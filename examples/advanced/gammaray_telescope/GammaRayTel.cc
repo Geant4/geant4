@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTel.cc,v 1.4 2001-07-11 09:56:56 gunter Exp $
+// $Id: GammaRayTel.cc,v 1.5 2001-11-23 17:35:02 santin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,6 +33,8 @@
 //      ------------ GammaRayTel example main program ------
 //           by F.Longo, R.Giannitrapani & G.Santin (29 nov 2000)
 //           See README file for details on this example            
+//  20.11.01 G.Santin: new analysis management, and some modification in the 
+//                     construction of some Action's
 // ************************************************************
 
 #include "G4RunManager.hh"
@@ -54,7 +56,7 @@
 #include "GammaRayTelEventAction.hh"
 
 #ifdef G4ANALYSIS_USE
-#include "GammaRayTelAnalysisManager.hh"
+#include "GammaRayTelAnalysis.hh"
 #endif
 
 
@@ -80,19 +82,12 @@ int main(int argc, char** argv)
 
 #ifdef G4ANALYSIS_USE
   // Creation of the analysis manager
-  GammaRayTelAnalysisManager* analysisMgr = new GammaRayTelAnalysisManager(detector);
+  GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
 #endif
 
   // Set optional user action classes
-#ifdef G4ANALYSIS_USE
-  GammaRayTelEventAction* eventAction = 
-    new GammaRayTelEventAction(analysisMgr);
-  GammaRayTelRunAction* runAction =
-    new GammaRayTelRunAction(analysisMgr);
-#else 
   GammaRayTelEventAction* eventAction = new GammaRayTelEventAction();
   GammaRayTelRunAction* runAction = new GammaRayTelRunAction();
-#endif
   runManager->SetUserAction(eventAction);
   runManager->SetUserAction(runAction);
 
@@ -143,7 +138,7 @@ int main(int argc, char** argv)
   delete visManager;
 #endif
 #ifdef G4ANALYSIS_USE
-  delete analysisMgr;
+  delete analysis;
 #endif
   delete runManager;
   return 0;
