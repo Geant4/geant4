@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.79 2002-11-16 17:10:47 hpw Exp $
+# $Id: binmake.gmk,v 1.80 2002-11-19 16:37:34 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -212,7 +212,16 @@ ifdef GLOBALLIBS
 else
 # The next line specifically should read LDLIBS2 = , not LDLIBS2 :=, so
 #   that it is not expanded until the directory G4TMPDIR is created.
-  LDLIBS2 = $(shell \
+  ifeq ($(G4INCLUDE_EXEC),1)
+    LDLIBS2 = $(shell \
+        G4TMP=$(G4TMP); export G4TMP; \
+	if [ \( -f $(G4LIB)/$(G4SYSTEM)/liblist \
+	  -a -f $(G4LIB)/$(G4SYSTEM)/libname.map \) ]; then \
+	$(G4LIB)/$(G4SYSTEM)/liblist \
+	  -m \
+	  < $(G4LIB)/$(G4SYSTEM)/libname.map; fi)
+  else
+    LDLIBS2 = $(shell \
         G4TMP=$(G4TMP); export G4TMP; \
 	if [ \( -f $(G4LIB)/$(G4SYSTEM)/liblist \
 	  -a -f $(G4LIB)/$(G4SYSTEM)/libname.map \) ]; then \
@@ -223,6 +232,7 @@ else
 # expanded too soon.  Hence extra libraries must have a different name...
 # Extra libraries to resolve remaining circular dependencies...
 #  LDLIBS2EXTRA = 
+  endif
 endif
 
 # LDLIBS3 contains the first set of low level libraries...
