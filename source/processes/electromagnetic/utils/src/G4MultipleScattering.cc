@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.21 2002-05-24 06:11:25 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.22 2002-06-11 08:06:47 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -46,6 +46,7 @@
 // 24-04-02 some minor changes in boundary algorithm, L.Urban
 // 06-05-02 bug fixed in GetContinuousStepLimit, L.Urban
 // 24-05-02 changes in angle distribution and boundary algorithm, L.Urban
+// 11-06-06 bug fixed in ComputeTransportCrossSection, L.Urban
 //
 // -----------------------------------------------------------------------------
 //
@@ -328,7 +329,10 @@ G4double G4MultipleScattering::ComputeTransportCrossSection(
       }
 
   // correct this value using the corrections computed for e+/e-
-  KineticEnergy *= electron_mass_c2/ParticleMass;
+  // scaling: mass*beta*gamma does not depend on the kind of particle !
+  G4double tau=KineticEnergy/electron_mass_c2 ;
+  KineticEnergy = sqrt(ParticleMass*ParticleMass+tau*(tau+2.)*
+                       electron_mass_c2*electron_mass_c2)-ParticleMass ;
   
   // interpolate in AtomicNumber and beta2
   // get bin number in Z
