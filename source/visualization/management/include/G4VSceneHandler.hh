@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.14 2001-07-11 10:09:14 gunter Exp $
+// $Id: G4VSceneHandler.hh,v 1.15 2001-07-22 01:04:59 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -148,11 +148,13 @@ public: // With description
   // }
 
   virtual void AddPrimitive (const G4Polyline&)   = 0;
+  virtual void AddPrimitive (const G4Scale&);
+  // Default implementation in this class but can be over-ridden.
   virtual void AddPrimitive (const G4Text&)       = 0;
   virtual void AddPrimitive (const G4Circle&)     = 0;      
   virtual void AddPrimitive (const G4Square&)     = 0;      
-  virtual void AddPrimitive (const G4Polymarker&);  // Implemented in terms
-  // of the above but can be over-ridden.
+  virtual void AddPrimitive (const G4Polymarker&);
+  // Default implementation in this class but can be over-ridden.
   virtual void AddPrimitive (const G4Polyhedron&) = 0;  
   virtual void AddPrimitive (const G4NURBS&)      = 0;       
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.32 2001-07-11 10:09:20 gunter Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.33 2001-07-22 01:05:06 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,44 +83,31 @@ Scenes are graphics-system-independent.
 
 The G4VisManager has a list of scenes.
 
-/vis/scene/create [<scene-name>]
-  default       auto-generated name
-  This scene becomes current.
-
-/vis/scene/list [<scene-name>] [<verbosity>]
-  default:           all             0
-  Current scene remains current.
-
-/vis/scene/select [<scene-name>]
-  default:      current scene name
-  This scene becomes current.
-
-NI /vis/scene/edit
-
-/vis/scene/remove <scene-name>
-  Current scene can change or become invalid.
-
-/vis/scene/add/ghosts [<particle>]
-  default:                 all
+/vis/scene/add/axes
   Adds to current scene.
 
 NI /vis/scene/add/ghost [<particle>] [<physical-volume-name>]
 NI                      [<copy-no>] [<depth>]
 
-/vis/scene/add/logicalVolume <logical-volume-name> [<depth>] 
-  default:                                             1
-  Adds logical volume to current scene.
-
-/vis/scene/add/volume [<physical-volume-name>] [<copy-no>] [<depth>]
-  default:                     world                -1         -1
-  Adds physical volume to current scene.
-  If copy-no is negative, first occurrence of physical-volume-name is
-    selected.
-  If depth is negative, search is made to all depths.
+/vis/scene/add/ghosts [<particle>]
+  default:                 all
+  Adds to current scene.
 
 /vis/scene/add/hits [<sensitive-volume-name>]
   default:              (argument not impl'd yet.)
   Causes hits, if any, to be drawn at the end of processiing an event.
+  Adds to current scene.
+
+/vis/scene/add/logicalVolume <logical-volume-name> [<depth>] 
+  default:                                             1
+  Adds logical volume to current scene.
+
+/vis/scene/add/scale [<length> <length-unit>] [x|y|z] [auto|manual] [<x0> <y0> <z0> <unit>]
+  default:                1          m           x        auto        0     0    0    m
+  Adds an annotated scale line to the current scene.  See G4Scale.hh
+  for further description.
+
+/vis/scene/add/text
   Adds to current scene.
 
 /vis/scene/add/trajectories [<sensitive-volume-name>]
@@ -131,24 +118,42 @@ NI                      [<copy-no>] [<depth>]
 NI /vis/scene/add/transientObjects
   Adds in current scene.
 
-NI /vis/scene/set/hitOption accumulate|byEvent
-  Affects current scene.
+/vis/scene/add/volume [<physical-volume-name>] [<copy-no>] [<depth>]
+  default:                     world                -1         -1
+  Adds physical volume to current scene.
+  If copy-no is negative, first occurrence of physical-volume-name is
+    selected.
+  If depth is negative, search is made to all depths.
 
-NI /vis/scene/set/notifyOption immediate|delayed
-  Affects current scene.
+/vis/scene/create [<scene-name>]
+  default       auto-generated name
+  This scene becomes current.
 
-NI /vis/scene/set/modelingStyle [<modeling-style>]
-  Affects current scene.
+NI /vis/scene/edit
+
+/vis/scene/list [<scene-name>] [<verbosity>]
+  default:           all             0
+  Current scene remains current.
 
 /vis/scene/notifyHandlers
   Refreshes all viewers of current scene.
   Does not issue "update" (see /vis/viewer/update).
 
-/vis/scene/add/axes
-  Adds to current scene.
+/vis/scene/remove <scene-name>
+  Current scene can change or become invalid.
 
-/vis/scene/add/text
-  Adds to current scene.
+/vis/scene/select [<scene-name>]
+  default:      current scene name
+  This scene becomes current.
+
+NI /vis/scene/set/hitOption accumulate|byEvent
+  Affects current scene.
+
+NI /vis/scene/set/modelingStyle [<modeling-style>]
+  Affects current scene.
+
+NI /vis/scene/set/notifyOption immediate|delayed
+  Affects current scene.
 
 
 Scene Handlers
@@ -162,33 +167,33 @@ viewers.
 
 The G4VisManager has a list of scene handlers.
 
+/vis/sceneHandler/attach [<scene-name>]
+  default:             current scene name
+  Attaches scene to current scene handler.
+
 /vis/sceneHandler/create [<graphics-system-name>] [<scene-handler-name>]
   default:                     error               auto-generated name
   (The first default simply triggers a list of possibilities.)
   This scene handler becomes current.
   The current scene, if any, is attached.
 
-/vis/sceneHandler/attach [<scene-name>]
-  default:             current scene name
-  Attaches scene to current scene handler.
-
 /vis/sceneHandler/list [<scene-handler-name>] [<verbosity>]
   default:                     all                  0
   Current scene handler remains current.
 
-/vis/sceneHandler/select [<scene-handler-name>]
-  default:            current scene handler name
-  This scene handler becomes current.
-
-/vis/sceneHandler/remove <scene-handler-name>
-  Current scene handler can change or become invalid.
+NI /vis/sceneHandler/notifyEndOfProcessing
+  Issues "update" for each viewer of current scene handler.
 
 NI /vis/sceneHandler/processScene
   Refreshes all viewers of current scene handler.
   Does not issue "update" (see /vis/viewer/update).
 
-NI /vis/sceneHandler/notifyEndOfProcessing
-  Issues "update" for each viewer of current scene handler.
+/vis/sceneHandler/remove <scene-handler-name>
+  Current scene handler can change or become invalid.
+
+/vis/sceneHandler/select [<scene-handler-name>]
+  default:            current scene handler name
+  This scene handler becomes current.
 
 
 Viewers
@@ -282,14 +287,6 @@ NI /vis/viewer/clone
   Magnifies by this factor relative to standard view.
   Affects current viewer.
 
-(Now follow some viewer/set commands.  A possible syntax is:
-
-NI /vis/viewer/set <parameter-name> <parameter-value> [<parameter-value>]...
-
-but this would mean re-inventing parameter parsing which is already
-contained in many G4UIcommand subclasses.  To re-use this code we have
-to know the type of the parameter, so we need separate commands.)
-
 /vis/viewer/set/all <from-viewer-name>
   Copies view parameters from from-viewer to current viewer.
   Affects current viewer.
@@ -335,21 +332,10 @@ NI /vis/viewer/set/cutawayPlane ...
   default: none                       30             deg
   Affects current viewer.
 
-#specialNI /vis/viewer/set/orbit (parameters)
-  Orbits the scene about the up-vector, lights fixed to the scene.  Draws N
-    frames, the camera rotated Delta-beta about the up-vector each frame.
-  Affects current viewer.
-
 /vis/viewer/set/sectionPlane ...
   Set plane for drawing section (DCUT).  Specify plane by x y z units nx ny nz,
   e.g., for a y-z plane at x = 1 cm:
   /vis/viewer/set/section_plane on 1 0 0 cm 1 0 0
-  Affects current viewer.
-
-#specialNI /vis/viewer/set/spin (parameters)
-#orNI      /vis/viewer/advanced?
-  Spins the scene about the up-vector, lights fixed to the camera.  Draws N
-  frames, the scene rotated Delta-beta about the up-vector each frame.
   Affects current viewer.
 
 /vis/viewer/set/style w[ireframe]|s[urface]
@@ -401,11 +387,6 @@ General Commands
 Compound Commands
 =================
 
-/vis/open [<graphics-system-name>] [<[pixels>]
-default:          error                600
-  /vis/sceneHandler/create $1
-  /vis/viewer/create ! ! $2
-
 NI /vis/draw <physical-volume-name> clashes with old /vis~/draw/, so...
 
 /vis/drawTree [<physical-volume-name>] [<system>]
@@ -429,6 +410,11 @@ default: 0 0 0 0 cm 1 0 cm
   /vis/viewer/panTo $3 $4 $5
   /vis/viewer/zoomTo $6
   /vis/viewer/dollyTo $7 $8
+
+/vis/open [<graphics-system-name>] [<[pixels>]
+default:          error                600
+  /vis/sceneHandler/create $1
+  /vis/viewer/create ! ! $2
 
 /vis/specify <logical-volume-name>
   /geometry/print $1
@@ -458,8 +444,8 @@ default: 0 0 0 0 cm 1 0 cm
   fMessengerList.push_back (new G4VisCommandSceneCreate);
   fMessengerList.push_back (new G4VisCommandSceneList);
   fMessengerList.push_back (new G4VisCommandSceneNotifyHandlers);
-  fMessengerList.push_back (new G4VisCommandSceneSelect);
   fMessengerList.push_back (new G4VisCommandSceneRemove);
+  fMessengerList.push_back (new G4VisCommandSceneSelect);
 
   directory = new G4UIdirectory ("/vis/scene/add/");
   directory -> SetGuidance ("Add model to current scene.");
@@ -468,6 +454,7 @@ default: 0 0 0 0 cm 1 0 cm
   fMessengerList.push_back (new G4VisCommandSceneAddGhosts);
   fMessengerList.push_back (new G4VisCommandSceneAddHits);
   fMessengerList.push_back (new G4VisCommandSceneAddLogicalVolume);
+  fMessengerList.push_back (new G4VisCommandSceneAddScale);
   fMessengerList.push_back (new G4VisCommandSceneAddText);
   fMessengerList.push_back (new G4VisCommandSceneAddTrajectories);
   fMessengerList.push_back (new G4VisCommandSceneAddVolume);
@@ -478,8 +465,8 @@ default: 0 0 0 0 cm 1 0 cm
   fMessengerList.push_back (new G4VisCommandSceneHandlerAttach);
   fMessengerList.push_back (new G4VisCommandSceneHandlerCreate);
   fMessengerList.push_back (new G4VisCommandSceneHandlerList);
-  fMessengerList.push_back (new G4VisCommandSceneHandlerSelect);
   fMessengerList.push_back (new G4VisCommandSceneHandlerRemove);
+  fMessengerList.push_back (new G4VisCommandSceneHandlerSelect);
 
   directory = new G4UIdirectory ("/vis/viewer/");
   directory -> SetGuidance ("Operations on Geant4 viewers.");

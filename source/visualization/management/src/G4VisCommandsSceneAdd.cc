@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.19 2001-07-11 10:09:19 gunter Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.20 2001-07-22 01:05:03 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -36,6 +36,7 @@
 #include "G4ModelingParameters.hh"
 #include "G4HitsModel.hh"
 #include "G4TrajectoriesModel.hh"
+#include "G4ScaleModel.hh"
 #include "G4TextModel.hh"
 #include "G4AxesModel.hh"
 #include "G4PhysicalVolumeSearchScene.hh"
@@ -311,6 +312,103 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand* command,
 }
 
 
+////////////// /vis/scene/add/scale //////////////////////////////////
+
+G4VisCommandSceneAddScale::G4VisCommandSceneAddScale () {
+  G4bool omitable;
+  fpCommand = new G4UIcommand ("/vis/scene/add/scale", this);
+  fpCommand -> SetGuidance 
+    ("/vis/scene/add/scale [<length> <length-unit>] [x|y|z] [auto|manual] [<x0> <y0> <z0> <unit>]");
+  fpCommand -> SetGuidance 
+    ("Defaults: 1 m x auto 0 0 0 m");
+  fpCommand -> SetGuidance 
+    ("Adds an annotated scale line to the current scene.");
+  fpCommand -> SetGuidance 
+    ("See G4Scale.hh for further description.");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("length", 'd', omitable = true);
+  parameter->SetDefaultValue (1.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("unit", 's', omitable = true);
+  parameter->SetDefaultValue ("m");
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("direction", 's', omitable = true);
+  parameter->SetDefaultValue ("x");
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("auto|manual", 's', omitable = true);
+  parameter->SetDefaultValue  ("auto");
+  fpCommand->SetParameter     (parameter);
+  parameter =  new G4UIparameter ("x0", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("y0", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("z0", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("unit", 's', omitable = true);
+  parameter->SetDefaultValue ("m");
+  fpCommand->SetParameter (parameter);
+}
+
+G4VisCommandSceneAddScale::~G4VisCommandSceneAddScale () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneAddScale::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand* command,
+					    G4String newValue) {
+  G4SceneList& sceneList = fpVisManager -> SetSceneList ();
+  if (sceneList.empty ()) {
+    G4cout << "No scenes - please create one before adding anything."
+	   << G4endl;
+    return;
+  }
+
+  G4double userLength, x0, y0, z0;
+  G4String userLengthUnit, direction, auto_manual, positionUnit;
+  G4std::istrstream is (newValue);
+  is >> userLength >> userLengthUnit >> direction >> auto_manual
+     >> x0 >> y0 >> z0 >> positionUnit;
+
+  G4double length = userLength * ValueOf(userLengthUnit);
+  G4double unit = ValueOf(positionUnit);
+  x0 *= unit; y0 *= unit; z0 *= unit;
+
+  //G4Text g4text(text, G4Point3D(x,y,z));
+  //g4text.SetScreenSize(font_size);
+  //g4text.SetOffset(x_offset,y_offset);
+
+  char tempcharstring [50];
+  G4std::ostrstream ost (tempcharstring, 50);
+  ost << userLength << ' ' << userLengthUnit << G4std::ends;
+  G4String annotation(tempcharstring);
+
+  G4Scale::Direction scaleDirection (G4Scale::x);
+  if (direction(0) == 'y') scaleDirection = G4Scale::y;
+  if (direction(0) == 'z') scaleDirection = G4Scale::z;
+
+  G4bool autoPlacing (false); if (auto_manual(0) == 'a') autoPlacing = true;
+
+  G4VModel* model = new G4ScaleModel
+    (G4Scale(length, annotation, scaleDirection, autoPlacing, x0, y0, x0));
+
+  G4Scene* pScene = fpVisManager -> GetCurrentScene ();
+  const G4String& currentSceneName = pScene -> GetName ();
+  G4bool successful = pScene -> AddRunDurationModel (model);
+  UpdateVisManagerScene (currentSceneName);
+  if (successful) {
+    G4cout << "Scale of " << annotation
+	   << " has been added to scene \"" << currentSceneName << "\""
+	   << G4endl;
+  }
+}
+
+
 ////////////// /vis/scene/add/text //////////////////////////////////
 
 G4VisCommandSceneAddText::G4VisCommandSceneAddText () {
@@ -380,9 +478,9 @@ void G4VisCommandSceneAddText::SetNewValue (G4UIcommand* command,
   G4VModel* model = new G4TextModel(g4text);
   G4Scene* pScene = fpVisManager -> GetCurrentScene ();
   const G4String& currentSceneName = pScene -> GetName ();
-  G4bool succesful = pScene -> AddRunDurationModel (model);
+  G4bool successful = pScene -> AddRunDurationModel (model);
   UpdateVisManagerScene (currentSceneName);
-  if (succesful) {
+  if (successful) {
     G4cout << "Text \"" << text
 	   << "\" has been added to scene \"" << currentSceneName << "\""
 	   << G4endl;
