@@ -82,7 +82,8 @@ HepRandom::showEngineStatus();
 void HadrontherapyRunAction::EndOfRunAction(const G4Run*) 
 {  
   // WRITE ASCII FILE FOR THE REGISTRATION OF THE BRAGG PEAK
-  // The a two column file (piccoXX.dat) is registered. The first column represents
+  // The a two column file (BraggPeak.out) is registered. 
+  //The first column represents
   // the ionization chamber position (in mm of water); the second
   // is the energy deposited for each position of the chamber
 
@@ -91,7 +92,7 @@ void HadrontherapyRunAction::EndOfRunAction(const G4Run*)
 G4double depth = 0;
 depth = i*0.002; //the number represents the thickness of the ionization chamber (in mm ofwater)
     
- std::ofstream pmtfile("picco412.dat", std::ios::app);
+ std::ofstream pmtfile("BraggPeak.out", std::ios::app);
  if(pmtfile.is_open())
    
    {

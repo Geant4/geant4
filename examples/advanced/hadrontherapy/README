@@ -186,7 +186,7 @@ x direction is along the beam direction,
 y and z directions are orthogonal to the beam direction.
 
 Alternatively, if the variable G4ANALYSIS_USE is set, an hbk file
-is produced containig the Bragg peak.
+is produced containig the Bragg peak in a histogram and in a ntuple.
 
 Setup for analysis: AIDA 3.2.1, PI 1.2.1                                
 
