@@ -1,5 +1,5 @@
 
-$Id: History,v 1.33 2002-10-28 11:37:00 gcosmo Exp $
+$Id: History,v 1.34 2002-10-29 14:16:22 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Oct 29  2002  Gabriele Cosmo       geom-bool-V04-01-01
+  - Added method CleanTransformations() to G4DisplacedSolid and corrected
+    implementation in destructor of G4BooleanSolid to not call for deletion
+    of G4VSolid in the case where displacement is used.
+    This fixes a problem noticed on Linux-g++ at application closeout for
+    double deletion of a solid in such special case.
 
  Oct 28  2002  Gabriele Cosmo       geom-bool-V04-01-00
   - Added implementation of StreamInfo() to comply with new interface for
