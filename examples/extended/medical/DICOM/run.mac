@@ -1,0 +1,9 @@
+/control/verbose 1
+/run/verbose 1
+#visualisation
+/vis/scene/create
+/vis/open OGLIX
+/vis/drawVolume
+/vis/viewer/update
+#beamOn
+/run/beamOn 3

@@ -3,13 +3,7 @@
 
 //*******************************************************
 //
-// DicomConfiguration.hh :
-//	- Handling of the header of *.g4 files
-//	- Reading <Data.dat> file
-//	- Used each we need to know information about the
-//	  picture we are analysing
-//	- Functions are in DicomConfiguration.cc
-//
+
 // The code was written by :
 //	Vincent Hubert-Tremblay at tigre.2@sympatico.ca
 //
@@ -24,8 +18,10 @@
 // tel (418) 525-4444 #6720
 // fax (418) 691 5268
 //*******************************************************
-
-
+//
+// DicomConfiguration.hh :
+// - Handling of the header of *.g4 files
+// - Reading <Data.dat> file
 
 #ifndef DicomConfiguration_h
 #define DicomConfiguration_h 1
@@ -80,8 +76,6 @@ private:
   G4double sliceLocation; 
   G4int compressionUsed;
   G4std::vector<G4double> densityValue;	
-
 };
-
 #endif
 

@@ -8,7 +8,7 @@ The DICOM application has been developed by the Geant4 users:
 Louis Archambault,Vincent Hubert-Tremblay.
 The example is a preliminary version of Geant4DicomInterface.
 
-1) Introduction
+--->1) Introduction
 
 DICOM images are read and used as Geometry for simulation. 
 
@@ -17,7 +17,7 @@ Three file .dcm give the experimental set-up
 It is possible to visualise the reproduced experimental  
 set-up thanks to the use visualisation packages.
 
-2) Installation:
+---> 2) Installation:
 
  -example enviroment with the compiler 3.2                              
  -a standard Geant4 example GNUmakefile is provided            
@@ -31,7 +31,16 @@ G4LEDATA: points to low energy data base - G4EMLOW2.2
 
 visualisation package: OpenGL
 
-3) Some details :
+---> 3) Run the example:
+
+- batch mode:
+dicom run.mac
+
+- interactive mode:
+dicom
+the file default.mac is read in order to visualise the phantom.
+
+--->4) Some details :
 
 The DICOM images pixel values represent CT (Hounsfield) numbers and they should be
 converted, first, to a given density and then to a material type.  The relation between
@@ -59,13 +68,6 @@ report 46 was used to build the materials (lung, liver, breast, bones, ...)
 
 For the example included, this is the correspondences used :
 (see the image PhantomCT.jpg for a visual example)
-
-4) More informations :
-
-For a more detailed explanation of the program, see the report(pdf) or the
-power point presentation included in the folder <informations>. Both documents
-are in french.
-
 
 5) Contacts
 

@@ -20,13 +20,13 @@ public:
 			       G4double minDensity ,
 			       G4Material* lunginhale,
 			       G4Material* lungexhale,
-			       G4Material* adipose_tissue,
+			       G4Material* adipose,
 			       G4Material* breast,
 			       G4Material* phantom,
 			       G4Material* muscle,
 			       G4Material* liver,
-			       G4Material* dense_bone,
-			       G4Material* trabecular_bone);
+			       G4Material* denseBone,
+			       G4Material* trabecularBone);
 
   virtual ~DicomPatientParameterisation();
 
