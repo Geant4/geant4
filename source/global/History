@@ -1,4 +1,4 @@
-$Id: History,v 1.58 2000-11-20 17:26:41 gcosmo Exp $
+$Id: History,v 1.59 2000-12-13 08:22:26 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 13, 2000 G.Folger (global-V02-00-06)
+- Added GNUmakefile to HEPRandom to handle "includes" gmake target.
 
 November 20, 2000 G.Cosmo (global-V02-00-05)
 - QA code cleanup and fixes to remove warnings from
