@@ -24,7 +24,7 @@
 /grdm/analogueMC 1
 /grdm/verbose 0
 
-/grdm/nucleusLimits 19 40 19 40 
+###/grdm/nucleusLimits 19 40 19 40 
 #/grdm/ion 74 33 0
 /gps/type Volume
 /gps/shape Sphere
