@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.49 1999-11-19 08:54:36 gcosmo Exp $
+# $Id: architecture.gmk,v 1.50 1999-11-23 14:51:06 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -513,9 +513,7 @@ ifeq ($(G4SYSTEM),DEC-cxx)
     FCFLAGS	:= -g
     CCFLAGS     := -g
   endif
-  CFRONT_G4TEMPLATE_REPOSITORY  := true
   G4_HAVE_BOOL  := yes
-  LDFLAGS	+= -taso
   CXXFLAGS	+= -ieee -timplicit_local
   FC		:= f77
   FCLIBS	:= -lUfor -lfor -lFutil -lots
@@ -528,14 +526,16 @@ ifeq ($(G4SYSTEM),DEC-cxx)
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
 #   OGLLIBS   := -lMesaGLU -lMesaGL
   endif
-  ifdef G4USE_STL
-    CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM)
-    CXXFLAGS += -nostdnew
-  endif
+  CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM)
   ifdef G4USE_OSPACE
-    CPPFLAGS += -DOS_OSF1_4 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING -DOS_NO_ALLOCATORS -D__NO_EDG_EXCEPTION_CLASSES
-    CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM) $(OSPACEINC) -I$(OSPACEDIR)
+    CPPFLAGS += -DOS_OSF1_4 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING
+    CPPFLAGS += -DOS_NO_ALLOCATORS -D__NO_EDG_EXCEPTION_CLASSES
+    CPPFLAGS += $(OSPACEINC) -I$(OSPACEDIR)
     CXXFLAGS += -nostdnew
+  else
+    G4USE_STD_NAMESPACE := yes
+    CXXFLAGS += -std strict_ansi
+    CPPFLAGS += -DG4USE_STD_NAMESPACE
   endif
 endif
 
