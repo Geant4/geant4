@@ -110,6 +110,7 @@ int main(int argc, char** argv)
   G4String  namePart = "proton";
   G4String  nameMat  = "Si";
   G4String  nameGen  = "stringCHIPS";
+  G4bool    logx     = false;
   G4bool    usepaw   = false;
   G4bool    inclusive= true;
   G4int     verbose  = 0;
@@ -220,6 +221,7 @@ int main(int argc, char** argv)
   G4cout << "#events" << G4endl;
   G4cout << "#exclusive" << G4endl;
   G4cout << "#inclusive" << G4endl;
+  G4cout << "#logx" << G4endl;
   G4cout << "#nbins" << G4endl;
   G4cout << "#nbinsa" << G4endl;
   G4cout << "#nbinse" << G4endl;
@@ -331,6 +333,8 @@ int main(int argc, char** argv)
       } else if(line == "#time(ns)") {
         (*fin) >> aTime;
         aTime *= ns;
+      } else if(line == "#logx") {
+        logx = true;
       } else if(line == "#exit") {
         end = false;
         break;
@@ -396,13 +400,18 @@ int main(int argc, char** argv)
     // Creating a tuple factory, whose tuples will be handled by the tree
     //   G4std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
 
-    const G4int nhisto = 50; 
+    const G4int nhisto = 56; 
     AIDA::IHistogram1D* h[nhisto];
     //    AIDA::IHistogram2D* h2;
     //AIDA::ITuple* ntuple1 = 0;
 
     G4double mass = part->GetPDGMass();
     G4double pmax = sqrt(energy*(energy + 2.0*mass));
+    G4double binlog = log10(2.0);
+    G4int nbinlog = (G4int)(log10(2.0*emax)/binlog);
+    G4double logmax = binlog*nbinlog;
+    G4double bine = emax/(G4double)nbinse;
+    G4double bind = emax/(G4double)nbinsd;
 		
     if(usepaw) {
 
@@ -498,6 +507,19 @@ int main(int argc, char** argv)
       if(nanglpi>4)
        h[49]=hf->createHistogram1D("50","ds/dE for pi+ at theta = 4",nbinspi,0.,emaxpi);
 
+      if(logx) {
+        h[50]=hf->createHistogram1D("51","E(MeV) neutrons",nbinlog,0.,logmax);
+        if(nangl>0)
+          h[51]=hf->createHistogram1D("52","ds/dE for neutrons at theta = 0",nbinlog,0.,logmax);
+        if(nangl>1)
+          h[52]=hf->createHistogram1D("53","ds/dE for neutrons at theta = 1",nbinlog,0.,logmax);
+        if(nangl>2)
+          h[53]=hf->createHistogram1D("54","ds/dE for neutrons at theta = 2",nbinlog,0.,logmax);
+        if(nangl>3)
+          h[54]=hf->createHistogram1D("55","ds/dE for neutrons at theta = 3",nbinlog,0.,logmax);
+        if(nangl>4)
+          h[55]=hf->createHistogram1D("56","ds/dE for neutrons at theta = 4",nbinlog,0.,logmax);
+      }
       	
       G4cout << "Histograms is initialised nbins=" << nbins
              << G4endl;
@@ -774,10 +796,19 @@ int main(int argc, char** argv)
             h[10]->fill(pt/MeV, 1.0);
             h[14]->fill(e/MeV, 1.0);
 	    h[22]->fill(e/MeV, factor);
+            G4double ee = log10(e/MeV);
+            G4int    nb = (G4int)(ee/binlog);
+            G4double e1 = binlog*nb;
+            G4double e2 = e1 + binlog;
+            e1 = pow(10., e1);
+            e2 = pow(10., e2) - e1;
+            G4double f  = factor*bine/e2;
+	    h[50]->fill(ee, f);
 	    if(e >= elim) h[25]->fill(cos(theta), factora);
             for(G4int kk=0; kk<nangl; kk++) {
               if(bng1[kk] <= thetad && thetad <= bng2[kk]) {
                 h[27+kk]->fill(e/MeV, cng[kk]); 
+                if(kk < 5) h[50+kk]->fill(ee, cng[kk]*bind/e2); 
                 break;
 	      }
 	    }
