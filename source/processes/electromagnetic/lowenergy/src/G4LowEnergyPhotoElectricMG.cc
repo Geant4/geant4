@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectricMG.cc,v 1.5 2001-09-16 15:51:25 elena Exp $
+// $Id: G4LowEnergyPhotoElectricMG.cc,v 1.6 2001-09-16 17:52:21 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -161,7 +161,7 @@ G4VParticleChange* G4LowEnergyPhotoElectricMG::PostStepDoIt(const G4Track& aTrac
 
   // Create lists of pointers to DynamicParticles (photons and electrons)
   // (Is the electron vector necessary? To be checked)
-  G4std::vector<G4DynamicParticle*>* photonVector;
+  G4std::vector<G4DynamicParticle*>* photonVector = 0;
   G4std::vector<G4DynamicParticle*> electronVector;
 
   G4double energyDeposit = bindingEnergy;
@@ -187,36 +187,39 @@ G4VParticleChange* G4LowEnergyPhotoElectricMG::PostStepDoIt(const G4Track& aTrac
     {
       energyDeposit += eKineticEnergy;    
     }
-  // Generation of fluorescence
-  if (Z > 5){
-    photonVector = deexcitationManager.GenerateParticles(Z,shellId);
 
-  }
   G4int nElectrons = electronVector.size();
-  G4int nTotPhotons = photonVector->size();
+  size_t nTotPhotons = 0;
   G4int nPhotons=0;
-  for (size_t k=0; k<nTotPhotons; k++)
+
+  // Generation of fluorescence
+  if (Z > 5)
     {
-      G4DynamicParticle* aPhoton = (*photonVector)[k];
-	if(aPhoton==0)
-	  {
-	    delete aPhoton;
-	  }
-	else
-	  {
-	    G4double itsKineticEnergy = aPhoton->GetKineticEnergy();
-	    if(itsKineticEnergy>=cutForLowEnergySecondaryPhotons)
-	      {
-		nPhotons++;
-		// Local energy deposit is given as the sun of the 
-		// energies of incident photons minus the energies
-		// of the outcoming fluorescence photons
-	      energyDeposit -= itsKineticEnergy* MeV;
-	      
-	      }
-	    else
-	      {delete aPhoton;}
-	  }
+      photonVector = deexcitationManager.GenerateParticles(Z,shellId); 
+      nTotPhotons = photonVector->size();
+      for (size_t k=0; k<nTotPhotons; k++)
+	{
+	  G4DynamicParticle* aPhoton = (*photonVector)[k];
+	  if(aPhoton==0)
+	    {
+	      delete aPhoton;
+	    }
+	  else
+	    {
+	      G4double itsKineticEnergy = aPhoton->GetKineticEnergy();
+	      if(itsKineticEnergy>=cutForLowEnergySecondaryPhotons)
+		{
+		  nPhotons++;
+		  // Local energy deposit is given as the sum of the 
+		  // energies of incident photons minus the energies
+		  // of the outcoming fluorescence photons
+		  energyDeposit -= itsKineticEnergy* MeV;
+		  
+		}
+	      else
+		{delete aPhoton;}
+	    }
+	}
     }
   G4int nSecondaries  = nElectrons + nPhotons;
   
