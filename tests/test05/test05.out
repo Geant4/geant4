@@ -58,7 +58,7 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
            material       min.delta energy(keV) 
 
                  Air           0.99
-                Lead         229.54
+                Lead         229.55
             ArgonGas           0.99
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
@@ -81,7 +81,7 @@ msc:   Tables of transport mean free paths.
            material        min.delta energy(keV) 
 
                  Air           0.99
-                Lead         229.54
+                Lead         229.55
             ArgonGas           0.99
 
 hIoni:    Knock-on electron cross sections . 
