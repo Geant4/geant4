@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.cc,v 1.25 2001-10-25 09:13:50 maire Exp $
+// $Id: G4VEnergyLoss.cc,v 1.26 2001-10-29 09:40:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,7 +33,8 @@
 //  bugfix in fluct.
 //  (some variables are doubles instead of ints now),L.Urban 23/03/01
 //  18/05/01 V.Ivanchenko Clean up againist Linux ANSI compilation 
-//  17-09-01 migration of Materials to pure STL (mma) 
+//  17-09-01 migration of Materials to pure STL (mma)
+//  26-10-01 static inline functions moved from .hh file (mma) 
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -102,6 +103,33 @@ G4VEnergyLoss::G4VEnergyLoss(G4VEnergyLoss& right)
      nmaxCont1(4),
      nmaxCont2(16)
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLoss::SetRndmStep(G4bool value) {rndmStepFlag = value;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLoss::SetEnlossFluc(G4bool value) {EnlossFlucFlag = value;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLoss::SetSubSec(G4bool value) {subSecFlag = value;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLoss::SetMinDeltaCutInRange(G4double value)
+{MinDeltaCutInRange = value; setMinDeltaCutInRange = true;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLoss::SetStepFunction(G4double c1, G4double c2)
+{
+ dRoverRange = c1; finalRange = c2;
+ c1lim=dRoverRange;
+ c2lim=2.*(1-dRoverRange)*finalRange;
+ c3lim=-(1.-dRoverRange)*finalRange*finalRange;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossTables.hh,v 1.11 2001-07-11 10:03:40 gunter Exp $
+// $Id: G4EnergyLossTables.hh,v 1.12 2001-10-29 09:40:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id:
 //
-// -------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #ifndef included_G4EnergyLossTables
 #define included_G4EnergyLossTables
@@ -39,14 +39,14 @@
 #include "G4Material.hh"
 #include "G4ios.hh"
 
-// -------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // A utility class, containing the energy loss tables
 // for each particle
 //
 // Energy loss processes have to register their tables with this 
 // class. The responsibility of creating and deleting the tables
 // remains with the energy loss classes.
-// -------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 //
 // P. Urban, 06/04/1998
 // L. Urban, 27/05/1988 , modifications + new functions added
@@ -56,8 +56,10 @@
 // L.Urban , 12/04/99 , bug fixed
 // don't use the helper class.
 // It can't be hidden for Rogue Wave uses it.
-// 10/11/99: moved from RWT hash dictionary to STL map, G.Barrand, M.Maire
-// -------------------------------------------------------------------
+// 10.11.99: moved from RWT hash dictionary to STL map, G.Barrand, M.Maire
+// 26.10.01: all static functions movev from .icc to .cc file (mma)
+//
+// -----------------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -183,7 +185,5 @@ private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4EnergyLossTables.icc"
 
 #endif

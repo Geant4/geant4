@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.hh,v 1.11 2001-10-24 16:17:05 maire Exp $
+// $Id: G4VEnergyLoss.hh,v 1.12 2001-10-29 09:40:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
-//	GEANT 4 class header file 
+// 26.10.01 static inline functions moved to .cc file (mma)
 //
+// ------------------------------------------------------------
 // 
 // Class Description 
 //
@@ -41,6 +42,7 @@
 //  All the EnergyLoss classes are inherited from G4VEnergyLoss
 //  class.
 //
+
 //  -----------------------------------------------------------
 //  created  on 28 January 2000  by L. Urban               
 //  -----------------------------------------------------------
@@ -117,32 +119,25 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
 
   public:  // With description
 
-    static void SetRndmStep     (G4bool   value) {rndmStepFlag   = value;}
+    static void SetRndmStep(G4bool value);
     // use / do not use randomisation in energy loss steplimit
     // ( default = no randomisation)
 
-    static void SetEnlossFluc   (G4bool   value) {EnlossFlucFlag = value;}
+    static void SetEnlossFluc(G4bool value);
     // compute energy loss with/without fluctuation
     // ( default : with fluctuation)
 
-    static void SetSubSec       (G4bool  value) {subSecFlag = value ; }
+    static void SetSubSec(G4bool value);
     // switch on/off the generation of the subcutoff secondaries
     // ( default = subcutoff secondary generation )
 
-    static void SetMinDeltaCutInRange(G4double value)
-                                    {MinDeltaCutInRange = value;
-                                     setMinDeltaCutInRange = true ;}
+    static void SetMinDeltaCutInRange(G4double value);
     // sets minimal cut value for the subcutoff secondaries
     // (i.e. the kinetic energy of these secondaries can not be
     //	smaller than the energy corresponds to MinDeltaCutInRange).
 
 
-    static void SetStepFunction (G4double c1, G4double c2)
-                               {dRoverRange = c1; finalRange = c2;
-                                c1lim=dRoverRange ;
-                                c2lim=2.*(1-dRoverRange)*finalRange;
-                                c3lim=-(1.-dRoverRange)*finalRange*finalRange;
-                               }
+    static void SetStepFunction (G4double c1, G4double c2);
     // sets values for data members used to compute the step limit:
     //   dRoverRange : max. relative range change in one step,
     //   finalRange  : if range <= finalRange --> last step for the particle.
@@ -196,11 +191,9 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
                         G4double Tmin,G4double Tmax,G4int nbin,
                         G4int materialIndex,G4PhysicsLogVector* rangeVector);
 
-    static G4double RangeIntLin(G4PhysicsVector* physicsVector
-                                                        ,G4int nbin);
+    static G4double RangeIntLin(G4PhysicsVector* physicsVector,G4int nbin);
 
-    static G4double RangeIntLog(G4PhysicsVector* physicsVector
-                                                        ,G4int nbin);
+    static G4double RangeIntLog(G4PhysicsVector* physicsVector,G4int nbin);
 
     static void BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
                         G4double Tmin,G4double Tmax,G4int nbin,
@@ -210,11 +203,9 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
                         G4double Tmin,G4double Tmax,G4int nbin,
                         G4int materialIndex,G4PhysicsLogVector* rangeVector);
 
-    static G4double LabTimeIntLog(G4PhysicsVector* physicsVector
-                                                        ,G4int nbin);
+    static G4double LabTimeIntLog(G4PhysicsVector* physicsVector,G4int nbin);
 
-    static G4double ProperTimeIntLog(G4PhysicsVector* physicsVector,
-                                                         G4int nbin);
+    static G4double ProperTimeIntLog(G4PhysicsVector* physicsVector,G4int nbin);
 
     static void InvertRangeVector(G4PhysicsTable* theRangeTable,
                                   G4PhysicsTable* theRangeCoeffATable,
@@ -242,7 +233,7 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
 
    static G4bool   rndmStepFlag;    // control the randomization of the step
    static G4bool   EnlossFlucFlag;  // control the energy loss fluctuation
-   static G4bool       subSecFlag;  // control the generation of subcutoff secondaries
+   static G4bool       subSecFlag;  // control the generation of subcutoff delta
 
    static G4double MinDeltaCutInRange; // minimum cut for delta rays
    static G4double* MinDeltaEnergy ;
