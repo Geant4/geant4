@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: B02DetectorConstruction.cc,v 1.4 2002-04-19 10:54:27 gcosmo Exp $
+// $Id: B02DetectorConstruction.cc,v 1.5 2002-11-08 14:47:48 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#include "globals.hh"
 #include "g4std/strstream"
+#include "globals.hh"
 
 #include "B02DetectorConstruction.hh"
 
@@ -40,8 +40,10 @@
 #include "G4Colour.hh"
 #include "PhysicalConstants.h"
 
+// for importance biasing
+#include "G4IStore.hh"
+
 B02DetectorConstruction::B02DetectorConstruction()
- : fWorldVolume(0)
 {;}
 
 B02DetectorConstruction::~B02DetectorConstruction()
@@ -49,8 +51,6 @@ B02DetectorConstruction::~B02DetectorConstruction()
 
 G4VPhysicalVolume* B02DetectorConstruction::Construct()
 {
-  char line[255];
-  
   G4double pos_x;
   G4double pos_y;
   G4double pos_z; 
@@ -84,7 +84,6 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
   A = 28.09*g/mole;
   G4Element* elSi  = new G4Element(name="Silicon", symbol="Si", Z=14, A);
 
-
   A = 39.1*g/mole; 
   G4Element* elK  = new G4Element(name="K"  ,symbol="K" , Z=19 , A);
 
@@ -113,21 +112,20 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
   Concrete->AddElement(elCa , fractionmass= 0.044);
   Concrete->AddElement(elFe , fractionmass= 0.014);
   Concrete->AddElement(elC , fractionmass= 0.001);
-
-  density = 0.0203*g/cm3;
-  G4Material* LightConcrete = new G4Material("LightConcrete", density, 10);
-  LightConcrete->AddElement(elH , fractionmass= 0.01);
-  LightConcrete->AddElement(elO , fractionmass= 0.529);
-  LightConcrete->AddElement(elNa , fractionmass= 0.016);
-  LightConcrete->AddElement(elHg , fractionmass= 0.002);
-  LightConcrete->AddElement(elAl , fractionmass= 0.034);
-  LightConcrete->AddElement(elSi , fractionmass= 0.337);
-  LightConcrete->AddElement(elK , fractionmass= 0.013);
-  LightConcrete->AddElement(elCa , fractionmass= 0.044);
-  LightConcrete->AddElement(elFe , fractionmass= 0.014);
-  LightConcrete->AddElement(elC , fractionmass= 0.001);
    
-  G4Material *WorldMaterial = Galactic; 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   /////////////////////////////
   // world cylinder volume
@@ -137,78 +135,70 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
 
   G4double innerRadiusCylinder = 0*cm;
   G4double outerRadiusCylinder = 100*cm;
-  G4double hightCylinder       = 15.001*cm;
+  G4double hightCylinder       = 105*cm;
   G4double startAngleCylinder  = 0*deg;
   G4double spanningAngleCylinder    = 360*deg;
 
   G4Tubs *worldCylinder = new G4Tubs("worldCylinder",
-				     innerRadiusCylinder,
-				     outerRadiusCylinder,
-				     hightCylinder,
-				     startAngleCylinder,
-				     spanningAngleCylinder);
+                                     innerRadiusCylinder,
+                                     outerRadiusCylinder,
+                                     hightCylinder,
+                                     startAngleCylinder,
+                                     spanningAngleCylinder);
 
   // logical world
 
   G4LogicalVolume *worldCylinder_log = 
-    new G4LogicalVolume(worldCylinder, WorldMaterial, "worldCylinder_log");
+    new G4LogicalVolume(worldCylinder, Galactic, "worldCylinder_log");
 
-  G4VisAttributes * WorldVisAtt
-    = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
-  WorldVisAtt->SetVisibility(true);
-  worldCylinder_log->SetVisAttributes(WorldVisAtt);
+  name = "shieldWorld";
+  G4VPhysicalVolume *pWorldVolume = new 
+    G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log,
+		  name, 0, false, 0);
 
-  // physical world
 
-  name = "worldCylinder_phys";
-  G4VPhysicalVolume* worldCylinder_phys =
-    new G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log,
-		      name, 0, false, 0);
-
-  ///////////////////////////////////////////////
-  // shield cylinder for (cells 1-2)
-  ////////////////////////////////////////////////
+  // creating 18 slobs of 10 cm thick concrete
 
   G4double innerRadiusShield = 0*cm;
   G4double outerRadiusShield = 100*cm;
-  G4double hightShield       = 5*cm;
+  G4double hightShield       = 90*cm;
   G4double startAngleShield  = 0*deg;
   G4double spanningAngleShield    = 360*deg;
 
   G4Tubs *aShield = new G4Tubs("aShield",
-			       innerRadiusShield,
-			       outerRadiusShield,
-			       hightShield,
-			       startAngleShield,
-			       spanningAngleShield);
+                               innerRadiusShield,
+                               outerRadiusShield,
+                               hightShield,
+                               startAngleShield,
+                               spanningAngleShield);
   
   // logical shield
 
   G4LogicalVolume *aShield_log = 
     new G4LogicalVolume(aShield, Concrete, "aShield_log");
 
-
-  G4VisAttributes * shieldVisAtt
-    = new G4VisAttributes(G4Colour(0.0,1.0,1.0));
-  shieldVisAtt->SetVisibility(true);
-  shieldVisAtt->SetForceSolid(false);
-  aShield_log->SetVisAttributes(shieldVisAtt);
+  G4VisAttributes* pShieldVis = new 
+    G4VisAttributes(G4Colour(0.0,0.0,1.0));
+  pShieldVis->SetForceSolid(true);
+  aShield_log->SetVisAttributes(pShieldVis);
 
   // physical shields
 
-  //        physical shields for cell 2 to 4
-  for(G4int i=0; i<3; i++)
-  {
-    if (i+2<10)    sprintf(line,"cell: 0%d, shield",i+2);
-    else sprintf(line,"cell: %d, shield",i+2);
-    G4String name(line);
-    pos_x = 0*cm;
-    pos_y = 0*cm;
-    pos_z = -10*cm+(10*cm)*i;
-    new G4PVPlacement(0, G4ThreeVector(pos_x, pos_y, pos_z),
-		      aShield_log, name, worldCylinder_log, false, 0);
-  }
-  fWorldVolume = worldCylinder_phys;
+  name = "concreteShield";
 
-  return worldCylinder_phys;
+  pos_x = 0*cm;
+  pos_y = 0*cm;
+  pos_z = 0;
+  G4VPhysicalVolume *pvol = 
+    new G4PVPlacement(0, 
+		      G4ThreeVector(pos_x, pos_y, pos_z),
+		      aShield_log, 
+		      name, 
+		      worldCylinder_log, 
+		      false, 
+		      0);
+
+  return pWorldVolume;
 }
+
+

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2002-08-29 15:37:24 dressel Exp $
+# $Id: GNUmakefile,v 1.5 2002-11-08 14:47:31 dressel Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -14,8 +14,10 @@ endif
 .PHONY: all
 all: lib bin
 
-include /afs/cern.ch/user/d/dressel/G4scoring/scoring.gmk
 
 CPPFLAGS +=
 
 include $(G4INSTALL)/config/binmake.gmk
+
+CPPFLAGS += `aida-config -i`
+LDFLAGS += `aida-config -l`

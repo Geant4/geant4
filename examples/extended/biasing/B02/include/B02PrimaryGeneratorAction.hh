@@ -21,9 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: B02PrimaryGeneratorAction.hh,v 1.2 2002-04-19 10:54:26 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 
 #ifndef B02PrimaryGeneratorAction_hh
 #define B02PrimaryGeneratorAction_hh B02PrimaryGeneratorAction_hh 
@@ -47,3 +44,5 @@ class B02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 };
 
 #endif
+
+

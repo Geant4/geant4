@@ -21,16 +21,18 @@
 // ********************************************************************
 //
 //
-// $Id: B02DetectorConstruction.hh,v 1.2 2002-04-19 10:54:26 gcosmo Exp $
+// $Id: B02DetectorConstruction.hh,v 1.3 2002-11-08 14:47:42 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef B02DetectorConstruction_hh
 #define B02DetectorConstruction_hh B02DetectorConstruction_hh
 
-class G4VPhysicalVolume;
-
+#include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
+
+class G4VPhysicalVolume;
+class G4IStore;
 
 class B02DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -39,9 +41,7 @@ public:
   ~B02DetectorConstruction();
   
   G4VPhysicalVolume* Construct();
-  G4VPhysicalVolume* GetWorldVolume(){return fWorldVolume;}
-private:
-  G4VPhysicalVolume* fWorldVolume;
+
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B02PhysicsList.cc,v 1.2 2002-04-19 10:54:27 gcosmo Exp $
+// $Id: B02PhysicsList.cc,v 1.3 2002-11-08 14:47:48 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,7 +45,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 
-B02PhysicsList::B02PhysicsList() : G4VUserPhysicsList()
+B02PhysicsList::B02PhysicsList():  G4VUserPhysicsList()
 {
   SetVerboseLevel(1);
 }
@@ -622,11 +622,12 @@ void B02PhysicsList::ConstructGeneral()
 
 void B02PhysicsList::SetCuts()
 {
-  if (verboseLevel >0){
+  if (verboseLevel >0)
+  {
     G4cout << "B02PhysicsList::SetCuts:";
     G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << G4endl;
   }  
- //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
+  //   "G4VUserPhysicsList::SetCutsWithDefault" method sets 
   //   the default cut value for all particle types 
   SetCutsWithDefault();   
 }

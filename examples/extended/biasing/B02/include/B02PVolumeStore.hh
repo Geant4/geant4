@@ -21,46 +21,42 @@
 // ********************************************************************
 //
 //
-#ifndef B02PhysicsList_h
-#define B02PhysicsList_h 1
+// $Id: B02PVolumeStore.hh,v 1.1 2002-11-08 14:52:16 dressel Exp $
+// GEANT4 tag 
+//
+// ----------------------------------------------------------------------
+// Class B02PVolumeStore
+//
+// Class description:
+//
+// ...
 
-#include "G4VUserPhysicsList.hh"
+// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// ----------------------------------------------------------------------
+
+#ifndef B02PVolumeStore_hh
+#define B02PVolumeStore_hh B02PVolumeStore_hh
+
 #include "globals.hh"
+#include "g4std/set"
+#include "G4GeometryCell.hh"
+#include "G4GeometryCellComp.hh"
 
+typedef G4std::set< G4GeometryCell, G4GeometryCellComp > B02SetGeometryCell;
 
-// taken from Tst12PhysicsList
+class B02PVolumeStore {
+public:
+  B02PVolumeStore();
+  ~B02PVolumeStore();
+  
+  void AddPVolume(const G4GeometryCell &cell);
+  const G4VPhysicalVolume *GetPVolume(const G4String &name) const;
+  G4String GetPNames() const;
 
-class B02PhysicsList: public G4VUserPhysicsList
-{
-  public:
-    B02PhysicsList();
-    virtual ~B02PhysicsList();
-
-  protected:
-    // Construct particle and physics
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
-
-    // 
-    virtual void SetCuts();
-    
-  protected:
-  // these methods Construct physics processes and register them
-    virtual void ConstructGeneral();
-    virtual void ConstructEM();
-    virtual void ConstructHad();
-    virtual void ConstructLeptHad();
- //
-    void  ConstructAllBosons();
-    void  ConstructAllLeptons();
-    void  ConstructAllMesons();
-    void  ConstructAllBaryons();
-    void  ConstructAllIons();
-    void  ConstructAllShortLiveds();
-
+private:
+  B02SetGeometryCell fSetGeometryCell;
 };
 
+
+
 #endif
-
-
-

@@ -21,46 +21,58 @@
 // ********************************************************************
 //
 //
-#ifndef B02PhysicsList_h
-#define B02PhysicsList_h 1
+// $Id: B02CellScorer.cc,v 1.1 2002-11-08 14:52:17 dressel Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// B02CellScorer.cc
+//
+// ----------------------------------------------------------------------
 
-#include "G4VUserPhysicsList.hh"
-#include "globals.hh"
+#include "B02CellScorer.hh"
+#include "G4GeometryCell.hh"
+#include "G4Step.hh"
+#include "G4StepPoint.hh"
 
 
-// taken from Tst12PhysicsList
+B02CellScorer::B02CellScorer(AIDA::IHistogram1D *h) :
+  fHisto(h)
+{}
 
-class B02PhysicsList: public G4VUserPhysicsList
-{
-  public:
-    B02PhysicsList();
-    virtual ~B02PhysicsList();
+B02CellScorer::~B02CellScorer()
+{}
 
-  protected:
-    // Construct particle and physics
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
+void B02CellScorer::ScoreAnExitingStep(const G4Step &aStep,
+				       const G4GeometryCell &pre_gCell){
+  fG4CellScorer.ScoreAnExitingStep(aStep, pre_gCell);
+  FillHisto(aStep);
+}
 
-    // 
-    virtual void SetCuts();
-    
-  protected:
-  // these methods Construct physics processes and register them
-    virtual void ConstructGeneral();
-    virtual void ConstructEM();
-    virtual void ConstructHad();
-    virtual void ConstructLeptHad();
- //
-    void  ConstructAllBosons();
-    void  ConstructAllLeptons();
-    void  ConstructAllMesons();
-    void  ConstructAllBaryons();
-    void  ConstructAllIons();
-    void  ConstructAllShortLiveds();
+void B02CellScorer::ScoreAnEnteringStep(const G4Step &aStep,
+					const G4GeometryCell &post_gCell){
+  fG4CellScorer.ScoreAnEnteringStep(aStep, post_gCell);
+  return;
+}
 
-};
+void B02CellScorer::ScoreAnInVolumeStep(const G4Step &aStep,
+					const G4GeometryCell &post_gCell){
+  fG4CellScorer.ScoreAnInVolumeStep(aStep, post_gCell);
+  FillHisto(aStep);
+}
 
-#endif
+void B02CellScorer::FillHisto(const G4Step &aStep){
+
+  G4StepPoint *p = 0;
+  p = aStep.GetPreStepPoint();
+  G4double sl = aStep.GetStepLength();
+  G4double slw = sl * p->GetWeight();
+  
+  fHisto->fill(p->GetKineticEnergy(), slw);
+}
+
+
 
 
 
