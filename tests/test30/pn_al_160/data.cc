@@ -50,7 +50,7 @@
 
 int main(int argc, char** argv)
 {
-  int verbose = 1;
+  int verbose = 2;
 
   // -------------------------------------------------------------------
   // Control on input
@@ -79,7 +79,7 @@ int main(int argc, char** argv)
   fout_c->open(fname3.c_str(), std::ios::out|std::ios::trunc);
 
   //there can't be lines longer than nmax characters
-  const size_t nmax = 200;
+  const int nmax = 200;
   char line[nmax]; 
   std::string line1, line2, word1, word2, word3;
   G4bool end = true;
@@ -90,7 +90,8 @@ int main(int argc, char** argv)
   int counter = 0;
   double bin = 5.0*MeV;
   double elim= 30.0*MeV;
-  double x, e, an, e1, e2, e0, y1, y2, ct1, ct2;
+  double x, e, an, e1, e2, y1, y2, ct1, ct2;
+  double e0 = 0.0;
 
   for(int i=0; i<=nbin; i++) {
     x = bin*(double)i;

@@ -428,7 +428,7 @@ int main(int argc, char** argv)
     }
 
     G4double factor = cross_sec*MeV*1000.0*(G4double)nbins/(energy*barn*(G4double)nevt);
-    G4double factora= cross_sec*MeV*1000.0*(G4double)nbinsa/(twopi*pi*barn*(G4double)nevt);
+    G4double factora= cross_sec*MeV*1000.0*(G4double)nbinsa/(twopi*2.0*barn*(G4double)nevt);
     G4double factorb= cross_sec*1000.0/(barn*(G4double)nevt);
     G4cout << "### factor  = " << factor
            << "### factora = " << factor 
