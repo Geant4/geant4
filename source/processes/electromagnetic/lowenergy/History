@@ -1,4 +1,4 @@
-$Id: History,v 1.159 2002-11-08 17:56:01 pia Exp $
+$Id: History,v 1.160 2002-11-18 18:23:06 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18.11-2002   MGP, tag emlowen-V04-01-07
+             Bug fix in G4BremsstrahlungParameters, to load EEDL correctly
+             (correction for PRS 430)
 
 08.11-2002   MGP, tag emlowen-V04-01-06
              New model for angular distribution in Rayleigh by Gerardo
