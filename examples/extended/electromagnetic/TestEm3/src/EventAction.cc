@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: EventAction.cc,v 1.5 2004-03-15 11:14:46 maire Exp $
+// $Id: EventAction.cc,v 1.6 2004-03-16 18:06:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,15 +73,9 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
     G4cout << "\n---> Begin Of Event: " << evtNb << G4endl;
     
   //initialize EnergyDeposit per event
-  size_t n = detector->GetNbOfAbsor();
-  energyDeposit.resize(n); 
-  energyLeaving.resize(n); 
-  trackLengthCh.resize(n);
-  for (size_t k=0; k<n; k++) {
-    energyDeposit[k] = 0.0; 
-    energyLeaving[k] = 0.0; 
-    trackLengthCh[k] = 0.0;
-  }   
+  //
+  for (G4int k=0; k<MaxAbsor; k++)
+    energyDeposit[k] = energyLeaving[k] = trackLengthCh[k] = 0.0;   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -90,7 +84,7 @@ void EventAction::EndOfEventAction(const G4Event* evt)
 {
   for (G4int k=0; k<detector->GetNbOfAbsor(); k++) {
      runAct->fillPerEvent(k,energyDeposit[k],trackLengthCh[k],
-                            energyLeaving[k]/(G4double)(detector->GetNbOfLayers()));
+                       energyLeaving[k]/(G4double)(detector->GetNbOfLayers()));
 #ifdef USE_AIDA
       if (runAct->GetHisto(k)) {
 	G4double unit = runAct->GetHistoUnit(k); 

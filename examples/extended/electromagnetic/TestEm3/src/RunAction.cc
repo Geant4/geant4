@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.12 2004-03-15 11:14:46 maire Exp $
+// $Id: RunAction.cc,v 1.13 2004-03-16 18:06:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -185,8 +185,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   G4cout << "\n-------------------------------------------------------------\n"
          << std::setw(51) << "total energy dep"
-	 << std::setw(30) << "total tracklen"
-	 << std::setw(40) << "mean energy leaving per layer \n \n";	 
+	 << std::setw(27) << "total tracklen"
+	 << std::setw(53) << "energy leakage from secondaries \n \n";	 
 
   for (G4int k=0; k<Detector->GetNbOfAbsor(); k++)
     {
