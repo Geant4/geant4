@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VMuEnergyLoss.cc,v 1.4 2000-05-25 12:54:18 urban Exp $
+// $Id: G4VMuEnergyLoss.cc,v 1.5 2000-06-13 16:36:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -89,7 +89,7 @@ G4VMuEnergyLoss::~G4VMuEnergyLoss()
 {
      if(theLossTable) {
         theLossTable->clearAndDestroy();
-        delete theLossTable;
+        delete theLossTable; theLossTable = NULL; 
      }
 
 }
