@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.27 2004-11-18 14:37:25 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.28 2004-11-19 07:59:50 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -493,7 +493,10 @@ void G4OpenInventorSceneHandler::EndModeling () {
 
 void G4OpenInventorSceneHandler::ClearStore () {
   G4VSceneHandler::ClearStore();
+
   fDetectorRoot->removeAllChildren();
+  fSeparatorMap.clear();
+
   fTransientRoot->removeAllChildren();
 }
 
