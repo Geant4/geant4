@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RegularXrayTRmodel.cc,v 1.3 2000-06-15 17:38:39 gcosmo Exp $
+// $Id: G4RegularXrayTRmodel.cc,v 1.1 2000-11-14 16:09:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 

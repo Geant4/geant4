@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VClusterModel.hh,v 1.1 2000-07-14 16:07:48 grichine Exp $
+// $Id: G4VClusterModel.hh,v 1.1 2000-11-14 16:07:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
