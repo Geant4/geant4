@@ -7,7 +7,7 @@
 #verbose
 0
 #events
-10000
+100000
 //--------Proton_processes
 #particle
 proton
@@ -17,9 +17,9 @@ Zr
 #energy(MeV)
 120
 #emax(MeV)
-125
+140
 #nbinse
-25
+70
 #nbinsd
 25
 #elim(MeV)

@@ -95,7 +95,7 @@ Test30Physics::Test30Physics()
 
 Test30Physics::~Test30Physics()
 {
-  if(theProcess) delete theProcess;
+  //  if(theProcess) delete theProcess;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -639,7 +639,7 @@ int main(int argc, char** argv)
       G4int nn= n;
 			
       if(iter == 1000*(iter/1000)) {
-        cerr << "##### " << iter << "-th event  #####" << G4endl;
+        G4cerr << "##### " << iter << "-th event  #####" << G4endl;
       }	
 
       G4int nbar = 0;
@@ -825,7 +825,7 @@ int main(int argc, char** argv)
       tree->close();
     }
 
-    G4cout << "###### End of run # " << run << "     ######" << G4endl;
+    G4cerr << "###### End of run # " << run << "     ######" << G4endl;
 
   } while(end);
 
