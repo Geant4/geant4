@@ -205,8 +205,6 @@ examples                                         examples-V06-02-05
       primary incident particle according to user defined distributions.
       These range from simple monocromatic point source to complicated mutiple
       sources with various biasing schemes.
-  o medical/GammaTherapy (gtherapy-V06-02-02)
-    + Some code cleanup.
   o radioactivedecay/exrdm (exrdm-V06-02-00)
     + New example for showing the usage of the G4RadioactiveDecay process to
       simulate the decays of radioactive isotopes as well as the induced
