@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MySteppingAction.cc,v 1.4 1999-12-15 14:54:35 gunter Exp $
+// $Id: MySteppingAction.cc,v 1.5 2000-05-22 07:22:52 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,6 +65,8 @@ void MySteppingAction::UserSteppingAction(const G4Step* pStep) {
     }
     pVVisManager -> Draw (pl);
     G4Circle intercept (pStep -> GetPostStepPoint () -> GetPosition ());
+    G4VisAttributes iva (G4Colour(1.,0.,1));
+    intercept.SetVisAttributes (&iva);
     pVVisManager -> Draw (intercept);
     
   }
