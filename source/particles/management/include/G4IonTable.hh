@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.hh,v 1.16 2000-09-22 11:23:27 kurasige Exp $
+// $Id: G4IonTable.hh,v 1.17 2000-10-20 11:34:45 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,6 +55,7 @@ class G4IonTable
  protected:
    // hide copy construictor as protected 
    G4IonTable(const  G4IonTable &right);
+   G4IonTable & operator = (const G4IonTable &) {return *this;}
 
  public:
   // destructor

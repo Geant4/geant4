@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DynamicParticle.hh,v 1.7 2000-10-18 14:51:43 kurasige Exp $
+// $Id: G4DynamicParticle.hh,v 1.8 2000-10-20 11:34:45 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -141,7 +141,7 @@ class G4DynamicParticle
      // set/get dynamical charge 
      // the dynamical mass is set to PDG charge in default
 
-     G4ElectronOccupancy* GetElectronOccupancy() const;
+     const G4ElectronOccupancy* GetElectronOccupancy() const;
      // Get electron occupancy 
      // ElectronOccupancy is valid only if the particle is ion
      G4int  GetTotalOccupancy() const;

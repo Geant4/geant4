@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTableIterator.hh,v 1.3 1999-12-15 14:51:11 gunter Exp $
+// $Id: G4ParticleTableIterator.hh,v 1.4 2000-10-20 11:34:45 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,7 +28,10 @@ template < class K, class V > class G4ParticleTableIterator
  public:
   typedef  G4std::map<K, V, G4std::less<K> > Map;
   G4ParticleTableIterator( Map &adict):
-    mydict(&adict),it(adict.begin()),defined(false){}
+    it(adict.begin()),
+    mydict(&adict),
+    defined(false)
+     {}
 
   G4bool operator++ ()
     {

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleDefinition.cc,v 1.9 2000-02-27 06:44:29 kurasige Exp $
+// $Id: G4ParticleDefinition.cc,v 1.10 2000-10-20 11:35:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -122,7 +122,8 @@ G4ParticleDefinition::~G4ParticleDefinition()
 const G4ParticleDefinition & G4ParticleDefinition::operator=(const G4ParticleDefinition &right)
 {
   if (this != &right)  {
-  } return right;
+  } 
+  return *this;
 }
 
 G4int G4ParticleDefinition::operator==(const G4ParticleDefinition &right) const

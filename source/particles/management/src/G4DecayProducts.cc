@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayProducts.cc,v 1.5 1999-12-15 14:51:12 gunter Exp $
+// $Id: G4DecayProducts.cc,v 1.6 2000-10-20 11:35:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -199,7 +199,7 @@ void G4DecayProducts::Boost(G4double newbetax, G4double newbetay, G4double newbe
    theParentParticle->Set4Momentum(parent4);
 }
 
-G4bool G4DecayProducts::IsChecked()
+G4bool G4DecayProducts::IsChecked() const
 {
   G4bool returnValue = true;
   // check parent 
@@ -259,7 +259,7 @@ G4bool G4DecayProducts::IsChecked()
   return returnValue;
 }
 
-void G4DecayProducts::DumpInfo()
+void G4DecayProducts::DumpInfo() const
 {
    G4cout << " ----- List of DecayProducts  -----" << G4endl;
    G4cout << " ------ Parent Particle ----------" << G4endl;

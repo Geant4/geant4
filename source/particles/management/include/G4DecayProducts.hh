@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayProducts.hh,v 1.5 1999-12-15 14:51:10 gunter Exp $
+// $Id: G4DecayProducts.hh,v 1.6 2000-10-20 11:34:44 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -69,13 +69,13 @@ class G4DecayProducts
 
     G4DynamicParticle* operator[](G4int anIndex) const;
 
-    G4int entries(){return numberOfProducts;};
+    G4int entries() const {return numberOfProducts;};
 
   // check energy/momentum of products 
-    G4bool IsChecked(); 
+    G4bool IsChecked() const; 
    
   // 
-    void DumpInfo();
+    void DumpInfo() const;
 
   protected:
     enum {MaxNumberOfProducts = 64};

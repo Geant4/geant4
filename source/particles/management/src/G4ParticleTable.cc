@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTable.cc,v 1.16 2000-02-25 07:36:24 kurasige Exp $
+// $Id: G4ParticleTable.cc,v 1.17 2000-10-20 11:35:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParticleTable
@@ -346,7 +346,8 @@ void G4ParticleTable::DumpTable(const G4String &particle_name)
   } else {
     // dump only particle with name of  particle_name
     G4ParticleDefinition *ptr;
-    if ( (ptr = FindParticle(particle_name)) != 0) {
+    ptr = FindParticle(particle_name);
+    if ( ptr != 0) {
       ptr->DumpTable();
     } else {
 #ifdef G4VERBOSE

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayTableMessenger.hh,v 1.4 1999-12-15 14:51:10 gunter Exp $
+// $Id: G4DecayTableMessenger.hh,v 1.5 2000-10-20 11:34:45 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,7 +56,8 @@ class G4DecayTableMessenger: public G4UImessenger
     virtual G4String GetCurrentValue(G4UIcommand * command);
 
   private:
-    G4DecayTableMessenger(const G4DecayTableMessenger&){};
+    G4DecayTableMessenger(const G4DecayTableMessenger&){}
+    G4DecayTableMessenger & operator = (const G4DecayTableMessenger &){ return *this;}
 
   private:
     G4ParticleDefinition* SetCurrentParticle();

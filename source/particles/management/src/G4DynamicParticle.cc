@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DynamicParticle.cc,v 1.6 1999-12-15 14:51:12 gunter Exp $
+// $Id: G4DynamicParticle.cc,v 1.7 2000-10-20 11:35:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -238,6 +238,7 @@ G4DynamicParticle & G4DynamicParticle::operator=(const G4DynamicParticle &right)
     theMomentumDirection = right.theMomentumDirection;
     theKineticEnergy = right.theKineticEnergy;
     thePolarization = right.thePolarization;
+    theProperTime = right.theProperTime;
     verboseLevel = right.verboseLevel;
     
     // thePreAssignedDecayProducts must not be copied.
