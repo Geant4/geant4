@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2001-11-08 10:32:51 radoone Exp $
+$Id: History,v 1.14 2001-11-08 11:21:29 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Nov 8, 2001 Radovan Chytracek
+Nov 8, 2001 Radovan Chytracek (exampleN05-V03-02-00)
 - RC dev changes propagated to the main trunk HEAD revision
 
 Nov 7, 2001 Marc Verderi (exampleN05-RC-dev)
