@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleDefinition.hh,v 1.8 2001-03-12 05:58:21 kurasige Exp $
+// $Id: G4ParticleDefinition.hh,v 1.9 2001-04-03 06:41:23 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -120,8 +120,8 @@ class G4ParticleDefinition
       G4int    GetPDGiSpin() const { return thePDGiSpin; }
       G4int    GetPDGiParity() const { return thePDGiParity; }
       G4int    GetPDGiConjugation() const { return thePDGiConjugation; }
-      G4double GetPDGIsospin() const { return thePDGiIsospin; }
-      G4double GetPDGIsospin3() const { return thePDGiIsospin3; }
+      G4double GetPDGIsospin() const { return thePDGIsospin; }
+      G4double GetPDGIsospin3() const { return thePDGIsospin3; }
       G4int    GetPDGiIsospin() const { return thePDGiIsospin; }
       G4int    GetPDGiIsospin3() const { return thePDGiIsospin3; }
       G4int    GetPDGiGParity() const { return thePDGiGParity; }
