@@ -5,13 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RayTracerSceneHandler.hh,v 1.1 2000-02-23 16:03:52 johna Exp $
+// $Id: G4RayTracerSceneHandler.hh,v 1.2 2000-02-28 15:19:49 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // John Allison  17th March 2000
 
-#ifndef RAYTRACERSCENEHANDLER_HH
-#define RAYTRACERSCENEHANDLER_HH
+#ifndef G4RAYTRACERSCENEHANDLER_HH
+#define G4RAYTRACERSCENEHANDLER_HH
 
 #include "G4VSceneHandler.hh"
 

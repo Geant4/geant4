@@ -1,4 +1,4 @@
-$Id: History,v 1.64 2000-02-24 12:23:36 johna Exp $
+$Id: History,v 1.65 2000-02-28 15:19:48 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+28th February 2000  John Allison
+- Cosmetic improvements to G4RayTracerSceneHandler.hh and G4RayTracerViewer.hh.
 
 24th February 2000  John Allison
 - Minor inmprovement of messages from /vis/viewer/refresh.
