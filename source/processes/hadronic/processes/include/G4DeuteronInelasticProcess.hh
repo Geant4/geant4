@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DeuteronInelasticProcess.hh,v 1.2 1999-12-15 14:53:34 gunter Exp $
+// $Id: G4DeuteronInelasticProcess.hh,v 1.3 2000-12-14 08:47:20 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Deuteron Inelastic Process
@@ -15,6 +15,11 @@
 #ifndef G4DeuteronInelasticProcess_h
 #define G4DeuteronInelasticProcess_h 1
  
+// Class Description
+// Process for Deuteron Inelastic scattering; 
+// to be used in your physics list in case you need this physics.
+// Class Description - End
+
 //#include "G4HadronicInelasticProcess.hh"
 #include "G4HadronInelasticProcess.hh"
  

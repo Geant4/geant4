@@ -5,12 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SigmaPlusInelasticProcess.hh,v 1.2 1999-12-15 14:53:34 gunter Exp $
+// $Id: G4SigmaPlusInelasticProcess.hh,v 1.3 2000-12-14 08:47:20 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // G4 Process: SigmaPlus Inelastic Process
  // J.L. Chuma, TRIUMF, 05-Nov-1996
  // Last modified: 03-Apr-1997
+
+// Class Description
+// Process for SigmaPlus Inelastic scattering; 
+// to be used in your physics list in case you need this physics.
+// Class Description - End
 
 #ifndef G4SigmaPlusInelasticProcess_h
 #define G4SigmaPlusInelasticProcess_h 1

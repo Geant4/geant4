@@ -13,6 +13,11 @@
 #ifndef G4IonInelasticProcess_h
 #define G4IonInelasticProcess_h 1
  
+// Class Description
+// Process for Ion Inelastic scattering; 
+// to be used in your physics list in case you need this physics.
+// Class Description - End
+
 #include "G4HadronInelasticProcess.hh"
 #include "G4GenericIon.hh"
  
