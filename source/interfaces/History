@@ -1,4 +1,4 @@
-$Id: History,v 1.19 1999-11-10 15:25:42 barrand Exp $
+$Id: History,v 1.20 1999-11-10 16:12:19 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-10 Nov 1999 Hajime Yoshida
+10 Nov 1999 Hajime Yoshida  (interfaces-V00-01-03)
+- Added less<G4String> argument (Guy).
 - G4UIWin32.hh, G4UIXm.hh : usage of G4std::less in G4std::map.
 - G4VInteractorManager.cc : G4std::find, G4std::remove.
 
