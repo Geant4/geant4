@@ -313,10 +313,10 @@ examples                                         examples-V06-02-06
     + Removed dependency from user hadronics lists.
   o electromagnetic/TestEm1 (testem1-V06-02-07)
     + PhysListEmStandard: put threshold for G4BremsstrahlungCMS at 10 GeV.
-  o electromagnetic/TestEm2 (testem1-V06-02-05)
+  o electromagnetic/TestEm2 (testem2-V06-02-05)
     + Fix in the logic of PhysicsList::AddPhysicsList().
     + Fixed bug in change of cuts between runs.
-  o electromagnetic/TestEm3 (testem1-V06-02-06)
+  o electromagnetic/TestEm3 (testem3-V06-02-06)
     + New 'StepMax' processes and messenger.
     + Updated macros tbhec and lhcb.
   o eventgenerator/exgps (exgps-V06-02-01)
