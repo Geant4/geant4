@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.14 2003-12-01 09:32:05 gcosmo Exp $
+// $Id: G4ReflectedSolid.cc,v 1.1 2004-05-13 14:49:42 gcosmo Exp $
 //
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
