@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTJpegMaker.cc,v 1.8 2003-06-16 17:13:43 gunter Exp $
+// $Id: G4RTJpegMaker.cc,v 1.9 2003-06-18 08:23:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -63,21 +63,7 @@ void G4RTJpegMaker::CreateFigureFile(G4String fileName,
         aFigure.GetJpegData(&jpegAddress,jpegSize);
 
         std::ofstream ofs;
-#ifdef G4USE_STD_NAMESPACE
         ofs.open(fileName,std::ios::out|std::ios::trunc|std::ios::binary);
-#else
-	ofs.open(fileName,ios::out|ios::trunc);
-#endif
         ofs.write(jpegAddress,jpegSize);
         ofs.close();
-
 }
-
-
-
-
-
-
-
-
-
