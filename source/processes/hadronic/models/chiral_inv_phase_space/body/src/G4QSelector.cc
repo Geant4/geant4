@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QSelector.cc,v 1.10 2001-10-04 20:00:24 hpw Exp $
+// $Id: G4QSelector.cc,v 1.11 2001-10-30 08:32:39 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,7 +31,7 @@ G4bool G4QSelector::SelectPDGSet(G4QPDGCodeVector thePDGCodes)
   //for (ind=0; ind<tNH; ind++)
   for (ind=tNH-1; ind>=0; ind--) // A Loop to fill
   {
-    G4int c=theHadrons[ind]->GetPDGCode(); // PDGCode
+    ////////G4int c=theHadrons[ind]->GetPDGCode(); // PDGCode
   }
 
   delete yes;

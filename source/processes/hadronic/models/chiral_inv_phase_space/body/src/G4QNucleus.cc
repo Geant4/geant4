@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QNucleus.cc,v 1.20 2001-10-04 20:00:23 hpw Exp $
+// $Id: G4QNucleus.cc,v 1.21 2001-10-30 08:32:38 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -388,7 +388,7 @@ G4int G4QNucleus::UpdateClusters(G4bool din)
 #endif
     if(dA>2)
     {
-      G4double itA=A+1.; 
+      ///////////G4double itA=A+1.; 
       G4double idA=dA+1.; 
       G4int dLim=dA;
       if(maxClust<dA) dLim=maxClust;
@@ -712,13 +712,13 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
   static const G4double   uWell=1.7;              // EffectiveDepth of potential well B (Boltsman)
   //static const G4double   uWell=0.0;              // EffectiveDepth of potential well B (Boltsman)
   //static const G4double   alpha=7.2;              // Probability for alpha to evaporate
-  static const G4double   gunA=80.;               // Switch A-parameter for BaryonGun
+  //////////static const G4double   gunA=80.;               // Switch A-parameter for BaryonGun
   //static const G4double   gunB=exp(1)/gunA;
-  static const G4double   gunB=exp(2)/4/gunA/gunA;
-  static const G4double   gunP2=200000.;          // Switch P2-parameter for BaryonGun
-  static const G4double   maSht=1.2;              // shift for maximal x approximation
-  static const G4double   coSht=.19;              // multiple for maximal x approximation
-  static const G4double   third=1./3.;            // power for maximal x approximation
+  ///////////////////static const G4double   gunB=exp(2)/4/gunA/gunA;
+  //////////////static const G4double   gunP2=200000.;          // Switch P2-parameter for BaryonGun
+  //////////////static const G4double   maSht=1.2;              // shift for maximal x approximation
+  ///////////static const G4double   coSht=.19;              // multiple for maximal x approximation
+  //////////////static const G4double   third=1./3.;            // power for maximal x approximation
   static const G4int      gPDG =   22;            // PDGCode of gamma
   static const G4QPDGCode gQPDG(gPDG);            // QPDGCode of gamma
   static const G4int      nPDG = 2112;            // PDGCode of neutron
@@ -768,8 +768,8 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
   G4cout<<"G4QNucleus::EvaporateBaryon: Called with a="<<a<<GetThis()<<",alpha="<<alpha<<G4endl;
 #endif
   G4double a1= a-1;
-  G4double z = Z;
-  G4double zn= Z+N;
+  //////////G4double z = Z;
+  //////////G4double zn= Z+N;
   G4double PBarr= CoulombBarrier(1,1);            // Coulomb Barrier for proton
   G4double PPBarr= CoulombBarrier(1,1,1,1);       // Coulomb Barrier for proton (after proton)
   G4double PABarr= CoulombBarrier(1,1,2,4);       // Coulomb Barrier for proton (after alpha)
@@ -778,7 +778,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
   G4double AABarr= CoulombBarrier(2,4,2,4);       // Coulomb Barrier for alpha (after alpha)
   G4double PPPBarr= CoulombBarrier(1,1,2,2);      // Coulomb Barrier for proton (after 2 protons)
   G4double AAABarr= CoulombBarrier(2,4,4,8);      // Coulomb Barrier for alpha (after 2 alphas)
-  G4double APABarr= CoulombBarrier(2,4,3,5);      // Coulomb Barrier for alpha (after p+alpha)
+  //////G4double APABarr= CoulombBarrier(2,4,3,5);      // Coulomb Barrier for alpha (after p+alpha)
   G4double PPABarr= CoulombBarrier(1,1,3,5);      // Coulomb Barrier for proton (after p+alpha)
   G4double SPPBarr=PBarr+PPBarr;                  // Summed Coulomb Barrier for p+p pair
   G4double SAABarr=ABarr+AABarr;                  // Summed Coulomb Barrier for alpha+alpha pair
@@ -787,7 +787,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
   G4double SAPBarr=PABarr+ABarr;                  // Summed Coulomb Barrier for alpha+p pair
   G4double DAPBarr=APBarr+PBarr;                  // Another summed Coulomb Barrier for alpha+p pair
   if(DAPBarr>SAPBarr)SAPBarr=DAPBarr;             // Get maximum to make possible both sequences
-  G4double SAPABarr=APABarr+SAPBarr;              // Summed Coulomb Barrier for alpha+p+alpha
+  ///////G4double SAPABarr=APABarr+SAPBarr;              // Summed Coulomb Barrier for alpha+p+alpha
   G4double SPPABarr=PPABarr+SAPBarr;              // Summed Coulomb Barrier for p+p+alpha
   G4LorentzVector h1mom;
   G4LorentzVector h2mom;
@@ -1283,12 +1283,12 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
     G4bool pSecF = npFlag||ppFlag||plFlag||paFlag; // Possibility of second radiation after proton
     G4bool lSecF = nlFlag||plFlag||llFlag||laFlag; // Possibility of second radiation after lambda
     G4bool aSecF = naFlag||paFlag||laFlag||aaFlag; // Possibility of second radiation after alpha
-    G4bool nTrF=nnnF||nnpF||nppF||nnlF||nplF||nllF;//Possib of third baryon radiation after n
-    G4bool pTrF=nnpF||nppF||pppF||nplF||pplF||pllF;//Possib of third baryon radiation after p
-    G4bool lTrF=nnlF||nplF||pplF||nllF||pllF||lllF;//Possib of third baryon radiation after l
-    G4bool aTrF=nnaF||npaF||ppaF||nlaF||plaF||llaF;//Possib of third baryon radiation after a
+    ///////G4bool nTrF=nnnF||nnpF||nppF||nnlF||nplF||nllF;//Possib of third baryon radiation after n
+    ///////G4bool pTrF=nnpF||nppF||pppF||nplF||pplF||pllF;//Possib of third baryon radiation after p
+    ///////G4bool lTrF=nnlF||nplF||pplF||nllF||pllF||lllF;//Possib of third baryon radiation after l
+    ///////G4bool aTrF=nnaF||npaF||ppaF||nlaF||plaF||llaF;//Possib of third baryon radiation after a
     G4bool secB  = nSecF||pSecF||lSecF||aSecF;     // Possibility to decay in TwoBaryons(Alphas)
-    G4bool thdB  = nTrF||pTrF||lTrF||aTrF||naaF||paaF||laaF||aaaF; // Possibility to radiate three
+    //G4bool thdB  = nTrF||pTrF||lTrF||aTrF||naaF||paaF||laaF||aaaF; // Possibility to radiate three
 #ifdef pdebug
 	G4cout<<"G4QN::EvaB:n="<<nSecF<<",p="<<pSecF<<",l="<<lSecF<<",a="<<aSecF<<",nn="<<nnFlag<<",np="
           <<npFlag<<",pp="<<ppFlag<<",pa="<<paFlag<<",na="<<naFlag<<",aa="<<aaFlag<<G4endl;
@@ -2565,8 +2565,8 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
   G4int acm=0;                                   // Threshold ac value
   G4int mCand=theQCandidates.size();
   G4double s=0.;                                 // Prototype of summ for constant A (=ac>2)
-  G4double sZ=0.;                                // Percent of protons
-  G4double sN=0.;                                // Percent of neutrons
+  ///////////G4double sZ=0.;                                // Percent of protons
+  ///////////G4double sN=0.;                                // Percent of neutrons
   G4double comb=ae0*(ae0-1)/2;                   // Product up to ac=2
 #ifdef pdebug
   G4cout<<"G4QNucleus::PrepareCand:#C=="<<mCand<<",dZ="<<dZ<<",dN="<<dN<<",Z="<<Z<<",N="<<N<<G4endl;
@@ -2619,7 +2619,7 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
 #endif
           if     (ac==1)
 	      {
-            G4double mp=pos*ae;
+            //////////G4double mp=pos*ae;
             if     (zc) pos*=ze/ae;
             else if(nc) pos*=ne/ae;
             else if(sc) pos*=se/ae;
@@ -2636,7 +2636,7 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
           }
           else if(ac==2)
 	      {
-            G4double mp=pos*ae2;
+            ///////////G4double mp=pos*ae2;
             if(ze<zc||ne<nc||se<sc) pos=0.;
             else
 		    {

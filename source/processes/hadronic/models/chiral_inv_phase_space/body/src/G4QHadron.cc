@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QHadron.cc,v 1.17 2001-09-19 15:32:42 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.18 2001-10-30 08:32:38 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -66,7 +66,7 @@ G4QHadron::G4QHadron(G4QPDGCode QPDG, G4LorentzVector p) :
 
 // Make sense Chipolino or Quasmon
 G4QHadron::G4QHadron(G4QContent QC, G4LorentzVector p) :
-  valQ(QC),theMomentum(p),nFragm(0)
+  theMomentum(p),valQ(QC),nFragm(0)
 {
   G4int curPDG=valQ.GetSPDGCode();
   if(curPDG&&curPDG!=10) theQPDG.SetPDGCode(curPDG);
@@ -89,7 +89,7 @@ G4QHadron::G4QHadron(G4QPDGCode QPDG, G4LorentzVector p, G4QContent QC) :
 {};
 
 G4QHadron::G4QHadron(G4QParticle* pPart, G4double maxM) :
-  theMomentum(0.,0.,0.,0.),nFragm(0),theQPDG(pPart->GetQPDG())
+  theQPDG(pPart->GetQPDG()),theMomentum(0.,0.,0.,0.),nFragm(0)
 {
 #ifdef debug
   G4cout<<"G4QHadron is created & randomized with maxM="<<maxM<<G4endl;
@@ -398,7 +398,7 @@ G4bool G4QHadron::CorEDecayIn2(G4double corE, G4LorentzVector& fr4Mom)
   G4double Py=theMomentum.py()+iPy-fPy;
   G4double Pz=theMomentum.pz()+iPz-fPz;
   G4double mE=theMomentum.e();
-  G4double mM2=theMomentum.m2();
+  ///////////G4double mM2=theMomentum.m2();
   theMomentum= G4LorentzVector(Px,Py,Pz,mE+corE);
 #ifdef pdebug
   G4double difF=fr4Mom.m2()-fM2;
@@ -433,7 +433,7 @@ G4bool G4QHadron::DecayIn3(G4LorentzVector& f4Mom,G4LorentzVector& s4Mom,G4Loren
   G4double m12sBase=(iM-tM)*(iM-tM)-m12sMin;
   G4double rR = 0.;
   G4double rnd= 1.;
-  G4int    tr = 0;                 //@@ Comment if "cout" below is skiped @@
+  /////////////G4int    tr = 0;                 //@@ Comment if "cout" below is skiped @@
   G4double m12s = 0.;              // Fake definition before the Loop
   while (rnd > rR)
   {
@@ -485,7 +485,7 @@ G4double G4QHadron::RandomizeMass(G4QParticle* pPart, G4double maxM)
 #endif
     return 0.;
   }
-  G4double theMass  = 0.;
+  ///////////////G4double theMass  = 0.;
   if(width==0.)
   {
 #ifdef debug

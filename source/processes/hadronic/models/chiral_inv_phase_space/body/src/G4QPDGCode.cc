@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QPDGCode.cc,v 1.17 2001-09-18 15:28:22 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.18 2001-10-30 08:32:39 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -513,7 +513,7 @@ G4double G4QPDGCode::GetMass()
     else if(ab==79) return GetNuclMass(1,0,1); // pL
     else if(ab==80) return GetNuclMass(0,0,2); // LL
   }
-  else return GetNuclMass(b+z[c],b+n[c],s[c]);
+  return GetNuclMass(b+z[c],b+n[c],s[c]);
 }
 
 // Get the width value for the PDG
@@ -542,14 +542,14 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
   static const G4double mP  = G4QPDGCode(2212).GetMass();
   static const G4double mN  = G4QPDGCode(2112).GetMass();
   static const G4double mL  = G4QPDGCode(3122).GetMass(); // Lambda
-  static const G4double mSm = G4QPDGCode(3112).GetMass(); // Sigma-
-  static const G4double mSp = G4QPDGCode(3222).GetMass(); // Sigma+
-  static const G4double mKm = G4QPDGCode(3312).GetMass(); // Ksi-
-  static const G4double mKz = G4QPDGCode(3322).GetMass(); // Ksi0
+  //////////static const G4double mSm = G4QPDGCode(3112).GetMass(); // Sigma-
+  //////////static const G4double mSp = G4QPDGCode(3222).GetMass(); // Sigma+
+  //////////static const G4double mKm = G4QPDGCode(3312).GetMass(); // Ksi-
+  //////////static const G4double mKz = G4QPDGCode(3322).GetMass(); // Ksi0
   static const G4double mK  = G4QPDGCode( 321).GetMass();
   static const G4double mK0 = G4QPDGCode( 311).GetMass();
   static const G4double mPi = G4QPDGCode( 211).GetMass();
-  static const G4double mPi0= G4QPDGCode( 111).GetMass();
+  //////////static const G4double mPi0= G4QPDGCode( 111).GetMass();
   static const G4int    nSh = 164;
   static G4double sh[nSh] = {0.,                        // Fake element for C++ N=Z=0
                                -4.315548,   2.435504,  -1.170501,   3.950887,   5.425238,
@@ -750,7 +750,12 @@ G4QContent G4QPDGCode::GetQuarkContent() const
   G4int au=0;
   G4int as=0;
   G4int ab=abs(thePDGCode);
-  if     (ab==22 || ab==10)
+  if     (!ab)
+  {
+    G4cerr<<"***G4QPDGCode::GetQuarkContent: PDG=0, return (0,0,0,0,0,0)"<<G4endl;
+    return G4QContent(0,0,0,0,0,0);
+  }
+  else if(ab==22 || ab==10)
   {
 #ifdef debug
     if     (ab==22) G4cout<<"***G4QPDGCode::GetQuarkContent: For the Photon? - Return 0"<<G4endl;
@@ -828,7 +833,7 @@ G4QContent G4QPDGCode::GetQuarkContent() const
         if     (f==1) return G4QContent(1,0,0,1,0,0);
         else if(f==2) return G4QContent(0,1,0,0,1,0);
         else if(f==3) return G4QContent(0,0,1,0,0,1);
-        else G4cerr<<"***G4QPDGCode::GetQCont:4 PDG="<<thePDGCode<<","<<f<<","<<v<<","<<t<<G4endl;
+        else G4cerr<<"***G4QPDGCode::GetQCont:4 PDG="<<thePDGCode<<",i="<<f<<","<<v<<","<<t<<G4endl;
 	  }
       else
 	  {
@@ -1028,6 +1033,7 @@ G4int G4QPDGCode::GetRelCrossIndex(G4int i, G4int o)  const
     else G4cerr<<"***G4QPDGCode::RelGetCrossIndex: strange exiting quark (i=0) o="<<o<<G4endl;
   }
   else G4cerr<<"***G4QPDGCode::RelGetCrossIndex: strange entering quark i="<<i<<G4endl;
+  return 0;
 }
 
 // Get number of Combinations for q_i->q_o

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QChipolino.cc,v 1.10 2001-09-18 15:28:20 mkossov Exp $
+// $Id: G4QChipolino.cc,v 1.11 2001-10-30 08:32:37 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -44,9 +44,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
   cout<<"G4QChipolino is called with QC="<<QCont<<",rQC="<<rQC<<",tot="<<tot<<endl;
 #endif
   minM=1000000.;              // Prototype of minimal mass         (@@ just a big number)
-  G4double m1=mPi0;
   theQPDG1   = Pi0;
-  G4double m2=mPi0;
   theQPDG2   = Pi0;
   theQCont1  = Pi0QC;
   if      (!tot)              // Should not be here, just in case     (strange input)

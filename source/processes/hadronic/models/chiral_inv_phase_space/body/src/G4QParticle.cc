@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QParticle.cc,v 1.11 2001-10-04 20:00:24 hpw Exp $
+// $Id: G4QParticle.cc,v 1.12 2001-10-30 08:32:39 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -97,7 +97,7 @@ ostream& operator<<(ostream& lhs, G4QParticle& rhs)
     lhs << DCV[i]->GetDecayChanLimit() << "PDG codes";
     G4QPDGCodeVector PCV=DCV[i]->GetVecOfSecHadrons();
     G4int m = PCV.size();
-    for (int j=0; j<n; j++)
+    for (int j=0; j<m; j++)
     {
       if(!j) lhs << ":";
       else   lhs << ",";

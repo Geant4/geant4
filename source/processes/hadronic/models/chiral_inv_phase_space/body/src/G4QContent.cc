@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QContent.cc,v 1.16 2001-09-18 15:28:20 mkossov Exp $
+// $Id: G4QContent.cc,v 1.17 2001-10-30 08:32:37 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -22,6 +22,7 @@
 //#define debug
 //#define pdebug
 //#define ppdebug
+//#define erdebug
 
 #include "G4QContent.hh"
 
@@ -31,8 +32,10 @@ G4QContent::G4QContent(G4int d, G4int u, G4int s, G4int ad, G4int au, G4int as):
 {
   if(d<0||u<0||s<0||ad<0||au<0||as<0)
   {
+#ifdef erdebug
     G4cerr<<"***G4QContent:"<<d<<","<<u<<","<<s<<","<<ad<<","<<au<<","<<as<<G4endl;
     //G4Exception("***G4QContent::Constructor: Negative Quark Content");
+#endif
     if(d<0) ad-=d;
     if(u<0) au-=u;
     if(s<0) as-=s;
@@ -104,10 +107,10 @@ G4QContent G4QContent::operator-=(const G4QContent& rhs)
   G4int rAD=rhs.nAD;
   G4int rAU=rhs.nAU;
   G4int rAS=rhs.nAS;
-  G4int rQ =rD+rU+rS;
-  G4int rAQ=rAD+rAU+rAS;
-  G4int nQ =nD+nU+nS;
-  G4int nAQ=nAD+nAU+nAS;
+  ///////////G4int rQ =rD+rU+rS;
+  ///////////G4int rAQ=rAD+rAU+rAS;
+  ///////////G4int nQ =nD+nU+nS;
+  ///////////G4int nAQ=nAD+nAU+nAS;
   if(nU<rU||nAU<rAU||nD<rD||nAD<rAD)
   {
     G4int dU=rU-nU;
@@ -485,7 +488,9 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
   G4QContent r=Pi;     // Pion prototype of returned value
   if((tot!=4||q!=2) && (tot!=5||(q!=1&&aq!=1)) && (tot!=6||abs(b)!=2))
   {
+	//#ifdef erdebug
     G4cerr<<"***G4QCont::SplitChipo: QC="<<GetThis()<<G4endl;
+	//#endif
     return Pi;
   }
   else if(tot==4)      // Mesonic (eight possibilities)
@@ -496,7 +501,9 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
     else if(r.SubtractKaon(mQ)) return r;
     else
     {
+	  //#ifdef debug
       G4cerr<<"***G4QCont::SplitChipo: Mesonic tot="<<tot<<",b="<<b<<",q="<<q<<",aq="<<aq<<G4endl;
+	  //#endif
       return Pi;
     }
   }
@@ -570,8 +577,11 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
     }
     else
     {
+	  //#ifdef erdebug
       G4cerr<<"***G4QCont::SplitChipo: Baryonic tot=5,b=1,qCont="<<GetThis()<<G4endl;
+      //#endif
       return Pi;
+
     }
     return r;
   }
@@ -597,7 +607,9 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
         else if(r.SubtractHadron(dm)) return r-dm;
         else
         {
+     	  //#ifdef erdebug
           G4cerr<<"***G4QCont::SplitChipo: Dibaryon (1) tot=6, b=2, qCont="<<GetThis()<<G4endl;
+          //#endif
           return Pi;
         }
       }
@@ -610,7 +622,9 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
         else if(r.SubtractHadron(la)) return r-la;
         else
         {
+     	  //#ifdef erdebug
           G4cerr<<"***G4QContent::SplitChipo: Dibaryon (2) tot=6, b=2, qCont="<<GetThis()<<G4endl;
+          //#endif
           return Pi;
         }
       }
@@ -623,7 +637,9 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
         else if(r.SubtractHadron(nt)) return r-nt;
         else
         {
+     	  //#ifdef erdebug
           G4cerr<<"***G4QContent::SplitChipo: Dibaryon (3) tot=6, b=2, qCont="<<GetThis()<<G4endl;
+          //#endif
           return Pi;
         }
       }
@@ -647,7 +663,9 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
         else if(r.SubtractHadron(dm)) return r-dm;
         else
         {
+     	  //#ifdef erdebug
           G4cerr<<"***G4QContent::SplitChipo: ADibaryon (1) tot=6, b=2, qCont="<<GetThis()<<G4endl;
+          //#endif
           return Pi;
         }
       }
@@ -660,7 +678,9 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
         else if(r.SubtractHadron(la)) return r-la;
         else
         {
+     	  //#ifdef erdebug
           G4cerr<<"***G4QContent::SplitChipo: ADibaryon (2) tot=6, b=2, qCont="<<GetThis()<<G4endl;
+          //#endif
           return Pi;
         }
       }
@@ -673,7 +693,9 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
         else if(r.SubtractHadron(nt)) return r-nt;
         else
         {
+     	  //#ifdef erdebug
           G4cerr<<"***G4QContent::SplitChipo: ADibaryon (3) tot=6, b=2, qCont="<<GetThis()<<G4endl;
+          //#endif
           return Pi;
         }
       }
@@ -681,7 +703,9 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
   }
   else                 // More than Dibaryon (@@ can use the same algorithm as for dibaryon)
   {
+    //#ifdef erdebug
     G4cerr<<"***G4QContent::SplitChipolino: Strange Hadron with QuarkContent="<<GetThis()<<G4endl;
+    //#endif
     return r;
   }
 }// End of G4QContent::SplitChipolino
@@ -690,13 +714,15 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
 G4QContent G4QContent::IndQ (G4int index)
 {//        ==============================
 #ifdef debug
-  cout << "G4QC::IndQ is called"<<endl;
+  G4cout << "G4QC::IndQ is called"<<G4endl;
 #endif
   if(index<nD) return G4QContent(1,0,0,0,0,0);
   else if(index<nD+nU) return G4QContent(0,1,0,0,0,0);
   else if(index<nD+nU+nS) return G4QContent(0,0,1,0,0,0);
+  //#ifdef erdebug
   else G4cerr<<"***G4QC::IndQ:index="<<index<<" for the QuarkContent="<<GetThis()<<G4endl;
-  G4Exception("***G4QC::IndQ: Index exceeds the total number of quarks");
+  //G4Exception("***G4QC::IndQ: Index exceeds the total number of quarks");
+  //#endif
   return G4QContent(0,0,0,0,0,0);
 }
 
@@ -709,8 +735,10 @@ G4QContent G4QContent::IndAQ (G4int index)
   if(index<nAD) return G4QContent(0,0,0,1,0,0);
   else if(index<nAD+nAU) return G4QContent(0,0,0,0,1,0);
   else if(index<nAD+nAU+nAS) return G4QContent(0,0,0,0,0,1);
+  //#ifdef erdebug
   else G4cerr<<"***G4QC::IndAQ:index="<<index<<" for the QuarkContent="<<GetThis()<<G4endl;
-  G4Exception("***G4QC::IndAQ: Index exceeds the total number of antiquarks");
+  //G4Exception("***G4QC::IndAQ: Index exceeds the total number of antiquarks");
+  //#endif
   return G4QContent(0,0,0,0,0,0);
 }
 
@@ -767,8 +795,8 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
 #ifdef pdebug
   G4cout<<"G4QC::DecQC: demanded "<<nQAQ<<" pairs, executed "<<nReal<<" pairs"<<G4endl;
 #endif
-  G4int nt = tot - nTotP - nTotP;
-  for (int i=0; i<nReal; i++)
+  ///////////G4int nt = tot - nTotP - nTotP;
+  for (G4int i=0; i<nReal; i++)
   {
     G4double base = nTotP;
     //if (nRet && nSP==1 && !nQAQ) base = nLP;                   // Keep S-Sbar pair if possible
@@ -937,7 +965,6 @@ G4int G4QContent::GetN() const
 G4int G4QContent::GetL() const
 {//   ========================
   G4int rS=nS-nAS;                                   // Constituent s-quarks
-  G4int b3=nD-nAD+nU-nAU+rS;                         // (Baryon number) * 3
   return rS;
 }
 
@@ -967,7 +994,6 @@ G4int G4QContent::GetAN() const
 G4int G4QContent::GetAL() const
 {//   =========================
   G4int rS=nAS-nS;                                   // Constituent anti-s-quarks
-  G4int b3=nAD-nD+nAU-nU+rS;                         // - (Baryon number) * 3
   return rS;
 }
 
@@ -988,9 +1014,9 @@ G4int G4QContent::GetCharge() const
   if(nAU)c+=nAU*cAU;
   if(nAD)c+=nAD*cAD;
   if(nAS)c+=nAS*cAS;
-
+  //#ifdef erdebug
   if(c%3) G4cerr<<"***G4QContent:GetCharge: c="<<c<<"/3 isn't integer, QC="<<GetThis()<<G4endl;
-
+  //#endif
   return c/3;
 }
 
@@ -998,9 +1024,9 @@ G4int G4QContent::GetCharge() const
 G4int G4QContent::GetBaryonNumber() const
 {//   ===================================
   G4int b=nU+nD+nS-nAU-nAD-nAS;
-
+  //#ifdef erdebug
   if(b%3) G4cerr<<"***G4Content: BaryonNumber="<<b<<"/3 is not an integer value"<<G4endl;
-
+  //#endif
   return b/3;
 }
 
@@ -1247,14 +1273,7 @@ G4int G4QContent::GetSPDGCode() const
     else if (mU>0)                               // Isotopic Mesons
 	{
       p=201;
-      if      (mU==2 && mD==0)
-      {
-        G4double rn=G4UniformRand();
-        //if     (rn<0.500) p=111;
-        //else if(rn<0.667) p=331;
-        //else
-          p=221;
-      }
+      if      (mU==2 && mD==0) p=221;
       else if (mU==1 && mD==1) p+=10;
       else
 	  {
@@ -1264,14 +1283,7 @@ G4int G4QContent::GetSPDGCode() const
         return 0;
       }
 	}
-    else if (mD==2)
-    {
-      G4double rn=G4UniformRand();
-      //if     (rn<0.500) p=221;
-      //else if(rn<0.667) p=331;
-      //else
-        p=111;
-    }
+    else if (mD==2) p=111;
     else
     {
 #ifdef debug
@@ -1301,7 +1313,7 @@ G4int G4QContent::NOfCombinations(const G4QContent& rhs) const
   G4int mAU=rhs.GetAU();
   G4int mAS=rhs.GetAS();
   G4int mN=mD+mU+mS-mAD-mAU-mAS;
-  G4int PDG=abs(GetSPDGCode());
+  ////////////G4int PDG=abs(GetSPDGCode());
   //if((nD<mD||nU<mU||nS<mS||nAD<mAD||nAU<mAU||nAS<mAS)&&!mN&&(PDG==1114||PDG==2224)) return 1;
   if(((nD<mD||nAD<mAD)&&!(mD-mAD)||(nU<mU||nAU<mAU)&&!(mU-mAU)||(nS<mS||nAS<mAS)&&!(mS-mAS))&&!mN)
     return 1;
