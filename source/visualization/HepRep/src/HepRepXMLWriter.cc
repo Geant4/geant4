@@ -22,7 +22,7 @@
 //
 //--------------------------------------------------------------------------
 // File and Version Information:
-// 	$Id: HepRepXMLWriter.cc,v 1.4 2002-01-14 22:31:28 perl Exp $
+// 	$Id: HepRepXMLWriter.cc,v 1.5 2002-01-29 01:25:25 perl Exp $
 //
 // Description:
 //	Create a HepRep XML File (HepRep version 1).
@@ -44,16 +44,63 @@
 HepRepXMLWriter::HepRepXMLWriter()
 {
   isOpen = false;
+  init();
 }
 
-void HepRepXMLWriter::addType(const char* name)
+void HepRepXMLWriter::init()
+{
+  typeDepth = -1;
+
+  int i = -1;
+  while (i++<49) {
+    delete [] prevTypeName[i];
+    prevTypeName[i] = new char[1];
+    strcpy(prevTypeName[i],"");
+
+    inType[i] = false;
+    inInstance[i] = false;
+  }
+
+  inPrimitive = false;
+  inPoint = false;
+}
+
+void HepRepXMLWriter::addType(const char* name,int newTypeDepth)
 {
   if (fout.good())
   {
-    endType();
-    fout << "  <heprep:type version=\"null\" name=\"" << name << "\">"
+    // Flatten structure if it exceeds maximum allowed typeDepth of 49.
+    if (newTypeDepth > 49)
+      newTypeDepth = 49;
+
+    if (newTypeDepth < 0)
+      newTypeDepth = 0;
+
+    // If moving closer to the root, close previously open types.
+    while (newTypeDepth<typeDepth)
+      endType();
+
+    // Close any remaining primitives of the current instance.
+    endPrimitive();
+
+    // If this is a new type name for the current depth, declare the
+    // new Type.  Otherwise, it is just another Instance of the current Type.
+    if (strcmp(name,prevTypeName[newTypeDepth])!=0)
+    {
+      if (inType[newTypeDepth])
+	endType();
+
+      delete [] prevTypeName[newTypeDepth];
+      prevTypeName[newTypeDepth] = new char[strlen(name)];
+      strcpy(prevTypeName[newTypeDepth],name);
+
+      inType[newTypeDepth] = true;
+      indent();
+      fout << "<heprep:type version=\"null\" name=\"" << name << "\">"
 	 << G4endl;
-    inType = true;
+
+      typeDepth = newTypeDepth;
+    }
   } else {
     G4cout << "HepRepXMLWriter:addType No file is currently open." << G4endl;
   }
@@ -63,13 +110,15 @@ void HepRepXMLWriter::addInstance()
 {
   if (fout.good())
   {
-    if (inType)
+    if (inType[typeDepth])
     {
       endInstance();
-      fout << "    <heprep:instance>" << G4endl;
-      inInstance = true;
+      inInstance[typeDepth] = true;
+      indent();
+      fout << "<heprep:instance>" << G4endl;
     } else {
-      G4cout << "HepRepXMLWriter:addInstance No HepRep Type is currently open"
+      G4cout <<
+	"HepRepXMLWriter:addInstance No HepRep Type is currently open"
 	     << G4endl;
     }
   } else {
@@ -82,11 +131,12 @@ void HepRepXMLWriter::addPrimitive()
 {
   if (fout.good())
   {
-    if (inInstance)
+    if (inInstance[typeDepth])
     {
       endPrimitive();
-      fout << "      <heprep:primitive>" << G4endl;
       inPrimitive = true;
+      indent();
+      fout << "<heprep:primitive>" << G4endl;
     } else {
       G4cout <<
 	"HepRepXMLWriter:addPrimitive No HepRep Instance is currently open"
@@ -105,8 +155,9 @@ void HepRepXMLWriter::addPoint(double x, double y, double z)
     if (inPrimitive)
     {
       endPoint();
-      fout << "        <heprep:point x=\"" << x << "\" y=\"" << y << "\" z=\"" << z << "\">" << G4endl;
       inPoint = true;
+      indent();
+      fout << "<heprep:point x=\"" << x << "\" y=\"" << y << "\" z=\"" << z << "\">" << G4endl;
     } else {
       G4cout <<
 	"HepRepXMLWriter:addPoint No HepRep Primitive is currently open"
@@ -125,9 +176,9 @@ void HepRepXMLWriter::addAttDef(const char* name,
   if (fout.good())
   {
     indent();
-    fout << "  <heprep:attdef extra=\"" << extra << "\" name=\"" << name << "\" type=\"" << type << "\"" << G4endl;
+    fout << "<heprep:attdef extra=\"" << extra << "\" name=\"" << name << "\" type=\"" << type << "\"" << G4endl;
     indent();
-    fout << "    desc=\"" << desc << "\"/>" << G4endl;
+    fout << "  desc=\"" << desc << "\"/>" << G4endl;
   } else {
     G4cout << "HepRepXMLWriter:addAttDef No file is currently open" << G4endl;
   }
@@ -197,10 +248,10 @@ void HepRepXMLWriter::addAttValue (const char* name,
 {
   if (fout.good())
   {
-    indent();
     int redness = int(value1*255.);
     int greenness = int(value2*255.);
     int blueness = int(value3*255.);
+    indent();
     fout << "  <heprep:attvalue showLabel=\"NONE\" name=\"" << name << "\"" << G4endl;
     indent();
     fout << "    value=\"" << redness << "," << greenness << "," << blueness << "\"/>" << G4endl;
@@ -209,58 +260,66 @@ void HepRepXMLWriter::addAttValue (const char* name,
   }
 }
 
-void HepRepXMLWriter::open(const char* filespec)
+void HepRepXMLWriter::open(const char* fileSpec)
 {
   if (isOpen)
-    fout.close();
-
-  fout.open(filespec);
-
-  if (fout.good())
-  {
+    close();
+  
+  fout.open(fileSpec);
+    
+  if (fout.good()) {
     fout << "<?xml version=\"1.0\" ?>" << G4endl;
     fout << "<heprep:heprep xmlns:heprep=\"http://www.freehep.org/HepRep\"" << G4endl;
     fout << "  xmlns:xsi=\"http://www.w3.org/1999/XMLSchema-instance\" xsi:schemaLocation=\"HepRep.xsd\">" << G4endl;
-
+    
     isOpen = true;
-    inType = false;
-    inInstance = false;
-    inPrimitive = false;
-    inPoint = false;
+    init();
   } else {
-    G4cout << "HepRepXMLWriter:open Unable to write to file " << filespec << G4endl;
+    G4cout << "HepRepXMLWriter:open Unable to write to file " << fileSpec << G4endl;
   }
 }
 
 void HepRepXMLWriter::close()
 {
-  if (fout.good())
-  {
-    endType();
+  // Close any remaining open Types
+  endTypes();
+
+  if (fout.good()) {      
     fout << "</heprep:heprep>" << G4endl;
     fout.close( );
+    isOpen = false;
   } else {
     G4cout << "HepRepXMLWriter:close No file is currently open" << G4endl;
   }
 }
 
+void HepRepXMLWriter::endTypes()
+{
+  // Close any remaining open Types
+    while(typeDepth>-1)
+      endType();
+}
+
 void HepRepXMLWriter::endType()
 {
-  if (inType)
-  {
-    endInstance();
-    fout << "  </heprep:type>" << G4endl;
-    inType = false;
-  }
+  endInstance();
+  indent();
+  fout << "</heprep:type>" << G4endl;
+  inType[typeDepth] = false;
+  delete [] prevTypeName[typeDepth];
+  prevTypeName[typeDepth] = new char[1];
+  strcpy(prevTypeName[typeDepth],"");
+  typeDepth--;
 }
 
 void HepRepXMLWriter::endInstance()
 {
-  if (inInstance)
+  if (inInstance[typeDepth])
   {
     endPrimitive();
-    fout << "    </heprep:instance>" << G4endl;
-    inInstance = false;
+    indent();
+    fout << "</heprep:instance>" << G4endl;
+    inInstance[typeDepth] = false;
   }
 }
 
@@ -269,7 +328,8 @@ void HepRepXMLWriter::endPrimitive()
   if (inPrimitive)
   {
     endPoint();
-    fout << "      </heprep:primitive>" << G4endl;
+    indent();
+    fout << "</heprep:primitive>" << G4endl;
     inPrimitive = false;
   }
 }
@@ -278,7 +338,8 @@ void HepRepXMLWriter::endPoint()
 {
   if (inPoint)
   {
-    fout << "        </heprep:point>" << G4endl;
+    indent();
+    fout << "</heprep:point>" << G4endl;
     inPoint = false;
   }
 }
@@ -287,10 +348,14 @@ void HepRepXMLWriter::indent()
 {
   if (fout.good())
   {
-    if (inType)
+    int i = 0;
+    while (inType[i] && i<12) {
       fout << "  ";
-    if (inInstance)
-      fout << "  ";
+      if (inInstance[i])
+        fout << "  ";
+      i++;
+    }
+
     if (inPrimitive)
       fout << "  ";
     if (inPoint)

@@ -22,7 +22,7 @@
 //
 //--------------------------------------------------------------------------
 // File and Version Information:
-// 	$Id: HepRepXMLWriter.hh,v 1.5 2002-01-14 22:31:25 perl Exp $
+// 	$Id: HepRepXMLWriter.hh,v 1.6 2002-01-29 01:25:09 perl Exp $
 //
 // Description:
 //	Create a HepRep XML File (HepRep version 1).
@@ -47,7 +47,7 @@ class HepRepXMLWriter
 public:
   HepRepXMLWriter();
 
-  void addType(const char* name);
+  void addType(const char* name, int newTypeDepth);
   void addInstance();
   void addPrimitive();
   void addPoint(double x, double y, double z);
@@ -57,7 +57,6 @@ public:
 		 const char* type,
 		 const char* extra);
 
-  // Four methods to fill attValues
   void addAttValue(const char* name,
 		   const char* value);
 
@@ -77,13 +76,21 @@ public:
 
   void open(const char* filespec);
   void close();
+
+  void endTypes();
+
+  int typeDepth;
+  bool inType[50];
+  bool inInstance[50];
+  char* prevTypeName[50];
   
 private:
   G4std::ofstream fout;
 
   bool isOpen;
-  bool inType;
-  bool inInstance;
+
+  void init();
+
   bool inPrimitive;
   bool inPoint;
 

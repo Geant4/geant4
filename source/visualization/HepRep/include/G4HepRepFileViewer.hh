@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileViewer.hh,v 1.2 2001-11-19 15:06:52 johna Exp $
+// $Id: G4HepRepFileViewer.hh,v 1.3 2002-01-29 01:25:06 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,6 +48,8 @@ public:
 
 private:
   HepRepXMLWriter *hepRepXMLWriter;
+  int fileCounter;
+  bool isOpen;
 };
 
 #endif

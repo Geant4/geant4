@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.3 2001-11-19 15:07:28 johna Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.4 2002-01-29 01:25:19 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// John Allison  5th April 2001
-// A base class for a scene handler to dump geometry hierarchy.
-// Based on a provisional G4HepRepFileGraphicsScene (was in modeling).
+// Joseph Perl  27th January 2002
+// A base class for a scene handler to export geometry and trajectories
+// to the HepRep xml file format.
 
 #include "G4HepRepFileSceneHandler.hh"
 #include "G4HepRepFile.hh"
@@ -65,11 +65,30 @@ G4HepRepFileSceneHandler::G4HepRepFileSceneHandler(G4VGraphicsSystem& system,
   fSceneCount++;
 
   hepRepXMLWriter = ((G4HepRepFile*)(&system))->GetHepRepXMLWriter();
-  G4cout << "  From scene handler const: opening file, G4HepRepFile.xml"
-	 << G4endl;
 }
 
 G4HepRepFileSceneHandler::~G4HepRepFileSceneHandler() {}
+
+void G4HepRepFileSceneHandler::BeginModeling() {
+  G4VSceneHandler::BeginModeling();  // Required: see G4VSceneHandler.hh.
+  // Force culling off...
+  if (fpModel) {
+    fpOriginalMP = fpModel->GetModelingParameters();
+    if (fpOriginalMP) {
+      fpNonCullingMP = new G4ModelingParameters(*fpOriginalMP);
+      fpNonCullingMP->SetCulling(false);
+      fpModel->SetModelingParameters(fpNonCullingMP);
+    }
+  }
+}
+
+void G4HepRepFileSceneHandler::EndModeling() {
+  if (fpModel && fpOriginalMP) {
+    fpModel->SetModelingParameters(fpOriginalMP);
+    delete fpNonCullingMP;
+  }
+  G4VSceneHandler::EndModeling();  // Required: see G4VSceneHandler.hh.
+}
 
 #ifdef G4HEPREPFILEDEBUG
 void G4HepRepFileSceneHandler::PrintThings() {
@@ -97,7 +116,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Box& box) {
 	 << G4endl;
   PrintThings();
 #endif
-  hepRepXMLWriter->addType(fpCurrentPV->GetName());
+  hepRepXMLWriter->addType(fpCurrentPV->GetName(),fCurrentDepth-1);
   G4VSceneHandler::AddThis(box);  // Invoke default action.
 }
 
@@ -109,7 +128,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Cons& cons) {
 	 << G4endl;
   PrintThings();
 #endif
-  hepRepXMLWriter->addType(fpCurrentPV->GetName());
+  hepRepXMLWriter->addType(fpCurrentPV->GetName(),fCurrentDepth-1);
   G4VSceneHandler::AddThis(cons);  // Invoke default action.
 }
 
@@ -121,7 +140,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Tubs& tubs) {
 	 << G4endl;
   PrintThings();
 #endif
-  hepRepXMLWriter->addType(fpCurrentPV->GetName());
+  hepRepXMLWriter->addType(fpCurrentPV->GetName(),fCurrentDepth-1);
   G4VSceneHandler::AddThis(tubs);  // Invoke default action.
 }
 
@@ -133,7 +152,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Trd& trd) {
 	 << G4endl;
   PrintThings();
 #endif
-  hepRepXMLWriter->addType(fpCurrentPV->GetName());
+  hepRepXMLWriter->addType(fpCurrentPV->GetName(),fCurrentDepth-1);
   G4VSceneHandler::AddThis(trd);  // Invoke default action.
 }
 
@@ -145,7 +164,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Trap& trap) {
 	 << G4endl;
   PrintThings();
 #endif
-  hepRepXMLWriter->addType(fpCurrentPV->GetName());
+  hepRepXMLWriter->addType(fpCurrentPV->GetName(),fCurrentDepth-1);
   G4VSceneHandler::AddThis(trap);  // Invoke default action.
 }
 
@@ -157,7 +176,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Sphere& sphere) {
 	 << G4endl;
   PrintThings();
 #endif
-  hepRepXMLWriter->addType(fpCurrentPV->GetName());
+  hepRepXMLWriter->addType(fpCurrentPV->GetName(),fCurrentDepth-1);
   G4VSceneHandler::AddThis(sphere);  // Invoke default action.
 }
 
@@ -169,7 +188,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Para& para) {
 	 << G4endl;
   PrintThings();
 #endif
-  hepRepXMLWriter->addType(fpCurrentPV->GetName());
+  hepRepXMLWriter->addType(fpCurrentPV->GetName(),fCurrentDepth-1);
   G4VSceneHandler::AddThis(para);  // Invoke default action.
 }
 
@@ -181,7 +200,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Torus& torus) {
 	 << G4endl;
   PrintThings();
 #endif
-  hepRepXMLWriter->addType(fpCurrentPV->GetName());
+  hepRepXMLWriter->addType(fpCurrentPV->GetName(),fCurrentDepth-1);
   G4VSceneHandler::AddThis(torus);  // Invoke default action.
 }
 
@@ -193,7 +212,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Polycone& polycone) {
 	 << G4endl;
   PrintThings();
 #endif
-  hepRepXMLWriter->addType(fpCurrentPV->GetName());
+  hepRepXMLWriter->addType(fpCurrentPV->GetName(),fCurrentDepth-1);
   G4VSceneHandler::AddThis(polycone);  // Invoke default action.
 }
 
@@ -205,7 +224,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Polyhedra& polyhedra) {
 	 << G4endl;
   PrintThings();
 #endif
-  hepRepXMLWriter->addType(fpCurrentPV->GetName());
+  hepRepXMLWriter->addType(fpCurrentPV->GetName(),fCurrentDepth-1);
   G4VSceneHandler::AddThis(polyhedra);  // Invoke default action.
 }
 
@@ -217,7 +236,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4VSolid& solid) {
 	 << G4endl;
   PrintThings();
 #endif
-  hepRepXMLWriter->addType(fpCurrentPV->GetName());
+  hepRepXMLWriter->addType(fpCurrentPV->GetName(),fCurrentDepth-1);
   G4VSceneHandler::AddThis(solid);  // Invoke default action.
 }
 
@@ -231,8 +250,21 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyline& polyline) {
   PrintThings();
 #endif
 
+  // If the polyline primitive is used when we are not in any HepRep Type,
+  // this must be the beginning of event data (since all other data comes in
+  // through addThis methods that first do an addType).
+  if (!hepRepXMLWriter->inType[0]) {
+    hepRepXMLWriter->addType("Event Data",0);
+    hepRepXMLWriter->addInstance();
+  }
+
+  // If we are in event data, this must be a Trajectory.
+  if (strcmp(hepRepXMLWriter->prevTypeName[0],"Event Data")==0)
+    hepRepXMLWriter->addType("Trajectories",1);
+
   hepRepXMLWriter->addInstance();
   hepRepXMLWriter->addAttValue("DrawAs","Line");
+  hepRepXMLWriter->addAttValue("Layer",hepRepXMLWriter->typeDepth);
 
   G4Colour color = GetColour(polyline);
   hepRepXMLWriter->addAttValue("LineColor", color.GetRed(), color.GetGreen(), color.GetBlue());
@@ -254,12 +286,18 @@ void G4HepRepFileSceneHandler::AddPrimitive (const G4Polymarker& line) {
   PrintThings();
 #endif
 
-  hepRepXMLWriter->addInstance();
-  hepRepXMLWriter->addAttValue("DrawAs","Point");
+  if (!hepRepXMLWriter->inType[0]) {
+    hepRepXMLWriter->addType("Event Data",0);
+    hepRepXMLWriter->addInstance();
+  }
 
-  // FIXME: should be taken from G4
-  hepRepXMLWriter->addAttValue("MarkName", "Square");
-  hepRepXMLWriter->addAttValue("MarkSize", 5);
+  // If we are in event data, this must be a Trajectory.
+  if (strcmp(hepRepXMLWriter->prevTypeName[0],"Event Data")==0)
+    hepRepXMLWriter->addType("Unknown",1);
+
+  hepRepXMLWriter->addInstance();
+  hepRepXMLWriter->addAttValue("DrawAs","Line");
+  hepRepXMLWriter->addAttValue("Layer",hepRepXMLWriter->typeDepth);
 
   G4Colour color = GetColour(line);
   hepRepXMLWriter->addAttValue("LineColor", color.GetRed(), color.GetGreen(), color.GetBlue());
@@ -292,17 +330,41 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Circle& circle) {
   PrintThings();
 #endif
 
+  // If the circle primitive is used when we are not in any HepRep Type,
+  // this must be a Trajectory Point (since all other data comes in through
+  // addThis methods that first do an addType).
+  // If the circle primitive is used when we are not in any HepRep Type,
+  // this must be the beginning of event data (since all other data comes in
+  // through addThis methods that first do an addType).
+  if (!hepRepXMLWriter->inType[0]) {
+    hepRepXMLWriter->addType("Event Data",0);
+    hepRepXMLWriter->addInstance();
+  }
+
+  // If we are in event data, this must be a Trajectory Point.
+  // Make it a subType of Trajectories if they are currently being drawn.
+  if (strcmp(hepRepXMLWriter->prevTypeName[0],"Event Data")==0) {
+    if (strcmp(hepRepXMLWriter->prevTypeName[1],"Trajectories")==0)
+      hepRepXMLWriter->addType("Trajectory Points",2);
+    else
+      hepRepXMLWriter->addType("Trajectory Points",1);
+  }
+
   hepRepXMLWriter->addInstance();
   hepRepXMLWriter->addAttValue("DrawAs","Point");
+  hepRepXMLWriter->addAttValue("Layer",hepRepXMLWriter->typeDepth);
   hepRepXMLWriter->addAttValue("MarkName", "Dot");
+  hepRepXMLWriter->addAttValue("MarkSize", 4);
 
+  // Hit circles seem to be defaulting to black.  Override this as white.
   G4Colour color = GetColour(circle);
-  hepRepXMLWriter->addAttValue("LineColor", color.GetRed(), color.GetGreen(), color.GetBlue());
-
+  if (color.GetRed()==0.&&color.GetGreen()==0.&&color.GetBlue()==0.) {
+    hepRepXMLWriter->addAttValue("MarkColor", 1., 1., 1.);
+  } else {
+    hepRepXMLWriter->addAttValue("MarkColor", color.GetRed(), color.GetGreen(), color.GetBlue());
+  }
+  
   hepRepXMLWriter->addPrimitive();
-
-  G4double  radius = circle.GetWorldSize();
-  hepRepXMLWriter->addAttValue("MarkSize", radius);
 
   G4Point3D center = (*fpObjectTransformation) * circle.GetPosition();
   hepRepXMLWriter->addPoint(center.x(), center.y(), center.z());
@@ -317,8 +379,18 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Square& square) {
   PrintThings();
 #endif
 
+  if (!hepRepXMLWriter->inType[0]) {
+    hepRepXMLWriter->addType("Event Data",0);
+    hepRepXMLWriter->addInstance();
+  }
+
+  // If we are in event data, this must be a Trajectory.
+  if (strcmp(hepRepXMLWriter->prevTypeName[0],"Event Data")==0)
+    hepRepXMLWriter->addType("Unknown",1);
+
   hepRepXMLWriter->addInstance();
-  hepRepXMLWriter->addAttValue("DrawAs","Point");
+  hepRepXMLWriter->addAttValue("DrawAs","Point"); 
+  hepRepXMLWriter->addAttValue("Layer",hepRepXMLWriter->typeDepth);
   hepRepXMLWriter->addAttValue("MarkName", "Square");
 
   G4Colour color = GetColour(square);
@@ -342,11 +414,21 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
 #endif
   if(polyhedron.GetNoFacets()==0)return;
 
+  if (!hepRepXMLWriter->inType[0]) {
+    hepRepXMLWriter->addType("Event Data",0);
+    hepRepXMLWriter->addInstance();
+  }
+
+  // If we are in event data, this must be a Trajectory.
+  if (strcmp(hepRepXMLWriter->prevTypeName[0],"Event Data")==0)
+    hepRepXMLWriter->addType("Unknown",1);
+
   G4Normal3D surfaceNormal;
   G4Point3D vertex;
 
   hepRepXMLWriter->addInstance();
   hepRepXMLWriter->addAttValue("DrawAs","Polygon");
+  hepRepXMLWriter->addAttValue("Layer",hepRepXMLWriter->typeDepth);
 
   G4Colour color = GetColour(polyhedron);
   hepRepXMLWriter->addAttValue("LineColor", color.GetRed(), color.GetGreen(), color.GetBlue());

@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2002-01-14 22:31:20 perl Exp $
+$Id: History,v 1.11 2002-01-29 01:24:57 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,8 +20,10 @@ committal in the CVS repository !
 History file for visualization/HepRep sub-category
 ---------------------------------------------------------------------------
 
-14th January 2002  Joseph Perl
-- Corrected handling for already open file in HepRepXMLWriter.
+28th January 2002  Joseph Perl
+- Produce hierarchical output rather than flat HepRepType structure.
+- Handle trajectories as well as detector geometry.
+- Output files now named G4Data<n>.heprep where n increments with each open.
 
 19th November 2001  John Allison  (vis-V03-02-19)
 - Added G4HEPREPFILEDEBUG to control debug code.

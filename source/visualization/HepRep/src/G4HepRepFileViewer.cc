@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileViewer.cc,v 1.3 2001-11-19 15:07:28 johna Exp $
+// $Id: G4HepRepFileViewer.cc,v 1.4 2002-01-29 01:25:22 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4HepRepFileViewer.hh"
@@ -39,7 +39,8 @@
 G4HepRepFileViewer::G4HepRepFileViewer
 (G4VSceneHandler& sceneHandler, const G4String& name):
   G4VViewer(sceneHandler, sceneHandler.IncrementViewCount(), name) {
-
+  fileCounter = 0;
+  isOpen = false;
   hepRepXMLWriter = ((G4HepRepFileSceneHandler*)(&sceneHandler))->GetHepRepXMLWriter();
 }
 
@@ -47,16 +48,28 @@ G4HepRepFileViewer::~G4HepRepFileViewer() {}
 
 void G4HepRepFileViewer::SetView() {
 #ifdef G4HEPREPFILEDEBUG
-  G4cout << "G4HepRepFileViewer::SetView() called." << G4endl;
+  G4cout << "G4HepRepFileViewer::SetView() called with isOpen=" << isOpen << G4endl;
 #endif
-  hepRepXMLWriter->open("G4HepRepFile.xml");
-  hepRepXMLWriter->addAttDef("LVol", "Logical Volume", "Physics","");
-  hepRepXMLWriter->addAttDef("Solid", "Solid Name", "Physics","");
-  hepRepXMLWriter->addAttDef("EType", "Entity Type", "Physics","");
-  hepRepXMLWriter->addAttDef("Material", "Material Name", "Physics","");
-  hepRepXMLWriter->addAttDef("Density", "Material Density", "Physics","");
-  hepRepXMLWriter->addAttDef("State", "Material State", "Physics","");
-  hepRepXMLWriter->addAttDef("Radlen", "Material Radiation Length", "Physics","");
+  
+  if (isOpen) {    
+    hepRepXMLWriter->endTypes();
+  } else {
+    isOpen = true;
+    char* newFileSpec;
+    newFileSpec = new char [100];
+    int length;
+    length = sprintf (newFileSpec, "%s%d%s","G4Data",fileCounter,".heprep");
+    hepRepXMLWriter->open(newFileSpec);
+    fileCounter++;
+
+    hepRepXMLWriter->addAttDef("LVol", "Logical Volume", "Physics","");
+    hepRepXMLWriter->addAttDef("Solid", "Solid Name", "Physics","");
+    hepRepXMLWriter->addAttDef("EType", "Entity Type", "Physics","");
+    hepRepXMLWriter->addAttDef("Material", "Material Name", "Physics","");
+    hepRepXMLWriter->addAttDef("Density", "Material Density", "Physics","");
+    hepRepXMLWriter->addAttDef("State", "Material State", "Physics","");
+    hepRepXMLWriter->addAttDef("Radlen", "Material Radiation Length", "Physics","");
+  }
 }
 
 void G4HepRepFileViewer::ClearView() {
@@ -75,12 +88,10 @@ void G4HepRepFileViewer::DrawView() {
 
 void G4HepRepFileViewer::ShowView () {
 #ifdef G4HEPREPFILEDEBUG
-    G4cout << "G4HepRepFileViewer::ShowView" << G4endl;
+  G4cout << "G4HepRepFileViewer::ShowView" << G4endl;
 #endif
-    G4VViewer::ShowView();
-    
-    hepRepXMLWriter->close();
+  G4VViewer::ShowView();
+  
+  hepRepXMLWriter->close();
+  isOpen = false;
 }
-
-
-
