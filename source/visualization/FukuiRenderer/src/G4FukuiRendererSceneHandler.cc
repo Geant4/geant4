@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FukuiRendererScene.cc,v 1.1 1999-01-07 16:14:38 gunter Exp $
+// $Id: G4FukuiRendererSceneHandler.cc,v 1.1 1999-01-09 16:11:52 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,8 +29,8 @@
 #include "globals.hh"
 #include "G4FRConst.hh"
 #include "G4FukuiRenderer.hh"
-#include "G4FukuiRendererScene.hh"
-#include "G4FukuiRendererView.hh"
+#include "G4FukuiRendererSceneHandler.hh"
+#include "G4FukuiRendererViewer.hh"
 #include "G4Point3D.hh"
 #include "G4VisAttributes.hh"
 #include "G4Transform3D.hh"
@@ -55,11 +55,11 @@ const char FR_ENV_CULL_INVISIBLE_OBJECTS [] = "G4DAWN_CULL_INVISIBLE_OBJECTS";
 ///////////////////////////
 
 
-	//----- G4FukuiRendererScene, constructor
-G4FukuiRendererScene::G4FukuiRendererScene (G4FukuiRenderer& system,
+	//----- G4FukuiRendererSceneHandler, constructor
+G4FukuiRendererSceneHandler::G4FukuiRendererSceneHandler (G4FukuiRenderer& system,
 					    const G4String& name):
 fSystem   (system)                  ,
-G4VScene  (system, fSceneIdCount++, name) ,
+G4VSceneHandler  (system, fSceneIdCount++, name) ,
 fPrimDest (system.GetPrimDest() )   ,
 flag_in_modeling       (false)      ,
 flag_saving_g4_prim    (false)      ,
@@ -89,14 +89,14 @@ COMMAND_BUF_SIZE       (G4FRClientServer::SEND_BUFMAX)
 		//----- count instantiated scenes
 	fSceneCount++;
 
-} // G4FukuiRendererScene, constructor
+} // G4FukuiRendererSceneHandler, constructor
 
 
-	//----- G4FukuiRendererScene, destructor
-G4FukuiRendererScene::~G4FukuiRendererScene () 
+	//----- G4FukuiRendererSceneHandler, destructor
+G4FukuiRendererSceneHandler::~G4FukuiRendererSceneHandler () 
 {
 #if defined DEBUG_FR_SCENE
-	G4cerr << "***** ~G4FukuiRendererScene" << endl;
+	G4cerr << "***** ~G4FukuiRendererSceneHandler" << endl;
 #endif 
   fSceneCount--;
   ClearStore (); // clear current scene
@@ -108,7 +108,7 @@ G4FukuiRendererScene::~G4FukuiRendererScene ()
 // Common to DAWN and DAWNFILE drivers //
 /////////////////////////////////////////
 
-#define  G4FRSCENE  G4FukuiRendererScene
+#define  G4FRSCENE  G4FukuiRendererSceneHandler
 #include "G4FRSceneFunc.icc"
 #undef   G4FRSCENE 
 
@@ -117,9 +117,9 @@ G4FukuiRendererScene::~G4FukuiRendererScene ()
 //////////////////////
 
 	//----- static variables
-G4int G4FukuiRendererScene::fSceneIdCount = 0; 
+G4int G4FukuiRendererSceneHandler::fSceneIdCount = 0; 
 
-G4int G4FukuiRendererScene::fSceneCount = 0;   
+G4int G4FukuiRendererSceneHandler::fSceneCount = 0;   
 			// num of existing instances
 
 #endif // G4VIS_BUILD_DAWN_DRIVER

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FukuiRenderer.cc,v 1.1 1999-01-07 16:14:38 gunter Exp $
+// $Id: G4FukuiRenderer.cc,v 1.2 1999-01-09 16:11:51 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,9 +24,9 @@
 #define __G_ANSI_C__
 
 //#include "G4VisFeaturesOfFukuiRenderer.hh"
-#include "G4VScene.hh"
-#include "G4FukuiRendererScene.hh"
-#include "G4FukuiRendererView.hh"
+#include "G4VSceneHandler.hh"
+#include "G4FukuiRendererSceneHandler.hh"
+#include "G4FukuiRendererViewer.hh"
 #include "G4FRClientServer.hh"
 #include "G4FRConst.hh"
 #include "G4FRFeatures.hh"
@@ -70,24 +70,24 @@ G4FukuiRenderer::~G4FukuiRenderer ()
 }
 
 	//-----  G4FukuiRenderer::CreateScene () 
-G4VScene* G4FukuiRenderer::CreateScene (const G4String& name) 
+G4VSceneHandler* G4FukuiRenderer::CreateScene (const G4String& name) 
 {
-	G4VScene* p = new G4FukuiRendererScene (*this, name);
+	G4VSceneHandler* p = new G4FukuiRendererSceneHandler (*this, name);
 
 	if(!flag_connected) { delete p ;  p = NULL ; }
 
-	G4cout	<< G4FukuiRendererScene::GetSceneCount ()
+	G4cout	<< G4FukuiRendererSceneHandler::GetSceneCount ()
 		<< ' ' << fName << " scenes extanct." << endl;
 
 	return p;
 }
 
 	//-----  G4FukuiRenderer::CreateView () 
-G4VView* G4FukuiRenderer::CreateView (G4VScene& scene, const G4String& name) 
+G4VViewer* G4FukuiRenderer::CreateView (G4VSceneHandler& scene, const G4String& name) 
 {
 	if(!flag_connected) return NULL;
-       	G4VView* pView = 
-	  new G4FukuiRendererView ((G4FukuiRendererScene&) scene, name);
+       	G4VViewer* pView = 
+	  new G4FukuiRendererViewer ((G4FukuiRendererSceneHandler&) scene, name);
 	return pView;
 }
 

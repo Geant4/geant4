@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILEScene.cc,v 1.1 1999-01-07 16:14:37 gunter Exp $
+// $Id: G4DAWNFILESceneHandler.cc,v 1.1 1999-01-09 16:11:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -28,8 +28,8 @@
 #include "globals.hh"
 #include "G4FRConst.hh"
 #include "G4DAWNFILE.hh"
-#include "G4DAWNFILEScene.hh"
-#include "G4DAWNFILEView.hh"
+#include "G4DAWNFILESceneHandler.hh"
+#include "G4DAWNFILEViewer.hh"
 #include "G4Point3D.hh"
 #include "G4VisAttributes.hh"
 #include "G4Transform3D.hh"
@@ -56,10 +56,10 @@ const char  DEFAULT_G4PRIM_FILE_NAME[] = "g4.prim";
 ///////////////////////////
 
 
-	//----- G4DAWNFILEScene, constructor
-G4DAWNFILEScene::G4DAWNFILEScene (G4DAWNFILE& system, const G4String& name):
+	//----- G4DAWNFILESceneHandler, constructor
+G4DAWNFILESceneHandler::G4DAWNFILESceneHandler (G4DAWNFILE& system, const G4String& name):
 fSystem   (system)                        ,
-G4VScene  (system, fSceneIdCount++, name) ,
+G4VSceneHandler  (system, fSceneIdCount++, name) ,
 fPrimDest ()                              ,
 flag_in_modeling       (false)            ,
 flag_saving_g4_prim    (false)            ,
@@ -91,18 +91,18 @@ COMMAND_BUF_SIZE       (G4FRofstream::SEND_BUFMAX)
 } 
 
 
-	//----- G4DAWNFILEScene, destructor
-G4DAWNFILEScene::~G4DAWNFILEScene () 
+	//----- G4DAWNFILESceneHandler, destructor
+G4DAWNFILESceneHandler::~G4DAWNFILESceneHandler () 
 {
 #if defined DEBUG_FR_SCENE
-	G4cerr << "***** ~G4DAWNFILEScene" << endl;
+	G4cerr << "***** ~G4DAWNFILESceneHandler" << endl;
 #endif 
   fSceneCount--;
   ClearStore (); // clear current scene
 
 }
 
-void	G4DAWNFILEScene::SetG4PrimFileName() 
+void	G4DAWNFILESceneHandler::SetG4PrimFileName() 
 {
 	// g4.prim, g4_1.prim, ..., g4_MAX_FILE_INDEX.prim
 	const int MAX_FILE_INDEX = fMaxFileNum - 1 ;
@@ -152,10 +152,10 @@ void	G4DAWNFILEScene::SetG4PrimFileName()
 	G4cerr << "  (Customizable as: setenv G4DAWNFILE_MAX_FILE_NUM number) " << endl;
 	G4cerr << "===========================================" << endl; 
 
-} // G4DAWNFILEScene::SetG4PrimFileName()
+} // G4DAWNFILESceneHandler::SetG4PrimFileName()
 
 
-void	G4DAWNFILEScene::BeginSavingG4Prim( void ) 
+void	G4DAWNFILESceneHandler::BeginSavingG4Prim( void ) 
 {
 	if( !IsSavingG4Prim() ) 
 	{ 
@@ -167,7 +167,7 @@ void	G4DAWNFILEScene::BeginSavingG4Prim( void )
 	} 
 }
 
-void	G4DAWNFILEScene::EndSavingG4Prim  ( void ) 
+void	G4DAWNFILESceneHandler::EndSavingG4Prim  ( void ) 
 {
 	if(  IsSavingG4Prim() )
 	{
@@ -181,7 +181,7 @@ void	G4DAWNFILEScene::EndSavingG4Prim  ( void )
 // Common to DAWN and DAWNFILE drivers //
 /////////////////////////////////////////
 
-#define  G4FRSCENE  G4DAWNFILEScene
+#define  G4FRSCENE  G4DAWNFILESceneHandler
 #include "G4FRSceneFunc.icc"
 #undef   G4FRSCENE 
 
@@ -190,9 +190,9 @@ void	G4DAWNFILEScene::EndSavingG4Prim  ( void )
 //////////////////////
 
 	//----- static variables
-G4int G4DAWNFILEScene::fSceneIdCount = 0; 
+G4int G4DAWNFILESceneHandler::fSceneIdCount = 0; 
 
-G4int G4DAWNFILEScene::fSceneCount = 0;   
+G4int G4DAWNFILESceneHandler::fSceneCount = 0;   
 			// num of existing instances
 
 #endif // G4VIS_BUILD_DAWNFILE_DRIVER

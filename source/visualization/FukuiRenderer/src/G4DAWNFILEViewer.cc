@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILEView.cc,v 1.1 1999-01-07 16:14:37 gunter Exp $
+// $Id: G4DAWNFILEViewer.cc,v 1.1 1999-01-09 16:11:48 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -26,7 +26,7 @@
 #include <string.h>
 #include <assert.h>
 
-#include "G4SceneData.hh"
+#include "G4Scene.hh"
 #include "G4Vector3D.hh"
 #include "G4VisExtent.hh"
 #include "G4LogicalVolume.hh"
@@ -34,18 +34,18 @@
 
 #include "G4FRConst.hh"
 #include "G4DAWNFILE.hh"
-#include "G4DAWNFILEScene.hh"
-#include "G4DAWNFILEView.hh"
+#include "G4DAWNFILESceneHandler.hh"
+#include "G4DAWNFILEViewer.hh"
 
 
 
 	//----- constants
 const char  FR_ENV_MULTI_WINDOW[] = "G4DAWN_MULTI_WINDOW" ;
 
-	//----- G4DAWNFILEView, constructor
-G4DAWNFILEView::G4DAWNFILEView (G4DAWNFILEScene& scene,
+	//----- G4DAWNFILEViewer, constructor
+G4DAWNFILEViewer::G4DAWNFILEViewer (G4DAWNFILESceneHandler& scene,
 				const G4String& name): 
-  G4VView (scene, scene.IncrementViewCount (), name), fScene (scene)
+  G4VViewer (scene, scene.IncrementViewCount (), name), fScene (scene)
 {
 	// Set a g4.prim-file viewer 
 	strcpy( fG4PrimViewer, "dawn" ); 
@@ -72,27 +72,27 @@ G4DAWNFILEView::G4DAWNFILEView (G4DAWNFILEScene& scene,
 
 }
 
-	//----- G4DAWNFILEView, destructor
-G4DAWNFILEView::~G4DAWNFILEView () 
+	//----- G4DAWNFILEViewer, destructor
+G4DAWNFILEViewer::~G4DAWNFILEViewer () 
 {}
 
-	//----- G4DAWNFILEView::SetView () 
-void G4DAWNFILEView::SetView () 
+	//----- G4DAWNFILEViewer::SetView () 
+void G4DAWNFILEViewer::SetView () 
 {
 #if defined DEBUG_FR_VIEW
-      G4cerr << "***** G4DAWNFILEView::SetView()\n";
+      G4cerr << "***** G4DAWNFILEViewer::SetView()\n";
 #endif 
 // Do nothing, since DAWN is running as a different process.
 // SendViewParameters () will do this job instead.
 }
 
 
-	//----- G4DAWNFILEView::ClearView()
+	//----- G4DAWNFILEViewer::ClearView()
 void
-G4DAWNFILEView::ClearView( void )
+G4DAWNFILEViewer::ClearView( void )
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4DAWNFILEView::ClearView () " << endl;
+	G4cerr << "***** G4DAWNFILEViewer::ClearView () " << endl;
 #endif
 
 		//----- Begin saving data to g4.prim
@@ -104,11 +104,11 @@ G4DAWNFILEView::ClearView( void )
 }
 
 
-	//----- G4DAWNFILEView::DrawView () 
-void G4DAWNFILEView::DrawView () 
+	//----- G4DAWNFILEViewer::DrawView () 
+void G4DAWNFILEViewer::DrawView () 
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4DAWNFILEView::DrawView () " << endl;
+	G4cerr << "***** G4DAWNFILEViewer::DrawView () " << endl;
 #endif
 		//----- Error recovery
 	if( fScene.IsInModeling() )  {
@@ -135,15 +135,15 @@ void G4DAWNFILEView::DrawView ()
 		//----- Draw
 	ProcessView () ;
 
-} // G4DAWNFILEView::DrawView () 
+} // G4DAWNFILEViewer::DrawView () 
 
 
 
-	//----- G4DAWNFILEView::ShowView()
-void G4DAWNFILEView::ShowView( void )
+	//----- G4DAWNFILEViewer::ShowView()
+void G4DAWNFILEViewer::ShowView( void )
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4DAWNFILEView::ShowView () " << endl;
+	G4cerr << "***** G4DAWNFILEViewer::ShowView () " << endl;
 #endif
 
 	if( fScene.IsInModeling() ) // if( fScene.flag_in_modeling ) 
@@ -195,14 +195,14 @@ void G4DAWNFILEView::ShowView( void )
 
 	}
 
-} // G4DAWNFILEView::ShowView()
+} // G4DAWNFILEViewer::ShowView()
 
 
-	//----- G4DAWNFILEView::FlushView()
-void G4DAWNFILEView::FlushView( void )
+	//----- G4DAWNFILEViewer::FlushView()
+void G4DAWNFILEViewer::FlushView( void )
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4DAWNFILEView::Flush () " << endl;
+	G4cerr << "***** G4DAWNFILEViewer::Flush () " << endl;
 #endif
 
 	ShowView();
@@ -210,11 +210,11 @@ void G4DAWNFILEView::FlushView( void )
 
 
 
-	//----- G4DAWNFILEView::SendDrawingStyleToDAWNGUI( ostream& out ) 
-void  G4DAWNFILEView::SendDrawingStyleToDAWNGUI( ostream& out ) 
+	//----- G4DAWNFILEViewer::SendDrawingStyleToDAWNGUI( ostream& out ) 
+void  G4DAWNFILEViewer::SendDrawingStyleToDAWNGUI( ostream& out ) 
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4DAWNFILEView::SendDrawingStyle() " << endl;
+	G4cerr << "***** G4DAWNFILEViewer::SendDrawingStyle() " << endl;
 #endif
 
 	G4int  style = fVP.GetDrawingStyle();
@@ -239,19 +239,19 @@ void  G4DAWNFILEView::SendDrawingStyleToDAWNGUI( ostream& out )
 		break;
 	}
 
-} // G4DAWNFILEView::SendDrawingStyle()  
+} // G4DAWNFILEViewer::SendDrawingStyle()  
 
 
 
-	//----- G4DAWNFILEView::SendViewParameters () 
-void G4DAWNFILEView::SendViewParameters () 
+	//----- G4DAWNFILEViewer::SendViewParameters () 
+void G4DAWNFILEViewer::SendViewParameters () 
 {
   // Calculates view representation based on extent of object being
   // viewed and (initial) direction of camera.  (Note: it can change
   // later due to user interaction via visualization system's GUI.)
 
 #if defined DEBUG_FR_VIEW
-      G4cerr << "***** G4DAWNFILEView::SendViewParameters()\n";
+      G4cerr << "***** G4DAWNFILEViewer::SendViewParameters()\n";
 #endif 
 
 		//----- Magic number to decide camera distance automatically
@@ -375,7 +375,7 @@ void G4DAWNFILEView::SendViewParameters ()
 	fScene.SendStr( FR_SET_CAMERA );
 
 
-} // G4DAWNFILEView::SendViewParameters () 
+} // G4DAWNFILEViewer::SendViewParameters () 
 
 
 #endif // G4VIS_BUILD_DAWNFILE_DRIVER

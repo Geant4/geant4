@@ -5,33 +5,33 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILEView.hh,v 1.1 1999-01-07 16:14:35 gunter Exp $
+// $Id: G4DAWNFILEViewer.hh,v 1.1 1999-01-09 16:11:39 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
-// DAWNFILE view - opens window, hard copy, etc.
+// DAWNFILE viewer - opens window, hard copy, etc.
 
 //=================//
 #ifdef G4VIS_BUILD_DAWNFILE_DRIVER
 //=================//
 
 
-#ifndef G4DAWNFILE_VIEW_HH
-#define G4DAWNFILE_VIEW_HH
+#ifndef G4DAWNFILE_VIEWER_HH
+#define G4DAWNFILE_VIEWER_HH
 
-#include "G4VView.hh"
+#include "G4VViewer.hh"
 #include "globals.hh"
 
-class G4DAWNFILEScene ;
+class G4DAWNFILESceneHandler ;
 
-class G4DAWNFILEView: public G4VView {
+class G4DAWNFILEViewer: public G4VViewer {
 
 	enum FRDEV {FRDEV_PS=1, FRDEV_XWIN=2, FRDEV_PS2=3, FRDEV_XWIN2=4, FRDEV_OPEN_GL=5, FRDEV_DEVICE_END=6} ;
 
 public:
 	//----- constructor and destructor
-  G4DAWNFILEView  (G4DAWNFILEScene& scene, const G4String& name = "");
-  ~G4DAWNFILEView ();
+  G4DAWNFILEViewer  (G4DAWNFILESceneHandler& scene, const G4String& name = "");
+  ~G4DAWNFILEViewer ();
 
 	//----- overriding base class methods
   void SetView   (); // Do nothing. SendViewParameters will do its job. 
@@ -48,7 +48,7 @@ public:
   void  SendDrawingStyleToDAWNGUI( ostream& out ) ;
 
 private:
-  G4DAWNFILEScene& fScene; // Reference to Graphics Scene for this view.
+  G4DAWNFILESceneHandler& fScene; // Reference to Graphics Scene for this view.
 
   char  fG4PrimViewer          [32] ;
   char  fG4PrimViewerInvocation[64] ;

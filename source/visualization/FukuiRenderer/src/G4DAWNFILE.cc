@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILE.cc,v 1.1 1999-01-07 16:14:37 gunter Exp $
+// $Id: G4DAWNFILE.cc,v 1.2 1999-01-09 16:11:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -22,9 +22,9 @@
 
 //#include "G4VisFeaturesOfDAWNFILE.hh"
 #include "G4FRFeatures.hh" 
-#include "G4VScene.hh"
-#include "G4DAWNFILEScene.hh"
-#include "G4DAWNFILEView.hh"
+#include "G4VSceneHandler.hh"
+#include "G4DAWNFILESceneHandler.hh"
+#include "G4DAWNFILEViewer.hh"
 #include "G4FRConst.hh"
 
 
@@ -42,21 +42,21 @@ G4DAWNFILE::~G4DAWNFILE ()
 
 
 	//-----  G4DAWNFILE::CreateScene (const G4String& name) 
-G4VScene* G4DAWNFILE::CreateScene (const G4String& name) 
+G4VSceneHandler* G4DAWNFILE::CreateScene (const G4String& name) 
 {
-	G4VScene* p = new G4DAWNFILEScene (*this, name);
+	G4VSceneHandler* p = new G4DAWNFILESceneHandler (*this, name);
 
-	G4cout	<< G4DAWNFILEScene::GetSceneCount ()
+	G4cout	<< G4DAWNFILESceneHandler::GetSceneCount ()
 		<< ' ' << fName << " scenes extanct." << endl;
 
 	return p;
 }
 
 	//-----  G4DAWNFILE::CreateView ()
-G4VView* G4DAWNFILE::CreateView (G4VScene& scene, const G4String& name) 
+G4VViewer* G4DAWNFILE::CreateView (G4VSceneHandler& scene, const G4String& name) 
 {
-       	G4VView* pView = 
-	  new G4DAWNFILEView ((G4DAWNFILEScene&) scene, name);
+       	G4VViewer* pView = 
+	  new G4DAWNFILEViewer ((G4DAWNFILESceneHandler&) scene, name);
 	return pView;
 }
 

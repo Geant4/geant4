@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FukuiRendererView.cc,v 1.1 1999-01-07 16:14:38 gunter Exp $
+// $Id: G4FukuiRendererViewer.cc,v 1.1 1999-01-09 16:11:53 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,7 +27,7 @@
 #include <string.h>
 #include <assert.h>
 
-#include "G4SceneData.hh"
+#include "G4Scene.hh"
 #include "G4Vector3D.hh"
 #include "G4VisExtent.hh"
 #include "G4LogicalVolume.hh"
@@ -35,28 +35,28 @@
 
 #include "G4FRConst.hh"
 #include "G4FukuiRenderer.hh"
-#include "G4FukuiRendererScene.hh"
-#include "G4FukuiRendererView.hh"
+#include "G4FukuiRendererSceneHandler.hh"
+#include "G4FukuiRendererViewer.hh"
 
 
 	//----- constants
 const char  FR_ENV_MULTI_WINDOW[] = "G4DAWN_MULTI_WINDOW" ;
 
-	//----- G4FukuiRendererView, constructor
-G4FukuiRendererView::G4FukuiRendererView (G4FukuiRendererScene& scene,
+	//----- G4FukuiRendererViewer, constructor
+G4FukuiRendererViewer::G4FukuiRendererViewer (G4FukuiRendererSceneHandler& scene,
 					  const G4String& name): 
-  G4VView (scene, scene.IncrementViewCount (), name), fScene (scene)
+  G4VViewer (scene, scene.IncrementViewCount (), name), fScene (scene)
 {}
 
-	//----- G4FukuiRendererView, destructor
-G4FukuiRendererView::~G4FukuiRendererView () 
+	//----- G4FukuiRendererViewer, destructor
+G4FukuiRendererViewer::~G4FukuiRendererViewer () 
 {}
 
-	//----- G4FukuiRendererView::SetView () 
-void G4FukuiRendererView::SetView () 
+	//----- G4FukuiRendererViewer::SetView () 
+void G4FukuiRendererViewer::SetView () 
 {
 #if defined DEBUG_FR_VIEW
-      G4cerr << "***** G4FukuiRendererView::SetView()\n";
+      G4cerr << "***** G4FukuiRendererViewer::SetView()\n";
 #endif 
 // Do nothing, since DAWN is running as a different process.
 // SendViewParameters () will do this job instead.
@@ -65,12 +65,12 @@ void G4FukuiRendererView::SetView ()
 
 
 
-	//----- G4FukuiRendererView::ClearView()
+	//----- G4FukuiRendererViewer::ClearView()
 void
-G4FukuiRendererView::ClearView( void )
+G4FukuiRendererViewer::ClearView( void )
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4FukuiRendererView::ClearView () " << endl;
+	G4cerr << "***** G4FukuiRendererViewer::ClearView () " << endl;
 #endif
 
 		//----- Begin saving data to g4.prim
@@ -82,11 +82,11 @@ G4FukuiRendererView::ClearView( void )
 }
 
 
-	//----- G4FukuiRendererView::DrawView () 
-void G4FukuiRendererView::DrawView () 
+	//----- G4FukuiRendererViewer::DrawView () 
+void G4FukuiRendererViewer::DrawView () 
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4FukuiRendererView::DrawView () " << endl;
+	G4cerr << "***** G4FukuiRendererViewer::DrawView () " << endl;
 #endif
 		//----- Error recovery
 	if( fScene.IsInModeling() )  {
@@ -125,15 +125,15 @@ void G4FukuiRendererView::DrawView ()
 		//----- Draw
 	ProcessView () ;
 
-} // G4FukuiRendererView::DrawView () 
+} // G4FukuiRendererViewer::DrawView () 
 
 
 
-	//----- G4FukuiRendererView::ShowView()
-void G4FukuiRendererView::ShowView( void )
+	//----- G4FukuiRendererViewer::ShowView()
+void G4FukuiRendererViewer::ShowView( void )
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4FukuiRendererView::ShowView () " << endl;
+	G4cerr << "***** G4FukuiRendererViewer::ShowView () " << endl;
 #endif
 
 	if( fScene.IsInModeling() ) // if( fScene.flag_in_modeling ) 
@@ -155,14 +155,14 @@ void G4FukuiRendererView::ShowView( void )
 		this->Wait();
 	}
 
-} // G4FukuiRendererView::ShowView()
+} // G4FukuiRendererViewer::ShowView()
 
 
-	//----- G4FukuiRendererView::FlushView()
-void G4FukuiRendererView::FlushView( void )
+	//----- G4FukuiRendererViewer::FlushView()
+void G4FukuiRendererViewer::FlushView( void )
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4FukuiRendererView::Flush () " << endl;
+	G4cerr << "***** G4FukuiRendererViewer::Flush () " << endl;
 #endif
 
 	if( fScene.IsInModeling() ) // if( fScene.flag_in_modeling ) 
@@ -182,32 +182,32 @@ void G4FukuiRendererView::FlushView( void )
 
 	}
 
-} // G4FukuiRendererView::FlushView()
+} // G4FukuiRendererViewer::FlushView()
 
 
 
-	//----- G4FukuiRendererView::Wait()
+	//----- G4FukuiRendererViewer::Wait()
 void
-G4FukuiRendererView::Wait()
+G4FukuiRendererViewer::Wait()
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4FukuiRendererView::Wait () " << endl;
+	G4cerr << "***** G4FukuiRendererViewer::Wait () " << endl;
 #endif
   fScene.SendStr    ( FR_WAIT );
   fScene.GetPrimDest().WaitSendBack( FR_WAIT );
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4FukuiRendererView::Wait () : end" << endl;
+	G4cerr << "***** G4FukuiRendererViewer::Wait () : end" << endl;
 #endif
 
 }
 
 
-	//----- G4FukuiRendererView::SendDevice()
+	//----- G4FukuiRendererViewer::SendDevice()
 void
-G4FukuiRendererView::SendDevice( FRDEV dev )
+G4FukuiRendererViewer::SendDevice( FRDEV dev )
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4FukuiRendererView::SendDevice() " << endl;
+	G4cerr << "***** G4FukuiRendererViewer::SendDevice() " << endl;
 #endif
 
 
@@ -219,11 +219,11 @@ G4FukuiRendererView::SendDevice( FRDEV dev )
 }
 
 
-	//----- G4FukuiRendererView::SendDrawingStyle()  
-void  G4FukuiRendererView::SendDrawingStyle() 
+	//----- G4FukuiRendererViewer::SendDrawingStyle()  
+void  G4FukuiRendererViewer::SendDrawingStyle() 
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4FukuiRendererView::SendDrawingStyle() " << endl;
+	G4cerr << "***** G4FukuiRendererViewer::SendDrawingStyle() " << endl;
 #endif
 
 	G4int  style = fVP.GetDrawingStyle();
@@ -245,19 +245,19 @@ void  G4FukuiRendererView::SendDrawingStyle()
 		break;
 	}
 
-} // G4FukuiRendererView::SendDrawingStyle()  
+} // G4FukuiRendererViewer::SendDrawingStyle()  
 
 
 
-	//----- G4FukuiRendererView::SendViewParameters () 
-void G4FukuiRendererView::SendViewParameters () 
+	//----- G4FukuiRendererViewer::SendViewParameters () 
+void G4FukuiRendererViewer::SendViewParameters () 
 {
   // Calculates view representation based on extent of object being
   // viewed and (initial) direction of camera.  (Note: it can change
   // later due to user interaction via visualization system's GUI.)
 
 #if defined DEBUG_FR_VIEW
-      G4cerr << "***** G4FukuiRendererView::SendViewParameters()\n";
+      G4cerr << "***** G4FukuiRendererViewer::SendViewParameters()\n";
 #endif 
 
 		//----- Magic number to decide camera distance automatically
@@ -354,6 +354,6 @@ void G4FukuiRendererView::SendViewParameters ()
 		//----- SET CAMERA
 	fScene.SendStr( FR_SET_CAMERA );
 
-} // G4FukuiRendererView::SendViewParameters () 
+} // G4FukuiRendererViewer::SendViewParameters () 
 
 #endif // G4VIS_BUILD_DAWN_DRIVER

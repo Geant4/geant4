@@ -5,106 +5,40 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FukuiRendererScene.hh,v 1.1 1999-01-07 16:14:36 gunter Exp $
+// $Id: G4DAWNFILESceneHandler.hh,v 1.1 1999-01-09 16:11:38 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// Satoshi TANAKA, Fri Jun 28 11:19:19 JST 1996
+// Satoshi TANAKA
 
 
 //=================//
-#ifdef G4VIS_BUILD_DAWN_DRIVER
+#ifdef G4VIS_BUILD_DAWNFILE_DRIVER
 //=================//
 
 
-#ifndef G4FUKUI_RENDERER_SCENE_HH
-#define G4FUKUI_RENDERER_SCENE_HH
+#ifndef G4DAWNFILE_SCENE_HANDLER_HH
+#define G4DAWNFILE_SCENE_HANDLER_HH
 
 #include "globals.hh"
 
-#include "G4VScene.hh"
+#include "G4VSceneHandler.hh"
 
-#include "G4FRClientServer.hh"
+#include "G4FRofstream.hh"
 #include "G4FRConst.hh"
 
+
 class G4VisAttributes ;
-class G4FukuiRenderer;
-
-
-////////////////////////////////////////////////////////////////////////
-//
-// ===== About AddPrimitive() functions =====
-//
-// Any graphics driver should prepare AddPrimitive() functions 
-// for the following visualizable primitives:    
-//
-//  G4Polyline, 
-//  G4NURBS (not supported by DAWN), 
-//  G4Text, G4Circle, G4Square, 
-//  G4Polyhedron 
-//
-// A drawing function G4VisManager::Draw(...) is prepared for each 
-// of these primitives.
-// 
-// These primitives have visualization attributes by themselves.
-// AddPrimitive() functions use these assinged visualization attributes
-// for visualization.
-//
-// Local coordinates to locate these primitives are set to the current in
-// BeginPrimitive() functions.  
-// See G4VisManager::Draw( const G4Polyline&), for example.
-//
-//////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////////
-//
-// ========== About AddThis() functions ======= 
-//
-// AddThis() functions are usually used to visualize a physical volume.
-// The are called when G4VisManager::Draw( void ) is used.
-//
-// Current local coordinates and current visualization attributes
-// are set to the current in the inherited PreAddThis() function.
-// PreAddThis() is called in  G4PhysicalVolumeModel::DescribeAndDescend():
-//
-//    // Make decision to Draw.
-//    G4bool thisToBeDrawn = !IsThisCulled (pLV);
-//    if (thisToBeDrawn) {
-//      scene.PreAddThis (theNewAT, *(pLV -> GetVisAttributes ()));
-//      pSol -> DescribeYourselfTo (scene);
-//      scene.PostAddThis ();
-//    }
-//
-// where G4VSolid::DescribeYourselfTo ( G4VScene& ) calls 
-// a proper AddThis() function. See G4Box.cc, for example. 
-//
-// For shapes for which AddThis() functions are not prepered explicitly,  
-// AddThis (const G4VSolid& ) is called automatically.  
-// Then the following chain of calling is Done:
-//
-//     AddThis ( const G4VSolid& ) 
-// ==> G4VScene::AddThis ( const G4VSolid& ) 
-// ==> G4VScene::RequestPrimitives( const G4VSolid& )
-// ==> AddPrimitive ( const G4Polyhedron& ) 
-//
-// Therefore, AddPrimitive( const G4Polyhedron& ) is used for 
-// visualization finally.  Note that G4Polyhedron is automatically 
-// created in G4VScene::RequestPrimitives( const G4VSolid& ) and 
-// current visualization attributes are assigned there.
-//
-///////////////////////////////////////////////////////////////////////
-
+class G4DAWNFILE;
 
 
 	//-----
-class G4FukuiRendererScene: public G4VScene {
+class G4DAWNFILESceneHandler: public G4VSceneHandler {
 
 public:
 
 	//----- constructor and destructor
-  G4FukuiRendererScene (G4FukuiRenderer& system, const G4String& name = "");
-  ~G4FukuiRendererScene ();
+  G4DAWNFILESceneHandler (G4DAWNFILE& system, const G4String& name = "");
+  ~G4DAWNFILESceneHandler ();
 
 	//----- overriding base class methods
   void AddPrimitive (const G4Polyline& line);
@@ -114,10 +48,10 @@ public:
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);
   void AddPrimitive (const G4Polymarker& polymarker) 
-       { G4VScene::AddPrimitive (polymarker); }
+       { G4VSceneHandler::AddPrimitive (polymarker); }
 
   virtual void BeginModeling () ; 
-  virtual void EndModeling   () { G4VScene::EndModeling ();}
+  virtual void EndModeling   () { G4VSceneHandler::EndModeling ();}
 
   virtual void BeginPrimitives (const G4Transform3D& objectTransformation);
   virtual void EndPrimitives ();
@@ -133,37 +67,31 @@ public:
 
   void ClearStore (){}
 
-	//----- methods inherent to this class
+	//----- public methods inherent to this class
   static G4int GetSceneCount ();
   void         FREndModeling () ;
   G4bool       IsInModeling () { return flag_in_modeling ; }
 
   G4bool IsSavingG4Prim   ( void ) { return flag_saving_g4_prim ;	}
-  void   BeginSavingG4Prim( void ) 
-	{
-		if( !IsSavingG4Prim() ) 
-		{ 
-			SendStr( FR_SAVE )    ; 
-			SendStr( FR_G4_PRIM_HEADER   )    ; 
-			flag_saving_g4_prim = true  ; 
-		} 
-	}
-  void   EndSavingG4Prim  ( void ) 
-         { if(  IsSavingG4Prim() ) { SendStr( FR_END_SAVE ); flag_saving_g4_prim = false ; } }
+  void	BeginSavingG4Prim( void ); 
+  void	EndSavingG4Prim  ( void ) ;
+  void	SetG4PrimFileName() ;
 
-  G4FRClientServer& GetPrimDest () { return fPrimDest ; }
-  G4FukuiRenderer&  GetSystem   () { return fSystem   ; }
-  void              SendBoundingBox   ( void );
+  G4DAWNFILE&  GetSystem   () { return fSystem   ; }
+  void         SendBoundingBox   ( void );
+  const char*  GetG4PrimFileName () { return fG4PrimFileName ; }
+
 
 private:
 
-	//----- Utilities etc
+	//----- Utilities etc (common to DAWN and DAWNFILE drivers )
   G4bool    SendVisAttributes ( const G4VisAttributes*  pAV );
   G4bool    IsVisible     ( void ) ;
   G4bool    InitializeFR  ( void ) ;
   void	    SendTransformedCoordinates( void ) ;
   void	    SendPhysVolName           ( void ) ;
 
+	//----- public methods common to DAWN and DAWNFILE drivers
 public:
 
   void	 SendStr   (	const char*	char_string ) ;
@@ -257,15 +185,13 @@ public:
   void	SendInt   (	G4int 		val );
   void	SendDouble(	G4double 	val );
 
-
-
 private:
-  G4FukuiRenderer& fSystem;     // Graphics system for this scene.
+  G4DAWNFILE&	fSystem;     // Graphics system for this scene.
   static G4int	fSceneIdCount;
   static G4int	fSceneCount;    // No. of existing scenes.
 
-  G4FRClientServer&	fPrimDest    ;  // defined in G4FukuiRenderer
-  G4bool		flag_in_modeling ;	
+  G4FRofstream	fPrimDest    ;  // defined here
+  G4bool	flag_in_modeling ;	
 		// true:  FR_BEGIN_MODELING has sent to DAWN, and
 		//        FR_END_MODELING   has not sent yet.
 		// false:  otherwise
@@ -275,10 +201,15 @@ private:
 		// in FREndModeling().
 		// ( EndModeling() is not used.)
 
-  G4bool		flag_saving_g4_prim ;	
+  G4bool	flag_saving_g4_prim ;	
 
-  const int		COMMAND_BUF_SIZE    ;
+  const int	COMMAND_BUF_SIZE    ;
+
+  char		fG4PrimDestDir [256] ; 
+  char          fG4PrimFileName[256] ;
+  G4int		fMaxFileNum           ;
+	
 };
 
 #endif
-#endif //G4VIS_BUILD_DAWN_DRIVER
+#endif //G4VIS_BUILD_DAWNFILE_DRIVER

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FRSceneFunc.icc,v 1.1 1999-01-07 16:14:38 gunter Exp $
+// $Id: G4FRSceneFunc.icc,v 1.2 1999-01-09 16:11:50 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -298,7 +298,7 @@ void G4FRSCENE::AddPrimitive ( const G4Polyhedron& polyhedron )
 void G4FRSCENE::BeginModeling ()
 {
 
-        G4VScene::BeginModeling ();
+        G4VSceneHandler::BeginModeling ();
 
 		//----- 
 #if defined DEBUG_FR_SCENE
@@ -342,7 +342,7 @@ void G4FRSCENE::BeginPrimitives (const G4Transform3D& objectTransformation)
 	G4cerr << "***** BeginPrimitives \n";
 #endif
 
-  G4VScene::BeginPrimitives (objectTransformation);
+  G4VSceneHandler::BeginPrimitives (objectTransformation);
   fpObjectTransformation = &objectTransformation;
 
 #if defined DEBUG_FR_SCENE
@@ -357,7 +357,7 @@ void G4FRSCENE::EndPrimitives ()
 #if defined DEBUG_FR_SCENE
 	G4cerr << "***** EndPrimitives \n";
 #endif
-  G4VScene::EndPrimitives ();
+  G4VSceneHandler::EndPrimitives ();
 }
 
 	//----- G4FRSCENE::GetSceneCount ()
@@ -565,7 +565,7 @@ void G4FRSCENE::AddThis ( const G4Sphere& sphere )
 			//...... G4Polyhedron is used for visualization.
 			//...... Visualization attributes and 
 			//...... local coordinates are resent and overwritten.
-		G4VScene::AddThis( sphere ) ; 
+		G4VSceneHandler::AddThis( sphere ) ; 
 
 ////////////////////////////////////////////////////////////////
 //			//----- sphere segment
@@ -754,7 +754,7 @@ void G4FRSCENE::AddThis ( const G4VSolid& solid  )
 
 
 		//----- Send a primitive
-	G4VScene::AddThis( solid ) ; 
+	G4VSceneHandler::AddThis( solid ) ; 
 
 } //G4FRSCENE::AddThis ( const G4VSolid& ) 
 
@@ -764,7 +764,7 @@ G4bool
 G4FRSCENE::SendVisAttributes ( const G4VisAttributes*  pAV )
 {
 
-  // Have a look at G4VScene::GetDrawingStyle (const G4Visible&). (John)
+  // Have a look at G4VSceneHandler::GetDrawingStyle (const G4Visible&). (John)
 
   G4bool status = true ; // initialization
   const G4double ALPHA_MIN = 0.001 ; // min of alpha factor of color

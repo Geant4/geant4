@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILE.hh,v 1.1 1999-01-07 16:14:34 gunter Exp $
+// $Id: G4DAWNFILE.hh,v 1.2 1999-01-09 16:11:37 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -21,7 +21,7 @@
 #include "G4VGraphicsSystem.hh"
 
 	//----- prototype
-class G4VScene   ;
+class G4VSceneHandler   ;
 
 	//----------------------------//
 	//----- class G4DAWNFILE -----// 
@@ -31,8 +31,8 @@ class G4DAWNFILE: public G4VGraphicsSystem {
 public:
   G4DAWNFILE ();
   ~G4DAWNFILE ();
-  G4VScene* CreateScene (const G4String& name = "");
-  G4VView*  CreateView  (G4VScene&, const G4String& name = "");
+  G4VSceneHandler* CreateScene (const G4String& name = "");
+  G4VViewer*  CreateView  (G4VSceneHandler&, const G4String& name = "");
 
 private:
 
