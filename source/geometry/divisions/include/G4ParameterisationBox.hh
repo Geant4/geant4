@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationBox.hh,v 1.2 2003-11-18 12:15:29 arce Exp $
+// $Id: G4ParameterisationBox.hh,v 1.3 2003-11-19 11:51:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // classes G4ParameterisationBoxX,
@@ -63,8 +63,8 @@ class G4ParameterisationBoxX : public G4VDivisionParameterisation
   public:  // with description
   
     G4ParameterisationBoxX( EAxis axis, G4int nCopies,
-			  G4double offset, G4double step,
-			  G4VSolid* msolid, DivisionType divType );
+                            G4double offset, G4double step,
+                            G4VSolid* msolid, DivisionType divType );
   
     virtual ~G4ParameterisationBoxX();
 
@@ -78,18 +78,28 @@ class G4ParameterisationBoxX : public G4VDivisionParameterisation
 
   private:  // Dummy declarations to get rid of warnings ...
 
-    void ComputeDimensions (G4Cons&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Trd&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Sphere&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Orb&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Torus&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Para&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Trap&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Hype&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Tubs&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Polycone&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const {}
- 
+    void ComputeDimensions (G4Cons&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Trd&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Sphere&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Orb&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Torus&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Para&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Trap&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Hype&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Tubs&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Polycone&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Polyhedra&,const G4int,
+                            const G4VPhysicalVolume*) const {}
 };
 
 class G4ParameterisationBoxY : public G4VDivisionParameterisation
@@ -111,18 +121,28 @@ class G4ParameterisationBoxY : public G4VDivisionParameterisation
 
   private:  // Dummy declarations to get rid of warnings ...
 
-    void ComputeDimensions (G4Cons&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Trd&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Sphere&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Orb&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Torus&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Para&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Trap&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Hype&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Tubs&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Polycone&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const {}
- 
+    void ComputeDimensions (G4Cons&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Trd&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Sphere&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Orb&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Torus&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Para&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Trap&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Hype&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Tubs&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Polycone&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Polyhedra&,const G4int,
+                            const G4VPhysicalVolume*) const {}
 };
 
 class G4ParameterisationBoxZ : public G4VDivisionParameterisation
@@ -130,31 +150,41 @@ class G4ParameterisationBoxZ : public G4VDivisionParameterisation
   public:  // with description
 
     G4ParameterisationBoxZ( EAxis axis, G4int nCopies,
-			    G4double offset, G4double step,
-			    G4VSolid* msolid, DivisionType divType );
+                            G4double offset, G4double step,
+                            G4VSolid* msolid, DivisionType divType );
     virtual ~G4ParameterisationBoxZ();
 
     virtual G4double GetMaxParameter() const;
 
     virtual void ComputeTransformation( const G4int copyNo,
-                                      G4VPhysicalVolume* physVol ) const;
+                                        G4VPhysicalVolume* physVol ) const;
     void ComputeDimensions(G4Box& box, const G4int copyNo,
-			   const G4VPhysicalVolume* physVol) const;
+                           const G4VPhysicalVolume* physVol) const;
 
   private:  // Dummy declarations to get rid of warnings ...
 
-    void ComputeDimensions (G4Cons&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Trd&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Sphere&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Orb&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Torus&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Para&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Trap&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Hype&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Tubs&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Polycone&,const G4int,const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const {}
- 
+    void ComputeDimensions (G4Cons&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Trd&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Sphere&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Orb&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Torus&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Para&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Trap&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Hype&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Tubs&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Polycone&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Polyhedra&,const G4int,
+                            const G4VPhysicalVolume*) const {}
 };
 
 #endif

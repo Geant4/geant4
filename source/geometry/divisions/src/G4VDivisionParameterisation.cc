@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.cc,v 1.7 2003-11-18 12:15:44 arce Exp $
+// $Id: G4VDivisionParameterisation.cc,v 1.8 2003-11-19 11:51:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VDivisionParameterisation Implementation file
@@ -44,6 +44,7 @@ G4VDivisionParameterisation( EAxis axis, G4int nDiv,
   : faxis(axis), fnDiv( nDiv), fwidth(step),
     foffset(offset), fDivisionType(divType), fmotherSolid( motherSolid ) 
 {
+#ifdef G4DIVDEBUG
   if (verbose >= 1)
   {
     G4cout << " G4VDivisionParameterisation  no divisions " << fnDiv
@@ -51,8 +52,9 @@ G4VDivisionParameterisation( EAxis axis, G4int nDiv,
            << " offset " << foffset << " = " << offset << G4endl
            << " step " << fwidth << " = " << step << G4endl;
   }
-  theVoluFirstCopyNo = 1;
+#endif
 
+  theVoluFirstCopyNo = 1;
 }
 
 //--------------------------------------------------------------------------
@@ -79,9 +81,12 @@ G4int
 G4VDivisionParameterisation::
 CalculateNDiv( G4double motherDim, G4double width, G4double offset ) const
 {
-  G4cout << "CalculateNDiv " << ( motherDim - offset ) / width 
-	 << " Motherdim: " <<  motherDim << ", Offset: " << offset
+#ifdef G4DIVDEBUG
+  G4cout << " G4VDivisionParameterisation::CalculateNDiv: "
+         << ( motherDim - offset ) / width 
+         << " Motherdim: " <<  motherDim << ", Offset: " << offset
          << ", Width: " << width << G4endl;
+#endif
 
   return G4int( ( motherDim - offset ) / width );
 }
@@ -91,57 +96,56 @@ G4double
 G4VDivisionParameterisation::
 CalculateWidth( G4double motherDim, G4int nDiv, G4double offset ) const
 { 
-  G4cout << " CalculateWidth: " << ( motherDim - offset ) / nDiv
-	 << ", Motherdim: " << motherDim << ", Offset: " << offset
-	 << ", Number of divisions: " << nDiv << G4endl;
+#ifdef G4DIVDEBUG
+  G4cout << " G4VDivisionParameterisation::CalculateWidth: "
+         << ( motherDim - offset ) / nDiv
+         << ", Motherdim: " << motherDim << ", Offset: " << offset
+         << ", Number of divisions: " << nDiv << G4endl;
+#endif
 
   return ( motherDim - offset ) / nDiv;
 }
-
 
 //--------------------------------------------------------------------------
 void G4VDivisionParameterisation::CheckParametersValidity()
 {
   G4double maxPar = GetMaxParameter();
-  //  G4cout << "G4VDivisionParameterisation::CheckParametersValidity maxPar " << maxPar << G4endl;
   CheckOffset( maxPar );
   CheckNDivAndWidth( maxPar );
 }
 
-
 //--------------------------------------------------------------------------
 void G4VDivisionParameterisation::CheckOffset( G4double maxPar )
 {
-  if( foffset >= maxPar ) {
-    char msgcha[10];
-    gcvt( foffset, 10, msgcha );
-    char msgcha2[10];
-    gcvt( maxPar, 10, msgcha2 );
-    G4String msgstr = G4String("!! Division of solid ") + G4String(fmotherSolid->GetName()) + G4String(" has too big offset = ") + G4String(msgcha) + G4String(" > ") + G4String(msgcha2);
-    G4Exception("G4VDivisionParameterisation::CheckParametersValidity()",
+  if( foffset >= maxPar )
+  {
+    G4cerr << "ERROR - G4VDivisionParameterisation::CheckOffset()" << G4endl
+           << "        Division of solid " << fmotherSolid->GetName()
+           << " has too big offset = " << G4endl
+           << "        " << foffset << " > " << maxPar << " !" << G4endl;
+    G4Exception("G4VDivisionParameterisation::CheckOffset()",
                 "IllegalConstruct", FatalException,
-                msgstr);
+                "Not supported configuration.");
   }
 }
-
 
 //--------------------------------------------------------------------------
 void G4VDivisionParameterisation::CheckNDivAndWidth( G4double maxPar )
 {
-  if( fDivisionType == DivNDIVandWIDTH && foffset + fwidth*fnDiv - maxPar > kCarTolerance ) {
-    char msgcha[10];
-    gcvt( foffset + fwidth*fnDiv, 10, msgcha );
-    char msgcha2[10];
-    gcvt( foffset, 10, msgcha2 );
-    char msgcha3[10];
-    gcvt( fwidth, 10, msgcha3 );
-    char msgcha4[10];
-    gcvt( fnDiv, 10, msgcha4 );
-    char msgcha5[10];
-    gcvt( maxPar, 10, msgcha5 );
-    G4String msgstr = G4String("!! Division of solid ") + fmotherSolid->GetName() + G4String(" has too big offset + width*nDiv = ") + G4String(msgcha) + G4String(" > ") + G4String(msgcha5) + G4String(" offset = ") + G4String(msgcha2) + G4String(" width = ") + G4String(msgcha3) + G4String(" nDiv = ") + G4String(msgcha4);
-    G4Exception("G4VDivisionParameterisation::CheckParametersValidity()",
+  if( (fDivisionType == DivNDIVandWIDTH)
+      && (foffset + fwidth*fnDiv - maxPar > kCarTolerance ) )
+  {
+    G4cerr << "ERROR - G4VDivisionParameterisation::CheckNDivAndWidth()"
+           << G4endl
+           << "        Division of solid " << fmotherSolid->GetName()
+           << " has too big offset + width*nDiv = " << G4endl
+           << "        " << foffset + fwidth*fnDiv << " > "
+           << foffset << ". Width = "
+           << G4endl
+           << "        " << fwidth << ". nDiv = " << fnDiv << " !"
+           << G4endl;
+    G4Exception("G4VDivisionParameterisation::CheckNDivAndWidth()",
                 "IllegalConstruct", FatalException,
-                msgstr);
+                "Not supported configuration.");
   }
 }

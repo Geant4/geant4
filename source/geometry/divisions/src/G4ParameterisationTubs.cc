@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTubs.cc,v 1.4 2003-11-18 12:15:44 arce Exp $
+// $Id: G4ParameterisationTubs.cc,v 1.5 2003-11-19 11:51:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationTubs Implementation file
@@ -56,20 +56,21 @@ G4ParameterisationTubsRho( EAxis axis, G4int nDiv,
   }
   else if( divType == DivNDIV )
   {
-    G4cout << " calculate width "<< G4endl;
     G4Tubs* msol = (G4Tubs*)(msolid);
     fwidth = CalculateWidth( msol->GetOuterRadius() - msol->GetInnerRadius(),
                              nDiv, offset );
   }
 
+#ifdef G4DIVDEBUG
   if( verbose >= 1 )
   {
     G4cout << " G4ParameterisationTubsRho - no divisions " << fnDiv << " = "
            << nDiv << G4endl
-	   << " Offset " << foffset << " = " << offset << G4endl
-	   << " Width " << fwidth << " = " << width << G4endl
-	   << " DivType " << divType << G4endl;
+           << " Offset " << foffset << " = " << offset << G4endl
+           << " Width " << fwidth << " = " << width << G4endl
+           << " DivType " << divType << G4endl;
   }
+#endif
 }
 
 //--------------------------------------------------------------------------
@@ -88,7 +89,7 @@ G4double G4ParameterisationTubsRho::GetMaxParameter() const
 //--------------------------------------------------------------------------
 void
 G4ParameterisationTubsRho::
-ComputeTransformation(const G4int copyNo, G4VPhysicalVolume* physVol) const
+ComputeTransformation(const G4int, G4VPhysicalVolume* physVol) const
 {
   //----- translation 
   G4ThreeVector origin(0.,0.,0.); 
@@ -96,20 +97,26 @@ ComputeTransformation(const G4int copyNo, G4VPhysicalVolume* physVol) const
   physVol->SetTranslation( origin );
 
   //----- calculate rotation matrix: unit
+
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
-    G4cout << " G4ParameterisationTubsRho - copyNo: " << copyNo << G4endl
+    G4cout << " G4ParameterisationTubsRho " << G4endl
            << " Offset: " << foffset/deg
            << " - Width: " << fwidth/deg << G4endl;
   }
+#endif
+
   ChangeRotMatrix( physVol );
 
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
-    G4cout << std::setprecision(8) << " G4ParameterisationTubsRho " << copyNo
+    G4cout << std::setprecision(8) << " G4ParameterisationTubsRho " << G4endl
            << " Position: " << origin << " - Width: " << fwidth
            << " - Axis " << faxis  << G4endl;
   }
+#endif
 }
 
 //--------------------------------------------------------------------------
@@ -132,12 +139,15 @@ ComputeDimensions( G4Tubs& tubs, const G4int copyNo,
   tubs.SetZHalfLength( pDz );
   tubs.SetStartPhiAngle( pSPhi );
   tubs.SetDeltaPhiAngle( pDPhi );
+
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
     G4cout << " G4ParameterisationTubsRho::ComputeDimensions()" << G4endl
            << " pRMin: " << pRMin << " - pRMax: " << pRMax << G4endl;
     tubs.DumpInfo();
   }
+#endif
 }
 
 //--------------------------------------------------------------------------
@@ -161,13 +171,15 @@ G4ParameterisationTubsPhi( EAxis axis, G4int nDiv,
     fwidth = CalculateWidth( msol->GetDeltaPhiAngle(), nDiv, offset );
   }
 
+#ifdef G4DIVDEBUG
   if( verbose >= 1 )
   {
     G4cout << " G4ParameterisationTubsPhi no divisions " << fnDiv << " = "
            << nDiv << G4endl
-	   << " Offset " << foffset << " = " << offset << G4endl
-	   << " Width " << fwidth << " = " << width << G4endl;
+           << " Offset " << foffset << " = " << offset << G4endl
+           << " Width " << fwidth << " = " << width << G4endl;
   }
+#endif
 }
 
 //--------------------------------------------------------------------------
@@ -194,14 +206,19 @@ ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
 
   //----- calculate rotation matrix (so that all volumes point to the centre)
   G4double posi = foffset  + copyNo*fwidth;
+
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
     G4cout << " G4ParameterisationTubsPhi - position: " << posi/deg << G4endl
            << " copyNo: " << copyNo << " - foffset: " << foffset/deg
            << " - fwidth: " << fwidth/deg << G4endl;
   }
+#endif
+
   ChangeRotMatrix( physVol, -posi );
 
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
     G4cout << std::setprecision(8) << " G4ParameterisationTubsPhi " << copyNo
@@ -209,6 +226,7 @@ ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
            << " Position: " << origin << " - Width: " << fwidth
            << " - Axis: " << faxis  << G4endl;
   }
+#endif
 }
 
 //--------------------------------------------------------------------------
@@ -231,12 +249,15 @@ ComputeDimensions( G4Tubs& tubs, const G4int,
   tubs.SetZHalfLength( pDz );
   tubs.SetStartPhiAngle( pSPhi );
   tubs.SetDeltaPhiAngle( pDPhi );
+
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
     G4cout << " G4ParameterisationTubsPhi::ComputeDimensions" << G4endl
            << " pSPhi: " << pSPhi << " - pDPhi: " << pDPhi << G4endl;
     tubs.DumpInfo();
   }
+#endif
 }
 
 //--------------------------------------------------------------------------
@@ -259,13 +280,15 @@ G4ParameterisationTubsZ( EAxis axis, G4int nDiv,
     fwidth = CalculateWidth( 2*msol->GetZHalfLength(), nDiv, offset );
   }
 
+#ifdef G4DIVDEBUG
   if( verbose >= 1 )
   {
     G4cout << " G4ParameterisationTubsZ: # divisions " << fnDiv << " = "
            << nDiv << G4endl
-	   << " Offset " << foffset << " = " << offset << G4endl
-	   << " Width " << fwidth << " = " << width << G4endl;
+           << " Offset " << foffset << " = " << offset << G4endl
+           << " Width " << fwidth << " = " << width << G4endl;
   }
+#endif
 }
 
 //--------------------------------------------------------------------------
@@ -286,13 +309,15 @@ G4ParameterisationTubsZ::
 ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
 {
   //----- set translation: along Z axis
-  G4Tubs* motherTubs = reinterpret_cast<G4Tubs*>(GetMotherSolid());
+  G4Tubs* motherTubs = (G4Tubs*)(fmotherSolid);
   G4double posi = - motherTubs->GetZHalfLength() + foffset
                   + fwidth/2 + copyNo*fwidth;
   G4ThreeVector origin(0.,0.,posi); 
   physVol->SetTranslation( origin );
 
   //----- calculate rotation matrix: unit
+
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
     G4cout << " G4ParameterisationTubsZ::ComputeTransformation()" << G4endl
@@ -300,8 +325,11 @@ ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
            << " foffset " << foffset/deg << " - fwidth " << fwidth/deg
            << G4endl;
   }
+#endif
+
   ChangeRotMatrix( physVol );
 
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
     G4cout << std::setprecision(8) << " G4ParameterisationTubsZ " << copyNo
@@ -309,6 +337,7 @@ ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
            << " Position: " << origin << " - Width: " << fwidth
            << " - Axis: " << faxis  << G4endl; 
   }
+#endif
 }
 
 //--------------------------------------------------------------------------
@@ -331,10 +360,13 @@ ComputeDimensions( G4Tubs& tubs, const G4int,
   tubs.SetZHalfLength( pDz );
   tubs.SetStartPhiAngle( pSPhi );
   tubs.SetDeltaPhiAngle( pDPhi );
+
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
     G4cout << " G4ParameterisationTubsZ::ComputeDimensions()" << G4endl
            << " pDz: " << pDz << G4endl;
     tubs.DumpInfo();
   }
+#endif
 }

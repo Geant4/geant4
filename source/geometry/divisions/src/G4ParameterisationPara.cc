@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPara.cc,v 1.5 2003-11-18 12:15:43 arce Exp $
+// $Id: G4ParameterisationPara.cc,v 1.6 2003-11-19 11:51:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationPara Implementation file
@@ -60,6 +60,7 @@ G4ParameterisationParaX( EAxis axis, G4int nDiv,
     fwidth = CalculateWidth( 2*mpara->GetXHalfLength(), nDiv, offset );
   }
 
+#ifdef G4DIVDEBUG
   if( verbose >= 1 )
   {
     G4cout << " G4ParameterisationParaX - # divisions " << fnDiv
@@ -67,6 +68,7 @@ G4ParameterisationParaX( EAxis axis, G4int nDiv,
            << " Offset " << foffset << " = " << offset << G4endl
            << " Width " << fwidth << " = " << width << G4endl;
   }
+#endif
 }
 
 //------------------------------------------------------------------------
@@ -81,7 +83,6 @@ G4ParameterisationParaX::~G4ParameterisationParaX()
 {
 }
 
-
 //------------------------------------------------------------------------
 void
 G4ParameterisationParaX::
@@ -95,12 +96,14 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
   G4double posi = -mdx + foffset+(copyNo+0.5)*fwidth;
   origin.setX( posi ); 
   
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
     G4cout << std::setprecision(8) << " G4ParameterisationParaX "
            << copyNo << G4endl
            << " Position: " << origin << " - Axis: " << faxis << G4endl;
   }
+#endif
 
   //----- set translation 
   physVol->SetTranslation( origin );
@@ -109,7 +112,7 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
 //--------------------------------------------------------------------------
 void
 G4ParameterisationParaX::
-ComputeDimensions(G4Para& para, const G4int copyNo,
+ComputeDimensions(G4Para& para, const G4int,
                   const G4VPhysicalVolume*) const
 {
   //---- The division along X of a Para will result a Para
@@ -125,17 +128,17 @@ ComputeDimensions(G4Para& para, const G4int copyNo,
  
   para.SetAllParameters ( pDx, pDy, pDz, pAlpha, pTheta, pPhi );
 
+#ifdef G4DIVDEBUG
   if( verbose >= 1 )
   {
-    G4cout << " G4ParameterisationParaX::ComputeDimensions(G4Para)"
+    G4cout << " G4ParameterisationParaX::ComputeDimensions()"
            << " - Mother PARA " << G4endl;
     msol->DumpInfo();
-    G4cout << " - Parameterised PARA: "
-           << copyNo << G4endl;
+    G4cout << " - Parameterised PARA: " << G4endl;
     para.DumpInfo();
   }
+#endif
 }
-
 
 //------------------------------------------------------------------------
 G4ParameterisationParaY::
@@ -158,6 +161,7 @@ G4ParameterisationParaY( EAxis axis, G4int nDiv,
     fwidth = CalculateWidth( 2*mpara->GetYHalfLength(), nDiv, offset );
   }
 
+#ifdef G4DIVDEBUG
   if( verbose >= 1 )
   {
     G4cout << " G4ParameterisationParaY - # divisions " << fnDiv
@@ -165,6 +169,7 @@ G4ParameterisationParaY( EAxis axis, G4int nDiv,
            << " Offset " << foffset << " = " << offset << G4endl
            << " Width " << fwidth << " = " << width << G4endl;
   }
+#endif
 }
 
 //------------------------------------------------------------------------
@@ -178,7 +183,6 @@ G4double G4ParameterisationParaY::GetMaxParameter() const
   G4Para* msol = (G4Para*)(fmotherSolid);
   return 2*msol->GetYHalfLength();
 }
-
 
 //------------------------------------------------------------------------
 void
@@ -195,12 +199,14 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
   G4double posiX = posiY * msol->GetTanAlpha();
   origin.setX( posiX );
 
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
     G4cout << std::setprecision(8) << " G4ParameterisationParaY "
            << copyNo << G4endl
            << " Position: " << origin << " - Axis: " << faxis << G4endl;
   }
+#endif
 
   //----- set translation 
   physVol->SetTranslation( origin );
@@ -209,7 +215,7 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
 //--------------------------------------------------------------------------
 void
 G4ParameterisationParaY::
-ComputeDimensions(G4Para& para, const G4int copyNo,
+ComputeDimensions(G4Para& para, const G4int,
                   const G4VPhysicalVolume*) const
 {
   //---- The division along Y of a Para will result a Para
@@ -225,15 +231,16 @@ ComputeDimensions(G4Para& para, const G4int copyNo,
  
   para.SetAllParameters ( pDx, pDy, pDz, pAlpha, pTheta, pPhi );
 
+#ifdef G4DIVDEBUG
   if( verbose >= -1 )
   {
-    G4cout << " G4ParameterisationParaY::ComputeDimensions(G4Para)"
+    G4cout << " G4ParameterisationParaY::ComputeDimensions()"
            << " - Mother PARA " << G4endl;
     msol->DumpInfo();
-    G4cout << " - Parameterised PARA: "
-           << copyNo << G4endl;
+    G4cout << " - Parameterised PARA: " << G4endl;
     para.DumpInfo();
   }
+#endif
 }
 
 //------------------------------------------------------------------------
@@ -257,6 +264,7 @@ G4ParameterisationParaZ( EAxis axis, G4int nDiv,
     fwidth = CalculateWidth( 2*mpara->GetZHalfLength(), nDiv, offset );
   }
 
+#ifdef G4DIVDEBUG
   if( verbose >= -1 )
   {
     G4cout << " G4ParameterisationParaZ - # divisions " << fnDiv
@@ -264,6 +272,7 @@ G4ParameterisationParaZ( EAxis axis, G4int nDiv,
            << " Offset " << foffset << " = " << offset << G4endl
            << " Width " << fwidth << " = " << width << G4endl;
   }
+#endif
 }
 
 //------------------------------------------------------------------------
@@ -278,7 +287,6 @@ G4double G4ParameterisationParaZ::GetMaxParameter() const
   return 2*msol->GetZHalfLength();
 }
 
-
 //------------------------------------------------------------------------
 void
 G4ParameterisationParaZ::
@@ -292,12 +300,14 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
   G4ThreeVector symAxis = msol->GetSymAxis();
   G4ThreeVector origin( symAxis * posi / symAxis.z() ); 
   
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
     G4cout << std::setprecision(8) << " G4ParameterisationParaZ "
            << copyNo << G4endl
            << " Position: " << origin << " - Axis: " << faxis << G4endl;
   }
+#endif
 
   //----- set translation 
   physVol->SetTranslation( origin );
@@ -306,7 +316,7 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
 //--------------------------------------------------------------------------
 void
 G4ParameterisationParaZ::
-ComputeDimensions(G4Para& para, const G4int copyNo,
+ComputeDimensions(G4Para& para, const G4int,
                   const G4VPhysicalVolume*) const
 {
   //---- The division along Z of a Para will result a Para
@@ -322,13 +332,14 @@ ComputeDimensions(G4Para& para, const G4int copyNo,
  
   para.SetAllParameters ( pDx, pDy, pDz, pAlpha, pTheta, pPhi );
 
+#ifdef G4DIVDEBUG
   if( verbose >= -1 )
   {
-    G4cout << " G4ParameterisationParaZ::ComputeDimensions(G4Para)"
+    G4cout << " G4ParameterisationParaZ::ComputeDimensions()"
            << " - Mother PARA " << G4endl;
     msol->DumpInfo();
-    G4cout << " - Parameterised PARA: "
-           << copyNo << G4endl;
+    G4cout << " - Parameterised PARA: " << G4endl;
     para.DumpInfo();
   }
+#endif
 }

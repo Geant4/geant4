@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolyhedra.cc,v 1.5 2003-11-18 12:15:43 arce Exp $
+// $Id: G4ParameterisationPolyhedra.cc,v 1.6 2003-11-19 11:51:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationPolyhedra Implementation file
@@ -58,14 +58,11 @@ G4ParameterisationPolyhedraRho( EAxis axis, G4int nDiv,
   }
   else if( divType == DivNDIV )
   {
-    G4cout  << " original_pars " << original_pars << G4endl;
-    G4cout  << " original_pars rmax size " << original_pars->Rmax << " "
-            <<  original_pars->Rmin << G4endl;
-
     fwidth = CalculateWidth( original_pars->Rmax[0]
                            - original_pars->Rmin[0], nDiv, offset );
   }
 
+#ifdef G4DIVDEBUG
   if( verbose >= 1 )
   {
     G4cout << " G4ParameterisationPolyhedraRho - # divisions " << fnDiv
@@ -73,6 +70,7 @@ G4ParameterisationPolyhedraRho( EAxis axis, G4int nDiv,
            << " Offset " << foffset << " = " << offset << G4endl
            << " Width " << fwidth << " = " << width << G4endl;
   }
+#endif
 }
 
 //------------------------------------------------------------------------
@@ -87,27 +85,40 @@ void G4ParameterisationPolyhedraRho::CheckParametersValidity()
 
   G4Polyhedra* msol = (G4Polyhedra*)(fmotherSolid);
 
-  if( fDivisionType == DivNDIVandWIDTH || fDivisionType == DivWIDTH ){
-    G4cerr << "!!!WARNING:  Solid " << msol->GetName() << " G4ParameterisationPolyhedraRho::CheckParametersValidity. Division along R will be done with a width different for each solid section, WIDTH will not be used " << G4endl;
+  if( fDivisionType == DivNDIVandWIDTH || fDivisionType == DivWIDTH )
+  {
+    G4cerr << "WARNING - "
+           << "G4ParameterisationPolyhedraRho::CheckParametersValidity()"
+           << G4endl
+           << "          Solid " << msol->GetName() << G4endl
+           << "          Division along R will be done with a width "
+           << "different for each solid section." << G4endl
+           << "          WIDTH will not be used !" << G4endl;
   }
-  if( foffset != 0. ) {
-    G4cerr << "!!!WARNING:  Solid " << msol->GetName() << " G4ParameterisationPolyhedraZ::CheckParametersValidity. Division along  R will be done with a width different for each solid section, OFFSET will not be used " << G4endl;
+  if( foffset != 0. )
+  {
+    G4cerr << "WARNING - "
+           << "G4ParameterisationPolyhedraRho::CheckParametersValidity()"
+           << G4endl
+           << "          Solid " << msol->GetName() << G4endl
+           << "          Division along  R will be done with a width "
+           << "different for each solid section." << G4endl
+           << "          OFFSET will not be used !" << G4endl;
   }
-
 }
 
 //------------------------------------------------------------------------
-G4double G4ParameterisationPolyhedraRho::GetMaxParameter() const{
+G4double G4ParameterisationPolyhedraRho::GetMaxParameter() const
+{
   G4Polyhedra* msol = (G4Polyhedra*)(fmotherSolid);
   G4PolyhedraHistorical* original_pars = msol->GetOriginalParameters();
   return original_pars->Rmax[0] - original_pars->Rmin[0];
 }
 
-
 //--------------------------------------------------------------------------
 void
 G4ParameterisationPolyhedraRho::
-ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
+ComputeTransformation( const G4int, G4VPhysicalVolume* physVol ) const
 {
   //----- translation 
   G4ThreeVector origin(0.,0.,0.);
@@ -116,22 +127,28 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
   physVol->SetTranslation( origin );
 
   //----- calculate rotation matrix: unit
+
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
-    G4cout << " G4ParameterisationPolyhedraRho - copyNo: " << copyNo << G4endl
+    G4cout << " G4ParameterisationPolyhedraRho " << G4endl
            << " foffset: " << foffset/deg
            << " - fwidth: " << fwidth/deg << G4endl;
   }
+#endif
+
   ChangeRotMatrix( physVol );
 
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
     G4cout << std::setprecision(8) << " G4ParameterisationPolyhedraRho "
-           << copyNo << G4endl
+           << G4endl
            << " Position: " << origin
            << " - Width: " << fwidth
            << " - Axis: " << faxis  << G4endl;
   }
+#endif
 }
 
 //--------------------------------------------------------------------------
@@ -158,12 +175,14 @@ ComputeDimensions( G4Polyhedra& phedra, const G4int copyNo,
   phedra.SetOriginalParameters(&origparam); // copy values & transfer pointers
   phedra.Reset();                           // reset to new solid parameters
 
+#ifdef G4DIVDEBUG
   if( verbose >= -2 )
   {
     G4cout << "G4ParameterisationPolyhedraRho::ComputeDimensions()" << G4endl
            << "-- Parametrised phedra copy-number: " << copyNo << G4endl;
     phedra.DumpInfo();
   }
+#endif
 }
 
 //--------------------------------------------------------------------------
@@ -188,6 +207,7 @@ G4ParameterisationPolyhedraPhi( EAxis axis, G4int nDiv,
     fwidth = CalculateWidth( deltaPhi, nDiv, offset );
   }
 
+#ifdef G4DIVDEBUG
   if( verbose >= 1 )
   {
     G4cout << " G4ParameterisationPolyhedraPhi - # divisions " << fnDiv
@@ -195,6 +215,7 @@ G4ParameterisationPolyhedraPhi( EAxis axis, G4int nDiv,
            << " Offset " << foffset << " = " << offset << G4endl
            << " Width " << fwidth << " = " << width << G4endl;
   }
+#endif
 }
 
 //------------------------------------------------------------------------
@@ -203,11 +224,11 @@ G4ParameterisationPolyhedraPhi::~G4ParameterisationPolyhedraPhi()
 }
 
 //------------------------------------------------------------------------
-G4double G4ParameterisationPolyhedraPhi::GetMaxParameter() const{
+G4double G4ParameterisationPolyhedraPhi::GetMaxParameter() const
+{
   G4Polyhedra* msol = (G4Polyhedra*)(fmotherSolid);
   return msol->GetEndPhi() - msol->GetStartPhi();
 }
-
 
 //---------------------------------------------------------------------
 void G4ParameterisationPolyhedraPhi::CheckParametersValidity()
@@ -216,24 +237,43 @@ void G4ParameterisationPolyhedraPhi::CheckParametersValidity()
 
   G4Polyhedra* msol = (G4Polyhedra*)(fmotherSolid);
 
-  if( fDivisionType == DivNDIVandWIDTH || fDivisionType == DivWIDTH ){
-    G4cerr << " Solid " << msol->GetName() << " G4ParameterisationPolyhedraPhi::CheckParametersValidity. Division along PHI will be done splitting in the defined numSide, WIDTH will not be used " << G4endl;
+  if( fDivisionType == DivNDIVandWIDTH || fDivisionType == DivWIDTH )
+  {
+    G4cerr << "WARNING - "
+           << "G4ParameterisationPolyhedraPhi::CheckParametersValidity()"
+           << G4endl
+           << "          Solid " << msol->GetName() << G4endl
+           << "          Division along PHI will be done splitting "
+           << "in the defined numSide." << G4endl
+           << "          WIDTH will not be used !" << G4endl;
   }
-  if( foffset != 0. ) {
-    G4cerr << " Solid " << msol->GetName() << " G4ParameterisationPolyhedraPhi::CheckParametersValidity. Division along PHI will be done splitting in the defined numSide, OFFSET will not be used " << G4endl;
+  if( foffset != 0. )
+  {
+    G4cerr << "WARNING - "
+           << "G4ParameterisationPolyhedraPhi::CheckParametersValidity()"
+           << G4endl
+           << "          Solid " << msol->GetName() << G4endl
+           << "          Division along PHI will be done splitting "
+           << "in the defined numSide." << G4endl
+           << "          OFFSET will not be used !" << G4endl;
   }
 
   G4PolyhedraHistorical* origparamMother = msol->GetOriginalParameters();
 
-  if( origparamMother->numSide != fnDiv ) { 
-    char msgcha[10];
-    gcvt( origparamMother->numSide, 10, msgcha );
-    char msgcha2[10];
-    gcvt( fnDiv, 10, msgcha2 );
-    G4String msgstr = G4String("Division along PHI will be done splitting in the defined numSide, that is the number of division will be ") + G4String(msgcha) + G4String(" instead of ") + G4String(msgcha2); 
-    G4Exception("G4ParameterisationPolyhedraPHI::CheckParametersValidity()",
+  if( origparamMother->numSide != fnDiv )
+  { 
+    G4cerr << "ERROR - "
+           << "G4ParameterisationPolyhedraPhi::CheckParametersValidity()"
+           << G4endl
+           << "        Division along PHI will be done splitting in the defined"
+           << G4endl
+           << "        numSide, i.e, the number of division would be :"
+           << "        " << origparamMother->numSide
+           << " instead of " << fnDiv << " !"
+           << G4endl; 
+    G4Exception("G4ParameterisationPolyhedraPhi::CheckParametersValidity()",
                 "IllegalConstruct", FatalException,
-                msgstr);
+                "Not supported configuration.");
   }
 }
 
@@ -249,6 +289,8 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
 
   //----- calculate rotation matrix (so that all volumes point to the centre)
   G4double posi = copyNo*fwidth;
+
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
     G4cout << " G4ParameterisationPolyhedraPhi - position: " << posi/deg
@@ -256,8 +298,11 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
            << " copyNo: " << copyNo
            << " - fwidth: " << fwidth/deg << G4endl;
   }
+#endif
+
   ChangeRotMatrix( physVol, -posi );
 
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
     G4cout << std::setprecision(8) << " G4ParameterisationPolyhedraPhi " << copyNo
@@ -265,12 +310,13 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
            << " Position: " << origin << " - Width: " << fwidth
            << " - Axis: " << faxis  << G4endl;
   }
+#endif
 }
 
 //--------------------------------------------------------------------------
 void
 G4ParameterisationPolyhedraPhi::
-ComputeDimensions( G4Polyhedra& phedra, const G4int copyNo,
+ComputeDimensions( G4Polyhedra& phedra, const G4int,
                    const G4VPhysicalVolume* ) const
 {
   G4Polyhedra* msol = (G4Polyhedra*)(fmotherSolid);
@@ -285,12 +331,13 @@ ComputeDimensions( G4Polyhedra& phedra, const G4int copyNo,
   phedra.SetOriginalParameters(&origparam);  // copy values & transfer pointers
   phedra.Reset();                            // reset to new solid parameters
 
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
-    G4cout << "G4ParameterisationPolyhedraPhi::ComputeDimensions()" << G4endl
-           << "-- Parametrised phedra copy-number: " << copyNo << G4endl;
+    G4cout << "G4ParameterisationPolyhedraPhi::ComputeDimensions():" << G4endl;
     phedra.DumpInfo();
   }
+#endif
 }
 
 //--------------------------------------------------------------------------
@@ -310,15 +357,16 @@ G4ParameterisationPolyhedraZ( EAxis axis, G4int nDiv,
     {
     fnDiv =
       CalculateNDiv( origparamMother->Z_values[origparamMother->Num_z_planes-1]
-		     - origparamMother->Z_values[0] , width, offset );
+                     - origparamMother->Z_values[0] , width, offset );
   }
   else if( divType == DivNDIV )
     {
     fwidth =
       CalculateNDiv( origparamMother->Z_values[origparamMother->Num_z_planes-1]
-		     - origparamMother->Z_values[0] , nDiv, offset );
+                     - origparamMother->Z_values[0] , nDiv, offset );
   }
   
+#ifdef G4DIVDEBUG
   if( verbose >= 1 )
     {
     G4cout << " G4ParameterisationPolyhedraZ - # divisions " << fnDiv << " = "
@@ -326,7 +374,7 @@ G4ParameterisationPolyhedraZ( EAxis axis, G4int nDiv,
            << " Offset " << foffset << " = " << offset << G4endl
            << " Width " << fwidth << " = " << width << G4endl;
   }
-
+#endif
 }
 
 //---------------------------------------------------------------------
@@ -339,9 +387,9 @@ G4double G4ParameterisationPolyhedraZ::GetMaxParameter() const
 {
   G4Polyhedra* msol = (G4Polyhedra*)(fmotherSolid);
   G4PolyhedraHistorical* origparamMother = msol->GetOriginalParameters();
-  return origparamMother->Z_values[origparamMother->Num_z_planes-1] - origparamMother->Z_values[0];
+  return (origparamMother->Z_values[origparamMother->Num_z_planes-1]
+         -origparamMother->Z_values[0]);
 }
-
 
 //---------------------------------------------------------------------
 void G4ParameterisationPolyhedraZ::CheckParametersValidity()
@@ -350,27 +398,45 @@ void G4ParameterisationPolyhedraZ::CheckParametersValidity()
 
   G4Polyhedra* msol = (G4Polyhedra*)(fmotherSolid);
 
-  if( fDivisionType == DivNDIVandWIDTH || fDivisionType == DivWIDTH ){
-    G4cerr << "!!!WARNING:  Solid " << msol->GetName() << " G4ParameterisationPolyhedraZ::CheckParametersValidity. Division along Z will be done splitting in the defined z_planes, WIDTH will not be used " << G4endl;
+  if( fDivisionType == DivNDIVandWIDTH || fDivisionType == DivWIDTH )
+  {
+    G4cerr << "WARNING - "
+           << "G4ParameterisationPolyhedraZ::CheckParametersValidity()"
+           << G4endl
+           << "          Solid " << msol->GetName() << G4endl
+           << "          Division along Z will be done splitting "
+           << "in the defined z_planes." << G4endl
+           << "          WIDTH will not be used !" << G4endl;
   }
 
-  if( foffset != 0. ) {
-    G4cerr << "!!!WARNING:  Solid " << msol->GetName() << " G4ParameterisationPolyhedraZ::CheckParametersValidity. Division along Z will be done splitting in the defined z_planes, OFFSET will not be used " << G4endl;
+  if( foffset != 0. )
+  {
+    G4cerr << "WARNING - "
+           << "G4ParameterisationPolyhedraZ::CheckParametersValidity()"
+           << G4endl
+           << "          Solid " << msol->GetName() << G4endl
+           << "          Division along Z will be done splitting "
+           << "in the defined z_planes." << G4endl
+           << "          OFFSET will not be used !" << G4endl;
   }
 
   G4PolyhedraHistorical* origparamMother = msol->GetOriginalParameters();
 
-  if( origparamMother->Num_z_planes-1 != fnDiv ) { 
-    char msgcha[10];
-    gcvt( origparamMother->Num_z_planes-1, 10, msgcha );
-    char msgcha2[10];
-    gcvt( fnDiv, 10, msgcha2 );
-    G4String msgstr = G4String("Division along Z will be done splitting in the defined z_planes, that is the number of division will be ") + G4String(msgcha) + G4String(" instead of ") + G4String(msgcha2); 
+  if( origparamMother->Num_z_planes-1 != fnDiv )
+  { 
+    G4cerr << "ERROR - "
+           << "G4ParameterisationPolyhedraZ::CheckParametersValidity()"
+           << G4endl
+           << "        Division along Z will be done splitting in the defined"
+           << G4endl
+           << "        z_planes, i.e, the number of division would be :"
+           << "        " << origparamMother->Num_z_planes-1
+           << " instead of " << fnDiv << " !"
+           << G4endl; 
     G4Exception("G4ParameterisationPolyhedraZ::CheckParametersValidity()",
                 "IllegalConstruct", FatalException,
-                msgstr);
+                "Not supported configuration.");
   }
-
 }
 
 //---------------------------------------------------------------------
@@ -383,19 +449,24 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol) const
   //----- set translation: along Z axis
   G4PolyhedraHistorical* origparamMother = msol->GetOriginalParameters();
   G4double posi = (origparamMother->Z_values[copyNo]
-		   + origparamMother->Z_values[copyNo+1])/2;
+                   + origparamMother->Z_values[copyNo+1])/2;
   G4ThreeVector origin(0.,0.,posi); 
   physVol->SetTranslation( origin );
 
   //----- calculate rotation matrix: unit
+
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
     G4cout << " G4ParameterisationPolyhedraZ - position: " << posi << G4endl
            << " copyNo: " << copyNo << " - foffset: " << foffset/deg
            << " - fwidth: " << fwidth/deg << G4endl;
   }
+#endif
+
   ChangeRotMatrix( physVol );
 
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
     G4cout << std::setprecision(8) << " G4ParameterisationPolyhedraZ "
@@ -403,6 +474,7 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol) const
            << " Position: " << origin << " - Width: " << fwidth
            << " - Axis: " << faxis  << G4endl;
   }
+#endif
 }
 
 //---------------------------------------------------------------------
@@ -419,7 +491,7 @@ ComputeDimensions( G4Polyhedra& phedra, const G4int copyNo,
   G4PolyhedraHistorical origparam( *origparamMother );
 
   G4double posi = (origparamMother->Z_values[copyNo]
-		   + origparamMother->Z_values[copyNo+1])/2;
+                   + origparamMother->Z_values[copyNo+1])/2;
 
   origparam.Num_z_planes = 2;
   origparam.Z_values[0] = origparamMother->Z_values[copyNo] - posi;
@@ -432,11 +504,13 @@ ComputeDimensions( G4Polyhedra& phedra, const G4int copyNo,
   phedra.SetOriginalParameters(&origparam);  // copy values & transfer pointers
   phedra.Reset();                            // reset to new solid parameters
 
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
     G4cout << "G4ParameterisationPolyhedraZ::ComputeDimensions()" << G4endl
            << "-- Parametrised phedra copy-number: " << copyNo << G4endl;
     phedra.DumpInfo();
   }
+#endif
 }
 

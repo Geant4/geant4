@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolycone.cc,v 1.6 2003-11-18 12:15:43 arce Exp $
+// $Id: G4ParameterisationPolycone.cc,v 1.7 2003-11-19 11:51:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationPolycone Implementation file
@@ -61,6 +61,7 @@ G4ParameterisationPolyconeRho( EAxis axis, G4int nDiv,
                            - origparamMother->Rmin[0], nDiv, offset );
   }
 
+#ifdef G4DIVDEBUG
   if( verbose >= -1 )
   {
     G4cout << " G4ParameterisationPolyconeRho - # divisions " << fnDiv
@@ -68,6 +69,7 @@ G4ParameterisationPolyconeRho( EAxis axis, G4int nDiv,
            << " Offset " << foffset << " = " << offset << G4endl
            << " Width " << fwidth << " = " << width << G4endl;
   }
+#endif
 }
 
 //---------------------------------------------------------------------
@@ -82,17 +84,32 @@ void G4ParameterisationPolyconeRho::CheckParametersValidity()
 
   G4Polycone* msol = (G4Polycone*)(fmotherSolid);
 
-  if( fDivisionType == DivNDIVandWIDTH || fDivisionType == DivWIDTH ){
-    G4cerr << "!!!WARNING:  Solid " << msol->GetName() << " G4ParameterisationPolyconeRho::CheckParametersValidity. Division along R will be done with a width different for each solid section, WIDTH will not be used " << G4endl;
+  if( fDivisionType == DivNDIVandWIDTH || fDivisionType == DivWIDTH )
+  {
+    G4cerr << "WARNING - "
+           << "G4ParameterisationPolyconeRho::CheckParametersValidity()"
+           << G4endl
+           << "          Solid " << msol->GetName() << G4endl
+           << "          Division along R will be done with a width "
+           << "different for each solid section." << G4endl
+           << "          WIDTH will not be used !" << G4endl;
   }
-  if( foffset != 0. ) {
-    G4cerr << "!!!WARNING:  Solid " << msol->GetName() << " G4ParameterisationPolyconeZ::CheckParametersValidity. Division along  R will be done with a width different for each solid section, OFFSET will not be used " << G4endl;
+  if( foffset != 0. )
+  {
+    G4cerr << "WARNING - "
+           << "G4ParameterisationPolyconeRho::CheckParametersValidity()"
+           << G4endl
+           << "          Solid " << msol->GetName() << G4endl
+           << "          Division along  R will be done with a width "
+           << "different for each solid section." << G4endl
+           << "          OFFSET will not be used !" << G4endl;
   }
 
 }
 
 //------------------------------------------------------------------------
-G4double G4ParameterisationPolyconeRho::GetMaxParameter() const{
+G4double G4ParameterisationPolyconeRho::GetMaxParameter() const
+{
   G4Polycone* msol = (G4Polycone*)(fmotherSolid);
   G4PolyconeHistorical* original_pars = msol->GetOriginalParameters();
   return original_pars->Rmax[0] - original_pars->Rmin[0];
@@ -102,7 +119,7 @@ G4double G4ParameterisationPolyconeRho::GetMaxParameter() const{
 //---------------------------------------------------------------------
 void
 G4ParameterisationPolyconeRho::
-ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
+ComputeTransformation( const G4int, G4VPhysicalVolume* physVol ) const
 {
   //----- translation 
   G4ThreeVector origin(0.,0.,0.); 
@@ -110,22 +127,28 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
   physVol->SetTranslation( origin );
 
   //----- calculate rotation matrix: unit
+
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
-    G4cout << " G4ParameterisationPolyconeRho - copyNo: " << copyNo << G4endl
+    G4cout << " G4ParameterisationPolyconeRho " << G4endl
            << " foffset: " << foffset
            << " - fwidth: " << fwidth << G4endl;
   }
+#endif
+
   ChangeRotMatrix( physVol );
 
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
     G4cout << std::setprecision(8) << " G4ParameterisationPolyconeRho "
-           << copyNo << G4endl
+           << G4endl
            << " Position: " << origin/mm
            << " - Width: " << fwidth/deg
            << " - Axis: " << faxis  << G4endl;
   }
+#endif
 }
 
 //---------------------------------------------------------------------
@@ -152,12 +175,14 @@ ComputeDimensions( G4Polycone& pcone, const G4int copyNo,
   pcone.SetOriginalParameters(&origparam);  // copy values & transfer pointers
   pcone.Reset();                            // reset to new solid parameters
 
+#ifdef G4DIVDEBUG
   if( verbose >= -2 )
   {
     G4cout << "G4ParameterisationPolyconeRho::ComputeDimensions()" << G4endl
            << "-- Parametrised pcone copy-number: " << copyNo << G4endl;
     pcone.DumpInfo();
   }
+#endif
 }
 
 //---------------------------------------------------------------------
@@ -182,6 +207,7 @@ G4ParameterisationPolyconePhi( EAxis axis, G4int nDiv,
     fwidth = CalculateWidth( deltaPhi, nDiv, offset );
   }
 
+#ifdef G4DIVDEBUG
   if( verbose >= 1 )
   {
     G4cout << " G4ParameterisationPolyconePhi - # divisions " << fnDiv
@@ -189,6 +215,7 @@ G4ParameterisationPolyconePhi( EAxis axis, G4int nDiv,
            << " Offset " << foffset/deg << " = " << offset/deg << G4endl
            << " Width " << fwidth/deg << " = " << width/deg << G4endl;
   }
+#endif
 }
 
 //---------------------------------------------------------------------
@@ -197,11 +224,11 @@ G4ParameterisationPolyconePhi::~G4ParameterisationPolyconePhi()
 }
 
 //------------------------------------------------------------------------
-G4double G4ParameterisationPolyconePhi::GetMaxParameter() const{
+G4double G4ParameterisationPolyconePhi::GetMaxParameter() const
+{
   G4Polycone* msol = (G4Polycone*)(fmotherSolid);
   return msol->GetEndPhi() - msol->GetStartPhi();
 }
-
 
 //---------------------------------------------------------------------
 void
@@ -215,6 +242,8 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
 
   //----- calculate rotation matrix (so that all volumes point to the centre)
   G4double posi = foffset + copyNo*fwidth;
+
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
     G4cout << " G4ParameterisationPolyconePhi - position: " << posi/deg
@@ -222,8 +251,11 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
            << " copyNo: " << copyNo << " - foffset: " << foffset/deg
            << " - fwidth: " << fwidth/deg << G4endl;
   }
+#endif
+
   ChangeRotMatrix( physVol, -posi );
 
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
     G4cout << std::setprecision(8) << " G4ParameterisationPolyconePhi "
@@ -231,12 +263,13 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
            << " Position: " << origin << " - Width: " << fwidth
            << " - Axis: " << faxis  << G4endl;
   }
+#endif
 }
 
 //---------------------------------------------------------------------
 void
 G4ParameterisationPolyconePhi::
-ComputeDimensions( G4Polycone& pcone, const G4int copyNo,
+ComputeDimensions( G4Polycone& pcone, const G4int,
                    const G4VPhysicalVolume* ) const
 {
   G4Polycone* msol = (G4Polycone*)(fmotherSolid);
@@ -249,12 +282,13 @@ ComputeDimensions( G4Polycone& pcone, const G4int copyNo,
   pcone.SetOriginalParameters(&origparam);  // copy values & transfer pointers
   pcone.Reset();                            // reset to new solid parameters
 
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
-    G4cout << "G4ParameterisationPolyconePhi::ComputeDimensions()" << G4endl
-           << "-- Parametrised pcone copy-number: " << copyNo << G4endl;
+    G4cout << "G4ParameterisationPolyconePhi::ComputeDimensions():" << G4endl;
     pcone.DumpInfo();
   }
+#endif
 }
 
 //---------------------------------------------------------------------
@@ -271,26 +305,27 @@ G4ParameterisationPolyconeZ( EAxis axis, G4int nDiv,
   G4PolyconeHistorical* origparamMother = msol->GetOriginalParameters();
   
   if( divType == DivWIDTH )
-    {
+  {
     fnDiv =
       CalculateNDiv( origparamMother->Z_values[origparamMother->Num_z_planes-1]
-		     - origparamMother->Z_values[0] , width, offset );
+                     - origparamMother->Z_values[0] , width, offset );
   }
   else if( divType == DivNDIV )
-    {
+  {
     fwidth =
       CalculateNDiv( origparamMother->Z_values[origparamMother->Num_z_planes-1]
-		     - origparamMother->Z_values[0] , nDiv, offset );
+                     - origparamMother->Z_values[0] , nDiv, offset );
   }
   
+#ifdef G4DIVDEBUG
   if( verbose >= 1 )
-    {
+  {
     G4cout << " G4ParameterisationPolyconeZ - # divisions " << fnDiv << " = "
            << nDiv << G4endl
            << " Offset " << foffset << " = " << offset << G4endl
            << " Width " << fwidth << " = " << width << G4endl;
   }
-
+#endif
 }
 
 //---------------------------------------------------------------------
@@ -298,13 +333,13 @@ G4ParameterisationPolyconeZ::~G4ParameterisationPolyconeZ()
 {
 }
 
-
 //------------------------------------------------------------------------
 G4double G4ParameterisationPolyconeZ::GetMaxParameter() const
 {
   G4Polycone* msol = (G4Polycone*)(fmotherSolid);
   G4PolyconeHistorical* origparamMother = msol->GetOriginalParameters();
-  return origparamMother->Z_values[origparamMother->Num_z_planes-1] - origparamMother->Z_values[0];
+  return (origparamMother->Z_values[origparamMother->Num_z_planes-1]
+         -origparamMother->Z_values[0]);
 }
 
 //---------------------------------------------------------------------
@@ -314,27 +349,45 @@ void G4ParameterisationPolyconeZ::CheckParametersValidity()
 
   G4Polycone* msol = (G4Polycone*)(fmotherSolid);
 
-  if( fDivisionType == DivNDIVandWIDTH || fDivisionType == DivWIDTH ){
-    G4cerr << "!!!WARNING:  Solid " << msol->GetName() << " G4ParameterisationPolyconeZ::CheckParametersValidity. Division along Z will be done splitting in the defined z_planes, WIDTH will not be used " << G4endl;
+  if( fDivisionType == DivNDIVandWIDTH || fDivisionType == DivWIDTH )
+  {
+    G4cerr << "WARNING - "
+           << "G4ParameterisationPolyconeZ::CheckParametersValidity()"
+           << G4endl
+           << "          Solid " << msol->GetName() << G4endl
+           << "          Division along Z will be done splitting in the "
+           << "defined z_planes." << G4endl
+           << "          WIDTH will not be used !" << G4endl;
   }
 
-  if( foffset != 0. ) {
-    G4cerr << "!!!WARNING:  Solid " << msol->GetName() << " G4ParameterisationPolyconeZ::CheckParametersValidity. Division along Z will be done splitting in the defined z_planes, OFFSET will not be used " << G4endl;
+  if( foffset != 0. )
+  {
+    G4cerr << "WARNING - "
+           << "G4ParameterisationPolyconeZ::CheckParametersValidity()"
+           << G4endl
+           << "          Solid " << msol->GetName() << G4endl
+           << "          Division along Z will be done splitting in the "
+           << "defined z_planes." << G4endl
+           << "          OFFSET will not be used !" << G4endl;
   }
 
   G4PolyconeHistorical* origparamMother = msol->GetOriginalParameters();
 
-  if( origparamMother->Num_z_planes-1 != fnDiv ) { 
-    char msgcha[10];
-    gcvt( origparamMother->Num_z_planes-1, 10, msgcha );
-    char msgcha2[10];
-    gcvt( fnDiv, 10, msgcha2 );
-    G4String msgstr = G4String("Division along Z will be done splitting in the defined z_planes, that is the number of division will be ") + G4String(msgcha) + G4String(" instead of ") + G4String(msgcha2); 
+  if( origparamMother->Num_z_planes-1 != fnDiv )
+  { 
+    G4cerr << "ERROR - "
+           << "G4ParameterisationPolyconeZ::CheckParametersValidity()"
+           << G4endl
+           << "        Division along Z will be done splitting in the defined"
+           << G4endl
+           << "        z_planes, i.e, the number of division would be :"
+           << "        " << origparamMother->Num_z_planes-1
+           << " instead of " << fnDiv << " !"
+           << G4endl; 
     G4Exception("G4ParameterisationPolyconeZ::CheckParametersValidity()",
                 "IllegalConstruct", FatalException,
-                msgstr);
+                "Not supported configuration.");
   }
-
 }
 
 //---------------------------------------------------------------------
@@ -347,19 +400,24 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol) const
   //----- set translation: along Z axis
   G4PolyconeHistorical* origparamMother = msol->GetOriginalParameters();
   G4double posi = (origparamMother->Z_values[copyNo]
-		   + origparamMother->Z_values[copyNo+1])/2;
+                   + origparamMother->Z_values[copyNo+1])/2;
   G4ThreeVector origin(0.,0.,posi); 
   physVol->SetTranslation( origin );
 
   //----- calculate rotation matrix: unit
+
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
     G4cout << " G4ParameterisationPolyconeZ - position: " << posi << G4endl
            << " copyNo: " << copyNo << " - foffset: " << foffset/deg
            << " - fwidth: " << fwidth/deg << G4endl;
   }
+#endif
+
   ChangeRotMatrix( physVol );
 
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
     G4cout << std::setprecision(8) << " G4ParameterisationPolyconeZ "
@@ -367,6 +425,7 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol) const
            << " Position: " << origin << " - Width: " << fwidth
            << " - Axis: " << faxis  << G4endl;
   }
+#endif
 }
 
 //---------------------------------------------------------------------
@@ -383,7 +442,7 @@ ComputeDimensions( G4Polycone& pcone, const G4int copyNo,
   G4PolyconeHistorical origparam( *origparamMother );
 
   G4double posi = (origparamMother->Z_values[copyNo]
-		   + origparamMother->Z_values[copyNo+1])/2;
+                   + origparamMother->Z_values[copyNo+1])/2;
 
   origparam.Num_z_planes = 2;
   origparam.Z_values[0] = origparamMother->Z_values[copyNo] - posi;
@@ -396,10 +455,12 @@ ComputeDimensions( G4Polycone& pcone, const G4int copyNo,
   pcone.SetOriginalParameters(&origparam);  // copy values & transfer pointers
   pcone.Reset();                            // reset to new solid parameters
 
+#ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
     G4cout << "G4ParameterisationPolyconeZ::ComputeDimensions()" << G4endl
            << "-- Parametrised pcone copy-number: " << copyNo << G4endl;
     pcone.DumpInfo();
   }
+#endif
 }
