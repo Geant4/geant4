@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //////////////////////////////////////////////////////////////////////////
-// $Id: G4BREPSolidPConeTest.cc,v 1.10 2002-01-22 22:48:11 radoone Exp $
+// $Id: G4BREPSolidPConeTest.cc,v 1.11 2002-01-28 10:06:55 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //////////////////////////////////////////////////////////////////////////
 //
@@ -41,6 +41,21 @@
 
 #include "g4std/fstream"
 #include "g4std/iomanip"
+
+void checkNormal( G4BREPSolid* solid, G4ThreeVector& position )
+{
+  G4ThreeVector normal = solid->SurfaceNormal( position );
+  
+  G4cout << G4endl
+         << "\t\tSurface normal"                 << G4endl
+         << "\t\t--------------"                 << G4endl
+         << "\t\tposition x="                    << position.x()
+         << " y="                                << position.y()
+         << " z="                                << position.z() << G4endl
+         << "\t\tis normX="                      << normal.x()
+         << " normY="                            << normal.y()
+         << " normZ="                            << normal.z()   << G4endl;
+}
 
 void checkSurfInOut( G4BREPSolid* solid, G4ThreeVector& position, G4ThreeVector& direction )
 {
@@ -94,6 +109,7 @@ void checkSolid( const G4String& where, G4BREPSolid* solid, G4ThreeVector& posit
   } else {
     G4cout <<" is on the surface"<<G4endl;
     checkSurfInOut( solid, position, direction );
+    checkNormal( solid, position );
   }
 }
 
