@@ -7,10 +7,7 @@
 #  testing but much can be done withing the testing script and reported
 #  during execution.
 #
-$DevDir="dev2";
-$SttTag="stt.geant4-01-01-ref-03-tags40";
-$DevDir="dev1";
-$SttTag="stt.geant4-01-01-ref-04+group1a";
+$maxshow=50;
 #
 open(CONFIG,"OnTest") || die "Failed to open OnTest configuration file $! ";
 ($DevDir,$Tag)=split(' ',<CONFIG>);
@@ -28,6 +25,18 @@ $TestTop="/afs/cern.ch/sw/geant4/stt/$DevDir";
        [ qw ( test11    test12    test13           test14    test15     )],
        [ qw ( test16    test17    test18           test501   test502    )], 
        [ qw ( test503   test504   test505          test601   test602  )] 
+      );
+
+# less columns for telnet at slac
+@tl = (
+       [ qw ( test01    test02    test02.hadron    test05   )],
+       [ qw ( test06    test07    test09           test10   )],
+       [ qw ( test101   test102   test103          test104  )],
+       [ qw ( test104.EMtest test105 test106       test11   )],
+       [ qw ( test12    test13    test14           test15   )],
+       [ qw ( test16    test17    test18           test501  )],
+       [ qw ( test502   test503   test504          test505  )],
+       [ qw ( test601   test602  )] 
       );
 
 opendir(TT,"$TestTop") || die "Failed to opendir TestTop  $TestTop $!";
@@ -108,7 +117,7 @@ foreach $Platform (@Platforms) {
                      close(ANAERR);
                  }
                  if ( "diff" eq "$FileType" ) {
-                     $maxshow=10; $shown=0; $differs=0;
+                     $shown=0; $differs=0;
                      open(ANADIFF,"$TestDir/$tfile");
                      while ($line=<ANADIFF>) {
                          $differs++;
@@ -129,9 +138,10 @@ foreach $Platform (@Platforms) {
                          next if ( $shown > $maxshow );
                          chomp($line);
                          print "$TestName $FileType  \"$line\".\n";
+                         print "$TestName $FileType  ++++ $shown significant differences - stop display.\n" if ( $shown >= $maxshow );
                      }
                      close(ANADIFF);
-                 #   print "$TestName $FileType $shown significant differences\n";
+                     print "$TestName $FileType  ++++ $shown significant differences.\n";
                      if ($shown > 0 ) {
                          $report_diff=sprintf("%-16s %-9s %-14s %7d different lines (in diff file).",$TestName,$Platform,$Option,$shown);
                          push(@DiffReports,$report_diff);
