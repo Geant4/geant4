@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: NTSTDetectorConstruction.cc,v 1.4 2003-11-27 08:57:09 japost Exp $
+// $Id: NTSTDetectorConstruction.cc,v 1.5 2003-11-27 10:46:44 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -36,6 +36,7 @@
 #include "G4CashKarpRKF45.hh"
 
 #include "G4DELPHIMagField.hh"
+#include "G4PropagatorInField.hh"
 
 NTSTDetectorConstruction::NTSTDetectorConstruction() 
   : _FileRead(0), debug(false), radius(19*cm), NSubLayer(0),
@@ -163,7 +164,29 @@ NTSTDetectorConstruction::Construct()
 
   globalFieldManager = G4TransportationManager::GetTransportationManager()->GetFieldManager();
 
+  G4PropagatorInField *
+  globalPropagatorInField= G4TransportationManager::GetTransportationManager()->GetPropagatorInField();
+
+  G4cout 
+    << "PropagatorInField parameter(s) are: " << G4endl
+    << " SetMaxLoopCount=" << globalPropagatorInField->GetMaxLoopCount()
+    << " minEpsilonStep= " << globalPropagatorInField->GetMinimumEpsilonStep() << " "
+    << " maxEpsilonStep= " << globalPropagatorInField->GetMaximumEpsilonStep() << " " 
+    << G4endl;
+
   globalFieldManager->SetDetectorField( (G4MagneticField *)&field );
+
+  // globalFieldManager->SetMinimumEpsilonStep( 5.0e-7 );    // Old value
+  // globalFieldManager->SetMaximumEpsilonStep( 0.05 );      // FIX - old value
+  // globalFieldManager->SetDeltaOneStep( 0.25 * mm );       // original value
+  // globalFieldManager->SetDeltaIntersection( 0.10 * mm );  // original value
+
+  G4cout << "Field Manager's parameters are " 
+	 << " minEpsilonStep= " << globalFieldManager->GetMinimumEpsilonStep() << " "
+	 << " maxEpsilonStep= " << globalFieldManager->GetMaximumEpsilonStep() << " " 
+	 << " deltaOneStep=   " << globalFieldManager->GetDeltaOneStep() << " "
+	 << " deltaIntersection= " << globalFieldManager->GetDeltaIntersection() 
+	 << G4endl;
 
   pEquation = new G4Mag_UsualEqRhs( &field); 
  
