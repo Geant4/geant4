@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung.cc,v 1.31 2003-04-29 04:59:48 kurasige Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.32 2003-05-26 16:13:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -312,8 +312,8 @@ void G4eBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4eBremsstrahlung::ComputeBremLoss(G4double Z,G4double natom,
-                         G4double T,G4double Cut,G4double x)
+G4double G4eBremsstrahlung::ComputeBremLoss(G4double Z,G4double,
+                         G4double T,G4double Cut,G4double)
 
 // compute loss due to soft brems
 {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.cc,v 1.7 2002-04-09 17:34:43 vnivanch Exp $
+// $Id: G4SynchrotronRadiation.cc,v 1.8 2003-05-26 16:13:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -47,7 +47,7 @@
  
 G4SynchrotronRadiation::G4SynchrotronRadiation(const G4String& processName)
 
-  : G4VDiscreteProcess("SynchrotronRadiation"),      // initialization
+  : G4VDiscreteProcess(processName),      // initialization
     LowestKineticEnergy (10.*keV),
     HighestKineticEnergy (100.*TeV),
     TotBin(200),
@@ -198,7 +198,7 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
 
 G4double 
 G4SynchrotronRadiation::GetPhotonEnergy( const G4Track& trackData,
-                                         const G4Step&  stepData      )
+                                         const G4Step&  )
 
 {
   G4int i ;

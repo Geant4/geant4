@@ -1,4 +1,4 @@
-$Id: History,v 1.91 2003-05-23 18:50:37 vnivanch Exp $
+$Id: History,v 1.92 2003-05-26 16:13:13 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26 May 03: V.Ivant (stand-V05-01-02)
+-Fix compilation warnings for pedantic compiler options
 
 23 May 03: V.Ivant (stand-V05-01-01)
 -Fix initialisation for STD: for integral Bohr fluctuations

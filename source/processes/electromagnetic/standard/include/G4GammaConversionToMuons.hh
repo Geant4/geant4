@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.hh,v 1.2 2002-05-06 09:32:41 maire Exp $
+// $Id: G4GammaConversionToMuons.hh,v 1.3 2003-05-26 16:13:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
@@ -77,7 +77,7 @@ class G4GammaConversionToMuons : public G4VDiscreteProcess
      void SetCrossSecFactor(G4double fac);
        // Set the factor to artificially increase the crossSection (default 1)
 
-     G4double inline GetCrossSecFactor() { return CrossSecFactor;}
+     G4double GetCrossSecFactor() { return CrossSecFactor;}
        // Get the factor to artificially increase the cross section
 
      G4double GetMeanFreePath(const G4Track& aTrack,

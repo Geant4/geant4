@@ -367,7 +367,7 @@ G4PAIonisation::BuildPAIonisationTable()
 //
 
 void
-G4PAIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
+G4PAIonisation::BuildLambdaTable(const G4ParticleDefinition&)
 {
   G4int i ;
   G4double dNdxCut, lambda;
@@ -709,7 +709,7 @@ G4VParticleChange* G4PAIonisation::AlongStepDoIt( const G4Track& trackData,
 G4double
 G4PAIonisation::GetLossWithFluct( G4double Step,
                                    const G4DynamicParticle* aParticle,
-                                   G4Material* aMaterial               )
+                                   G4Material*)
 {
   G4int iTkin, iTransfer  ;
   G4long numOfCollisions;
@@ -843,7 +843,7 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
 G4double  
 G4PAIonisation::GetAlongStepDelta( G4double Step,
                                    const G4DynamicParticle* aParticle,
-                                   G4Material* aMaterial               )
+                                   G4Material*             )
 {  
   G4int iTkin, iTransfer  ;
   G4long numOfCollisions;

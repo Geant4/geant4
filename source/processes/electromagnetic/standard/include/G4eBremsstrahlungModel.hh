@@ -113,7 +113,7 @@ private:
 
   void SetParticle(const G4ParticleDefinition* p);
 
-  G4double ComputeBremLoss(G4double Z, G4double tkin, G4double cut, G4double x);  
+  G4double ComputeBremLoss(G4double Z, G4double tkin, G4double cut);  
 
   G4double PositronCorrFactorLoss(G4double Z, G4double tkin, G4double cut);
 

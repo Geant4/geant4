@@ -168,7 +168,7 @@ G4double G4eBremsstrahlungModel::ComputeDEDX(const G4Material* material,
   
   G4double cut = G4std::min(cutEnergy, kineticEnergy);
 
-  G4double x, rate, loss;
+  G4double rate, loss;
   const G4double factorHigh = 36./(1450.*GeV);
   const G4double coef1 = -0.5;
   const G4double coef2 = 2./9.;
@@ -188,19 +188,19 @@ G4double G4eBremsstrahlungModel::ComputeDEDX(const G4Material* material,
     // loss for MinKinEnergy<KineticEnergy<=100 GeV
     if (kineticEnergy <= thigh) {
 
-      x = log(totalEnergy/electron_mass_c2);
-      loss = ComputeBremLoss(Z, kineticEnergy, cut, x) ;
+      //      x = log(totalEnergy/electron_mass_c2);
+      loss = ComputeBremLoss(Z, kineticEnergy, cut) ;
       if (!isElectron) loss *= PositronCorrFactorLoss(Z, kineticEnergy, cut);
 
     // extrapolation for KineticEnergy>100 GeV
     } else {
       
-      G4double xhigh = log(thigh/electron_mass_c2);
+      //      G4double xhigh = log(thigh/electron_mass_c2);
       G4double cuthigh = thigh*0.5;
 
       if (cut < thigh) {
 
-        loss = ComputeBremLoss(Z, thigh, cut, xhigh) ;
+        loss = ComputeBremLoss(Z, thigh, cut) ;
         if (!isElectron) loss *= PositronCorrFactorLoss(Z, thigh, cut) ;
         rate = cut/totalEnergy;
         loss *= (1. + coef1*rate + coef2*rate*rate);
@@ -209,7 +209,7 @@ G4double G4eBremsstrahlungModel::ComputeDEDX(const G4Material* material,
 
       } else {
 
-        loss = ComputeBremLoss(Z, thigh, cuthigh, xhigh) ;
+        loss = ComputeBremLoss(Z, thigh, cuthigh) ;
         if (!isElectron) loss *= PositronCorrFactorLoss(Z, thigh, cuthigh) ;
         rate = cut/totalEnergy;
         loss *= (1. + coef1*rate + coef2*rate*rate);
@@ -268,7 +268,7 @@ G4double G4eBremsstrahlungModel::ComputeDEDX(const G4Material* material,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4eBremsstrahlungModel::ComputeBremLoss(G4double Z, G4double T,
-                                                 G4double Cut, G4double x)
+                                                 G4double Cut)
 
 // compute loss due to soft brems
 {
@@ -829,10 +829,10 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4std::vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondaries(
-                             const G4MaterialCutsCouple* couple,
-                             const G4DynamicParticle* dp,
-                                   G4double tmin,
-                                   G4double maxEnergy)
+                             const G4MaterialCutsCouple*,
+                             const G4DynamicParticle*,
+                                   G4double,
+                                   G4double)
 {
   return 0;
 }

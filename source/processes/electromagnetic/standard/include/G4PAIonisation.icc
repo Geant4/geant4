@@ -38,7 +38,7 @@
 //
 
 inline G4double
- G4PAIonisation::GetConstraints(const G4DynamicParticle *aParticle,
+ G4PAIonisation::GetConstraints(const G4DynamicParticle *,
                                               G4Material *aMaterial    ) 
 {  
   size_t index = aMaterial->GetIndex() ;
@@ -89,7 +89,7 @@ G4PAIonisation::GetContinuousStepLimit( const G4Track& track ,
 
 inline G4double G4PAIonisation::
 GetMeanFreePath( const G4Track&          trackData,
-                       G4double          previousStepSize,
+                       G4double,
                        G4ForceCondition* condition         ) 
 {
 // G4cout<<"G4PAIonisation::GetMeanFreePath is called"<<G4endl ;

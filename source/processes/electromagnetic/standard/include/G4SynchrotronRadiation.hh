@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.hh,v 1.7 2002-04-09 17:34:40 vnivanch Exp $
+// $Id: G4SynchrotronRadiation.hh,v 1.8 2003-05-26 16:13:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -138,7 +138,7 @@ class G4SynchrotronRadiation : public G4VDiscreteProcess
 
 inline G4double 
 G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
-                                               G4double previousStepSize,
+                                               G4double,
                                                G4ForceCondition* condition)
 {
    const G4DynamicParticle* aDynamicParticle;

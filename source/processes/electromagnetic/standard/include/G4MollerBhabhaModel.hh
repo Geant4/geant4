@@ -126,7 +126,7 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4MollerBhabhaModel::MaxSecondaryEnergy(
-          const G4ParticleDefinition* p,
+          const G4ParticleDefinition*,
                 G4double kinEnergy) 
 {
   G4double tmax = kinEnergy;
