@@ -17,7 +17,6 @@ TFile *f = new TFile("cascade.root","RECREATE");
 TH1F *h1 = new TH1F("h1","particle types",100,-4,4);
 TNtuple *ntuple = new TNtuple("ntuple","data from cascade.out","nEve:typePart:eKin:momX:momY:momZ:nucA:nucZ:nucEx");
 
-
 while (1) {
   in >> nEve >> typePart >> eKin >> momX >> momY >> momZ >> nucA >> nucZ >> nucEx;
   if (!in.good()) break;
@@ -46,14 +45,15 @@ r->Divide(n, m);
 
 Int_t i = 1;
 Int_t nm = m * n +1;
+
 while (i < nm) {
-r->cd(i);
-gPad->SetBorderMode(0);
-gPad->Draw();
-gPad->SetLogy();
-//gPad->SetLogx();
-gPad->SetGrid();
-i++;
+  r->cd(i);
+  gPad->SetBorderMode(0);
+  gPad->Draw();
+  gPad->SetLogy();
+  //gPad->SetLogx();
+  gPad->SetGrid();
+  i++;
 }
 
 // Change default style 
@@ -67,6 +67,7 @@ r->cd(1);
 ntuple->SetLineColor(1);
 ntuple->SetFillColor(18);
 ntuple->Draw("eKin", "typePart==1");
+
 // Neutron energy
 r->cd(2);
 
@@ -105,6 +106,22 @@ r->cd(4);
 ntuple->SetLineColor(1);
 ntuple->SetFillColor(0);
 ntuple->Draw("eKin", "typePart==0");
+
+// Nucleons
+r->cd(5);
+gPad->GetFrame()->SetFillColor(0);
+
+ntuple->SetFillStyle(4000);
+ntuple->SetFillColor(0); 
+
+ntuple->SetLineClor(16);
+ntuple->SetLineStyle(1);
+ntuple->SetLineWidth(1); 
+ntuple->Draw("nucA", "typePart==0");
+ntuple->SetLineColor(13);
+ntuple->SetLineStyle(1);;
+ntuple->SetLineWidth(2); 
+ntuple->Draw("nucZ", "typePart==0","same");
 
 r->Update();
 
