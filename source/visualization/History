@@ -1,4 +1,4 @@
-$Id: History,v 1.24 1999-08-26 05:49:23 stanaka Exp $
+$Id: History,v 1.25 1999-08-27 15:56:07 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,12 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+vis-V00-01-02  27th August  John Allison
+- Eliminate residual references to G4Ray.
+- Improved some informational printing in G4VisManager::IsValidView.
+- G4VisManager::SetCurrentGraphicsSystem no longer gives spurious warnings.
+- Improved README (change `gmake global' to plain `gmake').
 
 vis-V00-01-01 26th August Satoshi TANAKA
 - Protection for invalid calling of BeginModeling
