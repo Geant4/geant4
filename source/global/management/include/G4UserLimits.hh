@@ -5,16 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserLimits.hh,v 1.2 1999-11-16 17:40:50 gcosmo Exp $
+// $Id: G4UserLimits.hh,v 1.3 1999-11-22 15:12:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 // 
 //
 // class G4UserLimits
 //
-// Class description:
+// class description:
 //
 // Simple placeholder for user Step limitations
+//
 
 // Author: Paul Kent August 96
 // 
@@ -29,7 +29,8 @@ class G4Track;
 
 class G4UserLimits
 {
-public:
+public:  // with description
+
   G4UserLimits(G4double ustepMax = DBL_MAX,
                G4double utrakMax = DBL_MAX,
                G4double utimeMax = DBL_MAX,
@@ -37,7 +38,8 @@ public:
 	       G4double urangMin = 0. );
   virtual ~G4UserLimits();
 
-public:
+public:  // with description
+
   // If a Logical Volume has a G4UserLimits object, 
   //the Step length should be limited as shorter 
   //than MaxAllowedStep in the volume.
@@ -55,12 +57,13 @@ public:
   virtual void SetUserMinEkine(G4double uekinMin);
   virtual void SetUserMinRange(G4double urangMin);
  
-protected:
+protected:  // with description
+
   G4double fMaxStep;        //max allowed Step size in this volume 
   G4double fMaxTrack;       //max total track length
   G4double fMaxTime;        //max time
-  G4double fMinEkine;       //min kinetic energy
-  G4double fMinRange;       //min remaining range
+  G4double fMinEkine;       //min kinetic energy  (only for charged particles)
+  G4double fMinRange;       //min remaining range (only for charged particles)
 };
 
 #include "G4UserLimits.icc"
