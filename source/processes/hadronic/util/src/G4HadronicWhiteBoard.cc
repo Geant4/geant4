@@ -35,3 +35,16 @@ G4HadronicWhiteBoard & G4HadronicWhiteBoard::Instance()
     theA = theTarget.GetN();
     theZ = theTarget.GetZ();
   }
+
+  void G4HadronicWhiteBoard::Dump()
+  {
+    std::cerr << std::endl;
+    std::cerr << "GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD"<<std::endl;
+    std::cerr << "Dumping the registered hadronic state information "<<std::endl;
+    std::cerr << "Nucleus A, Z = "<<theA<<" "<<theZ<<std::endl;
+    std::cerr << "Projectile was a "<<theName<<std::endl;
+    std::cerr << "projectile momentum (px, py, pz) = ("<<thePx<<", "<<thePy<<", "<<thePz<<")"<<std::endl;
+    std::cerr << "Projectile energy = "<< theE<<std::endl;
+    std::cerr << "GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD"<<std::endl;
+    std::cerr << std::endl;
+  }

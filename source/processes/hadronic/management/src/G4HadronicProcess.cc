@@ -49,7 +49,17 @@
 #include "G4HadReentrentException.hh"
 #include "G4HadronicInteractionWrapper.hh"
 
+#include "G4HadSignalHandler.hh"
+
 //@@ add model name info, once typeinfo available #include <typeinfo.h>
+
+  namespace G4HadronicProcess_local
+  {
+    extern "C" void G4HadronicProcessHandler_1(int)
+    {
+      G4HadronicWhiteBoard::Instance().Dump();
+    }
+  } 
  
  G4IsoParticleChange * G4HadronicProcess::theIsoResult = NULL;
  G4IsoParticleChange * G4HadronicProcess::theOldIsoResult = NULL;
@@ -303,6 +313,9 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
   const G4Track &aTrack, const G4Step &)
   {
     // G4cout << theNumberOfInteractionLengthLeft<<G4endl;
+    #ifndef G4HadSignalHandler_off
+    G4HadSignalHandler aHandler(G4HadronicProcess_local::G4HadronicProcessHandler_1);
+    #endif
     const G4DynamicParticle *aParticle = aTrack.GetDynamicParticle();
     G4Material *aMaterial = aTrack.GetMaterial();
     G4double originalEnergy = aParticle->GetKineticEnergy();

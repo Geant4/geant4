@@ -27,6 +27,8 @@ class G4HadronicWhiteBoard
   G4double GetA();
   G4double GetZ();
   
+  void Dump();
+  
   
   private:
   
