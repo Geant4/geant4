@@ -373,12 +373,12 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 	  nsec++;
 	  G4double tStep = steplength / ( kt->Get4Momentum().beta() * c_light );
 	  //G4cout << " minTimeStep, tStep Particle " <<minTimeStep << " " <<tStep
-	  //       << " " <<kt->GetDefinition()->GetParticleName() << " 4mom " << kt->Get4Momentum()<<G4endl;
+	  //       << " " <<kt->GetDefinition()->GetParticleName() << " 4mom " << kt->GetTrackingMomentum()<<G4endl;
 	  if(tStep<minTimeStep)
 	  {
 	    minTimeStep = tStep;
 //            G4cerr <<"Position "<<kt->GetPosition().mag()<<" "
-//	           <<kt->Get4Momentum().e()-kt->Get4Momentum().mag()<<G4endl;
+//	           <<kt->GetTrackingMomentum().e()-kt->GetTrackingMomentum().mag()<<G4endl;
 	  }
         }
       }
@@ -873,7 +873,7 @@ void  G4BinaryCascade::FindCollisions(G4KineticTrackVector * secondaries)
     pkt = *i;
     // look for collisions with target particles
 //      G4cerr << "G4BinaryCascade::ApplyCollision pre-collision time"
-//             <<pkt->Get4Momentum()<<" "<<pkt->Get4Momentum().boostVector().mag()<<" " <<pkt->GetDefinition()->GetParticleName()
+//             <<pkt->GetTrackingMomentum()<<" "<<pkt->GetTrackingMomentum().boostVector().mag()<<" " <<pkt->GetDefinition()->GetParticleName()
 //	     <<G4endl;
     for(G4std::vector<G4KineticTrack *>::iterator j = theTargetList.begin();
 	j != theTargetList.end(); ++j)
@@ -916,7 +916,7 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
 
   G4KineticTrackVector * products=0;
 
-//      G4cout << "ApplyCollisions : projte 4mom " << primary->Get4Momentum()<< G4endl;
+//      G4cout << "ApplyCollisions : projte 4mom " << primary->GetTrackingMomentum()<< G4endl;
 //   if (target != 0 )
 //   {
 //      G4cout << "ApplyCollisions : target 4mom " << target->Get4Momentum()<< G4endl;
