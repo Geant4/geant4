@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VUserPhysicsList.cc,v 1.1 1999-01-07 16:14:19 gunter Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.2 1999-02-09 15:11:38 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,6 +21,7 @@
 //                                        18 June 1998  by H.Kurashige 
 //       modifeid for short lived particles 27  June 1998  by H.Kurashige
 //       G4BestUnit on output             12 nov. 1998  mma  
+//       Added RemoveProcessManager        9 Frb. 1999 by H.Kurashige
 // ------------------------------------------------------------
 
 #include "globals.hh"
@@ -87,22 +88,27 @@ void G4VUserPhysicsList::AddProcessManager(G4ParticleDefinition* newParticle,
       }
     }
   }
-  
+
+#ifdef G4VERBOSE    
   if (verboseLevel >2){
     G4cerr << "G4VUserPhysicsList::AddProcessManager: ";
     G4cerr  << "adds ProcessManager to ";
     G4cerr  << newParticle->GetParticleName() << endl;
     newManager->DumpInfo();
   } 
+#endif
+
   newManager->SetParticleType(newParticle);
   if (newParticle->GetProcessManager() == NULL) {
     newParticle->SetProcessManager(newManager);
+#ifdef G4VERBOSE    
   } else {
     if (verboseLevel >0){
       G4cerr << "G4VUserPhysicsList::AddProcessManager: ";
       G4cerr  << newParticle->GetParticleName();
       G4cerr << " already has ProcessManager " << endl;
     }
+#endif
   }
 }
 
@@ -120,6 +126,25 @@ void G4VUserPhysicsList::InitializeProcessManager()
     }
   }
 }
+
+void G4VUserPhysicsList::RemoveProcessManager()
+{
+  // loop over all particles in G4ParticleTable 
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() ){
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
+    if  (pmanager!=NULL) delete pmanager;
+#ifdef G4VERBOSE    
+    if (verboseLevel >2){
+      G4cerr << "G4VUserPhysicsList::RemoveProcessManager: ";
+      G4cerr  << "remove ProcessManager from ";
+      G4cerr  << particle->GetParticleName() << endl;
+    }
+  } 
+#endif
+}
+
 
 #include "G4Transportation.hh"
 void G4VUserPhysicsList::AddTransportation()
@@ -143,16 +168,20 @@ void G4VUserPhysicsList::AddTransportation()
 void G4VUserPhysicsList::SetDefaultCutValue(G4double value)
 {
    if (value<=0.0) {
+#ifdef G4VERBOSE    
      if (verboseLevel >0){
        G4cerr << "G4VUserPhysicsList::SetDefaultCutValue: negative cut values";
        G4cerr << "  :" << value/mm << "[mm]" << endl;
      }
+#endif
    } else { 
+#ifdef G4VERBOSE    
      if (verboseLevel >1){
        G4cout << "G4VUserPhysicsList::SetDefaultCutValue:";
        G4cout << "default cut value is changed to   :" ;
        G4cout << value/mm << "[mm]" << endl;
      }
+#endif
      defaultCutValue = value;
      ResetCuts();
    }
@@ -160,10 +189,12 @@ void G4VUserPhysicsList::SetDefaultCutValue(G4double value)
 
 void G4VUserPhysicsList::ResetCuts()
 {
+#ifdef G4VERBOSE    
   if (verboseLevel >1) {
     G4cout << "G4VUserPhysicsList::ResetCuts()" << endl;
     G4cout << "  cut values in energy will be calculated later" << endl;
   }
+#endif
 
   // Reset cut values for other particles
   // loop over all particles in G4ParticleTable 
@@ -193,16 +224,20 @@ void G4VUserPhysicsList::SetCutValueForOtherThan(G4double cutValue,
 {
   // check cut value is positive
   if (cutValue <= 0.0) {
+#ifdef G4VERBOSE    
     if (verboseLevel >0){
       G4cerr << "G4VUserPhysicsList::SetCutValueForOtherThan: negative cut values";
       G4cerr << "  :" << cutValue/mm << "[mm]" << endl;
     }
+#endif
     return;
   } else {
+#ifdef G4VERBOSE    
     if (verboseLevel >1) {
       G4cout << "G4VUserPhysicsList::SetCutValueForOtherThan ";
       G4cout << "  :" << cutValue/mm << "[mm]" << endl;
     }
+#endif
   }
 
   // check specified particle types in arguments
@@ -261,8 +296,10 @@ void G4VUserPhysicsList::SetCutValueForOtherThan(G4double cutValue,
     if (!isSpecified) {
        if (!particle->IsShortLived()) {
 	 particle->SetCuts(cutValue);
+#ifdef G4VERBOSE    
 	 if (verboseLevel >1) 
 	   G4cout << "Set cuts for " << particle->GetParticleName() << endl;
+#endif
 	 BuildPhysicsTable(particle);
        }
     }
@@ -275,12 +312,16 @@ void G4VUserPhysicsList::SetCutValue(G4double aCut, const G4String& name)
   if (particle = theParticleTable->FindParticle(name)){
      if (!particle->IsShortLived()) {
        particle->SetCuts( aCut );
+#ifdef G4VERBOSE    
        if (verboseLevel >1) G4cout << "Set cuts for " << name << endl;
+#endif
        BuildPhysicsTable(particle);
      }
   } else {
+#ifdef G4VERBOSE    
     if (verboseLevel >0) 
       G4cout << name << " is not found in ParticleTable" << endl;
+#endif
   }
 }
 
@@ -289,16 +330,20 @@ void G4VUserPhysicsList::SetCutValueForOthers(G4double cutValue)
 {
  // check cut value is positive
   if (cutValue <= 0.0) {
+#ifdef G4VERBOSE    
     if (verboseLevel >0){
       G4cerr << "G4VUserPhysicsList::SetCutValueForOthers: negative cut values";
       G4cerr << "  :" << cutValue/mm << "[mm]" << endl;
     }
+#endif
     return;
   } else {
+#ifdef G4VERBOSE    
     if (verboseLevel >1) {
       G4cout << "G4VUserPhysicsList::SetCutValueForOthers ";
       G4cout << "  :" << cutValue/mm << "[mm]" << endl;
     }
+#endif
   }
 
   // Sets a cut value to particle types which have not be called SetCuts() 
@@ -308,8 +353,10 @@ void G4VUserPhysicsList::SetCutValueForOthers(G4double cutValue)
     if (!particle->IsShortLived()) {
       if ((particle->GetLengthCuts()<0.0) ||(particle->GetEnergyCuts()==NULL)) {
 	particle->SetCuts(cutValue);
+#ifdef G4VERBOSE    
 	if (verboseLevel >1) 
 	  G4cout << "Set cuts for " << particle->GetParticleName() << endl;
+#endif
 	BuildPhysicsTable(particle);
       }
     }
@@ -322,20 +369,26 @@ void G4VUserPhysicsList::ReCalcCutValue(const G4String& name)
   if (particle = theParticleTable->FindParticle(name)){
     if (!particle->IsShortLived()) {
       particle->ReCalcCuts();
+#ifdef G4VERBOSE    
       if (verboseLevel >1) G4cout << "Recalc cuts for " << name << endl;
+#endif
       BuildPhysicsTable(particle);
     }
   } else {
+#ifdef G4VERBOSE    
     if (verboseLevel >0) 
       G4cout << name << " is not found in ParticleTable" << endl;
+#endif
   }
 }
 
 void G4VUserPhysicsList::ReCalcCutValueForOthers()
 {
+#ifdef G4VERBOSE    
   if (verboseLevel >1) {
     G4cout << "G4VUserPhysicsList::ReCalcCutValueForOthers ";
   }
+#endif
 
   // Sets a cut value to particle types which have not be called SetCuts() 
   theParticleIterator->reset();
@@ -343,8 +396,10 @@ void G4VUserPhysicsList::ReCalcCutValueForOthers()
     G4ParticleDefinition* particle = theParticleIterator->value();
     if (!particle->IsShortLived()) {
       if (particle->GetEnergyCuts()==NULL) {
+#ifdef G4VERBOSE    
 	if (verboseLevel >1) 
 	  G4cout << "ReCalc cuts for " << particle->GetParticleName() << endl;
+#endif
 	particle->ReCalcCuts();
 	BuildPhysicsTable(particle);
       }

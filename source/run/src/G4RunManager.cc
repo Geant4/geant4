@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.cc,v 1.1 1999-01-07 16:14:17 gunter Exp $
+// $Id: G4RunManager.cc,v 1.2 1999-02-09 15:11:36 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,6 +69,7 @@ G4RunManager::~G4RunManager()
   if(verboseLevel>1) G4cout << "Deletion of G4 kernel class start." << endl;
   delete timer;
   delete runMessenger;
+  physicsList->RemoveProcessManager();
   G4ParticleTable::GetParticleTable()->DeleteMessenger();
   G4ProcessTable::GetProcessTable()->DeleteMessenger();
   delete previousEvents;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VUserPhysicsList.hh,v 1.1 1999-01-07 16:14:17 gunter Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.2 1999-02-09 15:11:29 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -159,6 +159,11 @@ class G4VUserPhysicsList
     // adds new ProcessManager to all particles in the Particle Table
     //   this routine is used in Construct()
     void InitializeProcessManager();
+
+  public:
+    // remove and delete ProcessManagers for all particles in tha Particle Table
+    //    this routine is invoked from RunManager 
+    void RemoveProcessManager();
 
   public:
     // add process manager for particles created on-the-fly 
