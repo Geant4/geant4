@@ -129,7 +129,7 @@ G4int G4SurfaceBoundary::IntersectRay2D(const G4Ray& ray)
 
     // test if the point is on the surface boundary
     if( temp==999 )
-      return 999;
+      return 1;
     else
       nbinter +=temp; 
   }
