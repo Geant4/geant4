@@ -132,10 +132,8 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	        return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	}
 
-	Material1 = pPreStepPoint ->GetPhysicalVolume()->
-				    GetLogicalVolume()->GetMaterial();
-	Material2 = pPostStepPoint->GetPhysicalVolume()->
-				    GetLogicalVolume()->GetMaterial();
+	Material1 = pPreStepPoint  -> GetMaterial();
+	Material2 = pPostStepPoint -> GetMaterial();
 
         const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
 
@@ -476,10 +474,15 @@ G4OpBoundaryProcess::GetFacetNormal(const G4ThreeVector& Momentum,
 
 void G4OpBoundaryProcess::DielectricMetal()
 {
-	do {
-           if( !G4BooleanRand(theReflectivity) ) {
+        G4int n = 0;
 
-	     DoAbsorption();
+	do {
+
+           n++;
+
+           if( !G4BooleanRand(theReflectivity) && n == 1 ) {
+
+             DoAbsorption();
              break;
 
            }
@@ -489,13 +492,13 @@ void G4OpBoundaryProcess::DielectricMetal()
                                         prob_ss+prob_sl+prob_bs == 0.0 ) {
 
                 DoReflection();
-                                                                                                                      
+
                 OldMomentum = NewMomentum;
                 OldPolarization = NewPolarization;
 
              } else {
 
-                ChooseReflection();
+                if ( n == 1 ) ChooseReflection();
                                                                                 
                 if ( theStatus == LambertianReflection ) {
                    DoReflection();
