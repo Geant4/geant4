@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.53 2004-11-11 16:40:37 johna Exp $
+cvs log $Id: History,v 1.54 2004-12-07 08:42:37 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+7th December 2004  G.Cosmo  (greps-V06-02-02)
+- Implemented migration to <cmath>.
 
 11th November 2004  J.Allison  (greps-V06-02-01 - requires vis-V06-02-05)
 - Removed G4Polymarker::line.  Use G4Polyline instead.
