@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateMagField.cc,v 1.19 2003-06-19 14:38:43 gunter Exp $
+// $Id: testPropagateMagField.cc,v 1.20 2003-06-19 15:19:58 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -268,7 +268,8 @@ G4FieldManager* SetupField(G4int type)
 
 G4PropagatorInField*  SetupPropagator( G4int type)
 {
-    G4FieldManager* fieldMgr= SetupField( type) ;
+    // G4FieldManager* fieldMgr= 
+    SetupField( type) ;
 
     // G4ChordFinder  theChordFinder( &MagField, 0.05*mm ); // Default stepper
  
