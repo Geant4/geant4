@@ -47,9 +47,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class HepTupleManager;
-class HepTuple;
-class HepHistogram;
+class IHistogram1D;
+class ITuple;
+class ITree;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -73,9 +73,9 @@ public:
 
 public: // Without description
 
-  void SetHistoName(const G4String& name) {histName = name;};
+    void SetHistoName(const G4String& name) {histName = name;};
     void bookHisto();
-    inline HepTuple* GetNtuple() const {return ntup;};
+    inline ITuple* GetNtuple() const {return ntup;};
     void SaveToTuple(const G4String&, G4double);
     void SaveToTuple(const G4String&, G4double, G4double);
     void SaveEvent();
@@ -113,9 +113,9 @@ private:
 
     G4String histName;
     G4String theName;
-    G4std::vector<HepHistogram*> histo;
-    HepTupleManager* hbookManager;
-    HepTuple* ntup;
+    G4std::vector<IHistogram1D*> histo;
+    ITuple* ntup;
+    ITree* tree;
     G4int nHisto;
     G4int verbose; 
     G4double zend;

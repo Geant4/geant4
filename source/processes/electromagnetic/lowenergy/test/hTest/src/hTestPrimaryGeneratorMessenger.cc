@@ -39,6 +39,7 @@
 #include "hTestPrimaryGeneratorMessenger.hh"
 #include "hTestPrimaryGeneratorAction.hh"
 #include "G4UImanager.hh"
+#include "hTestHisto.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -168,8 +169,12 @@ void hTestPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
     {theGen->SetBeamSigmaZ(sigmaZCmd->GetNewDoubleValue(newValue));}
   if(command == sigmaECmd)
     {theGen->SetBeamSigmaE(sigmaECmd->GetNewDoubleValue(newValue));}
-  if(command == beamECmd)
-    {theGen->SetBeamEnergy(beamECmd->GetNewDoubleValue(newValue));}
+  if(command == beamECmd) {
+     G4double e = beamECmd->GetNewDoubleValue(newValue);
+     theGen->SetBeamEnergy(e);
+     hTestHisto* theHisto = hTestHisto::GetPointer();
+     if(theHisto->GetMaxEnergy() == 0.0) theHisto->SetMaxEnergy(e);
+  }
   if(command == maxThetaCmd)
     {theGen->SetBeamMinCosTheta(cos(maxThetaCmd->GetNewDoubleValue(newValue)));}
   if(command == partCmd)
