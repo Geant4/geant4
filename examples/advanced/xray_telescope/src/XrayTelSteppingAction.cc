@@ -38,6 +38,14 @@
 // CHANGE HISTORY
 // --------------
 //
+// 05.12.2001 R. Nartallo
+// - Return condition for entering detector (cf LowEnTest)
+// - Remove line to kill track if too many steps
+//
+// 07.11.2001 M.G. Pia
+// - Modified the analysis management
+// - Small design iteration
+//
 // 30.11.2000 R. Nartallo
 // - Add pre-processor directives to compile without analysis option
 //
@@ -48,81 +56,60 @@
 // - First implementation of xray_telescope Physics list
 // - Based on Chandra and XMM models
 // 
-//
 // **********************************************************************
 
-#include "G4ios.hh"
-#include "G4Track.hh"
-#include "G4SteppingManager.hh"
-
-#include "globals.hh"
-
-#include <assert.h>
-#include "g4std/fstream"
-#include "g4std/iomanip"
-#include "g4std/iostream"
-#include "g4std/vector"
-
 #include "XrayTelSteppingAction.hh"
-#include "XrayTelAnalysisManager.hh"
+#include "globals.hh"
+#include "G4Track.hh"
+#include "G4Step.hh"
+#include "G4RunManager.hh"
+#include "XrayTelEventAction.hh"
+#include "XrayTelRunAction.hh"
+#include "XrayTelAnalysis.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#include "Randomize.hh"
 
-XrayTelSteppingAction::XrayTelSteppingAction(
-					     G4std::vector<G4double*>* enEnergy, 
-					     G4std::vector<G4ThreeVector*>* enDirect,
-					     G4bool* dEvent,
-					     XrayTelAnalysisManager* aAnalysisManager)
-  : enteringEnergy(enEnergy),
-    enteringDirection(enDirect),drawEvent(dEvent),
-  fAnalysisManager(aAnalysisManager)
-{;}
+XrayTelSteppingAction::XrayTelSteppingAction()
+{ }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayTelSteppingAction::~XrayTelSteppingAction()
 { }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void XrayTelSteppingAction::UserSteppingAction(const G4Step*)
+void XrayTelSteppingAction::UserSteppingAction(const G4Step* step)
 {
-  const G4SteppingManager* pSM = fpSteppingManager;
-  G4Track* fTrack = pSM->GetTrack();
-  G4int StepNo = fTrack->GetCurrentStepNumber();
+  G4bool entering = false;
+  G4Track* track = step->GetTrack();
 
-  if(StepNo >= 10000) fTrack->SetTrackStatus(fStopAndKill);
+  G4int stepNo = track->GetCurrentStepNumber();
 
   G4String volName; 
-  if ( fTrack->GetVolume() ) 
-    volName =  fTrack->GetVolume()->GetName(); 
+  if (track->GetVolume()) volName =  track->GetVolume()->GetName(); 
   G4String nextVolName;
-  if ( fTrack->GetNextVolume() ) 
-    nextVolName =  fTrack->GetNextVolume()->GetName();
- 
-  G4ThreeVector pos = fTrack->GetPosition();
+  if (track->GetNextVolume()) nextVolName =  track->GetNextVolume()->GetName();
 
-  //--- Entering Detector
-  if(volName != "Detector_P" && nextVolName == "Detector_P") {
+  // Entering Detector
+  if (volName != "Detector_P" && nextVolName == "Detector_P") 
+    {
+      entering = true;
 
-    enteringEnergy->push_back ( new G4double (fTrack->GetKineticEnergy()) );
-    enteringDirection->push_back (new G4ThreeVector (pos));
+      // Notify the corresponding UserAction that the event must be visualised
+      G4RunManager* runManager = G4RunManager::GetRunManager();
+      // Casting is safe here: one knows the RTTI of the UserActions 
+      // in the current application (otherwise one could dynamic_cast)
+      XrayTelEventAction* eventAction = (XrayTelEventAction*) runManager->GetUserEventAction();
+      eventAction->Update();
 
-    // now we want to do some analysis at this step ... 
-    // call back to the analysis-manger to do the analysis ...
+      // Notify the corresponding UserAction to update the run counters
+      XrayTelRunAction* runAction = (XrayTelRunAction*) runManager->GetUserRunAction();
+      runAction->Update(track->GetKineticEnergy());
+    }
 
-#ifdef G4ANALYSIS_USE
-    if(fAnalysisManager) fAnalysisManager->Step(fpSteppingManager);
-#endif
-
-    *drawEvent = true;
-  }
+  // Do the analysis related to this step
+  XrayTelAnalysis* analysis = XrayTelAnalysis::getInstance();
+  analysis->analyseStepping(*track,entering);
 }
-
-
-
-
-
 
 
 

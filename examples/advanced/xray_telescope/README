@@ -1,4 +1,4 @@
-$Id: README,v 1.6 2001-11-08 13:48:42 nartallo Exp $
+$Id: README,v 1.7 2001-12-05 18:55:45 nartallo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -66,16 +66,17 @@ setenv G4VIS_USE_DAWN               1
 setenv G4VIS_USE_DAWNFILE           1
 setenv PATH ${PATH}:"/afs/cern.ch/sw/geant4/dev/DAWN/Linux-g++"
 
-#set up Lizard
-setenv LIZARDROOT  /usr/local/freeLizard/3.2.0  #get correct path 
+#set up Lizard for the gcc-2.95 compiler
 setenv G4ANALYSIS_SYSTEM Lizard
 setenv G4ANALYSIS_USE               1
 setenv G4ANALYSIS_USE_LIZARD        1
 setenv G4ANALYSIS_BUILD             1
 setenv G4ANALYSIS_BUILD_LIZARD      1
+setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/3.6.5/bin
+source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.5/install/sharedstart.csh
 
 #add to the LD_LIBRARY_PATH 
-setenv LD_LIBRARY_PATH /usr/local/freeLizard/3.2.0/Linux/lib:$OGLHOME/lib
+setenv LD_LIBRARY_PATH $OGLHOME/lib
 
 
 IMPORTANT WARNING! 

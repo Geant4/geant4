@@ -38,6 +38,10 @@
 // CHANGE HISTORY
 // --------------
 //
+// 07.11.2001 M.G. Pia
+// - Modified the analysis management
+// - Small design iteration
+//
 // 16.10.2001 R. Nartallo
 // - Updated "/vis" commands to new versions
 // - Clean up code to avoid 'pedantic' and 'ANSI' compiler warnings 
@@ -58,92 +62,63 @@
 #include "G4Run.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
-#include "G4ios.hh"
-
-#include "g4std/fstream"
-#include "g4std/vector"
-
 #include "XrayTelRunAction.hh"
-#include "XrayTelAnalysisManager.hh"
+#include "XrayTelAnalysis.hh"
+#include "SystemOfUnits.h"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayTelRunAction::XrayTelRunAction(G4std::vector<G4double*> *enEnergy,
-				   G4std::vector<G4ThreeVector*> *enDirect,
-				   G4bool* dEvent,
-				   XrayTelAnalysisManager* aAnalysisManager)
-  :enteringEnergy(enEnergy),
-   enteringDirection(enDirect),drawEvent(dEvent),
-   fAnalysisManager(aAnalysisManager)
-{;}
+XrayTelRunAction::XrayTelRunAction()
+  :nEnteringTracks(0), totEnteringEnergy(0.)
+{ }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayTelRunAction::~XrayTelRunAction()
-{;}
+{ }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayTelRunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  G4int RunN = aRun->GetRunID();
-  if ( RunN % 1000 == 0 ) 
-    G4cout << "### Run : " << RunN << G4endl;
+  G4int runN = aRun->GetRunID();
+  if ( runN % 1000 == 0 ) 
+    G4cout << "### Run : " << runN << G4endl;
 
   if (G4VVisManager::GetConcreteInstance()) {
     G4UImanager* UI = G4UImanager::GetUIpointer(); 
     UI->ApplyCommand("/vis/scene/notifyHandlers");
   } 
 
-  enteringEnergy->clear();
-  enteringDirection->clear();
+  nEnteringTracks = 0;
+  totEnteringEnergy = 0.;
 
-#ifdef G4ANALYSIS_USE
-  if(fAnalysisManager) fAnalysisManager->BeginOfRun();
-#endif
+  // Book histograms and ntuples
+  XrayTelAnalysis* analysis = XrayTelAnalysis::getInstance();
+  analysis->book();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayTelRunAction::EndOfRunAction(const G4Run* )
 {
-
-  size_t i;
+  XrayTelAnalysis* analysis = XrayTelAnalysis::getInstance();
+  analysis->finish();
 
   if (G4VVisManager::GetConcreteInstance())
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
 
-  G4std::ofstream outscat("detector.hist", ios::app);
-
   G4cout << "End of Run summary" << G4endl << G4endl;
 
-  G4double totEnteringEnergy = 0.0;
-
-  for (i=0;i< enteringEnergy->size();i++)
-    totEnteringEnergy += *(*enteringEnergy)[i];
-  G4cout << "Total Entering Detector : " << enteringEnergy->size()  << G4endl;
-  G4cout << "Total Entering Detector Energy : " << totEnteringEnergy  << G4endl;
-
-  for (i=0;i<enteringEnergy->size();i++) {
-    outscat << "  "
-	    << *(*enteringEnergy)[i]
-            << "  "
-            << (*enteringDirection)[i]->x()
-	    << "  "
-            << (*enteringDirection)[i]->y()
-	    << "  "
-            << (*enteringDirection)[i]->z()
-	    << G4endl;
-  }
-  outscat.close();
-
-#ifdef G4ANALYSIS_USE
-  if(fAnalysisManager) fAnalysisManager->EndOfRun();
-#endif
+  G4cout << "Total Entering Detector : " << nEnteringTracks  << G4endl;
+  G4cout << "Total Entering Detector Energy : " 
+	 << totEnteringEnergy/MeV  
+	 << " MeV"
+	 << G4endl;
 }
 
 
-
+void XrayTelRunAction::Update(G4double energy)
+{
+  nEnteringTracks++;
+  totEnteringEnergy += energy;
+}
 
 
 

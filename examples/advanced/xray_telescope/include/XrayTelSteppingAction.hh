@@ -38,6 +38,9 @@
 // CHANGE HISTORY
 // --------------
 //
+// 07.11.2001 M.G. Pia
+// - Modified the analysis management
+//
 // 16.10.2001 R.Nartallo
 // - Clean up code to avoid 'pedantic' and 'ANSI' compiler warnings 
 //
@@ -51,32 +54,22 @@
 #ifndef XrayTelSteppingAction_h
 #define XrayTelSteppingAction_h 1
 
-class XrayTelAnalysisManager;
-
 #include "G4UserSteppingAction.hh"
-#include "G4ThreeVector.hh"
-#include "g4std/vector"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+class G4Step;
 
 class XrayTelSteppingAction : public G4UserSteppingAction
 {
 public:
-  XrayTelSteppingAction(  
-			G4std::vector<G4double*> *enEnergy, 
-			G4std::vector<G4ThreeVector*> *enDirect,
-			G4bool* dEvent,
-			XrayTelAnalysisManager* = 0);
+
+  XrayTelSteppingAction();
+
   virtual ~XrayTelSteppingAction();
 
-  virtual void UserSteppingAction(const G4Step*);
+  virtual void UserSteppingAction(const G4Step* step);
   
 private:
-  G4std::vector<G4double*>* enteringEnergy;
-  G4std::vector<G4ThreeVector*>* enteringDirection;
-  G4bool* drawEvent;
 
-  XrayTelAnalysisManager* fAnalysisManager;
 };
 
 #endif

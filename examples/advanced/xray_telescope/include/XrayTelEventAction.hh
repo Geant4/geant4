@@ -38,6 +38,9 @@
 // CHANGE HISTORY
 // --------------
 //
+// 05.12.2001 R.Nartallo
+// - Add "Update" function as in LowEnTest
+//
 // 16.10.2001 R.Nartallo
 // - Clean up code to avoid 'pedantic' and 'ANSI' compiler warnings 
 //
@@ -56,24 +59,25 @@
 
 class XrayTelEventActionMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 class XrayTelEventAction : public G4UserEventAction
 {
 public:
-  XrayTelEventAction(G4bool* dEvent);
+
+  XrayTelEventAction();
   ~XrayTelEventAction();
 
-public:
   void BeginOfEventAction(const G4Event* anEvent);
   void EndOfEventAction(const G4Event* anEvent);
     
   void SetDrawFlag(G4String val)  {drawFlag = val;};
-    
+   
+  void Update();
+ 
 private:
+
   G4String drawFlag;                         // control the drawing of event
   XrayTelEventActionMessenger* eventMessenger;
-  G4bool* drawEvent;
+  G4bool drawEvent;
 };
 
 #endif
