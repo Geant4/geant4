@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EquationOfMotion.hh,v 1.6 2002-06-11 08:11:44 japost Exp $
+// $Id: G4EquationOfMotion.hh,v 1.7 2002-06-11 08:38:56 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -64,6 +64,7 @@ class G4EquationOfMotion
        // Set the charge, momentum and mass of the current particle
        // --> used to set the equation's coefficients ...
 
+     inline
      void RightHandSide( const  G4double y[],
 				G4double dydx[] ) const;
        // This calculates the value of the derivative dydx at y.
@@ -77,7 +78,7 @@ class G4EquationOfMotion
        // Same as RHS above, but also returns the value of B.
        // Should be made the new default ? after putting dydx & B in a class.
 
-     void GetFieldValue( const  G4double Point[3],
+     void GetFieldValue( const  G4double Point[4],
 			        G4double Field[] )  const;
        // Obtain only the field - the stepper assumes it is pure Magnetic.
        // Not protected, because G4RKG3_Stepper uses it directly.
