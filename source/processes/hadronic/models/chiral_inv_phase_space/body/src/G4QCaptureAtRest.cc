@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.3 2004-04-08 07:54:00 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.4 2004-05-27 15:51:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -501,7 +501,7 @@ G4bool G4QCaptureAtRest::RandomizeMuDecayOrCapture(G4int Z, G4int N)
   G4double Z27 =0.002727*Z;
   G4double Z227=Z27*Z27;
   G4double Z427=Z227*Z227;
-  G4double Zeff=(Z-0.13782)*(1.2162-(0.09118-Z427)*sqrt(Z)); // Eff. Nuclear Charge
+  G4double Zeff=(Z-0.13782)*(1.2162-(0.09118-Z427)*sqrt((G4double)Z)); // Eff. Nuclear Charge
   G4double Ze2=Zeff*Zeff;      // Squared effective charge of the Nucleus
   G4double pD=.00045516*(1.-Ze2*.00014658);// 1./MeanLifeTime of muon in atoms (in ns^-1)
   G4double pC=.00001637*Ze2*Ze2/(33.563+N);// 1./MeanLifeTime of muon NuclCapture(in ns^-1)
@@ -625,7 +625,7 @@ G4bool G4QCaptureAtRest::RandomizeTauDecayOrCapture(G4int Z, G4int N)
   G4double Z27 =0.002727*Z;
   G4double Z227=Z27*Z27;
   G4double Z427=Z227*Z227;
-  G4double Zeff=(Z-0.13782)*(1.2162-(0.09118-Z427)*sqrt(Z)); // Eff. Nuclear Charge
+  G4double Zeff=(Z-0.13782)*(1.2162-(0.09118-Z427)*sqrt((G4double)Z)); // Eff. Nuclear Charge
   G4double Ze2=Zeff*Zeff;      // Squared effective charge of the Nucleus
   G4double pD=3436.*(1.-Ze2*.00014658);     //@@ 1./MeanLifeTime of Tau in atoms (in ns^-1)
   G4double pC=227.*Ze2*Ze2/(33.563+N);      //@@1./MeanLifeTime of TauNuclCapture(in ns^-1)
