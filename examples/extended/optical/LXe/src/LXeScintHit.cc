@@ -62,7 +62,7 @@ const LXeScintHit& LXeScintHit::operator=(const LXeScintHit &right){
 }
 
 //_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-G4int LXeScintHit::operator==(const LXeScintHit &right) const{
+G4int LXeScintHit::operator==(const LXeScintHit&) const{
   return false;
   //returns false because there currently isnt need to check for equality yet
 }

@@ -70,7 +70,7 @@ G4bool LXePMTSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist){
 //absorbed by the photocathode
 //_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 G4bool LXePMTSD::ProcessHits_constStep(const G4Step* aStep,
-				       G4TouchableHistory* ROhist){
+				       G4TouchableHistory* ){
 
   //need to know if this is an optical photon
   if(aStep->GetTrack()->GetDefinition() 
@@ -121,7 +121,7 @@ G4bool LXePMTSD::ProcessHits_constStep(const G4Step* aStep,
 }
 
 //_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-void LXePMTSD::EndOfEvent(G4HCofThisEvent* HCE){
+void LXePMTSD::EndOfEvent(G4HCofThisEvent* ){
 }
 
 //_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
