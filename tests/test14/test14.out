@@ -75,7 +75,7 @@ G4VUserPhysicsList::ResetCuts() is obsolete. This method gives no effect and you
      Transportation
 /particle/list
                  e+,                 e-,              gamma,           geantino
-
+             proton,
 /run/particle/dumpCutValues
 #
 /gun/direction 0 0 1
@@ -93,6 +93,7 @@ G4VUserPhysicsList::ResetCuts() is obsolete. This method gives no effect and you
 /gun/energy 10 keV
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 100 mum    e- 100 mum    e+ 100 mum
@@ -133,9 +134,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -162,11 +164,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.25s Real=0.25s Sys=0s
+  User=0.66s Real=0.66s Sys=0s
 # 
 /gun/energy 2 keV
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -206,6 +209,7 @@ Run Summary
   User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -232,11 +236,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.25s Real=0.25s Sys=0s
+  User=0.65s Real=0.66s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -273,9 +278,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -302,11 +308,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.25s Real=0.25s Sys=0s
+  User=0.66s Real=0.66s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -343,9 +350,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -372,13 +380,14 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.24s Real=0.24s Sys=0s
+  User=0.65s Real=0.65s Sys=0s
 #
 /gun/particle e-
 #---------------
 /gun/energy 10 keV
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -418,6 +427,7 @@ Run Summary
   User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -444,11 +454,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.26s Real=0.26s Sys=0s
+  User=0.67s Real=0.67s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -485,9 +496,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -514,11 +526,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.26s Real=0.26s Sys=0s
+  User=0.67s Real=0.67s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -555,9 +568,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -584,11 +598,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.26s Real=0.26s Sys=0s
+  User=0.66s Real=0.66s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -625,9 +640,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -654,7 +670,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.25s Real=0.25s Sys=0s
+  User=0.68s Real=0.68s Sys=0s
 #
 /calor/setAbsMat Lead      
 
@@ -670,6 +686,7 @@ Run Summary
 /gun/energy 10 keV
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -714,6 +731,7 @@ Run Summary
   User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -745,11 +763,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.25s Real=0.25s Sys=0s
+  User=0.64s Real=0.64s Sys=0s
 # 
 /gun/energy 2 keV
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -794,6 +813,7 @@ Run Summary
   User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -825,11 +845,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.25s Real=0.25s Sys=0s
+  User=0.65s Real=0.65s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -874,6 +895,7 @@ Run Summary
   User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -905,11 +927,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.25s Real=0.25s Sys=0s
+  User=0.65s Real=0.65s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -951,9 +974,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -985,13 +1009,14 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.24s Real=0.24s Sys=0s
+  User=0.64s Real=0.64s Sys=0s
 #
 /gun/particle e-
 #---------------
 /gun/energy 10 keV
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1036,6 +1061,7 @@ Run Summary
   User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1067,11 +1093,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.25s Real=0.25s Sys=0s
+  User=0.67s Real=0.67s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1116,6 +1143,7 @@ Run Summary
   User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1147,11 +1175,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.25s Real=0.25s Sys=0s
+  User=0.67s Real=0.67s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1193,9 +1222,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1227,11 +1257,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.25s Real=0.25s Sys=0s
+  User=0.67s Real=0.67s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1276,6 +1307,7 @@ Run Summary
   User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1307,7 +1339,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.26s Real=0.3s Sys=0s
+  User=0.69s Real=0.69s Sys=0s
 #
 #
 /calor/setAbsMat Water
@@ -1324,6 +1356,7 @@ Run Summary
 /gun/energy 10 keV
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1373,6 +1406,7 @@ Run Summary
   User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1409,11 +1443,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.24s Real=0.24s Sys=0s
+  User=0.64s Real=0.64s Sys=0s
 # 
 /gun/energy 2 keV
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1460,9 +1495,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1499,11 +1535,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.24s Real=0.24s Sys=0s
+  User=0.65s Real=0.65s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1547,12 +1584,105 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1        0        0      -50    0.0006        0        0         0    Absorber Transportation
     2        0        0       50    0.0006        0      100       100       World Transportation
     3        0        0    1e+03    0.0006        0      950  1.05e+03  OutOfWorld Transportation
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region DefaultRegionForTheWorld
+ Materials : Air Water 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 1.1 keV    e- 85 keV    e+ 84 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.65s Real=0.65s Sys=0s
+#
+/gun/energy 300 eV
+/tracking/verbose 2
+/run/beamOn 1
+
+Region DefaultRegionForTheWorld
+ Materials : Air Water 
+ Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Energy thresholds :  gamma 1.1 keV    e- 85 keV    e+ 84 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50    0.0003        0        0         0       World initStep
+    1        0        0      -50    0.0003        0        0         0    Absorber Transportation
+    2        0        0       50    0.0003        0      100       100       World Transportation
+    3        0        0    1e+03    0.0003        0      950  1.05e+03  OutOfWorld Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1589,103 +1719,14 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.24s Real=0.24s Sys=0s
-#
-/gun/energy 300 eV
-/tracking/verbose 2
-/run/beamOn 1
-Region DefaultRegionForTheWorld
- Materials : Air Water 
- Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
- Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
- Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
- Energy thresholds :  gamma 1.1 keV    e- 85 keV    e+ 84 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50    0.0003        0        0         0       World initStep
-    1        0        0      -50    0.0003        0        0         0    Absorber Transportation
-    2        0        0       50    0.0003        0      100       100       World Transportation
-    3        0        0    1e+03    0.0003        0      950  1.05e+03  OutOfWorld Transportation
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0s Sys=0s
-/tracking/verbose 0
-/run/beamOn 1000
-Region DefaultRegionForTheWorld
- Materials : Air Water 
- Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
- Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
- Energy thresholds :  gamma 30 keV    e- 2.4e+02 keV    e+ 2.3e+02 keV
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
- Energy thresholds :  gamma 1.1 keV    e- 85 keV    e+ 84 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=0.24s Real=0.24s Sys=0s
+  User=0.65s Real=0.65s Sys=0s
 #
 /gun/particle e-
 #-----------------
 /gun/energy 10 keV
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1732,9 +1773,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1771,11 +1813,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.25s Real=0.26s Sys=0s
+  User=0.68s Real=0.68s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1825,6 +1868,7 @@ Run Summary
   User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1861,11 +1905,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.25s Real=0.25s Sys=0s
+  User=0.67s Real=0.67s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1915,6 +1960,7 @@ Run Summary
   User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1951,11 +1997,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.27s Real=0.28s Sys=0s
+  User=0.67s Real=0.67s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -2005,6 +2052,7 @@ Run Summary
   User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -2041,7 +2089,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.26s Real=0.26s Sys=0s
+  User=0.67s Real=0.67s Sys=0s
 #
 /gun/particle gamma
 #------------------
@@ -2071,6 +2119,7 @@ Run Summary
 /tracking/verbose 0
 /gun/energy 2 MeV
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -2107,9 +2156,10 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.25s Real=0.25s Sys=0s
+  User=0.65s Real=0.65s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -2146,7 +2196,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.25s Real=0.25s Sys=0s
+  User=0.64s Real=0.64s Sys=0s
 /calor/setAbsMat Lead
 
  The  WORLD   is made of 2e+03mm of Air, the transverse size (R) of the world is 2e+03 mm. 
@@ -2157,6 +2207,7 @@ Run Summary
 /tracking/verbose 0
 /gun/energy 2 MeV
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -2193,9 +2244,10 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.25s Real=0.38s Sys=0s
+  User=0.64s Real=0.64s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -2232,7 +2284,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.25s Real=0.25s Sys=0s
+  User=0.64s Real=0.64s Sys=0s
 /calor/setAbsMat Water
 
  The  WORLD   is made of 2e+03mm of Air, the transverse size (R) of the world is 2e+03 mm. 
@@ -2243,6 +2295,7 @@ Run Summary
 /tracking/verbose 0
 /gun/energy 2 MeV
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -2279,9 +2332,10 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.25s Real=0.25s Sys=0s
+  User=0.64s Real=0.64s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -2318,7 +2372,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.28s Real=0.28s Sys=0s
+  User=0.65s Real=0.65s Sys=0s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

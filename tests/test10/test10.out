@@ -22,7 +22,7 @@ Current available graphics systems are:
 You select Sphere detector
 Tst10PhysicsList::SetCuts:CutLength : 1 (mm)
                  e-,              gamma,           geantino,      opticalphoton
-
+             proton,
 You select Cone detector
   A 10000 optical photons vertex has been generated at (-690.585,174.228,404.117)
 >>> Start Event 0
