@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.8 2001-03-28 15:31:16 gcosmo Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.9 2001-03-29 06:47:19 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -389,7 +389,7 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandProjection) {
     G4double fieldHalfAngle;
-    size_t iPos = 0;
+    G4std::string::size_type iPos = 0;
     if (newValue[iPos] == 'o') {  // "orthogonal"
       fieldHalfAngle = 0.;
     }
@@ -469,7 +469,7 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandStyle) {
     G4ViewParameters::DrawingStyle existingStyle = vp.GetDrawingStyle();
-    size_t iPos = 0;
+    G4std::string::size_type iPos = 0;
     if (newValue[iPos] == 'w') {  // "wireframe"
       switch (existingStyle) {
       case G4ViewParameters::wireframe:
