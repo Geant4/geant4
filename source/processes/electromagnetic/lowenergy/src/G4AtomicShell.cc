@@ -13,16 +13,12 @@
 //
 //      File name:     G4AtomicShell.cc
 //
-//      Author:        Alfonso Mantero (alfonso.mantero@ge.infn.it)
-// 
+//      Authors:        Alfonso Mantero (alfonso.mantero@ge.infn.it)
+//                      Elena Guardincerri (elena.guardincerri@ge.infn.it) 
+//
 //      Creation date: 1/05/2001
 // -------------------------------------------------------------------
 #include "G4AtomicShell.hh"
-
-// this is the constructor: U have to give some information the shell 
-// wich the subshell belongs to
-// the bindingenergy of the subshell u r creating, and the table of the 
-// transition datas
 
 G4AtomicShell::G4AtomicShell(G4int id, G4double energy, 
 			     const G4DataVector& prob,
@@ -45,7 +41,6 @@ G4double G4AtomicShell::BindingEnergy() const {
   return bindingEnergy;
 }
 
-//const G4std::vector<G4double>& G4AtomicShell::TransitionProbabilities() const{
 const G4DataVector& G4AtomicShell::TransitionProbabilities() const{
  
   return transProbabilities;
