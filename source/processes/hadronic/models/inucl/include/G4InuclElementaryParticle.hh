@@ -1,9 +1,9 @@
-#ifndef INUCL_ELEMENTARY_PARTICLE_H
-#define INUCL_ELEMENTARY_PARTICLE_H
+#ifndef G4INUCL_ELEMENTARY_PARTICLE_HH
+#define G4INUCL_ELEMENTARY_PARTICLE_HH
 
-#include "InuclParticle.h"
+#include "G4InuclParticle.hh"
 
-class InuclElementaryParticle : public InuclParticle {
+class G4InuclElementaryParticle : public G4InuclParticle {
 
 //      known particle types:
 //      1 - proton
@@ -18,14 +18,14 @@ class InuclElementaryParticle : public InuclParticle {
  
 public:
 
-InuclElementaryParticle() { valid_particle = false;};
+G4InuclElementaryParticle() { valid_particle = false;};
 
-InuclElementaryParticle(int type) : particleType(type) {
+G4InuclElementaryParticle(G4int type) : particleType(type) {
    particleMass = getParticleMass(type);
    valid_particle = false;
 };
 
-InuclElementaryParticle(const vector<double>& mom, int type) :
+G4InuclElementaryParticle(const vector<G4double>& mom, G4int type) :
     InuclParticle(mom), particleType(type) {
    particleMass = getParticleMass(type);
    momentum[0] = sqrt(momentum[1]*momentum[1] + momentum[2]*momentum[2] +
@@ -33,28 +33,28 @@ InuclElementaryParticle(const vector<double>& mom, int type) :
    valid_particle = true;
 };
 
-InuclElementaryParticle(double ekin, int type) : particleType(type) {
+G4InuclElementaryParticle(G4double ekin, G4int type) : particleType(type) {
    particleMass = getParticleMass(type);
    momentum.resize(4);
    momentum[0] = ekin + particleMass;
    momentum[3] = sqrt(momentum[0]*momentum[0] - particleMass*particleMass); 
-   momentum[1] = momentum[2] = 0.;
+   momentum[1] = momentum[2] = 0.0;
    valid_particle = true;
 };
 
-void setType(int ityp) { 
+void setType(G4int ityp) { 
   particleType = ityp;
   particleMass = getParticleMass(ityp);
 };
 
-void setMomentum(const vector<double>& mom) {
+void setMomentum(const vector<G4double>& mom) {
   momentum = mom;
   momentum[0] = sqrt(momentum[1]*momentum[1] + momentum[2]*momentum[2] +
      momentum[3]*momentum[3] + particleMass*particleMass);
   valid_particle = true;
 };
 
-int type() const { return particleType; };
+G4int type() const { return particleType; };
 
 bool photon() const { return particleType == 10; };
 
@@ -65,10 +65,10 @@ bool pion() const { return particleType == 3 || particleType == 5
 
 bool quasi_deutron() const { return particleType > 100; };
 
-double getMass() const { return particleMass; };
+G4double getMass() const { return particleMass; };
 
-double getParticleMass() const {
-  double mass;
+G4double getParticleMass() const {
+  G4double mass;
   switch(particleType) {
     case 1: // proton
       mass = 0.93827;
@@ -86,7 +86,7 @@ double getParticleMass() const {
       mass = 0.13498;
       break;
     case 10: // photon
-      mass = 0.;
+      mass = 0.0;
       break;
     case 111: // PP
       mass = 0.93827 + 0.93827;
@@ -98,53 +98,53 @@ double getParticleMass() const {
       mass = 0.93957 + 0.93957;
       break;
     default:
-     cout << " uups, unknown particle type " << particleType << endl;
+     G4cout << " uups, unknown particle type " << particleType << G4endl;
      mass = 0.;
     };
         
     return mass;
 };
 
-double getCharge() const {
-  double charge;
+G4double getCharge() const {
+  G4double charge;
   switch(particleType) {
     case 1: // proton
-      charge = 1.;
+      charge = 1.0;
       break;
     case 2: // neutron
-      charge = 0.;
+      charge = 0.0;
       break;
     case 3: // pi+
-      charge = 1.;
+      charge = 1.0;
       break;
     case 5: // pi-
-      charge = -1.;
+      charge = -1.0;
       break;
     case 7: // pi0
-      charge = 0.;
+      charge = 0.0;
       break;
     case 10: // photon
-      charge = 0.;
+      charge = 0.0;
       break;
     case 111: // PP
-      charge = 2.;
+      charge = 2.0;
       break;
     case 112: // PN
-      charge = 1.;
+      charge = 1.0;
       break;
     case 122: // NN
-      charge = 0.;
+      charge = 0.0;
       break;
     default:
-     cout << " uups, unknown particle type " << particleType << endl;
-     charge = 0.;
+     G4cout << " uups, unknown particle type " << particleType << G4endl;
+     charge = 0.0;
     };
         
     return charge;
 };
 
-double getParticleMass(int type) const {
-  double mass;
+G4double getParticleMass(G4int type) const {
+  G4double mass;
   switch(type) {
     case 1: // proton
       mass = 0.93827;
@@ -162,7 +162,7 @@ double getParticleMass(int type) const {
       mass = 0.13498;
       break;
     case 10: // photon
-      mass = 0.;
+      mass = 0.0;
       break;
     case 111: // PP
       mass = 0.93827 + 0.93827;
@@ -174,33 +174,33 @@ double getParticleMass(int type) const {
       mass = 0.93957 + 0.93957;
       break;
     default:
-     cout << " uups, unknown particle type " << type << endl;
-     mass = 0.;
+     G4cout << " uups, unknown particle type " << type << G4endl;
+     mass = 0.0;
     };
         
     return mass;
 };
 
-double getKineticEnergy() const { return momentum[0] - particleMass; };
+G4double getKineticEnergy() const { return momentum[0] - particleMass; };
 
-double getEnergy() const { return momentum[0]; };
+G4double getEnergy() const { return momentum[0]; };
 
 bool valid() const { return valid_particle; };
 
 virtual void printParticle() const {
-  InuclParticle::printParticle();
-  cout << " type " << particleType << " mass " << particleMass << 
-    " ekin " << getKineticEnergy() << endl; 
+  G4InuclParticle::printParticle();
+  G4cout << " type " << particleType << " mass " << particleMass << 
+    " ekin " << getKineticEnergy() << G4endl; 
 };
 
 private: 
 
-int particleType;
+G4int particleType;
 
-double particleMass;
+G4double particleMass;
 
 bool valid_particle;
 
 };        
 
-#endif // INUCL_ELEMENTARY_PARTICLE_H 
+#endif // G4INUCL_ELEMENTARY_PARTICLE_HH 

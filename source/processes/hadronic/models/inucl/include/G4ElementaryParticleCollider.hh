@@ -1,11 +1,11 @@
-#ifndef G4ELEMENTARY_PARTICLE_COLLIDER_H
-#define G4ELEMENTARY_PARTICLE_COLLIDER_H
+#ifndef G4ELEMENTARY_PARTICLE_COLLIDER_HH
+#define G4ELEMENTARY_PARTICLE_COLLIDER_HH
 
-#include "G4Collider.h"
-#include "G4InuclElementaryParticle.h"
-#include "G4InuclSpecialFunctions.h"
-#include "G4CascadSpecialFunctions.h"
-#include "G4LorentzConvertor.h"
+#include "G4Collider.hh"
+#include "G4InuclElementaryParticle.hh"
+#include "G4InuclSpecialFunctions.hh"
+#include "G4CascadSpecialFunctions.hh"
+#include "G4LorentzConvertor.hh"
 
 using namespace G4InuclSpecialFunctions;
 using namespace G4CascadSpecialFunctions;
@@ -61,7 +61,7 @@ vector<G4InuclElementaryParticle>
     
 };        
 
-#endif // ELEMENTARY_PARTICLE_COLLIDER_H 
+#endif // G4ELEMENTARY_PARTICLE_COLLIDER_HH 
 
 
 
