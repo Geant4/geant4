@@ -21,16 +21,26 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExtent.hh,v 1.5 2001-07-11 10:01:05 gunter Exp $
+// $Id: G4VisExtent.hh,v 1.6 2001-07-24 21:39:43 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // A.Walkden 28/11/95
 
 // Class Description:
-// G4VisExtent is a class to prototype extent functions for use in
-// instantiating Visualisation windows with an appropriate field of
-// view for the object(s) being drawn.
+// G4VisExtent defines a bounding box in a visualisable object's local
+// coordinate system which includes the object.
+// WARNING: it also attempts to support the concept of a bounding
+// sphere.  (This is used extensively in the G4 Visualisation System
+// to calculate camera parameters, etc.)  Be aware that this involves
+// loss of information.  Given a bounding box, one can calculate the
+// bounding sphere; inverting this will produce a cube which *might*
+// *not* include the object.  E.g., a long thin object of length l
+// will have a bounding sphere of diameter l; the corresponding cube
+// will have side l/sqrt(3) so that the bounding sphere diameter is
+// still l.  Thus the long thin object will stick out of the cube.
+// So, if you once use the concept of bounding sphere you must stick
+// with it and abandon the concept of bounding box.
 // Class Description - End:
 
 #ifndef G4VISEXTENT_HH
