@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.cc,v 1.19 2000-03-21 11:24:32 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.20 2000-03-21 11:26:57 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -24,6 +24,7 @@
 // 29/07/99: corr. for low energy , L.Urban
 // 17/09/99: corr. for high energy and/or small step , L.Urban
 // 30/09/99: nuclear size effect correction,  L.Urban
+// 21/03/00: member cpar has changed (tuning for lowen. ,L.Urban 
 // --------------------------------------------------------------
 
 #include "G4MultipleScattering.hh"
