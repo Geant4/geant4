@@ -227,6 +227,8 @@ class G4ParticleChange;
     G4double aScaleFactor;
     G4bool xBiasOn;
     G4double theLastCrossSection;
+
+    G4int ModelingState;
  };
  
 #endif

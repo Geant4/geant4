@@ -63,6 +63,7 @@
  G4HadronicProcess::G4HadronicProcess( const G4String &processName) :
       G4VDiscreteProcess( processName )
  { 
+   ModelingState = 0;
    isoIsOnAnyway = 0;
    theTotalResult = new G4ParticleChange();
    theCrossSectionDataStore = new G4CrossSectionDataStore();
@@ -122,6 +123,7 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
     }
     G4Material *aMaterial = aTrack.GetMaterial();
     G4int nElements = aMaterial->GetNumberOfElements();
+    ModelingState = 1;
     
     // returns the mean free path in GEANT4 internal units
     
@@ -361,6 +363,11 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
       }
     }
     while(!result);
+    if(!ModelingState && !getenv("BypassAllSafetyChecks") ) 
+    {
+      G4cout << "ERROR IN EXECUTION -- HADRONIC PROCESS STATE NOT VALID"<<G4endl;
+      G4cout << "Result will be of undefined quality."<<G4endl;
+    }
     if(result->GetStatusChange() == isAlive && thePro.GetDefinition() != aTrack.GetDefinition())
     {
       G4DynamicParticle * aP = const_cast<G4DynamicParticle *>(aTrack.GetDynamicParticle());
@@ -407,6 +414,7 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
     }
     
     G4double e=aTrack.GetKineticEnergy();
+    ModelingState = 0;
     if(e<5*GeV)
     {
       for(size_t i=0; i<theBias.size(); i++)
