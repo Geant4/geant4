@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: NametoGeant3Number.cc,v 1.1 2003-10-08 12:04:17 hpw Exp $
+// $Id: NametoGeant3Number.cc,v 1.2 2003-10-08 12:19:48 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  G4int NameToGeant3Number( G4ParticleDefinition* p )

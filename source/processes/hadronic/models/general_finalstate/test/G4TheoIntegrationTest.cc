@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TheoIntegrationTest.cc,v 1.1 2003-10-08 12:04:17 hpw Exp $
+// $Id: G4TheoIntegrationTest.cc,v 1.2 2003-10-08 12:19:48 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
