@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SteppingVerbose.hh,v 1.2 2003-11-27 18:20:18 vnivanch Exp $
+// $Id: SteppingVerbose.hh,v 1.3 2004-03-16 18:27:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   This class manages the verbose outputs in G4SteppingManager. 
@@ -43,7 +43,7 @@ class SteppingVerbose : public G4SteppingVerbose
 public:   
 
    SteppingVerbose();
-   ~SteppingVerbose();
+  ~SteppingVerbose();
 
    void StepInfo();
    void TrackingStarted();
