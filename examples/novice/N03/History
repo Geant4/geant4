@@ -1,4 +1,4 @@
-$Id: History,v 1.67 2003-11-06 14:46:13 johna Exp $
+$Id: History,v 1.68 2003-11-06 14:50:01 johna Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06-11-03 J.Allison (exampleN03-V05-02-04)
+- ExN03RunAction: removed ApplyCommand("/vis/...") statements.
 
 06-11-03 J.Allison (exampleN03-V05-02-03)
 - ExN03EventAction:

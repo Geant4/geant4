@@ -21,7 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03RunAction.cc,v 1.13 2003-10-24 12:34:15 maire Exp $
+
+// $Id: ExN03RunAction.cc,v 1.14 2003-11-06 14:50:06 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,20 +56,10 @@ void ExN03RunAction::BeginOfRunAction(const G4Run* aRun)
 
   //inform the runManager to save random number seed
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  
-  //visualization
-  if (G4VVisManager::GetConcreteInstance()) {
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");    
-  } 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN03RunAction::EndOfRunAction(const G4Run* )
-{
-  if (G4VVisManager::GetConcreteInstance()) {
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-  }
-}
+void ExN03RunAction::EndOfRunAction(const G4Run* ) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
