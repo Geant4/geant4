@@ -103,13 +103,13 @@ G4FermiPhaseSpaceDecay::NBodyDecay(const G4double M,  const std::vector<G4double
 {
   // Number of fragments
   G4int N = m.size();
-
+  G4int i, j;
   // Total Daughters Mass
   G4double mtot = std::accumulate( m.begin(), m.end(), 0.0);
   G4double Emax = M - mtot + m[0];
   G4double Emin = 0.0;
   G4double Wmax = 1.0;
-  for (G4int i = 1; i < N; i++)
+  for (i = 1; i < N; i++)
     {
       Emax += m[i];
       Emin += m[i-1];
@@ -125,7 +125,7 @@ G4FermiPhaseSpaceDecay::NBodyDecay(const G4double M,  const std::vector<G4double
       std::vector<G4double> r;
       r.reserve(N);
       r.push_back(0.0);
-      for (G4int i = 1; i < N-1; i++) r.push_back(G4UniformRand());
+      for (i = 1; i < N-1; i++) r.push_back(G4UniformRand());
       r.push_back(1.0);
       std::sort(r.begin(),r.end(), std::less<G4double>());
       
@@ -139,7 +139,7 @@ G4FermiPhaseSpaceDecay::NBodyDecay(const G4double M,  const std::vector<G4double
 
       // Calcualte daughter momenta
       weight = 1.0;
-      for (G4int j = 0; j < N-1; j++)
+      for (j = 0; j < N-1; j++)
 	{
 	  p[j] = PtwoBody(vm[j+1],vm[j],m[j+1]); 
 	  if (p[j] < 0.0)
@@ -170,13 +170,13 @@ G4FermiPhaseSpaceDecay::NBodyDecay(const G4double M,  const std::vector<G4double
 
   P->operator[](0) = new G4LorentzVector( a3P, sqrt(a3P.mag2()+m[0]*m[0]) );  
   P->operator[](1) = new G4LorentzVector(-a3P, sqrt(a3P.mag2()+m[1]*m[1]) );
-  for (G4int i = 2; i < N; i++)
+  for (i = 2; i < N; i++)
     {
       a3P = this->IsotropicVector(p[i-1]);
       P->operator[](i) = new G4LorentzVector(a3P, sqrt(a3P.mag2() + m[i]*m[i]));
       G4ThreeVector Beta = (-1.0)*P->operator[](i)->boostVector();
       // boost already created particles
-      for (G4int j = 0; j < i; j++)
+      for (j = 0; j < i; j++)
 	{
 	  P->operator[](j)->boost(Beta);
 	}

@@ -27,7 +27,7 @@ template<class A> void G4PtrSort(std::vector<A *> * aList)
   std::vector<G4SortHelperPtr<A> > helper;
   for(size_t i=0; i<aList->size(); i++) helper.push_back(aList->operator[](i));
   std::sort(helper.begin(), helper.end());
-  for(size_t i=0; i<helper.size(); i++) aList->operator[](i)=&(*helper[i]);
+  for(size_t j=0; j<helper.size(); j++) aList->operator[](j)=&(*helper[j]);
 };
 
 // }
