@@ -80,6 +80,8 @@
    std::for_each(theBias.begin(), 
             theBias.end(), 
 	    G4Delete());
+   if(theOldIsoResult) delete theOldIsoResult;
+   if(theIsoResult) delete theIsoResult;
  }
 
  void G4HadronicProcess::RegisterMe( G4HadronicInteraction *a )
