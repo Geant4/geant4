@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32Viewer.hh,v 1.5 2001-07-11 10:08:48 gunter Exp $
+// $Id: G4OpenGLImmediateWin32Viewer.hh,v 1.6 2001-07-14 21:47:41 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,7 @@ public G4OpenGLWin32Viewer, public G4OpenGLImmediateViewer{
   
 public:
   G4OpenGLImmediateWin32Viewer (G4OpenGLImmediateSceneHandler& scene);
+  void Initialise ();
   void DrawView ();
 };
 

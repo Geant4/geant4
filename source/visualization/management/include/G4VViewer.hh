@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.hh,v 1.10 2001-07-11 10:09:14 gunter Exp $
+// $Id: G4VViewer.hh,v 1.11 2001-07-14 21:48:21 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,6 +48,16 @@ public: // With description
 
   G4VViewer (G4VSceneHandler& scene, G4int id, const G4String& name = "");
   virtual ~G4VViewer ();
+
+  virtual void Initialise ();
+  // Called immediately after construction for those operations that
+  // must await complete contruction of viewer and all its bases.  For
+  // example, if this class (G4VViewer) is inherited virtually, as in
+  // the OpenGL sub-category, it will not be fully constructed until
+  // *after* the the derived viewer (this is the rule about order of
+  // construction for virtual inheritance), so the derived viewer may
+  // not use information in G4VViewer in its contructor.  Hence such
+  // code must be in Initialise().
 
   //////////////////////////////////////////////////////////////
   // View manipulation functions.

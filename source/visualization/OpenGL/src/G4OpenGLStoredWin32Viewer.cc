@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredWin32Viewer.cc,v 1.3 2001-07-11 10:08:55 gunter Exp $
+// $Id: G4OpenGLStoredWin32Viewer.cc,v 1.4 2001-07-14 21:47:53 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,9 @@ G4OpenGLStoredViewer (scene),
 G4VViewer (scene, scene.IncrementViewCount ()) {
 
   if (fViewId < 0) return;  // In case error in base class instantiation.
+}
+
+void G4OpenGLStoredWin32Viewer::Initialse () {
 
   //Check that G4OpenGLWin32Viewer got a double buffered colour visual
 
@@ -59,7 +62,6 @@ G4VViewer (scene, scene.IncrementViewCount ()) {
 
   glDepthFunc (GL_LEQUAL);
   glDepthMask (GL_TRUE);
-
 }
 
 void G4OpenGLStoredWin32Viewer::DrawView () {

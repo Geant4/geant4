@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredWin32Viewer.hh,v 1.3 2001-07-11 10:08:50 gunter Exp $
+// $Id: G4OpenGLStoredWin32Viewer.hh,v 1.4 2001-07-14 21:47:45 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,7 @@ public G4OpenGLWin32Viewer, public G4OpenGLStoredViewer{
   
 public:
   G4OpenGLStoredWin32Viewer (G4OpenGLStoredSceneHandler& scene);
+  void Initialise ();
   void DrawView ();
 };
 

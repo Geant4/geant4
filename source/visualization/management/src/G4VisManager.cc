@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.28 2001-07-11 10:09:19 gunter Exp $
+// $Id: G4VisManager.cc,v 1.29 2001-07-14 21:48:24 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -501,6 +501,7 @@ void G4VisManager::CreateViewer (G4String name) {
     G4VViewer* p = fpGraphicsSystem -> CreateViewer (*fpSceneHandler, name);
     if (p) {
       fpViewer = p;                             // Make current.
+      fpViewer -> Initialise ();
       fpSceneHandler -> AddViewerToList (fpViewer);
       fpSceneHandler -> SetCurrentViewer (fpViewer);
       // Make it possible for user action code to Draw.

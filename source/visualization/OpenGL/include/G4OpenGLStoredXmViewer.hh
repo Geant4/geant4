@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXmViewer.hh,v 1.4 2001-07-11 10:08:50 gunter Exp $
+// $Id: G4OpenGLStoredXmViewer.hh,v 1.5 2001-07-14 21:47:47 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,7 @@ public G4OpenGLXmViewer, public G4OpenGLStoredViewer{
 public:
   G4OpenGLStoredXmViewer (G4OpenGLStoredSceneHandler& scene, const G4String& name = "");
   virtual ~G4OpenGLStoredXmViewer ();
+  void Initialise ();
   void DrawView ();
 
 };

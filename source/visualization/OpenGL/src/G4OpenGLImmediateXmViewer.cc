@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXmViewer.cc,v 1.5 2001-07-11 10:08:54 gunter Exp $
+// $Id: G4OpenGLImmediateXmViewer.cc,v 1.6 2001-07-14 21:47:51 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,6 +58,11 @@ G4VViewer (scene, scene.IncrementViewCount (), name) {
     fViewId = -1;  // This flags an error.
     return;
   }
+}
+
+G4OpenGLImmediateXmViewer::~G4OpenGLImmediateXmViewer () {}
+
+void G4OpenGLImmediateXmViewer::Initialise () {
 
   CreateGLXContext (vi_immediate);
 
@@ -80,6 +85,9 @@ G4VViewer (scene, scene.IncrementViewCount (), name) {
   glShadeModel (GL_FLAT);
 
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  //The following code was in the constructor and found not to work for
+  //the reasons below.  It was moved to DrawView(), but has now been moved
+  //to Initialise().
   //The following code is useless in its current position, as the 
   //G4OpenGLXmViewer constructor gets called *after* it, and hence sets
   //doublebuffer to true or false there, after our little test to correct
@@ -89,22 +97,13 @@ G4VViewer (scene, scene.IncrementViewCount (), name) {
 
   // If a double buffer context has been forced upon us, ignore the
   // back buffer for this OpenGLImmediate view.
-  //  if (doublebuffer) {
-  //    doublebuffer = false;
-  //    glDrawBuffer (GL_FRONT);
-  //  }
+   if (doublebuffer) {
+     doublebuffer = false;
+     glDrawBuffer (GL_FRONT);
+   }
 }
 
-G4OpenGLImmediateXmViewer::~G4OpenGLImmediateXmViewer () {}
-
 void G4OpenGLImmediateXmViewer::DrawView () {
-
-  // If a double buffer context has been forced upon us, ignore the
-  // back buffer for this OpenGLImmediate view.
-  if (doublebuffer) {
-    doublebuffer = false;
-    glDrawBuffer (GL_FRONT);
-  }
 
   if (white_background == true) {
     glClearColor (1., 1., 1., 1.);

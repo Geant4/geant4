@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXViewer.cc,v 1.5 2001-07-11 10:08:55 gunter Exp $
+// $Id: G4OpenGLStoredXViewer.cc,v 1.6 2001-07-14 21:47:54 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,6 +59,11 @@ G4VViewer (scene, scene.IncrementViewCount (), name) {
       " G4OpenGLXViewer couldn't get a visual." << G4endl;
     return;
   }
+}
+
+G4OpenGLStoredXViewer::~G4OpenGLStoredXViewer () {}
+
+void G4OpenGLStoredXViewer::Initialise () {
 
   CreateGLXContext (vi_stored);
 
@@ -72,10 +77,7 @@ G4VViewer (scene, scene.IncrementViewCount (), name) {
 
   glDepthFunc (GL_LEQUAL);
   glDepthMask (GL_TRUE);
-
 }
-
-G4OpenGLStoredXViewer::~G4OpenGLStoredXViewer () {}
 
 void G4OpenGLStoredXViewer::DrawView () {
 

@@ -21,11 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.icc,v 1.8 2001-07-11 10:09:14 gunter Exp $
+// $Id: G4VViewer.icc,v 1.9 2001-07-14 21:48:22 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  30th December 1996
+
+inline void G4VViewer::Initialise () {}
 
 inline G4int G4VViewer::GetViewId () const {
   return fViewId;
