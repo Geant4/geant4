@@ -1,0 +1,12 @@
+- design iteration on multi-fragmentation
+- isotope-production models for neutron induced production, 
+  and corresponding design changes in hadronic/management
+- additional string model for proton induced reactions.
+==>
+- u.u. memory usage optimization in the neutron transport.
+
+this will come together with an updated set of neutron data 
+files.
+
+Many greetings, 
+              Hans-Peter.
