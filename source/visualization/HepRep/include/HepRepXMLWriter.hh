@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------
 // File and Version Information:
-// 	$Id: HepRepXMLWriter.hh,v 1.2 2001-11-19 15:06:52 johna Exp $
+// 	$Id: HepRepXMLWriter.hh,v 1.3 2001-11-21 16:48:33 johna Exp $
 //
 // Description:
 //	Create a HepRep XML File (HepRep version 1).
@@ -17,6 +17,7 @@
 #ifndef HepRepXMLWriter_hh
 #define HepRepXMLWriter_hh
 
+#include "globals.hh"
 #include "g4std/fstream"
 
 class HepRepXMLWriter
@@ -56,7 +57,7 @@ public:
   void close();
   
 private:
-  ofstream fout;
+  G4std::ofstream fout;
 
   bool inType;
   bool inInstance;
