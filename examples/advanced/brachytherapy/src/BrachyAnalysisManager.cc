@@ -81,7 +81,7 @@ void BrachyAnalysisManager::book()
  
 // check for non-zero
 
- IHistogram1D *h3 = histFact->create1D("30","Initial Energy", 500,0.00,5.);
+ IHistogram1D *h3 = histFact->create1D("30","Initial Energy", 100,0.,1.);
  // check for non-zero
 
  //Ntuple management

@@ -11,8 +11,6 @@
 BrachyRunAction::BrachyRunAction(G4String &SDNAME)
 {
   SDname=SDNAME;
-  //pDetector= (const BrachyDetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
-  //pEvent=(const BrachyEventAction*)G4RunManager::GetRunManager()->GetUserEventAction();
 
 
  

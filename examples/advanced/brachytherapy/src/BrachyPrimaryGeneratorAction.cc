@@ -23,11 +23,16 @@ BrachyPrimaryGeneratorAction::BrachyPrimaryGeneratorAction()
 {
  
  G4int NumParticles = 1;
-  G4double Energy = 0.356*MeV;
+
   m_pParticleGun = new G4ParticleGun(NumParticles);
 
 
  
+  m_pParticleGun = new G4ParticleGun(NumParticles);
+
+
+ 
+
 }
 
 //....
@@ -86,12 +91,18 @@ BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();
  G4ThreeVector direction(a,b,c);
  m_pParticleGun->SetParticleMomentumDirection(direction);
 
-  G4double Energy = 0.356*MeV;
+
+ //Energy = 0.356*MeV;
+
+Energy = 356*keV;
    m_pParticleGun->SetParticleEnergy(Energy);
 
    //Check the energy
    analysis->Spectrum(Energy);
   
    m_pParticleGun->GeneratePrimaryVertex(anEvent);
+
+ 
+
 }
 

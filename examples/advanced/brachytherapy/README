@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.3 2002-04-19 18:09:30 guatelli Exp $
+$Id: README,v 1.4 2002-06-13 15:11:27 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -12,19 +12,18 @@ $Id: README,v 1.3 2002-04-19 18:09:30 guatelli Exp $
 0. Introduction.
 
 Brachytherapy example simulates energy deposition on a voxel grid
-for a Bebig I-125  brachytherapy source.
+for a Ir   brachytherapy source.
 
 1. Technical description
 
-1.0. Bebig  I-125 source is constructed in the 
+1.0. the  source is constructed in the 
 brachyDetectorConstruction class. The source is composed by
-an iodium core encapsulated in a capsule (body + tip). 
-Inside the core there's a gold marker
-The source is put into a 30*cm water box.
+an iridium  core encapsulated in a capsule (body + tip). 
+The source is put in the center of a 30*cm water box.
 
 1.1. The water box is made sensitive detector. A longitudinal slice
 of it is associated to a planar read out geometry. At every hit
-energy deposition is read and stored into a voxel matrix.
+energy deposition is read and stored in a 2D histogram.
 
 1.2. the  output is  the file  brachy2.hbk  
 (e.g. anysotropy and isodose calculations):
@@ -32,102 +31,84 @@ energy deposition is read and stored into a voxel matrix.
  2)2Dhistogram with the distribution of energy in the plane (x,z,energy)
 2. Make
 
+1.3.the default visualization is with Dawn 
+
 A standard Geant4 example GNUmakefile is provided.
 
 2. Usage
 
-Simply run "Brachy" executable. The output is ("brachy2.hbk")
+ run "Brachy" executable. 
+The framework in in interactive mode,so
+you have to do:
+idle>/run/beamOn ( numberofevents)
+
+The output is ("brachy2.hbk")
 
 
 
 
 ------How to run the new version of AIDA:----------------------
 
-I used the new version of AIDA with  the last release of Geant4
 
-1)Aida platform for Linux:gcc compiler 2.95.2
+1)Aida  platform for Linux:gcc compiler 2.95.2
 
-if you don't have this compiler,
-you can access  to it : 
+-------------------------enviroment with the compiler 2.95.2 on lxplus------------------------------------
 
-setenv GCC_PATH /usr/local/gcc-alt-2.95.2
-setenv PATH  "${GCC_PATH}/bin:${PATH}"
-setenv LD_LIBRARY_PATH  "${GCC_PATH}/lib:${LD_LIBRARY_PATH}"
+
+setenv G4LEDATA /afs/cern.ch/sw/geant4/dev/data/G4EMLOW1.1
+setenv G4INSTALL /afs/cern.ch/user/g/guatelli/GEANT4/geant4
+#
+# ---- Linux setup ----
+#
+
+  setenv G4SYSTEM Linux-g++
  
-in this case,in your  geant4/source you have to do:
+#choose where you want to put the G4-libraries and G4workdir
 
-clean up your geant4/lib
-setenv GCC_PATH /usr/local/gcc-alt-2.95.2
-setenv PATH  "${GCC_PATH}/bin:${PATH}"
-setenv LD_LIBRARY_PATH  "${GCC_PATH}/lib:${LD_LIBRARY_PATH}"
-setenv G4SYSTEM ...
-setenv G4WORKDIR ...
-gmake 
-
-*define the enviroment variables
-
-*after this step check that
-       g++ --version is 2.95.2
-       $PLATF  :  redhat61/gcc-2.95.2
+  setenv G4LIB ....
+  setenv G4WORKDIR ...
 
 
-*in the GNUmakefile you have to add:
- G4ANALYSIS_USE = 1
- CPPFLAGS += -I${LHCXX_REL_DIR}/include -I/afs/cern.ch/sw/contrib/AIDA/2.2/
-(look at the GNUmakefile of the example)
-
-Now you should be able to compile your simulation
-
-this warning always appears but it's not important:
-/usr/bin/ld: warning: libGL.so.1, needed by /afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/4.0.0/lib/libqt-mt.so, not found (try using --rpath)
+---visualization-----
 
 
-the Lizard version,you have to use,is the old one : 
-source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.3-sec/install/sharedstart.csh
-(the new version is not ready)
-the g++ version is egcs-2.91.66
-and 
-$PLATF is  redhat61/egcs_1.1.2
- 
 
-the headerfiles of the new version of AIDA are in:
-/afs/cern.ch/sw/contrib/AIDA/2.2/cpp/AIDA
+# ---- set up VRMLview
+setenv G4VIS_BUILD_VRMLFILE_DRIVER  1
+setenv G4VIS_USE_VRML               1
+setenv G4VIS_USE_VRMLFILE           1
+setenv G4VRMLFILE_MAX_FILE_NUM     100
+setenv G4VRMLFILE_VIEWER        vrmlview    #if installed
+setenv G4VIS_USE_VRML               1
+setenv G4VIS_USE_VRMLFILE           1
+setenv PATH ${PATH}:"/afs/cern.ch/sw/contrib/VRML/bin/Linux"
+
+# ---- set up OpenGL or Mesa 
+setenv G4VIS_BUILD_OPENGLX_DRIVER   1
+setenv G4VIS_USE_OPENGLX            1
+setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Linux-g++
+
+# ---- set up DAWN
+setenv G4VIS_BUILD_DAWN_DRIVER      1
+setenv G4VIS_BUILD_DAWNFILE_DRIVER  1  
+setenv G4VIS_USE_DAWN               1
+setenv G4VIS_USE_DAWNFILE           1
+setenv PATH ${PATH}:"/afs/cern.ch/sw/geant4/dev/DAWN/Linux-g++"
 
 
-these are the enviroment variables to be defined,
-the following  example shows a definition valid with a CERN account:
-#
-#in order to get the stuff from the alternate compiler installed on lxplus 
-#source for your simulation:
-#
-if ( -e "/usr/local/gcc-alt-2.95.2" ) then
-setenv PATH /usr/local/gcc-alt-2.95.2/bin:${PATH}
-if ( ${?LD_LIBRARY_PATH} == 0 ) then
-setenv LD_LIBRARY_PATH /usr/local/gcc-alt-2.95.2/lib
-else
-setenv LD_LIBRARY_PATH /usr/local/gcc-alt-2.95.2/lib:${LD_LIBRARY_PATH}
-endif
-endif
-#
-#enviroments for running the simulation
-#
-setenv  G4SYSTEM Linux-g++
-setenv G4WORKDIR ./workdir
-setenv G4VIS_BUILD 1
-setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-setenv G4VIS_USE 1
-setenv G4VIS_USE_DAWNFILE 1
-setenv DAWN_HOME /afs/cern.ch/sw/geant4/dev/DAWN/${G4SYSTEM}
-set path=( $path $DAWN_HOME )
-setenv G4DAWNFILE_VIEWER dawn
-setenv  G4DAWN_NAMED_PIPE  1
-setenv G4LEDATA /afs/cern.ch/sw/geant4/dev/data/G4EMLOW0.5 
-setenv G4LIB /afs/cern.ch/user/g/guatelli/geant4/lib
-#
-# for the new version of Anaphe
-#
+
+-----------------------------------------------------------------------------------
+
+
+# ---- Analysis----
+
+setenv G4ANALYSIS_BUILD  1
+setenv PATH "${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/4.0.0/bin"
 source /afs/cern.ch/sw/lhcxx/share/LHCXX/4.0.0/install/sharedstart.csh
-#
 setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --noLicense --include`
 setenv G4ANALYSIS_AIDA_CONFIG_LIBS   `aida-config --noLicense --libs`
 
+# ---- add to the LD_LIBRARY_PATH 
+setenv LD_LIBRARY_PATH $OGLHOME/lib
+#
+# ---- end of Linux set-up ----

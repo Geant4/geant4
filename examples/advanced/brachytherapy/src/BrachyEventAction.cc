@@ -84,10 +84,9 @@ void BrachyEventAction::BeginOfEventAction(const G4Event* aEvent)
 void BrachyEventAction::EndOfEventAction(const G4Event* evt)
 {
 
+
  G4int evno = fpEventManager->GetConstCurrentEvent()->GetEventID() ;
  
-
-
  if((evno==100)||(evno==500)||(evno==1000)||(evno==2500)
 ||(evno==5000)||(evno==7000)||(evno==9000)||
     (evno==9500)||(evno==29000000)||(evno==29500000))
@@ -104,6 +103,7 @@ if(m_HitsCollectionID < 0)
 
  if(CHC)
 	{
+
 	
 	       G4int HitCount = CHC->entries();
 		
@@ -120,16 +120,14 @@ if(m_HitsCollectionID < 0)
 
                       EnergyDep=(*CHC)[h]->GetEdep();
                       
-                        z = (-m_NumVoxelZ+1+2*k)*VoxelWidth_Z/2; 
-                        x = (- m_NumVoxelX +1+2*i)*VoxelWidth_X/2;
+                        x = (-m_NumVoxelZ+1+2*k)*VoxelWidth_X/2; 
+                        z = (- m_NumVoxelZ+1+2*i)*VoxelWidth_Z/2;
                        
-			if(EnergyDep!=0){if(fabs(x) > 3*mm || fabs(z) > 6*mm)	
-			 { G4cout<<i<<" "<<k <<" "<<j<<" "<<x<<" "<<z<<" "<<  EnergyDep<<"Energia dello step" << G4endl;
-			 analysis->hist(x,z,EnergyDep); analysis->analyse(x,z,EnergyDep);}}}
+			if(EnergyDep!=0){
+			  { if( abs(x)>0.56*mm && abs(z)>3.8*mm)
+			   analysis->hist(x,z,EnergyDep); analysis->analyse(x,z,EnergyDep);}}}
 
 	}
-
-
 
 // extract the trajectories and draw them
 
@@ -154,6 +152,7 @@ if(m_HitsCollectionID < 0)
  
 
 }
+
 
 
 

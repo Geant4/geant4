@@ -6,6 +6,7 @@
 
 #include "BrachyWaterBoxROGeometry.hh"
 #include "BrachyWaterBoxSD.hh"
+#include "BrachyDetectorMessenger.hh"
 #include "BrachyDetectorConstruction.hh"
 #include "G4CSGSolid.hh"
 #include "G4Sphere.hh"
@@ -48,6 +49,7 @@ BrachyDetectorConstruction::BrachyDetectorConstruction(G4String &SDName):
   IridiumCore(0),IridiumCoreLog(0),IridiumCorePhys(0)
  
 {
+
   NumVoxelX=300;
   NumVoxelZ=300;
 
@@ -59,7 +61,11 @@ BrachyDetectorConstruction::BrachyDetectorConstruction(G4String &SDName):
  
      
   m_SDName = SDName;//pointer to sensitive detector
- 
+ // create commands for interactive definition of the calorimeter  
+  detectorMessenger = new BrachyDetectorMessenger(this);
+
+ m_SDName = SDName;
+
 }
 
 
@@ -95,12 +101,46 @@ void BrachyDetectorConstruction::DefineMaterials()
  G4Element* elN = new G4Element("Nitrogen","N",Z=7.,A);
 
  A = 16.00*g/mole;
+
   G4Element* elO = new G4Element("Oxygen","O",Z=8.,A);
+
+A=12.011*g/mole;
+ G4Element* elC=new G4Element("Carbon","C",Z=6.,A);
+ 
+ A=22.99*g/mole;
+ G4Element* elNa=new G4Element("Sodium","Na",Z=11.,A);
+ 
+ A=24.305*g/mole;
+ G4Element* elMg=new G4Element("Magnesium","Mg",Z=12.,A);
+
+ A=30.974*g/mole;
+ G4Element* elP=new G4Element("Phosphorus","P",Z=15.,A);
+ 
+  A=32.06*g/mole;
+ G4Element* elS=new G4Element("Sulfur","S",Z=16.,A);
+ 
+ A=35.453*g/mole;
+ G4Element* elCl=new G4Element("Chlorine","Cl",Z=17.,A);
+
+ 
+ A=39.098*g/mole;
+ G4Element* elK=new G4Element("Potassium","K",Z=19.,A);
+
+ A=40.08*g/mole;
+ G4Element* elCa=new G4Element("Calcium","Ca",Z=20.,A);
+
+
    
  // Elements for source capsule and cable
+
  
+  
+ 
+A=65.38*g/mole;
+ G4Element* elZn=new G4Element("Zinc","Zn",Z=30.,A);
   A=26.98*g/mole;
   G4Element* elAl=new G4Element("Aluminum","Al", Z=13.,A);
+
 
 
  A = 54.94*g/mole;
@@ -148,6 +188,28 @@ void BrachyDetectorConstruction::DefineMaterials()
  matH2O->AddElement(elH,2);
  matH2O->AddElement(elO,1);
 
+//soft tissue(NIST data)
+
+ d=1.0*g/cm3;
+ G4Material* soft=new G4Material("tissue",d,13);
+ soft->AddElement(elH,0.104472);
+ soft->AddElement(elC,0.23219);
+ soft->AddElement(elN,0.02488);
+ soft->AddElement(elO,0.630238);
+ soft->AddElement(elNa,0.00113);
+ soft->AddElement(elMg,0.00013);
+ soft->AddElement(elP,0.00133);
+ soft->AddElement(elS,0.00199);
+ soft->AddElement(elCl,0.00134);
+ soft->AddElement(elK,0.00199);
+ soft->AddElement(elCa,0.00023);
+ soft->AddElement(elFe,0.00005);
+ soft->AddElement(elZn,0.00003); 
+ 
+
+ 
+
+
  // Stainless steel (Medical Physics, Vol 25, No 10, Oct 1998)
  d = 8.02*g/cm3 ;
  G4Material* matSteel = new G4Material("Stainless steel",d,5);
@@ -157,12 +219,19 @@ void BrachyDetectorConstruction::DefineMaterials()
  matSteel->AddElement(elNi, 0.10);
  matSteel->AddElement(elFe, 0.68);
  
+
+//--elements for Iodium source which will be introduced in the next release
+
+ 
+
+
 //--elements for Iodium source which will be introduced in the next release
 
  //gold(chimica degli elementi N.N Greenwood,A.Earnshaw)
  A=196.97*g/mole;
  d=19.32*g/cm3;
  G4Material* gold=new G4Material("gold",Z=79.,A,d);
+
 
 
  //IodiumCore(chimica degli elementi N.N Greenwood,A.Earnshaw)
@@ -177,13 +246,15 @@ void BrachyDetectorConstruction::DefineMaterials()
  ceramica->AddElement(elAl,2);
  ceramica->AddElement(elO,3);
 
-
- water=matH2O;
+ 
+ AbsorberMaterial=matH2O;
  air= matAir;
  CapsuleMat=matSteel;
  IridiumMat=matIr192;
 
 }
+
+
 
 G4VPhysicalVolume* BrachyDetectorConstruction::ConstructDetector()
 {// Volumes
@@ -192,6 +263,10 @@ G4VPhysicalVolume* BrachyDetectorConstruction::ConstructDetector()
  G4double ExpHall_x = 4.0*m;
  G4double ExpHall_y = 4.0*m;
  G4double ExpHall_z = 4.0*m;
+
+  
+ 
+
 
   G4Colour  white   (1.0, 1.0, 1.0) ;
   G4Colour  grey    (0.5, 0.5, 0.5) ;
@@ -211,15 +286,18 @@ G4VPhysicalVolume* BrachyDetectorConstruction::ConstructDetector()
 
  // Water Box
  WaterBox = new G4Box("WaterBox",m_BoxDimX/2,m_BoxDimY/2,m_BoxDimZ/2);
- WaterBoxLog = new G4LogicalVolume(WaterBox,water,"WaterBoxLog",0,0,0);
- 
+ WaterBoxLog = new G4LogicalVolume(WaterBox,AbsorberMaterial,"WaterBoxLog",0,0,0);
 
 
 WaterBoxPhys = new G4PVPlacement(0,G4ThreeVector(),"WaterBoxPhys",WaterBoxLog,ExpHallPhys,false,0);
 
 
 
+
+
+
 // Capsule main body
+
 
  G4Tubs* Capsule = new G4Tubs("Capsule",0,0.55*mm,3.725*mm,0.*deg,360.*deg);
  G4LogicalVolume* CapsuleLog = new G4LogicalVolume(Capsule,CapsuleMat,"CapsuleLog");
@@ -355,6 +433,7 @@ WaterBoxPhys = new G4PVPlacement(0,G4ThreeVector(),"WaterBoxPhys",WaterBoxLog,Ex
 }
 
 
+
 void BrachyDetectorConstruction::PrintDetectorParameters()
 {
  G4cout << "-----------------------------------------------------------------------"
@@ -375,7 +454,8 @@ void BrachyDetectorConstruction::PrintDetectorParameters()
         <<dimVoxel/mm
         <<"mm"
 	<<G4endl 
-        <<"material of the box :water "
+        <<"material of the box : "
+        <<AbsorberMaterial->GetName() 
         <<G4endl
 	<<"the source is at the center  of the detector"
          <<G4endl
@@ -384,6 +464,27 @@ void BrachyDetectorConstruction::PrintDetectorParameters()
 <<"-------------------------------------------------------------------------"
 	 << G4endl;
 }
+
+
+void BrachyDetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
+
+{
+  // search the material by its name   
+  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
+  if (pttoMaterial)
+     {AbsorberMaterial = pttoMaterial;
+      WaterBoxLog->SetMaterial(pttoMaterial); 
+      PrintDetectorParameters();
+     } 
+  else G4cout<<"that's not avaiable!"<<G4endl;            
+}
+
+
+
+
+
+
+
 
 
 

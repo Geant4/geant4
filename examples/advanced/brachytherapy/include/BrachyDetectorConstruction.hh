@@ -13,8 +13,8 @@
 #include "G4LogicalVolume.hh"
 
 
-
 class BrachyWaterBoxSD;
+class BrachyDetectorMessenger;
 class G4LogicalVolume;
 class G4Material;
 class G4Tubs;
@@ -23,12 +23,16 @@ class G4Sphere;
 class G4Tubs;
 
 class G4VPhysicalVolume;
+class BrachyWaterBoxSD;
 
+
+class G4VPhysicalVolume;
 class BrachyDetectorConstruction : public G4VUserDetectorConstruction
 {
  public:
 	BrachyDetectorConstruction(G4String&);
 	~BrachyDetectorConstruction();
+
 
  private:
 	 G4double m_BoxDimX;
@@ -41,16 +45,20 @@ class BrachyDetectorConstruction : public G4VUserDetectorConstruction
 
 public:
   void PrintDetectorParameters(); 
-  
+  void SetAbsorberMaterial(G4String);
 const   G4double VoxelWidth_X() {return m_BoxDimX/NumVoxelX;};//num voxel
 const   G4double VoxelWidth_Z() {return m_BoxDimZ/NumVoxelZ;};
 const   G4int   GetNumVoxelX(){return NumVoxelX;};
 const   G4int   GetNumVoxelZ(){return NumVoxelZ;};
 const   G4double GetDimX(){return m_BoxDimX;};
-	
+       
+const   G4double GetBoxDim_Z() {return  m_BoxDimZ;};
+  
  
  
  private:
+
+  BrachyDetectorMessenger* detectorMessenger; 
 
  G4Box*             ExpHall;    //pointer to the solid World 
  G4LogicalVolume*   ExpHallLog;    //pointer to the logical World
@@ -75,12 +83,11 @@ const   G4double GetDimX(){return m_BoxDimX;};
   G4VPhysicalVolume* IridiumCorePhys;
 
   G4Material*              air;
-  G4Material*              water;
+  //G4Material*              water;
   G4Material*              CapsuleMat;
   G4Material*              IridiumMat;
- 
-  
-public:
+  G4Material*            AbsorberMaterial;
+
 	G4VPhysicalVolume* Construct();
 
  private:
@@ -88,7 +95,7 @@ public:
      void DefineMaterials();
      void ComputeDimVoxel();
    
-
+  public:
      G4VPhysicalVolume* ConstructDetector();  
 
  
