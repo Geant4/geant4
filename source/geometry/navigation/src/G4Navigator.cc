@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.12 2004-06-15 16:44:00 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.13 2004-06-18 12:47:05 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -42,7 +42,7 @@
 //
 G4Navigator::G4Navigator()
   : fWasLimitedByGeometry(false), fTopPhysical(0),
-    fCheck(false), fVerbose(0)
+    fCheck(false), fPushed(false), fVerbose(0)
 {
   ResetStackAndState();
 
@@ -792,6 +792,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   //
   fLocatedOnEdge   = fLastStepWasZero && (Step==0.0);
   fLastStepWasZero = (Step==0.0);
+  if (fPushed)  fPushed = fLastStepWasZero;
 
   // Handle large number of consecutive zero steps
   //
@@ -801,34 +802,50 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
 #ifdef G4DEBUG_NAVIGATION
     if( fNumberZeroSteps > 1 )
     {
-      G4cout << "G4Nav: another zero step, no " << fNumberZeroSteps
-             << " at " << pGlobalpoint
-             << " in volume " << motherPhysical->GetName()
-             << " nav-comp-step call # " << sNavCScalls
-             << G4endl ;
+       G4cout << "G4Nav - CompStep: another zero step, # " << fNumberZeroSteps
+              << " at " << pGlobalpoint
+              << " in volume " << motherPhysical->GetName()
+              << " nav-comp-step calls # " << sNavCScalls
+              << G4endl;
     }
 #endif
-    // if( fNumberZeroSteps > fActionThreshold_NoZeroSteps )
-    // {
-       // Act to recover this stuck track   
-    // }
-    if( fNumberZeroSteps > fAbandonThreshold_NoZeroSteps )
+    if( (fNumberZeroSteps > fActionThreshold_NoZeroSteps-1) && (!fPushed) )
     {
-      // Must kill this stuck track
-      //
-      G4cerr << "ERROR - G4Navigator::ComputeStep()" << G4endl
-             << "        Track stuck, not moving for " 
-             << fNumberZeroSteps-1 << " steps" << G4endl
-             << "        in volume: " << motherPhysical->GetName() << G4endl
-             << "        at point: " << pGlobalpoint << " ." << G4endl;
-      G4Exception("G4Navigator::ComputeStep()",
-                  "StuckTrack", EventMustBeAborted, 
-                  "Stuck Track: potential geometry or navigation problem.");
+       // Act to recover this stuck track. Pushing it once along direction
+       //
+       Step += 0.9*kCarTolerance;
+       fPushed = true;
+#ifdef G4VERBOSE
+       G4cerr << "WARNING - G4Navigator::ComputeStep()" << G4endl
+              << "          Track stuck, not moving for " 
+              << fNumberZeroSteps << " steps" << G4endl
+              << "          in volume -" << motherPhysical->GetName()
+              << "- at point " << pGlobalpoint << G4endl
+              << "          direction: " << pDirection << "." << G4endl
+              << "          Potential geometry or navigation problem !"
+              << G4endl
+              << "          Trying pushing it of " << Step << " mm ..."
+              << G4endl;
+#endif
+     }
+     if( fNumberZeroSteps > fAbandonThreshold_NoZeroSteps-1 )
+     {
+        // Must kill this stuck track
+        //
+        G4cerr << "ERROR - G4Navigator::ComputeStep()" << G4endl
+               << "        Track stuck, not moving for " 
+               << fNumberZeroSteps << " steps" << G4endl
+               << "        in volume -" << motherPhysical->GetName()
+               << "- at point " << pGlobalpoint << G4endl
+               << "        direction: " << pDirection << "." << G4endl;
+        G4Exception("G4Navigator::ComputeStep()",
+                    "StuckTrack", EventMustBeAborted, 
+                    "Stuck Track: potential geometry or navigation problem.");
     }
   }
   else
   {
-    fNumberZeroSteps = 0;
+    if (!fPushed)  fNumberZeroSteps = 0;
   }
 
   fEnteredDaughter = fEntering;   // I expect to enter a volume in this Step
@@ -923,24 +940,25 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
 //
 void G4Navigator::ResetState()
 {
-  fWasLimitedByGeometry=false;
-  fEntering=false;
-  fExiting=false;
-  fLocatedOnEdge = false;
-  fLastStepWasZero= false;
-  fEnteredDaughter = false;
-  fExitedMother = false;
-  
-  fValidExitNormal = false;
-  fExitNormal = G4ThreeVector(0,0,0);
+  fWasLimitedByGeometry  = false;
+  fEntering              = false;
+  fExiting               = false;
+  fLocatedOnEdge         = false;
+  fLastStepWasZero       = false;
+  fEnteredDaughter       = false;
+  fExitedMother          = false;
+  fPushed                = false;
 
-  fPreviousSftOrigin = G4ThreeVector(0,0,0);
-  fPreviousSafety = 0.0; 
+  fValidExitNormal       = false;
+  fExitNormal            = G4ThreeVector(0,0,0);
 
-  fNumberZeroSteps = 0;
+  fPreviousSftOrigin     = G4ThreeVector(0,0,0);
+  fPreviousSafety        = 0.0; 
+
+  fNumberZeroSteps       = 0;
     
-  fBlockedPhysicalVolume=0;
-  fBlockedReplicaNo=-1;
+  fBlockedPhysicalVolume = 0;
+  fBlockedReplicaNo      = -1;
 }
 
 // ********************************************************************

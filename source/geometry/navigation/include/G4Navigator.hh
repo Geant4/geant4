@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.7 2004-06-11 10:10:07 gcosmo Exp $
+// $Id: G4Navigator.hh,v 1.8 2004-06-18 12:47:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -403,6 +403,8 @@ class G4Navigator
 
   G4bool fCheck;
     // Check-mode flag  [if true, more strict checks are performed].
+  G4bool fPushed;
+    // Push flag  [if true, means a stuck particle has been pushed].
   G4int  fVerbose;
     // Verbose(ness) level  [if > 0, printout can occur].
 
