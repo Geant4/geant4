@@ -91,7 +91,7 @@ void test31EventAction::BeginOfEventAction(const G4Event*)
   }
 
   // Initialize user actions
-  if(verbose > 0) {
+  if(verbose > 0 || nEvt/100*100 == nEvt) {
     G4cout << "test31EventAction: Event # "
            << nEvt << " started" << G4endl;
   }

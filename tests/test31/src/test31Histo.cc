@@ -40,6 +40,7 @@
 #include "G4Alpha.hh"
 #include "G4LossTableManager.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4EmCalculator.hh"
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -60,7 +61,7 @@ test31Histo* test31Histo::GetPointer()
 
 test31Histo::test31Histo()
 {
-  verbose = 1;
+  verbose = 0;
   histName = G4String("histo.hbook");
   ntup = 0;
   nHisto = 1;
@@ -150,10 +151,11 @@ void test31Histo::EndOfHisto()
   G4cout << std::setprecision(4) << "Average number of back gamma   " << xgb << G4endl;
   G4cout<<"===================================================================="<<G4endl;
 
-  TableControl();
+  //TableControl();
 
    // Write histogram file
   if(0 < nHisto) {
+    for(G4int i=0; i<nHisto; i++) {(histo[i])->scale(x);}
     tree->commit();
     std::cout << "Closing the tree..." << std::endl;
     tree->close();
@@ -302,14 +304,19 @@ void test31Histo::AddParticleBack(const G4DynamicParticle* dp)
 
 void test31Histo::TableControl()
 {
+  G4EmCalculator cal;
+
 // parameters
   G4double tmin = 0.001*keV;
-  G4double tmax = 1000.*GeV;
-  G4int    nbin = 1200;
+  G4double tmax = 100.*GeV;
+  G4int    nbin = 1100;
   G4int   index = 1;
-//  G4ParticleDefinition* part = G4Proton::Proton();
-  G4ParticleDefinition* part = G4Electron::Electron();
+  G4ParticleDefinition* part = G4Proton::Proton();
+  //  G4ParticleDefinition* part = G4Electron::Electron();
 //  G4ParticleDefinition* part = G4Alpha::Alpha();
+  cal.PrintDEDXTable(part);
+  cal.PrintRangeTable(part);
+  cal.PrintInverseRangeTable(part);
 
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();

@@ -90,7 +90,8 @@ test31PrimaryGeneratorAction::~test31PrimaryGeneratorAction()
 void test31PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   counter++ ;
-  verbose = theDet->GetVerbose();
+  //  verbose = theDet->GetVerbose();
+  verbose = 0;
 
   // Simulation of beam position
   G4double x = x0;

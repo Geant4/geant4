@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.2 2004-05-04 09:52:26 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.3 2004-07-27 08:29:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -59,7 +59,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 
   pMessenger = new PhysicsListMessenger(this);
 
-  SetVerboseLevel(1);
+  SetVerboseLevel(0);
 
    // Particles
   particleList = new PhysListParticles("particles");
@@ -104,9 +104,11 @@ void PhysicsList::ConstructProcess()
   }
   AddStepMax();
   G4EmProcessOptions emOptions;
-  emOptions.SetMaxEnergy(10.*GeV);
-  emOptions.SetDEDXBinning(1000);
-  emOptions.SetLambdaBinning(100);
+  emOptions.SetMinEnergy(0.1*keV);
+  emOptions.SetMaxEnergy(100.*GeV);
+  emOptions.SetDEDXBinning(180);
+  emOptions.SetLambdaBinning(180);
+  // emOptions.SetVerbose(2,"hIoni");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
