@@ -22,7 +22,7 @@
 //
 //
 // 12/06/2002 G4UIGainServer H. MInamimoto and H. Yoshida created
-// $Id: G4UIGainServer.cc,v 1.1 2002-06-12 14:12:19 yhajime Exp $
+// $Id: G4UIGainServer.cc,v 1.2 2002-06-12 15:27:24 gcosmo Exp $
 // $Name: not supported by cvs2svn $
 //
 
@@ -45,7 +45,7 @@ G4UIGainServer::G4UIGainServer()
 
     port = DEFAULT_PORT;
     while(SetUPServer() == false){
-        G4cout<<"can't get the port no. "<<port<<" Now, try to get the next port "<<port+1<<endl;
+        G4cout<<"can't get the port no. "<<port<<" Now, try to get the next port "<<port+1<<G4endl;
         port++;
     }
 
@@ -192,7 +192,7 @@ G4String G4UIGainServer::GetCommand()
     if ( uiMode != java_mode ){
       G4cout << promptCharacter << "> " << G4endl;
     }else{
-      G4cout << "@@Ready" << endl;
+      G4cout << "@@Ready" << G4endl;
     }
 
 
@@ -200,7 +200,7 @@ G4String G4UIGainServer::GetCommand()
     /////////////////////////////
     read(socketD[1],buf,1024);
     newCommand=buf;
-    //DEBUG cout<<"->"<<newCommand<<"<-"<<newCommand.length()<<endl;
+    //DEBUG cout<<"->"<<newCommand<<"<-"<<newCommand.length()<<G4endl;
     //newCommand.readLine( G4cin, FALSE );
     /////////////////////////////
     /////////////////////////////
@@ -386,7 +386,7 @@ bool G4UIGainServer::SetUPServer(){
         return (false);
         //exit(1);
     }
-    else{ G4cout<<"G4GainServer waiting at "<<port<<endl; }
+    else{ G4cout<<"G4GainServer waiting at "<<port<<G4endl; }
 
     if(listen(socketD[0],1)<0){
         perror("listen");
@@ -403,8 +403,8 @@ void G4UIGainServer::WaitingConnection(){
     len = sizeof(caddr);
 
     for(int i=1;i<=2;i++){
-        if((socketD[i] = accept(socketD[0], (struct sockaddr *)&caddr,(socklen_t *)&len))<0){
-            cerr<<"accept:"<<i<<endl;
+        if((socketD[i] = accept(socketD[0], (struct sockaddr *)&caddr,(int *)&len))<0){
+            G4cerr<<"accept:"<<i<<G4endl;
             exit(1);
         }
     }

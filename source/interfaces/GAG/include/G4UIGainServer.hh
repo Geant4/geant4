@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIGainServer.hh,v 1.1 2002-06-12 14:12:57 yhajime Exp $
+// $Id: G4UIGainServer.hh,v 1.2 2002-06-12 15:27:23 gcosmo Exp $
 // $Name: not supported by cvs2svn $
 //
 
@@ -30,15 +30,15 @@
 #define G4UIGainServer_h 1
 
 #include <stdio.h>
-#include <iostream.h>
-#include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 //#include <sys/un.h>
 #include <netinet/in.h>
 #include <unistd.h>
 
+#include "g4std/iostream"
 #include "g4std/fstream"
+#include "globals.hh"
 #include "G4UImanager.hh"
 #include "G4VBasicShell.hh"
 
