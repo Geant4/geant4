@@ -22,7 +22,6 @@ G4IntraNucleiCascader::G4IntraNucleiCascader()
 G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 						 G4InuclParticle* target) {
 
-
   if (verboseLevel > 3) {
     G4cout << " >>> G4IntraNucleiCascader::collide" << G4endl;
   }
@@ -41,8 +40,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 #ifdef RUN
   G4InuclNuclei* tnuclei = dynamic_cast<G4InuclNuclei*>(target);
   G4InuclNuclei* bnuclei = dynamic_cast<G4InuclNuclei*>(bullet);
-  G4InuclElementaryParticle* bparticle = dynamic_cast<G4InuclElementaryParticle*>
-    (bullet);
+  G4InuclElementaryParticle* bparticle = dynamic_cast<G4InuclElementaryParticle*>(bullet);
   G4NucleiModel model(tnuclei);
   G4std::vector<G4double> momentum_in = bullet->getMomentum();
 
@@ -73,8 +71,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       zfin += bparticle->getCharge();
       if(bparticle->nucleon()) afin += 1.0;
       cascad_particles.push_back(model.initializeCascad(bparticle));
-    }
-    else { // nuclei with nuclei
+    } else { // nuclei with nuclei
       ekin_in = bnuclei->getKineticEnergy();
 
       G4double ab = bnuclei->getA();
@@ -95,10 +92,9 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	G4int iz = int(zb + 0.5);
 
 	G4int i;
+
 	for(i = 0; i < ia; i++) {
-
 	  G4int knd = i < iz ? 1 : 2;
-
 	  theExitonConfiguration.incrementQP(knd);
 	};
 
@@ -117,14 +113,14 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       iloop++;
 
       if (verboseLevel > 3) {
-	G4cout << " ***** number of cparticles " << cascad_particles.size() << G4endl;
+	G4cout << " Number of cparticles " << cascad_particles.size() << G4endl;
 	cascad_particles.back().print();
       }
 
       new_cascad_particles = model.generateParticleFate(cascad_particles.back(),
 							theElementaryParticleCollider);
-      if (verboseLevel > 3) {
-	G4cout << " new particles " << new_cascad_particles.size() << G4endl;
+      if (verboseLevel > 2) {
+	G4cout << " ew particles " << new_cascad_particles.size() << G4endl;
       }
 
       // handle the result of a new step
@@ -144,8 +140,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	    }
 
 	    cascad_particles.push_back(new_cascad_particles[0]);
-	  }
-	  else { // it becomes an exiton 
+	  } else { // it becomes an exiton 
 
 	    if (verboseLevel > 3) {
 	      G4cout << " becomes an exiton " << G4endl;
@@ -153,19 +148,17 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
 	    theExitonConfiguration.incrementQP(new_cascad_particles[0].getParticle().type());
 	  };  
-	}
-	else { // goes out
+	} else { // goes out
 
 	  if (verboseLevel > 3) {
-	    G4cout << " **** goes out **** " << G4endl;
+	    G4cout << " Goes out " << G4endl;
 
 	    new_cascad_particles[0].print();
 	  }
 
 	  output_particles.push_back(new_cascad_particles[0].getParticle());
 	}; 
-      }
-      else { // interaction 
+      } else { // interaction 
 	cascad_particles.pop_back();
 	for(G4int i = 0; i < G4int(new_cascad_particles.size()); i++) 
 	  cascad_particles.push_back(new_cascad_particles[i]);
@@ -180,7 +173,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     // cascad is finished -> check, whether it's o'k
 
     if (verboseLevel > 3) {
-      G4cout << " ***** cascad finished ******* " << G4endl
+      G4cout << " Cascade finished  " << G4endl
 	     << " output_particles  " << output_particles.size() <<  G4endl;
     }
 
@@ -230,7 +223,8 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	  outgoing_nuclei.setMomentum(momentum_out);
 	  outgoing_nuclei.setEnergy();
 	  outgoing_nuclei.setExitationEnergy(Eex);
-	  outgoing_nuclei.setExitonConfiguration(theExitonConfiguration);	                           	  output.addTargetFragment(outgoing_nuclei);
+	  outgoing_nuclei.setExitonConfiguration(theExitonConfiguration);	                           	  
+          output.addTargetFragment(outgoing_nuclei);
 
 	  return output;
 	};
@@ -244,8 +238,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
 	if(zfin == 1.0) { // recoiling proton
 	  last_particle.setType(1);
-	}
-	else { // neutron
+	} else { // neutron
 	  last_particle.setType(2);
 	}; 
 	last_particle.setMomentum(momentum_out);
@@ -259,6 +252,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
   };
 
 #else
+
   //  special branch to avoid the cascad generation but to get the input for
   //  evaporation etc
 
@@ -275,6 +269,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
   output.addTargetFragment(outgoing_nuclei);
 
   return output;
+
   /*
     G4InuclElementaryParticle* bparticle = dynamic_cast<G4InuclElementaryParticle*>
     (bullet);
@@ -283,6 +278,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     output.addTargetFragment(*tnuclei);
     return output;
   */
+
 #endif
 
   if (verboseLevel > 3) {
@@ -324,6 +320,3 @@ G4bool G4IntraNucleiCascader::goodCase(G4double a,
 
   return good; 
 }
-
-
-

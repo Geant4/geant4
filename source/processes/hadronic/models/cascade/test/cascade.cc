@@ -184,8 +184,7 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
       }
 
       output = collider->collide(bull, targ); // standard method
-      G4int p = printData(i);
-      G4cout << p << G4endl;
+      printData(i);
     }
 
     delete bull;
@@ -304,3 +303,9 @@ G4int test() {
 
   return 0;
 };
+
+
+
+
+
+
