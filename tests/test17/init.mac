@@ -7,7 +7,7 @@
 /run/verbose 2
 /run/initialize
 #
-/calor/setAbsMat Aluminium
+/calor/setAbsMat Aluminum
 /calor/setAbsThick 5 mm
 /calor/setAbsRad 20 mm
 /calor/update
