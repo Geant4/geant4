@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.27 2001-12-08 15:20:30 japost Exp $
+// $Id: G4Transportation.cc,v 1.28 2002-04-24 07:13:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -497,8 +497,7 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
   }
   else
   {                    // fGeometryLimitedStep  is false
-//#ifdef G4DEBUG
-#ifdef G4VERBOSE
+#ifdef G4DEBUG_TRANSPORT
     // Although the location is changed, we know that the physical 
     //   volume remains constant. 
     // In order to help in checking the user geometry
@@ -574,7 +573,7 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
 
     fLinearNavigator->LocateGlobalPointWithinVolume( track.GetPosition()) ;
 #else
-    // ie #ifndef G4DEBUG does a quick relocation
+    // ie #ifndef G4DEBUG_TRANSPORT does a quick relocation
     
     // The serves only to move the Navigator's location
 
