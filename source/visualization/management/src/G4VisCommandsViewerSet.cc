@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.21 2003-06-16 17:14:26 gunter Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.22 2004-07-01 15:59:09 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -104,7 +104,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
 
   fpCommandHiddenEdge =
     new G4UIcmdWithABool("/vis/viewer/set/hiddenEdge",this);
-  fpCommandHiddenEdge->SetGuidance("/vis/viewer/set/edge [true|false]");
+  fpCommandHiddenEdge->SetGuidance("/vis/viewer/set/hiddenEdge [true|false]");
   fpCommandHiddenEdge->SetParameterName("hidden-edge",omitable = true);
   fpCommandHiddenEdge->SetDefaultValue(true);
 
