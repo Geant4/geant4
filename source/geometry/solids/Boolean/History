@@ -1,5 +1,5 @@
 
-$Id: History,v 1.32 2002-05-13 06:56:49 gcosmo Exp $
+$Id: History,v 1.33 2002-10-28 11:37:00 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Oct 28  2002  Gabriele Cosmo       geom-bool-V04-01-00
+  - Added implementation of StreamInfo() to comply with new interface for
+    G4VSolid in "geommng-V04-01-03".
+  - Some cosmetic changes to code formatting.
+  - Extended unit tests to include new user test-cases (V.Grichine).
 
  May 11  2002  Vladimir Grichine    geom-bool-V04-00-05
   - G4ReflectedSolid.cc: bounding-box like algorithm for CalculateExtent().
