@@ -106,6 +106,13 @@ visualization                                    vis-V06-01-01
 - VRML (VRML-V06-01-00):
   o Fixed typo in printout in G4VRML[1/2]FileSceneHandler.cc files.
 
+g3tog4                                           g3tog4-V06-01-00
+------
+- Removed hardwired gSeparator constant (a character which is used
+  during generation of volume names) to '_'. Now gSeparator is made non
+  constant and so can be changed in case a user wants to use '_' in his
+  code. Modified files: G3toG4.hh, clparse.cc.
+
 examples                                         examples-V06-01-00
 --------
 - Updated reference outputs.
