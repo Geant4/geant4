@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TestEm2.cc,v 1.1 1999-02-19 10:28:37 maire Exp $
+// $Id: TestEm2.cc,v 1.2 1999-03-01 15:23:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Comments
@@ -16,6 +16,7 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+#include "Randomize.hh"
 
 #ifdef G4VIS_USE
 #include "Em2VisManager.hh"
@@ -30,7 +31,10 @@
 #include "Em2SteppingAction.hh"
 
 int main(int argc,char** argv) {
-
+ 
+  //choose the Random engine
+  HepRandom::setTheEngine(new RanecuEngine);
+   
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
