@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMax.cc,v 1.1 2004-11-24 11:25:02 maire Exp $
+// $Id: StepMax.cc,v 1.2 2005-01-11 17:12:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,37 +32,27 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMax::StepMax(const G4String& processName)
- : G4VDiscreteProcess(processName)
+ : G4VDiscreteProcess(processName),MaxChargedStep(DBL_MAX)
 {
-  for (G4int k=0; k<MaxAbsor; k++) stepMax[k] = DBL_MAX;
   pMess = new StepMaxMessenger(this);
 }
-
+ 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMax::~StepMax() { delete pMess; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool StepMax::IsApplicable(const G4ParticleDefinition& particle)
-{
+G4bool StepMax::IsApplicable(const G4ParticleDefinition& particle) 
+{ 
   return (particle.GetPDGCharge() != 0. && !particle.IsShortLived());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void StepMax::SetStepMax(G4int k,G4double step) {stepMax[k] = step;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double StepMax::PostStepGetPhysicalInteractionLength( const G4Track& aTrack,
-                                                        G4double,
-                                                    G4ForceCondition* condition)
+    
+void StepMax::SetMaxStep(G4double step) 
 {
-  // condition is set to "Not Forced"
-  *condition = NotForced;
-  
-  return stepMax[aTrack.GetVolume()->GetCopyNo()];
+  if(step > 0.0 && step <= DBL_MAX) MaxChargedStep = step;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMax.hh,v 1.1 2004-11-24 11:25:01 maire Exp $
+// $Id: StepMax.hh,v 1.2 2005-01-11 17:12:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,40 +34,45 @@
 #include "G4ParticleDefinition.hh"
 #include "G4Step.hh"
 
-#include "DetectorConstruction.hh"
-
 class StepMaxMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class StepMax : public G4VDiscreteProcess
 {
-  public:
+  public:     
 
-     StepMax(const G4String& processName = "UserStepMax");
+     StepMax(const G4String& processName ="UserStepMax");
     ~StepMax();
 
-     G4bool   IsApplicable(const G4ParticleDefinition&);
-
-     void     SetStepMax(G4int,G4double);
-
-     G4double GetStepMax(G4int k) {return stepMax[k];};
-
+     G4bool   IsApplicable(const G4ParticleDefinition&);    
+     void     SetMaxStep(G4double);
+     G4double GetMaxStep() {return MaxChargedStep;};
+     
      G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
-			                       G4double previousStepSize,
-			                       G4ForceCondition* condition);
+			                     G4double   previousStepSize,
+			                     G4ForceCondition* condition);
 
      G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
-     G4double GetMeanFreePath(const G4Track&, G4double,G4ForceCondition*)
-     {return DBL_MAX;};    
+     G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
+       {return 0.;};     // it is not needed here !
 
   private:
 
-     G4double stepMax[MaxAbsor];
-     
+     G4double    MaxChargedStep;
      StepMaxMessenger* pMess;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double StepMax::PostStepGetPhysicalInteractionLength(const G4Track&,
+                                                                    G4double,
+                                                  G4ForceCondition* condition )
+{
+  *condition = NotForced;
+  return MaxChargedStep;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
