@@ -1,4 +1,4 @@
-$Id: History,v 1.146 2001-06-22 16:12:18 gcosmo Exp $
+$Id: History,v 1.147 2001-06-25 10:59:11 morita Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -17,6 +17,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25th June 2001 Youhei Morita (config-V03-01-08)
+- Restored lib_d target (again) in common.gmk with a protection of G4ODBMS.
+- Linux-g++.gmk (G.Cosmo)
+  o Commented out -ansi setup for public release
+  o Fixed logic for activating G4OODDLX_FLAGS on egcs compiler
 
 22nd June Gabriele Cosmo (config-V03-01-07)
 - common.gmk (G.Folger):
