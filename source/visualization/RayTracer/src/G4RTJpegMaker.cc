@@ -33,11 +33,9 @@ void G4RTJpegMaker::CreateFigureFile(G4String fileName,
 
         aFigure.GetJpegData(&jpegAddress,jpegSize);
 
-        ofstream ofs;
-        ofs.open(fileName,ios::out);
+        G4std::ofstream ofs;
+        ofs.open(fileName,G4std::ios::out);
         ofs.write(jpegAddress,jpegSize);
         ofs.close();
 
 }
-
-

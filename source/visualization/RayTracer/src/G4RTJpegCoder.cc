@@ -347,5 +347,4 @@ G4JpegCoder::SetJpegProperty(const G4JpegProperty& aProperty )
   mProperty.MinorRevisions = 2;
   mProperty.HThumbnail = 0;
   mProperty.VThumbnail = 0;
-};
-
+}
