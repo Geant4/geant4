@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEInelasticTest.cc,v 1.13 2003-03-05 12:46:39 jwellisc Exp $
+// $Id: G4Pre.cc,v 1.1 2003-03-05 12:46:39 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -45,6 +45,9 @@
 #include "G4ExcitedStringDecay.hh"
 #include "G4QGSMFragmentation.hh"
 #include "G4LEProtonInelastic.hh"
+#include "G4ExcitationHandler.hh"
+#include "G4PreCompoundModel.hh"
+#include "G4BinaryCascade.hh"
 
 #include "G4DynamicParticle.hh"
 #include "G4LeptonConstructor.hh"
@@ -162,6 +165,8 @@
    G4LEProtonInelastic theProtonModel;
 //   theProtonModel.ForceEnergyConservation(false);
     G4ExcitationHandler theHandler;
+   G4PreCompoundModel * thePreModel = new G4PreCompoundModel(&theHandler);
+   G4BinaryCascade theBinCas;
     G4TheoFSGenerator * theTheoModel = new G4TheoFSGenerator;
     G4QGSModel<G4QGSParticipants> * theStringModel = new G4QGSModel<G4QGSParticipants>;
     G4GeneratorPrecompoundInterface theCascade;
@@ -177,7 +182,9 @@
 
 
 //   theInelasticProcess.RegisterMe(theTheoModel);
-   theInelasticProcess.RegisterMe(&theProtonModel);
+//   theInelasticProcess.RegisterMe(&theProtonModel);
+//   theInelasticProcess.RegisterMe(thePreModel);
+   theInelasticProcess.RegisterMe(&theBinCas);
    theProtonProcessManager->AddDiscreteProcess(&theInelasticProcess);
    theProcesses[0] = &theInelasticProcess;
    
@@ -244,7 +251,7 @@ int j = 0;
 	   aStep.SetPostStepPoint(&aStepPoint);
 	   aTrack->SetStep(&aStep);
            ++hpw;
-           if(hpw == 1000*(hpw/1000))
+           if(hpw == 10*(hpw/10))
            G4cerr << "FINAL EVENTCOUNTER=" << hpw
                 << " current energy: " << incomingEnergy
                 << " of particle " << aParticle->GetDefinition()->GetParticleName() 
