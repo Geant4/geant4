@@ -180,7 +180,7 @@ G4VParticleChange * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus 
 	{
 	  // This loop checks that particle with too large energy is not emitted.
 	  // CMS frame is considered in this loop. Nonrelativistic treatment. xxx
-	  pEmittedParticle = pSelectedChannel->emit();
+
 
 	  const G4int zRes = nucleusZ - pSelectedChannel->getParticleZ(); 
 	  const G4int aRes  = nucleusA - pSelectedChannel->getParticleA(); 
