@@ -1,32 +1,41 @@
-# $Id: common.gmk,v 1.7 1999-11-12 19:18:54 morita Exp $
+# $Id: common.gmk,v 1.8 1999-11-17 11:04:53 morita Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
 # Libraries are created according to G4SYSTEM. G.Cosmo, 11/6/96.
 # Introduced G4LIBDIR and G4TMPDIR. G.Cosmo, 23/6/98.
+# Introduced G4SCHEMA_HEADER_DIR and G4SCHEMA_SRC_DIR. Y.Morita, 16/11/99.
 
 ifndef G4LIBDIR
   G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
 endif
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(name)
 
+ifdef G4ODBMS_INSTALLATION
+  G4SCHEMA_HEADER_DIR := $(G4TMPSCHEMA_INCLUDE)
+else
+  G4SCHEMA_HEADER_DIR := $(G4TMPDIR)
+endif
+G4SCHEMA_SRC_DIR    := $(G4TMPDIR)
+
 sources := $(wildcard src/*.cc)
 schema_ddl := $(wildcard include/*.ddl)
-schema_hh := $(patsubst include/%.ddl,$(G4TMPDIR)/%.hh,$(schema_ddl))
+schema_hh := $(patsubst include/%.ddl,$(G4SCHEMA_HEADER_DIR)/%.hh,$(schema_ddl))
+schema_ref_hh := $(patsubst include/%.ddl,$(G4SCHEMA_HEADER_DIR)/%_ref.hh,$(schema_ddl))
 objects := $(patsubst src/%.cc,$(G4TMPDIR)/%.o,$(sources))
 dependencies := $(patsubst src/%.cc,$(G4TMPDIR)/%.d,$(sources))
 
 # output of ooddlx in G4TMPDIR (.hh, _ref.hh, _ddl.cc)
 #
-temporaries := $(patsubst include/%.ddl,$(G4TMPDIR)/%.hh,$(schema_ddl))
+temporaries := $(patsubst include/%.ddl,$(G4SCHEMA_HEADER_DIR)/%.hh,$(schema_ddl))
 
 # output of ooddlx in the current directory (if the process does not finish)
 #
 temporaries2 := $(patsubst include/%.ddl,%.hh,$(schema_ddl))
 
 ifdef G4ODBMS
-  temporaries += $(patsubst include/%.ddl,$(G4TMPDIR)/%_ddl.cc,$(schema_ddl)) \
-                 $(patsubst include/%.ddl,$(G4TMPDIR)/%_ref.hh,$(schema_ddl))
+  temporaries += $(patsubst include/%.ddl,$(G4SCHEMA_SRC_DIR)/%_ddl.cc,$(schema_ddl)) \
+                 $(patsubst include/%.ddl,$(G4SCHEMA_HEADER_DIR)/%_ref.hh,$(schema_ddl))
   temporaries2 += $(patsubst include/%.ddl,%_ddl.cc,$(schema_ddl)) \
                   $(patsubst include/%.ddl,%_ref.hh,$(schema_ddl))
   objects += $(patsubst include/%.ddl,$(G4TMPDIR)/%_ddl.o,$(schema_ddl))
@@ -69,25 +78,27 @@ else
 	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $(OUT_OBJ)$(G4TMPDIR)/$(*F).o src/$*.cc
 endif
 ifdef G4ODBMS
-$(G4TMPDIR)/%.o: $(G4TMPDIR)/%.cc
+$(G4TMPDIR)/%.o: $(G4SCHEMA_SRC_DIR)/%.cc
 ifdef CPPVERBOSE
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c -o $(G4TMPDIR)/$(*F).o $(G4TMPDIR)/$*.cc
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c -o $(G4TMPDIR)/$(*F).o $(G4SCHEMA_SRC_DIR)/$*.cc
 else
 	@echo Compiling $*.cc ...
-	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c -o $(G4TMPDIR)/$(*F).o $(G4TMPDIR)/$*.cc
+	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c -o $(G4TMPDIR)/$(*F).o $(G4SCHEMA_SRC_DIR)/$*.cc
 endif
 endif
 # Make the temporary files.
-.PRECIOUS: $(G4TMPDIR)/%_ddl.cc $(G4TMPDIR)/%.hh $(G4TMPDIR)/%_ref.hh
+.PRECIOUS: $(G4SCHEMA_SRC_DIR)/%_ddl.cc $(G4SCHEMA_HEADER_DIR)/%.hh $(G4SCHEMA_HEADER_DIR)/%_ref.hh
 
 ifdef G4ODBMS
-$(G4TMPDIR)/%_ddl.cc $(G4TMPDIR)/%.hh $(G4TMPDIR)/%_ref.hh: include/%.ddl
+$(G4SCHEMA_SRC_DIR)/%_ddl.cc $(G4SCHEMA_HEADER_DIR)/%.hh $(G4SCHEMA_HEADER_DIR)/%_ref.hh: include/%.ddl
 ifndef G4OODDLX_BOOT
 	@echo G4OODDLX_BOOT is not defined.  Stop.
 	exit 1
 endif
 	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
 	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
+	@if [ ! -d $(G4SCHEMA_HEADER_DIR) ] ; then mkdir $(G4SCHEMA_HEADER_DIR) ;fi
+	@if [ ! -d $(G4SCHEMA_SRC_DIR) ] ; then mkdir $(G4SCHEMA_SRC_DIR) ;fi
 ifdef CPPVERBOSE
 	ooddlx -notitle -header_suffix .hh -ref_suffix _ref.hh -c++_suffix _ddl.cc \
 	-DTEMPLATEP_HIDES_FNCD \
@@ -98,14 +109,9 @@ else
 	-DTEMPLATEP_HIDES_FNCD \
 	$(CPPFLAGS) $< $(G4OODDLX_BOOT)
 endif
-	@mv -f $*.hh $(G4TMPDIR)/
-	@mv -f $*_ref.hh $(G4TMPDIR)/
-	@mv -f $*_ddl.cc $(G4TMPDIR)/
-else
-$(G4TMPDIR)/%.hh: include/%.ddl
-	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
-	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
-	ln -s -f ../$< $(G4TMPDIR)/$*.hh
+	@mv -f $*.hh $(G4SCHEMA_HEADER_DIR)/
+	@mv -f $*_ref.hh $(G4SCHEMA_HEADER_DIR)/
+	@mv -f $*_ddl.cc $(G4SCHEMA_SRC_DIR)/
 endif
 
 # Make the .d file(s) and include it(them).
@@ -160,6 +166,7 @@ ifndef G4EXLIB
 clean:
 	@echo Cleaning up ...
 	@rm -f $(G4LIBDIR)/lib$(name).a
+	@rm -f $(schema_hh) $(schema_ref_hh)
 	@rm -rf $(G4TMPDIR)
 endif
 

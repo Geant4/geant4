@@ -1,4 +1,4 @@
-$Id: History,v 1.73 1999-11-15 08:38:13 gcosmo Exp $
+$Id: History,v 1.74 1999-11-17 11:04:52 morita Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17th November 1999  Youhei Morita
+- moved schema header files to G4INSTALL/schema/include
+  architecture.gmk: introduced G4SCHEMA_INCLUDE and G4TMPSCHEMA_INCLUDE
+  common.gmk: introduced G4SCHEMA_HEADER_DIR and G4SCHEMA_SRC_DIR 
+  globlib.gmk: added tmp schema header copying
 
 15th November 1999  Gabriele Cosmo (config-V00-01-08)
 - Tagged.
