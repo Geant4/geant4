@@ -1,0 +1,12 @@
+
+4th April 2000  Evgeni Chernaev
+- Added boolean operations (add, subtract, intersect) on HepPolyhedron objects.
+- Added BooleanProcessor.src.
+
+30th March 2000  John Allison
+- Added virtual operator= to G4Polyhedron.hh and HepPolyhedron.h to avoid
+  warnings about hiding.
+
+23rd February 2000  John Allison
+- Moved G4Polyhedron constructors and destructor to .cc.
+
