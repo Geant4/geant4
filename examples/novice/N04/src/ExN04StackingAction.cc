@@ -55,7 +55,7 @@ ExN04StackingAction::ClassifyNewTrack(const G4Track * aTrack)
       classification = fUrgent;
       break;
     }
-    if(InsideRoI(aTrack,angRoI))
+    if((angRoI<0.)||InsideRoI(aTrack,angRoI))
     { 
       classification = fUrgent;
       break;
