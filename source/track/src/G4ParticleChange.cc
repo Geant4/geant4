@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChange.cc,v 1.11 2000-10-20 11:42:38 kurasige Exp $
+// $Id: G4ParticleChange.cc,v 1.12 2001-03-05 12:20:46 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -235,9 +235,11 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
                 + ( CalcMomentum(theEnergyChange, theMomentumDirectionChange, mass)
 	            - pPreStepPoint->GetMomentum());
     G4double      tMomentum = pMomentum.mag();
-    G4ThreeVector direction( pMomentum.x()/tMomentum,
-			     pMomentum.y()/tMomentum,
-			     pMomentum.z()/tMomentum );
+    G4ThreeVector direction(1.0,0.0,0.0); 
+    if( tMomentum > 0. ){
+      G4double  inv_Momentum= 1.0 / tMomentum; 
+      direction= pMomentum * inv_Momentum;
+    }
     pPostStepPoint->SetMomentumDirection(direction);
     pPostStepPoint->SetKineticEnergy( energy );
   } else {
