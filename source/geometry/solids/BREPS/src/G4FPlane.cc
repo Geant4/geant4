@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FPlane.cc,v 1.5 1999-05-25 17:48:36 sgiani Exp $
+// $Id: G4FPlane.cc,v 1.6 1999-06-08 11:22:07 sgiani Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Corrections by S.Giani:
@@ -200,9 +200,9 @@ int G4FPlane::Intersect(const G4Ray& rayref)
 
   b = norm.x() * dirx + norm.y() * diry + norm.z() * dirz;
 
-  if ( fabs(b) < perThousand )    
+  if ( fabs(b) < perMillion )    
   {
-   // G4cout << "\nLine is parallel to G4Plane.No Hit.";
+    // G4cout << "\nLine is parallel to G4Plane.No Hit.";
   }  
   else
   {
