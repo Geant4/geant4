@@ -1,4 +1,4 @@
-$Id: History,v 1.153 2001-08-03 09:46:31 gcosmo Exp $
+$Id: History,v 1.154 2001-08-11 22:36:53 johna Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -17,6 +17,42 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11th August 2001  John Allison  (config-V03-02-04)
+- Introduced environment variable G4UI_NONE that, if set, no UI
+  sessions nor any UI libraries are built, not even libG4UIbasic.a nor
+  libG4UIcommon.a.  (This would only happen in a pure batch job or,
+  perhaps, in a user framework having its own UI system.)
+- Removed the need to specify environment variables for UI sessions
+  which do not need external packages or libraries, namely :
+    G4UI_BUILD_GAG_SESSION
+    G4UI_BUILD_TERMINAL_SESSION
+  with associated G4UI_USE environment variables:
+    G4UI_USE_GAG
+    G4UI_USE_TCSH
+    G4UI_USE_TERMINAL
+  In other words, the above environment variables become redundant and are
+  ignored.  
+  For backwards compatibility, unless G4UI_NONE is set, the corresponding
+  G4UI_USE C-pre-processor variables are automatically set.  Also, the
+  C-pre-processor variables G4UI_BUILD and G4UI_USE are set.
+- As before, environment variables for other sessions still need positive
+  setting of their G4UI_BUILD and G4UI_USE environment variables.  In this
+  category are:
+    G4UI_BUILD_WIN32_SESSION
+    G4UI_BUILD_WO_SESSION
+    G4UI_BUILD_XAW_SESSION
+    G4UI_BUILD_XM_SESSION
+  with associated G4UI_USE environment variables:
+    G4UI_USE_WIN32
+    G4UI_USE_WO
+    G4UI_USE_XAW
+    G4UI_USE_XM
+- Note: The user must still instantiate and SessionStart only *one*
+  session, but if it is to be one in the category needing external
+  packages or libraries, the corresponding G4UI_USE must be set to
+  trigger inclusion oflibraries.  Otherwise the user need not set any
+  environment variables.
 
 3rd August 2001 Gabriele Cosmo (config-V03-02-03)
 - architecture.gmk:
@@ -50,9 +86,11 @@ committal in the CVS repository !
       G4VIS_USE_VRMLFILE
       G4VIS_USE_ASCIITREE
       G4VIS_USE_GAGTREE
+  In other words, the above environment variables become redundant and are
+  ignored.  
   For backwards compatibility, unless G4VIS_NONE is set, the corresponding
-  C-pre-processor variables are automatically set.  Also, the C-pre-processor
-  variables G4VIS_BUILD and G4VIS_USE are set.
+  G4VIS_USE C-pre-processor variables are automatically set.  Also, the
+  C-pre-processor variables G4VIS_BUILD and G4VIS_USE are set.
 - As before, environment variables for other drivers still need positive
   setting of their G4VIS_BUILD and G4VIS_USE environment variables.  In this
   category are:

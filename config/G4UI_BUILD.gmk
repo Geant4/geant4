@@ -1,21 +1,18 @@
-# $Id: G4UI_BUILD.gmk,v 1.1 1999-01-07 15:58:31 gunter Exp $
+# $Id: G4UI_BUILD.gmk,v 1.2 2001-08-11 22:36:47 johna Exp $
 # -------------------------------------------------------------
 # Interfaces-specific CPPFLAGS for BUILD phase.
 #   John Allison, 6th July 1998.
 # Include this *after*  architecture.gmk
 # Include this *before* interactivity.gmk
 
-########################### interfaces/basic #######################
-
-ifndef G4UI_BUILD_TERMINAL_SESSION
-  G4UI_BUILD_TERMINAL_SESSION = 1
-endif
-
-ifdef G4UI_BUILD_TERMINAL_SESSION
+ifndef G4UI_NONE
   G4UI_BUILD = 1
-  G4UI_BUILD_BASIC_SESSION = 1
-  CPPFLAGS += -DG4UI_BUILD_TERMINAL_SESSION
-endif
+  CPPFLAGS += -DG4UI_BUILD
+
+# The following sessions are built by default (no environment
+#   variables needed)...
+# GAG_SESSION
+# TERMINAL_SESSION
 
 ifdef G4UI_BUILD_XM_SESSION
   G4UI_BUILD = 1
@@ -40,13 +37,6 @@ ifdef G4UI_BUILD_WIN32_SESSION
   CPPFLAGS += -DG4UI_BUILD_WIN32_SESSION
 endif
 
-########################### interfaces/GAG #######################
-
-ifdef G4UI_BUILD_GAG_SESSION
-  G4UI_BUILD = 1
-  CPPFLAGS += -DG4UI_BUILD_GAG_SESSION
-endif
-
 ########################### interfaces/OPACS #######################
 
 ifdef G4UI_BUILD_WO_SESSION
@@ -60,10 +50,5 @@ endif
 
 ############################################################################
 
-ifdef G4UI_BUILD
-  CPPFLAGS += -DG4UI_BUILD
-endif
-
-
-
+endif #G4UI_NONE
 

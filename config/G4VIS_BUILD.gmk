@@ -1,4 +1,4 @@
-# $Id: G4VIS_BUILD.gmk,v 1.6 2001-07-27 21:49:10 johna Exp $
+# $Id: G4VIS_BUILD.gmk,v 1.7 2001-08-11 22:36:50 johna Exp $
 # -------------------------------------------------------------
 # Visualization-specific CPPFLAGS for BUILD phase.
 #   John Allison, 24th January 1998.
@@ -8,6 +8,14 @@
 ifndef G4VIS_NONE
   G4VIS_BUILD = 1
   CPPFLAGS += -DG4VIS_BUILD
+
+# The following drivers are built by default (no environment
+#   variables needed)...
+# G4VIS_BUILD_ASCIITREE_DRIVER
+# G4VIS_BUILD_DAWNFILE_DRIVER
+# G4VIS_BUILD_GAGTREE_DRIVER
+# G4VIS_BUILD_RAYTRACER_DRIVER
+# G4VIS_BUILD_VRMLFILE_DRIVER
 
 ifdef G4VIS_BUILD_DAWN_DRIVER
   CPPFLAGS += -DG4VIS_BUILD_DAWN_DRIVER

@@ -1,17 +1,16 @@
-# $Id: G4VIS_USE.gmk,v 1.6 2001-07-27 21:49:12 johna Exp $
+# $Id: G4VIS_USE.gmk,v 1.7 2001-08-11 22:36:51 johna Exp $
 # -------------------------------------------------------------
 # GNUmakefile for CPPFLAGS for visualization USE phase.
 #   John Allison, 24th January 1998.
 
 ifndef G4VIS_NONE
-  G4VIS_USE = 1
 
 ifndef VISLIBS 
  VISLIBS :=
 endif
 
 # Not needing external packages or libraries...
-# Set old USE variables for backwards compatibility of user code...
+# Set old USE C-pre-processor flags for backwards compatibility of user code...
 
 CPPFLAGS += -DG4VIS_USE_DAWNFILE
 CPPFLAGS += -I$(G4BASE)/visualization/FukuiRenderer/include
@@ -86,21 +85,22 @@ ifdef G4VIS_USE_VRML
   # CPPFLAGS += -I... and VISLIBS += set above.
 endif
 
-ifdef G4VIS_USE
-  ifdef G4_SOLVE_TEMPLATES
-    G4_SOLVE_VIS_TEMPLATES = 1
-  endif
-  ifdef GNU_GCC
-    G4_SOLVE_VIS_TEMPLATES = 1
-  endif
-  ifdef G4_SOLVE_VIS_TEMPLATES
-    CPPFLAGS += -DG4_SOLVE_VIS_TEMPLATES
-  endif
-  CPPFLAGS += -DG4VIS_USE
-  CPPFLAGS += -I$(G4BASE)/visualization/management/include
-  CPPFLAGS += -I$(G4BASE)/visualization/modeling/include
-  VISLIBS  += -lG4vis_management
-  VISLIBS  += -lG4modeling
+########################### and finally... #######################
+
+G4VIS_USE   = 1
+CPPFLAGS += -DG4VIS_USE
+ifdef G4_SOLVE_TEMPLATES
+  G4_SOLVE_VIS_TEMPLATES = 1
 endif
+ifdef GNU_GCC
+  G4_SOLVE_VIS_TEMPLATES = 1
+endif
+ifdef G4_SOLVE_VIS_TEMPLATES
+  CPPFLAGS += -DG4_SOLVE_VIS_TEMPLATES
+endif
+CPPFLAGS += -I$(G4BASE)/visualization/management/include
+CPPFLAGS += -I$(G4BASE)/visualization/modeling/include
+VISLIBS  += -lG4vis_management
+VISLIBS  += -lG4modeling
 
 endif # G4VIS_NONE
