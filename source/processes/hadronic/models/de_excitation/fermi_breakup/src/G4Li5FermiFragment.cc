@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Li5FermiFragment.cc,v 1.3 2003-11-04 11:04:46 lara Exp $
+// $Id: G4Li5FermiFragment.cc,v 1.4 2003-12-02 00:36:31 larazb Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -68,8 +68,13 @@ G4Li5FermiFragment::G4Li5FermiFragment(const G4int anA, const G4int aZ, const G4
   : G4UnstableFermiFragment(anA,aZ,Pol,ExE)
 {
   // Li5 ----> alpha + proton
+#ifdef SUN_CC_STATIC
+  G4double alpha_mass = 3727.4169999999999;
+  G4double proton_mass = 938.27229999999997;
+#else
   G4double alpha_mass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(2,4);
   G4double proton_mass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(1,1); 
+#endif
 
   Masses.push_back(alpha_mass);
   Masses.push_back(proton_mass);
