@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpAbsorption.cc,v 1.4 2001-07-11 10:08:22 gunter Exp $
+// $Id: G4OpAbsorption.cc,v 1.5 2004-10-19 02:15:15 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -95,7 +95,7 @@ G4OpAbsorption::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 {
         aParticleChange.Initialize(aTrack);
 
-        aParticleChange.SetStatusChange(fStopAndKill);
+        aParticleChange.ProposeTrackStatus(fStopAndKill);
 
         if (verboseLevel>0) {
 	   G4cout << "\n** Photon absorbed! **" << G4endl;

@@ -16,6 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18th October 2004 Peter Gumplinger (op-V06-02-03)
+                Fix bug in DielectricMetal only GetFacetNormal for
+                LobeReflection.
+                Migrate files to 7.0 ParticleChange method names:
+                G4OpBoundaryProcess.hh, G4OpBoundaryProcess.cc,
+                G4OpWLS.cc, G4OpRayleigh.cc, G4OpAbsorption.cc
+
 27th September 2004 Peter Gumplinger (op-V06-02-02)
                 Fix bug in G4PlaneVectorRand and resample
                 theFacetNormal for LobeReflection in DielectricMetal

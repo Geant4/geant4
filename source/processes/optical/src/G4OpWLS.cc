@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpWLS.cc,v 1.2 2003-12-01 15:20:05 gcosmo Exp $
+// $Id: G4OpWLS.cc,v 1.3 2004-10-19 02:15:00 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -87,7 +87,7 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 {
   aParticleChange.Initialize(aTrack);
   
-  aParticleChange.SetStatusChange(fStopAndKill);
+  aParticleChange.ProposeTrackStatus(fStopAndKill);
 
   if (verboseLevel>0) {
     G4cout << "\n** Photon absorbed! **" << G4endl;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpBoundaryProcess.hh,v 1.10 2004-09-27 22:31:47 gum Exp $
+// $Id: G4OpBoundaryProcess.hh,v 1.11 2004-10-19 02:14:43 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -369,17 +369,17 @@ void G4OpBoundaryProcess::DoAbsorption()
 		
                  // EnergyDeposited =/= 0 means: photon has been detected
                  theStatus = Detection;
-                 aParticleChange.SetLocalEnergyDeposit(thePhotonMomentum);
+                 aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
               }
               else {
-                 aParticleChange.SetLocalEnergyDeposit(0.0);
+                 aParticleChange.ProposeLocalEnergyDeposit(0.0);
               }
 
               NewMomentum = OldMomentum;
               NewPolarization = OldPolarization;
 
-//              aParticleChange.SetEnergyChange(0.0);
-              aParticleChange.SetStatusChange(fStopAndKill);
+//              aParticleChange.ProposeEnergy(0.0);
+              aParticleChange.ProposeTrackStatus(fStopAndKill);
 }
 
 inline

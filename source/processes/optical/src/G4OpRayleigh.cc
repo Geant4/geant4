@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpRayleigh.cc,v 1.10 2004-04-27 00:27:30 gum Exp $
+// $Id: G4OpRayleigh.cc,v 1.11 2004-10-19 02:15:08 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -164,19 +164,19 @@ G4OpRayleigh::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         if(G4UniformRand() < 0.5)NewMomentumDirection = -NewMomentumDirection;
         NewMomentumDirection = NewMomentumDirection.unit();
 
-	aParticleChange.SetPolarizationChange(NewPolarization);
+	aParticleChange.ProposePolarization(NewPolarization);
 
-	aParticleChange.SetMomentumChange(NewMomentumDirection);
+	aParticleChange.ProposeMomentumDirection(NewMomentumDirection);
 
         if (verboseLevel>0) {
 		G4cout << "New Polarization: " 
 		     << NewPolarization << G4endl;
 		G4cout << "Polarization Change: "
-		     << *(aParticleChange.GetPolarizationChange()) << G4endl;  
+		     << *(aParticleChange.GetPolarization()) << G4endl;  
 		G4cout << "New Momentum Direction: " 
 		     << NewMomentumDirection << G4endl;
 		G4cout << "Momentum Change: "
-		     << *(aParticleChange.GetMomentumChange()) << G4endl; 
+		     << *(aParticleChange.GetMomentumDirection()) << G4endl; 
 	}
 
         return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
