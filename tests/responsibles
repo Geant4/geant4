@@ -1,4 +1,4 @@
-config                      gcosmo@slac.stanford.edu        Gabriele Cosmo
+config                      Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 digits+hits                 Makoto.Asai@cern.ch             Makoto Asai
 digits+hits/detector        Makoto.Asai@cern.ch             Makoto Asai
 digits+hits/digits          Makoto.Asai@cern.ch             Makoto Asai
@@ -11,8 +11,8 @@ geometry/management         John.Apostolakis@cern.ch        John Apostolakis
 geometry/solids             John.Apostolakis@cern.ch        John Apostolakis
 geometry/transportation     John.Apostolakis@cern.ch        John Apostolakis
 geometry/volumes            John.Apostolakis@cern.ch        John Apostolakis
-global                      gcosmo@slac.stanford.edu        Gabriele Cosmo
-global/management           gcosmo@slac.stanford.edu        Gabriele Cosmo
+global                      Gabriele.Cosmo@cern.ch          Gabriele Cosmo
+global/management           Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 global/HEPGeometry          Evgueni.Tcherniaev@cern.ch      Evgueni Tcherniaev
 global/HEPNumerics          Vladimir.Grichine@cern.ch       Vladimir Grichine
 graphics_reps               John.Allison@man.ac.uk          John Allison
@@ -21,7 +21,7 @@ interfaces                  yoshidah@naruto-u.ac.jp         Hajime Yoshida
 interfaces/GAG              nagamatu@naruto-u.ac.jp         Masayasu Nagamatu
 interfaces/common           barrand@lal.in2p3.fr            Guy Barrand
 interfaces/OPACS            barrand@lal.in2p3.fr            Guy Barrand
-interfaces/XVT              gcosmo@slac.stanford.edu        Gabriele Cosmo
+interfaces/XVT              Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 materials                   Michel.Maire@cern.ch            Michel Maire
 particles                   kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
 persistency                 Youhei.Morita@cern.ch           Youhei Morita
@@ -65,10 +65,11 @@ visualization/OPACS         barrand@lal.in2p3.fr            Guy Barrand
 visualization/OpenGL        ajw@hep.man.ac.uk               Andy Walkden
 visualization/OpenInventor  jeffk@fnpspg.fnal.gov           Jeff Kallebach
 visualization/OpenInventor  joe@cactus.phyast.pitt.edu      Joe Boudreau
+visualization/RayTracer     Makoto.Asai@cern.ch             Makoto Asai
 environments                John.Allison@man.ac.uk          John Allison
 environments/Momo           yoshidah@naruto-u.ac.jp         Hajime Yoshida
 environments/OPACS          barrand@lal.in2p3.fr            Guy Barrand
-environments/XVT            gcosmo@slac.stanford.edu        Gabriele Cosmo
+environments/XVT            Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 examples (general)          Makoto.Asai@cern.ch             Makoto Asai
 examples (UserPhysicsProcesses) fwj@Triumf.CA               Fred Jones
 examples/novice/N01         Makoto.Asai@cern.ch             Makoto Asai
@@ -77,31 +78,34 @@ examples/novice/N03         Michel.Maire@cern.ch            Michel Maire
 examples/novice/N04         Makoto.Asai@cern.ch             Makoto Asai 
 examples/novice/N05         verderi@polhp6.in2p3.fr         Marc Verderi
 examples/novice/N06         gum@triumf.ca                   Peter Gumplinger
-examples/extended/E01       Evgueni.Tcherniaev@cern.ch      Evgueni Tcherniaev
-examples/extended/E02       Youhei.Morita@cern.ch           Youhei Morita
-examples/extended/E03       John.Apostolakis@cern.ch        John Apostolakis
+examples/extended/electromagnetic/:
+  TestEm1-5                 Michel.Maire@cern.ch            Michel Maire
+  TestEm6                   Vladimir.Ivantchencko@cern.ch   Vladimir Ivanchencko
+  TestEm8                   Vladimir.Grichine@cern.ch       Vladimir Grichine
+examples/extended/persistency  Youhei.Morita@cern.ch        Youhei Morita
 tests                       John.Allison@man.ac.uk          John Allison
 tests                       barrand@lal.in2p3.fr            Guy Barrand
 tests                       Frank.Behner@cern.ch            Frank Behner
-tests                       hamatsu@comp.metro-u.ac.jp      Ryosuke Hamatsu
 tests                       fwj@Triumf.CA                   Fred Jones
-tests                       magni@mi.infn.it                Stefano Magni
 tests                       Makoto.Asai@cern.ch             Makoto Asai
-tests                       gcosmo@slac.stanford.edu        Gabriele Cosmo
+tests                       Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 tests/test01                John.Apostolakis@cern.ch        John Apostolakis
 tests/test02                Makoto.Asai@cern.ch             Makoto Asai
-tests/test03                gum@triumf.ca                   Peter Gumplinger
-tests/test04                Youhei.Morita@cern.ch           Youhei Morita
-tests/test05                Lionel.Broglia.Patron@cern.ch   Lionel Broglia
+tests/test03                (not currently used - see tests/GNUmakefile)
+tests/test04                (not currently used - see tests/GNUmakefile)
+tests/test05                Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 tests/test06                Michel.Maire@cern.ch            Michel Maire
 tests/test07                Frank.Behner@cern.ch            Frank Behner
-tests/test08                John.Apostolakis@cern.ch        John Apostolakis
+tests/test08                (not currently used - see tests/GNUmakefile)
 tests/test09                Michel.Maire@cern.ch            Michel Maire
 tests/test10                magni@mi.infn.it                Stefano Magni
 tests/test11                Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 tests/test12                Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 tests/test13                Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 tests/test14                Maria.Grazia.Pia@cern.ch        Maria Grazia Pia
+tests/test15                Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+tests/test16                Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+tests/test17                (not currently used - see tests/GNUmakefile)
 tests/test201               barrand@lal.in2p3.fr            Guy Barrand
 tests/test301               Makoto.Asai@cern.ch             Makoto Asai
 tests/test302               Makoto.Asai@cern.ch             Makoto Asai
