@@ -20,75 +20,32 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst14PhysicsList.hh,v 1.11 2003-02-23 14:35:11 pia Exp $
+// $Id: Tst14Particles.cc,v 1.1 2003-02-23 14:36:31 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Original author unknown (contact: Maria.Grazia.Pia@cern.ch)
+// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
-// 22 Feb 2003 MGP          Redesigned for modular PhysicsList
+// 22 Feb 2003 MGP          Created
 //
 // -------------------------------------------------------------------
 
-// Class description:
-// System test for e/gamma, standard photon processes for PhysicsList
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
+#include "Tst14Particles.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 
-// -------------------------------------------------------------------
+Tst14Particles::Tst14Particles(const G4String& name)
+  :  G4VPhysicsConstructor(name)
+{ }
 
-#ifndef TST14PHYSICSLIST_HH
-#define TST14PHYSICSLIST_HH 1
+Tst14Particles::~Tst26PhysListParticles()
+{}
 
-#include "G4VModularPhysicsList.hh"
-#include "globals.hh"
-
-class Tst14PhysicsListMessenger;
-
-class Tst14PhysicsList: public G4VModularPhysicsList {
-public:
-  
-  Tst14PhysicsList();
-
-  virtual ~Tst14PhysicsList();
-  
-  // Register PhysicsList chunks
-  void AddPhysicsList(const G4String& name);
-
-  // Production thresholds, expressed in range
-  void SetGammaCut(G4double cut);
-  void SetElectronCut(G4double cut);
-
-  // Production thresholds, expressed in energy, for photons, electrons and both
-  void SetGammaLowLimit(G4double cut);
-  void SetElectronLowLimit(G4double cut);
-  void SetGELowLimit(G4double cut);
-
-  // Cut for generation of secondaries for EEDL/EPDL processes
-  void SetLowEnSecPhotCut(G4double cut);
-  void SetLowEnSecElecCut(G4double cut);
- 
-  // Activation of Auger effect in electron ionisation and photoelectric effect
-  void ActivateAuger(G4bool flag);
-
-private:
-
-  G4bool electronIsRegistered;
-  G4bool positronIsRegistered;
-  G4bool photonIsRegistered;
-
-  G4double cutForGamma;
-  G4double cutForElectron;
-
-  Tst14PhysicsListMessenger* messenger;
-
-};
-
-#endif
-
-
-
-
-
-
-
+void Tst14Particles::ConstructParticle()
+{
+  G4Gamma::GammaDefinition();
+  G4Electron::ElectronDefinition();
+  G4Positron::PositronDefinition();
+}
