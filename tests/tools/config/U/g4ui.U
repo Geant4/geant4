@@ -189,12 +189,11 @@ gans=y
 g4message=`cat << EOM
 
   G4UI_BUILD_XAW_SESSION
-  Specifies to include in kernel library the XAW
-  Motif-based user interfaces.
-
   G4UI_USE_XAW
-  Specifies to use the XAW interfaces in the
+
+  Specifies to include and use the XAW interfaces in the
   application to be built.
+  The XAW (X11 Athena Widget set) are required to activate these driver.
 EOM`
 
 dflt=$g4ui_use_xaw
@@ -274,10 +273,12 @@ gans=$ans
 g4message=`cat << EOM
 
   G4UI_BUILD_WO_SESSION
-Gabriele, where can I take descriprion? 
 
   G4UI_USE_WO
-Gabriele, where can I take descriprion? 
+
+  Specifies to include in kernel library and use the OPACS WO terminal
+  interface for the OPACS system. The OPACS tool must be installed
+  to activate this driver !
 
 EOM`
 
