@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunActionMessenger.hh,v 1.2 2004-01-15 17:30:40 vnivanch Exp $
+// $Id: RunActionMessenger.hh,v 1.3 2004-01-21 17:29:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,6 @@ class RunAction;
 class G4UIcommand;
 class G4UIcmdWithAString;
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunActionMessenger: public G4UImessenger
@@ -51,10 +50,9 @@ class RunActionMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    RunAction* Run;
-    G4UIcommand*  HistoCmd;        
-    G4UIcmdWithAString*     fCmd;
- 
+    RunAction*          Run;
+    G4UIcmdWithAString* fileCmd;
+    G4UIcommand*        HistoCmd;         
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

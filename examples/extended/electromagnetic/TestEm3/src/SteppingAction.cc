@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SteppingAction.cc,v 1.8 2004-01-16 14:14:08 vnivanch Exp $
+// $Id: SteppingAction.cc,v 1.9 2004-01-21 17:29:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,7 +59,6 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 
   // collect energy and track length step by step
   G4double edep = aStep->GetTotalEnergyDeposit();
-  if(edep == 0.0) return;
 
   G4double stepl = 0.;
   if (track->GetDefinition()->GetPDGCharge() != 0.)

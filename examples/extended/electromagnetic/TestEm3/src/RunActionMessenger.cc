@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunActionMessenger.cc,v 1.2 2004-01-15 17:30:40 vnivanch Exp $
+// $Id: RunActionMessenger.cc,v 1.3 2004-01-21 17:29:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,8 +41,8 @@
 RunActionMessenger::RunActionMessenger(RunAction* run)
 :Run(run)
 {    
-  fCmd = new G4UIcmdWithAString("/testem/run/fileName",this);
-  fCmd->SetGuidance("set name for the histograms file");
+  fileCmd = new G4UIcmdWithAString("/testem/run/setFileName",this);
+  fileCmd->SetGuidance("set name for the histograms file");
 
   HistoCmd = new G4UIcommand("/testem/run/setHisto",this);
   HistoCmd->SetGuidance("Set histo Edep in absorber k");
@@ -76,14 +76,14 @@ RunActionMessenger::RunActionMessenger(RunAction* run)
 RunActionMessenger::~RunActionMessenger()
 {
   delete HistoCmd;  
-  delete fCmd;
+  delete fileCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {   
-  if (command == fCmd) Run->SetFileName(newValue);
+  if (command == fileCmd) Run->SetFileName(newValue);
 
   if (command == HistoCmd)
    { G4int idh,nbins; G4double vmin,vmax; char unts[30];
