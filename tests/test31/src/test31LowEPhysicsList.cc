@@ -113,11 +113,11 @@ void test31LowEPhysicsList::ConstructProcess()
       
     } else if (particleName == "e-") {
       if(0 < verbose) G4cout << "LowE e-" << G4endl; 
-      //pmanager->AddProcess(new G4MultipleScattering(), -1, 1,1);
+      pmanager->AddProcess(new G4MultipleScattering(), -1, 1,1);
       G4LowEnergyIonisation* lei = new G4LowEnergyIonisation();
       lei->SetCutForLowEnSecPhotons(1.0*MeV);
       lei->SetCutForLowEnSecElectrons(1.0*MeV);
-      lei->SetEnlossFluc(false);
+      //lei->SetEnlossFluc(false);
       // lei->ActivateAuger(true);
       lei->SetVerboseLevel(verbose);
       G4LowEnergyBremsstrahlung* bre = new G4LowEnergyBremsstrahlung();
@@ -154,7 +154,7 @@ void test31LowEPhysicsList::ConstructProcess()
               )
     {
       if(0 < verbose) G4cout << "LowE " << particleName << G4endl; 
-      //      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
       G4hLowEnergyIonisation* hIon = new G4hLowEnergyIonisation() ;
 
       if(nuclStop) hIon->SetNuclearStoppingOn();
@@ -164,7 +164,7 @@ void test31LowEPhysicsList::ConstructProcess()
       else         hIon->SetBarkasOff();
 
       hIon->SetVerboseLevel(verbose);
-           hIon->SetEnlossFluc(false);
+      //   hIon->SetEnlossFluc(false);
 
       if(table == G4String("Ziegler1977He") ||
          table == G4String("Ziegler1977H") ||

@@ -4,18 +4,13 @@
 #================================================ 
 /control/verbose 2
 /run/verbose 1
-/tracking/verbose 2
+/tracking/verbose 0
 /event/verbose 0
 /test31/verbose 0
 #
-/test31/physics/cutGamma     0.1 mm
-#/test31/physics/cutGamma    100 cm
-/test31/physics/cutElectron  0.1 mm
-#/test31/physics/cutElectron 100 mm
+/test31/physics/cutAll       0.1 mm
 #/test31/physics/MaxStep     0.1 mm
-#/test31/physics/EMList      Standard
-/test31/physics/EMList       MAstandard 
-/test31/physics/HadronList   none
+/test31/physics/addPhysics   model
 /test31/AbsorberMaterial     Silicon
 /test31/AbsorberThick        10 mm
 /test31/NumberOfAbsorbers    60
@@ -24,7 +19,7 @@
 #/test31/HistoName           hbook.paw 
 /test31/HistoName            el_st_ma1000.paw 
 /test31/HistoNumber          5
-/test31/NumberOfEvents       2
+/test31/NumberOfEvents       1000
 /test31/gun/beamE            1000.0 MeV
 #
 /gun/particle e-
