@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.cc,v 1.26 2001-10-29 09:40:52 maire Exp $
+// $Id: G4VEnergyLoss.cc,v 1.27 2001-11-08 08:09:58 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,6 +35,7 @@
 //  18/05/01 V.Ivanchenko Clean up againist Linux ANSI compilation 
 //  17-09-01 migration of Materials to pure STL (mma)
 //  26-10-01 static inline functions moved from .hh file (mma) 
+    08.11.01 some static methods,data members are not static L.Urban
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -43,12 +44,6 @@
 #include "G4EnergyLossMessenger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double     G4VEnergyLoss::ParticleMass ;                
-G4double     G4VEnergyLoss::taulow       ;                
-G4double     G4VEnergyLoss::tauhigh      ;                
-G4double     G4VEnergyLoss::ltaulow      ;                
-G4double     G4VEnergyLoss::ltauhigh     ;                
 
 G4bool       G4VEnergyLoss::rndmStepFlag   = false;
 G4bool       G4VEnergyLoss::EnlossFlucFlag = true;
@@ -170,10 +165,8 @@ void G4VEnergyLoss::BuildRangeVector(G4PhysicsTable* theDEDXTable,
   G4int nbin=100,i;
   G4bool isOut;
 
-  // ??????????????????????????????????
-  static const G4double small = 1.e-6 ;
-
-  static G4double masslimit = 0.52*MeV ;
+  const G4double small = 1.e-6 ;
+  const G4double masslimit = 0.52*MeV ;
 
   G4double tlim=2.*MeV,t1=0.1*MeV,t2=0.025*MeV ;
   G4double tlime=0.2*keV,factor=2.*electron_mass_c2 ;
@@ -907,12 +900,12 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 //  calculate actual loss from the mean loss
 //  The model used to get the fluctuation is essentially the same as in Glandz in Geant3.
 {
-   static const G4double minLoss = 1.*eV ;
-   static const G4double probLim = 0.01 ;
-   static const G4double sumaLim = -log(probLim) ;
-   static const G4double alim=10.;
-   static const G4double kappa = 10. ;
-   static const G4double factor = twopi_mc2_rcl2 ;
+   const G4double minLoss = 1.*eV ;
+   const G4double probLim = 0.01 ;
+   const G4double sumaLim = -log(probLim) ;
+   const G4double alim=10.;
+   const G4double kappa = 10. ;
+   const G4double factor = twopi_mc2_rcl2 ;
 
 
   // check if the material has changed ( cache mechanism)
