@@ -25,7 +25,7 @@
 // S.Guatelli
 //
 //
-// $Id: Tst50AnalysisManager.hh,v 1.8 2003-02-04 14:21:32 guatelli Exp $
+// $Id: Tst50AnalysisManager.hh,v 1.9 2003-02-05 13:05:44 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    **********************************
@@ -100,7 +100,7 @@ AIDA::IHistogram1D *h4;
 AIDA::IHistogram2D *h6;
 AIDA::IHistogram1D *h5;
 private:
- 
+  Tst50PrimaryGeneratorAction* p_Primary;
  
   G4double en;
   G4double range;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.cc,v 1.8 2003-01-28 08:57:50 guatelli Exp $
+// $Id: Tst50EventAction.cc,v 1.9 2003-02-05 13:05:45 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,16 +63,9 @@ Tst50EventAction::~Tst50EventAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 void Tst50EventAction::BeginOfEventAction(const G4Event*)
-{
-  // G4cout<<"evento:"<<GetEventno()<<G4endl;
-  energy=0;
-
-if (hit_CollID==-1)
-{
-      G4SDManager * SDman = G4SDManager::GetSDMpointer();
-      hit_CollID = SDman->GetCollectionID("trackerCollection");
-      //the pointer points to the ID number of the sensitive detector
-    }
+{ 
+ energyDep=0.;
+ energy=0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -80,33 +73,18 @@ if (hit_CollID==-1)
 void Tst50EventAction::EndOfEventAction(const G4Event* evt)
 {
  G4double initialEnergy=p_Primary->GetInitialEnergy();
-  
-  // extracted from hits, compute the total energy deposit 
 
-  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
-  
-  Tst50TrackerHitsCollection* hit_HC = 0;
-  G4int n_hit = 0;
-  G4double energyDep=0.;
-  
-  if (HCE) hit_HC = (Tst50TrackerHitsCollection*)(HCE->GetHC(hit_CollID));
-  if(hit_HC)
-    { 
-      n_hit = hit_HC->entries();
-      for (G4int i=0;i<n_hit;i++)
-	{ 
-	   energyDep= (((*hit_HC)[i]->GetEdep()))/MeV; 
+	  
 	
-/********         
+
 #ifdef G4ANALYSIS_USE
 	    Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
 	    if(energyDep!=0)
 	        analysis->energy_deposit(energyDep);
 #endif
-*/
-	}
-    }
-  /*
+	
+
+/*
 G4cout<<"energia iniziale in MeV:"<<initialEnergy/MeV<<G4endl;
 G4cout<<"energia in MeV:"<<energy/MeV<<G4endl;
   G4double radiation=(energy/initialEnergy);
@@ -155,6 +133,11 @@ G4int Tst50EventAction::GetEventno()
 G4double Tst50EventAction::RadiationYield(G4double energyLost)
 {
   energy += energyLost;
+ 
 }
+void Tst50EventAction::CalculateEnergyDeposit(G4double deposit)
+{
+  energyDep += deposit;
 
-
+ 
+}

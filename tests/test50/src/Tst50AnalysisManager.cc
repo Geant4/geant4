@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: Tst50AnalysisManager.cc,v 1.8 2003-02-04 14:21:32 guatelli Exp $
+// $Id: Tst50AnalysisManager.cc,v 1.9 2003-02-05 13:05:45 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifdef  G4ANALYSIS_USE
@@ -51,11 +51,11 @@
 #include "AIDA/ITree.h"
 #include "AIDA/ITuple.h"
 #include "Tst50PrimaryGeneratorAction.hh"
-
+#include "G4RunManager.hh"
 Tst50AnalysisManager* Tst50AnalysisManager::instance = 0;
 
 Tst50AnalysisManager::Tst50AnalysisManager() : 
-  aFact(0), theTree(0), histFact(0), tupFact(0)
+  aFact(0), theTree(0), histFact(0), tupFact(0),p_Primary(0)
   // tupFact(0)
   
 
@@ -97,7 +97,7 @@ Tst50AnalysisManager::~Tst50AnalysisManager()
 
   delete aFact;
   aFact = 0;
-
+  delete p_Primary;
 }
 
 Tst50AnalysisManager* Tst50AnalysisManager::getInstance()
@@ -110,10 +110,13 @@ Tst50AnalysisManager* Tst50AnalysisManager::getInstance()
 void Tst50AnalysisManager::book() 
 {
   
- 
+  G4RunManager* runManager = G4RunManager::GetRunManager();
+  p_Primary =
+(Tst50PrimaryGeneratorAction*)(runManager->GetUserPrimaryGeneratorAction());
 
+ G4double initial_energy= p_Primary->GetInitialEnergy();
 
-  // h1= histFact->createHistogram1D("10","Energy Deposit",200. ,0.,2.);
+ h1= histFact->createHistogram1D("10","Energy Deposit",100.*initial_energy ,0.,initial_energy);
 
  h2=histFact->createHistogram1D("20","Primary transmitted particle energy/initial_energy",1000. ,0.,1.);
  h3=histFact->createHistogram1D("30","Primary backscattered  particle energy/initial_energy",1000. ,0.,1.);
@@ -121,7 +124,7 @@ void Tst50AnalysisManager::book()
 h4=histFact->createHistogram1D("40","angle of backscattered particles",80.*2, 80.,190.);
 
  h5=histFact->createHistogram1D("50","angle of transmitted  particles",100.*2,0.,100.);
- h6=histFact->createHistogram2D("60","angle, energy of bremmstrahlung gamma",180.*4,0., 180.,100.,0.,100.);
+ h6=histFact->createHistogram2D("60","angle, energy of bremmstrahlung gamma",180.*4,0., 180.,100.*initial_energy,0.,initial_energy);
 
  // in questo istogramma  metto il deposito di energia di ogni evento nel target
 
@@ -143,7 +146,7 @@ h4=histFact->createHistogram1D("40","angle of backscattered particles",80.*2, 80
 
 void Tst50AnalysisManager::energy_deposit(G4double En)
 {
-  //  h1->fill(En);
+   h1->fill(En);
 }
 void Tst50AnalysisManager::energy_transmitted(G4double En2)
 {

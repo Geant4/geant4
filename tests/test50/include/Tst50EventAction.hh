@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.hh,v 1.4 2003-01-17 17:14:14 guatelli Exp $
+// $Id: Tst50EventAction.hh,v 1.5 2003-02-05 13:05:45 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,9 +49,11 @@ class Tst50EventAction : public G4UserEventAction
     void EndOfEventAction(const G4Event*);
     G4int    GetEventno();
   G4double RadiationYield(G4double);
+  void CalculateEnergyDeposit(G4double);
   private:
     G4int hit_CollID;
   G4double energy;
+  G4double energyDep;
   Tst50PrimaryGeneratorAction* p_Primary;
   G4String filename;
   G4bool RadiationY;
