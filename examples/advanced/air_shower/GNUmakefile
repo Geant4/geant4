@@ -1,5 +1,5 @@
 # --------------------------------------------------------------
-# GNUmakefile for ULTRA Advanced Example.  
+# GNUmakefile for ULTRA-based air shower Advanced Example.  
 # --------------------------------------------------------------
 
 name := Ultra
