@@ -1,4 +1,4 @@
-$Id: History,v 1.38 2000-01-19 11:13:46 gcosmo Exp $
+$Id: History,v 1.39 2000-02-01 16:54:56 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+January 31, 2000 G.Cosmo (global-V01-00-02)
+- STLInterface: several fixes.
+  o Fixed bug in G4String::toUpper().
+    (bug was introduced inadvertently on 20-Oct-1999).
+  o Added checks for bound-overflows in G4RWTPtrSortedVector::find().
+  o Fixed bound-check for operators () and [] in most collections:
+    () access operators DO NOT perform bound-checking (except if G4DEBUG set);
+    [] access operators DO perform bound-checking.
+  o tpvector[.h.icc]: changed 'unsigned int' to 'size_t' in constructors.
+    Added 'rwsize' and bound-checking for operator[].
+  o tvvector.icc: added call to std_vector() in default constructor.
+  o tpordvec.icc: added std_pvector:: scope for calls to [] operator,
+    where missing.
+  o tvordvec.icc: added std_vector:: scope for calls to [] operator,
+    where missing.
 
 January 19, 2000 G.Cosmo (global-V01-00-01)
 - G4UnitsTable[.hh.cc]: added constructor to G4BestUnit for 3vectors (M.Maire).
