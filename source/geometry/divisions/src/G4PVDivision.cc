@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.cc,v 1.5 2003-10-21 09:04:28 gcosmo Exp $
+// $Id: G4PVDivision.cc,v 1.6 2003-10-21 09:12:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4PVDivision Implementation file
@@ -213,7 +213,8 @@ void G4PVDivision::GetReplicationData(EAxis& axis,
 
 
 //--------------------------------------------------------------------------
-//TODO: this method should check that the child lv is of the correct type, else the ComputeDimensions will nver be called
+//TODO: this method should check that the child lv is of the correct type,
+//      else the ComputeDimensions will never be called
 void G4PVDivision::SetParameterisation( G4LogicalVolume* motherLogical,
                                   const EAxis axis,
                                   const G4int nDivs,
