@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2004-04-02 11:54:24 maire Exp $
+$Id: History,v 1.22 2004-04-02 12:14:00 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,7 @@ track of all tags.
      
 April 2, 2004 mma (exampleN06-V06-01-00)
 - PrimaryGenerator: e+ 500 keV
+- remove vis commands from RunAction
 
 March 17, 2004 Peter Gumplinger (exampleN06-V06-00-00)
 - DetectorConstruction: change surface model between OpWaterSurface
