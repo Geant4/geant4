@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VVisManager.hh,v 1.1 1999-04-28 14:19:32 johna Exp $
+// $Id: G4VVisManager.hh,v 1.2 1999-05-19 08:50:28 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,7 +50,7 @@ public:
   // Returns pointer to actual visualization manager if a view is
   // available for drawing, else returns null.  Always check value.
 
-  virtual ~G4VVisManager () {}
+  virtual ~G4VVisManager ();
 
   ///////////////////////////////////////////////////////////////////
   // Functions to Draw "transient" objects, useful for hits, digis, etc.

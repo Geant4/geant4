@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VVisManager.cc,v 1.1 1999-04-28 14:19:33 johna Exp $
+// $Id: G4VVisManager.cc,v 1.2 1999-05-19 08:50:35 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,5 +13,7 @@
 // John Allison 19/Oct/1996.
 
 #include "G4VVisManager.hh"
+
+G4VVisManager::~G4VVisManager () {}
 
 G4VVisManager* G4VVisManager::fpConcreteInstance = 0;
