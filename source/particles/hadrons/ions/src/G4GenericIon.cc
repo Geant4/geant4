@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericIon.cc,v 1.9 2004-09-02 01:52:34 asaim Exp $
+// $Id: G4GenericIon.cc,v 1.10 2005-01-14 03:49:13 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,17 +40,17 @@
 // ######################################################################
 // ###                           GenericIon                           ###
 // ######################################################################
-G4ParticleDefinition* G4GenericIon::theInstance = 0;
+G4GenericIon* G4GenericIon::theInstance = 0;
 
-G4ParticleDefinition* G4GenericIon::Definition()
+G4GenericIon* G4GenericIon::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "GenericIon";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -64,7 +64,7 @@ G4ParticleDefinition* G4GenericIon::Definition()
 //!!!! this particle should not be used for tracking
 //!!!! all properties except name and type are meaningless
 //!!!!
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,   0.9382723*GeV,       0.0*MeV,       eplus,
                     1,              +1,             0,          
                     1,              +1,             0,             
@@ -72,16 +72,17 @@ G4ParticleDefinition* G4GenericIon::Definition()
 		 true,            -1.0,          NULL,
              false,           "generic"
               );
-  
+  }
+  theInstance = reinterpret_cast<G4GenericIon*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4GenericIon::GenericIonDefinition()
+G4GenericIon*  G4GenericIon::GenericIonDefinition()
 { 
   return Definition();
 }
 
-G4ParticleDefinition*  G4GenericIon::GenericIon()
+G4GenericIon*  G4GenericIon::GenericIon()
 { 
   return Definition();
 }

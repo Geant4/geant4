@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Triton.hh,v 1.8 2004-09-02 01:52:34 asaim Exp $
+// $Id: G4Triton.hh,v 1.9 2005-01-14 03:49:13 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                          TRITON                                ###
 // ######################################################################
 
-class G4Triton
+class G4Triton : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4Triton* theInstance;
    G4Triton(){}
    ~G4Triton(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* TritonDefinition();
-   static G4ParticleDefinition* Triton();
+   static G4Triton* Definition();
+   static G4Triton* TritonDefinition();
+   static G4Triton* Triton();
 };
 
 #endif

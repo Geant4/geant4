@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TauMinus.hh,v 1.8 2004-09-02 01:52:39 asaim Exp $
+// $Id: G4TauMinus.hh,v 1.9 2005-01-14 03:49:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                        TAUMINUS                                ###
 // ######################################################################
 
-class G4TauMinus
+class G4TauMinus : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4TauMinus* theInstance;
    G4TauMinus(){}
    ~G4TauMinus(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* TauMinusDefinition();
-   static G4ParticleDefinition* TauMinus();
+   static G4TauMinus* Definition();
+   static G4TauMinus* TauMinusDefinition();
+   static G4TauMinus* TauMinus();
 };
 
 #endif

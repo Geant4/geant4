@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonZeroShort.hh,v 1.10 2004-09-02 01:52:36 asaim Exp $
+// $Id: G4KaonZeroShort.hh,v 1.11 2005-01-14 03:49:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                      KAONZERO SHORT                            ###
 // ######################################################################
 
-class G4KaonZeroShort
+class G4KaonZeroShort : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4KaonZeroShort* theInstance;
    G4KaonZeroShort(){}
    ~G4KaonZeroShort(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* KaonZeroShortDefinition();
-   static G4ParticleDefinition* KaonZeroShort();
+   static G4KaonZeroShort* Definition();
+   static G4KaonZeroShort* KaonZeroShortDefinition();
+   static G4KaonZeroShort* KaonZeroShort();
 };
 
 #endif

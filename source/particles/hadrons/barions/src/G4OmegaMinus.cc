@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OmegaMinus.cc,v 1.11 2004-09-02 01:52:32 asaim Exp $
+// $Id: G4OmegaMinus.cc,v 1.12 2005-01-14 03:49:11 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,17 +44,17 @@
 // ###                           OmegaMinus                           ###
 // ######################################################################
 
-G4ParticleDefinition* G4OmegaMinus::theInstance = 0;
+G4OmegaMinus* G4OmegaMinus::theInstance = 0;
 
-G4ParticleDefinition* G4OmegaMinus::Definition()
+G4OmegaMinus* G4OmegaMinus::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "omega-";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -65,7 +65,7 @@ G4ParticleDefinition* G4OmegaMinus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
 
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    1.67245*GeV,  8.02e-12*MeV,    -1*eplus,
                     3,              +1,             0,
                     0,               0,             0,
@@ -87,16 +87,18 @@ G4ParticleDefinition* G4OmegaMinus::Definition()
   for (G4int index=0; index <3; index++ ) table->Insert(mode[index]);
   delete [] mode;
   
-  theInstance->SetDecayTable(table);
+   anInstance->SetDecayTable(table);
+  }
+  theInstance = reinterpret_cast<G4OmegaMinus*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4OmegaMinus::OmegaMinusDefinition()
+G4OmegaMinus*  G4OmegaMinus::OmegaMinusDefinition()
 { 
   return Definition();
 }
 
-G4ParticleDefinition*  G4OmegaMinus::OmegaMinus()
+G4OmegaMinus*  G4OmegaMinus::OmegaMinus()
 { 
   return Definition();
 }

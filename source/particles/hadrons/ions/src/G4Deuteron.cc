@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Deuteron.cc,v 1.9 2004-09-02 01:52:34 asaim Exp $
+// $Id: G4Deuteron.cc,v 1.10 2005-01-14 03:49:13 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,17 +41,17 @@
 // ###                           DEUTERON                             ###
 // ######################################################################
 
-G4ParticleDefinition* G4Deuteron::theInstance = 0;
+G4Deuteron* G4Deuteron::theInstance = 0;
 
-G4ParticleDefinition* G4Deuteron::Definition()
+G4Deuteron* G4Deuteron::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "deuteron";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -61,7 +61,7 @@ G4ParticleDefinition* G4Deuteron::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,   1.875613*GeV,       0.0*MeV,  +1.0*eplus,
                     2,              +1,             0,
                     0,               0,             0,
@@ -70,17 +70,19 @@ G4ParticleDefinition* G4Deuteron::Definition()
              false,           "static"
               );
 
-  theInstance->SetAtomicNumber(1);
-  theInstance->SetAtomicMass(2);
+   anInstance->SetAtomicNumber(1);
+   anInstance->SetAtomicMass(2);
+  }
+  theInstance = reinterpret_cast<G4Deuteron*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4Deuteron::DeuteronDefinition()
+G4Deuteron*  G4Deuteron::DeuteronDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4Deuteron::Deuteron()
+G4Deuteron*  G4Deuteron::Deuteron()
 {
   return Definition();
 }

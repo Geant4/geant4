@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XicPlus.cc,v 1.10 2004-09-02 01:52:33 asaim Exp $
+// $Id: G4XicPlus.cc,v 1.11 2005-01-14 03:49:11 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,17 +44,17 @@
 // ###                           XicPlus                              ###
 // ######################################################################
 
-G4ParticleDefinition* G4XicPlus::theInstance = 0;
+G4XicPlus* G4XicPlus::theInstance = 0;
 
-G4ParticleDefinition* G4XicPlus::Definition()
+G4XicPlus* G4XicPlus::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "xi_c+";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0) 
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -65,23 +65,24 @@ G4ParticleDefinition* G4XicPlus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
 
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    2.4663*GeV,   1.49e-9*MeV,   +1.*eplus,
                     1,              +1,             0,
                     1,              +1,             0,
              "baryon",               0,            +1,        4232,
                 false,       0.35e-3*ns,          NULL,
                 false,       "xi_c");
-  
+  }
+  theInstance = reinterpret_cast<G4XicPlus*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4XicPlus::XicPlusDefinition()
+G4XicPlus*  G4XicPlus::XicPlusDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4XicPlus::XicPlus()
+G4XicPlus*  G4XicPlus::XicPlus()
 {
   return Definition();
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PionZero.hh,v 1.11 2004-09-02 01:52:36 asaim Exp $
+// $Id: G4PionZero.hh,v 1.12 2005-01-14 03:49:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                         PIONZERO                               ###
 // ######################################################################
 
-class G4PionZero
+class G4PionZero : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4PionZero* theInstance;
    G4PionZero(){}
    ~G4PionZero(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* PionZeroDefinition();
-   static G4ParticleDefinition* PionZero();
+   static G4PionZero* Definition();
+   static G4PionZero* PionZeroDefinition();
+   static G4PionZero* PionZero();
 };
 
 #endif

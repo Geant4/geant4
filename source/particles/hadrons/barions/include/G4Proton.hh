@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Proton.hh,v 1.10 2004-09-02 01:52:28 asaim Exp $
+// $Id: G4Proton.hh,v 1.11 2005-01-14 03:49:08 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                          PROTON                                ###
 // ######################################################################
 
-class G4Proton
+class G4Proton : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4Proton* theInstance;
    G4Proton(){}
    ~G4Proton(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* ProtonDefinition();
-   static G4ParticleDefinition* Proton();
+   static G4Proton* Definition();
+   static G4Proton* ProtonDefinition();
+   static G4Proton* Proton();
 };
 
 

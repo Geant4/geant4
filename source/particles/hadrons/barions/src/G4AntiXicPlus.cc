@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiXicPlus.cc,v 1.10 2004-09-02 01:52:32 asaim Exp $
+// $Id: G4AntiXicPlus.cc,v 1.11 2005-01-14 03:49:11 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,17 +44,17 @@
 // ###                          AntiXicPlus                           ###
 // ######################################################################
 
-G4ParticleDefinition* G4AntiXicPlus::theInstance = 0;
+G4AntiXicPlus* G4AntiXicPlus::theInstance = 0;
 
-G4ParticleDefinition* G4AntiXicPlus::Definition()
+G4AntiXicPlus* G4AntiXicPlus::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "anti_xi_c+";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0) 
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -65,22 +65,24 @@ G4ParticleDefinition* G4AntiXicPlus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
   
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    2.4663*GeV,   1.49e-9*MeV,   -1.*eplus, 
                     1,              +1,             0,
                     1,              -1,             0,
              "baryon",               0,            -1,       -4232,
                 false,       0.35e-3*ns,          NULL,
                 false,       "xi_c");
+  }
+  theInstance = reinterpret_cast<G4AntiXicPlus*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4AntiXicPlus::AntiXicPlusDefinition()
+G4AntiXicPlus*  G4AntiXicPlus::AntiXicPlusDefinition()
 { 
   return Definition();
 }
 
-G4ParticleDefinition*  G4AntiXicPlus::AntiXicPlus()
+G4AntiXicPlus*  G4AntiXicPlus::AntiXicPlus()
 { 
   return Definition();
 }

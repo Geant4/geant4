@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XiMinus.cc,v 1.10 2004-09-02 01:52:33 asaim Exp $
+// $Id: G4XiMinus.cc,v 1.11 2005-01-14 03:49:11 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,17 +44,17 @@
 // ###                           XiMinus                              ###
 // ######################################################################
 
-G4ParticleDefinition* G4XiMinus::theInstance = 0;
+G4XiMinus* G4XiMinus::theInstance = 0;
 
-G4ParticleDefinition* G4XiMinus::Definition()
+G4XiMinus* G4XiMinus::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "xi-";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -65,7 +65,7 @@ G4ParticleDefinition* G4XiMinus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
 
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    1.32132*GeV,  4.02e-12*MeV,    -1*eplus,
                     1,              +1,             0,
                     1,              -1,             0,
@@ -83,16 +83,18 @@ G4ParticleDefinition* G4XiMinus::Definition()
   for (G4int index=0; index <1; index++ ) table->Insert(mode[index]);
   delete [] mode;
 
-  theInstance->SetDecayTable(table);
+   anInstance->SetDecayTable(table);
+  }
+  theInstance = reinterpret_cast<G4XiMinus*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4XiMinus::XiMinusDefinition()
+G4XiMinus*  G4XiMinus::XiMinusDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4XiMinus::XiMinus()
+G4XiMinus*  G4XiMinus::XiMinus()
 {
   return Definition();
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4JPsi.hh,v 1.9 2004-09-02 01:52:35 asaim Exp $
+// $Id: G4JPsi.hh,v 1.10 2005-01-14 03:49:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                               JPsi                             ###
 // ######################################################################
 
-class G4JPsi
+class G4JPsi : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4JPsi* theInstance;
    G4JPsi(){}
    ~G4JPsi(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* JPsiDefinition();
-   static G4ParticleDefinition* JPsi();
+   static G4JPsi* Definition();
+   static G4JPsi* JPsiDefinition();
+   static G4JPsi* JPsi();
 };
 
 #endif

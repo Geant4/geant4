@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmaPlus.cc,v 1.11 2004-09-02 01:52:32 asaim Exp $
+// $Id: G4SigmaPlus.cc,v 1.12 2005-01-14 03:49:11 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,17 +44,17 @@
 // ###                           SigmaPlus                            ###
 // ######################################################################
 
-G4ParticleDefinition* G4SigmaPlus::theInstance = 0;
+G4SigmaPlus* G4SigmaPlus::theInstance = 0;
 
-G4ParticleDefinition* G4SigmaPlus::Definition()
+G4SigmaPlus* G4SigmaPlus::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "sigma+";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -65,7 +65,7 @@ G4ParticleDefinition* G4SigmaPlus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
 
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    1.18937*GeV, 8.209e-12*MeV,       eplus,
                     1,              +1,             0,
                     2,              +2,             0,
@@ -85,16 +85,18 @@ G4ParticleDefinition* G4SigmaPlus::Definition()
   for (G4int index=0; index <2; index++ ) table->Insert(mode[index]);
   delete [] mode;
 
-  theInstance->SetDecayTable(table);
+   anInstance->SetDecayTable(table);
+  }
+  theInstance = reinterpret_cast<G4SigmaPlus*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4SigmaPlus::SigmaPlusDefinition()
+G4SigmaPlus*  G4SigmaPlus::SigmaPlusDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4SigmaPlus::SigmaPlus()
+G4SigmaPlus*  G4SigmaPlus::SigmaPlus()
 {
   return Definition();
 }

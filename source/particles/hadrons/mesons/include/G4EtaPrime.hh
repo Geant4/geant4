@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EtaPrime.hh,v 1.10 2004-09-02 01:52:35 asaim Exp $
+// $Id: G4EtaPrime.hh,v 1.11 2005-01-14 03:49:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,17 +44,17 @@
 // ###                         EtaPrime                               ###
 // ######################################################################
 
-class G4EtaPrime
+class G4EtaPrime : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4EtaPrime* theInstance;
    G4EtaPrime(){}
    ~G4EtaPrime(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* EtaPrimeDefinition();
-   static G4ParticleDefinition* EtaPrime();
+   static G4EtaPrime* Definition();
+   static G4EtaPrime* EtaPrimeDefinition();
+   static G4EtaPrime* EtaPrime();
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmacZero.hh,v 1.10 2004-09-02 01:52:28 asaim Exp $
+// $Id: G4SigmacZero.hh,v 1.11 2005-01-14 03:49:08 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                         SigmacZero                             ###
 // ######################################################################
 
-class G4SigmacZero
+class G4SigmacZero : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4SigmacZero* theInstance;
    G4SigmacZero(){}
    ~G4SigmacZero(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* SigmacZeroDefinition();
-   static G4ParticleDefinition* SigmacZero();
+   static G4SigmacZero* Definition();
+   static G4SigmacZero* SigmacZeroDefinition();
+   static G4SigmacZero* SigmacZero();
 };
 
 #endif

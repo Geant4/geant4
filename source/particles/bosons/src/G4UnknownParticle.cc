@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnknownParticle.cc,v 1.2 2004-09-02 01:52:26 asaim Exp $
+// $Id: G4UnknownParticle.cc,v 1.3 2005-01-14 03:49:06 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,18 +40,18 @@
 // ######################################################################
 // ###                          Unknown Particle                      ###
 // ######################################################################
-G4ParticleDefinition* G4UnknownParticle::theInstance = 0;
+G4UnknownParticle* G4UnknownParticle::theInstance = 0;
 
-G4ParticleDefinition*  G4UnknownParticle::Definition() 
+G4UnknownParticle*  G4UnknownParticle::Definition() 
 {
   if (theInstance !=0) return theInstance;
 
   const G4String name = "unknown";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //      
   //    Arguments for constructor are as follows 
@@ -61,7 +61,7 @@ G4ParticleDefinition*  G4UnknownParticle::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table 
   //             shortlived      subType    anti_encoding
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
 	         name,         0.0*MeV,       0.0*MeV,         0.0, 
 		    0,               0,             0,          
 		    0,               0,             0,             
@@ -69,17 +69,18 @@ G4ParticleDefinition*  G4UnknownParticle::Definition()
 		 true,             0.0,          NULL,
 		false,      "geantino",            0
 		);
-  
+  }
+  theInstance = reinterpret_cast<G4UnknownParticle*>(anInstance);
   return theInstance;
 
 }
 
-G4ParticleDefinition*  G4UnknownParticle::UnknownParticleDefinition() 
+G4UnknownParticle*  G4UnknownParticle::UnknownParticleDefinition() 
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4UnknownParticle::UnknownParticle() 
+G4UnknownParticle*  G4UnknownParticle::UnknownParticle() 
 {
   return Definition();
 }

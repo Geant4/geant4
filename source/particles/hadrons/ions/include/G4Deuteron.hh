@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Deuteron.hh,v 1.8 2004-09-02 01:52:34 asaim Exp $
+// $Id: G4Deuteron.hh,v 1.9 2005-01-14 03:49:13 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                          DEUTERON                              ###
 // ######################################################################
 
-class G4Deuteron
+class G4Deuteron : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4Deuteron* theInstance;
    G4Deuteron(){}
    ~G4Deuteron(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* DeuteronDefinition();
-   static G4ParticleDefinition* Deuteron();
+   static G4Deuteron* Definition();
+   static G4Deuteron* DeuteronDefinition();
+   static G4Deuteron* Deuteron();
 };
 
 #endif

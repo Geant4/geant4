@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Geantino.cc,v 1.13 2004-09-02 01:52:26 asaim Exp $
+// $Id: G4Geantino.cc,v 1.14 2005-01-14 03:49:06 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,18 +41,18 @@
 // ######################################################################
 // ###                          GEANTINO                              ###
 // ######################################################################
-G4ParticleDefinition* G4Geantino::theInstance = 0;
+G4Geantino* G4Geantino::theInstance = 0;
 
-G4ParticleDefinition*  G4Geantino::Definition() 
+G4Geantino*  G4Geantino::Definition() 
 {
   if (theInstance !=0) return theInstance;
 
   const G4String name = "geantino";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //      
   //    Arguments for constructor are as follows 
@@ -62,7 +62,7 @@ G4ParticleDefinition*  G4Geantino::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table 
   //             shortlived      subType    anti_encoding
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
 		  name,           0.0*MeV,       0.0*MeV,         0.0, 
 		  0,                    0,             0,          
 		  0,                    0,             0,             
@@ -70,17 +70,18 @@ G4ParticleDefinition*  G4Geantino::Definition()
 		  true,               0.0,          NULL,
 		  false,        "geantino",            0
 		);
-  
+  }
+  theInstance = reinterpret_cast<G4Geantino*>(anInstance);
   return theInstance;
 
 }
 
-G4ParticleDefinition*  G4Geantino::GeantinoDefinition() 
+G4Geantino*  G4Geantino::GeantinoDefinition() 
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4Geantino::Geantino() 
+G4Geantino*  G4Geantino::Geantino() 
 {
   return Definition();
 }

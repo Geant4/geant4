@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PionPlus.hh,v 1.8 2004-09-02 01:52:36 asaim Exp $
+// $Id: G4PionPlus.hh,v 1.9 2005-01-14 03:49:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                         PIONPLUS                               ###
 // ######################################################################
 
-class G4PionPlus
+class G4PionPlus : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4PionPlus* theInstance;
    G4PionPlus(){}
    ~G4PionPlus(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* PionPlusDefinition();
-   static G4ParticleDefinition* PionPlus();
+   static G4PionPlus* Definition();
+   static G4PionPlus* PionPlusDefinition();
+   static G4PionPlus* PionPlus();
 };
 
 #endif

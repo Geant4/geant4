@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonZero.cc,v 1.13 2004-09-02 01:52:38 asaim Exp $
+// $Id: G4KaonZero.cc,v 1.14 2005-01-14 03:49:16 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                          KAONZERO                              ###
 // ######################################################################
 
-G4ParticleDefinition* G4KaonZero::theInstance = 0;
+G4KaonZero* G4KaonZero::theInstance = 0;
 
-G4ParticleDefinition* G4KaonZero::Definition()
+G4KaonZero* G4KaonZero::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "kaon0";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -66,7 +66,7 @@ G4ParticleDefinition* G4KaonZero::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
 
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    0.497672*GeV,       0.0*MeV,         0.0,
                     0,              -1,             0,
                     1,              -1,             0,
@@ -87,16 +87,18 @@ G4ParticleDefinition* G4KaonZero::Definition()
   for (G4int index=0; index <2; index++ ) table->Insert(mode[index]);
   delete [] mode;
 
-  theInstance->SetDecayTable(table);
+   anInstance->SetDecayTable(table);
+  }
+  theInstance = reinterpret_cast<G4KaonZero*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4KaonZero::KaonZeroDefinition()
+G4KaonZero*  G4KaonZero::KaonZeroDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4KaonZero::KaonZero()
+G4KaonZero*  G4KaonZero::KaonZero()
 {
   return Definition();
 }

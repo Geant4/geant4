@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericIon.hh,v 1.8 2004-09-02 01:52:34 asaim Exp $
+// $Id: G4GenericIon.hh,v 1.9 2005-01-14 03:49:13 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,17 +51,17 @@
 // ###                          GenericIon                            ###
 // ######################################################################
 
-class G4GenericIon
+class G4GenericIon : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4GenericIon* theInstance;
    G4GenericIon(){}
    ~G4GenericIon(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* GenericIonDefinition();
-   static G4ParticleDefinition* GenericIon();
+   static G4GenericIon* Definition();
+   static G4GenericIon* GenericIonDefinition();
+   static G4GenericIon* GenericIon();
 };
 
 #endif

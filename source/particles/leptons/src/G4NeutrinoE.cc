@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutrinoE.cc,v 1.13 2004-09-02 01:52:40 asaim Exp $
+// $Id: G4NeutrinoE.cc,v 1.14 2005-01-14 03:49:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,19 +39,19 @@
 #include "G4ParticleTable.hh"
 
 // ######################################################################
-// ###                         NEUTRINO                               ###
+// ###                         NEUTRINO E                             ###
 // ######################################################################
-G4ParticleDefinition* G4NeutrinoE::theInstance = 0;
+G4NeutrinoE* G4NeutrinoE::theInstance = 0;
 
-G4ParticleDefinition* G4NeutrinoE::Definition()
+G4NeutrinoE* G4NeutrinoE::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "nu_e";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -61,7 +61,7 @@ G4ParticleDefinition* G4NeutrinoE::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,         0.0*MeV,       0.0*MeV,         0.0, 
 		    1,               0,             0,          
 		    0,               0,             0,             
@@ -69,16 +69,17 @@ G4ParticleDefinition* G4NeutrinoE::Definition()
 		 true,             0.0,          NULL,
              false,           "e"
               );
-
+  }
+  theInstance = reinterpret_cast<G4NeutrinoE*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4NeutrinoE::NeutrinoEDefinition()
+G4NeutrinoE*  G4NeutrinoE::NeutrinoEDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4NeutrinoE::NeutrinoE()
+G4NeutrinoE*  G4NeutrinoE::NeutrinoE()
 {
   return Definition();
 }

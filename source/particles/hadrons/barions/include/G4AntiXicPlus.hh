@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiXicPlus.hh,v 1.7 2004-09-02 01:52:27 asaim Exp $
+// $Id: G4AntiXicPlus.hh,v 1.8 2005-01-14 03:49:07 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                      AntiXicPlus                               ###
 // ######################################################################
 
-class G4AntiXicPlus
+class G4AntiXicPlus : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4AntiXicPlus* theInstance;
    G4AntiXicPlus(){}
    ~G4AntiXicPlus(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* AntiXicPlusDefinition();
-   static G4ParticleDefinition* AntiXicPlus();
+   static G4AntiXicPlus* Definition();
+   static G4AntiXicPlus* AntiXicPlusDefinition();
+   static G4AntiXicPlus* AntiXicPlus();
 };
 
 #endif

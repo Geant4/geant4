@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiXiZero.cc,v 1.15 2004-09-02 01:52:32 asaim Exp $
+// $Id: G4AntiXiZero.cc,v 1.16 2005-01-14 03:49:10 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,17 +44,17 @@
 // ###                           AntiXiZero                           ###
 // ######################################################################
 
-G4ParticleDefinition* G4AntiXiZero::theInstance = 0;
+G4AntiXiZero* G4AntiXiZero::theInstance = 0;
 
-G4ParticleDefinition* G4AntiXiZero::Definition()
+G4AntiXiZero* G4AntiXiZero::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "anti_xi0";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -65,7 +65,7 @@ G4ParticleDefinition* G4AntiXiZero::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
   
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    1.3149*GeV,  2.27e-12*MeV,         0.0,
                     1,              +1,             0,
                     1,              -1,             0,
@@ -86,16 +86,18 @@ G4ParticleDefinition* G4AntiXiZero::Definition()
   for (G4int index=0; index <2; index++ ) table->Insert(mode[index]);
   delete [] mode;
   
-  theInstance->SetDecayTable(table);
+   anInstance->SetDecayTable(table);
+  }
+  theInstance = reinterpret_cast<G4AntiXiZero*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4AntiXiZero::AntiXiZeroDefinition()
+G4AntiXiZero*  G4AntiXiZero::AntiXiZeroDefinition()
 { 
   return Definition();
 }
 
-G4ParticleDefinition*  G4AntiXiZero::AntiXiZero()
+G4AntiXiZero*  G4AntiXiZero::AntiXiZero()
 { 
   return Definition();
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4He3.hh,v 1.8 2004-09-02 01:52:34 asaim Exp $
+// $Id: G4He3.hh,v 1.9 2005-01-14 03:49:13 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                            He3                                 ###
 // ######################################################################
 
-class G4He3
+class G4He3 : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4He3* theInstance;
    G4He3(){}
    ~G4He3(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* He3Definition();
-   static G4ParticleDefinition* He3();
+   static G4He3* Definition();
+   static G4He3* He3Definition();
+   static G4He3* He3();
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PionMinus.cc,v 1.9 2004-09-02 01:52:38 asaim Exp $
+// $Id: G4PionMinus.cc,v 1.10 2005-01-14 03:49:16 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,17 +44,17 @@
 // ###                         PIONMINUS                              ###
 // ######################################################################
 
-G4ParticleDefinition* G4PionMinus::theInstance = 0;
+G4PionMinus* G4PionMinus::theInstance = 0;
 
-G4ParticleDefinition* G4PionMinus::Definition()
+G4PionMinus* G4PionMinus::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "pi-";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -65,7 +65,7 @@ G4ParticleDefinition* G4PionMinus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
 
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    0.1395700*GeV, 2.5284e-14*MeV,    -1.*eplus,
                     0,              -1,             0,
                     2,              -2,            -1,
@@ -81,16 +81,18 @@ G4ParticleDefinition* G4PionMinus::Definition()
   G4VDecayChannel* mode = new G4PhaseSpaceDecayChannel("pi-",1.00,2,"mu-","anti_nu_mu");
   table->Insert(mode);
 
-  theInstance->SetDecayTable(table);
+   anInstance->SetDecayTable(table);
+  }
+  theInstance = reinterpret_cast<G4PionMinus*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4PionMinus::PionMinusDefinition()
+G4PionMinus*  G4PionMinus::PionMinusDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4PionMinus::PionMinus()
+G4PionMinus*  G4PionMinus::PionMinus()
 {
   return Definition();
 }

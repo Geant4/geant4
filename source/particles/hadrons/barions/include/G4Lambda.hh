@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Lambda.hh,v 1.11 2004-09-02 01:52:28 asaim Exp $
+// $Id: G4Lambda.hh,v 1.12 2005-01-14 03:49:07 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                          Lambda                                ###
 // ######################################################################
 
-class G4Lambda
+class G4Lambda : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4Lambda* theInstance;
    G4Lambda(){}
    ~G4Lambda(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* LambdaDefinition();
-   static G4ParticleDefinition* Lambda();
+   static G4Lambda* Definition();
+   static G4Lambda* LambdaDefinition();
+   static G4Lambda* Lambda();
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XiZero.cc,v 1.15 2004-09-02 01:52:33 asaim Exp $
+// $Id: G4XiZero.cc,v 1.16 2005-01-14 03:49:11 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,17 +44,17 @@
 // ###                           XiZero                               ###
 // ######################################################################
 
-G4ParticleDefinition* G4XiZero::theInstance = 0;
+G4XiZero* G4XiZero::theInstance = 0;
 
-G4ParticleDefinition* G4XiZero::Definition()
+G4XiZero* G4XiZero::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "xi0";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -65,7 +65,7 @@ G4ParticleDefinition* G4XiZero::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
 
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    1.3149*GeV,  2.27e-12*MeV,         0.0,
                     1,              +1,             0,
                     1,              +1,             0,
@@ -83,16 +83,18 @@ G4ParticleDefinition* G4XiZero::Definition()
   for (G4int index=0; index <1; index++ ) table->Insert(mode[index]);
   delete [] mode;
 
-  theInstance->SetDecayTable(table);
+   anInstance->SetDecayTable(table);
+  }
+  theInstance = reinterpret_cast<G4XiZero*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4XiZero::XiZeroDefinition()
+G4XiZero*  G4XiZero::XiZeroDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4XiZero::XiZero()
+G4XiZero*  G4XiZero::XiZero()
 {
   return Definition();
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiXiZero.hh,v 1.11 2004-09-02 01:52:27 asaim Exp $
+// $Id: G4AntiXiZero.hh,v 1.12 2005-01-14 03:49:07 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                          AntiXiZero                            ###
 // ######################################################################
 
-class G4AntiXiZero
+class G4AntiXiZero : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4AntiXiZero* theInstance;
    G4AntiXiZero(){}
    ~G4AntiXiZero(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* AntiXiZeroDefinition();
-   static G4ParticleDefinition* AntiXiZero();
+   static G4AntiXiZero* Definition();
+   static G4AntiXiZero* AntiXiZeroDefinition();
+   static G4AntiXiZero* AntiXiZero();
 };
 
 #endif

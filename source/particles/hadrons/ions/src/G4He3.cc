@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4He3.cc,v 1.9 2004-09-02 01:52:34 asaim Exp $
+// $Id: G4He3.cc,v 1.10 2005-01-14 03:49:13 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,17 +41,17 @@
 // ###                           He3                                  ###
 // ######################################################################
 
-G4ParticleDefinition* G4He3::theInstance = 0;
+G4He3* G4He3::theInstance = 0;
 
-G4ParticleDefinition* G4He3::Definition()
+G4He3* G4He3::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "He3";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0) 
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -61,7 +61,7 @@ G4ParticleDefinition* G4He3::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,   2.80923*GeV,       0.0*MeV,  +2.0*eplus,
                     1,              +1,             0,
                     0,               0,             0,
@@ -70,17 +70,19 @@ G4ParticleDefinition* G4He3::Definition()
              false,           "static"
               );
 
-  theInstance->SetAtomicNumber(2);
-  theInstance->SetAtomicMass(3);
+   anInstance->SetAtomicNumber(2);
+   anInstance->SetAtomicMass(3);
+  }
+  theInstance = reinterpret_cast<G4He3*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4He3::He3Definition()
+G4He3*  G4He3::He3Definition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4He3::He3()
+G4He3*  G4He3::He3()
 {
   return Definition();
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Neutron.hh,v 1.13 2004-09-02 01:52:28 asaim Exp $
+// $Id: G4Neutron.hh,v 1.14 2005-01-14 03:49:07 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                         NEUTRON                                ###
 // ######################################################################
 
-class G4Neutron
+class G4Neutron : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4Neutron* theInstance;
    G4Neutron(){}
    ~G4Neutron(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* NeutronDefinition();
-   static G4ParticleDefinition* Neutron();
+   static G4Neutron* Definition();
+   static G4Neutron* NeutronDefinition();
+   static G4Neutron* Neutron();
 };
 
 #endif

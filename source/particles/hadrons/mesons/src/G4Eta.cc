@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Eta.cc,v 1.14 2004-09-02 01:52:37 asaim Exp $
+// $Id: G4Eta.cc,v 1.15 2005-01-14 03:49:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                         ETA                                    ###
 // ######################################################################
 
-G4ParticleDefinition* G4Eta::theInstance = 0;
+G4Eta* G4Eta::theInstance = 0;
 
-G4ParticleDefinition* G4Eta::Definition()
+G4Eta* G4Eta::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "eta";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -66,7 +66,7 @@ G4ParticleDefinition* G4Eta::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
 
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    0.54730*GeV,      1.18*keV,         0.0,
                     0,              -1,            +1,
                     0,               0,            +1,
@@ -90,16 +90,18 @@ G4ParticleDefinition* G4Eta::Definition()
   for (G4int index=0; index <4; index++ ) table->Insert(mode[index]);
   delete [] mode;
 
-  theInstance->SetDecayTable(table);
+   anInstance->SetDecayTable(table);
+  }
+  theInstance = reinterpret_cast<G4Eta*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4Eta::EtaDefinition()
+G4Eta*  G4Eta::EtaDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4Eta::Eta()
+G4Eta*  G4Eta::Eta()
 {
   return Definition();
 }

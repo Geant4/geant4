@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiBsMesonZero.cc,v 1.14 2004-09-02 01:52:36 asaim Exp $
+// $Id: G4AntiBsMesonZero.cc,v 1.15 2005-01-14 03:49:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,17 +40,17 @@
 // ###                      AntiBsMesonZero                           ###
 // ######################################################################
 
-G4ParticleDefinition* G4AntiBsMesonZero::theInstance = 0;
+G4AntiBsMesonZero* G4AntiBsMesonZero::theInstance = 0;
 
-G4ParticleDefinition* G4AntiBsMesonZero::Definition()
+G4AntiBsMesonZero* G4AntiBsMesonZero::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "anti_Bs0";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -61,23 +61,24 @@ G4ParticleDefinition* G4AntiBsMesonZero::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
 
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    5.3692*GeV,   4.51e-10*MeV,          0.,
                     0,              -1,             0,
                     0,               0,             0,
               "meson",               0,             0,        -531,
                 false,      1.61e-3*ns,          NULL,
                 false,       "Bs");
-
+  }
+  theInstance = reinterpret_cast<G4AntiBsMesonZero*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4AntiBsMesonZero::AntiBsMesonZeroDefinition()
+G4AntiBsMesonZero*  G4AntiBsMesonZero::AntiBsMesonZeroDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4AntiBsMesonZero::AntiBsMesonZero()
+G4AntiBsMesonZero*  G4AntiBsMesonZero::AntiBsMesonZero()
 {
   return Definition();
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BMesonPlus.cc,v 1.9 2004-09-02 01:52:37 asaim Exp $
+// $Id: G4BMesonPlus.cc,v 1.10 2005-01-14 03:49:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,17 +41,17 @@
 // ###                          BMesonPLUS                            ###
 // ######################################################################
 
-G4ParticleDefinition* G4BMesonPlus::theInstance = 0;
+G4BMesonPlus* G4BMesonPlus::theInstance = 0;
 
-G4ParticleDefinition* G4BMesonPlus::Definition()
+G4BMesonPlus* G4BMesonPlus::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "B+";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -62,23 +62,24 @@ G4ParticleDefinition* G4BMesonPlus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
 
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    5.2789*GeV,  3.93e-10*MeV,    +1.*eplus,
                     0,              -1,             0,
                     1,              +1,             0,
               "meson",               0,             0,         521,
                 false,      1.62e-3*ns,          NULL,
                 false,       "B");
-
+  }
+  theInstance = reinterpret_cast<G4BMesonPlus*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4BMesonPlus::BMesonPlusDefinition()
+G4BMesonPlus*  G4BMesonPlus::BMesonPlusDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4BMesonPlus::BMesonPlus()
+G4BMesonPlus*  G4BMesonPlus::BMesonPlus()
 {
   return Definition();
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiXiMinus.cc,v 1.10 2004-09-02 01:52:32 asaim Exp $
+// $Id: G4AntiXiMinus.cc,v 1.11 2005-01-14 03:49:10 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,17 +44,17 @@
 // ###                           AntiXiMinus                          ###
 // ######################################################################
 
-G4ParticleDefinition* G4AntiXiMinus::theInstance = 0;
+G4AntiXiMinus* G4AntiXiMinus::theInstance = 0;
 
-G4ParticleDefinition* G4AntiXiMinus::Definition()
+G4AntiXiMinus* G4AntiXiMinus::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "anti_xi-";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -65,7 +65,7 @@ G4ParticleDefinition* G4AntiXiMinus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
   
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    1.32132*GeV,  4.02e-12*MeV,       eplus,
                     1,              +1,             0,
                     1,              +1,             0,
@@ -82,16 +82,18 @@ G4ParticleDefinition* G4AntiXiMinus::Definition()
   for (G4int index=0; index <1; index++ ) table->Insert(mode[index]);
   delete [] mode;
   
-  theInstance->SetDecayTable(table);
+   anInstance->SetDecayTable(table);
+  }
+  theInstance = reinterpret_cast<G4AntiXiMinus*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4AntiXiMinus::AntiXiMinusDefinition()
+G4AntiXiMinus*  G4AntiXiMinus::AntiXiMinusDefinition()
 { 
   return Definition();
 }
 
-G4ParticleDefinition*  G4AntiXiMinus::AntiXiMinus()
+G4AntiXiMinus*  G4AntiXiMinus::AntiXiMinus()
 { 
   return Definition();
 }

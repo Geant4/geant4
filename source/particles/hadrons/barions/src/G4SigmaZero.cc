@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmaZero.cc,v 1.15 2004-09-02 01:52:32 asaim Exp $
+// $Id: G4SigmaZero.cc,v 1.16 2005-01-14 03:49:11 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,17 +44,17 @@
 // ###                           SigmaZero                            ###
 // ######################################################################
 
-G4ParticleDefinition* G4SigmaZero::theInstance = 0;
+G4SigmaZero* G4SigmaZero::theInstance = 0;
 
-G4ParticleDefinition* G4SigmaZero::Definition()
+G4SigmaZero* G4SigmaZero::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "sigma0";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -65,7 +65,7 @@ G4ParticleDefinition* G4SigmaZero::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
 
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    1.19255*GeV,    8.9e-3*MeV,         0.0,
                     1,              +1,             0,
                     2,               0,             0,
@@ -81,16 +81,18 @@ G4ParticleDefinition* G4SigmaZero::Definition()
 
   table->Insert(mode);
 
-  theInstance->SetDecayTable(table);
+   anInstance->SetDecayTable(table);
+  }
+  theInstance = reinterpret_cast<G4SigmaZero*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4SigmaZero::SigmaZeroDefinition()
+G4SigmaZero*  G4SigmaZero::SigmaZeroDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4SigmaZero::SigmaZero()
+G4SigmaZero*  G4SigmaZero::SigmaZero()
 {
   return Definition();
 }

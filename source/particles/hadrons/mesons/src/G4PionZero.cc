@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PionZero.cc,v 1.14 2004-09-02 01:52:38 asaim Exp $
+// $Id: G4PionZero.cc,v 1.15 2005-01-14 03:49:16 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,17 +46,17 @@
 // ###                          PIONZERO                              ###
 // ######################################################################
 
-G4ParticleDefinition* G4PionZero::theInstance = 0;
+G4PionZero* G4PionZero::theInstance = 0;
 
-G4ParticleDefinition* G4PionZero::Definition()
+G4PionZero* G4PionZero::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "pi0";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -67,7 +67,7 @@ G4ParticleDefinition* G4PionZero::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
 
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    0.1349764*GeV,   7.8e-06*MeV,         0.0,
                     0,              -1,            +1,
                     2,               0,            -1,
@@ -87,16 +87,18 @@ G4ParticleDefinition* G4PionZero::Definition()
   mode = new G4DalitzDecayChannel("pi0",0.012,"e-","e+");
   table->Insert(mode);
 
-  theInstance->SetDecayTable(table);
+   anInstance->SetDecayTable(table);
+  }
+  theInstance = reinterpret_cast<G4PionZero*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4PionZero::PionZeroDefinition()
+G4PionZero*  G4PionZero::PionZeroDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4PionZero::PionZero()
+G4PionZero*  G4PionZero::PionZero()
 {
   return Definition();
 }

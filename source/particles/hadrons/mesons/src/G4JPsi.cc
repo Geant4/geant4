@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4JPsi.cc,v 1.13 2004-09-02 01:52:37 asaim Exp $
+// $Id: G4JPsi.cc,v 1.14 2005-01-14 03:49:16 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,17 +40,17 @@
 // ###                                JPsi                            ###
 // ######################################################################
 
-G4ParticleDefinition* G4JPsi::theInstance = 0;
+G4JPsi* G4JPsi::theInstance = 0;
 
-G4ParticleDefinition* G4JPsi::Definition()
+G4JPsi* G4JPsi::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "J/psi";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -61,23 +61,24 @@ G4ParticleDefinition* G4JPsi::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
 
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    3.09688*GeV,     0.087*MeV,          0.,
                     2,              -1,            -1,
                     0,               0,            -1,
               "meson",               0,             0,         443,
                 false,          0.0*ns,          NULL,
                 false,         "J/psi",           443);
-
+  }
+  theInstance = reinterpret_cast<G4JPsi*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4JPsi::JPsiDefinition()
+G4JPsi*  G4JPsi::JPsiDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4JPsi::JPsi()
+G4JPsi*  G4JPsi::JPsi()
 {
   return Definition();
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DMesonPlus.cc,v 1.9 2004-09-02 01:52:37 asaim Exp $
+// $Id: G4DMesonPlus.cc,v 1.10 2005-01-14 03:49:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,17 +41,17 @@
 // ###                          DMesonPLUS                            ###
 // ######################################################################
 
-G4ParticleDefinition* G4DMesonPlus::theInstance = 0;
+G4DMesonPlus* G4DMesonPlus::theInstance = 0;
 
-G4ParticleDefinition* G4DMesonPlus::Definition()
+G4DMesonPlus* G4DMesonPlus::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "D+";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -62,23 +62,24 @@ G4ParticleDefinition* G4DMesonPlus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
 
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    1.8693*GeV,   6.26e-10*MeV,    +1.*eplus,
                     0,              -1,             0,
                     1,              +1,             0,
               "meson",               0,             0,         411,
                 false,     1.057e-3*ns,          NULL,
                 false,       "D");
-
+  }
+  theInstance = reinterpret_cast<G4DMesonPlus*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4DMesonPlus::DMesonPlusDefinition()
+G4DMesonPlus*  G4DMesonPlus::DMesonPlusDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4DMesonPlus::DMesonPlus()
+G4DMesonPlus*  G4DMesonPlus::DMesonPlus()
 {
   return Definition();
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DMesonZero.cc,v 1.14 2004-09-02 01:52:37 asaim Exp $
+// $Id: G4DMesonZero.cc,v 1.15 2005-01-14 03:49:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,17 +40,17 @@
 // ###                          DMesonZero                            ###
 // ######################################################################
 
-G4ParticleDefinition* G4DMesonZero::theInstance = 0;
+G4DMesonZero* G4DMesonZero::theInstance = 0;
 
-G4ParticleDefinition* G4DMesonZero::Definition()
+G4DMesonZero* G4DMesonZero::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "D0";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -60,7 +60,7 @@ G4ParticleDefinition* G4DMesonZero::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,   1.8645*GeV,   1.599e-9*MeV,          0.,
                     0,              -1,             0,
                     1,              -1,             0,
@@ -68,16 +68,17 @@ G4ParticleDefinition* G4DMesonZero::Definition()
                 false,     0.415e-3*ns,          NULL,
              false,           "D"
               );
-
+  }
+  theInstance = reinterpret_cast<G4DMesonZero*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4DMesonZero::DMesonZeroDefinition()
+G4DMesonZero*  G4DMesonZero::DMesonZeroDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4DMesonZero::DMesonZero()
+G4DMesonZero*  G4DMesonZero::DMesonZero()
 {
   return Definition();
 }

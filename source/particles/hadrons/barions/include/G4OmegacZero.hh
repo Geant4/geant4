@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OmegacZero.hh,v 1.10 2004-09-02 01:52:28 asaim Exp $
+// $Id: G4OmegacZero.hh,v 1.11 2005-01-14 03:49:08 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                          OmegacZero                            ###
 // ######################################################################
 
-class G4OmegacZero
+class G4OmegacZero : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4OmegacZero* theInstance;
    G4OmegacZero(){}
    ~G4OmegacZero(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* OmegacZeroDefinition();
-   static G4ParticleDefinition* OmegacZero();
+   static G4OmegacZero* Definition();
+   static G4OmegacZero* OmegacZeroDefinition();
+   static G4OmegacZero* OmegacZero();
 };
 
 #endif

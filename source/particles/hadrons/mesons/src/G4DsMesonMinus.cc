@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DsMesonMinus.cc,v 1.9 2004-09-02 01:52:37 asaim Exp $
+// $Id: G4DsMesonMinus.cc,v 1.10 2005-01-14 03:49:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,17 +41,17 @@
 // ###                        DsMesonMinus                            ###
 // ######################################################################
 
-G4ParticleDefinition* G4DsMesonMinus::theInstance = 0;
+G4DsMesonMinus* G4DsMesonMinus::theInstance = 0;
 
-G4ParticleDefinition* G4DsMesonMinus::Definition()
+G4DsMesonMinus* G4DsMesonMinus::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "Ds-";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -61,7 +61,7 @@ G4ParticleDefinition* G4DsMesonMinus::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,   1.9685*GeV,  1.342e-9*MeV,    -1.*eplus,
                     0,              -1,             0,
                     0,               0,             0,
@@ -69,16 +69,17 @@ G4ParticleDefinition* G4DsMesonMinus::Definition()
                 false,     0.467e-3*ns,          NULL,
              false,           "Ds"
               );
-
+  }
+  theInstance = reinterpret_cast<G4DsMesonMinus*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4DsMesonMinus::DsMesonMinusDefinition()
+G4DsMesonMinus*  G4DsMesonMinus::DsMesonMinusDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4DsMesonMinus::DsMesonMinus()
+G4DsMesonMinus*  G4DsMesonMinus::DsMesonMinus()
 {
   return Definition();
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutron.cc,v 1.15 2004-09-02 01:52:31 asaim Exp $
+// $Id: G4AntiNeutron.cc,v 1.16 2005-01-14 03:49:09 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,17 +41,17 @@
 // ######################################################################
 // ###                          ANTI NEUTRON                          ###
 // ######################################################################
-G4ParticleDefinition* G4AntiNeutron::theInstance = 0;
+G4AntiNeutron* G4AntiNeutron::theInstance = 0;
 
-G4ParticleDefinition* G4AntiNeutron::Definition()
+G4AntiNeutron* G4AntiNeutron::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "anti_neutron";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0) 
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -61,7 +61,7 @@ G4ParticleDefinition* G4AntiNeutron::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,  0.93956563*GeV, 7.432e-28*GeV,         0.0, 
 		    1,              +1,             0,          
 		    1,              +1,             0,             
@@ -69,16 +69,17 @@ G4ParticleDefinition* G4AntiNeutron::Definition()
 		 true,            -1.0,          NULL,
              false,           "neucleon"
               );
-
+  }
+  theInstance = reinterpret_cast<G4AntiNeutron*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4AntiNeutron::AntiNeutronDefinition()
+G4AntiNeutron*  G4AntiNeutron::AntiNeutronDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4AntiNeutron::AntiNeutron()
+G4AntiNeutron*  G4AntiNeutron::AntiNeutron()
 {
   return Definition();
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutrinoMu.hh,v 1.10 2004-09-02 01:52:39 asaim Exp $
+// $Id: G4AntiNeutrinoMu.hh,v 1.11 2005-01-14 03:49:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                       ANTI NEUTRINO MU                         ###
 // ######################################################################
 
-class G4AntiNeutrinoMu
+class G4AntiNeutrinoMu : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4AntiNeutrinoMu* theInstance;
    G4AntiNeutrinoMu(){}
    ~G4AntiNeutrinoMu(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* AntiNeutrinoMuDefinition();
-   static G4ParticleDefinition* AntiNeutrinoMu();
+   static G4AntiNeutrinoMu* Definition();
+   static G4AntiNeutrinoMu* AntiNeutrinoMuDefinition();
+   static G4AntiNeutrinoMu* AntiNeutrinoMu();
 };
 
 #endif

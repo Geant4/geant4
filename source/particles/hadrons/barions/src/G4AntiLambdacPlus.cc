@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiLambdacPlus.cc,v 1.10 2004-09-02 01:52:31 asaim Exp $
+// $Id: G4AntiLambdacPlus.cc,v 1.11 2005-01-14 03:49:09 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,17 +44,17 @@
 // ###                      AntiLambdacPlus                           ###
 // ######################################################################
 
-G4ParticleDefinition* G4AntiLambdacPlus::theInstance = 0;
+G4AntiLambdacPlus* G4AntiLambdacPlus::theInstance = 0;
 
-G4ParticleDefinition* G4AntiLambdacPlus::Definition()
+G4AntiLambdacPlus* G4AntiLambdacPlus::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "anti_lambda_c+";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0) 
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -65,7 +65,7 @@ G4ParticleDefinition* G4AntiLambdacPlus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
 
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    2.2849*GeV,   3.30e-9*MeV,   -1.*eplus,
                     1,              +1,             0,
                     0,               0,             0,
@@ -74,15 +74,17 @@ G4ParticleDefinition* G4AntiLambdacPlus::Definition()
                 false,       "lambda_c");
   
   // decay mode is not defined here, with expectation of pre-assigned.
+  } 
+  theInstance = reinterpret_cast<G4AntiLambdacPlus*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4AntiLambdacPlus::AntiLambdacPlusDefinition()
+G4AntiLambdacPlus*  G4AntiLambdacPlus::AntiLambdacPlusDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4AntiLambdacPlus::AntiLambdacPlus()
+G4AntiLambdacPlus*  G4AntiLambdacPlus::AntiLambdacPlus()
 {
   return Definition();
 }

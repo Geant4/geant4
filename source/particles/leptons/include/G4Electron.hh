@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Electron.hh,v 1.9 2004-09-02 01:52:39 asaim Exp $
+// $Id: G4Electron.hh,v 1.10 2005-01-14 03:49:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                         ELECTRON                               ###
 // ######################################################################
 
-class G4Electron
+class G4Electron : G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4Electron* theInstance;
    G4Electron(){}
    ~G4Electron(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* ElectronDefinition();
-   static G4ParticleDefinition* Electron();
+   static G4Electron* Definition();
+   static G4Electron* ElectronDefinition();
+   static G4Electron* Electron();
 };
 
 #endif

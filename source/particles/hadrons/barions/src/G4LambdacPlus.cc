@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LambdacPlus.cc,v 1.10 2004-09-02 01:52:32 asaim Exp $
+// $Id: G4LambdacPlus.cc,v 1.11 2005-01-14 03:49:11 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,17 +44,17 @@
 // ###                      LambdacPlus                               ###
 // ######################################################################
 
-G4ParticleDefinition* G4LambdacPlus::theInstance = 0;
+G4LambdacPlus* G4LambdacPlus::theInstance = 0;
 
-G4ParticleDefinition* G4LambdacPlus::Definition()
+G4LambdacPlus* G4LambdacPlus::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "lambda_c+";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -65,23 +65,24 @@ G4ParticleDefinition* G4LambdacPlus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
 
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    2.2849*GeV,   3.30e-9*MeV,   +1.*eplus,
                     1,              +1,             0,
                     0,               0,             0,
              "baryon",               0,            +1,        4122,
                 false,     0.206e-3*ns,          NULL,
                 false,       "lambda_c");
-  
+  }
+  theInstance = reinterpret_cast<G4LambdacPlus*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4LambdacPlus::LambdacPlusDefinition()
+G4LambdacPlus*  G4LambdacPlus::LambdacPlusDefinition()
 { 
   return Definition();
 }
 
-G4ParticleDefinition*  G4LambdacPlus::LambdacPlus()
+G4LambdacPlus*  G4LambdacPlus::LambdacPlus()
 { 
   return Definition();
 }

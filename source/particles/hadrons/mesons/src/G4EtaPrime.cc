@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EtaPrime.cc,v 1.15 2004-09-02 01:52:37 asaim Exp $
+// $Id: G4EtaPrime.cc,v 1.16 2005-01-14 03:49:16 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,17 +43,17 @@
 // ###                         EtaPrime                               ###
 // ######################################################################
 
-G4ParticleDefinition* G4EtaPrime::theInstance = 0;
+G4EtaPrime* G4EtaPrime::theInstance = 0;
 
-G4ParticleDefinition* G4EtaPrime::Definition()
+G4EtaPrime* G4EtaPrime::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "eta_prime";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -64,7 +64,7 @@ G4ParticleDefinition* G4EtaPrime::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
 
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    0.95777*GeV,     0.202*MeV,         0.0,
                     0,              -1,            +1,
                     0,               0,            +1,
@@ -86,16 +86,18 @@ G4ParticleDefinition* G4EtaPrime::Definition()
   for (G4int index=0; index <3; index++ ) table->Insert(mode[index]);
   delete [] mode;
 
-  theInstance->SetDecayTable(table);
+   anInstance->SetDecayTable(table);
+  }
+  theInstance = reinterpret_cast<G4EtaPrime*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4EtaPrime::EtaPrimeDefinition()
+G4EtaPrime*  G4EtaPrime::EtaPrimeDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4EtaPrime::EtaPrime()
+G4EtaPrime*  G4EtaPrime::EtaPrime()
 {
   return Definition();
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiProton.cc,v 1.9 2004-09-02 01:52:31 asaim Exp $
+// $Id: G4AntiProton.cc,v 1.10 2005-01-14 03:49:10 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,17 +42,17 @@
 // ###                       ANTIPROTON                               ###
 // ######################################################################
 
-G4ParticleDefinition* G4AntiProton::theInstance = 0;
+G4AntiProton* G4AntiProton::theInstance = 0;
 
-G4ParticleDefinition* G4AntiProton::Definition()
+G4AntiProton* G4AntiProton::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "anti_proton";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -62,7 +62,7 @@ G4ParticleDefinition* G4AntiProton::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,   0.9382723*GeV,       0.0*MeV,  -1.0*eplus, 
 		    1,              +1,             0,         
 		    1,              -1,             0,             
@@ -70,16 +70,17 @@ G4ParticleDefinition* G4AntiProton::Definition()
 		 true,            -1.0,          NULL,
              false,           "neucleon"
               );
-
+  }
+  theInstance = reinterpret_cast<G4AntiProton*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4AntiProton::AntiProtonDefinition()
+G4AntiProton*  G4AntiProton::AntiProtonDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4AntiProton::AntiProton()
+G4AntiProton*  G4AntiProton::AntiProton()
 {
   return Definition();
 }

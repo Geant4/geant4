@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Proton.cc,v 1.9 2004-09-02 01:52:32 asaim Exp $
+// $Id: G4Proton.cc,v 1.10 2005-01-14 03:49:11 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,17 +40,17 @@
 // ######################################################################
 // ###                           PROTON                               ###
 // ######################################################################
-G4ParticleDefinition* G4Proton::theInstance = 0;
+G4Proton* G4Proton::theInstance = 0;
 
-G4ParticleDefinition* G4Proton::Definition()
+G4Proton* G4Proton::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "proton";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -60,7 +60,7 @@ G4ParticleDefinition* G4Proton::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,   0.9382723*GeV,       0.0*MeV,       eplus, 
 		    1,              +1,             0,          
 		    1,              +1,             0,             
@@ -69,17 +69,19 @@ G4ParticleDefinition* G4Proton::Definition()
              false,           "neucleon"
               );
 
-  theInstance->SetAtomicNumber(1);
-  theInstance->SetAtomicMass(1);
+   anInstance->SetAtomicNumber(1);
+   anInstance->SetAtomicMass(1);
+  }
+  theInstance = reinterpret_cast<G4Proton*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4Proton::ProtonDefinition()
+G4Proton*  G4Proton::ProtonDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4Proton::Proton()
+G4Proton*  G4Proton::Proton()
 {
   return Definition();
 }

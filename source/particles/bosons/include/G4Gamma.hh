@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Gamma.hh,v 1.13 2004-09-02 01:52:26 asaim Exp $
+// $Id: G4Gamma.hh,v 1.14 2005-01-14 03:49:05 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,10 +45,10 @@
 // ###                           GAMMA                                ###
 // ######################################################################
 
-class G4Gamma
+class G4Gamma : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4Gamma* theInstance;
 
  private: // hide constructor as private
    G4Gamma(){}
@@ -56,9 +56,9 @@ class G4Gamma
  public:
    ~G4Gamma(){}
 
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* GammaDefinition();
-   static G4ParticleDefinition* Gamma();
+   static G4Gamma* Definition();
+   static G4Gamma* GammaDefinition();
+   static G4Gamma* Gamma();
 };
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TauPlus.hh,v 1.8 2004-09-02 01:52:39 asaim Exp $
+// $Id: G4TauPlus.hh,v 1.9 2005-01-14 03:49:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                           TAUPLUS                              ###
 // ######################################################################
 
-class G4TauPlus
+class G4TauPlus : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4TauPlus* theInstance;
    G4TauPlus(){}
    ~G4TauPlus(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* TauPlusDefinition();
-   static G4ParticleDefinition* TauPlus();
+   static G4TauPlus* Definition();
+   static G4TauPlus* TauPlusDefinition();
+   static G4TauPlus* TauPlus();
 };
 
 #endif

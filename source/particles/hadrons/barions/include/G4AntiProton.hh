@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiProton.hh,v 1.9 2004-09-02 01:52:27 asaim Exp $
+// $Id: G4AntiProton.hh,v 1.10 2005-01-14 03:49:07 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                          ANTIPROTON                            ###
 // ######################################################################
 
-class G4AntiProton
+class G4AntiProton : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4AntiProton* theInstance;
    G4AntiProton(){}
    ~G4AntiProton(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* AntiProtonDefinition();
-   static G4ParticleDefinition* AntiProton();
+   static G4AntiProton* Definition();
+   static G4AntiProton* AntiProtonDefinition();
+   static G4AntiProton* AntiProton();
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonMinus.cc,v 1.11 2004-09-02 01:52:38 asaim Exp $
+// $Id: G4KaonMinus.cc,v 1.12 2005-01-14 03:49:16 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,17 +46,17 @@
 // ###                         KAONMINUS                              ###
 // ######################################################################
 
-G4ParticleDefinition* G4KaonMinus::theInstance = 0;
+G4KaonMinus* G4KaonMinus::theInstance = 0;
 
-G4ParticleDefinition* G4KaonMinus::Definition()
+G4KaonMinus* G4KaonMinus::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "kaon-";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -67,7 +67,7 @@ G4ParticleDefinition* G4KaonMinus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
 
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    0.493677*GeV,   5.315e-14*MeV,    -1.*eplus,
                     0,              -1,             0,
                     1,              -1,             0,
@@ -96,16 +96,18 @@ G4ParticleDefinition* G4KaonMinus::Definition()
   for (G4int index=0; index <6; index++ ) table->Insert(mode[index]);
   delete [] mode;
 
-  theInstance->SetDecayTable(table);
+   anInstance->SetDecayTable(table);
+  }
+  theInstance = reinterpret_cast<G4KaonMinus*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4KaonMinus::KaonMinusDefinition()
+G4KaonMinus*  G4KaonMinus::KaonMinusDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4KaonMinus::KaonMinus()
+G4KaonMinus*  G4KaonMinus::KaonMinus()
 {
   return Definition();
 }

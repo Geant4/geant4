@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonMinus.cc,v 1.9 2004-09-02 01:52:40 asaim Exp $
+// $Id: G4MuonMinus.cc,v 1.10 2005-01-14 03:49:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,17 +43,17 @@
 // ######################################################################
 // ###                          MUONMINUS                             ###
 // ######################################################################
-G4ParticleDefinition* G4MuonMinus::theInstance = 0;
+G4MuonMinus* G4MuonMinus::theInstance = 0;
 
-G4ParticleDefinition* G4MuonMinus::Definition()
+G4MuonMinus* G4MuonMinus::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "mu-";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -63,7 +63,7 @@ G4ParticleDefinition* G4MuonMinus::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
-  theInstance = new G4ParticleDefinition(
+  anInstance = new G4ParticleDefinition(
                  name,   0.1056584*GeV, 2.99591e-16*MeV,  -1.*eplus, 
 		    1,               0,             0,          
 		    0,               0,             0,             
@@ -77,17 +77,18 @@ G4ParticleDefinition* G4MuonMinus::Definition()
   // create a decay channel
   G4VDecayChannel* mode = new G4MuonDecayChannel("mu-",1.00);
   table->Insert(mode);
-  theInstance->SetDecayTable(table);
-
+  anInstance->SetDecayTable(table);
+  }
+  theInstance = reinterpret_cast<G4MuonMinus*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4MuonMinus::MuonMinusDefinition()
+G4MuonMinus*  G4MuonMinus::MuonMinusDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4MuonMinus::MuonMinus()
+G4MuonMinus*  G4MuonMinus::MuonMinus()
 {
   return Definition();
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmacZero.cc,v 1.14 2004-09-02 01:52:32 asaim Exp $
+// $Id: G4AntiSigmacZero.cc,v 1.15 2005-01-14 03:49:10 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,17 +44,17 @@
 // ###                      AntiSigmacZero                            ###
 // ######################################################################
 
-G4ParticleDefinition* G4AntiSigmacZero::theInstance = 0;
+G4AntiSigmacZero* G4AntiSigmacZero::theInstance = 0;
 
-G4ParticleDefinition* G4AntiSigmacZero::Definition()
+G4AntiSigmacZero* G4AntiSigmacZero::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "anti_sigma_c0";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -65,7 +65,7 @@ G4ParticleDefinition* G4AntiSigmacZero::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
   
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    2.4521*GeV,       1.5*MeV,  +0.0*eplus,
                     1,              +1,             0,
                     2,               0,             0,
@@ -83,16 +83,18 @@ G4ParticleDefinition* G4AntiSigmacZero::Definition()
   for (G4int index=0; index <1; index++ ) table->Insert(mode[index]);
   delete [] mode;
   
-  theInstance->SetDecayTable(table);
+   anInstance->SetDecayTable(table);
+  }
+  theInstance = reinterpret_cast<G4AntiSigmacZero*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4AntiSigmacZero::AntiSigmacZeroDefinition()
+G4AntiSigmacZero*  G4AntiSigmacZero::AntiSigmacZeroDefinition()
 { 
   return Definition();
 }
 
-G4ParticleDefinition*  G4AntiSigmacZero::AntiSigmacZero()
+G4AntiSigmacZero*  G4AntiSigmacZero::AntiSigmacZero()
 { 
   return Definition();
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmaMinus.cc,v 1.10 2004-09-02 01:52:32 asaim Exp $
+// $Id: G4SigmaMinus.cc,v 1.11 2005-01-14 03:49:11 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,17 +44,17 @@
 // ###                           SigmaMinus                           ###
 // ######################################################################
 
-G4ParticleDefinition* G4SigmaMinus::theInstance = 0;
+G4SigmaMinus* G4SigmaMinus::theInstance = 0;
 
-G4ParticleDefinition* G4SigmaMinus::Definition()
+G4SigmaMinus* G4SigmaMinus::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "sigma-";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -65,7 +65,7 @@ G4ParticleDefinition* G4SigmaMinus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
   
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    1.19744*GeV,  4.45e-12*MeV,    -1*eplus,
                     1,              +1,             0,
                     2,              -2,             0,
@@ -83,16 +83,18 @@ G4ParticleDefinition* G4SigmaMinus::Definition()
   for (G4int index=0; index <1; index++ ) table->Insert(mode[index]);
   delete [] mode;
 
-  theInstance->SetDecayTable(table);
+   anInstance->SetDecayTable(table);
+  }
+  theInstance = reinterpret_cast<G4SigmaMinus*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4SigmaMinus::SigmaMinusDefinition()
+G4SigmaMinus*  G4SigmaMinus::SigmaMinusDefinition()
 { 
   return Definition();
 }
 
-G4ParticleDefinition*  G4SigmaMinus::SigmaMinus()
+G4SigmaMinus*  G4SigmaMinus::SigmaMinus()
 { 
   return Definition();
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiKaonZero.cc,v 1.13 2004-09-02 01:52:37 asaim Exp $
+// $Id: G4AntiKaonZero.cc,v 1.14 2005-01-14 03:49:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                      ANTIKAONZERO                              ###
 // ######################################################################
 
-G4ParticleDefinition* G4AntiKaonZero::theInstance = 0;
+G4AntiKaonZero* G4AntiKaonZero::theInstance = 0;
 
-G4ParticleDefinition* G4AntiKaonZero::Definition()
+G4AntiKaonZero* G4AntiKaonZero::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "anti_kaon0";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -66,7 +66,7 @@ G4ParticleDefinition* G4AntiKaonZero::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
 
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    0.497672*GeV,       0.0*MeV,         0.0,
                     0,              -1,             0,
                     1,               1,             0,
@@ -86,16 +86,18 @@ G4ParticleDefinition* G4AntiKaonZero::Definition()
   for (G4int index=0; index <2; index++ ) table->Insert(mode[index]);
   delete [] mode;
 
-  theInstance->SetDecayTable(table);
+   anInstance->SetDecayTable(table);
+  }
+  theInstance = reinterpret_cast<G4AntiKaonZero*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4AntiKaonZero::AntiKaonZeroDefinition()
+G4AntiKaonZero*  G4AntiKaonZero::AntiKaonZeroDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4AntiKaonZero::AntiKaonZero()
+G4AntiKaonZero*  G4AntiKaonZero::AntiKaonZero()
 {
   return Definition();
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Alpha.hh,v 1.8 2004-09-02 01:52:34 asaim Exp $
+// $Id: G4Alpha.hh,v 1.9 2005-01-14 03:49:13 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                          ALPHA                                 ###
 // ######################################################################
 
-class G4Alpha
+class G4Alpha : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4Alpha* theInstance;
    G4Alpha(){}
    ~G4Alpha(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* AlphaDefinition();
-   static G4ParticleDefinition* Alpha();
+   static G4Alpha* Definition();
+   static G4Alpha* AlphaDefinition();
+   static G4Alpha* Alpha();
 };
 
 #endif

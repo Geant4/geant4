@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Geantino.hh,v 1.10 2004-09-02 01:52:26 asaim Exp $
+// $Id: G4Geantino.hh,v 1.11 2005-01-14 03:49:05 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,10 +45,10 @@
 // ###                         GEANTINO                               ###
 // ######################################################################
 
-class G4Geantino
+class G4Geantino : public G4ParticleDefinition
 {
  private:
-  static G4ParticleDefinition* theInstance;
+  static G4Geantino* theInstance;
 
  private:
   G4Geantino() {}
@@ -56,9 +56,9 @@ class G4Geantino
  public:
   ~G4Geantino(){}
  
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* GeantinoDefinition();
-   static G4ParticleDefinition* Geantino();
+   static G4Geantino* Definition();
+   static G4Geantino* GeantinoDefinition();
+   static G4Geantino* Geantino();
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Neutron.cc,v 1.17 2004-09-02 01:52:32 asaim Exp $
+// $Id: G4Neutron.cc,v 1.18 2005-01-14 03:49:11 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ######################################################################
 // ###                           NEUTRON                              ###
 // ######################################################################
-G4ParticleDefinition* G4Neutron::theInstance = 0;
+G4Neutron* G4Neutron::theInstance = 0;
 
-G4ParticleDefinition* G4Neutron::Definition()
+G4Neutron* G4Neutron::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "neutron";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -65,7 +65,7 @@ G4ParticleDefinition* G4Neutron::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,  0.93956563*GeV, 7.432e-28*GeV,         0.0, 
 		    1,              +1,             0,          
 		    1,              -1,             0,             
@@ -78,19 +78,21 @@ G4ParticleDefinition* G4Neutron::Definition()
   // create a decay channel
   G4VDecayChannel* mode = new G4NeutronBetaDecayChannel("neutron",1.00);
   table->Insert(mode);
-  theInstance->SetDecayTable(table);
+   anInstance->SetDecayTable(table);
 
-  theInstance->SetAtomicNumber(0);
-  theInstance->SetAtomicMass(1);
+   anInstance->SetAtomicNumber(0);
+   anInstance->SetAtomicMass(1);
+  }
+  theInstance = reinterpret_cast<G4Neutron*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4Neutron::NeutronDefinition()
+G4Neutron*  G4Neutron::NeutronDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4Neutron::Neutron()
+G4Neutron*  G4Neutron::Neutron()
 {
   return Definition();
 }

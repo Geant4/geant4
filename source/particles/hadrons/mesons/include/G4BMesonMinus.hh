@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BMesonMinus.hh,v 1.6 2004-09-02 01:52:35 asaim Exp $
+// $Id: G4BMesonMinus.hh,v 1.7 2005-01-14 03:49:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                         BMesonMinus                            ###
 // ######################################################################
 
-class G4BMesonMinus
+class G4BMesonMinus : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4BMesonMinus* theInstance;
    G4BMesonMinus(){}
    ~G4BMesonMinus(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* BMesonMinusDefinition();
-   static G4ParticleDefinition* BMesonMinus();
+   static G4BMesonMinus* Definition();
+   static G4BMesonMinus* BMesonMinusDefinition();
+   static G4BMesonMinus* BMesonMinus();
 };
 
 #endif

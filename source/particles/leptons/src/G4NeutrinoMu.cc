@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutrinoMu.cc,v 1.14 2004-09-02 01:52:40 asaim Exp $
+// $Id: G4NeutrinoMu.cc,v 1.15 2005-01-14 03:49:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,17 +41,17 @@
 // ######################################################################
 // ###                     MU NEUTRINO                               ###
 // ######################################################################
-G4ParticleDefinition* G4NeutrinoMu::theInstance = 0;
+G4NeutrinoMu* G4NeutrinoMu::theInstance = 0;
 
-G4ParticleDefinition* G4NeutrinoMu::Definition()
+G4NeutrinoMu* G4NeutrinoMu::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "nu_mu";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -61,7 +61,7 @@ G4ParticleDefinition* G4NeutrinoMu::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,         0.0*MeV,       0.0*MeV,         0.0, 
 		    1,               0,             0,          
 		    0,               0,             0,             
@@ -69,16 +69,17 @@ G4ParticleDefinition* G4NeutrinoMu::Definition()
 		 true,             0.0,          NULL,
              false,           "mu"
               );
-
+  }
+  theInstance = reinterpret_cast<G4NeutrinoMu*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4NeutrinoMu::NeutrinoMuDefinition()
+G4NeutrinoMu*  G4NeutrinoMu::NeutrinoMuDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4NeutrinoMu::NeutrinoMu()
+G4NeutrinoMu*  G4NeutrinoMu::NeutrinoMu()
 {
   return Definition();
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonMinus.hh,v 1.8 2004-09-02 01:52:35 asaim Exp $
+// $Id: G4KaonMinus.hh,v 1.9 2005-01-14 03:49:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                        KAONMINUS                               ###
 // ######################################################################
 
-class G4KaonMinus
+class G4KaonMinus : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4KaonMinus* theInstance;
    G4KaonMinus(){}
    ~G4KaonMinus(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* KaonMinusDefinition();
-   static G4ParticleDefinition* KaonMinus();
+   static G4KaonMinus* Definition();
+   static G4KaonMinus* KaonMinusDefinition();
+   static G4KaonMinus* KaonMinus();
 };
 
 #endif

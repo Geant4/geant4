@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiLambdacPlus.hh,v 1.7 2004-09-02 01:52:27 asaim Exp $
+// $Id: G4AntiLambdacPlus.hh,v 1.8 2005-01-14 03:49:06 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                          AntiLambdacPlus                       ###
 // ######################################################################
 
-class G4AntiLambdacPlus
+class G4AntiLambdacPlus : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4AntiLambdacPlus* theInstance;
    G4AntiLambdacPlus(){}
    ~G4AntiLambdacPlus(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* AntiLambdacPlusDefinition();
-   static G4ParticleDefinition* AntiLambdacPlus();
+   static G4AntiLambdacPlus* Definition();
+   static G4AntiLambdacPlus* AntiLambdacPlusDefinition();
+   static G4AntiLambdacPlus* AntiLambdacPlus();
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Eta.hh,v 1.10 2004-09-02 01:52:35 asaim Exp $
+// $Id: G4Eta.hh,v 1.11 2005-01-14 03:49:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                         ETA                                    ###
 // ######################################################################
 
-class G4Eta
+class G4Eta : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4Eta* theInstance;
    G4Eta(){}
    ~G4Eta(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* EtaDefinition();
-   static G4ParticleDefinition* Eta();
+   static G4Eta* Definition();
+   static G4Eta* EtaDefinition();
+   static G4Eta* Eta();
 };
 
 #endif

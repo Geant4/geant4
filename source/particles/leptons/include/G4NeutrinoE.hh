@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutrinoE.hh,v 1.10 2004-09-02 01:52:39 asaim Exp $
+// $Id: G4NeutrinoE.hh,v 1.11 2005-01-14 03:49:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                         NEUTRINO E                             ###
 // ######################################################################
 
-class G4NeutrinoE
+class G4NeutrinoE : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4NeutrinoE* theInstance;
    G4NeutrinoE(){}
    ~G4NeutrinoE(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* NeutrinoEDefinition();
-   static G4ParticleDefinition* NeutrinoE();
+   static G4NeutrinoE* Definition();
+   static G4NeutrinoE* NeutrinoEDefinition();
+   static G4NeutrinoE* NeutrinoE();
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutrinoTau.cc,v 1.13 2004-09-02 01:52:40 asaim Exp $
+// $Id: G4AntiNeutrinoTau.cc,v 1.14 2005-01-14 03:49:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,17 +42,17 @@
 // ######################################################################
 // ###                   ANTI TAU NEUTRINO                            ###
 // ######################################################################
-G4ParticleDefinition* G4AntiNeutrinoTau::theInstance = 0;
+G4AntiNeutrinoTau* G4AntiNeutrinoTau::theInstance = 0;
 
-G4ParticleDefinition* G4AntiNeutrinoTau::Definition()
+G4AntiNeutrinoTau* G4AntiNeutrinoTau::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "anti_nu_tau";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -62,7 +62,7 @@ G4ParticleDefinition* G4AntiNeutrinoTau::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,         0.0*MeV,       0.0*MeV,         0.0, 
 		    1,               0,             0,          
 		    0,               0,             0,             
@@ -70,16 +70,17 @@ G4ParticleDefinition* G4AntiNeutrinoTau::Definition()
 		 true,             0.0,          NULL,
              false,           "tau"
               );
-
+  }
+  theInstance = reinterpret_cast<G4AntiNeutrinoTau*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4AntiNeutrinoTau::AntiNeutrinoTauDefinition()
+G4AntiNeutrinoTau*  G4AntiNeutrinoTau::AntiNeutrinoTauDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4AntiNeutrinoTau::AntiNeutrinoTau()
+G4AntiNeutrinoTau*  G4AntiNeutrinoTau::AntiNeutrinoTau()
 {
   return Definition();
 }

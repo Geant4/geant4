@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutrinoTau.cc,v 1.13 2004-09-02 01:52:40 asaim Exp $
+// $Id: G4NeutrinoTau.cc,v 1.14 2005-01-14 03:49:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,17 +41,17 @@
 // ######################################################################
 // ###                     TAU NEUTRINO                               ###
 // ######################################################################
-G4ParticleDefinition* G4NeutrinoTau::theInstance = 0;
+G4NeutrinoTau* G4NeutrinoTau::theInstance = 0;
 
-G4ParticleDefinition* G4NeutrinoTau::Definition()
+G4NeutrinoTau* G4NeutrinoTau::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "nu_tau";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -61,7 +61,7 @@ G4ParticleDefinition* G4NeutrinoTau::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,         0.0*MeV,       0.0*MeV,         0.0, 
 		    1,               0,             0,          
 		    0,               0,             0,             
@@ -69,16 +69,17 @@ G4ParticleDefinition* G4NeutrinoTau::Definition()
 		 true,             0.0,          NULL,
              false,           "tau"
               );
-
+  }
+  theInstance = reinterpret_cast<G4NeutrinoTau*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4NeutrinoTau::NeutrinoTauDefinition()
+G4NeutrinoTau*  G4NeutrinoTau::NeutrinoTauDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4NeutrinoTau::NeutrinoTau()
+G4NeutrinoTau*  G4NeutrinoTau::NeutrinoTau()
 {
   return Definition();
 }

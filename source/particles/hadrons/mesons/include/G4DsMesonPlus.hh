@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DsMesonPlus.hh,v 1.6 2004-09-02 01:52:35 asaim Exp $
+// $Id: G4DsMesonPlus.hh,v 1.7 2005-01-14 03:49:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                        DsMesonPlus                             ###
 // ######################################################################
 
-class G4DsMesonPlus
+class G4DsMesonPlus : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4DsMesonPlus* theInstance;
    G4DsMesonPlus(){}
    ~G4DsMesonPlus(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* DsMesonPlusDefinition();
-   static G4ParticleDefinition* DsMesonPlus();
+   static G4DsMesonPlus* Definition();
+   static G4DsMesonPlus* DsMesonPlusDefinition();
+   static G4DsMesonPlus* DsMesonPlus();
 };
 
 #endif

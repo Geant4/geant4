@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Triton.cc,v 1.9 2004-09-02 01:52:34 asaim Exp $
+// $Id: G4Triton.cc,v 1.10 2005-01-14 03:49:13 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,17 +41,17 @@
 // ###                           TRITON                               ###
 // ######################################################################
 
-G4ParticleDefinition* G4Triton::theInstance = 0;
+G4Triton* G4Triton::theInstance = 0;
 
-G4ParticleDefinition* G4Triton::Definition()
+G4Triton* G4Triton::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "triton";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -61,7 +61,7 @@ G4ParticleDefinition* G4Triton::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,   2.80925*GeV,       0.0*MeV,  +1.0*eplus,
                     1,              +1,             0,
                     0,               0,             0,
@@ -70,17 +70,19 @@ G4ParticleDefinition* G4Triton::Definition()
              false,           "static"
               );
 
-  theInstance->SetAtomicNumber(1);
-  theInstance->SetAtomicMass(3);
+   anInstance->SetAtomicNumber(1);
+   anInstance->SetAtomicMass(3);
+  }
+  theInstance = reinterpret_cast<G4Triton*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4Triton::TritonDefinition()
+G4Triton*  G4Triton::TritonDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4Triton::Triton()
+G4Triton*  G4Triton::Triton()
 {
   return Definition();
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XicPlus.hh,v 1.7 2004-09-02 01:52:30 asaim Exp $
+// $Id: G4XicPlus.hh,v 1.8 2005-01-14 03:49:08 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                          XicPlus                               ###
 // ######################################################################
 
-class G4XicPlus
+class G4XicPlus : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4XicPlus* theInstance;
    G4XicPlus(){}
    ~G4XicPlus(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* XicPlusDefinition();
-   static G4ParticleDefinition* XicPlus();
+   static G4XicPlus* Definition();
+   static G4XicPlus* XicPlusDefinition();
+   static G4XicPlus* XicPlus();
 };
 
 #endif

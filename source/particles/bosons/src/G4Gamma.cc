@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Gamma.cc,v 1.11 2004-09-02 01:52:26 asaim Exp $
+// $Id: G4Gamma.cc,v 1.12 2005-01-14 03:49:06 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,19 +40,19 @@
 // ######################################################################
 // ###                            GAMMA                               ###
 // ######################################################################
-G4ParticleDefinition* G4Gamma::theInstance = 0;
+G4Gamma* G4Gamma::theInstance = 0;
 
 
-G4ParticleDefinition*  G4Gamma::Definition() 
+G4Gamma*  G4Gamma::Definition() 
 {
   if (theInstance !=0) return theInstance;
 
   const G4String name = "gamma";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //      
   //    Arguments for constructor are as follows 
@@ -62,7 +62,7 @@ G4ParticleDefinition*  G4Gamma::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table 
   //             shortlived      subType    anti_encoding
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
 	         name,         0.0*MeV,       0.0*MeV,         0.0, 
 		    2,              -1,            -1,          
 		    0,               0,             0,             
@@ -70,16 +70,17 @@ G4ParticleDefinition*  G4Gamma::Definition()
 	      true,                0.0,          NULL,
              false,           "photon",          22
 	      );
-  
+  }
+  theInstance = reinterpret_cast<G4Gamma*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4Gamma::GammaDefinition() 
+G4Gamma*  G4Gamma::GammaDefinition() 
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4Gamma::Gamma() 
+G4Gamma*  G4Gamma::Gamma() 
 {
   return Definition();
 }

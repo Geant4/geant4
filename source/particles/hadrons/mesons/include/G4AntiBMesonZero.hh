@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiBMesonZero.hh,v 1.9 2004-09-02 01:52:35 asaim Exp $
+// $Id: G4AntiBMesonZero.hh,v 1.10 2005-01-14 03:49:13 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                         AntiBMesonZero                         ###
 // ######################################################################
 
-class G4AntiBMesonZero
+class G4AntiBMesonZero : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4AntiBMesonZero* theInstance;
    G4AntiBMesonZero(){}
    ~G4AntiBMesonZero(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* AntiBMesonZeroDefinition();
-   static G4ParticleDefinition* AntiBMesonZero();
+   static G4AntiBMesonZero* Definition();
+   static G4AntiBMesonZero* AntiBMesonZeroDefinition();
+   static G4AntiBMesonZero* AntiBMesonZero();
 };
 
 #endif

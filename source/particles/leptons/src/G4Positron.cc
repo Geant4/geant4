@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Positron.cc,v 1.9 2004-09-02 01:52:40 asaim Exp $
+// $Id: G4Positron.cc,v 1.10 2005-01-14 03:49:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,17 +40,17 @@
 // ######################################################################
 // ###                         POSITRON                               ###
 // ######################################################################
-G4ParticleDefinition* G4Positron::theInstance = 0;
+G4Positron* G4Positron::theInstance = 0;
 
-G4ParticleDefinition* G4Positron::Definition()
+G4Positron* G4Positron::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "e+";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -60,7 +60,7 @@ G4ParticleDefinition* G4Positron::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,  0.51099906*MeV,       0.0*MeV,    +1.*eplus, 
 		    1,               0,             0,          
 		    0,               0,             0,             
@@ -68,16 +68,17 @@ G4ParticleDefinition* G4Positron::Definition()
 		 true,            -1.0,          NULL,
                 false,             "e"
               );
-
+  }
+  theInstance = reinterpret_cast<G4Positron*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4Positron::PositronDefinition()
+G4Positron*  G4Positron::PositronDefinition()
 {
   return Definition();
 }
 
-G4ParticleDefinition*  G4Positron::Positron()
+G4Positron*  G4Positron::Positron()
 {
   return Definition();
 }

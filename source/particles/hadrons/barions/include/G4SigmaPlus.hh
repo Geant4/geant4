@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmaPlus.hh,v 1.8 2004-09-02 01:52:28 asaim Exp $
+// $Id: G4SigmaPlus.hh,v 1.9 2005-01-14 03:49:08 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,17 +45,17 @@
 // ###                          SigmaPlus                             ###
 // ######################################################################
 
-class G4SigmaPlus
+class G4SigmaPlus : public G4ParticleDefinition
 {
  private:
-   static G4ParticleDefinition* theInstance;
+   static G4SigmaPlus* theInstance;
    G4SigmaPlus(){}
    ~G4SigmaPlus(){}
 
  public:
-   static G4ParticleDefinition* Definition();
-   static G4ParticleDefinition* SigmaPlusDefinition();
-   static G4ParticleDefinition* SigmaPlus();
+   static G4SigmaPlus* Definition();
+   static G4SigmaPlus* SigmaPlusDefinition();
+   static G4SigmaPlus* SigmaPlus();
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmaPlus.cc,v 1.11 2004-09-02 01:52:31 asaim Exp $
+// $Id: G4AntiSigmaPlus.cc,v 1.12 2005-01-14 03:49:10 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,17 +44,17 @@
 // ###                           AntiSigmaPlus                       ####
 // ######################################################################
 
-G4ParticleDefinition* G4AntiSigmaPlus::theInstance = 0;
+G4AntiSigmaPlus* G4AntiSigmaPlus::theInstance = 0;
 
-G4ParticleDefinition* G4AntiSigmaPlus::Definition()
+G4AntiSigmaPlus* G4AntiSigmaPlus::Definition()
 {
   if (theInstance !=0) return theInstance;
   const G4String name = "anti_sigma+";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  theInstance = pTable->FindParticle(name);
-  if (theInstance !=0) return theInstance;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
   // create particle
   //
   //    Arguments for constructor are as follows
@@ -65,7 +65,7 @@ G4ParticleDefinition* G4AntiSigmaPlus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
   
-  theInstance = new G4ParticleDefinition(
+   anInstance = new G4ParticleDefinition(
                  name,    1.18937*GeV, 8.209e-12*MeV,   -1.*eplus,
                     1,              +1,             0,
                     2,              -2,             0,
@@ -85,16 +85,18 @@ G4ParticleDefinition* G4AntiSigmaPlus::Definition()
   for (G4int index=0; index <2; index++ ) table->Insert(mode[index]);
   delete [] mode;
   
-  theInstance->SetDecayTable(table);
+   anInstance->SetDecayTable(table);
+  }
+  theInstance = reinterpret_cast<G4AntiSigmaPlus*>(anInstance);
   return theInstance;
 }
 
-G4ParticleDefinition*  G4AntiSigmaPlus::AntiSigmaPlusDefinition()
+G4AntiSigmaPlus*  G4AntiSigmaPlus::AntiSigmaPlusDefinition()
 { 
   return Definition();
 }
 
-G4ParticleDefinition*  G4AntiSigmaPlus::AntiSigmaPlus()
+G4AntiSigmaPlus*  G4AntiSigmaPlus::AntiSigmaPlus()
 { 
   return Definition();
 }
