@@ -717,3 +717,4 @@ G4double G4OpBoundaryProcess::GetMeanFreePath(const G4Track& ,
 
 	return DBL_MAX;
 }
+
