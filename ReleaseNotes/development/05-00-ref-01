@@ -1,0 +1,174 @@
+
+                       geant4-05-00-ref-01
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Introduced first implementation of 'cuts-by-region' technique,
+    allowing setup of different production cuts associated to different
+    regions (sub-detectors) of the detector geometry.
+  o Dismissed temporary implementation of 'cuts-per-material'. Codes
+    making use of this feature will be required to migrate to the new
+    scheme.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+geometry/management                     geommng-V05-00-03
+-------------------
+- Included development for 'cuts-by-region':
+  o Introduced new classes G4Region and G4RegionStore.
+  o Modified G4LogicalVolume to handle recursive propagation of regions
+    to daughters.
+  o Updated G4LogicalVolumeStore to handle de-registration of root
+    regions for volumes which are explicitely deleted.
+- G4VSolid.cc: restored original conditions for extent clipping in
+  method ClipPolygon().
+
+geometry/solids/Boolean                 geom-bool-V05-00-00
+-----------------------
+- G4ReflectionFactory[.hh.cc]:
+  o Added set/get functions Set/GetVolumesNameExtension() for volume-name
+    extension. By default now the factory assigns "_refl" postfix to name
+    of reflected volumes.
+  o Assumed less strict condition in the CheckScale() method, to avoid
+    precision problems with imported rotation matrices.
+
+global                                  global-V05-00-00
+------
+- global.hh: exclude definition of min/max for Windows .NET VC++ compiler.
+
+intercoms                               intercoms-V05-00-00
+---------
+- Added G4VVisManager::Draw methods for hits and trajectories.
+
+parameterisations                       parmodels-V05-00-00
+-----------------
+- Updated header files to remove redundant header inclusions
+  and properly order inclusion for complex numbers, to allow
+  porting on Windows .NET VC++ compiler.
+
+particles                               particles-V05-00-04
+---------
+- Included development for 'cuts-by-region'
+  (verbose mode temporarly ON by default):
+  o Dismissed 'cuts-by-material' temporary implementation.
+  o Removed concrete implementation of method
+    'CalcEnergyCuts( const G4Material* )' from affected particles.
+  o Removed ComputeLoss(), BuildRangeVector() from G4Electron and G4Positron.
+  o Added classes G4MaterialCutsCouple, G4ProductionCuts, G4ProductionCutsTable,
+    G4RToEConvForAntiNeutron, G4RToEConvForAntiProton, G4RToEConvForElectron,
+    G4RToEConvForGamma, G4RToEConvForNeutron, G4RToEConvForPositron,
+    G4RToEConvForProton, G4VRangeToEnergyConverter - in processes/management.
+  o Modified G4ParticleDefinition and G4ParticleWithCuts to handle new cuts scheme.
+  o Added dependency on geometry/volumes in management/GNUmakefile.
+
+processes/electromagnetic/lowenergy     emlowen-V05-00-00
+-----------------------------------
+- Included development for 'cuts-by-region':
+  o Made relevant physics processes "region-aware".
+
+processes/electromagnetic/muons         muons-V05-00-02
+-------------------------------
+- Included development for 'cuts-by-region':
+  o Made relevant physics processes "region-aware".
+- MuPairProduction::PostStepDoIt(): removed 'tracking cut' of muon.
+
+processes/electromagnetic/standard      stand-V05-00-02
+----------------------------------
+- Included development for 'cuts-by-region':
+  o Made relevant physics processes "region-aware".
+- Fixed problem in cut control in G4PAIonisation.
+- Fix in setting of 'costeta' in PhotoElectricEffect::ElecThetaDistribution().
+
+processes/electromagnetic/utils         utils-V05-00-01
+-------------------------------
+- Included development for 'cuts-by-region':
+  o Made relevant physics processes "region-aware".
+
+processes/electromagnetic/xrays         xrays-V05-00-00
+-------------------------------
+- G4VXTRenergyLoss[.hh.cc]: removed redundant header inclusions and
+  ordered inclusion for complex numbers to allow porting on Windows .NET VC++.
+
+processes/hadronic/models/chiral_inv_phase_space/body  CHIPS-V04-01-09
+-----------------------------------------------------
+- Minor fix for memory leak.
+
+processes/hadronic/models/generator/de_excitation      ghad-deex-V05-00-01
+-------------------------------------------------
+- Fixed a printout warning.
+- Minor fix in method G4ExcitationHandler::transform() when calling erase(),
+  to allow porting on Windows .NET VC++ compiler. 
+
+processes/hadronic/models/generator/pre_equilibrium    ghad-preco-V05-00-00
+---------------------------------------------------
+- Fixed a printout warning.
+
+processes/transportation                transport-V05-00-02
+------------------------
+- Included development for 'cuts-by-region':
+  o Made G4Transportation processes "region-aware".
+
+run                                     run-V05-00-03
+---
+- Included development for 'cuts-by-region':
+  o In G4VUserPhysicsList, removed the following methods:
+    ReCalcCutValue(), SetCutValueForOthers(), SetCutValueForOtherThan(),
+    ReCalcCutValueForOthers(), StoreMaterialInfo(), StoreCutValues(),
+    RetrieveCutValues(), CheckForRetrievePhysicsTable(), CheckMaterialInfo().
+    Added method BuildPhysicsTable().
+  o Modified G4RunManger to properly handle new cuts scheme based on regions.
+
+track                                   track-V05-00-01
+-----
+- Included development for 'cuts-by-region':
+  o Updated G4Track, G4Step, G4StepPoint and G4ParticleChangeForTransport
+    to properly handle new G4MaterialCutsCouple.
+
+tracking                                tracking-V05-00-00
+--------
+- Included development for 'cuts-by-region':
+  o Modified implementation of stepping to cope with new scheme for
+    cuts and regions.
+
+visualization				vis-V05-00-00
+-------------
+- OpenInventor module: removed erroneous additional transformation.
+- Added G4VisManager::Draw methods for hits and trajectories.
+
+g3tog4                                  g3tog4-V05-00-00
+------
+- G4gstmed[.hh.cc]: added get functions GetSize() and GetMTE(G4int i) for
+  the medium table entries.
+
+config                                  config-V05-00-00
+------
+- Added experimental setup WIN32-VC7.gmk for Windows .NET VC++ compiler.
+- Generalised identification of WIN32 specific setups in core scripts.
+- Forced silent generation of dependencies (added -w option to calls to g++).
+
+examples
+--------
+o Reference outputs NOT updated (not to include temporary debug verbosity
+  from 'cuts-by-region' development).
+- advanced:
+  o lAr_calorimeter (lAr_calorimeter-V05-00-01)
+    + Updated files which were missing in the public release version.
+- extended:
+  o electromagnetic/TestEm5 (testem5-V05-00-01)
+    + Added UI director /testem for test-specific commands.
+- novice:
+  o N02 (exampleN02-V05-00-00)
+    + Added UI director /testem for test-specific commands.
+  o N03 (exampleN03-V05-00-00)
+    + Added UI director /testem for test-specific commands.
+
+tests
+-----
+o Reference outputs NOT updated (not to include temporary debug verbosity
+  from 'cuts-by-region' development).
+- test01, test10, test14, test20
+  o Corrected technique for updating detector geometry, according to the
+    recent changes in G4RunManager.
