@@ -21,11 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: MyVisManager.cc,v 1.18 2003-10-17 09:29:43 gbarrand Exp $
+// $Id: MyVisManager.cc,v 1.19 2003-11-06 15:24:52 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison 24th January 1998.
+
+#ifdef G4VIS_USE
 
 #include "MyVisManager.hh"
 
@@ -124,3 +126,5 @@ void MyVisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4VRML2);
 #endif
 }
+
+#endif
