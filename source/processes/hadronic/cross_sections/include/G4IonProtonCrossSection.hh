@@ -67,7 +67,7 @@ class G4IonProtonCrossSection : public G4VCrossSectionDataSet
 
    virtual
    void DumpPhysicsTable(const G4ParticleDefinition&)
-   {G4cout << "G4IonProtonCrossSection: uses formula"<<endl;}
+   {G4cout << "G4IonProtonCrossSection: uses formula"<<G4endl;}
 
 };
 
