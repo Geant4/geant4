@@ -1338,7 +1338,7 @@ G4hLowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
   // create vector of tracks of secondary particles
 
   G4std::vector<G4DynamicParticle*>* partVector;
-  partVector->clear();
+  //  partVector->clear();
   G4std::vector<G4DynamicParticle*>* secVector = 0;
   G4DynamicParticle* aSecondary = 0;
   G4ParticleDefinition* type = 0;
@@ -1399,7 +1399,7 @@ G4hLowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
     }
   }
 
-  if(partVector->size()==0) {
+  if(partVector->empty()) {
     delete partVector;
     return 0;
   }
