@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3Division.cc,v 1.8 2001-02-14 13:26:30 gcosmo Exp $
+// $Id: G3Division.cc,v 1.9 2001-03-14 13:27:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, V.Berejnoi 13.10.99
@@ -13,11 +13,13 @@
 #include "G3Division.hh"
 #include "G3VolTableEntry.hh"
 #include "G3toG4MakeSolid.hh"
+#include "G4Para.hh"
 #include "G3Pos.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
+
 
 G3VolTableEntry* G4CreateVTE(G4String vname, G4String shape, G4int nmed,
                                G4double Rpar[], G4int npar);
@@ -105,6 +107,26 @@ G4VPhysicalVolume* G3Division::CreatePVReplica()
   G4String name = fVTE->GetName();
   G4LogicalVolume* lv =  fVTE->GetLV();
   G4LogicalVolume* mlv = fMVTE->GetLV();
+  
+  G4String shape = fMVTE->GetShape();
+  if (shape == "PARA") {
+    // The para volume cannot be replicated using G4PVReplica.
+    // (Replicating a volume along a cartesian axis means "slicing" it
+    // with slices -perpendicular- to that axis.)
+    
+    // position the replicated elements    
+    for (G4int i=0; i<fNofDivisions; i++) {
+       G4ThreeVector position = G4ThreeVector(); 
+       position[fIAxis-1] = fLowRange + fWidth/2. + i*fWidth;
+       if (position.y()!=0.) 
+         position.setX(position.y()*((G4Para*)lv->GetSolid())->GetTanAlpha());
+
+       new G4PVPlacement(0, position, lv, name, mlv, 0, i);
+    }
+    
+    // no G4PVReplica was created - return 0
+    return 0;   
+  }     
   
   G4PVReplica* pvol 
     = new G4PVReplica(name, lv, mlv, fAxis, fNofDivisions, fWidth, fOffset);
