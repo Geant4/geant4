@@ -1,4 +1,4 @@
--n $Id: History,v 1.29 2004-03-18 18:19:25 pia Exp $
+-n $Id: History,v 1.30 2004-12-02 15:43:48 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02 Dec 2004 - MGP, tag test14-V06-02-00
 
 18 Mar 2004 - MGP, tag test14-V06-00-00
               test14_penelope.in with a reasonable number of events
