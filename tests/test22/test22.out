@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (29-Jun-2001)
+                                (14-Dec-2001)
              Copyright : Geant4 Collaboration
 **********************************************
 SimpleBox is now made of Pb
@@ -79,6 +79,7 @@ SimpleBox is now made of Al
 /gun/particle gamma
 /gun/energy 500 MeV
 /run/beamOn 1
+Event number 0
 #
 # electron 500 MeV in Air
 #
@@ -87,4 +88,5 @@ SimpleBox is now made of Air
 /gun/particle e-
 /gun/energy 500 MeV
 /run/beamOn 1
+Event number 1
 #

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (29-Jun-2001)
+                                (14-Dec-2001)
              Copyright : Geant4 Collaboration
 **********************************************
 SimpleBox is now made of Pb
@@ -95,7 +95,7 @@ MuPairProd:  theoretical cross sections
 /gun/energy 100 GeV
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-/run/beamOn 1
+/run/beamOn 200
 #
 # neutron at 100 GeV in Pb
 #
@@ -103,7 +103,7 @@ SimpleBox is now made of Pb
 /gun/energy 100 GeV
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-/run/beamOn 1
+/run/beamOn 200
 #
 # pi+ at 100 GeV in Pb
 #
@@ -111,7 +111,7 @@ SimpleBox is now made of Pb
 /gun/energy 100 GeV
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-/run/beamOn 1
+/run/beamOn 200
 #
 # pi- at 100 GeV in Pb
 #
@@ -119,7 +119,7 @@ SimpleBox is now made of Pb
 /gun/energy 100 GeV
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-/run/beamOn 1
+/run/beamOn 200
 #
 # kaon+ at 100 GeV in Pb
 #
@@ -127,7 +127,7 @@ SimpleBox is now made of Pb
 /gun/energy 100 GeV
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-/run/beamOn 1
+/run/beamOn 200
 #
 # kaon- at 100 GeV in Pb
 #
@@ -135,7 +135,7 @@ SimpleBox is now made of Pb
 /gun/energy 100 GeV
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-/run/beamOn 1
+/run/beamOn 200
 #
 # kaon0S at 100 GeV in Pb
 #
@@ -143,7 +143,7 @@ SimpleBox is now made of Pb
 /gun/energy 100 GeV
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-/run/beamOn 1
+/run/beamOn 200
 #
 # kaon0L at 100 GeV in Pb
 #
@@ -151,7 +151,7 @@ SimpleBox is now made of Pb
 /gun/energy 100 GeV
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-/run/beamOn 1
+/run/beamOn 200
 #
 # proton at 100 GeV in Al
 #
@@ -159,7 +159,7 @@ SimpleBox is now made of Pb
 /gun/energy 100 GeV
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
-/run/beamOn 1
+/run/beamOn 200
 #
 # neutron at 100 GeV in Al
 #
@@ -167,7 +167,7 @@ SimpleBox is now made of Al
 /gun/energy 100 GeV
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
-/run/beamOn 1
+/run/beamOn 200
 #
 # pi+ at 100 GeV in Al
 #
@@ -175,7 +175,7 @@ SimpleBox is now made of Al
 /gun/energy 100 GeV
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
-/run/beamOn 1
+/run/beamOn 200
 #
 # pi- at 100 GeV in Al
 #
@@ -183,7 +183,7 @@ SimpleBox is now made of Al
 /gun/energy 100 GeV
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
-/run/beamOn 1
+/run/beamOn 200
 #
 # kaon+ at 100 GeV in Al
 #
@@ -191,7 +191,7 @@ SimpleBox is now made of Al
 /gun/energy 100 GeV
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
-/run/beamOn 1
+/run/beamOn 200
 #
 # kaon- at 100 GeV in Al
 #
@@ -199,7 +199,7 @@ SimpleBox is now made of Al
 /gun/energy 100 GeV
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
-/run/beamOn 1
+/run/beamOn 200
 #
 # kaon0S at 100 GeV in Al
 #
@@ -207,7 +207,7 @@ SimpleBox is now made of Al
 /gun/energy 100 GeV
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
-/run/beamOn 1
+/run/beamOn 200
 #
 # kaon0L at 100 GeV in Al
 #
@@ -215,7 +215,7 @@ SimpleBox is now made of Al
 /gun/energy 100 GeV
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
-/run/beamOn 1
+/run/beamOn 200
 #
 # proton at 100 GeV in Air
 #
@@ -223,7 +223,7 @@ SimpleBox is now made of Al
 /gun/energy 100 GeV
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
-/run/beamOn 1
+/run/beamOn 200
 #
 # neutron at 100 GeV in Air
 #
@@ -231,7 +231,7 @@ SimpleBox is now made of Air
 /gun/energy 100 GeV
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
-/run/beamOn 1
+/run/beamOn 200
 #
 # pi+ at 100 GeV in Air
 #
@@ -239,7 +239,7 @@ SimpleBox is now made of Air
 /gun/energy 100 GeV
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
-/run/beamOn 1
+/run/beamOn 200
 #
 # pi- at 100 GeV in Air
 #
@@ -247,7 +247,7 @@ SimpleBox is now made of Air
 /gun/energy 100 GeV
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
-/run/beamOn 1
+/run/beamOn 200
 #
 # kaon+ at 100 GeV in Air
 #
@@ -255,7 +255,7 @@ SimpleBox is now made of Air
 /gun/energy 100 GeV
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
-/run/beamOn 1
+/run/beamOn 200
 #
 # kaon- at 100 GeV in Air
 #
@@ -263,7 +263,7 @@ SimpleBox is now made of Air
 /gun/energy 100 GeV
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
-/run/beamOn 1
+/run/beamOn 200
 #
 # kaon0S at 100 GeV in Air
 #
@@ -271,7 +271,7 @@ SimpleBox is now made of Air
 /gun/energy 100 GeV
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
-/run/beamOn 1
+/run/beamOn 200
 #
 # kaon0L at 100 GeV in Air
 #
@@ -279,4 +279,4 @@ SimpleBox is now made of Air
 /gun/energy 100 GeV
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
-/run/beamOn 1
+/run/beamOn 200

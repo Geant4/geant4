@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (29-Jun-2001)
+                                (14-Dec-2001)
              Copyright : Geant4 Collaboration
 **********************************************
 SimpleBox is now made of Pb
@@ -79,11 +79,15 @@ SimpleBox is now made of Al
 /gun/energy 500 MeV
 /run/beamOn 100
 Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   0 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=40.24s Real=44.15s Sys=3.91s
+  User=18s Real=21s Sys=3.3s
 #
 # electron 500 MeV in Air
 #
@@ -96,7 +100,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.54s Real=1.65s Sys=0.11s
+  User=0.71s Real=0.79s Sys=0.08s
 #
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.

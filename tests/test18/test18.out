@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (29-Jun-2001)
+                                (14-Dec-2001)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -9,12 +9,13 @@ Registering graphics systems...
 
 You have successfully chosen to use the following graphics systems.
 Current available graphics systems are:
+  ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
- RDM Applies to all Volumes
-         RDM Applies to Volume universe_L
-         RDM Applies to Volume aSphere_L1
-         RDM Applies to Volume aSphere_L2
+  VRML2FILE (VRML2FILE)
 ******** SetCuts for gamma ********************
 The maximal meaningful cut is 857.236 mm.
 All the gammawill be killed !
@@ -92,14 +93,7 @@ MuPairProd:  theoretical cross sections
 /run/beamOn
 ### Run : 0
 /gun/direction 1.0 0.0 0.0
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /afs/cern.ch/sw/geant4/stt/dev2/src/geant4/data/RadiativeDecay/z12.a24
-The nucleus is assumed to be stable 
        0.001           1           0     Na24[0.0]
-        46.4           1   8.789e+04     e-
-    1.34e+03           1   8.789e+04     anti_nu_e
-    2.75e+03           1   8.789e+04     gamma
-    1.37e+03           1   8.789e+04     gamma
-      0.0429           1   8.789e+04     Mg24[0.0]
 
 #
 #
@@ -112,9 +106,6 @@ The nucleus is assumed to be stable
 /run/beamOn
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     Ne24[0.0]
-    1.01e+03           1       330.9     e-
-         986           1       330.9     anti_nu_e
-       0.109           1       330.9     Na24[472.2]
 
 #
 #
@@ -127,10 +118,9 @@ The nucleus is assumed to be stable
 /run/beamOn 
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     F24[0.0]
-    5.85e+03           1      0.1606     e-
-    6.87e+03           1      0.1606     anti_nu_e
-    1.98e+03           1      0.1606     gamma
-       0.457           1      0.1606     Ne24[0.0]
+    1.44e+03           1      0.6508     e-
+    1.13e+04           1      0.6508     anti_nu_e
+        2.73           1      0.6508     Ne24[0.0]
 
 #
 #
@@ -143,14 +133,12 @@ The nucleus is assumed to be stable
 /run/beamOn 
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     Al24[0.0]
-    2.65e+03           1       1.077     e+
-         511           1       1.077     gamma
-         511           1       1.077     gamma
-    2.79e+03           1       1.077     nu_e
-    4.32e+03           1       1.077     gamma
-    2.75e+03           1       1.077     gamma
-    1.37e+03           1       1.077     gamma
-       0.614           1       1.077     Mg24[0.0]
+         908           1      0.4076     e+
+         511           1      0.4076     gamma
+         511           1      0.4076     gamma
+    3.51e+03           1      0.4076     nu_e
+    4.32e+03           1      0.4076     gamma
+       0.457           1      0.4076     Mg24[0.0]
 
 #
 #
@@ -163,13 +151,7 @@ The nucleus is assumed to be stable
 /run/beamOn
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     Na24[472.0]
-         472           1     0.02226     gamma
-           0           1     0.02226     Na24[0.0]
-         695           1        9314     e-
-         696           1        9314     anti_nu_e
-    2.75e+03           1        9314     gamma
-    1.37e+03           1        9314     gamma
-       0.023           1        9314     Mg24[0.0]
+       0.001           1     0.05053     Na24[0.0]
 
 #
 #
@@ -182,11 +164,11 @@ The nucleus is assumed to be stable
 /run/beamOn
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     Cr46[0.0]
-     5.5e+03           1      0.5435     e+
-         511           1      0.5435     gamma
-         511           1      0.5435     gamma
-     2.1e+03           1      0.5435     nu_e
-       0.477           1      0.5435     V46[0.0]
+     4.4e+03           1     0.04502     e+
+         511           1     0.04502     gamma
+         511           1     0.04502     gamma
+    2.19e+03           1     0.04502     nu_e
+       0.358           1     0.04502     V46[0.0]
 
 #
 #
@@ -199,8 +181,8 @@ The nucleus is assumed to be stable
 /run/beamOn
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     Po215[0.0]
-    7.39e+03           1     0.00177     alpha
-         140           1     0.00177     Pb211[0.0]
+    7.39e+03           1    0.003956     alpha
+         140           1    0.003956     Pb211[0.0]
 
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (29-Jun-2001)
+                                (14-Dec-2001)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -9,7 +9,11 @@ Registering graphics systems...
 
 You have successfully chosen to use the following graphics systems.
 Current available graphics systems are:
+  ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
 
@@ -133,7 +137,20 @@ MuPairProd:  theoretical cross sections
 /run/particle/dumpCutValues
 ============= The cut Energy ==============================
                             gamma              e-    
-Cut in range                  2 mm            2 mm 
+Cut in range       
+          Aluminium           2 mm            2 mm 
+        liquidArgon           2 mm            2 mm 
+             Copper           2 mm            2 mm 
+               Lead           2 mm            2 mm 
+              Water           2 mm            2 mm 
+       Scintillator           2 mm            2 mm 
+             quartz           2 mm            2 mm 
+                Air           2 mm            2 mm 
+            Aerogel           2 mm            2 mm 
+        CarbonicGas           2 mm            2 mm 
+         WaterSteam           2 mm            2 mm 
+           Galactic           2 mm            2 mm 
+               Beam           2 mm            2 mm 
 Cut in energy
           Aluminium        9.56 keV        1.03 MeV
         liquidArgon        8.59 keV         561 keV

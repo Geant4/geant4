@@ -1,0 +1,1062 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                (14-Dec-2001)
+             Copyright : Geant4 Collaboration
+**********************************************
+SimpleBox is now made of Pb
+# /run/verbose 2
+/run/particle/setCut 1 m
+/run/initialize
+Tst21PhysicsList::SetCuts:CutLength : 1000 (mm)
+******** SetCuts for gamma ********************
+The maximal meaningful cut is 857.187 mm.
+All the gammawill be killed !
+in the material Aluminium.
+Error in G4ParticleWithCuts::ConvertCutToKineticEnergy
+******** ConvertCutToKineticEnergy for gamma ********************
+The cut energy is set 1.79769e+305GeV 
+******** SetCuts for gamma ********************
+The maximal meaningful cut is 106.991 mm.
+All the gammawill be killed !
+in the material Lead.
+Error in G4ParticleWithCuts::ConvertCutToKineticEnergy
+******** ConvertCutToKineticEnergy for gamma ********************
+The cut energy is set 1.79769e+305GeV 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
+        Sandia crossSection below 50 KeV
+       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+Error in G4ParticleWithCuts::ConvertCutToKineticEnergy
+******** ConvertCutToKineticEnergy for e- ********************
+The cut energy is set 1.79769e+305GeV 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+Error in G4ParticleWithCuts::ConvertCutToKineticEnergy
+******** ConvertCutToKineticEnergy for e+ ********************
+The cut energy is set 1.79769e+305GeV 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+/gun/direction 1 0 0
+#
+# proton at 100 GeV in Pb
+#
+/gun/particle proton
+/gun/energy 100 GeV
+/mydet/SelectMaterial Pb
+SimpleBox is now made of Pb
+/run/beamOn 100
+Event number 0
+Event number 1
+Event number 2
+Event number 3
+Event number 4
+Event number 5
+Event number 6
+Event number 7
+Event number 8
+Event number 9
+Event number 10
+Event number 11
+Event number 12
+Event number 13
+Event number 14
+Event number 15
+Event number 16
+Event number 17
+Event number 18
+Event number 19
+Event number 20
+Event number 21
+Event number 22
+Event number 23
+Event number 24
+Event number 25
+Event number 26
+Event number 27
+Event number 28
+Event number 29
+Event number 30
+Event number 31
+Event number 32
+Event number 33
+Event number 34
+Event number 35
+Event number 36
+Event number 37
+Event number 38
+Event number 39
+Event number 40
+Event number 41
+Event number 42
+Event number 43
+Event number 44
+Event number 45
+Event number 46
+Event number 47
+Event number 48
+Event number 49
+Event number 50
+Event number 51
+Event number 52
+Event number 53
+Event number 54
+Event number 55
+Event number 56
+Event number 57
+Event number 58
+Event number 59
+Event number 60
+Event number 61
+Event number 62
+Event number 63
+Event number 64
+Event number 65
+Event number 66
+Event number 67
+Event number 68
+Event number 69
+Event number 70
+Event number 71
+Event number 72
+Event number 73
+Event number 74
+Event number 75
+Event number 76
+Event number 77
+Event number 78
+Event number 79
+Event number 80
+Event number 81
+Event number 82
+Event number 83
+Event number 84
+Event number 85
+Event number 86
+Event number 87
+Event number 88
+Event number 89
+Event number 90
+Event number 91
+Event number 92
+Event number 93
+Event number 94
+Event number 95
+Event number 96
+Event number 97
+Event number 98
+Event number 99
+#
+# proton at 400 GeV in Pb
+#
+/gun/particle proton
+/gun/energy 400 GeV
+/mydet/SelectMaterial Pb
+SimpleBox is now made of Pb
+/run/beamOn 100
+Event number 100
+Event number 101
+Event number 102
+Event number 103
+Event number 104
+Event number 105
+Event number 106
+Event number 107
+Event number 108
+Event number 109
+Event number 110
+Event number 111
+Event number 112
+Event number 113
+Event number 114
+Event number 115
+Event number 116
+Event number 117
+Event number 118
+Event number 119
+Event number 120
+Event number 121
+Event number 122
+Event number 123
+Event number 124
+Event number 125
+Event number 126
+Event number 127
+Event number 128
+Event number 129
+Event number 130
+Event number 131
+Event number 132
+Event number 133
+Event number 134
+Event number 135
+Event number 136
+Event number 137
+Event number 138
+Event number 139
+Event number 140
+Event number 141
+Event number 142
+Event number 143
+Event number 144
+Event number 145
+Event number 146
+Event number 147
+Event number 148
+Event number 149
+Event number 150
+Event number 151
+Event number 152
+Event number 153
+Event number 154
+Event number 155
+Event number 156
+Event number 157
+Event number 158
+Event number 159
+Event number 160
+Event number 161
+Event number 162
+Event number 163
+Event number 164
+Event number 165
+Event number 166
+Event number 167
+Event number 168
+Event number 169
+Event number 170
+Event number 171
+Event number 172
+Event number 173
+Event number 174
+Event number 175
+Event number 176
+Event number 177
+Event number 178
+Event number 179
+Event number 180
+Event number 181
+Event number 182
+Event number 183
+Event number 184
+Event number 185
+Event number 186
+Event number 187
+Event number 188
+Event number 189
+Event number 190
+Event number 191
+Event number 192
+Event number 193
+Event number 194
+Event number 195
+Event number 196
+Event number 197
+Event number 198
+Event number 199
+#
+# proton at 1 TeV in Pb
+#
+/gun/particle proton
+/gun/energy 1 TeV
+/mydet/SelectMaterial Pb
+SimpleBox is now made of Pb
+/run/beamOn 100
+Event number 200
+Event number 201
+Event number 202
+Event number 203
+Event number 204
+Event number 205
+Event number 206
+Event number 207
+Event number 208
+Event number 209
+Event number 210
+Event number 211
+Event number 212
+Event number 213
+Event number 214
+Event number 215
+Event number 216
+Event number 217
+Event number 218
+Event number 219
+Event number 220
+Event number 221
+Event number 222
+Event number 223
+Event number 224
+Event number 225
+Event number 226
+Event number 227
+Event number 228
+Event number 229
+Event number 230
+Event number 231
+Event number 232
+Event number 233
+Event number 234
+Event number 235
+Event number 236
+Event number 237
+Event number 238
+Event number 239
+Event number 240
+Event number 241
+Event number 242
+Event number 243
+Event number 244
+Event number 245
+Event number 246
+Event number 247
+Event number 248
+Event number 249
+Event number 250
+Event number 251
+Event number 252
+Event number 253
+Event number 254
+Event number 255
+Event number 256
+Event number 257
+Event number 258
+Event number 259
+Event number 260
+Event number 261
+Event number 262
+Event number 263
+Event number 264
+Event number 265
+Event number 266
+Event number 267
+Event number 268
+Event number 269
+Event number 270
+Event number 271
+Event number 272
+Event number 273
+Event number 274
+Event number 275
+Event number 276
+Event number 277
+Event number 278
+Event number 279
+Event number 280
+Event number 281
+Event number 282
+Event number 283
+Event number 284
+Event number 285
+Event number 286
+Event number 287
+Event number 288
+Event number 289
+Event number 290
+Event number 291
+Event number 292
+Event number 293
+Event number 294
+Event number 295
+Event number 296
+Event number 297
+Event number 298
+Event number 299
+#
+# proton at 100 GeV in Al
+#
+/gun/particle proton
+/gun/energy 100 GeV
+/mydet/SelectMaterial Al
+SimpleBox is now made of Al
+/run/beamOn 100
+Event number 300
+Event number 301
+Event number 302
+Event number 303
+Event number 304
+Event number 305
+Event number 306
+Event number 307
+Event number 308
+Event number 309
+Event number 310
+Event number 311
+Event number 312
+Event number 313
+Event number 314
+Event number 315
+Event number 316
+Event number 317
+Event number 318
+Event number 319
+Event number 320
+Event number 321
+Event number 322
+Event number 323
+Event number 324
+Event number 325
+Event number 326
+Event number 327
+Event number 328
+Event number 329
+Event number 330
+Event number 331
+Event number 332
+Event number 333
+Event number 334
+Event number 335
+Event number 336
+Event number 337
+Event number 338
+Event number 339
+Event number 340
+Event number 341
+Event number 342
+Event number 343
+Event number 344
+Event number 345
+Event number 346
+Event number 347
+Event number 348
+Event number 349
+Event number 350
+Event number 351
+Event number 352
+Event number 353
+Event number 354
+Event number 355
+Event number 356
+Event number 357
+Event number 358
+Event number 359
+Event number 360
+Event number 361
+Event number 362
+Event number 363
+Event number 364
+Event number 365
+Event number 366
+Event number 367
+Event number 368
+Event number 369
+Event number 370
+Event number 371
+Event number 372
+Event number 373
+Event number 374
+Event number 375
+Event number 376
+Event number 377
+Event number 378
+Event number 379
+Event number 380
+Event number 381
+Event number 382
+Event number 383
+Event number 384
+Event number 385
+Event number 386
+Event number 387
+Event number 388
+Event number 389
+Event number 390
+Event number 391
+Event number 392
+Event number 393
+Event number 394
+Event number 395
+Event number 396
+Event number 397
+Event number 398
+Event number 399
+#
+# proton at 400 GeV in Al
+#
+/gun/particle proton
+/gun/energy 400 GeV
+/mydet/SelectMaterial Al
+SimpleBox is now made of Al
+/run/beamOn 100
+Event number 400
+Event number 401
+Event number 402
+Event number 403
+Event number 404
+Event number 405
+Event number 406
+Event number 407
+Event number 408
+Event number 409
+Event number 410
+Event number 411
+Event number 412
+Event number 413
+Event number 414
+Event number 415
+Event number 416
+Event number 417
+Event number 418
+Event number 419
+Event number 420
+Event number 421
+Event number 422
+Event number 423
+Event number 424
+Event number 425
+Event number 426
+Event number 427
+Event number 428
+Event number 429
+Event number 430
+Event number 431
+Event number 432
+Event number 433
+Event number 434
+Event number 435
+Event number 436
+Event number 437
+Event number 438
+Event number 439
+Event number 440
+Event number 441
+Event number 442
+Event number 443
+Event number 444
+Event number 445
+Event number 446
+Event number 447
+Event number 448
+Event number 449
+Event number 450
+Event number 451
+Event number 452
+Event number 453
+Event number 454
+Event number 455
+Event number 456
+Event number 457
+Event number 458
+Event number 459
+Event number 460
+Event number 461
+Event number 462
+Event number 463
+Event number 464
+Event number 465
+Event number 466
+Event number 467
+Event number 468
+Event number 469
+Event number 470
+Event number 471
+Event number 472
+Event number 473
+Event number 474
+Event number 475
+Event number 476
+Event number 477
+Event number 478
+Event number 479
+Event number 480
+Event number 481
+Event number 482
+Event number 483
+Event number 484
+Event number 485
+Event number 486
+Event number 487
+Event number 488
+Event number 489
+Event number 490
+Event number 491
+Event number 492
+Event number 493
+Event number 494
+Event number 495
+Event number 496
+Event number 497
+Event number 498
+Event number 499
+#
+# proton at 1 TeV in Al
+#
+/gun/particle proton
+/gun/energy 1 TeV
+/mydet/SelectMaterial Al
+SimpleBox is now made of Al
+/run/beamOn 100
+Event number 500
+Event number 501
+Event number 502
+Event number 503
+Event number 504
+Event number 505
+Event number 506
+Event number 507
+Event number 508
+Event number 509
+Event number 510
+Event number 511
+Event number 512
+Event number 513
+Event number 514
+Event number 515
+Event number 516
+Event number 517
+Event number 518
+Event number 519
+Event number 520
+Event number 521
+Event number 522
+Event number 523
+Event number 524
+Event number 525
+Event number 526
+Event number 527
+Event number 528
+Event number 529
+Event number 530
+Event number 531
+Event number 532
+Event number 533
+Event number 534
+Event number 535
+Event number 536
+Event number 537
+Event number 538
+Event number 539
+Event number 540
+Event number 541
+Event number 542
+Event number 543
+Event number 544
+Event number 545
+Event number 546
+Event number 547
+Event number 548
+Event number 549
+Event number 550
+Event number 551
+Event number 552
+Event number 553
+Event number 554
+Event number 555
+Event number 556
+Event number 557
+Event number 558
+Event number 559
+Event number 560
+Event number 561
+Event number 562
+Event number 563
+Event number 564
+Event number 565
+Event number 566
+Event number 567
+Event number 568
+Event number 569
+Event number 570
+Event number 571
+Event number 572
+Event number 573
+Event number 574
+Event number 575
+Event number 576
+Event number 577
+Event number 578
+Event number 579
+Event number 580
+Event number 581
+Event number 582
+Event number 583
+Event number 584
+Event number 585
+Event number 586
+Event number 587
+Event number 588
+Event number 589
+Event number 590
+Event number 591
+Event number 592
+Event number 593
+Event number 594
+Event number 595
+Event number 596
+Event number 597
+Event number 598
+Event number 599
+#
+# proton at 100 GeV in Air
+#
+/gun/particle proton
+/gun/energy 100 GeV
+/mydet/SelectMaterial Air
+SimpleBox is now made of Air
+/run/beamOn 100
+Event number 600
+Event number 601
+Event number 602
+Event number 603
+Event number 604
+Event number 605
+Event number 606
+Event number 607
+Event number 608
+Event number 609
+Event number 610
+Event number 611
+Event number 612
+Event number 613
+Event number 614
+Event number 615
+Event number 616
+Event number 617
+Event number 618
+Event number 619
+Event number 620
+Event number 621
+Event number 622
+Event number 623
+Event number 624
+Event number 625
+Event number 626
+Event number 627
+Event number 628
+Event number 629
+Event number 630
+Event number 631
+Event number 632
+Event number 633
+Event number 634
+Event number 635
+Event number 636
+Event number 637
+Event number 638
+Event number 639
+Event number 640
+Event number 641
+Event number 642
+Event number 643
+Event number 644
+Event number 645
+Event number 646
+Event number 647
+Event number 648
+Event number 649
+Event number 650
+Event number 651
+Event number 652
+Event number 653
+Event number 654
+Event number 655
+Event number 656
+Event number 657
+Event number 658
+Event number 659
+Event number 660
+Event number 661
+Event number 662
+Event number 663
+Event number 664
+Event number 665
+Event number 666
+Event number 667
+Event number 668
+Event number 669
+Event number 670
+Event number 671
+Event number 672
+Event number 673
+Event number 674
+Event number 675
+Event number 676
+Event number 677
+Event number 678
+Event number 679
+Event number 680
+Event number 681
+Event number 682
+Event number 683
+Event number 684
+Event number 685
+Event number 686
+Event number 687
+Event number 688
+Event number 689
+Event number 690
+Event number 691
+Event number 692
+Event number 693
+Event number 694
+Event number 695
+Event number 696
+Event number 697
+Event number 698
+Event number 699
+#
+# proton at 400 GeV in Air
+#
+/gun/particle proton
+/gun/energy 400 GeV
+/mydet/SelectMaterial Air
+SimpleBox is now made of Air
+/run/beamOn 100
+Event number 700
+Event number 701
+Event number 702
+Event number 703
+Event number 704
+Event number 705
+Event number 706
+Event number 707
+Event number 708
+Event number 709
+Event number 710
+Event number 711
+Event number 712
+Event number 713
+Event number 714
+Event number 715
+Event number 716
+Event number 717
+Event number 718
+Event number 719
+Event number 720
+Event number 721
+Event number 722
+Event number 723
+Event number 724
+Event number 725
+Event number 726
+Event number 727
+Event number 728
+Event number 729
+Event number 730
+Event number 731
+Event number 732
+Event number 733
+Event number 734
+Event number 735
+Event number 736
+Event number 737
+Event number 738
+Event number 739
+Event number 740
+Event number 741
+Event number 742
+Event number 743
+Event number 744
+Event number 745
+Event number 746
+Event number 747
+Event number 748
+Event number 749
+Event number 750
+Event number 751
+Event number 752
+Event number 753
+Event number 754
+Event number 755
+Event number 756
+Event number 757
+Event number 758
+Event number 759
+Event number 760
+Event number 761
+Event number 762
+Event number 763
+Event number 764
+Event number 765
+Event number 766
+Event number 767
+Event number 768
+Event number 769
+Event number 770
+Event number 771
+Event number 772
+Event number 773
+Event number 774
+Event number 775
+Event number 776
+Event number 777
+Event number 778
+Event number 779
+Event number 780
+Event number 781
+Event number 782
+Event number 783
+Event number 784
+Event number 785
+Event number 786
+Event number 787
+Event number 788
+Event number 789
+Event number 790
+Event number 791
+Event number 792
+Event number 793
+Event number 794
+Event number 795
+Event number 796
+Event number 797
+Event number 798
+Event number 799
+#
+# proton at 1 TeV in Air
+#
+/gun/particle proton
+/gun/energy 1 TeV
+/mydet/SelectMaterial Air
+SimpleBox is now made of Air
+/run/beamOn 100
+Event number 800
+Event number 801
+Event number 802
+Event number 803
+Event number 804
+Event number 805
+Event number 806
+Event number 807
+Event number 808
+Event number 809
+Event number 810
+Event number 811
+Event number 812
+Event number 813
+Event number 814
+Event number 815
+Event number 816
+Event number 817
+Event number 818
+Event number 819
+Event number 820
+Event number 821
+Event number 822
+Event number 823
+Event number 824
+Event number 825
+Event number 826
+Event number 827
+Event number 828
+Event number 829
+Event number 830
+Event number 831
+Event number 832
+Event number 833
+Event number 834
+Event number 835
+Event number 836
+Event number 837
+Event number 838
+Event number 839
+Event number 840
+Event number 841
+Event number 842
+Event number 843
+Event number 844
+Event number 845
+Event number 846
+Event number 847
+Event number 848
+Event number 849
+Event number 850
+Event number 851
+Event number 852
+Event number 853
+Event number 854
+Event number 855
+Event number 856
+Event number 857
+Event number 858
+Event number 859
+Event number 860
+Event number 861
+Event number 862
+Event number 863
+Event number 864
+Event number 865
+Event number 866
+Event number 867
+Event number 868
+Event number 869
+Event number 870
+Event number 871
+Event number 872
+Event number 873
+Event number 874
+Event number 875
+Event number 876
+Event number 877
+Event number 878
+Event number 879
+Event number 880
+Event number 881
+Event number 882
+Event number 883
+Event number 884
+Event number 885
+Event number 886
+Event number 887
+Event number 888
+Event number 889
+Event number 890
+Event number 891
+Event number 892
+Event number 893
+Event number 894
+Event number 895
+Event number 896
+Event number 897
+Event number 898
+Event number 899
