@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test13.hadronic.exerciser.cc,v 1.5 1999-11-23 15:44:40 stesting Exp $
+// $Id: test13.hadronic.exerciser.cc,v 1.6 1999-11-28 18:49:34 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,7 +37,7 @@ static void OutputCases
 	  << "\n/gun/particle " << particleNameList [iParticle]
 	  << "\n/gun/energy " <<  G4BestUnit (energyList [iEnergy], "Energy")
 	  << "\n/mydet/SelectMaterial " << materialNameList [iMaterial]
-	  << "\n/run/beamOn 3";
+	  << "\n/run/beamOn 1";
 
       }
     }
@@ -71,6 +71,7 @@ int main (int argc, char** argv) {
   G4RWTValOrderedVector <G4double> energyList;
   energyList.append (100 * GeV);
   energyList.append (400 * GeV);
+  energyList.append (1 * TeV);
 
   G4RWTValOrderedVector <G4String> materialNameList;
   materialNameList.append ("Pb");

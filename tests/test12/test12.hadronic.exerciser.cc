@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test12.hadronic.exerciser.cc,v 1.4 1999-11-23 15:44:40 stesting Exp $
+// $Id: test12.hadronic.exerciser.cc,v 1.5 1999-11-28 18:49:33 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -72,36 +72,6 @@ int main (int argc, char** argv) {
   energyList.append (100 * GeV);
 
   G4RWTValOrderedVector <G4String> materialNameList;
-  materialNameList.append ("Pb");
-  materialNameList.append ("Al");
-  materialNameList.append ("Air");
-
-  OutputCases (particleNameList, energyList, materialNameList);
-
-  particleNameList.clear ();
-  particleNameList.append ("proton");
-  particleNameList.append ("neutron");
-
-  energyList.clear ();
-  energyList.append (500 * MeV);
-
-  materialNameList.clear ();
-  materialNameList.append ("Pb");
-  materialNameList.append ("Al");
-  materialNameList.append ("Air");
-
-  OutputCases (particleNameList, energyList, materialNameList);
-
-  particleNameList.clear ();
-  particleNameList.append ("neutron");
-  particleNameList.append ("triton");
-  particleNameList.append ("deuteron");
-  particleNameList.append ("alpha");
-
-  energyList.clear ();
-  energyList.append (100 * MeV);
-
-  materialNameList.clear ();
   materialNameList.append ("Pb");
   materialNameList.append ("Al");
   materialNameList.append ("Air");
