@@ -7,6 +7,7 @@
 #include <Inventor/nodes/SoPointSet.h>
 
 #include <Inventor/elements/SoCoordinateElement.h>
+#include <Inventor/elements/SoCacheElement.h>
 #include <Inventor/elements/SoLazyElement.h>
 
 #include <HEPVis/SbGL.h>
@@ -596,7 +597,6 @@ void HEPVis_SoMarkerSet::initClass (
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
   SO_NODE_INIT_CLASS(HEPVis_SoMarkerSet,SoPointSet,"PointSet");
-
 }
 //////////////////////////////////////////////////////////////////////////////
 HEPVis_SoMarkerSet::HEPVis_SoMarkerSet (
@@ -627,6 +627,10 @@ void HEPVis_SoMarkerSet::GLRender (
   const SoCoordinateElement* coordinateElement = 
     SoCoordinateElement::getInstance(state);
   if(coordinateElement==NULL) return;
+
+  if(aAction->isOfType(SoGL2PSAction::getClassTypeId())) {
+    SoCacheElement::invalidate(state);
+  }
 
   const SbColor& color = SoLazyElement::getDiffuse(aAction->getState(),0);
   float red,green,blue;
