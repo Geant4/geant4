@@ -1,0 +1,43 @@
+#
+# ------ WIN32/VC ------    Visual-C++ 7.0 .NET
+#                            experimental setup
+ifeq ($(G4SYSTEM),WIN32-VC7)
+  CXX       := CL
+  G4_HAVE_BOOL := yes
+  ifdef G4OPTIMISE
+    CXXFLAGS  += -Ox
+  else
+    ifdef G4DEBUG
+      CXXFLAGS  += -Od -Zi -Fd$(G4LIBDIR)/lib$(name)
+    endif
+  endif
+  CXXFLAGS += -MD -GR -GX -Zm200 -nologo -DWIN32 -D_CONSOLE 
+  CXXFLAGS += -D_WIN32 -DOS
+  CPPFLAGS += -DWIN32 -DXPNET
+  #
+  # Use ISO standard version.
+  #
+  G4USE_STD_NAMESPACE := yes 
+  CPPFLAGS += -DG4USE_STD_NAMESPACE
+
+  LDFLAGS  += -FORCE /NODEFAULTLIB:MSVCRT.dll
+
+  AR := LIB
+  ECHO := echo -e
+  FC := g77
+#  FCLIBS := -lf2c
+  ifndef OGLFLAGS
+    OGLFLAGS  :=
+  endif
+  ifndef OGLLIBS
+    OGLLIBS   := -lGLU  -lGL
+  endif
+
+  define build-granular-shared-lib
+    @echo "Shared Libraries not supported on $(G4SYSTEM)
+  endef
+  define build-global-shared-lib
+    @echo "Shared Libraries not supported on $(G4SYSTEM)
+  endef
+
+endif
