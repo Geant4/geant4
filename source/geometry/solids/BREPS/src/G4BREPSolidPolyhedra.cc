@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.21 2002-02-13 17:46:52 radoone Exp $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.22 2002-02-14 18:39:12 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -82,7 +82,6 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     nb_of_surfaces = 2*(sections * sides) + 4;
   }
 
-
   //SurfaceVec = new G4Surface*[nb_of_surfaces];
   G4int       MaxNbOfSurfaces = nb_of_surfaces;
   G4Surface** MaxSurfaceVec   = new G4Surface*[MaxNbOfSurfaces];
@@ -98,8 +97,102 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
 
 
   ///////////////////////////////////////////////////
-   
+  // Preconditions check
+  
+  // Detecting minimal required number of sides
+  if( sides < 3 ) {
+    G4Exception( "\nG4BREPSolidPolyhedra must have at least 3 sides!\a\n" );
+  }
+  
+  // Detecting minimal required number of z-sections
+  if( num_z_planes < 2 ) {
+    G4Exception( "\nG4BREPSolidPolyhedra must have at least 2 z-sections!\a\n" );
+  }
 
+  // Detect invalid configurations at the ends of polyhedra which would not lead to
+  // a valid solid creation and likely to a crash
+  if( z_values[0] == z_values[1] || z_values[sections-1] == z_values[sections] ) {
+    G4Exception( "\nG4BREPSolidPolyhedra must have the first 2 and the last 2 z-values different!\a\n" );
+  }
+
+  // Find out how the z-values sequence is ordered
+  G4bool increasing;
+  if( z_values[0] < z_values[1] ) {
+    increasing = true;
+  } else {
+    increasing = false;
+  }
+  
+  // Detecting polyhedra teeth
+  // It's forbidden to specify unordered, e.g. non-increasing or non-decreasing sequence
+  // of z-values. It may be provided by a specific solid in a future.
+  for( G4int idx = 0; idx < sections; idx++ ) {
+    if(
+        ( z_values[idx] > z_values[idx+1] &&  increasing ) ||
+        ( z_values[idx] < z_values[idx+1] && !increasing )
+      )
+    {
+      // ERROR! Invalid sequence of z-values
+      G4std::ostrstream msgstr;
+      msgstr << G4endl
+             << "ERROR: The unordered, non-increasing or non-decreasing sequence of z_values detected!\a"
+             << G4endl
+             << "Check z_values with indexes: "
+             << idx << " " << (idx+1) << G4endl << G4std::ends;
+      G4Exception( msgstr.str() );
+    }
+  }
+  ///////////////////////////////////////////////////
+
+#ifdef G4_EXPERIMENTAL_CODE
+  // There is one problem when sequence of z values is not increasing in a regular way,
+  // in other words, it's not purely increasing or decreasing
+  // Irregular sequence can be provided in order to define a polyhedra having teeth
+  // as shown on the picture bellow
+  // In this sequence can happen the following z[a-1] > z[a] < z[a+1] && z[a+1] >= z[a-1]
+  // One has to check the RMAX and RMIN values due to the possible intersections.
+  //
+  // 1     2     3  
+  // ___   ___   ____
+  // 00/   00/ _ 000/
+  // 0/    0/ |0 00|
+  // V___  V__+0 00+--
+  // 0000  00000 00000
+  // ----  ----- -----
+  // ------------------------------------ z-axis
+  // 
+  //
+  // NOTE: This picture doesn't show all the possible configurations of a polyhedra having
+  //       teeth when looking at its profile
+  //       The picture shows only one half of the polyhedra's profile
+  //////////////////////////////////////////////////////////////////////////////////
+
+  // Experimental code! Not recommended for production, it's incomplete!
+  // The task is to identify invalid combination of z, RMIN and RMAX values
+  // in the case of toothydra :-)
+  G4int toothIdx;
+
+  for( G4int idx = 1; idx < sections+1; idx++ ) {
+    if( z_values[idx-1] > z_values[idx] ) {
+      G4double toothdist = fabs( z_values[idx-1] - z_values[idx] );
+      G4double aftertoothdist = fabs( z_values[idx+1] - z_values[idx] );
+      if( toothdist > aftertoothdist ) {
+        // Check for possible intersection
+        if( RMAX[idx-1] < RMAX[idx+1] || RMIN[idx-1] > RMIN[idx+1] ) {
+          // ERROR! The surface conflict!
+          G4std::ostrstream msgstr;
+          msgstr << G4endl
+                 << "ERROR: The unordered sequence of z_values detected with conflicting RMAX or RMIN values!\a"
+                 << G4endl
+                 << "Check z_values with indexes: "
+                 << (idx-1) << " " << idx << " " << (idx+1) << G4endl << G4std::ends;
+          G4Exception( msgstr.str() );
+        }
+      }
+    }
+  }
+#endif // G4_EXPERIMENTAL_CODE
+   
   for(G4int a=0;a<sections;a++)
   {
     Length = z_values[a+1] - z_values[a];
@@ -137,6 +230,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
         if( MaxSurfaceVec[Count] != 0 ) {
           // Rotate axis back for the other surface point calculation
           // only in the case any of the Create* methods above have been called
+          // because they modify the passed in TmpAxis
           TmpAxis.rotateZ(-PartAngle);
         }
         
@@ -303,7 +397,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
             SurfSense = ENormal;
           }
         } else if(RMIN[a] != RMIN[a+1]) {
-	        // Cases 1, 2
+	        // Cases 3, 4
 	        R1 = RMIN[a];
           R2 = RMIN[a+1];
           if( R1 > R2 ) {
@@ -330,7 +424,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
         }        
         Count++;
         
-        // Since we can create here at maximum 2 surfaces we need to reflect this in the total
+        // Since we can create here at maximum 1 surface we need to reflect this in the total
         nb_of_surfaces -= ((2*sides) - 1);
       }      
     } // End of if( Length != 0.0 )
@@ -339,7 +433,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
   } // End of for loop over z sections
   
   if(dphi >= 2*pi-perMillion) {
-    // Create only end planes
+    // Create the end planes for the configuration where delta phi >= 2*PI
     
     TmpAxis = XAxis;
     TmpAxis.rotateZ(phi1);	
@@ -365,7 +459,40 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     Count++;
     
   } else {
-    // If phi section, create a single boundary (case with RMIN=0 included)
+    // If delta phi < 2*PI then create a single boundary (case with RMIN=0 included)
+    
+    // Create the lateral planars
+    TmpAxis             = XAxis;
+    G4Vector3D TmpAxis2 = XAxis;
+    TmpAxis.rotateZ(phi1);
+    TmpAxis2.rotateZ(phi1);
+    TmpAxis2.rotateZ(dphi);	
+    
+    LocalOrigin      = Origin;
+    G4int points     = sections*2+2;
+    G4int PointCount = 0;
+    
+    G4Point3DVector GapPointList(points);
+    G4Point3DVector GapPointList2(points);
+    
+    
+    for(G4int d=0;d<sections+1;d++) {
+      GapPointList[PointCount] = LocalOrigin + (RMAX[d]*TmpAxis);
+      GapPointList[points-1-PointCount] = LocalOrigin + (RMIN[d]*TmpAxis);	    
+      
+      GapPointList2[PointCount] = LocalOrigin + (RMAX[d]*TmpAxis2);
+      GapPointList2[points-1-PointCount] = LocalOrigin + (RMIN[d]*TmpAxis2);	 
+   	         
+      PointCount++;
+
+      Length = z_values[d+1] - z_values[d];
+      LocalOrigin = LocalOrigin+(Length*Axis);
+    }
+    
+    // Add the lateral planars to the surfaces list and set/reverse sense
+    MaxSurfaceVec[Count++] = new G4FPlane( &GapPointList,  0, ENormal );
+    MaxSurfaceVec[Count++] = new G4FPlane( &GapPointList2, 0, EInverse );
+    
     TmpAxis = XAxis;
     TmpAxis.rotateZ(phi1);	
     TmpAxis.rotateZ(dphi);
@@ -383,44 +510,11 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
       TmpAxis.rotateZ(-PartAngle);
     }
     
-    // Create the lateral planars
-    TmpAxis             = XAxis;
-    G4Vector3D TmpAxis2 = XAxis;
-    TmpAxis.rotateZ(phi1);
-    TmpAxis2.rotateZ(phi1);
-    TmpAxis2.rotateZ(dphi);	
-    
-    LocalOrigin      = Origin;
-    G4int points     = sections*2+2;
-    G4int PointCount = 0;
-    
-    G4Point3DVector GapPointList(points);
-    G4Point3DVector GapPointList2(points);
-    
-    for(G4int d=0;d<sections+1;d++) {
-      GapPointList[PointCount] = LocalOrigin + (RMAX[d]*TmpAxis);
-      GapPointList[points-1-PointCount] = LocalOrigin + (RMIN[d]*TmpAxis);	    
-      
-      GapPointList2[PointCount] = LocalOrigin + (RMAX[d]*TmpAxis2);
-      GapPointList2[points-1-PointCount] = LocalOrigin + (RMIN[d]*TmpAxis2);	 
-   	         
-      PointCount++;
-
-      Length = z_values[d+1] - z_values[d];
-      LocalOrigin = LocalOrigin+(Length*Axis);
-    }
-    
-    // Add the lateral planars to the surfaces list and set/reverse sense
-    
-//    SurfaceVec[nb_of_surfaces-4] = new G4FPlane(&GapPointList);
-//    SurfaceVec[nb_of_surfaces-3] = new G4FPlane(&GapPointList2, 0, 0);
-    MaxSurfaceVec[Count++] = new G4FPlane( &GapPointList,  0, ENormal );
-    MaxSurfaceVec[Count++] = new G4FPlane( &GapPointList2, 0, EInverse );
-    
-    //Add the end planes to the surfaces list and set/reverse sense
-    
+    // Add the end planes to the surfaces list
+    // Note the surface sense in this case is reversed
+    // It's because here we have created the end planes in reversed order
+    // than it's done by ComputePlanarSurface() method
     if(RMAX[0]-RMIN[0] >= perMillion) {
-//      SurfaceVec[nb_of_surfaces-2] = new G4FPlane(&EndPointList);
       MaxSurfaceVec[Count] = new G4FPlane( &EndPointList, 0, EInverse );
     }
     else {
@@ -431,7 +525,6 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     Count++;
     
     if(RMAX[sections]-RMIN[sections] >= perMillion) {
-//      SurfaceVec[nb_of_surfaces-1] = new G4FPlane(&EndPointList2, 0, 0);
       MaxSurfaceVec[Count] = new G4FPlane( &EndPointList2, 0, ENormal );
     } else {
       MaxSurfaceVec[Count] = 0;
@@ -439,7 +532,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     };    	    
   }
 
-  // Now let's replicate the relevant surfaces into polyhedra's vector of surfaces
+  // Now let's replicate the relevant surfaces into G4BREPSolid's vector of surfaces
   SurfaceVec = new G4Surface*[nb_of_surfaces];
   G4int sf = 0; G4int zeroCount = 0;
   for( G4int srf = 0; srf < MaxNbOfSurfaces; srf++ ) {
@@ -452,11 +545,6 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
       zeroCount++;
     }
   }
-    G4cout << "sf: "              << sf
-           << " nb_of_surfaces: " << nb_of_surfaces
-           << " Count: "          << Count
-           << " zeroCount: "      << zeroCount
-           << G4endl;
 
   if( sf != nb_of_surfaces ) {
     G4cerr << "Bad number of surfaces!\a\n"
@@ -465,6 +553,8 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
            << " Count: "          << Count
            << G4endl;
     // Should we call G4Exception here ?
+    // Yes, because it usually leads to a crash
+    G4Exception( "INTERNAL ERROR: Going bananas!\a\n" );
   }
 
   // Clean up the temporary vector of surfaces
@@ -525,7 +615,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
   {
     G4cerr << "ERROR in creating G4BREPSolidPolyhedra: "  << 
       " z_values[0]= " << z_values[0] << " is not equal to " << 
-      " z_start= " , z_start;
+      " z_start= " << z_start;
     // G4Exception(" Error in creating G4BREPSolidPolyhedra: z_values[0] must be equal to z_start" );
     original_parameters.Z_values[0]= z_start; 
   }

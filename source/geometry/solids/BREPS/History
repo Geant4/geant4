@@ -1,4 +1,4 @@
-$Id: History,v 1.38 2002-02-14 11:11:53 gcosmo Exp $
+$Id: History,v 1.39 2002-02-14 18:42:21 radoone Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14/02/2002 : R. Chytracek
+- Final commit after series of bug fixes and enhancements:
+  o Added more preconditions checks
+  o Added code forbidding "teeth" in polyhedra as it brings
+    high complexity into its implementation
+  o Fixing comments, removal of debug print-outs
 
 13/02/2002 : R. Chytracek      breps-V04-00-02
 - Bug fix #354:
