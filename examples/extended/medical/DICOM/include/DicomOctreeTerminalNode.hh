@@ -1,22 +1,22 @@
 #ifndef DicomOctreeTerminalNode_h
 #define DicomOctreeTerminalNode_h
 
-class Octree;
-class  DicomOctreeTerminalNode : public OctreeNode
+//class Octree;
+class  DicomOctreeTerminalNode : public DicomOctreeNode
 {
 public:
 
-   DicomOctreeTerminalNode(OctreeNode* pParent );
+   DicomOctreeTerminalNode(DicomOctreeNode* pParent );
   ~ DicomOctreeTerminalNode();
 
 public:
-  OctreeNode*& operator []( G4int index );
+  DicomOctreeNode*& operator []( G4int index );
   G4int MemSize();
 
   OctreeNodeType Type()                      {return TERMINAL_NODE;}
-  G4int FindChild( const OctreeNode* pNode ) {return -1;}
+  G4int FindChild( const DicomOctreeNode* pNode ) {return -1;}
 
 private:
-  static OctreeNode* mNull;
+  static DicomOctreeNode* mNull;
 };
 #endif

@@ -9,7 +9,7 @@ DicomOctree::DicomOctree( G4int noLevels, G4double size )
 {
   mNoLevels = noLevels;
   mSize = size;
-  mRoot = new MiddleNode(0);
+  mRoot = new DicomOctreeMiddleNode(0);
 }
 
 DicomOctree::~DicomOctree()
@@ -18,9 +18,9 @@ DicomOctree::~DicomOctree()
   mRoot = 0; 
 }
 
-OctreeNode* DicomOctree::CreateNode( G4double nodeX, G4double nodeY, G4double nodeZ, G4int level )
+DicomOctreeNode* DicomOctree::CreateNode( G4double nodeX, G4double nodeY, G4double nodeZ, G4int level )
 {
-  OctreeNode* current = mRoot;
+  DicomOctreeNode* current = mRoot;
   G4double currentX = 0;
   G4double currentY = 0;
   G4double currentZ = 0;
@@ -39,7 +39,7 @@ OctreeNode* DicomOctree::CreateNode( G4double nodeX, G4double nodeY, G4double no
         {
 	  if ( i < level - 1 )
             {
-	      (*current)[direction] = new MiddleNode( current );
+	      (*current)[direction] = new DicomOctreeMiddleNode( current );
             } else
 	      {
                 (*current)[direction] = new DicomOctreeTerminalNode( current );
@@ -54,12 +54,12 @@ OctreeNode* DicomOctree::CreateNode( G4double nodeX, G4double nodeY, G4double no
   return current;
 }
 
-OctreeNode* DicomOctree::operator()( G4double nodeX, 
+DicomOctreeNode* DicomOctree::operator()( G4double nodeX, 
                                 G4double nodeY, 
                                 G4double nodeZ, 
                                 G4int level )
 {
-    OctreeNode* current = mRoot;
+    DicomOctreeNode* current = mRoot;
     G4double currentX = 0;
     G4double currentY = 0;
     G4double currentZ = 0;
@@ -90,7 +90,7 @@ void DicomOctree::DeleteTree()
   mRoot = 0;
 }
 
-void DicomOctree::CountRecursive( OctreeNode* pNode, 
+void DicomOctree::CountRecursive( DicomOctreeNode* pNode, 
                              G4int rMiddle, 
                              G4int rTerminal )
 {
@@ -107,7 +107,8 @@ void DicomOctree::CountRecursive( OctreeNode* pNode,
 G4int DicomOctree::CountMemory( G4int rMiddle, G4int rTerminal )
 {
   CountRecursive( mRoot, rMiddle, rTerminal );
-  G4int total = rMiddle*sizeof(MiddleNode) + rTerminal*sizeof(DicomOctreeTerminalNode);
+  G4int total = rMiddle*sizeof(DicomOctreeMiddleNode) + 
+                rTerminal*sizeof(DicomOctreeTerminalNode);
   return total;
 }
 

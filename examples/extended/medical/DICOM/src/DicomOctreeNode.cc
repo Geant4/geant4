@@ -2,20 +2,20 @@
 #include <stddef.h>
 #include "DicomOctreeNode.hh"
 
-G4int OctreeNode::mInstanceCounter = 0;
+G4int DicomOctreeNode::mInstanceCounter = 0;
 
-OctreeNode::OctreeNode()
+DicomOctreeNode::DicomOctreeNode()
 {
   mParent = 0;
   mInstanceCounter++;
 }
 
-OctreeNode::~OctreeNode()
+DicomOctreeNode::~DicomOctreeNode()
 {
   mInstanceCounter--;
 }
 
-OctreeNode::OctreeNode( OctreeNode* pParent )
+DicomOctreeNode::DicomOctreeNode( DicomOctreeNode* pParent )
 {
   mParent = pParent;
   mInstanceCounter++;

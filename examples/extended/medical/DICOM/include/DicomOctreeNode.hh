@@ -2,29 +2,29 @@
 #define DICOMOCTREENODE_H
 #include "globals.hh"
 
-class Octree;
+//class Octree;
 
 enum OctreeNodeType { MIDDLE_NODE, TERMINAL_NODE };
 
 //  OctreeNode represents a single node in the octree.
 
-class OctreeNode
+class DicomOctreeNode
 {
 public:
 
-  OctreeNode();
-  ~OctreeNode();
-  OctreeNode( OctreeNode* pParent );
+  DicomOctreeNode();
+  ~DicomOctreeNode();
+  DicomOctreeNode( DicomOctreeNode* pParent );
   
   G4double Density(){return mDensity;}
 
-  virtual OctreeNode*& operator []( G4int index ) = 0;
+  virtual DicomOctreeNode*& operator []( G4int index ) = 0;
 
   virtual OctreeNodeType Type() = 0;
 
-  const OctreeNode* Parent(){ return mParent; }
+  const DicomOctreeNode* Parent(){ return mParent; }
 
-  virtual G4int FindChild( const OctreeNode* pNode ) = 0;
+  virtual G4int FindChild( const DicomOctreeNode* pNode ) = 0;
 
   static G4int InstanceCounter() { return mInstanceCounter; }
 
@@ -32,7 +32,7 @@ public:
 
 private:
   static G4int mInstanceCounter;
-  OctreeNode* mParent;
+  DicomOctreeNode* mParent;
   G4double  mDensity;
 };
 #endif 

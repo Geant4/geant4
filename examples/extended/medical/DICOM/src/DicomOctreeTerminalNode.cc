@@ -2,8 +2,8 @@
 #include "DicomOctreeTerminalNode.hh"
 
 
-OctreeNode* DicomOctreeTerminalNode::mNull = 0;
-DicomOctreeTerminalNode::DicomOctreeTerminalNode( OctreeNode* pParent) : OctreeNode( pParent )
+DicomOctreeNode* DicomOctreeTerminalNode::mNull = 0;
+DicomOctreeTerminalNode::DicomOctreeTerminalNode( DicomOctreeNode* pParent) : DicomOctreeNode( pParent )
 {
 
 }
@@ -12,7 +12,7 @@ DicomOctreeTerminalNode::~DicomOctreeTerminalNode()
 
 }
 
-OctreeNode*& DicomOctreeTerminalNode::operator []( G4int )
+DicomOctreeNode*& DicomOctreeTerminalNode::operator []( G4int )
 {
   return mNull;
 }

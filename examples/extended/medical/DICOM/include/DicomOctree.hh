@@ -19,9 +19,9 @@
 #include "DicomOctreeTerminalNode.hh"
 
 class DicomOctreeNode;
-class MiddleNode;
+class DicomOctreeMiddleNode;
 class DicomTerminalNode;
-class OctreeNode;
+class DicomOctree;
 
 class DicomOctree
 {
@@ -30,24 +30,24 @@ public:
   DicomOctree( G4int noLevels, G4double size );
   ~DicomOctree();
 
-  OctreeNode* CreateNode( G4double i, G4double j, G4double k, G4int level );
-  OctreeNode* operator()( G4double nodeX, G4double nodeY, 
+  DicomOctreeNode* CreateNode( G4double i, G4double j, G4double k, G4int level );
+  DicomOctreeNode* operator()( G4double nodeX, G4double nodeY, 
                           G4double nodeZ, G4int level );
   void DeleteTree(); 
   
   G4int CountMemory( G4int rMiddle, G4int rTerminal );
   
-  OctreeNode* Root()   { return mRoot; } 
+  DicomOctreeNode* Root()   { return mRoot; } 
   G4double Size()      { return mSize; }
   G4int NoLevels()     { return mNoLevels; }
   G4int Resolution()   { return ( 1 << mNoLevels ); }
   
 private:
 
-  void CountRecursive( OctreeNode* pNode, G4int rMiddle, G4int rTerminal );
+  void CountRecursive( DicomOctreeNode* pNode, G4int rMiddle, G4int rTerminal );
 
   // Root node of the tree
-  MiddleNode* mRoot;
+  DicomOctreeMiddleNode* mRoot;
   
   // In an octree, size denotes physical size of the cube,
   // ie length of its sides (which are assumed equal).

@@ -2,23 +2,21 @@
 #define DicomOctreeMiddleNode_h
 #include "globals.hh"
 
-class Octree;
-
-class MiddleNode : public OctreeNode
+class DicomOctreeMiddleNode : public DicomOctreeNode
 {
 public:
-  MiddleNode();
-  ~MiddleNode();
+  DicomOctreeMiddleNode();
+  ~DicomOctreeMiddleNode();
 
 public:
   void ResetFamily();
-  MiddleNode( OctreeNode* pParent );
-  G4int FindChild( const OctreeNode* pNode );
+  DicomOctreeMiddleNode( DicomOctreeNode* pParent );
+  G4int FindChild( const DicomOctreeNode* pNode );
   G4int MemSize();
-  OctreeNode*& operator []( G4int index )   {return mChildren[index];}
+  DicomOctreeNode*& operator []( G4int index )   {return mChildren[index];}
   OctreeNodeType Type()                     {return MIDDLE_NODE;}
 
 private:
- OctreeNode*  mChildren[8];
+  DicomOctreeNode*  mChildren[8];
 };
 #endif
