@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.35 2003-06-24 13:54:20 japost Exp $
+// $Id: G4ChordFinder.cc,v 1.36 2003-06-25 09:04:23 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -439,5 +439,6 @@ G4ChordFinder::TestChordPrint( G4int    noTrials,
             << fLastStepEstimate_Unconstrained
             << " new_step_constr= " << std::setw(10)
             << lastStepTrial << G4endl;
+     G4cout << " nextStepTrial = " << std::setw(10) << nextStepTrial << G4endl;
      G4cout.precision(oldprec);
 }
