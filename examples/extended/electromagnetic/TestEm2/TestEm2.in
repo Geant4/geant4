@@ -1,4 +1,4 @@
-# $Id: TestEm2.in,v 1.10 2004-02-06 10:13:19 vnivanch Exp $
+# $Id: TestEm2.in,v 1.11 2004-04-16 09:12:54 vnivanch Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -20,7 +20,7 @@
 #
 /testem/phys/setCuts 5.0 mm
 #
-/process/eLoss/preciseRange  true
+#/process/eLoss/preciseRange  true
 /run/initialize
 #
 /gun/particle e-
