@@ -42,11 +42,10 @@
 // -------------------------------------------------------------------
 
 #ifndef G4HSHELLCROSSSECTION_HH
-#define G4HSHELLCROSSSECTION__HH 1
+#define G4HSHELLCROSSSECTION_HH 1
 
 #include "globals.hh"
 #include "G4VhShellCrossSection.hh" 
-#include "g4std/vector"
 
 class G4hShellCrossSection : public G4VhShellCrossSection
 {
