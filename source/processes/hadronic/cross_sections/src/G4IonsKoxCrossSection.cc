@@ -1,4 +1,5 @@
 // 18-Sep-2003 First version is written by T. Koi
+// 10-Nov-2003 Bug Fix at Cal. ke_per_n and D T. Koi
 
 #include "G4IonsKoxCrossSection.hh"
 #include "G4ParticleTable.hh"
@@ -26,12 +27,12 @@ GetCrossSection(const G4DynamicParticle* aParticle,
 
    G4double Rvol = r0 * (  cubicrAp + cubicrAt );
 
-   G4double ke_per_N = aParticle->GetKineticEnergy() / At;
+   G4double ke_per_N = aParticle->GetKineticEnergy() / Ap;
    G4double c = calCeValue ( ke_per_N / MeV  );  
 
    G4double a = 1.85;
    G4double Rsurf = r0 * ( a * cubicrAp * cubicrAt / ( cubicrAp + cubicrAt ) - c); 
-   G4double D = 5 * ( At - 2 * Zt ) * Zp / ( Ap * At );
+   G4double D = 5.0 * ( At - 2 * Zt ) * Zp / ( Ap * At );
    Rsurf = Rsurf + D * fermi;  // multiply D by fermi 
 
    G4double Rint = Rvol + Rsurf;
