@@ -31,6 +31,7 @@
 // tel (418) 525-4444 #6720
 // fax (418) 691 5268
 //*******************************************************
+
 #include "globals.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
@@ -49,7 +50,7 @@ int main(int argc,char** argv)
 {
 				
   // Treatment of DICOM images before creating the G4runManager
-  dicomHandler* dcmHandler = new dicomHandler;
+  DicomHandler* dcmHandler = new DicomHandler;
   dcmHandler->checkFileFormat();
 
   // Initialisation of physics, geometry, primary particles ... 
@@ -70,7 +71,7 @@ int main(int argc,char** argv)
 
   G4UImanager* UI = G4UImanager::GetUIpointer();
  
-  if(argc==1)
+  if (argc==1)
     {
       G4UIsession* session = new G4UIterminal(new G4UItcsh);
       UI->ApplyCommand("/control/execute default.mac");

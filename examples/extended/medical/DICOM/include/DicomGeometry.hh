@@ -31,16 +31,16 @@
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
 
-#include <stdio.h>
+//#include <stdio.h>
 #include "g4std/vector"
-#include "G4Material.hh"
-#include "G4MaterialTable.hh"
-#include "G4Box.hh"
-#include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
 
 class DicomConfiguration;
 class DicomPatientConstructor;
+class G4Material;
+class G4LogicalVolume;
+class G4PhysicalVolume;
+class G4Box;
+
 class DicomGeometry : public G4VUserDetectorConstruction
 {
 public:
@@ -48,17 +48,13 @@ public:
   DicomGeometry();
   ~DicomGeometry();
 
+  G4VPhysicalVolume* Construct();
+
 private:
 
   void InitialisationOfMaterials();
-
-public:
-
   void PatientConstruction();
-  G4VPhysicalVolume* Construct();
-
-private:  
-   
+ 
   DicomPatientConstructor* patientConstructor;
 
   //Materials ...

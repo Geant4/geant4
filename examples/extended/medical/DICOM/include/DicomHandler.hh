@@ -31,21 +31,21 @@
 
 #ifndef DicomHandler_h
 #define DicomHandler_h 1
+
 #include "globals.hh"
 #include "G4ios.hh"
 #include "g4std/strstream"
 #include "g4std/streambuf"
 #include "G4strstreambuf.hh"
-class dicomHandler
+
+class DicomHandler
 {
 public:
 
-  dicomHandler()
-  {
-    compression = 0;
-    max = 0;
-  };
-  ~dicomHandler(){;}
+  DicomHandler();
+
+  ~DicomHandler() { }
+
   G4int readHeader(FILE *,char[300]);
 
   G4int readData(FILE *,char[300]); // note: always use readHeader 
@@ -53,6 +53,7 @@ public:
 
   // use ImageMagick to display the image
   G4int displayImage(char[500]);
+
   void checkFileFormat();
 
 private:
