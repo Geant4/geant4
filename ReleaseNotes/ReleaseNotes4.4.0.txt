@@ -52,67 +52,65 @@ to the related History files):
 
   o Event:
     -----
-  - Cleared compilation warnings on gcc-2.95.2. 
-  - Fixes to comply with removal of STLInterface.
-  - G4PrimaryParticle now stores the proper trackID.
   - Added a new feature for the user to increase the number of waiting stacks.
+  - Added Beam option for generating accelerator beams.
+  - Added check whether the primary vertex is inside of the world volume.
+  - G4PrimaryParticle now stores the proper trackID.
+  - G4PrimaryTransformer: now considering case where a primary is
+    placed on the boundary of the world volume.
   - G4GeneralParticleSource (GPS): implemented co-ordinates rotation for
     angular distribution.
   - Bug fix in G4EventManager in case G4_STORETRAJECTORY is off. 
-  - Added Beam option for generating accelerator beams.
-  - Add check whether the primary vertex is inside of the world volume.
-  - Move set method of position and time from G4ParticleGun to
+  - Moved set method of position and time from G4ParticleGun to
     G4VPrimaryGenerator so that G4HEPEvtInterface can accept the primary
     vertex position
-  - G4PrimaryTransformer: now considering case where a primary is
-    placed on the boundary of the world volume.
+  - Cleared compilation warnings on gcc-2.95.2. 
+  - Fixes to comply with removal of STLInterface.
 
   o Electromagnetic Processes (Low-energy):
     --------------------------------------
-  - Fixed a problem of continuity of ion effective charge.
-  - First implementation of fluorescence process.
-  - Fixed energy conservation problems for small range cuts in
-    G4LowEnergyIonisation.
-  - Cleared compilation warnings on gcc-2.95.2.
-  - Fixes to comply with removal of STLInterface.
   - Major revision of G4LowEnergyCompton, G4LowEnergyRayleigh and
     G4LowEnergyGammaConversion: re-implementation according to the design
     iteration in the data domain.
-  - Added protection in G4LowEnergyPhotoElectric to avoid generation of
-    photons causing negative energy balance.
+  - New version of data G4EMLOW0.5 required.
   - New classes for shell cross sections for proton-induced fluorescence. 
-  - Removed static inline methods to non inline.
-  - Introduced changes to allow multiple cuts per material (temporary). 
+  - First implementation of fluorescence process.
   - Introduced PIXE in G4hLowEnergyIonisation.
   - Significant physics an performance improvement in electron processes.
-  - New version of data G4EMLOW0.5 required.
   - Added method to deactivate fluorescence in ionisation if needed.
+  - Added protection in G4LowEnergyPhotoElectric to avoid generation of
+    photons causing negative energy balance.
+  - Fixed a problem of continuity of ion effective charge.
+  - Fixed energy conservation problems for small range cuts in
+    G4LowEnergyIonisation.
+  - Introduced changes to allow multiple cuts per material (temporary). 
+  - Removed static inline methods to non inline.
+  - Cleared compilation warnings on gcc-2.95.2.
+  - Fixes to comply with removal of STLInterface.
 
   o Electromagnetic Processes (Standard):
     ------------------------------------
-  - Cleared compilation warnings on gcc-2.95.2.
-  - Fixes to comply with removal of STLInterface.
-  - Suppression of the production threshold in phot, compt, conv, annih
-    processes.
-  - Removed obsolete "integral" module. 
   - Implemented mechanism for storing and retrieving Physics Tables.
   - Implemented new function ComputeRestrictedMeandEdx() for ionisation
     processes. 
   - Implemented subcutoff delta-rays mechanism in G4VMuEnergyLoss.
+  - Suppression of the production threshold in phot, compt, conv, annih
+    processes.
+  - Removed obsolete "integral" module. 
   - Fixed old outstanding bug in G4EnergyLossTables, responsible for
     causing negative energy deposit in some occasions. 
-  - Removed static inline methods to non inline.
-  - Introduced changes to allow multiple cuts per material (temporary).
   - Introduced changes for reference-counted touchables.
+  - Introduced changes to allow multiple cuts per material (temporary).
+  - Removed static inline methods to non inline.
+  - Cleared compilation warnings on gcc-2.95.2.
+  - Fixes to comply with removal of STLInterface.
 
   o General Processes, Parameterisation, Decay, Optical:
     ---------------------------------------------------
-  - Cleared compilation warnings on gcc-2.95.2 compiler.
-  - Fixes to comply with removal of STLInterface.
   - management:
-    o Fixed bug in copy constructor of G4ProcessManager.
     o Added Set/GetProcessManager() to G4VProcess and modified 
       G4ProcessManager::AddProcess() to invoke SetProcessManager().
+    o Fixed bug in copy constructor of G4ProcessManager.
   - parameterisation(s):
     o Added new classes describing X-ray transition radiation generation
       inside radiators (i.e. just along incident particle track):
@@ -122,23 +120,23 @@ to the related History files):
       touchables.
   - optical:
     o Changed process name for G4OpRayleigh, G4OpBoundary and G4OpAbsorption.
+  - Cleared compilation warnings on gcc-2.95.2 compiler.
+  - Fixes to comply with removal of STLInterface.
 
   o Geometry:
     --------
   - Introduced geometry/verification module for checking geometry for
     volumes overlaps.
-  - Cleared compilation warnings on gcc-2.95.2 compiler.
-  - Fixes to comply with removal of STLInterface.
   - Magnetic field:
+    o Handling Electric Field and time-dependent fields.
+    o Introduced ability to set field per volume.
+    o New extended examples for field in examples/extended.
     o Added method in G4ChordFinder to erase/reset the state of the
       StepEstimate. This is unwanted internal state that was carried
       between tracks and events as a side effect.
       Calling this at the start of each track, it is now possible to
       eliminate a reported problem of non-repeatability.
     o Reduced maximum number of steps in G4MagIntegratorDriver.
-    o Handling Electric Field and time-dependent fields.
-    o Introduced ability to set field per volume.
-    o New extended examples for field in examples/extended.
     o Protected verbose warnings with G4DEBUG_FIELD flag in G4ChordFinder
       and G4MagIntegratorDriver.
     o G4FieldManager: added fFieldChangesEnergy data member and get/set
@@ -204,15 +202,17 @@ to the related History files):
     o Fixes for compilation on gcc-2.96.98 and gcc-3.0.2 compilers.
     o G4Axis2Placement3dCreator::CreateG4Geometry(): added check to
       attribute validity for 'direction'.
+  - Cleared compilation warnings on gcc-2.95.2 compiler.
+  - Fixes to comply with removal of STLInterface.
 
   o Global:
     ------
+  - Introduced G4ReferenceCountedHandle templated class.
   - Modified G4Exception behavior, now setting G4StateManager to
     "abort" state instead of aborting the application.
   - Removed STLinterface module:
     o renamed cstring[.h.icc] to G4String[.hh.icc].
     o renamed ctoken.h to G4Tokenizer.hh.
-  - Introduced G4ReferenceCountedHandle templated class.
 
   o Graphics Representations:
     ------------------------
@@ -222,14 +222,12 @@ to the related History files):
 
   o Hadronic Processes:
     ------------------
-  - Cleared compilation warnings and minor fixes for gcc-2.95.2 compiler.
-  - Fixes to comply with removal of STLInterface.
-  - General updates, fixes, new development: cross_sections, management,
-    kinetic_model, quark_gluon_string, string_common, string_fragmentation,
-    generator/util, processes and util modules
   - New cascade models (evaporation & utils modules).
   - New chiral_inv_phase_space model (body & interface modules). 
   - New coherent_elastic model.
+  - General updates, fixes, new development: cross_sections, management,
+    kinetic_model, quark_gluon_string, string_common, string_fragmentation,
+    generator/util, processes and util modules
   - Performance optimization to improve the speed for doppler broadening.
   - models/neutron_hp:
     o Fixed asymmetry in the angular distributions for elastic scattering
@@ -246,31 +244,32 @@ to the related History files):
       any more to satisfy the pre-calculated number of pomeron exchanged
       in soft collisions, energy conservation, and the minimum
       string-mass constraint. 
+  - Cleared compilation warnings and minor fixes for gcc-2.95.2 compiler.
+  - Fixes to comply with removal of STLInterface.
 
   o Materials:
     ---------
-  - Cleared compilation warnings on gcc-2.95.2 compiler.
-  - Fixes to comply with removal of STLInterface.
   - G4Isotope, G4Element, G4Material: IndexInTable is now obtained
     dynamically via GetIndex().
-  - An Isotope, Element, Material can be deleted.
-  - Removed static inline methods in G4Isotope, G4Element, G4Material
-    and G4SandiaTable.
+  - Added new function G4Materials::SetChemicalFormula().
+  - Fixed problems erasing when deleting Isotope, Element or Material objects.
   - Fixed memory leak in G4SandiaTable::ComputeMatSandiaMatrix(),
     for deletion of temporary vectors Z, tmp1, tmp2.
   - Moved definitions of G4IsotopeVector and G4ElementVector
     G4ElementTable and G4MaterialTable to the appropriate headers.
-  - Added new function G4Materials::SetChemicalFormula().
+  - Removed static inline methods to non-inline.
+  - Cleared compilation warnings on gcc-2.95.2 compiler.
+  - Fixes to comply with removal of STLInterface.
 
   o Particles:
     ---------
-  - Cleared compilation warnings and minor fixed for gcc-2.95.2 compiler.
-  - Fixes to comply with removal of STLInterface.
-  - Fixed bugs in copy constructor of G4DecayProduct.
   - Introduced G4NeutronBetaDecayChannel and added to G4Neutron.
   - Allow MassDifference in case of nucleon decay.
-  - Removed static inline methods to non-inlined.
+  - Fixed bug in copy constructor of G4DecayProduct.
   - Introduced changes to allow multiple cuts per material (temporary). 
+  - Removed static inline methods to non-inlined.
+  - Cleared compilation warnings and minor fixed for gcc-2.95.2 compiler.
+  - Fixes to comply with removal of STLInterface.
 
   o Persistency:
     -----------
@@ -279,33 +278,30 @@ to the related History files):
 
   o Run, Intercoms and Interfaces
     -----------------------------
-  - Cleared compilation warnings on gcc-2.95.2 compiler.
-  - Fixes to comply with removal of STLInterface.
   - run:
-    o Fixed bugs in G4VUserPhysicsList.
-    o Added a new feature for the user to increase the number of waiting
-      stacks.
+    o Added new feature allowing to increase the number of waiting stacks.
     o Added Set/GetApplyCuts methods in G4VUserPhysicsList.
     o Added /run/particle/applyCuts command in G4UserPhysicsListMessenger.
     o Added GetVersionString() method to G4RunManager.
     o Added rndmSaveThisRun() and rndmSaveThisEvent() methods to G4RunManager.
     o Added /random/ commands to G4RunMessenger.
+    o Fixed bugs in G4VUserPhysicsList.
   - intercoms:
-    o Introduced new feature of suppressing the program abortion due to
+    o Introduced feature for suppressing the program abortion due to
       G4Exception.
-    o Fixed parsing of quoted (") tokens.
-    o Added G4VGraphicsScene::AddPrimitive(const G4Scale&).
-    o Added G4VisManager::Draw(const G4Scale&,...).
-    o Modified G4UIbatch to display (G4cerr) the error message.
-      Comment lines are now displayed only for verbose level=2. 
     o Introduced "Shell variables" for UI command handling. Added
       class G4UIaliasList.
-    o Included correction for string parameter starting with a space.
     o Introduced loop execution of a macro file, recursive expansion of
       aliased  variables, and some other new features in G4UImanager and
       related classes.
       New commands: /control/shell, /control/foreach, /control/loop,
                     /control/createHTML.
+    o Added G4VGraphicsScene::AddPrimitive(const G4Scale&).
+    o Added G4VisManager::Draw(const G4Scale&,...).
+    o Modified G4UIbatch to display (G4cerr) the error message.
+      Comment lines are now displayed only for verbose level=2. 
+    o Included correction for string parameter starting with a space.
+    o Fixed parsing of quoted (") tokens.
     o Fixed a problem for commands with doubled slash.
   - interfaces:
     o Re-engineered G4UI variables:
@@ -313,18 +309,15 @@ to the related History files):
       Nothing built if G4UI_NONE is set.
     o G4VInteractorManager::RemoveDispatcher : change the remove logic in
       order to fix a disfunctionning with vis/OpenInventor driver.
+  - Cleared compilation warnings on gcc-2.95.2 compiler.
+  - Fixes to comply with removal of STLInterface.
 
   o Tracking & Track:
     ----------------
-  - Cleared compilation warnings on gcc-2.95.2 compiler.
-  - Fixes to comply with removal of STLInterface.
-  - Introduced changes for reference-counted touchables mechanism.
   - track:
     o Fixed bug for velocity in method G4Step::UpdateTrack().
     o Implemented assignment operator for G4ParticleChangeForRadDecay.
     o Fixed bug in assignment operator of G4Track.
-    o Added SetParentWeightByProcess() and SetSecondaryWeightByProcess()
-      methods.
     o Removed static inline methods to non inline.
   - tracking:
     o Added protection for tracks placed outside the world volume
@@ -334,6 +327,9 @@ to the related History files):
       (primary or secondary) in SetInitialStep(). This is in order to assist
       in starting particles that are on/near-to boundaries in the correct
       volume. 
+  - Introduced changes for reference-counted touchables mechanism.
+  - Cleared compilation warnings on gcc-2.95.2 compiler.
+  - Fixes to comply with removal of STLInterface.
 
   o Transportation:
     --------------
@@ -349,60 +345,57 @@ to the related History files):
 
   o Visualization:
     -------------
-  - Cleared compilation warnings on gcc-2.95.2 compiler.
-  - Fixes to comply with removal of STLInterface.
+  - Introduced new HepRep graphics driver.
+  - Removed the need to specify environment variables for visualization
+    drivers which do not need external packages or libraries.
   - Removed old-style commands. 
+  - Added commands:
+    o /vis/scene/add/scale
+    o /vis/viewer/flush = refresh + update.
+    o /vis/viewer/set/upThetaPhi and upVector.
+    o refresh|flush option to /vis/scene/notifyHandlers.
+  - Moved /vis/viewer/lights and viewpoint to /vis/viewer/set.
+  - Added G4ScaleModel.
+  - Added G4VModel::SetExtent(const G4VisExtent&).
+  - Added G4VisManager::Draw(const G4Scale&,...).
+  - Added template graphics system XXX.
+  - Re-implemented verbosity control.  Output statements wherever possible
+    are controlled by the verbosity in a simple graded message scheme.
+  - Improved auto-refreshing.
+  - Force rebuild of graphics "stores" (graphical databases) and,
+    if auto-refresh is true, refresh of all views
+    (/vis/scene/notifyHandlers) after an addition to scene.
+  - Eliminated view parameters from G4VisManager.
+    Paramenters can be copied from one view to another with:
+    /vis/viewer/set/all 
+  - Updated G4RTJpegMaker for porting Windows systems. 
+  - OpenInventor : move HEPVis/SoWindow under vis/OpenInventor/G4SoWindow
+    to prepare HEPVis/6.0. (HEPVis/SoWindow will disappear from HEPVis/6.0).
   - Fixed crash in optimised mode: added Initialise() to viewers so 
     that windows are opened after viewers are fully constructed. 
   - Corrected mistake which could cause crash if user specified a
     non-existent scene handler in /vis/sceneHandler/remove. 
   - Fix for replica rotation matrix. It Fixes observed crashes in replica
     tracking with visualisation.
-  - Added /vis/scene/add/scale command.
-  - Added G4ScaleModel.
-  - Added G4VModel::SetExtent(const G4VisExtent&).
-  - Improved auto-refreshing.
-  - Force rebuild of graphics "stores" (graphical databases) and,
-    if auto-refresh is true, refresh of all views
-    (/vis/scene/notifyHandlers) after an addition to scene.
-  - Removed the need to specify environment variables for visualization
-    drivers which do not need external packages or libraries.
-  - Eliminated view parameters from G4VisManager.
-    Paramenters can be copied from one view to another with:
-    /vis/viewer/set/all 
-  - Added README.quick, a quick installation guide.
-  - Re-implemented verbosity control.  Output statements wherever possible
-    are controlled by the verbosity in a simple graded message scheme.
   - Fixed bug in G4VSceneHandler::AddPrimitive(const G4Scale&).
-  - Added G4VisManager::Draw(const G4Scale&,...).
-  - Added template graphics system XXX.
-  - Improved verbosity guidance and READMEs.
-  - Introduced new HepRep graphics driver.
-  - Added commands:
-    o /vis/viewer/flush = refresh + update.
-    o /vis/viewer/set/upThetaPhi and upVector.
-    o refresh|flush option to /vis/scene/notifyHandlers.
-  - Moved /vis/viewer/lights and viewpoint to /vis/viewer/set.
-  - Updated G4RTJpegMaker for porting Windows systems. 
-  - OpenInventor : move HEPVis/SoWindow under vis/OpenInventor/G4SoWindow
-    to prepare HEPVis/6.0. (HEPVis/SoWindow will disappear from HEPVis/6.0).
   - Fixed bug in G4VisManager::EndOfEvent.
+  - Added README.quick, a quick installation guide.
+  - Improved verbosity guidance and READMEs.
+  - Cleared compilation warnings on gcc-2.95.2 compiler.
+  - Fixes to comply with removal of STLInterface.
 
   o G4toG4 Tool:
     -----------
-  - Cleared compilation warnings on gcc-2.95.2 compiler.
-  - Fixes to comply with removal of STLInterface.
   - Implemented reflection of CSG solids through G4ReflectionFactory
     class and G4ReflectedSolid. Added G3G4_NO_REFLECTION flag to exclude
     it if needed for cases not yet covered.
   - Added limited support for MANY volumes through adoption of boolean solids.
   - Changed G3Division::CreatePVReplica() to return a G4PhysicalVolumesPair.
+  - Cleared compilation warnings on gcc-2.95.2 compiler.
+  - Fixes to comply with removal of STLInterface.
 
   o Examples:
     --------
-  - Cleared most compilation warnings on gcc-2.95.2 compiler.
-  - Fixes to comply with removal of STLInterface.
-  - Updated reference outputs.
   - Novice:
     o updated visualization macros.
     o updated vis-managers.
@@ -416,8 +409,15 @@ to the related History files):
       dark matter experiment.
     o xray_fluorescence: new simulation setup for the study the elemental
       composition of a planet through the measurement of the X-rays emitted.
+    o new improved versions of existing advanced applications.
+  - Cleared most compilation warnings on gcc-2.95.2 compiler.
+  - Fixes to comply with removal of STLInterface.
+  - Updated reference outputs.
 
-Notes: 
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
 
   o  Geant4 4.0 is based on STL and can be installed with strict
      ISO/ANSI C++ compliant setup or not. See notes below.
