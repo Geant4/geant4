@@ -1,4 +1,4 @@
-.$Id: History,v 1.58 2004-01-29 00:51:33 duns Exp $
+.$Id: History,v 1.59 2004-01-29 00:56:43 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,7 +19,7 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
-28 January 2004 Mark Donszelmann
+28 January 2004 Mark Donszelmann (vis-HepRep-V06-00-01)
 - Fixed GEANT-40. For some unclear reason the symbols zcalloc and zcfree
   of the zlib library were being called as C++ mangled names. 
   To get rid of the situation of a mix of C++ and C names, we took
