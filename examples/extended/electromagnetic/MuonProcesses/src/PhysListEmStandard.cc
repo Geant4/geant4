@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.5 2004-12-06 13:39:37 vnivanch Exp $
+// $Id: PhysListEmStandard.cc,v 1.6 2004-12-06 13:45:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,16 +67,8 @@ void PhysListEmStandard::ConstructProcess()
   pmanager->AddProcess(mubrem,    -1,-1,3);
   pmanager->AddProcess(mupair,    -1,-1,4);
 
-  //  pmanager->AddProcess(new G4MuIonisation,        -1, 1,1);
-  // pmanager->AddProcess(new G4MuBremsstrahlung,    -1, 2,2);
-  // pmanager->AddProcess(new G4MuPairProduction,    -1, 3,3);       
-
   particle = G4MuonMinus::MuonMinus();
   pmanager = particle->GetProcessManager();    
-
-  // pmanager->AddProcess(new G4MuIonisation,        -1, 1,1);
-  // pmanager->AddProcess(new G4MuBremsstrahlung,    -1, 2,2);
-  // pmanager->AddProcess(new G4MuPairProduction,    -1, 3,3);       
 
   pmanager->AddProcess(muion,     -1, 2,2);
   pmanager->AddProcess(mubrem,    -1,-1,3);
