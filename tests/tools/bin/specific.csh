@@ -179,7 +179,7 @@ if ( `uname -n` == aleph ) then
 #    setenv G4USE_OSPACE 1
 #  endif
 setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
-setenv G4INSTALL /geant4/0.1
+setenv G4INSTALL /geant4/dev
 setenv G4SYSTEM  HP-aCC
 setenv G4DEBUG   1
 # RW comes with the compiler : setenv G4USE_STL 1
@@ -235,7 +235,7 @@ if ( `uname -n` == asc ) then
 #endif
 setenv G4USE_STL 1
 setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
-setenv G4INSTALL /geant4/0.1
+setenv G4INSTALL /geant4/dev
 setenv G4SYSTEM DEC-cxx
 setenv G4DEBUG 1
 #setenv G4MAKESHLIB $G4INSTALL/config/makeshlib.sh
@@ -285,7 +285,7 @@ endif
 #---------------------------------------------------
 if ( `uname -n` == "lx1.lal.in2p3.fr" ) then
 setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
-setenv G4INSTALL /geant4/0.1
+setenv G4INSTALL /geant4/dev
 setenv G4SYSTEM  Linux-g++
 setenv G4DEBUG   1
 setenv G4USE_STL 1
@@ -342,7 +342,7 @@ if ( `uname -n` == "papou1" ) then
     setenv G4USE_OSPACE 1
   endif
 setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
-setenv G4INSTALL /geant4/dev/geant4
+setenv G4INSTALL /geant4/dev
 setenv G4SYSTEM  SUN-CC
 setenv G4DEBUG   1
 #setenv G4MAKESHLIB                 $G4INSTALL/config/makeshlib.sh
