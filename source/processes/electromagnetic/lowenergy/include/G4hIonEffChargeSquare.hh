@@ -79,7 +79,6 @@ private:
                                     G4double ionCharge) const;
   // This method returns ion effective charge square parametrised 
 
-  const G4double protonMass;
   const G4double theHeMassAMU;
 
 };

@@ -48,7 +48,7 @@ public:
 
   G4VLowEnergyModel(const G4String& name);
 
-  ~G4VLowEnergyModel();
+  virtual ~G4VLowEnergyModel();
 
   virtual G4double TheValue(const G4DynamicParticle* particle,
 			    const G4Material* material)  = 0;

@@ -154,6 +154,8 @@ void hTestPhysicsList::ConstructProcess()
 #include "G4MultipleScattering.hh"
 
 #include "G4eIonisation.hh"
+#include "G4LowEnergyIonisation.hh"
+#include "G4LowEnergyBremsstrahlung.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
 
@@ -186,8 +188,10 @@ void hTestPhysicsList::ConstructEM()
     } else if (particleName == "e-") {
       //electron
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);       
+      //  pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
+      pmanager->AddProcess(new G4LowEnergyIonisation,        -1, 2,2);
+      pmanager->AddProcess(new G4LowEnergyBremsstrahlung,    -1,-1,3);       
+      //      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);       
 
       hTestStepCut* theeminusStepCut = new hTestStepCut();
       theeminusStepCut->SetMaxStep(MaxChargedStep);  
@@ -196,6 +200,7 @@ void hTestPhysicsList::ConstructEM()
     } else if (particleName == "e+") {
       //positron      
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+      //       pmanager->AddProcess(new G4LowEnergyIonisation,        -1, 2,2);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);

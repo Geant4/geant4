@@ -18,6 +18,11 @@
 // 
 // Creation date: 20 July 2000
 //
+// Modifications:
+// 20/07/2000  V.Ivanchenko First implementation
+// 22/08/2000  V.Ivanchenko Bug fixed in call of a model
+// 03/10/2000  V.Ivanchenko CodeWizard clean up
+//
 // Class Description: 
 //
 // Low energy protons/ions nuclear stopping parametrisation
@@ -26,12 +31,7 @@
 //
 // -------------------------------------------------------------------
 //
-// Modifications: 
-// 20/07/2000  V.Ivanchenko First implementation
-// 22/08/2000  V.Ivanchenko Bug fixed in call of a model
-//
-// -------------------------------------------------------------------
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4hNuclearStoppingModel.hh" 
@@ -47,26 +47,40 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4hNuclearStoppingModel::G4hNuclearStoppingModel(const G4String& name):
-  G4VLowEnergyModel(name),
-  highEnergyLimit(100.*MeV),
-  lowEnergyLimit(1.*eV),
-  factorPDG2AMU(1.007276/proton_mass_c2),
-  theZieglerFactor(eV*cm2*1.0e-15) 
+  G4VLowEnergyModel(name)
 {
+  modelName = name ;
+  InitializeMe() ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4hNuclearStoppingModel::InitializeMe()
+{
+  // Constants
+  highEnergyLimit = 100.*MeV ;
+  lowEnergyLimit  = 1.*eV ;
+  factorPDG2AMU   = 1.007276/proton_mass_c2 ;
+  theZieglerFactor= eV*cm2*1.0e-15 ; 
+
   // Registration of parametrisation models of nuclear energy losses
-  if("Ziegler1977" == name) { 
+  G4String blank  = G4String(" ") ;
+  G4String zi77   = G4String("Ziegler1977") ;
+  G4String ir49   = G4String("ICRU_R49") ;
+  G4String zi85   = G4String("Ziegler1985") ;
+  if(zi77 == modelName) { 
       nStopingPowerTable = new G4hZiegler1977Nuclear();
     
-  } else if("ICRU_R49" == name || " " == name) {
+  } else if(ir49 == modelName || blank == modelName) {
       nStopingPowerTable = new G4hZiegler1985Nuclear();
 
-  } else if("Ziegler1985" == name) {
+  } else if(zi85 == modelName) {
       nStopingPowerTable = new G4hICRU49Nuclear();
         
   } else {
     G4cout << 
-    "G4hLowEnergyIonisation warning: There is no table with the name <" 
- << name << ">" 
+    "G4hLowEnergyIonisation warning: There is no table with the modelName <" 
+ << modelName << ">" 
  << " for nuclear stopping, <ICRU_R49> is applied " 
  << G4endl; 
     nStopingPowerTable = new G4hICRU49Nuclear();
@@ -145,6 +159,7 @@ G4double G4hNuclearStoppingModel::StoppingPower(
   return nloss;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 

@@ -20,8 +20,8 @@
 // 24/05/2000 MGP  Modified to remove compilation warnings on Linux and DEC
 //                 Introduced sizes of L0, L1, L2 arrays
 // 23/05/2000 MGP  Made compliant to design
-//  
 // 02/08/2000 V.Ivanchenko Clean up according new design
+// 03/10/2000  V.Ivanchenko CodeWizard clean up
 //
 // ************************************************************
 // It is the Quantal Harmonic Oscillator Model for energy loss
@@ -126,7 +126,7 @@ G4bool G4QAOLowEnergyLoss::IsInCharge(
   for (G4int m = 0; m < numberOfMaterials; m++)
     {
       G4String matName = material->GetName();
-      if (matName == materialAvailable[m] || 
+      if (matName == materialAvailable[m] && 
           material->GetNumberOfElements() == 1){ 
 	hasMaterial = true;
 	break;}
@@ -144,7 +144,7 @@ G4bool G4QAOLowEnergyLoss::IsInCharge(
 G4double G4QAOLowEnergyLoss::TheValue(const G4DynamicParticle* particle,
 	       	                      const G4Material* material) 
 {
-  G4int zParticle = G4int(particle->GetCharge());
+  G4int zParticle = (G4int)(particle->GetCharge());
 
   G4double energy = particle->GetKineticEnergy() ;
   G4double eloss  = EnergyLoss(material,energy,zParticle) ;
@@ -158,7 +158,7 @@ G4double G4QAOLowEnergyLoss::TheValue(const G4ParticleDefinition* aParticle,
        		                      const G4Material* material,
                                             G4double kineticEnergy) 
 {
-  G4int zParticle = G4int (aParticle->GetPDGCharge());
+  G4int zParticle = (G4int)(aParticle->GetPDGCharge());
 
   G4double eloss  = EnergyLoss(material,kineticEnergy,zParticle) ;
 
@@ -173,15 +173,17 @@ G4double G4QAOLowEnergyLoss::EnergyLoss(const G4Material* material,
                                               G4int zParticle) const 
 {
   G4int nbOfShell = GetNumberOfShell(material);
-  G4double ionisationEnergy = material->GetIonisation()->GetMeanExcitationEnergy();
+  G4double ionisationEnergy = material->GetIonisation()
+                            ->GetMeanExcitationEnergy();
   G4double dedx=0;
-  G4double v=0;
-  v= c_light * sqrt( 2 * kineticEnergy / proton_mass_c2 );
-  G4double coeff=0;
-  coeff= (twopi * proton_mass_c2 * material-> GetTotNbOfElectPerVolume()) / ( electron_mass_c2);
-  coeff*= ( fine_structure_const * fine_structure_const * hbarc_squared ) / ( kineticEnergy );
-  G4double fractionOfBetheVelocity = 0;
-  fractionOfBetheVelocity = ( fine_structure_const * c_light) / v;
+  G4double v = c_light * sqrt( 2.0 * kineticEnergy / proton_mass_c2 );
+  G4double coeff = twopi * proton_mass_c2 * 
+                  (material-> GetTotNbOfElectPerVolume()) / 
+                   electron_mass_c2 ;
+  coeff *= fine_structure_const * fine_structure_const * hbarc_squared / 
+           kineticEnergy ;
+
+  G4double fBetheVelocity = fine_structure_const * c_light / v;
   
   G4double stoppingNumber = 0, l0Term = 0, l1Term = 0, l2Term = 0;
   
@@ -189,7 +191,8 @@ G4double G4QAOLowEnergyLoss::EnergyLoss(const G4Material* material,
     
     G4double l0 = 0, l1 = 0, l2 = 0;
     G4double NormalizedEnergy = 0;
-    NormalizedEnergy = ( 2 * electron_mass_c2 * v * v  ) / ( c_squared * GetShellEnergy(material,nos) );
+    NormalizedEnergy = ( 2 * electron_mass_c2 * v * v  ) / 
+                       ( c_squared * GetShellEnergy(material,nos) );
     l0 = GetL0(NormalizedEnergy);
     l0Term += GetShellStrength(material,nos)  * l0; 
     
@@ -200,9 +203,11 @@ G4double G4QAOLowEnergyLoss::EnergyLoss(const G4Material* material,
     l2Term += GetShellStrength(material,nos) * l2; 
     
   }
-
        
-  stoppingNumber = zParticle * zParticle * ( l0Term + zParticle * fractionOfBetheVelocity * l1Term + zParticle * zParticle * fractionOfBetheVelocity * fractionOfBetheVelocity * l2Term);
+  stoppingNumber = zParticle * zParticle * 
+         (l0Term + 
+          zParticle * fBetheVelocity * l1Term + 
+          zParticle * zParticle * fBetheVelocity * fBetheVelocity * l2Term);
   dedx = ( coeff * stoppingNumber);
               
   return dedx ; 
@@ -216,111 +221,100 @@ G4int G4QAOLowEnergyLoss::GetNumberOfShell(const G4Material* material) const
   // Set default return value
   G4int nShell = nbofShellForMaterial[0];
 
-  if(material->GetName() == "Aluminium")  nShell =  nbofShellForMaterial[0];
-  else if  (material->GetName() == "Silicon"  ) nShell = nbofShellForMaterial[1] ;
-  else if  (material->GetName()== "Copper") nShell = nbofShellForMaterial[2];  
-  else if  (material->GetName() == "Tantalum") nShell = nbofShellForMaterial[3];
-  else if  (material->GetName() == "Gold" )  nShell = nbofShellForMaterial[4];  
-  else if  (material->GetName() == "Platinum") nShell = nbofShellForMaterial[5];
-  else if  (material->GetNumberOfElements() == 1) 
-  	nShell = material->GetElement(0)->GetNbOfAtomicShells();
-  else G4cout << "WARNING - G4QAOLowEnergyLoss::GetNumberOfShell - "
-	      << "The model is not available for "
-	      << material->GetName() 
-	      << G4endl;
-  
+  for(G4int i=0; i<numberOfMaterials; i++) {
+
+    if(materialAvailable[i] == material->GetName()) {
+      nShell =  nbofShellForMaterial[i];
+      return nShell;
+    }
+  }
+
+  G4cout << "WARNING - G4QAOLowEnergyLoss::GetNumberOfShell - "
+         << "The model is not available for "
+         << material->GetName() << G4endl;
+
   return nShell;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4QAOLowEnergyLoss::GetShellEnergy(const G4Material* material,G4int nbOfTheShell) const
+G4double G4QAOLowEnergyLoss::GetShellEnergy(const G4Material* material,
+                                            G4int nbOfTheShell) const
 {
   // 
   G4double shellEnergy = alShellEnergy[0];
 
-  if(material->GetName() == "Aluminium") shellEnergy =  alShellEnergy[nbOfTheShell];
-  else if  (material->GetName() == "Silicon"  ) shellEnergy =  siShellEnergy[nbOfTheShell];
-  else if  (material->GetName() == "Copper") shellEnergy =  cuShellEnergy[nbOfTheShell];  
-  else if  (material->GetName() == "Tantalum") shellEnergy =  taShellEnergy[nbOfTheShell];
-  else if  (material->GetName() == "Gold" )  shellEnergy =  auShellEnergy[nbOfTheShell];   
-  else if  (material->GetName() == "Platinum") shellEnergy =  ptShellEnergy[nbOfTheShell];
-  else if  (material->GetNumberOfElements() == 1)
-    shellEnergy = GetOscillatorEnergy(material, nbOfTheShell);
-  else G4cout << "WARNING - G4QAOLowEnergyLoss::GetShellEnergy - "
-	      << "The model is not available for "
-	      << material->GetName() 
-	      << G4endl;
+  for(G4int i=0; i<numberOfMaterials; i++) {
+
+    if(materialAvailable[i] == material->GetName()) {
+      shellEnergy =  alShellEnergy[i];
+      return shellEnergy;
+    }
+  }
+
+  G4cout << "WARNING - G4QAOLowEnergyLoss::GetShellEnergy - "
+         << "The model is not available for "
+         << material->GetName() << G4endl;
 
   return  shellEnergy;
   }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4QAOLowEnergyLoss::GetOscillatorEnergy(const G4Material* material,G4int nbOfTheShell) const
+G4double G4QAOLowEnergyLoss::GetOscillatorEnergy(const G4Material* material,
+                                                 G4int nbOfTheShell) const
 { 
-  G4double oscShellEnergy = 0;
   
-  const G4Element* element ;
-  element = material->GetElement(0);
+  const G4Element* element = material->GetElement(0);
   
-  G4int Z = G4int(element->GetZ());
-  
-  G4double a = 0;
-  a = exp(0.5);
-  
-  G4double squaredPlasmonEnergy = 1;
-  squaredPlasmonEnergy = pow(28.16,2) 
-			* material->GetDensity()/g/cm3
-			* ( Z / element->GetN()) * 1e-6  ;
-  
-  G4double plasmonTerm = 0 ;
-  plasmonTerm = 2./3. ; 
-  plasmonTerm *= GetOccupationNumber(Z,nbOfTheShell) / Z ; 
-  plasmonTerm *= squaredPlasmonEnergy;
-  plasmonTerm /= Z ;
+  G4int Z = (G4int)(element->GetZ());
     
-  G4double ionTerm = 0;
-  ionTerm = a ;
-  ionTerm *= element->GetAtomicShell(nbOfTheShell);
-  ionTerm = pow(ionTerm,2);
+  G4double squaredPlasmonEnergy = 28.16 * 28.16 * 1e-6  
+                                * (material->GetDensity()) * (cm3/g)
+			        *  Z / (element->GetN()) ;
+  
+  G4double plasmonTerm = 0.66667 * GetOccupationNumber(Z,nbOfTheShell)  
+                       * squaredPlasmonEnergy / (Z*Z) ; 
+
+  G4double ionTerm = exp(0.5) * (element->GetAtomicShell(nbOfTheShell)) ;
+
+  ionTerm = ionTerm*ionTerm ;
    
-  oscShellEnergy = sqrt( ionTerm + plasmonTerm );
+  G4double oscShellEnergy = sqrt( ionTerm + plasmonTerm );
  
   return  oscShellEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4QAOLowEnergyLoss::GetShellStrength(const G4Material* material,G4int nbOfTheShell) const
+G4double G4QAOLowEnergyLoss::GetShellStrength(const G4Material* material,
+                                              G4int nbOfTheShell) const
 {
   G4double shellStrength = alShellStrength[0];
   
-  if(material->GetName() == "Aluminium") shellStrength = alShellStrength[nbOfTheShell];
-  else if  (material->GetName() == "Silicon"  ) shellStrength = siShellStrength[nbOfTheShell];
-  else if  (material->GetName() == "Copper") shellStrength = cuShellStrength[nbOfTheShell];  
-  else if  (material->GetName() == "Tantalum") shellStrength = taShellStrength[nbOfTheShell];
-  else if  (material->GetName() == "Gold" )  shellStrength = auShellStrength[nbOfTheShell];   
-  else if  (material->GetName() == "Platinum") shellStrength = ptShellStrength[nbOfTheShell];
-  else if  (material->GetNumberOfElements() == 1){
-    G4int Z = G4int(material->GetZ());
-    shellStrength = GetOccupationNumber(Z,nbOfTheShell) / Z ;}
-  else G4cout << "WARNING - G4QAOLowEnergyLoss::GetShellEnergy - "
-	      << "The model is not available for "
-	      << material->GetName() 
-	      << G4endl;
+  for(G4int i=0; i<numberOfMaterials; i++) {
+
+    if(materialAvailable[i] == material->GetName()) {
+      shellStrength =  alShellStrength[i];
+      return shellStrength;
+    }
+  }
+
+  G4cout << "WARNING - G4QAOLowEnergyLoss::GetShellEnergy - "
+         << "The model is not available for "
+         << material->GetName() << G4endl;
 
   return shellStrength;
-
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4QAOLowEnergyLoss::GetOccupationNumber(G4int Z,
-			     G4int ShellNb) const
+G4double G4QAOLowEnergyLoss::GetOccupationNumber(G4int Z, G4int ShellNb) const
 {
-  G4int indice = 1;
-  for (G4int z = 1 ; z < Z ; z++) indice += fNumberOfShells[z];
-  indice += ShellNb;  
+
+  G4int indice = ShellNb ;
+  for (G4int z = 1 ; z < Z ; z++) {indice += fNumberOfShells[z];}
+
   return nbOfElectronPerSubShell[indice];
 }
 
@@ -328,18 +322,17 @@ G4double G4QAOLowEnergyLoss::GetOccupationNumber(G4int Z,
 
 G4double G4QAOLowEnergyLoss::GetL0(G4double normEnergy) const 
 {
-  G4double l0 = 0, l0p = 0;
-  G4double bethe = 0;
-  G4int n = 0;
-  do{
-    n++;
-    if ( n >= sizeL0 ) break;
-    l0 = L0[n][1];
-    l0p = L0[n-1][1];
-    bethe = (l0 - l0p) * ( normEnergy - L0[n-1][0]) / (L0[n][0] - L0[n-1][0]);
-    bethe+= l0p;
-  } while( normEnergy >= L0[n][0] );
+  G4int n;
   
+  for(n = 0; n < sizeL0; n++) {
+    if( normEnergy < L0[n][0] ) break;
+  }
+  if(0 == n) n = 1 ;
+
+  G4double l0    = L0[n][1];
+  G4double l0p   = L0[n-1][1];
+  G4double bethe = l0p + (l0 - l0p) * ( normEnergy - L0[n-1][0]) / 
+                  (L0[n][0] - L0[n-1][0]);
   return bethe ;
   
 }
@@ -347,17 +340,17 @@ G4double G4QAOLowEnergyLoss::GetL0(G4double normEnergy) const
 
 G4double G4QAOLowEnergyLoss::GetL1(G4double normEnergy) const
 {
-  G4double l1 = 0, l1p = 0 ;
-  G4double barkas = 0;
-  G4int n = 0;
-  do{
-    n++;
-    if ( n >= sizeL1 ) break;
-    l1 = L1[n][1];
-    l1p = L1[n-1][1];
-    barkas = (l1 - l1p) * ( normEnergy - L1[n-1][0]) / (L1[n][0] - L1[n-1][0]);
-    barkas+= l1p;
-  } while( normEnergy >= L1[n][0]);
+  G4int n;
+
+  for(n = 0; n < sizeL1; n++) {
+    if( normEnergy < L1[n][0] ) break;
+  }
+  if(0 == n) n = 1 ;
+
+  G4double l1    = L1[n][1];
+  G4double l1p   = L1[n-1][1];
+  G4double barkas= l1p + (l1 - l1p) * ( normEnergy - L1[n-1][0]) / 
+                  (L1[n][0] - L1[n-1][0]);
   
   return barkas;
   
@@ -367,17 +360,16 @@ G4double G4QAOLowEnergyLoss::GetL1(G4double normEnergy) const
 
 G4double G4QAOLowEnergyLoss::GetL2(G4double normEnergy) const
 {
-  G4double l2 = 0, l2p = 0;
-  G4double bloch = 0;
-  G4int n = 0;
-  do{
-    n++;
-    if ( n >= sizeL2 ) break;
-    l2 = L2[n][1];
-    l2p = L2[n-1][1];
-    bloch = (l2 - l2p) * ( normEnergy - L2[n-1][0]) / (L2[n][0] - L2[n-1][0]);
-    bloch+= l2p;
-  } while( normEnergy >= L2[n][0] );
+  G4int n;
+  for(n = 0; n < sizeL2; n++) {
+    if( normEnergy < L2[n][0] ) break;
+  }
+  if(0 == n) n = 1 ;
+
+  G4double l2    = L2[n][1];
+  G4double l2p   = L2[n-1][1];
+  G4double bloch = l2p + (l2 - l2p) * ( normEnergy - L2[n-1][0]) / 
+                  (L2[n][0] - L2[n-1][0]);
   
   return bloch;
 }
@@ -661,5 +653,7 @@ const G4int G4QAOLowEnergyLoss::fNumberOfShells[101] =
 27 , 27 , 27 , 26 , 26 ,   27 , 27 , 26 , 26 , 26    // 91 - 100
 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 

@@ -126,9 +126,9 @@ protected:
 
 private:
 
-  void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
+  void InitializeMe();
 
-  void InitialiseParametrisation();
+  void InitializeParametrisation();
 
   void BuildLossTable(const G4ParticleDefinition& aParticleType) ;
 
@@ -210,16 +210,8 @@ private:
   G4double* deltaCutInKineticEnergy;
   G4PhysicsTable* theMeanFreePathTable;
   
-  // constants needed for the energy loss calculation  
-  const G4double factor;
-  const G4double protonMass;             
   const G4double paramStepLimit; // parameter limits the step at low energy
   
-  // particles 
-  //  const G4Electron* theElectron;
-  //  const G4Proton* theProton;
-  //  const G4AntiProton* theAntiProton;
-
   G4double fdEdx;        // computed in GetContraints
   G4double fRangeNow ;   //         
   G4double charge;       //

@@ -77,8 +77,6 @@ private:
                                       G4double particleMass,
                                       G4double charge) const;
 
-  const G4double protonMassAMU;
-
 };
 
 #endif

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLowEnergyLoss.cc,v 1.6 2000-09-16 08:47:22 pia Exp $
+// $Id: G4hLowEnergyLoss.cc,v 1.7 2000-10-04 00:05:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -125,7 +125,7 @@ G4double G4hLowEnergyLoss::RTable,G4hLowEnergyLoss::LOGRTable;
 G4hLowEnergyLoss::G4hLowEnergyLoss(const G4String& processName)
    : G4VContinuousDiscreteProcess (processName),
      theLossTable (NULL),
-     MinKineticEnergy(1.*eV), 
+     MinKineticEnergy(0.0), 
      linLossLimit(0.05),
      lastMaterial (NULL),
      MaxExcitationNumber (1.e6),

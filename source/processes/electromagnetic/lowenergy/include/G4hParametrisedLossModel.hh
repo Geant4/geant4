@@ -76,6 +76,8 @@ private:
   G4hParametrisedLossModel(G4hParametrisedLossModel &);
   G4hParametrisedLossModel & operator=(const G4hParametrisedLossModel &right);
 
+  void InitializeMe();
+
   G4double StoppingPower(const G4Material* material,
                                G4double kineticEnergy);
 
@@ -88,9 +90,10 @@ private:
   // Pointer to the parametrisation class
   G4VhElectronicStoppingPower* eStopingPowerTable;
 
-  const G4double theZieglerFactor; // Factor to convert the Stopping Power 
-                                   // unit [ev/(10^15 atoms/cm^2]
-                                   // into the Geant4 dE/dx unit
+  G4double theZieglerFactor; // Factor to convert the Stopping Power 
+                             // unit [ev/(10^15 atoms/cm^2]
+                             // into the Geant4 dE/dx unit
+  G4String modelName;
 
   G4double lowEnergyLimit;
   G4double highEnergyLimit;

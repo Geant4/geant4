@@ -82,6 +82,8 @@ private:
   G4hNuclearStoppingModel(G4hNuclearStoppingModel &);
   G4hNuclearStoppingModel & operator=(const G4hNuclearStoppingModel &right);
 
+  void InitializeMe();
+
   G4double StoppingPower(const G4Material* material,
                                G4double kineticEnergy,
                                G4double z1,
@@ -90,15 +92,15 @@ private:
   // Pointer to the parametrisation class
   G4VhNuclearStoppingPower* nStopingPowerTable;
 
-  const G4double factorPDG2AMU;    // Factor to convert PDG mass unit
-                                   // into AMU
+  G4double factorPDG2AMU;    // Factor to convert PDG mass unit
+                             // into AMU
 
-  const G4double theZieglerFactor; // Factor to convert the Stopping Power 
-                                   // unit [ev/(10^15 atoms/cm^2]
-                                   // into the Geant4 dE/dx unit
-
-  const G4double lowEnergyLimit;
-  const G4double highEnergyLimit;
+  G4double theZieglerFactor; // Factor to convert the Stopping Power 
+                             // unit [ev/(10^15 atoms/cm^2]
+                             // into the Geant4 dE/dx unit
+  G4String modelName;
+  G4double lowEnergyLimit;
+  G4double highEnergyLimit;
 };
 
 #endif

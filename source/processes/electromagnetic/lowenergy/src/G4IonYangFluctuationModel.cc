@@ -21,6 +21,7 @@
 // Modifications: 
 // 18/08/2000  V.Ivanchenko First implementation
 // 04/09/2000  V.Ivanchenko Rename fluctuations            
+// 03/10/2000  V.Ivanchenko CodeWizard clean up
 //
 // -------------------------------------------------------------------
 // Class Description: 
@@ -38,12 +39,12 @@
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Material.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4IonYangFluctuationModel::G4IonYangFluctuationModel(const G4String& name)
-  : G4VLowEnergyModel(name), 
-    protonMassAMU(proton_mass_c2/1.007276)
+  : G4VLowEnergyModel(name)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -144,7 +145,7 @@ G4double G4IonYangFluctuationModel::YangFluctuationModel(
   // Q.Yang et al., NIM B61(1991)149-155.
 
   // Reduced energy in MeV/AMU
-  G4double energy = kineticEnergy * protonMassAMU/(particleMass*MeV) ;
+  G4double energy = kineticEnergy *amu_c2/(particleMass*MeV) ;
 
   G4int i = 0 ;
   G4double factor = 1.0 ;

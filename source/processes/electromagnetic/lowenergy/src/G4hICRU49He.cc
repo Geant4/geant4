@@ -21,6 +21,7 @@
 // Modifications: 
 // 20/07/2000  V.Ivanchenko First implementation
 // 18/09/2000  V.Ivanchenko clean up - all variable are the same as in ICRU
+// 03/10/2000  V.Ivanchenko clean up accoding to CodeWizard
 //
 // Class Description: 
 //
@@ -55,9 +56,10 @@ G4hICRU49He::~G4hICRU49He()
 G4bool G4hICRU49He::HasMaterial(const G4Material* material) 
 {
   G4String chFormula = material->GetChemicalFormula() ;
+  G4String myFormula = G4String(" ");
 
-  if (" " ==  chFormula ) {
-    if(1 == (material->GetNumberOfElements())) return true;
+  if (myFormula == chFormula ) {
+    if(1 == (material->GetNumberOfElements())) {return true;}
     return false ;
   }
 
@@ -73,9 +75,10 @@ G4bool G4hICRU49He::HasMaterial(const G4Material* material)
   
   // Special treatment for water in gas state
   
+  myFormula = G4String("H_2O") ;
   const G4State theState = material->GetState() ;
-  if( theState == kStateGas && "H_2O" == chFormula) {
-    chFormula = "H_2O-Gas";
+  if( theState == kStateGas && myFormula == chFormula) {
+    chFormula = G4String("H_2O-Gas");
   }
 
   G4int i;

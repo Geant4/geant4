@@ -82,7 +82,6 @@ private:
   // constants needed for the energy loss calculation
   
   const G4double twoln10;
-  const G4double factor;
   const G4double bg2lim;
   const G4double taulim;    // energy to start to switch off shell corrections
 

@@ -45,7 +45,7 @@ public:
 
   G4VhElectronicStoppingPower();
 
-  ~G4VhElectronicStoppingPower();
+  virtual ~G4VhElectronicStoppingPower();
 
   virtual G4double StoppingPower(const G4Material* material,
                                        G4double kineticEnergy) = 0 ;

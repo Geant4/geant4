@@ -20,6 +20,7 @@
 //
 // Modifications: 
 // 20/07/2000  V.Ivanchenko First implementation
+// 03/10/2000  V.Ivanchenko clean up accoding to CodeWizard
 //
 // Class Description: 
 //
@@ -35,13 +36,13 @@
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Material.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4hBetheBlochModel::G4hBetheBlochModel(const G4String& name)
   : G4VLowEnergyModel(name), 
     twoln10(2.*log(10.)),
-    factor(twopi_mc2_rcl2),
     bg2lim(0.0169), 
     taulim(8.4146e-3)
 {;}
@@ -199,7 +200,7 @@ G4double G4hBetheBlochModel::BetheBlochFormula(
   // now compute the total ionization loss
     
   ionloss -= delta + sh ;
-  ionloss *= factor*electronDensity/beta2 ;
+  ionloss *= twopi_mc2_rcl2*electronDensity/beta2 ;
 
   if ( ionloss < 0.0) ionloss = 0.0 ;
   

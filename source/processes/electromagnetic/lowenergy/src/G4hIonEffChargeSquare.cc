@@ -43,7 +43,6 @@
 
 G4hIonEffChargeSquare::G4hIonEffChargeSquare(const G4String& name)
   : G4VLowEnergyModel(name), 
-    protonMass(proton_mass_c2),
     theHeMassAMU(4.0026)
 {;}
 
@@ -145,7 +144,7 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
   // Vol.1, Pergamon Press, 1985
 
   // Fast ions or hadrons
-  G4double reducedEnergy = kineticEnergy * protonMass/particleMass ;
+  G4double reducedEnergy = kineticEnergy * proton_mass_c2/particleMass ;
   if( (reducedEnergy > ionCharge * 10.0 * MeV) || 
       (ionCharge < 1.5) ) return ionCharge*ionCharge ;
 

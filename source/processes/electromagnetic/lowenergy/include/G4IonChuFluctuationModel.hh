@@ -78,8 +78,6 @@ private:
                                      G4double kineticEnergy,
                                      G4double particleMass) const;
 
-  const G4double protonMassAMU;
-
 };
 
 #endif

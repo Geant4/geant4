@@ -39,9 +39,12 @@
 //                reorganise access to Barkas and Bloch terms  
 // 04 Sept.  2000 V.Ivanchenko rename fluctuations
 // 05 Sept.  2000 V.Ivanchenko clean up
+// 03 Oct.   2000 V.Ivanchenko CodeWizard clean up
 // --------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 #include "G4hLowEnergyIonisation.hh"
 #include "globals.hh"
 #include "G4ios.hh"
@@ -53,16 +56,11 @@
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
   : G4hLowEnergyLoss(processName),
     theMeanFreePathTable(NULL),
-    protonLowEnergy(1.*keV),
-    protonHighEnergy(2.*MeV),
-    antiProtonLowEnergy(1.*keV),
-    antiProtonHighEnergy(2.*MeV),
     theProtonTable("ICRU_R49p"),
     theAntiProtonTable("ICRU_R49p"),
     theNuclearTable("ICRU_R49"),
@@ -75,11 +73,23 @@ G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
     theIonYangFluctuationModel(NULL),
     nStopping(true),
     theBarkas(true),
-    paramStepLimit (0.005),
-    factor(twopi_mc2_rcl2),
-    protonMass(proton_mass_c2)
+    paramStepLimit (0.005)
 { 
-  SetPhysicsTableBining(10.0*eV, 100.0*TeV, 200) ;
+  InitializeMe();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4hLowEnergyIonisation::InitializeMe()
+{
+  LowestKineticEnergy  = 10.0*eV ;
+  HighestKineticEnergy = 100.0*TeV ;
+  MinKineticEnergy     = 1.*eV ; 
+  TotBin = 200 ;
+  protonLowEnergy      = 1.*keV ; 
+  protonHighEnergy     = 2.*MeV ;
+  antiProtonLowEnergy  = 1.*keV ;
+  antiProtonHighEnergy = 2.*MeV ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -101,17 +111,6 @@ G4hLowEnergyIonisation::~G4hLowEnergyIonisation()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4hLowEnergyIonisation::SetPhysicsTableBining(G4double lowE, 
-                                                   G4double highE,
-						   G4int nBins)
-{
-  LowestKineticEnergy = lowE ;
-  HighestKineticEnergy = highE ;
-  TotBin = nBins ;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4hLowEnergyIonisation::SetElectronicStoppingPowerModel(
                              const G4ParticleDefinition* aParticle,
                              const G4String& dedxTable)
@@ -126,7 +125,7 @@ void G4hLowEnergyIonisation::SetElectronicStoppingPowerModel(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4hLowEnergyIonisation::InitialiseParametrisation() 
+void G4hLowEnergyIonisation::InitializeParametrisation() 
 
 {
   G4Proton* theProton = G4Proton::Proton();
@@ -169,7 +168,7 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
   
   //  just call BuildLossTable+BuildLambdaTable
 {
-  InitialiseParametrisation() ;
+  InitializeParametrisation() ;
   G4Proton* theProton = G4Proton::Proton();
   G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
   G4Electron* theElectron = G4Electron::Electron();
@@ -265,7 +264,7 @@ void G4hLowEnergyIonisation::BuildLossTable(
     }
 
     ionlossBB = theBetheBlochModel->TheValue(&aParticleType,material,highE) ;
-    ionlossBB -= DeltaRaysEnergy(material,highE,protonMass) ;
+    ionlossBB -= DeltaRaysEnergy(material,highE,proton_mass_c2) ;
 
     if(theBarkas) {
       ionlossBB += BarkasTerm(material,highE)*charge ;
@@ -292,7 +291,7 @@ void G4hLowEnergyIonisation::BuildLossTable(
         ionloss = theBetheBlochModel->TheValue(theProton,material, 
                                                lowEdgeEnergy) ; 
 
-        ionloss -= DeltaRaysEnergy(material,lowEdgeEnergy,protonMass) ;
+        ionloss -= DeltaRaysEnergy(material,lowEdgeEnergy,proton_mass_c2) ;
 
         if(theBarkas) {
           ionloss += BarkasTerm(material,lowEdgeEnergy)*charge ;
@@ -699,7 +698,7 @@ G4double G4hLowEnergyIonisation::ProtonParametrisedDEDX(
   }
   
   // Delta rays energy
-  eloss -= DeltaRaysEnergy(material,kineticEnergy,protonMass) ;
+  eloss -= DeltaRaysEnergy(material,kineticEnergy,proton_mass_c2) ;
 
   if(eloss < 0.0) eloss = 0.0 ;  
   
@@ -743,7 +742,7 @@ G4double G4hLowEnergyIonisation::AntiProtonParametrisedDEDX(
                   eloss -= 2.0*BarkasTerm(material, kineticEnergy);
   
   // Delta rays energy
-  eloss -= DeltaRaysEnergy(material,kineticEnergy,protonMass) ;
+  eloss -= DeltaRaysEnergy(material,kineticEnergy,proton_mass_c2) ;
 
   if(eloss < 0.0) eloss = 0.0 ;  
   
@@ -781,7 +780,8 @@ G4double G4hLowEnergyIonisation::DeltaRaysEnergy(
     
   if ( deltaCut < tmax) {
     x = deltaCut / tmax ;
-    dloss = ( beta2 * (x - 1.0) - log(x) ) * factor * electronDensity / beta2 ;
+    dloss = ( beta2 * (x - 1.0) - log(x) ) * twopi_mc2_rcl2 
+          * electronDensity / beta2 ;
   }
   return dloss ;
 }
@@ -961,7 +961,7 @@ G4double G4hLowEnergyIonisation::ComputeDEDX(
   G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
   G4double dedx = 0.0 ;
     
-  G4double tscaled = kineticEnergy*protonMass/(aParticle->GetPDGMass()) ; 
+  G4double tscaled = kineticEnergy*proton_mass_c2/(aParticle->GetPDGMass()) ; 
   charge  = aParticle->GetPDGCharge() ;
   
   if(charge>0.0) {
@@ -1013,7 +1013,7 @@ G4double G4hLowEnergyIonisation::BarkasTerm(const G4Material* material,
   // Information on particle and material
   G4double kinE  = kineticEnergy ;
   if(0.5*MeV > kinE) kinE = 0.5*MeV ; 
-  G4double gamma = 1.0 + kinE / protonMass ;
+  G4double gamma = 1.0 + kinE / proton_mass_c2 ;
   G4double beta2 = 1.0 - 1.0/(gamma*gamma) ;
   if(0.0 >= beta2) return 0.0;
   
@@ -1057,7 +1057,7 @@ G4double G4hLowEnergyIonisation::BarkasTerm(const G4Material* material,
     BarkasTerm += FunctionOfW /( sqrt(ZMaterial * X) * X);
   }
 
-  BarkasTerm *= factor * (material->GetElectronDensity()) / beta2 ;
+  BarkasTerm *= twopi_mc2_rcl2 * (material->GetElectronDensity()) / beta2 ;
 
   return BarkasTerm;
 }
@@ -1075,7 +1075,7 @@ G4double G4hLowEnergyIonisation::BlochTerm(const G4Material* material,
 //
 {
   G4double eloss = 0.0 ;
-  G4double gamma = 1.0 + kineticEnergy / protonMass ;
+  G4double gamma = 1.0 + kineticEnergy / proton_mass_c2 ;
   G4double beta2 = 1.0 - 1.0/(gamma*gamma) ;
   G4double y = cSquare / (137.0*137.0*beta2) ;
 
@@ -1091,7 +1091,7 @@ G4double G4hLowEnergyIonisation::BlochTerm(const G4Material* material,
       eloss += de ;
     }
   }
-  eloss *= -1.0 * y * cSquare * factor * 
+  eloss *= -1.0 * y * cSquare * twopi_mc2_rcl2 * 
             (material->GetElectronDensity()) / beta2 ;
  
   return eloss;
@@ -1115,7 +1115,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
 
   static const G4double minLoss = 1.*eV ;
   static const G4double kappa = 10. ;
-  static const G4double theBohrVelocity2 = 50.0 * keV/protonMass ;
+  static const G4double theBohrVelocity2 = 50.0 * keV/proton_mass_c2 ;
 
   G4int    imaterial   = material->GetIndex() ; 
   G4double ipotFluct   = material->GetIonisation()->GetMeanExcitationEnergy() ;
@@ -1148,7 +1148,8 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
   // Gaussian fluctuation 
   if(meanLoss > kappa*tmax)
   {
-    siga = tmax * (0.5-0.25*beta2) * step * factor * electronDensity / beta2 ;
+    siga = tmax * (0.5-0.25*beta2) * step * twopi_mc2_rcl2 
+         * electronDensity / beta2 ;
 
     // High velocity
     if( 3.0 < beta2/(theBohrVelocity2*zeff)) {

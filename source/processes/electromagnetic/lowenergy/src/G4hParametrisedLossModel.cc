@@ -21,6 +21,7 @@
 // Modifications: 
 // 20/07/2000  V.Ivanchenko First implementation
 // 18/08/2000  V.Ivanchenko TRIM85 model is added
+// 03/10/2000  V.Ivanchenko CodeWizard clean up
 //
 // Class Description: 
 //
@@ -30,6 +31,7 @@
 //
 // -------------------------------------------------------------------
 //
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4hParametrisedLossModel.hh" 
@@ -47,39 +49,54 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4hParametrisedLossModel::G4hParametrisedLossModel(const G4String& name):
-  G4VLowEnergyModel(name),
-  theZieglerFactor(eV*cm2*1.0e-15)
+  G4VLowEnergyModel(name)
 {
+  modelName = name ;
+  InitializeMe();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4hParametrisedLossModel::InitializeMe()
+{
+  theZieglerFactor = eV*cm2*1.0e-15 ;
+
   // Registration of parametrisation models
-  if("Ziegler1977p" == name) { 
+  G4String blank  = G4String(" ") ;
+  G4String zi77p  = G4String("Ziegler1977p") ;
+  G4String zi77He = G4String("Ziegler1977He") ;
+  G4String ir49p  = G4String("ICRU_R49p") ;
+  G4String ir49He = G4String("ICRU_R49He") ;
+  G4String zi85p  = G4String("Ziegler1985p") ;
+  if(zi77p == modelName) { 
       eStopingPowerTable = new G4hZiegler1977p();
       highEnergyLimit = 100.0*MeV;
       lowEnergyLimit  = 1.0*keV;
     
-  } else if("Ziegler1977He" == name) {
+  } else if(zi77He == modelName) {
       eStopingPowerTable = new G4hZiegler1977He();
       highEnergyLimit = 10.0*MeV/4.0;
       lowEnergyLimit  = 1.0*keV/4.0;
 
-  } else if("Ziegler1985p" == name) {
+  } else if(zi85p == modelName) {
       eStopingPowerTable = new G4hZiegler1985p();
       highEnergyLimit = 100.0*MeV;
       lowEnergyLimit  = 1.0*eV;
 
-  } else if("ICRU_R49p" == name || " " == name) {
+  } else if(ir49p == modelName || blank == modelName) {
       eStopingPowerTable = new G4hICRU49p();
       highEnergyLimit = 2.0*MeV;
       lowEnergyLimit  = 1.0*keV;
 
-  } else if("ICRU_R49He" == name) {
+  } else if(ir49He == modelName) {
       eStopingPowerTable = new G4hICRU49He();
       highEnergyLimit = 10.0*MeV/4.0;
       lowEnergyLimit  = 1.0*keV/4.0;
         
   } else {
     G4cout << 
-    "G4hLowEnergyIonisation warning: There is no table with the name <" 
- << name << ">" << "for electronic stopping, <ICRU_R49p> is applied" 
+    "G4hLowEnergyIonisation warning: There is no table with the modelName <" 
+ << modelName << ">" << "for electronic stopping, <ICRU_R49p> is applied" 
  << G4endl; 
     eStopingPowerTable = new G4hICRU49p();
     highEnergyLimit = 2.0*MeV;
@@ -251,8 +268,9 @@ G4bool G4hParametrisedLossModel::MolecIsInZiegler1988(
   // J.F.Ziegler and J.M.Manoyan, The stopping of ions in compaunds,
   // Nucl. Inst. & Meth. in Phys. Res. B35 (1988) 215-228.
   
+  G4String myFormula = G4String(" ") ;
   const G4String chFormula = material->GetChemicalFormula() ;
-  if (" " == chFormula ) return false ;
+  if (myFormula == chFormula ) return false ;
   
   //  There are no evidence for difference of stopping power depended on
   //  phase of the compound except for water. The stopping power of the 
@@ -260,8 +278,9 @@ G4bool G4hParametrisedLossModel::MolecIsInZiegler1988(
   //  
   //  No chemical factor for water-gas 
    
+  myFormula = G4String("H_2O") ;
   const G4State theState = material->GetState() ;
-  if( theState == kStateGas && "H_2O" == chFormula) return false ;
+  if( theState == kStateGas && myFormula == chFormula) return false ;
     
   const size_t numberOfMolecula = 53 ;
 
@@ -362,3 +381,4 @@ G4double G4hParametrisedLossModel::ChemicalFactor(
   return factor ;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -42,7 +42,7 @@ public:
 
   G4VhNuclearStoppingPower();
 
-  ~G4VhNuclearStoppingPower();
+  virtual ~G4VhNuclearStoppingPower();
 
   void SetNuclearStoppingFluctuationsOn() {lossFlucFlag = true;}; 
 
