@@ -1,4 +1,4 @@
-$Id: History,v 1.68 2003-10-13 09:21:26 flei Exp $
+$Id: History,v 1.69 2003-11-19 19:28:43 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 19 2003, M.Asai (event-V05-02-09)
+- G4ParticleGun.cc, G4ParticleGunMessenger.cc:
+ - Added protection against shooting shortlived particle.
+
 Oct 13 2003, F.Lei (event-V05-02-08)
 - increased the array size from 256 to 1024 for user defined histograms.
 - Bug fix in G4GeneralParticleSource.cc: make sure the SideRefVec(1/2/3) are unit
