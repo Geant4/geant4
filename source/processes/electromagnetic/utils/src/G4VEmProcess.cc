@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.11 2004-08-11 14:13:52 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.12 2004-09-16 09:08:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -79,7 +79,8 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   currentCouple(0),
   integral(false),
   meanFreePath(true),
-  aboveCSmax(true)
+  aboveCSmax(true),
+  buildTable(true)
 {
 
   minKinEnergy    = 0.1*keV;
@@ -158,8 +159,10 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
   if( !cutsWasModified ) return;
 
   InitialiseEmProcess();
-  theLambdaTable = BuildLambdaTable();
-  FindLambdaMax();
+  if(buildTable) {
+    theLambdaTable = BuildLambdaTable();
+    FindLambdaMax();
+  }
   PrintInfoDefinition();
 
   if(-1 < verboseLevel) {
@@ -255,7 +258,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 
   // Integral approach
   if (integral) {
-    G4double lx = GetLambda(finalT);
+    G4double lx = GetLambda(finalT, currentCouple);
     if(preStepLambda<lx && 0 < verboseLevel) {
       G4cout << "WARING: for " << particle->GetParticleName() 
              << " and " << GetProcessName() 

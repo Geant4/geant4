@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.13 2004-09-13 09:19:11 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.14 2004-09-16 09:08:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -39,6 +39,7 @@
 // 09-08-04 optimise integral option (V.Ivanchenko)
 // 11-08-04 add protected methods to access cuts (V.Ivanchenko)
 // 09-09-04 Bug fix for the integral mode with 2 peaks (V.Ivanchneko)
+// 16-09-04 Add flag for LambdaTable and method RecalculateLambda (V.Ivanchneko)
 //
 // Class Description:
 //
@@ -129,6 +130,8 @@ public:
   void UpdateEmModel(const G4String&, G4double, G4double);
   // Define new energy range for the model identified by the name
 
+  virtual G4double RecalculateLambda(G4double kinEnergy, 
+                               const G4MaterialCutsCouple* couple);
   G4double GetLambda(G4double& kinEnergy, const G4MaterialCutsCouple* couple);
   // It returns the Lambda of the process
 
@@ -172,6 +175,8 @@ protected:
 
   G4double GetGammaEnergyCut();
   G4double GetElectronEnergyCut();
+
+  void SetBuildTableFlag(G4bool val);
 
 private:
 
@@ -233,6 +238,7 @@ private:
   G4bool                       integral;
   G4bool                       meanFreePath;
   G4bool                       aboveCSmax;
+  G4bool                       buildTable;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -256,7 +262,16 @@ inline G4double G4VEmProcess::GetLambda(G4double& kineticEnergy,
   DefineMaterial(couple);
   G4double x = 0.0;
   if(theLambdaTable) x = GetLambda(kineticEnergy);
+  else               x = RecalculateLambda(kineticEnergy, couple);
   return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEmProcess::RecalculateLambda(
+                G4double, const G4MaterialCutsCouple*)
+{
+  return 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -363,6 +378,14 @@ inline G4double G4VEmProcess::GetElectronEnergyCut()
 {
   return (*theCutsElectron)[currentMaterialIndex];
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEmProcess::SetBuildTableFlag(G4bool val)
+{
+  buildTable = val;
+}
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
