@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.cc,v 1.22 2001-11-12 11:20:51 maire Exp $
+// $Id: G4VeEnergyLoss.cc,v 1.23 2002-02-06 05:50:35 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 
@@ -40,6 +40,7 @@
 // 17-09-01, migration of Materials to pure STL (mma)
 // 29-10-01 all static functions no more inlined (mma) 
 // 08-11-01 Charge,lastCharge not data members, L.Urban
+// 06-02-02 bug fixed in MinDeltaCutInRange computation, L.Urban
 // -----------------------------------------------------------------------------
 
  
@@ -380,7 +381,7 @@ void G4VeEnergyLoss::BuildDEDXTable(
 	 // set default MinDeltaCutInRange to rcut/10.
 	 if(!setMinDeltaCutInRange )
 	   MinDeltaCutInRange = (G4Electron::Electron()
-	                                       ->GetEnergyCuts())[mat]/10.;
+	                                       ->GetLengthCuts())[mat]/10.;
          LowerLimitForced[mat] = false ;
          
          MinDeltaEnergy[mat] = G4EnergyLossTables::GetPreciseEnergyFromRange(
@@ -395,7 +396,7 @@ void G4VeEnergyLoss::BuildDEDXTable(
 
 //	 if((subSecFlag) && (&aParticleType==G4Electron::Electron()))
 //         {
-//	   G4cout << G4std::setw(20) << (*theMaterialTable)(mat)->GetName()
+//	   G4cout << G4std::setw(20) << (*theMaterialTable)[mat]->GetName()
 //	 	  << G4std::setw(15) << MinDeltaEnergy[mat]/keV ;
 //           if(LowerLimitForced[mat])
 //              G4cout << "  lower limit forced." << G4endl;
