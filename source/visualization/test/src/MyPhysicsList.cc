@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyPhysicsList.cc,v 1.6 2003-06-16 17:14:34 gunter Exp $
+// $Id: MyPhysicsList.cc,v 1.7 2003-11-06 15:18:26 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -220,7 +220,6 @@ void MyPhysicsList::ConstructEM()
     //electron
       // Construct processes for electron
       G4MultipleScattering *ms = new G4MultipleScattering();
-      ms->SetLateralDisplacementFlag(false);
       pmanager->AddProcess(ms,-1,1,1);
       pmanager->AddProcess(new G4eIonisation(),-1,2,2);
       pmanager->AddProcess(new G4eBremsstrahlung(),-1,-1,3);
@@ -229,7 +228,6 @@ void MyPhysicsList::ConstructEM()
       //positron
       // Construct processes for positron
       G4MultipleScattering *ms = new G4MultipleScattering();
-      ms->SetLateralDisplacementFlag(false);
       pmanager->AddProcess(ms,-1,1,1);
       pmanager->AddProcess(new G4eIonisation(),-1,2,2);
       pmanager->AddProcess(new G4eBremsstrahlung(),-1,-1,3);      
@@ -240,7 +238,6 @@ void MyPhysicsList::ConstructEM()
     //muon  
      // Construct processes for muon+
       G4MultipleScattering *ms = new G4MultipleScattering();
-      ms->SetLateralDisplacementFlag(false);
       pmanager->AddProcess(ms,-1,1,1);
       pmanager->AddProcess(new G4MuIonisation(),-1,2,2);
      pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);
@@ -251,7 +248,6 @@ void MyPhysicsList::ConstructEM()
           (particle->GetParticleName() != "chargedgeantino")) {
 	// all others charged particles except geantino
 	G4MultipleScattering *ms = new G4MultipleScattering();
-	ms->SetLateralDisplacementFlag(false);
 	pmanager->AddProcess(ms,-1,1,1);
 	pmanager->AddProcess(new G4hIonisation(),-1,2,2);       
      }
