@@ -1,4 +1,4 @@
-$Id: History,v 1.42 2001-11-09 19:32:56 japost Exp $
+$Id: History,v 1.43 2001-11-09 23:07:20 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,32 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Nov  9th, 2001  J. Apostolakis - field-V03-02-03
+------------------------
+Motivated by the use case of an Electric Field,
+ - in order to achieve reasonable accuracy in time integration,
+ - and to enable fields that vary with the global time)
+we (John Ap. and V. Grichine) changed the following:
+
+- Modified G4Field to allow the time in the GetFieldValue method 
+     - as 4th component of the "position" array.
+
+- Modified EquationOfMotion to provide the time to the GetFieldValue method
+   of G4Field
+      * as the 4th component of a position / time  4-array
+      * in place of only position as a 3-arry
+
+- Added the global time as variable to be integrated over in the 
+   case of an Electric Field
+
+Support for these modifications is required in G4Transportation.
+
+(Better support will require either
+ - a modification in G4FieldTrack to indicate whether the time has been
+    integrated or not.  
+ - or additionally making the time calculation a property of G4FieldTrack,
+    bring in code to do it in from G4Transportation.)
+
 
 Nov  8th, 2001  J. Apostolakis - field-V03-02-02
 ------------------------
