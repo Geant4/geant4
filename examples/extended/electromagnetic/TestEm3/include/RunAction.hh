@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.3 2004-01-15 14:47:51 vnivanch Exp $
+// $Id: RunAction.hh,v 1.4 2004-01-15 17:30:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,6 +69,8 @@ class RunAction : public G4UserRunAction
 
     void SetHisto (G4int, G4int, G4double, G4double, G4String);
 
+    void SetFileName(const G4String& name) {filename = name;};
+
     void PrintDedxTables();
     
   private:
@@ -79,12 +81,18 @@ class RunAction : public G4UserRunAction
 
     DetectorConstruction* Detector;    
     RunActionMessenger*   runMessenger;        
+    G4String              filename;
+    G4String hid[MaxAbsor];    
+    G4String htitle[MaxAbsor];    
+    G4int    hbins[MaxAbsor];    
+    G4double hmin[MaxAbsor];    
+    G4double hmax[MaxAbsor];    
+    G4double histoUnit[MaxAbsor];    
     
 #ifdef G4ANALYSIS_USE    
     AIDA::ITree* tree;
     AIDA::IHistogramFactory* hf;
     AIDA::IHistogram1D* histo[MaxAbsor];
-    G4double histoUnit[MaxAbsor];    
 #endif      
              
 };

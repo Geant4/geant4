@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.4 2004-01-15 14:47:52 vnivanch Exp $
+// $Id: RunAction.cc,v 1.5 2004-01-15 17:30:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,25 +52,8 @@ RunAction::RunAction(DetectorConstruction* det)
 :Detector(det)
 {
   runMessenger = new RunActionMessenger(this);
-
-#ifdef G4ANALYSIS_USE
-  // Creating the analysis factory
-  std::auto_ptr<AIDA::IAnalysisFactory> af(AIDA_createAnalysisFactory());
-
-  // Creating the tree factory
-  std::auto_ptr<AIDA::ITreeFactory> tf(af->createTreeFactory());
-
-  // Creating a tree mapped to an hbook file.
-  G4bool readOnly  = false;
-  G4bool createNew = true;
-  tree = tf->create("testem3.paw", "hbook", readOnly, createNew);
-  // Creating a histogram factory, whose histograms will be handled by the tree
-  //std::auto_ptr<AIDA::IHistogramFactory>
-  hf = af->createHistogramFactory(*tree);
-
-  for (G4int k=0; k<MaxAbsor; k++) {histo[k] = 0; histoUnit[k] = 1.;}
-
-#endif
+  filename = "testem3.paw";
+  for (G4int k=0; k<MaxAbsor; k++) {hbins[k] = 1; histoUnit[k] = 1.;}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -89,14 +72,16 @@ void RunAction::SetHisto(G4int k,
   G4String title = "Edep in absorber " + id[k] + " (" + unit + ")";
   G4double valunit = G4UnitDefinition::GetValueOf(unit);
   valmin /= valunit; valmax /= valunit;
+  hid[k]    = id[k+1];
+  htitle[k] = title;
+  hbins[k]  = nbins;
+  hmin[k]   = valmin;
+  hmax[k]   = valmax;
+  histoUnit[k] = valunit;
 
   G4cout << "---->SetHisto: " << title << " ; " << nbins << " bins from "
          << valmin << " " << unit << " to " << valmax << unit  << G4endl;
 
-#ifdef G4ANALYSIS_USE
-  histoUnit[k] = valunit;
-  histo[k] = hf->createHistogram1D(id[k+1],title,nbins,valmin,valmax);
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -122,6 +107,26 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
      G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
 
 
+#ifdef G4ANALYSIS_USE
+  // Creating the analysis factory
+  std::auto_ptr<AIDA::IAnalysisFactory> af(AIDA_createAnalysisFactory());
+
+  // Creating the tree factory
+  std::auto_ptr<AIDA::ITreeFactory> tf(af->createTreeFactory());
+
+  // Creating a tree mapped to an hbook file.
+  G4bool readOnly  = false;
+  G4bool createNew = true;
+  tree = tf->create(filename, "hbook", readOnly, createNew);
+  // Creating a histogram factory, whose histograms will be handled by the tree
+  //std::auto_ptr<AIDA::IHistogramFactory>
+  hf = af->createHistogramFactory(*tree);
+  for (G4int k=0; k<MaxAbsor; k++) {
+    if(hbins[k] <= 1) histo[k] = 0;
+    else histo[k] = hf->createHistogram1D(hid[k],htitle[k],hbins[k],hmin[k],hmax[k]);
+  }
+
+#endif
   //example of print dEdx tables
   //
   ////PrintDedxTables();
