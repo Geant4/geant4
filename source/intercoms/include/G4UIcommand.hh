@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.hh,v 1.11 2002-04-26 22:03:35 asaim Exp $
+// $Id: G4UIcommand.hh,v 1.12 2002-11-27 18:05:33 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -130,8 +130,7 @@ class G4UIcommand
       // of the parameters is the order of invoking this method.
       inline void SetGuidance(const char * aGuidance)
       { 
-        G4String * theGuidance = new G4String( aGuidance );
-        commandGuidance.push_back( *theGuidance ); 
+        commandGuidance.push_back( G4String( aGuidance ) ); 
       }
       //  Adds a guidance line. Unlimitted number of invokation of this method is
       // allowed. The given lines of guidance will appear for the help. The first
