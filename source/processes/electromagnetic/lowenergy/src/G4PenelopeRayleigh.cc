@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4PenelopeRayleigh.cc,v 1.4 2003-02-22 18:06:13 pia Exp $
+// $Id: G4PenelopeRayleigh.cc,v 1.5 2003-02-24 00:36:10 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L. Pandola (luciano.pandola@cern.ch)
@@ -75,6 +75,7 @@ G4PenelopeRayleigh::G4PenelopeRayleigh(const G4String& processName)
   samplingFunction_x = new G4DataVector();
   samplingFunction_y = new G4DataVector();
   meanFreePathTable = 0;
+  material = 0;
 
    if (verboseLevel > 0) 
      {
