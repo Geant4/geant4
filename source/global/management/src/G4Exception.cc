@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Exception.cc,v 1.2 1999-05-03 14:17:11 fbehner Exp $
+// $Id: G4Exception.cc,v 1.3 1999-05-17 10:45:22 fbehner Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,7 +38,18 @@ void G4Exception(string s)
 {
   G4Exception(s.c_str());
 }
+// Other typedefs
+#include <rw/cstring.h>
+typedef RWCString G4String;
+
+void G4Exception(G4String s)
+{
+  G4Exception(s.c_str());
+}
 #endif
+
+
+
 
 
 
