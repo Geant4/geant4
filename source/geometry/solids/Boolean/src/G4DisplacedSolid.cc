@@ -4,6 +4,7 @@
 // History:
 //
 // 28.10.98 V.Grichine, creation according J. Apostolakis's recommendations
+// 14.11.99 V.Grichine, modifications in CalculateExtent(...) method
 
 #include "G4DisplacedSolid.hh"
 
@@ -41,8 +42,8 @@ G4DisplacedSolid( const G4String& pName,
 //
 //
 G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
-                                    G4VSolid* pSolid ,
-			      const G4Transform3D& transform  ) :
+                                          G4VSolid* pSolid ,
+			            const G4Transform3D& transform  ) :
   G4VSolid(pName)
 {
   fPtrSolid = pSolid ;
@@ -129,12 +130,15 @@ G4ThreeVector  G4DisplacedSolid::GetObjectTranslation() const
 //
      
 G4bool 
-G4DisplacedSolid::CalculateExtent(const EAxis pAxis,
-			       const G4VoxelLimits& pVoxelLimit,
-			       const G4AffineTransform& pTransform,
-				     G4double& pMin, G4double& pMax) const 
+G4DisplacedSolid::CalculateExtent( const EAxis pAxis,
+			           const G4VoxelLimits& pVoxelLimit,
+			           const G4AffineTransform& pTransform,
+				         G4double& pMin, 
+                                         G4double& pMax           ) const 
 {
-  return fPtrSolid->CalculateExtent(pAxis,pVoxelLimit,pTransform,
+  G4AffineTransform sumTransform ;
+  sumTransform.Product(*fDirectTransform,pTransform) ;
+  return fPtrSolid->CalculateExtent(pAxis,pVoxelLimit,sumTransform,
                                     pMin,pMax) ;
 }
  
