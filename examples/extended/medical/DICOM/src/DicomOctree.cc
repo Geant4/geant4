@@ -15,7 +15,7 @@ Octree::~Octree()
   mRoot = 0; 
 }
 
-OctreeNode* Octree::CreateNode( float nodeX, float nodeY, float nodeZ, G4int level )
+OctreeNode* Octree::CreateNode( G4double nodeX, G4double nodeY, G4double nodeZ, G4int level )
 {
     OctreeNode* current = mRoot;
     float curr_x = 0;
@@ -50,8 +50,11 @@ OctreeNode* Octree::CreateNode( float nodeX, float nodeY, float nodeZ, G4int lev
     }
     return current;
 }
-//---------------------------------------------------------------------------
-OctreeNode* Octree::operator()( float nodeX, float nodeY, float nodeZ, G4int level )
+
+OctreeNode* Octree::operator()( G4double nodeX, 
+                                G4double nodeY, 
+                                G4double nodeZ, 
+                                G4int level )
 {
     OctreeNode* current = mRoot;
     float curr_x = 0;
@@ -78,10 +81,7 @@ OctreeNode* Octree::operator()( float nodeX, float nodeY, float nodeZ, G4int lev
     return current;
 }
 
-float Octree::Size()
-{
-    return mSize;
-}
+
 
 OctreeNode* Octree::Root()
 {

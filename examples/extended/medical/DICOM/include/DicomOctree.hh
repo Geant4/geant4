@@ -21,16 +21,16 @@ class Octree
 
 public:
   
-  // MGP: why float? To be converted to G4double?
   Octree( G4int noLevels, G4double size );
   ~Octree();
   void DeleteTree();
 
-  OctreeNode* CreateNode( float i, float j, float k, G4int level );
-  OctreeNode* operator()( float nodeX, float nodeY, float nodeZ, G4int level );
+  OctreeNode* CreateNode( G4double i, G4double j, G4double k, G4int level );
+  OctreeNode* operator()( G4double nodeX, G4double nodeY, 
+                          G4double nodeZ, G4int level );
     
   OctreeNode* Root(); 
-  float Size();
+  G4double Size() {return mSize;}
   G4int CountMemory( G4int rMiddle, G4int rTerminal );
   
   G4int NoLevels();
@@ -46,7 +46,7 @@ private:
   
   // In an octree, size denotes physical size of the cube,
   // ie length of its sides (which are assumed equal).
-  float mSize;
+  G4double mSize;
   
   // Number of levels denotes the maximal number of
   // nodes in a single branch, starting from the root node.
