@@ -220,7 +220,7 @@ if [ X`uname -n | grep dxplus` != X  -o "$UNAMEN" = "dcosf01" ]; then
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
   export G4TMP=/tmp/g4stt$REF
-  if [ ! -d $G4TMP }; then
+  if [ ! -d $G4TMP ]; then
     mkdir $G4TMP
   fi
   # G4 build flags :
