@@ -215,7 +215,7 @@ void XrayFluoPhysicsList::SetCuts(){
    SetCutValue(cutForElectron,"e-");
    SetCutValue(cutForElectron,"e+");
    SetCutValue(cutForProton, "proton");
-   SetCutValueForOthers(cutForProton);
+   SetCutValue(cutForProton, "alpha");
    if (verboseLevel>0) DumpCutValuesTable();
 }
 
