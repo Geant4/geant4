@@ -1,25 +1,4 @@
 //
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
 //    ************************************
 //    *                                  *
 //    *       ThyroidROGeometry.cc       *
@@ -27,7 +6,6 @@
 //    ************************************
 
 #include "ThyroidROGeometry.hh"
-
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
@@ -64,7 +42,7 @@ G4VPhysicalVolume* ThyroidROGeometry::Build()
  // (It will be allowed to set a NULL pointer in volumes of such virtual
  // division in future, since this material is irrelevant for tracking.)
 
-G4double A;    // atomic mass
+   G4double A;    // atomic mass
  G4double Z;    // atomic number
  G4double d;   // density
  G4int iz;     // iz = number of protons in an isotope
@@ -188,6 +166,19 @@ G4PVPlacement(rotD2,G4ThreeVector(0,1,0),"DetectorPhys",RODetectorLog,ROWaterNec
 
  return ROWaterNeckPhys;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

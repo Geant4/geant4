@@ -1,5 +1,4 @@
 //
-//
 //    ******************************************
 //    *                                        *
 //    *     ThyroidDetectorConstruction.cc     *
@@ -20,7 +19,6 @@
 #include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
-#include "G4UnionSolid.hh"
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
@@ -38,7 +36,10 @@
 #include "G4Colour.hh"
 #include "G4EllipticalTube.hh"
 #include "G4RotationMatrix.hh"
-
+#include "G4UnionSolid.hh"
+#include "G4VisAttributes.hh"
+#include "G4Colour.hh"
+#include "G4ios.hh"
 //....
 
 ThyroidDetectorConstruction::ThyroidDetectorConstruction()
@@ -56,8 +57,7 @@ ThyroidDetectorConstruction::~ThyroidDetectorConstruction()
 
 G4VPhysicalVolume* ThyroidDetectorConstruction::Construct()
 {
-
-  //definizione colori 
+  /*definizione colori 
   G4Colour  white   (1.0, 1.0, 1.0) ;
   G4Colour  grey    (0.5, 0.5, 0.5) ;
   G4Colour  lgrey   (.75, .75, .75) ;
@@ -66,8 +66,7 @@ G4VPhysicalVolume* ThyroidDetectorConstruction::Construct()
   G4Colour  cyan    (0.0, 1.0, 1.0) ;
   G4Colour  magenta (1.0, 0.0, 1.0) ; 
   G4Colour  yellow  (1.0, 1.0, 0.0) ;
-  G4Colour  lblue   (0.0, 0.0, .75);
-
+  G4Colour  lblue   (0.0, 0.0, .75);*/
 
 // Define required materials
 
@@ -138,10 +137,10 @@ G4VPhysicalVolume* ThyroidDetectorConstruction::Construct()
    
  // Air material
  
- d = 1.*mg/cm3;
- G4Material* matAir = new G4Material("Air",d, 2); 
- matAir->AddElement(elN,0.7);
- matAir->AddElement(elO,0.3);
+  d = 1.290*mg/cm3;
+  G4Material* matAir = new G4Material("Air",d, ncomponents=2); 
+  matAir->AddElement(elN,0.7);
+  matAir->AddElement(elO,0.3);
 
  // SoftTissue
 
@@ -161,7 +160,10 @@ G4VPhysicalVolume* ThyroidDetectorConstruction::Construct()
  matSoftTissue->AddElement(elFe,0.000050);
  matSoftTissue->AddElement(elZn,0.000030);
  
- // Water
+ 
+
+
+// Water
 
  d = 1.000*g/cm3;
  G4Material* matH2O = new G4Material("Water",d,2);
@@ -173,7 +175,6 @@ G4VPhysicalVolume* ThyroidDetectorConstruction::Construct()
  A = 126.90*g/mole;
  Z = 53;
  G4Material* matI131 = new G4Material("I",Z,A,d);
-
  // Bone
 
  d=1.85*g/cm3;
@@ -187,6 +188,7 @@ G4VPhysicalVolume* ThyroidDetectorConstruction::Construct()
  bone->AddElement(elS,0.002);
  bone->AddElement(elCa,0.147);
 
+ 
  // Volumes
 
 // NECK (our world Volume)
@@ -203,21 +205,19 @@ G4VPhysicalVolume* ThyroidDetectorConstruction::Construct()
 G4LogicalVolume(WaterNeck,matH2O,"WaterNeckLog",0,0,0); 
 G4VPhysicalVolume* WaterNeckPhys = new
 G4PVPlacement(0,G4ThreeVector(),"WaterNeckPhys",WaterNeckLog,0,false,0);
-	
-// TRACHEA (bone Tubs)
 
- G4double TRmin = 0.3*cm;
+ // TRACHEA (bone Tubs)
+
+ G4double TRmin = 0*cm;
  G4double TRmax = 0.5*cm;
  G4double TDz = 7.*cm;
  G4double TSPhi = 0.*deg;
  G4double TDPhi = 360.*deg;
-
  G4Tubs* Trachea = new G4Tubs("Trachea",TRmin, TRmax, TDz, TSPhi, TDPhi);
  G4LogicalVolume* TracheaLog = new
  G4LogicalVolume(Trachea,bone,"TracheaLog",0,0,0); 
  G4VPhysicalVolume* TracheaPhys = new
  G4PVPlacement(0,G4ThreeVector(),TracheaLog,"TracheaPhys",WaterNeckLog,false,0);
-
  // Interno Trachea (Air Tubs)
 
   G4double ARmin = 0.*cm;
@@ -232,11 +232,12 @@ G4PVPlacement(0,G4ThreeVector(),"WaterNeckPhys",WaterNeckLog,0,false,0);
   G4VPhysicalVolume* IntTracheaPhys = new
   G4PVPlacement(0,G4ThreeVector(),IntTracheaLog,"IntTracheaPhys",TracheaLog,false,0);
 
+
  // Thyroid  (2 ellipticaltubes)
  
  // LeftThyroid (Tubo ellittico ruotato)
-    G4double TlDx = 0.4*cm;
-    G4double TlDy = 1.0*cm;
+    G4double TlDx = 0.7*cm;
+    G4double TlDy = 0.7*cm;
     G4double TlDz = 2.5*cm;
     
 
@@ -253,18 +254,17 @@ G4LogicalVolume(LeftThyroid,matSoftTissue,"LeftThyroidLog",0,0,0);
 
  // RightThyroid (Tubo ellittico ruotato)
    
-    G4double TrDx = 0.4*cm;
-    G4double TrDy = 1.0*cm;
+    G4double TrDx = 0.7*cm;
+    G4double TrDy = 0.7*cm;
     G4double TrDz = 2.5*cm;
 
    G4RotationMatrix* rotD2 = new G4RotationMatrix();
     rotD2->rotateX (-20.*deg);
 
-printf("\n tiroide\n");
 
  G4EllipticalTube* RightThyroid  = new G4EllipticalTube("RightThyroid", TrDx, TrDy, TrDz);
  G4LogicalVolume*RightThyroidLog = new
-G4LogicalVolume(RightThyroid,matSoftTissue,"RightThyroidLog",0,0,0); 
+ G4LogicalVolume(RightThyroid,matSoftTissue,"RightThyroidLog",0,0,0); 
  //G4VPhysicalVolume* RightThyroidPhys = new
  //G4PVPlacement(rotD2,G4ThreeVector(0,1.0*cm,0),RightThyroidLog,"RightThyroidPhys",WaterNeckLog,false,0);
 
@@ -277,21 +277,18 @@ G4LogicalVolume(RightThyroid,matSoftTissue,"RightThyroidLog",0,0,0);
  G4UnionSolid* thyroidUnion = new G4UnionSolid( "unionThyroidSolid", LeftThyroid, RightThyroid,
                                                 rotinunion, moveinunion ); 
  G4LogicalVolume* UnionThyroidLog = new G4LogicalVolume(thyroidUnion,matSoftTissue,"unionThyroidLog",0,0,0); 
- G4VPhysicalVolume* unionThyroidPhysical = new G4PVPlacement( rotD2, G4ThreeVector(0,0,0),UnionThyroidLog,"unionThyroidPhys",WaterNeckLog,false,0);
+ G4VPhysicalVolume* unionThyroidPhysical = new G4PVPlacement( rotD2, G4ThreeVector(0,0,0),UnionThyroidLog,"UnThyroidPhys",WaterNeckLog,false,0);
  
  G4ThreeVector moveinmother(0.7*cm,-0.58*deltay,0.0); 
 
  // Iodine Nodule
-printf("\n nodulo1\n");
 
- G4Sphere* IodineNodule = new G4Sphere("IodineNodule",
-0.*cm,0.5*cm,0.*deg,360.*deg,0.*deg,180.*deg);  G4LogicalVolume*
-IodineNoduleLog = new
-G4LogicalVolume(IodineNodule,matI131,"IodineNoduleLog",0,0,0); 
-G4VPhysicalVolume* IodineNodulePhys = new
-G4PVPlacement(0,G4ThreeVector(0,-1.0*cm,0),IodineNoduleLog,"IodineNodulePhys",LeftThyroidLog,false,0); 	  // Sensitive Detector and ReadOut geometry definition
+ G4Sphere* IodineNodule = new G4Sphere("IodineNodule",0.*cm,0.6*cm,0.*deg,360.*deg,0.*deg,180.*deg);  
+G4LogicalVolume* IodineNoduleLog = new G4LogicalVolume(IodineNodule,matSoftTissue,"IodineNoduleLog",0,0,0); 
+G4VPhysicalVolume* IodineNodulePhys = new G4PVPlacement(0,G4ThreeVector(-2,0.,-1.),IodineNoduleLog,"IodineNodulePhys",UnionThyroidLog,false,0); 	 
+	 
 
-printf("\n nodulo\n");
+ // Sensitive Detector and ReadOut geometry definition
 
  G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
  ThyroidSD* pThyroidSD = new ThyroidSD(m_SDName);
@@ -307,35 +304,91 @@ pThyroidSD->SetROgeometry(pThyroidROGeometry);
 pSDManager->AddNewDetector(pThyroidSD);        
 RightThyroidLog->SetSensitiveDetector(pThyroidSD); 
  }
+//
 
+                                        
+  // Visualization attributes
 
- G4VisAttributes* IodineNoduleVisAtt= new G4VisAttributes(magenta);
-   IodineNoduleVisAtt->SetVisibility(true);
-   IodineNoduleVisAtt->SetForceWireframe(true);
-  IodineNoduleLog->SetVisAttributes(IodineNoduleVisAtt);
+  //Invisible volume
+  WaterNeckLog->SetVisAttributes (G4VisAttributes::Invisible);
+  
+  //Visualization Styles
+  G4VisAttributes* VisAtt1= new G4VisAttributes(G4Colour(1.0,0.0,0.0));
+  VisAtt1->SetVisibility(true);
+  VisAtt1->SetForceSolid(TRUE);
+  
+  G4VisAttributes* VisAtt2= new G4VisAttributes(G4Colour(0.0,1.0,0.0));
+  VisAtt2->SetVisibility(true);
+  VisAtt2->SetForceSolid(TRUE);
+  				
+  G4VisAttributes* VisAtt3= new G4VisAttributes(G4Colour(0.0,0.0,1.0));
+  VisAtt3->SetVisibility(true);
+  VisAtt3->SetForceSolid(TRUE);
 
- G4VisAttributes* LeftThyroidVisAtt= new G4VisAttributes(red);
- LeftThyroidVisAtt->SetVisibility(true);  
- LeftThyroidVisAtt->SetForceWireframe(true);
- LeftThyroidLog->SetVisAttributes( LeftThyroidVisAtt);
-
- G4VisAttributes* RightThyroidVisAtt= new G4VisAttributes(red);
- RightThyroidVisAtt->SetVisibility(true);  
- RightThyroidVisAtt->SetForceWireframe(true);
- RightThyroidLog->SetVisAttributes( RightThyroidVisAtt);
-
-  G4VisAttributes* TracheaVisAtt= new G4VisAttributes(blue);
-  TracheaVisAtt->SetVisibility(true);  
-  TracheaVisAtt->SetForceWireframe(true);
-  TracheaLog->SetVisAttributes( TracheaVisAtt);
-
-  G4VisAttributes* IntTracheaVisAtt= new G4VisAttributes(grey);
-  IntTracheaVisAtt->SetVisibility(true);  
-  IntTracheaVisAtt->SetForceWireframe(true);
-  IntTracheaLog->SetVisAttributes( IntTracheaVisAtt);
-
+			  
+  //Visible Volumes
+  UnionThyroidLog->SetVisAttributes(VisAtt1);
+  IodineNoduleLog->SetVisAttributes(VisAtt2);
+  TracheaLog->SetVisAttributes(VisAtt3);
+  IntTracheaLog->SetVisAttributes(VisAtt3);
  return WaterNeckPhys;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

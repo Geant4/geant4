@@ -1,28 +1,7 @@
 //
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
 //    **********************************
 //    *                                *
-//    *      ThyroidEventAction.hh      *
+//    *      ThyroidEventAction.hh     *
 //    *                                *
 //    **********************************
 
@@ -42,16 +21,33 @@ class ThyroidEventAction : public G4UserEventAction
     void BeginOfEventAction(const G4Event*);
     void EndOfEventAction(const G4Event*);
 
-  // public:
-  //  G4float *m_pVoxel;
+ 
+  //G4float *m_pVoxel;
 
   private:
-    G4int m_HitsCollectionID;
+    G4double  EnergyDep;
+  G4int NumVoxelX;
+  G4int NumVoxelY;
+  G4int NumVoxelZ;
+  // ThyroidDetectorConstruction *pDetector;
+  G4double VoxelWidth_X;
+  G4double VoxelWidth_Y;
+  G4double VoxelWidth_Z;
+
+ G4int m_HitsCollectionID;
+ G4int i;
+  G4int w;
+  G4int k;
+  G4double x;
+  G4double y;
+  G4double z;
+  G4String      SDname;
 };
 
 #endif
 
     
+
 
 
 

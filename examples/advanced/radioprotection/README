@@ -1,82 +1,41 @@
-#setup necessario per la compilazione con la visualizzazione e l'analisi dati
+-------------------------------------------------------------------
+$Id: README,v 1.2 2003-05-23 11:55:57 francy Exp $
+-------------------------------------------------------------------
 
+     =========================================================
+ 		      Geant4 - Radioprotection example
+     =========================================================
 
+                             README
+                      ---------------------
 
-setenv G4LEDATA /afs/cern.ch/sw/geant4/dev/data/G4EMLOW1.1
-setenv G4INSTALL /users/francy/geant4
+0. Introduction.
 
+Radioprotection example simulates energy deposition in the healthy lobe
+of thyroid after the submission of I-131 tabloid for metabolic therapy.
 
+1. Technical description
 
-# ---- Linux setup ----
-#
-if ( `uname` == Linux ) then
-  setenv G4SYSTEM Linux-g++
-  setenv G4LIB /users/francy/work/lib/
-  setenv G4WORKDIR /users/francy/work
-# ---- set up VRMLview
-setenv G4VIS_BUILD_VRMLFILE_DRIVER  1
-setenv G4VIS_USE_VRML               1
-setenv G4VIS_USE_VRMLFILE           1
-setenv G4VRMLFILE_MAX_FILE_NUM     100
-setenv G4VRMLFILE_VIEWER        vrmlview    #if installed
-setenv G4VIS_USE_VRML               1
-setenv G4VIS_USE_VRMLFILE           1
-setenv PATH ${PATH}:"/afs/cern.ch/sw/contrib/VRML/bin/Linux"
-# ---- set up OpenGL or Mesa 
-setenv G4VIS_BUILD_OPENGLX_DRIVER   1
-setenv G4VIS_USE_OPENGLX            1
-setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Linux-g++
-# ---- set up DAWN
-setenv G4VIS_BUILD_DAWN_DRIVER      1
-setenv G4VIS_BUILD_DAWNFILE_DRIVER  1  
-setenv G4VIS_USE_DAWN               1
-setenv G4VIS_USE_DAWNFILE           1
-setenv PATH ${PATH}:"/afs/cern.ch/sw/geant4/dev/DAWN/Linux-g++"
-# ---- Analysis
-setenv G4ANALYSIS_BUILD  1
-setenv PATH "${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/4.0.0/bin"
-source /afs/cern.ch/sw/lhcxx/share/LHCXX/4.0.0/install/sharedstart.csh
-# ---- add to the LD_LIBRARY_PATH 
-setenv LD_LIBRARY_PATH $OGLHOME/lib
-#
-# ---- end of Linux set-up ----
-else
-# 
-# ---- SUN setup ----
-  if ( `uname` == SunOS ) then
-  setenv G4SYSTEM SUN-CC
-  setenv G4LIB /users/francy/work/lib
-  setenv G4WORKDIR /users/francy/work
-  endif
-endif
-#
+1.0. I-131 tabloid  is  submitted in the patient for  metabolic therapy. 
+This therapy takes advantage from  the radioemmision of I-131 and from the 
+capabilty,for the patological nodule, to metabolize the most of I-131.
+This nodule (approximated as a sphere) is the source; and is constructed 
+in the ThyroidDetectorConstruction class. The source is composed by I-131
+omogeneusly distribuited in all the nodule.
 
-# for Anaphe
-#analisi
-source /afs/cern.ch/sw/lhcxx/share/LHCXX/4.0.2/install/sharedstart.csh
+1.1. The water cilynder (the neck and world volume) is made sensitive detector. 
+At every hit energy deposition is read and stored into a "Thyroid.out" file.
 
-setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --noLicense --include`
-setenv G4ANALYSIS_AIDA_CONFIG_LIBS   `aida-config --noLicense --libs`
+1.2. Visualizaion with was improved
 
-#versione vecchia  di Lizard 
-#fare solo questo
+2. Make
 
-#source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.3-sec/install/sharedstart.csh
+A standard Geant4 example GNUmakefile is provided.
 
-# setup to use gcc 2.95.2 from /iusr/local/gcc-alt-2.95.2
-# GF
+2. Usage
 
-set gccvers = `g++ -v |& awk 'NR==2 { print $3 }'`
-if ( $gccvers == "2.95.2" ) then
-   echo "default compiler seems to be gcc 2.95.2 already"
-else
-   echo "need to use alternative gcc"
-   setenv PATH "/usr/local/gcc-alt-2.95.2/bin:${PATH}"
-   setenv MANPATH "/usr/local/gcc-alt-2.95.2/man:${MANPATH}"
-   echo $LD_LIBRARY_PATH | grep -q -e 'gcc-alt-2.95.2/lib' \
-      || setenv LD_LIBRARY_PATH "/usr/local/gcc-alt-2.95.2/lib:${LD_LIBRARY_PATH}"
-endif
-echo "Please check that compiler is version 2.95.2:"
-echo ""
+Simply run "Thyroid" executable. The ASCII "Thyroid.out" file is
+produced.
 
-gcc -v |& tail -1
+N.B.: actual version is still to debug, work is in progress
+
