@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: T07EventAction.hh,v 1.4 2001-07-11 10:09:42 gunter Exp $
+// $Id: T07EventAction.hh,v 1.5 2002-12-09 10:57:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,12 +34,6 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
-
-#ifdef MAKEHBOOK
-#include "HbookHistogram.hh"
-#else
-#include "Histo.hh"
-#endif
 
 class T07EventActionMessenger;
 
@@ -61,17 +55,6 @@ class T07EventAction : public G4UserEventAction
     G4int    calorimeterCollID;                // Hits collection ID
     G4String drawFlag;                         // control the drawing of event
     T07EventActionMessenger*  eventMessenger;
-#ifdef MAKEBOOK
-    HbookHistogram *EnergyAbsorber;
-    HbookHistogram *EnergyGap;    
-    HbookHistogram *TrackLengthAbsorber;
-    HbookHistogram *TrackLengthGap;
-#else
-    odHisto EnergyAbsorber;
-    odHisto EnergyGap;
-    odHisto TrackLengthAbsorber;
-    odHisto TrackLengthGap;
-#endif    
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: T07EventAction.cc,v 1.6 2001-10-23 10:00:59 gcosmo Exp $
+// $Id: T07EventAction.cc,v 1.7 2002-12-09 10:57:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,44 +50,16 @@
 
 
 T07EventAction::T07EventAction()
-:calorimeterCollID(-1),drawFlag("all"),eventMessenger(NULL)
-#ifndef MAKEHBOOK
-,EnergyAbsorber(250,0.,750.),EnergyGap(100,0.,100.),
-TrackLengthAbsorber(100,0.,500.),TrackLengthGap(100,0.,500.)
-#endif
+ : calorimeterCollID(-1),drawFlag("all"),eventMessenger(0)
 {
   eventMessenger = new T07EventActionMessenger(this);
-#ifdef MAKEHBOOK
-    EnergyAbsorber=new HbookHistogram("Energy Absorber",100,0.,500.);
-    EnergyGap=new HbookHistogram("Energy Gap",100,0.,50.);
-    TrackLengthAbsorber=new HbookHistogram("Track Length Absorber",
-					   100,0.,300.);
-    TrackLengthGap=new HbookHistogram("Track Gap Absorber",
-				      100,0.,200.);
-#endif    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 T07EventAction::~T07EventAction()
 {
-  delete eventMessenger;
-#ifndef MAKEHBOOK
-  G4std::ofstream o("test07.plt");
-  o << "# Histos 4" << G4endl;
-  EnergyAbsorber.output(o);
-  o << G4endl;
-  o << G4endl;
-  EnergyGap.output(o);
-  o << G4endl;
-  o << G4endl;
-  TrackLengthAbsorber.output(o);
-  o << G4endl;
-  o << G4endl;
-  TrackLengthGap.output(o);
-  o.close();
-#endif
-  
+  delete eventMessenger;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -105,25 +77,17 @@ void T07EventAction::BeginOfEventAction(const G4Event*)
 void T07EventAction::EndOfEventAction( const G4Event* evt )
 {
  
-#ifdef MAKEHBOOK
-  if(evt->GetEventID()%100==0)
-    G4cout << ">>> Event " << evt->GetEventID() << G4endl;
-#else  
-  // G4cout << ">>> Event " << evt->GetEventID() << G4endl;
-#endif
+  // if(evt->GetEventID()%100==0)
+  //   G4cout << ">>> Event " << evt->GetEventID() << G4endl;
 
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
-  T07CalorHitsCollection* CHC = NULL;
+  T07CalorHitsCollection* CHC = 0;
   if (HCE)
       CHC = (T07CalorHitsCollection*)(HCE->GetHC(calorimeterCollID));
 
   if (CHC)
-   {
+  {
     int n_hit = CHC->entries();
-#ifndef MAKEHBOOK
-    //G4cout << "     " << n_hit
-    //     << " hits are stored in T07CalorHitsCollection." << G4endl;
-#endif
     G4double totEAbs=0, totLAbs=0, totEGap=0, totLGap=0;
     for (int i=0;i<n_hit;i++)
       { totEAbs += (*CHC)[i]->GetEdepAbs(); 
@@ -132,16 +96,6 @@ void T07EventAction::EndOfEventAction( const G4Event* evt )
         totLGap += (*CHC)[i]->GetTrakGap();
         
       }
-#ifdef MAKEHBOOK
-    EnergyAbsorber->accumulate(totEAbs*MeV);
-    EnergyGap->accumulate(totEGap*MeV);
-    TrackLengthAbsorber->accumulate(totLAbs*mm);
-    TrackLengthGap->accumulate(totLGap*mm);
-#else    
-    EnergyAbsorber.accumulate(totEAbs*MeV);
-    EnergyGap.accumulate(totEGap*MeV);
-    TrackLengthAbsorber.accumulate(totLAbs*mm);
-    TrackLengthGap.accumulate(totLGap*mm);
     /*
     G4cout
        << "   Absorber: total energy: " << G4std::setw(7) << G4BestUnit(totEAbs,"Energy")
@@ -151,10 +105,8 @@ void T07EventAction::EndOfEventAction( const G4Event* evt )
        << "       total track length: " << G4std::setw(7) << G4BestUnit(totLGap,"Length")
        << G4endl;
     */
-#endif           
-    }
+   }
 
-#ifndef MAKEHBOOK
   /*
   G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
   G4int n_trajectories = 0;
@@ -176,9 +128,6 @@ void T07EventAction::EndOfEventAction( const G4Event* evt )
          }
   }
   */
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-

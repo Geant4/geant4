@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test07.cc,v 1.3 2001-07-11 10:09:42 gunter Exp $
+// $Id: test07.cc,v 1.4 2002-12-09 10:57:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,14 +48,8 @@
 #include "T07EventAction.hh"
 #include "T07SteppingAction.hh"
 
-int main(int argc,char** argv) {
-
-#ifdef MAKEHBOOK
-
-  theHbookManager.SetFilename("test07.hbook");
-
-#endif
-
+int main(int argc,char** argv)
+{
   // Set the default random engine to RanecuEngine
   RanecuEngine defaultEngine;
   HepRandom::setTheEngine(&defaultEngine);
@@ -68,7 +62,7 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new T07PhysicsList);
   
-#if defined(G4VIS_USE) && !defined(MAKEHBOOK)
+#if defined(G4VIS_USE)
   // visualization manager
   G4VisManager* visManager = new T07VisManager;
   visManager->Initialize();
@@ -101,14 +95,10 @@ int main(int argc,char** argv) {
     }
 
   // job termination
-#if defined(G4VIS_USE) && !defined(MAKEHBOOK)
+#if defined(G4VIS_USE)
   delete visManager;
 #endif
   delete runManager;
 
   return 0;
 }
-
-
-
-
