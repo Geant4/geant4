@@ -1,4 +1,4 @@
-# $Id: G4VIS_USE.gmk,v 1.8 2001-08-24 23:30:44 perl Exp $
+# $Id: G4VIS_USE.gmk,v 1.9 2001-08-27 16:22:11 johna Exp $
 # -------------------------------------------------------------
 # GNUmakefile for CPPFLAGS for visualization USE phase.
 #   John Allison, 24th January 1998.
@@ -35,28 +35,11 @@ ifdef G4VIS_USE_DAWN
 endif
 
 ifdef G4VIS_USE_HEPREP
-  G4VIS_USE  = 1
+  INC_HEPREP = 1
+  LOAD_HEPREP = 1
   CPPFLAGS += -DG4VIS_USE_HEPREP
   CPPFLAGS += -I$(G4BASE)/visualization/HepRep/include
-  CPPFLAGS += -I$(FREEHEP)/org/freehep/jni
-  CPPFLAGS += -I$(FREEHEP)/hep/graphics/heprep/jni
-  CPPFLAGS += -I$(JDK_HOME)/include/$(G4_HEPREP_OSNAME)
-  CPPFLAGS += -I$(JDK_HOME)/include
-  ifeq ($(G4_HEPREP_OSNAME), win32)
-    EXTRALIBS += -lG4HepRep
-    LDFLAGS += $(subst /,\\,$(FREEHEP)/lib/$(G4SYSTEM)/FREEHEP$(G4_HEPREP_DEBUG).lib)
-    LDFLAGS += $(subst /,\\,$(JDK_HOME)/lib/jvm.lib)
-  else
-    EXTRALIBS += -L$(FREEHEP)/lib/$(G4SYSTEM)/
-    EXTRALIBS += -L$(JDK_HOME)/jre/lib/$(G4_HEPREP_ARCH)/hotspot 
-    EXTRALIBS += -L$(JDK_HOME)/jre/lib/$(G4_HEPREP_ARCH)/classic 
-    EXTRALIBS += -L$(JDK_HOME)/jre/lib/$(G4_HEPREP_ARCH) 
-    EXTRALIBS += -L$(JDK_HOME)/jre/bin/hotspot
-    EXTRALIBS += -L$(JDK_HOME)/jre/bin/classic
-    EXTRALIBS += -L$(JDK_HOME)/jre/bin/
-    EXTRALIBS += -lFREEHEP_g
-    EXTRALIBS += -ljvm
-  endif
+  VISLIBS += -lG4HepRep
 endif
 
 ifdef G4VIS_USE_OPACS
