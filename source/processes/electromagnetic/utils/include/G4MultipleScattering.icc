@@ -21,100 +21,49 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.icc,v 1.4 2001-07-11 10:03:40 gunter Exp $
+// $Id: G4MultipleScattering.icc,v 1.5 2001-09-11 12:18:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id: 
-// -------------------------------------------------------------
-//    GEANT 4 class inlined methods file
+//------------ G4MultipleScattering physics process ---------------------------
+//              by Laszlo Urban, March 2001
 //
-//    History: based on object model of
-//    2nd December 1995, G.Cosmo
-//    ------- G4MultipleScattering physics process ------
-//              by Laszlo Urban, October 1997
-// **************************************************************
-// 25/11/97: mods for KinEnergy > HighestLimit
-// 22/10/98: cleanup , L.Urban
-// 15/10/99: bugfix, some accuracy problems fixed , L.Urban
-// 18/05/01 V.Ivanchenko Clean up againist Linux ANSI compilation 
-//---------------------------------------------------------------
+// Modified:
+//
+// 18-05-01 V.Ivanchenko Clean up against Linux ANSI compilation 
+// 23-08-01 new angle and z distribution,energy dependence reduced,
+//          Store,Retrieve methods commented out temporarily, L.Urban
+// 27-08-01 bugfix in AlongStepDoIt, L.Urban
+// 28-08-01 GetContinuousStepLimit and AlongStepDoIt moved to .cc file (mma)
+// 11-09-01 G4MultipleScatteringx put as default: G4MultipleScattering (mma)
+//
+//------------------------------------------------------------------------------
 
-inline G4double G4MultipleScattering::GetContinuousStepLimit(
-                                     const G4Track& track,                  
-                                     G4double,
-                                     G4double currentMinimumStep,
-                                     G4double&)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
+G4bool G4MultipleScattering::IsApplicable(const G4ParticleDefinition& particle)
 {
-  G4double zPathLength,tPathLength ;
-  const G4DynamicParticle* aParticle ;
-  G4Material* aMaterial ;
-  G4double KineticEnergy,tau ;
-  G4bool isOut ;
-
-  // this process is not a candidate for selection!!!!!!!!!
-  SetGPILSelection(NotCandidateForSelection) ; 
-
-  if(track.GetCurrentStepNumber() == 1)
-    stepFlag = 0 ;
-
-  tPathLength = currentMinimumStep ;
-
-  aMaterial = track.GetMaterial() ;
-  materialIndex = aMaterial->GetIndex() ;
-
-  aParticle = track.GetDynamicParticle() ;
-  KineticEnergy = aParticle->GetKineticEnergy() ;
-
-  if((lastMaterial != aMaterial) || (lastKineticEnergy != KineticEnergy))
-  {
-    lastKineticEnergy = KineticEnergy ;
-    materialIndex = aMaterial->GetIndex() ;
-
-    if((lastMaterial != aMaterial)||(KineticEnergy >= Tlimit)||(stepFlag != 1))
-    fTransportMeanFreePath = (*theTransportMeanFreePathTable)
-                             (materialIndex)->GetValue(KineticEnergy,isOut);
-
-    lastMaterial = aMaterial;
-
-    if(KineticEnergy < Tlimit)
-    {
-      stepFlag = 1 ;
-      range = G4EnergyLossTables::GetRange(aParticle->GetDefinition(),
-                                       KineticEnergy,aMaterial) ;
-
-      alpha1 = range/fTransportMeanFreePath+1 ;
-    }
-  }
-
-  //  do the true -> geom transformation
-  if( fTransportMeanFreePath > biglambda )
-  {
-    zPathLength = tPathLength ;
-  }
-  else if(stepFlag == 0)
-  {
-    tau = tPathLength/fTransportMeanFreePath ;
-    if(tau < perMillion)
-      zPathLength = tPathLength ;
-    else
-      zPathLength = fTransportMeanFreePath*(1.-exp(-tau)) ;
-  }
-  else
-  {
-    tau = tPathLength/range ; 
-    if(tau<perMillion)
-      zPathLength = range*(1.-exp(-alpha1*tau))/alpha1 ;
-    else if(tau<0.99) 
-      zPathLength = range*(1.-exp(alpha1*log(1.-tau)))/alpha1 ;
-    else
-      zPathLength = range/alpha1 ;
-  }  
-
-  tLast = tPathLength ;
-  zLast = zPathLength ; 
-
-  return zPathLength ;
+  return(particle.GetPDGCharge() != 0.);
 }
+  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4MultipleScattering::AlongStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double previousStepSize,
+                             G4double currentMinimumStep,
+                             G4double& currentSafety,
+                             G4GPILSelection* selection)
+{
+  // get Step limit proposed by the process
+  G4double steplength = GetContinuousStepLimit(track,previousStepSize,
+                                              currentMinimumStep,currentSafety);
+  // set return value for G4GPILSelection
+  *selection = valueGPILSelectionMSC;
+  return  steplength;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4MultipleScattering::GetMeanFreePath(
                                             const G4Track& track,
@@ -124,71 +73,22 @@ inline G4double G4MultipleScattering::GetMeanFreePath(
  //  it does not limit the Step size , but it sets condition to
  //   Forced , because the PostStepDoIt always has to be called
 
-  {
-    *condition = Forced ;
-
-    return DBL_MAX ;
-  }
-
-inline G4VParticleChange* G4MultipleScattering::AlongStepDoIt(
-                                       const G4Track& track,const G4Step& Step)          
- //   only a geom path->true path transformation is performed
 {
-  static const G4double tfacmx = 10. ;
-  G4double tau,geomPathLength, truePathLength ;
-
-  fParticleChange.Initialize(track);
-
-  geomPathLength = track.GetStepLength() ;
-
-  if(geomPathLength == zLast)
-  { 
-    truePathLength = tLast ;
-  }
-  else if( fTransportMeanFreePath > biglambda )
-  {
-    truePathLength = geomPathLength ;  
-  }
-  else if(stepFlag == 0)
-  {
-    tau = geomPathLength/fTransportMeanFreePath ;
-    if(tau<perMillion)
-      truePathLength = fTransportMeanFreePath*tau ; 
-    else if(tau < 1.)
-      truePathLength = -fTransportMeanFreePath*log(1.-tau) ; 
-    else
-      truePathLength = tfacmx*fTransportMeanFreePath ; 
-  }
-  else 
-  {
-    if(geomPathLength/range < perMillion)
-      truePathLength = range*(1.-exp(-geomPathLength/range)) ;
-    else
-      truePathLength = range*(1.-exp(log(1.-alpha1*geomPathLength/range)/
-                                     alpha1)) ;
-  }
-
-  fParticleChange.SetTrueStepLength(truePathLength) ;
-
-  return &fParticleChange ;
-  
+  *condition = Forced;
+  return DBL_MAX;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4bool G4MultipleScattering::IsApplicable(
-                                    const G4ParticleDefinition& particle)
-  {
-   return(particle.GetPDGCharge() != 0.);
-  }
-
-inline G4double G4MultipleScattering::GetLambda(
-                              G4double KineticEnergy,
-                              G4Material* material)
+inline 
+G4double G4MultipleScattering::GetLambda(G4double KineticEnergy,
+                                          G4Material* material)
 {
   G4bool isOut;
   
   G4double lambda = (*theTransportMeanFreePathTable)
-                    (material->GetIndex())->
-                    GetValue(KineticEnergy,isOut);
+                    (material->GetIndex())->GetValue(KineticEnergy,isOut);
   return lambda;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
