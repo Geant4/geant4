@@ -50,8 +50,19 @@ GammaRayTelAnalysis::GammaRayTelAnalysis() :
   histo2DSave("enable"),histo2DMode("strip"),
   analysisMessenger(0)
 {
+}
+
+GammaRayTelAnalysis::~GammaRayTelAnalysis()
+{
+   Finish();
+}     
+
+
+void GammaRayTelAnalysis::Init()
+{
   G4RunManager* runManager = G4RunManager::GetRunManager();
-  GammaRayTelDetector = (GammaRayTelDetectorConstruction*)(runManager->GetUserDetectorConstruction());
+  GammaRayTelDetector =
+(GammaRayTelDetectorConstruction*)(runManager->GetUserDetectorConstruction());
 
   analysisMessenger = new GammaRayTelAnalysisMessenger(this);
   histoManager = createIHistoManager();
@@ -59,10 +70,10 @@ GammaRayTelAnalysis::GammaRayTelAnalysis() :
   ntFactory = Lizard::createNTupleFactory();
   vectorFactory = createIVectorFactory();
   plotter = createIPlotter();
-}
+}                       
 
-GammaRayTelAnalysis::~GammaRayTelAnalysis()
-{ 
+void GammaRayTelAnalysis::Finish()
+{
   delete ntFactory;
   ntFactory = 0;
 
@@ -77,7 +88,7 @@ GammaRayTelAnalysis::~GammaRayTelAnalysis()
 
   delete analysisMessenger;
   analysisMessenger = 0;
-}
+}             
 
 GammaRayTelAnalysis* GammaRayTelAnalysis::getInstance()
 {
@@ -130,6 +141,8 @@ void GammaRayTelAnalysis::BeginOfRun(G4int n)
   float sizexy, sizez;
   int Nstrip, Nplane, Ntile, N;
   char name[30];
+
+  Init();
 
   // Relevant data from the detector to set the histograms dimensions
   Nplane = GammaRayTelDetector->GetNbOfTKRLayers();
@@ -282,6 +295,10 @@ void GammaRayTelAnalysis::EndOfRun(G4int n)
   delete ntuple;
   ntuple = 0;
   G4cout << "Deleted ntuple" << G4endl;
+
+// close files for this run
+  if (histoManager != 0) Finish();    
+
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

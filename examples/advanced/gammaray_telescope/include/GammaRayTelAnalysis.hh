@@ -91,6 +91,9 @@ public:
   void EndOfRun(G4int n);
   void EndOfEvent(G4int flag);
 
+  void Init();
+  void Finish();
+
   void SetHisto1DDraw(G4String str) {histo1DDraw = str;};
   void SetHisto1DSave(G4String str) {histo1DSave = str;};
   void SetHisto2DDraw(G4String str) {histo2DDraw = str;};
