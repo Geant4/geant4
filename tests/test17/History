@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2000-11-08 04:52:59 vnivanch Exp $
+$Id: History,v 1.8 2000-11-24 08:36:12 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-08.11.2000 - V. Ivanchenko  
+25th November 2000 Steve O'Neale (tagset210)
+- Update test outputs for min.delta energy cut in Gold and Graphite
+- Update test outputs for energy cut table only for e- and gamma
+- Update test outputs for small changes in Range in absorber due to emlowen tag
+
+  Following work is not tagged and not included in the code
+             08.11.2000 - V. Ivanchenko  
              Reorganized sensitive detector, new test17.out
 
 18th August 2000 - V. Ivanchenko  

@@ -104,11 +104,11 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
          liquidArgon         78.362
                 Iron         224.07
               Copper         238.25
-                Gold         334.83
+                Gold         334.84
                 Lead         229.53
                Water         81.507
              Methane        0.11903
-            Graphite         122.93
+            Graphite         122.94
                  Air        0.18052
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
@@ -180,22 +180,22 @@ Set cuts for pi-
 Set cuts for pi0
 Set cuts for triton
 ============= The cut Energy ==============================
-                            gamma              e-             mu-          proton         neutron    
-Cut in range                  1 mm            1 mm            1 mm            1 mm            1 mm 
+                            gamma              e-    
+Cut in range                  1 mm            1 mm 
 Cut in energy
-          Beryllium        2.01 keV         468 keV        4.29 MeV        11.5 MeV           1 eV 
-           Aluminum         6.9 keV         599 keV        5.03 MeV        13.1 MeV           1 eV 
-             Carbon        3.16 keV         523 keV        4.67 MeV        12.4 MeV           1 eV 
-            Silicon         6.9 keV         542 keV        4.73 MeV        12.2 MeV           1 eV 
-        liquidArgon        6.14 keV         344 keV        3.25 MeV        8.33 MeV           1 eV 
-               Iron        20.6 keV        1.28 MeV        8.54 MeV          22 MeV           1 eV 
-             Copper        24.7 keV         1.4 MeV        8.97 MeV        23.1 MeV           1 eV 
-               Gold         112 keV        2.29 MeV        11.8 MeV        29.2 MeV           1 eV 
-               Lead         100 keV        1.37 MeV        8.54 MeV          21 MeV           1 eV 
-              Water        2.89 keV         353 keV        3.39 MeV        8.97 MeV           1 eV 
-            Methane           1 eV          119 eV         39.4 keV        82.5 keV           1 eV 
-           Graphite        3.33 keV         570 keV        4.97 MeV        13.1 MeV           1 eV 
-                Air           1 eV          181 eV         39.4 keV        58.5 keV           1 eV 
+          Beryllium        2.01 keV         468 keV
+           Aluminum         6.9 keV         599 keV
+             Carbon        3.16 keV         523 keV
+            Silicon         6.9 keV         542 keV
+        liquidArgon        6.14 keV         344 keV
+               Iron        20.6 keV        1.28 MeV
+             Copper        24.7 keV         1.4 MeV
+               Gold         112 keV        2.29 MeV
+               Lead         100 keV        1.37 MeV
+              Water        2.89 keV         353 keV
+            Methane           1 eV          119 eV 
+           Graphite        3.33 keV         570 keV
+                Air           1 eV          181 eV 
 ===================================================
 #
 # Macro file for the initialization phase of "test17" based on "TestEm6.cc"
@@ -214,7 +214,7 @@ Cut in energy
 ### Run 0 start.
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    Range in absorber = 0.00919925 +- 4.68795e-06  mm  
+    Range in absorber = 0.00920804 +- 6.74003e-06  mm  
 
     Energy deposit in absorber = 0.5 +- 0  MeV 
 
@@ -226,7 +226,7 @@ Cut in energy
 ### Run 1 start.
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    Range in absorber = 0.00930973 +- 5.23735e-06  mm  
+    Range in absorber = 0.00932708 +- 6.6206e-06  mm  
 
     Energy deposit in absorber = 0.5 +- 0  MeV 
 
@@ -240,7 +240,7 @@ Cut in energy
 ### Run 2 start.
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    Range in absorber = 0.00895903 +- 8.80245e-06  mm  
+    Range in absorber = 0.00899735 +- 8.55829e-06  mm  
 
     Energy deposit in absorber = 6 +- 0  MeV 
 
