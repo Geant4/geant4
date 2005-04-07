@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttCheck.hh,v 1.3 2005-03-28 19:13:56 allison Exp $
+// $Id: G4AttCheck.hh,v 1.4 2005-04-07 16:47:18 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4ATTCHECK_HH
@@ -72,13 +72,14 @@ public:
   friend std::ostream& operator<< (std::ostream&, const G4AttCheck&);
 private:
   void AddValuesAndDefs
-  (std::vector<G4AttValue>* pValues,
-   std::map<G4String,G4AttDef>* pDefinitions,
+  (std::vector<G4AttValue>* newValues,
+   std::map<G4String,G4AttDef>* newDefinitions,
    const G4String& oldName,
    const G4String& name,
    const G4String& value,
    const G4String& extra,
    const G4String& description = "") const;   // Utility function for Standard.
+  static G4bool fFirst;  // Flag for initialising the following containers.
   static std::set<G4String> fUnitCategories;  // Set of legal unit categories.
   static std::map<G4String,G4String> fStandardUnits;  // Standard units.
   static std::set<G4String> fCategories;      // Set of legal categories.
