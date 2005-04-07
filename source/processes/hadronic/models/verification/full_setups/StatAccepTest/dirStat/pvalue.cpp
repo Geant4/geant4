@@ -6,7 +6,9 @@
 //          2)  ntuple_b.hbook
 // which contain each a ntuple, containing physics information about
 // the showering of a certain incoming beam particle into a sampling 
-// calorimeter. One of the ntuple can be obtained with a certain version
+// calorimeter, and two histograms (that summarize, in a single plot,
+// the longitudinal and transverse shower profile). 
+// One of these two HBOOK files can be obtained with a certain version
 // of Geant4, for instance 6.0, and the other with another version,
 // for instance 6.1 . 
 // The goal of this program is to compare the two ntuples, in such a 
@@ -24,8 +26,8 @@
 //              respectively.
 //          b)  histo_a.hbook, histo_b.hbook : HBOOK files containing
 //                                             the histograms obtained
-//              from the first ntuple (ntuple_a.hbook) and the second one
-//              (ntuple_b.hbook), respectively.
+//              from the first file (ntuple_a.hbook), and those obtained
+//              from the second file (ntuple_b.hbook), respectively.
 //          c)  printing on the screen the results of the statistical
 //              tests, i.e. the probability, called "p-value", that 
 //              two histograms (in the case of binned statistics test),
@@ -169,7 +171,7 @@ int main (int, char **) {
   }
 
   // std::cout << " treeHBookA " << (int) treeHBookA.get() << std::endl; //***DEBUG***
-  AIDA::ITuple* p_tpA = dynamic_cast<AIDA::ITuple*>(  ( treeHBookA->find( "/1" ) ) );
+  AIDA::ITuple* p_tpA = dynamic_cast<AIDA::ITuple*>( ( treeHBookA->find( "/1" ) ) );
   if ( ! p_tpA ) { 
      std::cerr << "Error finding /hbookA/1 " << std::endl; 
      return -1;
@@ -184,6 +186,31 @@ int main (int, char **) {
   // for ( int i = 0; i < tpA.columns(); ++i ) {
   //   std::cout << tpA.columnName(i) << "\t" << tpA.columnType(i) << std::endl;
   // }
+
+  AIDA::ITuple& tpB = dynamic_cast<AIDA::ITuple&>( * ( treeHBookB->find( "/1" ) ) );
+
+  //***DEBUG***
+  // std::cout << "Tuple B title : " << tpB.title() << std::endl;
+  // std::cout << "Tuple B variables : " << std::endl;
+  // for ( int i = 0; i < tpB.columns(); ++i ) {
+  //   std::cout << tpB.columnName(i) << "\t" << tpB.columnType(i) << std::endl;
+  // }
+
+  // Read also the two histograms: longitudinal shower profile
+  // and transverse shower profile.
+  AIDA::IHistogram1D& histL_A = 
+    dynamic_cast<AIDA::IHistogram1D&>( * ( treeHBookA->find( "/50" ) ) );
+  std::cout << " HistoL A title : " << histL_A.title() << std::endl;   //***DEBUG***
+  AIDA::IHistogram1D& histR_A = 
+    dynamic_cast<AIDA::IHistogram1D&>( * ( treeHBookA->find( "/60" ) ) );
+  std::cout << " HistoR A title : " << histR_A.title() << std::endl;   //***DEBUG***
+
+  AIDA::IHistogram1D& histL_B = 
+    dynamic_cast<AIDA::IHistogram1D&>( * ( treeHBookB->find( "/50" ) ) );
+  std::cout << " HistoL B title : " << histL_B.title() << std::endl;   //***DEBUG***
+  AIDA::IHistogram1D& histR_B = 
+    dynamic_cast<AIDA::IHistogram1D&>( * ( treeHBookB->find( "/60" ) ) );
+  std::cout << " HistoR B title : " << histR_B.title() << std::endl;   //***DEBUG***
 
   // ---------------------------------------------------------------
   // Get the number of elements of the vector L and R of the ntuple.
@@ -267,15 +294,6 @@ int main (int, char **) {
       //           << std::endl; //***DEBUG***
     }  
   }
-
-  AIDA::ITuple& tpB = dynamic_cast<AIDA::ITuple&>( * ( treeHBookB->find( "/1" ) ) );
-
-  //***DEBUG***
-  // std::cout << "Tuple B title : " << tpB.title() << std::endl;
-  // std::cout << "Tuple B variables : " << std::endl;
-  // for ( int i = 0; i < tpB.columns(); ++i ) {
-  //   std::cout << tpB.columnName(i) << "\t" << tpB.columnType(i) << std::endl;
-  // }
 
   AIDA::ICloud1D * cB1 = hfB->createCloud1D( "Energy deposit in Active layers, B" ); 
   AIDA::ICloud1D * cB2 = hfB->createCloud1D( "Energy deposit in All layers, B" ); 
@@ -450,6 +468,10 @@ int main (int, char **) {
   hfacB->createCopy( "11", cB1bis->histogram() );
   hfacA->createCopy( "12", cA2bis->histogram() );
   hfacB->createCopy( "12", cB2bis->histogram() );
+  hfacA->createCopy( "50", histL_A );
+  hfacB->createCopy( "50", histL_B );
+  hfacA->createCopy( "60", histR_A );
+  hfacB->createCopy( "60", histR_B );
   for ( int i = 0; i < numberOfReplicas; i++ ) {
     int idNum = i + 100;
     std::string idString = toString( idNum );
@@ -565,7 +587,27 @@ int main (int, char **) {
   std::cout << "  KS" << "  d=" << resultUnbin2.distance()
             << "  ndf=" << resultUnbin2.ndf() 
             << "  pvalue=" << resultUnbin2.quality() << std::endl;
-  
+
+  std::cout << "Observable 3";  // Longitudinal shower shape: Only binned tests.
+  ComparisonResult resultBin3 = comparatorBin.compare( histL_A, histL_B );
+  if ( resultBin3.quality() < pvalueThreshold ) {
+    std::cout << "\t ***WARNING***";
+  }
+  std::cout << std::endl;
+  std::cout << "  Chi2" << "  d=" << resultBin3.distance()
+	    << "  ndf=" << resultBin3.ndf() 
+	    << "  pvalue=" << resultBin3.quality() << std::endl;
+
+  std::cout << "Observable 4";  // Longitudinal shower shape: Only binned tests.
+  ComparisonResult resultBin4 = comparatorBin.compare( histR_A, histR_B );
+  if ( resultBin4.quality() < pvalueThreshold ) {
+    std::cout << "\t ***WARNING***";
+  }
+  std::cout << std::endl;
+  std::cout << "  Chi2" << "  d=" << resultBin4.distance()
+	    << "  ndf=" << resultBin4.ndf() 
+	    << "  pvalue=" << resultBin4.quality() << std::endl;
+
   std::vector< ComparisonResult > resultBinL;
   std::vector< ComparisonResult > resultUnbinL;
   for ( int i = 0; i < numberOfReplicas; i++ ) {

@@ -31,7 +31,7 @@ public:
   void finish();
   void close();
   // The first method is called by StatAccepTestDetectorConstruction
-  // only when the geometry is changed.  
+  // only when the geometry is constructed the first time or changed.  
   // The second and third methods are called by StatAccepTestRunAction, 
   // at the beginning and at the end of a Run, respectively.
   // The fourth method, close(), it is called at the end of
@@ -58,6 +58,7 @@ private:
   AIDA::IAnalysisFactory* analysisFactory;
   AIDA::ITree* tree;
   AIDA::ITuple* tuple;
+  AIDA::IHistogramFactory* histoFactory;
 
   G4int numberOfReplicas;
   G4int numberOfRadiusBins;  // Number of bins in the transverse profile
@@ -82,6 +83,9 @@ private:
   std::vector< G4double > sumL2;
   std::vector< G4double > sumR;
   std::vector< G4double > sumR2;
+
+  AIDA::IHistogram1D* longitudinalProfileHisto;
+  AIDA::IHistogram1D* transverseProfileHisto;
 
 };
 

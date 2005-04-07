@@ -1,6 +1,11 @@
                  History file
                  ------------
 
+7-Apr-2005 - A.Ribon (statAccepTest-V07-00-02)
+- Included summary histograms for the longitudinal 
+  and transverse shower profiles.
+
+
 24-Mar-2005 - A.Ribon (statAccepTest-V07-00-01)
 - Update for Geant4 7.0 .
 

@@ -4,14 +4,20 @@
 
 #include <AIDA/AIDA.h>
 
+//***TEMPORARY WORK-AROUND*** : need  AIDA_Dev/  subdirectory at the
+//                              same level as  AIDA/  in PI/PI_1_3_0/include .
+//                              But it does not work! 
+// // //#include <AIDA_Dev/IDevHistogram1D.h>
+
 
 StatAccepTestAnalysis* StatAccepTestAnalysis::instance = 0;
 
  
 StatAccepTestAnalysis::StatAccepTestAnalysis() : 
-  analysisFactory( 0 ), tree( 0 ), tuple( 0 ), 
+  analysisFactory( 0 ), tree( 0 ), tuple( 0 ), histoFactory( 0 ), 
   numberOfReplicas( 0 ), numberOfRadiusBins( 0 ), numberOfEvents( 0 ),
-  radiusBin( 0.0 ) {
+  radiusBin( 0.0 ), 
+  longitudinalProfileHisto( 0 ), transverseProfileHisto( 0 ) {
 
   analysisFactory = AIDA_createAnalysisFactory();
   if ( analysisFactory ) {    
@@ -22,10 +28,10 @@ StatAccepTestAnalysis::StatAccepTestAnalysis() :
       // associated to an XML file, for data sets.
       bool readOnly = false;  // we want to write.
       bool createNew = true ; // create file if it doesn't exist.
-      tree = treeFactory->create("ntuple.hbook", "hbook", readOnly, createNew);
+      tree = treeFactory->create( "ntuple.hbook", "hbook", readOnly, createNew );
       if ( tree ) {
 	// Get a tuple factory :
-	AIDA::ITupleFactory* tupleFactory = analysisFactory->createTupleFactory(*tree);
+	AIDA::ITupleFactory* tupleFactory = analysisFactory->createTupleFactory( *tree );
 	if ( tupleFactory ) {
 	  // Create a tuple :
 	  std::string description = "float ID, E, EDEP_ACT, EDEP_CAL; "; 
@@ -34,13 +40,16 @@ StatAccepTestAnalysis::StatAccepTestAnalysis() :
           description += "Tuple{ float R} R"; 
 	  std::string option = "nLayers[0,100] L(nLayers) nBinR[0,30] R(nBinR)";
 	  tuple = tupleFactory->create("1","Event info", description, option);
-	  assert(tuple);
+	  assert( tuple );
 	  delete tupleFactory;
 	}
+        // Create a factory for histograms :
+        histoFactory = analysisFactory->createHistogramFactory( *tree );  
       }
       delete treeFactory; // It will not delete the ITree.
     }
   }
+
 }
 
 
@@ -59,6 +68,10 @@ void StatAccepTestAnalysis::close() {
   if ( analysisFactory ) {
     delete analysisFactory;
     analysisFactory = 0;
+  }
+  if ( histoFactory ) {
+    delete histoFactory;
+    histoFactory = 0;
   }
 }
 
@@ -120,11 +133,45 @@ void StatAccepTestAnalysis::init( const G4int numberOfReplicasIn,
          << "\t numberOfRadiusBins = " << numberOfRadiusBins << G4endl
          << "\t radiusBin          = " << radiusBin/mm << " mm" 
 	 << G4endl;  //***DEBUG***
+
+  // Create two histograms: one for the longitudinal shower profile,
+  // and one for the transverse shower profile.
+  assert( histoFactory );
+  if ( histoFactory ) {
+      // // // if ( ! tree->find( "50" ) ) {
+      longitudinalProfileHisto = 
+	histoFactory->createHistogram1D("50", "Longitudinal shower profile", 
+					numberOfReplicas, 0.0, 1.0*numberOfReplicas );
+      assert( longitudinalProfileHisto );
+      // G4cout << " Created longitudinalProfileHisto " << G4endl;
+      // // // if ( ! tree->find( "60" ) ) {
+      transverseProfileHisto = 
+	histoFactory->createHistogram1D("60", "Transverse shower profile", 
+					numberOfRadiusBins, 0.0, 1.0*numberOfRadiusBins );
+      assert( transverseProfileHisto );
+      // G4cout << " Created transverseProfileHisto " << G4endl;
+  }
+  
 }                       
 
 
-void StatAccepTestAnalysis::finish() {             
-  if ( tree ) tree->commit();
+void StatAccepTestAnalysis::finish() {
+
+  // Notice that the errors that are calculated here are not the
+  // precisely correct ones, which would need also the pure weights
+  // besides the values  x * weight . Only the latter are used 
+  // below to calculate approximate errors, using the standard
+  // formulas, as if the values  x * weight  were pure values
+  // without a weight.
+
+  // For the summary histograms for the longitudinal and transverse 
+  // shower shapes (longitudinalProfileHisto, transverseProfileHisto
+  // respectively), for the time being, in AIDA is not yet possible
+  // to set the errors, so the errors are automatically set to the 
+  // square root of the y-value of that bin (which is what is called 
+  // "mu" below, rather than "mu_sigma"), which does not make any
+  // sense! So, ignore eventual failures in the statistical tests
+  // only for these two variables.
 
   // Print results. 
   G4double n = static_cast< G4double >( numberOfEvents );
@@ -155,7 +202,12 @@ void StatAccepTestAnalysis::finish() {
       G4cout << "\t layer = " << iLayer << "\t <E> = " 
 	     << mu << " +/- " << mu_sigma << G4endl;
     }
+    if ( longitudinalProfileHisto ) {
+      //***LOOKHERE*** :  mu_sigma  should be set as error.
+      longitudinalProfileHisto->fill( 1.0*iLayer, mu );
+    }
   }
+  // // // std::vector<double> rmsTransverseProfile;   //***TEMPORARY WORK-AROUND***
   G4cout << " Average <E> [MeV] in each Radius bin " << G4endl; 
   for ( int iBinR = 0; iBinR < numberOfRadiusBins; iBinR++ ) {
     double sum  = sumR[ iBinR ];
@@ -167,8 +219,28 @@ void StatAccepTestAnalysis::finish() {
       G4cout << "\t iBinR = " << iBinR << "\t <E> = " 
 	     << mu << " +/- " << mu_sigma << G4endl;
     }
+    if ( transverseProfileHisto ) {
+      //***LOOKHERE*** :  mu_sigma  should be set as error.
+      transverseProfileHisto->fill( 1.0*iBinR, mu );
+    }
+    // // // rmsTransverseProfile.push_back( mu_sigma );   //***TEMPORARY WORK-AROUND***
   }  
 
+  // ***TEMPORARY WORK-AROUND*** in order to set properly the error bars
+  // of a weighted histogram, until this possibility will be added 
+  // in AIDA::IHistogram1D . But it does not work!
+  // // // AIDA::Dev::IDevHistogram1D * devTransverseProfileHisto = 
+  // // //   dynamic_cast< AIDA::Dev::IDevHistogram1D * > ( transverseProfileHisto ); 
+  // // // assert( devTransverseProfileHisto ); 
+  // // // for (int iBinR = 0; iBinR < devTransverseProfileHisto->axis().bins() ; iBinR++ ) { 
+  // // //   devTransverseProfileHisto->setBinContents( iBinR, 
+  // // // 					       transverseProfileHisto->binEntries( iBinR ),
+  // // // 					       transverseProfileHisto->binHeight( iBinR ),
+  // // // 					       rmsTransverseProfile[ iBinR ], 
+  // // // 					       transverseProfileHisto->binMean( iBinR ) );
+  // // // }
+
+  if ( tree ) tree->commit();
 }
 
 
