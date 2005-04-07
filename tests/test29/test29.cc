@@ -127,8 +127,6 @@
 #include "time.h"
 #include <cmath>
 
-//#define debug
-
 //int main(int argc, char** argv)
 extern "C" double drand();
 int main()
@@ -265,7 +263,7 @@ int main()
     G4int z3=thrdZ[a]; // Third table
     G4int z4=quadZ[a]; // Fourth table
     if(z2)
-	{
+	   {
       if(z1==z2)G4cout<<"#"<<a<<": z1="<<z1<<" = z2="<<z2<<", z3="<<z3<<",z4="<<z4<<G4endl;
       if(z3)
 	  {
@@ -341,6 +339,7 @@ int main()
   G4int    tgN=tPDG-90000000-tgZ*1000;
   G4QContent pQC=G4QPDGCode(pPDG).GetQuarkContent();
   G4int    cp=pQC.GetCharge();
+  if (pPDG==13 || pPDG==15) cp=-1; // Quark content of leptons is not supported by CHIPS
   G4int    bnp=pQC.GetBaryonNumber();
   G4QContent tQC=G4QPDGCode(tPDG).GetQuarkContent();
   G4int    ct=tQC.GetCharge();
@@ -622,20 +621,14 @@ int main()
     G4int    totBaryN = totBN+dBN;
     G4int    curPDG=tPDG+dBN;
     G4double curM=G4QPDGCode(curPDG).GetMass(); // Update #of neutrons in the TargetNucleus
-
-    totSum = G4LorentzVector(0., 0., pmax, e0+curM);
-
     G4LorentzVector Residual=proc->GetEnegryMomentumConservation();
     //G4double de = aChange->GetLocalEnergyDeposit(); // Init Total Energy by EnergyDeposit
     G4int nSec = aChange->GetNumberOfSecondaries();
-
+    G4double EnergyDep = aChange->GetLocalEnergyDeposit();
 #ifdef debug
-    G4cout<<"Test29: "<<nSec<<" secondary particles are generated"<<G4endl;
+    G4cout<<"Test29: "<<nSec<<" secondary particles are generated, dE="<<EnergyDep<<G4endl;
 #endif
-
-    //G4int nbar = 0;
-
-    // @@ G4int npt=0;
+    totSum = G4LorentzVector(0., 0., pmax, e0+curM-EnergyDep); // For the En/Mom check
     G4int nGamma=0;
     G4double EGamma=0;
     G4int nP0=0;
@@ -723,32 +716,41 @@ int main()
       if(c==211) nPP++;                              // Positive pions
       if(c==22) nGamma++;                            // Gammas
       if(c==22) EGamma+=e;                           // Energy of gammas
-      totCharge-=pd->GetPDGCharge();
-      totBaryN-=pd->GetBaryonNumber();
+      if(abs(c)>99)                                  // Do not count charge of leptons
+      {
+        totCharge-=pd->GetPDGCharge();
+        totBaryN-=pd->GetBaryonNumber();
+      }
 #ifdef pdebug
       G4cout<<"Test29:#"<<i<<",PDG="<<c<<",4M="<<lorV<<m<<",T="<<lorV.e()-m<<G4endl;
 #endif
       delete aChange->GetSecondary(i);
 	   } // End of the LOOP over secondaries
 	   //	delete secondaries in the end of the event       	 
+    if (totCharge==totC && totBaryN==totBN) // for decay of the lepton target mass is out
+				{
+						totCharge=0;
+      totBaryN=0;
+      totSum-=G4LorentzVector(0., 0., 0., curM);
+    }
     G4double ss=fabs(totSum.t())+fabs(totSum.x())+fabs(totSum.y())+fabs(totSum.z());    
 #ifdef pdebug
     G4cout<<">TEST29:r4M="<<totSum<<ss<<",rChrg="<<totCharge<<",rBaryN="<<totBaryN<<G4endl;
 #endif
-	   if (totCharge ||totBaryN || ss>1. || alarm || (nGamma && !EGamma))
+	   if (totCharge ||totBaryN || ss>.1 || alarm || (nGamma && !EGamma))
     {
 #ifdef pdebug
-      G4int tZ=81;
-      G4int tN=91;
-      G4int tA=tZ+tN;
-      G4bool inLib=G4NucleiPropertiesTable::IsInTable(tZ,tA);
-						if(inLib) G4cerr<<"*Test29: m="<<G4NucleiProperties::GetNuclearMass(tA,tZ)<<G4endl;
-      else
-      {
-        G4double fM=G4ParticleTable::GetParticleTable()->FindIon(tZ,tA,0,tZ)->GetPDGMass();
-        G4double cM=G4QPDGCode(2112).GetNuclMass(tZ,tN,0);
-        G4cerr<<"**Test29:Z="<<tZ<<",N="<<tN<<" NotInMassTable,GM="<<fM<<",M="<<cM<<G4endl;
-						}
+      //G4int tZ=81;
+      //G4int tN=91;
+      //G4int tA=tZ+tN;
+      //G4bool inLib=G4NucleiPropertiesTable::IsInTable(tZ,tA);
+						//if(inLib) G4cerr<<"*Test29: m="<<G4NucleiProperties::GetNuclearMass(tA,tZ)<<G4endl;
+      //else
+      //{
+      //G4double fM=G4ParticleTable::GetParticleTable()->FindIon(tZ,tA,0,tZ)->GetPDGMass();
+      //G4double cM=G4QPDGCode(2112).GetNuclMass(tZ,tN,0);
+      //G4cerr<<"**Test29:Z="<<tZ<<",N="<<tN<<" NotInMassTable,GM="<<fM<<",M="<<cM<<G4endl;
+						//}
 #endif
       G4cerr<<"**Test29:#"<<iter<<":n="<<nSec<<",4M="<<totSum<<",Charge="<<totCharge
             <<",BaryN="<<totBaryN<<", R="<<Residual<<",D2="<<ss<<",nN="<<curN<<G4endl;

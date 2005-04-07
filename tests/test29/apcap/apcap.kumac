@@ -72,7 +72,7 @@ macro apca targ=^12!C file=c0606 np=6 nn=6 runn=2000
   hi/fil 35 chips_[file].hbook
   hrin 1
   nevts = $hinfo(1,'entries')
-*  nevts = 20707
+*  nevts = 6092
   mess 'nevents='//[nevts]
   hi/del 1
 *
@@ -126,7 +126,7 @@ macro apca targ=^12!C file=c0606 np=6 nn=6 runn=2000
   pi/del ' '
   swi gz
 *
-  title 'Antiproton annihilation on '//[targ]//' nucleus'
+*  title 'Antiproton annihilation on '//[targ]//' nucleus'
   clr
   zone 1 1
   set dmod 1
@@ -146,6 +146,7 @@ macro apca targ=^12!C file=c0606 np=6 nn=6 runn=2000
   opt linx
 *
   dk   = [kmax]-[kmin]
+  xtl  = $sigma([kmin]+0.68*([dk]))
   xt   = $sigma([kmin]+0.70*([dk]))
   xtx  = $sigma([kmin]+0.72*([dk]))
   xtxt = $sigma([kmin]+0.75*([dk]))
@@ -275,6 +276,9 @@ macro apca targ=^12!C file=c0606 np=6 nn=6 runn=2000
     tytx=[ytx]*[dytx]
     if     [j] = 1 then
        set mtyp 25
+       set mscf 0.75
+       exec ~/PTOOL/legend0 [xtl] [ytx] ' ' 0. .5 -40
+       set mscf 1.00
        exec ~/PTOOL/legend0 [xt] [ytx] ' ' 0. .5 -40
        set mtyp [im]
        exec ~/PTOOL/legend0 [xtx] [ytx] ' ' 0. .5 -40
@@ -284,8 +288,10 @@ macro apca targ=^12!C file=c0606 np=6 nn=6 runn=2000
        ytx = [ytx] / [fytx]
        ydx = [ydx] / [fytx]
     elseif [j] = 2 then	   		
-       set mtyp 24
-       exec ~/PTOOL/legend0 [xt] [ytx] ' ' 0. .5 -40
+       if [np] = 92 then
+         set mtyp 24
+         exec ~/PTOOL/legend0 [xt] [ytx] ' ' 0. .5 -40
+       endif
        set mtyp [im]
        exec ~/PTOOL/legend0 [xtx] [ytx] ' ' 0. .5 -40
        exec ~/PTOOL/snotes [xtxt] [tytx] 'neutrons' 0. .3 -40
@@ -296,8 +302,10 @@ macro apca targ=^12!C file=c0606 np=6 nn=6 runn=2000
     elseif [j] = 3 then	   		
        set mtyp 30
        exec ~/PTOOL/legend0 [xt] [ytx] ' ' 0. .5 -40
-       set mtyp [im]
-       exec ~/PTOOL/legend0 [xtx] [ytx] ' ' 0. .5 -40
+       if [np] = 92 then
+         set mtyp [im]
+         exec ~/PTOOL/legend0 [xtx] [ytx] ' ' 0. .5 -40
+       endif
        exec ~/PTOOL/snotes [xtxt] [tytx] 'deuterons' 0. .3 -40
        exec hsolid 10[j] 0 14 [Nbin] 2 [im] [m] 4 1 [np]
        exec drlin [ydx] [xdi] [xdf]
@@ -306,24 +314,29 @@ macro apca targ=^12!C file=c0606 np=6 nn=6 runn=2000
     elseif [j] = 4 then	   		
        set mtyp 26
        exec ~/PTOOL/legend0 [xt] [ytx] ' ' 0. .5 -40
-       set mtyp [im]
-       exec ~/PTOOL/legend0 [xtx] [ytx] ' ' 0. .5 -40
+       if [np] = 92 then
+         set mtyp [im]
+         exec ~/PTOOL/legend0 [xtx] [ytx] ' ' 0. .5 -40
+       endif
        exec ~/PTOOL/snotes [xtxt] [tytx] 'tritons (x 0.1)' 0. .3 -40
-       exec hsolid 10[j] 0 15 [Nbin] 2 [im] [m] 4 2 [np]
+       exec hsolid 10[j] 0 16 [Nbin] 2 [im] [m] 4 2 [np]
        exec drlin [ydx] [xdi] [xdf]
        ytx = [ytx] / [fytx]
        ydx = [ydx] / [fytx]
     elseif [j] = 5 then	   		
-       exec ~/PTOOL/legend0 [xtx] [ytx] ' ' 0. .5 -40
+       if [np] = 92 then
+         set mtyp 27
+         exec ~/PTOOL/legend0 [xtx] [ytx] ' ' 0. .5 -40
+       endif
        exec ~/PTOOL/snotes [xtxt] [tytx] 'kaons (x 100)' 0. .3 -40
-       exec hsolid 10[j] 0 23 [Nbin] 2 [im] [m] 8 3 [np]
+       exec hsolid 10[j] 0 20 [Nbin] 2 [im] [m] 8 3 [np]
        exec drlin [ydx] [xdi] [xdf]
        ytx = [ytx] / [fytx]
        ydx = [ydx] / [fytx]
     elseif [j] = 6 then	   		
        exec ~/PTOOL/legend0 [xtx] [ytx] ' ' 0. .5 -40
        exec ~/PTOOL/snotes [xtxt] [tytx] 'pions (x 100)' 0. .3 -40
-       exec hsolid 10[j] 0 20 [Nbin] 2 [im] [m] 8 4 [np]
+       exec hsolid 10[j] 0 15 [Nbin] 2 [im] [m] 8 4 [np]
        exec drlin [ydx] [xdi] [xdf]
        ytx = [ytx] / [fytx]
        ydx = [ydx] / [fytx]
@@ -337,7 +350,7 @@ macro apca targ=^12!C file=c0606 np=6 nn=6 runn=2000
     elseif [j] = 8 then	   		
        exec ~/PTOOL/legend0 [xtx] [ytx] ' ' 0. .5 -40
        exec ~/PTOOL/snotes [xtxt] [tytx] 'He-3 (x 0.1)' 0. .3 -40
-       exec hsolid 10[j] 0 20 [Nbin] 2 [im] [m] 4 4 [np]
+       exec hsolid 10[j] 0 21 [Nbin] 2 [im] [m] 4 4 [np]
        exec drlin [ydx] [xdi] [xdf]
        ytx = [ytx] / [fytx]
        ydx = [ydx] / [fytx]
@@ -570,7 +583,8 @@ macro hsolid id=66 id2=0 hf=1 hn=60 icol=1 im=20 m=939.567 iw=1 is=1 z=6
   exec ~/PTOOL/white [icol]
   set lwid [iw]
   set dmod [is]
-  graph [nb] $sigma(0.5*(wp+wt)) $sigma(wy/wp) C
+  *graph [nb] $sigma(0.5*(wp+wt)) $sigma(wy/wp) C
+  graph [nb] $sigma(0.5*(wp+wt)) $sigma(wy/wp) L
   ve/del cy,cd,tx,ty,td,wx,wy,wd,wt,wp
 return
 *
@@ -673,7 +687,7 @@ h/errors $sigma((mex+ten)/2) xsex ? dsex [npt] 31 .25
 set dmod
 ve/del kex,sexp,dsexp,sexm,dsexm,scexp,dscexp,scexm,dscexm
 ve/del pex,eex,fexp,fexm,dfexp,dfexm,mex,ten,dsex,tex,qex,xex,dxex
-******************** all lambdas *********************
+******************** neutral kaons *********************
 m=vmass(5)
 if [np] = 92 then
   npl=8
