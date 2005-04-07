@@ -20,7 +20,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.79 2005-04-04 16:55:45 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.80 2005-04-07 10:31:26 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -3618,9 +3618,11 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
 	     }
       else
 	     {
+#ifdef pdebug
         G4cerr<<"-Warning-G4Q::FillHVec:PDG="<<thePDG<<"("<<t.m()<<","<<fragMas<<") < Mes="
               <<PDG1<<"("<<m1<<") + ResA="<<PDG2<<"("<<m2<<"), d="<<fragMas-m1-m2<<G4endl;
 	       //throw G4QException("G4Quasm::FillHadrVec: mass of decaying hadron is too small");
+#endif
         theQHadrons.push_back(qH); // FillAsIs to correct later in G4QEnvironment (Warning)
 	     }
 	   }

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.13 2005-03-24 16:06:06 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.14 2005-04-07 10:31:26 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -53,13 +53,13 @@ G4QCaptureAtRest::G4QCaptureAtRest(const G4String& processName)
 }
 G4bool   G4QCaptureAtRest::manualFlag=false; // If false then standard parameters are used
 G4double G4QCaptureAtRest::Temperature=180.; // Critical Temperature (sensitive at High En)
-G4double G4QCaptureAtRest::SSin2Gluons=0.1;  // Supression of s-quarks (in respect to u&d)
+G4double G4QCaptureAtRest::SSin2Gluons=0.3;  // Supression of s-quarks (in respect to u&d)
 G4double G4QCaptureAtRest::EtaEtaprime=0.3;  // Supression of eta mesons (gg->qq/3g->qq)
 G4double G4QCaptureAtRest::freeNuc=0.0;      // Percentage of free nucleons on the surface
 G4double G4QCaptureAtRest::freeDib=0.0;      // Percentage of free diBaryons on the surface
 G4double G4QCaptureAtRest::clustProb=1.;     // Nuclear clusterization parameter
 G4double G4QCaptureAtRest::mediRatio=1.;     // medium/vacuum hadronization ratio
-G4int    G4QCaptureAtRest::nPartCWorld=234;  // The#of particles initialized in CHIPS World
+G4int    G4QCaptureAtRest::nPartCWorld=154;  // The#of particles initialized in CHIPS World
 G4double G4QCaptureAtRest::SolidAngle=0.5;   // Part of Solid Angle to capture (@@A-dep.)
 G4bool   G4QCaptureAtRest::EnergyFlux=false; // Flag for Energy Flux use (not MultyQuasmon)
 G4double G4QCaptureAtRest::PiPrThresh=141.4; // Pion Production Threshold for gammas
@@ -243,8 +243,8 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
   else  N = G4QIsotope::Get()->GetNeutrons(Z);
   nOfNeutrons=N;                                       // Remember it for energy-mom. check
   if(manualFlag) G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // ManualP
-		else if(Z+N>20) G4QNucleus::SetParameters(.18,.06,6.,1.); //HeavyNuclei ClusterizationPar
-  else       G4QNucleus::SetParameters(0.0,0.0,1.,1.);      //LightNuclei ClusterizationPar
+		else if(Z+N>20) G4QNucleus::SetParameters(.70,.10,4.,10.);//HeavyNuclei ClusterizationPar
+  else       G4QNucleus::SetParameters(.60,.04,1.,10.);     //LightNuclei ClusterizationPar
 #ifdef debug
   G4cout<<"G4QCaptureAtRest::AtRestDoIt: N="<<N<<" for element with Z="<<Z<<G4endl;
 #endif
@@ -270,6 +270,11 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #ifdef debug
   G4cout<<"G4QCaptureAtRest::AtRestDoIt: projPDG="<<projPDG<<", targPDG="<<targPDG<<G4endl;
 #endif
+  G4double      localtime = track.GetGlobalTime();
+  G4ThreeVector position  = track.GetPosition();
+  localtime += Time;
+	 std::vector<G4double>* cascE = new std::vector<G4double>;
+	 std::vector<G4Track*>* cascT = new std::vector<G4Track*>;
   G4int           nuPDG=14;                  // Prototype for weak decay
   if(projPDG==15) nuPDG=16;
   if(projPDG==-211 && targPDG==90001000)     // Use Panofsky ratio for (p+pi-) system decay
@@ -441,9 +446,25 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
   {
     if(projPDG==13||projPDG==15) mp-=EnergyDeposition;//TheEnergyDeposit is only for LepCap
 #ifdef debug
-	   G4cout<<"G4QCaptureAtRest::AtRestDoIt: CHIPS decay muMB="<<mp<<G4endl;
+	   G4cout<<"G4QCaptureAtRest::AtRestDoIt: CHIPS M="<<mp<<",dE="<<EnergyDeposition<<G4endl;
 #endif
     G4LorentzVector projLV(0.,0.,0.,mp);
+    // @@ it can be a flag @@ now for tau it is only energy deposition, for mu +EMCascade
+    if(projPDG==13)
+    {
+      MuCaptureEMCascade(Z, N, cascE);
+      G4int nsec=cascE->size();
+      G4DynamicParticle* theSec = 0; // Prototype to fill particle in the G4ParticleChange
+	     for(G4int is=0; is<nsec; is++)
+	     {
+        G4double ener=cascE->operator[](is);
+        if(ener>0) theSec = new G4DynamicParticle(G4Electron::Electron(),RndmDir(),ener);
+        else       theSec = new G4DynamicParticle(G4Gamma::Gamma(),RndmDir(),-ener);
+        projLV-=theSec->Get4Momentum();
+        G4Track* aNewTrack = new G4Track(theSec, localtime, position );
+        cascT->push_back(aNewTrack);
+      }
+    }
     G4QPDGCode targQPDG(targPDG);
     G4double tM=mp+targQPDG.GetMass();
     EnMomConservation=G4LorentzVector(0.,0.,0.,tM);         // Total 4-mom of the reaction
@@ -475,31 +496,15 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     delete pan;                              // Delete the Nuclear Environment <--<--+
   }
   aParticleChange.Initialize(track);
-  G4double localtime = track.GetGlobalTime();
-  G4ThreeVector   position = track.GetPosition();
-  // In future it can be a flag, now for tau it is energy deposition , for mu - EMCascade
-  G4int tNH = output->size();                // A#of hadrons in the output
-  if(projPDG==13)
-  {
-	   std::vector<G4double>* cascE = new std::vector<G4double>;
-    MuCaptureEMCascade(Z, N, cascE);
-    G4int nsec=cascE->size();
-    aParticleChange.SetNumberOfSecondaries(nsec+tNH);
-    G4DynamicParticle* theSec = 0; // Prototype to fill particle in the G4ParticleChange
-	   for(G4int is=0; is<nsec; is++)
-	   {
-      G4double ener=cascE->operator[](is);
-      if(ener>0) theSec = new G4DynamicParticle(G4Electron::Electron(),RndmDir(),ener);
-      else       theSec = new G4DynamicParticle(G4Gamma::Gamma(),RndmDir(),-ener);
-      G4Track* aNewTrack = new G4Track(theSec, localtime, position );
-      aParticleChange.AddSecondary( aNewTrack );
-    }
-    cascE->clear();
-    delete cascE;
-  }
-  else aParticleChange.SetNumberOfSecondaries(tNH); 
+  G4int tNH = output->size(); // A#of hadrons in the output without EM Cascade
+  G4int nsec=cascE->size();
+  aParticleChange.SetNumberOfSecondaries(tNH+nsec); 
+	 for(G4int is=0; is<nsec; is++) aParticleChange.AddSecondary((*cascT)[is]);
+  cascE->clear();
+  delete cascE;
+  cascT->clear();
+  delete cascT;
   // Now add nuclear fragments
-  localtime += Time;
 #ifdef debug
   G4cout<<"G4QCaptureAtRest::AtRestDoIt: "<<tNH<<" particles are generated"<<G4endl;
 #endif
@@ -594,8 +599,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #endif
   }
   delete output;
-  if(projPDG==13) aParticleChange.ProposeLocalEnergyDeposit(0.);//Fill EnDepMuon(EMCascade)
-  else aParticleChange.ProposeLocalEnergyDeposit(EnergyDeposition); // Fill EnDepos for Tau
+  aParticleChange.ProposeLocalEnergyDeposit(EnergyDeposition);// Fill EnergyDeposition
   aParticleChange.ProposeTrackStatus(fStopAndKill);           // Kill the absorbed particle
   //return &aParticleChange;                               // This is not enough (ClearILL)
   return G4VRestProcess::AtRestDoIt(track, step);
