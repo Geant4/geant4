@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadrons.cc,v 1.2 2004-12-01 19:39:15 vnivanch Exp $
+// $Id: G4eeToHadrons.cc,v 1.3 2005-04-08 16:12:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,6 +36,7 @@
 //
 // Modifications:
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 
 //
@@ -120,20 +121,11 @@ void G4eeToHadrons::InitialiseProcess(const G4ParticleDefinition*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eeToHadrons::PrintInfoDefinition()
+void G4eeToHadrons::PrintInfo()
 {
-  G4VEmProcess::PrintInfoDefinition();
-
   G4cout << "      e+ annihilation into hadrons active above " 
          << thKineticEnergy/GeV << " GeV"
          << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4PhysicsVector* G4eeToHadrons::LambdaPhysicsVector(const G4MaterialCutsCouple*)
-{
-  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

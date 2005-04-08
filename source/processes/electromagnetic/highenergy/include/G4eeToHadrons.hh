@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadrons.hh,v 1.2 2005-03-14 18:38:54 vnivanch Exp $
+// $Id: G4eeToHadrons.hh,v 1.3 2005-04-08 16:12:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,6 +36,7 @@
 //
 // Modifications:
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 //
 // Class Description:
@@ -67,35 +68,33 @@ public:
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& p);
 
-  G4double CrossSection(G4double kineticEnergy, const G4MaterialCutsCouple* couple);
   // It returns the cross section of the process for energy/ material
+  G4double CrossSection(G4double kineticEnergy, 
+			const G4MaterialCutsCouple* couple);
 
-  virtual G4double RecalculateLambda(G4double kinEnergy,
-                               const G4MaterialCutsCouple* couple);
+  G4double RecalculateLambda(G4double kinEnergy,
+			     const G4MaterialCutsCouple* couple);
 
-  virtual void PrintInfoDefinition();
   // Print out of the class parameters
+  void PrintInfo();
 
-  virtual G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
-
-  void SetCrossSecFactor(G4double fac);
   // Set the factor to artificially increase the crossSection (default 1)
+  void SetCrossSecFactor(G4double fac);
 
 protected:
 
-  virtual void InitialiseProcess(const G4ParticleDefinition*);
+  void InitialiseProcess(const G4ParticleDefinition*);
 
   G4double GetMeanFreePath(const G4Track&,G4double,G4ForceCondition*);
 
-  virtual void ResetNumberOfInteractionLengthLeft();
+  void ResetNumberOfInteractionLengthLeft();
 
-  virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
+  std::vector<G4DynamicParticle*>* SecondariesPostStep(
                                    G4VEmModel*,
                              const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*,
-                                   G4double&);
+                             const G4DynamicParticle*);
 
-  virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dp);
+  G4double MaxSecondaryEnergy(const G4DynamicParticle* dp);
 
 private:
 
@@ -103,7 +102,6 @@ private:
                          const G4MaterialCutsCouple* couple);
 
   std::vector<G4DynamicParticle*>* GenerateSecondaries(const G4DynamicParticle*);
-
 
   // hide assignment operator
   G4eeToHadrons & operator=(const G4eeToHadrons &right);
@@ -154,8 +152,7 @@ inline G4double G4eeToHadrons::MaxSecondaryEnergy(const G4DynamicParticle* dp)
 inline std::vector<G4DynamicParticle*>* G4eeToHadrons::SecondariesPostStep(
                                                   G4VEmModel*,
                                             const G4MaterialCutsCouple*,
-                                            const G4DynamicParticle* dp,
-                                                  G4double&)
+                                            const G4DynamicParticle* dp)
 {
   std::vector<G4DynamicParticle*>* newp = 0;
   G4double kinEnergy = dp->GetKineticEnergy();

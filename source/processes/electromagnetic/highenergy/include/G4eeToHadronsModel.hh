@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsModel.hh,v 1.1 2004-11-19 18:44:04 vnivanch Exp $
+// $Id: G4eeToHadronsModel.hh,v 1.2 2005-04-08 16:12:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,6 +35,7 @@
 // Creation date: 25.10.2003
 //
 // Modifications:
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 
 //
@@ -64,25 +65,10 @@ public:
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  G4double HighEnergyLimit(const G4ParticleDefinition* p = 0);
-
-  G4double LowEnergyLimit(const G4ParticleDefinition* p = 0);
-
   G4double PeakEnergy() const;
-
-  void SetHighEnergyLimit(G4double e);
-
-  void SetLowEnergyLimit(G4double e);
 
   G4double MinEnergyCut(const G4ParticleDefinition*,
                         const G4MaterialCutsCouple*);
-
-  G4bool IsInCharge(const G4ParticleDefinition*);
-
-  G4double ComputeDEDX(const G4MaterialCutsCouple*,
-                       const G4ParticleDefinition*,
-                             G4double kineticEnergy,
-                             G4double cutEnergy);
 
   G4double CrossSection(const G4MaterialCutsCouple*,
                         const G4ParticleDefinition*,
@@ -90,19 +76,11 @@ public:
                               G4double cutEnergy,
                               G4double maxEnergy);
 
-  G4DynamicParticle* SampleSecondary(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double maxEnergy);
-
   std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double maxEnergy);
-
-  G4double MaxSecondaryEnergy(const G4DynamicParticle*);
 
   G4DynamicParticle* GenerateCMPhoton(G4double);
 
@@ -143,13 +121,6 @@ inline G4double G4eeToHadronsModel::MaxSecondaryEnergy(
                 G4double kinEnergy)
 {
   return kinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4eeToHadronsModel::MaxSecondaryEnergy(const G4DynamicParticle* dp)
-{
-  return dp->GetKineticEnergy();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

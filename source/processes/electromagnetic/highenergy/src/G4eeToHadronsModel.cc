@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsModel.cc,v 1.2 2004-12-01 18:13:44 vnivanch Exp $
+// $Id: G4eeToHadronsModel.cc,v 1.3 2005-04-08 16:12:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,6 +35,7 @@
 // Creation date: 12.08.2003
 //
 // Modifications:
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 //
 // -------------------------------------------------------------------
@@ -70,8 +71,8 @@ G4eeToHadronsModel::G4eeToHadronsModel(const G4Vee2hadrons* m,
   nbins(100),
   verbose(ver)
 {
-  highKinEnergy = 0.1*TeV;
-  lowKinEnergy  = 0.0;
+  highKinEnergy = HighEnergyLimit();
+  lowKinEnergy  = LowEnergyLimit();
   theGamma      = G4Gamma::Gamma();
 }
 
@@ -82,41 +83,6 @@ G4eeToHadronsModel::~G4eeToHadronsModel()
   delete model;
   delete crossPerElectron;
   delete crossBornPerElectron;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4eeToHadronsModel::HighEnergyLimit(const G4ParticleDefinition*)
-{
-  return highKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4eeToHadronsModel::LowEnergyLimit(const G4ParticleDefinition*)
-{
-  return lowKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4eeToHadronsModel::SetHighEnergyLimit(G4double e)
-{
-  highKinEnergy = e;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4eeToHadronsModel::SetLowEnergyLimit(G4double e)
-{
-  lowKinEnergy = e;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4bool G4eeToHadronsModel::IsInCharge(const G4ParticleDefinition* p)
-{
-  return (p == G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -180,16 +146,6 @@ void G4eeToHadronsModel::Initialise(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4eeToHadronsModel::ComputeDEDX(const G4MaterialCutsCouple*,
-                                        const G4ParticleDefinition*,
-                                              G4double,
-                                              G4double)
-{
-  return 0.0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 G4double G4eeToHadronsModel::CrossSection(const G4MaterialCutsCouple* couple,
                                           const G4ParticleDefinition*,
                                                 G4double kineticEnergy,
@@ -206,17 +162,6 @@ G4double G4eeToHadronsModel::CrossSection(const G4MaterialCutsCouple* couple,
   }
   //  G4cout << "e= " << kineticEnergy << " cross= " << cross << G4endl;
   return cross;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4DynamicParticle* G4eeToHadronsModel::SampleSecondary(
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*,
-                                   G4double,
-                                   G4double)
-{
-  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
