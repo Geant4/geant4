@@ -1,5 +1,5 @@
-#ifndef G4EnergyLossForPropogator_h
-#define G4EnergyLossForPropogator_h 1
+#ifndef G4EnergyLossForExtrapolator_h
+#define G4EnergyLossForExtrapolator_h 1
 
 //
 // ********************************************************************
@@ -23,12 +23,12 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForPropogator.hh,v 1.1 2005-03-11 12:50:57 vnivanch Exp $
+// $Id: G4EnergyLossForExtrapolator.hh,v 1.1 2005-04-08 14:00:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:    G4EnergyLossForPropogator
+// ClassName:    G4EnergyLossForExtrapolator
 //  
 // Description:  This class provide calculation of energy loss, fluctuation, 
 //               and msc angle
@@ -36,6 +36,7 @@
 // Author:       09.12.04 V.Ivanchenko 
 //
 // Modification: 
+// 08-04-05 Rename Propogator -> Extrapolator
 //
 //----------------------------------------------------------------------------
 //
@@ -53,27 +54,40 @@ class G4ProductionCuts;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class G4EnergyLossForPropogator 
+class G4EnergyLossForExtrapolator 
 {
 public:
-  G4EnergyLossForPropogator();
-  ~G4EnergyLossForPropogator();
+  G4EnergyLossForExtrapolator();
+  ~G4EnergyLossForExtrapolator();
 
-  G4double EnergyAfterStep(G4double kinEnergy, G4double step, const G4Material*, const G4ParticleDefinition* part);
-  G4double EnergyAfterStep(G4double kinEnergy, G4double step, const G4Material*, const G4String& name);
-  G4double EnergyBeforeStep(G4double kinEnergy, G4double step, const G4Material*, const G4ParticleDefinition* part);
-  G4double EnergyBeforeStep(G4double kinEnergy, G4double step, const G4Material*, const G4String& name);
+  G4double EnergyAfterStep(G4double kinEnergy, G4double step, 
+			   const G4Material*, const G4ParticleDefinition* part);
 
-  G4double AverageScatteringAngle(G4double kinEnergy, G4double step, const G4Material*, const G4ParticleDefinition* part);
-  G4double AverageScatteringAngle(G4double kinEnergy, G4double step, const G4Material*, const G4String& name);
+  G4double EnergyAfterStep(G4double kinEnergy, G4double step, 
+			   const G4Material*, const G4String& particleName);
+
+  G4double EnergyBeforeStep(G4double kinEnergy, G4double step, 
+			    const G4Material*, const G4ParticleDefinition* part);
+
+  G4double EnergyBeforeStep(G4double kinEnergy, G4double step, 
+			    const G4Material*, const G4String& particleName);
+
+  G4double AverageScatteringAngle(G4double kinEnergy, G4double step, 
+				  const G4Material*, const G4ParticleDefinition* part);
+
+  G4double AverageScatteringAngle(G4double kinEnergy, G4double step, 
+				  const G4Material*, const G4String& particleName);
 
   G4double EnergyDispersion(G4double kinEnergy, G4double step, 
-                    const G4Material*, const G4ParticleDefinition* part);
+			    const G4Material*, const G4ParticleDefinition* part);
+
   G4double EnergyDispertion(G4double kinEnergy, G4double step, 
-                    const G4Material*, const G4String& name);
+			    const G4Material*, const G4String& particleName);
 
   G4double ComputeDEDX(G4double kinEnergy, const G4Material*, const G4ParticleDefinition* part);
+
   G4double ComputeRange(G4double kinEnergy, const G4Material*, const G4ParticleDefinition* part);
+
   G4double ComputeEnergy(G4double range, const G4Material*, const G4ParticleDefinition* part);
 
   void SetVerbose(G4int val) {verbose = val;};
@@ -83,11 +97,13 @@ private:
   void Initialisation();
 
   G4PhysicsTable* PrepareTable();
+
   const G4ParticleDefinition* FindParticle(const G4String& name);
 
   G4double ComputeValue(G4double x, const G4Material* mat, const G4PhysicsTable* table);
 
   void ComputeElectronDEDX(const G4ParticleDefinition* part, G4PhysicsTable* table); 
+
   void ComputeProtonDEDX(const G4ParticleDefinition* part, G4PhysicsTable* table); 
 
   const G4ParticleDefinition* currentParticle;
@@ -120,32 +136,40 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4EnergyLossForPropogator::EnergyAfterStep(G4double kinEnergy, G4double step, 
-                                            const G4Material* mat, const G4String& name)
+inline G4double G4EnergyLossForExtrapolator::EnergyAfterStep(G4double kinEnergy, 
+							     G4double step, 
+							     const G4Material* mat, 
+							     const G4String& name)
 {
   return EnergyAfterStep(kinEnergy,step,mat,FindParticle(name));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4EnergyLossForPropogator::EnergyBeforeStep(G4double kinEnergy, G4double step, 
-                                            const G4Material* mat, const G4String& name)
+inline G4double G4EnergyLossForExtrapolator::EnergyBeforeStep(G4double kinEnergy, 
+							      G4double step, 
+							      const G4Material* mat, 
+							      const G4String& name)
 {
   return EnergyBeforeStep(kinEnergy,step,mat,FindParticle(name));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4EnergyLossForPropogator::AverageScatteringAngle(G4double kinEnergy, G4double step, 
-                                            const G4Material* mat, const G4String& name)
+inline G4double G4EnergyLossForExtrapolator::AverageScatteringAngle(G4double kinEnergy, 
+								    G4double step, 
+								    const G4Material* mat, 
+								    const G4String& name)
 {
   return AverageScatteringAngle(kinEnergy,step,mat,FindParticle(name));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4EnergyLossForPropogator::EnergyDispertion(G4double kinEnergy, G4double step, 
-                    const G4Material* mat, const G4String& name)
+inline G4double G4EnergyLossForExtrapolator::EnergyDispertion(G4double kinEnergy, 
+							      G4double step, 
+							      const G4Material* mat, 
+							      const G4String& name)
 {
   return EnergyDispersion(kinEnergy,step,mat,FindParticle(name));
 }

@@ -20,12 +20,12 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForPropogator.cc,v 1.1 2005-03-11 12:50:57 vnivanch Exp $
+// $Id: G4EnergyLossForExtrapolator.cc,v 1.1 2005-04-08 14:00:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:    G4EnergyLossForPropogator
+// ClassName:    G4EnergyLossForExtrapolator
 //  
 // Description:  This class provide calculation of energy loss, fluctuation, 
 //               and msc angle
@@ -33,13 +33,14 @@
 // Author:       09.12.04 V.Ivanchenko 
 //
 // Modification: 
+// 08-04-05 Rename Propogator -> Extrapolator
 //
 //----------------------------------------------------------------------------
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4EnergyLossForPropogator.hh"
+#include "G4EnergyLossForExtrapolator.hh"
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4ParticleDefinition.hh"
@@ -57,14 +58,14 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4EnergyLossForPropogator::G4EnergyLossForPropogator()
+G4EnergyLossForExtrapolator::G4EnergyLossForExtrapolator()
 {
   Initialisation();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4EnergyLossForPropogator:: ~G4EnergyLossForPropogator()
+G4EnergyLossForExtrapolator:: ~G4EnergyLossForExtrapolator()
 {
   for(G4int i=0; i<nmat; i++) {delete couples[i];}
   delete dedxElectron;
@@ -81,8 +82,10 @@ G4EnergyLossForPropogator:: ~G4EnergyLossForPropogator()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EnergyLossForPropogator::EnergyAfterStep(G4double kinEnergy, G4double step, 
-                                            const G4Material* mat, const G4ParticleDefinition* part)
+G4double G4EnergyLossForExtrapolator::EnergyAfterStep(G4double kinEnergy, 
+						      G4double step, 
+						      const G4Material* mat, 
+						      const G4ParticleDefinition* part)
 {
   G4double kinEnergyFinal = kinEnergy;
   if(mat && part) {
@@ -101,8 +104,10 @@ G4double G4EnergyLossForPropogator::EnergyAfterStep(G4double kinEnergy, G4double
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EnergyLossForPropogator::EnergyBeforeStep(G4double kinEnergy, G4double step, 
-                                            const G4Material* mat, const G4ParticleDefinition* part)
+G4double G4EnergyLossForExtrapolator::EnergyBeforeStep(G4double kinEnergy, 
+						       G4double step, 
+						       const G4Material* mat, 
+						       const G4ParticleDefinition* part)
 {
   G4double kinEnergyFinal = kinEnergy;
   if(mat && part) {
@@ -119,8 +124,10 @@ G4double G4EnergyLossForPropogator::EnergyBeforeStep(G4double kinEnergy, G4doubl
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EnergyLossForPropogator::AverageScatteringAngle(G4double kinEnergy, G4double step, 
-                                            const G4Material* mat, const G4ParticleDefinition* part)
+G4double G4EnergyLossForExtrapolator::AverageScatteringAngle(G4double kinEnergy, 
+							     G4double step, 
+							     const G4Material* mat, 
+							     const G4ParticleDefinition* part)
 {
   G4double theta = 0.0;
   if(mat && part && kinEnergy > 0.0) {
@@ -135,8 +142,10 @@ G4double G4EnergyLossForPropogator::AverageScatteringAngle(G4double kinEnergy, G
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
-G4double G4EnergyLossForPropogator::EnergyDispersion(G4double kinEnergy, G4double step, 
-                    const G4Material* mat, const G4ParticleDefinition* part)
+G4double G4EnergyLossForExtrapolator::EnergyDispersion(G4double kinEnergy, 
+						       G4double step, 
+						       const G4Material* mat, 
+						       const G4ParticleDefinition* part)
 {
   G4double sig2 = 0.0;
   if(part) {
@@ -160,7 +169,7 @@ G4double G4EnergyLossForPropogator::EnergyDispersion(G4double kinEnergy, G4doubl
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EnergyLossForPropogator::Initialisation()
+void G4EnergyLossForExtrapolator::Initialisation()
 {
   currentParticle = 0;
   electron = G4Electron::Electron();
@@ -213,7 +222,7 @@ void G4EnergyLossForPropogator::Initialisation()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PhysicsTable* G4EnergyLossForPropogator::PrepareTable()
+G4PhysicsTable* G4EnergyLossForExtrapolator::PrepareTable()
 {
   G4PhysicsTable* table = new G4PhysicsTable();
 
@@ -227,7 +236,7 @@ G4PhysicsTable* G4EnergyLossForPropogator::PrepareTable()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-const G4ParticleDefinition* G4EnergyLossForPropogator::FindParticle(const G4String& name)
+const G4ParticleDefinition* G4EnergyLossForExtrapolator::FindParticle(const G4String& name)
 {
   if(name != currentParticleName) {
     currentParticle = G4ParticleTable::GetParticleTable()->FindParticle(name);
@@ -241,8 +250,9 @@ const G4ParticleDefinition* G4EnergyLossForPropogator::FindParticle(const G4Stri
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EnergyLossForPropogator::ComputeDEDX(G4double kinEnergy, const G4Material* mat, 
-                                          const G4ParticleDefinition* part)
+G4double G4EnergyLossForExtrapolator::ComputeDEDX(G4double kinEnergy, 
+						  const G4Material* mat, 
+						  const G4ParticleDefinition* part)
 {
   G4double x = 0.0;
   if(part == electron)      x = ComputeValue(kinEnergy, mat, dedxElectron);
@@ -257,8 +267,9 @@ G4double G4EnergyLossForPropogator::ComputeDEDX(G4double kinEnergy, const G4Mate
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EnergyLossForPropogator::ComputeRange(G4double kinEnergy, const G4Material* mat, 
-                                          const G4ParticleDefinition* part)
+G4double G4EnergyLossForExtrapolator::ComputeRange(G4double kinEnergy, 
+						   const G4Material* mat, 
+						   const G4ParticleDefinition* part)
 {
   G4double x = 0.0;
   if(part == electron)      x = ComputeValue(kinEnergy, mat, rangeElectron);
@@ -274,8 +285,9 @@ G4double G4EnergyLossForPropogator::ComputeRange(G4double kinEnergy, const G4Mat
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EnergyLossForPropogator::ComputeEnergy(G4double range, const G4Material* mat, 
-                                          const G4ParticleDefinition* part)
+G4double G4EnergyLossForExtrapolator::ComputeEnergy(G4double range, 
+						    const G4Material* mat, 
+						    const G4ParticleDefinition* part)
 {
   G4double x = 0.0;
   if(part == electron)      x = ComputeValue(range, mat, invRangeElectron);
@@ -291,8 +303,9 @@ G4double G4EnergyLossForPropogator::ComputeEnergy(G4double range, const G4Materi
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EnergyLossForPropogator::ComputeValue(G4double x, const G4Material* mat, 
-                                          const G4PhysicsTable* table)
+G4double G4EnergyLossForExtrapolator::ComputeValue(G4double x, 
+						   const G4Material* mat, 
+						   const G4PhysicsTable* table)
 {
   G4double res = 0.0;
   bool b;
@@ -304,14 +317,14 @@ G4double G4EnergyLossForPropogator::ComputeValue(G4double x, const G4Material* m
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EnergyLossForPropogator::ComputeElectronDEDX(const G4ParticleDefinition* part, 
-                                                          G4PhysicsTable* table) 
+void G4EnergyLossForExtrapolator::ComputeElectronDEDX(const G4ParticleDefinition* part, 
+						      G4PhysicsTable* table) 
 {
   G4MollerBhabhaModel* ioni = new G4MollerBhabhaModel(part);
   G4eBremsstrahlungModel* brem = new G4eBremsstrahlungModel(part);
   const G4MaterialTable* mtable = G4Material::GetMaterialTable();
   if(0<verbose) {
-    G4cout << "G4EnergyLossForPropogator::ComputeElectronDEDX for " 
+    G4cout << "G4EnergyLossForExtrapolator::ComputeElectronDEDX for " 
            << part->GetParticleName() 
            << G4endl;
   }
@@ -343,14 +356,14 @@ void G4EnergyLossForPropogator::ComputeElectronDEDX(const G4ParticleDefinition* 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EnergyLossForPropogator::ComputeProtonDEDX(const G4ParticleDefinition* part, 
-                                                        G4PhysicsTable* table)
+void G4EnergyLossForExtrapolator::ComputeProtonDEDX(const G4ParticleDefinition* part, 
+						    G4PhysicsTable* table)
 {
   G4BetheBlochModel* ioni = new G4BetheBlochModel(part);
   const G4MaterialTable* mtable = G4Material::GetMaterialTable();
 
   if(0<verbose) {
-    G4cout << "G4EnergyLossForPropogator::ComputeProtonDEDX for " << part->GetParticleName() 
+    G4cout << "G4EnergyLossForExtrapolator::ComputeProtonDEDX for " << part->GetParticleName() 
            << G4endl;
   }
  
