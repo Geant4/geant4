@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.27 2005-03-28 23:08:18 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.28 2005-04-08 12:40:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -47,6 +47,7 @@
 // 17-11-04 Add method CrossSectionPerAtom (V.Ivanchenko)
 // 14-03-05 Reduce number of pure virtual methods and make inline part separate (V.Ivanchenko)
 // 24-03-05 Remove IsInCharge and add G4VParticleChange in the constructor (V.Ivanchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -77,24 +78,26 @@ class G4VEmModel
 
 public:
 
-  G4VEmModel(const G4String& nam): 
-    name(nam), lowLimit(0.0), highLimit(0.0), fluc(0), pParticleChange(0) {};
+  G4VEmModel(const G4String& nam);
 
-  virtual ~G4VEmModel() {};
+  virtual ~G4VEmModel();
+
+  //------------------------------------------------------------------------
+  // Virtual methods to be implemented for the concrete model
+  //------------------------------------------------------------------------
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&) = 0;
 
-  void SetParticleChange(G4VParticleChange*,  G4VEmFluctuationModel*);
 
-  G4VEmFluctuationModel* GetModelOfFluctuations();
+  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
+                                const G4MaterialCutsCouple*,
+                                const G4DynamicParticle*,
+                                      G4double tmin = 0.0,
+                                      G4double tmax = DBL_MAX) = 0;
 
-  G4double HighEnergyLimit(const G4ParticleDefinition*);
-
-  G4double LowEnergyLimit(const G4ParticleDefinition*);
-
-  void SetHighEnergyLimit(G4double);
-
-  void SetLowEnergyLimit(G4double);
+  //------------------------------------------------------------------------
+  // Methods with standard implementation; may be overwritten if needed 
+  //------------------------------------------------------------------------
 
   virtual G4double MinEnergyCut(const G4ParticleDefinition*,
                                 const G4MaterialCutsCouple*);
@@ -128,18 +131,8 @@ public:
                                       G4double kinEnergy, 
                                       G4double Z, 
                                       G4double A, 
-                                      G4double  cutEnergy = 0.0,
-                                      G4double  maxEnergy = DBL_MAX);
-
-  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin = 0.0,
-                                      G4double tmax = DBL_MAX) = 0;
-
-  G4double MaxSecondaryKinEnergy(const G4DynamicParticle* dynParticle);
-
-  const G4String& GetName() const;
+                                      G4double cutEnergy = 0.0,
+                                      G4double maxEnergy = DBL_MAX);
 
   // Methods for msc simulation
   virtual G4double GeomPathLength(G4PhysicsTable* theLambdaTable,
@@ -166,6 +159,28 @@ protected:
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
     				               G4double kineticEnergy);
 
+  //------------------------------------------------------------------------
+  // Generic methods common to all models
+  //------------------------------------------------------------------------
+
+public:
+
+  void SetParticleChange(G4VParticleChange*, G4VEmFluctuationModel*);
+
+  G4VEmFluctuationModel* GetModelOfFluctuations();
+
+  G4double HighEnergyLimit();
+
+  G4double LowEnergyLimit();
+
+  void SetHighEnergyLimit(G4double);
+
+  void SetLowEnergyLimit(G4double);
+
+  G4double MaxSecondaryKinEnergy(const G4DynamicParticle* dynParticle);
+
+  const G4String& GetName() const;
+
 private:
 
   //  hide assignment operator
@@ -186,12 +201,19 @@ protected:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEmModel::HighEnergyLimit(const G4ParticleDefinition*)
+inline G4VEmModel::G4VEmModel(const G4String& nam): 
+  name(nam), lowLimit(0.0), highLimit(0.0), fluc(0), pParticleChange(0) 
+{};
+
+inline G4VEmModel::~G4VEmModel() 
+{};
+
+inline G4double G4VEmModel::HighEnergyLimit()
 {
   return highLimit;
 }
 
-inline G4double G4VEmModel::LowEnergyLimit(const G4ParticleDefinition*)
+inline G4double G4VEmModel::LowEnergyLimit()
 {
   return lowLimit;
 }
@@ -206,7 +228,8 @@ inline void G4VEmModel::SetLowEnergyLimit(G4double val)
   lowLimit = val;
 }
 
-inline void G4VEmModel::SetParticleChange(G4VParticleChange* p,  G4VEmFluctuationModel* f = 0)
+inline void G4VEmModel::SetParticleChange(G4VParticleChange* p,  
+                                          G4VEmFluctuationModel* f = 0)
 {
   if(p && pParticleChange != p) pParticleChange = p;
   fluc = f;
@@ -255,7 +278,7 @@ inline G4double G4VEmModel::CrossSectionPerVolume(
     const G4Element* elm = (*theElementVector)[i];
     G4double Z = elm->GetZ(); 
     G4double A = elm->GetA();
-    cross += theAtomNumDensityVector[i]*ComputeCrossSectionPerAtom(p, ekin, Z, A, emin, emax); 
+    cross += theAtomNumDensityVector[i]*ComputeCrossSectionPerAtom(p,ekin,Z,A,emin,emax); 
   }
   return cross;
 }

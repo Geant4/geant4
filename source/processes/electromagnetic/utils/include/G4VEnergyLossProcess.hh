@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.35 2005-03-28 23:08:18 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.36 2005-04-08 12:40:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -57,6 +57,7 @@
 // 27-08-04 Add NeedBuildTables method (V.Ivanchneko)
 // 09-09-04 Bug fix for the integral mode with 2 peaks (V.Ivanchneko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -108,15 +109,15 @@ public:
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
   
+  virtual void PrintInfo() = 0;
+
+protected:
+
   virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
                                    G4VEmModel*,
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle*,
                                    G4double& tcut) = 0;
-
-  virtual void PrintInfoDefinition();
-
-protected:
 
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
                                     const G4Material*, G4double cut) = 0;
@@ -129,15 +130,13 @@ protected:
   //------------------------------------------------------------------------
   // Methods with standard implementation; may be overwritten if needed 
   //------------------------------------------------------------------------
-public:
-  
+protected:
+
   virtual void CorrectionsAlongStep(
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle*,
 			           G4double& eloss,
                                    G4double& length);
-
-protected:
 
   virtual G4double GetMeanFreePath(const G4Track& track,
                                          G4double previousStepSize,
@@ -152,6 +151,8 @@ protected:
   // Generic methods common to all processes 
   //------------------------------------------------------------------------
 public:
+
+  void PrintInfoDefinition();
 
   void PreparePhysicsTable(const G4ParticleDefinition&);
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.hh,v 1.13 2005-03-28 23:07:54 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.hh,v 1.14 2005-04-08 12:39:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -39,6 +39,7 @@
 // 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
 // 24-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 //
 // Class Description:
@@ -55,6 +56,7 @@
 #include "G4VEmModel.hh"
 
 class G4Element;
+class G4ParticleChangeForLoss;
 
 class G4eBremsstrahlungModel : public G4VEmModel
 {
@@ -66,8 +68,6 @@ public:
   virtual ~G4eBremsstrahlungModel();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-
-  G4bool IsInCharge(const G4ParticleDefinition*);
 
   G4double MinEnergyCut(const G4ParticleDefinition*, const G4MaterialCutsCouple*);
 
@@ -82,27 +82,11 @@ public:
                               G4double cutEnergy,
                               G4double maxEnergy);
 
-  G4DynamicParticle* SampleSecondary(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double maxEnergy);
-
   std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double maxEnergy);
-
-  virtual std::vector<G4DynamicParticle*>* PostStepDoIt(
-                                const G4MaterialCutsCouple*,
-                                const G4ParticleDefinition*,
-				      G4double& kinEnergy,
-				      G4double& edep,
-   				      G4ThreeVector& direction,
-				      G4ThreeVector& polarization,
-                                      G4double tmin,
-                                      G4double tmax);
 
   void   SetLPMflag(G4bool val) {theLPMflag = val;};
   G4bool LPMflag() const {return theLPMflag;};
@@ -141,7 +125,8 @@ private:
   G4eBremsstrahlungModel(const  G4eBremsstrahlungModel&);
 
   const G4ParticleDefinition* particle;
-  G4ParticleDefinition* theGamma;
+  G4ParticleDefinition*       theGamma;
+  G4ParticleChangeForLoss*    fParticleChange;
   G4double highKinEnergy;
   G4double lowKinEnergy;
   G4double minThreshold;

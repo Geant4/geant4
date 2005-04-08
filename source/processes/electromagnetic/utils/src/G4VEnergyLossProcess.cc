@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.50 2005-03-28 23:08:18 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.51 2005-04-08 12:40:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -79,6 +79,7 @@
 // 27-08-04 Add NeedBuildTables method (V.Ivanchneko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 11-03-05 Shift verbose level by 1 (V.Ivantchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -778,6 +779,7 @@ void G4VEnergyLossProcess::PrintInfoDefinition()
            << G4BestUnit(maxKinEnergy,"Energy")
            << " in " << nLambdaBins << " bins."
            << G4endl;
+    PrintInfo();
     if(theRangeTableForLoss) {
       G4cout << "      Step function: finalRange(mm)= " << finalRange/mm
              << ", dRoverRange= " << dRoverRange

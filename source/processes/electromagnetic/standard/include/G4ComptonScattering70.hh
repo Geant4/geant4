@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering70.hh,v 1.1 2005-03-16 12:14:25 vnivanch Exp $
+// $Id: G4ComptonScattering70.hh,v 1.2 2005-04-08 12:39:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------------ G4ComptonScattering70 physics process -----------------------
@@ -89,8 +89,7 @@ protected:
   virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
                                    G4VEmModel*,
                              const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*,
-                                   G4double& edep);
+                             const G4DynamicParticle*);
 
 private:
   
@@ -116,20 +115,9 @@ inline G4bool G4ComptonScattering70::IsApplicable(const G4ParticleDefinition& p)
 inline std::vector<G4DynamicParticle*>* G4ComptonScattering70::SecondariesPostStep(
                                    G4VEmModel* model,
                              const G4MaterialCutsCouple* couple,
-                             const G4DynamicParticle* dp, G4double&)
+                             const G4DynamicParticle* dp)
 { 
-  std::vector<G4DynamicParticle*>* newp = model->SampleSecondaries(couple, dp);
-  G4DynamicParticle* gamma = (*newp)[0];
-  G4double e = gamma->GetKineticEnergy();
-  if(e > DBL_MIN) {
-    fParticleChange.SetProposedKineticEnergy(e);
-    fParticleChange.ProposeMomentumDirection(gamma->GetMomentumDirection());
-    //    fParticleChange.ProposePolarization(gamma->GetPolarization());
-  } else {
-    fParticleChange.ProposeTrackStatus(fStopAndKill);
-  }
-  delete gamma;
-  return newp;
+  return model->SampleSecondaries(couple, dp);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

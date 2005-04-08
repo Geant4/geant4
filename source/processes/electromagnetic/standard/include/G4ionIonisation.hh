@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.34 2005-03-28 23:07:54 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.35 2005-04-08 12:39:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -47,6 +47,7 @@
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -70,7 +71,6 @@ class G4VEmFluctuationModel;
 
 class G4ionIonisation : public G4VEnergyLossProcess
 {
-
 public:
 
   G4ionIonisation(const G4String& name = "ionIoni");
@@ -79,19 +79,22 @@ public:
 
   G4bool IsApplicable(const G4ParticleDefinition& p);
 
-  G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
-			    const G4Material*, G4double cut);
+  // Print out of the class parameters
+  void PrintInfo();
 
-  void SecondariesPostStep(
+protected:
+
+  void CorrectionsAlongStep(
+                           const G4MaterialCutsCouple*,
+	             	   const G4DynamicParticle*,
+			         G4double& eloss,
+			         G4double& length);
+
+  std::vector<G4DynamicParticle*>* SecondariesPostStep(
 			    G4VEmModel*,
 			    const G4MaterialCutsCouple*,
 			    const G4DynamicParticle*,
-			    G4double);
-
-  void PrintInfoDefinition();
-  // Print out of the class parameters
-
-protected:
+			    G4double&);
 
   void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 				   const G4ParticleDefinition*);
@@ -100,7 +103,10 @@ protected:
 			   G4double previousStepSize,
 			   G4ForceCondition* condition);
 
-  virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle);
+  G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
+			    const G4Material*, G4double cut);
+
+  G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle);
 
 private:
 
@@ -182,21 +188,24 @@ inline G4double G4ionIonisation::GetMeanFreePath(const G4Track& track,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void  G4ionIonisation::CorrectionsAlongStep(
+inline void G4ionIonisation::CorrectionsAlongStep(
                            const G4MaterialCutsCouple*,
 	             	   const G4DynamicParticle*,
 			         G4double& eloss,
                                  G4double& s)
 {
-  if(scaledEnergy > eth) eloss += s*corr->HighOrderCorrections(currentParticle,theMaterial,preKinEnergy);
-  else                   eloss += s*corr->NuclearDEDX(currentParticle,theMaterial,preKinEnergy - eloss*0.5);
+  if(preKinEnergy*massRatio > eth) 
+    eloss += s*corr->HighOrderCorrections(currentParticle,theMaterial,preKinEnergy);
+  else                   
+    eloss += s*corr->NuclearDEDX(currentParticle,theMaterial,preKinEnergy - eloss*0.5);
   preKinEnergy -= eloss;
-  fParticleChange.SetProposedCharge(effCharge.EffectiveCharge(currentParticle,theMaterial,preKinEnergy));
+  fParticleChange.SetProposedCharge(effCharge.EffectiveCharge(currentParticle,
+                                    theMaterial,preKinEnergy));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4ionIonisation::SecondariesPostStep(
+inline std::vector<G4DynamicParticle*>* G4ionIonisation::SecondariesPostStep(
                                                  G4VEmModel* model,
                                            const G4MaterialCutsCouple* couple,
                                            const G4DynamicParticle* dp,

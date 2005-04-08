@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation70.cc,v 1.3 2004-12-01 19:37:15 vnivanch Exp $
+// $Id: G4eplusAnnihilation70.cc,v 1.4 2005-04-08 12:39:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,6 +36,7 @@
 //
 // Modifications:
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 
 //
@@ -70,6 +71,7 @@ void G4eplusAnnihilation70::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
+    SetIntegral(true);
     SetSecondaryParticle(G4Gamma::Gamma());
     G4double emin = 0.1*keV;
     G4double emax = 100.*TeV;
@@ -85,10 +87,8 @@ void G4eplusAnnihilation70::InitialiseProcess(const G4ParticleDefinition*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eplusAnnihilation70::PrintInfoDefinition()
+void G4eplusAnnihilation70::PrintInfo()
 {
-  G4VEmProcess::PrintInfoDefinition();
-
   G4cout << "      Heilter model of formula of annihilation into 2 photons"
          << G4endl;
 }

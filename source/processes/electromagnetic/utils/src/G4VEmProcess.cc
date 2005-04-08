@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.22 2005-03-28 23:08:18 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.23 2005-04-08 12:40:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -40,6 +40,7 @@
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivanchenko)
 // 11-03-05 Shift verbose level by 1, add applyCuts and killPrimary flags (V.Ivanchenko)
 // 14-03-05 Update logic PostStepDoIt (V.Ivanchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 //
 // Class Description:
@@ -340,6 +341,7 @@ void G4VEmProcess::PrintInfoDefinition()
            << G4BestUnit(maxKinEnergy,"Energy")
            << " in " << nLambdaBins << " bins."
            << G4endl;
+    PrintInfo();
   }
 
   if(1 < verboseLevel) {

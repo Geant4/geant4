@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.26 2005-03-28 23:08:18 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.27 2005-04-08 12:40:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -50,6 +50,7 @@
 // 03-11-03 Substitute STL vector for G4RegionModels (V.Ivanchenko)
 // 26-01-04 Fix in energy range conditions (V.Ivanchenko)
 // 24-03-05 Remove check or IsInCharge (V.Ivanchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -295,8 +296,8 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
       G4VEmModel* model = models[ii];
       if ( 0 == regions[ii] || region == regions[ii] ) {
 
-        G4double tmin = model->LowEnergyLimit(particle);
-        G4double tmax = model->HighEnergyLimit(particle);
+        G4double tmin = model->LowEnergyLimit();
+        G4double tmax = model->HighEnergyLimit();
         if (n) tmin = std::max(tmin, eHigh[n-1]);
 
         if(1 < verboseLevel) {

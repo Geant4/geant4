@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.32 2005-03-28 23:07:54 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.33 2005-04-08 12:39:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,6 +44,7 @@
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 27-05-04 Set integral to be a default regime (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 //
 // -------------------------------------------------------------------
@@ -71,8 +72,7 @@ G4ionIonisation::G4ionIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
     theParticle(0),
     theBaseParticle(0),
-    isInitialised(false),
-    subCutoff(false)
+    isInitialised(false)
 {
   SetDEDXBinning(120);
   SetLambdaBinning(120);
@@ -127,22 +127,13 @@ void G4ionIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* pa
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4ionIonisation::PrintInfoDefinition()
+void G4ionIonisation::PrintInfo()
 {
-  G4VEnergyLossProcess::PrintInfoDefinition();
-
   G4cout << "      Scaling relation is used to proton dE/dx and range"
          << G4endl
          << "      Bether-Bloch model for Escaled > " << eth << " MeV, ICRU49 "
          << "parametrisation for alpha particles below."
          << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4ionIonisation::SetSubCutoff(G4bool val)
-{
-  subCutoff = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

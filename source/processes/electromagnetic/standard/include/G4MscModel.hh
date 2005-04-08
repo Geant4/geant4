@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.hh,v 1.1 2004-11-19 19:21:23 vnivanch Exp $
+// $Id: G4MscModel.hh,v 1.2 2005-04-08 12:39:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -47,6 +47,7 @@
 // 23-04-04 changes in data members and in signature of SampleCosineTheta
 //          (L.Urban)
 // 17-08-04 name of data member facxsi changed to factail (L.Urban)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 
 //
 // Class Description:
@@ -74,18 +75,8 @@ public:
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  G4double HighEnergyLimit(const G4ParticleDefinition*) {return highKinEnergy;};
-
-  G4double LowEnergyLimit(const G4ParticleDefinition*) {return lowKinEnergy;};
-
-  void SetHighEnergyLimit(G4double e) {highKinEnergy = e;};
-
-  void SetLowEnergyLimit(G4double e) {lowKinEnergy = e;};
-
   G4double MinEnergyCut(const G4ParticleDefinition*,
                         const G4MaterialCutsCouple*) {return 0.0;};
-
-  G4bool IsInCharge(const G4ParticleDefinition*);
 
   G4double ComputeDEDX(const G4MaterialCutsCouple*,
                        const G4ParticleDefinition*,
@@ -97,11 +88,6 @@ public:
                               G4double kineticEnergy,
                               G4double cutEnergy,
                               G4double maxEnergy);
-  G4DynamicParticle* SampleSecondary(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double,
-                                      G4double) {return 0;};
 
   std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
@@ -147,8 +133,6 @@ private:
   G4double mass;
   G4double charge;
   G4double massRate;
-  G4double highKinEnergy;
-  G4double lowKinEnergy;
 
   G4double taubig;
   G4double tausmall;

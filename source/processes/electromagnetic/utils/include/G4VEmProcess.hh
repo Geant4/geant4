@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.19 2005-03-28 23:08:18 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.20 2005-04-08 12:40:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,7 @@
 // 09-09-04 Bug fix for the integral mode with 2 peaks (V.Ivanchneko)
 // 16-09-04 Add flag for LambdaTable and method RecalculateLambda (V.Ivanchneko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -86,7 +87,7 @@ public:
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
 
-  virtual void PrintInfoDefinition();
+  virtual void PrintInfo() = 0;
 
 protected:
 
@@ -104,11 +105,13 @@ protected:
   virtual G4double RecalculateLambda(G4double kinEnergy,
                                const G4MaterialCutsCouple* couple);
 
-
   //------------------------------------------------------------------------
   // Generic methods common to all processes 
   //------------------------------------------------------------------------
+
 public:
+
+  void PrintInfoDefinition();
 
   G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 

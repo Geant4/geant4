@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaCompton.hh,v 1.1 2005-03-16 12:14:25 vnivanch Exp $
+// $Id: G4KleinNishinaCompton.hh,v 1.2 2005-04-08 12:39:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -49,10 +49,8 @@
 #define G4KleinNishinaCompton_h 1
 
 #include "G4VEmModel.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4Gamma.hh"
 
-class G4DataVector;
+class G4ParticleChangeForLoss;
 
 class G4KleinNishinaCompton : public G4VEmModel
 {
@@ -66,21 +64,13 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  virtual G4bool IsInCharge(const G4ParticleDefinition*);
-
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
-                                      G4double& kinEnergy, 
-                                      G4double& Z, 
-                                      G4double& A, 
-                                      G4double  cut,
-                                      G4double  emax);
-
-  virtual G4DynamicParticle* SampleSecondary(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double maxEnergy);
+                                      G4double kinEnergy, 
+                                      G4double Z, 
+                                      G4double A, 
+                                      G4double cut,
+                                      G4double emax);
 
   virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
@@ -88,35 +78,17 @@ public:
                                       G4double tmin,
                                       G4double maxEnergy);
 
-
 private:
 
   // hide assignment operator
   G4KleinNishinaCompton & operator=(const  G4KleinNishinaCompton &right);
   G4KleinNishinaCompton(const  G4KleinNishinaCompton&);
 
-  G4ParticleDefinition* theGamma;
-  G4ParticleDefinition* theElectron;
+  G4ParticleDefinition*     theGamma;
+  G4ParticleDefinition*     theElectron;
+  G4ParticleChangeForLoss*  fParticleChange;
 
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4bool G4KleinNishinaCompton::IsInCharge(const G4ParticleDefinition* p)
-{
-  return (p == G4Gamma::Gamma());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4DynamicParticle* G4KleinNishinaCompton::SampleSecondary(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double,
-                                      G4double)
-{
-  return 0;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

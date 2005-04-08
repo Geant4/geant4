@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ComptonScattering70.cc,v 1.2 2005-03-17 20:16:43 vnivanch Exp $
+// $Id: G4ComptonScattering70.cc,v 1.3 2005-04-08 12:39:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,9 +84,7 @@ void G4ComptonScattering70::InitialiseProcess(const G4ParticleDefinition*)
   if(!isInitialised) {
     isInitialised = true;
     //    SetVerboseLevel(1);
-    SetKillPrimaryFlag(false);
     SetBuildTableFlag(true);
-    SetIntegral(false);
     SetSecondaryParticle(G4Electron::Electron());
     G4double emin = MinKinEnergy();
     G4double emax = MaxKinEnergy();
@@ -103,7 +101,8 @@ void G4ComptonScattering70::PrintInfoDefinition()
 {
   G4VEmProcess::PrintInfoDefinition();
 
-  G4cout << "      Total cross sections has a good parametrisation.from 10 KeV to (100/Z) GeV" << G4endl;
+  G4cout << "      Total cross sections has a good parametrisation.from 10 KeV to (100/Z) GeV" 
+         << G4endl;
   G4cout << "      Sampling according " << model->GetName() << " model" << G4endl;
                      
 }         

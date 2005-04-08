@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaCompton.cc,v 1.2 2005-03-17 20:16:43 vnivanch Exp $
+// $Id: G4KleinNishinaCompton.cc,v 1.3 2005-04-08 12:39:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -47,8 +47,10 @@
 
 #include "G4KleinNishinaCompton.hh"
 #include "G4Electron.hh"
+#include "G4Gamma.hh"
 #include "Randomize.hh"
 #include "G4DataVector.hh"
+#include "G4ParticleChangeForLoss.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -71,14 +73,19 @@ G4KleinNishinaCompton::~G4KleinNishinaCompton()
 
 void G4KleinNishinaCompton::Initialise(const G4ParticleDefinition*,
                                        const G4DataVector&)
-{}
+{
+  if(pParticleChange)
+    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
+  else
+    fParticleChange = new G4ParticleChangeForLoss();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4KleinNishinaCompton::ComputeCrossSectionPerAtom(
                                        const G4ParticleDefinition*,
-                                             G4double& GammaEnergy,
-                                             G4double& Z, G4double&,
+                                             G4double GammaEnergy,
+                                             G4double Z, G4double,
                                              G4double, G4double)
 {
   G4double CrossSection = 0.0 ;
@@ -180,10 +187,13 @@ std::vector<G4DynamicParticle*>* G4KleinNishinaCompton::SampleSecondaries(
   G4ThreeVector gamDirection1 ( dirx,diry,dirz );
   gamDirection1.rotateUz(gamDirection0);
   G4double gamEnergy1 = epsilon*gamEnergy0;
-  G4DynamicParticle* newg = new G4DynamicParticle(theGamma,gamDirection1,gamEnergy1);
-
+  fParticleChange->SetProposedKineticEnergy(gamEnergy1);
+  if(gamEnergy1 > DBL_MIN) 
+    fParticleChange->SetProposedMomentumDirection(gamDirection1);
+  else 
+    fParticleChange->ProposeTrackStatus(fStopAndKill);
+  
   std::vector<G4DynamicParticle*>* fvect = new std::vector<G4DynamicParticle*>;
-  fvect->push_back(newg);
  
   //
   // kinematic of the scattered electron

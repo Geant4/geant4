@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisation.hh,v 1.29 2005-03-28 23:07:54 vnivanch Exp $
+// $Id: G4hIonisation.hh,v 1.30 2005-04-08 12:39:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -57,6 +57,7 @@
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -93,19 +94,19 @@ public:
   G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
                                     const G4Material*, G4double cut);
 
+  // Print out of the class parameters
+  void PrintInfo();
+
+protected:
+
   std::vector<G4DynamicParticle*>*  SecondariesPostStep(
                                    G4VEmModel*,
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle*,
-                                   G4double);
-
-  void PrintInfoDefinition();
-  // Print out of the class parameters
-
-protected:
+                                   G4double&);
 
   void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-                                           const G4ParticleDefinition*);
+				   const G4ParticleDefinition*);
 
   G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle);
 
@@ -167,7 +168,7 @@ inline std::vector<G4DynamicParticle*>* G4hIonisation::SecondariesPostStep(
                                                   G4VEmModel* model,
                                             const G4MaterialCutsCouple* couple,
                                             const G4DynamicParticle* dp,
-                                                  G4double tcut)
+                                                  G4double& tcut)
 {
   return model->SampleSecondaries(couple, dp, tcut);
 }

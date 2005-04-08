@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation70.hh,v 1.5 2005-03-16 12:12:39 vnivanch Exp $
+// $Id: G4eplusAnnihilation70.hh,v 1.6 2005-04-08 12:39:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,6 +37,7 @@
 // Modifications:
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 15-03-05 Update interface according to changings in G4VEmProcess (V.Ivantchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 //
 // Class Description:
@@ -52,6 +53,7 @@
 
 #include "G4VEmProcess.hh"
 #include "G4Positron.hh"
+#include "G4VEmModel.hh"
 
 class G4eplusAnnihilation70 : public G4VEmProcess
 {
@@ -73,11 +75,10 @@ public:
                              G4ForceCondition* condition
                             );
 
-  void PrintInfoDefinition();
   // Print out of the class parameters
+  void PrintInfo();
 
   G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
-
 
 protected:
 
@@ -86,8 +87,7 @@ protected:
   virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
                                    G4VEmModel*,
                              const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*, 
-                                   G4double&);
+                             const G4DynamicParticle*);
 
 private:
 
@@ -118,13 +118,10 @@ inline G4double G4eplusAnnihilation70::AtRestGetPhysicalInteractionLength(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4VEmModel.hh"
-
 inline std::vector<G4DynamicParticle*>* G4eplusAnnihilation70::SecondariesPostStep(
                                                   G4VEmModel* model,
                                             const G4MaterialCutsCouple* couple,
-                                            const G4DynamicParticle* dp,
-                                                  G4double&)
+                                            const G4DynamicParticle* dp)
 {
   fParticleChange.ProposeTrackStatus(fStopAndKill);
   return model->SampleSecondaries(couple, dp);

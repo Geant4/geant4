@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.14 2005-03-14 18:37:24 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.15 2005-04-08 12:40:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,6 +37,7 @@
 // Modifications:
 // 12.09.2004 Add verbosity (V.Ivanchenko)
 // 17.11.2004 Change signature of methods, add new methods (V.Ivanchenko)
+// 08.04.2005 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -337,11 +338,11 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
       } else {
         res = currentModel->ComputeDEDX(currentCouple, p, kinEnergy, cut);
       }
-      if(isIon && currentModel->HighEnergyLimit(p) > 100.*MeV) 
+      if(isIon && currentModel->HighEnergyLimit() > 100.*MeV) 
         res += corr->HighOrderCorrections(p,mat,kinEnergy);
 
       // emulate boundary region for different parameterisations
-      G4double eth = currentModel->LowEnergyLimit(p);
+      G4double eth = currentModel->LowEnergyLimit();
       if(eth > 0.05*MeV && eth < 10.*MeV && escaled > eth) {
         G4double res1 = 0.0;
         if(baseParticle) {

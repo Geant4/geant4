@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.2 2004-12-01 19:37:14 vnivanch Exp $
+// $Id: G4MscModel.cc,v 1.3 2005-04-08 12:39:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -105,8 +105,6 @@ G4MscModel::G4MscModel(G4double& m_dtrl, G4double& m_NuclCorrPar,
   factail(m_factail),
   samplez(m_samplez)
 {
-  highKinEnergy = 100.0*TeV;
-  lowKinEnergy  = 0.1*keV;
   stepmin       = 1.e-6*mm;
   currentRange  = 0. ;
 }
@@ -116,17 +114,10 @@ G4MscModel::G4MscModel(G4double& m_dtrl, G4double& m_NuclCorrPar,
 G4MscModel::~G4MscModel()
 {}
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4bool G4MscModel::IsInCharge(const G4ParticleDefinition* p)
-{
-  return (p->GetPDGCharge() != 0.0);
-}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4MscModel::Initialise(const G4ParticleDefinition* p,
-                              const G4DataVector&)
+			    const G4DataVector&)
 {
   // set values of some data members
   sigmafactor = twopi*classic_electr_radius*classic_electr_radius;
@@ -140,10 +131,10 @@ void G4MscModel::Initialise(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4MscModel::CrossSection(const G4MaterialCutsCouple* couple,
-                                    const G4ParticleDefinition* p,
-                                          G4double kineticEnergy,
-                                          G4double,
-                                          G4double)
+				  const G4ParticleDefinition* p,
+				  G4double kineticEnergy,
+				  G4double,
+				  G4double)
 {
   const G4Material* material = couple->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector();

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.hh,v 1.10 2005-03-28 23:07:54 vnivanch Exp $
+// $Id: G4MollerBhabhaModel.hh,v 1.11 2005-04-08 12:39:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,12 +54,15 @@
 
 #include "G4VEmModel.hh"
 
+class G4ParticleChangeForLoss;
+
 class G4MollerBhabhaModel : public G4VEmModel
 {
 
 public:
 
-  G4MollerBhabhaModel(const G4ParticleDefinition* p = 0, const G4String& nam = "MollerBhabha");
+  G4MollerBhabhaModel(const G4ParticleDefinition* p = 0, 
+		      const G4String& nam = "MollerBhabha");
 
   virtual ~G4MollerBhabhaModel();
 
@@ -67,8 +70,6 @@ public:
 
   G4double MinEnergyCut(const G4ParticleDefinition*,
                         const G4MaterialCutsCouple*);
-
-  G4bool IsInCharge(const G4ParticleDefinition*);
 
   G4double ComputeDEDX(const G4MaterialCutsCouple*,
                        const G4ParticleDefinition*,
@@ -81,32 +82,16 @@ public:
                               G4double cutEnergy,
                               G4double maxEnergy);
 
-  G4DynamicParticle* SampleSecondary(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double maxEnergy);
-
   std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double maxEnergy);
 
-  virtual std::vector<G4DynamicParticle*>* PostStepDoIt(
-                                const G4MaterialCutsCouple*,
-                                const G4ParticleDefinition*,
-				G4double& kinEnergy,
-				G4double& edep,
-				G4ThreeVector& direction,
-				G4ThreeVector& polarization,
-				G4double tmin,
-				G4double tmax);
-
 protected:
 
-  virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-                                            G4double kinEnergy);
+  G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
+			      G4double kinEnergy);
 
 private:
 
@@ -117,7 +102,8 @@ private:
   G4MollerBhabhaModel(const  G4MollerBhabhaModel&);
 
   const G4ParticleDefinition* particle;
-  G4ParticleDefinition* theElectron;
+  G4ParticleDefinition*       theElectron;
+  G4ParticleChangeForLoss*    fParticleChange;
   G4double twoln10;
   G4double lowLimit;
   G4bool   isElectron;

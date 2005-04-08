@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToTwoGammaModel.cc,v 1.4 2004-12-01 19:37:15 vnivanch Exp $
+// $Id: G4eeToTwoGammaModel.cc,v 1.5 2005-04-08 12:39:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,6 +35,7 @@
 // Creation date: 02.08.2004
 //
 // Modifications:
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 //
 // Class Description:
@@ -74,8 +75,6 @@ using namespace std;
 G4eeToTwoGammaModel::G4eeToTwoGammaModel(const G4ParticleDefinition*,
                                          const G4String& nam)
   : G4VEmModel(nam),
-  highKinEnergy(10.*TeV),
-  lowKinEnergy(0.1*keV),
   pi_rcl2(pi*classic_electr_radius*classic_electr_radius)
 {
 }
@@ -87,31 +86,10 @@ G4eeToTwoGammaModel::~G4eeToTwoGammaModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4eeToTwoGammaModel::HighEnergyLimit(const G4ParticleDefinition*)
-{
-  return highKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4eeToTwoGammaModel::LowEnergyLimit(const G4ParticleDefinition*)
-{
-  return lowKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 G4double G4eeToTwoGammaModel::MinEnergyCut(const G4ParticleDefinition*,
                                            const G4MaterialCutsCouple*)
 {
   return 0.0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4bool G4eeToTwoGammaModel::IsInCharge(const G4ParticleDefinition* p)
-{
-  return (p == G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -152,17 +130,6 @@ G4double G4eeToTwoGammaModel::CrossSection(const G4MaterialCutsCouple* couple,
   G4double cross = pi_rcl2*eDensity*((gamma2+4*gam+1.)*log(gam+bg) - (gam+3.)*bg)
                  / (bg2*(gam+1.));
   return cross;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4DynamicParticle* G4eeToTwoGammaModel::SampleSecondary(
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*,
-                                   G4double,
-                                   G4double)
-{
-  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

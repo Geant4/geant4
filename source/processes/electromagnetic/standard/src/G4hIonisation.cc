@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.55 2005-03-28 23:07:54 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.56 2005-04-08 12:39:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -93,7 +93,6 @@ G4hIonisation::G4hIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
     theParticle(0),
     theBaseParticle(0),
-    subCutoff(false),
     isInitialised(false)
 {
   SetDEDXBinning(120);
@@ -128,7 +127,6 @@ void G4hIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part
   mass  = theParticle->GetPDGMass();
   ratio = electron_mass_c2/mass;
 
-  G4double massFactor = mass/proton_mass_c2;
   G4VEmModel* em = new G4BraggModel();
   em->SetLowEnergyLimit(0.1*keV);
   eth = 2.0*MeV*mass/proton_mass_c2;
@@ -149,10 +147,8 @@ void G4hIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4hIonisation::PrintInfoDefinition()
+void G4hIonisation::PrintInfo()
 {
-  G4VEnergyLossProcess::PrintInfoDefinition();
-
   G4cout << "      Scaling relation is used to proton dE/dx and range"
          << G4endl
          << "      Bether-Bloch model for Escaled > " << eth << " MeV, ICRU49 "
