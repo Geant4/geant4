@@ -99,6 +99,7 @@ void StatAccepTestAnalysis::init() {
 
   if ( tuple ) tuple->reset();
   longitudinalProfile.clear();
+  beamEnergy  = 0.0;
   sumEdepAct  = 0.0;
   sumEdepAct2 = 0.0;
   sumEdepTot  = 0.0;
@@ -119,6 +120,7 @@ void StatAccepTestAnalysis::init() {
     sumR2.push_back( 0.0 );
   } 
   numberOfEvents = 0;
+  vecEvis.clear();
 }                       
 
 
@@ -174,6 +176,7 @@ void StatAccepTestAnalysis::finish() {
   // only for these two variables.
 
   // Print results. 
+  G4cout << " Beam energy [MeV] = " << beamEnergy << G4endl; 
   G4double n = static_cast< G4double >( numberOfEvents );
   // G4cout << " n=" << n << G4endl;                             //***DEBUG***
   double sum, sum2, mu, sigma, mu_sigma;
@@ -184,6 +187,7 @@ void StatAccepTestAnalysis::finish() {
   mu_sigma = sigma / sqrt( n );
   G4cout << " Average <E> [MeV] deposited in all active layers = " 
          << mu << " +/- " << mu_sigma << G4endl;
+  double mu_Evis = mu;  // For later usage.
   sum  = sumEdepTot;
   sum2 = sumEdepTot2;
   mu       = sum / n;
@@ -240,6 +244,33 @@ void StatAccepTestAnalysis::finish() {
   // // // 					       transverseProfileHisto->binMean( iBinR ) );
   // // // }
 
+  // Print information useful for the linearity of the energy response,
+  // energy resolutio, e/pi .
+  // Because non-gaussian distribution of the visible energy (i.e. the
+  // sum of the deposited energies in all active layers) are expected
+  // for a non-compensating calorimeter, it is not possible to use the
+  //  sigma  of the gaussian fit as estimator of the width of the
+  // distribution. On the other hand, the  rms  is not appropriate as
+  // estimator of the energy resolution, because it weighs too much the
+  // tails of the distribution (because of the square of the deviation
+  // of a value from the average). A more appropriate estimator is the
+  // "normalized deviation", i.e. the average of the absolute value of
+  // the deviation from the mean (so each value has the same weight,
+  // regardless whether it is in the central region or in the tail),
+  // normalized in such a way to coincide with  sigma  in the case of
+  // a perfect gaussian distribution.
+  G4double width_Evis = 0.0;
+  for ( std::vector< G4double >::const_iterator cit = vecEvis.begin();
+	cit != vecEvis.end() ; ++cit ) {
+    width_Evis += fabs( *cit - mu_Evis );
+  }
+  width_Evis *= sqrt( 3.141592654/2.0 ) / n ;
+  G4cout << " Visible energy information [MeV] " << G4endl; 
+  G4cout << "\t mu_Evis    = " << mu_Evis << G4endl
+         << "\t sigma_Evis = " << width_Evis << G4endl
+         << "\t energy resolution = " << width_Evis/mu_Evis << G4endl
+         << "\t sampling fraction = " << mu_Evis/beamEnergy << G4endl;
+
   if ( tree ) tree->commit();
 }
 
@@ -248,6 +279,7 @@ void StatAccepTestAnalysis::fillNtuple( float incidentParticleId,
 					float incidentParticleEnergy, 
 					float totalEnergyDepositedInActiveLayers,
 					float totalEnergyDepositedInCalorimeter ) {
+  beamEnergy = incidentParticleEnergy;
   if (tuple) {
     // G4cout << " StatAccepTestAnalysis::fillNtuple : DEBUG Info " << G4endl
     //        << "\t incidentParticleId = " << incidentParticleId << G4endl
@@ -318,6 +350,11 @@ void StatAccepTestAnalysis::fillNtuple( float incidentParticleId,
       //       << G4endl; //***DEBUG***
     }
   }
+
+  // Store information of the visible energy, for later computing
+  // of the energy resolution.
+  vecEvis.push_back( totalEnergyDepositedInActiveLayers );
+
 }
 
 

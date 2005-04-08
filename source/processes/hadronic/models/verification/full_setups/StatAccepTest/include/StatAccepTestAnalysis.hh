@@ -77,6 +77,7 @@ private:
   // each active layer, and in each radius bin, we need to collect 
   // the sum of the energy deposits and the sum of the square of 
   // energy deposits.
+  G4double beamEnergy;
   G4double sumEdepAct, sumEdepAct2;
   G4double sumEdepTot, sumEdepTot2;
   std::vector< G4double > sumL;
@@ -84,6 +85,15 @@ private:
   std::vector< G4double > sumR;
   std::vector< G4double > sumR2;
 
+  // Due to the non-gaussian visible energy distribution, the width 
+  // of it cannot be estimated as the sigma of the gaussian fit; on
+  // the other hand, the rms is not appropriate because it weights 
+  // too much the tails. A better estimate would be to consider the
+  // "normalized deviation". To calculate it, we need to keep all
+  // the values of EdepAct in a vector.
+  std::vector< G4double > vecEvis;
+
+  // Summary histograms for the longitudinal and transverse shower profiles. 
   AIDA::IHistogram1D* longitudinalProfileHisto;
   AIDA::IHistogram1D* transverseProfileHisto;
 

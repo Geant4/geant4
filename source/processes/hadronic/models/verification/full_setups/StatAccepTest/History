@@ -1,6 +1,11 @@
                  History file
                  ------------
 
+8-Apr-2005 - A.Ribon (statAccepTest-V07-00-03)
+- Added information useful to extract the response,
+  energy resolution, and e/pi.
+
+
 7-Apr-2005 - A.Ribon (statAccepTest-V07-00-02)
 - Included summary histograms for the longitudinal 
   and transverse shower profiles.
