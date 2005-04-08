@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.hh,v 1.24 2004-11-10 08:49:09 vnivanch Exp $
+// $Id: G4MuBremsstrahlung.hh,v 1.25 2005-04-08 15:18:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -49,6 +49,7 @@
 // 10-02-04 Add lowestKinEnergy (V.Ivanchenko)
 // 17-08-04 Rename the process "Mu" -> "mu" (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -83,31 +84,25 @@ public:
 
   G4bool IsApplicable(const G4ParticleDefinition& p);
 
-  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
-                                    const G4Material*, G4double cut);
+  G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
+			    const G4Material*, 
+			    G4double cut);
 
-  virtual std::vector<G4Track*>* SecondariesAlongStep(
-                             const G4Step&,
-			           G4double&,
-			           G4double&,
-                                   G4double&);
+  std::vector<G4DynamicParticle*>* SecondariesPostStep( 
+                            G4VEmModel*,
+			    const G4MaterialCutsCouple*,
+			    const G4DynamicParticle*,
+			    G4double& tcut);
 
-  virtual void SecondariesPostStep(
-                                   G4VEmModel*,
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*,
-                                   G4double&,
-                                   G4double&);
-
-  void PrintInfoDefinition();
   // Print out of the class parameters
+  void PrintInfo();
 
 protected:
 
-  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-                                           const G4ParticleDefinition*);
+  void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+				   const G4ParticleDefinition*);
 
-  virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle);
+  G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle);
 
 private:
 
@@ -132,14 +127,6 @@ inline G4bool G4MuBremsstrahlung::IsApplicable(const G4ParticleDefinition& p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline std::vector<G4Track*>* G4MuBremsstrahlung::SecondariesAlongStep(
-                             const G4Step&, G4double&, G4double&, G4double&)
-{
-  return 0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline G4double G4MuBremsstrahlung::MinPrimaryEnergy(const G4ParticleDefinition*,
                                                      const G4Material*,
                                                            G4double)
@@ -156,17 +143,13 @@ inline G4double G4MuBremsstrahlung::MaxSecondaryEnergy(const G4DynamicParticle* 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4MuBremsstrahlung::SecondariesPostStep(
-                                                       G4VEmModel* model,
-                                                 const G4MaterialCutsCouple* couple,
-                                                 const G4DynamicParticle* dp,
-                                                       G4double& tcut,
-                                                       G4double& kinEnergy)
+inline std::vector<G4DynamicParticle*>* G4MuBremsstrahlung::SecondariesPostStep(
+						    G4VEmModel* model,
+						    const G4MaterialCutsCouple* couple,
+						    const G4DynamicParticle* dp,
+						    G4double& tcut)
 {
-  G4DynamicParticle* gamma = model->SampleSecondary(couple, dp, tcut, kinEnergy);
-  fParticleChange.SetNumberOfSecondaries(1);
-  fParticleChange.AddSecondary(gamma);
-  kinEnergy -= gamma->GetKineticEnergy();
+  return model->SampleSecondaries(couple, dp, tcut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

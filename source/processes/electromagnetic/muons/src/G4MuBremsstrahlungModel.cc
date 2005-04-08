@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.cc,v 1.13 2004-12-02 08:20:38 vnivanch Exp $
+// $Id: G4MuBremsstrahlungModel.cc,v 1.14 2005-04-08 15:18:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,6 +42,7 @@
 // 27-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
 // 10-02-04 Add lowestKinEnergy (V.Ivanchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 
 //
@@ -62,6 +63,7 @@
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4ParticleChangeForLoss.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -78,8 +80,6 @@ using namespace std;
 G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition*,
                                                  const G4String& nam)
   : G4VEmModel(nam),
-  highKinEnergy(100.*TeV),
-  lowKinEnergy(1.0*keV),
   lowestKinEnergy(1.0*GeV),
   minThreshold(1.0*keV),
   nzdat(5),
@@ -87,7 +87,9 @@ G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition*,
   NBIN(1000),
   cutFixed(0.98*keV),
   samplingTablesAreFilled(false)
-{}
+{
+  highKinEnergy = HighEnergyLimit();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -103,20 +105,6 @@ G4MuBremsstrahlungModel::~G4MuBremsstrahlungModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MuBremsstrahlungModel::HighEnergyLimit(const G4ParticleDefinition*)
-{
-  return highKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4MuBremsstrahlungModel::LowEnergyLimit(const G4ParticleDefinition*)
-{
-  return lowKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 G4double G4MuBremsstrahlungModel::MinEnergyCut(const G4ParticleDefinition*,
                                                const G4MaterialCutsCouple*)
 {
@@ -125,16 +113,11 @@ G4double G4MuBremsstrahlungModel::MinEnergyCut(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool G4MuBremsstrahlungModel::IsInCharge(const G4ParticleDefinition* p)
-{
-  return (p == G4MuonMinus::MuonMinus() || p == G4MuonPlus::MuonPlus());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition*,
                                          const G4DataVector& cuts)
 {
+  theGamma = G4Gamma::Gamma();
+
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
@@ -153,7 +136,10 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition*,
     partialSumSigma.push_back(dv);
   }
   if(!samplingTablesAreFilled) MakeSamplingTables();
-
+  if(pParticleChange)
+    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
+  else
+    fParticleChange = new G4ParticleChangeForLoss();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -462,13 +448,13 @@ void G4MuBremsstrahlungModel::MakeSamplingTables()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4DynamicParticle* G4MuBremsstrahlungModel::SampleSecondary(
+vector<G4DynamicParticle*>* G4MuBremsstrahlungModel::SampleSecondaries(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp,
                                    G4double minEnergy,
                                    G4double maxEnergy)
 {
-  G4double kineticEnergy     = dp->GetKineticEnergy();
+  G4double kineticEnergy = dp->GetKineticEnergy();
   // check against insufficient energy
   G4double tmax = min(kineticEnergy, maxEnergy);
   G4double tmin = min(tmax, minEnergy);
@@ -564,24 +550,13 @@ G4DynamicParticle* G4MuBremsstrahlungModel::SampleSecondary(
   G4ThreeVector GammaDirection ( dirx, diry, dirz);
   GammaDirection.rotateUz(ParticleDirection);
 
-  G4DynamicParticle* aGamma = new G4DynamicParticle();
-  aGamma->SetDefinition(G4Gamma::Gamma());
-  aGamma->SetKineticEnergy(GammaEnergy);
-  aGamma->SetMomentumDirection(GammaDirection);
+  // primary change
+  kineticEnergy -= GammaEnergy;
+  fParticleChange->SetProposedKineticEnergy(kineticEnergy);
 
-  return aGamma;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-vector<G4DynamicParticle*>* G4MuBremsstrahlungModel::SampleSecondaries(
-                             const G4MaterialCutsCouple* couple,
-                             const G4DynamicParticle* dp,
-                                   G4double tmin,
-                                   G4double maxEnergy)
-{
+  // save secondary
+  G4DynamicParticle* aGamma = new G4DynamicParticle(theGamma,GammaDirection,GammaEnergy);
   vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
-  G4DynamicParticle* aGamma = SampleSecondary(couple,dp,tmin,maxEnergy);
   vdp->push_back(aGamma);
 
   return vdp;

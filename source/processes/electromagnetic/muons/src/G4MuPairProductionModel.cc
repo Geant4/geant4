@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.21 2004-12-02 08:20:38 vnivanch Exp $
+// $Id: G4MuPairProductionModel.cc,v 1.22 2005-04-08 15:18:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -49,6 +49,7 @@
 // 28-04-04 For complex materials repeat calculation of max energy for each
 //          material (V.Ivanchenko)
 // 01-11-04 Fix bug in expression inside ComputeDMicroscopicCrossSection (R.Kokoulin)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 
 //
 // Class Description:
@@ -69,6 +70,7 @@
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4ParticleChangeForLoss.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -88,8 +90,6 @@ G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition*,
                                                  const G4String& nam)
   : G4VEmModel(nam),
   minPairEnergy(4.*electron_mass_c2),
-  highKinEnergy(1000000.*TeV),
-  lowKinEnergy(minPairEnergy),
   lowestKinEnergy(1.*GeV),
   factorForCross(4.*fine_structure_const*fine_structure_const
                    *classic_electr_radius*classic_electr_radius/(3.*pi)),
@@ -105,26 +105,14 @@ G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition*,
   ymax(0.),
   dy((ymax-ymin)/nbiny),
   samplingTablesAreFilled(false)
-{}
+{
+  SetLowEnergyLimit(minPairEnergy);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MuPairProductionModel::~G4MuPairProductionModel()
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4MuPairProductionModel::HighEnergyLimit(const G4ParticleDefinition*)
-{
-  return highKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4MuPairProductionModel::LowEnergyLimit(const G4ParticleDefinition*)
-{
-  return lowKinEnergy;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -136,17 +124,18 @@ G4double G4MuPairProductionModel::MinEnergyCut(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool G4MuPairProductionModel::IsInCharge(const G4ParticleDefinition* p)
-{
-  return (p == G4MuonMinus::MuonMinus() || p == G4MuonPlus::MuonPlus());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4MuPairProductionModel::Initialise(const G4ParticleDefinition*,
                                          const G4DataVector&)
 { 
   if (!samplingTablesAreFilled) MakeSamplingTables();
+
+  theElectron = G4Electron::Electron();
+  thePositron = G4Positron::Positron();
+
+  if(pParticleChange)
+    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
+  else
+    fParticleChange = new G4ParticleChangeForLoss();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -444,17 +433,6 @@ void G4MuPairProductionModel::MakeSamplingTables()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4DynamicParticle* G4MuPairProductionModel::SampleSecondary(
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*,
-                                   G4double,
-                                   G4double)
-{
-  return 0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* aDynamicParticle,
@@ -543,7 +521,7 @@ vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
   ElectDirection.rotateUz(ParticleDirection);
 
   // create G4DynamicParticle object for the particle1
-  G4DynamicParticle* aParticle1= new G4DynamicParticle(G4Electron::Electron(),
+  G4DynamicParticle* aParticle1= new G4DynamicParticle(theElectron,
                                                        ElectDirection,
 						       ElectKineEnergy);
 
@@ -553,10 +531,13 @@ vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
   PositDirection.rotateUz(ParticleDirection);
 
   // create G4DynamicParticle object for the particle2
-  G4DynamicParticle* aParticle2= new G4DynamicParticle(G4Positron::Positron(),
+  G4DynamicParticle* aParticle2= new G4DynamicParticle(thePositron,
                                                        PositDirection,
 						       PositKineEnergy);
 
+  // primary change
+  kineticEnergy -= (ElectKineEnergy + PositKineEnergy);
+  fParticleChange->SetProposedKineticEnergy(kineticEnergy);
 
   vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
   vdp->push_back(aParticle1);

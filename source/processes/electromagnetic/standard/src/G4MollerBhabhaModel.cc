@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc,v 1.18 2005-04-08 12:39:58 vnivanch Exp $
+// $Id: G4MollerBhabhaModel.cc,v 1.19 2005-04-08 15:18:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -351,7 +351,8 @@ std::vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondaries(
   fParticleChange->SetProposedMomentumDirection(direction);
 
   // create G4DynamicParticle object for delta ray
-  G4DynamicParticle* delta = new G4DynamicParticle(theElectron,deltaDirection,deltaKinEnergy);
+  G4DynamicParticle* delta = new G4DynamicParticle(theElectron,
+						   deltaDirection,deltaKinEnergy);
   vdp->push_back(delta);
   return vdp;
 }
