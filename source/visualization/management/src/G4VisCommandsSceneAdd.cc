@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.51 2005-03-16 17:17:10 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.52 2005-04-10 21:04:39 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -605,7 +605,7 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   G4VisAttributes visAtts(G4Colour(red, green, blue));
   visAtts.SetForceSolid(true);         // Always solid.
 
-  G4Logo* logo = new G4Logo(height,visAtts);
+  G4Logo* logo = new G4Logo(height,visAtts,fpVisManager);
   G4VModel* model =
     new G4CallbackModel<G4VisCommandSceneAddLogo::G4Logo>(logo);
   model->SetGlobalDescription("G4Logo");
@@ -650,9 +650,11 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
 }
 
 G4VisCommandSceneAddLogo::G4Logo::G4Logo
-(G4double height,const G4VisAttributes& visAtts):
+(G4double height, const G4VisAttributes& visAtts, G4VisManager* pVisManager):
   fHeight(height),
-  fVisAtts(visAtts) {
+  fVisAtts(visAtts),
+  fpVisManager(pVisManager)
+ {
   const G4double& h =  height;
   const G4double h2  = 0.5 * h;   // Half height.
   const G4double ri  = 0.25 * h;  // Inner radius.
@@ -720,8 +722,8 @@ G4VisCommandSceneAddLogo::G4Logo::~G4Logo() {
 
 void G4VisCommandSceneAddLogo::G4Logo::operator()
   (const G4Transform3D& transform) {
-  G4VisCommandSceneAddLogo::fpVisManager->Draw(*fpG,transform);
-  G4VisCommandSceneAddLogo::fpVisManager->Draw(*fp4,transform);
+  fpVisManager->Draw(*fpG,transform);
+  fpVisManager->Draw(*fp4,transform);
 }
 
 ////////////// /vis/scene/add/scale //////////////////////////////////

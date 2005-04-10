@@ -1,4 +1,4 @@
-$Id: History,v 1.285 2005-03-16 17:56:53 allison Exp $
+$Id: History,v 1.286 2005-04-10 21:04:39 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+10th April 2005  John Allison  (visman-V07-00-00)
+- G4VisCommandsSceneAdd.cc: 2nd attempt to fix access to fpVisManager
+  from nested class for SUN.
 
 16th March 2005  John Allison  (vis-V07-00-13)
 - G4VisCommandsSceneAdd.cc: fixed access to fpVisManager from nested class.
