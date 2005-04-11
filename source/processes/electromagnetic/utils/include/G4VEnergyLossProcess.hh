@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.36 2005-04-08 12:40:07 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.37 2005-04-11 10:40:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -56,8 +56,9 @@
 // 06-08-04 Clear up names of member functions (V.Ivanchenko)
 // 27-08-04 Add NeedBuildTables method (V.Ivanchneko)
 // 09-09-04 Bug fix for the integral mode with 2 peaks (V.Ivanchneko)
-// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
-// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivanchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivanchenko)
+// 11-04-05 Use MaxSecondaryEnergy from a model (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -119,11 +120,6 @@ protected:
                              const G4DynamicParticle*,
                                    G4double& tcut) = 0;
 
-  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
-                                    const G4Material*, G4double cut) = 0;
-
-  virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dp) = 0;
-
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
                                            const G4ParticleDefinition*) = 0;
 
@@ -131,6 +127,9 @@ protected:
   // Methods with standard implementation; may be overwritten if needed 
   //------------------------------------------------------------------------
 protected:
+
+  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
+                                    const G4Material*, G4double cut);
 
   virtual void CorrectionsAlongStep(
                              const G4MaterialCutsCouple*,
@@ -161,6 +160,8 @@ public:
   G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
 
   G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+
+  G4double SampleRange();
 
   G4PhysicsTable* BuildDEDXTable();
   G4PhysicsTable* BuildDEDXTableForPreciseRange();
@@ -548,10 +549,14 @@ inline G4double G4VEnergyLossProcess::GetDEDXDispersion(
                                         G4double length)
 {
   DefineMaterial(couple);
-  G4double tmax = MaxSecondaryEnergy(dp);
+  G4double ekin = dp->GetKineticEnergy();
+  G4VEmModel* currentModel = SelectModel(ekin*massRatio);
+  G4double tmax = currentModel->MaxSecondaryKinEnergy(dp);
   tmax = std::min(tmax,(*theCuts)[currentMaterialIndex]);
-  return modelManager->GetDEDXDispersion(currentMaterial, dp, tmax, length,
-                       currentMaterialIndex);
+  G4double d = 0.0;
+  G4VEmFluctuationModel* fm = currentModel->GetModelOfFluctuations();
+  if(fm) d = fm->Dispersion(currentMaterial,dp,tmax,length);
+  return d;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -635,10 +640,17 @@ inline G4double G4VEnergyLossProcess::GetContinuousStepLimit(const G4Track&,
       x = y + minStepLimit*(1.0 - dRoverRange)*(2.0 - minStepLimit/fRange);
     // G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<<" range= "<<fRange
     //    <<" cMinSt="<<currentMinStep <<" minStepLimit= " << minStepLimit<< G4endl;
-    }
+    } else if (rndmStepFlag) x = SampleRange();
   }
   //G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<<" stepLimit= "<<x<<G4endl;
   return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEnergyLossProcess::SampleRange()
+{
+  return fRange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -650,6 +662,14 @@ inline void G4VEnergyLossProcess::ResetNumberOfInteractionLengthLeft()
   G4VProcess::ResetNumberOfInteractionLengthLeft();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEnergyLossProcess::MinPrimaryEnergy(const G4ParticleDefinition*,
+						       const G4Material*, 
+						       G4double cut)
+{
+  return cut;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

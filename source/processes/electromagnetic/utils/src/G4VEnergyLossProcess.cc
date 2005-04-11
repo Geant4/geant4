@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.51 2005-04-08 12:40:07 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.52 2005-04-11 10:40:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -80,6 +80,7 @@
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 11-03-05 Shift verbose level by 1 (V.Ivantchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 11-04-05 Use MaxSecondaryEnergy from a model (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -653,8 +654,10 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   }
 
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
-  G4double tmax = MaxSecondaryEnergy(dynParticle);
+  G4VEmModel* currentModel = SelectModel(preStepScaledEnergy);
+  G4double tmax = currentModel->MaxSecondaryKinEnergy(dynParticle);
   tmax = std::min(tmax,(*theCuts)[currentMaterialIndex]);
+
   /*
   G4double eloss0 = eloss;
   if(-1 < verboseLevel) {
@@ -668,9 +671,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   // Sample fluctuations
   if (lossFluctuationFlag && eloss + lowestKinEnergy <= preStepKinEnergy) {
 
-    eloss = modelManager->SampleFluctuations(currentMaterial, dynParticle,
-                                       tmax, length, eloss, preStepScaledEnergy,
-				       currentMaterialIndex);
+    G4VEmFluctuationModel* fm = currentModel->GetModelOfFluctuations();
+    if(fm) eloss = fm->SampleFluctuations(currentMaterial,dynParticle,tmax,length,eloss);
   }
   /*
   if(-1 < verboseLevel) {

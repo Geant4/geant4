@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.3 2005-03-28 23:07:54 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.4 2005-04-11 10:40:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,7 @@
 // 27-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
 // 24-03-05 Add G4EmCorrections (V.Ivanchenko)
+// 11-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -63,8 +64,6 @@ using namespace std;
 G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p, const G4String& nam)
   : G4VEmModel(nam),
   particle(0),
-  highKinEnergy(100.*TeV),
-  lowKinEnergy(2.0*MeV),
   twoln10(2.0*log(10.0)),
   bg2lim(0.0169),
   taulim(8.4146e-3),
@@ -78,20 +77,6 @@ G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p, const G4Stri
 
 G4BetheBlochModel::~G4BetheBlochModel()
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
-{
-  if(particle != p) {
-    particle = p;
-    mass = particle->GetPDGMass();
-    spin = particle->GetPDGSpin();
-    G4double q = particle->GetPDGCharge()/eplus;
-    chargeSquare = q*q;
-    ratio = electron_mass_c2/mass;
-  }
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

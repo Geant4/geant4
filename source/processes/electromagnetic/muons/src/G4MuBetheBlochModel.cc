@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.cc,v 1.15 2005-04-08 15:18:12 vnivanch Exp $
+// $Id: G4MuBetheBlochModel.cc,v 1.16 2005-04-11 10:40:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -91,6 +91,7 @@ void G4MuBetheBlochModel::SetParticle(const G4ParticleDefinition* p)
   mass = particle->GetPDGMass();
   massSquare = mass*mass;
   ratio = electron_mass_c2/mass;
+  tlimit = 51.2*GeV*std::pow(proton_mass_c2/mass,0.66667);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

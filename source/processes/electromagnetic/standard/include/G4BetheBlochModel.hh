@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.hh,v 1.2 2005-03-28 23:07:54 vnivanch Exp $
+// $Id: G4BetheBlochModel.hh,v 1.3 2005-04-11 10:40:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,8 @@
 // 13-02-03 Add name (V.Ivanchenko)
 // 12-11-03 Fix for GenericIons (V.Ivanchenko)
 // 24-03-05 Add G4EmCorrections (V.Ivanchenko)
+// 11-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 11-04-04 Move MaxSecondaryEnergy to models (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -108,11 +110,10 @@ private:
   G4ParticleChangeForLoss*    fParticleChange;
 
   G4double mass;
+  G4double tlimit;
   G4double spin;
   G4double chargeSquare;
   G4double ratio;
-  G4double highKinEnergy;
-  G4double lowKinEnergy;
   G4double twoln10;
   G4double bg2lim;
   G4double taulim;
@@ -129,8 +130,22 @@ inline G4double G4BetheBlochModel::MaxSecondaryEnergy(
   G4double tau  = kinEnergy/mass;
   G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
                   (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
+  return std::min(tmax,tlimit);
+}
 
-  return tmax;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
+{
+  if(particle != p) {
+    particle = p;
+    mass = particle->GetPDGMass();
+    spin = particle->GetPDGSpin();
+    G4double q = particle->GetPDGCharge()/eplus;
+    chargeSquare = q*q;
+    ratio = electron_mass_c2/mass;
+    tlimit = 51.2*GeV*std::pow(proton_mass_c2/mass,0.66667);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

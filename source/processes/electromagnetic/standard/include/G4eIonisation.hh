@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisation.hh,v 1.28 2005-04-08 12:39:58 vnivanch Exp $
+// $Id: G4eIonisation.hh,v 1.29 2005-04-11 10:40:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -53,7 +53,7 @@
 // 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
-//
+// 11-04-04 Move MaxSecondaryEnergy to models (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -104,8 +104,6 @@ protected:
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
                                     const G4Material*, G4double cut);
 
-  virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dp);
-
 private:
 
   // hide assignment operator
@@ -124,8 +122,8 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4eIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
-                                                   const G4Material*,
-                                                         G4double cut)
+						const G4Material*,
+						G4double cut)
 {
   G4double x = cut;
   if(isElectron) x += cut;
@@ -138,16 +136,6 @@ inline G4bool G4eIonisation::IsApplicable(const G4ParticleDefinition& p)
 {
   return (&p == G4Electron::Electron() || &p == G4Positron::Positron());
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4eIonisation::MaxSecondaryEnergy(const G4DynamicParticle* dp)
-{
-  G4double tmax = dp->GetKineticEnergy();
-  if(isElectron) tmax *= 0.5;
-  return tmax;
-}
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

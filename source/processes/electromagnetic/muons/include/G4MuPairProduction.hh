@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.hh,v 1.25 2005-04-08 15:18:12 vnivanch Exp $
+// $Id: G4MuPairProduction.hh,v 1.26 2005-04-11 10:40:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -96,8 +96,6 @@ public:
 
 protected:
 
-  G4double MaxSecondaryEnergy(const G4DynamicParticle* dp);
-
   void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 				   const G4ParticleDefinition*);
 
@@ -131,13 +129,6 @@ inline G4double G4MuPairProduction::MinPrimaryEnergy(const G4ParticleDefinition*
                                                            G4double)
 {
   return lowestKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4MuPairProduction::MaxSecondaryEnergy(const G4DynamicParticle* dp)
-{
-  return dp->GetKineticEnergy();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

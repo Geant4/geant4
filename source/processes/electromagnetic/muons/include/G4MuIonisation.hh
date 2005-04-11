@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.hh,v 1.26 2005-04-08 15:18:12 vnivanch Exp $
+// $Id: G4MuIonisation.hh,v 1.27 2005-04-11 10:40:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -110,8 +110,6 @@ protected:
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
                                            const G4ParticleDefinition*);
 
-  virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle);
-
 private:
 
   // hide assignment operator
@@ -147,17 +145,6 @@ inline G4double G4MuIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
   G4double x = 0.5*cut/electron_mass_c2;
   G4double g = x*ratio + std::sqrt((1. + x)*(1. + x*ratio*ratio));
   return mass*(g - 1.0);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4MuIonisation::MaxSecondaryEnergy(const G4DynamicParticle* dynParticle)
-{
-  G4double tau  = dynParticle->GetKineticEnergy()/mass;
-  G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.0)/
-                  (1. + 2.0*(tau + 1.0)*ratio + ratio*ratio);
-
-  return tmax;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

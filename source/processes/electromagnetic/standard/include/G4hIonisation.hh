@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisation.hh,v 1.30 2005-04-08 12:39:58 vnivanch Exp $
+// $Id: G4hIonisation.hh,v 1.31 2005-04-11 10:40:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -58,6 +58,7 @@
 // 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 11-04-04 Move MaxSecondaryEnergy to models (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -108,8 +109,6 @@ protected:
   void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 				   const G4ParticleDefinition*);
 
-  G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle);
-
 private:
 
   // hide assignment operator
@@ -134,8 +133,7 @@ private:
 
 inline G4bool G4hIonisation::IsApplicable(const G4ParticleDefinition& p)
 {
-  return (p.GetPDGCharge() != 0.0 &&
-          p.GetPDGMass() > 10.0*MeV &&
+  return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV &&
 	 !p.IsShortLived());
 }
 
@@ -149,17 +147,6 @@ inline G4double G4hIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
   G4double y = electron_mass_c2/mass;
   G4double g = x*y + std::sqrt((1. + x)*(1. + x*y*y));
   return mass*(g - 1.0);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4hIonisation::MaxSecondaryEnergy(const G4DynamicParticle* dynParticle)
-{
-  G4double gamma= dynParticle->GetKineticEnergy()/mass + 1.0;
-  G4double tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
-                  (1. + 2.0*gamma*ratio + ratio*ratio);
-
-  return tmax;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

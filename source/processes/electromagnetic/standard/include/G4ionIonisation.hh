@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.35 2005-04-08 12:39:58 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.36 2005-04-11 10:40:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -48,6 +48,8 @@
 // 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 11-04-05 Move MaxSecondary energy to model (V.Ivanchneko)
+// 11-04-04 Move MaxSecondaryEnergy to models (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -154,17 +156,6 @@ inline G4double G4ionIonisation::MinPrimaryEnergy(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4ionIonisation::MaxSecondaryEnergy(const G4DynamicParticle* dynParticle)
-{
-  G4double mass  = dynParticle->GetMass();
-  G4double gamma = dynParticle->GetKineticEnergy()/mass + 1.0;
-  G4double tmax  = electron_mass_c2*std::min(2.0*(gamma*gamma - 1.),
-                                             51200.*std::pow(proton_mass_c2/mass,0.66667));
-  return tmax;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 
 inline G4double G4ionIonisation::GetMeanFreePath(const G4Track& track,
                                                        G4double, 
@@ -198,9 +189,8 @@ inline void G4ionIonisation::CorrectionsAlongStep(
     eloss += s*corr->HighOrderCorrections(currentParticle,theMaterial,preKinEnergy);
   else                   
     eloss += s*corr->NuclearDEDX(currentParticle,theMaterial,preKinEnergy - eloss*0.5);
-  preKinEnergy -= eloss;
   fParticleChange.SetProposedCharge(effCharge.EffectiveCharge(currentParticle,
-                                    theMaterial,preKinEnergy));
+                                    theMaterial,preKinEnergy-eloss));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.hh,v 1.25 2005-04-08 15:18:12 vnivanch Exp $
+// $Id: G4MuBremsstrahlung.hh,v 1.26 2005-04-11 10:40:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -102,8 +102,6 @@ protected:
   void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 				   const G4ParticleDefinition*);
 
-  G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle);
-
 private:
 
   G4MuBremsstrahlung & operator=(const G4MuBremsstrahlung &right);
@@ -132,13 +130,6 @@ inline G4double G4MuBremsstrahlung::MinPrimaryEnergy(const G4ParticleDefinition*
                                                            G4double)
 {
   return lowestKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4MuBremsstrahlung::MaxSecondaryEnergy(const G4DynamicParticle* dynParticle)
-{
-  return dynParticle->GetKineticEnergy();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

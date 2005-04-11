@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.hh,v 1.11 2005-04-08 15:18:12 vnivanch Exp $
+// $Id: G4MuBetheBlochModel.hh,v 1.12 2005-04-11 10:40:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -111,6 +111,7 @@ private:
   G4double logLimitKinEnergy;
   G4double mass;
   G4double massSquare;
+  G4double tlimit;
   G4double ratio;
   G4double twoln10;
   G4double bg2lim;
@@ -128,7 +129,7 @@ inline G4double G4MuBetheBlochModel::MaxSecondaryEnergy(
   G4double tau  = kinEnergy/mass;
   G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
                   (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
-  return tmax;
+  return std::min(tmax,tlimit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

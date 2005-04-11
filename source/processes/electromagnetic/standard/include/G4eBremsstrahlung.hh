@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.hh,v 1.29 2005-04-08 12:39:58 vnivanch Exp $
+// $Id: G4eBremsstrahlung.hh,v 1.30 2005-04-11 10:40:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,7 +55,7 @@
 // 04-11-04 add gamma threshold (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
-//
+// 11-04-04 Move MaxSecondaryEnergy to models (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -105,11 +105,6 @@ protected:
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
                                            const G4ParticleDefinition*);
 
-  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
-                                    const G4Material*, G4double cut);
-
-  virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle);
-
 private:
 
   // hide assignment operator
@@ -130,22 +125,6 @@ private:
 inline G4bool G4eBremsstrahlung::IsApplicable(const G4ParticleDefinition& p)
 {
   return (&p == G4Electron::Electron() || &p == G4Positron::Positron());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4eBremsstrahlung::MinPrimaryEnergy(const G4ParticleDefinition*,
-                                                    const G4Material*,
-						          G4double cut)
-{
-  return cut;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4eBremsstrahlung::MaxSecondaryEnergy(const G4DynamicParticle* dynParticle)
-{
-  return dynParticle->GetKineticEnergy();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
