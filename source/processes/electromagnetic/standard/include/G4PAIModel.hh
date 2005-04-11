@@ -192,12 +192,8 @@ inline G4double G4PAIModel::MaxSecondaryEnergy( const G4ParticleDefinition*,
 
 inline  void G4PAIModel::DefineForRegion(const G4Region* r) 
 {
-  //  G4Region* rPAI = r;
-  //  fPAIRegionVector.push_back(rPAI);
   fPAIRegionVector.push_back(r);
 }
-
-
 
 #endif
 

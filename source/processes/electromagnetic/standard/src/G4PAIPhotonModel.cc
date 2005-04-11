@@ -30,6 +30,7 @@
 //
 // 17.08.04 V.Grichine, bug fixed for Tkin<=0 in SampleSecondary
 // 16.08.04 V.Grichine, bug fixed in massRatio for DEDX, CrossSection, SampleSecondary
+// 11.04.05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 
 #include "G4Region.hh"
@@ -51,6 +52,7 @@
 #include "G4Material.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4ParticleChangeForLoss.hh"
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -135,37 +137,12 @@ void G4PAIPhotonModel::SetParticle(const G4ParticleDefinition* p)
   fQc = fMass/fRatio;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
-G4double G4PAIPhotonModel::HighEnergyLimit(const G4ParticleDefinition* p)
-{
-  if(!fParticle) SetParticle(p);
-  return fHighKinEnergy;
-}
-
-///////////////////////////////////////////////////////////////////////////
-
-G4double G4PAIPhotonModel::LowEnergyLimit( const G4ParticleDefinition* p )
-{
-  if(!fParticle) SetParticle(p);
-  return fLowKinEnergy;
-}
-
 ////////////////////////////////////////////////////////////////////////////
 
 G4double G4PAIPhotonModel::MinEnergyCut( const G4ParticleDefinition*,
                                    const G4MaterialCutsCouple*)
 {
-  //  return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
   return 0.0; // any positive cut
-}
-
-////////////////////////////////////////////////////////////////////////////
-
-G4bool G4PAIPhotonModel::IsInCharge( const G4ParticleDefinition* p )
-{
-  if(!fParticle) SetParticle(p);
-  return (p->GetPDGCharge() != 0.0 );
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -174,6 +151,11 @@ void G4PAIPhotonModel::Initialise(const G4ParticleDefinition* p,
                                    const G4DataVector&)
 {
   if(!fParticle) SetParticle(p);
+
+  if(pParticleChange)
+    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
+  else
+    fParticleChange = new G4ParticleChangeForLoss();
 
   const G4ProductionCutsTable* theCoupleTable =
         G4ProductionCutsTable::GetProductionCutsTable();
@@ -744,12 +726,13 @@ G4double G4PAIPhotonModel::CrossSection( const G4MaterialCutsCouple* matCC,
 // be returned as G4Dynamicparticle*.
 //
 
-G4DynamicParticle* 
-G4PAIPhotonModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
-                                   const G4DynamicParticle* dp,
-                                         G4double tmin,
-                                         G4double maxEnergy)
+std::vector<G4DynamicParticle*>*
+G4PAIPhotonModel::SampleSecondaries( const G4MaterialCutsCouple* matCC,
+                                     const G4DynamicParticle* dp,
+                                           G4double tmin,
+                                           G4double maxEnergy)
 {
+  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
   size_t jMat;
   for( jMat = 0 ;jMat < fMaterialCutsCoupleVector.size() ; ++jMat )
   {
@@ -765,13 +748,13 @@ G4PAIPhotonModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
   fdNdxCutPhotonVector  = fdNdxCutPhotonTable[jMat];
   fdNdxCutPlasmonVector = fdNdxCutPlasmonTable[jMat];
 
-  G4double tmax = min(MaxSecondaryEnergy(dp), maxEnergy);
+  G4double tmax = min(MaxSecondaryKinEnergy(dp), maxEnergy);
   if( tmin >= tmax ) 
   {
     G4cout<<"G4PAIPhotonModel::SampleSecondary: tmin >= tmax "<<G4endl;
   }
 
-  G4ThreeVector momentum = dp->GetMomentumDirection();
+  G4ThreeVector direction = dp->GetMomentumDirection();
   G4double particleMass  = dp->GetMass();
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double scaledTkin    = kineticEnergy*proton_mass_c2/particleMass;
@@ -823,7 +806,14 @@ G4PAIPhotonModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
     G4double dirx = sintheta*cos(phi), diry = sintheta*sin(phi), dirz = costheta;
 
     G4ThreeVector deltaDirection(dirx,diry,dirz);
-    deltaDirection.rotateUz(momentum);
+    deltaDirection.rotateUz(direction);
+
+    // primary change
+
+    kineticEnergy -= deltaTkin;
+    G4ThreeVector dir = totalMomentum*direction - deltaTotalMomentum*deltaDirection;
+    direction = dir.unit();
+    fParticleChange->SetProposedMomentumDirection(direction);
 
     // create G4DynamicParticle object for e- delta ray
  
@@ -832,7 +822,6 @@ G4PAIPhotonModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
     deltaRay->SetKineticEnergy( deltaTkin );
     deltaRay->SetMomentumDirection(deltaDirection); 
 
-    return deltaRay;
   }
   else    // secondary 'Cherenkov' photon
   { 
@@ -866,7 +855,10 @@ G4PAIPhotonModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
     G4double dirx = sintheta*cos(phi), diry = sintheta*sin(phi), dirz = costheta;
 
     G4ThreeVector deltaDirection(dirx,diry,dirz);
-    deltaDirection.rotateUz(momentum);
+    deltaDirection.rotateUz(direction);
+
+    // primary change
+    kineticEnergy -= deltaTkin;
 
     // create G4DynamicParticle object for photon ray
  
@@ -875,8 +867,11 @@ G4PAIPhotonModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
     photonRay->SetKineticEnergy( deltaTkin );
     photonRay->SetMomentumDirection(deltaDirection); 
 
-    return photonRay;    
+    vdp->push_back(photonRay);
   }
+
+  fParticleChange->SetProposedKineticEnergy(kineticEnergy);
+  return vdp;
 }
 
 
@@ -989,21 +984,6 @@ G4PAIPhotonModel::GetEnergyTransfer( G4PhysicsTable* pTable, G4int iPlace,
     }
   }
   return energyTransfer ;
-}
-
-
-////////////////////////////////////////////////////////////////////////////
-
-vector<G4DynamicParticle*>* 
-G4PAIPhotonModel::SampleSecondaries( const G4MaterialCutsCouple* couple,
-                               const G4DynamicParticle* dp,
-                                     G4double tmin,
-                                     G4double maxEnergy)
-{
-  vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
-  G4DynamicParticle* delta             = SampleSecondary(couple, dp, tmin, maxEnergy);
-  vdp->push_back(delta);
-  return vdp;
 }
 
 ///////////////////////////////////////////////////////////////////////

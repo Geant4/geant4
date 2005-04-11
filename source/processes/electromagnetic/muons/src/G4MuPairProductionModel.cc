@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.22 2005-04-08 15:18:12 vnivanch Exp $
+// $Id: G4MuPairProductionModel.cc,v 1.23 2005-04-11 08:49:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -536,7 +536,7 @@ vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
 						       PositKineEnergy);
 
   // primary change
-  kineticEnergy -= (ElectKineEnergy + PositKineEnergy);
+  kineticEnergy -= (ElectKineEnergy + PositKineEnergy + 2.0*electron_mass_c2);
   fParticleChange->SetProposedKineticEnergy(kineticEnergy);
 
   vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
