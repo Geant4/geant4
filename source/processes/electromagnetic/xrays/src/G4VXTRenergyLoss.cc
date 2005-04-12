@@ -22,7 +22,7 @@
 //
 //
 
-// $Id: G4VXTRenergyLoss.cc,v 1.14 2004-12-02 08:31:08 vnivanch Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.15 2005-04-12 09:10:55 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -241,7 +241,7 @@ G4Integrator<G4VXTRenergyLoss,G4double(G4VXTRenergyLoss::*)(G4double)> integral;
      }
      G4cout<<iTkin<<"\t"
            <<"fGamma = "<<fGamma<<"\t"  //  <<"  fMaxThetaTR = "<<fMaxThetaTR
-           <<"sumE = "<<energySum      // <<" ; sumA = "<<angleSum
+           <<"sumN = "<<energySum      // <<" ; sumA = "<<angleSum
            <<G4endl ;
      iPlace = iTkin ;
      fEnergyDistrTable->insertAt(iPlace,energyVector) ;

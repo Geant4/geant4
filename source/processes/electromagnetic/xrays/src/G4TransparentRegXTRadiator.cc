@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransparentRegXTRadiator.cc,v 1.1 2005-04-05 08:28:04 grichine Exp $
+// $Id: G4TransparentRegXTRadiator.cc,v 1.2 2005-04-12 09:10:55 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -62,37 +62,49 @@ G4TransparentRegXTRadiator::~G4TransparentRegXTRadiator()
   ;
 }
 
+///////////////////////////////////////////////////////////////////////////
+//
+//
+
 G4double G4TransparentRegXTRadiator::SpectralXTRdEdx(G4double energy)
 {
-  G4double result, sum = 0., tmp, cof1, cof2, cofMin, cofPHC;
+  G4double result, sum = 0., tmp, cof1, cof2, cofMin, cofPHC,aMa, bMb, sigma;
   G4int k, kMax, kMin;
- 
+
+  aMa = fPlateThick*GetPlateLinearPhotoAbs(energy);
+  bMb = fGasThick*GetGasLinearPhotoAbs(energy);
+  sigma = aMa + bMb;
+   
   cofPHC  = 4*pi*hbarc;
   tmp     = (fSigma1 - fSigma2)/cofPHC/energy;  
   cof1    = fPlateThick*tmp;
   cof2    = fGasThick*tmp;
+
   cofMin  =  energy*(fPlateThick + fGasThick)/fGamma/fGamma;
   cofMin += (fPlateThick*fSigma1 + fGasThick*fSigma2)/energy;
   cofMin /= cofPHC;
-  kMin = G4int(cofMin);
 
+  if (fGamma < 1200) kMin = G4int(cofMin);  // 1 ?
+  else               kMin = 1;
 
-  tmp  = 2*sqrt((fPlateThick + fGasThick)*(fPlateThick*fSigma1 + fGasThick*fSigma2));
+  tmp  = (fPlateThick + fGasThick)*energy*fMaxThetaTR;
   tmp /= cofPHC;
-  kMax = G4int(tmp);
 
-  tmp /= fGamma;
+  kMax = kMin + 9; // kMin + G4int(tmp);
 
-  if( G4int(tmp) < kMin ) kMin = G4int(tmp);
+  // tmp /= fGamma;
+  // if( G4int(tmp) < kMin ) kMin = G4int(tmp);
+  // G4cout<<"kMin = "<<kMin<<";    kMax = "<<kMax<<G4endl;
 
   for( k = kMin; k <= kMax; k++ )
   {
-    tmp    = pi*fGasThick*(k - cof1)/(fPlateThick + fGasThick);
-    result = (k-cof1)*(k-cof1)*(k-cof2)*(k-cof2);
-    sum   += sin(tmp)*sin(tmp)*(k-cofMin)/(k-cof1)/result;    
+    tmp    = pi*fPlateThick*(k + cof2)/(fPlateThick + fGasThick);
+    result = (k - cof1)*(k - cof1)*(k + cof2)*(k + cof2);
+    sum   += sin(tmp)*sin(tmp)*abs(k-cofMin)/result;
+    //  G4cout<<"k = "<<k<<";    sum = "<<sum<<G4endl;    
   }
-  result = 4*fPlateNumber*( cof1 + cof2 )*( cof1 + cof2 )*sum/energy;
-
+  result = 4*( cof1 + cof2 )*( cof1 + cof2 )*sum/energy;
+  result *= (1-exp(-fPlateNumber*sigma))/(1-exp(-sigma));  // fPlateNumber;
   return result;
 }
 
