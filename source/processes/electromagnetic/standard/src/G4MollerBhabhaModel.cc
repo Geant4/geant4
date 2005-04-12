@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc,v 1.19 2005-04-08 15:18:25 vnivanch Exp $
+// $Id: G4MollerBhabhaModel.cc,v 1.20 2005-04-12 18:12:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -110,14 +110,15 @@ void G4MollerBhabhaModel::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MollerBhabhaModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
+G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
+					  const G4Material* material,
                                           const G4ParticleDefinition* p,
                                                 G4double kineticEnergy,
                                                 G4double cutEnergy)
 {
   if(!particle) SetParticle(p);
   // calculate the dE/dx due to the ionization by Seltzer-Berger formula
-  const G4Material* material = couple->GetMaterial();
+  
   G4double electronDensity = material->GetElectronDensity();
   G4double Zeff  = electronDensity/material->GetTotNbOfAtomsPerVolume();
   G4double th    = 0.25*sqrt(Zeff)*keV;
@@ -189,7 +190,8 @@ G4double G4MollerBhabhaModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MollerBhabhaModel::CrossSection(const G4MaterialCutsCouple* couple,
+G4double G4MollerBhabhaModel::CrossSectionPerVolume(
+					   const G4Material* material,
                                            const G4ParticleDefinition* p,
                                                  G4double kineticEnergy,
                                                  G4double cutEnergy,
@@ -235,7 +237,7 @@ G4double G4MollerBhabhaModel::CrossSection(const G4MaterialCutsCouple* couple,
             - b1*log(xmax/xmin);
     }
 
-    cross *= twopi_mc2_rcl2*(couple->GetMaterial()->GetElectronDensity())/kineticEnergy;
+    cross *= twopi_mc2_rcl2*(material->GetElectronDensity())/kineticEnergy;
   }
   return cross;
 }

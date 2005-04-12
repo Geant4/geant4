@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.5 2005-04-12 11:20:58 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.6 2005-04-12 18:12:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -249,7 +249,7 @@ vector<G4DynamicParticle*>* G4BetheBlochModel::SampleSecondaries(
 
   // Change kinematics of primary particle
   kineticEnergy       -= deltaKinEnergy;
-  G4ThreeVector finalP = direction*totMomentum - deltaDirection*totMomentum;
+  G4ThreeVector finalP = direction*totMomentum - deltaDirection*deltaMomentum;
   finalP               = finalP.unit();
   
   fParticleChange->SetProposedKineticEnergy(kineticEnergy);

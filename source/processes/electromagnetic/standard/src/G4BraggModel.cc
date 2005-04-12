@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.6 2005-04-11 10:40:47 vnivanch Exp $
+// $Id: G4BraggModel.cc,v 1.7 2005-04-12 18:12:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -139,7 +139,8 @@ G4double G4BraggModel::ComputeDEDXPerVolume(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4BraggModel::CrossSection(const G4MaterialCutsCouple* couple,
+G4double G4BraggModel::CrossSectionPerVolume(
+				    const G4Material* material,
                                     const G4ParticleDefinition* p,
                                           G4double kineticEnergy,
                                           G4double cutEnergy,
@@ -156,8 +157,7 @@ G4double G4BraggModel::CrossSection(const G4MaterialCutsCouple* couple,
     G4double beta2   = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
     cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*log(maxEnergy/cutEnergy)/tmax;
 
-    cross *= twopi_mc2_rcl2*chargeSquare*
-             (couple->GetMaterial()->GetElectronDensity())/beta2;
+    cross *= twopi_mc2_rcl2*chargeSquare*(material->GetElectronDensity())/beta2;
   }
  //   G4cout << "BR: e= " << kineticEnergy << " tmin= " << cutEnergy << " tmax= " << tmax
  //        << " cross= " << cross << G4endl;
@@ -215,7 +215,7 @@ vector<G4DynamicParticle*>* G4BraggModel::SampleSecondaries(
 
   // Change kinematics of primary particle
   kineticEnergy       -= deltaKinEnergy;
-  G4ThreeVector finalP = direction*totMomentum - deltaDirection*totMomentum;
+  G4ThreeVector finalP = direction*totMomentum - deltaDirection*deltaMomentum;
   finalP               = finalP.unit();
   
   fParticleChange->SetProposedKineticEnergy(kineticEnergy);

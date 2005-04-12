@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.cc,v 1.14 2005-04-08 15:18:12 vnivanch Exp $
+// $Id: G4MuBremsstrahlungModel.cc,v 1.15 2005-04-12 18:12:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -144,7 +144,8 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MuBremsstrahlungModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
+G4double G4MuBremsstrahlungModel::ComputeDEDXPerVolume(
+					      const G4Material* material,
                                               const G4ParticleDefinition*,
                                                     G4double kineticEnergy,
                                                     G4double cutEnergy)
@@ -155,7 +156,6 @@ G4double G4MuBremsstrahlungModel::ComputeDEDX(const G4MaterialCutsCouple* couple
   G4double tmax = kineticEnergy;
   G4double cut  = min(cutEnergy,tmax);
 
-  const G4Material* material = couple->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomicNumDensityVector = material->GetAtomicNumDensityVector();
 
@@ -319,7 +319,8 @@ G4double G4MuBremsstrahlungModel::ComputeDMicroscopicCrossSection(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MuBremsstrahlungModel::CrossSection(const G4MaterialCutsCouple* couple,
+G4double G4MuBremsstrahlungModel::CrossSectionPerVolume(
+					       const G4Material* material,
                                                const G4ParticleDefinition*,
                                                      G4double kineticEnergy,
                                                      G4double cutEnergy,
@@ -331,7 +332,6 @@ G4double G4MuBremsstrahlungModel::CrossSection(const G4MaterialCutsCouple* coupl
   G4double tmax = min(maxEnergy, kineticEnergy);
   G4double cut  = min(cutEnergy, tmax);
 
-  const G4Material* material = couple->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector() ;
   const G4double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();
 
