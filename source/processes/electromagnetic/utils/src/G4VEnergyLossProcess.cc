@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.52 2005-04-11 10:40:47 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.53 2005-04-12 18:13:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -658,7 +658,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   G4double tmax = currentModel->MaxSecondaryKinEnergy(dynParticle);
   tmax = std::min(tmax,(*theCuts)[currentMaterialIndex]);
 
-  /*
+  /*  
   G4double eloss0 = eloss;
   if(-1 < verboseLevel) {
     G4cout << "Before fluct: eloss(MeV)= " << eloss/MeV
@@ -669,7 +669,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   */
 
   // Sample fluctuations
-  if (lossFluctuationFlag && eloss + lowestKinEnergy <= preStepKinEnergy) {
+  if (lossFluctuationFlag && eloss < preStepKinEnergy) {
 
     G4VEmFluctuationModel* fm = currentModel->GetModelOfFluctuations();
     if(fm) eloss = fm->SampleFluctuations(currentMaterial,dynParticle,tmax,length,eloss);
@@ -684,7 +684,9 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   }
   */
 
-  CorrectionsAlongStep(currentCouple, dynParticle, eloss, length);
+  // Corrections, which cannot be tabulated 
+  if(eloss < preStepKinEnergy)
+    CorrectionsAlongStep(currentCouple, dynParticle, eloss, length);
  
   G4double finalT = preStepKinEnergy - eloss;
   if (finalT <= lowestKinEnergy) finalT = 0.0;
@@ -693,7 +695,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   fParticleChange.SetProposedKineticEnergy(finalT);
   fParticleChange.ProposeLocalEnergyDeposit(eloss);
 
-  /*
+  /*  
   if(-1 < verboseLevel) {
     G4cout << "Final value eloss(MeV)= " << eloss/MeV
            << " preStepKinEnergy= " << preStepKinEnergy
@@ -704,7 +706,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   */
 
   return &fParticleChange;
-}
+  }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
