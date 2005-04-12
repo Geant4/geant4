@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2004-12-10 18:50:14 gcosmo Exp $
+$Id: History,v 1.34 2005-04-12 09:38:43 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 April 04: V.Ivant (xrays-V07-00-00)
+- Update TRD model for regular radiator to provide more realistic
+  gamma spectrum
 
 10 Dec 04: G.Cosmo (xrays-V06-02-05)
 - Replaced M_PI with CLHEP's pi.
