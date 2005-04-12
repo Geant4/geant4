@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.4 2005-04-11 10:40:47 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.5 2005-04-12 11:20:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -129,7 +129,8 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
 
   G4double eDensity = material->GetElectronDensity();
 
-  G4double dedx = log(2.0*electron_mass_c2*bg2*cutEnergy/eexc2)-(1.0 + cutEnergy/tmax)*beta2;
+  G4double dedx = log(2.0*electron_mass_c2*bg2*cutEnergy/eexc2)
+                - (1.0 + cutEnergy/tmax)*beta2;
 
   if(0.5 == spin) {
     G4double del = 0.5*cutEnergy/(kineticEnergy + mass);

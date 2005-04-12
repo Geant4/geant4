@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.hh,v 1.15 2005-04-08 15:18:12 vnivanch Exp $
+// $Id: G4MuPairProductionModel.hh,v 1.16 2005-04-12 11:20:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -133,8 +133,6 @@ private:
   G4ParticleChangeForLoss*    fParticleChange;
 
   G4double minPairEnergy;
-  G4double highKinEnergy;
-  G4double lowKinEnergy;
   G4double lowestKinEnergy;
 
   G4double factorForCross;
@@ -144,7 +142,6 @@ private:
   G4double z13;
   G4double z23;
   G4double lnZ;
-
 
   const G4ParticleDefinition* particle;
 
@@ -173,6 +170,7 @@ inline G4double G4MuPairProductionModel::MaxSecondaryEnergy(
   G4double maxPairEnergy = kineticEnergy + particleMass*(1.0 - 0.75*sqrte*z13);
   return maxPairEnergy;
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4MuPairProductionModel::SetCurrentElement(G4double Z)

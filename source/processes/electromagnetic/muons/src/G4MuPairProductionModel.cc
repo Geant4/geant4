@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.23 2005-04-11 08:49:52 vnivanch Exp $
+// $Id: G4MuPairProductionModel.cc,v 1.24 2005-04-12 11:20:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -158,8 +158,7 @@ G4double G4MuPairProductionModel::ComputeDEDX(const G4MaterialCutsCouple* couple
      G4double Z = (*theElementVector)[i]->GetZ();
      SetCurrentElement(Z);
      G4double tmax = MaxSecondaryEnergy(particle, kineticEnergy);
-     G4double cut  = min(cutEnergy,tmax);
-     G4double loss = ComputMuPairLoss(Z, kineticEnergy, cut, tmax);
+     G4double loss = ComputMuPairLoss(Z, kineticEnergy, cutEnergy, tmax);
      dedx += loss*theAtomicNumDensityVector[i];
   }
   if (dedx < 0.) dedx = 0.;
@@ -175,8 +174,8 @@ G4double G4MuPairProductionModel::ComputMuPairLoss(G4double Z,
   SetCurrentElement(Z);
   G4double loss = 0.0;
 
-  G4double cut = cutEnergy;
-  if(tmax <= cutEnergy || cut <= minPairEnergy) return loss;
+  G4double cut  = min(cutEnergy,tmax);
+  if(cut <= minPairEnergy) return loss;
 
   // calculate the rectricted loss
   // numerical integration in log(PairEnergy)
