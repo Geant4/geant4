@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.hh,v 1.12 2005-04-11 10:40:47 vnivanch Exp $
+// $Id: G4MuBetheBlochModel.hh,v 1.13 2005-04-12 13:24:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -73,12 +73,14 @@ public:
   G4double MinEnergyCut(const G4ParticleDefinition*,
                         const G4MaterialCutsCouple*);
 
-  virtual G4double ComputeDEDX(const G4MaterialCutsCouple*,
-                       const G4ParticleDefinition*,
-                             G4double kineticEnergy,
-                             G4double cutEnergy);
+  virtual G4double ComputeDEDXPerVolume(
+		        const G4MaterialCutsCouple*,
+                        const G4ParticleDefinition*,
+                              G4double kineticEnergy,
+                              G4double cutEnergy);
 
-  virtual G4double CrossSection(const G4MaterialCutsCouple*,
+  virtual G4double CrossSectionPerVolume(
+                        const G4MaterialCutsCouple*,
                         const G4ParticleDefinition*,
                               G4double kineticEnergy,
                               G4double cutEnergy,

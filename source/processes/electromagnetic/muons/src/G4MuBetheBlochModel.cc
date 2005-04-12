@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.cc,v 1.16 2005-04-11 10:40:47 vnivanch Exp $
+// $Id: G4MuBetheBlochModel.cc,v 1.17 2005-04-12 13:24:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -119,10 +119,10 @@ void G4MuBetheBlochModel::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MuBetheBlochModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
-                                               const G4ParticleDefinition* p,
-                                                     G4double kineticEnergy,
-                                                     G4double cut)
+G4double G4MuBetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
+						   const G4ParticleDefinition* p,
+						   G4double kineticEnergy,
+						   G4double cut)
 {
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
   G4double tau   = kineticEnergy/mass;
@@ -131,17 +131,14 @@ G4double G4MuBetheBlochModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
   G4double bg2   = tau * (tau+2.0);
   G4double beta2 = bg2/(gam*gam);
 
-  const G4Material* material = couple->GetMaterial();
   G4double eexc  = material->GetIonisation()->GetMeanExcitationEnergy();
   G4double eexc2 = eexc*eexc;
-  G4double taul  = material->GetIonisation()->GetTaul();
   G4double cden  = material->GetIonisation()->GetCdensity();
   G4double mden  = material->GetIonisation()->GetMdensity();
   G4double aden  = material->GetIonisation()->GetAdensity();
   G4double x0den = material->GetIonisation()->GetX0density();
   G4double x1den = material->GetIonisation()->GetX1density();
-  G4double* shellCorrectionVector =
-            material->GetIonisation()->GetShellCorrectionVector();
+
   G4double eDensity = material->GetElectronDensity();
 
   G4double dedx = log(2.0*electron_mass_c2*bg2*cutEnergy/eexc2)-(1.0 + cutEnergy/tmax)*beta2;
@@ -158,23 +155,7 @@ G4double G4MuBetheBlochModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
   }
 
   // shell correction
-  G4double sh = 0.0;
-  x  = 1.0;
-
-  if ( bg2 > bg2lim ) {
-    for (G4int k=0; k<3; k++) {
-	x *= bg2 ;
-	sh += shellCorrectionVector[k]/x;
-    }
-
-  } else {
-    for (G4int k=0; k<3; k++) {
-	x *= bg2lim ;
-	sh += shellCorrectionVector[k]/x;
-    }
-    sh *= log(tau/taul)/log(taulim/taul);
-  }
-  dedx -= sh;
+  dedx -= 2.0*corr->ShellCorrection(p,material,kineticEnergy);
 
   // now compute the total ionization loss
 
@@ -200,16 +181,19 @@ G4double G4MuBetheBlochModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
 
   dedx *= twopi_mc2_rcl2*eDensity/beta2;
 
+  //High order corrections
+  dedx += corr->HighOrderCorrections(p,material,kineticEnergy);
+
   return dedx;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MuBetheBlochModel::CrossSection(const G4MaterialCutsCouple* couple,
-                                           const G4ParticleDefinition* p,
-                                                 G4double kineticEnergy,
-                                                 G4double cutEnergy,
-                                                 G4double maxKinEnergy)
+G4double G4MuBetheBlochModel::CrossSectionPerVolume(const G4Material* material,
+						    const G4ParticleDefinition* p,
+						    G4double kineticEnergy,
+						    G4double cutEnergy,
+						    G4double maxKinEnergy)
 {
   G4double cross = 0.0;
   G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
@@ -242,7 +226,7 @@ G4double G4MuBetheBlochModel::CrossSection(const G4MaterialCutsCouple* couple,
       cross += dcross*logstep*alphaprime;
     }
 
-    cross *= twopi_mc2_rcl2*(couple->GetMaterial()->GetElectronDensity())/beta2;
+    cross *= twopi_mc2_rcl2*(material->GetElectronDensity())/beta2;
 
   }
 
