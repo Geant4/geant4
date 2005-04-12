@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.cc,v 1.17 2005-04-12 13:24:49 vnivanch Exp $
+// $Id: G4MuBetheBlochModel.cc,v 1.18 2005-04-12 13:31:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,6 +42,7 @@
 // 13-02-03 Add name (V.Ivanchenko)
 // 10-02-04 Calculation of radiative corrections using R.Kokoulin model (V.Ivanchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 12-04-05 Add usage of G4EmCorrections (V.Ivanchenko)
 //
 
 //
@@ -55,6 +56,8 @@
 #include "G4MuBetheBlochModel.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
+#include "G4LossTableManager.hh"
+#include "G4EmCorrections.hh"
 #include "G4ParticleChangeForLoss.hh"
 
 G4double G4MuBetheBlochModel::xgi[]={ 0.0199,0.1017,0.2372,0.4083,0.5917,0.7628,0.8983,0.9801 };
@@ -91,7 +94,6 @@ void G4MuBetheBlochModel::SetParticle(const G4ParticleDefinition* p)
   mass = particle->GetPDGMass();
   massSquare = mass*mass;
   ratio = electron_mass_c2/mass;
-  tlimit = 51.2*GeV*std::pow(proton_mass_c2/mass,0.66667);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -115,6 +117,8 @@ void G4MuBetheBlochModel::Initialise(const G4ParticleDefinition* p,
     fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
   else
     fParticleChange = new G4ParticleChangeForLoss();
+
+  corr = G4LossTableManager::Instance()->EmCorrections();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

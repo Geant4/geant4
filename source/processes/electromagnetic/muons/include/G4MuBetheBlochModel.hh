@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.hh,v 1.13 2005-04-12 13:24:49 vnivanch Exp $
+// $Id: G4MuBetheBlochModel.hh,v 1.14 2005-04-12 13:31:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,7 @@
 // 13-02-03 Add Nama (V.Ivanchenko)
 // 10-02-04 Calculation of radiative corrections using R.Kokoulin model (V.Ivanchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 12-04-05 Add usage of G4EmCorrections (V.Ivanchenko)
 //
 
 //
@@ -58,6 +59,7 @@
 #include "G4VEmModel.hh"
 
 class G4ParticleChangeForLoss;
+class G4EmCorrections;
 
 class G4MuBetheBlochModel : public G4VEmModel
 {
@@ -74,13 +76,13 @@ public:
                         const G4MaterialCutsCouple*);
 
   virtual G4double ComputeDEDXPerVolume(
-		        const G4MaterialCutsCouple*,
+		        const G4Material*,
                         const G4ParticleDefinition*,
                               G4double kineticEnergy,
                               G4double cutEnergy);
 
   virtual G4double CrossSectionPerVolume(
-                        const G4MaterialCutsCouple*,
+                        const G4Material*,
                         const G4ParticleDefinition*,
                               G4double kineticEnergy,
                               G4double cutEnergy,
@@ -108,12 +110,12 @@ private:
   const G4ParticleDefinition* particle;
   G4ParticleDefinition*       theElectron;
   G4ParticleChangeForLoss*    fParticleChange;
+  G4EmCorrections*            corr;
 
   G4double limitKinEnergy;
   G4double logLimitKinEnergy;
   G4double mass;
   G4double massSquare;
-  G4double tlimit;
   G4double ratio;
   G4double twoln10;
   G4double bg2lim;
@@ -131,7 +133,7 @@ inline G4double G4MuBetheBlochModel::MaxSecondaryEnergy(
   G4double tau  = kinEnergy/mass;
   G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
                   (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
-  return std::min(tmax,tlimit);
+  return tmax;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
