@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.37 2005-04-11 10:40:47 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.38 2005-04-12 11:21:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -638,11 +638,11 @@ inline G4double G4VEnergyLossProcess::GetContinuousStepLimit(const G4Track&,
 
     if(x > minStepLimit && y < currentMinStep ) {
       x = y + minStepLimit*(1.0 - dRoverRange)*(2.0 - minStepLimit/fRange);
-    // G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<<" range= "<<fRange
-    //    <<" cMinSt="<<currentMinStep <<" minStepLimit= " << minStepLimit<< G4endl;
+      //    G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<<" range= "<<fRange
+      //  <<" cMinSt="<<currentMinStep <<" minStepLimit= " << minStepLimit<< G4endl;
     } else if (rndmStepFlag) x = SampleRange();
   }
-  //G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<<" stepLimit= "<<x<<G4endl;
+  //  G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<<" stepLimit= "<<x<<G4endl;
   return x;
 }
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.4 2005-02-27 18:07:33 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.5 2005-04-12 11:21:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -83,7 +83,6 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
   G4double q  = effCharge.EffectiveCharge(p,material,kineticEnergy)/eplus;
   G4double q2 = q*q;
   G4double ba = beta2/alpha2;
-
   G4double BarkasTerm = 0.0;
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* atomDensity  = material->GetAtomicNumDensityVector(); 
@@ -1320,7 +1319,15 @@ void G4EmCorrections::Initialise()
     MSH[i] = mm[i];
     TAU[i] = tau[i];
   }
-
+  const G4double coseb[14] = {0.0,0.05,0.1,0.15,0.2,0.3,0.4,0.5,0.6,0.8,
+                              1.0,1.2,1.5,2.0};
+  const G4double cosxi[14] = {1.0000, 0.9905, 0.9631, 0.9208, 0.8680,
+                              0.7478, 0.6303, 0.5290, 0.4471, 0.3323,
+                              0.2610, 0.2145, 0.1696, 0.1261};
+  for(i=0; i<14; i++) {
+    COSEB[i] = coseb[i];
+    COSXI[i] = cosxi[i];
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
