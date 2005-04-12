@@ -1,4 +1,4 @@
-$Id: History,v 1.34 2005-04-12 09:38:43 vnivanch Exp $
+$Id: History,v 1.35 2005-04-12 09:39:29 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,7 +19,7 @@ committal in the CVS repository !
 
 12 April 04: V.Ivant (xrays-V07-00-00)
 - Update TRD model for regular radiator to provide more realistic
-  gamma spectrum
+  gamma spectrum (V.Grichine)
 
 10 Dec 04: G.Cosmo (xrays-V06-02-05)
 - Replaced M_PI with CLHEP's pi.
