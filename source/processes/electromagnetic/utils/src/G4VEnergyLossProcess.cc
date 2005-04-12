@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.53 2005-04-12 18:13:04 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.54 2005-04-12 18:31:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -150,6 +150,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, G4ProcessType t
   lambdaFactor(0.1),
   mfpKinEnergy(0.0),
   lossFluctuationFlag(true),
+  lossFluctuationArePossible(true),
   rndmStepFlag(false),
   tablesAreBuilt(false),
   integral(true),
@@ -376,6 +377,10 @@ void G4VEnergyLossProcess::AddEmModel(G4int order, G4VEmModel* p, G4VEmFluctuati
 {
   modelManager->AddEmModel(order, p, fluc, region);
   if(p) p->SetParticleChange(pParticleChange, fluc);
+  if(!fluc) {
+    lossFluctuationFlag = false;
+    lossFluctuationArePossible = false;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -671,8 +676,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   // Sample fluctuations
   if (lossFluctuationFlag && eloss < preStepKinEnergy) {
 
-    G4VEmFluctuationModel* fm = currentModel->GetModelOfFluctuations();
-    if(fm) eloss = fm->SampleFluctuations(currentMaterial,dynParticle,tmax,length,eloss);
+    currentModel->GetModelOfFluctuations
+                ->SampleFluctuations(currentMaterial,dynParticle,tmax,length,eloss);
   }
   /*
   if(-1 < verboseLevel) {
@@ -685,8 +690,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   */
 
   // Corrections, which cannot be tabulated 
-  if(eloss < preStepKinEnergy)
-    CorrectionsAlongStep(currentCouple, dynParticle, eloss, length);
+  CorrectionsAlongStep(currentCouple, dynParticle, eloss, length);
  
   G4double finalT = preStepKinEnergy - eloss;
   if (finalT <= lowestKinEnergy) finalT = 0.0;
@@ -1299,7 +1303,8 @@ void G4VEnergyLossProcess::SetLinearLossLimit(G4double val)
 
 void G4VEnergyLossProcess::SetLossFluctuations(G4bool val)
 {
-  lossFluctuationFlag = val;
+  if(val && lossFluctuationArePossible)
+    lossFluctuationFlag = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

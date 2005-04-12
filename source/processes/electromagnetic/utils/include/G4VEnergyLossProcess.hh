@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.38 2005-04-12 11:21:25 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.39 2005-04-12 18:31:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -418,6 +418,7 @@ private:
   G4double mfpKinEnergy;
 
   G4bool   lossFluctuationFlag;
+  G4bool   lossFluctuationArePossible;
   G4bool   rndmStepFlag;
   G4bool   tablesAreBuilt;
   G4bool   integral;
