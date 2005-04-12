@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.65 2004-12-13 16:27:48 gcosmo Exp $
+# $Id: GNUmakefile,v 1.66 2005-04-12 09:29:32 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -48,6 +48,10 @@ kernel_global:
 	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE) global); done;:
 
 kernel:
+	@echo "*************************************************************"
+	@echo " Geant4 version - $Name: not supported by cvs2svn $ - installation"
+	@echo "                      Copyright : Geant4 Collaboration"
+	@echo "*************************************************************"
 	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE)); done;:
 	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE)); done;:
 	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE)); done;:
