@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.36 2005-04-11 10:40:47 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.37 2005-04-13 13:40:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -185,12 +185,14 @@ inline void G4ionIonisation::CorrectionsAlongStep(
 			         G4double& eloss,
                                  G4double& s)
 {
-  if(preKinEnergy*massRatio > eth) 
-    eloss += s*corr->HighOrderCorrections(currentParticle,theMaterial,preKinEnergy);
-  else                   
-    eloss += s*corr->NuclearDEDX(currentParticle,theMaterial,preKinEnergy - eloss*0.5);
-  fParticleChange.SetProposedCharge(effCharge.EffectiveCharge(currentParticle,
-                                    theMaterial,preKinEnergy-eloss));
+  if(eloss < preKinEnergy) {
+    if(preKinEnergy*massRatio > eth) 
+      eloss += s*corr->HighOrderCorrections(currentParticle,theMaterial,preKinEnergy);
+    else                   
+      eloss += s*corr->NuclearDEDX(currentParticle,theMaterial,preKinEnergy - eloss*0.5);
+    fParticleChange.SetProposedCharge(effCharge.EffectiveCharge(currentParticle,
+                                      theMaterial,preKinEnergy-eloss));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
