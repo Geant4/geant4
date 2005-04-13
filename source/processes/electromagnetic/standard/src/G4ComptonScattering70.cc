@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ComptonScattering70.cc,v 1.3 2005-04-08 12:39:58 vnivanch Exp $
+// $Id: G4ComptonScattering70.cc,v 1.4 2005-04-13 09:59:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,14 +97,11 @@ void G4ComptonScattering70::InitialiseProcess(const G4ParticleDefinition*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4ComptonScattering70::PrintInfoDefinition()
+void G4ComptonScattering70::PrintInfo()
 {
-  G4VEmProcess::PrintInfoDefinition();
-
   G4cout << "      Total cross sections has a good parametrisation.from 10 KeV to (100/Z) GeV" 
          << G4endl;
   G4cout << "      Sampling according " << model->GetName() << " model" << G4endl;
-                     
 }         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

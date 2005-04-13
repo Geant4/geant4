@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering70.hh,v 1.2 2005-04-08 12:39:58 vnivanch Exp $
+// $Id: G4ComptonScattering70.hh,v 1.3 2005-04-13 09:59:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------------ G4ComptonScattering70 physics process -----------------------
@@ -78,7 +78,7 @@ public:  // with description
   G4bool IsApplicable(const G4ParticleDefinition&);
 
   // Print few lines of informations about the process: validity range,
-  virtual void PrintInfoDefinition();
+  virtual void PrintInfo();
 
   void SetModel(const G4String& name);
 
