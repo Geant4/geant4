@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.5 2005-04-12 11:21:25 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.6 2005-04-13 13:41:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -620,7 +620,11 @@ G4double G4EmCorrections::NuclearDEDX(const G4ParticleDefinition* p,
 				            G4double kineticEnergy,
                                             G4bool fluct)
 {
+  G4double nloss = 0.0;
+  if(kineticEnergy <= 0.0) return nloss; 
+
   lossFlucFlag = fluct;
+
   // Projectile nucleus
   G4double z1 = std::fabs((p->GetPDGCharge())/eplus) ;
   G4double m1 = p->GetPDGMass()/amu_c2;
@@ -632,8 +636,6 @@ G4double G4EmCorrections::NuclearDEDX(const G4ParticleDefinition* p,
                                  material->GetAtomicNumDensityVector() ;
 
   //  loop for the elements in the material
-
-  G4double nloss = 0.0;
 
   for (G4int iel=0; iel<NumberOfElements; iel++) {
     const G4Element* element = (*theElementVector)[iel] ;
