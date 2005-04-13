@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.54 2005-04-12 18:31:47 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.55 2005-04-13 09:44:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -676,8 +676,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   // Sample fluctuations
   if (lossFluctuationFlag && eloss < preStepKinEnergy) {
 
-    currentModel->GetModelOfFluctuations
-                ->SampleFluctuations(currentMaterial,dynParticle,tmax,length,eloss);
+    currentModel->GetModelOfFluctuations()->
+      SampleFluctuations(currentMaterial,dynParticle,tmax,length,eloss);
   }
   /*
   if(-1 < verboseLevel) {
