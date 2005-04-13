@@ -1,4 +1,4 @@
-$Id: History,v 1.140 2005-03-18 08:39:41 vnivanch Exp $
+$Id: History,v 1.141 2005-04-13 09:12:32 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13 April 05: V.Ivant (stand-V07-00-04)
+- Remove PAIwithPhotonModel
+- Migrade to updated interfaces of utils
+- Use G4EmCorrections for hadrons/ions ionisation
 
 18 March 05: V.Ivant (stand-V07-00-03)
 - Add G4ComptonScattering70 and G4KleinNishinaModel (V.Ivanchenko)
