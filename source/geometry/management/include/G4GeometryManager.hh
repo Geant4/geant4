@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.hh,v 1.8 2003-11-02 14:01:21 gcosmo Exp $
+// $Id: G4GeometryManager.hh,v 1.9 2005-04-13 15:53:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GeometryManager
@@ -52,13 +52,16 @@ class G4GeometryManager
 {
   public: // with description
   
-    G4bool CloseGeometry(G4bool pOptimise=true, G4bool verbose=false);
+    G4bool CloseGeometry(G4bool pOptimise=true, G4bool verbose=false,
+                         G4LogicalVolume* vol=0);
       // Close (`lock') the geometry: perform sanity and `completion' checks
       // and optionally [default=yes] build optimisation information.
-    
-    void OpenGeometry();
+      // Applies to just a specific subtree if a logical volume is specified.
+
+    void OpenGeometry(G4LogicalVolume* vol=0);
       // Open (`unlock') the geometry and remove optimisation information if
-      // present.
+      // present. Applies to just a specific subtree if a logical volume is
+      // specified.
 
     G4bool IsGeometryClosed();
       // Return true/false according to state of optimised geoemtry.
@@ -73,7 +76,8 @@ class G4GeometryManager
   private:
 
     void BuildOptimisations(G4bool allOpt, G4bool verbose=false);
-    void DeleteOptimisations();
+    void BuildOptimisations(G4bool allOpt, G4LogicalVolume* vol);
+    void DeleteOptimisations(G4LogicalVolume* vol=0);
     static void ReportVoxelStats( std::vector<G4SmartVoxelStat> & stats,
                                   G4double totalCpuTime );
     static G4GeometryManager* fgInstance;
