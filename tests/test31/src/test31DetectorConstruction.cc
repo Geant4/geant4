@@ -121,154 +121,22 @@ void test31DetectorConstruction::DefineMaterials()
   if(myVerbose > 0) {
     G4cout << "test31DetectorConstruction: DefineMaterials starts" << G4endl;  
   } 
-  /*
+
   G4String name, symbol;             //a=mass of a mole;
   G4double a, z, density;            //z=mean number of protons;  
 
   G4int    ncomponents, natoms;
-  G4double fractionmass;
   G4double temperature, pressure;
 
-  //  std::vector<G4Material*> list;
   G4Material* ma = 0;
-
-//
-// define Elements
-//
-
-  a = 1.01*g/mole;
-  G4Element* elH  = new G4Element(name="Hydrogen",symbol="H", z= 1., a);
-
-  a = 14.01*g/mole;
-  G4Element* elN  = new G4Element(name="Nitrogen",symbol="N" , z= 7., a);
-
-  a = 16.00*g/mole;
-  G4Element* elO  = new G4Element(name="Oxygen"  ,symbol="O" , z= 8., a);
-
-  a = 12.00*g/mole;
-  G4Element* elC  = new G4Element(name="Carbon"  ,symbol="C" , z= 6., a);
-
-  a = 69.723*g/mole;
-  G4Element* elGa  = new G4Element(name="Gallium"  ,symbol="Ga" , z= 31., a);
-
-  a = 74.9216*g/mole;
-  G4Element* elAs  = new G4Element(name="Arsenicum"  ,symbol="As" , z= 33., a);
-
-  G4Element*  Cs  = new G4Element ("Cesium"  , "Cs", 55. , 132.905*g/mole);
-
-  G4Element*   I  = new G4Element ("Iodide"  , "I", 53. , 126.9044*g/mole);
-
   
-//
-// define simple materials
-//
+  G4NistManager* man = G4NistManager::Instance();
 
-  density = 0.001*g/cm3;
-  a = 4.0*g/mole;
-  ma = new G4Material(name="Helium", z=2., a, density);
-
-  density = 1.848*g/cm3;
-  a = 9.01*g/mole;
-  ma = new G4Material(name="Beryllium", z=4., a, density);
-
-  density = 2.699*g/cm3;
-  a = 26.98*g/mole;
-  ma = new G4Material(name="Aluminum", z=13., a, density);
-
-  density = 2.265*g/cm3;
-  a = 12.0107*g/mole;
-  ma = new G4Material(name="Carbon", z=6., a, density);
-
-  density = 2.330*g/cm3;
-  a = 28.09*g/mole;
-  ma = new G4Material(name="Silicon", z=14., a, density);
-
-  density = 1.390*g/cm3;
-  a = 39.95*g/mole;
-  ma = new G4Material(name="LiquidArgon", z=18., a, density);
-
-  density = 3.02*g/cm3;
-  a = 131.29*g/mole;
-  ma = new G4Material(name="LiquidXenon", z=54., a, density);
-
-  density = 7.874*g/cm3;
-  a = 55.85*g/mole;
-  ma = new G4Material(name="Iron"   , z=26., a, density);
-
-  density = 8.960*g/cm3;
-  a = 63.55*g/mole;
-  ma = new G4Material(name="Copper"   , z=29., a, density);
-
-  density = 5.323*g/cm3;
-  a = 72.61*g/mole;
-  ma = new G4Material(name="Germanium", z=32., a, density);
-
-  density = 19.32*g/cm3;
-  a =196.97*g/mole;
-  ma = new G4Material(name="Gold"   , z=79., a, density);
-
-  density = 11.35*g/cm3;
-  a = 207.19*g/mole;
-  ma = new G4Material(name="Lead"     , z=82., a, density);
-
-//
-// define a material from elements.   case 1: chemical molecule
-//
-
-  density = 1.000*g/cm3;
-  ma = new G4Material("Water", density, 2);
-  ma->SetChemicalFormula("H_2O");
-  ma->AddElement(elH, natoms=2);
-  ma->AddElement(elO, natoms=1);
-  G4double exc = ma->GetIonisation()->FindMeanExcitationEnergy("H_2O");
-  ma->GetIonisation()->SetMeanExcitationEnergy(exc);
-
-  density = 0.0006672*g/cm3;
-  ma = new G4Material("Methane", density, 2);
-  ma->SetChemicalFormula("CH_4");
-  ma->AddElement(elH, natoms=4);
-  ma->AddElement(elC, natoms=1);
-
-  ma = new G4Material("Graphite", 2.265*g/cm3, 1);
-  ma->SetChemicalFormula("Graphite");
-  ma->AddElement( elC, 1 );
-
-  density = 5.3176*g/cm3;
-  ma = new G4Material("GaAs", density, ncomponents=2);
-  ma->SetChemicalFormula("GaAS");
-  ma->AddElement(elGa, natoms=1);
-  ma->AddElement(elAs, natoms=1);
-
-  ma = new G4Material ("Ethane" , 0.4241*g/cm3, 2);
-  ma->SetChemicalFormula("C_2H_6");
-  ma->AddElement(elH,6);
-  ma->AddElement(elC,2);
-
-  ma = new G4Material ("CsI" , 4.51*g/cm3, 2);
-  ma->SetChemicalFormula("CsI");
-  ma->AddElement(Cs,1);
-  ma->AddElement(I,1);
-  ma->GetIonisation()->SetMeanExcitationEnergy(415.689*eV);
-
-  density = 19.35*g/cm3;
-  a = 183.85*g/mole;
-  ma = new G4Material(name="Tangsten"     , z=74., a, density);
-
-//
-// define a material from elements.   case 2: mixture by fractional mass
-//
-
-  density = 1.290*mg/cm3;
-  
-  ma = new G4Material("Air"  , density, ncomponents=2);
-  ma->AddElement(elN, fractionmass=0.7);
-  ma->AddElement(elO, fractionmass=0.3);
-  
   density = 1.39*g/cm3;
   ma = new G4Material("Mylar"  , density, ncomponents=3);
-  ma->AddElement(elC, natoms=10);
-  ma->AddElement(elH, natoms=18);
-  ma->AddElement(elO, natoms=5);
+  ma->AddElement(man->FindOrBuildElement("C"), natoms=10);
+  ma->AddElement(man->FindOrBuildElement("H"), natoms=18);
+  ma->AddElement(man->FindOrBuildElement("O"), natoms=5);
   
   density     = universe_mean_density;    //from PhysicalConstants.h
   pressure    = 3.e-18*pascal;
@@ -278,7 +146,7 @@ void test31DetectorConstruction::DefineMaterials()
   ma = new G4Material("Vacuum", z, a, density,
                                       kStateGas,temperature,pressure);
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
-  */
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

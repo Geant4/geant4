@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2005-03-22 10:42:59 vnivanch Exp $
+$Id: History,v 1.4 2005-04-13 11:54:54 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13 April 05: V.Ivant (test31-V07-00-00)
+- Add test of G4NistManager
 
 02 Dec 04: V.Ivant (test31-V06-02-01)
 - Migration to cmath 

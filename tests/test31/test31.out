@@ -1,89 +1,28 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (23-February-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
-G4Material: Mean excitation energy is changed for CsI Iold= 491.166eV; Inew= 415.689 eV;
 
-***** Table : Nb of materials = 22 *****
+***** Table : Nb of materials = 2 *****
 
- Material:   Helium     density:  1.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 942.611 m  
-   --->  Element:   Helium      Z =  2.0   N =   4.0   A =   4.00 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material: Beryllium     density:  1.848 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  35.267 cm 
-   --->  Element: Beryllium      Z =  4.0   N =   9.0   A =   9.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material: Aluminum     density:  2.699 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.896 cm 
-   --->  Element: Aluminum      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material:   Carbon     density:  2.265 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  18.851 cm 
-   --->  Element:   Carbon      Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material:  Silicon     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368 cm 
-   --->  Element:  Silicon      Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material: LiquidArgon     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
-   --->  Element: LiquidArgon      Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material: LiquidXenon     density:  3.020 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   2.808 cm 
-   --->  Element: LiquidXenon      Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material:     Iron     density:  7.874 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.758 cm 
-   --->  Element:     Iron      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material:   Copper     density:  8.960 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.436 cm 
-   --->  Element:   Copper      Z = 29.0   N =  63.5   A =  63.55 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material: Germanium     density:  5.323 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   2.301 cm 
-   --->  Element: Germanium      Z = 32.0   N =  72.6   A =  72.61 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material:     Gold     density: 19.320 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.344 mm 
-   --->  Element:     Gold      Z = 79.0   N = 197.0   A = 196.97 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
-   --->  Element:     Lead      Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material:    Water H_2O   density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
-
- Material:  Methane CH_4   density:  0.667 kg/m3   temperature: 273.15 K  pressure:   1.00 atm  RadLength: 696.322 m  
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  25.19 %  Abundance  80.00 %
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.00 g/mole  fractionMass:  74.81 %  Abundance  20.00 %
-
- Material: Graphite Graphite   density:  2.265 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  18.834 cm 
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.00 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material:     GaAs GaAS   density:  5.318 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   2.293 cm 
-   --->  Element:  Gallium Ga   Z = 31.0   N =  69.7   A =  69.72 g/mole  fractionMass:  48.20 %  Abundance  50.00 %
-   --->  Element: Arsenicum As   Z = 33.0   N =  74.9   A =  74.92 g/mole  fractionMass:  51.80 %  Abundance  50.00 %
-
- Material:   Ethane C_2H_6   density: 424.100 kg/m3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.076 m  
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  20.16 %  Abundance  75.00 %
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.00 g/mole  fractionMass:  79.84 %  Abundance  25.00 %
-
- Material:      CsI CsI   density:  4.510 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.860 cm 
-   --->  Element:   Cesium Cs   Z = 55.0   N = 132.9   A = 132.91 g/mole  fractionMass:  51.15 %  Abundance  50.00 %
-   --->  Element:   Iodide  I   Z = 53.0   N = 126.9   A = 126.90 g/mole  fractionMass:  48.85 %  Abundance  50.00 %
-
- Material: Tangsten     density: 19.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.495 mm 
-   --->  Element: Tangsten      Z = 74.0   N = 183.8   A = 183.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material:      Air     density:  1.290 kg/m3   temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
-   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
-
- Material:    Mylar     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  28.868 cm 
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.00 g/mole  fractionMass:  55.00 %  Abundance  30.30 %
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   8.33 %  Abundance  54.55 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  36.67 %  Abundance  15.15 %
+ Material:    Mylar     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  28.877 cm 
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+   --->  Isotope:     C   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+   --->  Isotope:     C   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  fractionMass:  55.03 %  Abundance  30.30 %
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope:     H   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope:     H   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  fractionMass:   8.31 %  Abundance  54.55 %
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope:     O   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope:     O   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope:     O   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  fractionMass:  36.65 %  Abundance  15.15 %
 
  Material:   Vacuum     density:  0.000 kg/m3   temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204727576.737 pc 
-   --->  Element:   Vacuum      Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Vacuum ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
 
 Detector Construction is defined
@@ -119,23 +58,25 @@ UI interface is started
 #/testem/phys/stepMax        0.1 mm
 /testem/phys/addPhysics      standard
 PhysicsList::AddPhysicsList <standard>
-/test31/AbsorberMaterial     Silicon
+/test31/AbsorberMaterial     G4_Si
 /test31/AbsorberThick        10 mm
 /test31/NumberOfAbsorbers    60
 /test31/maxDeltaEnergy       1.0 MeV
-/test31/WorldMaterial        Vacuum
+/test31/WorldMaterial        G4_AIR
 /test31/HistoNumber          5
 /test31/gun/beamE            1000.0 MeV
 test31PrimaryGeneratorMessenger: O'K 
 #/process/eLoss/preciseRange  true
 /run/initialize
-The  WORLD   is made of  of Vacuum. The transverse size (XY) of the world is 1000 mm
-The ABSORBER is made of 60 items of 10 mm of Silicon. The transverse size (XY) is 1000 mm
-The meanExc(eV)= 173.6
+G4Material: Mean excitation energy is changed for G4_AIR Iold= 85.627eV; Inew= 85.7 eV;
+G4Material: Mean excitation energy is changed for G4_Si Iold= 173.6eV; Inew= 173 eV;
+The  WORLD   is made of  of G4_AIR. The transverse size (XY) of the world is 1000 mm
+The ABSORBER is made of 60 items of 10 mm of G4_Si. The transverse size (XY) is 1000 mm
+The meanExc(eV)= 173
 
 phot:  Total cross sections from Sandia parametrisation. 
 #
-/testem/histo/fileName            t_e_st.paw
+#/testem/histo/fileName            t_e_st.paw
 /gun/particle e-
 /run/beamOn 1000
 G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
@@ -155,8 +96,8 @@ msc:  Model variant of multiple scattering for e-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
       Lambda tables from threshold to 100 GeV in 90 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
@@ -167,8 +108,8 @@ eBrem:   tables are built for  e-
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
       Lambda tables from threshold to 100 GeV in 90 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
@@ -187,15 +128,16 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
       Lambda tables from threshold to 100 GeV in 90 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
       Lambda tables from threshold to 100 GeV in 90 bins.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
       Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below.
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
@@ -204,9 +146,9 @@ msc:  Model variant of multiple scattering for mu+
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
       Lambda tables from threshold to 100 GeV in 90 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
@@ -225,14 +167,14 @@ msc:  Model variant of multiple scattering for pi-
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Vacuum
+ Material : G4_AIR
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
  Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Silicon
+ Material : G4_Si
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
  Energy thresholds :  gamma 2.29225 keV    e- 120.425 keV    e+ 118.951 keV
  Region(s) which use this couple : 
@@ -242,8 +184,6 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 0 start
 test31Histo:  AbsThick(mm)= 10 Nabs= 60 zmax= 600 nHisto= 5
-### Histo books 5 histograms 
-Tree store  : t_e_st.paw
 Start Run processing.
 test31EventAction: Event # 100 started
 test31EventAction: Event # 200 started
@@ -258,41 +198,46 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=71.07s Real=71.21s Sys=0.11s
+  User=54.71s Real=54.77s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions are started
 ====================================================================
-Range(mm)= 239.36; Stragling(mm)= 99.826 +- 3.2    1e+03 events for range
+Range(mm)= 249.9; Stragling(mm)= 105.05 +- 3.3    1e+03 events for range
 Number of events               1000
-Average energy deposit         824.9 MeV
+Average energy deposit         827.3 MeV
 Average number of e-           1424
-Average number of gamma        299.2
-Average number of e+           15.87
-Average number of steps        5862
-Average number of leak charged 1.223
-Average number of leak gamma   21.29
-Average number of back charged 0.007
-Average number of back gamma   1.717
+Average number of gamma        300.1
+Average number of e+           15.84
+Average number of steps        5861
+Average number of leak charged 1.176
+Average number of leak gamma   21.44
+Average number of back charged 0.001
+Average number of back gamma   1.861
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
-Histograms and Ntuples are saved
+G4Material: Mean excitation energy is changed for G4_Al Iold= 166.4eV; Inew= 166 eV;
+====================================================================
+   Tables control for  alpha
+   Material            G4_Al
+====================================================================
+====================================================================
 #
-/testem/histo/fileName            t_mu_st.paw
+#/testem/histo/fileName            t_mu_st.paw
 /gun/particle mu-
 /run/beamOn 1000
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Vacuum
+ Material : G4_AIR
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
  Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Silicon
+ Material : G4_Si
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
  Energy thresholds :  gamma 2.292 keV    e- 120.4 keV    e+ 119 keV
  Region(s) which use this couple : 
@@ -301,8 +246,6 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 ### Run 1 start
-### Histo books 5 histograms 
-Tree store  : t_mu_st.paw
 Start Run processing.
 test31EventAction: Event # 1100 started
 test31EventAction: Event # 1200 started
@@ -317,41 +260,45 @@ test31EventAction: Event # 2000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=7.02s Real=7.02s Sys=0s
+  User=5.71s Real=5.72s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions are started
 ====================================================================
 Range(mm)= 600; Stragling(mm)= 0 +- 0    1e+03 events for range
 Number of events               1000
-Average energy deposit         245.6 MeV
-Average number of e-           133.9
-Average number of gamma        13.53
-Average number of e+           0.055
-Average number of steps        429.7
-Average number of leak charged 1.076
-Average number of leak gamma   0.494
+Average energy deposit         247.4 MeV
+Average number of e-           136
+Average number of gamma        13.77
+Average number of e+           0.057
+Average number of steps        437.6
+Average number of leak charged 1.093
+Average number of leak gamma   0.504
 Average number of back charged 0
-Average number of back gamma   0.077
+Average number of back gamma   0.092
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
-Histograms and Ntuples are saved
+====================================================================
+   Tables control for  alpha
+   Material            G4_Al
+====================================================================
+====================================================================
 #
-/testem/histo/fileName            t_pi_st.paw
+#/testem/histo/fileName            t_pi_st.paw
 /gun/particle pi+
 /run/beamOn 1000
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Vacuum
+ Material : G4_AIR
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
  Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Silicon
+ Material : G4_Si
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
  Energy thresholds :  gamma 2.292 keV    e- 120.4 keV    e+ 119 keV
  Region(s) which use this couple : 
@@ -360,8 +307,6 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 ### Run 2 start
-### Histo books 5 histograms 
-Tree store  : t_pi_st.paw
 Start Run processing.
 test31EventAction: Event # 2100 started
 test31EventAction: Event # 2200 started
@@ -376,41 +321,45 @@ test31EventAction: Event # 3000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=6.77s Real=6.76s Sys=0s
+  User=5.42s Real=5.42s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions are started
 ====================================================================
 Range(mm)= 600; Stragling(mm)= 0 +- 0    1e+03 events for range
 Number of events               1000
-Average energy deposit         241.8 MeV
-Average number of e-           129.9
-Average number of gamma        12.55
-Average number of e+           0.04
-Average number of steps        421.3
-Average number of leak charged 1.096
-Average number of leak gamma   0.384
+Average energy deposit         241.4 MeV
+Average number of e-           128.7
+Average number of gamma        12.46
+Average number of e+           0.029
+Average number of steps        417.9
+Average number of leak charged 1.088
+Average number of leak gamma   0.375
 Average number of back charged 0
-Average number of back gamma   0.075
+Average number of back gamma   0.082
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
-Histograms and Ntuples are saved
+====================================================================
+   Tables control for  alpha
+   Material            G4_Al
+====================================================================
+====================================================================
 #
-/testem/histo/fileName            t_p_st.paw
+#/testem/histo/fileName            t_p_st.paw
 /gun/particle proton
 /run/beamOn 1000
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Vacuum
+ Material : G4_AIR
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
  Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Silicon
+ Material : G4_Si
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
  Energy thresholds :  gamma 2.292 keV    e- 120.4 keV    e+ 119 keV
  Region(s) which use this couple : 
@@ -419,8 +368,6 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 ### Run 3 start
-### Histo books 5 histograms 
-Tree store  : t_p_st.paw
 Start Run processing.
 test31EventAction: Event # 3100 started
 test31EventAction: Event # 3200 started
@@ -435,27 +382,31 @@ test31EventAction: Event # 4000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=6.92s Real=6.9s Sys=0s
+  User=5.66s Real=5.67s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions are started
 ====================================================================
 Range(mm)= 600; Stragling(mm)= 0 +- 0    1e+03 events for range
 Number of events               1000
-Average energy deposit         262.4 MeV
-Average number of e-           117.2
-Average number of gamma        6.341
+Average energy deposit         263.3 MeV
+Average number of e-           117.7
+Average number of gamma        6.527
 Average number of e+           0
-Average number of steps        422.5
-Average number of leak charged 1.022
-Average number of leak gamma   0.048
+Average number of steps        425.6
+Average number of leak charged 1.025
+Average number of leak gamma   0.056
 Average number of back charged 0
-Average number of back gamma   0.029
+Average number of back gamma   0.021
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
-Histograms and Ntuples are saved
+====================================================================
+   Tables control for  alpha
+   Material            G4_Al
+====================================================================
+====================================================================
 #
 Graphics systems deleted.
 Visualization Manager deleting...
-  User=92.58s Real=92.71s Sys=0.12s
+  User=72.13s Real=72.23s Sys=0.03s
 G4 kernel has come to Quit state.

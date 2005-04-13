@@ -46,7 +46,7 @@
 #include "G4EmCorrections.hh"
 #include "G4NistManager.hh"
 #include "G4BraggModel.hh"
-#include "G4BetheBlochModel70.hh"
+#include "G4BetheBlochModel.hh"
 #include <iomanip>
 #include <fstream>
 
@@ -302,14 +302,17 @@ void test31Histo::AddParticleBack(const G4DynamicParticle* dp)
 
 void test31Histo::TableControl()
 {
+  G4NistManager*  mman = G4NistManager::Instance();
+  G4EmCorrections* emc = G4LossTableManager::Instance()->EmCorrections();
   G4EmCalculator cal;
   cal.SetVerbose(0);
+
   // parameters
   G4double tmin = 1.*keV;
   G4double tmax = 1.*GeV;
   G4int    nbin = 60;
-   //  G4int   index = 1;
-  G4double cut  = 100.*GeV; 
+  //  G4int   index = 1;
+  //  G4double cut  = 100.*GeV; 
   //G4ParticleDefinition* part = G4Proton::Proton();
   //  G4ParticleDefinition* part = G4Electron::Electron();
   //  G4ParticleDefinition* part = G4Alpha::Alpha();
@@ -321,7 +324,7 @@ void test31Histo::TableControl()
      G4String part_name = "alpha";
      // G4String part_name = "C12[0.0]";
    //   G4String mat_name  = "Tangsten";
-    G4String mat_name  = "Aluminum";
+    G4String mat_name  = "G4_Al";
    //     G4String mat_name  = "Silicon";
    //  G4String mat_name  = "Gold";
     //   G4String mat_name  = "Iron";
@@ -330,7 +333,7 @@ void test31Histo::TableControl()
   //G4String proc_name = "hLowEIoni";
 
   const G4ParticleDefinition* part = cal.FindParticle(part_name);
-  const G4Material* mat = cal.FindMaterial(mat_name);
+  const G4Material* mat = mman->FindOrBuildMaterial(mat_name);
   //  G4double fact = gram/(MeV*cm2*mat->GetDensity());
 
   G4double xmin = std::log10(tmin);
@@ -343,8 +346,8 @@ void test31Histo::TableControl()
   G4cout << "====================================================================" << G4endl;
 
   for(G4int i=0; i<=nbin; i++) {
-    G4double e  = std::pow(10.,x);
     /*    
+    G4double e = std::pow(10.,x);
     G4double dedx0 = cal.GetDEDX(e,part,mat);
     G4double dedx = cal.ComputeDEDX(e,part_name,proc_name,mat_name,cut);
     G4cout << i << ".   e(MeV)= " << e/MeV 
@@ -354,10 +357,8 @@ void test31Histo::TableControl()
     */
     x += step;
   }
-  G4NistManager*  mman = G4NistManager::Instance();
-  G4EmCorrections* emc = G4LossTableManager::Instance()->EmCorrections();
 
-  G4bool icorr = true;
+  G4bool icorr = false;
   if(icorr) {
     G4cout << "====================================================================" << G4endl;
     G4cout << "             Ionisation Corrections" << G4endl;
@@ -423,12 +424,12 @@ void test31Histo::TableControl()
 
   G4cout << "====================================================================" << G4endl;
 
-  G4bool ish = true;
+  G4bool ish = false;
   if (ish) {
 
     const G4ParticleDefinition* proton = cal.FindParticle("proton");
     G4BraggModel        bragg;
-    G4BetheBlochModel70 bethe;
+    G4BetheBlochModel   bethe;
     G4DataVector        empty;
     bragg.Initialise(proton, empty);
     bethe.Initialise(proton, empty);
@@ -454,8 +455,8 @@ void test31Histo::TableControl()
       elm = mman->FindOrBuildElement(z, false);
       G4String nam = "G4_"+elm->GetSymbol();
       ma = mman->FindOrBuildMaterial(nam, false);
-      dedx0 = bragg.ComputeDEDX(ma,proton,e,GeV);
-      dedx1 = bethe.ComputeDEDX(ma,proton,e,GeV);
+      dedx0 = bragg.ComputeDEDXPerVolume(ma,proton,e,GeV);
+      dedx1 = bethe.ComputeDEDXPerVolume(ma,proton,e,GeV);
       G4cout << " " << (dedx1 - dedx0)*fact/(ma->GetElectronDensity()) << ",";
       if(z/10*10 == z) G4cout << G4endl;
     }
@@ -472,8 +473,8 @@ void test31Histo::TableControl()
       elm = mman->FindOrBuildElement(z, false);
       G4String nam = "G4_"+elm->GetSymbol();
       ma = mman->FindOrBuildMaterial(nam, false);
-      fdedx0 = bragg.ComputeDEDX(ma,proton,e,GeV)*ffact/ma->GetElectronDensity();
-      fdedx1 = bethe.ComputeDEDX(ma,proton,e,GeV)*ffact/ma->GetElectronDensity();
+      fdedx0 = bragg.ComputeDEDXPerVolume(ma,proton,e,GeV)*ffact/ma->GetElectronDensity();
+      fdedx1 = bethe.ComputeDEDXPerVolume(ma,proton,e,GeV)*ffact/ma->GetElectronDensity();
       s0 = fdedx1 - fdedx0;
       s1 = emc->ShellCorrectionSTD(proton,ma,fe);
 
@@ -484,7 +485,7 @@ void test31Histo::TableControl()
     G4cout << G4endl;
   }
 
-  G4bool ihist = true;
+  G4bool ihist = false;
   if (ihist) {
     G4cout << "====================================================================" << G4endl;
     G4cout << "             Stopping Powers" << G4endl;
@@ -513,7 +514,7 @@ void test31Histo::TableControl()
           G4cout << "Input file <" << fname << "> does not exist! Exit" << G4endl;
           exit(1);
         }
-        G4int i1 = histo->addCloud1D(fname);
+        //G4int i1 = histo->addCloud1D(fname);
         for(G4int j=0; j<8; j++) {fin->getline( line, 200);}
         G4int i2 =0;
         do {

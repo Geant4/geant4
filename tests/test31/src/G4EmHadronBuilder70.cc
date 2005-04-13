@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmHadronBuilder70.cc,v 1.1 2005-03-11 08:16:16 vnivanch Exp $
+// $Id: G4EmHadronBuilder70.cc,v 1.2 2005-04-13 11:54:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -44,8 +44,8 @@
 
 #include "G4MultipleScattering.hh"
 
-#include "G4hIonisation70.hh"
-#include "G4ionIonisation70.hh"
+#include "G4hIonisation.hh"
+#include "G4ionIonisation.hh"
 
 #include "G4Electron.hh"
 #include "G4Proton.hh"
@@ -85,7 +85,7 @@ void G4EmHadronBuilder70::ConstructProcess()
 {
   // Add standard EM Processes
   theParticleIterator->reset();
-  G4hIonisation70* hion;
+  G4hIonisation* hion;
   const G4ParticleDefinition* pip = G4PionPlus::PionPlus();
   const G4ParticleDefinition* pin = G4PionMinus::PionMinus();
 
@@ -125,14 +125,14 @@ void G4EmHadronBuilder70::ConstructProcess()
       if (particleName == "GenericIon" || particleName == "alpha" || particleName == "He3") {
 
         pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-        pmanager->AddProcess(new G4ionIonisation70,      -1, 2,2);
+        pmanager->AddProcess(new G4ionIonisation,      -1, 2,2);
 
       } else if ((!particle->IsShortLived()) &&
 	         (particle->GetPDGCharge() != 0.0) &&
 	         (particle->GetParticleName() != "chargedgeantino")) {
 
         pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
-        pmanager->AddProcess(new G4hIonisation70,     -1,2,2);
+        pmanager->AddProcess(new G4hIonisation,     -1,2,2);
       }
     }
   }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmQEDBuilder70.cc,v 1.2 2005-02-26 21:59:04 vnivanch Exp $
+// $Id: G4EmQEDBuilder70.cc,v 1.3 2005-04-13 11:54:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -42,7 +42,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
-#include "G4ComptonScattering.hh"
+#include "G4ComptonScattering70.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
@@ -51,7 +51,6 @@
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation70.hh"
-#include "G4eplusAnnihilation.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -86,7 +85,7 @@ void G4EmQEDBuilder70::ConstructProcess()
   G4ProcessManager* pmanager = particle->GetProcessManager();
 
   pmanager->AddDiscreteProcess( new G4PhotoElectricEffect() );
-  pmanager->AddDiscreteProcess( new G4ComptonScattering() );
+  pmanager->AddDiscreteProcess( new G4ComptonScattering70() );
   pmanager->AddDiscreteProcess( new G4GammaConversion() );
 
   // Add standard EM Processes for e-
@@ -104,8 +103,8 @@ void G4EmQEDBuilder70::ConstructProcess()
   pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
   pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
   pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
-  pmanager->AddProcess(new G4eplusAnnihilation, 0,-1,4);
-  //pmanager->AddProcess(new G4eplusAnnihilation70, 0,-1,4);
+  //  pmanager->AddProcess(new G4eplusAnnihilation, 0,-1,4);
+  pmanager->AddProcess(new G4eplusAnnihilation70, 0,-1,4);
 
 }
 
