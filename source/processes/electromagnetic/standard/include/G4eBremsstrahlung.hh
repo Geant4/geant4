@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.hh,v 1.30 2005-04-11 10:40:47 vnivanch Exp $
+// $Id: G4eBremsstrahlung.hh,v 1.31 2005-04-13 13:48:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -88,7 +88,7 @@ public:
   G4bool IsApplicable(const G4ParticleDefinition& p);
 
   // Print out of the class parameters
-  virtual void PrintInfo();
+  void PrintInfo();
 
   void SetGammaThreshold(G4double val);
 
@@ -96,14 +96,14 @@ public:
 
 protected:
 
-  virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
+  std::vector<G4DynamicParticle*>* SecondariesPostStep(
                                    G4VEmModel*,
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle*,
                                    G4double&);
 
-  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-                                           const G4ParticleDefinition*);
+  void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+				   const G4ParticleDefinition*);
 
 private:
 

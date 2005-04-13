@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaCompton.hh,v 1.2 2005-04-08 12:39:58 vnivanch Exp $
+// $Id: G4KleinNishinaCompton.hh,v 1.3 2005-04-13 13:48:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -62,9 +62,9 @@ public:
 
   virtual ~G4KleinNishinaCompton();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  virtual G4double ComputeCrossSectionPerAtom(
+  G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
                                       G4double kinEnergy, 
                                       G4double Z, 
@@ -72,7 +72,7 @@ public:
                                       G4double cut,
                                       G4double emax);
 
-  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
+  std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,

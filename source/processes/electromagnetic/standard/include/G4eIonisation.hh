@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisation.hh,v 1.29 2005-04-11 10:40:47 vnivanch Exp $
+// $Id: G4eIonisation.hh,v 1.30 2005-04-13 13:48:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -92,17 +92,17 @@ public:
 
 protected:
 
-  virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
+  std::vector<G4DynamicParticle*>* SecondariesPostStep(
                                    G4VEmModel*,
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle*,
                                    G4double&);
 
-  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-                                           const G4ParticleDefinition*);
+  void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+				   const G4ParticleDefinition*);
 
-  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
-                                    const G4Material*, G4double cut);
+  G4double MinPrimaryEnergy(const G4ParticleDefinition*,
+			    const G4Material*, G4double cut);
 
 private:
 
