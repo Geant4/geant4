@@ -1,4 +1,4 @@
-$Id: History,v 1.82 2005-04-04 09:29:00 gcosmo Exp $
+$Id: History,v 1.83 2005-04-13 15:53:24 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 13, 2005  G.Cosmo                      geommng-V07-00-02
+- Extended signatures for OpenGeometry() and CloseGeometry() to consider local
+  optimisation of a subtree of volumes. Voxelisation can now apply to just a
+  specific subtree if a logical volume is specified.
 
 Apr 02, 2005  M.Asai                       geommng-V07-00-01
 - Added protection against NULL material pointer for volumes belonging
