@@ -400,17 +400,17 @@ void DetectorConstruction::DefineMaterials()
 
 G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 {
-   // Cleanup old geometry
-   G4PhysicalVolumeStore::GetInstance()->Clean();
-   G4LogicalVolumeStore::GetInstance()->Clean();
-   G4SolidStore::GetInstance()->Clean();
+  // Cleanup old geometry
+  G4PhysicalVolumeStore::GetInstance()->Clean();
+  G4LogicalVolumeStore::GetInstance()->Clean();
+  G4SolidStore::GetInstance()->Clean();
 
-   //
-   InitialiseGeometryParameters();
+  //
+  InitialiseGeometryParameters();
 
-   //
-   // World
-   //
+  //
+  // World
+  //
 
   G4VPhysicalVolume* pv;
 

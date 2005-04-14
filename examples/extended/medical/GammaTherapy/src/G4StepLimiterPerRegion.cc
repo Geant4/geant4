@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4StepLimiterPerRegion.cc,v 1.1 2004-12-02 10:34:08 vnivanch Exp $
+// $Id: G4StepLimiterPerRegion.cc,v 1.2 2005-04-14 08:22:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -29,6 +29,7 @@
 #include "G4StepLimiterPerRegion.hh"
 #include "G4StepLimiterMessenger.hh"
 #include "G4VPhysicalVolume.hh"
+#include "Histo.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -37,6 +38,7 @@ G4StepLimiterPerRegion::G4StepLimiterPerRegion(const G4String& processName)
    MaxChargedStep(DBL_MAX)
 {
   pMess = new G4StepLimiterMessenger(this);
+  gasVolume = Histo::GetPointer()->GasVolume();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,6 +81,8 @@ G4double G4StepLimiterPerRegion::PostStepGetPhysicalInteractionLength(
 G4VParticleChange* G4StepLimiterPerRegion::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 {
   aParticleChange.Initialize(aTrack);
+  if(aTrack.GetVolume() == gasVolume) 
+    aParticleChange.ProposeTrackStatus(fStopAndKill);
   return &aParticleChange;
 }
 
