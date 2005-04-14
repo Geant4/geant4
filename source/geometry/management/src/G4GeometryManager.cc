@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.cc,v 1.16 2005-04-13 15:53:09 gcosmo Exp $
+// $Id: G4GeometryManager.cc,v 1.17 2005-04-14 11:00:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GeometryManager
@@ -43,7 +43,7 @@
 // Needed for building optimisations
 //
 #include "G4LogicalVolumeStore.hh"
-#include "G4LogicalVolume.hh"
+#include "G4VPhysicalVolume.hh"
 #include "G4SmartVoxelHeader.hh"
 #include "voxeldefs.hh"
 
@@ -66,17 +66,17 @@ G4GeometryManager::G4GeometryManager()
 // Closes geometry - performs sanity checks and optionally builds optimisation
 // for placed volumes (always built for replicas & parameterised).
 // NOTE: Currently no sanity checks are performed.
-// Applies to just a specific subtree if a logical volume is specified.
+// Applies to just a specific subtree if a physical volume is specified.
 // ***************************************************************************
 //
 G4bool G4GeometryManager::CloseGeometry(G4bool pOptimise, G4bool verbose,
-                                        G4LogicalVolume* tVolume)
+                                        G4VPhysicalVolume* pVolume)
 {
    if (!fIsClosed)
   {
-    if (tVolume)
+    if (pVolume)
     {
-      BuildOptimisations(pOptimise, tVolume);
+      BuildOptimisations(pOptimise, pVolume);
     }
     else
     {
@@ -90,14 +90,21 @@ G4bool G4GeometryManager::CloseGeometry(G4bool pOptimise, G4bool verbose,
 // ***************************************************************************
 // Opens the geometry and removes optimisations (optionally, related to just
 // the specified logical-volume).
-// Applies to just a specific subtree if a logical volume is specified.
+// Applies to just a specific subtree if a physical volume is specified.
 // ***************************************************************************
 //
-void G4GeometryManager::OpenGeometry(G4LogicalVolume* tVolume)
+void G4GeometryManager::OpenGeometry(G4VPhysicalVolume* pVolume)
 {
   if (fIsClosed)
   {
-    DeleteOptimisations(tVolume);
+    if (pVolume)
+    {
+      DeleteOptimisations(pVolume);
+    }
+    else
+    {
+      DeleteOptimisations();
+    }
     fIsClosed=false;
   }
 }
@@ -206,8 +213,16 @@ void G4GeometryManager::BuildOptimisations(G4bool allOpts, G4bool verbose)
 // ***************************************************************************
 //
 void G4GeometryManager::BuildOptimisations(G4bool allOpts,
-                                           G4LogicalVolume* tVolume)
+                                           G4VPhysicalVolume* pVolume)
 {
+   if (!pVolume) { return; }
+
+   // Retrieve the mother logical volume, if not NULL,
+   // otherwise apply global optimisation for the world volume
+   //
+   G4LogicalVolume* tVolume = pVolume->GetMotherLogical();
+   if (!tVolume) { return BuildOptimisations(allOpts, false); }
+
    G4SmartVoxelHeader* head = tVolume->GetVoxelHeader();
    delete head;
    tVolume->SetVoxelHeader(0);
@@ -239,32 +254,51 @@ void G4GeometryManager::BuildOptimisations(G4bool allOpts,
             << G4endl;
 #endif
    }
+
+   // Scan recursively the associated logical volume tree
+   //
+  tVolume = pVolume->GetLogicalVolume();
+  if (tVolume->GetNoDaughters()) {  BuildOptimisations(allOpts, tVolume->GetDaughter(0)); }
 }
 
 // ***************************************************************************
 // Removes all optimisation info.
 // Loops over all logical volumes, deleting non-null voxels pointers,
-// or removes optimisation info for a subtree, if a LV is specified.
 // ***************************************************************************
 //
-void G4GeometryManager::DeleteOptimisations(G4LogicalVolume* tVolume)
+void G4GeometryManager::DeleteOptimisations()
 {
-  if (tVolume)
+  G4LogicalVolume* tVolume = 0;
+  G4LogicalVolumeStore* Store = G4LogicalVolumeStore::GetInstance();
+  for (size_t n=0; n<Store->size(); n++)
   {
+    tVolume=(*Store)[n];
     delete tVolume->GetVoxelHeader();
     tVolume->SetVoxelHeader(0);
   }
-  else
-  {
-    G4LogicalVolumeStore* Store = G4LogicalVolumeStore::GetInstance();
-    G4LogicalVolume* volume;
-    for (size_t n=0; n<Store->size(); n++)
-    {
-      volume=(*Store)[n];
-      delete volume->GetVoxelHeader();
-      volume->SetVoxelHeader(0);
-    }
-  }
+}
+
+// ***************************************************************************
+// Removes optimisation info for the specified subtree.
+// Scans recursively all daughter volumes, deleting non-null voxels pointers.
+// ***************************************************************************
+//
+void G4GeometryManager::DeleteOptimisations(G4VPhysicalVolume* pVolume)
+{
+  if (!pVolume) { return; }
+
+  // Retrieve the mother logical volume, if not NULL,
+  // otherwise global deletion to world volume.
+  //
+  G4LogicalVolume* tVolume = pVolume->GetMotherLogical();
+  if (!tVolume) { return DeleteOptimisations(); }
+  delete tVolume->GetVoxelHeader();
+  tVolume->SetVoxelHeader(0);
+
+  // Scan recursively the associated logical volume tree
+  //
+  tVolume = pVolume->GetLogicalVolume();
+  if (tVolume->GetNoDaughters()) { DeleteOptimisations(tVolume->GetDaughter(0)); }
 }
 
 // ***************************************************************************
