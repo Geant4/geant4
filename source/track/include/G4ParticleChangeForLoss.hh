@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.hh,v 1.13 2005-04-14 17:59:38 vnivanch Exp $
+// $Id: G4ParticleChangeForLoss.hh,v 1.14 2005-04-14 19:00:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -63,8 +63,8 @@ public:
   // ----------------------------------------------------
   // --- the following methods are for updating G4Step -----
 
-  virtual G4Step* UpdateStepForAlongStep(G4Step* Step);
-  virtual G4Step* UpdateStepForPostStep(G4Step* Step);
+  G4Step* UpdateStepForAlongStep(G4Step* Step);
+  G4Step* UpdateStepForPostStep(G4Step* Step);
   // A physics process gives the final state of the particle
   // based on information of G4Track
 
@@ -213,7 +213,7 @@ inline void G4ParticleChangeForLoss::InitializeForPostStep(const G4Track& track)
 // methods for updating G4Step
 //
 
-G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
+inline G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
 {
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
 
@@ -239,7 +239,7 @@ G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
   return pStep;
 }
 
-G4Step* G4ParticleChangeForLoss::UpdateStepForPostStep(G4Step* pStep)
+inline G4Step* G4ParticleChangeForLoss::UpdateStepForPostStep(G4Step* pStep)
 {
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
   if(proposedKinEnergy > 0.0) {

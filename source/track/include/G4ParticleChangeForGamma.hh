@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForGamma.hh,v 1.1 2005-04-14 18:00:15 vnivanch Exp $
+// $Id: G4ParticleChangeForGamma.hh,v 1.2 2005-04-14 19:00:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -61,7 +61,7 @@ public:
   // ----------------------------------------------------
   // --- the following methods are for updating G4Step -----
 
-  virtual G4Step* UpdateStepForPostStep(G4Step* Step);
+  G4Step* UpdateStepForPostStep(G4Step* Step);
   // A physics process gives the final state of the particle
   // based on information of G4Track
 
