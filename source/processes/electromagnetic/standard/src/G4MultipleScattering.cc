@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.24 2005-02-07 13:35:24 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.25 2005-04-15 11:40:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -64,6 +64,7 @@
 // 17-08-04 name of facxsi changed to factail (L.Urban)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 07-02-05 correction in order to have a working Setsamplez function (L.Urban)
+// 15-04-05 optimize internal interface (V.Ivanchenko)
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -97,7 +98,8 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
   SetBinning(totBins);
   SetMinKinEnergy(lowKineticEnergy);
   SetMaxKinEnergy(highKineticEnergy);
-  Setsamplez(true) ; 
+  Setsamplez(true);
+  isInitialized = false; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -109,6 +111,9 @@ G4MultipleScattering::~G4MultipleScattering()
 
 void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* particle)
 {
+  boundary = BoundaryAlgorithmFlag();
+  if(isInitialized) return;
+
   if (particle->GetParticleType() == "nucleus") {
     SetBoundary(false);
     SetLateralDisplasmentFlag(false);
@@ -120,10 +125,11 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* particl
     SetBuildLambdaTable(true);
   }
   G4MscModel* em = new G4MscModel(dtrl,NuclCorrPar,FactPar,factail,samplez);
+  em->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
   em->SetLowEnergyLimit(lowKineticEnergy);
   em->SetHighEnergyLimit(highKineticEnergy);
   AddEmModel(1, em);
-  boundary = BoundaryAlgorithmFlag();
+  isInitialized = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -169,7 +175,7 @@ G4double G4MultipleScattering::TruePathLengthLimit(const G4Track&  track,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4MultipleScattering::PrintInfoDefinition()
+void G4MultipleScattering::PrintInfo()
 {
   G4VMultipleScattering::PrintInfoDefinition();
   if(boundary) {

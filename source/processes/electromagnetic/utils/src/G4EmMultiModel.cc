@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmMultiModel.cc,v 1.3 2005-03-28 23:08:18 vnivanch Exp $
+// $Id: G4EmMultiModel.cc,v 1.4 2005-04-15 11:40:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,6 +35,7 @@
 // Creation date: 03.05.2004
 //
 // Modifications: 
+// 15-04-05 optimize internal interface (V.Ivanchenko)
 //
 
 // Class Description:
@@ -136,17 +137,6 @@ G4double G4EmMultiModel::CrossSection(const G4MaterialCutsCouple* couple,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4DynamicParticle* G4EmMultiModel::SampleSecondary(
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*,
-                                   G4double,
-                                   G4double)
-{
-  return 0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 std::vector<G4DynamicParticle*>* G4EmMultiModel::SampleSecondaries(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp,
@@ -186,17 +176,6 @@ std::vector<G4DynamicParticle*>* G4EmMultiModel::SampleSecondaries(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmMultiModel:: MaxSecondaryEnergy(const G4DynamicParticle* dp)
-{
-  G4double tmax = 0.0;
-  if(nModels) {
-    tmax = (model[0])-> MaxSecondaryKinEnergy(dp);
-  } 
-  return tmax;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 G4double G4EmMultiModel:: MaxSecondaryEnergy(const G4ParticleDefinition*,
 					           G4double kinEnergy)
 {
@@ -212,15 +191,6 @@ void G4EmMultiModel::DefineForRegion(const G4Region* r)
 {
   if(nModels) {
     for(G4int i=0; i<nModels; i++) {(model[i])->DefineForRegion(r);}
-  } 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4EmMultiModel::SetDynamicParticle(const G4DynamicParticle* dp)
-{
-  if(nModels) {
-    for(G4int i=0; i<nModels; i++) {(model[i])->SetDynamicParticle(dp);}
   } 
 }
 

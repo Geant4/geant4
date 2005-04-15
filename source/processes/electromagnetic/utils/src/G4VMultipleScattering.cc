@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.32 2005-03-28 23:08:18 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.33 2005-04-15 11:40:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -46,6 +46,7 @@
 // 27-08-04 Add InitialiseForRun method (V.Ivanchneko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 11-03-05 Shift verbose level by 1 (V.Ivantchenko)
+// 15-04-05 optimize internal interface (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -70,15 +71,12 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
-#include "G4Navigator.hh"
-#include "G4TransportationManager.hh"
 #include "G4PhysicsTableHelper.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType type):
                  G4VContinuousDiscreteProcess(name, type),
-  navigator(0),
   theLambdaTable(0),
   firstParticle(0),
   currentParticle(0),
@@ -178,9 +176,6 @@ void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part
     InitialiseProcess(firstParticle);
     if(buildLambdaTable)
       theLambdaTable = G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
-    if(latDisplasment && !navigator)
-      navigator = G4TransportationManager::GetTransportationManager()
-        ->GetNavigatorForTracking();
     const G4DataVector* theCuts = modelManager->Initialise(firstParticle, 0, 10.0, verboseLevel);
 
     if(2 < verboseLevel) G4cout << theCuts << G4endl;
@@ -195,67 +190,7 @@ void G4VMultipleScattering::AddEmModel(G4int order, G4VEmModel* p,
 {
   G4VEmFluctuationModel* fm = 0;
   modelManager->AddEmModel(order, p, fm, region);
-  if(p) p->SetParticleChange(pParticleChange);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
-                                                       const G4Step& step)
-{
-  fParticleChange.Initialize(track);
-  G4double kineticEnergy = track.GetKineticEnergy();
-  G4double truestep = step.GetStepLength();
-
-  if (kineticEnergy > 0.0) {
-    G4double cth  = currentModel->SampleCosineTheta(truestep,kineticEnergy);
-    G4double sth  = std::sqrt(1.-cth*cth);
-    G4double phi  = twopi*G4UniformRand();
-    G4double dirx = sth*std::cos(phi);
-    G4double diry = sth*std::sin(phi);
-
-    G4ThreeVector oldDirection = track.GetMomentumDirection();
-    G4ThreeVector newDirection(dirx,diry,cth);
-    newDirection.rotateUz(oldDirection);
-    fParticleChange.ProposeMomentumDirection(newDirection);
-
-  /*
-  if(0 < verboseLevel) {
-    const G4ParticleDefinition* pd = dynParticle->GetDefinition();
-    G4cout << "G4VMultipleScattering::PostStepDoIt: Sample secondary; E= " << finalT/MeV
-           << " MeV; model= (" << currentModel->LowEnergyLimit(pd)
-           << ", " <<  currentModel->HighEnergyLimit(pd) << ")"
-           << G4endl;
-  }
-  */
-
-    if (latDisplasment) {
-
-      G4double safety = step.GetPostStepPoint()->GetSafety();
-      if ( safety > 0.0) {
-        G4double r = currentModel->SampleDisplacement();
-        if (r > safety) r = safety;
-
-        // sample direction of lateral displacement
-        G4double phi  = twopi*G4UniformRand();
-        G4double dirx = std::cos(phi);
-        G4double diry = std::sin(phi);
-
-        G4ThreeVector latDirection(dirx,diry,0.0);
-        latDirection.rotateUz(oldDirection);
-
-        // compute new endpoint of the Step
-        G4ThreeVector newPosition = (step.GetPostStepPoint())->GetPosition()
-					    + r*latDirection;
-
-        navigator->LocateGlobalPointWithinVolume(newPosition);
-
-        fParticleChange.ProposePosition(newPosition);
-      }
-    }
-  }
-
-  return &fParticleChange;
+  if(p)p->SetParticleChange(pParticleChange);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -274,10 +209,11 @@ void G4VMultipleScattering::PrintInfoDefinition()
 	     << " in " << nBins << " bins."
 	     << G4endl;
     }
-  }
-  if (2 < verboseLevel) {
+    PrintInfo();
+    if (2 < verboseLevel) {
       G4cout << "LambdaTable address= " << theLambdaTable << G4endl;
       if(theLambdaTable) G4cout << (*theLambdaTable) << G4endl;
+    }
   }
 }
 
@@ -353,13 +289,6 @@ G4bool G4VMultipleScattering::RetrievePhysicsTable(const G4ParticleDefinition* p
     }
   }
   return yes;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-const G4PhysicsTable* G4VMultipleScattering::LambdaTable() const
-{
-  return theLambdaTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

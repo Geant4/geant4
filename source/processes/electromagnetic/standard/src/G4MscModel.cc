@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.3 2005-04-08 12:39:58 vnivanch Exp $
+// $Id: G4MscModel.cc,v 1.4 2005-04-15 11:40:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,6 +68,7 @@
 //
 // 03-11-04 precision problem for very high energy ions and small stepsize
 //          solved in SampleCosineTheta (L.Urban).
+// 15-04-05 optimize internal interface - add SampleSecondaries method (V.Ivanchenko)
 //
 
 // Class Description:
@@ -87,14 +88,17 @@
 #include "G4Electron.hh"
 #include "G4LossTableManager.hh"
 #include "G4PhysicsTable.hh"
+#include "G4ParticleChangeForMSC.hh"
+#include "G4Navigator.hh"
+#include "G4TransportationManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
 
-G4MscModel::G4MscModel(G4double& m_dtrl, G4double& m_NuclCorrPar,
-                           G4double& m_FactPar, G4double& m_factail,
-			   G4bool& m_samplez, const G4String& nam)
+G4MscModel::G4MscModel(G4double m_dtrl, G4double m_NuclCorrPar,
+		       G4double m_FactPar, G4double m_factail,
+		       G4bool m_samplez, const G4String& nam)
   : G4VEmModel(nam),
   taubig(8.0),
   tausmall(1.e-20),
@@ -126,6 +130,16 @@ void G4MscModel::Initialise(const G4ParticleDefinition* p,
   charge = particle->GetPDGCharge()/eplus;
   b = 1. ;
   xsi = 3.00 ;
+
+  if(pParticleChange)
+    fParticleChange = reinterpret_cast<G4ParticleChangeForMSC*>(pParticleChange);
+  else
+    fParticleChange = new G4ParticleChangeForMSC();
+
+  if(latDisplasment && !navigator)
+    navigator = G4TransportationManager::GetTransportationManager()
+      ->GetNavigatorForTracking();
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -505,6 +519,62 @@ G4double G4MscModel::TrueStepLength(G4double geomStepLength)
   if(trueLength < geomStepLength) trueLength = geomStepLength;
 
   return trueLength;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+std::vector<G4DynamicParticle*>* G4MscModel::SampleSecondaries(
+                                const G4MaterialCutsCouple*,
+                                const G4DynamicParticle* dynParticle,
+                                      G4double truestep,
+                                      G4double safety)
+{
+  G4double kineticEnergy = dynParticle->GetKineticEnergy();
+  if(kineticEnergy <= 0.0) return 0;
+
+  G4double cth  = SampleCosineTheta(truestep,kineticEnergy);
+  G4double sth  = sqrt((1.0 - cth)*(1.0 + cth));
+  G4double phi  = twopi*G4UniformRand();
+  G4double dirx = sth*cos(phi);
+  G4double diry = sth*sin(phi);
+
+  G4ThreeVector oldDirection = dynParticle->GetMomentumDirection();
+  G4ThreeVector newDirection(dirx,diry,cth);
+  newDirection.rotateUz(oldDirection);
+  fParticleChange->ProposeMomentumDirection(newDirection);
+
+  /*
+  if(0 < verboseLevel) {
+    const G4ParticleDefinition* pd = dynParticle->GetDefinition();
+    G4cout << "G4VMultipleScattering::PostStepDoIt: Sample secondary; E= " << finalT/MeV
+           << " MeV; model= (" << currentModel->LowEnergyLimit(pd)
+           << ", " <<  currentModel->HighEnergyLimit(pd) << ")"
+           << G4endl;
+  }
+  */
+
+  if (latDisplasment && safety > 0.0) {
+
+    G4double r = SampleDisplacement();
+    if (r > safety) r = safety;
+
+    // sample direction of lateral displacement
+    G4double phi  = twopi*G4UniformRand();
+    G4double dirx = std::cos(phi);
+    G4double diry = std::sin(phi);
+
+    G4ThreeVector newPosition(dirx,diry,0.0);
+    newPosition.rotateUz(oldDirection);
+
+    // compute new endpoint of the Step
+    newPosition *= r;
+    newPosition += *(fParticleChange->GetProposedPosition());
+
+    navigator->LocateGlobalPointWithinVolume(newPosition);
+
+    fParticleChange->ProposePosition(newPosition);
+  }
+  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

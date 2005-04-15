@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmMultiModel.hh,v 1.3 2005-03-28 23:08:18 vnivanch Exp $
+// $Id: G4EmMultiModel.hh,v 1.4 2005-04-15 11:40:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,8 +35,7 @@
 // Creation date: 03.05.2004
 //
 // Modifications:
-//
-//
+// 15-04-05 optimize internal interface (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -72,21 +71,15 @@ public:
 
 
   G4double ComputeDEDX(const G4MaterialCutsCouple*,
-                               const G4ParticleDefinition*,
-                                     G4double kineticEnergy,
-                                     G4double cutEnergy);
+		       const G4ParticleDefinition*,
+		       G4double kineticEnergy,
+		       G4double cutEnergy);
 
   G4double CrossSection(const G4MaterialCutsCouple*,
-                                const G4ParticleDefinition*,
-                                      G4double kineticEnergy,
-                                      G4double cutEnergy,
-                                      G4double maxEnergy);
-
-  G4DynamicParticle* SampleSecondary(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double tmax);
+			const G4ParticleDefinition*,
+			G4double kineticEnergy,
+			G4double cutEnergy,
+			G4double maxEnergy);
 
   std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
@@ -94,11 +87,7 @@ public:
                                       G4double tmin,
                                       G4double tmax);
 
-  G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle);
-
   void DefineForRegion(const G4Region*);
-
-  void SetDynamicParticle(const G4DynamicParticle*);
 
   void AddModel(G4VEmModel*, G4double tmin, G4double tmax);
 

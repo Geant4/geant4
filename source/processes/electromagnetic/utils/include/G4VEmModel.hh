@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.28 2005-04-08 12:40:07 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.29 2005-04-15 11:40:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -48,6 +48,7 @@
 // 14-03-05 Reduce number of pure virtual methods and make inline part separate (V.Ivanchenko)
 // 24-03-05 Remove IsInCharge and add G4VParticleChange in the constructor (V.Ivanchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 15-04-05 optimize internal interface for msc (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -145,14 +146,7 @@ public:
 
   virtual G4double TrueStepLength(G4double geomStepLength);
 
-  virtual G4double SampleCosineTheta(G4double trueStepLength,
-                                     G4double kinEnergy);
-
-  virtual G4double SampleDisplacement();
-
   virtual void DefineForRegion(const G4Region*);
-
-  virtual void SetDynamicParticle(const G4DynamicParticle*);
 
 protected:
 
@@ -332,20 +326,7 @@ inline G4double G4VEmModel::TrueStepLength(G4double geomStepLength)
   return geomStepLength;
 };
 
-inline G4double G4VEmModel::SampleCosineTheta(G4double,G4double ) 
-{
-  return 1.0;
-}
-
-inline G4double G4VEmModel::SampleDisplacement() 
-{
-  return 0.0;
-}
-
 inline void G4VEmModel::DefineForRegion(const G4Region*) 
-{}
-
-inline void G4VEmModel::SetDynamicParticle(const G4DynamicParticle*) 
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
