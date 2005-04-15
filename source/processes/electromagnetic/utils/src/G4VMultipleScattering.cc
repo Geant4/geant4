@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.33 2005-04-15 11:40:46 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.34 2005-04-15 14:11:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -107,11 +107,12 @@ G4VMultipleScattering::~G4VMultipleScattering()
 
 void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
+  G4String num = part.GetParticleName();
   if(1 < verboseLevel) {
     //    G4cout << "========================================================" << G4endl;
     G4cout << "### G4VMultipleScattering::BuildPhysicsTable() for "
            << GetProcessName()
-           << " and particle " << part.GetParticleName()
+           << " and particle " << num
            << G4endl;
   }
 
@@ -124,7 +125,6 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
     for (size_t i=0; i<numOfCouples; i++) {
 
       if (theLambdaTable->GetFlag(i)) {
-
         // create physics vector and fill it
         const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
         G4PhysicsVector* aVector = PhysicsVector(couple);
@@ -133,21 +133,22 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
       }
     }
 
-    G4String num = part.GetParticleName();
     if(1 < verboseLevel) {
       G4cout << "Lambda table is built for "
              << num
              << G4endl;
     }
-    if(verboseLevel>0 && ( num == "e-" || num == "mu+" || num == "proton" || num == "pi-")) 
-      PrintInfoDefinition();
-    if(2 < verboseLevel) G4cout << *theLambdaTable << G4endl;
+  }
+  if(verboseLevel>0 && ( num == "e-" || num == "mu+" ||  
+                         num == "proton" || num == "pi-" || num == "GenericIon")) {
+    PrintInfoDefinition();
+    if(2 < verboseLevel && theLambdaTable) G4cout << *theLambdaTable << G4endl;
   }
 
   if(1 < verboseLevel) {
     G4cout << "### G4VMultipleScattering::BuildPhysicsTable() done for "
            << GetProcessName()
-           << " and particle " << part.GetParticleName()
+           << " and particle " << num
            << G4endl;
   }
 }

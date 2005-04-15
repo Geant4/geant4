@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.25 2005-04-15 11:40:35 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.26 2005-04-15 14:10:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -177,7 +177,6 @@ G4double G4MultipleScattering::TruePathLengthLimit(const G4Track&  track,
 
 void G4MultipleScattering::PrintInfo()
 {
-  G4VMultipleScattering::PrintInfoDefinition();
   if(boundary) {
     G4cout << "      Boundary algorithm is active with facrange= "
            << facrange

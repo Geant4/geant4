@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.11 2005-04-15 11:40:35 vnivanch Exp $
+// $Id: G4MultipleScattering.hh,v 1.12 2005-04-15 14:10:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,7 +52,7 @@
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering.hh,v 1.11 2005-04-15 11:40:35 vnivanch Exp $
+// $Id: G4MultipleScattering.hh,v 1.12 2005-04-15 14:10:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -85,8 +85,8 @@ public:    // with description
   G4bool IsApplicable (const G4ParticleDefinition& p);
 
   G4double TruePathLengthLimit(const G4Track&  track,
-                                      G4double& lambda,
-                                      G4double  currentMinimalStep);
+			       G4double& lambda,
+			       G4double  currentMinimalStep);
 
   // Print few lines of informations about the process: validity range,
   void PrintInfo();
