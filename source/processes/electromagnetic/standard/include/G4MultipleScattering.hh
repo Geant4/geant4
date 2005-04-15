@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.12 2005-04-15 14:10:33 vnivanch Exp $
+// $Id: G4MultipleScattering.hh,v 1.13 2005-04-15 14:41:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,7 +52,7 @@
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering.hh,v 1.12 2005-04-15 14:10:33 vnivanch Exp $
+// $Id: G4MultipleScattering.hh,v 1.13 2005-04-15 14:41:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -93,6 +93,9 @@ public:    // with description
 
   // geom. step length distribution should be sampled or not
   void Setsamplez(G4bool value);
+
+  // activate boundary algorithm
+  void SetBoundary(G4bool value);
 
   // to reduce the energy/step dependence
   void Setdtrl(G4double value);
@@ -155,6 +158,12 @@ inline G4bool G4MultipleScattering::IsApplicable (const G4ParticleDefinition& p)
 inline void G4MultipleScattering::Setsamplez(G4bool value)
 {
   samplez = value;
+}
+
+// activate boundary algorithm
+inline void G4MultipleScattering::SetBoundary(G4bool value)
+{
+  boundary = value;
 }
 
 // to reduce the energy/step dependence

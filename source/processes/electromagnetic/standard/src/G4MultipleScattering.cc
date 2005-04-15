@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.26 2005-04-15 14:10:33 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.27 2005-04-15 14:41:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -78,16 +78,19 @@
 using namespace std;
 
 G4MultipleScattering::G4MultipleScattering(const G4String& processName)
-     : G4VMultipleScattering(processName),
-       totBins(120),
-       facrange(0.199),
-       dtrl(0.05),
-       NuclCorrPar (0.0615),
-       FactPar(0.40),
-       factail(1.0),
-       cf(1.001),
-       stepnolastmsc(-1000000),
-       nsmallstep(5)
+  : G4VMultipleScattering(processName),
+    totBins(120),
+    facrange(0.199),
+    dtrl(0.05),
+    NuclCorrPar (0.0615),
+    FactPar(0.40),
+    factail(1.0),
+    cf(1.001),
+    stepnolastmsc(-1000000),
+    nsmallstep(5),
+    samplez(true),
+    boundary(true),
+    isInitialized(false)
 {
   lowKineticEnergy = 0.1*keV;
   highKineticEnergy= 100.*TeV;
@@ -98,8 +101,6 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
   SetBinning(totBins);
   SetMinKinEnergy(lowKineticEnergy);
   SetMaxKinEnergy(highKineticEnergy);
-  Setsamplez(true);
-  isInitialized = false; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -111,16 +112,14 @@ G4MultipleScattering::~G4MultipleScattering()
 
 void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* particle)
 {
-  boundary = BoundaryAlgorithmFlag();
   if(isInitialized) return;
 
   if (particle->GetParticleType() == "nucleus") {
-    SetBoundary(false);
+    boundary = false;
     SetLateralDisplasmentFlag(false);
     SetBuildLambdaTable(false);
     Setsamplez(false) ;
   } else {
-    SetBoundary(true);
     SetLateralDisplasmentFlag(true);
     SetBuildLambdaTable(true);
   }

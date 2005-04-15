@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.34 2005-04-15 14:11:00 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.35 2005-04-15 14:41:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -47,6 +47,7 @@
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 11-03-05 Shift verbose level by 1 (V.Ivantchenko)
 // 15-04-05 optimize internal interface (V.Ivanchenko)
+// 15-04-05 remove boundary flag (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -82,7 +83,6 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType
   currentParticle(0),
   currentCouple(0),
   nBins(120),
-  boundary(false),
   latDisplasment(true),
   buildLambdaTable(true)
 {

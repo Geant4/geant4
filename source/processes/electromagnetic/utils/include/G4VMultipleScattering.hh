@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.26 2005-04-15 11:40:46 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.27 2005-04-15 14:41:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -50,6 +50,7 @@
 // 27-08-04 Add InitialiseForRun method (V.Ivanchneko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 15-04-05 optimize internal interfaces (V.Ivanchenko)
+// 15-04-05 remove boundary flag (V.Ivanchenko)
 
 // -------------------------------------------------------------------
 //
@@ -175,10 +176,6 @@ public:
   void SetLateralDisplasmentFlag(G4bool val);
      // lateral displacement to be/not to be computed
 
-  G4bool BoundaryAlgorithmFlag() const;
-  void SetBoundary(G4bool val);
-     // boundary algorith is/isnt active
-
   void SetBuildLambdaTable(G4bool val);
 
   const G4PhysicsTable* LambdaTable() const;
@@ -249,7 +246,6 @@ private:
   G4double                    currentRange;
 
   G4GPILSelection             valueGPILSelectionMSC;
-  G4bool                      boundary;
   G4bool                      latDisplasment;
   G4bool                      buildLambdaTable;
 };
@@ -442,20 +438,6 @@ inline  G4bool G4VMultipleScattering::LateralDisplasmentFlag() const
 inline  void G4VMultipleScattering::SetLateralDisplasmentFlag(G4bool val)
 {
   latDisplasment = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline  G4bool G4VMultipleScattering::BoundaryAlgorithmFlag() const
-{
-  return boundary;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline  void G4VMultipleScattering::SetBoundary(G4bool val)
-{
-  boundary = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
