@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.hh,v 1.14 2005-04-14 19:00:56 vnivanch Exp $
+// $Id: G4ParticleChangeForLoss.hh,v 1.15 2005-04-15 06:44:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -242,10 +242,8 @@ inline G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
 inline G4Step* G4ParticleChangeForLoss::UpdateStepForPostStep(G4Step* pStep)
 {
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
-  if(proposedKinEnergy > 0.0) {
-    pPostStepPoint->SetCharge( currentCharge );
-    pPostStepPoint->SetMomentumDirection( proposedMomentumDirection );
-  }
+  pPostStepPoint->SetCharge( currentCharge );
+  pPostStepPoint->SetMomentumDirection( proposedMomentumDirection );
   pPostStepPoint->SetKineticEnergy( proposedKinEnergy );
   // update weight
   // this feature is commented out, it should be overwritten in case
