@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.23 2005-01-14 03:00:39 kurasige Exp $
+// $Id: G4ParticleDefinition.cc,v 1.24 2005-04-17 04:59:41 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -114,9 +114,7 @@ G4ParticleDefinition::G4ParticleDefinition(
 #ifdef G4VERBOSE
    if (this->FillQuarkContents() != thePDGEncoding) {
      if (verboseLevel>0) {
-       // cerr bnot G4cerr is used intentionally  
-       // because G4ParticleDefinition constructor may be called 
-       // before G4cerr object is instantiated !!
+       // Using G4cerr expecting that it is available in construction of static objects 
        G4cerr << "Particle " << aName << " has a strange PDGEncoding " <<G4endl;
      }
    }
