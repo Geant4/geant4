@@ -1,4 +1,4 @@
-$Id: History,v 1.42 2004-11-18 15:19:05 johna Exp $
+$Id: History,v 1.43 2005-04-17 16:08:43 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,17 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+17th April 2005  John Allison  (opengl-V07-00-00)
+- Based on vis-V07-00-13.
+- Implemented text for X-Windows viewers.  Uses glXUseXFont, which
+  creates display lists for nominated fonts.  Simple-minded scheme in
+  which each viewer creates its own font display lists for a variety
+  of sizes, which are accessed by the scene handler through a new
+  class, G4OpenGLFontBaseStore.  Affected methods:
+    G4OpenGLXViewer::CreateMainWindow()
+    G4OpenGLXmViewer::CreateMainWindow()
+    G4OpenGLSceneHandler::AddPrimitive (const G4Text& text)
 
 18th November 2004  John Allison  (opengl-V06-02-07)
 - Removed redundant fLastVP from G4OpenGLStoredSceneHandler.

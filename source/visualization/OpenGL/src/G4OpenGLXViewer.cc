@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.23 2004-12-07 23:40:59 perl Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.24 2005-04-17 16:08:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,6 +32,7 @@
 #ifdef G4VIS_BUILD_OPENGLX_DRIVER
 
 #include "G4OpenGLXViewer.hh"
+#include "G4OpenGLFontBaseStore.hh"
 
 #include "G4ios.hh"
 
@@ -146,6 +147,7 @@ void G4OpenGLXViewer::GetXConnection () {
 	 << G4endl;
     return;
   }
+
 }
 
 void G4OpenGLXViewer::CreateGLXContext (XVisualInfo* v) {
@@ -278,6 +280,42 @@ void G4OpenGLXViewer::CreateMainWindow () {
 
 // connect the context to a window
   glXMakeCurrent (dpy, win, cx);
+
+  // Set up fonts...
+  std::map<G4double,G4String> fonts;  // G4VMarker screen size and font name.
+  fonts[10.] = "-adobe-courier-bold-r-normal--10-100-75-75-m-60-iso8859-1";
+  fonts[11.] = "-adobe-courier-bold-r-normal--11-80-100-100-m-60-iso8859-1";
+  fonts[12.] = "-adobe-courier-bold-r-normal--12-120-75-75-m-70-iso8859-1";
+  fonts[13.] = "fixed";
+  fonts[14.] = "-adobe-courier-bold-r-normal--14-100-100-100-m-90-iso8859-1";
+  fonts[17.] = "-adobe-courier-bold-r-normal--17-120-100-100-m-100-iso8859-1";
+  fonts[18.] = "-adobe-courier-bold-r-normal--18-180-75-75-m-110-iso8859-1";
+  fonts[20.] = "-adobe-courier-bold-r-normal--20-140-100-100-m-110-iso8859-1";
+  fonts[24.] = "-adobe-courier-bold-r-normal--24-240-75-75-m-150-iso8859-1";
+  fonts[25.] = "-adobe-courier-bold-r-normal--25-180-100-100-m-150-iso8859-1";
+  fonts[34.] = "-adobe-courier-bold-r-normal--34-240-100-100-m-200-iso8859-1";
+  std::map<G4double,G4String>::const_iterator i;
+  for (i = fonts.begin(); i != fonts.end(); ++i) {
+    XFontStruct* font_info = XLoadQueryFont(dpy, i->second);
+    if (!font_info) {
+      G4cerr <<
+	"G4OpenGLXmViewer: XLoadQueryFont failed for font\n  "
+	     << i->second
+	     << G4endl;
+      continue;
+    }
+    G4int font_base = glGenLists(256);
+    if (!font_base) {
+      G4cerr << "G4OpenGLXmViewer: out of display lists for fonts." 
+	     << G4endl;
+      continue;
+    }
+    G4int first = font_info->min_char_or_byte2;
+    G4int last  = font_info->max_char_or_byte2;
+    glXUseXFont(font_info->fid, first, last-first+1,font_base+first);
+    G4OpenGLFontBaseStore::AddFontBase(this,font_base,i->first,i->second);
+  }
+
 }
 
 G4OpenGLXViewer::G4OpenGLXViewer (G4OpenGLSceneHandler& scene):
@@ -357,7 +395,6 @@ vi_stored (0)
 
   //  glClearColor (0., 0., 0., 0.);
   //  glClearDepth (1.);
-  
 }
 
 G4OpenGLXViewer::~G4OpenGLXViewer () {

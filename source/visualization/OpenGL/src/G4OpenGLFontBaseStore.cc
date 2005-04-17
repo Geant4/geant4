@@ -20,19 +20,38 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4OpenGL.hh,v 1.3 2005-04-17 16:08:43 allison Exp $
+//
+// $Id: G4OpenGLFontBaseStore.cc,v 1.1 2005-04-17 16:08:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// G.Barrand.
 
-#ifndef G4OpenGL_h
-#define G4OpenGL_h 
+#include "G4OpenGLFontBaseStore.hh"
 
-#ifdef WIN32
-#include <windows.h>
-#endif
+std::multimap<G4VViewer*,G4OpenGLFontBaseStore::FontInfo>
+G4OpenGLFontBaseStore::fFontBaseMap;
 
-#include <GL/gl.h>
-#include <GL/glu.h>
+void G4OpenGLFontBaseStore::AddFontBase
+(G4VViewer* viewer,G4int fontBase,
+ G4double size, const G4String& fontName) {
+  fFontBaseMap.insert
+    (std::make_pair(viewer, FontInfo(fontName, size, fontBase)));
+}
 
-#endif
+G4int G4OpenGLFontBaseStore::GetFontBase(G4VViewer* viewer, G4double size) {
+  G4int fontBase = -1;
+  std::multimap<G4VViewer*,FontInfo>::const_iterator i, j;
+  i = fFontBaseMap.find(viewer);
+  if (i != fFontBaseMap.end()) {
+    G4double sizeDiscrepancy = 9999.;
+    while (i->first == viewer){
+      G4double d = std::abs(size - i->second.fSize);
+      if (d < sizeDiscrepancy) {
+	sizeDiscrepancy = d;
+	j = i;
+      }
+      ++i;
+    }
+    fontBase = j->second.fFontBase;
+  }
+  return fontBase;
+}

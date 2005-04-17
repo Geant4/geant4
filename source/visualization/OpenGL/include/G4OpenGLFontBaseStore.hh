@@ -20,19 +20,38 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4OpenGL.hh,v 1.3 2005-04-17 16:08:43 allison Exp $
+// $Id: G4OpenGLFontBaseStore.hh,v 1.1 2005-04-17 16:08:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// G.Barrand.
+// J.Allison  Apr 2005.
 
-#ifndef G4OpenGL_h
-#define G4OpenGL_h 
+// Class Description:
+// Facilitates sharing of font bases between scene handler and viewers.
 
-#ifdef WIN32
-#include <windows.h>
-#endif
+#ifndef G4OPENGLFONTBASESTORE_HH
+#define G4OPENGLFONTBASESTORE_HH
 
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "globals.hh"
+#include <map>
+
+class G4VViewer;
+
+class G4OpenGLFontBaseStore {
+public:
+  static void AddFontBase(G4VViewer*, G4int fontBase,
+			  G4double size, const G4String& fontName);
+  static G4int GetFontBase(G4VViewer*, G4double size);
+private:
+  struct FontInfo {
+    FontInfo():
+      fFontName(""), fSize(0), fFontBase(-1) {}
+    FontInfo(const G4String& fontName, G4double size, G4int fontBase):
+      fFontName(fontName), fSize(size), fFontBase(fontBase) {}
+    G4String fFontName;
+    G4double fSize;  // In terms of G4VMarker Screen Size.
+    G4int fFontBase;
+  };
+  static std::multimap<G4VViewer*,FontInfo> fFontBaseMap;
+};
 
 #endif
