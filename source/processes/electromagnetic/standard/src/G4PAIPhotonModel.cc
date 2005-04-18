@@ -139,14 +139,6 @@ void G4PAIPhotonModel::SetParticle(const G4ParticleDefinition* p)
 
 ////////////////////////////////////////////////////////////////////////////
 
-G4double G4PAIPhotonModel::MinEnergyCut( const G4ParticleDefinition*,
-                                   const G4MaterialCutsCouple*)
-{
-  return 0.0; // any positive cut
-}
-
-////////////////////////////////////////////////////////////////////////////
-
 void G4PAIPhotonModel::Initialise(const G4ParticleDefinition* p,
                                    const G4DataVector&)
 {
@@ -821,6 +813,7 @@ G4PAIPhotonModel::SampleSecondaries( const G4MaterialCutsCouple* matCC,
     deltaRay->SetDefinition(G4Electron::Electron());
     deltaRay->SetKineticEnergy( deltaTkin );
     deltaRay->SetMomentumDirection(deltaDirection); 
+    vdp->push_back(deltaRay);
 
   }
   else    // secondary 'Cherenkov' photon

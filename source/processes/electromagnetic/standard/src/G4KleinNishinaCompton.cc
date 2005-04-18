@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaCompton.cc,v 1.3 2005-04-08 12:39:58 vnivanch Exp $
+// $Id: G4KleinNishinaCompton.cc,v 1.4 2005-04-18 17:26:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -50,7 +50,7 @@
 #include "G4Gamma.hh"
 #include "Randomize.hh"
 #include "G4DataVector.hh"
-#include "G4ParticleChangeForLoss.hh"
+#include "G4ParticleChangeForGamma.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -62,6 +62,7 @@ G4KleinNishinaCompton::G4KleinNishinaCompton(const G4ParticleDefinition*,
 {
   theGamma = G4Gamma::Gamma();
   theElectron = G4Electron::Electron();
+  lowestGammaEnergy = 1.0*eV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -75,9 +76,9 @@ void G4KleinNishinaCompton::Initialise(const G4ParticleDefinition*,
                                        const G4DataVector&)
 {
   if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
+    fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
   else
-    fParticleChange = new G4ParticleChangeForLoss();
+    fParticleChange = new G4ParticleChangeForGamma();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -188,11 +189,14 @@ std::vector<G4DynamicParticle*>* G4KleinNishinaCompton::SampleSecondaries(
   gamDirection1.rotateUz(gamDirection0);
   G4double gamEnergy1 = epsilon*gamEnergy0;
   fParticleChange->SetProposedKineticEnergy(gamEnergy1);
-  if(gamEnergy1 > DBL_MIN) 
-    fParticleChange->SetProposedMomentumDirection(gamDirection1);
-  else 
+  if(gamEnergy1 > lowestGammaEnergy) {
+    fParticleChange->ProposeMomentumDirection(gamDirection1);
+  } else { 
     fParticleChange->ProposeTrackStatus(fStopAndKill);
-  
+    gamEnergy1 += fParticleChange->GetLocalEnergyDeposit();
+    fParticleChange->ProposeLocalEnergyDeposit(gamEnergy1);
+  }
+
   std::vector<G4DynamicParticle*>* fvect = new std::vector<G4DynamicParticle*>;
  
   //

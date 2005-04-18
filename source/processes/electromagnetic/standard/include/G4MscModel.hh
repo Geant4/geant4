@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.hh,v 1.3 2005-04-15 11:40:35 vnivanch Exp $
+// $Id: G4MscModel.hh,v 1.4 2005-04-18 17:26:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,14 +65,13 @@
 #include "G4VEmModel.hh"
 
 class G4ParticleChangeForMSC;
-class G4Navigator;
 
 class G4MscModel : public G4VEmModel
 {
 
 public:
 
-  G4MscModel(G4double, G4double, G4double, G4double, G4bool,
+  G4MscModel(G4double&, G4double&, G4double&, G4double&, G4bool&,
 	     const G4String& nam = "MscUni");
 
   virtual ~G4MscModel();
@@ -121,7 +120,6 @@ private:
 
   const G4ParticleDefinition* particle;
   G4ParticleChangeForMSC*     fParticleChange;
-  G4Navigator*                navigator;
 
   G4double mass;
   G4double charge;

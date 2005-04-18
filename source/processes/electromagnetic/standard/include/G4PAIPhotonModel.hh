@@ -68,12 +68,8 @@ public:
   virtual ~G4PAIPhotonModel();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-
   
   void InitialiseMe(const G4ParticleDefinition*) {};
-
-  G4double MinEnergyCut(const G4ParticleDefinition*,
-                        const G4MaterialCutsCouple*);
 
   G4double ComputeDEDX(const G4MaterialCutsCouple*,
                        const G4ParticleDefinition*,

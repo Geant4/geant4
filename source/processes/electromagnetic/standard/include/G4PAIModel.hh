@@ -69,8 +69,7 @@ public:
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  G4double MinEnergyCut(const G4ParticleDefinition*,
-                        const G4MaterialCutsCouple*);
+  void InitialiseMe(const G4ParticleDefinition*) {};
 
   G4double ComputeDEDX(const G4MaterialCutsCouple*,
                        const G4ParticleDefinition*,

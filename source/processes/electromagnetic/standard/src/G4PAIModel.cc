@@ -122,14 +122,6 @@ void G4PAIModel::SetParticle(const G4ParticleDefinition* p)
 
 ////////////////////////////////////////////////////////////////////////////
 
-G4double G4PAIModel::MinEnergyCut( const G4ParticleDefinition*,
-                                   const G4MaterialCutsCouple*)
-{
-  return 0.*eV; // any positive cut
-}
-
-////////////////////////////////////////////////////////////////////////////
-
 void G4PAIModel::Initialise(const G4ParticleDefinition* p,
 			    const G4DataVector&)
 {

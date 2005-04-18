@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToTwoGammaModel.cc,v 1.5 2005-04-08 12:39:58 vnivanch Exp $
+// $Id: G4eeToTwoGammaModel.cc,v 1.6 2005-04-18 17:26:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -86,39 +86,20 @@ G4eeToTwoGammaModel::~G4eeToTwoGammaModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4eeToTwoGammaModel::MinEnergyCut(const G4ParticleDefinition*,
-                                           const G4MaterialCutsCouple*)
-{
-  return 0.0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4eeToTwoGammaModel::Initialise(const G4ParticleDefinition*,
                                      const G4DataVector&)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4eeToTwoGammaModel::ComputeDEDX(const G4MaterialCutsCouple*,
-                                          const G4ParticleDefinition*,
-                                                G4double,
-                                                G4double)
-{
-  return 0.0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4eeToTwoGammaModel::CrossSection(const G4MaterialCutsCouple* couple,
-                                           const G4ParticleDefinition*,
-                                                 G4double kineticEnergy,
-                                                 G4double,
-                                                 G4double)
+G4double G4eeToTwoGammaModel::CrossSectionPerVolume(const G4Material* material,
+						    const G4ParticleDefinition*,
+						    G4double kineticEnergy,
+						    G4double,
+						    G4double)
 {
   // Calculates the cross section per atom of annihilation into two photons
   // from the Heilter formula.
-  const G4Material* material = couple->GetMaterial();
   G4double eDensity = material->GetElectronDensity();
 
   G4double tau   = kineticEnergy/electron_mass_c2;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaCompton.hh,v 1.3 2005-04-13 13:48:59 vnivanch Exp $
+// $Id: G4KleinNishinaCompton.hh,v 1.4 2005-04-18 17:26:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -50,7 +50,7 @@
 
 #include "G4VEmModel.hh"
 
-class G4ParticleChangeForLoss;
+class G4ParticleChangeForGamma;
 
 class G4KleinNishinaCompton : public G4VEmModel
 {
@@ -86,8 +86,8 @@ private:
 
   G4ParticleDefinition*     theGamma;
   G4ParticleDefinition*     theElectron;
-  G4ParticleChangeForLoss*  fParticleChange;
-
+  G4ParticleChangeForGamma* fParticleChange;
+  G4double                  lowestGammaEnergy;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

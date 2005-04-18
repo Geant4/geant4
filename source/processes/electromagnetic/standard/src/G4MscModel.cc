@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.4 2005-04-15 11:40:35 vnivanch Exp $
+// $Id: G4MscModel.cc,v 1.5 2005-04-18 17:26:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -89,16 +89,15 @@
 #include "G4LossTableManager.hh"
 #include "G4PhysicsTable.hh"
 #include "G4ParticleChangeForMSC.hh"
-#include "G4Navigator.hh"
 #include "G4TransportationManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
 
-G4MscModel::G4MscModel(G4double m_dtrl, G4double m_NuclCorrPar,
-		       G4double m_FactPar, G4double m_factail,
-		       G4bool m_samplez, const G4String& nam)
+G4MscModel::G4MscModel(G4double& m_dtrl, G4double& m_NuclCorrPar,
+		       G4double& m_FactPar, G4double& m_factail,
+		       G4bool& m_samplez, const G4String& nam)
   : G4VEmModel(nam),
   taubig(8.0),
   tausmall(1.e-20),
@@ -135,10 +134,6 @@ void G4MscModel::Initialise(const G4ParticleDefinition* p,
     fParticleChange = reinterpret_cast<G4ParticleChangeForMSC*>(pParticleChange);
   else
     fParticleChange = new G4ParticleChangeForMSC();
-
-  if(latDisplasment && !navigator)
-    navigator = G4TransportationManager::GetTransportationManager()
-      ->GetNavigatorForTracking();
 
 }
 
@@ -544,13 +539,11 @@ std::vector<G4DynamicParticle*>* G4MscModel::SampleSecondaries(
   fParticleChange->ProposeMomentumDirection(newDirection);
 
   /*
-  if(0 < verboseLevel) {
     const G4ParticleDefinition* pd = dynParticle->GetDefinition();
-    G4cout << "G4VMultipleScattering::PostStepDoIt: Sample secondary; E= " << finalT/MeV
-           << " MeV; model= (" << currentModel->LowEnergyLimit(pd)
-           << ", " <<  currentModel->HighEnergyLimit(pd) << ")"
+    G4cout << "G4MscModel: Sample secondary; E(MeV)= " << kineticEnergy/MeV
+           << " MeV; step(mm)= " << truestep/mm
+           << ", safety(mm)= " <<  safety/mm << " " << pd->GetParticleName()
            << G4endl;
-  }
   */
 
   if (latDisplasment && safety > 0.0) {
@@ -570,7 +563,8 @@ std::vector<G4DynamicParticle*>* G4MscModel::SampleSecondaries(
     newPosition *= r;
     newPosition += *(fParticleChange->GetProposedPosition());
 
-    navigator->LocateGlobalPointWithinVolume(newPosition);
+    G4TransportationManager::GetTransportationManager()
+      ->GetNavigatorForTracking()->LocateGlobalPointWithinVolume(newPosition);
 
     fParticleChange->ProposePosition(newPosition);
   }
