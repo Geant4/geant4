@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.20 2005-04-08 12:40:07 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.21 2005-04-18 17:31:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,6 +42,7 @@
 // 16-09-04 Add flag for LambdaTable and method RecalculateLambda (V.Ivanchneko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 18-04-05 Use G4ParticleChangeForGamma (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -61,7 +62,7 @@
 #include "G4EmModelManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleChangeForLoss.hh"
+#include "G4ParticleChangeForGamma.hh"
 
 class G4Step;
 class G4VEmModel;
@@ -229,7 +230,7 @@ private:
 
 protected:
 
-  G4ParticleChangeForLoss      fParticleChange;
+  G4ParticleChangeForGamma     fParticleChange;
 
 private:
 

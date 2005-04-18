@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.35 2005-04-15 14:41:21 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.36 2005-04-18 17:31:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -89,6 +89,9 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType
   minKinEnergy = 100.0*eV;
   maxKinEnergy = 100.0*TeV;
   SetVerboseLevel(1);
+
+  pParticleChange = &fParticleChange;
+
   modelManager = new G4EmModelManager();
   (G4LossTableManager::Instance())->Register(this);
 

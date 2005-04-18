@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaCompton.cc,v 1.4 2005-04-18 17:26:55 vnivanch Exp $
+// $Id: G4KleinNishinaCompton.cc,v 1.5 2005-04-18 17:31:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,10 +35,9 @@
 // Creation date: 15.03.2005
 //
 // Modifications:
-//
+// 18-04-05 Use G4ParticleChangeForGamma (V.Ivantchenko)
 //
 // Class Description:
-//
 //
 // -------------------------------------------------------------------
 //

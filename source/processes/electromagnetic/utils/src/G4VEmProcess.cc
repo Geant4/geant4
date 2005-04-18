@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.23 2005-04-08 12:40:07 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.24 2005-04-18 17:31:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,7 @@
 // 11-03-05 Shift verbose level by 1, add applyCuts and killPrimary flags (V.Ivanchenko)
 // 14-03-05 Update logic PostStepDoIt (V.Ivanchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 18-04-05 Use G4ParticleChangeForGamma (V.Ivantchenko)
 //
 //
 // Class Description:

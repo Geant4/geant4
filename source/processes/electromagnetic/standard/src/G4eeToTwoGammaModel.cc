@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToTwoGammaModel.cc,v 1.6 2005-04-18 17:26:55 vnivanch Exp $
+// $Id: G4eeToTwoGammaModel.cc,v 1.7 2005-04-18 17:31:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,6 +36,7 @@
 //
 // Modifications:
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 18-04-05 Compute CrossSectionPerVolume (V.Ivantchenko)
 //
 //
 // Class Description:

@@ -1,4 +1,4 @@
-$Id: History,v 1.141 2005-04-13 09:12:32 vnivanch Exp $
+$Id: History,v 1.142 2005-04-18 17:35:35 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18 April 05: V.Ivant (stand-V07-00-05)
+- Gamma processes migrate to G4ParticleChangeForGamma
+- G4MultipleScattering and G4MscModel - optimise internal interfaces
 
 13 April 05: V.Ivant (stand-V07-00-04)
 - Remove PAIwithPhotonModel
