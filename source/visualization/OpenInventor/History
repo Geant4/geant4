@@ -1,4 +1,4 @@
-$Id: History,v 1.60 2004-12-02 15:31:18 gcosmo Exp $
+$Id: History,v 1.61 2005-04-19 07:49:20 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+19th March 2005  Guy Barrand
+- SoCounterAction.cc : remove extra ';' at end of SO_ACTION_SOURCE.
+  Code with ';;' does not compile with the "-pedantic" mode of g++-3.4.
 
 26th November 2004  Guy Barrand  (openinventor-V06-02-02)
 - G4OpenInventorXtViewer, SoPolyhedron, SoCounterAction.h : 

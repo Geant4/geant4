@@ -38,7 +38,7 @@
 #include <Inventor/nodekits/SoBaseKit.h>
 #include <Inventor/elements/SoSwitchElement.h>
 
-SO_ACTION_SOURCE(SoCounterAction);
+SO_ACTION_SOURCE(SoCounterAction)
 
 void SoCounterAction::initClass(void){
   SO_ACTION_INIT_CLASS(SoCounterAction,SoAction);
