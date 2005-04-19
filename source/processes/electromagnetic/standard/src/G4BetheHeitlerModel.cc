@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.cc,v 1.1 2005-04-19 15:42:24 vnivanch Exp $
+// $Id: G4BetheHeitlerModel.cc,v 1.2 2005-04-19 18:59:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -81,7 +81,7 @@ G4BetheHeitlerModel::~G4BetheHeitlerModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4BetheHeitlerModel::Initialise(const G4ParticleDefinition*,
-                                       const G4DataVector&)
+				     const G4DataVector&)
 {
   if(pParticleChange)
     fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
@@ -149,7 +149,7 @@ G4double G4BetheHeitlerModel::InitializeCrossSectionPerAtom(G4double GammaEnergy
   G4double GammaEnergySave = GammaEnergy;
   if (GammaEnergy < GammaEnergyLimit) GammaEnergy = GammaEnergyLimit ;
 
-  G4double X=log(GammaEnergy/electron_mass_c2),X2=X*X, X3=X2*X, X4=X3*X, X5=X4*X;
+  G4double X=log(GammaEnergy/electron_mass_c2), X2=X*X, X3=X2*X, X4=X3*X, X5=X4*X;
 
   G4double F1 = a0 + a1*X + a2*X2 + a3*X3 + a4*X4 + a5*X5,
            F2 = b0 + b1*X + b2*X2 + b3*X3 + b4*X4 + b5*X5,

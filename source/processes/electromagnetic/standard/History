@@ -1,4 +1,4 @@
-$Id: History,v 1.143 2005-04-19 09:50:38 vnivanch Exp $
+$Id: History,v 1.144 2005-04-19 19:04:58 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-- Cash pointer to navigator
+19 April 05: V.Ivant (stand-V07-00-06)
+- Add G4GammaConvertion70
+- Cash pointer to navigator for G4MscModel
 
 18 April 05: V.Ivant (stand-V07-00-05)
 - Gamma processes migrate to G4ParticleChangeForGamma

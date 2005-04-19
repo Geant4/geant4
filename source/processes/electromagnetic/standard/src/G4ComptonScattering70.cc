@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ComptonScattering70.cc,v 1.5 2005-04-19 15:42:24 vnivanch Exp $
+// $Id: G4ComptonScattering70.cc,v 1.6 2005-04-19 19:03:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,7 @@ G4ComptonScattering70::G4ComptonScattering70(const G4String& processName,
     selectedModel(0),
     mType(0)
 {
-  SetLambdaBinning(80);
+  SetLambdaBinning(90);
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*GeV);
 }
