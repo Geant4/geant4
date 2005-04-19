@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransparentRegXTRadiator.cc,v 1.2 2005-04-12 09:10:55 grichine Exp $
+// $Id: G4TransparentRegXTRadiator.cc,v 1.3 2005-04-19 14:56:39 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,7 +29,7 @@
 
 #include "G4TransparentRegXTRadiator.hh"
 #include "Randomize.hh"
-
+#include "G4Integrator.hh"
 #include "G4Gamma.hh"
 
 using namespace std;
@@ -104,7 +104,21 @@ G4double G4TransparentRegXTRadiator::SpectralXTRdEdx(G4double energy)
     //  G4cout<<"k = "<<k<<";    sum = "<<sum<<G4endl;    
   }
   result = 4*( cof1 + cof2 )*( cof1 + cof2 )*sum/energy;
-  result *= (1-exp(-fPlateNumber*sigma))/(1-exp(-sigma));  // fPlateNumber;
+  // result *= ( 1 - exp(-0.5*fPlateNumber*sigma) )/( 1 - exp(-0.5*sigma) );  // fPlateNumber;
+  result *= fPlateNumber*exp(-0.5*fPlateNumber*sigma)+1-exp(-0.5*fPlateNumber*sigma); 
+  /*
+  fEnergy = energy;
+  //  G4Integrator<G4VXTRenergyLoss,G4double(G4VXTRenergyLoss::*)(G4double)> integral;
+  G4Integrator<G4TransparentRegXTRadiator,G4double(G4VXTRenergyLoss::*)(G4double)> integral;
+ 
+  tmp = integral.Legendre96(this,&G4VXTRenergyLoss::SpectralAngleXTRdEdx,
+                             0.0,0.3*fMaxThetaTR) +
+      integral.Legendre96(this,&G4VXTRenergyLoss::SpectralAngleXTRdEdx,
+                             0.3*fMaxThetaTR,0.6*fMaxThetaTR) +         
+      integral.Legendre96(this,&G4VXTRenergyLoss::SpectralAngleXTRdEdx,
+                             0.6*fMaxThetaTR,fMaxThetaTR) ;
+  result += tmp;
+  */ 
   return result;
 }
 
@@ -122,12 +136,13 @@ G4TransparentRegXTRadiator::GetStackFactor( G4double energy,
                                          G4double gamma, G4double varAngle )
 {
 
-  G4double result, Za, Zb, Ma, Mb;
+  G4double result, Za, Zb, Ma, Mb, sigma;
   
   Za = GetPlateFormationZone(energy,gamma,varAngle);
   Zb = GetGasFormationZone(energy,gamma,varAngle);
   Ma = GetPlateLinearPhotoAbs(energy);
   Mb = GetGasLinearPhotoAbs(energy);
+  sigma = Ma*fPlateThick + Mb*fGasThick;
 
   G4complex Ca(1.0+0.5*fPlateThick*Ma/fAlphaPlate,fPlateThick/Za/fAlphaPlate); 
   G4complex Cb(1.0+0.5*fGasThick*Mb/fAlphaGas,fGasThick/Zb/fAlphaGas); 
@@ -138,8 +153,10 @@ G4TransparentRegXTRadiator::GetStackFactor( G4double energy,
   G4complex F1 =   (1.0 - Ha)*(1.0 - Hb )/(1.0 - H)
                  * G4double(fPlateNumber) ;
   G4complex F2 =   (1.0-Ha)*(1.0-Ha)*Hb/(1.0-H)/(1.0-H)
-                 * (1.0 - pow(H,fPlateNumber)) ;
-  G4complex R  = (F1 + F2)*OneInterfaceXTRdEdx(energy,gamma,varAngle);
+                 * (1.0 - exp(-0.5*fPlateNumber*sigma)) ;
+  // * (1.0 - pow(H,fPlateNumber)) ;
+  //  G4complex R  = (F1 + F2)*OneInterfaceXTRdEdx(energy,gamma,varAngle);
+  G4complex R  = F2*OneInterfaceXTRdEdx(energy,gamma,varAngle);
   result       = 2.0*real(R);  
   return      result;
 
@@ -149,17 +166,17 @@ G4TransparentRegXTRadiator::GetStackFactor( G4double energy,
   bZb = fGasThick/GetGasFormationZone(energy,gamma,varAngle);
   aMa = fPlateThick*GetPlateLinearPhotoAbs(energy);
   bMb = fGasThick*GetGasLinearPhotoAbs(energy);
-  Qa = exp(-aMa);
-  Qb = exp(-bMb);
+  Qa = exp(-0.5*aMa);
+  Qb = exp(-0.5*bMb);
   Q  = Qa*Qb;
-  G4complex Ha( exp(-0.5*aMa)*cos(aZa),
-               -exp(-0.5*aMa)*sin(aZa)   );  
-  G4complex Hb( exp(-0.5*bMb)*cos(bZb),
-               -exp(-0.5*bMb)*sin(bZb)    );
+  G4complex Ha( Qa*cos(aZa),
+               -Qb*sin(aZa)   );  
+  G4complex Hb( Qb*cos(bZb),
+               -Qb*sin(bZb)    );
   G4complex H  = Ha*Hb;
   G4complex Hs = conj(H);
-  D            = 1.0 /( (1 - sqrt(Q))*(1 - sqrt(Q)) + 
-                  4*sqrt(Q)*sin(0.5*(aZa+bZb))*sin(0.5*(aZa+bZb)) );
+  D            = 1.0 /( (1 - Q)*(1 - Q) + 
+                  4*Q*sin(0.5*(aZa+bZb))*sin(0.5*(aZa+bZb)) );
   G4complex F1 = (1.0 - Ha)*(1.0 - Hb)*(1.0 - Hs)
                  * G4double(fPlateNumber)*D;
   G4complex F2 = (1.0-Ha)*(1.0-Ha)*Hb*(1.0-Hs)*(1.0-Hs)
