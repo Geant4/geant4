@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.hh,v 1.4 2005-04-18 17:26:55 vnivanch Exp $
+// $Id: G4MscModel.hh,v 1.5 2005-04-19 09:49:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,6 +65,7 @@
 #include "G4VEmModel.hh"
 
 class G4ParticleChangeForMSC;
+class G4Navigator;
 
 class G4MscModel : public G4VEmModel
 {
@@ -120,6 +121,7 @@ private:
 
   const G4ParticleDefinition* particle;
   G4ParticleChangeForMSC*     fParticleChange;
+  G4Navigator*                navigator;
 
   G4double mass;
   G4double charge;
@@ -150,7 +152,7 @@ private:
 
   G4bool   samplez;
   G4bool   latDisplasment;
-
+  G4bool   isInitialized;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

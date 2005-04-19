@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.5 2005-04-18 17:26:55 vnivanch Exp $
+// $Id: G4MscModel.cc,v 1.6 2005-04-19 09:49:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -90,6 +90,7 @@
 #include "G4PhysicsTable.hh"
 #include "G4ParticleChangeForMSC.hh"
 #include "G4TransportationManager.hh"
+#include "G4Navigator.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -106,7 +107,8 @@ G4MscModel::G4MscModel(G4double& m_dtrl, G4double& m_NuclCorrPar,
   NuclCorrPar (m_NuclCorrPar),
   FactPar(m_FactPar),
   factail(m_factail),
-  samplez(m_samplez)
+  samplez(m_samplez),
+  isInitialized(false)
 {
   stepmin       = 1.e-6*mm;
   currentRange  = 0. ;
@@ -122,6 +124,7 @@ G4MscModel::~G4MscModel()
 void G4MscModel::Initialise(const G4ParticleDefinition* p,
 			    const G4DataVector&)
 {
+  if(isInitialized) return;
   // set values of some data members
   sigmafactor = twopi*classic_electr_radius*classic_electr_radius;
   particle = p;
@@ -135,6 +138,8 @@ void G4MscModel::Initialise(const G4ParticleDefinition* p,
   else
     fParticleChange = new G4ParticleChangeForMSC();
 
+  navigator = G4TransportationManager::GetTransportationManager()
+    ->GetNavigatorForTracking();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -563,8 +568,7 @@ std::vector<G4DynamicParticle*>* G4MscModel::SampleSecondaries(
     newPosition *= r;
     newPosition += *(fParticleChange->GetProposedPosition());
 
-    G4TransportationManager::GetTransportationManager()
-      ->GetNavigatorForTracking()->LocateGlobalPointWithinVolume(newPosition);
+    navigator->LocateGlobalPointWithinVolume(newPosition);
 
     fParticleChange->ProposePosition(newPosition);
   }
