@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.hh,v 1.6 2005-02-01 09:37:45 grichine Exp $
+// $Id: Em10PhysicsList.hh,v 1.7 2005-04-19 14:57:56 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -52,6 +52,7 @@ class G4hIonisation;
 class Em10StepCut;
 
 class Em10DetectorConstruction;
+// class ALICEDetectorConstruction;
 class Em10PhysicsListMessenger;
 
 
@@ -59,6 +60,7 @@ class Em10PhysicsList: public G4VUserPhysicsList
 {
   public:
     Em10PhysicsList( Em10DetectorConstruction*);
+  // Em10PhysicsList( ALICEDetectorConstruction*);
    ~Em10PhysicsList();
 
   protected:
@@ -120,6 +122,7 @@ class Em10PhysicsList: public G4VUserPhysicsList
     G4double cutForElectron;
 
     Em10DetectorConstruction* pDet;
+  //  ALICEDetectorConstruction* apDet;
     Em10PhysicsListMessenger* physicsListMessenger;
 
     G4double fMinElectronEnergy;      // minimalEnergy of produced electrons

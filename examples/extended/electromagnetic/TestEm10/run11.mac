@@ -35,13 +35,13 @@
 # Update geometry after changing its parametrs
 #
 #/XTRdetector/update
-# window: Myalr 51 micron
+# window: Mylar 51 micron
 #  PLOT: energy deposit distribution in absorber (g4.11)
 #
 /plots/sethistName g4.p11
-/plots/setnbinEn 73
+/plots/setnbinEn 50
 /plots/setEnlow 0.0 MeV
-/plots/setEnhigh 0.011  MeV
+/plots/setEnhigh 0.050  MeV
 #
 # these commands do not change energy cuts???
 #
@@ -57,7 +57,7 @@
 # set cuts in XTR detector
 #
 /XTRdetector/setGammaCut 100.0
-/XTRdetector/setElectronCut 1.0
+/XTRdetector/setElectronCut 100.0
 /XTRdetector/setPositronCut 100.
 /XTRdetector/update
 #
@@ -88,11 +88,11 @@
 #
 # Particle and its energy
 #
-#/gun/particle e-
-#/gun/energy 3000.0 MeV
+/gun/particle e-
+/gun/energy 2000.0 MeV
 #
-/gun/particle proton
-/gun/energy 6000000.0 MeV
+#/gun/particle proton
+#/gun/energy 6000000.0 MeV
 #
 #/tracking/verbose 2
 #

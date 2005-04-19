@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.cc,v 1.11 2005-02-01 09:37:46 grichine Exp $
+// $Id: Em10DetectorConstruction.cc,v 1.12 2005-04-19 14:57:56 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,17 +95,17 @@ Em10DetectorConstruction::Em10DetectorConstruction()
   // Radiator and detector parameters
 
 
-  fRadThickness = 0.0127*mm ; // 25*micrometer ;     
-  fGasGap       = 0.762*mm ;          //  1500*micrometer  ;   
+  fRadThickness = 0.02*mm;   // 0.0127*mm ; // 25*micrometer ;     
+  fGasGap       = 0.250*mm;  // 0.762*mm ;          //  1500*micrometer  ;   
   foilGasRatio = fRadThickness/(fRadThickness+fGasGap) ;
-  fFoilNumber   = 100 ;             //  188 ;
+  fFoilNumber   = 220;  // 100 ;             //  188 ;
 
   fAlphaPlate   = 160.0 ;
   fAlphaGas     = 160.0 ;
   fModelNumber  = 0 ;
 
 
-  AbsorberThickness = 15.0*mm ;   // 40.0*mm ;
+  AbsorberThickness = 38.3*mm; // 15.0*mm ;   // 40.0*mm ;
 
   AbsorberRadius   = 10.*cm;
   zAbsorber = 36.*cm ;
@@ -397,6 +397,13 @@ void Em10DetectorConstruction::DefineMaterials()
   ////////////////////////////////////////////////////////////////////////////
   //
   // MWPC mixtures
+
+  // 85% Xe + 15% CO2, STP
+  
+  density = 4.9*mg/cm3;
+  G4Material* Xe15CO2 = new G4Material(name="Xe15CO2"  , density, ncomponents=2);
+  Xe15CO2->AddMaterial( Xe,              fractionmass = 0.979);
+  Xe15CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.021);
   
   // 80% Xe + 20% CO2, STP
   
@@ -489,14 +496,14 @@ void Em10DetectorConstruction::DefineMaterials()
   
   // default materials of the calorimeter and TR radiator
 
-  fRadiatorMat = radiatorMat ; // CH2 Mylar ; 
-  fFoilMat     = Mylar ; // Li ; // CH2 ;  
-  fGasMat      = Air ; // He ;// CO2 ; 
+  fRadiatorMat = radiatorMat; // CH2 Mylar ; 
+  fFoilMat     = CH2; // Mylar ; // Li ; // CH2 ;  
+  fGasMat      = Air; // He ;// CO2 ; 
   
   fWindowMat = Mylar ;
   fElectrodeMat = Al ;
 
-  AbsorberMaterial = Ar7CH4; // Xe10CH4; // Xe55He15CH4;
+  AbsorberMaterial = Xe15CO2; // Ar7CH4; // Xe10CH4; // Xe55He15CH4;
  
 
   fGapMat          = Xe10CH4 ;

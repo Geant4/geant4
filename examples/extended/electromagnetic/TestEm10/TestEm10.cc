@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm10.cc,v 1.2 2001-07-11 09:57:18 gunter Exp $
+// $Id: TestEm10.cc,v 1.3 2005-04-19 14:58:25 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,7 @@
 #endif
 
 #include "Em10DetectorConstruction.hh"
+// #include "ALICEDetectorConstruction.hh"
 #include "Em10PhysicsList.hh"
 #include "Em10PrimaryGeneratorAction.hh"
 #include "Em10RunAction.hh"
@@ -70,6 +71,10 @@ int main(int argc,char** argv)
 
   Em10DetectorConstruction* detector;
   detector = new Em10DetectorConstruction;
+
+  // ALICEDetectorConstruction* detector;
+  // detector = new ALICEDetectorConstruction;
+
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new Em10PhysicsList(detector));
   

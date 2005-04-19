@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.cc,v 1.11 2005-02-01 09:37:46 grichine Exp $
+// $Id: Em10PhysicsList.cc,v 1.12 2005-04-19 14:57:56 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,6 +29,7 @@
 
 #include "Em10PhysicsList.hh"
 #include "Em10DetectorConstruction.hh"
+// #include "ALICEDetectorConstruction.hh"
 #include "Em10PhysicsListMessenger.hh"
 
 #include "G4ParticleDefinition.hh"
@@ -66,12 +67,39 @@ Em10PhysicsList::Em10PhysicsList(Em10DetectorConstruction* p)
 
   defaultCutValue = 1.000*mm ;
   cutForGamma     = defaultCutValue ;
-  cutForElectron  = defaultCutValue ;
+  cutForElectron  = 100*defaultCutValue ;
 
   SetVerboseLevel(1);
   physicsListMessenger = new Em10PhysicsListMessenger(this);
 }
 
+/////////////////////////////////////////////////////////////
+//
+//
+/*
+Em10PhysicsList::Em10PhysicsList(ALICEDetectorConstruction* p)
+  :  G4VUserPhysicsList(),
+     MaxChargedStep(DBL_MAX),
+     thePhotoElectricEffect(0),      theComptonScattering(0),
+     theGammaConversion(0),
+     theeminusMultipleScattering(0), theeminusIonisation(0),
+     theeminusBremsstrahlung(0),
+     theeplusMultipleScattering(0),  theeplusIonisation(0),
+     theeplusBremsstrahlung(0),
+     theeplusAnnihilation(0),
+     theeminusStepCut(0),            theeplusStepCut(0),
+     fMinElectronEnergy(1.0*keV),fMinGammaEnergy(1.0*keV)
+{
+  apDet = p;
+
+  defaultCutValue = 1.000*mm ;
+  cutForGamma     = defaultCutValue ;
+  cutForElectron  = defaultCutValue ;
+
+  SetVerboseLevel(1);
+  physicsListMessenger = new Em10PhysicsListMessenger(this);
+}
+*/
 /////////////////////////////////////////////////////////////////////////
 //
 //
@@ -185,7 +213,9 @@ void Em10PhysicsList::ConstructProcess()
 
 #include "G4ForwardXrayTR.hh"
 #include "G4RegularXTRadiator.hh"
+#include "G4TransparentRegXTRadiator.hh"
 #include "G4GammaXTRadiator.hh"
+
 
 #include "Em10StepCut.hh"
 
@@ -202,8 +232,10 @@ void Em10PhysicsList::ConstructEM()
 
   const G4RegionStore* theRegionStore = G4RegionStore::GetInstance();
   G4Region* gas = theRegionStore->GetRegion("XTRdEdxDetector");
-    /*    
-     G4RegularXTRadiator* regXTRprocess = 
+
+  /* 
+        
+  G4RegularXTRadiator* regXTRprocess = 
                  new G4RegularXTRadiator(pDet->GetLogicalRadiator(),
 					 pDet->GetFoilMaterial(),
 					 pDet->GetGasMaterial(),
@@ -211,11 +243,13 @@ void Em10PhysicsList::ConstructEM()
 					 pDet->GetGasThick(),
 					 pDet->GetFoilNumber(),
 					 "RegularXTRadiator");
-       
-    */ 
-      G4GammaXTRadiator* gammaXTRprocess =
+  				    
+      
+    
+
+  G4GammaXTRadiator* gammaXTRprocess =
                  new G4GammaXTRadiator(pDet->GetLogicalRadiator(),
-				       2.,
+				       25.,
 				       10.,
 				       pDet->GetFoilMaterial(),
 				       pDet->GetGasMaterial(),
@@ -224,6 +258,19 @@ void Em10PhysicsList::ConstructEM()
 				       pDet->GetFoilNumber(),
 				       "GammaXTRadiator");
 
+  */ 
+    
+  G4TransparentRegXTRadiator* regXTRprocess = 
+                 new G4TransparentRegXTRadiator(pDet->GetLogicalRadiator(),
+					 pDet->GetFoilMaterial(),
+					 pDet->GetGasMaterial(),
+					 pDet->GetFoilThick(),
+					 pDet->GetGasThick(),
+					 pDet->GetFoilNumber(),
+					 "RegularXTRadiator");
+       
+
+   
   theParticleIterator->reset();
 
   while( (*theParticleIterator)() )
@@ -295,6 +342,8 @@ void Em10PhysicsList::ConstructEM()
 				       "GammaXTRadiator"));
        // ,-1,1,-1);
        */
+      // pmanager->AddContinuousProcess(gammaXTRprocess);
+      pmanager->AddContinuousProcess(regXTRprocess);
 
       pmanager->AddProcess(theeminusStepCut,-1,-1,4);
       theeminusStepCut->SetMaxStep(MaxChargedStep) ;
@@ -400,7 +449,8 @@ void Em10PhysicsList::ConstructEM()
 					 "RegularXTRadiator"));
        // ,-1,1,-1);
        */
-      pmanager->AddContinuousProcess(gammaXTRprocess);
+      // pmanager->AddContinuousProcess(gammaXTRprocess);
+      //  pmanager->AddContinuousProcess(regXTRprocess);
        // ,-1,1,-1);
        
       pmanager->AddProcess( thehadronStepCut,-1,-1,3);
