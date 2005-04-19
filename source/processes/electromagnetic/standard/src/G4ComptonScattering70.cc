@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ComptonScattering70.cc,v 1.4 2005-04-13 09:59:10 vnivanch Exp $
+// $Id: G4ComptonScattering70.cc,v 1.5 2005-04-19 15:42:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,9 +63,9 @@ using namespace std;
 
 G4ComptonScattering70::G4ComptonScattering70(const G4String& processName,
   G4ProcessType type):G4VEmProcess (processName, type),
-		      isInitialised(false),
-                      model(0),
-		      mType(0)
+    isInitialised(false),
+    selectedModel(0),
+    mType(0)
 {
   SetLambdaBinning(80);
   SetMinKinEnergy(0.1*keV);
@@ -83,15 +83,14 @@ void G4ComptonScattering70::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    //    SetVerboseLevel(1);
     SetBuildTableFlag(true);
     SetSecondaryParticle(G4Electron::Electron());
     G4double emin = MinKinEnergy();
     G4double emax = MaxKinEnergy();
-    if(0 == mType) model = new G4KleinNishinaCompton();
-    model->SetLowEnergyLimit(emin);
-    model->SetHighEnergyLimit(emax);
-    AddEmModel(1, model);
+    if(0 == mType) selectedModel = new G4KleinNishinaCompton();
+    selectedModel->SetLowEnergyLimit(emin);
+    selectedModel->SetHighEnergyLimit(emax);
+    AddEmModel(1, selectedModel);
   } 
 }
 
@@ -101,7 +100,7 @@ void G4ComptonScattering70::PrintInfo()
 {
   G4cout << "      Total cross sections has a good parametrisation.from 10 KeV to (100/Z) GeV" 
          << G4endl;
-  G4cout << "      Sampling according " << model->GetName() << " model" << G4endl;
+  G4cout << "      Sampling according " << selectedModel->GetName() << " model" << G4endl;
 }         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
