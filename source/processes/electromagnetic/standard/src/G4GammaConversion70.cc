@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4GammaConversion70.cc,v 1.1 2005-04-19 15:42:24 vnivanch Exp $
+// $Id: G4GammaConversion70.cc,v 1.2 2005-04-19 18:54:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,7 +70,11 @@ using namespace std;
 G4GammaConversion70::G4GammaConversion70(const G4String& processName,
   G4ProcessType type):G4VEmProcess (processName, type),
     isInitialised(false)
-{}
+{
+  SetLambdaBinning(100);
+  SetMinKinEnergy(2.0*electron_mass_c2);
+  SetMaxKinEnergy(100.0*GeV);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
@@ -87,6 +91,7 @@ void G4GammaConversion70::InitialiseProcess(const G4ParticleDefinition*)
     SetBuildTableFlag(true);
     SetSecondaryParticle(G4Electron::Electron());
     G4double emin = max(MinKinEnergy(), 2.0*electron_mass_c2);
+    SetMinKinEnergy(emin);
     G4double emax = MaxKinEnergy();
     G4VEmModel* model = new G4BetheHeitlerModel();
     model->SetLowEnergyLimit(emin);
