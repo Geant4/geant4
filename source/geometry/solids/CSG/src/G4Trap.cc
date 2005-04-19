@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.30 2005-03-03 16:06:06 allison Exp $
+// $Id: G4Trap.cc,v 1.31 2005-04-19 14:55:11 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -29,6 +29,7 @@
 // Implementation for G4Trap class
 //
 // History:
+// 19.04.05 V.Grichine: bug fixed in G4Trap("name",G4ThreeVector[8] vp)
 // 12.12.04 V.Grichine: SurfaceNormal with edges/vertices 
 // 15.11.04 V.Grichine: bug fixed in G4Trap("name",G4ThreeVector[8] vp)
 // 13.12.99 V.Grichine: bug fixed in DistanceToIn(p,v)
@@ -140,7 +141,8 @@ G4Trap::G4Trap( const G4String& pName,
       && pt[0].y() == pt[1].y() && pt[2].y() == pt[3].y()
       && pt[4].y() == pt[5].y() && pt[6].y() == pt[7].y()
       && ( pt[0].y() + pt[2].y() + pt[4].y() + pt[6].y() ) == 0 
-      && ( pt[0].x() + pt[1].x() + pt[4].x() + pt[5].x() ) == 0 )
+      && ( pt[0].x() + pt[1].x() + pt[4].x() + pt[5].x() + 
+           pt[2].x() + pt[3].x() + pt[6].x() + pt[7].x() ) == 0 )
   {
     G4bool good;
     
