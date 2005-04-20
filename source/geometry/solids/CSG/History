@@ -1,4 +1,4 @@
-$Id: History,v 1.73 2005-04-04 09:50:14 gcosmo Exp $
+$Id: History,v 1.74 2005-04-20 08:08:17 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 20, 2004  V.Grichine                 geom-csg-V07-00-03
+- G4Trap: fix in p.x() centering to sum over all vertices.
 
 Mar 23, 2005  J.Allison                  geom-csg-V07-00-02
 - Added test for Number-Of-Rotation-Steps in G4CSGSolid::GetPolyhedron().
