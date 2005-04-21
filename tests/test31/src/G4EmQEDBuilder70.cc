@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmQEDBuilder70.cc,v 1.3 2005-04-13 11:54:54 vnivanch Exp $
+// $Id: G4EmQEDBuilder70.cc,v 1.4 2005-04-21 16:11:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -43,8 +43,8 @@
 #include "G4ProcessManager.hh"
 
 #include "G4ComptonScattering70.hh"
-#include "G4GammaConversion.hh"
-#include "G4PhotoElectricEffect.hh"
+#include "G4GammaConversion70.hh"
+#include "G4PhotoElectricEffect70.hh"
 
 #include "G4MultipleScattering.hh"
 
@@ -84,9 +84,9 @@ void G4EmQEDBuilder70::ConstructProcess()
   G4ParticleDefinition* particle = G4Gamma::Gamma();
   G4ProcessManager* pmanager = particle->GetProcessManager();
 
-  pmanager->AddDiscreteProcess( new G4PhotoElectricEffect() );
+  pmanager->AddDiscreteProcess( new G4PhotoElectricEffect70() );
   pmanager->AddDiscreteProcess( new G4ComptonScattering70() );
-  pmanager->AddDiscreteProcess( new G4GammaConversion() );
+  pmanager->AddDiscreteProcess( new G4GammaConversion70() );
 
   // Add standard EM Processes for e-
   particle = G4Electron::Electron();
