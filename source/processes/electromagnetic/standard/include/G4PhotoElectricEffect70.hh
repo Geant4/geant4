@@ -21,30 +21,35 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion70.hh,v 1.2 2005-04-21 16:09:48 vnivanch Exp $
+// $Id: G4PhotoElectricEffect70.hh,v 1.1 2005-04-21 16:09:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-//------------------ G4GammaConversion physics process------------------------
+//------------------ G4PhotoElectricEffect physics process ------------------
 //                   by Michel Maire, 24 May 1996
 //
-// 11-06-96, Added GetRandomAtom() method and new data member
+// 12-06-96, Added SelectRandomAtom() method and new data member
 //           for cumulative total cross section, by M.Maire
-// 21-06-96, SetCuts inplementation, M.Maire
-// 16-09-96, Dynamical array PartialSumSigma, M.Maire
-// 14-01-97, crossection table + meanfreepath table.
-//           PartialSumSigma removed, M.Maire
-// 14-03-97, new physics scheme for geant4alpha, M.Maire
+// 21-06-96, SetCuts implementation, M.Maire
+// 17-09-96, Dynamic array PartialSumSigma
+//           split ComputeBindingEnergy(), M.Maire
+// 08-01-97, crossection table + meanfreepath table, M.Maire
+// 13-03-97, adapted for the new physics scheme, M.Maire
 // 13-08-98, new methods SetBining() PrintInfo()
+// 17-11-98, use table of atomic shells in PostStepDoIt, mma
+// 06-01-99, Sandia crossSection below 50 keV, V.Grichine mma
 // 03-08-01, new methods Store/Retrieve PhysicsTable (mma)
 // 06-08-01, BuildThePhysicsTable() called from constructor (mma)
-// 19-09-01, come back to previous ProcessName: "conv"
+// 19-09-01, come back to previous process name "phot"
 // 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
 // 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)
-// 13-08-04, suppress .icc file
-//           public ComputeCrossSectionPerAtom() and ComputeMeanFreePath() (mma)
-// 09-11-04, Remove Retrieve tables (V.Ivantchenko)
-// 19-04-05, Redesign - use G4VEmProcess interface (V.Ivantchenko)
+// 10-01-02, moved few function from icc to cc
+// 17-04-02, Keep only Sandia crossSections. Remove BuildPhysicsTables.
+//           Simplify public interface (mma)
+// 29-04-02, Generate theta angle of the photoelectron from Sauter-Gavrila
+//           distribution (mma)
+// 13-08-04, suppress icc file; make public ComputeCrossSectionPerAtom() (mma)
+// 21-04-05, Redesign - use G4VEmProcess interface (V.Ivantchenko)
 // -----------------------------------------------------------------------------
 
 // class description
@@ -53,8 +58,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef G4GammaConversion70_h
-#define G4GammaConversion70_h 1
+#ifndef G4PhotoElectricEffect70_h
+#define G4PhotoElectricEffect70_h 1
 
 #include "globals.hh"
 #include "G4VEmProcess.hh"
@@ -67,15 +72,15 @@ class G4VEmModel;
 class G4MaterialCutsCouple;
 class G4DynamicParticle;
 
-class G4GammaConversion70 : public G4VEmProcess
+class G4PhotoElectricEffect70 : public G4VEmProcess
 
 {
 public:  // with description
 
-  G4GammaConversion70(const G4String& processName ="conv",
-		      G4ProcessType type = fElectromagnetic);
+  G4PhotoElectricEffect70(const G4String& processName ="phot",
+		          G4ProcessType type = fElectromagnetic);
 
-  virtual ~G4GammaConversion70();
+  virtual ~G4PhotoElectricEffect70();
 
   // true for Gamma only.
   G4bool IsApplicable(const G4ParticleDefinition&);
@@ -93,34 +98,34 @@ protected:
                              const G4DynamicParticle*);
 
 private:
-  
-  // hide assignment operator as private 
-  G4GammaConversion70& operator=(const G4GammaConversion70 &right);
-  G4GammaConversion70(const G4GammaConversion70& );
-     
+
+  // hide assignment operator as private
+  G4PhotoElectricEffect70& operator=(const G4PhotoElectricEffect70 &right);
+  G4PhotoElectricEffect70(const G4PhotoElectricEffect70& );
+
   G4bool          isInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4bool G4GammaConversion70::IsApplicable(const G4ParticleDefinition& p)
+inline G4bool G4PhotoElectricEffect70::IsApplicable(const G4ParticleDefinition& p)
 {
   return (&p == G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline std::vector<G4DynamicParticle*>* G4GammaConversion70::SecondariesPostStep(
+inline std::vector<G4DynamicParticle*>* G4PhotoElectricEffect70::SecondariesPostStep(
                                    G4VEmModel* model,
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp)
-{ 
-  fParticleChange.ProposeTrackStatus(fStopAndKill);  
+{
+  fParticleChange.ProposeTrackStatus(fStopAndKill);
   return model->SampleSecondaries(couple, dp);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-  
+
 #endif
- 
+
