@@ -1,4 +1,4 @@
-$Id: History,v 1.35 2005-04-12 09:39:29 vnivanch Exp $
+$Id: History,v 1.36 2005-04-22 12:39:47 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22 April 04: V.Ivant (xrays-V07-00-01)
+- Add G4StrawTubeXTRadiator;
+- Modify integration algorithm in G4TransparentRegXTRadiator
 
 12 April 04: V.Ivant (xrays-V07-00-00)
 - Update TRD model for regular radiator to provide more realistic
