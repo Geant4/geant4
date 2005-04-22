@@ -148,7 +148,7 @@ G4bool GFlashShowerModel::CheckContainment(const G4FastTrack& fastTrack)
 		R*SinPhi[i]*CrossShower     ;
 		
 		if(SolidCalo->Inside(Position) != kOutside) 
-			NlateralInside=NlateralInside++;
+			NlateralInside++;
 	}
 	
 	//chose to parametrise or flag when all inetc...
@@ -266,7 +266,7 @@ void GFlashShowerModel::ElectronDoIt(const G4FastTrack& fastTrack,  G4FastStep& 
 		//generate spots & hits:
 		for (int i = 0; i < DNsp; i++)
 		{ 
-			NSpotDeposited=NSpotDeposited++;
+			NSpotDeposited++;
 			GFlashEnergySpot Spot;      
 			
 			//Spot energy: the same for all spots
