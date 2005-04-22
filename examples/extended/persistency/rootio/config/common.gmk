@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.3 2005-04-22 16:26:47 gcosmo Exp $
+# $Id: common.gmk,v 1.4 2005-04-22 16:57:04 gcosmo Exp $
 # =====================================================================
 # common.gmk: GNUmakefile variables for building the library files.
 #
@@ -90,7 +90,7 @@ endif
 ifneq ($(root_hh),)
 
 include/%Root.hh include/%sRoot.hh include/%RootIO.hh src/%Root.cc src/%sRoot.cc src/%RootIO.cc: rootio/%.rootio
-	$(G4ROOTIO) $<
+	@$(G4ROOTIO) $<
 
 $(root_dict): $(root_hh) $(root_def)
 ifdef CPPVERBOSE
@@ -107,7 +107,7 @@ else
 endif
 
 $(root_def): $(root_hh)
-	$(G4PEX_DIR)/config/rootdict.sh "$(root_name)" $(root_def)
+	@$(G4PEX_DIR)/config/rootdict.sh "$(root_name)" $(root_def)
 
 endif
 
