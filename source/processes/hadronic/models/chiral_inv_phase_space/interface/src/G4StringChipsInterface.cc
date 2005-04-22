@@ -20,6 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+
+//#define debug
+//#define pdebug
+
 #include "G4StringChipsInterface.hh"
 #include "globals.hh"
 #include <utility>
@@ -34,7 +38,9 @@ G4StringChipsInterface::G4StringChipsInterface()
   G4cout << "Please enter the energy loss per fermi in GeV"<<G4endl;
   G4cin >> theEnergyLossPerFermi;
 #endif
-
+#ifdef debug
+  G4cout<<"G4StringChipsInterface::Constructor is called"<<G4endl;
+#endif
   theEnergyLossPerFermi = 0.5*GeV;
   // theEnergyLossPerFermi = 1.*GeV;
 }
@@ -42,12 +48,18 @@ G4StringChipsInterface::G4StringChipsInterface()
 G4HadFinalState* G4StringChipsInterface::
 ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& theNucleus)
 {
+#ifdef debug
+  G4cout<<"G4StringChipsInterface::ApplyYourself is called"<<G4endl;
+#endif
   return theModel.ApplyYourself(aTrack, theNucleus);
 }
 
 G4ReactionProductVector* G4StringChipsInterface::
 Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 {
+#ifdef debug
+  G4cout<<"G4StringChipsInterface::Propagate is called"<<G4endl;
+#endif
   // Protection for non physical conditions
   
   if(theSecondaries->size() == 1) 
@@ -87,9 +99,9 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     {
       if((*current).first > toSort)
       {
-	theSorted.insert(current, it);
-	inserted = true;
-	break;
+	       theSorted.insert(current, it);
+	       inserted = true;
+	       break;
       }
     }
     if(!inserted)
@@ -125,6 +137,9 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4ReactionProductVector * theResult = new G4ReactionProductVector;
   G4ReactionProduct * theSec;
   G4KineticTrackVector * secondaries;
+#ifdef pdebug
+  G4cout<<"G4StringChipsInterface::Propagate: Absorption"<<G4endl; 
+#endif
   
   // first decay and add all escaping particles.
   for(current = theSorted.begin(); current!=theSorted.end(); current++)
@@ -169,7 +184,13 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 #ifdef CHIPSdebug
     G4cout <<"ABSORBED STRING particles "<<current->second->GetDefinition()->GetPDGCharge()<<" "
            << current->second->GetDefinition()->GetPDGEncoding()<<" "
-	   << current->second->Get4Momentum() <<G4endl; 
+	          << current->second->Get4Momentum() <<G4endl; 
+#endif
+#ifdef pdebug
+    G4cout<<"G4StringChipsInterface::Propagate:C="
+          <<current->second->GetDefinition()->GetPDGCharge()<<", PDG="
+          << current->second->GetDefinition()->GetPDGEncoding()<<", 4M="
+	         << current->second->Get4Momentum() <<G4endl; 
 #endif
 
     // projectile 4-momentum needed in constructor of quasmon
@@ -233,20 +254,20 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4LorentzVector targ4Mom(-1.*hitMomentum, targetEnergy);
   
   // construct the quasmon
-  G4int nop = 223; // ??????
-  G4double fractionOfSingleQuasiFreeNucleons = 0.15;
-  G4double fractionOfPairedQuasiFreeNucleons = 0.01;
+  G4int nop = 122; // clusters up to Alpha cluster
+  G4double fractionOfSingleQuasiFreeNucleons = 0.5; // It is A-dependent (C=.85, U=.40)
+  G4double fractionOfPairedQuasiFreeNucleons = 0.05;
   G4double clusteringCoefficient = 5.;
   G4double temperature = 180.;
-  G4double halfTheStrangenessOfSee = 0.1; // = s/d = s/u
+  G4double halfTheStrangenessOfSee = 0.3; // = s/d = s/u
   G4double etaToEtaPrime = 0.3;
 
   G4QNucleus::SetParameters(fractionOfSingleQuasiFreeNucleons,
                             fractionOfPairedQuasiFreeNucleons,
-			                clusteringCoefficient);
+			                         clusteringCoefficient);
   G4Quasmon::SetParameters(temperature,
                            halfTheStrangenessOfSee,
-			               etaToEtaPrime);
+			                        etaToEtaPrime);
 
 #ifdef CHIPSdebug
   G4cout << "G4QNucleus parameters "<< fractionOfSingleQuasiFreeNucleons << " "
@@ -295,7 +316,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       G4cerr << " Dumping the information in the pojectile list"<<G4endl;
       for(size_t i=0; i< projHV.size(); i++)
       {
-	G4cerr <<"  Incoming 4-momentum and PDG code of "<<i<<"'th hadron: "
+	       G4cerr <<"  Incoming 4-momentum and PDG code of "<<i<<"'th hadron: "
                <<" "<< projHV[i]->Get4Momentum()<<" "<<projHV[i]->GetPDGCode()<<G4endl;
       }
       throw;
@@ -304,10 +325,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     projHV.clear();
     delete pan;
   }
-  else 
-  {
-    output = new G4QHadronVector;
-  }
+  else output = new G4QHadronVector;
    
   // Fill the result.
 #ifdef CHIPSdebug
