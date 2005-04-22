@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MCTruthRootIO.cc,v 1.4 2002-12-13 14:45:42 gunter Exp $
+// $Id: G4MCTruthRootIO.cc,v 1.5 2005-04-22 16:26:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4MCTruthRootIO.cc
@@ -33,13 +33,13 @@
 G4MCTruthRootIO* G4MCTruthRootIO::thePointer=G4MCTruthRootIO::GetMCTruthRootIO();
 
 // Implementation of Store
-bool G4MCTruthRootIO::Store(G4MCTEvent* mctevent)
+bool G4MCTruthRootIO::Store(G4MCTEvent*)
 {
   return true;
 }
 
 // Implementation of Retrieve
-bool G4MCTruthRootIO::Retrieve(G4MCTEvent* & mctevent)
+bool G4MCTruthRootIO::Retrieve(G4MCTEvent* &)
 {
   return true;
 }

@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.2 2002-12-04 09:39:24 morita Exp $
+# $Id: common.gmk,v 1.3 2005-04-22 16:26:47 gcosmo Exp $
 # =====================================================================
 # common.gmk: GNUmakefile variables for building the library files.
 #
@@ -99,7 +99,7 @@ ifdef CPPVERBOSE
 	        $(PROG_ROOTCINT) -f $@ -c $(CINT_INCLUDES) -p $(root_tmp) )
 	( cd $(G4PEX_TMP); rm -f $(root_tmp) )
 else
-	@echo "Generating dictionary $(root_dict) ..."
+	@echo "Generating dictionary ..."
 	@cp -f $^ $(G4PEX_TMP)/
 	@( cd $(G4PEX_TMP); \
 	        $(PROG_ROOTCINT) -f $@ -c $(CINT_INCLUDES) -p $(root_tmp) )
@@ -112,14 +112,14 @@ $(root_def): $(root_hh)
 endif
 
 $(root_dict_o): $(root_dict)
-	@echo "Compiling $< with $(CXX) ..."
+	@echo "Compiling dictionary with $(CXX) ..."
 	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
 
 # ---------------------------------------------------------------------
 
 $(libraries_to_build): $(objects)
 ifneq ($(G4LIB_BUILD_SHARED),)
-	@echo Creating shared library $@
+	@echo Creating shared library lib$(TARGET).so ...
 	@rm -f $(G4PEX_LIB)/lib$(TARGET).so
 	@cd $(G4PEX_TMP); \
 	$(CXX) -Wl,-soname,lib$(TARGET).so \
@@ -127,9 +127,9 @@ ifneq ($(G4LIB_BUILD_SHARED),)
 	  $(EXTLDFLAGS) $(EXTLIBS)
 endif
 ifneq ($(G4LIB_BUILD_STATIC),)
-	@echo Creating static library $@
+	@echo Creating static library lib$(TARGET).a ...
 	@rm -f $(G4PEX_LIB)/lib$(TARGET).a
-	$(AR) $(G4PEX_LIB)/lib$(TARGET).a $(G4PEX_TMP)/*.o
+	@$(AR) $(G4PEX_LIB)/lib$(TARGET).a $(G4PEX_TMP)/*.o
 	@if [ -f /usr/bin/ranlib -o -f /bin/ranlib ] ; then \
 	ranlib $(G4PEX_LIB)/lib$(TARGET).a ;fi
 endif

@@ -6,6 +6,11 @@ This example demonstrates how to store calorimeter hits using ROOT I/O.
 Example sensitive detector and hits (Pers01CalorimeterSD and Pers01CalorHit)
 are taken from the novice example N03.
 
+NOTE: to buils the example "PersEx01" it is required that the header files
+      of Geant4 have been installed in $G4INCLUDE !
+      You must have done so, either through the Configure script or manually
+      with "gmake includes" from $G4INSTALL/source.
+
 *** Making libraries ***
 
 First you need to make Geant4 ROOT I/O libraries.
@@ -24,21 +29,21 @@ Note: ROOT 3.03.08 is known to cause problems with Geant4 ROOT I/O.
 
 Then you make libG4ROOTIO.so by typing 
 
-  cd G4INSTALL/examples/extented/persistency/rootio
+  cd $G4INSTALL/examples/extented/persistency/rootio
   make
 
 The library module will be built into $G4PEX_LIB.
- (G4INSTALL/examples/extented/persistency/rootio/lib/$G4SYSTEM)
+ ($G4INSTALL/examples/extented/persistency/rootio/lib/$G4SYSTEM)
 
 
 *** Making executable module G4PersEx01 ***
 
-  cd G4INSTALL/examples/extented/persistency/PersEx01
+  cd $G4INSTALL/examples/extented/persistency/PersEx01
   make
 
 By doing this, you create libG4PersEx01.so in $G4PEX_LIB, and
 the executable module G4PersEx01 in $G4PEX_BIN.
- (G4INSTALL/examples/extented/persistency/rootio/bin/$G4SYSTEM)
+ ($G4INSTALL/examples/extented/persistency/rootio/bin/$G4SYSTEM)
 
 By running "run" script provided in this directory, hits information
 will be stored into a file G4run0001.root.
