@@ -101,8 +101,8 @@ std::pair<G4double, G4double> G4InuclSpecialFunctions::paraMakerTruncated(G4doub
   const G4double Z1[5] = {10.0, 20.0, 30.0, 50.0, 70.0};
   const G4double AP[5] = {0.42, 0.58, 0.68, 0.77, 0.8};
   const G4double CP[5] = {0.5, 0.28, 0.2, 0.15, 0.1};
-  G4double AK2;
-  G4double CP2;
+  G4double AK2=0.;
+  G4double CP2=0.;
 
   if (Z < 10.0) {
     AK2=0.42;
