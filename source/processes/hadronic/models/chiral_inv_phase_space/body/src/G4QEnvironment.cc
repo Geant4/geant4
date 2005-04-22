@@ -24,7 +24,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.102 2005-04-07 10:31:26 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.103 2005-04-22 16:07:50 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -44,7 +44,7 @@
 //#define rdebug
 //#define ffdebug
 //#define pcdebug
-#define mudebug
+//#define mudebug
 
 #include "G4QEnvironment.hh" 
 #include <cmath>
@@ -1519,11 +1519,12 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
     //G4int cbRM    =3;                      // MaxCounter of the "StopedByCoulombBarrier"
     //G4int cbRM    =9;                      // MaxCounter of the "Stoped byCoulombBarrier"
     G4int totC    = 0;                     // Counter to break the "infinit" loop
-    G4int totCM   = 227;                   // Limit for the "infinit" loop counter
+    //G4int totCM   = 227;                   // Limit for the "infinit" loop counter
+    G4int totCM   = envA;                   // Limit for the "infinit" loop counter
     //G4int totCM   = 27;                    // Limit for this counter
     //G4int nCnMax = 1;                      // MaxCounterOfHadrFolts for shortCutSolutions
-    //G4int nCnMax = 3;                      // MaxCounterOfHadrFolts for shortCutSolutions
-    G4int nCnMax = 9;                      // MaxCounterOfHadrFolts for shortCutSolutions
+    G4int nCnMax = 3;                      // MaxCounterOfHadrFolts for shortCutSolutions
+    //G4int nCnMax = 9;                      // MaxCounterOfHadrFolts for shortCutSolutions
     while (sumstat||totC<totCM)            // ===***=== The MAIN "FOREVER" LOOP ===***===
 	   {
 #ifdef chdebug
@@ -1710,7 +1711,7 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
             if(nHadrons) for(G4int kpo=0; kpo<nHadrons; kpo++)//LOOP over out QHadrons  ^ ^
             {                                 //                                        ^ ^
 	  		         //G4QHadron* insH =output->operator[](kpo);// Pointer to theOutputQHadron ^ ^
-	  		         G4QHadron* insH = (*output)(kpo);// Pointer to the Output QHadron         ^ ^
+	  		         G4QHadron* insH = (*output)[kpo];// Pointer to the Output QHadron         ^ ^
               G4int qhsNF  = insH->GetNFragments(); // A#of secondary fragments         ^ ^
               if(!qhsNF)                      // Subtract only final hadrons            ^ ^
 			           {                               //                                        ^ ^
@@ -6351,8 +6352,8 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
       unsigned pHadr=intQHadrons.size();
       if(pHadr)for(unsigned ic3=0;ic3<pHadr;ic3++) if(!(intQHadrons[ic3]->GetNFragments()))
       {
-        ccContSum+=intQHadrons[ic2]->GetCharge();
-        cbContSum+=intQHadrons[ic2]->GetBaryonNumber();
+        ccContSum+=intQHadrons[ic3]->GetCharge();
+        cbContSum+=intQHadrons[ic3]->GetBaryonNumber();
       }
       if(ccContSum-chContSum || cbContSum-bnContSum)
       {
@@ -8715,8 +8716,10 @@ void G4QEnvironment::DecayBaryon(G4QHadron* qH)
   }
   else if(qM<sum || !G4QHadron(q4M).DecayIn2(f4Mom, s4Mom))
   {
+#ifdef pdebug
     G4cerr<<"---Warning---G4QE::DecBar:fPDG="<<fQPDG<<"(M="<<fMass<<")+sPDG="<<sQPDG<<"(M="
           <<sMass<<") > TotM="<<q4M.m()<<G4endl;
+#endif
     if(!theEnvironment.GetA())
     {
       G4Quasmon* quasH = new G4Quasmon(qH->GetQC(),qH->Get4Momentum());

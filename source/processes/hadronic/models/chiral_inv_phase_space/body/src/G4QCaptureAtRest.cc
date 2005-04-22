@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.14 2005-04-07 10:31:26 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.15 2005-04-22 16:07:50 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -55,11 +55,11 @@ G4bool   G4QCaptureAtRest::manualFlag=false; // If false then standard parameter
 G4double G4QCaptureAtRest::Temperature=180.; // Critical Temperature (sensitive at High En)
 G4double G4QCaptureAtRest::SSin2Gluons=0.3;  // Supression of s-quarks (in respect to u&d)
 G4double G4QCaptureAtRest::EtaEtaprime=0.3;  // Supression of eta mesons (gg->qq/3g->qq)
-G4double G4QCaptureAtRest::freeNuc=0.0;      // Percentage of free nucleons on the surface
-G4double G4QCaptureAtRest::freeDib=0.0;      // Percentage of free diBaryons on the surface
-G4double G4QCaptureAtRest::clustProb=1.;     // Nuclear clusterization parameter
-G4double G4QCaptureAtRest::mediRatio=1.;     // medium/vacuum hadronization ratio
-G4int    G4QCaptureAtRest::nPartCWorld=154;  // The#of particles initialized in CHIPS World
+G4double G4QCaptureAtRest::freeNuc=0.5;      // Percentage of free nucleons on the surface
+G4double G4QCaptureAtRest::freeDib=0.05;     // Percentage of free diBaryons on the surface
+G4double G4QCaptureAtRest::clustProb=5.;     // Nuclear clusterization parameter
+G4double G4QCaptureAtRest::mediRatio=10.;    // medium/vacuum hadronization ratio
+G4int    G4QCaptureAtRest::nPartCWorld=152;  // The#of particles initialized in CHIPS World
 G4double G4QCaptureAtRest::SolidAngle=0.5;   // Part of Solid Angle to capture (@@A-dep.)
 G4bool   G4QCaptureAtRest::EnergyFlux=false; // Flag for Energy Flux use (not MultyQuasmon)
 G4double G4QCaptureAtRest::PiPrThresh=141.4; // Pion Production Threshold for gammas
@@ -242,9 +242,14 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
   }
   else  N = G4QIsotope::Get()->GetNeutrons(Z);
   nOfNeutrons=N;                                       // Remember it for energy-mom. check
+  G4double dd=0.025;
+  G4double am=Z+N;
+  G4double sr=sqrt(am);
+  G4double dsr=0.01*(sr+sr);
+  if(dsr<dd)dsr=dd;
   if(manualFlag) G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // ManualP
-		else if(Z+N>20) G4QNucleus::SetParameters(.70,.10,4.,10.);//HeavyNuclei ClusterizationPar
-  else       G4QNucleus::SetParameters(.60,.04,1.,10.);     //LightNuclei ClusterizationPar
+		else if(projPDG==-2212) G4QNucleus::SetParameters(1.-dsr-dsr,dd+dd,5.,10.);//aP ClustPars
+  else if(projPDG==-211)  G4QNucleus::SetParameters(.67-dsr,.32-dsr,5.,9.);//Pi- ClustPars
 #ifdef debug
   G4cout<<"G4QCaptureAtRest::AtRestDoIt: N="<<N<<" for element with Z="<<Z<<G4endl;
 #endif

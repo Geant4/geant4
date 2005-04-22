@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.50 2005-04-04 16:55:45 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.51 2005-04-22 16:07:50 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -2919,7 +2919,7 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
 		          }
             s+=prod;
             pos*=prod;
-            //pos/=comb;//Open/close this line if **RECALCULATION**(below) is closed/opened
+            pos/=comb;
 #ifdef cldebug
 		          if(pos) G4cout<<"G4QN::PreC:c="<<cPDG<<",p="<<pos<<",i="<<index<<",m="<<mac
                           <<",pr="<<prod<<",c="<<cca<<G4endl;
@@ -2928,35 +2928,8 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
 #endif
             cca++;
 	         }
-          // **RECALCULATION** which normes clusters to the Z,N independent A-probabilities
-          if(ac>2 && cca==mac) // "The last cluster" **RECALCULATION** is open ->close UP
-										//if(2>3)                     // ***RECALCULATION*** is closed (comb uncom'd)
-          {
-            G4double rat=1.;
-            if(s>0.) rat/=s;
-	           if(pos) pos*=rat;
-            curCand->SetPreProbability(pos);
-            curCand->SetDenseProbability(pos);
-            for(int ir=1; ir<mac; ir++)
-	           {
-              G4QCandidate* rCand=theQCandidates[index-ir];		  
-              pos=rCand->GetPreProbability();
-              if(pos)
-	             {
-                pos*=rat;
-#ifdef cldebug
-                G4cout<<"G4QN::PC:i="<<index-ir<<" corred by "<<s/comb<<",p="<<pos<<G4endl;
-#endif
-                rCand->SetPreProbability(pos);
-                rCand->SetDenseProbability(pos);
-	             }
-	           }
-	         }
-          else
-          {
-            curCand->SetPreProbability(pos);
-            curCand->SetDenseProbability(pos*dense);
-	         }
+          curCand->SetPreProbability(pos);
+          curCand->SetDenseProbability(pos*dense);
 #ifdef cldebug
 	         G4cout<<"G4QN::PrepC: ClasterPDG="<<cPDG<<",preProb="<<pos<<",d="<<dense<<G4endl;
 #endif
