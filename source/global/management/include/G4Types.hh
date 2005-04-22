@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Types.hh,v 1.11 2005-04-22 09:15:26 gcosmo Exp $
+// $Id: G4Types.hh,v 1.12 2005-04-22 09:32:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,7 +57,7 @@
 // Disable deprecated warnings for usage of strstream on Linux
 // architectures with gcc >= 3.0 release
 //
-#if (__GNUC__>=3) && (__GNUC_MINOR__>0)
+#if (__GNUC__>=3) && (__GNUC_MINOR__>=0)
   #undef __DEPRECATED
 #endif
   
