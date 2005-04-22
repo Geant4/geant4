@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXViewer.cc,v 1.10 2004-04-07 15:18:22 gbarrand Exp $
+// $Id: G4OpenGLStoredXViewer.cc,v 1.11 2005-04-22 12:02:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,8 +58,8 @@ G4OpenGLStoredXViewer::~G4OpenGLStoredXViewer () {}
 void G4OpenGLStoredXViewer::Initialise () {
 
   CreateGLXContext (vi_stored);
-
   CreateMainWindow ();
+  CreateFontLists ();
 
   InitializeGLView ();
 

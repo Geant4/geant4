@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.24 2005-04-17 16:08:43 allison Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.25 2005-04-22 12:02:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,6 +32,7 @@
 #ifdef G4VIS_BUILD_OPENGLX_DRIVER
 
 #include "G4OpenGLXViewer.hh"
+
 #include "G4OpenGLFontBaseStore.hh"
 
 #include "G4ios.hh"
@@ -281,7 +282,10 @@ void G4OpenGLXViewer::CreateMainWindow () {
 // connect the context to a window
   glXMakeCurrent (dpy, win, cx);
 
-  // Set up fonts...
+}
+
+void G4OpenGLXViewer::CreateFontLists () {
+
   std::map<G4double,G4String> fonts;  // G4VMarker screen size and font name.
   fonts[10.] = "-adobe-courier-bold-r-normal--10-100-75-75-m-60-iso8859-1";
   fonts[11.] = "-adobe-courier-bold-r-normal--11-80-100-100-m-60-iso8859-1";
@@ -299,14 +303,14 @@ void G4OpenGLXViewer::CreateMainWindow () {
     XFontStruct* font_info = XLoadQueryFont(dpy, i->second);
     if (!font_info) {
       G4cerr <<
-	"G4OpenGLXmViewer: XLoadQueryFont failed for font\n  "
+	"G4OpenGLXViewer: XLoadQueryFont failed for font\n  "
 	     << i->second
 	     << G4endl;
       continue;
     }
     G4int font_base = glGenLists(256);
     if (!font_base) {
-      G4cerr << "G4OpenGLXmViewer: out of display lists for fonts." 
+      G4cerr << "G4OpenGLXViewer: out of display lists for fonts." 
 	     << G4endl;
       continue;
     }
@@ -315,7 +319,6 @@ void G4OpenGLXViewer::CreateMainWindow () {
     glXUseXFont(font_info->fid, first, last-first+1,font_base+first);
     G4OpenGLFontBaseStore::AddFontBase(this,font_base,i->first,i->second);
   }
-
 }
 
 G4OpenGLXViewer::G4OpenGLXViewer (G4OpenGLSceneHandler& scene):

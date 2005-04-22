@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.7 2003-06-10 17:13:32 gcosmo Exp $
+// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.8 2005-04-22 12:02:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,6 +51,7 @@ void G4OpenGLImmediateWin32Viewer::Initialise () {
 
   CreateGLWin32Context ();
   CreateMainWindow ();
+  CreateFontLists ();
 
   // If a double buffer context has been forced upon us, ignore the
   // back buffer for this OpenGLImmediate view.

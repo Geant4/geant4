@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXViewer.cc,v 1.9 2004-04-07 15:18:22 gbarrand Exp $
+// $Id: G4OpenGLImmediateXViewer.cc,v 1.10 2005-04-22 12:02:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,8 +59,8 @@ G4OpenGLImmediateXViewer::~G4OpenGLImmediateXViewer () {}
 void G4OpenGLImmediateXViewer::Initialise () {
 
   CreateGLXContext (vi_immediate);
-
   CreateMainWindow ();
+  CreateFontLists ();
 
   InitializeGLView ();
 

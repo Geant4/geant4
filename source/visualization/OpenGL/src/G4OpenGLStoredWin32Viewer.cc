@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredWin32Viewer.cc,v 1.7 2003-06-10 17:13:34 gcosmo Exp $
+// $Id: G4OpenGLStoredWin32Viewer.cc,v 1.8 2005-04-22 12:02:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,6 +51,7 @@ void G4OpenGLStoredWin32Viewer::Initialise () {
 
   CreateGLWin32Context ();
   CreateMainWindow ();
+  CreateFontLists ();
 
 // clear the buffers and window.
   ClearView ();

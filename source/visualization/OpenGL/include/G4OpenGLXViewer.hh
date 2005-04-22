@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.hh,v 1.20 2004-07-09 15:44:21 johna Exp $
+// $Id: G4OpenGLXViewer.hh,v 1.21 2005-04-22 12:02:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,6 +60,7 @@ protected:
   void GetXConnection ();
   void CreateGLXContext (XVisualInfo* vi);
   virtual void CreateMainWindow ();
+  virtual void CreateFontLists ();
 
   static int snglBuf_RGBA[12];
   static int dblBuf_RGBA[13];
