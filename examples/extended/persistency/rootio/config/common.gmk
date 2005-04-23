@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.4 2005-04-22 16:57:04 gcosmo Exp $
+# $Id: common.gmk,v 1.5 2005-04-23 15:44:02 gcosmo Exp $
 # =====================================================================
 # common.gmk: GNUmakefile variables for building the library files.
 #
@@ -152,6 +152,13 @@ ifneq ($(cleanup_target),)
 endif
 	@rm -f -r $(G4PEX_DIR)/lib/$(G4SYSTEM)/$(libraries_to_build)
 	@rm -f -r $(G4PEX_DIR)/tmp/$(G4SYSTEM)/$(TARGET)
+	@rm -f -r $(G4PEX_DIR)/include/G4ROOTIOLinkDef.h
+
+distclean:
+	@rm -f -r $(G4PEX_DIR)/lib
+	@rm -f -r $(G4PEX_DIR)/tmp
+	@rm -f -r $(G4PEX_DIR)/bin
+	@rm -f -r $(G4PEX_DIR)/include/G4ROOTIOLinkDef.h
 
 test:
 	@echo "objects = $(objects)"
