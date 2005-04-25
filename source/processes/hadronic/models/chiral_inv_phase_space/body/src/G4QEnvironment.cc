@@ -24,7 +24,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.103 2005-04-22 16:07:50 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.104 2005-04-25 09:37:22 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -6824,7 +6824,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
 #endif
   lHadr=theQHadrons[maxB]->GetBaryonNumber();
   G4int tHadr=lHadr;                             // Total Baryon number
-  if(nHadr>1)for(unsigned ipo=0; ipo<theQHadrons.size(); ipo++) // Find theBiggestNuclFragm
+  if(nHadr>1)for(unsigned ipo=0; ipo<theQHadrons.size()-1; ipo++) // Find BiggestNuclFragm
   {
     G4int hPDG = theQHadrons[ipo]->GetPDGCode();
     if(hPDG==22) gamcnt++;
@@ -6844,7 +6844,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
 	   }
   }
 #ifdef pdebug
-  G4cout<<"G4QE::FSI:max#"<<maxB<<",B="<<lHadr<<",tBN="<<tHadr<<",gamcnt="<<gamcnt<<G4endl;
+  G4cout<<"G4QE::FSI:max#"<<maxB<<",lB="<<lHadr<<",tBN="<<tHadr<<",gam="<<gamcnt<<G4endl;
 #endif
   nHadr=theQHadrons.size();
 #ifdef chdebug
@@ -7381,7 +7381,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
         //theFragments->push_back(secHadr);// (del.equiv. - user is responsible for that)
       }
     }
-    else if(curHadr->GetStrangeness()<0&&curHadr->GetBaryonNumber()>0)// AntistrangeNucleus
+    else if(hST<0 && hBN>0) // AntistrangeNucleus (@@ see above, already done)
 	   {
       G4LorentzVector r4M=curHadr->Get4Momentum(); // Real 4-mom of theAntiStrangeNucleus
       G4double reM=r4M.m();              // Real mass of the antiStrange nucleus
@@ -7473,8 +7473,8 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
     else if(hPDG>90500000&&hPDG!=91000000&&hPDG!=91000999&&hPDG!=90999001) // Only for G4
 	// @@ Xi & Omega- can be added here ^^^, if show up below
 	   {
-#ifdef fdebug
-      G4cerr<<"**G4QEnvironment::FSI:*G4* Hypernucleus PDG="<<hPDG<<" must decay"<<G4endl;
+#ifdef pdebug
+      G4cerr<<"***G4QEnvironment::FSI:*G4* Hypernucleus PDG="<<hPDG<<" must decay"<<G4endl;
 #endif
       G4int nL=curHadr->GetStrangeness();      // A number of Lambdas in the Hypernucleus
       G4int nB=curHadr->GetBaryonNumber();     // Total Baryon Number of the Hypernucleus
@@ -7483,29 +7483,29 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
       G4int nSP=0;                             // A#0f unavoidable Sigma+
       if(nC<0)                                 // Negative hypernucleus
 	     {
-        if(-nC<nL)
+        if(-nC<=nL)
 		      {
-          nSM=-nC;
-          nL+=nC;
+          nSM=-nC;                             // Can be compensated by Sigma-
+          nL+=nC;                              // Reduce the residual strangeness
         }
         else
 		      {
-          nSM=nL;
-          nL=0;
+          nSM=nL;                              // The maximum number of Sigma-
+          nL=0;                                // Kill the residual strangeness
         }
       }
       else if(nC>nB-nL)                        // Extra positive hypernucleus
 	     {
-        if(nC<nB)
+        if(nC<=nB)
 		      {
           G4int dH=nB-nC;
-          nSP=nL-dH;
-          nL=dH;
+          nSP=nL-dH;                           // Can be compensated by Sigma+
+          nL=dH;                               // Reduce the residual strangeness
         }
         else
 		      {
-          nSP=nL;
-          nL=0;
+          nSP=nL;                              // The maximum number of Sigma+
+          nL=0;                                // Kill the residual strangeness
         }
       }
       G4LorentzVector r4M=curHadr->Get4Momentum(); // Real 4-momentum of the hypernucleus
@@ -7513,6 +7513,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
       G4int rlPDG = hPDG-nL*1000000-nSP*1000999-nSM*999001;// Subtract Lamb/Sig from Nucl
       G4int    sPDG=3122;                      // Prototype for the Hyperon PDG
       G4double MLa=mLamb;                      // Prototype for one Hyperon decay
+#ifdef pdebug
+      G4cerr<<"G4QEnvironment::FSI:*G4* nS+="<<nSP<<", nS-="<<nSM<<", nL="<<nL<<G4endl;
+#endif
       if(nSP||nSM)
 	     {
         if(nL)
@@ -7533,9 +7536,12 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
           MLa=mSigM;
         }
       }
+#ifdef pdebug
+      G4cerr<<"G4QEnvironment::FSI:*G4* mS="<<MLa<<", sPDG="<<sPDG<<", nL="<<nL<<G4endl;
+#endif
       if(nL>1) MLa*=nL;
-      G4double rlM=G4QNucleus(rlPDG).GetMZNS();// Mass of the new nonstrange nucleus
-      if(nL==1&&reM>rlM+mSigZ&&G4UniformRand()>.5) // Sigma0 ! @@ Add it in hadronization
+      G4double rlM=G4QNucleus(rlPDG).GetMZNS();// Mass of the new residualNonstrangeNucleus
+      if(!nSP&&!nSM&&nL==1&&reM>rlM+mSigZ&&G4UniformRand()>.5) // Sigma0 @@ AddToHadroniz.?
 	     {
         sPDG=3212;
         MLa=mSigZ;
@@ -7544,14 +7550,13 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
       G4QNucleus rnN(rnPDG);                   // New nonstrange nucleus
       G4double rnM=rnN.GetMZNS();              // Mass of the new nonstrange nucleus
       // @@ Take into account that there can be Iso-Hypernucleus (Add PI+,R & Pi-,R decays)
-      if(rlPDG==90000000)                      // Multy Hyperon (@@ only Lambda is done)
+      if(rlPDG==90000000)                      // Multy Hyperon (HyperNuc of only hyperons)
 	     {
         if(nL>1) r4M=r4M/nL;                   // split the 4-mom for the MultyLambda
         for(G4int il=0; il<nL; il++)           // loop over Lambdas
         {
           G4QHadron* theLam = new G4QHadron(sPDG,r4M);// Make a New Hadr for the Hyperon
           theQHadrons.push_back(theLam);       // (del.eq.- user is responsible for del)
-          //theFragments->push_back(theLam);   // (delete equivalent for the Hyperon)
         }
       }
 	     else if(reM>rlM+MLa-eps)                  // Lambda(or Sigma) can be split
@@ -7569,7 +7574,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
           G4cerr<<"***G4QE::FSI:Hypern, M="<<reM<<"<A+n*L="<<sum<<",d="<<sum-reM<<G4endl;
           throw G4QException("***G4QEnvironment::FSInter: Hypernuclear L-decay error");
         }
-#ifdef fdebug
+#ifdef pdebug
         G4cout<<"*G4QE::FSI:HypN "<<r4M<<"->A="<<rlPDG<<n4M<<", n*Lamb="<<nL<<h4M<<G4endl;
 #endif
         curHadr->Set4Momentum(n4M);
@@ -7581,7 +7586,6 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
           curHadr->SetQPDG(G4QPDGCode(90000001));
           G4QHadron* secHadr = new G4QHadron(curHadr);
           theQHadrons.push_back(secHadr);    // (del.eq.- user is responsible for del)
-          //theFragments->push_back(secHadr);    // (del.eq.- user is responsible for del)
         }
         else if(rlPDG==90002000)               // Additional action with curHadr change
 	       {
@@ -7590,9 +7594,8 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
           curHadr->SetQPDG(G4QPDGCode(90001000));
           G4QHadron* secHadr = new G4QHadron(curHadr);
           theQHadrons.push_back(secHadr);    // (del.eq.- user is responsible for del)
-          //theFragments->push_back(secHadr);    // (del.eq.- user is responsible for del)
         }
-        // @@ Add multybaryon decays if necessary
+        // @@(?) Add multybaryon decays if necessary (Now it anyhow is made later)
 #ifdef fdebug
         G4cout<<"*G4QE::FSI: resNucPDG="<<curHadr->GetPDGCode()<<G4endl;
 #endif
@@ -7601,7 +7604,6 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
         {
           G4QHadron* theLamb = new G4QHadron(sPDG,h4M);// Make a New Hadr for the Hyperon
           theQHadrons.push_back(theLamb);      // (del.eq.- user is responsible for del)
-          //theFragments->push_back(theLamb);    // (delete equivalent for the Hyperon)
         }
       }
 	     else if(reM>rnM+mPi0-eps&&!nSP&&!nSM)    // Lambda->N only if Sigmas are absent
