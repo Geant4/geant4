@@ -24,7 +24,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.104 2005-04-25 09:37:22 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.105 2005-04-25 16:17:52 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -8312,7 +8312,9 @@ void G4QEnvironment::DecayBaryon(G4QHadron* qH)
       }
       else                      // @@ Can be aReason to search for anError in Fragmentation
 						{
+#ifdef pdebug
         G4cout<<"-Worning-G4QE::DecBary:*AsIs* DEL++ M="<<qM<<"<"<<mPPi<<G4endl;
+#endif
         theQHadrons.push_back(qH);               // Fill AsIs (delete equivalent)
         return;
       }
@@ -8704,7 +8706,7 @@ void G4QEnvironment::DecayBaryon(G4QHadron* qH)
   }
   else 
   {
-    G4cout<<"-Worning-G4QE::DecBary:*AsIs*UnknBaryon(AntiS) QC="<<qH->GetQC()<<G4endl;
+    G4cout<<"---Worning---G4QE::DecBary:*AsIso* UnknBaryon(AntiS) QC="<<qH->GetQC()<<G4endl;
     theQHadrons.push_back(qH);                 // Fill AsIs (delete equivalent)
     return;
   }
