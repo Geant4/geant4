@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.6 2005-04-13 13:41:03 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.7 2005-04-26 16:52:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -693,6 +693,7 @@ void G4EmCorrections::Initialise()
 // . Z^3 Barkas effect in the stopping power of matter for charged particles
 //   J.C Ashley and R.H.Ritchie
 //   Physical review B Vol.5 No.7 1 April 1972 pagg. 2393-2397
+  G4int i, j;
   const G4double fTable[47][2] = {
    { 0.02, 21.5},
    { 0.03, 20.0},
@@ -742,7 +743,7 @@ void G4EmCorrections::Initialise()
    { 9.0,  0.0032},
    { 10.0, 0.0025} };
 
-  for(G4int i=0; i<47; i++) {
+  for(i=0; i<47; i++) {
     engBarkas[i] = fTable[i][0];
     corBarkas[i] = fTable[i][1];
   }
@@ -866,7 +867,7 @@ void G4EmCorrections::Initialise()
   { 0.0, 3.166E-3}
   };
 
-  for(G4int i=0; i<104; i++) {
+  for(i=0; i<104; i++) {
     e[i] = nuca[i][0];
     a[i] = nuca[i][1];
   }
@@ -883,7 +884,6 @@ void G4EmCorrections::Initialise()
   nEtaK = 29;
   nEtaL = 28;
 
-  G4int i, j;
   const G4double d[11] = {0., 0., 0., 1.72, 2.09, 2.48, 2.82, 3.16, 3.53, 3.84, 4.15};
   const G4double thek[20] = {0.64, 0.65, 0.66, 0.68, 0.70, 0.72, 0.74, 0.75, 0.76, 0.78,
                              0.80, 0.82, 0.84, 0.85, 0.86, 0.88, 0.90, 0.92, 0.94, 0.95};
