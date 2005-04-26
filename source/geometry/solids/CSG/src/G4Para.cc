@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.26 2005-03-03 16:06:06 allison Exp $
+// $Id: G4Para.cc,v 1.27 2005-04-26 09:35:44 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
@@ -30,6 +30,7 @@
 //
 // History:
 //
+// 26.04.05 V.Grichine: new SurfaceNormal is default
 // 30.11.04 V.Grichine: modifications in SurfaceNormal for edges/vertices and in
 //                      constructor with vertices
 // 14.02.02 V.Grichine: bug fixed in Inside according to proposal of D.Wright
@@ -37,6 +38,7 @@
 // 31.10.96 V.Grichine: Modifications according G4Box/Tubs before to commit
 // 21.03.95 P.Kent: Modified for `tolerant' geom
 //
+////////////////////////////////////////////////////////////////////////////
 
 #include "G4Para.hh"
 
@@ -436,7 +438,7 @@ EInside G4Para::Inside( const G4ThreeVector& p ) const
 
 G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
 {
-  ENSide  side;
+  //  ENSide  side;
   G4ThreeVector norm;
   G4double distx,disty,distz;
   G4double newpx,newpy,xshift;
@@ -457,47 +459,6 @@ G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
   distx=std::fabs(std::fabs(xshift)-fDx*calpha);
   disty=std::fabs(std::fabs(newpy)-fDy);
   distz=std::fabs(std::fabs(p.z())-fDz);
-    
-
-#ifndef G4NEW_SURF_NORMAL
-
-  if (distx < disty)
-  {
-    if (distx < distz) side = kNX;
-    else               side = kNZ;
-  }
-  else
-  {
-    if (disty < distz) side = kNY;
-    else               side = kNZ;
-  }
-
-  switch (side)
-  {
-    case kNX:
-      tntheta = fTthetaCphi*calpha+fTthetaSphi*salpha;
-
-      if ( xshift < 0 )  cosntheta = -1/std::sqrt(1+tntheta*tntheta);
-      else               cosntheta =  1/std::sqrt(1+tntheta*tntheta);
-      
-      norm = G4ThreeVector(calpha*cosntheta, salpha*cosntheta,-tntheta*cosntheta);
-      break;
-
-    case kNY:
-      if (newpy < 0)   ycomp = -1/std::sqrt(1+fTthetaSphi*fTthetaSphi);    
-      else             ycomp =  1/std::sqrt(1+fTthetaSphi*fTthetaSphi);
-      
-      norm = G4ThreeVector(0, ycomp,-fTthetaSphi*ycomp);
-      break;
-
-    case kNZ:         
-      if (p.z() >= 0 )  norm = G4ThreeVector(0,0,1);      
-      else              norm = G4ThreeVector(0,0,-1);
-      
-      break;
-  }
-
-#else
 
   // New code for particle on surface including edges and corners with specific
   // normals
@@ -621,9 +582,6 @@ G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
       }
     }      
   }
-
-#endif
-
   return norm;
 }
 

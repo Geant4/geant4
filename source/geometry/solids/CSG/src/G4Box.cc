@@ -21,21 +21,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.31 2005-03-03 16:06:06 allison Exp $
+// $Id: G4Box.cc,v 1.32 2005-04-26 09:35:44 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //
 // Implementation for G4Box class
 //
-//  24.06.98 - V. Grichine: insideEdge in DistanceToIn(p,v)
-//  20.09.98 - V.Grichine: new algorithm of DistanceToIn(p,v)
-//  07.05.00 - V.Grichine: d= DistanceToIn(p,v), if d<e/2, d=0
-//  09.06.00 - V.Grichine: safety in DistanceToIn(p) against Inside(p)=kOutside
-//             and information before exception in DistanceToOut(p,v,...)
+//  26.04.05 - V.Grichine, new surface normal with edges/vertices to be default
 //  15.11.00 - D.Williams, V.Grichine: bug fixed in CalculateExtent - change
 //                                     algorithm for rotated vertices
-// --------------------------------------------------------------------
+//  09.06.00 - V.Grichine: safety in DistanceToIn(p) against Inside(p)=kOutside
+//             and information before exception in DistanceToOut(p,v,...)
+//  07.05.00 - V.Grichine: d= DistanceToIn(p,v), if d<e/2, d=0
+//  20.09.98 - V.Grichine: new algorithm of DistanceToIn(p,v)
+//  24.06.98 - V. Grichine: insideEdge in DistanceToIn(p,v)
+//
+///////////////////////////////////////////////////////////////
 
 #include "G4Box.hh"
 
@@ -379,37 +381,6 @@ G4ThreeVector G4Box::SurfaceNormal( const G4ThreeVector& p) const
   disty = std::fabs(std::fabs(p.y()) - fDy) ;
   distz = std::fabs(std::fabs(p.z()) - fDz) ;
 
-#ifndef G4NEW_SURF_NORMAL
-
-  if ( distx <= disty )
-  {
-    if ( distx <= distz )     // Closest to X
-    {
-      if ( p.x() < 0 ) norm = G4ThreeVector(-1.0,0,0) ;
-      else             norm = G4ThreeVector( 1.0,0,0) ;
-    }
-    else                      // Closest to Z
-    {
-      if ( p.z() < 0 ) norm = G4ThreeVector(0,0,-1.0) ;
-      else             norm = G4ThreeVector(0,0, 1.0) ;
-    }
-  }
-  else
-  {
-    if ( disty <= distz )      // Closest to Y
-    {
-      if ( p.y() < 0 ) norm = G4ThreeVector(0,-1.0,0) ;
-      else             norm = G4ThreeVector(0, 1.0,0) ;
-    }
-    else                       // Closest to Z
-    {
-      if ( p.z() < 0 ) norm = G4ThreeVector(0,0,-1.0) ;
-      else             norm = G4ThreeVector(0,0, 1.0) ;
-    }
-  }
-
-#else
-
   // New code for particle on surface including edges and corners with specific
   // normals
 
@@ -527,9 +498,6 @@ G4ThreeVector G4Box::SurfaceNormal( const G4ThreeVector& p) const
       }
     }      
   }
-
-#endif
-
   return norm;
 }
 

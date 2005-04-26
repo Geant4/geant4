@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.24 2005-03-03 16:06:06 allison Exp $
+// $Id: G4Trd.cc,v 1.25 2005-04-26 09:35:44 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -29,12 +29,13 @@
 //
 // History:
 //
+// 26.04.05, V.Grichine, new SurfaceNoramal is default
 // 07.12.04, V.Grichine, SurfaceNoramal with edges/vertices.
 // 07.05.00, V.Grichine, in d = DistanceToIn(p,v), if d<0.5*kCarTolerance, d=0
 //    ~1996, V.Grichine, 1st implementation based on old code of P.Kent
 // 
 //
-//--------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////////
 
 #include "G4Trd.hh"
 
@@ -405,52 +406,6 @@ G4ThreeVector G4Trd::SurfaceNormal( const G4ThreeVector& p ) const
   disty = std::fabs(newpy-widy)/secy;       //                to y side
   distz = std::fabs(std::fabs(p.z())-fDz);  //                to z side
 
-  // find closest side
-
-#ifndef G4NEW_SURF_NORMAL
-  
-  if (distx <= disty)
-  { 
-    if (distx <= distz) 
-    {
-      // Closest to X
-      
-      fcos = 1.0/secx;
-      // normal=(+/-std::cos(ang),0,-std::sin(ang))
-
-      if ( p.x() >= 0 ) norm = G4ThreeVector(fcos,0,-tanx*fcos);
-      else              norm = G4ThreeVector(-fcos,0,-tanx*fcos);
-    }
-    else
-    {
-      // Closest to Z
-      
-      if ( p.z() >= 0 ) norm = G4ThreeVector(0,0,1);
-      else              norm = G4ThreeVector(0,0,-1);
-    }
-  }
-  else
-  {  
-    if (disty <= distz)
-    {
-      // Closest to Y
-      
-      fcos = 1.0/secy;
-
-      if ( p.y() >= 0 ) norm = G4ThreeVector(0,fcos,-tany*fcos);
-      else              norm = G4ThreeVector(0,-fcos,-tany*fcos);
-    }
-    else 
-    {
-      // Closest to Z
-      
-      if ( p.z() >= 0 ) norm = G4ThreeVector(0,0,1);
-      else              norm = G4ThreeVector(0,0,-1);
-    }
-  }
-
-#else
-
   // New code for particle on surface including edges and corners with specific
   // normals
 
@@ -570,9 +525,6 @@ G4ThreeVector G4Trd::SurfaceNormal( const G4ThreeVector& p ) const
       }
     }      
   }
-
-#endif
-
   return norm;   
 }
 

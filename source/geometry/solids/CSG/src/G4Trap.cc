@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.31 2005-04-19 14:55:11 grichine Exp $
+// $Id: G4Trap.cc,v 1.32 2005-04-26 09:35:44 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -29,6 +29,8 @@
 // Implementation for G4Trap class
 //
 // History:
+//
+// 26.04.05 V.Grichine: new SurfaceNormal is default 
 // 19.04.05 V.Grichine: bug fixed in G4Trap("name",G4ThreeVector[8] vp)
 // 12.12.04 V.Grichine: SurfaceNormal with edges/vertices 
 // 15.11.04 V.Grichine: bug fixed in G4Trap("name",G4ThreeVector[8] vp)
@@ -39,7 +41,8 @@
 // 01.11.96 V.Grichine: Costructor for Right Angular Wedge from STEP, G4Trd/Para
 // 09.09.96 V.Grichine: Final modifications before to commit
 // 21.03.95 P.Kent: Modified for `tolerant' geometry
-// 
+//
+//////////////////////////////////////////////////////////////////////////////////// 
 
 #include "G4Trap.hh"
 #include "globals.hh"
@@ -1093,24 +1096,6 @@ G4ThreeVector G4Trap::SurfaceNormal( const G4ThreeVector& p ) const
   }
   distz = std::fabs(std::fabs( p.z() ) - fDz );
 
-
-
-#ifndef G4NEW_SURF_NORMAL
-
-  if (safe < distz)
-  {
-    norm = G4ThreeVector(fPlanes[imin].a,fPlanes[imin].b,fPlanes[imin].c);
-  }
-  else
-  {
-    if ( p.z() > 0 ) norm = G4ThreeVector(0,0,1);
-    else             norm =  G4ThreeVector(0,0,-1);
-    
-  }
-
-
-#else
-
   // New code for particle on surface including edges and corners with specific
   // normals
   G4double distx,disty,distmx,distmy;
@@ -1238,10 +1223,6 @@ G4ThreeVector G4Trap::SurfaceNormal( const G4ThreeVector& p ) const
       }
     }      
   }
-
-#endif
-
-  
   return norm;
 }
 
