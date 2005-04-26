@@ -21,23 +21,21 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.32 2005-04-26 09:35:44 grichine Exp $
+// $Id: G4Box.cc,v 1.33 2005-04-26 11:40:10 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //
 // Implementation for G4Box class
 //
-//  26.04.05 - V.Grichine, new surface normal with edges/vertices to be default
-//  15.11.00 - D.Williams, V.Grichine: bug fixed in CalculateExtent - change
-//                                     algorithm for rotated vertices
+//  24.06.98 - V. Grichine: insideEdge in DistanceToIn(p,v)
+//  20.09.98 - V.Grichine: new algorithm of DistanceToIn(p,v)
+//  07.05.00 - V.Grichine: d= DistanceToIn(p,v), if d<e/2, d=0
 //  09.06.00 - V.Grichine: safety in DistanceToIn(p) against Inside(p)=kOutside
 //             and information before exception in DistanceToOut(p,v,...)
-//  07.05.00 - V.Grichine: d= DistanceToIn(p,v), if d<e/2, d=0
-//  20.09.98 - V.Grichine: new algorithm of DistanceToIn(p,v)
-//  24.06.98 - V. Grichine: insideEdge in DistanceToIn(p,v)
-//
-///////////////////////////////////////////////////////////////
+//  15.11.00 - D.Williams, V.Grichine: bug fixed in CalculateExtent - change
+//                                     algorithm for rotated vertices
+// --------------------------------------------------------------------
 
 #include "G4Box.hh"
 
@@ -384,123 +382,73 @@ G4ThreeVector G4Box::SurfaceNormal( const G4ThreeVector& p) const
   // New code for particle on surface including edges and corners with specific
   // normals
 
-  G4double delta    = 0.5*kCarTolerance;
-  G4ThreeVector nX  = G4ThreeVector( 1.0, 0,0  );
-  G4ThreeVector nmX = G4ThreeVector(-1.0, 0,0  );
-  G4ThreeVector nY  = G4ThreeVector( 0, 1.0,0  );
-  G4ThreeVector nmY = G4ThreeVector( 0,-1.0,0  );
-  G4ThreeVector nZ  = G4ThreeVector( 0, 0,  1.0);
-  G4ThreeVector nmZ = G4ThreeVector( 0, 0,- 1.0);
+  const G4double delta    = 0.5*kCarTolerance;
+  const G4ThreeVector nX  = G4ThreeVector( 1.0, 0,0  );
+  const G4ThreeVector nmX = G4ThreeVector(-1.0, 0,0  );
+  const G4ThreeVector nY  = G4ThreeVector( 0, 1.0,0  );
+  const G4ThreeVector nmY = G4ThreeVector( 0,-1.0,0  );
+  const G4ThreeVector nZ  = G4ThreeVector( 0, 0,  1.0);
+  const G4ThreeVector nmZ = G4ThreeVector( 0, 0,- 1.0);
+
+  G4ThreeVector normX(0.,0.,0.), normY(0.,0.,0.), normZ(0.,0.,0.);
+  G4ThreeVector sumnorm(0., 0., 0.);
+  G4bool        isX(false), isY(false), isZ(false); 
+  G4int noSurfaces=0; 
 
   if (distx <= delta)         // on X/mX surface and around
   {
-    if ( p.x() >= 0.)         // on X surface
-    {
-      if (disty <= delta)
-      {
-        if (distz <= delta)   // corners around X surface
-        {
-          if ( p.y() >= 0.)
-	  {
-            if ( p.z() >= 0.) norm = ( nX + nY + nZ  ).unit();
-            else              norm = ( nX + nY + nmZ ).unit(); 
-	  }
-          else
-	  {
-            if ( p.z() >= 0.) norm = ( nX + nmY + nZ  ).unit();
-            else              norm = ( nX + nmY + nmZ ).unit(); 
-	  }
-        }
-        else                  // on XY edges
-	{
-          if ( p.y() >= 0.)   norm = ( nX + nY  ).unit();
-          else                norm = ( nX + nmY ).unit();
-	}        
-      }
-      else
-      {
-        if (distz <= delta)   // on XZ edges
-        {
-          if ( p.z() >= 0.)   norm = ( nX + nZ  ).unit();
-          else                norm = ( nX + nmZ ).unit();
-        }
-        else                  norm = nX;        
-      }
-    }
-    else                      // on mX surface
-    {
-      if (disty <= delta)
-      {
-        if (distz <= delta)   // corners around mX surface
-        {
-          if ( p.y() >= 0.)
-	  {
-            if ( p.z() >= 0.) norm = ( nmX + nY + nZ  ).unit();
-            else              norm = ( nmX + nY + nmZ ).unit(); 
-	  }
-          else
-	  {
-            if ( p.z() >= 0.) norm = ( nmX + nmY + nZ  ).unit();
-            else              norm = ( nmX + nmY + nmZ ).unit(); 
-	  }
-        }
-        else                  // on mXY edges
-	{
-          if ( p.y() >= 0.)   norm = ( nmX + nY  ).unit();
-          else                norm = ( nmX + nmY ).unit();
-	}        
-      }
-      else
-      {
-        if (distz <= delta)   // on mXZ edges
-        {
-          if ( p.z() >= 0.)   norm = ( nmX + nZ  ).unit();
-          else                norm = ( nmX + nmZ ).unit();
-        }
-        else                  norm = nmX;        
-      }
+    isX= true; 
+    noSurfaces ++; 
+    if ( p.x() >= 0.){        // on +X surface
+      normX= nX;
+    }else{
+      normX = nmX; 
     }
   }
-  else
+
+  if (disty <= delta)    // on one of the +Y or -Y surfaces
   {
-    if (disty <= delta)
-    {
-      if (distz <= delta)     // on YZ edges
-      {
-        if ( p.y() >= 0.)
-	{
-          if ( p.z() >= 0.)   norm = ( nY + nZ  ).unit();
-          else                norm = ( nY + nmZ ).unit(); 
-	}
-        else
-	{
-            if ( p.z() >= 0.) norm = ( nmY + nZ  ).unit();
-            else              norm = ( nmY + nmZ ).unit(); 
-	}
-      }
-      else                    // on Y/mY surfaces
-      {
-        if ( p.y() >= 0.)     norm = nY;
-        else                  norm = nmY;
-      } 
+    isY= true;
+    noSurfaces ++; 
+    if ( p.y() >= 0.){        // on +Y surface
+      normY= nY;
+    }else{
+      normY = nmY; 
     }
-    else                      // on Z/mZ surfaces
-    {
-      if (distz <= delta) 
-      {
-          if ( p.z() >= 0.)   norm = nZ;
-          else                norm = nmZ; 
-      }
-      else                    // is not on surface !?
-      {
-        G4Exception("G4Box::SurfaceNormal(p)", "Notification", JustWarning, 
-                    "Point p is not on surface !?" ); 
-      }
-    }      
   }
+
+  if (distz <= delta)    // on one of the +Z or -Z surfaces
+  {
+    isZ= true;
+    noSurfaces ++; 
+    if ( p.z() >= 0.){        // on +Z surface
+      normZ= nZ;
+    }else{
+      normZ = nmZ; 
+    }
+  }
+
+  sumnorm= normX + normY + normZ; 
+
+  norm= G4ThreeVector( 0., 0., 0.); 
+  if( isX || isY || isZ ) 
+  { 
+     norm = ( normX + normY + normZ ) . unit(); 
+  }else{
+     G4Exception("G4Box::SurfaceNormal(p)", "Notification", JustWarning, 
+		 "Point p is not on surface !?" ); 
+  }
+  
   return norm;
 }
 
+//   G4cout << " Point is " << p << G4endl;  
+//   G4cout << " normX = " << normX << G4endl
+//	    << " normY = " << normY << G4endl
+//	    << " normZ = " << normZ << G4endl; 
+//   G4cout << " norm= " << norm << G4endl; 
+
+ 
 ///////////////////////////////////////////////////////////////////////////
 //
 // Calculate distance to box from an outside point
@@ -946,7 +894,8 @@ std::ostream& G4Box::StreamInfo(std::ostream& os) const
 
 void G4Box::DescribeYourselfTo (G4VGraphicsScene& scene) const 
 {
-  scene.AddSolid (*this);
+  // scene.AddSolid (*this);
+  scene.AddThis (*this);
 }
 
 G4VisExtent G4Box::GetExtent() const 
