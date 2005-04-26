@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Box.cc,v 1.7 2004-12-02 09:31:29 gcosmo Exp $
+// $Id: testG4Box.cc,v 1.8 2005-04-26 11:38:57 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -91,6 +91,7 @@ G4bool testG4Box()
 // Check Surface Normal
     G4ThreeVector normal;
 
+    // Normals on Surface 
     normal=b1.SurfaceNormal(ponxside);
     assert(ApproxEqual(normal,G4ThreeVector(1,0,0)));
     normal=b1.SurfaceNormal(ponmxside);
@@ -108,6 +109,78 @@ G4bool testG4Box()
     normal=b1.SurfaceNormal(ponmzsidey);
     assert(ApproxEqual(normal,G4ThreeVector(0,0,-1)));
 
+    // Normals on Edges
+    G4ThreeVector edgeXY(    20.0,  30., 0.0); 
+    G4ThreeVector edgemXmY( -20.0, -30., 0.0); 
+    G4ThreeVector edgeXmY(   20.0, -30., 0.0); 
+    G4ThreeVector edgemXY(  -20.0,  30., 0.0); 
+    G4ThreeVector edgeXZ(    20.0, 0.0, 40.0); 
+    G4ThreeVector edgemXmZ( -20.0, 0.0, -40.0); 
+    G4ThreeVector edgeXmZ(   20.0, 0.0, -40.0); 
+    G4ThreeVector edgemXZ(  -20.0, 0.0, 40.0); 
+    G4ThreeVector edgeYZ(    0.0,  30.0,  40.0); 
+    G4ThreeVector edgemYmZ(  0.0, -30.0, -40.0); 
+    G4ThreeVector edgeYmZ(   0.0,  30.0, -40.0); 
+    G4ThreeVector edgemYZ(   0.0, -30.0,  40.0); 
+
+    G4double invSqrt2 = 1.0 / std::sqrt( 2.0); 
+    G4double invSqrt3 = 1.0 / std::sqrt( 3.0); 
+
+    normal= b1.SurfaceNormal( edgeXY ); 
+    assert(ApproxEqual( normal, G4ThreeVector( invSqrt2, invSqrt2, 0.0) )); 
+    // G4cout << " Normal at " << edgeXY << " is " << normal 
+    //    << " Expected is " << G4ThreeVector( invSqrt2, invSqrt2, 0.0) << G4endl;     
+    normal= b1.SurfaceNormal( edgemXmY ); 
+    assert(ApproxEqual( normal, G4ThreeVector( -invSqrt2, -invSqrt2, 0.0) )); 
+    normal= b1.SurfaceNormal( edgeXmY ); 
+    assert(ApproxEqual( normal, G4ThreeVector( invSqrt2, -invSqrt2, 0.0) )); 
+    normal= b1.SurfaceNormal( edgemXY ); 
+    assert(ApproxEqual( normal, G4ThreeVector( -invSqrt2, invSqrt2, 0.0) )); 
+
+    normal= b1.SurfaceNormal( edgeXZ ); 
+    assert(ApproxEqual( normal, G4ThreeVector(  invSqrt2, 0.0, invSqrt2) )); 
+    normal= b1.SurfaceNormal( edgemXmZ ); 
+    assert(ApproxEqual( normal, G4ThreeVector( -invSqrt2, 0.0, -invSqrt2) )); 
+    normal= b1.SurfaceNormal( edgeXmZ ); 
+    assert(ApproxEqual( normal, G4ThreeVector(  invSqrt2, 0.0, -invSqrt2) )); 
+    normal= b1.SurfaceNormal( edgemXZ ); 
+    assert(ApproxEqual( normal, G4ThreeVector( -invSqrt2, 0.0, invSqrt2) )); 
+
+    normal= b1.SurfaceNormal( edgeYZ ); 
+    assert(ApproxEqual( normal, G4ThreeVector( 0.0,  invSqrt2,  invSqrt2) )); 
+    normal= b1.SurfaceNormal( edgemYmZ ); 
+    assert(ApproxEqual( normal, G4ThreeVector( 0.0, -invSqrt2, -invSqrt2) )); 
+    normal= b1.SurfaceNormal( edgeYmZ ); 
+    assert(ApproxEqual( normal, G4ThreeVector( 0.0,  invSqrt2, -invSqrt2) )); 
+    normal= b1.SurfaceNormal( edgemYZ ); 
+    assert(ApproxEqual( normal, G4ThreeVector( 0.0, -invSqrt2,  invSqrt2) )); 
+
+    // Normals on corners
+    G4ThreeVector cornerXYZ(    20.0,  30., 40.0); 
+    G4ThreeVector cornermXYZ(  -20.0,  30., 40.0); 
+    G4ThreeVector cornerXmYZ(   20.0, -30., 40.0); 
+    G4ThreeVector cornermXmYZ( -20.0, -30., 40.0); 
+    G4ThreeVector cornerXYmZ(    20.0,  30., -40.0); 
+    G4ThreeVector cornermXYmZ(  -20.0,  30., -40.0); 
+    G4ThreeVector cornerXmYmZ(   20.0, -30., -40.0); 
+    G4ThreeVector cornermXmYmZ( -20.0, -30., -40.0); 
+ 
+    normal= b1.SurfaceNormal( cornerXYZ ); 
+    assert(ApproxEqual( normal, G4ThreeVector(  invSqrt3,  invSqrt3, invSqrt3) )); 
+    normal= b1.SurfaceNormal( cornermXYZ ); 
+    assert(ApproxEqual( normal, G4ThreeVector( -invSqrt3,  invSqrt3, invSqrt3) )); 
+    normal= b1.SurfaceNormal( cornerXmYZ ); 
+    assert(ApproxEqual( normal, G4ThreeVector(  invSqrt3, -invSqrt3, invSqrt3) )); 
+    normal= b1.SurfaceNormal( cornermXmYZ ); 
+    assert(ApproxEqual( normal, G4ThreeVector( -invSqrt3, -invSqrt3, invSqrt3) )); 
+    normal= b1.SurfaceNormal( cornerXYmZ ); 
+    assert(ApproxEqual( normal, G4ThreeVector(  invSqrt3,  invSqrt3, -invSqrt3) )); 
+    normal= b1.SurfaceNormal( cornermXYmZ ); 
+    assert(ApproxEqual( normal, G4ThreeVector( -invSqrt3,  invSqrt3, -invSqrt3) )); 
+    normal= b1.SurfaceNormal( cornerXmYmZ ); 
+    assert(ApproxEqual( normal, G4ThreeVector(  invSqrt3, -invSqrt3, -invSqrt3) )); 
+    normal= b1.SurfaceNormal( cornermXmYmZ ); 
+    assert(ApproxEqual( normal, G4ThreeVector( -invSqrt3, -invSqrt3, -invSqrt3) )); 
 
 // DistanceToOut(P)
     Dist=b1.DistanceToOut(pzero);
