@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.33 2005-04-26 11:40:10 japost Exp $
+// $Id: G4Box.cc,v 1.34 2005-04-26 11:51:45 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -392,48 +392,60 @@ G4ThreeVector G4Box::SurfaceNormal( const G4ThreeVector& p) const
 
   G4ThreeVector normX(0.,0.,0.), normY(0.,0.,0.), normZ(0.,0.,0.);
   G4ThreeVector sumnorm(0., 0., 0.);
-  G4bool        isX(false), isY(false), isZ(false); 
   G4int noSurfaces=0; 
 
   if (distx <= delta)         // on X/mX surface and around
   {
-    isX= true; 
     noSurfaces ++; 
     if ( p.x() >= 0.){        // on +X surface
-      normX= nX;
+      normX= nX ;    // G4ThreeVector( 1.0, 0., 0. );
     }else{
-      normX = nmX; 
+      normX= nmX;    // G4ThreeVector(-1.0, 0., 0. ); 
     }
+    sumnorm= normX; 
   }
 
   if (disty <= delta)    // on one of the +Y or -Y surfaces
   {
-    isY= true;
     noSurfaces ++; 
     if ( p.y() >= 0.){        // on +Y surface
       normY= nY;
     }else{
       normY = nmY; 
     }
+    sumnorm += normY; 
   }
 
   if (distz <= delta)    // on one of the +Z or -Z surfaces
   {
-    isZ= true;
     noSurfaces ++; 
     if ( p.z() >= 0.){        // on +Z surface
       normZ= nZ;
     }else{
       normZ = nmZ; 
     }
+    sumnorm += normZ; 
   }
 
-  sumnorm= normX + normY + normZ; 
+  // sumnorm= normX + normY + normZ; 
+  const G4double invSqrt2 = 1.0 / std::sqrt( 2.0); 
+  const G4double invSqrt3 = 1.0 / std::sqrt( 3.0); 
 
   norm= G4ThreeVector( 0., 0., 0.); 
-  if( isX || isY || isZ ) 
+  if( noSurfaces > 0 )
   { 
-     norm = ( normX + normY + normZ ) . unit(); 
+    if( noSurfaces == 1 ){ 
+      norm= sumnorm; 
+    }else{
+      // norm = sumnorm . unit(); 
+      if( noSurfaces == 2 ) { 
+	// 2 surfaces -> on edge 
+	norm = invSqrt2 * sumnorm; 
+      } else { 
+	// 3 surfaces (on corner)
+	norm = invSqrt3 * sumnorm; 
+      }
+    }
   }else{
      G4Exception("G4Box::SurfaceNormal(p)", "Notification", JustWarning, 
 		 "Point p is not on surface !?" ); 
