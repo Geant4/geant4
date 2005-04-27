@@ -58,7 +58,7 @@ will be stored into a file G4run0001.root.
 You can read the hit ROOT file G4run0001.root with HitsAnalyzer.
 
   cd HitsAnalyzer
-  make
+  gmake G4LIB_BUILD_SHARED=1
   ./run
 
 
@@ -88,7 +88,7 @@ Pers01DetectorConstruction.cc.
 On line#4, file name for the hits output is specified.
 
 
-*** Root I/O Adopter classes ***
+*** Root I/O Adapter classes ***
 
 In the subdirectory rootio, there is a file called Pers01CalorHit.rootio
 which is used to generate a set of ROOT I/O adopter classes.
@@ -158,7 +158,7 @@ In Geant4, various types of hits information from each subdetector
 must be recorded into the file.  For the developer of each
 subdetector, the type of information for each hit is important
 and the I/O mechanism can be similar to each other.  g4rootio.pl
-enables an automatic generation of ROOT I/O adopter classes from
+enables an automatic generation of ROOT I/O adapter classes from
 a simple definition file *.rootio.
 
 
@@ -174,7 +174,7 @@ only those simple types.
 
 g4rootio.pl is not capable of storing data members with pointers
 or variable length array such as char* or std::string.  For the
-charaters, you may need to use fixed length array such as char[20].
+characters, you may need to use fixed length array such as char[20].
 
 
 *** How to write Pers01CalorHit.rootio ***
@@ -316,9 +316,9 @@ Then the retrieved MDTHitsCollection has 0 as the 3rd argument.
 It is users responsibility to fill this variable properly.
 
 
-*** Generation of the ROOT I/O Adopter classes ***
+*** Generation of the ROOT I/O Adapter classes ***
 
-ROOT I/O adopter classes can be generated automatically with the
+ROOT I/O adapter classes can be generated automatically with the
 GNUmakefiles provided in the $G4PEX_DIR/config directory.
 "make clean" will cleans up your directory.
 
