@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.6 2005-04-22 16:57:04 gcosmo Exp $
+# $Id: binmake.gmk,v 1.7 2005-04-27 09:29:16 gcosmo Exp $
 # =====================================================================
 # binmake.gmk: GNUmakefile variables for creating the binary executable
 #
@@ -231,5 +231,5 @@ endif
 	@rm -f -r $(G4PEX_DIR)/tmp/$(G4SYSTEM)/$(TARGET)
 
 distclean: clean
-	@rm -f G4defaultOutput G4run0001.root G4History.macro core* .DAWN*.history g4_*.prim
+	@rm -f G4defaultOutput G4run0001.root Histo.root G4History.macro core* .DAWN*.history g4_*.prim
 

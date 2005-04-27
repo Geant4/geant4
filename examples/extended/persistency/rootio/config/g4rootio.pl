@@ -2108,7 +2108,7 @@ sub fads_create_io_source_file{
   print(OUT "  branch->SetAutoDelete(kFALSE);\n");
   print(OUT "\n");
   print(OUT "  if ( m_verbose > 2 ) {\n");
-  print(OUT "    G4cout << \"${class_io}: Storing ${class_name} collectoin \"\n");
+  print(OUT "    G4cout << \"${class_io}: Storing ${class_name} collection \"\n");
   print(OUT "              << \"for \\\"\" << ahc->GetSDname() << \"\\\", \"\n");
   print(OUT "              << \"collection \\\"\" << ahc->GetName() << \"\\\".\" << G4endl\n");
   print(OUT "              << \"  # of entries: \" << ahc->$collection_class_method_entries << \".\" << G4endl;\n");
@@ -2154,7 +2154,7 @@ sub fads_create_io_source_file{
   print(OUT "  branch->SetAddress(&f_hc);\n");
   print(OUT "\n");
   print(OUT "  if ( m_verbose > 2 ) {\n");
-  print(OUT "    G4cout << \"${class_io}: Retrieving ${class_name} collectoin \"\n");
+  print(OUT "    G4cout << \"${class_io}: Retrieving ${class_name} collection \"\n");
   print(OUT "              << \"for \\\"\" << f_detName << \"\\\", \"\n");
   print(OUT "              << \"collection \\\"\" << f_colName << \"\\\".\" << G4endl;\n");
   print(OUT "  }\n");
