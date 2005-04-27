@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: FTFModelTest2.cc,v 1.2 2005-01-14 17:26:17 gunter Exp $
+// $Id: FTFModelTest2.cc,v 1.3 2005-04-27 15:26:54 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -95,6 +95,8 @@
 #include "G4ProtonInelasticCrossSection.hh"
 #include "G4NeutronInelasticCrossSection.hh"
 #include "G4HadronInelasticDataSet.hh"
+#include "G4IonTable.hh"
+#include "G4HadTmpUtil.hh"   // G4lrint
 
 #include <memory> // for the auto_ptr(T>
 #include "AIDA/AIDA.h"
@@ -112,13 +114,15 @@ int main()
 
 	G4Nucleus lead(207.2, 82.);	// lead
 	G4Material* m_lead = new G4Material("Pb",    82., 207.19*g/mole, 11.35*g/cm3);
+	G4Nucleus Mg(24.3, 12.0);	// Magnesium
+	G4Material* m_Mg = new G4Material("Mg",    12., 24.305*g/mole, 1.738*g/cm3);
 	G4Nucleus Be(9.,4.); 		// Beryllium
 	G4Material* m_Be = new G4Material("Be",    4.,  9.01*g/mole, 1.848*g/cm3);
 	G4Nucleus H(1.,1.);		// Hydrogen (Proton)
 	G4Material* m_H = new G4Material("H",     1.,  1.0*g/mole, 1.*g/cm3);
-	G4Nucleus nuclei[] = { H, H, Be, lead };  // 0 is dummy
+	G4Nucleus nuclei[] = { H, H, Be, Mg, lead };  // 0 is dummy
 	
-	G4Material * materials[] = {m_H, m_H, m_Be, m_lead };
+	G4Material * materials[] = {m_H, m_H, m_Be, m_Mg, m_lead };
 		
 	G4StableIsotopes theIso;
 
@@ -398,9 +402,13 @@ int main()
 
 
 	G4ParticleDefinition * proton = G4Proton::Proton();
-	G4double Ekinetic= sqrt(sqr(proj_momentum) + sqr(proton->GetPDGMass())) - proton->GetPDGMass();
-	         
-	
+	G4double Eprojectile = sqrt(sqr(proj_momentum) + sqr(proton->GetPDGMass()));
+	G4double Ekinetic= Eprojectile - proton->GetPDGMass();
+	G4double beta = proj_momentum / ( proton->GetPDGMass() + Eprojectile );
+	G4double delta_eta = atanh ( beta );        
+	G4cout << " offset for rapidity = " << delta_eta << G4endl;
+	Info->fill(3.,delta_eta);
+        
 	G4VCrossSectionDataSet* cs = 0;
 	if(proton == G4Proton::Proton() && material->GetElement(0)->GetZ() > 1.5) {
 	  cs = new G4ProtonInelasticCrossSection();
@@ -409,7 +417,6 @@ int main()
 	} else {
 	  cs = new G4HadronInelasticDataSet();
 	}
-
 
 	G4DynamicParticle dParticle(proton,G4ThreeVector(1., 0.,0.),Ekinetic);
 	G4double cross_sec = 0.0;
@@ -430,7 +437,7 @@ int main()
       G4cout << "    cross(b)= " << cross_sec/barn << G4endl;
 
       Info->fill(1.,double(maxEvents));
-      Info->fill(1.,cross_sec);
+      Info->fill(2.,cross_sec);
  
 // =========================event loop ================================================================ 
  	for ( G4int ntimes=0; ntimes< maxEvents; ntimes++) {
@@ -709,7 +716,7 @@ int main()
 		Sum += (*result)[astring]->Get4Momentum();
 		
 		rapidity=Rapidity((*result)[astring]->Get4Momentum().pz(),(*result)[astring]->Get4Momentum().e());
-
+		
 		cutEt += (rapidity> -0.1 && rapidity<2.9 ) ? Etcurrent : 0.;
 		cutEta += (rapidity> -0.1 && rapidity<5.5 ) ? Etcurrent : 0.;
 
