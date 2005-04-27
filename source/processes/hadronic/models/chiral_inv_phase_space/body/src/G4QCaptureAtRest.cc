@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.16 2005-04-25 09:37:22 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.17 2005-04-27 15:30:03 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -204,12 +204,13 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     if(Z<0) return 0;
   }
   G4int N = Z;
-  G4IsotopeVector* isoVector=pElement->GetIsotopeVector();
-  G4int isoSize=isoVector->size();
+  //G4IsotopeVector* isoVector=pElement->GetIsotopeVector();
+  //G4int isoSize=isoVector->size(); // !! Ttis initiates an error! *******************
+  G4int isoSize=0;
 #ifdef debug
   G4cout<<"G4QCaptureAtRest::AtRestDoIt: isovectorLength="<<isoSize<<G4endl;
 #endif
-  if(isoVector->size())               // The Element has not trivial abumdance set
+  if(isoSize)                         // The Element has not trivial abumdance set
   {
     // @@ the following solution is temporary till G4Element can contain the QIsotopIndex
     G4int curInd=G4QIsotope::Get()->GetLastIndex(Z);
