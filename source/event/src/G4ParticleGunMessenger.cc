@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGunMessenger.cc,v 1.11 2004-02-22 02:55:26 kurasige Exp $
+// $Id: G4ParticleGunMessenger.cc,v 1.12 2005-04-27 01:32:46 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -66,9 +66,10 @@ G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun * fPtclGun)
   G4int nPtcl = particleTable->entries();
   for(G4int i=0;i<nPtcl;i++)
   {
-    if(!(particleTable->GetParticle(i)->IsShortLived()))
+    G4ParticleDefinition* pd = particleTable->GetParticle(i);
+    if( !(pd->IsShortLived()) || pd->GetDecayTable() )
     {
-      candidateList += particleTable->GetParticleName(i);
+      candidateList += pd->GetParticleName();
       candidateList += " ";
     }
   }

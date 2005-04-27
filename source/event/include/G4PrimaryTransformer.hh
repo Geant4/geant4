@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.hh,v 1.9 2004-12-31 03:29:25 asaim Exp $
+// $Id: G4PrimaryTransformer.hh,v 1.10 2005-04-27 01:32:46 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -64,17 +64,10 @@ class G4PrimaryTransformer
     { verboseLevel = vl; };
 
   public: //with description
-    inline void SetUnknnownParticleDefined(G4bool vl)
-    {
-      unknownParticleDefined = vl;
-      if(unknownParticleDefined && !unknown) 
-      { G4cerr << "unknownParticleDefined cannot be set true because G4UnknownParticle is not defined in the physics list."
-               << G4endl << "Command ignored." << G4endl;
-        unknownParticleDefined = false;
-      }
-    }
+    void SetUnknnownParticleDefined(G4bool vl);
     // By invoking this Set method, the user can alter the treatment of unknown
     // particle. The ideal place to invoke this method is in the BeginOfRunAction.
+
     inline G4bool GetUnknownParticleDefined() const
     { return unknownParticleDefined; }
 
@@ -84,12 +77,21 @@ class G4PrimaryTransformer
               G4double x0,G4double y0,G4double z0,G4double t0,G4double wv);
     void SetDecayProducts(G4PrimaryParticle* mother,
                             G4DynamicParticle* motherDP);
+    G4bool CheckDynamicParticle(G4DynamicParticle*DP);
+
   protected: //with description
+  // Following two virtual methods are provided to customize the use of PrimaryTransformer
+  // for particle types exotic to Geant4.
+
     virtual G4ParticleDefinition* GetDefinition(G4PrimaryParticle*pp);
-    // virtual method to be overwritten. Return appropriate G4ParticleDefinition
-    // w.r.t. the primary particle. If NULL is returned, the particle will not be
-    // treated as a track, but its daughters will be examined in case it has 
-    // "pre-assigned decay products".
+    // Return appropriate G4ParticleDefinition w.r.t. the primary particle. 
+    // If NULL is returned, the particle will not be treated as a track, but its daughters
+    // will be examined in case it has "pre-assigned decay products".
+
+    virtual G4bool IsGoodForTrack(G4ParticleDefinition*pd);
+    // Return true if a primary particle should be converted into a track.
+    // By default, all particles of non-shortlived and shortlived with valid decay
+    // tables are converted.
 };
 
 #endif
