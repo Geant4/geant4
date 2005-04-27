@@ -1,0 +1,262 @@
+
+                       geant4-07-00-ref-03
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Extended geometry optimisation such that re-voxelisation can now apply
+    to just a specific subtree if a physical volume is specified.
+  o Modified solids interface to replace AddThis() with AddSolid()
+    for the generation of graphics primitives.
+  o New generic framework for twisted solids. Added G4TwistedTrd and
+    extended G4TwistedTrap to support setups with different trapezoidal
+    endcaps with centres not necessarily on a line parallel to the z axis.
+  o Optimised internal interfaces for EM base classes.
+  o Updated TRD model for regular radiators to provide more realistic
+    gamma spectrum.
+  o Physics tuning for the antiproton-nuclear annihilation at rest in
+    the CHIPS hadronic model.
+  o Reviewed all visualization commands: improved guidance, simplified
+    and rationalised the commands.
+  o Added first implementation of cutaway: a clipping box for physical
+    volume tree.
+  o Introduced drawing of readout geometry for logical volumes.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+g3tog4                                           g3tog4-V07-00-00
+------
+- GNUmakefile: corrected order for graphics_reps and intercoms in the
+  definition of GLOBLIBS.
+
+geometry/management                              geommng-V07-00-02
+-------------------
+- Extended signatures for OpenGeometry() and CloseGeometry() to consider local
+  optimisation of a subtree of volumes. Voxelisation can now apply to just a
+  specific subtree if a physical volume is specified.
+- Added protection against NULL material pointer for volumes belonging
+  to the tracking geometry in G4Region scanning.
+  Addresses problem report #735.
+- G4ReflectedSolid: added test for 'Number-Of-Rotation-Steps' in
+  GetPolyhedron(). Changed AddThis() to AddSolid().
+
+geometry/solids                                  geomsolids-V07-00-00
+---------------
+- Implemented Get/CreatePolyhedron() when missing and added test for
+  'Number-Of-Rotation-Steps' in GetPolyhedron().
+- Changed AddThis() with AddSolid() for all solids in DescribeYourselfTo().
+- Some code cleanup.
+- CSG (geom-csg-V07-00-03)
+  o G4Trap: fix in p.x() centering to sum over all vertices.
+- specific (geom-specific-V07-00-03)
+  o New generic framework for twisted solids G4TwistedBox, G4TwistedTrd and
+    G4TwistedTrap: inheriting now from the base class G4VTwistedFaceted.
+  o Extended G4TwistedTrap to support setups with different trapezoidal
+    endcaps with centres not necessarily on a line parallel to the z axis.
+  o Added G4TwistedTrd and general G4TwistedTrap as test cases in test.
+
+global                                           global-V07-00-04
+------
+- G4UnitsTable.hh/.cc: Added G4BestUnit::operator G4String.
+- G4Types.hh: extend check for deprecated warning on <strstream> for
+  versions of gcc >= 3.
+
+graphics_reps                                    greps-V07-00-03
+-------------
+- G4Polyhedron: Added fNumberOfRotationStepsAtTimeOfCreation.
+- G4VisAttributes: Changed std::vector<G4AttDef> to map<G4String,G4AttDef>.
+- Added new class G4AttCheck.
+
+interfaces                                       interfaces-V07-00-01
+----------
+- G4UIGainServer: fixed conditional compilation for porting on MacOS 10.4.
+
+materials                                        materials-V07-00-02
+---------
+- G4Isotope: made 'A' optional (now taken from Nist data base by default).
+- G4Element: added new data member 'fIndexZ' to count the number of elements
+  with same 'Z'.
+- Added warning in GetMaterial(materialName) and GetElement(elementName).
+
+parameterisations/gflash                         gflash-V07-00-02
+------------------------
+- GFlashShowerModel: fixed compilation warning on gcc-4.0 for possible
+  undefined operation on 'NlateralInside' and 'NSpotDeposited'.
+
+processes/electromagnetic/highenergy             highenergy-V07-00-00
+------------------------------------
+- Migrated to new optimised interfaces from 'utils' classes.
+
+processes/electromagnetic/muons                  muons-V07-00-01
+-------------------------------
+- Added new class G4EnergyLossForExtrapolator.
+- Adopt G4EmCorrections for muon ionisation.
+- Relax by one verbosity level.
+- Migrated to new optimised interfaces from 'utils' classes.
+
+processes/electromagnetic/standard               stand-V07-00-07
+----------------------------------
+- Added new '70' implementations classes G4PhotoElectricEffect70,
+  G4GammaConversion70, G4ComptonScattering70 and G4KleinNishinaModel.
+- Cashing pointer to tracking navigator for G4MscModel and optimised
+  internal interfaces (also in G4MultipleScattering).
+- Migrated gamma processes use G4ParticleChangeForGamma.
+- Using G4EmCorrections for hadrons/ions ionisation.
+- Migrated to new optimised interfaces from 'utils' classes.
+
+processes/electromagnetic/utils                  utils-V07-00-06
+-------------------------------
+- Added method SelectRandomAtom() to G4VEmModel.
+- Migrated G4VEmProcess to use G4ParticleChangeForGamma
+- Optimised internal interfaces for G4VMultipleScattering, G4VEmModel,
+  G4VEmFluctuationModel, G4VEmProcess and G4VEmEnergyLossProcess.
+- Fixed range calculation for dedx=0 in G4LossTableBuilder.
+- Added Mott correction to G4EmCorrection.
+
+processes/electromagnetic/xrays                  xrays-V07-00-01
+-------------------------------
+- Added new class G4StrawTubeXTRadiator and modified integration algorithm
+  in G4TransparentRegXTRadiator.
+- Updated TRD model for regular radiators to provide more realistic
+  gamma spectrum.
+
+processes/hadronic/models/cascade/cascade        ghad-bert-cas-V07-00-00
+-----------------------------------------
+- Fixed initialisation of sk,ik in G4CascadSpecialFunctions, and CP2, AK2
+  in paraMaker. Fixes compilation warning on gcc-4.0.
+
+processes/hadronic/models/chiral_.../body        ghad-chips-body-V07-00-09
+-----------------------------------------
+- Physics tuning for the antiproton-nuclear annihilation at rest.
+- Fixed infinite-loop in QGSC allocation of CHIPS. Adapted QGSC interface
+  for CHIPS with new parameters. Corrected also parameters in the
+  G4QCaptureAtRest.
+- Fix for non-conservation bug in negative hypernucleus decay.
+
+processes/hadronic/models/chiral_.../interface   ghad-chips-int-V07-00-00
+----------------------------------------------
+- New parameters for the QGSC interface of CHIPS, to cover secondary clusters
+  up to alphas and speed-up the QGSC process.
+
+run                                              run-V07-00-01
+---
+- Moved invocation of ConstructParticle() method back to the original
+  place in InitializePhysics().
+
+track                                            track-V07-00-00
+-----
+- Added new class G4ParticleChangeForGamma.
+- Modified G4ParticleChangeForLoss to inline 'update' methods.
+
+tracking                                         tracking-V07-00-00
+--------
+- Simplified creation of G4AttValues using G4BestUnit::operator
+  G4String() and G4UIcommand::ConvertToString().
+
+visualization                                    vis-V07-00-13
+-------------
+- Reviewed all vis commands. Improved guidance, simplified and
+  rationalised the commands.
+- Added first implementation of cutaway: a clipping box for physical
+  volume tree:   vis/scene/add/volume ! ! ! box km 0 1 0 1 0 1
+- G4VisManager:
+  o Removed "Delete" methods. Removed "remove" and "edit" commands.
+  o Added default G4Transform3D::Identity to objectTransformation
+    argument in Draw methods.
+- Removed automatic parameter candidate specification for commands
+  that take an argument that is a scene, scene handler or viewer
+  name - it is checked in SetNewValue() methods.
+- Added G4VUserVisAction and G4CallbackModel classes.
+- Implemented /vis/scene/add/userAction.
+- Introduced /vis/scene/add/logo.
+- Introduced drawing of readout geometry for logical volumes.
+  For drawing of logical volumes, introduced boolean flags to control 
+  drawing of: boolean components (if any), voxels (if any) and readout
+  geometry (if any). Augmented commands /vis/specify and
+  /vis/scene/add/logicalVolume to use above flags.
+- G4ASCIITree: added printing of names of sensitive detector (if any) and
+  readout geometry (if any).
+- Added Set methods to G4VModel.
+- G4VisCommandsSceneAdd: fixed access to fpVisManager from nested class.
+- Added constructor and virtual destructor to G4VUserVisAction.
+- Added return type to G4ViewParameters::SetNoOfSides() and
+  G4ModelingParameters::SetNoOfSides(), returning the number of sides
+  per circle in polyhedron contruction.
+- Bug fix in G4PhysicalVolumeModel to have the number of rotation steps
+  correctly applied.
+- Refined logo and scale.
+- Improved physical volume clipping.
+- Added argument to G4CallbackModel::operator()(const G4Transform3D&) so that
+  the model could implement a given transformation.
+- Used std::istrstream::istrstream(std::string) throughout.
+- Protected scene handlers for the case of the drawing of solids NOT
+  from a physical volume tree.
+- Fixed a problem with ClearTransientStore(). ClearTransientStore()
+  should restrict itself to its job.
+- Removed (commented out) some code that forced extra kernel visits,
+  purportedly to overcome a problem in OpenGLStored methods.
+- Commented out SetView() and ClearView() in /vis/viewer/refresh in
+  G4VisCommandsViewer.
+- Changed signature of G4VViewer::SetNeedKernelVisit(G4bool) for
+  compatibility.
+- Fixed bug in /vis/viewer/update to check the existence of the scene
+  handler and the scene.
+- Updated READMEs for G4VisExecutive.  Removed references to OPACS.
+
+source/GNUmakefile                               source-gmk-V07-00-00
+------------------
+- Added printout of Geant4 version at build startup.
+
+examples                                         examples-V07-00-02
+--------
+- Updated reference outputs.
+- advanced
+  o Tiara (Tiara-V07-00-00)
+    + Migration to SLC3 with latest versions of PI 1.3.X.
+- extended
+  o analysis/A01 (exampleA01-V07-00-00)
+    + Fixed linking problem with AIDA on WIN32-VC.
+  o biasing/B02 (B02-V07-00-00)
+    + Migration to SLC3 with latest versions of PI 1.3.X.
+  o biasing/B03 (B03-V07-00-00)
+    + Migration to SLC3 with latest versions of PI 1.3.X.
+  o electromagnetic/TestEm1 (testem1-V07-00-01)
+    + PhysListEmStandard: use G4eBremsstrahlung from the standard;
+      removed G4eBremsstrahlungCMS. Treat Alpha as GenericIon.
+    + Removed He3 from predefined particles.
+  o electromagnetic/TestEm3 (testem3-V07-00-05)
+    + Removed He3 from predefined particles.
+    + PhysListEmStandard: treat Alpha as GenericIon.
+  o electromagnetic/TestEm5 (testem5-V07-00-01)
+    + Removed He3 and ionC12 from predefined particles, also from
+      IonBinaryCascade.
+    + PhysListEmStandard: treat alpha as GenericIon.
+    + Add PhysListEmPenelope.
+  o electromagnetic/TestEm7 (testem7-V07-00-01)
+    + Removed He3 and ionC12 from predefined particles, also from
+      IonBinaryCascade.
+    + PhysListEmStandard: treat alpha as GenericIon.
+  o electromagnetic/TestEm8 (testem8-V07-00-01)
+    + Remove IonC12 class.
+    + Remove unused headers.
+  o electromagnetic/TestEm9 (testem9-V07-00-00)
+    + Removed He3 and ionC12 from predefined particles, also from
+      IonBinaryCascade.
+    + PhysListEmStandard: treat alpha as GenericIon.
+  o medical/GammaTherapy (gtherapy-V07-00-00)
+    + Updated QED Builder70.
+    + Return back killing electrons in the gas volume.
+  o paralled (exparallel-V07-00-00)
+    + Added missing directories with annotated files in ParN02 and ParN04.
+    + Added text description.
+  o persistency (persistencyEx-V07-00-01) 
+    + Brought code up-to-date to compile with current Geant4 kernel and
+      configuration setup.
+
+tests                                            tests-V07-00-02
+-----
+- Updated reference outputs.
+- test10 (test10-V07-00-00)
+  o Added G4TwistedTrd and general G4TwistedTrap as test cases.
