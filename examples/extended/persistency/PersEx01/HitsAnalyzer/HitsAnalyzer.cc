@@ -108,20 +108,21 @@ int main(int argc, char **argv)
   }
 
   if (verbose) {
-    if (read)  cout << "*** Input File: " << filename << endl;
-    if (write) cout << "*** Output File: " << filename << endl;
-    cout << "*** Histogram File: " << histofile << endl;
+    if (read)  std::cout << "*** Input File: " << filename << std::endl;
+    if (write) std::cout << "*** Output File: " << filename << std::endl;
+    std::cout << "*** Histogram File: " << histofile << std::endl;
   }
 
   Int_t ev;
   Int_t printev = 10000;
 
-  cout << endl << " *** Testing Pers01CalorHitRootIO *** " << endl << endl;
+  std::cout << std::endl << " *** Testing Pers01CalorHitRootIO *** "
+            << std::endl << std::endl;
 
-  string detName = "CalorSD";
-  string colName = "CalCollection";
-  string obj     = "Hits";
-  string pmName  = "ROOT";
+  std::string detName = "CalorSD";
+  std::string colName = "CalCollection";
+  std::string obj     = "Hits";
+  std::string pmName  = "ROOT";
 
   G4PersistencyCenter* pc = G4PersistencyCenter::GetPersistencyCenter();
   G4PersistencyManager* pm = pc->GetPersistencyManager(pmName);
@@ -154,7 +155,7 @@ int main(int argc, char **argv)
 
     G4VHitsCollection* ahc;
 
-    string file = pc->CurrentReadFile(obj);
+    std::string file = pc->CurrentReadFile(obj);
     if ( pm->TransactionManager()->SelectReadFile(obj, file) ) {
 
       ev = 0;
@@ -200,12 +201,12 @@ int main(int argc, char **argv)
       hit->AddAbs(edep,2*edep);
       hit->AddGap(edep,2*edep);
 
-      if (verbose) cout << " EdepAbs = " << hit->GetEdepAbs() << endl;
+      if (verbose) std::cout << " EdepAbs = " << hit->GetEdepAbs() << std::endl;
 
       hc = new Pers01CalorHitsCollection(detName,colName);
       hc->insert(hit);
 
-      string file = pc->CurrentWriteFile(obj);
+      std::string file = pc->CurrentWriteFile(obj);
       if ( pm->TransactionManager()->SelectWriteFile(obj, file) ) {
         ioman->Store(hc);
       }
@@ -215,7 +216,7 @@ int main(int argc, char **argv)
     pm->TransactionManager()->Commit();
   }
 
-  cout << "Done." << endl;
+  std::cout << "Done." << std::endl;
 
   // delete hits collection, IO manager
   // delete pc;
