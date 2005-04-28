@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyPhotonStandard.cc,v 1.1 2005-03-10 12:59:11 mpiergen Exp $
+// $Id: HadrontherapyPhotonStandard.cc,v 1.2 2005-04-28 20:39:33 mpiergen Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

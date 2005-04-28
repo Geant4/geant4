@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyPrimaryGeneratorMessenger.hh,v 1.1 2005-03-10 12:58:52 mpiergen Exp $
+// $Id: HadrontherapyPrimaryGeneratorMessenger.hh,v 1.2 2005-04-28 20:39:33 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili

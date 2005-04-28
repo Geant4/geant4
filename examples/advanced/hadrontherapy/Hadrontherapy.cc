@@ -56,8 +56,6 @@
 
 #ifdef G4VIS_USE
 #include "HadrontherapyVisManager.hh"
-//#include "G4VisExecutive.hh"
-//#include "G4XXX.hh"
 #endif
 
 #include "HadrontherapyDetectorConstruction.hh"
@@ -96,11 +94,8 @@ int main(int argc,char** argv) {
   //***********************************************
 
 #ifdef G4VIS_USE
-   // Instantiate and initialise Visualization Manager.
-   //G4VisManager* visManager = new G4VisExecutive;
   G4VisManager* visManager = new HadrontherapyVisManager;
-   //visManager -> RegisterGraphicsSystem(new G4XXX);
-   visManager -> Initialize ();
+  visManager -> Initialize();
 #endif 
 
   //**********************************
@@ -108,6 +103,7 @@ int main(int argc,char** argv) {
   //********************************
 
   runManager -> SetUserAction(new HadrontherapyPrimaryGeneratorAction);
+  //runManager -> SetUserAction(new HadrontherapyPrimaryGeneratorAction( detector ))
   //****************************************
   // set the optional user action classes
   //***************************************
