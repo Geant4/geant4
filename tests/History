@@ -1,4 +1,4 @@
-$Id: History,v 1.53 2005-03-18 14:44:21 gcosmo Exp $
+$Id: History,v 1.54 2005-04-28 14:25:47 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+tests-V07-00-02 28th April 2005  Gabriele Cosmo
+- Updated reference outputs according to reference tag geant4-07-00-ref-03.
+  Includes tag: test10-V07-00-00.
+
 tests-V07-00-01 18th March 2005  Gabriele Cosmo
 - Updated reference outputs according to reference tag geant4-07-00-ref-02.
 
@@ -25,15 +29,15 @@ tests-V07-00-00 23rd February 2005  Gabriele Cosmo
 
 tests-V06-02-07 16th December 2004  Gabriele Cosmo
 - Updated reference outputs according to reference tag geant4-07-00-ref-00.
-- Include tags: test10-V06-02-00, test32-V06-02-01, test34-V06-02-00,
-                test40-V06-02-02, test50-V06-02-02.
+- Includes tags: test10-V06-02-00, test32-V06-02-01, test34-V06-02-00,
+                 test40-V06-02-02, test50-V06-02-02.
 
 tests-V06-02-06 8th December 2004 Gabriele Cosmo
 - Implemented migration to <cmath>.
 
 tests-V06-02-05 26th November 2004  Gabriele Cosmo
 - Updated reference outputs according to reference tag geant4-06-02-ref-05.
-- Include tags: test32-V06-02-00, test33-V06-02-00.
+- Includes tags: test32-V06-02-00, test33-V06-02-00.
 
 tests-V06-02-04 29th October 2004  Gabriele Cosmo
 - Updated reference outputs according to reference tag geant4-06-02-ref-04.
