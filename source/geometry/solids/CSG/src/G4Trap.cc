@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.32 2005-04-26 09:35:44 grichine Exp $
+// $Id: G4Trap.cc,v 1.33 2005-04-28 08:28:33 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -30,6 +30,7 @@
 //
 // History:
 //
+// 28.04.05 V.Grichine: new SurfaceNormal according to J. Apostolakis proposal 
 // 26.04.05 V.Grichine: new SurfaceNormal is default 
 // 19.04.05 V.Grichine: bug fixed in G4Trap("name",G4ThreeVector[8] vp)
 // 12.12.04 V.Grichine: SurfaceNormal with edges/vertices 
@@ -633,8 +634,8 @@ G4bool G4Trap::MakePlanes()
    
   // Back side iwth normal approx. +X
   //
-  good=MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
-  if (!good)
+  good = MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
+  if ( !good )
   {
     G4cerr << "ERROR - G4Trap()::MakePlanes(): " << GetName() << G4endl;
     G4Exception("G4Trap::MakePlanes()", "InvalidSetup", FatalException,
@@ -648,7 +649,7 @@ G4bool G4Trap::MakePlanes()
 //
 // Calculate the coef's of the plane p1->p2->p3->p4->p1
 // where the ThreeVectors 1-4 are in anti-clockwise order when viewed from
-// infront of the plane.
+// infront of the plane (i.e. from normal direction).
 //
 // Return true if the ThreeVectors are coplanar + set coef;s
 //        false if ThreeVectors are not coplanar
@@ -659,65 +660,64 @@ G4bool G4Trap::MakePlane( const G4ThreeVector& p1,
                           const G4ThreeVector& p4,
                                 TrapSidePlane& plane )
 {
-  G4double a,b,c,s;
-  G4ThreeVector v12,v13,v14,Vcross;
+  G4double a, b, c, s;
+  G4ThreeVector v12, v13, v14, Vcross;
 
   G4bool good;
 
-  v12 = p2-p1;
-  v13 = p3-p1;
-  v14 = p4-p1;
-  Vcross=v12.cross(v13);
+  v12    = p2 - p1;
+  v13    = p3 - p1;
+  v14    = p4 - p1;
+  Vcross = v12.cross(v13);
 
   if (std::fabs(Vcross.dot(v14)/(Vcross.mag()*v14.mag())) > kCoplanar_Tolerance)
   {
-    good=false;
+    good = false;
   }
   else
   {
     // a,b,c correspond to the x/y/z components of the
     // normal vector to the plane
      
-    a=(p2.y()-p1.y())*(p1.z()+p2.z())+(p3.y()-p2.y())*(p2.z()+p3.z());
-    a+=(p4.y()-p3.y())*(p3.z()+p4.z())+(p1.y()-p4.y())*(p4.z()+p1.z()); // ?
-    
-    b=(p2.z()-p1.z())*(p1.x()+p2.x())+(p3.z()-p2.z())*(p2.x()+p3.x());
-    b+=(p4.z()-p3.z())*(p3.x()+p4.x())+(p1.z()-p4.z())*(p4.x()+p1.x()); // ?
-      
-    c=(p2.x()-p1.x())*(p1.y()+p2.y())+(p3.x()-p2.x())*(p2.y()+p3.y());
-    c+=(p4.x()-p3.x())*(p3.y()+p4.y())+(p1.x()-p4.x())*(p4.y()+p1.y()); // ?
+    //  a  = (p2.y()-p1.y())*(p1.z()+p2.z())+(p3.y()-p2.y())*(p2.z()+p3.z());
+    //  a += (p4.y()-p3.y())*(p3.z()+p4.z())+(p1.y()-p4.y())*(p4.z()+p1.z()); // ?   
+    // b  = (p2.z()-p1.z())*(p1.x()+p2.x())+(p3.z()-p2.z())*(p2.x()+p3.x());
+    // b += (p4.z()-p3.z())*(p3.x()+p4.x())+(p1.z()-p4.z())*(p4.x()+p1.x()); // ?      
+    // c  = (p2.x()-p1.x())*(p1.y()+p2.y())+(p3.x()-p2.x())*(p2.y()+p3.y());
+    // c += (p4.x()-p3.x())*(p3.y()+p4.y())+(p1.x()-p4.x())*(p4.y()+p1.y()); // ?
 
     // Let create diagonals 4-2 and 3-1 than (4-2)x(3-1) provides
     // vector perpendicular to the plane directed to outside !!!
-    // and a,b,c, = f(1,2,3,4)
+    // and a,b,c, = f(1,2,3,4) external relative to trap normal
 
-    // a = +(p4.y() - p2.y())*(p3.z() - p1.z())
-    //     - (p3.y() - p1.y())*(p4.z() - p2.z()) ;
-    // b = -(p4.x() - p2.x())*(p3.z() - p1.z())
-    //     + (p3.x() - p1.x())*(p4.z() - p2.z()) ; 
-    // c = +(p4.x() - p2.x())*(p3.y() - p1.y())
-    //     - (p3.x() - p1.x())*(p4.y() - p2.y()) ;
+    a = +(p4.y() - p2.y())*(p3.z() - p1.z())
+        - (p3.y() - p1.y())*(p4.z() - p2.z());
 
-    s=std::sqrt(a*a+b*b+c*c);   // so now vector plane.(a,b,c) is unit 
+    b = -(p4.x() - p2.x())*(p3.z() - p1.z())
+        + (p3.x() - p1.x())*(p4.z() - p2.z());
+ 
+    c = +(p4.x() - p2.x())*(p3.y() - p1.y())
+        - (p3.x() - p1.x())*(p4.y() - p2.y());
+
+    s = std::sqrt( a*a + b*b + c*c ); // so now vector plane.(a,b,c) is unit 
 
     if( s > 0 )
     {
-      plane.a=a/s;
-      plane.b=b/s;
-      plane.c=c/s;
+      plane.a = a/s;
+      plane.b = b/s;
+      plane.c = c/s;
     }
     else
     {
       G4cerr << "ERROR - G4Trap()::MakePlane(): " << GetName() << G4endl;
       G4Exception("G4Trap::MakePlanes()", "InvalidSetup", FatalException,
-                  "Invalid parameters.") ;
+                  "Invalid parameters: norm.mod() <= 0") ;
     }
-
     // Calculate D: p1 in in plane so D=-n.p1.Vect()
-    //
-    plane.d=-(plane.a*p1.x()+plane.b*p1.y()+plane.c*p1.z());
+    
+    plane.d = -( plane.a*p1.x() + plane.b*p1.y() + plane.c*p1.z() );
 
-    good=true;
+    good = true;
   }
   return good;
 }
@@ -1036,40 +1036,34 @@ EInside G4Trap::Inside( const G4ThreeVector& p ) const
   EInside in;
   G4double Dist;
   G4int i;
-  if (std::fabs(p.z())<=fDz-kCarTolerance/2)
+  if ( std::fabs(p.z()) <= fDz-kCarTolerance*0.5)
   {
-    in=kInside;
-    for (i=0;i<4;i++)
+    in = kInside;
+
+    for ( i = 0;i < 4;i++ )
     {
-      Dist=fPlanes[i].a*p.x()+fPlanes[i].b*p.y()
-          +fPlanes[i].c*p.z()+fPlanes[i].d;
-      if (Dist>kCarTolerance/2)
-      {
-        return in=kOutside;
-      }
-      else if (Dist>-kCarTolerance/2)
-      {
-        in=kSurface;
-      } 
+      Dist = fPlanes[i].a*p.x() + fPlanes[i].b*p.y()
+            +fPlanes[i].c*p.z() + fPlanes[i].d;
+
+      if      (Dist >  kCarTolerance*0.5)  return in = kOutside;
+      else if (Dist > -kCarTolerance*0.5)         in = kSurface;
+       
     }
   }
-  else if (std::fabs(p.z())<=fDz+kCarTolerance/2)
+  else if (std::fabs(p.z()) <= fDz+kCarTolerance*0.5)
   {
-    in=kSurface;
-    for (i=0;i<4;i++)
+    in = kSurface;
+
+    for ( i = 0; i < 4; i++ )
     {
-      Dist=fPlanes[i].a*p.x()+fPlanes[i].b*p.y()
-          +fPlanes[i].c*p.z()+fPlanes[i].d;
-      if (Dist>kCarTolerance/2)
-      {
-        return in=kOutside;
-      }
+      Dist =  fPlanes[i].a*p.x() + fPlanes[i].b*p.y()
+             +fPlanes[i].c*p.z() + fPlanes[i].d;
+
+      if (Dist > kCarTolerance*0.5)        return in = kOutside;      
     }
   }
-  else
-  {
-    in=kOutside;
-  }
+  else  in = kOutside;
+  
   return in;
 }
 
@@ -1080,9 +1074,10 @@ EInside G4Trap::Inside( const G4ThreeVector& p ) const
 
 G4ThreeVector G4Trap::SurfaceNormal( const G4ThreeVector& p ) const
 {
-  G4double safe = kInfinity, dist, distz;
-  G4ThreeVector norm;
-  G4int i, imin = 0;
+  G4int i, imin = 0, noSurfaces = 0;
+  G4double dist, distz, distx, disty, distmx, distmy, safe = kInfinity;
+  G4double delta    = 0.5*kCarTolerance;
+  G4ThreeVector norm, sumnorm(0.,0.,0.);
 
   for (i = 0; i < 4; i++)
   {
@@ -1094,135 +1089,59 @@ G4ThreeVector G4Trap::SurfaceNormal( const G4ThreeVector& p ) const
       imin = i;
     }
   }
-  distz = std::fabs(std::fabs( p.z() ) - fDz );
+  distz  = std::fabs( std::fabs( p.z() ) - fDz );
 
-  // New code for particle on surface including edges and corners with specific
-  // normals
-  G4double distx,disty,distmx,distmy;
-  G4double delta    = 0.5*kCarTolerance;
-  distmy            =  std::fabs(fPlanes[0].a*p.x() + fPlanes[0].b*p.y()
-          + fPlanes[0].c*p.z() + fPlanes[0].d);
-  disty             =  std::fabs(fPlanes[1].a*p.x() + fPlanes[1].b*p.y()
-          + fPlanes[1].c*p.z() + fPlanes[1].d);
-  distmx            =  std::fabs(fPlanes[2].a*p.x() + fPlanes[2].b*p.y()
-          + fPlanes[2].c*p.z() + fPlanes[2].d);
-  disty             =  std::fabs(fPlanes[3].a*p.x() + fPlanes[3].b*p.y()
-          + fPlanes[3].c*p.z() + fPlanes[3].d);
+  distmy = std::fabs( fPlanes[0].a*p.x() + fPlanes[0].b*p.y()
+                    + fPlanes[0].c*p.z() + fPlanes[0].d      );
+
+  disty  = std::fabs( fPlanes[1].a*p.x() + fPlanes[1].b*p.y()
+                    + fPlanes[1].c*p.z() + fPlanes[1].d      );
+
+  distmx = std::fabs( fPlanes[2].a*p.x() + fPlanes[2].b*p.y()
+                    + fPlanes[2].c*p.z() + fPlanes[2].d      );
+
+  distx  = std::fabs( fPlanes[3].a*p.x() + fPlanes[3].b*p.y()
+                    + fPlanes[3].c*p.z() + fPlanes[3].d      );
 
   G4ThreeVector nX  = G4ThreeVector(fPlanes[3].a,fPlanes[3].b,fPlanes[3].c);
   G4ThreeVector nmX = G4ThreeVector(fPlanes[2].a,fPlanes[2].b,fPlanes[2].c);
   G4ThreeVector nY  = G4ThreeVector(fPlanes[1].a,fPlanes[1].b,fPlanes[1].c);
   G4ThreeVector nmY = G4ThreeVector(fPlanes[0].a,fPlanes[0].b,fPlanes[0].c);
-  G4ThreeVector nZ  = G4ThreeVector( 0, 0,  1.0);
-  G4ThreeVector nmZ = G4ThreeVector( 0, 0, -1.0);
+  G4ThreeVector nZ  = G4ThreeVector(0.,0.,1.0);
 
-  if (distx <= delta || 
-      distmx <= delta)        // on X/mX surface and around
+  if (distx <= delta)      
   {
-    if ( distx <= delta )     // on X surface
-    {
-      if (disty <= delta || distmy <= delta )
-      {
-        if (distz <= delta)   // corners around X surface
-        {
-          if ( disty <= delta )
-	  {
-            if ( p.z() >= 0.) norm = ( nX + nY + nZ  ).unit();
-            else              norm = ( nX + nY + nmZ ).unit(); 
-	  }
-          else
-	  {
-            if ( p.z() >= 0.) norm = ( nX + nmY + nZ  ).unit();
-            else              norm = ( nX + nmY + nmZ ).unit(); 
-	  }
-        }
-        else                  // on XY edges
-	{
-          if ( disty <= delta )   norm = ( nX + nY  ).unit();
-          else                    norm = ( nX + nmY ).unit();
-	}        
-      }
-      else
-      {
-        if (distz <= delta)   // on XZ edges
-        {
-          if ( p.z() >= 0.)   norm = ( nX + nZ  ).unit();
-          else                norm = ( nX + nmZ ).unit();
-        }
-        else                  norm = nX;        
-      }
-    }
-    else                      // on mX surface
-    {
-      if (disty <= delta || distmy <= delta)
-      {
-        if (distz <= delta)   // corners around mX surface
-        {
-          if ( disty <= delta )
-	  {
-            if ( p.z() >= 0.) norm = ( nmX + nY + nZ  ).unit();
-            else              norm = ( nmX + nY + nmZ ).unit(); 
-	  }
-          else
-	  {
-            if ( p.z() >= 0.) norm = ( nmX + nmY + nZ  ).unit();
-            else              norm = ( nmX + nmY + nmZ ).unit(); 
-	  }
-        }
-        else                  // on mXY edges
-	{
-          if (disty <= delta )  norm = ( nmX + nY  ).unit();
-          else                  norm = ( nmX + nmY ).unit();
-	}        
-      }
-      else
-      {
-        if (distz <= delta)   // on mXZ edges
-        {
-          if ( p.z() >= 0.)   norm = ( nmX + nZ  ).unit();
-          else                norm = ( nmX + nmZ ).unit();
-        }
-        else                  norm = nmX;        
-      }
-    }
+    noSurfaces ++;
+    sumnorm += nX;     
   }
-  else
+  if (distmx <= delta)      
   {
-    if (disty <= delta || distmy <= delta)
-    {
-      if (distz <= delta)     // on YZ edges
-      {
-        if ( disty <= delta )
-	{
-          if ( p.z() >= 0.)   norm = ( nY + nZ  ).unit();
-          else                norm = ( nY + nmZ ).unit(); 
-	}
-        else
-	{
-            if ( p.z() >= 0.) norm = ( nmY + nZ  ).unit();
-            else              norm = ( nmY + nmZ ).unit(); 
-	}
-      }
-      else                    // on Y/mY surfaces
-      {
-        if (disty <= delta)   norm = nY;
-        else                  norm = nmY;
-      } 
-    }
-    else                      // on Z/mZ surfaces
-    {
-      if (distz <= delta) 
-      {
-          if ( p.z() >= 0.)   norm = nZ;
-          else                norm = nmZ; 
-      }
-      else                    // is not on surface !?
-      {
-        G4Exception("G4Trap::SurfaceNormal(p)", "Notification", JustWarning, 
-                    "Point p is not on surface !?" ); 
-      }
-    }      
+    noSurfaces ++;
+    sumnorm += nmX;      
   }
+  if (disty <= delta)
+  {
+    noSurfaces ++;
+    sumnorm += nY;  
+  }
+  if (distmy <= delta)
+  {
+    noSurfaces ++;
+    sumnorm += nmY;  
+  }
+  if (distz <= delta)  
+  {
+    noSurfaces ++;
+    if ( p.z() >= 0.)  sumnorm += nZ;
+    else               sumnorm -= nZ; 
+  }
+  if ( noSurfaces == 0 )
+  {
+    G4Exception("G4Trap::SurfaceNormal(p)", "Notification", JustWarning, 
+                "Point p is not on surface !?" ); 
+  }
+  else if ( noSurfaces == 1 ) norm = sumnorm;
+  else                        norm = sumnorm.unit();
   return norm;
 }
 

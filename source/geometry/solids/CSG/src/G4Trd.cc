@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.25 2005-04-26 09:35:44 grichine Exp $
+// $Id: G4Trd.cc,v 1.26 2005-04-28 08:28:33 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -29,6 +29,7 @@
 //
 // History:
 //
+// 28.04.05 V.Grichine: new SurfaceNormal according to J. Apostolakis proposal 
 // 26.04.05, V.Grichine, new SurfaceNoramal is default
 // 07.12.04, V.Grichine, SurfaceNoramal with edges/vertices.
 // 07.05.00, V.Grichine, in d = DistanceToIn(p,v), if d<0.5*kCarTolerance, d=0
@@ -385,146 +386,61 @@ EInside G4Trd::Inside( const G4ThreeVector& p ) const
 
 G4ThreeVector G4Trd::SurfaceNormal( const G4ThreeVector& p ) const
 {
-  G4ThreeVector norm;
-  G4double z,tanx,secx,newpx,widx;
-  G4double tany,secy,newpy,widy;
-  G4double distx,disty,distz,fcos;
+  G4ThreeVector norm, sumnorm(0.,0.,0.);
+  G4int noSurfaces = 0; 
+  G4double z = 2.0*fDz, tanx, secx, newpx, widx;
+  G4double tany, secy, newpy, widy;
+  G4double distx, disty, distz, fcos;
+  G4double delta = 0.5*kCarTolerance;
 
-  z=2.0*fDz;
-
-  tanx  = (fDx2-fDx1)/z;
+  tanx  = (fDx2 - fDx1)/z;
   secx  = std::sqrt(1.0+tanx*tanx);
   newpx = std::fabs(p.x())-p.z()*tanx;
-  widx  = fDx2-fDz*tanx;
+  widx  = fDx2 - fDz*tanx;
 
-  tany  = (fDy2-fDy1)/z;
+  tany  = (fDy2 - fDy1)/z;
   secy  = std::sqrt(1.0+tany*tany);
   newpy = std::fabs(p.y())-p.z()*tany;
-  widy  = fDy2-fDz*tany;
+  widy  = fDy2 - fDz*tany;
 
   distx = std::fabs(newpx-widx)/secx;       // perp. distance to x side
   disty = std::fabs(newpy-widy)/secy;       //                to y side
   distz = std::fabs(std::fabs(p.z())-fDz);  //                to z side
 
-  // New code for particle on surface including edges and corners with specific
-  // normals
-
-  G4double delta    = 0.5*kCarTolerance;
   fcos              = 1.0/secx;
   G4ThreeVector nX  = G4ThreeVector( fcos,0,-tanx*fcos);
   G4ThreeVector nmX = G4ThreeVector(-fcos,0,-tanx*fcos);
+
   fcos              = 1.0/secy;
   G4ThreeVector nY  = G4ThreeVector(0, fcos,-tany*fcos);
   G4ThreeVector nmY = G4ThreeVector(0,-fcos,-tany*fcos);
   G4ThreeVector nZ  = G4ThreeVector( 0, 0,  1.0);
-  G4ThreeVector nmZ = G4ThreeVector( 0, 0,- 1.0);
-
-  if (distx <= delta)         // on X/mX surface and around
+ 
+  if (distx <= delta)      
   {
-    if ( p.x() >= 0.)         // on X surface
-    {
-      if (disty <= delta)
-      {
-        if (distz <= delta)   // corners around X surface
-        {
-          if ( p.y() >= 0.)
-	  {
-            if ( p.z() >= 0.) norm = ( nX + nY + nZ  ).unit();
-            else              norm = ( nX + nY + nmZ ).unit(); 
-	  }
-          else
-	  {
-            if ( p.z() >= 0.) norm = ( nX + nmY + nZ  ).unit();
-            else              norm = ( nX + nmY + nmZ ).unit(); 
-	  }
-        }
-        else                  // on XY edges
-	{
-          if ( p.y() >= 0.)   norm = ( nX + nY  ).unit();
-          else                norm = ( nX + nmY ).unit();
-	}        
-      }
-      else
-      {
-        if (distz <= delta)   // on XZ edges
-        {
-          if ( p.z() >= 0.)   norm = ( nX + nZ  ).unit();
-          else                norm = ( nX + nmZ ).unit();
-        }
-        else                  norm = nX;        
-      }
-    }
-    else                      // on mX surface
-    {
-      if (disty <= delta)
-      {
-        if (distz <= delta)   // corners around mX surface
-        {
-          if ( p.y() >= 0.)
-	  {
-            if ( p.z() >= 0.) norm = ( nmX + nY + nZ  ).unit();
-            else              norm = ( nmX + nY + nmZ ).unit(); 
-	  }
-          else
-	  {
-            if ( p.z() >= 0.) norm = ( nmX + nmY + nZ  ).unit();
-            else              norm = ( nmX + nmY + nmZ ).unit(); 
-	  }
-        }
-        else                  // on mXY edges
-	{
-          if ( p.y() >= 0.)   norm = ( nmX + nY  ).unit();
-          else                norm = ( nmX + nmY ).unit();
-	}        
-      }
-      else
-      {
-        if (distz <= delta)   // on mXZ edges
-        {
-          if ( p.z() >= 0.)   norm = ( nmX + nZ  ).unit();
-          else                norm = ( nmX + nmZ ).unit();
-        }
-        else                  norm = nmX;        
-      }
-    }
+    noSurfaces ++;
+    if ( p.x() >= 0.) sumnorm += nX;
+    else              sumnorm += nmX;   
   }
-  else
+  if (disty <= delta)
   {
-    if (disty <= delta)
-    {
-      if (distz <= delta)     // on YZ edges
-      {
-        if ( p.y() >= 0.)
-	{
-          if ( p.z() >= 0.)   norm = ( nY + nZ  ).unit();
-          else                norm = ( nY + nmZ ).unit(); 
-	}
-        else
-	{
-            if ( p.z() >= 0.) norm = ( nmY + nZ  ).unit();
-            else              norm = ( nmY + nmZ ).unit(); 
-	}
-      }
-      else                    // on Y/mY surfaces
-      {
-        if ( p.y() >= 0.)     norm = nY;
-        else                  norm = nmY;
-      } 
-    }
-    else                      // on Z/mZ surfaces
-    {
-      if (distz <= delta) 
-      {
-          if ( p.z() >= 0.)   norm = nZ;
-          else                norm = nmZ; 
-      }
-      else                    // is not on surface !?
-      {
-        G4Exception("G4Trd::SurfaceNormal(p)", "Notification", JustWarning, 
-                    "Point p is not on surface !?" ); 
-      }
-    }      
+    noSurfaces ++;
+    if ( p.y() >= 0.) sumnorm += nY;
+    else              sumnorm += nmY;   
   }
+  if (distz <= delta)  
+  {
+    noSurfaces ++;
+    if ( p.z() >= 0.) sumnorm += nZ;
+    else              sumnorm -= nZ; 
+  }
+  if ( noSurfaces == 0 )
+  {
+    G4Exception("G4Trd::SurfaceNormal(p)", "Notification", JustWarning, 
+                "Point p is not on surface !?" ); 
+  }
+  else if ( noSurfaces == 1 ) norm = sumnorm;
+  else                        norm = sumnorm.unit();
   return norm;   
 }
 
