@@ -12,6 +12,9 @@ Some of the development/fixes included since the last reference tag are:
     extended G4TwistedTrap to support setups with different trapezoidal
     endcaps with centres not necessarily on a line parallel to the z axis.
   o Optimised internal interfaces for EM base classes.
+  o Add corrections to standard hadron/ion ionization.
+  o Added new class G4EnergyLossForExtrapolator, which can be used to estimate
+    energy loss and fluctuations independently of G4 tracking
   o Updated TRD model for regular radiators to provide more realistic
     gamma spectrum.
   o Physics tuning for the antiproton-nuclear annihilation at rest in
@@ -99,9 +102,10 @@ processes/electromagnetic/muons                  muons-V07-00-01
 processes/electromagnetic/standard               stand-V07-00-07
 ----------------------------------
 - Added new '70' implementations classes G4PhotoElectricEffect70,
-  G4GammaConversion70, G4ComptonScattering70 and G4KleinNishinaModel.
+  G4GammaConversion70, G4ComptonScattering70 and G4KleinNishinaModel,
+  which are prototypes of model based design of gamma processes
 - Cashing pointer to tracking navigator for G4MscModel and optimised
-  internal interfaces (also in G4MultipleScattering).
+  internal interfaces.
 - Migrated gamma processes use G4ParticleChangeForGamma.
 - Using G4EmCorrections for hadrons/ions ionisation.
 - Migrated to new optimised interfaces from 'utils' classes.
@@ -113,7 +117,7 @@ processes/electromagnetic/utils                  utils-V07-00-06
 - Optimised internal interfaces for G4VMultipleScattering, G4VEmModel,
   G4VEmFluctuationModel, G4VEmProcess and G4VEmEnergyLossProcess.
 - Fixed range calculation for dedx=0 in G4LossTableBuilder.
-- Added Mott correction to G4EmCorrection.
+- Added Mott correction to G4EmCorrection class.
 
 processes/electromagnetic/xrays                  xrays-V07-00-01
 -------------------------------
