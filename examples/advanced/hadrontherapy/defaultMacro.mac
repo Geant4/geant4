@@ -30,6 +30,7 @@
 /lowEnergy/cutG .02 mm
 /lowEnergy/cutE .02 mm
 
+/process/list
 /particle/list
 
 
@@ -47,8 +48,6 @@
 /beam/energy 63.4 MeV
 /beam/energySpread 300 keV
 /beam/spotXPosition -2000.0 mm
-/beam/spotSizeY 1.0 mm
-/beam/spotSizeZ 1.0 mm
 /tracking/verbose 0
 /tracking/storeTrajectory 0
 

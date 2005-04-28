@@ -159,12 +159,26 @@ Modulator wheel can be omitted setting its material air.
 run $G4WORKDIR/bin/Linux-g++/Hadrontherapy visualisation.mac
 to visualise the experimental set-up with OpenGL
 -----------------------------------------------------------------------
-----> 4. PHYSICS
+----> 4. PHYSICS (Modular Physics)
 
-Electromagnetic and hadronic processes are modeled.
+choice of physics lists:
 
-The LowEnergy package is used to model the electromagnetic processes
-of all the particles involved in the experimental set-up.
+--> gamma    - photon-standard (Standard Processes)
+             - photon-epdl     (LowEnergy Processes)
+             - photon-penelope (Penelope Processes)
+
+--> e-       - electron-standard (Standard Processes)
+             - electron-eedl     (LowEnergyProcesses)
+             - electron-penelope (Penelope Processes)
+             
+--> e+       - positron-standard (Standard Processes)         
+
+--> proton   - proton-standard(Standard Processes)
+             - proton-LowE (stopping power ICRU_49)    
+             - proton-hadronic (elastic and inelatic processes)
+--> muon     - muon 
+--> decay    - decay
+
 
 ------------------------------------------------------------------------
 ----> 5. SIMULATION OUTPUT                                              
@@ -215,5 +229,4 @@ Next planned improvements will be:
 for comments, advices, doubts and questions please contact: 
 cirrone@lns.infn.it, giorgiorusso@lns.infn.it
 
-last modified: G.A.P. Cirrone, 25/02/2005
-
+last modified: Michela Piergentili, 28/04/2005

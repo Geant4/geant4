@@ -91,7 +91,6 @@ int main(int argc,char** argv) {
   detector = new HadrontherapyDetectorConstruction;
   runManager -> SetUserInitialization(detector);
   runManager -> SetUserInitialization(new HadrontherapyPhysicsList);
-
   //***********************************************
   // Set the visualization if you chose to have it!
   //***********************************************
@@ -109,7 +108,6 @@ int main(int argc,char** argv) {
   //********************************
 
   runManager -> SetUserAction(new HadrontherapyPrimaryGeneratorAction);
- 
   //****************************************
   // set the optional user action classes
   //***************************************
@@ -133,7 +131,7 @@ int main(int argc,char** argv) {
   // get the pointer to the User Interface manager 
   //***********************************************
 
-  G4UImanager* UI = G4UImanager::GetUIpointer();
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   //*******************************************************************
   //Define  UI terminal for interactive mode (wait command from keyboard
@@ -143,40 +141,35 @@ int main(int argc,char** argv) {
   G4UIsession* session = 0;
   
   if (argc==1)   // Define UI session for interactive mode.
-    {
-                        
+  {          
 #ifdef G4UI_USE_XM
-      session = new G4UIXm(argc,argv);
+        session = new G4UIXm(argc,argv);
 #else           
 
 #ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
+    session = new G4UIterminal(new G4UItcsh);      
 #else
-      session = new G4UIterminal();
+       session = new G4UIterminal();
 #endif
 #endif
-    }
+  }
 
 
   if (session)   // Define UI session for interactive mode.
-    {
+  {
       
-      UI->ApplyCommand("/control/execute/defaultMacro.mac");    
-      session -> SessionStart();
-      delete session;
-    }
+    UImanager->ApplyCommand("/control/execute/defaultMacro.mac ");    
+    session -> SessionStart();
+    delete session;
+  }
 
   else           // Batch mode
 
-    { 
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
-    }
- 
-  //******************* 
-  // job termination
-  //*******************
+  { 
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command+fileName);
+  }
 
 #ifdef G4VIS_USE
   delete visManager;

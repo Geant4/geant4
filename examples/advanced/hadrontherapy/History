@@ -9,9 +9,14 @@ $Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
                       Category History file
                       ---------------------
 
+28.04.2005 - M.Piergentili
+		Modular Physics list, Primary Generator Messenger,
+		updated README and defaultMacro.mac,
+		tag: hadrontherapy-V07-00-02
+
+
 25.02.2005 - G.A.P. Cirrone & M.Piergentili, update of the physiscList
 		class to correct some bugs.
-
 30.11.2004 - S. Guatelli, 
                 correct analysis, tag: hadrontherapy-V06-02-00
                 
