@@ -131,7 +131,7 @@ processes/hadronic/models/cascade/cascade        ghad-bert-cas-V07-00-00
 - Fixed initialisation of sk,ik in G4CascadSpecialFunctions, and CP2, AK2
   in paraMaker. Fixes compilation warning on gcc-4.0.
 
-processes/hadronic/models/chiral_.../body        ghad-chips-body-V07-00-09
+processes/hadronic/models/chiral_.../body        ghad-chips-body-V07-00-11
 -----------------------------------------
 - Physics tuning for the antiproton-nuclear annihilation at rest.
 - Fixed infinite-loop in QGSC allocation of CHIPS. Adapted QGSC interface
