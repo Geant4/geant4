@@ -17,8 +17,6 @@ Some of the development/fixes included since the last reference tag are:
     energy loss and fluctuations independently of G4 tracking
   o Updated TRD model for regular radiators to provide more realistic
     gamma spectrum.
-  o Physics tuning for the antiproton-nuclear annihilation at rest in
-    the CHIPS hadronic model.
   o Reviewed all visualization commands: improved guidance, simplified
     and rationalised the commands.
   o Added first implementation of cutaway: a clipping box for physical
@@ -130,19 +128,6 @@ processes/hadronic/models/cascade/cascade        ghad-bert-cas-V07-00-00
 -----------------------------------------
 - Fixed initialisation of sk,ik in G4CascadSpecialFunctions, and CP2, AK2
   in paraMaker. Fixes compilation warning on gcc-4.0.
-
-processes/hadronic/models/chiral_.../body        ghad-chips-body-V07-00-11
------------------------------------------
-- Physics tuning for the antiproton-nuclear annihilation at rest.
-- Fixed infinite-loop in QGSC allocation of CHIPS. Adapted QGSC interface
-  for CHIPS with new parameters. Corrected also parameters in the
-  G4QCaptureAtRest.
-- Fix for non-conservation bug in negative hypernucleus decay.
-
-processes/hadronic/models/chiral_.../interface   ghad-chips-int-V07-00-00
-----------------------------------------------
-- New parameters for the QGSC interface of CHIPS, to cover secondary clusters
-  up to alphas and speed-up the QGSC process.
 
 run                                              run-V07-00-01
 ---
