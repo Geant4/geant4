@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.25 2005-04-29 16:58:59 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.26 2005-04-29 18:04:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -280,13 +280,12 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 
   G4VEmModel* currentModel = SelectModel(finalT);
 
-  /*
+  /*  
   if(0 < verboseLevel) {
-    const G4ParticleDefinition* pd = dynParticle->GetDefinition();
     G4cout << "G4VEmProcess::PostStepDoIt: Sample secondary; E= "
            << finalT/MeV
-           << " MeV; model= (" << currentModel->LowEnergyLimit(pd)
-           << ", " <<  currentModel->HighEnergyLimit(pd) << ")"
+           << " MeV; model= (" << currentModel->LowEnergyLimit()
+           << ", " <<  currentModel->HighEnergyLimit() << ")"
            << G4endl;
   }
   */
@@ -337,7 +336,9 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 void G4VEmProcess::PrintInfoDefinition()
 {
   if(0 < verboseLevel) {
-    G4cout << G4endl << GetProcessName() << ":  " << G4endl
+    G4cout << G4endl << GetProcessName() << ":   tables are built for  "
+           << particle->GetParticleName()
+           << G4endl
            << "      Lambda tables from "
            << G4BestUnit(minKinEnergy,"Energy") 
            << " to "

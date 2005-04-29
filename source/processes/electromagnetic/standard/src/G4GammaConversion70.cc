@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4GammaConversion70.cc,v 1.2 2005-04-19 18:54:38 vnivanch Exp $
+// $Id: G4GammaConversion70.cc,v 1.3 2005-04-29 18:02:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -105,6 +105,7 @@ void G4GammaConversion70::InitialiseProcess(const G4ParticleDefinition*)
 void G4GammaConversion70::PrintInfo()
 {
   G4cout << "      Total cross sections has a good parametrisation.from 1.5 MeV to 100 GeV for all Z;"
+         << G4endl
          << "      sampling secondary e+e- according to the Bethe-Heitler model" 
          << G4endl;
 }         
