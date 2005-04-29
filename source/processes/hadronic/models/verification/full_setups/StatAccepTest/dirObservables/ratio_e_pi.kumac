@@ -1,0 +1,66 @@
+*-------------------------------------------------------------
+* 29-Apr-2005    Compare ratio e/pi vs. beam energy.  
+*   	         Input:  beam_energies.txt : binning edges in x;
+*                        ratios_e_pi.txt-a  
+*                        ratios_e_pi.txt-b
+*                The kumac should be able to work even if one
+*                of the two input files is missing.
+*-------------------------------------------------------------
+*
+MESSAGE ' '
+MESSAGE '  --- START KUMAC  ratio_e_pi.kumac  --- ' 
+*
+IF ($FEXIST(beam_energies.txt)) THEN
+  VEC/READ vx  beam_energies.txt
+ELSE
+  message ' File beam_energies.txt NOT found! '
+  exit
+ENDIF
+*  
+IF ($FEXIST(ratios_e_pi.txt-a)) THEN
+  VEC/READ vy1 ratios_e_pi.txt-a
+***  message ' vy1 : '
+***  vec/print vy1
+  BINS 100 'Ratio e/pi' $VLEN(vy1,1) vx
+  HISTO/PUT/CONT 100 vy1
+ENDIF
+*
+IF ($FEXIST(ratios_e_pi.txt-b)) THEN
+  VEC/READ vy2 ratios_e_pi.txt-b
+***  message ' vy1 : '
+***  vec/print vy1
+  BINS 200 'Ratio e/pi' $VLEN(vy2,1) vx
+  HISTO/PUT/CONT 200 vy2
+ENDIF
+*
+FOR/FILE 20 ratio_e_pi.ps
+META 20 -111
+*
+TITLE 'e/pi vs. beam energy'
+OPT UTIT
+ZONE 1 1
+SET KSIZ 0.3
+*
+SET MTYP 20
+SET PMCI 2
+IF ($FEXIST(ratios_e_pi.txt-a)) THEN 
+  HISTO/PLOT 100 p
+  SET MTYP 21
+  SET PMCI 4
+  IF ($FEXIST(ratios_e_pi.txt-b)) THEN
+    HISTO/PLOT 200 sp
+  ENDIF
+ELSE 
+  SET MTYP 21
+  SET PMCI 4
+  IF ($FEXIST(ratios_e_pi.txt-b)) THEN
+    HISTO/PLOT 200 p
+  ENDIF
+ENDIF
+*
+ATITLE 'Beam energy' 'e/pi'
+*
+CLOSE 20
+*
+MESSAGE '  --- END KUMAC  ratio_e_pi.kumac  --- '
+MESSAGE ' '

@@ -1,6 +1,12 @@
                  History file
                  ------------
 
+29-Apr-2005 - A.Ribon (statAccepTest-V07-00-04)
+- Added a new sudirectory, dirObservables, which
+  contains a python script and some kumacs useful
+  to produce plots of various observables.
+
+
 8-Apr-2005 - A.Ribon (statAccepTest-V07-00-03)
 - Added information useful to extract the response,
   energy resolution, and e/pi.

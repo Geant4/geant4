@@ -1,0 +1,66 @@
+*-------------------------------------------------------------
+* 29-Apr-2005    Compare sampling fraction vs. beam energy.  
+*                Input:  beam_energies.txt : binning edges in x;
+*                        sampling_fractions.txt-a  
+*                        sampling_fractions.txt-b  
+*                The kumac should be able to work even if one
+*                of the two input files is missing.
+*-------------------------------------------------------------
+*
+MESSAGE ' '
+MESSAGE '  --- START KUMAC  sampling_fraction.kumac  --- '
+*
+IF ($FEXIST(beam_energies.txt)) THEN
+  VEC/READ vx beam_energies.txt
+ELSE
+  message ' File beam_energies.txt NOT found! '
+  exit
+ENDIF
+*  
+IF ($FEXIST(sampling_fractions.txt-a)) THEN
+  VEC/READ vy1 sampling_fractions.txt-a
+***  message ' vy1 : '
+***  vec/print vy1
+  BINS 100 'Sampling fractions' $VLEN(vy1,1) vx
+  HISTO/PUT/CONT 100 vy1
+ENDIF
+*
+IF ($FEXIST(sampling_fractions.txt-b)) THEN
+  VEC/READ vy2 sampling_fractions.txt-b
+***  message ' vy2 : '
+***  vec/print vy2
+  BINS 200 'Sampling fractions' $VLEN(vy2,1) vx
+  HISTO/PUT/CONT 200 vy2
+ENDIF
+*
+FOR/FILE 20 sampling_fraction.ps
+META 20 -111
+*
+TITLE 'Sampling fraction vs. beam energy'
+OPT UTIT
+ZONE 1 1
+SET KSIZ 0.3
+*
+SET MTYP 20
+SET PMCI 2
+IF ($FEXIST(sampling_fractions.txt-a)) THEN
+  HISTO/PLOT 100 p
+  SET MTYP 21
+  SET PMCI 4
+  IF ($FEXIST(sampling_fractions.txt-b)) THEN
+    HISTO/PLOT 200 sp
+  ENDIF
+ELSE
+  SET MTYP 21
+  SET PMCI 4
+  IF ($FEXIST(sampling_fractions.txt-b)) THEN
+    HISTO/PLOT 200 p
+  ENDIF
+ENDIF
+*
+ATITLE 'Beam energy' 'Sampling fraction'
+*
+CLOSE 20
+*
+MESSAGE '  --- END KUMAC  sampling_fraction.kumac  --- '
+MESSAGE ' '

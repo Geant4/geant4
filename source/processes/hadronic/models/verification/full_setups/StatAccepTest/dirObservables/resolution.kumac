@@ -1,0 +1,62 @@
+*-------------------------------------------------------------
+* 29-Apr-2005    Compare energy resolutions vs. beam energy.  
+*                Input:  beam_energies.txt : binning edges in x;
+*                        energy_resolutions.txt-a  
+*                        energy_resolutions.txt-b  
+*                The kumac should be able to work even if one
+*                of the two input files is missing.
+*-------------------------------------------------------------
+*
+MESSAGE ' '
+MESSAGE '  --- START KUMAC  resolution.kumac  --- '
+*
+IF ($FEXIST(beam_energies.txt)) THEN
+  VEC/READ vx  beam_energies.txt
+ELSE
+  message ' File beam_energies.txt NOT found! '
+  exit
+ENDIF
+*  
+IF ($FEXIST(energy_resolutions.txt-a)) THEN
+  VEC/READ vy1 energy_resolutions.txt-a
+  BINS 100 'Energy resolution' $VLEN(vy1,1) vx  
+  HISTO/PUT/CONT 100 vy1
+ENDIF
+*
+IF ($FEXIST(energy_resolutions.txt-b)) THEN
+  VEC/READ vy2 energy_resolutions.txt-b
+  BINS 200 'Energy resolution' $VLEN(vy2,1) vx
+  HISTO/PUT/CONT 200 vy2
+ENDIF
+*
+FOR/FILE 20 resolution.ps
+META 20 -111
+*
+TITLE 'Energy resolution vs. beam energy'
+OPT UTIT
+ZONE 1 1
+SET KSIZ 0.3
+*
+SET MTYP 20
+SET PMCI 2
+IF ($FEXIST(energy_resolutions.txt-a)) THEN
+  HISTO/PLOT 100 p
+  SET MTYP 21
+  SET PMCI 4
+  IF ($FEXIST(energy_resolutions.txt-b)) THEN
+    HISTO/PLOT 200 sp
+  ENDIF
+ELSE
+  SET MTYP 21
+  SET PMCI 4
+  IF ($FEXIST(energy_resolutions.txt-b)) THEN
+    HISTO/PLOT 200 p
+  ENDIF
+ENDIF
+*
+ATITLE 'Beam energy' 'Energy resolution'
+*
+CLOSE 20
+*
+MESSAGE '  --- END KUMAC  resolution.kumac  --- '
+MESSAGE ' '

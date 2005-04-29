@@ -1,0 +1,80 @@
+*-------------------------------------------------------------
+* 29-Feb-2005   Compare longitudinal shower shapes.  
+*               Input:  longitudinal_profile.txt-a  
+*                       longitudinal_profile.txt-b
+*                       each ASCII file with two colums:
+*                       energy_layer_i  error_energy_layer_i
+*               The kumac should be able to work even if one
+*               of the two input files is missing.
+*-------------------------------------------------------------
+*
+MESSAGE ' '
+MESSAGE '  --- START KUMAC  longitudinal_profile.kumac  --- '
+*
+IF ($FEXIST(longitudinal_profile.txt-a)) THEN
+  VEC/READ vc1,ve1 longitudinal_profile.txt-a
+  1DHISTO 100 'Longitudinal shower profile'  $VLEN(vc1,1) 1.0 $VLEN(vc1,1)
+  HISTO/PUT/CONT 100 vc1
+  HISTO/PUT/ERR  100 ve1
+ENDIF
+*
+IF ($FEXIST(longitudinal_profile.txt-b)) THEN
+  VEC/READ vc2,ve2 longitudinal_profile.txt-b
+  1DHISTO 200 'Longitudinal shower profile ' $VLEN(vc2,1) 1.0 $VLEN(vc2,1)
+  HISTO/PUT/CONT 200 vc2
+  HISTO/PUT/ERR  200 ve2
+ENDIF
+*
+FOR/FILE 20 longitudinal_profile.ps
+META 20 -111
+*
+TITLE 'Longitudinal Shower Profile'
+OPT UTIT
+ZONE 1 2
+SET KSIZ 0.3
+*
+SET MTYP 20
+SET PMCI 2
+IF ($FEXIST(longitudinal_profile.txt-a)) THEN
+  HISTO/PLOT 100 E
+  SET MTYP 21
+  SET PMCI 4
+  IF ($FEXIST(longitudinal_profile.txt-b)) THEN
+    HISTO/PLOT 200 ES
+  ENDIF
+ELSE
+  SET MTYP 21
+  SET PMCI 4
+  IF ($FEXIST(longitudinal_profile.txt-b)) THEN
+    HISTO/PLOT 200 E
+  ENDIF
+ENDIF
+*
+ATITLE 'Layer' 'Energy deposit in MeV'
+*
+OPT LOGY
+*
+SET MTYP 20
+SET PMCI 2
+IF ($FEXIST(longitudinal_profile.txt-a)) THEN
+  HISTO/PLOT 100 E
+  SET MTYP 21
+  SET PMCI 4
+  IF ($FEXIST(longitudinal_profile.txt-b)) THEN
+    HISTO/PLOT 200 ES
+  ENDIF
+ELSE
+  SET MTYP 21
+  SET PMCI 4
+  IF ($FEXIST(longitudinal_profile.txt-b)) THEN
+    HISTO/PLOT 200 E
+  ENDIF
+ENDIF
+*
+ATITLE 'Layer' 'Energy deposit in MeV'
+*
+CLOSE 20
+*
+MESSAGE '  --- END KUMAC  longitudinal_profile.kumac  --- '
+MESSAGE ' '
+

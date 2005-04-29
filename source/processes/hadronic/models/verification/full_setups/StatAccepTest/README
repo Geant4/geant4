@@ -1,4 +1,4 @@
- A.R. Created 20-Aug-2004 ; Last change 6-Dec-2004.
+ A.R. Created 20-Aug-2004 ; Last change 29-Apr-2005.
  
  This directory contains a configurable calorimeter setup to be used
  as statistical acceptance suite of Geant4, that is to validate a
@@ -78,3 +78,16 @@
                                                ---> 6) plot.kumac
 
  only the first one, mainScript.py , needs to be modified by the user.
+
+ After the whole simulation is completed, a post-processing phase
+ must be performed in order to produce plots of various observables.
+ This phase requires that all the output files of the simulation
+ are collected in the same directory tree (eventual with a 
+ subdirectory structure), whereas the HBOOK files (ntuples) are
+ not needed. 
+ The subdirectory  dirObservables/  contains a Python script,
+ observables.py , and some kumacs that are invoked by the script
+ to produce the plots. The user is required simply to set some
+ parameters in the  observables.py  script, and then run it.
+ Please read the comments at the top of the file  observables.py
+ for more information.
