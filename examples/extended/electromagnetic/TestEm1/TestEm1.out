@@ -115,28 +115,26 @@ msc:  Model variant of multiple scattering for e-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
 
-brCMS:   tables are built for  e-
+brem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
-      Gamma high energy threshold 10000 MeV
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
 
-brCMS:   tables are built for  e+
+brem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
-      Gamma high energy threshold 10000 MeV
 
 annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
@@ -149,15 +147,18 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
+
+msc:  Model variant of multiple scattering for GenericIon
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
       Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below.
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
+      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -166,9 +167,9 @@ msc:  Model variant of multiple scattering for mu+
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -183,9 +184,9 @@ muPairProd:   tables are built for  mu+
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -233,7 +234,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 200
-  User=57.9s Real=88.46s Sys=21s
+  User=63.34s Real=93.69s Sys=20.96s
 
  ======================== run summary ======================
 
@@ -241,29 +242,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.777 MeV
+ total energy deposit: 99.795 MeV
 
- nb tracks/event   neutral:     27.940   charged:    698.145
- nb  steps/event   neutral:    145.760   charged:   3501.195
+ nb tracks/event   neutral:     27.890   charged:    696.070
+ nb  steps/event   neutral:    144.765   charged:   3551.890
 
  nb of process calls per event: 
-          eIoni       brCMS       compt        photTransportation        conv     annihil
-       3473.600      26.110     117.820      25.400       1.065       1.480       1.480
+          eIoni        brem       compt        phot        conv     annihilTransportation
+       3524.220      26.220     116.875      25.390       1.445       1.445       1.060
 
 ---------------------------------------------------------
  Primary particle : 
- CSDA Range = 10.806 cm    rms = 4.017 cm 
- proj Range = 9.250 cm    rms = 3.657 cm 
- proj/CSDA  = 0.856
- transverse dispersion at end = 1.806 cm 
+ CSDA Range = 10.931 cm    rms = 3.737 cm 
+ proj Range = 9.336 cm    rms = 3.427 cm 
+ proj/CSDA  = 0.854
+ transverse dispersion at end = 1.736 cm 
 
- mass CSDA Range from simulation = 29.176 g/cm2
+ mass CSDA Range from simulation = 29.513 g/cm2
                from PhysicsTable = 85.395 g/cm2
 ---------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 532674473, 525747510
+ Current couple of seeds = 1645379266, 900793937
 ----------------------------------------
 #
 /testem/phys/setCuts 1 mm
@@ -286,28 +287,26 @@ msc:  Model variant of multiple scattering for e-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
 
-brCMS:   tables are built for  e-
+brem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
-      Gamma high energy threshold 10000 MeV
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
 
-brCMS:   tables are built for  e+
+brem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
-      Gamma high energy threshold 10000 MeV
 
 annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
@@ -320,15 +319,18 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
+
+msc:  Model variant of multiple scattering for GenericIon
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
       Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below.
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
+      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -337,9 +339,9 @@ msc:  Model variant of multiple scattering for mu+
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -354,9 +356,9 @@ muPairProd:   tables are built for  mu+
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -391,7 +393,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 532674473, 525747510
+ Current couple of seeds = 1645379266, 900793937
 ----------------------------------------
 Start Run processing.
 
@@ -399,7 +401,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 200
-  User=19.25s Real=31.5s Sys=10.55s
+  User=21.87s Real=34.75s Sys=10.54s
 
  ======================== run summary ======================
 
@@ -407,29 +409,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.643 MeV
+ total energy deposit: 99.792 MeV
 
- nb tracks/event   neutral:     28.245   charged:    147.580
- nb  steps/event   neutral:    140.540   charged:   1077.930
+ nb tracks/event   neutral:     28.325   charged:    151.015
+ nb  steps/event   neutral:    144.100   charged:   1127.410
 
  nb of process calls per event: 
-          brCMS       eIoni        phot       comptTransportation        conv     annihil
-         26.395    1050.090      25.700     112.295       1.100       1.445       1.445
+           brem       eIoni        phot       compt        conv     annihilTransportation
+         26.780    1099.265      25.910     115.775       1.365       1.365       1.050
 
 ---------------------------------------------------------
  Primary particle : 
- CSDA Range = 11.691 cm    rms = 3.709 cm 
- proj Range = 9.970 cm    rms = 3.497 cm 
- proj/CSDA  = 0.853
- transverse dispersion at end = 1.961 cm 
+ CSDA Range = 10.607 cm    rms = 3.783 cm 
+ proj Range = 9.158 cm    rms = 3.553 cm 
+ proj/CSDA  = 0.863
+ transverse dispersion at end = 1.603 cm 
 
- mass CSDA Range from simulation = 31.567 g/cm2
+ mass CSDA Range from simulation = 28.639 g/cm2
                from PhysicsTable = 67.818 g/cm2
 ---------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 623673724, 405814321
+ Current couple of seeds = 917965385, 895770852
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

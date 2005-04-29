@@ -118,8 +118,8 @@ msc:  Model variant of multiple scattering for e-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -130,8 +130,8 @@ eBrem:   tables are built for  e-
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -150,8 +150,11 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
+
+msc:  Model variant of multiple scattering for GenericIon
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -160,9 +163,9 @@ msc:  Model variant of multiple scattering for mu+
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -177,9 +180,9 @@ muPairProd:   tables are built for  mu+
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -195,25 +198,25 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
-cell_01_rep:0............ |           1 |         108 |         125 |         106 |         106 |   8.9027146 |   9.2574898 |           1 |
-cell_02_rep:0............ |           2 |          83 |         158 |         172 |          86 |   7.8477054 |   8.5962945 |           1 |
-cell_03_rep:0............ |           4 |         100 |         221 |         289 |       72.25 |   5.8844573 |   7.6603583 |           1 |
-cell_04_rep:0............ |           8 |         113 |         233 |         308 |        38.5 |   5.3338753 |   7.4224318 |           1 |
-cell_05_rep:0............ |          16 |         132 |         271 |         363 |     22.6875 |   5.8486835 |     7.39996 |           1 |
-cell_06_rep:0............ |          32 |         150 |         317 |         482 |     15.0625 |   4.5880363 |   6.7195245 |           1 |
-cell_07_rep:0............ |          64 |         175 |         350 |         508 |      7.9375 |   3.9702443 |    6.534581 |           1 |
-cell_08_rep:0............ |         128 |         202 |         424 |         651 |   5.0859375 |  0.12127253 |   5.9196255 |           1 |
-cell_09_rep:0............ |         256 |         232 |         479 |         880 |      3.4375 |   2.3545899 |   5.3102442 |           1 |
-cell_10_rep:0............ |         512 |         258 |         523 |         941 |   1.8378906 |   2.5474441 |   5.0007586 |           1 |
-cell_11_rep:0............ |        1024 |         290 |         571 |        1090 |   1.0644531 | 0.056668031 |   4.6627569 |           1 |
-cell_12_rep:0............ |        2048 |         330 |         657 |        1293 |  0.63134766 | 0.087351356 |   4.5724757 |           1 |
-cell_13_rep:0............ |        4096 |         380 |         762 |        1554 |  0.37939453 | 0.066828544 |    4.342442 |           1 |
-cell_14_rep:0............ |        8192 |         423 |         842 |        1747 |  0.21325684 | 0.069650585 |   4.2127256 |           1 |
-cell_15_rep:0............ |       16384 |         470 |         927 |        2038 |  0.12438965 |   2.0879212 |   3.8557482 |           1 |
-cell_16_rep:0............ |       32768 |         524 |        1023 |        2220 | 0.067749023 | 0.050145428 |   3.7243147 |           1 |
-cell_17_rep:0............ |       65536 |         570 |        1116 |        2369 | 0.036148071 |  0.60884393 |   3.6116183 |           1 |
-cell_18_rep:0............ |      131072 |         507 |        1126 |        2506 | 0.019119263 |   1.9918584 |   3.4890199 |           1 |
-rest_rep:0............... |      131072 |         564 |         564 |           0 |           0 |           0 |           0 |           0 |
+cell_01_rep:0............ |           1 |         114 |         132 |         105 |         105 |   9.0836008 |   9.4007964 |           1 |
+cell_02_rep:0............ |           2 |          80 |         171 |         171 |        85.5 |   8.5035042 |   8.9743924 |           1 |
+cell_03_rep:0............ |           4 |          99 |         209 |         234 |        58.5 |   8.1935182 |   8.7986927 |           1 |
+cell_04_rep:0............ |           8 |         115 |         242 |         232 |          29 |   7.2706048 |   8.5230829 |           1 |
+cell_05_rep:0............ |          16 |         125 |         260 |         328 |        20.5 |   5.9919314 |   7.5925781 |           1 |
+cell_06_rep:0............ |          32 |         126 |         272 |         406 |     12.6875 |   4.9966329 |   6.8914386 |           1 |
+cell_07_rep:0............ |          64 |         118 |         251 |         400 |        6.25 |   4.5578905 |   6.4076417 |           1 |
+cell_08_rep:0............ |         128 |         133 |         263 |         424 |      3.3125 |   3.6415037 |   5.6827881 |           1 |
+cell_09_rep:0............ |         256 |         128 |         276 |         419 |   1.6367188 |   3.6303604 |   6.0321039 |           1 |
+cell_10_rep:0............ |         512 |         124 |         266 |         540 |   1.0546875 |   2.9571621 |   5.1673255 |           1 |
+cell_11_rep:0............ |        1024 |         119 |         229 |         404 |  0.39453125 |   2.5197964 |   5.1248478 |           1 |
+cell_12_rep:0............ |        2048 |         120 |         239 |         498 |  0.24316406 | 0.034611461 |   4.8224557 |           1 |
+cell_13_rep:0............ |        4096 |         130 |         244 |         477 |  0.11645508 |   2.2779062 |   5.1105595 |           1 |
+cell_14_rep:0............ |        8192 |         145 |         295 |         500 | 0.061035156 |   2.7245586 |   5.4572019 |           1 |
+cell_15_rep:0............ |       16384 |         144 |         294 |         541 |  0.03302002 |   2.8669349 |   5.2553738 |           1 |
+cell_16_rep:0............ |       32768 |         154 |         309 |         600 | 0.018310547 |   2.1549447 |    4.701074 |           1 |
+cell_17_rep:0............ |       65536 |         163 |         335 |         689 | 0.010513306 | 0.059100268 |   4.6965931 |           1 |
+cell_18_rep:0............ |      131072 |         153 |         351 |         685 |0.0052261353 | 0.019476329 |   4.4157369 |           1 |
+rest_rep:0............... |      131072 |         132 |         132 |           0 |           0 |           0 |           0 |           0 |
 shieldWorld_rep:0........ |           1 |           9 |         109 |           0 |           0 |          10 |          10 |           1 |
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: MassImportanceProcess, will be removed!

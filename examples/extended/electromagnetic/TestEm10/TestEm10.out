@@ -177,58 +177,59 @@ gas material = Air
 plate plasma energy = 24.5068 eV
 gas plasma energy = 0.731967 eV
 Regular X-ray TR  radiator EM process is called
-0	fGamma = 107.6	sumE = 0.1375
-1	fGamma = 123.4	sumE = 0.1837
-2	fGamma = 141.5	sumE = 0.2418
-3	fGamma = 162.3	sumE = 0.3066
-4	fGamma = 186.2	sumE = 0.383
-5	fGamma = 213.7	sumE = 0.4962
-6	fGamma = 245.2	sumE = 0.6044
-7	fGamma = 281.3	sumE = 0.7205
-8	fGamma = 322.9	sumE = 0.8636
-9	fGamma = 370.5	sumE = 0.9838
-10	fGamma = 425.3	sumE = 1.132
-11	fGamma = 488.2	sumE = 1.3
-12	fGamma = 560.3	sumE = 1.515
-13	fGamma = 643.2	sumE = 1.72
-14	fGamma = 738.3	sumE = 2.035
-15	fGamma = 847.6	sumE = 2.092
-16	fGamma = 973	sumE = 2.807
-17	fGamma = 1117	sumE = 2.533
-18	fGamma = 1282	sumE = 3.06
-19	fGamma = 1472	sumE = 3.308
-20	fGamma = 1690	sumE = 3.858
-21	fGamma = 1940	sumE = 4.186
-22	fGamma = 2228	sumE = 5.068
-23	fGamma = 2558	sumE = 4.712
-24	fGamma = 2936	sumE = 5.267
-25	fGamma = 3371	sumE = 4.662
-26	fGamma = 3871	sumE = 5.098
-27	fGamma = 4444	sumE = 5.373
-28	fGamma = 5102	sumE = 4.5
-29	fGamma = 5858	sumE = 5.411
-30	fGamma = 6726	sumE = 4.855
-31	fGamma = 7722	sumE = 5.287
-32	fGamma = 8866	sumE = 5.582
-33	fGamma = 1.018e+04	sumE = 5.473
-34	fGamma = 1.169e+04	sumE = 6.564
-35	fGamma = 1.342e+04	sumE = 7.486
-36	fGamma = 1.541e+04	sumE = 10.5
-37	fGamma = 1.769e+04	sumE = 13.53
-38	fGamma = 2.031e+04	sumE = 16.15
-39	fGamma = 2.332e+04	sumE = 18.12
-40	fGamma = 2.677e+04	sumE = 19.3
-41	fGamma = 3.074e+04	sumE = 19.99
-42	fGamma = 3.529e+04	sumE = 20.4
-43	fGamma = 4.052e+04	sumE = 20.65
-44	fGamma = 4.652e+04	sumE = 20.81
-45	fGamma = 5.342e+04	sumE = 20.92
-46	fGamma = 6.133e+04	sumE = 20.98
-47	fGamma = 7.042e+04	sumE = 21.01
-48	fGamma = 8.085e+04	sumE = 21.04
-49	fGamma = 9.283e+04	sumE = 21.05
+fAlphaPlate = 10000 ; fAlphaGas = 1000
+0	fGamma = 107.6	sumN = -NaN
+1	fGamma = 123.4	sumN = -NaN
+2	fGamma = 141.5	sumN = -NaN
+3	fGamma = 162.3	sumN = -NaN
+4	fGamma = 186.2	sumN = -NaN
+5	fGamma = 213.7	sumN = -NaN
+6	fGamma = 245.2	sumN = -NaN
+7	fGamma = 281.3	sumN = -NaN
+8	fGamma = 322.9	sumN = -NaN
+9	fGamma = 370.5	sumN = -NaN
+10	fGamma = 425.3	sumN = -NaN
+11	fGamma = 488.2	sumN = -NaN
+12	fGamma = 560.3	sumN = -NaN
+13	fGamma = 643.2	sumN = -NaN
+14	fGamma = 738.3	sumN = -NaN
+15	fGamma = 847.6	sumN = -NaN
+16	fGamma = 973	sumN = -NaN
+17	fGamma = 1117	sumN = -NaN
+18	fGamma = 1282	sumN = -NaN
+19	fGamma = 1472	sumN = -NaN
+20	fGamma = 1690	sumN = -NaN
+21	fGamma = 1940	sumN = -NaN
+22	fGamma = 2228	sumN = -NaN
+23	fGamma = 2558	sumN = -NaN
+24	fGamma = 2936	sumN = -NaN
+25	fGamma = 3371	sumN = -NaN
+26	fGamma = 3871	sumN = -NaN
+27	fGamma = 4444	sumN = -NaN
+28	fGamma = 5102	sumN = -NaN
+29	fGamma = 5858	sumN = -NaN
+30	fGamma = 6726	sumN = -NaN
+31	fGamma = 7722	sumN = -NaN
+32	fGamma = 8866	sumN = -NaN
+33	fGamma = 1.018e+04	sumN = -NaN
+34	fGamma = 1.169e+04	sumN = -NaN
+35	fGamma = 1.342e+04	sumN = -NaN
+36	fGamma = 1.541e+04	sumN = -NaN
+37	fGamma = 1.769e+04	sumN = -NaN
+38	fGamma = 2.031e+04	sumN = -NaN
+39	fGamma = 2.332e+04	sumN = -NaN
+40	fGamma = 2.677e+04	sumN = -NaN
+41	fGamma = 3.074e+04	sumN = -NaN
+42	fGamma = 3.529e+04	sumN = -NaN
+43	fGamma = 4.052e+04	sumN = -NaN
+44	fGamma = 4.652e+04	sumN = -NaN
+45	fGamma = 5.342e+04	sumN = -NaN
+46	fGamma = 6.133e+04	sumN = -NaN
+47	fGamma = 7.042e+04	sumN = -NaN
+48	fGamma = 8.085e+04	sumN = -NaN
+49	fGamma = 9.283e+04	sumN = -NaN
 
-total time for build X-ray TR energy loss tables = 96.72 s
+total time for build X-ray TR energy loss tables = 112.21 s
 
 phot:  Total cross sections from Sandia parametrisation. 
 Em10PhysicsList::SetCuts:CutLength : 1 mm 
@@ -249,8 +250,8 @@ msc:  Model variant of multiple scattering for e-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -261,8 +262,8 @@ eBrem:   tables are built for  e-
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -281,8 +282,9 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -291,9 +293,9 @@ msc:  Model variant of multiple scattering for mu+
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -308,9 +310,9 @@ muPairProd:   tables are built for  mu+
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -370,28 +372,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=7.84s Real=8.35s Sys=0.49s
+  User=4.41s Real=4.69s Sys=0.28s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=16.8445 +- 0.210469  mm  
+    mean charged track length   in absorber=16.0748 +- 0.18573  mm  
 
-            mean energy deposit in absorber=0.0134029 +- 0.000287725  MeV 
+            mean energy deposit in absorber=0.00476736 +- 0.000116482  MeV 
 
- mean number of steps in absorber (charged) =3.155 +- 0.0864464      
- mean number of steps in absorber (neutral) =3.89 +- 0.0642954      
+ mean number of steps in absorber (charged) =1.579 +- 0.0531767      
+ mean number of steps in absorber (neutral) =0.096 +- 0.00952806      
 
-   mean number of charged secondaries = 1.574 +- 0.0438922
+   mean number of charged secondaries = 0.226 +- 0.0178024
 
-   mean number of neutral secondaries = 0.002 +- 0.0014128
+   mean number of neutral secondaries = 0.003 +- 0.00172945
 
-   mean number of e-s =1.574  and e+s =0
+   mean number of e-s =0.226  and e+s =0
 
-(number) transmission coeff=0.51  reflection coeff=0.005
+(number) transmission coeff=0.485  reflection coeff=0.003
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 848103659, 2068856722
+ Current couple of seeds = 1486211418, 1595580037
 ----------------------------------------
 
 ========= Table of registered couples ==============================

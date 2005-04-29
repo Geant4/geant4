@@ -117,8 +117,8 @@ msc:  Model variant of multiple scattering for e-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -129,8 +129,8 @@ eBrem:   tables are built for  e-
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -169,6 +169,8 @@ hLowEIoni:    Knock-on electron cross sections .
         from 25 keV  to 2 MeV .
         Parametrization of the Barkas effect is switched on.
         Nuclear stopping power model is ICRU_R49
+
+msc:  Model variant of multiple scattering for GenericIon
 G4hLowEnergyIonisation::BuildPhysicsTable for GenericIon mass(MeV)= 938.272 charge= 1 type= nucleus
 Cuts are defined 
 G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built 
@@ -197,9 +199,9 @@ msc:  Model variant of multiple scattering for mu+
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -214,9 +216,9 @@ muPairProd:   tables are built for  mu+
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -255,7 +257,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.36s Real=4.14s Sys=1.78s
+  User=2.31s Real=4.99s Sys=1.86s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -298,7 +300,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.32s Real=4.07s Sys=1.75s
+  User=2.19s Real=4.52s Sys=1.86s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -401,7 +403,7 @@ EvtNo= 975  length= 0.00887208  xend= 0.00101975
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.76s Real=4.38s Sys=1.62s
+  User=2.86s Real=5.87s Sys=1.57s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 937 for IonC12 with Ekin = 6 MeV p= 365.827 MeV/c
@@ -443,21 +445,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=13.88s Real=14.14s Sys=0.25s
+  User=13.57s Real=13.85s Sys=0.2s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.19309 +- 0.01488  microns 
-    CSDA  Range  in absorber = 9.0555 +- 0.0164557  microns 
+    Track Length in absorber = 9.21101 +- 0.0182688  microns 
+    CSDA  Range  in absorber = 9.0729 +- 0.0180863  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.134093 +- 0.01488 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.186504 +- 0.0164557 microns 
+    Track Length (G4 - ICRU49) = 0.152009 +- 0.0182688 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.203902 +- 0.0180863 microns 
 
-Average Number electrons per event = 22.03
-Average Number photons per event   = 21.95
+Average Number electrons per event = 22.31
+Average Number photons per event   = 22.21
 
 #
 /test17/cutAugerEnergy 250 eV
@@ -487,20 +489,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=32.54s Real=32.74s Sys=0.2s
+  User=33.13s Real=34.22s Sys=0.15s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.15764 +- 0.0180171  microns 
-    CSDA  Range  in absorber = 9.00714 +- 0.0206843  microns 
+    Track Length in absorber = 9.16817 +- 0.0172461  microns 
+    CSDA  Range  in absorber = 9.03678 +- 0.0179258  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.0986408 +- 0.0180171 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.138144 +- 0.0206843 microns 
+    Track Length (G4 - ICRU49) = 0.109172 +- 0.0172461 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.167778 +- 0.0179258 microns 
 
-Average Number electrons per event = 509.47
-Average Number photons per event   = 3.06
+Average Number electrons per event = 509.33
+Average Number photons per event   = 2.54
 
 G4 kernel has come to Quit state.

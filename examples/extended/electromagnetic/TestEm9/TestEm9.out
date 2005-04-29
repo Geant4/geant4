@@ -112,8 +112,8 @@ msc:  Model variant of multiple scattering for e-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -124,8 +124,8 @@ eBrem:   tables are built for  e-
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -144,15 +144,18 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
+
+msc:  Model variant of multiple scattering for GenericIon
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
       Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below.
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -161,9 +164,9 @@ msc:  Model variant of multiple scattering for mu+
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -178,9 +181,9 @@ muPairProd:   tables are built for  mu+
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -262,28 +265,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=30.46s Real=34.17s Sys=3.64s
+  User=32.23s Real=36.2s Sys=3.7s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Number of events             100
-Average number of e-         1308
-Average number of gamma      686.2
-Average number of e+         47.48
-Average number of steps      3835
-Edep 1x1 =                   0.8296 +- 0.003737
-Edep 3x3 =                   0.9584 +- 0.001257
-Edep 5x5 =                   0.9802 +- 0.0009521
+Average number of e-         1310
+Average number of gamma      692.2
+Average number of e+         48.68
+Average number of steps      3852
+Edep 1x1 =                   0.8238 +- 0.00399
+Edep 3x3 =                   0.9552 +- 0.001546
+Edep 5x5 =                   0.9802 +- 0.0009616
 ========================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8296  delEdep1x1= 0.003647 nrms= 1.039
-Erms1x1: 0.03737  delErms1x1= 0.002271 nrms= 0.647
-Edep3x3: 0.9584  delEdep3x3= 0.002002 nrms= 1.251
-Erms3x3: 0.01257  delErms3x3= -0.003433 nrms= -2.146
-Edep5x5: 0.9802  delEdep5x5= 0.001175 nrms= 0.9876
-Erms5x5: 0.009521  delErms5x5= -0.002379 nrms= -1.999
+Edep1x1: 0.8238  delEdep1x1= -0.002227 nrms= -0.6346
+Erms1x1: 0.0399  delErms1x1= 0.004803 nrms= 1.368
+Edep3x3: 0.9552  delEdep3x3= -0.001187 nrms= -0.7418
+Erms3x3: 0.01546  delErms3x3= -0.0005429 nrms= -0.3393
+Edep5x5: 0.9802  delEdep5x5= 0.001153 nrms= 0.9689
+Erms5x5: 0.009616  delErms5x5= -0.002284 nrms= -1.919
 <<<<<END>>>>>   IS ACCEPTED
 
 #
