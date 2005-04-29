@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.21 2005-04-18 17:31:56 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.22 2005-04-29 16:58:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -164,6 +164,9 @@ public:
                              const G4MaterialCutsCouple* couple);
   // It returns the cross section of the process for energy/ material
 
+  G4double ComputeCrossSectionPerAtom(G4double kineticEnergy, G4double Z);
+  // It returns the cross section of the process per atom
+
   G4double MeanFreePath(     const G4Track& track,
                                    G4double previousStepSize,
                                    G4ForceCondition* condition);
@@ -202,6 +205,8 @@ protected:
   G4double GetElectronEnergyCut();
 
   void SetBuildTableFlag(G4bool val);
+
+  void SetStartFromNullFlag(G4bool val);
 
 private:
 
@@ -272,6 +277,7 @@ private:
   G4bool                       aboveCSmax;
   G4bool                       buildLambdaTable;
   G4bool                       applyCuts;
+  G4bool                       startFromNull;
 
   G4int                        nRegions;
   std::vector<G4Region*>       regions;
@@ -331,7 +337,6 @@ inline G4double G4VEmProcess::GetLambda(G4double e)
 
 inline void G4VEmProcess::NewIntegralLambda(G4double e)
 {
-  meanFreePath  = false;
   aboveCSmax    = false;
   mfpKinEnergy  = theEnergyOfCrossSectionMax[currentMaterialIndex];
   if (e <= mfpKinEnergy) {
@@ -364,10 +369,11 @@ inline G4double G4VEmProcess::GetMeanFreePath(const G4Track& track,
   if(integral) ComputeIntegralLambda();
   else         preStepLambda = GetLambda(preStepKinEnergy, currentCouple);
   if (meanFreePath) {
+    meanFreePath  = false;
     if(0.0 < preStepLambda) preStepMFP = 1.0/preStepLambda;
     else                    preStepMFP = DBL_MAX;
   }
-  //  G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<< " eCSmax= " 
+  //    G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<< " eCSmax= " 
   //  <<mfpKinEnergy<< " mfp= "<<preStepMFP<<G4endl;
   return preStepMFP;
 }

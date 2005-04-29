@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.24 2005-04-18 17:31:56 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.25 2005-04-29 16:58:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -70,6 +70,7 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4PhysicsTableHelper.hh"
+#include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -88,6 +89,7 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   aboveCSmax(true),
   buildLambdaTable(true),
   applyCuts(false),
+  startFromNull(true),
   nRegions(0)
 {
   SetVerboseLevel(1);
@@ -204,7 +206,7 @@ void G4VEmProcess::BuildLambdaTable()
       // create physics vector and fill it
       const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
       G4PhysicsVector* aVector = LambdaPhysicsVector(couple);
-      modelManager->FillLambdaVector(aVector, couple);
+      modelManager->FillLambdaVector(aVector, couple, startFromNull);
       G4PhysicsTableHelper::SetPhysicsVector(theLambdaTable, i, aVector);
     }
   }
@@ -370,8 +372,21 @@ G4double G4VEmProcess::MicroscopicCrossSection(G4double kineticEnergy,
                            GetValue(kineticEnergy, b));
 
     cross /= currentMaterial->GetTotNbOfAtomsPerVolume();
+  } else {
+    G4VEmModel* model = SelectModel(kineticEnergy);
+    cross = model->CrossSectionPerVolume(currentMaterial,particle,kineticEnergy);
   }
 
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4VEmProcess::ComputeCrossSectionPerAtom(G4double kineticEnergy, G4double Z)
+{
+  G4VEmModel* model = SelectModel(kineticEnergy);
+  G4double A = G4NistManager::Instance()->FindOrBuildElement(G4int(Z), false)->GetN();
+  G4double cross = model->ComputeCrossSectionPerAtom(particle,kineticEnergy,Z,A);
   return cross;
 }
 
@@ -567,6 +582,13 @@ G4PhysicsVector* G4VEmProcess::LambdaPhysicsVector(const G4MaterialCutsCouple*)
 void G4VEmProcess::SetBuildTableFlag(G4bool val)
 {
   buildLambdaTable = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmProcess::SetStartFromNullFlag(G4bool val)
+{
+  startFromNull = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
