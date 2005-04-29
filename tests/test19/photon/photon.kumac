@@ -1,0 +1,277 @@
+macro all f=0.1 que=2-cor
+* -- f=0 assumes histograms already there
+  nEvts = 2000 * [f]
+  pi/del *
+  zone 1 1
+****  exec phot ^6!Li    li0303  3   3 [nEvts] 41 10000 30000 [que]
+  exec phot ^7!Li    li0304  3   4 [nEvts] 21 10000 30000 [que]
+****  exec phot ^7!Li    li0304  3   4 [nEvts] 41 10000 30000 [que]
+  exec phot ^9!Be    be0405  4   5 [nEvts] 21 17000 37000 [que]
+****  exec phot ^9!Be    be0405  4   5 [nEvts] 41 17000 37000 [que]
+  exec phot ^12!C     c0606  6   6 [nEvts] 20 19000 38000 [que]
+****  exec phot ^12!C     c0606  6   6 [nEvts] 39 19000 38000 [que]
+  exec phot ^16!O     o0808  8   8 [nEvts] 22 16000 37000 [que]
+****  exec phot ^16!O     o0808  8   8 [nEvts] 43 16000 37000 [que]
+  exec phot ^27!Al   al1314 13  14 [nEvts] 24 14000 37000 [que]
+****  exec phot ^27!Al   al1314 13  14 [nEvts] 47 14000 37000 [que]
+  exec phot ^40!Ca   ca2020 20  20 [nEvts] 16 15000 30000 [que]
+****  exec phot ^40!Ca   ca2020 20  20 [nEvts] 31 15000 30000 [que]
+  exec ~/PTOOL/pri ps 1 6 phocs [que] 2 3
+*  exec ~/PTOOL/pri eps 1 6 phocs [que] 2 3
+  exec ~/PTOOL/pri port 1 6 phocs [que] 2 3
+return
+*
+macro run z=20 f=0.1 que=2-cor
+* -- f=0 assumes histograms already there
+  nEvts = 2000 * [f]
+  pi/del *
+  zone 1 1
+if ([z] = 2 .or. [z] = 0) then
+* exec phot ^6!Li    li0303  3   3 [nEvts] 41 10000 30000 [que]
+ exec phot ^6!Li    li0303  3   3 [nEvts] 21 10000 30000 [que]
+endif
+if ([z] = 3 .or. [z] = 0) then
+* exec phot ^7!Li    li0304  3   4 [nEvts] 41 10000 30000 [que]
+ exec phot ^7!Li    li0304  3   4 [nEvts] 21 10000 30000 [que]
+endif
+if ([z] = 4 .or. [z] = 0) then
+* exec phot ^9!Be    be0405  4   5 [nEvts] 41 17000 37000 [que]
+ exec phot ^9!Be    be0405  4   5 [nEvts] 21 17000 37000 [que]
+endif
+if ([z] = 6 .or. [z] = 0) then
+* exec phot ^12!C     c0606  6   6 [nEvts] 39 19000 38000 [que]
+ exec phot ^12!C     c0606  6   6 [nEvts] 20 19000 38000 [que]
+endif
+if ([z] = 8 .or. [z] = 0) then
+* exec phot ^16!O     o0808  8   8 [nEvts] 43 16000 37000 [que]
+ exec phot ^16!O     o0808  8   8 [nEvts] 22 16000 37000 [que]
+endif
+if ([z] = 13 .or. [z] = 0) then
+* exec phot ^27!Al   al1314 13  14 [nEvts] 47 14000 37000 [que]
+ exec phot ^27!Al   al1314 13  14 [nEvts] 24 14000 37000 [que]
+endif
+if ([z] = 20 .or. [z] = 0) then
+* exec phot ^40!Ca   ca2020 20  20 [nEvts] 31 15000 30000 [que]
+ exec phot ^40!Ca   ca2020 20  20 [nEvts] 16 15000 30000 [que]
+endif
+if ([z] = 29 .or. [z] = 0) then
+* exec phot ^64!Cu   cu2935 29  35 [nEvts] 73  7000 43000 [que]
+ exec phot ^64!Cu   cu2935 29  35 [nEvts] 37  7000 43000 [que]
+endif
+if ([z] = 50 .or. [z] = 0) then
+* exec phot ^120!Sn  sn5070 50  70 [nEvts] 73  7000 43000 [que]
+ exec phot ^120!Sn  sn5070 50  70 [nEvts] 37  7000 43000 [que]
+endif
+if ([z] = 79 .or. [z] = 0) then
+* exec phot ^197!Au au79118 79 118 [nEvts] 73  7000 43000 [que]
+ exec phot ^197!Au au79118 79 118 [nEvts] 37  7000 43000 [que]
+endif
+if ([z] = 82 .or. [z] = 0) then
+* exec phot ^207!Pb pb82125 82 125 [nEvts] 73  7000 43000 [que]  
+ exec phot ^207!Pb pb82125 82 125 [nEvts] 37  7000 43000 [que]  
+endif
+if ([z] = 92 .or. [z] = 0) then
+* exec phot ^235!U   u92143 92 143 [nEvts] 73  7000 43000 [que]
+ exec phot ^235!U   u92143 92 143 [nEvts] 37  7000 43000 [que]
+endif
+******* exec ~/PTOOL/pri port 1 10 phocs [que] 2 5
+  exec ~/PTOOL/pri eps 1 10 phocs_all [que] 2 5
+* shell gv phocs.ps &
+return
+*
+macro phot targ=^12!C file=c0606 np=6 nn=6 runn=2000 _
+           ne=5 e0=10000 e1=50000 pq=atsbhp
+*
+  mess 'A='//[file]//', Nev='//[runn]//' per point, Emin='//[e0]//' keV, Emax='//[e1]//' keV'
+  dir = ./
+  hi/del *
+  ve/del *
+  exec creavec
+*
+  exec chips [targ] [file] [np] [nn] [runn] [ne] [e0] [e1] [dir]
+*
+  clr
+  opt zfl
+  swi gz
+  opt utit
+  title 'E?[g]! (MeV)' u
+  title 'Photoneutron production part of total photonuclear cross section'
+  xmin = $sigma([e0]/1100.)
+  xmax = $sigma([e1]/900.)
+  exec ~/PTOOL/setpq
+  opt date
+*  opt logy
+*  null [xmin] [xmax] -0.05 1.14
+  null [xmin] [xmax] 0.0 1.05
+*  null [xmin] [xmax] .01 1.0
+  exec ~/PTOOL/setsq
+*****  atitle ' ' '[s]([g],nX)/[s]([g]A total)                      ^!'
+  atitle ' ' '[s]([g],nX)/[s]([g],tot)'
+  title ' ' u
+  title ' '
+  set dmod 3
+  fu/pl    0.1e-6*x [xmin] [xmax] s
+  fu/pl 1.+0.1e-6*x [xmin] [xmax] s
+  set dmod 1
+  graph [ne] photen nxcs l
+  ve/re eg,ex,nt,no [file]tot.dat
+  exec ~/PTOOL/red
+  h/err eg ex ? ? $sigma(nco(eg)) 24 .3
+  exec ~/PTOOL/black
+***  txt = [targ]//' nucleus'
+  txt = [targ]
+***  exec ~/PTOOL/notes .05 .93 [txt] 0. .35 defont
+  exec ~/PTOOL/notes .2 .9 [txt] 0. 1. defont
+********  exec paramline
+*
+return
+*
+macro chips targ=C file=c0606 np=6 nn=6 runn=2000 _
+            ne=5 e0=10000 e1=50000 dir=./
+* -- Default: 5 equidistant energies from 10 to 50 MeV
+  exec readpar pf=chipstest_[file].in
+  ve/cr photen([ne]) r
+  ve/cr nxcs([ne]) r
+  ve/cr nmult(150) r
+  clo 35
+****  n1=int(([e1]-[e0])/1000)
+  do i = 1 , [ne]
+    EkeV = $sigma(int([e0]+([e1]-[e0])/([ne]-1)*([i]-1)))
+* Why this does not work ?
+****  do i = 1 , [n1]+1
+****    EkeV = $sigma(int([e0]+1000*([i]-1)))
+    EMeV = $sigma([EkeV]/1000.)
+    mess 'A='//[file]//', Emin='//[EMeV]//' MeV'
+    ve/cr worke(1) r [EMeV]
+    ve/copy worke(1:1) photen([i]:[i])
+    ve/copy worke(1:1) momb
+    ve/del  worke    
+    if [runn] > 0 then
+      pdg  = $sigma([np]*1000+[nn])
+      pdgt = 90000000 + [pdg]
+      nevt = [runn]
+      ve/cr   work(3) i [pdgt] [nevt] 22
+      ve/copy work(1:1) pdgtg
+      ve/copy work(2:2) nevnt
+      ve/copy work(3:3) pdgpr
+      ve/del  work 
+      exec writepar pf=chipstest.in
+      logfile = ./log/chips_[file]_[EkeV].log
+      if $fexist([logfile]) then
+        shell rm -f [logfile]
+      endif
+*****      mess 'Start E_gamma='//[EMeV]//' MeV'
+      wait ' ' 2
+	  exec makehbk
+      wait ' ' 2
+      shell ./CHIPStest
+*****      shell ./CHIPStest  >& ./log/chips_[file]_[EkeV].log
+      shell mv chips.hbook [dir]chips_[file]_[EkeV].hbook
+    endif
+    hi/del *
+    hi/fil 35 [dir]chips_[file]_[EkeV].hbook
+*=== Old procedure
+*    hrin 3025
+*    clo 35
+*=== New procedure
+    1d 3025 'Neutron Multiplicity n?n!' 30 -0.5 29.5 0
+*
+*    opt zfl
+*    swi gz
+    hrin 1
+*    nevts = $hinfo(1,'entries')
+*   w = 1. / [nevts]
+    nt/pl 25.Mneut ! ! ! ! N 3025 | selector for neutrons (no plot N)
+    clo 35
+*=== End of procedure
+    get/cont 3025 nmult
+    ntot = $sigma(vsum(nmult))
+    n0neut = nmult(1)
+    ve/cr worke(1) r $sigma(1.-[n0neut]/[ntot])
+    ve/copy worke(1:1) nxcs([i]:[i])
+    ve/del  worke    
+  enddo
+return
+*
+macro readpar  pf=chipstest.in
+  ve/read  temp,ssse,eepr,nop,momb,enb,pdgpr,pdgtg,nevnt,_
+freeN,freeD,clustP,rM,sA_
+              [pf] 'F7.2,F5.2,F5.2,I4,F6.0,F6.0,2I9,I9,5F5.2' 'OC' -/*/  
+return
+macro writepar pf=chipstest.in
+  ve/write temp,ssse,eepr,nop,momb,enb,pdgpr,pdgtg,nevnt,_
+freeN,freeD,clustP,rM,sA_
+              [pf] 'F7.2,F5.2,F5.2,I4,F9.3,F9.3,2I9,I9,5F5.2' 'OC'
+return
+*
+macro creavec
+ ve/cr temp(1) r 
+ ve/cr ssse(1) r
+ ve/cr eepr(1) r
+ ve/cr nop(1) i
+ ve/cr momb(1) r
+ ve/cr enb(1) r
+ ve/cr pdgpr(1) i
+ ve/cr pdgtg(1) i
+ ve/cr nevnt(1) i
+ ve/cr freeN(1) r
+ ve/cr freeD(1) r
+ ve/cr clustP(1) r
+ ve/cr rM(1) r
+ ve/cr sA(1) r
+return
+*
+macro paramline xp=0.40 yp=0.96
+ ttemp   = temp(1)
+ tssse   = ssse(1)
+ teepr   = eepr(1)
+ tmomb   = momb(1)
+ tenb    = enb(1)
+ tfreeN  = freeN(1) 
+ tfreeD  = freeD(1) 
+ tclustP = clustP(1)
+ txrM    = rM(1)
+ txsA    = sA(1)
+ txtm = 't='//[ttemp]//' ss='//[tssse]//' eep='//[teepr]//' p='//[tmomb]_
+//' e='//[tenb]//' fN='//[tfreeN]//' fD='//[tfreeD]//' cP='//[tclustP]_
+//' rM='//[txrM]//' sA='//[txsA]
+ exec ~/PTOOL/snotes [xp] [yp] [txtm] 0. 0.25 40 0
+return
+*
+*
+macro makehbk
+ ve/cr nevts(1) r
+ ve/read nevts histnevt.out
+ 1d 1 'N events' 1 0. 2. 0.
+ put/cont 1 nevts
+ hi/fil 35 chips.hbook ! n
+ nt/create 20 'Incl' 43 //lun35 8096 _
+  Nevt  MtotD MtotR  Mprot Mneut Mdeut Mtrit MHe3  MHe4  Mgam  _
+  Mpim  Mpip  Mpi0   MKp   MK0   MKm   MaK0  Meta  Metap Mrhom _
+  Mrhop Mrho0 Momega Mphi  MKS0  MKSC  MaKS0 MaKSC Mf2   Ma2m  _
+  Ma2p  Ma20  Mf2p   ND    PDG   NS    NZ    NN    m     Px    _
+  Py    Pz    E
+ nt/read 20 tuplincl.out ! ! 9000000
+ nt/create 22 '3pi' 40 //lun35 8096 _
+  Nevt  MtotD MtotR  Mprot Mneut Mdeut Mtrit MHe3  MHe4  Mgam  _
+  Mpim  Mpip  Mpi0   MKp   MK0   MKm   MaK0  Meta  Metap Mrhom _
+  Mrhop Mrho0 Momega Mphi  MKS0  MKSC  MaKS0 MaKSC Mf2   Ma2m  _
+  Ma2p  Ma20  Mf2p   m3pi  m12   m13   m23   pdg1  pdg2  pdg3
+ nt/read 22 tuple3pi.out ! ! 9000000
+ nt/create 25 'EvtA' 33 //lun35 8096 _
+  Nevt  MtotD MtotR  Mprot Mneut Mdeut Mtrit MHe3  MHe4  Mgam  _
+  Mpim  Mpip  Mpi0   MKp   MK0   MKm   MaK0  Meta  Metap Mrhom _
+  Mrhop Mrho0 Momega Mphi  MKS0  MKSC  MaKS0 MaKSC Mf2   Ma2m  _
+  Ma2p  Ma20  Mf2p
+ nt/read 25 tuplevta.out ! ! 9000000
+ nt/create 27 'EvtQ' 33 //lun35 8096 _
+  Nevt  MtotD MtotR  Mprot Mneut Mdeut Mtrit MHe3  MHe4  Mgam  _
+  Mpim  Mpip  Mpi0   MKp   MK0   MKm   MaK0  Meta  Metap Mrhom _
+  Mrhop Mrho0 Momega Mphi  MKS0  MKSC  MaKS0 MaKSC Mf2   Ma2m  _
+  Ma2p  Ma20  Mf2p
+ nt/read 27 tuplevtq.out ! ! 9000000
+ hrout *
+ clo 35
+ ve/del nevts
+ hi/del *
+return

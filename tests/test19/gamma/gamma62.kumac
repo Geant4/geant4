@@ -1,0 +1,515 @@
+macro run f=1
+ nEvts = 2000 * [f]
+* exec gam62 targ=^27!Al  file=al1314   np=13 nn=14  runn=[nEvts]
+ exec gam62 targ=^40!Ca  file=ca2020   np=20 nn=20  runn=[nEvts]
+ exec result
+* --- Prints parameters of simulation ---
+* exec paramline [xp] [yp]
+ exec prieps
+return
+*
+macro runs z=13 f=1 
+ nEvts = 2000 * [f]
+if     [z] = 13 then
+ exec gam62 targ=^27!Al  file=al1314   np=13 nn=14  runn=[nEvts]
+elseif [z] = 20 then
+ exec gam62 targ=^40!Ca  file=ca2020   np=20 nn=20  runn=[nEvts]
+endif
+return
+*
+macro gam62 targ=^12!C file=c0606 np=6 nn=6 runn=2000
+*
+  hi/del *
+  ve/del *
+  rset
+  ~/paw/tools/pl.kumac
+  opt hori
+  exec creavec
+  do i = 35 , 47 | 39 | 
+   clo [i]
+  enddo
+*
+  if [runn] > 0 then
+    exec chips [targ]  [file]_1 [np] [nn] [runn] 59.0 [file]
+    exec chips [targ]  [file]_2 [np] [nn] [runn] 60.5 [file]
+    exec chips [targ]  [file]_3 [np] [nn] [runn] 62.0 [file]
+    exec chips [targ]  [file]_4 [np] [nn] [runn] 63.5 [file]
+    exec chips [targ]  [file]_5 [np] [nn] [runn] 65.0 [file]
+  goto break
+    exec chips [targ]  [file]_6 [np] [nn] [runn] 59.5 [file]
+    exec chips [targ]  [file]_7 [np] [nn] [runn] 60.0 [file]
+    exec chips [targ]  [file]_8 [np] [nn] [runn] 61.0 [file]
+    exec chips [targ]  [file]_9 [np] [nn] [runn] 61.5 [file]
+    exec chips [targ] [file]_10 [np] [nn] [runn] 62.5 [file]
+    exec chips [targ] [file]_11 [np] [nn] [runn] 63.0 [file]
+    exec chips [targ] [file]_12 [np] [nn] [runn] 64.0 [file]
+    exec chips [targ] [file]_13 [np] [nn] [runn] 64.5 [file]
+   break:
+  endif
+*
+  exec readpar pf=chipstest_[file]_3.in
+*
+  chain -gamma
+  hi/fil 35 chips_[file]_1.hbook
+  hrin 1
+  chain gamma //LUN35
+  do i = 2 , 13 | 5 | 13 | 
+    lun = 34 + [i]
+    hi/fil [lun] chips_[file]_[i].hbook
+    hrin 1 ! 99999
+    chain gamma //LUN[lun]
+  enddo
+  cd //gamma
+*
+  exec go [np]
+*
+  exec ~/PTOOL/black
+  set   mtyp
+  set   ksiz
+  igset mscf 1.
+*
+  exec prieps [file] 
+  if [runn] = 0 then
+    wait ' ' 2
+*    shell lpr -Patsbhpd [file].ps
+  endif
+*
+  next
+*
+return
+*
+macro chips targ=Al file=al1314_1 np=13 nn=14 runn=2000 egam=62. fil0=al1314
+  exec readpar pf=chipstest_[fil0].in
+*
+  pdg  = $sigma([np]*1000+[nn])
+  pdgt = 90000000 + [pdg]
+  ve/cr   work(2) i [pdgt] [runn]
+  ve/copy work(1:1) pdgtg
+  ve/copy work(2:2) nevnt
+  ve/del  work  
+  ve/cr   work(2) r [egam] [egam]
+  ve/copy work(1:1) enb
+  ve/copy work(2:2) momb
+  ve/del  work  
+  exec writepar pf=chipstest.in
+*  shell rm chips_[file].log
+  shell cp chipstest.in chipstest_[file].in
+  wait ' ' 2
+  shell ./CHIPStest  | > chips_[file].log
+  wait ' ' 2
+  exec makehbk
+  wait ' ' 2
+  shell mv chips.hbook chips_[file].hbook
+*
+return
+*
+macro readpar  pf=chipstest.in
+  ve/read  temp,ssse,eepr,nop,momb,enb,pdgpr,pdgtg,nevnt,freeN,freeD,clustP,rMed,solA_
+              [pf] 'F7.2,F5.2,F5.2,I4,F6.1,F6.1,2I9,I9,5F5.2' 'OC' -/*/  
+return
+macro writepar pf=chipstest.in
+  ve/write temp,ssse,eepr,nop,momb,enb,pdgpr,pdgtg,nevnt,freeN,freeD,clustP,rMed,solA_
+              [pf] 'F7.2,F5.2,F5.2,I4,F6.1,F6.1,2I9,I9,5F5.2' 'OC'
+return
+*
+macro creavec
+ ve/cr temp(1) r 
+ ve/cr ssse(1) r
+ ve/cr eepr(1) r
+ ve/cr nop(1) i
+ ve/cr momb(1) r
+ ve/cr enb(1) r
+ ve/cr pdgpr(1) i
+ ve/cr pdgtg(1) i
+ ve/cr nevnt(1) i
+ ve/cr freeN(1) r
+ ve/cr freeD(1) r
+ ve/cr clustP(1) r
+ ve/cr rMed(1) r
+ ve/cr solA(1) r
+return
+*
+macro hsolid id=66 hf=1 hn=60 col=black m=939.567 d=1
+  nb = $sigma([hn]-[hf]+1)
+  ve/cr wt([nb]) r
+  ve/cr wy([nb]) r
+  ve/cr wd([nb]) r
+  get/abs  [id]([hf]:[hn]) wt
+  get/cont [id]([hf]:[hn]) wy
+  get/err  [id]([hf]:[hn]) wd
+  ve/copy $sigma(sqrt(wt*(2.*[m]+wt))) wp
+  set errx 0.01
+  exec ~/PTOOL/white 8
+  set lwid 4
+  graph [nb] $sigma(0.5*(wp+wt)) $sigma(wy/wp) l
+  exec ~/PTOOL/[col]
+  set lwid 1
+  set dmod [d]
+  graph [nb] $sigma(0.5*(wp+wt)) $sigma(wy/wp) l
+  exec ~/PTOOL/black
+  set dmod 3
+  graph [nb] $sigma(0.5*(wp+wt)) $sigma(wy/wp) l
+  set lwid 1
+  set dmod 1
+*#  h/errors $sigma(0.5*(wp+wt)) $sigma(wy/wp) ? $sigma(wd/wp) [nb] 1 .01
+  ve/del wy,wd,wt,wp
+  set errx 
+return
+*
+macro prieps fnam=gam62 fil=99
+*
+  for/fil [fil] [fnam].eps
+  meta -[fil] -113
+  mess '*** Creating eps-file: '//[fnam]//'.eps'
+*  for/fil [fil] [fnam].ps
+*  meta -[fil] -115
+*  mess '*** Creating ps-file: '//[fnam]//'.ps'
+  pi/pl ' '
+  meta 0
+  for/clo [fil]
+return
+*
+macro paramline xp=0.05 yp=0.96
+ ttemp   = temp(1)
+ tssse   = ssse(1)
+ teepr   = eepr(1)
+ tmomb   = momb(1)
+ tenb    = enb(1)
+ tfreeN  = freeN(1) 
+ tfreeD  = freeD(1) 
+ tclustP = clustP(1)
+ trMed   = rMed(1)
+ tsolA   = solA(1)
+ txtm = 't='//[ttemp]//' ss='//[tssse]//' eep='//[teepr]//' p='//[tmomb]_
+//' e='//[tenb]//' fN='//[tfreeN]//' fD='//[tfreeD]//' cP='//[tclustP]_
+//' rM='//[trMed]//' sA='//[tsolA]
+ exec ~/PTOOL/snotes [xp] [yp] [txtm] 0. 0.25 40 0
+return
+*
+macro go np=13
+*
+  dcos = 0.10  | dOmega includes 2.*[dcos]
+  cut 0 -
+  cut $10 abs(Pz/sqrt(Px*Px+Py*Py+Pz*Pz)+0.866)<[dcos] | 150 deg
+  cut $11 abs(Pz/sqrt(Px*Px+Py*Py+Pz*Pz))<[dcos]       |  90 deg
+  cut $12 abs(Pz/sqrt(Px*Px+Py*Py+Pz*Pz)-0.500)<[dcos] |  60 deg
+  cut  $1 nd=0.and.E-m>0..and.(PDG=2212.or.(ns=0.and.nz=1.and.nn=0)) | proton
+  cut  $2 nd=0.and.E-m>0..and.ns=0.and.nz=1.and.nn=1                 | deuteron
+*
+1d 102 ' Proton kinetic energy' 60 0. 60.
+1d 103 ' cos([Q]?proton!)' 40 -1. 1.
+1d 104 ' Proton kinetic energy [Q] = 150 deg' 60 0.5 60.5
+1d 105 ' Proton kinetic energy [Q] =  90 deg' 60 0.5 60.5
+1d 106 ' Proton kinetic energy [Q] =  60 deg' 60 0.5 60.5
+*
+1d 202 ' Deuteron kinetic energy' 60 0. 60.
+1d 203 ' cos([Q]?deuteron!)' 40 -1. 1.
+1d 204 ' Deuteron kinetic energy [Q] = 150 deg' 60 0.5 60.5
+1d 205 ' Deuteron kinetic energy [Q] =  90 deg' 60 0.5 60.5
+1d 206 ' Deuteron kinetic energy [Q] =  60 deg' 60 0.5 60.5
+*
+2d 300 'T vs cos[Q], PDG=2212' 20 -1 1 20 -3 57 0 
+2d 301 'T vs cos[Q], PDG=90001000' 20 -1 1 20 -3 57 0 
+*
+call hbarx(0)
+opt zfl
+swi z
+zone 4 4
+opt liny
+nt/pl 20.(E-m)                            $1 -102
+nt/pl 20.Pz/sqrt(Px*Px+Py*Py+Pz*Pz)       $1 -103
+nt/pl 20.(E-m)     $1.and.$10 -104
+nt/pl 20.(E-m)     $1.and.$11 -105
+nt/pl 20.(E-m)     $1.and.$12 -106
+*
+nt/pl 20.(E-m)                            $2 -202
+nt/pl 20.Pz/sqrt(Px*Px+Py*Py+Pz*Pz)       $2 -203
+nt/pl 20.(E-m)     $2.and.$10 -204
+nt/pl 20.(E-m)     $2.and.$11 -205
+nt/pl 20.(E-m)     $2.and.$12 -206
+pi/del ' '
+*
+zone 2 1
+swi gz
+if [np] = 13 then
+  title '^27!Al([g],p) at E?[g]! = 59-65 MeV'
+elseif [np] = 20 then
+  title '^40!Ca([g],p) at E?[g]! = 59-65 MeV'
+endif
+igset mscf 1.
+nt/pl 20.(E-m)%pz/sqrt(Px*Px+Py*Py+Pz*Pz+.1e-6) pdg=2212                _
+ ! ! ! ! 300
+nt/pl 20.(E-m)%pz/sqrt(Px*Px+Py*Py+Pz*Pz+.1e-6) (ns=0.and.nz=1.and.nn=0)_
+ ! ! ! ! 301
+*
+clr
+zone 2 2
+if [np] = 13 then
+  title '^27!Al([g],p) at E?[g]! = 62 MeV   ^27!Al([g],d) at E?[g]! = 62 MeV'
+elseif [np] = 20 then
+  title '^40!Ca([g],p) at E?[g]! = 62 MeV   ^40!Ca([g],d) at E?[g]! = 62 MeV'
+else
+  title 'No target specified'
+endif
+set htyp 0
+opt logy
+call hbarx(0)
+hi/pl 102
+title ' '
+hi/pl 202
+hi/pl 103
+hi/pl 203
+*
+if [np] = 13 then
+  hi/fil 67 dinreg_al_0062.hbk ! n
+elseif [np] = 20 then
+  hi/fil 67 dinreg_ca_0062.hbk ! n
+endif
+hrout *
+clo 67
+*
+return
+*
+macro show 1=al 2='0062' 3=1000000 4=3.6
+dCosT = 2. * 0.10
+dT    = 1.         | (MeV) E'-interval
+d2pi  = 6.2831854  | (2pi)
+sgtot = [4]        | sigma_gamma_total (in mb)
+hi/del *
+file = 'dinreg_'//[1]//'_'//[2]//'.hbk'
+hi/fil 67 [file]
+hrin *
+ clo 67
+ nevts = $hinfo(1,'entries')
+weight = 1. / [nevts]
+weight = [weight] * [3]   | c.s. expressed in nb
+weight = [weight] * [4]   | mb
+weight = [weight] / [dT]
+weight = [weight] / [dCosT]
+weight = [weight] / [d2pi]
+add 102 102 102 [weight] 0.
+add 202 202 202 [weight] 0.
+add 104 104 104 [weight] 0.
+add 204 204 204 [weight] 0.
+add 105 105 105 [weight] 0.
+add 205 205 205 [weight] 0.
+add 106 106 106 [weight] 0.
+add 206 206 206 [weight] 0.
+opt logy
+set xlab 1.37
+exec ~/PTOOL/black
+null 70. 210. .006 400
+if [1] = 'ca' then
+  atitle 'k = (p?p!+T?p!)/2 (MeV)        ^!' _
+'d[s]/p?p!dE?p!d[W]?p! (nb MeV^-2! sr^-1!)                 ^!'
+else
+  atitle 'k = (p?p!+T?p!)/2 (MeV)          ^!'  ' '
+endif
+set dmod 1
+*
+exec vexpin [1]_p[2] a 24 938.273
+*#
+*#exec ~/PTOOL/green
+*#exec vexpin [1]_d[2] b 21 1875.61
+*#exec ~/PTOOL/black
+*
+if [1] = 'ca' then
+*#
+  exec hsolid 104 1 60 red    938.273 
+*#
+  exec hsolid 106 1 60 violet 938.273 
+endif
+exec hsolid 105 1 60 black 938.273
+*#
+*#exec hsolid 205 1 60 green 1875.61
+*#exec hsolid 205 1 60 black 1875.61 2
+exec ~/PTOOL/black
+opt liny
+set dmod
+*
+return
+*
+macro vexpin 1=al_p0062 2=a mt=24 m=938.273
+ve/read eex[2],sex[2],dsex[2] gamma_[1].vexp
+smm = sex[2](1)
+dmm = [smm]
+rng = dsex[2](1)
+srang = [rng]
+sbase = 2
+ve/copy $sigma(10.**(([sbase]*[dmm] -[srang]*sex[2])/[dmm])) sex
+ve/copy $sigma(10.**(([sbase]*[dmm] -[srang]*dsex[2])/[dmm])) dsex
+ve/copy $sigma(sqrt(eex[2]*(2.*[m]+eex[2]))) pex
+ve/copy $sigma((eex[2]+pex)/2.) kex[2]
+ve/copy $sigma(1000.*sex/pex) sex[2]              | Convert to nb
+ve/copy $sigma(1000.*(sex-dsex)/pex) dsex[2]
+ve/del pex,sex,dsex
+nexh = eex[2](1)
+nex  = [nexh]
+nex1 = [nexh] - 1 
+set dmod 1
+exec ~/PTOOL/vrebin kex[2](2:[nex]) sex[2](2:[nex]) dsex[2](2:[nex]) _
+                    [nex1] 3 xrb yrb dyrb 
+nrb = [@]
+h/errors xrb yrb ? dyrb [nrb] [mt] .25
+ve/del xrb,yrb,dyrb
+**h/errors kex[2](2:[nex]) sex[2](2:[nex]) _
+**                      ? dsex[2](2:[nex]) [nex1] [mt] .15
+*
+return
+*
+macro result 1=gz 2=4000 
+  Alias/cr  paperX '12.0' 
+  Alias/cr paperY '18.0'
+  exec ~/PTOOL/reset
+  exec ~/PTOOL/setpq
+opt vert
+hi/del *
+*title 'A([g],p) and A([g],d) spectral cross section at E?[g]!=59-65 MeV'
+title '^40!Ca([g],p) spectral cross section'
+zone 1 1
+opt ndat
+constal = 1000000 | mb to nb
+constca = 1000000 | 
+swi [1]
+*#exec show  al  0062  [constal] 3.6  |!!! sigma = 3.6 - table
+*#exec ~/PTOOL/notes .75 .92 '^27!Al' 0. .4 -40
+*#exec ~/PTOOL/snotes .30 .82 'protons' 0. .4 -40
+*#exec ~/PTOOL/snotes .72 .86 '[Q] = 90^o!' 0. .4 -40
+*#
+*#exec ~/PTOOL/green
+*#exec ~/PTOOL/snotes .10 .35 'deuterons' 0. .4 -40
+exec ~/PTOOL/black
+*
+exec show  ca  0062  [constca] 7.  |!!! sigma = 7. - total cross-section from table
+*#
+exec plcaex
+exec ~/PTOOL/notes .5 .92  'E?[g]!=62 MeV' 0. .4 -40
+*?*fun/pl x 30. 200. s
+*#exec ~/PTOOL/notes .75 .92 '^40!Ca' 0. .4 -40
+*#exec ~/PTOOL/snotes .30 .90 'protons' 0. .4 -40
+*#exec ~/PTOOL/snotes .72 .86 '[Q] = 90^o!' 0. .4 -40
+*#exec ~/PTOOL/green
+*#exec ~/PTOOL/snotes .10 .45 'deuterons' 0. .4 -40
+*#exec ~/PTOOL/snotes .20 .61 '[Q] = 90^o!'  -44. .4 -40
+*#
+exec ~/PTOOL/violet
+*#
+set mtyp 26
+exec ~/PTOOL/legend .15 .40 '[Q] =? ! 60^o!'  0. .4 -40
+*#
+exec ~/PTOOL/red
+*#
+set mtyp 27
+set mscf 1.5
+exec ~/PTOOL/legend .15 .26 '[Q] = 150^o!' 0. .4 -40
+*#
+exec ~/PTOOL/black
+*#
+set mtyp 24
+set mscf 1.0
+exec ~/PTOOL/legend .15 .33 '[Q] =? ! 90^o!'  0. .4 -40
+*
+return
+*
+macro gresult 1=z 2=1000 
+exec ~/PTOOL/reset
+title 'A([g],p) and A([g],d) spectral cross section at E?[g]!=59-65 MeV'
+zone 2 1
+opt ndat
+constal = [2]
+constca = [2]
+***constca = [constal] * 1.481
+swi [1]
+exec gshow  al  0062  [constal]
+exec ~/PTOOL/notes .65 .89 ' ' 0. .4 -40
+exec ~/PTOOL/snotes .65 .89 '^27!Al' 0. .4 -40
+exec ~/PTOOL/snotes .65 .75 '[Q] = 90^o!' 0. .4 -40
+*
+exec gshow  ca  0062  [constca]
+exec ~/PTOOL/notes .65 .89 ' ' 0. .4 -40
+exec ~/PTOOL/notes .65 .89 '^40!Ca' 0. .4 -40
+exec ~/PTOOL/snotes .65 .75 '[Q] = 90^o!' 0. .4 -40
+*
+return
+*
+macro plcaex m=939.567
+ve/read kex,sex150,dsex150,sex60,dsex60 gp_ca0060.vexp
+nexh = kex(1)
+nex  = [nexh]
+nex1 = [nexh] - 1
+sc150   =  sex150(1)
+sc150mm = dsex150(1)
+sc60   =  sex60(1)
+sc60mm = dsex60(1)
+ve/copy $sigma(60.-1000.*kex) kex
+ve/copy $sigma(sqrt(kex*(2.*[m]+kex))) wpex
+ve/copy $sigma((kex+wpex)/2.) kex
+ve/copy $sigma(1000.*sex150*[sc150]/[sc150mm]/wpex) scex150
+ve/copy $sigma(1000.*(dsex150-sex150)*[sc150]/[sc150mm]/wpex) dscex150
+ve/copy $sigma(1000.*sex60*[sc60]/[sc60mm]/wpex) scex60
+ve/copy $sigma(1000.*(dsex60-sex60)*[sc60]/[sc60mm]/wpex) dscex60
+*
+exec ~/PTOOL/violet
+set dmod 1
+mt = 26
+exec ~/PTOOL/vrebin kex(2:[nex]) scex60(2:[nex]) dscex60(2:[nex]) _
+                    [nex1] 3 xrb yrb dyrb 
+nrb = [@]
+h/errors xrb yrb ? dyrb [nrb] [mt] .25
+ve/del xrb,yrb,dyrb
+*#h/errors kex(2:[nex]) scex60(2:[nex]) _
+*#                  ? dscex60(2:[nex]) [nex1] [mt] .15
+*
+exec ~/PTOOL/red
+mt = 27
+exec ~/PTOOL/vrebin kex(2:[nex]) scex150(2:[nex]) dscex150(2:[nex]) _
+                    [nex1] 3 xrb yrb dyrb 
+nrb = [@]
+h/errors xrb yrb ? dyrb [nrb] [mt] .35
+ve/del xrb,yrb,dyrb
+*#h/errors kex(2:[nex]) scex150(2:[nex]) _
+*#                  ? dscex150(2:[nex]) [nex1] [mt] .25
+exec ~/PTOOL/black
+*
+return
+
+*
+macro makehbk
+ ve/cr nevts(1) r
+ ve/read nevts histnevt.out
+ 1d 1 'N events' 1 0. 2. 0.
+ put/cont 1 nevts
+ hi/fil 35 chips.hbook ! n
+ nt/create 20 'Incl' 43 //lun35 8096 _
+  Nevt  MtotD MtotR  Mprot Mneut Mdeut Mtrit MHe3  MHe4  Mgam  _
+  Mpim  Mpip  Mpi0   MKp   MK0   MKm   MaK0  Meta  Metap Mrhom _
+  Mrhop Mrho0 Momega Mphi  MKS0  MKSC  MaKS0 MaKSC Mf2   Ma2m  _
+  Ma2p  Ma20  Mf2p   ND    PDG   NS    NZ    NN    m     Px    _
+  Py    Pz    E
+ nt/read 20 tuplincl.out ! ! 9000000
+ nt/create 22 '3pi' 40 //lun35 8096 _
+  Nevt  MtotD MtotR  Mprot Mneut Mdeut Mtrit MHe3  MHe4  Mgam  _
+  Mpim  Mpip  Mpi0   MKp   MK0   MKm   MaK0  Meta  Metap Mrhom _
+  Mrhop Mrho0 Momega Mphi  MKS0  MKSC  MaKS0 MaKSC Mf2   Ma2m  _
+  Ma2p  Ma20  Mf2p   m3pi  m12   m13   m23   pdg1  pdg2  pdg3
+ nt/read 22 tuple3pi.out ! ! 9000000
+ nt/create 25 'EvtA' 33 //lun35 8096 _
+  Nevt  MtotD MtotR  Mprot Mneut Mdeut Mtrit MHe3  MHe4  Mgam  _
+  Mpim  Mpip  Mpi0   MKp   MK0   MKm   MaK0  Meta  Metap Mrhom _
+  Mrhop Mrho0 Momega Mphi  MKS0  MKSC  MaKS0 MaKSC Mf2   Ma2m  _
+  Ma2p  Ma20  Mf2p
+ nt/read 25 tuplevta.out ! ! 9000000
+ nt/create 27 'EvtQ' 33 //lun35 8096 _
+  Nevt  MtotD MtotR  Mprot Mneut Mdeut Mtrit MHe3  MHe4  Mgam  _
+  Mpim  Mpip  Mpi0   MKp   MK0   MKm   MaK0  Meta  Metap Mrhom _
+  Mrhop Mrho0 Momega Mphi  MKS0  MKSC  MaKS0 MaKSC Mf2   Ma2m  _
+  Ma2p  Ma20  Mf2p
+ nt/read 27 tuplevtq.out ! ! 9000000
+ hrout *
+ clo 35
+ ve/del nevts
+ hi/del *
+return
+
+
+
