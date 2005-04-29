@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation70.cc,v 1.4 2005-04-08 12:39:58 vnivanch Exp $
+// $Id: G4eplusAnnihilation70.cc,v 1.5 2005-04-29 16:58:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -72,6 +72,9 @@ void G4eplusAnnihilation70::InitialiseProcess(const G4ParticleDefinition*)
   if(!isInitialised) {
     isInitialised = true;
     SetIntegral(true);
+    //    SetVerboseLevel(3);
+    SetBuildTableFlag(true);
+    SetStartFromNullFlag(false);
     SetSecondaryParticle(G4Gamma::Gamma());
     G4double emin = 0.1*keV;
     G4double emax = 100.*TeV;
