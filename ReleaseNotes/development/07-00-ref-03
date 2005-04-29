@@ -90,7 +90,7 @@ processes/electromagnetic/highenergy             highenergy-V07-00-00
 ------------------------------------
 - Migrated to new optimised interfaces from 'utils' classes.
 
-processes/electromagnetic/muons                  muons-V07-00-01
+processes/electromagnetic/muons                  muons-V07-00-02
 -------------------------------
 - Added new class G4EnergyLossForExtrapolator.
 - Adopt G4EmCorrections for muon ionisation.
@@ -108,7 +108,7 @@ processes/electromagnetic/standard               stand-V07-00-07
 - Using G4EmCorrections for hadrons/ions ionisation.
 - Migrated to new optimised interfaces from 'utils' classes.
 
-processes/electromagnetic/utils                  utils-V07-00-06
+processes/electromagnetic/utils                  utils-V07-00-08
 -------------------------------
 - Added method SelectRandomAtom() to G4VEmModel.
 - Migrated G4VEmProcess to use G4ParticleChangeForGamma
