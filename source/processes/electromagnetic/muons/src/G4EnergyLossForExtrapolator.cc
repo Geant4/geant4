@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.cc,v 1.1 2005-04-08 14:00:17 vnivanch Exp $
+// $Id: G4EnergyLossForExtrapolator.cc,v 1.2 2005-04-29 10:05:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -218,7 +218,7 @@ void G4EnergyLossForExtrapolator::Initialisation()
   builder.BuildRangeTable(dedxProton, rangeProton);  
   builder.BuildInverseRangeTable(rangeProton, invRangeProton);  
 
-};
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

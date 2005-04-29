@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.30 2005-04-19 15:42:59 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.31 2005-04-29 10:08:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -205,10 +205,10 @@ protected:
 
 inline G4VEmModel::G4VEmModel(const G4String& nam): 
   name(nam), lowLimit(0.0), highLimit(0.0), fluc(0), pParticleChange(0) 
-{};
+{}
 
 inline G4VEmModel::~G4VEmModel() 
-{};
+{}
 
 inline G4double G4VEmModel::HighEnergyLimit()
 {
@@ -354,7 +354,7 @@ inline G4double G4VEmModel::GeomPathLength(G4PhysicsTable*,
 inline G4double G4VEmModel::TrueStepLength(G4double geomStepLength) 
 {
   return geomStepLength;
-};
+}
 
 inline void G4VEmModel::DefineForRegion(const G4Region*) 
 {}
