@@ -1,6 +1,6 @@
 *-------------------------------------------------------------
 * 29-Apr-2005    Compare ratio e/pi vs. beam energy.  
-*   	         Input:  beam_energies.txt : binning edges in x;
+*                Input:  beam_energies.txt : energies values;
 *                        ratios_e_pi.txt-a  
 *                        ratios_e_pi.txt-b
 *                The kumac should be able to work even if one
@@ -10,28 +10,55 @@
 MESSAGE ' '
 MESSAGE '  --- START KUMAC  ratio_e_pi.kumac  --- ' 
 *
+xmin = 999.9
+xmax = 0.0
 IF ($FEXIST(beam_energies.txt)) THEN
   VEC/READ vx  beam_energies.txt
+  xmin = 0.0
+  xmax = $RSIGMA(1.0+int(VMAX(vx)*1.1))
+***  MESSAGE ' xmax=', [xmax]
 ELSE
-  message ' File beam_energies.txt NOT found! '
+  MESSAGE ' File beam_energies.txt NOT found! '
   exit
 ENDIF
 *  
+y1min = 999.9
+y1max = 0.0 
 IF ($FEXIST(ratios_e_pi.txt-a)) THEN
   VEC/READ vy1 ratios_e_pi.txt-a
-***  message ' vy1 : '
+***  MESSAGE ' vy1 : '
 ***  vec/print vy1
-  BINS 100 'Ratio e/pi' $VLEN(vy1,1) vx
-  HISTO/PUT/CONT 100 vy1
+***  y1min = $RSIGMA(VMIN(vy1)*0.9)
+  y1min = 0.0
+  y1max = $RSIGMA(VMAX(vy1)*1.1)
+***  MESSAGE ' y1min=', [y1min]
+***  MESSAGE ' y1max=', [y1max]
 ENDIF
 *
+y2min = 999.9
+y2max = 0.0 
 IF ($FEXIST(ratios_e_pi.txt-b)) THEN
   VEC/READ vy2 ratios_e_pi.txt-b
-***  message ' vy1 : '
-***  vec/print vy1
-  BINS 200 'Ratio e/pi' $VLEN(vy2,1) vx
-  HISTO/PUT/CONT 200 vy2
+***  MESSAGE ' vy2 : '
+***  vec/print vy2
+***  y2min = $RSIGMA(VMIN(vy2)*0.9)
+  y2min = 0.0
+  y2max = $RSIGMA(VMAX(vy2)*1.1)
+***  MESSAGE ' y2min=', [y2min]
+***  MESSAGE ' y2max=', [y2max]
 ENDIF
+*
+ymin = [y1min]
+IF ( [y2min].LT.[ymin] ) THEN
+   ymin = [y2min]
+ENDIF
+***MESSAGE ' ymin=' [ymin]
+*
+ymax = [y1max]
+IF ( [y2max].GT.[ymax] ) THEN
+   ymax = [y2max]
+ENDIF
+***MESSAGE ' ymax=' [ymax]
 *
 FOR/FILE 20 ratio_e_pi.ps
 META 20 -111
@@ -41,21 +68,15 @@ OPT UTIT
 ZONE 1 1
 SET KSIZ 0.3
 *
-SET MTYP 20
-SET PMCI 2
+NULL [xmin] [xmax] [ymin] [ymax]
+*
 IF ($FEXIST(ratios_e_pi.txt-a)) THEN 
-  HISTO/PLOT 100 p
-  SET MTYP 21
+  SET PMCI 2
+  GRAPHICS/HPLOT/SYMBOLS vx vy1 $VLEN(vy1,1) 20 0.20 
+ENDIF
+IF ($FEXIST(ratios_e_pi.txt-b)) THEN
   SET PMCI 4
-  IF ($FEXIST(ratios_e_pi.txt-b)) THEN
-    HISTO/PLOT 200 sp
-  ENDIF
-ELSE 
-  SET MTYP 21
-  SET PMCI 4
-  IF ($FEXIST(ratios_e_pi.txt-b)) THEN
-    HISTO/PLOT 200 p
-  ENDIF
+  GRAPHICS/HPLOT/SYMBOLS vx vy2 $VLEN(vy2,1) 21 0.20
 ENDIF
 *
 ATITLE 'Beam energy' 'e/pi'

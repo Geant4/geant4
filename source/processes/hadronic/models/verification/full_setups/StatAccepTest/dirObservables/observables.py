@@ -65,8 +65,8 @@
 #                                   been retrieved: of course, this should
 #                                   never happens, and so this file should
 #                                   always be empty if everything is ok.
-#    o  The bin edges for the beam energy values, used by the 
-#       kumacs to plot some quantities as a function of the beam energy.
+#    o  The beam energy values, used by the kumacs to plot some quantities
+#       as a function of the beam energy.
 #    o  A set of ascii files, extracted from the list of found
 #       simulation log files, whose names are:
 #          -  energy_resolutions.txt-LABEL
@@ -144,7 +144,9 @@ nonRetrievedFiles = open( "listNonRetrievedFiles.txt", "w" )
 
 def printParameters() :
     # 
-    # This function prints out the values of the various parameters.
+    # This function prints out the values of the various parameters,
+    # and also produces the file  beam_energies.txt  which is then
+    # used by the kumacs for making the plots.
 
     print '  --- Start function  printParameters  --- '
 
@@ -166,103 +168,20 @@ def printParameters() :
     for iParticle in tupleParticles :
         print '                   ', iParticle
 
+    fileEnergyValues = open( "beam_energies.txt", "w" )
+    createdFiles.write( "beam_energies.txt" + "\n" )
     print '  Beam Energy values : '
     for iE in tupleEnergies :
         print '                       ', iE
+        E = float( iE.replace("GeV","") )        
+        fileEnergyValues.write( str( E ) + "\n" )
+    fileEnergyValues.close()
 
     print '  Number of Events : '
     for iN in tupleEvents :
         print '                     ', iN
 
     print '  --- End   function  printParameters  --- '
-    return
-
-
-def findEnergyBins() :
-    # 
-    # This function produces the file   beam_energies.txt
-    # which contains the bin edges for the beam energies,
-    # needed by the kumacs to plot various observables as
-    # a function of the beam energy.
-    # For "normal" energy values, the bin edges are chosen
-    # such that these energy values are at the center of
-    # the bins. If this is not possible, then a warning is
-    # print, and anyhow each bin contains one and only one
-    # value of beam energy.
-
-    print '  --- Start function  findEnergyBins  --- '
-
-    # Put the string values of the energies in a list of
-    # floating numbers, and check that the energies values
-    # are positive and increasing. If there are no energies,
-    # or some are negative, or not all in increasing order,
-    # then exit without writing the file.
-    listE = []
-    energiesOK = 1
-    previousE = 0.0
-    N = 0
-    for iE in tupleEnergies : 
-        N += 1
-        E = float( iE.replace("GeV","") )
-        listE.append( E )
-        if ( E < previousE ) :
-            print ' ERROR : non increasing energy values! '
-            energiesOK = 0
-        previousE = E
-    if ( N < 1 ) :
-        print ' ERROR : no energy values! '
-        energiesOK = 0
-    if ( not energiesOK ) :
-        return
-
-    # Add a fake large value to the end of the list of energies,
-    # to simplify the algorithm for the bin determination.
-    listE.append( 999999.9 )
-    
-    fileEnergyBins = open( "beam_energies.txt", "w" )
-    createdFiles.write( "beam_energies.txt" + "\n" )
-
-    # The algorithm for finding the bin edges is very simple:
-    # the lowest edge is defined as the middle position between
-    # 0 and the first energy value; the other ones, are the
-    # symmetric positions with respect the energy values, in
-    # the normal case that these values do not overcome the
-    # next energy value. If instead this condition happens, then
-    # the bin edge is chosen to still guarantee one and only one
-    # energy value per bin, but not anymore positioned at the
-    # center of the beam.
-    currentEdge = (listE[0] - 0.0) / 2.0
-    fileEnergyBins.write( str( currentEdge ) + "\n" )
-    for i in range( N ) :
-        # print ' i=', i , '  E=', listE[ i ]
-        step = listE[ i ] - currentEdge
-        if ( listE[ i ] + step - listE[ i+1 ] < 0.0000001 ) :
-            currentEdge = listE[ i ] + step
-        else :
-            currentEdge = ( listE[ i ] + listE[ i+1 ] ) / 2.0
-            print ' WARNING : strange sequence of energies '
-            print '    [ ', i-1, ' ] = ', listE[ i-1 ] 
-            print '    [ ', i, ' ] = ', listE[ i ] 
-            print '    [ ', i+1, ' ] = ', listE[ i+1 ] 
-        fileEnergyBins.write( str( currentEdge ) + "\n" )
-
-    fileEnergyBins.close()
-
-    # Debugging: print out the content of the file, i.e. the
-    # bin edges, and the central values.
-    #fileEnergyBins = open( "beam_energies.txt", "r" )
-    #tupleEnergyBins = fileEnergyBins.readlines()
-    #previous = -999.9
-    #next = 0.0
-    #for value in tupleEnergyBins :
-    #    next = float( value.split()[0] )
-    #    if ( previous >= 0.0 ) :
-    #        mean = (previous + next) / 2.0
-    #        print ' [ ', previous, ' , ', next, ' ] :', mean 
-    #    previous = next   
-    #fileEnergyBins.close()
-    
-    print '  --- End   function  findEnergyBins  --- '
     return
 
 
@@ -666,7 +585,6 @@ print '  ========== START observables.py ========== '
 
 # Print the parameters and calculate the bins for the beam energy.
 printParameters();
-findEnergyBins()
 
 # Keep track of all the files created by this script.
 createdFiles.write( "listFoundFiles.txt" + " \n" )

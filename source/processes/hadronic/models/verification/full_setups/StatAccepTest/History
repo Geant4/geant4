@@ -1,6 +1,14 @@
                  History file
                  ------------
 
+29-Apr-2005 - A.Ribon (statAccepTest-V07-00-05)
+- The kumacs in dirObservables have been modified
+  (and a minor modification in the python script
+   as well) in order to use vectors directly for
+  plotting rather than histograms as before (which
+  requires unnatural binning along the x-axis).
+
+
 29-Apr-2005 - A.Ribon (statAccepTest-V07-00-04)
 - Added a new sudirectory, dirObservables, which
   contains a python script and some kumacs useful
