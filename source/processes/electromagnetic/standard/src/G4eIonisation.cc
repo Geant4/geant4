@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisation.cc,v 1.40 2005-04-08 12:39:58 vnivanch Exp $
+// $Id: G4eIonisation.cc,v 1.41 2005-05-01 20:26:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -69,6 +69,7 @@
 #include "G4Electron.hh"
 #include "G4MollerBhabhaModel.hh"
 #include "G4UniversalFluctuation.hh"
+#include "G4BohrFluctuations.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -102,6 +103,7 @@ void G4eIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part
     SetSecondaryParticle(theElectron);
 
     flucModel = new G4UniversalFluctuation();
+    //flucModel = new G4BohrFluctuations();
 
     G4VEmModel* em = new G4MollerBhabhaModel();
     em->SetLowEnergyLimit(0.1*keV);

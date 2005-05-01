@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.55 2005-04-13 09:44:47 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.56 2005-05-01 20:26:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -669,6 +669,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     G4cout << "Before fluct: eloss(MeV)= " << eloss/MeV
            << " tmax= " << tmax
            << " e-eloss= " << preStepKinEnergy-eloss
+           << "  fluct= " << lossFluctuationFlag 
            << G4endl;
   }
   */
@@ -676,7 +677,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   // Sample fluctuations
   if (lossFluctuationFlag && eloss < preStepKinEnergy) {
 
-    currentModel->GetModelOfFluctuations()->
+    eloss = currentModel->GetModelOfFluctuations()->
       SampleFluctuations(currentMaterial,dynParticle,tmax,length,eloss);
   }
   /*
@@ -1303,8 +1304,8 @@ void G4VEnergyLossProcess::SetLinearLossLimit(G4double val)
 
 void G4VEnergyLossProcess::SetLossFluctuations(G4bool val)
 {
-  if(val && lossFluctuationArePossible)
-    lossFluctuationFlag = val;
+  if(val && !lossFluctuationArePossible) return;
+  lossFluctuationFlag = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
