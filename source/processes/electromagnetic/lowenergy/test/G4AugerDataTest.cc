@@ -62,64 +62,89 @@ int main()
   G4cout << "The atom of atomic number "<<Z<<" has "
 	 << vac<<" vacancies "<<G4endl;
   G4cout << "Enter the index of the main vacancy" << G4endl;
+  G4int a, b;
   G4int vacancyIndex;
-  G4cin >> vacancyIndex;
+  G4cin >> a;
 
-   G4int n = dataSet->NumberOfTransitions(Z, vacancyIndex);
+  if (a == -1)
+    {
+      a = 0;
+      b = vac-1;
+    }
+  else { b = a;} 
 
-  G4cout << " Testing VacancyId..."<< G4endl;
+  for (vacancyIndex = a; vacancyIndex<=b; vacancyIndex++)
+    {
 
+      G4int n = dataSet->NumberOfTransitions(Z, vacancyIndex);
 
-   G4int id = dataSet->VacancyId(Z, vacancyIndex);
-   G4cout << " The shell whose index is " <<vacancyIndex  
-	  << " has identity " << id << G4endl;
-   G4cout <<" Electrons can reach it from "<< n <<" shells."<<G4endl;
-
-   G4cout << "Enter the index of the starting shell of the electron transition" << G4endl;
-   G4int initIndex;
-   G4cin >>initIndex;
-
-   G4int startingShellId = dataSet->StartShellId(Z, vacancyIndex, initIndex);
-
-   G4cout << " The shell whose index is " <<initIndex  
-	  << " has identity " << startingShellId << G4endl;
-
-   G4int nAuger = dataSet->NumberOfAuger(Z, vacancyIndex, startingShellId);
+      G4cout << " Testing VacancyId..."<< G4endl;
 
 
-   G4cout <<" Being a transition electron from here, an auger electron could came from  "
-	  << nAuger <<" shells."<<G4endl;
+      G4int id = dataSet->VacancyId(Z, vacancyIndex);
+      G4cout << " The shell whose index is " <<vacancyIndex  
+	     << " has identity " << id << G4endl;
+      G4cout <<" Electrons can reach it from "<< n <<" shells."<<G4endl;
 
+      G4int a1 = 0;
 
-   G4cout << "Enter the index of the auger electron originating  shell" << G4endl;
-   G4int augerIndex;
-   G4cin >>augerIndex;
+      if (a == b) {
+	G4cout << "Enter the index of the starting shell of the electron transition" << G4endl;
+	G4cin >>a1;
+	n = a1;
+	if (a1 >=n) G4Exception("max Index number must be less than number of available shells");
+      }
+      for (G4int initIndex = a1; initIndex < n; initIndex++){
 
-  G4cout << " Testing StartShellEnergy..."<< G4endl;
+	G4int startingShellId = dataSet->StartShellId(Z, vacancyIndex, initIndex);
+	
+	G4cout << " The shell whose index is " <<initIndex  
+	       << " has identity " << startingShellId << G4endl;
+	
+	G4int nAuger = dataSet->NumberOfAuger(Z, vacancyIndex, startingShellId);
+	
+	G4int a2 = 0;
+	if (a == b) {	
+	  G4cout <<" Being a transition electron from here, an auger electron could came from  "
+		 << nAuger <<" shells."<<G4endl;	  
+	  G4cout << "Enter the index of the auger electron originating  shell" << G4endl;	
+	  G4cin >>a2;
+	  n = a2;
+	  
+	  if (a2 >= nAuger) G4Exception("max Index number must be less than number of available shells");
+	}	
 
-   G4double startingShellEnergy = dataSet-> StartShellEnergy(Z, vacancyIndex, startingShellId, augerIndex);
+	for (G4int augerIndex = a2; augerIndex < nAuger; augerIndex++){
 
-  G4cout << " Testing StartShellProb..."<< G4endl;
+	G4cout << " Testing StartShellEnergy..."<< G4endl;
+	
+	G4double startingShellEnergy = dataSet-> StartShellEnergy(Z, vacancyIndex, startingShellId, augerIndex);
+	
+	G4cout << " Testing StartShellProb..."<< G4endl;
+	
+	G4double startingShellProb = dataSet-> StartShellProb(Z, vacancyIndex, startingShellId, augerIndex);
+	G4int augerShellId = dataSet-> AugerShellId(Z, vacancyIndex, startingShellId, augerIndex);
+	G4cout <<" The identity of the starting shell is "<<augerShellId<<G4endl;
+	G4cout<<" The energy of the transition to the final shell is "
+	      << startingShellEnergy<< " MeV "<<G4endl;
+	G4cout<<" The probability of the transition to the final shell is "
+	      <<startingShellProb <<G4endl;
+	
+	
+	G4cout <<" The identity of the auger originating shell is "<<augerShellId<<G4endl;
 
-   G4double startingShellProb = dataSet-> StartShellProb(Z, vacancyIndex, startingShellId, augerIndex);
-   G4int augerShellId = dataSet-> AugerShellId(Z, vacancyIndex, startingShellId, augerIndex);
-   G4cout <<" The identity of the starting shell is "<<augerShellId<<G4endl;
-   G4cout<<" The energy of the transition to the final shell is "
-	 << startingShellEnergy<< " MeV "<<G4endl;
-   G4cout<<" The probability of the transition to the final shell is "
-	 <<startingShellProb <<G4endl;
-
-
-   G4cout <<" The identity of the auger originating shell is "<<augerShellId<<G4endl;
-
-   /*
-   G4cout << "PRINT DATA"<<G4endl;
-   
-   dataSet->PrintData(Z);
-   */
-   delete dataSet;
-   
-   G4cout << "END OF THE MAIN PROGRAM" << G4endl;
+	}
+      }
+    }
+  
+  /*
+    G4cout << "PRINT DATA"<<G4endl;
+    
+    dataSet->PrintData(Z);
+  */
+  delete dataSet;
+  
+  G4cout << "END OF THE MAIN PROGRAM" << G4endl;
 }
 
 
