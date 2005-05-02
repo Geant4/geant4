@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.26 2005-04-29 18:04:48 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.27 2005-05-02 12:43:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -46,7 +46,6 @@
 //
 // Class Description:
 //
-// It is the unified process for e+ annililation at rest and in fly.
 
 // -------------------------------------------------------------------
 //
@@ -335,8 +334,15 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 
 void G4VEmProcess::PrintInfoDefinition()
 {
-  if(0 < verboseLevel) {
-    G4cout << G4endl << GetProcessName() << ":   tables are built for  "
+  if(verboseLevel > 0) {
+    G4cout << G4endl << GetProcessName() << ": " ;
+    PrintInfo();
+  }
+
+  if (!buildLambdaTable)  return;
+  
+  if(verboseLevel > 0) {
+    G4cout << "      tables are built for  "
            << particle->GetParticleName()
            << G4endl
            << "      Lambda tables from "
@@ -345,16 +351,15 @@ void G4VEmProcess::PrintInfoDefinition()
            << G4BestUnit(maxKinEnergy,"Energy")
            << " in " << nLambdaBins << " bins."
            << G4endl;
-    PrintInfo();
   }
 
-  if(1 < verboseLevel) {
+  if(verboseLevel > 1) {
     G4cout << "Tables are built for " << particle->GetParticleName()
            << G4endl;
 
-    if(2 < verboseLevel) {
-      G4cout << "LambdaTable address= " << theLambdaTable << G4endl;
-      if(theLambdaTable) G4cout << (*theLambdaTable) << G4endl;
+  if(verboseLevel > 2) {
+    G4cout << "LambdaTable address= " << theLambdaTable << G4endl;
+    if(theLambdaTable) G4cout << (*theLambdaTable) << G4endl;
     }
   }
 }

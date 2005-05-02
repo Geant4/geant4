@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect70.hh,v 1.1 2005-04-21 16:09:48 vnivanch Exp $
+// $Id: G4PhotoElectricEffect70.hh,v 1.2 2005-05-02 12:44:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,6 +50,7 @@
 //           distribution (mma)
 // 13-08-04, suppress icc file; make public ComputeCrossSectionPerAtom() (mma)
 // 21-04-05, Redesign - use G4VEmProcess interface (V.Ivantchenko)
+// 02-05-05, move ParticleChange actions in model (mma)
 // -----------------------------------------------------------------------------
 
 // class description
@@ -99,10 +100,6 @@ protected:
 
 private:
 
-  // hide assignment operator as private
-  G4PhotoElectricEffect70& operator=(const G4PhotoElectricEffect70 &right);
-  G4PhotoElectricEffect70(const G4PhotoElectricEffect70& );
-
   G4bool          isInitialised;
 };
 
@@ -121,7 +118,6 @@ inline std::vector<G4DynamicParticle*>* G4PhotoElectricEffect70::SecondariesPost
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp)
 {
-  fParticleChange.ProposeTrackStatus(fStopAndKill);
   return model->SampleSecondaries(couple, dp);
 }
 

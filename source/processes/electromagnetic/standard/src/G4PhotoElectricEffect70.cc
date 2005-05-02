@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PhotoElectricEffect70.cc,v 1.1 2005-04-21 16:09:48 vnivanch Exp $
+// $Id: G4PhotoElectricEffect70.cc,v 1.2 2005-05-02 12:44:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -99,7 +99,7 @@ void G4PhotoElectricEffect70::InitialiseProcess(const G4ParticleDefinition*)
 
 void G4PhotoElectricEffect70::PrintInfo()
 {
-  G4cout << "      Total cross sections from Sandia parametrisation. "
+  G4cout << " Total cross sections from Sandia parametrisation. "
          << G4endl;
 }
 

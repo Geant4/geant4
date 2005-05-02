@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PEEffectModel.cc,v 1.1 2005-04-21 16:09:48 vnivanch Exp $
+// $Id: G4PEEffectModel.cc,v 1.2 2005-05-02 12:44:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -97,48 +97,41 @@ std::vector<G4DynamicParticle*>* G4PEEffectModel::SampleSecondaries(
 
   // select randomly one element constituing the material.
   const G4Element* anElement = SelectRandomAtom(aMaterial,theGamma,energy);
-
+  
   //
   // Photo electron
   //
-
-  G4int nShells = anElement->GetNbOfAtomicShells();
-  G4int n  = -1;
-  G4double elocal = energy;
-
-  // Select atomic shell
-
-  for(G4int i=0; i<nShells; i++) {
-    if(energy>anElement->GetAtomicShell(i)) {
-      n = G4int(G4double(nShells - i)*G4UniformRand()) + i;
-      break;
-    }
-  }
   std::vector<G4DynamicParticle*>* fvect = new std::vector<G4DynamicParticle*>;
 
-  if (n>=0) {
+  // Select atomic shell
+  G4int nShells = anElement->GetNbOfAtomicShells();
+  G4int i  = 0;  
+  while ((i<nShells) && (energy<anElement->GetAtomicShell(i))) i++;
 
-    G4double ElecKineEnergy = energy - anElement->GetAtomicShell(n);
+  // no shell available
+  if (i == nShells) return fvect;
+  
+  G4double bindingEnergy  = anElement->GetAtomicShell(i);
+  G4double ElecKineEnergy = energy - bindingEnergy;
 
-    if (ElecKineEnergy > fminimalEnergy) {
-
-      // direction of the photo electron
-
-      elocal -= ElecKineEnergy;
-      G4double cosTeta = ElecCosThetaDistribution(ElecKineEnergy);
-      G4double sinTeta = sqrt(1.-cosTeta*cosTeta);
-      G4double Phi     = twopi * G4UniformRand();
-      G4double dirx = sinTeta*cos(Phi),diry = sinTeta*sin(Phi),dirz = cosTeta;
-      G4ThreeVector ElecDirection(dirx,diry,dirz);
-      ElecDirection.rotateUz(PhotonDirection);
-      //
-      G4DynamicParticle* aParticle = new G4DynamicParticle (
-                        theElectron,ElecDirection, ElecKineEnergy);
-      fvect->push_back(aParticle);
+  if (ElecKineEnergy > fminimalEnergy)
+    {
+     // direction of the photo electron
+     //
+     G4double cosTeta = ElecCosThetaDistribution(ElecKineEnergy);
+     G4double sinTeta = sqrt(1.-cosTeta*cosTeta);
+     G4double Phi     = twopi * G4UniformRand();
+     G4double dirx = sinTeta*cos(Phi),diry = sinTeta*sin(Phi),dirz = cosTeta;
+     G4ThreeVector ElecDirection(dirx,diry,dirz);
+     ElecDirection.rotateUz(PhotonDirection);
+     //
+     G4DynamicParticle* aParticle = new G4DynamicParticle (
+                       theElectron,ElecDirection, ElecKineEnergy);
+     fvect->push_back(aParticle);
     }
-  }
-   //
-  fParticleChange->ProposeLocalEnergyDeposit(elocal);
+
+  fParticleChange->ProposeTrackStatus(fStopAndKill);   
+  fParticleChange->ProposeLocalEnergyDeposit(bindingEnergy);
   return fvect;
 }
 

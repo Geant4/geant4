@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PEEffectModel.hh,v 1.1 2005-04-21 16:09:48 vnivanch Exp $
+// $Id: G4PEEffectModel.hh,v 1.2 2005-05-02 12:44:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -82,10 +82,6 @@ protected:
   virtual G4double ElecCosThetaDistribution(G4double ElecKineEnergy);
 
 private:
-
-  // hide assignment operator
-  G4PEEffectModel & operator=(const G4PEEffectModel &right);
-  G4PEEffectModel(const  G4PEEffectModel&);
 
   G4ParticleDefinition*     theGamma;
   G4ParticleDefinition*     theElectron;
