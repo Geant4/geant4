@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsScene.hh,v 1.11 2005-01-27 20:01:11 johna Exp $
+// $Id: G4VGraphicsScene.hh,v 1.12 2005-05-03 17:34:44 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // John Allison  19th July 1996
 //
@@ -63,30 +63,6 @@ class G4NURBS;
 class G4VGraphicsScene {
 
 public: // With description
-
-  ///////////////////////////////////////////////////////////////////
-  // Temporary migration functions.
-
-  virtual void PreAddThis (const G4Transform3D& objectTransformation,
-			   const G4VisAttributes& visAttribs) {
-    PreAddSolid(objectTransformation, visAttribs);
-  }
-
-  virtual void PostAddThis () {PostAddSolid();}
-
-  virtual void AddThis (const G4Box& box)             {AddSolid(box);}
-  virtual void AddThis (const G4Cons& cons)           {AddSolid(cons);}
-  virtual void AddThis (const G4Tubs& tubs)           {AddSolid(tubs);}
-  virtual void AddThis (const G4Trd& trd)             {AddSolid(trd);}
-  virtual void AddThis (const G4Trap& trap)           {AddSolid(trap);}
-  virtual void AddThis (const G4Sphere& sphere)       {AddSolid(sphere);}
-  virtual void AddThis (const G4Para& para)           {AddSolid(para);}
-  virtual void AddThis (const G4Torus& torus)         {AddSolid(torus);}
-  virtual void AddThis (const G4Polycone& polycone)   {AddSolid(polycone);}
-  virtual void AddThis (const G4Polyhedra& polyhedra) {AddSolid(polyhedra);}
-  virtual void AddThis (const G4VSolid& solid)        {AddSolid(solid);}
-  virtual void AddThis (const G4VTrajectory& traj)    {AddCompound(traj);}
-  virtual void AddThis (const G4VHit& hit)            {AddCompound(hit);}
 
   ///////////////////////////////////////////////////////////////////
   // Methods for adding solids to the scene handler.  They
