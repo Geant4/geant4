@@ -76,6 +76,22 @@ private:
   G4Material*        Air;
   G4Material*        Sci;
   G4Material*        Vacuum;
+  G4Material*        Be;
+  G4Material*        materialW;
+  G4Material*        materialAg;
+  G4Material*        Au;
+  G4Material*        Cs;
+  G4Material*        materialK;
+  G4Material*        materialMn;
+  G4Material*        materialP;
+  G4Material*        materialS;
+  G4Material*        materialCa;
+  G4Material*        materialNa;
+  G4Material*        U;
+
+
+
+
 
 };
 

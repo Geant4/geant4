@@ -48,8 +48,8 @@ XrayFluoAnalysisManager* XrayFluoAnalysisManager::instance = 0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoAnalysisManager::XrayFluoAnalysisManager()
-  :outputFileName("xrayfluo"), /*visPlotter(false),*/ persistencyType("xml"), 
-  deletePersistencyFile(true), analysisFactory(0), tree(0),histogramFactory(0)//, plotter(0)
+  :outputFileName("xrayfluo"), visPlotter(false), phaseSpaceFlag(false), physicFlag (false), persistencyType("xml"), 
+   deletePersistencyFile(true), gunParticleEnergies(0), gunParticleTypes(0), analysisFactory(0), tree(0),histogramFactory(0), plotter(0)
 {
   //creating the messenger
   analisysMessenger = new XrayFluoAnalysisMessenger(this);
@@ -58,19 +58,18 @@ XrayFluoAnalysisManager::XrayFluoAnalysisManager()
   // creating Analysis factroy, necessary to create/manage analysis
   analysisFactory = AIDA_createAnalysisFactory();
 
-    // creating  persistency
-
   CreatePersistency(outputFileName,persistencyType);
 
-//   if(analysisFactory) {
-
+  if(analysisFactory) {
 
     
-//     // Creating the plotter factory
-//     plotterFactory = analysisFactory->createPlotterFactory();
-//   }
+    // Creating the plotter factory
 
-
+    if (visPlotter){
+      plotterFactory = analysisFactory->createPlotterFactory();
+    }
+  }
+  
   G4cout << "XrayFluoAnalysisManager created" << G4endl;
 }
 
@@ -84,10 +83,15 @@ XrayFluoAnalysisManager::~XrayFluoAnalysisManager()
   delete analysisFactory;
   analysisFactory = 0;
 
-  //  delete plotterFactory;
-  //  plotterFactory=0;
+  delete plotterFactory;
+  plotterFactory=0;
 
   delete tree;
+
+  if ( gunParticleEnergies ) delete gunParticleEnergies;
+  gunParticleEnergies = 0;
+  if ( gunParticleTypes ) delete gunParticleTypes;
+  gunParticleTypes = 0;
 
   delete instance;
 
@@ -110,106 +114,254 @@ void XrayFluoAnalysisManager::CreatePersistency(G4String fileName,G4String persi
 						G4bool readOnly, G4bool createNew)
 {
 
-  if (tree) delete tree;
-  if (histogramFactory) delete histogramFactory;
+  if (tree) {
+    delete tree;
+    tree = 0;
+  }
+  if (treeDet) {
+    delete treeDet;
+    treeDet =0;
+  }
+  if (histogramFactory) {
+    delete histogramFactory;
+    histogramFactory = 0;
+  }
+  if (tupleFactory) {
+    delete tupleFactory;
+    tupleFactory = 0; 
+  }
 
-    AIDA::ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
-    if(treeFactory) {
-      if (persistencyType == "hbook") {
-	fileName = fileName + ".hbk";
+  if (tupleDetFactory) {
+    delete tupleDetFactory;
+    tupleDetFactory = 0;
+  }
+  G4String fileNameDet = fileName+"Detector";
+  
+  AIDA::ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
+  if(treeFactory) {
+    if (persistencyType == "hbook") {
+      fileName = fileName + ".hbk";
+      fileNameDet = fileNameDet + ".hbk";
+    }
+    else if (persistencyType == "xml"){
+      fileName = fileName + ".xml";
+      fileNameDet = fileNameDet + ".xml";
+    }
+    
+    if (phaseSpaceFlag) {
+      
+      tree = treeFactory->create(fileName,persistencyType,readOnly,createNew); // output file
+      treeDet = treeFactory->create(fileNameDet,persistencyType,readOnly,createNew); // output file
+      if(analysisFactory) {
+       	
+	tupleDetFactory = analysisFactory->createTupleFactory(*treeDet);  
+	tupleFactory = analysisFactory->createTupleFactory(*tree);
+	
       }
-      else if (persistencyType == "xml"){
-	fileName = fileName + ".xml";
-      }
+    } 
+    
+    // trees to be stored in case of phase-space production
+    else {
+      
       tree = treeFactory->create(fileName,persistencyType,readOnly,createNew); // output file
       
-      delete treeFactory; // Will not delete the ITree.
+      if(analysisFactory) {
+       	
+	histogramFactory = analysisFactory->createHistogramFactory(*tree);  
+	
+      }
     }
-  if(analysisFactory) {
-
-
-    histogramFactory = analysisFactory->createHistogramFactory(*tree);  
-
+    
+    delete treeFactory; // Will not delete the ITree.
   }
 }
 
 
 void XrayFluoAnalysisManager::book()
 {
-    // Book histograms
-
-  histo_1 = histogramFactory->createHistogram1D("1","Energy Deposit", 500,0.,10.); //20eV def.
-  histo_2 = histogramFactory->createHistogram1D("2","Gamma born in the sample", 100,0.,10.);
-  histo_3 = histogramFactory->createHistogram1D("3","Electrons  born in the sample", 100,0.,10.);
-  histo_4 = histogramFactory->createHistogram1D("4","Gammas leaving the sample", 300,0.,10.);
-  histo_5 = histogramFactory->createHistogram1D("5","Electrons leaving the sample ",200000 ,0.,10.0); // .05 eV def.
-  histo_6 = histogramFactory->createHistogram1D("6","Gammas reaching the detector", 100,0.,10.);
-  histo_7 = histogramFactory->createHistogram1D("7","Spectrum of the incident particles", 100,0.,10.);
-  histo_8 = histogramFactory->createHistogram1D("8","Protons reaching the detector", 100,0.,10.);
-  histo_9 = histogramFactory->createHistogram1D("9","Protons leaving the sample", 100,0.,10.);
-
-  // Debugging-purpose Histos
-
-  //histo_10 = histogramFactory->createHistogram1D("10","Photon Origin", 4,0.,3.);  
-  //histo_11 = histogramFactory->createHistogram1D("11","Spectrum from LowEnPhotoELectric", 300,0.,10.);
-  //histo_12 = histogramFactory->createHistogram1D("12","Spectrum From the other processes (unknown)", 300,0.,10.);
-
-  //  IHistogram2D* histo_20 = histogramFactory->
-  //create2D("20","Phi, Theta",80 ,-3.14,3.14,80,0.,3.14);  
   
+  if (phaseSpaceFlag) {
+    /*    
+    // Book clouds
+    
+    cloud_1 = histogramFactory->createCloud1D("Gamma Exting Sample","ciao!",-1); 
+    cloud_2 = histogramFactory->createCloud1D("Gamma Incident on the detector","ciao!",-1);
+    cloud_3 = histogramFactory->createCloud1D("Electrons Exiting the Sample","ciao!",-1);
+    beamCloud = histogramFactory->createCloud1D("Incident Radiation Spectrum","ciao!",-1);
+    */
+    // Book output Tuple
+
+    // Book tuple
+    std::vector<std::string> columnNames;
+    columnNames.push_back("Particle");
+    columnNames.push_back("Energies");
+    columnNames.push_back("momentumTheta");
+    columnNames.push_back("momentumPhi");
+    columnNames.push_back("Processes");
+
+    std::vector<std::string> columnTypes;
+    columnTypes.push_back("int");
+    columnTypes.push_back("double");
+    columnTypes.push_back("double");
+    columnTypes.push_back("double");
+    columnTypes.push_back("int"); // useful for hbk
+
+
+    tupleFluo = tupleFactory->create("10", "Total Tuple", columnNames, columnTypes, "");
+    assert(tupleFluo);
+
+  }
+  
+  else {
+    // Book histograms
+    
+    histo_1 = histogramFactory->createHistogram1D("1","Energy Deposit", 500,0.,10.); //20eV def.
+    histo_2 = histogramFactory->createHistogram1D("2","Gamma born in the sample", 100,0.,10.);
+    histo_3 = histogramFactory->createHistogram1D("3","Electrons  born in the sample", 100,0.,10.);
+    histo_4 = histogramFactory->createHistogram1D("4","Gammas leaving the sample", 300,0.,10.);
+    histo_5 = histogramFactory->createHistogram1D("5","Electrons leaving the sample ",200000 ,0.,10.0); // .05 eV def.
+    histo_6 = histogramFactory->createHistogram1D("6","Gammas reaching the detector", 100,0.,10.);
+    histo_7 = histogramFactory->createHistogram1D("7","Spectrum of the incident particles", 100,0.,10.);
+    histo_8 = histogramFactory->createHistogram1D("8","Protons reaching the detector", 100,0.,10.);
+    histo_9 = histogramFactory->createHistogram1D("9","Protons leaving the sample", 100,0.,10.);
+    
+    // Debugging-purpose Histos
+    
+    //histo_10 = histogramFactory->createHistogram1D("10","Photon Origin", 4,0.,3.);  
+    //histo_11 = histogramFactory->createHistogram1D("11","Spectrum from LowEnPhotoELectric", 300,0.,10.);
+    //histo_12 = histogramFactory->createHistogram1D("12","Spectrum From the other processes (unknown)", 300,0.,10.);
+    
+    //  IHistogram2D* histo_20 = histogramFactory->
+    //create2D("20","Phi, Theta",80 ,-3.14,3.14,80,0.,3.14);  
+  }
 } 
- 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void XrayFluoAnalysisManager::LoadGunData(G4String fileName, G4bool raileighFlag) {
+  
+  //  gunParticleEnergies = new std::vector<G4double>;
+  //  gunParticleTypes = new std::vector<G4String>;
+
+  G4String ext = fileName.substr(fileName.size()-3,fileName.size()-1);
+  G4String persistencyType;
+  
+  if (ext == "xml") {
+    
+    persistencyType = "xml";
+  }
+  else if (ext == "hbk") {
+    
+    persistencyType = "hbook";
+  }
+
+  gunParticleEnergies = new std::vector<G4double>;
+  gunParticleTypes = new std::vector<G4String>;
+
+  AIDA::ITreeFactory* treeDataFactory = analysisFactory->createTreeFactory();
+  AIDA::ITree* treeData = treeDataFactory->create(fileName,persistencyType,true,false); // input file
+  AIDA::IManagedObject* mo = treeData->find("10");
+  AIDA::ITuple* tupleData = dynamic_cast<AIDA::ITuple*>(mo);
+  tupleData->start();
+
+  while (tupleData->next()) {
+    if (raileighFlag ^ (!raileighFlag && (tupleData->getInt(4)) ) ) {
+      gunParticleEnergies->push_back(tupleData->getDouble(1));
+      if (tupleData->getInt(0) == 1 ) gunParticleTypes->push_back("gamma");
+      if (tupleData->getInt(0) == 0 ) gunParticleTypes->push_back("e-");
+    }
+
+  }
+  G4cout << "Maximum mumber of events: "<< gunParticleEnergies->size() <<G4endl;
+
+
+}
+
+std::vector<G4double>* XrayFluoAnalysisManager::GetEmittedParticleEnergies() {
+
+  return gunParticleEnergies;
+
+}
+
+std::vector<G4String>* XrayFluoAnalysisManager::GetEmittedParticleTypes() {
+
+  return gunParticleTypes;
+
+}
+
 
 void XrayFluoAnalysisManager::finish()
 {
 
-//   if(plotter)  {
-//     // Wait for the keyboard return to avoid destroying the plotter window too quickly.
-//     G4cout << "Press <ENTER> to exit" << G4endl;
-//     G4cin.get();
-//     plotter->hide(); //hide plotter windows, but doesn't delete plotter
-//   }
+  if (tupleFluo) {ExtractData();};
 
+  if(plotter)  {
+    // Wait for the keyboard return to avoid destroying the plotter window too quickly.
+    G4cout << "Press <ENTER> to exit" << G4endl;
+    G4cin.get();
+    plotter->hide(); //hide plotter windows, but doesn't delete plotter
+  }
+  
   if(tree) {
     tree->commit(); // Write histos in file. 
     tree->close();
   }
-
+  if (treeDet) {
+    treeDet->commit();
+    treeDet->close();
+  }
+  
   deletePersistencyFile = false;
-
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-// void XrayFluoAnalysisManager::InitializePlotter()
-// {
+void XrayFluoAnalysisManager::InitializePlotter()
+{
 
-//   // If speciefied (visPlotter=true),
-//   // a window for the visulizaton of partial results is created
-//   if(plotterFactory && visPlotter && deletePersistencyFile) 
-//     {
-//       plotter = plotterFactory->create();
-//       // Set the page title :
-//       plotter->setParameter("pageTitle","XrayFluo");
-//     }
+  // If speciefied (visPlotter=true),
+  // a window for the visulizaton of partial results is created
+  if(plotterFactory && visPlotter && deletePersistencyFile) 
+    {
+      plotter = plotterFactory->create();
+      // Set the page title :
+      plotter->setParameter("pageTitle","XrayFluo");
+    }
 
-//   if(plotter && visPlotter) {
-//     plotter->show(); // shows plotter window
-//   }
+  if(plotter && visPlotter) {
+    plotter->show(); // shows plotter window
+  }
   
-// }
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-// void XrayFluoAnalysisManager::PlotCurrentResults()
-// {
-//   if(plotter) {
-//       // Plotting the Detector Energy Deposit - histo_1
-//       AIDA::IHistogram1D& histo1p = *histo_1;
-//       plotter->currentRegion().plot( histo1p, "Detector Energy Deposition" );
-//       plotter->refresh();
-//     }
-// }
+void XrayFluoAnalysisManager::PlotCurrentResults()
+{
+  if(plotter) {
+    if (phaseSpaceFlag){
+      // Plotting the spectrum of Gamma exiting the sample - cloud1
+      AIDA::ICloud1D& cloud = *cloud_1;
+      AIDA::IFilter* filterGamma = tupleFactory->createFilter(
+                                              " Particle == std::string(\"gamma\") ");
+      AIDA::IEvaluator* evaluatorEnergy = tupleFactory->createEvaluator("Energies");
+      filterGamma->initialize(*tupleFluo); 
+      evaluatorEnergy->initialize(*tupleFluo);
+      tupleFluo->project(cloud,*evaluatorEnergy,*filterGamma);  
+      
+      plotter->currentRegion().plot( cloud, "Exiting Gammas " );
+      plotter->refresh();
+    }
+    
+    else{
+      // Plotting the Detector Energy Deposit - histo_1
+      AIDA::IHistogram1D& histo1p = *histo_1;
+      plotter->currentRegion().plot( histo1p, "Detector Energy Deposition" );
+      plotter->refresh();
+    }
+    
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4bool XrayFluoAnalysisManager::GetDeletePersistencyFileFlag()
@@ -217,13 +369,74 @@ G4bool XrayFluoAnalysisManager::GetDeletePersistencyFileFlag()
   return deletePersistencyFile;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void XrayFluoAnalysisManager::SetPhysicFlag(G4bool val)
+{
+  physicFlag = val;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+
+
+
+
 void XrayFluoAnalysisManager::analyseStepping(const G4Step* aStep)
 {
-
   
+  if (phaseSpaceFlag){
+    
+    
+    G4String particleType="";
+    G4String parentProcess="";
+    G4ThreeVector momentum=0;
+    G4double particleEnergy=0;
+    
+    // Select volume from wich the step starts
+    if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Sample"){
+      // Select volume in wich the step ends
+      if (physicFlag ^ (!physicFlag && (aStep->GetTrack()->GetNextVolume()->GetName() == "World" ))) { 
+	//
+	//
+	//	G4cout << "physicFlag: "<< physicFlag << G4endl
+	//	       << "NextVolume: "<< aStep->GetTrack()->GetNextVolume()->GetName() << G4endl;
+	
+	// extracting information needed
+	particleType = aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->GetParticleName();
+	momentum = aStep->GetTrack()->GetDynamicParticle()->GetMomentum();
+	particleEnergy = aStep->GetPreStepPoint()->GetKineticEnergy();
+	G4int parent;
+	if(aStep->GetTrack()->GetCreatorProcess()){
+	  parentProcess = aStep->GetTrack()->GetCreatorProcess()->GetProcessName();
+	  parent = 1;
+	}	
+	else {
+	  parentProcess = "Not Known";
+	  parent = 0;
+	}
+	// filling tuple 
+	
+	//	G4cout<< particleType << G4endl;
+	G4int part = 2 ;
+	if (particleType == "gamma") part =1; 
+	if (particleType == "e-") part = 0;
+	
+	tupleFluo->fill(0,part);
+	tupleFluo->fill(1,particleEnergy);
+	tupleFluo->fill(2,momentum.theta());
+	tupleFluo->fill(3,momentum.phi());
+	tupleFluo->fill(4,parent); //hacked to be useful for hbk
+	
+	tupleFluo->addRow();
+      }
+    }
+  }
+  
+  
+  // Normal behaviour, without creation of phase space
+  else {
+    
   G4double gammaAtTheDetPre=0;
   G4double protonsAtTheDetPre=0;
   G4double gammaLeavingSample=0;
@@ -408,7 +621,7 @@ void XrayFluoAnalysisManager::analyseStepping(const G4Step* aStep)
       {if(0 != aStep->GetTrack()->GetParentID())
 	
 	{if(aStep->GetTrack()->GetVolume()->GetName() == "Sample")
-	  {
+{
 	    eleBornInSample = (aStep->GetPreStepPoint()->GetKineticEnergy());
 	    if(histo_3) {
 	      histo_3->fill(eleBornInSample/keV);
@@ -447,10 +660,44 @@ void XrayFluoAnalysisManager::analyseStepping(const G4Step* aStep)
       }
     //}  close of if(aStep->GetTrack()->GetVolume()->GetName() == "World"){ 
   }
-
+ }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void XrayFluoAnalysisManager::ExtractData(){
+  
+  if (tupleFluo->rows()) {
+    
+    
+    //    AIDA::IFilter* filterGamma = tupleFactory->createFilter(" Particle == std::string(\"gamma\")");
+    //    AIDA::IFilter* filterEminus = tupleFactory->createFilter(" Particle == std::string(\"e-\")");
+    
+    
+    AIDA::IFilter* filterAngle = tupleFactory->createFilter("(momentumPhi   >= (220. * (3.1415926/180.) )) && 
+                                                             (momentumPhi   <= (230. * (3.1415926/180.) )) && 
+                                                             (momentumTheta >= (130. * (3.1415926/180.) )) && 
+                                                             (momentumTheta <= (140. * (3.1415926/180.) )) " );
+    
+    
+    //    filterGamma  ->initialize(*tupleFluo); 
+    //    filterEminus ->initialize(*tupleFluo);
+    filterAngle->initialize(*tupleFluo);
+    
+    // Create IEvaluator and initialize it to this ITuple
+    //    AIDA::IEvaluator* evaluatorEnergy = tupleFactory->createEvaluator("Energies");
+    //    evaluatorEnergy->initialize(*tupleFluo);
+    
+    //    tupleFluo->project(*cloud_1,*evaluatorEnergy,*filterGamma);  
+    //    tupleFluo->project(*cloud_2,*evaluatorEnergy,*filterAngle);  
+    //    tupleFluo->project(*cloud_3,*evaluatorEnergy,*filterEminus);  
+    
+    tupleDetFluo = tupleDetFactory->createFiltered("1", *tupleFluo, *filterAngle);
+    assert(tupleDetFluo);    
+  }
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 
 void XrayFluoAnalysisManager::analyseEnergyDep(G4double energyDep)
 {
@@ -468,7 +715,12 @@ void XrayFluoAnalysisManager::analysePrimaryGenerator(G4double energy)
 
   // Filling of energy spectrum histogram of the primary generator
 
+  if (phaseSpaceFlag){
+    //    beamCloud->fill(energy/keV);
+  }
+  else {
     histo_7->fill(energy/keV);
+  }
 }
 
 

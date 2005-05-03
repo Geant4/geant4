@@ -60,14 +60,18 @@
 
 XrayFluoEventAction::XrayFluoEventAction(XrayFluoDetectorConstruction* det)
   :drawFlag("all"),
-   HPGeCollID(-1),
+   HPGeCollID(0),
    eventMessenger(0),
    printModulo(1),
    detectorType(0)
 {
   eventMessenger = new XrayFluoEventActionMessenger(this);
-  detectorType = det->GetDetectorType();
-
+  
+  if (!(det->GetPhaseSpaceFlag()) ){
+    detectorType = det->GetDetectorType();
+    HPGeCollID=-1;
+  }
+  
   //runManager = new XrayFluoRunAction();
   G4cout << "XrayFluoEventAction created" << G4endl;  
 }
@@ -106,6 +110,10 @@ XrayFluoEventAction::XrayFluoEventAction(XrayFluoMercuryDetectorConstruction* de
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 XrayFluoEventAction::~XrayFluoEventAction()
 {
    delete eventMessenger;
@@ -132,10 +140,9 @@ void XrayFluoEventAction::BeginOfEventAction(const G4Event* evt)
     if ( eventNumber % (G4int)5e6 != 0 ) G4cout << "#" << std::flush;
     else G4cout << "#"<< G4endl;
     //    if ( eventNumber % 5e6 == 0 ) G4cout << "#"<< G4endl;
-    //    #ifdef G4ANALYSIS_USE
-    //    XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
-    //    analysis->PlotCurrentResults();
-    //    #endif
+
+    XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
+    analysis->PlotCurrentResults();
   }
 
   if (HPGeCollID==-1)
@@ -151,45 +158,47 @@ void XrayFluoEventAction::BeginOfEventAction(const G4Event* evt)
 
 void XrayFluoEventAction::EndOfEventAction(const G4Event* evt)
 {
-  // extracted from hits, compute the total energy deposit (and total charged
-  // track length) 
-  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
-
-
   
-  XrayFluoSensorHitsCollection* HPGeHC = 0;
-  G4int n_hit = 0;
-  G4double totEnergyDetect=0., totEnergy=0., energyD=0.;
-  
-  if (HCE) HPGeHC = (XrayFluoSensorHitsCollection*)(HCE->GetHC(HPGeCollID));
-  if(HPGeHC)
-
-
-    {
-      n_hit = HPGeHC->entries();
+  if (detectorType) {
+    
+    // extracted from hits, compute the total energy deposit (and total charged
+    // track length) 
+    G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
+    
+    XrayFluoSensorHitsCollection* HPGeHC = 0;
+    G4int n_hit = 0;
+    G4double totEnergyDetect=0., totEnergy=0., energyD=0.;
+    
+    if (HCE) HPGeHC = (XrayFluoSensorHitsCollection*)(HCE->GetHC(HPGeCollID));
+    if(HPGeHC)
       
-      // if (n_hit) {G4cout << "Number of Hits in the detector "<< n_hit << G4endl;}
       
-      for (G4int i=0;i<n_hit;i++)
-	{
-	  
-	  totEnergy += (*HPGeHC)[i]->GetEdepTot(); 
-	  
-	  
-	  
-	  energyD = detectorType->ResponseFunction(totEnergy);
-	  // energyD = totEnergy;
-	  // G4cout << "energy deposit: "<< totEnergy  << G4endl;
-#ifdef G4ANALYSIS_USE
-	  XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
-	  analysis->analyseEnergyDep(energyD);
-#endif	  
-	  totEnergyDetect += energyD;
-	  
-	  
-	}
-    }
-  
+      {
+	n_hit = HPGeHC->entries();
+	
+	// if (n_hit) {G4cout << "Ecco quante hit ho nel detector "<< n_hit << G4endl;}
+	
+	for (G4int i=0;i<n_hit;i++)
+	  {
+	    
+	    totEnergy += (*HPGeHC)[i]->GetEdepTot(); 
+	    
+	    
+	    
+	    energyD = detectorType->ResponseFunction(totEnergy);
+	    // energyD = totEnergy;
+	    // G4cout << "energy deposit: "<< totEnergy  << G4endl;
+	    
+	    XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
+	    analysis->analyseEnergyDep(energyD);
+	    
+	    totEnergyDetect += energyD;
+	    
+	    
+	  }
+      }
+  }  
+
   // extract the trajectories and draw them
   
   if (G4VVisManager::GetConcreteInstance())

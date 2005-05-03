@@ -42,7 +42,7 @@ public:
   
   ~XrayFluoSimulation();
   
-  void RunSimulation(int argc,char** argv);
+  void RunSimulation(int argc,char* argv[]);
   
 private: 
 

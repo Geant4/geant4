@@ -80,12 +80,10 @@ private:
   //the sigma is to be set in the file XrayFluoEventAction.cc 
   G4double RandomCut(G4double);
 
-
   XrayFluoVDetectorType* detectorType;
 
   
-  
-  //XrayFluoRunAction* runManager;
+   //XrayFluoRunAction* runManager;
 
 
   //this method distributes the energy deposit (which must be given as

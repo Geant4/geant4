@@ -41,7 +41,7 @@
 
 class XrayFluoPrimaryGeneratorAction;
 class G4UIcmdWithAString;
-
+class G4UIcmdWithABool;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class XrayFluoPrimaryGeneratorMessenger: public G4UImessenger
@@ -59,15 +59,24 @@ private:
   //command to set a random impact point
   G4UIcmdWithAString*          RndmCmd;
 
- //command to choose a plane circular source
+  //command to choose a plane circular source
   G4UIcmdWithAString*          RndmVert;
  
   //command to shot particles according to certain spectra
-  G4UIcmdWithAString*        spectrum;
+  G4UIcmdWithAString*          spectrum;
 
- //command to shot particles from an isotropic source
-  G4UIcmdWithAString*        isoVert;
+  //command to shot particles from an isotropic source
+  G4UIcmdWithAString*          isoVert;
+
+  //command to shot particles created during previous runs
+  G4UIcmdWithAString*          loadPahseSpace;
+
+  //command to set the flag to load Data abaout particle coming from Rayleigh scattering
+  G4UIcmdWithABool*            loadRayleighData;
+
 };
+
+
 
 #endif
 

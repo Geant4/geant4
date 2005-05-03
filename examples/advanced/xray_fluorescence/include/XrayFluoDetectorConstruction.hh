@@ -74,6 +74,7 @@ public:
   
   void UpdateGeometry();
 
+  void SetOhmicPosThickness(G4double);
 
   void SetSampleMaterial(G4String newMaterial);
 
@@ -83,6 +84,15 @@ public:
 
   inline void SetSampleGranularity(G4bool granularity) 
   {sampleGranularity = granularity;};
+
+  inline void PhaseSpaceOn() 
+  {phaseSpaceFlag = true;};
+
+  inline void PhaseSpaceOff() 
+  {phaseSpaceFlag = false;};
+  
+  inline G4bool GetPhaseSpaceFlag()
+  {return phaseSpaceFlag;};
 
   inline void SetGrainDia(G4double size)
   {grainDia = size;};
@@ -115,6 +125,9 @@ public:
   G4Material* GetOhmicNegMaterial()  {return OhmicNegMaterial;};
   G4double    GetOhmicNegThickness() {return OhmicNegThickness;};      
   
+  G4ThreeVector GetDetectorPosition();
+  G4ThreeVector GetSamplePosition()  {return G4ThreeVector(0,0,0);};
+
   const G4VPhysicalVolume* GetphysiWorld() {return physiWorld;};  
   const G4VPhysicalVolume* GetHPGe()        {return physiHPGe;};
   const G4VPhysicalVolume* GetSample()     {return physiSample;};
@@ -134,6 +147,7 @@ private:
   XrayFluoVDetectorType* detectorType;
 
   G4bool sampleGranularity;
+  G4bool phaseSpaceFlag;
 
   G4double           DeviceSizeX;
   G4double           DeviceSizeY;
@@ -282,19 +296,28 @@ inline void XrayFluoDetectorConstruction::ComputeApparateParameters()
 {     
   // Compute derived parameters of the apparate
   
-  DeviceThickness = PixelThickness+OhmicNegThickness+OhmicPosThickness;
+  if (phaseSpaceFlag) {    
 
-  G4cout << "DeviceThickness(cm): "<< DeviceThickness/cm << G4endl;
+    WorldSizeZ = 10 *m; 
+    WorldSizeXY = 10 *m;
 
-  DeviceSizeY =(NbOfPixelRows * std::max(ContactSizeXY,PixelSizeXY));
-  DeviceSizeX =(NbOfPixelColumns * std::max(ContactSizeXY,PixelSizeXY));
-
-  G4cout << "DeviceSizeX(cm): "<< DeviceSizeX/cm <<G4endl;
-  G4cout << "DeviceSizeY(cm): "<< DeviceSizeY/cm << G4endl;
-
-  WorldSizeZ = (2 * (DistDe  +1.4142 *(std::max(std::max(DeviceThickness,DeviceSizeY), DeviceSizeX))))+5*m; 
-  WorldSizeXY = 2 * (DistDe +1.4142 *Dia1SizeXY)+5*m;
-  
+  }
+  else {
+    
+    DeviceThickness = PixelThickness+OhmicNegThickness+OhmicPosThickness;
+    
+    G4cout << "DeviceThickness(cm): "<< DeviceThickness/cm << G4endl;
+    
+    DeviceSizeY =(NbOfPixelRows * std::max(ContactSizeXY,PixelSizeXY));
+    DeviceSizeX =(NbOfPixelColumns * std::max(ContactSizeXY,PixelSizeXY));
+    
+    G4cout << "DeviceSizeX(cm): "<< DeviceSizeX/cm <<G4endl;
+    G4cout << "DeviceSizeY(cm): "<< DeviceSizeY/cm << G4endl;
+    
+    WorldSizeZ = (2 * (DistDe  +1.4142 *(std::max(std::max(DeviceThickness,DeviceSizeY), DeviceSizeX))))+5*m; 
+    WorldSizeXY = 2 * (DistDe +1.4142 *Dia1SizeXY)+5*m;
+    
+  }
 }
 
 #endif

@@ -67,6 +67,14 @@ XrayFluoAnalysisMessenger::XrayFluoAnalysisMessenger(XrayFluoAnalysisManager* an
   outputFileCommand->SetGuidance("Update persistency file");
   outputFileCommand->SetGuidance("This command MUST be used after outputFile or outputFileType commands");
   outputFileCommand->AvailableForStates(G4State_Idle);
+
+  physicFlagCmd = new G4UIcmdWithABool("/analysis/setPhysicProduction",this);
+  physicFlagCmd->SetGuidance("Select if data stored in the Pahse-Space must contain physical data or particles exiting the sample");
+  physicFlagCmd->SetGuidance("To be used before and togheter with /gun/loadGunData");
+  physicFlagCmd->SetParameterName("Physyc Flag",true);
+  physicFlagCmd->SetDefaultValue(false);
+  physicFlagCmd->AvailableForStates(G4State_Idle);
+
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -96,7 +104,11 @@ void XrayFluoAnalysisMessenger::SetNewValue(G4UIcommand* command,G4String newVal
       if (xrayFluoAnalysis->GetDeletePersistencyFileFlag()) remove("xrayfluo.hbk");      
       xrayFluoAnalysis->SetOutputFileType(newValue);
     }
-
+  if( command == physicFlagCmd )
+    { 
+      G4bool newPhysFlag = physicFlagCmd->GetNewBoolValue(newValue);
+      xrayFluoAnalysis->SetPhysicFlag(newPhysFlag);
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

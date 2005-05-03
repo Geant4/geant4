@@ -407,10 +407,10 @@ G4VPhysicalVolume* XrayFluoPlaneDetectorConstruction::ConstructApparate()
 				       planeMaterial,	//its material
 				       "Grain");	        //its name
       G4ThreeVector grainPosition; 
-      G4double grainInitPositionX = 0.;
-      G4double grainInitPositionY = 0.;
+      G4double grainInitPositionX = 0;
+      G4double grainInitPositionY = 0;
       G4double grainInitPositionZ = (-1.*planeThickness/2.+grainDia/2.);
-      G4double grainStepX = grainDia;
+      G4double grainStepX = grainDia = 0;
       G4double grainStepY = grainDia*(1.-(0.5-(std::sqrt(3.)/4.)));
       G4double grainStepZ = grainDia*std::sqrt(2./3.);
       
@@ -584,9 +584,6 @@ void XrayFluoPlaneDetectorConstruction::PrintApparateParameters()
 void XrayFluoPlaneDetectorConstruction::UpdateGeometry()
 {
 
-  delete solidWorld;
-  delete logicWorld;
-  delete physiWorld;
   delete solidHPGe;
   delete logicHPGe;
   delete physiHPGe;
@@ -605,6 +602,9 @@ void XrayFluoPlaneDetectorConstruction::UpdateGeometry()
   delete solidScreen;
   delete logicScreen;
   delete physiScreen;
+  delete solidWorld;
+  delete logicWorld;
+  delete physiWorld;
 
   zRotPhiHPGe.rotateX(-1.*PhiHPGe);
   G4RunManager::GetRunManager()->DefineWorldVolume(ConstructApparate());

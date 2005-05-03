@@ -50,6 +50,7 @@ class XrayFluoDetectorConstruction;
 class XrayFluoPlaneDetectorConstruction;
 class XrayFluoMercuryDetectorConstruction;
 
+
 class XrayFluoPhysicsList: public G4VUserPhysicsList
 {
 public:
@@ -57,6 +58,7 @@ public:
   XrayFluoPhysicsList(XrayFluoDetectorConstruction*);
   XrayFluoPhysicsList(XrayFluoPlaneDetectorConstruction*);
   XrayFluoPhysicsList(XrayFluoMercuryDetectorConstruction*);
+
 
   virtual ~XrayFluoPhysicsList();
   
@@ -85,10 +87,10 @@ public:
   void SetGammaCut(G4double);
   void SetElectronCut(G4double);
 
-//   void SetGammaLowLimit(G4double);
-//   void SetElectronLowLimit(G4double);
+  void SetGammaLowLimit(G4double);
+  void SetElectronLowLimit(G4double);
 
-  //  void SetGELowLimit(G4double);
+  void SetGELowLimit(G4double);
 
   void SetLowEnSecPhotCut(G4double);
   void SetLowEnSecElecCut(G4double);
@@ -109,6 +111,7 @@ private:
   XrayFluoDetectorConstruction* pDet;
   XrayFluoPlaneDetectorConstruction* planeDet;
   XrayFluoMercuryDetectorConstruction* mercuryDet;
+
 };
 
 #endif

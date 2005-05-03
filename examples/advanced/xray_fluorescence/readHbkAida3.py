@@ -1,5 +1,0 @@
-tree = tf.create("xrayfluo.hbk", "hbook", 1,0)
-hf = af.createHistogramFactory(tree)
-h1 = tree.findH1D("1")
-pl.currentRegion().plot(h1)
-pl.refresh()

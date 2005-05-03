@@ -38,6 +38,9 @@
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
+#include "G4DataVector.hh"
+#include "G4ThreeVector.hh"
+#include <vector>
 
 class G4ParticleGun;
 class G4Event;
@@ -70,6 +73,13 @@ class XrayFluoPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
  //set the flag for shooting particles from an isotropic source
   void SetIsoVert  (G4String val) { isoVert = val  ;}
 
+  //load data created in previous runs 
+  void ActivatePhaseSpace(G4String);
+
+  //load Raileigh scattered photon from previously loaded data
+  void SetRayleighFlag (G4bool);
+
+
 private:
 //pointer a to G4 service class
   G4ParticleGun*                particleGun;	  
@@ -92,6 +102,21 @@ private:
 
  //flag  for shooting particles from an isotropic source
   G4String                      isoVert;
+
+  //flag for the use of phase-space created with a previous run
+  G4bool phaseSpaceGunFlag;
+
+  // the flag to load  particle coming from Rayleigh scattering
+  G4bool rayleighFlag; 
+
+  // data for storage of phase space previously  created
+  std::vector<G4double>* particleEnergies;
+  std::vector<G4String>* particleTypes;
+
+  G4ThreeVector detectorPosition;
+
+
+
 };
 
 #endif
