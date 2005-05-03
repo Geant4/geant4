@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.6 2005-03-28 23:08:18 vnivanch Exp $
+// $Id: G4EmProcessOptions.cc,v 1.7 2005-05-03 08:09:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -194,7 +194,7 @@ void G4EmProcessOptions::SetMaxEnergyForMuons(G4double val)
   for(itr = v.begin(); itr != v.end(); itr++) {
     G4VEnergyLossProcess* p = *itr;
     if(p) {
-      if(std::fabs(p->Particle()->GetPDGMass() - 105.66*MeV) < MeV)
+      if(std::abs(p->Particle()->GetPDGMass() - 105.66*MeV) < MeV)
         p->SetMaxKinEnergy(val);
     }
   }
@@ -204,7 +204,7 @@ void G4EmProcessOptions::SetMaxEnergyForMuons(G4double val)
   for(itp = w.begin(); itp != w.end(); itp++) {
     G4VEmProcess* q = *itp;
     if(q) {
-      if(std::fabs(q->Particle()->GetPDGMass() - 105.66*MeV) < MeV)
+      if(std::abs(q->Particle()->GetPDGMass() - 105.66*MeV) < MeV)
         q->SetMaxKinEnergy(val);
     }
   }
@@ -215,7 +215,7 @@ void G4EmProcessOptions::SetMaxEnergyForMuons(G4double val)
   for(itm = u.begin(); itm != u.end(); itm++) {
     G4VMultipleScattering* s = *itm;
     if(s) {
-      if(std::fabs(s->Particle()->GetPDGMass() - 105.66*MeV) < MeV)
+      if(std::abs(s->Particle()->GetPDGMass() - 105.66*MeV) < MeV)
         s->SetMaxKinEnergy(val);
     }
   }
