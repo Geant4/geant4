@@ -1,4 +1,4 @@
-$Id: History,v 1.87 2005-04-22 10:08:58 tsasaki Exp $
+$Id: History,v 1.88 2005-05-03 17:48:51 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd May 2005  John Allison  (tracking-V07-00-00 - needs greps-V07-00-04)
+- Corrected AttDefs.
+- Made use of G4AttCheck.
+
 22 April 2005  T. Sasaki 
 - SetNavigator Method has been removed from G4TrackingManager
 
