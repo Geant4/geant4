@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectoryPoint.cc,v 1.13 2005-03-22 14:40:51 allison Exp $
+// $Id: G4SmoothTrajectoryPoint.cc,v 1.14 2005-05-03 17:48:51 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,6 +37,11 @@
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
 #include "G4UnitsTable.hh"
+
+//#define G4ATTDEBUG
+#ifdef G4ATTDEBUG
+#include "G4AttCheck.hh"
+#endif
 
 G4Allocator<G4SmoothTrajectoryPoint> aSmoothTrajectoryPointAllocator;
 
@@ -81,10 +86,10 @@ G4SmoothTrajectoryPoint::GetAttDefs() const
   if (isNew) {
     G4String Pos("Pos");
     (*store)[Pos] = G4AttDef(Pos, "Step Position",
-			     "Physics","","G4ThreeVector");
+			     "Physics","G4BestUnit","G4ThreeVector");
     G4String Aux("Aux");
     (*store)[Aux] = G4AttDef(Aux, "Auxiliary Point Position",
-			     "Physics","","G4ThreeVector");
+			     "Physics","G4BestUnit","G4ThreeVector");
   }
   return store;
 }
@@ -102,6 +107,10 @@ std::vector<G4AttValue>* G4SmoothTrajectoryPoint::CreateAttValues() const
   }
 
   values->push_back(G4AttValue("Pos",G4BestUnit(fPosition,"Length"),""));
+
+#ifdef G4ATTDEBUG
+  G4cout << G4AttCheck(values,GetAttDefs());
+#endif
 
   return values;
 }

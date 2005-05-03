@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryPoint.cc,v 1.15 2005-03-22 14:40:51 allison Exp $
+// $Id: G4TrajectoryPoint.cc,v 1.16 2005-05-03 17:48:51 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,6 +37,11 @@
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
 #include "G4UnitsTable.hh"
+
+//#define G4ATTDEBUG
+#ifdef G4ATTDEBUG
+#include "G4AttCheck.hh"
+#endif
 
 G4Allocator<G4TrajectoryPoint> aTrajectoryPointAllocator;
 
@@ -66,7 +71,8 @@ const std::map<G4String,G4AttDef>* G4TrajectoryPoint::GetAttDefs() const
     = G4AttDefStore::GetInstance("G4TrajectoryPoint",isNew);
   if (isNew) {
     G4String Pos("Pos");
-    (*store)[Pos] = G4AttDef(Pos, "Position", "Physics","","G4ThreeVector");
+    (*store)[Pos] =
+      G4AttDef(Pos, "Position", "Physics","G4BestUnit","G4ThreeVector");
   }
   return store;
 }
@@ -76,6 +82,10 @@ std::vector<G4AttValue>* G4TrajectoryPoint::CreateAttValues() const
   std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
 
   values->push_back(G4AttValue("Pos",G4BestUnit(fPosition,"Length"),""));
+
+#ifdef G4ATTDEBUG
+  G4cout << G4AttCheck(values,GetAttDefs());
+#endif
 
   return values;
 }

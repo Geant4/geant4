@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.cc,v 1.26 2005-03-22 14:40:51 allison Exp $
+// $Id: G4Trajectory.cc,v 1.27 2005-05-03 17:48:51 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,6 +45,11 @@
 #include "G4AttValue.hh"
 #include "G4UIcommand.hh"
 #include "G4UnitsTable.hh"
+
+//#define G4ATTDEBUG
+#ifdef G4ATTDEBUG
+#include "G4AttCheck.hh"
+#endif
 
 G4Allocator<G4Trajectory> aTrajectoryAllocator;
 
@@ -125,25 +130,25 @@ const std::map<G4String,G4AttDef>* G4Trajectory::GetAttDefs() const
     (*store)[PID] = G4AttDef(PID,"Parent ID","Bookkeeping","","G4int");
 
     G4String PN("PN");
-    (*store)[PN] = G4AttDef(PN,"Particle Name","Physics","","G4String");
+    (*store)[PN] = G4AttDef(PN,"Particle Name","Bookkeeping","","G4String");
 
     G4String Ch("Ch");
-    (*store)[Ch] = G4AttDef(Ch,"Charge","Physics","","G4double");
+    (*store)[Ch] = G4AttDef(Ch,"Charge","Physics","e+","G4double");
 
     G4String PDG("PDG");
-    (*store)[PDG] = G4AttDef(PDG,"PDG Encoding","Physics","","G4int");
+    (*store)[PDG] = G4AttDef(PDG,"PDG Encoding","Bookkeeping","","G4int");
 
     G4String IMom("IMom");
     (*store)[IMom] = G4AttDef(IMom, "Momentum of track at start of trajectory",
-			      "Physics","","G4ThreeVector");
+			      "Physics","G4BestUnit","G4ThreeVector");
 
     G4String IMag("IMag");
     (*store)[IMag] = 
       G4AttDef(IMag, "Magnitude of momentum of track at start of trajectory",
-	       "Physics","","G4double");
+	       "Physics","G4BestUnit","G4double");
 
     G4String NTP("NTP");
-    (*store)[NTP] = G4AttDef(NTP,"No. of points","Physics","","G4int");
+    (*store)[NTP] = G4AttDef(NTP,"No. of points","Bookkeeping","","G4int");
 
   }
   return store;
@@ -175,6 +180,10 @@ std::vector<G4AttValue>* G4Trajectory::CreateAttValues() const
 
   values->push_back
     (G4AttValue("NTP",G4UIcommand::ConvertToString(GetPointEntries()),""));
+
+#ifdef G4ATTDEBUG
+  G4cout << G4AttCheck(values,GetAttDefs());
+#endif
 
   return values;
 }
