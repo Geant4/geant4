@@ -9,6 +9,9 @@ $Id:
                       Category History file
                       ---------------------
 
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
+
 07.12.2004 - S. Guatelli (DMX-V06-02-02)
             G4VParticleChange migrated
 

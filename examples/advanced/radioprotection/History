@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.7 2004-11-23 14:39:27 guatelli Exp $
+$Id: History,v 1.8 2005-05-03 10:05:48 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.7 2004-11-23 14:39:27 guatelli Exp $
 
                       Category History file
                       ---------------------
+
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
 
 11.2004 - Binary cascade approach added
 

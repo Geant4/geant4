@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.6 2004-12-02 10:58:10 ribon Exp $
+$Id: History,v 1.7 2005-05-03 10:05:48 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.6 2004-12-02 10:58:10 ribon Exp $
 
                       Category History file
                       ---------------------
+
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
 
 02.12.2004 - A.Ribon (Rich-V06-02-02)
              Interface change to the class G4VParticleChange.

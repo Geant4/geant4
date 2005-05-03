@@ -9,6 +9,9 @@ $Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
                       Category History file
                       ---------------------
 
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
+
 28.04.2005 - M.Piergentili
 		Modular Physics list, Primary Generator Messenger,
 		updated README and defaultMacro.mac,

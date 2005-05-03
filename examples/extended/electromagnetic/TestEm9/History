@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2005-03-18 16:12:56 maire Exp $
+$Id: History,v 1.21 2005-05-03 10:05:48 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ track of all tags.
 
      ----------------------------------------------------------
      
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
+
 16-03-05 mma(testem9-V07-00-00)
 - remove He3 and ionC12 from predefined particles.
 - remove IonC12 class

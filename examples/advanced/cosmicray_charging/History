@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
+
 10.12.2004 - Gabriele Cosmo, tag cosmicray_charging-V06-02-03
              Replaced usage of M_PI with CLHEP's pi.
 
