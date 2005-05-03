@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.3 2005-02-07 14:38:21 maire Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.4 2005-05-03 13:37:43 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,6 +44,9 @@
 // 06-02-04 Add control on big sigma > 2*meanLoss (V.Ivanchenko)
 // 26-04-04 Comment out the case of very small step (V.Ivanchenko)
 // 07-02-05 define problim = 5.e-3 (mma)
+// 03-05-05 conditions of Gaussian fluctuation changed (bugfix)
+//          + smearing for very small loss (L.Urban)
+//          
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -109,8 +112,6 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 
   if(!particle) InitialiseMe(dp->GetDefinition());
 
-  ipotFluct = material->GetIonisation()->GetMeanExcitationEnergy();
-
   G4double tau   = dp->GetKineticEnergy()/particleMass;
   G4double gam   = tau + 1.0;
   G4double gam2  = gam*gam;
@@ -119,26 +120,35 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   G4double loss(0.), siga(0.);
   
   // Gaussian regime
+  // for heavy particles only and conditions
+  // for Gauusian fluct. has been changed 
   //
-  if (meanLoss >= minNumberInteractionsBohr*tmax)
+  if ((particleMass > electron_mass_c2) &&
+      (meanLoss >= minNumberInteractionsBohr*tmax))
   {
-    electronDensity = material->GetElectronDensity();
-    siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
-                              * electronDensity * chargeSquare;
-    siga = sqrt(siga);
-    G4double twomeanLoss = meanLoss + meanLoss;
-    if (twomeanLoss < siga) {
-      G4double x;
-      do {
-        loss = twomeanLoss*G4UniformRand();
-	x = (loss - meanLoss)/siga;
-      } while (1.0 - 0.5*x*x < G4UniformRand());
-    } else {
-      do {
-       loss = G4RandGauss::shoot(meanLoss,siga);
-      } while (loss < 0. || loss > twomeanLoss);
+    G4double massrate = electron_mass_c2/particleMass ;
+    G4double tmaxkine = 2.*electron_mass_c2*beta2*gam2/
+                        (1.+massrate*(2.*gam+massrate)) ;
+    if (tmaxkine <= 2.*tmax)   
+    {
+      electronDensity = material->GetElectronDensity();
+      siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
+                                * electronDensity * chargeSquare;
+      siga = sqrt(siga);
+      G4double twomeanLoss = meanLoss + meanLoss;
+      if (twomeanLoss < siga) {
+        G4double x;
+        do {
+          loss = twomeanLoss*G4UniformRand();
+       	  x = (loss - meanLoss)/siga;
+        } while (1.0 - 0.5*x*x < G4UniformRand());
+      } else {
+        do {
+          loss = G4RandGauss::shoot(meanLoss,siga);
+        } while (loss < 0. || loss > twomeanLoss);
+      }
+      return loss;
     }
-    return loss;
   }
 
   // Glandz regime : initialisation
@@ -151,23 +161,36 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
     e1LogFluct   = material->GetIonisation()->GetLogEnergy1fluct();
     e2LogFluct   = material->GetIonisation()->GetLogEnergy2fluct();
     rateFluct    = material->GetIonisation()->GetRateionexcfluct();
+    ipotFluct    = material->GetIonisation()->GetMeanExcitationEnergy();
     ipotLogFluct = material->GetIonisation()->GetLogMeanExcEnergy();
     lastMaterial = material;
   }
 
+  G4double a1 = 0. , a2 = 0., a3 = 0. ;
   G4double p1,p2,p3;
+  G4double rate = rateFluct ;
 
   G4double w1 = tmax/ipotFluct;
-  G4double w2 = log(2.*electron_mass_c2*beta2*gam2);
+  G4double w2 = log(2.*electron_mass_c2*beta2*gam2)-beta2;
 
-  G4double C = meanLoss*(1.-rateFluct)/(w2-ipotLogFluct-beta2);
+  if(w2 > ipotLogFluct)
+  {
+    G4double C = meanLoss*(1.-rateFluct)/(w2-ipotLogFluct);
+    a1 = C*f1Fluct*(w2-e1LogFluct)/e1Fluct;
+    a2 = C*f2Fluct*(w2-e2LogFluct)/e2Fluct;
+    if(a2 < 0.)
+    {
+      a1 = 0. ;
+      a2 = 0. ;
+      rate = 1. ;  
+    }
+  }
+  else
+  {
+    rate = 1. ;
+  }
 
-  G4double a1 = C*f1Fluct*(w2-e1LogFluct-beta2)/e1Fluct;
-  G4double a2 = C*f2Fluct*(w2-e2LogFluct-beta2)/e2Fluct;
-  G4double a3 = rateFluct*meanLoss*(tmax-ipotFluct)/(ipotFluct*tmax*log(w1));
-  if(a1 < 0.) a1 = 0.;
-  if(a2 < 0.) a2 = 0.;
-  if(a3 < 0.) a3 = 0.;
+  a3 = rate*meanLoss*(tmax-ipotFluct)/(ipotFluct*tmax*log(w1));
 
   G4double suma = a1+a2+a3;
   
@@ -175,30 +198,34 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   //
   if (suma > sumalim)
   {
-    // excitation type 1
-    if (a1>alim) {
-      siga=sqrt(a1) ;
-      p1 = max(0.,G4RandGauss::shoot(a1,siga)+0.5);
-    } else {
-      p1 = G4double(G4Poisson(a1));
-    }
+    p1 = 0., p2 = 0 ;
+    if((a1+a2) > 0.)
+    {
+      // excitation type 1
+      if (a1>alim) {
+        siga=sqrt(a1) ;
+        p1 = max(0.,G4RandGauss::shoot(a1,siga)+0.5);
+      } else {
+        p1 = G4double(G4Poisson(a1));
+      }
     
-    // excitation type 2
-    if (a2>alim) {
-      siga=sqrt(a2) ;
-      p2 = max(0.,G4RandGauss::shoot(a2,siga)+0.5);
-    } else {
-      p2 = G4double(G4Poisson(a2));
-    }
+      // excitation type 2
+      if (a2>alim) {
+        siga=sqrt(a2) ;
+        p2 = max(0.,G4RandGauss::shoot(a2,siga)+0.5);
+      } else {
+        p2 = G4double(G4Poisson(a2));
+      }
     
-    loss = p1*e1Fluct+p2*e2Fluct;
+      loss = p1*e1Fluct+p2*e2Fluct;
  
-    // smearing to avoid unphysical peaks
-    if (p2 > 0.)
-      loss += (1.-2.*G4UniformRand())*e2Fluct;
-    else if (loss>0.)
-      loss += (1.-2.*G4UniformRand())*e1Fluct;   
-    if (loss < 0.) loss = 0.0;
+      // smearing to avoid unphysical peaks
+      if (p2 > 0.)
+        loss += (1.-2.*G4UniformRand())*e2Fluct;
+      else if (loss>0.)
+        loss += (1.-2.*G4UniformRand())*e1Fluct;   
+      if (loss < 0.) loss = 0.0;
+    }
 
     // ionisation
     if (a3 > 0.) {
@@ -242,41 +269,29 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   //
   G4double e0 = material->GetIonisation()->GetEnergy0fluct();
 
-  if (tmax == ipotFluct)
+  a3 = meanLoss*(tmax-e0)/(tmax*e0*log(tmax/e0));
+  if (a3 > alim)
   {
-    a3 = meanLoss/e0;
-    if (a3 > alim)
-    {
-      siga=sqrt(a3) ;
-      p3 = max(0.,G4RandGauss::shoot(a3,siga)+0.5);
-    } else {
-      p3 = G4double(G4Poisson(a3));
-    }
-    loss = p3*e0;
-    if (p3 > 0.) loss += (1.-2.*G4UniformRand())*e0;
-
-   } else {
-    tmax = tmax-ipotFluct+e0 ;
-    a3 = meanLoss*(tmax-e0)/(tmax*e0*log(tmax/e0));
-    if (a3 > alim)
-    {
-      siga=sqrt(a3);
-      p3 = max(0.,G4RandGauss::shoot(a3,siga)+0.5);
-    } else {
-          p3 = G4double(G4Poisson(a3));
-    }
-    if (p3 > 0.) {
-      G4double w = (tmax-e0)/tmax;
-      G4double corrfac = 1.;
-      if (p3 > nmaxCont2) {
-        corrfac = p3/nmaxCont2;
-        p3 = nmaxCont2;
-      } 
-      G4int ip3 = (G4int)p3;
-      for (G4int i=0; i<ip3; i++) loss += 1./(1.-w*G4UniformRand());
-      loss *= e0*corrfac;
-     }
+    siga=sqrt(a3);
+    p3 = max(0.,G4RandGauss::shoot(a3,siga)+0.5);
+  } else {
+    p3 = G4double(G4Poisson(a3));
+  }
+  if (p3 > 0.) {
+    G4double w = (tmax-e0)/tmax;
+    G4double corrfac = 1.;
+    if (p3 > nmaxCont2) {
+      corrfac = p3/nmaxCont2;
+      p3 = nmaxCont2;
+    } 
+    G4int ip3 = (G4int)p3;
+    for (G4int i=0; i<ip3; i++) loss += 1./(1.-w*G4UniformRand());
+    loss *= e0*corrfac;
+    // smearing for losses near to e0
+    if(p3 <= 2.)
+    loss += e0*(1.-2.*G4UniformRand()) ;
    }
+    
    return loss;
 }
 
