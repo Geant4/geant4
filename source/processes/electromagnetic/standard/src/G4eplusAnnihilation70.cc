@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation70.cc,v 1.5 2005-04-29 16:58:33 vnivanch Exp $
+// $Id: G4eplusAnnihilation70.cc,v 1.6 2005-05-03 12:43:21 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,6 +37,7 @@
 // Modifications:
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 03-05-05 suppress Integral option (mma)
 //
 
 //
@@ -71,7 +72,6 @@ void G4eplusAnnihilation70::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    SetIntegral(true);
     //    SetVerboseLevel(3);
     SetBuildTableFlag(true);
     SetStartFromNullFlag(false);
@@ -98,7 +98,8 @@ void G4eplusAnnihilation70::PrintInfo()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PhysicsVector* G4eplusAnnihilation70::LambdaPhysicsVector(const G4MaterialCutsCouple*)
+G4PhysicsVector* G4eplusAnnihilation70::LambdaPhysicsVector(
+                                                    const G4MaterialCutsCouple*)
 {
   G4PhysicsVector* v = new G4PhysicsLogVector(MinKinEnergy(), MaxKinEnergy(),
                                               LambdaBinning());
@@ -120,11 +121,10 @@ G4VParticleChange* G4eplusAnnihilation70::AtRestDoIt(const G4Track& aTrack,
   fParticleChange.InitializeForPostStep(aTrack);
 
   // Below gamma production threshold
-  if(electron_mass_c2 < GetGammaEnergyCut()) {
+  if (GetGammaEnergyCut() > electron_mass_c2) {
     fParticleChange.ProposeLocalEnergyDeposit(2.0*electron_mass_c2);
-
-    // Real gamma production
-  } else {    
+    
+  } else {   // Real gamma production 
     fParticleChange.SetNumberOfSecondaries(2);
 
     G4double cosTeta = 2.*G4UniformRand()-1. , sinTeta = sqrt(1.-cosTeta*cosTeta);
