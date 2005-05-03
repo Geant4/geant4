@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.41 2005-03-03 16:06:06 allison Exp $
+// $Id: G4Torus.cc,v 1.42 2005-05-03 09:07:45 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,6 +29,7 @@
 //
 // Implementation
 //
+// 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
 // 18.03.04 V.Grichine: bug fixed in DistanceToIn(p)
 // 11.01.01 E.Medernach: Use G4PolynomialSolver to find roots
 // 03.10.00 E.Medernach: SafeNewton added
@@ -1075,83 +1076,74 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
 
 G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
 {
-  ENorm side ;
-  G4ThreeVector norm;
-  G4double rho2,rho,pt2,pt,phi;
-  G4double distRMin,distRMax,distSPhi,distEPhi,distMin;
+  G4int noSurfaces = 0;  
+  G4double rho2,rho,pt2,pt,pPhi;
+  G4double distRMin,distRMax,distSPhi,distEPhi;
+  G4double delta = 0.5*kCarTolerance;
+  G4ThreeVector nR, nPs, nPe;
+  G4ThreeVector norm, sumnorm(0.,0.,0.);
 
   rho2 = p.x()*p.x() + p.y()*p.y();
-  rho = std::sqrt(rho2) ;
-  pt2 = std::fabs(rho2+p.z()*p.z() +fRtor*fRtor - 2*fRtor*rho) ;
+  rho = std::sqrt(rho2);
+  pt2 = std::fabs(rho2+p.z()*p.z() +fRtor*fRtor - 2*fRtor*rho);
   pt = std::sqrt(pt2) ;
 
-  distRMax = std::fabs(pt - fRmax) ;
+            distRMax = std::fabs(pt - fRmax);
+  if(fRmin) distRMin = std::fabs(pt - fRmin);
 
 
-  if(fRmin)  // First minimum radius
+  if( rho > delta ) nR = G4ThreeVector( p.x()*(1-fRtor/rho)/pt,
+                                        p.y()*(1-fRtor/rho)/pt,
+                                        p.z()/pt                 );
+
+  if ( fDPhi < twopi ) // && rho ) // old limitation against (0,0,z)
   {
-    distRMin = std::fabs(pt - fRmin) ;
+    pPhi = std::atan2(p.y(),p.x());
 
-    if (distRMin < distRMax)
+    //   if ( pPhi  < 0 ) pPhi     += twopi;
+    // if ( fSPhi < 0 ) distSPhi = std::fabs( pPhi - (fSPhi + twopi) )*rho;
+    // else             distSPhi = std::fabs( pPhi - fSPhi )*rho;
+
+    if(pPhi  < fSPhi-delta)           pPhi     += twopi;
+    else if(pPhi > fSPhi+fDPhi+delta) pPhi     -= twopi;
+
+                     distSPhi = std::fabs( pPhi - fSPhi )*rho;
+                     distEPhi = std::fabs(pPhi-fSPhi-fDPhi)*rho;
+
+    nPs = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0);
+    nPe = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0);
+  } 
+  if( distRMax <= delta )
+  {
+    noSurfaces ++;
+    sumnorm += nR;
+  }
+  if( fRmin && distRMin <= delta )
+  {
+    noSurfaces ++;
+    sumnorm -= nR;
+  }
+  if( fDPhi < twopi )   
+  {
+    if (distSPhi <= delta)
     {
-      distMin = distRMin ;
-      side    = kNRMin ;
+      noSurfaces ++;
+      sumnorm += nPs;
     }
-    else
+    if (distEPhi <= delta) 
     {
-      distMin = distRMax ;
-      side    = kNRMax ;
+      noSurfaces ++;
+      sumnorm += nPe;
     }
   }
-  else
+  if ( noSurfaces == 0 )
   {
-    distMin = distRMax ;
-    side    = kNRMax ;
-  }    
-  if (fDPhi < twopi && rho )
-  {
-    phi = std::atan2(p.y(),p.x()) ; // Protected against (0,0,z) (above rho !=0)
+    G4Exception("G4Torus::SurfaceNormal(p)", "Notification", JustWarning, 
+                "Point p is not on surface !?" ); 
+  }
+  else if ( noSurfaces == 1 ) norm = sumnorm;
+  else                        norm = sumnorm.unit();
 
-    if (phi < 0) phi += twopi ;
-
-    if (fSPhi < 0 ) distSPhi = std::fabs(phi-(fSPhi+twopi))*rho ;
-    else            distSPhi = std::fabs(phi-fSPhi)*rho ;
-
-    distEPhi = std::fabs(phi - fSPhi - fDPhi)*rho ;
-
-    if (distSPhi < distEPhi) // Find new minimum
-    {
-      if (distSPhi<distMin) side = kNSPhi ;
-    }
-    else
-    {
-      if (distEPhi < distMin) side = kNEPhi ;
-    }
-  }  
-  switch (side)
-  {
-    case kNRMin:      // Inner radius
-      norm = G4ThreeVector( -p.x()*(1-fRtor/rho)/pt,
-                            -p.y()*(1-fRtor/rho)/pt,
-                            -p.z()/pt                 ) ;
-      break ;
-    case kNRMax:      // Outer radius
-      norm = G4ThreeVector( p.x()*(1-fRtor/rho)/pt,
-                            p.y()*(1-fRtor/rho)/pt,
-                            p.z()/pt                  ) ;
-      break;
-    case kNSPhi:
-      norm = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0) ;
-      break;
-    case kNEPhi:
-      norm = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0) ;
-      break;
-    default:
-      DumpInfo();
-      G4Exception("G4Torus::SurfaceNormal()", "Notification", JustWarning,
-                  "Undefined side for valid surface normal to solid.");
-      break ;
-  } 
   return norm ;
 }
 

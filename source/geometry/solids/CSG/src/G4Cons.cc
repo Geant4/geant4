@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.35 2005-03-03 16:06:06 allison Exp $
+// $Id: G4Cons.cc,v 1.36 2005-05-03 09:07:45 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -30,6 +30,7 @@
 //
 // History:
 //
+// 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
 // 26.07.04 V.Grichine: bugs fixed in   Distance ToIn(p,v):dIn=dOut=0 in 3/10^8
 // 23.01.04 V.Grichine: bugs fixed in   Distance ToIn(p,v)
 // 26.06.02 V.Grichine: bugs fixed in   Distance ToIn(p,v)
@@ -440,102 +441,90 @@ G4bool G4Cons::CalculateExtent( const EAxis              pAxis,
 
 G4ThreeVector G4Cons::SurfaceNormal( const G4ThreeVector& p) const
 {
-  ENorm side ;
-  G4ThreeVector norm ;
-  G4double rho, phi ;
-  G4double distZ, distRMin, distRMax, distSPhi, distEPhi, distMin ;
-  G4double tanRMin, secRMin, pRMin, widRMin ;
-  G4double tanRMax, secRMax, pRMax, widRMax ;
-
-  distZ = std::fabs(std::fabs(p.z()) - fDz) ;
-  rho   = std::sqrt(p.x()*p.x() + p.y()*p.y()) ;
-
-  tanRMin  = (fRmin2 - fRmin1)*0.5/fDz ;
-  secRMin  = std::sqrt(1 + tanRMin*tanRMin) ;
-  pRMin    = rho - p.z()*tanRMin ;
-  widRMin  = fRmin2 - fDz*tanRMin ;
-  distRMin = std::fabs(pRMin - widRMin)/secRMin ;
-
-  tanRMax  = (fRmax2 - fRmax1)*0.5/fDz ;
-  secRMax  = std::sqrt(1+tanRMax*tanRMax) ;
-  pRMax    = rho - p.z()*tanRMax ;
-  widRMax  = fRmax2 - fDz*tanRMax ;
-  distRMax = std::fabs(pRMax - widRMax)/secRMax ;
+  G4int noSurfaces = 0;
+  G4double rho, pPhi;
+  G4double distZ, distRMin, distRMax, distSPhi, distEPhi;
+  G4double tanRMin, secRMin, pRMin, widRMin;
+  G4double tanRMax, secRMax, pRMax, widRMax;
+  G4double delta = 0.5*kCarTolerance;
   
-  if (distRMin < distRMax)  // First minimum
+  G4ThreeVector norm, sumnorm(0.,0.,0.), nZ = G4ThreeVector(0.,0.,1.0);
+  G4ThreeVector nR, nr(0.,0.,0.), nPs, nPe;
+
+  distZ = std::fabs(std::fabs(p.z()) - fDz);
+  rho   = std::sqrt(p.x()*p.x() + p.y()*p.y());
+
+  tanRMin  = (fRmin2 - fRmin1)*0.5/fDz;
+  secRMin  = std::sqrt(1 + tanRMin*tanRMin);
+  pRMin    = rho - p.z()*tanRMin;
+  widRMin  = fRmin2 - fDz*tanRMin;
+  distRMin = std::fabs(pRMin - widRMin)/secRMin;
+
+  tanRMax  = (fRmax2 - fRmax1)*0.5/fDz;
+  secRMax  = std::sqrt(1+tanRMax*tanRMax);
+  pRMax    = rho - p.z()*tanRMax;
+  widRMax  = fRmax2 - fDz*tanRMax;
+  distRMax = std::fabs(pRMax - widRMax)/secRMax;
+
+  if (fDPhi < twopi)   //  &&  rho ) // Protected against (0,0,z) 
   {
-    if (distZ < distRMin)
+    pPhi = std::atan2(p.y(),p.x());
+
+    // if ( phi < 0 )    phi += twopi;
+    // if ( fSPhi < 0 )  distSPhi = std::fabs(phi - (fSPhi + twopi))*rho;    
+    // else              distSPhi = std::fabs(phi - fSPhi)*rho;
+    
+    if(pPhi  < fSPhi-delta)           pPhi     += twopi;
+    else if(pPhi > fSPhi+fDPhi+delta) pPhi     -= twopi;
+
+                      distSPhi = std::fabs( pPhi - fSPhi )*rho;
+                      distEPhi = std::fabs(pPhi - fSPhi - fDPhi)*rho;
+
+    nPs = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0);
+    nPe = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0);
+  }
+  if ( rho > delta )   
+  {
+    nR = G4ThreeVector(p.x()/rho,p.y()/rho,-tanRMax/secRMax);
+    if (fRmin1 || fRmin2) nr = G4ThreeVector(-p.x()/rho,-p.y()/rho,tanRMin/secRMin);
+  }
+
+  if( distRMax <= delta )
+  {
+    noSurfaces ++;
+    sumnorm += nR;
+  }
+  if( (fRmin1 || fRmin2) && distRMin <= delta )
+  {
+    noSurfaces ++;
+    sumnorm += nr;
+  }
+  if( fDPhi < twopi )   
+  {
+    if (distSPhi <= delta)
     {
-      distMin = distZ ;
-      side    = kNZ ;
+      noSurfaces ++;
+      sumnorm += nPs;
     }
-    else
+    if (distEPhi <= delta) 
     {
-      distMin = distRMin ;
-      side    = kNRMin ;
+      noSurfaces ++;
+      sumnorm += nPe;
     }
   }
-  else
+  if (distZ <= delta)  
   {
-    if (distZ < distRMax)
-    {
-      distMin = distZ ;
-      side    = kNZ ;
-    }
-    else
-    {
-      distMin = distRMax ;
-      side    = kNRMax ;
-    }
+    noSurfaces ++;
+    if ( p.z() >= 0.)  sumnorm += nZ;
+    else               sumnorm -= nZ; 
   }
-  if ( fDPhi < twopi && rho )  // Protected against (0,0,z) 
+  if ( noSurfaces == 0 )
   {
-    phi = std::atan2(p.y(),p.x()) ;
-
-    if (phi < 0) phi += twopi ;
-
-    if (fSPhi < 0) distSPhi = std::fabs(phi - (fSPhi + twopi))*rho ;
-    else           distSPhi = std::fabs(phi - fSPhi)*rho ;
-
-    distEPhi = std::fabs(phi - fSPhi - fDPhi)*rho ;
-
-    // Find new minimum
-
-    if (distSPhi < distEPhi)
-    {
-      if (distSPhi < distMin) side = kNSPhi ;
-    }
-    else 
-    {
-      if (distEPhi < distMin) side = kNEPhi ;
-    }
-  }    
-  switch (side)
-  {
-    case kNRMin:      // Inner radius
-      rho *= secRMin ;
-      norm = G4ThreeVector(-p.x()/rho,-p.y()/rho,tanRMin/secRMin) ;
-      break ;
-    case kNRMax:      // Outer radius
-      rho *= secRMax ;
-      norm = G4ThreeVector(p.x()/rho,p.y()/rho,-tanRMax/secRMax) ;
-      break ;
-    case kNZ:      // +/- dz
-      if (p.z() > 0) norm = G4ThreeVector(0,0,1) ; 
-      else           norm = G4ThreeVector(0,0,-1) ; 
-      break ;
-    case kNSPhi:
-      norm = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0) ;
-      break ;
-    case kNEPhi:
-      norm=G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0) ;
-      break ;
-    default:
-      DumpInfo();
-      G4Exception("G4Cons::SurfaceNormal()", "Notification", JustWarning,
-                  "Undefined side for valid surface normal to solid.") ;
-      break ;    
+    G4Exception("G4Cons::SurfaceNormal(p)", "Notification", JustWarning, 
+                "Point p is not on surface !?" ); 
   }
+  else if ( noSurfaces == 1 ) norm = sumnorm;
+  else                        norm = sumnorm.unit();
   return norm ;
 }
 

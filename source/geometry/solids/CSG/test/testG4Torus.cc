@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Torus.cc,v 1.9 2004-12-02 09:31:30 gcosmo Exp $
+// $Id: testG4Torus.cc,v 1.10 2005-05-03 09:07:45 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -118,6 +118,11 @@ G4bool testG4Torus()
    
    G4Torus t1("Solid Torus #1",0,Rmax,Rtor,0,twopi);
    G4Torus t2("Hole cutted Torus #2",Rmin,Rmax,Rtor,pi/4,halfpi);
+   G4Torus tn2("tn2",Rmin,Rmax,Rtor,halfpi,halfpi);
+   G4Torus tn3("tn3",Rmin,Rmax,Rtor,halfpi,3*halfpi);
+
+
+
    G4Torus t3("Hole cutted Torus #3",4*Rmin,Rmax,Rtor,halfpi-pi/24,pi/12);
    G4Torus t4("Solid Torus #4",0,Rtor-3*kCarTolerance,Rtor,0,twopi);
    G4Torus t5("Solid cutted Torus #5",0,Rtor-3*kCarTolerance,Rtor,pi/4,halfpi);
@@ -176,11 +181,25 @@ G4bool testG4Torus()
 
 // Check Surface Normal
     G4ThreeVector normal;
+    G4double p2=1./sqrt(2.); // ,p3=1./sqrt(3.);
+
 
     normal=t1.SurfaceNormal(ponrmax);
     assert(ApproxEqual(normal,vx));
-    normal=t1.SurfaceNormal(ponrmin);
+    normal=t1.SurfaceNormal(G4ThreeVector(0.,190.,0.));
     assert(ApproxEqual(normal,vy));
+    normal=tn2.SurfaceNormal(G4ThreeVector(0.,Rtor+Rmax,0.));
+    assert(ApproxEqual(normal,G4ThreeVector(p2,p2,0.)));
+    normal=tn2.SurfaceNormal(G4ThreeVector(0.,Rtor+Rmin,0.));
+    assert(ApproxEqual(normal,G4ThreeVector(p2,-p2,0.)));
+    normal=tn2.SurfaceNormal(G4ThreeVector(0.,Rtor-Rmin,0.));
+    assert(ApproxEqual(normal,G4ThreeVector(p2,p2,0.)));
+    normal=tn2.SurfaceNormal(G4ThreeVector(0.,Rtor-Rmax,0.));
+    assert(ApproxEqual(normal,G4ThreeVector(p2,-p2,0.)));
+    normal=tn3.SurfaceNormal(G4ThreeVector(Rtor,0.,Rmax));
+    assert(ApproxEqual(normal,G4ThreeVector(0.,p2,p2)));
+    normal=tn3.SurfaceNormal(G4ThreeVector(0.,Rtor,Rmax));
+    assert(ApproxEqual(normal,G4ThreeVector(p2,0.,p2)));
     
     normal=t2.SurfaceNormal(ponrmin);
     assert(ApproxEqual(normal,vmy));

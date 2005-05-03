@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Cons2.cc,v 1.12 2004-12-02 09:31:29 gcosmo Exp $
+// $Id: testG4Cons2.cc,v 1.13 2005-05-03 09:07:45 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Simple test of G4Cons
@@ -117,6 +117,8 @@ int main(void)
 	G4RotationMatrix r90X,r90Y,r90Z,r180X,r45X,r30Y;
 	
   G4Cons c1("Hollow Full Tube",50,100,50,100,50,0,twopi),
+         cn1("cn1",45.,50.,45.,50.,50,halfpi,halfpi),
+         cn2("cn1",45.,50.,45.,50.,50,halfpi,3*halfpi),
 	 c2("Hollow Full Cone",50,100,50,200,50,-1,twopi),
 	 c3("Hollow Cut Tube",50,100,50,100,50,-pi/6,pi/3),
 	 c4("Hollow Cut Cone",50,100,50,200,50,-pi/6,pi/3),
@@ -302,6 +304,31 @@ int main(void)
 	
 
 	G4cout << "Testing G4Cons::SurfaceNormal...\n";
+
+    G4ThreeVector normal;
+    G4double p2=1./sqrt(2.),p3=1./sqrt(3.);
+
+    normal=cn1.SurfaceNormal(G4ThreeVector(0.,50.,0.));
+    assert(ApproxEqual(normal,G4ThreeVector(p2,p2,0.)));
+    normal=cn1.SurfaceNormal(G4ThreeVector(0.,45.,0.));
+    assert(ApproxEqual(normal,G4ThreeVector(p2,-p2,0.)));
+    normal=cn1.SurfaceNormal(G4ThreeVector(0.,45.,50.));
+    assert(ApproxEqual(normal,G4ThreeVector(p3,-p3,p3)));
+    normal=cn1.SurfaceNormal(G4ThreeVector(0.,45.,-50.));
+    assert(ApproxEqual(normal,G4ThreeVector(p3,-p3,-p3)));
+    normal=cn1.SurfaceNormal(G4ThreeVector(-50.,0.,-50.));
+    assert(ApproxEqual(normal,G4ThreeVector(-p3,-p3,-p3)));
+    normal=cn1.SurfaceNormal(G4ThreeVector(-50.,0.,0.));
+    assert(ApproxEqual(normal,G4ThreeVector(-p2,-p2,0.)));
+    normal=cn2.SurfaceNormal(G4ThreeVector(0.,0.,0.));
+    assert(ApproxEqual(normal,G4ThreeVector(p2,p2,0.)));
+    normal=c6.SurfaceNormal(G4ThreeVector(0.,0.,50.));
+    assert(ApproxEqual(normal,G4ThreeVector(0.,0.,1.)));
+
+
+
+
+
 	norm=c1.SurfaceNormal(ponplz);
 	if (OutRange(norm,G4ThreeVector(0,0,1)))
 	    G4cout << "Error A " << norm << G4endl;

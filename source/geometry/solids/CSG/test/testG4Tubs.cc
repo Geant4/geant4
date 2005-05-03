@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Tubs.cc,v 1.14 2004-12-02 09:31:30 gcosmo Exp $
+// $Id: testG4Tubs.cc,v 1.15 2005-05-03 09:07:45 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -107,7 +107,9 @@ G4bool testG4Tubs()
 
     G4Tubs t4("Hole Sector #4",45*mm,50*mm,50*mm,halfpi,halfpi);
 
-  G4Tubs t5("Hole Sector #5",50*mm,100*mm,50*mm,0.0,270.0*deg);
+    G4Tubs t5("Hole Sector #5",50*mm,100*mm,50*mm,0.0,270.0*deg);
+    
+    G4Tubs t6("Solid Sector #3",0,50*mm,50*mm,halfpi,3.*halfpi);
 
   G4Tubs tube6("tube6",750,760,350,0.31415926535897931,5.6548667764616276);
 
@@ -184,9 +186,24 @@ G4bool testG4Tubs()
 // Check Surface Normal
 
     G4ThreeVector normal;
-
+    G4double p2=1./sqrt(2.),p3=1./sqrt(3.);
     normal=t1.SurfaceNormal(ponxside);
     assert(ApproxEqual(normal,vx));
+
+    normal=t4.SurfaceNormal(G4ThreeVector(0.,50.,0.));
+    assert(ApproxEqual(normal,G4ThreeVector(p2,p2,0.)));
+    normal=t4.SurfaceNormal(G4ThreeVector(0.,45.,0.));
+    assert(ApproxEqual(normal,G4ThreeVector(p2,-p2,0.)));
+    normal=t4.SurfaceNormal(G4ThreeVector(0.,45.,50.));
+    assert(ApproxEqual(normal,G4ThreeVector(p3,-p3,p3)));
+    normal=t4.SurfaceNormal(G4ThreeVector(0.,45.,-50.));
+    assert(ApproxEqual(normal,G4ThreeVector(p3,-p3,-p3)));
+    normal=t4.SurfaceNormal(G4ThreeVector(-50.,0.,-50.));
+    assert(ApproxEqual(normal,G4ThreeVector(-p3,-p3,-p3)));
+    normal=t4.SurfaceNormal(G4ThreeVector(-50.,0.,0.));
+    assert(ApproxEqual(normal,G4ThreeVector(-p2,-p2,0.)));
+    normal=t6.SurfaceNormal(G4ThreeVector(0.,0.,0.));
+    assert(ApproxEqual(normal,G4ThreeVector(p2,p2,0.)));
 
 // DistanceToOut(P)
     Dist=t1.DistanceToOut(pzero);

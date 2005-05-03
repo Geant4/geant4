@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Sphere.cc,v 1.15 2004-12-02 09:31:30 gcosmo Exp $
+// $Id: testG4Sphere.cc,v 1.16 2005-05-03 09:07:45 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -125,7 +125,16 @@ int main(void)
     pgoodNorm=&goodNorm;
 
     G4Sphere s1("Solid G4Sphere",0,50,0,twopi,0,pi);
+    G4Sphere sn1("sn1",0,50,halfpi,3.*halfpi,0,pi);
+    G4Sphere sn11("sn11",0,50,0,twopi,0.,halfpi);
+    G4Sphere sn12("sn12",0,50,0,twopi,0.,0.25*pi);
+    G4Sphere sn13("sn12",0,50,0,twopi,0.75*pi,0.25*pi);
+
     G4Sphere s2("Spherical Shell",45,50,0,twopi,0,pi);
+    G4Sphere sn2("sn2",45,50,halfpi,halfpi,0,pi);
+
+
+
     G4Sphere s3("Band (theta segment)",45,50,0,twopi,pi/4,halfpi);
     G4Sphere s32("Band (theta segment2)",45,50,0,twopi,0,pi/4);
     G4Sphere s33("Band (theta segment1)",45,50,0,twopi,pi*3/4,pi/4);
@@ -334,6 +343,26 @@ G4ThreeVector s9v(-0.6542770611918751,
     assert(s42.Inside(pmx)==kSurface);
 
 // Checking G4Sphere::SurfaceNormal
+    G4double p2=1./sqrt(2.),p3=1./sqrt(3.);
+
+
+    norm=sn1.SurfaceNormal(G4ThreeVector(0.,0.,50.));
+    assert(ApproxEqual(norm,G4ThreeVector(p3,p3,p3)));
+    norm=sn1.SurfaceNormal(G4ThreeVector(0.,0.,0.));
+    assert(ApproxEqual(norm,G4ThreeVector(p2,p2,0.)));
+
+    norm=sn11.SurfaceNormal(G4ThreeVector(0.,0.,0.));
+    assert(ApproxEqual(norm,G4ThreeVector(0.,0.,-1.)));
+    norm=sn12.SurfaceNormal(G4ThreeVector(0.,0.,0.));
+    assert(ApproxEqual(norm,G4ThreeVector(0.,0.,-1.)));
+    norm=sn13.SurfaceNormal(G4ThreeVector(0.,0.,0.));
+    assert(ApproxEqual(norm,G4ThreeVector(0.,0.,1.)));
+
+    norm=sn2.SurfaceNormal(G4ThreeVector(-45.,0.,0.));
+    assert(ApproxEqual(norm,G4ThreeVector(p2,-p2,0.)));
+
+
+
     norm=s1.SurfaceNormal(ponrmax1);
     assert(ApproxEqual(norm,vx));
 
