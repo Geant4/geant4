@@ -45,7 +45,7 @@ bool XMLHepRepWriter::addProperty(std::string key, std::string value) {
 bool XMLHepRepWriter::close() {
     xml->closeDoc(true);
     if (zip != NULL) {
-        zip->putNextEntry(ZipCDirEntry("heprep.properties"));
+        zip->putNextEntry("heprep.properties");
         
         map<string, string>::iterator i = properties.begin();
         while (i != properties.end()) {
@@ -66,7 +66,7 @@ bool XMLHepRepWriter::close() {
 
 bool XMLHepRepWriter::write(HepRep* heprep, string name) {
     if (zip != NULL) {
-        zip->putNextEntry(ZipCDirEntry(name));
+        zip->putNextEntry(name);
     }
     xml->openDoc();
     xml->setAttribute("version", "2.0");
