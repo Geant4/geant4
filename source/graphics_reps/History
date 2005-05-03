@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.65 2005-04-07 16:47:18 allison Exp $
+cvs log $Id: History,v 1.66 2005-05-03 17:43:41 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd May 2005  John Allison  (greps-V07-00-04)
+- Improved G4AttCheck.
 
 7th April 2005  John Allison  (greps-V07-00-03)
 - Needs g3tog4-V07-00-00 and geometry-gmk-V07-00-00.
