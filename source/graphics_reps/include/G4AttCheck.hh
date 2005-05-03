@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttCheck.hh,v 1.4 2005-04-07 16:47:18 allison Exp $
+// $Id: G4AttCheck.hh,v 1.5 2005-05-03 17:43:00 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4ATTCHECK_HH
@@ -53,24 +53,37 @@ class G4AttValue;
 class G4AttDef;
 
 class G4AttCheck {
-public:
+
+public: // With description
+
   G4AttCheck
   (const std::vector<G4AttValue>* values,
    const std::map<G4String,G4AttDef>* definitions);
+
   ~G4AttCheck();
+
   const std::vector<G4AttValue>* GetAttValues() const {
     return fpValues;
   }
+
   const std::map<G4String,G4AttDef>* GetAttDefs() const {
     return fpDefinitions;
   }
-  void Check() const;  // Check only.  Silent unless error - then G4cerr.
-  void Standard
-  (std::vector<G4AttValue>* newValues,
-   std::map<G4String,G4AttDef>* newDefinitions)
-    const;  // Returns standard versions in provided vector and map.
+
+  G4bool Check(const G4String& leader = "") const;
+  // Check only.  Silent unless error - then G4cerr.  Returns error.
+  // Provide leader, e.g., name of calling function.
+
+  G4bool Standard
+  (std::vector<G4AttValue>* standardValues,
+   std::map<G4String,G4AttDef>* standardDefinitions)
+    const;
+  // Places standard versions in provided containers and returns error.
+
   friend std::ostream& operator<< (std::ostream&, const G4AttCheck&);
+
 private:
+
   void AddValuesAndDefs
   (std::vector<G4AttValue>* newValues,
    std::map<G4String,G4AttDef>* newDefinitions,
@@ -79,14 +92,16 @@ private:
    const G4String& value,
    const G4String& extra,
    const G4String& description = "") const;   // Utility function for Standard.
+
+  const std::vector<G4AttValue>* fpValues;
+  const std::map<G4String,G4AttDef>* fpDefinitions;
+
   static G4bool fFirst;  // Flag for initialising the following containers.
   static std::set<G4String> fUnitCategories;  // Set of legal unit categories.
   static std::map<G4String,G4String> fStandardUnits;  // Standard units.
   static std::set<G4String> fCategories;      // Set of legal categories.
   static std::set<G4String> fUnits;           // Set of legal units.
   static std::set<G4String> fValueTypes;      // Set of legal value types.
-  const std::vector<G4AttValue>* fpValues;
-  const std::map<G4String,G4AttDef>* fpDefinitions;
 };
 
 #endif //G4ATTCHECK_HH
