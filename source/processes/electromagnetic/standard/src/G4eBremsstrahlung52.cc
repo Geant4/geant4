@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung52.cc,v 1.4 2004-12-01 19:37:15 vnivanch Exp $
+// $Id: G4eBremsstrahlung52.cc,v 1.5 2005-05-03 08:07:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -377,7 +377,7 @@ G4double G4eBremsstrahlung52::ComputeBremLoss(G4double Z,G4double,
   G4double delz = 1.e6;
   for (G4int ii=0; ii<NZ; ii++)
     {
-      if(fabs(Z-ZZ[ii]) < delz)  { iz = ii; delz = fabs(Z-ZZ[ii]);}
+      if(std::abs(Z-ZZ[ii]) < delz)  { iz = ii; delz = std::abs(Z-ZZ[ii]);}
     }
 
   G4double xx = log10(T);
@@ -618,10 +618,10 @@ G4double G4eBremsstrahlung52::ComputeCrossSectionPerAtom(
   G4double delz = 1.e6 ;
   for (G4int ii=0; ii<NZ; ii++)
   {
-    if(fabs(AtomicNumber-ZZ[ii]) < delz)
+    if(std::abs(AtomicNumber-ZZ[ii]) < delz)
     {
       iz = ii ;
-      delz = fabs(AtomicNumber-ZZ[ii]) ;
+      delz = std::abs(AtomicNumber-ZZ[ii]) ;
     }
   }
 

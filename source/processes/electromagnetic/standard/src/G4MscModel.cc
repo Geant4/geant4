@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.6 2005-04-19 09:49:24 vnivanch Exp $
+// $Id: G4MscModel.cc,v 1.7 2005-05-03 08:07:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -604,7 +604,7 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength, G4double Kinetic
         // ( Highland formula: Particle Physics Booklet, July 2002, eq. 26.10)
         // here : theta0 = 13.6*MeV*Q*(t/X0)**0.555/(beta*cp) 
         const G4double c_highland = 13.6*MeV, corr_highland=0.555 ;
-        G4double Q = fabs(charge) ;
+        G4double Q = std::abs(charge) ;
         G4double xx0 = trueStepLength/currentRadLength;
         G4double betacp = sqrt(currentKinEnergy*(currentKinEnergy+2.*mass)*
                                KineticEnergy*(KineticEnergy+2.*mass)/

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.24 2005-04-12 18:12:41 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.cc,v 1.25 2005-05-03 08:07:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -324,7 +324,7 @@ G4double G4eBremsstrahlungModel::ComputeBremLoss(G4double Z, G4double T,
   G4double delz = 1.e6;
   for (G4int ii=0; ii<NZ; ii++)
     {
-      G4double dz = fabs(Z-ZZ[ii]);
+      G4double dz = std::abs(Z-ZZ[ii]);
       if(dz < delz)  {
         iz = ii;
         delz = dz;
@@ -526,10 +526,11 @@ G4double G4eBremsstrahlungModel::CrossSectionPerAtom(G4double kineticEnergy,
   G4double delz = 1.e6 ;
   for (G4int ii=0; ii<NZ; ii++)
   {
-    if(fabs(Z-ZZ[ii]) < delz)
+    G4double absdelz = std::abs(Z-ZZ[ii]); 
+    if(absdelz < delz)
     {
       iz = ii ;
-      delz = fabs(Z-ZZ[ii]);
+      delz = absdelz;
     }
   }
 

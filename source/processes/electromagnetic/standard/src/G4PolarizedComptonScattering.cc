@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedComptonScattering.cc,v 1.12 2004-12-01 19:37:15 vnivanch Exp $
+// $Id: G4PolarizedComptonScattering.cc,v 1.13 2005-05-03 08:07:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -69,7 +69,7 @@ G4VParticleChange* G4PolarizedComptonScattering::PostStepDoIt(
    
    G4ThreeVector GammaPolarization0 = aDynamicGamma->GetPolarization();  
  
-   if (fabs(GammaPolarization0.mag() - 1.e0) > 1.e-14)
+   if (std::abs(GammaPolarization0.mag() - 1.e0) > 1.e-14)
       G4ComptonScattering::PostStepDoIt(aTrack,aStep);
        
    G4double GammaEnergy0 = aDynamicGamma->GetKineticEnergy();
@@ -106,7 +106,7 @@ G4VParticleChange* G4PolarizedComptonScattering::PostStepDoIt(
    G4double Rand = G4UniformRand();
 
    int j = 0;
-   while ((j < 100) && (fabs(SetPhi(epsilon,sint2,middle,Rand)) > resolution))
+   while ((j < 100) && (std::abs(SetPhi(epsilon,sint2,middle,Rand)) > resolution))
 	{
           middle = (maximum + minimum)/2;
           if (SetPhi(epsilon,sint2,middle,Rand)*
