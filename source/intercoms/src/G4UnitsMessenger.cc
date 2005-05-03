@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsMessenger.cc,v 1.5 2003-05-21 21:13:30 asaim Exp $
+// $Id: G4UnitsMessenger.cc,v 1.6 2005-05-03 17:30:29 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,6 @@ G4UnitsMessenger::G4UnitsMessenger()
       
   ListCmd = new G4UIcmdWithoutParameter("/units/list",this);
   ListCmd->SetGuidance("full list of available units.");
-  ListCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
