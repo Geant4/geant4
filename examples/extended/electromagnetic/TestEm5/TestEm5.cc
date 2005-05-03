@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm5.cc,v 1.12 2004-06-30 16:32:57 maire Exp $
+// $Id: TestEm5.cc,v 1.13 2005-05-03 10:21:16 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,7 +34,7 @@
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
-#include "VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "DetectorConstruction.hh"
@@ -69,7 +69,7 @@ int main(int argc,char** argv) {
 
 #ifdef G4VIS_USE
   // visualization manager
-  G4VisManager* visManager = new VisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
 

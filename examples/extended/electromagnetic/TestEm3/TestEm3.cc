@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TestEm3.cc,v 1.15 2004-10-25 12:50:55 maire Exp $
+// $Id: TestEm3.cc,v 1.16 2005-05-03 10:21:16 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,7 +42,7 @@
 #include "HistoManager.hh"
 
 #ifdef G4VIS_USE
-#include "VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,7 +72,7 @@ int main(int argc,char** argv) {
     
 #ifdef G4VIS_USE
   // visualization manager
-  G4VisManager* visManager = new VisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
     

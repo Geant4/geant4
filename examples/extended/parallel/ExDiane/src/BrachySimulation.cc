@@ -47,7 +47,7 @@
 #endif
 
 #ifdef G4VIS_USE
-#include "BrachyVisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "BrachyEventAction.hh"

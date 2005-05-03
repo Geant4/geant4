@@ -48,7 +48,7 @@
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
-#include "DMXVisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "DMXDetectorConstruction.hh"
@@ -92,7 +92,7 @@ int main(int argc,char** argv) {
   
 #ifdef G4VIS_USE
   // visualization manager
-  G4VisManager* visManager = new DMXVisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
 

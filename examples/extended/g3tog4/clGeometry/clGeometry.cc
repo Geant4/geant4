@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: clGeometry.cc,v 1.4 2003-07-04 15:55:01 gcosmo Exp $
+// $Id: clGeometry.cc,v 1.5 2005-05-03 10:21:16 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,7 +50,7 @@
 
 // visualization
 #ifdef G4VIS_USE
-#include "G3toG4VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 int main(int argc, char** argv)
@@ -106,7 +106,7 @@ int main(int argc, char** argv)
   //----------------
 
 #ifdef G4VIS_USE
-  G4VisManager* VisManager = new G3toG4VisManager;
+  G4VisManager* VisManager = new G4VisExecutive;
   VisManager -> Initialize();
 #endif
     

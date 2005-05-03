@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN02.cc,v 1.8 2002-01-09 17:23:49 ranjard Exp $
+// $Id: exampleN02.cc,v 1.9 2005-05-03 10:21:16 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@
 #include "G4UItcsh.hh"
 
 #ifdef G4VIS_USE
-#include "ExN02VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,7 +62,7 @@ int main(int argc,char** argv) {
   
 #ifdef G4VIS_USE
   // Visualization, if you choose to have it!
-  G4VisManager* visManager = new ExN02VisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
    

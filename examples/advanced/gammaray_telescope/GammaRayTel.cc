@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTel.cc,v 1.11 2003-06-16 16:46:19 gunter Exp $
+// $Id: GammaRayTel.cc,v 1.12 2005-05-03 10:21:16 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,7 +47,7 @@
 #endif
 
 #ifdef G4VIS_USE
-#include "GammaRayTelVisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "GammaRayTelDetectorConstruction.hh"
@@ -109,7 +109,7 @@ int main(int argc, char** argv)
 
 #ifdef G4VIS_USE
   // Visualization manager
-  G4VisManager* visManager = new GammaRayTelVisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
   

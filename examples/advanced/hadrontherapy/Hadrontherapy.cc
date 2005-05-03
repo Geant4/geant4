@@ -55,7 +55,7 @@
 #include "G4UItcsh.hh"
 
 #ifdef G4VIS_USE
-#include "HadrontherapyVisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "HadrontherapyDetectorConstruction.hh"
@@ -94,7 +94,7 @@ int main(int argc,char** argv) {
   //***********************************************
 
 #ifdef G4VIS_USE
-  G4VisManager* visManager = new HadrontherapyVisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager -> Initialize();
 #endif 
 

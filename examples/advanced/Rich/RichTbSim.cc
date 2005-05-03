@@ -45,7 +45,7 @@
 #endif
 #include "Randomize.hh"
 #ifdef G4VIS_USE
-#include "RichTbVisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "G4ios.hh"
@@ -82,7 +82,7 @@ int main(int argc,char** argv) {
 
 // UserAction classes - optional
 
-  RichTbVisManager* visManager = new RichTbVisManager();
+  G4VisManager* visManager = new G4VisExecutive();
   visManager->SetVerboseLevel(0);
   visManager->Initialize();
 

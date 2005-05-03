@@ -45,7 +45,7 @@
 #include "DicomPhysicsList.hh"
 
 #ifdef G4VIS_USE
-#include "DicomVisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "DicomGeometry.hh"
@@ -72,7 +72,7 @@ int main(int argc,char** argv)
 
 #ifdef G4VIS_USE
   // visualisation manager
-  G4VisManager* visManager = new DicomVisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
 

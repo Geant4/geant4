@@ -42,7 +42,7 @@
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
-#include "exrdmVisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 int main(int argc,char** argv)
@@ -86,7 +86,7 @@ int main(int argc,char** argv)
  
 #ifdef G4VIS_USE
   // visualization manager
-  G4VisManager* visManager = new exrdmVisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
 

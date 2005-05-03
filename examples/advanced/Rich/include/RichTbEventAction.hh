@@ -34,7 +34,7 @@
 #include "RichTbAnalysisManager.hh"
 
 class G4Event;
-class RichTbVisManager;
+class G4VVisManager;
 class RichTbAnalysisManager;
 class RichTbIOData;
 
@@ -44,7 +44,7 @@ class RichTbEventAction : public G4UserEventAction {
   RichTbEventAction();
 
   RichTbEventAction(RichTbRunConfig* ,
-		    RichTbVisManager* , RichTbIOData* );
+		    G4VVisManager* , RichTbIOData* );
   virtual ~RichTbEventAction();
 public:
     void BeginOfEventAction(const G4Event* );
@@ -52,13 +52,13 @@ public:
     G4int GetRichCollID() {return RichTbCollID;};
   RichTbAnalysisManager* getAnalysisM()
   {return ranalysisManager; }
-  RichTbVisManager* getVisM()
+  G4VVisManager* getVisM()
   {return pVisManager; }
  private:
   RichTbRunConfig* runConfiguration;
   G4int RichTbCollID;
   RichTbAnalysisManager* ranalysisManager;
-  RichTbVisManager* pVisManager;
+  G4VVisManager* pVisManager;
   RichTbIOData* rTbIOData;
 
 };

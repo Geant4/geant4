@@ -35,7 +35,6 @@
 #include "G4VHitsCollection.hh"
 #include "G4SDManager.hh"
 #include "G4VVisManager.hh"
-#include "RichTbVisManager.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 #include "RichTbSD.hh"
@@ -50,7 +49,7 @@ RichTbEventAction::RichTbEventAction()
 }
 
 RichTbEventAction::RichTbEventAction(RichTbRunConfig* RConfig, 
-    RichTbVisManager* RVisManager, RichTbIOData* RIOData)
+    G4VVisManager* RVisManager, RichTbIOData* RIOData)
 {
   RichTbCollID = -1;
   runConfiguration=RConfig;

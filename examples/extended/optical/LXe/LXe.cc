@@ -39,7 +39,7 @@
 #include "RecorderBase.hh"
 
 #ifdef G4VIS_USE
-#include "LXeVisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 //_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
@@ -53,7 +53,7 @@ int main(int argc, char** argv)
   runManager->SetUserInitialization(new LXePhysicsList);
 
 #ifdef G4VIS_USE
-  G4VisManager* visManager = new LXeVisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
 

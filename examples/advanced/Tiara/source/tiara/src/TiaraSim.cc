@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TiaraSim.cc,v 1.6 2004-12-08 15:37:15 daquinog Exp $
+// $Id: TiaraSim.cc,v 1.7 2005-05-03 10:21:17 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,7 +37,7 @@
 #include "G4VUserDetectorConstruction.hh"
 
 #include "TiaraPrimaryGeneratorAction.hh"
-#include "TiaraVisManager.hh"
+#include "G4VisExecutive.hh"
 #include "G4UItcsh.hh"
 #include "TiaraVisEventAction.hh"
 #include "TiaraVisRunAction.hh"
@@ -108,7 +108,7 @@ void TiaraSim::AddParticleCut(const std::string &particle,
 }
 
 void TiaraSim::AddVisRunAction() {
-  fVisManager = new TiaraVisManager; 
+  fVisManager = new G4VisExecutive; 
   frunMgr->SetUserAction(new TiaraVisRunAction);
 }
 void TiaraSim::initializeVisManager() {

@@ -79,7 +79,7 @@
 #include "G4UItcsh.hh"
 #include "XrayTelDetectorConstruction.hh"
 #include "XrayTelPhysicsList.hh"
-#include "XrayTelVisManager.hh"
+#include "G4VisExecutive.hh"
 #include "XrayTelEventAction.hh"
 #include "XrayTelRunAction.hh"
 #include "XrayTelSteppingAction.hh"
@@ -103,7 +103,7 @@ int main( int argc, char** argv )
   runManager->SetUserAction(new XrayTelSteppingAction);
 
   // visualization manager
-  G4VisManager* visManager = new XrayTelVisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();    
 
   //Initialize G4 kernel

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm10.cc,v 1.3 2005-04-19 14:58:25 grichine Exp $
+// $Id: TestEm10.cc,v 1.4 2005-05-03 10:21:16 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,7 @@
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
-#include "Em10VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "Em10DetectorConstruction.hh"
@@ -82,7 +82,7 @@ int main(int argc,char** argv)
 
   // visualization manager
 
-  G4VisManager* visManager = new Em10VisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 
 #endif 

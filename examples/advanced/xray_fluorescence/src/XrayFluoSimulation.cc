@@ -40,7 +40,7 @@
 #endif
 #include "Randomize.hh"
 #ifdef G4VIS_USE
-#include "XrayFluoVisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 #include "XrayFluoDetectorConstruction.hh"
 #include "XrayFluoPlaneDetectorConstruction.hh"
@@ -142,7 +142,7 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
   
 #ifdef G4VIS_USE
   //visualization manager
-  G4VisManager* visManager = new XrayFluoVisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
 
