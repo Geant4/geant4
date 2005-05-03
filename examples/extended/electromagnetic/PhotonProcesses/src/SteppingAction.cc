@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.3 2005-05-02 18:59:09 vnivanch Exp $
+// $Id: SteppingAction.cc,v 1.4 2005-05-03 12:07:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,10 +49,12 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   G4StepPoint* endPoint = aStep->GetPostStepPoint();
   G4String procName = endPoint->GetProcessDefinedStep()->GetProcessName();
+  G4double stepLength = aStep->GetStepLength();
 
   //count processes and sum track length
   //
   runAction->CountProcesses(procName);
+  if (procName != "Transportation") runAction->SumTrack(stepLength);
   
   //plot final state
   //
@@ -60,10 +62,6 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   //
   G4int id = 1;
   if (aStep->GetTrack()->GetTrackStatus() == fAlive) {
-
-    // if positron alive do not kill event
-    if(aStep->GetTrack()->GetDynamicParticle()->GetCharge() > 0.5*eplus) return;
-    
     G4double energy = endPoint->GetKineticEnergy();      
     histoManager->FillHisto(id,energy);
 
@@ -72,9 +70,6 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     G4double costeta = direction.x();
     histoManager->FillHisto(id,costeta);     
   }  
-
-  G4double trackLength = aStep->GetTrack()->GetTrackLength();
-  if (procName != "Transportation") runAction->SumTrack(trackLength);
   
   //secondaries
   //
