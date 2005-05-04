@@ -1,4 +1,4 @@
-$Id: History,v 1.147 2005-05-04 14:43:54 maire Exp $
+$Id: History,v 1.148 2005-05-04 16:18:47 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03 May 05: V.Ivant (stand-V07-00-09)
+- move v70 processes (model interface) to be default and old to be 52
+  (Compton, GammaConversion, PhotoElectricEffect, eplusAnnihilation)
      
 03 May 05: mma (stand-V07-00-08)
 - last tag before permutation v70 -> stand ->v52 for photon processes

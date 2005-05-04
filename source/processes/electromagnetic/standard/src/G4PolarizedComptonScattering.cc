@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedComptonScattering.cc,v 1.13 2005-05-03 08:07:41 vnivanch Exp $
+// $Id: G4PolarizedComptonScattering.cc,v 1.14 2005-05-04 16:16:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,21 +32,22 @@
 // Corrections by Rui Curado da Silva (Nov. 2000)
 //    - Sampling of Phi
 //    - Depolarization probability
-// 
+//
 // 13-07-01, DoIt: suppression of production cut for the electron (mma)
-// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma) 
+// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
+// 04-05-05, Inheritance from ComptonScattering52 (V.Ivanchenko)
 //
 // -----------------------------------------------------------------------------
 
 #include "G4PolarizedComptonScattering.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 using namespace std;
- 
+
 G4PolarizedComptonScattering::G4PolarizedComptonScattering(
                                                   const G4String& processName)
-: G4ComptonScattering (processName)
+: G4ComptonScattering52 (processName)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,16 +62,16 @@ G4VParticleChange* G4PolarizedComptonScattering::PostStepDoIt(
 // GEANT4 internal units
 //
 // Note : Effects due to binding of atomic electrons are negliged.
- 
+
 {
    aParticleChange.Initialize(aTrack);
 
-   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle(); 
-   
-   G4ThreeVector GammaPolarization0 = aDynamicGamma->GetPolarization();  
- 
+   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
+
+   G4ThreeVector GammaPolarization0 = aDynamicGamma->GetPolarization();
+
    if (std::abs(GammaPolarization0.mag() - 1.e0) > 1.e-14)
-      G4ComptonScattering::PostStepDoIt(aTrack,aStep);
+      G4ComptonScattering52::PostStepDoIt(aTrack,aStep);
        
    G4double GammaEnergy0 = aDynamicGamma->GetKineticEnergy();
    G4double E0_m = GammaEnergy0 / electron_mass_c2;
