@@ -1,4 +1,4 @@
-$Id: History,v 1.89 2005-05-03 17:50:07 allison Exp $
+$Id: History,v 1.90 2005-05-04 09:07:05 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,7 +21,7 @@ committal in the CVS repository !
 - Corrected AttDefs.
 - Made use of G4AttCheck.
 
-22 April 2005  T. Sasaki 
+22 April 2005  T. Sasaki  (not included in tracking-V07-00-01)
 - SetNavigator Method has been removed from G4TrackingManager
 
 22 March 2005 John Allison (tracking-V07-00-00 - needs global-V07-00-03)
