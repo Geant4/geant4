@@ -1,4 +1,4 @@
-$Id: History,v 1.146 2005-05-03 13:42:40 urban Exp $
+$Id: History,v 1.147 2005-05-04 14:43:54 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+03 May 05: mma (stand-V07-00-08)
+- last tag before permutation v70 -> stand ->v52 for photon processes
+- G4eplusAnnihilation70 : suppress Integral option
+- G4PEEffectModel::SampleSecondaries() : correct for shell selection
+- fabs -> std::abs
 
 03 May 05: L.Urban
 - G4UniversalFluctuation.cc : bugfix in the part of the Gaussian
