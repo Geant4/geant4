@@ -1,4 +1,4 @@
-$Id: History,v 1.44 2005-04-22 12:02:47 allison Exp $
+$Id: History,v 1.45 2005-05-04 20:27:49 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+4th May 2005  John Allison  (opengl-V07-00-02)
+- Restored sequence Set/Clear/DrawView in ClearTransientStore.  (It
+  was taken out to prevent recursive calling, but that seems to be OK,
+  and it is needed to implement refresh at end of event/run.)
 
 22nd April 2005  John Allison  (opengl-V07-00-01)
 - Rationalised work of opengl-V07-00-00.  Functionality unchanged.
