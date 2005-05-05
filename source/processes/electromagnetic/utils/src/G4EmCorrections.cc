@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.7 2005-04-26 16:52:07 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.8 2005-05-05 18:20:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -34,6 +34,7 @@
 // Creation date: 13.01.2005
 //
 // Modifications:
+// 05.05.2005 VI Fix misprint in Mott term
 //
 //
 // Class Description:
@@ -85,7 +86,7 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
   G4double ba = beta2/alpha2;
   G4double BarkasTerm = 0.0;
   const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* atomDensity  = material->GetAtomicNumDensityVector(); 
+  const G4double* atomDensity  = material->GetAtomicNumDensityVector();
   G4int numberOfElements = material->GetNumberOfElements();
 
   for (G4int i = 0; i<numberOfElements; i++) {
@@ -103,7 +104,7 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
     if(1 == iz) {
       if(material->GetName() == "G4_lH2") b = 0.6;
       else                                b = 1.8;
-    } 
+    }
     else if(2 == iz)  b = 0.6;
     else if(10 >= iz) b = 1.8;
     else if(17 >= iz) b = 1.4;
@@ -135,23 +136,23 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
     G4double de = BlochTerm;
     G4double i = 1.0;
     do {
-      i += 1.0; 
+      i += 1.0;
       de = 1.0/( i * (i*i + y2));
       BlochTerm += de;
     } while (de > BlochTerm*0.01);
- 
+
   }
-  BlochTerm *= -2.0*y2; 
+  BlochTerm *= -2.0*y2;
 
   G4double beta = std::sqrt(beta2);
   G4double eexc  = material->GetIonisation()->GetMeanExcitationEnergy();
 
-  G4double invbeta = 1.0/beta;  
-  G4double invbeta2= invbeta*invbeta;  
+  G4double invbeta = 1.0/beta;
+  G4double invbeta2= invbeta*invbeta;
   G4double za  = q*fine_structure_const;
   G4double za2 = za*za;
   G4double za3 = za2*za;
-  G4double x   = za*invbeta; 
+  G4double x   = za*invbeta;
   G4double cosx;
   if(x < COSEB[13]) {
     G4int i = Index(x,COSEB,14);
@@ -159,9 +160,9 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
   } else {
     cosx = COSXI[13]*COSEB[13]/x;
   }
-     
-  G4double mterm = 
-        za*beta*(1.725 + pi*cosx*(0.52 - 2.0*std::sqrt(eexc/2.0*electron_mass_c2*bg2)))
+
+  G4double mterm =
+        za*beta*(1.725 + pi*cosx*(0.52 - 2.0*std::sqrt(eexc/(2.0*electron_mass_c2*bg2))))
       + za2*(3.246 - 0.451*beta2)
       + za3*(1.522*beta + 0.987*invbeta)
       + za2*za2*(4.569 - 0.494*beta2 - 2.696*invbeta2)
@@ -299,7 +300,7 @@ G4double G4EmCorrections::KShell(G4double tet, G4double eta)
             Value(x, TheK[itet], TheK[itet+1], ZK[itet], ZK[itet+1])/(eta*eta))/eta;
   } else {
     G4double y = eta;
-    if(eta < Eta[0])  y =  Eta[0]; 
+    if(eta < Eta[0])  y =  Eta[0];
     G4int ieta = Index(y, Eta, nEtaK);
     corr = Value2(x, y, TheK[itet], TheK[itet+1], Eta[ieta], Eta[ieta+1],
                   CK[itet][ieta], CK[itet+1][ieta], CK[itet][ieta+1], CK[itet+1][ieta+1]);
@@ -327,7 +328,7 @@ G4double G4EmCorrections::LShell(G4double tet, G4double eta)
            )/eta;
   } else {
     G4double y = eta;
-    if(eta < Eta[0])  y =  Eta[0]; 
+    if(eta < Eta[0])  y =  Eta[0];
     G4int ieta = Index(y, Eta, nEtaL);
     corr = Value2(x, y, TheL[itet], TheL[itet+1], Eta[ieta], Eta[ieta+1],
                CL[itet][ieta], CL[itet+1][ieta], CL[itet][ieta+1], CL[itet+1][ieta+1]);
@@ -386,7 +387,7 @@ G4double G4EmCorrections::ShellCorrection(const G4ParticleDefinition* p,
 
   G4double term = 0.0;
   const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* atomDensity  = material->GetAtomicNumDensityVector(); 
+  const G4double* atomDensity  = material->GetAtomicNumDensityVector();
   G4int numberOfElements = material->GetNumberOfElements();
 
   for (G4int i = 0; i<numberOfElements; i++) {
@@ -437,7 +438,7 @@ G4double G4EmCorrections::ShellCorrection(const G4ParticleDefinition* p,
           term += f*18.0*atomDensity[i]*LShell(eshell,HM[iz-11]*eta)/Z; 
           term += f*(Z - 28.)*atomDensity[i]*LShell(eshell,HN[iz-33]*eta)/Z; 
         } else {
-          term += f*18.0*atomDensity[i]*LShell(eshell,HM[53]*eta)/Z; 
+          term += f*18.0*atomDensity[i]*LShell(eshell,HM[53]*eta)/Z;
           term += f*32.0*atomDensity[i]*LShell(eshell,HN[30]*eta)/Z; 
           term += f*(Z - 60.)*atomDensity[i]*LShell(eshell,150.*eta)/Z; 
 	}
@@ -499,7 +500,7 @@ G4double G4EmCorrections::BarkasCorrection(const G4ParticleDefinition* p,
 
   G4double BarkasTerm = 0.0;
   const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* atomDensity  = material->GetAtomicNumDensityVector(); 
+  const G4double* atomDensity  = material->GetAtomicNumDensityVector();
   G4int numberOfElements = material->GetNumberOfElements();
 
   for (G4int i = 0; i<numberOfElements; i++) {
@@ -577,11 +578,11 @@ G4double G4EmCorrections::MottCorrection(const G4ParticleDefinition* p,
 {
   G4double tau   = kineticEnergy / p->GetPDGMass();
   G4double gamma = 1.0 + tau;
-  G4double gb2   = tau*(tau + 2.0);
-  G4double beta2 = gb2/(gamma*gamma);
+  G4double bg2   = tau*(tau + 2.0);
+  G4double beta2 = bg2/(gamma*gamma);
 
   G4double q  = effCharge.EffectiveCharge(p,material,kineticEnergy)/eplus;
-  
+
   G4double beta = std::sqrt(beta2);
   G4double eexc = material->GetIonisation()->GetMeanExcitationEnergy();
 
@@ -589,12 +590,12 @@ G4double G4EmCorrections::MottCorrection(const G4ParticleDefinition* p,
 
   if(beta > 0.0) {
 
-    G4double invbeta = 1.0/beta;  
-    G4double invbeta2= invbeta*invbeta;  
+    G4double invbeta = 1.0/beta;
+    G4double invbeta2= invbeta*invbeta;
     G4double za  = q*fine_structure_const;
     G4double za2 = za*za;
     G4double za3 = za2*za;
-    G4double x   = za*invbeta; 
+    G4double x   = za*invbeta;
     G4double cosx;
     if(x < COSEB[13]) {
       G4int i = Index(x,COSEB,14);
@@ -602,12 +603,14 @@ G4double G4EmCorrections::MottCorrection(const G4ParticleDefinition* p,
     } else {
       cosx = COSXI[13]*COSEB[13]/x;
     }
-     
-    mterm = za*beta*(1.725 + pi*cosx*(0.52 - 2.0*std::sqrt(2.0*electron_mass_c2*gb2/eexc)))
+
+    mterm =
+        za*beta*(1.725 + pi*cosx*(0.52 - 2.0*std::sqrt(eexc/(2.0*electron_mass_c2*bg2))))
       + za2*(3.246 - 0.451*beta2)
       + za3*(1.522*beta + 0.987*invbeta)
       + za2*za2*(4.569 - 0.494*beta2 - 2.696*invbeta2)
       + za3*za2*(1.254*beta + 0.222*invbeta - 1.17*invbeta*invbeta2);
+
   }
 
   return mterm;
