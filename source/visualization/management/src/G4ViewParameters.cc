@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.18 2005-03-15 12:52:43 allison Exp $
+// $Id: G4ViewParameters.cc,v 1.19 2005-05-06 08:44:00 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,7 +72,7 @@ G4ViewParameters::G4ViewParameters ():
   fAutoRefresh (false)
 {
   fDefaultMarker.SetScreenSize (5.);
-  // Markers are 5 pixels radius, 10 pixels diameter.
+  // Markers are 5 pixels "overall" size, i.e., diameter.
 }
 
 G4ViewParameters::~G4ViewParameters () {
