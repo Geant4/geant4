@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeMessenger.hh,v 1.5 2004-09-13 20:52:52 johna Exp $
+// $Id: G4ASCIITreeMessenger.hh,v 1.6 2005-05-06 08:38:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,6 +35,8 @@
 
 #include "G4UImessenger.hh"
 
+#include <vector>
+
 class G4ASCIITree;
 class G4UIcommand;
 class G4UIcmdWithAnInteger;
@@ -46,6 +48,7 @@ public:
   virtual ~G4ASCIITreeMessenger();
   G4String GetCurrentValue (G4UIcommand* command);
   void SetNewValue (G4UIcommand* command, G4String newValue);
+  static std::vector<G4String> fVerbosityGuidance;
 private:
   G4ASCIITree* fpASCIITree;
   G4UIcommand* fpDirectory;

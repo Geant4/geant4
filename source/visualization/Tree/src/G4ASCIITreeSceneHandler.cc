@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.19 2005-02-23 11:28:02 allison Exp $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.20 2005-05-06 08:38:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,6 +32,7 @@
 #include "G4ASCIITreeSceneHandler.hh"
 
 #include "G4ASCIITree.hh"
+#include "G4ASCIITreeMessenger.hh"
 #include "G4VSolid.hh"
 #include "G4PhysicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
@@ -89,33 +90,11 @@ void G4ASCIITreeSceneHandler::WriteHeader (std::ostream& os)
   const G4ASCIITree* pSystem = (G4ASCIITree*)GetGraphicsSystem();
   const G4int verbosity = pSystem->GetVerbosity();
   const G4int detail = verbosity % 10;
-  os <<
-    "#  Set verbosity with \"/vis/ASCIITree/verbose <verbosity>\":"
-    "\n#  <  10: - does not print daughters of repeated placements."
-    "\n#         - does not repeat replicas."
-    "\n#  >= 10: prints all physical volumes."
-    "\n#  The level of detail is given by the units (verbosity%10):"
-    "\n#  >=  0: prints physical volume name."
-    "\n#  >=  1: prints logical volume name (and names of sensitive detector"
-    "\n#         and readout geometry, if any)."
-    "\n#  >=  2: prints solid name and type."
-    "\n#  >=  3: prints volume and density."
-    "\n#  >=  4: prints mass of each top physical volume in scene to depth specified."
-    "\n#  >=  5: prints mass of branch at each volume (can be time consuming)."
-    "\n#  Note: by default, culling is switched off so all volumes are seen.";
-  if (detail >=4) {
-    os <<
-      "\n#  Note: the mass calculation takes into account daughters, normally"
-      "\n#  to unlimited depth, which can be time consuuming.  If you want the"
-      "\n#  mass of a particular subtree to a particular depth:"
-      "\n#    /vis/open ATree"
-      "\n#    /vis/ASCIITree/verbose 14"
-      "\n#    /vis/scene/create"
-      "\n#    /vis/scene/add/volume <subtree-physical-volume> ! <depth>"
-      "\n#    /vis/sceneHandler/attach"
-      "\n#    /vis/viewer/flush";
+  os << "#  Set verbosity with \"/vis/ASCIITree/verbose <verbosity>\":";
+  for (size_t i = 0;
+       i < G4ASCIITreeMessenger::fVerbosityGuidance.size(); ++i) {
+    os << "\n#  " << G4ASCIITreeMessenger::fVerbosityGuidance[i];
   }
-
   os << "\n#  Now printing with verbosity " << verbosity;
   os << "\n#  Format is: PV:n";
   if (detail >= 1) os << " / LV (SD,RO)";

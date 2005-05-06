@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeMessenger.cc,v 1.12 2005-03-10 19:32:08 allison Exp $
+// $Id: G4ASCIITreeMessenger.cc,v 1.13 2005-05-06 08:38:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,8 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
 
+std::vector<G4String> G4ASCIITreeMessenger::fVerbosityGuidance;
+
 G4ASCIITreeMessenger::G4ASCIITreeMessenger
 (G4ASCIITree* ASCIITree):
   fpASCIITree(ASCIITree) {
@@ -50,8 +52,47 @@ G4ASCIITreeMessenger::G4ASCIITreeMessenger
   fpDirectorySet -> SetGuidance ("Settings for ASCIITree control.");
 
   fpCommandVerbose = new G4UIcmdWithAnInteger ("/vis/ASCIITree/verbose", this);
-  fpCommandVerbose -> SetGuidance
-    ("0 (default) mimimum - 10 maximum printing.");
+  fVerbosityGuidance.push_back
+    ("<  10: - does not print daughters of repeated placements,"
+     " does not repeat replicas.");
+  fVerbosityGuidance.push_back
+    (">= 10: prints all physical volumes.");
+  fVerbosityGuidance.push_back
+    ("The level of detail is given by the units (verbosity%10):");
+  fVerbosityGuidance.push_back
+    (">=  0: prints physical volume name.");
+  fVerbosityGuidance.push_back
+    (">=  1: prints logical volume name (and names of sensitive detector"
+     " and readout geometry, if any).");
+  fVerbosityGuidance.push_back
+    (">=  2: prints solid name and type.");
+  fVerbosityGuidance.push_back
+    (">=  3: prints volume and density.");
+  fVerbosityGuidance.push_back
+    (">=  4: prints mass of each top physical volume in scene to depth specified.");
+  fVerbosityGuidance.push_back
+    (">=  5: prints mass of branch at each volume (can be time consuming).");
+  fVerbosityGuidance.push_back
+    ("Note: by default, culling is switched off so all volumes are seen.");
+  fVerbosityGuidance.push_back
+    ("Note: the mass calculation takes into account daughters, normally"
+      " to unlimited depth, which can be time consuuming.  If you want the"
+      " mass of a particular subtree to a particular depth:");
+  fVerbosityGuidance.push_back
+    ("  /vis/open ATree");
+  fVerbosityGuidance.push_back
+    ("  /vis/ASCIITree/verbose 14");
+  fVerbosityGuidance.push_back
+    ("  /vis/scene/create");
+  fVerbosityGuidance.push_back
+    ("  /vis/scene/add/volume <subtree-physical-volume> ! <depth>");
+  fVerbosityGuidance.push_back
+    ("  /vis/sceneHandler/attach");
+  fVerbosityGuidance.push_back
+    ("  /vis/viewer/flush");
+  for (size_t i = 0; i < fVerbosityGuidance.size(); ++i) {
+    fpCommandVerbose -> SetGuidance(fVerbosityGuidance[i]);
+  }
   fpCommandVerbose -> SetParameterName ("verbosity",omitable = true);
   fpCommandVerbose -> SetDefaultValue(0);
 
