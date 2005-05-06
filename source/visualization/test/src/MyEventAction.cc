@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyEventAction.cc,v 1.6 2003-09-02 14:18:43 johna Exp $
+// $Id: MyEventAction.cc,v 1.7 2005-05-06 08:27:56 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,9 +45,12 @@
 #include "G4VVisManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4Scale.hh"
+#include "G4Text.hh"
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
+
+#include <sstream>
 
 MyEventAction::MyEventAction()
 {;}
@@ -60,6 +63,7 @@ void MyEventAction::BeginOfEventAction(const G4Event*)
 
 void MyEventAction::EndOfEventAction(const G4Event* anEvent)
 {
+  static int iEvent = 0;
   static int coutCount = 0;
   if (coutCount < 10) {
     coutCount++;
@@ -127,8 +131,14 @@ void MyEventAction::EndOfEventAction(const G4Event* anEvent)
     scale.SetVisAttributes(&va);
     pVVisManager->Draw(scale);
 
+    std::ostringstream oss;
+    oss << "Event " << iEvent << std::endl;
+    G4Text text(oss.str(), G4Point3D(400.*cm, 400.*cm, -400.*cm));
+    text.SetScreenSize(18);
+    G4VisAttributes textAtts(G4Colour(0.,1.,1));
+    text.SetVisAttributes(textAtts);
+    pVVisManager->Draw(text);
+
   }
+  ++iEvent;
 }
-
-
-
