@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.52 2005-04-10 21:04:39 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.53 2005-05-06 08:45:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -1260,7 +1260,7 @@ G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
   parameter -> SetDefaultValue (G4Scene::UNLIMITED);
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("clip-volume-type", 's', omitable = true);
-  parameter -> SetDefaultValue ("");
+  parameter -> SetDefaultValue ("none");
   parameter -> SetGuidance
     ("For \"box\", the parameters are xmin,xmax,ymin,ymax,zmin,zmax."
      "\n Only \"box\" is programmed at present.");
