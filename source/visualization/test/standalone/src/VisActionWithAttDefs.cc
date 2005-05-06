@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: VisActionWithAttDefs.cc,v 1.4 2005-03-28 19:15:33 allison Exp $
+// $Id: VisActionWithAttDefs.cc,v 1.5 2005-05-06 08:30:45 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "VisActionWithAttDefs.hh"
@@ -80,18 +80,27 @@ VisActionWithAttDefs::VisActionWithAttDefs ()
   fpAttValues->push_back
     (G4AttValue("ScoobyDoo","Rubbish",""));
 
-  G4AttCheck(fpAttValues,fpAttDefs).Check();  // Check only.
+  G4AttCheck(fpAttValues,fpAttDefs).Check
+    ("VisActionWithAttDefs::VisActionWithAttDefs");  // Check only.
 
   // Print...
-  G4cout << "\nVisActionWithAttDefs: constructor: att values:\n"
-	 << G4AttCheck(fpAttValues,fpAttDefs) << G4endl;
+  G4cout << "\nVisActionWithAttDefs::VisActionWithAttDefs: att values:\n"
+	 << G4AttCheck(fpAttValues,fpAttDefs)
+	 << G4endl;
 
+  // Convert to standard atts (as a test), print and delete...
   std::vector<G4AttValue>* pStandardAttValues = new std::vector<G4AttValue>;
   std::map<G4String,G4AttDef>* pStandardAttDefs =
     new std::map<G4String,G4AttDef>;
-  G4AttCheck(fpAttValues,fpAttDefs).Standard
+  G4bool error = G4AttCheck(fpAttValues,fpAttDefs).Standard
     (pStandardAttValues,pStandardAttDefs);
-  G4cout << "\nVisActionWithAttDefs: constructor: standardised versions:\n"
+  if (error) {
+    G4cout << "VisActionWithAttDefs::VisActionWithAttDefs"
+      "\nERROR found during conversion to standard atts."
+	   << G4endl;
+  }
+  G4cout <<
+    "VisActionWithAttDefs::VisActionWithAttDefs: standardised versions:\n"
 	 << G4AttCheck(pStandardAttValues,pStandardAttDefs)
 	 << G4endl;
   delete pStandardAttDefs;
