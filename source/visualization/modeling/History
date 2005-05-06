@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2005-03-03 16:48:28 allison Exp $
+$Id: History,v 1.32 2005-05-06 08:50:23 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+6th May 2005  John Allison  (modeling-V07-00-00)
+- G4PhysicalVolumeModel: SetCopyNo of replicas and paramaterised volumes.
 
 3rd March 2005  John Allison  (vis-V07-00-08)
 - Added Set methods to G4VModel.

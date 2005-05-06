@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.30 2005-03-15 13:00:19 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.31 2005-05-06 08:50:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -216,6 +216,7 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	pMaterial = pP -> ComputeMaterial (n, pVPV);
 	pP -> ComputeTransformation (n, pVPV);
 	pSol -> ComputeDimensions (pP, n, pVPV);
+	pVPV -> SetCopyNo (n);
 	DescribeAndDescend (pVPV, requestedDepth, pLV, pSol, pMaterial,
 			    theAT, sceneHandler);
       }
@@ -275,8 +276,7 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	} 
 	pVPV -> SetTranslation (translation);
 	pVPV -> SetRotation    (pRotation);
-	// pVPV -> SetCopyNo (n); // Has no effect and might even be
-	// dangerous.
+	pVPV -> SetCopyNo (n);
 	pSol = pLV -> GetSolid ();
 	pMaterial = pLV -> GetMaterial ();
 	DescribeAndDescend (pVPV, requestedDepth, pLV, pSol, pMaterial,
