@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.33 2005-03-15 12:57:57 allison Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.34 2005-05-06 08:46:50 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -323,7 +323,7 @@ G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
   delete fpCommandViewpointVector;
 }
 
-G4String G4VisCommandsViewerSet::GetCurrentValue(G4UIcommand* command) {
+G4String G4VisCommandsViewerSet::GetCurrentValue(G4UIcommand*) {
   return "";
 }
 
