@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.icc,v 1.1 2005-02-04 16:42:39 johna Exp $
+// $Id: G4VisExecutive.icc,v 1.2 2005-05-06 08:42:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -121,4 +121,11 @@ void G4VisExecutive::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4VRML1);
   RegisterGraphicsSystem (new G4VRML2);
 #endif
+
+  if (fVerbose > 0) {
+    G4cout <<
+      "\nYou have successfully chosen to use the following graphics systems."
+         << G4endl;
+    PrintAvailableGraphicsSystems ();
+  }
 }
