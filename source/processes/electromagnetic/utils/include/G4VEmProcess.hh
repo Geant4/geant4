@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.23 2005-05-08 17:55:01 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.24 2005-05-08 17:56:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -43,6 +43,7 @@
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 18-04-05 Use G4ParticleChangeForGamma (V.Ivantchenko)
+// 08-05-05 Fix problem in logic when path boundary between materials (V.Ivantchenko)
 //
 // Class Description:
 //

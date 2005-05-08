@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.32 2005-05-08 17:55:01 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.33 2005-05-08 17:56:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -49,6 +49,7 @@
 // 24-03-05 Remove IsInCharge and add G4VParticleChange in the constructor (V.Ivanchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 15-04-05 optimize internal interface for msc (V.Ivanchenko)
+// 08-05-05 A -> N (V.Ivanchenko)
 //
 // Class Description:
 //
