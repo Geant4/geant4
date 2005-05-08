@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.15 2005-04-08 12:40:07 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.16 2005-05-08 18:16:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,6 +38,7 @@
 // 12.09.2004 Add verbosity (V.Ivanchenko)
 // 17.11.2004 Change signature of methods, add new methods (V.Ivanchenko)
 // 08.04.2005 Major optimisation of internal interfaces (V.Ivantchenko)
+// 08.05.2005 Use updated interfaces (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -324,10 +325,10 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
   }
   if(FindEmModel(p, processName, kinEnergy)) {
     //    G4cout << "currentModel= " << currentModel << G4endl;
-    if(UpdateCouple(mat, cut) && UpdateParticle(p, kinEnergy)) {
+    if(UpdateParticle(p, kinEnergy)) {
       G4double escaled = kinEnergy*massRatio; 
       if(baseParticle) {
-        res = currentModel->ComputeDEDX(currentCouple, baseParticle, escaled, cut)
+        res = currentModel->ComputeDEDXPerVolume(mat, baseParticle, escaled, cut)
             * chargeSquare;
         if(verbose > 1) {
           G4cout <<  baseParticle->GetParticleName() << " E(MeV)= " << escaled
@@ -336,7 +337,7 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
                  << G4endl;
 	}          
       } else {
-        res = currentModel->ComputeDEDX(currentCouple, p, kinEnergy, cut);
+        res = currentModel->ComputeDEDXPerVolume(mat, p, kinEnergy, cut);
       }
       if(isIon && currentModel->HighEnergyLimit() > 100.*MeV) 
         res += corr->HighOrderCorrections(p,mat,kinEnergy);
@@ -346,19 +347,19 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
       if(eth > 0.05*MeV && eth < 10.*MeV && escaled > eth) {
         G4double res1 = 0.0;
         if(baseParticle) {
-          res1 = currentModel->ComputeDEDX(currentCouple, baseParticle, eth, cut)
+          res1 = currentModel->ComputeDEDXPerVolume(mat, baseParticle, eth, cut)
                * chargeSquare;
 	} else {
-	  res1 = currentModel->ComputeDEDX(currentCouple, p, eth, cut);
+	  res1 = currentModel->ComputeDEDXPerVolume(mat, p, eth, cut);
 	}
         if(isIon) res1 += corr->HighOrderCorrections(p,mat,eth/massRatio);  
         G4double res0 = res1;
         if(FindEmModel(p, processName, eth-1.0*keV)) {
 	  if(baseParticle) {
-	    res0 = currentModel->ComputeDEDX(currentCouple, baseParticle, eth, cut)
+	    res0 = currentModel->ComputeDEDXPerVolume(mat, baseParticle, eth, cut)
 	         * chargeSquare;
 	  } else {
-	    res0 = currentModel->ComputeDEDX(currentCouple, p, eth, cut);
+	    res0 = currentModel->ComputeDEDXPerVolume(mat, p, eth, cut);
 	  }
 	}
         //G4cout << "eth= " << eth << " escaled= " << escaled << " res0= " << res0 << " res1= " 
@@ -430,13 +431,13 @@ G4double G4EmCalculator::ComputeCrossSectionPerVolume(
 {
   G4double res = 0.0;
   if(FindEmModel(p, processName, kinEnergy)) {
-    if(UpdateCouple(mat, cut) && UpdateParticle(p, kinEnergy)) {
+    if(UpdateParticle(p, kinEnergy)) {
       G4double e = kinEnergy;
       if(baseParticle) {
         e *= kinEnergy*massRatio;
-        res = currentModel->CrossSection(currentCouple, baseParticle, e, cut, e)*chargeSquare;
+        res = currentModel->CrossSectionPerVolume(mat, baseParticle, e, cut, e)*chargeSquare;
       } else {
-        res = currentModel->CrossSection(currentCouple, p, e, cut, e);
+        res = currentModel->CrossSectionPerVolume(mat, p, e, cut, e);
       }
     }
     if(verbose>0) {
@@ -503,7 +504,7 @@ G4double G4EmCalculator::ComputeCrossSectionPerAtom(G4double kinEnergy,
 		                                    G4double cut)
 {
   return ComputeCrossSectionPerAtom(kinEnergy,FindParticle(particle),processName,
-                                    elm->GetZ(),elm->GetA(),cut);
+                                    elm->GetZ(),elm->GetN(),cut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
