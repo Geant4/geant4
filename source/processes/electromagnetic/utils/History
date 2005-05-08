@@ -1,4 +1,4 @@
-$Id: History,v 1.196 2005-05-04 14:34:20 maire Exp $
+$Id: History,v 1.197 2005-05-08 17:55:01 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09 May 05: V.Ivant (utils-V07-00-10)
+- Bux fixes in G4VEmProcess, G4VEmModel, G4EmCorrections
      
 03 May 05: V.Ivant (utils-V07-00-09)
 - fabs -> std::abs

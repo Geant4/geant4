@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.31 2005-04-29 10:08:26 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.32 2005-05-08 17:55:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -288,7 +288,7 @@ inline G4double G4VEmModel::CrossSectionPerVolume(
   for (size_t i=0; i<nelm; i++) {
     const G4Element* elm = (*theElementVector)[i];
     G4double Z = elm->GetZ(); 
-    G4double A = elm->GetA();
+    G4double A = elm->GetN();
     cross += theAtomNumDensityVector[i]*ComputeCrossSectionPerAtom(p,ekin,Z,A,emin,emax); 
     xsec[i] = cross;
   }
