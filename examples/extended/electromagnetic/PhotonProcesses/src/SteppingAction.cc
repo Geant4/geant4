@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.4 2005-05-03 12:07:46 maire Exp $
+// $Id: SteppingAction.cc,v 1.5 2005-05-09 17:49:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,6 +62,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   //
   G4int id = 1;
   if (aStep->GetTrack()->GetTrackStatus() == fAlive) {
+    //allow positron to do few steps
+    if(aStep->GetTrack()->GetDynamicParticle()->GetCharge() > 0.5*eplus)return;
     G4double energy = endPoint->GetKineticEnergy();      
     histoManager->FillHisto(id,energy);
 
