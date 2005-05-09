@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.25 2005-05-09 08:23:26 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.26 2005-05-09 11:18:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -43,7 +43,7 @@
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 18-04-05 Use G4ParticleChangeForGamma (V.Ivantchenko)
-// 08-05-05 Fix problem in logic when path boundary between materials (V.Ivantchenko)
+// 09-05-05 Fix problem in logic when path boundary between materials (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -134,6 +134,8 @@ public:
   void SetMaxKinEnergy(G4double e);
   G4double MaxKinEnergy() const;
   // Max kinetic energy for tables
+
+  void SetLambdaFactor(G4double val);
 
   G4bool StorePhysicsTable(const G4ParticleDefinition*,
                            const G4String& directory,
@@ -379,6 +381,7 @@ inline G4double G4VEmProcess::GetMeanFreePath(const G4Track& track,
   *condition = NotForced;
   preStepKinEnergy = track.GetKineticEnergy();
   DefineMaterial(track.GetMaterialCutsCouple());
+  if( aboveCSmax && preStepKinEnergy < mfpKinEnergy ) ResetNumberOfInteractionLengthLeft();
   if (meanFreePath) {
     if(integral) ComputeIntegralLambda();
     else         preStepLambda = GetCurrentLambda();
@@ -440,6 +443,13 @@ inline G4double G4VEmProcess::GetGammaEnergyCut()
 inline G4double G4VEmProcess::GetElectronEnergyCut()
 {
   return (*theCutsElectron)[currentMaterialIndex];
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEmProcess::SetLambdaFactor(G4double val)
+{
+  if(val > 0.0 && val <= 1.0) lambdaFactor = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
