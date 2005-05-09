@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.5 2004-12-03 09:36:38 vnivanch Exp $
+// $Id: RunAction.cc,v 1.6 2005-05-09 16:10:42 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,6 +35,7 @@
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4EmCalculator.hh"
 
 #include "Randomize.hh"
 #include <iomanip>
@@ -96,10 +97,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double density = material->GetDensity();
   G4int survive = 0;
    
-  G4String particle = primary->GetParticleGun()->GetParticleDefinition()
-                      ->GetParticleName();    
+  G4ParticleDefinition* particle = 
+                            primary->GetParticleGun()->GetParticleDefinition();
+  G4String Particle = particle->GetParticleName();    
   G4double energy = primary->GetParticleGun()->GetParticleEnergy();
-  G4cout << "\n The run consists of " << NbOfEvents << " "<< particle << " of "
+  G4cout << "\n The run consists of " << NbOfEvents << " "<< Particle << " of "
          << G4BestUnit(energy,"Energy") << " through " 
 	 << G4BestUnit(detector->GetSize(),"Length") << " of "
 	 << material->GetName() << " (density: " 
@@ -137,7 +139,18 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	 << "\t\t\tmassic: "         << massicAC*g/cm2 << " cm2/g"
          << G4endl;
 
-            	                           
+  //check cross section from G4EmCalculator
+  //
+  if (ProcCounter->size() == 1) {
+    G4String process = (*ProcCounter)[0]->GetName();
+    G4EmCalculator emCalculator;
+    G4double massSigma = emCalculator.
+        ComputeCrossSectionPerVolume(energy,particle,process,material)/density;
+    
+    G4cout << "\n \t \t mass AttenuationCoef from G4EmCalculator: "
+           << massSigma*g/cm2 << " cm2/g" << G4endl;
+  }  	   
+	    	                           
   G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);         
 
