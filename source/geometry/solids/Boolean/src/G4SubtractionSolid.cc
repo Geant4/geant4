@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.cc,v 1.24 2005-05-04 07:43:45 grichine Exp $
+// $Id: G4SubtractionSolid.cc,v 1.25 2005-05-09 13:44:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -125,18 +125,12 @@ EInside G4SubtractionSolid::Inside( const G4ThreeVector& p ) const
   }
   else
   {
-    // #ifndef G4NEW_SURF_NORMAL  
-    // if(( positionA == kInside && positionB == kSurface  ) ||
-    //   ( positionB == kOutside && positionA == kSurface ) ||
-    //   ( positionA == kSurface && positionB == kSurface )   )  return kSurface;
-    // #else
     if(( positionA == kInside && positionB == kSurface) ||
        ( positionB == kOutside && positionA == kSurface) ||
        ( positionA == kSurface && positionB == kSurface &&
          ( fPtrSolidA->SurfaceNormal(p) - 
            fPtrSolidB->SurfaceNormal(p) ).mag2() > 
             1000*kRadTolerance )                            )  return kSurface;
-    // #endif
     else  return kOutside;
   }
 }

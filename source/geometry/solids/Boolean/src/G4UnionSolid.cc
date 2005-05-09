@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.cc,v 1.28 2005-05-04 07:43:45 grichine Exp $
+// $Id: G4UnionSolid.cc,v 1.29 2005-05-09 13:44:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -133,21 +133,17 @@ EInside G4UnionSolid::Inside( const G4ThreeVector& p ) const
   EInside positionA = fPtrSolidA->Inside(p);
   EInside positionB = fPtrSolidB->Inside(p);
 
-  // #ifndef G4NEW_SURF_NORMAL  
-  // if( positionA == kInside  || positionB == kInside )           return kInside;  
-  // #else
-    if( positionA == kInside  || positionB == kInside   ||
-        ( positionA == kSurface && positionB == kSurface &&
-          ( fPtrSolidA->SurfaceNormal(p) + 
-            fPtrSolidB->SurfaceNormal(p) ).mag2() < 
-            1000*kRadTolerance ) )                              return kInside;
-    // #endif    
+  if( positionA == kInside  || positionB == kInside   ||
+    ( positionA == kSurface && positionB == kSurface &&
+        ( fPtrSolidA->SurfaceNormal(p) + 
+          fPtrSolidB->SurfaceNormal(p) ).mag2() < 
+          1000*kRadTolerance ) )                              return kInside;
   else
   {
     if( ( positionA != kInside  && positionB == kSurface ) ||
         ( positionB != kInside  && positionA == kSurface ) ||
-        ( positionA == kSurface && positionB == kSurface )    )  return kSurface;
-    else                                                         return kOutside;    
+        ( positionA == kSurface && positionB == kSurface )    ) return kSurface;
+    else                                                        return kOutside;
   }
 }
 
