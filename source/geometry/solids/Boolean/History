@@ -1,5 +1,5 @@
 
-$Id: History,v 1.51 2005-04-04 09:45:14 gcosmo Exp $
+$Id: History,v 1.52 2005-05-09 13:46:03 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ May 04, 2005  V.Grichine                 geom-bool-V07-00-03
+  - Make the new implementation of Inside() with surface-normal for
+    edges/vertices the deafult one.
+    Removed G4NEW_SURF_NORMAL compilation flag.
 
  Mar 23, 2005  J.Allison                  geom-bool-V07-00-02
   - Added test for Number-Of-Rotation-Steps in GetPolyhedron()
