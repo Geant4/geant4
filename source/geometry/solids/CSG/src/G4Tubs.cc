@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.47 2005-05-03 09:07:45 grichine Exp $
+// $Id: G4Tubs.cc,v 1.48 2005-05-09 07:32:49 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -556,7 +556,7 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
 {
   G4int noSurfaces = 0;
   G4double rho, pPhi;
-  G4double delta   = 0.5*kCarTolerance;
+  G4double delta   = 0.5*kCarTolerance, dAngle = 0.5*kAngTolerance;
   G4double distZ, distRMin, distRMax, distSPhi, distEPhi;
   G4ThreeVector norm, sumnorm(0.,0.,0.);
   G4ThreeVector nZ = G4ThreeVector(0, 0, 1.0);
@@ -579,8 +579,8 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
     if(pPhi  < fSPhi-delta)           pPhi     += twopi;
     else if(pPhi > fSPhi+fDPhi+delta) pPhi     -= twopi;
 
-                      distSPhi = std::fabs( pPhi - fSPhi )*rho;
-                      distEPhi = std::fabs(pPhi - fSPhi - fDPhi)*rho;
+    distSPhi = std::fabs( pPhi - fSPhi );       // *rho;
+    distEPhi = std::fabs(pPhi - fSPhi - fDPhi); // *rho;
 
     nPs = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0);
     nPe = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0);
@@ -599,12 +599,12 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
   }
   if( fDPhi < twopi )   
   {
-    if (distSPhi <= delta)
+    if (distSPhi <= dAngle)  // delta)
     {
       noSurfaces ++;
       sumnorm += nPs;
     }
-    if (distEPhi <= delta) 
+    if (distEPhi <= dAngle) // delta) 
     {
       noSurfaces ++;
       sumnorm += nPe;

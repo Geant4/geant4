@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.37 2005-05-03 09:07:45 grichine Exp $
+// $Id: G4Sphere.cc,v 1.38 2005-05-09 07:32:49 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -542,7 +542,7 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
   G4int noSurfaces = 0;  
   G4double rho, rho2, rad, pPhi, pTheta;
   G4double distRMin, distRMax, distSPhi, distEPhi, distSTheta, distETheta;
-  G4double delta = 0.5*kCarTolerance;
+  G4double delta = 0.5*kCarTolerance, dAngle = 0.5*kAngTolerance;
   G4ThreeVector nR, nPs, nPe, nTs, nTe, nZ(0.,0.,1.);
   G4ThreeVector norm, sumnorm(0.,0.,0.);
 
@@ -564,8 +564,8 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
     // if ( fSPhi < 0 )  distSPhi = std::fabs( pPhi - (fSPhi + twopi) )*rho;
     // else              distSPhi = std::fabs( pPhi - fSPhi )*rho;
 
-                      distSPhi = std::fabs( pPhi - fSPhi )*rho;
-                      distEPhi = std::fabs(pPhi-fSPhi-fDPhi)*rho;
+    distSPhi = std::fabs( pPhi - fSPhi ); // *rho;
+    distEPhi = std::fabs(pPhi-fSPhi-fDPhi); // *rho;
 
     nPs = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0);
     nPe = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0);
@@ -573,8 +573,8 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
   if ( fDTheta < pi ) // && rad ) // old limitation against (0,0,0)
   {
     pTheta     = std::atan2(rho,p.z());
-    distSTheta = std::fabs(pTheta-fSTheta)*rad;
-    distETheta = std::fabs(pTheta-fSTheta-fDTheta)*rad;
+    distSTheta = std::fabs(pTheta-fSTheta); // *rad;
+    distETheta = std::fabs(pTheta-fSTheta-fDTheta); // *rad;
 
     nTs = G4ThreeVector(-std::cos(fSTheta)*std::cos(pPhi),
                         -std::cos(fSTheta)*std::sin(pPhi),
@@ -597,12 +597,12 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
   }
   if( fDPhi < twopi )   
   {
-    if (distSPhi <= delta)
+    if (distSPhi <= dAngle)
     {
       noSurfaces ++;
       sumnorm += nPs;
     }
-    if (distEPhi <= delta) 
+    if (distEPhi <= dAngle) 
     {
       noSurfaces ++;
       sumnorm += nPe;
@@ -610,13 +610,13 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
   }
   if ( fDTheta < pi )
   {
-    if (distSTheta <= delta && fSTheta > 0.)
+    if (distSTheta <= dAngle && fSTheta > 0.)
     {
       noSurfaces ++;
       if( rad <= delta && fDPhi >= twopi) sumnorm += nZ;
       else                                sumnorm += nTs;
     }
-    if (distETheta <= delta && fSTheta+fDTheta < pi) 
+    if (distETheta <= dAngle && fSTheta+fDTheta < pi) 
     {
       noSurfaces ++;
       if( rad <= delta && fDPhi >= twopi) sumnorm -= nZ;
