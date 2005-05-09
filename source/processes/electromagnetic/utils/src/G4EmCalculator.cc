@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.16 2005-05-08 18:16:33 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.17 2005-05-09 17:48:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -431,14 +431,13 @@ G4double G4EmCalculator::ComputeCrossSectionPerVolume(
 {
   G4double res = 0.0;
   if(FindEmModel(p, processName, kinEnergy)) {
-    if(UpdateParticle(p, kinEnergy)) {
-      G4double e = kinEnergy;
-      if(baseParticle) {
-        e *= kinEnergy*massRatio;
-        res = currentModel->CrossSectionPerVolume(mat, baseParticle, e, cut, e)*chargeSquare;
-      } else {
-        res = currentModel->CrossSectionPerVolume(mat, p, e, cut, e);
-      }
+    UpdateParticle(p, kinEnergy);
+    G4double e = kinEnergy;
+    if(baseParticle) {
+      e *= kinEnergy*massRatio;
+      res = currentModel->CrossSectionPerVolume(mat, baseParticle, e, cut, e)*chargeSquare;
+    } else {
+      res = currentModel->CrossSectionPerVolume(mat, p, e, cut, e);
     }
     if(verbose>0) {
       G4cout << "E(MeV)= " << kinEnergy/MeV
@@ -475,14 +474,13 @@ G4double G4EmCalculator::ComputeCrossSectionPerAtom(
 {
   G4double res = 0.0;
   if(FindEmModel(p, processName, kinEnergy)) {
-    if(UpdateParticle(p, kinEnergy)) {
-      G4double e = kinEnergy;
-      if(baseParticle) {
-        e *= kinEnergy*massRatio;
-        res = currentModel->ComputeCrossSectionPerAtom(baseParticle, e, Z, A, cut)*chargeSquare;
-      } else {
-        res = currentModel->ComputeCrossSectionPerAtom(p, e, Z, A, cut);
-      }
+    UpdateParticle(p, kinEnergy);
+    G4double e = kinEnergy;
+    if(baseParticle) {
+      e *= kinEnergy*massRatio;
+      res = currentModel->ComputeCrossSectionPerAtom(baseParticle, e, Z, A, cut)*chargeSquare;
+    } else {
+      res = currentModel->ComputeCrossSectionPerAtom(p, e, Z, A, cut);
     }
     if(verbose>0) {
       G4cout << "E(MeV)= " << kinEnergy/MeV
@@ -546,6 +544,7 @@ G4bool G4EmCalculator::UpdateParticle(const G4ParticleDefinition* p, G4double ki
 {
   if(p != currentParticle) {
     currentParticle = p;
+    baseParticle    = 0;
     currentParticleName = p->GetParticleName();
   }
   isApplicable    = false;
