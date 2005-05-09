@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.24 2005-05-08 17:56:52 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.25 2005-05-09 08:23:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -221,8 +221,6 @@ private:
 
   G4double GetCurrentLambda();
 
-  void NewIntegralLambda();
-
   G4double ComputeCurrentLambda(G4double kinEnergy);
 
   void BuildLambdaTable();
@@ -349,8 +347,9 @@ inline G4double G4VEmProcess::GetLambda(G4double e)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VEmProcess::NewIntegralLambda()
+inline void G4VEmProcess::ComputeIntegralLambda()
 {
+  meanFreePath  = false;
   aboveCSmax    = false;
   mfpKinEnergy  = theEnergyOfCrossSectionMax[currentMaterialIndex];
   if (preStepKinEnergy <= mfpKinEnergy) {
@@ -383,21 +382,12 @@ inline G4double G4VEmProcess::GetMeanFreePath(const G4Track& track,
   if (meanFreePath) {
     if(integral) ComputeIntegralLambda();
     else         preStepLambda = GetCurrentLambda();
-    meanFreePath  = false;
     if(0.0 < preStepLambda) preStepMFP = 1.0/preStepLambda;
     else                    preStepMFP = DBL_MAX;
   }
   //    G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<< " eCSmax= " 
   //  <<mfpKinEnergy<< " mfp= "<<preStepMFP<<G4endl;
   return preStepMFP;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEmProcess::ComputeIntegralLambda()
-{
-  if(!meanFreePath || (aboveCSmax && preStepKinEnergy < mfpKinEnergy)) ResetNumberOfInteractionLengthLeft();
-  if( meanFreePath ) NewIntegralLambda();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
