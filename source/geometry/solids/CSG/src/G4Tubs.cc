@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.48 2005-05-09 07:32:49 grichine Exp $
+// $Id: G4Tubs.cc,v 1.49 2005-05-09 14:11:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -557,7 +557,8 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
   G4int noSurfaces = 0;
   G4double rho, pPhi;
   G4double delta   = 0.5*kCarTolerance, dAngle = 0.5*kAngTolerance;
-  G4double distZ, distRMin, distRMax, distSPhi, distEPhi;
+  G4double distZ, distRMin, distRMax;
+  G4double distSPhi=0., distEPhi=0.;
   G4ThreeVector norm, sumnorm(0.,0.,0.);
   G4ThreeVector nZ = G4ThreeVector(0, 0, 1.0);
   G4ThreeVector nR, nPs, nPe;

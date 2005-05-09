@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.37 2005-05-09 07:32:49 grichine Exp $
+// $Id: G4Cons.cc,v 1.38 2005-05-09 14:11:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -443,7 +443,8 @@ G4ThreeVector G4Cons::SurfaceNormal( const G4ThreeVector& p) const
 {
   G4int noSurfaces = 0;
   G4double rho, pPhi;
-  G4double distZ, distRMin, distRMax, distSPhi, distEPhi;
+  G4double distZ, distRMin, distRMax;
+  G4double distSPhi=0.0, distEPhi=0.0;
   G4double tanRMin, secRMin, pRMin, widRMin;
   G4double tanRMax, secRMax, pRMax, widRMax;
   G4double delta = 0.5*kCarTolerance, dAngle = 0.5*kAngTolerance;

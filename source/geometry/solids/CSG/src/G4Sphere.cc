@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.38 2005-05-09 07:32:49 grichine Exp $
+// $Id: G4Sphere.cc,v 1.39 2005-05-09 14:11:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -541,7 +541,8 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
 {
   G4int noSurfaces = 0;  
   G4double rho, rho2, rad, pPhi, pTheta;
-  G4double distRMin, distRMax, distSPhi, distEPhi, distSTheta, distETheta;
+  G4double distRMin = 0.;
+  G4double distSPhi=0., distEPhi=0., distSTheta=0., distETheta=0.;
   G4double delta = 0.5*kCarTolerance, dAngle = 0.5*kAngTolerance;
   G4ThreeVector nR, nPs, nPe, nTs, nTe, nZ(0.,0.,1.);
   G4ThreeVector norm, sumnorm(0.,0.,0.);
@@ -550,7 +551,7 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
   rad  = std::sqrt(rho2+p.z()*p.z());
   rho  = std::sqrt(rho2);
 
-              distRMax = std::fabs(rad-fRmax);
+  G4double    distRMax = std::fabs(rad-fRmax);
   if (fRmin)  distRMin = std::fabs(rad-fRmin);
     
   pPhi = std::atan2(p.y(),p.x());

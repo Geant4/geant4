@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.43 2005-05-09 07:32:49 grichine Exp $
+// $Id: G4Torus.cc,v 1.44 2005-05-09 14:11:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1078,7 +1078,8 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
 {
   G4int noSurfaces = 0;  
   G4double rho2,rho,pt2,pt,pPhi;
-  G4double distRMin,distRMax,distSPhi,distEPhi;
+  G4double distRMin=0.;
+  G4double distSPhi=0.,distEPhi=0.;
   G4double delta = 0.5*kCarTolerance, dAngle = 0.5*kAngTolerance;
   G4ThreeVector nR, nPs, nPe;
   G4ThreeVector norm, sumnorm(0.,0.,0.);
@@ -1088,9 +1089,8 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
   pt2 = std::fabs(rho2+p.z()*p.z() +fRtor*fRtor - 2*fRtor*rho);
   pt = std::sqrt(pt2) ;
 
-            distRMax = std::fabs(pt - fRmax);
+  G4double  distRMax = std::fabs(pt - fRmax);
   if(fRmin) distRMin = std::fabs(pt - fRmin);
-
 
   if( rho > delta ) nR = G4ThreeVector( p.x()*(1-fRtor/rho)/pt,
                                         p.y()*(1-fRtor/rho)/pt,
