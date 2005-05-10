@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.7 2005-05-09 17:49:24 vnivanch Exp $
+// $Id: RunAction.cc,v 1.8 2005-05-10 15:24:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -141,20 +141,19 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   //check cross section from G4EmCalculator
   //
-  G4cout << G4endl;
-  G4double sumc = 0.0;
   G4EmCalculator emCalculator;
+  G4double sumc = 0.0;  
   for (size_t i=0; i< ProcCounter->size();i++) {
     G4String procName = (*ProcCounter)[i]->GetName();
-    G4double massSigma = emCalculator.
-      ComputeCrossSectionPerVolume(energy,particle,procName,material)/density;
+    G4double massSigma = 
+    emCalculator.ComputeCrossSectionPerVolume(energy,particle,
+                                              procName,material)/density;
     sumc += massSigma;
-    G4cout << " Mass AttenuationCoef for " << procName
+    G4cout << "\n Mass AttenuationCoef for " << procName
            << " from G4EmCalculator: \t"
-           << massSigma*g/cm2 << " cm2/g" << G4endl;
+           << massSigma*g/cm2 << " cm2/g";
   }  	   
-  G4cout << G4endl;
-  G4cout << " Sum of mass AttenuationCoef "
+  G4cout << "\n\n Sum of mass AttenuationCoef "
 	 << " from G4EmCalculator: \t"
 	 << sumc*g/cm2 << " cm2/g" << G4endl;
 	    	                           
