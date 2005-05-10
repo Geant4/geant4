@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.51 2004-12-07 08:28:39 gcosmo Exp $
+// $Id: G4Transportation.cc,v 1.52 2005-05-10 15:20:13 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -63,7 +63,7 @@ class G4VSensitiveDetector;
 // Constructor
 
 G4Transportation::G4Transportation( G4int verboseLevel )
-  : G4VProcess( G4String("Transportation") ),
+  : G4VProcess( G4String("Transportation"), fTransportation ),
     fParticleIsLooping( false ),
     fPreviousSftOrigin (0.,0.,0.),
     fPreviousSafety    ( 0.0 ),
