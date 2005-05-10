@@ -1,4 +1,4 @@
-$Id: History,v 1.260 2004-12-08 12:46:06 gcosmo Exp $
+$Id: History,v 1.261 2005-05-10 08:46:32 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10th May 2005 John Allison (config-V07-00-00)
+- Made OPENGLXM require OPENGLX.
 
 8th December 2004 John Allison (config-V06-02-03)
 - Darwin-g++.gmk: fixes on setup for dynamic libraries.
