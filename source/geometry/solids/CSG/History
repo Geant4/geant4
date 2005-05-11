@@ -1,4 +1,4 @@
-$Id: History,v 1.75 2005-05-09 14:12:00 gcosmo Exp $
+$Id: History,v 1.76 2005-05-11 08:59:58 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 11, 2004  V.Grichine                 geom-csg-V07-00-05
+- G4Para: bug fixed in SurfaceNormal(p) for x-distance, to be now in
+  accordance with the surface selection using Inside(p).
+- Updated unit test testSurfaceNormal.cc.
 
 May 09, 2004  V.Grichine                 geom-csg-V07-00-04
 - Updated implementation of SurfaceNormal(p) to get consistence with 
