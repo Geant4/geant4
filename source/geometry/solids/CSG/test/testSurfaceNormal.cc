@@ -30,7 +30,9 @@
 //
 // History:
 //
+// 09.05.05 V.Grichine SurfaceNormal for tubs, cons, sphere, torus, box
 // 11.11.04 V.Grichine creation for box
+//
 
 #include "G4ios.hh"
 #include <assert.h>
@@ -507,7 +509,7 @@ int main(void)
 
   enum Esolid {kBox, kOrb, kSphere, kCons, kTubs, kTorus, kPara, kTrapezoid, kTrd};
 
-  Esolid useCase = kTorus;
+  Esolid useCase = kSphere;
 
   pNorm=&norm;
   pgoodNorm=&goodNorm;

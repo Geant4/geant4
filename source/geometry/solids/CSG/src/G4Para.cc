@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.28 2005-04-28 08:28:33 grichine Exp $
+// $Id: G4Para.cc,v 1.29 2005-05-11 07:56:11 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
@@ -450,14 +450,16 @@ G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
 
   newpx  = p.x()-fTthetaCphi*p.z();
   newpy  = p.y()-fTthetaSphi*p.z();
-  calpha = 1/std::sqrt(1+fTalpha*fTalpha);
 
+  calpha = 1/std::sqrt(1+fTalpha*fTalpha);
   if (fTalpha)  salpha = -calpha/fTalpha;  // NOTE: actually use MINUS std::sin(alpha)
   else          salpha = 0.;
   
-  xshift = newpx*calpha+newpy*salpha;
+  //  xshift = newpx*calpha+newpy*salpha;
+  xshift = newpx - newpy*fTalpha;
 
-  distx  = std::fabs(std::fabs(xshift)-fDx*calpha);
+  //  distx  = std::fabs(std::fabs(xshift)-fDx*calpha);
+  distx  = std::fabs(std::fabs(xshift)-fDx);
   disty  = std::fabs(std::fabs(newpy)-fDy);
   distz  = std::fabs(std::fabs(p.z())-fDz);
 
