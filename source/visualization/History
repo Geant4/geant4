@@ -1,4 +1,4 @@
-$Id: History,v 1.288 2005-05-06 08:52:52 allison Exp $
+$Id: History,v 1.289 2005-05-12 19:40:43 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,15 +24,17 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+12th May 2005  John Allison
+- Moved zlib to externals/zlib.
+
 6th May 2005  John Allison  (vis-V07-00-14)
 - OpenGL: fixed bug (views not refreshed - opengl-V07-00-02).
 - Improved ASSCIITree guidance.
 - G4VisExecutive: Replaced printing of available graphics systems.
   Now corresponds to behaviour of most old examples vis managers.
-- Fixed pedantic warnings from gcc 4.
+- Fixed some pedantic warnings from gcc 4.
 - G4PhysicalVolumeModel: SetCopyNo of replicas and paramaterised
   volumes (modeling-V07-00-00).
-
 
 5th May 2005  John Allison
 - Introduced zlib directory.

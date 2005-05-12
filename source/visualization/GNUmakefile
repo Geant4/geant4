@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.19 2005-05-05 09:42:06 allison Exp $
+# $Id: GNUmakefile,v 1.20 2005-05-12 19:40:43 allison Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for visualization and modeling.  John Allison, 5/7/95.
 # Modeling is always made.  Others by environment.  John Allison  4/7/98.
@@ -20,7 +20,7 @@ SUBDIRS := modeling
 SUBLIBS := G4modeling
 
 ifdef G4LIB_BUILD_ZLIB
-  SUBDIRS := zlib
+  SUBDIRS := externals/zlib
   SUBLIBS := G4zlib
 endif
 
