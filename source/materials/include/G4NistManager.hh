@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh,v 1.2 2005-03-01 12:14:41 maire Exp $
+// $Id: G4NistManager.hh,v 1.3 2005-05-12 17:29:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,6 +42,13 @@
 // A utility static class
 //
 
+// -------------------------------------------------------------------
+//
+// Class Description:
+//
+// Element data from the NIST DB on Atomic Weights and Isotope Compositions
+// http://physics.nist.gov/PhysRefData/Compositions/index.html
+//
 // -------------------------------------------------------------------
 //
 
@@ -118,7 +125,9 @@ public:
   size_t GetNumberOfMaterials() {return nMaterials;};
   
   void SetVerbose(G4int);
-  void ListMaterials(const G4String&);  
+  G4int GetVerbose();
+
+  void ListMaterials(const G4String&);
   void PrintG4Material(const G4String&);
 
 private:
@@ -133,7 +142,7 @@ private:
   size_t   nMaterials;
   
   G4int    verbose;
-  
+
   G4NistElementBuilder*    elmBuilder;
   G4NistMaterialBuilder*   matBuilder;
   G4NistMessenger*         messenger;
@@ -160,7 +169,7 @@ G4Element* G4NistManager::FindOrBuildElement(G4int Z, G4bool isotopes)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline 
+inline
 G4Element* G4NistManager::FindOrBuildElement(const G4String& symb,
                                                    G4bool isotopes)
 {
@@ -185,12 +194,20 @@ G4double G4NistManager::GetIsotopeMass(G4int Z, G4int N)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline 
+inline
 G4Material* G4NistManager::GetMaterial(size_t index)
 {
   G4Material* mat = 0;
   if(index < nMaterials) mat = materials[index];
   return mat;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+G4int G4NistManager::GetVerbose()
+{
+  return verbose;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

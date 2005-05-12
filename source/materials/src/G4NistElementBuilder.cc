@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc,v 1.4 2005-03-18 11:30:07 stesting Exp $
+// $Id: G4NistElementBuilder.cc,v 1.5 2005-05-12 17:29:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,6 +36,13 @@
 // Modifications:
 //
 //
+// -------------------------------------------------------------------
+//
+// Class Description:
+//
+// Element data from the NIST DB on Atomic Weights and Isotope Compositions
+// http://physics.nist.gov/PhysRefData/Compositions/index.html
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -45,7 +52,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4NistElementBuilder::G4NistElementBuilder(G4int vb):
-  verbose(vb)
+  verbose(vb), first(true)
 {
   Initialise();
 }
@@ -60,6 +67,12 @@ G4NistElementBuilder::~G4NistElementBuilder()
 G4Element* G4NistElementBuilder::FindOrBuildElement(const G4String& symb,
                                                           G4bool buildIsotopes)
 {
+  if(first) {
+    if(verbose > 0) {
+      G4cout << "### NIST DataBase for Elements is used" << G4endl;
+    }
+    first = false;
+  }
   G4int Z = 0;
   G4Element* elm = 0;
   do {Z++;} while (Z<maxNumElements && !(symb == elmSymbol[Z]));

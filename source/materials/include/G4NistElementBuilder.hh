@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.hh,v 1.4 2005-03-01 12:14:41 maire Exp $
+// $Id: G4NistElementBuilder.hh,v 1.5 2005-05-12 17:29:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4NistElementBuilder_h
@@ -37,7 +37,11 @@
 //
 //----------------------------------------------------------------------------
 //
-
+// Class Description:
+//
+// Element data from the NIST DB on Atomic Weights and Isotope Compositions
+// http://physics.nist.gov/PhysRefData/Compositions/index.html
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "globals.hh"
@@ -76,26 +80,27 @@ private:
 
   void Initialise();
 
-  void AddElement(const G4String& symbol, G4int Z, G4int nc, const G4int& N, 
+  void AddElement(const G4String& symbol, G4int Z, G4int nc, const G4int& N,
                   const G4double& A, const G4double& sA, const G4double& W);
-		  
-  // Build a G4Element from dataBase		  
+
+  // Build a G4Element from dataBase
   G4Element* BuildElement(G4int Z, G4bool buildIsotopes);
-  
+
 private:
 
   G4String   elmSymbol     [maxNumElements];
   G4double   atomicMass    [maxNumElements];
   G4int      nIsotopes     [maxNumElements];
-  G4int      nFirstIsotope [maxNumElements];  
+  G4int      nFirstIsotope [maxNumElements];
   G4int      idxIsotopes   [maxNumElements];
-      
+
   G4double   massIsotopes   [maxAbundance];
   G4double   sigMass        [maxAbundance];
   G4double   relAbundance   [maxAbundance];
-  
+
   G4int      index;
   G4int      verbose;
+  G4bool     first;
 
 };
 

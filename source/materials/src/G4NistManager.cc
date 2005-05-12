@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistManager.cc,v 1.1 2005-02-22 10:11:09 maire Exp $
+// $Id: G4NistManager.cc,v 1.2 2005-05-12 17:29:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,9 +37,12 @@
 // Modifications:
 //
 //
+// -------------------------------------------------------------------
+//
 // Class Description:
 //
-// -------------------------------------------------------------------
+// Element data from the NIST DB on Atomic Weights and Isotope Compositions
+// http://physics.nist.gov/PhysRefData/Compositions/index.html
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
