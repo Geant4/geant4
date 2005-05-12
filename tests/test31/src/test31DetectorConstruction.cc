@@ -90,7 +90,7 @@ test31DetectorConstruction::test31DetectorConstruction():
   SizeXY            = 1000.0*mm;
   gap               = 0.0;
   NumberOfAbsorbers = 300;
-  nameMatWorld      = G4String("G4_AIR");
+  nameMatWorld      = G4String("G4_Galactic");
   WorldSizeZ        = 400.0*mm;
   maxDelta          = 10.0*MeV;
 
@@ -131,6 +131,7 @@ void test31DetectorConstruction::DefineMaterials()
   G4Material* ma = 0;
   
   G4NistManager* man = G4NistManager::Instance();
+  man->SetVerbose(1);
 
   density = 1.39*g/cm3;
   ma = new G4Material("Mylar"  , density, ncomponents=3);
@@ -144,9 +145,7 @@ void test31DetectorConstruction::DefineMaterials()
   a = 1.01*g/mole;
   z = 1.0;
   ma = new G4Material("Vacuum", z, a, density,
-                                      kStateGas,temperature,pressure);
-  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
-  
+                                      kStateGas,temperature,pressure);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -215,6 +214,7 @@ G4VPhysicalVolume* test31DetectorConstruction::ConstructGeometry()
   //
   //always return the physical World
   //
+  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
   return physWorld;
 }

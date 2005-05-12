@@ -41,7 +41,7 @@
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
-#include "VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "test31DetectorConstruction.hh"
@@ -80,7 +80,7 @@ int main(int argc,char** argv) {
 
 #ifdef G4VIS_USE
   G4cout << "VisManager will be initialized" << G4endl;
-  G4VisManager* visManager = new VisManager;
+  G4VisManager* visManager = new G4VisExecutive();
   visManager->Initialize();
 #endif 
 
