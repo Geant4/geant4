@@ -1,4 +1,4 @@
-$Id: History,v 1.148 2005-05-04 16:18:47 vnivanch Exp $
+$Id: History,v 1.149 2005-05-12 11:32:02 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 May 05: V.Ivant (stand-V07-00-10)
+- Move G4BaggIonModel to updated interfaces; 
+- cleanup
 
 03 May 05: V.Ivant (stand-V07-00-09)
 - move v70 processes (model interface) to be default and old to be 52
