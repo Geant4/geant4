@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation.hh,v 1.16 2005-05-04 16:16:12 vnivanch Exp $
+// $Id: G4eplusAnnihilation.hh,v 1.17 2005-05-12 11:06:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,27 +65,25 @@ public:
 
   virtual ~G4eplusAnnihilation();
 
-  G4bool IsApplicable(const G4ParticleDefinition& p);
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
 
   virtual G4VParticleChange* AtRestDoIt(
                              const G4Track& track,
                              const G4Step& stepData);
 
-  virtual G4double AtRestGetPhysicalInteractionLength(
+  G4double AtRestGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4ForceCondition* condition
                             );
 
   // Print out of the class parameters
-  void PrintInfo();
-
-  G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
+  virtual void PrintInfo();
 
 protected:
 
   virtual void InitialiseProcess(const G4ParticleDefinition*);
 
-  virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
+  std::vector<G4DynamicParticle*>* SecondariesPostStep(
                                    G4VEmModel*,
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle*);

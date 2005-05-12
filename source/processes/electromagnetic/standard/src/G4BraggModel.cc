@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.7 2005-04-12 18:12:41 vnivanch Exp $
+// $Id: G4BraggModel.cc,v 1.8 2005-05-12 11:06:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -75,6 +75,7 @@ G4BraggModel::G4BraggModel(const G4ParticleDefinition* p, const G4String& nam)
   if(p) SetParticle(p);
   lowestKinEnergy  = 1.0*keV;
   theZieglerFactor = eV*cm2*1.0e-15;
+  theElectron = G4Electron::Electron();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -96,7 +97,10 @@ void G4BraggModel::Initialise(const G4ParticleDefinition* p,
                               const G4DataVector&)
 {
   if(p != particle) SetParticle(p);
-  if(particle->GetParticleType() == "nucleus") isIon = true;
+  G4String pname = particle->GetParticleName();
+  if(particle->GetParticleType() == "nucleus" && 
+     pname != "deuteron" && pname != "triton") isIon = true;
+
   if(pParticleChange) 
     fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
   else 
@@ -222,8 +226,8 @@ vector<G4DynamicParticle*>* G4BraggModel::SampleSecondaries(
   fParticleChange->SetProposedMomentumDirection(finalP);
 
   // create G4DynamicParticle object for delta ray
-  G4DynamicParticle* delta = new G4DynamicParticle(G4Electron::Electron(),
-                                                   deltaDirection,deltaKinEnergy);
+  G4DynamicParticle* delta = new G4DynamicParticle(theElectron,deltaDirection,
+						   deltaKinEnergy);
 
   vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
   vdp->push_back(delta);

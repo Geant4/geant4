@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.hh,v 1.3 2005-02-27 18:07:26 vnivanch Exp $
+// $Id: G4BraggIonModel.hh,v 1.4 2005-05-12 11:06:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,6 +36,7 @@
 //
 // Modifications:
 // 09-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 11-05-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -50,6 +51,8 @@
 
 #include "G4VEmModel.hh"
 
+class G4ParticleChangeForLoss;
+
 class G4BraggIonModel : public G4VEmModel
 {
 
@@ -59,50 +62,32 @@ public:
 
   virtual ~G4BraggIonModel();
 
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-
-  G4double HighEnergyLimit(const G4ParticleDefinition*);
-
-  G4double LowEnergyLimit(const G4ParticleDefinition*);
-
-  void SetHighEnergyLimit(G4double e) {highKinEnergy = e;};
-
-  void SetLowEnergyLimit(G4double e) {lowKinEnergy = e;};
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
   G4double MinEnergyCut(const G4ParticleDefinition*,
-                        const G4MaterialCutsCouple*);
+			const G4MaterialCutsCouple*);
 
-  G4bool IsInCharge(const G4ParticleDefinition*);
+  virtual G4double ComputeDEDXPerVolume(const G4Material*,
+					const G4ParticleDefinition*,
+					G4double kineticEnergy,
+					G4double cutEnergy);
 
-  G4double ComputeDEDX(const G4MaterialCutsCouple*,
-                       const G4ParticleDefinition*,
-                             G4double kineticEnergy,
-                             G4double cutEnergy);
+  virtual G4double CrossSectionPerVolume(const G4Material*,
+					 const G4ParticleDefinition*,
+					 G4double kineticEnergy,
+					 G4double cutEnergy,
+					 G4double maxEnergy);
 
-  G4double CrossSection(const G4MaterialCutsCouple*,
-                        const G4ParticleDefinition*,
-                              G4double kineticEnergy,
-                              G4double cutEnergy,
-                              G4double maxEnergy);
-
-  G4DynamicParticle* SampleSecondary(
+  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double maxEnergy);
-
-  std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double maxEnergy);
-
-  G4double MaxSecondaryEnergy(const G4DynamicParticle*);
 
 protected:
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-                                    G4double kinEnergy);
+			      G4double kinEnergy);
 
 private:
 
@@ -127,6 +112,9 @@ private:
   G4double DEDX(const G4Material* material, G4double kineticEnergy);
 
   const G4ParticleDefinition* particle;
+  G4ParticleDefinition*       theElectron;
+  G4ParticleChangeForLoss*    fParticleChange;
+
   G4double mass;
   G4double spin;
   G4double chargeSquare;
@@ -155,13 +143,6 @@ inline G4double G4BraggIonModel::MaxSecondaryEnergy(
   G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
                   (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
   return tmax;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4BraggIonModel::MaxSecondaryEnergy(const G4DynamicParticle* dp)
-{
-  return MaxSecondaryEnergy(dp->GetDefinition(),dp->GetKineticEnergy());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

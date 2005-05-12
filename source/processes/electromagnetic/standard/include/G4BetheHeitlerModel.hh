@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.hh,v 1.2 2005-04-19 18:59:15 vnivanch Exp $
+// $Id: G4BetheHeitlerModel.hh,v 1.3 2005-05-12 11:06:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -62,9 +62,9 @@ public:
  
   virtual ~G4BetheHeitlerModel();
 
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  G4double ComputeCrossSectionPerAtom(
+  virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
                                       G4double kinEnergy, 
                                       G4double Z, 
@@ -72,7 +72,7 @@ public:
                                       G4double cut,
                                       G4double emax);
 
-  std::vector<G4DynamicParticle*>* SampleSecondaries(
+  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,

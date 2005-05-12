@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.37 2005-04-13 13:40:03 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.38 2005-05-12 11:06:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -82,7 +82,7 @@ public:
   G4bool IsApplicable(const G4ParticleDefinition& p);
 
   // Print out of the class parameters
-  void PrintInfo();
+  virtual void PrintInfo();
 
 protected:
 
@@ -92,7 +92,7 @@ protected:
 			         G4double& eloss,
 			         G4double& length);
 
-  std::vector<G4DynamicParticle*>* SecondariesPostStep(
+  virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
 			    G4VEmModel*,
 			    const G4MaterialCutsCouple*,
 			    const G4DynamicParticle*,
@@ -105,10 +105,8 @@ protected:
 			   G4double previousStepSize,
 			   G4ForceCondition* condition);
 
-  G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
-			    const G4Material*, G4double cut);
-
-  G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle);
+  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
+				    const G4Material*, G4double cut);
 
 private:
 

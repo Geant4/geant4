@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.27 2005-05-02 12:43:02 maire Exp $
+// $Id: G4VEmProcess.cc,v 1.28 2005-05-12 11:06:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -289,9 +289,10 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   }
   */
 
-  std::vector<G4DynamicParticle*>* newp = SecondariesPostStep(currentModel,
-                                                              currentCouple,
-		                                              track.GetDynamicParticle());
+  
+  std::vector<G4DynamicParticle*>* newp = 
+    SecondariesPostStep(currentModel,currentCouple,track.GetDynamicParticle());
+
   if (newp) {
     G4int num = newp->size();
     fParticleChange.SetNumberOfSecondaries(num);
@@ -566,6 +567,7 @@ const G4PhysicsTable* G4VEmProcess::LambdaTable() const
 void G4VEmProcess::SetIntegral(G4bool val)
 {
   integral = val;
+  if(integral) buildLambdaTable = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

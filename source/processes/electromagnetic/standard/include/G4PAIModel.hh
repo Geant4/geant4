@@ -67,37 +67,37 @@ public:
 
   virtual ~G4PAIModel();
 
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  void InitialiseMe(const G4ParticleDefinition*) {};
+  virtual void InitialiseMe(const G4ParticleDefinition*) {};
 
-  G4double ComputeDEDX(const G4MaterialCutsCouple*,
-                       const G4ParticleDefinition*,
-                             G4double kineticEnergy,
-                             G4double cutEnergy);
+  virtual G4double ComputeDEDX(const G4MaterialCutsCouple*,
+			       const G4ParticleDefinition*,
+			       G4double kineticEnergy,
+			       G4double cutEnergy);
 
-  G4double CrossSection(const G4MaterialCutsCouple*,
-                        const G4ParticleDefinition*,
-                              G4double kineticEnergy,
-                              G4double cutEnergy,
-                              G4double maxEnergy);
+  virtual G4double CrossSection(const G4MaterialCutsCouple*,
+				const G4ParticleDefinition*,
+				G4double kineticEnergy,
+				G4double cutEnergy,
+				G4double maxEnergy);
 
-  std::vector<G4DynamicParticle*>* SampleSecondaries(
+  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double maxEnergy);
 
-  G4double SampleFluctuations(const G4Material*,
-                          const G4DynamicParticle*,
- 				G4double&,
-                                G4double&,
-                                G4double&);
+  virtual G4double SampleFluctuations(const G4Material*,
+				      const G4DynamicParticle*,
+				      G4double&,
+				      G4double&,
+				      G4double&);
 
-  G4double Dispersion(    const G4Material*,
-                          const G4DynamicParticle*,
- 				G4double&,
-                                G4double&);
+  virtual G4double Dispersion(    const G4Material*,
+				  const G4DynamicParticle*,
+				  G4double&,
+				  G4double&);
 
   void     DefineForRegion(const G4Region* r) ;
   void     ComputeSandiaPhotoAbsCof();

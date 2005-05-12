@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.cc,v 1.2 2005-04-19 18:59:15 vnivanch Exp $
+// $Id: G4BetheHeitlerModel.cc,v 1.3 2005-05-12 11:06:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -313,6 +313,8 @@ std::vector<G4DynamicParticle*>* G4BetheHeitlerModel::SampleSecondaries(
   std::vector<G4DynamicParticle*>* fvect = new std::vector<G4DynamicParticle*>;
   fvect->push_back(aParticle1);
   fvect->push_back(aParticle2);
+
+  fParticleChange->ProposeTrackStatus(fStopAndKill);   
  
   return fvect;
 }

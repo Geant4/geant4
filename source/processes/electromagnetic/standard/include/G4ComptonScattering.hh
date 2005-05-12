@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering.hh,v 1.14 2005-05-04 16:16:12 vnivanch Exp $
+// $Id: G4ComptonScattering.hh,v 1.15 2005-05-12 11:06:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------------ G4ComptonScattering physics process -----------------------
@@ -71,21 +71,21 @@ class G4ComptonScattering : public G4VEmProcess
 public:  // with description
 
   G4ComptonScattering(const G4String& processName ="compt",
-	  	              G4ProcessType type = fElectromagnetic);
+		      G4ProcessType type = fElectromagnetic);
 
   virtual ~G4ComptonScattering();
 
-  // true for Gamma only.
+  // true for Gamma only.  
   G4bool IsApplicable(const G4ParticleDefinition&);
 
   // Print few lines of informations about the process: validity range,
-  void PrintInfo();
+  virtual void PrintInfo();
 
   void SetModel(const G4String& name);
 
 protected:
 
-  void InitialiseProcess(const G4ParticleDefinition*);
+  virtual void InitialiseProcess(const G4ParticleDefinition*);
 
   std::vector<G4DynamicParticle*>* SecondariesPostStep(
                                    G4VEmModel*,

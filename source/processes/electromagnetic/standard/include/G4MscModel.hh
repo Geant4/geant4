@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.hh,v 1.5 2005-04-19 09:49:24 vnivanch Exp $
+// $Id: G4MscModel.hh,v 1.6 2005-05-12 11:06:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -77,15 +77,15 @@ public:
 
   virtual ~G4MscModel();
 
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  virtual G4double CrossSection(const G4MaterialCutsCouple*,
-                                const G4ParticleDefinition*,
-                                      G4double kineticEnergy,
-                                      G4double cutEnergy = 0.0,
-                                      G4double maxEnergy = DBL_MAX);
+  virtual G4double CrossSectionPerVolume(const G4Material*,
+					 const G4ParticleDefinition*,
+					 G4double kineticEnergy,
+					 G4double cutEnergy = 0.0,
+					 G4double maxEnergy = DBL_MAX);
 
-  std::vector<G4DynamicParticle*>* SampleSecondaries(
+  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double length,

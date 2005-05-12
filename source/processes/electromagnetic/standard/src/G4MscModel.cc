@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.7 2005-05-03 08:07:41 vnivanch Exp $
+// $Id: G4MscModel.cc,v 1.8 2005-05-12 11:06:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -144,13 +144,12 @@ void G4MscModel::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MscModel::CrossSection(const G4MaterialCutsCouple* couple,
-				  const G4ParticleDefinition* p,
-				  G4double kineticEnergy,
-				  G4double,
-				  G4double)
+G4double G4MscModel::CrossSectionPerVolume(const G4Material* material,
+					   const G4ParticleDefinition* p,
+					   G4double kineticEnergy,
+					   G4double,
+					   G4double)
 {
-  const G4Material* material = couple->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* NbOfAtomsPerVolume = material->GetVecNbOfAtomsPerVolume();
   G4int NumberOfElements = material->GetNumberOfElements();

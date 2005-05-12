@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.hh,v 1.15 2005-04-12 18:12:41 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.hh,v 1.16 2005-05-12 11:06:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -63,26 +63,28 @@ class G4eBremsstrahlungModel : public G4VEmModel
 
 public:
 
-  G4eBremsstrahlungModel(const G4ParticleDefinition* p = 0, const G4String& nam = "StanBrem");
+  G4eBremsstrahlungModel(const G4ParticleDefinition* p = 0, 
+			 const G4String& nam = "StandBrem");
 
   virtual ~G4eBremsstrahlungModel();
 
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  G4double MinEnergyCut(const G4ParticleDefinition*, const G4MaterialCutsCouple*);
+  G4double MinEnergyCut(const G4ParticleDefinition*, 
+			const G4MaterialCutsCouple*);
 
-  G4double ComputeDEDXPerVolume(const G4Material*,
-				const G4ParticleDefinition*,
-				G4double kineticEnergy,
-				G4double cutEnergy);
+  virtual G4double ComputeDEDXPerVolume(const G4Material*,
+					const G4ParticleDefinition*,
+					G4double kineticEnergy,
+					G4double cutEnergy);
 
-  G4double CrossSectionPerVolume(const G4Material*,
-				 const G4ParticleDefinition*,
-				 G4double kineticEnergy,
-				 G4double cutEnergy,
-				 G4double maxEnergy);
+  virtual G4double CrossSectionPerVolume(const G4Material*,
+					 const G4ParticleDefinition*,
+					 G4double kineticEnergy,
+					 G4double cutEnergy,
+					 G4double maxEnergy);
 
-  std::vector<G4DynamicParticle*>* SampleSecondaries(
+  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
@@ -93,8 +95,8 @@ public:
 
 protected:
 
-  virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-    				            G4double kineticEnergy);
+  G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
+			      G4double kineticEnergy);
 
 private:
 

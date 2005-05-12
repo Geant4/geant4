@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation.cc,v 1.21 2005-05-04 16:16:12 vnivanch Exp $
+// $Id: G4eplusAnnihilation.cc,v 1.22 2005-05-12 11:06:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -95,16 +95,6 @@ void G4eplusAnnihilation::PrintInfo()
 {
   G4cout << "      Heilter model of formula of annihilation into 2 photons"
          << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4PhysicsVector* G4eplusAnnihilation::LambdaPhysicsVector(
-                                                    const G4MaterialCutsCouple*)
-{
-  G4PhysicsVector* v = new G4PhysicsLogVector(MinKinEnergy(), MaxKinEnergy(),
-                                              LambdaBinning());
-  return v;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

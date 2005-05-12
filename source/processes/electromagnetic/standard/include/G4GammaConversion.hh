@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.hh,v 1.16 2005-05-04 16:16:12 vnivanch Exp $
+// $Id: G4GammaConversion.hh,v 1.17 2005-05-12 11:06:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -82,11 +82,11 @@ public:  // with description
   G4bool IsApplicable(const G4ParticleDefinition&);
 
   // Print few lines of informations about the process: validity range,
-  void PrintInfo();
+  virtual void PrintInfo();
 
 protected:
 
-  void InitialiseProcess(const G4ParticleDefinition*);
+  virtual void InitialiseProcess(const G4ParticleDefinition*);
 
   std::vector<G4DynamicParticle*>* SecondariesPostStep(
                                    G4VEmModel*,
@@ -117,7 +117,7 @@ inline std::vector<G4DynamicParticle*>* G4GammaConversion::SecondariesPostStep(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp)
 { 
-  fParticleChange.ProposeTrackStatus(fStopAndKill);  
+  //  fParticleChange.ProposeTrackStatus(fStopAndKill);  
   return model->SampleSecondaries(couple, dp);
 }
 

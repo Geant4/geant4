@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisation.hh,v 1.31 2005-04-11 10:40:47 vnivanch Exp $
+// $Id: G4hIonisation.hh,v 1.32 2005-05-12 11:06:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -93,10 +93,10 @@ public:
   G4bool IsApplicable(const G4ParticleDefinition& p);
 
   G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
-                                    const G4Material*, G4double cut);
+			    const G4Material*, G4double cut);
 
   // Print out of the class parameters
-  void PrintInfo();
+  virtual void PrintInfo();
 
 protected:
 
@@ -106,8 +106,8 @@ protected:
                              const G4DynamicParticle*,
                                    G4double&);
 
-  void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-				   const G4ParticleDefinition*);
+  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+					   const G4ParticleDefinition*);
 
 private:
 
@@ -140,8 +140,8 @@ inline G4bool G4hIonisation::IsApplicable(const G4ParticleDefinition& p)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4hIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
-                                                   const G4Material*,
-                                                         G4double cut)
+						const G4Material*,
+						G4double cut)
 {
   G4double x = 0.5*cut/electron_mass_c2;
   G4double y = electron_mass_c2/mass;

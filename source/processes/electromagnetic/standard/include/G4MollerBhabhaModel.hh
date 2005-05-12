@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.hh,v 1.12 2005-04-12 18:12:41 vnivanch Exp $
+// $Id: G4MollerBhabhaModel.hh,v 1.13 2005-05-12 11:06:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -66,23 +66,23 @@ public:
 
   virtual ~G4MollerBhabhaModel();
 
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
   G4double MinEnergyCut(const G4ParticleDefinition*,
-                        const G4MaterialCutsCouple*);
+			const G4MaterialCutsCouple*);
 
-  G4double ComputeDEDXPerVolume(const G4Material*,
+  virtual G4double ComputeDEDXPerVolume(const G4Material*,
 				const G4ParticleDefinition*,
 				G4double kineticEnergy,
 				G4double cutEnergy);
 
-  G4double CrossSectionPerVolume(const G4Material*,
+  virtual G4double CrossSectionPerVolume(const G4Material*,
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,
 				 G4double cutEnergy,
 				 G4double maxEnergy);
 
-  std::vector<G4DynamicParticle*>* SampleSecondaries(
+  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,

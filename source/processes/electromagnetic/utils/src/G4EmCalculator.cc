@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.17 2005-05-09 17:48:54 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.18 2005-05-12 11:06:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -259,7 +259,7 @@ G4double G4EmCalculator::GetMeanFreePath(G4double kinEnergy,
 {
   G4double res = DBL_MAX;
   G4double x = GetCrossSectionPerVolume(kinEnergy,p, processName, mat,region);
-  if(x > 0.0) res = 1.0/(x*(mat->GetTotNbOfAtomsPerVolume()));
+  if(x > 0.0) res = 1.0/x;
   if(verbose>1) {
     G4cout << "E(MeV)= " << kinEnergy/MeV
 	   << " MFP(mm)= " << res/mm
@@ -515,7 +515,7 @@ G4double G4EmCalculator::ComputeMeanFreePath(G4double kinEnergy,
 {
   G4double mfp = DBL_MAX;
   G4double x = ComputeCrossSectionPerVolume(kinEnergy, p, processName, mat, cut);
-  if(x > 0.0) mfp = 1.0/(x*(currentMaterial->GetTotNbOfAtomsPerVolume()));
+  if(x > 0.0) mfp = 1.0/x;
   if(verbose>1) {
     G4cout << "E(MeV)= " << kinEnergy/MeV
 	   << " MFP(mm)= " << mfp/mm
