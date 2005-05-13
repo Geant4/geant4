@@ -112,7 +112,7 @@ namespace cheprep {
         }
 #else
         // suppress warning about unused var
-        bool suppress_warning = compress;
+        compress = false;
 #endif // CHEPREP_USE_ZLIB
 
         crc = 0;
