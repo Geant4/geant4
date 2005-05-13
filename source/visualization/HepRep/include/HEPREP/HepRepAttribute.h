@@ -7,11 +7,13 @@
 #ifndef HEPREP_HEPREPATTRIBUTE_H
 #define HEPREP_HEPREPATTRIBUTE_H 1
 
-// Copyright 2000-2002, FreeHEP.
+// Copyright 2000-2005, FreeHEP.
 
 #include <set>
 #include <string>
 #include <vector>
+
+#include "HEPREP/Types.h"
 
 #include "HEPREP/HepRepConstants.h"
 
@@ -57,6 +59,15 @@ public:
      * @param showLabel show this as label
      */
     virtual void addAttValue(std::string key, std::string value, int showLabel = HepRepConstants::SHOW_NONE) = 0;
+
+    /**
+     * Adds an attValue.
+     *
+     * @param key name of attValue
+     * @param value value of attValue
+     * @param showLabel show this as label
+     */
+    virtual void addAttValue(std::string key, int64 value, int showLabel = HepRepConstants::SHOW_NONE) = 0;
 
     /**
      * Adds an attValue.

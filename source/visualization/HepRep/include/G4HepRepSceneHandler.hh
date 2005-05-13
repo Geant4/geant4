@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.hh,v 1.34 2005-01-27 20:04:34 johna Exp $
+// $Id: G4HepRepSceneHandler.hh,v 1.35 2005-05-13 14:57:26 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -166,6 +166,9 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         G4int eventNumber;
         G4int eventNumberWidth;
         G4String extension;
+        G4bool writeBinary;
+        G4bool writeZip;
+        G4bool writeGZ;
         G4bool writeMultipleFiles;
 
         // DO NOT USE member vars directly, use get methods.

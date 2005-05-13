@@ -12,6 +12,8 @@
 #include <string>
 #include <vector>
 
+#include "HEPREP/Types.h"
+
 namespace HEPREP {
 
 /**
@@ -93,7 +95,7 @@ public:
      *
      * @return value as long.
      */
-    virtual long getLong() = 0;
+    virtual int64 getLong() = 0;
 
     /**
      * Returns value as int.
