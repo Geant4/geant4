@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.67 2005-04-12 09:43:48 gcosmo Exp $
+# $Id: GNUmakefile,v 1.68 2005-05-13 08:38:55 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -32,13 +32,13 @@ unique := $(shell echo $$$$)
 .PHONY: all glob global kernel_global kernel libmap dll win32def includes clean_libs clean clean_lists clean_all
 
 all: kernel
-ifdef G4USE_G3TOG4
+ifdef G4LIB_USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE)); done;:
 endif
 	$(MAKE) libmap
 
 glob global: kernel_global
-ifdef G4USE_G3TOG4
+ifdef G4LIB_USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE)); done;:
 endif
 
@@ -109,7 +109,7 @@ ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
 	@echo "Clearing temporary DLL objects and temporaries ..."
 	@rm -rf $(G4LIBDIR)/*.def $(G4LIBDIR)/*.exp
 	@rm -rf $(G4TMPDIR)/*
-ifdef G4USE_G3TOG4
+ifdef G4LIB_USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE)); done;:
 	@mv $(G4LIBDIR)/libG3toG4.a $(G4LIBDIR)/libG3toG4.lib
 endif
@@ -133,7 +133,7 @@ includes:
 	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE) $@); done
 	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE) $@); done
 	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE) $@); done
-ifdef G4USE_G3TOG4
+ifdef G4LIB_USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) $@); done
 endif
 
@@ -142,7 +142,7 @@ clean_libs:
 	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE) clean_libs); done
 	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE) clean_libs); done
 	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE) clean_libs); done
-ifdef G4USE_G3TOG4
+ifdef G4LIB_USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) clean_libs); done
 endif
 	@rm -rf $(G4LIBDIR)/libname.map
