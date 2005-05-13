@@ -1,4 +1,4 @@
-$Id: History,v 1.39 2004-12-08 12:17:20 gcosmo Exp $
+$Id: History,v 1.40 2005-05-13 17:58:18 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13 May 2005  V.Ivanchenko (test17-V07-00-00)
+             Use new version of particle cathegory
 
 08 Dec 2004  Gabriele Cosmo
              Implemented missing migration to <cmath>:

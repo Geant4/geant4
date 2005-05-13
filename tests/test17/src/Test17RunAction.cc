@@ -30,8 +30,9 @@
 
 #include "G4Run.hh"
 #include "G4UImanager.hh"
-#include "G4IonC12.hh"
 #include "G4ios.hh"
+#include "G4Proton.hh"
+#include "G4Electron.hh"
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

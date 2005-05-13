@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsListMessenger.cc,v 1.1 2004-05-26 11:39:10 vnivanch Exp $
+// $Id: PhysicsListMessenger.cc,v 1.2 2005-05-13 17:58:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -130,20 +130,27 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
   if( command == pListCmd )
    { pPhysicsList->AddPhysicsList(newValue);}
 
+  
   if(command == eCmd) {
     G4double x = eCmd->GetNewDoubleValue(newValue);
     if (lehad) lehad->SetGammaCut(x);
+    /*
     G4EmProcessOptions opt;
     if (x<10.*MeV) opt.ActivateFluorescence(true);
     else           opt.ActivateFluorescence(false);
+    */
   }
+
   if(command == eaCmd) {
     G4double x = eaCmd->GetNewDoubleValue(newValue);
     if(lehad)lehad->SetAugerCut(x);
+    /*
     G4EmProcessOptions opt;
     if (x<10.*MeV) opt.ActivateAugerElectronProduction(true);
     else           opt.ActivateAugerElectronProduction(false);
+    */
   }
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

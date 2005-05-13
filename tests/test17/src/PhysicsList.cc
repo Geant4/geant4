@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.3 2004-07-02 09:39:01 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.4 2005-05-13 17:58:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -45,7 +45,6 @@
 #include "G4EmMuonBuilder.hh"
 #include "G4EmHadronBuilder.hh"
 #include "G4EmLowEnergyHadronBuilder.hh"
-#include "G4EmLowEnergyHadronBuilderNew.hh"
 #include "G4EmLowEnergyQEDBuilder.hh"
 #include "G4EmQEDBuilder52.hh"
 #include "G4EmMuonBuilder52.hh"
@@ -91,7 +90,6 @@ PhysicsList::~PhysicsList()
 
 void PhysicsList::ConstructParticle()
 {
-  if(!emBuilderIsRegisted) AddPhysicsList("standard");
   G4VModularPhysicsList::ConstructParticle();
 }
 
@@ -99,6 +97,7 @@ void PhysicsList::ConstructParticle()
 
 void PhysicsList::ConstructProcess()
 {
+  if(!emBuilderIsRegisted) AddPhysicsList("standard");
   G4VModularPhysicsList::ConstructProcess();
 
   // Define energy interval for loss processes
@@ -117,7 +116,6 @@ void PhysicsList::ConstructProcess()
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
   G4bool yes = false;
-
   if ("standard" == name && !emBuilderIsRegisted) {
     RegisterPhysics(new G4EmQEDBuilder());
     RegisterPhysics(new G4EmMuonBuilder());
@@ -138,14 +136,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     RegisterPhysics(new G4EmLowEnergyQEDBuilder());
     RegisterPhysics(new G4EmMuonBuilder());
     RegisterPhysics(new G4EmLowEnergyHadronBuilder(pMessenger));
-    RegisterPhysics(new StepMaxBuilder());
-    emBuilderIsRegisted = true;
-    yes = true;
-
-  } else if ("lowenergyNew" == name && !emBuilderIsRegisted) {
-    RegisterPhysics(new G4EmLowEnergyQEDBuilder());
-    RegisterPhysics(new G4EmMuonBuilder());
-    RegisterPhysics(new G4EmLowEnergyHadronBuilderNew());
     RegisterPhysics(new StepMaxBuilder());
     emBuilderIsRegisted = true;
     yes = true;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ParticlesBuilder.cc,v 1.1 2004-05-26 11:39:10 vnivanch Exp $
+// $Id: ParticlesBuilder.cc,v 1.2 2005-05-13 17:58:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 
 //
 //---------------------------------------------------------------------------
@@ -83,10 +83,6 @@
 #include "G4Triton.hh"
 #include "G4He3.hh"
 #include "G4GenericIon.hh"
-
-#include "G4IonC12.hh"
-#include "G4IonAr40.hh"
-#include "G4IonFe56.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -150,9 +146,6 @@ void ParticlesBuilder::ConstructParticle()
   G4He3::He3Definition();
   G4Alpha::AlphaDefinition();
   G4GenericIon::GenericIonDefinition();
-  G4IonC12::IonC12();
-  G4IonAr40::IonAr40();
-  G4IonFe56::IonFe56();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
