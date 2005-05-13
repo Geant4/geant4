@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.3 2005-02-17 17:13:55 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.4 2005-05-13 16:14:59 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -43,11 +43,55 @@ G4QCollision::G4QCollision(const G4String& processName) : G4VDiscreteProcess(pro
   G4cout<<"G4QCollision::Constructor is called"<<G4endl;
 #endif
   if (verboseLevel>0) G4cout << GetProcessName() << " process is created "<< G4endl;
-  G4QCHIPSWorld::Get()->GetParticles(234);           // Create CHIPS World of 234 particles
-  G4QNucleus::SetParameters(0.,0.,1.,1.);            // Nuclear clusterization parameters
-  G4Quasmon::SetParameters(180.,.09,.3);             // Temperature, s-antis, eta suppress
-  G4QEnvironment::SetParameters(.5);                 // SolAngle (pbar-A secondary capture)
+
+  G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World with 234 particles
+  G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // Clusterization param's
+  G4Quasmon::SetParameters(Temperature,SSin2Gluons,EtaEtaprime);  // Hadronic parameters
+  G4QEnvironment::SetParameters(SolidAngle); // SolAngle of pbar-A secondary mesons capture
   //@@ Initialize here the G4QuasmonString parameters
+}
+
+G4bool   G4QCollision::manualFlag=false; // If false then standard parameters are used
+G4double G4QCollision::Temperature=180.; // Critical Temperature (sensitive at High En)
+G4double G4QCollision::SSin2Gluons=0.3;  // Supression of s-quarks (in respect to u&d)
+G4double G4QCollision::EtaEtaprime=0.3;  // Supression of eta mesons (gg->qq/3g->qq)
+G4double G4QCollision::freeNuc=0.5;      // Percentage of free nucleons on the surface
+G4double G4QCollision::freeDib=0.05;     // Percentage of free diBaryons on the surface
+G4double G4QCollision::clustProb=5.;     // Nuclear clusterization parameter
+G4double G4QCollision::mediRatio=10.;    // medium/vacuum hadronization ratio
+G4int    G4QCollision::nPartCWorld=152;  // The#of particles initialized in CHIPS World
+G4double G4QCollision::SolidAngle=0.5;   // Part of Solid Angle to capture (@@A-dep.)
+G4bool   G4QCollision::EnergyFlux=false; // Flag for Energy Flux use (not MultyQuasmon)
+G4double G4QCollision::PiPrThresh=141.4; // Pion Production Threshold for gammas
+G4double G4QCollision::M2ShiftVir=20000.;// Shift for M2=-Q2=m_pi^2 of the virtualGamma
+G4double G4QCollision::DiNuclMass=1880.; // DoubleNucleon Mass for VirtualNormalization
+
+void G4QCollision::SetManual()   {manualFlag=true;}
+void G4QCollision::SetStandard() {manualFlag=false;}
+
+// Fill the private parameters
+void G4QCollision::SetParameters(G4double temper, G4double ssin2g, G4double etaetap,
+                                     G4double fN, G4double fD, G4double cP, G4double mR,
+                                     G4int nParCW, G4double solAn, G4bool efFlag,
+                                     G4double piThresh, G4double mpisq, G4double dinum)
+{//  =============================================================================
+  Temperature=temper;
+  SSin2Gluons=ssin2g;
+  EtaEtaprime=etaetap;
+  freeNuc=fN;
+  freeDib=fD;
+  clustProb=cP;
+  mediRatio=mR;
+  nPartCWorld = nParCW;
+  EnergyFlux=efFlag;
+  SolidAngle=solAn;
+  PiPrThresh=piThresh;
+  M2ShiftVir=mpisq;
+  DiNuclMass=dinum;
+  G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World with 234 particles
+  G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // Clusterization param's
+  G4Quasmon::SetParameters(Temperature,SSin2Gluons,EtaEtaprime);  // Hadronic parameters
+  G4QEnvironment::SetParameters(SolidAngle); // SolAngle of pbar-A secondary mesons capture
 }
 
 // Destructor
@@ -169,6 +213,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   //static const G4double mMu  = G4QPDGCode(13).GetMass();
   //static const G4double mTau = G4QPDGCode(15).GetMass();
   //static const G4double mEl  = G4QPDGCode(11).GetMass();
+  //
   const G4DynamicParticle* projHadron = track.GetDynamicParticle();
   const G4ParticleDefinition* particle=projHadron->GetDefinition();
   G4LorentzVector proj4M=projHadron->Get4Momentum();
@@ -176,6 +221,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   G4double Momentum=proj4M.rho();
   if(fabs(Momentum-momentum)>.001)G4cerr<<"G4QC::PSDI P="<<Momentum<<"="<<momentum<<G4endl;
 #ifdef debug
+  G4double mp=proj4M.m();
   G4cout<<"G4QCollision::PostStepDoIt is called, P="<<Momentum<<"="<<momentum<<G4endl;
 #endif
   if (!IsApplicable(*particle))  // Check applicability
@@ -237,32 +283,62 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     sumfra.push_back(sum);             // remember the summation steps
   }
   G4double rnd = sum*G4UniformRand();
-  for(i=0; i<nE; ++i)
-  {
-    G4int cZ=static_cast<G4int>((*theElementVector)[i]->GetZ());
-    sum=sumfra[i];
-    if (rnd<sum)  
-    { 
-	     Z = cZ;
-      break;
-	   }
-  }
+  for(i=0; i<nE; ++i) if (rnd<sumfra[i]) break;
+  G4Element* pElement=(*theElementVector)[i];
+  Z=static_cast<G4int>(pElement->GetZ());
   if(Z<=0)
   {
     G4cerr<<"---Worning---G4QCollision::PostStepDoIt:Element with Z="<<Z<< G4endl;
     if(Z<0) return 0;
   }
-  G4int N = G4QIsotope::Get()->GetNeutrons(Z);
-  nOfNeutrons=N;                                       // Remember it for energy-mom. check
-  if(Z+N>20) G4QNucleus::SetParameters(.18,.06,6.,1.); // HeavyNuclei NuclearClusterization
-  else       G4QNucleus::SetParameters(0.0,0.0,1.,1.); // LightNuclei NuclearClusterization
-  if(N) // @@ Temporary suppression of Deuterons @@ !
-  {
+  G4int N = Z;
+  G4int isoSize=0;                         // The default for the isoVectorLength is 0
+  G4IsotopeVector* isoVector=pElement->GetIsotopeVector();
+  if(isoVector) isoSize=isoVector->size(); // Get real size of the isotopeVector if exists
 #ifdef debug
-    G4cout<<"*TMP*G4QCollision::PostStepDoIt: N="<<N<<" for element with Z="<<Z<<G4endl;
+  G4cout<<"G4QCollision::PostStepDoIt: isovectorLength="<<isoSize<<G4endl;
 #endif
-    N=0;
+  if(isoSize)                         // The Element has not trivial abumdance set
+  {
+    // @@ the following solution is temporary till G4Element can contain the QIsotopIndex
+    G4int curInd=G4QIsotope::Get()->GetLastIndex(Z);
+    if(!curInd)                       // The new artificial element must be defined 
+				{
+      std::vector<std::pair<G4int,G4double>*>* newAbund =
+                                               new std::vector<std::pair<G4int,G4double>*>;
+      G4double* abuVector=pElement->GetRelativeAbundanceVector();
+      for(G4int j=0; j<isoSize; j++)
+      {
+        N=pElement->GetIsotope(j)->GetN()-Z;
+        if(pElement->GetIsotope(j)->GetZ()!=Z) G4cerr<<"*G4QCaptureAtRest::AtRestDoIt: Z="
+																																							 <<pElement->GetIsotope(j)->GetZ()<<"#"<<Z<<G4endl;
+        G4double abund=abuVector[j];
+								std::pair<G4int,G4double>* pr= new std::pair<G4int,G4double>(N,abund);
+#ifdef debug
+        G4cout<<"G4QCollision::PostStepDoIt:pair#="<<j<<", N="<<N<<",ab="<<abund<<G4endl;
+#endif
+        newAbund->push_back(pr);
+						}
+#ifdef debug
+      G4cout<<"G4QCollision::PostStepDoIt: pairVectorLength="<<newAbund->size()<<G4endl;
+#endif
+      curInd=G4QIsotope::Get()->InitElement(Z,1,newAbund);
+      for(G4int k=0; k<isoSize; k++) delete (*newAbund)[k];
+      delete newAbund;
+    }
+    // @@ ^^^^^^^^^^ End of the temporary solution ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    N = G4QIsotope::Get()->GetNeutrons(Z,curInd);
   }
+  else  N = G4QIsotope::Get()->GetNeutrons(Z);
+  nOfNeutrons=N;                                       // Remember it for energy-mom. check
+  G4double dd=0.025;
+  G4double am=Z+N;
+  G4double sr=sqrt(am);
+  G4double dsr=0.01*(sr+sr);
+  if(dsr<dd)dsr=dd;
+  if(manualFlag) G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // ManualP
+		else if(projPDG==-2212) G4QNucleus::SetParameters(1.-dsr-dsr,dd+dd,5.,10.);//aP ClustPars
+  else if(projPDG==-211)  G4QNucleus::SetParameters(.67-dsr,.32-dsr,5.,9.);//Pi- ClustPars
 #ifdef debug
   G4cout<<"G4QCollision::PostStepDoIt: N="<<N<<" for element with Z="<<Z<<G4endl;
 #endif
@@ -365,51 +441,78 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   EnMomConservation=proj4M+G4LorentzVector(0.,0.,0.,tM);    // Total 4-mom of the reaction
   G4QHadronVector* output=new G4QHadronVector; // Prototype of the output G4QHadronVector
   // @@@@@@@@@@@@@@ Temporary for the testing purposes --- Begin
-  G4bool elF=false; // Flag of the ellastic scattering is "false" by default
+  //G4bool elF=false; // Flag of the ellastic scattering is "false" by default
   //G4double eWei=1.;
   // @@@@@@@@@@@@@@ Temporary for the testing purposes --- End  
 #ifdef debug
   G4cout<<"G4QCollision::PostStepDoIt: projPDG="<<projPDG<<", targPDG="<<targPDG<<G4endl;
 #endif
-  G4QHadron* pH = new G4QHadron(projPDG,proj4M);                // ---> DELETED -->---+
-  G4QuasmonString* pan= new G4QuasmonString(pH,false,targPDG,false);//-> DELETED --+  |
-  delete pH;                                                    // --------<-------+--+
+  G4QHadron* pH = new G4QHadron(projPDG,proj4M);                // ---> DELETED -->--   -+
+  if(momentum<1000.) // Condition for using G4QEnvironment (not G4QuasmonString)         |
+		{ //                                                                                   |
+    G4QHadronVector projHV;                                 //                           |
+    projHV.push_back(pH);                                   // DESTROYED over 2 lines -+ |
+    G4QEnvironment* pan= new G4QEnvironment(projHV,targPDG);// ---> DELETED --->-----+ | |
+    std::for_each(projHV.begin(), projHV.end(), DeleteQHadron()); // <---<------<----+-+-+
+    projHV.clear(); // <------------<---------------<-------------------<------------+-+ .
 #ifdef debug
-  G4double mp=G4QPDGCode(projPDG).GetMass();   // Mass of the projectile particle  |
-  G4cout<<"G4QCollision::PostStepDoIt: pPDG="<<projPDG<<", pM="<<mp<<G4endl; //    |
+    G4cout<<"G4QCollision::PostStepDoIt: pPDG="<<projPDG<<", mp="<<mp<<G4endl; //    |   .
 #endif
-  G4int tNH=0;                      // Prototype of the number of secondaries inOut|
-  try                                                           //                 |
-	 {                                                             //                 |
-				// delete output;                                           //                 |
-    //output = pan->Fragment();// DESTROYED in the end of the LOOP work space      |
-    // @@@@@@@@@@@@@@ Temporary for the testing purposes --- Begin                 |
-    tNH=pan->GetNOfHadrons();
-    if(tNH==2)                      // At least 2 hadrons are in the Constr.Output |
-				{//                                                                            |
-      elF=true;                     // Just put a flag for the ellastic Scattering |
-	     delete output;                // Delete a prototype of dummy G4QHadronVector |
-      output = pan->GetHadrons();   // DESTROYED in the end of the LOOP work space |
-    }//                                                                            |
-    //eWei=pan->GetWeight();        // Just an example for the weight of the event |
+    try                                                           //                 |   .
+	   {                                                             //                 |   .
+	     delete output;                                              //                 |   .
+      output = pan->Fragment();// DESTROYED in the end of the LOOP work space        |   .
+    }                                                             //                 |   .
+    catch (G4QException& error)//                                                    |   .
+	   {                                                             //                 |   .
+	     //#ifdef pdebug
+      G4cerr<<"***G4QCollision::PostStepDoIt: G4QE Exception is catched"<<G4endl; // |   .
+	     //#endif
+      G4Exception("G4QCollision::PostStepDoIt:","27",FatalException,"CHIPS Crash");//|   .
+    }                                                             //                 |   .
+    delete pan;                              // Delete the Nuclear Environment <--<--+   .
+  } //                                                                                   .
+  else               // Use G4QuasmonString                                              .
+		{ //                                                                                   ^
+    G4QuasmonString* pan= new G4QuasmonString(pH,false,targPDG,false);//-> DELETED --+   |
+    delete pH;                                                    // --------<-------+---+
 #ifdef debug
-    G4cout<<"=====>>G4QCollision::PostStepDoIt: elF="<<elF<<",n="<<tNH<<G4endl; // |
+    G4double mp=G4QPDGCode(projPDG).GetMass();   // Mass of the projectile particle  |
+    G4cout<<"G4QCollision::PostStepDoIt: pPDG="<<projPDG<<", pM="<<mp<<G4endl; //    |
 #endif
-    // @@@@@@@@@@@@@@ Temporary for the testing purposes --- End                   |
-  }                                                             //                 |
-  catch (G4QException& error)//                                                    |
-	 {                                                             //                 |
-	   //#ifdef pdebug
-    G4cerr<<"***G4QCollision::PostStepDoIt: GEN Exception is catched"<<G4endl; //  |
-	   //#endif
-    G4Exception("G4QCollision::AtRestDoIt:","27",FatalException,"QString Excep");//|
-  }                                                             //                 |
-  delete pan;                              // Delete the Nuclear Environment ---<--+
+    //G4int tNH=0;                    // Prototype of the number of secondaries inOut|
+    try                                                           //                 |
+	   {                                                             //                 |
+				  delete output;                                            //                   |
+      output = pan->Fragment();// DESTROYED in the end of the LOOP work space        |
+      // @@@@@@@@@@@@@@ Temporary for the testing purposes --- Begin                 |
+      //tNH=pan->GetNOfHadrons();     // For the test purposes of the String         |
+      //if(tNH==2)                    // At least 2 hadrons are in the Constr.Output |
+				  //{//                                                                          |
+      //  elF=true;                   // Just put a flag for the ellastic Scattering |
+	     //  delete output;              // Delete a prototype of dummy G4QHadronVector |
+      //  output = pan->GetHadrons(); // DESTROYED in the end of the LOOP work space |
+      //}//                                                                          |
+      //eWei=pan->GetWeight();        // Just an example for the weight of the event |
+#ifdef debug
+      //G4cout<<"=====>>G4QCollision::PostStepDoIt: elF="<<elF<<",n="<<tNH<<G4endl;//|
+#endif
+      // @@@@@@@@@@@@@@ Temporary for the testing purposes --- End                   |
+    }                                                             //                 |
+    catch (G4QException& error)//                                                    |
+	   {                                                             //                 |
+	     //#ifdef pdebug
+      G4cerr<<"***G4QCollision::PostStepDoIt: GEN Exception is catched"<<G4endl; //  |
+	     //#endif
+      G4Exception("G4QCollision::AtRestDoIt:","27",FatalException,"QString Excep");//|
+    }                                                             //                 |
+    delete pan;                              // Delete the Nuclear Environment ---<--+
+  }
   aParticleChange.Initialize(track);
   G4double localtime = track.GetGlobalTime();
   G4ThreeVector position = track.GetPosition();
   // ------------- From here the secondaries are filled -------------------------
-  //@@@  G4int tNH = output->size();       // A#of hadrons in the output
+  G4int tNH = output->size();       // A#of hadrons in the output
   aParticleChange.SetNumberOfSecondaries(tNH); 
   // Now add nuclear fragments
 #ifdef debug
@@ -419,7 +522,8 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   if(tNH==1) tNH=0;                        // @@ Temporary
   if(tNH==2&&2!=nOut) G4cout<<"--Warning--G4QCollision::PostStepDoIt: 2 # "<<nOut<<G4endl;
   // Deal with ParticleChange final state interface to GEANT4 output of the process
-  if(tNH==2) for(i=0; i<tNH; i++) // @@ Temporary tNH==2 instead of just tNH
+  //if(tNH==2) for(i=0; i<tNH; i++) // @@ Temporary tNH==2 instead of just tNH
+  if(tNH) for(i=0; i<tNH; i++) // @@ Temporary tNH==2 instead of just tNH
   {
     // Note that one still has to take care of Hypernuclei (with Lambda or Sigma inside)
     // Hypernucleus mass calculation and ion-table interface upgrade => work for Hisaya @@
@@ -474,16 +578,20 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
 #endif
     theSec->SetDefinition(theDefinition);
     G4LorentzVector h4M=hadr->Get4Momentum();
+    EnMomConservation-=h4M;
+#ifdef tdebug
+    G4cout<<"G4QCollis::PSDI:"<<i<<","<<PDGCode<<h4M<<h4M.m()<<EnMomConservation<<G4endl;
+#endif
 #ifdef debug
     G4cout<<"G4QCollision::PostStepDoIt:#"<<i<<",PDG="<<PDGCode<<",4M="<<h4M<<G4endl;
 #endif
-    theSec->Set4Momentum(h4M);
+    theSec->Set4Momentum(h4M); //                                                         ^
     delete hadr; // <-----<-----------<-------------<---------------------<---------<-----+
 #ifdef debug
     G4ThreeVector curD=theSec->GetMomentumDirection();              //                    ^
     G4double curM=theSec->GetMass();                                //                    |
     G4double curE=theSec->GetKineticEnergy()+curM;                  //                    ^
-    G4cout<<"G4QCapAtR::PSDoIt:p="<<curD<<curD.mag()<<",e="<<curE<<",m="<<curM<<G4endl;// |
+    G4cout<<"G4QCollis::PSDoIt:p="<<curD<<curD.mag()<<",e="<<curE<<",m="<<curM<<G4endl;// |
 #endif
     G4Track* aNewTrack = new G4Track(theSec, localtime, position ); //                    ^
     aParticleChange.AddSecondary( aNewTrack ); //                                         |

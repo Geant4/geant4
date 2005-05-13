@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.18 2005-04-28 07:47:44 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.19 2005-05-13 16:14:59 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -51,6 +51,7 @@ G4QCaptureAtRest::G4QCaptureAtRest(const G4String& processName)
   G4Quasmon::SetParameters(Temperature,SSin2Gluons,EtaEtaprime);  // Hadronic parameters
   G4QEnvironment::SetParameters(SolidAngle); // SolAngle of pbar-A secondary mesons capture
 }
+
 G4bool   G4QCaptureAtRest::manualFlag=false; // If false then standard parameters are used
 G4double G4QCaptureAtRest::Temperature=180.; // Critical Temperature (sensitive at High En)
 G4double G4QCaptureAtRest::SSin2Gluons=0.3;  // Supression of s-quarks (in respect to u&d)
@@ -138,10 +139,13 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
   //static const G4double mMu  = G4QPDGCode(13).GetMass();
   //static const G4double mTau = G4QPDGCode(15).GetMass();
   static const G4double mEl  = G4QPDGCode(11).GetMass();
+  //
   const G4DynamicParticle* stoppedHadron = track.GetDynamicParticle();
   const G4ParticleDefinition* particle=stoppedHadron->GetDefinition();
+  Time=0.;
+  EnergyDeposition=0.;
 #ifdef debug
-  G4cout<<"G4QCaptureAtRest::AtRestDoIt is called"<<G4endl;
+  G4cout<<"G4QCaptureAtRest::AtRestDoIt is called,EnDeposition="<<EnergyDeposition<<G4endl;
 #endif
   if (! IsApplicable(*particle))  // Check applicability
   {
@@ -181,9 +185,9 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
   for(i=0; i<nE; ++i)
   {
    	G4double frac=material->GetFractionVector()[i];
-    G4int cZ=static_cast<G4int>((*theElementVector)[i]->GetZ());
     if(projPDG==13||projPDG==15)
     {
+      G4int cZ=static_cast<G4int>((*theElementVector)[i]->GetZ());
       frac*=cZ;
       if(cZ==9||cZ==35||cZ==53||cZ==85) frac*=.66;
       else if                  (cZ== 3) frac*=.50;
@@ -560,7 +564,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
       //else if (PDGCode==90002001) theDefinition = G4He3::He3();
       //else if (PDGCode==90002002) theDefinition = G4Alpha::Alpha();
       //else
-        theDefinition = G4ParticleTable::GetParticleTable()->FindIon(aZ,aA,0,aZ);
+      theDefinition = G4ParticleTable::GetParticleTable()->FindIon(aZ,aA,0,aZ);
     }
     else
     {
@@ -585,7 +589,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     G4LorentzVector h4M=hadr->Get4Momentum();
     EnMomConservation-=h4M;
 #ifdef tdebug
-    G4cout<<"G4QCap:"<<i<<","<<PDGCode<<h4M<<h4M.m()<<EnMomConservation<<G4endl;
+    G4cout<<"G4QCapAR::ARDoIt:"<<i<<","<<PDGCode<<h4M<<h4M.m()<<EnMomConservation<<G4endl;
 #endif
 #ifdef debug
     G4cout<<"G4QCaptureAtRest::AtRestDoIt:#"<<i<<",PDG="<<PDGCode<<",4M="<<h4M<<G4endl;
@@ -605,6 +609,9 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #endif
   }
   delete output;
+#ifdef debug
+  G4cout<<"G4QCaptureAtRest::AtRestDoIt: the EnergyDeposition="<<EnergyDeposition<<G4endl;
+#endif
   aParticleChange.ProposeLocalEnergyDeposit(EnergyDeposition);// Fill EnergyDeposition
   aParticleChange.ProposeTrackStatus(fStopAndKill);           // Kill the absorbed particle
   //return &aParticleChange;                               // This is not enough (ClearILL)
@@ -719,7 +726,7 @@ void G4QCaptureAtRest::MuCaptureEMCascade(G4int Z, G4int N, std::vector<G4double
     // case of Auger electrons
     if((nAuger < Z) && ((pGamma + 10000.0) * G4UniformRand() < 10000.0) ) // 10000 (? M.K.)
     {
-	  nAuger++;                   // Radiate one more Auger electron
+   	  nAuger++;                       // Radiate one more Auger electron
       DeltaE = EnergyLevel[nLevel-1] - EnergyLevel[nLevel];
       nLevel--;
 #ifdef debug

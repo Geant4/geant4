@@ -20,7 +20,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.80 2005-04-07 10:31:26 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.81 2005-05-13 16:14:59 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -252,17 +252,17 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
   ////////////static const G4double conCon=197.327;            // Conversion constant (hc)
   ////////////static const G4double rCB   = 1.09;// R=r_CB*(a^1/3+A^1/3)(CoulBarRadius(fm))
   static const G4double eps = 0.003;    // 3keV cut to split instead of decay
-#ifdef debug
-  G4cout<<"G4Quasmon(G4Q)::HadronizeQ(HQ):*==>>>START QUASMON HADRONIZATION<<<==*"<<G4endl;
-#endif
   G4double momPhoton=phot4M.rho();
   G4double addPhoton=phot4M.e();
+#ifdef debug
+  G4cout<<"G4Quasmon::HadrQ:*=>>>START QUASMON HADRONIZATION<<<=*, aP="<<addPhoton<<G4endl;
+#endif
   G4bool piF = false;                         // FirstFragmentationFlag for PiCaptureAtRest
   G4bool gaF = false;                         // FirstFragmentationFlag for GammaNucleus
   if(addPhoton<0.)                            // "PionCapture at rest" case
   {
 #ifdef debug
-	G4cout<<"G4Q::HQ: PionAtRest, addP="<<addPhoton<<", momP="<<momPhoton<<G4endl;
+	   G4cout<<"G4Q::HQ: PionAtRest, addP="<<addPhoton<<", momP="<<momPhoton<<G4endl;
 #endif
     addPhoton=0.;
     momPhoton=0.;
@@ -275,6 +275,9 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
   G4int nP= theWorld->GetQPEntries(); // A#of initialized particles in CHIPS World
   //@@ Make special parametyer to cut high resonances for nuclear fragmentation !!
   G4int          nMesons  = G4QNucleus().GetNDefMesonC();
+#ifdef debug
+  G4cout<<"G4Quasmon::HadrQ:CHIPSWorld initialized with nP="<<nP<<",nM="<<nMesons<<G4endl;
+#endif
   if     (nP<34) nMesons  =  9; // @@ Only for hadronic, not nuclear reactions (?)
   else if(nP<51) nMesons  = 18; // @@ Only for hadronic, not nuclear reactions (?)
   else if(nP<65) nMesons  = 27; // @@ Only for hadronic, not nuclear reactions (?)
@@ -284,10 +287,14 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
   else if(nP<59) nBaryons = 36; // @@ Only for hadronic, not nuclear reactions (?)
   else if(nP<76) nBaryons = 52; // @@ Only for hadronic, not nuclear reactions (?)
   G4int          nClusters= nP-G4QPDGCode().GetNQHadr(); // "+Leptons/Isobars/Hyperons"
+#ifdef debug
+  G4cout<<"G4Quasmon:HadrQ: Init Candidates:"<<theEnvironment<<",n="<<theQCandidates.size()
+        <<",nMesons="<<nMesons<<",nBaryons="<<nBaryons<<",nClusters="<<nClusters<<G4endl;
+#endif
   theEnvironment.InitCandidateVector(theQCandidates,nMesons,nBaryons,nClusters);
-#ifdef pardeb
-  G4cout<<"G4Quasmon:Constructor: Candidates are initialized: nMesons="<<nMesons
-        <<", nBaryons="<<nBaryons<<", nClusters="<<nClusters<<G4endl;
+#ifdef debug
+  G4cout<<"G4Quasmon:HadrQ:CandidatesAreInitialized,n="<<theQCandidates.size()<<",nMesons="
+        <<nMesons<<", nBaryons="<<nBaryons<<", nClusters="<<nClusters<<G4endl;
 #endif
   if(!status||q4Mom==zeroLV)                   // This Quasmon is done (Sould not be here)
   {
@@ -340,6 +347,9 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
   G4int oldNH=theQHadrons.size();           // To compare on the fragmentation step
 #endif
   G4bool start=true;
+#ifdef debug
+  G4cout<<"Before the loop EnvPDG="<<theEnvironment.GetPDG()<<G4endl;
+#endif
   while(theEnvironment.GetPDG()==NUCPDG || start)// **=TheMainLOOP(LOOP only forVacuum)=**
   {
 #ifdef chdebug

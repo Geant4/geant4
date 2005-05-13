@@ -24,7 +24,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.105 2005-04-25 16:17:52 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.106 2005-05-13 16:14:59 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -61,7 +61,7 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
 #ifdef debug
   G4cout<<">>>>>>G4QE::Const: Called targPDG="<<targPDG<<", nInpHadr="<<nHadrons<<G4endl;
 #endif
-  if(!nHadrons||targPDG==90000000)           // No projectile Hadrons or no target Nucleus
+  if(nHadrons<1 || targPDG==90000000)        // No projectile Hadrons or no target Nucleus
   {
     G4cerr<<"---Warning---G4QEnv::Const:a#ofINPHadr="<<nHadrons<<",tPDG="<<targPDG<<G4endl;
     //throw G4QException("***G4QEnvironment: There is no one projectile or vacuum target");
@@ -86,9 +86,13 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
 #endif
       theQHadrons.push_back(curQH);          // (delete equivalent)
     }
+    if (nHadrons<0) G4cerr<<"**G4QE::Const:NH="<<nHadrons<<" < 0 !"<<G4endl;
     return;
   }
   G4QPDGCode targQPDG(targPDG);
+#ifdef pdebug
+  G4cout<<"G4QE::C:targQPDG="<<targQPDG<<G4endl;
+#endif
   G4int    targA=targQPDG.GetBaryNum();
   G4double targM=targQPDG.GetMass();
   totCharge=targQPDG.GetCharge();
@@ -151,10 +155,10 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
 #ifdef pdebug
         G4cout<<"G4QEnvironment::Const: exM="<<exMass-targM<<" > mPi0 ?"<<G4endl;
 #endif      
-        if(exMass<targM+135.977) // Nucleus is below the pion threshold
+        if(exMass<targM+135.977) // Nucleus is below the pion production threshold
 	       {
           G4QNucleus exEnviron(tot4Mom,targPDG);
-          // One can put here the pbpt= (M.K.)
+          // @@ One can put here the pbpt= (M.K.) @@ What about d,t,alpha splitting?
           if(!exEnviron.SplitBaryon()) // Nucleus is below the splitting fragment threshold
 		        {
 #ifdef pdebug
@@ -211,7 +215,7 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
 		      }
 		      fnN.Set4Momentum(fn4m);
         // (mu,q->nu,q) reaction succeded and Neutrino can be pushed to Output
-        G4QHadron* neutrino = 0;              // Neutrino to be filled to Output
+        G4QHadron* neutrino = 0;              // NeutrinoPrototype to be filled to Output
 #ifdef mudebug
         G4cout<<"G4QEnv::Const:fM="<<tm<<fn4m<<",GSM="<<fnm<<G4endl;
 #endif      
@@ -744,6 +748,9 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
       G4cout<<"G4QE::CreQ: before Fragment vE="<<vE<<",QQC="<<valQ<<",Q4M="<<q4Mom<<G4endl;
 #endif
       G4QHadronVector* output=pan->Fragment(vE,1);//Output of inVacAnnihilation*DESTROY*<-+
+#ifdef pdebug
+      G4cout<<"G4QE::CrQ:NucleonAntinucleonAnnihilation's done,N="<<output->size()<<G4endl;
+#endif
       G4Quasmon::OpenElectromagneticDecays();  // Parameter for multihadronFragmentatation^
 #ifdef pdebug
 	     G4cout<<"G4QE::CrQ:>>AnnihilationIsDone,C="<<totCharge<<",B="<<totBaryoN<<G4endl;// ^
@@ -1047,8 +1054,8 @@ void G4QEnvironment::PrepareInteractionProbabilities(const G4QContent& projQC, G
   G4double probab = 0.;                            // Interaction probability
   G4double denseB = 0.;                            // A#of*prob baryons in dense part
   G4double allB   = 0.;                            // A#of*prob baryons in the nucleus
-  if(2>3) allB=AP;                                 // A trick to use not used AP as |3-mom|
-  //in PR//G4int pPDG = projQC.GetSPDGCode();        // PDG code of the projectile particle
+  G4int pPDG = projQC.GetSPDGCode();               // PDG code of the projectile particle
+  if(2>3) {allB=AP; allB=pPDG;}                    // A trick to use not used AP(3M) & pPDG
   for (unsigned index=0; index<theQCandidates.size(); index++)
   {
     G4QCandidate* curCand=theQCandidates[index];   // Intermediate pointer
@@ -1082,7 +1089,11 @@ void G4QEnvironment::PrepareInteractionProbabilities(const G4QContent& projQC, G
       G4double fact=1./pow(2.,d);
       if (qC<-1) probab=0.;     
       //else if((pPDG==-211&&AP<10.||pPDG==22&&AP<150.)&&cBN<2)probab=0.;//PiAtRest/GamBlPi
-      //else if(pPDG==22&&AP<152.&&cBN<2)probab=nOfCl*cBN*fact/2;//GamUnderPi(QuarkCapture)
+      else if(pPDG==22&&AP<152.)
+      {
+        if(cBN<2)probab=nOfCl*cBN*fact; //Gamma Under Pi Threshold (QuarkCapture)
+        else probab=0.;
+      }
       ////////////////////////else if((pPDG==-211&&AP<10.)&&cBN<2) probab=0;//PiCapAtRst(D)
       //else if(pPDG==-211&&AP<10.)            probab=nOfCl*fact;// special PiCaptureAtRest
       //else if(pPDG==-211&&AP<10.)            probab=nOfCl*cBN*(cBN-1)*fact;
@@ -8706,7 +8717,9 @@ void G4QEnvironment::DecayBaryon(G4QHadron* qH)
   }
   else 
   {
+#ifdef pdebug
     G4cout<<"---Worning---G4QE::DecBary:*AsIso* UnknBaryon(AntiS) QC="<<qH->GetQC()<<G4endl;
+#endif
     theQHadrons.push_back(qH);                 // Fill AsIs (delete equivalent)
     return;
   }

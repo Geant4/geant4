@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.51 2005-04-22 16:07:50 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.52 2005-05-13 16:14:59 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -2701,7 +2701,14 @@ void G4QNucleus::InitCandidateVector(G4QCandidateVector& theQCandidates,
   if(maxBar>nOfBaryons) maxBar=nOfBaryons;
   if(maxBar>=0) for (i=0; i<maxBar; i++) 
   {
-    theQCandidates.push_back(new G4QCandidate(baryonPDG[i])); // delete equivalent
+#ifdef debug
+    G4cout<<"G4QNucleus::InitCandidateVector: define PDG="<<baryonPDG[i]<<G4endl;
+#endif
+    G4QCandidate* curBar=new G4QCandidate(baryonPDG[i]);
+#ifdef debug
+    G4cout<<"G4QNucleus::InitCandidateVector: current baryon is defined"<<G4endl;
+#endif
+    theQCandidates.push_back(curBar); // delete equivalent
 #ifdef debug
     G4cout<<"G4Nucleus::InitCandidateVector: "<<ind++<<", Baryon # "<<i<<" with code = "
           <<baryonPDG[i]<< ", QC="<<theQCandidates[i]->GetQC()<<" is initialized"<<G4endl;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCollision.hh,v 1.2 2005-02-04 08:53:50 mkossov Exp $
+// $Id: G4QCollision.hh,v 1.3 2005-05-13 16:14:59 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision header ----------------
@@ -96,8 +96,7 @@
 //#include <vector>
 
 class G4QCollision : public G4VDiscreteProcess
-{  
-
+{
 public:
 
   // Constructor
@@ -106,7 +105,7 @@ public:
   // Destructor
   ~G4QCollision();
 
-  G4bool IsApplicable(const G4ParticleDefinition& particle); // Now only for protons
+  G4bool IsApplicable(const G4ParticleDefinition& particle);
 
   G4double GetMeanFreePath(const G4Track& aTrack, G4double previousStepSize,
                            G4ForceCondition* condition);
@@ -128,7 +127,13 @@ public:
 
   G4int GetNumberOfNeutronsInTarget();
 
-protected:                         
+  // Static functions
+  static void SetManual();
+  static void SetStandard();
+  static void SetParameters(G4double temper=180., G4double ssin2g=.1, G4double etaetap=.3,
+                            G4double fN=0., G4double fD=0., G4double cP=1., G4double mR=1.,
+                            G4int npCHIPSWorld=234, G4double solAn=.5, G4bool efFlag=false,
+                            G4double piTh=141.4,G4double mpi2=20000.,G4double dinum=1880.);
 
 private:
 
@@ -138,10 +143,34 @@ private:
   // Copy constructor
   G4QCollision(const G4QCollision&);
 
-		// Body
+		// BODY
+  // Static Parameters
+  static G4bool   manualFlag;  // If false then standard parameters are used
+  static G4int    nPartCWorld; // The#of particles for hadronization (limit of A of fragm.)
+  // -> Parameters of the G4Quasmon class:
+  static G4double Temperature; // Quasmon Temperature
+  static G4double SSin2Gluons; // Percent of ssbar sea in a constituen gluon
+  static G4double EtaEtaprime; // Part of eta-prime in all etas
+  // -> Parameters of the G4QNucleus class:
+  static G4double freeNuc;     // probability of the quasi-free baryon on surface
+  static G4double freeDib;     // probability of the quasi-free dibaryon on surface
+  static G4double clustProb;   // clusterization probability in dense region
+  static G4double mediRatio;   // relative vacuum hadronization probability
+  // -> Parameters of the G4QEnvironment class:
+  static G4bool   EnergyFlux;  // Flag for Energy Flux use instead of Multy Quasmon
+  static G4double SolidAngle;  // Part of Solid Angle to capture secondaries(@@A-dep)
+  static G4double PiPrThresh;  // Pion Production Threshold for gammas
+  static G4double M2ShiftVir;  // Shift for M2=-Q2=m_pi^2 of the virtual gamma
+  static G4double DiNuclMass;  // Double Nucleon Mass for virtual normalization
+  //
+  // Working parameters
   G4VQCrossSection* theCS;
   G4LorentzVector EnMomConservation;                  // Residual of Energy/Momentum Cons.
   G4int nOfNeutrons;                                  // #of neutrons in the target nucleus
+
+  // Modifires for the reaction
+  G4double Time;                                      // Time shift of the capture reaction
+  G4double EnergyDeposition;                          // Energy deposited in the reaction
 };
 #endif
 

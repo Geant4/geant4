@@ -450,7 +450,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4cout << "Number of particles from string"<<theResult->size()<<G4endl;
   G4cout << "Number of particles from chips"<<maxParticle<<G4endl;
 #endif
-  for(G4int particle = 0; particle < maxParticle; particle++)
+  if(maxParticle) for(G4int particle = 0; particle < maxParticle; particle++)
   {
     if(output->operator[](particle)->GetNFragments() != 0) 
     {
