@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.18 2004-06-04 14:17:54 duns Exp $
+# $Id: GNUmakefile,v 1.19 2005-05-13 15:02:25 duns Exp $
 
 name := G4visHepRep
 
@@ -17,10 +17,11 @@ include $(G4INSTALL)/config/architecture.gmk
 include $(G4INSTALL)/config/G4VIS_BUILD.gmk
 include $(G4INSTALL)/config/interactivity.gmk
 
-CPPFLAGS += -DDEBUG -DZ_PREFIX
-CPPFLAGS += -I$(G4BASE)/visualization/HepRep/include/ref
-CPPFLAGS += -I$(G4BASE)/visualization/HepRep/include/zipios++
-CPPFLAGS += -I$(G4BASE)/visualization/HepRep/include/zlib
+ifdef G4LIB_USE_ZLIB
+CPPFLAGS += -DG4LIB_USE_ZLIB
+CPPFLAGS += -DCHEPREP_USE_ZLIB
+CPPFLAGS += -I$(G4BASE)/visualization/externals/zlib/include
+endif
 
 CPPFLAGS += -I$(G4BASE)/event/include
 CPPFLAGS += -I$(G4BASE)/track/include

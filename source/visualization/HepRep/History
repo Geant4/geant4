@@ -1,4 +1,4 @@
-.$Id: History,v 1.80 2005-05-03 13:21:02 duns Exp $
+.$Id: History,v 1.81 2005-05-13 15:02:25 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,19 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+NOTE:
+FIXME:
+- No HepRepDefault can be found!
+
+12 May 2005 Mark Donszelmann
+- Renamed zconf.h, zlib.h and zutil.h back into their old names.
+- Removed -DZ_PREFIX from the zlib compilation step.
+- Added G4LIB_BUILD_ZLIB for building zlib and G4LIB_USE_ZLIB for using zlib.
+- Removed all files belonging to zipios++ from include and src.
+- Removed all files from the ref include directory.
+- Moved zlib to the externals/zlib package.
+- Added cheprep src and include files and changed GNUmakefile.
+
 3 May 2005 Mark Donszelmann
 - Removed the following zlib and zipios files which are not necessary for writing
   zip or gz files: include/zipios++/basicentry.h, include/zipios++/collcoll.h, 
