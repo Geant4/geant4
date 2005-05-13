@@ -110,6 +110,9 @@ namespace cheprep {
                 setp(&(in[0]), &(in[0])+inSize);
             }
         }
+#else
+        // suppress warning about unused var
+        bool suppress_warning = compress;
 #endif // CHEPREP_USE_ZLIB
 
         crc = 0;

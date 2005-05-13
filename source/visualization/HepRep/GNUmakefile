@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.20 2005-05-13 17:16:14 duns Exp $
+# $Id: GNUmakefile,v 1.21 2005-05-13 17:25:13 duns Exp $
 
 name := G4visHepRep
 
@@ -22,8 +22,6 @@ CPPFLAGS += -DG4LIB_USE_ZLIB
 CPPFLAGS += -DCHEPREP_USE_ZLIB
 CPPFLAGS += -I$(G4BASE)/visualization/externals/zlib/include
 endif
-
-CPPFLAGS += -Wno-long-long
 
 CPPFLAGS += -I$(G4BASE)/event/include
 CPPFLAGS += -I$(G4BASE)/track/include

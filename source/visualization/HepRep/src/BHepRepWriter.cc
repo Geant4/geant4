@@ -9,7 +9,7 @@
                         
 /**
  * @author Mark Donszelmann
- * @version $Id: BHepRepWriter.cc,v 1.1 2005-05-13 15:00:04 duns Exp $
+ * @version $Id: BHepRepWriter.cc,v 1.2 2005-05-13 17:25:13 duns Exp $
  */
 namespace cheprep {
 
@@ -202,7 +202,7 @@ namespace cheprep {
     void BHepRepWriter::close() {
     }
     
-    void BHepRepWriter::openDoc(std::string version, std::string encoding, bool standalone) {
+    void BHepRepWriter::openDoc(std::string version, std::string /* encoding */, bool /* standalone */) {
         stringValues.clear();
         
         // header
