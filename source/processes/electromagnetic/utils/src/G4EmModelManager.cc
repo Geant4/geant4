@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.27 2005-04-08 12:40:07 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.28 2005-05-13 16:54:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -245,7 +245,6 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
   minSubRange = theMinSubRange;
 
   Clear();
-
   G4RegionStore* regionStore = G4RegionStore::GetInstance();
   const G4Region* world = regionStore->GetRegion("DefaultRegionForTheWorld", false);
 
@@ -272,14 +271,14 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
-  idxOfRegionModels = new G4int[numOfCouples];
+  G4int numOfCouples = theCoupleTable->GetTableSize();
+  idxOfRegionModels = new G4int[numOfCouples+1];
+  idxOfRegionModels[numOfCouples] = 0;
   setOfRegionModels = new G4RegionModels*[nRegions];
   upperEkin.resize(nEmModels);
 
   // Order models for regions
   for (G4int reg=0; reg<nRegions; reg++) {
-
     const G4Region* region = set[reg];
 
     G4int n = 0;
@@ -298,11 +297,12 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 
         G4double tmin = model->LowEnergyLimit();
         G4double tmax = model->HighEnergyLimit();
-        if (n) tmin = std::max(tmin, eHigh[n-1]);
+        if (n>0) tmin = std::max(tmin, eHigh[n-1]);
 
         if(1 < verboseLevel) {
-          G4cout << "Model # " << ii << " for region <"
-	         << region->GetName() << ">  "
+          G4cout << "Model # " << ii << " for region <";
+	  if (region) G4cout << region->GetName(); 
+          G4cout << ">  "
 	         << " tmin(MeV)= " << tmin/MeV
                  << "; tmax(MeV)= " << tmax/MeV
                  << G4endl;
@@ -320,8 +320,9 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
     eLow[0] = 0.0;
 
     if(1 < verboseLevel) {
-      G4cout << "New G4RegionModels set with " << n << " models for region <"
-	     << region->GetName() << ">  Elow(MeV)= ";
+      G4cout << "New G4RegionModels set with " << n << " models for region <";
+      if (region) G4cout << region->GetName(); 
+      G4cout << ">  Elow(MeV)= ";
       for(G4int ii=0; ii<n; ii++) {G4cout << eLow[ii]/MeV << " ";}
       G4cout << G4endl;
     }
@@ -331,7 +332,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 
   // Access to materials and build cuts
 
-  for(size_t i=0; i<numOfCouples; i++) {
+  for(G4int i=0; i<numOfCouples; i++) {
 
     const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
     const G4Material* material = couple->GetMaterial();
