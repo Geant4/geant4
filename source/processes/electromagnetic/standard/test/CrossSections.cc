@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: CrossSections.cc,v 1.2 2005-05-13 16:55:29 vnivanch Exp $
+// $Id: CrossSections.cc,v 1.3 2005-05-13 17:01:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -56,14 +56,14 @@ int main() {
 
   // initialise processes
   // G4v52
-  G4PhotoElectricEffect52* phot = new G4PhotoElectricEffect52();
-  G4ComptonScattering52*   comp = new G4ComptonScattering52();
-  G4GammaConversion52*     conv = new G4GammaConversion52();
+   G4PhotoElectricEffect52* phot = new G4PhotoElectricEffect52();
+   G4ComptonScattering52*   comp = new G4ComptonScattering52();
+   G4GammaConversion52*     conv = new G4GammaConversion52();
 
   // Standard
-  G4PhotoElectricEffect* phot = new G4PhotoElectricEffect();
-  G4ComptonScattering*   comp = new G4ComptonScattering();
-  G4GammaConversion*     conv = new G4GammaConversion();
+  //G4PhotoElectricEffect* phot = new G4PhotoElectricEffect();
+  //G4ComptonScattering*   comp = new G4ComptonScattering();
+  //G4GammaConversion*     conv = new G4GammaConversion();
 
   G4ParticleDefinition* gamma = G4Gamma::Gamma(); 
   G4RegionStore::GetInstance()->FindOrCreateRegion("dummy");
@@ -78,10 +78,9 @@ int main() {
 
   for (G4double Energy = Emin; Energy <= Emax; Energy += dE) {
     G4cout << "\n " << G4BestUnit (Energy, "Energy")
-	   << "\tcomp= " << comp->ComputeCrossSectionPerAtom(Energy,Z)/barn
-	   << "\tconv= " << conv->ComputeCrossSectionPerAtom(Energy,Z)/barn
-	   << "\tphot= " << phot->ComputeCrossSectionPerAtom(Energy,Z)/barn 
-	   << G4endl;
+	   << " \tcomp= " << comp->ComputeCrossSectionPerAtom(Energy,Z)/barn
+	   << " \tconv= " << conv->ComputeCrossSectionPerAtom(Energy,Z)/barn
+	   << " \tphot= " << phot->ComputeCrossSectionPerAtom(Energy,Z)/barn;
   }
 
   G4cout << G4endl;
