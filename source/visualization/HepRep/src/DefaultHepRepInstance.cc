@@ -1,10 +1,12 @@
 
 #include <iostream>
 
-#include "DefaultHepRepInstance.h"
+#include "cheprep/DefaultHepRepInstance.h"
 
 using namespace std;
 using namespace HEPREP;
+
+namespace cheprep {
 
 DefaultHepRepInstance::DefaultHepRepInstance(HepRepInstance* instance, HepRepType* heprepType)
     : DefaultHepRepAttribute(), parent(instance), type(heprepType) {
@@ -77,3 +79,5 @@ HepRepAttValue* DefaultHepRepInstance::getAttValue(string name) {
     HepRepAttValue* value = getAttValueFromNode(name);
     return (value != NULL) ? value : type->getAttValue(name);
 }
+
+} // cheprep

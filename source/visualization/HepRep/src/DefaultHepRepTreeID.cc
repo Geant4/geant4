@@ -1,10 +1,12 @@
 
 #include <iostream>
 
-#include "DefaultHepRepTreeID.h"
+#include "cheprep/DefaultHepRepTreeID.h"
 
 using namespace std;
 using namespace HEPREP;
+
+namespace cheprep {
 
 DefaultHepRepTreeID::DefaultHepRepTreeID(string name, string version, string qualifier)
     : name(name), version(version), qualifier(qualifier) {
@@ -28,3 +30,5 @@ string DefaultHepRepTreeID::getName() {
 string DefaultHepRepTreeID::getVersion() {
     return version;
 }
+
+} // cheprep

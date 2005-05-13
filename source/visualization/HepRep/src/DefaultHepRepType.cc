@@ -1,8 +1,10 @@
 
-#include "DefaultHepRepType.h"
+#include "cheprep/DefaultHepRepType.h"
 
 using namespace std;
 using namespace HEPREP;
+
+namespace cheprep {
 
 DefaultHepRepType::DefaultHepRepType(HepRepType* parentType, string typeName)
     : DefaultHepRepDefinition(), parent(parentType), name(typeName) {
@@ -102,3 +104,5 @@ vector<HepRepType*> DefaultHepRepType::getTypeList() {
     return types;
 }
 
+
+} // cheprep

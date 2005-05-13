@@ -1,12 +1,14 @@
 
-#include "DefaultHepRepDefinition.h"
-#include "DefaultHepRepAttDef.h"
+#include "cheprep/DefaultHepRepDefinition.h"
+#include "cheprep/DefaultHepRepAttDef.h"
 
 #include <iostream>
 #include <algorithm>
 
 using namespace std;
 using namespace HEPREP;
+
+namespace cheprep {
 
 DefaultHepRepDefinition::DefaultHepRepDefinition()
     : DefaultHepRepAttribute() {
@@ -43,3 +45,4 @@ HepRepAttDef* DefaultHepRepDefinition::getAttDefFromNode(string name) {
     return (attDefs.count(s) > 0) ? attDefs[s] : NULL;    
 }
 
+} // cheprep

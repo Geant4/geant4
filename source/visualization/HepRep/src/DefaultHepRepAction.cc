@@ -1,10 +1,12 @@
 
 #include <iostream>
 
-#include "DefaultHepRepAction.h"
+#include "cheprep/DefaultHepRepAction.h"
 
 using namespace std;
 using namespace HEPREP;
+
+namespace cheprep {
 
 DefaultHepRepAction::DefaultHepRepAction(string name, string expression)
     : name(name), expression(expression) {
@@ -24,4 +26,6 @@ string DefaultHepRepAction::getExpression() {
 HepRepAction* DefaultHepRepAction::copy() {
     return new DefaultHepRepAction(name, expression);
 }
+
+} // cheprep
 

@@ -1,8 +1,10 @@
 
-#include "DefaultHepRep.h"
+#include "cheprep/DefaultHepRep.h"
 
 using namespace std;
 using namespace HEPREP;
+
+namespace cheprep {
 
 DefaultHepRep::DefaultHepRep() {
 }
@@ -91,4 +93,6 @@ string DefaultHepRep::checkForException() {
 vector<HepRepInstanceTree*> DefaultHepRep::getInstanceTreeList() {
     return instanceTrees;
 }
+
+} // cheprep
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.79 2005-01-27 20:04:41 johna Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.80 2005-05-13 15:00:05 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -66,8 +66,8 @@
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
 
-// JHepRep
-#include "XMLHepRepFactory.h"
+// CHepRep
+#include "cheprep/XMLHepRepFactory.h"
 
 // This
 #include "G4HepRep.hh"
@@ -76,6 +76,7 @@
 
 
 using namespace HEPREP;
+using namespace cheprep;
 using namespace std;
 
 G4int G4HepRepSceneHandler::sceneCount = 0;
@@ -99,6 +100,9 @@ G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, G4HepRepM
           eventNumber           (1),
           eventNumberWidth      (-1),
           extension             (""),
+          writeBinary           (false),
+          writeZip              (false),
+          writeGZ               (false),
           writeMultipleFiles    (false),
           _heprep               (NULL),
           _heprepGeometry       (NULL)
@@ -147,6 +151,9 @@ void G4HepRepSceneHandler::open(G4String name) {
         eventNumberPrefix = "";
         eventNumberSuffix = "";
         extension = "";
+        writeBinary = false;
+        writeZip = false;
+        writeGZ = false;
         writeMultipleFiles = false;
         eventNumber = 0;
         eventNumberWidth = 0;        
@@ -160,6 +167,9 @@ void G4HepRepSceneHandler::open(G4String name) {
         eventNumberPrefix = "";
         eventNumberSuffix = "";
         extension = "";
+        writeBinary = false;
+        writeZip = false;
+        writeGZ = false;
         writeMultipleFiles = false;
         eventNumber = 0;
         eventNumberWidth = 0;        
@@ -170,8 +180,9 @@ void G4HepRepSceneHandler::open(G4String name) {
         if (eventNumberWidth < 0) {
             // derive filename(s)
             // check for extensions
-            const unsigned int numberOfExtensions = 4;
-            string ext[numberOfExtensions] = {".heprep", ".heprep.xml", ".heprep.zip", ".heprep.gz"};
+            const unsigned int numberOfExtensions = 8;
+            string ext[numberOfExtensions] = {".heprep", ".heprep.xml", ".heprep.zip", ".heprep.gz",
+                                              ".bheprep", ".bheprep.xml", ".bheprep.zip", ".bheprep.gz"};
             unsigned int i=0;
             while (i < numberOfExtensions) {
                 int dot = name.size() - ext[i].size();
@@ -182,10 +193,17 @@ void G4HepRepSceneHandler::open(G4String name) {
         
             if (i != numberOfExtensions) {
                 extension = ext[i];
+                writeBinary = i >= (numberOfExtensions/2);
+                writeZip = (i == 2) || (i == 6);
+                writeGZ = (i == 3) || (i == 7);
                 int dot = name.length() - extension.length();
                 baseName = (dot >= 0) ? name.substr(0, dot) : "";
-            } else {  
+            } else {
+                // Default for no extension  
                 extension = ".heprep.zip";
+                writeBinary = false;
+                writeZip = true;
+                writeGZ = false;
                 baseName = name;
             }
         
@@ -292,7 +310,7 @@ bool G4HepRepSceneHandler::closeHepRep(bool final) {
                 if (writeMultipleFiles) {
                     sprintf(name, "%s%s%s#%s", baseName.c_str(), "-geometry", extension.c_str(), "G4GeometryData");
                 } else {
-                    sprintf(name, "%s%s#%s", "geometry", ".heprep", "G4GeometryData");
+                    sprintf(name, "%s%s#%s", "geometry", (writeBinary ? ".bheprep" : ".heprep"), "G4GeometryData");
                 }   
                 getEventInstanceTree()->addInstanceTree(factory->createHepRepTreeID(name, "1.0"));
             }
@@ -325,9 +343,13 @@ bool G4HepRepSceneHandler::closeHepRep(bool final) {
                 openFile(G4String(fileName));
             }
 
-            if (!writeMultipleFiles) writer->addProperty("RecordLoop.ignore", "geometry.heprep");
+            char name[128];
+            sprintf(name, "%s%s", "geometry", (writeBinary ? ".bheprep" : ".heprep"));
+            if (!writeMultipleFiles) {
+                writer->addProperty("RecordLoop.ignore", name);
+            }
 
-            writer->write(_heprepGeometry, G4String("geometry.heprep"));
+            writer->write(_heprepGeometry, G4String(name));
             
             delete _heprepGeometry;
             _heprepGeometry = NULL;
@@ -351,12 +373,12 @@ bool G4HepRepSceneHandler::closeHepRep(bool final) {
         // write out the heprep
 // NOTE: does not work on Solaris 5.2 and Linux 2.95.2
 //        stringstream eventName;
-//        eventName << "event-" << setw(eventNumberWidth) << setfill('0') << eventNumber << ".heprep";
+//        eventName << "event-" << setw(eventNumberWidth) << setfill('0') << eventNumber << (writeBinary ? ".bheprep" : ".heprep");
 //        writer->write(_heprep, eventName.str());
 // Use instead:
         char eventName[128];
         char eventFormat[128];
-        sprintf(eventFormat, "%s%d%s", "event-%0", eventNumberWidth, "d.heprep");
+        sprintf(eventFormat, "%s%d%s%s", "event-%0", eventNumberWidth, "d", (writeBinary ? ".bheprep" : ".heprep"));
         sprintf(eventName, eventFormat, eventNumber);
         writer->write(_heprep, G4String(eventName));
 
@@ -391,7 +413,7 @@ void G4HepRepSceneHandler::close() {
 
 void G4HepRepSceneHandler::openFile(G4String name) {
     out = new ofstream(name.c_str(), std::ios::out | std::ios::binary );
-    writer = factory->createHepRepWriter(out, extension == ".heprep.zip", (extension == ".heprep.zip") || (extension == ".heprep.gz"));
+    writer = factory->createHepRepWriter(out, writeZip, writeZip || writeGZ);
 }
 
 void G4HepRepSceneHandler::closeFile() {

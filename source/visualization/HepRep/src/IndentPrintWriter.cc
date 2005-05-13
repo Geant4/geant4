@@ -1,9 +1,11 @@
 
 #include <fstream>
 
-#include "IndentPrintWriter.h"
+#include "cheprep/IndentPrintWriter.h"
 
 using namespace std;
+
+namespace cheprep {
 
 IndentPrintWriter::IndentPrintWriter(ostream* out, int level)
     : out(out), 
@@ -83,3 +85,4 @@ void IndentPrintWriter::setIndentString(const string & indent) {
     indentString = indent;
 }
 
+} // cheprep

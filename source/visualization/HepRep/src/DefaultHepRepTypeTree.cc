@@ -1,10 +1,12 @@
 
 #include <iostream>
 
-#include "DefaultHepRepTypeTree.h"
+#include "cheprep/DefaultHepRepTypeTree.h"
 
 using namespace std;
 using namespace HEPREP;
+
+namespace cheprep {
 
 DefaultHepRepTypeTree::DefaultHepRepTypeTree(HepRepTreeID* typeTree)
     : DefaultHepRepTreeID(typeTree->getName(), typeTree->getVersion()) {
@@ -35,3 +37,5 @@ HepRepType* DefaultHepRepTypeTree::getType(string /*typeName*/) {
     cerr << "DefaultHepRepTypeTree::getType(string) not implemented." << endl;
     return NULL;
 }
+
+} // cheprep

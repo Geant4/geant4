@@ -2,11 +2,13 @@
 #include <iostream>
 #include <fstream>
 
-#include "XMLHepRepWriter.h"
-#include "XMLHepRepFactory.h"
+#include "cheprep/XMLHepRepWriter.h"
+#include "cheprep/XMLHepRepFactory.h"
 
 using namespace std;
 using namespace HEPREP;
+
+namespace cheprep {
 
 
 XMLHepRepFactory::XMLHepRepFactory() {
@@ -28,3 +30,6 @@ HepRepReader* XMLHepRepFactory::createHepRepReader (std::string) {
 HepRepWriter* XMLHepRepFactory::createHepRepWriter(ostream* out, bool randomAccess, bool compress) {
     return new XMLHepRepWriter(out, randomAccess, compress);
 }
+
+} // cheprep
+
