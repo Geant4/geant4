@@ -132,22 +132,23 @@ void XrayFluoDataSet::LoadData(const G4String& fileName)
 {
   // Build the complete string identifying the file with the data set
   
-  char nameChar[100] = {""};
-  std::ostrstream ost(nameChar, 100, std::ios::out);
-  
-  ost << fileName <<".dat";
-  
-  G4String name(nameChar);
 
-  G4String dirFile = name;
+   G4String dirFile = "";
 
-  if (!(getenv("XRAYDATA"))) { 
-    
-    char* path = getenv("PWD");
-    
+  char* path;
+
+#ifndef XRAYDATA
+#define XRAYDATA PWD
+#endif 
+  
+  path = getenv("XRAYDATA");
+
+  G4cout << path << G4endl;
+  G4cout << fileName << G4endl;
+
+
     G4String pathString(path);
-    dirFile = pathString + "/" + name;
-  }
+    dirFile = pathString + "/" + fileName + ".dat";
 
   std::ifstream file(dirFile);
   std::filebuf* lsdp = file.rdbuf();
