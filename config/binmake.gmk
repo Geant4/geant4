@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.104 2004-11-30 08:33:42 gcosmo Exp $
+# $Id: binmake.gmk,v 1.105 2005-05-13 09:00:11 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -138,7 +138,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/event/include \
               -I$(G4BASE)/graphics_reps/include \
               -I$(G4BASE)/intercoms/include
-  ifdef G4USE_G3TOG4
+  ifdef G4LIB_USE_G3TOG4
     INCFLAGS += -I$(G4BASE)/g3tog4/include
   endif
  endif
@@ -194,7 +194,7 @@ LDLIBS1 := $(EXTRALIBS)
 ifdef GLOBALLIBS
   LDLIBS2 := $(VISLIBS) -lG4interfaces -lG4persistency
 
-  ifdef G4USE_G3TOG4
+  ifdef G4LIB_USE_G3TOG4
     LDLIBS2 += -lG3toG4
   endif
 
@@ -212,6 +212,12 @@ ifdef GLOBALLIBS
              -lG4graphics_reps \
              -lG4intercoms \
              -lG4global
+  ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+    ifdef G4LIB_USE_ZLIB
+      LDLIBS2 += -lG4zlib
+    endif
+  endif
+
 else
 # The next lines specifically should read LDLIBS2 = , not LDLIBS2 :=, so
 # that it is not expanded until the directory G4TMPDIR is created.
