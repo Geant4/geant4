@@ -26,8 +26,15 @@ XMLHepRepWriter::XMLHepRepWriter(ostream* os, bool randomAccess, bool useCompres
     } else {
         zip = NULL;
         if (useCompression) {
+#ifndef CHEPREP_NO_ZLIB
             gz = new GZIPOutputStream(*os);
             out = gz;
+#else
+            cerr << "WARNING: the .gz output stream you are creating will be a plain file," << endl;
+            cerr << "since compression support (ZLIB) was not compiled into the library." << endl;
+            cerr << "To add ZLIB support, you need to undefine CHEPREP_NO_ZLIB." << endl;  
+            gz = NULL;            
+#endif
         } else {
             gz = NULL;
         }

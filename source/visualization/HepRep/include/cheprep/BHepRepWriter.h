@@ -13,7 +13,7 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: BHepRepWriter.h,v 1.3 2005-05-13 17:31:06 duns Exp $
+ * @version $Id: BHepRepWriter.h,v 1.4 2005-05-15 16:08:25 duns Exp $
  */
 namespace cheprep {
 

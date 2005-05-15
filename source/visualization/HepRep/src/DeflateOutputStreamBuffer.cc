@@ -76,24 +76,24 @@ namespace cheprep {
             : buffer(buffer)
               , crc(0)
               , size(0)
-#ifdef CHEPREP_USE_ZLIB               
+#ifndef CHEPREP_NO_ZLIB               
               , zStreamOpen(false)
               , in(inSize)
               , out(outSize) 
-#endif // CHEPREP_USE_ZLIB
+#endif // CHEPREP_NO_ZLIB
               {
         
-#ifdef CHEPREP_USE_ZLIB
+#ifndef CHEPREP_NO_ZLIB
         zStream.zalloc = Z_NULL;
         zStream.zfree = Z_NULL;
         zStream.opaque = Z_NULL;
-#endif // CHEPREP_USE_ZLIB
+#endif // CHEPREP_NO_ZLIB
     }
         
 
     void DeflateOutputStreamBuffer::init(bool compress) {
 
-#ifdef CHEPREP_USE_ZLIB        
+#ifndef CHEPREP_NO_ZLIB        
         if (compress) {
             if (zStreamOpen) return;
             
@@ -113,7 +113,7 @@ namespace cheprep {
 #else
         // suppress warning about unused var
         compress = false;
-#endif // CHEPREP_USE_ZLIB
+#endif // CHEPREP_NO_ZLIB
 
         crc = 0;
         size = 0;
@@ -121,7 +121,7 @@ namespace cheprep {
     
     void DeflateOutputStreamBuffer::finish() {
 
-#ifdef CHEPREP_USE_ZLIB        
+#ifndef CHEPREP_NO_ZLIB        
         if (zStreamOpen) {
 
             overflow() ;
@@ -149,22 +149,22 @@ namespace cheprep {
             
             zStreamOpen = false ;
         }      
-#endif // CHEPREP_USE_ZLIB
+#endif // CHEPREP_NO_ZLIB
     }
                 
     DeflateOutputStreamBuffer::~DeflateOutputStreamBuffer() {
     }
 
 
-#ifdef CHEPREP_USE_ZLIB        
+#ifndef CHEPREP_NO_ZLIB        
     #define DO1 crc = crctable[(crc ^ (*buf++)) & 0xff] ^ (crc >> 8)
     #define DO8 DO1; DO1; DO1; DO1; DO1; DO1; DO1; DO1
-#endif // CHEPREP_USE_ZLIB
+#endif // CHEPREP_NO_ZLIB
 
 
     int DeflateOutputStreamBuffer::overflow(int c) {
 
-#ifdef CHEPREP_USE_ZLIB        
+#ifndef CHEPREP_NO_ZLIB        
         if (zStreamOpen) {
             zStream.avail_in = pptr() - pbase() ;
             zStream.next_in = reinterpret_cast<unsigned char *>(&(in[0]));
@@ -211,19 +211,19 @@ namespace cheprep {
     
             return 0 ;
         } else {
-#endif // CHEPREP_USE_ZLIB
+#endif // CHEPREP_NO_ZLIB
             crc = crc ^ 0xffffffffUL;
             crc = crctable[(crc ^ c) & 0xff] ^ (crc >> 8);
             crc = crc ^ 0xffffffffUL;
             size++;
             return buffer->sputc((char)c);
-#ifdef CHEPREP_USE_ZLIB        
+#ifndef CHEPREP_NO_ZLIB        
         }
-#endif // CHEPREP_USE_ZLIB
+#endif // CHEPREP_NO_ZLIB
     }
     
 
-#ifdef CHEPREP_USE_ZLIB        
+#ifndef CHEPREP_NO_ZLIB        
     bool DeflateOutputStreamBuffer::flushOut() {
         int deflatedCount = outSize - zStream.avail_out;
         int byteCount = buffer->sputn(&(out[0]), deflatedCount);
@@ -233,6 +233,6 @@ namespace cheprep {
 
         return deflatedCount == byteCount ;
     }
-#endif // CHEPREP_USE_ZLIB
+#endif // CHEPREP_NO_ZLIB
     
 } // cheprep

@@ -10,7 +10,7 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: ZipOutputStreamBuffer.cc,v 1.3 2005-05-13 17:31:06 duns Exp $
+ * @version $Id: ZipOutputStreamBuffer.cc,v 1.4 2005-05-15 16:08:25 duns Exp $
  */
 namespace cheprep {
 
@@ -96,7 +96,7 @@ namespace cheprep {
         
         closeEntry();
 
-#ifndef CHEPREP_USE_ZLIB
+#ifdef CHEPREP_NO_ZLIB
         compress = false;
 #endif
         init(compress);

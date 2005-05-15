@@ -6,9 +6,9 @@
 #include <iostream>
 #include <string>
 
-#ifdef CHEPREP_USE_ZLIB
+#ifndef CHEPREP_NO_ZLIB
 #include <zlib.h>
-#endif // CHEPREP_USE_ZLIB
+#endif // CHEPREP_NO_ZLIB
 
 namespace cheprep {
 
@@ -27,9 +27,9 @@ namespace cheprep {
         protected:
             int overflow(int c = EOF);
 
-#ifdef CHEPREP_USE_ZLIB
+#ifndef CHEPREP_NO_ZLIB
             bool flushOut();
-#endif // CHEPREP_USE_ZLIB
+#endif // CHEPREP_NO_ZLIB
 
             inline void putUI(unsigned int ui) {
                 unsigned char* ucp = reinterpret_cast<unsigned char *>(&ui);
@@ -75,7 +75,7 @@ namespace cheprep {
             unsigned int crc;
             unsigned int size;
 
-#ifdef CHEPREP_USE_ZLIB            
+#ifndef CHEPREP_NO_ZLIB            
             const static unsigned int inSize = 1000;
             const static unsigned int outSize = 1000;
             z_stream zStream;
@@ -83,7 +83,7 @@ namespace cheprep {
 
             std::vector<char> in;
             std::vector<char> out;
-#endif // CHEPREP_USE_ZLIB
+#endif // CHEPREP_NO_ZLIB
 };
 
 

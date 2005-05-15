@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.80 2005-05-13 15:00:05 duns Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.81 2005-05-15 16:08:25 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -196,6 +196,27 @@ void G4HepRepSceneHandler::open(G4String name) {
                 writeBinary = i >= (numberOfExtensions/2);
                 writeZip = (i == 2) || (i == 6);
                 writeGZ = (i == 3) || (i == 7);
+#ifndef G4LIB_USE_ZLIB               
+                if (writeGZ)
+                    writeGZ = false;
+                    cerr << endl;
+                    cerr << "WARNING: the .gz output file you are creating will be a plain file," << endl;
+                    cerr << "since compression support (ZLIB) was not compiled into the Geant4." << endl;
+                    cerr << "A plain heprep or bheprep file can be fairly large." << endl; 
+                }
+                if (writeZIP)
+                    cerr << endl;
+                    cerr << "WARNING: the .zip output file you are creating will not be compressed," << endl;
+                    cerr << "since compression support (ZLIB) was not compiled into the Geant4." << endl;
+                    cerr << "A zip file containing non-compressed heprep or bheprep files can be fairly large." << endl;
+                }
+                if (writeGZ || writeZIP) {
+                    cerr << "To add compression support using ZLIB, you need to define" << endl;
+                    cerr << "G4LIB_USE_ZLIB and recompile the visualization category, followed by" << endl;
+                    cerr << "a relink of your application code." << endl;  
+                    cerr << endl;
+                }
+#endif // G4LIB_USE_ZLIB
                 int dot = name.length() - extension.length();
                 baseName = (dot >= 0) ? name.substr(0, dot) : "";
             } else {

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.21 2005-05-13 17:25:13 duns Exp $
+# $Id: GNUmakefile,v 1.22 2005-05-15 16:08:25 duns Exp $
 
 name := G4visHepRep
 
@@ -19,8 +19,11 @@ include $(G4INSTALL)/config/interactivity.gmk
 
 ifdef G4LIB_USE_ZLIB
 CPPFLAGS += -DG4LIB_USE_ZLIB
-CPPFLAGS += -DCHEPREP_USE_ZLIB
+ifdef G4LIB_BUILD_ZLIB
 CPPFLAGS += -I$(G4BASE)/visualization/externals/zlib/include
+endif
+else
+CPPFLAGS += -DCHEPREP_NO_ZLIB
 endif
 
 CPPFLAGS += -I$(G4BASE)/event/include
