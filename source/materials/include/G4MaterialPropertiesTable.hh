@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.hh,v 1.15 2004-05-17 13:42:06 gcosmo Exp $
+// $Id: G4MaterialPropertiesTable.hh,v 1.16 2005-05-16 22:19:57 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,8 @@
 // Version:     1.0
 // Created:     1996-02-08
 // Author:      Juliet Armstrong
-// Updated:     2002-11-05 add named material constants by P. Gumplinger
+// Updated:     2005-05-12 add SetGROUPVEL() by P. Gumplinger
+//              2002-11-05 add named material constants by P. Gumplinger
 //              1999-11-05 Migration from G4RWTPtrHashDictionary to STL
 //                         by John Allison
 //              1999-10-29 add method and class descriptors
@@ -143,6 +144,8 @@ private:
         std::map< G4String, G4double, std::less<G4String> > MPTC;
         typedef std::map< G4String, G4double,
           std::less<G4String> >::iterator MPTCiterator;
+
+        G4MaterialPropertyVector* SetGROUPVEL();
 
 };
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.60 2005-05-13 10:21:12 maire Exp $
+$Id: History,v 1.61 2005-05-16 22:17:47 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16.05.05 P.Gumplinger (materials-V07-00-05)
+- Add SetGROUPVEL() courtesy of Horton-Smith (bug report #741)
      
 13-05-05 V.Ivanchenko (materials-V07-00-04)
 - add acknowledgement in the Nist classes
