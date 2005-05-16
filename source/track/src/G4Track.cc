@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.cc,v 1.22 2004-12-02 06:38:17 kurasige Exp $
+// $Id: G4Track.cc,v 1.23 2005-05-16 22:32:08 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,6 +33,7 @@
 //   Add copy constructor            Hisaya Feb. 07 01
 //   Fix GetVelocity                 Hisaya Feb. 17 01
 //   Modification for G4TouchableHandle             22 Oct. 2001  R.Chytracek//
+//   Fix GetVelocity (bug report #741)   Horton-Smith Apr 14 2005
 
 #include "G4Track.hh"
 
@@ -166,26 +167,24 @@ G4double G4Track::GetVelocity() const
     // special case for photons
     if ( (fOpticalPhoton !=0)  &&
 	 (fpDynamicParticle->GetDefinition()==fOpticalPhoton) ){
-     G4Material*
-	mat=fpTouchable->GetVolume()->GetLogicalVolume()->GetMaterial();
- 
-      if(mat->GetMaterialPropertiesTable() != 0){
-	if(mat->GetMaterialPropertiesTable()->GetProperty("RINDEX") != 0 ){ 
-          // light velocity = c/reflection-index 
-	  velocity /= 
-	    mat->GetMaterialPropertiesTable()->GetProperty("RINDEX")->
-	    GetProperty(fpDynamicParticle->GetTotalMomentum()) ; 
-	}
-      }  
+                                                                                
+       G4Material*
+          mat=fpTouchable->GetVolume()->GetLogicalVolume()->GetMaterial();
+                                                                                
+       if(mat->GetMaterialPropertiesTable() != 0){
+         // light velocity = c/(rindex+d(rindex)/d(log(E_phot)))
+         // values stored in GROUPVEL material properties vector
+         G4MaterialPropertyVector *groupvel =
+            mat->GetMaterialPropertiesTable()->GetProperty("GROUPVEL");
+         if(groupvel != 0 )
+           velocity =
+             groupvel->GetProperty(fpDynamicParticle->GetTotalMomentum());
+       }
     }
   } else {
     G4double T = fpDynamicParticle->GetKineticEnergy();
-    velocity = c_light*std::sqrt(T*(T+2.*mass))/(T+mass) ;
+    velocity = c_light*std::sqrt(T*(T+2.*mass))/(T+mass);
   }
-  
-  return velocity ; 
+                                                                                
+  return velocity ;
 }
- 
-
-
-
