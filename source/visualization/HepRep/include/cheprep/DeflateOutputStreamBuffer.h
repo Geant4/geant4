@@ -76,8 +76,8 @@ namespace cheprep {
             unsigned int size;
 
 #ifndef CHEPREP_NO_ZLIB            
-            const static unsigned int inSize = 1000;
-            const static unsigned int outSize = 1000;
+            static const unsigned int inSize = 1000;
+            static const unsigned int outSize = 1000;
             z_stream zStream;
             bool zStreamOpen;
 
