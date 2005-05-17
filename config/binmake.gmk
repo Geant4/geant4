@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.105 2005-05-13 09:00:11 gcosmo Exp $
+# $Id: binmake.gmk,v 1.106 2005-05-17 08:08:13 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -212,12 +212,6 @@ ifdef GLOBALLIBS
              -lG4graphics_reps \
              -lG4intercoms \
              -lG4global
-  ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
-    ifdef G4LIB_USE_ZLIB
-      LDLIBS2 += -lG4zlib
-    endif
-  endif
-
 else
 # The next lines specifically should read LDLIBS2 = , not LDLIBS2 :=, so
 # that it is not expanded until the directory G4TMPDIR is created.
@@ -242,6 +236,10 @@ else
 # Extra libraries to resolve remaining circular dependencies...
 #  LDLIBS2EXTRA = 
   endif
+endif
+
+ifdef G4LIB_BUILD_ZLIB
+  LDLIBS2 += -lG4zlib
 endif
 
 # LDLIBS3 contains the first set of low level libraries...

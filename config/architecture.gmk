@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.102 2005-05-13 11:20:58 gcosmo Exp $
+# $Id: architecture.gmk,v 1.103 2005-05-17 08:08:13 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -212,7 +212,12 @@ ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
 else
   LDFLAGS   += -L$(CLHEP_LIB_DIR)
   LOADLIBS  := -l$(CLHEP_LIB)
-  LOADLIBS  += -lm -lz
+  LOADLIBS  += -lm
+  ifdef G4LIB_USE_ZLIB
+    ifndef G4LIB_BUILD_ZLIB
+      LOADLIBS += -lz
+    endif
+  endif
 endif
 
 # Graphic variables...
