@@ -1,4 +1,4 @@
-$Id: History,v 1.262 2005-05-13 09:01:59 gcosmo Exp $
+$Id: History,v 1.263 2005-05-17 08:08:32 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17th May 2005 Gabriele Cosmo (config-V07-00-02)
+- Corrected settings of G4LIB_BUILD/USE_ZLIB:
+  o G4LIB_BUILD_ZLIB is mandatory for Windows, if zlib is required;
+  o if G4LIB_BUILD_ZLIB is set, the G4-zlib module is used (all platforms);
+  o if only G4LIB_USE_ZLIB is set, the system zlib is used (UNIX only);
+  o if none is set, zlib is not used (all platforms).
+- Updated compilation options on Darwin-g++, now similar to Linux-g++ setup.
+- Still requiring tag "source-gmk-V07-00-01" for source/GNUmakefile to build
+  the g3tog4 module.
 
 13th May 2005 Gabriele Cosmo (config-V07-00-01)
 - Added G4LIB_BUILD_ZLIB/G4LIB_USE_ZLIB. Modified architecture.gmk
