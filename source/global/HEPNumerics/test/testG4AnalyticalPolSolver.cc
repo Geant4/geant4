@@ -1,19 +1,35 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
+// $Id: testG4AnalyticalPolSolver.cc,v 1.2 2005-05-17 14:49:46 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // Test program for G4AnalyticalPolSolver class. 
 //
 
-#include "G4ios.hh"
 #include "globals.hh"
+#include "G4ios.hh"
 #include "G4AnalyticalPolSolver.hh"
-
-
-
-
 
 // Testing quadratic
 //  Re=  1.0000000000 Im=  1.0000000000 
@@ -30,15 +46,11 @@
 //  Re= -0.0000000000 Im=  1.4142135624 
 //  Re= -0.0000000000 Im= -1.4142135624 
 
-
-
-
 int main()
 {
   G4int i, k, n;
   G4double p[5], r[3][5];
   G4AnalyticalPolSolver solver;
-
 
   for ( n = 2; n <= 4; n++ )
   {
@@ -74,18 +86,18 @@ int main()
 
     if( n == 2 )
     {
-      G4cout<<"Test QUADROOTS(p,r):"<<G4endl;    
-      i = solver.QUADROOTS(p,r);
+      G4cout<<"Test QuadRoots(p,r):"<<G4endl;    
+      i = solver.QuadRoots(p,r);
     }
     else if( n == 3 )
     {
       G4cout<<"Test CUBICROOTS(p,r):"<<G4endl;    
-      i = solver.CUBICROOTS(p,r);
+      i = solver.CubicRoots(p,r);
     }
     else if( n == 4 )
     {
       G4cout<<"Test BIQUADROOTS(p,r):"<<G4endl;    
-      i = solver.BIQUADROOTS(p,r);
+      i = solver.BiquadRoots(p,r);
     }
 
     for( k = 1; k <= n; k++ )
@@ -95,4 +107,3 @@ int main()
   }
   return 0;
 }
-
