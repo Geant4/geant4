@@ -6,7 +6,7 @@
 #
 # Create empty scene ("world" is default)
 #
-/vis/scene/create A01Output.heprep
+/vis/scene/create A01Output.bheprep
 #
 # Create a scene handler for a specific graphics system
 # Edit the next line(s) to choose another graphic system

@@ -1,12 +1,15 @@
 #
 # Macro file for A01app
 #
+# This file does visualization using the HepRep2 format.
+# This format is not yet ready for general use (still being debugged).
+#
 /run/verbose 2
 #
 #
 # Create empty scene ("world" is default)
 #
-/vis/scene/create A01Output.heprep
+/vis/scene/create A01Output.bheprep.gz
 #
 # Create a scene handler for a specific graphics system
 # Edit the next line(s) to choose another graphic system
@@ -14,8 +17,6 @@
 /vis/open HepRepXML
 /vis/viewer/set/culling global false
 /vis/viewer/zoom 0.0001
-#/vis/viewer/set/viewpointThetaPhi 20 40 deg
-#/vis/scene/endOfEventAction accumulate
 #
 # Add volume to scene
 #
