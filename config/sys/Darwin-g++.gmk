@@ -1,24 +1,18 @@
 #
 # ------ MacOS-X ------      !!! not generally supported !!!
-#
-# MacOS 10.1 GNU-gcc 2.92.2
-# MacOS 10.2 there is g++2 and g++3, choose consistently one,
-#            like g++2 which is 2.95.2, g++3 for 3.X.
-# MacOS 10.3 use default MacOS-X compiler (g++) as the default.
-#            Have commands to build the .dylib (MacOS-X shared libs)
+#                                 MacOS 10.3 gcc-3.3
+#                                 MacOS 10.4 gcc-4.0
+# Uses default MacOS-X compiler (g++).
+# Includes commands to build the .dylib (MacOS-X shared libs)
 # 
 # Use   echo -n    (there is not the 'echo -e' option of Linux)
 #
 # Author: Helmut Burkhardt - CERN
 #
 ifeq ($(G4SYSTEM),Darwin-g++)
-# choice of compiler (take, as default, the MacOS default) :
-#  CXX       := g++2
-#  CXX       := g++3
   CXX       := g++
-  CXXFLAGS  := -Wall -ansi -pedantic -pipe
-# optionally add verbose flag
-# CXXFLAGS  += -v
+  CXXFLAGS  := -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long
+  CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe
   ifdef G4OPTIMISE
     CXXFLAGS  += -O
     FCFLAGS   := -O
