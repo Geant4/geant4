@@ -21,10 +21,6 @@ IndentPrintWriter::~IndentPrintWriter() {
 void IndentPrintWriter::close() {
     if (!closed) {
         out->flush();
-        ofstream* fout = dynamic_cast<ofstream *>(out);
-        if (fout != NULL) {
-            fout->close();
-        }
         closed = true;
     }
 }

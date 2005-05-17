@@ -139,12 +139,12 @@ void XMLWriter::setAttribute(string name, string value) {
 }
 
 void XMLWriter::setAttribute(std::string name, std::vector<double> value) {
-    setAttribute("type", (std::string)"Color");
+    if (name == "value") setAttribute("type", (std::string)"Color");
     setAttribute(name, DefaultHepRepAttValue::getAsString(value));
 }
 
 void XMLWriter::setAttribute(std::string name, int64 value) {
-    setAttribute("type", (std::string)"long");
+    if (name == "value") setAttribute("type", (std::string)"long");
     setAttribute(name, DefaultHepRepAttValue::getAsString(value));
 }
 
@@ -153,18 +153,18 @@ void XMLWriter::setAttribute(std::string name, int value) {
         string label = DefaultHepRepAttValue::toShowLabel(value);
         setAttribute("showlabel", label);
     } else {
-        setAttribute("type", (std::string)"int");
+        if (name == "value") setAttribute("type", (std::string)"int");
         setAttribute(name, DefaultHepRepAttValue::getAsString(value));
     }
 }
 
 void XMLWriter::setAttribute(std::string name, bool value) {
-    setAttribute("type", (std::string)"boolean");
+    if (name == "value") setAttribute("type", (std::string)"boolean");
     setAttribute(name, DefaultHepRepAttValue::getAsString(value));
 }
 
 void XMLWriter::setAttribute(string name, double value) {
-    setAttribute("type", (std::string)"double");
+    if (name == "value") setAttribute("type", (std::string)"double");
     setAttribute(name, DefaultHepRepAttValue::getAsString(value));
 }
 

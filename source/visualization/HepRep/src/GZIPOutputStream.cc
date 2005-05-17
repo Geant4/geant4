@@ -9,7 +9,8 @@ namespace cheprep {
     GZIPOutputStream::GZIPOutputStream(ostream &os)
                 : std::ostream(NULL) {
       
-        buffer = new GZIPOutputStreamBuffer(os.rdbuf());    
+        buffer = new GZIPOutputStreamBuffer(os.rdbuf()); 
+        init(buffer);   
     }
 
 

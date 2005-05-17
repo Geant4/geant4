@@ -22,8 +22,8 @@ namespace cheprep {
     
     void GZIPOutputStreamBuffer::close() {
         if (!open) return;
-        
-//        closeStream();  
+
+        finish();         
         writeTrailer();
       
         open = false ;
@@ -46,7 +46,8 @@ namespace cheprep {
         flag |= (filename == "") ? 0x00 : 0x08;
         flag |= (comment  == "") ? 0x00 : 0x10;
     
-        putUS(0x1f8b);  // Magic #
+        putUB(0x1f);  // Magic #
+        putUB(0x8b);  // Magic #        
         putUB(0x08);  // Deflater.DEFLATED
         putUB(flag);  // FLG
         putUI(0x00000000);  // MTIME

@@ -13,15 +13,14 @@ namespace cheprep {
 
             GZIPOutputStreamBuffer( std::streambuf *outbuf );
 
+            int overflow(int);
+
             void setFilename( const std::string &filename );
             void setComment( const std::string &comment );
 
             void close() ;
 
             virtual ~GZIPOutputStreamBuffer() ;
-
-        protected:
-            virtual int overflow( int c = EOF ) ;
 
         private:
             void writeHeader();
