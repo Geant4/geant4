@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2005-05-11 16:26:20 maire Exp $
+$Id: History,v 1.26 2005-05-17 00:21:46 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16 May 2005 Peter Gumplinger (exampleN06-V07-00-01)
+- use SetProcessOrdering for theDecayProces
      
 11 May 2005 Michel Maire (exampleN06-V07-00-00)
 - UI command cerenkovMaxPhotons available in Idle state only 
