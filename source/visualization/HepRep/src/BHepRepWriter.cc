@@ -9,7 +9,7 @@
                         
 /**
  * @author Mark Donszelmann
- * @version $Id: BHepRepWriter.cc,v 1.5 2005-05-17 00:15:13 duns Exp $
+ * @version $Id: BHepRepWriter.cc,v 1.6 2005-05-17 22:07:07 duns Exp $
  */
 namespace cheprep {
 
@@ -390,7 +390,8 @@ namespace cheprep {
         std::transform(v.begin(), v.end(), v.begin(), (int(*)(int)) tolower);
         if ((values.count(v) <= 0) && (stringValues.count(value) <= 0)) {
             writeStringDefine(value);
-            stringValues[value] = stringValues.size();
+            int index = stringValues.size();
+            stringValues[value] = index;
         }
     }
 
@@ -477,7 +478,6 @@ namespace cheprep {
 
     void BHepRepWriter::writeDouble(double d) {
         union {
-            // FIXME, other platforms
 	        int64 i;
 	        double d;
         } u;
@@ -493,7 +493,7 @@ namespace cheprep {
 	        float f;
         } u;
         u.f = (float)d;
- 
+
         writeInt(u.i);
     }
 

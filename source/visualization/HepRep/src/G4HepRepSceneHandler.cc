@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.82 2005-05-17 00:15:13 duns Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.83 2005-05-17 22:07:07 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -657,6 +657,7 @@ void G4HepRepSceneHandler::AddCompound (const G4VTrajectory& trajectory) {
     _trajectoryType->addAttValue("Color", color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha());
     _trajectoryType->addAttValue("ID", -1);
     _trajectoryType->addAttValue("IMom", G4String(""));
+    _trajectoryType->addAttValue("IMag", 0.0);
     _trajectoryType->addAttValue("PDG", -1);
     _trajectoryType->addAttValue("PN", G4String(""));
     _trajectoryType->addAttValue("PID", -1);

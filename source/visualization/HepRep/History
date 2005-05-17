@@ -1,4 +1,4 @@
-.$Id: History,v 1.82 2005-05-17 00:15:13 duns Exp $
+.$Id: History,v 1.83 2005-05-17 22:07:07 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,10 +19,6 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
-NOTE:
-FIXME:
-- No HepRepDefault can be found!
-
 16 May 2005 Mark Donszelmann
 - Fixed problems with sequential heprep files, gz files, 
   too much into in the heprep file and some compilation mistakes.

@@ -63,7 +63,7 @@ class XMLHepRepWriter : public virtual HEPREP::HepRepWriter {
         bool write(HEPREP::HepRepAttribute* attribute);
         bool write(HEPREP::HepRepDefinition* definition);
         bool write(HEPREP::HepRepAttValue* attValue);
-        bool write(HEPREP::HepRepAttDef* attDef);
+        bool write(HEPREP::HepRepAttDef* attDef);        
 };
 
 } // cheprep

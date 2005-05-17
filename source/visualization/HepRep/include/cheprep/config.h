@@ -7,20 +7,26 @@ namespace cheprep {
 
 // WIN32 and NOT GNU_GCC
 typedef __int64 int64;
+typedef unsigned __int64 uint64;
 #define CHEPREP_INT64_FORMAT "%ld"
+#define CHEPREP_UINT64_FORMAT "%uld"
 
 #else // other than WIN32-MSVC
 #if defined(_LP64) 
 
 // 64 Bit Platforms
 typedef long int64;
+typedef unsigned long uint64;
 #define CHEPREP_INT64_FORMAT "%ld"
+#define CHEPREP_UINT64_FORMAT "%uld"
 
 #else 
 
 // 32-Bit Platforms
 typedef long long int64;
+typedef unsigned long long uint64;
 #define CHEPREP_INT64_FORMAT "%lld"
+#define CHEPREP_UINT64_FORMAT "%ulld"
 
 #endif // 32-Bit Platforms
 #endif // other than WIN32-MSVC
