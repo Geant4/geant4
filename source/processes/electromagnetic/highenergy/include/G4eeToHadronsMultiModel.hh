@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsModel.hh,v 1.3 2005-05-18 10:12:32 vnivanch Exp $
+// $Id: G4eeToHadronsMultiModel.hh,v 1.1 2005-05-18 10:12:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -28,45 +28,42 @@
 // GEANT4 Class header file
 //
 //
-// File name:     G4eeToHadronsModel
+// File name:     G4eeToHadronsMultiModel
 //
 // Author:        Vladimir Ivanchenko
 //
-// Creation date: 25.10.2003
+// Creation date: 18.05.2005
 //
 // Modifications:
-// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
-// 18-05-05 Use optimized interfaces (V.Ivantchenko)
 //
 
 //
-// Class Description:
+// Class Description: vector of e+e- -> hadrons models
 //
 
 // -------------------------------------------------------------------
 //
 
-#ifndef G4eeToHadronsModel_h
-#define G4eeToHadronsModel_h 1
+#ifndef G4eeToHadronsMultiModel_h
+#define G4eeToHadronsMultiModel_h 1
 
 #include "G4VEmModel.hh"
+#include "G4eeToHadronsModel.hh"
+#include "Randomize.hh"
+#include <vector>
 
-class G4PhysicsVector;
-class G4Vee2hadrons;
+class G4eeCrossSections;
 
-class G4eeToHadronsModel : public G4VEmModel
+class G4eeToHadronsMultiModel : public G4VEmModel
 {
 
 public:
 
-  G4eeToHadronsModel(const G4Vee2hadrons*, G4int ver=0,
-                     const G4String& nam = "eeToHadrons");
+  G4eeToHadronsMultiModel(G4int ver=0, const G4String& nam = "eeToHadrons");
 
-  virtual ~G4eeToHadronsModel();
+  virtual ~G4eeToHadronsMultiModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-
-  G4double PeakEnergy() const;
 
   virtual G4double CrossSectionPerVolume(const G4Material*,
                                          const G4ParticleDefinition*,
@@ -80,38 +77,73 @@ public:
                                       G4double tmin = 0.0,
                                       G4double maxEnergy = DBL_MAX);
 
-  G4DynamicParticle* GenerateCMPhoton(G4double);
+  void PrintInfo();
+
+  // Set the factor to artificially increase the crossSection (default 1)
+  void SetCrossSecFactor(G4double fac);
 
 private:
 
-  void ComputeCMCrossSectionPerElectron();
-
   // hide assignment operator
-  G4eeToHadronsModel & operator=(const  G4eeToHadronsModel &right);
-  G4eeToHadronsModel(const  G4eeToHadronsModel&);
+  G4eeToHadronsMultiModel & operator=(const  G4eeToHadronsMultiModel &right);
+  G4eeToHadronsMultiModel(const  G4eeToHadronsMultiModel&);
 
-  const G4Vee2hadrons*  model;
-  G4ParticleDefinition* theGamma;
-  G4PhysicsVector*      crossPerElectron;
-  G4PhysicsVector*      crossBornPerElectron;
-  G4bool                isInitialised;
-  G4int                 nbins;
-  G4int                 verbose;
+  G4eeCrossSections*               cross;
 
-  G4double              lowKinEnergy;
-  G4double              peakKinEnergy;
-  G4double              highKinEnergy;
+  std::vector<G4eeToHadronsModel*> models;
 
-  G4double              emin;
-  G4double              epeak;
-  G4double              emax;
+  std::vector<G4double>            ekinMin;
+  std::vector<G4double>            ekinPeak;
+  std::vector<G4double>            ekinMax;
+  std::vector<G4double>            cumSum;
+
+  G4double                         thKineticEnergy;
+  G4double                         maxKineticEnergy;
+  G4double                         csFactor;
+
+  G4int                            nModels;
+  G4int                            verbose;
+  G4bool                           isInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eeToHadronsModel::PeakEnergy() const
+inline G4double G4eeToHadronsMultiModel::CrossSectionPerVolume(
+                                 const G4Material* material,
+                                 const G4ParticleDefinition*,
+                                 G4double kineticEnergy,
+                                 G4double, G4double)
 {
-  return peakKinEnergy;
+  G4double res = 0.0;
+  if (kineticEnergy > thKineticEnergy) {
+    for(G4int i=0; i<nModels; i++) {
+      if(kineticEnergy >= ekinMin[i] && kineticEnergy <= ekinMax[i])
+        res += (models[i])->CrossSectionPerVolume(material,0,kineticEnergy);
+      cumSum[i] = res;
+    }
+  }
+  return res*csFactor;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline std::vector<G4DynamicParticle*>* G4eeToHadronsMultiModel::SampleSecondaries(
+                                const G4MaterialCutsCouple* couple,
+                                const G4DynamicParticle* dp,
+                                G4double, G4double)
+{
+  std::vector<G4DynamicParticle*>* newp = 0;
+  G4double kinEnergy = dp->GetKineticEnergy();
+  if (kinEnergy > thKineticEnergy) {
+    G4double q = cumSum[nModels-1]*G4UniformRand();
+    for(G4int i=0; i<nModels; i++) {
+      if(q <= cumSum[i]) {
+        newp = (models[i])->SampleSecondaries(couple,dp);
+	break;
+      }
+    }
+  }
+  return newp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

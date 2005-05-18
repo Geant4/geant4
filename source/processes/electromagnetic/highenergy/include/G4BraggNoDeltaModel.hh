@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsModel.hh,v 1.3 2005-05-18 10:12:32 vnivanch Exp $
+// $Id: G4BraggNoDeltaModel.hh,v 1.1 2005-05-18 10:12:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -28,90 +28,78 @@
 // GEANT4 Class header file
 //
 //
-// File name:     G4eeToHadronsModel
+// File name:     G4BraggNoDeltaModel
 //
 // Author:        Vladimir Ivanchenko
 //
-// Creation date: 25.10.2003
+// Creation date: 18.05.2005
 //
 // Modifications:
-// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
-// 18-05-05 Use optimized interfaces (V.Ivantchenko)
 //
-
 //
 // Class Description:
 //
+// Implementation of Bethe-Bloch model of energy loss without delta-ray
 
 // -------------------------------------------------------------------
 //
 
-#ifndef G4eeToHadronsModel_h
-#define G4eeToHadronsModel_h 1
+#ifndef G4BraggNoDeltaModel_h
+#define G4BraggNoDeltaModel_h 1
 
-#include "G4VEmModel.hh"
+#include "G4BraggIonModel.hh"
 
-class G4PhysicsVector;
-class G4Vee2hadrons;
-
-class G4eeToHadronsModel : public G4VEmModel
+class G4BraggNoDeltaModel : public G4BraggIonModel
 {
 
 public:
 
-  G4eeToHadronsModel(const G4Vee2hadrons*, G4int ver=0,
-                     const G4String& nam = "eeToHadrons");
+  G4BraggNoDeltaModel(const G4ParticleDefinition* p = 0, const G4String& nam = "BraggNoD");
 
-  virtual ~G4eeToHadronsModel();
+  virtual ~G4BraggNoDeltaModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-
-  G4double PeakEnergy() const;
+  virtual G4double ComputeDEDXPerVolume(const G4Material*,
+					const G4ParticleDefinition*,
+					G4double kineticEnergy,
+					G4double cutEnergy);
 
   virtual G4double CrossSectionPerVolume(const G4Material*,
-                                         const G4ParticleDefinition*,
-                                         G4double kineticEnergy,
-                                         G4double cutEnergy = 0.0,
-                                         G4double maxEnergy = DBL_MAX);
-
-  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin = 0.0,
-                                      G4double maxEnergy = DBL_MAX);
-
-  G4DynamicParticle* GenerateCMPhoton(G4double);
+					 const G4ParticleDefinition*,
+					 G4double kineticEnergy,
+					 G4double cutEnergy,
+					 G4double maxEnergy);
 
 private:
 
-  void ComputeCMCrossSectionPerElectron();
-
   // hide assignment operator
-  G4eeToHadronsModel & operator=(const  G4eeToHadronsModel &right);
-  G4eeToHadronsModel(const  G4eeToHadronsModel&);
+  G4BraggNoDeltaModel & operator=(const  G4BraggNoDeltaModel &right);
+  G4BraggNoDeltaModel(const  G4BraggNoDeltaModel&);
 
-  const G4Vee2hadrons*  model;
-  G4ParticleDefinition* theGamma;
-  G4PhysicsVector*      crossPerElectron;
-  G4PhysicsVector*      crossBornPerElectron;
-  G4bool                isInitialised;
-  G4int                 nbins;
-  G4int                 verbose;
-
-  G4double              lowKinEnergy;
-  G4double              peakKinEnergy;
-  G4double              highKinEnergy;
-
-  G4double              emin;
-  G4double              epeak;
-  G4double              emax;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eeToHadronsModel::PeakEnergy() const
+inline G4BraggNoDeltaModel::G4BraggNoDeltaModel(const G4ParticleDefinition*p,
+                 const G4String& nam) : G4BraggIonModel(p, nam)
+{}
+
+inline G4BraggNoDeltaModel::~G4BraggNoDeltaModel()
+{}
+
+inline G4double G4BraggNoDeltaModel::ComputeDEDXPerVolume(
+                            const G4Material* material,
+			    const G4ParticleDefinition* pd,
+                            G4double kineticEnergy, G4double)
 {
-  return peakKinEnergy;
+  return G4BraggIonModel::ComputeDEDXPerVolume(material, pd, kineticEnergy, DBL_MAX);
+}
+
+inline G4double G4BraggNoDeltaModel::CrossSectionPerVolume(
+                            const G4Material*,
+			    const G4ParticleDefinition*,
+			    G4double, G4double, G4double)
+{
+  return 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
