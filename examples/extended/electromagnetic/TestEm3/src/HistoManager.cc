@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.8 2005-03-01 17:55:19 maire Exp $
+// $Id: HistoManager.cc,v 1.9 2005-05-18 15:28:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -167,8 +167,8 @@ void HistoManager::SetHisto(G4int ih,
  // histo 12 : longitudinal profile of energy deposit in absorber 2 (MeV)  
  // ...etc...........  
  // 
- // histo 21 : forward energy flow of primary particle (MeV)
- // histo 22 : forward energy flow of all secondary particles (MeV)  
+ // histo 21 : forward  energy flow (MeV)
+ // histo 22 : backward energy flow (MeV)  
   	 
   const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
                          "10","11","12","13","14","15","16","17","18","19",
@@ -182,12 +182,12 @@ void HistoManager::SetHisto(G4int ih,
     Unit[ih] = G4UnitDefinition::GetValueOf(unit);   
     vmin = valmin/Unit[ih]; vmax = valmax/Unit[ih];  
   } else if (ih > MaxAbsor && ih < 2*MaxAbsor) {
-    title = "longit. profile of Edep (per event) in absorber " 
-           + id[ih-MaxAbsor] + " (MeV)";
+    title = "longit. profile of Edep (MeV/event) in absorber " 
+           + id[ih-MaxAbsor];
   } else if (ih == 2*MaxAbsor+1) {
-    title = "Forward energy flow (per event) of primary particle (MeV)";
+    title = "Forward energy flow (MeV/event)";
   } else if (ih == 2*MaxAbsor+2) {
-    title = "Forward energy flow (per event) of secondary particles (MeV)";
+    title = "Backward energy flow (MeV/event)";
   } else return;
         
   exist[ih] = true;

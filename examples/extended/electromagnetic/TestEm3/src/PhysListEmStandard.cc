@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.7 2005-03-15 17:57:54 maire Exp $
+// $Id: PhysListEmStandard.cc,v 1.8 2005-05-18 15:28:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,16 +78,22 @@ void PhysListEmStandard::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+      G4MultipleScattering* emuls = new G4MultipleScattering;
+      pmanager->AddProcess(emuls,                    -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
+      
+      emuls->SetFacrange(0.2);
 	    
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+      G4MultipleScattering* pmuls = new G4MultipleScattering;
+      pmanager->AddProcess(pmuls,                    -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
+      
+      pmuls->SetFacrange(0.2);
       
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {

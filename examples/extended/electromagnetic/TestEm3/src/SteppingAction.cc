@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.19 2005-02-02 16:42:45 maire Exp $
+// $Id: SteppingAction.cc,v 1.20 2005-05-18 15:28:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -29,6 +29,7 @@
 #include "SteppingAction.hh"
 
 #include "DetectorConstruction.hh"
+#include "RunAction.hh"
 #include "EventAction.hh"
 #include "HistoManager.hh"
 
@@ -38,9 +39,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(DetectorConstruction* det, EventAction* evt,
-                               HistoManager* hist)
-:G4UserSteppingAction(),detector(det),eventAct(evt),histoManager(hist) 
+SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* run,
+                               EventAction* evt, HistoManager* hist)
+:G4UserSteppingAction(),detector(det),runAct(run),eventAct(evt),
+ histoManager(hist) 
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,24 +54,27 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-  const G4StepPoint* prePoint = aStep->GetPreStepPoint();
+  //initialize Energy flow
+  if (aStep->GetTrack()->GetCurrentStepNumber() == 1) Idold = 0;
       
-  //if World, returns
+  //if World, return
   //
+  const G4StepPoint* prePoint = aStep->GetPreStepPoint();
   G4VPhysicalVolume* volume = prePoint->GetPhysicalVolume();    
   //if sum of absorbers do not fill exactly a layer: check material, not volume.
   G4Material* mat = volume->GetLogicalVolume()->GetMaterial();
   if (mat == detector->GetWorldMaterial()) return;
  
-  const G4StepPoint* endPoint = aStep->GetPostStepPoint();
-  const G4Track*     track    = aStep->GetTrack();
-  const G4ParticleDefinition* particle = track->GetDefinition(); 
- 
-  //locate the absorber
+  //here we are in an absorber. Locate it
   //
   G4int absorNum  = volume->GetCopyNo();
   G4int layerNum  = prePoint->GetTouchable()->GetReplicaNumber(1);
-    
+  
+  //track informations 
+  const G4StepPoint* endPoint = aStep->GetPostStepPoint();
+  const G4Track*     track    = aStep->GetTrack();
+  const G4ParticleDefinition* particle = track->GetDefinition(); 
+     
   // collect energy deposit
   G4double edep = aStep->GetTotalEnergyDeposit();
   
@@ -85,15 +90,26 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   
   //energy flow
   //
-  //leaving an absorber ?  in forward direction ?
-  if ((endPoint->GetPhysicalVolume() != volume)
-     && (track->GetMomentumDirection().x() > 0.)) {
-      G4int planNum = 1 + (detector->GetNbOfAbsor())*layerNum + absorNum;
-      G4double EnLeaving = track->GetKineticEnergy();
-      if (particle == G4Positron::Positron()) EnLeaving += 2*electron_mass_c2;
-      G4int ih = 2*MaxAbsor + 1;
-      if (track->GetTrackID() != 1) ih += 1;
-      histoManager->FillHisto(ih, (G4double)planNum, EnLeaving);
+  // unique identificator of layer+absorber
+  G4int Idnow = (detector->GetNbOfAbsor())*layerNum + absorNum;
+  if (track->GetCurrentStepNumber() == 1) Idold = Idnow;     // track begins
+  //
+  //first step in the absorber ?
+  G4int plane=0;
+  if (prePoint->GetStepStatus() == fGeomBoundary) {
+    G4double Eflow = prePoint->GetKineticEnergy();
+    if (particle == G4Positron::Positron()) Eflow += 2*electron_mass_c2;  
+    if      (Idnow > Idold) runAct->sumForwEflow(plane=Idnow,   Eflow);
+    else if (Idnow < Idold) runAct->sumBackEflow(plane=Idnow+1, Eflow);
+    Idold = Idnow;
+  }   
+  
+  //last plane : forward leakage
+  G4int Idlast = (detector->GetNbOfAbsor())*(detector->GetNbOfLayers()); 
+  if ((Idnow == Idlast) && (endPoint->GetStepStatus() == fGeomBoundary)) {
+    G4double Eflow = endPoint->GetKineticEnergy();
+    if (particle == G4Positron::Positron()) Eflow += 2*electron_mass_c2;  
+    runAct->sumForwEflow(plane=Idlast+1, Eflow);
   }
 
 ////  example of Birk attenuation

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.5 2004-10-25 12:50:59 maire Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.6 2005-05-18 15:28:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -95,9 +95,6 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       particleGun->SetParticlePosition(oldPosition);      
     }
   else  particleGun->GeneratePrimaryVertex(anEvent);
-  
-  //fill histo of energy flow
-  histoManager->FillHisto(2*MaxAbsor+1, 1.,particleGun->GetParticleEnergy());  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

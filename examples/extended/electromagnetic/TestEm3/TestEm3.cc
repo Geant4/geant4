@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TestEm3.cc,v 1.16 2005-05-03 10:21:16 allison Exp $
+// $Id: TestEm3.cc,v 1.17 2005-05-18 15:28:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,7 +79,7 @@ int main(int argc,char** argv) {
   // set user action classes
   RunAction*      runAct = new RunAction(detector,primary,histo);
   EventAction*    evtAct = new EventAction(detector,runAct,histo);
-  SteppingAction* stpAct = new SteppingAction(detector,evtAct,histo);
+  SteppingAction* stpAct = new SteppingAction(detector,runAct,evtAct,histo);
   
   runManager->SetUserAction(runAct);
   runManager->SetUserAction(evtAct);
