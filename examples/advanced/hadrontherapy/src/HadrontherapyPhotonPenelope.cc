@@ -20,10 +20,6 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyPhotonPenelope.cc,v 1.2 2005-04-28 20:39:33 mpiergen Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// -------------------------------------------------------------------
 
 #include "HadrontherapyPhotonPenelope.hh"
 
@@ -34,6 +30,7 @@
 #include "G4PenelopeGammaConversion.hh"
 #include "G4PenelopePhotoElectric.hh"
 #include "G4PenelopeRayleigh.hh"
+#include "G4StepLimiter.hh"
 
 HadrontherapyPhotonPenelope::HadrontherapyPhotonPenelope(const G4String& name): G4VPhysicsConstructor(name)
 { }
@@ -43,8 +40,6 @@ HadrontherapyPhotonPenelope::~HadrontherapyPhotonPenelope()
 
 void HadrontherapyPhotonPenelope::ConstructProcess()
 {
-  // Add processes a' la Penelope for photons
-  
   theParticleIterator->reset();
 
   while( (*theParticleIterator)() )
@@ -59,6 +54,9 @@ void HadrontherapyPhotonPenelope::ConstructProcess()
 	  manager->AddDiscreteProcess(new G4PenelopeCompton);
 	  manager->AddDiscreteProcess(new G4PenelopeGammaConversion);
 	  manager->AddDiscreteProcess(new G4PenelopeRayleigh);
+          manager->AddProcess(new G4StepLimiter(),-1,-1, 3);
 	}   
     }
 }
+
+

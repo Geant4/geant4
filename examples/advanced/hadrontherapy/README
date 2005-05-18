@@ -10,7 +10,7 @@ This example is developed by G.A.Pablo Cirrone, Giorgio Russo and
 Francesco Di Rosa of the Laboratori Nazionali del Sud - Istituto Nazionale 
 di Fisica Nucleare, Via S. Sofia, 44 Catania, Sicily, Italy (www.lns.infn.it)
 
-Am fundamental role on the example development was also carried out by Susanna Guatelli
+A fundamental role on the example development was carried out by Susanna Guatelli
 and Maria Grazia Pia from the Istituto Nazionale di Fisica Nucleare, Section of
 Genova (I).
 
@@ -19,6 +19,7 @@ Dipartimento di Fisica of Catania University, Catania.
 
 The authors wish to thank Harald Paganetti (from NPTC, Massachussets (US)) for the
 help in the realization of the movement of the modulator wheel.
+
 ------------------------------------------------------------------------
 ----> INTRODUCTION.                                                    
                                                                        
@@ -68,7 +69,43 @@ The elements simulated are:
 ----> 1.EXPERIMENTAL SET-UP.      
                                       
 The application fully simulates the proton therapy beam line
-installed at Laboratori Nazionali del Sud. Inside the water
+installed at Laboratori Nazionali del Sud.
+The default beam line is a typical treatment line composed by several elements all
+devoted to create the so-called "terapeutical beam", i.e. a beam ideal 
+for a radiotherapeutic treatment.
+
+The main elements are:
+** The COLLIMATORS: placed along the beam line to collimate the beam;
+
+** The RANGE SHIFTERS: to decrease the energy of the primary proton beam 
+   to a specific value;
+
+** The MODULATOR WHEEL: to modulate the energy of the primary and monoenergetic
+   beam in to a wide spectrum. The energy modulation is necessary to 
+   homogeneusly irradiate a tumour volume that can extends in depth 
+   up to 20 mm;
+
+** The MONITOR CHAMBERS: very thin ionisation chamber that permit the 
+   dose monitoring during the patient irradiation;
+
+** The PATIENT COLLIMATOR: a brass, tumour-shaped collimator able to 
+   confine the proton irradiation field in order to irradiate just the tumour mass
+   in the trasverse direction;
+
+The user has the possibility to vary, via messenger, almost all the geometrical 
+characteristics of the beam line elements (i.e. their position along the beam line, 
+their thickness, etc.)
+
+At the end of the beam line, a typical water phantom is reproduced.
+A user-defined region of the phantom is divided (via the ROGeomtry class) in 
+cubic voxelsof 
+Inside the water phantom the user has the possibility to collect a lot of 
+informations regarding the particle traversing it.
+
+In particular the default configuration permits the collection of the energy deposited in each voxel
+of the phantom
+
+Inside the water
 phantom (placed at the end of the proton beam line) the Markus ionisation
 chamber and a radiographic film are located; these elements permit the
 reconstruction of the Bragg curve (registered on the file BraggPeak.out)
@@ -159,26 +196,12 @@ Modulator wheel can be omitted setting its material air.
 run $G4WORKDIR/bin/Linux-g++/Hadrontherapy visualisation.mac
 to visualise the experimental set-up with OpenGL
 -----------------------------------------------------------------------
-----> 4. PHYSICS (Modular Physics)
+----> 4. PHYSICS
 
-choice of physics lists:
+Electromagnetic and hadronic processes are modeled.
 
---> gamma    - photon-standard (Standard Processes)
-             - photon-epdl     (LowEnergy Processes)
-             - photon-penelope (Penelope Processes)
-
---> e-       - electron-standard (Standard Processes)
-             - electron-eedl     (LowEnergyProcesses)
-             - electron-penelope (Penelope Processes)
-             
---> e+       - positron-standard (Standard Processes)         
-
---> proton   - proton-standard(Standard Processes)
-             - proton-LowE (stopping power ICRU_49)    
-             - proton-hadronic (elastic and inelatic processes)
---> muon     - muon 
---> decay    - decay
-
+The LowEnergy package is used to model the electromagnetic processes
+of all the particles involved in the experimental set-up.
 
 ------------------------------------------------------------------------
 ----> 5. SIMULATION OUTPUT                                              
@@ -229,4 +252,5 @@ Next planned improvements will be:
 for comments, advices, doubts and questions please contact: 
 cirrone@lns.infn.it, giorgiorusso@lns.infn.it
 
-last modified: Michela Piergentili, 28/04/2005
+last modified: G.A.P. Cirrone, 25/02/2005
+

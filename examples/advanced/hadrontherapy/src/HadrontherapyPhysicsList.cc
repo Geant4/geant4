@@ -20,73 +20,73 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyPhysicsList.cc,v 1.13 2005-04-28 20:39:33 mpiergen Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: HadrontherapyPhysicsList.cc,v 1.0
+// --------------------------------------------------------------
+//                 GEANT 4 - Hadrontherapy example
+// --------------------------------------------------------------
+// Code developed by:
 //
-// -------------------------------------------------------------------
-
+// G.A.P. Cirrone, G. Russo
+// Laboratori Nazionali del Sud - INFN, Catania, Italy
+//
+// --------------------------------------------------------------
+#include "globals.hh"
 #include "HadrontherapyPhysicsList.hh"
 #include "HadrontherapyPhysicsListMessenger.hh"
 #include "HadrontherapyParticles.hh"
 #include "HadrontherapyPhotonStandard.hh"
 #include "HadrontherapyPhotonEPDL.hh"
 #include "HadrontherapyPhotonPenelope.hh"
-#include "HadrontherapyPhotonPolarised.hh"
 #include "HadrontherapyElectronStandard.hh"
 #include "HadrontherapyElectronEEDL.hh"
 #include "HadrontherapyElectronPenelope.hh"
 #include "HadrontherapyPositronStandard.hh"
-#include "HadrontherapyProtonLowE.hh"
-#include "HadrontherapyProtonStandard.hh"
+#include "HadrontherapyPositronPenelope.hh"
+#include "HadrontherapyIonLowE.hh"
+#include "HadrontherapyIonStandard.hh"
 #include "HadrontherapyProtonHadro.hh"
-#include "HadrontherapyMuon.hh"
+#include "HadrontherapyMuonStandard.hh"
 #include "HadrontherapyDecay.hh"
-
-#include "G4ParticleDefinition.hh"
-#include "G4ProductionCutsTable.hh"
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
+//#include "G4ParticleDefinition.hh"
+#include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4VProcess.hh"
-#include "G4LowEnergyPhotoElectric.hh"
-#include "G4LowEnergyIonisation.hh"
-#include "G4LowEnergyBremsstrahlung.hh"
 
- 
+#include "G4Region.hh"
+#include "G4RegionStore.hh" 
+//#include "G4ParticleTypes.hh"
+#include "G4ParticleTable.hh"
+#include "G4Material.hh"
+#include "G4VeLowEnergyLoss.hh"
+#include "G4EnergyLossTables.hh"
+#include "G4ios.hh"
+#include <iomanip.h>               
+
+
 HadrontherapyPhysicsList::HadrontherapyPhysicsList(): G4VModularPhysicsList(),
-						      electronIsRegistered(false), 
-						      positronIsRegistered(false),
-						      photonIsRegistered(false),
-						      protonIsRegistered(false),
-						      protonHadroIsRegistered(false),
-						      muonIsRegistered(false),
-						      decayIsRegistered(false)
+						      
+electronIsRegistered(false), positronIsRegistered(false), 
+photonIsRegistered(false), ionIsRegistered(false),
+protonHadroIsRegistered(false), muonIsRegistered(false),
+decayIsRegistered(false)
 {
-  defaultCutValue = 0.1 * mm;
+  defaultCutValue = 10. * mm;
+  currentDefaultCut = defaultCutValue;
   cutForGamma = defaultCutValue;
   cutForElectron = defaultCutValue;
-
-  SetVerboseLevel(1);
-
-  // UI messenger
+  cutForProton = defaultCutValue;
   messenger = new HadrontherapyPhysicsListMessenger(this);
- 
-  // Particles
-  RegisterPhysics( new HadrontherapyParticles("particles") );
-
+  SetVerboseLevel(1);
 }
 
 HadrontherapyPhysicsList::~HadrontherapyPhysicsList()
-{
+{ 
   delete messenger;
 }
 
-
 void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 {
-
   G4cout << "Adding PhysicsList chunk " << name << G4endl;
 
   // Register standard processes for photons
@@ -95,71 +95,65 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
       if (photonIsRegistered) 
 	{
 	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- photon List already existing" << G4endl;
+		 << " cannot be registered ---- photon List already existing" 
+                 << G4endl;
 	} 
       else 
 	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
 	  RegisterPhysics( new HadrontherapyPhotonStandard(name) );
 	  photonIsRegistered = true;
 	}
     }
+
   // Register LowE-EPDL processes for photons
   if (name == "photon-epdl") 
-     {
+    {
       if (photonIsRegistered) 
 	{
 	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- photon List already existing" << G4endl;
+		 << " cannot be registered ---- photon List already existing"
+                 << G4endl;
 	} 
       else 
 	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
 	  RegisterPhysics( new HadrontherapyPhotonEPDL(name) );
 	  photonIsRegistered = true;
 	}
-   } 
+    } 
   // Register processes a' la Penelope for photons
   if (name == "photon-penelope")
     {
-     if (photonIsRegistered) 
+      if (photonIsRegistered) 
 	{
 	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- photon List already existing" << G4endl;
+		 << " cannot be registered ---- photon List already existing" 
+                 << G4endl;
 	} 
       else 
 	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
 	  RegisterPhysics( new HadrontherapyPhotonPenelope(name) );
 	  photonIsRegistered = true;
 	}
     }
-  // Register polarised processes for photons
-  if (name == "photon-polarised")
-    {
-      if (photonIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- photon List already existing" << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
-	  RegisterPhysics( new HadrontherapyPhotonPolarised(name) );
-	  photonIsRegistered = true;
-	}
-    }
+
   // Register standard processes for electrons
   if (name == "electron-standard") 
     {
       if (electronIsRegistered) 
 	{
 	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- electron List already existing" << G4endl;
+		 << " cannot be registered ---- electron List already existing"                  << G4endl;
 	} 
       else 
 	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
 	  RegisterPhysics( new HadrontherapyElectronStandard(name) );	  
 	  electronIsRegistered = true;
 	}
@@ -170,26 +164,28 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
       if (electronIsRegistered) 
 	{
 	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- electron List already existing" << G4endl;
+		 << " cannot be registered ---- electron List already existing"                  << G4endl;
 	} 
       else 
 	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
 	  RegisterPhysics( new HadrontherapyElectronEEDL(name) );
 	  electronIsRegistered = true;
 	}
-   } 
+    } 
   // Register processes a' la Penelope for electrons
   if (name == "electron-penelope")
     {
-     if (electronIsRegistered) 
+      if (electronIsRegistered) 
 	{
 	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-		 << " cannot be registered ---- electron List already existing" << G4endl;
+		 << " cannot be registered ---- electron List already existing"                  << G4endl;
 	} 
       else 
 	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
 	  RegisterPhysics( new HadrontherapyElectronPenelope(name) );
 	  electronIsRegistered = true;
 	}
@@ -200,44 +196,86 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
       if (positronIsRegistered) 
 	{
 	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- positron List already existing" << G4endl;
+		 << " cannot be registered ---- positron List already existing"                  << G4endl;
 	} 
       else 
 	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
 	  RegisterPhysics( new HadrontherapyPositronStandard(name) );
 	  positronIsRegistered = true;
 	}
     }
-
-  // Register standard processes for protons
-  if (name == "proton-LowE") 
+  // Register penelope processes for positrons
+  if (name == "positron-penelope") 
     {
-      if (protonIsRegistered) 
+      if (positronIsRegistered) 
 	{
 	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- proton List already existing" << G4endl;
+		 << " cannot be registered ---- positron List already existing"                  << G4endl;
 	} 
       else 
 	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
-	  RegisterPhysics( new HadrontherapyProtonLowE(name) );
-	  protonIsRegistered = true;
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics( new HadrontherapyPositronPenelope(name) );
+	  positronIsRegistered = true;
 	}
     }
 
-  if (name == "proton-standard") 
+  // Register Low Energy ICRU processes for charged particles
+  //excluding e+, e-, muons
+  if (name == "ion-LowE") 
     {
-      if (protonIsRegistered) 
+      if (ionIsRegistered) 
 	{
 	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- proton List already existing" << G4endl;
+		 << " cannot be registered ---- proton List already existing" 
+                 << G4endl;
 	} 
       else 
 	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
-	  RegisterPhysics( new HadrontherapyProtonStandard(name) );
-	  protonIsRegistered = true;
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics( new HadrontherapyIonLowE(name) );
+	  ionIsRegistered = true;
+	}
+    }
+
+ // Register Standard processes for charged particles
+  //excluding e+, e-, muons
+
+  if (name == "ion-standard") 
+    {
+      if (ionIsRegistered) 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- ion List already existing" 
+                 << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics( new HadrontherapyIonStandard(name) );
+	  ionIsRegistered = true;
+	}
+    }
+
+  if (name == "muon-standard") 
+    {
+      if (muonIsRegistered) 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- decay List already existing" 
+                 << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics( new HadrontherapyMuonStandard(name) );
+	  muonIsRegistered = true;
 	}
     }
 
@@ -246,29 +284,17 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
       if (protonHadroIsRegistered) 
 	{
 	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- proton hadronic List already existing" << G4endl;
+		 << " cannot be registered ---- decay List already existing" 
+                 << G4endl;
 	} 
       else 
 	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
 	  RegisterPhysics( new HadrontherapyProtonHadro(name) );
-	  protonIsRegistered = true;
+	  protonHadroIsRegistered = true;
 	}
-    }
 
-  if (name == "muon") 
-    {
-      if (muonIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- muon List already existing" << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
-	  RegisterPhysics( new HadrontherapyMuon(name) );
-	  muonIsRegistered = true;
-	}
     }
 
   if (name == "decay") 
@@ -276,298 +302,109 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
       if (decayIsRegistered) 
 	{
 	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- decay List already existing" << G4endl;
+		 << " cannot be registered ---- decay List already existing" 
+                 << G4endl;
 	} 
       else 
 	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
 	  RegisterPhysics( new HadrontherapyDecay(name) );
 	  decayIsRegistered = true;
 	}
+
     }
 
-
-  if (electronIsRegistered && positronIsRegistered && photonIsRegistered && protonIsRegistered && muonIsRegistered && decayIsRegistered)
+  if (electronIsRegistered && positronIsRegistered && photonIsRegistered &&
+      ionIsRegistered) 
     {
-      G4cout << "PhysicsList for electron, positron, photon, proton, muon, decay registered" << G4endl;
+     G4cout<< 
+     "Electromagnetic physics is registered for electron, positron, photons, protons" 
+     << G4endl;
     }
+    if (protonHadroIsRegistered && muonIsRegistered && decayIsRegistered)
+      {
+	G4cout << " Hadronic physics is registered"<< G4endl;
+      }     
 }
-
-
-void HadrontherapyPhysicsList::SetGELowLimit(G4double cut)
-{
-  if (verboseLevel > 0)
-    {
-      G4cout << "HadrontherapyPhysicsList - Gamma and electron cut in energy = " 
-	     << cut * MeV << " MeV" << G4endl;
-    }  
-  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(cut,1e5);
-}
-
-
-void HadrontherapyPhysicsList::SetGammaLowLimit(G4double cut)
-{
-  if (verboseLevel > 0)
-    {
-      G4cout << "HadrontherapyPhysicsList - Gamma cut in energy = " 
-	     << cut * MeV << " MeV" << G4endl;
-    }  
-  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(cut,1e5);
-}
-
-void HadrontherapyPhysicsList::SetElectronLowLimit(G4double cut)
-{
-  if (verboseLevel > 0)
-    {
-      G4cout << "HadrontherapyPhysicsList - Electron cut in energy = " 
-	     << cut * MeV << " MeV" << G4endl;
-    }  
-  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(cut,1e5);
-}
-
-void HadrontherapyPhysicsList::SetGammaCut(G4double value)
-{
-  ResetCuts();
-  cutForGamma = value;
-}
-
-
-void HadrontherapyPhysicsList::SetElectronCut(G4double value)
-{
-  ResetCuts();
-  cutForElectron = value;
-}
-
 
 void HadrontherapyPhysicsList::SetCuts()
-{
+{ 
+ 
+ // reactualise cutValues
+  if (currentDefaultCut != defaultCutValue)
+    {
+     if(cutForGamma    == currentDefaultCut) cutForGamma    = defaultCutValue;
+     if(cutForElectron == currentDefaultCut) cutForElectron = defaultCutValue;
+     if(cutForProton   == currentDefaultCut) cutForProton   = defaultCutValue;
+     currentDefaultCut = defaultCutValue;
+    }
+  
+  // set cut values for gamma at first and for e- second and next for e+,
+  // because some processes for e+/e- need cut values for gamma 
   SetCutValue(cutForGamma,"gamma");
   SetCutValue(cutForElectron,"e-");
   SetCutValue(cutForElectron,"e+");
+
+  // set cut values for proton and anti_proton before all other hadrons
+  // because some processes for hadrons need cut values for proton/anti_proton 
+
+  //SetCutValue(defaultCutValue, "proton");
+  //SetCutValue(defaultCutValue, "anti_proton");
+
+  
+  // Cut per region
+  // in region dosemeter we need a very accurate precision
+
+  G4String regName = "PhantomLog";
+  G4Region* region = G4RegionStore::GetInstance()->GetRegion(regName);
+  G4ProductionCuts* cuts = new G4ProductionCuts ;
+  cuts -> SetProductionCut(0.001*mm,G4ProductionCuts::GetIndex("gamma"));
+  cuts -> SetProductionCut(0.001*mm,G4ProductionCuts::GetIndex("e-"));
+  cuts -> SetProductionCut(0.001*mm,G4ProductionCuts::GetIndex("e+"));
+  region -> SetProductionCuts(cuts);
+      
+  //if (verboseLevel >0){
+  //    G4cout << "HadrontherapyPhysicsList::SetCuts:";
+  //    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") 
+  //    << G4endl;
+  //  }
+    
+    if (verboseLevel>0) DumpCutValuesTable();
 }
 
-void HadrontherapyPhysicsList::SetLowEnSecPhotCut(G4double cut)
+void HadrontherapyPhysicsList::SetGammaCut(G4double val)
 {
-  // This m.f. is pertinent to LowEnergy EPDL/EEDL processes only
-
-  // Get the ProcessManager for photons and the list of photon processes
-  G4ProcessManager* photonManager = G4Gamma::GammaDefinition()->GetProcessManager();
-  G4ProcessVector* photonProcesses = photonManager->GetProcessList();
-  G4int nPhotonProcesses = photonProcesses->size();
-
-  // Loop over photon processes until one retrieves LowEnergyPhotoElectric
-  for (G4int iPhoton=0; iPhoton<nPhotonProcesses; iPhoton++)
-    {
-      G4VProcess* process = (*photonProcesses)[iPhoton];
-      const G4String& name = process->GetProcessName();
-      G4String nameLowE("LowEnPhotoElec");
-      if (name == nameLowE)
-	{
-	  // The only way to get access to the cut stting is through a dynamic_cast
-	  // (it is ugly!)
-	  G4LowEnergyPhotoElectric* lowEProcess = dynamic_cast<G4LowEnergyPhotoElectric*>(process);
-	  if (lowEProcess != 0) 
-	    {
-	     lowEProcess->SetCutForLowEnSecPhotons(cut);
-	     G4cout << "Low energy secondary photons cut is now set to: "
-		    << cut * MeV
-		    << " (MeV) for LowEnergyPhotoElectric"
-		    << G4endl;
-	    }
-	}
-    }
-  
-  // Get the ProcessManager for electrons and the list of electron processes
-  G4ProcessManager* electronManager = G4Electron::ElectronDefinition()->GetProcessManager();
-  G4ProcessVector* electronProcesses = electronManager->GetProcessList();
-  G4int nElectronProcesses = electronProcesses->size();
-
-  // Loop over electron processes until one retrieves LowEnergyIonisation or LowEnergyBremsstrahlung
-  for (G4int iElectron=0; iElectron<nElectronProcesses; iElectron++)
-    {
-      G4VProcess* process = (*electronProcesses)[iElectron];
-      const G4String& name = process->GetProcessName();
-
-      G4String nameIoni("LowEnergyIoni");
-      if (name == nameIoni)
-	{
-	  // The only way to get access to the cut setting is through a dynamic_cast
-	  // (it is ugly!)
-	  G4LowEnergyIonisation* lowEProcess = dynamic_cast<G4LowEnergyIonisation*>(process);
-	  if (lowEProcess != 0) 
-	    {
-	      lowEProcess->SetCutForLowEnSecPhotons(cut);
-	      G4cout << "Low energy secondary photons cut is now set to: "
-		     << cut * MeV
-		     << " (MeV) for LowEnergyIonisation"
-		     << G4endl;
-	    }
-	}
-
-      G4String nameBrems("LowEnBrem");
-      if (name == nameBrems)
-	{
-	  // The only way to get access to the cut setting is through a dynamic_cast
-	  // (it is ugly!)
-	  G4LowEnergyBremsstrahlung* lowEProcess = dynamic_cast<G4LowEnergyBremsstrahlung*>(process);
-	  if (lowEProcess != 0) 
-	    {
-	      lowEProcess->SetCutForLowEnSecPhotons(cut);
-	      G4cout << "Low energy secondary photons cut is now set to: "
-		     << cut * MeV
-		     << " (MeV) for LowEnergyBremsstrahlung"
-		     << G4endl;
-	    }
-	}
-    }
+  ResetCuts();
+  cutForGamma = val;
 }
 
-
-void HadrontherapyPhysicsList::SetLowEnSecElecCut(G4double cut)
-{  
-  // This m.f. is pertinent to LowEnergy EPDL/EEDL processes only
-
-  // Get the ProcessManager for photons and the list of photon processes
-  G4ProcessManager* photonManager = G4Gamma::GammaDefinition()->GetProcessManager();
-  G4ProcessVector* photonProcesses = photonManager->GetProcessList();
-  G4int nPhotonProcesses = photonProcesses->size();
-
-  // Loop over photon processes until one retrieves LowEnergyPhotoElectric
-  for (G4int iPhoton=0; iPhoton<nPhotonProcesses; iPhoton++)
-    {
-      G4VProcess* process = (*photonProcesses)[iPhoton];
-      const G4String& name = process->GetProcessName();
-      G4String nameLowE("LowEnPhotoElec");
-      if (name == nameLowE)
-	{
-	  // The only way to get access to the cut stting is through a dynamic_cast
-	  // (it is ugly!)
-	  G4LowEnergyPhotoElectric* lowEProcess = dynamic_cast<G4LowEnergyPhotoElectric*>(process);
-	  if (lowEProcess != 0) 
-	    {
-	     lowEProcess->SetCutForLowEnSecElectrons(cut);
-	     G4cout << "Low energy secondary electrons cut is now set to: "
-		    << cut * MeV
-		    << " (MeV) for LowEnergyPhotoElectric"
-		    << G4endl;
-	    }
-	}
-    }
-  
-  // Get the ProcessManager for electrons and the list of electron processes
-  G4ProcessManager* electronManager = G4Electron::ElectronDefinition()->GetProcessManager();
-  G4ProcessVector* electronProcesses = electronManager->GetProcessList();
-  G4int nElectronProcesses = electronProcesses->size();
-
-  // Loop over electron processes until one retrieves LowEnergyIonisation
-  for (G4int iElectron=0; iElectron<nElectronProcesses; iElectron++)
-    {
-      G4VProcess* process = (*electronProcesses)[iElectron];
-      const G4String& name = process->GetProcessName();
-      G4String nameLowE("LowEnergyIoni");
-      if (name == nameLowE)
-	{
-	  // The only way to get access to the cut setting is through a dynamic_cast
-	  // (it is ugly!)
-	  G4LowEnergyIonisation* lowEProcess = dynamic_cast<G4LowEnergyIonisation*>(process);
-	  if (lowEProcess != 0) 
-	    {
-	      lowEProcess->SetCutForLowEnSecElectrons(cut);
-	      G4cout << "Low energy secondary electrons cut is now set to: "
-		     << cut * MeV
-		     << " (MeV) for LowEnergyIonisation"
-		     << G4endl;
-	    }
-	}
-    }
-}
-
-void HadrontherapyPhysicsList::ActivateAuger(G4bool value)
-{  
-  // Get the ProcessManager for photons and the list of photon processes
-  G4ProcessManager* photonManager = G4Gamma::GammaDefinition()->GetProcessManager();
-  G4ProcessVector* photonProcesses = photonManager->GetProcessList();
-  G4int nPhotonProcesses = photonProcesses->size();
-
-  // Loop over photon processes until one retrieves LowEnergyPhotoElectric
-  for (G4int iPhoton=0; iPhoton<nPhotonProcesses; iPhoton++)
-    {
-      G4VProcess* process = (*photonProcesses)[iPhoton];
-      const G4String& name = process->GetProcessName();
-      G4String nameLowE("LowEnPhotoElec");
-      if (name == nameLowE)
-	{
-	  // The only way to get access to the Auger activation is through a dynamic_cast
-	  // (it is ugly!)
-	  G4LowEnergyPhotoElectric* lowEProcess = dynamic_cast<G4LowEnergyPhotoElectric*>(process);
-	  if (lowEProcess != 0) 
-	    {
-	     lowEProcess->ActivateAuger(value);
-	      G4cout << "Auger electron production flag is " << value
-		     << " for LowEnergyPhotoElectric process" << G4endl;
-	    }
-	}
-    }
-  
-  // Get the ProcessManager for electrons and the list of electron processes
-  G4ProcessManager* electronManager = G4Electron::ElectronDefinition()->GetProcessManager();
-  G4ProcessVector* electronProcesses = electronManager->GetProcessList();
-  G4int nElectronProcesses = electronProcesses->size();
-
-  // Loop over electron processes until one retrieves LowEnergyIonisation
-  for (G4int iElectron=0; iElectron<nElectronProcesses; iElectron++)
-    {
-      G4VProcess* process = (*electronProcesses)[iElectron];
-      const G4String& name = process->GetProcessName();
-      G4String nameLowE("LowEnergyIoni");
-      if (name == nameLowE)
-	{
-	  // The only way to get access to the Auger activation is through a dynamic_cast
-	  // (it is ugly!)
-	  G4LowEnergyIonisation* lowEProcess = dynamic_cast<G4LowEnergyIonisation*>(process);
-	  if (lowEProcess != 0) 
-	    {
-	      lowEProcess->ActivateAuger(value);
-	      G4cout << "Auger electron production flag is " << value
-		     << " for LowEnergyIonisation process" << G4endl;
-	    }
-	}
-    }
-}
-
-void HadrontherapyPhysicsList::SetAngularDistribution(const G4String& angularName)
+void HadrontherapyPhysicsList::SetElectronCut(G4double val)
 {
-
-  G4cout << "Setting angular distribution to " << angularName << G4endl;
-
-  // Get the ProcessManager for electrons and the list of electron processes
-  G4ProcessManager* electronManager = G4Electron::ElectronDefinition()->GetProcessManager();
-  G4ProcessVector* electronProcesses = electronManager->GetProcessList();
-  G4int nElectronProcesses = electronProcesses->size();
-
-  // Loop over electron processes until one retrieves LowEnergyIonisation
-  for (G4int iElectron=0; iElectron<nElectronProcesses; iElectron++)
-    {
-      G4VProcess* process = (*electronProcesses)[iElectron];
-      const G4String& name = process->GetProcessName();
-      G4String nameBrems("LowEnBrem");
-
-      if (name == nameBrems)
-	{
-	  // The only way to get access to the cut setting is through a dynamic_cast
-	  // (it is ugly!)
-	  G4LowEnergyBremsstrahlung* lowEProcess = dynamic_cast<G4LowEnergyBremsstrahlung*>(process);
-	  if (lowEProcess != 0) 
-	    {
-              lowEProcess->SetAngularGenerator(angularName);
-	      G4cout << "Low energy Bremsstrahlung angular distribution is set to: "
-		     << angularName
-		     << G4endl;
-	    }
-	}
-    }
-
+  ResetCuts();
+  cutForElectron = val;
 }
 
+void HadrontherapyPhysicsList::SetProtonCut(G4double val)
+{
+  ResetCuts();
+  cutForProton = val;
+}
+
+// ---------------------------------------------------------------------------
+//void HadrontherapyPhysicsList::GetRange(G4double val)
+//{
+//G4ParticleTable* theParticleTable =  G4ParticleTable::GetParticleTable();
+//G4Material* currMat = pDet->GetPhantomMaterial();
+//
+//G4ParticleDefinition* part;
+//G4double cut;
+//part = theParticleTable->FindParticle("e-");
+//cut = G4EnergyLossTables::GetRange(part,val,currMat);
+//G4cout << "material : " << currMat->GetName() << G4endl;
+//G4cout << "particle : " << part->GetParticleName() << G4endl;
+//G4cout << "energy   : " << G4BestUnit(val,"Energy") << G4endl;
+//G4cout << "range    : " << G4BestUnit(cut,"Length") << G4endl;
+//}
 
 

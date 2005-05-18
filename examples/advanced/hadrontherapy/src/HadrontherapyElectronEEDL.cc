@@ -20,8 +20,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyElectronEEDL.cc,v 1.2 2005-04-28 20:39:33 mpiergen Exp $
+// $Id: HadrontherapyElectronEEDL.cc,v 1.3 2005-05-18 07:53:27 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Author: Maria.Grazia.Pia@cern.ch
+//
+// History:
+// -----------
+// 22 Feb 2003 MGP          Designed for modular Physics List
 //
 // -------------------------------------------------------------------
 
@@ -33,6 +39,10 @@
 #include "G4MultipleScattering.hh"
 #include "G4LowEnergyIonisation.hh"
 #include "G4LowEnergyBremsstrahlung.hh"
+#include "G4StepLimiter.hh"
+#include "G4VBremAngularDistribution.hh"
+#include "G4Generator2BS.hh"
+#include "G4Generator2BN.hh"
 
 HadrontherapyElectronEEDL::HadrontherapyElectronEEDL(const G4String& name): G4VPhysicsConstructor(name)
 { }
@@ -56,7 +66,9 @@ void HadrontherapyElectronEEDL::ConstructProcess()
 	{
 	  manager->AddProcess(new G4MultipleScattering,     -1, 1,1);
 	  manager->AddProcess(new G4LowEnergyIonisation,    -1, 2,2);
-	  manager->AddProcess(new G4LowEnergyBremsstrahlung,-1,-1,3);
+	  G4LowEnergyBremsstrahlung* brem = new G4LowEnergyBremsstrahlung();
+          manager->AddProcess(brem,-1,-1,3);
+          manager->AddProcess(new G4StepLimiter(),          -1,-1, 3);
 	}   
     }
 }

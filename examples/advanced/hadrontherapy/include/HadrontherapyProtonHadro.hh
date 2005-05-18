@@ -20,33 +20,38 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//    **************************************
+//    *                                    *
+//    *    HadrontherapyProtonHadro.hh        *
+//    *                                    *
+//    **************************************
 //
-// $Id: HadrontherapyProtonHadro.hh,v 1.2 2005-04-28 20:39:33 mpiergen Exp $
+// $Id: HadrontherapyProtonHadro.hh,v 1.3 2005-05-18 07:53:27 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// -------------------------------------------------------------------
+// Author : Susanna Guatelli, guatelli@ge.infn.it
+// 
 
-
-#ifndef HADRONTHERAPYPROTONHADRO_HH
-#define HADRONTHERAPYPROTONHADRO_HH 1
+#ifndef HadrontherapyProtonHadro_h
+#define HadrontherapyProtonHadro_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class HadrontherapyProtonHadro : public G4VPhysicsConstructor {
+#include "G4QGSParticipants.hh"
+#include "G4QGSModel.hh"
 
-public: 
+class HadrontherapyProtonHadro: public G4VPhysicsConstructor 
+{
+  public:
+    HadrontherapyProtonHadro(const G4String& name = "proton-hadronic");
+    virtual ~HadrontherapyProtonHadro();
 
-  HadrontherapyProtonHadro(const G4String& name = "proton-hadronic");
-  
-  virtual ~HadrontherapyProtonHadro();
-  
-  // This method is dummy for physics
-  virtual void ConstructParticle() {};
-  
-  virtual void ConstructProcess();
+  protected:
+    // Construct particle and physics
+    void ConstructParticle(){};
+    void ConstructProcess();
 };
-
 #endif
 
 

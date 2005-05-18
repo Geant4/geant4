@@ -20,28 +20,38 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyProtonHadro.cc,v 1.2 2005-04-28 20:39:33 mpiergen Exp $
+//    **************************************
+//    *                                    *
+//    *    HadrontherapyProtonHadro.cc        *
+//    *                                    *
+//    **************************************
+//
+// $Id: HadrontherapyProtonHadro.cc,v 1.3 2005-05-18 07:53:27 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// -------------------------------------------------------------------
-
+// Author : Susanna Guatelli, guatelli@ge.infn.it
+// 
 #include "HadrontherapyProtonHadro.hh"
-
-#include "G4ProcessManager.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
+#include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
-#include "G4ProtonInelasticProcess.hh"
-#include "G4HadronElasticProcess.hh"
+#include "G4Material.hh"
+#include "G4ios.hh"
+#include "G4ProtonInelasticCrossSection.hh"
 #include "G4LElastic.hh"
+#include "G4HadronElasticProcess.hh"
 #include "G4LEProtonInelastic.hh"
 #include "G4HEProtonInelastic.hh"
+#include "G4ProtonInelasticProcess.hh"
 
-HadrontherapyProtonHadro::HadrontherapyProtonHadro(const G4String& name): G4VPhysicsConstructor(name)
-{ }
-
+HadrontherapyProtonHadro::HadrontherapyProtonHadro(const G4String& name): 
+G4VPhysicsConstructor(name)
+{
+}
 HadrontherapyProtonHadro::~HadrontherapyProtonHadro()
-{ }
+{}
 
 void HadrontherapyProtonHadro::ConstructProcess()
 {
@@ -60,7 +70,8 @@ void HadrontherapyProtonHadro::ConstructProcess()
 	  if (particleName == "proton") 
 	    {
 	      pmanager->AddDiscreteProcess(theElasticProcess);
-	      G4ProtonInelasticProcess* theInelasticProcess = new G4ProtonInelasticProcess("inelastic");
+	      G4ProtonInelasticProcess* theInelasticProcess =
+                                  new G4ProtonInelasticProcess("inelastic");
 	      G4LEProtonInelastic* theLEInelasticModel = new G4LEProtonInelastic;
 	      theInelasticProcess->RegisterMe(theLEInelasticModel);
 	      G4HEProtonInelastic* theHEInelasticModel = new G4HEProtonInelastic;
@@ -69,3 +80,6 @@ void HadrontherapyProtonHadro::ConstructProcess()
 	    }
 	}
 }
+
+
+

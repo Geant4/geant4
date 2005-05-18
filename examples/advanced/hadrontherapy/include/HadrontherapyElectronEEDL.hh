@@ -21,8 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: HadrontherapyElectronEEDL.hh,v 1.2 2005-04-28 20:39:33 mpiergen Exp $
+// $Id: HadrontherapyElectronEEDL.hh,v 1.3 2005-05-18 07:53:27 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+//
+// History:
+// -----------
+// 22 Feb 2003 MGP          Created
 //
 // -------------------------------------------------------------------
 
@@ -32,8 +38,8 @@
 
 // -------------------------------------------------------------------
 
-#ifndef HADRONTHERAPYELECTRONEEDL_HH
-#define HADRONTHERAPYELECTRONEEDL_HH 1
+#ifndef TST50ELECTRONEEDL_HH
+#define TST50ELECTRONEEDL_HH 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
@@ -42,7 +48,7 @@ class HadrontherapyElectronEEDL : public G4VPhysicsConstructor {
 
 public: 
 
-  HadrontherapyElectronEEDL(const G4String& name = "electron-epdl");
+  HadrontherapyElectronEEDL(const G4String& name = "electron-eedl");
   
   virtual ~HadrontherapyElectronEEDL();
   

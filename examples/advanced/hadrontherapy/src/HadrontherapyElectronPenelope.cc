@@ -20,8 +20,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyElectronPenelope.cc,v 1.2 2005-04-28 20:39:33 mpiergen Exp $
+// $Id: HadrontherapyElectronPenelope.cc,v 1.3 2005-05-18 07:53:27 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Author: Maria.Grazia.Pia@cern.ch
+//
+// History:
+// -----------
+// 22 Feb 2003 MGP          Designed for modular Physics List
 //
 // -------------------------------------------------------------------
 
@@ -31,11 +37,13 @@
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MultipleScattering.hh"
-#include "G4LowEnergyIonisation.hh"
+#include "G4PenelopeIonisation.hh"
 #include "G4PenelopeBremsstrahlung.hh"
+#include "G4PenelopeAnnihilation.hh"
+#include "G4StepLimiter.hh"
 
-
-HadrontherapyElectronPenelope::HadrontherapyElectronPenelope(const G4String& name): G4VPhysicsConstructor(name)
+HadrontherapyElectronPenelope::HadrontherapyElectronPenelope(const G4String& name): 
+G4VPhysicsConstructor(name)
 { }
 
 HadrontherapyElectronPenelope::~HadrontherapyElectronPenelope()
@@ -43,7 +51,7 @@ HadrontherapyElectronPenelope::~HadrontherapyElectronPenelope()
 
 void HadrontherapyElectronPenelope::ConstructProcess()
 {
-  // Add processes a' la Penelope for electrons
+  
   
   theParticleIterator->reset();
 
@@ -55,11 +63,13 @@ void HadrontherapyElectronPenelope::ConstructProcess()
      
       if (particleName == "e-") 
 	{
-	  manager->AddProcess(new G4MultipleScattering,     -1, 1,1);
-	  manager->AddProcess(new G4LowEnergyIonisation,    -1, 2,2);
-	  manager->AddProcess(new G4PenelopeBremsstrahlung, -1,-1,3);
+	  manager -> AddProcess(new G4MultipleScattering, -1, 1,1);
+	  G4PenelopeIonisation* ioni = new G4PenelopeIonisation();
+   	  G4PenelopeBremsstrahlung* brem = new G4PenelopeBremsstrahlung();
+          manager -> AddProcess(ioni, -1, 2,2);
+	  manager -> AddProcess(brem, -1,-1,3); 
+          manager->AddProcess(new G4MultipleScattering, -1, 1,1);
+          manager->AddProcess(new G4StepLimiter(),      -1,-1,3); 
 	}   
- 	  // Ionisation not available yet
-         
     }
 }

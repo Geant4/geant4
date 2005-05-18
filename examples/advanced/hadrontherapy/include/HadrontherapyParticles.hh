@@ -20,21 +20,21 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyParticles.hh,v 1.2 2005-04-28 20:39:33 mpiergen Exp $
+// $Id: HadrontherapyParticles.hh,v 1.3 2005-05-18 07:53:27 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+// Author:Susanna Guatelli, guatelli@ge.infn.it 
 //
-// -------------------------------------------------------------------
 
-#ifndef HadrontherapyPARTICLES_HH
-#define HadrontherapyPARTICLES_HH 1
+#ifndef HADRONTHERAPYPARTICLES_HH
+#define HADRONTHERAPYPARTICLES_HH 1
 
-#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
+#include "G4VPhysicsConstructor.hh"
 
 class HadrontherapyParticles : public G4VPhysicsConstructor {
 public: 
+
   HadrontherapyParticles(const G4String& name = "particles");
   
   virtual ~HadrontherapyParticles();
@@ -42,10 +42,8 @@ public:
   virtual void ConstructParticle();
   
   // This method is dummy
-  virtual void ConstructProcess() {};
-  
+  virtual void ConstructProcess() {};  
 };
-
 #endif
 
 

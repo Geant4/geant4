@@ -45,7 +45,7 @@ class HadrontherapyRunAction;
 class HadrontherapyEventAction;
 class HadrontherapySteppingMessenger;
 
-// ---------------------------------------------------------------
+
 #ifndef G4NOHIST
  class HepTupleManager;
  class HepHistogram;
@@ -54,18 +54,9 @@ class HadrontherapySteppingMessenger;
 class HadrontherapySteppingAction : public G4UserSteppingAction
 {
 public:
-  HadrontherapySteppingAction( HadrontherapyEventAction* );
+  HadrontherapySteppingAction( );
   ~HadrontherapySteppingAction();
   
   void UserSteppingAction(const G4Step*);
-
-  G4int event_id;
-  G4int Controllo;
-
-private:
-  HadrontherapyDetectorConstruction* detector;
-  HadrontherapyEventAction*          eventaction;
-  HadrontherapyRunAction*            runaction;
-  HadrontherapySteppingMessenger*    steppingMessenger;   
 };
 #endif

@@ -26,7 +26,7 @@
 // --------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone, G. Russo
+// G.Candiano, G.A.P. Cirrone, F. Di Rosa, G. Russo
 // Laboratori Nazionali del Sud - INFN, Catania, Italy
 //
 // --------------------------------------------------------------
@@ -39,12 +39,9 @@
 
 class HadrontherapyDetectorConstruction;
 class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
+class G4UIcmdWithAString;
 
-// -------------------------------------------------------------------
 class HadrontherapyDetectorMessenger: public G4UImessenger
 {
   public:
@@ -56,12 +53,24 @@ class HadrontherapyDetectorMessenger: public G4UImessenger
 private:
   HadrontherapyDetectorConstruction* HadrontherapyDetector;
   
-  G4UIdirectory*             HadronDir;
+  G4UIdirectory*             modulatorDir;
   G4UIdirectory*             detDir;
+  G4UIdirectory*             beamLineDir;
+  G4UIdirectory*             RangeShifterDir;
+  G4UIdirectory*             FirstScatteringFoilDir;
+  G4UIdirectory*             SecondScatteringFoilDir;
+  G4UIdirectory*             StopperDir;
+  G4UIdirectory*             FinalCollimatorDir;
+  G4UIcmdWithADoubleAndUnit* outerRadiusDosemeterCmd;
   G4UIcmdWithADoubleAndUnit* ModulatorAngleCmd;
+  G4UIcmdWithAString*   RangeShifterMatCmd;
+  G4UIcmdWithADoubleAndUnit* RangeShifterBox_xCmd;
+  G4UIcmdWithADoubleAndUnit* RangeShifterBoxPosition_xCmd;
+  G4UIcmdWithADoubleAndUnit* FirstScatteringFoil_xCmd;
+  G4UIcmdWithADoubleAndUnit* SecondScatteringFoil_xCmd;
+  G4UIcmdWithADoubleAndUnit* outerRadiusStopperCmd;
+  G4UIcmdWithADoubleAndUnit* innerRadiusFinalCollimatorCmd;
+
 };
-
-// ----------------------------------------------------------------------
-
 #endif
 

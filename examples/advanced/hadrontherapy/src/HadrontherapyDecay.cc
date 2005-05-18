@@ -20,18 +20,26 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyDecay.cc,v 1.2 2005-04-28 20:39:33 mpiergen Exp $
+//
+//    ***********************
+//    *                     *
+//    *    HadrontherapyDecay.cc   *
+//    *                     *          
+//    ***********************
+//
+// $Id: HadrontherapyDecay.cc,v 1.3 2005-05-18 07:53:27 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// -------------------------------------------------------------------
+// Author:Susanna Guatelli, guatelli@ge.infn.it 
+//
 
 #include "HadrontherapyDecay.hh"
-
 #include "G4ProcessManager.hh"
+#include "globals.hh"
+#include "G4ios.hh"
+
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
-#include "G4Decay.hh"
+#include "G4ProcessManager.hh"
 
 HadrontherapyDecay::HadrontherapyDecay(const G4String& name): G4VPhysicsConstructor(name)
 { }
@@ -41,19 +49,20 @@ HadrontherapyDecay::~HadrontherapyDecay()
 
 void HadrontherapyDecay::ConstructProcess()
 {
+  // Add Decay Process
   G4Decay* theDecayProcess = new G4Decay();
-   
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    
-    //add decay process
-    if (theDecayProcess->IsApplicable(*particle)) { 
-      pmanager ->AddProcess(theDecayProcess);
-      // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
+  theParticleIterator -> reset();
+  while( (*theParticleIterator)() )
+    {
+      G4ParticleDefinition* particle = theParticleIterator -> value();
+      G4ProcessManager* pmanager = particle -> GetProcessManager();
+      
+      if (theDecayProcess -> IsApplicable(*particle)) 
+	{ 
+	  pmanager -> AddProcess(theDecayProcess);
+	  // set ordering for PostStepDoIt and AtRestDoIt
+	  pmanager -> SetProcessOrdering(theDecayProcess, idxPostStep);
+	  pmanager -> SetProcessOrdering(theDecayProcess, idxAtRest);
+	}
     }
-  }
 }

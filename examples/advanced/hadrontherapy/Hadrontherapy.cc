@@ -19,160 +19,161 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-//
-//
-// $Id: Hadrontherapy.cc
-//
-// --------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// --------------------------------------------------------------
-// Code developed by:
-// G.A.P. Cirrone, G. Russo
-// Laboratori Nazionali del Sud - INFN, Catania, Italy
-//
-//
-// ****************  Hadrontherapy  ****************************************
-// Hadrontherapy simulates a general transport beam line dedicated to the 
-// irradiation of toumors with hadron beams.
-// All the elements of a typical hadron beam line (collimator, 
-// scattering system, range shifter, etc.) are simulated.
-// Positions, dimensions and materials of such element can be changed by the users.
-// Actually only proton beams can be simulated.
-// All the characteristics of the incident beam can be changed.
-// Two typical detectors commonly used in the hadrontherapy
-// field are simulated: the Markus ionization chamber for the 
-// reconstruction of the depth dose distributions,
-// and a gafchromic film for the reconstruction of the 
-// lateral dose distributions.
-// **************************************************************************
 
-#include <fstream>
-#include <iomanip>
-#include <iostream>
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
+#ifdef G4UI_USE_XM
+#include "G4UIXm.hh"
+#endif
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #endif
 
+#include "HadrontherapyEventAction.hh"
 #include "HadrontherapyDetectorConstruction.hh"
 #include "HadrontherapyPhysicsList.hh"
+#include "HadrontherapyPhantomSD.hh"
 #include "HadrontherapyPrimaryGeneratorAction.hh"
+#include "G4SDManager.hh"
 #include "HadrontherapyRunAction.hh"
-#include "HadrontherapyEventAction.hh"
+#include "Randomize.hh"  
+#include "G4RunManager.hh"
+#include "G4SDManager.hh"
+#include "G4UImanager.hh"
+#include "G4UImessenger.hh"
 #include "HadrontherapySteppingAction.hh"
-// -----------------------------------------------------------------------
-int main(int argc,char** argv) {
+#include "globals.hh"
 
-  //***************************
-  // choose the Random engine
-  //***************************
 
-  HepRandom::setTheEngine(new RanecuEngine);
-  G4int seed = time(NULL);
-  HepRandom::setTheSeed(seed);
-    
-  //***********************************
-  // Construct the default run manager
-  //***********************************
+// ----------------------------------------------------------------
+int main(int argc ,char ** argv)
+{
+  //Output matrix 
+  G4int numberVoxelX = 80;
+  G4int numberVoxelY = 80;
+  G4int numberVoxelZ = 80;
+ 
+  G4double* matrix = new G4double[numberVoxelX*numberVoxelY*numberVoxelZ];
+
+  // Initialization of the matrix elemts to zero
+  for(G4int i = 0; i < numberVoxelX; i++)
+  {
+      for(G4int j = 0; j < numberVoxelY; j++)
+      {
+	  for(G4int k = 0; k < numberVoxelZ; k++)
+
+	matrix[(i*numberVoxelY+j)*numberVoxelZ+k] = 0.;
+    }
+  }
+
+ //  G4double matrix[80][80][80]; // dimensions of the output matrix
+
+  G4RunManager* pRunManager = new G4RunManager;
+
+  // Initialize the geometry
+  pRunManager -> SetUserInitialization(new HadrontherapyDetectorConstruction());
   
-  G4RunManager * runManager = new G4RunManager;
+  //Initialize the physics 
+  pRunManager -> SetUserInitialization(new HadrontherapyPhysicsList());
   
-  //***************************************
-  // set mandatory initialization classes
-  //***************************************
+  // Initialize the primary particles  
+  pRunManager -> SetUserAction(new HadrontherapyPrimaryGeneratorAction());
 
-  HadrontherapyDetectorConstruction* detector;
-  detector = new HadrontherapyDetectorConstruction;
-  runManager -> SetUserInitialization(detector);
-  runManager -> SetUserInitialization(new HadrontherapyPhysicsList);
-  //***********************************************
-  // Set the visualization if you chose to have it!
-  //***********************************************
+  // Optional UserActions: run, event, stepping
+  pRunManager->SetUserAction(new HadrontherapyRunAction());
+  HadrontherapyEventAction *pEventAction = new HadrontherapyEventAction( matrix, numberVoxelX,
+                                                                         numberVoxelY, numberVoxelZ);
+  pRunManager->SetUserAction(pEventAction );
+
+
+  HadrontherapySteppingAction* steppingaction = new HadrontherapySteppingAction(); 
+  pRunManager -> SetUserAction(steppingaction);    
+
 
 #ifdef G4VIS_USE
+  // visualization manager
   G4VisManager* visManager = new G4VisExecutive;
-  visManager -> Initialize();
-#endif 
-
-  //**********************************
-  // set mandatory user action class
-  //********************************
-
-  runManager -> SetUserAction(new HadrontherapyPrimaryGeneratorAction);
-  //runManager -> SetUserAction(new HadrontherapyPrimaryGeneratorAction( detector ))
-  //****************************************
-  // set the optional user action classes
-  //***************************************
-
-  HadrontherapyRunAction* runaction = new HadrontherapyRunAction;
-  runManager -> SetUserAction(runaction);
- 
-  HadrontherapyEventAction* eventaction = new HadrontherapyEventAction( runaction );
-  runManager -> SetUserAction(eventaction);
+  visManager->Initialize();
+#endif
   
-  HadrontherapySteppingAction* steppingaction = new HadrontherapySteppingAction( eventaction );
-  runManager -> SetUserAction(steppingaction);    
- 
-  //*********************
-  // Initialize G4 kernel
-  //*********************
-
-  //runManager -> Initialize();
-
-  //***********************************************
-  // get the pointer to the User Interface manager 
-  //***********************************************
-
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
-
-  //*******************************************************************
-  //Define  UI terminal for interactive mode (wait command from keyboard
-  //or for batch mode but reading a macro file
-  //********************************************************************
-
+  
   G4UIsession* session = 0;
-  
-  if (argc==1)   // Define UI session for interactive mode.
-  {          
-#ifdef G4UI_USE_XM
-        session = new G4UIXm(argc,argv);
-#else           
+  if (argc == 1)   // Define UI session for interactive mode.
+    {
+      session = new G4UIterminal();
+    } 
 
-#ifdef G4UI_USE_TCSH
-    session = new G4UIterminal(new G4UItcsh);      
-#else
-       session = new G4UIterminal();
-#endif
-#endif
-  }
-
-
+  // get the pointer to the User Interface manager 
+  G4UImanager* UI = G4UImanager::GetUIpointer();  
   if (session)   // Define UI session for interactive mode.
-  {
-      
-    UImanager->ApplyCommand("/control/execute/defaultMacro.mac ");    
-    session -> SessionStart();
-    delete session;
-  }
-
+    { 
+      G4cout<<" UI session starts ..."<< G4endl;
+      UI->ApplyCommand("/control/execute VisualisationMacro.mac");    
+      session->SessionStart();
+      delete session;
+    }
   else           // Batch mode
+    { 
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UI->ApplyCommand(command+fileName);
+    }  
 
-  { 
-    G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
-  }
 
+ if(matrix)
+	{
+	 std::ofstream ofs;
+
+	// Output voxel data to text file
+	// Format = i  <tab> j  <tab> k <tab> edep [MeV] <eol>
+	ofs.open("EnergyDeposit.out");
+		{
+
+		  ofs<<" i "<<'\t'<<" j "<<'\t'<<"k"<<'\t' 
+                     <<"released energy(Mev)"
+		     <<G4endl;
+		 
+                  G4int k;
+                  G4int j;
+                  G4int i;             
+                   
+		    for(G4int l = 0; l < numberVoxelZ; l++) 
+                      {
+                        k = l;
+                        
+                       for(G4int m = 0; m < numberVoxelY; m++) 
+                       { 
+			 j = m * numberVoxelZ + k; 
+                         
+                        for(G4int n = 0; n <  numberVoxelX; n++)
+			  {
+			    i =  n* numberVoxelZ * numberVoxelY + j;
+			     if(matrix[i]!=0)
+			      {
+			        ofs << n <<'\t'<< m <<'\t'<<
+				k<<'\t'<<matrix[i]<<G4endl;
+				// ofs<< i <<'\t'<<j<<'\t'<<
+				//k<<'\t'<<matrix[i]<<G4endl;
+			     }
+			  }   
+		       }
+		      }
+	       
+		ofs.close();
+		}
+	}
+
+ delete[] matrix;   
+ 
+  // Job termination
 #ifdef G4VIS_USE
   delete visManager;
-#endif  
+#endif
 
-  delete runManager;
+  delete pRunManager;
 
   return 0;
 }
-

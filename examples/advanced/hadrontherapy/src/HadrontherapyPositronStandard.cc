@@ -20,9 +20,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyPositronStandard.cc,v 1.2 2005-04-28 20:39:33 mpiergen Exp $
+// $Id: HadrontherapyPositronStandard.cc,v 1.3 2005-05-18 07:53:27 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// Author: Maria.Grazia.Pia@cern.ch
+//
+// History:
+// -----------
+// 22 Feb 2003 MGP          Designed for modular Physics List
 //
 // -------------------------------------------------------------------
 
@@ -35,6 +40,7 @@
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
+#include "G4StepLimiter.hh"
 
 HadrontherapyPositronStandard::HadrontherapyPositronStandard(const G4String& name): G4VPhysicsConstructor(name)
 { }
@@ -59,7 +65,8 @@ void HadrontherapyPositronStandard::ConstructProcess()
 	  manager->AddProcess(new G4MultipleScattering, -1, 1,1);
 	  manager->AddProcess(new G4eIonisation,        -1, 2,2);
 	  manager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
-	  manager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
+	  manager->AddProcess(new G4eplusAnnihilation,   0,-1,4); 
+          manager->AddProcess(new G4StepLimiter(),          -1,-1, 3);
 	}   
     }
 }

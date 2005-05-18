@@ -20,9 +20,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyPhotonEPDL.cc,v 1.2 2005-04-28 20:39:33 mpiergen Exp $
+// $Id: HadrontherapyPhotonEPDL.cc,v 1.3 2005-05-18 07:53:27 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// Author: Maria.Grazia.Pia@cern.ch
+//
+// History:
+// -----------
+// 22 Feb 2003 MGP          Designed for modular Physics List
 //
 // -------------------------------------------------------------------
 
@@ -35,6 +40,7 @@
 #include "G4LowEnergyGammaConversion.hh"
 #include "G4LowEnergyPhotoElectric.hh"
 #include "G4LowEnergyRayleigh.hh"
+#include "G4StepLimiter.hh"
 
 HadrontherapyPhotonEPDL::HadrontherapyPhotonEPDL(const G4String& name): G4VPhysicsConstructor(name)
 { }
@@ -60,6 +66,7 @@ void HadrontherapyPhotonEPDL::ConstructProcess()
 	  manager->AddDiscreteProcess(new G4LowEnergyCompton);
 	  manager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
 	  manager->AddDiscreteProcess(new G4LowEnergyRayleigh);
+          manager->AddProcess(new G4StepLimiter(),-1,-1, 3);
 	}   
     }
 }

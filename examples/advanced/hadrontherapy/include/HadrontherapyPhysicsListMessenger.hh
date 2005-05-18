@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HadrontherapyPhysicsListMessenger.hh,v 1.2 2005-04-28 20:39:33 mpiergen Exp $
+// $Id: HadrontherapyPhysicsListMessenger.hh,v 1.3 2005-05-18 07:53:27 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -60,27 +60,9 @@ public:
   
 private:
   
-  HadrontherapyPhysicsList*          physicsList;    // not owned pointer
-  
-  G4UIdirectory* lowEnDir;
+  HadrontherapyPhysicsList* physicsList;   
   G4UIdirectory* listDir;
-
-  G4UIcmdWithADoubleAndUnit* cutGLowLimCmd;
-  G4UIcmdWithADoubleAndUnit* cutELowLimCmd;
-  G4UIcmdWithADoubleAndUnit* cutGELowLimCmd;
-
-  G4UIcmdWithADoubleAndUnit* cutSecPhotCmd;
-  G4UIcmdWithADoubleAndUnit* cutSecElecCmd;
-
-  G4UIcmdWithADoubleAndUnit* cutGCmd;
-  G4UIcmdWithADoubleAndUnit* cutECmd;
-
-  G4UIcmdWithABool*          augerCmd;
-
-  G4UIcmdWithAString*        physicsListCmd;
-
-  G4UIcmdWithAString*        angularDistributionCmd;
-
+  G4UIcmdWithAString* physicsListCmd;
 };
 
 #endif

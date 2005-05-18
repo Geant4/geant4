@@ -21,17 +21,23 @@
 // ********************************************************************
 //
 //
-// $Id: HadrontherapyDecay.hh,v 1.2 2005-04-28 20:39:33 mpiergen Exp $
+//    ************************
+//    *                      *
+//    *    HadrontherapyDecay.hh    *
+//    *                      *           
+//    ************************
+//
+// $Id: HadrontherapyDecay.hh,v 1.3 2005-05-18 07:53:27 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// -------------------------------------------------------------------
-
-
+// Author:Susanna Guatelli, guatelli@ge.infn.it 
+//
 #ifndef HADRONTHERAPYDECAY_HH
 #define HADRONTHERAPYDECAY_HH 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
+#include "G4Decay.hh"
 
 class HadrontherapyDecay : public G4VPhysicsConstructor {
 
@@ -44,15 +50,7 @@ public:
   // This method is dummy for physics
   virtual void ConstructParticle() {};
   
-  virtual void ConstructProcess();
+  virtual void ConstructProcess();  
 };
-
 #endif
-
-
-
-
-
-
-
 

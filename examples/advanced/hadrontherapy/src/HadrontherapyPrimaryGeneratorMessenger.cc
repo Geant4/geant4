@@ -20,105 +20,146 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyPrimaryGeneratorMessenger.cc,v 1.2 2005-04-28 20:39:33 mpiergen Exp $
 //
-//
-// Code developed by: M. Piergentili
-//
-#include "HadrontherapyPrimaryGeneratorMessenger.hh"
 
+#include "HadrontherapyPrimaryGeneratorMessenger.hh"
 #include "HadrontherapyPrimaryGeneratorAction.hh"
-#include "HadrontherapyRunAction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithADouble.hh"
 
-HadrontherapyPrimaryGeneratorMessenger::HadrontherapyPrimaryGeneratorMessenger(HadrontherapyPrimaryGeneratorAction* HadrontherapyGun)
-  :HadrontherapyAction(HadrontherapyGun)
-
-{  
-  beamDir = new G4UIdirectory("/beam/");
-
-  EnergyCmd = new G4UIcmdWithADoubleAndUnit("/beam/energy",this);
-  EnergyCmd->SetGuidance("Select the energy (and unit) of the primary particles");
-  EnergyCmd->SetGuidance("Type particle Energy");
-  EnergyCmd->SetParameterName("energy",true,true);
-  EnergyCmd->SetDefaultValue(1.);
-  EnergyCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  SourceTypeCmd = new G4UIcmdWithADoubleAndUnit("/beam/energySpread",this);
-  SourceTypeCmd->SetGuidance("Select the standard deviation of the energy.");
-  SourceTypeCmd->SetParameterName("sigma",true);
-  SourceTypeCmd->SetDefaultValue(1.);
-  SourceTypeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  BeamCmd = new G4UIcmdWithADoubleAndUnit("/beam/spotXPosition",this);
-  BeamCmd->SetGuidance("Select the x position (and unit) of the spot");
-  BeamCmd->SetParameterName("x0",true,true);
-  BeamCmd->SetDefaultValue(1.);
-  BeamCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  SizeYCmd = new G4UIcmdWithADoubleAndUnit("/beam/spotSizeY",this);
-  SizeYCmd->SetGuidance("Select the size (and unit) of the spot");
-  SizeYCmd->SetParameterName("sizeY",true,true);
-  SizeYCmd->SetDefaultValue(1.);
-  SizeYCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  SizeZCmd = new G4UIcmdWithADoubleAndUnit("/beam/spotSizeZ",this);
-  SizeZCmd->SetGuidance("Select the size (and unit) of the spot");
-  SizeZCmd->SetParameterName("sizeZ",true,true);
-  SizeZCmd->SetDefaultValue(1.);
-  SizeZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-}
-
-void HadrontherapyPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+HadrontherapyPrimaryGeneratorMessenger::HadrontherapyPrimaryGeneratorMessenger(
+                                             HadrontherapyPrimaryGeneratorAction* HadrontherapyGun)
+:HadrontherapyAction(HadrontherapyGun)
 { 
-  if( command == EnergyCmd )
-    { 
-      G4double newEnergy = EnergyCmd->GetNewDoubleValue(newValue);
-      HadrontherapyAction->SetEnergy(newEnergy);
- G4cout << "Energy "<< newEnergy << G4endl; 
-    }
+ beamParametersDir = new G4UIdirectory("/beam/");
+ beamParametersDir -> SetGuidance("set parameters of beam");
+ 
+ EnergyDir = new G4UIdirectory("/beam/energy/");  
+ EnergyDir -> SetGuidance ("set energy of beam");  
 
-  if( command == SourceTypeCmd )
- {
-   G4double newSourceType = SourceTypeCmd->GetNewDoubleValue(newValue);
-      HadrontherapyAction->SetSourceType(newSourceType);
-    
-      G4cout << " standard deviation"<< newSourceType << G4endl;  
- }
+ particlePositionDir = new G4UIdirectory("/beam/position/");  
+ particlePositionDir -> SetGuidance ("set position of particle");  
 
-  if( command == BeamCmd )
- {
-   G4double newPosition = BeamCmd->GetNewDoubleValue(newValue);
-      HadrontherapyAction->SetXPosition(newPosition);
-    
-      G4cout << " beam source x position"<< newPosition << G4endl;  
- }
+ MomentumDir = new G4UIdirectory("/beam/momentum/");  
+ MomentumDir -> SetGuidance ("set momentum of particle ");  
 
-  if( command == SizeYCmd )
- {
-   G4double newSpotSizeY = SizeYCmd->GetNewDoubleValue(newValue);
-      HadrontherapyAction->SetSpotSizeY(newSpotSizeY);
-    
-      G4cout << " beam source y size"<< newSpotSizeY << G4endl;  
- }
-  if( command == SizeZCmd )
- {
-   G4double newSpotSizeZ = SizeZCmd->GetNewDoubleValue(newValue);
-      HadrontherapyAction->SetSpotSizeZ(newSpotSizeZ);
-    
-      G4cout << " beam source y size"<< newSpotSizeZ << G4endl;  
- }
+ sigmaMomentumYCmd = new G4UIcmdWithADouble("/beam/momentum/sigmaY",this);
+ sigmaMomentumYCmd -> SetGuidance("set sigma momentum y");
+ sigmaMomentumYCmd -> SetParameterName("momentum",false);
+ sigmaMomentumYCmd -> AvailableForStates(G4State_PreInit,G4State_Idle);   
 
+
+ sigmaMomentumZCmd = new G4UIcmdWithADouble("/beam/momentum/sigmaZ",this);
+ sigmaMomentumZCmd -> SetGuidance("set sigma momentum z");
+ sigmaMomentumZCmd -> SetParameterName("momentum",false);
+ sigmaMomentumZCmd -> AvailableForStates(G4State_PreInit,G4State_Idle);   
+
+
+ meanKineticEnergyCmd = new G4UIcmdWithADoubleAndUnit("/beam/energy/meanEnergy",this);
+ meanKineticEnergyCmd->SetGuidance("set mean Kinetic energy");
+ meanKineticEnergyCmd->SetParameterName("Energy",false);
+ meanKineticEnergyCmd->SetDefaultUnit("MeV");
+ meanKineticEnergyCmd->SetUnitCandidates("eV keV MeV GeV TeV");
+ meanKineticEnergyCmd->AvailableForStates(G4State_PreInit,G4State_Idle);   
+
+ 
+ sigmaEnergyCmd = new G4UIcmdWithADoubleAndUnit("/beam/energy/sigmaEnergy",this);
+ sigmaEnergyCmd->SetGuidance("set sigma energy");
+ sigmaEnergyCmd->SetParameterName("Energy",false);
+ sigmaEnergyCmd->SetDefaultUnit("keV");
+ sigmaEnergyCmd->SetUnitCandidates("eV keV MeV GeV TeV");
+ sigmaEnergyCmd->AvailableForStates(G4State_PreInit,G4State_Idle);   
+ 
+
+ XpositionCmd = new G4UIcmdWithADoubleAndUnit("/beam/position/Xposition",this);
+ XpositionCmd->SetGuidance("set x coordinate of particle");
+ XpositionCmd->SetParameterName("position",false);
+ XpositionCmd->SetDefaultUnit("mm");
+ XpositionCmd->SetUnitCandidates("mm cm m");
+ XpositionCmd->AvailableForStates(G4State_PreInit,G4State_Idle);   
+
+
+ YpositionCmd = new G4UIcmdWithADoubleAndUnit("/beam/position/Yposition",this);
+ YpositionCmd->SetGuidance("set y coordinate of particle");
+ YpositionCmd->SetParameterName("position",false);
+ YpositionCmd->SetDefaultUnit("mm");
+ YpositionCmd->SetUnitCandidates("mm cm m");
+ YpositionCmd->AvailableForStates(G4State_PreInit,G4State_Idle);   
+
+ sigmaYCmd = new G4UIcmdWithADoubleAndUnit("/beam/position/Yposition/sigmaY",this);
+ sigmaYCmd->SetGuidance("set sigma y");
+ sigmaYCmd->SetParameterName("position",false);
+ sigmaYCmd->SetDefaultUnit("mm");
+ sigmaYCmd->SetUnitCandidates("mm cm m");
+ sigmaYCmd->AvailableForStates(G4State_PreInit,G4State_Idle);   
+
+
+ ZpositionCmd = new G4UIcmdWithADoubleAndUnit("/beam/position/Zposition",this);
+ ZpositionCmd->SetGuidance("set z coordinate of particle");
+ ZpositionCmd->SetParameterName("position",false);
+ ZpositionCmd->SetDefaultUnit("mm");
+ ZpositionCmd->SetUnitCandidates("mm cm m");
+ ZpositionCmd->AvailableForStates(G4State_PreInit,G4State_Idle);   
+
+ sigmaZCmd = new G4UIcmdWithADoubleAndUnit("/beam/position/Zposition/sigmaZ",this);sigmaZCmd->SetGuidance("set sigma z");
+ sigmaZCmd->SetParameterName("position",false);
+ sigmaZCmd->SetDefaultUnit("mm");
+ sigmaZCmd->SetUnitCandidates("mm cm m");
+ sigmaZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);   
 }
-
 
 HadrontherapyPrimaryGeneratorMessenger::~HadrontherapyPrimaryGeneratorMessenger()
 {
-  delete EnergyCmd;
-  delete SourceTypeCmd;
-  delete beamDir;
-  delete SizeYCmd;
-  delete SizeZCmd;
-}
+  delete beamParametersDir;
+  delete EnergyDir;
+  delete meanKineticEnergyCmd;  
+  delete sigmaEnergyCmd;
+  delete particlePositionDir;
+  delete MomentumDir;
+  delete XpositionCmd; 
+  delete YpositionCmd; 
+  delete ZpositionCmd; 
+  delete sigmaYCmd; 
+  delete sigmaZCmd; 
+  delete sigmaMomentumYCmd; 
+  delete sigmaMomentumZCmd; 
+}  
+
+void HadrontherapyPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)                
+{
+  if ( command == meanKineticEnergyCmd )                                                                        
+    { HadrontherapyAction -> SetmeanKineticEnergy(meanKineticEnergyCmd
+						  ->GetNewDoubleValue(newValue));}
+  if ( command == sigmaEnergyCmd )                                                                        
+    { HadrontherapyAction -> SetsigmaEnergy(sigmaEnergyCmd
+					    ->GetNewDoubleValue(newValue));}
+  if ( command == XpositionCmd )                                                                        
+    { HadrontherapyAction -> SetXposition(XpositionCmd
+					  ->GetNewDoubleValue(newValue));}
+
+  if ( command == YpositionCmd )                                                                        
+    { HadrontherapyAction -> SetYposition(YpositionCmd
+					  ->GetNewDoubleValue(newValue));}
+
+  if ( command == ZpositionCmd )                                                                        
+    { HadrontherapyAction -> SetZposition(ZpositionCmd
+					  ->GetNewDoubleValue(newValue));}
+
+  if ( command == sigmaYCmd )                                                                        
+    { HadrontherapyAction -> SetsigmaY(sigmaYCmd
+				       ->GetNewDoubleValue(newValue));}
+
+  if ( command == sigmaZCmd )                                                                        
+    { HadrontherapyAction -> SetsigmaZ(sigmaZCmd
+				       ->GetNewDoubleValue(newValue));}
+
+  if ( command == sigmaMomentumYCmd )                                                                        
+    { HadrontherapyAction -> SetsigmaMomentumY(sigmaMomentumYCmd
+					       ->GetNewDoubleValue(newValue));}
+
+  if ( command == sigmaMomentumZCmd )                                                                        
+    { HadrontherapyAction -> SetsigmaMomentumZ(sigmaMomentumZCmd
+					       ->GetNewDoubleValue(newValue));}
+}                 

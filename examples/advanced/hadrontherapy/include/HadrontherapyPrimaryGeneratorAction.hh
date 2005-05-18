@@ -1,3 +1,4 @@
+
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -40,39 +41,43 @@
 
 class G4ParticleGun;
 class G4Event;
-class HadrontherapyDetectorConstruction;
+
 class HadrontherapyPrimaryGeneratorMessenger;
 class HadrontherapyPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
-
-// ---------------------------------------------------------------------------
 {
 public:
-  HadrontherapyPrimaryGeneratorAction();   
-  ~HadrontherapyPrimaryGeneratorAction();
+HadrontherapyPrimaryGeneratorAction();    
+~HadrontherapyPrimaryGeneratorAction();
   
 public:
-  void SetDefaultKinematic();
+ 
+
+  void SetsigmaEnergy(G4double);
+  void SetmeanKineticEnergy(G4double);
+  void SetDefaultPrimaryParticle();
   void GeneratePrimaries(G4Event*);
-  void SetEnergy(G4double val){ pEnergy = val;}
-  void SetSourceType(G4double val) { sigmaK = val;}
-  void SetXPosition(G4double val) {x0 = val;}
-  void SetSpotSizeY(G4double val) { sigmaY = val;}
-  void SetSpotSizeZ(G4double val) { sigmaZ = val;}
-private:
-  G4ParticleGun*                particleGun;
-
-  G4double                      pEnergy;
-  G4double                      sigmaK;
-
-  G4double x0;
-  //G4double y0;
-  //G4double z0;
-
-  //G4double sigmaX;
+  void SetXposition(G4double);
+  void SetYposition(G4double);
+  void SetZposition(G4double);
+  void SetsigmaY(G4double);
+  void SetsigmaZ(G4double);
+  void SetsigmaMomentumY(G4double);
+  void SetsigmaMomentumZ(G4double);
+  
+  G4double meanKineticEnergy;
+  G4double sigmaEnergy;
+  G4double X0;
+  G4double Y0;
+  G4double Z0;
   G4double sigmaY;
   G4double sigmaZ;
+  G4double sigmaMomentumY;
+  G4double sigmaMomentumZ;
 
-  HadrontherapyPrimaryGeneratorMessenger* gunMessenger;     
+private:
+  G4ParticleGun*                particleGun;
+  HadrontherapyPrimaryGeneratorMessenger* gunMessenger; 
+  G4double sigmaX;
 };
 
 #endif

@@ -20,17 +20,6 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyElectronStandard.hh,v 1.2 2005-04-28 20:39:33 mpiergen Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// -------------------------------------------------------------------
-
-// Class description:
-// System test for e/gamma, standard photon processes for PhysicsList
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
-
-// -------------------------------------------------------------------
-
 #ifndef HADRONTHERAPYELECTRONSTANDARD_HH
 #define HADRONTHERAPYELECTRONSTANDARD_HH 1
 
@@ -52,11 +41,4 @@ public:
 };
 
 #endif
-
-
-
-
-
-
-
 

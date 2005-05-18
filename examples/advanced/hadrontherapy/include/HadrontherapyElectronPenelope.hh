@@ -21,10 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: HadrontherapyElectronPenelope.hh,v 1.2 2005-04-28 20:39:33 mpiergen Exp $
+// $Id: HadrontherapyElectronPenelope.hh,v 1.3 2005-05-18 07:53:27 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+//
+// History:
+// -----------
+// 22 Feb 2003 MGP          Created
+//
 // -------------------------------------------------------------------
+
 // Class description:
 // System test for e/gamma, electron processes a' la Penelope for PhysicsList
 // Further documentation available from http://www.ge.infn.it/geant4/lowE

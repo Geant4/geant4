@@ -26,9 +26,11 @@
 //                 GEANT 4 - Hadrontherapy example
 // --------------------------------------------------------------
 // Code developed by:
-//
+// S. Guatelli
+// INFN Sezione di Genova, genova Italy
 // G.A.P. Cirrone, G. Russo
 // Laboratori Nazionali del Sud - INFN, Catania, Italy
+
 // --------------------------------------------------------------
 
 #ifdef  G4ANALYSIS_USE
@@ -56,8 +58,8 @@ HadrontherapyAnalysisManager::HadrontherapyAnalysisManager() :
 
  //parameters for the TreeFactory
  
-  G4String fileName="protontherapy.xml";
-  theTree = treeFact->create(fileName,"xml",false, true,"uncompress" );
+  G4String fileName="protontherapy.hbk";
+  theTree = treeFact->create(fileName,"hbook",false, true);
   delete treeFact;
   histFact = aFact->createHistogramFactory( *theTree );
   tupFact  = aFact->createTupleFactory    ( *theTree );

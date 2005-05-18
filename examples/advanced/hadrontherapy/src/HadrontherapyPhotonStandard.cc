@@ -20,12 +20,6 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyPhotonStandard.cc,v 1.2 2005-04-28 20:39:33 mpiergen Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//
-// -------------------------------------------------------------------
-
 #include "HadrontherapyPhotonStandard.hh"
 
 #include "G4ProcessManager.hh"
@@ -34,6 +28,7 @@
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
+#include "G4StepLimiter.hh"
 
 HadrontherapyPhotonStandard::HadrontherapyPhotonStandard(const G4String& name): G4VPhysicsConstructor(name)
 { }
@@ -52,12 +47,13 @@ void HadrontherapyPhotonStandard::ConstructProcess()
       G4ParticleDefinition* particle = theParticleIterator->value();
       G4ProcessManager* manager = particle->GetProcessManager();
       G4String particleName = particle->GetParticleName();
-     
+
       if (particleName == "gamma") 
 	{
 	  manager->AddDiscreteProcess(new G4PhotoElectricEffect);
 	  manager->AddDiscreteProcess(new G4ComptonScattering);
-	  manager->AddDiscreteProcess(new G4GammaConversion);
+	  manager->AddDiscreteProcess(new G4GammaConversion); 
+          manager->AddProcess(new G4StepLimiter(),-1,-1, 3);
 	}   
     }
 }

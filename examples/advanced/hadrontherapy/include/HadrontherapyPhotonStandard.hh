@@ -20,8 +20,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyPhotonStandard.hh,v 1.2 2005-04-28 20:39:33 mpiergen Exp $
+// $Id: HadrontherapyPhotonStandard.hh,v 1.3 2005-05-18 07:53:27 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+//
+// History:
+// -----------
+// 22 Feb 2003 MGP          Created
 //
 // -------------------------------------------------------------------
 
@@ -31,8 +37,8 @@
 
 // -------------------------------------------------------------------
 
-#ifndef HADRONTHERAPYPHOTONSTANDARD_HH
-#define HADRONTHERAPYPHOTONSTANDARD_HH 1
+#ifndef TST50PHOTONSTANDARD_HH
+#define TST50PHOTONSTANDARD_HH 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
