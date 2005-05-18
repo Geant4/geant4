@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggNoDeltaModel.hh,v 1.1 2005-05-18 10:12:32 vnivanch Exp $
+// $Id: G4BraggNoDeltaModel.hh,v 1.2 2005-05-18 11:02:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,7 +54,8 @@ class G4BraggNoDeltaModel : public G4BraggIonModel
 
 public:
 
-  G4BraggNoDeltaModel(const G4ParticleDefinition* p = 0, const G4String& nam = "BraggNoD");
+  G4BraggNoDeltaModel(G4double ch = 1.0, const G4ParticleDefinition* p = 0,
+                      const G4String& nam = "BraggNoD");
 
   virtual ~G4BraggNoDeltaModel();
 
@@ -75,12 +76,14 @@ private:
   G4BraggNoDeltaModel & operator=(const  G4BraggNoDeltaModel &right);
   G4BraggNoDeltaModel(const  G4BraggNoDeltaModel&);
 
+  G4double mcharge2;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4BraggNoDeltaModel::G4BraggNoDeltaModel(const G4ParticleDefinition*p,
-                 const G4String& nam) : G4BraggIonModel(p, nam)
+inline G4BraggNoDeltaModel::G4BraggNoDeltaModel(G4double ch, const G4ParticleDefinition*p,
+                 const G4String& nam) : G4BraggIonModel(p, nam), mcharge2(ch*ch)
 {}
 
 inline G4BraggNoDeltaModel::~G4BraggNoDeltaModel()
@@ -89,9 +92,14 @@ inline G4BraggNoDeltaModel::~G4BraggNoDeltaModel()
 inline G4double G4BraggNoDeltaModel::ComputeDEDXPerVolume(
                             const G4Material* material,
 			    const G4ParticleDefinition* pd,
-                            G4double kineticEnergy, G4double)
+                            G4double kinEnergy, G4double)
 {
-  return G4BraggIonModel::ComputeDEDXPerVolume(material, pd, kineticEnergy, DBL_MAX);
+  G4double dedx = G4BraggIonModel::ComputeDEDXPerVolume(material, pd, kinEnergy, DBL_MAX);
+  if(mcharge2 > 2.0) {
+    G4double m = pd->GetPDGMass();
+    dedx *= mcharge2*kinEnergy*(kinEnergy + 2.0*m)/((kinEnergy + m)*(kinEnergy + m));
+  }
+  return dedx;
 }
 
 inline G4double G4BraggNoDeltaModel::CrossSectionPerVolume(
