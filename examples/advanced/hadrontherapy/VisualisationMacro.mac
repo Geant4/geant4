@@ -1,0 +1,43 @@
+#----------------------------------------------------------------------------
+# MACRO FILE FOR THE VISUALIZATION OF THE
+# HADRONTHERAPY EXAMPLE USING THE OPENGL LIBRARIES
+#
+#
+# THIS MACRO ILLUSTRATES THE POSSIBILITY
+# FOR THE USER TO 
+#
+# 1. Insert a range shifter of PMMA (default is air i.e. no range shifter!);
+# 2. Define the thickness of the range shifter; 
+# 3. Define the position of it;
+#
+# THEN THE USER CAN RUN HIS/HER SIMULATION 
+#
+# LOOKING ON THE HELP OF THE IDLE HOW TO CHANGE OTHE TOPIC FEATURES
+# OF THE BEAM LINE, IS SPECIFIED
+#------------------------------------------------------------------------------
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 0
+/event/verbose 0
+
+/physics/addPhysics photon-epdl
+/physics/addPhysics electron-eedl
+/physics/addPhysics positron-standard
+/physics/addPhysics ion-LowE
+/physics/addPhysics muon-standard
+/physics/addPhysics decay
+/physics/addPhysics proton-hadronic
+
+/run/initialize
+
+#/vis/scene/create
+#/vis/open OGLIX
+#/vis/viewer/flush
+#/vis/viewer/set/viewpointThetaPhi 0 180 deg
+#/vis/viewer/zoom 5
+#/vis/viewer/pan 150 80 cm
+#/tracking/storeTrajectory 1
+#/vis/scene/endOfEventAction accumulate
+#/vis/viewer/update
+/run/beamOn 40
+
