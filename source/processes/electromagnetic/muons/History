@@ -1,4 +1,4 @@
-$Id: History,v 1.79 2005-04-29 10:05:18 vnivanch Exp $
+$Id: History,v 1.80 2005-05-18 16:06:18 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18 May 05: V.Ivant (muons-V07-00-03)
+- Fix: fabs -> std::abs
 
 29 April 05: V.Ivant (muons-V07-00-02)
 - Fix compilation warning at gcc-3.4

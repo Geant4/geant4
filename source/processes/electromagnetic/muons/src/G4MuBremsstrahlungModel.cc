@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.cc,v 1.15 2005-04-12 18:12:33 vnivanch Exp $
+// $Id: G4MuBremsstrahlungModel.cc,v 1.16 2005-05-18 16:06:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -490,7 +490,7 @@ vector<G4DynamicParticle*>* G4MuBremsstrahlungModel::SampleSecondaries(
   NBINminus1 = NBIN-1 ;
   for (G4int iz=0; iz<nzdat; iz++)
   {
-    del = fabs(lnZ-log(zdat[iz])) ;
+    del = std::abs(lnZ-log(zdat[iz])) ;
     if(del<delmin)
     {
        delmin=del ;
@@ -501,7 +501,7 @@ vector<G4DynamicParticle*>* G4MuBremsstrahlungModel::SampleSecondaries(
   delmin = 1.e10 ;
   for (G4int it=0; it<ntdat; it++)
   {
-    del = fabs(log(tmax)-log(tdat[it])) ;
+    del = std::abs(log(tmax)-log(tdat[it])) ;
     if(del<delmin)
     {
       delmin=del;
