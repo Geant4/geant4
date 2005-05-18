@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AnalyticalPolSolver.hh,v 1.2 2005-05-17 14:49:21 gcosmo Exp $
+// $Id: G4AnalyticalPolSolver.hh,v 1.3 2005-05-18 10:28:44 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class description:
@@ -66,9 +66,10 @@ class G4AnalyticalPolSolver
     G4AnalyticalPolSolver();
     ~G4AnalyticalPolSolver();
 
-    G4int QuadRoots( G4double p[5], G4double r[3][5]);
-    G4int CubicRoots( G4double p[5], G4double r[3][5]);
-    G4int BiquadRoots( G4double p[5], G4double r[3][5]);
+    G4int QuadRoots(    G4double p[5], G4double r[3][5]);
+    G4int CubicRoots(   G4double p[5], G4double r[3][5]);
+    G4int BiquadRoots(  G4double p[5], G4double r[3][5]);
+    G4int QuarticRoots( G4double p[5], G4double r[3][5]);
 };
 
 #endif
