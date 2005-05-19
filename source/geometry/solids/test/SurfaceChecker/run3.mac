@@ -1,0 +1,3 @@
+/tracking/verbose 0
+/gun/particle geantino
+/run/beamOn 1

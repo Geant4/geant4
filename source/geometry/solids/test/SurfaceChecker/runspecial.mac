@@ -1,0 +1,10 @@
+# $Id: runspecial.mac,v 1.1 2005-05-19 13:07:29 link Exp $
+#
+#
+
+/random/setSavingFlag 1
+
+/gun/particle geantino
+/run/beamOn 13109
+
+

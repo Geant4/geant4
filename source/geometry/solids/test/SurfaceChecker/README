@@ -1,0 +1,39 @@
+README for SurfaceChecker
+
+
+Oliver Link, Oliver.Link@cern.ch
+Thu May 19 14:50:39 CEST 2005
+
+
+SurfaceChecker
+====================================
+
+The following two steps have to be executed in order:
+
+1) SurfaceChecker run1.mac > data/yourfile.data
+
+   Comments:
+   - run1.mac can be replaced by some longer tests,e.g. runLong.mac
+   - runspecial.mac is used to save the random number at the end of 
+     a given event. Restart with runSingle.mac at the previous random
+     number position.
+   - You have to redirect the output to a file in the directory
+     "data", with the filename extension ".data". 
+
+2) extractor.pl
+   
+   This perl script parses the output file (located in the "data" 
+   directory) and converts the information into a ntuple. The file will
+   have the same name as your data file (e.g. yourfile.hbk) and will
+   be stored in the directory "hbk".
+   The format of the ntuple (with Id 1) is the following:
+
+	 phi,u :    surface parameters
+	 x,y,z:     generated (true) surface point in cartesian coordinates
+	 px,py,pz:  vertex position in cartesian coordinates
+	 dist:      (true) distance between vertex and intersection
+	 vx,vy,vz:  momentum of particle at vertex
+	 xr,yr,zr:  reconstructed intersection 
+	 delta :    distance between reconstructed and true intersection
+	 theta:     angle between momentum and surface normal at intersection
+   

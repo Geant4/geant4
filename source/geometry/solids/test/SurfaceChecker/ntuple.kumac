@@ -1,0 +1,28 @@
+MACRO NTUPLE 
+
+
+* MERGES THE ASCII DATA (hbk/file.hbk) INTO A NTUPLE (hbk/file.hbk)
+
+* FILE : ASCII INPUT FILE  ( taken from the shell environment ) 
+* HBK  : FILE CONTAINING THE RESULTING NTUPLE
+
+* NTUPLE VARIABLES:
+* phi,u : surface parameters
+* x,y,z:  generated (true) surface point in cartesian coordinates
+* px,py,pz: vertex position in cartesian coordinates
+* dist:     distance between vertex and intersection
+* vx,vy,vz: momentum of particle at vertex
+* xr,yr,zr: reconstructed intersection 
+* delta :  distance between reconstructed and true intersection
+* theta: angle between momentum and surface normal at intersection
+
+FILE = $ENV(arg1)
+HBK  = $ENV(arg2)
+
+NT/CRE 1 'merge' 17 ! ! phi u x y z px py pz dist vx vy vz rx yr zr delta theta
+NT/READ 1 [FILE]
+
+HI/FILE 1 [HBK] 1024 N
+HROUT 0
+
+
