@@ -1,4 +1,4 @@
-$Id: History,v 1.143 2005-05-17 14:47:55 gcosmo Exp $
+$Id: History,v 1.144 2005-05-19 07:37:32 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 19, 2005  V.Grichine (global-V07-00-06)
+- Improved accuracy to G4AnalyticalPolSolver for quartic case.
 
 May 17, 2005  V.Grichine (global-V07-00-05)
 - Added new class G4AnalyticalPolSolver in HEPNumerics module, implementing
