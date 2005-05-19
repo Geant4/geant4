@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4AnalyticalPolSolver.cc,v 1.3 2005-05-18 10:28:44 grichine Exp $
+// $Id: testG4AnalyticalPolSolver.cc,v 1.4 2005-05-19 07:37:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Test program for G4AnalyticalPolSolver class. 
@@ -159,7 +159,7 @@ int main()
     }
   }
 
-G4cout<<G4endl<<G4endl;
+  G4cout << G4endl << G4endl;
 
   // Random test of quadratic, cubic, and biquadratic equations
 
@@ -200,7 +200,8 @@ G4cout<<G4endl<<G4endl;
           G4cout<<"b    = "<<b<<G4endl;
           G4cout<<"c    = "<<c<<G4endl;
           G4cout<<"d    = "<<d<<G4endl;
-          G4cout<<"root = "<< r[1][k] << " " << r[2][k] <<" i" << G4endl<< G4endl;
+          G4cout<<"root = "<< r[1][k] << " " << r[2][k] <<" i"
+                << G4endl << G4endl;
         }
       }
     }

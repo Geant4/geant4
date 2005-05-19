@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AnalyticalPolSolver.hh,v 1.3 2005-05-18 10:28:44 grichine Exp $
+// $Id: G4AnalyticalPolSolver.hh,v 1.4 2005-05-19 07:37:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class description:
@@ -51,7 +51,7 @@
 
 // --------------------------- HISTORY --------------------------------------
 //
-// 13.05.05 V.Grichine ( Vladimir.Grichine@cern.ch ):
+// 13.05.05 V.Grichine ( Vladimir.Grichine@cern.ch )
 //          First implementation in C++
 
 #ifndef G4AN_POL_SOLVER_HH
