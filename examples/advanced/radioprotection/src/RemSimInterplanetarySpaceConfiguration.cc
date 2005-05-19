@@ -44,8 +44,6 @@ RemSimInterplanetarySpaceConfiguration::RemSimInterplanetarySpaceConfiguration()
   G4int n_particle = 1;
   particleGun = new G4ParticleGun(n_particle);
 
-  run = new RemSimRunAction();
-
   moon = false;
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
@@ -55,23 +53,20 @@ RemSimInterplanetarySpaceConfiguration::RemSimInterplanetarySpaceConfiguration()
   G4ThreeVector v(0.0,0.0,1.0);
   particleGun -> SetParticleEnergy(1.*MeV);
   particleGun -> SetParticleMomentumDirection(v);
+ 
+  energies = new G4DataVector;
+  data = new G4DataVector;
 }
 
 RemSimInterplanetarySpaceConfiguration::~RemSimInterplanetarySpaceConfiguration()
 {
-  delete run;
+  delete data;
+  delete energies;
   delete particleGun;
 }
 
 void RemSimInterplanetarySpaceConfiguration::GeneratePrimaries(G4Event* anEvent){
-  // Read the ASCII files containing  the fluxes of particles in respect
-  // to the energy in MeV
-  G4bool value = run -> GetFile();
-  if (value == true)
-    {
-  G4DataVector* energies = run -> GetPrimaryParticleEnergy();
-  G4DataVector* data = run -> GetPrimaryParticleEnergyDistribution();	 
-  G4double sum = run -> GetPrimaryParticleEnergyDistributionSum();
+  G4double sum = GetPrimaryParticleEnergyDistributionSum();
   G4double partSum = 0;
   G4int j = 0;
   G4double random = sum*G4UniformRand();
@@ -95,16 +90,9 @@ void RemSimInterplanetarySpaceConfiguration::GeneratePrimaries(G4Event* anEvent)
      particleGun -> SetParticlePosition(G4ThreeVector(0., 0., -25.*m));  
      G4ThreeVector v(0.0,0.0,1.0); 
      particleGun -> SetParticleMomentumDirection(v);
-
    }
- 
+  
  particleGun -> GeneratePrimaryVertex(anEvent);
-    }
-  else 
-    {
-      G4String excep = "Load data file";
-      G4Exception(excep);
-    }
 }
 
 void RemSimInterplanetarySpaceConfiguration:: MoonConfiguration() 
@@ -144,10 +132,75 @@ void RemSimInterplanetarySpaceConfiguration::SetMoon(G4bool value)
 {
   moon = value;
 }
-void RemSimInterplanetarySpaceConfiguration::SetParticle(G4String particle)
-{
-  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4String particleName = particle;
-  particleGun -> SetParticleDefinition(particleTable->FindParticle(particleName));
+
+void RemSimInterplanetarySpaceConfiguration::Read(G4String name)
+{    
+  ReadData(MeV,name);
+  G4cout << name << "  is the input file!" << G4endl;
 }
 
+void RemSimInterplanetarySpaceConfiguration::ReadData(G4double unitE, G4String fileName)
+{
+  char nameChar[100] = {""};
+  std::ostrstream ost(nameChar, 100, std::ios::out);
+ 
+  ost << fileName;
+  
+  G4String name(nameChar);
+  
+  std::ifstream file(fileName);
+  std::filebuf* lsdp = file.rdbuf();
+  
+  if (! (lsdp->is_open()) )
+    {
+	  G4String excep = "RemSimInterplanteraySpaceConfiguration - data file: not found";
+	  G4Exception(excep);
+    }
+  G4double a = 0;
+  G4int k = 1;
+  
+  do
+    {
+      file >> a;
+      G4int nColumns = 2;
+      // The file is organized into two columns:
+      // 1st column is the energy
+      // 2nd column is the corresponding value
+      // The file terminates with the pattern: -1   -1
+      //                                       -2   -2
+      if (a == -1 || a == -2)
+	{
+	  
+	}
+      else
+	{
+	  if (k%nColumns != 0)
+	    {	
+	      G4double e = a * unitE;
+	      energies->push_back(e);  
+	      //              G4cout<<e<<"energy";
+	      
+	      k++;
+	      
+	    }
+	  else if (k%nColumns == 0)
+	    {
+	      G4double value = a;
+	      data->push_back(value);
+	      //G4cout<<" "<<a<<"flux"<<G4endl;
+	      k = 1;
+	    }
+	}
+      
+    } while (a != -2); // end of file
+}
+G4double RemSimInterplanetarySpaceConfiguration::GetPrimaryParticleEnergyDistributionSum()
+{
+  G4double sum = 0;
+  size_t size = data -> size();
+  for (size_t i = 0; i < size; i++)
+     {
+       sum+=(*data)[i];
+     }
+   return sum;
+ }

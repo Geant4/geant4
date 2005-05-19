@@ -18,23 +18,27 @@
 ## Visualisation
 #/vis/scene/create
 # --- Choose one the following visualisation tools
-/vis/open OGLIX
+#/vis/open OGLIX
 #/vis/open DAWNFILE
 #/vis/open VRML2FILE
 # --------
-/vis/drawVolume
+#/vis/drawVolume
 #/vis/viewer/zoom 2
-/tracking/storeTrajectory 1
-/vis/scene/endOfEventAction accumulate
+#/tracking/storeTrajectory 1
+#/vis/scene/endOfEventAction accumulate
 ######################
 /run/initialize
-/vis/viewer/set/viewpointThetaPhi 90 180 deg
-/gun/particleType proton
-/gun/generator Basic
-/gun/energy 100. MeV 
+#/vis/viewer/set/viewpointThetaPhi 90 180 deg
+#/gun/particle IonO16
+#/gun/generator Basic
+/gun/energy 400. MeV
+/gun/generator Interplanetary
+/gun/particle IonO16
+/gun/data gcrZ=8.txt
 /configuration/choose vehicle
 /configuration/AddShielding On
-
+/tracking/verbose 1
+/run/beamOn 10
 
 
 

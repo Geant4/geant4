@@ -27,7 +27,7 @@
 //    *                                *
 //    **********************************
 //
-// $Id: RemSimBasicGenerator.hh,v 1.8 2004-11-22 16:51:38 guatelli Exp $
+// $Id: RemSimBasicGenerator.hh,v 1.9 2005-05-19 13:30:59 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
@@ -52,14 +52,14 @@ public:
   void GeneratePrimaries(G4Event* anEvent); 
   G4double  GetInitialEnergy();
   void SetMoon(G4bool){;};
-  void SetParticle(G4String);
+  void Read(G4String);
 
 private:
   G4ParticleGun* particleGun;
   G4String randomDirection;
   G4String spectrum;
   G4double energy;
-  RemSimRunAction* run;
+  // RemSimRunAction* run;
 };
 #endif
 
