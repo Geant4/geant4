@@ -30,11 +30,8 @@
 /run/initialize
 #/vis/viewer/set/viewpointThetaPhi 90 180 deg
 #/gun/particle IonO16
-#/gun/generator Basic
+/gun/generator Basic
 /gun/energy 400. MeV
-/gun/generator Interplanetary
-/gun/particle IonO16
-/gun/data gcrZ=8.txt
 /configuration/choose vehicle
 /configuration/AddShielding On
 /tracking/verbose 1
