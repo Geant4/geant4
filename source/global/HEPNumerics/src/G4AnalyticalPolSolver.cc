@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AnalyticalPolSolver.cc,v 1.4 2005-05-19 07:37:10 gcosmo Exp $
+// $Id: G4AnalyticalPolSolver.cc,v 1.5 2005-05-19 07:40:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -270,7 +270,7 @@ G4int G4AnalyticalPolSolver::BiquadRoots( G4double p[5], G4double r[3][5] )
 G4int G4AnalyticalPolSolver::QuarticRoots( G4double p[5], G4double r[3][5])
 {
   G4double a0, a1, a2, a3, y1;
-  G4double R2, D2, E2, R, D, E;
+  G4double R2, D2, E2, D, E, R = 0.;
   G4double a, b, c, d, ds;
 
   G4double reRoot[4];
