@@ -16,23 +16,23 @@
 /event/verbose 0
 ################
 ## Visualisation
-#/vis/scene/create
+/vis/scene/create
 # --- Choose one the following visualisation tools
-#/vis/open OGLIX
+/vis/open OGLIX
 #/vis/open DAWNFILE
 #/vis/open VRML2FILE
 # --------
-#/vis/drawVolume
-#/vis/viewer/zoom 2
-#/tracking/storeTrajectory 1
-#/vis/scene/endOfEventAction accumulate
+/vis/drawVolume
+/vis/viewer/zoom 2
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate
 ######################
 /run/initialize
-#/vis/viewer/set/viewpointThetaPhi 90 180 deg
+/vis/viewer/set/viewpointThetaPhi 90 180 deg
 #/gun/particle IonO16
 /gun/generator Basic
 /gun/energy 400. MeV
-/configuration/choose vehicle
+/configuration/choose moon
 /configuration/AddShielding On
 /tracking/verbose 1
 /run/beamOn 10

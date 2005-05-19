@@ -26,7 +26,7 @@
 //    *                                    *          
 //    **************************************
 //
-// $Id: RemSimDetectorConstruction.hh,v 1.10 2004-05-22 12:57:04 guatelli Exp $
+// $Id: RemSimDetectorConstruction.hh,v 1.11 2005-05-19 14:28:09 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
@@ -67,10 +67,9 @@ private:
   G4LogicalVolume* experimentalHall_log;
   G4VPhysicalVolume* experimentalHall_phys;
   G4VPhysicalVolume* phantomPhys;
-  G4VPhysicalVolume* detectorPhys;
+  G4VPhysicalVolume* detectorPhys; 
+  RemSimVGeometryComponent* geometry;
   RemSimMaterial*  pMaterial;
-  RemSimVGeometryComponent* pVehicle;
-  RemSimVGeometryComponent* pMoon;
   RemSimDetectorMessenger* messenger; 
   G4String decoratorValue;
   G4String astronautValue;

@@ -27,7 +27,7 @@
 //    *                                    *          
 //    **************************************
 //
-// $Id: RemSimDetectorConstruction.cc,v 1.13 2004-05-27 08:36:51 guatelli Exp $
+// $Id: RemSimDetectorConstruction.cc,v 1.14 2005-05-19 14:28:09 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
@@ -61,13 +61,10 @@
 
 RemSimDetectorConstruction::RemSimDetectorConstruction()
   :  experimentalHall_log(0), experimentalHall_phys(0),
-     phantomPhys(0), detectorPhys(0)
+     phantomPhys(0), detectorPhys(0), geometry(0)
 {
  pMaterial = new RemSimMaterial();
-
- pVehicle = new RemSimVehicle1();
- pMoon =  new RemSimMoonHabitat();
-
+ 
  messenger = new RemSimDetectorMessenger(this);
  decoratorValue ="Nothing";
  astronautValue ="On";
@@ -90,8 +87,7 @@ RemSimDetectorConstruction::~RemSimDetectorConstruction()
   delete decoratorSPE;
   delete decorator;
   delete messenger;
-  delete pMoon;
-  delete pVehicle;
+  delete geometry;
   delete pMaterial;
 }
 
@@ -116,20 +112,23 @@ G4VPhysicalVolume* RemSimDetectorConstruction::Construct()
                                       false,0);
   return experimentalHall_phys;
 }
+
 void RemSimDetectorConstruction::ConstructVolume()
 { 
   if (moon == true)
     { 
-      pMoon -> ConstructComponent(experimentalHall_phys);
-      decorator1 = new RemSimAstronautDecorator(pMoon);
-      G4VPhysicalVolume* shelter = pMoon -> GetShelter();
+      geometry =  new RemSimMoonHabitat();
+      geometry -> ConstructComponent(experimentalHall_phys);
+      decorator1 = new RemSimAstronautDecorator(geometry);
+      G4VPhysicalVolume* shelter = geometry -> GetShelter();
       decorator1 -> ChangeMother(shelter);
       decorator1 -> ConstructComponent(experimentalHall_phys);
     }
   else 
     {
-      pVehicle -> ConstructComponent(experimentalHall_phys); 
-      decorator1 = new RemSimAstronautDecorator(pVehicle); 
+      geometry = new RemSimVehicle1();
+      geometry -> ConstructComponent(experimentalHall_phys); 
+      decorator1 = new RemSimAstronautDecorator(geometry); 
       decorator1 -> ConstructComponent(experimentalHall_phys);
     }
 }
@@ -144,7 +143,7 @@ void RemSimDetectorConstruction::AddShielding(G4String value)
 	{
 	  if (decorator == 0)
 	    { 
-	      decorator = new RemSimShieldingDecorator(pVehicle);
+	      decorator = new RemSimShieldingDecorator(geometry);
 	      decorator -> ConstructComponent(experimentalHall_phys); 
 	      G4RunManager::GetRunManager() -> DefineWorldVolume(experimentalHall_phys);
 	    }
@@ -174,7 +173,7 @@ void RemSimDetectorConstruction::AddShelterSPE(G4String value)
 	{
 	if (decoratorSPE == 0)
 	  { 
-	    decoratorSPE = new RemSimShelterSPEDecorator(pVehicle);
+	    decoratorSPE = new RemSimShelterSPEDecorator(geometry);
 	    decoratorSPE -> ConstructComponent(experimentalHall_phys); 
 	    G4RunManager::GetRunManager() -> DefineWorldVolume(experimentalHall_phys);
 	  }
@@ -204,7 +203,7 @@ void RemSimDetectorConstruction::AddHabitatRoof(G4String value)
 	{
 	if (decoratorRoof == 0)
 	  { 
-	    decoratorRoof = new RemSimRoofDecorator(pMoon);
+	    decoratorRoof = new RemSimRoofDecorator(geometry);
 	    decoratorRoof -> ConstructComponent(experimentalHall_phys); 
 	    G4RunManager::GetRunManager() -> DefineWorldVolume(experimentalHall_phys);
 	  }
