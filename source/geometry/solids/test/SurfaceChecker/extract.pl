@@ -119,12 +119,14 @@ foreach $file ( @filelist ) {
     close FH ;
     close TXT ;
 
-    print "convert ascii $txtfile to ntuple $hbkfile...\n" ;
+    print "start converting ascii $txtfile to ntuple $hbkfile...\n" ;
 
-    system("export arg1=$txtfile; export arg2=$hbkfile ; paw -w 0 -b ntuple > /dev/null") && die "cannot create the ntuple in $hbkfile:$!\n" ;
+    system("export arg1=$txtfile; export arg2=$hbkfile; export arg3=$mcount ; paw -w 0 -b ntuple") && die "cannot create the ntuple in $hbkfile:$!\n" ;
 
     # delete the temporary ascii file. Comment out this line if needed.
     system("rm $txtfile") && die "cannot remove $txtfile.$!\n" ;
+
+    print "\n\n" ;
 
 }
 

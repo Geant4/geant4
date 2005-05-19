@@ -1,10 +1,10 @@
 MACRO NTUPLE 
 
-
 * MERGES THE ASCII DATA (hbk/file.txt) INTO A NTUPLE (hbk/file.hbk)
 
 * FILE : ASCII INPUT FILE  ( taken from the shell environment ) 
 * HBK  : FILE CONTAINING THE RESULTING NTUPLE
+* NEVENT : NUMBER OF EVENTS TO READ, DEFAULT IN PAW IS 1E6
 
 * NTUPLE VARIABLES:
 * phi,u : surface parameters
@@ -16,15 +16,19 @@ MACRO NTUPLE
 * delta :  distance between reconstructed and true intersection
 * theta: angle between momentum and surface normal at intersection
 
-FILE = $ENV(arg1)
-HBK  = $ENV(arg2)
-
+FILE   = $ENV(arg1)
+HBK    = $ENV(arg2)
+NEVENT = $ENV(arg3)
+ 
 *file = hbk/surf.txt
 *hbk  = hbk/surf.hbk
+*nevent = 100000
+
+MESS PAW: Process [NEVENT] events.
 
 HI/FILE 1 [HBK] 1024 N
 NT/CRE 1 'merge' 17 //lun1 ! phi u x y z px py pz dist vx vy vz rx ry rz delta theta
-NT/READ 1 [FILE]
+NT/READ 1 [FILE] ! ! [NEVENT]
 
 HROUT 0
 CLOSE 1
