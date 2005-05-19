@@ -124,7 +124,7 @@ foreach $file ( @filelist ) {
     system("export arg1=$txtfile; export arg2=$hbkfile ; paw -w 0 -b ntuple > /dev/null") && die "cannot create the ntuple in $hbkfile:$!\n" ;
 
     # delete the temporary ascii file. Comment out this line if needed.
-#    system("rm $txtfile") && die "cannot remove $txtfile.$!\n" ;
+    system("rm $txtfile") && die "cannot remove $txtfile.$!\n" ;
 
 }
 
