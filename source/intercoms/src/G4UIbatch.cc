@@ -21,13 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIbatch.cc,v 1.12 2005-05-19 16:11:53 asaim Exp $
+// $Id: G4UIbatch.cc,v 1.13 2005-05-19 16:40:45 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4UIbatch.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
+
+G4bool G4UIbatch::commandFailed = false;
 
 G4UIbatch::G4UIbatch(const char* fileName,G4UIsession* prevSession) 
  : previousSession(prevSession), macroFileName(fileName),
