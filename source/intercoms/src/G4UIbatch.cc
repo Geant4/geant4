@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIbatch.cc,v 1.11 2002-06-07 17:37:44 asaim Exp $
+// $Id: G4UIbatch.cc,v 1.12 2005-05-19 16:11:53 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,6 +41,11 @@ G4UIbatch::G4UIbatch(const char* fileName,G4UIsession* prevSession)
     G4cerr << "macro file <" << fileName << "> could not open."
          << G4endl;
     openFailed = true;
+    commandFailed = true;
+  }
+  else
+  {
+    commandFailed = false;
   }
 }
 
@@ -62,6 +67,7 @@ G4UIsession * G4UIbatch::SessionStart()
       if( macroFile.bad() )
       {
         G4cout << "Cannot read " << macroFileName << "." << G4endl;
+        commandFailed = true;
         break;
       }
       if( macroFile.eof() ) break;
@@ -97,7 +103,9 @@ G4UIsession * G4UIbatch::SessionStart()
                    << commandLine << "> *****" << G4endl;
           }
           G4cerr << "***** Command ignored *****" << G4endl;
+          commandFailed = true;
         }
+        if(commandFailed) break;
       }
     }
   }
