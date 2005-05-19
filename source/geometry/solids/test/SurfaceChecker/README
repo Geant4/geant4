@@ -20,7 +20,7 @@ The following two steps have to be executed in order:
    - You have to redirect the output to a file in the directory
      "data", with the filename extension ".data". 
 
-2) extractor.pl
+2) extract.pl
    
    This perl script parses the output file (located in the "data" 
    directory) and converts the information into a ntuple. The file will
@@ -33,7 +33,7 @@ The following two steps have to be executed in order:
 	 px,py,pz:  vertex position in cartesian coordinates
 	 dist:      (true) distance between vertex and intersection
 	 vx,vy,vz:  momentum of particle at vertex
-	 xr,yr,zr:  reconstructed intersection 
+	 rx,ry,rz:  reconstructed intersection 
 	 delta :    distance between reconstructed and true intersection
 	 theta:     angle between momentum and surface normal at intersection
    

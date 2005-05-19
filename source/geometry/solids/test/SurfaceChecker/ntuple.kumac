@@ -1,7 +1,7 @@
 MACRO NTUPLE 
 
 
-* MERGES THE ASCII DATA (hbk/file.hbk) INTO A NTUPLE (hbk/file.hbk)
+* MERGES THE ASCII DATA (hbk/file.txt) INTO A NTUPLE (hbk/file.hbk)
 
 * FILE : ASCII INPUT FILE  ( taken from the shell environment ) 
 * HBK  : FILE CONTAINING THE RESULTING NTUPLE
@@ -12,17 +12,20 @@ MACRO NTUPLE
 * px,py,pz: vertex position in cartesian coordinates
 * dist:     distance between vertex and intersection
 * vx,vy,vz: momentum of particle at vertex
-* xr,yr,zr: reconstructed intersection 
+* rx,ry,rz: reconstructed intersection 
 * delta :  distance between reconstructed and true intersection
 * theta: angle between momentum and surface normal at intersection
 
 FILE = $ENV(arg1)
 HBK  = $ENV(arg2)
 
-NT/CRE 1 'merge' 17 ! ! phi u x y z px py pz dist vx vy vz rx yr zr delta theta
-NT/READ 1 [FILE]
+*file = hbk/surf.txt
+*hbk  = hbk/surf.hbk
 
 HI/FILE 1 [HBK] 1024 N
-HROUT 0
+NT/CRE 1 'merge' 17 //lun1 ! phi u x y z px py pz dist vx vy vz rx ry rz delta theta
+NT/READ 1 [FILE]
 
+HROUT 0
+CLOSE 1
 
