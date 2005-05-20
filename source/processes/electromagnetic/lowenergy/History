@@ -1,4 +1,4 @@
-$Id: History,v 1.221 2005-05-20 07:29:11 pia Exp $
+$Id: History,v 1.222 2005-05-20 07:40:16 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20.05.2005   MGP, tag emlowen-V07-00-04
+             Bug fix in G4LowEnergyPolarizedCompton, provided by R. Capra
 
 20.05.2005   MGP, tag emlowen-V07-00-03
              Bug fix in AtomicDeexcitation concerning the Auger effect,
