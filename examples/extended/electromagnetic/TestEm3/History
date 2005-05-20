@@ -1,4 +1,4 @@
-$Id: History,v 1.76 2005-05-18 15:28:37 maire Exp $
+$Id: History,v 1.77 2005-05-20 12:06:38 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
+     
+20-05-05 mma (testem3-V07-00-07)
+- forward and backward energy flow in geant3
      
 17-05-05 mma (testem3-V07-00-06)
 - forward and backward energy flow: SteppingAction + RunAction

@@ -35,13 +35,20 @@
       ENDIF
 *
 * *** Energy flow
-      IF ((NUMED.LE.NbAbsor).and.(INWVOL.EQ.2)) THEN
-        plane = 1. + NbAbsor*(layer-1) + numed
-        Eleav = gekin
-	if (ipart.eq.2) Eleav = gekin + 2*emass
-        ih = 2*MaxAbs + 1
-	if (istak.gt.0) ih = 2*MaxAbs + 2
-	if (histo(ih)) call hfill (ih, plane, 0., Eleav/(aMeV*nevent))
+      IF (NUMED.LE.NbAbsor) THEN
+        Idnow = NbAbsor*(layer-1) + numed
+        Eflow = gekin
+        if (ipart.eq.2) Eflow = gekin + 2*emass
+*       entrance in an absorber	      
+        if (INWVOL.eq.1) THEN
+          if (Idnow.gt.Idold) Eforw(Idnow)   = Eforw(Idnow)   + Eflow
+          if (Idnow.lt.Idold) Eback(Idnow+1) = Eback(Idnow+1) + Eflow
+	  Idold = Idnow	  
+        endif
+*       last plane: forward leakage	
+	if ((INWVOL.eq.2).and.(Idnow.eq.NbAbsor*NbLayer)) THEN
+	  Eforw(Idnow+1) = Eforw(Idnow+1) + Eflow
+	endif
       ENDIF	     
 *
       END

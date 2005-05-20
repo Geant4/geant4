@@ -1,5 +1,4 @@
-FILE  linac.paw
-FILE  linac.paw
+FILE  linac.hbook
 LIST
 C
 C    linac/ecal
@@ -26,6 +25,6 @@ KINE 5 (muplus) 5.0 (GeV) 1000. (x0) 0. (y0) 0. (z0) 1. (ux) 0. (uy) 0. (uz)
 C  
 SWIT 0 (drawCharg)
 C   
-DEBUG  10  5 1000
-TRIG   10000
+DEBUG  10  5 100
+TRIG   1000
 END
