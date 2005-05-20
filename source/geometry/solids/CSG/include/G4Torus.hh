@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.hh,v 1.16 2004-09-08 15:13:51 grichine Exp $
+// $Id: G4Torus.hh,v 1.17 2005-05-20 15:34:22 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -168,6 +168,8 @@ class G4Torus : public G4CSGSolid
     G4double SolveNumeric(const G4ThreeVector& p,
                           const G4ThreeVector& v,
                                 G4bool IsDistanceToIn) const;
+
+    G4double SolveNumericJT(G4double c[]) const;
 
     G4ThreeVectorList*
     CreateRotatedVertices(const G4AffineTransform& pTransform,

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.44 2005-05-09 14:11:24 gcosmo Exp $
+// $Id: G4Torus.cc,v 1.45 2005-05-20 15:34:22 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,6 +59,8 @@
 #include "G4NURBScylinder.hh"
 #include "G4NURBStubesector.hh"
 #include "G4PolynomialSolver.hh"
+
+#include "G4JTPolynomialSolver.hh"
 
 // #define DEBUGTORUS 1
 
@@ -757,6 +759,29 @@ G4int G4Torus::SolveQuadratic( G4double c[], G4double s[] ) const
   return 0;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+//
+// Calculate the nearest nonnegative real root to torus surface
+
+G4double G4Torus::SolveNumericJT( G4double cIn[]) const
+{
+
+  G4int i, num, n = 5;
+  G4double c[5], sr[4], si[4], tmp = kInfinity; 
+
+  G4JTPolynomialSolver  torusEq;
+
+  for ( i = 0; i < n; i++ ) c[i] = cIn[ n - 1 - i ];
+
+  num = torusEq.FindRoots( c, 4, sr, si );
+  
+  for ( i = 0; i < num; i++ ) 
+  {
+    if( si[i] == 0. && sr[i] > 0. &&  sr[i] < tmp  ) tmp = sr[i];
+  }  
+  return tmp;
+}
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Calculate extent under transform and specified limit
@@ -1286,6 +1311,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
     // Numerical root research
     //
     s[0] = SolveNumeric(p, v, true);
+    // s[0] = SolveNumericJT(c);
     num = 1; // There is only one root: the correct one 
   
 #if DEBUGTORUS
@@ -1378,6 +1404,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
 
       // Numerical root research
       // s[0] = s[0]; // We already take care of Rmin in SolveNumeric !
+      // s[0] = SolveNumericJT(c);
       num = 1;
 
       if(num)
@@ -1647,6 +1674,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
 
     // Numerical root research
     s[0] = SolveNumeric( p, v, false);
+    // s[0] = SolveNumericJT(c);
     num = 1; // There is only one root.
 
 #if DEBUGTORUS
@@ -1702,6 +1730,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
         //
         // num = SolveBiQuadratic(c,s) ;
         // s[0] = s[0]; // We already take care of Rmin in SolveNumeric 
+	// s[0] = SolveNumericJT(c);
         num = 1;
    
         if(num)
