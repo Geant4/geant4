@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.2 2004-06-30 16:49:31 vnivanch Exp $
+// $Id: PhysicsList.hh,v 1.3 2005-05-20 08:17:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,9 +78,6 @@ private:
   G4int    verbose;
   G4bool   emBuilderIsRegisted;
   G4bool   decayBuilderIsRegisted;
-  G4bool   bicBuilderIsRegisted;
-  G4bool   ibicBuilderIsRegisted;
-  G4bool   elsBuilderIsRegisted;
 
   PhysicsListMessenger* pMessenger;
 
