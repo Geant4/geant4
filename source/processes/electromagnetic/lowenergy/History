@@ -1,4 +1,4 @@
-$Id: History,v 1.223 2005-05-20 08:05:25 pia Exp $
+$Id: History,v 1.224 2005-05-20 09:18:18 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20.05.2005   MGP, tag emlowen-V07-00-06
+             New low energy polarised Rayleigh scattering process
+             (G4LowEnergyPolarizedRayleigh) developed by Riccardo Capra
+             To be paired to test14-V07-00-00 for integration testing
 
 20.05.2005   MGP, tag emlowen-V07-00-05
              Fix in G4hICRU49Nuclear.cc G4hZiegler1985Nuclear.cc, 
