@@ -21,51 +21,44 @@
 // ********************************************************************
 //
 //
-// $Id: StepMaxBuilder.hh,v 1.1 2004-05-26 11:38:27 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// Class Description:
+// The messenger for physics list class.
+// Class Description - end
+// 
 
-#ifndef StepMaxBuilder_h
-#define StepMaxBuilder_h 1
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4VPhysicsConstructor.hh"
+#ifndef Test17PhysicsListMessenger_h
+#define Test17PhysicsListMessenger_h 1
+
 #include "globals.hh"
+#include "G4UImessenger.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+class Test17PhysicsList;
+class G4UIcmdWithADoubleAndUnit;
 
-class StepMaxBuilder : public G4VPhysicsConstructor
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+class Test17PhysicsListMessenger: public G4UImessenger
 {
-public:
-  StepMaxBuilder(const G4String& name = "StepMax");
-  virtual ~StepMaxBuilder();
+  public: // Without description
 
-public:
-  // This method is dummy for physics
-  virtual void ConstructParticle();
+    Test17PhysicsListMessenger(Test17PhysicsList*);
+   ~Test17PhysicsListMessenger();
 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type
-  virtual void ConstructProcess();
+    void SetNewValue(G4UIcommand*, G4String);
 
-private:
+  private:
 
-   // hide assignment operator
-  StepMaxBuilder & operator=(const StepMaxBuilder &right);
-  StepMaxBuilder(const StepMaxBuilder&);
+    Test17PhysicsList*            Test17List;
 
+    G4UIcmdWithADoubleAndUnit* cutGCmd;
+    G4UIcmdWithADoubleAndUnit* cutECmd;
+    G4UIcmdWithADoubleAndUnit* eCmd;
+    G4UIcmdWithADoubleAndUnit* eaCmd;
+    G4UIcmdWithADoubleAndUnit* setMaxStepCmd;     
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
-
-
-
-
-
-
-
 

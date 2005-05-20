@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test17.cc,v 1.9 2004-05-26 11:38:26 vnivanch Exp $
+// $Id: test17.cc,v 1.10 2005-05-20 09:29:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@
 #include "Randomize.hh"
 
 #include "Test17DetectorConstruction.hh"
-#include "PhysicsList.hh"
+#include "Test17PhysicsList.hh"
 #include "Test17PrimaryGeneratorAction.hh"
 #include "Test17RunAction.hh"
 #include "Test17EventAction.hh"
@@ -59,7 +59,7 @@ int main(int argc,char** argv) {
   Test17DetectorConstruction* detector;
   detector = new Test17DetectorConstruction;
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new PhysicsList());
+  runManager->SetUserInitialization(new Test17PhysicsList(detector));
 
   // set user action classes
   runManager->SetUserAction(new Test17PrimaryGeneratorAction(detector));
