@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.40 2005-05-13 16:14:59 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.41 2005-05-20 12:07:37 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -157,8 +157,19 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
   G4double sM  = sqrt(sM2);              // Mass of the 2nd Hadron
   G4double iM2 = theMomentum.m2();
   G4double iM  = sqrt(iM2);              // Mass of the decaying hadron
-  if(theMomentum.e()<theMomentum.rho())G4cerr<<"*G4QH::RDI2:*Bst*,4="<<theMomentum<<",e-p="
-                                             <<theMomentum.e()-theMomentum.rho()<<G4endl;
+  G4double vP  = theMomentum.rho();      // Momentum of the decaying hadron
+  G4double dE  = theMomentum.e();        // Energy of the decaying hadron
+  if(dE<vP)
+  {
+    G4cerr<<"***G4QHad::RelDecIn2: Tachionic 4-mom="<<theMomentum<<", E-p="<<dE-vP<<G4endl;
+    G4double accuracy=.000001*vP;
+    G4double emodif=abs(dE-vP);
+    if(emodif<accuracy)
+				{
+      G4cerr<<"G4QHadron::RelDecIn2: *Boost* E-p shift is corrected to "<<emodif<<G4endl;
+      theMomentum.setE(vP+emodif);
+    }
+  }
   G4ThreeVector ltb = theMomentum.boostVector();// Boost vector for backward Lorentz Trans.
   G4ThreeVector ltf = -ltb;              // Boost vector for forward Lorentz Trans.
   G4LorentzVector cdir = dir;            // A copy to make a transformation to CMS

@@ -24,7 +24,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.106 2005-05-13 16:14:59 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.107 2005-05-20 12:07:37 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -9345,8 +9345,10 @@ void G4QEnvironment::DecayAntiStrange(G4QHadron* qH)
       }
 	     else
       {
+#ifdef pdebug
         G4cerr<<"---Warning---G4QE::DAS:AsItIsE="<<theEnvironment<<",h="<<qQC<<q4M<<",qM="
               <<qM<<" < sum="<<sum<<"=(F)"<<nucM<<"+(kK)"<<n1M<<G4endl;
+#endif
         theQHadrons.push_back(qH);  // @@ Can cause problems with particle conversion in G4
         return;
         //throw G4QException("G4QE::DecayAntiStrange:AntStrangeNuc DecIn2 didn't succeed");
@@ -9697,8 +9699,7 @@ void G4QEnvironment::DecayAlphaBar(G4QHadron* qH)
   G4int totS=qQC.GetStrangeness();              //  Total Strangeness       (L)
   G4int totC=qQC.GetCharge();                   //  Total Charge            (p)
   G4int totBN=qQC.GetBaryonNumber();            // Total Baryon Number      (A)
-  G4int totN=totBN-totS-totC;                   // Total Number of Neutrons (n)
-  if((totN==totBN||totC==totBN||totS==totBN)&&totBN>1)
+  if((!totS&&!totC||totC==totBN||totS==totBN)&&totBN>1)
   {
     DecayMultyBaryon(qH);
     //return;
@@ -10606,7 +10607,7 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
               G4int chNF=curHadr->GetNFragments();
               G4int chCH=curHadr->GetCharge();
               G4int chBN=curHadr->GetBaryonNumber();
-              G4int chS=curHadr->GetStrangeness();
+              //G4int chS=curHadr->GetStrangeness();
               G4LorentzVector ch4M=curHadr->Get4Momentum(); // 4Mom of the Current Hadron
 #ifdef cdebug
 			           G4cout<<"G4QE::CGS:#"<<hd<<",ch="<<chCH<<",b="<<chBN<<",4M="<<ch4M<<G4endl;
@@ -10771,9 +10772,12 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
                         G4QPDGCode tcQPDG(tcQC);         // QPDG for the Total Compound
                         G4double   tcM=tcQPDG.GetMass(); // GS Mass of the TotalCompound
                         G4QHadron* tcH = new G4QHadron(tcQPDG,tt4M);// Hadron=TotalCompound
-                        if(chBN==2 || reTCH==-chCH&&(!chS||chS==chBN))//dec DiBar or MulBar
+                        G4int tcS=tcQC.GetStrangeness();            // Total Strangeness
+                        G4int tcC=tcQC.GetCharge();                 // Total Charge
+                        G4int tcBN=tcQC.GetBaryonNumber();          // Total Baryon Number
+                        if(tcBN==2|| !tcS&&!tcC||tcS==tcBN||tcC==tcBN)//dec DiBar or MulBar
                         {
-                          if(chBN==2) DecayDibaryon(tcH); // Decay Dibaryon
+                          if(tcBN==2) DecayDibaryon(tcH); // Decay Dibaryon
                           else     DecayMultyBaryon(tcH); // Decay Multibaryon
                           G4QHadron* theLast = theQHadrons[theQHadrons.size()-1];
                           curHadr->Set4Momentum(theLast->Get4Momentum());//4-Mom of CurHadr

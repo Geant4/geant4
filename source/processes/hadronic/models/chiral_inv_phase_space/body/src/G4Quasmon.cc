@@ -20,7 +20,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.81 2005-05-13 16:14:59 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.82 2005-05-20 12:07:37 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -464,7 +464,19 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
 #ifdef debug
 	   G4cout<<"G4Q::HQ: totPDG="<<totPDG<<",totM="<<totMass<<",rPDG="<<resNPDG<<G4endl;
 #endif
-	   if(tot4M.e()<tot4M.rho()) G4cerr<<"---Warning---G4Q::HQ:*Boost* tot4M="<<tot4M<<G4endl;
+    G4double totEn=tot4M.e();
+				G4double totMo=tot4M.rho();
+	   if(totEn<totMo)
+    {
+      G4cerr<<"---Warning---G4Q::HQ: *Boost* tot4M="<<tot4M<<", E-p="<<totEn-totMo<<G4endl;
+      G4double accuracy=.000001*totMo;
+      G4double emodif=fabs(totEn-totMo);
+      if(emodif<accuracy)
+						{
+        G4cerr<<"G4Q::HQ: *Boost* E-p shift  is corrected to "<<emodif<<G4endl;
+        tot4M.setE(totMo+emodif);
+      }
+    }
     G4ThreeVector totBoost = tot4M.boostVector(); // BoostVector for TotalSystem (backward)
     G4ThreeVector totRBoost= -totBoost;    // Boost vector for Total System (forward)
     G4int    iniPDG =valQ.GetSPDGCode();
