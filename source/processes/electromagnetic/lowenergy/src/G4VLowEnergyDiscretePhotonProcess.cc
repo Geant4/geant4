@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VLowEnergyDiscretePhotonProcess.cc,v 1.1 2005-05-12 09:22:06 capra Exp $
+// $Id: G4VLowEnergyDiscretePhotonProcess.cc,v 1.2 2005-05-20 15:20:18 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -37,15 +37,7 @@
 //
 //----------------------------------------------------------------
 
-//! \file    G4VLowEnergyDiscretePhotonProcess.cc
-//! \brief   Implementation of G4VLowEnergyDiscretePhotonProcess class
-//! \author  Capra Riccardo
-//! \date    May 2005
-//! \par     History:
-//! <TABLE>
-//!  <TR><TD> 02 May 2005 </TD><TD> R. Capra	</TD><TD> 1<SUP>st</SUP> implementation </TD></TR>
-//! </TABLE>
-//! \sa      G4VLowEnergyDiscretePhotonProcess.hh         
+  
 
 #include "G4VLowEnergyDiscretePhotonProcess.hh"
 
@@ -58,114 +50,119 @@
 #include "G4ThreeVector.hh"
 #include "Randomize.hh" // G4UniformRand
 
-                                                G4VLowEnergyDiscretePhotonProcess :: G4VLowEnergyDiscretePhotonProcess(const G4String &processName, const G4String &aCrossSectionFileName, const G4String &aScatterFileName, G4VDataSetAlgorithm *aScatterInterpolation, G4double aLowEnergyLimit, G4double aHighEnergyLimit)
-:
- G4VDiscreteProcess(processName, fElectromagnetic),
- lowEnergyLimit(aLowEnergyLimit),
- highEnergyLimit(aHighEnergyLimit),
- crossSectionFileName(aCrossSectionFileName),
- meanFreePathTable(0)
+G4VLowEnergyDiscretePhotonProcess :: G4VLowEnergyDiscretePhotonProcess(const G4String& processName, 
+								       const G4String& aCrossSectionFileName, 
+								       const G4String& aScatterFileName, 
+								       G4VDataSetAlgorithm* aScatterInterpolation, 
+								       G4double aLowEnergyLimit, 
+								       G4double aHighEnergyLimit)
+  :
+  G4VDiscreteProcess(processName, fElectromagnetic),
+  lowEnergyLimit(aLowEnergyLimit),
+  highEnergyLimit(aHighEnergyLimit),
+  crossSectionFileName(aCrossSectionFileName),
+  meanFreePathTable(0)
 {
- crossSectionHandler = new G4CrossSectionHandler();
- scatterFunctionData = new G4CompositeEMDataSet(aScatterFileName, aScatterInterpolation, 1., 1.);
+  crossSectionHandler = new G4CrossSectionHandler();
+  scatterFunctionData = new G4CompositeEMDataSet(aScatterFileName, aScatterInterpolation, 1., 1.);
  
- if (verboseLevel > 0)
- {
-  G4cout << GetProcessName() << " is created " << G4endl
-         << "Energy range: "
-         << lowEnergyLimit / keV << " keV - "
-         << highEnergyLimit / GeV << " GeV"
-         << G4endl;
- }
+  if (verboseLevel > 0)
+    {
+      G4cout << GetProcessName() << " is created " << G4endl
+	     << "Energy range: "
+	     << lowEnergyLimit / keV << " keV - "
+	     << highEnergyLimit / GeV << " GeV"
+	     << G4endl;
+    }
 }
 
 
 
-                                                G4VLowEnergyDiscretePhotonProcess :: ~G4VLowEnergyDiscretePhotonProcess(void)
+G4VLowEnergyDiscretePhotonProcess::~G4VLowEnergyDiscretePhotonProcess(void)
 {
- if (meanFreePathTable)
-  delete meanFreePathTable;
+  if (meanFreePathTable)
+    delete meanFreePathTable;
  
- delete crossSectionHandler;
- delete scatterFunctionData;
-}
-
-
-
-
-
-G4bool                                          G4VLowEnergyDiscretePhotonProcess :: IsApplicable(const G4ParticleDefinition &particleDefinition)
-{
- return (&particleDefinition)==G4Gamma::Gamma(); 
-}
-
-
-
-void                                            G4VLowEnergyDiscretePhotonProcess :: BuildPhysicsTable(const G4ParticleDefinition & /*photon*/)
-{
- crossSectionHandler->Clear();
- crossSectionHandler->LoadData(crossSectionFileName);
-
- if (meanFreePathTable)
-  delete meanFreePathTable; 
- meanFreePathTable=crossSectionHandler->BuildMeanFreePathForMaterials();
+  delete crossSectionHandler;
+  delete scatterFunctionData;
 }
 
 
 
 
 
-G4double                                        G4VLowEnergyDiscretePhotonProcess :: GetMeanFreePath(const G4Track &aTrack, G4double /*previousStepSize*/, G4ForceCondition * /*condition*/)
+G4bool G4VLowEnergyDiscretePhotonProcess::IsApplicable(const G4ParticleDefinition& particleDefinition)
 {
- G4double photonEnergy;
- photonEnergy = aTrack.GetDynamicParticle()->GetKineticEnergy();
+  return (&particleDefinition)==G4Gamma::Gamma(); 
+}
 
- if (photonEnergy < lowEnergyLimit)
-  return DBL_MAX;
- 
- if (photonEnergy > highEnergyLimit)
-  photonEnergy=highEnergyLimit;
- 
- size_t materialIndex;
- materialIndex = aTrack.GetMaterialCutsCouple()->GetIndex(); 
 
- return meanFreePathTable->FindValue(photonEnergy, materialIndex);
+
+void G4VLowEnergyDiscretePhotonProcess::BuildPhysicsTable(const G4ParticleDefinition&  /*photon*/)
+{
+  crossSectionHandler->Clear();
+  crossSectionHandler->LoadData(crossSectionFileName);
+
+  if (meanFreePathTable)
+    delete meanFreePathTable; 
+  meanFreePathTable=crossSectionHandler->BuildMeanFreePathForMaterials();
 }
 
 
 
 
 
-G4ThreeVector                                   G4VLowEnergyDiscretePhotonProcess :: GetPhotonPolarization(const G4DynamicParticle & photon)
+G4double G4VLowEnergyDiscretePhotonProcess::GetMeanFreePath(const G4Track& aTrack, G4double /*previousStepSize*/, G4ForceCondition*  /*condition*/)
 {
- G4ThreeVector photonMomentumDirection;
- G4ThreeVector photonPolarization;
+  G4double photonEnergy;
+  photonEnergy = aTrack.GetDynamicParticle()->GetKineticEnergy();
 
- photonPolarization = photon.GetPolarization(); 
- photonMomentumDirection = photon.GetMomentumDirection();
-
- if ((!photonPolarization.isOrthogonal(photonMomentumDirection, 1e-6)) || photonPolarization.mag()==0.)
- {
-  // if |photonPolarization|==0. or |photonPolarization * photonDirection0| > 1e-6 * |photonPolarization ^ photonDirection0|
-  // then polarization is choosen randomly.
-  
-  G4ThreeVector e1(photonMomentumDirection.orthogonal().unit());
-  G4ThreeVector e2(photonMomentumDirection.cross(e1).unit());
-  
-  G4double angle(G4UniformRand() * twopi);
-  
-  e1*=cos(angle);
-  e2*=sin(angle);
-  
-  photonPolarization=e1+e2;
- }
- else if (photonPolarization.howOrthogonal(photonMomentumDirection) != 0.)
- {
-  // if |photonPolarization * photonDirection0| != 0.
-  // then polarization is made orthonormal;
-  
-  photonPolarization=photonPolarization.perpPart(photonMomentumDirection);
- }
+  if (photonEnergy < lowEnergyLimit)
+    return DBL_MAX;
  
- return photonPolarization.unit();
+  if (photonEnergy > highEnergyLimit)
+    photonEnergy=highEnergyLimit;
+ 
+  size_t materialIndex;
+  materialIndex = aTrack.GetMaterialCutsCouple()->GetIndex(); 
+
+  return meanFreePathTable->FindValue(photonEnergy, materialIndex);
+}
+
+
+
+
+
+G4ThreeVector G4VLowEnergyDiscretePhotonProcess::GetPhotonPolarization(const G4DynamicParticle&  photon)
+{
+  G4ThreeVector photonMomentumDirection;
+  G4ThreeVector photonPolarization;
+
+  photonPolarization = photon.GetPolarization(); 
+  photonMomentumDirection = photon.GetMomentumDirection();
+
+  if ((!photonPolarization.isOrthogonal(photonMomentumDirection, 1e-6)) || photonPolarization.mag()==0.)
+    {
+      // if |photonPolarization|==0. or |photonPolarization * photonDirection0| > 1e-6 * |photonPolarization ^ photonDirection0|
+      // then polarization is choosen randomly.
+  
+      G4ThreeVector e1(photonMomentumDirection.orthogonal().unit());
+      G4ThreeVector e2(photonMomentumDirection.cross(e1).unit());
+  
+      G4double angle(G4UniformRand() * twopi);
+  
+      e1*=cos(angle);
+      e2*=sin(angle);
+  
+      photonPolarization=e1+e2;
+    }
+  else if (photonPolarization.howOrthogonal(photonMomentumDirection) != 0.)
+    {
+      // if |photonPolarization * photonDirection0| != 0.
+      // then polarization is made orthonormal;
+  
+      photonPolarization=photonPolarization.perpPart(photonMomentumDirection);
+    }
+ 
+  return photonPolarization.unit();
 }
