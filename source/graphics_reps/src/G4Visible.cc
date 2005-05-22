@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Visible.cc,v 1.7 2005-05-22 16:07:11 allison Exp $
+// $Id: G4Visible.cc,v 1.8 2005-05-22 16:20:37 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,16 +49,19 @@ void G4Visible::SetVisAttributes (const G4VisAttributes& VA) {
   static G4bool firstCall = true;
   if (firstCall) {
     firstCall = false;
-    G4cout << 
-"WARNING: DEPRECATED method G4Visible::SetVisAttributes(const G4VisAttributes&)"
+    G4cout <<
+"\n*******************************************************************************" 
+"\nWARNING: DEPRECATED method G4Visible::SetVisAttributes(const G4VisAttributes&)"
 "\n       has been invoked.  Please use SetVisAttributes(const G4VisAttributes*)"
-"\n       instead, i.e., provide a pointer to a G4VisAttributes object.  Only"
+"\n       instead, i.e., provide a pointer to a G4VisAttributes object.  Only the"
 "\n       pointer is stored, so the G4VisAttributes object to which it refers must"
 "\n       have a life long enough to satisfy all uses of the G4Visible object."
 "\n       E.g., if the G4Visible object is created on the heap (using `new')"
-"\n       then the associated G4VisAttributes object would normally also be"
+"\n       then the associated G4VisAttributes object should normally also be"
 "\n       created on the heap and managed in the same way."
-	   << G4endl;
+"\n       (This message is printed only once.  Please check all occurances of"
+"\n       your use of SetVisAttributes.)"
+"\n*******************************************************************************\n" 	   << G4endl;
   }
 }
 
