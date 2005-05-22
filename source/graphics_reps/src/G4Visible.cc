@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Visible.cc,v 1.8 2005-05-22 16:20:37 allison Exp $
+// $Id: G4Visible.cc,v 1.9 2005-05-22 16:32:37 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,7 +61,8 @@ void G4Visible::SetVisAttributes (const G4VisAttributes& VA) {
 "\n       created on the heap and managed in the same way."
 "\n       (This message is printed only once.  Please check all occurances of"
 "\n       your use of SetVisAttributes.)"
-"\n*******************************************************************************\n" 	   << G4endl;
+"\n*******************************************************************************\n"
+ 	   << G4endl;
   }
 }
 
