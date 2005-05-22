@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.66 2005-05-03 17:43:41 allison Exp $
+cvs log $Id: History,v 1.67 2005-05-22 16:07:11 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22nd May 2005  John Allison  (greps-V07-00-05)
+- DEPRECATED G4Visible::SetVisAttributes (const G4VisAttributes&).
+  Meanwhile created copy of G4VisAttributes object on the heap.
 
 3rd May 2005  John Allison  (greps-V07-00-04)
 - Improved G4AttCheck.
