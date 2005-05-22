@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.hh,v 1.21 2005-03-02 08:25:57 gcosmo Exp $
+// $Id: G4LogicalVolume.hh,v 1.22 2005-05-22 16:41:57 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -263,7 +263,7 @@ class G4LogicalVolume
 
     inline const G4VisAttributes* GetVisAttributes () const;
     inline void  SetVisAttributes (const G4VisAttributes* pVA);
-    inline void  SetVisAttributes (const G4VisAttributes& VA);
+    void  SetVisAttributes (const G4VisAttributes& VA);
       // Gets and sets visualization attributes.
 
     inline void BecomeEnvelopeForFastSimulation(G4FastSimulationManager* );

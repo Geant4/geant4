@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.icc,v 1.20 2005-02-18 01:12:25 asaim Exp $
+// $Id: G4LogicalVolume.icc,v 1.21 2005-05-22 16:41:57 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -473,12 +473,6 @@ inline
 void G4LogicalVolume::SetVisAttributes (const G4VisAttributes* pVA)
 {
   fVisAttributes = pVA;
-}
-
-inline
-void G4LogicalVolume::SetVisAttributes (const G4VisAttributes& VA)
-{
-  fVisAttributes = &VA;
 }
 
 // ********************************************************************
