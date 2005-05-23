@@ -24,7 +24,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.108 2005-05-23 09:39:33 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.109 2005-05-23 14:25:21 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -3722,10 +3722,10 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH, G4bool corFlag)
     //return;
   }
   /// @@@@@@@ *** TEMPORARY TO AVOID HYPERMUCLEI FOR GEANT4 *** @@@@@@@
-  if(thePDG!=91000000 && thePDG>90999999)
+  if(thePDG>91000000) //@@MadeForGeant4@@: If there is a Lambda, substitute it by a neutron
   {
     G4int S=(thePDG-90000000)/1000000;
-    thePDG-=S*999999;
+    thePDG-=S*999999;                  // S Neutrons instead of S Lambdas
     qH->SetQPDG(G4QPDGCode(thePDG));
   }
   /// @@@ *** ^^^ END OF TEMPORARY ^^^ *** @@@
@@ -3950,7 +3950,7 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH, G4bool corFlag)
     G4int   bsCond =qNuc.SplitBaryon();        // (Bary/Deut/Alph)SeparCond for TotResNucl
     G4bool  dbsCond=qNuc.Split2Baryons();      // (Two Baryons)SeparCond for TotResidNucl
 #ifdef debug
-	   G4cout<<"G4QEnv::EvaRes:bs="<<bsCond<<",dbs="<<dbsCond<<G4endl;
+	   G4cout<<"G4QEnv::EvaRes: bs="<<bsCond<<", dbs="<<dbsCond<<", A="<<bA<<G4endl;
 #endif
     if(fabs(totMass-GSMass)<.003&&!bsCond&&!dbsCond) // GS or can't split 1(2)B FillAsItIs
     {
@@ -3961,7 +3961,7 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH, G4bool corFlag)
       return;
     }
     else if((bA==1||!bsCond&&!dbsCond)&&totMass>GSMass+.003)//==>Fuse&DecayTech (no gamDec)
-	//if(2>3)                                  // Close "Fuse&Decay Technology" ***@@@***
+	   //if(2>3)                                  // Close "Fuse&Decay Technology" ***@@@***
 	   {
 #ifdef debug
 	     G4cout<<"G4QE::EvaR:SplitBar, s="<<bsCond<<",M="<<totMass<<" > GSM="<<GSMass<<G4endl;
@@ -4470,15 +4470,14 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH, G4bool corFlag)
       G4LorentzVector b4M;
       G4LorentzVector r4M;
       G4bool evC=true;                  // @@ It makes only one attempt to be possible
-      G4bool dcC=false;                 // @@ Looks like it can be only false
       G4int bPDG=0;
       G4int rPDG=0;
-      G4double bM   = 0.;               // Prototype of Real Mass of the EvaporatedDibaryon
-      G4double rM   = 0.;               // Prototype of Real Mass of the residual nucleus
+      G4double bM = 0.;                 // Prototype of Real Mass of the EvaporatedDibaryon
+      G4double rM = 0.;                 // Prototype of Real Mass of the residual nucleus
       G4int bB=0;                       // Proto of Baryon Number of the evaporated baryon
       G4int rB=0;                       // Proto of Baryon Number of the residual nucleus
-      G4QHadron* bHadron = new G4QHadron; // Proto of the evaporated baryon
-      G4QHadron* rHadron = new G4QHadron; // Proto of the residual nucleus
+      G4QHadron* bHadron = new G4QHadron;// Proto of the evaporated baryon @@where deleted?
+      G4QHadron* rHadron = new G4QHadron;// Proto of the residual nucleus @@where deleted?
       G4int evcn=0;
       //G4int evcm=27;
       G4int evcm=9;                     // Max numder of attempts to evaporate
@@ -4486,7 +4485,6 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH, G4bool corFlag)
       while(evC&&evcn<evcm)
       {
         evC=true;
-        dcC=false;
         evcn++;
         if(!qNuc.EvaporateBaryon(bHadron,rHadron)) // Evaporation did not succeed
 	       {
@@ -4505,71 +4503,63 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH, G4bool corFlag)
           delete quasH;
           return;
 	       }
-        if(!dcC)                                // Evaporation succeeded
-        {
-          evC=false;
-          b4M=bHadron->Get4Momentum();
-          r4M=rHadron->Get4Momentum();
-          bM   = b4M.m();                       // Real mass of the evaporated dibaryon
-          rM   = r4M.m();                       // Real mass of the residual nucleus
-          bB=bHadron->GetBaryonNumber();        // Baryon number of the evaporated baryon
-          rB=rHadron->GetBaryonNumber();        // Baryon number of the residual nucleus
-          bPDG=bHadron->GetPDGCode();
-          rPDG=rHadron->GetPDGCode();
+        evC=false;
+        b4M=bHadron->Get4Momentum();
+        r4M=rHadron->Get4Momentum();
+        bM   = b4M.m();                       // Real mass of the evaporated dibaryon
+        rM   = r4M.m();                       // Real mass of the residual nucleus
+        bB=bHadron->GetBaryonNumber();        // Baryon number of the evaporated baryon
+        rB=rHadron->GetBaryonNumber();        // Baryon number of the residual nucleus
+        bPDG=bHadron->GetPDGCode();
+        rPDG=rHadron->GetPDGCode();
 #ifdef debug
-          G4int bC=bHadron->GetCharge();        // Baryon number of the evaporated baryon
-          //G4int rC=rHadron->GetCharge();       // Baryon number of the residual nucleus
-          G4double bCB=qNuc.CoulombBarrier(bC,bB);
-          //G4double rCB=qNuc.CoulombBarrier(rC,rB);
-          G4cout<<"G4QEnv::EvaRes:Attempt #"<<evcn<<" > "<<evcm<<", rPDG="<<rPDG<<", bPDG="
-                <<bPDG<<", bE="<<b4M.e()-b4M.m()<<" > bCB="<<bCB<<G4endl;
+        G4int bC=bHadron->GetCharge();        // Baryon number of the evaporated baryon
+        //G4int rC=rHadron->GetCharge();       // Baryon number of the residual nucleus
+        G4double bCB=qNuc.CoulombBarrier(bC,bB);
+        //G4double rCB=qNuc.CoulombBarrier(rC,rB);
+        G4cout<<"G4QEnv::EvaRes:Attempt #"<<evcn<<" > "<<evcm<<", rPDG="<<rPDG<<", bPDG="
+              <<bPDG<<", bE="<<b4M.e()-b4M.m()<<" > bCB="<<bCB<<G4endl;
 #endif
-          //if(b4M.e()-b4M.m()<bCB&&evcn<evcm) evC=true;
-		      }
+        //if(b4M.e()-b4M.m()<bCB&&evcn<evcm) evC=true;
 	     }  // End of while
-      if(!dcC)
-      {
 #ifdef debug
-        G4cout<<"G4QEnv::EvaRes:*** EVA IS DONE *** F="<<bPDG<<b4M<<",bB="<<bB<<", ResNuc="
-              <<rPDG<<r4M<<",rB="<<rB<<G4endl;
+      G4cout<<"G4QEnv::EvaRes:*** EVA IS DONE *** F="<<bPDG<<b4M<<",bB="<<bB<<", ResNuc="
+            <<rPDG<<r4M<<",rB="<<rB<<G4endl;
 #endif
-        delete qH;
-        if(bB<2)theQHadrons.push_back(bHadron); // Fill EvaporatedBaryon (del.equivalent)
-        else if(bB==2) DecayDibaryon(bHadron);  // => "Dibaryon" case needs decay
-        else if(bB==4) theQHadrons.push_back(bHadron); // "Alpha radiation" case (del.eq.)
-        else if(bB==5) DecayAlphaBar(bHadron);  // "Alpha+Baryon Decay" case (del.equiv.)
-        else if(bPDG==90004002) DecayAlphaDiN(bHadron); // Decay alph+2p(alph+2n is stable)
-        else if(bPDG==90004004) DecayAlphaAlpha(bHadron);// "Alph+Alph Decay" case(del.eq.)
-        else
-	       {
-          delete bHadron;
-          G4cerr<<"***G4QE::EvaRes:bB="<<bB<<">2 - unexpected evaporated fragment"<<G4endl;
-          throw G4QException("G4QEnvironment::EvaporateResidual: Wrong evaporation act");
-	       }
-        if(rB>2) EvaporateResidual(rHadron);    // Continue evaporation (@@ Self-call)
-        else if(rB==2)                   // => "Dibaryon" case needs decay @@ DecayDibaryon
-	       {
-          G4double rGSM = rHadron->GetQPDG().GetMass();// Ground State mass of the dibaryon
-#ifdef debug
-		        G4cout<<"G4QE::EvaRes:ResidDibM="<<rM<<",GSM="<<rGSM<<",M-GSM="<<rM-rGSM<<G4endl;
-#endif
-
-          if(rM<=rGSM-0.001)
-		        {
-            delete rHadron;
-            G4cerr<<"***G4QEnv::EvaRes: <residual> M="<<rM<<" < GSM="<<rGSM<<G4endl;
-            throw G4QException("G4QEnvironment::EvaporateResidual:Evapor below MassShell");
-		        }
-          else if(fabs(rM-rGSM)<0.001&&rPDG==90001001)theQHadrons.push_back(rHadron);//(DE)
-          else DecayDibaryon(rHadron);         // => "Dibaryon Decay" case (del.equivalent)
-	       }
-        else if(rB==5) DecayAlphaBar(rHadron); // "Alpha+Baryon Decay" case (del.equival.)
-        else if(rPDG==90004002) DecayAlphaDiN(rHadron);//Decay alph+2p (alph+2n is stable)
-        else if(rPDG==90004004) DecayAlphaAlpha(rHadron);// "Alpha+Alpha Decay" case(delEq)
-        else theQHadrons.push_back(rHadron); // Fill ResidNucl=Baryon to OutputHadronVector
-	     } // End of fail in decay check
-      //else delete qH;
+      delete qH;
+      if(bB<2)theQHadrons.push_back(bHadron); // Fill EvaporatedBaryon (del.equivalent)
+      else if(bB==2) DecayDibaryon(bHadron);  // => "Dibaryon" case needs decay
+      else if(bB==4) theQHadrons.push_back(bHadron); // "Alpha radiation" case (del.eq.)
+      else if(bB==5) DecayAlphaBar(bHadron);  // "Alpha+Baryon Decay" case (del.equiv.)
+      else if(bPDG==90004002) DecayAlphaDiN(bHadron); // Decay alph+2p(alph+2n is stable)
+      else if(bPDG==90004004) DecayAlphaAlpha(bHadron);// "Alph+Alph Decay" case(del.eq.)
       else
+	     {
+        delete bHadron;
+        G4cerr<<"***G4QE::EvaRes:bB="<<bB<<">2 - unexpected evaporated fragment"<<G4endl;
+        throw G4QException("G4QEnvironment::EvaporateResidual: Wrong evaporation act");
+	     }
+      if(rB>2) EvaporateResidual(rHadron);    // Continue evaporation (@@ Self-call)
+      else if(rB==2)                   // => "Dibaryon" case needs decay @@ DecayDibaryon
+	     {
+        G4double rGSM = rHadron->GetQPDG().GetMass();// Ground State mass of the dibaryon
+#ifdef debug
+		      G4cout<<"G4QE::EvaRes:ResidDibM="<<rM<<",GSM="<<rGSM<<",M-GSM="<<rM-rGSM<<G4endl;
+#endif
+        if(rM<=rGSM-0.001)
+		      {
+          delete rHadron;
+          G4cerr<<"***G4QEnv::EvaRes: <residual> M="<<rM<<" < GSM="<<rGSM<<G4endl;
+          throw G4QException("G4QEnvironment::EvaporateResidual:Evapor below MassShell");
+		      }
+        else if(fabs(rM-rGSM)<0.001&&rPDG==90001001)theQHadrons.push_back(rHadron);//(DE)
+        else DecayDibaryon(rHadron);         // => "Dibaryon Decay" case (del.equivalent)
+	     }
+      else if(rB==5) DecayAlphaBar(rHadron); // "Alpha+Baryon Decay" case (del.equival.)
+      else if(rPDG==90004002) DecayAlphaDiN(rHadron);//Decay alph+2p (alph+2n is stable)
+      else if(rPDG==90004004) DecayAlphaAlpha(rHadron);// "Alpha+Alpha Decay" case(delEq)
+      else theQHadrons.push_back(rHadron); // Fill ResidNucl=Baryon to OutputHadronVector
+      if(2>3)                              // @@ This can be skipped @@ ! @@
       {
         G4Quasmon* quasH = new G4Quasmon(qH->GetQC(),qH->Get4Momentum());
         theEnvironment=G4QNucleus(90000000,G4LorentzVector(0.,0.,0.,0.));
@@ -4743,6 +4733,7 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH, G4bool corFlag)
 #ifdef sdebug
   G4cout<<"G4QEnv::EvaRes:===>>>>End. "<<G4endl;
 #endif
+  return;                            //!! This a recursive function, so some compilers...!!
 } // End of EvaporateResidual
 
 //The public Hadronisation function with the Exception treatment (del respons. of User !)
