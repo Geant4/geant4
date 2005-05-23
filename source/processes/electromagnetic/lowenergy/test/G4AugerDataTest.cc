@@ -91,8 +91,9 @@ int main()
       if (a == b) {
 	G4cout << "Enter the index of the starting shell of the electron transition" << G4endl;
 	G4cin >>a1;
-	n = a1;
 	if (a1 >=n) G4Exception("max Index number must be less than number of available shells");
+	n = a1 + 1;
+
       }
       for (G4int initIndex = a1; initIndex < n; initIndex++){
 
@@ -109,9 +110,9 @@ int main()
 		 << nAuger <<" shells."<<G4endl;	  
 	  G4cout << "Enter the index of the auger electron originating  shell" << G4endl;	
 	  G4cin >>a2;
-	  n = a2;
-	  
 	  if (a2 >= nAuger) G4Exception("max Index number must be less than number of available shells");
+	  nAuger = a2 + 1;
+	  
 	}	
 
 	for (G4int augerIndex = a2; augerIndex < nAuger; augerIndex++){

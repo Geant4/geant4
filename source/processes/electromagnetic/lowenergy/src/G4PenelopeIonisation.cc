@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisation.cc,v 1.17 2005-03-11 10:16:53 pandola Exp $
+// $Id: G4PenelopeIonisation.cc,v 1.18 2005-05-23 12:52:41 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -356,7 +356,7 @@ G4VParticleChange* G4PenelopeIonisation::PostStepDoIt(const G4Track& track,
   G4double bindingEnergy = 0.0;
   G4int shellId = 0;
   if (iOsc > 0){
-    const G4AtomicShell* shell = transitionManager->Shell(Z,iosc2);
+    const G4AtomicShell* shell = transitionManager->Shell(Z,iosc2-1); // Modified by Alf
     bindingEnergy = shell->BindingEnergy();
     shellId = shell->ShellId();
   }
