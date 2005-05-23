@@ -20,12 +20,6 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: SCDetectorMessenger.hh,v 1.1 2005-05-19 13:07:29 link Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef SCDetectorMessenger_h
 #define SCDetectorMessenger_h 1
@@ -36,29 +30,18 @@
 class SCDetectorConstruction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
-class G4UIcmdWithADoubleAndUnit;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class SCDetectorMessenger: public G4UImessenger
 {
   public:
-    SCDetectorMessenger(SCDetectorConstruction*);
-   ~SCDetectorMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
+    SCDetectorMessenger(SCDetectorConstruction * myDC);
+      void SetNewValue(G4UIcommand * command,G4String newValues);
   private:
-    SCDetectorConstruction* myDetector;
-    
-    G4UIdirectory*             N02Dir;
-    G4UIdirectory*             detDir;
-    G4UIcmdWithAString*        TargMatCmd;
-    G4UIcmdWithAString*        ChamMatCmd;    
-    G4UIcmdWithADoubleAndUnit* FieldCmd;
+    SCDetectorConstruction * myDetector;
+    G4UIdirectory *      mydetDir;
+    G4UIcmdWithAString * selDetCmd;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
+
 

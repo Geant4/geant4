@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SCPrimaryGeneratorAction.hh,v 1.1 2005-05-19 13:07:29 link Exp $
+// $Id: SCPrimaryGeneratorAction.hh,v 1.2 2005-05-23 16:16:33 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,7 +53,7 @@ class SCPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4ParticleGun* particleGun;
     G4ThreeVector GetRandomPosition( );
     G4ThreeVector GetRandomDirection( );
-    G4ThreeVector GetTorusPoint(G4double &u,G4double &v) ;
+    G4ThreeVector GetSurfacePoint(G4double &u,G4double &v) ;
     SCDetectorConstruction* myDetector;
 };
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SCDetectorConstruction.cc,v 1.1 2005-05-19 13:07:29 link Exp $
+// $Id: SCDetectorConstruction.cc,v 1.2 2005-05-23 16:16:34 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -33,11 +33,31 @@
 #include "SCTrackerSD.hh"
 
 #include "G4Material.hh"
+
 #include "G4Box.hh"
+#include "G4Orb.hh"
 #include "G4Tubs.hh"
-#include "G4Torus.hh"
-#include "G4TwistedTrap.hh"
 #include "G4Sphere.hh"
+#include "G4Cons.hh"
+#include "G4Hype.hh"
+#include "G4Para.hh"
+#include "G4Torus.hh"
+#include "G4Trd.hh"
+
+#include "G4Polycone.hh"
+
+#include "G4TwistedTubs.hh"
+#include "G4TwistedBox.hh"
+#include "G4TwistedTrd.hh"
+#include "G4TwistedTrap.hh"
+
+#include "G4BooleanSolid.hh"
+#include "G4DisplacedSolid.hh"
+#include "G4UnionSolid.hh"
+#include "G4IntersectionSolid.hh"
+#include "G4SubtractionSolid.hh"
+#include "G4ReflectedSolid.hh"
+
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVParameterised.hh"
@@ -52,11 +72,14 @@
 
 #include "G4UnitsTable.hh"
 
+#include "G4RunManager.hh"
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 SCDetectorConstruction::SCDetectorConstruction()
 :solidWorld(0),  logicWorld(0),  physiWorld(0),
- solidTracker(0),logicTracker(0),physiTracker(0), 
+ logicTracker(0),physiTracker(0), 
  fpMagField(0), fWorldLength(0.),  fTrackerpDz(0.)
 {
   fpMagField = new SCMagneticField();
@@ -71,13 +94,21 @@ SCDetectorConstruction::~SCDetectorConstruction()
   delete detectorMessenger;             
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-G4VPhysicalVolume* SCDetectorConstruction::Construct()
+////////////////////////////////////////////////////////////////
+
+void SCDetectorConstruction::SwitchDetector()
 {
-//--------- Material definition ---------
+  G4RunManager::GetRunManager()->DefineWorldVolume(physiWorld);
+}
+
+
+G4VPhysicalVolume*
+SCDetectorConstruction::SelectDetector( const G4String& val )
+{
+
 
   G4double a, z;
+
   G4double density;
   G4int nel;
 
@@ -91,11 +122,240 @@ G4VPhysicalVolume* SCDetectorConstruction::Construct()
 
   // Print all the materials defined.
   //
-  G4cout << G4endl << "The materials defined are : " << G4endl << G4endl;
-  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+  //  G4cout << G4endl << "The materials defined are : " << G4endl << G4endl;
+  //G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
-//--------- Sizes of the principal geometrical components (solids)  ---------
-  
+  G4Box* b1 = new G4Box ( "b1", 100*cm, 50*cm, 50*cm );
+  G4Box* b2 = new G4Box ( "b2", 50*cm, 100*cm, 50*cm );
+
+  fval = val ;
+
+  if (val == "Sphere")
+  {
+    // only solid sphere is supportet for now
+      fTrackerR = 11*cm ;
+      aVolume = new G4Sphere ("aSphere",  0, fTrackerR ,0*deg, 360*deg, 0*deg, 180*deg);
+
+  }
+  else if (val == "Orb")
+  {
+
+    fTrackerR = 11*cm ;
+    aVolume = new G4Orb ( "aOrb", fTrackerR );
+
+  }
+  else if (val == "Box") 
+  {         
+
+    fTrackerpDx1 = 10*cm ;
+    fTrackerpDy1 = 10*cm ;
+    fTrackerpDz  = 10*cm ;
+
+    aVolume = new G4Box ( "aBox", fTrackerpDx1, fTrackerpDy1, fTrackerpDz );
+  }
+  else if (val == "Cone")
+  {        
+
+    fTrackerpDz = 80*cm ;
+    fTrackerR1 = 11*cm ;
+    fTrackerR2 = 16*cm ;
+
+    aVolume = new G4Cons ( "aCone", 0 , fTrackerR1, 0, fTrackerR2, fTrackerpDz, 0, 360.*deg  ); 
+
+  }
+  else if (val == "manyCons")
+  {        
+    aVolume = new G4Cons ( "aCone", 2*cm, 6*cm, 8*cm, 14*cm,
+                           10*cm, 10*deg, 300*deg ); 
+  //  10*cm, 10*deg, 300*deg ); 
+			   //  0., pi);
+
+ 
+  }
+  else if (val == "Tube")
+  {
+
+    // only solid Tube is supported.
+    fTrackerpDz = 80*cm ;
+    fTrackerR = 11*cm ;
+
+    aVolume = new G4Tubs ( "aTube",0.,fTrackerR,fTrackerpDz,0.,360*deg) ;
+
+  }
+  else if (val == "Hype")
+  {
+    aVolume = new G4Hype ("aHype", 10*cm, 20*cm, 0*deg, 360*deg, 10*cm );
+  }
+  else if (val == "Torus")
+  {
+
+    fTrackerR = 20*cm ;
+    fTrackerR1 = 5*cm ;
+    fTrackerR2 = 6*cm ;
+
+    aVolume = new G4Torus("aTorus", fTrackerR1, fTrackerR2 ,fTrackerR, 0*deg, 360*deg) ;
+
+  }
+  else if (val == "Para")
+  {
+    aVolume = new G4Para ("aPara", 8*cm, 10*cm, 12*cm, 30*deg, 45*deg, 60*deg);
+  }
+  else if (val == "Trd")
+  {
+    aVolume = new G4Trd ("aTrd", 80*cm, 100*cm, 70*cm, 90*cm, 100*cm);
+  }
+  else if (val == "b1Ub2") 
+  {         
+    aVolume = new G4UnionSolid("b1Ub2",b1,b2);
+    /*
+    G4Box * box1 = new G4Box("Box1",1092.500000,240.103374,92.000000);
+    G4Box * box2 = new G4Box("Box2",540.103374,792.500000,92.000000);
+
+    G4double L1 = 1104;
+
+    aVolume =
+    new G4UnionSolid("ECShapeBoxes",
+                     box1,
+                     box2,
+                     0,
+                     G4ThreeVector(-L1/2.,
+                                   L1/2.,
+                                   0.));
+    */
+  }
+  else if (val == "b1Ib2") 
+  {         
+    aVolume = new G4IntersectionSolid("b1Ib2",b1,b2);
+  }
+  else if (val == "b1Sb2") 
+  {         
+    aVolume = new G4SubtractionSolid("b1Sb2",b1,b2);
+  }
+  else if (val == "b1Ib1") 
+  {         
+    aVolume = new G4IntersectionSolid("b1Ib1",b1,b1);
+  }
+  else if (val == "b1Ub1") 
+  {         
+    aVolume = new G4UnionSolid("b1Ub1",b1,b1);
+  }
+  else if (val == "b1Sb1") 
+  {         
+    aVolume = new G4SubtractionSolid("b1Sb1",b1,b1);
+  }
+  else if ( val == "TwistedTubs" )
+  {
+
+    fTwistAngle = 20*deg ;
+    fTrackerpDz = 80*cm ;
+    fTrackerR1  = 5*cm ;
+    fTrackerR2  = 10*cm ;
+    fPhi        = 50*deg ;
+
+    aVolume = new G4TwistedTubs("aTwistedTubs", fTwistAngle, fTrackerR1 , fTrackerR2, fTrackerpDz, fPhi ) ;
+  }
+
+  else if (val == "TwistedBox")
+  {
+
+
+    fTwistAngle = 20*deg ;
+    fTrackerpDx1 = 11*cm ;
+    fTrackerpDy1 = 8*cm ;
+    fTrackerpDz  = 80*cm ;
+
+    aVolume = new G4TwistedBox("aTwistedBox",fTwistAngle,fTrackerpDx1,fTrackerpDy1,fTrackerpDz) ;
+  }
+  else if (val == "TwistedTrd")
+  {
+
+    fTrackerpDx1 = 5*cm ;
+    fTrackerpDx2 = 10*cm ;
+    fTrackerpDy1 = 8*cm ;
+    fTrackerpDy2 = 15*cm ;
+    fTrackerpDz  = 80*cm ;
+    fTwistAngle = 20*deg ;
+
+    aVolume = new G4TwistedTrd("aTwistedTrd",fTrackerpDx1,fTrackerpDx2,fTrackerpDy1,fTrackerpDy2,fTrackerpDz,fTwistAngle);
+
+  }
+  else if (val == "TwistedTrap")     // regular twisted trap
+  {
+
+    fTwistAngle = 20*deg ;
+    fTrackerpDz = 80*cm ;
+    fTrackerpDx1 = 5*cm ;
+    fTrackerpDx2 = 7*cm ;
+    fTrackerpDy1 = 8*cm ;
+
+    aVolume = new G4TwistedTrap("aTwistedTrap",fTwistAngle,fTrackerpDx1,fTrackerpDx2,fTrackerpDy1,fTrackerpDz);
+  }
+
+  else if ( val == "TwistedTrap2") 
+  {
+
+    // this is a general twisted trap with equal endcaps, but alph,phi,theta not zero
+    // Reason: the surface equation is a special case.
+
+    fTwistAngle = 20*deg ;
+    fTrackerpDz = 80*cm ;
+    fTheta = 10*deg ;
+    fPhi  =  40*deg ;
+    fTrackerpDy1 = 8*cm ;
+    fTrackerpDx1 = 11*cm ;
+    fTrackerpDx2 = 16*cm ;
+    fTrackerpDy2 = 8*cm ;
+    fTrackerpDx3 = 11*cm ;
+    fTrackerpDx4 = 16*cm ;
+    fAlph = 50*deg    ;
+
+    aVolume = new G4TwistedTrap("aTwistedTrap2",
+				fTwistAngle,         // twist angle
+				fTrackerpDz,         // half z length
+				fTheta,              // direction between end planes
+				fPhi,                // defined by polar and azimutal angles.
+				fTrackerpDy1,        // half y length at -pDz
+				fTrackerpDx1,        // half x length at -pDz,-pDy
+				fTrackerpDx2,        // half x length at -pDz,+pDy
+				fTrackerpDy2,        // half y length at +pDz
+				fTrackerpDx3,        // half x length at +pDz,-pDy
+				fTrackerpDx4,        // half x length at +pDz,+pDy
+				fAlph                // tilt angle at +pDz
+				) ;
+  }
+  else if ( val == "TwistedTrap3") 
+  {
+    fTwistAngle = 60*deg ; 
+    fTrackerpDz = 80*cm;
+    fTheta = 10*deg ;
+    fPhi  =  40*deg ;
+    fTrackerpDy1 = 16*cm ;
+    fTrackerpDx1 = 24*cm ;
+    fTrackerpDx2 = 14*cm ;
+    fTrackerpDy2 = 8*cm ;
+    fTrackerpDx3 = 16*cm ;
+    fTrackerpDx4 = 11*cm ;
+    fAlph = 50*deg    ;
+
+    aVolume = new G4TwistedTrap("aTwistedTrap3",
+				fTwistAngle,         // twist angle
+				fTrackerpDz,         // half z length
+				fTheta,              // direction between end planes
+				fPhi,                // defined by polar and azimutal angles.
+				fTrackerpDy1,        // half y length at -pDz
+				fTrackerpDx1,        // half x length at -pDz,-pDy
+				fTrackerpDx2,        // half x length at -pDz,+pDy
+				fTrackerpDy2,        // half y length at +pDz
+				fTrackerpDx3,        // half x length at +pDz,-pDy
+				fTrackerpDx4,        // half x length at +pDz,+pDy
+				fAlph                // tilt angle at +pDz
+				) ;
+  }
+  else
+  {
+    G4Exception("Sc01DetectorConstruction::SelectDetector() - Invalid shape!");
+  }
+
   fWorldLength= 10*m ;
    
 //--------- Definitions of Solids, Logical Volumes, Physical Volumes ---------
@@ -119,87 +379,19 @@ G4VPhysicalVolume* SCDetectorConstruction::Construct()
                                  0);              // no field specific to volume
 				 
 
-  //------------------------------ 
-  // Twisted Tracker
-  //------------------------------
-  
-  G4ThreeVector positionTracker = G4ThreeVector(0,0,0);
-  G4RotationMatrix* rotD3 = new G4RotationMatrix();
 
-  /*
-  fTwistAngle = 60*deg ;    // twisted angle
-  fTrackerpDx1 = 15*cm ;
-  fTrackerpDx2 = 25*cm ;
-  fTrackerpDy1 = 30*cm ;
-  fTrackerpDx3 = 15*cm ;
-  fTrackerpDx4 = 25*cm ;
-  fTrackerpDy2 = 30*cm ;
-  fAlph = 0*deg ;
-  fTheta = 0*deg ;
-  fPhi  = 0*deg ;
-  fTrackerpDz = 80*cm ;  // half z-length
-  */
+  G4LogicalVolume* aVolume_log = new G4LogicalVolume(aVolume, Air, "aVolume_L", 0,0,0);
 
-  /*
-
-  fTwistAngle = 60*deg ;    // twisted angle
-  fTrackerpDx1 = 14*cm ;
-  fTrackerpDx2 = 24*cm ;
-  fTrackerpDy1 = 16*cm ;
-  fTrackerpDx3 = 11*cm ;
-  fTrackerpDx4 = 16*cm ;
-  fTrackerpDy2 = 8*cm ;
-  fAlph = 40*deg ;
-  fTheta = 10*deg ;
-  fPhi  = 40*deg ;
-  fTrackerpDz = 80*cm ;  // half z-length
-
-  */
-
-  fTwistAngle = 20*deg ;
-  fTrackerpDz = 80*cm ;
-  fTheta = 10*deg ;
-  fPhi  =  40*deg ;
-  fTrackerpDy1 = 8*cm ;
-  fTrackerpDx1 = 11*cm ;
-  fTrackerpDx2 = 16*cm ;
-  fTrackerpDy2 = 8*cm ;
-  fTrackerpDx3 = 11*cm ;
-  fTrackerpDx4 = 16*cm ;
-  fAlph = -50*deg    ;
-
-  /*
-  solidTracker = new G4TwistedTrap("tracker",
-				      fTwistAngle,    // twist angle
-				      fTrackerpDz,         // half z length
-				      fTheta,      // direction between end planes
-				      fPhi,        // defined by polar and azimutal angles.
-				      fTrackerpDy1,        // half y length at -pDz
-				      fTrackerpDx1,        // half x length at -pDz,-pDy
-				      fTrackerpDx2,        // half x length at -pDz,+pDy
-				      fTrackerpDy2,        // half y length at +pDz
-				      fTrackerpDx3,         // half x length at +pDz,-pDy
-				      fTrackerpDx4,        // half x length at +pDz,+pDy
-				      -fAlph        // tilt angle . attention: inverse definition.
-				      ) ;
+  G4VPhysicalVolume * aVolume_phys1
+    = new G4PVPlacement(0,
+			G4ThreeVector(0*cm, 0*cm, 0*cm),
+                        aVolume_log, 
+			val, 
+			logicWorld, 
+			false,
+			0);
 
 
-  */
-
-
-  solidTracker = new G4Torus("tracker", 0, fTrackerpDy2 ,fTrackerpDx2, 0*deg, 360*deg) ;
-
-
-  logicTracker = new G4LogicalVolume(solidTracker , Air, "Tracker",0,0,0);  
-  physiTracker = new G4PVPlacement(rotD3,         // no rotation
-				  positionTracker, // at (x,y,z)
-				  logicTracker,    // its logical volume		  
-				  "Tracker",       // its name
-				  logicWorld,      // its mother  volume
-				  false,           // no boolean operations
-				  0);              // no particular field 
-
-  G4cout << "Mass of twisted Trapezoid = " << G4BestUnit(solidTracker->GetCubicVolume(),"Volume") << G4endl ;
 
 //--------- Visualization attributes -------------------------------
 
@@ -211,25 +403,28 @@ G4VPhysicalVolume* SCDetectorConstruction::Construct()
 
   G4VisAttributes* BoxVisAtt= new G4VisAttributes(G4Colour(0.0,.0,1.0,0.6));
   BoxVisAtt->SetVisibility(true);
-  logicTracker->SetVisAttributes(BoxVisAtt);
+  aVolume_log->SetVisAttributes(BoxVisAtt);
   
 //--------- example of User Limits -------------------------------
 
-  // below is an example of how to set tracking constraints in a given
-  // logical volume(see also in N02PhysicsList how to setup the process
-  // G4UserSpecialCuts).  
-  // Sets a max Step length in the tracker region
-  // G4double maxStep = 0.5*ChamberWidth, maxLength = 2*fTrackerLength;
-  // G4double maxTime = 0.1*ns, minEkin = 10*MeV;
-  // logicTracker->SetUserLimits(new G4UserLimits(maxStep,maxLength,maxTime,
-  //                                               minEkin));
   
   return physiWorld;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
- 
+G4VPhysicalVolume* SCDetectorConstruction::Construct()
+{
+
+
+  //-------------------Hall ----------------------------------
+  
+  return SelectDetector ("Sphere");  // default is Sphere
+
+}
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 void SCDetectorConstruction::SetMagField(G4double fieldValue)

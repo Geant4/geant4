@@ -20,46 +20,52 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: SCDetectorMessenger.cc,v 1.1 2005-05-19 13:07:29 link Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-// 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SCDetectorMessenger.hh"
 
 #include "SCDetectorConstruction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "G4ios.hh"
 
-SCDetectorMessenger::SCDetectorMessenger(SCDetectorConstruction* myDet)
-:myDetector(myDet)
-{ 
-  N02Dir = new G4UIdirectory("/N02/");
-  N02Dir->SetGuidance("UI commands specific to this example.");
-  
-  detDir = new G4UIdirectory("/N02/det/");
-  detDir->SetGuidance("detector control.");
-  
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-SCDetectorMessenger::~SCDetectorMessenger()
+SCDetectorMessenger::SCDetectorMessenger(SCDetectorConstruction * myDC)
+  : myDetector(myDC)
 {
-  delete detDir;
-  delete N02Dir;
+  G4String defParam;
+
+  mydetDir = new G4UIdirectory("/mydet/");
+  mydetDir->SetGuidance("Detector setup commands.");
+
+  selDetCmd = new G4UIcmdWithAString("/mydet/SelectDetector",this);
+  selDetCmd->SetGuidance("Select Detector Setup.");
+  selDetCmd->SetGuidance("  Choice : Detector type ");
+  selDetCmd->SetParameterName("choice",true);
+  selDetCmd->SetDefaultValue("Sphere");
+
+ selDetCmd->SetCandidates("Sphere Orb Box Cone manyCons Tube Hype Torus Para Trd b1Ib2 b1Ub2 b1Sb2 b1Ub1 b1Ib1 b1Sb1 TwistedTubs TwistedBox TwistedTrd TwistedTrap TwistedTrap2 TwistedTrap3");
+  selDetCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+    myDetector->SelectDetector(defParam="Sphere");
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void SCDetectorMessenger::SetNewValue(G4UIcommand* ,G4String )
-{ 
+void SCDetectorMessenger::SetNewValue(G4UIcommand * command,
+                                         G4String newValues)
+{
+  if( command == selDetCmd )
+  {
+    myDetector->SelectDetector(newValues);
+    myDetector->SwitchDetector();
+  }
+  return;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+
+
+
+
+
+
+

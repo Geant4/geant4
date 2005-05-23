@@ -7,7 +7,7 @@ MACRO NTUPLE
 * NEVENT : NUMBER OF EVENTS TO READ, DEFAULT IN PAW IS 1E6
 
 * NTUPLE VARIABLES:
-* phi,u : surface parameters
+* u,v : surface parameters (eg. angle phi, z-position. See PrimaryGeneratorAction)
 * x,y,z:  generated (true) surface point in cartesian coordinates
 * px,py,pz: vertex position in cartesian coordinates
 * dist:     distance between vertex and intersection
@@ -27,7 +27,7 @@ NEVENT = $ENV(arg3)
 MESS PAW: Process [NEVENT] events.
 
 HI/FILE 1 [HBK] 1024 N
-NT/CRE 1 'merge' 17 //lun1 ! phi u x y z px py pz dist vx vy vz rx ry rz delta theta
+NT/CRE 1 'merge' 17 //lun1 ! u v x y z px py pz dist vx vy vz rx ry rz delta theta
 NT/READ 1 [FILE] ! ! [NEVENT]
 
 HROUT 0

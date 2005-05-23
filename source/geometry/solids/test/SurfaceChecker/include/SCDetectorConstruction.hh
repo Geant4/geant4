@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SCDetectorConstruction.hh,v 1.1 2005-05-19 13:07:29 link Exp $
+// $Id: SCDetectorConstruction.hh,v 1.2 2005-05-23 16:16:31 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,13 +33,9 @@
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "SCMagneticField.hh"
+#include "G4VSolid.hh"
 
-class G4Box;
-class G4Tubs;
-class G4TwistedTubs;
-class G4TwistedTrap;
-class G4Sphere;
-class G4Torus;
+class G4Box ;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
@@ -62,6 +58,11 @@ class SCDetectorConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume* GetTracker() {return physiTracker;};
      G4double GetWorldFullLength()   {return fWorldLength;}; 
 
+
+     G4double GetTrackerR() { return fTrackerR ; } ;
+     G4double GetTrackerR1() { return fTrackerR1 ; } ;
+     G4double GetTrackerR2() { return fTrackerR2 ; } ;
+
      G4double GetTrackerpDz()  { return fTrackerpDz;};
      G4double GetTrackerpDx1() { return fTrackerpDx1 ; } ;
      G4double GetTrackerpDx2() { return fTrackerpDx2 ; } ;
@@ -75,6 +76,10 @@ class SCDetectorConstruction : public G4VUserDetectorConstruction
      G4double GetAlpha() { return fAlph ; } ;
      G4double GetPhi() { return fPhi ; } ;
      G4double GetTheta() { return fTheta ; } ;
+     G4String GetDetectorType() { return fval ; } ;
+
+     void  SwitchDetector();
+     G4VPhysicalVolume* SelectDetector (const G4String& val);
 
      void setTargetMaterial (G4String);
      void setChamberMaterial(G4String);
@@ -85,9 +90,10 @@ class SCDetectorConstruction : public G4VUserDetectorConstruction
      G4Box*             solidWorld;    // pointer to the solid envelope 
      G4LogicalVolume*   logicWorld;    // pointer to the logical envelope
      G4VPhysicalVolume* physiWorld;    // pointer to the physical envelope
+     G4VSolid* aVolume;
 
   //     G4TwistedTrap*     solidTracker;
-     G4Torus*             solidTracker ;
+
      G4LogicalVolume*   logicTracker;  // pointer to the logical Tracker
      G4VPhysicalVolume* physiTracker;  // pointer to the physical Tracker
      
@@ -97,6 +103,11 @@ class SCDetectorConstruction : public G4VUserDetectorConstruction
        
      G4double fWorldLength;            // Full length of the world volume
 
+
+     G4double fTrackerR ;   // a radius
+     G4double fTrackerR1 ;   // r1
+     G4double fTrackerR2 ;   // r2
+    
      G4double fTrackerpDz  ;          // Full length of Tracker (pDz)
      G4double fTrackerpDx1 ;  // twisted Trapezoid
      G4double fTrackerpDx2 ;
@@ -108,6 +119,9 @@ class SCDetectorConstruction : public G4VUserDetectorConstruction
      G4double fPhi ;
      G4double fTheta ;
      G4double fAlph ;
+    
+     G4String fval ;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
