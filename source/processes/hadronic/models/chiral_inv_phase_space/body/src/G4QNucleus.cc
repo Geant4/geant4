@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.52 2005-05-13 16:14:59 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.53 2005-05-23 09:39:33 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -2654,7 +2654,7 @@ G4int G4QNucleus::RandomizeBinom(G4double p,G4int aN)
 
 //Initialize a Candidate vector for the instance of a Quasmon
 void G4QNucleus::InitCandidateVector(G4QCandidateVector& theQCandidates,
-                                    G4int maxMes, G4int maxBar, G4int maxClust)
+                                    G4int maxMes, G4int maxBar, G4int maxClst)
 //   ==========================================================================
 {
   static const G4int nOfMesons =45; //a#of S=0,1,2,3,4 Mesons, => candidates to hadrons
@@ -2714,7 +2714,7 @@ void G4QNucleus::InitCandidateVector(G4QCandidateVector& theQCandidates,
           <<baryonPDG[i]<< ", QC="<<theQCandidates[i]->GetQC()<<" is initialized"<<G4endl;
 #endif
   }
-  if(maxClust>=0) for (i=0; i<maxClust; i++) 
+  if(maxClst>=0) for (i=0; i<maxClst; i++) 
   {
     G4int clustQCode = i+G4QPDGCode().GetNQHadr(); //Q-codes of cluster in the CHIPS world
     G4QPDGCode clustQPDG;

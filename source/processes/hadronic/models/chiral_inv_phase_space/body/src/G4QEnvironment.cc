@@ -24,7 +24,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.107 2005-05-20 12:07:37 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.108 2005-05-23 09:39:33 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -4779,7 +4779,7 @@ G4QHadronVector* G4QEnvironment::Fragment()
     }
   }
 #endif
-  G4QHadronVector dummy;       // Prototype of the output G4QHadronVector to avoid wornings
+  G4QHadronVector dummy;       // Prototype of the output G4QHadronVector to avoid warnings
   G4QHadronVector* theFragments = &dummy; // Prototype of the output G4QHadronVector
   G4int ExCount =0;                       // Counter of the repetitions
   G4int MaxExCnt=1;                       // A#of of repetitions + 1 (1 for no repetitions)
@@ -5775,7 +5775,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
 #endif
       if(hPDG==89999003||hPDG==90002999)
       {
-        G4cerr<<"---WORNING---G4QE::FSI:**nD-/pD++**(3),PDG="<<hPDG<<" CORRECTION"<<G4endl;
+        G4cerr<<"---WARNING---G4QE::FSI:**nD-/pD++**(3),PDG="<<hPDG<<" CORRECTION"<<G4endl;
         G4LorentzVector h4Mom=curHadr->Get4Momentum();
         G4double      hM=h4Mom.m();
         G4QPDGCode fQPDG=nQPDG;
@@ -5805,7 +5805,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
 		      }
         else if(hM<sum || !G4QHadron(h4Mom).DecayIn3(f4M,s4M,t4M))
 	       {
-          G4cerr<<"---WORNING---G4QE::FSI: Still trying, NDM="<<hM<<"->"<<fM<<"("<<fQPDG
+          G4cerr<<"---WARNING---G4QE::FSI: Still trying, NDM="<<hM<<"->"<<fM<<"("<<fQPDG
                 <<")+"<<sM<<"("<<sPDG<<")+"<<tM<<"("<<tPDG<<")="<<sum<<G4endl;
           if(!theEnvironment.GetA())
           {
@@ -5855,7 +5855,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
       nHadr=theQHadrons.size();
       if(hPDG==89001001||hPDG==89002000||hPDG==89000002)
       {
-        G4cerr<<"---WORNING---G4QE::FSI:***(K+N)*** (2),PDG="<<hPDG<<" CORRECTION"<<G4endl;
+        G4cerr<<"---WARNING---G4QE::FSI:***(K+N)*** (2),PDG="<<hPDG<<" CORRECTION"<<G4endl;
         G4LorentzVector h4Mom=curHadr->Get4Momentum();
         G4double      hM=h4Mom.m();
         G4QPDGCode fQPDG=nQPDG;
@@ -5893,7 +5893,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
 		      }
         else if(hM<sum || !G4QHadron(h4Mom).DecayIn2(f4M,s4M))
 	       {
-          G4cerr<<"---WORNING---G4QE::FSI: Still trying (2),NDM="<<hM<<"->"<<fM<<"("<<fQPDG
+          G4cerr<<"---WARNING---G4QE::FSI: Still trying (2),NDM="<<hM<<"->"<<fM<<"("<<fQPDG
                 <<")+"<<sM<<"("<<sPDG<<")="<<sum<<G4endl;
           if(!theEnvironment.GetA())
           {
@@ -8324,7 +8324,7 @@ void G4QEnvironment::DecayBaryon(G4QHadron* qH)
       else                      // @@ Can be aReason to search for anError in Fragmentation
 						{
 #ifdef pdebug
-        G4cout<<"-Worning-G4QE::DecBary:*AsIs* DEL++ M="<<qM<<"<"<<mPPi<<G4endl;
+        G4cout<<"-Warning-G4QE::DecBary:*AsIs* DEL++ M="<<qM<<"<"<<mPPi<<G4endl;
 #endif
         theQHadrons.push_back(qH);               // Fill AsIs (delete equivalent)
         return;
@@ -8332,7 +8332,7 @@ void G4QEnvironment::DecayBaryon(G4QHadron* qH)
     }
     else if(theLC==-1)          // Delta- like: only n+PiM is possible
 				{
-      if(qM>mNPi)               // Only p+gamma decay is possible
+      if(qM+eps>mNPi)           // Only p+gamma decay is possible
 						{
         fQPDG=nQPDG;            // Baryon is neutron
         fMass=mNeut;
@@ -8341,14 +8341,18 @@ void G4QEnvironment::DecayBaryon(G4QHadron* qH)
       }
       else                      // @@ Can be aReason to search for anError in Fragmentation
 						{
-        G4cout<<"-Worning-G4QE::DecBary:*AsIs* DEL++ M="<<qM<<"<"<<mNPi<<G4endl;
+#ifdef pdebug
+        G4cout<<"-Warning-G4QE::DecBary:*AsIs* DEL++ M="<<qM<<"<"<<mNPi<<G4endl;
+#endif
         theQHadrons.push_back(qH);               // Fill AsIs (delete equivalent)
         return;
       }
     }
     else 
     {
-      G4cout<<"-Worning-G4QE::DecBary:*AsIs* UnknBaryon (S=0) QC="<<qH->GetQC()<<G4endl;
+#ifdef pdebug
+      G4cout<<"-Warning-G4QE::DecBary:*AsIs* UnknBaryon (S=0) QC="<<qH->GetQC()<<G4endl;
+#endif
       theQHadrons.push_back(qH);                 // Fill AsIs (delete equivalent)
       return;
     }
@@ -8710,7 +8714,7 @@ void G4QEnvironment::DecayBaryon(G4QHadron* qH)
       //KsiM: KsiM+Pi0=1456.29, Ksi0+Pi=1454.4, L+K=1609.36, Sig0+K=1686.32, SigM+K0=1695.1
       //KsiZ: Ksi0+Pi0=1449.81, KsiM+Pi=1460.9, L+K0=1613.3, Sig0+K0=1690.3, SigP+K=1683.05
       //Omeg: Omeg+Pi0=1807.43, Ksi0+K=1808.5, KsiM+K0=1818.96
-      G4cout<<"-Worning-G4QE::DecBary:*AsIs* UnknBaryon(S>1)QC="<<qH->GetQC()<<G4endl;
+      G4cout<<"-Warning-G4QE::DecBary:*AsIs* UnknBaryon(S>1)QC="<<qH->GetQC()<<G4endl;
       theQHadrons.push_back(qH);                 // Fill AsIs (delete equivalent)
       return;
     }
@@ -8718,7 +8722,7 @@ void G4QEnvironment::DecayBaryon(G4QHadron* qH)
   else 
   {
 #ifdef pdebug
-    G4cout<<"---Worning---G4QE::DecBary:*AsIso* UnknBaryon(AntiS) QC="<<qH->GetQC()<<G4endl;
+    G4cout<<"---Warning---G4QE::DecBary:*AsIso* UnknBaryon(AntiS) QC="<<qH->GetQC()<<G4endl;
 #endif
     theQHadrons.push_back(qH);                 // Fill AsIs (delete equivalent)
     return;
@@ -9576,7 +9580,7 @@ void G4QEnvironment::DecayMultyBaryon(G4QHadron* qH)
   else
   {
     // @@It must be checked, that they are not under the mass shell
-    // !! OK !! Checked by the worning print that they are mostly in the Ground State !!
+    // !! OK !! Checked by the warning print that they are mostly in the Ground State !!
     G4LorentzVector f4Mom=q4M/totBN; // @@ Too simple solution (split in two parts!)
 #ifdef pdebug
     // Warning for the future development
