@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.22 2005-02-23 11:08:00 allison Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.23 2005-05-24 23:02:42 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -111,7 +111,40 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Box& box) {
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddSolid(box);  // Invoke default action.
+
+  AddHepRepInstance("Prism");
+  hepRepXMLWriter->addPrimitive();
+
+  G4double dx = box.GetXHalfLength();
+  G4double dy = box.GetYHalfLength();
+  G4double dz = box.GetZHalfLength();
+
+  G4Point3D vertex1(G4Point3D( dx, dy,-dz));
+  G4Point3D vertex2(G4Point3D( dx,-dy,-dz));
+  G4Point3D vertex3(G4Point3D(-dx,-dy,-dz));
+  G4Point3D vertex4(G4Point3D(-dx, dy,-dz));
+  G4Point3D vertex5(G4Point3D( dx, dy, dz));
+  G4Point3D vertex6(G4Point3D( dx,-dy, dz));
+  G4Point3D vertex7(G4Point3D(-dx,-dy, dz));
+  G4Point3D vertex8(G4Point3D(-dx, dy, dz));
+
+  vertex1 = (*fpObjectTransformation) * vertex1;
+  vertex2 = (*fpObjectTransformation) * vertex2;
+  vertex3 = (*fpObjectTransformation) * vertex3;
+  vertex4 = (*fpObjectTransformation) * vertex4;
+  vertex5 = (*fpObjectTransformation) * vertex5;
+  vertex6 = (*fpObjectTransformation) * vertex6;
+  vertex7 = (*fpObjectTransformation) * vertex7;
+  vertex8 = (*fpObjectTransformation) * vertex8;
+
+  hepRepXMLWriter->addPoint(vertex1.x(), vertex1.y(), vertex1.z());
+  hepRepXMLWriter->addPoint(vertex2.x(), vertex2.y(), vertex2.z());
+  hepRepXMLWriter->addPoint(vertex3.x(), vertex3.y(), vertex3.z());
+  hepRepXMLWriter->addPoint(vertex4.x(), vertex4.y(), vertex4.z());
+  hepRepXMLWriter->addPoint(vertex5.x(), vertex5.y(), vertex5.z());
+  hepRepXMLWriter->addPoint(vertex6.x(), vertex6.y(), vertex6.z());
+  hepRepXMLWriter->addPoint(vertex7.x(), vertex7.y(), vertex7.z());
+  hepRepXMLWriter->addPoint(vertex8.x(), vertex8.y(), vertex8.z());
 }
 
 
@@ -123,7 +156,35 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Cons& cons) {
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddSolid(cons);  // Invoke default action.
+
+  // HepRep does not have a primitive for a cut cone,
+  // so if this cone is cut, let the base class convert this
+  // solid to polygons.
+  if (cons.GetDeltaPhiAngle() < twopi) {
+    G4VSceneHandler::AddSolid(cons);  // Invoke default action.
+  } else {
+    AddHepRepInstance("Cylinder");
+
+    G4Point3D vertex1(G4Point3D( 0., 0., cons.GetZHalfLength()));
+    G4Point3D vertex2(G4Point3D( 0., 0.,-cons.GetZHalfLength()));
+
+    vertex1 = (*fpObjectTransformation) * vertex1;
+    vertex2 = (*fpObjectTransformation) * vertex2;
+
+    // Outer cylinder.
+    hepRepXMLWriter->addPrimitive();
+    hepRepXMLWriter->addAttValue("Radius1",cons.GetOuterRadiusMinusZ());
+    hepRepXMLWriter->addAttValue("Radius2",cons.GetOuterRadiusPlusZ());
+    hepRepXMLWriter->addPoint(vertex1.x(), vertex1.y(), vertex1.z());
+    hepRepXMLWriter->addPoint(vertex2.x(), vertex2.y(), vertex2.z());
+
+    // Inner cylinder.
+    hepRepXMLWriter->addPrimitive();
+    hepRepXMLWriter->addAttValue("Radius1",cons.GetInnerRadiusMinusZ());
+    hepRepXMLWriter->addAttValue("Radius2",cons.GetInnerRadiusPlusZ());
+    hepRepXMLWriter->addPoint(vertex1.x(), vertex1.y(), vertex1.z());
+    hepRepXMLWriter->addPoint(vertex2.x(), vertex2.y(), vertex2.z());
+  }
 }
 
 
@@ -135,7 +196,37 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Tubs& tubs) {
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddSolid(tubs);  // Invoke default action.
+
+  // HepRep does not have a primitive for a cut cylinder,
+  // so if this cylinder is cut, let the base class convert this
+  // solid to polygons.
+  if (tubs.GetDeltaPhiAngle() < twopi) {
+    G4VSceneHandler::AddSolid(tubs);  // Invoke default action.
+  } else {
+    AddHepRepInstance("Cylinder");
+
+    G4Point3D vertex1(G4Point3D( 0., 0., tubs.GetZHalfLength()));
+    G4Point3D vertex2(G4Point3D( 0., 0.,-tubs.GetZHalfLength()));
+
+    vertex1 = (*fpObjectTransformation) * vertex1;
+    vertex2 = (*fpObjectTransformation) * vertex2;
+
+    // Outer cylinder.
+    hepRepXMLWriter->addPrimitive();
+    hepRepXMLWriter->addAttValue("Radius1", tubs.GetOuterRadius());
+    hepRepXMLWriter->addAttValue("Radius2", tubs.GetOuterRadius());
+    hepRepXMLWriter->addPoint(vertex1.x(), vertex1.y(), vertex1.z());
+    hepRepXMLWriter->addPoint(vertex2.x(), vertex2.y(), vertex2.z());
+
+    // Inner cylinder.
+    if (tubs.GetInnerRadius() != 0.) {
+      hepRepXMLWriter->addPrimitive();
+      hepRepXMLWriter->addAttValue("Radius1", tubs.GetInnerRadius());
+      hepRepXMLWriter->addAttValue("Radius2", tubs.GetInnerRadius());
+      hepRepXMLWriter->addPoint(vertex1.x(), vertex1.y(), vertex1.z());
+      hepRepXMLWriter->addPoint(vertex2.x(), vertex2.y(), vertex2.z());
+    }
+  }
 }
 
 
@@ -147,7 +238,42 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Trd& trd) {
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddSolid(trd);  // Invoke default action.
+
+  AddHepRepInstance("Prism");
+  hepRepXMLWriter->addPrimitive();
+
+  G4double dx1 = trd.GetXHalfLength1();
+  G4double dy1 = trd.GetYHalfLength1();
+  G4double dx2 = trd.GetXHalfLength2();
+  G4double dy2 = trd.GetYHalfLength2();
+  G4double dz = trd.GetZHalfLength();
+
+  G4Point3D vertex1(G4Point3D( dx1, dy1,-dz));
+  G4Point3D vertex2(G4Point3D( dx1,-dy1,-dz));
+  G4Point3D vertex3(G4Point3D(-dx1,-dy1,-dz));
+  G4Point3D vertex4(G4Point3D(-dx1, dy1,-dz));
+  G4Point3D vertex5(G4Point3D( dx2, dy2, dz));
+  G4Point3D vertex6(G4Point3D( dx2,-dy2, dz));
+  G4Point3D vertex7(G4Point3D(-dx2,-dy2, dz));
+  G4Point3D vertex8(G4Point3D(-dx2, dy2, dz));
+
+  vertex1 = (*fpObjectTransformation) * vertex1;
+  vertex2 = (*fpObjectTransformation) * vertex2;
+  vertex3 = (*fpObjectTransformation) * vertex3;
+  vertex4 = (*fpObjectTransformation) * vertex4;
+  vertex5 = (*fpObjectTransformation) * vertex5;
+  vertex6 = (*fpObjectTransformation) * vertex6;
+  vertex7 = (*fpObjectTransformation) * vertex7;
+  vertex8 = (*fpObjectTransformation) * vertex8;
+
+  hepRepXMLWriter->addPoint(vertex1.x(), vertex1.y(), vertex1.z());
+  hepRepXMLWriter->addPoint(vertex2.x(), vertex2.y(), vertex2.z());
+  hepRepXMLWriter->addPoint(vertex3.x(), vertex3.y(), vertex3.z());
+  hepRepXMLWriter->addPoint(vertex4.x(), vertex4.y(), vertex4.z());
+  hepRepXMLWriter->addPoint(vertex5.x(), vertex5.y(), vertex5.z());
+  hepRepXMLWriter->addPoint(vertex6.x(), vertex6.y(), vertex6.z());
+  hepRepXMLWriter->addPoint(vertex7.x(), vertex7.y(), vertex7.z());
+  hepRepXMLWriter->addPoint(vertex8.x(), vertex8.y(), vertex8.z());
 }
 
 
@@ -437,7 +563,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyline& polyline) {
   PrintThings();
 #endif
 
-  AddHepRepInstance("Line",polyline);
+  AddHepRepInstance("Line");
 
   hepRepXMLWriter->addPrimitive();
 
@@ -457,7 +583,7 @@ void G4HepRepFileSceneHandler::AddPrimitive (const G4Polymarker& line) {
   PrintThings();
 #endif
 
-  AddHepRepInstance("Point",line);
+  AddHepRepInstance("Point");
 
   hepRepXMLWriter->addAttValue("MarkName", "Dot");
   hepRepXMLWriter->addAttValue("MarkSize", 4);
@@ -496,7 +622,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Circle& circle) {
   PrintThings();
 #endif
 
-  AddHepRepInstance("Point",circle);
+  AddHepRepInstance("Point");
 
   hepRepXMLWriter->addAttValue("MarkName", "Dot");
   hepRepXMLWriter->addAttValue("MarkSize", 4);
@@ -517,7 +643,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Square& square) {
   PrintThings();
 #endif
 
-  AddHepRepInstance("Point",square);
+  AddHepRepInstance("Point");
 
   hepRepXMLWriter->addAttValue("MarkName", "Square");
   hepRepXMLWriter->addAttValue("MarkSize", 4);
@@ -537,7 +663,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
   PrintThings();
 #endif
 
-  AddHepRepInstance("Polygon",polyhedron);
+  AddHepRepInstance("Polygon");
 
   if(polyhedron.GetNoFacets()==0)return;
 
@@ -576,8 +702,11 @@ G4HepRepFileXMLWriter *G4HepRepFileSceneHandler::GetHepRepXMLWriter() {
 }
 
 
-void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
-						 const G4Visible visible) {
+// Space holder method that has to be here to avoid bizarre Microsoft link error.
+void G4HepRepFileSceneHandler::UnusedMethod() {
+}
+
+void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName) {
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddHepRepInstance called."
@@ -676,7 +805,7 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
   hepRepXMLWriter->addAttValue("DrawAs",primName);
 
   // Handle color attribute, avoiding drawing anything black on black.
-  G4Colour colour = GetColour(visible);
+  G4Colour colour = fpVisAttribs->GetColour();
   float redness = colour.GetRed();
   float greenness = colour.GetGreen();
   float blueness = colour.GetBlue();
@@ -693,8 +822,7 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
     hepRepXMLWriter->addAttValue("LineColor",redness,greenness,blueness);
 
   // Handle visibility attribute.
-  const G4VisAttributes* visAtts = visible.GetVisAttributes();
-  if (visAtts && (visAtts->IsVisible()==0))
+  if (fpVisAttribs && (fpVisAttribs->IsVisible()==0))
     hepRepXMLWriter->addAttValue("Visibility",false);
   else
     hepRepXMLWriter->addAttValue("Visibility",true);
@@ -734,17 +862,17 @@ void G4HepRepFileSceneHandler::CheckFileOpen() {
 }
 
 
-void G4HepRepFileSceneHandler::ClearTransientStore () {
-  G4VSceneHandler::ClearTransientStore ();
+void G4HepRepFileSceneHandler::ClearTransientStore() {
+  G4VSceneHandler::ClearTransientStore();
   /*
   ClearTransientStore should restrict itself to its job.  In other
   places, a draw command follows, so it is not needed here.  In fact
   it can cause a double recursive descent into DrawView, so the following
   has been commented out (JA - 23/Jan/05).
   if (fpViewer) {
-    fpViewer -> SetView ();
-    fpViewer -> ClearView ();
-    fpViewer -> DrawView ();
+    fpViewer -> SetView();
+    fpViewer -> ClearView();
+    fpViewer -> DrawView();
   }
   */
 }

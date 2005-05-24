@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.16 2005-01-27 20:04:31 johna Exp $
+// $Id: G4HepRepFileSceneHandler.hh,v 1.17 2005-05-24 23:02:42 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -127,8 +127,8 @@ protected:
 
 private:
   G4HepRepFileXMLWriter *hepRepXMLWriter;
-  void AddHepRepInstance(const char* primName,
-			 const G4Visible visible);
+  void UnusedMethod();
+  void AddHepRepInstance(const char* primName);
   void CheckFileOpen();
   int fileCounter;
 
