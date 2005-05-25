@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.cc,v 1.27 2005-05-25 14:16:32 allison Exp $
+// $Id: G4LogicalVolume.cc,v 1.28 2005-05-25 14:57:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -360,20 +360,4 @@ G4double G4LogicalVolume::GetMass(G4bool forced,
 void G4LogicalVolume::SetVisAttributes (const G4VisAttributes& VA)
 {
   fVisAttributes = new G4VisAttributes(VA);
-  static G4bool firstCall = true;
-  if (firstCall) {
-    firstCall = false;
-    G4cout <<
-"\n*******************************************************************************" 
-"\nWARNING: DEPRECATED method"
-"\n       G4LogicalVolume::SetVisAttributes(const G4VisAttributes&) has been"
-"\n       invoked.  Please use SetVisAttributes(const G4VisAttributes*)"
-"\n       instead, i.e., provide a pointer to a G4VisAttributes object.  Only the"
-"\n       pointer is stored, so the G4VisAttributes object to which it refers must,"
-"\n       like the G4LogicalVolume object, be created on the heap (using `new')"
-"\n       (This message is printed only once.  Please check all occurances of"
-"\n       your use of SetVisAttributes.)"
-"\n*******************************************************************************\n"
-	   << G4endl;
-  }
 }
