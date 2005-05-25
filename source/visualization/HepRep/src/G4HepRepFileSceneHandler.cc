@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.23 2005-05-24 23:02:42 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.24 2005-05-25 06:33:48 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -701,10 +701,6 @@ G4HepRepFileXMLWriter *G4HepRepFileSceneHandler::GetHepRepXMLWriter() {
     return hepRepXMLWriter;
 }
 
-
-// Space holder method that has to be here to avoid bizarre Microsoft link error.
-void G4HepRepFileSceneHandler::UnusedMethod() {
-}
 
 void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName) {
 #ifdef G4HEPREPFILEDEBUG
