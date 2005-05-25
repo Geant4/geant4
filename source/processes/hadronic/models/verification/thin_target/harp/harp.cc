@@ -104,6 +104,8 @@ int main(int argc, char** argv)
   G4int     verbose  = 0;
   G4double  energy   = 100.*MeV;
   G4double  sigmae   = 0.0;
+  G4double  m_pmax   = 0.0;
+  G4double  m_p      = 0.0;
   G4double  elim     = 30.*MeV;
   G4double  dangl    = 5.0;
   G4int     nevt     = 1000;
@@ -114,6 +116,7 @@ int main(int argc, char** argv)
   G4int     nbinspi  = 20;
   G4int     nangl    = 0;
   G4int     nanglpi  = 0;
+  G4int     nmompi   = 0;
   G4String hFile     = "hbook.paw";
   G4double theStep   = 0.01*micrometer;
   G4double range     = 1.0*micrometer;
@@ -144,37 +147,10 @@ int main(int argc, char** argv)
   G4double bng2[15] = {0.0};
   G4double cng[15] = {0.0};
   G4double angpi[10] = {0.0};
+  G4double mompi[10] = {0.0};
   G4double bngpi1[10] = {0.0};
   G4double bngpi2[10] = {0.0};
   G4double cngpi[10] = {0.0};
-  float bestZ[250] = {
-    0.0, 1.0, 1.0, 2.0, 2.0, 0.0, 0.0, 4.0, 0.0, 0.0,   //0
-    4.0, 0.0, 0.0, 0.0, 6.0, 0.0, 0.0, 0.0, 9.0, 0.0,   //10
-    10.0, 10.0, 11.0, 0.0, 11.0, 0.0, 13.0, 0.0, 0.0, 0.0,   //20
-    0.0, 0.0, 15.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //30
-    0.0, 0.0, 0.0, 0.0, 21.0, 0.0, 21.0, 21.0, 23.0, 0.0,   //40
-    0.0, 24.0, 25.0, 0.0, 25.0, 0.0, 27.0, 27.0, 27.0, 26.0,   //50
-    27.0, 0.0, 0.0, 0.0, 0.0, 30.0, 31.0, 31.0, 32.0, 32.0,   //60
-    33.0, 33.0, 33.0, 34.0, 33.0, 34.0, 35.0, 35.0, 0.0, 36.0,   //70
-    36.0, 37.0, 36.0, 37.0, 37.0, 38.0, 39.0, 39.0, 41.0, 40.0,   //80
-    41.0, 39.0, 41.0, 38.0, 39.0, 40.0, 40.0, 39.0, 40.0, 0.0,   //90
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //100
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //110
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //120
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //130
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //140
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //150
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //160
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //170
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //180
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //190
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //200
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //210
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //220
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //230
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };        //240
-
-
 
   // Track
   G4ThreeVector aPosition = G4ThreeVector(0.,0.,0.);
@@ -240,9 +216,12 @@ int main(int argc, char** argv)
   G4cout << "#dangle" << G4endl;
   G4cout << "#particle" << G4endl;
   G4cout << "#energy(MeV)" << G4endl;
+  G4cout << "#momentum(MeV/c)" << G4endl;
+  G4cout << "#mompi(MeV/c)" << G4endl;
   G4cout << "#sigmae(MeV)" << G4endl;
   G4cout << "#emax(MeV)" << G4endl;
   G4cout << "#emaxpi(MeV)" << G4endl;
+  G4cout << "#pmax(MeV/c)" << G4endl;
   G4cout << "#elim(MeV)" << G4endl;
   G4cout << "#ebinlog(MeV)" << G4endl;
   G4cout << "#range(mm)" << G4endl;
@@ -292,6 +271,12 @@ int main(int argc, char** argv)
         (*fin) >> ebinlog;
 	if (ebinlog < 1.1) ebinlog = 1.1;
         ebinlog *= MeV;
+      } else if(line == "#pmax(MeV/c)") {
+        (*fin) >> m_pmax;
+        m_pmax *= MeV;
+      } else if(line == "#momentum(MeV/c)") {
+        (*fin) >> m_p;
+        m_p *= MeV;
       } else if(line == "#events") {
         (*fin) >> nevt;
       } else if(line == "#exclusive") {
@@ -314,6 +299,10 @@ int main(int argc, char** argv)
         (*fin) >> nanglpi;
       } else if(line == "#anglespi") {
         for(int k=0; k<nanglpi; k++) {(*fin) >> angpi[k];}
+      } else if(line == "#nmompi") {
+        (*fin) >> nmompi;
+      } else if(line == "#mompi(MeV/c)") {
+        for(int k=0; k<nmompi; k++) {(*fin) >> mompi[k];}
       } else if(line == "#dangle") {
         (*fin) >> dangl;
       } else if(line == "#angles") {
@@ -434,6 +423,11 @@ int main(int argc, char** argv)
 
 
     G4double mass = part->GetPDGMass();
+    if(m_pmax == 0.0) m_pmax = emax;
+    else              emax   = m_pmax;
+    m_pmax /= GeV;
+    if(m_p > 0.0) energy = sqrt(m_p*m_p + mass*mass);
+
     G4double pmax = sqrt(energy*(energy + 2.0*mass));
     G4double binlog = log10(ebinlog);
     G4int nbinlog = (G4int)(log10(2.0*emax)/binlog);
@@ -442,7 +436,6 @@ int main(int argc, char** argv)
     G4double bind = emax/(G4double)nbinsd;
 
     double m_pmin = 0.0;
-    double m_pmax = emax/GeV;
     double m_ptmax = 0.65;
     double m_pth = 0.2;
     int m_binp = 65;
@@ -553,6 +546,22 @@ int main(int argc, char** argv)
                  barn*emax*(G4double)nevt);
       }
     }
+
+    double coeff = cross_sec*MeV*1000.0/(barn*(G4double)nevt);
+    int    nmomtet[50][20];
+    double harpcs[50][20];
+    double dthetad = angpi[nanglpi-1]/double(nanglpi);
+    double mom0 = 0.0;
+    for(int k=0; k<nmompi; k++) {
+      double dp = mompi[k] - mom0;
+      double ang0 = 0.0;
+      for(int j=0; j<nanglpi; j++) {
+        nmomtet[k][j] = 0;
+        harpcs[k][j] = coeff/(twopi*dp*(cos(ang0) - cos(angpi[j])));
+        ang0 = angpi[j];
+      }
+      mom0 = mompi[k];
+    }    
 
     G4Track* gTrack;
     gTrack = new G4Track(&dParticle,aTime,aPosition);
@@ -666,7 +675,7 @@ int main(int argc, char** argv)
         G4double thetad = theta/degree;
         G4double thetamr = theta*1000.;
 
-        if(thetamr>= m_thetamin && thetamr <= m_thetamax && p>m_pth) {
+	//        if(thetamr>= m_thetamin && thetamr <= m_thetamax && p>m_pth) {
           std::string nam = pd->GetParticleName();
           if(nam == "proton") {
             h[2]->fill(float(p/GeV),1.0);
@@ -677,7 +686,8 @@ int main(int argc, char** argv)
               h[8]->fill(float(cost),1.0);
               n_pr++;
             }
-          } else if(nam == "pi+" || nam == "kaon+" || nam == "pi-" || nam == "kaon-") {
+	    //          } else if(nam == "pi+" || nam == "kaon+" || nam == "pi-" || nam == "kaon-") {
+          } else if(nam == "pi+" || nam == "pi-" ) {
             h[3]->fill(float(p/GeV),1.0);
             h[5]->fill(float(pt/GeV),1.0);
 //            h2[1]->fill(p,cost);
@@ -686,15 +696,21 @@ int main(int argc, char** argv)
               h[9]->fill(float(cost),1.0);
               n_pi++;
             }
+            if(p < mompi[nmompi-1] && theta < angpi[nanglpi-1]) {
+              int kang = int(theta/dthetad);
+              if(kang >= nanglpi) kang = nanglpi - 1; 
+              int kp = -1;
+              do {kp++;} while (kp < nmompi - 1 && p > mompi[kp]);  
+              nmomtet[kp][kang] += 1;
+	    }        
           }
           h[0]->fill(float(n_pr),1.0);
           h[1]->fill(float(n_pi),1.0);
-	}
+	  //	}
       
 	//	delete sec;       	 
         delete aChange->GetSecondary(i);
       }
-    
       aChange->Clear();
     }
   
@@ -710,7 +726,44 @@ int main(int argc, char** argv)
       tree->close();
     }
 
-    G4cerr << "###### End of run # " << run << "     ######" << G4endl;
+    G4cout << "###### Cross section per bin " << G4endl;
+
+    mom0 = 0.0;
+    G4double mom1;
+    G4double dsdm[50];    
+    G4double dsda[20];    
+    G4double cross;
+    for(int k=0; k<nmompi; k++) {
+      double mom1 = mompi[k];
+      dsdm[k] = 0.0;
+      G4cout << "## Next momentum bin " << mom0 << "  -  " << mom1 << "  MeV/c" << G4endl;
+
+      for(int j=0; j<nanglpi; j++) {
+        cross = double(nmomtet[k][j])*harpcs[k][j];
+        G4cout << "  " << cross;
+
+        if(k>0) dsda[j] += cross;
+        else    dsda[j] = 0.0;
+        if(j>0) dsdm[k] += cross;
+      }
+      G4cout << G4endl;
+      mom0 = mom1;
+    }
+    G4cout << G4endl;    
+    G4cout << "## For momentum " << mompi[0] << "  -  " << mompi[nmompi-1] << "  MeV/c" << G4endl;
+    for(int j=0; j<nanglpi; j++) {
+      G4cout << "  " << dsda[j];
+    }
+    G4cout << G4endl;    
+    G4cout << G4endl;    
+    G4cout << "## For angles " << angpi[0] << "  -  " << angpi[nanglpi-1] << " radian" << G4endl;
+    for(int kk=0; kk<nmompi; kk++) {
+      G4cout << "  " << dsdm[kk];
+    }
+    G4cout << G4endl;
+    G4cout << G4endl;
+
+    G4cout << "###### End of run # " << run << "     ######" << G4endl;
   }  
     //  } while(end);
 
