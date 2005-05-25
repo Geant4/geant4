@@ -61,6 +61,8 @@ private:
   G4UIdirectory*             SecondScatteringFoilDir;
   G4UIdirectory*             StopperDir;
   G4UIdirectory*             FinalCollimatorDir;
+  G4UIdirectory*             stepDefDir;
+
   G4UIcmdWithADoubleAndUnit* outerRadiusDosemeterCmd;
   G4UIcmdWithADoubleAndUnit* ModulatorAngleCmd;
   G4UIcmdWithAString*   RangeShifterMatCmd;
@@ -70,7 +72,7 @@ private:
   G4UIcmdWithADoubleAndUnit* SecondScatteringFoil_xCmd;
   G4UIcmdWithADoubleAndUnit* outerRadiusStopperCmd;
   G4UIcmdWithADoubleAndUnit* innerRadiusFinalCollimatorCmd;
-
+G4UIcmdWithADoubleAndUnit* MaxStepCmd;
 };
 #endif
 

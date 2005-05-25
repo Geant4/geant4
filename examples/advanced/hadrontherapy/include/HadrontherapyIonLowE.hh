@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyIonLowE.hh,v 1.1 2005-05-18 08:00:00 guatelli Exp $
+// $Id: HadrontherapyIonLowE.hh,v 1.2 2005-05-25 09:11:09 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli, guatelli@ge.infn.it

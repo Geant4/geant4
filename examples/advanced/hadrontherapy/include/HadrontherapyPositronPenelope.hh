@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HadrontherapyPositronPenelope.hh,v 1.1 2005-05-18 08:00:00 guatelli Exp $
+// $Id: HadrontherapyPositronPenelope.hh,v 1.2 2005-05-25 09:11:09 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

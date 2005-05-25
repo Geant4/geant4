@@ -46,8 +46,9 @@
 #include "G4UImessenger.hh"
 #include "HadrontherapySteppingAction.hh"
 #include "globals.hh"
-
-
+#ifdef  G4ANALYSIS_USE
+#include "HadrontherapyAnalysisManager.hh"
+#endif
 // ----------------------------------------------------------------
 int main(int argc ,char ** argv)
 {
@@ -56,6 +57,7 @@ int main(int argc ,char ** argv)
   G4int numberVoxelY = 80;
   G4int numberVoxelZ = 80;
  
+
   G4double* matrix = new G4double[numberVoxelX*numberVoxelY*numberVoxelZ];
 
   // Initialization of the matrix elemts to zero
@@ -68,6 +70,13 @@ int main(int argc ,char ** argv)
 	matrix[(i*numberVoxelY+j)*numberVoxelZ+k] = 0.;
     }
   }
+
+#ifdef G4ANALYSIS_USE
+  HadrontherapyAnalysisManager* analysis = 
+                          HadrontherapyAnalysisManager::getInstance();
+  analysis -> book();
+#endif
+  
 
  //  G4double matrix[80][80][80]; // dimensions of the output matrix
 
@@ -157,6 +166,13 @@ int main(int argc ,char ** argv)
 				k<<'\t'<<matrix[i]<<G4endl;
 				// ofs<< i <<'\t'<<j<<'\t'<<
 				//k<<'\t'<<matrix[i]<<G4endl;
+#ifdef G4ANALYSIS_USE 
+				//HadrontherapyAnalysisManager* analysis = 
+				//HadrontherapyAnalysisManager::getInstance();
+				analysis -> Energy_Dep(n, m, k, matrix[i]);
+                                analysis -> BraggPeak(n, matrix[i]);
+#endif
+                             
 			     }
 			  }   
 		       }
@@ -167,7 +183,13 @@ int main(int argc ,char ** argv)
 	}
 
  delete[] matrix;   
- 
+
+#ifdef G4ANALYSIS_USE
+ //HadrontherapyAnalysisManager* analysis = 
+ //                        HadrontherapyAnalysisManager::getInstance();
+  analysis -> finish();
+#endif
+  
   // Job termination
 #ifdef G4VIS_USE
   delete visManager;

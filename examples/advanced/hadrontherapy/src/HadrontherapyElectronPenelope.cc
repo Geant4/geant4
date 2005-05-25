@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyElectronPenelope.cc,v 1.3 2005-05-18 07:53:27 guatelli Exp $
+// $Id: HadrontherapyElectronPenelope.cc,v 1.4 2005-05-25 09:11:09 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch

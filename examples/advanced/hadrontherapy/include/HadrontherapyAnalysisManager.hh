@@ -31,7 +31,6 @@
 
 namespace AIDA{
   class ITree; 
-  class IDataPoint;
   class IAnalysisFactory;
   class ITreeFactory;
 };
@@ -47,8 +46,8 @@ public:
   
   void book();
   
-  void Energy_Dep(G4double, G4double);
-  void Energy_Event(G4int, G4double);
+  void Energy_Dep(G4int, G4int, G4int, G4double);
+  void BraggPeak(G4int, G4double);
   
   void finish();
 
@@ -57,8 +56,7 @@ private:
 
 private:
   AIDA::IAnalysisFactory*  aFact;
-  AIDA::ITree*             theTree;
-  //  AIDA::ITreeFactory      *treeFact; 
+  AIDA::ITree*             theTree; 
   AIDA::IHistogramFactory *histFact;
   AIDA::ITupleFactory     *tupFact;
   AIDA::IHistogram1D *h1;

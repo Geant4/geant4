@@ -56,7 +56,7 @@ class HadrontherapyVoxelParameterisation;
 class HadrontherapyBeamLine;
 class HadrontherapyDetectorMessenger;
 class HadrontherapyModulator;
-
+class G4UserLimits;
 class HadrontherapyDetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
@@ -78,7 +78,7 @@ void SetFirstScatteringFoil (G4double);
 void SetSecondScatteringFoil (G4double);
 void SetOuterRadiusStopper (G4double);
 void SetInnerRadiusFinalCollimator (G4double);
-
+  void SetMaxStepSize(G4double);
   //G4Material* GetPhantomMaterial()  {return PhantomMaterial;};
 const G4double VoxelWidth_X(){return phantomSizeX/numberOfVoxelsAlongX;}
 const G4double VoxelWidth_Z(){return phantomSizeZ/numberOfVoxelsAlongZ;}
@@ -113,6 +113,8 @@ private:
 
   // Patient/
   G4VPhysicalVolume*  patientPhys; 
+
+  G4UserLimits* userLimits;
  
   HadrontherapyDetectorMessenger* detectorMessenger; 
   

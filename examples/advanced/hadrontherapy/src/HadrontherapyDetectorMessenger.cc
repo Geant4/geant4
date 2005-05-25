@@ -46,6 +46,9 @@ HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(
   beamLineDir = new G4UIdirectory("/beamLine/");
   beamLineDir->SetGuidance("set specification of range shifter");  
 
+  stepDefDir = new G4UIdirectory("/stepDefinition/");
+  stepDefDir -> SetGuidance("set the step size during transport");
+
   RangeShifterDir = new G4UIdirectory("/beamLine/RangeShifter/");
   RangeShifterDir->SetGuidance("set specification of range shifter");  
 
@@ -114,6 +117,13 @@ HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(
    innerRadiusFinalCollimatorCmd->SetDefaultUnit("mm");  
    innerRadiusFinalCollimatorCmd->SetUnitCandidates("mm cm m");  
    innerRadiusFinalCollimatorCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+ MaxStepCmd = new G4UIcmdWithADoubleAndUnit("/stepDefinition/stepMax",this);
+  MaxStepCmd->SetGuidance("Set max allowed step size");
+  MaxStepCmd->SetParameterName("Size",false);
+  MaxStepCmd->SetRange("Size>0.");
+  MaxStepCmd->SetUnitCategory("Length");
+  MaxStepCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
 }
 
 HadrontherapyDetectorMessenger::~HadrontherapyDetectorMessenger()

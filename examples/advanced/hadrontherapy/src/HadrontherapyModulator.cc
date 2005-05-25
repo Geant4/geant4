@@ -66,14 +66,15 @@ HadrontherapyModulator::HadrontherapyModulator()
   for (G4int i=0; i<numberOfModules; i++)
     physiMod[i]=0; 
    
-  startAngle = new G4DataVector;
-  spanningAngle = new G4DataVector;
-  Ztranslation = new G4DataVector;
+startAngle = new G4DataVector;
+spanningAngle = new G4DataVector;
+Ztranslation = new G4DataVector;
 
   // rotation matrix of the mother volume
-  rotationMatrix = new G4RotationMatrix(); 
-  G4double angle = 90. *deg;             
-  rotationMatrix -> rotateY(angle);
+  // Set the steps of the modulator aginst the proton beam
+rotationMatrix = new G4RotationMatrix(); 
+G4double angle = 270. *deg;             
+rotationMatrix -> rotateY(angle);
 }
 
 HadrontherapyModulator::~HadrontherapyModulator() 
@@ -102,141 +103,129 @@ HadrontherapyModulator::~HadrontherapyModulator()
 void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 {
 
-  G4VPhysicalVolume* mother = motherVolume;
-  ReadFile("modulator.dat");
+G4VPhysicalVolume* mother = motherVolume;
+ReadFile("modulator.dat");
  
-  //Materials
-  HadrontherapyMaterial* material = new HadrontherapyMaterial();
-  G4Material* MotherModMater = material -> GetMat("Air");  
-  G4Material* Mod0Mater = material -> GetMat("Air");
-  G4Material* ModMater = material -> GetMat("PMMA");
-  delete material;
+//Materials
+HadrontherapyMaterial* material = new HadrontherapyMaterial();
+G4Material* MotherModMater = material -> GetMat("Air");  
+G4Material* Mod0Mater = material -> GetMat("Air");
+G4Material* ModMater = material -> GetMat("Air");
+delete material;
 
- G4double innerRadiusOfTheTube = 2.5 *cm;
- G4double outerRadiusOfTheTube = 9.5 *cm;
- G4double hightOfTheTube = 0.03*cm;
+G4double innerRadiusOfTheTube = 2.5 *cm;
+G4double outerRadiusOfTheTube = 9.5 *cm;
+G4double hightOfTheTube = 0.03*cm;
 
-  //----------------------------------------------------------
-  //Mother volume  
-  //----------------------------------------------------------
+//----------------------------------------------------------
+//Mother volume of the modulator wheel
+// This volume must rotate to produce a Spread out Bragg peak
+//----------------------------------------------------------
   
-  G4double hightOfTheTube0 = 5.0 *cm;
-  G4double startAngleOfTheTube0 = 45 *deg;
-  G4double spanningAngleOfTheTube0 = 90 *deg;
+G4double hightOfTheTube0 = 5.0 *cm;
+G4double startAngleOfTheTube0 = 45 *deg;
+G4double spanningAngleOfTheTube0 = 90 *deg;
 
  
- G4Box* solidMotherMod = new G4Box("MotherMod", 12. *cm, 12. *cm, 12. *cm);
- 
+G4Box* solidMotherMod = new G4Box("MotherMod", 12. *cm, 12. *cm, 12. *cm);
 
- G4LogicalVolume* logicMotherMod = new G4LogicalVolume(solidMotherMod, MotherModMater,
-                                      "MotherMod",0,0,0);
-  
- G4ThreeVector positionMotherMod = G4ThreeVector(-2260.50 *mm, 30 *mm, 50 *mm);
+G4LogicalVolume* logicMotherMod = new G4LogicalVolume(solidMotherMod, MotherModMater, "MotherMod",0,0,0);
 
- physiMotherMod = new G4PVPlacement(rotationMatrix,
-                                    positionMotherMod,
-                                     "MotherMod",        // its name
-				   logicMotherMod,     // its logical volume				  
-				   mother, // its mother  volume
-				   false,           // no boolean operations
-				   0);              // no particular field 
+G4ThreeVector positionMotherMod = G4ThreeVector(-2260.50 *mm, 30 *mm, 50 *mm);
+
+physiMotherMod = new G4PVPlacement(rotationMatrix, positionMotherMod, "MotherMod", 
+				   logicMotherMod, mother, false, 0);      
  
 
-  G4ThreeVector positionMod0 = G4ThreeVector(0*cm,0*cm,0*cm);
- 
- 
-  G4Tubs* solidMod0 = new G4Tubs("Mod0",
-			 innerRadiusOfTheTube, 
-			 outerRadiusOfTheTube,
-			 hightOfTheTube0,
-			 startAngleOfTheTube0, 
-			 spanningAngleOfTheTube0);
+// -------------------------------------------------------
+// The modulator consists of four wings and each wing
+// has its own mother volume
+// -------------------------------------------------------
+
+// --------------------------------------
+// Mother volume of the Wing number one
+// --------------------------------------
+
+G4ThreeVector positionMod0 = G4ThreeVector(0*cm,0*cm,0*cm);
+
+G4Tubs* solidMod0 = new G4Tubs("Mod0", innerRadiusOfTheTube, outerRadiusOfTheTube, hightOfTheTube0,
+			       startAngleOfTheTube0, spanningAngleOfTheTube0);
   
-  G4LogicalVolume* logicMod0 = new G4LogicalVolume(solidMod0, Mod0Mater, "Mod0",0,0,0);
+G4LogicalVolume* logicMod0 = new G4LogicalVolume(solidMod0, Mod0Mater, "Mod0",0,0,0);
   
-  
-  G4VPhysicalVolume* physiMod0 = new G4PVPlacement(0,positionMod0, 
-                                                   "Mod0",        // its name 
-				logicMod0,    // its logical volume			  
-				physiMotherMod,  // its mother  volume
-				false,         // no boolean operations
-				0);            // no particular field
+G4VPhysicalVolume* physiMod0 = new G4PVPlacement(0,positionMod0, "Mod0", logicMod0, physiMotherMod, false, 0);
   
 
-  G4RotationMatrix rm20;
-  rm20.rotateZ(90 *deg);
+  // ------------------------------------
+  // Mother volume of the Wing number two
+  // -------------------------------------
+
+G4RotationMatrix rm20;
+rm20.rotateZ(90 *deg);
   
-  G4ThreeVector positionMod20 = G4ThreeVector(0*cm,0*cm,0*cm);
+G4ThreeVector positionMod20 = G4ThreeVector(0*cm,0*cm,0*cm);
   
-  G4Tubs* solidMod20 = new G4Tubs("Mod20",
-			  innerRadiusOfTheTube, 
-			  outerRadiusOfTheTube,
-			  hightOfTheTube0,
-			  startAngleOfTheTube0, 
-			  spanningAngleOfTheTube0);
+G4Tubs* solidMod20 = new G4Tubs("Mod20", innerRadiusOfTheTube, outerRadiusOfTheTube, hightOfTheTube0,
+			  startAngleOfTheTube0, spanningAngleOfTheTube0);
   
-  G4LogicalVolume* logicMod20 = new G4LogicalVolume(solidMod20, Mod0Mater, "Mod0",0,0,0);
+G4LogicalVolume* logicMod20 = new G4LogicalVolume(solidMod20, Mod0Mater, "Mod0",0,0,0);
   
-  
-  G4VPhysicalVolume* physiMod20 = new G4PVPlacement(G4Transform3D(rm20, positionMod20), 
-				 logicMod20,    // its logical volume			  
-				 "Mod20",        // its name
-				 logicMotherMod,  // its mother  volume
-				 false,         // no boolean operations
-				 0);            // no particular field
-    
+G4VPhysicalVolume* physiMod20 = new G4PVPlacement(G4Transform3D(rm20, positionMod20), logicMod20, "Mod20",
+				 logicMotherMod, false, 0);
+
+  // --------------------------------------
+  // Mother volume of the wing number three
+  // --------------------------------------
  
- G4RotationMatrix rm40;
- rm40.rotateZ(180 *deg);
+G4RotationMatrix rm40;
+rm40.rotateZ(180 *deg);
   
- G4ThreeVector positionMod40 = G4ThreeVector(0*cm,0*cm,0*cm);
+G4ThreeVector positionMod40 = G4ThreeVector(0*cm,0*cm,0*cm);
   
- G4Tubs*  solidMod40 = new G4Tubs("Mod40",
-			  innerRadiusOfTheTube, 
-			  outerRadiusOfTheTube,
-			  hightOfTheTube0,
-			  startAngleOfTheTube0, 
-			  spanningAngleOfTheTube0);
+G4Tubs*  solidMod40 = new G4Tubs("Mod40", innerRadiusOfTheTube, outerRadiusOfTheTube, hightOfTheTube0,
+				 startAngleOfTheTube0, spanningAngleOfTheTube0);
   
-  G4LogicalVolume* logicMod40 = new G4LogicalVolume(solidMod40, Mod0Mater, "Mod40",0,0,0);
+G4LogicalVolume* logicMod40 = new G4LogicalVolume(solidMod40, Mod0Mater, "Mod40",0,0,0);
   
-  G4VPhysicalVolume* physiMod40 = new G4PVPlacement(G4Transform3D(rm40, positionMod40), 
-				 logicMod40,    // its logical volume			  
-				 "Mod40",        // its name
-				 logicMotherMod,  // its mother  volume
-				 false,         // no boolean operations
-				 0);            // no particular field
+G4VPhysicalVolume* physiMod40 = new G4PVPlacement(G4Transform3D(rm40, positionMod40), logicMod40,  			  
+				 "Mod40", logicMotherMod, false, 0);
+
+
+  //--------------------------------------
+  // Mother volume of the Wing number four
+  // -------------------------------------
   
-  G4RotationMatrix rm60;
-  rm60.rotateZ(270 *deg);
+G4RotationMatrix rm60;
+rm60.rotateZ(270 *deg);
   
-  G4ThreeVector positionMod60 = G4ThreeVector(0*cm,0*cm,0*cm);
+G4ThreeVector positionMod60 = G4ThreeVector(0*cm,0*cm,0*cm);
   
-  G4Tubs* solidMod60 = new G4Tubs("Mod60",
-			  innerRadiusOfTheTube, 
-			  outerRadiusOfTheTube,
-			  hightOfTheTube0,
-			  startAngleOfTheTube0, 
-			  spanningAngleOfTheTube0);
+G4Tubs* solidMod60 = new G4Tubs("Mod60", innerRadiusOfTheTube, outerRadiusOfTheTube, hightOfTheTube0,
+				startAngleOfTheTube0, spanningAngleOfTheTube0);
   
-  G4LogicalVolume* logicMod60 = new G4LogicalVolume(solidMod60, Mod0Mater, "Mod60",0,0,0);
+G4LogicalVolume* logicMod60 = new G4LogicalVolume(solidMod60, Mod0Mater, "Mod60",0,0,0);
   
-  
-  G4VPhysicalVolume* physiMod60 = new G4PVPlacement(G4Transform3D(rm60, positionMod60), 
-				 logicMod60,    // its logical volume			  
-				 "Mod60",        // its name
-				 logicMotherMod,  // its mother  volume
-				 false,         // no boolean operations
-				 0);            // no particular field
+G4VPhysicalVolume* physiMod60 = new G4PVPlacement(G4Transform3D(rm60, positionMod60), logicMod60,			  
+				 "Mod60", logicMotherMod, false, 0);
+
+
+
+
+// --------------------------------------------------
+// Now starting from the input file (modulator.dat)
+// the modulator is reproduced
+// --------------------------------------------------
+
+
   char name[6];
 
   G4VisAttributes * red = new G4VisAttributes( G4Colour(1. ,0. ,0.));
   red -> SetVisibility(true);
   red -> SetForceSolid(true);
 
-  G4int numberSlices = 18;
+G4int numberSlices = 18;
  
-  G4VPhysicalVolume* physiMother = 0;
+G4VPhysicalVolume* physiMother = 0;
 
  for (G4int i = 0; i < numberOfModules; i++)
  {
@@ -246,26 +235,40 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
    if (i % numberSlices == 3) physiMother = physiMod60;
 
    sprintf(name, "Mod%2d", i);
-   solidMod[i] = new G4Tubs(G4String(name), innerRadiusOfTheTube, outerRadiusOfTheTube, 
+
+
+solidMod[i] = new G4Tubs(G4String(name), innerRadiusOfTheTube, outerRadiusOfTheTube, 
                             hightOfTheTube, (*startAngle)[i], (*spanningAngle)[i]);
    
-   logicMod[i] = new G4LogicalVolume(solidMod[i], ModMater, G4String(name), 0,0,0);
+logicMod[i] = new G4LogicalVolume(solidMod[i], ModMater, G4String(name), 0,0,0);
 
-   physiMod[i] = new G4PVPlacement(0,G4ThreeVector(0,0,(*Ztranslation)[i]),G4String(name),
+physiMod[i] = new G4PVPlacement(0,G4ThreeVector(0,0,(*Ztranslation)[i]),G4String(name),
                                     logicMod[i],
                                    physiMother, false,0);
-				   
-   logicMod[i] -> SetVisAttributes(red);
+
+// ------------------------
+// Visualisation attributes
+// ------------------------				
+   
+logicMod[i] -> SetVisAttributes(red);
+logicMotherMod -> SetVisAttributes (G4VisAttributes::Invisible);
+logicMod0 -> SetVisAttributes(G4VisAttributes::Invisible);
+logicMod20 -> SetVisAttributes(G4VisAttributes::Invisible);
+logicMod40 -> SetVisAttributes(G4VisAttributes::Invisible);
+logicMod60 -> SetVisAttributes(G4VisAttributes::Invisible);
+
  }
 }
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyModulator::SetModulatorAngle(G4double angle)
 {
   G4double rotationAngle = angle;
-  rotationMatrix -> rotateX(rotationAngle);
+  rotationMatrix -> rotateZ(rotationAngle);
   physiMotherMod -> SetRotation(rotationMatrix);  
   G4cout << "MODULATOR HAS BEEN ROTATED OF   " << rotationAngle/deg << " deg" << G4endl;
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyModulator::ReadFile(G4String name)
 { 
   file = name;   
@@ -273,6 +276,7 @@ void HadrontherapyModulator::ReadFile(G4String name)
   G4cout << file << " is the input file to model the modulator!" << G4endl;
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyModulator::ReadData(G4String fileName)
 {
   char nameChar[100] = {""};

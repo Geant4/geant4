@@ -116,19 +116,15 @@ void HadrontherapyDetectorConstruction::ConstructBeamLine()
 // TREATMENT ROOM
 //---------------------
 
-// TREATMENT ROOM SIZES
+ // TREATMENT ROOM SIZES
  G4double Worldx = 400.0 *cm;
  G4double Worldy = 400.0 *cm;
  G4double Worldz = 400.0 *cm;
 
  G4Box* TreatmentRoom = new G4Box("TreatmentRoom",Worldx,Worldy,Worldz);
- logicTreatmentRoom = new G4LogicalVolume(TreatmentRoom, 
-                                                           Air,
-                                                           "logicTreatmentRoom",                                                           0,0,0);
- physiTreatmentRoom = new G4PVPlacement(0,G4ThreeVector(),
-				"physiTreatmentRoom",
-                                 logicTreatmentRoom,
-                                 0,false,0);
+ logicTreatmentRoom = new G4LogicalVolume(TreatmentRoom, Air, "logicTreatmentRoom", 0,0,0);
+ physiTreatmentRoom = new G4PVPlacement(0,G4ThreeVector(),"physiTreatmentRoom", logicTreatmentRoom, 0,false,0);
+
 
  //Visualisation of the treatment room
  logicTreatmentRoom -> SetVisAttributes (G4VisAttributes::Invisible);
@@ -272,3 +268,17 @@ void HadrontherapyDetectorConstruction::SetRSMaterial(G4String materialChoice)
   G4String  newMaterial = materialChoice;
   beamLine -> SetRSMaterial(newMaterial);
 }
+
+/////////////////////////////////////////////////////////////////////////////
+ void HadrontherapyDetectorConstruction::SetMaxStepSize(G4double val)
+{
+  // set the maximum allowed step size
+  
+ if (val <= DBL_MIN)
+     { //G4cout << "\n --->warning from SetMaxStepSize: maxStep "
+       // << val  << " out of range. Command refused" << G4endl;
+      return;
+     }
+     userLimits->SetMaxAllowedStep(val);
+     }
+
