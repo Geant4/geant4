@@ -1,3 +1,4 @@
+// Copyright FreeHEP, 2005.
 #ifndef CHEPREP_INDENTPRINTWRITER_H
 #define CHEPREP_INDENTPRINTWRITER_H 1
 
@@ -14,6 +15,7 @@
  * print, println methods taking other arguments may not be indented properly.
  *
  * @author Mark Donszelmann
+ * @version $Id: IndentPrintWriter.h,v 1.2 2005-05-25 23:21:59 duns Exp $
  */
 namespace cheprep {
 

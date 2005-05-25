@@ -7,7 +7,7 @@
 #ifndef HEPREP_HEPREPFACTORY_H
 #define HEPREP_HEPREPFACTORY_H 1
 
-// Copyright 2000-2002, FreeHEP.
+// Copyright 2000-2005, FreeHEP.
 
 #include <iostream>
 #include <string>

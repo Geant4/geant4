@@ -1,3 +1,4 @@
+// Copyright FreeHEP, 2005.
 
 #include <iostream>
 #include <fstream>
@@ -16,6 +17,10 @@ using namespace std;
 using namespace HEPREP;
 
 
+/**
+ * @author Mark Donszelmann
+ * @version $Id: DefaultHepRepFactory.cc,v 1.5 2005-05-25 23:22:25 duns Exp $
+ */
 namespace cheprep {
 
 DefaultHepRepFactory::DefaultHepRepFactory() {

@@ -1,3 +1,4 @@
+// Copyright FreeHEP, 2005.
 #ifndef CHEPREP_DEFAULTHEPREPATTRIBUTE_H
 #define CHEPREP_DEFAULTHEPREPATTRIBUTE_H 1
 
@@ -14,8 +15,8 @@
 #include "HEPREP/HepRepWriter.h"
 
 /**
- *
- * @author M.Donszelmann
+ * @author Mark Donszelmann
+ * @version $Id: DefaultHepRepAttribute.h,v 1.2 2005-05-25 23:21:59 duns Exp $
  */
 namespace cheprep {
 

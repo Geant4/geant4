@@ -1,3 +1,4 @@
+// Copyright FreeHEP, 2005.
 #ifndef CHEPREP_GZIPOUTPUTSTREAMBUF_H
 #define CHEPREP_GZIPOUTPUTSTREAMBUF_H
 
@@ -5,6 +6,10 @@
 
 #include "cheprep/DeflateOutputStreamBuffer.h"
 
+/**
+ * @author Mark Donszelmann
+ * @version $Id: GZIPOutputStreamBuffer.h,v 1.3 2005-05-25 23:21:59 duns Exp $
+ */
 namespace cheprep {
 
     class GZIPOutputStreamBuffer : public DeflateOutputStreamBuffer {

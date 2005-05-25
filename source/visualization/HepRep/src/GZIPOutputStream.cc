@@ -1,7 +1,12 @@
+// Copyright FreeHEP, 2005.
 
 #include "cheprep/GZIPOutputStreamBuffer.h"
 #include "cheprep/GZIPOutputStream.h"
 
+/**
+ * @author Mark Donszelmann
+ * @version $Id: GZIPOutputStream.cc,v 1.3 2005-05-25 23:22:25 duns Exp $
+ */
 namespace cheprep {
 
     using namespace std;

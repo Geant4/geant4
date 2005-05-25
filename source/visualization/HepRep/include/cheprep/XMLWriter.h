@@ -1,3 +1,4 @@
+// Copyright FreeHEP, 2005.
 #ifndef CHEPREP_XMLWRITER_H
 #define CHEPREP_XMLWRITER_H 1
 
@@ -13,10 +14,8 @@
 #include "cheprep/IndentPrintWriter.h"
 
 /**
- * A class that makes it easy to write XML documents.
- *
- * @author Tony Johnson
  * @author Mark Donszelmann
+ * @version $Id: XMLWriter.h,v 1.2 2005-05-25 23:21:59 duns Exp $
  */
 namespace cheprep {
 

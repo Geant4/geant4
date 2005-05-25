@@ -7,7 +7,7 @@
 #ifndef HEPREP_HEPREPATTRIBUTELISTENER_H
 #define HEPREP_HEPREPATTRIBUTELISTENER_H 1
 
-// Copyright 2000-2004, FreeHEP.
+// Copyright 2000-2005, FreeHEP.
 
 #include <string>
 #include <vector>

@@ -1,3 +1,4 @@
+// Copyright FreeHEP, 2005.
 #ifndef CHEPREP_GZIPOUTPUTSTREAM_H
 #define CHEPREP_GZIPOUTPUTSTREAM_H
 
@@ -5,6 +6,10 @@
 
 #include "cheprep/GZIPOutputStreamBuffer.h"
 
+/**
+ * @author Mark Donszelmann
+ * @version $Id: GZIPOutputStream.h,v 1.2 2005-05-25 23:21:59 duns Exp $
+ */
 namespace cheprep {
 
     class GZIPOutputStream : public std::ostream {

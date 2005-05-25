@@ -1,9 +1,14 @@
+// Copyright FreeHEP, 2005.
 
 #include "cheprep/DefaultHepRepInstanceTree.h"
 
 using namespace std;
 using namespace HEPREP;
 
+/**
+ * @author Mark Donszelmann
+ * @version $Id: DefaultHepRepInstanceTree.cc,v 1.10 2005-05-25 23:22:25 duns Exp $
+ */
 namespace cheprep {
 
 DefaultHepRepInstanceTree::DefaultHepRepInstanceTree(string name, string version, HepRepTreeID* typeTree)

@@ -1,3 +1,4 @@
+// Copyright FreeHEP, 2005.
 #ifndef CHEPREP_XMLHEPREPWRITER_H
 #define CHEPREP_XMLHEPREPWRITER_H 1
 
@@ -29,8 +30,8 @@
 #include "cheprep/GZIPOutputStream.h"
 
 /**
- *
- * @author M.Donszelmann
+ * @author Mark Donszelmann
+ * @version $Id: XMLHepRepWriter.h,v 1.3 2005-05-25 23:21:59 duns Exp $
  */
 namespace cheprep {
 

@@ -9,7 +9,7 @@
                         
 /**
  * @author Mark Donszelmann
- * @version $Id: BHepRepWriter.cc,v 1.7 2005-05-17 22:13:01 duns Exp $
+ * @version $Id: BHepRepWriter.cc,v 1.8 2005-05-25 23:21:59 duns Exp $
  */
 namespace cheprep {
 
@@ -73,6 +73,9 @@ namespace cheprep {
             attributes["typetreename"]          = 0x2c;
             attributes["typetreeversion"]       = 0x2d;
             attributes["order"]                 = 0x2e;
+            
+            // for PI
+            attributes["eof"]                   = 0x7f;
         }
         
         if (values.size() <= 0) { 
@@ -207,8 +210,8 @@ namespace cheprep {
         
         // header
         writeByte(WBXML_VERSION);
-        writeByte(UNKNOWN_PID);
-        writeByte(UTF8);        
+        writeMultiByteInt(UNKNOWN_PID);
+        writeMultiByteInt(UTF8);        
         
         version = "BinaryHepRep/1.0"; 
        
@@ -221,6 +224,9 @@ namespace cheprep {
     }
     
     void BHepRepWriter::closeDoc(bool /* force */) {
+        writeByte(PI);
+        writeByte(attributes["eof"]);
+        writeByte(END);
     }
 
     void BHepRepWriter::openTag(std::string name) {
@@ -228,6 +234,7 @@ namespace cheprep {
     }
     
     void BHepRepWriter::closeTag() {
+        writePoints();
         writeByte(END);
     }
     
@@ -248,6 +255,16 @@ namespace cheprep {
         // write tag
         bool isPoint = (s == "point");
         bool hasAttributes = (stringAttributes.size() > 0) || (doubleAttributes.size() > (unsigned int)(isPoint ? 3 : 0));
+        
+        if (!hasAttributes && isPoint) {
+            // store the point for the future
+            points.push_back(doubleAttributes["x"]);
+            points.push_back(doubleAttributes["y"]);
+            points.push_back(doubleAttributes["z"]);
+            return;
+        }
+
+        writePoints();
         writeByte(tags[s] | ((hasContent || isPoint) ? CONTENT : 0x00) | (hasAttributes ? ATTRIBUTE : 0x00));        
             
         // write attributes
@@ -265,9 +282,16 @@ namespace cheprep {
                     // write ATTRVALUE
                     writeByte(values[v]);
                 } else {
-                    // write string ref
-                    writeByte(STR_R);
-                    writeMultiByteInt(stringValues[value]);    
+                    if (stringValues.count(value) <= 0) {
+                        // define this new string
+                        writeStringDefine(value);
+                        int index = stringValues.size();
+                        stringValues[value] = index;
+                    } else {
+                        // write string ref
+                        writeByte(STR_R);
+                        writeMultiByteInt(stringValues[value]);    
+                    }
                 }
             }
     	    stringAttributes.clear();   	     
@@ -280,7 +304,7 @@ namespace cheprep {
                 writeByte(attributes[name]);
                 // write OPAQUE
                 writeByte(OPAQUE);
-                writeByte(value.size());
+                writeMultiByteInt(value.size());
                 writeByte((int)(value[0] * 0xff) & 0xff);
                 writeByte((int)(value[1] * 0xff) & 0xff);
                 writeByte((int)(value[2] * 0xff) & 0xff);
@@ -296,7 +320,7 @@ namespace cheprep {
                 writeByte(attributes[name]);
                 // write OPAQUE
                 writeByte(OPAQUE);
-                writeByte(8);
+                writeMultiByteInt(8);
                 writeLong(value);
             }
     	    longAttributes.clear();
@@ -309,7 +333,7 @@ namespace cheprep {
                 writeByte(attributes[name]);
                 // write OPAQUE
                 writeByte(OPAQUE);
-                writeByte(4);
+                writeMultiByteInt(4);
                 writeInt(value);
             }
     	    intAttributes.clear();
@@ -334,13 +358,8 @@ namespace cheprep {
                     writeByte(attributes[name]);
                     // write OPAQUE
                     writeByte(OPAQUE);
-                    if (singlePrecision) {
-                        writeByte(0x04);
-                        writeFloat(value);
-                    } else {
-                        writeByte(0x08);
-                        writeDouble(value);
-                    }   
+                    writeMultiByteInt(singlePrecision ? 4 : 8);
+                    writeReal(value);
                 }        
             }
     	    doubleAttributes.clear();
@@ -351,17 +370,10 @@ namespace cheprep {
         
         if (s == "point") {
             writeByte(OPAQUE);
-            if (singlePrecision) {               
-                writeByte(12);
-                writeFloat(doubleAttributes["x"]);
-                writeFloat(doubleAttributes["y"]);
-                writeFloat(doubleAttributes["z"]);
-            } else {
-                writeByte(24);
-                writeDouble(doubleAttributes["x"]);
-                writeDouble(doubleAttributes["y"]);
-                writeDouble(doubleAttributes["z"]);
-            }            
+            writeMultiByteInt(singlePrecision ?  12 : 24);
+            writeReal(doubleAttributes["x"]);
+            writeReal(doubleAttributes["y"]);
+            writeReal(doubleAttributes["z"]);
         }
         
         if (isPoint && !hasContent) {
@@ -370,6 +382,22 @@ namespace cheprep {
         }    
     }
     
+    void BHepRepWriter::writePoints() {
+        if (points.size() <= 0) return;
+        
+        writeByte(tags["point"] | CONTENT);                
+        writeByte(OPAQUE);
+        writeMultiByteInt(points.size()*(singlePrecision ? 4 : 8));
+        for (std::vector<double>::iterator i = points.begin(); i != points.end(); ) {
+            writeReal(*i++);
+            writeReal(*i++);
+            writeReal(*i++);
+        }
+        writeByte(END);
+        
+        points.clear();
+    }
+        
     void BHepRepWriter::setAttribute(std::string name, char* value) {
         setAttribute(name, (std::string)value);
     }
@@ -384,15 +412,6 @@ namespace cheprep {
         }
                     
         stringAttributes[name] = value;
-
-        // make sure the attribute value is defined
-        std::string v = value;
-        std::transform(v.begin(), v.end(), v.begin(), (int(*)(int)) tolower);
-        if ((values.count(v) <= 0) && (stringValues.count(value) <= 0)) {
-            writeStringDefine(value);
-            int index = stringValues.size();
-            stringValues[value] = index;
-        }
     }
 
     void BHepRepWriter::setAttribute(std::string name, std::vector<double> value) {
@@ -476,25 +495,23 @@ namespace cheprep {
         writeByte(buf[0]);
     }
 
-    void BHepRepWriter::writeDouble(double d) {
-        union {
-	        int64 i;
-	        double d;
-        } u;
-        u.d = d;
- 
-        writeLong(u.i);
-    }            
-
-
-    void BHepRepWriter::writeFloat(double d) {
-        union {
-	        int i;
-	        float f;
-        } u;
-        u.f = (float)d;
-
-        writeInt(u.i);
+    void BHepRepWriter::writeReal(double d) {
+        if (singlePrecision) {
+            union {
+    	        int i;
+    	        float f;
+            } u;
+            u.f = (float)d;
+            writeInt(u.i);
+        } else {
+            union {
+    	        int64 i;
+    	        double d;
+            } u;
+            u.d = d;
+     
+            writeLong(u.i);
+        }
     }
 
     void BHepRepWriter::writeLong(int64 i) {        

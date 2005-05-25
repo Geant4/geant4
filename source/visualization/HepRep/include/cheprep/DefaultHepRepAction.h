@@ -1,3 +1,4 @@
+// Copyright FreeHEP, 2005.
 #ifndef CHEPREP_DEFAULTHEPREPACTION_H
 #define CHEPREP_DEFAULTHEPREPACTION_H 1
 
@@ -8,8 +9,8 @@
 #include "HEPREP/HepRepAction.h"
 
 /**
- *
- * @author M.Donszelmann
+ * @author Mark Donszelmann
+ * @version $Id: DefaultHepRepAction.h,v 1.2 2005-05-25 23:21:59 duns Exp $
  */
 namespace cheprep {
 

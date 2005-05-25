@@ -9,7 +9,7 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: ZipOutputStream.h,v 1.7 2005-05-17 22:13:01 duns Exp $
+ * @version $Id: ZipOutputStream.h,v 1.8 2005-05-25 23:21:59 duns Exp $
  */
 namespace cheprep {
 

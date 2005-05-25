@@ -7,7 +7,7 @@
 #ifndef HEPREP_HEPREPPOINT_H
 #define HEPREP_HEPREPPOINT_H 1
 
-// Copyright 2000-2002, FreeHEP.
+// Copyright 2000-2005, FreeHEP.
 
 #include <vector>
 

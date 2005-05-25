@@ -1,3 +1,4 @@
+// Copyright FreeHEP, 2005.
 
 #include "cheprep/config.h"
 
@@ -10,6 +11,10 @@
 using namespace std;
 using namespace HEPREP;
 
+/**
+ * @author Mark Donszelmann
+ * @version $Id: DefaultHepRepAttribute.cc,v 1.7 2005-05-25 23:22:25 duns Exp $
+ */
 namespace cheprep {
 
 

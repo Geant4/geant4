@@ -7,7 +7,7 @@
 #ifndef HEPREP_HEPREPWRITER_H
 #define HEPREP_HEPREPWRITER_H 1
 
-// Copyright 2002, Freehep.
+// Copyright 2002-2005, Freehep.
 
 #include <string>
 #include <vector>

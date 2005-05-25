@@ -7,7 +7,7 @@
 #ifndef HEPREP_HEPREPDEFINITION_H
 #define HEPREP_HEPREPDEFINITION_H 1
 
-// Copyright 2000-2002, FreeHEP.
+// Copyright 2000-2005, FreeHEP.
 
 #include <set>
 #include <string>

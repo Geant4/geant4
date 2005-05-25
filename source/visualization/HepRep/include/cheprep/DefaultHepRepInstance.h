@@ -1,3 +1,4 @@
+// Copyright FreeHEP, 2005.
 #ifndef CHEPREP_DEFAULTHEPREPINSTANCE_H
 #define CHEPREP_DEFAULTHEPREPINSTANCE_H 1
 
@@ -18,8 +19,8 @@
 #include "DefaultHepRepAttribute.h"
 
 /**
- *
- * @author M.Donszelmann
+ * @author Mark Donszelmann
+ * @version $Id: DefaultHepRepInstance.h,v 1.2 2005-05-25 23:21:59 duns Exp $
  */
 namespace cheprep {
 

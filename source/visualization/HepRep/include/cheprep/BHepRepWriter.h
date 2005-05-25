@@ -13,7 +13,7 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: BHepRepWriter.h,v 1.7 2005-05-17 22:13:01 duns Exp $
+ * @version $Id: BHepRepWriter.h,v 1.8 2005-05-25 23:21:59 duns Exp $
  */
 namespace cheprep {
 
@@ -111,12 +111,15 @@ namespace cheprep {
             std::map<std::string, bool> booleanAttributes;
             std::map<std::string, double> doubleAttributes;
             
+            // point array
+            std::vector<double> points;
+            
             // methods
             void writeTag(std::string name, bool content = false);
+            void writePoints();
             void writeStringDefine(std::string s);                     
             void writeMultiByteInt(unsigned int ui);                     
-            void writeDouble(double ui);
-            void writeFloat(double ui);
+            void writeReal(double ui);
             void writeLong(int64 i);
             void writeInt(int i);
             void writeByte(unsigned char b);

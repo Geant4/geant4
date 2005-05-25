@@ -1,3 +1,4 @@
+// Copyright FreeHEP, 2005.
 
 #include <fstream>
 
@@ -5,6 +6,10 @@
 
 using namespace std;
 
+/**
+ * @author Mark Donszelmann
+ * @version $Id: IndentPrintWriter.cc,v 1.13 2005-05-25 23:22:25 duns Exp $
+ */
 namespace cheprep {
 
 IndentPrintWriter::IndentPrintWriter(ostream* out, int level)

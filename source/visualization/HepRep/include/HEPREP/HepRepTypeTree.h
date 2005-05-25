@@ -7,7 +7,7 @@
 #ifndef HEPREP_HEPREPTYPETREE_H
 #define HEPREP_HEPREPTYPETREE_H 1
 
-// Copyright 2000-2002, FreeHEP.
+// Copyright 2000-2005, FreeHEP.
 
 #include <string>
 #include <vector>

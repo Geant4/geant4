@@ -7,7 +7,7 @@
 #ifndef HEPREP_HEPREPITERATOR_H
 #define HEPREP_HEPREPITERATOR_H 1
 
-// Copyright 2000-2004, FreeHEP.
+// Copyright 2000-2005, FreeHEP.
 
 #include <string>
 

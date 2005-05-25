@@ -7,7 +7,7 @@
 #ifndef HEPREP_HEPREPFRAMELISTENER_H
 #define HEPREP_HEPREPFRAMELISTENER_H 1
 
-// Copyright 2004, FreeHEP.
+// Copyright 2004-2005, FreeHEP.
 
 namespace HEPREP {
 

@@ -1,3 +1,4 @@
+// Copyright FreeHEP, 2005.
 #ifndef CHEPREP_DEFAULTHEPREPTYPETREE_H
 #define CHEPREP_DEFAULTHEPREPTYPETREE_H 1
 
@@ -16,8 +17,8 @@
 #include "DefaultHepRepTreeID.h"
 
 /**
- *
- * @author M.Donszelmann
+ * @author Mark Donszelmann
+ * @version $Id: DefaultHepRepTypeTree.h,v 1.2 2005-05-25 23:21:59 duns Exp $
  */
 namespace cheprep {
 

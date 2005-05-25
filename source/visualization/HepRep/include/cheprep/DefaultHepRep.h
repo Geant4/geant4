@@ -1,3 +1,4 @@
+// Copyright FreeHEP, 2005.
 #ifndef CHEPREP_DEFAULTHEPREP_H
 #define CHEPREP_DEFAULTHEPREP_H 1
 
@@ -15,8 +16,8 @@
 #include "HEPREP/HepRepInstanceTree.h"
 
 /**
- *
- * @author M.Donszelmann
+ * @author Mark Donszelmann
+ * @version $Id: DefaultHepRep.h,v 1.2 2005-05-25 23:21:59 duns Exp $
  */
 namespace cheprep {
 

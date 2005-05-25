@@ -1,3 +1,4 @@
+// Copyright FreeHEP, 2005.
 
 #include <iostream>
 #include <cstring>
@@ -9,6 +10,10 @@
 using namespace std;
 using namespace HEPREP;
 
+/**
+ * @author Mark Donszelmann
+ * @version $Id: DefaultHepRepAttDef.cc,v 1.7 2005-05-25 23:22:25 duns Exp $
+ */
 namespace cheprep {
 
 DefaultHepRepAttDef::DefaultHepRepAttDef(string name, string desc, string category, string extra)

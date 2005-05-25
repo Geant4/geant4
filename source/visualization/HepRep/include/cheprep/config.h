@@ -1,6 +1,11 @@
+// Copyright FreeHEP, 2005.
 #ifndef CHEPREP_CONFIG_H
 #define CHEPREP_CONFIG_H 1
 
+/**
+ * @author Mark Donszelmann
+ * @version $Id: config.h,v 1.3 2005-05-25 23:21:59 duns Exp $
+ */
 namespace cheprep {
 
 #if defined(WIN32) && !defined(GNU_GCC)

@@ -7,7 +7,7 @@
 #ifndef HEPREP_HEPREPREADER_H
 #define HEPREP_HEPREPREADER_H 1
 
-// Copyright 2002-2003, Freehep.
+// Copyright 2002-2004, Freehep.
 
 #include <string>
 #include <vector>

@@ -7,7 +7,7 @@
 #ifndef HEPREP_HEPREPTREEID_H
 #define HEPREP_HEPREPTREEID_H 1
 
-// Copyright 2000-2003, FreeHEP.
+// Copyright 2000-2005, FreeHEP.
 
 #include <string>
 

@@ -1,3 +1,4 @@
+// Copyright FreeHEP, 2005.
 #ifndef XMLHEPREPFACTORY_H
 #define XMLHEPREPFACTORY_H 1
 
@@ -10,8 +11,8 @@
 #include "DefaultHepRepFactory.h"
 
 /**
- *
- * @author M.Donszelmann
+ * @author Mark Donszelmann
+ * @version $Id: XMLHepRepFactory.h,v 1.2 2005-05-25 23:21:59 duns Exp $
  */
 namespace cheprep {
 

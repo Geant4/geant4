@@ -1,3 +1,4 @@
+// Copyright FreeHEP, 2005.
 #ifndef ABSTRACTXMLWRITER_H
 #define ABSTRACTXMLWRITER_H 1
 
@@ -6,10 +7,8 @@
 #include <string>
 
 /**
- * A class that makes it easy to write XML documents.
- *
- * @author Tony Johnson
  * @author Mark Donszelmann
+ * @version $Id: AbstractXMLWriter.h,v 1.2 2005-05-25 23:21:59 duns Exp $
  */
 namespace cheprep {
     
