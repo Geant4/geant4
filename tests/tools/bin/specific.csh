@@ -523,7 +523,7 @@ if ( `uname -n` == "pc-88172" ) then
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/DMX
 endif
 
-if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == Ordinateur-de-Guy-Barrand.local ) then
+if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == wl-72106.lal.in2p3.fr || `uname -n` == Ordinateur-de-Guy-Barrand.local ) then
   set prompt='mac-91114-g4> ' 
 # Core :
   setenv MAKECMD make
