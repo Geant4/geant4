@@ -1,0 +1,24 @@
+.$Id: History,v 1.1 2005-05-25 23:18:52 duns Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+History file for visualization/HepRep sub-category
+--------------------------------------------------
+25 May 2005 Mark Donszelmann (vis-zlib-V07-00-00 against geant4-07-00-ref-03)
+- zlib version 1.2.2
+
