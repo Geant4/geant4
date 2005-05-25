@@ -1,4 +1,4 @@
-$Id: History,v 1.88 2005-05-23 07:59:14 gcosmo Exp $
+$Id: History,v 1.89 2005-05-25 14:58:11 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 25, 2005  G.Cosmo                      geommng-V07-00-04
+- Fixed problem with previous tag, where version of G4LogicalVolume.cc was
+  not correct and untagged.
+- G4LogicalVolume::SetVisAttributes(const G4VisAttributes& VA): now creating
+  a copy of 'VA' on the heap. Temporary solution, until a proper 'store' for
+  visualization attributes will be implemented to take care of the memory
+  management.
+
 May 23, 2005  G.Cosmo                      geommng-V07-00-03
-- Modified comments in G4VSolid and G4BlockingList to overcome a limitation in the
-  scripts for the generation of the Software Reference Manual.
+- Modified comments in G4VSolid and G4BlockingList to overcome a limitation in
+  the scripts for the generation of the Software Reference Manual.
 
 Apr 13, 2005  G.Cosmo                      geommng-V07-00-02
 - Extended signatures for OpenGeometry() and CloseGeometry() to consider local
