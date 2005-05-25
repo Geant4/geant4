@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.cc,v 1.26 2005-05-22 16:41:57 allison Exp $
+// $Id: G4LogicalVolume.cc,v 1.27 2005-05-25 14:16:32 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -359,7 +359,7 @@ G4double G4LogicalVolume::GetMass(G4bool forced,
 
 void G4LogicalVolume::SetVisAttributes (const G4VisAttributes& VA)
 {
-  fVisAttributes = new G4VisAttributes(&VA);
+  fVisAttributes = new G4VisAttributes(VA);
   static G4bool firstCall = true;
   if (firstCall) {
     firstCall = false;
