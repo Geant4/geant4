@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Visible.cc,v 1.10 2005-05-24 08:44:25 allison Exp $
+// $Id: G4Visible.cc,v 1.11 2005-05-26 10:07:14 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,7 @@ G4bool G4Visible::operator == (const G4Visible& right) const{
 
 void G4Visible::SetVisAttributes (const G4VisAttributes& VA) {
   fpVisAttributes = new G4VisAttributes(VA);
+  /*
   static G4bool firstCall = true;
   if (firstCall) {
     firstCall = false;
@@ -64,6 +65,7 @@ void G4Visible::SetVisAttributes (const G4VisAttributes& VA) {
 "\n*******************************************************************************\n"
  	   << G4endl;
   }
+  */
 }
 
 std::ostream& operator << (std::ostream& os, const G4Visible& v) {
