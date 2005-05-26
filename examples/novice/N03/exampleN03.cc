@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.21 2005-05-03 10:21:16 allison Exp $
+// $Id: exampleN03.cc,v 1.22 2005-05-26 12:21:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -54,7 +54,6 @@
 #include "ExN03EventAction.hh"
 #include "ExN03SteppingAction.hh"
 #include "ExN03SteppingVerbose.hh"
-#include "ExN03TRackingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -73,7 +72,6 @@ int main(int argc,char** argv) {
   ExN03DetectorConstruction* detector = new ExN03DetectorConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new ExN03PhysicsList);
-  runManager->SetUserAction(new ExN03TrackingAction);
 
  G4UIsession* session=0;
   
