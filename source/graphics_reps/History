@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.68 2005-05-24 08:46:17 allison Exp $
+cvs log $Id: History,v 1.69 2005-05-26 08:33:25 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-2th May 2005  John Allison
+2th May 2005  John Allison  (greps-V07-00-06)
 - Fixed bug introduced in greps-V07-00-05.
 
 22nd May 2005  John Allison  (greps-V07-00-05)
