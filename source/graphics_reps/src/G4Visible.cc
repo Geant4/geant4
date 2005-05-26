@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Visible.cc,v 1.11 2005-05-26 10:07:14 allison Exp $
+// $Id: G4Visible.cc,v 1.12 2005-05-26 10:34:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,26 +46,6 @@ G4bool G4Visible::operator == (const G4Visible& right) const{
 
 void G4Visible::SetVisAttributes (const G4VisAttributes& VA) {
   fpVisAttributes = new G4VisAttributes(VA);
-  /*
-  static G4bool firstCall = true;
-  if (firstCall) {
-    firstCall = false;
-    G4cout <<
-"\n*******************************************************************************" 
-"\nWARNING: DEPRECATED method G4Visible::SetVisAttributes(const G4VisAttributes&)"
-"\n       has been invoked.  Please use SetVisAttributes(const G4VisAttributes*)"
-"\n       instead, i.e., provide a pointer to a G4VisAttributes object.  Only the"
-"\n       pointer is stored, so the G4VisAttributes object to which it refers must"
-"\n       have a life long enough to satisfy all uses of the G4Visible object."
-"\n       E.g., if the G4Visible object is created on the heap (using `new')"
-"\n       then the associated G4VisAttributes object should normally also be"
-"\n       created on the heap and managed in the same way."
-"\n       (This message is printed only once.  Please check all occurances of"
-"\n       your use of SetVisAttributes.)"
-"\n*******************************************************************************\n"
- 	   << G4endl;
-  }
-  */
 }
 
 std::ostream& operator << (std::ostream& os, const G4Visible& v) {

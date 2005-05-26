@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.71 2005-05-26 10:08:51 allison Exp $
+cvs log $Id: History,v 1.72 2005-05-26 10:34:55 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-2th May 2005  John Allison  (greps-V07-00-07)
+26th May 2005  John Allison  (greps-V07-00-07)
 - Fixed bug introduced in greps-V07-00-05.
-- Commented out WARNING in G4Visible::SetVisAttributes(const G4VisAttributes&)
+- Removed DEPRECATION of G4Visible::SetVisAttributes(const G4VisAttributes&)
   pending a resolution of the issues for a future release.
 
 22nd May 2005  John Allison  (greps-V07-00-05)
