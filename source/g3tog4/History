@@ -1,7 +1,11 @@
-$Id: History,v 1.58 2005-04-07 08:28:02 gcosmo Exp $
+$Id: History,v 1.59 2005-05-26 14:17:36 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V07-00-01 26-May-2005 G.Cosmo
+- Initialise local pointer variable 'mothLV' in method
+  G3toG4BuildTree::G3toG4BuildPVTree().
 
 g3tog4-V07-00-00 06-Apr-2005 J.Allison
 - GNUmakefile: corrected order for graphics_reps and intercoms in the
