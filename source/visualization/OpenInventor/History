@@ -1,4 +1,4 @@
-$Id: History,v 1.62 2005-05-25 08:16:06 gbarrand Exp $
+$Id: History,v 1.63 2005-05-26 15:29:50 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,7 +20,7 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
-25th May 2005  Guy Barrand
+25th May 2005  Guy Barrand  (openinventor-V07-00-00)
 - G4OpenInventorTransform3D.cc : use the CLHEP::Transform3D::operator(i,j)
   to initialize the m array in order to be compatible with new versions
   of CLHEP.
