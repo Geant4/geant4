@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.69 2005-05-26 08:33:25 gcosmo Exp $
+cvs log $Id: History,v 1.70 2005-05-26 10:07:14 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,8 @@ committal in the CVS repository !
 
 2th May 2005  John Allison  (greps-V07-00-06)
 - Fixed bug introduced in greps-V07-00-05.
+- Commented out WARNING in G4Visible::SetVisAttributes(const G4VisAttributes&)
+  pending a resolution of the issues for a future release.
 
 22nd May 2005  John Allison  (greps-V07-00-05)
 - DEPRECATED G4Visible::SetVisAttributes (const G4VisAttributes&).
