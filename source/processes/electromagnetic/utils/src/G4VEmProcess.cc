@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.28 2005-05-12 11:06:52 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.29 2005-05-27 18:38:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -165,6 +165,7 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
     G4cout << "G4VEmProcess::BuildPhysicsTable() for "
            << GetProcessName()
            << " and particle " << part.GetParticleName()
+	   << " buildLambdaTable= " << buildLambdaTable
            << G4endl;
   }
 
@@ -197,7 +198,6 @@ void G4VEmProcess::BuildLambdaTable()
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
-
   for(size_t i=0; i<numOfCouples; i++) {
 
     if (theLambdaTable->GetFlag(i)) {
@@ -480,22 +480,26 @@ void G4VEmProcess::FindLambdaMax()
   }
   size_t n = theLambdaTable->length();
   G4PhysicsVector* pv = (*theLambdaTable)[0];
-  size_t nb = pv->GetVectorLength();
-  G4double emax = pv->GetLowEdgeEnergy(nb);
-  G4double e, s, smax = 0.0;
+  G4double e, s, emax, smax;
   theEnergyOfCrossSectionMax = new G4double [n];
   theCrossSectionMax = new G4double [n];
   G4bool b;
 
   for (size_t i=0; i<n; i++) {
     pv = (*theLambdaTable)[i];
+    emax = DBL_MAX;
     smax = 0.0;
-    for (size_t j=0; j<nb; j++) {
-      e = pv->GetLowEdgeEnergy(j);
-      s = pv->GetValue(e,b);
-      if(s > smax) {
-	smax = s;
-	emax = e;
+    if(pv) {
+      size_t nb = pv->GetVectorLength();
+      emax = pv->GetLowEdgeEnergy(nb);
+      smax = 0.0;
+      for (size_t j=0; j<nb; j++) {
+	e = pv->GetLowEdgeEnergy(j);
+	s = pv->GetValue(e,b);
+	if(s > smax) {
+	  smax = s;
+	  emax = e;
+	}
       }
     }
     theEnergyOfCrossSectionMax[i] = emax;

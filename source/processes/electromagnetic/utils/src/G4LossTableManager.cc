@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.57 2005-05-03 08:09:34 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.58 2005-05-27 18:38:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -184,6 +184,8 @@ void G4LossTableManager::Register(G4VEnergyLossProcess* p)
   if(integralActive)       p->SetIntegral(integral);
   if(minEnergyActive)      p->SetMinKinEnergy(minKinEnergy);
   if(maxEnergyActive)      p->SetMaxKinEnergy(maxKinEnergy);
+  if(verbose > 1) 
+    G4cout << "G4LossTableManager::Register G4VEnergyLossProcess : " << p->GetProcessName() << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -200,6 +202,8 @@ void G4LossTableManager::DeRegister(G4VEnergyLossProcess* p)
 void G4LossTableManager::Register(G4VMultipleScattering* p)
 {
   msc_vector.push_back(p);
+  if(verbose > 1) 
+    G4cout << "G4LossTableManager::Register G4VMultipleScattering : " << p->GetProcessName() << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -217,6 +221,8 @@ void G4LossTableManager::DeRegister(G4VMultipleScattering* p)
 void G4LossTableManager::Register(G4VEmProcess* p)
 {
   emp_vector.push_back(p);
+  if(verbose > 1) 
+    G4cout << "G4LossTableManager::Register G4VEmProcess : " << p->GetProcessName() << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

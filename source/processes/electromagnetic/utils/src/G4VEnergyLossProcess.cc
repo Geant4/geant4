@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.56 2005-05-01 20:26:33 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.57 2005-05-27 18:38:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -917,22 +917,25 @@ void G4VEnergyLossProcess::SetLambdaTable(G4PhysicsTable* p)
   if(p) {
     size_t n = p->length();
     G4PhysicsVector* pv = (*p)[0];
-    size_t nb = pv->GetVectorLength();
-    G4double emax = pv->GetLowEdgeEnergy(nb);
-    G4double e, s, smax = 0.0;
+    G4double e, s, smax, emax;
     theEnergyOfCrossSectionMax = new G4double [n];
     theCrossSectionMax = new G4double [n];
     G4bool b;
 
     for (size_t i=0; i<n; i++) {
       pv = (*p)[i];
+      emax = DBL_MAX;
       smax = 0.0;
-      for (size_t j=0; j<nb; j++) {
-        e = pv->GetLowEdgeEnergy(j);
-        s = pv->GetValue(e,b);
-        if(s > smax) {
-          smax = s;
-          emax = e;
+      if(pv) {
+        size_t nb = pv->GetVectorLength();
+        emax = pv->GetLowEdgeEnergy(nb);
+	for (size_t j=0; j<nb; j++) {
+	  e = pv->GetLowEdgeEnergy(j);
+	  s = pv->GetValue(e,b);
+	  if(s > smax) {
+	    smax = s;
+	    emax = e;
+	  }
 	}
       }
       theEnergyOfCrossSectionMax[i] = emax;

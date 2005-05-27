@@ -1,4 +1,4 @@
-$Id: History,v 1.199 2005-05-18 14:19:00 vnivanch Exp $
+$Id: History,v 1.200 2005-05-27 18:40:05 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27 May 05: V.Ivant (utils-V07-00-13)
+- fix problem observed for second run after adding/removal materials
 
 18 May 05: V.Ivant (utils-V07-00-12)
 - fix calculation of CrossSection without /run/initialise
