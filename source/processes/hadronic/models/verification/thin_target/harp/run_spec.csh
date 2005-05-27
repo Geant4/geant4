@@ -8,7 +8,7 @@
 
 cd $G4INSTALL/source
 gmake
-source ~/pi_setup.csh
+source ~/bin/pi_setup.csh
 cd processes/hadronic/models/verification/thin_target/harp
 setenv TARGET p_al_13gev
 gmake
