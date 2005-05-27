@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.38 2005-03-09 16:27:09 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.39 2005-05-27 13:39:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -321,7 +321,7 @@ void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
   AddPrimitive(tick21.transform(transformation));
   AddPrimitive(tick22.transform(transformation));
   G4Text text(scale.GetAnnotation(),textPosition.transform(transformation));
-  text.SetScreenSize(24.);
+  text.SetScreenSize(12.);
   AddPrimitive(text);
 }
 
@@ -439,6 +439,10 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 
   const std::vector<G4VModel*>& runDurationModelList =
     fpScene -> GetRunDurationModelList ();
+  /*
+  const std::vector<G4VModel*>& endOfEventModelList =
+    fpScene -> GetEndOfEventModelList ();
+  */
 
   if (runDurationModelList.size ()) {
     G4VisManager::Verbosity verbosity =
@@ -471,6 +475,17 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
       pModel -> DescribeYourselfTo (*this);
       pModel -> SetModelingParameters (tempMP);
     }
+    /*
+    for (size_t i = 0; i < endOfEventModelList.size (); i++) {
+      G4VModel* pModel = endOfEventModelList[i];
+      const G4ModelingParameters* tempMP =
+	pModel -> GetModelingParameters ();
+      pModel -> SetModelingParameters (pMP);
+      SetModel (pModel);  // Store for use by derived class.
+      pModel -> DescribeYourselfTo (*this);
+      pModel -> SetModelingParameters (tempMP);
+    }
+    */
     delete pMP;
     SetModel (0);  // Flags invalid model.
     EndModeling ();
