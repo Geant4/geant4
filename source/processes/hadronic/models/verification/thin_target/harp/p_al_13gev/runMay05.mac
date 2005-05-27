@@ -15,7 +15,7 @@ proton
 #material
 Al
 #momentum(MeV/c)
-12.9
+12900
 #pmax(MeV/c)
 14000.
 #nbins
