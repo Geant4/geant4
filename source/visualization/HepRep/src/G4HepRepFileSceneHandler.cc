@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.24 2005-05-25 06:33:48 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.25 2005-05-27 06:31:36 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -68,6 +68,22 @@ G4HepRepFileSceneHandler::G4HepRepFileSceneHandler(G4VGraphicsSystem& system,
 
   hepRepXMLWriter = ((G4HepRepFile*)(&system))->GetHepRepXMLWriter();
   fileCounter = 0;
+  int length;
+
+  if (getenv("G4HEPREPFILE_DIR") == NULL)
+    strcpy(fileDir, "");
+  else
+    length = sprintf (fileDir, "%s%s", getenv("G4HEPREPFILE_DIR"),"/");
+
+  if (getenv("G4HEPREPFILE_NAME") == NULL)
+    strcpy(fileName, "G4Data");
+  else
+    strcpy(fileName, getenv("G4HEPREPFILE_NAME"));
+
+  if (getenv("G4HEPREPFILE_OVERWRITE") == NULL)
+    fileOverwrite = false;
+  else
+    fileOverwrite = strcmp(getenv("G4HEPREPFILE_OVERWRITE"),"0");
 }
 
 
@@ -800,13 +816,27 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName) {
 
   hepRepXMLWriter->addAttValue("DrawAs",primName);
 
-  // Handle color attribute, avoiding drawing anything black on black.
-  G4Colour colour = fpVisAttribs->GetColour();
-  float redness = colour.GetRed();
-  float greenness = colour.GetGreen();
-  float blueness = colour.GetBlue();
+  // Handle color attribute.
+  float redness;
+  float greenness;
+  float blueness;
 
-  if (redness==0. && greenness==0. && blueness==0.) {
+  if (fpVisAttribs) {
+    G4Colour colour = fpVisAttribs->GetColour();
+    redness = colour.GetRed();
+    greenness = colour.GetGreen();
+    blueness = colour.GetBlue();
+    
+    // Avoiding drawing anything black on black.  
+    if (redness==0. && greenness==0. && blueness==0.) {
+      redness = 1.;
+      greenness = 1.;
+      blueness = 1.;
+    }
+  } else {
+    G4cout <<
+      "G4HepRepFileSceneHandler::AddHepRepInstance using default colour."
+	   << G4endl;
     redness = 1.;
     greenness = 1.;
     blueness = 1.;
@@ -834,9 +864,17 @@ void G4HepRepFileSceneHandler::CheckFileOpen() {
 
   if (!hepRepXMLWriter->isOpen) {
     char* newFileSpec;
-    newFileSpec = new char [100];
+    newFileSpec = new char [256];
     int length;
-    length = sprintf (newFileSpec, "%s%d%s","G4Data",fileCounter,".heprep");
+
+    if (fileOverwrite)
+      length = sprintf (newFileSpec, "%s%s%s",fileDir,fileName,".heprep");
+    else
+      length = sprintf (newFileSpec, "%s%s%d%s",fileDir,fileName,fileCounter,".heprep");
+    G4cout <<
+      "G4HepRepFileSceneHandler::CheckFileOpen opened fileSpec " << newFileSpec
+	   << G4endl;
+
     hepRepXMLWriter->open(newFileSpec);
 #ifdef G4HEPREPFILEDEBUG
     G4cout <<
@@ -865,10 +903,10 @@ void G4HepRepFileSceneHandler::ClearTransientStore() {
   places, a draw command follows, so it is not needed here.  In fact
   it can cause a double recursive descent into DrawView, so the following
   has been commented out (JA - 23/Jan/05).
+  */
   if (fpViewer) {
     fpViewer -> SetView();
     fpViewer -> ClearView();
     fpViewer -> DrawView();
   }
-  */
 }
