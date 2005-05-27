@@ -1,4 +1,4 @@
-$Id: History,v 1.77 2005-05-26 09:44:05 gcosmo Exp $
+$Id: History,v 1.78 2005-05-27 16:38:54 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 27, 2005  J.Allison
+- Fixed polyhedron representation of G4Torus.
 
 May 26, 2005  G.Cosmo                    geom-csg-V07-00-06
 - G4Box.cc: restored call to AddSolid() and replaced old AddThis() in

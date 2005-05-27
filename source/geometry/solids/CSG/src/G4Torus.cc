@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.45 2005-05-20 15:34:22 grichine Exp $
+// $Id: G4Torus.cc,v 1.46 2005-05-27 16:38:54 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -2317,7 +2317,7 @@ void G4Torus::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 
 G4Polyhedron* G4Torus::CreatePolyhedron () const 
 {
-  return new G4PolyhedronTorus (fRmin, fRmax, fRtor, fSPhi, fSPhi + fDPhi);
+  return new G4PolyhedronTorus (fRmin, fRmax, fRtor, fSPhi, fDPhi);
 }
 
 G4NURBS* G4Torus::CreateNURBS () const 
