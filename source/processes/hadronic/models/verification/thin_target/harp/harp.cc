@@ -547,7 +547,7 @@ int main(int argc, char** argv)
       }
     }
 
-    double coeff = cross_sec*MeV*1000.0/(barn*(G4double)nevt);
+    double coeff = cross_sec*GeV*1000.0/(barn*(G4double)nevt);
     int    nmomtet[50][20];
     double harpcs[50][20];
     double dthetad = angpi[nanglpi-1]/double(nanglpi);
@@ -675,8 +675,8 @@ int main(int argc, char** argv)
         G4double thetad = theta/degree;
         G4double thetamr = theta*1000.;
 
-	//        if(thetamr>= m_thetamin && thetamr <= m_thetamax && p>m_pth) {
-          std::string nam = pd->GetParticleName();
+        std::string nam = pd->GetParticleName();
+	if(thetamr>= m_thetamin && thetamr <= m_thetamax && p>m_pth) {
           if(nam == "proton") {
             h[2]->fill(float(p/GeV),1.0);
             h[4]->fill(float(pt/GeV),1.0);
@@ -686,7 +686,6 @@ int main(int argc, char** argv)
               h[8]->fill(float(cost),1.0);
               n_pr++;
             }
-	    //          } else if(nam == "pi+" || nam == "kaon+" || nam == "pi-" || nam == "kaon-") {
           } else if(nam == "pi+" || nam == "pi-" ) {
             h[3]->fill(float(p/GeV),1.0);
             h[5]->fill(float(pt/GeV),1.0);
@@ -696,19 +695,20 @@ int main(int argc, char** argv)
               h[9]->fill(float(cost),1.0);
               n_pi++;
             }
-            if(p < mompi[nmompi-1] && theta < angpi[nanglpi-1]) {
-              int kang = int(theta/dthetad);
-              if(kang >= nanglpi) kang = nanglpi - 1; 
-              int kp = -1;
-              do {kp++;} while (kp < nmompi - 1 && p > mompi[kp]);  
-              nmomtet[kp][kang] += 1;
-	    }        
           }
           h[0]->fill(float(n_pr),1.0);
           h[1]->fill(float(n_pi),1.0);
-	  //	}
-      
-	//	delete sec;       	 
+
+	}
+
+	if(p < mompi[nmompi-1] && theta < angpi[nanglpi-1] 
+	   && (nam == "pi+" || nam == "pi-" )) {
+	  int kang = int(theta/dthetad);
+	  if(kang >= nanglpi) kang = nanglpi - 1; 
+	  int kp = -1;
+	  do {kp++;} while (kp < nmompi - 1 && p > mompi[kp]);  
+	  nmomtet[kp][kang] += 1;
+	}        
         delete aChange->GetSecondary(i);
       }
       aChange->Clear();
@@ -726,6 +726,9 @@ int main(int argc, char** argv)
       tree->close();
     }
 
+    G4cout.setf(std::ios::fixed,std::ios::floatfield);
+    G4int prec = G4cout.precision(6);
+
     G4cout << "###### Cross section per bin " << G4endl;
 
     mom0 = 0.0;
@@ -736,15 +739,21 @@ int main(int argc, char** argv)
     for(int k=0; k<nmompi; k++) {
       double mom1 = mompi[k];
       dsdm[k] = 0.0;
-      G4cout << "## Next momentum bin " << mom0 << "  -  " << mom1 << "  MeV/c" << G4endl;
+      G4cout << "## Next momentum bin " 
+	     << mom0 << "  -  " << mom1 << "  MeV/c" 
+	     << G4endl;
+
+      G4double ang0 = ang1 = 0.0;
 
       for(int j=0; j<nanglpi; j++) {
+        ang1 = anglpi[j];
         cross = double(nmomtet[k][j])*harpcs[k][j];
         G4cout << "  " << cross;
 
-        if(k>0) dsda[j] += cross;
+        if(k>0) dsda[j] += cross*(mom1 - mom0);
         else    dsda[j] = 0.0;
-        if(j>0) dsdm[k] += cross;
+        if(j>0) dsdm[k] += cross*twopi*(cos(ang0) - cos(ang1));
+        ang0 = ang1;
       }
       G4cout << G4endl;
       mom0 = mom1;
@@ -767,6 +776,9 @@ int main(int argc, char** argv)
     G4cout << G4endl;
 
     G4cout << "###### End of run # " << run << "     ######" << G4endl;
+    G4cout.setf(mode,std::ios::floatfield);
+    G4cout.precision(prec);
+
   }  
     //  } while(end);
 
