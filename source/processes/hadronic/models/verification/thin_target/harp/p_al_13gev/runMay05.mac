@@ -7,7 +7,7 @@
 #verbose
 0
 #events
-10000
+1000000
 //--------Proton_processes
 #particle
 proton

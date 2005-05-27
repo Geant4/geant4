@@ -750,13 +750,16 @@ int main(int argc, char** argv)
       mom0 = mom1;
     }
     G4cout << G4endl;    
-    G4cout << "## For momentum " << mompi[0] << "  -  " << mompi[nmompi-1] << "  MeV/c" << G4endl;
+    G4cout << "## ds/dtheta(mb/rad) with momentum cut: " 
+           << mompi[0] << "  -  " << mompi[nmompi-1] 
+           << "  MeV/c" << G4endl;
     for(int j=0; j<nanglpi; j++) {
       G4cout << "  " << dsda[j];
     }
     G4cout << G4endl;    
     G4cout << G4endl;    
-    G4cout << "## For angles " << angpi[0] << "  -  " << angpi[nanglpi-1] << " radian" << G4endl;
+    G4cout << "## ds/dp(mb/GeV) with theta cut " 
+           << angpi[0] << "  -  " << angpi[nanglpi-1] << " radian" << G4endl;
     for(int kk=0; kk<nmompi; kk++) {
       G4cout << "  " << dsdm[kk];
     }
