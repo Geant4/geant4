@@ -1,4 +1,4 @@
-$Id: History,v 1.289 2005-05-12 19:40:43 allison Exp $
+$Id: History,v 1.290 2005-05-27 14:00:59 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,17 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+27th May 2005  John Allison
+- DAWN-V07-00-00, VRML-V07-00-00:
+    Fixed bug introduced in ClearTransientStore.
+- openinventor-V07-00-00 and 01:
+    fixes for CLHEP and marker sizes.
+- vis-HepRep-V07-00-01 and vis-zlib-V07-00-00:
+    Migration to G4LIB_BUILD_ZLIB and some developments.
+- management:
+  o Reduced text size of scale annotation to 12 pixels.
+  o Fixed default values in /vis/scene/add/text.
 
 12th May 2005  John Allison
 - Moved zlib to externals/zlib.

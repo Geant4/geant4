@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.hh,v 1.12 2005-01-27 20:05:59 johna Exp $
+// $Id: G4XXXSceneHandler.hh,v 1.13 2005-05-27 14:00:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,7 @@
 #ifndef G4XXXSCENEHANDLER_HH
 #define G4XXXSCENEHANDLER_HH
 
-#define G4XXXDEBUG  // Comment this out to suppress debug code.
+//#define G4XXXDEBUG  // Comment this out to suppress debug code.
 
 #include "G4VSceneHandler.hh"
 
@@ -57,8 +57,8 @@ public:
   void AddSolid(const G4VSolid&);
   void AddCompound(const G4VTrajectory&);
   void AddCompound(const G4VHit&);
-  // void PreAddSolid(const G4Transform3D& objectTransformation,
-  //                 const G4VisAttributes&);
+  void PreAddSolid(const G4Transform3D& objectTransformation,
+		   const G4VisAttributes&);
   // void PostAddSolid();
 
   ////////////////////////////////////////////////////////////////
