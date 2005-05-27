@@ -104,8 +104,6 @@ examples                                         examples-V07-00-04
 - Changed VisManagers in all examples making use of visualization to now
   adopt G4VisExecutive.
 - extended
-  o electromagnetic/TestEm9 (testem9-V07-00-00)
-    + Migration to use NIST materials.
   o medical/GammaTherapy (gtherapy-V07-00-01)
     + Remove QED Builder70
 - novice
