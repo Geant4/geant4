@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.53 2005-05-06 08:45:27 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.54 2005-05-27 13:41:35 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -991,24 +991,35 @@ G4VisCommandSceneAddText::G4VisCommandSceneAddText () {
   fpCommand -> SetGuidance
     ("Adds text to current scene.");
   G4UIparameter* parameter;
-  parameter = new G4UIparameter ("x", 'd', omitable = false);
+  parameter = new G4UIparameter ("x", 'd', omitable = true);
+  parameter->SetDefaultValue (0);
+  parameter->SetGuidance ("x");
   fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("y", 'd', omitable = false);
+  parameter =  new G4UIparameter ("y", 'd', omitable = true);
+  parameter->SetDefaultValue (0);
+  parameter->SetGuidance ("y");
   fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("z", 'd', omitable = false);
+  parameter =  new G4UIparameter ("z", 'd', omitable = true);
+  parameter->SetDefaultValue (0);
+  parameter->SetGuidance ("z");
   fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("unit", 's', omitable = false);
+  parameter =  new G4UIparameter ("unit", 's', omitable = true);
+  parameter->SetDefaultValue ("m");
   fpCommand->SetParameter     (parameter);
-  parameter =  new G4UIparameter ("font_size", 'd', omitable = false);
+  parameter =  new G4UIparameter ("font_size", 'd', omitable = true);
+  parameter->SetDefaultValue (12);
   parameter->SetGuidance ("pixels");
   fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("x_offset", 'd', omitable = false);
+  parameter =  new G4UIparameter ("x_offset", 'd', omitable = true);
+  parameter->SetDefaultValue (0);
   parameter->SetGuidance ("pixels");
   fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("y_offset", 'd', omitable = false);
+  parameter =  new G4UIparameter ("y_offset", 'd', omitable = true);
+  parameter->SetDefaultValue (0);
   parameter->SetGuidance ("pixels");
   fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("text", 's', omitable = false);
+  parameter =  new G4UIparameter ("text", 's', omitable = true);
+  parameter->SetDefaultValue ("Hello");
   fpCommand->SetParameter (parameter);
 }
 
