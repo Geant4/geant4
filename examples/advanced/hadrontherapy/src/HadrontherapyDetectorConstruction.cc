@@ -215,6 +215,7 @@ void HadrontherapyDetectorConstruction::SetModulatorAngle(G4double val)
   G4cout << val/deg << G4endl;
   modulator -> SetModulatorAngle(modulatorAngle);
   G4RunManager::GetRunManager()-> GeometryHasBeenModified();
+  //  G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
 }
 
 void HadrontherapyDetectorConstruction::SetRangeShifterXposition(G4double val)
