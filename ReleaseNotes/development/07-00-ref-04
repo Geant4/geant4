@@ -94,18 +94,11 @@ tracking                                         tracking-V07-00-01
 - Removed redundant declaration of SetNavigator() method.
   Addresses problem report #742.
 
-physics_lists/electromagnetic                    emphys-V07-00-00
------------------------------
-- Changed gamma and e+ classes in G4EmQEDBuilder52.
-
 examples                                         examples-V07-00-04
 --------
 - Updated reference outputs.
 - Changed VisManagers in all examples making use of visualization to now
   adopt G4VisExecutive.
-- extended
-  o medical/GammaTherapy (gtherapy-V07-00-01)
-    + Remove QED Builder70
 - novice
   o N03 (exampleN03-V07-00-01)
     + Fixed compilation error introduced with migration to G4VisExecutive.
