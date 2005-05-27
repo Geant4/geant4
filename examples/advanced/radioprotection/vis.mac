@@ -29,14 +29,12 @@
 ######################
 /run/initialize
 /vis/viewer/set/viewpointThetaPhi 90 180 deg
-#/gun/particle IonO16
 /gun/generator Basic
 /gun/energy 400. MeV
-/configuration/choose moon
+/configuration/choose vehicle
 /configuration/AddShielding On
-/tracking/verbose 1
+#/tracking/verbose 1
 /run/beamOn 10
-
 
 
 
