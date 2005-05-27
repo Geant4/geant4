@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransparentRegXTRadiator.cc,v 1.4 2005-05-27 15:29:07 grichine Exp $
+// $Id: G4TransparentRegXTRadiator.cc,v 1.5 2005-05-27 15:37:52 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -84,11 +84,11 @@ G4double G4TransparentRegXTRadiator::SpectralXTRdEdx(G4double energy)
   cofMin += (fPlateThick*fSigma1 + fGasThick*fSigma2)/energy;
   cofMin /= cofPHC;
 
-  if (fGamma < 1200) kMin = G4int(cofMin);  // 1200 ?
-  else               kMin = 1;
+  //  if (fGamma < 1200) kMin = G4int(cofMin);  // 1200 ?
+  // else               kMin = 1;
 
-  tmp  = (fPlateThick + fGasThick)*energy*fMaxThetaTR;
-  tmp /= cofPHC;
+  // tmp  = (fPlateThick + fGasThick)*energy*fMaxThetaTR;
+  // tmp /= cofPHC;
 
   kMin = G4int(cofMin);
   if (cofMin > kMin) kMin++;
