@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyEventAction.cc,v 1.7 2005-05-06 08:27:56 allison Exp $
+// $Id: MyEventAction.cc,v 1.8 2005-05-27 13:43:57 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -128,7 +128,7 @@ void MyEventAction::EndOfEventAction(const G4Event* anEvent)
 
     G4Scale scale(1. * m, "Test Scale");
     G4VisAttributes va (G4Colour(1.,0.,0.));
-    scale.SetVisAttributes(&va);
+    scale.SetVisAttributes(va);
     pVVisManager->Draw(scale);
 
     std::ostringstream oss;
