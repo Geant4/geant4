@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.24 2005-01-27 20:05:04 johna Exp $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.25 2005-05-27 13:53:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,6 +65,8 @@ public:
   void AddPrimitive (const G4Scale& scale) {
     G4VSceneHandler::AddPrimitive (scale);
   }
+  void 		ClearStore ();
+  void 		ClearTransientStore ();
   
   //
   // Primitives for use of HEPVis
@@ -77,10 +79,11 @@ public:
 		   const G4VisAttributes& visAttribs);
 
 private:
-  void 		ClearStore ();
-  void 		ClearTransientStore ();
-  void 		RequestPrimitives (const G4VSolid& solid);
-  G4double  	GetMarkerSize    ( const G4VMarker&  mark ) ;
+  //void 		RequestPrimitives (const G4VSolid& solid);
+  //G4double  	GetMarkerSize    ( const G4VMarker&  mark ) ;
+  enum G4OIMarker {G4OICircle, G4OISquare};
+  void AddCircleSquare (G4OIMarker markerType, const G4VMarker&);
+
 private:
   static G4int fSceneIdCount;   // static counter for OpenInventor scenes.
   static G4int fSceneCount;

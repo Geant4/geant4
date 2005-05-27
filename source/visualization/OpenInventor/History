@@ -1,4 +1,4 @@
-$Id: History,v 1.63 2005-05-26 15:29:50 gcosmo Exp $
+$Id: History,v 1.64 2005-05-27 13:53:02 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+27th May 2005  John Allison  (openinventor-V07-00-01)
+- Implemented marker sizes.
 
 25th May 2005  Guy Barrand  (openinventor-V07-00-00)
 - G4OpenInventorTransform3D.cc : use the CLHEP::Transform3D::operator(i,j)

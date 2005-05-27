@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.36 2005-01-27 20:05:10 johna Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.37 2005-05-27 13:53:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -191,8 +191,6 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line) {
 }
 
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
-  //G4VSceneHandler::AddPrimitive (polymarker);
-
   G4int pointn = polymarker.size();
   if(pointn<=0) return;
 
@@ -215,20 +213,80 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
   coordinate3->point.setValues(0,pointn,points);
   fCurrentSeparator->addChild(coordinate3);
   
+  const G4VMarker& marker = polymarker;
+  G4bool userSpecified = (marker.GetWorldSize() || marker.GetScreenSize());
+  const G4VMarker& def = fpViewer -> GetViewParameters().GetDefaultMarker();
+  //const G4Vector3D& viewpointDirection =
+  //  fpViewer -> GetViewParameters().GetViewpointDirection();
+  //const G4Vector3D& up = fpViewer->GetViewParameters().GetUpVector();
+  G4double scale = fpViewer -> GetViewParameters().GetGlobalMarkerScale();
+  G4double size = scale *
+    userSpecified ? marker.GetWorldSize() : def.GetWorldSize();
+  G4double screenSize = 0;  // Calculate marker in screen size...
+  if (size) {  // Size specified in world coordinates.
+    screenSize = 10.;  // This needs to be much more sophisticated!
+  } else { // Size specified in screen coordinates (pixels).
+    screenSize = scale *
+      userSpecified ? marker.GetScreenSize() : def.GetScreenSize();
+  }
+
   SoMarkerSet* markerSet = new SoMarkerSet;
   markerSet->numPoints = pointn;
+
+  G4VMarker::FillStyle style = marker.GetFillStyle();
   switch (polymarker.GetMarkerType()) {
   default:
-  // Are available 5_5, 7_7 and 9_9
-  case G4Polymarker::dots:{
-    markerSet->markerIndex = SoMarkerSet::CIRCLE_LINE_5_5;
-  }break;
-  case G4Polymarker::circles:{
-    markerSet->markerIndex = SoMarkerSet::CIRCLE_LINE_7_7;
-  }break;
-  case G4Polymarker::squares:{
-    markerSet->markerIndex = SoMarkerSet::SQUARE_LINE_7_7;
-  }break;
+    // Are available 5_5, 7_7 and 9_9
+  case G4Polymarker::dots:
+    if (screenSize <= 5.) {
+      markerSet->markerIndex = SoMarkerSet::CIRCLE_FILLED_5_5;
+    } else if (screenSize <= 7.) {
+      markerSet->markerIndex = SoMarkerSet::CIRCLE_FILLED_7_7;
+    } else {
+      markerSet->markerIndex = SoMarkerSet::CIRCLE_FILLED_9_9;
+    }
+    break;
+  case G4Polymarker::circles:
+    if (screenSize <= 5.) {
+      if (style == G4VMarker::filled) {
+	markerSet->markerIndex = SoMarkerSet::CIRCLE_FILLED_5_5;
+      } else {
+	markerSet->markerIndex = SoMarkerSet::CIRCLE_LINE_5_5;
+      }
+    } else if (screenSize <= 7.) {
+      if (style == G4VMarker::filled) {
+	markerSet->markerIndex = SoMarkerSet::CIRCLE_FILLED_7_7;
+      } else {
+	markerSet->markerIndex = SoMarkerSet::CIRCLE_LINE_7_7;
+      }
+    } else {
+      if (style == G4VMarker::filled) {
+	markerSet->markerIndex = SoMarkerSet::CIRCLE_FILLED_9_9;
+      } else {
+	markerSet->markerIndex = SoMarkerSet::CIRCLE_LINE_9_9;
+      }
+    }
+    break;
+  case G4Polymarker::squares:
+    if (screenSize <= 5.) {
+      if (style == G4VMarker::filled) {
+	markerSet->markerIndex = SoMarkerSet::SQUARE_FILLED_5_5;
+      } else {
+	markerSet->markerIndex = SoMarkerSet::SQUARE_LINE_5_5;
+      }
+    } else if (screenSize <= 7.) {
+      if (style == G4VMarker::filled) {
+	markerSet->markerIndex = SoMarkerSet::SQUARE_FILLED_7_7;
+      } else {
+	markerSet->markerIndex = SoMarkerSet::SQUARE_LINE_7_7;
+      }
+    } else {
+      if (style == G4VMarker::filled) {
+	markerSet->markerIndex = SoMarkerSet::SQUARE_FILLED_9_9;
+      } else {
+	markerSet->markerIndex = SoMarkerSet::SQUARE_LINE_9_9;
+      }
+    }
   }
   fCurrentSeparator->addChild(markerSet);
 
@@ -278,56 +336,22 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Text& text) {
 // Method for handling G4Circle objects
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Circle& circle) {
-  //
-  // Color
-  //
-  const G4Colour& c = GetColour (circle);
-  SoMaterial* material = 
-    fStyleCache->getMaterial((float)c.GetRed(),
-                             (float)c.GetGreen(),
-                             (float)c.GetBlue(),
-                             (float)(1-c.GetAlpha()));
-  fCurrentSeparator->addChild(material);
-
-  //
-  // Dimensions
-  //
-  // (userSpecified and defaultMarker are unused - what was intended here?)
-  //G4double userSpecified = circle.GetWorldSize() || circle.GetScreenSize();
-  //const G4VMarker& defaultMarker =
-  //   fpViewer -> GetViewParameters().GetDefaultMarker();
-
-  G4double size = GetMarkerSize ( circle );
-
-  //
-  // Position
-  //
-  
-  const G4Point3D cCtr = circle.GetPosition();
-   
-  SoTranslation *cTrans = new SoTranslation;
-  cTrans->translation.setValue((float)cCtr.x(),
-                               (float)cCtr.y(),
-                               (float)cCtr.z());
-  fCurrentSeparator->addChild(cTrans);
-
-  //
-  // Sphere
-  // 
-
-  SoSphere *g4Sphere = new SoSphere();
-  g4Sphere->radius = (float)size;
-  fCurrentSeparator->addChild(g4Sphere);
+  AddCircleSquare(G4OICircle, circle);
 }
 
 //
 // Method for handling G4Square objects - defaults to wireframe
 //
-void G4OpenInventorSceneHandler::AddPrimitive (const G4Square& Square) {
+void G4OpenInventorSceneHandler::AddPrimitive (const G4Square& square) {
+  AddCircleSquare(G4OISquare, square);
+}
+
+void G4OpenInventorSceneHandler::AddCircleSquare
+(G4OIMarker markerType, const G4VMarker& marker) {
   //
   // Color
   //
-  const G4Colour& c = GetColour (Square);
+  const G4Colour& c = GetColour (marker);
   SoMaterial* material = 
     fStyleCache->getMaterial((float)c.GetRed(),
                              (float)c.GetGreen(),
@@ -335,29 +359,134 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Square& Square) {
                              (float)(1-c.GetAlpha()));
   fCurrentSeparator->addChild(material);
 
-  //
-  // Size
-  //
-  G4double sSize = GetMarkerSize(Square);
-  sSize = sSize * 2.0;
+  // A few useful quantities...
+  G4Point3D centre = marker.GetPosition();
+  G4bool userSpecified = (marker.GetWorldSize() || marker.GetScreenSize());
+  const G4VMarker& def = fpViewer -> GetViewParameters().GetDefaultMarker();
+  //const G4Vector3D& viewpointDirection =
+  //  fpViewer -> GetViewParameters().GetViewpointDirection();
+  //const G4Vector3D& up = fpViewer->GetViewParameters().GetUpVector();
+  G4double scale = fpViewer -> GetViewParameters().GetGlobalMarkerScale();
+  G4double size = scale *
+    userSpecified ? marker.GetWorldSize() : def.GetWorldSize();
+  G4double screenSize = 0;  // Calculate marker in screen size...
+  if (size) {  // Size specified in world coordinates.
+    screenSize = 10.;  // This needs to be much more sophisticated!
+  } else { // Size specified in screen coordinates (pixels).
+    screenSize = scale *
+      userSpecified ? marker.GetScreenSize() : def.GetScreenSize();
+  }
 
+  // Borrowed from AddPrimitive(G4Polymarker) - inefficient?
+  SbVec3f* points = new SbVec3f[1];
+  points[0].setValue((float)centre.x(),
+		     (float)centre.y(),
+		     (float)centre.z());
+  SoCoordinate3* coordinate3 = new SoCoordinate3;
+  coordinate3->point.setValues(0,1,points);
+  fCurrentSeparator->addChild(coordinate3);
+  SoMarkerSet* markerSet = new SoMarkerSet;
+  markerSet->numPoints = 1;
+
+  G4VMarker::FillStyle style = marker.GetFillStyle();
+  switch (markerType) {
+  case G4OICircle:
+    if (screenSize <= 5.) {
+      if (style == G4VMarker::filled) {
+	markerSet->markerIndex = SoMarkerSet::CIRCLE_FILLED_5_5;
+      } else {
+	markerSet->markerIndex = SoMarkerSet::CIRCLE_LINE_5_5;
+      }
+    } else if (screenSize <= 7.) {
+      if (style == G4VMarker::filled) {
+	markerSet->markerIndex = SoMarkerSet::CIRCLE_FILLED_7_7;
+      } else {
+	markerSet->markerIndex = SoMarkerSet::CIRCLE_LINE_7_7;
+      }
+    } else {
+      if (style == G4VMarker::filled) {
+	markerSet->markerIndex = SoMarkerSet::CIRCLE_FILLED_9_9;
+      } else {
+	markerSet->markerIndex = SoMarkerSet::CIRCLE_LINE_9_9;
+      }
+    }
+    break;
+  case G4OISquare:
+    if (screenSize <= 5.) {
+      if (style == G4VMarker::filled) {
+	markerSet->markerIndex = SoMarkerSet::SQUARE_FILLED_5_5;
+      } else {
+	markerSet->markerIndex = SoMarkerSet::SQUARE_LINE_5_5;
+      }
+    } else if (screenSize <= 7.) {
+      if (style == G4VMarker::filled) {
+	markerSet->markerIndex = SoMarkerSet::SQUARE_FILLED_7_7;
+      } else {
+	markerSet->markerIndex = SoMarkerSet::SQUARE_LINE_7_7;
+      }
+    } else {
+      if (style == G4VMarker::filled) {
+	markerSet->markerIndex = SoMarkerSet::SQUARE_FILLED_9_9;
+      } else {
+	markerSet->markerIndex = SoMarkerSet::SQUARE_LINE_9_9;
+      }
+    }
+  break;
+  }
+  fCurrentSeparator->addChild(markerSet);
+
+  delete [] points;
+}
+
+/* Old method
+//
+// Method for handling G4Square objects - defaults to wireframe
+//
+void G4OpenInventorSceneHandler::AddPrimitive (const G4Square& square) {
   //
-  // Position
+  // Color
   //
-  const G4Point3D sOrig = Square.GetPosition();
-   
+  const G4Colour& c = GetColour (square);
+  SoMaterial* material = 
+    fStyleCache->getMaterial((float)c.GetRed(),
+                             (float)c.GetGreen(),
+                             (float)c.GetBlue(),
+                             (float)(1-c.GetAlpha()));
+  fCurrentSeparator->addChild(material);
+
+  // A few useful quantities...
+  const G4VMarker& marker = square;
+  G4Point3D centre = marker.GetPosition();
+  G4bool userSpecified = (marker.GetWorldSize() || marker.GetScreenSize());
+  const G4VMarker& def = fpViewer -> GetViewParameters().GetDefaultMarker();
+  //const G4Vector3D& viewpointDirection =
+  //  fpViewer -> GetViewParameters().GetViewpointDirection();
+  //const G4Vector3D& up = fpViewer->GetViewParameters().GetUpVector();
+  G4double scale = fpViewer -> GetViewParameters().GetGlobalMarkerScale();
+  G4double size = scale *
+    userSpecified ? marker.GetWorldSize() : def.GetWorldSize();
+  G4double screenSize = 0, worldSize = 0;  // Calculate marker in world size...
+  if (size) {  // Size specified in world coordinates.
+    worldSize = size;
+  } else { // Size specified in screen coordinates (pixels).
+    screenSize = scale *
+      userSpecified ? marker.GetScreenSize() : def.GetScreenSize();
+    worldSize = 1. * cm;  // Needs to be more sophisticated!!
+  }
+
   SoTranslation *sTrans = new SoTranslation;
-  sTrans->translation.setValue((float)sOrig.x(),
-                               (float)sOrig.y(),
-                               (float)sOrig.z());
+  sTrans->translation.setValue((float)centre.x(),
+                               (float)centre.y(),
+                               (float)centre.z());
   fCurrentSeparator->addChild(sTrans);
   
   SoCube *g4Square = new SoCube();
-  g4Square->width =  (float)sSize;
-  g4Square->height = (float)sSize;
-  g4Square->depth =  (float)sSize;
+  g4Square->width =  (float)worldize;
+  g4Square->height = (float)worldSize;
+  g4Square->depth =  (float)worldSize;
   fCurrentSeparator->addChild(g4Square);
 }
+*/
 
 //
 // Method for handling G4Polyhedron objects for drawing solids.
@@ -502,15 +631,19 @@ void G4OpenInventorSceneHandler::ClearStore () {
 }
 
 void G4OpenInventorSceneHandler::ClearTransientStore () {
+  G4VSceneHandler::ClearTransientStore ();
+
   fTransientRoot->removeAllChildren();
 }
 
+/*
 void G4OpenInventorSceneHandler::RequestPrimitives (const G4VSolid& solid) {
     // Stop-gap solution for display List re-use.
     // A proper implementation would use geometry hierarchy.
     //
     G4VSceneHandler::RequestPrimitives (solid);
 }
+*/
 
 void G4OpenInventorSceneHandler::PreAddSolid
 (const G4Transform3D& objectTransformation,
@@ -698,6 +831,7 @@ void G4OpenInventorSceneHandler::PreAddSolid
 }
 
 
+/*
 G4double  G4OpenInventorSceneHandler::GetMarkerSize ( const G4VMarker& mark ) 
 {
         //----- return value ( marker radius in 3d units) 
@@ -745,6 +879,7 @@ G4double  G4OpenInventorSceneHandler::GetMarkerSize ( const G4VMarker& mark )
         return size ;
 
 } // G4OpenInventorSceneHandler::GetMarkerSize ()
+*/
 
 //void G4OpenInventorSceneHandler::AddSolid(const G4VTrajectory& traj) {
 //  G4VSceneHandler::AddSolid(traj);  // For now.
