@@ -21,37 +21,36 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLFontBaseStore.cc,v 1.1 2005-04-17 16:08:43 allison Exp $
+// $Id: G4OpenGLFontBaseStore.cc,v 1.2 2005-05-27 10:56:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4OpenGLFontBaseStore.hh"
 
-std::multimap<G4VViewer*,G4OpenGLFontBaseStore::FontInfo>
+std::map<G4VViewer*,std::vector<G4OpenGLFontBaseStore::FontInfo> >
 G4OpenGLFontBaseStore::fFontBaseMap;
 
 void G4OpenGLFontBaseStore::AddFontBase
 (G4VViewer* viewer,G4int fontBase,
  G4double size, const G4String& fontName) {
-  fFontBaseMap.insert
-    (std::make_pair(viewer, FontInfo(fontName, size, fontBase)));
+  fFontBaseMap[viewer].push_back(FontInfo(fontName, size, fontBase));
 }
 
 G4int G4OpenGLFontBaseStore::GetFontBase(G4VViewer* viewer, G4double size) {
   G4int fontBase = -1;
-  std::multimap<G4VViewer*,FontInfo>::const_iterator i, j;
+  std::map<G4VViewer*,std::vector<FontInfo> >::const_iterator i;
   i = fFontBaseMap.find(viewer);
   if (i != fFontBaseMap.end()) {
     G4double sizeDiscrepancy = 9999.;
-    while (i->first == viewer){
-      G4double d = std::abs(size - i->second.fSize);
+    std::vector<FontInfo>::const_iterator j, k;
+    for (j = i->second.begin(); j != i->second.end(); ++j) {
+      G4double d = std::abs(size - j->fSize);
       if (d < sizeDiscrepancy) {
 	sizeDiscrepancy = d;
-	j = i;
+	k = j;
       }
-      ++i;
     }
-    fontBase = j->second.fFontBase;
+    fontBase = k->fFontBase;
   }
   return fontBase;
 }

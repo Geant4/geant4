@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4OpenGLFontBaseStore.hh,v 1.1 2005-04-17 16:08:43 allison Exp $
+// $Id: G4OpenGLFontBaseStore.hh,v 1.2 2005-05-27 10:56:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // J.Allison  Apr 2005.
@@ -33,6 +33,7 @@
 
 #include "globals.hh"
 #include <map>
+#include <vector>
 
 class G4VViewer;
 
@@ -51,7 +52,7 @@ private:
     G4double fSize;  // In terms of G4VMarker Screen Size.
     G4int fFontBase;
   };
-  static std::multimap<G4VViewer*,FontInfo> fFontBaseMap;
+  static std::map<G4VViewer*,std::vector<FontInfo> > fFontBaseMap;
 };
 
 #endif
