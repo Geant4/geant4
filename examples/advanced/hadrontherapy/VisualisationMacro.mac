@@ -34,8 +34,8 @@
 /vis/open OGLIX
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 30 130 deg
-/vis/viewer/zoom 5
-/vis/viewer/pan 10 80 cm
+/vis/viewer/zoom 9
+/vis/viewer/pan -10  80 cm
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
 /vis/viewer/update
