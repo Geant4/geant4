@@ -27,7 +27,7 @@
 //    *                                    *          
 //    **************************************
 //
-// $Id: RemSimDetectorConstruction.cc,v 1.14 2005-05-19 14:28:09 guatelli Exp $
+// $Id: RemSimDetectorConstruction.cc,v 1.15 2005-05-27 14:20:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
@@ -64,7 +64,7 @@ RemSimDetectorConstruction::RemSimDetectorConstruction()
      phantomPhys(0), detectorPhys(0), geometry(0)
 {
  pMaterial = new RemSimMaterial();
- 
+
  messenger = new RemSimDetectorMessenger(this);
  decoratorValue ="Nothing";
  astronautValue ="On";
@@ -117,18 +117,17 @@ void RemSimDetectorConstruction::ConstructVolume()
 { 
   if (moon == true)
     { 
-      geometry =  new RemSimMoonHabitat();
+
+      geometry = new RemSimMoonHabitat();
       geometry -> ConstructComponent(experimentalHall_phys);
-      decorator1 = new RemSimAstronautDecorator(geometry);
-      G4VPhysicalVolume* shelter = geometry -> GetShelter();
-      decorator1 -> ChangeMother(shelter);
+      decorator1 = new RemSimAstronautDecorator(geometry, moon);
       decorator1 -> ConstructComponent(experimentalHall_phys);
     }
   else 
     {
       geometry = new RemSimVehicle1();
       geometry -> ConstructComponent(experimentalHall_phys); 
-      decorator1 = new RemSimAstronautDecorator(geometry); 
+      decorator1 = new RemSimAstronautDecorator(geometry, moon); 
       decorator1 -> ConstructComponent(experimentalHall_phys);
     }
 }
@@ -200,15 +199,15 @@ void RemSimDetectorConstruction::AddHabitatRoof(G4String value)
   if (moon == true)
     { 
       if (value == "On")
-	{
+      	{
 	if (decoratorRoof == 0)
 	  { 
 	    decoratorRoof = new RemSimRoofDecorator(geometry);
 	    decoratorRoof -> ConstructComponent(experimentalHall_phys); 
 	    G4RunManager::GetRunManager() -> DefineWorldVolume(experimentalHall_phys);
 	  }
-	else  G4cout<<" The roof alread exists!"<<G4endl;
-	}
+		else  G4cout<<" The roof alread exists!"<<G4endl;
+		}
 
   if (value == "Off")
     {
@@ -260,14 +259,14 @@ void RemSimDetectorConstruction:: ChooseConfiguration(G4String value)
       if (value == "vehicle") ConstructVolume();
   
       else if (value == "moon")
-	{
+      	{
 	  moon = true;
 	  ConstructVolume();
-	}
+	  	}
       G4RunManager::GetRunManager() -> DefineWorldVolume(experimentalHall_phys);
-      flag = true;
-    }
-  else 
-   G4cout<< "The configurations vehicle/moon can not be switched" << G4endl;
+       flag = true;
+      }
+       else 
+       G4cout<< "The configurations vehicle/moon can not be switched" << G4endl;
 }
 
