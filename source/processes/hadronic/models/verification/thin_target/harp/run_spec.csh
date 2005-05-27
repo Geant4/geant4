@@ -16,7 +16,7 @@ echo "Start of run for " $TARGET
 mkdir $1
 cd $1
 
-$G4MY/harp ../$TARGET/run.mac  >&  res.out
+#$G4MY/harp ../$TARGET/run.mac  >&  res.out
 $G4MY/harp ../$TARGET/runMay05.mac  >&  resMay05.out
 
 cd ../
