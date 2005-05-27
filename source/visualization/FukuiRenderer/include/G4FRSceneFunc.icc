@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRSceneFunc.icc,v 1.8 2005-02-23 11:15:49 allison Exp $
+// $Id: G4FRSceneFunc.icc,v 1.9 2005-05-27 13:33:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -1454,11 +1454,6 @@ void G4FRSCENEHANDLER::SendDouble( G4double	val    )
 void G4FRSCENEHANDLER::ClearTransientStore() 
 {
   G4VSceneHandler::ClearTransientStore ();
-  /*
-  ClearTransientStore should restrict itself to its job.  In other
-  places, a draw command follows, so it is not needed here.  In fact
-  it can cause a double recursive descent into DrawView, so the following
-  has been commented out (JA - 23/Jan/05).
   // This is typically called after an update and before drawing hits
   // of the next event.  To simulate the clearing of "transients"
   // (hits, etc.) the detector is redrawn...
@@ -1467,6 +1462,5 @@ void G4FRSCENEHANDLER::ClearTransientStore()
     fpViewer -> ClearView ();
     fpViewer -> DrawView ();
   }
-  */
 }
 
