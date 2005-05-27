@@ -15,11 +15,15 @@ use strict ;
 my @solids = qw/Torus Box Sphere Tube Orb Cone TwistedTubs TwistedBox
     TwistedTrd TwistedTrap TwistedTrap2 TwistedTrap3/ ;
 
+my $nevents = 100000 ;   # sets the number of events
+
+# --------------------------------------------------------------------------
+
+
 my $macro ;    # the name of the macro file.    Will be deleted at the end.
 my $data ;     # output file of SurfaceChecker. Will be deleted at the end.
 my $hbk  ;     # resulting hbook file.
 
-my $nevents = 10 ;   # sets the number of events
 
 foreach my $solid ( @solids ) {
 
@@ -61,4 +65,4 @@ foreach my $solid ( @solids ) {
 
 }
 
-
+system(" paw -w 0 -b solid > /dev/null") && die "cannot execute paw macro solid:$!\n" ;

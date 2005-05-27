@@ -1,0 +1,262 @@
+
+MACRO SOLID
+
+* Author: Oliver Link, Oliver.Link@cern.ch
+* Description:
+*    1. testall.pl generates hbook files in folder hbk
+*         (e.g: hbk/run_solidname_nevents.hbk)
+*    2. The user can specify the range to be analysed [xmin] [xmax]
+*        and change the number of bins [n] . See USER INPUT below
+*    3. solid.kumac is analysing only files respecting the
+*       naming scheme (1.), ommiting other hbk files in the folder!!!
+*       See Macro: checksolids
+*    4. Plotting data (stored in vectors).
+*       Macro: plot [psfile] [xmin] [xmax] [ymin] [ymax]
+*   ->  Prepares two postscript files
+*            - solid-full.ps  : full range plotted
+*            - solid-zoom.ps  : reduced range plotted
+*          ( this may be changed in future, e.g more plots, ranges.. )    
+
+******************************************************************
+******************************************************************
+***************          USER INPUT       ************************
+******************************************************************
+******************************************************************
+
+** fix the number of bins and analysis range
+nbins = 200
+xmin  = 1e-12
+xmax  = 1e5
+
+* goto plot     | if you want to go directly to the plot section 
+              | and thus skipping the checksolids macro.
+              | You have to process the checksolids macro at least once.
+
+******************************************************************
+******************************************************************
+********************** initialization  ***************************
+
+** delete old histograms and vectors,  init some paw settings
+
+hi/del 0    | delete all histos
+v/del *     | delete all vectors
+cut 0 -     | delete all cuts
+
+opt logx
+
+opt nstat
+opt ngrid
+opt nfit
+opt grid
+
+******************************************************************
+******************************************************************
+********************** create binning ****************************
+
+ve/cre x([nbins]) r
+ve/cre widths([nbins]) r
+ve/cre vlogdx([nbins]) r
+ve/cre xerr([nbins]) r
+ve/cre XHigh([nbins]) r
+ve/cre XLow([nbins]) r
+
+div = [xmax]/[xmin]
+
+do i=1,[nbins]
+  xcenter = $rsigma([xmin]*[div]**(([i]-0.5)/[nbins]))
+  dx      = $rsigma([xmin]*[div]**([i]/[nbins])*(1-[div]**(-1/[nbins])))
+  xiLow   = $rsigma([xmin]*[div]**(([i]-1)/[nbins]))
+  xiHigh  = $rsigma([xmin]*[div]**([i]/[nbins]))
+  logdx   = $rsigma(log10([xiHigh])-log10([xiLow]))
+  ve/inp x([i]) [xcenter]
+  ve/inp widths([i]) [dx]
+  ve/inp vlogdx([i]) [logdx]
+  ve/inp XLow([i])  [xiLow]
+  ve/inp XHigh([i]) [xiHigh]
+enddo
+
+vscale widths 0.5 xerr
+
+
+******************************************************************
+******************************************************************
+********************** analyse data ******************************
+
+
+exec checksolids
+
+
+******************************************************************
+******************************************************************
+********************** plot data  ********************************
+
+plot:
+
+* set fonts and precission
+
+set *fon -132
+set TXFP -132
+* set vsiz 0.45
+set asiz 0.7
+* margins
+set ymgl 2.5
+set ymgu 2.0
+set xmgl 3.0
+set xmgr 1.0
+
+*  usage: plot [psfile] [xmin] [xmax] [ymin] [ymax]
+exec plot 'solid-full.ps'   [xmin] [xmax] 0 0.1
+exec plot 'solid-zoom.ps'   1e-12   1e-8  0 0.1
+
+return
+
+******************************************************************
+******************************************************************
+********************** macros ************************************
+
+
+MACRO PLOT [psfile] [xmin] [xmax] [ymin] [ymax]
+
+* this macro generates the plot x vs. y
+*    [xmin] [xmax] [ymin] [ymax] is the plot range 
+*    [psfile] name of the postscript file
+
+nbins = $vdim(x,1)                |  number of bins
+m     = $exec('NumberOfSolids')   |  number of solids
+
+
+* open postscript file
+for/file 70 [psfile]
+meta 70 -114
+
+null [xmin] [xmax] [ymin] [ymax]
+atitle 'dist (mm)' 'events/bin (variable size)'
+
+do j=1,[m]
+
+  icolor = $rsigma(mod([j],7)+1)
+  isym   = $rsigma(mod([j],11)+ 20)
+  posy = 97 - [j]*3
+
+  file = $shell('ls hbk/run_*.hbk',[j])
+  file = $shell('ls hbk/run_*.hbk',[j])
+  ilow = $index([file],_)+1 
+  string = $substring([file],[ilow],$len([file]))	
+  ichar = $index([string],_)-1
+  txt = $substring([file],[ilow],[ichar])
+
+  set hcol [icolor]
+  set pmci [icolor]
+  set plci [icolor]
+ 
+  g/h/e x y[j] xerr e[j] [nbins] [isym] 0.2
+
+  exec logsymbol 75 [posy] [txt] [isym]
+
+
+enddo
+
+* close postscript
+close 70
+
+Return
+
+******************************************************************
+******************************************************************
+
+MACRO CHECKSOLIDS
+* loops over all solids (hbook files in folder hbk)
+* operates on ntuple 1 in hbook [file]
+* calculates the number of events per bin
+* and stores the values in a vector y[solidnum]
+*  [solidnum] is a unique (integer) number to identify the solid
+
+* create a counter histogram
+idc = 12345
+1d [idc] 'counter' 1 0 1
+
+nbins = $vdim(x,1)                    |  number of bins
+m     =  $exec('NumberOfSolids')      |  number of solids
+
+do solidnum=1,[m]
+
+* create vector for data
+  ve/cre y[solidnum]([nbins]) r
+  ve/cre e[solidnum]([nbins]) r
+
+  file = $shell('ls hbk/run_*.hbk',[solidnum])
+  mess process [file]
+
+  hi/file 1 [file]
+
+  hi/op/reset [idc]
+  nt/proj [idc] 1.0.5 
+  norm = $hinfo([idc],'entries')
+
+  do i=1,[nbins]
+     hi/op/reset [idc]
+     nt/proj [idc] 1.0.5 XLow([i])<delta<XHigh([i])
+     entries = $hinfo([idc],'entries')
+
+* histogram df/dx = df(log10(x))/dlog10(x) * 1/x * 1/Log(x)
+*   factor = $rsigma(vlogdx([i])*x([i])*log(10)*[norm])
+
+     factor =  $rsigma(vlogdx([i])*[norm])
+     count = $rsigma([entries]/[factor])
+     error = $rsigma(sqrt([entries])/[factor])
+
+     ve/inp y[solidnum]([i]) [count]
+     ve/inp e[solidnum]([i]) [error]
+
+  enddo
+
+  close 1
+
+enddo
+
+hi/del [idc]     | delete counter
+
+return
+
+
+
+******************************************************************
+******************************************************************
+
+
+MACRO LOGSYMBOL 1=100 2=100 [txt] [isym]
+* plots a symbol at position 1/2
+*  [txt]  text to display
+*  [isym] symbol number 
+   X1 = $GRAFINFO('WNXMIN')
+   X2 = $GRAFINFO('WNXMAX')
+   Y1 = $GRAFINFO('WNYMIN')
+   Y2 = $GRAFINFO('WNYMAX')
+   DX = [X2]-[X1]
+   X  = [1]/100.
+   X  = [DX]*[X]
+   X  = [X]+[X1]
+   DY = [Y2]-[Y1]
+   Y  = [2]/100.
+   Y  = [DY]*[Y]
+   Y  = [Y]+[Y1]
+
+   if ( [X].gt.0 ) then
+      X  = $rsigma(10**[X]) 
+   else
+      X =  $rsigma(1./(10**abs([X])))
+   endif
+
+   key [X] [Y] [isym] [txt]
+Return
+
+
+******************************************************************
+******************************************************************
+******* determine the number of hbook files in hbk ***************
+
+Macro NUMBEROFSOLIDS
+
+ m = $shell('ls -l hbk/run_*.hbk | wc -l')
+
+Return [m]

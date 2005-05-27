@@ -5,6 +5,18 @@ README for SurfaceChecker
 History:
 ----------------------------------
 
+27.May 05
+- change in testall.pl: additionally executes at the end the paw macro single.kumac 
+                        the default number of events is set to 100000
+- added a paw macro single.kumac:  
+  analyses systematically all hbook files found in folder hbk ( hbk/run_cone_10000.hbk )
+  and produces two plots
+    - solid-full.ps  : comparing all solids in a full range    (1e-12 to 1e5 mm)
+    - solid-zoom.ps  : comparing all solids in a reduced range (1e-12 to 1e-8 mm)
+  Attention: only files respecting the naming rule run_solidname_nevents.hbk will be considered!
+- added a paw macro singlesolid.kumac:
+  Can be used to to the same analysis for one single file only. No naming rule for the bhook file.
+
 23.May 05
 - changed naming of general surface parameters (hbk only): now u,v insted of u,phi
 - Detector is directly selectable from macro file for the following solids:
