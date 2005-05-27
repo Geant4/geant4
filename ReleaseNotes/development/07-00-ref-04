@@ -1,0 +1,119 @@
+
+                       geant4-07-00-ref-04
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Updated implementation for SurfaceNormal() on most CSG and boolean
+    solids to adopt variant for edges/vertices.
+  o Modified G4UIbatch to now abort execution of the macro file if commands
+    are wrong or not existing.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                                           config-V07-00-00
+------
+- Changed configuration for OPENGLXM to explicitely require OPENGLX.
+
+geometry/management                              geommng-V07-00-04
+-------------------
+- G4LogicalVolume::SetVisAttributes(const G4VisAttributes& VA): now creating
+  a copy of 'VA' on the heap. Temporary solution, until a proper 'store' for
+  visualization attributes will be implemented to take care of the memory
+  management.
+- Modified comments in G4VSolid and G4BlockingList to overcome a limitation in
+  the scripts for the generation of the Software Reference Manual.
+
+geometry/solids/Boolean                          geom-bool-V07-00-03
+-----------------------
+- The new implementation of Inside() with surface-normal for edges/vertices
+  is now the deafult one.
+
+geometry/solids/CSG                              geom-csg-V07-00-06
+-------------------
+- Updated implementation of SurfaceNormal(p) to get consistence with
+  Inside(p) functions for the treatment of phi/theta surfaces.
+  They are treated now in both functions in terms of kAngTolerance.
+  The reason is that historically SurfaceNormal(p) was using only
+  kCarTolerance for estimation of shortest distance to a surface. Now,
+  following the new updated specification, the surface selection is made
+  according to Inside(p) approach (as kSurface is selected), i.e. - for
+  phi/theta surfaces in terms of kAngTolerance.
+  The new implementation is now the default.
+
+geometry/solids/specific                         geom-specific-V07-00-04
+------------------------
+- G4TwistedSurface: fixed bug in GetAreaCode() affecting G4TwistedTubs.
+
+global                                           global-V07-00-06
+------
+- Added new class G4AnalyticalPolSolver in HEPNumerics module, implementing
+  the CACM algorithm for solving analytically a polynomial equation up to
+  the 4th order.
+
+graphics_reps                                    greps-V07-00-07
+-------------
+- Improved G4AttCheck and removed warning in implementation of
+  G4Visible::SetVisAttributes(const G4VisAttributes&).
+
+intercoms                                        intercoms-V07-00-02
+---------
+- Modified G4UIbatch so that it now aborts the execution of the macro file
+  (and any other parent macro files which issued this macro file) if a
+  command in the macro file is wrong or cannot be executed.
+  Fixes problem report #734.
+
+materials                                        materials-V07-00-05
+---------
+- Added SetGROUPVEL() in G4MaterialPropertiesTable.
+  Addresses problem report #741.
+- Trivial fix in G4IonisParamMat::FindMeanExcitationEnergy().
+  Addresses problem report #746.
+- Added acknowledgement to Nist classes.
+
+processes/decay                                  decay-V07-00-00
+---------------
+- Fixed bug in G4Decay::AtRestGetPhysicalInteractionLength().
+  Condition is now fixed to "Not Forced".
+
+run                                              run-V07-00-01
+---
+- Moved invocation of ConstructParticle() method back to the original
+  place in InitializePhysics().
+
+track                                            track-V07-00-00
+-----
+- Added new class G4ParticleChangeForGamma.
+- Modified G4ParticleChangeForLoss to inline 'update' methods.
+
+tracking                                         tracking-V07-00-01
+--------
+- Changed Trajectory classes to make use of G4AttCheck.
+- Removed redundant declaration of SetNavigator() method.
+  Addresses problem report #742.
+
+physics_lists/electromagnetic                    emphys-V07-00-00
+-----------------------------
+- Changed gamma and e+ classes in G4EmQEDBuilder52.
+
+examples                                         examples-V07-00-04
+--------
+- Updated reference outputs.
+- Changed VisManagers in all examples making use of visualization to now
+  adopt G4VisExecutive.
+- extended
+  o electromagnetic/TestEm9 (testem9-V07-00-00)
+    + Migration to use NIST materials.
+  o medical/GammaTherapy (gtherapy-V07-00-01)
+    + Remove QED Builder70
+- novice
+  o N03 (exampleN03-V07-00-01)
+    + Fixed compilation error introduced with migration to G4VisExecutive.
+  o N06 (exampleN06-V07-00-01)
+    + Use SetProcessOrdering() for the decay process.
+
+tests                                            tests-V07-00-03
+-----
+- Updated reference outputs.
