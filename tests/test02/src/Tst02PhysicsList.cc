@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst02PhysicsList.cc,v 1.8 2003-06-16 17:14:45 gunter Exp $
+// $Id: Tst02PhysicsList.cc,v 1.9 2005-05-27 18:36:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,6 +52,8 @@ Tst02PhysicsList::Tst02PhysicsList():  G4VModularPhysicsList()
   // default cut value  (1.0mm) 
   defaultCutValue = 1.0*mm;
   SetVerboseLevel(1);
+
+  G4LossTableManager::Instance()->SetVerbose(1);
 
   // General Physics
   RegisterPhysics( new Tst02GeneralPhysics("general") );

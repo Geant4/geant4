@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst02DetectorConstruction.hh,v 1.4 2004-03-16 14:50:28 gcosmo Exp $
+// $Id: Tst02DetectorConstruction.hh,v 1.5 2005-05-27 18:36:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -50,6 +50,7 @@ class Tst02DetectorConstruction : public G4VUserDetectorConstruction
      void SelectMaterialPointer();
 
      G4LogicalVolume*   simpleBoxLog;
+     G4VPhysicalVolume* simpleBoxDetector;
      G4Material* selectedMaterial;
      G4Material* Air;
      G4Material* Al;
