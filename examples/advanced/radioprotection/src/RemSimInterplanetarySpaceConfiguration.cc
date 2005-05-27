@@ -75,13 +75,35 @@ void RemSimInterplanetarySpaceConfiguration::GeneratePrimaries(G4Event* anEvent)
       partSum += (*data)[j];
       j++;
     }
-	 
-  particleGun -> SetParticleEnergy((*energies)[j]);    
+
+    G4String particleName = particleGun -> GetParticleDefinition() -> 
+  GetParticleName();	 
+  
+  G4int n = 0;
+
+  if (particleName == "alpha") n = 4;
+  else {
+    if (particleName == "IonC12") n = 12;
+    else
+      { if (particleName == "IonSi28") n = 28;
+      else {
+        if (particleName == "IonFe52") n = 52;
+	else {
+	  if (particleName == "IonO16") n = 16;
+	  else {
+	    if (particleName == "proton") n = 1 ;
+	  }
+	}
+      }
+      }
+  }
+
+  particleGun -> SetParticleEnergy((*energies)[j] * n);    
  
 #ifdef G4ANALYSIS_USE   
  G4double energy = particleGun -> GetParticleEnergy(); 
  RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
- analysis -> primaryParticleEnergyDistribution(energy/MeV);
+ analysis -> primaryParticleEnergyDistribution((energy/n) / MeV);
 #endif
  
  if (moon == true) MoonConfiguration();

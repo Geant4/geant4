@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimShieldingDecorator.hh,v 1.4 2004-05-22 12:57:05 guatelli Exp $
+// $Id: RemSimShieldingDecorator.hh,v 1.5 2005-05-27 14:21:42 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
@@ -50,8 +50,6 @@ public:
   void DestroyComponent(); 
   void ChangeThickness(G4double);
   void PrintDetectorParameters();
-  G4VPhysicalVolume* GetShelter(){return 0;};
-  void ChangeMother(G4VPhysicalVolume*){;};
 
 private:
   void ConstructShielding(G4VPhysicalVolume*);

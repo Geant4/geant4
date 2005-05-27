@@ -11,17 +11,34 @@
 #/physics/addPhysics muon-standard
 #/physics/addPhysics decay
 # Sets some default verbose
-#######################################
 /control/verbose 1
 /run/verbose 1
 /event/verbose 0
-#/tracking/verbose 1
 /run/initialize
-/gun/particleType proton
-/gun/generator Moon
-/run/data gcrZ=1.txt
+#######################################
+## Visualisation
+#/vis/scene/create
+# --- Choose one the following visualisation tools
+#/vis/open OGLIX
+#/vis/open DAWNFILE
+#/vis/open VRML2FILE
+# --------
+#/vis/drawVolume
+##/vis/viewer/zoom 2
+#/vis/viewer/set/viewpointThetaPhi 90 180 deg
+#/tracking/storeTrajectory 1
+#/vis/scene/endOfEventAction accumulate
+########################################
 /configuration/choose moon
 /configuration/AddRoof On
-#/configuration/AddRoof Off
-/roof/thickness 1. m
-/run/beamOn 100
+/roof/thickness 2. m
+/gun/generator Interplanetary
+/gun/data gcrZ=26.txt
+#/tracking/verbose 1
+/gun/particle IonFe52
+/run/beamOn 10
+
+
+
+
+

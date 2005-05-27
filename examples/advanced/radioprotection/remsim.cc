@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: remsim.cc,v 1.9 2005-05-03 10:21:16 allison Exp $
+// $Id: remsim.cc,v 1.10 2005-05-27 14:21:42 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4RunManager.hh"

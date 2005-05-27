@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimVGeometryComponent.hh,v 1.5 2004-05-22 12:57:05 guatelli Exp $
+// $Id: RemSimVGeometryComponent.hh,v 1.6 2005-05-27 14:21:42 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
@@ -39,6 +39,5 @@ public:
 
   virtual void ConstructComponent(G4VPhysicalVolume*) = 0;
   virtual void DestroyComponent() = 0;
-  virtual G4VPhysicalVolume* GetShelter() = 0;
 };
 #endif
