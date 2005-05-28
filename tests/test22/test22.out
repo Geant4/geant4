@@ -124,6 +124,8 @@ Event number 0
 Event number 1
 Event number 2
 Event number 3
+G4ElectroNuclearReaction::ApplyYourself: photonEnergy is very high
+If this condition appears frequently, please contact Hans-Peter.Wellisch@cern.ch
 Event number 4
 Event number 5
 Event number 6
