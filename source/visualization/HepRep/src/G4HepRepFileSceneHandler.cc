@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.26 2005-05-28 18:04:22 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.27 2005-05-28 18:06:32 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -898,6 +898,9 @@ void G4HepRepFileSceneHandler::CheckFileOpen() {
 
 void G4HepRepFileSceneHandler::ClearTransientStore() {
   G4VSceneHandler::ClearTransientStore();
+  // This is typically called after an update and before drawing hits
+  // of the next event.  To simulate the clearing of "transients"
+  // (hits, etc.) the detector is redrawn...
   if (fpViewer) {
     fpViewer -> SetView();
     fpViewer -> ClearView();
