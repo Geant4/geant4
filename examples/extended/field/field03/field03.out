@@ -59,17 +59,6 @@ Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
 
-You have successfully chosen to use the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
-  G4HepRepFile (HepRepFile)
-  G4HepRep (HepRepXML)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-
  The  WORLD   is made of 44000mm of Air, the transverse size (R) of the world is 22000 mm. 
  The ABSORBER is made of 1mm of Air, the transverse size (R) is 20000 mm. 
  Z position of the (middle of the) absorber 21990  mm.
@@ -231,7 +220,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.25s Real=0.25s Sys=0s
+  User=0.25s Real=0.26s Sys=0s
 Set field value to (0,0,1000) Gauss 
 
 ========= Table of registered couples ==============================

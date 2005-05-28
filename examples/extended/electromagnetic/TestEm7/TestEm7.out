@@ -25,17 +25,6 @@ G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 7
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
-
-You have successfully chosen to use the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
-  G4HepRepFile (HepRepFile)
-  G4HepRep (HepRepXML)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
 /run/verbose 2
 #
 /testem/det/setMat Water
@@ -230,7 +219,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=143.07s Real=451.36s Sys=54.28s
+  User=143.12s Real=276.8s Sys=54.55s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of Water (density: 1 g/cm3 )
 

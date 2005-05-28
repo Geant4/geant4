@@ -11,17 +11,6 @@ G4Material: Mean excitation energy is changed for CsI Iold= 491.166eV; Inew= 553
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
-
-You have successfully chosen to use the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
-  G4HepRepFile (HepRepFile)
-  G4HepRep (HepRepXML)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
 /run/verbose 2
 #
 #### /testem/phys/addPhysics  g4v52
@@ -234,7 +223,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=38.08s Real=49.15s Sys=6.49s
+  User=38s Real=47.28s Sys=6.54s
 
 ------------------------------------------------------------
 material             Total Edep   sqrt(E0(GeV))*rmsE/Emean     total tracklen 

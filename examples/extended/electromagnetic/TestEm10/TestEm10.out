@@ -10,17 +10,6 @@ Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
 
-You have successfully chosen to use the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
-  G4HepRepFile (HepRepFile)
-  G4HepRep (HepRepXML)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-
 ***** Table : Nb of materials = 32 *****
 
  Material: Aluminium     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
@@ -229,7 +218,7 @@ fAlphaPlate = 10000 ; fAlphaGas = 1000
 48	fGamma = 8.085e+04	sumN = -NaN
 49	fGamma = 9.283e+04	sumN = -NaN
 
-total time for build X-ray TR energy loss tables = 112.21 s
+total time for build X-ray TR energy loss tables = 101.23 s
 
 phot:  Total cross sections from Sandia parametrisation. 
 Em10PhysicsList::SetCuts:CutLength : 1 mm 
@@ -372,7 +361,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.41s Real=4.69s Sys=0.28s
+  User=4.46s Real=4.78s Sys=0.32s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
     mean charged track length   in absorber=16.0748 +- 0.18573  mm  

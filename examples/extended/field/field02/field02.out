@@ -61,17 +61,6 @@ Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
 
-You have successfully chosen to use the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
-  G4HepRepFile (HepRepFile)
-  G4HepRep (HepRepXML)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-
  The  WORLD   is made of 800mm of Air, the transverse size (R) of the world is 200 mm. 
  The ABSORBER is made of 40mm of Kr20CO2, the transverse size (R) is 100 mm. 
  Z position of the (middle of the) absorber 360  mm.
@@ -5123,7 +5112,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.73s Real=1.52s Sys=0.77s
+  User=0.83s Real=4.42s Sys=0.65s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

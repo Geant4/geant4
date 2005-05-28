@@ -19,31 +19,20 @@ phot:  Total cross sections from Sandia parametrisation.
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
-
-You have successfully chosen to use the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
-  G4HepRepFile (HepRepFile)
-  G4HepRep (HepRepXML)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-1148af0
-1148618
-1146ee8
-1146a10
-115d878
-1159f60
-115dd50
-115a438
-115e228
-115a910
-115fa60
-115b2c0
-115cec8
-1159a88
+11170a0
+1116bc8
+1115498
+1114fc0
+112be28
+1128510
+112c300
+11289e8
+112c7d8
+1128ec0
+112e010
+1129870
+112b478
+1128038
 G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 

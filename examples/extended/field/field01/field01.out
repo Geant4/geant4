@@ -57,17 +57,6 @@ Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
 
-You have successfully chosen to use the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
-  G4HepRepFile (HepRepFile)
-  G4HepRep (HepRepXML)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-
  The  WORLD   is made of 44000mm of Air, the transverse size (R) of the world is 22000 mm. 
  The ABSORBER is made of 1mm of Air, the transverse size (R) is 20000 mm. 
  Z position of the (middle of the) absorber 21990  mm.
@@ -197,7 +186,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -227,7 +216,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -257,7 +246,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 
 ========= Table of registered couples ==============================
 
@@ -287,7 +276,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -348,7 +337,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -386,7 +375,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.02s Real=0.02s Sys=0s
+  User=0.02s Real=0.03s Sys=0.01s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

@@ -64,17 +64,6 @@ G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 7
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
-
-You have successfully chosen to use the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
-  G4HepRepFile (HepRepFile)
-  G4HepRep (HepRepXML)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
 /run/verbose 1
 #
 /testem/det/setMat Water
@@ -150,7 +139,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=19.33s Real=25.1s Sys=0.93s
+  User=18.91s Real=25.31s Sys=0.76s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 

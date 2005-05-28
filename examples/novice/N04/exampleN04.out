@@ -19,31 +19,20 @@ phot:  Total cross sections from Sandia parametrisation.
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
-
-You have successfully chosen to use the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
-  G4HepRepFile (HepRepFile)
-  G4HepRep (HepRepXML)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-1148af0
-1148618
-1146ee8
-1146a10
-115d878
-1159f60
-115dd50
-115a438
-115e228
-115a910
-115fa60
-115b2c0
-115cec8
-1159a88
+11170a0
+1116bc8
+1115498
+1114fc0
+112be28
+1128510
+112c300
+11289e8
+112c7d8
+1128ec0
+112e010
+1129870
+112b478
+1128038
 /run/verbose      1
 /tracking/verbose 0
 /run/beamOn 3
@@ -221,7 +210,7 @@ Stage 1->2 : 0 isolated muon found.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=3.27s Real=4.75s Sys=0.16s
+  User=3.22s Real=3.62s Sys=0.19s
 G4 kernel has come to Quit state.
 Graphics systems deleted.
 Visualization Manager deleting...

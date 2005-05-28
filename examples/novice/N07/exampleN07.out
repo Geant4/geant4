@@ -37,17 +37,6 @@
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
-
-You have successfully chosen to use the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
-  G4HepRepFile (HepRepFile)
-  G4HepRep (HepRepXML)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
 /run/verbose 1
 /run/initialize
 --------------------------------------------------------
@@ -230,7 +219,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=13.22s Real=14.83s Sys=1.6s
+  User=13.06s Real=14.9s Sys=1.84s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -521,7 +510,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=18.21s Real=20.24s Sys=2.03s
+  User=17.88s Real=20.27s Sys=2.39s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -841,7 +830,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=2.04s Real=2.28s Sys=0.24s
+  User=2.15s Real=2.3s Sys=0.15s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1192,7 +1181,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=8.78s Real=10.4s Sys=1.62s
+  User=9.31s Real=10.48s Sys=1.17s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################

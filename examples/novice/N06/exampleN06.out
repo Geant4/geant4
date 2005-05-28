@@ -9,17 +9,6 @@
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
-
-You have successfully chosen to use the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
-  G4HepRepFile (HepRepFile)
-  G4HepRep (HepRepXML)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
 Equal
 Equal
 Equal
@@ -1043,7 +1032,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     1      5 m    2.18 m   -2.15 m    3.74 eV      0 eV   5.86 m    5.86 m          Tank  Transportation
     2     10 m    5.76 m   -5.69 m    3.74 eV      0 eV    7.1 m      13 m    OutOfWorld  Transportation
 Number of optical photons produces in this event : 53
-number of event = 1 User=0.09s Real=0.23s Sys=0.14s
+number of event = 1 User=0.1s Real=0.23s Sys=0.13s
 #
 /process/inactivate Scintillation
 /N06/phys/verbose 0
@@ -1377,6 +1366,6 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     1      5 m   -45.2 cm  -2.94 m    2.42 eV      0 eV   5.82 m    5.82 m          Tank  Transportation
     2     10 m   -1.17 m   -7.64 m    2.42 eV      0 eV    6.9 m    12.7 m    OutOfWorld  Transportation
 Number of optical photons produces in this event : 34
-number of event = 1 User=0.03s Real=0.09s Sys=0.06s
+number of event = 1 User=0.05s Real=0.09s Sys=0.04s
 Graphics systems deleted.
 Visualization Manager deleting...
