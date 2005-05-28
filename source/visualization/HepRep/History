@@ -1,4 +1,4 @@
-.$Id: History,v 1.86 2005-05-27 06:31:36 perl Exp $
+.$Id: History,v 1.87 2005-05-28 18:13:23 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+28 May 2005 Joseph Perl
+- For HeRepFile, correct heprep xmlns reference.
+
 25 May 2005 Joseph Perl
 - For HeRepFile, allow user to specify output directory, filename
   and whether to overwrite.
