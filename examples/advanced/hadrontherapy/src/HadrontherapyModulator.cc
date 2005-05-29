@@ -152,7 +152,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 HadrontherapyMaterial* material = new HadrontherapyMaterial();
 //G4Material* MotherModMater = material -> GetMat("Air");  
 G4Material* Mod0Mater = material -> GetMat("Air");
-G4Material* ModMater = material -> GetMat("Air");
+G4Material* ModMater = material -> GetMat("PMMA");
 delete material;
 
  G4double innerRadiusOfTheTube = 2.5 *cm;
