@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransparentRegXTRadiator.cc,v 1.5 2005-05-27 15:37:52 grichine Exp $
+// $Id: G4TransparentRegXTRadiator.cc,v 1.6 2005-05-29 15:46:41 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -87,12 +87,16 @@ G4double G4TransparentRegXTRadiator::SpectralXTRdEdx(G4double energy)
   //  if (fGamma < 1200) kMin = G4int(cofMin);  // 1200 ?
   // else               kMin = 1;
 
-  // tmp  = (fPlateThick + fGasThick)*energy*fMaxThetaTR;
-  // tmp /= cofPHC;
 
   kMin = G4int(cofMin);
   if (cofMin > kMin) kMin++;
 
+  // tmp  = (fPlateThick + fGasThick)*energy*fMaxThetaTR;
+  // tmp /= cofPHC;
+  // kMax = G4int(tmp);
+  // if(kMax < 0) kMax = 0;
+  // kMax += kMin;
+  
 
   kMax = kMin + 19; //  9; // kMin + G4int(tmp);
 
@@ -158,7 +162,7 @@ G4TransparentRegXTRadiator::GetStackFactor( G4double energy,
                  * G4double(fPlateNumber) ;
   G4complex F2 =   (1.0-Ha)*(1.0-Ha)*Hb/(1.0-H)/(1.0-H)
                  * (1.0 - exp(-0.5*fPlateNumber*sigma)) ;
-  // * (1.0 - pow(H,fPlateNumber)) ;
+  //    *(1.0 - pow(H,fPlateNumber)) ;
     G4complex R  = (F1 + F2)*OneInterfaceXTRdEdx(energy,gamma,varAngle);
   // G4complex R  = F2*OneInterfaceXTRdEdx(energy,gamma,varAngle);
   result       = 2.0*real(R);  
@@ -166,26 +170,26 @@ G4TransparentRegXTRadiator::GetStackFactor( G4double energy,
   */
    // numerically unstable result
 
-  G4double result, Qa, Qb, Q, aZa, bZb, aMa, bMb, D, sigma;  
-  aZa = fPlateThick/GetPlateFormationZone(energy,gamma,varAngle);
-  bZb = fGasThick/GetGasFormationZone(energy,gamma,varAngle);
-  aMa = fPlateThick*GetPlateLinearPhotoAbs(energy);
-  bMb = fGasThick*GetGasLinearPhotoAbs(energy);
+  G4double result, Qa, Qb, Q, aZa, bZb, aMa, bMb, D, sigma; 
+ 
+  aZa   = fPlateThick/GetPlateFormationZone(energy,gamma,varAngle);
+  bZb   = fGasThick/GetGasFormationZone(energy,gamma,varAngle);
+  aMa   = fPlateThick*GetPlateLinearPhotoAbs(energy);
+  bMb   = fGasThick*GetGasLinearPhotoAbs(energy);
   sigma = aMa*fPlateThick + bMb*fGasThick;
-  Qa = exp(-0.5*aMa);
-  Qb = exp(-0.5*bMb);
-  Q  = Qa*Qb;
-  G4complex Ha( Qa*cos(aZa),
-               -Qb*sin(aZa)   );  
-  G4complex Hb( Qb*cos(bZb),
-               -Qb*sin(bZb)    );
+  Qa    = exp(-0.5*aMa);
+  Qb    = exp(-0.5*bMb);
+  Q     = Qa*Qb;
+
+  G4complex Ha( Qa*cos(aZa), -Qa*sin(aZa)   );  
+  G4complex Hb( Qb*cos(bZb), -Qb*sin(bZb)    );
   G4complex H  = Ha*Hb;
   G4complex Hs = conj(H);
   D            = 1.0 /( (1 - Q)*(1 - Q) + 
-                  4*Q*sin(0.5*(aZa+bZb))*sin(0.5*(aZa+bZb)) );
+                  4*Q*sin(0.5*(aZa + bZb))*sin(0.5*(aZa + bZb)) );
   G4complex F1 = (1.0 - Ha)*(1.0 - Hb)*(1.0 - Hs)
                  * G4double(fPlateNumber)*D;
-  G4complex F2 = (1.0-Ha)*(1.0-Ha)*Hb*(1.0-Hs)*(1.0-Hs)
+  G4complex F2 = (1.0 - Ha)*(1.0 - Ha)*Hb*(1.0 - Hs)*(1.0 - Hs)
                    // * (1.0 - pow(H,fPlateNumber)) * D*D;
                  * (1.0 - exp(-0.5*fPlateNumber*sigma)) * D*D;
   G4complex R  = (F1 + F2)*OneInterfaceXTRdEdx(energy,gamma,varAngle);
