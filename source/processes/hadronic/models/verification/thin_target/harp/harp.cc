@@ -726,10 +726,9 @@ int main(int argc, char** argv)
       tree->close();
     }
 
-    G4cout.setf(std::ios::fixed,std::ios::floatfield);
+    G4cout.setf(std::ios::fixed);
     G4int prec = G4cout.precision(6);
-
-    G4cout << "###### Cross section per bin " << G4endl;
+    G4cout << "###### Cross section per bin " << std::setw(6) << G4endl;
 
     mom0 = 0.0;
     G4double mom1;
@@ -743,14 +742,15 @@ int main(int argc, char** argv)
 	     << mom0 << "  -  " << mom1 << "  MeV/c" 
 	     << G4endl;
 
-      G4double ang0 = ang1 = 0.0;
+      G4double ang0 = 0.0;
+      G4double ang1 = 0.0;
 
       for(int j=0; j<nanglpi; j++) {
-        ang1 = anglpi[j];
+        ang1 = angpi[j];
         cross = double(nmomtet[k][j])*harpcs[k][j];
         G4cout << "  " << cross;
 
-        if(k>0) dsda[j] += cross*(mom1 - mom0);
+        if(k>0) dsda[j] += cross*(mom1 - mom0)/GeV;
         else    dsda[j] = 0.0;
         if(j>0) dsdm[k] += cross*twopi*(cos(ang0) - cos(ang1));
         ang0 = ang1;
@@ -776,7 +776,6 @@ int main(int argc, char** argv)
     G4cout << G4endl;
 
     G4cout << "###### End of run # " << run << "     ######" << G4endl;
-    G4cout.setf(mode,std::ios::floatfield);
     G4cout.precision(prec);
 
   }  

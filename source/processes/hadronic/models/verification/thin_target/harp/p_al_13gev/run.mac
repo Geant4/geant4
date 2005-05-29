@@ -22,6 +22,12 @@ Al
 140
 //--------
 #generator
+lepar
+#paw
+lepar.paw
+#run
+//--------
+#generator
 binary
 #paw
 bic.paw
