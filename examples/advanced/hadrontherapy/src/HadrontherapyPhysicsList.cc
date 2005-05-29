@@ -44,7 +44,7 @@
 #include "HadrontherapyPositronPenelope.hh"
 #include "HadrontherapyIonLowE.hh"
 #include "HadrontherapyIonStandard.hh"
-#include "HadrontherapyProtonHadro.hh"
+#include "HadrontherapyProtonPrecompound.hh"
 #include "HadrontherapyMuonStandard.hh"
 #include "HadrontherapyDecay.hh"
 //#include "G4ParticleDefinition.hh"
@@ -68,7 +68,7 @@ HadrontherapyPhysicsList::HadrontherapyPhysicsList(): G4VModularPhysicsList(),
 						      
 electronIsRegistered(false), positronIsRegistered(false), 
 photonIsRegistered(false), ionIsRegistered(false),
-protonHadroIsRegistered(false), muonIsRegistered(false),
+protonPrecompoundIsRegistered(false), muonIsRegistered(false),
 decayIsRegistered(false)
 {
   defaultCutValue = 10. * mm;
@@ -279,9 +279,9 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	}
     }
 
-  if (name == "proton-hadronic") 
+  if (name == "proton-precompound") 
     {
-      if (protonHadroIsRegistered) 
+      if (protonPrecompoundIsRegistered) 
 	{
 	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
 		 << " cannot be registered ---- decay List already existing" 
@@ -291,8 +291,8 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	{
 	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
                  << " is registered" << G4endl;
-	  RegisterPhysics( new HadrontherapyProtonHadro(name) );
-	  protonHadroIsRegistered = true;
+	  RegisterPhysics( new HadrontherapyProtonPrecompound(name) );
+	  protonPrecompoundIsRegistered = true;
 	}
 
     }
@@ -322,7 +322,7 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
      "Electromagnetic physics is registered for electron, positron, photons, protons" 
      << G4endl;
     }
-    if (protonHadroIsRegistered && muonIsRegistered && decayIsRegistered)
+    if (protonPrecompoundIsRegistered && muonIsRegistered && decayIsRegistered)
       {
 	G4cout << " Hadronic physics is registered"<< G4endl;
       }     

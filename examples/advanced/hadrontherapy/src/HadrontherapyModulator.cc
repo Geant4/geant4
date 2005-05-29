@@ -145,14 +145,14 @@ HadrontherapyModulator::~HadrontherapyModulator()
 void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 {
 
-G4VPhysicalVolume* mother = motherVolume;
+  //G4VPhysicalVolume* mother = motherVolume;
 //ReadFile("modulator.dat");
 
 //Materials
 HadrontherapyMaterial* material = new HadrontherapyMaterial();
-G4Material* MotherModMater = material -> GetMat("Air");  
+//G4Material* MotherModMater = material -> GetMat("Air");  
 G4Material* Mod0Mater = material -> GetMat("Air");
-G4Material* ModMater = material -> GetMat("PMMA");
+G4Material* ModMater = material -> GetMat("Air");
 delete material;
 
  G4double innerRadiusOfTheTube = 2.5 *cm;
@@ -169,7 +169,7 @@ delete material;
 
  
 
-  physiMotherMod = new G4PVPlacement(rm,positionMotherMod,  "MotherMod", 
+ physiMotherMod = new G4PVPlacement(rm,positionMotherMod,  "MotherMod", 
 				   logicMotherMod,     // its logical volume				  
 				   motherVolume,      // its mother  volume
 				   false,           // no boolean operations
@@ -2015,36 +2015,41 @@ delete material;
 G4VisAttributes * red = new G4VisAttributes( G4Colour(1. ,0. ,0.));
  red-> SetVisibility(true);
  red-> SetForceSolid(true);
+ logicMotherMod -> SetVisAttributes(G4VisAttributes::Invisible);
 
+ logicMod0 ->SetVisAttributes(G4VisAttributes::Invisible);
+ logicMod20 ->SetVisAttributes(G4VisAttributes::Invisible);
+ logicMod40 ->SetVisAttributes(G4VisAttributes::Invisible);
+ logicMod60 ->SetVisAttributes(G4VisAttributes::Invisible);
  logicMod1 -> SetVisAttributes(red);
-  logicMod2 -> SetVisAttributes(red);
-  logicMod3 -> SetVisAttributes(red);
-  logicMod4 -> SetVisAttributes(red);
-  logicMod5 -> SetVisAttributes(red);
-  logicMod6 -> SetVisAttributes(red);
-  logicMod7 -> SetVisAttributes(red);
-  logicMod8 -> SetVisAttributes(red);
-  logicMod9 -> SetVisAttributes(red);
-  logicMod10 -> SetVisAttributes(red);
-  logicMod11 -> SetVisAttributes(red);
-  logicMod12 -> SetVisAttributes(red);
-  logicMod13 -> SetVisAttributes(red);
-  logicMod14 -> SetVisAttributes(red);
-  logicMod15 -> SetVisAttributes(red);
-  logicMod16 -> SetVisAttributes(red);
-  logicMod17 -> SetVisAttributes(red);
-  logicMod18 -> SetVisAttributes(red);
-  logicMod21 -> SetVisAttributes(red);
-  logicMod22 -> SetVisAttributes(red);
-  logicMod23 -> SetVisAttributes(red);
-  logicMod24 -> SetVisAttributes(red);
-  logicMod25 -> SetVisAttributes(red);
-  logicMod26 -> SetVisAttributes(red);
-  logicMod27 -> SetVisAttributes(red);
-  logicMod28 -> SetVisAttributes(red);
-  logicMod29 -> SetVisAttributes(red);
-  logicMod30 -> SetVisAttributes(red);
-  logicMod31 -> SetVisAttributes(red);
+ logicMod2 -> SetVisAttributes(red);
+ logicMod3 -> SetVisAttributes(red);
+ logicMod4 -> SetVisAttributes(red);
+ logicMod5 -> SetVisAttributes(red);
+ logicMod6 -> SetVisAttributes(red);
+ logicMod7 -> SetVisAttributes(red);
+ logicMod8 -> SetVisAttributes(red);
+ logicMod9 -> SetVisAttributes(red);
+ logicMod10 -> SetVisAttributes(red);
+ logicMod11 -> SetVisAttributes(red);
+ logicMod12 -> SetVisAttributes(red);
+ logicMod13 -> SetVisAttributes(red);
+ logicMod14 -> SetVisAttributes(red);
+ logicMod15 -> SetVisAttributes(red);
+ logicMod16 -> SetVisAttributes(red);
+ logicMod17 -> SetVisAttributes(red);
+ logicMod18 -> SetVisAttributes(red);
+ logicMod21 -> SetVisAttributes(red);
+ logicMod22 -> SetVisAttributes(red);
+ logicMod23 -> SetVisAttributes(red);
+ logicMod24 -> SetVisAttributes(red);
+ logicMod25 -> SetVisAttributes(red);
+ logicMod26 -> SetVisAttributes(red);
+ logicMod27 -> SetVisAttributes(red);
+ logicMod28 -> SetVisAttributes(red);
+ logicMod29 -> SetVisAttributes(red);
+ logicMod30 -> SetVisAttributes(red);
+ logicMod31 -> SetVisAttributes(red);
   logicMod32 -> SetVisAttributes(red);
   logicMod33 -> SetVisAttributes(red);
   logicMod34 -> SetVisAttributes(red);

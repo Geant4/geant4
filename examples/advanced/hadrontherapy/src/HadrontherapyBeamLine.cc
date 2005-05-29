@@ -45,14 +45,29 @@
 #include "G4Material.hh"
 
 HadrontherapyBeamLine::HadrontherapyBeamLine(G4VPhysicalVolume* motherVolume):
-  physiBeamLineSupport(0), physiBeamLineCover(0), physiBeamLineCover2(0),
-  FirstScatteringFoil(0), SecondScatteringFoil(0),
-  physiFirstScatteringFoil(0), physiKaptonWindow(0), 
-  solidStopper(0), physiStopper(0),
+  physiBeamLineSupport(0), 
+  physiBeamLineCover(0), 
+  physiBeamLineCover2(0),
+  
+  FirstScatteringFoil(0),
+  physiFirstScatteringFoil(0),
+
+  physiKaptonWindow(0), 
+  solidStopper(0), 
+  physiStopper(0), 
+  SecondScatteringFoil(0),
   physiSecondScatteringFoil(0),
-  physiFirstCollimator(0),solidRangeShifterBox(0), logicRangeShifterBox(0),physiRangeShifterBox(0),
-  physiSecondCollimator(0),physiFirstCollimatorModulatorBox(0),
-  physiHoleFirstCollimatorModulatorBox(0),physiSecondCollimatorModulatorBox(0),
+  
+  physiFirstCollimator(0),
+  solidRangeShifterBox(0), 
+  logicRangeShifterBox(0),
+  physiRangeShifterBox(0),
+  
+  physiSecondCollimator(0),
+  physiFirstCollimatorModulatorBox(0),
+  physiHoleFirstCollimatorModulatorBox(0),
+  
+  physiSecondCollimatorModulatorBox(0),
   physiHoleSecondCollimatorModulatorBox(0), physiFirstMonitorLayer1(0), physiFirstMonitorLayer2(0),
   physiFirstMonitorLayer3(0), physiFirstMonitorLayer4(0), physiSecondMonitorLayer1(0), physiSecondMonitorLayer2(0),
   physiSecondMonitorLayer3(0), physiSecondMonitorLayer4(0),physiThirdMonitorLayer1(0), physiThirdMonitorLayer2(0),
@@ -769,6 +784,7 @@ logicHoleNozzleSupport    ->    SetVisAttributes(yellow);
 
  void HadrontherapyBeamLine::HadrontherapyBeamFinalCollimator()
    {
+
  // --------------------------------
  //     FINAL COLLIMATOR 25 mm
  //-------------------------
@@ -786,6 +802,7 @@ G4double FinalCollimatorPosition_y    = 0.      *mm;
 G4double FinalCollimatorPosition_z    = 0.      *mm;
 
 G4double phi = 90. *deg;     
+
 // Matrix definition for a 90 deg rotation. Also used for other volumes       
 G4RotationMatrix rm;               
 rm.rotateY(phi);
@@ -793,25 +810,30 @@ rm.rotateY(phi);
 G4Material* Brass = material -> GetMat("Brass");
 
 solidFinalCollimator = new G4Tubs("FinalCollimator", innerRadiusFinalCollimator, outerRadiusFinalCollimator,
-				  hightFinalCollimator, startAngleFinalCollimator, spanningAngleFinalCollimator);
+				  hightFinalCollimator, 
+				  startAngleFinalCollimator, spanningAngleFinalCollimator);
 
-G4LogicalVolume* logicFinalCollimator = new G4LogicalVolume(solidFinalCollimator, Brass, "FinalCollimator", 0, 0, 0);
+G4LogicalVolume* logicFinalCollimator = new G4LogicalVolume(solidFinalCollimator, 
+							    Brass, "FinalCollimator", 0, 0, 0);
 
 physiFinalCollimator = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector(FinalCollimatorPosition_x,
 									 FinalCollimatorPosition_y,
 									 FinalCollimatorPosition_z)),
 					 "FinalCollimator", logicFinalCollimator, mother, false, 0); 
 
+ 
 G4VisAttributes * yellow = new G4VisAttributes( G4Colour(1., 1., 0. ));
 yellow-> SetVisibility(true);
 yellow-> SetForceSolid(true);
 logicFinalCollimator -> SetVisAttributes(yellow); 
    }
 
+
 void HadrontherapyBeamLine::setRangeShifterXPos(G4double val)
 {
   G4double value = val;
-  physiRangeShifterBox -> SetTranslation(G4ThreeVector(value, RangeShifterBoxPosition_y, RangeShifterBoxPosition_z)); 
+  physiRangeShifterBox -> SetTranslation(G4ThreeVector
+					 (value, RangeShifterBoxPosition_y, RangeShifterBoxPosition_z)); 
   G4cout << "The Range Shifter is translated to"<< value/mm <<"mm along the X axis" <<G4endl;
 }
 
@@ -852,7 +874,7 @@ void HadrontherapyBeamLine::SetOuterRadiusStopper(G4double val)
 
 void HadrontherapyBeamLine::SetInnerRadiusFinalCollimator(G4double val)
 {
- G4double value = val;
+  // G4double value = val;
  solidFinalCollimator -> SetInnerRadius(val);
  G4cout<<"Inner Radius of the final collimator is (mm):"
        <<solidFinalCollimator -> GetInnerRadius()/mm

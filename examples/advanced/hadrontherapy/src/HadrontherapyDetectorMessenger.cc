@@ -64,59 +64,59 @@ HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(
   FinalCollimatorDir = new G4UIdirectory("/beamLine/FinalCollimator/");
   FinalCollimatorDir->SetGuidance("set specification of final collimator");  
 
-   ModulatorAngleCmd = new G4UIcmdWithADoubleAndUnit("/modulator/angle",this);
-   ModulatorAngleCmd->SetGuidance("Set Modulator Angle");
-   ModulatorAngleCmd->SetParameterName("Size",false);
-   ModulatorAngleCmd->SetRange("Size>=0.");
-   ModulatorAngleCmd->SetUnitCategory("Angle");  
-   ModulatorAngleCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  ModulatorAngleCmd = new G4UIcmdWithADoubleAndUnit("/modulator/angle",this);
+  ModulatorAngleCmd->SetGuidance("Set Modulator Angle");
+  ModulatorAngleCmd->SetParameterName("Size",false);
+  ModulatorAngleCmd->SetRange("Size>=0.");
+  ModulatorAngleCmd->SetUnitCategory("Angle");  
+  ModulatorAngleCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-   RangeShifterMatCmd = new G4UIcmdWithAString("/beamLine/RangeShifter/RSMat",this);
-   RangeShifterMatCmd->SetGuidance("Set material of range shifter");
-   RangeShifterMatCmd->SetParameterName("choice",false);
-   RangeShifterMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  RangeShifterMatCmd = new G4UIcmdWithAString("/beamLine/RangeShifter/RSMat",this);
+  RangeShifterMatCmd->SetGuidance("Set material of range shifter");
+  RangeShifterMatCmd->SetParameterName("choice",false);
+  RangeShifterMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-   RangeShifterBox_xCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/RangeShifter/thickness",this);
-   RangeShifterBox_xCmd->SetGuidance("Set half of the thickness of range shifter");
-   RangeShifterBox_xCmd->SetParameterName("Size",false);
-   RangeShifterBox_xCmd->SetDefaultUnit("mm");  
-   RangeShifterBox_xCmd->SetUnitCandidates("mm cm m");  
-   RangeShifterBox_xCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  RangeShifterBox_xCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/RangeShifter/thickness",this);
+  RangeShifterBox_xCmd->SetGuidance("Set half of the thickness of range shifter");
+  RangeShifterBox_xCmd->SetParameterName("Size",false);
+  RangeShifterBox_xCmd->SetDefaultUnit("mm");  
+  RangeShifterBox_xCmd->SetUnitCandidates("mm cm m");  
+  RangeShifterBox_xCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-   RangeShifterBoxPosition_xCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/RangeShifter/position",this);
-   RangeShifterBoxPosition_xCmd->SetGuidance("Set position of range shifter");
-   RangeShifterBoxPosition_xCmd->SetParameterName("Size",false);
-   RangeShifterBoxPosition_xCmd->SetDefaultUnit("mm");  
-   RangeShifterBoxPosition_xCmd->SetUnitCandidates("mm cm m");  
-   RangeShifterBoxPosition_xCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  RangeShifterBoxPosition_xCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/RangeShifter/position",this);
+  RangeShifterBoxPosition_xCmd->SetGuidance("Set position of range shifter");
+  RangeShifterBoxPosition_xCmd->SetParameterName("Size",false);
+  RangeShifterBoxPosition_xCmd->SetDefaultUnit("mm");  
+  RangeShifterBoxPosition_xCmd->SetUnitCandidates("mm cm m");  
+  RangeShifterBoxPosition_xCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-   FirstScatteringFoil_xCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/ScatteringFoil1/thickness",this);
-   FirstScatteringFoil_xCmd->SetGuidance("Set thickness of first scattering foil");
-   FirstScatteringFoil_xCmd->SetParameterName("Size",false);
-   FirstScatteringFoil_xCmd->SetDefaultUnit("mm");  
-   FirstScatteringFoil_xCmd->SetUnitCandidates("mm cm m");  
-   FirstScatteringFoil_xCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  FirstScatteringFoil_xCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/ScatteringFoil1/thickness",this);
+  FirstScatteringFoil_xCmd->SetGuidance("Set thickness of first scattering foil");
+  FirstScatteringFoil_xCmd->SetParameterName("Size",false);
+  FirstScatteringFoil_xCmd->SetDefaultUnit("mm");  
+  FirstScatteringFoil_xCmd->SetUnitCandidates("mm cm m");  
+  FirstScatteringFoil_xCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-   SecondScatteringFoil_xCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/ScatteringFoil2/thickness",this);
-   SecondScatteringFoil_xCmd->SetGuidance("Set thickness of second scattering foil");
-   SecondScatteringFoil_xCmd->SetParameterName("Size",false);
-   SecondScatteringFoil_xCmd->SetDefaultUnit("mm");  
-   SecondScatteringFoil_xCmd->SetUnitCandidates("mm cm m");  
-   SecondScatteringFoil_xCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  SecondScatteringFoil_xCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/ScatteringFoil2/thickness",this);
+  SecondScatteringFoil_xCmd->SetGuidance("Set thickness of second scattering foil");
+  SecondScatteringFoil_xCmd->SetParameterName("Size",false);
+  SecondScatteringFoil_xCmd->SetDefaultUnit("mm");  
+  SecondScatteringFoil_xCmd->SetUnitCandidates("mm cm m");  
+  SecondScatteringFoil_xCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-   outerRadiusStopperCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/Stopper/outRadius",this);
-   outerRadiusStopperCmd->SetGuidance("Set size of outer radius");
-   outerRadiusStopperCmd->SetParameterName("Size",false);
-   outerRadiusStopperCmd->SetDefaultUnit("mm");  
-   outerRadiusStopperCmd->SetUnitCandidates("mm cm m");  
-   outerRadiusStopperCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  outerRadiusStopperCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/Stopper/outRadius",this);
+  outerRadiusStopperCmd->SetGuidance("Set size of outer radius");
+  outerRadiusStopperCmd->SetParameterName("Size",false);
+  outerRadiusStopperCmd->SetDefaultUnit("mm");  
+  outerRadiusStopperCmd->SetUnitCandidates("mm cm m");  
+  outerRadiusStopperCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-   innerRadiusFinalCollimatorCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/FinalCollimator/halfInnerRad",this);
-   innerRadiusFinalCollimatorCmd->SetGuidance("Set size of inner radius ( max 21.5 mm)");
-   innerRadiusFinalCollimatorCmd->SetParameterName("Size",false);
-   innerRadiusFinalCollimatorCmd->SetDefaultUnit("mm");  
-   innerRadiusFinalCollimatorCmd->SetUnitCandidates("mm cm m");  
-   innerRadiusFinalCollimatorCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  innerRadiusFinalCollimatorCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/FinalCollimator/halfInnerRad",this);
+  innerRadiusFinalCollimatorCmd->SetGuidance("Set size of inner radius ( max 21.5 mm)");
+  innerRadiusFinalCollimatorCmd->SetParameterName("Size",false);
+  innerRadiusFinalCollimatorCmd->SetDefaultUnit("mm");  
+  innerRadiusFinalCollimatorCmd->SetUnitCandidates("mm cm m");  
+  innerRadiusFinalCollimatorCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
  MaxStepCmd = new G4UIcmdWithADoubleAndUnit("/stepDefinition/stepMax",this);
   MaxStepCmd->SetGuidance("Set max allowed step size");

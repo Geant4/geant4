@@ -85,57 +85,57 @@ G4Element* elCl = new G4Element("Chlorine","Cl",Z = 17.,A);
 A = 39.098*g/mole;
 G4Element* elK = new G4Element("Potassium","K",Z = 19.,A);
 
-A = 40.08*g/mole;
-G4Element* elCa = new G4Element("Calcium","Ca",Z = 20.,A);
-  
-A = 65.38*g/mole;
-G4Element* elZn = new G4Element("Zinc","Zn",Z = 30.,A);
-
-A  =  54.94*g/mole;
-G4Element* elMn   =  new G4Element("Manganese","Mn",Z = 25.,A);
+ A = 40.08*g/mole;
+ G4Element* elCa = new G4Element("Calcium","Ca",Z = 20.,A);
  
-A = 28.09*g/mole;
-G4Element* elSi  = new G4Element("Silicon","Si",Z = 14.,A);
-
-A = 52.00*g/mole;
-G4Element* elCr  = new G4Element("Chromium","Cr",Z = 24.,A);
-
-A = 58.70*g/mole;
-G4Element* elNi  = new G4Element("Nickel","Ni",Z = 28.,A);
-
-A = 55.85*g/mole;
-G4Element* elFe  = new G4Element("Iron","Fe",Z = 26.,A);
+ A = 65.38*g/mole;
+ G4Element* elZn = new G4Element("Zinc","Zn",Z = 30.,A);
  
-A = 183.84* g/mole;
-d = 19.3*g/cm3;
-matW = new G4Material("Tungsten",Z = 74.,A,d);
+ A  =  54.94*g/mole;
+ G4Element* elMn   =  new G4Element("Manganese","Mn",Z = 25.,A);
+ 
+ A = 28.09*g/mole;
+ G4Element* elSi  = new G4Element("Silicon","Si",Z = 14.,A);
+ 
+ A = 52.00*g/mole;
+ G4Element* elCr  = new G4Element("Chromium","Cr",Z = 24.,A);
+ 
+ A = 58.70*g/mole;
+ G4Element* elNi  = new G4Element("Nickel","Ni",Z = 28.,A);
+ 
+ A = 55.85*g/mole;
+ G4Element* elFe  = new G4Element("Iron","Fe",Z = 26.,A);
+ 
+ A = 183.84* g/mole;
+ d = 19.3*g/cm3;
+ matW = new G4Material("Tungsten",Z = 74.,A,d);
+ 
+ A = 180.948*g/mole;
+ d = 16.6*g/cm3;
+ G4Element* elTa = new G4Element("Tantalum","Ta", Z=73.,A); 
+ 
+ A = 63.546*g/mole;
+ d = 8.90*g/cm3;
+ G4Element* elCu = new G4Element("Copper","Cu", Z=29., A);  
 
-A = 180.948*g/mole;
-d = 16.6*g/cm3;
-G4Element* elTa = new G4Element("Tantalum","Ta", Z=73.,A); 
-               
-A = 63.546*g/mole;
-d = 8.90*g/cm3;
-G4Element* elCu = new G4Element("Copper","Cu", Z=29., A);  
-
-
-  // MATERIAL ALUMINUM
-d = 2.700*g/cm3;
-matAl = new G4Material("MatAluminum",d,1);
-matAl->AddElement(elAl,1);
-
-  // MATERIAL SILICON
-d = 2.330*g/cm3;
-matSi = new G4Material("MatSilicon",d,1);
-matSi->AddElement(elSi,1);
-
+ 
+// MATERIAL ALUMINUM
+ d = 2.700*g/cm3;
+ matAl = new G4Material("MatAluminum",d,1);
+ matAl->AddElement(elAl,1);
+ 
+// MATERIAL SILICON
+ d = 2.330*g/cm3;
+ matSi = new G4Material("MatSilicon",d,1);
+ matSi->AddElement(elSi,1);
+ 
 // MATERIAL TANTALUM
  d = 16.6*g/cm3;
  matTa = new G4Material("MatTantalum", d, 1);
  matTa -> AddElement(elTa, 1);
-
+ 
  // MATERIAL COPPER
-d = 8.90*g/cm3;
+ d = 8.90*g/cm3;
  matCu = new G4Material("MatCopper", d, 1);
  matCu -> AddElement(elCu, 1);
   // Vacuum

@@ -26,18 +26,22 @@
 /physics/addPhysics ion-LowE
 /physics/addPhysics muon-standard
 /physics/addPhysics decay
-/physics/addPhysics proton-hadronic
+/physics/addPhysics proton-precompound
 
 /run/initialize
 
-/vis/scene/create
-/vis/open OGLIX
-/vis/viewer/flush
+#/vis/scene/create
+#/vis/open OGLIX
+#/vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 30 130 deg
-/vis/viewer/zoom 9
+/vis/viewer/zoom 3
 /vis/viewer/pan -10  80 cm
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
-/vis/viewer/update
-#/run/beamOn 40
+#/vis/viewer/update
+/gun/energy 10 GeV
+/beamLine/RangeShifter/thickness 1 cm
+/beamLine/RangeShifter/RSMat Air
+/vis/viewer/flush
+/run/beamOn 5000
 

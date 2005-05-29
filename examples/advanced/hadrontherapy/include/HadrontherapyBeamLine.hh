@@ -58,15 +58,19 @@ public:
 private:
   G4VPhysicalVolume* physiBeamLineSupport; 
   G4VPhysicalVolume* physiBeamLineCover; 
-  G4VPhysicalVolume* physiBeamLineCover2;  
-  G4VPhysicalVolume* physiVacuumZone;
-  G4VPhysicalVolume* physiFirstScatteringFoil; 
-  G4VPhysicalVolume* physiKaptonWindow;
-  G4Tubs* solidStopper;
-  G4VPhysicalVolume* physiStopper; 
-  G4VPhysicalVolume* physiSecondScatteringFoil;
+  G4VPhysicalVolume* physiBeamLineCover2;
+
   G4Box* FirstScatteringFoil;
-  G4Box* SecondScatteringFoil;
+  G4VPhysicalVolume* physiFirstScatteringFoil;
+  G4VPhysicalVolume* physiVacuumZone;
+  G4VPhysicalVolume* physiKaptonWindow;
+
+  G4Tubs* solidStopper;
+
+  G4VPhysicalVolume* physiStopper; 
+  G4Box* SecondScatteringFoil;  
+  G4VPhysicalVolume* physiSecondScatteringFoil;  
+  
   G4VPhysicalVolume* physiFirstCollimator;
   G4VPhysicalVolume* physiHoleFirstCollimator;
   G4Box* solidRangeShifterBox;
