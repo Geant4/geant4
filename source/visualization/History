@@ -1,4 +1,4 @@
-$Id: History,v 1.291 2005-05-29 23:21:25 allison Exp $
+$Id: History,v 1.292 2005-05-29 23:26:23 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -33,7 +33,7 @@ History file for visualization category
     Fixed bug introduced in ClearTransientStore.
 - openinventor-V07-00-00 and 01:
     fixes for CLHEP and marker sizes.
-- vis-HepRep-V07-00-01 and vis-zlib-V07-00-00:
+- vis-HepRep-V07-00-01 and vis-zlib-V07-00-00  (Mark Donszelmann)
     Migration to G4LIB_BUILD_ZLIB and some developments.
 - management:
   o Reduced text size of scale annotation to 12 pixels.
