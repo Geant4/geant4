@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.27 2005-05-28 18:06:32 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.28 2005-05-29 06:22:54 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -84,6 +84,11 @@ G4HepRepFileSceneHandler::G4HepRepFileSceneHandler(G4VGraphicsSystem& system,
     fileOverwrite = false;
   else
     fileOverwrite = strcmp(getenv("G4HEPREPFILE_OVERWRITE"),"0");
+
+  if (getenv("G4HEPREPFILE_CULL") == NULL)
+    cullInvisibleObjects = false;
+  else
+    cullInvisibleObjects = strcmp(getenv("G4HEPREPFILE_CULL"),"0");
 }
 
 
@@ -129,6 +134,10 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Box& box) {
 #endif
 
   AddHepRepInstance("Prism");
+
+  if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
+    return;
+
   hepRepXMLWriter->addPrimitive();
 
   G4double dx = box.GetXHalfLength();
@@ -181,6 +190,9 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Cons& cons) {
   } else {
     AddHepRepInstance("Cylinder");
 
+    if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
+      return;
+
     G4Point3D vertex1(G4Point3D( 0., 0., cons.GetZHalfLength()));
     G4Point3D vertex2(G4Point3D( 0., 0.,-cons.GetZHalfLength()));
 
@@ -221,6 +233,9 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Tubs& tubs) {
   } else {
     AddHepRepInstance("Cylinder");
 
+    if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
+      return;
+
     G4Point3D vertex1(G4Point3D( 0., 0., tubs.GetZHalfLength()));
     G4Point3D vertex2(G4Point3D( 0., 0.,-tubs.GetZHalfLength()));
 
@@ -256,6 +271,10 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Trd& trd) {
 #endif
 
   AddHepRepInstance("Prism");
+
+  if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
+    return;
+
   hepRepXMLWriter->addPrimitive();
 
   G4double dx1 = trd.GetXHalfLength1();
@@ -581,6 +600,9 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyline& polyline) {
 
   AddHepRepInstance("Line");
 
+  if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
+    return;
+
   hepRepXMLWriter->addPrimitive();
 
   for (size_t i=0; i < polyline.size(); i++) {
@@ -600,6 +622,9 @@ void G4HepRepFileSceneHandler::AddPrimitive (const G4Polymarker& line) {
 #endif
 
   AddHepRepInstance("Point");
+
+  if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
+    return;
 
   hepRepXMLWriter->addAttValue("MarkName", "Dot");
   hepRepXMLWriter->addAttValue("MarkSize", 4);
@@ -640,6 +665,9 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Circle& circle) {
 
   AddHepRepInstance("Point");
 
+  if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
+    return;
+
   hepRepXMLWriter->addAttValue("MarkName", "Dot");
   hepRepXMLWriter->addAttValue("MarkSize", 4);
 
@@ -661,6 +689,9 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Square& square) {
 
   AddHepRepInstance("Point");
 
+  if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
+    return;
+
   hepRepXMLWriter->addAttValue("MarkName", "Square");
   hepRepXMLWriter->addAttValue("MarkSize", 4);
 
@@ -680,6 +711,9 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
 #endif
 
   AddHepRepInstance("Polygon");
+
+  if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
+    return;
 
   if(polyhedron.GetNoFacets()==0)return;
 
@@ -800,6 +834,9 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName) {
       hepRepXMLWriter->addType(fpCurrentPV->GetName(),fCurrentDepth);
       hepRepXMLWriter->addInstance();
     }
+
+    if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
+      return;
 
     // Additional attributes.
     hepRepXMLWriter->addAttValue("Layer",hepRepXMLWriter->typeDepth);

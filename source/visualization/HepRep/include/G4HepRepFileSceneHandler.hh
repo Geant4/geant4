@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.19 2005-05-27 06:31:36 perl Exp $
+// $Id: G4HepRepFileSceneHandler.hh,v 1.20 2005-05-29 06:22:54 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -133,6 +133,7 @@ private:
   char fileDir[256]; 
   char fileName[256];
   G4bool fileOverwrite;
+  G4bool cullInvisibleObjects;
 
 #ifdef G4HEPREPFILEDEBUG
   void PrintThings();
