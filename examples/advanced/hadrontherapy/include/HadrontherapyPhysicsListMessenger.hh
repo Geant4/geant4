@@ -19,20 +19,20 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+// $Id: HadrontherapyPhisicsListMessenger.hh; May 2005
+// ----------------------------------------------------------------------------
+//                 GEANT 4 - Hadrontherapy example
+// ----------------------------------------------------------------------------
+// Code developed by:
 //
-//
-// $Id: HadrontherapyPhysicsListMessenger.hh,v 1.4 2005-05-25 09:11:09 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//
-//
-// -------------------------------------------------------------------
-
-// Class description:
-// System test for e/gamma, UI for PhysicsList
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
-
-// -------------------------------------------------------------------
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// 
+// (a) Laboratori Nazionali del Sud 
+//     of the National Institute for Nuclear Physics, Catania, Italy
+// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+// 
+// * cirrone@lns.infn.it
+// ----------------------------------------------------------------------------
 
 #ifndef HADRONTHERAPYPHYSICSLISTMESSENGER_HH
 #define HADRONTHERAPYPHYSICSLISTMESSENGER_HH 1

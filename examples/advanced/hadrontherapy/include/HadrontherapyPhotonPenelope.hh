@@ -20,9 +20,22 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-
-#ifndef TST50PHOTONPENELOPE_HH
-#define TST50PHOTONPENELOPE_HH 1
+// $Id: HadrontherapyPhotonPenelope.hh; Version 4.0 May 2005
+// ----------------------------------------------------------------------------
+//                 GEANT 4 - Hadrontherapy example
+// ----------------------------------------------------------------------------
+// Code developed by:
+//
+// G.A.P. Cirrone(a)*, G. Candiano, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// 
+// (a) Laboratori Nazionali del Sud 
+//     of the National Institute for Nuclear Physics, Catania, Italy
+// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+// 
+// * cirrone@lns.infn.it
+// ----------------------------------------------------------------------------
+#ifndef HADRONTHERAPYPHOTONPENELOPE_HH
+#define HADRONTHERAPYPHOTONPENELOPE_HH 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
@@ -40,6 +53,5 @@ public:
   
   virtual void ConstructProcess();
 };
-
 #endif
 

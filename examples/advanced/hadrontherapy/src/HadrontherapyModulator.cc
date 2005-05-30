@@ -20,17 +20,21 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-//
-// $Id: HadrontherapyDetectorConstruction.hh,v 3.0, September 2004
-// --------------------------------------------------------------
+// $Id: HadrontherapyModulator.cc; May 2005
+// ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
-// --------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G. Candiano, G.A.P. Cirrone, F. Di Rosa, G. Russo
-// Laboratori Nazionali del Sud - INFN, Catania, Italy
-//
-// --------------------------------------------------------------
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// 
+// (a) Laboratori Nazionali del Sud 
+//     of the National Institute for Nuclear Physics, Catania, Italy
+// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+// 
+// * cirrone@lns.infn.it
+// ----------------------------------------------------------------------------
+
 #include "G4Material.hh"
 #include "G4Tubs.hh"
 #include "G4Box.hh"
@@ -2098,6 +2102,7 @@ G4VisAttributes * red = new G4VisAttributes( G4Colour(1. ,0. ,0.));
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyModulator::SetModulatorAngle(G4double angle)
 {
+ 
   G4double rotationAngle = angle;
   rm -> rotateZ(rotationAngle);
   physiMotherMod -> SetRotation(rm);  

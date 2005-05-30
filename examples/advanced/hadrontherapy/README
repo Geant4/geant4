@@ -98,7 +98,7 @@ their thickness, etc.)
 
 At the end of the beam line, a typical water phantom is reproduced.
 A user-defined region of the phantom is divided (via the ROGeomtry class) in 
-cubic voxelsof 
+cubic voxels of??????????? 
 Inside the water phantom the user has the possibility to collect a lot of 
 informations regarding the particle traversing it.
 
@@ -161,7 +161,7 @@ necessary for the run of Hadrontherapy.
 The user can visualise the experimental set-up with OpenGL, DAWN and vrml
 
 ------------------------------------------------------------------------
-----> 3. HOW TO RUN THE EXAMPLE.                                         
+----> 3. HOW TO RUN THE EXAMPLE.??????????????????????                                         
 
 In interactive mode:
 > $G4WORDIR/bin/Linux-g++/Hadrontherapy
@@ -204,7 +204,7 @@ The LowEnergy package is used to model the electromagnetic processes
 of all the particles involved in the experimental set-up.
 
 ------------------------------------------------------------------------
-----> 5. SIMULATION OUTPUT                                              
+----> 5. SIMULATION OUTPUT              ???????????????????????????????                                
 
 The output is in ASCII file format:
 
@@ -227,7 +227,7 @@ y and z directions are orthogonal to the beam direction.
 Alternatively, if the variable G4ANALYSIS_USE is set, an hbk file
 is produced containig the Bragg peak in a histogram and in a ntuple.
 
-Setup for analysis: AIDA 3.2.1, PI 1.2.1                                
+Setup for analysis: AIDA 3.2.1, PI 1.3.3                                
 
 Users can download the analysis tools from:  
 http://aida.freehep.org/

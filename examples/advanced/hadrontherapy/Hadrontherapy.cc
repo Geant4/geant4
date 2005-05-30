@@ -19,6 +19,22 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+// $Id: Hadrontherapy.cc Main of the Hadrontherapy example; Version 4.0 May 2005
+
+// ----------------------------------------------------------------------------
+//                 GEANT 4 - Hadrontherapy example
+// ----------------------------------------------------------------------------
+// Code developed by:
+//
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// 
+// (a) Laboratori Nazionali del Sud 
+//     of the National Institute for Nuclear Physics, Catania, Italy
+// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+// 
+// * cirrone@lns.infn.it
+// ----------------------------------------------------------------------------
+
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -78,8 +94,6 @@ int main(int argc ,char ** argv)
 #endif
   
 
- //  G4double matrix[80][80][80]; // dimensions of the output matrix
-
   G4RunManager* pRunManager = new G4RunManager;
 
   // Initialize the geometry
@@ -120,7 +134,7 @@ int main(int argc ,char ** argv)
   if (session)   // Define UI session for interactive mode.
     { 
       G4cout<<" UI session starts ..."<< G4endl;
-      UI->ApplyCommand("/control/execute VisualisationMacro.mac");    
+      UI->ApplyCommand("/control/execute visualisationMacro.mac");    
       session->SessionStart();
       delete session;
     }
@@ -164,11 +178,10 @@ int main(int argc ,char ** argv)
 			      {
 			        ofs << n <<'\t'<< m <<'\t'<<
 				k<<'\t'<<matrix[i]<<G4endl;
-				// ofs<< i <<'\t'<<j<<'\t'<<
-				//k<<'\t'<<matrix[i]<<G4endl;
+				
+
 #ifdef G4ANALYSIS_USE 
-				//HadrontherapyAnalysisManager* analysis = 
-				//HadrontherapyAnalysisManager::getInstance();
+	
 				analysis -> Energy_Dep(n, m, k, matrix[i]);
                                 analysis -> BraggPeak(n, matrix[i]);
 #endif
@@ -185,8 +198,6 @@ int main(int argc ,char ** argv)
  delete[] matrix;   
 
 #ifdef G4ANALYSIS_USE
- //HadrontherapyAnalysisManager* analysis = 
- //                        HadrontherapyAnalysisManager::getInstance();
   analysis -> finish();
 #endif
   

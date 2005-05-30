@@ -19,32 +19,31 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-//
-// $Id: HadrontherapyPhantomSD.hh,v 3.0, September 2004
-// --------------------------------------------------------------
+// $Id: HadrontherapyPhantomSD.hh; May 2005
+// ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
-// --------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone, F. Di Rosa, G. Russo
-// Laboratori Nazionali del Sud - INFN, Catania, Italy
-//
-// --------------------------------------------------------------
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// 
+// (a) Laboratori Nazionali del Sud 
+//     of the National Institute for Nuclear Physics, Catania, Italy
+// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+// 
+// * cirrone@lns.infn.it
+// ----------------------------------------------------------------------------
 
 #ifndef HadrontherapyPhantomSD_h
 #define HadrontherapyPhantomSD_h 1
 
 #include "G4VSensitiveDetector.hh"
 #include "HadrontherapyPhantomHit.hh"
-#include "HadrontherapyRunAction.hh"
 #include "globals.hh"
-#include "G4ios.hh"
-
 
 class G4Step;
 class G4HCofThisEvent;
 class G4TouchableHistory;
-
 class HadrontherapyPhantomSD : public G4VSensitiveDetector
 {
 public:

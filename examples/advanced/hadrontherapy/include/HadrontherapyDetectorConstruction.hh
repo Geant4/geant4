@@ -19,17 +19,22 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+// $Id: HadrontherapyDetectorConstruction.hh; Version 4.0 May 2005
 //
-// $Id: HadrontherapyDetectorConstruction.hh,v 3.0, September 2004
-// --------------------------------------------------------------
+// ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
-// --------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G. Candiano, G.A.P. Cirrone, F. Di Rosa, G. Russo
-// Laboratori Nazionali del Sud - INFN, Catania, Italy
-//
-// --------------------------------------------------------------
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// 
+// (a) Laboratori Nazionali del Sud 
+//     of the National Institute for Nuclear Physics, Catania, Italy
+// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+// 
+// * cirrone@lns.infn.it
+// ----------------------------------------------------------------------------
+
 #ifndef HadrontherapyDetectorConstruction_H
 #define HadrontherapyDetectorConstruction_H 1
 

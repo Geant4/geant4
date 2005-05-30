@@ -19,11 +19,20 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+// $Id: HadrontherapyIonStandard.cc; May 2005
+// ----------------------------------------------------------------------------
+//                 GEANT 4 - Hadrontherapy example
+// ----------------------------------------------------------------------------
+// Code developed by:
 //
-// $Id: HadrontherapyIonStandard.cc,v 1.2 2005-05-25 09:11:09 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// Author: Susanna Guatelli, guatelli@ge.infn.it
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// 
+// (a) Laboratori Nazionali del Sud 
+//     of the National Institute for Nuclear Physics, Catania, Italy
+// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+// 
+// * cirrone@lns.infn.it
+// ----------------------------------------------------------------------------
 
 #include "HadrontherapyIonStandard.hh"
 #include "G4ProcessManager.hh"
@@ -52,18 +61,18 @@ void HadrontherapyIonStandard::ConstructProcess()
 
       // protons, ions, pions, kaons, etc.
       if (( charge != 0. ) && particleName != "e+" && particleName != "mu+" &&
-            particleName != "e-" && particleName != "mu-") 
+	  particleName != "e-" && particleName != "mu-") 
+	{
+	  if((!particle -> IsShortLived()) &&
+	     (particle -> GetParticleName() != "chargedgeantino"))
 	    {
-             if((!particle -> IsShortLived()) &&
-		 (particle -> GetParticleName() != "chargedgeantino"))
-	       {
-		 G4hIonisation* ionisation = new G4hIonisation();
-		 G4VProcess*  multipleScattering = new G4MultipleScattering(); 
-		 manager -> AddProcess(multipleScattering, -1,1,1);   
-		 manager -> AddProcess(ionisation, -1,2,2);
-		 manager -> AddProcess(new G4StepLimiter(),-1,-1, 3);
-	       }
+	      G4hIonisation* ionisation = new G4hIonisation();
+	      G4VProcess*  multipleScattering = new G4MultipleScattering(); 
+	      manager -> AddProcess(multipleScattering, -1,1,1);   
+	      manager -> AddProcess(ionisation, -1,2,2);
+	      manager -> AddProcess(new G4StepLimiter(),-1,-1, 3);
 	    }
+	}
     }
 }
 

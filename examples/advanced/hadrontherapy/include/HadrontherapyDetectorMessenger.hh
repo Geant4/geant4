@@ -19,16 +19,19 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-//
-// $Id: HadrontherapyDetectorMessenger.hh,v 1.0
-// --------------------------------------------------------------
+// $Id: HadrontherapyDetectorMessenger.hh; May 2005
+// ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
-// --------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.Candiano, G.A.P. Cirrone, F. Di Rosa, G. Russo
-// Laboratori Nazionali del Sud - INFN, Catania, Italy
-//
+// G.A.P. Cirrone(a)*, G. Candiano, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// 
+// (a) Laboratori Nazionali del Sud 
+//     of the National Institute for Nuclear Physics, Catania, Italy
+// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+// 
+// * cirrone@lns.infn.it
 // --------------------------------------------------------------
 
 #ifndef HadrontherapyDetectorMessenger_h
@@ -45,8 +48,8 @@ class G4UIcmdWithAString;
 class HadrontherapyDetectorMessenger: public G4UImessenger
 {
   public:
-    HadrontherapyDetectorMessenger(HadrontherapyDetectorConstruction* );
-   ~HadrontherapyDetectorMessenger();
+  HadrontherapyDetectorMessenger(HadrontherapyDetectorConstruction* );
+  ~HadrontherapyDetectorMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
     
@@ -72,7 +75,7 @@ private:
   G4UIcmdWithADoubleAndUnit* SecondScatteringFoil_xCmd;
   G4UIcmdWithADoubleAndUnit* outerRadiusStopperCmd;
   G4UIcmdWithADoubleAndUnit* innerRadiusFinalCollimatorCmd;
-G4UIcmdWithADoubleAndUnit* MaxStepCmd;
+  G4UIcmdWithADoubleAndUnit* MaxStepCmd;
 };
 #endif
 

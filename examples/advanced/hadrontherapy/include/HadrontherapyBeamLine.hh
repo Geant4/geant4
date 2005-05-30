@@ -19,17 +19,17 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-//
-// $Id: HadrontherapyDetectorConstruction.hh,v 3.0, September 2004
-// --------------------------------------------------------------
+// $Id: HadrontherapyBeamLine.hh; May 2005;
+// -----------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
-// --------------------------------------------------------------
+// -----------------------------------------------------------
 // Code developed by:
 //
 // G. Candiano, G.A.P. Cirrone, F. Di Rosa, G. Russo
 // Laboratori Nazionali del Sud - INFN, Catania, Italy
 //
-// --------------------------------------------------------------
+// ----------------------------------------------------------
+
 #ifndef HadrontherapyBeamLine_H
 #define HadrontherapyBeamLine_H 1
 

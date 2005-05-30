@@ -19,17 +19,20 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// $Id: HadrontherapyEventAction.cc,v 2.0
-// ------------------------------------------------------------
-//     GEANT 4 - Hadrontherapy example
-// ------------------------------------------------------------
+// $Id: HadrontherapyEventAction.cc; May 2005
+// ----------------------------------------------------------------------------
+//                 GEANT 4 - Hadrontherapy example
+// ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone, F. Di Rosa, G. Russo
-// Laboratori Nazionali del Sud - INFN, Catania, Italy
-//
-// -------------------------------------------------------------
-
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// 
+// (a) Laboratori Nazionali del Sud 
+//     of the National Institute for Nuclear Physics, Catania, Italy
+// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+// 
+// * cirrone@lns.infn.it
+// ----------------------------------------------------------------------------
 
 #include "HadrontherapyEventAction.hh"
 #include "HadrontherapyPhantomHit.hh"
@@ -62,66 +65,59 @@ HadrontherapyEventAction::~HadrontherapyEventAction()
 {
 }
 
-void HadrontherapyEventAction::BeginOfEventAction(const G4Event*evt )
+void HadrontherapyEventAction::BeginOfEventAction(const G4Event* )
 {
-  //G4int event_id = evt->GetEventID();
-  //G4cout << event_id << ": evt" << G4endl;
  G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
  if(m_HitsCollectionID == -1)
- 	m_HitsCollectionID = pSDManager->GetCollectionID("HadrontherapyPhantomHitsCollection");
+ 	m_HitsCollectionID = pSDManager -> GetCollectionID("HadrontherapyPhantomHitsCollection");
 }
 
 void HadrontherapyEventAction::EndOfEventAction(const G4Event* evt)
 {  
- if(m_HitsCollectionID < 0)
-	return;
+  if(m_HitsCollectionID < 0)
+    return;
 
- G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
- HadrontherapyPhantomHitsCollection* CHC = NULL; 
+  G4HCofThisEvent* HCE = evt -> GetHCofThisEvent();
+  HadrontherapyPhantomHitsCollection* CHC = NULL; 
  
- if(HCE)
-	CHC = (HadrontherapyPhantomHitsCollection*)(HCE->GetHC(m_HitsCollectionID));
-
- if(CHC)
+  if(HCE)
+    CHC = (HadrontherapyPhantomHitsCollection*)(HCE -> GetHC(m_HitsCollectionID));
+  
+  if(CHC)
+    {
+      if(matrix)
 	{
-	if(matrix)
-		{
-		// Fill voxel matrix with energy deposit data
-		G4int HitCount = CHC->entries();
-		for (G4int h=0; h<HitCount; h++)
-		  {
-		    G4int i = ((*CHC)[h])->GetXID();
-                    G4int j = ((*CHC)[h])->GetYID();
-                    G4int k =  ((*CHC)[h])->GetZID();
-			matrix[(i * numberY + j)* numberZ + k]+= 
-                        (*CHC)[h]->GetEdep();
-			//	G4cout<<"Hit:"<< h << G4endl;
-			//G4cout<< "Energy deposit in the event:" 
-                        //      << matrix[(i * numberY + j)* numberZ + k]
-			//     <<"in"<< i <<" " << j << " "<< "" << k<< G4endl;
-		  }
-		}
+	  // Fill voxel matrix with energy deposit
+	  G4int HitCount = CHC -> entries();
+	  for (G4int h=0; h<HitCount; h++)
+	    {
+	      G4int i = ((*CHC)[h]) -> GetXID();
+	      G4int j = ((*CHC)[h]) -> GetYID();
+	      G4int k = ((*CHC)[h]) -> GetZID();
+	      matrix[(i * numberY + j)* numberZ + k]+= 
+		(*CHC)[h] -> GetEdep();
+	      }
 	}
+    }
 
   // extract the trajectories and draw them ...
 
   if (G4VVisManager::GetConcreteInstance())
     {
-      G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
+      G4TrajectoryContainer * trajectoryContainer = evt -> GetTrajectoryContainer();
       G4int n_trajectories = 0;
-      if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
+      if (trajectoryContainer) n_trajectories = trajectoryContainer -> entries();
       
-      for (G4int i=0; i<n_trajectories; i++) 
+      for (G4int i = 0; i < n_trajectories; i++) 
         {
           G4Trajectory* trj = (G4Trajectory*)
-	    ((*(evt->GetTrajectoryContainer()))[i]);
-	  if(drawFlag == "all") trj->DrawTrajectory(50);
-	  else if((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-	    trj->DrawTrajectory(50);
-	  else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
-	    trj->DrawTrajectory(50);	     	     
+	    ((*(evt -> GetTrajectoryContainer()))[i]);
+	  if(drawFlag == "all") trj -> DrawTrajectory(50);
+	  else if((drawFlag == "charged")&&(trj -> GetCharge() != 0.))
+	    trj -> DrawTrajectory(50);
+	  else if ((drawFlag == "neutral")&&(trj -> GetCharge() == 0.))
+	    trj -> DrawTrajectory(50);	     	     
 	}
     }
-
 }
 

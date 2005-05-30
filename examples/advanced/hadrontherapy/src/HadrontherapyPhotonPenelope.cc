@@ -20,9 +20,21 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-
+// $Id: HadrontherapyPhotonPenelope.cc; Version 4.0 May 2005
+// ----------------------------------------------------------------------------
+//                 GEANT 4 - Hadrontherapy example
+// ----------------------------------------------------------------------------
+// Code developed by:
+//
+// G.A.P. Cirrone(a)*, G. Candiano, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// 
+// (a) Laboratori Nazionali del Sud 
+//     of the National Institute for Nuclear Physics, Catania, Italy
+// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+// 
+// * cirrone@lns.infn.it
+// ----------------------------------------------------------------------------
 #include "HadrontherapyPhotonPenelope.hh"
-
 #include "G4ProcessManager.hh"
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
@@ -40,21 +52,21 @@ HadrontherapyPhotonPenelope::~HadrontherapyPhotonPenelope()
 
 void HadrontherapyPhotonPenelope::ConstructProcess()
 {
-  theParticleIterator->reset();
+  theParticleIterator -> reset();
 
   while( (*theParticleIterator)() )
     {
-      G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* manager = particle->GetProcessManager();
-      G4String particleName = particle->GetParticleName();
+      G4ParticleDefinition* particle = theParticleIterator -> value();
+      G4ProcessManager* manager = particle -> GetProcessManager();
+      G4String particleName = particle -> GetParticleName();
      
       if (particleName == "gamma") 
 	{
-	  manager->AddDiscreteProcess(new G4PenelopePhotoElectric);
-	  manager->AddDiscreteProcess(new G4PenelopeCompton);
-	  manager->AddDiscreteProcess(new G4PenelopeGammaConversion);
-	  manager->AddDiscreteProcess(new G4PenelopeRayleigh);
-          manager->AddProcess(new G4StepLimiter(),-1,-1, 3);
+	  manager -> AddDiscreteProcess(new G4PenelopePhotoElectric);
+	  manager -> AddDiscreteProcess(new G4PenelopeCompton);
+	  manager -> AddDiscreteProcess(new G4PenelopeGammaConversion);
+	  manager -> AddDiscreteProcess(new G4PenelopeRayleigh);
+          manager -> AddProcess(new G4StepLimiter(),-1,-1, 3);
 	}   
     }
 }

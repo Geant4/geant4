@@ -19,22 +19,23 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-//
-// $Id: HadrontherapyPhantomSD.cc,v 3.0, September 2004
-// --------------------------------------------------------------
+// $Id: HadrontherapyPhantomSD.cc; May 2005
+// ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
-// --------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone, F. Di Rosa, G. Russo
-// Laboratori Nazionali del Sud - INFN, Catania, Italy
-//
-// --------------------------------------------------------------
-
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// 
+// (a) Laboratori Nazionali del Sud 
+//     of the National Institute for Nuclear Physics, Catania, Italy
+// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+// 
+// * cirrone@lns.infn.it
+// ----------------------------------------------------------------------------
 
 #include "HadrontherapyPhantomSD.hh"
 #include "HadrontherapyPhantomHit.hh"
-#include "HadrontherapyAnalysisManager.hh"
 #include "HadrontherapyDetectorConstruction.hh"
 #include "HadrontherapyPhantomROGeometry.hh"
 #include "G4Track.hh"
@@ -44,29 +45,24 @@
 #include "G4VTouchable.hh"
 #include "G4TouchableHistory.hh"
 #include "G4SDManager.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ios.hh"
-#include "HadrontherapyRunAction.hh"
-
 
 HadrontherapyPhantomSD::HadrontherapyPhantomSD(G4String name):G4VSensitiveDetector(name)
 { 
- G4String HCname;
- collectionName.insert(HCname="HadrontherapyPhantomHitsCollection");
+  G4String HCname;
+  collectionName.insert(HCname="HadrontherapyPhantomHitsCollection");
  
- HitsCollection = NULL; 
- G4String sensitiveDetectorName = name;
+  HitsCollection = NULL; 
+  G4String sensitiveDetectorName = name;
 }
 
 HadrontherapyPhantomSD::~HadrontherapyPhantomSD()
 { 
 }
 
-
 void HadrontherapyPhantomSD::Initialize(G4HCofThisEvent*)
 { 
- HitsCollection = new HadrontherapyPhantomHitsCollection(sensitiveDetectorName,
-                                                         collectionName[0]);
+  HitsCollection = new HadrontherapyPhantomHitsCollection(sensitiveDetectorName,
+							  collectionName[0]);
 }
 
 
@@ -75,41 +71,38 @@ G4bool HadrontherapyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* RO
   if(!ROhist)
     return false;
  
-  if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() != "PhantomPhys")
+  if(aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> GetName() != "PhantomPhys")
     return false;
 
   G4double energyDeposit = aStep -> GetTotalEnergyDeposit();
  
   if(energyDeposit == 0.) return false;
 
- // Read Voxel indexes: i is the x index, k is the z index
+  // Read Voxel indexes: i is the x index, k is the z index
 
- G4int k  = ROhist->GetReplicaNumber(0);
- G4int i  = ROhist->GetReplicaNumber(2);
- G4int j  = ROhist->GetReplicaNumber(1);
+  G4int k  = ROhist -> GetReplicaNumber(0);
+  G4int i  = ROhist -> GetReplicaNumber(2);
+  G4int j  = ROhist -> GetReplicaNumber(1);
 
   if(energyDeposit != 0)                       
     {       
       HadrontherapyPhantomHit* phantomHit = new HadrontherapyPhantomHit();
             
-      phantomHit->SetEdepAndPosition(i, j, k, energyDeposit); 
-      HitsCollection->insert(phantomHit);
+      phantomHit -> SetEdepAndPosition(i, j, k, energyDeposit); 
+      HitsCollection -> insert(phantomHit);
     }
  
-  //G4cout<< "Energy deposit in the sensitive detector:" << energyDeposit/MeV
-  //	<< "in"<< i <<" " << j << " "<< "" << k<< G4endl;
-  
- return true;
+  return true;
 }
 
 void HadrontherapyPhantomSD::EndOfEvent(G4HCofThisEvent* HCE)
 {
- static G4int HCID = -1;
-  if(HCID<0)
-  	{ 
-	HCID = GetCollectionID(0); 
-	}
-  HCE->AddHitsCollection(HCID,HitsCollection);
+  static G4int HCID = -1;
+  if(HCID < 0)
+    { 
+      HCID = GetCollectionID(0); 
+    }
+  HCE -> AddHitsCollection(HCID,HitsCollection);
 }
 
 void HadrontherapyPhantomSD::clear()

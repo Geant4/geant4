@@ -19,10 +19,20 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+// $Id: HadrontherapyPhantomHit.hh; May 2005
+// ----------------------------------------------------------------------------
+//                 GEANT 4 - Hadrontherapy example
+// ----------------------------------------------------------------------------
+// Code developed by:
 //
-// It manages the hits and the enrgy deposit in the phantom associated with 
-// each hit ...
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// 
+// (a) Laboratori Nazionali del Sud 
+//     of the National Institute for Nuclear Physics, Catania, Italy
+// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+// 
+// * cirrone@lns.infn.it
+// ----------------------------------------------------------------------------
 
 #ifndef HadrontherapyPhantomHit_h
 #define HadrontherapyPhantomHit_h 1
@@ -62,13 +72,13 @@ public:
   inline void SetCellID(G4int XID,G4int YID,G4int ZID)
   {xHitID = XID; zHitID = ZID;  yHitID = YID;  }
   
-  inline G4int GetXID() // Get hit x coordinate 
+  inline G4int GetXID() // Get x index of the voxel 
   {return xHitID;}
 
-  inline G4int GetZID() // Get hit z coordinate   
+  inline G4int GetZID() // Get y index of the voxel   
   {return zHitID;}
 
-  inline G4int GetYID() // Get hit y coordinate  
+  inline G4int GetYID() // Get z index of the voxel  
   {return yHitID;}
    
   inline void SetEdep(G4double edep) //Set hit energy deposit
