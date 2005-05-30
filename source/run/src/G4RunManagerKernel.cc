@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.24 2005-03-25 17:58:38 asaim Exp $
+// $Id: G4RunManagerKernel.cc,v 1.25 2005-05-30 07:01:39 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -201,6 +201,19 @@ void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
   physicsList = uPhys;
   // G4ParticleTable::GetParticleTable()->SetReadiness();
   physicsList->ConstructParticle();
+  if(verboseLevel>2) G4ParticleTable::GetParticleTable()->DumpTable();
+  if(verboseLevel>1)
+  {
+    G4cout << "List of instantiated particles ============================================" << G4endl;
+    G4int nPtcl = G4ParticleTable::GetParticleTable()->entries();
+    for(G4int i=0;i<nPtcl;i++)
+    {
+      G4ParticleDefinition* pd = G4ParticleTable::GetParticleTable()->GetParticle(i);
+      G4cout << pd->GetParticleName() << " ";
+      if(i%10==9) G4cout << G4endl;
+    }
+    G4cout << G4endl;
+  }
 }
   
 void G4RunManagerKernel::InitializePhysics()
