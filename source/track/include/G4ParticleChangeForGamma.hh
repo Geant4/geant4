@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForGamma.hh,v 1.2 2005-04-14 19:00:56 vnivanch Exp $
+// $Id: G4ParticleChangeForGamma.hh,v 1.3 2005-05-30 18:23:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,6 +33,7 @@
 //   15 April 2005 V.Ivanchenko for gamma EM processes
 //
 //   Modified:
+//   30.05.05 V.Ivanchenko add UpdateStepForAtRest
 //
 // ------------------------------------------------------------
 //
@@ -61,6 +62,7 @@ public:
   // ----------------------------------------------------
   // --- the following methods are for updating G4Step -----
 
+  G4Step* UpdateStepForAtRest(G4Step* pStep);
   G4Step* UpdateStepForPostStep(G4Step* Step);
   // A physics process gives the final state of the particle
   // based on information of G4Track
@@ -176,6 +178,13 @@ inline void G4ParticleChangeForGamma::InitializeForPostStep(const G4Track& track
 //----------------------------------------------------------------
 // method for updating G4Step
 //
+
+inline G4Step* G4ParticleChangeForGamma::UpdateStepForAtRest(G4Step* pStep)
+{
+  pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
+  pStep->SetStepLength( 0.0 );
+  return pStep;
+}
 
 inline G4Step* G4ParticleChangeForGamma::UpdateStepForPostStep(G4Step* pStep)
 {
