@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.icc,v 1.13 2005-03-25 00:40:32 asaim Exp $
+// $Id: G4DynamicParticle.icc,v 1.14 2005-05-30 07:13:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -262,11 +262,15 @@ inline
 G4int G4DynamicParticle::GetPDGcode() const
 {
   G4int code = theParticleDefinition->GetPDGEncoding();
-  if(code==0)
-  { if(primaryParticle) code = primaryParticle->GetPDGcode(); }
+  if(code==0) code = thePDGcode;
   return code;
 }
 
+inline 
+void G4DynamicParticle::SetPDGcode(G4int c)
+{
+  thePDGcode = c;
+}
 
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.hh,v 1.15 2005-03-25 00:40:32 asaim Exp $
+// $Id: G4DynamicParticle.hh,v 1.16 2005-05-30 07:13:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -230,6 +230,7 @@ class G4DynamicParticle
 
  public:
    void SetPrimaryParticle(G4PrimaryParticle* p);
+   void SetPDGcode(G4int c);
 
  public: // With Description
    G4PrimaryParticle* GetPrimaryParticle() const;
@@ -244,7 +245,8 @@ class G4DynamicParticle
    // corresponding primary particle or pre-assigned decay product will be
    // returned if available. Otherwise (e.g. for geantino) returns 0.
 
-
+ private:
+   G4int thePDGcode;
 };
 
 #include "G4DynamicParticle.icc"
