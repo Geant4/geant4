@@ -53,7 +53,7 @@ qgsp
 qgsp0.paw
 #run
 //--------
-#generator
+#generator 
 qgsc
 #paw
 qgsc0.paw
