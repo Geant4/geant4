@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.20 2005-05-29 06:22:54 perl Exp $
+// $Id: G4HepRepFileSceneHandler.hh,v 1.21 2005-05-30 19:03:58 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -127,13 +127,17 @@ protected:
 
 private:
   G4HepRepFileXMLWriter *hepRepXMLWriter;
-  void AddHepRepInstance(const char* primName);
+  void AddHepRepInstance(const char* primName,
+			 const G4Visible visible);
   void CheckFileOpen();
   int fileCounter;
   char fileDir[256]; 
   char fileName[256];
   G4bool fileOverwrite;
   G4bool cullInvisibleObjects;
+  G4bool haveVisible;
+  G4bool drawingTraj;
+  G4bool drawingHit;
 
 #ifdef G4HEPREPFILEDEBUG
   void PrintThings();

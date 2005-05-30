@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.28 2005-05-29 06:22:54 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.29 2005-05-30 19:03:58 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -89,6 +89,10 @@ G4HepRepFileSceneHandler::G4HepRepFileSceneHandler(G4VGraphicsSystem& system,
     cullInvisibleObjects = false;
   else
     cullInvisibleObjects = strcmp(getenv("G4HEPREPFILE_CULL"),"0");
+
+  haveVisible = false;
+  drawingTraj = false;
+  drawingHit = false;
 }
 
 
@@ -133,7 +137,8 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Box& box) {
   PrintThings();
 #endif
 
-  AddHepRepInstance("Prism");
+  haveVisible = false;
+  AddHepRepInstance("Prism", NULL);
 
   if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
     return;
@@ -188,7 +193,8 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Cons& cons) {
   if (cons.GetDeltaPhiAngle() < twopi) {
     G4VSceneHandler::AddSolid(cons);  // Invoke default action.
   } else {
-    AddHepRepInstance("Cylinder");
+    haveVisible = false;
+    AddHepRepInstance("Cylinder", NULL);
 
     if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
       return;
@@ -231,7 +237,8 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Tubs& tubs) {
   if (tubs.GetDeltaPhiAngle() < twopi) {
     G4VSceneHandler::AddSolid(tubs);  // Invoke default action.
   } else {
-    AddHepRepInstance("Cylinder");
+    haveVisible = false;
+    AddHepRepInstance("Cylinder", NULL);
 
     if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
       return;
@@ -270,7 +277,8 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Trd& trd) {
   PrintThings();
 #endif
 
-  AddHepRepInstance("Prism");
+  haveVisible = false;
+  AddHepRepInstance("Prism", NULL);
 
   if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
     return;
@@ -488,16 +496,6 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
   // For every trajectory, add an instance of Type Trajectory.
   hepRepXMLWriter->addInstance();
 
-  // Set the LineColor attribute according to the particle charge.
-  float redness = 0.;
-  float greenness = 0.;
-  float blueness = 0.;
-  const G4double charge = traj.GetCharge();
-  if(charge>0.)      blueness =  1.; // Blue = positive.
-  else if(charge<0.) redness  =  1.; // Red = negative.
-  else               greenness = 1.; // Green = neutral.
-  hepRepXMLWriter->addAttValue("LineColor",redness,greenness,blueness);
-
   // Copy the current trajectory's G4AttValues to HepRepAttValues.
   if (attValues && attDefs) {
     for (iAttVal = attValues->begin();
@@ -519,15 +517,10 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
     delete attValues;  // AttValues must be deleted after use.
   }
 
-  // Each trajectory is made of a single primitive, a polyline.
-  hepRepXMLWriter->addPrimitive();
-
-  // Specify the polyline by using the trajectory points.
-  for (i = 0; i < traj.GetPointEntries(); i++) {
-    G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(i);
-    G4Point3D vertex = aTrajectoryPoint->GetPosition();
-    hepRepXMLWriter->addPoint(vertex.x(), vertex.y(), vertex.z());
-  }
+  // Now call base class to deconstruct trajectory into a polyline.
+  drawingTraj = true;
+  G4VSceneHandler::AddCompound(traj);  // Invoke default action.
+  drawingTraj = false;
 
   // Create Trajectory Points as a subType of Trajectories.
   previousName = hepRepXMLWriter->prevTypeName[2];
@@ -598,7 +591,8 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyline& polyline) {
   PrintThings();
 #endif
 
-  AddHepRepInstance("Line");
+  haveVisible = true;
+  AddHepRepInstance("Line", polyline);
 
   if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
     return;
@@ -621,7 +615,8 @@ void G4HepRepFileSceneHandler::AddPrimitive (const G4Polymarker& line) {
   PrintThings();
 #endif
 
-  AddHepRepInstance("Point");
+  haveVisible = true;
+  AddHepRepInstance("Point", line);
 
   if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
     return;
@@ -663,7 +658,8 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Circle& circle) {
   PrintThings();
 #endif
 
-  AddHepRepInstance("Point");
+  haveVisible = true;
+  AddHepRepInstance("Point", circle);
 
   if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
     return;
@@ -687,7 +683,8 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Square& square) {
   PrintThings();
 #endif
 
-  AddHepRepInstance("Point");
+  haveVisible = true;
+  AddHepRepInstance("Point", square);
 
   if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
     return;
@@ -710,7 +707,8 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
   PrintThings();
 #endif
 
-  AddHepRepInstance("Polygon");
+  haveVisible = true;
+  AddHepRepInstance("Polygon", polyhedron);
 
   if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
     return;
@@ -752,7 +750,8 @@ G4HepRepFileXMLWriter *G4HepRepFileSceneHandler::GetHepRepXMLWriter() {
 }
 
 
-void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName) {
+void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
+						 const G4Visible visible) {
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddHepRepInstance called."
@@ -766,7 +765,11 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName) {
   // be falsely false if no geometry has yet been drawn.
   // So I test on both !fpCurrentPV (means no geometry has yet been drawn)
   // and fReadyForTransients.
-  if (!fpCurrentPV || fReadyForTransients) {
+  if (drawingTraj) {
+    // In this case, HepRep type, layer and instance were already created
+    // in the AddCompound(...traj) method.
+  }
+  else if (!fpCurrentPV || fReadyForTransients) {
     if (strcmp("Event Data",hepRepXMLWriter->prevTypeName[0])!=0) {
       hepRepXMLWriter->addType("Event Data",0);
       hepRepXMLWriter->addInstance();
@@ -814,6 +817,8 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName) {
 
     hepRepXMLWriter->addInstance();
 
+    hepRepXMLWriter->addAttValue("DrawAs",primName);
+
     // Handle Type declaration for Detector Geometry,
     // replacing G4's top geometry level name "worldPhysical" with the
     // name "Detector Geometry".
@@ -849,17 +854,22 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName) {
     hepRepXMLWriter->addAttValue("Density", fpCurrentLV->GetMaterial()->GetDensity());
     hepRepXMLWriter->addAttValue("State", fpCurrentLV->GetMaterial()->GetState());
     hepRepXMLWriter->addAttValue("Radlen", fpCurrentLV->GetMaterial()->GetRadlen());
+    hepRepXMLWriter->addAttValue("DrawAs",primName);
   }
-
-  hepRepXMLWriter->addAttValue("DrawAs",primName);
 
   // Handle color attribute.
   float redness;
   float greenness;
   float blueness;
 
-  if (fpVisAttribs) {
-    G4Colour colour = fpVisAttribs->GetColour();
+  if (fpVisAttribs || haveVisible) {
+    G4Colour colour;
+
+    if (fpVisAttribs)
+      colour = fpVisAttribs->GetColour();
+    else
+      colour = GetColour(visible);
+
     redness = colour.GetRed();
     greenness = colour.GetGreen();
     blueness = colour.GetBlue();
@@ -871,9 +881,11 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName) {
       blueness = 1.;
     }
   } else {
+#ifdef G4HEPREPFILEDEBUG
     G4cout <<
       "G4HepRepFileSceneHandler::AddHepRepInstance using default colour."
 	   << G4endl;
+#endif
     redness = 1.;
     greenness = 1.;
     blueness = 1.;
