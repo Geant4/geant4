@@ -95,16 +95,9 @@ G4double halfPhantomDimensionZ = phantomDimensionZ;
 			     worldDimensionY,
 			     worldDimensionZ);
 
-  G4LogicalVolume *ROWorldLog = new G4LogicalVolume(ROWorld,
-						    dummyMat,
-						    "ROWorldLog",
-						    0,0,0);
+  G4LogicalVolume *ROWorldLog = new G4LogicalVolume(ROWorld, dummyMat, "ROWorldLog", 0,0,0);
 
-  G4VPhysicalVolume *ROWorldPhys = new G4PVPlacement(0,
-						     G4ThreeVector(),
-						     "ROWorldPhys",
-						     ROWorldLog,
-						     0,false,0);
+  G4VPhysicalVolume *ROWorldPhys = new G4PVPlacement(0,G4ThreeVector(), "ROWorldPhys", ROWorldLog, 0,false,0);
 
 // phantom ROGeometry ... 
   G4Box *ROPhantom = new G4Box("ROPhantom", 

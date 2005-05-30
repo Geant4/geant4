@@ -1,56 +1,52 @@
-
-#********************************
-#   defaultMacro.mac
+#----------------------------------------------------------------------------
+# DEFAULT MACRO FOR THE  
+# HADRONTHERAPY EXAMPLE
 #
-#********************************
-/control/verbose 2
-/control/saveHistory
-/run/verbose 2
+#
+# THIS MACRO SIMPLY PERMIT TO  RUN A SIMULATION 
+# WITHOUT THE VISUALISATION  
+#
+# THE RANGE SHIFTER MATERIAL AND THICKNESS CAN BE SPECIFIED 
+#
+# NOTE THAT THE MODULATOR MATERIAL IS POLTMETHYLMETHACRILATE 
+# (PMMA) FOR DEFAULT. IF ONE WANT CARRY OUT A SIMULATION WITHOUT 
+# THE MODULATOR HE/SHE MUST SET "Air" the <<ModMater>> in the
+# <<GetMater>> function of the HadrontherapyModulator.cc class
+#
+# USERS SHOULD GIVE A LOOK TO THE HELP OF THE IDLE TO KNOW
+# THE ACTIVATED MESSSENGERS FOR THE GEOMETRY
+#
+# ADDITIONAL INFORMATIONS ON THE MESSENGER AVAILABLE CAN BE FOUND
+# INSIDE THE HADRONTHERAPY DOCUMENTATION (http://www.ge.infn.it/geant4/examples/).
+# 
+# ANYWAY SEND ME AN E-MAIL FOR ANY QUESTION: cirrone@lns.infn.it.   
+# --------------------------------------------------------------------------------  
 
 
-# ---- Assemble standard electromagnetic PhysicsList
-#/physics/addPhysics photon-standard
-#/physics/addPhysics electron-standard
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 0
+/event/verbose 0
 
+# SETTING FOR THE PHYSICS MODELS
 /physics/addPhysics photon-epdl
 /physics/addPhysics electron-eedl
-
 /physics/addPhysics positron-standard
-
-/physics/addPhysics proton-LowE
-/physics/addPhysics proton-hadronic
-#/physics/addPhysics proton-standard
-
-/physics/addPhysics muon
+/physics/addPhysics ion-LowE
+/physics/addPhysics muon-standard
 /physics/addPhysics decay
-
-
-/lowEnergy/lowlimG 2.5e-4 MeV
-/lowEnergy/lowlimE 2.5e-4 MeV
-/lowEnergy/cutG .02 mm
-/lowEnergy/cutE .02 mm
-
-/process/list
-/particle/list
-
+/physics/addPhysics proton-precompound
 
 /run/initialize
 
-/lowEnergy/auger true
-/lowEnergy/seceleccut 2.5e-4 MeV
-/lowEnergy/secphotcut 2.5e-4 MeV
+# IF YOU WANT A RANGE SHIFTER PLEASE CHANGE
+# THE FOLLOWIG PARAMETERS
+# SETTING FOR THE RANGE SHIFTER
+ 
+#/beamLine/RangeShifter/thickness 4 cm
+#/beamLine/RangeShifter/RSMat Water
 
-/process/activate Transportation all
-/hits/activate
-/hits/verbose 1
-/gun/particle proton
+/vis/viewer/flush
 
-/beam/energy 63.4 MeV
-/beam/energySpread 300 keV
-/beam/spotXPosition -2000.0 mm
-/tracking/verbose 0
-/tracking/storeTrajectory 0
-
-/run/beamOn 5
-
+/run/beamOn 5000
 

@@ -145,8 +145,7 @@ void HadrontherapyDetectorConstruction::ConstructBeamLine()
 
 // Patient
  G4Box* patient = new G4Box("patient",20 *cm, 20 *cm, 20 *cm);
- G4LogicalVolume* patientLog = new G4LogicalVolume(patient,Water,
-                                                   "patientLog",0,0,0);
+ G4LogicalVolume* patientLog = new G4LogicalVolume(patient,Water, "patientLog", 0, 0, 0);
  patientPhys = new G4PVPlacement(0,G4ThreeVector(0.0 *mm, 0.0 *mm, 0.0 *mm),
                                 "patientPhys",
 				 patientLog,physiTreatmentRoom,false,0); 
@@ -218,7 +217,7 @@ void HadrontherapyDetectorConstruction::SetModulatorAngle(G4double val)
   G4double modulatorAngle = val;
   G4cout << val/deg << G4endl;
   modulator -> SetModulatorAngle(modulatorAngle);
-  G4RunManager::GetRunManager()-> GeometryHasBeenModified();
+  G4RunManager::GetRunManager() -> GeometryHasBeenModified();
   //  G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
 }
 
@@ -226,7 +225,7 @@ void HadrontherapyDetectorConstruction::SetRangeShifterXposition(G4double val)
 {
   G4double value = val;
   beamLine -> setRangeShifterXPos(value);
-  G4RunManager::GetRunManager()-> GeometryHasBeenModified();
+  G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }
 
 void HadrontherapyDetectorConstruction::SetRangeShifterX(G4double val)
@@ -247,14 +246,14 @@ void HadrontherapyDetectorConstruction::SetSecondScatteringFoil(G4double val)
 {
   G4double value = val;
   beamLine -> SetSecondScatteringFoil(value);
-  G4RunManager::GetRunManager()-> GeometryHasBeenModified();
+  G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }
 
 void HadrontherapyDetectorConstruction::SetOuterRadiusStopper(G4double val)
 {
   G4double value = val;
   beamLine -> SetOuterRadiusStopper(value); 
-  G4RunManager::GetRunManager()-> GeometryHasBeenModified(); 
+  G4RunManager::GetRunManager() -> GeometryHasBeenModified(); 
  
   // Perche' si ridefinisce il sensitive detector?  
 //ConstructSensitiveDetector();
@@ -265,7 +264,7 @@ void HadrontherapyDetectorConstruction::SetInnerRadiusFinalCollimator(G4double v
 {
   G4double value = val;
   beamLine -> SetInnerRadiusFinalCollimator(value);
-  G4RunManager::GetRunManager()-> GeometryHasBeenModified();
+  G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }
 
 void HadrontherapyDetectorConstruction::SetRSMaterial(G4String materialChoice)
