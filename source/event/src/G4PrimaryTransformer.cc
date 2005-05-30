@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.cc,v 1.22 2005-04-27 01:32:46 asaim Exp $
+// $Id: G4PrimaryTransformer.cc,v 1.23 2005-05-30 07:05:47 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -151,6 +151,11 @@ void G4PrimaryTransformer::GenerateSingleTrack
     SetDecayProducts( primaryParticle, DP );
     // Set primary particle
     DP->SetPrimaryParticle(primaryParticle);
+    // Set PDG code if it is different from G4ParticleDefinition
+    if(partDef->GetPDGEncoding()==0 && primaryParticle->GetPDGcode()!=0)
+    {
+      DP->SetPDGcode(primaryParticle->GetPDGcode());
+    }
     // Check the particle is properly constructed
     if(!CheckDynamicParticle(DP))
     {
