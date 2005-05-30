@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorConstruction.cc,v 1.16 2005-05-30 16:20:23 maire Exp $
+// $Id: ExN02DetectorConstruction.cc,v 1.17 2005-05-30 16:51:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -41,7 +41,6 @@
 #include "G4SDManager.hh"
 
 #include "G4UserLimits.hh"
-#include "G4StepLimiter.hh"
 
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
