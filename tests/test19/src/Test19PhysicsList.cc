@@ -51,8 +51,7 @@ Test19PhysicsList::Test19PhysicsList():  G4VUserPhysicsList()
   SetVerboseLevel(1);
 }
 
-Test19PhysicsList::~Test19PhysicsList()
-{}
+Test19PhysicsList::~Test19PhysicsList() {}
 
 void Test19PhysicsList::ConstructParticle()
 {
@@ -78,6 +77,7 @@ void Test19PhysicsList::ConstructBosons()
   // optical photon
   G4OpticalPhoton::OpticalPhotonDefinition();
 }
+
 void Test19PhysicsList::ConstructLeptons()
 {
   // leptons
@@ -89,20 +89,19 @@ void Test19PhysicsList::ConstructLeptons()
   G4NeutrinoMu::NeutrinoMuDefinition();
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
 }
-void Test19PhysicsList::ConstructMesons()
+
+void Test19PhysicsList::ConstructMesons() {}
+
+void Test19PhysicsList::ConstructBaryons()  //  barions
 {
-}
-void Test19PhysicsList::ConstructBaryons()
-{
-  //  barions
   G4Proton::ProtonDefinition();
   G4AntiProton::AntiProtonDefinition();
   G4Neutron::NeutronDefinition();
   G4AntiNeutron::AntiNeutronDefinition();
 }
-void Test19PhysicsList::ConstructAllShortLiveds()
-{
-}
+
+void Test19PhysicsList::ConstructAllShortLiveds() {}
+
 void Test19PhysicsList::ConstructProcess()
 {
   // Transportation, electromagnetic and general processes 
@@ -125,52 +124,44 @@ void Test19PhysicsList::ConstructProcess()
 void Test19PhysicsList::ConstructEM()
 {
   theParticleIterator->reset();
-
   while( (*theParticleIterator)() )
-    {
-      G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* pmanager = particle->GetProcessManager();
-      G4String particleName = particle->GetParticleName();
-
-      if (particleName == "gamma")
-	{
-	  //gamma
-	  pmanager->AddDiscreteProcess(new G4PhotoElectricEffect());
-	  pmanager->AddDiscreteProcess(new G4ComptonScattering());
-	  pmanager->AddDiscreteProcess(new G4GammaConversion());
-	}
-      else if (particleName == "e-")
-	{
-	  //electron
-	  pmanager->AddProcess(new G4MultipleScattering(),-1, 1,1);
-	  pmanager->AddProcess(new G4eIonisation(),       -1, 2,2);
-	  pmanager->AddProcess(new G4eBremsstrahlung(),   -1,-1,3);
-	}
-      else if (particleName == "e+")
-	{
-	  //positron
-	  pmanager->AddProcess(new G4MultipleScattering(),-1, 1,1);
-	  pmanager->AddProcess(new G4eIonisation(),       -1, 2,2);
-	  pmanager->AddProcess(new G4eBremsstrahlung(),   -1,-1,3);
-	  pmanager->AddProcess(new G4eplusAnnihilation(),  0,-1,4);
-	}
-      else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) &&
-	       (particle->GetParticleName() != "chargedgeantino"))
-	{
-	  //all others charged particles except geantino
-	  pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
-
-	  G4double demax = 0.05;  // try to lose at most 5% of the energy in
-	  //    a single step (in limit of large energies)
-	  G4double stmin = 1.e-9 * m;  // length of the final step: 10 angstrom
-	  // reproduced angular distribution of TRIM
-
-	  G4hLowEnergyIonisation* lowEIonisation = new G4hLowEnergyIonisation();
-	  pmanager->AddProcess( lowEIonisation, -1,2,2);
-	  lowEIonisation->SetStepFunction( demax, stmin );
-	}
-    }
+  {
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
+    G4String particleName = particle->GetParticleName();
+    if (particleName == "gamma")	    //gamma
+	   {
+	     pmanager->AddDiscreteProcess(new G4PhotoElectricEffect());
+	     pmanager->AddDiscreteProcess(new G4ComptonScattering());
+	     pmanager->AddDiscreteProcess(new G4GammaConversion());
+	   }
+    else if (particleName == "e-")	  //electron
+	   {
+	     pmanager->AddProcess(new G4MultipleScattering(),-1, 1,1);
+	     pmanager->AddProcess(new G4eIonisation(),       -1, 2,2);
+	     pmanager->AddProcess(new G4eBremsstrahlung(),   -1,-1,3);
+	   }
+    else if (particleName == "e+")	  //positron
+	   {
+	     pmanager->AddProcess(new G4MultipleScattering(),-1, 1,1);
+	     pmanager->AddProcess(new G4eIonisation(),       -1, 2,2);
+	     pmanager->AddProcess(new G4eBremsstrahlung(),   -1,-1,3);
+	     pmanager->AddProcess(new G4eplusAnnihilation(),  0,-1,4);
+	   }
+    else if (!particle->IsShortLived() && particle->GetPDGCharge() != 0.0 &&
+	            particle->GetParticleName() != "chargedgeantino")
+	   {
+	     //all others charged particles except geantino
+	     pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+	     G4double demax = 0.05;  // try to lose at most 5% of the energy in
+	     //    a single step (in limit of large energies)
+	     G4double stmin = 1.e-9 * m;  // length of the final step: 10 angstrom
+	     // reproduced angular distribution of TRIM
+	     G4hLowEnergyIonisation* lowEIonisation = new G4hLowEnergyIonisation();
+	     pmanager->AddProcess( lowEIonisation, -1,2,2);
+	     lowEIonisation->SetStepFunction( demax, stmin );
+	   }
+  }
 }
 
 #include "G4Decay.hh"
@@ -179,10 +170,12 @@ void Test19PhysicsList::ConstructGeneral()
 {
   G4Decay* theDecayProcess = new G4Decay();
   theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
+  while( (*theParticleIterator)() )
+  {
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
-    if (theDecayProcess->IsApplicable(*particle)) {
+    if (theDecayProcess->IsApplicable(*particle))
+    {
       pmanager ->AddProcess(theDecayProcess);
       pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
       pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
@@ -193,10 +186,7 @@ void Test19PhysicsList::ConstructGeneral()
 void Test19PhysicsList::SetCuts()
 {
   // defaultCutValue you have typed in is used
-
-  if (verboseLevel >1){
-    G4cout << "Test19PhysicsList::SetCuts:" << G4endl;
-  }
+  if (verboseLevel >1) G4cout << "Test19PhysicsList::SetCuts:" << G4endl;
 
   // set cut values for gamma at first and for e- second
   SetCutValue(cutForGamma, "gamma");
@@ -209,9 +199,7 @@ void Test19PhysicsList::SetCuts()
 
   // SetCutValueForOthers(defaultCutValue); 
  
-  if (verboseLevel >1) { 
-    DumpCutValuesTable(); 
-  } 
+  if (verboseLevel >1) DumpCutValuesTable();
 }
 
 void Test19PhysicsList::SetCutForGamma(G4double cut)
@@ -232,20 +220,11 @@ void Test19PhysicsList::SetCutForProton(G4double cut)
   cutForProton = cut;
 }
 
-G4double Test19PhysicsList::GetCutForGamma() const
-{
-  return cutForGamma;
-}
+G4double Test19PhysicsList::GetCutForGamma() const { return cutForGamma; }
 
-G4double Test19PhysicsList::GetCutForElectron() const
-{
-  return cutForElectron;
-}
+G4double Test19PhysicsList::GetCutForElectron() const { return cutForElectron; }
 
-G4double Test19PhysicsList::GetCutForProton() const
-{
-  return cutForProton;
-}
+G4double Test19PhysicsList::GetCutForProton() const { return cutForProton; }
 
 
 

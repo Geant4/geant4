@@ -188,6 +188,8 @@ return
 *
 macro go np=13
 *
+  Size 24. 18.
+*
   dcos = 0.10  | dOmega includes 2.*[dcos]
   cut 0 -
   cut $10 abs(Pz/sqrt(Px*Px+Py*Py+Pz*Pz)+0.866)<[dcos] | 150 deg
@@ -270,7 +272,49 @@ clo 67
 *
 return
 *
-macro show 1=al 2='0062' 3=1000000 4=3.6
+macro showd 1=al 2='0062' 3=1000000 4=3.6
+dCosT = 2. * 0.10
+dT    = 1.         | (MeV) E'-interval
+d2pi  = 6.2831854  | (2pi)
+sgtot = [4]        | sigma_gamma_total (in mb)
+hi/del *
+file = 'dinreg_'//[1]//'_'//[2]//'.hbk'
+hi/fil 67 [file]
+hrin *
+ clo 67
+ nevts = $hinfo(1,'entries')
+weight = 1. / [nevts]
+weight = [weight] * [3]   | c.s. expressed in nb
+weight = [weight] * [4]   | mb
+weight = [weight] / [dT]
+weight = [weight] / [dCosT]
+weight = [weight] / [d2pi]
+add 202 202 202 [weight] 0.
+add 204 204 204 [weight] 0.
+add 205 205 205 [weight] 0.
+add 206 206 206 [weight] 0.
+opt logy
+set xlab 1.37
+exec ~/PTOOL/black
+null 70. 210. .006 400
+if [1] = 'ca' then
+  atitle 'k = (p?d!+T?d!)/2 (MeV)        ^!' _
+'d[s]/p?d!dE?d!d[W]?d! (nb MeV^-2! sr^-1!)                 ^!'
+else
+  atitle 'k = (p?d!+T?d!)/2 (MeV)          ^!'  ' '
+endif
+set dmod 1
+*
+exec vexpin [1]_d[2] b 21 1875.61
+*
+exec hsolid 205 1 60 black 1875.61
+exec ~/PTOOL/black
+opt liny
+set dmod
+*
+return
+*
+macro showp 1=al 2='0062' 3=1000000 4=3.6
 dCosT = 2. * 0.10
 dT    = 1.         | (MeV) E'-interval
 d2pi  = 6.2831854  | (2pi)
@@ -288,13 +332,9 @@ weight = [weight] / [dT]
 weight = [weight] / [dCosT]
 weight = [weight] / [d2pi]
 add 102 102 102 [weight] 0.
-add 202 202 202 [weight] 0.
 add 104 104 104 [weight] 0.
-add 204 204 204 [weight] 0.
 add 105 105 105 [weight] 0.
-add 205 205 205 [weight] 0.
 add 106 106 106 [weight] 0.
-add 206 206 206 [weight] 0.
 opt logy
 set xlab 1.37
 exec ~/PTOOL/black
@@ -308,10 +348,6 @@ endif
 set dmod 1
 *
 exec vexpin [1]_p[2] a 24 938.273
-*#
-*#exec ~/PTOOL/green
-*#exec vexpin [1]_d[2] b 21 1875.61
-*#exec ~/PTOOL/black
 *
 if [1] = 'ca' then
 *#
@@ -320,9 +356,6 @@ if [1] = 'ca' then
   exec hsolid 106 1 60 violet 938.273 
 endif
 exec hsolid 105 1 60 black 938.273
-*#
-*#exec hsolid 205 1 60 green 1875.61
-*#exec hsolid 205 1 60 black 1875.61 2
 exec ~/PTOOL/black
 opt liny
 set dmod
@@ -364,14 +397,16 @@ macro result 1=gz 2=4000
   exec ~/PTOOL/setpq
 opt vert
 hi/del *
-*title 'A([g],p) and A([g],d) spectral cross section at E?[g]!=59-65 MeV'
-title '^40!Ca([g],p) spectral cross section'
-zone 1 1
+title 'A([g],p) and A([g],d) spectral cross section at E?[g]!=59-65 MeV'
+Size 24. 18.
+zone 2 1
+
+*title '^40!Ca([g],p) spectral cross section'
 opt ndat
 constal = 1000000 | mb to nb
 constca = 1000000 | 
 swi [1]
-*#exec show  al  0062  [constal] 3.6  |!!! sigma = 3.6 - table
+*#exec showp  al  0062  [constal] 3.6  |!!! sigma = 3.6 - table
 *#exec ~/PTOOL/notes .75 .92 '^27!Al' 0. .4 -40
 *#exec ~/PTOOL/snotes .30 .82 'protons' 0. .4 -40
 *#exec ~/PTOOL/snotes .72 .86 '[Q] = 90^o!' 0. .4 -40
@@ -380,18 +415,11 @@ swi [1]
 *#exec ~/PTOOL/snotes .10 .35 'deuterons' 0. .4 -40
 exec ~/PTOOL/black
 *
-exec show  ca  0062  [constca] 7.  |!!! sigma = 7. - total cross-section from table
+exec showp  ca  0062  [constca] 5.  |!!! sigma = 5. - total cross-section from table
 *#
 exec plcaex
-exec ~/PTOOL/notes .5 .92  'E?[g]!=62 MeV' 0. .4 -40
-*?*fun/pl x 30. 200. s
-*#exec ~/PTOOL/notes .75 .92 '^40!Ca' 0. .4 -40
-*#exec ~/PTOOL/snotes .30 .90 'protons' 0. .4 -40
-*#exec ~/PTOOL/snotes .72 .86 '[Q] = 90^o!' 0. .4 -40
-*#exec ~/PTOOL/green
-*#exec ~/PTOOL/snotes .10 .45 'deuterons' 0. .4 -40
-*#exec ~/PTOOL/snotes .20 .61 '[Q] = 90^o!'  -44. .4 -40
-*#
+exec ~/PTOOL/notes .5 .92  'protons' 0. .4 -40
+*
 exec ~/PTOOL/violet
 *#
 set mtyp 26
@@ -406,6 +434,20 @@ exec ~/PTOOL/legend .15 .26 '[Q] = 150^o!' 0. .4 -40
 exec ~/PTOOL/black
 *#
 set mtyp 24
+set mscf 1.0
+exec ~/PTOOL/legend .15 .33 '[Q] =? ! 90^o!'  0. .4 -40
+title '^40!Ca([g],d) spectral cross section'
+opt ndat
+constal = 1000000 | mb to nb
+constca = 1000000 | 
+swi [1]
+*
+exec showd  ca  0062  [constca] 5.  |!!! sigma = 5. - total cross-section from table
+*#
+exec ~/PTOOL/notes .5 .92  'deuterons' 0. .4 -40
+exec ~/PTOOL/black
+*#
+set mtyp 21
 set mscf 1.0
 exec ~/PTOOL/legend .15 .33 '[Q] =? ! 90^o!'  0. .4 -40
 *

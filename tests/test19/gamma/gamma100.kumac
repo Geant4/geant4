@@ -1,4 +1,4 @@
-macro run1 e=123 f=3 z=6 n=3 que=32-rb205-hp
+macro run1 e=123 f=3 n=3 z=6 que=32-rb205-hp
  nEvts = 2000 * [f]
 if [z] = 6 then	
  if [e] = 123 then	   	  	  		  

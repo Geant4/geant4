@@ -2,6 +2,7 @@ macro all f=0.1 que=2-cor
 * -- f=0 assumes histograms already there
   nEvts = 2000 * [f]
   pi/del *
+  Size 18. 21.
   zone 1 1
 ****  exec phot ^6!Li    li0303  3   3 [nEvts] 41 10000 30000 [que]
   exec phot ^7!Li    li0304  3   4 [nEvts] 21 10000 30000 [que]
@@ -16,9 +17,9 @@ macro all f=0.1 que=2-cor
 ****  exec phot ^27!Al   al1314 13  14 [nEvts] 47 14000 37000 [que]
   exec phot ^40!Ca   ca2020 20  20 [nEvts] 16 15000 30000 [que]
 ****  exec phot ^40!Ca   ca2020 20  20 [nEvts] 31 15000 30000 [que]
-  exec ~/PTOOL/pri ps 1 6 phocs [que] 2 3
-*  exec ~/PTOOL/pri eps 1 6 phocs [que] 2 3
-  exec ~/PTOOL/pri port 1 6 phocs [que] 2 3
+*  exec ~/PTOOL/pri ps 1 6 photon [que] 3 2 ! xprint 24. 18.
+  exec ~/PTOOL/pri eps 1 6 photon [que] 3 2 ! xprint 24. 18.
+*  exec ~/PTOOL/pri port 1 6 photon [que] 3 2 ! xprint 24. 18.
 return
 *
 macro run z=20 f=0.1 que=2-cor
@@ -74,9 +75,8 @@ if ([z] = 92 .or. [z] = 0) then
 * exec phot ^235!U   u92143 92 143 [nEvts] 73  7000 43000 [que]
  exec phot ^235!U   u92143 92 143 [nEvts] 37  7000 43000 [que]
 endif
-******* exec ~/PTOOL/pri port 1 10 phocs [que] 2 5
-  exec ~/PTOOL/pri eps 1 10 phocs_all [que] 2 5
-* shell gv phocs.ps &
+******* exec ~/PTOOL/pri port 1 10 photon [que] 2 5
+  exec ~/PTOOL/pri eps 1 10 photon_all [que] 2 5
 return
 *
 macro phot targ=^12!C file=c0606 np=6 nn=6 runn=2000 _
@@ -95,7 +95,7 @@ macro phot targ=^12!C file=c0606 np=6 nn=6 runn=2000 _
   swi gz
   opt utit
   title 'E?[g]! (MeV)' u
-  title 'Photoneutron production part of total photonuclear cross section'
+  *title 'Photoneutron production part of total photonuclear cross section'
   xmin = $sigma([e0]/1100.)
   xmax = $sigma([e1]/900.)
   exec ~/PTOOL/setpq
