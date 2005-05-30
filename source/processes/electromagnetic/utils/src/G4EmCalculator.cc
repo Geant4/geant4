@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.18 2005-05-12 11:06:52 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.19 2005-05-30 08:55:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -669,8 +669,8 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
   if (p != currentParticle || processName != currentName) {
     currentName     = processName;
     currentLambda   = 0;
-    G4LossTableManager* manager = G4LossTableManager::Instance();
-    const std::vector<G4VEnergyLossProcess*> vel = manager->GetEnergyLossProcessVector();
+    G4LossTableManager* lManager = G4LossTableManager::Instance();
+    const std::vector<G4VEnergyLossProcess*> vel = lManager->GetEnergyLossProcessVector();
     G4int n = vel.size();
     for(G4int i=0; i<n; i++) {
       if((vel[i])->GetProcessName() == currentName && (vel[i])->Particle() == p) {
@@ -680,7 +680,7 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
       }
     }
     if(!currentLambda) {
-      const std::vector<G4VEmProcess*> vem = manager->GetEmProcessVector();
+      const std::vector<G4VEmProcess*> vem = lManager->GetEmProcessVector();
       G4int n = vem.size();
       for(G4int i=0; i<n; i++) {
         if((vem[i])->GetProcessName() == currentName && (vem[i])->Particle() == p) {
@@ -691,7 +691,7 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
       }
     }
     if(!currentLambda) {
-      const std::vector<G4VMultipleScattering*> vmsc = manager->GetMultipleScatteringVector();
+      const std::vector<G4VMultipleScattering*> vmsc = lManager->GetMultipleScatteringVector();
       G4int n = vmsc.size();
       for(G4int i=0; i<n; i++) {
         if((vmsc[i])->GetProcessName() == currentName && (vmsc[i])->Particle() == p) {
@@ -720,8 +720,8 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
   currentName = processName;
   currentModel = 0;
   size_t idx   = 0;
-  G4LossTableManager* manager = G4LossTableManager::Instance();
-  const std::vector<G4VEnergyLossProcess*> vel = manager->GetEnergyLossProcessVector();
+  G4LossTableManager* lManager = G4LossTableManager::Instance();
+  const std::vector<G4VEnergyLossProcess*> vel = lManager->GetEnergyLossProcessVector();
   G4int n = vel.size();
   for(G4int i=0; i<n; i++) {
     if((vel[i])->GetProcessName() == currentName && (vel[i])->Particle() == p) {
@@ -742,7 +742,7 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
     }
   }
   if(!currentModel) {
-    const std::vector<G4VEmProcess*> vem = manager->GetEmProcessVector();
+    const std::vector<G4VEmProcess*> vem = lManager->GetEmProcessVector();
     G4int n = vem.size();
     for(G4int i=0; i<n; i++) {
       if((vem[i])->GetProcessName() == currentName && (vem[i])->Particle() == p) {
@@ -753,7 +753,7 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
     }
   }
   if(!currentModel) {
-    const std::vector<G4VMultipleScattering*> vmsc = manager->GetMultipleScatteringVector();
+    const std::vector<G4VMultipleScattering*> vmsc = lManager->GetMultipleScatteringVector();
     G4int n = vmsc.size();
     for(G4int i=0; i<n; i++) {
       if((vmsc[i])->GetProcessName() == currentName && (vmsc[i])->Particle() == p) {
@@ -774,8 +774,8 @@ const G4VEnergyLossProcess* G4EmCalculator::FindEnergyLossProcess(
 {
   const G4VEnergyLossProcess* elp = 0;
   
-  G4LossTableManager* manager = G4LossTableManager::Instance();
-  const std::vector<G4VEnergyLossProcess*> vel = manager->GetEnergyLossProcessVector();
+  G4LossTableManager* lManager = G4LossTableManager::Instance();
+  const std::vector<G4VEnergyLossProcess*> vel = lManager->GetEnergyLossProcessVector();
   G4int n = vel.size();
   for(G4int i=0; i<n; i++) {
     if((vel[i])->Particle() == p) {

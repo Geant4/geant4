@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.9 2005-05-18 16:18:09 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.10 2005-05-30 08:55:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -271,9 +271,9 @@ G4double G4EmCorrections:: LShellCorrection(const G4ParticleDefinition* p,
       G4int nmax = std::min(4,shells.GetNumberOfShells(iz));
       for(G4int j=1; j<nmax; j++) {
         G4double ne = G4double(shells.GetNumberOfElectrons(iz,j));
-        G4double e = shells.GetBindingEnergy(iz,j);
+        G4double e1 = shells.GetBindingEnergy(iz,j);
 	//        G4cout << "LShell: j= " << j << " ne= " << ne << " e(eV)= " << e/eV << " e0(eV)= " << e0/eV << G4endl; 
-        term += f*ne*atomDensity[i]*LShell(e/e0,ba2/Z2)/Z;
+        term += f*ne*atomDensity[i]*LShell(e1/e0,ba2/Z2)/Z;
       }
     }
   }
@@ -415,19 +415,19 @@ G4double G4EmCorrections::ShellCorrection(const G4ParticleDefinition* p,
       G4double eshell = 0.0;
       for(G4int j=1; j<nmax; j++) {
         G4double x = G4double(shells.GetNumberOfElectrons(iz,j));
-        G4double e = shells.GetBindingEnergy(iz,j);
+        G4double e1 = shells.GetBindingEnergy(iz,j);
 	norm   += x;
-	eshell += e*x;
-        term += f*x*atomDensity[i]*LShell(e/e0,eta)/Z;
+	eshell += e1*x;
+        term += f*x*atomDensity[i]*LShell(e1/e0,eta)/Z;
       }
       if(10 < iz) {
 	eshell /= norm;
 	G4double eeff = eshell*eta;
 	for(G4int k=nmax; k<ntot; k++) {
           G4double x = G4double(shells.GetNumberOfElectrons(iz,k));
-          G4double e = shells.GetBindingEnergy(iz,k);
-          term += f*x*atomDensity[i]*LShell(e/e0,eeff/e)/Z;
-	  //          term += f*x*atomDensity[i]*LShell(eshell/e0,eeff/e)/Z;
+          G4double e1 = shells.GetBindingEnergy(iz,k);
+          term += f*x*atomDensity[i]*LShell(e1/e0,eeff/e1)/Z;
+	  //          term += f*x*atomDensity[i]*LShell(eshell/e0,eeff/e1)/Z;
 	}
 	/*
         if(28 >= iz) {
