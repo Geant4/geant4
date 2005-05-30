@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.29 2005-05-27 18:38:33 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.30 2005-05-30 08:22:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -109,6 +109,7 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
 G4VEmProcess::~G4VEmProcess()
 {
   Clear();
+  if(theLambdaTable) theLambdaTable->clearAndDestroy();
   delete modelManager;
   (G4LossTableManager::Instance())->DeRegister(this);
 }
@@ -147,7 +148,6 @@ void G4VEmProcess::Clear()
 {
   if(theEnergyOfCrossSectionMax) delete [] theEnergyOfCrossSectionMax;
   if(theCrossSectionMax) delete [] theCrossSectionMax;
-  if(theLambdaTable) theLambdaTable->clearAndDestroy();
   theEnergyOfCrossSectionMax = 0;
   theCrossSectionMax = 0;
   modelManager->Clear();
