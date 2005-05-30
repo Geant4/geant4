@@ -106,10 +106,10 @@ int main(int argc ,char ** argv)
   pRunManager -> SetUserAction(new HadrontherapyPrimaryGeneratorAction());
 
   // Optional UserActions: run, event, stepping
-  pRunManager->SetUserAction(new HadrontherapyRunAction());
+  pRunManager -> SetUserAction(new HadrontherapyRunAction());
   HadrontherapyEventAction *pEventAction = new HadrontherapyEventAction( matrix, numberVoxelX,
                                                                          numberVoxelY, numberVoxelZ);
-  pRunManager->SetUserAction(pEventAction );
+  pRunManager -> SetUserAction(pEventAction );
 
 
   HadrontherapySteppingAction* steppingaction = new HadrontherapySteppingAction(); 
@@ -119,7 +119,7 @@ int main(int argc ,char ** argv)
 #ifdef G4VIS_USE
   // visualization manager
   G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
+  visManager -> Initialize();
 #endif
   
   
@@ -134,68 +134,51 @@ int main(int argc ,char ** argv)
   if (session)   // Define UI session for interactive mode.
     { 
       G4cout<<" UI session starts ..."<< G4endl;
-      UI->ApplyCommand("/control/execute visualisationMacro.mac");    
-      session->SessionStart();
+      UI -> ApplyCommand("/control/execute visualisationMacro.mac");    
+      session -> SessionStart();
       delete session;
     }
   else           // Batch mode
     { 
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
+      UI -> ApplyCommand(command + fileName);
     }  
-
-
- if(matrix)
-	{
-	 std::ofstream ofs;
-
-	// Output voxel data to text file
-	// Format = i  <tab> j  <tab> k <tab> edep [MeV] <eol>
-	ofs.open("EnergyDeposit.out");
-		{
-
-		  ofs<<" i "<<'\t'<<" j "<<'\t'<<"k"<<'\t' 
-                     <<"released energy(Mev)"
-		     <<G4endl;
-		 
-                  G4int k;
-                  G4int j;
-                  G4int i;             
+  
+  if(matrix)
+    {		 
+      G4int k;
+      G4int j;
+      G4int i;             
                    
-		    for(G4int l = 0; l < numberVoxelZ; l++) 
-                      {
-                        k = l;
+      for(G4int l = 0; l < numberVoxelZ; l++) 
+	{
+	  k = l;
                         
-                       for(G4int m = 0; m < numberVoxelY; m++) 
-                       { 
-			 j = m * numberVoxelZ + k; 
+	  for(G4int m = 0; m < numberVoxelY; m++) 
+	    { 
+	      j = m * numberVoxelZ + k; 
                          
-                        for(G4int n = 0; n <  numberVoxelX; n++)
-			  {
-			    i =  n* numberVoxelZ * numberVoxelY + j;
-			     if(matrix[i]!=0)
-			      {
-			        ofs << n <<'\t'<< m <<'\t'<<
-				k<<'\t'<<matrix[i]<<G4endl;
-				
-
-#ifdef G4ANALYSIS_USE 
-	
-				analysis -> Energy_Dep(n, m, k, matrix[i]);
-                                analysis -> BraggPeak(n, matrix[i]);
+	      for(G4int n = 0; n <  numberVoxelX; n++)
+		{
+		  i =  n* numberVoxelZ * numberVoxelY + j;
+		  if(matrix[i] != 0)
+		    {
+			     
+#ifdef G4ANALYSIS_USE 	
+		      analysis -> Energy_Dep(n, m, k, matrix[i]);
+		      analysis -> BraggPeak(n, matrix[i]);
 #endif
                              
-			     }
-			  }   
-		       }
-		      }
-	       
-		ofs.close();
-		}
+		    }
+		}   
+	    }
 	}
+	       
+    }
 
- delete[] matrix;   
+
+  delete[] matrix;   
 
 #ifdef G4ANALYSIS_USE
   analysis -> finish();
