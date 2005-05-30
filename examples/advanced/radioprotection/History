@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.8 2005-05-03 10:05:48 allison Exp $
+$Id: History,v 1.9 2005-05-30 09:41:25 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,8 @@ $Id: History,v 1.8 2005-05-03 10:05:48 allison Exp $
 
                       Category History file
                       ---------------------
+30th May 2005  Susanna Guatelli  (radioprotection-V07-00-05)
+- Code review, analysis with AIDA 3.2.1 and PI 1.3.3
 
 3rd May 2005  John Allison  (examples-V07-00-03)
 - Replaced vis manager with G4VisExecutive.
