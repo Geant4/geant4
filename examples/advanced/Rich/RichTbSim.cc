@@ -25,7 +25,7 @@
 // Created: Sajan Easo (Sajan.Easo@cern.ch)
 // Revision and changes: Patricia Mendez (Patricia.Mendez@cern.ch)
 // ----------------------------------------------------------------
-#include <iostream.h>
+#include <iostream>
 #include "RichTbRunAction.hh"
 #include "RichTbEventAction.hh"
 #include "RichTbDetectorConstruction.hh"
@@ -87,8 +87,8 @@ int main(int argc,char** argv) {
   visManager->Initialize();
 
    G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-   cout<<" PVVisManager "<<pVVisManager<<endl;
-   cout<<"VisManager "<<visManager<<endl;
+   G4cout<<" PVVisManager "<<pVVisManager<<G4endl;
+   G4cout<<"VisManager "<<visManager<<G4endl;
 
    runManager->SetUserAction(new RichTbRunAction);
 

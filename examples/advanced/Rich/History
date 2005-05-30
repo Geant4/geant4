@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.7 2005-05-03 10:05:48 allison Exp $
+$Id: History,v 1.8 2005-05-30 09:01:05 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.7 2005-05-03 10:05:48 allison Exp $
 
                       Category History file
                       ---------------------
+
+30.03.2005 - A.Ribon (Rich-V07-00-01)
+             Replaced  <iostream.h>  with  <iostream>  and 
+             cout  with  G4cout .
 
 3rd May 2005  John Allison  (examples-V07-00-03)
 - Replaced vis manager with G4VisExecutive.
