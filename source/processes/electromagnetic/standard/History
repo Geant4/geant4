@@ -1,4 +1,4 @@
-$Id: History,v 1.149 2005-05-12 11:32:02 vnivanch Exp $
+$Id: History,v 1.150 2005-05-30 08:46:58 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30 May 05: V.Ivant (stand-V07-00-11)
+- Fix compilation warning at SUN in G4BaggIonModel; 
 
 12 May 05: V.Ivant (stand-V07-00-10)
 - Move G4BaggIonModel to updated interfaces; 

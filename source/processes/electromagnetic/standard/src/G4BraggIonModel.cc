@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc,v 1.5 2005-05-12 11:06:43 vnivanch Exp $
+// $Id: G4BraggIonModel.cc,v 1.6 2005-05-30 08:46:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -247,7 +247,7 @@ G4bool G4BraggIonModel::HasMaterial(const G4Material* material)
    // ICRU Report N49, 1993. Power's model for He.
   const size_t numberOfMolecula = 30 ;
   SetMoleculaNumber(numberOfMolecula) ;
-  static G4String name[numberOfMolecula] = {
+  static G4String nameMol[numberOfMolecula] = {
     "H_2", "Be-Solid", "C-Solid", "Graphite", "N_2",
     "O_2", "Al-Solid", "Si-Solid", "Ar-Solid", "Cu-Solid",
     "Ge", "W-Solid", "Au-Solid", "Pb-Solid", "C_2H_2",
@@ -263,7 +263,7 @@ G4bool G4BraggIonModel::HasMaterial(const G4Material* material)
 
   // Search for the material in the table
   for (size_t i=0; i<numberOfMolecula; i++) {
-      if (chFormula == name[i]) {
+      if (chFormula == nameMol[i]) {
         SetMoleculaNumber(i) ;
 	return true ;
       }
