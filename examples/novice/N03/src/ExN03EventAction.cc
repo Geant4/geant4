@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventAction.cc,v 1.23 2003-11-12 16:15:48 johna Exp $
+// $Id: ExN03EventAction.cc,v 1.24 2005-05-30 14:24:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -112,11 +112,11 @@ void ExN03EventAction::EndOfEventAction(const G4Event* evt)
 
      for (G4int i=0; i<n_trajectories; i++) 
         { G4VTrajectory* trj = ((*(evt->GetTrajectoryContainer()))[i]);
-          if (drawFlag == "all") pVisManager->Draw(*trj,1000);
+          if (drawFlag == "all") pVisManager->Draw(*trj,100);
           else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-                                  pVisManager->Draw(*trj,1000);
+                                  pVisManager->Draw(*trj,100);
           else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
-                                  pVisManager->Draw(*trj,1000);
+                                  pVisManager->Draw(*trj,100);
         }
   }
 }  
