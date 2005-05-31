@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2005-05-31 12:46:50 vnivanch Exp $
+$Id: History,v 1.19 2005-05-31 12:47:31 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-31rd May 2005 V.Ivant  (examples-V07-00-04)
+31rd May 2005 V.Ivant  (testem8-V07-00-02)
 - 70 -> st -> 52
 
 3rd May 2005  John Allison  (examples-V07-00-03)
