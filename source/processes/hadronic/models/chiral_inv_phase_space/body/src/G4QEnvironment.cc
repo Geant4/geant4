@@ -24,7 +24,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.109 2005-05-23 14:25:21 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.110 2005-05-31 08:23:52 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -10895,8 +10895,18 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
                 G4LorentzVector tt4M=ch4M+reTLV; // resSMa=GSMass of the ResidQuasmon(+Env)
                 G4double        ttM=tt4M.m();    // TotalMass of CurHadr+Residual compaund
                 G4QContent      ttQC=valQ+curHadr->GetQC(); // total Quark Content
-                G4QPDGCode      ttQPDG(ttQC.GetZNSPDGCode());
+                G4int           ttPDG=ttQC.GetZNSPDGCode();
+                G4QPDGCode      ttQPDG(ttPDG);
                 G4double        ttGSM=ttQPDG.GetMass();
+                if(ttM>ttGSM && ttQC.GetStrangeness()>0)//Hypernucleus can be L->N degraded
+                {
+                  ttPDG-=ttQC.GetStrangeness()*999999; // S Neutrons instead of S Lambdas
+                  ttQPDG=G4QPDGCode(ttPDG);            // Update QPDGcode defining fragment
+                  ttGSM=ttQPDG.GetMass();              // Update the degraded mass value
+#ifdef pdebug
+                  G4cout<<"G4QEnv::CheckGS:Hypernucleus degraded to QPDG="<<ttQPDG<<G4endl;
+#endif
+                }
                 if(ttM>ttGSM)   // Decay of Pi0 in 2 gammas with the residual nucleus
                 {
 #ifdef cdebug
@@ -10917,7 +10927,7 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
                     return true;
                   }
                 }
-                else G4cerr<<"***G4QEnv::CheckGS:M="<<ttM<<" < GSM"<<ttGSM<<ttQPDG<<G4endl;
+                else G4cerr<<"**G4QEnv::CheckGS:M="<<ttM<<" < GSM="<<ttGSM<<ttQPDG<<G4endl;
               }
             }
           }
