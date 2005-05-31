@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2005-05-26 05:44:24 duns Exp $
+$Id: History,v 1.34 2005-05-31 20:04:28 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,6 +10,9 @@ $Id: History,v 1.33 2005-05-26 05:44:24 duns Exp $
      ----------------------------------------------------------
 
 ---------------------------------------------------------------------------  
+31st May 2005 -  Mark Donszelmann (exampleA01-V07-00-03)
+- Added setting of initial viewpoint to macro files for heprep and bheprep.
+
 26th May 2005 -  Mark Donszelmann (exampleA01-V07-00-02)
 - Fixed filling of hit histograms.
 
