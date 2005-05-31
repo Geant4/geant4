@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.19 2005-05-06 08:44:00 allison Exp $
+// $Id: G4ViewParameters.cc,v 1.20 2005-05-31 16:54:01 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -180,17 +180,28 @@ G4int G4ViewParameters::SetNoOfSides (G4int nSides) {
 
 void G4ViewParameters::SetViewAndLights
 (const G4Vector3D& viewpointDirection) {
+
   fViewpointDirection = viewpointDirection;
-  if (fLightsMoveWithCamera) {
-  G4Vector3D zprime = fViewpointDirection.unit ();
-  G4Vector3D xprime = (fUpVector.cross (zprime)).unit ();
-  G4Vector3D yprime = zprime.cross (xprime);
-   fActualLightpointDirection =
-     fRelativeLightpointDirection.x () * xprime +
-     fRelativeLightpointDirection.y () * yprime +
-     fRelativeLightpointDirection.x () * zprime;     
+
+  // If the requested viewpoint direction is parallel to the up
+  // vector, the orientation of the view is undefined...
+  if (fViewpointDirection.unit() * fUpVector.unit() > .9999) {
+    G4cout <<
+      "WARNING: Viewpoint direction is very close to the up vector direction."
+      "\n  Consider setting the up vector to obtain definable behaviour."
+	   << G4endl;
   }
-  else {
+
+  // Move the lights too if requested...
+  if (fLightsMoveWithCamera) {
+    G4Vector3D zprime = fViewpointDirection.unit ();
+    G4Vector3D xprime = (fUpVector.cross (zprime)).unit ();
+    G4Vector3D yprime = zprime.cross (xprime);
+    fActualLightpointDirection =
+      fRelativeLightpointDirection.x () * xprime +
+      fRelativeLightpointDirection.y () * yprime +
+      fRelativeLightpointDirection.x () * zprime;     
+  } else {
     fActualLightpointDirection = fRelativeLightpointDirection;
   }
 }
