@@ -1,4 +1,4 @@
-$Id: History,v 1.226 2005-05-31 10:05:59 capra Exp $
+$Id: History,v 1.227 2005-05-31 13:10:47 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+31.05.2005   MGP, tag emlowen-V07-00-11
+             Fix to Penelope ionisation (for atomic deexcitation?)
+             contributed by A. Mantero
+
+31.05.2005   MGP, tag emlowen-V07-00-10
+             Sauter angular distribution fixed in G4PenelopePhotoelectric
+             (contributed by L. Pandola)
+
 31.05.2005   Riccardo Capra, emlowen-V07-00-09, implementation of 
              the DNA elastic scattering in water.
+
+             A.M., tag emlowen-V07-00-08
+             Not documented
 
 20.05.2005   MGP, tag emlowen-V07-00-07
              Small design fixes related to PolarizedRayleigh on top 
