@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm9.cc,v 1.4 2005-05-03 10:21:16 allison Exp $
+// $Id: TestEm9.cc,v 1.5 2005-05-31 15:57:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,7 +36,6 @@
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "SteppingVerbose.hh"
 
 #include "RunAction.hh"
 #include "EventAction.hh"
@@ -53,9 +52,6 @@ int main(int argc,char** argv) {
 
   //choose the Random engine
   HepRandom::setTheEngine(new RanecuEngine);
-
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
 
   //Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
