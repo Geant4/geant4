@@ -83,10 +83,11 @@ run                                              run-V07-00-01
 - Moved invocation of ConstructParticle() method back to the original
   place in InitializePhysics().
 
-track                                            track-V07-00-00
+track                                            track-V07-00-01
 -----
 - Added new class G4ParticleChangeForGamma.
 - Modified G4ParticleChangeForLoss to inline 'update' methods.
+- Fix in G4Track::GetVelocity(). Addresses problem report #741.
 
 tracking                                         tracking-V07-00-01
 --------
