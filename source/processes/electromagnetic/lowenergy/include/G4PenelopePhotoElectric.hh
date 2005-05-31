@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopePhotoElectric.hh,v 1.2 2003-02-23 23:42:52 pia Exp $
+// $Id: G4PenelopePhotoElectric.hh,v 1.3 2005-05-31 10:09:14 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L.Pandola
@@ -29,6 +29,8 @@
 // History:
 // -----------
 // 07 Jan  2003   L.Pandola   1st implementation
+// 31 May  2005   L.Pandola   Added method to sample angular distribution
+//                            of the final electron
 // -------------------------------------------------------------------
 
 // Class description:
@@ -88,6 +90,8 @@ private:
  // Hide copy constructor and assignment operator as private 
   G4PenelopePhotoElectric& operator=(const G4PenelopePhotoElectric& right);
   G4PenelopePhotoElectric(const G4PenelopePhotoElectric& );
+
+  G4double SampleElectronDirection(G4double);
 
   G4double lowEnergyLimit;  // low energy limit  applied to the process
   G4double highEnergyLimit; // high energy limit applied to the process
