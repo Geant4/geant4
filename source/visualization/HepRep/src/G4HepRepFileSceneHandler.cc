@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.30 2005-05-31 06:41:56 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.31 2005-05-31 23:02:25 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,6 +50,7 @@
 #include "G4VHit.hh"
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
+#include "G4AttCheck.hh"
 
 //HepRep
 #include "G4HepRepFileXMLWriter.hh"
@@ -410,9 +411,27 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
   G4cout << "G4HepRepFileSceneHandler::AddCompound(G4VTrajectory&) " << G4endl;
 #endif
 
-  std::vector<G4AttValue>* attValues = traj.CreateAttValues();
+  G4int drawingMode = ((G4TrajectoriesModel*)fpModel)->GetDrawingMode();
+
+  // Convert to standard attributes.
+  std::vector<G4AttValue>* pStandardAttValues = new  std::vector<G4AttValue>;
+  std::map<G4String,G4AttDef>* pStandardAttDefs =
+    new std::map<G4String,G4AttDef>;
+  G4bool error = G4AttCheck(traj.CreateAttValues(),traj.GetAttDefs()).Standard
+    (pStandardAttValues,pStandardAttDefs);
+  if (error) {
+    G4cout << "G4HepRepFileSceneHandler::AddCompound(traj):"
+      "\nERROR found during conversion to standard trajectory attributes."
+           << G4endl;
+  }
+#ifdef G4HEPREPFILEDEBUG 
+  G4cout <<
+    "G4HepRepFileSceneHandler::AddCompound(traj): standardised attributes:\n"
+         << G4AttCheck(pStandardAttValues,pStandardAttDefs)
+         << G4endl;
+#endif
+
   std::vector<G4AttValue>::iterator iAttVal;
-  const std::map<G4String,G4AttDef>* attDefs = traj.GetAttDefs();
   std::map<G4String,G4AttDef>::const_iterator iAttDef;
   G4int i;
 
@@ -439,11 +458,11 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
     // Take all Trajectory attDefs from first trajectory.
     // Would rather be able to get these attDefs without needing a reference from any
     // particular trajectory, but don't know how to do that.
-    if (attValues && attDefs) {
-      for (iAttVal = attValues->begin();
-	   iAttVal != attValues->end(); ++iAttVal) {
-	iAttDef = attDefs->find(iAttVal->GetName());
-	if (iAttDef != attDefs->end()) {
+    if (pStandardAttValues && pStandardAttDefs) {
+      for (iAttVal = pStandardAttValues->begin();
+	   iAttVal != pStandardAttValues->end(); ++iAttVal) {
+	iAttDef = pStandardAttDefs->find(iAttVal->GetName());
+	if (iAttDef != pStandardAttDefs->end()) {
 	  // Protect against incorrect use of Category.  Anything value other than the
 	  // standard ones will be considered to be in the physics category.
 	  G4String category = iAttDef->second.GetCategory();
@@ -465,18 +484,28 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
     // Note also that until we get the good separation of Types and Instances that comes
     // in HepRep2, the user must be careful not to use the same AttName for two
     // different Types.
-    if (traj.GetPointEntries()>0) {
+    if (drawingMode!=0 && traj.GetPointEntries()>0) {
       G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(0);
-      std::vector<G4AttValue>* pointAttValues
-	= aTrajectoryPoint->CreateAttValues();
-      const std::map<G4String,G4AttDef>* pointAttDefs
-	= aTrajectoryPoint->GetAttDefs();
-      if (pointAttValues && pointAttDefs) {
-	for (iAttVal = pointAttValues->begin();
-	     iAttVal != pointAttValues->end(); ++iAttVal) {
+
+      // Convert to standard attributes.
+      std::vector<G4AttValue>* pStandardPointAttValues =
+	new std::vector<G4AttValue>;
+      std::map<G4String,G4AttDef>* pStandardPointAttDefs =
+	new std::map<G4String,G4AttDef>;
+      G4bool error = G4AttCheck(aTrajectoryPoint->CreateAttValues(),aTrajectoryPoint->GetAttDefs()).Standard
+	(pStandardPointAttValues,pStandardPointAttDefs);
+      if (error) {
+	G4cout << "G4HepRepFileSceneHandler::AddCompound(traj):"
+	  "\nERROR found during conversion to standard trajectory point attributes."
+	       << G4endl;
+      }
+
+      if (pStandardPointAttValues && pStandardPointAttDefs) {
+	for (iAttVal = pStandardPointAttValues->begin();
+	     iAttVal != pStandardPointAttValues->end(); ++iAttVal) {
 	  iAttDef =
-	    pointAttDefs->find(iAttVal->GetName());
-	  if (iAttDef != pointAttDefs->end()) {
+	    pStandardPointAttDefs->find(iAttVal->GetName());
+	  if (iAttDef != pStandardPointAttDefs->end()) {
 	    // Protect against incorrect use of Category.  Anything value other than the
 	    // standard ones will be considered to be in the physics category.
 	    G4String category = iAttDef->second.GetCategory();
@@ -497,12 +526,12 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
   hepRepXMLWriter->addInstance();
 
   // Copy the current trajectory's G4AttValues to HepRepAttValues.
-  if (attValues && attDefs) {
-    for (iAttVal = attValues->begin();
-	 iAttVal != attValues->end(); ++iAttVal) {
+  if (pStandardAttValues && pStandardAttDefs) {
+    for (iAttVal = pStandardAttValues->begin();
+	 iAttVal != pStandardAttValues->end(); ++iAttVal) {
       std::map<G4String,G4AttDef>::const_iterator iAttDef =
-	attDefs->find(iAttVal->GetName());
-      if (iAttDef == attDefs->end()) {
+	pStandardAttDefs->find(iAttVal->GetName());
+      if (iAttDef == pStandardAttDefs->end()) {
 	G4cout << "G4HepRepFileSceneHandler::AddCompound(traj):"
 	  "\n  WARNING: no matching definition for attribute \""
 	       << iAttVal->GetName() << "\", value: "
@@ -514,10 +543,10 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 	hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
       }
     }    
-    delete attValues;  // AttValues must be deleted after use.
+    delete pStandardAttDefs;
+    delete pStandardAttValues; 
   }
 
-  G4int drawingMode = ((G4TrajectoriesModel*)fpModel)->GetDrawingMode();
   if (drawingMode>=0) {
     // Now call base class to deconstruct trajectory into a polyline.
     ((G4TrajectoriesModel*)fpModel)->SetDrawingMode(0);
@@ -547,18 +576,25 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
       hepRepXMLWriter->addInstance();
 
       // Copy the current trajectory point's G4AttValues to HepRepAttValues.
-      std::vector<G4AttValue>* pointAttValues
-	= aTrajectoryPoint->CreateAttValues();
-      const std::map<G4String,G4AttDef>* pointAttDefs
-	= aTrajectoryPoint->GetAttDefs();
+      std::vector<G4AttValue>* pStandardPointAttValues =
+	new std::vector<G4AttValue>;
+      std::map<G4String,G4AttDef>* pStandardPointAttDefs =
+	new std::map<G4String,G4AttDef>;
+      G4bool error = G4AttCheck(aTrajectoryPoint->CreateAttValues(),aTrajectoryPoint->GetAttDefs()).Standard
+	(pStandardPointAttValues,pStandardPointAttDefs);
+      if (error) {
+	G4cout << "G4HepRepFileSceneHandler::AddCompound(traj):"
+	  "\nERROR found during conversion to standard trajectory point attributes."
+	       << G4endl;
+      }
 
-      if (pointAttValues && pointAttDefs) {
+      if (pStandardPointAttValues && pStandardPointAttDefs) {
 	std::vector<G4AttValue>::iterator iAttVal;
-	for (iAttVal = pointAttValues->begin();
-	     iAttVal != pointAttValues->end(); ++iAttVal) {
+	for (iAttVal = pStandardPointAttValues->begin();
+	     iAttVal != pStandardPointAttValues->end(); ++iAttVal) {
 	  std::map<G4String,G4AttDef>::const_iterator iAttDef =
-	    pointAttDefs->find(iAttVal->GetName());
-	  if (iAttDef == pointAttDefs->end()) {
+	    pStandardPointAttDefs->find(iAttVal->GetName());
+	  if (iAttDef == pStandardPointAttDefs->end()) {
 	    G4cout << "\nG4VTrajectory::ShowTrajectory:"
 	      "\n  WARNING: no matching definition for trajectory"
 	      " point attribute \""
@@ -570,7 +606,8 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 	    hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
 	  }
 	}
-	delete pointAttValues;  // AttValues must be deleted after use.
+	delete pStandardPointAttValues;
+	delete pStandardPointAttDefs;
       }
 
       // Each trajectory point is made of a single primitive, a point.

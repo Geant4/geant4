@@ -1,4 +1,4 @@
-.$Id: History,v 1.90 2005-05-31 06:41:56 perl Exp $
+.$Id: History,v 1.91 2005-05-31 23:02:25 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+31 May 2005 Joseph Perl
+- For HeRepFile, use G4AttCheck to standardize attribute units.
+
 30 May 2005 Joseph Perl
 - For HeRepFile, respect Drawing Mode.
 
