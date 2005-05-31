@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.29 2005-05-30 19:03:58 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.30 2005-05-31 06:41:56 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,6 +46,7 @@
 #include "G4NURBS.hh"
 #include "G4VTrajectory.hh"
 #include "G4VTrajectoryPoint.hh"
+#include "G4TrajectoriesModel.hh"
 #include "G4VHit.hh"
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
@@ -406,7 +407,7 @@ void G4HepRepFileSceneHandler::AddSolid(const G4VSolid& solid) {
 
 void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 #ifdef G4HEPREPFILEDEBUG
-    G4cout << "G4HepRepFileSceneHandler::AddCompound(G4VTrajectory&) " << G4endl;
+  G4cout << "G4HepRepFileSceneHandler::AddCompound(G4VTrajectory&) " << G4endl;
 #endif
 
   std::vector<G4AttValue>* attValues = traj.CreateAttValues();
@@ -432,7 +433,6 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
   // If this is the first trajectory of this event...
   if (strcmp("Trajectories",previousName)!=0) {
     // Specify attribute values common to all trajectories.
-    hepRepXMLWriter->addAttValue("DrawAs","Line");
     hepRepXMLWriter->addAttValue("Layer",100);
 
     // Specify additional attribute definitions for trajectories.
@@ -517,59 +517,67 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
     delete attValues;  // AttValues must be deleted after use.
   }
 
-  // Now call base class to deconstruct trajectory into a polyline.
-  drawingTraj = true;
-  G4VSceneHandler::AddCompound(traj);  // Invoke default action.
-  drawingTraj = false;
-
-  // Create Trajectory Points as a subType of Trajectories.
-  previousName = hepRepXMLWriter->prevTypeName[2];
-  hepRepXMLWriter->addType("Trajectory Points",2);
-
-  // Specify attributes common to all trajectory points.
-  if (strcmp("Trajectory Points",previousName)!=0) {
-    hepRepXMLWriter->addAttValue("DrawAs","Point");
-    hepRepXMLWriter->addAttValue("Layer",110);
-    hepRepXMLWriter->addAttValue("Visibility","False");
+  G4int drawingMode = ((G4TrajectoriesModel*)fpModel)->GetDrawingMode();
+  if (drawingMode>=0) {
+    // Now call base class to deconstruct trajectory into a polyline.
+    ((G4TrajectoriesModel*)fpModel)->SetDrawingMode(0);
+    drawingTraj = true;
+    G4VSceneHandler::AddCompound(traj);  // Invoke default action.
+    drawingTraj = false;
+    ((G4TrajectoriesModel*)fpModel)->SetDrawingMode(drawingMode);
   }
 
-  for (i = 0; i < traj.GetPointEntries(); i++) {
-    G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(i);
+  if (drawingMode!=0) {
+    // Create Trajectory Points as a subType of Trajectories.
+    previousName = hepRepXMLWriter->prevTypeName[2];
+    hepRepXMLWriter->addType("Trajectory Points",2);
 
-    // Each point is a separate instance of the type Trajectory Points.
-    hepRepXMLWriter->addInstance();
-
-  // Copy the current trajectory point's G4AttValues to HepRepAttValues.
-    std::vector<G4AttValue>* pointAttValues
-      = aTrajectoryPoint->CreateAttValues();
-    const std::map<G4String,G4AttDef>* pointAttDefs
-      = aTrajectoryPoint->GetAttDefs();
-
-    if (pointAttValues && pointAttDefs) {
-      std::vector<G4AttValue>::iterator iAttVal;
-      for (iAttVal = pointAttValues->begin();
-	   iAttVal != pointAttValues->end(); ++iAttVal) {
-	std::map<G4String,G4AttDef>::const_iterator iAttDef =
-	  pointAttDefs->find(iAttVal->GetName());
-	if (iAttDef == pointAttDefs->end()) {
-	  G4cout << "\nG4VTrajectory::ShowTrajectory:"
-	    "\n  WARNING: no matching definition for trajectory"
-	    " point attribute \""
-		 << iAttVal->GetName() << "\", value: "
-		 << iAttVal->GetValue();
-	}
-	else {
-	  //hepRepXMLWriter->addAttValue(iAttDef->second.GetDesc(), iAttVal->GetValue());
-	  hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
-	}
-      }
-      delete pointAttValues;  // AttValues must be deleted after use.
+    // Specify attributes common to all trajectory points.
+    if (strcmp("Trajectory Points",previousName)!=0) {
+      hepRepXMLWriter->addAttValue("DrawAs","Point");
+      hepRepXMLWriter->addAttValue("MarkSize",std::abs(drawingMode)/1000);
+      hepRepXMLWriter->addAttValue("Layer",110);
+      hepRepXMLWriter->addAttValue("Visibility","True");
     }
 
-  // Each trajectory point is made of a single primitive, a point.
-    hepRepXMLWriter->addPrimitive();
-    G4Point3D vertex = aTrajectoryPoint->GetPosition();
-    hepRepXMLWriter->addPoint(vertex.x(), vertex.y(), vertex.z());
+    for (i = 0; i < traj.GetPointEntries(); i++) {
+      G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(i);
+
+      // Each point is a separate instance of the type Trajectory Points.
+      hepRepXMLWriter->addInstance();
+
+      // Copy the current trajectory point's G4AttValues to HepRepAttValues.
+      std::vector<G4AttValue>* pointAttValues
+	= aTrajectoryPoint->CreateAttValues();
+      const std::map<G4String,G4AttDef>* pointAttDefs
+	= aTrajectoryPoint->GetAttDefs();
+
+      if (pointAttValues && pointAttDefs) {
+	std::vector<G4AttValue>::iterator iAttVal;
+	for (iAttVal = pointAttValues->begin();
+	     iAttVal != pointAttValues->end(); ++iAttVal) {
+	  std::map<G4String,G4AttDef>::const_iterator iAttDef =
+	    pointAttDefs->find(iAttVal->GetName());
+	  if (iAttDef == pointAttDefs->end()) {
+	    G4cout << "\nG4VTrajectory::ShowTrajectory:"
+	      "\n  WARNING: no matching definition for trajectory"
+	      " point attribute \""
+		   << iAttVal->GetName() << "\", value: "
+		   << iAttVal->GetValue();
+	  }
+	  else {
+	    //hepRepXMLWriter->addAttValue(iAttDef->second.GetDesc(), iAttVal->GetValue());
+	    hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
+	  }
+	}
+	delete pointAttValues;  // AttValues must be deleted after use.
+      }
+
+      // Each trajectory point is made of a single primitive, a point.
+      hepRepXMLWriter->addPrimitive();
+      G4Point3D vertex = aTrajectoryPoint->GetPosition();
+      hepRepXMLWriter->addPoint(vertex.x(), vertex.y(), vertex.z());
+    }
   }
 }
 
@@ -578,7 +586,85 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VHit& hit) {
 #ifdef G4HEPREPFILEDEBUG
     G4cout << "G4HepRepFileSceneHandler::AddCompound(G4VHit&) " << G4endl;
 #endif
-    G4VSceneHandler::AddCompound(hit);  // Invoke default action.
+
+// All commented out until G4VHit.hh CreateAttValues becomes virtual const.
+//   std::vector<G4AttValue>* attValues = hit.CreateAttValues();
+//   std::vector<G4AttValue>::iterator iAttVal;
+//   const std::map<G4String,G4AttDef>* attDefs = hit.GetAttDefs();
+//   std::map<G4String,G4AttDef>::const_iterator iAttDef;
+//   G4int i;
+
+//   // Open the HepRep output file if it is not already open.
+//   CheckFileOpen();
+
+//   // Add the Event Data Type if it hasn't already been added.
+//   // If this is the first trajectory or hit, add the Event Data type and define attributes.
+//   if (strcmp("Event Data",hepRepXMLWriter->prevTypeName[0])!=0) {
+//     hepRepXMLWriter->addType("Event Data",0);
+//     hepRepXMLWriter->addInstance();
+//   }
+
+//   // Add the Hits Type.
+//   G4String previousName = hepRepXMLWriter->prevTypeName[1];
+//   hepRepXMLWriter->addType("Hits",1);
+
+//   // If this is the first hit of this event...
+//   if (strcmp("Hits",previousName)!=0) {
+//     // Specify attribute values common to all hits.
+//     hepRepXMLWriter->addAttValue("Layer",130);
+
+//     // Specify additional attribute definitions for hits.
+//     // Take all Hit attDefs from first hit.
+//     // Would rather be able to get these attDefs without needing a reference from any
+//     // particular hit, but don't know how to do that.
+//     if (attValues && attDefs) {
+//       for (iAttVal = attValues->begin();
+// 	   iAttVal != attValues->end(); ++iAttVal) {
+// 	iAttDef = attDefs->find(iAttVal->GetName());
+// 	if (iAttDef != attDefs->end()) {
+// 	  // Protect against incorrect use of Category.  Anything value other than the
+// 	  // standard ones will be considered to be in the physics category.
+// 	  G4String category = iAttDef->second.GetCategory();
+// 	  if (strcmp(category,"Draw")!=0 &&
+// 	      strcmp(category,"Physics")!=0 &&
+// 	      strcmp(category,"Association")!=0 &&
+// 	      strcmp(category,"PickAction")!=0)
+// 	    category = "Physics";
+// 	  hepRepXMLWriter->addAttDef(iAttVal->GetName(), iAttDef->second.GetDesc(),
+// 				     category, iAttDef->second.GetExtra());
+// 	}
+//       }
+//     }
+//   }
+
+//   // For every hit, add an instance of Type Hit.
+//   hepRepXMLWriter->addInstance();
+
+//   // Copy the current hit's G4AttValues to HepRepAttValues.
+//   if (attValues && attDefs) {
+//     for (iAttVal = attValues->begin();
+// 	 iAttVal != attValues->end(); ++iAttVal) {
+//       std::map<G4String,G4AttDef>::const_iterator iAttDef =
+// 	attDefs->find(iAttVal->GetName());
+//       if (iAttDef == attDefs->end()) {
+// 	G4cout << "G4HepRepFileSceneHandler::AddCompound(hit):"
+// 	  "\n  WARNING: no matching definition for attribute \""
+// 	       << iAttVal->GetName() << "\", value: "
+// 	       << iAttVal->GetValue();
+//       }
+//       else {
+// 	// Use GetDesc rather than GetName once WIRED can handle names with spaces in them.
+// 	//hepRepXMLWriter->addAttValue(iAttDef->second.GetDesc(), iAttVal->GetValue());
+// 	hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
+//       }
+//     }    
+//     delete attValues;  // AttValues must be deleted after use.
+//   }
+
+//   // Now call base class to deconstruct hit into primitives.
+//   drawingHit = true;
+  G4VSceneHandler::AddCompound(hit);  // Invoke default action.
+//   drawingHit = false;
 }
 
 
@@ -765,9 +851,9 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
   // be falsely false if no geometry has yet been drawn.
   // So I test on both !fpCurrentPV (means no geometry has yet been drawn)
   // and fReadyForTransients.
-  if (drawingTraj) {
+  if (drawingTraj || drawingHit) {
     // In this case, HepRep type, layer and instance were already created
-    // in the AddCompound(...traj) method.
+    // in the AddCompound method.
   }
   else if (!fpCurrentPV || fReadyForTransients) {
     if (strcmp("Event Data",hepRepXMLWriter->prevTypeName[0])!=0) {
@@ -817,8 +903,6 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 
     hepRepXMLWriter->addInstance();
 
-    hepRepXMLWriter->addAttValue("DrawAs",primName);
-
     // Handle Type declaration for Detector Geometry,
     // replacing G4's top geometry level name "worldPhysical" with the
     // name "Detector Geometry".
@@ -854,8 +938,9 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
     hepRepXMLWriter->addAttValue("Density", fpCurrentLV->GetMaterial()->GetDensity());
     hepRepXMLWriter->addAttValue("State", fpCurrentLV->GetMaterial()->GetState());
     hepRepXMLWriter->addAttValue("Radlen", fpCurrentLV->GetMaterial()->GetRadlen());
-    hepRepXMLWriter->addAttValue("DrawAs",primName);
   }
+
+  hepRepXMLWriter->addAttValue("DrawAs",primName);
 
   // Handle color attribute.
   float redness;
