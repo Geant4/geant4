@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TextModel.hh,v 1.4 2001-08-24 20:36:21 johna Exp $
+// $Id: G4TextModel.hh,v 1.5 2005-05-31 17:01:25 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,7 +64,7 @@ private:
   G4TextModel (const G4TextModel&);
   G4TextModel& operator = (const G4TextModel&);
 
-  G4Text fText;
+  G4Text fG4Text;
 
 };
 
