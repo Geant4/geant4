@@ -219,6 +219,9 @@ a different format (cirrone@lns.infn.it).
 ------------------------------------------------------------------------
 ----> 6. FUTURE PLANS
 
+*** Add local ant time-dependent electric field to study the possibility
+    of the active beam scanning system;
+
 *** Change and improvement of the messenger classes.
 
 *** Improvement of the alghoritm that construct the modulator wheel: this

@@ -92,7 +92,7 @@ void HadrontherapyAnalysisManager::book()
 
   //parameters for the TreeFactory
  
-  G4String fileName="protontherapy.hbk";
+  G4String fileName="hadrontherapy.hbk";
   theTree = treeFact->create(fileName,"hbook",false, true);
   delete treeFact;
   histFact = aFact->createHistogramFactory( *theTree );
