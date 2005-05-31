@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2005-05-11 10:37:19 mkossov Exp $
+$Id: README,v 1.2 2005-05-31 15:23:01 mkossov Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -122,6 +122,8 @@ $Id: README,v 1.1 2005-05-11 10:37:19 mkossov Exp $
 
     Interactive mode: ">./PhotIn".
                       Print "/control/execute sample.mac" when "Idle>" prompt appears.
+    or (as the sam="/control/execute sample.mac" alias is define in vis.mac)
+                      Print "Idle> sam"
 
     Setting visualization parameters: The "vis.mac" macro file will be called automatically
     when the interactive execution starts.
@@ -155,6 +157,15 @@ $Id: README,v 1.1 2005-05-11 10:37:19 mkossov Exp $
     Omittable     : False
 
 
+    Command : /PhoyIn/numberOfSlabs
+    Guidance: Set number of slabs in a layer.
+    Range of parameters : nl>0
+
+    Parameter     : nl
+    Parameter type: i
+    Omittable     : False
+
+
     Command : /PhotIn/serialGeometry
     Guidance: Select calorimeters to be placed in serial or parallel.
 
@@ -171,3 +182,40 @@ $Id: README,v 1.1 2005-05-11 10:37:19 mkossov Exp $
     Parameter type: i
     Omittable     : True
     Default value : taken from the current value
+
+General comments about the structure of the example:
+====================================================
+
+0. In all .cc files the debug flags can be defined. To make program silent comment them.
+   In some .cc files the errors flag is defined. It permits run time warnings (if ever).
+
+1. All constants of the example, names, and default values for the variable parameters are
+   collected in the include/PhotInConstants.hh header widely used in almost all classes.
+
+2. The src/PhotInHit collection is practically a structure for three values: energy
+   deposition of charged particles, track length of neutrons, and #of steps. Hits are
+   collected PhotInCalorHitsCollection's defined in include/PhotInCalorHit.hh.
+
+3. PhotInCalorimeterSD class defines and treats 6 (two per detector: one for absorber, one
+   for the active slabs) hit collections, so absorber is defined as a sensitive detector.
+
+4. All cuts are made in the PhotInPhysicsList::SetCuts(), while in future cuts can be more
+   complicated than the scaling of the standard cuts and can be out of the Physics List.
+
+The dependency structure (general Constants.hh and PhotIn prefix are skipped).
+==============================================================================
+
+               __________________________________________________Main________.
+              /          /         /        /              /     |  |        |
+        VisManager  PhysicsList   /        /              /      | RunAction |
+                                 /        /              /       |  |        |
+                PrimaryGeneratorAction   /    DetectorMessenger  | Run   EventAction
+                                |       /    /           \     \ |  |   /   /
+                         DetectorConstruction             \ StackingAction /
+                        /       |            \             \              /
+   LayerParameterization  GapParameterization CalorimeerSD  \            /
+                                                   |         \          /
+                                          CalorHitsCollection \        /
+                                                             \ \      /
+                                                              CalorHit
+              

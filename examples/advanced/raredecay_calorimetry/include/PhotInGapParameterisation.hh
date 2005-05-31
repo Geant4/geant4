@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInGapParameterisation.hh,v 1.1 2005-05-11 10:37:19 mkossov Exp $
+// $Id: PhotInGapParameterisation.hh,v 1.2 2005-05-31 15:23:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -34,34 +34,40 @@
 
 #include "globals.hh"
 #include "G4VPVParameterisation.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4ThreeVector.hh"
+#include "G4Material.hh"
 
-class G4VPhysicalVolume;
-class G4Material;
+#include "PhotInConstants.hh"
 
 class PhotInGapParameterisation : public G4VPVParameterisation
 { 
-  public:
-  
-    PhotInGapParameterisation();
-    virtual ~PhotInGapParameterisation();
-   
-    virtual void ComputeTransformation(const G4int copyNo,
-                                G4VPhysicalVolume* physVol) const;
-    virtual G4Material* ComputeMaterial(const G4int copyNo,
-                                G4VPhysicalVolume* physVol);
+public:  // Constructors & Destructors
+  PhotInGapParameterisation();
+  virtual ~PhotInGapParameterisation(); // Means that it can be a basic class
 
-  private:
-    G4int       numberOfLayers;
-    G4Material* absMaterial;
-    G4Material* gapMaterial;
+  // -v-v-v-v-v- Virtual functions (can be overloaded) -v-v-v-v-v-v-v   
+  virtual void ComputeTransformation(const G4int copyNo, G4VPhysicalVolume* physVol) const;
+  virtual G4Material* ComputeMaterial(const G4int copyNo, G4VPhysicalVolume* physVol);
 
-  public:
-    inline void SetNumberOfLayers(G4int nl)
-    { numberOfLayers = nl; }
-    inline void SetAbsorberMaterial(G4Material* mat)
-    { absMaterial = mat; }
-    inline void SetGapMaterial(G4Material* mat)
-    { gapMaterial = mat; }
+  void        SetNumberOfSlabs(G4int nl)               { numberOfSlabs = nl; }
+  void        SetGapMaterial(G4Material* mat)          { gapMaterial = mat; }
+  void        SetHalfTotalWidth(G4double hy)           { hyTot = hy; }
+  void        SetHalfTotalLayerThickness(G4double hz)  { hzLay = hz; }
+  void        SetSamplingFraction(G4double sf)         { sampFract = sf; }
+  G4int       GetNumberOfSlabs()                       { return numberOfSlabs; }
+  G4Material* GetGapMaterial()                         { return gapMaterial; }
+  G4double    GetHalfTotalWidth(G4double hy)           { return hyTot; }
+  G4double    GetHalfTotalLayerThickness(G4double hz)  { return hzLay; }
+  G4double    GetSamplingFraction(G4double sf)         { return sampFract; }
+
+private: // --- BODY ---
+  G4int       numberOfSlabs;           // Subdivision of the active area in a few slabs
+  G4Material* gapMaterial;             // Material of the active area to be subdivided
+  G4double    hyTot;                   // Total transversal halfWidth to be subdivided
+  G4double    hzLay;                   // Half z-thickness of the layer of the calorimeter
+  G4double    sampFract;               // Sampling fraction of the active area (in length)
+
 };
 
 

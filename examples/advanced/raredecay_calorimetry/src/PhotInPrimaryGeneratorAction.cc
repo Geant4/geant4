@@ -21,52 +21,61 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInPrimaryGeneratorAction.cc,v 1.1 2005-05-11 10:37:19 mkossov Exp $
+// $Id: PhotInPrimaryGeneratorAction.cc,v 1.2 2005-05-31 15:23:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
+#define debug
+
 #include "PhotInPrimaryGeneratorAction.hh"
 
-#include "G4Event.hh"
-#include "G4ParticleGun.hh"
-#include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
-
-PhotInPrimaryGeneratorAction::PhotInPrimaryGeneratorAction()
-:serial(false)
+PhotInPrimaryGeneratorAction::PhotInPrimaryGeneratorAction():
+  section(1),detector(0)
 {
+#ifdef debug
+  G4cout<<"PhotInPrimaryGeneratorAction::Constructor: is called"<<G4endl;
+#endif
   G4int n_particle = 1;
-  particleGun  = new G4ParticleGun(n_particle);
+  particleGun  = new G4ParticleGun(n_particle); // Initialization of the pointer from BODY
   
   // default particle kinematic
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
-  G4ParticleDefinition* particle
-                    = particleTable->FindParticle(particleName="mu-");
+  G4ParticleDefinition* particle = particleTable->FindParticle(particleName="gamma");//@@
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticleEnergy(100.*GeV);
+  particleGun->SetParticleEnergy(100.*GeV); // @@ Make a possibility to change on flight
 }
 
-PhotInPrimaryGeneratorAction::~PhotInPrimaryGeneratorAction()
+PhotInPrimaryGeneratorAction::~PhotInPrimaryGeneratorAction() {delete particleGun;}
+
+void PhotInPrimaryGeneratorAction::SetDetector(PhotInDetectorConstruction* det)
 {
-  delete particleGun;
+#ifdef debug
+  G4cout<<"PhotInPrimaryGeneratorAction::SetDetector: is called"<<G4endl;
+#endif
+  detector=det;
 }
 
 void PhotInPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  if(serial)
+  
+  G4double hY=detector->GetHalfYWidth();
+  G4double hZ=detector->GetHalfZThickness();
+  if(section==1) // The section #1 is always in the center (comment or change if #ofSec!=3)
   {
-    particleGun->SetParticlePosition(G4ThreeVector(0.,0.,-3.5*m));
+    particleGun->SetParticlePosition(G4ThreeVector(0.,0.,-hZ));
+    particleGun->GeneratePrimaryVertex(anEvent);
+  }
+  else if(detector->IsSerial())
+  {
+    particleGun->SetParticlePosition(G4ThreeVector(0.,0.,hZ*(section+section-3)));
     particleGun->GeneratePrimaryVertex(anEvent);
   }
   else
   {
-    for(G4int i=0;i<3;i++)
-    {
-      particleGun->SetParticlePosition(G4ThreeVector(0.,G4double(i-1)*m,-1.5*m));
-      particleGun->GeneratePrimaryVertex(anEvent);
-    }
+    particleGun->SetParticlePosition(G4ThreeVector(0.,hY*(section+section-2),-hZ));
+    particleGun->GeneratePrimaryVertex(anEvent);
   }
 }
 

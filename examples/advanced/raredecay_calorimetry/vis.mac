@@ -28,3 +28,5 @@
 /vis/scene/endOfEventAction accumulate
 /vis/scene/add/trajectories
 
+/control/alias sam "/control/execute sample.mac"
+/control/listAlias

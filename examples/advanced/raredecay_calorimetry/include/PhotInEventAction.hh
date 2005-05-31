@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInEventAction.hh,v 1.1 2005-05-11 10:37:19 mkossov Exp $
+// $Id: PhotInEventAction.hh,v 1.2 2005-05-31 15:23:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -31,25 +31,37 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
+#include "PhotInStackingAction.hh"
+#include "PhotInConstants.hh"
+#include "PhotInCalorHit.hh"
+
+#include "G4Event.hh"
+#include "G4EventManager.hh"
+#include "G4HCofThisEvent.hh"
+#include "G4VHitsCollection.hh"
+#include "G4TrajectoryContainer.hh"
+#include "G4Trajectory.hh"
+#include "G4VVisManager.hh"
+#include "G4SDManager.hh"
+#include "G4UImanager.hh"
+#include "G4ios.hh"
+#include "G4UnitsTable.hh"
+
 class PhotInEventAction : public G4UserEventAction
 {
-  public:
-    PhotInEventAction();
-    virtual ~PhotInEventAction();
+public:
+  PhotInEventAction();
+  virtual ~PhotInEventAction();
 
-  public:
-    virtual void   BeginOfEventAction(const G4Event*);
-    virtual void   EndOfEventAction(const G4Event*);
+  virtual void   BeginOfEventAction(const G4Event*);
+  virtual void   EndOfEventAction(const G4Event*);
     
-  private:
-    G4int          calorimeterCollID[6];                
-    static G4int   verboseLevel;
+  static void SetVerboseLevel(G4int i) { verboseLevel = i; }
+  static G4int GetVerboseLevel()       { return verboseLevel; }
 
-  public:
-    static void SetVerboseLevel(G4int i)
-    { verboseLevel = i; }
-    static G4int GetVerboseLevel()
-    { return verboseLevel; }
+private:
+  G4int          calorimeterCollID[PhotInDiNSections]; //Collections
+  static G4int   verboseLevel;
 };
 
 

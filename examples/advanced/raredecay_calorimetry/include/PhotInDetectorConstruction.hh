@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInDetectorConstruction.hh,v 1.1 2005-05-11 10:37:19 mkossov Exp $
+// $Id: PhotInDetectorConstruction.hh,v 1.2 2005-05-31 15:23:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,64 +30,85 @@
 #define PhotInDetectorConstruction_h 1
 
 #include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
 
-class G4LogicalVolume;
-class G4VPhysicalVolume;
-class G4PVParameterised;
-class G4Material;
-class G4Box;
-class PhotInGapParameterisation;
-class PhotInDetectorMessenger;
+#include "PhotInLayerParameterisation.hh"
+#include "PhotInGapParameterisation.hh"
+#include "PhotInCalorimeterSD.hh"
+#include "PhotInConstants.hh"
+
+#include "globals.hh"
+#include "G4ios.hh"
+#include "G4LogicalVolume.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVParameterised.hh"
+#include "G4PVPlacement.hh"
+#include "G4Material.hh"
+#include "G4Box.hh"
+#include "G4RunManager.hh"
+#include "G4SDManager.hh"
+#include "G4VisAttributes.hh"
+#include "G4Colour.hh"
 
 class PhotInDetectorConstruction : public G4VUserDetectorConstruction
 {
-  public:
-    PhotInDetectorConstruction();
-    virtual ~PhotInDetectorConstruction();
+public:
+  // Constructor ^ Distructor
+  PhotInDetectorConstruction(G4double x=1., G4double y=1., G4double z=1.);
+  virtual ~PhotInDetectorConstruction();
 
-  public:
-    virtual G4VPhysicalVolume* Construct();
+  // Interface for the Geometry Construction (can be overloaded)
+  virtual G4VPhysicalVolume* Construct();
+
+  // Member functions
+  void CreateMaterial(G4String materialChoice);
+  void UpdateGeometry();
+  void PrintCalorParameters() const;
+  void SetAbsorberMaterial(G4String materialChoice);     
+  void SetGapMaterial(G4String materialChoice);     
+  void SetSerialGeometry(G4bool ser);
+  void SetNumberOfLayers(G4int ln);
+  void SetNumberOfSlabs(G4int sn);
+  void SetSamplingFraction(G4double sf);
+  //void SetSectionHalfDimensions(G4double xhd,G4double xhd, G4double xhd);
+		// Immediate definition of Get functions
+  G4double GetHalfZThickness()   { return zHD; }
+  G4double GetHalfYWidth()       { return yHD; }
+  G4double GetHalfXHight()       { return xHD; }
+  G4String GetAbsorberMaterial() const { return absorberMaterial->GetName();}
+  G4String GetGapMaterial() const      { return gapMaterial->GetName();};
+  G4int GetNumberOfLayers() const      { return numberOfLayers; }
+  G4int GetNumberOfSlabs() const       { return numberOfSlabs; }
+  G4double GetSamplingFraction() const { return samplingFraction; }
+  G4bool IsSerial() const              { return serial; }
      
-  public:
-    void CreateMaterial(G4String materialChoice);
-    void UpdateGeometry();
-    void PrintCalorParameters() const;
-    void SetAbsorberMaterial(G4String materialChoice);     
-    G4String GetAbsorberMaterial() const;
-    void SetGapMaterial(G4String materialChoice);     
-    G4String GetGapMaterial() const;
-    void SetSerialGeometry(G4bool ser);
-    void SetNumberOfLayers(G4int nl);
-    inline G4int GetNumberOfLayers() const
-    { return numberOfLayers; }
-    inline G4bool IsSerial() const
-    { return serial; }
-     
-  private:
-    void DefineMaterials();
+private:
+  void DefineMaterials();
 
-  private:
-    G4int              numberOfLayers;
+		// ---- Body ----
+  G4int                      numberOfLayers;   // #of layers in one section of Calorimeter
+  G4int                      numberOfSlabs;    // #of slabs of the active gap in a layer
+  G4double                   samplingFraction; // gap_thickness/total_thickness
+  G4double                   xHD;              // Dimension of the section along the slab
+  G4double                   yHD;              // Dimension of the section perpend the slab
+  G4double                   zHD;              // Dimension of the section perpen the layer
 
-    G4Material*        worldMaterial;
-    G4Material*        absorberMaterial;
-    G4Material*        gapMaterial;
+  G4bool                     serial;           // A flag of serial or parallel layout
 
-    G4Box*             gapSolid;
+  G4Material*                worldMaterial;    // Material of the WORLD volume (?shape)
+  G4Material*                absorberMaterial; // Material of the Absorber (variable)
+  G4Material*                gapMaterial;      // Material of the Active Gap (variable)
 
-    G4LogicalVolume*   worldLogical;
-    G4LogicalVolume*   calorLogical[3];
-    G4LogicalVolume*   layerLogical[3];
+  G4Box*                     layerSolid;       // Layer of absorber including a  gap
+  G4Box*                     slabSolid;        // Active Gap (SD=Sensitive Detector)
+  G4LogicalVolume*           calorLogical[PhotInNumSections]; // logVol's for CalorSections
+  G4LogicalVolume*           layerLogical[PhotInNumSections]; // logVol's for LayersOfSects
+  G4LogicalVolume*           slabLogical[PhotInNumSections];  // logVol's for SlabsOfLayers
+  G4VPhysicalVolume*         calorPhysical[PhotInNumSections];//physVol's for CalSections
+  G4PVParameterised*         layerPhysical[PhotInNumSections];//physVol's for LayersOfSects
+  G4PVParameterised*         slabPhysical[PhotInNumSections]; //physVol's for SlabsOfLayers
 
-    G4VPhysicalVolume* worldPhysical;
-    G4VPhysicalVolume* calorPhysical[3];
-    G4PVParameterised* layerPhysical[3];
-
-    G4bool             serial;
-
-    PhotInGapParameterisation* gapParam;
-    PhotInDetectorMessenger* detectorMessenger; 
+  PhotInLayerParameterisation* layerParam;     // Parameterization of layers
+  PhotInGapParameterisation*   gapParam;       // Parameterization of gaps
       
 };
 

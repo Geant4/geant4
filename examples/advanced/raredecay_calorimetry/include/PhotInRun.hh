@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInRun.hh,v 1.1 2005-05-11 10:37:19 mkossov Exp $
+// $Id: PhotInRun.hh,v 1.2 2005-05-31 15:23:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,51 +32,44 @@
 #include "G4Run.hh"
 #include "G4Allocator.hh"
 
-class G4Event;
-class G4HCtable;
-class G4DCtable;
+#include "PhotInConstants.hh"
+#include "PhotInCalorHit.hh"
+#include "PhotInStackingAction.hh"
+
+#include "G4Event.hh"
+#include "G4HCofThisEvent.hh"
 
 class PhotInRun : public G4Run
 {
   public:
     PhotInRun();
     virtual ~PhotInRun();
-    inline void *operator new(size_t);
-    inline void operator delete(void* aRun);
+    void *operator new(size_t);
+    void operator delete(void* aRun);
 
-  public:
+    G4double GetTotalE(G4int i) const       { return totE[i]; }
+    G4double GetTotalL(G4int i) const       { return totL[i]; }
+    G4int    GetNStep(G4int i) const        { return nStep[i]; }
+    G4int    GetNGamma(G4int i) const       { return nGamma[i]; }
+    G4int    GetNElectron(G4int i) const    { return nElectron[i]; }
+    G4int    GetNPositron(G4int i) const    { return nPositron[i]; }
+    G4double GetEMinGamma(G4int i) const    { return eMinGamma[i]; }
+    G4double GetEMinElectron(G4int i) const { return eMinElectron[i]; }
+    G4double GetEMinPositron(G4int i) const { return eMinPositron[i]; }
+
     virtual void RecordEvent(const G4Event*);
 
   private:
-    G4double totE[6];
-    G4double totL[6];
-    G4int nStep[6];
-    G4int nGamma[6];
-    G4int nElectron[6];
-    G4int nPositron[6];
-    G4double eMinGamma[6];
-    G4double eMinElectron[6];
-    G4double eMinPositron[6];
+    G4double totE[PhotInDiNSections];
+    G4double totL[PhotInDiNSections];
+    G4int nStep[PhotInDiNSections];
+    G4int nGamma[PhotInDiNSections];
+    G4int nElectron[PhotInDiNSections];
+    G4int nPositron[PhotInDiNSections];
+    G4double eMinGamma[PhotInDiNSections];
+    G4double eMinElectron[PhotInDiNSections];
+    G4double eMinPositron[PhotInDiNSections];
 
-  public:
-    inline G4double GetTotalE(G4int i) const
-    { return totE[i]; }
-    inline G4double GetTotalL(G4int i) const
-    { return totL[i]; }
-    inline G4int GetNStep(G4int i) const
-    { return nStep[i]; }
-    inline G4int GetNGamma(G4int i) const
-    { return nGamma[i]; }
-    inline G4int GetNElectron(G4int i) const
-    { return nElectron[i]; }
-    inline G4int GetNPositron(G4int i) const
-    { return nPositron[i]; }
-    inline G4double GetEMinGamma(G4int i) const
-    { return eMinGamma[i]; }
-    inline G4double GetEMinElectron(G4int i) const
-    { return eMinElectron[i]; }
-    inline G4double GetEMinPositron(G4int i) const
-    { return eMinPositron[i]; }
 };
 
 extern G4Allocator<PhotInRun> anPhotInRunAllocator;

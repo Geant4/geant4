@@ -21,44 +21,44 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInCalorHit.cc,v 1.1 2005-05-11 10:37:19 mkossov Exp $
+// $Id: PhotInCalorHit.cc,v 1.2 2005-05-31 15:23:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+
+#define debug
 
 #include "PhotInCalorHit.hh"
 
 G4Allocator<PhotInCalorHit> PhotInCalorHitAllocator;
 
-PhotInCalorHit::PhotInCalorHit()
-:Edep(0.),TrackLength(0.),nStep(0)
-{;}
+PhotInCalorHit::PhotInCalorHit(): G4VHit(), Edep(0.), TrackLength(0.), nSteps(0) {}
 
-PhotInCalorHit::~PhotInCalorHit()
-{;}
+PhotInCalorHit::~PhotInCalorHit() {}
 
-PhotInCalorHit::PhotInCalorHit(const PhotInCalorHit& right):G4VHit()
+PhotInCalorHit::PhotInCalorHit(const PhotInCalorHit& right): G4VHit()
 {
-  Edep = right.Edep;
+  Edep        = right.Edep;
   TrackLength = right.TrackLength;
-  nStep= right.nStep;
+  nSteps      = right.nSteps;
+#ifdef debug
+  G4cout<<"PhotInCalorHit:init by hit E="<<Edep<<",L="<<TrackLength<<",S="<<nSteps<<G4endl;
+#endif
 }
 
 const PhotInCalorHit& PhotInCalorHit::operator=(const PhotInCalorHit& right)
 {
-  Edep = right.Edep;
+  Edep        = right.Edep;
   TrackLength = right.TrackLength;
-  nStep= right.nStep;
+  nSteps      = right.nSteps;
+#ifdef debug
+  G4cout<<"PhotInCalorHit::init by eq E="<<Edep<<",L="<<TrackLength<<",S="<<nSteps<<G4endl;
+#endif
   return *this;
 }
 
-int PhotInCalorHit::operator==(const PhotInCalorHit& right) const
-{
-  return (this==&right);
-}
+int PhotInCalorHit::operator==(const PhotInCalorHit& right) const { return (this==&right);}
 
-void PhotInCalorHit::Draw()
-{;}
+void PhotInCalorHit::Draw() {} // User can draw the Hit
 
-void PhotInCalorHit::Print()
-{;}
+void PhotInCalorHit::Print(){} // User can print the Hit
 

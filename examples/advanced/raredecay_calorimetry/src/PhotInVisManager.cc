@@ -21,65 +21,24 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInVisManager.cc,v 1.1 2005-05-11 10:37:19 mkossov Exp $
+// $Id: PhotInVisManager.cc,v 1.2 2005-05-31 15:23:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+
+#define debug
 
 #ifdef G4VIS_USE
 
 #include "PhotInVisManager.hh"
 
-// Supported drivers...
-
-// Not needing external packages or libraries...
-#include "G4ASCIITree.hh"
-#include "G4DAWNFILE.hh"
-#include "G4GAGTree.hh"
-#include "G4HepRepFile.hh"
-#include "G4HepRep.hh"
-#include "G4RayTracer.hh"
-#include "G4VRML1File.hh"
-#include "G4VRML2File.hh"
-
-// Needing external packages or libraries...
-
-#ifdef G4VIS_USE_DAWN
-#include "G4FukuiRenderer.hh"
-#endif
-
-#ifdef G4VIS_USE_OPENGLX
-#include "G4OpenGLImmediateX.hh"
-#include "G4OpenGLStoredX.hh"
-#endif
-
-#ifdef G4VIS_USE_OPENGLWIN32
-#include "G4OpenGLImmediateWin32.hh"
-#include "G4OpenGLStoredWin32.hh"
-#endif
-
-#ifdef G4VIS_USE_OPENGLXM
-#include "G4OpenGLImmediateXm.hh"
-#include "G4OpenGLStoredXm.hh"
-#endif
-
-#ifdef G4VIS_USE_OIX
-#include "G4OpenInventorX.hh"
-#endif
-
-#ifdef G4VIS_USE_OIWIN32
-#include "G4OpenInventorWin32.hh"
-#endif
-
-#ifdef G4VIS_USE_VRML
-#include "G4VRML1.hh"
-#include "G4VRML2.hh"
-#endif
-
 PhotInVisManager::PhotInVisManager () {}
 
-void PhotInVisManager::RegisterGraphicsSystems () {
-
-  // Graphics Systems not needing external packages or libraries...
+void PhotInVisManager::RegisterGraphicsSystems()
+{
+#ifdef debug
+  G4cout<<"PhotInVisManager::RegisterGraphicsSystems is called"<<G4endl;
+#endif
+  // Graphics Systems of not needed external packages or libraries...
   RegisterGraphicsSystem (new G4ASCIITree);
   RegisterGraphicsSystem (new G4DAWNFILE);
   RegisterGraphicsSystem (new G4GAGTree);
@@ -89,7 +48,7 @@ void PhotInVisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4VRML1File);
   RegisterGraphicsSystem (new G4VRML2File);
 
-  // Graphics systems needing external packages or libraries...
+  // Graphics systems of needed external packages or libraries...
 
 #ifdef G4VIS_USE_DAWN
   RegisterGraphicsSystem (new G4FukuiRenderer);
@@ -123,10 +82,9 @@ void PhotInVisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4VRML2);
 #endif
 
-  if (fVerbose > 0) {
-    G4cout <<
-      "\nYou have successfully chosen to use the following graphics systems."
-	 << G4endl;
+  if (fVerbose > 0)
+  {
+    G4cout<<"PhotInVisManager::RegisterGraphicsSystems: chosen graphics systems"<<G4endl;
     PrintAvailableGraphicsSystems ();
   }
 }

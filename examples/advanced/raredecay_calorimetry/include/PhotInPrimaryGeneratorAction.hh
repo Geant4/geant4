@@ -21,37 +21,50 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInPrimaryGeneratorAction.hh,v 1.1 2005-05-11 10:37:19 mkossov Exp $
+// $Id: PhotInPrimaryGeneratorAction.hh,v 1.2 2005-05-31 15:23:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef PhotInPrimaryGeneratorAction_h
 #define PhotInPrimaryGeneratorAction_h 1
 
+#include "PhotInDetectorConstruction.hh"
+
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
+#include "G4Event.hh"
+#include "G4ParticleGun.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
 
-class G4ParticleGun;
-class G4Event;
-
-class PhotInPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+class PhotInPrimaryGeneratorAction: public G4VUserPrimaryGeneratorAction
 {
-  public:
-    PhotInPrimaryGeneratorAction();    
-    virtual ~PhotInPrimaryGeneratorAction();
+public:
+  PhotInPrimaryGeneratorAction();    
+  virtual ~PhotInPrimaryGeneratorAction();
 
-  public:
-    virtual void GeneratePrimaries(G4Event*);
+  virtual void GeneratePrimaries(G4Event*);
 
-  private:
-    G4ParticleGun*                particleGun;
-    G4bool                        serial;
+  //void SetSerial(G4bool ser) {serial  = ser;} // Different positions for different setups
+  void SetDetector(PhotInDetectorConstruction* det);
+  void SetSection(G4int sec)                  // Define position for the particular section
+  {
+    if(sec<0||sec>PhotInNumSections)
+    {
+      G4cout<<"PhotInPrimaryGeneratorAction::SetSection: section="<<sec<<"? set 1"<<G4endl;
+      section = 1;
+    }
+				else section = sec;
+  }
+  //G4bool GetSerial() {return serial;} // Get the setups
+  G4int GetSection() {return section;} // Get the starting section
 
-  public:
-    inline void SetSerial(G4bool ser)
-    { serial = ser; }
+private: //--- BODY ---
+  G4ParticleGun*                particleGun;
+  G4int                         section;
+  PhotInDetectorConstruction*   detector;
+
 };
-
 
 #endif
 

@@ -21,22 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInRun.cc,v 1.1 2005-05-11 10:37:19 mkossov Exp $
+// $Id: PhotInRun.cc,v 1.2 2005-05-31 15:23:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#include "PhotInRun.hh"
-#include "PhotInCalorHit.hh"
-#include "PhotInStackingAction.hh"
+#define debug
 
-#include "G4Event.hh"
-#include "G4HCofThisEvent.hh"
+#include "PhotInRun.hh"
 
 G4Allocator<PhotInRun> anPhotInRunAllocator;
 
 PhotInRun::PhotInRun()
 {
-  for(size_t i=0;i<6;i++)
+  for(G4int i=0; i<PhotInDiNSections; i++)
   {
     totE[i] = 0.;
     totL[i] = 0.;
@@ -50,15 +47,17 @@ PhotInRun::PhotInRun()
   }
 }
 
-PhotInRun::~PhotInRun()
-{;}
+PhotInRun::~PhotInRun() {}
 
 void PhotInRun::RecordEvent(const G4Event* evt)
 {
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
   if(!HCE) return;
+#ifdef debug
+  G4cout<<"PhotInRun::RecordEvent: record event # "<<numberOfEvent<<G4endl;
+#endif
   numberOfEvent++;
-  for(int j=0;j<6;j++)
+  for(G4int j=0; j<PhotInDiNSections; j++)
   {
     nGamma[j] += PhotInStackingAction::GetNGamma(j);
     nElectron[j] += PhotInStackingAction::GetNElectron(j);
@@ -71,7 +70,7 @@ void PhotInRun::RecordEvent(const G4Event* evt)
     { eMinPositron[j] = PhotInStackingAction::GetEMinPositron(j); }
   }
   PhotInCalorHitsCollection* CHC = 0;
-  for(size_t i=0;i<6;i++)
+  for(G4int i=0; i<PhotInDiNSections; i++)
   {
     if (HCE) CHC = (PhotInCalorHitsCollection*)(HCE->GetHC(i));
     if (CHC)
@@ -86,5 +85,3 @@ void PhotInRun::RecordEvent(const G4Event* evt)
     }
   }
 }
-
-  

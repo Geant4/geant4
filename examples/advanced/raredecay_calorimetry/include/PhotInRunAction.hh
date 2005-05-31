@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInRunAction.hh,v 1.1 2005-05-11 10:37:19 mkossov Exp $
+// $Id: PhotInRunAction.hh,v 1.2 2005-05-31 15:23:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -30,8 +30,15 @@
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
+#include "PhotInRun.hh"
+#include "PhotInConstants.hh"
 
-class G4Run;
+#include "G4RegionStore.hh"
+#include "G4Region.hh"
+#include "G4ProductionCuts.hh"
+#include "G4ios.hh"
+#include "G4Run.hh"
+#include "G4UnitsTable.hh"
 
 class PhotInRunAction : public G4UserRunAction
 {

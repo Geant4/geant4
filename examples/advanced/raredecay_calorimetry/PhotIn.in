@@ -2,16 +2,16 @@
 /run/verbose 1
 /run/initialize
 /run/dumpRegion
-/run/beamOn 10
+/run/beamOn 1
 /run/dumpCouples
 ##
 ##
 ##
-/run/setCutForRegion Calor-A 0.2 mm
-/run/setCutForRegion Calor-B 2 mm
-/run/setCutForRegion Calor-C 2 cm
+/run/setCutForRegion Region0 0.2 mm
+/run/setCutForRegion Region1 2 mm
+/run/setCutForRegion Region2 2 cm
 /run/dumpRegion
-/run/beamOn 10
+/run/beamOn 1
 /run/dumpCouples
 ##
 ##
@@ -19,15 +19,14 @@
 /PhotIn/setAbsMat Aluminium
 /PhotIn/setGapMat Water
 /run/dumpRegion
-/run/beamOn 10
+/run/beamOn 1
 /run/dumpCouples
 ##
 ##
 ##
-/run/setCutForRegion Calor-A 0.01 mm
-/run/setCutForRegion Calor-B 0.1 mm
-/run/setCutForRegion Calor-C 1 mm
+/run/setCutForRegion Region0 0.01 mm
+/run/setCutForRegion Region1 0.1 mm
+/run/setCutForRegion Region2 1 mm
 /run/dumpRegion
-/run/beamOn 10
+/run/beamOn 1
 /run/dumpCouples
-

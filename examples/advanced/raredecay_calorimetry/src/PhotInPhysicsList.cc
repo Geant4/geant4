@@ -21,54 +21,35 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInPhysicsList.cc,v 1.1 2005-05-11 10:37:19 mkossov Exp $
+// $Id: PhotInPhysicsList.cc,v 1.2 2005-05-31 15:23:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
+#define debug
+
 #include "PhotInPhysicsList.hh"
 
-#include "G4ParticleDefinition.hh"
-#include "G4ProcessManager.hh"
-#include "G4ProcessVector.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
-#include "G4ios.hh"              
+PhotInPhysicsList::PhotInPhysicsList():  G4VUserPhysicsList() { SetVerboseLevel(1); }
 
-PhotInPhysicsList::PhotInPhysicsList():  G4VUserPhysicsList()
-{
- defaultCutValue = 1.0*mm;
- SetVerboseLevel(1);
-}
-
-PhotInPhysicsList::~PhotInPhysicsList()
-{}
+PhotInPhysicsList::~PhotInPhysicsList() {}
 
 void PhotInPhysicsList::ConstructParticle()
 {
-  // In this method, static member functions should be called
-  // for all particles which you want to use.
-  // This ensures that objects of these particle types will be
-  // created in the program. 
+  // In this method, static member functions for particles should be called
+  // for all particles which user is going to use in the simulation. If not
+  // defined particle appear in the simulation? it can cause a WORNING which
+  // means that in the simulation appeard unexpected particles. Then add them.
 
-  ConstructBosons();
-  ConstructLeptons();
-  ConstructMesons();
-  ConstructBaryons();
-}
+  // @@ Word "Definition" can be skipped. - Old fashion (M.K.)
 
-void PhotInPhysicsList::ConstructBosons()
-{
   // pseudo-particles
   G4Geantino::GeantinoDefinition();
   G4ChargedGeantino::ChargedGeantinoDefinition();
 
-  // gamma
+  // gammas
   G4Gamma::GammaDefinition();
-}
 
-void PhotInPhysicsList::ConstructLeptons()
-{
-  // leptons
+  // leptons (without tau and it's neutrino)
   G4Electron::ElectronDefinition();
   G4Positron::PositronDefinition();
   G4MuonPlus::MuonPlusDefinition();
@@ -78,11 +59,8 @@ void PhotInPhysicsList::ConstructLeptons()
   G4AntiNeutrinoE::AntiNeutrinoEDefinition();
   G4NeutrinoMu::NeutrinoMuDefinition();
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
-}
 
-void PhotInPhysicsList::ConstructMesons()
-{
- //  mesons
+  //  mesons
   G4PionPlus::PionPlusDefinition();
   G4PionMinus::PionMinusDefinition();
   G4PionZero::PionZeroDefinition();
@@ -94,56 +72,68 @@ void PhotInPhysicsList::ConstructMesons()
   G4AntiKaonZero::AntiKaonZeroDefinition();
   G4KaonZeroLong::KaonZeroLongDefinition();
   G4KaonZeroShort::KaonZeroShortDefinition();
-}
 
-void PhotInPhysicsList::ConstructBaryons()
-{
-//  barions
+  //  barions
   G4Proton::ProtonDefinition();
   G4AntiProton::AntiProtonDefinition();
   G4Neutron::NeutronDefinition();
   G4AntiNeutron::AntiNeutronDefinition();
+
+  // hyperons
+		G4Lambda::LambdaDefinition();
+		G4SigmaPlus::SigmaPlusDefinition();
+		G4SigmaZero::SigmaZeroDefinition();
+		G4SigmaMinus::SigmaMinusDefinition();
+		G4XiMinus::XiMinusDefinition();
+		G4XiZero::XiZeroDefinition();
+		G4OmegaMinus::OmegaMinusDefinition();
+		G4AntiLambda::AntiLambdaDefinition();
+		G4AntiSigmaPlus::AntiSigmaPlusDefinition();
+		G4AntiSigmaZero::AntiSigmaZeroDefinition();
+		G4AntiSigmaMinus::AntiSigmaMinusDefinition();
+		G4AntiXiMinus::AntiXiMinusDefinition();
+		G4AntiXiZero::AntiXiZeroDefinition();
+		G4AntiOmegaMinus::AntiOmegaMinusDefinition();
 }
+
 
 void PhotInPhysicsList::ConstructProcess()
 {
-  AddTransportation();
-  ConstructEM();
-  ConstructGeneral();
-}
+#ifdef debug
+  G4cout<<"PhotInPhysicsList::ConstructProcess: is called "<<G4endl;
+#endif
+  AddTransportation();     // Transportation is a "process" and defined in the basic class
 
-#include "G4ComptonScattering.hh"
-#include "G4GammaConversion.hh"
-#include "G4PhotoElectricEffect.hh"
-
-#include "G4MultipleScattering.hh"
-
-#include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
-#include "G4eplusAnnihilation.hh"
-
-#include "G4MuIonisation.hh"
-#include "G4MuBremsstrahlung.hh"
-#include "G4MuPairProduction.hh"
-
-#include "G4hIonisation.hh"
-
-void PhotInPhysicsList::ConstructEM()
-{
+  // Add Electromagnetic interaction Processes and Decays
+  G4Decay* theDecayProcess = new G4Decay(); // @@ When this class is decayed? (M.K.)
   theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
+  while( (*theParticleIterator)() )
+  {
     G4ParticleDefinition* particle = theParticleIterator->value();
+#ifdef debug
+				G4cout<<"PhotInPhysList::ConstructProcess: Part="<<particle->GetParticleName()<<G4endl;
+#endif
     G4ProcessManager* pmanager = particle->GetProcessManager();
+    // Decays
+    if (theDecayProcess->IsApplicable(*particle))
+    { 
+      pmanager ->AddProcess(theDecayProcess);
+      // set ordering for PostStepDoIt and AtRestDoIt
+      pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
+      pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
+    }
+
     G4String particleName = particle->GetParticleName();
-     
-    if (particleName == "gamma") {
-    // gamma
+    // EM Interactions     
+    if (particleName == "gamma")    // gamma
+    {
       pmanager->AddDiscreteProcess(new G4GammaConversion());
       pmanager->AddDiscreteProcess(new G4ComptonScattering());      
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect());
 
-    } else if (particleName == "e-") {
-    //electron
+    } 
+    else if (particleName == "e-")    //electron
+    {
       G4VProcess* theeminusMultipleScattering = new G4MultipleScattering();
       G4VProcess* theeminusIonisation         = new G4eIonisation();
       G4VProcess* theeminusBremsstrahlung     = new G4eBremsstrahlung();
@@ -163,8 +153,9 @@ void PhotInPhysicsList::ConstructEM()
       pmanager->SetProcessOrdering(theeminusIonisation,         idxPostStep,2);
       pmanager->SetProcessOrdering(theeminusBremsstrahlung,     idxPostStep,3);
 
-    } else if (particleName == "e+") {
-    //positron
+    }
+    else if (particleName == "e+")    //positron
+    {
       G4VProcess* theeplusMultipleScattering = new G4MultipleScattering();
       G4VProcess* theeplusIonisation         = new G4eIonisation();
       G4VProcess* theeplusBremsstrahlung     = new G4eBremsstrahlung();
@@ -189,10 +180,9 @@ void PhotInPhysicsList::ConstructEM()
       pmanager->SetProcessOrdering(theeplusIonisation,         idxPostStep,2);
       pmanager->SetProcessOrdering(theeplusBremsstrahlung,     idxPostStep,3);
       pmanager->SetProcessOrdering(theeplusAnnihilation,       idxPostStep,4);
-  
-    } else if( particleName == "mu+" || 
-               particleName == "mu-"    ) {
-    //muon  
+    }
+    else if( particleName == "mu+" || particleName == "mu-"    )    //muon  of both signs
+    {
       G4VProcess* aMultipleScattering = new G4MultipleScattering();
       G4VProcess* aBremsstrahlung     = new G4MuBremsstrahlung();
       G4VProcess* aPairProduction     = new G4MuPairProduction();
@@ -209,81 +199,51 @@ void PhotInPhysicsList::ConstructEM()
       pmanager->SetProcessOrdering(anIonisation,        idxAlongStep,2);
       pmanager->SetProcessOrdering(aBremsstrahlung,     idxAlongStep,3);
       pmanager->SetProcessOrdering(aPairProduction,     idxAlongStep,4);
-      
       //
       // set ordering for PostStepDoIt
       pmanager->SetProcessOrdering(aMultipleScattering, idxPostStep,1);
       pmanager->SetProcessOrdering(anIonisation,        idxPostStep,2);
       pmanager->SetProcessOrdering(aBremsstrahlung,     idxPostStep,3);
       pmanager->SetProcessOrdering(aPairProduction,     idxPostStep,4);
-
-     } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
-     // all others charged particles except geantino     
-     G4VProcess* aMultipleScattering = new G4MultipleScattering();
-     G4VProcess* anIonisation        = new G4hIonisation();
-     //
-     // add processes
-     pmanager->AddProcess(anIonisation);
-     pmanager->AddProcess(aMultipleScattering);
-     //
-     // set ordering for AlongStepDoIt
-     pmanager->SetProcessOrdering(aMultipleScattering, idxAlongStep,1);
-     pmanager->SetProcessOrdering(anIonisation,        idxAlongStep,2);
-     //
-     // set ordering for PostStepDoIt
-     pmanager->SetProcessOrdering(aMultipleScattering, idxPostStep,1);
-     pmanager->SetProcessOrdering(anIonisation,        idxPostStep,2);
+    }
+    else if(!particle->IsShortLived() && particle->GetPDGCharge() && 
+	            particle->GetParticleName()!="chargedgeantino")// all others charged particles
+    {
+      G4VProcess* aMultipleScattering = new G4MultipleScattering();
+      G4VProcess* anIonisation        = new G4hIonisation();
+      //
+      // add processes
+      pmanager->AddProcess(anIonisation);
+      pmanager->AddProcess(aMultipleScattering);
+      //
+      // set ordering for AlongStepDoIt
+      pmanager->SetProcessOrdering(aMultipleScattering, idxAlongStep,1);
+      pmanager->SetProcessOrdering(anIonisation,        idxAlongStep,2);
+      //
+      // set ordering for PostStepDoIt
+      pmanager->SetProcessOrdering(aMultipleScattering, idxPostStep,1);
+      pmanager->SetProcessOrdering(anIonisation,        idxPostStep,2);
     }
   }
 }
-
-#include "G4Decay.hh"
-
-void PhotInPhysicsList::ConstructGeneral()
-{
-  // Add Decay Process
-   G4Decay* theDecayProcess = new G4Decay();
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    if (theDecayProcess->IsApplicable(*particle)) { 
-      pmanager ->AddProcess(theDecayProcess);
-      // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
-    }
-  }
-}
-
-#include "G4Region.hh"
-#include "G4RegionStore.hh"
-#include "G4ProductionCuts.hh"
 
 void PhotInPhysicsList::SetCuts()
 {
-  if (verboseLevel >0){
-    G4cout << "PhotInPhysicsList::SetCuts: default cut length : "
-         << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }  
-
-  // These values are used as the default production thresholds
-  // for the world volume.
+  if(verboseLevel>0) G4cout<<"PhotInPhysicsList::SetCuts: default cut length : "
+                           <<G4BestUnit(defaultCutValue,"Length")<<G4endl;
+  // These values are used as the default production thresholds for the world volume.
   SetCutsWithDefault();
 
- 
   // Production thresholds for detector regions
-  G4String regName[] = {"Calor-A","Calor-B","Calor-C"};
-  G4double fuc = 1.;
-  for(G4int i=0;i<3;i++)
+
+  G4double fact = 1.; // Multiplicative factor for default cuts
+  for(G4int i=0; i< PhotInNumSections; i++)
   { 
-    G4Region* reg = G4RegionStore::GetInstance()->GetRegion(regName[i]);
+    G4Region* reg = G4RegionStore::GetInstance()-> GetRegion(PhotInRegName[i]);
     G4ProductionCuts* cuts = new G4ProductionCuts;
-    cuts->SetProductionCut(defaultCutValue*fuc);
+    cuts->SetProductionCut(defaultCutValue*fact);
     reg->SetProductionCuts(cuts);
-    fuc *= 10.;
+    fact *= 10.; // @@ Increment the multiplicative factor by order of magnitude
   }
 }
 

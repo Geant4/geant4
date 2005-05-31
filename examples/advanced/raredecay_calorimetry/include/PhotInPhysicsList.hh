@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInPhysicsList.hh,v 1.1 2005-05-11 10:37:19 mkossov Exp $
+// $Id: PhotInPhysicsList.hh,v 1.2 2005-05-31 15:23:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -31,31 +31,49 @@
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
 
+#include "PhotInConstants.hh"
+
+// Headers for particles
+#include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
+#include "G4ProcessVector.hh"
+#include "G4ParticleTypes.hh"
+#include "G4ParticleTable.hh"
+#include "G4ios.hh"              
+
+// Headers for Processes and Decays
+#include "G4ComptonScattering.hh"
+#include "G4GammaConversion.hh"
+#include "G4PhotoElectricEffect.hh"
+#include "G4MultipleScattering.hh"
+#include "G4eIonisation.hh"
+#include "G4eBremsstrahlung.hh"
+#include "G4eplusAnnihilation.hh"
+#include "G4MuIonisation.hh"
+#include "G4MuBremsstrahlung.hh"
+#include "G4MuPairProduction.hh"
+#include "G4hIonisation.hh"
+
+#include "G4Decay.hh"
+
+// Headers for cuts
+#include "G4Region.hh"
+#include "G4RegionStore.hh"
+#include "G4ProductionCuts.hh"
+
 class PhotInPhysicsList: public G4VUserPhysicsList
 {
-  public:
-    PhotInPhysicsList();
-   ~PhotInPhysicsList();
+public:
+  PhotInPhysicsList();
+  ~PhotInPhysicsList();
 
-  protected:
-    // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
- 
-    void SetCuts();
+protected:
+  // Construct particles, EM physics processes, and cuts
+  void ConstructParticle();
+  void ConstructProcess();
+  void SetCuts();
 
-   
-  protected:
-    // these methods Construct particles 
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBaryons();
-
-  protected:
-    // these methods Construct physics processes and register them
-    void ConstructGeneral();
-    void ConstructEM();
+  //There's no BODY values in this class: all BODY is in the basic G4VUserPhysicsList class
 };
 
 #endif

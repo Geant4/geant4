@@ -21,43 +21,56 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInCalorimeterSD.hh,v 1.1 2005-05-11 10:37:19 mkossov Exp $
+// $Id: PhotInCalorimeterSD.hh,v 1.2 2005-05-31 15:23:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef PhotInCalorimeterSD_h
 #define PhotInCalorimeterSD_h 1
 
-class G4HCofThisEvent;
-class G4Step;
-class G4TouchableHistory;
 #include "G4VSensitiveDetector.hh"
 #include "globals.hh"
+
 #include "PhotInCalorHit.hh"
+#include "PhotInConstants.hh"
+
+#include "G4VPhysicalVolume.hh"
+#include "G4HCofThisEvent.hh"
+#include "G4Step.hh"
+#include "G4VTouchable.hh"
+#include "G4TouchableHistory.hh"
+#include "G4SDManager.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTypes.hh"      // Headers of all Geant4 particles are here
+#include "G4Track.hh"
+#include "G4ios.hh"
 
 class PhotInCalorimeterSD : public G4VSensitiveDetector
 {
-  public:
-      PhotInCalorimeterSD(G4String);
-      virtual ~PhotInCalorimeterSD();
+public:
+  PhotInCalorimeterSD(G4String);
+  virtual ~PhotInCalorimeterSD();
 
-      virtual void Initialize(G4HCofThisEvent*);
-      virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-      virtual void EndOfEvent(G4HCofThisEvent*);
-      virtual void clear();
-      virtual void DrawAll();
-      virtual void PrintAll();
+  virtual void Initialize(G4HCofThisEvent*);
+  virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
+  virtual void EndOfEvent(G4HCofThisEvent*);
+  virtual void clear();
+  virtual void DrawAll();
+  virtual void PrintAll();
 
-  private:
-      static G4int numberOfLayers;
-      PhotInCalorHitsCollection*  AbsCollection;      
-      PhotInCalorHitsCollection*  GapCollection;      
-      G4int AbsCollID;
-      G4int GapCollID;
+  static void SetNumberOfLayers(G4int ln) { numberOfLayers = ln; }
+  static void SetNumberOfSlabs(G4int sn)  { numberOfSlabs  = sn; }
+  static G4int GetNumberOfLayers()        { return numberOfLayers; }
+  static G4int GetNumberOfSlabs()         { return numberOfSlabs; }
 
-  public:
-      static void SetNumberOfLayers(G4int nl)
-      { numberOfLayers = nl; }
+private: // --- BODY ---
+  static G4int numberOfLayers;
+  static G4int numberOfSlabs;
+  PhotInCalorHitsCollection*  SlabsCollection;      
+  PhotInCalorHitsCollection*  AbsorberCollection;      
+  G4int SlabsCollID;
+  G4int AbsorberCollID;
+  //G4CollectionNameVector collectionName; is from the basic class G4VSensitiveDetector
 };
 
 #endif

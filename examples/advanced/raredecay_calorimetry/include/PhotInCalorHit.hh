@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInCalorHit.hh,v 1.1 2005-05-11 10:37:19 mkossov Exp $
+// $Id: PhotInCalorHit.hh,v 1.2 2005-05-31 15:23:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -34,38 +34,34 @@
 
 class PhotInCalorHit : public G4VHit
 {
- public:
-   PhotInCalorHit();
-   virtual ~PhotInCalorHit();
-   PhotInCalorHit(const PhotInCalorHit&);
-   const PhotInCalorHit& operator=(const PhotInCalorHit&);
-   int operator==(const PhotInCalorHit&) const;
+public:
+  PhotInCalorHit();
+  virtual ~PhotInCalorHit();
+  PhotInCalorHit(const PhotInCalorHit&);
+  const PhotInCalorHit& operator=(const PhotInCalorHit&);
+  int operator==(const PhotInCalorHit&) const;
 
-   inline void* operator new(size_t);
-   inline void  operator delete(void*);
+  inline void* operator new(size_t);
+  inline void  operator delete(void*);
 
-   virtual void Draw();
-   virtual void Print();
+  virtual void Draw();
+  virtual void Print();
       
- public:
-   inline void AddEnergy(G4double de)
-   { Edep += de; }
-   inline void AddStep(G4double dl)
-   {
-     TrackLength += dl; 
-     nStep++;
-   }
-   inline G4double GetEdep() const
-   { return Edep; }
-   inline G4double GetTrak() const
-   { return TrackLength; }
-   inline G4int GetNStep() const
-   { return nStep; }
+  void AddEnergy(G4double de) { Edep += de; }
+
+  void AddStep(G4double dl)
+  {
+    TrackLength += dl; 
+    nSteps++;
+  }
+  G4double GetEdep() const { return Edep; }
+  G4double GetTrak() const { return TrackLength; }
+  G4int   GetNStep() const { return nSteps; }
     
- private:
-   G4double Edep;
-   G4double TrackLength;
-   G4int    nStep;
+private: //--- BODY ---
+  G4double Edep;
+  G4double TrackLength;
+  G4int    nSteps;
 };
 
 typedef G4THitsCollection<PhotInCalorHit> PhotInCalorHitsCollection;
@@ -80,9 +76,7 @@ inline void* PhotInCalorHit::operator new(size_t)
 }
 
 inline void PhotInCalorHit::operator delete(void* aHit)
-{
-  PhotInCalorHitAllocator.FreeSingle((PhotInCalorHit*) aHit);
-}
+  { PhotInCalorHitAllocator.FreeSingle((PhotInCalorHit*) aHit); }
 
 
 #endif

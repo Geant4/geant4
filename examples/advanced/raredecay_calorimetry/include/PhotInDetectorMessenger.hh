@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInDetectorMessenger.hh,v 1.1 2005-05-11 10:37:19 mkossov Exp $
+// $Id: PhotInDetectorMessenger.hh,v 1.2 2005-05-31 15:23:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -31,16 +31,19 @@
 #include "globals.hh"
 #include "G4UImessenger.hh"
 
-class PhotInDetectorConstruction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithABool;
-class G4UIcmdWithAnInteger;
+#include "PhotInDetectorConstruction.hh"
+#include "PhotInEventAction.hh"
+
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithAnInteger.hh"
+#include "G4Material.hh"
 
 class PhotInDetectorMessenger: public G4UImessenger
 {
   public:
-    PhotInDetectorMessenger(PhotInDetectorConstruction* );
+    PhotInDetectorMessenger(PhotInDetectorConstruction* detector);
     virtual ~PhotInDetectorMessenger();
     
     virtual void SetNewValue(G4UIcommand*, G4String);
@@ -54,6 +57,7 @@ class PhotInDetectorMessenger: public G4UImessenger
     G4UIcmdWithAString*        AbsMaterCmd;
     G4UIcmdWithAString*        GapMaterCmd;
     G4UIcmdWithAnInteger*      numLayerCmd;
+    G4UIcmdWithAnInteger*      numSlabsCmd;
     G4UIcmdWithABool*          SerialCmd;
     G4UIcmdWithAnInteger*      verboseCmd;
 };

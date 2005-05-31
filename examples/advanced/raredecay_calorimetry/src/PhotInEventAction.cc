@@ -21,62 +21,37 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInEventAction.cc,v 1.1 2005-05-11 10:37:19 mkossov Exp $
+// $Id: PhotInEventAction.cc,v 1.2 2005-05-31 15:23:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
+#define debug
+
 #include "PhotInEventAction.hh"
-
-#include "PhotInCalorHit.hh"
-#include "PhotInStackingAction.hh"
-
-#include "G4Event.hh"
-#include "G4EventManager.hh"
-#include "G4HCofThisEvent.hh"
-#include "G4VHitsCollection.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
-#include "G4SDManager.hh"
-#include "G4UImanager.hh"
-#include "G4ios.hh"
-#include "G4UnitsTable.hh"
 
 G4int PhotInEventAction::verboseLevel=0;
 
 PhotInEventAction::PhotInEventAction()
 {
-  for(size_t i=0;i<6;i++)
-  { calorimeterCollID[i] = -1; }
+#ifdef debug
+  G4cout<<"PhotInEventAction::Constructor is called"<<G4endl;
+#endif
+  for(G4int i=0; i<PhotInDiNSections; i++)calorimeterCollID[i] = -1;
 }
 
-PhotInEventAction::~PhotInEventAction()
-{;}
+PhotInEventAction::~PhotInEventAction(){}
 
 void PhotInEventAction::BeginOfEventAction(const G4Event*)
 {
-  for(size_t i=0;i<6;i++)
+  for(G4int i=0; i<PhotInDiNSections; i++)
   {
     if(calorimeterCollID[i]==-1)
     {
-      G4String colName;
-      switch(i)
-      {
-        case 0:
-          colName = "CalorSD-A/AbsCollection"; break;
-        case 1:
-          colName = "CalorSD-A/GapCollection"; break;
-        case 2:
-          colName = "CalorSD-B/AbsCollection"; break;
-        case 3:
-          colName = "CalorSD-B/GapCollection"; break;
-        case 4:
-          colName = "CalorSD-C/AbsCollection"; break;
-        case 5:
-          colName = "CalorSD-C/GapCollection"; break;
-      }
-      calorimeterCollID[i] = 
-        G4SDManager::GetSDMpointer()->GetCollectionID(colName);
+      G4String colName=PhotInColNms[i];
+#ifdef debug
+      G4cout<<"PhotInEventAction::BeginOfEventAction:Col#"<<i<<",create="<<colName<<G4endl;
+#endif
+      calorimeterCollID[i] = G4SDManager::GetSDMpointer()->GetCollectionID(colName);
     }
   }
 }
@@ -88,62 +63,41 @@ void PhotInEventAction::EndOfEventAction(const G4Event* evt)
 
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
   if(!HCE) return;
-  G4cout << G4endl << "Event : " << evt->GetEventID() << G4endl;
-
+#ifdef debug
+  G4cerr<<"PhotInEventAction::EndOfEventAction:"<<evt->GetEventID()<<G4endl;
+#endif
   PhotInCalorHitsCollection* CHC = 0;
-  for(size_t i=0;i<6;i++)
+  for(G4int i=0; i<PhotInDiNSections; i++) // Make final sums for each collection and print
   {
     G4double totE=0.;
     G4double totL=0.;
-    G4int nStep=0;
+    G4int nStep=0;         // @@ Do we need the # of steps ?
     
     if (HCE) CHC = (PhotInCalorHitsCollection*)(HCE->GetHC(calorimeterCollID[i]));
     if (CHC)
     {
       G4int nHit = CHC->entries();
-      for (G4int ii=0;ii<nHit;ii++)
+      for (G4int ii=0; ii<nHit; ii++)
       {
         totE += (*CHC)[ii]->GetEdep(); 
         totL += (*CHC)[ii]->GetTrak();
         nStep += (*CHC)[ii]->GetNStep();
       }
     }
-   
-    switch(i)
-    {
-      case 0:
-        G4cout << "Calor-A : Absorber" << G4endl; break;
-      case 1:
-        G4cout << "Calor-A : SensitiveGap" << G4endl; break;
-      case 2:
-        G4cout << "Calor-B : Absorber" << G4endl; break;
-      case 3:
-        G4cout << "Calor-B : SensitiveGap" << G4endl; break;
-      case 4:
-        G4cout << "Calor-C : Absorber" << G4endl; break;
-      case 5:
-        G4cout << "Calor-C : SensitiveGap" << G4endl; break;
-    }
-    G4cout
-       << "  total energy deposition : " << std::setw(7)
-       << G4BestUnit(totE,"Energy") << G4endl;
-    G4cout
-       << "  number of particles generated :" << G4endl
-       << "    gamma " << PhotInStackingAction::GetNGamma(i) 
-       << "    e- " << PhotInStackingAction::GetNElectron(i) 
-       << "    e+ " << PhotInStackingAction::GetNPositron(i) << G4endl;
-    G4cout
-       << "  minimum kinetic energy of generated secondaries :" << G4endl << std::setw(7)
-       << "    gamma " << G4BestUnit(PhotInStackingAction::GetEMinGamma(i),"Energy") 
-       << "    e- " << G4BestUnit(PhotInStackingAction::GetEMinElectron(i),"Energy") 
-       << "    e+ " << G4BestUnit(PhotInStackingAction::GetEMinPositron(i),"Energy")
-       << G4endl;
-    G4cout
-       << "  total track length of e+/e- : " << std::setw(7)
-       << G4BestUnit(totL,"Length") << G4endl;
-    G4cout
-       << "  number of steps of e+/e- : " << nStep
-       << G4endl;
+				G4cout<<PhotInColNms[i]<<" : "<<G4endl;
+    G4cout<<" total energy deposition : "<<std::setw(7)<<G4BestUnit(totE,"Energy")<<G4endl;
+    // @@ Change after modification of PhotInStackingAction
+    //G4cout<<" number of particles generated :"<<G4endl
+    //      <<"  gamma "<<PhotInStackingAction::GetNGamma(i) 
+    //      <<"  e-    "<<PhotInStackingAction::GetNElectron(i) 
+    //      <<"  e+    "<<PhotInStackingAction::GetNPositron(i)<< G4endl;
+    // @@ Change after modification of PhotInStackingAction
+    //G4cout<<" minimum kinetic energy of generated secondaries :"<<G4endl
+    //      <<"  gamma "<<G4BestUnit(PhotInStackingAction::GetEMinGamma(i),"Energy") 
+    //      <<"  e-    "<<G4BestUnit(PhotInStackingAction::GetEMinElectron(i),"Energy") 
+    //      <<"  e+    "<<G4BestUnit(PhotInStackingAction::GetEMinPositron(i),"Energy")
+    //      <<G4endl;
+    G4cout<<" total track length of neutrons ="<<G4BestUnit(totL,"Length")<<" consists of "
+          <<nStep<<", meanStep="<<G4BestUnit(totL/nStep,"Length")<<G4endl;
   }
 }  
-
