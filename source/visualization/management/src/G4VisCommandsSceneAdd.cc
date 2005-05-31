@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.54 2005-05-27 13:41:35 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.55 2005-05-31 16:50:35 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -53,6 +53,7 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4Tokenizer.hh"
 #include "G4ios.hh"
 #include <strstream>
 
@@ -1019,7 +1020,8 @@ G4VisCommandSceneAddText::G4VisCommandSceneAddText () {
   parameter->SetGuidance ("pixels");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("text", 's', omitable = true);
-  parameter->SetDefaultValue ("Hello");
+  parameter->SetGuidance ("The rest of the line is text.");
+  parameter->SetDefaultValue ("Hello G4");
   fpCommand->SetParameter (parameter);
 }
 
@@ -1044,10 +1046,15 @@ void G4VisCommandSceneAddText::SetNewValue (G4UIcommand*, G4String newValue) {
     return;
   }
 
-  G4String text, unitString;
-  G4double x, y, z, font_size, x_offset, y_offset;
-  std::istrstream is (newValue);
-  is >> x >> y >> z >> unitString >> font_size >> x_offset >> y_offset >> text;
+  G4Tokenizer next(newValue);
+  G4double x = StoD(next());
+  G4double y = StoD(next());
+  G4double z = StoD(next());
+  G4String unitString = next();
+  G4double font_size = StoD(next());
+  G4double x_offset = StoD(next());
+  G4double y_offset = StoD(next());
+  G4String text = next("\n");
 
   G4double unit = G4UIcommand::ValueOf(unitString);
   x *= unit; y *= unit; z *= unit;
