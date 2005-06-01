@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.7 2005-03-02 13:39:46 maire Exp $
+// $Id: RunAction.cc,v 1.8 2005-06-01 11:11:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,9 +55,10 @@ RunAction::RunAction()
    // Creating a tree mapped to an hbook file.
    G4bool readOnly  = false;
    G4bool createNew = true;
-   tree = tf->create("testem4.hbook","hbook",readOnly,createNew, "uncompress");
-   //tree = tf->create("testem4.root","root",readOnly,createNew, "uncompress");
-   //tree = tf->create("testem4.XML" ,"XML" ,readOnly,createNew, "uncompress");
+   G4String options =  "--noErrors uncompress";
+   tree = tf->create("testem4.hbook","hbook",readOnly,createNew, options);
+   //tree = tf->create("testem4.root","root",readOnly,createNew, options);
+   //tree = tf->create("testem4.XML" ,"XML" ,readOnly,createNew, options);
    delete tf;
    
    if (tree) {
