@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.13 2005-03-02 12:30:36 maire Exp $
+// $Id: RunAction.cc,v 1.14 2005-06-01 13:12:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -93,10 +93,11 @@ void RunAction::bookHisto()
   // Create a tree mapped to an hbook file.
   G4bool readOnly  = false;
   G4bool createNew = true;
+  G4String options = "--noErrors uncompress";
   AIDA::ITreeFactory* tf  = af->createTreeFactory();  
-  tree = tf->create("testem7.hbook","hbook", readOnly, createNew, "uncompress");
-  //tree = tf->create("testem7.root", "root",readOnly, createNew, "uncompress");
-  //tree = tf->create("testem7.XML" , "XML" ,readOnly, createNew, "uncompress");
+  tree = tf->create("testem7.hbook","hbook", readOnly, createNew, options);
+  //tree = tf->create("testem7.root", "root",readOnly, createNew, options);
+  //tree = tf->create("testem7.XML" , "XML" ,readOnly, createNew, options);
   delete tf;
   if (!tree) {
     G4cout << "RunAction::bookHisto()" << G4endl;
