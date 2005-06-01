@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RE01.cc,v 1.1 2004-11-26 07:37:39 asaim Exp $
+// $Id: RE01.cc,v 1.2 2005-06-01 18:27:29 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,9 +49,19 @@
 #include "RE01TrackingAction.hh"
 #include "RE01SteppingAction.hh"
 
+#ifdef G4VIS_USE
+#include "G4VisExecutive.hh"
+#endif
+
 int main(int argc,char** argv)
 {
   G4RunManager* runManager = new G4RunManager;
+
+#ifdef G4VIS_USE
+  // Visualization manager construction
+  G4VisManager* visManager = new G4VisExecutive;
+  visManager->Initialize();
+#endif
 
   runManager->SetUserInitialization(new RE01DetectorConstruction);
   runManager->SetUserInitialization(new RE01PhysicsList);
@@ -82,6 +92,10 @@ int main(int argc,char** argv)
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command+fileName);
   }
+
+#ifdef G4VIS_USE
+  delete visManager;
+#endif
 
   delete runManager;
 
