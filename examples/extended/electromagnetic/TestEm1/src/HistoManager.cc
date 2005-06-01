@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.5 2005-02-01 11:34:04 maire Exp $
+// $Id: HistoManager.cc,v 1.6 2005-06-01 10:20:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,7 +43,7 @@ HistoManager::HistoManager()
   // Creating the analysis factory
   af = AIDA_createAnalysisFactory();
   if(!af) {
-    G4cout << "TestEm1::HistoManager::HistoManager :" 
+    G4cout << " HistoManager::HistoManager() :" 
            << " problem creating the AIDA analysis factory."
            << G4endl;
   }
@@ -51,7 +51,7 @@ HistoManager::HistoManager()
  
   fileName[0] = "testem1";
   fileType    = "hbook";
-  fileOption = "uncompress";
+  fileOption  = "--noErrors uncompress";
   // histograms
   for (G4int k=0; k<MaxHisto; k++) {
     histo[k] = 0;
@@ -89,7 +89,7 @@ void HistoManager::book()
   tree = tf->create(fileName[1], fileType, readOnly, createNew, fileOption);
   delete tf;
   if(!tree) {
-    G4cout << "TestEm1::HistoManager::book :" 
+    G4cout << "HistoManager::book() :" 
            << " problem creating the AIDA tree with "
            << " storeName = " << fileName[1]
            << " storeType = " << fileType
