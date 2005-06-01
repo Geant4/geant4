@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.5 2005-03-03 15:03:04 maire Exp $
+// $Id: HistoManager.cc,v 1.6 2005-06-01 13:44:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,7 +51,7 @@ HistoManager::HistoManager()
  
   fileName[0] = "photonprocesses";
   fileType    = "hbook";
-  fileOption  = "uncompress";  
+  fileOption  = "--noErrors uncompress";  
   // histograms
   for (G4int k=0; k<MaxHisto; k++) {
     histo[k] = 0;

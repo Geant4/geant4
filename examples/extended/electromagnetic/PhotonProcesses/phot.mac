@@ -1,4 +1,4 @@
-# $Id: phot.mac,v 1.4 2005-05-09 16:10:42 maire Exp $
+# $Id: phot.mac,v 1.5 2005-06-01 13:44:06 maire Exp $
 #
 # Macro file for "PhotonProcesses.cc"
 # (can be run in batch, without graphic)
@@ -11,7 +11,7 @@
 /testem/det/setMat Iron
 ###/testem/det/setMat BGO
 #
-#### /testem/phys/addPhysics g4v52
+###/testem/phys/addPhysics g4v52
 #
 /run/initialize
 #

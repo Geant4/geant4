@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.8 2005-05-10 15:24:27 maire Exp $
+// $Id: RunAction.cc,v 1.9 2005-06-01 13:44:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -156,7 +156,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout << "\n\n Sum of mass AttenuationCoef "
 	 << " from G4EmCalculator: \t"
 	 << sumc*g/cm2 << " cm2/g" << G4endl;
-	    	                           
+	 
   G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);         
 
