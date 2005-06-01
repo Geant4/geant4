@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.4 2005-03-03 16:50:35 maire Exp $
+// $Id: HistoManager.cc,v 1.5 2005-06-01 13:58:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,7 +51,7 @@ HistoManager::HistoManager()
  
   fileName[0] = "muonprocesses";
   fileType    = "hbook";
-  fileOption  = "uncompress";    
+  fileOption  = "--noErrors uncompress";    
   // histograms
   for (G4int k=0; k<MaxHisto; k++) {
     histo[k] = 0;
