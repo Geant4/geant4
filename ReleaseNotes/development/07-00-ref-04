@@ -78,6 +78,11 @@ processes/decay                                  decay-V07-00-00
 - Fixed bug in G4Decay::AtRestGetPhysicalInteractionLength().
   Condition is now fixed to "Not Forced".
 
+processes/transportation                         transport-V07-00-01
+------------------------
+- Added process type to G4Transportation.
+  Addresses problem report #743.
+
 run                                              run-V07-00-01
 ---
 - Moved invocation of ConstructParticle() method back to the original
