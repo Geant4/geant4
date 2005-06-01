@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.9 2005-05-18 15:28:37 maire Exp $
+// $Id: HistoManager.cc,v 1.10 2005-06-01 10:48:40 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,7 +51,7 @@ HistoManager::HistoManager()
  
   fileName[0] = "testem3";
   fileType    = "hbook";  
-  fileOption  = "uncompress";  
+  fileOption  = "--noErrors uncompress";  
   // histograms
   for (G4int k=0; k<MaxHisto; k++) { 
     histo[k] = 0;
