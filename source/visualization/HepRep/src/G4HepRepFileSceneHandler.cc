@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.32 2005-06-01 03:28:34 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.33 2005-06-01 06:50:15 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1039,16 +1039,9 @@ void G4HepRepFileSceneHandler::CheckFileOpen() {
       length = sprintf (newFileSpec, "%s%s%s",fileDir,fileName,".heprep");
     else
       length = sprintf (newFileSpec, "%s%s%d%s",fileDir,fileName,fileCounter,".heprep");
-    G4cout <<
-      "G4HepRepFileSceneHandler::CheckFileOpen opened fileSpec " << newFileSpec
-	   << G4endl;
+    G4cout << "HepRepFile writing to " << newFileSpec << G4endl;
 
     hepRepXMLWriter->open(newFileSpec);
-#ifdef G4HEPREPFILEDEBUG
-    G4cout <<
-      "G4HepRepFileSceneHandler::CheckFileOpen opened file " << fileCounter
-	   << G4endl;
-#endif
     fileCounter++;
 
     hepRepXMLWriter->addAttDef("LVol", "Logical Volume", "Physics","");
