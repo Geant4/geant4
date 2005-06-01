@@ -1,4 +1,4 @@
-.$Id: History,v 1.93 2005-06-01 22:33:00 perl Exp $
+.$Id: History,v 1.94 2005-06-01 22:38:25 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,7 +19,7 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
-31 May 2005 Joseph Perl
+1 June 2005 Joseph Perl
 - For HeRepFile, use attributes from hits.
 
 1 June 2005 Mark Donszelmann (vis-HepRep-V07-00-02)
