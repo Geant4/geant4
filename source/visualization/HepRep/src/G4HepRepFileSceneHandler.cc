@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.33 2005-06-01 06:50:15 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.34 2005-06-01 22:33:00 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -414,6 +414,7 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
   G4int drawingMode = ((G4TrajectoriesModel*)fpModel)->GetDrawingMode();
 
   // Pointers to hold trajectory attribute values and definitions.
+  std::vector<G4AttValue>* rawTrajAttValues = traj.CreateAttValues();
   std::vector<G4AttValue>* trajAttValues =
     new std::vector<G4AttValue>;
   std::map<G4String,G4AttDef>* trajAttDefs =
@@ -426,18 +427,21 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 
   // Get trajectory attributes and definitions in standard HepRep style
   // (uniform units, 3Vectors decomposed).
-  G4bool error = G4AttCheck(traj.CreateAttValues(),
-    traj.GetAttDefs()).Standard(trajAttValues,trajAttDefs);
-  if (error) {
-    G4cout << "G4HepRepFileSceneHandler::AddCompound(traj):"
-      "\nERROR found during conversion to standard trajectory attributes."
-           << G4endl;
-  }
+  if (rawTrajAttValues) {
+    G4bool error = G4AttCheck(rawTrajAttValues,
+      traj.GetAttDefs()).Standard(trajAttValues,trajAttDefs);
+    if (error) {
+      G4cout << "G4HepRepFileSceneHandler::AddCompound(traj):"
+        "\nERROR found during conversion to standard trajectory attributes."
+             << G4endl;
+    }
 #ifdef G4HEPREPFILEDEBUG 
-  G4cout <<
-    "G4HepRepFileSceneHandler::AddCompound(traj): standardised attributes:\n"
-         << G4AttCheck(trajAttValues,trajAttDefs) << G4endl;
+    G4cout <<
+      "G4HepRepFileSceneHandler::AddCompound(traj): standardised attributes:\n"
+           << G4AttCheck(trajAttValues,trajAttDefs) << G4endl;
 #endif
+    delete rawTrajAttValues;
+  }
 
   // Open the HepRep output file if it is not already open.
   CheckFileOpen();
@@ -487,6 +491,7 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
       G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(0);
 
       // Pointers to hold trajectory point attribute values and definitions.
+      std::vector<G4AttValue>* rawPointAttValues = aTrajectoryPoint->CreateAttValues();
       std::vector<G4AttValue>* pointAttValues =
 	new std::vector<G4AttValue>;
       std::map<G4String,G4AttDef>* pointAttDefs =
@@ -494,32 +499,35 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 
       // Get first trajectory point's attributes and definitions in standard HepRep style
       // (uniform units, 3Vectors decomposed).
-      G4bool error = G4AttCheck(aTrajectoryPoint->CreateAttValues(),
-	aTrajectoryPoint->GetAttDefs()).Standard(pointAttValues,pointAttDefs);
-      if (error) {
-	G4cout << "G4HepRepFileSceneHandler::AddCompound(traj):"
-	  "\nERROR found during conversion to standard first point attributes." << G4endl;
-      }
+      if (rawPointAttValues) {
+        G4bool error = G4AttCheck(rawPointAttValues,
+	  aTrajectoryPoint->GetAttDefs()).Standard(pointAttValues,pointAttDefs);
+        if (error) {
+	  G4cout << "G4HepRepFileSceneHandler::AddCompound(traj):"
+	    "\nERROR found during conversion to standard first point attributes." << G4endl;
+        }
 
       // Write out point attribute definitions.
-      if (pointAttValues && pointAttDefs) {
-	for (iAttVal = pointAttValues->begin();
-	     iAttVal != pointAttValues->end(); ++iAttVal) {
-	  iAttDef =
-	    pointAttDefs->find(iAttVal->GetName());
-	  if (iAttDef != pointAttDefs->end()) {
-	    // Protect against incorrect use of Category.  Anything value other than the
-	    // standard ones will be considered to be in the physics category.
-	    G4String category = iAttDef->second.GetCategory();
-	    if (strcmp(category,"Draw")!=0 &&
-		strcmp(category,"Physics")!=0 &&
-		strcmp(category,"Association")!=0 &&
-		strcmp(category,"PickAction")!=0)
-	      category = "Physics";
-	    hepRepXMLWriter->addAttDef(iAttVal->GetName(), iAttDef->second.GetDesc(),
-				       category, iAttDef->second.GetExtra());
+        if (pointAttValues && pointAttDefs) {
+	  for (iAttVal = pointAttValues->begin();
+	       iAttVal != pointAttValues->end(); ++iAttVal) {
+	    iAttDef =
+	      pointAttDefs->find(iAttVal->GetName());
+	    if (iAttDef != pointAttDefs->end()) {
+	      // Protect against incorrect use of Category.  Anything value other than the
+	      // standard ones will be considered to be in the physics category.
+	      G4String category = iAttDef->second.GetCategory();
+	      if (strcmp(category,"Draw")!=0 &&
+  		  strcmp(category,"Physics")!=0 &&
+		  strcmp(category,"Association")!=0 &&
+		  strcmp(category,"PickAction")!=0)
+	        category = "Physics";
+	      hepRepXMLWriter->addAttDef(iAttVal->GetName(), iAttDef->second.GetDesc(),
+		  		         category, iAttDef->second.GetExtra());
+	    }
 	  }
 	}
+	delete rawPointAttValues;
       }
 
       // Clean up point attributes.
@@ -580,6 +588,7 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
       hepRepXMLWriter->addInstance();
 
       // Pointers to hold trajectory point attribute values and definitions.
+      std::vector<G4AttValue>* rawPointAttValues = aTrajectoryPoint->CreateAttValues();
       std::vector<G4AttValue>* pointAttValues =
 	new std::vector<G4AttValue>;
       std::map<G4String,G4AttDef>* pointAttDefs =
@@ -587,20 +596,23 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 
       // Get trajectory point attributes and definitions in standard HepRep style
       // (uniform units, 3Vectors decomposed).
-      G4bool error = G4AttCheck(aTrajectoryPoint->CreateAttValues(),
-        aTrajectoryPoint->GetAttDefs()).Standard(pointAttValues,pointAttDefs);
-      if (error) {
-	G4cout << "G4HepRepFileSceneHandler::AddCompound(traj):"
-	  "\nERROR found during conversion to standard point attributes." << G4endl;
-      }
+      if (rawPointAttValues) {
+        G4bool error = G4AttCheck(rawPointAttValues,
+          aTrajectoryPoint->GetAttDefs()).Standard(pointAttValues,pointAttDefs);
+        if (error) {
+	  G4cout << "G4HepRepFileSceneHandler::AddCompound(traj):"
+	    "\nERROR found during conversion to standard point attributes." << G4endl;
+        }
 
-      // Write out point attribute values.
-      if (pointAttValues) {
-	std::vector<G4AttValue>::iterator iAttVal;
-	for (iAttVal = pointAttValues->begin();
-	     iAttVal != pointAttValues->end(); ++iAttVal)
-	    hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
-	delete pointAttValues;
+        // Write out point attribute values.
+        if (pointAttValues) {
+	  std::vector<G4AttValue>::iterator iAttVal;
+	  for (iAttVal = pointAttValues->begin();
+	       iAttVal != pointAttValues->end(); ++iAttVal)
+	      hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
+	  delete pointAttValues;
+        }
+	delete rawPointAttValues;
       }
 
       // Clean up point attributes.
@@ -618,87 +630,101 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 
 void G4HepRepFileSceneHandler::AddCompound (const G4VHit& hit) {
 #ifdef G4HEPREPFILEDEBUG
-    G4cout << "G4HepRepFileSceneHandler::AddCompound(G4VHit&) " << G4endl;
+  G4cout << "G4HepRepFileSceneHandler::AddCompound(G4VHit&) " << G4endl;
 #endif
 
-// All commented out until G4VHit.hh CreateAttValues becomes virtual const.
-//   std::vector<G4AttValue>* attValues = hit.CreateAttValues();
-//   std::vector<G4AttValue>::iterator iAttVal;
-//   const std::map<G4String,G4AttDef>* attDefs = hit.GetAttDefs();
-//   std::map<G4String,G4AttDef>::const_iterator iAttDef;
-//   G4int i;
+  // Pointers to hold hit attribute values and definitions.
+  std::vector<G4AttValue>* rawHitAttValues = hit.CreateAttValues();
+  std::vector<G4AttValue>* hitAttValues =
+    new std::vector<G4AttValue>;
+  std::map<G4String,G4AttDef>* hitAttDefs =
+    new std::map<G4String,G4AttDef>;
 
-//   // Open the HepRep output file if it is not already open.
-//   CheckFileOpen();
+  // Iterators to use with attribute values and definitions.
+  std::vector<G4AttValue>::iterator iAttVal;
+  std::map<G4String,G4AttDef>::const_iterator iAttDef;
+  G4int i;
 
-//   // Add the Event Data Type if it hasn't already been added.
-//   // If this is the first trajectory or hit, add the Event Data type and define attributes.
-//   if (strcmp("Event Data",hepRepXMLWriter->prevTypeName[0])!=0) {
-//     hepRepXMLWriter->addType("Event Data",0);
-//     hepRepXMLWriter->addInstance();
-//   }
+  // Get hit attributes and definitions in standard HepRep style
+  // (uniform units, 3Vectors decomposed).
+  if (rawHitAttValues) {
+    G4bool error = G4AttCheck(rawHitAttValues,
+      hit.GetAttDefs()).Standard(hitAttValues,hitAttDefs);
+    if (error) {
+      G4cout << "G4HepRepFileSceneHandler::AddCompound(hit):"
+        "\nERROR found during conversion to standard hit attributes."
+             << G4endl;
+    }
+#ifdef G4HEPREPFILEDEBUG 
+    G4cout <<
+      "G4HepRepFileSceneHandler::AddCompound(hit): standardised attributes:\n"
+           << G4AttCheck(hitAttValues,hitAttDefs) << G4endl;
+#endif
+    delete rawHitAttValues;
+  }
 
-//   // Add the Hits Type.
-//   G4String previousName = hepRepXMLWriter->prevTypeName[1];
-//   hepRepXMLWriter->addType("Hits",1);
+  // Open the HepRep output file if it is not already open.
+  CheckFileOpen();
 
-//   // If this is the first hit of this event...
-//   if (strcmp("Hits",previousName)!=0) {
-//     // Specify attribute values common to all hits.
-//     hepRepXMLWriter->addAttValue("Layer",130);
+  // Add the Event Data Type if it hasn't already been added.
+  if (strcmp("Event Data",hepRepXMLWriter->prevTypeName[0])!=0) {
+    hepRepXMLWriter->addType("Event Data",0);
+    hepRepXMLWriter->addInstance();
+  }
 
-//     // Specify additional attribute definitions for hits.
-//     // Take all Hit attDefs from first hit.
-//     // Would rather be able to get these attDefs without needing a reference from any
-//     // particular hit, but don't know how to do that.
-//     if (attValues && attDefs) {
-//       for (iAttVal = attValues->begin();
-// 	   iAttVal != attValues->end(); ++iAttVal) {
-// 	iAttDef = attDefs->find(iAttVal->GetName());
-// 	if (iAttDef != attDefs->end()) {
-// 	  // Protect against incorrect use of Category.  Anything value other than the
-// 	  // standard ones will be considered to be in the physics category.
-// 	  G4String category = iAttDef->second.GetCategory();
-// 	  if (strcmp(category,"Draw")!=0 &&
-// 	      strcmp(category,"Physics")!=0 &&
-// 	      strcmp(category,"Association")!=0 &&
-// 	      strcmp(category,"PickAction")!=0)
-// 	    category = "Physics";
-// 	  hepRepXMLWriter->addAttDef(iAttVal->GetName(), iAttDef->second.GetDesc(),
-// 				     category, iAttDef->second.GetExtra());
-// 	}
-//       }
-//     }
-//   }
+  // Add the Hits Type.
+  G4String previousName = hepRepXMLWriter->prevTypeName[1];
+  hepRepXMLWriter->addType("Hits",1);
 
-//   // For every hit, add an instance of Type Hit.
-//   hepRepXMLWriter->addInstance();
+  // If this is the first hit of this event,
+  // specify attribute values common to all hits.
+  if (strcmp("Hits",previousName)!=0) {
+    hepRepXMLWriter->addAttValue("Layer",130);
 
-//   // Copy the current hit's G4AttValues to HepRepAttValues.
-//   if (attValues && attDefs) {
-//     for (iAttVal = attValues->begin();
-// 	 iAttVal != attValues->end(); ++iAttVal) {
-//       std::map<G4String,G4AttDef>::const_iterator iAttDef =
-// 	attDefs->find(iAttVal->GetName());
-//       if (iAttDef == attDefs->end()) {
-// 	G4cout << "G4HepRepFileSceneHandler::AddCompound(hit):"
-// 	  "\n  WARNING: no matching definition for attribute \""
-// 	       << iAttVal->GetName() << "\", value: "
-// 	       << iAttVal->GetValue();
-//       }
-//       else {
-// 	// Use GetDesc rather than GetName once WIRED can handle names with spaces in them.
-// 	//hepRepXMLWriter->addAttValue(iAttDef->second.GetDesc(), iAttVal->GetValue());
-// 	hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
-//       }
-//     }    
-//     delete attValues;  // AttValues must be deleted after use.
-//   }
+    // Take all Hit attDefs from first hit.
+    // Would rather be able to get these attDefs without needing a reference from any
+    // particular hit, but don't know how to do that.
+    // Write out hit attribute definitions.
+    if (hitAttValues && hitAttDefs) {
+      for (iAttVal = hitAttValues->begin();
+	   iAttVal != hitAttValues->end(); ++iAttVal) {
+	iAttDef = hitAttDefs->find(iAttVal->GetName());
+	if (iAttDef != hitAttDefs->end()) {
+	  // Protect against incorrect use of Category.  Anything value other than the
+	  // standard ones will be considered to be in the physics category.
+	  G4String category = iAttDef->second.GetCategory();
+	  if (strcmp(category,"Draw")!=0 &&
+	      strcmp(category,"Physics")!=0 &&
+	      strcmp(category,"Association")!=0 &&
+ 	      strcmp(category,"PickAction")!=0)
+ 	    category = "Physics";
+ 	  hepRepXMLWriter->addAttDef(iAttVal->GetName(), iAttDef->second.GetDesc(),
+ 				     category, iAttDef->second.GetExtra());
+	}
+      }
+    }
+  } // end of special treatment for when this is the first hit.
 
-//   // Now call base class to deconstruct hit into primitives.
-//   drawingHit = true;
+  // For every hit, add an instance of Type Hit.
+  hepRepXMLWriter->addInstance();
+
+  // Write out the hit's attribute values.
+  if (hitAttValues) {
+    for (iAttVal = hitAttValues->begin();
+ 	 iAttVal != hitAttValues->end(); ++iAttVal)
+ 	hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
+    delete hitAttValues;
+  }
+
+  // Clean up hit attributes.
+  if (hitAttDefs)
+    delete hitAttDefs;
+
+  // Now that we have written out all of the attributes that are based on the
+  // hit's particulars, call base class to deconstruct hit into a primitives.
+  drawingHit = true;
   G4VSceneHandler::AddCompound(hit);  // Invoke default action.
-//   drawingHit = false;
+  drawingHit = false;
 }
 
 
