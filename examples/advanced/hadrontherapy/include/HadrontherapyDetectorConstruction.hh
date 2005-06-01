@@ -40,89 +40,95 @@
 
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
-#include "G4LogicalVolume.hh"
 
-class HadrontherapyPhantomSD;
-class HadrontherapyDetectorMessenger;
+class G4VPhysicalVolume;
 class G4LogicalVolume;
-class G4Material;
-class G4Tubs;
-class G4Box;
-class G4Sphere;
-class G4Tubs;
-class G4Colour;
-class G4VPhysicalVolume;
-class HadrontherapyPhantomSD;
 class HadrontherapyPhantomROGeometry;
-class G4VPhysicalVolume;
-class HadrontherapyMaterial;
-class HadrontherapyFactory;
-class HadrontherapyVoxelParameterisation;
 class HadrontherapyBeamLine;
 class HadrontherapyDetectorMessenger;
 class HadrontherapyModulator;
-class G4UserLimits;
+class HadrontherapyPhantomSD;
+class HadrontherapyMaterial;
+
 class HadrontherapyDetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
 
   HadrontherapyDetectorConstruction();
+
   ~HadrontherapyDetectorConstruction();
 
-  G4VPhysicalVolume*   Construct();  
-void SetModulatorAngle (G4double);
-void ConstructPhantom(); 
-void ConstructBeamLine();
-void ConstructSensitiveDetector();
-void PrintDetectorParameters(); 
-void SetPhantomMaterial(G4String); 
-void SetRSMaterial(G4String); 
-void SetRangeShifterX (G4double);
-void SetRangeShifterXposition (G4double);
-void SetFirstScatteringFoil (G4double);
-void SetSecondScatteringFoil (G4double);
-void SetOuterRadiusStopper (G4double);
-void SetInnerRadiusFinalCollimator (G4double);
-  void SetMaxStepSize(G4double);
-  //G4Material* GetPhantomMaterial()  {return PhantomMaterial;};
-const G4double VoxelWidth_X(){return phantomSizeX/numberOfVoxelsAlongX;}
-const G4double VoxelWidth_Z(){return phantomSizeZ/numberOfVoxelsAlongZ;}
+  G4VPhysicalVolume* Construct();  
 
-const G4int   GetNumVoxelX()  {return  numberOfVoxelsAlongX;}
-const G4int   GetNumVoxelY()  {return  numberOfVoxelsAlongY;}
-const G4int   GetNumVoxelZ()  {return numberOfVoxelsAlongZ;}
+private: 
 
+  void ConstructBeamLine();
+  // This method allows to define the beam line geometry in the
+  // experimental set-up
 
-const G4double GetDimX()      {return phantomSizeX;}
-const G4double GetBoxDim_Y()  {return  phantomSizeY;}
+ void ConstructPhantom(); 
+ // This method allows to define the phantom geometry in the
+ // experimental set-up
+ 
+ void ConstructSensitiveDetector();
+  // The sensitive detector is associated to the phantom volume
 
+public: 
 
-void ComputeDimVoxel() {dimVoxel = phantomSizeX/numberOfVoxelsAlongX;}
+  void SetModulatorAngle(G4double angle);
+  // This method allows moving the modulator through UI commands
 
-public:
-G4double    GetModulatorAngle()      {return ModulatorAngle;};
+  void SetRangeShifterXPosition(G4double translation);
+  // This method allows to move the Range Shifter along
+  // the X axis through UI commands
+
+  void SetRangeShifterXSize(G4double halfSize);
+  // This method allows to change the size of the range shifter along
+  // the X axis through UI command.
+
+  void SetFirstScatteringFoilSize(G4double halfSize);
+  // This method allows to change the size of the first scattering foil
+  // along the X axis through UI command.
+
+  void SetSecondScatteringFoilSize (G4double halfSize); 
+  // This method allows to change the size of the second scattering foil
+  // along the X axis through UI command.
+
+  void SetOuterRadiusStopper (G4double value); 
+  // This method allows to change the size of the outer radius of the stopper
+  // through UI command.
+
+  void SetInnerRadiusFinalCollimator (G4double value);
+  // This method allows to change the size of the inner radius of the 
+  // final collimator through UI command.
+
+  void SetRSMaterial(G4String material);
+  // This method allows to change the material 
+  // of the range shifter through UI command.
+
+  void ComputeVoxelSize() {phantomSizeX/numberOfVoxelsAlongX;}
+  // Returns the size of the voxel along the X axis
  
 private:
   
-   HadrontherapyPhantomSD* phantomSD;//pointer to sensitive detector
-   HadrontherapyPhantomROGeometry* phantomROGeometry;//pointer to ROGeometry 
-   HadrontherapyBeamLine* beamLine;
-   
-   // Treatment Room - world
-  G4LogicalVolume*   logicTreatmentRoom;
-  G4VPhysicalVolume* physiTreatmentRoom;
+  HadrontherapyPhantomSD* phantomSD; // Pointer to sensitive detector
 
-  // Phantom ... 
-  G4LogicalVolume*    PhantomLog; 
-  G4VPhysicalVolume*  PhantomPhys;
+  HadrontherapyPhantomROGeometry* phantomROGeometry; // Pointer to ROGeometry 
 
-  // Patient/
-  G4VPhysicalVolume*  patientPhys; 
+  HadrontherapyBeamLine* beamLine; // Pointer to the beam line 
+                                   // geometry component
 
-  G4UserLimits* userLimits;
- 
-  HadrontherapyDetectorMessenger* detectorMessenger; 
+  HadrontherapyModulator* modulator; // Pointer to the modulator 
+                                     // geometry component
+
+  G4VPhysicalVolume* physicalTreatmentRoom;
+  G4VPhysicalVolume* patientPhysicalVolume;
+  G4LogicalVolume* phantomLogicalVolume;
+  G4VPhysicalVolume* phantomPhysicalVolume;
   
+  HadrontherapyDetectorMessenger* detectorMessenger; 
+  HadrontherapyMaterial* material;
+
   G4double phantomSizeX; 
   G4double phantomSizeY; 
   G4double phantomSizeZ;
@@ -130,16 +136,5 @@ private:
   G4int numberOfVoxelsAlongX; 
   G4int numberOfVoxelsAlongY;
   G4int numberOfVoxelsAlongZ;  
- 
-  HadrontherapyMaterial* pMaterial; 
-  HadrontherapyModulator* modulator;
-  
-  G4double    ModulatorAngle;
-
-
-  G4double innerRadiusFinalCollimator;
-  G4String sensitiveDetectorName; 
-  G4double dimVoxel;
-  G4String materialName; 
 };
 #endif

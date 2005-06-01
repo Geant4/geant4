@@ -31,6 +31,9 @@
 //
 // --------------------------------------------------------------
 #include "globals.hh"
+#include "G4ProcessManager.hh"
+#include "G4Region.hh"
+#include "G4RegionStore.hh"
 #include "HadrontherapyPhysicsList.hh"
 #include "HadrontherapyPhysicsListMessenger.hh"
 #include "HadrontherapyParticles.hh"
@@ -47,35 +50,19 @@
 #include "HadrontherapyProtonPrecompound.hh"
 #include "HadrontherapyMuonStandard.hh"
 #include "HadrontherapyDecay.hh"
-//#include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
-#include "G4ProcessManager.hh"
-#include "G4ProcessVector.hh"
-#include "G4VProcess.hh"
-
-#include "G4Region.hh"
-#include "G4RegionStore.hh" 
-//#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
-#include "G4Material.hh"
-#include "G4VeLowEnergyLoss.hh"
-#include "G4EnergyLossTables.hh"
-#include "G4ios.hh"
-#include <iomanip.h>               
-
 
 HadrontherapyPhysicsList::HadrontherapyPhysicsList(): G4VModularPhysicsList(),
-						      
-electronIsRegistered(false), positronIsRegistered(false), 
-photonIsRegistered(false), ionIsRegistered(false),
-protonPrecompoundIsRegistered(false), muonIsRegistered(false),
-decayIsRegistered(false)
+						      electronIsRegistered(false), 
+						      positronIsRegistered(false), 
+						      photonIsRegistered(false), 
+						      ionIsRegistered(false),
+						      protonPrecompoundIsRegistered(false), 
+						      muonIsRegistered(false),
+						      decayIsRegistered(false)
 {
+  // The threshold of production of secondaries is fixed to 10. mm
+  // for all the particles, in all the experimental set-up
   defaultCutValue = 10. * mm;
-  currentDefaultCut = defaultCutValue;
-  cutForGamma = defaultCutValue;
-  cutForElectron = defaultCutValue;
-  cutForProton = defaultCutValue;
   messenger = new HadrontherapyPhysicsListMessenger(this);
   SetVerboseLevel(1);
 }
@@ -87,7 +74,14 @@ HadrontherapyPhysicsList::~HadrontherapyPhysicsList()
 
 void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 {
-  G4cout << "Adding PhysicsList chunk " << name << G4endl;
+  G4cout << "Adding PhysicsList component " << name << G4endl;
+  
+  //
+  // Electromagnetic physics. 
+  //
+  // The user can choose three alternative approaches:
+  // Standard, Low Energy based on the Livermore libraries and Low Energy Penelope
+  //
 
   // Register standard processes for photons
   if (name == "photon-standard") 
@@ -124,6 +118,7 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	  photonIsRegistered = true;
 	}
     } 
+
   // Register processes a' la Penelope for photons
   if (name == "photon-penelope")
     {
@@ -148,7 +143,8 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
       if (electronIsRegistered) 
 	{
 	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- electron List already existing"                  << G4endl;
+		 << " cannot be registered ---- electron List already existing" 
+		 << G4endl;
 	} 
       else 
 	{
@@ -158,13 +154,15 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	  electronIsRegistered = true;
 	}
     }
+
   // Register LowE-EEDL processes for electrons
   if (name == "electron-eedl") 
     {
       if (electronIsRegistered) 
 	{
 	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- electron List already existing"                  << G4endl;
+		 << " cannot be registered ---- electron List already existing"                  
+		 << G4endl;
 	} 
       else 
 	{
@@ -174,13 +172,15 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	  electronIsRegistered = true;
 	}
     } 
+
   // Register processes a' la Penelope for electrons
   if (name == "electron-penelope")
     {
       if (electronIsRegistered) 
 	{
 	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-		 << " cannot be registered ---- electron List already existing"                  << G4endl;
+		 << " cannot be registered ---- electron List already existing"                  
+		 << G4endl;
 	} 
       else 
 	{
@@ -190,13 +190,15 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	  electronIsRegistered = true;
 	}
     }
+
   // Register standard processes for positrons
   if (name == "positron-standard") 
     {
       if (positronIsRegistered) 
 	{
 	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- positron List already existing"                  << G4endl;
+		 << " cannot be registered ---- positron List already existing"                  
+		 << G4endl;
 	} 
       else 
 	{
@@ -223,8 +225,8 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	}
     }
 
-  // Register Low Energy ICRU processes for charged particles
-  //excluding e+, e-, muons
+  // Register Low Energy ICRU processes for protons and ions
+
   if (name == "ion-LowE") 
     {
       if (ionIsRegistered) 
@@ -242,8 +244,7 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	}
     }
 
- // Register Standard processes for charged particles
-  //excluding e+, e-, muons
+  // Register Standard processes for protons and ions
 
   if (name == "ion-standard") 
     {
@@ -262,6 +263,7 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	}
     }
 
+  // Register the Standard processes for muons
   if (name == "muon-standard") 
     {
       if (muonIsRegistered) 
@@ -279,24 +281,7 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	}
     }
 
-  if (name == "proton-precompound") 
-    {
-      if (protonPrecompoundIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- decay List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new HadrontherapyProtonPrecompound(name) );
-	  protonPrecompoundIsRegistered = true;
-	}
-
-    }
-
+  // Register the decay process
   if (name == "decay") 
     {
       if (decayIsRegistered) 
@@ -312,99 +297,61 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	  RegisterPhysics( new HadrontherapyDecay(name) );
 	  decayIsRegistered = true;
 	}
-
+    }
+  //
+  //
+  // Register the hadronic physics for protons, neutrons, ions
+  //
+  // 
+  if (name == "proton-precompound") 
+    {
+      if (protonPrecompoundIsRegistered) 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- decay List already existing" 
+                 << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics( new HadrontherapyProtonPrecompound(name) );
+	  protonPrecompoundIsRegistered = true;
+	}
     }
 
   if (electronIsRegistered && positronIsRegistered && photonIsRegistered &&
       ionIsRegistered) 
     {
-     G4cout<< 
-     "Electromagnetic physics is registered for electron, positron, photons, protons" 
-     << G4endl;
+      G4cout << 
+	"Electromagnetic physics is registered for electron, positron, photons, protons" 
+	     << G4endl;
     }
     if (protonPrecompoundIsRegistered && muonIsRegistered && decayIsRegistered)
       {
-	G4cout << " Hadronic physics is registered"<< G4endl;
+	G4cout << " Hadronic physics is registered" << G4endl;
       }     
 }
 
 void HadrontherapyPhysicsList::SetCuts()
-{ 
- 
- // reactualise cutValues
-  if (currentDefaultCut != defaultCutValue)
-    {
-     if(cutForGamma    == currentDefaultCut) cutForGamma    = defaultCutValue;
-     if(cutForElectron == currentDefaultCut) cutForElectron = defaultCutValue;
-     if(cutForProton   == currentDefaultCut) cutForProton   = defaultCutValue;
-     currentDefaultCut = defaultCutValue;
-    }
-  
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma 
-  SetCutValue(cutForGamma,"gamma");
-  SetCutValue(cutForElectron,"e-");
-  SetCutValue(cutForElectron,"e+");
-
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton 
-
-  //SetCutValue(defaultCutValue, "proton");
-  //SetCutValue(defaultCutValue, "anti_proton");
-
-  
-  // Cut per region
-  // in region dosemeter we need a very accurate precision
-
-  G4String regName = "PhantomLog";
-  G4Region* region = G4RegionStore::GetInstance()->GetRegion(regName);
-  G4ProductionCuts* cuts = new G4ProductionCuts ;
-  cuts -> SetProductionCut(0.001*mm,G4ProductionCuts::GetIndex("gamma"));
-  cuts -> SetProductionCut(0.001*mm,G4ProductionCuts::GetIndex("e-"));
-  cuts -> SetProductionCut(0.001*mm,G4ProductionCuts::GetIndex("e+"));
-  region -> SetProductionCuts(cuts);
-      
-  //if (verboseLevel >0){
-  //    G4cout << "HadrontherapyPhysicsList::SetCuts:";
-  //    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") 
-  //    << G4endl;
-  //  }
+{  
+  // Set the threshold of production equal to the defaultCutValue
+  // in the experimental set-up
+  G4VUserPhysicsList::SetCutsWithDefault();
     
-    if (verboseLevel>0) DumpCutValuesTable();
-}
+  // Definition of a smaller threshold of production in the phantom region
+  // where high accuracy is required in the energy deposit calculation
 
-void HadrontherapyPhysicsList::SetGammaCut(G4double val)
-{
-  ResetCuts();
-  cutForGamma = val;
-}
+  G4String regionName = "PhantomLog";
+  G4Region* region = G4RegionStore::GetInstance()->GetRegion(regionName);
+  G4ProductionCuts* cuts = new G4ProductionCuts ;
+  G4double regionCut = 0.001*mm;
+  cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("gamma"));
+  cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("e-"));
+  cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("e+"));
+  region -> SetProductionCuts(cuts);
 
-void HadrontherapyPhysicsList::SetElectronCut(G4double val)
-{
-  ResetCuts();
-  cutForElectron = val;
+  if (verboseLevel>0) DumpCutValuesTable();
 }
-
-void HadrontherapyPhysicsList::SetProtonCut(G4double val)
-{
-  ResetCuts();
-  cutForProton = val;
-}
-
-// ---------------------------------------------------------------------------
-//void HadrontherapyPhysicsList::GetRange(G4double val)
-//{
-//G4ParticleTable* theParticleTable =  G4ParticleTable::GetParticleTable();
-//G4Material* currMat = pDet->GetPhantomMaterial();
-//
-//G4ParticleDefinition* part;
-//G4double cut;
-//part = theParticleTable->FindParticle("e-");
-//cut = G4EnergyLossTables::GetRange(part,val,currMat);
-//G4cout << "material : " << currMat->GetName() << G4endl;
-//G4cout << "particle : " << part->GetParticleName() << G4endl;
-//G4cout << "energy   : " << G4BestUnit(val,"Energy") << G4endl;
-//G4cout << "range    : " << G4BestUnit(cut,"Length") << G4endl;
-//}
 
 

@@ -38,6 +38,7 @@
 #include "HadrontherapyPhantomHit.hh"
 #include "HadrontherapyPhantomSD.hh"
 #include "HadrontherapyDetectorConstruction.hh"
+#include "HadrontherapyMatrix.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
@@ -50,15 +51,11 @@
 #include "G4ios.hh"
 #include "G4VVisManager.hh"
 
-HadrontherapyEventAction::HadrontherapyEventAction(G4double *Matrix, G4int nbVoxelX, G4int nbVoxelY, G4int nbVoxelZ) :
+HadrontherapyEventAction::HadrontherapyEventAction(HadrontherapyMatrix* Matrix) :
   drawFlag("all" )
 { 
  m_HitsCollectionID = -1;
- 
- numberX = nbVoxelX;
- numberY = nbVoxelY;
- numberZ = nbVoxelZ;
- matrix = Matrix; 
+  matrix = Matrix; 
 }
 
 HadrontherapyEventAction::~HadrontherapyEventAction()
@@ -94,9 +91,10 @@ void HadrontherapyEventAction::EndOfEventAction(const G4Event* evt)
 	      G4int i = ((*CHC)[h]) -> GetXID();
 	      G4int j = ((*CHC)[h]) -> GetYID();
 	      G4int k = ((*CHC)[h]) -> GetZID();
-	      matrix[(i * numberY + j)* numberZ + k]+= 
-		(*CHC)[h] -> GetEdep();
-	      }
+              G4double energyDeposit = ((*CHC)[h]) -> GetEdep();
+              matrix -> Fill(i, j, k, energyDeposit);
+              
+	    }
 	}
     }
 

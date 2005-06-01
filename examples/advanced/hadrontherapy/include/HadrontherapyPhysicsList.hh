@@ -39,7 +39,6 @@
 
 class HadrontherapyPhysicsListMessenger;
 
-
 class HadrontherapyPhysicsList: public G4VModularPhysicsList
 {
 public:
@@ -48,11 +47,6 @@ public:
 
   virtual void SetCuts();
   void AddPhysicsList(const G4String& name);  
-
-  // Production thresholds, expressed in range
-  void SetGammaCut(G4double cut);
-  void SetElectronCut(G4double cut);
-  void SetProtonCut(G4double cut);
   
 private:
   G4bool electronIsRegistered;
@@ -63,11 +57,6 @@ private:
   G4bool chargedParticleIsRegistered;
   G4bool muonIsRegistered;
   G4bool decayIsRegistered;
-
-  G4double currentDefaultCut;
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForProton;
 
   HadrontherapyPhysicsListMessenger* messenger;
 };

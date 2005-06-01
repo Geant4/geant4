@@ -42,11 +42,8 @@
 # IF YOU WANT A RANGE SHIFTER PLEASE CHANGE
 # THE FOLLOWIG PARAMETERS
 # SETTING FOR THE RANGE SHIFTER
- 
 #/beamLine/RangeShifter/thickness 4 cm
 #/beamLine/RangeShifter/RSMat Water
-
-/vis/viewer/flush
-
+#/vis/viewer/flush
 /run/beamOn 5000
 

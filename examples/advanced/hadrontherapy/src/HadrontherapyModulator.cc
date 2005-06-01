@@ -154,9 +154,9 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 //Materials
 HadrontherapyMaterial* material = new HadrontherapyMaterial();
-//G4Material* MotherModMater = material -> GetMat("Air");  
+
 G4Material* Mod0Mater = material -> GetMat("Air");
-G4Material* ModMater = material -> GetMat("PMMA");
+G4Material* ModMater = material -> GetMat("Air");
 delete material;
 
  G4double innerRadiusOfTheTube = 2.5 *cm;
@@ -2099,95 +2099,14 @@ G4VisAttributes * red = new G4VisAttributes( G4Colour(1. ,0. ,0.));
   logicMod78 -> SetVisAttributes(red);
 }
 
-/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyModulator::SetModulatorAngle(G4double angle)
 {
- 
   G4double rotationAngle = angle;
   rm -> rotateZ(rotationAngle);
   physiMotherMod -> SetRotation(rm);  
-  G4cout << "MODULATOR HAS BEEN ROTATED OF   " << rotationAngle/deg << " deg" << G4endl;
+  G4cout << "MODULATOR HAS BEEN ROTATED OF   " << rotationAngle/deg 
+  << " deg" << G4endl;
  G4RunManager::GetRunManager()-> GeometryHasBeenModified(); 
-
 }
-
-/////////////////////////////////////////////////////////////////////////////
-//void HadrontherapyModulator::ReadFile(G4String name)
-//{// 
-//  file = name;   
-//  ReadData(file);
-//  G4cout << file << " is the input file to model the modulator!" << G4endl;
-//}
-
-/////////////////////////////////////////////////////////////////////////////
-// void HadrontherapyModulator::ReadData(G4String fileName)
-// {
-//   char nameChar[100] = {""};
-//   std::ostrstream ost(nameChar, 100, std::ios::out);
- 
-//   ost << fileName;
-  
-//   G4String name(nameChar);
-  
-//   std::ifstream file(fileName);
-//   std::filebuf* lsdp = file.rdbuf();
-  
-//   if (! (lsdp->is_open()) )
-//     {
-// 	  G4String excep = "HadrontherapyModulator - data file: not found";
-// 	  G4Exception(excep);
-//     }
-
-//   G4double a = 0;
-//   G4int k = 1;
-  
-//   do
-//     {
-//       file >> a;
-//       // The file is organized into three columns:
-//       // 1st column is the start angle
-//       // 2nd column is the spanning angle
-//       // 3rd column is the translation along z
-//       // The file terminates with the pattern: -1   -1 -1
-      
-//       if (a == -1)
-// 	{
-// 	  G4cout<<" The file is read!"<<G4endl;
-// 	}
-//       else
-// 	{
-// 	  if (k == 1)
-// 	    {	
-// 	      G4double angle = a * deg;
-// 	      startAngle -> push_back(angle);  
-// 	      //G4cout<< angle/deg <<"deg";
-// 	      k++;
-	      
-// 	    }
-// 	  else if (k == 2)
-// 	    {
-// 	      G4double spanning = a * deg;
-// 	      spanningAngle -> push_back(spanning);
-// 	      //G4cout<<" "<< spanning/deg <<"spanning"<<G4endl;
-// 	      k ++;
-// 	    } 
-// 	  else if (k == 3)
-// 	    {
-// 	      G4double translation = a * cm;
-// 	      Ztranslation -> push_back(translation);
-// 	      //G4cout<<" "<< translation/cm <<": x translation"<<G4endl;
-// 	      k = 1;
-// 	    }
-// 	} 
-//     } while (a != -1); // end of file
-  
-//   file.close();
-// }
-
-
-
-
-
-
 
 

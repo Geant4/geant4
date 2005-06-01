@@ -39,11 +39,12 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
+class HadrontherapyMatrix;
 
 class HadrontherapyEventAction : public G4UserEventAction
 {
 public:
-  HadrontherapyEventAction(G4double *, G4int, G4int, G4int);
+  HadrontherapyEventAction(HadrontherapyMatrix*);
   ~HadrontherapyEventAction();
 
 public:
@@ -55,10 +56,7 @@ private:
   
   G4String drawFlag; //Visualisation flag
   G4int m_HitsCollectionID;
-  G4double *matrix;
-  G4int numberX;
-  G4int numberY;
-  G4int numberZ;
+  HadrontherapyMatrix *matrix;
 };
 
 #endif

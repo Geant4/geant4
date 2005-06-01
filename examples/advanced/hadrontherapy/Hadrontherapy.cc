@@ -29,8 +29,8 @@
 // G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
 // 
 // (a) Laboratori Nazionali del Sud 
-//     of the National Institute for Nuclear Physics, Catania, Italy
-// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+//     of the INFN, Catania, Italy
+// (b) INFN Section of Genova, Genova, Italy
 // 
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
@@ -43,81 +43,61 @@
 #ifdef G4UI_USE_XM
 #include "G4UIXm.hh"
 #endif
-
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #endif
-
 #include "HadrontherapyEventAction.hh"
 #include "HadrontherapyDetectorConstruction.hh"
 #include "HadrontherapyPhysicsList.hh"
 #include "HadrontherapyPhantomSD.hh"
 #include "HadrontherapyPrimaryGeneratorAction.hh"
-#include "G4SDManager.hh"
 #include "HadrontherapyRunAction.hh"
+#include "HadrontherapyMatrix.hh"
 #include "Randomize.hh"  
 #include "G4RunManager.hh"
-#include "G4SDManager.hh"
 #include "G4UImanager.hh"
 #include "G4UImessenger.hh"
-#include "HadrontherapySteppingAction.hh"
 #include "globals.hh"
+#include "HadrontherapySteppingAction.hh"
 #ifdef  G4ANALYSIS_USE
 #include "HadrontherapyAnalysisManager.hh"
 #endif
-// ----------------------------------------------------------------
+
 int main(int argc ,char ** argv)
 {
-  //Output matrix 
-  G4int numberVoxelX = 80;
-  G4int numberVoxelY = 80;
-  G4int numberVoxelZ = 80;
- 
+  G4RunManager* runManager = new G4RunManager;
 
-  G4double* matrix = new G4double[numberVoxelX*numberVoxelY*numberVoxelZ];
+  // Initialize the geometry
+  runManager -> SetUserInitialization(new HadrontherapyDetectorConstruction());
+  
+  // Initialize the physics 
+  runManager -> SetUserInitialization(new HadrontherapyPhysicsList());
+  
+  // Initialize the primary particles  
+  runManager -> SetUserAction(new HadrontherapyPrimaryGeneratorAction());
 
-  // Initialization of the matrix elemts to zero
-  for(G4int i = 0; i < numberVoxelX; i++)
-  {
-      for(G4int j = 0; j < numberVoxelY; j++)
-      {
-	  for(G4int k = 0; k < numberVoxelZ; k++)
+  // Initialize matrix 
+  HadrontherapyMatrix* matrix = new HadrontherapyMatrix();
+  matrix -> Initialize();
 
-	matrix[(i*numberVoxelY+j)*numberVoxelZ+k] = 0.;
-    }
-  }
+  // Optional UserActions: run, event, stepping
+  runManager -> SetUserAction(new HadrontherapyRunAction());
+  HadrontherapyEventAction* pEventAction = new HadrontherapyEventAction(matrix);
+  runManager -> SetUserAction(pEventAction);
+
+
+  HadrontherapySteppingAction* steppingAction = new HadrontherapySteppingAction(); 
+  runManager -> SetUserAction(steppingAction);    
+
 
 #ifdef G4ANALYSIS_USE
   HadrontherapyAnalysisManager* analysis = 
-                          HadrontherapyAnalysisManager::getInstance();
+    HadrontherapyAnalysisManager::getInstance();
   analysis -> book();
 #endif
   
-
-  G4RunManager* pRunManager = new G4RunManager;
-
-  // Initialize the geometry
-  pRunManager -> SetUserInitialization(new HadrontherapyDetectorConstruction());
-  
-  //Initialize the physics 
-  pRunManager -> SetUserInitialization(new HadrontherapyPhysicsList());
-  
-  // Initialize the primary particles  
-  pRunManager -> SetUserAction(new HadrontherapyPrimaryGeneratorAction());
-
-  // Optional UserActions: run, event, stepping
-  pRunManager -> SetUserAction(new HadrontherapyRunAction());
-  HadrontherapyEventAction *pEventAction = new HadrontherapyEventAction( matrix, numberVoxelX,
-                                                                         numberVoxelY, numberVoxelZ);
-  pRunManager -> SetUserAction(pEventAction );
-
-
-  HadrontherapySteppingAction* steppingaction = new HadrontherapySteppingAction(); 
-  pRunManager -> SetUserAction(steppingaction);    
-
-
 #ifdef G4VIS_USE
-  // visualization manager
+  // Visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager -> Initialize();
 #endif
@@ -129,7 +109,7 @@ int main(int argc ,char ** argv)
       session = new G4UIterminal();
     } 
 
-  // get the pointer to the User Interface manager 
+  // Get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
   if (session)   // Define UI session for interactive mode.
     { 
@@ -144,41 +124,8 @@ int main(int argc ,char ** argv)
       G4String fileName = argv[1];
       UI -> ApplyCommand(command + fileName);
     }  
-  
-  if(matrix)
-    {		 
-      G4int k;
-      G4int j;
-      G4int i;             
-                   
-      for(G4int l = 0; l < numberVoxelZ; l++) 
-	{
-	  k = l;
-                        
-	  for(G4int m = 0; m < numberVoxelY; m++) 
-	    { 
-	      j = m * numberVoxelZ + k; 
-                         
-	      for(G4int n = 0; n <  numberVoxelX; n++)
-		{
-		  i =  n* numberVoxelZ * numberVoxelY + j;
-		  if(matrix[i] != 0)
-		    {
-			     
-#ifdef G4ANALYSIS_USE 	
-		      analysis -> Energy_Dep(n, m, k, matrix[i]);
-		      analysis -> BraggPeak(n, matrix[i]);
-#endif
-                             
-		    }
-		}   
-	    }
-	}
-	       
-    }
 
-
-  delete[] matrix;   
+  matrix -> TotalEnergyDeposit();
 
 #ifdef G4ANALYSIS_USE
   analysis -> finish();
@@ -189,7 +136,7 @@ int main(int argc ,char ** argv)
   delete visManager;
 #endif
 
-  delete pRunManager;
+  delete runManager;
 
   return 0;
 }
