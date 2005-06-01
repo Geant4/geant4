@@ -30,26 +30,35 @@ Driver: HepRepXML
 -----------------
 The version of HepRep produced by this driver is HepRep Version 2.
 
-It uses ZLIB and ZIPIOS (included in the HepRep driver) to
-compress the files if necessary. ZLIB and ZIPIOS are included in the
-zlib and zipios++ include directories and further licensed and described there.
+This driver can write both Binary HepRep (.bheprep) and XML HepRep 
+(.heprep) files. Binary HepRep files are a one-to-one translation
+of XML HepRep files, but they are considerably shorter and faster
+to parse by a HepRep viewer.
 
-HepRep XML files can contain multiple HepRep events/geometries.
+Both Binary HepRep and XML HepRep can be compressed using the standard
+zlib library if linked into Geant4 using G4LIB_USE_ZLIB. If a standard
+zlib is not available (WIN32-VC for instance) you should also set 
+G4LIB_BUILD_ZLIB to build G4zlib included with Geant4.
+
+HepRep files (Binary and XML) can contain multiple HepRep events/geometries.
 If the file contains more than one HepRep it is not strictly XML anymore.
-Files can be written in .heprep.zip .heprep.gz or .heprep format. 
+Files can be written in .heprep.zip, .heprep.gz or .heprep format and their
+binary versions .bheprep.zip, .bheprep.gz or .bheprep.
+
 The .heprep.zip is the default for file output, the .heprep is the default 
 for stdout and stderr.
 
-(Optional) To set the filename, where the extension should be .heprep.zip 
-.heprep.gz or .heprep (.zip and .gz will compress), use:
+(Optional) To set the filename with a particular extension such as: 
+.heprep.zip, .heprep.gz, .heprep, .bheprep.zip, .bheprep.gz or .bheprep
+use for instance:
 
-/vis/scene/create filename.heprep.zip
+/vis/scene/create filename.bheprep.zip
 
 
 (Optional) To create separate files for each event, you can set a suffix such as 
-"-0001" to start writing files from filename-0001.heprep.zip to 
-filename-9999.heprep.zip (or up), while "-55-sub" will start write files 
-filename-55-sub.heprep.zip to filename-99-sub.heprep.zip (or up).
+"-0001" to start writing files from filename-0001.bheprep.zip to 
+filename-9999.bheprep.zip (or up), while "-55-sub" will start write files 
+filename-55-sub.bheprep.zip to filename-99-sub.bheprep.zip (or up).
 
 /vis/heprep/setEventNumberSuffix -0001
 (Note: suffix has to contain at least one digit)
@@ -121,5 +130,5 @@ Only one SceneHandler can exist at any time, connected to a single Viewer.
 Since the HepRep format is a model rather than a view this is not a real
 limitation. In WIRED you can create as many views (SceneHandlers) as you like.
 
-27 May 2004
+1 June 2005
 Mark.Donszelmann@slac.stanford.edu
