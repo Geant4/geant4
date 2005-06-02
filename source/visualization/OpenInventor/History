@@ -1,4 +1,4 @@
-$Id: History,v 1.64 2005-05-27 13:53:02 allison Exp $
+$Id: History,v 1.65 2005-06-02 16:51:56 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+2nd June 2005  John Allison  (openinventor-V07-00-02)
+- Changed char* to const char* in gl2psMsg.
 
 27th May 2005  John Allison  (openinventor-V07-00-01)
 - Implemented marker sizes.
