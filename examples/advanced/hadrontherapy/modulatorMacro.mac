@@ -1,0 +1,1207 @@
+
+# ---------------------------------------------------------
+# THIS MACRO PERMIT TO RECONSTRUCT THE SPREAD OUT BRAGG PEAK
+# MODULATING THE PROTON BEAM ENERGY BY MEANS OF A ROTATING
+# MODULATOR WHEEL.
+# HERE THE WHEEL IS ROTATED OF 1 DEGREE AT EACH RUN AND 
+# ONE THOUSAND PROTON HYSTORIES ARE SIMULATED IN EACH 
+# RUN
+# IN ORDER TO INCREASE THE RESOLUTION MORE EVENT CAN ADDED
+# OR A SMALLER ANGLE CAN BE CHOSEN.
+# 
+# NOTE THAT THE MODULATOR MATERIAL IS POLTMETHYLMETHACRILATE 
+# (PMMA) FOR DEFAULT. IF ONE WANT CARRY OUT A SIMULATION WITHOUT 
+# THE MODULATOR HE/SHE MUST SET "Air" the <<ModMater>> in the
+# <<GetMater>> function of the HadrontherapyModulator.cc class
+#
+# USERS SHOULD GIVE A LOOK TO THE HELP OF THE IDLE TO KNOW
+# THE ACTIVATED MESSSENGERS FOR THE GEOMETRY
+#
+# ADDITIONAL INFORMATIONS ON THE MESSENGER AVAILABLE CAN BE FOUND
+# INSIDE THE HADRONTHERAPY DOCUMENTATION (http://www.ge.infn.it/geant4/examples/).
+# 
+# ANYWAY SEND ME AN E-MAIL FOR ANY QUESTION: cirrone@lns.infn.it.   
+# --------------------------------------------------------------------------------  
+
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 0
+/event/verbose 0
+
+# SET OF THE PHYSICS PRTOCESSES
+/physics/addPhysics photon-epdl
+/physics/addPhysics electron-eedl
+/physics/addPhysics positron-standard
+/physics/addPhysics ion-LowE
+/physics/addPhysics muon-standard
+/physics/addPhysics decay
+/physics/addPhysics proton-hadronic
+
+/run/initialize
+
+# SET OF THE VISUALISATION CHARACTERISTICS
+/vis/scene/create
+/vis/open OGLIX
+/vis/viewer/zoom 5.5
+/vis/viewer/set/viewpointThetaPhi  50 130 deg
+/vis/viewer/pan -60 40 cm
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate
+
+# IF YOU WANT A RANGE SHIFTER PLEASE CHANGE
+# THE FOLLOWIG PARAMETERS
+# SETTING FOR THE RANGE SHIFTER
+
+/beamLine/RangeShifter/RSMat Air
+/beamLine/RangeShifter/thickness 1 cm
+
+
+# START OF THE MODULATOR ROTATION
+# IT CONSISTS IN A COMPLETE ROTATION 
+# OF THE WHHEEL (360 DEG)
+
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+/vis/viewer/flush
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 10 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+/modulator/angle 1 deg
+/run/beamOn 1000
+
+

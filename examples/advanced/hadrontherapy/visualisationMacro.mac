@@ -1,0 +1,64 @@
+#----------------------------------------------------------------------------
+# MACRO FILE FOR THE VISUALIZATION OF THE
+# HADRONTHERAPY EXAMPLE USING THE OPENGL LIBRARIES
+#
+#
+# THIS MACRO ILLUSTRATES THE POSSIBILITY
+# FOR THE USER TO 
+#
+# 1. Insert a range shifter of PMMA (default is air i.e. no range shifter!);
+# 2. Define the thickness of the range shifter; 
+# 
+#
+# NOTE THAT THE MODULATOR MATERIAL IS POLTMETHYLMETHACRILATE 
+# (PMMA) FOR DEFAULT. IF ONE WANT CARRY OUT A SIMULATION WITHOUT 
+# THE MODULATOR HE/SHE MUST SET "Air" the <<ModMater>> in the
+# <<GetMater>> function of the HadrontherapyModulator.cc class
+#
+# THEN THE USER CAN RUN HIS/HER SIMULATION 
+#
+# LOOKING ON THE HELP OF THE IDLE FOR HOW TO CHANGE OTHE TOPIC FEATURES
+# OF THE BEAM LINE.
+# ADDITIONAL INFORMATIONS ON THE MESSENGER AVAILABLE CAN BE FOUND
+# INSIDE THE HADRONTHERAPY DOCUMENTATION (http://www.ge.infn.it/geant4/examples/).
+# 
+# ANYWAY SEND ME AN E-MAIL FOR ANY QUESTION: cirrone@lns.infn.it.   
+#------------------------------------------------------------------------------
+
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 0
+/event/verbose 0
+
+# SETTING FOR THE PHYSICS MODELS
+/physics/addPhysics photon-epdl
+/physics/addPhysics electron-eedl
+/physics/addPhysics positron-standard
+/physics/addPhysics ion-LowE
+/physics/addPhysics muon-standard
+/physics/addPhysics decay
+/physics/addPhysics proton-precompound
+
+/run/initialize
+
+# SET OF THE VISUALISATION CHARACTERISTICS
+/vis/scene/create
+/vis/open OGLIX
+/vis/viewer/flush
+/vis/viewer/set/viewpointThetaPhi 30 130 deg
+/vis/viewer/zoom 3
+/vis/viewer/pan -10  80 cm
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate
+/vis/viewer/update
+
+# SETTING FOR THE RANGE SHIFTER 
+/beamLine/RangeShifter/thickness 4 cm
+/beamLine/RangeShifter/RSMat Water
+
+#/tracking/verbose 1
+/vis/viewer/flush
+#/run/beamOn 1
+
+#/run/beamOn 5000
+
