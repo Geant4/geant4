@@ -21,33 +21,56 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDNAProcessInWater.hh,v 1.2 2005-06-02 15:02:54 sincerti Exp $
+// $Id: G4DNAElectronElasticEmfietzoglou.cc,v 1.1 2005-06-02 15:02:54 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#ifndef G4VDNAProcessInWater_hh
- #define G4VDNAProcessInWater_hh 1
+#include "G4DNAElectronElasticEmfietzoglou.hh"
  
- #include "G4VLowEnergyTestableDiscreteProcess.hh"
+                                         G4DNAElectronElasticEmfietzoglou :: G4DNAElectronElasticEmfietzoglou(const G4String & name)
+:
+ G4VDNAElectronElasticScatteringInWater(name),
+ lowEnergyLimit(200*eV),
+ highEnergyLimit(10*keV)
+{
+}
+
+G4double                                 G4DNAElectronElasticEmfietzoglou :: TotalCrossSection(G4double k, G4int z)
+{
+ if (k<=highEnergyLimit && k>lowEnergyLimit) return (pi * RutherfordTotalCrossSection(k, z)) / ( ScreeningFactor(k,z)*(ScreeningFactor(k,z)+1.) );
+ else return 0;
+}
+
+
+G4double                                 G4DNAElectronElasticEmfietzoglou :: RandomizeCosTheta(G4double k, G4int z)
+{
+ //  d sigma_el                sigma_Ruth(K)
+ // ------------ (K) ~ -----------------------------  
+ //   d Omega           (1 + 2 n(K) - cos(theta))^2
+ //
+ // We extract cos(theta) distributed as (1 + 2 n(K) - cos(theta))^-2
+ //
+ // Maximum is for theta=0: 1/(4 n(K)^2) (When n(K) is positive, that is always satisfied within the validity of the process)
+ //
+ // Phys. Med. Biol. 45 (2000) 3171-3194
  
- class G4VDNAProcessInWater : public G4VLowEnergyTestableDiscreteProcess
+ G4double n;
+ n=ScreeningFactor(k, z);
+
+ G4double oneOverMax;
+ oneOverMax=(4.*n*n);
+ 
+ G4double cosTheta;
+ G4double fCosTheta;
+ 
+ do
  {
-  public:
-                                         G4VDNAProcessInWater(const G4String & name) : G4VLowEnergyTestableDiscreteProcess(name) {}
-   virtual                              ~G4VDNAProcessInWater() {}
+  cosTheta = 2.*G4UniformRand()-1.;
+  fCosTheta = (1 + 2.*n - cosTheta);
+  fCosTheta = oneOverMax/(fCosTheta*fCosTheta);
+ }
+ while (fCosTheta < G4UniformRand());
  
-   virtual G4VParticleChange *           PostStepDoIt(const G4Track & aTrack, const G4Step & aStep);
-
-  protected:
-   void                                  ValidateInWater(const G4Track & aTrack) const;
-   virtual G4double                      GetMeanFreePath(const G4Track & aTrack, G4double previousStepSize, G4ForceCondition * condition);
-   virtual G4double                      TotalCrossSection (G4double k, G4int z) = 0;   
-
-  private:
-   // Hides default constructor and assignment operator as private 
-                                         G4VDNAProcessInWater();
-   G4VDNAProcessInWater &                operator=(const G4VDNAProcessInWater & right);
- };
-
-#endif /* G4VDNAProcessInWater_hh */
+ return cosTheta;
+}
 

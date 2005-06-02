@@ -20,32 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4DNATest.cc,v 1.1 2005-05-31 09:58:40 capra Exp $
+// $Id: G4DNATest.cc,v 1.2 2005-06-02 15:02:54 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-// --------------------------------------------------------------
-//
-// File name:     G4LowEnergyPolarizedRayleighTest.cc
-//
-// Author:        Capra Riccardo
-//
-// Creation date: May 2005
-//
-// History:
-// -----------
-// 03 May 2005  R. Capra         1st implementation
-//
-//----------------------------------------------------------------
-
-//! \file    G4LowEnergyPolarizedRayleighTest.cc
-//! \brief   Tests G4LowEnergyPolarizedRayleigh process
-//! \author  Capra Riccardo
-//! \date    May 2005
-//! \par     History:
-//! <TABLE>
-//!  <TR><TD> 03 May 2005 </TD><TD> R. Capra	</TD><TD> 1<SUP>st</SUP> implementation </TD></TR>
-//! </TABLE>
-//! \sa      G4LowEnergyPolarizedRayleigh.hh         
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -53,8 +29,6 @@
 #include <iomanip>
 #include <memory>
 #include <cstdlib>
-
-#include "G4DNAElectronElasticScatteringInWater.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
@@ -105,6 +79,10 @@
 #include "AIDA/IHistogram3D.h"
 #include "AIDA/ITupleFactory.h"
 #include "AIDA/ITuple.h"
+
+// DNA
+#include "G4DNAElectronElasticBrenner.hh"
+#include "G4DNAElectronElasticEmfietzoglou.hh"
 
 //! \brief Options structure
 struct Options
@@ -418,9 +396,10 @@ G4VLowEnergyTestableDiscreteProcess * GetSelectedProcess(const struct Options & 
  static G4VLowEnergyTestableDiscreteProcess ** processes=0;
  if (!processes)
  {
-  processes=new G4VLowEnergyTestableDiscreteProcess *[2];
-  processes[0]=new G4DNAElectronElasticScatteringInWater;
-  processes[1]=0;
+  processes=new G4VLowEnergyTestableDiscreteProcess *[3];
+  processes[0]=new G4DNAElectronElasticBrenner;
+  processes[1]=new G4DNAElectronElasticEmfietzoglou;
+  processes[2]=0;
  }
  
  unsigned long i(0);

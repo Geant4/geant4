@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDNAProcessInWater.cc,v 1.1 2005-05-31 09:58:40 capra Exp $
+// $Id: G4VDNAProcessInWater.cc,v 1.2 2005-06-02 15:02:54 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -58,5 +58,42 @@ void                                     G4VDNAProcessInWater :: ValidateInWater
  message+=theMaterial->GetName();
   
  G4Exception(message);
+}
+
+G4double                                 G4VDNAProcessInWater :: GetMeanFreePath(const G4Track & aTrack, G4double /* previousStepSize */, G4ForceCondition * /* condition */)
+{
+ const G4int z(10); // H2O number of electrons
+ G4double k=aTrack.GetDynamicParticle()->GetKineticEnergy();
+
+ // We suppose we are in water, one of the elements must be oxygen
+ G4Material * theMaterial(aTrack.GetMaterial());
+ size_t i(theMaterial->GetNumberOfElements());   
+ while (i>0)
+ { 
+  i--;
+
+  const G4Element * element(theMaterial->GetElement(i));
+ 
+  if (element->GetZ()==8.)
+  {
+   // Number of oxigens per volume = number of water molecules per volume
+   G4double density;
+   density=theMaterial->GetAtomicNumDensityVector()[i];
+ 
+   G4double sigma_el;
+   sigma_el=TotalCrossSection(k,z);
+ 
+   return 1./(density*sigma_el);
+  }
+ }
+ 
+ G4String message;
+ message="G4VDNAProcessInWater::GetMeanFreePath - ";
+ message+=theMaterial->GetName();
+ message+=" is not a water material";
+   
+ G4Exception(message);
+ 
+ return DBL_MAX;
 }
 

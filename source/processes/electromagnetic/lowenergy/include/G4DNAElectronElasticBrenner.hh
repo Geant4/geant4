@@ -21,33 +21,38 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDNAProcessInWater.hh,v 1.2 2005-06-02 15:02:54 sincerti Exp $
+// $Id: G4DNAElectronElasticBrenner.hh,v 1.1 2005-06-02 15:02:54 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#ifndef G4VDNAProcessInWater_hh
- #define G4VDNAProcessInWater_hh 1
+// Phys. Med. Biol. 29 N.4 (1983) 443-447
+
+#ifndef G4DNAElectronElasticBrenner_hh
+ #define G4DNAElectronElasticBrenner_hh 1
  
- #include "G4VLowEnergyTestableDiscreteProcess.hh"
+ #include "G4VDNAElectronElasticScatteringInWater.hh"
  
- class G4VDNAProcessInWater : public G4VLowEnergyTestableDiscreteProcess
+ class G4DNAElectronElasticBrenner : public G4VDNAElectronElasticScatteringInWater
  {
   public:
-                                         G4VDNAProcessInWater(const G4String & name) : G4VLowEnergyTestableDiscreteProcess(name) {}
-   virtual                              ~G4VDNAProcessInWater() {}
- 
-   virtual G4VParticleChange *           PostStepDoIt(const G4Track & aTrack, const G4Step & aStep);
+                                         G4DNAElectronElasticBrenner(const G4String & name="DNAElectronElasticBrenner");
+   virtual                              ~G4DNAElectronElasticBrenner() {}
 
+   virtual G4VParticleChange *           PostStepDoIt(const G4Track & aTrack, const G4Step & aStep);
+ 
   protected:
-   void                                  ValidateInWater(const G4Track & aTrack) const;
-   virtual G4double                      GetMeanFreePath(const G4Track & aTrack, G4double previousStepSize, G4ForceCondition * condition);
-   virtual G4double                      TotalCrossSection (G4double k, G4int z) = 0;   
+   virtual G4double                      RandomizeCosTheta(G4double k, G4int z);
+   virtual G4double                      TotalCrossSection (G4double k, G4int z);
 
   private:
+   G4double                              CalculatePolynomial(G4double k, const G4double *vector, G4int size) const;
+
    // Hides default constructor and assignment operator as private 
-                                         G4VDNAProcessInWater();
-   G4VDNAProcessInWater &                operator=(const G4VDNAProcessInWater & right);
+   G4DNAElectronElasticBrenner &         operator=(const G4DNAElectronElasticBrenner & right);
+
+   const G4double lowEnergyLimit;
+   const G4double highEnergyLimit;
  };
 
-#endif /* G4VDNAProcessInWater_hh */
+#endif /* G4DNAElectronElasticBrenner_hh */
 

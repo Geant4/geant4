@@ -21,49 +21,39 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAElectronElasticScatteringInWater.hh,v 1.1 2005-05-31 09:58:40 capra Exp $
+// $Id: G4VDNAElectronElasticScatteringInWater.hh,v 1.1 2005-06-02 15:02:54 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 // Nucl. Instr. Meth. 155 (1978) 145-156
 // J. Phys. D: Appl. Phys. 33 (2000) 932-944
 // Phys. Med. Biol. 45 (2000) 3171-3194
-// Phys. Med. Biol. 29 N.4 (1983) 443-447
 
-#ifndef G4DNAElectronElasticScatteringInWater_hh
- #define G4DNAElectronElasticScatteringInWater_hh 1
+#ifndef G4VDNAElectronElasticScatteringInWater_hh
+ #define G4VDNAElectronElasticScatteringInWater_hh 1
  
  #include "G4VDNAProcessInWater.hh"
  
- class G4DNAElectronElasticScatteringInWater : public G4VDNAProcessInWater
+ class G4VDNAElectronElasticScatteringInWater : public G4VDNAProcessInWater
  {
   public:
-                                         G4DNAElectronElasticScatteringInWater(const G4String & name="DNAElectronElasticScatteringInWater");
-   virtual                              ~G4DNAElectronElasticScatteringInWater() {}
+                                         G4VDNAElectronElasticScatteringInWater(const G4String & name);
+   virtual                              ~G4VDNAElectronElasticScatteringInWater() {}
  
    virtual G4VParticleChange *           PostStepDoIt(const G4Track & aTrack, const G4Step & aStep);
    virtual G4bool                        IsApplicable(const G4ParticleDefinition & aParticleDefinition);
 
   protected:
-   virtual G4double                      GetMeanFreePath(const G4Track & aTrack, G4double previousStepSize, G4ForceCondition * condition);
+   virtual G4double                      RandomizeCosTheta(G4double k, G4int z) = 0 ;
+
+   G4double                              RutherfordTotalCrossSection(G4double k, G4int z) const;
+   G4double                              ScreeningFactor(G4double k, G4int z) const;
 
   private:
-   G4double                              RutherfordTotalCrossSection(G4double k, G4int z);
-   G4double                              ScreeningFactor(G4double k, G4int z);
-   G4double                              GenerateCosThetaElasticEmfietzoglou(G4double k, G4int z);
-   G4double                              GenerateCosThetaElasticBrenner(G4double k);
-   G4double                              CalulatePolynomial(G4double k, const G4double *vector, G4int size);
-
    // Hides default constructor and assignment operator as private 
-   G4DNAElectronElasticScatteringInWater & operator=(const G4DNAElectronElasticScatteringInWater & right);
-
-
-
-   G4double lowEnergyLimit;
-   G4double highEnergyLimit;
-   const G4double intrinsicLowEnergyLimit;
-   const G4double intrinsicHighEnergyLimit;
+                                         G4VDNAElectronElasticScatteringInWater();
+   G4VDNAElectronElasticScatteringInWater & operator=(const G4VDNAElectronElasticScatteringInWater & right);
  };
 
-#endif /* G4DNAElectronElasticScatteringInWater_hh */
+#endif /* G4VDNAElectronElasticScatteringInWater_hh */
 
