@@ -20,12 +20,12 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.85 2005-06-02 19:15:21 duns Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.86 2005-06-02 22:23:10 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 /**
- * @author Mark Donszelmann, Joseph Perl
+ * @author Mark Donszelmann
  */
 
 #include <stdio.h>
@@ -105,6 +105,8 @@ G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, G4HepRepM
           writeZip              (false),
           writeGZ               (false),
           writeMultipleFiles    (false),
+          currentHit            (NULL),
+          currentTrack          (NULL),
           _heprep               (NULL),
           _heprepGeometry       (NULL)
 {
@@ -515,7 +517,7 @@ void G4HepRepSceneHandler::AddSolid(const G4Box& box) {
     vertex7 = (transform) * vertex7;
     vertex8 = (transform) * vertex8;
 
-    HepRepInstance* instance = getGeometryOrEventInstance();
+    HepRepInstance* instance = getGeometryOrEventInstance(getCalHitType());
     setAttribute(instance, "DrawAs", "Prism");
         
     setVisibility(instance, box);
@@ -666,7 +668,7 @@ void G4HepRepSceneHandler::AddSolid(const G4Trd& trd) {
     vertex7 = (transform) * vertex7;
     vertex8 = (transform) * vertex8;
 
-    HepRepInstance* instance = getGeometryOrEventInstance();
+    HepRepInstance* instance = getGeometryOrEventInstance(getCalHitType());
     setAttribute(instance, "DrawAs", "Prism");
         
     setVisibility(instance, trd);
@@ -786,6 +788,14 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Circle& circle) {
 
     HepRepInstance* instance = factory->createHepRepInstance(getEventInstance(), getHitType());
 
+    vector<G4AttValue>* hitAttValues = currentHit->CreateAttValues();
+    const map<G4String,G4AttDef>* hitAttDefs = currentHit->GetAttDefs();
+
+    addAttDefs(getHitType(), hitAttDefs);
+    addAttVals(instance, hitAttDefs, hitAttValues);
+    
+    delete hitAttValues;
+
     G4Point3D center = transform * circle.GetPosition();
 
     setColor (instance, GetColor(circle));
@@ -810,7 +820,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 
     if (polyhedron.GetNoFacets()==0) return;
 
-    HepRepInstance* instance = getGeometryOrEventInstance();
+    HepRepInstance* instance = getGeometryOrEventInstance(getCalHitType());
         
     setVisibility(instance, polyhedron);
 	
@@ -937,8 +947,13 @@ void G4HepRepSceneHandler::AddCompound (const G4VTrajectory& trajectory) {
 
 
 void G4HepRepSceneHandler::AddCompound (const G4VHit& hit) { 
+#ifdef PDEBUG
+    cout << "G4HepRepSceneHandler::AddCompound(G4VHit&) " << endl;
+#endif
     if (dontWrite()) return;
+    currentHit = &hit;
     G4VSceneHandler::AddCompound(hit); 
+    currentHit = NULL;
 }
 
 void G4HepRepSceneHandler::PreAddSolid (const G4Transform3D& objectTransformation,
@@ -1292,7 +1307,7 @@ void G4HepRepSceneHandler::addAttVals(HepRepAttribute* attribute, const map<G4St
 
 
 bool G4HepRepSceneHandler::isEventData () {
-    return !fpCurrentPV || fReadyForTransients;
+    return !fpCurrentPV || fReadyForTransients || currentHit || currentTrack;
 }
 
 void G4HepRepSceneHandler::addTopLevelAttributes(HepRepType* type) {
@@ -1336,8 +1351,8 @@ void G4HepRepSceneHandler::addTopLevelAttributes(HepRepType* type) {
 }           
 
 
-HEPREP::HepRepInstance* G4HepRepSceneHandler::getGeometryOrEventInstance() {
-    return isEventData() ? factory->createHepRepInstance(getEventInstance(), getCalHitType())
+HEPREP::HepRepInstance* G4HepRepSceneHandler::getGeometryOrEventInstance(HepRepType* type) {
+    return isEventData() ? factory->createHepRepInstance(getEventInstance(), type)
                          : getGeometryInstance(fpCurrentLV, fCurrentDepth);
 }
 

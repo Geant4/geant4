@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.hh,v 1.37 2005-06-02 19:15:21 duns Exp $
+// $Id: G4HepRepSceneHandler.hh,v 1.38 2005-06-02 22:23:10 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -134,7 +134,7 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         void setMarker (HEPREP::HepRepAttribute *attribute, const G4VMarker& marker);
 
         inline void setAttribute (HEPREP::HepRepAttribute* attribute, G4String name, char* value) {
-            setAttribute(attribute, name, (G4String)value);
+            setAttribute(attribute, name, G4String(value));
         }
         void setAttribute (HEPREP::HepRepAttribute* attribute, G4String name, G4String value);
         void setAttribute (HEPREP::HepRepAttribute* attribute, G4String name, bool value);
@@ -154,7 +154,7 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
 
         void addTopLevelAttributes(HEPREP::HepRepType* type);
 
-        HEPREP::HepRepInstance*     getGeometryOrEventInstance();
+        HEPREP::HepRepInstance*     getGeometryOrEventInstance(HEPREP::HepRepType* type);
 
         // Returns the particular instance/type or if not created, creates them and adds them to the HepRep
         HEPREP::HepRep*             getHepRep();
@@ -194,6 +194,8 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         G4bool writeZip;
         G4bool writeGZ;
         G4bool writeMultipleFiles;
+        const G4VHit* currentHit;
+        const G4VTrajectory* currentTrack;
 
         // DO NOT USE member vars directly, use get methods.
         HEPREP::HepRep*                         _heprep;
