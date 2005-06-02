@@ -27,9 +27,8 @@
 //
 // G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
 // 
-// (a) Laboratori Nazionali del Sud 
-//     of the National Institute for Nuclear Physics, Catania, Italy
-// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+// (a) Laboratori Nazionali del Sud - INFN,  Catania, Italy
+// (b) INFN Section of Genova, Genova, Italy
 // 
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
@@ -49,13 +48,13 @@ HadrontherapyPrimaryGeneratorAction::HadrontherapyPrimaryGeneratorAction()
   gunMessenger = new HadrontherapyPrimaryGeneratorMessenger(this);
   particleGun  = new G4ParticleGun();
   SetDefaultPrimaryParticle();  
- }  
+}  
 
 HadrontherapyPrimaryGeneratorAction::~HadrontherapyPrimaryGeneratorAction()
 {
   delete particleGun;
   delete gunMessenger;
- }
+}
   
 void HadrontherapyPrimaryGeneratorAction::SetDefaultPrimaryParticle()
 {    
@@ -98,53 +97,54 @@ void HadrontherapyPrimaryGeneratorAction::SetDefaultPrimaryParticle()
 
 void HadrontherapyPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-// ****************************************
-// Set the beam angular apread 
-// and spot size
-// beam spot size
-// ****************************************
+  // ****************************************
+  // Set the beam angular apread 
+  // and spot size
+  // beam spot size
+  // ****************************************
 
- // Set the position of the primary particles
- G4double x = X0;
- G4double y = Y0;
- G4double z = Z0;
+  // Set the position of the primary particles
+  G4double x = X0;
+  G4double y = Y0;
+  G4double z = Z0;
 
- if ( sigmaY > 0.0 )
-   {
-     y += G4RandGauss::shoot( Y0, sigmaY );
-   }
+  if ( sigmaY > 0.0 )
+    {
+      y += G4RandGauss::shoot( Y0, sigmaY );
+    }
  
- if ( sigmaZ > 0.0 )
-   {
-     z += G4RandGauss::shoot( Z0, sigmaZ );
-   }
+  if ( sigmaZ > 0.0 )
+    {
+      z += G4RandGauss::shoot( Z0, sigmaZ );
+    }
 
- particleGun -> SetParticlePosition(G4ThreeVector( x , y , z ) );
+  particleGun -> SetParticlePosition(G4ThreeVector( x , y , z ) );
  
- // ********************************************
- // Set the beam energy and energy spread
- // ********************************************
+  // ********************************************
+  // Set the beam energy and energy spread
+  // ********************************************
 
- G4double kineticEnergy = G4RandGauss::shoot( meanKineticEnergy, sigmaEnergy );
- particleGun -> SetParticleEnergy ( kineticEnergy );
+  G4double kineticEnergy = G4RandGauss::shoot( meanKineticEnergy, sigmaEnergy );
+  particleGun -> SetParticleEnergy ( kineticEnergy );
 
-// Set the direction of the primary particles
- G4double momentumY = 0.0;
- G4double momentumZ = 0.0;
+  // Set the direction of the primary particles
+  G4double momentumY = 0.0;
+  G4double momentumZ = 0.0;
 
- if ( sigmaMomentumY  > 0.0 )
-   {
-     momentumY += G4RandGauss::shoot( 0., sigmaMomentumY );
-   }
- if ( sigmaMomentumZ  > 0.0 )
-   {
-     momentumZ += G4RandGauss::shoot( 0., sigmaMomentumZ );
-   }
+  if ( sigmaMomentumY  > 0.0 )
+    {
+      momentumY += G4RandGauss::shoot( 0., sigmaMomentumY );
+    }
+  if ( sigmaMomentumZ  > 0.0 )
+    {
+      momentumZ += G4RandGauss::shoot( 0., sigmaMomentumZ );
+    }
  
- particleGun->SetParticleMomentumDirection(G4ThreeVector(1,momentumY,momentumZ));
- // Generate a primary particle
- particleGun -> GeneratePrimaryVertex( anEvent ); 
+  particleGun->SetParticleMomentumDirection(G4ThreeVector(1,momentumY,momentumZ));
+  // Generate a primary particle
+  particleGun -> GeneratePrimaryVertex( anEvent ); 
 } 
+
 
 void HadrontherapyPrimaryGeneratorAction::SetmeanKineticEnergy (G4double  val )  
 { meanKineticEnergy = val;} 

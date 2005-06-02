@@ -37,26 +37,31 @@
 #include "HadrontherapyProtonPrecompound.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
-#include "G4ProcessVector.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
-#include "G4Material.hh"
 #include "G4LElastic.hh"
-#include "G4BinaryCascade.hh"
-#include "G4CascadeInterface.hh"
 #include "G4PionPlusInelasticProcess.hh"
 #include "G4LEPionPlusInelastic.hh"
 #include "G4LEPionMinusInelastic.hh"
-#include "G4HEPionPlusInelastic.hh"
-#include "G4HEPionMinusInelastic.hh"
 #include "G4PionMinusInelasticProcess.hh"
-#include "G4LEPionMinusInelastic.hh"
-#include "G4HEPionMinusInelastic.hh"
 #include "G4PiMinusAbsorptionAtRest.hh"
-#include "G4AntiProtonInelasticProcess.hh"
-#include "G4LEAntiProtonInelastic.hh"
-#include "G4HEAntiProtonInelastic.hh"
-#include "G4AntiProtonAnnihilationAtRest.hh"
+#include "G4PiNuclearCrossSection.hh" 
+#include "G4LFission.hh"
+#include "G4LCapture.hh"
+#include "G4NeutronInelasticProcess.hh"
+#include "G4NeutronInelasticCrossSection.hh"
+#include "G4TripathiCrossSection.hh"
+#include "G4IonsShenCrossSection.hh"
+#include "G4HadronInelasticProcess.hh"
+#include "G4BinaryLightIonReaction.hh"
+#include "G4LEDeuteronInelastic.hh"
+#include "G4DeuteronInelasticProcess.hh"
+#include "G4TritonInelasticProcess.hh"
+#include "G4LETritonInelastic.hh"
+#include "G4AlphaInelasticProcess.hh"
+#include "G4LEAlphaInelastic.hh"
+#include "G4HadronElasticProcess.hh"
+#include "G4ProtonInelasticProcess.hh"
+#include "G4ProtonInelasticCrossSection.hh"
+#include "G4HadronCaptureProcess.hh"
 //
 // PRECOMPOUND PHYSICS LIST
 //
@@ -70,13 +75,24 @@
 HadrontherapyProtonPrecompound::HadrontherapyProtonPrecompound(const G4String& name): 
   G4VPhysicsConstructor(name)
 {
-  binaryLightIonLowLimit = 80.*MeV;
-  binaryLightIonHighLimit = 40.*GeV;
-  LEPHighLimit = 100.*MeV;
+  // Inelastic process, energy limits 
+
+  // Protons, neutrons and pions
+  // Energy limit of the precompound model
   precompoundLowLimit = 0.*MeV;
   precompoundHighLimit = 300.*MeV;
+
+  // Energy limit of the neutron fission and capture
   neutronLowLimit = 0.*TeV;
   neutronHighLimit = 100.*TeV;
+ 
+  // Ions
+  // Energy limit of the binary ion model
+  binaryLightIonLowLimit = 0.*MeV;
+  binaryLightIonHighLimit = 40.*GeV;
+
+  // Energy limit of the LEP model for ions
+  LEPHighLimit = 100.*MeV;
 }
 
 HadrontherapyProtonPrecompound::~HadrontherapyProtonPrecompound()
@@ -84,116 +100,234 @@ HadrontherapyProtonPrecompound::~HadrontherapyProtonPrecompound()
 
 void HadrontherapyProtonPrecompound::ConstructProcess()
 {
-  // ELASTIC SCATTERING
-  // ****PROTON, NEUTRON, IONS
+
+  G4ParticleDefinition* particle = 0;
+  G4ProcessManager* pmanager = 0;
+ 
+  // Elastic scattering
+  // for protons, neutrons, pions, ions
   G4LElastic* elastic_Model = new G4LElastic();
   G4HadronElasticProcess* elastic = new G4HadronElasticProcess();
   elastic -> RegisterMe(elastic_Model);
+ 
+  // Activation of Precompound model + evaporation (default evaporation)
+  // The Fermi break-up is not active (default condition) 
+  // for protons, pions and neutrons
+ 
+  G4PreCompoundModel* preEquilibrium = new G4PreCompoundModel(&theHandler);
+  preEquilibrium -> SetMinEnergy(precompoundLowLimit);
+  preEquilibrium -> SetMaxEnergy(precompoundHighLimit);
 
-  // INELASTIC SCATTERING
-  // Binary Cascade
-  G4ParticleDefinition* particle = 0;
-  G4ProcessManager* pmanager = 0;
-  G4BinaryLightIonReaction* theBC = new G4BinaryLightIonReaction();
-  theBC -> SetMinEnergy(binaryLightIonLowLimit);
-  theBC -> SetMaxEnergy(binaryLightIonHighLimit);
+  //----------//
+  // Protons  //
+  //----------//
 
-  G4TripathiCrossSection * TripathiCrossSection= new G4TripathiCrossSection;
+  // Inelastic process for protons
+  particle = G4Proton::Proton();
+  pmanager = particle -> GetProcessManager();
+  
+  // Activation of the Precompound model for the proton 
+  // inelastic process
+  //G4ProtonInelasticProcess protonInelasticScattering;
+  protonInelasticScattering.RegisterMe(preEquilibrium);  
+  
+  // Set the cross section for the proton inelastic process
+  //G4ProtonInelasticCrossSection  protonInelasticCrossSection;
+  protonInelasticScattering.AddDataSet(&protonInelasticCrossSection);
+
+  // Set the proton hadronic processes: inelastic and elastic scattering
+  pmanager -> AddDiscreteProcess(&protonInelasticScattering);
+  pmanager -> AddDiscreteProcess(elastic); 
+ 
+
+  //----------//
+  // Neutrons //
+  //----------//
+
+  // Inelastic process for neutrons
+  particle = G4Neutron::Neutron();
+  pmanager = particle -> GetProcessManager();
+  
+  // Activation of the Precompound model for the neutrons
+  // inelastic process
+  
+  neutronInelasticScattering.RegisterMe(preEquilibrium);
+
+  // Set the cross section for the neutron inelastic process
+  
+  neutronInelasticScattering.AddDataSet(&neutronInelasticCrossSection);
+
+  // Set the neutron hadronic processes: inelastic and elastic scattering
+  pmanager -> AddDiscreteProcess(&neutronInelasticScattering);
+  pmanager -> AddDiscreteProcess(elastic); 
+
+  //----------//
+  // Pions    //
+  //----------//
+
+  // Inelastic process for pions
+ 
+  // Pions plus
+  particle = G4PionPlus::PionPlus(); 
+  pmanager = particle -> GetProcessManager();
+ 
+  // Activation of the Precompound model for the pion plus
+  // inelastic process
+  
+  pionPlusInelasticScattering.RegisterMe(preEquilibrium);
+
+  // Set the cross section for the pion inelastic process
+  
+  pionPlusInelasticScattering.AddDataSet(&pionPlusInelasticCrossSection);
+
+  // Set the pion plus hadronic processes: inelastic and elastic scattering
+  pmanager -> AddDiscreteProcess(&pionPlusInelasticScattering);
+  pmanager -> AddDiscreteProcess(elastic); 
+
+  // Pions minus
+  particle = G4PionMinus::PionMinus(); 
+  pmanager = particle -> GetProcessManager();
+ 
+  // Activation of the Precompound model for the pion minus
+  // inelastic process
+ 
+  pionMinusInelasticScattering.RegisterMe(preEquilibrium);
+
+  // Set the cross section for the pion minus inelastic process
+  
+  pionMinusInelasticScattering.AddDataSet(&pionMinusInelasticCrossSection);
+
+  // Set the pion minus hadronic processes: inelastic and elastic scattering
+  pmanager -> AddDiscreteProcess(&pionMinusInelasticScattering);
+  pmanager -> AddDiscreteProcess(elastic); 
+  pmanager -> AddRestProcess(new G4PiMinusAbsorptionAtRest, ordDefault); 
+
+  //------------------//
+  //d, t, 3He, alpha //
+  //------------------//
+
+  //Inelastic scattering for d, t, 3He, alpha
+  
+  //Activation of the Low Energy Parameterised (LEP) model and binary ion model
+  // for the inelastic scattering 
+
+  G4BinaryLightIonReaction* binaryIonCascade = new G4BinaryLightIonReaction();
+  binaryIonCascade -> SetMinEnergy(binaryLightIonLowLimit);
+  binaryIonCascade -> SetMaxEnergy(binaryLightIonHighLimit);
+
+  // Set the cross section for the inelastic scattering
+  G4TripathiCrossSection * TripathiCrossSection = new G4TripathiCrossSection;
   G4IonsShenCrossSection * aShen = new G4IonsShenCrossSection;
 
-  // Proton PRECOMPOUND + EVAPORATION(DEFAULT EVAPORATION) NO FERMI BREAK-UP
-  particle = G4Proton::Proton();
-  pmanager = particle->GetProcessManager();
-  G4PreCompoundModel* thePreEquilib = new G4PreCompoundModel(&theHandler);
-  thePreEquilib -> SetMinEnergy(precompoundLowLimit);
-  thePreEquilib -> SetMaxEnergy(precompoundHighLimit);
-  theIPProton.RegisterMe(thePreEquilib);
-  theIPProton.AddDataSet(&thePXSec);
-  pmanager -> AddDiscreteProcess(&theIPProton);
-  pmanager -> AddDiscreteProcess(elastic); //ELASIC SCATTERING
-
-  // deuteron
+  // Deuteron
   particle = G4Deuteron::Deuteron();
   pmanager = particle -> GetProcessManager();
-  G4LEDeuteronInelastic* theDIModel = new G4LEDeuteronInelastic;
-  theDIModel -> SetMaxEnergy(LEPHighLimit);
-  theIPdeuteron.AddDataSet(TripathiCrossSection);
-  theIPdeuteron.AddDataSet(aShen);
-  theIPdeuteron.RegisterMe(theDIModel);
-  theIPdeuteron.RegisterMe(theBC);
-  pmanager -> AddDiscreteProcess(&theIPdeuteron);
-  pmanager -> AddDiscreteProcess(elastic); // ELASTIC PROCESSES
 
-  // triton
+  // Activate the LEP model for the d inelastic scattering 
+  G4LEDeuteronInelastic* deuteronLEPModel = new G4LEDeuteronInelastic;
+  deuteronLEPModel -> SetMaxEnergy(LEPHighLimit);
+
+  // Activate the binary ion model model for the d inelastic scattering 
+ 
+  deuteronInelasticScattering.RegisterMe(deuteronLEPModel);
+  deuteronInelasticScattering.RegisterMe(binaryIonCascade);
+
+  // Definition of the the deuteron inelastic scattering cross section 
+  deuteronInelasticScattering.AddDataSet(TripathiCrossSection);
+  deuteronInelasticScattering.AddDataSet(aShen);
+
+  // Set the deuteron hadronic processes: inelastic and elastic scattering
+  pmanager -> AddDiscreteProcess(&deuteronInelasticScattering);
+  pmanager -> AddDiscreteProcess(elastic); 
+
+  // Triton
   particle = G4Triton::Triton();
-  pmanager = particle->GetProcessManager();
-  G4LETritonInelastic* theTIModel = new G4LETritonInelastic;
-  theTIModel -> SetMaxEnergy(LEPHighLimit);
-  theIPtriton.AddDataSet(TripathiCrossSection);
-  theIPtriton.AddDataSet(aShen);
-  theIPtriton.RegisterMe(theTIModel);
-  theIPtriton.RegisterMe(theBC);
-  pmanager -> AddDiscreteProcess(&theIPtriton);
-  pmanager -> AddDiscreteProcess(elastic); //ELASTIC SCATTERING
+  pmanager = particle -> GetProcessManager();
+
+  // Activate the LEP model for the t inelastic scattering 
+  G4LETritonInelastic* tritonLEPModel = new G4LETritonInelastic;
+  tritonLEPModel -> SetMaxEnergy(LEPHighLimit);
+
+  // Activate the binary ion model model for the t inelastic scattering 
+ 
+  tritonInelasticScattering.RegisterMe(tritonLEPModel);
+  tritonInelasticScattering.RegisterMe(binaryIonCascade);
+
+  // Definition of the the triton inelastic scattering cross section 
+  tritonInelasticScattering.AddDataSet(TripathiCrossSection);
+  tritonInelasticScattering.AddDataSet(aShen);
+
+  // Set the triton hadronic processes: inelastic and elastic scattering
+  pmanager -> AddDiscreteProcess(&tritonInelasticScattering);
+  pmanager -> AddDiscreteProcess(elastic); 
 
   // alpha
   particle = G4Alpha::Alpha();
-  pmanager = particle->GetProcessManager();
-  G4LEAlphaInelastic* theAIModel = new G4LEAlphaInelastic;
-  theAIModel -> SetMaxEnergy(LEPHighLimit);
-  theIPalpha.AddDataSet(TripathiCrossSection);
-  theIPalpha.AddDataSet(aShen);
-  theIPalpha.RegisterMe(theAIModel);
-  theIPalpha.RegisterMe(theBC);
-  pmanager -> AddDiscreteProcess(&theIPalpha);
-  pmanager -> AddDiscreteProcess(elastic); //ELASTIC SCATTERING
+  pmanager = particle -> GetProcessManager();
+
+  // Activate the LEP model for the alpha inelastic scattering 
+  G4LEAlphaInelastic* alphaLEPModel = new G4LEAlphaInelastic;
+  alphaLEPModel -> SetMaxEnergy(LEPHighLimit);
+
+  // Activate the binary ion model model for the alpha inelastic scattering 
+  alphaInelasticScattering.RegisterMe(alphaLEPModel);
+  alphaInelasticScattering.RegisterMe(binaryIonCascade);
+
+  // Definition of the alpha inelastic scattering cross section 
+  alphaInelasticScattering.AddDataSet(TripathiCrossSection);
+  alphaInelasticScattering.AddDataSet(aShen);
+
+  // Set the alpha hadronic processes: inelastic and elastic scattering
+  pmanager -> AddDiscreteProcess(&alphaInelasticScattering);
+  pmanager -> AddDiscreteProcess(elastic); 
+
+
+
+
+// // alpha
+//   particle = G4Alpha::Alpha();
+//   pmanager = particle->GetProcessManager();
+//   G4LEAlphaInelastic* alphaLEPModel = new G4LEAlphaInelastic;
+//   alphaLEPModel -> SetMaxEnergy(LEPHighLimit);
+  
+//   alphaInelasticScattering.AddDataSet(TripathiCrossSection);
+//   alphaInelasticScattering.AddDataSet(aShen);
+//   alphaInelasticScattering.RegisterMe(theAIModel);
+//   alphaInelasticScattering.RegisterMe(theBC);
+//   pmanager -> AddDiscreteProcess(&theIPalpha);
+//   pmanager -> AddDiscreteProcess(elastic); //ELASTIC SCATTERING
+
+
+
+
 
   // He3
   particle = G4He3::He3();
-  pmanager = particle->GetProcessManager();
-  G4BinaryLightIonReaction * theGenIonBC= new G4BinaryLightIonReaction;
-  G4HadronInelasticProcess* theIPHe3 =
-    new G4HadronInelasticProcess("He3Inelastic",particle);
-  theIPHe3 -> AddDataSet(TripathiCrossSection);
-  theIPHe3 -> AddDataSet(aShen);
-  theIPHe3 -> RegisterMe(theGenIonBC);
-  pmanager -> AddDiscreteProcess(theIPHe3);
-  pmanager -> AddDiscreteProcess(elastic); //ELASTIC SCATTERING
+  pmanager = particle -> GetProcessManager();
+
+  // Only Binary Ion model activated
+  // LEP model is not availaboe for 3He
   
-  // Neutron
-  particle = G4Neutron::Neutron();
-  pmanager = particle->GetProcessManager();
-  thePreEquilib -> SetMinEnergy(precompoundLowLimit);
-  thePreEquilib -> SetMaxEnergy(precompoundHighLimit);
-  theIPNeutron.RegisterMe(thePreEquilib);
-  theIPNeutron.AddDataSet(&theNXSec);
-  pmanager -> AddDiscreteProcess(&theIPNeutron);
-  pmanager -> AddDiscreteProcess(elastic); // ELASTIC SCATTERING
+  G4HadronInelasticProcess*  He3InelasticScattering = 
+    new G4HadronInelasticProcess("Inelastic scattering", particle);
 
+  // Change the binary ion model limits because the LEP is not available
+  // 
+  binaryIonCascade -> SetMinEnergy(0.*MeV);
+  binaryIonCascade -> SetMaxEnergy(binaryLightIonHighLimit);
 
-// Pions plus
-  G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
-  G4LElastic* theElasticModel = new G4LElastic;
-  theElasticProcess -> RegisterMe(theElasticModel);
+  He3InelasticScattering -> RegisterMe(binaryIonCascade);
  
-  particle = G4PionPlus::PionPlus(); 
-  pmanager -> AddDiscreteProcess(theElasticProcess);
-  G4PionPlusInelasticProcess* thePionPlusInelasticProcess = new G4PionPlusInelasticProcess("inelastic");
-  G4PreCompoundModel* theLEInelasticModel = new G4PreCompoundModel(&theHandler);
-  thePionPlusInelasticProcess -> RegisterMe(theLEInelasticModel);
-  pmanager->AddDiscreteProcess(thePionPlusInelasticProcess);
+  // Definition of the 3He inelastic scattering cross section 
+  He3InelasticScattering -> AddDataSet(TripathiCrossSection);
+  He3InelasticScattering -> AddDataSet(aShen);
  
-  // Pion Minus
-  particle = G4PionMinus::PionMinus();
-  pmanager -> AddDiscreteProcess(theElasticProcess);
-  G4PionMinusInelasticProcess* thePionMinusInelasticProcess = 
-    new G4PionMinusInelasticProcess("inelastic");
-  G4PreCompoundModel* theLEPionMinusInelasticModel = new G4PreCompoundModel(&theHandler);
-  thePionMinusInelasticProcess -> RegisterMe(theLEPionMinusInelasticModel);
-  pmanager -> AddDiscreteProcess(thePionMinusInelasticProcess);
-  pmanager -> AddRestProcess(new G4PiMinusAbsorptionAtRest, ordDefault); 
-
-
+  // Set the He3 hadronic processes: inelastic and elastic scattering
+  pmanager -> AddDiscreteProcess(He3InelasticScattering);
+  pmanager -> AddDiscreteProcess(elastic); 
+  
+  // Other neutron processes
+ 
   //Hadron Capture 
   G4HadronCaptureProcess* neutronCapture = new G4HadronCaptureProcess();
   G4LCapture* capture_model = new G4LCapture();
@@ -208,7 +342,8 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
   fission_model -> SetMinEnergy(neutronLowLimit);
   fission_model -> SetMaxEnergy(neutronHighLimit);
   fission -> RegisterMe(fission_model); 
-  pmanager -> AddDiscreteProcess(fission);      
+  pmanager -> AddDiscreteProcess(fission);     
+  
 }
 
 

@@ -38,6 +38,10 @@
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
+#include "G4ExcitationHandler.hh"  
+
+#include "G4VPhysicsConstructor.hh"
+#include "globals.hh"
 
 #include "G4HadronElasticProcess.hh"
 #include "G4HadronFissionProcess.hh"
@@ -82,19 +86,57 @@
 #include "G4AlphaInelasticProcess.hh"
 #include "G4LEAlphaInelastic.hh"
 
+#include "G4PionPlusInelasticProcess.hh"
+#include "G4PionMinusInelasticProcess.hh"
+#include "G4PiNuclearCrossSection.hh"
+
+class G4HadronInelasticProcess;
+
 class HadrontherapyProtonPrecompound: public G4VPhysicsConstructor 
 {
- public:
-   HadrontherapyProtonPrecompound(const G4String& name = "proton-precompound");
-   virtual ~HadrontherapyProtonPrecompound();
+public:
+  HadrontherapyProtonPrecompound(const G4String& name = "proton-precompound");
+  virtual ~HadrontherapyProtonPrecompound();
 
- protected:
-   // Construct particle and physics
-   void ConstructParticle(){};
-   void ConstructProcess();
+protected:
+  // Construct particle and physics
+  void ConstructParticle(){};
+  void ConstructProcess();
 
- private:
+private:
 
+  // Proton inelastic proces
+  G4ProtonInelasticProcess       protonInelasticScattering;
+
+  // Cross Section for proton inelastic process
+  G4ProtonInelasticCrossSection  protonInelasticCrossSection;
+  
+  // Neutron inelastic process 
+  G4NeutronInelasticProcess neutronInelasticScattering;
+  
+  // Cross Section for neutron inelastic process
+  G4NeutronInelasticCrossSection neutronInelasticCrossSection;
+
+  // Pion plus inelastic process
+  G4PionPlusInelasticProcess pionPlusInelasticScattering;
+
+  // Cross sections for Pion plus inelastic process
+  G4PiNuclearCrossSection pionPlusInelasticCrossSection;
+
+  // Pion minus inelastic process
+  G4PionMinusInelasticProcess pionMinusInelasticScattering;
+
+  // Cross section for Pion minus inelastic process
+  G4PiNuclearCrossSection pionMinusInelasticCrossSection;
+  
+  // Deuteron inelastic process
+  G4DeuteronInelasticProcess deuteronInelasticScattering;
+
+  // Tritium inelastic process
+  G4TritonInelasticProcess tritonInelasticScattering; 
+
+  // Alpha inelastic process
+  G4AlphaInelasticProcess alphaInelasticScattering;
   G4double binaryLightIonLowLimit;
   G4double binaryLightIonHighLimit;
   G4double LEPHighLimit;
@@ -103,18 +145,7 @@ class HadrontherapyProtonPrecompound: public G4VPhysicsConstructor
   G4double neutronLowLimit;
   G4double neutronHighLimit;
 
-  G4ProtonInelasticCrossSection theXSec;
   G4ExcitationHandler theHandler;    
-  G4DeuteronInelasticProcess      theIPdeuteron;
-  G4TritonInelasticProcess        theIPtriton;
-  G4AlphaInelasticProcess         theIPalpha;
-  G4HadronInelasticProcess*       theIPHe3;
-  G4HadronInelasticProcess*       theIPIonC12;
-  G4HadronInelasticProcess*       theIPGenericIon;
-  G4ProtonInelasticCrossSection  thePXSec;
-  G4ProtonInelasticProcess       theIPProton;
-  G4NeutronInelasticProcess	 theIPNeutron;
-  G4NeutronInelasticCrossSection   theNXSec;
 };
 #endif
 

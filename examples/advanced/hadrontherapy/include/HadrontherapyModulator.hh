@@ -19,17 +19,19 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-//
-// $Id: HadrontherapyDetectorConstruction.hh,v 3.0, September 2004
-// --------------------------------------------------------------
+// ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
-// --------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G. Candiano, G.A.P. Cirrone, F. Di Rosa, G. Russo
-// Laboratori Nazionali del Sud - INFN, Catania, Italy
-//
-// --------------------------------------------------------------
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// 
+// (a) Laboratori Nazionali del Sud - INFN,  Catania, Italy
+// (b) INFN Section of Genova, Genova, Italy
+// 
+// * cirrone@lns.infn.it
+// ----------------------------------------------------------------------------
+
 #ifndef HadrontherapyModulator_H
 #define HadrontherapyModulator_H 1
 
@@ -40,7 +42,7 @@ class G4VPhysicalVolume;
 
 class HadrontherapyModulator
 {
- public:
+public:
 
   HadrontherapyModulator();
   ~HadrontherapyModulator();
@@ -48,7 +50,7 @@ class HadrontherapyModulator
   void BuildModulator(G4VPhysicalVolume*);  
   void SetModulatorAngle(G4double);
 
- private:
+private:
 
   G4RotationMatrix* rm;
   G4VPhysicalVolume* physiMotherMod;
@@ -92,7 +94,7 @@ class HadrontherapyModulator
   
   G4Tubs*            solidMod9;   
   G4LogicalVolume*   logicMod9;   
-     G4VPhysicalVolume* physiMod9;
+  G4VPhysicalVolume* physiMod9;
   
   G4Tubs*            solidMod10;   
   G4LogicalVolume*   logicMod10;  
@@ -359,7 +361,5 @@ class HadrontherapyModulator
   G4LogicalVolume*   logicMod78;  
   G4VPhysicalVolume* physiMod78;
    
-  // void ReadFile(G4String);
-  //void ReadData(G4String);
 };
 #endif
