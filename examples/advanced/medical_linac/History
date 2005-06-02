@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2005-06-02 12:22:11 mpiergen Exp $
+$Id: History,v 1.10 2005-06-02 13:57:07 mpiergen Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+02.06.2005   Michela Piergentili, tag medical_linac-V07-00-03
+	     code maintenance
+
 02.06.2005   Michela Piergentili, tag medical_linac-V07-00-02
 	     Bug fixed in ROGeometry
 
