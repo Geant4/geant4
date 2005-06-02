@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.86 2005-06-02 22:23:10 duns Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.87 2005-06-02 22:29:40 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -518,7 +518,7 @@ void G4HepRepSceneHandler::AddSolid(const G4Box& box) {
     vertex8 = (transform) * vertex8;
 
     HepRepInstance* instance = getGeometryOrEventInstance(getCalHitType());
-    setAttribute(instance, "DrawAs", "Prism");
+    setAttribute(instance, "DrawAs", G4String("Prism"));
         
     setVisibility(instance, box);
     setLine(instance, box);
@@ -554,7 +554,7 @@ void G4HepRepSceneHandler::AddSolid(const G4Cons& cons) {
     vertex2 = (transform) * vertex2;
 
     HepRepInstance* instance = getGeometryInstance(fpCurrentLV, fCurrentDepth);
-    setAttribute(instance, "DrawAs", "Cylinder");
+    setAttribute(instance, "DrawAs", G4String("Cylinder"));
         
     setVisibility(instance, cons);
     setLine(instance, cons);
@@ -605,7 +605,7 @@ void G4HepRepSceneHandler::AddSolid(const G4Tubs& tubs) {
     vertex2 = (transform) * vertex2;
 
     HepRepInstance* instance = getGeometryInstance(fpCurrentLV, fCurrentDepth);
-    setAttribute(instance, "DrawAs", "Cylinder");
+    setAttribute(instance, "DrawAs", G4String("Cylinder"));
         
     setVisibility(instance, tubs);
     setLine(instance, tubs);
@@ -669,7 +669,7 @@ void G4HepRepSceneHandler::AddSolid(const G4Trd& trd) {
     vertex8 = (transform) * vertex8;
 
     HepRepInstance* instance = getGeometryOrEventInstance(getCalHitType());
-    setAttribute(instance, "DrawAs", "Prism");
+    setAttribute(instance, "DrawAs", G4String("Prism"));
         
     setVisibility(instance, trd);
     setLine(instance, trd);
