@@ -12,10 +12,28 @@ Driver: HepRepFile
 ------------------
 The version of HepRep produced by this driver is HepRep Version 1.
 
-Each call to /vis/viewer/update
-rewrites the file G4HepRep.xml.
+Writes files with file extension .heprep.
 
-View the file using the WIRED Event Display, available from:
+First file is written to current directory and is named G4Data0.heprep.
+Subsequent files increment the number, as in G4Data1.heprep, G4Data2.heprep...
+
+To specify a different output file directory (instead of current directory),
+set G4HEPREPFILE_DIR
+
+To specify a different output file name (instead of G4Data),
+set G4HEPREPFILE_NAME
+
+To repeatedly overwrite the same output file (instead of having incremental
+numbers at the end of the file name),
+set G4HEPREPFILE_OVERWRITE
+
+By default, invisible objects are not culled but are left in the heprep file
+with their visibility initially set to false (so that you can subsequently
+choose to make them visible from within the heprep browser).
+To force culling of invisible objects,
+set G44HEPREPFILE_CULL
+
+View the file using the WIRED3 HepRep Browser, available from:
 http://www.slac.stanford.edu/BFROOT/www/Computing/Graphics/Wired/
 
 WIRED can read xml files in zipped format as well as unzipped,
@@ -23,7 +41,7 @@ so you can save space by applying gzip to the xml file.
 This will reduce the file to about five percent of its original size.
 
 Joseph Perl
-9 November 2001
+2 June 2005
 
 
 Driver: HepRepXML
