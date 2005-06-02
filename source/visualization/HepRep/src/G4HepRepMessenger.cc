@@ -20,14 +20,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepMessenger.cc,v 1.7 2005-06-02 19:15:21 duns Exp $
+// $Id: G4HepRepMessenger.cc,v 1.8 2005-06-02 23:37:19 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4HepRepMessenger.hh"
 
 G4HepRepMessenger::G4HepRepMessenger() :
     suffix (""),
-    geometry(false),
+    geometry(true),
     solids(true),
     invisibles(true) {
 
@@ -44,7 +44,7 @@ G4HepRepMessenger::G4HepRepMessenger() :
     appendGeometryCommand = new G4UIcmdWithABool("/vis/heprep/appendGeometry", this);
     appendGeometryCommand->SetGuidance("Appends copy of geometry to every event.");
     appendGeometryCommand->SetParameterName("flag",false);
-    appendGeometryCommand->SetDefaultValue(false);
+    appendGeometryCommand->SetDefaultValue(true);
     appendGeometryCommand->AvailableForStates(G4State_Idle);
 
     addPointAttributesCommand = new G4UIcmdWithABool("/vis/heprep/addPointAttributes", this);

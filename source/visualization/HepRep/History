@@ -1,4 +1,4 @@
-.$Id: History,v 1.94 2005-06-01 22:38:25 perl Exp $
+.$Id: History,v 1.95 2005-06-02 23:37:19 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+2 June 2005 Mark Donszelmann
+- HepRepXML (heprep2) handles: Solids, Attributes on Hits and Tracks.
+- cheprep at 2.0.5, fix for g++ 4.0.
+
 1 June 2005 Joseph Perl
 - For HeRepFile, use attributes from hits.
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.87 2005-06-02 22:29:40 duns Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.88 2005-06-02 23:37:19 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -518,6 +518,8 @@ void G4HepRepSceneHandler::AddSolid(const G4Box& box) {
     vertex8 = (transform) * vertex8;
 
     HepRepInstance* instance = getGeometryOrEventInstance(getCalHitType());
+    addAttributes(instance, getCalHitType());
+
     setAttribute(instance, "DrawAs", G4String("Prism"));
         
     setVisibility(instance, box);
@@ -669,6 +671,9 @@ void G4HepRepSceneHandler::AddSolid(const G4Trd& trd) {
     vertex8 = (transform) * vertex8;
 
     HepRepInstance* instance = getGeometryOrEventInstance(getCalHitType());
+
+    addAttributes(instance, getCalHitType());
+
     setAttribute(instance, "DrawAs", G4String("Prism"));
         
     setVisibility(instance, trd);
@@ -730,6 +735,8 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyline& line) {
 
     HepRepInstance* instance = factory->createHepRepInstance(getEventInstance(), getTrajectoryType());
 
+    addAttributes(instance, getTrajectoryType());
+
     setColor(instance, GetColor(line));
 
     setVisibility(instance, line);
@@ -751,6 +758,8 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polymarker& line) {
     if (dontWrite()) return;
 
     HepRepInstance* instance = factory->createHepRepInstance(getEventInstance(), getHitType());
+
+    addAttributes(instance, getHitType());
 
     setColor(instance, GetColor(line));
 
@@ -788,13 +797,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Circle& circle) {
 
     HepRepInstance* instance = factory->createHepRepInstance(getEventInstance(), getHitType());
 
-    vector<G4AttValue>* hitAttValues = currentHit->CreateAttValues();
-    const map<G4String,G4AttDef>* hitAttDefs = currentHit->GetAttDefs();
-
-    addAttDefs(getHitType(), hitAttDefs);
-    addAttVals(instance, hitAttDefs, hitAttValues);
-    
-    delete hitAttValues;
+    addAttributes(instance, getHitType());
 
     G4Point3D center = transform * circle.GetPosition();
 
@@ -822,6 +825,8 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 
     HepRepInstance* instance = getGeometryOrEventInstance(getCalHitType());
         
+    addAttributes(instance, getCalHitType());
+
     setVisibility(instance, polyhedron);
 	
     G4bool notLastFace;
@@ -869,6 +874,8 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Square& square) {
 
     HepRepInstance* instance = factory->createHepRepInstance(getEventInstance(), getHitType());
 
+    addAttributes(instance, getHitType());
+
     G4Point3D center = transform * square.GetPosition();
 
     setColor (instance, getColorFor(square));
@@ -880,9 +887,6 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Square& square) {
     factory->createHepRepPoint(instance, center.x(), center.y(), center.z());
 }
 
-
-//Method for handling G4NURBS objects for drawing solids.
-//Knots and Ctrl Pnts MUST be arrays of GLfloats.
 void G4HepRepSceneHandler::AddPrimitive (const G4NURBS&) {
 #ifdef PDEBUG
     cout << "G4HepRepSceneHandler::AddPrimitive(G4NURBS&) " << endl;
@@ -902,47 +906,10 @@ void G4HepRepSceneHandler::AddCompound (const G4VTrajectory& trajectory) {
     cout << "G4HepRepSceneHandler::AddCompound(G4VTrajectory&) " << endl;
 #endif
     if (dontWrite()) return;
-
-    vector<G4AttValue>* trajectoryAttValues = trajectory.CreateAttValues();
-    const map<G4String,G4AttDef>* trajectoryAttDefs = trajectory.GetAttDefs();
-
-    HepRepType* trajectoryType = getTrajectoryType();
-    addAttDefs(trajectoryType, trajectoryAttDefs);
     
-    // these attValues are non-standard, so can only be added when we have the attDef.
-    double charge = 0;
-    _trajectoryType->addAttValue("Ch", charge);
-    G4Color color = getColorFor(charge);
-    _trajectoryType->addAttValue("Color", color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha());
-    _trajectoryType->addAttValue("ID", -1);
-    _trajectoryType->addAttValue("IMom", G4String(""));
-    _trajectoryType->addAttValue("IMag", 0.0);
-    _trajectoryType->addAttValue("PDG", -1);
-    _trajectoryType->addAttValue("PN", G4String(""));
-    _trajectoryType->addAttValue("PID", -1);
-
-    HepRepInstance* trajectoryInstance = factory->createHepRepInstance(getEventInstance(), trajectoryType);
-    addAttVals(trajectoryInstance, trajectoryAttDefs, trajectoryAttValues);
-    
-    delete trajectoryAttValues;
-
-    setColor(trajectoryInstance, getColorFor(trajectory.GetCharge()));    
-    setAttribute(trajectoryInstance, "LineWidth", 1.0);
-
-    // Specify the polyline by using the trajectory points.
-    for (int i = 0; i < trajectory.GetPointEntries(); i++) {
-        G4VTrajectoryPoint* trajectoryPoint = trajectory.GetPoint(i);
-        G4Point3D vertex = trajectoryPoint->GetPosition();
-        HepRepPoint* point = factory->createHepRepPoint(trajectoryInstance, vertex.x(), vertex.y(), vertex.z());
-
-
-        if (messenger.addPointAttributes()) {
-            vector<G4AttValue>* pointAttValues = trajectoryPoint->CreateAttValues();
-            const map<G4String,G4AttDef>* pointAttDefs = trajectoryPoint->GetAttDefs();
-            addAttVals(point, pointAttDefs, pointAttValues);
-            delete pointAttValues;
-        }
-    }
+    currentTrack = &trajectory;
+    G4VSceneHandler::AddCompound(trajectory); 
+    currentTrack = NULL;    
 }
 
 
@@ -951,6 +918,7 @@ void G4HepRepSceneHandler::AddCompound (const G4VHit& hit) {
     cout << "G4HepRepSceneHandler::AddCompound(G4VHit&) " << endl;
 #endif
     if (dontWrite()) return;
+    
     currentHit = &hit;
     G4VSceneHandler::AddCompound(hit); 
     currentHit = NULL;
@@ -1073,6 +1041,49 @@ void G4HepRepSceneHandler::setMarker (HepRepAttribute *attribute, const G4VMarke
         setAttribute(attribute, "Fill", false);
     } else {
         setColor(attribute, GetColor(marker), G4String("FillColor"));
+    }
+}
+
+void G4HepRepSceneHandler::addAttributes(HepRepInstance* instance, HepRepType* type) {
+    if (currentHit) {
+        vector<G4AttValue>* hitAttValues = currentHit->CreateAttValues();
+        const map<G4String,G4AttDef>* hitAttDefs = currentHit->GetAttDefs();
+
+        addAttDefs(getHitType(), hitAttDefs);
+
+        // these attValues are non-standard, so can only be added when we have the attDef.
+        type->addAttValue("LVol", G4String(""));
+        type->addAttValue("HitType", G4String(""));
+        type->addAttValue("ID", -1);
+        type->addAttValue("Column", -1);
+        type->addAttValue("Row", -1);
+        type->addAttValue("Energy", 0.0);
+        type->addAttValue("Pos", G4String(""));
+
+        addAttVals(instance, hitAttDefs, hitAttValues);
+    
+        delete hitAttValues;
+    
+    } else if (currentTrack) {
+        vector<G4AttValue>* trajectoryAttValues = currentTrack->CreateAttValues();
+        const map<G4String,G4AttDef>* trajectoryAttDefs = currentTrack->GetAttDefs();
+
+        addAttDefs(type, trajectoryAttDefs);
+    
+        // these attValues are non-standard, so can only be added when we have the attDef.
+        type->addAttValue("Ch", 0.0);
+        type->addAttValue("Color", 1.0, 1.0, 1.0, 1.0);
+        type->addAttValue("ID", -1);
+        type->addAttValue("IMom", G4String(""));
+        type->addAttValue("IMag", 0.0);
+        type->addAttValue("PDG", -1);
+        type->addAttValue("PN", G4String(""));
+        type->addAttValue("PID", -1);
+
+        addAttVals(instance, trajectoryAttDefs, trajectoryAttValues);
+    
+        delete trajectoryAttValues;
+        
     }
 }
 
@@ -1199,18 +1210,8 @@ void G4HepRepSceneHandler::addAttDefs(HepRepDefinition* definition, const map<G4
     // Specify additional attribute definitions.
     map<G4String,G4AttDef>::const_iterator attDefIterator = attDefs->begin();
     while (attDefIterator != attDefs->end()) {
-	    // Protect against incorrect use of Category.  Anything value other than the
-	    // standard ones will be considered to be in the physics category.
-	    G4String category = attDefIterator->second.GetCategory();
-	    if ((category == "Draw") ||
-    		(category == "Physics") ||
-    		(category == "Association") ||
-    		(category == "PickAction")) {
-
-            category = "Physics";
-        }
         definition->addAttDef(attDefIterator->first, attDefIterator->second.GetDesc(),
-                        category, attDefIterator->second.GetExtra());
+                        attDefIterator->second.GetCategory(), attDefIterator->second.GetExtra());
         attDefIterator++;
     }
 }
@@ -1351,7 +1352,7 @@ void G4HepRepSceneHandler::addTopLevelAttributes(HepRepType* type) {
 }           
 
 
-HEPREP::HepRepInstance* G4HepRepSceneHandler::getGeometryOrEventInstance(HepRepType* type) {
+HepRepInstance* G4HepRepSceneHandler::getGeometryOrEventInstance(HepRepType* type) {
     return isEventData() ? factory->createHepRepInstance(getEventInstance(), type)
                          : getGeometryInstance(fpCurrentLV, fCurrentDepth);
 }

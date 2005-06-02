@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.hh,v 1.38 2005-06-02 22:23:10 duns Exp $
+// $Id: G4HepRepSceneHandler.hh,v 1.39 2005-06-02 23:37:19 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -148,6 +148,8 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         void close();
 
         void writeLayers(HEPREP::HepRep* heprep);
+
+        void addAttributes(HEPREP::HepRepInstance* instance, HEPREP::HepRepType* type);
 
         void addAttDefs(HEPREP::HepRepDefinition* definition, const std::map<G4String,G4AttDef>* attDefs);
         void addAttVals(HEPREP::HepRepAttribute* attribute, const std::map<G4String,G4AttDef>* attDefs, std::vector<G4AttValue>* attValues);
