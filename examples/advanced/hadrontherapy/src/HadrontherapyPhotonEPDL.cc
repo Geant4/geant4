@@ -35,9 +35,7 @@
 // ----------------------------------------------------------------------------
 
 #include "HadrontherapyPhotonEPDL.hh"
-
 #include "G4ProcessManager.hh"
-#include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4LowEnergyCompton.hh"
 #include "G4LowEnergyGammaConversion.hh"
@@ -55,21 +53,21 @@ void HadrontherapyPhotonEPDL::ConstructProcess()
 {
   // Add EPDL processes for photons
   
-  theParticleIterator->reset();
+  theParticleIterator -> reset();
 
   while( (*theParticleIterator)() )
     {
-      G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* manager = particle->GetProcessManager();
-      G4String particleName = particle->GetParticleName();
+      G4ParticleDefinition* particle = theParticleIterator -> value();
+      G4ProcessManager* manager = particle -> GetProcessManager();
+      G4String particleName = particle -> GetParticleName();
      
       if (particleName == "gamma") 
 	{
-	  manager->AddDiscreteProcess(new G4LowEnergyPhotoElectric);
-	  manager->AddDiscreteProcess(new G4LowEnergyCompton);
-	  manager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
-	  manager->AddDiscreteProcess(new G4LowEnergyRayleigh);
-          manager->AddProcess(new G4StepLimiter(),-1,-1, 3);
+	  manager -> AddDiscreteProcess(new G4LowEnergyPhotoElectric);
+	  manager -> AddDiscreteProcess(new G4LowEnergyCompton);
+	  manager -> AddDiscreteProcess(new G4LowEnergyGammaConversion);
+	  manager -> AddDiscreteProcess(new G4LowEnergyRayleigh);
+          manager -> AddProcess(new G4StepLimiter(),-1,-1, 3);
 	}   
     }
 }

@@ -36,7 +36,6 @@
 // ----------------------------------------------------------------------------
 #include "HadrontherapyPhotonPenelope.hh"
 #include "G4ProcessManager.hh"
-#include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4PenelopeCompton.hh"
 #include "G4PenelopeGammaConversion.hh"

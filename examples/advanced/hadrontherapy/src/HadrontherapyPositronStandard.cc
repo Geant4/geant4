@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyPositronStandard.cc,v 1.4 2005-05-25 09:11:09 guatelli Exp $
+// $Id: HadrontherapyPositronStandard.cc,v 1.5 2005-06-02 11:01:31 cirrone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -32,9 +32,7 @@
 // -------------------------------------------------------------------
 
 #include "HadrontherapyPositronStandard.hh"
-
 #include "G4ProcessManager.hh"
-#include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MultipleScattering.hh"
 #include "G4eIonisation.hh"
@@ -52,21 +50,21 @@ void HadrontherapyPositronStandard::ConstructProcess()
 {
   // Add standard processes for positrons
   
-  theParticleIterator->reset();
+  theParticleIterator -> reset();
 
   while( (*theParticleIterator)() )
     {
-      G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* manager = particle->GetProcessManager();
-      G4String particleName = particle->GetParticleName();
+      G4ParticleDefinition* particle = theParticleIterator -> value();
+      G4ProcessManager* manager = particle -> GetProcessManager();
+      G4String particleName = particle -> GetParticleName();
      
       if (particleName == "e+") 
 	{
-	  manager->AddProcess(new G4MultipleScattering, -1, 1,1);
-	  manager->AddProcess(new G4eIonisation,        -1, 2,2);
-	  manager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
-	  manager->AddProcess(new G4eplusAnnihilation,   0,-1,4); 
-          manager->AddProcess(new G4StepLimiter(),          -1,-1, 3);
+	  manager -> AddProcess(new G4MultipleScattering, -1, 1,1);
+	  manager -> AddProcess(new G4eIonisation,        -1, 2,2);
+	  manager -> AddProcess(new G4eBremsstrahlung,    -1,-1,3);
+	  manager -> AddProcess(new G4eplusAnnihilation,   0,-1,4); 
+          manager -> AddProcess(new G4StepLimiter(),      -1,-1,3);
 	}   
     }
 }

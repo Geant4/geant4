@@ -36,11 +36,6 @@
 
 #include "HadrontherapyPhantomSD.hh"
 #include "HadrontherapyPhantomHit.hh"
-#include "HadrontherapyDetectorConstruction.hh"
-#include "HadrontherapyPhantomROGeometry.hh"
-#include "G4Track.hh"
-#include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
 #include "G4Step.hh"
 #include "G4VTouchable.hh"
 #include "G4TouchableHistory.hh"
@@ -78,16 +73,16 @@ G4bool HadrontherapyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* RO
  
   if(energyDeposit == 0.) return false;
 
-  // Read Voxel indexes: i is the x index, k is the z index
+  // Read voxel indexes: i is the x index, k is the z index
 
   G4int k  = ROhist -> GetReplicaNumber(0);
   G4int i  = ROhist -> GetReplicaNumber(2);
   G4int j  = ROhist -> GetReplicaNumber(1);
 
   if(energyDeposit != 0)                       
-    {       
-      HadrontherapyPhantomHit* phantomHit = new HadrontherapyPhantomHit();
-            
+    {  
+      // Create a hit with the information of position in the phantom and energy deposit     
+      HadrontherapyPhantomHit* phantomHit = new HadrontherapyPhantomHit();       
       phantomHit -> SetEdepAndPosition(i, j, k, energyDeposit); 
       HitsCollection -> insert(phantomHit);
     }
@@ -104,18 +99,4 @@ void HadrontherapyPhantomSD::EndOfEvent(G4HCofThisEvent* HCE)
     }
   HCE -> AddHitsCollection(HCID,HitsCollection);
 }
-
-void HadrontherapyPhantomSD::clear()
-{
-}
- 
-void HadrontherapyPhantomSD::DrawAll()
-{
-}
-
-void HadrontherapyPhantomSD::PrintAll()
-{
-}
-
-
 

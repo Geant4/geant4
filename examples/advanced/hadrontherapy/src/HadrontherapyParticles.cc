@@ -35,11 +35,7 @@
 // ----------------------------------------------------------------------------
 
 #include "HadrontherapyParticles.hh"
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 
@@ -53,9 +49,11 @@ HadrontherapyParticles::~HadrontherapyParticles()
 void HadrontherapyParticles::ConstructParticle()
 {
   G4Gamma::GammaDefinition();
-  // *******  
-  // leptons
-  // *******
+
+  // *******//  
+  // leptons//
+  // *******//
+
   G4Electron::ElectronDefinition();
   G4Positron::PositronDefinition();
   G4MuonPlus::MuonPlusDefinition();
@@ -64,24 +62,27 @@ void HadrontherapyParticles::ConstructParticle()
   G4AntiNeutrinoE::AntiNeutrinoEDefinition();
   G4NeutrinoMu::NeutrinoMuDefinition();
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
-  // ********
-  //  mesons
-  // ********
+
+  // ********//
+  //  mesons //
+  // ********//
   G4PionPlus::PionPlusDefinition();
   G4PionMinus::PionMinusDefinition();
   G4PionZero::PionZeroDefinition();
   G4KaonPlus::KaonPlusDefinition();
   G4KaonMinus::KaonMinusDefinition();
-  // **********
-  //  barions
-  // **********
+
+  // **********//
+  //  barions  //
+  // **********//
   G4Proton::ProtonDefinition();
   G4AntiProton::AntiProtonDefinition();
   G4Neutron::NeutronDefinition();
   G4AntiNeutron::AntiNeutronDefinition();
-  // ******
-  //  ions
-  // ******
+
+  // ******//
+  //  ions //
+  // ******//
   G4Deuteron::DeuteronDefinition();
   G4Triton::TritonDefinition();
   G4He3::He3Definition();

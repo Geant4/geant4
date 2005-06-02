@@ -35,19 +35,13 @@
 // ----------------------------------------------------------------------------
 #include "HadrontherapyPhantomROGeometry.hh"
 #include "HadrontherapyDummySD.hh"
-
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
-#include "G4SDManager.hh"
 #include "G4Box.hh"
-#include "G4Tubs.hh"
-#include "G4SubtractionSolid.hh"
 #include "G4ThreeVector.hh"
 #include "G4Material.hh"
-#include "G4Colour.hh"
-#include "G4VisAttributes.hh"
 
 HadrontherapyPhantomROGeometry::HadrontherapyPhantomROGeometry(G4String aString,
 							       G4double phantomDimX,
@@ -56,84 +50,84 @@ HadrontherapyPhantomROGeometry::HadrontherapyPhantomROGeometry(G4String aString,
 							       G4int numberOfVoxelsX,
 							       G4int numberOfVoxelsY,
 							       G4int numberOfVoxelsZ):
-G4VReadOutGeometry(aString),
-phantomDimensionX(phantomDimX),
-phantomDimensionY(phantomDimY),
-phantomDimensionZ(phantomDimZ),
-numberOfVoxelsAlongX(numberOfVoxelsX),
-numberOfVoxelsAlongY(numberOfVoxelsY),
-numberOfVoxelsAlongZ(numberOfVoxelsZ)
+  G4VReadOutGeometry(aString),
+  phantomSizeX(phantomDimX),
+  phantomSizeY(phantomDimY),
+  phantomSizeZ(phantomDimZ),
+  numberOfVoxelsAlongX(numberOfVoxelsX),
+  numberOfVoxelsAlongY(numberOfVoxelsY),
+  numberOfVoxelsAlongZ(numberOfVoxelsZ)
 {
 }
-// -----------------------------------------------------
+
 HadrontherapyPhantomROGeometry::~HadrontherapyPhantomROGeometry()
 {
 }
-// -----------------------------------------------------
+
 G4VPhysicalVolume* HadrontherapyPhantomROGeometry::Build()
 {
-// A dummy material is used to fill the volumes of the readout geometry.
-// (It will be allowed to set a NULL pointer in volumes of such virtual
-// division in future, since this material is irrelevant for tracking.)
+  // A dummy material is used to fill the volumes of the readout geometry.
+  // (It will be allowed to set a NULL pointer in volumes of such virtual
+  // division in future, since this material is irrelevant for tracking.)
 
-G4Material* dummyMat = new G4Material(name="dummyMat", 1., 1.*g/mole, 1.*g/cm3);
+  G4Material* dummyMat = new G4Material(name="dummyMat", 1., 1.*g/mole, 1.*g/cm3);
 
-G4double worldDimensionX = 200.0 *cm;
-G4double worldDimensionY = 200.0 *cm;
-G4double worldDimensionZ = 200.0 *cm;
+  G4double worldSizeX = 200.0 *cm;
+  G4double worldSizeY = 200.0 *cm;
+  G4double worldSizeZ = 200.0 *cm;
 
+  G4double halfPhantomSizeX = phantomSizeX;
+  G4double halfPhantomSizeY = phantomSizeY;
+  G4double halfPhantomSizeZ = phantomSizeZ;
 
-G4double halfPhantomDimensionX = phantomDimensionX;
-G4double halfPhantomDimensionY = phantomDimensionY;
-G4double halfPhantomDimensionZ = phantomDimensionZ;
+  // World volume of ROGeometry ...
+  G4Box* ROWorld = new G4Box("ROWorld",
+			     worldSizeX,
+			     worldSizeY,
+			     worldSizeZ);
 
+  G4LogicalVolume* ROWorldLog = new G4LogicalVolume(ROWorld, dummyMat, 
+						    "ROWorldLog", 0,0,0);
 
+  G4VPhysicalVolume* ROWorldPhys = new G4PVPlacement(0,G4ThreeVector(), 
+						     "ROWorldPhys", 
+						     ROWorldLog, 
+						     0,false,0);
 
-// world volume of ROGeometry ...
-  G4Box *ROWorld = new G4Box("ROWorld",
-			     worldDimensionX,
-			     worldDimensionY,
-			     worldDimensionZ);
-
-  G4LogicalVolume *ROWorldLog = new G4LogicalVolume(ROWorld, dummyMat, "ROWorldLog", 0,0,0);
-
-  G4VPhysicalVolume *ROWorldPhys = new G4PVPlacement(0,G4ThreeVector(), "ROWorldPhys", ROWorldLog, 0,false,0);
-
-// phantom ROGeometry ... 
+  // Phantom ROGeometry 
   G4Box *ROPhantom = new G4Box("ROPhantom", 
-			       halfPhantomDimensionX, 
-			       halfPhantomDimensionY, 
-			       halfPhantomDimensionZ);
+			       halfPhantomSizeX, 
+			       halfPhantomSizeY, 
+			       halfPhantomSizeZ);
 
   G4LogicalVolume *ROPhantomLog = new G4LogicalVolume(ROPhantom,
 						      dummyMat,
 						      "ROPhantomLog",
 						      0,0,0);
-
+  
   G4VPhysicalVolume *ROPhantomPhys = new G4PVPlacement(0,
-						       G4ThreeVector(-180.0 *mm, 0.0 *mm, 0.0 *mm),
+						       G4ThreeVector(-180.0 *mm,
+								     0.0 *mm, 
+								     0.0 *mm),
 						       "PhantomPhys",
                                                        ROPhantomLog,
                                                        ROWorldPhys,
                                                        false,0);
 
 
+  // ROGeomtry: the phantom is divided in voxels along the axis X, Y, Z
 
-// ROGeomtry: Voxel division
+  // Division along X axis: the phantom is devided in slices along the X axis
 
-// variables for x division ...
+  G4double halfXVoxelSizeX = halfPhantomSizeX/numberOfVoxelsAlongX;
+  G4double halfXVoxelSizeY = halfPhantomSizeY;
+  G4double halfXVoxelSizeZ = halfPhantomSizeZ;
+  G4double voxelXThickness = 2*halfXVoxelSizeX;
 
-G4double halfXVoxelDimensionX = halfPhantomDimensionX/numberOfVoxelsAlongX;
-G4double halfXVoxelDimensionY = halfPhantomDimensionY;
-G4double halfXVoxelDimensionZ = halfPhantomDimensionZ;
-G4double voxelXThickness = 2*halfXVoxelDimensionX;
-
-
-// X division first... 
   G4Box *ROPhantomXDivision = new G4Box("ROPhantomXDivision",
-					halfXVoxelDimensionX,
-					halfXVoxelDimensionY,
-					halfXVoxelDimensionZ);
+					halfXVoxelSizeX,
+					halfXVoxelSizeY,
+					halfXVoxelSizeZ);
 
   G4LogicalVolume *ROPhantomXDivisionLog = new G4LogicalVolume(ROPhantomXDivision,
 							       dummyMat,
@@ -147,89 +141,56 @@ G4double voxelXThickness = 2*halfXVoxelDimensionX;
                                                               numberOfVoxelsAlongX,
                                                               voxelXThickness);
 
-// variables for y division ...
+  // Division along Y axis: the slices along the X axis are devided along the Y axis
 
-G4double halfYVoxelDimensionX =  halfXVoxelDimensionX;
-G4double halfYVoxelDimensionY = halfPhantomDimensionY/numberOfVoxelsAlongY;
-G4double halfYVoxelDimensionZ = halfPhantomDimensionZ;
-G4double voxelYThickness = 2*halfYVoxelDimensionY;
-
-
-
-// ...then Y  division
+  G4double halfYVoxelSizeX =  halfXVoxelSizeX;
+  G4double halfYVoxelSizeY = halfPhantomSizeY/numberOfVoxelsAlongY;
+  G4double halfYVoxelSizeZ = halfPhantomSizeZ;
+  G4double voxelYThickness = 2*halfYVoxelSizeY;
 
   G4Box *ROPhantomYDivision = new G4Box("ROPhantomYDivision",
-					halfYVoxelDimensionX, 
-					halfYVoxelDimensionY,
-					halfYVoxelDimensionZ);
+					halfYVoxelSizeX, 
+					halfYVoxelSizeY,
+					halfYVoxelSizeZ);
 
   G4LogicalVolume *ROPhantomYDivisionLog = new G4LogicalVolume(ROPhantomYDivision,
 							       dummyMat,
 							       "ROPhantomYDivisionLog",
 							       0,0,0);
  
-   G4VPhysicalVolume *ROPhantomYDivisionPhys = new G4PVReplica("ROPhantomYDivisionPhys",
+  G4VPhysicalVolume *ROPhantomYDivisionPhys = new G4PVReplica("ROPhantomYDivisionPhys",
 							      ROPhantomYDivisionLog,
 							      ROPhantomXDivisionPhys,
 							      kYAxis,
 							      numberOfVoxelsAlongY,
 							      voxelYThickness);
+  
+  // Division along Z axis: the slices along the Y axis are devided along the Z axis
 
-
-
-
-// variables for z division ...
-
-G4double halfZVoxelDimensionX = halfXVoxelDimensionX;
-G4double halfZVoxelDimensionY = halfYVoxelDimensionY;
-G4double halfZVoxelDimensionZ = halfPhantomDimensionZ/numberOfVoxelsAlongZ;
-G4double voxelZThickness = 2*halfZVoxelDimensionZ;
-
-
-//....and ...then Z division
+  G4double halfZVoxelSizeX = halfXVoxelSizeX;
+  G4double halfZVoxelSizeY = halfYVoxelSizeY;
+  G4double halfZVoxelSizeZ = halfPhantomSizeZ/numberOfVoxelsAlongZ;
+  G4double voxelZThickness = 2*halfZVoxelSizeZ;
  
- G4Box *ROPhantomZDivision = new G4Box("ROPhantomZDivision",
-				       halfZVoxelDimensionX,
-				       halfZVoxelDimensionY, 
-				       halfZVoxelDimensionZ);
+  G4Box *ROPhantomZDivision = new G4Box("ROPhantomZDivision",
+					halfZVoxelSizeX,
+					halfZVoxelSizeY, 
+					halfZVoxelSizeZ);
  
- G4LogicalVolume *ROPhantomZDivisionLog = new G4LogicalVolume(ROPhantomZDivision,
-							      dummyMat,
-							      "ROPhantomZDivisionLog",
-							      0,0,0);
+  G4LogicalVolume *ROPhantomZDivisionLog = new G4LogicalVolume(ROPhantomZDivision,
+							       dummyMat,
+							       "ROPhantomZDivisionLog",
+							       0,0,0);
  
- ROPhantomZDivisionPhys = new G4PVReplica("ROPhantomZDivisionPhys",
-					  ROPhantomZDivisionLog,
-					  ROPhantomYDivisionPhys,
-					  kZAxis,
-					  numberOfVoxelsAlongZ,
-					  voxelZThickness);
- 
+  ROPhantomZDivisionPhys = new G4PVReplica("ROPhantomZDivisionPhys",
+					   ROPhantomZDivisionLog,
+					   ROPhantomYDivisionPhys,
+					   kZAxis,
+					   numberOfVoxelsAlongZ,
+					   voxelZThickness);
 
-
-
-// ------------------------                                        
-// Visualization attributes
-
-G4VisAttributes * green = new G4VisAttributes( G4Colour(0. ,1. ,0.));
-green -> SetVisibility(true);
-green -> SetForceWireframe(true);
-
-G4VisAttributes * brawn = new G4VisAttributes( G4Colour(0.8, 0.5, 0.35));
-brawn -> SetVisibility(true);
-brawn -> SetForceSolid(true);
-
-
- ROPhantomYDivisionLog->SetVisAttributes(green);
- ROPhantomXDivisionLog ->SetVisAttributes(green);
- ROPhantomZDivisionLog ->SetVisAttributes(green);
-
-// -----------------------------------------------------------------------
-
-HadrontherapyDummySD *dummySD = new HadrontherapyDummySD;
-ROPhantomXDivisionLog->SetSensitiveDetector(dummySD);
-ROPhantomYDivisionLog->SetSensitiveDetector(dummySD);
-ROPhantomZDivisionLog->SetSensitiveDetector(dummySD);
+  HadrontherapyDummySD *dummySD = new HadrontherapyDummySD;
+  ROPhantomZDivisionLog -> SetSensitiveDetector(dummySD);
 
   return ROWorldPhys;
 }

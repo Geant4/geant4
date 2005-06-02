@@ -35,11 +35,6 @@
 // ----------------------------------------------------------------------------
 
 #include "HadrontherapyPhantomHit.hh"
-#include "G4ios.hh"
-#include "G4VVisManager.hh"
-#include "G4Colour.hh"
-#include "G4VisAttributes.hh"
-#include "G4LogicalVolume.hh"
 
 G4Allocator<HadrontherapyPhantomHit> HadrontherapyPhantomHitAllocator;
 
@@ -75,10 +70,4 @@ int HadrontherapyPhantomHit::operator==(const HadrontherapyPhantomHit &right) co
  return((xHitID==right.xHitID)&&(zHitID==right.zHitID)&&(yHitID==right.yHitID));
 }
 
-void HadrontherapyPhantomHit::Draw()
-{
-}
 
-void HadrontherapyPhantomHit::Print()
-{
-}

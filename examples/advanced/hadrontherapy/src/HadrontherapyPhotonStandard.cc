@@ -34,9 +34,7 @@
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
 #include "HadrontherapyPhotonStandard.hh"
-
 #include "G4ProcessManager.hh"
-#include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
@@ -53,20 +51,20 @@ void HadrontherapyPhotonStandard::ConstructProcess()
 {
   // Add standard processes for photons
   
-  theParticleIterator->reset();
+  theParticleIterator -> reset();
 
   while( (*theParticleIterator)() )
     {
-      G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* manager = particle->GetProcessManager();
-      G4String particleName = particle->GetParticleName();
+      G4ParticleDefinition* particle = theParticleIterator -> value();
+      G4ProcessManager* manager = particle -> GetProcessManager();
+      G4String particleName = particle -> GetParticleName();
 
       if (particleName == "gamma") 
 	{
-	  manager->AddDiscreteProcess(new G4PhotoElectricEffect);
-	  manager->AddDiscreteProcess(new G4ComptonScattering);
-	  manager->AddDiscreteProcess(new G4GammaConversion); 
-          manager->AddProcess(new G4StepLimiter(),-1,-1, 3);
+	  manager -> AddDiscreteProcess(new G4PhotoElectricEffect);
+	  manager -> AddDiscreteProcess(new G4ComptonScattering);
+	  manager -> AddDiscreteProcess(new G4GammaConversion); 
+          manager -> AddProcess(new G4StepLimiter(),-1,-1, 3);
 	}   
     }
 }

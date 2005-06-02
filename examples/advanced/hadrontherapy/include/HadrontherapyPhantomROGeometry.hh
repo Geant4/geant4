@@ -34,7 +34,9 @@
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
 //
-//The phantom is devided in voxels. the dimension of the voxel is 1mm
+//
+//The phantom is devided in voxels. the dimension of the voxel is 1 mm
+//
 //
 #ifndef HadrontherapyPhantomROGeometry_h
 #define HadrontherapyPhantomROGeometry_h 
@@ -52,16 +54,15 @@ public:
 				 G4int numberOfVoxelsY,
 				 G4int numberOfVoxelsZ);
 
-
   ~HadrontherapyPhantomROGeometry();
+
 private:
   G4VPhysicalVolume* Build();
 
-private:
-  
-  const G4double phantomDimensionX;
-  const G4double phantomDimensionY; 
-  const G4double phantomDimensionZ;
+private:  
+  const G4double phantomSizeX;
+  const G4double phantomSizeY; 
+  const G4double phantomSizeZ;
 
   const G4int numberOfVoxelsAlongX;
   const G4int numberOfVoxelsAlongY; 

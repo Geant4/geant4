@@ -40,38 +40,32 @@
 #include "G4VHit.hh"
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
-#include "G4ThreeVector.hh"
-#include "G4LogicalVolume.hh"
-#include "G4Transform3D.hh"
-#include "G4RotationMatrix.hh"
 
 class HadrontherapyPhantomHit : public G4VHit
 {
 public:
   HadrontherapyPhantomHit();
   ~HadrontherapyPhantomHit();
+ 
   HadrontherapyPhantomHit(const HadrontherapyPhantomHit &right);
+ 
   const HadrontherapyPhantomHit& operator = (const HadrontherapyPhantomHit &right);
+ 
   int operator == (const HadrontherapyPhantomHit &right) const;
 
   inline void *operator new(size_t);
   inline void operator delete(void *aHit);
 
-  void Draw();
-  void Print();
-
 private:
   G4int xHitID; // Hit x voxel 
   G4int zHitID; // Hit z voxel
   G4int yHitID; // Hit y voxel 
-  G4double energyDeposit; // energy deposit associated with the hit
+  G4double energyDeposit; // Energy deposit associated with the hit
 
 public:
-  //...
-  // Set Hit position
-  inline void SetCellID(G4int XID,G4int YID,G4int ZID)
-  {xHitID = XID; zHitID = ZID;  yHitID = YID;  }
-  
+  // Methods to get the information - energy deposit and associated
+  // position in the phantom - of the hits stored in the hits collection  
+ 
   inline G4int GetXID() // Get x index of the voxel 
   {return xHitID;}
 
@@ -81,8 +75,11 @@ public:
   inline G4int GetYID() // Get z index of the voxel  
   {return yHitID;}
    
-  inline void SetEdep(G4double edep) //Set hit energy deposit
-  {energyDeposit = edep;}
+  inline G4double GetEdep() // Get energy deposit
+  {return energyDeposit;}
+ 
+  // Methods to store the information of the hit ( energy deposit, position in the phantom )
+  // in the hits collection
 
   inline void SetEdepAndPosition(G4int xx, G4int yy, G4int zz, G4double eDep)
   {
@@ -91,12 +88,6 @@ public:
     zHitID = zz;
     energyDeposit = eDep;
   }
-
-  inline void AddEdep(G4double edep) // Add energy deposit
-  {energyDeposit += edep;}
-
-  inline G4double GetEdep() // Get energy deposit
-  {return energyDeposit;}
 };
 
 typedef G4THitsCollection<HadrontherapyPhantomHit> HadrontherapyPhantomHitsCollection;

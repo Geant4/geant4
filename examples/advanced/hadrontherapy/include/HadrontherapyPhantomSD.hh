@@ -51,12 +51,11 @@ public:
   ~HadrontherapyPhantomSD();
 
   void Initialize(G4HCofThisEvent*);
+ 
   G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
+ 
   void EndOfEvent(G4HCofThisEvent*HCE);
-  void clear();
-  void DrawAll();
-  void PrintAll(); 
-
+ 
 private:
   HadrontherapyPhantomHitsCollection *HitsCollection;
   G4String sensitiveDetectorName;	
