@@ -36,7 +36,9 @@
 
 #ifndef HadrontherapyMaterial_H
 #define HadrontherapyMaterial_H 1
+
 #include "globals.hh"
+
 class G4Material;
 
 class HadrontherapyMaterial
@@ -47,30 +49,25 @@ public:
 
 public:
   void  DefineMaterials();
-  G4Material* GetMat(G4String); //returns the material
+  G4Material* GetMat(G4String); // Returns the material
   
 private:
-G4Material* matW; 
-G4Material* matplexiglass;
-G4Material* matPb;
-G4Material* matir192;
-G4Material* Titanium;
-G4Material* matAir;
-G4Material* matH2O;
-G4Material* soft;
-G4Material* matsteel;
-G4Material* gold;
-G4Material* matI; 
-G4Material* ceramic;
-G4Material* Vacuum; 
-G4Material* bone;
-G4Material* muscle;
-G4Material* Ta;
-G4Material* Brass;
-G4Material* Kapton;
-G4Material* matAl;
-G4Material* matTa;
-G4Material* matCu;
-G4Material* matSi;
+  G4Material* matW;
+  G4Material* matAl; 
+  G4Material* matSi;
+  G4Material* matTa;
+  G4Material* matCu;
+  G4Material* vacuum; 
+  G4Material* matplexiglass;
+  G4Material* brass;
+  G4Material* kapton;
+  G4Material* matPb;
+  G4Material* titanium;
+  G4Material* matAir;
+  G4Material* matH2O;
+  G4Material* soft;
+  G4Material* gold;
+  G4Material* bone;
+  G4Material* muscle;
 };
 #endif

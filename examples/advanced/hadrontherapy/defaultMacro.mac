@@ -45,5 +45,6 @@
 #/beamLine/RangeShifter/thickness 4 cm
 #/beamLine/RangeShifter/RSMat Water
 #/vis/viewer/flush
-/run/beamOn 5000
+
+
 

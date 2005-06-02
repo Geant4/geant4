@@ -34,9 +34,7 @@
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
 #include "HadrontherapyElectronPenelope.hh"
-
 #include "G4ProcessManager.hh"
-#include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MultipleScattering.hh"
 #include "G4PenelopeIonisation.hh"

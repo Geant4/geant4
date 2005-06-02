@@ -35,17 +35,12 @@
 // -------------------------------------------------------------------
 
 #include "HadrontherapyElectronEEDL.hh"
-
 #include "G4ProcessManager.hh"
-#include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MultipleScattering.hh"
 #include "G4LowEnergyIonisation.hh"
 #include "G4LowEnergyBremsstrahlung.hh"
 #include "G4StepLimiter.hh"
-#include "G4VBremAngularDistribution.hh"
-#include "G4Generator2BS.hh"
-#include "G4Generator2BN.hh"
 
 HadrontherapyElectronEEDL::HadrontherapyElectronEEDL(const G4String& name): G4VPhysicsConstructor(name)
 { }

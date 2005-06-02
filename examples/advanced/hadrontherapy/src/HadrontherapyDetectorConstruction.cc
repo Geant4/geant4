@@ -57,7 +57,8 @@
 HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction()
   : phantomSD(0), phantomROGeometry(0), beamLine(0), modulator(0),
     physicalTreatmentRoom(0),
-    patientPhysicalVolume(0), phantomLogicalVolume(0), 
+    patientPhysicalVolume(0), 
+    phantomLogicalVolume(0), 
     phantomPhysicalVolume(0)
 {
   // Messenger to change parameters of the geometry
@@ -69,7 +70,8 @@ HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction()
   phantomSizeX = 20.*mm;
   phantomSizeY = 20.*mm;
   phantomSizeZ = 20.*mm;
-  
+
+  // Number of the phantom voxels  
   numberOfVoxelsAlongX = 80;
   numberOfVoxelsAlongY = 80;
   numberOfVoxelsAlongZ = 80;
@@ -84,9 +86,14 @@ HadrontherapyDetectorConstruction::~HadrontherapyDetectorConstruction()
 
 G4VPhysicalVolume* HadrontherapyDetectorConstruction::Construct()
 {  
+  // Define the materials of the experimental set-up
   material -> DefineMaterials();
+  
+  // Define the geometry components
   ConstructBeamLine();
   ConstructPhantom();
+  
+  // Set the sensitive detector where the energy deposit is collected
   ConstructSensitiveDetector();
  
   return physicalTreatmentRoom;
@@ -237,25 +244,25 @@ void HadrontherapyDetectorConstruction::SetModulatorAngle(G4double value)
 
 void HadrontherapyDetectorConstruction::SetRangeShifterXPosition(G4double value)
 {
-  beamLine -> setRangeShifterXPos(value);
+  beamLine -> SetRangeShifterXPosition(value);
   G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }
 
 void HadrontherapyDetectorConstruction::SetRangeShifterXSize(G4double value)
 {
-  beamLine -> setRangeShifterX(value);
+  beamLine -> SetRangeShifterXSize(value);
   G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }
 
 void HadrontherapyDetectorConstruction::SetFirstScatteringFoilSize(G4double value)
 {
-  beamLine -> SetFirstScatteringFoil(value);  
+  beamLine -> SetFirstScatteringFoilXSize(value);  
   G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }
 
 void HadrontherapyDetectorConstruction::SetSecondScatteringFoilSize(G4double value)
 {
-  beamLine -> SetSecondScatteringFoil(value);
+  beamLine -> SetSecondScatteringFoilXSize(value);
   G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }
 

@@ -20,15 +20,19 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 // $Id: HadrontherapyBeamLine.hh; May 2005;
-// -----------------------------------------------------------
+// ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
-// -----------------------------------------------------------
+// ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G. Candiano, G.A.P. Cirrone, F. Di Rosa, G. Russo
-// Laboratori Nazionali del Sud - INFN, Catania, Italy
-//
-// ----------------------------------------------------------
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// 
+// (a) Laboratori Nazionali del Sud 
+//     of the National Institute for Nuclear Physics, Catania, Italy
+// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+// 
+// * cirrone@lns.infn.it
+// -----------------------------------------------------------------------------
 
 #ifndef HadrontherapyBeamLine_H
 #define HadrontherapyBeamLine_H 1
@@ -41,37 +45,70 @@ class HadrontherapyBeamLine
 public:
   HadrontherapyBeamLine(G4VPhysicalVolume*);
   ~HadrontherapyBeamLine();
+
   void HadrontherapyBeamLineSupport();
+  // Definition of the beam line support
+
   void HadrontherapyBeamScatteringFoils();
+  // Definition of the first scattering foil, 
+  // of the Kapton window, of the stopper 
+
   void HadrontherapyBeamCollimators();
+  // Definition of the first collimator, of the range shifter, 
+  // of the second collimator, of the first and second 
+  // collimator modulators
+ 
   void HadrontherapyBeamMonitoring();
+  // Definition of three monitor chambers
+
   void HadrontherapyBeamNozzle();
+  // Definition of the beam noozle
+
   void HadrontherapyBeamFinalCollimator();
-  void setRangeShifterXPos(G4double);
-  void setRangeShifterX(G4double);
-  void SetFirstScatteringFoil(G4double);
-  void SetSecondScatteringFoil(G4double);
+  // Definition of the final collimator
+
+  // The following methods allow to change parameters
+  // of some beam line components
+
+  void SetRangeShifterXPosition(G4double value);
+  // This method allows to move the Range Shifter along
+  // the X axis
+
+  void SetRangeShifterXSize(G4double halfSize);
+  // This method allows to change the size of the range shifter along
+  // the X axis
+ 
+  void SetFirstScatteringFoilXSize(G4double);
+  // This method allows to change the size of the first scattering foil
+  // along the X axis
+
+  void SetSecondScatteringFoilXSize(G4double);
+  // This method allows to change the size of the second scattering foil
+  // along the X axis 
+  
   void SetOuterRadiusStopper(G4double);
+  // This method allows to change the size of the outer radius of the stopper
+ 
   void SetInnerRadiusFinalCollimator(G4double);
+  // This method allows to change the size of the inner radius of the 
+  // final collimator
+  
   void SetRSMaterial(G4String);
+  // This method allows to change the material 
+  // of the range shifter
 
 private:
   G4VPhysicalVolume* physiBeamLineSupport; 
   G4VPhysicalVolume* physiBeamLineCover; 
   G4VPhysicalVolume* physiBeamLineCover2;
-
-  G4Box* FirstScatteringFoil;
+  G4Box* firstScatteringFoil;
   G4VPhysicalVolume* physiFirstScatteringFoil;
-  G4VPhysicalVolume* physiVacuumZone;
   G4VPhysicalVolume* physiKaptonWindow;
-
   G4Tubs* solidStopper;
-
   G4VPhysicalVolume* physiStopper; 
-  G4Box* SecondScatteringFoil;  
+  G4Box* secondScatteringFoil;  
   G4VPhysicalVolume* physiSecondScatteringFoil;  
-  
-  G4VPhysicalVolume* physiFirstCollimator;
+  G4VPhysicalVolume* physiFirstCollimator;  
   G4VPhysicalVolume* physiHoleFirstCollimator;
   G4Box* solidRangeShifterBox;
   G4LogicalVolume* logicRangeShifterBox;
@@ -99,19 +136,12 @@ private:
   G4VPhysicalVolume* physiSecondHoleNozzleSupport;
   G4Tubs* solidFinalCollimator; 
   G4VPhysicalVolume* physiFinalCollimator; 
-   
-  G4double FirstScatteringFoil_x;
+  G4double firstScatteringFoilXSize;
   G4double outerRadiusStopper;
-  G4double SecondScatteringFoil_x;
-  G4double RangeShifterBox_x;
-  G4double RangeShifterBoxPosition_x; 
+  G4double secondScatteringFoilXSize;
+  G4double rangeShifterXSize;
+  G4double rangeShifterXPosition;
   G4double innerRadiusFinalCollimator;
-
-  G4double RangeShifterBox_y; 
-  G4double RangeShifterBox_z;
-  G4double RangeShifterBoxPosition_y;
-  G4double RangeShifterBoxPosition_z;
-
   G4VPhysicalVolume* mother;
   HadrontherapyMaterial* material;
   G4Material* RSMat;

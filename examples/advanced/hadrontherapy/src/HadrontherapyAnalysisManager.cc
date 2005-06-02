@@ -35,46 +35,34 @@
 // ----------------------------------------------------------------------------
 
 #ifdef  G4ANALYSIS_USE
-#include <stdlib.h>
-#include <fstream>
 #include "HadrontherapyAnalysisManager.hh"
-#include "G4ios.hh"
-#include "AIDA/IHistogram1D.h"
-#include "AIDA/IManagedObject.h"
-#include "AIDA/IAnalysisFactory.h"
-#include "AIDA/IHistogramFactory.h"
-#include "AIDA/ITupleFactory.h"
-#include "AIDA/ITreeFactory.h"
-#include "AIDA/ITree.h"
-#include "AIDA/ITuple.h"
 
 HadrontherapyAnalysisManager* HadrontherapyAnalysisManager::instance = 0;
 
 HadrontherapyAnalysisManager::HadrontherapyAnalysisManager() : 
   aFact(0), theTree(0), histFact(0), tupFact(0), h1(0), ntuple(0)
-{
-  
+{  
 }
 
 HadrontherapyAnalysisManager::~HadrontherapyAnalysisManager() 
 { 
   delete ntuple;
-  ntuple=0;
+  ntuple = 0;
 
   delete h1;
-  h1=0;
+  h1 = 0;
   
   delete tupFact;
-  tupFact=0;
+  tupFact = 0;
 
   delete histFact;
-  histFact=0;
+  histFact = 0;
 
   delete theTree;
-  theTree=0;
+  theTree = 0;
 
   delete aFact;
-  aFact=0;
+  aFact = 0;
 }
 
 HadrontherapyAnalysisManager* HadrontherapyAnalysisManager::getInstance()
@@ -85,41 +73,46 @@ HadrontherapyAnalysisManager* HadrontherapyAnalysisManager::getInstance()
 
 void HadrontherapyAnalysisManager::book() 
 {
-  
-  //build up  the  factories
+  // Build up  the  analysis factory
   aFact = AIDA_createAnalysisFactory();
-  AIDA::ITreeFactory *treeFact = aFact->createTreeFactory();
+  AIDA::ITreeFactory* treeFact = aFact -> createTreeFactory();
 
-  //parameters for the TreeFactory
- 
-  G4String fileName="hadrontherapy.hbk";
-  theTree = treeFact->create(fileName,"hbook",false, true);
+  // Create the .hbk file
+  G4String fileName = "hadrontherapy.hbk";
+  theTree = treeFact -> create(fileName,"hbook",false,true);
   delete treeFact;
-  histFact = aFact->createHistogramFactory( *theTree );
-  tupFact  = aFact->createTupleFactory    ( *theTree );
 
-  h1 = histFact -> createHistogram1D("10","slice, energy",
-                                     80,0.,80. );
- G4String columnNames = "int i; int j; int k; double energy;";
- G4String options = "";
- if (tupFact) ntuple = tupFact->create("1","1",columnNames, options);
+  // Create the histogram and the ntuple factory
+  histFact = aFact -> createHistogramFactory(*theTree);
+  tupFact = aFact -> createTupleFactory(*theTree);
+
+  // Create the histogram
+  h1 = histFact -> createHistogram1D("10","slice, energy", 80, 0., 80. );
+
+  // Create the ntuple
+  G4String columnNames = "int i; int j; int k; double energy;";
+  G4String options = "";
+  if (tupFact) ntuple = tupFact->create("1","1",columnNames, options);
 }
 
-void HadrontherapyAnalysisManager::Energy_Dep(G4int i, G4int j, G4int k,
- G4double energy)
+void HadrontherapyAnalysisManager::FillEnergyDeposit(G4int i, 
+						     G4int j, 
+						     G4int k,
+						     G4double energy)
 {
   if (ntuple)
     {
-      G4int iSlice = ntuple -> findColumn("i" );
+      G4int iSlice = ntuple -> findColumn("i");
       G4int jSlice = ntuple -> findColumn("j");
       G4int kSlice = ntuple -> findColumn("k");
-      G4int iEnergy = ntuple -> findColumn("energy" );
+      G4int iEnergy = ntuple -> findColumn("energy");
       
       ntuple -> fill(iSlice,i);
       ntuple -> fill(jSlice,j); 
       ntuple -> fill(kSlice,k);
       ntuple -> fill(iEnergy, energy);
     }
+
   ntuple -> addRow(); 
 }
 
@@ -130,13 +123,11 @@ void HadrontherapyAnalysisManager::BraggPeak(G4int slice, G4double energy)
 
 void HadrontherapyAnalysisManager::finish() 
 {  
- // write all histograms to file
+ // Write all histograms to file
  theTree -> commit();
- G4cout<<" commit done"<<G4endl;
  
- // close (will again commit)
+ // Close (will again commit)
  theTree ->close();
- G4cout<<" close() done"<<G4endl;
 }
 #endif
 

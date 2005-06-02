@@ -34,11 +34,6 @@
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
 
-#include "HadrontherapyEventAction.hh"
-#include "HadrontherapyPhantomHit.hh"
-#include "HadrontherapyPhantomSD.hh"
-#include "HadrontherapyDetectorConstruction.hh"
-#include "HadrontherapyMatrix.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
@@ -47,15 +42,18 @@
 #include "G4Trajectory.hh"
 #include "G4VVisManager.hh"
 #include "G4SDManager.hh"
-#include "G4UImanager.hh"
-#include "G4ios.hh"
 #include "G4VVisManager.hh"
+#include "HadrontherapyEventAction.hh"
+#include "HadrontherapyPhantomHit.hh"
+#include "HadrontherapyPhantomSD.hh"
+#include "HadrontherapyDetectorConstruction.hh"
+#include "HadrontherapyMatrix.hh"
 
-HadrontherapyEventAction::HadrontherapyEventAction(HadrontherapyMatrix* Matrix) :
+HadrontherapyEventAction::HadrontherapyEventAction(HadrontherapyMatrix* matrixPointer) :
   drawFlag("all" )
 { 
- m_HitsCollectionID = -1;
-  matrix = Matrix; 
+  hitsCollectionID = -1;
+  matrix = matrixPointer; 
 }
 
 HadrontherapyEventAction::~HadrontherapyEventAction()
@@ -65,26 +63,28 @@ HadrontherapyEventAction::~HadrontherapyEventAction()
 void HadrontherapyEventAction::BeginOfEventAction(const G4Event* )
 {
  G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
- if(m_HitsCollectionID == -1)
- 	m_HitsCollectionID = pSDManager -> GetCollectionID("HadrontherapyPhantomHitsCollection");
+ if(hitsCollectionID == -1)
+ 	hitsCollectionID = pSDManager -> GetCollectionID("HadrontherapyPhantomHitsCollection");
 }
 
 void HadrontherapyEventAction::EndOfEventAction(const G4Event* evt)
 {  
-  if(m_HitsCollectionID < 0)
+  if(hitsCollectionID < 0)
     return;
 
   G4HCofThisEvent* HCE = evt -> GetHCofThisEvent();
   HadrontherapyPhantomHitsCollection* CHC = NULL; 
  
   if(HCE)
-    CHC = (HadrontherapyPhantomHitsCollection*)(HCE -> GetHC(m_HitsCollectionID));
+    CHC = (HadrontherapyPhantomHitsCollection*)(HCE -> GetHC(hitsCollectionID));
   
   if(CHC)
     {
       if(matrix)
 	{
-	  // Fill voxel matrix with energy deposit
+	  // Fill the matrix with the information: voxel and associated energy deposit 
+          // in the phantom at the end of the event
+
 	  G4int HitCount = CHC -> entries();
 	  for (G4int h=0; h<HitCount; h++)
 	    {
@@ -92,13 +92,12 @@ void HadrontherapyEventAction::EndOfEventAction(const G4Event* evt)
 	      G4int j = ((*CHC)[h]) -> GetYID();
 	      G4int k = ((*CHC)[h]) -> GetZID();
               G4double energyDeposit = ((*CHC)[h]) -> GetEdep();
-              matrix -> Fill(i, j, k, energyDeposit);
-              
+              matrix -> Fill(i, j, k, energyDeposit);              
 	    }
 	}
     }
 
-  // extract the trajectories and draw them ...
+  // Extract the trajectories and draw them in the visualisation
 
   if (G4VVisManager::GetConcreteInstance())
     {

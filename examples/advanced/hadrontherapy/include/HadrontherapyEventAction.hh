@@ -39,6 +39,7 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
+
 class HadrontherapyMatrix;
 
 class HadrontherapyEventAction : public G4UserEventAction
@@ -50,13 +51,11 @@ public:
 public:
   void BeginOfEventAction(const G4Event*);
   void EndOfEventAction(const G4Event*);
-  
-  
-private:
-  
+    
+private: 
   G4String drawFlag; //Visualisation flag
-  G4int m_HitsCollectionID;
-  HadrontherapyMatrix *matrix;
+  G4int hitsCollectionID;
+  HadrontherapyMatrix *matrix; 
 };
 
 #endif

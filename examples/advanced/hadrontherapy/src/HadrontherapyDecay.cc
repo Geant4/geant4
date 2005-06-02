@@ -38,7 +38,6 @@
 #include "G4ProcessManager.hh"
 #include "globals.hh"
 #include "G4ios.hh"
-
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 

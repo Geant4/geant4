@@ -47,63 +47,48 @@
 #include "G4Material.hh"
 
 HadrontherapyBeamLine::HadrontherapyBeamLine(G4VPhysicalVolume* motherVolume):
-  physiBeamLineSupport(0), 
-  physiBeamLineCover(0), 
-  physiBeamLineCover2(0),
-  
-  FirstScatteringFoil(0),
-  physiFirstScatteringFoil(0),
-
-  physiKaptonWindow(0), 
-  solidStopper(0), 
-  physiStopper(0), 
-  SecondScatteringFoil(0),
-  physiSecondScatteringFoil(0),
-  
-  physiFirstCollimator(0),
-  solidRangeShifterBox(0), 
-  logicRangeShifterBox(0),
-  physiRangeShifterBox(0),
-  
-  physiSecondCollimator(0),
+  physiBeamLineSupport(0), physiBeamLineCover(0), physiBeamLineCover2(0), 
+  firstScatteringFoil(0), physiFirstScatteringFoil(0), physiKaptonWindow(0), 
+  solidStopper(0), physiStopper(0), 
+  secondScatteringFoil(0), physiSecondScatteringFoil(0),
+  physiFirstCollimator(0), solidRangeShifterBox(0), logicRangeShifterBox(0),
+  physiRangeShifterBox(0), physiSecondCollimator(0),
   physiFirstCollimatorModulatorBox(0),
   physiHoleFirstCollimatorModulatorBox(0),
-  
   physiSecondCollimatorModulatorBox(0),
-  physiHoleSecondCollimatorModulatorBox(0), physiFirstMonitorLayer1(0), physiFirstMonitorLayer2(0),
-  physiFirstMonitorLayer3(0), physiFirstMonitorLayer4(0), physiSecondMonitorLayer1(0), physiSecondMonitorLayer2(0),
-  physiSecondMonitorLayer3(0), physiSecondMonitorLayer4(0),physiThirdMonitorLayer1(0), physiThirdMonitorLayer2(0),
-  physiThirdMonitorLayer3(0), physiThirdMonitorLayer4(0), physiNozzleSupport(0), physiHoleNozzleSupport(0),
-  physiSecondHoleNozzleSupport(0),solidFinalCollimator(0),
+  physiHoleSecondCollimatorModulatorBox(0), 
+  physiFirstMonitorLayer1(0), physiFirstMonitorLayer2(0),
+  physiFirstMonitorLayer3(0), physiFirstMonitorLayer4(0),
+  physiSecondMonitorLayer1(0), physiSecondMonitorLayer2(0),
+  physiSecondMonitorLayer3(0), physiSecondMonitorLayer4(0),
+  physiThirdMonitorLayer1(0), physiThirdMonitorLayer2(0),
+  physiThirdMonitorLayer3(0), physiThirdMonitorLayer4(0),
+  physiNozzleSupport(0), physiHoleNozzleSupport(0),
+  physiSecondHoleNozzleSupport(0),
+  solidFinalCollimator(0),
   physiFinalCollimator(0)
 
 {
   mother = motherVolume;
   material = new HadrontherapyMaterial();  
+
+  G4double defaultFirstScatteringFoilXSize = 0.0075 *mm;
+  firstScatteringFoilXSize = defaultFirstScatteringFoilXSize; 
   
-  G4double defaultRangeShifterBoxPosition_x = -2530.5 *mm;
-  RangeShifterBoxPosition_x = defaultRangeShifterBoxPosition_x; 
+  G4double defaultOuterRadiusStopper = 2 *mm;
+  outerRadiusStopper = defaultOuterRadiusStopper; 
 
-  G4double defaultRangeShifterBox_x = 5 *mm; 
-  RangeShifterBox_x = defaultRangeShifterBox_x;
+  G4double defaultSecondScatteringFoilXSize = 0.0125 *mm;  
+  secondScatteringFoilXSize = defaultSecondScatteringFoilXSize;
 
-  G4double defaultFirstScatteringFoil_x = 0.0075 *mm;
-  FirstScatteringFoil_x = defaultFirstScatteringFoil_x; 
-  
-  G4double defaultSecondScatteringFoil_x = 0.0125 *mm;  
-  SecondScatteringFoil_x = defaultSecondScatteringFoil_x;
+  G4double defaultRangeShifterXSize = 5. *mm; 
+  rangeShifterXSize = defaultRangeShifterXSize;
 
-  G4double defaultouterRadiusStopper = 2 *mm;
-  outerRadiusStopper = defaultouterRadiusStopper; 
+  G4double defaultRangeShifterXPosition = -2530.5 *mm;
+  rangeShifterXPosition = defaultRangeShifterXPosition; 
 
   G4double defaultinnerRadiusFinalCollimator = 12.5 *mm;
   innerRadiusFinalCollimator = defaultinnerRadiusFinalCollimator;
-
-  RangeShifterBox_y = 176. *mm; 
-  RangeShifterBox_z = 176. *mm;  
-
-  RangeShifterBoxPosition_y = 0 *mm;
-  RangeShifterBoxPosition_z = 0 *mm;
 
   G4Material* air = material -> GetMat("Air") ;
   RSMat = air;
@@ -116,206 +101,195 @@ HadrontherapyBeamLine::~HadrontherapyBeamLine()
 
 void HadrontherapyBeamLine::HadrontherapyBeamLineSupport()
 {
-  // ---------------------
-  // BEAM LINE SUPPORT
-  //--------------------
+  // ------------------//
+  // Beam line support //
+  //-------------------//
 
-  G4double BeamLineSupport_x = 1.5 *m;
-  G4double BeamLineSupport_y = 20. *mm;
-  G4double BeamLineSupport_z = 600.*mm;                               
+  const G4double beamLineSupportXSize = 1.5*m;
+  const G4double beamLineSupportYSize = 20.*mm;
+  const G4double beamLineSupportZSize = 600.*mm;                               
 
-  G4double BeamLineSupportPosition_x = -1948.59 *mm;
-  G4double BeamLineSupportPosition_y = -230. *mm; 
-  G4double BeamLineSupportPosition_z = 0.*mm;
+  const G4double beamLineSupportXPosition = -1948.59 *mm;
+  const G4double beamLineSupportYPosition = -230. *mm; 
+  const G4double beamLineSupportZPosition = 0.*mm;
 
   G4Material* Al = material -> GetMat("MatAluminum"); 
 
-  G4Box* BeamLineSupport = new G4Box("BeamLineSupport", 
-				     BeamLineSupport_x, 
-				     BeamLineSupport_y, 
-				     BeamLineSupport_z);
+  G4Box* beamLineSupport = new G4Box("BeamLineSupport", 
+				     beamLineSupportXSize, 
+				     beamLineSupportYSize, 
+				     beamLineSupportZSize);
 
-  G4LogicalVolume* logicBeamLineSupport = new G4LogicalVolume(BeamLineSupport, 
+  G4LogicalVolume* logicBeamLineSupport = new G4LogicalVolume(beamLineSupport, 
 							      Al, 
 							      "BeamLineSupport");
-  physiBeamLineSupport = new G4PVPlacement(0, G4ThreeVector(BeamLineSupportPosition_x, 
-							    BeamLineSupportPosition_y,
-							    BeamLineSupportPosition_z),
+  physiBeamLineSupport = new G4PVPlacement(0, G4ThreeVector(beamLineSupportXPosition, 
+							    beamLineSupportYPosition,
+							    beamLineSupportZPosition),
 					   "BeamLineSupport", 
 					   logicBeamLineSupport, 
 					   mother, false, 0);
-
+ 
+  // Visualisation attributes of the beam line support
   G4VisAttributes * gray = new G4VisAttributes( G4Colour(0.5, 0.5, 0.5 ));
   gray-> SetVisibility(true);
   gray-> SetForceSolid(true);
   logicBeamLineSupport -> SetVisAttributes(gray);
 
-  //----------------------
-  //  BEAM LINE COVER 1 (left panel)
+  //---------------------------------//
+  //  Beam line cover 1 (left panel) //
+  //---------------------------------//
 
-  G4double BeamLineCover_x = 1.5    *m;
-  G4double BeamLineCover_y = 750.   *mm;
-  G4double BeamLineCover_z = 10.    *mm;                               
+  const G4double beamLineCoverXSize = 1.5*m;
+  const G4double beamLineCoverYSize = 750.*mm;
+  const G4double beamLineCoverZSize = 10.*mm;                               
 
-  G4double BeamLineCoverPosition_x = -1948.59 *mm;
-  G4double BeamLineCoverPosition_y = -980. *mm; 
-  G4double BeamLineCoverPosition_z =  600. *mm;
+  const G4double beamLineCoverXPosition = -1948.59 *mm;
+  const G4double beamLineCoverYPosition = -980.*mm; 
+  const G4double beamLineCoverZPosition = 600.*mm;
 
-  G4Box* BeamLineCover = new G4Box("BeamLineCover",
-				   BeamLineCover_x, 
-				   BeamLineCover_y, 
-				   BeamLineCover_z);
-  G4LogicalVolume* logicBeamLineCover = new G4LogicalVolume(BeamLineCover, 
+  G4Box* beamLineCover = new G4Box("BeamLineCover",
+				   beamLineCoverXSize, 
+				   beamLineCoverYSize, 
+				   beamLineCoverZSize);
+
+  G4LogicalVolume* logicBeamLineCover = new G4LogicalVolume(beamLineCover, 
 							    Al, 
 							    "BeamLineCover");
 
-  physiBeamLineCover = new G4PVPlacement(0, G4ThreeVector(BeamLineCoverPosition_x,
-							  BeamLineCoverPosition_y,
-							  BeamLineCoverPosition_z),
+  physiBeamLineCover = new G4PVPlacement(0, G4ThreeVector(beamLineCoverXPosition,
+							  beamLineCoverYPosition,
+							  beamLineCoverZPosition),
 					 "BeamLineCover", 
 					 logicBeamLineCover, 
 					 mother,
 					 false, 
 					 0);
 
-  // --------------------------
-  //  BEAM LINE COVER 2 (rigth panel)
+  // ---------------------------------//
+  //  Beam line cover 2 (rigth panel) //
+  // ---------------------------------//
 
-  G4double BeamLineCover2_x = 1.5    *m;
-  G4double BeamLineCover2_y = 750.   *mm;
-  G4double BeamLineCover2_z = 10.    *mm;                               
-
-  G4double BeamLineCover2Position_x = -1948.59 *mm;
-  G4double BeamLineCover2Position_y = -980. *mm; 
-  G4double BeamLineCover2Position_z =  -600. *mm;
-
-  G4Box* BeamLineCover2 = new G4Box("BeamLineCover2", 
-				    BeamLineCover2_x, 
-				    BeamLineCover2_y, 
-				    BeamLineCover2_z);
-
-  G4LogicalVolume* logicBeamLineCover2 = new G4LogicalVolume(BeamLineCover2, 
-							     Al, 
-							     "BeamLineCover2");
-
-  physiBeamLineCover2 = new G4PVPlacement(0, G4ThreeVector(BeamLineCover2Position_x,
-							   BeamLineCover2Position_y,
-							   BeamLineCover2Position_z),
+  // It has the same characteristic of beam line cover 1 but set in a different position
+  physiBeamLineCover2 = new G4PVPlacement(0, G4ThreeVector(beamLineCoverXPosition,
+							   beamLineCoverYPosition,
+							   - beamLineCoverZPosition),
 					  "BeamLineCover2", 
-					  logicBeamLineCover2, 
+					  logicBeamLineCover, 
 					  mother, 
 					  false, 
 					  0);
 
-  G4VisAttributes * blue = new G4VisAttributes( G4Colour(0. ,0. ,1.));
+  // Visualisation attributes of the beam line covers
+  G4VisAttributes* blue = new G4VisAttributes(G4Colour(0. ,0. ,1.));
   blue -> SetVisibility(true);
   blue -> SetForceSolid(true);
-
-  logicBeamLineCover  -> SetVisAttributes(blue);
-  logicBeamLineCover2 -> SetVisAttributes(blue); 
+  logicBeamLineCover -> SetVisAttributes(blue);
 }
+
 void HadrontherapyBeamLine::HadrontherapyBeamScatteringFoils()
 {
-  // ---------------------
-  // VACUUM ZONE
-  //-----------
+  // ------------//
+  // Vacuum area //
+  //-------------//
 
-  G4double VacuumZone_x = 60.5325 *mm;
-  G4double VacuumZone_y = 52.5    *mm;
-  G4double VacuumZone_z = 52.5    *mm;                               
+  const G4double vacuumZoneXSize = 60.5325 *mm;
+  const G4double vacuumZoneYSize = 52.5 *mm;
+  const G4double vacuumZoneZSize = 52.5 *mm;                               
 
-  G4double VacuumZonePosition_x = -3188.05750 *mm;
-  G4double VacuumZonePosition_y = 0.         *mm; 
-  G4double VacuumZonePosition_z = 0.         *mm;
+  const G4double vacuumZoneXPosition = -3188.05750 *mm;
 
-  G4Material* Vacuum = material -> GetMat("Galactic");
+  G4Material* vacuum = material -> GetMat("Galactic");
 
-  G4Box* VacuumZone= new G4Box("VacuumZone", VacuumZone_x, VacuumZone_y, VacuumZone_z);
-  G4LogicalVolume* logicVacuumZone = new G4LogicalVolume(VacuumZone, Vacuum, "VacuumZone");
+  G4Box* vacuumZone = new G4Box("VacuumZone", vacuumZoneXSize, vacuumZoneYSize, vacuumZoneZSize);
 
-  physiVacuumZone = new G4PVPlacement(0, G4ThreeVector(VacuumZonePosition_x, 
-						       VacuumZonePosition_y, 
-						       VacuumZonePosition_z),
+  G4LogicalVolume* logicVacuumZone = new G4LogicalVolume(vacuumZone, vacuum, "VacuumZone");
+
+  G4VPhysicalVolume* physiVacuumZone = new G4PVPlacement(0, G4ThreeVector(vacuumZoneXPosition, 0., 0.),
 				      "VacuumZone", 
 				      logicVacuumZone, 
 				      mother, 
 				      false, 
 				      0);
+  // ----------------------//
+  // First scattering foil //
+  // ----------------------//
 
-  // ------------------------
-  // FIRST SCATTERING FOIL 
+  const G4double firstScatteringFoilYSize = 52.5   *mm;
+  const G4double firstScatteringFoilZSize = 52.5   *mm;
 
-  //***default first scattering foil-x***
-
-
-  //***************************************************
-
-  G4double FirstScatteringFoil_y = 52.5   *mm;
-  G4double FirstScatteringFoil_z = 52.5   *mm;
-
-  G4double FirstScatteringFoilPosition_x = -59.525 *mm;
-  G4double FirstScatteringFoilPosition_y =  0      *mm;
-  G4double FirstScatteringFoilPosition_z =  0      *mm;
+  const G4double firstScatteringFoilXPosition = -59.525 *mm;
 
   G4Material* Ta = material -> GetMat("MatTantalum");
 
-  FirstScatteringFoil = new G4Box("FirstScatteringFoil", 
-				  FirstScatteringFoil_x, 
-				  FirstScatteringFoil_y, 
-				  FirstScatteringFoil_z);
+  firstScatteringFoil = new G4Box("FirstScatteringFoil", 
+				  firstScatteringFoilXSize, 
+				  firstScatteringFoilYSize, 
+				  firstScatteringFoilZSize);
 
-  G4LogicalVolume* logicFirstScatteringFoil = new G4LogicalVolume(FirstScatteringFoil, 
+  G4LogicalVolume* logicFirstScatteringFoil = new G4LogicalVolume(firstScatteringFoil, 
 								  Ta, 
 								  "FirstScatteringFoil");
-  physiFirstScatteringFoil = new G4PVPlacement(0, G4ThreeVector(FirstScatteringFoilPosition_x,
-								FirstScatteringFoilPosition_y,
-								FirstScatteringFoilPosition_z),
+
+  physiFirstScatteringFoil = new G4PVPlacement(0, G4ThreeVector(firstScatteringFoilXPosition,
+								0.,
+								0.),
 					       "FirstScatteringFoil", 
 					       logicFirstScatteringFoil, 
 					       physiVacuumZone, 
 					       false, 
 					       0); 
 
-  // ---------------------
-  // KAPTON WINDOW
-  //-----------
-  G4Material* Kapton = material -> GetMat("Kapton") ;
-  G4Box* solidKaptonWindow = new G4Box("KaptonWindow", 0.025*mm, 5.25*cm, 5.25*cm);
+  // --------------//
+  // Kapton Window //
+  //---------------//
+
+  G4Material* kapton = material -> GetMat("Kapton") ;
+
+  const G4double kaptonWindowXSize = 0.025*mm;
+  const G4double kaptonWindowYSize = 5.25*cm;
+  const G4double kaptonWindowZSize = 5.25*cm;
+  const G4double kaptonWindowXPosition = 60.5075*mm;
+  
+  G4Box* solidKaptonWindow = new G4Box("KaptonWindow", 
+				       kaptonWindowXSize,
+				       kaptonWindowYSize,
+				       kaptonWindowZSize);
+
   G4LogicalVolume* logicKaptonWindow = new G4LogicalVolume(solidKaptonWindow, 
-							   Kapton, 
+							   kapton, 
 							   "KaptonWindow");
-  physiKaptonWindow = new G4PVPlacement(0, G4ThreeVector(60.5075*mm, 0.*cm, 0.*cm), 
+
+  physiKaptonWindow = new G4PVPlacement(0, G4ThreeVector(kaptonWindowXPosition, 0., 0.), 
 					"KaptonWindow", 
 					logicKaptonWindow,
 					physiVacuumZone, 
 					false, 
 					0); 
+
   G4VisAttributes * white = new G4VisAttributes( G4Colour());
   white -> SetVisibility(true);
   white -> SetForceSolid(true);
 
-  logicKaptonWindow    -> SetVisAttributes(white);
+  logicKaptonWindow -> SetVisAttributes(white);
 
-  // --------------------
-  // STOPPER
-  //----------------------
-  //****default outer Radius stopper****
-
-  //********************************************
-
+  // --------//
+  // Stopper //
+  //---------//
+  
   G4double phi = 90. *deg;     
-  // Matrix definition for a 90 deg rotation. Also used for other volumes       
+  // Matrix definition for a 90 deg rotation with respect to Y axis
   G4RotationMatrix rm;               
   rm.rotateY(phi);
 
-  G4double innerRadiusStopper = 0.*cm;
-  G4double hightStopper = 3.5*mm;
-  G4double startAngleStopper = 0.*deg;
-  G4double spanningAngleStopper = 360.*deg;
+  const G4double innerRadiusStopper = 0.*cm;
+  const G4double hightStopper = 3.5*mm;
+  const G4double startAngleStopper = 0.*deg;
+  const G4double spanningAngleStopper = 360.*deg;
 
-  G4double StopperPosition_x = -2956.02 *mm;
-  G4double StopperPosition_y = 0.*m;
-  G4double StopperPosition_z = 0.*m;
+  const G4double stopperXPosition = -2956.02 *mm;
+  const G4double stopperYPosition = 0.*m;
+  const G4double stopperZPosition = 0.*m;
 
   solidStopper = new G4Tubs("Stopper", 
 			    innerRadiusStopper, 
@@ -324,97 +298,94 @@ void HadrontherapyBeamLine::HadrontherapyBeamScatteringFoils()
 			    startAngleStopper, 
 			    spanningAngleStopper);
 
-  G4Material* Brass = material -> GetMat("Brass") ;
+  G4Material* brass = material -> GetMat("Brass") ;
 
-  G4LogicalVolume* logicStopper = new G4LogicalVolume(solidStopper, Brass, "Stopper", 0, 0, 0);
+  G4LogicalVolume* logicStopper = new G4LogicalVolume(solidStopper, brass, "Stopper", 0, 0, 0);
 
-  physiStopper = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector(StopperPosition_x, 
-								   StopperPosition_y, 
-								   StopperPosition_z)),
+  physiStopper = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector(stopperXPosition, 
+								   stopperYPosition, 
+								   stopperZPosition)),
 				   "Stopper", 
 				   logicStopper, 
 				   mother, 
 				   false, 
 				   0);
 
-  G4VisAttributes * red = new G4VisAttributes( G4Colour(1. ,0. ,0.));
+  G4VisAttributes * red = new G4VisAttributes(G4Colour(1. ,0. ,0.));
   red-> SetVisibility(true);
   red-> SetForceSolid(true);
   logicStopper -> SetVisAttributes(red);
 
-  // ------------------------
-  // SECOND SCATTERING FOIL
-
-  //***default second scattering foil-x*********************
-
-
-  //*********************************************************
+  // -----------------------//
+  // Second scattering foil //
+  // -----------------------//
   
-  G4double SecondScatteringFoil_y = 52.5   *mm;
-  G4double SecondScatteringFoil_z = 52.5   *mm;
+  const G4double secondScatteringFoilYSize = 52.5   *mm;
+  const G4double secondScatteringFoilZSize = 52.5   *mm;
 
-  G4double SecondScatteringFoilPosition_x = -2952.51 *mm;
-  G4double SecondScatteringFoilPosition_y =  0         *mm;
-  G4double SecondScatteringFoilPosition_z =  0         *mm;                                                         
+  const G4double secondScatteringFoilXPosition = -2952.51 *mm;
+  const G4double secondScatteringFoilYPosition =  0         *mm;
+  const G4double secondScatteringFoilZPosition =  0         *mm;                                                         
   
-  SecondScatteringFoil = new G4Box("SecondScatteringFoil", 
-				   SecondScatteringFoil_x, 
-				   SecondScatteringFoil_y,
-				   SecondScatteringFoil_z);
+  secondScatteringFoil = new G4Box("SecondScatteringFoil", 
+				   secondScatteringFoilXSize, 
+				   secondScatteringFoilYSize,
+				   secondScatteringFoilZSize);
 
-  G4LogicalVolume* logicSecondScatteringFoil = new G4LogicalVolume(SecondScatteringFoil, 
+  G4LogicalVolume* logicSecondScatteringFoil = new G4LogicalVolume(secondScatteringFoil, 
 								   Ta, 
 								   "SecondScatteringFoil");
-  physiSecondScatteringFoil = new G4PVPlacement(0, G4ThreeVector(SecondScatteringFoilPosition_x,
-								 SecondScatteringFoilPosition_y,
-								 SecondScatteringFoilPosition_z),
+
+  physiSecondScatteringFoil = new G4PVPlacement(0, G4ThreeVector(secondScatteringFoilXPosition,
+								 secondScatteringFoilYPosition,
+								 secondScatteringFoilZPosition),
 						"SeconScatteringFoil", 
 						logicSecondScatteringFoil, 
 						mother, 
 						false, 
-
 						0);
-  logicSecondScatteringFoil   ->   SetVisAttributes(white);
 
+  logicSecondScatteringFoil -> SetVisAttributes(white);
 }
 
 void HadrontherapyBeamLine::HadrontherapyBeamCollimators()
 {
-  // ---------------------
-  // FIRST COLLIMATOR
+  // -----------------//
+  // First collimator //
+  // -----------------//
 
-  G4double FirstCollimator_x = 20    *mm;
-  G4double FirstCollimator_y = 100   *mm;
-  G4double FirstCollimator_z = 100   *mm;
+  const G4double firstCollimatorXSize = 20.*mm;
+  const G4double firstCollimatorYSize = 100.*mm;
+  const G4double firstCollimatorZSize = 100.*mm;
 
-  G4double FirstCollimatorPosition_x = -2932.5   *mm;
-  G4double FirstCollimatorPosition_y =  0         *mm;
-  G4double FirstCollimatorPosition_z =  0         *mm;
+  const G4double firstCollimatorXPosition = -2932.5*mm;
+  const G4double firstCollimatorYPosition = 0.*mm;
+  const G4double firstCollimatorZPosition = 0.*mm;
 
   G4Material* PMMA = material -> GetMat("PMMA");
 
   G4Box* solidFirstCollimator = new G4Box("FirstCollimator", 
-					  FirstCollimator_x, 
-					  FirstCollimator_y, 
-					  FirstCollimator_z);
+					  firstCollimatorXSize, 
+					  firstCollimatorYSize, 
+					  firstCollimatorZSize);
 
 
   G4LogicalVolume* logicFirstCollimator = new G4LogicalVolume(solidFirstCollimator, 
 							      PMMA, 
 							      "FirstCollimator");
 
-  physiFirstCollimator = new G4PVPlacement(0, G4ThreeVector(FirstCollimatorPosition_x,
-							    FirstCollimatorPosition_y,
-							    FirstCollimatorPosition_z),
+  physiFirstCollimator = new G4PVPlacement(0, G4ThreeVector(firstCollimatorXPosition,
+							    firstCollimatorYPosition,
+							    firstCollimatorZPosition),
 					   "FirstCollimator", 
 					   logicFirstCollimator, 
 					   mother, 
 					   false, 
 					   0);
 
-  // ----------------------------
-  // HOLE OF FIRST COLLIMATOR
-  //-----------------------------
+  // ----------------------------//
+  // Hole of the first collimator//
+  //-----------------------------//
 
   G4double innerRadiusHoleFirstCollimator   = 0.*mm;
   G4double outerRadiusHoleFirstCollimator   = 15.*mm;
@@ -447,122 +418,100 @@ void HadrontherapyBeamLine::HadrontherapyBeamCollimators()
 					       physiFirstCollimator, 
 					       false, 
 					       0);   
+  // --------------//
+  // Range shifter //
+  // --------------// 
 
-  //RANGE SHIFTER
+  const G4double rangeShifterYSize = 176. *mm; 
+  const G4double rangeShifterZSize = 176. *mm;  
 
   solidRangeShifterBox = new G4Box("RangeShifterBox",
-				   RangeShifterBox_x,
-				   RangeShifterBox_y,
-				   RangeShifterBox_z);
+				   rangeShifterXSize,
+				   rangeShifterYSize,
+				   rangeShifterZSize);
 
   logicRangeShifterBox = new G4LogicalVolume(solidRangeShifterBox,
                                              RSMat,
 					     "RangeShifterBox");
                                                                                               
   physiRangeShifterBox = new G4PVPlacement(0,
-					   G4ThreeVector(RangeShifterBoxPosition_x,                                                                        RangeShifterBoxPosition_y,  
-							 RangeShifterBoxPosition_z),
+					   G4ThreeVector(rangeShifterXPosition, 0., 0.),                                               
 					   "RangeShifterBox",
 					   logicRangeShifterBox,
 					   mother, 
 					   false,
 					   0);                        
 
-  G4VisAttributes * yellow = new G4VisAttributes( G4Colour(1., 1., 0. ));
+  G4VisAttributes * yellow = new G4VisAttributes(G4Colour(1., 1., 0. ));
   yellow-> SetVisibility(true);
   yellow-> SetForceSolid(true);
-  logicRangeShifterBox    ->    SetVisAttributes(yellow);
+  logicRangeShifterBox -> SetVisAttributes(yellow);
 
-  // ----------------------- 
-  // SECOND COLLIMATOR
-  //---------------------
+  // ------------------// 
+  // Second collimator //
+  //-------------------.//
 
-  G4double SecondCollimator_x = 20    *mm;
-  G4double SecondCollimator_y = 100   *mm;
-  G4double SecondCollimator_z = 100   *mm;
+  const G4double secondCollimatorXPosition = -2028.5*mm;
+  const G4double secondCollimatorYPosition =  0*mm;
+  const G4double secondCollimatorZPosition =  0*mm;
 
-  G4double SecondCollimatorPosition_x = -2028.5   *mm;
-  G4double SecondCollimatorPosition_y =  0         *mm;
-  G4double SecondCollimatorPosition_z =  0         *mm;
-
-  G4Box* solidSecondCollimator = new G4Box("SecondCollimator", 
-					   SecondCollimator_x, 
-					   SecondCollimator_y, 
-					   SecondCollimator_z);
-
-  G4LogicalVolume* logicSecondCollimator = new G4LogicalVolume(solidSecondCollimator, 
-							       PMMA, 
-							       "SecondCollimator");
-  physiSecondCollimator = new G4PVPlacement(0, G4ThreeVector(SecondCollimatorPosition_x,
-							     SecondCollimatorPosition_y,
-							     SecondCollimatorPosition_z),
+  physiSecondCollimator = new G4PVPlacement(0, G4ThreeVector(secondCollimatorXPosition,
+							     secondCollimatorYPosition,
+							     secondCollimatorZPosition),
 					    "SecondCollimator", 
-					    logicSecondCollimator, 
+					    logicFirstCollimator, 
 					    mother, 
 					    false, 
 					    0);
 
-  // --------------------------------
-  // HOLE OF SECOND COLLIMATOR
-  // --------------------------------
-  G4double innerRadiusHoleSecondCollimator   = 0.*mm;
-  G4double outerRadiusHoleSecondCollimator   = 15.*mm;
-  G4double hightHoleSecondCollimator         = 20.*mm;
-  G4double startAngleHoleSecondCollimator    = 0.*deg;
-  G4double spanningAngleHoleSecondCollimator = 360.*deg;
+  // ------------------------------//
+  // Hole of the second collimator //
+  // ------------------------------//
 
-  G4Tubs* solidHoleSecondCollimator = new G4Tubs("HoleSecondCollimator", 
-						 innerRadiusHoleSecondCollimator, 
-						 outerRadiusHoleSecondCollimator,
-						 hightHoleSecondCollimator, 
-						 startAngleHoleSecondCollimator, 
-						 spanningAngleHoleSecondCollimator);
-  G4LogicalVolume* logicHoleSecondCollimator = new G4LogicalVolume(solidHoleSecondCollimator,Air, 
-								   "HoleSecondCollimator", 
-								   0, 0, 0);
-
-  physiHoleSecondCollimator = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector()), 
+   physiHoleSecondCollimator = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector()), 
 						"HoleSecondCollimator",
-						logicHoleSecondCollimator, 
+						logicHoleFirstCollimator, 
 						physiSecondCollimator, 
 						false, 
 						0); 
   
-  // ----------------------------
-  //            FIRST
-  //  COLLIMATOR MODULATOR BOX
-  // ----------------------------
-  G4double FirstCollimatorModulatorBox_x = 10.    *mm;
-  G4double FirstCollimatorModulatorBox_y = 200.   *mm;
-  G4double FirstCollimatorModulatorBox_z = 200.   *mm;
+  // ---------------------------------//
+  // First Collimator modulator box //
+  // ---------------------------------//
 
-  G4double FirstCollimatorModulatorBoxPosition_x = -2660.5   *mm;
-  G4double FirstCollimatorModulatorBoxPosition_y =  0.         *mm;
-  G4double FirstCollimatorModulatorBoxPosition_z =  0.         *mm;
+  const G4double firstCollimatorModulatorXSize = 10.*mm;
+  const G4double firstCollimatorModulatorYSize = 200.*mm;
+  const G4double firstCollimatorModulatorZSize = 200.*mm;
+
+  const G4double firstCollimatorModulatorXPosition = -2660.5*mm;
+  const G4double firstCollimatorModulatorYPosition = 0.*mm;
+  const G4double firstCollimatorModulatorZPosition = 0.*mm;
 
   G4Material* Al = material -> GetMat("MatAluminum"); 
 
   G4Box* solidFirstCollimatorModulatorBox = new G4Box("FirstCollimatorModulatorBox", 
-						      FirstCollimatorModulatorBox_x,
-						      FirstCollimatorModulatorBox_y, 
-						      FirstCollimatorModulatorBox_z);
+						      firstCollimatorModulatorXSize,
+						      firstCollimatorModulatorYSize, 
+						      firstCollimatorModulatorZSize);
+
   G4LogicalVolume* logicFirstCollimatorModulatorBox = new G4LogicalVolume(solidFirstCollimatorModulatorBox, 
 									  Al, "FirstCollimatorModulatorBox");
-  physiFirstCollimatorModulatorBox = new G4PVPlacement(0, G4ThreeVector(FirstCollimatorModulatorBoxPosition_x,
-									FirstCollimatorModulatorBoxPosition_y,
-									FirstCollimatorModulatorBoxPosition_z),
-						       "FirstCollimatorModulatorBox", logicFirstCollimatorModulatorBox,
+
+  physiFirstCollimatorModulatorBox = new G4PVPlacement(0, G4ThreeVector(firstCollimatorModulatorXPosition,
+									firstCollimatorModulatorYPosition,
+									firstCollimatorModulatorZPosition),
+						       "FirstCollimatorModulatorBox",
+						       logicFirstCollimatorModulatorBox,
 						       mother, false, 0);
 
-  // ---------------------------------------
-  //   HOLE OF THE FIRST COLLLIMATOR 
-  //                MODULATOR  BOX
-  // ---------------------------------------
-  G4double innerRadiusHoleFirstCollimatorModulatorBox     = 0.   *mm;
-  G4double outerRadiusHoleFirstCollimatorModulatorBox     = 31.  *mm;
-  G4double hightHoleFirstCollimatorModulatorBox           = 10.  *mm;
-  G4double startAngleHoleFirstCollimatorModulatorBox      = 0.   *deg;
-  G4double spanningAngleHoleFirstCollimatorModulatorBox   = 360. *deg;
+  // ----------------------------------//
+  //   Hole of the first modulator box //
+  // ----------------------------------//
+  const G4double innerRadiusHoleFirstCollimatorModulatorBox = 0.*mm;
+  const G4double outerRadiusHoleFirstCollimatorModulatorBox = 31.*mm;
+  const G4double hightHoleFirstCollimatorModulatorBox = 10.*mm;
+  const G4double startAngleHoleFirstCollimatorModulatorBox = 0.*deg;
+  const G4double spanningAngleHoleFirstCollimatorModulatorBox = 360.*deg;
 
   G4Tubs* solidHoleFirstCollimatorModulatorBox  = new G4Tubs("HoleFirstCollimatorModulatorBox",
 							     innerRadiusHoleFirstCollimatorModulatorBox,
@@ -570,162 +519,141 @@ void HadrontherapyBeamLine::HadrontherapyBeamCollimators()
 							     hightHoleFirstCollimatorModulatorBox ,
 							     startAngleHoleFirstCollimatorModulatorBox,
 							     spanningAngleHoleFirstCollimatorModulatorBox);
+
   G4LogicalVolume* logicHoleFirstCollimatorModulatorBox = new G4LogicalVolume(solidHoleFirstCollimatorModulatorBox,
 									      Air, "HoleFirstCollimatorModulatorBox", 0, 0, 0);
+
   physiHoleFirstCollimatorModulatorBox = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector()),
 							   "HoleFirstCollimatorModulatorBox",
 							   logicHoleFirstCollimatorModulatorBox,
 							   physiFirstCollimatorModulatorBox, false, 0); 
-  // ------------------------------
-  //            SECOND
-  //  COLLIMATOR MODULATOR BOX
-  // ------------------------------
-  G4double SecondCollimatorModulatorBox_x = 10    *mm;
-  G4double SecondCollimatorModulatorBox_y = 200   *mm;
-  G4double SecondCollimatorModulatorBox_z = 200   *mm;
+  // -------------------------------------------//
+  //       Second collimator modulator box      //
+  // -------------------------------------------//
 
-  G4double SecondCollimatorModulatorBoxPosition_x = -2090.5   *mm;
-  G4double SecondCollimatorModulatorBoxPosition_y =  0         *mm;
-  G4double SecondCollimatorModulatorBoxPosition_z =  0         *mm;
-
-  G4Box* solidSecondCollimatorModulatorBox= new G4Box("SecondCollimatorModulatorBox",
-						      SecondCollimatorModulatorBox_x,
-						      SecondCollimatorModulatorBox_y,
-						      SecondCollimatorModulatorBox_z);
-  G4LogicalVolume* logicSecondCollimatorModulatorBox = new G4LogicalVolume(solidSecondCollimatorModulatorBox,Al, 
-									   "SecondCollimatorModulatorBox");
-
-  physiSecondCollimatorModulatorBox = new G4PVPlacement(0, G4ThreeVector(SecondCollimatorModulatorBoxPosition_x,
-									 SecondCollimatorModulatorBoxPosition_y,
-									 SecondCollimatorModulatorBoxPosition_z),
-							"SecondCollimatorModulatorBox", logicSecondCollimatorModulatorBox,
+  const G4double secondCollimatorModulatorXPosition = -2090.5 *mm;
+ 
+  physiSecondCollimatorModulatorBox = new G4PVPlacement(0, G4ThreeVector(secondCollimatorModulatorXPosition,0., 0.),
+							"SecondCollimatorModulatorBox", logicFirstCollimatorModulatorBox,
 							mother, false, 0);
   
-  // -------------------------------------------
-  //   HOLE OF THE SECOND  COLLLIMATOR 
-  //                MODULATOR  BOX
-  // -------------------------------------------
-  G4double innerRadiusHoleSecondCollimatorModulatorBox     = 0.   *mm;
-  G4double outerRadiusHoleSecondCollimatorModulatorBox     = 31.  *mm;
-  G4double hightHoleSecondCollimatorModulatorBox           = 10.  *mm;
-  G4double startAngleHoleSecondCollimatorModulatorBox      = 0.   *deg;
-  G4double spanningAngleHoleSecondCollimatorModulatorBox   = 360. *deg;
+  // -------------------------------// 
+  //   Hole of the second collimator //
+  // -------------------------------//
 
-  G4Tubs* solidHoleSecondCollimatorModulatorBox  = new G4Tubs("HoleSecondCollimatorModulatorBox",
-							      innerRadiusHoleSecondCollimatorModulatorBox,
-							      outerRadiusHoleSecondCollimatorModulatorBox,
-							      hightHoleSecondCollimatorModulatorBox ,
-							      startAngleHoleSecondCollimatorModulatorBox,
-							      spanningAngleHoleSecondCollimatorModulatorBox);
-
-  G4LogicalVolume* logicHoleSecondCollimatorModulatorBox = new G4LogicalVolume(solidHoleSecondCollimatorModulatorBox, Air,
-									       "HoleSecondCollimatorModulatorBox", 0, 0, 0);
   physiHoleSecondCollimatorModulatorBox = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector()),
 							    "HoleSecondCollimatorModulatorBox",
-							    logicHoleSecondCollimatorModulatorBox,
+							    logicHoleFirstCollimatorModulatorBox,
 							    physiSecondCollimatorModulatorBox, false, 0); 
 
   G4VisAttributes * blue = new G4VisAttributes( G4Colour(0. ,0. ,1.));
   blue -> SetVisibility(true);
   blue -> SetForceSolid(true);
 
-  logicFirstCollimator   ->    SetVisAttributes(yellow);
-  logicSecondCollimator    ->    SetVisAttributes(yellow);
-  logicFirstCollimatorModulatorBox    ->    SetVisAttributes(blue);
-  logicSecondCollimatorModulatorBox    ->    SetVisAttributes(blue);
-
+  logicFirstCollimator -> SetVisAttributes(yellow);
+  logicFirstCollimatorModulatorBox -> SetVisAttributes(blue);
 }
+
 void HadrontherapyBeamLine::HadrontherapyBeamMonitoring()
 {
   // ----------------------------
-  // FIRST MONITOR CHAMBER
+  // Firt monitor chamber
   // ----------------------------  
+
   // Each chamber consist of 9 mm of air in a box
   // that has two layers one of kapton and one
   // of copper
+
   G4Material* Kapton = material -> GetMat("Kapton") ;
   G4Material* Cu = material -> GetMat("MatCopper");
   G4Material* Air = material -> GetMat("Air") ;
 
-  G4Box* solidFirstMonitorLayer1 = new G4Box("FirstMonitorLayer1", 4.525022*mm, 10*cm, 10*cm);
+  const G4double monitor1XSize = 4.525022*mm;
+  const G4double monitor2XSize = 0.000011*mm;
+  const G4double monitor3XSize = 4.5*mm;
+  const G4double monitorYSize = 10.*cm; 
+  const G4double monitorZSize = 10.*cm;
+    
+  const G4double monitor1XPosition = -1765.97498 *mm;
+  const G4double monitor2XPosition = -4.500011*mm;
+  const G4double monitor4XPosition = 4.500011*mm;
+
+  G4Box* solidFirstMonitorLayer1 = new G4Box("FirstMonitorLayer1", monitor1XSize, monitorYSize, monitorZSize);
+
   G4LogicalVolume* logicFirstMonitorLayer1 = new G4LogicalVolume(solidFirstMonitorLayer1, Kapton, "FirstMonitorLayer1");
-  physiFirstMonitorLayer1 = new G4PVPlacement(0,G4ThreeVector(-1765.97498 *mm,0.*cm,0.*cm),
+
+  physiFirstMonitorLayer1 = new G4PVPlacement(0,G4ThreeVector(monitor1XPosition,0.*cm,0.*cm),
 					      "FirstMonitorLayer1", logicFirstMonitorLayer1, mother, false, 0);
 
-  G4Box* solidFirstMonitorLayer2 = new G4Box("FirstMonitorLayer2", 0.000011*mm, 10*cm, 10*cm);
+  G4Box* solidFirstMonitorLayer2 = new G4Box("FirstMonitorLayer2", monitor2XSize, monitorYSize, monitorZSize);
+ 
   G4LogicalVolume* logicFirstMonitorLayer2 = new G4LogicalVolume(solidFirstMonitorLayer2, Cu, "FirstMonitorLayer2");
-  physiFirstMonitorLayer2 = new G4PVPlacement(0, G4ThreeVector(-4.500011*mm,0.*cm,0.*cm),
+ 
+  physiFirstMonitorLayer2 = new G4PVPlacement(0, G4ThreeVector(monitor2XPosition,0.*cm,0.*cm),
 					      "FirstMonitorLayer2", logicFirstMonitorLayer2, physiFirstMonitorLayer1,
 					      false, 0);
   
-  G4Box* solidFirstMonitorLayer3 = new G4Box("FirstMonitorLayer3", 4.5*mm, 10*cm, 10*cm);
+  G4Box* solidFirstMonitorLayer3 = new G4Box("FirstMonitorLayer3", monitor3XSize, monitorYSize, monitorZSize);
+
   G4LogicalVolume* logicFirstMonitorLayer3 = new G4LogicalVolume(solidFirstMonitorLayer3, Air, "FirstMonitorLayer3");
+
   physiFirstMonitorLayer3 = new G4PVPlacement(0, G4ThreeVector(0.*mm,0.*cm,0.*cm), "MonitorLayer3",
 					      logicFirstMonitorLayer3, physiFirstMonitorLayer1, false, 0);
     
-  G4Box* solidFirstMonitorLayer4 = new G4Box("FirstMonitorLayer4", 0.000011*mm, 10*cm, 10*cm);
+  G4Box* solidFirstMonitorLayer4 = new G4Box("FirstMonitorLayer4", monitor2XSize, monitorYSize, monitorZSize);
+
   G4LogicalVolume* logicFirstMonitorLayer4 = new G4LogicalVolume(solidFirstMonitorLayer4, Cu, "FirstMonitorLayer4");
-  physiFirstMonitorLayer4 = new G4PVPlacement(0, G4ThreeVector(4.500011*mm,0.*cm,0.*cm), "FirstMonitorLayer4",
-					      logicFirstMonitorLayer4, physiFirstMonitorLayer1, false, 0);
-  // -----------------------------
-  // SECOND MONITOR CHAMBER
-  // -----------------------------
-  G4Box* solidSecondMonitorLayer1 = new G4Box("SecondMonitorLayer1", 4.525022*mm, 10*cm, 10*cm);
-  G4LogicalVolume* logicSecondMonitorLayer1 = new G4LogicalVolume(solidSecondMonitorLayer1, Kapton, "SecondMonitorLayer1");
+
+  physiFirstMonitorLayer4 = new G4PVPlacement(0, G4ThreeVector(monitor4XPosition,0.*cm,0.*cm), 
+					      "FirstMonitorLayer4",
+					      logicFirstMonitorLayer4,
+					      physiFirstMonitorLayer1, false, 0);
+  // ------------------------//
+  // Second monitor chamber  //
+  // ------------------------//
+  
   physiSecondMonitorLayer1 = new G4PVPlacement(0, G4ThreeVector(-1634.92493 *mm,0.*cm,0.*cm),
-					       "SecondMonitorLayer1", logicSecondMonitorLayer1,mother, false, 0);
+					       "SecondMonitorLayer1", logicFirstMonitorLayer1,mother, false, 0);
 
-  G4Box* solidSecondMonitorLayer2 = new G4Box("SecondMonitorLayer2", 0.000011*mm, 10*cm,10*cm);
-  G4LogicalVolume* logicSecondMonitorLayer2 = new G4LogicalVolume(solidSecondMonitorLayer2, Cu, "SecondMonitorLayer2");
-  physiSecondMonitorLayer2 = new G4PVPlacement(0, G4ThreeVector(-4.500011*mm,0.*cm,0.*cm), "SecondMonitorLayer2",
-					       logicSecondMonitorLayer2, physiSecondMonitorLayer1, false, 0);
+  physiSecondMonitorLayer2 = new G4PVPlacement(0, G4ThreeVector( monitor2XPosition,0.*cm,0.*cm), "SecondMonitorLayer2",
+					       logicFirstMonitorLayer2, physiSecondMonitorLayer1, false, 0);
   
-  G4Box* solidSecondMonitorLayer3 = new G4Box("SecondMonitorLayer3", 4.5*mm, 10*cm, 10*cm);
-  G4LogicalVolume* logicSecondMonitorLayer3 = new G4LogicalVolume(solidSecondMonitorLayer3, Air, "SecondMonitorLayer3");
-  physiSecondMonitorLayer3 = new G4PVPlacement(0, G4ThreeVector(0.*mm,0.*cm,0.*cm), "MonitorLayer3",
-					       logicSecondMonitorLayer3, physiSecondMonitorLayer1, false, 0);
+   physiSecondMonitorLayer3 = new G4PVPlacement(0, G4ThreeVector(0.*mm,0.*cm,0.*cm), "MonitorLayer3",
+					       logicFirstMonitorLayer3, physiSecondMonitorLayer1, false, 0);
     
-  G4Box* solidSecondMonitorLayer4 = new G4Box("SecondMonitorLayer4", 0.000011*mm, 10*cm,10*cm);
-  G4LogicalVolume* logicSecondMonitorLayer4 = new G4LogicalVolume(solidSecondMonitorLayer4, Cu, "SecondMonitorLayer4");
-  physiSecondMonitorLayer4 = new G4PVPlacement(0, G4ThreeVector(4.500011*mm,0.*cm,0.*cm), "SecondMonitorLayer4",
-					       logicSecondMonitorLayer4, physiSecondMonitorLayer1, false, 0);
+  physiSecondMonitorLayer4 = new G4PVPlacement(0, G4ThreeVector(monitor4XPosition,0.*cm,0.*cm), "SecondMonitorLayer4",
+					       logicFirstMonitorLayer4, physiSecondMonitorLayer1, false, 0);
 
-  // ---------------------------
-  // THIRD MONITOR CHAMBER
-  // ---------------------------
-  G4Box* solidThirdMonitorLayer1 = new G4Box("ThirdMonitorLayer1", 4.525022*mm, 10*cm, 10*cm);
-  G4LogicalVolume* logicThirdMonitorLayer1 = new G4LogicalVolume(solidThirdMonitorLayer1, Kapton, "ThirdMonitorLayer1");
+  // -----------------------// 
+  // Third monitor chamber  //
+  // -----------------------//
+
   physiThirdMonitorLayer1 = new G4PVPlacement(0, G4ThreeVector(-1505.87489 *mm,0.*cm,0.*cm),
-					      "ThirdMonitorLayer1", logicThirdMonitorLayer1, mother, false, 0);
+					      "ThirdMonitorLayer1", logicFirstMonitorLayer1, mother, false, 0);
 
-  G4Box* solidThirdMonitorLayer2 = new G4Box("ThirdMonitorLayer2", 0.000011*mm, 10*cm, 10*cm);
-  G4LogicalVolume* logicThirdMonitorLayer2 = new G4LogicalVolume(solidThirdMonitorLayer2, Cu, "ThirdMonitorLayer2");
-  physiThirdMonitorLayer2 = new G4PVPlacement(0, G4ThreeVector(-4.500011*mm,0.*cm,0.*cm), "ThirdMonitorLayer2",
-					      logicThirdMonitorLayer2, physiThirdMonitorLayer1, false, 0);
+  physiThirdMonitorLayer2 = new G4PVPlacement(0, G4ThreeVector(monitor2XPosition, 0.*cm,0.*cm), 
+						"ThirdMonitorLayer2",
+						logicFirstMonitorLayer2, 
+						physiThirdMonitorLayer1, 
+						false, 0);
  
-  G4Box* solidThirdMonitorLayer3 = new G4Box("ThirdMonitorLayer3", 4.5*mm, 10*cm, 10*cm);
-  G4LogicalVolume* logicThirdMonitorLayer3 = new G4LogicalVolume(solidThirdMonitorLayer3, Air,"ThirdMonitorLayer3");
   physiThirdMonitorLayer3 = new G4PVPlacement(0, G4ThreeVector(0.*mm,0.*cm,0.*cm), "MonitorLayer3",
-					      logicThirdMonitorLayer3, physiThirdMonitorLayer1, false, 0);
+					      logicFirstMonitorLayer3, physiThirdMonitorLayer1, false, 0);
   
-  G4Box* solidThirdMonitorLayer4 = new G4Box("ThirdMonitorLayer4", 0.000011*mm, 10*cm, 10*cm);
-  G4LogicalVolume* logicThirdMonitorLayer4 = new G4LogicalVolume(solidThirdMonitorLayer4, Cu, "ThirdMonitorLayer4");
-  physiThirdMonitorLayer4 = new G4PVPlacement(0, G4ThreeVector(4.500011*mm,0.*cm,0.*cm), "ThirdMonitorLayer4",
-					      logicThirdMonitorLayer4, physiSecondMonitorLayer1, false, 0);
+  physiThirdMonitorLayer4 = new G4PVPlacement(0, G4ThreeVector(monitor4XPosition,0.*cm,0.*cm), "ThirdMonitorLayer4",
+					      logicFirstMonitorLayer4, physiThirdMonitorLayer1, false, 0);
 }
 void HadrontherapyBeamLine::HadrontherapyBeamNozzle()
 {
+  // ---------------//
+  // Nozzle support //
+  //----------------//
+ 
+  const G4double nozzleSupportXSize = 29.5 *mm;
+  const G4double nozzleSupportYSize = 180. *mm;
+  const G4double nozzleSupportZSize = 180. *mm;
 
-  // ---------------------
-  // NOZZLE SUPPORT
-  //----------------------
-  G4double NozzleSupport_x =  29.5 *mm;
-  G4double NozzleSupport_y =  180. *mm;
-  G4double NozzleSupport_z =  180. *mm;
-
-  G4double NozzleSupportPosition_x = -601.00 *mm;
-  G4double NozzleSupportPosition_y = 0. *mm;
-  G4double NozzleSupportPosition_z = 0. *mm;
+  const G4double nozzleSupportXPosition = -601.00 *mm;
 
   G4Material* PMMA = material -> GetMat("PMMA");
   G4Material* Brass = material -> GetMat("Brass") ;
@@ -736,74 +664,88 @@ void HadrontherapyBeamLine::HadrontherapyBeamNozzle()
   G4RotationMatrix rm;               
   rm.rotateY(phi);
 
-  G4Box* solidNozzleSupport = new G4Box("NozzlSupport", NozzleSupport_x, NozzleSupport_y, NozzleSupport_z);
+  G4Box* solidNozzleSupport = new G4Box("NozzlSupport", nozzleSupportXSize, nozzleSupportYSize, nozzleSupportZSize);
+
   G4LogicalVolume* logicNozzleSupport = new G4LogicalVolume(solidNozzleSupport, PMMA, "NozzleSupport");
-  physiNozzleSupport = new G4PVPlacement(0, G4ThreeVector(NozzleSupportPosition_x, NozzleSupportPosition_y, 
-							  NozzleSupportPosition_z),
+ 
+  physiNozzleSupport = new G4PVPlacement(0, G4ThreeVector(nozzleSupportXPosition,0., 0.),
 					 "NozzleSupport", logicNozzleSupport, mother, false, 0);
+  
+  // ---------------------------------//
+  // First hole of the noozle support //
+  // ---------------------------------//
 
-  // --------------------------
-  // HOLE OF THE BOX SUPPORT 
-  // --------------------------
-  G4double innerRadiusHoleNozzleSupport     = 18.    *mm;
-  G4double outerRadiusHoleNozzleSupport     = 21.5   *mm;
-  G4double hightHoleNozzleSupport           = 185.   *mm;
-  G4double startAngleHoleNozzleSupport      = 0.     *deg;
-  G4double spanningAngleHoleNozzleSupport   = 360.   *deg;
+  const G4double innerRadiusHoleNozzleSupport = 18.*mm;
+  const G4double outerRadiusHoleNozzleSupport = 21.5 *mm;
+  const G4double hightHoleNozzleSupport = 185.*mm;
+  const G4double startAngleHoleNozzleSupport = 0.*deg;
+  const G4double spanningAngleHoleNozzleSupport = 360.*deg;
 
-  G4double HoleNozzleSupportPosition_x      = -475.5 *mm;
-  G4double HoleNozzleSupportPosition_y      = 0.     *mm;
-  G4double HoleNozzleSupportPosition_z      = 0.     *mm;
+  const G4double holeNozzleSupportXPosition = -475.5 *mm;
+ 
+  G4Tubs* solidHoleNozzleSupport = new G4Tubs("HoleNozzleSupport", 
+					      innerRadiusHoleNozzleSupport, 
+					      outerRadiusHoleNozzleSupport,
+					      hightHoleNozzleSupport, 
+					      startAngleHoleNozzleSupport, 
+					      spanningAngleHoleNozzleSupport);
 
-  G4Tubs* solidHoleNozzleSupport = new G4Tubs("HoleNozzleSupport", innerRadiusHoleNozzleSupport, outerRadiusHoleNozzleSupport,
-					      hightHoleNozzleSupport, startAngleHoleNozzleSupport, spanningAngleHoleNozzleSupport);
-  G4LogicalVolume* logicHoleNozzleSupport = new G4LogicalVolume(solidHoleNozzleSupport, Brass, "HoleNozzleSupport", 0, 0, 0);
-  physiHoleNozzleSupport = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector(HoleNozzleSupportPosition_x,
-									     HoleNozzleSupportPosition_y,
-									     HoleNozzleSupportPosition_z)),
+  G4LogicalVolume* logicHoleNozzleSupport = new G4LogicalVolume(solidHoleNozzleSupport, 
+								Brass, 
+								"HoleNozzleSupport", 
+								0, 0, 0);
+
+  physiHoleNozzleSupport = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector(holeNozzleSupportXPosition,
+									      0., 0.)),
 					     "HoleNozzleSupport", logicHoleNozzleSupport, mother, false, 0); 
 
-  //---------------------------------------
-  // Second Hole of the BOX SUPPORT
+  //------------------------------------//
+  // Second Hole of the noozle support  //
+  //------------------------------------//
+  const G4double innerRadiusSecondHoleNozzleSupport = 0.*mm;
+  const G4double outerRadiusSecondHoleNozzleSupport = 18.*mm;
+  const G4double hightSecondHoleNozzleSupport = 29.5 *mm;
+  const G4double startAngleSecondHoleNozzleSupport = 0.*deg;
+  const G4double spanningAngleSecondHoleNozzleSupport = 360.*deg;
 
-  G4double innerRadiusSecondHoleNozzleSupport   =    0.   *mm;
-  G4double outerRadiusSecondHoleNozzleSupport   =    18.  *mm;
-  G4double hightSecondHoleNozzleSupport         =    29.5 *mm;
-  G4double startAngleSecondHoleNozzleSupport    =    0.   *deg;
-  G4double spanningAngleSecondHoleNozzleSupport =    360. *deg;
+  G4Tubs* solidSecondHoleNozzleSupport = new G4Tubs("SecondHoleNozzleSupport",
+						    innerRadiusSecondHoleNozzleSupport,
+						    outerRadiusSecondHoleNozzleSupport, 
+						    hightSecondHoleNozzleSupport,
+						    startAngleSecondHoleNozzleSupport, 
+						    spanningAngleSecondHoleNozzleSupport);
 
-  G4Tubs* solidSecondHoleNozzleSupport = new G4Tubs("SecondHoleNozzleSupport", innerRadiusSecondHoleNozzleSupport,
-						    outerRadiusSecondHoleNozzleSupport, hightSecondHoleNozzleSupport,
-						    startAngleSecondHoleNozzleSupport, spanningAngleSecondHoleNozzleSupport);
-  G4LogicalVolume* logicSecondHoleNozzleSupport = new G4LogicalVolume(solidSecondHoleNozzleSupport, Air, "SecondHoleNozzleSupport", 0, 0, 0);
-  physiSecondHoleNozzleSupport = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector()), "SecondHoleNozzleSupport",
-						   logicSecondHoleNozzleSupport, physiNozzleSupport, false, 0); 
+  G4LogicalVolume* logicSecondHoleNozzleSupport = new G4LogicalVolume(solidSecondHoleNozzleSupport, 
+								      Air, 
+								      "SecondHoleNozzleSupport", 
+								      0, 0, 0);
+
+  physiSecondHoleNozzleSupport = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector()), 
+						   "SecondHoleNozzleSupport",
+						   logicSecondHoleNozzleSupport, 
+						   physiNozzleSupport, 
+						   false, 0); 
 
 
   G4VisAttributes * yellow = new G4VisAttributes( G4Colour(1., 1., 0. ));
   yellow-> SetVisibility(true);
   yellow-> SetForceSolid(true);
-  logicHoleNozzleSupport    ->    SetVisAttributes(yellow); 
+  logicHoleNozzleSupport -> SetVisAttributes(yellow); 
 }
 
 void HadrontherapyBeamLine::HadrontherapyBeamFinalCollimator()
 {
 
-  // --------------------------------
-  //     FINAL COLLIMATOR25
-  //-------------------------
+  // -----------------------//
+  //     Final collimator   //
+  //------------------------//
 
-
-
-
-  G4double outerRadiusFinalCollimator   = 21.5    *mm;
-  G4double hightFinalCollimator         = 3.5     *mm;
-  G4double startAngleFinalCollimator    = 0.      *deg;
-  G4double spanningAngleFinalCollimator = 360.    *deg;
-  G4double FinalCollimatorPosition_x    = -287.0  *mm;  
-  G4double FinalCollimatorPosition_y    = 0.      *mm; 
-  G4double FinalCollimatorPosition_z    = 0.      *mm;
-
+  const G4double outerRadiusFinalCollimator = 21.5*mm;
+  const G4double hightFinalCollimator = 3.5*mm;
+  const G4double startAngleFinalCollimator = 0.*deg;
+  const G4double spanningAngleFinalCollimator = 360.*deg;
+  const G4double finalCollimatorXPosition = -287.0 *mm;  
+  
   G4double phi = 90. *deg;     
 
   // Matrix definition for a 90 deg rotation. Also used for other volumes       
@@ -812,77 +754,69 @@ void HadrontherapyBeamLine::HadrontherapyBeamFinalCollimator()
 
   G4Material* Brass = material -> GetMat("Brass");
 
-  solidFinalCollimator = new G4Tubs("FinalCollimator", innerRadiusFinalCollimator, outerRadiusFinalCollimator,
+  solidFinalCollimator = new G4Tubs("FinalCollimator", innerRadiusFinalCollimator, 
+				    outerRadiusFinalCollimator,
 				    hightFinalCollimator, 
-				    startAngleFinalCollimator, spanningAngleFinalCollimator);
+				    startAngleFinalCollimator, 
+				    spanningAngleFinalCollimator);
 
   G4LogicalVolume* logicFinalCollimator = new G4LogicalVolume(solidFinalCollimator, 
 							      Brass, "FinalCollimator", 0, 0, 0);
 
-  physiFinalCollimator = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector(FinalCollimatorPosition_x,
-									   FinalCollimatorPosition_y,
-									   FinalCollimatorPosition_z)),
+  physiFinalCollimator = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector(finalCollimatorXPosition,0.,0.)),
 					   "FinalCollimator", logicFinalCollimator, mother, false, 0); 
 
- 
   G4VisAttributes * yellow = new G4VisAttributes( G4Colour(1., 1., 0. ));
   yellow-> SetVisibility(true);
   yellow-> SetForceSolid(true);
   logicFinalCollimator -> SetVisAttributes(yellow); 
 }
 
-
-void HadrontherapyBeamLine::setRangeShifterXPos(G4double val)
+void HadrontherapyBeamLine::SetRangeShifterXPosition(G4double value)
 {
-  G4double value = val;
-  physiRangeShifterBox -> SetTranslation(G4ThreeVector
-					 (value, RangeShifterBoxPosition_y, RangeShifterBoxPosition_z)); 
+  physiRangeShifterBox -> SetTranslation(G4ThreeVector(value, 0., 0.)); 
   G4cout << "The Range Shifter is translated to"<< value/mm <<"mm along the X axis" <<G4endl;
 }
 
-void HadrontherapyBeamLine::setRangeShifterX(G4double val)
+void HadrontherapyBeamLine::SetRangeShifterXSize(G4double value)
 {
-  G4double value = val;
   solidRangeShifterBox -> SetXHalfLength(value) ;
-  G4cout << "RangeShifter size X (mm): "<<solidRangeShifterBox -> GetXHalfLength()/mm
+  G4cout << "RangeShifter size X (mm): "<< ((solidRangeShifterBox -> GetXHalfLength())*2.)/mm
          << G4endl;
 }
 
-void HadrontherapyBeamLine::SetFirstScatteringFoil(G4double val)
+void HadrontherapyBeamLine::SetFirstScatteringFoilXSize(G4double value)
 { 
-  G4double value = val;
-  FirstScatteringFoil -> SetXHalfLength(value);
+  firstScatteringFoil -> SetXHalfLength(value);
   G4cout <<"The X size of the first scattering foil is (mm):"<<  
-    FirstScatteringFoil -> GetXHalfLength()/mm 
+    ((firstScatteringFoil -> GetXHalfLength())*2.)/mm 
 	 << G4endl;
 }
 
-void HadrontherapyBeamLine::SetSecondScatteringFoil(G4double val)
+void HadrontherapyBeamLine::SetSecondScatteringFoilXSize(G4double value)
 {
-  G4double value = val; 
-  SecondScatteringFoil -> SetXHalfLength(value);
+  secondScatteringFoil -> SetXHalfLength(value);
   G4cout <<"The X size of the second scattering foil is (mm):"<<  
-    SecondScatteringFoil -> GetXHalfLength()/mm 
+  ((secondScatteringFoil -> GetXHalfLength())*2.)/mm 
 	 << G4endl;
 }
 
-void HadrontherapyBeamLine::SetOuterRadiusStopper(G4double val)
+void HadrontherapyBeamLine::SetOuterRadiusStopper(G4double value)
 { 
-  G4double value = val;
   solidStopper -> SetOuterRadius(value);
   G4cout << "OuterRadius od the Stopper is (mm):"
 	 << solidStopper -> GetOuterRadius()/mm
 	 << G4endl;
 }
 
-void HadrontherapyBeamLine::SetInnerRadiusFinalCollimator(G4double val)
+void HadrontherapyBeamLine::SetInnerRadiusFinalCollimator(G4double value)
 {
-  // G4double value = val;
-  solidFinalCollimator -> SetInnerRadius(val);
+  solidFinalCollimator -> SetInnerRadius(value);
   G4cout<<"Inner Radius of the final collimator is (mm):"
-	<<solidFinalCollimator -> GetInnerRadius()/mm
-	<<G4endl; 
+	<< solidFinalCollimator -> GetInnerRadius()/mm
+	<< G4endl; 
 }
+
 void HadrontherapyBeamLine::SetRSMaterial(G4String materialChoice)
 {
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
