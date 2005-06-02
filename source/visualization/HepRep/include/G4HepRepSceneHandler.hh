@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.hh,v 1.36 2005-06-02 17:43:46 allison Exp $
+// $Id: G4HepRepSceneHandler.hh,v 1.37 2005-06-02 19:15:21 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,6 +41,17 @@
 #include "HEPREP/HepRep.h"
 
 //G4
+#include "G4Box.hh"
+#include "G4Cons.hh"
+#include "G4Tubs.hh"
+#include "G4Trd.hh"
+#include "G4Trap.hh"
+#include "G4Sphere.hh"
+#include "G4Para.hh"
+#include "G4Torus.hh"
+#include "G4Polycone.hh"
+#include "G4Polyhedra.hh"
+
 #include "G4VGraphicsSystem.hh"
 #include "G4VSceneHandler.hh"
 #include "G4Visible.hh"
@@ -56,19 +67,20 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         G4HepRepSceneHandler (G4VGraphicsSystem& system, G4HepRepMessenger& messenger, const G4String& name = "");
         virtual ~G4HepRepSceneHandler ();
 
-        void AddSolid (const G4Box& box)                 { G4VSceneHandler::AddSolid (box); }
-        void AddSolid (const G4Cons& cons)               { G4VSceneHandler::AddSolid (cons); }
-        void AddSolid (const G4Tubs& tubs)               { G4VSceneHandler::AddSolid (tubs); }
-        void AddSolid (const G4Trd& trd)                 { G4VSceneHandler::AddSolid (trd); }
-        void AddSolid (const G4Trap& trap)               { G4VSceneHandler::AddSolid (trap); }
-        void AddSolid (const G4Sphere& sphere)           { G4VSceneHandler::AddSolid (sphere); }
-        void AddSolid (const G4Para& para)               { G4VSceneHandler::AddSolid (para); }
-        void AddSolid (const G4Torus& torus)             { G4VSceneHandler::AddSolid (torus); }
-        void AddSolid (const G4Polycone& polycone)       { G4VSceneHandler::AddSolid (polycone); }
-        void AddSolid (const G4Polyhedra& polyhedra)     { G4VSceneHandler::AddSolid (polyhedra); }
-        void AddSolid (const G4VSolid& solid)            { G4VSceneHandler::AddSolid(solid); }
+        void AddSolid (const G4Box& box);
+        void AddSolid (const G4Cons& cons);
+        void AddSolid (const G4Tubs& tubs);
+        void AddSolid (const G4Trd& trd);
+        void AddSolid (const G4Trap& trap);          
+        void AddSolid (const G4Sphere& sphere);      
+        void AddSolid (const G4Para& para);          
+        void AddSolid (const G4Torus& torus);        
+        void AddSolid (const G4Polycone& polycone);  
+        void AddSolid (const G4Polyhedra& polyhedra);
+        void AddSolid (const G4VSolid& solid);       
+        
         void AddCompound (const G4VTrajectory&);
-        void AddCompound (const G4VHit& hit)                { G4VSceneHandler::AddCompound(hit); }
+        void AddCompound (const G4VHit& hit);
 
         void PreAddSolid (const G4Transform3D& objectTransformation, const G4VisAttributes& visAttribs);
         void PostAddSolid ();
@@ -81,7 +93,7 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         void AddPrimitive (const G4NURBS&);
 
         void AddPrimitive (const G4Polymarker&);
-        void AddPrimitive (const G4Scale& scale)            { G4VSceneHandler::AddPrimitive(scale); }
+        void AddPrimitive (const G4Scale& scale);
 
         void BeginPrimitives (const G4Transform3D& objectTransformation);
         void EndPrimitives ();
@@ -105,20 +117,32 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         HEPREP::HepRepWriter* writer;
         
         // Methods
+        G4bool dontWrite();
+        
         void setColor (HEPREP::HepRepAttribute *attribute, const G4Color& color,
 			            const G4String& key = G4String("Color"));
-        G4Color getColor (G4double charge);
+        G4Color getColorFor (const G4Visible& visible);
+        G4Color getColorFor (const G4VSolid& solid);
+        G4Color getColorFor (G4double charge);
+        
+        void setVisibility (HEPREP::HepRepAttribute *attribute, const G4VSolid& solid);
+        void setLine   (HEPREP::HepRepAttribute *attribute, const G4VSolid& solid);
+        
         void setVisibility (HEPREP::HepRepAttribute *attribute, const G4Visible& visible);
         void setLine   (HEPREP::HepRepAttribute *attribute, const G4Visible& visible);
+
         void setMarker (HEPREP::HepRepAttribute *attribute, const G4VMarker& marker);
 
+        inline void setAttribute (HEPREP::HepRepAttribute* attribute, G4String name, char* value) {
+            setAttribute(attribute, name, (G4String)value);
+        }
         void setAttribute (HEPREP::HepRepAttribute* attribute, G4String name, G4String value);
         void setAttribute (HEPREP::HepRepAttribute* attribute, G4String name, bool value);
         void setAttribute (HEPREP::HepRepAttribute* attribute, G4String name, double value);
         void setAttribute (HEPREP::HepRepAttribute* attribute, G4String name, int value);
         void setAttribute (HEPREP::HepRepAttribute* attribute, G4String name, double red, double green, double blue, double alpha);
 
-        bool isEventData ();
+        bool isEventData();
 
         void open(G4String name);
         void close();
@@ -129,6 +153,8 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         void addAttVals(HEPREP::HepRepAttribute* attribute, const std::map<G4String,G4AttDef>* attDefs, std::vector<G4AttValue>* attValues);
 
         void addTopLevelAttributes(HEPREP::HepRepType* type);
+
+        HEPREP::HepRepInstance*     getGeometryOrEventInstance();
 
         // Returns the particular instance/type or if not created, creates them and adds them to the HepRep
         HEPREP::HepRep*             getHepRep();
