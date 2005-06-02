@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.35 2005-06-02 11:47:06 gcosmo Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.36 2005-06-02 17:39:01 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -634,7 +634,7 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VHit& hit) {
 #endif
 
   // Pointers to hold hit attribute values and definitions.
-  const std::vector<G4AttValue>* rawHitAttValues = hit.CreateAttValues();
+  std::vector<G4AttValue>* rawHitAttValues = hit.CreateAttValues();
   std::vector<G4AttValue>* hitAttValues =
     new std::vector<G4AttValue>;
   std::map<G4String,G4AttDef>* hitAttDefs =
