@@ -670,6 +670,10 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
 		 daughtermomentum[2]*daughtermomentum[2]-
 		 daughtermomentum[0]*daughtermomentum[0])/
       (2.0*daughtermomentum[2]*daughtermomentum[0]);
+    // added the following test to avoid rounding erros. A problem
+    // reported bye Ben Morgan of Uni.Warwick
+    if (costhetan > 1.) costhetan = 1.;
+    if (costhetan < -1.) costhetan = -1.;
     sinthetan = std::sqrt((1.0-costhetan)*(1.0+costhetan));
     phin  = twopi*G4UniformRand()*rad;
     sinphin = std::sin(phin);
