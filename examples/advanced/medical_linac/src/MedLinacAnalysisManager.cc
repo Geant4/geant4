@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinacAnalysisManager.cc,v 1.4 2004-06-18 09:17:41 gunter Exp $
+// $Id: MedLinacAnalysisManager.cc,v 1.5 2005-06-02 12:22:11 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -56,8 +56,8 @@ MedLinacAnalysisManager::MedLinacAnalysisManager():
  
   //parameters for the TreeFactory
  
-  std::string fileName = "MedLinac.hbk";
-  theTree = treeFact->create(fileName,"hbook",false, true);
+  std::string fileName = "MedLinac.xml";
+  theTree = treeFact->create(fileName,"XML",false, true, "uncompress");
 
   delete treeFact;
  
