@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererSceneHandler.cc,v 1.10 2003-06-16 17:13:31 gunter Exp $
+// $Id: G4FukuiRendererSceneHandler.cc,v 1.11 2005-06-02 17:43:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -108,9 +108,6 @@ fPrec (9), fPrec2 (16)
 		}
 	}
 
-		//----- count instantiated scenes
-	fSceneCount++;
-
 		//----- precision control
 	if( getenv( "G4DAWN_PRECISION" ) != NULL ) {
 		sscanf( getenv("G4DAWN_PRECISION"), "%d", &fPrec ) ;
@@ -128,7 +125,6 @@ G4FukuiRendererSceneHandler::~G4FukuiRendererSceneHandler ()
 #if defined DEBUG_FR_SCENE
 	G4cerr << "***** ~G4FukuiRendererSceneHandler" << G4endl;
 #endif 
-  fSceneCount--;
   ClearStore (); // clear current scene
 
 }
@@ -211,8 +207,5 @@ void G4FukuiRendererSceneHandler::FRBeginModeling( void )
 
 	//----- static variables
 G4int G4FukuiRendererSceneHandler::fSceneIdCount = 0; 
-
-G4int G4FukuiRendererSceneHandler::fSceneCount = 0;   
-			// num of existing instances
 
 #endif // G4VIS_BUILD_DAWN_DRIVER

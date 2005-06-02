@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2Viewer.cc,v 1.10 2004-12-07 23:41:01 perl Exp $
+// $Id: G4VRML2Viewer.cc,v 1.11 2005-06-02 17:43:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2Viewer.cc
@@ -44,10 +44,12 @@
 #include "G4VRML2.hh"
 #include "G4ios.hh"
 
-G4VRML2Viewer::G4VRML2Viewer(G4VRML2SceneHandler& scene, const G4String& name) :
- G4VViewer(scene, scene.IncrementViewCount(), name),
- fSceneHandler(scene),
- fDest(scene.fDest)
+G4VRML2Viewer::G4VRML2Viewer(G4VRML2SceneHandler& sceneHandler, const G4String& name) :
+ G4VViewer(sceneHandler,
+	   sceneHandler.IncrementViewCount(),
+	   name),
+ fSceneHandler(sceneHandler),
+ fDest(sceneHandler.fDest)
 {
 	fViewHalfAngle = 0.5 * 0.785398 ; // 0.5 * 45*deg
 	fsin_VHA       = std::sin ( fViewHalfAngle ) ;	

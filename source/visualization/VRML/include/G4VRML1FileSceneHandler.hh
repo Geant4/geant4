@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1FileSceneHandler.hh,v 1.14 2005-01-27 20:05:33 johna Exp $
+// $Id: G4VRML1FileSceneHandler.hh,v 1.15 2005-06-02 17:43:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1FileSceneHandler.hh
@@ -91,8 +91,6 @@ public:
 	void VRMLBeginModeling();
 	void VRMLEndModeling();
 
-	static G4int GetSceneCount() { return fSceneCount; }
-
 	void connectPort();
 	void closePort();
 
@@ -126,7 +124,6 @@ private:
 	G4int        fMaxFileNum   ;	
 
 	static G4int fSceneIdCount;
-	static G4int fSceneCount;    // No. of existing scenes.
 
 };
 

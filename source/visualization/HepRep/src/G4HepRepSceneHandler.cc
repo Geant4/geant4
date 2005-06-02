@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.83 2005-05-17 22:07:07 duns Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.84 2005-06-02 17:43:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -79,14 +79,14 @@ using namespace HEPREP;
 using namespace cheprep;
 using namespace std;
 
-G4int G4HepRepSceneHandler::sceneCount = 0;
+G4int G4HepRepSceneHandler::sceneIdCount = 0;
 
 //#define LDEBUG 1
 //#define SDEBUG 1
 //#define PDEBUG 1
 
 G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, G4HepRepMessenger& heprepMessenger, const G4String& name)
-        : G4VSceneHandler (system, sceneCount++, name),
+        : G4VSceneHandler (system, sceneIdCount++, name),
           messenger             (heprepMessenger),
           geometryLayer         ("Geometry"),
           eventLayer            ("Event"),

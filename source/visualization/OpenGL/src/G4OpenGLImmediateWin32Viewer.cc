@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.8 2005-04-22 12:02:47 allison Exp $
+// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.9 2005-06-02 17:43:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,12 +35,12 @@
 #include "G4ios.hh"
 
 G4OpenGLImmediateWin32Viewer::G4OpenGLImmediateWin32Viewer
-(G4OpenGLImmediateSceneHandler& scene,
+(G4OpenGLImmediateSceneHandler& sceneHandler,
  const G4String&  name):
-G4OpenGLViewer (scene),
-G4OpenGLWin32Viewer (scene),
-G4OpenGLImmediateViewer (scene),
-G4VViewer (scene, scene.IncrementViewCount (), name) {
+G4OpenGLViewer (sceneHandler),
+G4OpenGLWin32Viewer (sceneHandler),
+G4OpenGLImmediateViewer (sceneHandler),
+G4VViewer (sceneHandler, sceneHandler.IncrementViewCount (), name) {
 
   if (fViewId < 0) return;  // In case error in base class instantiation.
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.37 2005-05-27 13:53:02 allison Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.38 2005-06-02 17:43:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -101,8 +101,6 @@ G4Point3D translation;
 
 G4int G4OpenInventorSceneHandler::fSceneIdCount = 0;
 
-G4int G4OpenInventorSceneHandler::fSceneCount = 0;
-
 G4OpenInventorSceneHandler::G4OpenInventorSceneHandler (G4OpenInventor& system,
                                           const G4String& name)
 :G4VSceneHandler (system, fSceneIdCount++, name)
@@ -115,8 +113,6 @@ G4OpenInventorSceneHandler::G4OpenInventorSceneHandler (G4OpenInventor& system,
 ,fStyleCache(0)
 ,fPreviewAndFull(false)
 {
-  fSceneCount++;
-
   fStyleCache = new SoStyleCache;
   fStyleCache->ref();
 
@@ -139,7 +135,6 @@ G4OpenInventorSceneHandler::~G4OpenInventorSceneHandler ()
 {
   fRoot->unref();
   fStyleCache->unref();
-  fSceneCount--;
 }
 
 //

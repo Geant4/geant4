@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.21 2005-05-30 19:03:58 perl Exp $
+// $Id: G4HepRepFileSceneHandler.hh,v 1.22 2005-06-02 17:43:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -117,13 +117,10 @@ public:
   ////////////////////////////////////////////////////////////////
   // Required...
 
-  static G4int GetSceneCount() {return fSceneCount;}
-
   G4HepRepFileXMLWriter *GetHepRepXMLWriter();
 
 protected:
   static G4int         fSceneIdCount;  // Counter for HepRep scene handlers.
-  static G4int         fSceneCount;    // No. of extanct scene handlers.
 
 private:
   G4HepRepFileXMLWriter *hepRepXMLWriter;

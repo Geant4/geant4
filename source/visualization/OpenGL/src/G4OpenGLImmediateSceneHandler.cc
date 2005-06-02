@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.12 2005-05-04 20:27:49 allison Exp $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.13 2005-06-02 17:43:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,14 +57,10 @@
 G4OpenGLImmediateSceneHandler::G4OpenGLImmediateSceneHandler (G4VGraphicsSystem& system,
 						const G4String& name):
 G4OpenGLSceneHandler (system, fSceneIdCount++, name)
-{
-  fSceneCount++;
-}
+{}
 
 G4OpenGLImmediateSceneHandler::~G4OpenGLImmediateSceneHandler ()
-{
-  fSceneCount--;
-}
+{}
 
 #include <iomanip>
 
@@ -115,12 +111,6 @@ void G4OpenGLImmediateSceneHandler::ClearTransientStore () {
   }
 }
 
-G4int G4OpenGLImmediateSceneHandler::GetSceneCount () {
-  return fSceneCount;
-}
-
 G4int G4OpenGLImmediateSceneHandler::fSceneIdCount = 0;
-
-G4int G4OpenGLImmediateSceneHandler::fSceneCount = 0;
 
 #endif

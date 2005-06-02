@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRSceneFunc.icc,v 1.9 2005-05-27 13:33:31 allison Exp $
+// $Id: G4FRSceneFunc.icc,v 1.10 2005-06-02 17:43:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -418,12 +418,6 @@ void G4FRSCENEHANDLER::EndPrimitives ()
   G4VSceneHandler::EndPrimitives ();
 }
 
-
-//----- 
-G4int G4FRSCENEHANDLER::GetSceneCount () 
-{
-	return fSceneCount;
-}
 
 //========== AddSolid() functions ==========//
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.hh,v 1.13 2005-01-27 20:04:20 johna Exp $
+// $Id: G4DAWNFILESceneHandler.hh,v 1.14 2005-06-02 17:43:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -96,7 +96,6 @@ public:
   void ClearTransientStore();  // Used for triggering detector re-drawing.
 
 	//----- public methods inherent to this class
-  static G4int GetSceneCount   ();
   void         FRBeginModeling () ;
   void         FREndModeling   () ;
   G4bool       FRIsInModeling  () { return FRflag_in_modeling ; }
@@ -216,7 +215,6 @@ public:
 private:
   G4DAWNFILE&	fSystem;     // Graphics system for this scene.
   static G4int	fSceneIdCount;
-  static G4int	fSceneCount;    // No. of existing scenes.
 
   G4FRofstream	fPrimDest    ;  // defined here
   G4bool	FRflag_in_modeling ;	

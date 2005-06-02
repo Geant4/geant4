@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.36 2005-06-02 17:39:01 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.37 2005-06-02 17:43:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -58,16 +58,10 @@
 G4int G4HepRepFileSceneHandler::fSceneIdCount = 0;
 // Counter for HepRep scene handlers.
 
-G4int G4HepRepFileSceneHandler::fSceneCount = 0;
-// No. of extanct scene handlers.
-
-
 G4HepRepFileSceneHandler::G4HepRepFileSceneHandler(G4VGraphicsSystem& system,
 					 const G4String& name):
   G4VSceneHandler(system, fSceneIdCount++, name)
 {
-  fSceneCount++;
-
   hepRepXMLWriter = ((G4HepRepFile*)(&system))->GetHepRepXMLWriter();
   fileCounter = 0;
   int length;

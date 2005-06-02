@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererSceneHandler.hh,v 1.13 2005-02-09 21:17:43 johna Exp $
+// $Id: G4FukuiRendererSceneHandler.hh,v 1.14 2005-06-02 17:43:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -101,7 +101,6 @@ public:
   void ClearTransientStore();  // Used for triggering detector re-drawing.
 
 	//----- methods inherent to this class
-  static G4int GetSceneCount   ();
   void         FRBeginModeling () ;
   void         FREndModeling   () ;
   G4bool       FRIsInModeling    () { return FRflag_in_modeling ; }
@@ -230,7 +229,6 @@ public:
 private:
   G4FukuiRenderer& fSystem;     // Graphics system for this scene.
   static G4int	fSceneIdCount;
-  static G4int	fSceneCount;    // No. of existing scenes.
 
   G4FRClientServer&	fPrimDest    ;  // defined in G4FukuiRenderer
   G4bool		FRflag_in_modeling ;	

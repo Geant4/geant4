@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXm.cc,v 1.9 2004-04-07 15:18:22 gbarrand Exp $
+// $Id: G4OpenGLImmediateXm.cc,v 1.10 2005-06-02 17:43:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,8 +47,6 @@ G4OpenGLImmediateXm::~G4OpenGLImmediateXm () {}
 
 G4VSceneHandler* G4OpenGLImmediateXm::CreateSceneHandler (const G4String& name) {
   G4VSceneHandler* pScene = new G4OpenGLImmediateSceneHandler (*this, name);
-  G4cout << G4OpenGLImmediateSceneHandler::GetSceneCount ()
-       << ' ' << fName << " scene handlers extanct." << G4endl;
   return    pScene;
 }
 

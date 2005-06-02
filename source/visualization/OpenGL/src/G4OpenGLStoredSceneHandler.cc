@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.19 2005-05-04 20:27:49 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.20 2005-06-02 17:43:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,14 +47,10 @@ G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler (G4VGraphicsSystem& syste
 G4OpenGLSceneHandler (system, fSceneIdCount++, name),
 fMemoryForDisplayLists (true),
 fTopPODL (0)
-{
-  fSceneCount++;
-}
+{}
 
 G4OpenGLStoredSceneHandler::~G4OpenGLStoredSceneHandler ()
-{
-  fSceneCount--;
-}
+{}
 
 void G4OpenGLStoredSceneHandler::BeginPrimitives
 (const G4Transform3D& objectTransformation) {
@@ -220,7 +216,5 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid) {
 }
 
 G4int G4OpenGLStoredSceneHandler::fSceneIdCount = 0;
-
-G4int G4OpenGLStoredSceneHandler::fSceneCount = 0;
 
 #endif

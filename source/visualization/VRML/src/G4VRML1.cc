@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1.cc,v 1.8 2002-06-23 03:31:50 stanaka Exp $
+// $Id: G4VRML1.cc,v 1.9 2005-06-02 17:43:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1.cc
@@ -74,9 +74,6 @@ G4VSceneHandler* G4VRML1::CreateSceneHandler(const G4String& name)
 	G4VSceneHandler *p = NULL;
 
 	p = new G4VRML1SceneHandler(*this, name);
-
-	G4cout << G4VRML1SceneHandler::GetSceneCount()
-		<< " " << fName << " scene handlers extanct." << G4endl;
 
 	return p;
 }

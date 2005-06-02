@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererViewer.cc,v 1.9 2004-12-10 18:16:00 gcosmo Exp $
+// $Id: G4FukuiRendererViewer.cc,v 1.10 2005-06-02 17:43:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,9 +56,12 @@
 
 
 //----- Constructor
-G4FukuiRendererViewer::G4FukuiRendererViewer (G4FukuiRendererSceneHandler& scene,
+G4FukuiRendererViewer::G4FukuiRendererViewer (G4FukuiRendererSceneHandler& sceneHandler,
 					  const G4String& name): 
-  G4VViewer (scene, scene.IncrementViewCount (), name), fSceneHandler (scene)
+  G4VViewer (sceneHandler,
+	     sceneHandler.IncrementViewCount (),
+	     name),
+  fSceneHandler (sceneHandler)
 {}
 
 //----- Destructor

@@ -21,16 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTreeSceneHandler.icc,v 1.5 2005-01-27 20:05:26 johna Exp $
+// $Id: G4VTreeSceneHandler.icc,v 1.6 2005-06-02 17:43:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  18th May 2000
 // An artificial graphics scene to find dump geometry hierarchy.
-
-inline G4int G4VTreeSceneHandler::GetSceneCount() {
-  return fSceneCount;
-}
 
 inline void G4VTreeSceneHandler::PreAddSolid
 (const G4Transform3D& objectTransformation,

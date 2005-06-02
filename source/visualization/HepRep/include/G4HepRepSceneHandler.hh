@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.hh,v 1.35 2005-05-13 14:57:26 duns Exp $
+// $Id: G4HepRepSceneHandler.hh,v 1.36 2005-06-02 17:43:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -88,15 +88,13 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         void BeginModeling ();
         void EndModeling ();
 
-        static G4int getSceneCount ()                       { return sceneCount; }
-
         void openHepRep();
         bool closeHepRep(bool final = false);
         void openFile(G4String name);
         void closeFile();
 
     private:
-        static G4int sceneCount;
+        static G4int sceneIdCount;
         const G4ModelingParameters* originalMP;  // Keeps pointer to original.
         G4ModelingParameters* nonCullingMP;      // For temporary non-culling.
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2FileSceneHandler.hh,v 1.13 2005-01-27 20:05:39 johna Exp $
+// $Id: G4VRML2FileSceneHandler.hh,v 1.14 2005-06-02 17:43:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2FileSceneHandler.hh
@@ -88,8 +88,6 @@ public:
 	void BeginModeling();
 	void EndModeling();
 
-	static G4int GetSceneCount() { return fSceneCount; }
-
 	void VRMLBeginModeling();
 	void VRMLEndModeling();
 
@@ -133,7 +131,6 @@ private:
 	G4double     fPVTransparency ;
 
 	static G4int fSceneIdCount;
-	static G4int fSceneCount;    // No. of existing scenes.
 
 public: 
 	std::ofstream     fDest ;

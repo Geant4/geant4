@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRenderer.cc,v 1.7 2001-07-11 10:08:46 gunter Exp $
+// $Id: G4FukuiRenderer.cc,v 1.8 2005-06-02 17:43:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -91,9 +91,6 @@ G4VSceneHandler* G4FukuiRenderer::CreateSceneHandler (const G4String& name)
 	G4VSceneHandler* p = new G4FukuiRendererSceneHandler (*this, name);
 
 	if(!flag_connected) { delete p ;  p = NULL ; }
-
-	G4cout	<< G4FukuiRendererSceneHandler::GetSceneCount ()
-		<< ' ' << fName << " scene handlers extanct." << G4endl;
 
 	return p;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1FileViewer.cc,v 1.7 2001-09-18 07:53:15 stanaka Exp $
+// $Id: G4VRML1FileViewer.cc,v 1.8 2005-06-02 17:43:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRMLView.cc
@@ -36,9 +36,12 @@
 #include "G4VRML1File.hh"
 #include "G4ios.hh"
 
-G4VRML1FileViewer::G4VRML1FileViewer(G4VRML1FileSceneHandler& scene,
+G4VRML1FileViewer::G4VRML1FileViewer(G4VRML1FileSceneHandler& sceneHandler,
 				 const G4String& name) :
-  G4VViewer(scene, scene.IncrementViewCount(), name), fSceneHandler(scene)
+  G4VViewer(sceneHandler,
+	    sceneHandler.IncrementViewCount(),
+	    name),
+  fSceneHandler(sceneHandler)
 {}
 
 G4VRML1FileViewer::~G4VRML1FileViewer()

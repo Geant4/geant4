@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.hh,v 1.15 2005-02-23 11:24:52 allison Exp $
+// $Id: G4VViewer.hh,v 1.16 2005-06-02 17:43:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,7 @@ public: // With description
 
   friend std::ostream& operator << (std::ostream& os, const G4VViewer& v);
 
-  G4VViewer (G4VSceneHandler& scene, G4int id, const G4String& name = "");
+  G4VViewer (G4VSceneHandler&, G4int id, const G4String& name = "");
   virtual ~G4VViewer ();
 
   virtual void Initialise ();

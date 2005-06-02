@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.25 2005-05-27 13:53:02 allison Exp $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.26 2005-06-02 17:43:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,7 +74,6 @@ public:
   void BeginPrimitives (const G4Transform3D& objectTransformation);
   void EndPrimitives ();
   void EndModeling ();
-  static G4int GetSceneCount ();
   void PreAddSolid (const G4Transform3D& objectTransformation,
 		   const G4VisAttributes& visAttribs);
 
@@ -86,7 +85,6 @@ private:
 
 private:
   static G4int fSceneIdCount;   // static counter for OpenInventor scenes.
-  static G4int fSceneCount;
 private:
   //
   // Stop-gap solution of structure re-use.
@@ -103,8 +101,6 @@ private:
   Geant4_SoStyleCache* fStyleCache;
   bool fPreviewAndFull;
 };
-
-#include "G4OpenInventorSceneHandler.icc"
 
 #endif
 

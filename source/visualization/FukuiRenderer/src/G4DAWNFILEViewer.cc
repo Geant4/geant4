@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILEViewer.cc,v 1.16 2004-12-10 18:16:00 gcosmo Exp $
+// $Id: G4DAWNFILEViewer.cc,v 1.17 2005-06-02 17:43:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -56,9 +56,12 @@ const char  FR_ENV_MULTI_WINDOW [] = "G4DAWN_MULTI_WINDOW" ;
 const char  FR_ENV_MULTI_WINDOW2[] = "G4DAWNFILE_MULTI_WINDOW" ;
 
 	//----- G4DAWNFILEViewer, constructor
-G4DAWNFILEViewer::G4DAWNFILEViewer (G4DAWNFILESceneHandler& scene,
+G4DAWNFILEViewer::G4DAWNFILEViewer (G4DAWNFILESceneHandler& sceneHandler,
 				const G4String& name): 
-  G4VViewer (scene, scene.IncrementViewCount (), name), fSceneHandler (scene)
+  G4VViewer (sceneHandler,
+	     sceneHandler.IncrementViewCount (),
+	     name),
+  fSceneHandler (sceneHandler)
 {
 	// Set a g4.prim-file viewer 
 	strcpy( fG4PrimViewer, "dawn" ); 

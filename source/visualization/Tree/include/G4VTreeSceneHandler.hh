@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTreeSceneHandler.hh,v 1.13 2005-01-27 20:05:23 johna Exp $
+// $Id: G4VTreeSceneHandler.hh,v 1.14 2005-06-02 17:43:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,13 +66,10 @@ public:
   virtual void BeginModeling();
   virtual void EndModeling();
 
-  static G4int GetSceneCount();
-
 protected:
   // In the derived class, override G4VScenehandler::RequestPrimitives
   // to implement dump of the geometry hierarchy.
   static G4int         fSceneIdCount;  // Counter for Tree scene handlers.
-  static G4int         fSceneCount;    // No. of extanct scene handlers.
   const G4Transform3D* fpCurrentObjectTransformation;
 };
 

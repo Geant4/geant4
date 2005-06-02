@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32.cc,v 1.8 2002-10-16 10:44:15 johna Exp $
+// $Id: G4OpenGLImmediateWin32.cc,v 1.9 2005-06-02 17:43:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,8 +45,6 @@ G4OpenGLImmediateWin32::G4OpenGLImmediateWin32 ():
 G4VSceneHandler* G4OpenGLImmediateWin32::CreateSceneHandler
 (const G4String& name) {
   G4VSceneHandler* pScene = new G4OpenGLImmediateSceneHandler (*this, name);
-  G4cout << G4OpenGLImmediateSceneHandler::GetSceneCount ()
-       << ' ' << fName << " scene handlers extanct." << G4endl;
   return    pScene;
 }
 

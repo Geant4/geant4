@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerSceneHandler.hh,v 1.7 2005-01-27 20:05:20 johna Exp $
+// $Id: G4RayTracerSceneHandler.hh,v 1.8 2005-06-02 17:43:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // John Allison  17th March 2000
@@ -62,11 +62,8 @@ public:
   void AddCompound(const G4VTrajectory&){}
   void AddCompound(const G4VHit&){}
 
-  static G4int GetSceneCount();
-
 private:
   static G4int    fSceneIdCount;  // Counter for RayTracer scene handlers.
-  static G4int    fSceneCount;    // No. of extanct scene handlers.
 };
 
 #endif
