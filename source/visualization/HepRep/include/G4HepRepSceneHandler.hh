@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.hh,v 1.39 2005-06-02 23:37:19 duns Exp $
+// $Id: G4HepRepSceneHandler.hh,v 1.40 2005-06-02 23:40:49 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -123,7 +123,6 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
 			            const G4String& key = G4String("Color"));
         G4Color getColorFor (const G4Visible& visible);
         G4Color getColorFor (const G4VSolid& solid);
-        G4Color getColorFor (G4double charge);
         
         void setVisibility (HEPREP::HepRepAttribute *attribute, const G4VSolid& solid);
         void setLine   (HEPREP::HepRepAttribute *attribute, const G4VSolid& solid);

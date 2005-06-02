@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.88 2005-06-02 23:37:19 duns Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.89 2005-06-02 23:40:49 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -984,16 +984,6 @@ G4Color G4HepRepSceneHandler::getColorFor (const G4VSolid& /* solid */) {
 
 G4Color G4HepRepSceneHandler::getColorFor (const G4Visible& visible) {
     return GetColor(visible);
-}
-
-G4Color G4HepRepSceneHandler::getColorFor (G4double charge) {
-    float red = 0.;
-    float green = 0.;
-    float blue = 0.;
-    if(charge>0.0)      blue =  1.0; // Blue = positive.
-    else if(charge<0.0) red  =  1.0; // Red = negative.
-    else                green = 1.0; // Green = neutral.
-    return G4Color(red, green, blue);
 }
 
 void G4HepRepSceneHandler::setVisibility (HepRepAttribute *attribute, const G4VSolid& /* solid */) {
