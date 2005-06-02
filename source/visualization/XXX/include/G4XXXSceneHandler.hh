@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.hh,v 1.14 2005-05-27 14:07:22 allison Exp $
+// $Id: G4XXXSceneHandler.hh,v 1.15 2005-06-02 17:00:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,7 @@
 #ifndef G4XXXSCENEHANDLER_HH
 #define G4XXXSCENEHANDLER_HH
 
-#define G4XXXDEBUG  // Comment this out to suppress debug code.
+//#define G4XXXDEBUG  // Comment this out to suppress debug code.
 
 #include "G4VSceneHandler.hh"
 
@@ -57,8 +57,8 @@ public:
   void AddSolid(const G4VSolid&);
   void AddCompound(const G4VTrajectory&);
   void AddCompound(const G4VHit&);
-  // void PreAddSolid(const G4Transform3D& objectTransformation,
-  //                 const G4VisAttributes&);
+  void PreAddSolid(const G4Transform3D& objectTransformation,
+		   const G4VisAttributes&);
   // void PostAddSolid();
 
   ////////////////////////////////////////////////////////////////
@@ -103,14 +103,8 @@ public:
   //void ClearStore ();
   void ClearTransientStore ();
 
-  ////////////////////////////////////////////////////////////////
-  // Required...
-
-  static G4int GetSceneCount() {return fSceneCount;}
-
 protected:
   static G4int         fSceneIdCount;  // Counter for XXX scene handlers.
-  static G4int         fSceneCount;    // No. of extanct scene handlers.
 
 private:
 #ifdef G4XXXDEBUG

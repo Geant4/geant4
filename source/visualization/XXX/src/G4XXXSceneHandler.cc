@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.21 2005-05-27 14:07:22 allison Exp $
+// $Id: G4XXXSceneHandler.cc,v 1.22 2005-06-02 17:00:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,15 +58,10 @@
 G4int G4XXXSceneHandler::fSceneIdCount = 0;
 // Counter for XXX scene handlers.
 
-G4int G4XXXSceneHandler::fSceneCount = 0;
-// No. of extanct scene handlers.
-
 G4XXXSceneHandler::G4XXXSceneHandler(G4VGraphicsSystem& system,
 					 const G4String& name):
   G4VSceneHandler(system, fSceneIdCount++, name)
-{
-  fSceneCount++;
-}
+{}
 
 G4XXXSceneHandler::~G4XXXSceneHandler() {}
 
@@ -90,6 +85,92 @@ void G4XXXSceneHandler::PrintThings() {
   G4cout << G4endl;
 }
 #endif
+
+#include <vector>
+std::vector<std::pair<G4VPhysicalVolume*, G4int> > fPVPath;
+typedef
+std::vector<std::pair<G4VPhysicalVolume*, G4int> >::const_iterator
+PVPath_const_iterator;
+
+void G4XXXSceneHandler::PreAddSolid
+(const G4Transform3D& objectTransformation,
+ const G4VisAttributes& visAttribs) {
+  using namespace std;
+  G4cout <<
+    "Current PV/LV/depth: "
+	 << fpCurrentPV->GetName() <<
+    "/"
+	 << fpCurrentLV->GetName() <<
+    "/"
+	 << fCurrentDepth
+	 << G4endl;
+  // How to establish a tree (even when some volumes have been
+  // culled)...
+  static G4int lastDepth = 0;
+  static G4LogicalVolume* lastMotherLV = 0;
+  G4int copyNo = fpCurrentPV->GetCopyNo();
+  if (fCurrentDepth > lastDepth) {
+    while (fCurrentDepth > lastDepth++) {
+      fPVPath.push_back(make_pair((G4VPhysicalVolume*)0,0));
+    }
+    fPVPath.back() = make_pair(fpCurrentPV,copyNo);
+  } else if (fCurrentDepth == lastDepth) {
+    fPVPath.back() = make_pair(fpCurrentPV,copyNo);
+  } else {
+    while (fCurrentDepth < lastDepth--) {
+      fPVPath.pop_back();
+    }
+    fPVPath.back() = make_pair(fpCurrentPV,copyNo);
+  }
+  lastDepth = fCurrentDepth;
+  lastMotherLV = fpCurrentPV->GetMotherLogical();
+
+  // Debug printing...
+  for (PVPath_const_iterator i = fPVPath.begin(); i != fPVPath.end(); ++i) {
+    if ((*i).first) {
+    G4cout << '/' << (*i).first->GetName();
+    } else {
+      G4cout << 0;
+    }
+    G4cout << ':' << (*i).second;
+  }
+  G4cout << G4endl;
+
+  /***********************************************
+  fLVSet.insert(fpCurrentLV);
+  G4LogicalVolume* motherLV = fpCurrentPV->GetMotherLogical();
+  if (motherLV) {
+    if (fLVSet.find(motherLV) == fLVSet.end()) {
+      // Mother not previously encountered - must have been culled.
+      G4cout << "Mother LV \"" << motherLV->GetName()
+	     << "\" not found." << G4endl;
+      // Search back up hierarchy...
+      do {
+	G4LogicalVolume* possibleMotherLV = 0;
+	G4LogicalVolumeStore* Store = G4LogicalVolumeStore::GetInstance();
+	for ( size_t LV=0; LV < Store->size(); LV++ ) {
+	  G4LogicalVolume* aLogVol = (*Store)[LV];
+	  if(aLogVol != this) {  // Don't look for it inside itself!
+	    for (G4int daughter=0; daughter < aLogVol->GetNoDaughters(); daughter++ ) {
+		  if( aLogVol->GetDaughter(daughter)->GetLogicalVolume()==this )
+		    { 
+		      // aLogVol is the mother !!!
+		      //
+		      motherLogVol = aLogVol;
+		      break;
+		    }
+		}
+	    }
+	}
+	motherLV = motherLV->GetPhysicalVolume()->GetMotherLogical(); 	
+      } while (motherLV && fLVSet.find(motherLV) == fLVSet.end());
+      G4cout << "Mother LV \"" << motherLV->GetName()
+	     << "\" found." << G4endl;
+    }
+  }
+  ****************************************/
+
+}
 
 void G4XXXSceneHandler::AddSolid(const G4Box& box) {
 #ifdef G4XXXDEBUG
@@ -415,15 +496,13 @@ void G4XXXSceneHandler::AddPrimitive(const G4NURBS&) {
 
 void G4XXXSceneHandler::ClearTransientStore () {
   G4VSceneHandler::ClearTransientStore ();
-  /*
-  ClearTransientStore should restrict itself to its job.  In other
-  places, a draw command follows, so it is not needed here.  In fact
-  it can cause a double recursive descent into DrawView, so the following
-  has been commented out (JA - 23/Jan/05).
+  // This is typically called after an update and before drawing hits
+  // of the next event.  To simulate the clearing of "transients"
+  // (hits, etc.) in a system without a graphical database, the
+  // detector is redrawn...
   if (fpViewer) {
     fpViewer -> SetView ();
     fpViewer -> ClearView ();
     fpViewer -> DrawView ();
   }
-  */
 }
