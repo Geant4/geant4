@@ -11,7 +11,7 @@ using namespace std;
 
 /**
  * @author Mark Donszelmann
- * @version $Id: XMLWriter.cc,v 1.11 2005-05-25 23:22:25 duns Exp $
+ * @version $Id: XMLWriter.cc,v 1.12 2005-06-02 21:28:45 duns Exp $
  */
 namespace cheprep {
 

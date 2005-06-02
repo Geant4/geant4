@@ -10,7 +10,7 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: ZipOutputStreamBuffer.cc,v 1.8 2005-05-25 23:22:25 duns Exp $
+ * @version $Id: ZipOutputStreamBuffer.cc,v 1.9 2005-06-02 21:28:45 duns Exp $
  */
 namespace cheprep {
 
@@ -35,7 +35,8 @@ namespace cheprep {
         finish();
                 
         entry->crc = getCRC();
-        entry->csize = pos() - entry->data;
+        // NOTE: pos()::operator- is ambiguous on gcc 4.0, so convert to long first
+        entry->csize = (long)pos() - entry->data;
         entry->size = getSize();
         putUI(EXTSIG);
         putUI(entry->crc);            // crc
@@ -75,7 +76,8 @@ namespace cheprep {
             delete entry;
             entry = NULL;
         }
-        long dirSize = pos() - dirStart;
+        // NOTE: pos()::operator- is ambiguous on gcc 4.0, so convert to long first
+        long dirSize = (long)pos() - dirStart;
         putUI(ENDSIG);
         putUS(0);                             // number of this disk
         putUS(0);                             // number of the disk with the start of central directory
@@ -113,7 +115,7 @@ namespace cheprep {
         entry->date = (utc->tm_year - 80) << 9 | (utc->tm_mon + 1) << 5 | utc->tm_mday;
         entry->time = utc->tm_hour << 11 | utc->tm_min << 5 | utc->tm_sec >> 1;
 
-        entry->offset = pos();
+        entry->offset = (long)pos();
         putUI(LOCSIG);                        // signature
         putUS(VERSIONEXTRACT);                // extraction version
         putUS(GENFLAG);                       // general purpose bit flag
@@ -126,7 +128,7 @@ namespace cheprep {
         putUS(entry->name.length());          // file name length
         putUS(0);                             // extra field length
         putS(entry->name);                    // file name
-        entry->data = pos();
+        entry->data = (long)pos();
         entry->crc = 0;
     }
             

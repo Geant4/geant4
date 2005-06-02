@@ -9,7 +9,7 @@
                         
 /**
  * @author Mark Donszelmann
- * @version $Id: BHepRepWriter.cc,v 1.8 2005-05-25 23:21:59 duns Exp $
+ * @version $Id: BHepRepWriter.cc,v 1.9 2005-06-02 21:28:45 duns Exp $
  */
 namespace cheprep {
 
@@ -230,7 +230,7 @@ namespace cheprep {
     }
 
     void BHepRepWriter::openTag(std::string name) {
-        writeTag(name, CONTENT);
+        writeTag(name, true);
     }
     
     void BHepRepWriter::closeTag() {

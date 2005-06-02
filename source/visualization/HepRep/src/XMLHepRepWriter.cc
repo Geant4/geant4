@@ -14,7 +14,7 @@ using namespace HEPREP;
 
 /**
  * @author Mark Donszelmann
- * @version $Id: XMLHepRepWriter.cc,v 1.14 2005-05-25 23:22:25 duns Exp $
+ * @version $Id: XMLHepRepWriter.cc,v 1.15 2005-06-02 21:28:45 duns Exp $
  */
 namespace cheprep {
 

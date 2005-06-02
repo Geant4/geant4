@@ -8,7 +8,7 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: GZIPOutputStreamBuffer.h,v 1.3 2005-05-25 23:21:59 duns Exp $
+ * @version $Id: GZIPOutputStreamBuffer.h,v 1.4 2005-06-02 21:28:45 duns Exp $
  */
 namespace cheprep {
 

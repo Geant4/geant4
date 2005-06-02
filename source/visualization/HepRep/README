@@ -51,7 +51,11 @@ The version of HepRep produced by this driver is HepRep Version 2.
 This driver can write both Binary HepRep (.bheprep) and XML HepRep 
 (.heprep) files. Binary HepRep files are a one-to-one translation
 of XML HepRep files, but they are considerably shorter and faster
-to parse by a HepRep viewer.
+to parse by a HepRepViewer such as WIRED 4.
+
+You can view the files using the WIRED 4 Event Display, available from:
+
+http://wired4.freehep.org
 
 Both Binary HepRep and XML HepRep can be compressed using the standard
 zlib library if linked into Geant4 using G4LIB_USE_ZLIB. If a standard
@@ -137,16 +141,11 @@ This results in a smaller zip file, as the geometry is only written once. Use th
 /vis/sceneHandler/remove scene-handler-0
 
 
-View the file using the WIRED Event Display, available from:
-
-http://wired.freehep.org
-
-
 Limitations:
 
 Only one SceneHandler can exist at any time, connected to a single Viewer. 
 Since the HepRep format is a model rather than a view this is not a real
-limitation. In WIRED you can create as many views (SceneHandlers) as you like.
+limitation. In WIRED 4 you can create as many views (SceneHandlers) as you like.
 
 1 June 2005
 Mark.Donszelmann@slac.stanford.edu
