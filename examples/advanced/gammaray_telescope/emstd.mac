@@ -7,10 +7,10 @@
 /process/activate   compt           gamma
 /process/activate   conv            gamma
 
-/process/inactivate LowEnergyIoni   e-
-/process/inactivate LowEnBrem       e-
+/process/inactivate LowEnergyIoni   
+/process/inactivate LowEnBrem       
 
-/process/activate   eIoni           e-
-/process/activate   eBrem           e-
+/process/activate   eIoni           
+/process/activate   eBrem           
 
 /process/list

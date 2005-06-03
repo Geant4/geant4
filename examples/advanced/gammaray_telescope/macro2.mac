@@ -13,7 +13,7 @@
 /control/saveHistory
 /run/verbose 2
 
-/control/execute emstd.mac
+/control/execute emlowe.mac
 
 /gun/particle mu-
 /gun/energy 100 MeV
@@ -23,15 +23,15 @@
 
 # You can modify the geometry of the telescope via a messenger
 
-/control/execute emlowe.mac
+/control/execute emstd.mac
 /payload/setNbOfTKRLayers 10
-#/payload/update
+/payload/update
 
 
 #
 # Create a scene handler for a specific graphics system
-#/vis/open VRML2FILE
-/vis/open OGLIX
+/vis/open VRML2FILE
+#/vis/open OGLIX
 
 /vis/viewer/reset
 /vis/viewer/set/viewpointThetaPhi 90 0
@@ -41,13 +41,13 @@
 
 # for drawing the tracks
 # if too many tracks cause core dump => storeTrajectory 0
-#/tracking/storeTrajectory 1
+/tracking/storeTrajectory 1
 
 #
 # Flush visualization
 /vis/viewer/update
 
-/run/beamOn 5
+/run/beamOn 10
 
 
 
