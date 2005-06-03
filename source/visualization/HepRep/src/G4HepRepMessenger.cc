@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepMessenger.cc,v 1.8 2005-06-02 23:37:19 duns Exp $
+// $Id: G4HepRepMessenger.cc,v 1.9 2005-06-03 00:03:36 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4HepRepMessenger.hh"
@@ -59,11 +59,13 @@ G4HepRepMessenger::G4HepRepMessenger() :
     useSolidsCommand->SetDefaultValue(true);
     useSolidsCommand->AvailableForStates(G4State_Idle);
 
+/* Not Enabled Yet
     writeInvisiblesCommand = new G4UIcmdWithABool("/vis/heprep/writeInvisibles", this);
     writeInvisiblesCommand->SetGuidance("Write invisible objects.");
     writeInvisiblesCommand->SetParameterName("flag",false);
     writeInvisiblesCommand->SetDefaultValue(true);
     writeInvisiblesCommand->AvailableForStates(G4State_Idle);
+*/
 }
 
 G4HepRepMessenger::~G4HepRepMessenger() {
@@ -71,7 +73,7 @@ G4HepRepMessenger::~G4HepRepMessenger() {
     delete appendGeometryCommand;
     delete addPointAttributesCommand;
     delete useSolidsCommand;
-    delete writeInvisiblesCommand;
+//    delete writeInvisiblesCommand;
     delete heprepDirectory;
 }
 
@@ -84,8 +86,8 @@ G4String G4HepRepMessenger::GetCurrentValue(G4UIcommand * command) {
         return addPointAttributesCommand->ConvertToString(pointAttributes); 
     } else if (command==useSolidsCommand) {
         return useSolidsCommand->ConvertToString(solids);
-    } else if (command==writeInvisiblesCommand) {
-        return writeInvisiblesCommand->ConvertToString(invisibles);
+//    } else if (command==writeInvisiblesCommand) {
+//        return writeInvisiblesCommand->ConvertToString(invisibles);
     } else {
         return "";
     }
@@ -100,8 +102,8 @@ void G4HepRepMessenger::SetNewValue(G4UIcommand * command, G4String newValue) {
         pointAttributes = addPointAttributesCommand->GetNewBoolValue(newValue);
     } else if (command==useSolidsCommand) {
         solids = useSolidsCommand->GetNewBoolValue(newValue);
-    } else if (command==writeInvisiblesCommand) {
-        invisibles = writeInvisiblesCommand->GetNewBoolValue(newValue);
+//    } else if (command==writeInvisiblesCommand) {
+//        invisibles = writeInvisiblesCommand->GetNewBoolValue(newValue);
     } 
 }
 

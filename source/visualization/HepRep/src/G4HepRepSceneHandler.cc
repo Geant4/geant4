@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.89 2005-06-02 23:40:49 duns Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.90 2005-06-03 00:03:36 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -987,10 +987,10 @@ G4Color G4HepRepSceneHandler::getColorFor (const G4Visible& visible) {
 }
 
 void G4HepRepSceneHandler::setVisibility (HepRepAttribute *attribute, const G4VSolid& /* solid */) {
-    setAttribute(attribute, "Visibility", true);
+    setAttribute(attribute, "Visibility", (fpVisAttribs ? (bool)fpVisAttribs->IsVisible() : true));
 }
 
-void G4HepRepSceneHandler::setVisibility (HepRepAttribute *attribute, const G4Visible& visible) {
+void G4HepRepSceneHandler::setVisibility ( HepRepAttribute *attribute, const G4Visible& visible) {
     const G4VisAttributes* atts = visible.GetVisAttributes();
 
     setAttribute(attribute, "Visibility", (atts && (atts->IsVisible()==0)) ? false : true);
