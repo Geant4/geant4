@@ -25,15 +25,14 @@
 // ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone(a)*, G. Candiano, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
 // 
 // (a) Laboratori Nazionali del Sud 
-//     of the National Institute for Nuclear Physics, Catania, Italy
-// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+//     of the INFN, Catania, Italy
+// (b) INFN Section of Genova, Genova, Italy
 // 
 // * cirrone@lns.infn.it
-// --------------------------------------------------------------
-
+// ----------------------------------------------------------------------------
 #ifndef HadrontherapyDetectorMessenger_h
 #define HadrontherapyDetectorMessenger_h 1
 

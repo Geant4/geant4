@@ -20,7 +20,6 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 // $Id: Hadrontherapy.cc Main of the Hadrontherapy example; Version 4.0 May 2005
-
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -34,8 +33,6 @@
 // 
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
-
-
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"

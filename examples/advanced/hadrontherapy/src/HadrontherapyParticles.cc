@@ -33,7 +33,6 @@
 // 
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
-
 #include "HadrontherapyParticles.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"

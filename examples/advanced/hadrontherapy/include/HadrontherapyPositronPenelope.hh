@@ -33,6 +33,7 @@
 // 
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
+
 #ifndef HADRONTHERAPYPOSITRONPENELOPE_HH
 #define HADRONTHERAPYPOSITRONPENELOPE_HH 1
 

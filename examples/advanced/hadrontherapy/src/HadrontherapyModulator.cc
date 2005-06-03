@@ -28,8 +28,9 @@
 //
 // G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
 // 
-// (a) Laboratori Nazionali del Sud - INFN,  Catania, Italy
-// (b) INFN Section of Genova, Genova, Italy
+// (a) Laboratori Nazionali del Sud 
+//     of the National Institute for Nuclear Physics, Catania, Italy
+// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
 // 
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------

@@ -19,7 +19,8 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// $Id: HadrontherapyBeamLine.hh; May 2005;
+// ----------------------------------------------------------------------------
+// $Id: HadrontherapyBeamLine.cc; May 2005
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -28,11 +29,11 @@
 // G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
 // 
 // (a) Laboratori Nazionali del Sud 
-//     of the National Institute for Nuclear Physics, Catania, Italy
-// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+//     of the INFN, Catania, Italy
+// (b) INFN Section of Genova, Genova, Italy
 // 
 // * cirrone@lns.infn.it
-// -----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 #ifndef HadrontherapyBeamLine_H
 #define HadrontherapyBeamLine_H 1

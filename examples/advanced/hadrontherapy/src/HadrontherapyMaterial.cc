@@ -33,7 +33,6 @@
 // 
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
-
 #include "globals.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"

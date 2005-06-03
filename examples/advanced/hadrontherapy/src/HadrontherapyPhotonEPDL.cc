@@ -33,7 +33,6 @@
 // 
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
-
 #include "HadrontherapyPhotonEPDL.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleDefinition.hh"

@@ -33,7 +33,6 @@
 // 
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
-
 #ifndef HADRONTHERAPYMUONSTANDARD_HH
 #define HADRONTHERAPYMUONSTANDARD_HH 1
 

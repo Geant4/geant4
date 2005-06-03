@@ -33,6 +33,7 @@
 // 
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
+
 #include "HadrontherapyPhantomROGeometry.hh"
 #include "HadrontherapyDummySD.hh"
 #include "G4LogicalVolume.hh"

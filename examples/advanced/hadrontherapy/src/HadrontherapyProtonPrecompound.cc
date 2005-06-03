@@ -28,8 +28,8 @@
 // G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
 // 
 // (a) Laboratori Nazionali del Sud 
-//     of the National Institute for Nuclear Physics, Catania, Italy
-// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+//     of the INFN, Catania, Italy
+// (b) INFN Section of Genova, Genova, Italy
 // 
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
@@ -88,7 +88,7 @@ HadrontherapyProtonPrecompound::HadrontherapyProtonPrecompound(const G4String& n
  
   // Ions
   // Energy limit of the binary ion model
-  binaryLightIonLowLimit = 0.*MeV;
+  binaryLightIonLowLimit = 80.*MeV;
   binaryLightIonHighLimit = 40.*GeV;
 
   // Energy limit of the LEP model for ions
@@ -216,8 +216,8 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
   binaryIonCascade -> SetMaxEnergy(binaryLightIonHighLimit);
 
   // Set the cross section for the inelastic scattering
-  G4TripathiCrossSection * TripathiCrossSection = new G4TripathiCrossSection;
-  G4IonsShenCrossSection * aShen = new G4IonsShenCrossSection;
+  TripathiCrossSection = new G4TripathiCrossSection;
+  ShenCrossSection = new G4IonsShenCrossSection;
 
   // Deuteron
   particle = G4Deuteron::Deuteron();
@@ -234,7 +234,7 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
 
   // Definition of the the deuteron inelastic scattering cross section 
   deuteronInelasticScattering.AddDataSet(TripathiCrossSection);
-  deuteronInelasticScattering.AddDataSet(aShen);
+  deuteronInelasticScattering.AddDataSet(ShenCrossSection);
 
   // Set the deuteron hadronic processes: inelastic and elastic scattering
   pmanager -> AddDiscreteProcess(&deuteronInelasticScattering);
@@ -255,7 +255,7 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
 
   // Definition of the the triton inelastic scattering cross section 
   tritonInelasticScattering.AddDataSet(TripathiCrossSection);
-  tritonInelasticScattering.AddDataSet(aShen);
+  tritonInelasticScattering.AddDataSet(ShenCrossSection);
 
   // Set the triton hadronic processes: inelastic and elastic scattering
   pmanager -> AddDiscreteProcess(&tritonInelasticScattering);
@@ -275,7 +275,7 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
 
   // Definition of the alpha inelastic scattering cross section 
   alphaInelasticScattering.AddDataSet(TripathiCrossSection);
-  alphaInelasticScattering.AddDataSet(aShen);
+  alphaInelasticScattering.AddDataSet(ShenCrossSection);
 
   // Set the alpha hadronic processes: inelastic and elastic scattering
   pmanager -> AddDiscreteProcess(&alphaInelasticScattering);
@@ -283,48 +283,47 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
 
 
 
+/////////////////////////////////////////////////////////////////////////////
+// NEW HE3
+/////////////////////////////////////////////////////////////////////////////
 
-// // alpha
-//   particle = G4Alpha::Alpha();
-//   pmanager = particle->GetProcessManager();
-//   G4LEAlphaInelastic* alphaLEPModel = new G4LEAlphaInelastic;
-//   alphaLEPModel -> SetMaxEnergy(LEPHighLimit);
+  //TripathiCrossSection = new G4TripathiCrossSection;
+  //ShenCrossSection = new G4IonsShenCrossSection;
+
+  pmanager->AddDiscreteProcess(elastic);
+  He3InelasticProcess = new G4HadronInelasticProcess
+    ("He3Inelastic", G4He3::He3());
   
-//   alphaInelasticScattering.AddDataSet(TripathiCrossSection);
-//   alphaInelasticScattering.AddDataSet(aShen);
-//   alphaInelasticScattering.RegisterMe(theAIModel);
-//   alphaInelasticScattering.RegisterMe(theBC);
-//   pmanager -> AddDiscreteProcess(&theIPalpha);
-//   pmanager -> AddDiscreteProcess(elastic); //ELASTIC SCATTERING
+  He3InelasticProcess->AddDataSet(TripathiCrossSection);
+  He3InelasticProcess->AddDataSet(ShenCrossSection);
+  He3InelasticProcess->RegisterMe(binaryIonCascade);
+  pmanager->AddDiscreteProcess(He3InelasticProcess);
 
 
+ //  // He3
+//   particle = G4He3::He3();
+//   pmanager = particle -> GetProcessManager();
 
-
-
-  // He3
-  particle = G4He3::He3();
-  pmanager = particle -> GetProcessManager();
-
-  // Only Binary Ion model activated
-  // LEP model is not availaboe for 3He
+//   // Only Binary Ion model activated
+//   // LEP model is not availaboe for 3He
   
-  G4HadronInelasticProcess*  He3InelasticScattering = 
-    new G4HadronInelasticProcess("Inelastic scattering", particle);
+//   G4HadronInelasticProcess*  He3InelasticScattering = 
+//     new G4HadronInelasticProcess("Inelastic scattering", particle);
 
-  // Change the binary ion model limits because the LEP is not available
-  // 
-  binaryIonCascade -> SetMinEnergy(0.*MeV);
-  binaryIonCascade -> SetMaxEnergy(binaryLightIonHighLimit);
+//   // Change the binary ion model limits because the LEP is not available
+//   // 
+//   binaryIonCascade -> SetMinEnergy(0.*MeV);
+//   binaryIonCascade -> SetMaxEnergy(binaryLightIonHighLimit);
 
-  He3InelasticScattering -> RegisterMe(binaryIonCascade);
+//   // Definition of the 3He inelastic scattering cross section 
+//   He3InelasticScattering -> AddDataSet(TripathiCrossSection);
+//   He3InelasticScattering -> AddDataSet(aShen);
  
-  // Definition of the 3He inelastic scattering cross section 
-  He3InelasticScattering -> AddDataSet(TripathiCrossSection);
-  He3InelasticScattering -> AddDataSet(aShen);
- 
-  // Set the He3 hadronic processes: inelastic and elastic scattering
-  pmanager -> AddDiscreteProcess(He3InelasticScattering);
-  pmanager -> AddDiscreteProcess(elastic); 
+//   He3InelasticScattering -> RegisterMe(binaryIonCascade);
+
+//   // Set the He3 hadronic processes: inelastic and elastic scattering
+//   pmanager -> AddDiscreteProcess(He3InelasticScattering);
+//   pmanager -> AddDiscreteProcess(elastic); 
   
   // Other neutron processes
  

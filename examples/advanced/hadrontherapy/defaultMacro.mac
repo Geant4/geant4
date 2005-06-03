@@ -45,6 +45,6 @@
 #/beamLine/RangeShifter/thickness 4 cm
 #/beamLine/RangeShifter/RSMat Water
 #/vis/viewer/flush
-
-
+/beam/energy/meanEnergy 63.5
+/run/beamOn 1000
 

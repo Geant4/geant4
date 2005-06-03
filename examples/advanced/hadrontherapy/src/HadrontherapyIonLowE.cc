@@ -25,14 +25,14 @@
 // ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// G.A.P. Cirrone(a)*, G. Candiano, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
 // 
 // (a) Laboratori Nazionali del Sud 
 //     of the National Institute for Nuclear Physics, Catania, Italy
 // (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
 // 
 // * cirrone@lns.infn.it
-// ----------------------------------------------------------------------------
+// --------------------------------------------------------------
 
 #include "HadrontherapyIonLowE.hh"
 #include "G4ProcessManager.hh"
@@ -60,20 +60,27 @@ void HadrontherapyIonLowE::ConstructProcess()
       G4String particleName = particle -> GetParticleName();
       G4double charge = particle -> GetPDGCharge();
 
-      // protons, ions, pions, kaons, etc.
+      // protons, ions, alpha, pions, kaons, generic ion.....
       if (( charge != 0. ) && particleName != "e+" && particleName != "mu+" &&
-            particleName != "e-" && particleName != "mu-") 
+	  particleName != "e-" && particleName != "mu-") 
+	{
+	  if((!particle -> IsShortLived()) &&
+	     (particle -> GetParticleName() != "chargedgeantino"))
 	    {
-             if((!particle -> IsShortLived()) &&
-		 (particle -> GetParticleName() != "chargedgeantino"))
-	       {
-		 G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();
-		 G4VProcess*  multipleScattering = new G4MultipleScattering(); 
-		 manager -> AddProcess(multipleScattering, -1,1,1);   
-		 manager -> AddProcess(ionisation, -1,2,2);
-		 manager -> AddProcess(new G4StepLimiter(),-1,-1, 3);
-	       }
+	      G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();
+		 
+	      ionisation -> SetNuclearStoppingPowerModel("ICRU_R49") ; // ICRU49 models for nuclear SP
+	      ionisation -> SetNuclearStoppingOn() ;
+		 
+	      // Switch off the Barkas and Bloch corrections
+	      ionisation -> SetBarkasOn();
+		 
+	      G4VProcess*  multipleScattering = new G4MultipleScattering(); 
+	      manager -> AddProcess(multipleScattering, -1,1,1);   
+	      manager -> AddProcess(ionisation, -1,2,2);
+	      manager -> AddProcess(new G4StepLimiter(),-1,-1, 3);
 	    }
+	}
     }
 }
 

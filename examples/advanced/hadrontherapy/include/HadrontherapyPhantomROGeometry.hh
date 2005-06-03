@@ -33,8 +33,7 @@
 // 
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
-//
-//
+
 //The phantom is devided in voxels. the dimension of the voxel is 1 mm
 //
 //

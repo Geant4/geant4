@@ -28,11 +28,12 @@
 // G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
 // 
 // (a) Laboratori Nazionali del Sud 
-//     of the National Institute for Nuclear Physics, Catania, Italy
-// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+//     of the INFN, Catania, Italy
+// (b) INFN Section of Genova, Genova, Italy
 // 
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
+
 #ifndef HadrontherapyProtonPrecompound_h
 #define HadrontherapyProtonPrecompound_h 1
 
@@ -137,6 +138,12 @@ private:
 
   // Alpha inelastic process
   G4AlphaInelasticProcess alphaInelasticScattering;
+
+  // He3 inelastic process
+  G4HadronInelasticProcess* He3InelasticProcess;
+  G4TripathiCrossSection* TripathiCrossSection;
+  G4IonsShenCrossSection* ShenCrossSection;
+
   G4double binaryLightIonLowLimit;
   G4double binaryLightIonHighLimit;
   G4double LEPHighLimit;

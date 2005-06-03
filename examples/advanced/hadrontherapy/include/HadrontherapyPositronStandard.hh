@@ -19,24 +19,20 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+// $Id: HadrontherapyPositronStandard.hh May 2005
+// ----------------------------------------------------------------------------
+//                 GEANT 4 - Hadrontherapy example
+// ----------------------------------------------------------------------------
+// Code developed by:
 //
-//
-// $Id: HadrontherapyPositronStandard.hh,v 1.4 2005-05-25 09:11:09 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//
-// History:
-// -----------
-// 22 Feb 2003 MGP          Created
-//
-// -------------------------------------------------------------------
-
-// Class description:
-// System test for e/gamma, standard positron processes for PhysicsList
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
-
-// -------------------------------------------------------------------
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// 
+// (a) Laboratori Nazionali del Sud 
+//     of the National Institute for Nuclear Physics, Catania, Italy
+// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+// 
+// * cirrone@lns.infn.it
+// ----------------------------------------------------------------------------
 
 #ifndef HADRONTHERAPYPOSITRONSTANDARD_HH
 #define HADRONTHERAPYPOSITRONSTANDARD_HH 1

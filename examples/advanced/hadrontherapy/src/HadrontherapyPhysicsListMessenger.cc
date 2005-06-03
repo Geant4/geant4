@@ -33,7 +33,6 @@
 // 
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
-
 #include "HadrontherapyPhysicsListMessenger.hh"
 #include "HadrontherapyPhysicsList.hh"
 #include "G4UIdirectory.hh"

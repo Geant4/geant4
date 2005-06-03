@@ -19,18 +19,20 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+// HadrontherapyPositronStandard.cc May 2005
+// ----------------------------------------------------------------------------
+//                 GEANT 4 - Hadrontherapy example
+// ----------------------------------------------------------------------------
+// Code developed by:
 //
-// $Id: HadrontherapyPositronStandard.cc,v 1.5 2005-06-02 11:01:31 cirrone Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// Author: Maria.Grazia.Pia@cern.ch
-//
-// History:
-// -----------
-// 22 Feb 2003 MGP          Designed for modular Physics List
-//
-// -------------------------------------------------------------------
-
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// 
+// (a) Laboratori Nazionali del Sud 
+//     of the National Institute for Nuclear Physics, Catania, Italy
+// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+// 
+// * cirrone@lns.infn.it
+// ----------------------------------------------------------------------------
 #include "HadrontherapyPositronStandard.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleDefinition.hh"
