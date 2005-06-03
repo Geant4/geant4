@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTel.cc,v 1.12 2005-05-03 10:21:16 allison Exp $
+// $Id: GammaRayTel.cc,v 1.13 2005-06-03 13:26:15 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

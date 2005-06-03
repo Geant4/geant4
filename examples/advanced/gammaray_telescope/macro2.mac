@@ -22,14 +22,16 @@
 /gun/direction 0 0 -1
 
 # You can modify the geometry of the telescope via a messenger
+
+/control/execute emlowe.mac
 /payload/setNbOfTKRLayers 10
-/payload/update
+#/payload/update
 
 
 #
 # Create a scene handler for a specific graphics system
-/vis/open VRML2FILE
-#/vis/open OGLIX
+#/vis/open VRML2FILE
+/vis/open OGLIX
 
 /vis/viewer/reset
 /vis/viewer/set/viewpointThetaPhi 90 0
@@ -39,12 +41,13 @@
 
 # for drawing the tracks
 # if too many tracks cause core dump => storeTrajectory 0
-/tracking/storeTrajectory 1
+#/tracking/storeTrajectory 1
 
 #
 # Flush visualization
 /vis/viewer/update
 
+/run/beamOn 5
 
 
 
