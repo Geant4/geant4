@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test19.cc,v 1.20 2005-02-04 16:26:35 johna Exp $
+// $Id: test19.cc,v 1.21 2005-06-03 05:12:09 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -87,7 +87,7 @@ int main (int argc, char** argv) {
 #else
   if (argc >= 2) {
     if (strcmp (argv[1], "tcsh")==0)     session =
-					   new G4UIterminal(new G4UItcsh);
+					   new G4UIterminal();
 #ifdef G4UI_USE_WO
     else if (strcmp (argv[1], "Wo")==0)  session = new G4UIWo (argc, argv);
 #endif
@@ -102,7 +102,7 @@ int main (int argc, char** argv) {
 					   new G4UIterminal();
   }
   else                                   session =
-					   new G4UIterminal(new G4UItcsh);
+					   new G4UIterminal();
 #endif
   G4UImanager::GetUIpointer()->SetSession(session);  //So that Pause works..
 
