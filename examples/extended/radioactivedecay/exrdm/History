@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2005-05-03 10:05:49 allison Exp $
+$Id: History,v 1.6 2005-06-03 16:49:36 flei Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+03 June 2005 Fan Lei (exrdm-V07-00-01)
+- updates to physics list
+- added macros/test.mac for testing the physics list
 
 3rd May 2005  John Allison  (examples-V07-00-03)
 - Replaced vis manager with G4VisExecutive.

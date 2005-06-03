@@ -56,6 +56,9 @@
 #include "G4KaonZeroLong.hh"
 #include "G4KaonZeroShort.hh"
 
+//ShortLived
+#include "G4ShortLivedConstructor.hh"
+
 // Baryons
 #include "G4Proton.hh"
 #include "G4AntiProton.hh"
@@ -131,6 +134,11 @@ void exrdmPhysListParticles::ConstructParticle()
   G4He3::He3Definition();
   G4Alpha::AlphaDefinition();
   G4GenericIon::GenericIonDefinition();
+  
+//  Construct  resonaces and quarks
+  G4ShortLivedConstructor pShortLivedConstructor;
+  pShortLivedConstructor.ConstructParticle();
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
