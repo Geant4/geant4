@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroManager.cc,v 1.3 2003-11-04 11:31:17 lara Exp $
+// $Id: G4StatMFMicroManager.cc,v 1.4 2005-06-04 13:27:49 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations

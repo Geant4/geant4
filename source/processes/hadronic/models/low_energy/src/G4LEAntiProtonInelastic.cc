@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEAntiProtonInelastic.cc,v 1.12 2004-12-07 13:49:11 gunter Exp $
+// $Id: G4LEAntiProtonInelastic.cc,v 1.13 2005-06-04 13:38:34 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: AntiProton Inelastic Process

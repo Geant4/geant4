@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionProbability.cc,v 1.5 2004-12-07 13:46:48 gunter Exp $
+// $Id: G4FissionProbability.cc,v 1.6 2005-06-04 13:22:51 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations

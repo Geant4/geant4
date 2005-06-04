@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.4 2003-12-11 10:50:49 gunter Exp $
+// $Id: G4FTFModel.cc,v 1.5 2005-06-04 13:47:01 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 

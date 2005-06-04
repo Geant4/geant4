@@ -49,7 +49,13 @@
     
     // Work-around for lack of model above 100 MeV
     if( originalIncident->GetKineticEnergy()/MeV > 100. ||
-        originalIncident->GetKineticEnergy() <= 0.1*MeV )return &theParticleChange;
+        originalIncident->GetKineticEnergy() <= 0.1*MeV )
+    {
+      theParticleChange.SetStatusChange(isAlive);
+      theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+      theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
+      return &theParticleChange;      
+    }
 
     G4double N = targetNucleus.GetN();
     G4double Z = targetNucleus.GetZ();

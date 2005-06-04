@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuNuclearInteraction.cc,v 1.4 2004-12-07 13:50:29 gunter Exp $
+// $Id: G4MuNuclearInteraction.cc,v 1.5 2005-06-04 13:47:45 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 

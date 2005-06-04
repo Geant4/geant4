@@ -97,14 +97,11 @@ G4bool G4BaryonSplitter::
 FindDiquark(G4int PDGCode, G4int Quark, G4int* Diquark)
 {
   const G4SPBaryon * aBaryon = theBaryons.GetBaryon(G4ParticleTable::GetParticleTable()->FindParticle(PDGCode));
-  if(aBaryon==NULL)
-  {
-    return FALSE;
-  }
-  else
+  if(aBaryon)
   {
     aBaryon->FindDiquark(Quark, *Diquark);
-    return TRUE;
+    return true;
   }
+  return false;
 }
 

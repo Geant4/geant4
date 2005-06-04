@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFFragment.cc,v 1.4 2004-12-07 13:47:41 gunter Exp $
+// $Id: G4StatMFFragment.cc,v 1.5 2005-06-04 13:27:48 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations

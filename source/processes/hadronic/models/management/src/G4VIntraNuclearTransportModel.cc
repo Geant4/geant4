@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIntraNuclearTransportModel.cc,v 1.2 2003-12-09 09:04:23 jwellisc Exp $
+// $Id: G4VIntraNuclearTransportModel.cc,v 1.3 2005-06-04 13:40:04 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: G4VIntraNuclearTransportModel.cc,v 1.0 1998/06/30

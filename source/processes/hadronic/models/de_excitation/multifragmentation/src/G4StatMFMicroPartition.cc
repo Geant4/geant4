@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroPartition.cc,v 1.5 2004-12-07 13:47:52 gunter Exp $
+// $Id: G4StatMFMicroPartition.cc,v 1.6 2005-06-04 13:27:49 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara

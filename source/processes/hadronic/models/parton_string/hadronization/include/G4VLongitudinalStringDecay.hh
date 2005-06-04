@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.hh,v 1.1 2003-10-07 11:25:40 hpw Exp $
+// $Id: G4VLongitudinalStringDecay.hh,v 1.2 2005-06-04 13:47:01 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // Maxim Komogorov
 //

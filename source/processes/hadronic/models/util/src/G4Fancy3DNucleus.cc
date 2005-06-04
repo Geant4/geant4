@@ -42,37 +42,18 @@
 G4Fancy3DNucleus::G4Fancy3DNucleus()
  : nucleondistance(0.8*fermi)
 {
-	theDensity=NULL;
-	theNucleons=NULL;
+	theDensity=0;
+	theNucleons=0;
 	currentNucleon=-1;
 	myA=0;
 	myZ=0;
 //G4cout <<"G4Fancy3DNucleus::G4Fancy3DNucleus()"<<G4endl;
 }
 
-/* No use for these
- *
- *G4Fancy3DNucleus::G4Fancy3DNucleus(const G4Fancy3DNucleus &right)
- * : nucleondistance(0.8*fermi)  {}
- *const G4Fancy3DNucleus & G4Fancy3DNucleus::operator=(const G4Fancy3DNucleus &right)
- *{
- *}
- *
- *
- *int G4Fancy3DNucleus::operator==(const G4Fancy3DNucleus &right) const
- *{
- *}
- *
- *int G4Fancy3DNucleus::operator!=(const G4Fancy3DNucleus &right) const
- *{
- *}
- *
- */
-
 G4Fancy3DNucleus::~G4Fancy3DNucleus()
 {
-  if(theNucleons!=NULL) delete [] theNucleons;
-  if(theDensity!=NULL) delete theDensity;
+  if(theNucleons) delete [] theNucleons;
+  if(theDensity) delete theDensity;
 }
 
 
@@ -80,7 +61,7 @@ void G4Fancy3DNucleus::Init(G4double theA, G4double theZ)
 {
 //  G4cout << "G4Fancy3DNucleus::Init(theA, theZ) called"<<G4endl;
   currentNucleon=-1;
-  if(theNucleons!=NULL) delete [] theNucleons;
+  if(theNucleons) delete [] theNucleons;
 
 // this was delected already:
 //  std::for_each(theRWNucleons.begin(), theRWNucleons.end(), DeleteNucleon());
@@ -93,7 +74,7 @@ void G4Fancy3DNucleus::Init(G4double theA, G4double theZ)
   
 //  G4cout << "myA, myZ" << myA << ", " << myZ << G4endl;
 
-  if(theDensity!=NULL) delete theDensity;
+  if(theDensity) delete theDensity;
   if ( myA < 17 ) {
      theDensity = new G4NuclearShellModelDensity(myA, myZ);
   } else {
@@ -124,13 +105,13 @@ void G4Fancy3DNucleus::Init(G4double theA, G4double theZ)
 G4bool G4Fancy3DNucleus::StartLoop()
 {
 	currentNucleon=0;
-	return theNucleons != NULL;
+	return theNucleons;
 }	
 
 G4Nucleon * G4Fancy3DNucleus::GetNextNucleon()
 {
   return ( currentNucleon>=0 && currentNucleon<myA ) ? 
-			theNucleons+currentNucleon++  : NULL;
+			theNucleons+currentNucleon++  : 0;
 }
 
 

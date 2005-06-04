@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPlot.hh,v 1.7 2002-12-12 19:17:59 gunter Exp $
+// $Id: G4HEPlot.hh,v 1.8 2005-06-04 13:32:52 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

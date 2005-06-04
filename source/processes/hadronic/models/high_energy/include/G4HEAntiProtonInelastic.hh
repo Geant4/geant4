@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEAntiProtonInelastic.hh,v 1.12 2004-04-22 18:54:16 dwright Exp $
+// $Id: G4HEAntiProtonInelastic.hh,v 1.13 2005-06-04 13:32:52 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

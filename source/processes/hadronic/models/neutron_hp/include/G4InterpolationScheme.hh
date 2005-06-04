@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InterpolationScheme.hh,v 1.6 2004-01-23 16:58:59 hpw Exp $
+// $Id: G4InterpolationScheme.hh,v 1.7 2005-06-04 13:44:43 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4InterpolationScheme_h

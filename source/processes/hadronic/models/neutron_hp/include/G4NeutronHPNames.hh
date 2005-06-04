@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPNames.hh,v 1.12 2004-05-24 10:32:59 hpw Exp $
+// $Id: G4NeutronHPNames.hh,v 1.13 2005-06-04 13:44:43 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPNames_h

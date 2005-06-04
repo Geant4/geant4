@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPPhotonDist.hh,v 1.8 2003-06-16 17:11:00 gunter Exp $
+// $Id: G4NeutronHPPhotonDist.hh,v 1.9 2005-06-04 13:44:43 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections

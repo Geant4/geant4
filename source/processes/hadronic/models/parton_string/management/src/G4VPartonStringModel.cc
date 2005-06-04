@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPartonStringModel.cc,v 1.2 2003-11-03 17:54:53 hpw Exp $
+// $Id: G4VPartonStringModel.cc,v 1.3 2005-06-04 13:47:01 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //// ------------------------------------------------------------

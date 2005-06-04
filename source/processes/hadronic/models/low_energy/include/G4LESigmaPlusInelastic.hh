@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LESigmaPlusInelastic.hh,v 1.8 2003-10-31 18:04:16 hpw Exp $
+// $Id: G4LESigmaPlusInelastic.hh,v 1.9 2005-06-04 13:38:34 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy SigmaPlus Inelastic Process

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEKaonZeroInelastic.hh,v 1.4 2003-10-31 18:04:15 hpw Exp $
+// $Id: G4LEKaonZeroInelastic.hh,v 1.5 2005-06-04 13:38:34 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy KaonZeroS Inelastic Process

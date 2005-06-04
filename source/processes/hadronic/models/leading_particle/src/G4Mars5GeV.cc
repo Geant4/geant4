@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mars5GeV.cc,v 1.12 2004-12-07 13:49:05 gunter Exp $
+// $Id: G4Mars5GeV.cc,v 1.13 2005-06-04 13:36:03 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

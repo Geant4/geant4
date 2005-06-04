@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroCanonical.cc,v 1.4 2004-12-07 13:47:43 gunter Exp $
+// $Id: G4StatMFMacroCanonical.cc,v 1.5 2005-06-04 13:27:48 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara

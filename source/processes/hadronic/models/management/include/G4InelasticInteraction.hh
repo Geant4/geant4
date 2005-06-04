@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InelasticInteraction.hh,v 1.2 2003-10-31 18:04:57 hpw Exp $
+// $Id: G4InelasticInteraction.hh,v 1.3 2005-06-04 13:40:04 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Inelastic Interaction 

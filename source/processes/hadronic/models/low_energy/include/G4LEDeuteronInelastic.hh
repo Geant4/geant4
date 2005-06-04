@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEDeuteronInelastic.hh,v 1.7 2003-07-01 15:49:02 hpw Exp $
+// $Id: G4LEDeuteronInelastic.hh,v 1.8 2005-06-04 13:38:34 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy Deuteron Inelastic Process

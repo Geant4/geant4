@@ -34,7 +34,13 @@
   {
     theParticleChange.Clear();
     const G4HadProjectile *originalIncident = &aTrack;
-    if (originalIncident->GetKineticEnergy()<= 0.1*MeV) return &theParticleChange;
+    if (originalIncident->GetKineticEnergy()<= 0.1*MeV) 
+    {
+      theParticleChange.SetStatusChange(isAlive);
+      theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+      theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
+      return &theParticleChange;      
+    }
     //
     // create the target particle
     //

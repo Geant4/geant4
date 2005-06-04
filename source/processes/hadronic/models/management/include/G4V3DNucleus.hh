@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4V3DNucleus.hh,v 1.3 2003-12-11 11:54:13 hpw Exp $
+// $Id: G4V3DNucleus.hh,v 1.4 2005-06-04 13:40:04 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4V3DNucleus_h

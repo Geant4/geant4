@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPContEnergyAngular.hh,v 1.8 2003-06-16 17:10:35 gunter Exp $
+// $Id: G4NeutronHPContEnergyAngular.hh,v 1.9 2005-06-04 13:44:43 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPContEnergyAngular_h

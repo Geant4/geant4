@@ -23,7 +23,7 @@
 #ifndef G4PomeronCrossSection_h
 #define G4PomeronCrossSection_h 1
 //
-// $Id: G4PomeronCrossSection.hh,v 1.1 2003-10-07 11:26:00 hpw Exp $
+// $Id: G4PomeronCrossSection.hh,v 1.2 2005-06-04 13:47:01 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4Proton.hh"

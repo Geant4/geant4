@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundHe3.hh,v 1.1 2003-08-26 18:54:10 lara Exp $
+// $Id: G4PreCompoundHe3.hh,v 1.2 2005-06-04 13:48:42 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara

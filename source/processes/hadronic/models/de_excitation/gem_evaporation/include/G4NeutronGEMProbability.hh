@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronGEMProbability.hh,v 1.2 2004-12-07 13:46:49 gunter Exp $
+// $Id: G4NeutronGEMProbability.hh,v 1.3 2005-06-04 13:25:25 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations

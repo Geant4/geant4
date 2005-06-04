@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitationHandler.hh,v 1.4 2003-10-07 12:54:01 lara Exp $
+// $Id: G4ExcitationHandler.hh,v 1.5 2005-06-04 13:26:14 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations

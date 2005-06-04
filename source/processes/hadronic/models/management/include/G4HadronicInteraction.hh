@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronicInteraction.hh,v 1.5 2004-05-26 09:56:52 hpw Exp $
+// $Id: G4HadronicInteraction.hh,v 1.6 2005-06-04 13:40:04 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Interaction  abstract base class

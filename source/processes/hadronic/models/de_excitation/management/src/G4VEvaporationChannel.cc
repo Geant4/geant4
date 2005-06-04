@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEvaporationChannel.cc,v 1.3 2003-11-04 11:27:53 lara Exp $
+// $Id: G4VEvaporationChannel.cc,v 1.4 2005-06-04 13:26:42 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations

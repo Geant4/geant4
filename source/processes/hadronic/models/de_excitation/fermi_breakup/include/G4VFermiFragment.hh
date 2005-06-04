@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VFermiFragment.hh,v 1.1 2003-08-26 18:34:20 lara Exp $
+// $Id: G4VFermiFragment.hh,v 1.2 2005-06-04 13:22:14 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations

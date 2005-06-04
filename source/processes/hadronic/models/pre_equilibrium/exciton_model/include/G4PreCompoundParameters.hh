@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundParameters.hh,v 1.1 2003-08-26 18:54:25 lara Exp $
+// $Id: G4PreCompoundParameters.hh,v 1.2 2005-06-04 13:48:42 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFission.hh,v 1.8 2004-05-24 10:32:59 hpw Exp $
+// $Id: G4NeutronHPFission.hh,v 1.9 2005-06-04 13:44:43 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: High Precision low E neutron tracking

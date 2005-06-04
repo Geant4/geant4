@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParametrizedHadronicVertex.cc,v 1.3 2004-11-30 17:18:33 hpw Exp $
+// $Id: G4ParametrizedHadronicVertex.cc,v 1.4 2005-06-04 13:47:45 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------

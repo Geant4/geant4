@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFissionSpectrum.hh,v 1.9 2004-12-07 13:49:33 gunter Exp $
+// $Id: G4NeutronHPFissionSpectrum.hh,v 1.10 2005-06-04 13:44:43 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPFissionSpectrum_h

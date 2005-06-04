@@ -50,8 +50,13 @@
     }
     
     // Work-around for lack of model above 100 MeV
-    if (kineticEnergy/MeV > 100. || kineticEnergy <= 0.1*MeV) return &theParticleChange;
-
+    if (kineticEnergy/MeV > 100. || kineticEnergy <= 0.1*MeV) 
+    {
+      theParticleChange.SetStatusChange(isAlive);
+      theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+      theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
+      return &theParticleChange;      
+    }
     G4double theAtomicMass = targetNucleus.AtomicMass( A, Z )-Z*G4Electron::Electron()->GetPDGMass();
     G4double massVec[9];
     massVec[0] = targetNucleus.AtomicMass( A+4.0, Z+2.0 )-(Z+2.0)*G4Electron::Electron()->GetPDGMass();

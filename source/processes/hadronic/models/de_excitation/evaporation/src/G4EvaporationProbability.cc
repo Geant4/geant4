@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationProbability.cc,v 1.3 2004-12-07 13:46:39 gunter Exp $
+// $Id: G4EvaporationProbability.cc,v 1.4 2005-06-04 13:21:21 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations

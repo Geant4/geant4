@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEKaonPlusInelastic.hh,v 1.11 2004-04-22 20:01:17 dwright Exp $
+// $Id: G4HEKaonPlusInelastic.hh,v 1.12 2005-06-04 13:32:52 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

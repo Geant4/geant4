@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GEMChannel.hh,v 1.2 2003-08-29 08:24:13 lara Exp $
+// $Id: G4GEMChannel.hh,v 1.3 2005-06-04 13:25:25 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations

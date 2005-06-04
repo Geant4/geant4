@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHP2NPInelasticFS.hh,v 1.7 2003-07-01 15:58:35 hpw Exp $
+// $Id: G4NeutronHP2NPInelasticFS.hh,v 1.8 2005-06-04 13:44:43 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHP2NPInelasticFS_h

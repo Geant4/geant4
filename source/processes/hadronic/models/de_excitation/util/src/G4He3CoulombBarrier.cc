@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4He3CoulombBarrier.cc,v 1.2 2003-11-03 17:53:06 hpw Exp $
+// $Id: G4He3CoulombBarrier.cc,v 1.3 2005-06-04 13:29:20 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations

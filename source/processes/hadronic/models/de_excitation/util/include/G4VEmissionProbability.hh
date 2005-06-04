@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEmissionProbability.hh,v 1.1 2003-08-26 18:50:06 lara Exp $
+// $Id: G4VEmissionProbability.hh,v 1.2 2005-06-04 13:29:20 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations

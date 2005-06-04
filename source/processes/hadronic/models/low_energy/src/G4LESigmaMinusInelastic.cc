@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LESigmaMinusInelastic.cc,v 1.9 2004-12-07 13:49:25 gunter Exp $
+// $Id: G4LESigmaMinusInelastic.cc,v 1.10 2005-06-04 13:38:34 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: SigmaMinus Inelastic Process
@@ -37,7 +37,13 @@
                                           G4Nucleus &targetNucleus )
   {
     const G4HadProjectile *originalIncident = &aTrack;
-    if (originalIncident->GetKineticEnergy()<= 0.1*MeV) return &theParticleChange;
+    if (originalIncident->GetKineticEnergy()<= 0.1*MeV) 
+    {
+      theParticleChange.SetStatusChange(isAlive);
+      theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+      theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
+      return &theParticleChange;      
+    }
     //
     // create the target particle
     //

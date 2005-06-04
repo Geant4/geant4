@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEKaonZeroLongInelastic.cc,v 1.8 2003-07-01 15:42:24 hpw Exp $
+// $Id: G4HEKaonZeroLongInelastic.cc,v 1.9 2005-06-04 13:32:52 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
