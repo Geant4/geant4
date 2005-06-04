@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronFissionDataSet.cc,v 1.6 2003-07-01 15:08:46 hpw Exp $
+// $Id: G4HadronFissionDataSet.cc,v 1.7 2005-06-04 12:54:19 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
