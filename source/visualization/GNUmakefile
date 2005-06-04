@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.20 2005-05-12 19:40:43 allison Exp $
+# $Id: GNUmakefile,v 1.21 2005-06-04 14:53:18 gcosmo Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for visualization and modeling.  John Allison, 5/7/95.
 # Modeling is always made.  Others by environment.  John Allison  4/7/98.
@@ -20,8 +20,8 @@ SUBDIRS := modeling
 SUBLIBS := G4modeling
 
 ifdef G4LIB_BUILD_ZLIB
-  SUBDIRS := externals/zlib
-  SUBLIBS := G4zlib
+  SUBDIRS += externals/zlib
+  SUBLIBS += G4zlib
 endif
 
 # Libraries which can be used without external packages or libraries...
