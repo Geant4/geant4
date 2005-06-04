@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QPDGToG4Particle.hh,v 1.1 2004-12-08 14:45:57 mkossov Exp $
+// $Id: G4QPDGToG4Particle.hh,v 1.2 2005-06-04 13:08:23 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGToG4Particle header ----------------

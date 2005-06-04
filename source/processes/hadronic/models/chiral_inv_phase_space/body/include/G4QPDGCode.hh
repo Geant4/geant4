@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.hh,v 1.24 2005-02-21 18:47:56 mkossov Exp $
+// $Id: G4QPDGCode.hh,v 1.25 2005-06-04 13:08:23 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------

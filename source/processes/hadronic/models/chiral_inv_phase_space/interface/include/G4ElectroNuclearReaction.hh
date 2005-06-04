@@ -22,7 +22,7 @@
 //
 //
 //
-// $Id: G4ElectroNuclearReaction.hh,v 1.21 2004-12-10 22:11:29 gcosmo Exp $
+// $Id: G4ElectroNuclearReaction.hh,v 1.22 2005-06-04 13:08:23 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParentClusterVector.hh,v 1.16 2004-03-25 10:44:46 gunter Exp $
+// $Id: G4QParentClusterVector.hh,v 1.17 2005-06-04 13:08:23 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCandidateVector ----------------

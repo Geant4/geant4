@@ -24,7 +24,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QuasmonString.cc,v 1.2 2005-02-04 08:54:01 mkossov Exp $
+// $Id: G4QuasmonString.cc,v 1.3 2005-06-04 13:08:23 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QuasmonString ----------------

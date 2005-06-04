@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCandidateVector.hh,v 1.19 2004-03-25 10:44:32 gunter Exp $
+// $Id: G4QCandidateVector.hh,v 1.20 2005-06-04 13:08:23 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCandidateVector ----------------

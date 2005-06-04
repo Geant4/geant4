@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCodeVector.hh,v 1.17 2004-03-25 10:44:44 gunter Exp $
+// $Id: G4QPDGCodeVector.hh,v 1.18 2005-06-04 13:08:23 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCandidateVector ----------------

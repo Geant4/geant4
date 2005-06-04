@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QChipolino.cc,v 1.29 2004-11-09 11:11:09 mkossov Exp $
+// $Id: G4QChipolino.cc,v 1.30 2005-06-04 13:08:23 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QChipolino ----------------

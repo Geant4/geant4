@@ -1,25 +1,3 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
 // IntegrHadrNucleus.cc
 
 #include "globals.hh"
@@ -29,21 +7,21 @@
  void  G4IntegrHadrNucleus::
            GetIntegralCrSec(G4Nucleus *  aNucleus)
  {
-    G4int      i, /*k,*/ l/*, m*/;
-    G4double   N, N1, N2, N3, N4, Delta, Inel1/*, Inel3*/;
-    G4double   Tot0, Inel0, /*Inel2,*/ Prod0, Prod1, 
+    G4int      i, l;
+    G4double   N, N1, N2, N3, N4, Delta, Inel1;
+    G4double   Tot0, Inel0, Prod0, Prod1, 
                 ak, Delt, Delt2, Delt3;
     G4double   Rnucl, R0, Stot, Bhad, Asq, MbToB, Pi1;
-    G4double   Dtot, /*Dinel,*/ Dprod, Rnuc2, RB, R2B, bk, bd;
+    G4double   Dtot, Dprod, Rnuc2, RB, R2B, bk, bd;
 
-      G4int  Anucleus = static_cast<G4int>( aNucleus->GetN() );
+      G4int  Anucleus = (int) aNucleus->GetN();
 
  if(Anucleus<4)
          {
   G4Exception(" This nucleus is very light for this model !!!");
          }
 
-  if(Anucleus>238)
+  if(Anucleus>208)
          {
   G4Exception(" This nucleus is very heavy for this model !!!");
          }
@@ -56,15 +34,15 @@
           Asq     = 1+HadrReIm*HadrReIm;
 
           R0      = std::sqrt(0.99);                        //{ This is fermi}
+
           if (Anucleus >10)  R0 = std::sqrt(0.84);          
           if (Anucleus >20)  R0 = std::sqrt((35.34+0.5*Anucleus)
                                   /(40.97+Anucleus));
           if (Anucleus == 16) R0 = std::sqrt(0.75);
           if (Anucleus == 58) R0 = std::sqrt(0.6);
-
 //          R0      =  std::sqrt(0.64);
 
-          Rnucl   = R0*std::pow(static_cast<double>(Anucleus),0.3333);            //{In Fermi }
+          Rnucl   = R0*std::pow(Anucleus,0.3333);            //{In Fermi }
 
         if(Anucleus == 4) Rnucl = 1.2;
 
@@ -107,7 +85,7 @@
 
 //                 Inel2      = Inel2+Inel1*N3;
                  Prod0    = Prod0+Prod1*N3;
-          if(std::abs(N1/i/Inel0) < 0.0001)  break;
+          if(std::fabs(N1/i/Inel0) < 0.0001)  break;
               }  // i
 
              Tot0         = Tot0*HadrTot;
@@ -148,8 +126,8 @@
          {       
                 HadrEnergy = aHadron->GetTotalEnergy()/1000;
 
-if(HadrEnergy < 1.5)
-  G4cout << " The hadron energy is very low for this model !!!"<<G4endl;
+if(HadrEnergy < 1.4999)
+  G4Exception(" The hadron energy is very low for this model !!!");
 
                 G4HadronValues::GetHadronValues(aHadron);
                 GetIntegralCrSec(aNucleus);
@@ -164,8 +142,8 @@ if(HadrEnergy < 1.5)
         {
                 HadrEnergy = aHadron->GetTotalEnergy()/1000;
 
-if(HadrEnergy < 1.5)
-  G4cout <<" The hadron energy is very low for this model !!!"<<G4endl;
+if(HadrEnergy < 1.4999)
+  G4Exception(" The hadron energy is very low for this model !!!");
 
                 G4HadronValues::GetHadronValues(aHadron);
                 GetIntegralCrSec(aNucleus);
@@ -180,8 +158,8 @@ if(HadrEnergy < 1.5)
        {
                 HadrEnergy = aHadron->GetTotalEnergy()/1000;
 
-if(HadrEnergy < 1.5)
-  G4cout <<" The hadron energy is very low for this model !!!"<<G4endl;
+if(HadrEnergy < 1.4999)
+  G4Exception(" The hadron energy is very low for this model !!!");
 
                 G4HadronValues::GetHadronValues(aHadron);
                 GetIntegralCrSec(aNucleus);
@@ -196,8 +174,8 @@ if(HadrEnergy < 1.5)
        {
                 HadrEnergy = aHadron->GetTotalEnergy()/1000;
 
-if(HadrEnergy < 1.5)
-  G4cout <<" The hadron energy is very low for this model !!!"<<G4endl;
+if(HadrEnergy < 1.4999)
+  G4Exception(" The hadron energy is very low for this model !!!");
 
                 G4HadronValues::GetHadronValues(aHadron);
                 GetIntegralCrSec(aNucleus);
@@ -212,8 +190,8 @@ if(HadrEnergy < 1.5)
        {
                 HadrEnergy = aHadron->GetTotalEnergy()/1000;
 
-if(HadrEnergy < 1.5)
-  G4cout <<" The hadron energy is very low for this model !!!"<<G4endl;
+if(HadrEnergy < 1.4999)
+  G4Exception(" The hadron energy is very low for this model !!!");
 
                 G4HadronValues::GetHadronValues(aHadron);
                 GetIntegralCrSec(aNucleus);

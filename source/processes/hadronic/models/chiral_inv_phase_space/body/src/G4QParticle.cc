@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParticle.cc,v 1.30 2004-12-09 11:09:27 mkossov Exp $
+// $Id: G4QParticle.cc,v 1.31 2005-06-04 13:08:23 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QParticle ----------------

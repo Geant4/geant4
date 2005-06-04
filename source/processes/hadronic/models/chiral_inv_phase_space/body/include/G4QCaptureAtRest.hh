@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.hh,v 1.7 2005-02-21 18:47:56 mkossov Exp $
+// $Id: G4QCaptureAtRest.hh,v 1.8 2005-06-04 13:08:23 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest header ----------------

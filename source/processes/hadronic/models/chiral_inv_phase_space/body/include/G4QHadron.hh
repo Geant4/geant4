@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.hh,v 1.29 2005-02-04 08:53:50 mkossov Exp $
+// $Id: G4QHadron.hh,v 1.30 2005-06-04 13:08:23 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
