@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyRangeManager.cc,v 1.11 2003-11-03 17:47:30 hpw Exp $
+// $Id: G4EnergyRangeManager.cc,v 1.12 2005-06-04 12:51:43 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Energy Range Manager

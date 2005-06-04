@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VLeadingParticleBiasing.hh,v 1.4 2003-07-01 15:05:32 hpw Exp $
+// $Id: G4VLeadingParticleBiasing.hh,v 1.5 2005-06-04 12:51:43 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
