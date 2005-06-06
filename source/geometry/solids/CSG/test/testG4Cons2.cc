@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Cons2.cc,v 1.13 2005-05-03 09:07:45 grichine Exp $
+// $Id: testG4Cons2.cc,v 1.14 2005-06-06 09:17:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Simple test of G4Cons
@@ -306,7 +306,7 @@ int main(void)
 	G4cout << "Testing G4Cons::SurfaceNormal...\n";
 
     G4ThreeVector normal;
-    G4double p2=1./sqrt(2.),p3=1./sqrt(3.);
+    G4double p2=1./std::sqrt(2.),p3=1./std::sqrt(3.);
 
     normal=cn1.SurfaceNormal(G4ThreeVector(0.,50.,0.));
     assert(ApproxEqual(normal,G4ThreeVector(p2,p2,0.)));

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Torus.cc,v 1.10 2005-05-03 09:07:45 grichine Exp $
+// $Id: testG4Torus.cc,v 1.11 2005-06-06 09:17:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -181,7 +181,7 @@ G4bool testG4Torus()
 
 // Check Surface Normal
     G4ThreeVector normal;
-    G4double p2=1./sqrt(2.); // ,p3=1./sqrt(3.);
+    G4double p2=1./std::sqrt(2.); // ,p3=1./std::sqrt(3.);
 
 
     normal=t1.SurfaceNormal(ponrmax);

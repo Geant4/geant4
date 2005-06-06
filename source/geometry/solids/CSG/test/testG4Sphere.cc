@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Sphere.cc,v 1.16 2005-05-03 09:07:45 grichine Exp $
+// $Id: testG4Sphere.cc,v 1.17 2005-06-06 09:17:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -343,7 +343,7 @@ G4ThreeVector s9v(-0.6542770611918751,
     assert(s42.Inside(pmx)==kSurface);
 
 // Checking G4Sphere::SurfaceNormal
-    G4double p2=1./sqrt(2.),p3=1./sqrt(3.);
+    G4double p2=1./std::sqrt(2.),p3=1./std::sqrt(3.);
 
 
     norm=sn1.SurfaceNormal(G4ThreeVector(0.,0.,50.));
