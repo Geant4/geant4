@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2005-06-06 07:31:28 gcosmo Exp $
+$Id: History,v 1.8 2005-06-06 14:51:04 tomezb Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,6 +7,9 @@ $Id: History,v 1.7 2005-06-06 07:31:28 gcosmo Exp $
 
                            History file
                            ------------
+
+06.06.2005 -- B.Tome - air_shower-V07-00-01
+           -- README updated; analysis with AIDA 3.2.1 and PI 1.3.3.
 
 06.06.2005 -- G.Cosmo - air_shower-V07-00-00
            -- Corrected usage of <strstream> in RunActionMessenger.
