@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.39 2005-06-06 08:19:06 grichine Exp $
+// $Id: G4Cons.cc,v 1.40 2005-06-06 13:02:19 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -521,8 +521,10 @@ G4ThreeVector G4Cons::SurfaceNormal( const G4ThreeVector& p) const
   }
   if ( noSurfaces == 0 )
   {
+#ifdef G4NEW_SURF_NORMAL
     G4Exception("G4Cons::SurfaceNormal(p)", "Notification", JustWarning, 
-                "Point p is not on surface !?" ); 
+                "Point p is not on surface !?" );
+#endif 
   }
   else if ( noSurfaces == 1 ) norm = sumnorm;
   else                        norm = sumnorm.unit();

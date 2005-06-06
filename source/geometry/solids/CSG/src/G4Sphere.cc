@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.39 2005-05-09 14:11:24 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.40 2005-06-06 13:02:19 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -626,8 +626,10 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
   }
   if ( noSurfaces == 0 )
   {
+#ifdef G4NEW_SURF_NORMAL
     G4Exception("G4Sphere::SurfaceNormal(p)", "Notification", JustWarning, 
                 "Point p is not on surface !?" ); 
+#endif
   }
   else if ( noSurfaces == 1 ) norm = sumnorm;
   else                        norm = sumnorm.unit();

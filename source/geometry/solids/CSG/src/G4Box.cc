@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.35 2005-05-26 09:41:40 gcosmo Exp $
+// $Id: G4Box.cc,v 1.36 2005-06-06 13:02:19 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,6 +41,7 @@
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "Randomize.hh"
 
 #include "G4VPVParameterisation.hh"
 
@@ -447,8 +448,10 @@ G4ThreeVector G4Box::SurfaceNormal( const G4ThreeVector& p) const
       }
     }
   }else{
+#ifdef G4NEW_SURF_NORMAL
      G4Exception("G4Box::SurfaceNormal(p)", "Notification", JustWarning, 
-		 "Point p is not on surface !?" ); 
+		 "Point p is not on surface !?" );
+#endif 
   }
   
   return norm;
@@ -922,4 +925,43 @@ G4Polyhedron* G4Box::CreatePolyhedron () const
 G4NURBS* G4Box::CreateNURBS () const 
 {
   return new G4NURBSbox (fDx, fDy, fDz);
+}
+    
+/////////////////////////////////////////////////////////////////////////////
+//
+// Return a point (G4ThreeVector) randomly and uniformly selected on the solid surface
+
+G4ThreeVector G4Box::GetPointOnSurface() const
+{
+  G4double px, py, pz, select, sumS;
+  G4double Sxy = fDx*fDy, Sxz = fDx*fDz, Syz = fDy*fDz;
+
+  sumS   = Sxy + Sxz + Syz;
+  select = sumS*G4UniformRand();
+ 
+  if( select < Sxy )
+  {
+    px = -fDx +2*fDx*G4UniformRand();
+    py = -fDy +2*fDy*G4UniformRand();
+
+    if(G4UniformRand() > 0.5) pz =  fDz;
+    else                      pz = -fDz;
+  }
+  else if ( ( select - Sxy ) < Sxz ) 
+  {
+    px = -fDx +2*fDx*G4UniformRand();
+    pz = -fDz +2*fDz*G4UniformRand();
+
+    if(G4UniformRand() > 0.5) py =  fDy;
+    else                      py = -fDy;
+  }
+  else  
+  {
+    py = -fDy +2*fDy*G4UniformRand();
+    pz = -fDz +2*fDz*G4UniformRand();
+
+    if(G4UniformRand() > 0.5) px =  fDx;
+    else                      px = -fDx;
+  } 
+  return G4ThreeVector(px,py,pz);
 }

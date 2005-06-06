@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.hh,v 1.11 2004-09-08 15:13:50 grichine Exp $
+// $Id: G4Box.hh,v 1.12 2005-06-06 13:02:19 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -101,6 +101,8 @@ class G4Box : public G4CSGSolid
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
     G4GeometryType GetEntityType() const;
+
+    G4ThreeVector GetPointOnSurface() const; 
 
     std::ostream& StreamInfo(std::ostream& os) const;
 

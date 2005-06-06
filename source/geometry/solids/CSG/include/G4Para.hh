@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.hh,v 1.10 2004-09-13 16:26:53 grichine Exp $
+// $Id: G4Para.hh,v 1.11 2005-06-06 13:02:19 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -130,6 +130,8 @@ class G4Para : public G4CSGSolid
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
     G4GeometryType GetEntityType() const;
+
+    G4ThreeVector GetPointOnSurface() const; 
 
     std::ostream& StreamInfo(std::ostream& os) const;
 

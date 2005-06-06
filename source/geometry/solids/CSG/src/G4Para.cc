@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.29 2005-05-11 07:56:11 grichine Exp $
+// $Id: G4Para.cc,v 1.30 2005-06-06 13:02:19 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
@@ -45,6 +45,7 @@
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "Randomize.hh"
 
 #include "G4VPVParameterisation.hh"
 
@@ -491,8 +492,10 @@ G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
   }
   if ( noSurfaces == 0 )
   {
+#ifdef G4NEW_SURF_NORMAL
     G4Exception("G4Para::SurfaceNormal(p)", "Notification", JustWarning, 
-                "Point p is not on surface !?" ); 
+                "Point p is not on surface !?" );
+#endif 
   }
   else if ( noSurfaces == 1 ) norm = sumnorm;
   else                        norm = sumnorm.unit();
@@ -1149,6 +1152,51 @@ G4NURBS* G4Para::CreateNURBS () const
   // return new G4NURBSbox (fDx, fDy, fDz);
   return 0 ;
 }
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Return a point (G4ThreeVector) randomly and uniformly selected on the solid surface
+
+G4ThreeVector G4Para::GetPointOnSurface() const
+{
+  G4double px, py, pz, select, sumS;
+  G4double Sxy, Sxz, Syz;
+
+  Sxy = fDx*fDy; 
+  Sxz = fDx*fDz; 
+  Syz = fDy*fDz;
+
+  sumS   = Sxy + Sxz + Syz;
+  select = sumS*G4UniformRand();
+ 
+  if( select < Sxy )
+  {
+    px = -fDx +2*fDx*G4UniformRand();
+    py = -fDy +2*fDy*G4UniformRand();
+
+    if(G4UniformRand() > 0.5) pz =  fDz;
+    else                      pz = -fDz;
+  }
+  else if ( ( select - Sxy ) < Sxz ) 
+  {
+    px = -fDx +2*fDx*G4UniformRand();
+    pz = -fDz +2*fDz*G4UniformRand();
+
+    if(G4UniformRand() > 0.5) py =  fDy;
+    else                      py = -fDy;
+  }
+  else  
+  {
+    py = -fDy +2*fDy*G4UniformRand();
+    pz = -fDz +2*fDz*G4UniformRand();
+
+    if(G4UniformRand() > 0.5) px =  fDx;
+    else                      px = -fDx;
+  } 
+  return G4ThreeVector(px,py,pz);
+}
+
+
 
 //
 //

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.26 2005-04-28 08:28:33 grichine Exp $
+// $Id: G4Trd.cc,v 1.27 2005-06-06 13:02:19 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,6 +43,7 @@
 #include "G4VPVParameterisation.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "Randomize.hh"
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
@@ -436,8 +437,10 @@ G4ThreeVector G4Trd::SurfaceNormal( const G4ThreeVector& p ) const
   }
   if ( noSurfaces == 0 )
   {
+#ifdef G4NEW_SURF_NORMAL
     G4Exception("G4Trd::SurfaceNormal(p)", "Notification", JustWarning, 
-                "Point p is not on surface !?" ); 
+                "Point p is not on surface !?" );
+#endif 
   }
   else if ( noSurfaces == 1 ) norm = sumnorm;
   else                        norm = sumnorm.unit();
@@ -1269,6 +1272,71 @@ G4NURBS* G4Trd::CreateNURBS () const
   //  return new G4NURBSbox (fDx, fDy, fDz);
   return 0;
 }
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Return a point (G4ThreeVector) randomly and uniformly selected on the solid surface
+
+G4ThreeVector G4Trd::GetPointOnSurface() const
+{
+  G4double px, py, pz, tgX, tgY, secX, secY, select, sumS, tmp;
+  G4double Sxy1, Sxy2, Sxy, Sxz, Syz;
+
+  tgX  = 0.5*(fDx2-fDx1)/fDz;
+  secX = std::sqrt(1+tgX*tgX);
+  tgY  = 0.5*(fDy2-fDy1)/fDz;
+  secY = std::sqrt(1+tgY*tgY);
+
+  // calculate 0.25 of side surfaces, sumS is 0.25 of total surface
+
+  Sxy1 = fDx1*fDy1; 
+  Sxy2 = fDx2*fDy2;
+  Sxy  = Sxy1 + Sxy2; 
+  Sxz  = (fDx1 + fDx2)*fDz*secY; 
+  Syz  = (fDy1 + fDy2)*fDz*secX;
+  sumS = Sxy + Sxz + Syz;
+
+  select = sumS*G4UniformRand();
+ 
+  if( select < Sxy )                  // Sxy1 or Sxy2
+  {
+    if( select < Sxy1 ) 
+    {
+      pz = -fDz;
+      px = -fDx1 + 2*fDx1*G4UniformRand();
+      py = -fDy1 + 2*fDy1*G4UniformRand();
+    }
+    else      
+    {
+      pz =  fDz;
+      px = -fDx2 + 2*fDx2*G4UniformRand();
+      py = -fDy2 + 2*fDy2*G4UniformRand();
+    }
+  }
+  else if ( ( select - Sxy ) < Sxz )    // Sxz
+  {
+    pz  = -fDz  + 2*fDz*G4UniformRand();
+    tmp =  fDx1 + (pz + fDz)*tgX;
+    px  = -tmp  + 2*tmp*G4UniformRand();
+    tmp =  fDy1 + (pz + fDz)*tgY;
+
+    if(G4UniformRand() > 0.5) py =  tmp;
+    else                      py = -tmp;
+  }
+  else                                   // Syz
+  {
+    pz  = -fDz  + 2*fDz*G4UniformRand();
+    tmp =  fDy1 + (pz + fDz)*tgY;
+    py  = -tmp  + 2*tmp*G4UniformRand();
+    tmp =  fDx1 + (pz + fDz)*tgX;
+
+    if(G4UniformRand() > 0.5) px =  tmp;
+    else                      px = -tmp;
+  } 
+  return G4ThreeVector(px,py,pz);
+}
+
+
 
 //
 //

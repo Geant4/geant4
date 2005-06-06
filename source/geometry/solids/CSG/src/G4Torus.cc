@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.46 2005-05-27 16:38:54 allison Exp $
+// $Id: G4Torus.cc,v 1.47 2005-06-06 13:02:19 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1163,8 +1163,10 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
   }
   if ( noSurfaces == 0 )
   {
+#ifdef G4NEW_SURF_NORMAL
     G4Exception("G4Torus::SurfaceNormal(p)", "Notification", JustWarning, 
-                "Point p is not on surface !?" ); 
+                "Point p is not on surface !?" );
+#endif 
   }
   else if ( noSurfaces == 1 ) norm = sumnorm;
   else                        norm = sumnorm.unit();
