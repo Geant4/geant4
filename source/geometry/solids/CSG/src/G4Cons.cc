@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.38 2005-05-09 14:11:24 gcosmo Exp $
+// $Id: G4Cons.cc,v 1.39 2005-06-06 08:19:06 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -486,8 +486,8 @@ G4ThreeVector G4Cons::SurfaceNormal( const G4ThreeVector& p) const
   }
   if ( rho > delta )   
   {
-    nR = G4ThreeVector(p.x()/rho,p.y()/rho,-tanRMax/secRMax);
-    if (fRmin1 || fRmin2) nr = G4ThreeVector(-p.x()/rho,-p.y()/rho,tanRMin/secRMin);
+    nR = G4ThreeVector(p.x()/rho/secRMax,p.y()/rho/secRMax,-tanRMax/secRMax);
+    if (fRmin1 || fRmin2) nr = G4ThreeVector(-p.x()/rho/secRMin,-p.y()/rho/secRMin,tanRMin/secRMin);
   }
 
   if( distRMax <= delta )
