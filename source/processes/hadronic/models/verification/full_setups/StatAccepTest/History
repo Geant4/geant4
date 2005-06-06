@@ -1,6 +1,12 @@
                  History file
                  ------------
 
+6-June-2005 - A.Ribon (statAccepTest-V07-00-06)
+- Preparing the version to be use for the June 
+  release testing. Only a minor change in plot.py
+  to pick  paw  from the installation.
+
+
 29-Apr-2005 - A.Ribon (statAccepTest-V07-00-05)
 - The kumacs in dirObservables have been modified
   (and a minor modification in the python script
