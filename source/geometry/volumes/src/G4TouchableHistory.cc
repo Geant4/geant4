@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHistory.cc,v 1.10 2004-06-11 14:17:22 gcosmo Exp $
+// $Id: G4TouchableHistory.cc,v 1.11 2005-06-06 15:19:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,11 +30,6 @@
 // ----------------------------------------------------------------------
 
 #include "G4TouchableHistory.hh"
-
-// Ensures correct order of construction and destruption of static objects.
-//
-G4Allocator<G4NavigationLevel>     aNavigationLevelAllocator;
-G4Allocator<G4NavigationLevelRep>  aNavigLevelRepAllocator;
 
 G4TouchableHistory::~G4TouchableHistory()
 {
