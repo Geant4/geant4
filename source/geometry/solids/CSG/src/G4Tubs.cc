@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.50 2005-06-06 13:02:19 grichine Exp $
+// $Id: G4Tubs.cc,v 1.51 2005-06-06 13:21:43 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -619,7 +619,7 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
   }
   if ( noSurfaces == 0 )
   {
-#ifdef G4NEW_SURF_NORMAL
+#ifdef G4CSGDEBUG
     G4Exception("G4Tube::SurfaceNormal(p)", "Notification", JustWarning, 
                 "Point p is not on surface !?" );
 #endif 

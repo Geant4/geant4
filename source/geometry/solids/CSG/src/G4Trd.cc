@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.27 2005-06-06 13:02:19 grichine Exp $
+// $Id: G4Trd.cc,v 1.28 2005-06-06 13:21:43 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -437,7 +437,7 @@ G4ThreeVector G4Trd::SurfaceNormal( const G4ThreeVector& p ) const
   }
   if ( noSurfaces == 0 )
   {
-#ifdef G4NEW_SURF_NORMAL
+#ifdef G4CSGDEBUG
     G4Exception("G4Trd::SurfaceNormal(p)", "Notification", JustWarning, 
                 "Point p is not on surface !?" );
 #endif 

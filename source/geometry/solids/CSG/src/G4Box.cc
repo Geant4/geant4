@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.36 2005-06-06 13:02:19 grichine Exp $
+// $Id: G4Box.cc,v 1.37 2005-06-06 13:21:43 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -448,7 +448,7 @@ G4ThreeVector G4Box::SurfaceNormal( const G4ThreeVector& p) const
       }
     }
   }else{
-#ifdef G4NEW_SURF_NORMAL
+#ifdef G4CSGDEBUG
      G4Exception("G4Box::SurfaceNormal(p)", "Notification", JustWarning, 
 		 "Point p is not on surface !?" );
 #endif 

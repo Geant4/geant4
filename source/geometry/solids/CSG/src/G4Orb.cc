@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.17 2005-06-06 13:02:19 grichine Exp $
+// $Id: G4Orb.cc,v 1.18 2005-06-06 13:21:43 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Orb
@@ -309,7 +309,7 @@ G4ThreeVector G4Orb::SurfaceNormal( const G4ThreeVector& p ) const
       break;
    default:
       DumpInfo();
-#ifdef G4NEW_SURF_NORMAL
+#ifdef G4CSGDEBUG
       G4Exception("G4Orb::SurfaceNormal()", "Notification", JustWarning,
                   "Undefined side for valid surface normal to solid.");
 #endif
