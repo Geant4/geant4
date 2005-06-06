@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarter.hh,v 1.7 2003-08-19 15:16:21 dressel Exp $
+// $Id: Tst33AppStarter.hh,v 1.8 2005-06-06 16:14:47 gcosmo Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -109,7 +109,7 @@ private:
   G4bool fWeightroulette;
   G4int fTime;
   G4ProcessPlacer *fChangeWeightPlacer;
-  Tst33WeightChangeProcess *fWeightChangeProcess;;
+  Tst33WeightChangeProcess *fWeightChangeProcess;
   G4VWeightWindowAlgorithm *fWWAlg;
 };
 
