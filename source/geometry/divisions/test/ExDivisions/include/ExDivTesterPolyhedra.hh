@@ -33,7 +33,6 @@
 
 class G4VSolid;
 class G4VPhysicalVolume;
-class HepTransform3D;
 
 #include "ExVDivTester.hh"
 
