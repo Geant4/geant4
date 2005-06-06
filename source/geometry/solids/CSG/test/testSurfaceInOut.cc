@@ -439,7 +439,7 @@ G4ThreeVector GetVectorOnCons(G4Cons& cons)
 
 G4ThreeVector GetVectorOnTorus(G4Torus& torus)
 {
-  G4double phi, radius, px, py, pz;
+  G4double phi, alpha, radius, px, py, pz;
   G4double part = 1./4.;
   G4double rand = G4UniformRand();
 
@@ -449,48 +449,35 @@ G4ThreeVector GetVectorOnTorus(G4Torus& torus)
   G4double phi1  = torus.GetSPhi();
   G4double phi2  = phi1 + torus.GetDPhi ();
 
-
-  if      ( rand < part ) // Rmax
+ if      ( rand < part ) // Rmax
   {
-    radius = pRmax -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand(); 
-    pz     = -pRtor - 0.5*kCarTolerance + (2*pRtor + kCarTolerance)*G4UniformRand(); 
+    radius = pRmax -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand();
+    alpha = twopi*G4UniformRand(); 
     phi    = phi1 - 0.5*kAngTolerance + (phi2 - phi1 + kAngTolerance)*G4UniformRand();
   }
   else if ( rand < 2*part )  // Rmin
   {
     radius = pRmin -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand(); 
-    pz     = -pRtor - 0.5*kCarTolerance + (2*pRtor + kCarTolerance)*G4UniformRand();   
+    alpha = twopi*G4UniformRand(); 
     phi    = phi1 - 0.5*kAngTolerance + (phi2 - phi1 + kAngTolerance)*G4UniformRand();
   }
   else if ( rand < 3*part )  // phi1
   {
     radius = pRmin - 0.5*kCarTolerance + (pRmax-pRmin+kCarTolerance)*G4UniformRand(); 
-    pz     = -pRtor - 0.5*kCarTolerance + (2*pRtor + kCarTolerance)*G4UniformRand();   
-    phi    = phi1 -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand();
+    alpha = twopi*G4UniformRand(); 
+    //  pz     = -pRtor - 0.5*kCarTolerance + (2*pRtor + kCarTolerance)*G4UniformRand();   
+    phi    = phi1 -0.5*kAngTolerance + (kAngTolerance)*G4UniformRand();
   }
-  else if ( rand < 4*part )  // phi2
+  else   // phi2
   {
     radius = pRmin - 0.5*kCarTolerance + (pRmax-pRmin+kCarTolerance)*G4UniformRand(); 
-    pz     = -pRtor - 0.5*kCarTolerance + (2*pRtor + kCarTolerance)*G4UniformRand();   
-    phi    = phi2 -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand();
+    alpha = twopi*G4UniformRand(); 
+    phi    = phi2 -0.5*kAngTolerance + (kAngTolerance)*G4UniformRand();
   }
-  else if ( rand < 5*part )  // -fZ
-  {
-    radius = pRmin - 0.5*kCarTolerance + (pRmax-pRmin+kCarTolerance)*G4UniformRand(); 
+  px = (pRtor+radius*std::cos(alpha))*std::cos(phi);
+  py = (pRtor+radius*std::cos(alpha))*std::sin(phi);
+  pz = radius*std::sin(alpha);
 
-    pz     = -pRtor - 0.5*kCarTolerance + (kCarTolerance)*G4UniformRand();   
-  
-    phi    = phi1 - 0.5*kAngTolerance + (phi2 - phi1 + kAngTolerance)*G4UniformRand();
-  }
-  else // fZ
-  {
-    radius = pRmin - 0.5*kCarTolerance + (pRmax-pRmin+kCarTolerance)*G4UniformRand(); 
-    pz     = pRtor - 0.5*kCarTolerance + (kCarTolerance)*G4UniformRand();     
-    phi    = phi1 - 0.5*kAngTolerance + (phi2 - phi1 + kAngTolerance)*G4UniformRand();
-  }
-
-  px = radius*std::cos(phi);
-  py = radius*std::sin(phi);
   
   return G4ThreeVector(px,py,pz);
 }
@@ -502,16 +489,21 @@ G4ThreeVector GetVectorOnTorus(G4Torus& torus)
 
 int main(void)
 {
-  G4int i,j, iMax=1000000, jMax=1000;
+  G4int i,j, iMax=1000, jMax=1000;
   G4int iCheck=iMax/10;
   G4double distIn, distOut;
+
+  G4double Rtor = 100 ;
+  G4double Rmax = Rtor*0.9 ;
+  G4double Rmin = Rtor*0.1 ;
+
   EInside surfaceP;
   G4ThreeVector norm,*pNorm;
   G4bool *pgoodNorm, goodNorm, calcNorm=true;
 
   enum Esolid {kBox, kOrb, kSphere, kCons, kTubs, kTorus, kPara, kTrapezoid, kTrd};
 
-  Esolid useCase = kCons;
+  Esolid useCase = kTorus;
 
   pNorm=&norm;
   pgoodNorm=&goodNorm;
@@ -585,7 +577,11 @@ int main(void)
   G4Cons c5("Hollow Cut Cone",25,50,75,150,50,0,3*halfpi);
     
   G4Torus torus1("torus1",10.,15.,20.,0.,3*halfpi);
- 
+  G4Torus tor2("Hole cutted Torus #2",Rmin,Rmax,Rtor,pi/4,halfpi);
+  G4Torus torn2("tn2",Rmin,Rmax,Rtor,halfpi,halfpi);
+  G4Torus torn3("tn3",Rmin,Rmax,Rtor,halfpi,3*halfpi);
+
+
   // Check of some use cases shown zero-zero problems
 
   G4ThreeVector pCheck, vCheck;

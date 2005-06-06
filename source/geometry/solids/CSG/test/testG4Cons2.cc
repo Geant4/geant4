@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Cons2.cc,v 1.14 2005-06-06 09:17:22 gcosmo Exp $
+// $Id: testG4Cons2.cc,v 1.15 2005-06-06 10:22:23 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Simple test of G4Cons
@@ -320,7 +320,7 @@ int main(void)
     assert(ApproxEqual(normal,G4ThreeVector(-p3,-p3,-p3)));
     normal=cn1.SurfaceNormal(G4ThreeVector(-50.,0.,0.));
     assert(ApproxEqual(normal,G4ThreeVector(-p2,-p2,0.)));
-    normal=cn2.SurfaceNormal(G4ThreeVector(0.,0.,0.));
+    normal=cn2.SurfaceNormal(G4ThreeVector(50.,0.,0.));
     assert(ApproxEqual(normal,G4ThreeVector(p2,p2,0.)));
     normal=c6.SurfaceNormal(G4ThreeVector(0.,0.,50.));
     assert(ApproxEqual(normal,G4ThreeVector(0.,0.,1.)));
