@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.5 2005-05-09 15:17:47 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.6 2005-06-06 12:49:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -44,7 +44,6 @@
 #include "G4EmQEDBuilder.hh"
 #include "G4EmMuonBuilder.hh"
 #include "G4EmHadronBuilder.hh"
-//#include "G4EmHighEnergyBuilder.hh"
 #include "G4EmQEDBuilder52.hh"
 #include "G4LowEnergyQEDBuilder.hh"
 #include "G4PenelopeQEDBuilder.hh"
@@ -116,6 +115,7 @@ void PhysicsList::ConstructProcess()
   emOptions.SetDEDXBinning(90);
   emOptions.SetLambdaBinning(90);
   emOptions.SetBuildPreciseRange(false);
+  emOptions.SetApplyCuts(true);
   //emOptions.SetVerbose(0);
 }
 

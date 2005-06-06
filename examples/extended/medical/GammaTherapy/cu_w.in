@@ -17,8 +17,8 @@
 #/testem/phys/addPhysics       modelP
 #/testem/phys/addPhysics       lowenergy
 #
-/testem/target1Material       W
-/testem/target2Material       Cu
+/testem/target1Material       G4_W
+/testem/target2Material       G4_Cu
 /testem/target1Z              5.5 mm
 /testem/target2Z              6.5 mm
 #
