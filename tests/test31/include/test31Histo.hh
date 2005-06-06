@@ -111,6 +111,7 @@ public: // Without description
 private:
 
   void TableControl();
+  void MuonTest();
 
   test31Histo(const test31Histo&);
   const test31Histo& operator=(const test31Histo& right);
