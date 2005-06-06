@@ -95,7 +95,7 @@ int main(int argc,char** argv) {
 #else
     G4UIsession* session = new G4UIterminal();
 #endif
-    UImanager->ApplyCommand("/control/execute vis.mac");
+    UImanager->ApplyCommand("/control/execute Visualisation.mac");
     session->SessionStart();
     delete session;
   }
