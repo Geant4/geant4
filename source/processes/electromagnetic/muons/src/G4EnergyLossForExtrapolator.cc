@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.cc,v 1.3 2005-05-18 16:06:18 vnivanch Exp $
+// $Id: G4EnergyLossForExtrapolator.cc,v 1.4 2005-06-06 11:19:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -320,8 +320,12 @@ G4double G4EnergyLossForExtrapolator::ComputeValue(G4double x,
 void G4EnergyLossForExtrapolator::ComputeElectronDEDX(const G4ParticleDefinition* part, 
 						      G4PhysicsTable* table) 
 {
-  G4MollerBhabhaModel* ioni = new G4MollerBhabhaModel(part);
-  G4eBremsstrahlungModel* brem = new G4eBremsstrahlungModel(part);
+  G4DataVector v;
+  G4MollerBhabhaModel* ioni = new G4MollerBhabhaModel();
+  G4eBremsstrahlungModel* brem = new G4eBremsstrahlungModel();
+  ioni->Initialise(part, v);
+  brem->Initialise(part, v);
+
   const G4MaterialTable* mtable = G4Material::GetMaterialTable();
   if(0<verbose) {
     G4cout << "G4EnergyLossForExtrapolator::ComputeElectronDEDX for " 
@@ -359,7 +363,10 @@ void G4EnergyLossForExtrapolator::ComputeElectronDEDX(const G4ParticleDefinition
 void G4EnergyLossForExtrapolator::ComputeProtonDEDX(const G4ParticleDefinition* part, 
 						    G4PhysicsTable* table)
 {
-  G4BetheBlochModel* ioni = new G4BetheBlochModel(part);
+  G4DataVector v;
+  G4BetheBlochModel* ioni = new G4BetheBlochModel();
+  ioni->Initialise(part, v);
+
   const G4MaterialTable* mtable = G4Material::GetMaterialTable();
 
   if(0<verbose) {
