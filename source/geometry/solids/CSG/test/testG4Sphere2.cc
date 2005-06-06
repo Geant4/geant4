@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Sphere2.cc,v 1.2 2004-12-02 09:31:30 gcosmo Exp $
+// $Id: testG4Sphere2.cc,v 1.3 2005-06-06 11:06:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -89,7 +89,6 @@ const G4String OutputInside(const EInside a)
 
 int main(void)
 {
-    G4double Dist;
     G4ThreeVector pzero(0,0,0),px(30,0,0),py(0,30,0),pz(0,0,30);
     G4ThreeVector Pmx(-30,0,0),pmy(0,-30,0),pmz(0,0,-30);
     G4ThreeVector pbigx(100,0,0),pbigy(0,100,0),pbigz(0,0,100);
@@ -119,7 +118,7 @@ int main(void)
     G4ThreeVector v345exit1(-0.8,0.6,0),v345exit2(0.8,0.6,0),
 	          v345exit3(0.6,0.8,0);
     G4ThreeVector norm,*pNorm;
-    G4bool *pgoodNorm,goodNorm,calcNorm=true;
+    G4bool *pgoodNorm,goodNorm;
 
     pNorm=&norm;
     pgoodNorm=&goodNorm;

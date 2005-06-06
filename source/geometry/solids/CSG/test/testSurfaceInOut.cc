@@ -522,7 +522,7 @@ int main(void)
 
   G4Orb  o1("Solid G4Orb",50);
   G4Orb  o10("s10",0.018*mm);
-  G4Orb* solidO1= new G4Orb("O1", 2.7*cm);
+  // G4Orb* solidO1= new G4Orb("O1", 2.7*cm);
 
 
   // spheres for test
