@@ -106,7 +106,7 @@ for line in pfile :
             mainKumac.close();
 
             # Execute in batch the kumac (without arguments) main.kumac
-            os.system("paw -w 0 -b main.kumac")
+            os.system("export PATH=$DIR_INSTALLATIONS/dirPAW:$PATH; paw -w 0 -b main.kumac")
 
             # Rename the .ps file to remember the observable
             os.rename( "plot.ps" , "plot.ps-" + numObservable + label )
