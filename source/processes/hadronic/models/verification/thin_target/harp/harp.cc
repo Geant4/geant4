@@ -425,7 +425,6 @@ int main(int argc, char** argv)
     G4double mass = part->GetPDGMass();
     if(m_pmax == 0.0) m_pmax = emax;
     else              emax   = m_pmax;
-    m_pmax /= GeV;
     if(m_p > 0.0) energy = sqrt(m_p*m_p + mass*mass);
 
     G4double pmax = sqrt(energy*(energy + 2.0*mass));
@@ -456,14 +455,14 @@ int main(int argc, char** argv)
       G4cout << "Hbook file name: <" << hFile << ">" << G4endl;
       G4cout << "energy = " << energy/GeV << " GeV" << G4endl;
       G4cout << "emax   = " << emax/GeV << " GeV" << G4endl;
-      G4cout << "pmax   = " << m_pmax << " GeV" << G4endl;
+      G4cout << "pmax   = " << m_pmax/GeV << " GeV" << G4endl;
 
       h[0]=hf->createHistogram1D("10","Number of protons",10,-0.5,9.5);
       h[1]=hf->createHistogram1D("11","Number of pions",10,-0.5,9.5);
-      h[2]=hf->createHistogram1D("12","Proton momentum",nbins,m_pmin,m_pmax);
-      h[3]=hf->createHistogram1D("13","Pion momentum",nbins,m_pmin,m_pmax);
-      h[4]=hf->createHistogram1D("14","Proton Pt",m_binp,0.0,m_ptmax);
-      h[5]=hf->createHistogram1D("15","Pion Pt",m_binp,0.0,m_ptmax);
+      h[2]=hf->createHistogram1D("12","Proton momentum",nbins,m_pmin/GeV,m_pmax/GeV);
+      h[3]=hf->createHistogram1D("13","Pion momentum",nbins,m_pmin/GeV,m_pmax/GeV);
+      h[4]=hf->createHistogram1D("14","Proton Pt",m_binp,0.0,m_ptmax/GeV);
+      h[5]=hf->createHistogram1D("15","Pion Pt",m_binp,0.0,m_ptmax/GeV);
       h[6]=hf->createHistogram1D("16","Proton theta",m_bint,0.0,m_thetamax);
       h[7]=hf->createHistogram1D("17","Pion theta",m_bint,0.0,m_thetamax);
       h[8]=hf->createHistogram1D("18","Proton cos(theta)",m_bint,cosmin,1.0);
