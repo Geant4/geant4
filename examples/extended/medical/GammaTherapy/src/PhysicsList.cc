@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.6 2005-06-06 12:49:10 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.7 2005-06-07 13:55:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -83,6 +83,7 @@ PhysicsList::PhysicsList()
 
   // Add Physics builders
   RegisterPhysics(new ParticlesBuilder());
+  steplimiter = new G4StepLimiterBuilder();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -130,6 +131,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   }
   if ((name == "standard") && !emBuilderIsRegisted) {
     RegisterPhysics(new G4EmQEDBuilder());
+    RegisterPhysics(steplimiter);
     RegisterPhysics(new G4EmMuonBuilder());
     RegisterPhysics(new G4EmHadronBuilder());
     emBuilderIsRegisted = true;
@@ -137,6 +139,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   } else if (name == "g4v52" && !emBuilderIsRegisted) {
     RegisterPhysics(new G4EmQEDBuilder52());
+    RegisterPhysics(steplimiter);
     RegisterPhysics(new G4EmMuonBuilder52());
     RegisterPhysics(new G4EmHadronBuilder52());
     emBuilderIsRegisted = true;
@@ -144,6 +147,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   } else if (name == "lowenergy" && !emBuilderIsRegisted) {
     RegisterPhysics(new G4LowEnergyQEDBuilder());
+    RegisterPhysics(steplimiter);
     RegisterPhysics(new G4EmMuonBuilder());
     RegisterPhysics(new G4EmHadronBuilder());
     emBuilderIsRegisted = true;
@@ -151,14 +155,10 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   } else if (name == "penelope" && !emBuilderIsRegisted) {
     RegisterPhysics(new G4PenelopeQEDBuilder());
+    RegisterPhysics(steplimiter);
     RegisterPhysics(new G4EmMuonBuilder());
     RegisterPhysics(new G4EmHadronBuilder());
     emBuilderIsRegisted = true;
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
-
-  } else if (name == "step_limit" && !stepLimiterIsRegisted) {
-    RegisterPhysics(new G4StepLimiterBuilder());
-    stepLimiterIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
   } else if (name == "decay" && !decayIsRegisted) {

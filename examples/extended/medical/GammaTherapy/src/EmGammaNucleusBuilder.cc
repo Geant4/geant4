@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: EmGammaNucleusBuilder.cc,v 1.4 2005-06-07 13:55:07 vnivanch Exp $
+// $Id: EmGammaNucleusBuilder.cc,v 1.5 2005-06-07 13:56:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "EmGammaNucleusBuilder.hh"
@@ -32,6 +32,7 @@
 #include "G4GenericIon.hh"
 #include "G4PhotoNuclearProcess.hh"
 #include "G4GammaNuclearReaction.hh"
+#include "G4TheoFSGenerator.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,7 +62,7 @@ void EmGammaNucleusBuilder::ConstructProcess()
   G4ParticleDefinition* particle = G4Gamma::Gamma();
   G4ProcessManager* pmanager = particle->GetProcessManager();
   G4PhotoNuclearProcess* pnp = new G4PhotoNuclearProcess("gNucler");
-  G4TheoFSGenerator tf = new G4TheoFSGenerator();
+  G4TheoFSGenerator* tf = new G4TheoFSGenerator();
   G4GammaNuclearReaction* gn = new G4GammaNuclearReaction();
   tf->SetMinEnergy(3.5*GeV);
   tf->SetMaxEnergy(100.*TeV);
