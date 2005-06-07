@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.44 2005-06-07 14:15:18 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.45 2005-06-07 14:25:25 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -540,7 +540,7 @@ if(rad2 <= Rmax_minus*Rmax_minus && rad2 >= Rmin_plus*Rmin_plus) in = kInside ;
 G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
 {
   G4int noSurfaces = 0;  
-  G4double rho, rho2, rad, pTheta, pPhi=0.;
+  G4double rho, rho2, rad, pTheta, pPhi;
   G4double distRMin = kInfinity;
   G4double distSPhi = kInfinity, distEPhi = kInfinity;
   G4double distSTheta = kInfinity, distETheta = kInfinity;
@@ -555,16 +555,17 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
   G4double    distRMax = std::fabs(rad-fRmax);
   if (fRmin)  distRMin = std::fabs(rad-fRmin);
     
+  if ( rho && (fDPhi < twopi || fDTheta < pi) )
+  {
+    pPhi = std::atan2(p.y(),p.x());
 
+    if(pPhi  < fSPhi-dAngle)           pPhi     += twopi;
+    else if(pPhi > fSPhi+fDPhi+dAngle) pPhi     -= twopi;
+  }
   if ( fDPhi < twopi ) // && rho ) // old limitation against (0,0,z)
   {
     if ( rho )
     {
-      pPhi = std::atan2(p.y(),p.x());
-
-      if(pPhi  < fSPhi-dAngle)          pPhi     += twopi;
-      else if(pPhi > fSPhi+fDPhi+dAngle) pPhi     -= twopi;
-
       distSPhi = std::fabs( pPhi - fSPhi ); 
       distEPhi = std::fabs(pPhi-fSPhi-fDPhi); 
     }
