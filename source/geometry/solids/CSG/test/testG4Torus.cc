@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Torus.cc,v 1.11 2005-06-06 09:17:22 gcosmo Exp $
+// $Id: testG4Torus.cc,v 1.12 2005-06-07 08:00:43 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -124,8 +124,8 @@ G4bool testG4Torus()
 
 
    G4Torus t3("Hole cutted Torus #3",4*Rmin,Rmax,Rtor,halfpi-pi/24,pi/12);
-   G4Torus t4("Solid Torus #4",0,Rtor-3*kCarTolerance,Rtor,0,twopi);
-   G4Torus t5("Solid cutted Torus #5",0,Rtor-3*kCarTolerance,Rtor,pi/4,halfpi);
+   G4Torus t4("Solid Torus #4",0,Rtor - 2.e3*kCarTolerance,Rtor,0,twopi);
+   G4Torus t5("Solid cutted Torus #5",0,Rtor - 2.e3*kCarTolerance,Rtor,pi/4,halfpi);
    
    G4Torus * aTub = new G4Torus("Ring1", 0*cm, 10*cm, 
                                          1*m, 0*deg, 360*deg ); 
@@ -442,8 +442,8 @@ G4bool testG4Torus()
 	    else
 		{
 		    assert(t4.CalculateExtent(kZAxis,zTestClip,origin,min,max));
-		    G4double testMin=-100;
-		    G4double testMax=(zTest<100) ? zTest : 100;
+		    G4double testMin=-100+2e3*kCarTolerance;
+		    G4double testMax=(zTest<100-2e3*kCarTolerance) ? zTest : 100-2e3*kCarTolerance;
 		    assert (ApproxEqual(min,testMin)
 			    &&ApproxEqual(max,testMax));
 		}

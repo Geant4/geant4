@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Cons2.cc,v 1.15 2005-06-06 10:22:23 grichine Exp $
+// $Id: testG4Cons2.cc,v 1.16 2005-06-07 08:00:43 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Simple test of G4Cons
@@ -352,10 +352,12 @@ int main(void)
 	    G4cout << "Error G " << norm << G4endl;
 
 	norm=c5.SurfaceNormal(G4ThreeVector(51,0,-50));
-	if (OutRange(norm,vmz))
+	if (OutRange(norm,G4ThreeVector(0.,-p2,-p2)))
 	    G4cout << "Errot H " << norm << G4endl;
 
-	G4cout << "Testing G4Cons::DistanceToOut...\n";
+  G4cout << "Testing G4Cons::DistanceToOut...\n";
+
+
 	dist=c4.DistanceToOut(ponphi1);
 	if (OutRange(dist,0))
 		G4cout << "Error A " << dist << G4endl;
