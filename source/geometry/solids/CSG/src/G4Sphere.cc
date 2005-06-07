@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.41 2005-06-06 13:21:43 grichine Exp $
+// $Id: G4Sphere.cc,v 1.42 2005-06-07 09:34:47 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -541,8 +541,9 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
 {
   G4int noSurfaces = 0;  
   G4double rho, rho2, rad, pPhi, pTheta;
-  G4double distRMin = 0.;
-  G4double distSPhi=0., distEPhi=0., distSTheta=0., distETheta=0.;
+  G4double distRMin = kInfinity;
+  G4double distSPhi = kInfinity, distEPhi = kInfinity;
+  G4double distSTheta = kInfinity, distETheta = kInfinity;
   G4double delta = 0.5*kCarTolerance, dAngle = 0.5*kAngTolerance;
   G4ThreeVector nR, nPs, nPe, nTs, nTe, nZ(0.,0.,1.);
   G4ThreeVector norm, sumnorm(0.,0.,0.);
@@ -554,29 +555,40 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
   G4double    distRMax = std::fabs(rad-fRmax);
   if (fRmin)  distRMin = std::fabs(rad-fRmin);
     
-  pPhi = std::atan2(p.y(),p.x());
-  // if ( pPhi < 0 ) pPhi += twopi;
-    if(pPhi  < fSPhi-delta)           pPhi     += twopi;
-    else if(pPhi > fSPhi+fDPhi+delta) pPhi     -= twopi;
-
 
   if ( fDPhi < twopi ) // && rho ) // old limitation against (0,0,z)
   {
-    // if ( fSPhi < 0 )  distSPhi = std::fabs( pPhi - (fSPhi + twopi) )*rho;
-    // else              distSPhi = std::fabs( pPhi - fSPhi )*rho;
+    if ( rho )
+    {
+      pPhi = std::atan2(p.y(),p.x());
 
-    distSPhi = std::fabs( pPhi - fSPhi ); // *rho;
-    distEPhi = std::fabs(pPhi-fSPhi-fDPhi); // *rho;
+      if(pPhi  < fSPhi-dAngle)          pPhi     += twopi;
+      else if(pPhi > fSPhi+fDPhi+dAngle) pPhi     -= twopi;
 
+      distSPhi = std::fabs( pPhi - fSPhi ); 
+      distEPhi = std::fabs(pPhi-fSPhi-fDPhi); 
+    }
+    else if( !fRmin )
+    {
+      distSPhi = 0.; 
+      distEPhi = 0.; 
+    }
     nPs = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0);
     nPe = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0);
   }        
   if ( fDTheta < pi ) // && rad ) // old limitation against (0,0,0)
   {
-    pTheta     = std::atan2(rho,p.z());
-    distSTheta = std::fabs(pTheta-fSTheta); // *rad;
-    distETheta = std::fabs(pTheta-fSTheta-fDTheta); // *rad;
-
+    if ( rho )
+    {
+      pTheta     = std::atan2(rho,p.z());
+      distSTheta = std::fabs(pTheta-fSTheta); 
+      distETheta = std::fabs(pTheta-fSTheta-fDTheta); 
+    }
+    else if( !fRmin )
+    {
+      if ( fSTheta )                distSTheta = 0.;
+      if ( fSTheta + fDTheta < pi ) distETheta = 0.;
+    }
     nTs = G4ThreeVector(-std::cos(fSTheta)*std::cos(pPhi),
                         -std::cos(fSTheta)*std::sin(pPhi),
                          std::sin(fSTheta)               );
@@ -622,6 +634,7 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
       noSurfaces ++;
       if( rad <= delta && fDPhi >= twopi) sumnorm -= nZ;
       else                                sumnorm += nTe;
+      if(sumnorm.z() == 0.)               sumnorm += nZ;
     }
   }
   if ( noSurfaces == 0 )

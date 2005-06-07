@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.48 2005-06-06 13:21:43 grichine Exp $
+// $Id: G4Torus.cc,v 1.49 2005-06-07 09:34:47 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,6 +29,7 @@
 //
 // Implementation
 //
+// 07.06.05 V.Grichine: SurfaceNormal(p) for rho=0, Constructor as G4Cons 
 // 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
 // 18.03.04 V.Grichine: bug fixed in DistanceToIn(p)
 // 11.01.01 E.Medernach: Use G4PolynomialSolver to find roots
@@ -91,9 +92,9 @@ G4Torus::SetAllParameters( G4double pRmin,
                            G4double pSPhi,
                            G4double pDPhi )
 {
-  fCubicVolume= 0.;
+  fCubicVolume = 0.;
   fpPolyhedron = 0;
-  if ( pRtor >= pRmax + kCarTolerance )      // Check swept radius
+  if ( pRtor >= pRmax + 1.e3*kCarTolerance )      // Check swept radius, as in G4Cons
   {
     fRtor = pRtor ;
   }
@@ -106,11 +107,11 @@ G4Torus::SetAllParameters( G4double pRmin,
                 "InvalidSetup", FatalException, "Invalid swept radius.");
   }
 
-  // Check radii
+  // Check radii, as in G4Cons
 
-  if ( pRmin < pRmax - 2*kCarTolerance && pRmin >= 0 )
+  if ( pRmin < pRmax - 1.e2*kCarTolerance && pRmin >= 0 )
   {
-    if (pRmin >= kCarTolerance) fRmin = pRmin ;
+    if (pRmin >= 1.e2*kCarTolerance) fRmin = pRmin ;
     else                        fRmin = 0.0   ;
     fRmax = pRmax ;
   }
@@ -1102,9 +1103,9 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
 G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
 {
   G4int noSurfaces = 0;  
-  G4double rho2,rho,pt2,pt,pPhi;
-  G4double distRMin=0.;
-  G4double distSPhi=0.,distEPhi=0.;
+  G4double rho2, rho, pt2, pt, pPhi;
+  G4double distRMin = kInfinity;
+  G4double distSPhi = kInfinity, distEPhi = kInfinity;
   G4double delta = 0.5*kCarTolerance, dAngle = 0.5*kAngTolerance;
   G4ThreeVector nR, nPs, nPe;
   G4ThreeVector norm, sumnorm(0.,0.,0.);
@@ -1123,18 +1124,16 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
 
   if ( fDPhi < twopi ) // && rho ) // old limitation against (0,0,z)
   {
-    pPhi = std::atan2(p.y(),p.x());
+    if ( rho )
+    {
+      pPhi = std::atan2(p.y(),p.x());
 
-    //   if ( pPhi  < 0 ) pPhi     += twopi;
-    // if ( fSPhi < 0 ) distSPhi = std::fabs( pPhi - (fSPhi + twopi) )*rho;
-    // else             distSPhi = std::fabs( pPhi - fSPhi )*rho;
+      if(pPhi  < fSPhi-delta)           pPhi     += twopi;
+      else if(pPhi > fSPhi+fDPhi+delta) pPhi     -= twopi;
 
-    if(pPhi  < fSPhi-delta)           pPhi     += twopi;
-    else if(pPhi > fSPhi+fDPhi+delta) pPhi     -= twopi;
-
-    distSPhi = std::fabs( pPhi - fSPhi ); // *rho;
-    distEPhi = std::fabs(pPhi-fSPhi-fDPhi); // *rho;
-
+      distSPhi = std::fabs( pPhi - fSPhi );
+      distEPhi = std::fabs(pPhi-fSPhi-fDPhi);
+    }
     nPs = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0);
     nPe = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0);
   } 
