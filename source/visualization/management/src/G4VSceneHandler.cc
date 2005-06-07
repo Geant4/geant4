@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.39 2005-05-27 13:39:36 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.40 2005-06-07 17:03:17 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -419,8 +419,8 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
       G4cout <<
 	"ERROR: G4VSceneHandler::RequestPrimitives"
 	"\n  Polyhedron not available for " << solid.GetName () <<
-	".\nThis means it cannot be visualized on most systems."
-	"\nContact the Visualization Coordinator." << G4endl;
+	".\n  This means it cannot be visualized on most systems."
+	"\n  Contact the Visualization Coordinator." << G4endl;
       }
     }
     break;
