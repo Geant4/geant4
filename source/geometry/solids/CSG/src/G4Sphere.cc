@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.43 2005-06-07 14:07:45 grichine Exp $
+// $Id: G4Sphere.cc,v 1.44 2005-06-07 14:15:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -540,7 +540,7 @@ if(rad2 <= Rmax_minus*Rmax_minus && rad2 >= Rmin_plus*Rmin_plus) in = kInside ;
 G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
 {
   G4int noSurfaces = 0;  
-  G4double rho, rho2, rad, pPhi, pTheta;
+  G4double rho, rho2, rad, pTheta, pPhi=0.;
   G4double distRMin = kInfinity;
   G4double distSPhi = kInfinity, distEPhi = kInfinity;
   G4double distSTheta = kInfinity, distETheta = kInfinity;
