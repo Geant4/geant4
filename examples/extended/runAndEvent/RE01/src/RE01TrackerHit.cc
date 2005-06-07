@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RE01TrackerHit.cc,v 1.2 2005-06-02 21:30:50 perl Exp $
+// $Id: RE01TrackerHit.cc,v 1.3 2005-06-07 10:53:17 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -125,10 +125,10 @@ std::vector<G4AttValue>* RE01TrackerHit::CreateAttValues() const
     (G4AttValue("TrackID",G4UIcommand::ConvertToString(trackID),""));
 
   values->push_back
-    (G4AttValue("ZCellID","",""));
+    (G4AttValue("ZCellID"," ",""));
 
   values->push_back
-    (G4AttValue("PhiCellID","",""));
+    (G4AttValue("PhiCellID"," ",""));
 
   values->push_back
     (G4AttValue("Energy",G4BestUnit(edep,"Energy"),""));
@@ -141,7 +141,7 @@ std::vector<G4AttValue>* RE01TrackerHit::CreateAttValues() const
     (G4AttValue("Pos",G4BestUnit(pos,"Length"),""));
 
   values->push_back
-    (G4AttValue("LVol","",""));
+    (G4AttValue("LVol"," ",""));
   
    return values;
 }

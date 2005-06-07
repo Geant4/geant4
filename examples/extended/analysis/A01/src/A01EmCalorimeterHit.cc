@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01EmCalorimeterHit.cc,v 1.7 2005-06-02 10:06:36 perl Exp $
+// $Id: A01EmCalorimeterHit.cc,v 1.8 2005-06-07 10:50:02 perl Exp $
 // --------------------------------------------------------------
 //
 
@@ -143,10 +143,10 @@ std::vector<G4AttValue>* A01EmCalorimeterHit::CreateAttValues() const
     (G4AttValue("ID",G4UIcommand::ConvertToString(cellID),""));
 
   values->push_back
-    (G4AttValue("Column","",""));
+    (G4AttValue("Column"," ",""));
 
   values->push_back
-    (G4AttValue("Row","",""));
+    (G4AttValue("Row"," ",""));
 
   //G4double noTime = 0.*s;
   //values->push_back
@@ -163,7 +163,7 @@ std::vector<G4AttValue>* A01EmCalorimeterHit::CreateAttValues() const
       (G4AttValue("LVol",pLogV->GetName(),""));
   else
     values->push_back
-      (G4AttValue("LVol","",""));
+      (G4AttValue("LVol"," ",""));
   
    return values;
 }

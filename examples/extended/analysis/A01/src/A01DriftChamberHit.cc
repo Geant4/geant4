@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01DriftChamberHit.cc,v 1.6 2005-06-02 10:06:36 perl Exp $
+// $Id: A01DriftChamberHit.cc,v 1.7 2005-06-07 10:50:02 perl Exp $
 // --------------------------------------------------------------
 //
 #include "A01DriftChamberHit.hh"
@@ -134,10 +134,10 @@ std::vector<G4AttValue>* A01DriftChamberHit::CreateAttValues() const
     (G4AttValue("ID",G4UIcommand::ConvertToString(layerID),""));
 
   values->push_back
-    (G4AttValue("Column","",""));
+    (G4AttValue("Column"," ",""));
 
   values->push_back
-    (G4AttValue("Row","",""));
+    (G4AttValue("Row"," ",""));
 
   //values->push_back
   //  (G4AttValue("Time",G4BestUnit(time,"Time"),""));
@@ -150,7 +150,7 @@ std::vector<G4AttValue>* A01DriftChamberHit::CreateAttValues() const
     (G4AttValue("Pos",G4BestUnit(worldPos,"Length"),""));
 
   values->push_back
-    (G4AttValue("LVol","",""));
+    (G4AttValue("LVol"," ",""));
 
   return values;
 }

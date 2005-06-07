@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RE01CalorimeterHit.cc,v 1.2 2005-06-02 21:30:50 perl Exp $
+// $Id: RE01CalorimeterHit.cc,v 1.3 2005-06-07 10:53:17 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -139,7 +139,7 @@ std::vector<G4AttValue>* RE01CalorimeterHit::CreateAttValues() const
   values->push_back(G4AttValue("HitType","RE01CalorimeterHit",""));
 
   values->push_back
-    (G4AttValue("TrackID","",""));
+    (G4AttValue("TrackID"," ",""));
 
   values->push_back
     (G4AttValue("ZCellID",G4UIcommand::ConvertToString(ZCellID),""));
@@ -161,7 +161,7 @@ std::vector<G4AttValue>* RE01CalorimeterHit::CreateAttValues() const
       (G4AttValue("LVol",pLogV->GetName(),""));
   else
     values->push_back
-      (G4AttValue("LVol","",""));
+      (G4AttValue("LVol"," ",""));
 
   return values;
 }
