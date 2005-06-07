@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.42 2005-06-07 09:34:47 grichine Exp $
+// $Id: G4Sphere.cc,v 1.43 2005-06-07 14:07:45 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -582,19 +582,20 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
     {
       pTheta     = std::atan2(rho,p.z());
       distSTheta = std::fabs(pTheta-fSTheta); 
-      distETheta = std::fabs(pTheta-fSTheta-fDTheta); 
+      distETheta = std::fabs(pTheta-fSTheta-fDTheta);
+ 
+      nTs = G4ThreeVector(-std::cos(fSTheta)*std::cos(pPhi),
+                        -std::cos(fSTheta)*std::sin(pPhi),
+                         std::sin(fSTheta)               );
+      nTe = G4ThreeVector( std::cos(fSTheta+fDTheta)*std::cos(pPhi),
+                         std::cos(fSTheta+fDTheta)*std::sin(pPhi),
+                        -std::sin(fSTheta+fDTheta)               );    
     }
     else if( !fRmin )
     {
       if ( fSTheta )                distSTheta = 0.;
       if ( fSTheta + fDTheta < pi ) distETheta = 0.;
-    }
-    nTs = G4ThreeVector(-std::cos(fSTheta)*std::cos(pPhi),
-                        -std::cos(fSTheta)*std::sin(pPhi),
-                         std::sin(fSTheta)               );
-    nTe = G4ThreeVector( std::cos(fSTheta+fDTheta)*std::cos(pPhi),
-                         std::cos(fSTheta+fDTheta)*std::sin(pPhi),
-                        -std::sin(fSTheta+fDTheta)               );
+    }    
   }
   if( rad )  nR = G4ThreeVector(p.x()/rad,p.y()/rad,p.z()/rad);
 
