@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.31 2005-05-06 08:50:23 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.32 2005-06-07 16:54:33 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -102,9 +102,18 @@ void G4PhysicalVolumeModel::CalculateExtent () {
        false); // View digis - not relevant for physical volume model.
     fpMP = &mParams;
     DescribeYourselfTo (bsScene);
-    fExtent = bsScene.GetBoundingSphereExtent ();
-    if (!(fExtent.GetXmin() < fExtent.GetXmax())) {
+    G4double radius = bsScene.GetRadius();
+    if (radius < 0.) {  // Nothing in the scene.
       fExtent = fpTopPV -> GetLogicalVolume () -> GetSolid () -> GetExtent ();
+    } else {
+      // Transform back to coordinates relative to the top
+      // transformation, which is in G4VModel::fTransform.  This makes
+      // it conform to all models, which are defined by a
+      // transformation and an extent relative to that
+      // transformation...
+      G4Point3D centre = bsScene.GetCentre();
+      centre.transform(fTransform.inverse());
+      fExtent = G4VisExtent(centre, radius);
     }
     fpMP = tempMP;
     fRequestedDepth = tempRequestedDepth;

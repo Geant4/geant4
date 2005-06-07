@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingSphereScene.hh,v 1.14 2005-01-27 20:06:29 johna Exp $
+// $Id: G4BoundingSphereScene.hh,v 1.15 2005-06-07 16:54:33 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,6 +68,10 @@ public:
   void AddCompound (const G4VTrajectory&) {}
   void AddCompound (const G4VHit&) {}
   G4VisExtent GetBoundingSphereExtent ();
+  const G4Point3D& GetCentre() const {return fCentre;}
+  G4double GetRadius() const {return fRadius;}
+
+  void SetCentre(const G4Point3D& centre) {fCentre = centre;}
 
   ////////////////////////////////////////////////////////////////
   // The following 2 functions can be used by any code which wishes to
