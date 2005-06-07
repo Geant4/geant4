@@ -1,4 +1,4 @@
-$Id: History,v 1.81 2005-06-06 13:53:09 gcosmo Exp $
+$Id: History,v 1.82 2005-06-07 13:52:21 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,15 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Jun, 6, 2005  V.Grichine                 geom-csg-V07-00-08
-- Fixed bug in G4Cons::SurfaceNormal(p) for normals returned from
+Jun 6, 2005  V.Grichine                  geom-csg-V07-00-08
+- Correction to SurfaceNormal() for G4Cons, G4Sphere, G4Torus, G4Tubs
+  for properly handling location on z-axis and in the frame origin.
+  Fixed bug in G4Cons::SurfaceNormal(p) for normals returned from
   rmax and rmin.
 - Moved debug printouts for surface-normals to G4CSGDEBUG.
-- Cleared compilation warnings in unit tests.
-
-Jun, 6, 2005  V.Grichine                 geom-csg-V07-00-08
-- Fixed bug in G4Cons::SurfaceNormal(p) for normals returned from
-  rmax and rmin.
+- Cleared compilation warnings in unit tests and updates.
 
 May 27, 2005  J.Allison                  geom-csg-V07-00-07
 - Fixed polyhedron representation of G4Torus.
