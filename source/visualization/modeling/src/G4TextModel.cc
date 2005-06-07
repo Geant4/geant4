@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TextModel.cc,v 1.5 2005-05-31 17:01:25 allison Exp $
+// $Id: G4TextModel.cc,v 1.6 2005-06-07 16:53:40 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,17 +33,17 @@
 #include "G4ModelingParameters.hh"
 #include "G4VGraphicsScene.hh"
 
+#include "G4UnitsTable.hh"
 #include <sstream>
 
 G4TextModel::~G4TextModel () {}
 
 G4TextModel::G4TextModel (const G4Text& g4Text): fG4Text(g4Text) {
   std::ostringstream oss;
-  oss << "G4TextModel: " << fG4Text.GetText()
-      << " at " << g4Text.GetPosition()
-      << " with size " << g4Text.GetScreenSize()
-      << " with offsets " << g4Text.GetXOffset() << ',' << g4Text.GetYOffset()
-      << std::endl;
+  oss << "G4TextModel: \"" << fG4Text.GetText()
+      << "\" at " << G4BestUnit(g4Text.GetPosition(),"Length")
+      << "with size " << g4Text.GetScreenSize()
+      << " with offsets " << g4Text.GetXOffset() << ',' << g4Text.GetYOffset();
   fGlobalTag = oss.str();
   fGlobalDescription = fGlobalTag;
 }
