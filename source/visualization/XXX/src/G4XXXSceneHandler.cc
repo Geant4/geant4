@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.22 2005-06-02 17:00:11 allison Exp $
+// $Id: G4XXXSceneHandler.cc,v 1.23 2005-06-07 16:46:33 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -93,8 +93,7 @@ std::vector<std::pair<G4VPhysicalVolume*, G4int> >::const_iterator
 PVPath_const_iterator;
 
 void G4XXXSceneHandler::PreAddSolid
-(const G4Transform3D& objectTransformation,
- const G4VisAttributes& visAttribs) {
+(const G4Transform3D&, const G4VisAttributes&) {
   using namespace std;
   G4cout <<
     "Current PV/LV/depth: "
@@ -419,7 +418,7 @@ void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
   //Get colour, etc..
   //const G4Colour& c = pVA -> GetColour ();
   
-  // Initial action depending on drwaing style.
+  // Initial action depending on drawing style.
   switch (drawing_style) {
   case (G4ViewParameters::hsr):
     {
@@ -481,7 +480,6 @@ void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
   } while (notLastFace);  
 }
 
-//void G4XXXSceneHandler::AddPrimitive(const G4NURBS& nurbs) {
 void G4XXXSceneHandler::AddPrimitive(const G4NURBS&) {
 #ifdef G4XXXDEBUG
   G4cout <<

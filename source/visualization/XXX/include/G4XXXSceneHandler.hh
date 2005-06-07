@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.hh,v 1.15 2005-06-02 17:00:11 allison Exp $
+// $Id: G4XXXSceneHandler.hh,v 1.16 2005-06-07 16:46:33 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,7 @@
 #ifndef G4XXXSCENEHANDLER_HH
 #define G4XXXSCENEHANDLER_HH
 
-//#define G4XXXDEBUG  // Comment this out to suppress debug code.
+#define G4XXXDEBUG  // Comment this out to suppress debug code.
 
 #include "G4VSceneHandler.hh"
 
