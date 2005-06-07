@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.41 2005-03-10 19:33:03 allison Exp $
+// $Id: G4VisCommandsScene.cc,v 1.42 2005-06-07 17:00:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -420,6 +420,16 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
     return;
   }
 
+  // Store current context...
+  G4VSceneHandler* pCurrentSceneHandler =
+    fpVisManager -> GetCurrentSceneHandler();
+  G4VViewer* pCurrentViewer = fpVisManager -> GetCurrentViewer();
+  G4Scene* pCurrentScene = fpVisManager -> GetCurrentScene();
+  G4VisManager::Verbosity currentVerbosity = fpVisManager -> GetVerbosity();
+
+  // Suppress messages during this process (only print errors)...
+  //fpVisManager -> SetVerboseLevel(G4VisManager::errors);
+
   // For each scene handler, if it contains the scene, clear and
   // rebuild the graphical database, then for each viewer set (make
   // current), clear, (re)draw, and show.
@@ -436,8 +446,12 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
 	const G4int nViewers = viewerList.size ();
 	for (G4int iV = 0; iV < nViewers; iV++) {
 	  G4VViewer* aViewer = viewerList [iV];
-	  aSceneHandler -> SetCurrentViewer (aViewer);  // Temporarily.
-	  aViewer -> SetView ();  // Temporarily switch contexts.
+	  aSceneHandler -> SetCurrentViewer (aViewer);
+	  // Ensure consistency of vis manager...
+	  fpVisManager -> SetCurrentViewer(aViewer);
+	  fpVisManager -> SetCurrentSceneHandler(aSceneHandler);
+	  fpVisManager -> SetCurrentScene(aScene);
+	  aViewer -> SetView ();
 	  //??aViewer -> ClearView ();
 	  aViewer -> DrawView ();
 	  if (flush) aViewer -> ShowView ();
@@ -462,14 +476,26 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
       }
     }
   }
-  // Reclaim original context...
-  G4VSceneHandler* pCurrentSceneHandler =
-    fpVisManager -> GetCurrentSceneHandler();
-  G4VViewer* pCurrentViewer = fpVisManager -> GetCurrentViewer();
+
+  // Reclaim original context - but set viewer first, then scene
+  // handler, because the latter might have been created very recently
+  // and, not yet having a viewer, the current viewer will,
+  // temporarily, refer to another scene handler.  SetCurrentViewer
+  // actually resets the scene handler, which is what we don't want,
+  // so we set it again on the next line...
+  fpVisManager -> SetCurrentViewer(pCurrentViewer);
+  fpVisManager -> SetCurrentSceneHandler(pCurrentSceneHandler);
+  fpVisManager -> SetCurrentScene(pCurrentScene);
+  fpVisManager -> SetVerboseLevel(currentVerbosity);
+  // Take care of special case of scene handler with no viewer yet.  
   if (pCurrentSceneHandler) {
-    pCurrentSceneHandler -> SetCurrentViewer (pCurrentViewer);
-    if (pCurrentViewer && pCurrentSceneHandler->GetScene()) {
-      pCurrentViewer -> SetView ();
+    G4ViewerList& viewerList = pCurrentSceneHandler -> SetViewerList ();
+    const G4int nViewers = viewerList.size ();
+    if (nViewers) {
+      pCurrentSceneHandler -> SetCurrentViewer (pCurrentViewer);
+      if (pCurrentViewer && pCurrentSceneHandler->GetScene()) {
+	pCurrentViewer -> SetView ();
+      }
     }
   }
 }
