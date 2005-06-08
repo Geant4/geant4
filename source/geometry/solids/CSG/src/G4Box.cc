@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.37 2005-06-06 13:21:43 grichine Exp $
+// $Id: G4Box.cc,v 1.38 2005-06-08 12:43:54 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -452,6 +452,7 @@ G4ThreeVector G4Box::SurfaceNormal( const G4ThreeVector& p) const
      G4Exception("G4Box::SurfaceNormal(p)", "Notification", JustWarning, 
 		 "Point p is not on surface !?" );
 #endif 
+     norm = ApproxSurfaceNormal(p);
   }
   
   return norm;
@@ -965,3 +966,48 @@ G4ThreeVector G4Box::GetPointOnSurface() const
   } 
   return G4ThreeVector(px,py,pz);
 }
+
+//////////////////////////////////////////////////////////////////////////
+//
+//
+
+G4ThreeVector G4Box::ApproxSurfaceNormal( const G4ThreeVector& p) const
+{
+  G4double distx, disty, distz ;
+  G4ThreeVector norm ;
+
+  // Calculate distances as if in 1st octant
+
+  distx = std::fabs(std::fabs(p.x()) - fDx) ;
+  disty = std::fabs(std::fabs(p.y()) - fDy) ;
+  distz = std::fabs(std::fabs(p.z()) - fDz) ;
+
+  if ( distx <= disty )
+  {
+    if ( distx <= distz )     // Closest to X
+    {
+      if ( p.x() < 0 ) norm = G4ThreeVector(-1.0,0,0) ;
+      else             norm = G4ThreeVector( 1.0,0,0) ;
+    }
+    else                      // Closest to Z
+    {
+      if ( p.z() < 0 ) norm = G4ThreeVector(0,0,-1.0) ;
+      else             norm = G4ThreeVector(0,0, 1.0) ;
+    }
+  }
+  else
+  {
+    if ( disty <= distz )      // Closest to Y
+    {
+      if ( p.y() < 0 ) norm = G4ThreeVector(0,-1.0,0) ;
+      else             norm = G4ThreeVector(0, 1.0,0) ;
+    }
+    else                       // Closest to Z
+    {
+      if ( p.z() < 0 ) norm = G4ThreeVector(0,0,-1.0) ;
+      else             norm = G4ThreeVector(0,0, 1.0) ;
+    }
+  }
+  return norm;
+}
+

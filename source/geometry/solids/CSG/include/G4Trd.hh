@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.hh,v 1.11 2005-06-06 13:02:19 grichine Exp $
+// $Id: G4Trd.hh,v 1.12 2005-06-08 12:43:54 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -152,6 +152,10 @@ class G4Trd : public G4CSGSolid
     // Codes for faces (kPX=plus x face,kMY= minus y face etc)
 
     enum ESide {kUndefined, kPX,kMX,kPY,kMY,kPZ,kMZ};
+
+private:
+
+    G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
 
 };
 

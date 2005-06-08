@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.hh,v 1.11 2005-06-06 13:02:19 grichine Exp $
+// $Id: G4Para.hh,v 1.12 2005-06-08 12:43:54 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -147,6 +147,8 @@ class G4Para : public G4CSGSolid
     CreateRotatedVertices(const G4AffineTransform& pTransform) const;
 
   private:
+
+    G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p) const;
 
     G4double fDx,fDy,fDz;
     G4double fTalpha,fTthetaCphi,fTthetaSphi;

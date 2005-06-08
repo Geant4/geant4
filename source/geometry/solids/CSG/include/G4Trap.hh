@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.hh,v 1.10 2004-12-02 09:31:28 gcosmo Exp $
+// $Id: G4Trap.hh,v 1.11 2005-06-08 12:43:54 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -236,6 +236,8 @@ class G4Trap : public G4CSGSolid
       // for G4CSGSolid:: ClipCrossSection and ClipBetweenSections
 
   private:
+
+    G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
 
     G4double fDz,fTthetaCphi,fTthetaSphi;
     G4double fDy1,fDx1,fDx2,fTalpha1;

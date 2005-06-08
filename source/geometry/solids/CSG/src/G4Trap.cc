@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.35 2005-06-06 13:21:43 grichine Exp $
+// $Id: G4Trap.cc,v 1.36 2005-06-08 12:43:54 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -1141,6 +1141,7 @@ G4ThreeVector G4Trap::SurfaceNormal( const G4ThreeVector& p ) const
     G4Exception("G4Trap::SurfaceNormal(p)", "Notification", JustWarning, 
                 "Point p is not on surface !?" );
 #endif 
+     norm = ApproxSurfaceNormal(p);
   }
   else if ( noSurfaces == 1 ) norm = sumnorm;
   else                        norm = sumnorm.unit();
@@ -1747,6 +1748,46 @@ G4NURBS* G4Trap::CreateNURBS () const
    // return new G4NURBSbox (fDx, fDy, fDz);
    return 0 ;
 }
+
+////////////////////////////////////////////////////////////////////////////////////
+//
+//
+
+G4ThreeVector G4Trap::ApproxSurfaceNormal( const G4ThreeVector& p ) const
+{
+  G4double safe=kInfinity,Dist,safez;
+  G4int i,imin=0;
+  for (i=0;i<4;i++)
+  {
+    Dist=std::fabs(fPlanes[i].a*p.x()+fPlanes[i].b*p.y()
+        +fPlanes[i].c*p.z()+fPlanes[i].d);
+    if (Dist<safe)
+    {
+      safe=Dist;
+      imin=i;
+    }
+  }
+  safez=std::fabs(std::fabs(p.z())-fDz);
+  if (safe<safez)
+  {
+    return G4ThreeVector(fPlanes[imin].a,fPlanes[imin].b,fPlanes[imin].c);
+  }
+  else
+  {
+    if (p.z()>0)
+    {
+      return G4ThreeVector(0,0,1);
+    }
+    else
+    {
+      return G4ThreeVector(0,0,-1);
+    }
+  }
+}
+
+
+
+
 
 
 // ********************************  End of G4Trap.cc   ********************************
