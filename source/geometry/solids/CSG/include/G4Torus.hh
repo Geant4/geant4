@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.hh,v 1.17 2005-05-20 15:34:22 grichine Exp $
+// $Id: G4Torus.hh,v 1.18 2005-06-08 13:05:22 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -186,6 +186,8 @@ class G4Torus : public G4CSGSolid
     enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi};
 
   private:
+
+    G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p) const;
 
     inline G4double TorusEquation (G4double x, G4double y, G4double z,
                                    G4double R0, G4double R1) const;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.hh,v 1.11 2004-12-10 16:22:37 gcosmo Exp $
+// $Id: G4Cons.hh,v 1.12 2005-06-08 13:05:22 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -164,6 +164,8 @@ class G4Cons : public G4CSGSolid
         enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
 
   private:
+
+        G4ThreeVector ApproxSurfaceNormal(const G4ThreeVector& p) const;
 
         G4double fRmin1,fRmin2,
                  fRmax1,fRmax2,

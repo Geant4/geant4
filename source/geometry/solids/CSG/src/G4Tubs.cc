@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.52 2005-06-07 09:34:47 grichine Exp $
+// $Id: G4Tubs.cc,v 1.53 2005-06-08 13:05:22 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -626,6 +626,7 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
     G4Exception("G4Tube::SurfaceNormal(p)", "Notification", JustWarning, 
                 "Point p is not on surface !?" );
 #endif 
+     norm = ApproxSurfaceNormal(p);
   }
   else if ( noSurfaces == 1 ) norm = sumnorm;
   else                        norm = sumnorm.unit();
@@ -1653,6 +1654,122 @@ G4NURBS* G4Tubs::CreateNURBS () const
   }
   return pNURBS ;
 }
+
+/////////////////////////////////////////////////////////////////////////////////////
+//
+//
+
+G4ThreeVector G4Tubs::ApproxSurfaceNormal( const G4ThreeVector& p ) const
+{
+  ENorm side ;
+  G4ThreeVector norm ;
+  G4double rho, phi ;
+  G4double distZ, distRMin, distRMax, distSPhi, distEPhi, distMin ;
+
+  rho = std::sqrt(p.x()*p.x() + p.y()*p.y()) ;
+
+  distRMin = std::fabs(rho - fRMin) ;
+  distRMax = std::fabs(rho - fRMax) ;
+  distZ    = std::fabs(std::fabs(p.z()) - fDz) ;
+
+  if (distRMin < distRMax) // First minimum
+  {
+    if ( distZ < distRMin )
+    {
+       distMin = distZ ;
+       side    = kNZ ;
+    }
+    else
+    {
+      distMin = distRMin ;
+      side    = kNRMin   ;
+    }
+  }
+  else
+  {
+    if ( distZ < distRMax )
+    {
+      distMin = distZ ;
+      side    = kNZ   ;
+    }
+    else
+    {
+      distMin = distRMax ;
+      side    = kNRMax   ;
+    }
+  }   
+  if (fDPhi < twopi  &&  rho ) // Protected against (0,0,z) 
+  {
+    phi = std::atan2(p.y(),p.x()) ;
+
+    if ( phi < 0 ) phi += twopi ;
+
+    if ( fSPhi < 0 )
+    {
+      distSPhi = std::fabs(phi - (fSPhi + twopi))*rho ;
+    }
+    else
+    {
+      distSPhi = std::fabs(phi - fSPhi)*rho ;
+    }
+    distEPhi = std::fabs(phi - fSPhi - fDPhi)*rho ;
+                                      
+    if (distSPhi < distEPhi) // Find new minimum
+    {
+      if ( distSPhi < distMin )
+      {
+        side = kNSPhi ;
+      }
+    }
+    else
+    {
+      if ( distEPhi < distMin )
+      {
+        side = kNEPhi ;
+      }
+    }
+  }    
+  switch ( side )
+  {
+    case kNRMin : // Inner radius
+    {                      
+      norm = G4ThreeVector(-p.x()/rho,-p.y()/rho,0) ;
+      break ;
+    }
+    case kNRMax : // Outer radius
+    {                  
+      norm = G4ThreeVector(p.x()/rho,p.y()/rho,0) ;
+      break ;
+    }
+    case kNZ : //    + or - dz
+    {                              
+      if ( p.z() > 0 ) norm = G4ThreeVector(0,0,1)  ; 
+      else             norm = G4ThreeVector(0,0,-1) ; 
+      break ;
+    }
+    case kNSPhi:
+    {
+      norm = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0) ;
+      break ;
+    }
+    case kNEPhi:
+    {
+      norm = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0) ;
+      break;
+    }
+    default:
+    {
+      DumpInfo();
+      G4Exception("G4Tubs::ApproxSurfaceNormal()", "Notification", JustWarning,
+                  "Undefined side for valid surface normal to solid.");
+      break ;
+    }    
+  }                
+  return norm;
+}
+
+
+
 
 //
 //

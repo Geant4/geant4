@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.hh,v 1.9 2004-09-08 15:13:52 grichine Exp $
+// $Id: G4Tubs.hh,v 1.10 2005-06-08 13:05:22 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -161,6 +161,10 @@ class G4Tubs : public G4CSGSolid
     // used by normal
 
     enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
+
+  private:
+
+    G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
 
 };
 
