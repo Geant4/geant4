@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationGEMFactory.cc,v 1.3 2005-06-04 13:25:25 jwellisc Exp $
+// $Id: G4EvaporationGEMFactory.cc,v 1.4 2005-06-08 06:26:06 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -139,14 +139,14 @@ typedef GROUP68(G4NeutronGEMChannel, G4ProtonGEMChannel, G4DeuteronGEMChannel, G
                 G4Mg27GEMChannel, G4Mg28GEMChannel, G4CompetitiveFission, G4PhotonEvaporation) the_channels;
 
   template<class U>
-  static void gem_push_one_new(std::vector<G4VEvaporationChannel*> * list)
+  void gem_push_one_new(std::vector<G4VEvaporationChannel*> * list)
   {
     list->push_back(new typename U::first);
     gem_push_one_new<typename U::rest>(list);
   }
   // partial specializaion not supported yet...
   template<> 
-  static void gem_push_one_new<G4Pair<G4PhotonEvaporation, G4Terminator> >(std::vector<G4VEvaporationChannel*> * list)
+  void gem_push_one_new<G4Pair<G4PhotonEvaporation, G4Terminator> >(std::vector<G4VEvaporationChannel*> * list)
   {
     list->push_back(new G4PhotonEvaporation);
   }
