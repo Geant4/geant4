@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.47 2005-06-08 13:05:22 grichine Exp $
+// $Id: G4Sphere.cc,v 1.48 2005-06-08 16:14:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -649,6 +649,168 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
   }
   else if ( noSurfaces == 1 ) norm = sumnorm;
   else                        norm = sumnorm.unit();
+  return norm;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Algorithm for SurfaceNormal() following the original specification
+// for points not on the surface
+
+G4ThreeVector G4Sphere::ApproxSurfaceNormal( const G4ThreeVector& p ) const
+{
+  ENorm side;
+  G4ThreeVector norm;
+  G4double rho,rho2,rad,pPhi,pTheta;
+  G4double distRMin,distRMax,distSPhi,distEPhi,
+           distSTheta,distETheta,distMin;
+
+  rho2=p.x()*p.x()+p.y()*p.y();
+  rad=std::sqrt(rho2+p.z()*p.z());
+  rho=std::sqrt(rho2);
+
+  //
+  // Distance to r shells
+  //
+
+  distRMax=std::fabs(rad-fRmax);
+  if (fRmin)
+  {
+    distRMin=std::fabs(rad-fRmin);
+      
+    if (distRMin<distRMax)
+    {
+      distMin=distRMin;
+      side=kNRMin;
+    }
+    else
+    {   
+      distMin=distRMax;
+      side=kNRMax;
+    }
+  }
+  else
+  {
+    distMin=distRMax;
+    side=kNRMax;
+  }
+
+  //
+  // Distance to phi planes
+  //
+  // Protected against (0,0,z) 
+    
+  pPhi = std::atan2(p.y(),p.x());
+  if (pPhi<0) pPhi += twopi;
+
+  if (fDPhi<twopi&&rho)
+  {
+    if (fSPhi<0)
+    {
+      distSPhi=std::fabs(pPhi-(fSPhi+twopi))*rho;
+    }
+    else
+    {
+      distSPhi=std::fabs(pPhi-fSPhi)*rho;
+    }
+
+    distEPhi=std::fabs(pPhi-fSPhi-fDPhi)*rho;
+
+    // Find new minimum
+    //
+    if (distSPhi<distEPhi)
+    {
+      if (distSPhi<distMin)
+      {
+        distMin=distSPhi;
+        side=kNSPhi;
+      }
+    }
+    else
+    {
+      if (distEPhi<distMin)
+      {
+        distMin=distEPhi;
+        side=kNEPhi;
+      }
+    }
+  }
+
+  //
+  // Distance to theta planes
+  //
+
+  if (fDTheta<pi&&rad)
+  {
+    pTheta=std::atan2(rho,p.z());
+    distSTheta=std::fabs(pTheta-fSTheta)*rad;
+    distETheta=std::fabs(pTheta-fSTheta-fDTheta)*rad;
+
+    // Find new minimum
+    //
+    if (distSTheta<distETheta)
+    {
+      if (distSTheta<distMin)
+      {
+        distMin = distSTheta ;
+        side = kNSTheta ;
+      }
+    }
+    else
+    {
+      if (distETheta<distMin)
+      {
+        distMin = distETheta ;
+        side = kNETheta ;
+      }
+    }
+  }
+
+  switch (side)
+  {
+    case kNRMin:      // Inner radius
+      norm=G4ThreeVector(-p.x()/rad,-p.y()/rad,-p.z()/rad);
+      break;
+    case kNRMax:      // Outer radius
+      norm=G4ThreeVector(p.x()/rad,p.y()/rad,p.z()/rad);
+      break;
+    case kNSPhi:
+      norm=G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0);
+      break;
+    case kNEPhi:
+      norm=G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0);
+      break;
+    case kNSTheta:
+      norm=G4ThreeVector(-std::cos(fSTheta)*std::cos(pPhi),
+                         -std::cos(fSTheta)*std::sin(pPhi),
+                          std::sin(fSTheta)            );
+      //  G4cout<<G4endl<<" case kNSTheta:"<<G4endl;
+      //  G4cout<<"pPhi = "<<pPhi<<G4endl;
+      //  G4cout<<"rad  = "<<rad<<G4endl;
+      //  G4cout<<"pho  = "<<rho<<G4endl;
+      //  G4cout<<"p:    "<<p.x()<<"; "<<p.y()<<"; "<<p.z()<<G4endl;
+      //  G4cout<<"norm: "<<norm.x()<<"; "<<norm.y()<<"; "<<norm.z()<<G4endl;
+      break;
+    case kNETheta:
+      norm=G4ThreeVector( std::cos(fSTheta+fDTheta)*std::cos(pPhi),
+                          std::cos(fSTheta+fDTheta)*std::sin(pPhi),
+                         -std::sin(fSTheta+fDTheta)              );
+
+      //  G4cout<<G4endl<<" case kNETheta:"<<G4endl;
+      //  G4cout<<"pPhi = "<<pPhi<<G4endl;
+      //  G4cout<<"rad  = "<<rad<<G4endl;
+      //  G4cout<<"pho  = "<<rho<<G4endl;
+      //  G4cout<<"p:    "<<p.x()<<"; "<<p.y()<<"; "<<p.z()<<G4endl;
+      //  G4cout<<"norm: "<<norm.x()<<"; "<<norm.y()<<"; "<<norm.z()<<G4endl;
+      break;
+    default:
+      DumpInfo();
+      G4Exception("G4Sphere::ApproxSurfaceNormal()", "Notification", JustWarning,
+                  "Undefined side for valid surface normal to solid.");
+      break;    
+  } // end case
+
   return norm;
 }
 
@@ -2761,169 +2923,3 @@ G4NURBS* G4Sphere::CreateNURBS () const
 {
   return new G4NURBSbox (fRmax, fRmax, fRmax);       // Box for now!!!
 }
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-
-G4ThreeVector G4Sphere::ApproxSurfaceNormal( const G4ThreeVector& p ) const
-{
-  ENorm side;
-  G4ThreeVector norm;
-  G4double rho,rho2,rad,pPhi,pTheta;
-  G4double distRMin,distRMax,distSPhi,distEPhi,
-           distSTheta,distETheta,distMin;
-
-  rho2=p.x()*p.x()+p.y()*p.y();
-  rad=std::sqrt(rho2+p.z()*p.z());
-  rho=std::sqrt(rho2);
-
-  //
-  // Distance to r shells
-  //
-
-  distRMax=std::fabs(rad-fRmax);
-  if (fRmin)
-  {
-    distRMin=std::fabs(rad-fRmin);
-      
-    if (distRMin<distRMax)
-    {
-      distMin=distRMin;
-      side=kNRMin;
-    }
-    else
-    {   
-      distMin=distRMax;
-      side=kNRMax;
-    }
-  }
-  else
-  {
-    distMin=distRMax;
-    side=kNRMax;
-  }
-
-  //
-  // Distance to phi planes
-  //
-  // Protected against (0,0,z) 
-    
-  pPhi = std::atan2(p.y(),p.x());
-  if (pPhi<0) pPhi += twopi;
-
-  if (fDPhi<twopi&&rho)
-  {
-    if (fSPhi<0)
-    {
-      distSPhi=std::fabs(pPhi-(fSPhi+twopi))*rho;
-    }
-    else
-    {
-      distSPhi=std::fabs(pPhi-fSPhi)*rho;
-    }
-
-    distEPhi=std::fabs(pPhi-fSPhi-fDPhi)*rho;
-
-    // Find new minimum
-    //
-    if (distSPhi<distEPhi)
-    {
-      if (distSPhi<distMin)
-      {
-        distMin=distSPhi;
-        side=kNSPhi;
-      }
-    }
-    else
-    {
-      if (distEPhi<distMin)
-      {
-        distMin=distEPhi;
-        side=kNEPhi;
-      }
-    }
-  }
-
-  //
-  // Distance to theta planes
-  //
-
-  if (fDTheta<pi&&rad)
-  {
-    pTheta=std::atan2(rho,p.z());
-    distSTheta=std::fabs(pTheta-fSTheta)*rad;
-    distETheta=std::fabs(pTheta-fSTheta-fDTheta)*rad;
-
-    // Find new minimum
-    //
-    if (distSTheta<distETheta)
-    {
-      if (distSTheta<distMin)
-      {
-        distMin = distSTheta ;
-        side = kNSTheta ;
-      }
-    }
-    else
-    {
-      if (distETheta<distMin)
-      {
-        distMin = distETheta ;
-        side = kNETheta ;
-      }
-    }
-  }
-
-  switch (side)
-  {
-    case kNRMin:      // Inner radius
-      norm=G4ThreeVector(-p.x()/rad,-p.y()/rad,-p.z()/rad);
-      break;
-    case kNRMax:      // Outer radius
-      norm=G4ThreeVector(p.x()/rad,p.y()/rad,p.z()/rad);
-      break;
-    case kNSPhi:
-      norm=G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0);
-      break;
-    case kNEPhi:
-      norm=G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0);
-      break;
-    case kNSTheta:
-      norm=G4ThreeVector(-std::cos(fSTheta)*std::cos(pPhi),
-                         -std::cos(fSTheta)*std::sin(pPhi),
-                          std::sin(fSTheta)            );
-      //  G4cout<<G4endl<<" case kNSTheta:"<<G4endl;
-      //  G4cout<<"pPhi = "<<pPhi<<G4endl;
-      //  G4cout<<"rad  = "<<rad<<G4endl;
-      //  G4cout<<"pho  = "<<rho<<G4endl;
-      //  G4cout<<"p:    "<<p.x()<<"; "<<p.y()<<"; "<<p.z()<<G4endl;
-      //  G4cout<<"norm: "<<norm.x()<<"; "<<norm.y()<<"; "<<norm.z()<<G4endl;
-      break;
-    case kNETheta:
-      norm=G4ThreeVector( std::cos(fSTheta+fDTheta)*std::cos(pPhi),
-                          std::cos(fSTheta+fDTheta)*std::sin(pPhi),
-                         -std::sin(fSTheta+fDTheta)              );
-
-      //  G4cout<<G4endl<<" case kNETheta:"<<G4endl;
-      //  G4cout<<"pPhi = "<<pPhi<<G4endl;
-      //  G4cout<<"rad  = "<<rad<<G4endl;
-      //  G4cout<<"pho  = "<<rho<<G4endl;
-      //  G4cout<<"p:    "<<p.x()<<"; "<<p.y()<<"; "<<p.z()<<G4endl;
-      //  G4cout<<"norm: "<<norm.x()<<"; "<<norm.y()<<"; "<<norm.z()<<G4endl;
-      break;
-    default:
-      DumpInfo();
-      G4Exception("G4Sphere::ApproxSurfaceNormal()", "Notification", JustWarning,
-                  "Undefined side for valid surface normal to solid.");
-      break;    
-  } // end case
-
-  return norm;
-}
-
-
-
-//  End of G4Sphere.cc 
-//
-///////////////////////////////////////////////////////////////////////////

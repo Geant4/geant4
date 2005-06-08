@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.50 2005-06-08 13:05:22 grichine Exp $
+// $Id: G4Torus.cc,v 1.51 2005-06-08 16:14:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1171,6 +1171,93 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
   else if ( noSurfaces == 1 ) norm = sumnorm;
   else                        norm = sumnorm.unit();
 
+  return norm ;
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+//
+// Algorithm for SurfaceNormal() following the original specification
+// for points not on the surface
+
+G4ThreeVector G4Torus::ApproxSurfaceNormal( const G4ThreeVector& p ) const
+{
+  ENorm side ;
+  G4ThreeVector norm;
+  G4double rho2,rho,pt2,pt,phi;
+  G4double distRMin,distRMax,distSPhi,distEPhi,distMin;
+
+  rho2 = p.x()*p.x() + p.y()*p.y();
+  rho = std::sqrt(rho2) ;
+  pt2 = std::fabs(rho2+p.z()*p.z() +fRtor*fRtor - 2*fRtor*rho) ;
+  pt = std::sqrt(pt2) ;
+
+  distRMax = std::fabs(pt - fRmax) ;
+
+
+  if(fRmin)  // First minimum radius
+  {
+    distRMin = std::fabs(pt - fRmin) ;
+
+    if (distRMin < distRMax)
+    {
+      distMin = distRMin ;
+      side    = kNRMin ;
+    }
+    else
+    {
+      distMin = distRMax ;
+      side    = kNRMax ;
+    }
+  }
+  else
+  {
+    distMin = distRMax ;
+    side    = kNRMax ;
+  }    
+  if (fDPhi < twopi && rho )
+  {
+    phi = std::atan2(p.y(),p.x()) ; // Protected against (0,0,z) (above rho !=0)
+
+    if (phi < 0) phi += twopi ;
+
+    if (fSPhi < 0 ) distSPhi = std::fabs(phi-(fSPhi+twopi))*rho ;
+    else            distSPhi = std::fabs(phi-fSPhi)*rho ;
+
+    distEPhi = std::fabs(phi - fSPhi - fDPhi)*rho ;
+
+    if (distSPhi < distEPhi) // Find new minimum
+    {
+      if (distSPhi<distMin) side = kNSPhi ;
+    }
+    else
+    {
+      if (distEPhi < distMin) side = kNEPhi ;
+    }
+  }  
+  switch (side)
+  {
+    case kNRMin:      // Inner radius
+      norm = G4ThreeVector( -p.x()*(1-fRtor/rho)/pt,
+                            -p.y()*(1-fRtor/rho)/pt,
+                            -p.z()/pt                 ) ;
+      break ;
+    case kNRMax:      // Outer radius
+      norm = G4ThreeVector( p.x()*(1-fRtor/rho)/pt,
+                            p.y()*(1-fRtor/rho)/pt,
+                            p.z()/pt                  ) ;
+      break;
+    case kNSPhi:
+      norm = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0) ;
+      break;
+    case kNEPhi:
+      norm = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0) ;
+      break;
+    default:
+      DumpInfo();
+      G4Exception("G4Torus::ApproxSurfaceNormal()", "Notification", JustWarning,
+                  "Undefined side for valid surface normal to solid.");
+      break ;
+  } 
   return norm ;
 }
 
@@ -3193,98 +3280,6 @@ G4double G4Torus::DistanceToTorus ( G4double x, G4double y, G4double z,
     return kInfinity;
   }
 }
-
-/////////////////////////////////////////////////////////////////////////////////
-//
-//
-
-
-
-G4ThreeVector G4Torus::ApproxSurfaceNormal( const G4ThreeVector& p ) const
-{
-  ENorm side ;
-  G4ThreeVector norm;
-  G4double rho2,rho,pt2,pt,phi;
-  G4double distRMin,distRMax,distSPhi,distEPhi,distMin;
-
-  rho2 = p.x()*p.x() + p.y()*p.y();
-  rho = std::sqrt(rho2) ;
-  pt2 = std::fabs(rho2+p.z()*p.z() +fRtor*fRtor - 2*fRtor*rho) ;
-  pt = std::sqrt(pt2) ;
-
-  distRMax = std::fabs(pt - fRmax) ;
-
-
-  if(fRmin)  // First minimum radius
-  {
-    distRMin = std::fabs(pt - fRmin) ;
-
-    if (distRMin < distRMax)
-    {
-      distMin = distRMin ;
-      side    = kNRMin ;
-    }
-    else
-    {
-      distMin = distRMax ;
-      side    = kNRMax ;
-    }
-  }
-  else
-  {
-    distMin = distRMax ;
-    side    = kNRMax ;
-  }    
-  if (fDPhi < twopi && rho )
-  {
-    phi = std::atan2(p.y(),p.x()) ; // Protected against (0,0,z) (above rho !=0)
-
-    if (phi < 0) phi += twopi ;
-
-    if (fSPhi < 0 ) distSPhi = std::fabs(phi-(fSPhi+twopi))*rho ;
-    else            distSPhi = std::fabs(phi-fSPhi)*rho ;
-
-    distEPhi = std::fabs(phi - fSPhi - fDPhi)*rho ;
-
-    if (distSPhi < distEPhi) // Find new minimum
-    {
-      if (distSPhi<distMin) side = kNSPhi ;
-    }
-    else
-    {
-      if (distEPhi < distMin) side = kNEPhi ;
-    }
-  }  
-  switch (side)
-  {
-    case kNRMin:      // Inner radius
-      norm = G4ThreeVector( -p.x()*(1-fRtor/rho)/pt,
-                            -p.y()*(1-fRtor/rho)/pt,
-                            -p.z()/pt                 ) ;
-      break ;
-    case kNRMax:      // Outer radius
-      norm = G4ThreeVector( p.x()*(1-fRtor/rho)/pt,
-                            p.y()*(1-fRtor/rho)/pt,
-                            p.z()/pt                  ) ;
-      break;
-    case kNSPhi:
-      norm = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0) ;
-      break;
-    case kNEPhi:
-      norm = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0) ;
-      break;
-    default:
-      DumpInfo();
-      G4Exception("G4Torus::ApproxSurfaceNormal()", "Notification", JustWarning,
-                  "Undefined side for valid surface normal to solid.");
-      break ;
-  } 
-  return norm ;
-}
-
-
-
-
 
 ///////////////////////////////////////////////////////////////////////
 //

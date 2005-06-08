@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.18 2005-06-06 13:21:43 grichine Exp $
+// $Id: G4Orb.cc,v 1.19 2005-06-08 16:14:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Orb
@@ -470,7 +470,7 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
       d2 = pDotV3d*pDotV3d - c;
 
       if( ( c > -fRmaxTolerance*fRmax) &&         // on tolerant surface
-	  ( ( pDotV3d >= 0 )   || ( d2 < 0 )) )   // leaving outside from Rmax 
+          ( ( pDotV3d >= 0 )   || ( d2 < 0 )) )   // leaving outside from Rmax 
                                                   // not re-entering
       {
         if(calcNorm)

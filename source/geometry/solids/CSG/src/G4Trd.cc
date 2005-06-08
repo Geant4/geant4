@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.29 2005-06-08 12:43:54 grichine Exp $
+// $Id: G4Trd.cc,v 1.30 2005-06-08 16:14:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -445,6 +445,85 @@ G4ThreeVector G4Trd::SurfaceNormal( const G4ThreeVector& p ) const
   }
   else if ( noSurfaces == 1 ) norm = sumnorm;
   else                        norm = sumnorm.unit();
+  return norm;   
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Algorithm for SurfaceNormal() following the original specification
+// for points not on the surface
+
+G4ThreeVector G4Trd::ApproxSurfaceNormal( const G4ThreeVector& p ) const
+{
+  G4ThreeVector norm;
+  G4double z,tanx,secx,newpx,widx;
+  G4double tany,secy,newpy,widy;
+  G4double distx,disty,distz,fcos;
+
+  z=2.0*fDz;
+
+  tanx=(fDx2-fDx1)/z;
+  secx=std::sqrt(1.0+tanx*tanx);
+  newpx=std::fabs(p.x())-p.z()*tanx;
+  widx=fDx2-fDz*tanx;
+
+  tany=(fDy2-fDy1)/z;
+  secy=std::sqrt(1.0+tany*tany);
+  newpy=std::fabs(p.y())-p.z()*tany;
+  widy=fDy2-fDz*tany;
+
+  distx=std::fabs(newpx-widx)/secx;  // perpendicular distance to x side
+  disty=std::fabs(newpy-widy)/secy;  //                        to y side
+  distz=std::fabs(std::fabs(p.z())-fDz);  //                        to z side
+
+  // find closest side
+  //
+  if (distx<=disty)
+  { 
+    if (distx<=distz) 
+    {
+      // Closest to X
+      //
+      fcos=1.0/secx;
+      // normal=(+/-std::cos(ang),0,-std::sin(ang))
+      if (p.x()>=0)
+        norm=G4ThreeVector(fcos,0,-tanx*fcos);
+      else
+        norm=G4ThreeVector(-fcos,0,-tanx*fcos);
+    }
+    else
+    {
+      // Closest to Z
+      //
+      if (p.z()>=0)
+        norm=G4ThreeVector(0,0,1);
+      else
+        norm=G4ThreeVector(0,0,-1);
+    }
+  }
+  else
+  {  
+    if (disty<=distz)
+    {
+      // Closest to Y
+      //
+      fcos=1.0/secy;
+      if (p.y()>=0)
+        norm=G4ThreeVector(0,fcos,-tany*fcos);
+      else
+        norm=G4ThreeVector(0,-fcos,-tany*fcos);
+    }
+    else 
+    {
+      // Closest to Z
+      //
+      if (p.z()>=0)
+        norm=G4ThreeVector(0,0,1);
+      else
+        norm=G4ThreeVector(0,0,-1);
+    }
+  }
   return norm;   
 }
 
@@ -1336,86 +1415,3 @@ G4ThreeVector G4Trd::GetPointOnSurface() const
   } 
   return G4ThreeVector(px,py,pz);
 }
-
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-
-G4ThreeVector G4Trd::ApproxSurfaceNormal( const G4ThreeVector& p ) const
-{
-  G4ThreeVector norm;
-  G4double z,tanx,secx,newpx,widx;
-  G4double tany,secy,newpy,widy;
-  G4double distx,disty,distz,fcos;
-
-  z=2.0*fDz;
-
-  tanx=(fDx2-fDx1)/z;
-  secx=std::sqrt(1.0+tanx*tanx);
-  newpx=std::fabs(p.x())-p.z()*tanx;
-  widx=fDx2-fDz*tanx;
-
-  tany=(fDy2-fDy1)/z;
-  secy=std::sqrt(1.0+tany*tany);
-  newpy=std::fabs(p.y())-p.z()*tany;
-  widy=fDy2-fDz*tany;
-
-  distx=std::fabs(newpx-widx)/secx;  // perpendicular distance to x side
-  disty=std::fabs(newpy-widy)/secy;  //                        to y side
-  distz=std::fabs(std::fabs(p.z())-fDz);  //                        to z side
-
-  // find closest side
-  //
-  if (distx<=disty)
-  { 
-    if (distx<=distz) 
-    {
-      // Closest to X
-      //
-      fcos=1.0/secx;
-      // normal=(+/-std::cos(ang),0,-std::sin(ang))
-      if (p.x()>=0)
-        norm=G4ThreeVector(fcos,0,-tanx*fcos);
-      else
-        norm=G4ThreeVector(-fcos,0,-tanx*fcos);
-    }
-    else
-    {
-      // Closest to Z
-      //
-      if (p.z()>=0)
-        norm=G4ThreeVector(0,0,1);
-      else
-        norm=G4ThreeVector(0,0,-1);
-    }
-  }
-  else
-  {  
-    if (disty<=distz)
-    {
-      // Closest to Y
-      //
-      fcos=1.0/secy;
-      if (p.y()>=0)
-        norm=G4ThreeVector(0,fcos,-tany*fcos);
-      else
-        norm=G4ThreeVector(0,-fcos,-tany*fcos);
-    }
-    else 
-    {
-      // Closest to Z
-      //
-      if (p.z()>=0)
-        norm=G4ThreeVector(0,0,1);
-      else
-        norm=G4ThreeVector(0,0,-1);
-    }
-  }
-  return norm;   
-}
-
-
-
-//
-//
-///////////////////////////////////////////////////////////////////////////

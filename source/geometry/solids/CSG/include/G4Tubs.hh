@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.hh,v 1.10 2005-06-08 13:05:22 grichine Exp $
+// $Id: G4Tubs.hh,v 1.11 2005-06-08 16:14:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -165,7 +165,8 @@ class G4Tubs : public G4CSGSolid
   private:
 
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
-
+      // Algorithm for SurfaceNormal() following the original
+      // specification for points not on the surface
 };
 
 #include "G4Tubs.icc"

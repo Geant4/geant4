@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.hh,v 1.12 2005-06-08 12:43:54 grichine Exp $
+// $Id: G4Para.hh,v 1.13 2005-06-08 16:14:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -149,6 +149,10 @@ class G4Para : public G4CSGSolid
   private:
 
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p) const;
+      // Algorithm for SurfaceNormal() following the original
+      // specification for points not on the surface
+
+ private:
 
     G4double fDx,fDy,fDz;
     G4double fTalpha,fTthetaCphi,fTthetaSphi;

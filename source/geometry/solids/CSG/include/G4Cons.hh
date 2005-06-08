@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.hh,v 1.12 2005-06-08 13:05:22 grichine Exp $
+// $Id: G4Cons.hh,v 1.13 2005-06-08 16:14:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -166,6 +166,10 @@ class G4Cons : public G4CSGSolid
   private:
 
         G4ThreeVector ApproxSurfaceNormal(const G4ThreeVector& p) const;
+          // Algorithm for SurfaceNormal() following the original
+          // specification for points not on the surface
+
+  private:
 
         G4double fRmin1,fRmin2,
                  fRmax1,fRmax2,

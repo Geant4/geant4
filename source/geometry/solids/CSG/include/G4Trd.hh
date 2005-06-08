@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.hh,v 1.12 2005-06-08 12:43:54 grichine Exp $
+// $Id: G4Trd.hh,v 1.13 2005-06-08 16:14:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -153,10 +153,11 @@ class G4Trd : public G4CSGSolid
 
     enum ESide {kUndefined, kPX,kMX,kPY,kMY,kPZ,kMZ};
 
-private:
+  private:
 
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
-
+      // Algorithm for SurfaceNormal() following the original
+      // specification for points not on the surface
 };
 
 #include "G4Trd.icc"

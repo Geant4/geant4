@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.38 2005-06-08 12:43:54 grichine Exp $
+// $Id: G4Box.cc,v 1.39 2005-06-08 16:14:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -440,17 +440,17 @@ G4ThreeVector G4Box::SurfaceNormal( const G4ThreeVector& p) const
     }else{
       // norm = sumnorm . unit(); 
       if( noSurfaces == 2 ) { 
-	// 2 surfaces -> on edge 
-	norm = invSqrt2 * sumnorm; 
+        // 2 surfaces -> on edge 
+        norm = invSqrt2 * sumnorm; 
       } else { 
-	// 3 surfaces (on corner)
-	norm = invSqrt3 * sumnorm; 
+        // 3 surfaces (on corner)
+        norm = invSqrt3 * sumnorm; 
       }
     }
   }else{
 #ifdef G4CSGDEBUG
      G4Exception("G4Box::SurfaceNormal(p)", "Notification", JustWarning, 
-		 "Point p is not on surface !?" );
+                 "Point p is not on surface !?" );
 #endif 
      norm = ApproxSurfaceNormal(p);
   }
@@ -458,13 +458,51 @@ G4ThreeVector G4Box::SurfaceNormal( const G4ThreeVector& p) const
   return norm;
 }
 
-//   G4cout << " Point is " << p << G4endl;  
-//   G4cout << " normX = " << normX << G4endl
-//	    << " normY = " << normY << G4endl
-//	    << " normZ = " << normZ << G4endl; 
-//   G4cout << " norm= " << norm << G4endl; 
+//////////////////////////////////////////////////////////////////////////
+//
+// Algorithm for SurfaceNormal() following the original specification
+// for points not on the surface
 
- 
+G4ThreeVector G4Box::ApproxSurfaceNormal( const G4ThreeVector& p ) const
+{
+  G4double distx, disty, distz ;
+  G4ThreeVector norm ;
+
+  // Calculate distances as if in 1st octant
+
+  distx = std::fabs(std::fabs(p.x()) - fDx) ;
+  disty = std::fabs(std::fabs(p.y()) - fDy) ;
+  distz = std::fabs(std::fabs(p.z()) - fDz) ;
+
+  if ( distx <= disty )
+  {
+    if ( distx <= distz )     // Closest to X
+    {
+      if ( p.x() < 0 ) norm = G4ThreeVector(-1.0,0,0) ;
+      else             norm = G4ThreeVector( 1.0,0,0) ;
+    }
+    else                      // Closest to Z
+    {
+      if ( p.z() < 0 ) norm = G4ThreeVector(0,0,-1.0) ;
+      else             norm = G4ThreeVector(0,0, 1.0) ;
+    }
+  }
+  else
+  {
+    if ( disty <= distz )      // Closest to Y
+    {
+      if ( p.y() < 0 ) norm = G4ThreeVector(0,-1.0,0) ;
+      else             norm = G4ThreeVector(0, 1.0,0) ;
+    }
+    else                       // Closest to Z
+    {
+      if ( p.z() < 0 ) norm = G4ThreeVector(0,0,-1.0) ;
+      else             norm = G4ThreeVector(0,0, 1.0) ;
+    }
+  }
+  return norm;
+}
+
 ///////////////////////////////////////////////////////////////////////////
 //
 // Calculate distance to box from an outside point
@@ -965,49 +1003,5 @@ G4ThreeVector G4Box::GetPointOnSurface() const
     else                      px = -fDx;
   } 
   return G4ThreeVector(px,py,pz);
-}
-
-//////////////////////////////////////////////////////////////////////////
-//
-//
-
-G4ThreeVector G4Box::ApproxSurfaceNormal( const G4ThreeVector& p) const
-{
-  G4double distx, disty, distz ;
-  G4ThreeVector norm ;
-
-  // Calculate distances as if in 1st octant
-
-  distx = std::fabs(std::fabs(p.x()) - fDx) ;
-  disty = std::fabs(std::fabs(p.y()) - fDy) ;
-  distz = std::fabs(std::fabs(p.z()) - fDz) ;
-
-  if ( distx <= disty )
-  {
-    if ( distx <= distz )     // Closest to X
-    {
-      if ( p.x() < 0 ) norm = G4ThreeVector(-1.0,0,0) ;
-      else             norm = G4ThreeVector( 1.0,0,0) ;
-    }
-    else                      // Closest to Z
-    {
-      if ( p.z() < 0 ) norm = G4ThreeVector(0,0,-1.0) ;
-      else             norm = G4ThreeVector(0,0, 1.0) ;
-    }
-  }
-  else
-  {
-    if ( disty <= distz )      // Closest to Y
-    {
-      if ( p.y() < 0 ) norm = G4ThreeVector(0,-1.0,0) ;
-      else             norm = G4ThreeVector(0, 1.0,0) ;
-    }
-    else                       // Closest to Z
-    {
-      if ( p.z() < 0 ) norm = G4ThreeVector(0,0,-1.0) ;
-      else             norm = G4ThreeVector(0,0, 1.0) ;
-    }
-  }
-  return norm;
 }
 
