@@ -1264,17 +1264,20 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
   //   G4cout << "Fluorescence is switched :" << theFluo << G4endl; 
 
   if(theFluo && Z > 5) {
-    
-    G4int shell = shellCS->SelectRandomShell(Z, KineticEnergy,
-                                             ParticleMass,DeltaKineticEnergy);
+
+
+
+    // Atom total cross section for the Empiric Model    
     if (expFlag) {    
-      // Atom total cross section for the Empiric Model    
-      shellCS->SetTotalCS(totalCrossSectionMap[Z]);
-      if (shell==1) {
-	aParticleChange.ProposeLocalEnergyDeposit (KineticEnergy);
-	aParticleChange.ProposeEnergy(0);
-      }
+    shellCS->SetTotalCS(totalCrossSectionMap[Z]);    
     }
+    G4int shell = shellCS->SelectRandomShell(Z, KineticEnergy,ParticleMass,DeltaKineticEnergy);
+
+    if (expFlag && shell==1) {        
+      aParticleChange.ProposeLocalEnergyDeposit (KineticEnergy);
+      aParticleChange.ProposeEnergy(0);      
+    }
+
 
     const G4AtomicShell* atomicShell =
                 (G4AtomicTransitionManager::Instance())->Shell(Z, shell);

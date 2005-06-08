@@ -38,7 +38,7 @@
 // ------------------
 // Test of second implementation of the Empiric Model for shell cross sections in proton ionisation
 // --------------------------------------------------------------------
-// $Id: testDoubleExp.cc,v 1.2 2004-12-02 14:02:33 pia Exp $
+// $Id: testDoubleExp.cc,v 1.3 2005-06-08 13:18:28 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
@@ -52,7 +52,7 @@
 #include "G4hShellCrossSectionDoubleExp.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4Proton.hh"
-#include "AIDA/AIDA.h"
+#include "AIDA.h"
 
 int main()
 { 

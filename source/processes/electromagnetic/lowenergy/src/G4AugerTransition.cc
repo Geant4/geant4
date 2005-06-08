@@ -133,9 +133,11 @@ G4int G4AugerTransition::AugerOriginatingShellId(G4int index, G4int startShellId
 G4double G4AugerTransition::AugerTransitionEnergy(G4int index, G4int startShellId) const
 {
   const G4DataVector* energies = AugerTransitionEnergies(startShellId);
-  G4DataVector::const_iterator pos = energies->begin();
-  G4double energy = 0;
-  energy = *(pos+index);
+    G4double energy = 0;    
+  if (index < (G4int) energies->size()) {
+    G4DataVector::const_iterator pos = energies->begin();
+    energy = *(pos+index);
+  }
   return energy; 
 }
 

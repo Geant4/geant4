@@ -400,8 +400,8 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 	    }
 	    else {
 
-	      std::vector<G4int>::iterator vectorIndex = (initIds->end())-1;
-	      if((G4int)a != *vectorIndex){
+	      //	      std::vector<G4int>::iterator vectorIndex = (initIds->end())-1;
+	      if((G4int)a != initIds->back()){
 
 
 		if((initIds->size()) == 1) { 
@@ -409,9 +409,9 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 		}  
 		else {
 
-		  initIds->push_back((G4int)a);
+
 		  G4int augerShellId = 0;
-		  augerShellId = *vectorIndex;
+		  augerShellId = initIds->back();
 		  
 		  (*newIdMap)[augerShellId] = *newIds;
 		  (*newEnergyMap)[augerShellId] = *transEnergies;
@@ -422,6 +422,7 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 		  newIds = new std::vector<G4int>;
 		  transEnergies = new G4DataVector;
 		  transProbabilities = new G4DataVector;
+		  initIds->push_back((G4int)a);
 		}
 	      }
 	    }
