@@ -128,7 +128,7 @@ class G4DiffElasticHadrNucleus: public //G4HadronValues
 
           if(N < 100) for(G4int M = 1; M<=N; M++)  Res = Res*M;         
 
-          if(N >= 100)  Res = 2.50662827*std::exp(-N-1)*std::pow(N+1,N+0.5)*
+          if(N >= 100)  Res = 2.50662827*std::exp(static_cast<double>(-N-1))*std::pow(N+1,N+0.5)*
                          (1+1/12/(N+1)+1/288/(N+1)/(N+1)-
                          139/51840/(N+1)/(N+1)/(N+1)-
                          571/2488320/(N+1)/(N+1)/(N+1)/(N+1));
