@@ -30,7 +30,12 @@
 //
 // History:
 //
-// 14.07.04 V.Grichine creation for box, orb and sphere
+// 11.11.04 V.Grichine creation for box, tubs, cons, sphere, orb, torus
+// 07.06.05 J.Apostolakis:  revised to test each solid in turn,  use argc/argv
+
+// Notes:  (J.A. June 2005)
+//  - To call it use :  testSurfaceNormal  [no_points] [no_directions_each]
+//  - Old 'main' is now a test function,  new main loops over each solid type
 
 #include "G4ios.hh"
 #include <assert.h>
@@ -483,14 +488,72 @@ G4ThreeVector GetVectorOnTorus(G4Torus& torus)
 }
 
 
+enum Esolid {kBox, kOrb, kSphere, kCons, kTubs, kTorus, kPara, kTrapezoid, kTrd};
+
+
 //////////////////////////////////////////////////////////////////////
 //
 // Main executable function
 
-int main(void)
+int main(int argc, char** argv)
 {
-  G4int i,j, iMax=1000, jMax=1000;
-  G4int iCheck=iMax/10;
+  int test_one_solid( Esolid, int, int ); 
+  int no_points= 10000;
+  int dirs_per_point= 1000; 
+
+  G4cout << "Usage: testSurfaceInOut [ no_surface_points ]  [ no_directions_each ] " 
+	 << G4endl << G4endl;
+  int points_in=0, dirs_in=0; 
+  if( argc >= 2 ){
+       points_in = atoi(argv[1]);
+  } 
+  if( argc >= 3 ){
+       dirs_in = atoi(argv[2]);
+  }  
+
+  if( points_in > 0 ) { no_points= points_in; } 
+  if( dirs_in > 0 ) { dirs_per_point = dirs_in; }  
+
+  G4cout << "Testing each solid with " << no_points << " surface points and " 
+	 << dirs_per_point  << " directions each. " << G4endl;
+
+  Esolid useCase; 
+  G4cout<< "To test Box." << G4endl;
+  test_one_solid( useCase= kBox,  no_points, dirs_per_point ); 
+
+  G4cout<< "To test Tubs." << G4endl;
+  test_one_solid( useCase= kTubs,  no_points, dirs_per_point ); 
+
+  G4cout<< "To test Sphere." << G4endl;
+  test_one_solid( useCase= kSphere,  no_points, dirs_per_point ); 
+
+  G4cout<< "To test Orb." << G4endl;
+  test_one_solid( useCase= kOrb,  no_points, dirs_per_point ); 
+
+  G4cout<< "To test Cons." << G4endl;
+  test_one_solid( useCase= kCons,  no_points, dirs_per_point ); 
+
+  G4cout<< "To test Para." << G4endl;
+  test_one_solid( useCase= kPara,  no_points, dirs_per_point ); 
+ 
+  G4cout<< "To test Trapezoid." << G4endl;
+  test_one_solid( useCase= kTrapezoid,  no_points, dirs_per_point ); 
+
+  G4cout<< "To test Trd." << G4endl;
+  test_one_solid( useCase= kTrd,  no_points, dirs_per_point ); 
+
+  return 0; 
+}
+
+//
+
+int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
+{
+  G4int i,j;
+  G4int iMax=  num_points, jMax= directions_per_point;
+  G4int iCheck=iMax/25;
+  G4cout << "  Reporting every  " << iCheck <<  " points. " << G4endl; 
+
   G4double distIn, distOut;
 
   G4double Rtor = 100 ;
@@ -500,10 +563,6 @@ int main(void)
   EInside surfaceP;
   G4ThreeVector norm,*pNorm;
   G4bool *pgoodNorm, goodNorm, calcNorm=true;
-
-  enum Esolid {kBox, kOrb, kSphere, kCons, kTubs, kTorus, kPara, kTrapezoid, kTrd};
-
-  Esolid useCase = kTorus;
 
   pNorm=&norm;
   pgoodNorm=&goodNorm;
@@ -635,6 +694,8 @@ int main(void)
       }
       else
       {
+        G4ThreeVector origin_norm = b1.SurfaceNormal(p);
+
         for(j=0;j<jMax;j++)
         {
           G4ThreeVector v = GetRandomUnitVector();
@@ -646,19 +707,21 @@ int main(void)
 	  {
 	    G4cout<<" distIn < kCarTolerance && distOut < kCarTolerance"<<G4endl;
             G4cout<<"distIn = "<<distIn<<";  distOut = "<<distOut<<G4endl;
-            G4cout<<"location p: "<<G4endl;
+            G4cout<<"location p: "; // << G4endl;
             G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
-            G4cout<<" direction v: "<<G4endl;
+            G4cout<<" direction v: "; // << G4endl; 
             G4cout<<"( "<<v.x()<<", "<<v.y()<<", "<<v.z()<<" ); "<<G4endl<<G4endl;
 	  }
           else if(distIn > 100000*kCarTolerance && distOut > 100*kCarTolerance)
 	  {
 	    G4cout<<" distIn > 100000*kCarTolerance && distOut > 100*kCarTolerance"<<G4endl;
             G4cout<<"distIn = "<<distIn<<";  distOut = "<<distOut<<G4endl;
-            G4cout<<"location p: "<<G4endl;
+            G4cout<<"location p: ";  // << G4endl;
             G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
-            G4cout<<" direction v: "<<G4endl;
-            G4cout<<"( "<<v.x()<<", "<<v.y()<<", "<<v.z()<<" ); "<<G4endl<<G4endl;
+            G4cout<<" direction v: ";  // << G4endl;
+            G4cout<<"( "<<v.x()<<", "<<v.y()<<", "<<v.z()<<" ); "<<G4endl;
+	    G4cout<<" dot prod v.norm(orig)= " << v.dot( origin_norm ) << G4endl;
+	    G4cout <<G4endl;
 	  }     
         }
       }
@@ -703,7 +766,8 @@ int main(void)
             G4cout<<"location p: "<<G4endl;
             G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
             G4cout<<" direction v: "<<G4endl;
-            G4cout<<"( "<<v.x()<<", "<<v.y()<<", "<<v.z()<<" ); "<<G4endl<<G4endl;
+            G4cout<<"( "<<v.x()<<", "<<v.y()<<", "<<v.z()<<" ); "<<G4endl; 
+	    G4cout<<" p.v/|p|= " << p.dot(v)/p.mag() <<G4endl;
 	  }     
         }
       }
@@ -711,7 +775,7 @@ int main(void)
     break;
 
     case kSphere:
-      G4cout<<"Testing all cutted G4Sphere:"<<G4endl<<G4endl;
+      G4cout<<"Testing one cutted G4Sphere:" << s5 <<G4endl<<G4endl;
     for(i=0;i<iMax;i++)
     {
       if(i%iCheck == 0) G4cout<<"i = "<<i<<G4endl;
@@ -902,6 +966,8 @@ int main(void)
     break;
 
     default:
+      G4cout<<"A test is not implemented for this case: " << useCase <<G4endl<<G4endl;
+
     break;   
   }
   return 0;
