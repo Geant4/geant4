@@ -121,6 +121,7 @@ examples/extended/electromagnetic:
   TestEm1,2,5,6,7,9          Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
   TestEm3,4                  Michel.Maire@lapp.in2p3.fr      Michel Maire
   TestEm8,10                 Vladimir.Grichine@cern.ch       Vladimir Grichine
+  TestEm11                   Michel.Maire@lapp.in2p3.fr      Michel Maire
   MuonProcesses              Michel.Maire@lapp.in2p3.fr      Michel Maire
   PhotonProcesses            Michel.Maire@lapp.in2p3.fr      Michel Maire
 examples/extended/eventgenerator:
@@ -163,6 +164,7 @@ tests                        Serguei.Sadilov@cern.ch         Serguei Sadilov
       test16                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
       test17                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test18                 flei@space.qinetiq.com          Fan Lei
+      test19                 Mikhail.Kossov@cern.ch          Mikhail Kossov
       test20                 MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
       test21                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
       test22                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
@@ -172,6 +174,7 @@ tests                        Serguei.Sadilov@cern.ch         Serguei Sadilov
       test26                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test27                 Gunter.Folger@cern.ch           Gunter Folger
       test28                 flei@space.qinetiq.com          Fan Lei
+      test29                 Mikhail.Kossov@cern.ch          Mikhail Kossov
       test30                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test31                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test32                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
