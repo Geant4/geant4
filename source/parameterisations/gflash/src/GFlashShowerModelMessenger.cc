@@ -39,11 +39,11 @@
 
 
 
-GFlashShowerModelMessenger::GFlashShowerModelMessenger(GFlashShowerModel * myModel)
+GFlashShowerModelMessenger::GFlashShowerModelMessenger(GFlashShowerModel * aModel)
 { 
 	myParaDir = new G4UIdirectory("/GFlash/");
 	myParaDir->SetGuidance("Parametrisation control.");
-	this->myModel= myModel;
+	myModel= aModel;
 	
 	FlagCmd = new G4UIcmdWithAnInteger("/GFlash/flag",this);
 	FlagCmd->SetGuidance("Defines if GFlash is activated");
