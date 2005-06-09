@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.69 2005-06-09 15:11:54 gcosmo Exp $
+# $Id: GNUmakefile,v 1.70 2005-06-09 15:16:22 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -63,7 +63,7 @@ libmap: $(G4LIBDIR)/liblist
 	  -name GNUmakefile -exec $(GREP) -l '^ *name *:=' {} \; \
 	  | sort \
 	  > /tmp/G4_all_lib_makefiles.$(unique);
-	@echo "Weeding out /test[s]/, global level GNUmakefiles, etc ..."
+	@echo "Weeding out paths and files ..."
 	@for i in `cat /tmp/G4_all_lib_makefiles.$(unique)`; \
 	do \
 	  echo $$i | $(GREP) -q '/tests\?/' || \
