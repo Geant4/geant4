@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst02DetectorConstruction.cc,v 1.5 2005-05-27 18:36:54 vnivanch Exp $
+// $Id: Tst02DetectorConstruction.cc,v 1.6 2005-06-09 07:35:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -107,14 +107,13 @@ void Tst02DetectorConstruction::SelectMaterialPointer()
 G4VPhysicalVolume* Tst02DetectorConstruction::Construct()
 {
   SelectMaterialPointer();
-  if(!simpleBoxLog) {
-    G4Box * mySimpleBox = new G4Box("SBox",200*cm, 200*cm, 200*cm);
-    simpleBoxLog = new G4LogicalVolume( mySimpleBox,
-                                      selectedMaterial,"SLog",0,0,0);
 
-    simpleBoxDetector = new G4PVPlacement(0,G4ThreeVector(),
+  G4Box * mySimpleBox = new G4Box("SBox",200*cm, 200*cm, 200*cm);
+  simpleBoxLog = new G4LogicalVolume( mySimpleBox,
+                                      selectedMaterial,"SLog",0,0,0);
+  G4VPhysicalVolume* simpleBoxDetector = new G4PVPlacement(0,G4ThreeVector(),
                                         "SPhys",simpleBoxLog,0,false,0);
-  }
+
   return simpleBoxDetector;
 }
 
