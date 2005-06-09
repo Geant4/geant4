@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.68 2005-05-13 08:38:55 gcosmo Exp $
+# $Id: GNUmakefile,v 1.69 2005-06-09 15:11:54 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -57,13 +57,8 @@ kernel:
 	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE)); done;:
 
 libmap: $(G4LIBDIR)/liblist
-	@echo "WARNING: Making a library map of granular libraries."
-	@echo "         This is a list of libraries in order of use, and for"
-	@echo "         each library a list of other libraries used."
-	@echo "         To do this it needs a complete set of dependency"
-	@echo "         files, e.g., after gmake in the source/ directory."
-	@echo "Searching $(G4INSTALL)/source"
-	@echo '  for GNUmakefiles containing "name" and sorting ...'
+	@echo "libmap stage:"
+	@echo "Searching for GNUmakefiles and sorting ..."
 	@find . \
 	  -name GNUmakefile -exec $(GREP) -l '^ *name *:=' {} \; \
 	  | sort \
