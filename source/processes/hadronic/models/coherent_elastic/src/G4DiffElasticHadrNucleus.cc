@@ -1,3 +1,28 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4DiffElasticHadrNucleus.cc,v 1.15 2005-06-10 13:23:42 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 //G4DiffElasticHadrNucleus.cc
 
@@ -12,7 +37,7 @@
   
                   if(Nucleus == 208)
                     {  //  R1 = 20.73; R2 = 15.74.
-                  R1       = 4.1408*std::pow(Nucleus,0.3018);
+                  R1       = 4.1408*std::pow(static_cast<double>(Nucleus),0.3018);
                   R2       = 3.806*std::pow(Nucleus-10.068,0.2685);
                   Pnucl    = 0.9;
                   Aeff     = 1.1;
@@ -56,10 +81,10 @@
                     }
                   else
                     {
-                      R1    = 4.45*std::pow(Nucleus-1,0.309);
+                      R1    = 4.45*std::pow(static_cast<double>(Nucleus-1),0.309);
                  if(Nucleus == 28)
-                      R1    = 4.25*std::pow(Nucleus-1,0.309);
-                      R2    = 2.3*std::pow(Nucleus,0.36);
+                      R1    = 4.25*std::pow(static_cast<double>(Nucleus-1),0.309);
+                      R2    = 2.3*std::pow(static_cast<double>(Nucleus),0.36);
                       Pnucl = 0.176+0.00167*Nucleus+
                                  8.69E-6*Nucleus*Nucleus;
                       Aeff  = 0.9;
@@ -477,7 +502,7 @@
       case(64) :    r0       = 1.1;
                     r01      = 1.16*0.0;
                     break;
-      default  :    Re = std::pow(Nucleus, 0.3333);
+      default  :    Re = std::pow(static_cast<double>(Nucleus), 0.3333);
                     r0 = 1.16*(1.0-1.16/Re/Re);
         }
 
@@ -499,8 +524,8 @@
         EcmH        = (S-MassN*MassN+MassH*MassH)/2/std::sqrt(S);
         MomentumCMN = std::sqrt(EcmH*EcmH-MassH*MassH);
 
-        rAfm        = r0*std::pow(Nucleus, 0.3333)*
-                             (1-r01/std::pow(Nucleus,0.666));
+        rAfm        = r0*std::pow(static_cast<double>(Nucleus), 0.3333)*
+                      (1-r01/std::pow(static_cast<double>(Nucleus),0.666));
         rAGeV       = rAfm*std::sqrt(25.68);
         stepB       = rAmax*rAGeV/(NpointsB-1);
 

@@ -1,3 +1,29 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.15 2005-06-10 13:28:07 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // G4ElasticHadrNucleusHe.hh
 
 #ifndef G4ElasticHadrNucleusHE_h
@@ -124,7 +150,8 @@
 
           if(N < 100) for(G4int M = 1; M<=N; M++)  Res = Res*M;         
 
-           else  Res = 2.50662827*std::exp(static_cast<double>(-N-1))*std::pow(N+1,N+0.5)*
+           else  Res = 2.50662827*std::exp(static_cast<double>(-N-1))*
+                         std::pow(static_cast<double>(N+1),N+0.5)*
                          (1+1/12/(N+1)+1/288/(N+1)/(N+1)-
                          139/51840/(N+1)/(N+1)/(N+1)-
                          571/2488320/(N+1)/(N+1)/(N+1)/(N+1));

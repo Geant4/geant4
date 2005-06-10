@@ -1,3 +1,29 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4IntegrHadrNucleus.cc,v 1.12 2005-06-10 13:23:42 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // IntegrHadrNucleus.cc
 
 #include "globals.hh"
@@ -42,7 +68,7 @@
           if (Anucleus == 58) R0 = std::sqrt(0.6);
 //          R0      =  std::sqrt(0.64);
 
-          Rnucl   = R0*std::pow(Anucleus,0.3333);            //{In Fermi }
+          Rnucl   = R0*std::pow(static_cast<double>(Anucleus),0.3333);            //{In Fermi }
 
         if(Anucleus == 4) Rnucl = 1.2;
 
