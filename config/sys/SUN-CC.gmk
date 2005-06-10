@@ -40,7 +40,7 @@ ifeq ($(G4SYSTEM),SUN-CC)
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
   endif
   CPPFLAGS += -DSOCKET_IRIX_SOLARIS
-  LOADLIBS += -lsocket -lnsl
+  LOADLIBS += -lsunmath -lsocket -lnsl
   CPPFLAGS += -DG4NOT_ISO_DELETES -DG4NO_ISO_VECDIST
 
   define build-granular-shared-lib
