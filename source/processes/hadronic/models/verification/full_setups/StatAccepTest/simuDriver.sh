@@ -90,7 +90,7 @@ echo ' EVENTS      =' $EVENTS
     export LABEL=$PHYSICS-$CALORIMETER-$PARTICLE-$ENERGY-$EVENTS ;
     . setup.sh-$REF1-$LABEL ;
     cd dirStat/ ;
-    rm pvalue.o pvalue ;
+    rm -f pvalue.o pvalue ;
     gmake ;
     python2.2 driver.py $REF1 $REF2 $LABEL ; 
   fi )

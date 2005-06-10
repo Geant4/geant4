@@ -1,6 +1,11 @@
                  History file
                  ------------
 
+10-June-2005 - A.Ribon (statAccepTest-V07-00-07)
+- Preparing the version to be use for the June 
+  release testing. Only few minor changes.
+
+
 6-June-2005 - A.Ribon (statAccepTest-V07-00-06)
 - Preparing the version to be use for the June 
   release testing. Only a minor change in plot.py

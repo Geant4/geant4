@@ -45,7 +45,7 @@ fileLog = "outputPvalues.log" + "-" + generalCase   # Log file for pvalues.
 print "    fileLog = ", fileLog
 
 # Execute the  pvalue  executable that does the Statistical tests.
-os.system( "pvalue > " + fileLog + " 2>&1 " )
+os.system( "./pvalue > " + fileLog + " 2>&1 " )
 
 # Execute the Python scrip  plot.py  which uses the log file
 # of the previous executable.
