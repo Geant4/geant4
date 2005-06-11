@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.hh,v 1.5 2004-08-10 23:57:16 asaim Exp $
+// $Id: G4RunManagerKernel.hh,v 1.6 2005-06-11 22:33:00 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -160,6 +160,8 @@ class G4RunManagerKernel
     { return eventManager->GetStackManager(); }
     inline G4TrackingManager* GetTrackingManager() const
     { return eventManager->GetTrackingManager(); }
+    inline void SetPrimaryTransformer(G4PrimaryTransformer* pt)
+    { eventManager->SetPrimaryTransformer(pt); }
     inline G4PrimaryTransformer* GetPrimaryTransformer() const
     { return eventManager->GetPrimaryTransformer(); }
 
