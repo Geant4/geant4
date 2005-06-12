@@ -70,39 +70,39 @@ public:
 
   //  virtual void ComputeDimensions (G4Box & voxels, const G4int copyNo, const G4VPhysicalVolume* physVol) const;
 
-  virtual void ComputeDimension (G4Box&, 
+  virtual void ComputeDimensions (G4Box&, 
 				  const G4int, 
 				  const G4VPhysicalVolume* ) const;
 
-   virtual void ComputeDimension(G4Tubs &,
+   virtual void ComputeDimensions(G4Tubs &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 
-    virtual void ComputeDimension(G4Trd &,
+    virtual void ComputeDimensions(G4Trd &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 	
-    virtual void ComputeDimension(G4Trap &,
+    virtual void ComputeDimensions(G4Trap &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 	
-    virtual void ComputeDimension(G4Cons &,
+    virtual void ComputeDimensions(G4Cons &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 
-    virtual void ComputeDimension(G4Sphere &,
+    virtual void ComputeDimensions(G4Sphere &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 
-    virtual void ComputeDimension(G4Torus &,
+    virtual void ComputeDimensions(G4Torus &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 
-    virtual void ComputeDimension(G4Para &,
+    virtual void ComputeDimensions(G4Para &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 
-    virtual void ComputeDimension(G4Hype &,
+    virtual void ComputeDimensions(G4Hype &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 
@@ -135,10 +135,10 @@ private:
   G4VisAttributes* attributeDenseBone;
 
   G4int max;
-  G4int compression;
+  short compression;
   
   FILE* readData; 
-  G4int columns,rows;
+  short columns,rows;
   G4double pixelSpacingX;
   G4double pixelSpacingY;
   G4double sliceThickness;
@@ -153,6 +153,20 @@ private:
   //G4LogicalVolume* LogicalVolumeParam;
 
   G4double middleLocationValue;
+
+private:
+
+    void readColorChart();
+    class ColorChart {
+    public:
+	G4double density;
+	G4double color[3];
+	G4double alpha;
+	enum {CRED, CGREEN, CBLUE};
+    };
+    std::vector<ColorChart> colorChart;
+    G4int numColorChart;
+    G4double getChartColor(G4int, G4double density);
 };
 #endif
 

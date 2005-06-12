@@ -32,7 +32,7 @@
 // tel (418) 525-4444 #6720
 // fax (418) 691 5268
 //
-// + Université Laval, Québec (QC) Canada
+// + Universit-Aé Laval, Québec (QC) Canada$)B
 //*******************************************************
 //
 //*******************************************************
@@ -50,384 +50,450 @@
 #include "DicomHandler.hh"
 #include "globals.hh"
 #include "G4ios.hh"
-#include <strstream>
-#include <streambuf>
-#include "G4strstreambuf.hh"
 #include <fstream>
 
+#include <cctype>
+#include <cstring>
+
+
 DicomHandler::DicomHandler()
-{
-  compression = 0;
-  max = 0;
+    : DATABUFFSIZE(8192), LINEBUFFSIZE(128), FILENAMESIZE(512),
+      compression(0), max(0), rows(0), columns(0),
+      bitAllocated(0), maxPixelValue(0), minPixelValue(0),
+      pixelSpacingX(0.), pixelSpacingY(0.),
+      sliceThickness(0.), sliceLocation(0.),
+      rescaleIntercept(0), rescaleSlope(0),
+      littleEndian(true), implicitEndian(false),
+      pixelRepresentation(0) {
+    ;
 }
 
-G4int DicomHandler::readHeader(FILE *dicom, char filename2[300])
+DicomHandler::~DicomHandler() {
+    ;
+}
+
+G4int DicomHandler::readHeader(FILE *dicom, char * filename2)
 {
-  G4int returnvalue = 0;
-  char buffer[196];
-  char  pixelSpacing[300];
-  std::fread( buffer, 1, 128, dicom ); // The first 128 bytes 
+    G4int returnvalue = 0;
+    char * buffer = new char[LINEBUFFSIZE];
+
+    implicitEndian = false;
+    littleEndian = true;
+
+    std::fread( buffer, 1, 128, dicom ); // The first 128 bytes 
                                          //are not important
-  // Reads the "DICOM" letters
-  std::fread( buffer, 1, 4, dicom );
-  G4int readGroupId; //identify the kind of input data 
-  G4int readElementId;//identify a particular type information
-
-  // the elementLength say if a particular information (associated with a
-  //given readGroupId+readElementId) is to be read in 2 or 4 bits
-  G4int elementLength;
-  G4int elementLength2;
-  G4int elementLength3;
-  char value[10000][300];
-  // Read information up to the pixel data
-  // note: it should be a while instead of a for
-  for ( G4int i = 0; i <= 100000000; i++ )
-    {
-      //Reading groups and elements :
-      std::fread(&readGroupId,1,2,dicom);
-      std::fread(&readElementId,1,2,dicom);
-
-      if (readGroupId == 0x7FE0) // beginning of the pixels
-        {
-	  std::fread( buffer, 1, 2,dicom); // Skip 2 reserved bytes
-	  break;
-        }
-
-      std::fread(&elementLength,1,2,dicom);
-      G4int tagDictionnary;
-      G4int bitStored = 0;
-      // If value representation (VR) is OB, OW, SQ, UN, 
-      //the next length is 32 bits
-      if ( elementLength == 16975 || 
-           elementLength == 22351 || 
-           elementLength == 20819 || 
-           elementLength == 20053)
-        {
-	  //skip 2 reserved "bytes"
-	  std::fread( buffer, 1, 2,dicom); // Skip 2 reserved bytes
-	  std::fread(&elementLength3, 4, 1, dicom);
-          // Reading length of the information
-	  std::fread(&value[i],elementLength3,1,dicom);
-          // Reading the information with
-	  // (BIG) buffer : "value"
-	  // Creating a tag to be identified afterward
-	  tagDictionnary = readGroupId*0x10000 + readElementId;
-        }
-      else  // lenght is 16 bits :
-        {
-	  std::fread(&elementLength2,1,2,dicom);
-	  std::fread(&value[i],elementLength2,1,dicom);
-	  tagDictionnary = readGroupId*0x10000 + readElementId;
-        }
-
-      if (tagDictionnary == 0x00280010 ) // Number of Rows
-        {
-	  rows = *(G4int*)&value[i];
-	  std::printf("[0x00280010] Rows -> %i\n",rows);
-        }
-      if (tagDictionnary == 0x00280011 ) // Number of columns
-        {
-	  columns = *(G4int*)&value[i];
-	  std::printf("[0x00280011] Columns -> %i\n",columns);
-        }
-      if (tagDictionnary == 0x00280102 ) // High bits  ( not used )
-        {
-	  G4int highBits = *(G4int*)&value[i];
-	  std::printf("[0x00280102] High bits -> %i\n",highBits);
-        }
-      if (tagDictionnary == 0x00280100 )  // Bits allocated ( not used )
-        {
-	  bitAllocated = *(G4int*)&value[i];
-	  std::printf("[0x00280100] Bits allocated -> %i\n",bitAllocated);
-	  bitAllocated = (bitAllocated)/8;
-        }
-      if (tagDictionnary == 0x00280101 )  //  Bits stored ( not used )
-        {
-	  bitStored = *(G4int*)&value[i];
-	  std::printf("[0x00280101] Bits stord -> %i\n",bitStored);
-	  bitStored = (bitStored)/8;
-        }
-      if (tagDictionnary == 0x00281053)  //  Rescale slope ( not used )
-        { 
-	  G4int rescaleSlope =  atoi( value[i] );
-	  std::printf("[0x00281053] Rescale Slope -> %i\n",rescaleSlope);
-	  bitStored = (bitStored)/8;
-        }
-      if (tagDictionnary == 0x00281052 )  // Rescalse intercept ( not used )
-        {
-	  G4int rescaleIntercept = atoi( value[i] );
-	  std::printf("[0x00281052] Rescale Intercept -> %i\n", rescaleIntercept );
-	  bitStored = (bitStored)/8;
-        }
-      if (tagDictionnary == 0x00280103 )
-        {
-	  //  Pixel representation ( functions not design to read signed bits )
-	  std::printf("[0x00280103] Pixel Representation -> %i\n",  atoi( value[i] ) );
-	  if ( atoi(value[i]) == 1 )
-            {
-	      std::printf("### PIXEL REPRESENTATION = 1, BITS ARE SIGNED, ");
-	      std::printf("DICOM READING SCAN FOR UNSIGNED VALUE, POSSIBLE ");
-	      std::printf("ERROR !!!!!! -> \n");
-            }
-	  bitStored = (bitStored)/8;
-        }
-      if (tagDictionnary == 0x00080008 ) //  Image type ( not used )
-        {
-	  std::printf("[0x00080008] Image Types -> %s\n",value[i]);
-	  bitStored = (bitStored)/8;
-        }
-      if (tagDictionnary == 0x00283000 )   //  Modality LUT Sequence ( not used )
-        {
-	  std::printf("[0x00283000] Modality LUT Sequence SQ 1 -> %s\n",value[i]);
-	  bitStored = (bitStored)/8;
-        }
-      if (tagDictionnary == 0x00283002 )  // LUT Descriptor ( not used )
-        {
-	  std::printf("[0x00283002] LUT Descriptor US or SS 3 -> %s\n",value[i]);
-	  bitStored = (bitStored)/8;
-        }
-      if (tagDictionnary == 0x00283003 )  // LUT Explanation ( not used )
-        {
-	  std::printf("[0x00283003] LUT Explanation LO 1 -> %s\n",value[i]);
-	  bitStored = (bitStored)/8;
-        }
-      if (tagDictionnary == 0x00283004 )  // Modality LUT ( not used )
-        {
-	  std::printf("[0x00283004] Modality LUT Type LO 1 -> %s\n",value[i]);
-	  bitStored = (bitStored)/8;
-        }
-      if (tagDictionnary == 0x00283006 )  // LUT Data ( not used )
-        {
-	  std::printf("[0x00283006] LUT Data US or SS -> %s\n",value[i]);
-	  bitStored = (bitStored)/8;
-        }
-      if (tagDictionnary == 0x00283010 )  // VOI LUT ( not used )
-        {
-	  std::printf("[0x00283010] VOI LUT Sequence SQ 1 -> %s\n",value[i]);
-	  bitStored = (bitStored)/8;
-        }
-      if (tagDictionnary == 0x00280120 )  // Pixel Padding Value ( not used )
-        {
-	  std::printf("[0x00280120] Pixel Padding Value US or SS 1 -> %s\n",value[i]);
-	  bitStored = (bitStored)/8;
-        }
-      if (tagDictionnary == 0x00280030 )  // Pixel Spacing
-        {
-	  std::printf("[0x00280030] Pixel Spacing (mm) -> %s\n",value[i]);
-	  std::printf(pixelSpacing,"%s",value[i]);
-	  bitStored = (bitStored)/8;
-        }
-      if (tagDictionnary == 0x00200037 )  // Image Orientation ( not used )
-        {
-	  std::printf("[0x00200037] Image Orientation (Patient) -> %s\n",value[i]);
-	  bitStored = (bitStored)/8;
-        }
-      if (tagDictionnary == 0x00200032 )  // Image Position ( not used )
-        {
-	  std::printf("[0x00200032] Image Position (Patient,mm) -> %s\n",value[i]);
-	  bitStored = (bitStored)/8;
-        }
-      if (tagDictionnary == 0x00180050 )  // Slice Tickness
-        {
-	  std::printf("[0x00180050] Slice Tickness (mm) -> %s\n",value[i]);
-	  std::sprintf(sliceThickness,"%s",value[i]);//sliceThickness=value[i];
-	  bitStored = (bitStored)/8;
-        }
-      if (tagDictionnary == 0x00201041 )  // Slice Location
-        {
-	  std::printf("[0x00201041] Slice Location -> %s\n",value[i]);
-	  sliceLocation = atof(value[i]);
-	  bitStored = (bitStored)/8;
-        }
-      if (tagDictionnary == 0x00280004 ) 
-      // Photometric Interpretation ( not used )
-        {
-	  std::printf("[0x00280004] Photometric Interpretation -> %s\n",value[i]);
-	  bitStored = (bitStored)/8;
-        }
+    // Reads the "DICOM" letters
+    std::fread( buffer, 1, 4, dicom );
+    // if there is no preamble, the FILE pointer is rewinded.
+    if(std::strncmp("DICM", buffer, 4) != 0) {
+        std::fseek(dicom, 0, SEEK_SET);
+        implicitEndian = true;
     }
 
-  // Creating files to store information
-  char compressionbuf[100],maxbuf[100];
-  char filename[300];
-  compression = 0;
-  max = 0;
-  FILE* configuration;
+    short readGroupId;    // identify the kind of input data 
+    short readElementId;  // identify a particular type information
+    short elementLength2; // deal with element length in 2 bytes
+    G4int elementLength4; // deal with element length in 4 bytes
 
-  configuration = std::fopen("Data.dat","r");
-  if ( configuration != 0 )
-    {
-      std::fscanf(configuration,"%s",compressionbuf);
-      compression = atoi(compressionbuf);
-      std::fscanf(configuration,"%s",maxbuf);
-      max = atoi(maxbuf);
-      std::fclose(configuration);
+    char * data = new char[DATABUFFSIZE];
+
+    // Read information up to the pixel data
+    while(true) {
+
+	//Reading groups and elements :
+	readGroupId = 0;
+	readElementId = 0;
+	// group ID
+	std::fread(buffer, 2, 1, dicom);
+	getValue(buffer, readGroupId);
+	// element ID
+	std::fread(buffer, 2, 1, dicom);
+	getValue(buffer, readElementId);
+
+	// Creating a tag to be identified afterward
+	G4int tagDictionary = readGroupId*0x10000 + readElementId;
+
+
+	// VR or element length
+	std::fread(buffer,2,1,dicom);
+	getValue(buffer, elementLength2);
+
+	// If value representation (VR) is OB, OW, SQ, UN, 
+	//the next length is 32 bits
+	if((elementLength2 == 0x424f ||  // "OB"
+	    elementLength2 == 0x574f ||  // "OW"
+	    elementLength2 == 0x5153 ||  // "SQ"
+	    elementLength2 == 0x4e55) && // "UN"
+	   !implicitEndian ) {           // explicit VR
+
+	    std::fread(buffer, 2, 1, dicom); // Skip 2 reserved bytes
+
+	    // element length
+	    std::fread(buffer, 4, 1, dicom);
+	    getValue(buffer, elementLength4);
+
+	    // beginning of the pixels
+	    if(tagDictionary == 0x7FE00010) break;
+
+	    // Reading the information with data
+	    std::fread(data, elementLength4,1,dicom);
+
+
+	} else { // length is 16 bits :
+
+	    if(!implicitEndian || readGroupId == 2) {
+		// element length (2 bytes)
+		std::fread(buffer, 2, 1, dicom);
+		getValue(buffer, elementLength2);
+		elementLength4 = elementLength2;
+
+	    } else { 
+		// element length (4 bytes)
+		if(std::fseek(dicom, -2, SEEK_CUR) != 0) {
+		    G4cerr << "[DicomHandler] fseek failed" << G4endl;
+		    exit(-10);
+		}
+		std::fread(buffer, 4, 1, dicom);
+		getValue(buffer, elementLength4);
+	    }
+
+	    // beginning of the pixels
+	    if(tagDictionary == 0x7FE00010) break;
+
+	    std::fread(data, elementLength4, 1, dicom);
+	}
+
+	// NULL termination
+	data[elementLength4] = '\0';
+
+	// analyzing inforamtion 
+	getInformation(tagDictionary, data);
     }
-  else
-    {
-      std::printf("### WARNING, file Data.dat not here !!!\n");
-      exit(1);
-    }
-  FILE* data;
-  std::sprintf(filename,"%s.dat",filename2);
-  data = std::fopen(filename,"w+");
-  // Note: the .dat files contain basic information on the images.
 
-  char exception = '\\';
-  G4bool toggle = false;
-  G4int z = 0;
- 
-  for ( G4int y = 0; y <= 300; y++ )
-    {
-      if ( pixelSpacing[y] != exception )
-        {
-	  if (toggle == false)
-	    pixelSpacingX[y] = pixelSpacing[y];
-	  if (toggle == true)
-            {
-	      pixelSpacingY[z] = pixelSpacing[y];
-	      z++;
-            }
-        }
-      else if ( pixelSpacing[y] == exception )
-        {
-	  toggle = true;
-        }
-    }
+    // Creating files to store information
+    storeInformation(filename2);
 
-  std::fprintf(data,"Rows,columns(#):      %8i   %8i\n",rows,columns);
-  std::fprintf(data,"PixelSpacing_X,Y(mm): %8s   %8s\n",
-                 pixelSpacingX,pixelSpacingY);
-  std::fprintf(data,"SliceTickness(mm):    %8s\n",sliceThickness);
-  std::fprintf(data,"SliceLocation(mm):    %8f\n",sliceLocation);
-  std::fclose(data);
+    //
+    delete [] buffer;
+    delete [] data;
 
-  return returnvalue;
+    return returnvalue;
 }
 
-G4int DicomHandler::readData(FILE *dicom,char filename2[300])
+//
+void DicomHandler::getInformation(G4int & tagDictionary, char * data) {
+    if(tagDictionary == 0x00280010 ) { // Number of Rows
+	getValue(data, rows);
+	std::printf("[0x00280010] Rows -> %i\n",rows);
+
+    } else if(tagDictionary == 0x00280011 ) { // Number of columns
+	getValue(data, columns);
+	std::printf("[0x00280011] Columns -> %i\n",columns);
+
+    } else if(tagDictionary == 0x00280102 ) { // High bits  ( not used )
+	short highBits;
+	getValue(data, highBits);
+	std::printf("[0x00280102] High bits -> %i\n",highBits);
+
+    } else if(tagDictionary == 0x00280100 ) { // Bits allocated
+	getValue(data, bitAllocated);
+	std::printf("[0x00280100] Bits allocated -> %i\n", bitAllocated);
+
+    } else if(tagDictionary == 0x00280101 ) { //  Bits stored ( not used )
+	short bitStored;
+	getValue(data, bitStored);
+	std::printf("[0x00280101] Bits stored -> %i\n",bitStored);
+
+    } else if(tagDictionary == 0x00280106 ) { //  Min. pixel value
+	getValue(data, minPixelValue);
+	std::printf("[0x00280106] Min. pixel value -> %i\n", minPixelValue);
+
+    } else if(tagDictionary == 0x00280107 ) { //  Max. pixel value
+	getValue(data, maxPixelValue);
+	std::printf("[0x00280107] Max. pixel value -> %i\n", maxPixelValue);
+
+    } else if(tagDictionary == 0x00281053) { //  Rescale slope
+	rescaleSlope = atoi(data);
+	std::printf("[0x00281053] Rescale Slope -> %d\n", rescaleSlope);
+
+    } else if(tagDictionary == 0x00281052 ) { // Rescalse intercept
+	rescaleIntercept = atoi(data);
+	std::printf("[0x00281052] Rescale Intercept -> %d\n", rescaleIntercept );
+
+    } else if(tagDictionary == 0x00280103 ) {
+	//  Pixel representation ( functions not design to read signed bits )
+	pixelRepresentation = atoi(data); // 0: unsigned  1: signed 
+	std::printf("[0x00280103] Pixel Representation -> %i\n", pixelRepresentation);
+	if(pixelRepresentation == 1 ) {
+	    std::printf("### PIXEL REPRESENTATION = 1, BITS ARE SIGNED, ");
+	    std::printf("DICOM READING SCAN FOR UNSIGNED VALUE, POSSIBLE ");
+	    std::printf("ERROR !!!!!! -> \n");
+	}
+
+    } else if(tagDictionary == 0x00080006 ) { //  Modality
+	std::printf("[0x00080006] Modality -> %s\n", data);
+
+    } else if(tagDictionary == 0x00080070 ) { //  Manufacturer
+	std::printf("[0x00080070] Manufacturer -> %s\n", data);
+
+    } else if(tagDictionary == 0x00080080 ) { //  Institution Name
+	std::printf("[0x00080080] Institution Name -> %s\n", data);
+
+    } else if(tagDictionary == 0x00080081 ) { //  Institution Address
+	std::printf("[0x00080081] Institution Address -> %s\n", data);
+
+    } else if(tagDictionary == 0x00081040 ) { //  Institution Department Name
+	std::printf("[0x00081040] Institution Department Name -> %s\n", data);
+
+    } else if(tagDictionary == 0x00081090 ) { //  Manufacturer's Model Name
+	std::printf("[0x00081090] Manufacturer's Model Name -> %s\n", data);
+
+    } else if(tagDictionary == 0x00181000 ) { //  Device Serial Number
+	std::printf("[0x00181000] Device Serial Number -> %s\n", data);
+
+    } else if(tagDictionary == 0x00080008 ) { //  Image type ( not used )
+	std::printf("[0x00080008] Image Types -> %s\n", data);
+	    
+    } else if(tagDictionary == 0x00283000 ) { //  Modality LUT Sequence ( not used )
+	std::printf("[0x00283000] Modality LUT Sequence SQ 1 -> %s\n", data);
+
+    } else if(tagDictionary == 0x00283002 ) { // LUT Descriptor ( not used )
+	std::printf("[0x00283002] LUT Descriptor US or SS 3 -> %s\n", data);
+
+    } else if(tagDictionary == 0x00283003 ) { // LUT Explanation ( not used )
+	std::printf("[0x00283003] LUT Explanation LO 1 -> %s\n", data);
+
+    } else if(tagDictionary == 0x00283004 ) { // Modality LUT ( not used )
+	std::printf("[0x00283004] Modality LUT Type LO 1 -> %s\n", data);
+
+    } else if(tagDictionary == 0x00283006 ) { // LUT Data ( not used )
+	std::printf("[0x00283006] LUT Data US or SS -> %s\n", data);
+
+    } else if(tagDictionary == 0x00283010 ) { // VOI LUT ( not used )
+	std::printf("[0x00283010] VOI LUT Sequence SQ 1 -> %s\n", data);
+
+    } else if(tagDictionary == 0x00280120 ) { // Pixel Padding Value ( not used )
+	std::printf("[0x00280120] Pixel Padding Value US or SS 1 -> %s\n", data);
+
+    } else if(tagDictionary == 0x00280030 ) { // Pixel Spacing
+	char * buff = new char[LINEBUFFSIZE];
+	char * sepPos = index(data, '\\');
+	char * termPos = rindex(data, '\0');
+	std::strncpy(buff, data, sepPos - data);
+	pixelSpacingX = atof(buff);
+	std::strncpy(buff, sepPos+1, termPos - sepPos - 1);
+	pixelSpacingY = atof(buff);
+	std::printf("[0x00280030] Pixel Spacing (mm) -> %s\n", data);
+	delete [] buff;
+
+    } else if(tagDictionary == 0x00200037 ) { // Image Orientation ( not used )
+	std::printf("[0x00200037] Image Orientation (Patient) -> %s\n", data);
+
+    } else if(tagDictionary == 0x00200032 ) { // Image Position ( not used )
+	std::printf("[0x00200032] Image Position (Patient,mm) -> %s\n", data);
+
+    } else if(tagDictionary == 0x00180050 ) { // Slice Thickness
+	sliceThickness = atof(data);
+	std::printf("[0x00180050] Slice Thickness (mm) -> %f\n", sliceThickness);
+
+    } else if(tagDictionary == 0x00201041 ) { // Slice Location
+	sliceLocation = atof(data);
+	std::printf("[0x00201041] Slice Location -> %f\n", sliceLocation);
+
+    } else if(tagDictionary == 0x00280004 ) { // Photometric Interpretation ( not used )
+	std::printf("[0x00280004] Photometric Interpretation -> %s\n", data);
+
+    } else if(tagDictionary == 0x00020010) { // Endian
+	if(strcmp(data, "1.2.840.10008.1.2") == 0)
+	    implicitEndian = true;
+	else if(strncmp(data, "1.2.840.10008.1.2.2", 19) == 0)
+	    littleEndian = false;
+	//else 1.2.840..10008.1.2.1 (explicit little endian)
+		   
+	std::printf("[0x00020010] Endian -> %s\n", data);
+    }
+
+    // others
+    else {
+	std::printf("[0x%x] -> %s\n", tagDictionary, data);
+
+    }
+
+}
+
+//
+void DicomHandler::storeInformation(char * _filename) {
+
+    char * compressionbuf = new char[LINEBUFFSIZE];
+    char * maxbuf = new char[LINEBUFFSIZE];
+    char * filename = new char[FILENAMESIZE];
+    compression = 0;
+    max = 0;
+    FILE* configuration;
+
+    configuration = std::fopen("Data.dat","r");
+    if( configuration != 0 ) {
+	std::fscanf(configuration,"%s",compressionbuf);
+	compression = atoi(compressionbuf);
+	std::fscanf(configuration,"%s",maxbuf);
+	max = atoi(maxbuf);
+	std::fclose(configuration);
+    } else {
+	std::printf("### WARNING, file Data.dat not here !!!\n");
+	exit(1);
+    }
+
+
+    FILE* dat;
+    std::sprintf(filename,"%s.dat", _filename);
+    dat = std::fopen(filename,"w+");
+    // Note: the .dat files contain basic information on the images.
+
+    std::fprintf(dat,"Rows,columns(#):      %8i   %8i\n",rows,columns);
+    std::fprintf(dat,"PixelSpacing_X,Y(mm): %8f   %8f\n",
+                 pixelSpacingX,pixelSpacingY);
+    std::fprintf(dat,"SliceThickness(mm):   %8f\n",sliceThickness);
+    std::fprintf(dat,"SliceLocation(mm):    %8f\n",sliceLocation);
+    std::fclose(dat);
+
+    delete [] compressionbuf;
+    delete [] maxbuf;
+    delete [] filename;
+
+}
+
+//
+G4int DicomHandler::readData(FILE *dicom,char * filename2)
 {
-  G4int returnvalue = 0;
-  char compressionbuf[100],maxbuf[100];
-  G4int compression = 0, max = 0;
-  G4int intBuffer[1000000]; 
-  // intBuffer read a part of the header that is not
-  //useful for this application 
-  
-  G4int tab[1000][1000];
-  FILE* configuration = std::fopen("Data.dat","r");
-  std::fscanf(configuration,"%s",compressionbuf);
-  compression = atoi(compressionbuf);
-  std::fscanf(configuration,"%s",maxbuf);
-  max = atoi(maxbuf);
-  std::fclose(configuration);
+    G4int returnvalue = 0;
+    char * compressionbuf = new char[LINEBUFFSIZE];
+    char * maxbuf = new char[LINEBUFFSIZE];
+    short compression = 0;
+    G4int max = 0;
 
-  //  READING THE PIXELS :
-  G4int w = 0;
-  G4int len = 0;
+    FILE* configuration = std::fopen("Data.dat","r");
+    std::fscanf(configuration,"%s",compressionbuf);
+    compression = atoi(compressionbuf);
+    std::fscanf(configuration,"%s",maxbuf);
+    max = atoi(maxbuf);
+    std::fclose(configuration);
 
-  if (bitAllocated == 2) // Case 16 bits :
-    {
-      len = rows*columns;
-      for ( G4int j = 1; j <= rows; j++)
-        {
-	  for ( G4int i = 1; i <= columns; i++)
-            {
-	      w++;
-	      std::fread( &intBuffer[w], 1, 2, dicom);
-	      tab[j][i] = intBuffer[w];
-            }
-        }
-    }
-  else // not 16  bits :
-    {
-      std::printf("@@@ Error! Picture != 16 bits...\n");
-      std::printf("@@@ Error! Picture != 16 bits...\n"); 
-      std::printf("@@@ Error! Picture != 16 bits...\n"); 
-      len = rows*columns;
-      for (G4int j = 1;j <= rows;j++)
-        {
-	  for (G4int i = 1;i <= columns;i++)
-            {
-	      w++;
-	      std::fread(&intBuffer[w],1,2,dicom);
-	      tab[j][i] = intBuffer[w];
-            }
-        }
-      returnvalue = 1;
+    //  READING THE PIXELS :
+    G4int w = 0;
+    G4int len = 0;
+    
+    G4int** tab = new G4int*[rows];
+    for ( G4int i = 0; i < rows; i ++ ) {
+      tab[i] = new G4int[columns];
     }
 
-  // Creation of .g4 files wich contains averaged density data
+    if(bitAllocated == 8) { // Case 8 bits :
 
-  char nameProcessed[500];
-  FILE* processed;
+	std::printf("@@@ Error! Picture != 16 bits...\n");
+	std::printf("@@@ Error! Picture != 16 bits...\n"); 
+	std::printf("@@@ Error! Picture != 16 bits...\n"); 
 
-  std::sprintf(nameProcessed,"%s.g4",filename2);
-  processed = std::fopen(nameProcessed,"w+");
-  std::printf("### Writing of %s ###\n",nameProcessed);
+	unsigned char ch = 0;
 
-  std::fprintf(processed,"%8i   %8i\n",rows,columns);
-  std::fprintf(processed,"%8f   %8f\n",atof(pixelSpacingX),atof(pixelSpacingY) );
-  std::fprintf(processed,"%8i\n",atoi(sliceThickness) );
-  std::fprintf(processed,"%8f\n",sliceLocation);
-  std::fprintf(processed,"%8i\n",compression);
+	len = rows*columns;
+	for(G4int j = 0; j < rows; j++) {
+	    for(G4int i = 0; i < columns; i++) {
+		w++;
+		std::fread( &ch, 1, 1, dicom);
+		tab[j][i] = ch*rescaleSlope + rescaleIntercept;
+	    }
+	}
+	returnvalue = 1;
 
-  G4int compSize = 1;
-  compSize = compression;
-  G4int mean;
-  G4bool overflow = false;
-  G4int cpt=1;
-
-  if (compSize == 1) // no compression: each pixel has a density value)
-    {
-      for ( G4int ww = 1; ww <= rows; ww++)
-        {
-	  for( G4int xx = 1; xx <= columns; xx++)
-            {
-	      mean = (tab[ww][xx])/1;
-	      std::fprintf(processed,"%f   ",pixel2density(mean) );
-            }
-	  std::fprintf(processed,"\n");
-        }
+    } else { //  from 12 to 16 bits :
+	char sbuff[2];
+	short pixel;
+	len = rows*columns;
+	for( G4int j = 0; j < rows; j++) {
+	    for( G4int i = 0; i < columns; i++) {
+		w++;
+		std::fread(sbuff, 2, 1, dicom);
+		getValue(sbuff, pixel);
+		tab[j][i] = pixel*rescaleSlope + rescaleIntercept;
+	    }
+	}
     }
-  else
-    {
-      // density value is the average of a square region of
-      // compression*compression pixels
-      for (G4int ww = 1 ; ww <= rows ; ww = ww+compSize )
-        {
-	  for(G4int xx = 1 ; xx <= columns ; xx = xx+compSize )
-            {
-	      overflow = false;
-	      G4int mean = tab[ww][xx];
-	      G4int sumx = compSize-1;
-	      G4int sumy = compSize-1;
-	      for(  ; sumx>0; sumy--, sumx--)
-                {
-		  if (ww+sumy > rows|| xx+sumx > columns)
-                    {
-		      overflow = true;
-		      break;
-                    }
-		  mean = mean+tab[ww+sumy][xx+sumx];
-		  for (G4int m = sumx ; m>0 ; m--)
-                    {
-		      mean = mean+tab[ww+sumy-m][xx+sumx];
-		      mean = mean+tab[ww+sumy][xx+sumx-m];
-                    }
-                }
-	      mean = mean/(compSize*compSize);
-	      cpt = 1;
 
-	      if (overflow != true)
-		std::fprintf(processed,"%f   ",pixel2density( mean) );
+    // Creation of .g4 files wich contains averaged density data
+
+    char * nameProcessed = new char[FILENAMESIZE];
+    FILE* processed;
+
+    std::sprintf(nameProcessed,"%s.g4",filename2);
+    processed = std::fopen(nameProcessed,"w+b");
+    std::printf("### Writing of %s ###\n",nameProcessed);
+
+    std::fwrite(&rows, 2, 1, processed);
+    std::fwrite(&columns, 2, 1, processed);
+    std::fwrite(&pixelSpacingX, 8, 1, processed);
+    std::fwrite(&pixelSpacingY, 8, 1, processed);
+    std::fwrite(&sliceThickness, 8, 1, processed);
+    std::fwrite(&sliceLocation, 8, 1, processed);
+    std::fwrite(&compression, 2, 1, processed);
+
+    std::printf("%8i   %8i\n",rows,columns);
+    std::printf("%8f   %8f\n",pixelSpacingX,pixelSpacingY);
+    std::printf("%8f\n", sliceThickness);
+    std::printf("%8f\n", sliceLocation);
+    std::printf("%8i\n", compression);
+
+    G4int compSize = compression;
+    G4int mean;
+    G4double density;
+    G4bool overflow = false;
+    G4int cpt=1;
+
+    if(compSize == 1) { // no compression: each pixel has a density value)
+	for( G4int ww = 0; ww < rows; ww++) {
+	    for( G4int xx = 0; xx < columns; xx++) {
+		mean = tab[ww][xx];
+		density = pixel2density(mean);
+		std::fwrite(&density, sizeof(G4double), 1, processed);
             }
-	  std::fprintf(processed,"\n");
         }
-    }
-  std::fclose(processed);
 
-  return returnvalue;
+    } else {
+	// density value is the average of a square region of
+	// compression*compression pixels
+	for(G4int ww = 0; ww < rows ;ww += compSize ) {
+	    for(G4int xx = 0; xx < columns ;xx +=compSize ) {
+		overflow = false;
+		mean = 0;
+		for(int sumx = 0; sumx < compSize; sumx++) {
+		    for(int sumy = 0; sumy < compSize; sumy++) {
+			if(ww+sumy >= rows || xx+sumx >= columns) overflow = true;
+			mean += tab[ww+sumy][xx+sumx];
+		    }
+		    if(overflow) break;
+		}
+		mean /= compSize*compSize;
+		cpt = 1;
+
+		if(!overflow) {
+		    G4double density = pixel2density(mean);
+		    std::fwrite(&density, sizeof(G4double), 1, processed);
+		}
+	    }
+
+	}
+    }
+    std::fclose(processed);
+
+    delete [] compressionbuf;
+    delete [] maxbuf;
+    delete [] nameProcessed;
+
+    for ( G4int i = 0; i < rows; i ++ ) {
+      delete [] tab[i];
+    }
+    delete [] tab;
+
+    return returnvalue;
 }
 
 /*
@@ -441,144 +507,160 @@ G4int DicomHandler::readData(FILE *dicom,char filename2[300])
   return (G4int )i;
   }
 */
+
 G4double DicomHandler::pixel2density(G4int pixel)
 {
-  G4double density = -1;
-  G4int nbrequali = 0;
-  char nbrequalibuf[100];
-  G4double deltaCT = 0;
-  G4double deltaDensity = 0;
-  char valuedensitybuf[100][100];
-  char valueCTbuf[100][100];
-  G4double valuedensity[100];
-  G4double valueCT[100];
-  FILE* calibration;
+    G4double density = -1.;
+    G4int nbrequali = 0;
+    G4double deltaCT = 0;
+    G4double deltaDensity = 0;
 
-  // CT2Density.dat contains the calibration curve to convert CT (Hounsfield) number to
-  // physical density
-  calibration = std::fopen("CT2Density.dat","r");
-  std::fscanf(calibration,"%s",nbrequalibuf);
-  nbrequali = atoi(nbrequalibuf);
+    // CT2Density.dat contains the calibration curve to convert CT (Hounsfield)
+    // number to physical density
+    std::ifstream calibration("CT2Density.dat");
+    calibration >> nbrequali;
 
-  if (calibration == 0 )
-    {
-      std::printf("@@@ No value to transform pixels in density!\n");
-      exit(1);
+    G4double * valuedensity = new G4double[nbrequali];
+    G4double * valueCT = new G4double[nbrequali];
+
+    if(!calibration) {
+	G4cerr << "@@@ No value to transform pixels in density!" << G4endl;
+	exit(1);
+
+    } else { // calibration was successfully opened
+	for(G4int i = 0; i < nbrequali; i++) { // Loop to store all the pts in CT2Density.dat
+	    calibration >> valueCT[i] >> valuedensity[i];
+	}
     }
-  else // calibration != 0
-    {
-      for (G4int i=1;i<=nbrequali;i++) // Loop to store all the pts in CT2Density.dat
-        {
-	  std::fscanf(calibration,"%s %s",valueCTbuf[i-1],valuedensitybuf[i-1]);
-	  valueCT[i-1] = atof(valueCTbuf[i-1]);
-	  valuedensity[i-1]=atof(valuedensitybuf[i-1]);
-        }
-    }
-  std::fclose(calibration);
+    calibration.close();
 
-  for (G4int j = 1;j<nbrequali;j++)
-    {
-      if ( pixel >= valueCT[j-1] && pixel < valueCT[j])
-        {
-	  deltaCT = valueCT[j] - valueCT[j-1];
-	  deltaDensity = valuedensity[j] - valuedensity[j-1];
-	  if ( pixel - valueCT[j-1] >= valueCT[j] - pixel )
-            {
-	      density = valuedensity[j] + ( ( valueCT[j] - pixel ) * deltaDensity/deltaCT );
-            }
-	  else if ( pixel - valueCT[j-1] < valueCT[j] - pixel )
-            {
-	      density = valuedensity[j-1] + ( ( pixel - valueCT[j-1] ) * deltaDensity/deltaCT );
-            }
-        }
+    for(G4int j = 1; j < nbrequali; j++) {
+	if( pixel >= valueCT[j-1] && pixel < valueCT[j]) {
+
+	    deltaCT = valueCT[j] - valueCT[j-1];
+	    deltaDensity = valuedensity[j] - valuedensity[j-1];
+
+	    // interpolating linearly
+	    density = valuedensity[j] - ((valueCT[j] - pixel)*deltaDensity/deltaCT );
+	    break;
+	}
     }
 
-  if ( density < 0 )
-    {
-      std::printf("@@@ Error density = %f && Pixel = %i && deltaDensity/deltaCT = %f\n",density,pixel,deltaDensity/deltaCT);
+    if(density < 0.) {
+	std::printf("@@@ Error density = %f && Pixel = %i (0x%x) && deltaDensity/deltaCT = %f\n",density,pixel,pixel, deltaDensity/deltaCT);
     }
+    
+    delete [] valuedensity;
+    delete [] valueCT;
 
-  return density;
+    return density;
 }
 
 
 void DicomHandler::checkFileFormat()
 {
-  std::ifstream checkData("Data.dat");
-  char * oneLine = new char[101];
-  G4int nbImages;
+    std::ifstream checkData("Data.dat");
+    char * oneLine = new char[128];
+    G4int nbImages;
 
-  if (!(checkData.is_open())) //Check existance of Data.dat
-    {
-      G4cout << "\nDicomG4 needs Data.dat :\n\tFirst line: number of image pixel for a "
-	     << "voxel (G4Box)\n\tSecond line: number of images (CT slices) to "
-	     << "read\n\tEach following line contains the name of a Dicom image except "
-	     << "for the .dcm extension\n";
-      exit(0);
+    if(!(checkData.is_open())) { //Check existance of Data.dat
+
+	G4cout << "\nDicomG4 needs Data.dat :\n\tFirst line: number of image pixel for a "
+	       << "voxel (G4Box)\n\tSecond line: number of images (CT slices) to "
+	       << "read\n\tEach following line contains the name of a Dicom image except "
+	       << "for the .dcm extension\n";
+	exit(0);
     }
 
-  checkData >> nbImages;
-  checkData >> nbImages;
-  G4String oneName;
-  checkData.getline(oneLine,100);
-  std::ifstream testExistence;
-  G4bool existAlready = true;
-  for (G4int rep = 0; rep < nbImages; rep++)
-    { 
-      checkData.getline(oneLine,100);
-      oneName = oneLine;
-      oneName += ".g4"; // create dicomFile.g4
-      testExistence.open(oneName.data());
-      if (!(testExistence.is_open()))
-        {
-	  existAlready = false;
-	  testExistence.clear();
-	  testExistence.close();
-	  break;
-        }
-      testExistence.clear();
-      testExistence.close();
+    checkData >> nbImages;
+    checkData >> nbImages;
+    G4String oneName;
+    checkData.getline(oneLine,100);
+    std::ifstream testExistence;
+    G4bool existAlready = true;
+    for(G4int rep = 0; rep < nbImages; rep++) { 
+	checkData.getline(oneLine,100);
+	oneName = oneLine;
+	oneName += ".g4"; // create dicomFile.g4
+	testExistence.open(oneName.data());
+	if(!(testExistence.is_open())) {
+	    existAlready = false;
+	    testExistence.clear();
+	    testExistence.close();
+	    break;
+	}
+	testExistence.clear();
+	testExistence.close();
     }
-  checkData.close();
-  delete [] oneLine;
+    checkData.close();
+    delete [] oneLine;
 
-  if ( existAlready == false ) // The files *.g4 have to be created
-    {
-      G4cout << "\nAll the necessary images were not found in processed form, starting "
-	     << "with .dcm images\n";
+    if( existAlready == false ) { // The files *.g4 have to be created
 
-      FILE* dicom;
-      FILE *lecturePref;
-      char compressionc[300],maxc[300];
-      char name[300], inputFile[300];
-      lecturePref = std::fopen("Data.dat","r");
-      std::fscanf(lecturePref,"%s",compressionc);
-      compression = atoi(compressionc);
-      std::fscanf(lecturePref,"%s",maxc);
-      max = atoi(maxc);
+	G4cout << "\nAll the necessary images were not found in processed form, starting "
+	       << "with .dcm images\n";
 
-      for ( G4int i = 1; i <= max; i++ ) // Begin loop on filenames
-        {
-	  std::fscanf(lecturePref,"%s",inputFile);
-	  std::sprintf(name,"%s.dcm",inputFile);
-	  //  Open input file and give it to gestion_dicom :
-	  std::printf("### Opening %s and reading :\n",name);
-	  dicom = std::fopen(name,"rb");
-	  // Reading the .dcm in two steps:
-	  //      1.  reading the header
-	  //	2. reading the pixel data and store the density in Moyenne.dat
-	  if ( dicom != 0 )
-            {
-	      readHeader(dicom,inputFile);
-	      readData(dicom,inputFile);
-            }
-	  else 
-            {
-	      G4cout << "\nError opening file : " << name << G4endl;
-	      exit(0);
-            }
-	  std::fclose(dicom);
-        }
-      std::fclose(lecturePref);
+	FILE * dicom;
+	FILE * lecturePref;
+	char * compressionc = new char[LINEBUFFSIZE];
+	char * maxc = new char[LINEBUFFSIZE];
+	//char name[300], inputFile[300];
+	char * name = new char[FILENAMESIZE];
+	char * inputFile = new char[FILENAMESIZE];
+
+	lecturePref = std::fopen("Data.dat","r");
+	std::fscanf(lecturePref,"%s",compressionc);
+	compression = atoi(compressionc);
+	std::fscanf(lecturePref,"%s",maxc);
+	max = atoi(maxc);
+
+	for( G4int i = 1; i <= max; i++ ) { // Begin loop on filenames
+
+	    std::fscanf(lecturePref,"%s",inputFile);
+	    std::sprintf(name,"%s.dcm",inputFile);
+	    std::cout << "check 1: " << name << std::endl;
+	    //  Open input file and give it to gestion_dicom :
+	    std::printf("### Opening %s and reading :\n",name);
+	    dicom = std::fopen(name,"rb");
+	    // Reading the .dcm in two steps:
+	    //      1.  reading the header
+	    //	2. reading the pixel data and store the density in Moyenne.dat
+	    if( dicom != 0 ) {
+		readHeader(dicom,inputFile);
+		readData(dicom,inputFile);
+	    } else {
+		G4cout << "\nError opening file : " << name << G4endl;
+		exit(0);
+	    }
+	    std::fclose(dicom);
+	}
+	std::fclose(lecturePref);
+
+	delete [] compressionc;
+	delete [] maxc;
+	delete [] name;
+	delete [] inputFile;
+
     } 
+
+}
+
+
+template <class Type>
+void DicomHandler::getValue(char * _val, Type & _rval) {
+
+#if BYTE_ORDER == BIG_ENDIAN
+    if(littleEndian) {      // little endian
+#else // BYTE_ORDER == LITTLE_ENDIAN
+    if(!littleEndian) {     // big endian
+#endif
+	const int SIZE = sizeof(_rval);
+	char ctemp;
+	for(int i = 0; i < SIZE/2; i++) {
+	    ctemp = _val[i];
+	    _val[i] = _val[SIZE - 1 - i];
+	    _val[SIZE - 1 - i] = ctemp;
+	}
+    }
+    _rval = *(Type *)_val;
 }

@@ -53,6 +53,8 @@
 #ifndef DicomHandler_h
 #define DicomHandler_h 1
 
+#include <cstdio>
+
 #include "globals.hh"
 
 class DicomHandler
@@ -61,29 +63,45 @@ public:
 
   DicomHandler();
 
-  ~DicomHandler() { }
+    ~DicomHandler();
 
-  G4int readHeader(FILE *,char[300]);
-
-  G4int readData(FILE *,char[300]); // note: always use readHeader 
+  G4int readHeader(FILE *,char *);
+  G4int readData(FILE *,char *); // note: always use readHeader 
                                     // before readData
 
   // use ImageMagick to display the image
   //G4int displayImage(char[500]);
 
-  void checkFileFormat();
+    void checkFileFormat();
+
+private:
+    template <class Type> void getValue(char *, Type &);
 
 private:
 
-  G4int compression, max;
-  G4double pixel2density(G4int pixel);
-  G4int rows;
-  G4int columns;
-  G4int bitAllocated;
+    const int DATABUFFSIZE;
+    const int LINEBUFFSIZE;
+    const int FILENAMESIZE;
 
-  char  pixelSpacingX[300],pixelSpacingY[300];
-  char  sliceThickness[300];
-  G4double sliceLocation;
+    void storeInformation(char *);
+    void getInformation(G4int &, char *);
+    G4double pixel2density(G4int pixel);
+
+    short compression;
+    G4int max;
+    short rows;
+    short columns;
+    short bitAllocated;
+    G4int maxPixelValue, minPixelValue;
+    
+    G4double pixelSpacingX, pixelSpacingY;
+    G4double sliceThickness;
+    G4double sliceLocation;
+    
+    G4int rescaleIntercept, rescaleSlope;
+    
+    G4bool littleEndian, implicitEndian;
+    short pixelRepresentation;
 };
 #endif
 
