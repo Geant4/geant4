@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.19 2005-06-10 13:40:16 gcosmo Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.20 2005-06-13 10:57:18 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  G4ElasticHadrNucleusHE.cc
@@ -34,6 +34,7 @@
 #include  <iostream>
 #include  <fstream>
 #include  "G4ios.hh"
+#include "G4ParticleTable.hh"
 
   using namespace std;
 
@@ -70,7 +71,7 @@
   G4Exception(" This nucleus is very heavy for this model !!!");
          }
 
-                MyIonTable  = new G4IonTable();
+                MyIonTable  = const_cast<G4IonTable *>(G4ParticleTable::GetParticleTable()->GetIonTable());
  
           Factorials1[0] = 1;
           for( ii = 1; ii<110; ii++)
@@ -165,10 +166,12 @@
    }           //   ik
 
       TestFile.close();
-
-  G4cout<<" The array for elastic scattering of "<<sNameHdr<<G4endl;
-  G4cout<<" on the Nuclues "<<iNnucl<<" has been written !"<<G4endl;
-  G4cout<<" The Name of File is "<<sNameFile.str()<<G4endl<<G4endl;
+  if(getenv("HEElastic_debug"))
+  {
+    G4cout<<" The array for elastic scattering of "<<sNameHdr<<G4endl;
+    G4cout<<" on the Nuclues "<<iNnucl<<" has been written !"<<G4endl;
+    G4cout<<" The Name of File is "<<sNameFile.str()<<G4endl<<G4endl;
+  }
 
       iContr = 0;
  }   //  Constructor 
@@ -205,12 +208,15 @@
 
        std::ostrstream sNameFile;
        sNameFile<<sPath<<sNameHdr<<"_"<<iNnucl<<".dat"<<std::ends;
+  
+  if(getenv("HEElastic_debug"))
+  {
+    G4cout <<" Reading file for: Hadron - "<<sNameHdr
+          <<".  Nucleus - "<<iNnucl<<G4endl;
+    G4cout <<" The Name of File is "<<sNameFile.str()<<G4endl;
+  }
 
-  G4cout <<" Reading file for: Hadron - "<<sNameHdr
-         <<".  Nucleus - "<<iNnucl<<G4endl;
-  G4cout <<" The Name of File is "<<sNameFile.str()<<G4endl;
-
-        MyIonTable     = new G4IonTable();
+        MyIonTable     = const_cast<G4IonTable *>(G4ParticleTable::GetParticleTable()->GetIonTable());
 
         GetNucleusParameters(aNucleus);
 
@@ -231,8 +237,7 @@
    if(TestFile)
    {
      ElasticData  ElD;
-
-     G4cout<<" The file exists "<<G4endl;
+  if(getenv("HEElastic_debug")) G4cout<<" The file exists "<<G4endl;
 
      ElD.hadrName         = sNameHdr;
      ElD.nuclAtomicNumber = iNnucl;
@@ -262,10 +267,13 @@
 
     SetOfElasticData.push_back(ElD);
 
+  if(getenv("HEElastic_debug"))
+  {
   G4cout<<" The array for elastic scattering of "<<sNameHdr;
   G4cout<<" on the Nuclues "<<iNnucl<<G4endl;
   G4cout<<" from the file "<<sNameFile.str()<<" has been readout !"
         <<G4endl<<G4endl;
+  }
 
     return 1;
    }  //  if check
@@ -387,7 +395,7 @@
  {
        G4int    nN, nZ;
 
-       G4IonTable        * MyIonTable = new  G4IonTable();
+       G4IonTable        * MyIonTable = const_cast<G4IonTable *>(G4ParticleTable::GetParticleTable()->GetIonTable());
 
     iContr = 133;
 
