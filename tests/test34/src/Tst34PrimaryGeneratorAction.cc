@@ -29,15 +29,15 @@
 
 Tst34PrimaryGeneratorAction::Tst34PrimaryGeneratorAction()
 {
-	particleGun=new G4GeneralParticleSource;
+  particleGun=new G4GeneralParticleSource;
 }
 
 Tst34PrimaryGeneratorAction::~Tst34PrimaryGeneratorAction()
 {
-	delete particleGun;
+  delete particleGun;
 }
 
 void Tst34PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 { 
-	particleGun->GeneratePrimaryVertex(anEvent);
+  particleGun->GeneratePrimaryVertex(anEvent);
 }

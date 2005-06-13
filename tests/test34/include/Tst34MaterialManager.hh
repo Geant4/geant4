@@ -23,43 +23,40 @@
 #ifndef MATERIALMANAGER_H
 #define MATERIALMANAGER_H
 
-using namespace std;
 #include "G4Element.hh"
 #include "G4Material.hh"
 
 #include <map>
 #include <iostream>
 
+typedef std::map< G4String, G4Element*, std::less<G4String> > ElementList;
+typedef std::map< G4String, G4Material*, std::less<G4String> > MaterialList;
 
-typedef map< G4String, G4Element*, less<G4String> > ElementList;
-typedef map< G4String, G4Material*, less<G4String> > MaterialList;
+class Tst34MaterialManager
+{
+  public:
 
+    static Tst34MaterialManager* GetMaterialManager();
+    void storeElement(G4String, G4String, G4double, G4double);
+    G4Element* getElement(G4String);
+    void storeMaterial(G4String, G4double, G4double, G4double);
+    void storeMaterial(G4String, G4double, G4int);
+    G4Material* getMaterial(G4String);
+    void addMaterial(G4String,G4String,G4double);
+    void addElement(G4String,G4String,G4double);
+    void addElement(G4String,G4String,G4int);
+    void printElementTable();
+    void printMaterialTable();
+    void initialize();
 
+  private:
 
+    Tst34MaterialManager();
 
-class Tst34MaterialManager {
-private:
-	ElementList elist;
-	MaterialList mlist;
-	Tst34MaterialManager() {initialize();}
-	static Tst34MaterialManager *mpointer;
-public:
-	static Tst34MaterialManager* GetMaterialManager()
-	{
-		if (!mpointer)
-			mpointer=new Tst34MaterialManager;
-		return mpointer;
-	}
-	void storeElement(G4String, G4String, double, double);
-	G4Element* getElement(G4String);
-	void storeMaterial(G4String, double, double, double);
-	void storeMaterial(G4String, double, int);
-	G4Material* getMaterial(G4String);
-	void addMaterial(G4String,G4String,double);
-	void addElement(G4String,G4String,double);
-	void addElement(G4String,G4String,int);
-	void printElementTable();
-	void printMaterialTable();
-	void initialize();
+  private:
+
+    ElementList elist;
+    MaterialList mlist;
+    static Tst34MaterialManager *mpointer;
 };
 #endif

@@ -25,41 +25,23 @@
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 
-
-
-
 Tst34RunAction::Tst34RunAction(): runID(0)
 {
 }
-
 
 Tst34RunAction::~Tst34RunAction()
 {
 }
 
-
 void Tst34RunAction::BeginOfRunAction(const G4Run* aRun)
 {  
    ((G4Run *)(aRun))->SetRunID(runID++);
    
-   std::cout << "### Run " << aRun->GetRunID() << " start." << std::endl;
+   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 }
 
 
 void Tst34RunAction::EndOfRunAction(const G4Run* aRun)
 { 
-
   G4cout << "number of events = " << aRun->GetNumberOfEvent() << G4endl;
-
 }
-
-
-
-
-
-
-
-
-
-
-

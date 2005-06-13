@@ -31,18 +31,18 @@
 G4Allocator<Tst34Hit>Tst34HitAllocator;
 
 Tst34Hit::Tst34Hit()
-{pLogV=NULL;}
+  : pLogV(0)
+{;}
 
 Tst34Hit::Tst34Hit(G4LogicalVolume* logVol)
-:pLogV(logVol)
+ : pLogV(logVol)
 {;}
 
 Tst34Hit::~Tst34Hit()
 {;}
 
 Tst34Hit::Tst34Hit(const Tst34Hit &right)
-:G4VHit()
-//@@@ Tst34Hit:Is it right with the init?
+  : G4VHit(right)
 {
   edep = right.edep;
   pos = right.pos; 
@@ -66,10 +66,9 @@ const Tst34Hit & Tst34Hit::operator=(const Tst34Hit &right)
 
 int Tst34Hit::operator==(const Tst34Hit &right) const
 {
-// @@@@ return 0;
-	if ((pos==right.pos) &&  (edep == right.edep)) return true;
-	else return false;
-	
+  if ((pos==right.pos) && (edep == right.edep)) return true;
+  else return false;
+  
 }
 
 void Tst34Hit::Draw()
@@ -88,18 +87,9 @@ void Tst34Hit::Draw()
     attribs.SetForceSolid(true);
     pVVisManager->Draw(*pLogV,attribs,trans);
   }
-*/	
+*/
 }
 
 void Tst34Hit::Print()
 {
 }
-
-
-
-
-
-
-
-
-

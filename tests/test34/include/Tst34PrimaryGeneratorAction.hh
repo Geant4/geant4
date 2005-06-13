@@ -31,17 +31,19 @@
 
 class G4Event;
 
-class Tst34PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
+class Tst34PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+{
 
-public:
-	Tst34PrimaryGeneratorAction();
-	~Tst34PrimaryGeneratorAction();
-	void GeneratePrimaries(G4Event* anEvent);
+  public:
 
-private:
-  G4GeneralParticleSource	* particleGun;
+    Tst34PrimaryGeneratorAction();
+   ~Tst34PrimaryGeneratorAction();
+
+    void GeneratePrimaries(G4Event* anEvent);
+
+  private:
+
+    G4GeneralParticleSource* particleGun;
 };
 
 #endif
-
-

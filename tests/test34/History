@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2004-11-27 17:51:23 gcosmo Exp $
+$Id: History,v 1.2 2005-06-13 15:56:48 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13th June 2005  G.Cosmo (test34-V07-00-00)
+- Corrected initialisation of sensitive detector.
+  Removed run-time errors reported by Valgrind.
+- General cleanup.
 
 26th November 2004  H.P.Wellisch (test34-V06-02-00)
 - First implementation of a system test for 'gflash' parameterisation.
