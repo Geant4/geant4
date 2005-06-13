@@ -39,7 +39,7 @@
 //    After changes to version 1.1 as in Geant4 v6.0
 //     - Mutilple particle source definition
 //     - Re-structured commands
-//     - old commonds have been retained for backward compatibility, will be
+//     - old commands have been retained for backward compatibility, will be
 //       removed in the future. 
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -910,219 +910,305 @@ void G4GeneralParticleSourceMessenger::SetNewValue(G4UIcommand *command, G4Strin
   if(command == typeCmd)
     {
       fParticleGun->GetPosDist()->SetPosDisType(newValues);
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == shapeCmd)
     {
       fParticleGun->GetPosDist()->SetPosDisShape(newValues);
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == centreCmd)
     {
       fParticleGun->GetPosDist()->SetCentreCoords(centreCmd->GetNew3VectorValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == posrot1Cmd)
     {
       fParticleGun->GetPosDist()->SetPosRot1(posrot1Cmd->GetNew3VectorValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == posrot2Cmd)
     {
       fParticleGun->GetPosDist()->SetPosRot2(posrot2Cmd->GetNew3VectorValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == halfxCmd)
     {
       fParticleGun->GetPosDist()->SetHalfX(halfxCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == halfyCmd)
     {
       fParticleGun->GetPosDist()->SetHalfY(halfyCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == halfzCmd)
     {
       fParticleGun->GetPosDist()->SetHalfZ(halfzCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == radiusCmd)
     {
       fParticleGun->GetPosDist()->SetRadius(radiusCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == radius0Cmd)
     {
       fParticleGun->GetPosDist()->SetRadius0(radius0Cmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == possigmarCmd)
     {
       fParticleGun->GetPosDist()->SetBeamSigmaInR(possigmarCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == possigmaxCmd)
     {
       fParticleGun->GetPosDist()->SetBeamSigmaInX(possigmaxCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == possigmayCmd)
     {
       fParticleGun->GetPosDist()->SetBeamSigmaInY(possigmayCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == paralpCmd)
     {
       fParticleGun->GetPosDist()->SetParAlpha(paralpCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == partheCmd)
     {
       fParticleGun->GetPosDist()->SetParTheta(partheCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == parphiCmd)
     {
       fParticleGun->GetPosDist()->SetParPhi(parphiCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == confineCmd)
     {
       fParticleGun->GetPosDist()->ConfineSourceToVolume(newValues);
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == angtypeCmd)
     {
       fParticleGun->GetAngDist()->SetAngDistType(newValues);
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == angrot1Cmd)
     {
       G4String a = "angref1";
       fParticleGun->GetAngDist()->DefineAngRefAxes(a,angrot1Cmd->GetNew3VectorValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == angrot2Cmd)
     {
       G4String a = "angref2";
       fParticleGun->GetAngDist()->DefineAngRefAxes(a,angrot2Cmd->GetNew3VectorValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == minthetaCmd)
     {
       fParticleGun->GetAngDist()->SetMinTheta(minthetaCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == minphiCmd)
     {
       fParticleGun->GetAngDist()->SetMinPhi(minphiCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == maxthetaCmd)
     {
       fParticleGun->GetAngDist()->SetMaxTheta(maxthetaCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == maxphiCmd)
     {
       fParticleGun->GetAngDist()->SetMaxPhi(maxphiCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == angsigmarCmd)
     {
       fParticleGun->GetAngDist()->SetBeamSigmaInAngR(angsigmarCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == angsigmaxCmd)
     {
       fParticleGun->GetAngDist()->SetBeamSigmaInAngX(angsigmaxCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == angsigmayCmd)
     {
       fParticleGun->GetAngDist()->SetBeamSigmaInAngY(angsigmayCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == useuserangaxisCmd)
     {
       fParticleGun->GetAngDist()->SetUseUserAngAxis(useuserangaxisCmd->GetNewBoolValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == surfnormCmd)
     {
       fParticleGun->GetAngDist()->SetUserWRTSurface(surfnormCmd->GetNewBoolValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == energytypeCmd)
     {
       fParticleGun->GetEneDist()->SetEnergyDisType(newValues);
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == eminCmd)
     {
       fParticleGun->GetEneDist()->SetEmin(eminCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == emaxCmd)
     {
       fParticleGun->GetEneDist()->SetEmax(emaxCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == monoenergyCmd)
     {
       fParticleGun->GetEneDist()->SetMonoEnergy(monoenergyCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == engsigmaCmd)
     {
       fParticleGun->GetEneDist()->SetBeamSigmaInE(engsigmaCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == alphaCmd)
     {
       fParticleGun->GetEneDist()->SetAlpha(alphaCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == tempCmd)
     {
       fParticleGun->GetEneDist()->SetTemp(tempCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == ezeroCmd)
     {
       fParticleGun->GetEneDist()->SetEzero(ezeroCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == gradientCmd)
     {
       fParticleGun->GetEneDist()->SetGradient(gradientCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == interceptCmd)
     {
       fParticleGun->GetEneDist()->SetInterCept(interceptCmd->GetNewDoubleValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == calculateCmd)
     {
       fParticleGun->GetEneDist()->Calculate();
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == energyspecCmd)
     {
       fParticleGun->GetEneDist()->InputEnergySpectra(energyspecCmd->GetNewBoolValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == diffspecCmd)
     {
       fParticleGun->GetEneDist()->InputDifferentialSpectra(diffspecCmd->GetNewBoolValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == histnameCmd)
     {
       histtype = newValues;
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == histpointCmd)
     {
@@ -1148,7 +1234,7 @@ void G4GeneralParticleSourceMessenger::SetNewValue(G4UIcommand *command, G4Strin
 	fParticleGun->GetEneDist()->ArbEnergyHisto(histpointCmd->GetNew3VectorValue(newValues));
       if(histtype == "epn")
 	fParticleGun->GetEneDist()->EpnEnergyHisto(histpointCmd->GetNew3VectorValue(newValues));
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning: The command is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
     }
   else if(command == resethistCmd)
     {
@@ -1159,12 +1245,16 @@ void G4GeneralParticleSourceMessenger::SetNewValue(G4UIcommand *command, G4Strin
       } else {
 	fParticleGun->GetBiasRndm()->ReSetHist(newValues);
       }
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if(command == arbintCmd)
     {
       fParticleGun->GetEneDist()->ArbInterpolate(newValues);
-      G4cout << " Warning: The commond is obsolete and will be removed soon. Please try to use the new structured commands!" << G4endl;
+      G4cout << " G4GeneralParticleSourceMessenger - Warning:" << G4endl
+             << " The command is obsolete and will be removed soon." << G4endl
+             << " Please try to use the new structured commands!" << G4endl;
     }
   else if( command==directionCmd )
     { 
