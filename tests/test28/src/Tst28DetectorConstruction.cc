@@ -33,10 +33,13 @@
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
 #include "G4UImanager.hh"
+#include "G4RunManager.hh"
 #include "G4ios.hh"
 
 Tst28DetectorConstruction::Tst28DetectorConstruction()
-:simpleBoxLog(0),theH(0),theSi(0),theCu(0),thePb(0),theU(0),selectedMaterial(0)
+  : simpleBoxLog(0), simpleBoxDetector(0),
+    theH(0),theSi(0),theCu(0),thePb(0),theU(0),theH2O(0),
+    selectedMaterial(0)
 {
   detectorMessenger = new Tst28DetectorMessenger(this);
   materialChoice = "Pb";
@@ -144,19 +147,22 @@ void Tst28DetectorConstruction::SelectMaterialPointer()
   { selectedMaterial = theU; }
 
   if(simpleBoxLog)
-  { simpleBoxLog->SetMaterial(selectedMaterial); }
+  {
+    simpleBoxLog->SetMaterial(selectedMaterial);
+    G4RunManager::GetRunManager()->GeometryHasBeenModified();
+  }
 }
 
 G4VPhysicalVolume* Tst28DetectorConstruction::Construct()
 {
   SelectMaterialPointer();
-
-  G4Box * mySimpleBox = new G4Box("SBox",200*cm, 200*cm, 200*cm);
-  simpleBoxLog = new G4LogicalVolume( mySimpleBox,
-                                      selectedMaterial,"SLog",0,0,0);
-  G4VPhysicalVolume* simpleBoxDetector = new G4PVPlacement(0,G4ThreeVector(),
-                                        "SPhys",simpleBoxLog,0,false,0);
-
+  if(!simpleBoxLog) {
+    G4Box * mySimpleBox = new G4Box("SBox",200*cm, 200*cm, 200*cm);
+    simpleBoxLog = new G4LogicalVolume( mySimpleBox,
+                                        selectedMaterial,"SLog",0,0,0);
+    simpleBoxDetector = new G4PVPlacement(0,G4ThreeVector(),
+                                          "SPhys",simpleBoxLog,0,false,0);
+  }
   return simpleBoxDetector;
 }
 

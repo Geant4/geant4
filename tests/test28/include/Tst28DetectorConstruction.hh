@@ -34,17 +34,22 @@ class Tst28DetectorMessenger;
 class Tst28DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
+
     Tst28DetectorConstruction();
     ~Tst28DetectorConstruction();
 
   public:
+
      G4VPhysicalVolume* Construct();
      void SelectMaterial(G4String val);
 
   private:
+
      void SelectMaterialPointer();
 
      G4LogicalVolume*   simpleBoxLog;
+     G4VPhysicalVolume* simpleBoxDetector;
+
      G4Material* theH;
      G4Material* theSi;
      G4Material* theCu;
@@ -54,7 +59,8 @@ class Tst28DetectorConstruction : public G4VUserDetectorConstruction
      
      G4Material* selectedMaterial;
      G4String materialChoice;
-     Tst28DetectorMessenger * detectorMessenger;
+
+     Tst28DetectorMessenger* detectorMessenger;
 };
 
 #endif
