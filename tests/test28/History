@@ -1,0 +1,21 @@
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Test 28 History file
+                    --------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+13.06.2005, G.Cosmo (test28-V07-00-00)
+- Cleared Valgrind run-time errors in DetectorConstruction.
+- Moved 'in' input macro to standard 'test28.in'.
+- Corrected update of run-manager for change of geometry setup.
+
+01.06.2004, J.P.Wellisch
+- created the test
