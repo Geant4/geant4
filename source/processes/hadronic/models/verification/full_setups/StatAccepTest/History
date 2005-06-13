@@ -1,6 +1,11 @@
                  History file
                  ------------
 
+13-June-2005 - A.Ribon (statAccepTest-V07-00-08)
+- Change of the ordering of  pvalue.cpp  to avoid
+  a bug in PI when reading ntuples from two files.
+
+
 10-June-2005 - A.Ribon (statAccepTest-V07-00-07)
 - Preparing the version to be use for the June 
   release testing. Only few minor changes.

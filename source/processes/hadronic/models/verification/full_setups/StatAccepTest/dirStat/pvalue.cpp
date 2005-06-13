@@ -146,11 +146,18 @@ int main (int, char **) {
   // Creating the tree factory.
   std::auto_ptr<AIDA::ITreeFactory> tf( af->createTreeFactory() );
  
-  // Read the two trees from the two input files.
-  bool readOnly  = true;  
-  bool createNew = false; 
+  // Define some useful variables.
+  bool readOnly, createNew;
+  int i_nLayers, i_nBinR, numberOfReplicas, numberOfRadiusBins; 
+  int iEdepAct, iEdepCal, iL, iR; 
+
+  // --- Start now working on the first ntuple ---
+
+  // Read the first tree from the input file.
+  readOnly  = true;  
+  createNew = false; 
   std::auto_ptr<AIDA::ITree> treeHBookA( tf->create( "ntuple_a.hbook", "hbook", 
-						     readOnly, createNew ) );
+ 						     readOnly, createNew ) );
   if ( ! treeHBookA.get() ) {
     std::cout << " ERROR: unable to open file  ntuple_a.hbook " << std::endl;
     return -1;
@@ -158,44 +165,24 @@ int main (int, char **) {
     // std:: cout << " OK : opened file  ntuple_a.hbook " << std::endl   //***DEBUG***
     //           << "\t The content is: " << treeHBookA->ls() << std::endl;
   }
-
-  std::auto_ptr<AIDA::ITree> treeHBookB( tf->create( "ntuple_b.hbook", "hbook", 
-                                                     readOnly, createNew ) );
-  if ( ! treeHBookB.get() ) {
-    std::cout << " ERROR: unable to open file  ntuple_b.hbook " << std::endl;
-    return -1;
-  } else {
-    // std:: cout << " OK : opened file  ntuple_b.hbook " << std::endl   //***DEBUG***
-    //            << "\t The content is: " << treeHBookB->ls() << std::endl;
-
-  }
-
+ 
   // std::cout << " treeHBookA " << (int) treeHBookA.get() << std::endl; //***DEBUG***
   AIDA::ITuple* p_tpA = dynamic_cast<AIDA::ITuple*>( ( treeHBookA->find( "/1" ) ) );
   if ( ! p_tpA ) { 
-     std::cerr << "Error finding /hbookA/1 " << std::endl; 
-     return -1;
+    std::cerr << "Error finding /hbookA/1 " << std::endl; 
+    return -1;
   }
   // std::cout << (int) p_tpA << std::endl; //***DEBUG*** 
-    
+     
   AIDA::ITuple& tpA = *p_tpA; 
-
+ 
   //***DEBUG***
   // std::cout << "Tuple A title : " << tpA.title() << std::endl;
   // std::cout << "Tuple A variables : " << std::endl;
   // for ( int i = 0; i < tpA.columns(); ++i ) {
   //   std::cout << tpA.columnName(i) << "\t" << tpA.columnType(i) << std::endl;
   // }
-
-  AIDA::ITuple& tpB = dynamic_cast<AIDA::ITuple&>( * ( treeHBookB->find( "/1" ) ) );
-
-  //***DEBUG***
-  // std::cout << "Tuple B title : " << tpB.title() << std::endl;
-  // std::cout << "Tuple B variables : " << std::endl;
-  // for ( int i = 0; i < tpB.columns(); ++i ) {
-  //   std::cout << tpB.columnName(i) << "\t" << tpB.columnType(i) << std::endl;
-  // }
-
+ 
   // Read also the two histograms: longitudinal shower profile
   // and transverse shower profile.
   AIDA::IHistogram1D& histL_A = 
@@ -204,45 +191,31 @@ int main (int, char **) {
   AIDA::IHistogram1D& histR_A = 
     dynamic_cast<AIDA::IHistogram1D&>( * ( treeHBookA->find( "/60" ) ) );
   std::cout << " HistoR A title : " << histR_A.title() << std::endl;   //***DEBUG***
-
-  AIDA::IHistogram1D& histL_B = 
-    dynamic_cast<AIDA::IHistogram1D&>( * ( treeHBookB->find( "/50" ) ) );
-  std::cout << " HistoL B title : " << histL_B.title() << std::endl;   //***DEBUG***
-  AIDA::IHistogram1D& histR_B = 
-    dynamic_cast<AIDA::IHistogram1D&>( * ( treeHBookB->find( "/60" ) ) );
-  std::cout << " HistoR B title : " << histR_B.title() << std::endl;   //***DEBUG***
-
+ 
   // ---------------------------------------------------------------
   // Get the number of elements of the vector L and R of the ntuple.
-  // ---------------------------------------------------------------
-  int i_nLayers = tpA.findColumn( "nLayers" ); 
-  int i_nBinR = tpA.findColumn( "nBinR" ); 
+  // ---------------------------------------------------------------  
+  i_nLayers = tpA.findColumn( "nLayers" ); 
+  i_nBinR = tpA.findColumn( "nBinR" ); 
   tpA.start(); tpA.next();
-  const int numberOfReplicas   = tpA.getInt( i_nLayers ); 
-  const int numberOfRadiusBins = tpA.getInt( i_nBinR ); 
-
+  numberOfReplicas   = tpA.getInt( i_nLayers ); 
+  numberOfRadiusBins = tpA.getInt( i_nBinR ); 
   std::cout << " numberOfReplicas   = " << numberOfReplicas << std::endl
-            << " numberOfRadiusBins = " << numberOfRadiusBins 
-	    << std::endl;                                       //***DEBUG***
-
+	    << " numberOfRadiusBins = " << numberOfRadiusBins 
+ 	    << std::endl;                                       //***DEBUG***
+ 
   // -------------------------------------------------------------
   // Creating the clouds, and fill them by projecting the ntuples.
   // -------------------------------------------------------------
-
-  // Creating two trees on two files where to save all clouds.
   readOnly  = false;  
   createNew = true; 
   std::auto_ptr<AIDA::ITree> treeCloudsA( tf->create("cloudsA.xml", "xml", 
-						     readOnly, createNew) );
-  std::auto_ptr<AIDA::ITree> treeCloudsB( tf->create("cloudsB.xml", "xml", 
-						     readOnly, createNew) );
-
-  // Creating two histogram factories attached to the two trees.
+ 						     readOnly, createNew) );
+  
+  // Creating a histogram factory attached to the tree.
   std::auto_ptr<AIDA::IHistogramFactory> 
     hfA( af->createHistogramFactory( *treeCloudsA ) );
-  std::auto_ptr<AIDA::IHistogramFactory> 
-    hfB( af->createHistogramFactory( *treeCloudsB ) );
-
+  
   // Create the clouds.
   AIDA::ICloud1D * cA1 = hfA->createCloud1D( "Energy deposit in Active layers, A" ); 
   AIDA::ICloud1D * cA2 = hfA->createCloud1D( "Energy deposit in All layers, A" ); 
@@ -258,13 +231,13 @@ int main (int, char **) {
     cAR.push_back( hfA->createCloud1D( name ) ); 
     // std::cout << "\t Created cloud: name = " << name << std::endl;  //***DEBUG***
   }
-
-  int iEdepAct = tpA.findColumn( "EDEP_ACT" ); 
-  int iEdepCal = tpA.findColumn( "EDEP_CAL" ); 
-  int iL = tpA.findColumn( "L" );
-  int iR = tpA.findColumn( "R" ); 
-
-  // Fill the clouds for the first ntuple.
+  
+  iEdepAct = tpA.findColumn( "EDEP_ACT" ); 
+  iEdepCal = tpA.findColumn( "EDEP_CAL" ); 
+  iL = tpA.findColumn( "L" );
+  iR = tpA.findColumn( "R" ); 
+   
+  // Fill the clouds with the first ntuple.
   tpA.start(); 
   while ( tpA.next() ) { 
     float eDepAct = tpA.getFloat( iEdepAct ); 
@@ -294,7 +267,37 @@ int main (int, char **) {
       //           << std::endl; //***DEBUG***
     }  
   }
-
+  
+  // Flushing the clouds into the file.
+  treeCloudsA->commit();
+  
+  // --- Do the same for the ntuple B ---
+  readOnly  = true;  
+  createNew = false; 
+  std::auto_ptr<AIDA::ITree> treeHBookB( tf->create( "ntuple_b.hbook", "hbook", 
+                                                     readOnly, createNew ) );
+  if ( ! treeHBookB.get() ) {
+    std::cout << " ERROR: unable to open file  ntuple_b.hbook " << std::endl;
+    return -1;
+  }
+  AIDA::ITuple& tpB = dynamic_cast<AIDA::ITuple&>( * ( treeHBookB->find( "/1" ) ) );
+  AIDA::IHistogram1D& histL_B = 
+    dynamic_cast<AIDA::IHistogram1D&>( * ( treeHBookB->find( "/50" ) ) );
+  std::cout << " HistoL B title : " << histL_B.title() << std::endl;   //***DEBUG***
+  AIDA::IHistogram1D& histR_B = 
+    dynamic_cast<AIDA::IHistogram1D&>( * ( treeHBookB->find( "/60" ) ) );
+  std::cout << " HistoR B title : " << histR_B.title() << std::endl;   //***DEBUG***
+  i_nLayers = tpB.findColumn( "nLayers" ); 
+  i_nBinR = tpB.findColumn( "nBinR" ); 
+  tpB.start(); tpB.next();
+  numberOfReplicas   = tpB.getInt( i_nLayers ); 
+  numberOfRadiusBins = tpB.getInt( i_nBinR ); 
+  readOnly  = false;  
+  createNew = true; 
+  std::auto_ptr<AIDA::ITree> treeCloudsB( tf->create("cloudsB.xml", "xml", 
+  						     readOnly, createNew) );
+  std::auto_ptr<AIDA::IHistogramFactory> 
+    hfB( af->createHistogramFactory( *treeCloudsB ) );
   AIDA::ICloud1D * cB1 = hfB->createCloud1D( "Energy deposit in Active layers, B" ); 
   AIDA::ICloud1D * cB2 = hfB->createCloud1D( "Energy deposit in All layers, B" ); 
   std::vector< AIDA::ICloud1D * > cBL;   
@@ -309,8 +312,10 @@ int main (int, char **) {
     cBR.push_back( hfB->createCloud1D( name ) ); 
     // std::cout << "\t Created cloud: name = " << name << std::endl;  //***DEBUG***
   }
-
-  // Fill the clouds for the second ntuple.
+  iEdepAct = tpB.findColumn( "EDEP_ACT" ); 
+  iEdepCal = tpB.findColumn( "EDEP_CAL" ); 
+  iL = tpB.findColumn( "L" );
+  iR = tpB.findColumn( "R" ); 
   tpB.start(); 
   while ( tpB.next() ) { 
     float eDepAct = tpB.getFloat( iEdepAct ); 
@@ -340,7 +345,8 @@ int main (int, char **) {
       //           << std::endl; //***DEBUG***
     }  
   }
-
+  treeCloudsB->commit();
+ 
   //***DEBUG*** : Check the content of the clouds.
   // std::cout << " Debugging info about cloud 1 :  A \t B " << std::endl
   //           << "\t sumOfWeights : " << cA1->sumOfWeights() 
@@ -395,10 +401,6 @@ int main (int, char **) {
   // 	      << "\t"                 << cBR[i]->rms() << std::endl;
   // }
  
-  // Flushing the clouds into the files
-  treeCloudsA->commit();
-  treeCloudsB->commit();
-  
   // ------------------------------------------------------------
   // Creating the histograms, by converting copies of the clouds.
   // ------------------------------------------------------------
@@ -410,29 +412,34 @@ int main (int, char **) {
   // are used as identifiers.
   AIDA::ICloud1D * cA1bis = 
     hfA->createCopy( "Energy deposit in Active layers, A bis", *cA1 );
-  AIDA::ICloud1D * cB1bis = 
-    hfB->createCopy( "Energy deposit in Active layers, B bis", *cB1 );
   AIDA::ICloud1D * cA2bis = 
     hfA->createCopy( "Energy deposit in All layers, A bis", *cA2 ); 
-  AIDA::ICloud1D * cB2bis = 
-    hfB->createCopy( "Energy deposit in All layers, B bis", *cB2 ); 
   std::vector< AIDA::ICloud1D * > cALbis;
-  std::vector< AIDA::ICloud1D * > cBLbis;
   std::vector< AIDA::ICloud1D * > cARbis;
-  std::vector< AIDA::ICloud1D * > cBRbis;
   for ( int i = 0; i < numberOfReplicas; i++ ) {
     std::string name = "LA" + toString( i ) + "bis";
     cALbis.push_back( hfA->createCopy( name, *cAL[i] ) ); 
     // std::cout << "\t Created cloud: name = " << name << std::endl;  //***DEBUG*** 
-    name = "LB" + toString( i ) + "bis";
-    cBLbis.push_back( hfB->createCopy( name, *cBL[i] ) ); 
-    // std::cout << "\t Created cloud: name = " << name << std::endl;  //***DEBUG***
   }
   for ( int i = 0; i < numberOfRadiusBins; i++ ) {
     std::string name = "RA" + toString( i ) + "bis";
     cARbis.push_back( hfA->createCopy( name, *cAR[i] ) ); 
     // std::cout << "\t Created cloud: name = " << name << std::endl;  //***DEBUG*** 
-    name = "RB" + toString( i ) + "bis";
+  }
+
+  AIDA::ICloud1D * cB1bis = 
+    hfB->createCopy( "Energy deposit in Active layers, B bis", *cB1 );
+  AIDA::ICloud1D * cB2bis = 
+    hfB->createCopy( "Energy deposit in All layers, B bis", *cB2 ); 
+  std::vector< AIDA::ICloud1D * > cBLbis;
+  std::vector< AIDA::ICloud1D * > cBRbis;
+  for ( int i = 0; i < numberOfReplicas; i++ ) {
+    std::string name = "LB" + toString( i ) + "bis";
+    cBLbis.push_back( hfB->createCopy( name, *cBL[i] ) ); 
+    // std::cout << "\t Created cloud: name = " << name << std::endl;  //***DEBUG***
+  }
+  for ( int i = 0; i < numberOfRadiusBins; i++ ) {
+    std::string name = "RB" + toString( i ) + "bis";
     cBRbis.push_back( hfB->createCopy( name, *cBR[i] ) ); 
     // std::cout << "\t Created cloud: name = " << name << std::endl;  //***DEBUG*** 
   }
@@ -440,7 +447,6 @@ int main (int, char **) {
   // Convert the copies of the clouds into histograms:
   // notice that the pairs of histograms that must be compared
   // must have the same binning.
-
   if ( ! convertCloudsToTheSameHistogram( *cA1bis, *cB1bis )  ||
        ! convertCloudsToTheSameHistogram( *cA2bis, *cB2bis ) ) return -1;
   for ( int i = 0; i < numberOfReplicas; i++ ) {
@@ -456,35 +462,49 @@ int main (int, char **) {
   createNew = true;
   std::auto_ptr<AIDA::ITree> treeHBookAout( tf->create("histo_a.hbook", "hbook", 
 						       readOnly, createNew ) );
-  std::auto_ptr<AIDA::ITree> treeHBookBout( tf->create("histo_b.hbook", "hbook", 
-						       readOnly, createNew ) );   
   // Creating a histogram factory, whose histograms will be handled by the tree
   std::auto_ptr<AIDA::IHistogramFactory> 
     hfacA( af->createHistogramFactory( *treeHBookAout ) );
-  std::auto_ptr<AIDA::IHistogramFactory> 
-    hfacB( af->createHistogramFactory( *treeHBookBout ) );
 
   hfacA->createCopy( "11", cA1bis->histogram() );
-  hfacB->createCopy( "11", cB1bis->histogram() );
   hfacA->createCopy( "12", cA2bis->histogram() );
-  hfacB->createCopy( "12", cB2bis->histogram() );
   hfacA->createCopy( "50", histL_A );
-  hfacB->createCopy( "50", histL_B );
   hfacA->createCopy( "60", histR_A );
-  hfacB->createCopy( "60", histR_B );
   for ( int i = 0; i < numberOfReplicas; i++ ) {
     int idNum = i + 100;
     std::string idString = toString( idNum );
     hfacA->createCopy( idString, cALbis[i]->histogram() );
-    hfacB->createCopy( idString, cBLbis[i]->histogram() );
   }
   for ( int i = 0; i < numberOfRadiusBins; i++ ) {
     int idNum = i + 200;
     std::string idString = toString( idNum );
     hfacA->createCopy( idString, cARbis[i]->histogram() );
-    hfacB->createCopy( idString, cBRbis[i]->histogram() );
   }
   
+  // Flushing the histograms into the file
+  treeHBookAout->commit();
+
+  // --- Do the same for the ntuple B --- 
+  std::auto_ptr<AIDA::ITree> treeHBookBout( tf->create("histo_b.hbook", "hbook", 
+						       readOnly, createNew ) );   
+  std::auto_ptr<AIDA::IHistogramFactory> 
+    hfacB( af->createHistogramFactory( *treeHBookBout ) );
+  hfacB->createCopy( "11", cB1bis->histogram() );
+  hfacB->createCopy( "12", cB2bis->histogram() );
+  hfacB->createCopy( "50", histL_B );
+  hfacB->createCopy( "60", histR_B );
+  for ( int i = 0; i < numberOfReplicas; i++ ) {
+    int idNum = i + 100;
+    std::string idString = toString( idNum );
+    hfacB->createCopy( idString, cBLbis[i]->histogram() );
+  }
+  for ( int i = 0; i < numberOfRadiusBins; i++ ) {
+    int idNum = i + 200;
+    std::string idString = toString( idNum );
+    hfacB->createCopy( idString, cBRbis[i]->histogram() );
+  }
+  treeHBookBout->commit();
+
   //***DEBUG*** : Check the content of the histograms.
   // std::cout << " Debugging info about histogram 1 :  A \t B " << std::endl
   //           << "\t allEntries   : " << cA1bis->histogram().allEntries() 
@@ -537,11 +557,7 @@ int main (int, char **) {
   // 	      << "\t rms          : " << cARbis[i]->histogram().rms() 
   // 	      << "\t"                 << cBRbis[i]->histogram().rms() << std::endl;
   // }
-  
-  // Flushing the histograms into the file
-  treeHBookAout->commit();
-  treeHBookBout->commit();
-  
+
   // ------------------------
   // Do the statistical tests
   // ------------------------
