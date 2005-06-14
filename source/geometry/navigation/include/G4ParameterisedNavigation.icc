@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.icc,v 1.4 2005-03-03 17:12:43 japost Exp $
+// $Id: G4ParameterisedNavigation.icc,v 1.5 2005-06-14 16:09:43 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,105 +78,3 @@ G4ParameterisedNavigation::ParamVoxelLocate( G4SmartVoxelHeader* pHead,
   return fVoxelNode;
 }
 
-// ********************************************************************
-// LevelLocate
-// ********************************************************************
-//
-inline
-G4bool
-G4ParameterisedNavigation::LevelLocate( G4NavigationHistory& history,
-                                  const G4VPhysicalVolume* blockedVol,
-                                  const G4int blockedNum,
-                                  const G4ThreeVector& globalPoint,
-                                  const G4ThreeVector* globalDirection,
-                                  const G4bool pLocatedOnEdge, 
-                                        G4ThreeVector& localPoint )
-{
-  G4SmartVoxelHeader *motherVoxelHeader;
-  G4SmartVoxelNode *motherVoxelNode;
-  G4VPhysicalVolume *motherPhysical, *pPhysical;
-  G4VPVParameterisation *pParam;
-  G4LogicalVolume *motherLogical;
-  G4VSolid *pSolid;
-  G4ThreeVector samplePoint;
-  G4int voxelNoDaughters, replicaNo;
-  
-  motherPhysical = history.GetTopVolume();
-  motherLogical = motherPhysical->GetLogicalVolume();
-  motherVoxelHeader = motherLogical->GetVoxelHeader();
-
-  // Find the voxel containing the point
-  //
-  motherVoxelNode = ParamVoxelLocate(motherVoxelHeader,localPoint);
-  
-  voxelNoDaughters = motherVoxelNode->GetNoContained();
-  if ( voxelNoDaughters==0 )  return false;
-  
-  pPhysical = motherLogical->GetDaughter(0);
-  pParam = pPhysical->GetParameterisation();
-
-  // Debug development  
-  G4cerr << "DebugLOG - G4ParameterisedNavigation::LevelLocate() " << G4endl
-	 << "            Current solid " << motherLogical
-                                              ->GetSolid()->GetName() << G4endl; 
-
-  G4cerr << " Attaching parent touchable information to Phys Volume " << G4endl; 
-  // Attach parent touchable information to Phys Volume
-  //   --> note: when a new object is created, it must be deleted.
-  G4VPhysicalVolume* newPhysical= CreateVolumeWithParent( pPhysical, history );
-  G4cerr << " G4ParameterisedNavigation::LevelLocate: "
-	 << " created new physical touchable " << newPhysical << G4endl; 
-  if( newPhysical ) { 
-     pPhysical= newPhysical; 
-  }
-
-  // Search replicated daughter volume
-  //
-  for ( register int sampleNo=voxelNoDaughters-1; sampleNo>=0; sampleNo-- )
-  {
-    replicaNo = motherVoxelNode->GetVolume(sampleNo);
-    if ( (replicaNo!=blockedNum) || (pPhysical!=blockedVol) )
-    {
-      // Obtain solid (as it can vary) and obtain its parameters
-      //
-
-      // pSolid = pParam->ComputeSolid(replicaNo, pPhysical); 
-      // pSolid->ComputeDimensions(pParam, replicaNo, pPhysical);
-      // pParam->ComputeTransformation(replicaNo, pPhysical);
-
-      // Call virtual methods, and copy information if needed
-      pSolid= IdentifyAndPlaceSolid( replicaNo, pPhysical, pParam ); 
-
-      // Setup history
-      //
-      history.NewLevel(pPhysical, kParameterised, replicaNo);
-      samplePoint = history.GetTopTransform().TransformPoint(globalPoint);
-      if ( !G4AuxiliaryNavServices::CheckPointOnSurface(pSolid,
-                                  samplePoint, globalDirection, 
-                                  history.GetTopTransform(), pLocatedOnEdge) )
-      {
-        history.BackLevel();
-      }
-      else
-      {
-        // Enter this daughter
-        //
-        localPoint = samplePoint;
-        
-  // Set the correct copy number in physical
-        //
-        pPhysical->SetCopyNo(replicaNo);
-        
-  // Set the correct solid and material in Logical Volume
-        //
-        G4LogicalVolume *pLogical = pPhysical->GetLogicalVolume();
-        pLogical->SetSolid(pSolid);
-        pLogical->UpdateMaterial(pParam->ComputeMaterial(replicaNo, pPhysical));
-  // Check that 'physicalTouchable' acts correctly as proxy here.  TODO JA
-
-        return true;
-      }
-    }
-  }
-  return false;
-}
