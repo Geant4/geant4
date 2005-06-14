@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4NestedParameterised.cc,v 1.1 2005-06-10 12:20:14 japost Exp $
+// $Id: testG4NestedParameterised.cc,v 1.2 2005-06-14 16:30:55 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,8 +68,7 @@ class MoveNRotate : public G4VNestedParameterisation
 
 private:
   void ComputeTransformation(const G4int n,
-			     G4VPhysicalVolume* pRep, 
-			     const G4VTouchable* parentTouch) const
+			     G4VPhysicalVolume* pRep) const
   {
     pRep->SetTranslation(G4ThreeVector(0,n*100,0));
     *fRotationVec = G4RotationMatrix();             // Unit matrix
@@ -129,6 +128,11 @@ private:
   virtual void ComputeDimensions(G4Polyhedra &,
 				 const G4int ,
 				 const G4VPhysicalVolume*) const {}
+
+  // Mandatory method, required as reason for this class
+  virtual G4Material* ComputeMaterial(const G4int repNo, 
+				      G4VPhysicalVolume *currentVol,
+				      const G4VTouchable *parentTouch);
  private:
     G4RotationMatrix *fRotationVec;
     G4double fTwistAngle;
