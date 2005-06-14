@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.cc,v 1.17 2005-03-09 16:42:25 allison Exp $
+// $Id: HepPolyhedron.cc,v 1.18 2005-06-14 10:27:27 gguerrie Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,6 +52,10 @@
 // 05.11.02 E.Chernyaev
 // - added createTwistedTrap() and createPolyhedron();
 //
+// 09.06.05 G.Guerrieri
+// - added HepPolyhedronEllipsoid;
+//
+
   
 #include "HepPolyhedron.h"
 #include <CLHEP/Units/PhysicalConstants.h>
@@ -1765,6 +1769,130 @@ HepPolyhedronSphere::HepPolyhedronSphere(double rmin, double rmax,
 }
 
 HepPolyhedronSphere::~HepPolyhedronSphere() {}
+
+HepPolyhedronEllipsoid::HepPolyhedronEllipsoid(double ax, double by,
+					       double cz, double zCut1,
+					       double zCut2)
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedronEllipsoid                      Date:    09.06.05 *
+ * Author: G.Guerrieri                               Revised:          *
+ *                                                                     *
+ * Function: Constructor of polyhedron for ELLIPSOID                   *
+ *                                                                     *
+ * Input: ax - semiaxis x                                              *
+ *        by - semiaxis y                                              *
+ *        cz - semiaxis z                                              *
+ *        zCut1 - lower cut plane level (solid lies above this plane)  *
+ *        zCut2 - upper cut plane level (solid lies below this plane)  *
+ *                                                                     *
+ ***********************************************************************/
+{
+  //   C H E C K   I N P U T   P A R A M E T E R S
+
+  if (zCut1 >= cz || zCut2 <= -cz || zCut1 > zCut2) {
+    HepStd::cerr << "HepPolyhedronEllipsoid: wrong zCut1 = " << zCut1
+           << " zCut2 = " << zCut2
+	   << " for given cz = " << cz << HepStd::endl;
+    return;
+  }
+  if (cz <= 0.0) {
+    HepStd::cerr << "HepPolyhedronEllipsoid: bad z semi-axis: cz = " << cz
+      << HepStd::endl;
+    return;
+  }
+
+  double dthe;
+  double sthe;
+  int cutflag;
+  cutflag= 0;
+  if (zCut2 >= cz)
+    {
+      sthe= 0.0;
+    }
+  else
+    {
+      sthe= acos(zCut2/cz);
+      cutflag++;
+    }
+  if (zCut1 <= -cz)
+    {
+      dthe= M_PI - sthe;
+    }
+  else
+    {
+      dthe= acos(zCut1/cz)-sthe;
+      cutflag++;
+    }
+
+  //   P R E P A R E   T W O   P O L Y L I N E S
+  //   generate sphere of radius cz first, then rescale x and y later
+
+  int ns = (GetNumberOfRotationSteps() + 1) / 2;
+  int np1 = int(dthe*ns/M_PI) + 2 + cutflag;
+
+  double *zz, *rr;
+  zz = new double[np1+1];
+  rr = new double[np1+1];
+  if (!zz || !rr)
+    {
+      HepStd::cerr << "Out of memory in HepPolyhedronEllipsoid!" << HepStd::endl;
+	//Exception("Out of memory in HepPolyhedronEllipsoid!");
+    }
+
+  double a = dthe/(np1-cutflag-1);
+  double cosa, sina;
+  int j=0;
+  if (sthe > 0.0)
+    {
+      zz[j]= zCut2;
+      rr[j]= 0.;
+      j++;
+    }
+  for (int i=0; i<np1-cutflag; i++) {
+    cosa  = cos(sthe+i*a);
+    sina  = sin(sthe+i*a);
+    zz[j] = cz*cosa;
+    rr[j] = cz*sina;
+    j++;
+  }
+  if (j < np1)
+    {
+      zz[j]= zCut1;
+      rr[j]= 0.;
+      j++;
+    }
+  if (j > np1)
+    HepStd::cerr << "Logic error in HepPolyhedronEllipsoid, memory corrupted!" << HepStd::endl;
+      //Exception("Logic error in HepPolyhedronEllipsoid, memory corrupted!");
+  if (j < np1)
+    {
+      HepStd::cerr << "Warning: logic error in HepPolyhedronEllipsoid." << HepStd::endl;
+      np1= j;
+    }
+  zz[j] = 0.;
+  rr[j] = 0.;
+
+  
+  //   R O T A T E    P O L Y L I N E S
+
+  RotateAroundZ(0, 0.0, 2.0*M_PI, np1, 1, zz, rr, -1, 1); 
+  SetReferences();
+
+  delete [] zz;
+  delete [] rr;
+
+  // rescale x and y vertex coordinates
+  {
+    HepPoint3D * p= pV;
+    for (int i=0; i<nvert; i++, p++) {
+      p->setX( p->x() * ax/cz );
+      p->setY( p->y() * by/cz );
+    }
+  }
+}
+HepPolyhedronEllipsoid::~HepPolyhedronEllipsoid() {}
+
 
 HepPolyhedronTorus::HepPolyhedronTorus(double rmin,
 				       double rmax,

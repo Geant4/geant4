@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPVParameterisation.hh,v 1.7 2005-02-15 17:38:28 japost Exp $
+// $Id: G4VPVParameterisation.hh,v 1.8 2005-06-14 10:26:12 gguerrie Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VPVParamterisation
@@ -37,6 +37,7 @@
 // 20.09.96 V.Grichine    Modifications for G4Trap/Cons/Sphere
 // 31.10.96 V.Grichine    Modifications for G4Torus/Para
 // 17.02.98 J.Apostolakis Allowing the parameterisation of Solid type
+// 09.06.05 G.Guerrieri   Added class G4Ellipsoid
 // --------------------------------------------------------------------
 #ifndef G4VPVPARAMETERISATION_HH
 #define G4VPVPARAMETERISATION_HH
@@ -56,6 +57,7 @@ class G4Trd;
 class G4Trap;
 class G4Cons;
 class G4Sphere;
+class G4Ellipsoid;
 class G4Orb;
 class G4Torus;
 class G4Para;
@@ -95,6 +97,10 @@ class G4VPVParameterisation
                                    const G4VPhysicalVolume *) const {}
 
     virtual void ComputeDimensions(G4Sphere &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
+
+    virtual void ComputeDimensions(G4Ellipsoid &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsScene.hh,v 1.12 2005-05-03 17:34:44 allison Exp $
+// $Id: G4VGraphicsScene.hh,v 1.13 2005-06-14 10:28:02 gguerrie Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // John Allison  19th July 1996
 //
@@ -42,6 +42,7 @@ class G4Tubs;
 class G4Trd;
 class G4Trap;
 class G4Sphere;
+class G4Ellipsoid;
 class G4Para;
 class G4Torus;
 class G4PhysicalVolumeModel;

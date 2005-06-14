@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedron.hh,v 1.12 2005-03-22 19:18:56 allison Exp $
+// $Id: G4Polyhedron.hh,v 1.13 2005-06-14 10:27:27 gguerrie Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4POLYHEDRON_HH
@@ -63,6 +63,10 @@
 //
 //   G4PolyhedronSphere(rmin,rmax,
 //                      phi,dphi,the,dthe)  - create G4Polyhedron for Sphere;
+//
+//   G4PolyhedronEllipsoid(rx, ry, rz,
+//                         zcut1,zcut2)     - create G4Polyhedron for Ellipsoid;
+//
 //   G4PolyhedronTorus(rmin,rmax,rtor,
 //                     phi,dphi)            - create G4Polyhedron for Torus;
 //
@@ -99,6 +103,11 @@
 //   (NumberOfRotationSteps is also called number of sides per circle or
 //   line segments per circle - see
 //   /vis/viewer/set/lineSegmentsPerCircle.)
+//
+// 09.06.05 G.Guerrieri
+// - Added class G4PolyhedronEllipsoid;
+//
+
 
 #include "globals.hh"
 #include "HepPolyhedron.h"
@@ -237,6 +246,25 @@ public:
     return G4Visible::operator = (from);
   }
   virtual G4VVisPrim& operator = (const G4VVisPrim& from) {
+    return G4VVisPrim::operator = (from);
+  }
+  virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
+    return HepPolyhedron::operator = (from);
+  }
+};
+
+class G4PolyhedronEllipsoid : public G4Polyhedron {
+public:
+  G4PolyhedronEllipsoid(G4double ax,
+			G4double bx,
+			G4double cz,
+			G4double zCut1,
+			G4double zCut2);
+  virtual ~G4PolyhedronEllipsoid ();
+  virtual G4Visible& operator = (const G4Visible& from) {
+    return G4Visible::operator = (from);
+  }
+  virtual G4VVisPrim& operator=(const G4VVisPrim& from) {
     return G4VVisPrim::operator = (from);
   }
   virtual HepPolyhedron& operator = (const HepPolyhedron& from) {

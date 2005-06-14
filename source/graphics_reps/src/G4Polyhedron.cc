@@ -21,8 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedron.cc,v 1.14 2005-03-22 19:18:56 allison Exp $
+// $Id: G4Polyhedron.cc,v 1.15 2005-06-14 10:27:27 gguerrie Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Added G4PolyhedronEllipsoid by G.Guerrieri - 2005.06.09
+
 
 #include "G4Polyhedron.hh"
 
@@ -103,6 +106,15 @@ G4PolyhedronSphere::G4PolyhedronSphere (G4double rmin, G4double rmax,
   G4Polyhedron (HepPolyhedronSphere (rmin, rmax, phi, dphi, the, dthe)) {}
 
 G4PolyhedronSphere::~G4PolyhedronSphere () {}
+
+G4PolyhedronEllipsoid::G4PolyhedronEllipsoid (G4double ax,
+                                              G4double by,
+                                              G4double cz,
+                                              G4double zCut1,
+                                              G4double zCut2):
+  G4Polyhedron (HepPolyhedronEllipsoid (ax, by, cz, zCut1, zCut2)) {}
+
+G4PolyhedronEllipsoid::~G4PolyhedronEllipsoid () {}
 
 G4PolyhedronTorus::G4PolyhedronTorus (G4double rmin, G4double rmax,
 				      G4double rtor,

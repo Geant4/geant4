@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.h,v 1.15 2005-03-22 16:42:52 allison Exp $
+// $Id: HepPolyhedron.h,v 1.16 2005-06-14 10:27:27 gguerrie Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -59,6 +59,9 @@
 //                                        - create polyhedron for G3 Pcon;
 //   HepPolyhedronSphere (rmin,rmax,phi,dphi,the,dthe)
 //                                        - create polyhedron for Sphere;
+//   HepPolyhedronEllipsoid (rx,ry,rz,zcut1,zcut2)
+//					  - create polyhedron for Ellipsoid;
+//
 //   HepPolyhedronTorus (rmin,rmax,rtor,phi,dphi)
 //                                        - create polyhedron for Torus;
 // Public functions:
@@ -155,6 +158,9 @@
 //
 // 06.03.05 J.Allison
 // - added IsErrorBooleanProcess
+//
+// 09.06.05 G.Guerrieri
+// - added class HepPolyhedronEllipsoid;
 //
 
 #ifndef HEP_POLYHEDRON_HH
@@ -474,6 +480,16 @@ public:
 		      double phi, double dphi,
 		      double the, double dthe);
   virtual ~HepPolyhedronSphere();
+  virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
+    return HepPolyhedron::operator = (from);
+  }
+};
+
+class HepPolyhedronEllipsoid : public HepPolyhedron {
+public:
+  HepPolyhedronEllipsoid(double ax, double by, double cz,
+                         double zCut1, double zCut2);
+  virtual ~HepPolyhedronEllipsoid();
   virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
     return HepPolyhedron::operator = (from);
   }
