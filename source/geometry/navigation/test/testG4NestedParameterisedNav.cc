@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4NestedParameterisedNav.cc,v 1.2 2005-03-03 17:15:31 japost Exp $
+// $Id: testG4NestedParameterisedNav.cc,v 1.3 2005-06-14 16:12:07 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,6 +41,7 @@
 #include "G4PVPlacement.hh"
 #include "G4PVParameterised.hh"
 #include "G4VPVParameterisation.hh"
+#include "G4PhysicalTouchable.hh"
 #include "G4VNestedParameterisation.hh"
 
 #include "G4Box.hh"
@@ -68,7 +69,9 @@ class XTopParam: public G4VPVParameterisation
   virtual void ComputeTransformation(const G4int n,
 				     G4VPhysicalVolume* pRep) const
   {
-    pRep->SetTranslation(G4ThreeVector( (n-((fNumRows+1.0)/2.))*fXfullWidth, 0., 0.) );
+    // G4cout << " Transf for n= " << n << " Offset x= " 
+    //   << (n-((fNumRows-1.0)/2.))*fXfullWidth << G4endl;
+    pRep->SetTranslation(G4ThreeVector( (n-((fNumRows-1.0)/2.))*fXfullWidth, 0., 0.) );
   }
   
   virtual void ComputeDimensions(G4Box &pBox,
@@ -80,38 +83,27 @@ class XTopParam: public G4VPVParameterisation
     pBox.SetZHalfLength(fZfullWidth*0.5);
   }
 
-  virtual void ComputeDimensions(G4Tubs &,
-				 const G4int ,
+  virtual void ComputeDimensions(G4Tubs &, const G4int ,
                                  const G4VPhysicalVolume*) const {}
-  virtual void ComputeDimensions(G4Trd &, 
-				 const G4int,
+  virtual void ComputeDimensions(G4Trd &,  const G4int,
 				 const G4VPhysicalVolume*) const {}
-  virtual void ComputeDimensions(G4Cons &,
-				 const G4int ,
+  virtual void ComputeDimensions(G4Cons &, const G4int ,
 				 const G4VPhysicalVolume*) const {}
-  virtual void ComputeDimensions(G4Trap &,
-				 const G4int ,
+  virtual void ComputeDimensions(G4Trap &, const G4int ,
 				 const G4VPhysicalVolume*) const {}
-  virtual void ComputeDimensions(G4Hype &,
-				 const G4int ,
+  virtual void ComputeDimensions(G4Hype &, const G4int ,
 				 const G4VPhysicalVolume*) const {}
-  virtual void ComputeDimensions(G4Orb &,
-				 const G4int ,
+  virtual void ComputeDimensions(G4Orb &,  const G4int ,
 				 const G4VPhysicalVolume*) const {}
-  virtual void ComputeDimensions(G4Sphere &,
-				 const G4int ,
+  virtual void ComputeDimensions(G4Sphere &, const G4int ,
 				 const G4VPhysicalVolume*) const {}
-  virtual void ComputeDimensions(G4Torus &,
-				 const G4int ,
+  virtual void ComputeDimensions(G4Torus &, const G4int ,
 				 const G4VPhysicalVolume*) const {}
-  virtual void ComputeDimensions(G4Para &,
-				 const G4int ,
+  virtual void ComputeDimensions(G4Para &,  const G4int ,
 				 const G4VPhysicalVolume*) const {}
-  virtual void ComputeDimensions(G4Polycone &,
-				 const G4int ,
+  virtual void ComputeDimensions(G4Polycone &, const G4int ,
 				 const G4VPhysicalVolume*) const {}
-  virtual void ComputeDimensions(G4Polyhedra &,
-				 const G4int ,
+  virtual void ComputeDimensions(G4Polyhedra &, const G4int ,
 				 const G4VPhysicalVolume*) const {}
 
   private:
@@ -129,17 +121,19 @@ class YSecondNestedParam: public G4VNestedParameterisation
   //    with different sizes on the odd-even diagonals.
   // 
 public:
-  YSecondNestedParam( G4int numCols, G4double fullBoxSize ) 
+  YSecondNestedParam( G4int numCols, G4double ySliceHalfSize, G4double xBoxHalfWidth, G4double zBoxHalfWidth ) 
    : fNumCols( numCols ) , 
-     fBoxHalfWidth(fullBoxSize*0.5), 
-     fFullBoxWidth(fullBoxSize)
+     fYBoxHalfWidth(ySliceHalfSize), 
+     fYFullBoxWidth(ySliceHalfSize*2.0),
+     fXBoxHalfWidth(xBoxHalfWidth), 
+     fZBoxHalfWidth(zBoxHalfWidth)
    {}
 
   virtual void ComputeTransformation(const G4int n,
 				     G4VPhysicalVolume* pRep) const
   {
     pRep->SetTranslation(G4ThreeVector(0., 
-				       (n-((fNumCols+1)/2.))*fFullBoxWidth, 
+				       (n-((fNumCols-1)/2.))*fYFullBoxWidth, 
 				       0.) );
     pRep->SetRotation(0);  
  }
@@ -172,9 +166,9 @@ public:
 				 const G4int,
 				 const G4VPhysicalVolume*) const
   {
-    pBox.SetXHalfLength(fBoxHalfWidth);
-    pBox.SetYHalfLength(fBoxHalfWidth);
-    pBox.SetZHalfLength(fBoxHalfWidth);
+    pBox.SetXHalfLength(fXBoxHalfWidth);
+    pBox.SetYHalfLength(fYBoxHalfWidth);
+    pBox.SetZHalfLength(fZBoxHalfWidth);
   }
   virtual void ComputeDimensions(G4Tubs &,
 				 const G4int ,
@@ -212,7 +206,8 @@ public:
 
 private:
   G4int    fNumCols; 
-  G4double fBoxHalfWidth, fFullBoxWidth;
+  G4double fYBoxHalfWidth, fYFullBoxWidth;
+  G4double fXBoxHalfWidth, fZBoxHalfWidth; 
 
 } ; // level2NestedParam;
 
@@ -249,7 +244,6 @@ G4VPhysicalVolume* BuildGeometry()
     // --------------------------------
     G4Box *myWorldBox= new G4Box ("WorldBox",1000.*cm,1000.*cm,1000.*cm);
     G4Box *myTopBox=new G4Box("cube",100.*cm,100.*cm,100.*cm);
-    G4Box *mySmallestBox=new G4Box("Smallest Box",10.*cm,10.*cm,10.*cm);
 
     G4LogicalVolume *worldLog=new G4LogicalVolume(myWorldBox,defaultMaterial,
 						  "World",0,0,0);
@@ -263,8 +257,6 @@ G4VPhysicalVolume* BuildGeometry()
 
     G4LogicalVolume *topLog=new G4LogicalVolume(myTopBox,defaultMaterial,
 						 "Level0 Top-LV"); // ,0,0,0);
-    G4LogicalVolume *variLog=new G4LogicalVolume(mySmallestBox,defaultMaterial,
-						"Level2 Smallest Box-LV"); // ,0,0,0);
 
  
     // Place two 'Top' Boxes in world
@@ -282,7 +274,7 @@ G4VPhysicalVolume* BuildGeometry()
     G4double xTopHalfWidth=100.*cm, yTopHalfWidth=100.*cm, zTopHalfWidth=100.*cm; 
     G4double xSlabHalfWidth= xTopHalfWidth / numSlabs; 
     G4double ySlabHalfWidth= yTopHalfWidth;
-    // G4double zSlabHalfWidth= zTopHalfWidth;
+    G4double zSlabHalfWidth= zTopHalfWidth;
 
     G4Box *mySlab= new G4Box("slab", xSlabHalfWidth, yTopHalfWidth, zTopHalfWidth);
                            // Original: 10.0*cm, 100.*cm, 100.*cm);
@@ -309,28 +301,32 @@ G4VPhysicalVolume* BuildGeometry()
 
     G4double xBoxHalfWidth= xSlabHalfWidth; 
     G4double yBoxHalfWidth= ySlabHalfWidth / numBoxesY; 
-    // G4double zBoxHalfWidth= zSlabHalfWidth;
-
+    G4double zBoxHalfWidth= zSlabHalfWidth;
+    G4Box *mySmallestBox=new G4Box("Smallest Box", 
+				   // 10.*cm, 10.*cm, 100.*cm);
+				   xBoxHalfWidth, yBoxHalfWidth, zBoxHalfWidth); 
+    G4LogicalVolume *variLog=new G4LogicalVolume(mySmallestBox,defaultMaterial,
+						"Level2 Smallest Box-LV"); 
     G4VNestedParameterisation* pSecondLevelParam =  
-      new YSecondNestedParam( numBoxesY, yBoxHalfWidth*2.0 ); 
+      new YSecondNestedParam( numBoxesY, yBoxHalfWidth, xBoxHalfWidth, zBoxHalfWidth); 
 
     // G4PVParameterised *paramLevelTwoPhys=
-                                 new G4PVParameterised("Level 2 blocks in y",
-						       variLog,
-						       slabLog, 
-						       kYAxis,
-						       numBoxesY,
-						       pSecondLevelParam);
+    new G4PVParameterised("Level 2 blocks in y",
+			  variLog,
+			  slabLog, 
+			  kYAxis,
+			  numBoxesY,
+			  pSecondLevelParam);
 
     G4cout << " Slab dimensions (half-width) are: " << G4endl
 	   << " x= " << xSlabHalfWidth/cm << " cm  "
 	   << " y= " << ySlabHalfWidth/cm << " cm  "
-	   << " z= " << ySlabHalfWidth/cm << " cm  " << G4endl << G4endl; 
+	   << " z= " << zSlabHalfWidth/cm << " cm  " << G4endl << G4endl; 
 
     G4cout << " Box dimensions (half-width) are: " << G4endl
 	   << " x= " << xBoxHalfWidth/cm << " cm  "
 	   << " y= " << yBoxHalfWidth/cm << " cm  "
-	   << " z= " << yBoxHalfWidth/cm << " cm  " << G4endl << G4endl; 
+	   << " z= " << zBoxHalfWidth/cm << " cm  " << G4endl << G4endl; 
 
 
     // Other volumes
@@ -353,7 +349,9 @@ G4bool testG4Navigator1(G4VPhysicalVolume *pTopNode)
     MyNavigator myNav;
     G4VPhysicalVolume *located;
     myNav.SetWorldVolume(pTopNode);
+    G4int copyNo= -1; 
 
+#ifdef ALL_TESTS      
     assert(!myNav.LocateGlobalPointAndSetup(G4ThreeVector(kInfinity,0,0),0,false));
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(0,0,0),0,false);
     assert(located->GetName()=="World");
@@ -370,19 +368,26 @@ G4bool testG4Navigator1(G4VPhysicalVolume *pTopNode)
     assert(ApproxEqual(myNav.CurrentLocalCoordinate(),G4ThreeVector(0.,-10.*cm,0.)));
 // Check that outside point causes stack to unwind
     assert(!myNav.LocateGlobalPointAndSetup(G4ThreeVector(kInfinity,0,0)));
-    G4int copyNo= -1; 
 // Check parameterised volumes
 // ---------------------------------------------------------
 // Replication 0
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(-340.*cm,-95.*cm,-2.5*cm));
     assert(located->GetName()=="Level 2 blocks in y");
-
     copyNo= located->GetCopyNo();
+    // G4cout << " Located ( -340.*cm, -95.*cm, -2.5*cm ) in " 
+    //   << located->GetName() << " copy no " << copyNo << G4endl; 
     assert(located->GetCopyNo() == 0 ); 
     // Mother copy/replica number should be 0 
+
+    //  Center of volume should be at ( -340 cm, -90 cm, 0 )
+    G4ThreeVector localCoords ( 0.*cm,-5.*cm, -2.5*cm ); 
+    // G4cout << " Local coordinates: " << G4endl
+    //	     << "  Expected " << localCoords << G4endl
+    //       << "  Obtained " << myNav.CurrentLocalCoordinate() << G4endl;
+    assert(ApproxEqual(myNav.CurrentLocalCoordinate(), localCoords )); 
+            //       G4ThreeVector(0.*cm,-5.*cm,-2.5*cm)));
     assert(located->GetLogicalVolume()->GetMaterial()==brightMaterial); 
-    assert(ApproxEqual(myNav.CurrentLocalCoordinate(),
-		       G4ThreeVector(10.*cm,-15.*cm,2.5*cm)));
+
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(500.*cm,-510.*cm,0));
     assert(located->GetName()=="Target+X-Y");
 
@@ -394,15 +399,54 @@ G4bool testG4Navigator1(G4VPhysicalVolume *pTopNode)
     assert(located->GetCopyNo() == 1 ); 
     // Mother copy/replica number should be 0
     //
-    assert(located->GetLogicalVolume()->GetMaterial()==darkMaterial); 
     assert(ApproxEqual(myNav.CurrentLocalCoordinate(),
-		       G4ThreeVector(10.*cm,-15.*cm,2.5*cm)));
+		       G4ThreeVector(0.0*cm,-5.*cm,-2.5*cm)));
+    assert(located->GetLogicalVolume()->GetMaterial()==darkMaterial); 
 
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(500.*cm,-510.*cm,0));
     assert(located->GetName()=="Target+X-Y");
 
 // Replication 2
     /// ....
+#endif 
+
+    // Forward part
+
+    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector( 280.*cm, 75.*cm, 25.*cm));
+    // Position inside Top Box is     +30 cm,  75 cm, 25 cm
+    // Box extent: -100 cm to +100 cm in X,  cut in 10 slabs
+    // Slab number(X): #6, local position +0 cm,  75 cm, 25 cm
+    // Slab extent: -10 cm to +10 cm in X, -100 cm to 100 cm in Y, Z
+    // Slice number(Y, from 10): #8, local position:  0 cm, 5 cm, 25 cm.
+
+    copyNo= located->GetCopyNo();
+    G4cout << " Located ( 280.*cm, 75.*cm, 25.*cm ) in  '" 
+           << located->GetName() << "' copy no " << copyNo << G4endl; 
+    G4cout << " Local coordinates " << myNav.CurrentLocalCoordinate() << G4endl;
+    G4cout << G4endl;
+    assert(located->GetName()=="Level 2 blocks in y");
+    assert(located->GetCopyNo() == 8 ); 
+    // Mother copy/replica number should be 0
+    //
+    assert(ApproxEqual(myNav.CurrentLocalCoordinate(),
+		       G4ThreeVector(0.0*cm, 5.*cm, 25.*cm)));
+    assert(located->GetLogicalVolume()->GetMaterial()==brightMaterial); 
+
+    G4PhysicalTouchable *locPT= dynamic_cast<G4PhysicalTouchable*>(located); 
+    G4VPhysicalVolume *parent= locPT->GetParentTouchable()->GetVolume(); 
+    G4cout << " **   Parent volume " << locPT << G4endl
+	   << "  Expected '" << "Slab Blocks in X" << "'" << G4endl 
+    	   << "  Obtained '" << parent->GetName() << "' copy no " << parent->GetCopyNo()
+	   << G4endl; 
+ 
+    G4VPhysicalVolume *parent2= locPT->GetParentTouchable()->GetVolume(1); 
+    G4cout << " **** Parent 2 volume " << locPT << G4endl
+	   << "  Expected " << "Top 2-pv" << G4endl
+    	   << "  Obtained " << parent2->GetName() << " copy no " << parent2->GetCopyNo()
+	   << G4endl; 
+
+    assert(parent2->GetName()=="Top 2-pv");
+    assert(parent->GetCopyNo() == 6 ); 
 
     return true;
 }
@@ -424,25 +468,45 @@ G4bool testG4Navigator2(G4VPhysicalVolume *pTopNode)
 //
 // Test location & Step computation
 //  
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(0,0,-10));
+    G4ThreeVector startXm4( -400.*cm, 0., -10.*cm ); 
+    located=myNav.LocateGlobalPointAndSetup( startXm4 );
     assert(located->GetName()=="World");
     physStep=kInfinity;
-    Step=myNav.ComputeStep(G4ThreeVector(0,0,-10),mxHat,physStep,safety);
-    assert(ApproxEqual(Step,25));
+    Step=myNav.ComputeStep( startXm4, xHat, physStep, safety);
+    assert(ApproxEqual(Step, 50.*cm));
 //    assert(ApproxEqual(safety,5));
     assert(safety>=0);
 
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(0,0,-10));
+    G4ThreeVector startXm1( -100.*cm, 0., -10.*cm ); 
+    located=myNav.LocateGlobalPointAndSetup(startXm1);
     assert(located->GetName()=="World");
     physStep=kInfinity;
-    Step=myNav.ComputeStep(G4ThreeVector(0,0,-10),xHat,physStep,safety);
-    assert(ApproxEqual(Step,5));
-//    assert(ApproxEqual(safety,5));
-    assert(safety>=0);
+    Step=myNav.ComputeStep( startXm1, mxHat, physStep, safety);
+    assert(ApproxEqual(Step,50.*cm));
+    assert(ApproxEqual(safety,50.*cm));
+    // assert(safety>=0);
+
+    G4ThreeVector newPoint = startXm1 + Step * mxHat;
     myNav.SetGeometricallyLimitedStep();
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(5,0,-10),0,true);
-    assert(located->GetName()=="Vari' Blocks");
+    located=myNav.LocateGlobalPointAndSetup(newPoint,0,true);
+    assert(located->GetName()=="Level 2 blocks in y"); 
 
+    G4PhysicalTouchable *locPT= dynamic_cast<G4PhysicalTouchable*>(located); 
+    G4VPhysicalVolume *parent= locPT->GetParentTouchable()->GetVolume(); 
+ 
+
+    G4VPhysicalVolume *parent2= locPT->GetParentTouchable()->GetVolume(1); 
+    G4cout << " Parent 2 volume " << locPT << G4endl
+	   << "  Expected " << "Top 1-pv" << G4endl
+    	   << "  Obtained " << parent2->GetName() << " copy no " << parent->GetCopyNo()
+	   << G4endl; 
+
+    assert(parent2->GetName()=="Top 1-pv");
+
+    G4cerr << " Testing in TestNavigator2() is ending line " << __LINE__ 
+	   << " for the time being. " << G4endl; 
+    return;
+// ------------------------------------------------------------------
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(0,0,-10));
     assert(located->GetName()=="World");
     physStep=kInfinity;
@@ -555,5 +619,7 @@ int main()
     testG4Navigator2(myTopNode);
 
     G4GeometryManager::GetInstance()->OpenGeometry();
+    // Must end with geometry open
+
     return 0;
 }
