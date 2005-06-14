@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.cc,v 1.5 2005-03-03 17:11:24 japost Exp $
+// $Id: G4ParameterisedNavigation.cc,v 1.6 2005-06-14 16:11:00 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -191,8 +191,8 @@ G4double G4ParameterisedNavigation::
   motherSafety = motherSolid->DistanceToOut(localPoint);
   ourSafety = motherSafety;              // Working isotropic safety
 
-  G4cout << "DebugLOG - G4ParameterisedNavigation::ComputeStep()" << G4endl
-	 << "            Current solid " << motherSolid->GetName() << G4endl; 
+  // G4cout << "DebugLOG - G4ParameterisedNavigation::ComputeStep()" << G4endl
+  //    << "            Current solid " << motherSolid->GetName() << G4endl; 
 
 #ifdef G4VERBOSE
   if ( fCheck )
@@ -267,7 +267,7 @@ G4double G4ParameterisedNavigation::
 
   sampleParam = samplePhysical->GetParameterisation();
 
-  G4cerr << " Attaching parent touchable information to Phys Volume " << G4endl; 
+  // G4cerr << " Attaching parent touchable information to Phys Volume " << G4endl; 
   // Attach parent touchable information to Phys Volume
   G4VPhysicalVolume* newPhysical= CreateVolumeWithParent( samplePhysical, history );
   if( newPhysical ) { samplePhysical= newPhysical; }
@@ -492,11 +492,10 @@ G4ParameterisedNavigation::ComputeSafety(const G4ThreeVector& localPoint,
   samplePhysical->GetReplicationData(axis, nReplicas, width, offset, consuming);
   sampleParam = samplePhysical->GetParameterisation();
 
-  // Debug development  
-  G4cerr << "DebugLOG - G4ParameterisedNavigation::ComputeSafety()" << G4endl
-	 << "            Current solid " << motherSolid->GetName() << G4endl; 
-
-  G4cerr << " Attaching parent touchable information to Phys Volume " << G4endl; 
+  //  Check development  
+  // G4cerr<< "DebugLOG - G4ParameterisedNavigation::ComputeSafety()" <<G4endl
+  // 	 << "            Current solid " << motherSolid->GetName() <<G4endl; 
+  // G4cerr <<" Attaching parent touchable information to Phys Volume "<<G4endl; 
   // Attach parent touchable information to Phys Volume
   //   --> note: when a new object is created, it must be deleted.
   G4VPhysicalVolume* newPhysical= CreateVolumeWithParent( samplePhysical, history );
@@ -560,8 +559,8 @@ G4double G4ParameterisedNavigation::
 ComputeVoxelSafety(const G4ThreeVector& localPoint,
                    const EAxis pAxis) const
 {
-  // Debug development  
-  G4cout << "DebugLOG - G4ParameterisedNavigation::ComputeVoxelSafety()" << G4endl; 
+  // Check development  
+  // G4cout << "DebugLOG - G4ParameterisedNavigation::ComputeVoxelSafety()" << G4endl; 
 
   // If no best axis is specified, adopt default
   // strategy as for placements
@@ -657,4 +656,107 @@ LocateNextVoxel( const G4ThreeVector& localPoint,
     }
   }
   return isNewVoxel;
+}
+
+
+// ********************************************************************
+// LevelLocate
+// ********************************************************************
+//
+G4bool
+G4ParameterisedNavigation::LevelLocate( G4NavigationHistory& history,
+                                  const G4VPhysicalVolume* blockedVol,
+                                  const G4int blockedNum,
+                                  const G4ThreeVector& globalPoint,
+                                  const G4ThreeVector* globalDirection,
+                                  const G4bool pLocatedOnEdge, 
+                                        G4ThreeVector& localPoint )
+{
+  G4SmartVoxelHeader *motherVoxelHeader;
+  G4SmartVoxelNode *motherVoxelNode;
+  G4VPhysicalVolume *motherPhysical, *pPhysical;
+  G4VPVParameterisation *pParam;
+  G4LogicalVolume *motherLogical;
+  G4VSolid *pSolid;
+  G4ThreeVector samplePoint;
+  G4int voxelNoDaughters, replicaNo;
+  
+  motherPhysical = history.GetTopVolume();
+  motherLogical = motherPhysical->GetLogicalVolume();
+  motherVoxelHeader = motherLogical->GetVoxelHeader();
+
+  // Find the voxel containing the point
+  //
+  motherVoxelNode = ParamVoxelLocate(motherVoxelHeader,localPoint);
+  
+  voxelNoDaughters = motherVoxelNode->GetNoContained();
+  if ( voxelNoDaughters==0 )  return false;
+  
+  pPhysical = motherLogical->GetDaughter(0);
+  pParam = pPhysical->GetParameterisation();
+
+  // Check development  
+  // G4cerr << "DebugLOG - G4ParameterisedNavigation::LevelLocate() " 
+  // 	 << "            Current solid " << motherLogical
+  //                                          ->GetSolid()->GetName() << G4endl; 
+  // G4cerr << " Attaching parent touchable information to Phys Volume " << G4endl; 
+
+  // Attach parent touchable information to Phys Volume
+  //   --> note: when a new object is created, it must be deleted.
+  G4VPhysicalVolume* newPhysical= CreateVolumeWithParent( pPhysical, history );
+  // G4cout << " G4ParameterisedNavigation::LevelLocate: "
+  //    << " created new physical touchable " << newPhysical << G4endl; 
+  if( newPhysical ) { 
+     pPhysical= newPhysical; 
+  }
+
+  // Search replicated daughter volume
+  //
+  for ( register int sampleNo=voxelNoDaughters-1; sampleNo>=0; sampleNo-- )
+  {
+    replicaNo = motherVoxelNode->GetVolume(sampleNo);
+    if ( (replicaNo!=blockedNum) || (pPhysical!=blockedVol) )
+    {
+      // Obtain solid (as it can vary) and obtain its parameters
+      //
+
+      // pSolid = pParam->ComputeSolid(replicaNo, pPhysical); 
+      // pSolid->ComputeDimensions(pParam, replicaNo, pPhysical);
+      // pParam->ComputeTransformation(replicaNo, pPhysical);
+
+      // Call virtual methods, and copy information if needed
+      pSolid= IdentifyAndPlaceSolid( replicaNo, pPhysical, pParam ); 
+
+      // Setup history
+      //
+      history.NewLevel(pPhysical, kParameterised, replicaNo);
+      samplePoint = history.GetTopTransform().TransformPoint(globalPoint);
+      if ( !G4AuxiliaryNavServices::CheckPointOnSurface(pSolid,
+                                  samplePoint, globalDirection, 
+                                  history.GetTopTransform(), pLocatedOnEdge) )
+      {
+        history.BackLevel();
+      }
+      else
+      {
+        // Enter this daughter
+        //
+        localPoint = samplePoint;
+        
+  // Set the correct copy number in physical
+        //
+        pPhysical->SetCopyNo(replicaNo);
+        
+  // Set the correct solid and material in Logical Volume
+        //
+        G4LogicalVolume *pLogical = pPhysical->GetLogicalVolume();
+        pLogical->SetSolid(pSolid);
+        pLogical->UpdateMaterial(pParam->ComputeMaterial(replicaNo, pPhysical));
+  // Check that 'physicalTouchable' acts correctly as proxy here.  TODO JA
+
+        return true;
+      }
+    }
+  }
+  return false;
 }
