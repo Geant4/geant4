@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Navigator2.cc,v 1.3 2004-12-10 16:20:22 gcosmo Exp $
+// $Id: testG4Navigator2.cc,v 1.4 2005-06-14 16:13:42 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
-#include "G4PVParameterised.hh"
+// #include "G4PVParameterised.hh"
 #include "G4VPVParameterisation.hh"
 #include "G4Box.hh"
 
