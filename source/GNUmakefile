@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.71 2005-06-09 15:20:43 gcosmo Exp $
+# $Id: GNUmakefile,v 1.72 2005-06-15 13:59:43 gunter Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -132,7 +132,7 @@ ifdef G4LIB_USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) $@); done
 endif
 
-clean_libs:
+clean_libs::
 	@echo Removing all libraries ...
 	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE) clean_libs); done
 	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE) clean_libs); done
@@ -142,7 +142,7 @@ ifdef G4LIB_USE_G3TOG4
 endif
 	@rm -rf $(G4LIBDIR)/libname.map
 
-clean:
+clean::
 	@echo Removing current $(G4SYSTEM) installation ...
 	@rm -rf $(G4TMPDIR)
 	@rm -rf $(G4LIBDIR)
@@ -160,7 +160,7 @@ ifdef CFRONT
 	@rm -rf $(G4TREP)
 endif
 
-clean_lists:
+clean_lists::
 	@echo Removing physics-lists installation ...
 ifndef G4LISTS_BASE
 	@rm -rf $(G4LIB)/plists/$(G4SYSTEM)
@@ -172,7 +172,7 @@ endif
 
 # Pay _extremely_ attention before executing the following target !!
 #
-clean_all:
+clean_all::
 	@echo Removing all installations ...
 	@echo Removing $(G4TMP) ...
 	@rm -rf $(G4TMP)

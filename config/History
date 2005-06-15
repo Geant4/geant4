@@ -1,4 +1,4 @@
-$Id: History,v 1.264 2005-06-10 16:13:18 gcosmo Exp $
+$Id: History,v 1.265 2005-06-15 13:59:59 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15th June 2005 Gunter Folger
+- change clean(_..) targets to be :: rules, allowing multiple clean targets
 
 10th June 2005 Gabriele Cosmo (config-V07-00-03)
 - Updated configuration script SUN-CC.gmk:
