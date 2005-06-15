@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.72 2005-06-15 13:59:43 gunter Exp $
+# $Id: GNUmakefile,v 1.73 2005-06-15 16:31:59 gunter Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -66,9 +66,8 @@ libmap: $(G4LIBDIR)/liblist
 	@echo "Weeding out paths and files ..."
 	@for i in `cat /tmp/G4_all_lib_makefiles.$(unique)`; \
 	do \
-	  echo $$i | $(GREP) -q '/tests\?/' || \
-	  $(GREP) -q SUBDIR $$i || \
-	  $(GREP) -q G4hepgeometry $$i || \
+	  echo $$i | $(GREP) -q -e '/tests\?/' -e 'models/verification' || \
+	  $(GREP) -q -e SUBDIR -e G4hepgeometry $$i || \
 	  echo $$i >> /tmp/G4_granlib_makefiles.$(unique); \
 	done
 	@echo "Making libname.map starter file ..."
