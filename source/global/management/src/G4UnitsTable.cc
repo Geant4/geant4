@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc,v 1.26 2005-03-21 18:34:35 gcosmo Exp $
+// $Id: G4UnitsTable.cc,v 1.27 2005-06-15 13:07:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
@@ -184,7 +184,7 @@ void G4UnitDefinition::BuildUnitsTable()
  new G4UnitDefinition(     "meter","m"       ,"Length",meter);
  new G4UnitDefinition("centimeter","cm"      ,"Length",centimeter); 
  new G4UnitDefinition("millimeter","mm"      ,"Length",millimeter);
- // new G4UnitDefinition("micrometer","um"      ,"Length",micrometer);
+ new G4UnitDefinition("micrometer","um"      ,"Length",micrometer);
  new G4UnitDefinition("micrometer","mum"     ,"Length",micrometer);
  new G4UnitDefinition( "nanometer","nm"      ,"Length",nanometer);
  new G4UnitDefinition(  "angstrom","Ang"     ,"Length",angstrom);    
