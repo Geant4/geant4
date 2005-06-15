@@ -1,4 +1,4 @@
-?RCS: $Id: Oldconfig.U,v 1.18 2004-12-06 02:44:40 sadilov Exp $
+?RCS: $Id: Oldconfig.U,v 1.19 2005-06-15 17:20:08 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.18  2004/12/06 02:44:40  sadilov
+?RCS: Splitting build and install
+?RCS:
 ?RCS: Revision 1.17  2004/12/02 20:39:05  sadilov
 ?RCS: Win splitting to 6 and 7
 ?RCS:
@@ -634,14 +637,14 @@ case  "$g4compiler" in
 				g4compiler=CC
 				;;
 		'WIN32')
-				g4compiler=VC7
+				g4compiler=VC
 	clcompiler=`( cl 1>/dev/null || echo "ERROR: There is no 'cl' compiler.") 2>&1`
 				case $clcompiler in
-				*"Version 12"*) g4compiler=VC
+				*"Version 12"*) g4compiler=VC6
 				;;
-				*"Version 13"*) g4compiler=VC7
+				*"Version 13"*) g4compiler=VC
 				;;
-				*) g4compiler=VC7
+				*) g4compiler=VC
 				;;
 				esac				
 				;;
@@ -831,8 +834,6 @@ fi
 
 	if [ X$install = Xyes ] ; then
 
-	. $src/.config/bin/$g4system/env.sh
-
 	$rm -rf .config/UU
 	
 	. $src/.config/bin/$g4system/move.sh
@@ -1010,9 +1011,9 @@ echo " "
 echo " "
 
 	echo " "
-	echo "WARNING: Geant4 is NOT installed yet!"
+	echo "WARNING: Geant4 is NOT built yet!"
 	echo "You (or the administrator if you have not enough privileges)"
-	echo "should start with \$G4INSTALL/Configure -install."
+	echo "should start with \$G4INSTALL/Configure -build."
 	echo "(where \$G4INSTALL is Geant4 install directory)."
 	echo " "
 	$rm -rf .config/UU
