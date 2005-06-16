@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.4 2005-05-12 17:29:08 vnivanch Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.5 2005-06-16 16:07:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1502,7 +1502,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 6, 0.280555);
   AddElementByWeightFraction( 9, 0.710028);
 
-  AddMaterial("G4_WATER", 1,0, 75., 2);
+  AddMaterial("G4_WATER", 1.0,0, 75., 2);
   AddElementByWeightFraction( 1, 0.111894);
   AddElementByWeightFraction( 8, 0.888106);
 
