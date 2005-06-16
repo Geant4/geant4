@@ -281,8 +281,8 @@ echo "On this machine the G4LIB_BUILD_G3TOG4=\$G4LIB_BUILD_G3TOG4"
 endif 
 
 if ( X$g4w_use_g3tog4 == Xy )  then
-setenv G4USE_G3TOG4 1
-echo "On this machine the G4USE_G3TOG4=\$G4USE_G3TOG4"
+setenv G4LIB_USE_G3TOG4 1
+echo "On this machine the G4LIB_USE_G3TOG4=\$G4LIB_USE_G3TOG4"
 endif 
 
 #+

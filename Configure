@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.70 2005-02-18 16:49:59 stesting Exp $
+# $Id: Configure,v 1.71 2005-06-16 15:45:51 stesting Exp $
 #
-# Generated on Wed Feb  9 19:12:58 CET 2005 [metaconfig 3.0 PL70]
+# Generated on Thu Jun 16 17:43:23 CEST 2005 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2666,7 +2666,7 @@ esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4data/G4EMLOW2.3
+	g4ledata=$g4data/G4EMLOW3.0
 	;;
 esac
 
@@ -2678,15 +2678,58 @@ esac
 
 case "$g4elasticdata" in
 '')
-	g4elasticdata=$g4data/Elastic
+	g4elasticdata=$g4data/G4ELASTIC1.1
 	;;
 esac
+
+#########################################################################
+
+# while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+Please, specify default directory where ALL the Geant4 data is installed:
+
+ G4LEVELGAMMADATA:		$g4levelgammadata
+
+ G4RADIOACTIVEDATA:		$g4radioactivedata
+
+ G4LEDATA:			$g4ledata
+
+ NeutronHPCrossSections:	$g4neutronhpcrosssections
+
+ G4ELASTICDATA:			$g4elasticdata
+
+You will be asked about customizing these next.
+
+EOM`
+
+#dflt="NO DEFAULT ANSWER"
+dflt=$g4data
+#fn='d~'
+rp=$g4message
+#. ./myread
+gans=$ans
+
+		dflt=$g4data
+		fn='d~'
+		. ./getfile
+		g4data=$ans
+
+		g4levelgammadata=$g4data/PhotonEvaporation
+		g4radioactivedata=$g4data/RadiativeDecay
+		g4ledata=$g4data/G4EMLOW3.0
+		g4neutronhpcrosssections=$g4data/G4NDL3.7
+		g4elasticdata=$g4data/Elastic
+# done
+
+###################################################################
 
 while test 1 = 1  ; do
 
 g4message=`cat << EOM
 
-Please, specify directories where the Geant4 data is installed:
+Please, specify default directory where the Geant4 data is installed:
 
 1) G4LEVELGAMMADATA:		$g4levelgammadata
 
@@ -2728,7 +2771,7 @@ gans=$ans
 	3) 
 		dflt=$g4ledata
 		fn='f~'
-		rp="Where is G4EMLOW2.3 data installed ?"
+		rp="Where is G4EMLOW3.0 data installed ?"
 		. ./getfile
 		g4ledata=$ans
 		;;

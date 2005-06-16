@@ -315,9 +315,9 @@ echo "On this machine the G4LIB_BUILD_G3TOG4=\$G4LIB_BUILD_G3TOG4"
 fi 
 
 if [ X$g4w_use_g3tog4 = Xy ] ; then
-G4USE_G3TOG4=1
-export G4USE_G3TOG4
-echo "On this machine the G4USE_G3TOG4=\$G4USE_G3TOG4"
+G4LIB_USE_G3TOG4=1
+export G4LIB_USE_G3TOG4
+echo "On this machine the G4LIB_USE_G3TOG4=\$G4LIB_USE_G3TOG4"
 fi 
 
 #+
