@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.8 2005-05-12 11:06:43 vnivanch Exp $
+// $Id: G4BraggModel.cc,v 1.9 2005-06-16 16:06:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -43,6 +43,7 @@
 // 04-06-03 Fix compilation warnings (V.Ivanchenko)
 // 12-09-04 Add lowestKinEnergy and change order of if in DEDX method (V.Ivanchenko)
 // 11-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 16-06-05 Fix problem of chemical formula (V.Ivantchenko)
 
 // Class Description:
 //
@@ -293,7 +294,10 @@ G4double G4BraggModel::StoppingPower(const G4Material* material,
    {4.015E+0, 4.542E+0, 3.955E+3, 4.847E+2, 7.904E-3}, 
    {4.571E+0, 5.173E+0, 4.346E+3, 4.779E+2, 8.572E-3},
    {2.631E+0, 2.601E+0, 1.701E+3, 1.279E+3, 1.638E-2} };
-      
+
+     static G4double atomicWeight[11] = {
+    101.96128, 44.0098, 16.0426, 28.0536, 42.0804,
+    104.1512, 44.665, 60.0843, 18.0152, 18.0152, 12.0};       
 
     if ( T < 10.0 ) {
       ionloss = a[iMolecula][0] * sqrt(T) ;
@@ -317,6 +321,7 @@ G4double G4BraggModel::StoppingPower(const G4Material* material,
 	ionloss *=(1.0+0.089-0.0248*log10(700.-99.));
       }
     }
+    ionloss /= atomicWeight[iMolecula];
 
   // pure material (normally not the case for this function)
   } else if(1 == (material->GetNumberOfElements())) {
@@ -481,21 +486,12 @@ G4double G4BraggModel::DEDX(const G4Material* material,
   const G4int numberOfElements = material->GetNumberOfElements();
   const G4double* theAtomicNumDensityVector =
                                  material->GetAtomicNumDensityVector();
-
+  
   // compaund material with parametrisation
   if( HasMaterial(material) ) {
 
-    eloss = StoppingPower(material, kineticEnergy)
-                               * (material->GetTotNbOfAtomsPerVolume());
-    if(1 < numberOfElements) {
-      G4int nAtoms = 0;
-     
-      const G4int* theAtomsVector = material->GetAtomsVector();
-      for (G4int iel=0; iel<numberOfElements; iel++) {
-        nAtoms += theAtomsVector[iel];
-      }
-      eloss /= nAtoms;
-    }
+    eloss = StoppingPower(material, kineticEnergy)*Avogadro;
+
   // pure material
   } else if(1 == numberOfElements) {
 
