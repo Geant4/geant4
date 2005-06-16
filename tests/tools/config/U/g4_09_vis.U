@@ -314,9 +314,8 @@ g4message=`cat << EOM
   G4VIS_BUILD_OIX_DRIVER
   G4VIS_USE_OIX
 
-This driver is based on the "Hepvis" class library.
-The OpenInventor driver and the Hepvis class library are based
-on OpenInventor technology for scientific visualization.
+The OpenInventor driver is based on OpenInventor technology 
+for scientific visualizarion.
 The X11 version of OpenInventor is required.
 
 EOM`
