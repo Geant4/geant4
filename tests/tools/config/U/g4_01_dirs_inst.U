@@ -31,12 +31,14 @@ esac
 case "$g4install" in
 '')
 if test $g4system = "WIN32-VC" -o $g4system = "WIN32-VC7"; then
-	g4install="c:/geant4"
+#	g4install="c:/geant4"
+	g4install=$abssrc
 else
-	if [ X"$HOME" = X/ ] ; then
-	HOME=""
-	fi
-	g4install="$HOME"/geant4
+#	if [ X"$HOME" = X/ ] ; then
+#	HOME=""
+#	fi
+#	g4install="$HOME"/geant4
+	g4install=$abssrc
 
 fi
 
@@ -60,7 +62,7 @@ esac
 
 case "$g4final_install" in
 '')
-	g4final_install=$g4final_install
+	g4final_install=$g4install
 	;;
 esac
 
@@ -97,7 +99,7 @@ installed.
 EOM`
 
 #dflt="NO DEFAULT ANSWER"
-dflt=$g4install
+dflt=$g4final_install
 fn='d~'
 rp=$g4message
 . ./getfile
@@ -127,18 +129,25 @@ case "$g4include" in
 	;;
 esac
 
-g4message=`cat << EOM
+#g4message=`cat << EOM
+#
+#Where will be directory to copy all Geant4 headers?
+#EOM`
+#
+##dflt="NO DEFAULT ANSWER"
+####dflt=$g4install/include
+#dflt=$g4include
+#fn='d~+'
+#rp=$g4message
+#. ./getfile
+#g4include=$ans
 
-Where will be directory to copy all Geant4 headers?
-EOM`
-
-#dflt="NO DEFAULT ANSWER"
-###dflt=$g4install/include
-dflt=$g4include
-fn='d~+'
-rp=$g4message
-. ./getfile
-g4include=$ans
+# Set constantly!
+if [ X$g4install != X$g4final_install ] ; then
+g4include=$g4final_install/include/geant4
+else
+g4include=$g4final_install/include
+fi
 
 fi
 
