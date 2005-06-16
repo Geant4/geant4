@@ -71,7 +71,6 @@ According to it will be set:
 
 CLHEP_INCLUDE_DIR		
 CLHEP_LIB_DIR			
-CLHEP_LIB		
 
 You can customise these settings next.
 EOM`
@@ -89,7 +88,6 @@ According to it will be set:
 
 CLHEP_INCLUDE_DIR		
 CLHEP_LIB_DIR			
-CLHEP_LIB		
 
 You will be asked about customizing these next.
 EOM`
@@ -145,21 +143,32 @@ rp=$g4message
 
 while test 1 = 1  ; do
 
-g4message=`cat << EOM
+g4message_1=`cat << You
 
-You can customize paths of you CLHEP installation:
+You can customize paths and library name of you CLHEP installation:
 
 1) CLHEP_INCLUDE_DIR:		$g4clhep_include_dir
 2) CLHEP_LIB_DIR:		$g4clhep_lib_dir
 3) CLHEP_LIB:			$g4clhep_lib
 
-To modify default settings, select number above (e.g. 2) 
+You`
+
+g4message_2=" need to use full library name with its extension (e.g. libCLHEP.lib)."
+
+g4message_3=`cat << EOM
+
+To modify default settings, select number above (e.g. 2)
 EOM`
 
 
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
+rp=$g4message_1$g4message_3
+else
+rp=$g4message_1$g4message_2$g4message_3
+fi
+
 dflt="Press [Enter] for default settings"
 #fn='d~'
-rp=$g4message
 . ./myread
 gans=$ans
 
@@ -195,14 +204,14 @@ gans=$ans
 	esac
 done
 
-if test "X$g4clhep_base_dir" = "X/usr" -o "X$g4clhep_base_dir" = "X/usr/local"; then
-g4clhep_base_dir=""
-fi
-
-if test "X$g4clhep_include_dir" = "X/usr/include" -o "X$g4clhep_include_dir" = "X/usr/local/include"; then
-g4clhep_include_dir=""
-fi
-
-if test "X$g4clhep_lib_dir" = "X/usr/lib" -o "X$g4clhep_lib_dir" = "X/usr/local/lib"; then
-g4clhep_lib_dir=""
-fi
+#if test "X$g4clhep_base_dir" = "X/usr" -o "X$g4clhep_base_dir" = "X/usr/local"; then
+#g4clhep_base_dir=""
+#fi
+#
+#if test "X$g4clhep_include_dir" = "X/usr/include" -o "X$g4clhep_include_dir" = "X/usr/local/include"; then
+#g4clhep_include_dir=""
+#fi
+#
+#if test "X$g4clhep_lib_dir" = "X/usr/lib" -o "X$g4clhep_lib_dir" = "X/usr/local/lib"; then
+#g4clhep_lib_dir=""
+#fi
