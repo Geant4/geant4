@@ -1,7 +1,9 @@
 all: 	# :::              	GEANT4 LOW ENERGY BERTINI CASCADE TESTING 
+#       :::                             by aatos.heikkinen@cern.ch
 	grep ":::" GNUmakefile
 #	::: GNUmakefile collects tools for Geant4 hadronic cascade testing for E < 1 GeV  
-#       ::: Do 'make global' first for Geant4
+#       ::: Do 'make global' first for Geant4 installation
+#       ::: Example of usage: make compilation, make run1 
 ifndef G4TARGET
   G4TARGET := $(TESTTARGET)
 endif
@@ -79,6 +81,8 @@ compilation:	# ::: make cascade executable
 	rm cascade; make cascade
 
 #	::: Input parameters for cascade : #events, particleType, bulletE [MeV], target A = Z + N, and target Z.
+#       ::: particleType: nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, foton = 10;
+
 #	::: Output file format: enegy [GeV] #events, #protons, #neutrons, #pions+ #pions-, #pions0, #fotons
 #	::: # of particles are divided by number of events
 
