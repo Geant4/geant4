@@ -177,7 +177,7 @@ $(G4TMPDIR)/%.d: src/%.F
 
 -include $(Fdependencies)
 
-clean: cleanf
+clean:: cleanf
 
 cleanf:
 	@$(RM) $(Flibobjects)
