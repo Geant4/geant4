@@ -29,7 +29,7 @@
 #include "G4CascadSpecialFunctions.hh"
 #include "G4LorentzConvertor.hh"
 
-#ifdef KAON
+#ifdef G4BERTINI_KAON
 #include "G4CascadeKplusPChannel.hh"
 #include "G4CascadeKplusNChannel.hh"
 #include "G4CascadeKzeroPChannel.hh"
@@ -66,7 +66,7 @@ public:
 
 private:
 
-#ifdef KAON 
+#ifdef G4BERTINI_KAON 
   G4CascadeKplusPChannel kpp;
   G4CascadeKplusNChannel kpn;
   G4CascadeKzeroPChannel k0p;
@@ -108,7 +108,7 @@ private:
   G4bool reChargering(G4double ekin, 
 		      G4int is) const;
 
-#ifdef KAON
+#ifdef G4BERTINI_KAON
   std::vector<G4double> particleSCMmomentumFor2to2(G4int is, 
 			             G4int kw, 
 				     G4double ekin,
@@ -129,7 +129,7 @@ private:
 						G4int mult, 
 						G4double ekin) const;
 
-#ifdef KAON 
+#ifdef G4BERTINI_KAON 
   std::vector<G4int> generateStrangeChannelPartTypes(G4int is, 
 						G4int mult, 
 						G4double ekin) const;

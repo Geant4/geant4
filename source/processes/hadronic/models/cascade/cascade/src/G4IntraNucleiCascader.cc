@@ -94,7 +94,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       ekin_in = bparticle->getKineticEnergy();
       zfin += bparticle->getCharge();
 
-#ifdef KAON
+#ifdef G4BERTINI_KAON
       if (bparticle->baryon()) afin += 1.0;
 #else
       if (bparticle->nucleon()) afin += 1.0;
@@ -228,7 +228,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
       zfin -= ipart->getCharge();
 
-#ifdef KAON
+#ifdef G4BERTINI_KAON
       if (ipart->baryon()) afin -= 1.0;
 #else
       if (ipart->nucleon()) afin -= 1.0;

@@ -109,7 +109,7 @@ public:
     return particleType <= 2; 
   };
 
-#ifdef KAON
+#ifdef G4BERTINI_KAON
   G4bool baryon() const { 
     return (particleType == 1  ||
             particleType == 2  ||
@@ -161,7 +161,7 @@ public:
       mass = 0.0;
       break;
 
-#ifdef KAON
+#ifdef G4BERTINI_KAON
     case 11: // k+
       mass = 0.49368;
       break;
@@ -235,7 +235,7 @@ public:
       charge = 0.0;
       break;
 
-#ifdef KAON
+#ifdef G4BERTINI_KAON
     case 11: // k+
       charge = 1.0;
       break;
@@ -286,7 +286,7 @@ public:
   };
 
 
-#ifdef KAON
+#ifdef G4BERTINI_KAON
   G4double getStrangeness(G4int type) const {
 
     G4double strangeness;
@@ -382,7 +382,7 @@ public:
       mass = 0.0;
       break;
 
-#ifdef KAON
+#ifdef G4BERTINI_KAON
     case 11: // k+
       mass = 0.49368;
       break;

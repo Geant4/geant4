@@ -33,7 +33,7 @@
 #include "G4CascadSpecialFunctions.hh"
 #include "G4ElementaryParticleCollider.hh"
 
-#ifdef KAON
+#ifdef G4BERTINI_KAON
 #include "G4CascadeKplusPChannel.hh"
 #include "G4CascadeKplusNChannel.hh"
 #include "G4CascadeKminusPChannel.hh"
@@ -120,7 +120,7 @@ public:
 
     G4int ip0 = ip < 3 ? ip - 1 : 2;
 
-#ifdef KAON
+#ifdef G4BERTINI_KAON
     if (ip > 10 && ip < 18) ip0 = 3;
     if (ip > 20) ip0 = 4;
 #endif
@@ -217,7 +217,7 @@ G4int verboseLevel;
 
   G4int current_nucl2;
 
-#ifdef KAON
+#ifdef G4BERTINI_KAON
   G4CascadeKplusPChannel kpp;
   G4CascadeKplusNChannel kpn;
   G4CascadeKminusPChannel kmp;

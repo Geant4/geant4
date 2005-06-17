@@ -350,7 +350,7 @@ G4int G4ElementaryParticleCollider::generateMultiplicity(G4int is,
       28.1,27.5, 31.0, 27.7, 27.8, 26.1, 25.2, 6.92, 6.70, 0.  , 25.7}}
   };
 
-#ifdef KAON
+#ifdef G4BERTINI_KAON
 
   G4int mul = 0;
   G4int l = is;
@@ -414,7 +414,7 @@ G4int G4ElementaryParticleCollider::generateMultiplicity(G4int is,
   G4int ik = iksk.first;
   G4double sk = iksk.second;
 
-#ifdef KAON
+#ifdef G4BERTINI_KAON
   l = is;
 #else
   G4int l = is;
@@ -448,7 +448,7 @@ G4int G4ElementaryParticleCollider::generateMultiplicity(G4int is,
   G4double sl = inuclRndm();
   G4double ptot = 0.0;
 
-#ifdef KAON
+#ifdef G4BERTINI_KAON
   mul = 0;
 #else
   G4int mul = 0;
@@ -467,7 +467,7 @@ G4int G4ElementaryParticleCollider::generateMultiplicity(G4int is,
 
   if(ekin > large_cut && mul == 1) mul = 2;
 
-#ifdef KAON
+#ifdef G4BERTINI_KAON
   }  // strange, non-strange
 #endif
 
@@ -521,7 +521,7 @@ generateSCMfinalState(G4double ekin,
     if(multiplicity == 2) { // 2 -> 2
       G4int kw;
 
-#ifdef KAON
+#ifdef G4BERTINI_KAON
       kw = 1;
       if ( (is > 10 && is < 14) || (is > 14 && is < 63) ) {
         particle_kinds =
@@ -572,7 +572,7 @@ generateSCMfinalState(G4double ekin,
 	particle_kinds.push_back(type2);       
       };
 
-#ifdef KAON
+#ifdef G4BERTINI_KAON
       }
       G4int outgoing_product = particle_kinds[0]*particle_kinds[1];
 #endif
@@ -586,7 +586,7 @@ generateSCMfinalState(G4double ekin,
 	m2 *= m2;	 
 	G4double a = 0.5 * (etot_scm * etot_scm - m1 - m2);
 	G4double np = std::sqrt((a * a - m1 * m2) / (m1 + m2 + 2.0 * a));
-#ifdef KAON
+#ifdef G4BERTINI_KAON
 	mom = particleSCMmomentumFor2to2(is, kw, ekin, np, outgoing_product);
 
       } else {
@@ -622,7 +622,7 @@ generateSCMfinalState(G4double ekin,
 
     } else { // 2 -> many
 
-#ifdef KAON
+#ifdef G4BERTINI_KAON
       if ( (is > 10 && is < 14) || (is > 14 && is < 63) ) {
         particle_kinds =
             generateStrangeChannelPartTypes(is, multiplicity, ekin);
@@ -631,7 +631,7 @@ generateSCMfinalState(G4double ekin,
 
       particle_kinds = generateOutgoingKindsFor2toMany(is, multiplicity, ekin);
 
-#ifdef KAON
+#ifdef G4BERTINI_KAON
       }
 #endif
 
@@ -1325,7 +1325,7 @@ generateOutgoingKindsFor2toMany(
   return kinds;
 }	
 
-#ifdef KAON
+#ifdef G4BERTINI_KAON
 std::vector<G4int> G4ElementaryParticleCollider::
 generateStrangeChannelPartTypes(G4int is, G4int mult, G4double ekin) const
 {
@@ -1815,7 +1815,7 @@ adjustIntervalForElastic(
   return std::pair<G4double, G4double>(a, b);
 }  
 
-#ifdef KAON
+#ifdef G4BERTINI_KAON
 std::vector<G4double> G4ElementaryParticleCollider::
 particleSCMmomentumFor2to2(
 			   G4int is, 
