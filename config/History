@@ -1,4 +1,4 @@
-$Id: History,v 1.265 2005-06-15 13:59:59 gunter Exp $
+$Id: History,v 1.266 2005-06-17 06:53:24 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-15th June 2005 Gunter Folger
-- change clean(_..) targets to be :: rules, allowing multiple clean targets
+15th June 2005 Gunter Folger (config-V07-00-04)
+- Changed clean(_..) targets to be :: rules, to allow multiple clean targets.
 
 10th June 2005 Gabriele Cosmo (config-V07-00-03)
 - Updated configuration script SUN-CC.gmk:
