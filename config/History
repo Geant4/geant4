@@ -1,4 +1,4 @@
-$Id: History,v 1.266 2005-06-17 06:53:24 gcosmo Exp $
+$Id: History,v 1.267 2005-06-17 06:59:37 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16th June 2005 Sergey Sadilov (config-V07-00-05)
+- Updated Configure script and support files:
+  o Added new data sets for low-energy-EM and elastic data.
+  o Set unique entry point for path to data.
+  o Updated variable settings for g3tog4 and zlib.
 
 15th June 2005 Gunter Folger (config-V07-00-04)
 - Changed clean(_..) targets to be :: rules, to allow multiple clean targets.
