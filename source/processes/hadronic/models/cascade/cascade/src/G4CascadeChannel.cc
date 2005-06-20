@@ -75,7 +75,7 @@ G4CascadeChannel::sampleFlat(std::vector<G4double> sigma) const
 std::vector<G4int> 
 G4CascadeChannel::getQnums(G4int type) const
 {
-  G4int bary, str, ch;
+  G4int bary=0, str=0, ch=0;
   std::vector<G4int> Qnums(3);
 
     switch(type) {
