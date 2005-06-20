@@ -55,7 +55,7 @@ G4CascadeElasticInterface::G4CascadeElasticInterface()
    
 G4ReactionProductVector* G4CascadeElasticInterface::Propagate(G4KineticTrackVector* , 
 						       G4V3DNucleus* ) {
-  return NULL;
+  return 0;
 }
 
 // #define debug_G4CascadeElasticInterface
@@ -120,10 +120,10 @@ G4HadFinalState* G4CascadeElasticInterface::ApplyYourself(const G4HadProjectile&
   } 
 
   // Set target
-  G4InuclNuclei*   target  = NULL;
-  G4InuclParticle* targetH = NULL;
+  G4InuclNuclei*   target  = 0;
+  G4InuclParticle* targetH = 0;
   // and outcoming particles
-  G4DynamicParticle* cascadeParticle = NULL;
+  G4DynamicParticle* cascadeParticle = 0;
 
   std::vector<G4double> targetMomentum(4, 0.0);
 
@@ -320,7 +320,7 @@ G4HadFinalState* G4CascadeElasticInterface::ApplyYourself(const G4HadProjectile&
   }
 
   // get nuclei fragments
-  G4DynamicParticle * aFragment = NULL;
+  G4DynamicParticle * aFragment = 0;
   G4ParticleDefinition * aIonDef = 0;
   G4ParticleTable *theTableOfParticles = G4ParticleTable::GetParticleTable();
 
@@ -386,10 +386,10 @@ G4HadFinalState* G4CascadeElasticInterface::ApplyYourself(const G4HadProjectile&
   delete bigb;
   delete collider;
 
-  if(target != NULL) delete target;
-  if(targetH != NULL) delete targetH;
- // if(cascadeParticle != NULL) delete cascadeParticle;
- // if(aFragment != NULL) delete aFragment;
+  if(target != 0) delete target;
+  if(targetH != 0) delete targetH;
+ // if(cascadeParticle != 0) delete cascadeParticle;
+ // if(aFragment != 0) delete aFragment;
 
   return &theResult;
 }

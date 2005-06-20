@@ -35,7 +35,7 @@ G4ElementaryParticleCollider::G4ElementaryParticleCollider()
     G4cout << " >>> G4ElementaryParticleCollider::G4ElementaryParticleCollider" << G4endl;
   }
 
-};
+}
 
 G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
 							 G4InuclParticle* target) {

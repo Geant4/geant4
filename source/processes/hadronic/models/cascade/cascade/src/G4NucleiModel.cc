@@ -34,7 +34,7 @@ G4NucleiModel::G4NucleiModel()
   if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::G4NucleiModel" << G4endl;
   }
-};
+}
 
 void G4NucleiModel::generateModel(G4double a, 
 				  G4double z) {
@@ -372,7 +372,7 @@ void G4NucleiModel::printModel() const {
       getFermiMomentum(2,i) << " VP " << getPotential(2,i) << G4endl
 	   << " pions: VP " << getPotential(3,i) << G4endl;
 
-}; 
+}
 
 G4InuclElementaryParticle G4NucleiModel::generateNucleon(G4int type, 
 							 G4int zone) const {
