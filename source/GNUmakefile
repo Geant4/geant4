@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.73 2005-06-15 16:31:59 gunter Exp $
+# $Id: GNUmakefile,v 1.74 2005-06-20 10:16:54 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -123,7 +123,7 @@ else
 endif
 
 includes:
-	@echo Installing includes files in $(G4INCLUDE) ...
+	@echo Installing header files in $(G4INCLUDE) ...
 	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE) $@); done
 	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE) $@); done
 	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE) $@); done
