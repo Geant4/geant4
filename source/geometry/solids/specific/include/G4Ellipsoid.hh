@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipsoid.hh,v 1.2 2005-06-20 16:47:25 gcosmo Exp $
+// $Id: G4Ellipsoid.hh,v 1.3 2005-06-20 17:29:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,9 +44,8 @@
 
 // History:
 // -------
-// 10.11.1999  G.Horton-Smith (RCNS, Tohoku University - Japan)
-//             First implementation
-// 10.02.2005  G.Guerrieri - Revision
+// 10.11.1999  G.Horton-Smith (Caltech, USA) - First implementation
+// 10.02.2005  G.Guerrieri (INFN Genova, Italy) - Revision
 // --------------------------------------------------------------------
 #ifndef G4Ellipsoid_HH
 #define G4Ellipsoid_HH
