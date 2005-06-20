@@ -53,13 +53,30 @@ HadrontherapyRunAction::~HadrontherapyRunAction()
 { 
 }
 
-void HadrontherapyRunAction::BeginOfRunAction(const G4Run*)
+void HadrontherapyRunAction::BeginOfRunAction(const G4Run* aRun)
 { 	
    G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+   G4cout << "Run " << aRun -> GetRunID() << " starts ..." << G4endl;
+
+   electromagnetic = 0;
+   hadronic = 0;
 }
 
-void HadrontherapyRunAction::EndOfRunAction(const G4Run*)
+void HadrontherapyRunAction::EndOfRunAction(const G4Run* aRun)
 {
+  G4cout << " Summary of Run " << aRun -> GetRunID() <<" :"<< G4endl;
+  G4cout << "Number of electromagnetic processes of primary particles in the phantom:"
+	 << electromagnetic << G4endl;
+  G4cout << "Number of hadronic processes of primary particles in the phantom:"
+	 << hadronic << G4endl;
+}
+void HadrontherapyRunAction::AddEMProcess()
+{
+ electromagnetic += 1;
+}
+void HadrontherapyRunAction::AddHadronicProcess()
+{
+  hadronic += 1;
 }
 
 

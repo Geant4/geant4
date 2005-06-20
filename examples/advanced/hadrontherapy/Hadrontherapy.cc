@@ -78,12 +78,14 @@ int main(int argc ,char ** argv)
   matrix -> Initialize();
 
   // Optional UserActions: run, event, stepping
-  runManager -> SetUserAction(new HadrontherapyRunAction());
+  HadrontherapyRunAction* pRunAction = new HadrontherapyRunAction();
+  runManager -> SetUserAction(pRunAction);
+
   HadrontherapyEventAction* pEventAction = new HadrontherapyEventAction(matrix);
   runManager -> SetUserAction(pEventAction);
 
 
-  HadrontherapySteppingAction* steppingAction = new HadrontherapySteppingAction(); 
+  HadrontherapySteppingAction* steppingAction = new HadrontherapySteppingAction(pRunAction); 
   runManager -> SetUserAction(steppingAction);    
 
 
