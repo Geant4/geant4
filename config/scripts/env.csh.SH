@@ -285,6 +285,21 @@ setenv G4LIB_USE_G3TOG4 1
 echo "On this machine the G4LIB_USE_G3TOG4=\$G4LIB_USE_G3TOG4"
 endif 
 
+
+#
+# Use ZLIB module
+#
+#+
+if ( X$g4wlib_build_zlib == Xy )  then
+setenv G4LIB_BUILD_ZLIB 1
+echo "On this machine the G4LIB_BUILD_ZLIB=\$G4LIB_BUILD_ZLIB"
+endif 
+
+if ( X$g4w_use_ZLIB == Xy )  then
+setenv G4LIB_USE_ZLIB 1
+echo "On this machine the G4LIB_USE_ZLIB=\$G4LIB_USE_ZLIB"
+endif 
+
 #+
 #
 # g4shared
