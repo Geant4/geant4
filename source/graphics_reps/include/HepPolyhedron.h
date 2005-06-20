@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.h,v 1.16 2005-06-14 10:27:27 gguerrie Exp $
+// $Id: HepPolyhedron.h,v 1.17 2005-06-20 14:48:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,32 +38,31 @@
 //   HepPolyhedronBox (dx,dy,dz)
 //                                        - create polyhedron for Box;
 //   HepPolyhedronTrd1 (dx1,dx2,dy,dz)
-//                                        - create polyhedron for G3 Trd1;
+//                                        - create polyhedron for Trd1;
 //   HepPolyhedronTrd2 (dx1,dx2,dy1,dy2,dz)
-//                                        - create polyhedron for G3 Trd2;
+//                                        - create polyhedron for Trd2;
 //   HepPolyhedronTrap (dz,theta,phi, h1,bl1,tl1,alp1, h2,bl2,tl2,alp2)
-//                                        - create polyhedron for G3 Trap;
+//                                        - create polyhedron for Trap;
 //   HepPolyhedronPara (dx,dy,dz,alpha,theta,phi)
-//                                        - create polyhedron for G3 Para;
+//                                        - create polyhedron for Para;
 //   HepPolyhedronTube (rmin,rmax,dz)
-//                                        - create polyhedron for G3 Tube;
+//                                        - create polyhedron for Tube;
 //   HepPolyhedronTubs (rmin,rmax,dz,phi1,dphi)
-//                                        - create polyhedron for G3 Tubs;
+//                                        - create polyhedron for Tubs;
 //   HepPolyhedronCone (rmin1,rmax1,rmin2,rmax2,dz)
-//                                        - create polyhedron for G3 Cone;
+//                                        - create polyhedron for Cone;
 //   HepPolyhedronCons (rmin1,rmax1,rmin2,rmax2,dz,phi1,dphi)
-//                                        - create polyhedron for G3 Cons;
+//                                        - create polyhedron for Cons;
 //   HepPolyhedronPgon (phi,dphi,npdv,nz, z(*),rmin(*),rmax(*))
-//                                        - create polyhedron for G3 Pgon;
+//                                        - create polyhedron for Pgon;
 //   HepPolyhedronPcon (phi,dphi,nz, z(*),rmin(*),rmax(*))
-//                                        - create polyhedron for G3 Pcon;
+//                                        - create polyhedron for Pcon;
 //   HepPolyhedronSphere (rmin,rmax,phi,dphi,the,dthe)
 //                                        - create polyhedron for Sphere;
-//   HepPolyhedronEllipsoid (rx,ry,rz,zcut1,zcut2)
-//					  - create polyhedron for Ellipsoid;
-//
 //   HepPolyhedronTorus (rmin,rmax,rtor,phi,dphi)
 //                                        - create polyhedron for Torus;
+//   HepPolyhedronEllipsoid (dx,dy,dz,zcut1,zcut2)
+//                                        - create polyhedron for Ellipsoid;
 // Public functions:
 //
 //   GetNoVertices ()       - returns number of vertices;
@@ -159,8 +158,8 @@
 // 06.03.05 J.Allison
 // - added IsErrorBooleanProcess
 //
-// 09.06.05 G.Guerrieri
-// - added class HepPolyhedronEllipsoid;
+// 20.06.05 G.Cosmo
+// - added HepPolyhedronEllipsoid
 //
 
 #ifndef HEP_POLYHEDRON_HH
@@ -485,21 +484,21 @@ public:
   }
 };
 
-class HepPolyhedronEllipsoid : public HepPolyhedron {
-public:
-  HepPolyhedronEllipsoid(double ax, double by, double cz,
-                         double zCut1, double zCut2);
-  virtual ~HepPolyhedronEllipsoid();
-  virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
-    return HepPolyhedron::operator = (from);
-  }
-};
-
 class HepPolyhedronTorus : public HepPolyhedron {
 public:
   HepPolyhedronTorus(double rmin, double rmax, double rtor,
                     double phi, double dphi);
   virtual ~HepPolyhedronTorus();
+  virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
+    return HepPolyhedron::operator = (from);
+  }
+};
+
+class HepPolyhedronEllipsoid : public HepPolyhedron {
+public:
+  HepPolyhedronEllipsoid(double dx, double dy, double dz, 
+			 double zcut1, double zcut2);
+  virtual ~HepPolyhedronEllipsoid();
   virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
     return HepPolyhedron::operator = (from);
   }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedron.hh,v 1.13 2005-06-14 10:27:27 gguerrie Exp $
+// $Id: G4Polyhedron.hh,v 1.14 2005-06-20 14:48:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4POLYHEDRON_HH
@@ -63,12 +63,10 @@
 //
 //   G4PolyhedronSphere(rmin,rmax,
 //                      phi,dphi,the,dthe)  - create G4Polyhedron for Sphere;
-//
-//   G4PolyhedronEllipsoid(rx, ry, rz,
-//                         zcut1,zcut2)     - create G4Polyhedron for Ellipsoid;
-//
 //   G4PolyhedronTorus(rmin,rmax,rtor,
 //                     phi,dphi)            - create G4Polyhedron for Torus;
+//   G4PolyhedronEllipsoid(dx,dy,dz,
+//                     zcut1,zcut2)         - create G4Polyhedron for Ellipsoid;
 //
 // Public functions inherited from HepPolyhedron (this list might be
 // incomplete):
@@ -103,11 +101,8 @@
 //   (NumberOfRotationSteps is also called number of sides per circle or
 //   line segments per circle - see
 //   /vis/viewer/set/lineSegmentsPerCircle.)
-//
-// 09.06.05 G.Guerrieri
-// - Added class G4PolyhedronEllipsoid;
-//
-
+// 20.06.05 G.Cosmo
+// - Added G4PolyhedronEllipsoid.
 
 #include "globals.hh"
 #include "HepPolyhedron.h"
@@ -253,25 +248,6 @@ public:
   }
 };
 
-class G4PolyhedronEllipsoid : public G4Polyhedron {
-public:
-  G4PolyhedronEllipsoid(G4double ax,
-			G4double bx,
-			G4double cz,
-			G4double zCut1,
-			G4double zCut2);
-  virtual ~G4PolyhedronEllipsoid ();
-  virtual G4Visible& operator = (const G4Visible& from) {
-    return G4Visible::operator = (from);
-  }
-  virtual G4VVisPrim& operator=(const G4VVisPrim& from) {
-    return G4VVisPrim::operator = (from);
-  }
-  virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
-    return HepPolyhedron::operator = (from);
-  }
-};
-
 class G4PolyhedronTorus: public G4Polyhedron {
 public:
   G4PolyhedronTorus (G4double rmin, G4double rmax, G4double rtor,
@@ -363,6 +339,22 @@ public:
     return G4Visible::operator = (from);
   }
   virtual G4VVisPrim& operator = (const G4VVisPrim& from) {
+    return G4VVisPrim::operator = (from);
+  }
+  virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
+    return HepPolyhedron::operator = (from);
+  }
+};
+
+class G4PolyhedronEllipsoid : public G4Polyhedron {
+ public:
+  G4PolyhedronEllipsoid(G4double dx, G4double dy, G4double dz, 
+                        G4double zcut1, G4double zcut2);
+  virtual ~G4PolyhedronEllipsoid ();
+  virtual G4Visible& operator=(const G4Visible &from) { 
+    return G4Visible::operator = (from);
+  }
+  virtual G4VVisPrim& operator=(const G4VVisPrim &from) {
     return G4VVisPrim::operator = (from);
   }
   virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
