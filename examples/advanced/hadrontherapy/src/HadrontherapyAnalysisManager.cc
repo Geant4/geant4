@@ -41,12 +41,16 @@ HadrontherapyAnalysisManager* HadrontherapyAnalysisManager::instance = 0;
 
 HadrontherapyAnalysisManager::HadrontherapyAnalysisManager() : 
   aFact(0), theTree(0), histFact(0), tupFact(0), h1(0), h2(0), h3(0),
-  h4(0), h5(0), h6(0), h7(0), h8(0), h9(0), h10(0), h11(0), h12(0), h13(0), h14(0), ntuple(0)
+  h4(0), h5(0), h6(0), h7(0), h8(0), h9(0), h10(0), h11(0), h12(0), h13(0), h14(0), ntuple(0),
+  ionTuple(0)
 {  
 }
 
 HadrontherapyAnalysisManager::~HadrontherapyAnalysisManager() 
 { 
+  delete ionTuple;
+  ionTuple = 0;
+  
   delete ntuple;
   ntuple = 0;
 
@@ -158,7 +162,12 @@ void HadrontherapyAnalysisManager::book()
   // Create the ntuple
   G4String columnNames = "int i; int j; int k; double energy;";
   G4String options = "";
-  if (tupFact) ntuple = tupFact->create("1","1",columnNames, options);
+  if (tupFact) ntuple = tupFact -> create("1","1",columnNames, options);
+
+  // Create the ntuple
+  G4String columnNames2 = "int a; double z;  int occupancy; double energy;";
+  G4String options2 = "";
+  if (tupFact) ionTuple = tupFact -> create("2","2", columnNames2, options2);
 }
 
 void HadrontherapyAnalysisManager::FillEnergyDeposit(G4int i, 
@@ -252,13 +261,33 @@ void HadrontherapyAnalysisManager::alphaEnergyDistribution(G4double energy)
   h14 -> fill(energy);
 }
 
+void HadrontherapyAnalysisManager::genericIonInformation(G4int a, 
+							 G4double z, 
+							 G4int electronOccupancy,
+							 G4double energy) 
+{
+ if (ionTuple)
+    {
+      G4int aIndex = ionTuple -> findColumn("a");
+      G4int zIndex = ionTuple -> findColumn("z");
+      G4int electronIndex = ionTuple -> findColumn("occupancy");  
+      G4int energyIndex = ionTuple -> findColumn("energy");
+      
+      ionTuple -> fill(aIndex,a);
+      ionTuple -> fill(zIndex,z); 
+      ionTuple -> fill(electronIndex, electronOccupancy); 
+      ionTuple -> fill(energyIndex, energy);
+    }
+  ionTuple -> addRow(); 
+}
+
 void HadrontherapyAnalysisManager::finish() 
 {  
- // Write all histograms to file
- theTree -> commit();
+  // Write all histograms to file
+  theTree -> commit();
  
- // Close (will again commit)
- theTree ->close();
+  // Close (will again commit)
+  theTree ->close();
 }
 #endif
 

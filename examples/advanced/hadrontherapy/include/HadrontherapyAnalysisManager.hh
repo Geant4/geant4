@@ -107,6 +107,8 @@ public:
   void alphaEnergyDistribution(G4double secondaryParticleKineticEnergy);
   // Energy distribution of secondary alpha originated in the phantom
 
+  void genericIonInformation(G4int, G4double, G4int, G4double);
+ 
   void finish();
   // Close the .hbk file with the histograms and the ntuples
 
@@ -131,6 +133,7 @@ private:
   AIDA::IHistogram1D *h13; 
   AIDA::IHistogram1D *h14;
   AIDA::ITuple *ntuple;
+  AIDA::ITuple *ionTuple;
 };
 #endif
 #endif
