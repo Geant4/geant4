@@ -1,0 +1,28 @@
+FILE  run01.paw
+LIST
+C
+C    stepmax
+C
+CALOR  10 (silicon)  0.1 (sizeX) 0.1 (sizeYZ) 1 (nLayers)
+KINE   3 (electron) 0.5e-3 (Ekine) 1. (xBeam) 0. (rBeam)
+TRIG   100000
+DEBUG  10  5 10000
+LOSS   1
+HADR   0
+ABAN   0
+C
+AUTO   0
+STEPMX 10.e-4
+C
+CUTS    10.0e-6 (cutgam)     10.0e-6 (cutele)  3*10.e-3 (cutneu/had/muo)
+      2*10.0e-6 (bcute/m) 2*541.0e-6 (dcute/m)
+C     
+SWIT   0 (draw) 1 (histo)
+C      
+*HISTO 1  100  0.    1.  1.e-1 (mm)
+*HISTO 2  102  0.  510.  1.e-6 (keV)
+*HISTO 3  100  0.    2.  1.e-1 (mm)
+*HISTO 4   10  0.   20.  1.e-4 (um)
+*HISTO 5  100  0.    1.  1.e-1 (mm)
+C      
+END
