@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50ElectronStandard.cc,v 1.2 2003-07-28 15:05:52 guatelli Exp $
+// $Id: Tst50ElectronStandard.cc,v 1.3 2005-06-21 15:21:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -39,6 +39,7 @@
 #include "G4MultipleScattering.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
+#include "G4StepLimiter.hh"
 
 Tst50ElectronStandard::Tst50ElectronStandard(const G4String& name): G4VPhysicsConstructor(name)
 { }
@@ -61,8 +62,9 @@ void Tst50ElectronStandard::ConstructProcess()
       if (particleName == "e-") 
 	{
 	  // manager->AddProcess(new G4MultipleScattering, -1, 1,1);
-	  manager->AddProcess(new G4eIonisation,        -1, 2,2);
-	  manager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
+	  manager -> AddProcess(new G4eIonisation,        -1, 2,2);
+	  manager -> AddProcess(new G4eBremsstrahlung,    -1,-1,3);
+	  manager -> AddProcess(new G4StepLimiter(),-1,-1,3);
 	}   
     }
 }

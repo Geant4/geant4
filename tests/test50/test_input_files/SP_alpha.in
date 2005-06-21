@@ -5,10 +5,11 @@
 /physics/addPhysics photon-epdl
 /physics/addPhysics electron-eedl
 /physics/addPhysics positron-standard
-/physics/addPhysics proton-ICRU49
 #################################
 # Alternative approaches for alpha e.m. processes
 ##################################
+# Activating Low energy model for alpha activates also the model
+#for protons
 #/physics/addPhysics alpha-standard
 /physics/addPhysics alpha-ICRU49
 #/physics/addPhysics alpha-ziegler77

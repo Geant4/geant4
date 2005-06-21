@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50ProtonZiegler2000.cc,v 1.1 2004-07-20 15:11:13 guatelli Exp $
+// $Id: Tst50ProtonZiegler2000.cc,v 1.2 2005-06-21 15:21:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -40,7 +40,9 @@
 #include "G4Proton.hh"
 #include "G4hLowEnergyIonisation.hh"
 #include "G4hLowEnergyLoss.hh"
-#include "G4hSRIM2000p.hh"
+#include "G4hSRIM2000p.hh" 
+#include "G4StepLimiter.hh"
+
 Tst50ProtonZiegler2000::Tst50ProtonZiegler2000(const G4String& name): G4VPhysicsConstructor(name)
 { }
 
@@ -68,8 +70,8 @@ void Tst50ProtonZiegler2000::ConstructProcess()
           ion -> SetNuclearStoppingOn() ;
 	  //  manager->AddProcess(multipleScattering,-1,1,1);  	
 	  ion -> SetEnlossFluc(false);
-          
-          manager->AddProcess(ion,-1,2,2);
+          manager -> AddProcess(new G4StepLimiter(),-1,-1,3);
+          manager-> AddProcess(ion,-1,2,2);
 	}
     }
 }

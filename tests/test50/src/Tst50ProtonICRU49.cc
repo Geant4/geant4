@@ -27,6 +27,7 @@
 #include "G4Proton.hh"
 #include "G4hLowEnergyIonisation.hh"
 #include "G4hLowEnergyLoss.hh"
+#include "G4StepLimiter.hh"
 
 Tst50ProtonICRU49::Tst50ProtonICRU49(const G4String& name): G4VPhysicsConstructor(name)
 { }
@@ -52,8 +53,9 @@ theParticleIterator->reset();
 	  ionisation -> SetEnlossFluc(false); 
 
           ionisation -> SetNuclearStoppingOn() ;
-
-	  manager->AddProcess(ionisation,-1,2,2);
+         
+          manager -> AddProcess(new G4StepLimiter(),-1,-1,3);
+	  manager -> AddProcess(ionisation,-1,2,2);
           //  manager->AddProcess(multipleScattering,-1,1,1);  	
 	}	
     }

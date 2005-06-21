@@ -32,6 +32,7 @@
 #include "G4MultipleScattering.hh"
 #include "G4Proton.hh"
 #include "G4hIonisation.hh"
+#include "G4StepLimiter.hh"
 
 Tst50ProtonStandard::Tst50ProtonStandard(const G4String& name): G4VPhysicsConstructor(name)
 { }
@@ -53,6 +54,7 @@ void Tst50ProtonStandard::ConstructProcess()
 	{
 	  //G4VProcess*  multipleScattering= new G4MultipleScattering(); 
 	  manager->AddProcess(new G4hIonisation(),-1,2,2);
+          manager -> AddProcess(new G4StepLimiter(),-1,-1,3);
 	  //manager->AddProcess(multipleScattering,-1,1,1);  	
 
 	}

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50ElectronPenelope.cc,v 1.2 2004-06-02 10:16:09 guatelli Exp $
+// $Id: Tst50ElectronPenelope.cc,v 1.3 2005-06-21 15:21:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -40,6 +40,7 @@
 #include "G4PenelopeIonisation.hh"
 #include "G4PenelopeBremsstrahlung.hh"
 #include "G4PenelopeAnnihilation.hh"
+#include "G4StepLimiter.hh"
 
 Tst50ElectronPenelope::Tst50ElectronPenelope(const G4String& name): 
 G4VPhysicsConstructor(name)
@@ -64,11 +65,12 @@ void Tst50ElectronPenelope::ConstructProcess()
 	{
 	  //	  manager -> AddProcess(new G4MultipleScattering, -1, 1,1);
 	  G4PenelopeIonisation* ioni = new G4PenelopeIonisation();
-	  G4PenelopeBremsstrahlung* brem = new G4PenelopeBremsstrahlung();
+	  G4PenelopeBremsstrahlung* brem = new G4PenelopeBremsstrahlung(); 
+	  ioni -> SetEnlossFluc(false); 
+          brem -> SetEnlossFluc(false); 
           manager -> AddProcess(ioni, -1, 2,2);
 	  manager -> AddProcess(brem, -1,-1,3); 
-          ioni -> SetEnlossFluc(false); 
-          brem -> SetEnlossFluc(false); 
+	  manager -> AddProcess(new G4StepLimiter(),-1,-1,3);
 	}   
     }
 }

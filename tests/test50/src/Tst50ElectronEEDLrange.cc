@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50ElectronEEDLrange.cc,v 1.4 2003-07-29 09:45:38 guatelli Exp $
+// $Id: Tst50ElectronEEDLrange.cc,v 1.5 2005-06-21 15:21:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -40,6 +40,7 @@
 #include "G4MultipleScattering.hh"
 #include "G4LowEnergyIonisation.hh"
 #include "G4LowEnergyBremsstrahlung.hh"
+#include "G4StepLimiter.hh"
 
 Tst50ElectronEEDLrange::Tst50ElectronEEDLrange(const G4String& name): G4VPhysicsConstructor(name)
 { }
@@ -64,11 +65,11 @@ void Tst50ElectronEEDLrange::ConstructProcess()
 	  
 	  G4LowEnergyIonisation* loweIon  = new G4LowEnergyIonisation("LowEnergyIoni");
           G4LowEnergyBremsstrahlung* loweBrem = new G4LowEnergyBremsstrahlung("LowEnBrem");
-    
-          manager->AddProcess(loweIon,     -1, 2,2);
-          manager->AddProcess(loweBrem,    -1,-1,3); 
-          loweIon->SetEnlossFluc(false); 
-          loweBrem->SetEnlossFluc(false);
+          loweIon -> SetEnlossFluc(false); 
+          loweBrem -> SetEnlossFluc(false);
+          manager -> AddProcess(loweIon,     -1, 2,2);
+          manager -> AddProcess(loweBrem,    -1,-1,3);  
+          manager -> AddProcess(new G4StepLimiter(),-1,-1,3);
           G4cout<<" range conditions set: no msc, no energy fluct"<<G4endl;	
 	}   
     }
