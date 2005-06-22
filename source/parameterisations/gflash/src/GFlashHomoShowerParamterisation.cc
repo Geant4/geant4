@@ -252,7 +252,7 @@
 	 return DEne;
  }
  
- G4double GFlashHomoShowerParamterisation::IntegrateNspLongitudinal(const G4double LongitudinalStep)
+ G4double GFlashHomoShowerParamterisation::IntegrateNspLongitudinal(G4double LongitudinalStep)
  {
 	 G4double LongitudinalStepInX0 = LongitudinalStep / X0; 
 	 G4float x1 = BetaNSpot*LongitudinalStepInX0;
