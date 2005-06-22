@@ -1,0 +1,396 @@
+
+                       geant4-07-01-ref-00
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Extended G4PrimaryTransformer to accept exotic particles and shortlived
+    primary particle with proper decay table.
+  o Fixed interface to G4VHit::CreateAttValues(): removed const qualifier
+    for input argument.
+  o New EM processes with model interface (Compton, GammaConversion,
+    PhotoElectricEffect, eplusAnnihilation) are now the default.
+  o New low energy polarised Rayleigh scattering process.
+  o Added kaon extension to Bertini cascade (not built by default).
+  o Physics tuning for the antiproton-nuclear annihilation at rest in CHIPS.
+  o New data sets for low-energy EM processes (G4EMLOWEN-3.0) and
+    elastic scattering (G4ELASTIC-1.1).
+  o Updated HEPREP to version 2.0.1 and cheprep to version 2.0.5.
+  o Optional installation of ZLIB module for file compression; new
+    installation flags: G4LIB_BUILD_ZLIB, G4LIB_USE_ZLIB.
+  o Examples updates and review.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                                           config-V07-00-05
+------
+- Updated Configure script (Configure-V07-00-01) and support files:
+  o Added new data sets for low-energy-EM and elastic data.
+  o Set unique entry point for path to data.
+  o Updated variable settings for g3tog4 and zlib.
+  o Corrected text where necessary.
+- Modified clean(_..) targets to be :: rules, to allow multiple clean targets.
+- Updated configuration script for SUN-CC:
+  o Removed obsolete compilation option -ptr$(G4TREP) for redirection to
+    template repository, no longer necessary.
+  o Added -lsunmath to LOADLIBS now required with CLHEP-1.9.X for static
+    libraries.
+- Updated compilation options on Darwin-g++, now similar to Linux-g++ setup.
+- Added G4LIB_BUILD/USE_ZLIB flags:
+  o G4LIB_BUILD_ZLIB is mandatory for Windows, if zlib is required;
+  o if G4LIB_BUILD_ZLIB is set, the G4-zlib module is used (all platforms);
+  o if only G4LIB_USE_ZLIB is set, the system zlib is used (UNIX only);
+  o if none is set, zlib is not used (all platforms).
+- Changed G4USE_G4TOG4 to G4LIB_USE_G3TOG4 to conform to standard flag names.
+  Required to build the g3tog4 module.
+
+digits_hits                                      digits_hits-V07-00-00
+-----------
+- G4VHit: fixed interface to CreateAttValues(), removed const qualifier.
+  Improved description.
+- G4VDigi: improved description.
+
+event                                            event-V07-00-05
+-----
+- Moved G4PrimaryParticle, G4PrimaryVertex, G4VUserPrimaryParticleInformation
+  and G4VUserPrimaryVertexInformation to particles/management.
+- Modified G4PrimaryTransformer:
+  o to accept exotic particles;
+  o to take care of mass defined in G4PrimaryParticle;
+  o to accept shortlived primary particle with proper decay table;
+  o to issue a warning message if a shortlived primary does not have decay
+    table nor pre-assigned decay mode and to add a new virtual method to
+    alter the conversion of such shortlived into a track (default
+    implementation converts it).
+- Modified G4ParticleGun and G4ParticleGunMessenger to accept shortlived
+  primary particle with proper decay table.
+- Fixed bug for particle weight in G4SingleParticlesource.
+- Corrected typo in printout for G4GeneralParticleMessenger.
+
+g3tog4                                           g3tog4-V07-00-01
+------
+- Initialise local pointer variable 'mothLV' in method
+  G3toG4BuildTree::G3toG4BuildPVTree().
+
+geometry/divisions                               geomdiv-V07-00-00
+------------------
+- Brought unit tests up to date for compilation on gcc-4.0.0.
+
+geometry/solids/CSG                              geom-csg-V07-00-09
+-------------------
+- Fixed polyhedron representation of G4Torus.
+- Correction to SurfaceNormal() for G4Cons, G4Sphere, G4Torus, G4Tubs
+  for properly handling location on z-axis and in the frame origin.
+  Fixed bug in G4Cons::SurfaceNormal(p) for normals returned from
+  rmax and rmin.
+- Keep old specification for SurfaceNormal() to treat usage of the
+  function for points not at the surface.
+- Moved debug printouts for surface-normals to G4CSGDEBUG.
+- Cleared compilation warnings in unit tests and updates.
+
+geometry/volumes                                 geomvol-V07-00-00
+----------------
+- Moved constructors/destructors and operators for G4NavigationLevelRep
+  and G4NavigationLevel to .cc file and not inlined. Rationalised definition
+  of allocators to belong to related translation units. Workaround necessary
+  to allow for correct optimisation on some 64-bits compilers.
+
+materials                                        materials-V07-00-06
+---------
+- Completed addition of acknowledgement to Nist classes.
+
+parameterisations/gflash                         gflash-V07-00-04
+------------------------
+- Fixed compilation warnings on SUN-CC for hiding of class attributes.
+- Corrected signature for IntegrateNspLongitudinal() in implementation
+  of GFlashHomoShowerParamterisation, to remove const qualifier.
+  Problem detected on SUN-CC.
+
+particles                                        particles-V07-00-04
+---------
+- Moved G4PrimaryParticle, G4PrimaryVertex, G4VUserPrimaryParticleInformation
+  and G4VUserPrimaryVertexInformation from event category to management module.
+- Changed default value of mass of G4PrimaryParticle from 0 to -1.
+- Added GetPDGcode() method to G4DynamicParticle.
+- Added neutrino energy spectrum in MuonDecayChannel.
+- G4ParticleDefinition now uses G4cerr instead of cerr.
+
+processes/electromagnetic/highenergy             highenergy-V07-00-01
+------------------------------------
+- Use new optimised interfaces; reorganised ee->hadrons models.
+- Added G4BetheBlochNoDeltaModel and G4BraggNoDeltaModel for simulation
+  of energy loss of very heavy particles.
+
+processes/electromagnetic/lowenergy              emlowen-V07-00-11
+-----------------------------------
+- Fix to Penelope ionisation for atomic deexcitation.
+- Fixed Sauter angular distribution in G4PenelopePhotoelectric.
+- Included implementation of DNA elastic scattering in water.
+- New low energy polarised Rayleigh scattering process
+  (G4LowEnergyPolarizedRayleigh)
+- Fix in G4hICRU49Nuclear.cc and G4hZiegler1985Nuclear.cc.
+- Bug fix in G4LowEnergyPolarizedCompton.
+- Bug fix in AtomicDeexcitation concerning the Auger effect.
+- Bug fix in PenelopeIonisation. Address problem report #729.
+
+processes/electromagnetic/muons                  muons-V07-00-04
+-------------------------------
+- Fixed Valgrind run-time error for non-initialised variable in 
+  G4EnergyLossForExtrapolator.
+- Replace calls to fabs() with std::abs().
+
+processes/electromagnetic/standard               stand-V07-00-11
+----------------------------------
+- Moved v70 processes (model interface) to be the default and old to be v52
+  (Compton, GammaConversion, PhotoElectricEffect, eplusAnnihilation)
+- Updated G4BaggIonModel to new interfaces
+- G4eplusAnnihilation: suppressed integral option.
+- G4PEEffectModel::SampleSecondaries(): correction for shell selection
+- Replaced usage of fabs() with std::abs().
+- G4UniversalFluctuation: bugfix in the part of the Gaussian
+  fluctuation + smearing for very small (~eV) loss.
+
+processes/electromagnetic/utils                  utils-V07-00-13
+-------------------------------
+- Fixed problem observed for second run after adding/removal materials.
+- Fixed compilation warning at SUN-CC in G4EmCalculator and G4EmCorrections.
+- Fixed calculation of CrossSection without /run/initialise.
+- Fixed calculation of MFP in G4Emcalculator.
+- Bux fixes in G4VEmProcess, G4VEmModel, G4EmCorrections.
+- Replaced usage of fabs() with std::abs().
+
+processes/electromagnetic/xrays                  xrays-V07-00-03
+-------------------------------
+- Fix in G4TransparentRegXTRadiator for low limit of integration 
+  over theta, affecting simulation in ALICE.
+
+processes/hadronic                               ghad-V07-00-01
+------------------
+- models/cascade/cascade (bertini-V07-00-02)
+  o Added kaon extension to Bertini cascade. Currently, in order to compile
+    the new code, the conditional assembly flag G4BERTINI_KAON must be set.
+- models/chiral_invariant_phase_space (ghad-chips-body-V07-00-16)
+  o Physics tuning for the antiproton-nuclear annihilation at rest.
+  o Corrected error in hypernuclear degradation to normal nuclear fragment
+    (1 per 5 millions interactions on Al).
+  o Fixed bug in G4QEnvironment::EvaporateResidual() observed on SUN.
+    Return statement added in the end of recursive void function.
+  o Cleared warnings after QGSC test for 30.E6 interactions of protons
+  o Fix for uninitialised G4QPDGCode in "interface module"
+    (ghad-chips-int-V07-00-01).
+- models/coherent_elastic (ghad-cohe-V07-00-01)
+  o Fix to allow high energy coherent elastic scattering to work with
+    current G4IonTable semantics.
+  o Fixes for porting on Windows/VC++7.1 compiler, to correct usage of pow().
+- models/parton_string/qgsm (ghad-qgsm-V07-00-00)
+  o Trivial fix in G4QGSModel.icc for compilation warning on gcc-4.0.0.
+- models/radioactive_decay (radioactive_decay-V07-00-01)
+  o Added tests to avoid cosine rounding errors in G4NuclearDecayChannel.
+
+run                                              run-V07-00-05
+---
+- Messages about defined particles and physics tables are now printed
+  out only for verbose level greater than 1.
+- Added SetPrimaryTransformer() method to G4RunManager and G4RunManagerKernel.
+- Changed version string in G4RunManagerKernel not to have CVS symbols.
+  Changed date for release 7.1.
+
+track                                            track-V07-00-02
+-----
+- Fix in G4ParticleChangeForGamma: added UpdateStepForAtRest() method
+
+visualization                                    vis-V07-00-19
+-------------
+- Added module "externals" including the ZLIB code now optional in
+  compilation, controlled by G4LIB_BUILD_ZLIB and G4LIB_USE_ZLIB.
+- FukuiRenderer:
+  o Fixed bug introduced in ClearTransientStore().
+- HepRep:
+  o Reorganised ZLIB and ZIPIOS++ code.
+  o Updated HEPREP to version 2.0.1 and cheprep to version 2.0.5.
+  o Fixed problems with sequential heprep files, gz files, too much info
+    in the heprep file.
+  o HepRepFile: improved handling of solids; added writing an EOF marker
+    for each binary file; allow user to specify output directory, filename
+    and whether to overwrite; corrected heprep xmlns reference; use G4AttCheck
+    to standardize attribute units; use attributes from hits; fixed bug
+    introduced in ClearTransientStore().
+  o HepRep2 now handling Solids, Attributes on Hits and Tracks.
+  o Fixes for compilation on gcc-4.0.0.
+- management:
+  o Fixed /vis/scene/add/text to accept text with spaces.
+  o Reduced text size of scale annotation to 12 pixels.
+  o Issue warning in G4ViewParameters for viewpoint direction close to
+    up vector direction.
+  o Fixed case of scene handler with no viewer in /vis/scene/notifyHandlers.
+  o G4VisExecutive: replaced printing of available graphics systems.
+    Now corresponds to behaviour of most old examples vis managers.
+- modeling:
+  o G4PhysicalVolumeModel: SetCopyNo of replicas and paramaterised volumes.
+  o G4TextModel: improved global tag for better identification.
+  o G4PhysicalVolumeModel: fixed case of off-origin volume.
+- OpenGL:
+  o G4OpenGLViewer: created virtual void CreateFontLists().
+    In all concrete viewers, added call to CreateFontLists().
+    Moved font code for X to G4OpenGLXViewer::CreateFontLists().
+  o There is no longer a need to implement in the XmViewer, since it
+    now inherits. Thus the font code now only appears once for X.
+  o Restored sequence Set/Clear/DrawView in ClearTransientStore().
+    Fixed bug for views not refreshed.
+- OpenInventor:
+  o Implemented marker sizes.
+  o Changed char* to const char* in gl2psMsg.
+  o Removed extra ';' in SoCounterAction.cc to allow for compilation
+    on gcc-3.4.X and higher.
+  o G4OpenInventorTransform3D: use the CLHEP::Transform3D::operator(i,j)
+    to initialize the m array in order to be compatible with new versions
+    of CLHEP.
+- Tree:
+  o Improved ASCIITree guidance.
+- VRML:
+  o Fixed bug introduced in ClearTransientStore().
+- XXX:
+  o Removed scene count and included some ongoing developments to do with
+    making a consistent geometry hierarchy in presence of culled volumes.
+  o Fixed some compilation warnings.
+
+source/GNUmakefile                               source-gmk-V07-00-04
+------------------
+- Modified "clean" targets to allow multiple clean rules.
+- Changed G4USE_G4TOG4 to G4LIB_USE_G3TOG4 to be consistent with the rest
+  of configuration variables.
+- Corrected text for "includes" target. Removed verbose output from
+  libmap stage.
+
+physics_lists/electromagnetic                    emphys-V07-00-00
+-----------------------------
+- Changed gamma and e+ classes in G4EmQEDBuilder52.
+
+data
+----
+- New data set for low-energy EM processes: G4EMLOWEN-3.0
+- New data set for elastic scattering: G4ELASTIC-1.1.
+
+examples                                         examples-V07-01-00
+--------
+- Updated reference outputs.
+- advanced
+  o air_shower (air_shower-V07-00-01)
+    + Corrected usage of <strstream> in RunActionMessenger.
+    + Corrected call to Visualisation.mac from main. Changed viewer to OGLSX.
+    + Updated README.
+  o brachytherapy (brachy-V07-00-01)
+    + Updated README and tested with AIDA 3.2.1 and PI-1.3.3.
+  o cosmicray_charging (cosmicray_charging-V07-00-00)
+    + Fixed trivial compilation error on gcc-3.4.X (double semicolon).
+  o gammaray_telescope (gammaraytel-V07-00-01)
+    + Minor changes to macro files.
+  o hadrontherapy (hadrontherapy-V07-00-08)
+    + Optimisation of the detector construction and sensitive detector
+    + Introduced modular physics and added hadronic physic list for
+      proton and ion.
+    + Corrected bug in the modulator wheel.
+    + Code review, removed warnings and deleted public variables.
+    + Tested analisys with AIDA 3.2.1 and PI 1.3.3.
+  o medical_linac (medical_linac-V07-00-03)
+    + Fixed bug in ROGeometry.
+    + Code review.
+  o radioprotection (radioprotection-V07-00-05)
+    + Code review and tested with AIDA 3.2.1 and PI-1.3.3.
+  o Rich (Rich-V07-00-01)
+    + Replaced <iostream.h> with <iostream> and cout with G4cout.
+  o xray_fluorescence (XrayFluo-V07-00-02)
+    + Added new developments and tested with PI-1.3.3.
+- extended
+  o analysis/A01 (exampleA01-V07-00-06)
+    + Added G4Atts to hit classes.
+    + Updated documentation for the use of Binary HepRep.
+    + Added setting of initial viewpoint to macro files.
+    + Fixed filling of hit histograms.
+    + Added bheprep example files.
+  o electromagnetic/MuonProcesses (muonprocesses-V07-00-01)
+    + HistoManager: added option --noErrors for hbook files.
+  o electromagnetic/PhotonProcesses (photonprocesses-V07-00-02)
+    + HistoManager: added option --noErrors for hbook files.
+    + Migration v70->standard->v52: PhysicsList and macros.
+    + Use EmCalculator in RunAction.
+  o electromagnetic/TestEm1 (testem1-V07-00-02)
+    + HistoManager: added option --noErrors for hbook files.
+    + PhysListEmG4v52: old photon processes and eplusAnnihilation
+      marked as 52.
+  o electromagnetic/TestEm2 (testem2-V07-00-02)
+    + Migration to model version of gamma processes.
+    + RunAction: added option --noErrors for hbook files.
+  o electromagnetic/TestEm3 (testem3-V07-00-08)
+    + RunAction: added option --noErrors for hbook files.
+    + Forward and backward energy flow in SteppingAction + RunAction.
+  o electromagnetic/TestEm4 (testem4-V07-00-01)
+    + RunAction: added option --noErrors for hbook files.
+  o electromagnetic/TestEm5 (testem5-V07-00-02)
+    + RunAction: added option --noErrors for hbook files.
+    + PhysListEmG4v52: old photon processes and eplusAnnihilation
+  o electromagnetic/TestEm6 (testem6-V07-00-01)
+    + RunAction: added option --noErrors for hbook files.
+  o electromagnetic/TestEm7 (testem7-V07-00-03)
+    + RunAction: added option --noErrors for hbook files.
+    + Added ionC12 in TestEm7.in macro.
+    + PhysListEmG4v52: photon processes v52.
+  o electromagnetic/TestEm8 (testem8-V07-00-02)
+    + Migration v70->standard->v52: PhysicsList and macros.
+  o electromagnetic/TestEm9 (testem9-V07-00-02)
+    + Migration to use NIST materials.
+    + Removed SteppingVerbose class.
+  o electromagnetic/TestEm11 (testem11-V07-00-01)
+    + New example showing handling of energy deposited by particles in
+      material and illustrating how to use the concept of 'process' in order 
+      to implement a constraint on the step size of the particle trajectories.
+  o medical/DICOM (DICOM-V07-00-01)
+    + Revision and bug fixes.
+  o medical/GammaTherapy (gtherapy-V07-00-04)
+    + Removed QED builder70.
+    + Migrated to use NIST materials and "ApplyCuts" option.
+    + Bug fix in UI for step-limiter.
+  o radioactivedecay/exrdm (exrdm-V07-00-00)
+    + Updated physics list and added macro test.mac for testing it.
+  o runAndEvent/RE01 (exampleRE01-V07-00-02)
+    + Added visualization.
+    + Added G4Atts to hit classes.
+    + Corrected unused attribute values from blank to space. 
+- novice
+  o N02 (exampleN02-V07-00-03)
+    + Completed replacement of vis manager with G4VisExecutive.
+    + Uncommented G4UserLimits + G4StepLimiter.
+    + ExN02TrackerHit: changed screen size to 2 pixels.
+  o N03 (exampleN03-V07-00-03)
+    + Completed replacement of vis manager with G4VisExecutive.
+    + Decreased size of trajectory points in EventAction.
+
+tests                                            tests-V07-01-00
+-----
+- Updated reference outputs.
+- test02 (test02-V07-00-01)
+  o Corrected update of run-manager for change of geometry setup.
+  o Correction in DetectorConstruction to avoid re-creation of geometry
+    setup at each change of material.
+  o Brought EM PhysicsList up to date.
+- test14 (test14-V07-00-00)
+  o Added test for low energy polarized Rayleigh.
+- test19 (test19-V07-00-00)
+  o New test for CHIPS hadronic model: physics on flight, QGSC.
+- test28 (test28-V07-00-00)
+  o Cleared Valgrind run-time errors in DetectorConstruction.
+  o Moved 'in' input macro to standard 'test28.in'.
+  o Corrected update of run-manager for change of geometry setup.
+- test29 (test29-V07-00-00)
+  o New test for CHIPS hadronic model: electroweak interface, G4QCaptureAtRest.
+- test31 (test31-V07-00-03)
+  o New acceptance test for EM processes.
+- test33 (test33-V07-00-00)
+  o Fixed trivial compilation error on gcc-3.4.X (double semicolon).
+- test34 (test34-V07-00-00)
+  o Corrected initialisation of sensitive detector.
+    Removed run-time errors reported by Valgrind.
+  o General cleanup.
