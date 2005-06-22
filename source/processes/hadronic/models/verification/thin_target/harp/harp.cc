@@ -685,7 +685,8 @@ int main(int argc, char** argv)
               h[8]->fill(float(cost),1.0);
               n_pr++;
             }
-          } else if(nam == "pi+" || nam == "pi-" ) {
+	    //          } else if(nam == "pi+" || nam == "pi-" ) {
+          } else if(nam == "pi+") {
             h[3]->fill(float(p/GeV),1.0);
             h[5]->fill(float(pt/GeV),1.0);
 //            h2[1]->fill(p,cost);

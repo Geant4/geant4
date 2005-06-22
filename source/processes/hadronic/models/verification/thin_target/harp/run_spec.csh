@@ -17,9 +17,10 @@ mkdir $1
 cd $1
 
 #$G4MY/harp ../$TARGET/run.mac  >&  res.out
-$G4MY/harp ../$TARGET/runMay05.mac  >&  resMay05.out
+$G4MY/harp ../$TARGET/runMay05.mac  >&  resJune22.out
 
 cd ../
 
 echo $TARGET " is done!"
 
+source run_all.csh
