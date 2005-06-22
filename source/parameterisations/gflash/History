@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2005-06-09 14:54:15 gcosmo Exp $
+$Id: History,v 1.5 2005-06-22 14:08:29 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 22nd, 2005 G.Cosmo (gflash-V07-00-04) 
+----------------------
+- Corrected signature for IntegrateNspLongitudinal() to remove
+  const qualifier. Problem detected on SUN-CC.
 
 Jun 9th, 2005 G.Cosmo (gflash-V07-00-03) 
 ---------------------
