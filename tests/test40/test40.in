@@ -1,4 +1,4 @@
-# $Id: test40.in,v 1.7 2004-07-01 10:12:51 japost Exp $
+# $Id: test40.in,v 1.8 2005-06-23 17:40:52 vnivanch Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -21,7 +21,7 @@
 /testem/event/printModulo 100
 #
 # Acceptance printout is activated
-/testem/det/acceptance  0.95140202  0.0082 4.0
+/testem/det/acceptance  0.95045  0.0084 4.0
 #
 /gun/particle e-
 /gun/energy 5 GeV
