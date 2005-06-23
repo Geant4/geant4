@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonDecayChannel.cc,v 1.12 2005-05-05 01:22:41 kurasige Exp $
+// $Id: G4MuonDecayChannel.cc,v 1.13 2005-06-23 11:02:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -143,9 +143,9 @@ do {
   sintheta=sqrt(1.-costheta*costheta);
   
 
-  rphi=2.0*M_PI*G4UniformRand()*rad;
+  rphi=twopi*G4UniformRand()*rad;
   rtheta=(acos(2.*G4UniformRand()-1.));
-  rpsi=2.0*M_PI*G4UniformRand()*rad;
+  rpsi=twopi*G4UniformRand()*rad;
 
   G4RotationMatrix *rot= new G4RotationMatrix();
   rot->set(rphi,rtheta,rpsi);
