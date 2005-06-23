@@ -169,7 +169,7 @@ processes/electromagnetic/xrays                  xrays-V07-00-03
 
 processes/hadronic                               ghad-V07-00-01
 ------------------
-- models/cascade/cascade (bertini-V07-00-02)
+- models/cascade/cascade (bertini-V07-00-03)
   o Added kaon extension to Bertini cascade. Currently, in order to compile
     the new code, the conditional assembly flag G4BERTINI_KAON must be set.
 - models/chiral_invariant_phase_space (ghad-chips-body-V07-00-16)
