@@ -514,8 +514,8 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
 
   if(target != 0) delete target;
   if(targetH != 0) delete targetH;
-  if(cascadeParticle != 0) delete cascadeParticle;
-  if(aFragment != 0) delete aFragment;
+ // if(cascadeParticle != 0) delete cascadeParticle;
+ // if(aFragment != 0) delete aFragment;
 
   return &theResult;
 }
