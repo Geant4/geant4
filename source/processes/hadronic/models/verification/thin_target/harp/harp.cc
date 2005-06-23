@@ -549,6 +549,8 @@ int main(int argc, char** argv)
     double coeff = cross_sec*GeV*1000.0/(barn*(G4double)nevt);
     int    nmomtet[50][20];
     double harpcs[50][20];
+    int    nmomtetm[50][20];
+    double harpcsm[50][20];
     double dthetad = angpi[nanglpi-1]/double(nanglpi);
     double mom0 = 0.0;
     for(int k=0; k<nmompi; k++) {
@@ -556,7 +558,9 @@ int main(int argc, char** argv)
       double ang0 = 0.0;
       for(int j=0; j<nanglpi; j++) {
         nmomtet[k][j] = 0;
+        nmomtetm[k][j] = 0;
         harpcs[k][j] = coeff/(twopi*dp*(cos(ang0) - cos(angpi[j])));
+	harpcsm[k][j] = harpcs[k][j];
         ang0 = angpi[j];
       }
       mom0 = mompi[k];
@@ -685,8 +689,7 @@ int main(int argc, char** argv)
               h[8]->fill(float(cost),1.0);
               n_pr++;
             }
-	    //          } else if(nam == "pi+" || nam == "pi-" ) {
-          } else if(nam == "pi+") {
+	  } else if(nam == "pi+" || nam == "pi-" ) {
             h[3]->fill(float(p/GeV),1.0);
             h[5]->fill(float(pt/GeV),1.0);
 //            h2[1]->fill(p,cost);
@@ -707,7 +710,8 @@ int main(int argc, char** argv)
 	  if(kang >= nanglpi) kang = nanglpi - 1; 
 	  int kp = -1;
 	  do {kp++;} while (kp < nmompi - 1 && p > mompi[kp]);  
-	  nmomtet[kp][kang] += 1;
+	  if(nam == "pi+") nmomtet[kp][kang] += 1;
+	  else             nmomtetm[kp][kang] += 1;
 	}        
         delete aChange->GetSecondary(i);
       }
@@ -734,7 +738,10 @@ int main(int argc, char** argv)
     G4double mom1;
     G4double dsdm[50];    
     G4double dsda[20];    
+    G4double dsdmm[50];    
+    G4double dsdam[20];    
     G4double cross;
+    G4double crossm;
     for(int k=0; k<nmompi; k++) {
       double mom1 = mompi[k];
       dsdm[k] = 0.0;
@@ -748,18 +755,25 @@ int main(int argc, char** argv)
       for(int j=0; j<nanglpi; j++) {
         ang1 = angpi[j];
         cross = double(nmomtet[k][j])*harpcs[k][j];
+        crossm= double(nmomtetm[k][j])*harpcsm[k][j];
         G4cout << "  " << cross;
 
         if(k>0) dsda[j] += cross*(mom1 - mom0)/GeV;
         else    dsda[j] = 0.0;
         if(j>0) dsdm[k] += cross*twopi*(cos(ang0) - cos(ang1));
+        if(k>0) dsdam[j] += crossm*(mom1 - mom0)/GeV;
+        else    dsdam[j] = 0.0;
+        if(j>0) dsdmm[k] += crossm*twopi*(cos(ang0) - cos(ang1));
+
+	harpcsm[k][j] = crossm;
+
         ang0 = ang1;
       }
       G4cout << G4endl;
       mom0 = mom1;
     }
     G4cout << G4endl;    
-    G4cout << "## ds/dtheta(mb/rad) with momentum cut: " 
+    G4cout << "## ds/dtheta(mb/rad) for pi+ with momentum cut: " 
            << mompi[0] << "  -  " << mompi[nmompi-1] 
            << "  MeV/c" << G4endl;
     for(int j=0; j<nanglpi; j++) {
@@ -767,19 +781,47 @@ int main(int argc, char** argv)
     }
     G4cout << G4endl;    
     G4cout << G4endl;    
-    G4cout << "## ds/dp(mb/GeV) with theta cut " 
+    G4cout << "## ds/dp(mb/GeV) for pi+ with theta cut " 
            << angpi[0] << "  -  " << angpi[nanglpi-1] << " radian" << G4endl;
     for(int kk=0; kk<nmompi; kk++) {
       G4cout << "  " << dsdm[kk];
     }
     G4cout << G4endl;
+    G4cout << "## ds/dtheta(mb/rad) for pi- with momentum cut: " 
+           << mompi[0] << "  -  " << mompi[nmompi-1] 
+           << "  MeV/c" << G4endl;
+    for(int j=0; j<nanglpi; j++) {
+      G4cout << "  " << dsdam[j];
+    }
+    G4cout << G4endl;    
+    G4cout << G4endl;    
+    G4cout << "## ds/dp(mb/GeV) for pi- with theta cut " 
+           << angpi[0] << "  -  " << angpi[nanglpi-1] << " radian" << G4endl;
+    for(int kk=0; kk<nmompi; kk++) {
+      G4cout << "  " << dsdmm[kk];
+    }
     G4cout << G4endl;
+    G4cout << G4endl;
+    mom0 = 0.0;
+    if(mom0 == 0.0) {
+      for(int k=0; k<nmompi; k++) {
+	double mom1 = mompi[k];
+	G4cout << "## Next momentum bin " 
+	       << mom0 << "  -  " << mom1 << "  MeV/c" 
+	       << G4endl;
+
+	for(int j=0; j<nanglpi; j++) {
+	  G4cout << "  " << harpcsm[k][j];
+	}
+	G4cout << G4endl;
+	mom0 = mom1;
+      }
+    }
 
     G4cout << "###### End of run # " << run << "     ######" << G4endl;
     G4cout.precision(prec);
 
   }  
-    //  } while(end);
 
   delete mate;
   delete fin;
