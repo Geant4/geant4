@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompositeEMDataSet.hh,v 1.5 2003-06-16 16:59:40 gunter Exp $
+// $Id: G4CompositeEMDataSet.hh,v 1.6 2005-06-24 09:55:05 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -40,66 +40,55 @@
 
 // -------------------------------------------------------------------
 
-#ifndef G4COMPOSITEEMDATASET_HH
-#define G4COMPOSITEEMDATASET_HH 1
+#ifndef   G4COMPOSITEEMDATASET_HH
+ #define  G4COMPOSITEEMDATASET_HH 1
 
-#include "globals.hh"
-#include "G4DataVector.hh"
-#include "G4VEMDataSet.hh"
-#include <vector>
+ #include "globals.hh"
+ #include "G4VEMDataSet.hh"
+ #include <vector>
 
-class G4EMDataSet;
-class G4VDataSetAlgorithm;
+ class G4VDataSetAlgorithm;
 
-class G4CompositeEMDataSet : public G4VEMDataSet 
-{ 
-public:
-
-  G4CompositeEMDataSet(G4VDataSetAlgorithm* interpolation,
-		       G4double unitE = MeV, G4double unitData = barn,
-		       G4int minZ = 1, G4int maxZ = 99);
-
-  G4CompositeEMDataSet(const G4String& dataFile,
-		       G4VDataSetAlgorithm* interpolation,
-		       G4double unitE = MeV, G4double unitData = barn,
-		       G4int minZ = 1, G4int maxZ = 99);
-
-  ~G4CompositeEMDataSet();
+ class G4CompositeEMDataSet : public G4VEMDataSet 
+ {
+  public:
+                                                G4CompositeEMDataSet(G4VDataSetAlgorithm* argAlgorithm, G4double argUnitEnergies=MeV, G4double argUnitData=barn, G4int argMinZ=1, G4int argMaxZ=99); 
+   virtual                                     ~G4CompositeEMDataSet();
  
-  G4double FindValue(G4double e, G4int Z = 0) const;
-
-  const G4VEMDataSet* GetComponent(G4int i) const { return components[i]; }
-
-  void AddComponent(G4VEMDataSet* component);
+   virtual G4double                             FindValue(G4double argEnergy, G4int argComponentId=0) const;
   
-  size_t NumberOfComponents() const { return nComponents; }
+   virtual void                                 PrintData(void) const;
 
-  void PrintData() const;
+   virtual const G4VEMDataSet *                 GetComponent(G4int argComponentId) const { return components[argComponentId]; }
+   virtual void                                 AddComponent(G4VEMDataSet * argDataSet) { components.push_back(argDataSet); }
+   virtual size_t                               NumberOfComponents(void) const { return components.size(); }
 
-  const G4DataVector& GetEnergies(G4int i) const;
-  const G4DataVector& GetData(G4int i) const;
+   virtual const G4DataVector &                 GetEnergies(G4int argComponentId) const { return GetComponent(argComponentId)->GetEnergies(0); }
+   virtual const G4DataVector &                 GetData(G4int argComponentId) const { return GetComponent(argComponentId)->GetData(0); }
+   virtual void                                 SetEnergiesData(G4DataVector * argEnergies, G4DataVector * argData, G4int argComponentId);
 
-private:
+   virtual G4bool                               LoadData(const G4String & argFileName);
+   virtual G4bool                               SaveData(const G4String & argFileName) const;
+   
+  private:
+   void                                         CleanUpComponents(void);
+  
+   // Hide copy constructor and assignment operator 
+                                                G4CompositeEMDataSet();
+                                                G4CompositeEMDataSet(const G4CompositeEMDataSet & copy);
+   G4CompositeEMDataSet &                       operator=(const G4CompositeEMDataSet & right);
 
-  // Hide copy constructor and assignment operator 
-  G4CompositeEMDataSet& operator=(const G4CompositeEMDataSet& right);
-  G4CompositeEMDataSet(const G4CompositeEMDataSet&);
+   std::vector<G4VEMDataSet *>                  components;          // Owned pointers
 
-  void LoadData(const G4String& fileName);
+   const G4VDataSetAlgorithm *                  algorithm;           // Owned pointer 
+  
+   G4double                                     unitEnergies;
+   G4double                                     unitData;
 
-  G4VDataSetAlgorithm* algorithm; 
-
-  std::vector<G4VEMDataSet*> components;
-  size_t nComponents;
-
-  G4double unit1;
-  G4double unit2;
-
-  G4int zMin;
-  G4int zMax;
-};
- 
-#endif
+   G4int                                        minZ;
+   G4int                                        maxZ;
+ };
+#endif /* G4COMPOSITEEMDATASET_HH */
 
 
 

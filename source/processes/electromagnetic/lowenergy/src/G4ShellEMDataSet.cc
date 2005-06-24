@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellEMDataSet.cc,v 1.10 2003-06-16 17:00:26 gunter Exp $
+// $Id: G4ShellEMDataSet.cc,v 1.11 2005-06-24 09:55:05 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -40,168 +40,232 @@
 #include <strstream>
 
 
-G4ShellEMDataSet::G4ShellEMDataSet(G4int Z,
-				   const G4VDataSetAlgorithm* interpolation,
-				   G4double unitE, G4double unitData)
-  :z(Z), algorithm(interpolation)
+                                                G4ShellEMDataSet :: G4ShellEMDataSet(G4int argZ, G4VDataSetAlgorithm* argAlgorithm, G4double argUnitEnergies, G4double argUnitData)
+:
+ z(argZ),
+ algorithm(argAlgorithm),
+ unitEnergies(argUnitEnergies),
+ unitData(argUnitData)
 {
-  nComponents = 0;
-  unit1 = unitE;
-  unit2 = unitData;
+ if (algorithm == 0) 
+  G4Exception("G4ShellEMDataSet::G4ShellEMDataSet - interpolation == 0");
 }
 
-G4ShellEMDataSet::G4ShellEMDataSet(G4int Z, const G4String& dataFile,
-				   const G4VDataSetAlgorithm* interpolation,
-				   G4double unitE, G4double unitData)
-  :z(Z), algorithm(interpolation)
-{
-  nComponents = 0;
-  unit1 = unitE;
-  unit2 = unitData;
-  LoadData(dataFile);
-}
 
-G4ShellEMDataSet::~G4ShellEMDataSet()
-{ 
-  for (size_t i=0; i<nComponents; i++)
-    {
-      G4VEMDataSet* dataSet = components[i];
-      delete dataSet;
-    }
+
+                                                G4ShellEMDataSet :: ~G4ShellEMDataSet()
+{
+ CleanUpComponents();
+ 
+ if (algorithm)
   delete algorithm;
 }
 
-G4double G4ShellEMDataSet::FindValue(G4double e, G4int ) const
+
+
+
+
+G4double                                        G4ShellEMDataSet :: FindValue(G4double argEnergy, G4int /* argComponentId */) const
 {
-  // Returns the sum over the shells corresponding to e
-  G4double value = 0.;
+ // Returns the sum over the shells corresponding to e
+ G4double value = 0.;
 
-  for (size_t i=0; i<nComponents; i++)
-    {
-      G4VEMDataSet* component = components[i];
-      G4double shellValue = component->FindValue(e);
-      value = value + shellValue;
-    }
+ std::vector<G4VEMDataSet *>::const_iterator i(components.begin());
+ std::vector<G4VEMDataSet *>::const_iterator end(components.end());
 
-  return value;
+ while (i!=end)
+ {
+  value+=(*i)->FindValue(argEnergy);
+  i++;
+ }
+
+ return value;
 }
 
-void G4ShellEMDataSet::PrintData() const
-{
-  G4cout << "The data set has " << nComponents << " components" << G4endl;
 
-  for (size_t i=0; i<nComponents; i++)
+
+
+
+void                                            G4ShellEMDataSet :: PrintData(void) const
+{
+ const size_t n(NumberOfComponents());
+
+ G4cout << "The data set has " << n << " components" << G4endl;
+ G4cout << G4endl;
+ 
+ size_t i(0);
+ 
+ while (i<n)
+ {
+  G4cout << "--- Component " << i << " ---" << G4endl;
+  GetComponent(i)->PrintData();
+  i++;
+ }
+}
+
+
+
+
+
+void                                            G4ShellEMDataSet :: SetEnergiesData(G4DataVector * argEnergies, G4DataVector * argData, G4int argComponentId)
+{
+ G4VEMDataSet * component(components[argComponentId]);
+ 
+ if (component)
+ {
+  component->SetEnergiesData(argEnergies, argData, 0);
+  return;
+ }
+
+ std::ostringstream message;
+ message << "G4ShellEMDataSet::SetEnergiesData - component " << argComponentId << " not found";
+ 
+ G4Exception(message.str().c_str());
+}
+
+
+
+
+
+G4bool                                          G4ShellEMDataSet :: LoadData(const G4String & argFileName)
+{
+ CleanUpComponents();
+
+ G4String fullFileName(FullFileName(argFileName));
+ std::ifstream in(fullFileName);
+
+ if (!in.is_open())
+ {
+  G4String message("G4ShellEMDataSet::LoadData - data file \"");
+  message+=fullFileName;
+  message+="\" not found";
+  G4Exception(message);
+ }
+
+ G4DataVector * argEnergies(0);
+ G4DataVector * argData(0);
+
+ G4double a;
+ G4int shellIndex(0);
+ bool energyColumn(true);
+
+ do
+ {
+  in >> a;
+  
+  if (a == -1)
   {
-    G4cout << "--- Component " << i << " ---" << G4endl;
-    G4VEMDataSet* component = components[i];
-    component->PrintData();
+   if (energyColumn && argEnergies!=0)
+   {
+    AddComponent(new G4EMDataSet(shellIndex, argEnergies, argData, algorithm->Clone(), unitEnergies, unitData));
+    argEnergies=0;
+    argData=0;
+   }
+   
+   energyColumn=(!energyColumn);
   }
+  else if (a!=-2)
+  {
+   if (argEnergies==0)
+   {
+    argEnergies=new G4DataVector;
+    argData=new G4DataVector;
+   }
+  
+   if (energyColumn)
+    argEnergies->push_back(a*unitEnergies);
+   else
+    argData->push_back(a*unitData);
+
+   energyColumn=(!energyColumn);
+  }
+ }
+ while (a != -2);
+
+ return true;
 }
 
-void G4ShellEMDataSet::LoadData(const G4String& fileName)
-{ 
-  // Build the complete string identifying the file with the data set
-  
-  char nameChar[100] = {""};
-  std::ostrstream ost(nameChar, 100, std::ios::out);
-  
-  if (z != 0)  ost << fileName << z << ".dat";
-  else   ost << fileName << ".dat";
 
-  G4String name(nameChar);
-  
-  char* path = getenv("G4LEDATA");
-  if (!path)
-    { 
-      G4String excep("G4ShellEMDataSet - G4LEDATA environment variable not set");
-      G4Exception(excep);
-    }
-  
-  G4String pathString(path);
-  G4String separator("/" );
-  G4String dirFile = pathString + separator + name;
-  std::ifstream file(dirFile);
-  std::filebuf* lsdp = file.rdbuf();
 
-  if (! (lsdp->is_open()) )
-    {
-      G4String s1("G4ShellEMDataSet - data file: ");
-      G4String s2(" not found");
-      G4String excep = s1 + dirFile + s2;
-      G4Exception(excep);
-    }
-
-  G4double a = 0;
-  G4int k = 1;
-  G4int s = 0;
-  
-  G4int shellIndex = 0;
-  G4DataVector* energies = new G4DataVector;
-  G4DataVector* data = new G4DataVector;
-
-  do {
-    file >> a;
-    G4int nColumns = 2;
-    if (a == -1)
-      {
-	if (s == 0)
-	  {
-	    // End of a shell data set
-	    G4VDataSetAlgorithm* algo = algorithm->Clone();
-	    G4VEMDataSet* dataSet = new G4EMDataSet(shellIndex,energies,data,algo);
-	    AddComponent(dataSet);
-	    // Start of new shell data set
-	    energies = new G4DataVector;
-            data = new G4DataVector;
-            shellIndex++;	    
-	  }      
-	s++;
-	if (s == nColumns)
-	{
-	  s = 0;
-	}
-      }
-    else if (a == -2)
-      {
-	// End of file; delete the empty vectors created when encountering the last -1 -1 row
-	delete energies;
-	delete data;
-      }
-    else
-      {
-	// 1st column is energy
-	if(k%nColumns != 0)
-	  {	    
-	    G4double e = a * unit1;
-	    energies->push_back(e);
-	    k++;
-	  }
-	else if (k%nColumns == 0)
-	  {
-	    // 2nd column is cross section 
-	    G4double value = a * unit2;
-	    data->push_back(value);
-	    k = 1;
-	  }
-      }
-  } while (a != -2); // end of file
-  file.close();
-}
-
-void G4ShellEMDataSet::AddComponent(G4VEMDataSet* component)
-{ 
-  components.push_back(component);
-  nComponents++;
-}
-
-const G4DataVector& G4ShellEMDataSet::GetEnergies(G4int i) const
+G4bool                                          G4ShellEMDataSet :: SaveData(const G4String & argFileName) const
 {
-  const G4VEMDataSet* component = GetComponent(i);
-  return (component->GetEnergies(i));
+ G4String fullFileName(FullFileName(argFileName));
+ std::ofstream out(fullFileName);
+
+ if (!out.is_open())
+ {
+  G4String message("G4EMDataSet::SaveData - cannot open \"");
+  message+=fullFileName;
+  message+="\"";
+  G4Exception(message);
+ }
+ 
+ out.precision(10);
+ out.width(15);
+ out.setf(std::ofstream::left);
+  
+ const size_t n(NumberOfComponents());
+ size_t k(0);
+ 
+ while (k<n)
+ {
+  const G4VEMDataSet * component=GetComponent(k);
+  
+  if (component)
+  {
+   const G4DataVector & energies(component->GetEnergies(0));
+   const G4DataVector & data(component->GetData(0));
+ 
+   G4DataVector::const_iterator i(energies.begin());
+   G4DataVector::const_iterator endI(energies.end());
+   G4DataVector::const_iterator j(data.begin());
+  
+   while (i!=endI)
+   {
+    out << (*i) << (*j) << std::endl;
+    i++;
+    j++;
+   }
+  }
+  
+  out << -1. << -1. << std::endl;
+  
+  k++;
+ }
+ 
+ out << -2. << -2. << std::endl;
+
+ return true;
 }
 
-const G4DataVector& G4ShellEMDataSet::GetData(G4int i) const 
+
+
+
+
+void                                            G4ShellEMDataSet :: CleanUpComponents(void)
 {
-  const G4VEMDataSet* component = GetComponent(i);
-  return (component->GetData(i));
+ while (!components.empty())
+ {
+  if (components.back())
+   delete components.back();
+
+  components.pop_back();
+ }
+}
+
+
+
+
+
+G4String                                        G4ShellEMDataSet :: FullFileName(const G4String & argFileName) const
+{
+ char* path = getenv("G4LEDATA");
+ if (!path)
+  G4Exception("G4ShellEMDataSet::FullFileName - G4LEDATA environment variable not set");
+  
+ std::ostringstream fullFileName;
+ 
+ fullFileName << path << '/' << argFileName << z << ".dat";
+                      
+ return G4String(fullFileName.str().c_str());
 }
