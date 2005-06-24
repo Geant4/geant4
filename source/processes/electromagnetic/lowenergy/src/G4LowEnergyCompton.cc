@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyCompton.cc,v 1.39 2004-12-02 14:01:35 pia Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.40 2005-06-24 09:59:02 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -81,7 +81,8 @@ G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
 
   G4VDataSetAlgorithm* scatterInterpolation = new G4LogLogInterpolation;
   G4String scatterFile = "comp/ce-sf-";
-  scatterFunctionData = new G4CompositeEMDataSet(scatterFile,scatterInterpolation,1.,1.);
+  scatterFunctionData = new G4CompositeEMDataSet(scatterInterpolation, 1., 1.);
+  scatterFunctionData->LoadData(scatterFile);
 
   meanFreePathTable = 0;
 

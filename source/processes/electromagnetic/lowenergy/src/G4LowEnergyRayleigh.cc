@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.35 2004-12-02 14:01:35 pia Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.36 2005-06-24 09:59:02 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -82,7 +82,8 @@ G4LowEnergyRayleigh::G4LowEnergyRayleigh(const G4String& processName)
 
   G4VDataSetAlgorithm* ffInterpolation = new G4LogLogInterpolation;
   G4String formFactorFile = "rayl/re-ff-";
-  formFactorData = new G4CompositeEMDataSet(formFactorFile,ffInterpolation,1.,1.);
+  formFactorData = new G4CompositeEMDataSet(ffInterpolation,1.,1.);
+  formFactorData->LoadData(formFactorFile);
 
   meanFreePathTable = 0;
 

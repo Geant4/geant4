@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VLowEnergyDiscretePhotonProcess.cc,v 1.2 2005-05-20 15:20:18 pia Exp $
+// $Id: G4VLowEnergyDiscretePhotonProcess.cc,v 1.3 2005-06-24 09:59:02 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -57,14 +57,15 @@ G4VLowEnergyDiscretePhotonProcess :: G4VLowEnergyDiscretePhotonProcess(const G4S
 								       G4double aLowEnergyLimit, 
 								       G4double aHighEnergyLimit)
   :
-  G4VDiscreteProcess(processName, fElectromagnetic),
+  G4VLowEnergyTestableDiscreteProcess(processName),
   lowEnergyLimit(aLowEnergyLimit),
   highEnergyLimit(aHighEnergyLimit),
   crossSectionFileName(aCrossSectionFileName),
   meanFreePathTable(0)
 {
   crossSectionHandler = new G4CrossSectionHandler();
-  scatterFunctionData = new G4CompositeEMDataSet(aScatterFileName, aScatterInterpolation, 1., 1.);
+  scatterFunctionData = new G4CompositeEMDataSet(aScatterInterpolation, 1., 1.);
+  scatterFunctionData->LoadData(aScatterFileName);
  
   if (verboseLevel > 0)
     {

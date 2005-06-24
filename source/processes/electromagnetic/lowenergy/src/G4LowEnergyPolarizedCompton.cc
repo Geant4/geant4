@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPolarizedCompton.cc,v 1.20 2005-05-16 09:04:32 capra Exp $
+// $Id: G4LowEnergyPolarizedCompton.cc,v 1.21 2005-06-24 09:59:02 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -99,8 +99,8 @@ G4LowEnergyPolarizedCompton::G4LowEnergyPolarizedCompton(const G4String& process
 
   G4VDataSetAlgorithm* scatterInterpolation = new G4LogLogInterpolation;
   G4String scatterFile = "comp/ce-sf-";
-  scatterFunctionData = new
-    G4CompositeEMDataSet(scatterFile,scatterInterpolation,1.,1.);
+  scatterFunctionData = new G4CompositeEMDataSet(scatterInterpolation,1.,1.);
+  scatterFunctionData->LoadData(scatterFile);
 
   meanFreePathTable = 0;
 

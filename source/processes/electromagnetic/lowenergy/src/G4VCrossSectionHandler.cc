@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.cc,v 1.14 2004-12-02 14:01:36 pia Exp $
+// $Id: G4VCrossSectionHandler.cc,v 1.15 2005-06-24 09:59:02 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -230,6 +230,12 @@ void G4VCrossSectionHandler::LoadShellData(const G4String& fileName)
   for (size_t i=0; i<nZ; i++)
     {
       G4int Z = (G4int) activeZ[i];
+      
+      // Riccardo Capra <capra@ge.infn.it>: PLEASE CHECK THE FOLLOWING PIECE OF CODE
+      // "energies" AND "data" G4DataVector ARE ALLOCATED, FILLED IN AND NEVER USED OR
+      // DELETED. WHATSMORE LOADING FILE OPERATIONS WERE DONE BY G4ShellEMDataSet
+      // EVEN BEFORE THE CHANGES I DID ON THIS FILE. SO THE FOLLOWING CODE IN MY
+      // OPINION SHOULD BE USELESS AND SHOULD PRODUCE A MEMORY LEAK. 
 
       // Build the complete string identifying the file with the data set
       
@@ -291,8 +297,13 @@ void G4VCrossSectionHandler::LoadShellData(const G4String& fileName)
 	} while (a != -2); // end of file
       
       file.close();
+      
+      // Riccardo Capra <capra@ge.infn.it>: END OF CODE THAT IN MY OPINION SHOULD BE
+      // REMOVED.
+      
       G4VDataSetAlgorithm* algo = interpolation->Clone();
-      G4VEMDataSet* dataSet = new G4ShellEMDataSet(Z,fileName,algo);
+      G4VEMDataSet* dataSet = new G4ShellEMDataSet(Z, algo);
+      dataSet->LoadData(fileName);
       dataMap[Z] = dataSet;
     }
 }
