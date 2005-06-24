@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: CrossSections.cc,v 1.4 2005-05-18 16:48:52 maire Exp $
+// $Id: CrossSections.cc,v 1.5 2005-06-24 15:50:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -56,14 +56,14 @@ int main() {
 
   // initialise processes
   // G4v52
-  G4PhotoElectricEffect52* phot = new G4PhotoElectricEffect52();
-  G4ComptonScattering52*   comp = new G4ComptonScattering52();
-  G4GammaConversion52*     conv = new G4GammaConversion52();
+  // G4PhotoElectricEffect52* phot = new G4PhotoElectricEffect52();
+  // G4ComptonScattering52*   comp = new G4ComptonScattering52();
+  // G4GammaConversion52*     conv = new G4GammaConversion52();
 
   // Standard
-  //G4PhotoElectricEffect* phot = new G4PhotoElectricEffect();
-  //G4ComptonScattering*   comp = new G4ComptonScattering();
-  //G4GammaConversion*     conv = new G4GammaConversion();
+  G4PhotoElectricEffect* phot = new G4PhotoElectricEffect();
+  G4ComptonScattering*   comp = new G4ComptonScattering();
+  G4GammaConversion*     conv = new G4GammaConversion();
 
   G4ParticleDefinition* gamma = G4Gamma::Gamma(); 
   G4RegionStore::GetInstance()->FindOrCreateRegion("dummy");
@@ -75,6 +75,8 @@ int main() {
   // print cross section per atom
   //
   G4double Emin = 1.0*MeV, Emax = 2.01*MeV, dE = 100*keV;
+
+  G4cout << "#### Test of Gamma Cross Sections for Z= " << Z << G4endl;
 
   for (G4double Energy = Emin; Energy <= Emax; Energy += dE) {
     G4cout << "\n " << G4BestUnit (Energy, "Energy")
