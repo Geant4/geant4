@@ -21,35 +21,28 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAElectronElasticEmfietzoglou.hh,v 1.1 2005-06-02 15:02:54 sincerti Exp $
+// $Id: G4DNAElectronElasticEmfietzoglou.hh,v 1.2 2005-06-24 10:07:13 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-//
-// Nucl. Instr. Meth. 155 (1978) 145-156
-// J. Phys. D: Appl. Phys. 33 (2000) 932-944
-// Phys. Med. Biol. 45 (2000) 3171-3194
 
-#ifndef G4DNAElectronElasticEmfietzoglou_hh
- #define G4DNAElectronElasticEmfietzoglou_hh 1
+#ifndef   G4DNAELECTRONELASTICEMFIETZOGLOU_HH
+ #define  G4DNAELECTRONELASTICEMFIETZOGLOU_HH 1
  
- #include "G4VDNAElectronElasticScatteringInWater.hh"
+ #include "G4DNAElectronElasticScatteringInWater.hh"
+ #include "G4DNARutherfordTotalCrossSectionPolicy.hh"
+ #include "G4DNAEmfietzoglouAngularDistributionPolicy.hh"
  
- class G4DNAElectronElasticEmfietzoglou : public G4VDNAElectronElasticScatteringInWater
+ struct G4DNAEmfietzoglouEnergyLimitsPolicy
+ {
+  static const G4double     lowEnergyLimit;
+  static const G4bool       zeroBelowLowEnergyLimit;
+  static const G4double     highEnergyLimit;
+  static const G4bool       zeroAboveHighEnergyLimit;
+ };
+ 
+ class G4DNAElectronElasticEmfietzoglou : public G4DNAElectronElasticScatteringInWater<G4DNARutherfordTotalCrossSectionPolicy<G4DNAEmfietzoglouEnergyLimitsPolicy>, G4DNAEmfietzoglouAngularDistributionPolicy>
  {
   public:
-                                         G4DNAElectronElasticEmfietzoglou(const G4String & name="DNAElectronElasticEmfietzoglou");
+                                         G4DNAElectronElasticEmfietzoglou(const G4String & name = "G4DNAElectronElasticEmfietzoglou") : G4DNAElectronElasticScatteringInWater<G4DNARutherfordTotalCrossSectionPolicy<G4DNAEmfietzoglouEnergyLimitsPolicy>, G4DNAEmfietzoglouAngularDistributionPolicy>(name) {}
    virtual                              ~G4DNAElectronElasticEmfietzoglou() {}
-
-  protected:
-   virtual G4double                      RandomizeCosTheta(G4double k, G4int z);
-   virtual G4double                      TotalCrossSection (G4double k, G4int z);
-
-  private:
-   // Hides default constructor and assignment operator as private 
-   G4DNAElectronElasticEmfietzoglou &    operator=(const G4DNAElectronElasticEmfietzoglou & right);
-
-   const G4double lowEnergyLimit;
-   const G4double highEnergyLimit;
  };
-
-#endif /* G4DNAElectronElasticEmfietzoglou_hh */
+#endif /* G4DNAELECTRONELASTICEMFIETZOGLOU_HH */

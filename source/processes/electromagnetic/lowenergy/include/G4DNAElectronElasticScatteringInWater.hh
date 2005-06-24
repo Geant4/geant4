@@ -21,12 +21,34 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAElectronElasticBrenner.cc,v 1.2 2005-06-24 10:07:13 capra Exp $
+// $Id: G4DNAElectronElasticScatteringInWater.hh,v 1.3 2005-06-24 10:07:13 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
 
-#include "G4DNAElectronElasticBrenner.hh"
+// Nucl. Instr. Meth. 155 (1978) 145-156
+// J. Phys. D: Appl. Phys. 33 (2000) 932-944
+// Phys. Med. Biol. 45 (2000) 3171-3194
 
-const G4double     G4DNABrennerEnergyLimitsPolicy::lowEnergyLimit(200*eV);
-const G4bool       G4DNABrennerEnergyLimitsPolicy::zeroBelowLowEnergyLimit(true);
-const G4double     G4DNABrennerEnergyLimitsPolicy::highEnergyLimit(10*keV);
-const G4bool       G4DNABrennerEnergyLimitsPolicy::zeroAboveHighEnergyLimit(true);
+#ifndef   G4DNAELECTRONELASTICSCATTERINGINWATER_HH
+ #define  G4DNAELECTRONELASTICSCATTERINGINWATER_HH 1
+ 
+ #include "G4VDNAProcessInWater.hh"
+ 
+ template<typename TotalCrossSectionPolicy, typename FinalStatesPolicy>
+ class G4DNAElectronElasticScatteringInWater : public G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>
+ {
+  public:
+                                         G4DNAElectronElasticScatteringInWater(const G4String & name) : G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>(name) {}
+   virtual                              ~G4DNAElectronElasticScatteringInWater() {}
+ 
+   virtual G4VParticleChange *           PostStepDoIt(const G4Track & aTrack, const G4Step & aStep);
+
+  private:
+   // Hides default constructor and assignment operator as private 
+                                         G4DNAElectronElasticScatteringInWater(const G4DNAElectronElasticScatteringInWater & copy);
+   G4DNAElectronElasticScatteringInWater & operator=(const G4DNAElectronElasticScatteringInWater & right);
+ };
+ 
+ #include "G4DNAElectronElasticScatteringInWater.icc"
+#endif /* G4DNAELECTRONELASTICSCATTERINGINWATER_HH */
+

@@ -21,12 +21,34 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAElectronElasticBrenner.cc,v 1.2 2005-06-24 10:07:13 capra Exp $
+// $Id: G4DNABrennerAngularDistributionPolicy.hh,v 1.1 2005-06-24 10:07:13 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Phys. Med. Biol. 29 N.4 (1983) 443-447
 
-#include "G4DNAElectronElasticBrenner.hh"
+#ifndef   G4DNABRENNERANGULARDISTRIBUTIONPOLICY_HH
+ #define  G4DNABRENNERANGULARDISTRIBUTIONPOLICY_HH 1
 
-const G4double     G4DNABrennerEnergyLimitsPolicy::lowEnergyLimit(200*eV);
-const G4bool       G4DNABrennerEnergyLimitsPolicy::zeroBelowLowEnergyLimit(true);
-const G4double     G4DNABrennerEnergyLimitsPolicy::highEnergyLimit(10*keV);
-const G4bool       G4DNABrennerEnergyLimitsPolicy::zeroAboveHighEnergyLimit(true);
+ #include "globals.hh"
+ 
+ class G4DNABrennerAngularDistributionPolicy
+ {
+  protected:
+                                        G4DNABrennerAngularDistributionPolicy() {}
+   virtual                             ~G4DNABrennerAngularDistributionPolicy() {}
+
+   G4double                             RandomizeCosTheta(G4double k, G4int z) const;
+   G4bool                               KillIncomingParticle(G4double k) const { return (k<stopAndKillLowEnergyLimit); }
+   void                                 BuildFinalStatesData(void) const {}
+   
+  private:
+   G4double                             CalculatePolynomial(G4double k, const G4double *vector, G4int size) const;
+
+   // Hides default constructor and assignment operator as private 
+                                        G4DNABrennerAngularDistributionPolicy(const G4DNABrennerAngularDistributionPolicy & copy);
+   G4DNABrennerAngularDistributionPolicy & operator=(const G4DNABrennerAngularDistributionPolicy & right);
+   
+   static const G4double                stopAndKillLowEnergyLimit;
+ };
+#endif /* G4DNABRENNERANGULARDISTRIBUTIONPOLICY_HH */
+

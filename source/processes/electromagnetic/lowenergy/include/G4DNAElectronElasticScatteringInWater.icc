@@ -21,12 +21,45 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAElectronElasticBrenner.cc,v 1.2 2005-06-24 10:07:13 capra Exp $
+// $Id: G4DNAElectronElasticScatteringInWater.icc,v 1.1 2005-06-24 10:07:13 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
 
-#include "G4DNAElectronElasticBrenner.hh"
-
-const G4double     G4DNABrennerEnergyLimitsPolicy::lowEnergyLimit(200*eV);
-const G4bool       G4DNABrennerEnergyLimitsPolicy::zeroBelowLowEnergyLimit(true);
-const G4double     G4DNABrennerEnergyLimitsPolicy::highEnergyLimit(10*keV);
-const G4bool       G4DNABrennerEnergyLimitsPolicy::zeroAboveHighEnergyLimit(true);
+#ifdef    G4DNAELECTRONELASTICSCATTERINGINWATER_HH
+ template<typename TotalCrossSectionPolicy, typename FinalStatesPolicy>
+ G4VParticleChange *                      G4DNAElectronElasticScatteringInWater<TotalCrossSectionPolicy, FinalStatesPolicy> :: PostStepDoIt(const G4Track & aTrack, const G4Step & aStep)
+ {
+  aParticleChange.Initialize(aTrack);
+  
+  G4double k;
+  k=aTrack.GetDynamicParticle()->GetKineticEnergy();
+ 
+  G4double cosTheta;
+  const G4int z(10); // H2O number of electrons
+  
+  cosTheta=FinalStatesPolicy::RandomizeCosTheta(k, z);
+ 
+  G4double phi;
+  phi=2*pi*G4UniformRand();
+  
+  G4ThreeVector zVers(aTrack.GetDynamicParticle()->GetMomentumDirection());
+  G4ThreeVector xVers(zVers.orthogonal());
+  G4ThreeVector yVers(zVers.cross(xVers));
+  
+  G4double xDir;
+  G4double yDir;
+  
+  xDir=std::sqrt(1-cosTheta*cosTheta);
+  yDir=xDir;
+  xDir*=cos(phi);
+  yDir*=sin(phi);
+  
+  G4ThreeVector zPrimeVers((xDir*xVers + yDir*yVers + cosTheta*zVers).unit());
+ 
+  aParticleChange.ProposeEnergy(k);
+  aParticleChange.ProposeMomentumDirection(zPrimeVers);
+  aParticleChange.SetNumberOfSecondaries(0);
+  
+  return G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>::PostStepDoIt(aTrack, aStep);
+ }
+#endif /* G4DNAELECTRONELASTICSCATTERINGINWATER_HH */

@@ -21,39 +21,34 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDNAElectronElasticScatteringInWater.hh,v 1.1 2005-06-02 15:02:54 sincerti Exp $
+// $Id: G4DNARutherfordTotalCrossSectionPolicy.hh,v 1.1 2005-06-24 10:07:13 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 
-// Nucl. Instr. Meth. 155 (1978) 145-156
-// J. Phys. D: Appl. Phys. 33 (2000) 932-944
-// Phys. Med. Biol. 45 (2000) 3171-3194
+#ifndef   G4DNARUTHERFORDTOTALCROSSSECTIONPOLICY_HH
+ #define  G4DNARUTHERFORDTOTALCROSSSECTIONPOLICY_HH 1
+ 
+ #include "globals.hh"
 
-#ifndef G4VDNAElectronElasticScatteringInWater_hh
- #define G4VDNAElectronElasticScatteringInWater_hh 1
- 
- #include "G4VDNAProcessInWater.hh"
- 
- class G4VDNAElectronElasticScatteringInWater : public G4VDNAProcessInWater
+ template <typename EnergyLimitsPolicy>
+ class G4DNARutherfordTotalCrossSectionPolicy
  {
-  public:
-                                         G4VDNAElectronElasticScatteringInWater(const G4String & name);
-   virtual                              ~G4VDNAElectronElasticScatteringInWater() {}
- 
-   virtual G4VParticleChange *           PostStepDoIt(const G4Track & aTrack, const G4Step & aStep);
-   virtual G4bool                        IsApplicable(const G4ParticleDefinition & aParticleDefinition);
-
   protected:
-   virtual G4double                      RandomizeCosTheta(G4double k, G4int z) = 0 ;
-
-   G4double                              RutherfordTotalCrossSection(G4double k, G4int z) const;
-   G4double                              ScreeningFactor(G4double k, G4int z) const;
+                                        G4DNARutherfordTotalCrossSectionPolicy() {}
+                                       ~G4DNARutherfordTotalCrossSectionPolicy() {}
+ 
+   const G4ParticleDefinition          *IncomingParticleDefinition(void) const;
+   G4double                             TotalCrossSection(G4double k, G4int z) const;
+   void                                 BuildTotalCrossSection(void) const {}
 
   private:
-   // Hides default constructor and assignment operator as private 
-                                         G4VDNAElectronElasticScatteringInWater();
-   G4VDNAElectronElasticScatteringInWater & operator=(const G4VDNAElectronElasticScatteringInWater & right);
- };
+   G4double                             RutherfordTotalCrossSection(G4double k, G4int z) const;
+   G4double                             ScreeningFactor(G4double k, G4int z) const;
 
-#endif /* G4VDNAElectronElasticScatteringInWater_hh */
+   // Hides default constructor and assignment operator as private 
+                                        G4DNARutherfordTotalCrossSectionPolicy(const G4DNARutherfordTotalCrossSectionPolicy & copy);
+   G4DNARutherfordTotalCrossSectionPolicy & operator=(const G4DNARutherfordTotalCrossSectionPolicy & right);
+ };
+ 
+ #include "G4DNARutherfordTotalCrossSectionPolicy.icc"
+#endif /* G4DNARUTHERFORDTOTALCROSSSECTIONPOLICY_HH */
 
