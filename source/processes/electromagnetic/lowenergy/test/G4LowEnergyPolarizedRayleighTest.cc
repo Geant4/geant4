@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyPolarizedRayleighTest.cc,v 1.2 2005-05-31 09:57:52 capra Exp $
+// $Id: G4LowEnergyPolarizedRayleighTest.cc,v 1.3 2005-06-24 10:03:57 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -417,14 +417,14 @@ G4PVPlacement * CreateGeometry(const struct Options & options)
 //! \brief Get process from options
 //! \param options Options for the process choice
 //! \return The choosen process
-G4VDiscreteProcess * GetSelectedProcess(const struct Options & options)
+G4VLowEnergyTestableDiscreteProcess * GetSelectedProcess(const struct Options & options)
 {
- static G4VDiscreteProcess ** processes=0;
+ static G4VLowEnergyTestableDiscreteProcess ** processes=0;
  if (!processes)
  {
-  processes=new G4VDiscreteProcess *[3];
+  processes=new G4VLowEnergyTestableDiscreteProcess *[3];
   processes[0]=new G4LowEnergyPolarizedRayleigh;
-  processes[1]=new G4LowEnergyRayleigh;
+  processes[1]=reinterpret_cast<G4VLowEnergyTestableDiscreteProcess *>(new G4LowEnergyRayleigh);
   processes[2]=0;
  }
  
@@ -621,7 +621,7 @@ void MeanFreePathTest(AIDA::ITupleFactory * tupleFactory, const struct Options &
  G4int step(options.nEnergySteps);
  
  G4ForceCondition condition;
- G4VDiscreteProcess * process(GetSelectedProcess(options));
+ G4VLowEnergyTestableDiscreteProcess * process(GetSelectedProcess(options));
  
  G4double mfp;
  clock_t time;
@@ -641,7 +641,7 @@ void MeanFreePathTest(AIDA::ITupleFactory * tupleFactory, const struct Options &
   step--;
 
   time=clock();
-  mfp=reinterpret_cast<G4VLowEnergyDiscretePhotonProcess *>(process)->DumpMeanFreePath(*aTrack, 1.*mm, &condition)/cm;
+  mfp=process->DumpMeanFreePath(*aTrack, 1.*mm, &condition)/cm;
   time=clock()-time;
 
   iTuple->fill(iTuple->findColumn("k"), aTrack->GetKineticEnergy()/eV);

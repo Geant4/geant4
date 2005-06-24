@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VLowEnergyDiscretePhotonProcess.hh,v 1.2 2005-05-20 15:19:18 pia Exp $
+// $Id: G4VLowEnergyDiscretePhotonProcess.hh,v 1.3 2005-06-24 10:03:57 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -44,7 +44,7 @@
 #define  G4VLowEnergyDiscretePhotonProcess_hh
  
 // Base class
-#include "G4VDiscreteProcess.hh"
+#include "G4VLowEnergyTestableDiscreteProcess.hh"
 
 // Forward declaration
 class G4String;
@@ -57,7 +57,7 @@ class G4VDataSetAlgorithm;
  
 // G4VLowEnergyDiscretePhotonProcess
 // A common class for Rayleigh and Compton processes
-class G4VLowEnergyDiscretePhotonProcess : public G4VDiscreteProcess
+class G4VLowEnergyDiscretePhotonProcess : public G4VLowEnergyTestableDiscreteProcess
 {
 public:
   //   Class constructor
@@ -96,16 +96,6 @@ public:
   //        crossSectionHandler data is loaded from crossSectionFile file
   //   photon particle is always a photon
   virtual void BuildPhysicsTable(const G4ParticleDefinition& photon);
-   
-  //   Calls GetMeanFreePath (for testing purpose only)
-  //   aTrack the particle momentum for which the mean free path must be evaluates (a photon)
-  //   previousStepSize the size of the prevous step (not used by this implementation)
-  //   condition the consition to be updated (not used by this implementation)
-  //   The mean free path evaluated by GetMeanFreePath
-  inline G4double DumpMeanFreePath(const G4Track& aTrack, 
-				   G4double previousStepSize, 
-				   G4ForceCondition* condition) 
-  {return GetMeanFreePath(aTrack, previousStepSize, condition);}
    
    
    
