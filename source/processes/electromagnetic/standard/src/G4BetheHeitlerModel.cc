@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.cc,v 1.3 2005-05-12 11:06:43 vnivanch Exp $
+// $Id: G4BetheHeitlerModel.cc,v 1.4 2005-06-24 16:01:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,6 +36,7 @@
 //
 // Modifications:
 // 18-04-05 Use G4ParticleChangeForGamma (V.Ivantchenko)
+// 24-06-05 Increase number of bins to 200 (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -61,7 +62,7 @@ G4BetheHeitlerModel::G4BetheHeitlerModel(const G4ParticleDefinition*,
 					 const G4String& nam)
   : G4VEmModel(nam),
     theCrossSectionTable(0),
-    nbins(100)
+    nbins(200)
 {
   theGamma    = G4Gamma::Gamma();
   thePositron = G4Positron::Positron();
