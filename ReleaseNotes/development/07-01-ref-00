@@ -188,6 +188,7 @@ processes/hadronic                               ghad-V07-00-01
   o Added kaon extension to Bertini cascade. Currently, in order to compile
     the new code, the conditional assembly flag G4BERTINI_KAON must be set.
 - models/chiral_invariant_phase_space (ghad-chips-body-V07-00-16)
+  o Adapted interface to chips/body as to not simulate heavy fragments.
   o Physics tuning for the antiproton-nuclear annihilation at rest.
   o Corrected error in hypernuclear degradation to normal nuclear fragment
     (1 per 5 millions interactions on Al).
