@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.hh,v 1.5 2001-07-11 10:03:41 gunter Exp $
+// $Id: G4Cerenkov.hh,v 1.6 2005-06-27 20:30:16 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -169,7 +169,11 @@ private:
 inline 
 G4bool G4Cerenkov::IsApplicable(const G4ParticleDefinition& aParticleType)
 {
-   return (aParticleType.GetPDGCharge() != 0);
+   if (aParticleType.GetParticleName() != "chargedgeantino" ) {
+      return (aParticleType.GetPDGCharge() != 0);
+   } else {
+      return false;
+   }
 }
 
 inline 
