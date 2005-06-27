@@ -27,7 +27,7 @@
 // Revision and changes: Patricia Mendez (Patricia.Mendez@cern.ch)
 /////////////////////////////////////////////////////////////////////////////
 #include <iostream>
-#include <math.h>
+#include <cmath>
 #include "globals.hh"
 #include "RichTbMaterial.hh"
 #include "G4Isotope.hh"

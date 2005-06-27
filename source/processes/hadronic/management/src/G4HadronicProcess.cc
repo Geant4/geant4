@@ -716,7 +716,7 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
   {
     G4double newM=aT.GetDefinition()->GetPDGMass();
     G4double newE=aR->GetEnergyChange() + newM;
-    G4double newP=sqrt(newE*newE - newM*newM);
+    G4double newP=std::sqrt(newE*newE - newM*newM);
     G4ThreeVector newPV = newP*aR->GetMomentumChange();
     G4LorentzVector newP4(newE, newPV);
     newP4.rotate(rotation, it);

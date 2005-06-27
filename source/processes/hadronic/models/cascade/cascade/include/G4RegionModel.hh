@@ -25,7 +25,7 @@
 
 #include "G4ios.hh"
 #include <vector>
-#include <math.h>
+#include <cmath>
 #include "globals.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"

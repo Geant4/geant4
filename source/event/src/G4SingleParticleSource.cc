@@ -44,7 +44,7 @@
 #include "G4PrimaryParticle.hh"
 #include "G4Event.hh"
 #include "Randomize.hh"
-#include <math.h>
+#include <cmath>
 #include "G4ParticleTable.hh"
 #include "G4Geantino.hh"
 #include "G4ParticleDefinition.hh"

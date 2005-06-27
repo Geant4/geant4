@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.19 2005-05-13 16:14:59 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.20 2005-06-27 15:30:29 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -249,7 +249,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
   nOfNeutrons=N;                                       // Remember it for energy-mom. check
   G4double dd=0.025;
   G4double am=Z+N;
-  G4double sr=sqrt(am);
+  G4double sr=std::sqrt(am);
   G4double dsr=0.01*(sr+sr);
   if(dsr<dd)dsr=dd;
   if(manualFlag) G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // ManualP
@@ -639,14 +639,14 @@ G4bool G4QCaptureAtRest::RandomizeMuDecayOrCapture(G4int Z, G4int N)
   G4double Z27 =0.002727*Z;
   G4double Z227=Z27*Z27;
   G4double Z427=Z227*Z227;
-  G4double Zeff=(Z-0.13782)*(1.2162-(0.09118-Z427)*sqrt((G4double)Z)); // EffNuclear Charge
+  G4double Zeff=(Z-0.13782)*(1.2162-(0.09118-Z427)*std::sqrt((G4double)Z)); // EffNuclear Charge
   G4double Ze2=Zeff*Zeff;      // Squared effective charge of the Nucleus
   G4double pD=.00045516*(1.-Ze2*.00014658);// 1./MeanLifeTime of muon in atoms (in ns^-1)
   G4double pC=.00001637*Ze2*Ze2/(33.563+N);// 1./MeanLifeTime of muon NuclCapture(in ns^-1)
   if(Z==1&&N==0) pC=.0000007;
   if(Z==1&&N==1) pC=.000000012;
-  G4double DLifeT=-log(G4UniformRand())/pD; // Time of the muon decay inside the atom
-  G4double CLifeT=-log(G4UniformRand())/pC; // Time of the muon capture by nucleus
+  G4double DLifeT=-std::log(G4UniformRand())/pD; // Time of the muon decay inside the atom
+  G4double CLifeT=-std::log(G4UniformRand())/pC; // Time of the muon capture by nucleus
   if(DLifeT<CLifeT)
   {
     Time=DLifeT;
@@ -763,14 +763,14 @@ G4bool G4QCaptureAtRest::RandomizeTauDecayOrCapture(G4int Z, G4int N)
   G4double Z27 =0.002727*Z;
   G4double Z227=Z27*Z27;
   G4double Z427=Z227*Z227;
-  G4double Zeff=(Z-0.13782)*(1.2162-(0.09118-Z427)*sqrt((G4double)Z)); // EffNuclear Charge
+  G4double Zeff=(Z-0.13782)*(1.2162-(0.09118-Z427)*std::sqrt((G4double)Z)); // EffNuclear Charge
   G4double Ze2=Zeff*Zeff;      // Squared effective charge of the Nucleus
   G4double pD=3436.*(1.-Ze2*.00014658);     //@@ 1./MeanLifeTime of Tau in atoms (in ns^-1)
   G4double pC=227.*Ze2*Ze2/(33.563+N);      //@@1./MeanLifeTime of TauNuclCapture(in ns^-1)
   if(Z==1&&N==0) pC=10.;                    // @@
   if(Z==1&&N==1) pC=.2;                     // @@
-  G4double DLifeT=-log(G4UniformRand())/pD; // Time of the muon decay inside the atom
-  G4double CLifeT=-log(G4UniformRand())/pC; // Time of the muon capture by nucleus
+  G4double DLifeT=-std::log(G4UniformRand())/pD; // Time of the muon decay inside the atom
+  G4double CLifeT=-std::log(G4UniformRand())/pC; // Time of the muon capture by nucleus
   if(DLifeT<CLifeT)
   {
     Time=DLifeT;

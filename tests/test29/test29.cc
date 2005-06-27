@@ -513,7 +513,7 @@ int main()
     // @@ G4double px, py, pz, pt;
     G4VParticleChange* aChange = 0;
     G4double e0 = energy+pMass;
-    G4double pmax=sqrt(e0*e0-pMass*pMass);
+    G4double pmax=std::sqrt(e0*e0-pMass*pMass);
     // Randomization loop: cycle random generator, using 2 lower digits in nEvt
     G4int    iRandCount = nEvt%100;
     G4double vRandCount = 0.;
@@ -606,14 +606,14 @@ int main()
           e = 0.0;
         }
 	       // for exclusive reaction 2 particles in final state
-	       p = sqrt(e*(e + m + m));
+	       p = std::sqrt(e*(e + m + m));
 	       mom *= p;
         lorV = G4LorentzVector(mom, e + m);    // "e" is a Kinetic energy!
         totSum -= lorV;
 #ifdef debug
         G4cout<<"Test29: 4M="<<lorV<<" is subtracted, sum4M="<<totSum<<",m="<<m<<G4endl;
 #endif
-        if(fabs(m-lorV.m())>.005)
+        if(std::fabs(m-lorV.m())>.005)
 	       {
 		        G4cerr<<"***Test29: m="<<lorV.m()<<" # "<<m<<", d="<<lorV.m()-m<<G4endl;
           alarm=true;
@@ -643,7 +643,7 @@ int main()
         //if(c==90002002) nAlphas++;                     // Alphas
         if(c==2212) nProtons++;                        // Protons
         if(c==2112) nNeutrons++;                       // Neutrons
-        if(c==2112 && fabs(e-1005.)<3.) nSpNeut++;     // Dibar-Neutrons
+        if(c==2112 && std::fabs(e-1005.)<3.) nSpNeut++;     // Dibar-Neutrons
         //if(c==90002002 && e-m<7.) nSpAlph++;           // Special Alphas
         if(c==111) nP0++;                              // Neutral  pions
         if(c==-211) nPN++;                             // Negative pions
@@ -652,7 +652,7 @@ int main()
         if(c==22) EGamma+=e;                           // Energy of gammas
         G4int cCG=0;
         G4int cBN=0;
-        if(abs(c)>99)                                  // Do not count charge of leptons
+        if(std::abs(c)>99)                                  // Do not count charge of leptons
         {
           cCG=static_cast<G4int>(pd->GetPDGCharge());
           cBN=static_cast<G4int>(pd->GetBaryonNumber());
@@ -666,13 +666,13 @@ int main()
         delete aChange->GetSecondary(i);
 	     } // End of the LOOP over secondaries
 	     //	delete secondaries in the end of the event       	 
-      if(abs(pPDG)<99&&totCharge==totC&&totBaryN==totBN) // for lepton decay target mass=0
+      if(std::abs(pPDG)<99&&totCharge==totC&&totBaryN==totBN) // for lepton decay target mass=0
 				  {
 						  totCharge=0;
         totBaryN=0;
         totSum-=G4LorentzVector(0., 0., 0., curM);
       }
-      G4double ss=fabs(totSum.t())+fabs(totSum.x())+fabs(totSum.y())+fabs(totSum.z());    
+      G4double ss=std::fabs(totSum.t())+std::fabs(totSum.x())+std::fabs(totSum.y())+std::fabs(totSum.z());    
 #ifdef pdebug
       G4cout<<"TEST29:r4M="<<totSum<<ss<<",rChg="<<totCharge<<",rBaryN="<<totBaryN<<G4endl;
 #endif
@@ -698,7 +698,7 @@ int main()
           G4QPDGCode cQPDG(c);
           sm   = cQPDG.GetMass();
           e    = sec->GetKineticEnergy();
-	         p    = sqrt(e*(e + m + m));
+	         p    = std::sqrt(e*(e + m + m));
 	         mom *= p;
           lorV = G4LorentzVector(mom, e + m);    // "e" is a Kinetic energy!
           totSum -= lorV;

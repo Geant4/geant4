@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.10 2005-05-30 08:55:51 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.11 2005-06-27 15:29:41 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -187,7 +187,7 @@ G4double G4EmCorrections::Bethe(const G4ParticleDefinition* p,
   G4double tmax  = 2.0*electron_mass_c2*bg2 /(1. + 2.0*gamma*ratio + ratio*ratio);
   G4double eexc  = material->GetIonisation()->GetMeanExcitationEnergy();
   G4double eexc2 = eexc*eexc;
-  G4double dedx = 0.5*log(2.0*electron_mass_c2*bg2*tmax/eexc2)-beta2;
+  G4double dedx = 0.5*std::log(2.0*electron_mass_c2*bg2*tmax/eexc2)-beta2;
   return dedx;
 }
 

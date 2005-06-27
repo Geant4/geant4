@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3NegVolPars.cc,v 1.11 2004-12-07 08:33:38 gcosmo Exp $ 
+// $Id: G3NegVolPars.cc,v 1.12 2005-06-27 15:28:27 gunter Exp $ 
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I. Hrivnacova, 13.10.99 
@@ -30,7 +30,7 @@
 #include "G3VolTable.hh"
 #include "G4VSolid.hh"
 #include "G3toG4.hh"
-#include <math.h>
+#include <cmath>
 
 G4bool G3CalcParamsFn(G4double *Rpar, G4int npar, G4double *Rparm,
                       G4String shape, G4String shapem)

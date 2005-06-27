@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopePhotoElectric.cc,v 1.9 2005-05-31 10:09:19 pandola Exp $
+// $Id: G4PenelopePhotoElectric.cc,v 1.10 2005-06-27 15:29:20 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L. Pandola

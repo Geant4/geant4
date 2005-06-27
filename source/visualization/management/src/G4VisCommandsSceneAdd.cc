@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.55 2005-05-31 16:50:35 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.56 2005-06-27 15:32:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -670,10 +670,10 @@ G4VisCommandSceneAddLogo::G4Logo::G4Logo
   const G4double xt = f1, yt = h2;      // Top of slope.
   const G4double xb = -h2, yb = f2 + w; // Bottom of slope.
   const G4double dx = xt - xb, dy = yt - yb;
-  const G4double angle = atan2(dy,dx);
+  const G4double angle = std::atan2(dy,dx);
   G4RotationMatrix rm;
   rm.rotateZ(angle*rad);
-  const G4double d = sqrt(dx * dx + dy * dy);
+  const G4double d = std::sqrt(dx * dx + dy * dy);
   const G4double s = h;  // Half height of square subtractor
   const G4double y8 = s; // Choose y of subtractor for outer slope.
   const G4double x8 = ((-s * d - dx * (yt - y8)) / dy) + xt;

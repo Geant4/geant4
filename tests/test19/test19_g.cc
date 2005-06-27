@@ -340,7 +340,7 @@ int main()
   G4QCaptureAtRest::SetManual();
   // *********** Now momb is a momentum of the incident particle *************
   G4double mp=G4QPDGCode(pPDG).GetMass();
-  G4double ep=sqrt(mp*mp+momb*momb);
+  G4double ep=std::sqrt(mp*mp+momb*momb);
   if(enb>0.) ep=enb;
   //G4int tPDG=90000000+tgZ*1000+tgN;
   G4int    tgZ=(tPDG-90000000)/1000;
@@ -645,7 +645,7 @@ int main()
     // @@ G4double px, py, pz, pt;
     G4VParticleChange* aChange = 0;
     G4double e0 = energy+pMass;
-    G4double pmax=sqrt(e0*e0-pMass*pMass);
+    G4double pmax=std::sqrt(e0*e0-pMass*pMass);
     G4double et=e0+mt;
     //G4int nEvt=100;
     // Randomization loop: cycle random generator, using 2 lower digits in nEvt
@@ -753,7 +753,7 @@ int main()
           e = 0.0;
         }
 	       // for exclusive reaction 2 particles in final state
-	       p = sqrt(e*(e + m + m));
+	       p = std::sqrt(e*(e + m + m));
 	       mom *= p;
         //if(i==1) // Means the target secondary for the ellastic scattering
 								//{
@@ -766,7 +766,7 @@ int main()
         lorV = G4LorentzVector(mom, e+m);    // "e" is a Kinetic energy!
         totSum -= lorV;
         //if(fabs(m-lorV.m())>.005&&1>2) // @@ Temporary closed
-        if(fabs(m-lorV.m())>2.7)     // In fact this is a test of the calculation accuracy
+        if(std::fabs(m-lorV.m())>2.7)     // In fact this is a test of the calculation accuracy
 	       {
 		        G4cerr<<"***Test19: m="<<lorV.m()<<" # "<<m<<", d="<<lorV.m()-m<<G4endl;
           alarm=true;
@@ -794,7 +794,7 @@ int main()
         //if(c==90002002) nAlphas++;                     // Alphas
         if(c==2212) nProtons++;                        // Protons
         if(c==2112) nNeutrons++;                       // Neutrons
-        if(c==2112 && fabs(e-1005.)<3.) nSpNeut++;     // Dibar-Neutrons
+        if(c==2112 && std::fabs(e-1005.)<3.) nSpNeut++;     // Dibar-Neutrons
         //if(c==90002002 && e-m<7.) nSpAlph++;           // Special Alphas
         if(c==111) nP0++;                              // Neutral  pions
         if(c==-211) nPN++;                             // Negative pions
@@ -803,7 +803,7 @@ int main()
         if(c==22) EGamma+=e;                           // Energy of gammas
         G4int cCG=0;
         G4int cBN=0;
-        if(abs(c)>99)                                  // Do not count charge of leptons
+        if(std::abs(c)>99)                                  // Do not count charge of leptons
         {
           cCG=static_cast<G4int>(pd->GetPDGCharge());
           cBN=static_cast<G4int>(pd->GetBaryonNumber());
@@ -817,7 +817,7 @@ int main()
         delete aChange->GetSecondary(i);
 	     } // End of the LOOP over secondaries
 	     //	delete secondaries in the end of the event       	 
-      G4double ss=fabs(totSum.t())+fabs(totSum.x())+fabs(totSum.y())+fabs(totSum.z());    
+      G4double ss=std::fabs(totSum.t())+std::fabs(totSum.x())+std::fabs(totSum.y())+std::fabs(totSum.z());    
 #ifdef pdebug
       G4cout<<">TEST19:r4M="<<totSum<<ss<<",rChrg="<<totCharge<<",rBaryN="<<totBaryN<<G4endl;
 #endif
@@ -844,7 +844,7 @@ int main()
           G4QPDGCode cQPDG(c);
           sm   = cQPDG.GetMass();
           e   = sec->GetKineticEnergy();
-	         p = sqrt(e*(e + m + m));
+	         p = std::sqrt(e*(e + m + m));
 	         mom *= p;
           lorV = G4LorentzVector(mom, e + m);    // "e" is a Kinetic energy!
           totSum -= lorV;
@@ -869,8 +869,8 @@ int main()
     delete timer;
 #ifdef tdebug
     G4double pGeV=pmax/1000.;
-    G4double alp=log(pGeV/(1.+1./pGeV/pGeV/pGeV));
-    G4double exr=1.-.822/(1.+exp(-(alp-.2)*1.15));
+    G4double alp=std::log(pGeV/(1.+1./pGeV/pGeV/pGeV));
+    G4double exr=1.-.822/(1.+std::exp(-(alp-.2)*1.15));
     G4cout<<"Test19:EndOfRun,p="<<pmax<<",dT="<<dTot<<",r="<<dEl/dTot<<",e="<<exr
           <<",d="<<exr-dEl/dTot<<",ra="<<(exr-.178)/.822<<G4endl;
     for(G4int ir=0; ir<nT; ir++) G4cout<<tVal[ir]<<" "<<tSig[ir]<<G4endl;// Print t-vectors

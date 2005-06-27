@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: clGeometry.cc,v 1.5 2005-05-03 10:21:16 allison Exp $
+// $Id: clGeometry.cc,v 1.6 2005-06-27 15:27:39 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@
 // controls whether drawing is to be Done or not
 
 #include <fstream>
-#include <math.h>
+#include <cmath>
 #include "G4ios.hh"
 
 // package includes

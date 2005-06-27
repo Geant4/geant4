@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSectionTest.cc,v 1.13 2004-11-10 10:24:30 grichine Exp $
+// $Id: G4PAIxSectionTest.cc,v 1.14 2005-06-27 15:29:38 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,7 @@
 
 #include "G4ios.hh"
 #include <fstream>
-#include <math.h>
+#include <cmath>
 #include "globals.hh"
 #include "Randomize.hh"
 

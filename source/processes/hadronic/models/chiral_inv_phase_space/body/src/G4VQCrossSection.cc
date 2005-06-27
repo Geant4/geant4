@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VQCrossSection.cc,v 1.3 2005-06-04 13:08:23 jwellisc Exp $
+// $Id: G4VQCrossSection.cc,v 1.4 2005-06-27 15:30:53 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -96,7 +96,7 @@ G4double G4VQCrossSection::GetCrossSection(G4double Momentum, G4int targZ, G4int
       lastTH =colTH[i];                // Last THreshold (A-dependent)
       lastCS =colCS[i];                // Last CrossSect (A-dependent)
       if(Momentum<=lastTH) return 0.;  // Momentum is below the Threshold value
-      else if(fabs(lastP/Momentum-1.)<tolerance) return lastCS*millibarn; // Use last CS
+      else if(std::fabs(lastP/Momentum-1.)<tolerance) return lastCS*millibarn; // Use last CS
       lastI  = i;                      // Make the found isotope to be current isotope
       lastCS=CalculateCrossSection(-1,lastI,lastN,lastZ,Momentum);//read&update DB, calc.CS
       break;                           // Go out of the LOOP
@@ -118,7 +118,7 @@ G4double G4VQCrossSection::GetCrossSection(G4double Momentum, G4int targZ, G4int
 	   } // End of creation of the new set of parameters
   } // End of parameters udate
   else if(Momentum<=lastTH) return 0.; // Momentum is below the Threshold value
-  else if(fabs(lastP/Momentum-1.)<tolerance) return lastCS*millibarn; // Use the last CS
+  else if(std::fabs(lastP/Momentum-1.)<tolerance) return lastCS*millibarn; // Use the last CS
   else lastCS=CalculateCrossSection(1,lastI,lastN,lastZ,Momentum); // Update DB, calc. CS
   colP[lastI]=Momentum;
   colCS[lastI]=lastCS;

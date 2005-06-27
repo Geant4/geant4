@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VQCrossSection.hh,v 1.3 2005-06-04 13:08:23 jwellisc Exp $
+// $Id: G4VQCrossSection.hh,v 1.4 2005-06-27 15:30:26 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

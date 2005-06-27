@@ -33,7 +33,7 @@
 
 #include "G4ios.hh"
 #include <fstream>
-#include <math.h>
+#include <cmath>
 #include "globals.hh"
 #include "Randomize.hh"
 #include "G4UnitsTable.hh"

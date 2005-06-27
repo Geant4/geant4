@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 #include "G4LowEXsection.hh"
-#include <math.h>
+#include <cmath>
 
 G4double G4LowEXsection::
  CrossSection(G4double aX) const

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QMuonNuclearCrossSection.cc,v 1.2 2005-06-04 13:08:23 jwellisc Exp $
+// $Id: G4QMuonNuclearCrossSection.cc,v 1.3 2005-06-27 15:30:38 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -116,13 +116,13 @@ G4double G4QMuonNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G4i
   static const G4int mL=nE-1;
   static const G4double EMi=2.0612;          // Minimum tabulated KineticEnergy of Muon
   static const G4double EMa=50000.;          // Maximum tabulated Energy of the Electron 
-  static const G4double lEMi=log(EMi);       // Minimum tabulatedLogarithmKinEnergy of Muon
-  static const G4double lEMa=log(EMa);       // Maximum tabulatedLogarithmKinEnergy of Muon
+  static const G4double lEMi=std::log(EMi);       // Minimum tabulatedLogarithmKinEnergy of Muon
+  static const G4double lEMa=std::log(EMa);       // Maximum tabulatedLogarithmKinEnergy of Muon
   static const G4double dlnE=(lEMa-lEMi)/mL; // Logarithmic table step for MuonKinEnergy
   static const G4double alop=1./137.036/3.14159265; //coeffitient for  E>50000 calculations
   static const G4double mmu=105.65839;       // Mass of the muon in MeV
   static const G4double mmu2=mmu*mmu;        // Squared Mass of muon in MeV^2
-  static const G4double lmmu=log(mmu);       // Log of the electron mass
+  static const G4double lmmu=std::log(mmu);       // Log of the electron mass
   // *** Begin of the Associative memory for acceleration of the cross section calculations
   static std::vector <G4int> colF;     // Vector of LastStartPosition in Ji-function tables
   static std::vector <G4double> colH;  // Vector of HighEnergyCoefficients (functional)
@@ -132,7 +132,7 @@ G4double G4QMuonNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G4i
   // *** End of Static Definitions (Associative Memory) ***
   //const G4double Energy = aPart->GetKineticEnergy()/MeV; // Energy of the Muon
   G4double TotEnergy2=Momentum*Momentum+mmu2;
-  G4double TotEnergy=sqrt(TotEnergy2); // Total energy of the muon
+  G4double TotEnergy=std::sqrt(TotEnergy2); // Total energy of the muon
   lastE=TotEnergy-mmu;               // Kinetic energy of the muon
   if (lastE<=EMi)                    // Energy is below the minimum energy in the table
   {
@@ -158,7 +158,7 @@ G4double G4QMuonNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G4i
       lastJ2 = new G4double[nE];     // Allocate memory for the new J2 function
       lastJ3 = new G4double[nE];     // Allocate memory for the new J3 function
       lastF   = GetFunctions(A,lastJ1,lastJ2,lastJ3);//newZeroPos and J-functions filling
-      lastH   = alop*A*(1.-.072*log(A));//similar to lastSP of G4PhotonuclearCrossSection
+      lastH   = alop*A*(1.-.072*std::log(A));//similar to lastSP of G4PhotonuclearCrossSection
 #ifdef pdebug
       G4cout<<"G4MuonNuclearCS::CalculateCrossSection: lastH="<<lastH<<",A="<<A<<G4endl;
 #endif
@@ -180,7 +180,7 @@ G4double G4QMuonNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G4i
     lastSig=0.;
     return 0.;
   }
-  G4double lE=log(lastE);            // log(muE) (it is necessary for the fit)
+  G4double lE=std::log(lastE);            // log(muE) (it is necessary for the fit)
   lastG=lE-lmmu;                     // Gamma of the muon (used to recover log(muE))
   G4double dlg1=lastG+lastG-1.;
   G4double lgoe=lastG/lastE;
@@ -2352,7 +2352,7 @@ G4int G4QMuonNuclearCrossSection::GetFunctions(G4double a,G4double*x,G4double*y,
   if(a!=ai) a=ai;
   for(G4int i=0; i<nN; i++)
   {
-    if(fabs(a-A[i])<.0005)              // A coincides with one of basic A's -> get from Tab
+    if(std::fabs(a-A[i])<.0005)              // A coincides with one of basic A's -> get from Tab
     {
       for(G4int k=0; k<nE; k++)
       {
@@ -2394,11 +2394,11 @@ G4double G4QMuonNuclearCrossSection::GetExchangeEnergy()
   static const G4int mL=nE-1;
   static const G4double EMi=2.0612;          // Minimum Energy
   static const G4double EMa=50000.;          // Maximum Energy
-  static const G4double lEMi=log(EMi);       // Minimum logarithmic Energy
-  static const G4double lEMa=log(EMa);       // Maximum logarithmic Energy
+  static const G4double lEMi=std::log(EMi);       // Minimum logarithmic Energy
+  static const G4double lEMa=std::log(EMa);       // Maximum logarithmic Energy
   static const G4double dlnE=(lEMa-lEMi)/mL; // Logarithmic step in Energy
   static const G4double mmu=105.65839;       // Mass of muon in MeV
-  static const G4double lmmu=log(mmu);       // Log of muon mass
+  static const G4double lmmu=std::log(mmu);       // Log of muon mass
   G4double phLE=0.;                     // Prototype of the log(nu=E_gamma)
   G4double Y[nE];                       // Prepare the array for randomization
 #ifdef debug
@@ -2449,10 +2449,10 @@ G4double G4QMuonNuclearCrossSection::GetExchangeEnergy()
     G4cerr<<"***G4QMuNuclearCS::GetExEnergy: N="<<lastN<<",Z="<<lastZ<<",lpE"<<phLE<<">leE"
           <<lastLE<<",Sig="<<lastSig<<",rndSig="<<ris<<",Beg="<<lastF<<",End="<<lastL
           <<",Y="<<Y[lastL]<<G4endl;
-    if(lastLE<7.2) phLE=log(exp(lastLE)-mmu);
+    if(lastLE<7.2) phLE=std::log(std::exp(lastLE)-mmu);
     else phLE=7.;
   }
-  return exp(phLE);
+  return std::exp(phLE);
 }
 
 G4double G4QMuonNuclearCrossSection::SolveTheEquation(G4double f)
@@ -2464,14 +2464,14 @@ G4double G4QMuonNuclearCrossSection::SolveTheEquation(G4double f)
   static const G4double reg=.11;                       // HE Reggeon slope
   static const G4double EMa=50000.;                    // Maximum Energy
   static const G4double mmu=105.65839;                 // Mass of muon in MeV
-  static const G4double lmmu=log(mmu);                 // Log of muon mass
-  static const G4double z=log(EMa);                    // Initial argument
-  static const G4double p=poc*(z-pos)+shd*exp(-reg*z); // CrossX on theHighTabEdge (small)
+  static const G4double lmmu=std::log(mmu);                 // Log of muon mass
+  static const G4double z=std::log(EMa);                    // Initial argument
+  static const G4double p=poc*(z-pos)+shd*std::exp(-reg*z); // CrossX on theHighTabEdge (small)
   static const G4int    imax=27;   // Not more than "imax" steps to find the solution
   static const G4double eps=0.001; // Accuracy which satisfies the search
   G4double lastLE=lastG+lmmu;                 // recover log(eE) from the gamma (lastG)
   G4double topLim=lastLE-.001;                // maximum log(phE) for equivalent photons
-  G4double rE=EMa/exp(lastLE);                // r=EMa/Eel to make the firs guess
+  G4double rE=EMa/std::exp(lastLE);                // r=EMa/Eel to make the firs guess
   G4double x=z+f/p/(lastG*(2.-rE*(2.-rE))-1.);// First guess (the first step from the edge)
 #ifdef pdebug
   G4cout<<"G4MuNucCS::SolveTheEq: e="<<eps<<",f="<<f<<",z="<<z<<",p="<<p<<",lastG="<<lastG
@@ -2494,7 +2494,7 @@ G4double G4QMuonNuclearCrossSection::SolveTheEquation(G4double f)
       x=topLim;
       if(i)G4Exception("G4QMuonNuclearCrossSec::SolveTheEq()","009",FatalException,"E>eE");
     }
-    if(fabs(d)<eps) break;
+    if(std::fabs(d)<eps) break;
     if(i+1>=imax) G4cerr<<"*G4MuNucCS::SolveTheE:"<<i+2<<">"<<imax<<"->Use bigMax. ln(eE)="
                         <<lastLE<<",Z="<<lastZ<<", N="<<lastN<<G4endl;
   }
@@ -2515,7 +2515,7 @@ G4double G4QMuonNuclearCrossSection::GetExchangeQ2(G4double nu)
   G4double iar=Qi2/Qa2;                 // Q2min/Q2max ratio
   G4double Dy=ye+.5*y2;                 // D(y) function
   G4double Py=ye/Dy;                    // P(y) function
-  G4double ePy=1.-exp(Py);              // 1-exp(P(y)) part
+  G4double ePy=1.-std::exp(Py);              // 1-exp(P(y)) part
   G4double Uy=Py*(1.-iar);              // U(y) function
   G4double Fy=(ye+ye)*(1.+ye)*iar/y2;   // F(y) function
   G4double fr=iar/(1.-ePy*iar);         // Q-fraction
@@ -2526,7 +2526,7 @@ G4double G4QMuonNuclearCrossSection::GetExchangeQ2(G4double nu)
 #endif
     return 0.;
   }    
-  G4double LyQa2=log(Fy+fr);            // L(y,Q2max) function
+  G4double LyQa2=std::log(Fy+fr);            // L(y,Q2max) function
   G4bool cond=true;
   G4int maxTry=3;
   G4int cntTry=0;
@@ -2534,7 +2534,7 @@ G4double G4QMuonNuclearCrossSection::GetExchangeQ2(G4double nu)
   while(cond&&cntTry<maxTry)            // The loop to avoid x>1.
   {
     G4double R=G4UniformRand();         // Random number (0,1)
-    Q2=Qi2*(ePy+1./(exp(R*LyQa2-(1.-R)*Uy)-Fy));
+    Q2=Qi2*(ePy+1./(std::exp(R*LyQa2-(1.-R)*Uy)-Fy));
     cntTry++;
     cond = Q2>1878.*nu;
   }
@@ -2563,9 +2563,9 @@ G4double G4QMuonNuclearCrossSection::GetVirtualFactor(G4double nu, G4double Q2)
   static const G4double dM=938.27+939.57;// Mean double nucleon mass = m_n+m_p (no binding)
   static const G4double Q0=843.;         // Coefficient of the dipole nucleonic form-factor
   static const G4double Q02=Q0*Q0;       // Squared coefficient of theDipoleNuclFormFactor
-  static const G4double blK0=log(185.);  // Coefficient of the b-function
+  static const G4double blK0=std::log(185.);  // Coefficient of the b-function
   static const G4double bp=0.85;          // Power of the b-function
-  static const G4double clK0=log(1390.);  // Coefficient of the c-function
+  static const G4double clK0=std::log(1390.);  // Coefficient of the c-function
   static const G4double cp=3.;            // Power of the c-function
   //G4double x=Q2/dM/nu;                  // Direct x definition
   G4double K=nu-Q2/dM;                    // K=nu*(1-x)
@@ -2576,12 +2576,12 @@ G4double G4QMuonNuclearCrossSection::GetVirtualFactor(G4double nu, G4double Q2)
 #endif
     return 0.;
   }
-  G4double lK=log(K);                     // ln(K)
+  G4double lK=std::log(K);                     // ln(K)
   G4double x=1.-K/nu;                     // This definitin saves one div.
   G4double GD=1.+Q2/Q02;                  // Reversed nucleonic form-factor
-  G4double b=exp(bp*(lK-blK0));           // b-factor
-  G4double c=exp(cp*(lK-clK0));           // c-factor
-  G4double r=.5*log(Q2+nu*nu)-lK;         // r=.5*log((Q^2+nu^2)/K^2)
-  G4double ef=exp(r*(b-c*r*r));           // exponential factor
+  G4double b=std::exp(bp*(lK-blK0));           // b-factor
+  G4double c=std::exp(cp*(lK-clK0));           // c-factor
+  G4double r=.5*std::log(Q2+nu*nu)-lK;         // r=.5*log((Q^2+nu^2)/K^2)
+  G4double ef=std::exp(r*(b-c*r*r));           // exponential factor
   return (1.-x)*ef/GD/GD;
 }

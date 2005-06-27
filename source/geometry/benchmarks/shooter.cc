@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: shooter.cc,v 1.5 2002-01-09 16:17:56 gcosmo Exp $
+// $Id: shooter.cc,v 1.6 2005-06-27 15:28:39 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // shooter - perform test shots.
@@ -41,7 +41,7 @@
 #include "G4ios.hh"
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
+#include <cmath>
 
 #include "G4GeometryManager.hh"
 #include "BuildBoxWorld.hh"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PionShowerModel.cc,v 1.11 2004-11-25 23:35:16 mverderi Exp $
+// $Id: ExN05PionShowerModel.cc,v 1.12 2005-06-27 15:28:03 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "ExN05PionShowerModel.hh"
@@ -138,7 +138,7 @@ void ExN05PionShowerModel::Explode(const G4FastTrack& fastTrack)
       phi = RandFlat::shoot()*twopi;
       ePoint = showerCenter +
 	z*zShower +
-	r*cos(phi)*xShower + r*sin(phi)*yShower;
+	r*std::cos(phi)*xShower + r*std::sin(phi)*yShower;
       eSpot.SetPosition(ePoint);
       feSpotList.push_back(eSpot);
     }

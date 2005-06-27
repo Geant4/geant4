@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.cc,v 1.4 2005-06-06 11:19:16 vnivanch Exp $
+// $Id: G4EnergyLossForExtrapolator.cc,v 1.5 2005-06-27 15:29:29 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -135,7 +135,7 @@ G4double G4EnergyLossForExtrapolator::AverageScatteringAngle(G4double kinEnergy,
     G4double M = part->GetPDGMass();
     G4double z = std::abs(part->GetPDGCharge()/eplus);
     G4double bpc = kinEnergy*(kinEnergy + 2.0*M)/(kinEnergy+M);
-    theta = 13.6*MeV*z*sqrt(t)/bpc;
+    theta = 13.6*MeV*z*std::sqrt(t)/bpc;
   }
   return theta;
 }

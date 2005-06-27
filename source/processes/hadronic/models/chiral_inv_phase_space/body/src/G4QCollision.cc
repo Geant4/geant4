@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.4 2005-05-13 16:14:59 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.5 2005-06-27 15:30:32 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -219,7 +219,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   G4LorentzVector proj4M=projHadron->Get4Momentum();
   G4double momentum = projHadron->GetTotalMomentum(); // 3-momentum of the Particle
   G4double Momentum=proj4M.rho();
-  if(fabs(Momentum-momentum)>.001)G4cerr<<"G4QC::PSDI P="<<Momentum<<"="<<momentum<<G4endl;
+  if(std::fabs(Momentum-momentum)>.001)G4cerr<<"G4QC::PSDI P="<<Momentum<<"="<<momentum<<G4endl;
 #ifdef debug
   G4double mp=proj4M.m();
   G4cout<<"G4QCollision::PostStepDoIt is called, P="<<Momentum<<"="<<momentum<<G4endl;
@@ -333,7 +333,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   nOfNeutrons=N;                                       // Remember it for energy-mom. check
   G4double dd=0.025;
   G4double am=Z+N;
-  G4double sr=sqrt(am);
+  G4double sr=std::sqrt(am);
   G4double dsr=0.01*(sr+sr);
   if(dsr<dd)dsr=dd;
   if(manualFlag) G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // ManualP
@@ -352,7 +352,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     G4double kinEnergy= projHadron->GetKineticEnergy();
     G4ParticleMomentum dir = projHadron->GetMomentumDirection();
     G4VQCrossSection* CSmanager=G4QElectronNuclearCrossSection::GetPointer();
-    G4int aProjPDG=abs(projPDG);
+    G4int aProjPDG=std::abs(projPDG);
     if(aProjPDG==13) CSmanager=G4QMuonNuclearCrossSection::GetPointer();
     if(aProjPDG==15) CSmanager=G4QTauNuclearCrossSection::GetPointer();
     G4double xSec=CSmanager->GetCrossSection(Momentum, Z, N);// Recalculate Cross Section
@@ -410,8 +410,8 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     }
     // Scatter the muon
     G4double EEm=iniE*finE-mu2;          // Just an intermediate value to avoid "2*"
-    G4double iniP=sqrt(iniE*iniE-mu2);   // Initial momentum of the electron
-    G4double finP=sqrt(finE*finE-mu2);   // Final momentum of the electron
+    G4double iniP=std::sqrt(iniE*iniE-mu2);   // Initial momentum of the electron
+    G4double finP=std::sqrt(finE*finE-mu2);   // Final momentum of the electron
     G4double cost=(EEm+EEm-photonQ2)/iniP/finP; // cos(theta) for the electron scattering
     if(cost>1.) cost=1.;                 // To avoid the accuracy of calculation problem
     //else if(cost>1.001)                // @@ error report can be done, but not necessary
@@ -425,10 +425,10 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     G4ThreeVector ort=dir.orthogonal();  // Not normed orthogonal vector (!) (to dir)
     G4ThreeVector ortx = ort.unit();     // First unit vector orthogonal to the direction
     G4ThreeVector orty = dir.cross(ortx);// Second unit vector orthoganal to the direction
-    G4double sint=sqrt(1.-cost*cost);    // Perpendicular component
+    G4double sint=std::sqrt(1.-cost*cost);    // Perpendicular component
     G4double phi=twopi*G4UniformRand();  // phi of scattered electron
-    G4double sinx=sint*sin(phi);         // x-component
-    G4double siny=sint*cos(phi);         // y-component
+    G4double sinx=sint*std::sin(phi);         // x-component
+    G4double siny=sint*std::cos(phi);         // y-component
     G4ThreeVector findir=cost*dir+sinx*ortx+siny*orty;
     aParticleChange.ProposeMomentumDirection(findir); // new direction for the muon
     const G4ThreeVector photon3M=iniP*dir-finP*findir;

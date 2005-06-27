@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.hh,v 1.16 2005-05-16 22:19:57 gum Exp $
+// $Id: G4MaterialPropertiesTable.hh,v 1.17 2005-06-27 15:28:54 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,7 +54,7 @@
 // Includes
 /////////////
 
-#include <math.h>
+#include <cmath>
 #include <map>
 #include "globals.hh"
 #include "G4MaterialPropertyVector.hh"

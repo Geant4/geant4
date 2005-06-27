@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: VisActionWithAttDefs.cc,v 1.5 2005-05-06 08:30:45 allison Exp $
+// $Id: VisActionWithAttDefs.cc,v 1.6 2005-06-27 15:32:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "VisActionWithAttDefs.hh"
@@ -67,7 +67,7 @@ VisActionWithAttDefs::VisActionWithAttDefs ()
   fpAttValues->push_back
     (G4AttValue("dimZ",G4BestUnit(z,"Length"),""));
   fpAttValues->push_back
-    (G4AttValue("diag",G4BestUnit(sqrt(x*x+y*y+z*z),"Length"),""));
+    (G4AttValue("diag",G4BestUnit(std::sqrt(x*x+y*y+z*z),"Length"),""));
   fpAttValues->push_back
     (G4AttValue
      ("dims",

@@ -42,7 +42,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
 #include "Randomize.hh"
-//#include <math.h>
+//#include <cmath>
 #include "G4TransportationManager.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PhysicalVolumeStore.hh"

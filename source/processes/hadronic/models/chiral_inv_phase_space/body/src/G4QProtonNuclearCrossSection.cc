@@ -93,7 +93,7 @@ G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G
     }
 	   else                             // This isotope wasn't calculated previously => CREATE
 	   {
-      G4double lnA=log(A);           // The nucleus is not found in DB. It is new.
+      G4double lnA=std::log(A);           // The nucleus is not found in DB. It is new.
       if(A==1.) lastSP=1.;           // @@ The Reggeon shadowing (A=1)
       else      lastSP=lnA;          // @@ The Reggeon shadowing
 #ifdef debug
@@ -142,21 +142,21 @@ G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G
   else                                      // UHE region (calculation, not frequent)
   {
     G4double P=0.001*Momentum;              // Approximation formula is for P in GeV/c
-    G4double lP=log(P);
+    G4double lP=std::log(P);
     if(targZ==1&&!targN)                    // At present only for p, n, and d targets
     {
       G4double ds=lP-4.;
-      sigma=5.3844/(.0018886+P*P)+(.3*ds*ds+39.+4.85/P)/(1+exp(-(.064+lP)/.27));
+      sigma=5.3844/(.0018886+P*P)+(.3*ds*ds+39.+4.85/P)/(1+std::exp(-(.064+lP)/.27));
     }
     else if(!targZ&&targN==1)               // At present only for p, n, and d targets
     {
       G4double ds=lP-4.;
-      sigma=18.045/(.00210946+P*P)+(.3*ds*ds+39.+4.85/P)/(1+exp((.1812-lP)/.3655));
+      sigma=18.045/(.00210946+P*P)+(.3*ds*ds+39.+4.85/P)/(1+std::exp((.1812-lP)/.3655));
     }
     else if(targZ==1&&targN==1)             // At present only for p, n, and d targets
     {
       G4double ds=lP-4.;
-      sigma=7.4818/(.000656+P*P)+(.6*ds*ds+72.8+9.7/P)/(1+exp(-(.22+lP)/.299));
+      sigma=7.4818/(.000656+P*P)+(.6*ds*ds+72.8+9.7/P)/(1+std::exp(-(.22+lP)/.299));
     }
     else
     {
@@ -240,13 +240,13 @@ G4int G4QProtonNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4doub
     return -1;
   }
   G4int r=0;                            // Low channel for LEN (filling-flag for LEN)
-  for(G4int i=0; i<nLA; i++) if(fabs(a-LA[i])<.0005)
+  for(G4int i=0; i<nLA; i++) if(std::fabs(a-LA[i])<.0005)
   {
     for(G4int k=0; k<nL; k++) y[k]=SL[i][k];
     r=1;                                // Flag of filled LEN part 
   }
   G4int h=0;
-  for(G4int j=0; j<nHA; j++) if(fabs(a-HA[j])<.0005)
+  for(G4int j=0; j<nHA; j++) if(std::fabs(a-HA[j])<.0005)
   {
     for(G4int k=0; k<nH; k++) z[k]=SH[j][k];
     h=1;                                // Flag of filled LEN part 

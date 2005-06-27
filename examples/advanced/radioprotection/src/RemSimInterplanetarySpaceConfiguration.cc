@@ -123,9 +123,9 @@ void RemSimInterplanetarySpaceConfiguration:: MoonConfiguration()
  //position
   G4double radius = 25.* m;
   G4double angle = pi * G4UniformRand()*rad;
-  G4double y0 = radius*cos(angle);
+  G4double y0 = radius*std::cos(angle);
   G4double x0 = 0.*m;
-  G4double z0 = -radius*sin(angle);
+  G4double z0 = -radius*std::sin(angle);
 
   if ( z0 < 0. *m)
     {
@@ -137,9 +137,9 @@ void RemSimInterplanetarySpaceConfiguration:: MoonConfiguration()
       if ((angledir> (pi/2.-angle)) && angledir<(3*pi/2.-angle))
 	{
       G4double a,b,c;
-      b=cos(angledir);
+      b=std::cos(angledir);
       a=0.;
-      c=sin(angledir);
+      c=std::sin(angledir);
       G4ThreeVector direction(a,b,c);
       particleGun -> SetParticleMomentumDirection(direction);
 	}

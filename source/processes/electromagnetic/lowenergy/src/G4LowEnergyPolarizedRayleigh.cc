@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyPolarizedRayleigh.cc,v 1.4 2005-05-20 15:20:18 pia Exp $
+// $Id: G4LowEnergyPolarizedRayleigh.cc,v 1.5 2005-06-27 15:29:17 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -108,15 +108,15 @@ G4VParticleChange* G4LowEnergyPolarizedRayleigh::PostStepDoIt(const G4Track&  aT
   zDir=outcomingPhotonCosTheta;
   xDir=std::sqrt(1-outcomingPhotonCosTheta*outcomingPhotonCosTheta);
   yDir=xDir;
-  xDir*=cos(outcomingPhotonPhi);
-  yDir*=sin(outcomingPhotonPhi);
+  xDir*=std::cos(outcomingPhotonPhi);
+  yDir*=std::sin(outcomingPhotonPhi);
  
   G4ThreeVector zPrime((xDir*x + yDir*y + zDir*z).unit());
   G4ThreeVector xPrime(x.perpPart(zPrime).unit());
   G4ThreeVector yPrime(zPrime.cross(xPrime));
  
   // outgoingPhotonPolarization is directed as x' cos(beta) + y' sin(beta)
-  G4ThreeVector outcomingPhotonPolarization(xPrime*cos(beta) + yPrime*sin(beta));
+  G4ThreeVector outcomingPhotonPolarization(xPrime*std::cos(beta) + yPrime*std::sin(beta));
  
   aParticleChange.ProposeEnergy(incomingPhotonEnergy);
   aParticleChange.ProposeMomentumDirection(zPrime);
@@ -202,7 +202,7 @@ G4double G4LowEnergyPolarizedRayleigh::GeneratePhi(G4double cosTheta) const
   do
     {
       phi = twopi * G4UniformRand();
-      cosPhi = cos(phi);
+      cosPhi = std::cos(phi);
       phiProbability= 1. - sin2Theta*cosPhi*cosPhi;
     }
   while (phiProbability < G4UniformRand());

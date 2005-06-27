@@ -58,7 +58,7 @@
 
 #include "globals.hh"
 
-#include <math.h>
+#include <cmath>
 
 //
 // Constructor

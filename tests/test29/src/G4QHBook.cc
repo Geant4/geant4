@@ -1,11 +1,26 @@
-// This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4QHBook.cc,v 1.1 2005-03-24 15:52:55 mkossov Exp $
+// $Id: G4QHBook.cc,v 1.2 2005-06-27 15:33:34 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHBook ----------------
@@ -171,7 +186,7 @@ void G4QHBook::FillEvt(const G4VParticleChange* hadrons)
       G4ThreeVector mom = cHd->GetMomentumDirection();        // Direction of the momentum
       G4double ener = cHd->GetKineticEnergy();                // Kinetic energy
       G4double ten = ener + mass;                             // Total energy
-	     G4double p = sqrt(ener*(ten + mass));                   // Abs value of the momentum
+	     G4double p = std::sqrt(ener*(ten + mass));                   // Abs value of the momentum
 	     mom *= p;                                               // 3-momentum
 	     lorVm[picount] =  G4LorentzVector(mom, ten);
 	     picount++;
@@ -328,7 +343,7 @@ void G4QHBook::FillEvt(const G4VParticleChange* hadrons)
     G4ThreeVector mom = cHd->GetMomentumDirection();     // Direction of the momentum
     G4double ener = cHd->GetKineticEnergy();             // Kinetic energy
     G4double e = ener + m;                             // Total energy
-	   G4double p = sqrt(ener*(e + m));                   // Abs value of the momentum
+	   G4double p = std::sqrt(ener*(e + m));                   // Abs value of the momentum
 	   mom *= p;                                            // 3-momentum
     G4LorentzVector lorV =  G4LorentzVector(mom, e);
     G4int   c = pd->GetPDGEncoding();

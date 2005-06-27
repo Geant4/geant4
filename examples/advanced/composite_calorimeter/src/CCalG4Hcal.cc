@@ -32,7 +32,7 @@
 #include "CCalSensitiveDetectors.hh"
 
 #include "CCalutils.hh"
-#include <math.h>
+#include <cmath>
 
 #include "G4ThreeVector.hh"
 #include "G4Box.hh"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPMadlandNixSpectrum.hh,v 1.10 2005-06-04 13:44:43 jwellisc Exp $
+// $Id: G4NeutronHPMadlandNixSpectrum.hh,v 1.11 2005-06-27 15:32:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPMadlandNixSpectrum_h
@@ -32,7 +32,7 @@
 #include "Randomize.hh"
 #include "G4ios.hh"
 #include <fstream>
-#include <math.h>
+#include <cmath>
 #include "G4VNeutronHPEDis.hh"
 
 //     #include <nag.h> @

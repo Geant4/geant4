@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QTauNuclearCrossSection.hh,v 1.2 2005-06-04 13:08:23 jwellisc Exp $
+// $Id: G4QTauNuclearCrossSection.hh,v 1.3 2005-06-27 15:30:23 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -101,10 +101,10 @@ inline G4double G4QTauNuclearCrossSection::DFun(G4double x)// Parametrization of
   static const G4double pos=16.5;                      // HE Pomeron shift
   static const G4double reg=.11;                       // HE Reggeon slope
   static const G4double mtu=1777.;                 // Mass of a muon in MeV
-  static const G4double lmtu=log(mtu);                 // Log of a muon mass
-  G4double y=exp(x-lastG-lmtu);                        // y for the x
+  static const G4double lmtu=std::log(mtu);                 // Log of a muon mass
+  G4double y=std::exp(x-lastG-lmtu);                        // y for the x
   G4double flux=lastG*(2.-y*(2.-y))-1.;                // flux factor
-  return (poc*(x-pos)+shd*exp(-reg*x))*flux;
+  return (poc*(x-pos)+shd*std::exp(-reg*x))*flux;
 }
 
 inline G4double G4QTauNuclearCrossSection::Fun(G4double x) // Integrated PhoNuc cross section
@@ -117,44 +117,44 @@ inline G4double G4QTauNuclearCrossSection::Fun(G4double x) // Integrated PhoNuc 
 
 inline G4double G4QTauNuclearCrossSection::HighEnergyJ1(G4double lEn)
 {
-  static const G4double le=log(50000.); // log(E0)
+  static const G4double le=std::log(50000.); // log(E0)
   static const G4double le2=le*le;      // log(E0)^2
   static const G4double a=.0375;        // a
   static const G4double ha=a*.5;        // a/2
   static const G4double ab=a*16.5;      // a*b
   static const G4double d=0.11;         // d
   static const G4double cd=1.0734/d;    // c/d
-  static const G4double ele=exp(-d*le); // E0^(-d)
-  return ha*(lEn*lEn-le2)-ab*(lEn-le)-cd*(exp(-d*lEn)-ele);
+  static const G4double ele=std::exp(-d*le); // E0^(-d)
+  return ha*(lEn*lEn-le2)-ab*(lEn-le)-cd*(std::exp(-d*lEn)-ele);
 }
 
 inline G4double G4QTauNuclearCrossSection::HighEnergyJ2(G4double lEn)
 {
   static const G4double e=50000.;       // E0
-  static const G4double le=log(e);      // log(E0)
+  static const G4double le=std::log(e);      // log(E0)
   static const G4double le1=(le-1.)*e;  // (log(E0)-1)*E0
   static const G4double a=.0375;        // a
   static const G4double ab=a*16.5;      // a*b
   static const G4double d=1.-0.11;      // 1-d
   static const G4double cd=1.0734/d;    // c/(1-d)
-  static const G4double ele=exp(d*le);  // E0^(1-d)
-  G4double En=exp(lEn);
-  return a*((lEn-1.)*En-le1)-ab*(En-e)+cd*(exp(d*lEn)-ele);
+  static const G4double ele=std::exp(d*le);  // E0^(1-d)
+  G4double En=std::exp(lEn);
+  return a*((lEn-1.)*En-le1)-ab*(En-e)+cd*(std::exp(d*lEn)-ele);
 }
 
 inline G4double G4QTauNuclearCrossSection::HighEnergyJ3(G4double lEn)
 {
   static const G4double e=50000.;       // E0
-  static const G4double le=log(e);      // log(E0)
+  static const G4double le=std::log(e);      // log(E0)
   static const G4double e2=e*e;         // E0^2
   static const G4double leh=(le-.5)*e2; // (log(E0)-.5)*E0^2
   static const G4double ha=.0375*.5;    // a/2
   static const G4double hab=ha*16.5;    // a*b/2
   static const G4double d=2.-.11;       // 2-d
   static const G4double cd=1.0734/d;    // c/(2-d)
-  static const G4double ele=exp(d*le);  // E0^(2-d)
-  G4double lastE2=exp(lEn+lEn);
-  return ha*((lEn-.5)*lastE2-leh)-hab*(lastE2-e2)+cd*(exp(d*lEn)-ele);
+  static const G4double ele=std::exp(d*le);  // E0^(2-d)
+  G4double lastE2=std::exp(lEn+lEn);
+  return ha*((lEn-.5)*lastE2-leh)-hab*(lastE2-e2)+cd*(std::exp(d*lEn)-ele);
 }
 
 #endif

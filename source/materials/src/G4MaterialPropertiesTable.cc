@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.cc,v 1.16 2005-05-16 22:21:05 gum Exp $
+// $Id: G4MaterialPropertiesTable.cc,v 1.17 2005-06-27 15:28:57 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -243,13 +243,13 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
     G4double n1 = rindex->GetProperty();
     G4double vg;
     // add entry at first photon energy
-    vg = c_light/(n0+(n1-n0)/log(E1/E0));
+    vg = c_light/(n0+(n1-n0)/std::log(E1/E0));
     // allow only for 'normal dispersion' -> dn/d(logE) > 0
     if(vg<0 || vg>c_light/n0)vg = c_light/n0;
     groupvel->AddElement( E0, vg );
     // add entries at midpoints between remaining photon energies
     while(1) {
-      vg = c_light/( 0.5*(n0+n1)+(n1-n0)/log(E1/E0));
+      vg = c_light/( 0.5*(n0+n1)+(n1-n0)/std::log(E1/E0));
       // allow only for 'normal dispersion' -> dn/d(logE) > 0
       if(vg<0 || vg>c_light/(0.5*(n0+n1)))vg = c_light/(0.5*(n0+n1));
       groupvel->AddElement( 0.5*(E0+E1), vg );
@@ -261,7 +261,7 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
       n1 = rindex->GetProperty();
     }
     // add entry at last photon energy
-    vg = c_light/(n1+(n1-n0)/log(E1/E0));
+    vg = c_light/(n1+(n1-n0)/std::log(E1/E0));
     // allow only for 'normal dispersion' -> dn/d(logE) > 0
     if(vg<0 || vg>c_light/n1)vg = c_light/n1;
     groupvel->AddElement( E1, vg );

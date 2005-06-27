@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test1.cc,v 1.3 2001-07-11 10:01:11 gunter Exp $
+// $Id: test1.cc,v 1.4 2005-06-27 15:28:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@
 // Simply tests linkability of kernel without visualization.
 
 #include "G4ios.hh"
-#include <math.h>
+#include <cmath>
 
 #include "BuildCalorimeter.hh"
 #include "G4VPhysicalVolume.hh"

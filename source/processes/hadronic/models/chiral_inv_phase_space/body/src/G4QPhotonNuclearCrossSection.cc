@@ -114,8 +114,8 @@ G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G
   static const G4double Emin=THmin+(nL-1)*dE; // minE for the HighE part
   static const G4double Emax=50000.;       // maxE for the HighE part
   static const G4int    nH=224;            // A#of HResonance points in lnE
-  static const G4double milE=log(Emin);    // Low logarithm energy for the HighE part
-  static const G4double malE=log(Emax);    // High logarithm energy (each 2.75 percent)
+  static const G4double milE=std::log(Emin);    // Low logarithm energy for the HighE part
+  static const G4double malE=std::log(Emax);    // High logarithm energy (each 2.75 percent)
   static const G4double dlE=(malE-milE)/(nH-1); // Step in log energy in the HighE part
   //
   //static const G4double shd=1.075-.0023*log(2.);  // HE PomShadowing(D)
@@ -147,7 +147,7 @@ G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G
     }
 	   else                             // This isotope wasn't calculated previously => CREATE
 	   {
-      G4double lnA=log(A);                  // The nucleus is not found in DB. It is new.
+      G4double lnA=std::log(A);                  // The nucleus is not found in DB. It is new.
       if(A==1.) lastSP=1.;                  // The Reggeon shadowing (A=1)
       else      lastSP=A*(1.-shc*lnA);      // The Reggeon shadowing
 #ifdef debug
@@ -187,7 +187,7 @@ G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G
   }
   else if (Energy<Emax)                     // High Energy region
   {
-    G4double lE=log(Energy);
+    G4double lE=std::log(Energy);
 #ifdef debug
     G4cout<<"G4QPhotNucCS::CalcCS: before HEN nH="<<nH<<",iE="<<milE<<",dlE="<<dlE<<G4endl;
 #endif
@@ -195,10 +195,10 @@ G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G
   }
   else                                      // UHE region (calculation, not frequent)
   {
-    G4double lE=log(Energy);
+    G4double lE=std::log(Energy);
     G4double sh=shd;
     if(A==1.)sh=shp;
-    sigma=lastSP*(poc*(lE-pos)+sh*exp(-reg*lE));
+    sigma=lastSP*(poc*(lE-pos)+sh*std::exp(-reg*lE));
   }
 #ifdef debug
   G4cout<<"G4PhotonNuclearCrossSection::CalcCS: sigma="<<sigma<<G4endl;
@@ -1483,13 +1483,13 @@ G4int G4QPhotonNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4doub
     return -1;
   }
   G4int r=0;                            // Low channel for GDR (filling-flag for GDR)
-  for(G4int i=0; i<nLA; i++) if(fabs(a-LA[i])<.0005)
+  for(G4int i=0; i<nLA; i++) if(std::fabs(a-LA[i])<.0005)
   {
     for(G4int k=0; k<nL; k++) y[k]=SL[i][k];
     r=1;                                // Flag of filled GDR part 
   }
   G4int h=0;
-  for(G4int j=0; j<nHA; j++) if(fabs(a-HA[j])<.0005)
+  for(G4int j=0; j<nHA; j++) if(std::fabs(a-HA[j])<.0005)
   {
     for(G4int k=0; k<nH; k++) z[k]=SH[j][k];
     h=1;                                // Flag of filled GDR part 

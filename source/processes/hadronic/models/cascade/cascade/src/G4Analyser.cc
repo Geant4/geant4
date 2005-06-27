@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 #include "G4Analyser.hh"
-#include <math.h>
+#include <cmath>
 
 G4Analyser::G4Analyser()
   :verboseLevel(1)  {

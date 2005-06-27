@@ -1,3 +1,7 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
 // * The following disclaimer summarizes all the specific disclaimers *
 // * of contributors to this software. The specific disclaimers,which *
 // * govern, are listed with their locations in:                      *
@@ -20,7 +24,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.82 2005-05-20 12:07:37 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.83 2005-06-27 15:30:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------

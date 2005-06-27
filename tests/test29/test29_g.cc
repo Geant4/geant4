@@ -344,7 +344,7 @@ int main()
   // *********** Now momb is a momentum of the incident particle *************
   G4double mp=G4QPDGCode(pPDG).GetMass();             // @@ just for the check
   momb=momb;
-  G4double ep=sqrt(mp*mp+momb*momb);                  // @@ just for the check
+  G4double ep=std::sqrt(mp*mp+momb*momb);                  // @@ just for the check
   if(enb>0.) ep=enb;
   //G4int tPDG=90000000+tgZ*1000+tgN;
   G4int    tgZ=(tPDG-90000000)/1000;
@@ -611,7 +611,7 @@ int main()
   // @@ G4double px, py, pz, pt;
   G4VParticleChange* aChange = 0;
   G4double e0 = energy+pMass;
-  G4double pmax=sqrt(e0*e0-pMass*pMass);
+  G4double pmax=std::sqrt(e0*e0-pMass*pMass);
   //G4int nEvt=100;
   // Randomization loop: cycle random generator, using 2 lower digits in nEvt
   G4int    iRandCount = nEvt%100;
@@ -709,11 +709,11 @@ int main()
         e = 0.0;
       }
 	     // for exclusive reaction 2 particles in final state
-	     p = sqrt(e*(e + m + m));
+	     p = std::sqrt(e*(e + m + m));
 	     mom *= p;
       lorV = G4LorentzVector(mom, e + m);    // "e" is a Kinetic energy!
       totSum -= lorV;
-      if(fabs(m-lorV.m())>.005)
+      if(std::fabs(m-lorV.m())>.005)
 	     {
 		      G4cerr<<"***Test29: m="<<lorV.m()<<" # "<<m<<", d="<<lorV.m()-m<<G4endl;
         alarm=true;
@@ -743,7 +743,7 @@ int main()
       //if(c==90002002) nAlphas++;                     // Alphas
       if(c==2212) nProtons++;                        // Protons
       if(c==2112) nNeutrons++;                       // Neutrons
-      if(c==2112 && fabs(e-1005.)<3.) nSpNeut++;     // Dibar-Neutrons
+      if(c==2112 && std::fabs(e-1005.)<3.) nSpNeut++;     // Dibar-Neutrons
       //if(c==90002002 && e-m<7.) nSpAlph++;           // Special Alphas
       if(c==111) nP0++;                              // Neutral  pions
       if(c==-211) nPN++;                             // Negative pions
@@ -758,7 +758,7 @@ int main()
       delete aChange->GetSecondary(i);
 	   } // End of the LOOP over secondaries
 	   //	delete secondaries in the end of the event       	 
-    G4double ss=fabs(totSum.t())+fabs(totSum.x())+fabs(totSum.y())+fabs(totSum.z());    
+    G4double ss=std::fabs(totSum.t())+std::fabs(totSum.x())+std::fabs(totSum.y())+std::fabs(totSum.z());    
 #ifdef pdebug
     G4cout<<">TEST29:r4M="<<totSum<<ss<<",rChrg="<<totCharge<<",rBaryN="<<totBaryN<<G4endl;
 #endif
@@ -798,7 +798,7 @@ int main()
         G4QPDGCode cQPDG(c);
         sm   = cQPDG.GetMass();
         e    = sec->GetKineticEnergy();
-	       p    = sqrt(e*(e + m + m));
+	       p    = std::sqrt(e*(e + m + m));
 	       mom *= p;
         lorV = G4LorentzVector(mom, e + m);    // "e" is a Kinetic energy!
         totSum -= lorV;
