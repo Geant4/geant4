@@ -166,7 +166,7 @@ void LXeDetectorConstruction::DefineMaterials(){
   Pstyrene->SetMaterialPropertiesTable(MPTPStyrene);
 
   G4double RefractiveIndexFiber[WLS_NUMENTRIES]={ 1.60, 1.60, 1.60, 1.60};
-  G4double AbsFiber[WLS_NUMENTRIES]={0.1*mm,0.1*mm,9.00*m,9.00*m};
+  G4double AbsFiber[WLS_NUMENTRIES]={9.00*m,9.00*m,0.1*mm,0.1*mm};
   G4double EmissionFib[WLS_NUMENTRIES]={0.0, 0.0,1.0, 1.0};
   G4MaterialPropertiesTable* MPTFiber = new G4MaterialPropertiesTable();
   MPTFiber->AddProperty("RINDEX",WLS_Energy,RefractiveIndexFiber,
