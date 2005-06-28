@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationGEMFactory.hh,v 1.2 2005-06-04 13:25:25 jwellisc Exp $
+// $Id: G4EvaporationGEMFactory.hh,v 1.3 2005-06-28 11:09:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -51,4 +51,24 @@ private:
 
 
 };
+
+#include "G4Pair.hh"
+#include "G4VEvaporationChannel.hh"
+#include "G4PhotonEvaporation.hh"
+
+template<class U>
+void gem_push_one_new
+(std::vector<G4VEvaporationChannel*> * list)
+{
+  list->push_back(new typename U::first);
+  gem_push_one_new<typename U::rest>(list);
+}
+// partial specialization not supported yet...
+template<> 
+void gem_push_one_new<G4Pair<G4PhotonEvaporation, G4Terminator> >
+(std::vector<G4VEvaporationChannel*> * list)
+{
+  list->push_back(new G4PhotonEvaporation);
+}
+
 #endif

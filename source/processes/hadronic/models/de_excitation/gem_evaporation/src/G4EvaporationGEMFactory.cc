@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationGEMFactory.cc,v 1.4 2005-06-08 06:26:06 jwellisc Exp $
+// $Id: G4EvaporationGEMFactory.cc,v 1.5 2005-06-28 11:09:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -96,11 +96,7 @@
 #include "G4Mg27GEMChannel.hh"
 #include "G4Mg28GEMChannel.hh"
 
-#include "G4Pair.hh"
-
 #include "G4CompetitiveFission.hh"
-#include "G4PhotonEvaporation.hh"
-
 
 const G4EvaporationGEMFactory & 
 G4EvaporationGEMFactory::operator=(const G4EvaporationGEMFactory & )
@@ -137,32 +133,13 @@ typedef GROUP68(G4NeutronGEMChannel, G4ProtonGEMChannel, G4DeuteronGEMChannel, G
                 G4Na21GEMChannel, G4Na22GEMChannel, G4Na23GEMChannel, G4Na24GEMChannel, G4Na25GEMChannel,
                 G4Mg22GEMChannel, G4Mg23GEMChannel, G4Mg24GEMChannel, G4Mg25GEMChannel, G4Mg26GEMChannel,
                 G4Mg27GEMChannel, G4Mg28GEMChannel, G4CompetitiveFission, G4PhotonEvaporation) the_channels;
-
-  template<class U>
-  void gem_push_one_new(std::vector<G4VEvaporationChannel*> * list)
-  {
-    list->push_back(new typename U::first);
-    gem_push_one_new<typename U::rest>(list);
-  }
-  // partial specializaion not supported yet...
-  template<> 
-  void gem_push_one_new<G4Pair<G4PhotonEvaporation, G4Terminator> >(std::vector<G4VEvaporationChannel*> * list)
-  {
-    list->push_back(new G4PhotonEvaporation);
-  }
                  
-std::vector<G4VEvaporationChannel*> * G4EvaporationGEMFactory::
-CreateChannel()
+std::vector<G4VEvaporationChannel*> * G4EvaporationGEMFactory::CreateChannel()
 {
   std::vector<G4VEvaporationChannel*> * theChannel = 
     new std::vector<G4VEvaporationChannel*>;
   theChannel->reserve(68);
   gem_push_one_new<the_channels>(theChannel);
 
-
   return theChannel;
-
 }
-
-
-
