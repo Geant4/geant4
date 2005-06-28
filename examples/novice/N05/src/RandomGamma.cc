@@ -26,6 +26,7 @@
 // distribution.
 // --------------------------------------------
 #include "RandomGamma.hh"
+#include <cmath>
 #include <CLHEP/Random/Randomize.h>
 
 double RandomGamma(double p)
