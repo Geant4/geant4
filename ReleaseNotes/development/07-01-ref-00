@@ -387,6 +387,8 @@ examples                                         examples-V07-01-00
     + Removed QED builder70.
     + Migrated to use NIST materials and "ApplyCuts" option.
     + Bug fix in UI for step-limiter.
+  o optical/LXe (LXe-V07-00-00)
+    + Fixed a material dependent parameter input. 
   o radioactivedecay/exrdm (exrdm-V07-00-00)
     + Updated physics list and added macro test.mac for testing it.
   o runAndEvent/RE01 (exampleRE01-V07-00-02)
