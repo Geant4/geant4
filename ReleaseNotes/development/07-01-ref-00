@@ -120,7 +120,7 @@ particles                                        particles-V07-00-04
 - Added GetPDGcode() method to G4DynamicParticle.
 - Added neutrino energy spectrum in MuonDecayChannel.
 - G4ParticleDefinition now uses G4cerr instead of cerr.
-- Fixes to replace M_PI with 'pi'. (partman-V07-00-00)
+- Fixes to replace M_PI with 'pi'. (partman-V07-00-01)
 
 processes/electromagnetic/highenergy             highenergy-V07-00-01
 ------------------------------------
@@ -203,7 +203,8 @@ processes/hadronic                               ghad-V07-00-01
     large scattering angles.
 - models/de_excitation
   o fermi_breakup: registration of fermi fragments made less redundant.
-  o gem_evaporation: channel registration sequence simplified.
+  o gem_evaporation (gem_evaporation-V07-00-00):
+    fix in channel registration sequence.
   o handler: fixed a small memory leak for light fragments.
 - models/low_energy
   o Fixed cases of very rare crashes for low energy strange particle
