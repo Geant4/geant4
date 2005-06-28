@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.22 2005-05-15 16:08:25 duns Exp $
+# $Id: GNUmakefile,v 1.23 2005-06-28 08:47:50 gcosmo Exp $
 
 name := G4visHepRep
 
@@ -7,6 +7,9 @@ ifndef G4INSTALL
 endif
 
 GLOBLIBS  = libG4vis_management.lib libG4modeling.lib
+ifdef G4LIB_BUILD_ZLIB
+  GLOBLIBS += libG4zlib.lib
+endif
 GLOBLIBS += libG4run.lib libG4event.lib
 GLOBLIBS += libG4tracking.lib libG4processes.lib libG4digits_hits.lib
 GLOBLIBS += libG4track.lib libG4particles.lib libG4geometry.lib
@@ -18,12 +21,12 @@ include $(G4INSTALL)/config/G4VIS_BUILD.gmk
 include $(G4INSTALL)/config/interactivity.gmk
 
 ifdef G4LIB_USE_ZLIB
-CPPFLAGS += -DG4LIB_USE_ZLIB
-ifdef G4LIB_BUILD_ZLIB
-CPPFLAGS += -I$(G4BASE)/visualization/externals/zlib/include
-endif
+  CPPFLAGS += -DG4LIB_USE_ZLIB
+  ifdef G4LIB_BUILD_ZLIB
+    CPPFLAGS += -I$(G4BASE)/visualization/externals/zlib/include
+  endif
 else
-CPPFLAGS += -DCHEPREP_NO_ZLIB
+  CPPFLAGS += -DCHEPREP_NO_ZLIB
 endif
 
 CPPFLAGS += -I$(G4BASE)/event/include
