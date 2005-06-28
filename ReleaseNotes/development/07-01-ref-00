@@ -404,6 +404,9 @@ examples                                         examples-V07-01-00
   o N03 (exampleN03-V07-00-03)
     + Completed replacement of vis manager with G4VisExecutive.
     + Decreased size of trajectory points in EventAction.
+  o N05 (exampleN05-V07-00-00)
+    + Fixed usage of std namespace for mathematical functions in RandomGamma
+      utility function.
 
 tests                                            tests-V07-01-00
 -----
