@@ -1,4 +1,4 @@
-$Id: History,v 1.152 2005-06-24 16:01:03 vnivanch Exp $
+$Id: History,v 1.153 2005-06-28 09:14:14 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -22,6 +22,7 @@ committal in the CVS repository !
   of chemical effect be independent on method of material definition (by
   number of atoms or by mass fractions); 
 - Increase number of bins for internal table of G4BetheHeitlerModel
+- Add protection for (tmax < meanPot and pot0) in G4UniversalFluctuations
 
 30 May 05: V.Ivant (stand-V07-00-11)
 - Fix compilation warning at SUN in G4BaggIonModel; 
