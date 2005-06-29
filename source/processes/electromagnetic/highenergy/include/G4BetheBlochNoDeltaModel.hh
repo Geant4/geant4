@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheBlochNoDeltaModel.hh,v 1.2 2005-05-18 11:02:10 vnivanch Exp $
+// $Id: G4BetheBlochNoDeltaModel.hh,v 1.3 2005-06-29 16:57:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -95,7 +95,7 @@ inline G4double G4BetheBlochNoDeltaModel::ComputeDEDXPerVolume(
 			    const G4ParticleDefinition* pd,
                             G4double kinEnergy, G4double)
 {
-  G4double dedx = G4BraggIonModel::ComputeDEDXPerVolume(material, pd, kinEnergy, DBL_MAX);
+  G4double dedx = G4BetheBlochModel::ComputeDEDXPerVolume(material, pd, kinEnergy, DBL_MAX);
   if(mcharge2 > 2.0) {
     G4double m = pd->GetPDGMass();
     dedx *= mcharge2*kinEnergy*(kinEnergy + 2.0*m)/((kinEnergy + m)*(kinEnergy + m));
