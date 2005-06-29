@@ -190,13 +190,6 @@ modify their implementation of the helper method for visualization
 <TT>AddSolid()</TT>.
 
 <P> </P>
-<B>G4VHit</B>
-<P> </P>
-A minor change to the interface (removed <TT>const</TT> qualifier for the returned type)
-to the virtual method <TT>CreateAttValues()</TT>, may require adaptation of the user code.
-
-
-<P> </P>
 <A NAME="7."></A>
 <HR>
 
@@ -621,22 +614,30 @@ please refer to the related History files provided in most packages):
 <A NAME="vis-notes">
 <H3><I>Visualization</I></H3></A>
 <UL>
-<LI><B>FukuiRenderer</B>
+<LI><B>HepRepFile</B>
     <UL>
-    <LI>Fixed bug introduced in <TT>ClearTransientStore()</TT>.</LI>
+    <LI>Providing more efficient representation of many solids (reduces
+        typical geometry file sizes by half).</LI>
+    <LI>Allow user to specify output directory and filename.</LI>
+    <LI>Allow user to specify whether to append a file number to the file
+        name or to overwrite a single file.</LI>
+    <LI>Allow user to specify whether or not invisible volumes should be
+        culled from the HepRepFile.</LI>
+    <LI>Correctly respect trajectory color from <TT>G4VisAttributes</TT>.</LI>
+    <LI>Handling <TT>G4VisAttributes</TT> from hits.</LI>
+    <LI>Using <TT>G4AttCheck</TT> to standardize attribute units.</LI>
+    <LI>Decomposed attributes that are 3Vectors into three separate HepRep
+        Attributes.</LI>
     </UL></LI>
-<LI><B>HepRep</B>
+<LI><B>HepRepXML</B>
     <UL>
-    <LI>Reorganised ZLIB and ZIPIOS++ code.</LI>
-    <LI>Updated HEPREP to version 2.0.1 and cheprep to version 2.0.5.</LI>
-    <LI>Fixed problems with sequential heprep files, gz files and too much info.</LI>
-    <LI>HepRepFile: improved handling of solids; added writing an EOF marker
-        for each binary file; allow user to specify output directory, filename
-        and whether to overwrite; corrected heprep xmlns reference; use <TT>G4AttCheck</TT>
-        to standardize attribute units; use attributes from hits; fixed bug
-        introduced in <TT>ClearTransientStore()</TT>.</LI>
-    <LI>HepRep2 now handling Solids, Attributes on Hits and Tracks.</LI>
+    <LI>Fixed problems with sequential heprep files, gz files and too much
+        info.</LI>
     <LI>Fixes for compilation on gcc-4.0.0.</LI>
+    <LI>Moved to heprep version 2.0.1 and cheprep version 2.0.5.</LI>
+    <LI>Reorganised ZLIB and ZIPIOS++ code.</LI>
+    <LI>Providing more efficient representation of many solids.</LI>
+    <LI>Handling attributes on hits and trajectories.</LI>
     </UL></LI>
 <LI><B>management</B>
     <UL>
@@ -709,10 +710,6 @@ please refer to the related History files provided in most packages):
         <TT>G4LogicalVolume::GetMass()</TT>; added printing of names of sensitive
         detector (if any) and readout geometry (if any).</LI>
     <LI>Improved ASCIITree guidance.</LI>
-    </UL></LI>
-<LI><B>VRML</B>
-    <UL>
-    <LI>Fixed bug introduced in <TT>ClearTransientStore()</TT>.</LI>
     </UL></LI>
 <LI><B>XXX</B>
     <UL>
@@ -805,7 +802,9 @@ please refer to the related History files provided in most packages):
     <LI>analysis/A01
         <UL>
         <LI>Fixed linking problem with AIDA on WIN32-VC.</LI>
-        <LI>Added <TT>G4Atts</TT> to hit classes and fixed filling of hit histograms.</LI>
+        <LI>Added <TT>G4Atts</TT> to hits so that one can see them if hits
+            are picked in WIRED.</LI>
+        <LI>Fixed filling of hit histograms.</LI>
         <LI>Updated documentation for the use of Binary HepRep.</LI>
         <LI>Added setting of initial viewpoint to macro files.</LI>
         <LI>Added bheprep example files.</LI>
@@ -940,8 +939,8 @@ please refer to the related History files provided in most packages):
     <LI>runAndEvent/RE01
         <UL>
         <LI>Added visualization.</LI>
-        <LI>Added <TT>G4Atts</TT> to hit classes.</LI>
-        <LI>Corrected unused attribute values from blank to space.</LI>
+        <LI>Added <TT>G4Atts</TT> to hits so that one can see them if hits
+            are picked in WIRED.</LI>
         </UL></LI>
     </UL></LI>
 <LI><B>novice</B>
