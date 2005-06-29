@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (23-February-2005)
+ Geant4 version Name: run-V07-00-05    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -80,8 +80,6 @@ Ionic processes for IonC12
 Ionic processes for alpha
 Hadronic processes for anti_proton
 Ionic processes for deuteron
-
-phot:  Total cross sections from Sandia parametrisation. 
 Hadronic processes for kaon+
 Hadronic processes for kaon-
 Hadronic processes for pi+
@@ -100,15 +98,18 @@ Set cuts for all particles!
 /gun/energy 500 keV
 /tracking/verbose 0
 /run/beamOn 1000
-G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
-compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-       Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+phot:  Total cross sections from Sandia parametrisation. 
 
-conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
-        e+e- energies according Bethe-Heitler
-        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according to the Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -138,9 +139,9 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -254,21 +255,22 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 0 start.
 Start Run processing.
+EvtNo= 364  length= 0.00580701  xend= -2.31297e-15
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.37s Real=4.27s Sys=1.89s
+  User=6.09s Real=7.69s Sys=1.53s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.18734 +- 0.00540938  microns 
-    CSDA  Range  in absorber = 9.0416 +- 0.00654108  microns 
+ end of Run TotNbofEvents = 999 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
+    Track Length in absorber = 9.18427 +- 0.00539586  microns 
+    CSDA  Range  in absorber = 9.04141 +- 0.00652432  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.128342 +- 0.00540938 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.172603 +- 0.00654108 microns 
+    Track Length (G4 - ICRU49) = 0.125265 +- 0.00539586 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.172411 +- 0.00652432 microns 
 
 Average Number electrons per event = 0
 Average Number photons per event   = 0
@@ -300,12 +302,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.35s Real=4.13s Sys=1.77s
+  User=5.43s Real=7.2s Sys=1.77s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.17829 +- 0.00554991  microns 
-    CSDA  Range  in absorber = 9.02265 +- 0.00604082  microns 
+    Track Length in absorber = 9.19003 +- 0.0056754  microns 
+    CSDA  Range  in absorber = 9.03842 +- 0.0061664  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
@@ -337,78 +339,79 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 2 start.
 Start Run processing.
-EvtNo= 22  length= 0.00862166  xend= 0.00297798
-EvtNo= 30  length= 0.00877116  xend= 0.00161317
-EvtNo= 47  length= 0.00876861  xend= 0.00260852
-EvtNo= 50  length= 0.00869258  xend= 0.00419296
-EvtNo= 53  length= 0.00869358  xend= 0.00140399
-EvtNo= 98  length= 0.00884916  xend= 0.00419117
-EvtNo= 114  length= 0.00868353  xend= 0.00166092
-EvtNo= 149  length= 0.00865358  xend= 0.00118349
-EvtNo= 158  length= 0.00880173  xend= 0.00425539
-EvtNo= 175  length= 0.00880153  xend= 0.00169807
-EvtNo= 181  length= 0.00868333  xend= 0.00431193
-EvtNo= 186  length= 0.00880299  xend= 0.0035163
-EvtNo= 194  length= 0.00879293  xend= 0.00394373
-EvtNo= 205  length= 0.00881453  xend= 0.0033816
-EvtNo= 230  length= 0.00867877  xend= 0.00162247
-EvtNo= 290  length= 0.00866244  xend= 0.00393179
-EvtNo= 316  length= 0.00864045  xend= 0.00107974
-EvtNo= 326  length= 0.00894291  xend= 0.00158402
-EvtNo= 332  length= 0.00881349  xend= 0.00316871
-EvtNo= 336  length= 0.00878998  xend= 0.000865617
-EvtNo= 360  length= 0.00873532  xend= 0.00368324
-EvtNo= 403  length= 0.00865898  xend= 0.00175777
-EvtNo= 411  length= 0.00887867  xend= 0.00409408
-EvtNo= 424  length= 0.00863606  xend= 0.00377402
-EvtNo= 427  length= 0.00873765  xend= 0.00399763
-EvtNo= 432  length= 0.00865419  xend= 0.00414294
-EvtNo= 462  length= 0.00891727  xend= 0.00196175
-EvtNo= 468  length= 0.00876322  xend= 0.00390331
-EvtNo= 516  length= 0.00884845  xend= 0.0018838
-EvtNo= 527  length= 0.00889833  xend= 0.00135761
-EvtNo= 556  length= 0.00863797  xend= 0.00167078
-EvtNo= 569  length= 0.0087971  xend= 0.00222735
-EvtNo= 571  length= 0.00866121  xend= 0.00351962
-EvtNo= 574  length= 0.00867909  xend= 0.00100106
-EvtNo= 582  length= 0.00859831  xend= 0.00118437
-EvtNo= 689  length= 0.00871256  xend= 0.00286708
-EvtNo= 695  length= 0.0088323  xend= 0.0031175
-EvtNo= 708  length= 0.00883946  xend= 0.00344681
-EvtNo= 709  length= 0.00884902  xend= 0.00399679
-EvtNo= 744  length= 0.00869155  xend= 0.0018863
-EvtNo= 755  length= 0.00892926  xend= 0.00202944
-EvtNo= 759  length= 0.00898812  xend= 0.00130861
-EvtNo= 762  length= 0.00876462  xend= 0.00337074
-EvtNo= 765  length= 0.00870932  xend= 0.00181995
-EvtNo= 771  length= 0.00882276  xend= 0.00125877
-EvtNo= 777  length= 0.00868975  xend= 0.00248151
-EvtNo= 781  length= 0.00851378  xend= 0.00402951
-EvtNo= 783  length= 0.00872145  xend= 0.00188084
-EvtNo= 795  length= 0.0089961  xend= 0.00346101
-EvtNo= 804  length= 0.00871612  xend= 0.00431434
-EvtNo= 813  length= 0.00871173  xend= 0.00358202
-EvtNo= 827  length= 0.00900563  xend= 0.00353932
-EvtNo= 854  length= 0.00866583  xend= 0.00176493
-EvtNo= 858  length= 0.0085146  xend= 0.00181291
-EvtNo= 861  length= 0.00875431  xend= 0.00373261
-EvtNo= 869  length= 0.00864469  xend= 0.00104364
-EvtNo= 872  length= 0.00881179  xend= 0.00227738
-EvtNo= 876  length= 0.00866577  xend= 0.00229012
-EvtNo= 904  length= 0.00858731  xend= 0.000938164
-EvtNo= 937  length= 0.00870244  xend= 0.00406685
-EvtNo= 945  length= 0.00881807  xend= 0.000774638
-EvtNo= 970  length= 0.00891886  xend= 0.00299559
-EvtNo= 975  length= 0.00887208  xend= 0.00101975
+EvtNo= 2  length= 0.0088503  xend= 0.00113232
+EvtNo= 4  length= 0.00853559  xend= 0.00120212
+EvtNo= 26  length= 0.00871399  xend= 0.00207159
+EvtNo= 32  length= 0.00854622  xend= 0.00400097
+EvtNo= 87  length= 0.00891426  xend= 0.0013262
+EvtNo= 91  length= 0.00873863  xend= 0.00200113
+EvtNo= 97  length= 0.00876928  xend= 0.00248084
+EvtNo= 106  length= 0.00870466  xend= 0.00425237
+EvtNo= 127  length= 0.00872078  xend= 0.00302462
+EvtNo= 130  length= 0.00869126  xend= 0.00240617
+EvtNo= 137  length= 0.0086921  xend= 0.00058998
+EvtNo= 149  length= 0.008818  xend= 0.00331322
+EvtNo= 169  length= 0.00869001  xend= 0.00330889
+EvtNo= 172  length= 0.00879294  xend= 0.00260256
+EvtNo= 201  length= 0.00866973  xend= 0.00307576
+EvtNo= 242  length= 0.008834  xend= 0.00125854
+EvtNo= 252  length= 0.00904008  xend= 0.00254278
+EvtNo= 282  length= 0.00879399  xend= 0.00136406
+EvtNo= 300  length= 0.00890029  xend= 0.000716006
+EvtNo= 303  length= 0.00860944  xend= 0.00316979
+EvtNo= 323  length= 0.00878196  xend= 0.00269053
+EvtNo= 325  length= 0.00879869  xend= 0.00272351
+EvtNo= 337  length= 0.00859047  xend= 0.00278631
+EvtNo= 344  length= 0.00884525  xend= 0.0034736
+EvtNo= 353  length= 0.00893054  xend= 0.00193892
+EvtNo= 389  length= 0.00874461  xend= 0.00199523
+EvtNo= 400  length= 0.00892748  xend= 0.00432525
+EvtNo= 406  length= 0.00878945  xend= 0.001045
+EvtNo= 418  length= 0.00868487  xend= 0.00186262
+EvtNo= 420  length= 0.00866776  xend= 0.00239686
+EvtNo= 424  length= 0.00887511  xend= 0.00287695
+EvtNo= 431  length= 0.00860899  xend= 0.00237189
+EvtNo= 435  length= 0.00894794  xend= 0.00279463
+EvtNo= 450  length= 0.00857447  xend= 0.00358035
+EvtNo= 452  length= 0.0086821  xend= 0.00317397
+EvtNo= 468  length= 0.00891622  xend= 0.000875823
+EvtNo= 469  length= 0.00866045  xend= 0.00168392
+EvtNo= 489  length= 0.00890671  xend= 0.00203275
+EvtNo= 513  length= 0.00891205  xend= 0.00372846
+EvtNo= 537  length= 0.00868464  xend= 0.00331162
+EvtNo= 548  length= 0.00883252  xend= 0.00393259
+EvtNo= 565  length= 0.0087195  xend= 0.00266097
+EvtNo= 580  length= 0.00872816  xend= 0.0043465
+EvtNo= 613  length= 0.00896282  xend= 0.00279493
+EvtNo= 648  length= 0.00859661  xend= 0.00178747
+EvtNo= 656  length= 0.0086663  xend= 0.00380182
+EvtNo= 705  length= 0.00870542  xend= 0.00101675
+EvtNo= 712  length= 0.00888447  xend= 0.00319302
+EvtNo= 717  length= 0.00898204  xend= 0.000651326
+EvtNo= 734  length= 0.00884943  xend= 0.00240569
+EvtNo= 737  length= 0.00873207  xend= 0.00222096
+EvtNo= 746  length= 0.00873015  xend= 0.00267687
+EvtNo= 792  length= 0.00885989  xend= 0.00438418
+EvtNo= 793  length= 0.00870235  xend= 0.00287036
+EvtNo= 815  length= 0.00869636  xend= 0.0028059
+EvtNo= 851  length= 0.00894017  xend= 0.000807023
+EvtNo= 865  length= 0.00889161  xend= 0.003165
+EvtNo= 882  length= 0.00879772  xend= 0.00437006
+EvtNo= 895  length= 0.00873198  xend= 0.00120837
+EvtNo= 899  length= 0.00890867  xend= 0.00149091
+EvtNo= 905  length= 0.00897821  xend= 0.00259871
+EvtNo= 951  length= 0.00873446  xend= 0.00401294
+EvtNo= 952  length= 0.00877365  xend= 0.00228478
+EvtNo= 962  length= 0.00865124  xend= 0.00146645
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.75s Real=4.45s Sys=1.7s
+  User=6.31s Real=7.86s Sys=1.54s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 937 for IonC12 with Ekin = 6 MeV p= 365.827 MeV/c
-    Track Length in absorber = 8.62177 +- 0.00378088  microns 
-    CSDA  Range  in absorber = 7.39118 +- 0.0471547  microns 
+ end of Run TotNbofEvents = 936 for IonC12 with Ekin = 6 MeV p= 365.827 MeV/c
+    Track Length in absorber = 8.65883 +- 0.0042367  microns 
+    CSDA  Range  in absorber = 7.42005 +- 0.0531062  microns 
 
     Energy deposit in absorber = 6  MeV 
 
@@ -445,21 +448,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=14.09s Real=14.34s Sys=0.23s
+  User=46.79s Real=47.13s Sys=0.23s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.21101 +- 0.0182688  microns 
-    CSDA  Range  in absorber = 9.0729 +- 0.0180863  microns 
+    Track Length in absorber = 9.19532 +- 0.0164631  microns 
+    CSDA  Range  in absorber = 9.05826 +- 0.0170721  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.152009 +- 0.0182688 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.203902 +- 0.0180863 microns 
+    Track Length (G4 - ICRU49) = 0.136318 +- 0.0164631 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.18926 +- 0.0170721 microns 
 
-Average Number electrons per event = 22.31
-Average Number photons per event   = 22.21
+Average Number electrons per event = 22.42
+Average Number photons per event   = 22.37
 
 #
 /test17/cutAugerEnergy 250 eV
@@ -489,20 +492,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=35.84s Real=37.3s Sys=1.44s
+  User=106.83s Real=107.31s Sys=0.19s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.18573 +- 0.0151566  microns 
-    CSDA  Range  in absorber = 9.0499 +- 0.0154166  microns 
+    Track Length in absorber = 9.17804 +- 0.0173155  microns 
+    CSDA  Range  in absorber = 9.02668 +- 0.0203422  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.126726 +- 0.0151566 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.180901 +- 0.0154166 microns 
+    Track Length (G4 - ICRU49) = 0.119035 +- 0.0173155 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.157676 +- 0.0203422 microns 
 
-Average Number electrons per event = 532.63
-Average Number photons per event   = 5.32
+Average Number electrons per event = 510.02
+Average Number photons per event   = 2.88
 
 G4 kernel has come to Quit state.

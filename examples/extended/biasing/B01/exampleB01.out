@@ -1,13 +1,11 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (23-February-2005)
+ Geant4 version Name: run-V07-00-05    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-
-phot:  Total cross sections from Sandia parametrisation. 
 B01PhysicsList::SetCuts:CutLength : 1 (mm)
 Going to assign importance: 1, to volume: cell_01
 Going to assign importance: 2, to volume: cell_02
@@ -101,15 +99,18 @@ DoIt Vector:
    LCapture
    Decay
 ================================================
-G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
-conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
-        e+e- energies according Bethe-Heitler
-        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according to the Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
-compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-       Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+phot:  Total cross sections from Sandia parametrisation. 
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -139,9 +140,9 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -198,26 +199,26 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
-cell_01_rep:0............ |           1 |         112 |         132 |         129 |         129 |   7.8355004 |    9.301754 |           1 |
-cell_02_rep:0............ |           2 |          83 |         179 |         178 |          89 |   6.5678399 |   9.1053844 |           1 |
-cell_03_rep:0............ |           4 |         108 |         219 |         227 |       56.75 |  0.10859253 |   9.1145058 |           1 |
-cell_04_rep:0............ |           8 |         117 |         261 |         303 |      37.875 |    8.080877 |   8.5051547 |           1 |
-cell_05_rep:0............ |          16 |         115 |         250 |         293 |     18.3125 |   7.3311766 |   8.2707176 |           1 |
-cell_06_rep:0............ |          32 |         119 |         243 |         267 |     8.34375 |    7.217487 |   8.1413088 |           1 |
-cell_07_rep:0............ |          64 |         129 |         271 |         330 |     5.15625 |   5.9957541 |   7.4088626 |           1 |
-cell_08_rep:0............ |         128 |         150 |         303 |         371 |   2.8984375 |  0.04369431 |   7.1665667 |           1 |
-cell_09_rep:0............ |         256 |         164 |         344 |         461 |   1.8007812 |   5.8930099 |   7.0336614 |           1 |
-cell_10_rep:0............ |         512 |         153 |         332 |         431 |  0.84179688 |    5.596436 |   6.6350616 |           1 |
-cell_11_rep:0............ |        1024 |         151 |         342 |         498 |  0.48632812 |   5.2777866 |   6.4401612 |           1 |
-cell_12_rep:0............ |        2048 |         179 |         369 |         563 |  0.27490234 | 0.056189038 |    5.898713 |           1 |
-cell_13_rep:0............ |        4096 |         203 |         411 |         649 |  0.15844727 |   4.6623984 |   5.9629792 |           1 |
-cell_14_rep:0............ |        8192 |         211 |         422 |         605 | 0.073852539 |  0.27051777 |   5.7648087 |           1 |
-cell_15_rep:0............ |       16384 |         208 |         423 |         649 | 0.039611816 |   3.3694673 |   5.3205326 |           1 |
-cell_16_rep:0............ |       32768 |         231 |         466 |         763 | 0.023284912 |   3.3670603 |   4.9422747 |           1 |
-cell_17_rep:0............ |       65536 |         245 |         494 |         887 | 0.013534546 |   2.9996119 |   4.9280254 |           1 |
-cell_18_rep:0............ |      131072 |         222 |         516 |         899 |0.0068588257 |   2.9951738 |   4.7428924 |           1 |
-rest_rep:0............... |      131072 |         239 |         239 |           0 |           0 |           0 |           0 |           0 |
-shieldWorld_rep:0........ |           1 |           9 |         108 |           0 |           0 |          10 |          10 |           1 |
+cell_01_rep:0............ |           1 |         109 |         128 |         116 |         116 |   9.0844649 |   9.5448707 |           1 |
+cell_02_rep:0............ |           2 |          69 |         152 |         142 |          71 |    8.514088 |   9.1338343 |           1 |
+cell_03_rep:0............ |           4 |          87 |         175 |         195 |       48.75 |   7.0706267 |   8.4721018 |           1 |
+cell_04_rep:0............ |           8 |         106 |         205 |         197 |      24.625 |   6.4781545 |    8.009855 |           1 |
+cell_05_rep:0............ |          16 |         125 |         265 |         325 |     20.3125 |   6.5346594 |   7.8737813 |           1 |
+cell_06_rep:0............ |          32 |         147 |         300 |         382 |     11.9375 |   4.8149962 |   7.5593459 |           1 |
+cell_07_rep:0............ |          64 |         151 |         322 |         410 |     6.40625 |   3.4013848 |   7.2868181 |           1 |
+cell_08_rep:0............ |         128 |         174 |         376 |         499 |   3.8984375 |   4.0138152 |   7.1811682 |           1 |
+cell_09_rep:0............ |         256 |         184 |         375 |         537 |   2.0976562 |   4.7452287 |   6.7490821 |           1 |
+cell_10_rep:0............ |         512 |         199 |         413 |         598 |   1.1679688 |  0.12715559 |   6.6545894 |           1 |
+cell_11_rep:0............ |        1024 |         209 |         427 |         670 |  0.65429688 |   3.8229542 |   5.9721558 |           1 |
+cell_12_rep:0............ |        2048 |         217 |         437 |         713 |  0.34814453 |   3.6997829 |   6.0543108 |           1 |
+cell_13_rep:0............ |        4096 |         232 |         475 |         720 |  0.17578125 |   3.8285283 |   5.9110234 |           1 |
+cell_14_rep:0............ |        8192 |         269 |         540 |         990 |  0.12084961 |   3.4219729 |   5.4792145 |           1 |
+cell_15_rep:0............ |       16384 |         291 |         584 |        1041 | 0.063537598 |   3.1097494 |    5.191823 |           1 |
+cell_16_rep:0............ |       32768 |         322 |         638 |        1155 | 0.035247803 |   3.2779116 |   5.0155103 |           1 |
+cell_17_rep:0............ |       65536 |         313 |         624 |        1178 | 0.017974854 |   2.8946874 |    4.807036 |           1 |
+cell_18_rep:0............ |      131072 |         279 |         646 |        1252 | 0.009552002 | 0.041089375 |   4.9343901 |           1 |
+rest_rep:0............... |      131072 |         301 |         301 |           0 |           0 |           0 |           0 |           0 |
+shieldWorld_rep:0........ |           1 |          12 |         111 |           0 |           0 |          10 |          10 |           1 |
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: MassImportanceProcess, will be removed!
   The initial Vectors: 

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (23-February-2005)
+ Geant4 version Name: run-V07-00-05    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -34,6 +34,17 @@ G4Material: Mean excitation energy is changed for G4_CESIUM_IODIDE Iold= 491.166
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
 /run/verbose 1
 #/tracking/verbose 1
 #
@@ -99,7 +110,7 @@ PhysicsList::AddPhysicsList: <standard>
 
 Ecal is 36 cm  of G4_CESIUM_IODIDE
 Absorber is 2 mm  of G4_Al
-Vertex is 3 cm  of 3 layers of Si of 100 mum npads= 599
+Vertex is 3 cm  of 3 layers of Si of 100 mum npads= 601
 world cuts are set
 Vertex cuts are set
 Muon cuts are set
@@ -109,7 +120,6 @@ Muon cuts are set
 /gun/particle e-
 /gun/energy 1 GeV
 /run/beamOn 100
-G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 phot:  Total cross sections from Sandia parametrisation. 
 
@@ -283,28 +293,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=4.7s Real=4.71s Sys=0s
+  User=83.39s Real=87.81s Sys=3.77s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Number of events             100
-Average number of e-         1323
-Average number of gamma      699.6
-Average number of e+         47.93
-Average number of steps      3889
-Edep 1x1 =                   0.8197 +- 0.00373
-Edep 3x3 =                   0.9546 +- 0.001549
-Edep 5x5 =                   0.978 +- 0.001261
+Average number of e-         1322
+Average number of gamma      698.5
+Average number of e+         47.86
+Average number of steps      3884
+Edep 1x1 =                   0.8258 +- 0.003048
+Edep 3x3 =                   0.9543 +- 0.001289
+Edep 5x5 =                   0.9794 +- 0.0009566
 ========================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8197  delEdep1x1= -0.006298 nrms= -1.794
-Erms1x1: 0.0373  delErms1x1= 0.002201 nrms= 0.6271
-Edep3x3: 0.9546  delEdep3x3= -0.001751 nrms= -1.094
-Erms3x3: 0.01549  delErms3x3= -0.0005134 nrms= -0.3209
-Edep5x5: 0.978  delEdep5x5= -0.0009577 nrms= -0.8048
-Erms5x5: 0.01261  delErms5x5= 0.0007141 nrms= 0.6001
+Edep1x1: 0.8258  delEdep1x1= -0.0001842 nrms= -0.05248
+Erms1x1: 0.03048  delErms1x1= -0.00462 nrms= -1.316
+Edep3x3: 0.9543  delEdep3x3= -0.00212 nrms= -1.325
+Erms3x3: 0.01289  delErms3x3= -0.003107 nrms= -1.942
+Edep5x5: 0.9794  delEdep5x5= 0.000367 nrms= 0.3084
+Erms5x5: 0.009566  delErms5x5= -0.002334 nrms= -1.962
 <<<<<END>>>>>   IS ACCEPTED
 
 #

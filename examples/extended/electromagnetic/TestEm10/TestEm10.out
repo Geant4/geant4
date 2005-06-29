@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (23-February-2005)
+ Geant4 version Name: run-V07-00-05    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -9,6 +9,17 @@
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
 
 ***** Table : Nb of materials = 32 *****
 
@@ -218,19 +229,20 @@ fAlphaPlate = 10000 ; fAlphaGas = 1000
 48	fGamma = 8.085e+04	sumN = -NaN
 49	fGamma = 9.283e+04	sumN = -NaN
 
-total time for build X-ray TR energy loss tables = 101.23 s
+total time for build X-ray TR energy loss tables = 235.1 s
+Em10PhysicsList::SetCuts:CutLength : 1 mm 
 
 phot:  Total cross sections from Sandia parametrisation. 
-Em10PhysicsList::SetCuts:CutLength : 1 mm 
-G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
-compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-       Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
-conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
-        e+e- energies according Bethe-Heitler
-        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according to the Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -260,9 +272,9 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -361,28 +373,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.46s Real=4.78s Sys=0.32s
+  User=12.31s Real=12.7s Sys=0.28s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=16.0748 +- 0.18573  mm  
+    mean charged track length   in absorber=16.0495 +- 0.173853  mm  
 
-            mean energy deposit in absorber=0.00476736 +- 0.000116482  MeV 
+            mean energy deposit in absorber=0.00501075 +- 0.000160406  MeV 
 
- mean number of steps in absorber (charged) =1.579 +- 0.0531767      
- mean number of steps in absorber (neutral) =0.096 +- 0.00952806      
+ mean number of steps in absorber (charged) =1.627 +- 0.0669766      
+ mean number of steps in absorber (neutral) =0.114 +- 0.0105358      
 
-   mean number of charged secondaries = 0.226 +- 0.0178024
+   mean number of charged secondaries = 0.226 +- 0.0205164
 
-   mean number of neutral secondaries = 0.003 +- 0.00172945
+   mean number of neutral secondaries = 0.002 +- 0.0014128
 
    mean number of e-s =0.226  and e+s =0
 
-(number) transmission coeff=0.485  reflection coeff=0.003
+(number) transmission coeff=0.507  reflection coeff=0.008
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1486211418, 1595580037
+ Current couple of seeds = 1654029929, 1433274685
 ----------------------------------------
 
 ========= Table of registered couples ==============================

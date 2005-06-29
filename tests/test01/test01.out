@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (23-February-2005)
+ Geant4 version Name: run-V07-00-05    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -27,7 +27,6 @@ Daughter CSG/Boolean will be made of Pb
 /run/initialize
 Tst01PhysicsList::SetCuts:/tracking/verbose 1
 /run/beamOn 1
-G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -48,7 +47,6 @@ Daughter CSG/Boolean will be made of Al
 /gun/direction 0 1 0
 /tracking/verbose 1
 /run/beamOn 1
-G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -69,7 +67,6 @@ Daughter CSG/Boolean will be made of Air
 /gun/direction 1 1 0
 /tracking/verbose 1
 /run/beamOn 1
-G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0

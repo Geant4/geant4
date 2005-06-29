@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (23-February-2005)
+ Geant4 version Name: run-V07-00-05    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -40,7 +40,6 @@ The cut in energy is set1.79769e+305GeV
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=2
 The cut in energy is set1.79769e+305GeV 
-G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -70,9 +69,9 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -160,7 +159,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.09s Real=0.1s Sys=0s
+  User=0.13s Real=0.19s Sys=0.01s
     1000.000           1           0     Na24[0.0]
          259           1   6.089e+04     e-
     1.13e+03           1   6.089e+04     anti_nu_e
@@ -206,7 +205,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.05s Real=0.05s Sys=0s
+  User=0.08s Real=0.08s Sys=0s
        1e+03           1           0     Ne24[0.0]
          429           1       301.6     e-
          694           1       301.6     anti_nu_e
@@ -258,7 +257,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
        1e+03           1           0     F24[0.0]
     1.11e+04           1       1.119     e-
     1.63e+03           1       1.119     anti_nu_e
@@ -314,11 +313,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.03s Real=0.04s Sys=0.01s
+  User=0.08s Real=0.08s Sys=0s
        1e+03           1           0     Al24[0.0]
     4.21e+03           1       2.266     e+
-         511           1       2.266     gamma
-         511           1       2.266     gamma
     4.53e+03           1       2.266     nu_e
     2.75e+03           1       2.266     gamma
     1.37e+03           1       2.266     gamma
@@ -364,13 +361,13 @@ Run Summary
   Number of events processed : 1
   User=0.01s Real=0.01s Sys=0s
        1e+03           1           0     Na24[472.0]
-         472           1     0.02466     gamma
-           0           1     0.02466     Na24[0.0]
-         458           1   1.441e+05     e-
-         933           1   1.441e+05     anti_nu_e
-    2.75e+03           1   1.441e+05     gamma
-    1.37e+03           1   1.441e+05     gamma
-      0.0119           1   1.441e+05     Mg24[0.0]
+         472           1     0.03872     gamma
+           0           1     0.03872     Na24[0.0]
+         479           1   7.646e+04     e-
+         912           1   7.646e+04     anti_nu_e
+    2.75e+03           1   7.646e+04     gamma
+    1.37e+03           1   7.646e+04     gamma
+      0.0112           1   7.646e+04     Mg24[0.0]
 
 #
 #
@@ -410,18 +407,14 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.02s Real=0.02s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
        1e+03           1           0     Cr46[0.0]
-          97           1      0.5465     e+
-         511           1      0.5465     gamma
-         511           1      0.5465     gamma
-    6.48e+03           1      0.5465     nu_e
-        0.54           1      0.5465     V46[0.0]
-    3.48e+03           1       1.358     e+
-         511           1       1.358     gamma
-         511           1       1.358     gamma
-    2.55e+03           1       1.358     nu_e
-       0.257           1       1.358     Ti46[0.0]
+    3.64e+03           1       0.319     e+
+    2.94e+03           1       0.319     nu_e
+       0.143           1       0.319     V46[0.0]
+    3.68e+03           1      0.7352     e+
+    2.35e+03           1      0.7352     nu_e
+       0.418           1      0.7352     Ti46[0.0]
 
 #
 #
@@ -461,10 +454,10 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.04s Sys=0s
        1e+03           1           0     Po215[0.0]
-    7.39e+03           1     0.00124     alpha
-         140           1     0.00124     Pb211[0.0]
+    7.39e+03           1    0.001035     alpha
+         140           1    0.001035     Pb211[0.0]
 
 Graphics systems deleted.
 Visualization Manager deleting...

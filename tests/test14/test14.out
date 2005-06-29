@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (23-February-2005)
+ Geant4 version Name: run-V07-00-05    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -97,7 +97,6 @@ G4VUserPhysicsList::ResetCuts() is obsolete. This method gives no effect and you
 /gun/energy 10 keV
 /tracking/verbose 2
 /run/beamOn 1
-G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
@@ -139,7 +138,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.03s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -169,7 +168,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.16s Real=0.16s Sys=0s
+  User=0.47s Real=0.47s Sys=0s
 # 
 /gun/energy 2 keV
 /tracking/verbose 2
@@ -240,7 +239,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.16s Real=0.16s Sys=0s
+  User=0.46s Real=0.46s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
@@ -281,7 +280,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -311,7 +310,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.17s Real=0.17s Sys=0s
+  User=0.46s Real=0.46s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
@@ -352,7 +351,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -382,7 +381,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.16s Real=0.16s Sys=0s
+  User=0.46s Real=0.46s Sys=0s
 #
 /gun/particle e-
 #---------------
@@ -455,7 +454,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.17s Real=0.17s Sys=0s
+  User=0.48s Real=0.48s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 2
@@ -526,7 +525,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.17s Real=0.17s Sys=0s
+  User=0.48s Real=0.48s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
@@ -567,7 +566,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -597,7 +596,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.17s Real=0.17s Sys=0s
+  User=0.48s Real=0.52s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
@@ -668,7 +667,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.17s Real=0.17s Sys=0s
+  User=0.48s Real=0.48s Sys=0s
 #
 /calor/setAbsMat Lead      
 
@@ -684,7 +683,6 @@ Run Summary
 /gun/energy 10 keV
 /tracking/verbose 2
 /run/beamOn 1
-G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
@@ -761,7 +759,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.16s Real=0.16s Sys=0s
+  User=0.46s Real=0.46s Sys=0s
 # 
 /gun/energy 2 keV
 /tracking/verbose 2
@@ -842,7 +840,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.16s Real=0.16s Sys=0s
+  User=0.47s Real=0.47s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
@@ -923,7 +921,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.16s Real=0.16s Sys=0s
+  User=0.46s Real=0.46s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
@@ -1004,7 +1002,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.16s Real=0.16s Sys=0s
+  User=0.46s Real=0.46s Sys=0s
 #
 /gun/particle e-
 #---------------
@@ -1087,7 +1085,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.17s Real=0.17s Sys=0s
+  User=0.48s Real=0.48s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 2
@@ -1133,7 +1131,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -1168,7 +1166,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.17s Real=0.17s Sys=0s
+  User=0.48s Real=0.48s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
@@ -1249,7 +1247,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.18s Real=0.18s Sys=0s
+  User=0.49s Real=0.49s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
@@ -1330,7 +1328,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.17s Real=0.17s Sys=0s
+  User=0.48s Real=0.48s Sys=0s
 #
 #
 /calor/setAbsMat Water
@@ -1347,7 +1345,6 @@ Run Summary
 /gun/energy 10 keV
 /tracking/verbose 2
 /run/beamOn 1
-G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 Region DefaultRegionForTheWorld
  Materials : Air Water 
@@ -1394,7 +1391,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -1434,7 +1431,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.16s Real=0.16s Sys=0s
+  User=0.46s Real=0.46s Sys=0s
 # 
 /gun/energy 2 keV
 /tracking/verbose 2
@@ -1525,7 +1522,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.16s Real=0.16s Sys=0s
+  User=0.47s Real=0.47s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
@@ -1576,7 +1573,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -1616,7 +1613,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.16s Real=0.16s Sys=0s
+  User=0.46s Real=0.48s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
@@ -1667,7 +1664,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -1707,7 +1704,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.17s Real=0.17s Sys=0s
+  User=0.46s Real=0.46s Sys=0s
 #
 /gun/particle e-
 #-----------------
@@ -1800,7 +1797,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.17s Real=0.17s Sys=0s
+  User=0.48s Real=0.48s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 2
@@ -1891,7 +1888,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.17s Real=0.17s Sys=0s
+  User=0.48s Real=0.48s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
@@ -1982,7 +1979,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.17s Real=0.17s Sys=0s
+  User=0.48s Real=0.48s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
@@ -2073,7 +2070,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.17s Real=0.17s Sys=0s
+  User=0.48s Real=0.48s Sys=0s
 #
 /gun/particle gamma
 #------------------
@@ -2140,7 +2137,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.16s Real=0.16s Sys=0s
+  User=0.46s Real=0.46s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -2180,7 +2177,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.16s Real=0.16s Sys=0s
+  User=0.46s Real=0.46s Sys=0s
 /calor/setAbsMat Lead
 
  The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
@@ -2228,7 +2225,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.17s Real=0.17s Sys=0s
+  User=0.46s Real=0.46s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -2268,7 +2265,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.17s Real=0.17s Sys=0s
+  User=0.46s Real=0.46s Sys=0s
 /calor/setAbsMat Water
 
  The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
@@ -2316,7 +2313,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.16s Real=0.16s Sys=0s
+  User=0.46s Real=0.46s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -2356,7 +2353,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.16s Real=0.16s Sys=0s
+  User=0.46s Real=0.46s Sys=0s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

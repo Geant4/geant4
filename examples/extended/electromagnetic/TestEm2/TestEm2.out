@@ -1,12 +1,11 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (23-February-2005)
+ Geant4 version Name: run-V07-00-05    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
 
 ***** Table : Nb of materials = 13 *****
 
@@ -64,6 +63,17 @@ G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 7
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
 /run/verbose 1
 #
 /testem/det/setMat Water
@@ -84,8 +94,6 @@ Absorber is 3.60564 m   of Water
  Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
-
-phot:  Total cross sections from Sandia parametrisation. 
 /testem/phys/verbose  -1
 #
 /gun/particle e-
@@ -94,19 +102,6 @@ phot:  Total cross sections from Sandia parametrisation.
 /testem/event/printModulo 20
 #
 /run/beamOn 100
-G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
-
-compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-       Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
-
-conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
-        e+e- energies according Bethe-Heitler
-        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
-
-annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 
 ========= Table of registered couples ==============================
 
@@ -139,20 +134,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=18.91s Real=25.31s Sys=0.76s
+  User=58.13s Real=60.09s Sys=0.92s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 1.11 radl:   14.47%       5.99%             0-> 1.11 radl:   14.47%     5.99% 
-    1.11-> 2.22 radl:   25.44%      11.12%             0-> 2.22 radl:   39.91%    14.62% 
-    2.22-> 3.33 radl:   21.96%       8.70%             0-> 3.33 radl:   61.87%    15.99% 
-    3.33-> 4.44 radl:   14.33%       9.35%             0-> 4.44 radl:   76.20%    15.03% 
-    4.44-> 5.55 radl:    8.00%       7.17%             0-> 5.55 radl:   84.20%    13.03% 
-    5.55-> 6.66 radl:    4.36%       4.99%             0-> 6.66 radl:   88.55%    10.42% 
-    6.66-> 7.77 radl:    2.35%       4.05%             0-> 7.77 radl:   90.91%     8.05% 
-    7.77-> 8.88 radl:    2.22%       4.28%             0-> 8.88 radl:   93.13%     5.50% 
-    8.88-> 9.99 radl:    0.86%       2.46%             0-> 9.99 radl:   93.99%     4.37% 
+    0.00-> 1.11 radl:   15.05%       6.99%             0-> 1.11 radl:   15.05%     6.99% 
+    1.11-> 2.22 radl:   25.82%       9.85%             0-> 2.22 radl:   40.87%    13.91% 
+    2.22-> 3.33 radl:   22.14%       8.93%             0-> 3.33 radl:   63.00%    15.88% 
+    3.33-> 4.44 radl:   13.84%       7.58%             0-> 4.44 radl:   76.84%    15.82% 
+    4.44-> 5.55 radl:    7.76%       6.82%             0-> 5.55 radl:   84.60%    12.95% 
+    5.55-> 6.66 radl:    4.37%       5.19%             0-> 6.66 radl:   88.97%     9.93% 
+    6.66-> 7.77 radl:    2.50%       4.71%             0-> 7.77 radl:   91.47%     6.97% 
+    7.77-> 8.88 radl:    1.54%       3.28%             0-> 8.88 radl:   93.02%     4.92% 
+    8.88-> 9.99 radl:    0.90%       2.14%             0-> 9.99 radl:   93.92%     4.14% 
 
 
 
@@ -160,26 +155,26 @@ Run Summary
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 0.11 radl:   60.72%      10.75%             0-> 0.11 radl:   60.72%    10.75% 
-    0.11-> 0.22 radl:   18.24%       6.88%             0-> 0.22 radl:   78.96%     9.45% 
-    0.22-> 0.33 radl:    8.25%       7.26%             0-> 0.33 radl:   87.21%     5.50% 
-    0.33-> 0.44 radl:    3.45%       2.54%             0-> 0.44 radl:   90.66%     4.85% 
-    0.44-> 0.56 radl:    2.15%       1.77%             0-> 0.56 radl:   92.81%     4.41% 
-    0.56-> 0.67 radl:    1.18%       1.00%             0-> 0.67 radl:   93.99%     4.37% 
+    0.00-> 0.11 radl:   62.23%      11.82%             0-> 0.11 radl:   62.23%    11.82% 
+    0.11-> 0.22 radl:   17.27%       6.51%             0-> 0.22 radl:   79.50%     9.78% 
+    0.22-> 0.33 radl:    6.86%       4.16%             0-> 0.33 radl:   86.36%     7.83% 
+    0.33-> 0.44 radl:    3.54%       2.77%             0-> 0.44 radl:   89.90%     6.68% 
+    0.44-> 0.56 radl:    2.53%       2.59%             0-> 0.56 radl:   92.42%     4.99% 
+    0.56-> 0.67 radl:    1.50%       2.10%             0-> 0.67 radl:   93.92%     4.14% 
 
                               SUMMARY
-                         energy deposit :   93.99 % E0 +-    4.37 % E0
-                         charged traklen:   13.58 radl +-    0.63 radl
-                         neutral traklen:  194.86 radl +-   17.94 radl
+                         energy deposit :   93.92 % E0 +-    4.14 % E0
+                         charged traklen:   13.64 radl +-    0.61 radl
+                         neutral traklen:  194.44 radl +-   22.06 radl
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 427542944, 83268987
+ Current couple of seeds = 1847571276, 486755118
 ----------------------------------------
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.93992249  delEdep= -0.0012775087 nrms= -0.26018508
-Erms: 0.043682822  delErms= -0.0054171775 nrms= -1.1032948
+Edep: 0.9392035  delEdep= -0.0019965033 nrms= -0.40661981
+Erms: 0.041390078  delErms= -0.0077099222 nrms= -1.5702489
 <<<<END>>>>   IS ACCEPTED
 
 #
