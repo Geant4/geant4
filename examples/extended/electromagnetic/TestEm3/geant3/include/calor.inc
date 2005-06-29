@@ -27,4 +27,4 @@
 
       COMMON/STEPMAX/stepmax
 *
-*  stepmax = max allowed step length                (data card STMAX)
+*  stepmax = max allowed step length                (data card STEPMX)

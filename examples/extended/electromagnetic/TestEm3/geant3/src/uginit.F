@@ -14,7 +14,7 @@
 * *** Define the GEANT parameters
       CALL GINIT
 *
-* *** default values
+* *** default values for histo
       do ih = 1,MaxHist
         histo(ih) = .false.
       enddo	                                                       
