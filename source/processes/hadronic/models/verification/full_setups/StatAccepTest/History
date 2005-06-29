@@ -1,6 +1,13 @@
                  History file
                  ------------
 
+29-June-2005 - A.Ribon (statAccepTest-V07-00-09)
+- Change in observables.py in order to plot all
+  beam energies even if not found in log files.
+  The kumacs now plot as a function of the
+  logarithm of the beam energy.
+
+
 13-June-2005 - A.Ribon (statAccepTest-V07-00-08)
 - Change of the ordering of  pvalue.cpp  to avoid
   a bug in PI when reading ntuples from two files.

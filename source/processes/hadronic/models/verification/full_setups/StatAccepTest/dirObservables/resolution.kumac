@@ -68,6 +68,8 @@ OPT UTIT
 ZONE 1 1
 SET KSIZ 0.3
 *
+OPT LOGX
+*
 NULL [xmin] [xmax] [ymin] [ymax]
 *
 IF ($FEXIST(energy_resolutions.txt-a)) THEN

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #----------------------------------------------------------------
-# 29-Apr-2005 A.R. 
+# Created: 29-Apr-2005. Last modification: 29-June-2005.  
 #
 # This Python script is used for post-processing analysis, i.e.
 # to produce plots (in PostScript format) of calorimeter
@@ -10,6 +10,8 @@
 # (longitudinal and transverse). These plots are obtained from
 # the information printed out at the end of the run of a
 # simulation job like:   mainStatAccepTest  run.g4
+# (notice that the ntuples/histograms that are also produced
+#  by running these simulation jobs are not used by this script).
 # We are assuming here that the log files of these simulation
 # runs are collected in a directory, eventually with a
 # subdirectory structure.
@@ -67,6 +69,8 @@
 #                                   always be empty if everything is ok.
 #    o  The beam energy values, used by the kumacs to plot some quantities
 #       as a function of the beam energy.
+#       (These beam energy values are those expected, not those that
+#        have been found.)
 #    o  A set of ascii files, extracted from the list of found
 #       simulation log files, whose names are:
 #          -  energy_resolutions.txt-LABEL
@@ -92,6 +96,13 @@
 #       where LABEL is a string that summarizes which case it
 #       corresponds (e.g.: 6.2.p02-7.0-QGSP-CuLAr-pi+-20GeV-5000 ).
 #
+# Notice that the plots vs. beam energy are always shown for all
+# expected beam energies, even for those that have not a
+# corresponding log file (due, presumely, to a failure of the job
+# in the Grid). In these cases in which a log file is not found,
+# the observable (energy resolution, sampling fraction, ratio_e_pi)
+# is set to 0.0.
+#
 #----------------------------------------------------------------
 
 import os
@@ -101,31 +112,23 @@ import string
 #***LOOKHERE***
 # Look for the files in this directory and recursively in all
 # its subdirectories.
-#directory = "/afs/cern.ch/sw/geant4/stat_testing/g70_slc3"
-directory = "."                 
+directory = "/afs/cern.ch/sw/geant4/stat_testing/june05"
 
 # Prepare all the cases.
-tupleG4Versions   = ("6.2.p02", "7.0.cand04")
-#tupleG4Versions   = ("6.2.p02",)
+tupleG4Versions   = ("7.0.p01", "7.1.cand01")
 
-#tuplePhysicsLists = ("LHEP", "QGSP", "QGSC", "QGSP_BIC", "QGSP_BERT")
-tuplePhysicsLists = ("QGSP",)
+tuplePhysicsLists = ("LHEP", "QGSP", "QGSC", "QGSP_BIC", "QGSP_BERT")
 
-#tupleCaloTypes    = ("FeSci", "CuSci", "PbSci", "CuLAr", "PbLAr", "WLAr", "PbWO4")
-tupleCaloTypes    = ("CuLAr",)
+tupleCaloTypes    = ("FeSci", "CuSci", "PbSci", "CuLAr", "PbLAr", "WLAr", "PbWO4")
 
-#tupleParticles    = ("e-", "pi+", "pi-", "k+", "k-", "k0L", "p", "n")
-tupleParticles    = ("e-", "pi+")
+tupleParticles    = ("e-", "pi+", "pi-", "k+", "k-", "k0L", "p", "n")
 
 tupleEnergies     = ("1GeV", "2GeV", "3GeV", "4GeV", "5GeV", "6GeV", "7GeV",
                      "8GeV", "9GeV", "10GeV", "20GeV", "30GeV", "40GeV",
                      "50GeV", "60GeV", "80GeV", "100GeV", "120GeV", "150GeV",
-#                     "180GeV", "200GeV", "250GeV", "300GeV", "1000GeV")
-                     "180GeV", "200GeV", "250GeV", "300GeV")
-#tupleEnergies     = ("20GeV",)
+                     "180GeV", "200GeV", "250GeV", "300GeV", "1000GeV")
 
 tupleEvents       = ("5000",)
-
 #***endLOOKHERE***
 
 # Collect in files the following lists:
@@ -230,7 +233,8 @@ def extractInfo( theFile , label , fileResolution , fileSampling , fileRatio ) :
             fileTransverse.write( line.split()[5] + "\t" + line.split()[7] + "\n" )
             #print ' transverse line: ' , line.split()[5] , ' +/- ', line.split()[7]
         if ( statusVisibleEnergy  and  line.find("mu_Evis") > -1 ) :
-            fileRatio.write( line.split()[2] + "\n" )
+            if ( fileRatio ) :
+                fileRatio.write( line.split()[2] + "\n" )
             #print ' mu_Evis line: ', line.split()[2]
         if ( statusVisibleEnergy  and  line.find("sigma_Evis") > -1 ) :
             pass;
@@ -518,7 +522,10 @@ def makeRatioPlots( label , strNumEvents , g4version_a , g4version_b ) :
                 numerator = float( tupleE_a[i].split()[0] )
                 denominator = float( tuplePi_a[i].split()[0] )
                 #print '  numerator=', numerator, ' denominator=', denominator
-                fileRatio_e_pi_a.write( str( numerator/denominator ) + "\n" )
+                ratio = 0.0
+                if ( abs(denominator) > 0.001 ) :
+                    ratio = numerator/denominator
+                fileRatio_e_pi_a.write( str( ratio ) + "\n" )
         else :
             print ' ERROR: E and PI files of DIFFERENT SIZE! ', \
                   len( tupleE_a ), '  ', len( tuplePi_a )
@@ -539,7 +546,10 @@ def makeRatioPlots( label , strNumEvents , g4version_a , g4version_b ) :
                 numerator = float( tupleE_b[i].split()[0] )
                 denominator = float( tuplePi_b[i].split()[0] )
                 #print '  numerator=', numerator, ' denominator=', denominator
-                fileRatio_e_pi_b.write( str( numerator/denominator ) + "\n" )
+                ratio = 0.0
+                if ( abs(denominator) > 0.001 ) :
+                    ratio = numerator/denominator
+                fileRatio_e_pi_b.write( str( ratio ) + "\n" )
         else :
             print ' ERROR: E and PI files of DIFFERENT SIZE! ', \
                   len( tupleE_b ), '  ', len( tuplePi_b )
@@ -700,7 +710,8 @@ for iPL in tuplePhysicsLists :        # Loop over Physics Lists
                                                  fileSampling_a , \
                                                  fileRatio_a )
                             else :
-                                print " inputFile = ", inputFile, " NOT FOUND!"
+                                # It should never happen!
+                                print " ERROR : inputFile=", inputFile, " NOT FOUND!"
 
                             # Call the appropriate kumacs
                             if ( ( secondElement  or  len( tupleG4Versions ) == 1 ) and \
@@ -710,6 +721,23 @@ for iPL in tuplePhysicsLists :        # Loop over Physics Lists
                         else :
                             missingFiles.write( fileName + "\n" )
                             print LABEL, " : NOT found!"
+                            # If the file is not found, we write "0.0" in
+                            # the files for energy resolution, sampling
+                            # fraction, and e/pi ratio. In this way, it is
+                            # possible to get plots of these quantities even
+                            # in the likely case that not all the jobs that
+                            # have been launched in the Grid have successfully
+                            # finished.
+                            if ( g4version2  and  secondElement ) :
+                                fileResolution_b.write( "0.0 \n" )
+                                fileSampling_b.write( "0.0 \n" )
+                                if ( fileRatio_b ) :
+                                    fileRatio_b.write( "0.0 \n" )
+                            else :
+                                fileResolution_a.write( "0.0 \n" )
+                                fileSampling_a.write( "0.0 \n" )
+                                if ( fileRatio_a ) :
+                                    fileRatio_a.write( "0.0 \n" )
 
                         secondElement = 1;
 
