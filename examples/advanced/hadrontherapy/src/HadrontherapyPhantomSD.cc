@@ -80,7 +80,8 @@ G4bool HadrontherapyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* RO
   G4int i  = ROhist -> GetReplicaNumber(2);
   G4int j  = ROhist -> GetReplicaNumber(1);
  
-  G4String particleName = aStep -> GetTrack() -> GetDynamicParticle() -> GetDefinition() -> GetParticleName();
+  G4String particleName = aStep -> GetTrack() -> GetDynamicParticle() -> 
+                           GetDefinition() -> GetParticleName();
 
   if(energyDeposit != 0)                       
     {  
@@ -102,28 +103,28 @@ G4bool HadrontherapyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* RO
  if(aStep -> GetTrack() -> GetTrackID()!= 1)
    {
      if (particleName == "proton")
-           analysis -> SecondaryProtonEnergyDeposit(i, energyDeposit);
+           analysis -> SecondaryProtonEnergyDeposit(i, energyDeposit/MeV);
   
      if (particleName == "neutron")
-     analysis -> SecondaryNeutronEnergyDeposit(i, energyDeposit);
+     analysis -> SecondaryNeutronEnergyDeposit(i, energyDeposit/MeV);
 
      if (particleName == "alpha")
-       analysis -> SecondaryAlphaEnergyDeposit(i, energyDeposit);
+       analysis -> SecondaryAlphaEnergyDeposit(i, energyDeposit/MeV);
 
      if (particleName == "gamma")
-       analysis -> SecondaryGammaEnergyDeposit(i, energyDeposit);
+       analysis -> SecondaryGammaEnergyDeposit(i, energyDeposit/MeV);
        
      if (particleName == "e-")
-       analysis -> SecondaryElectronEnergyDeposit(i, energyDeposit);
+       analysis -> SecondaryElectronEnergyDeposit(i, energyDeposit/MeV);
        
      if (particleName == "triton")
-       analysis -> SecondaryTritonEnergyDeposit(i, energyDeposit);
+       analysis -> SecondaryTritonEnergyDeposit(i, energyDeposit/MeV);
   
      if (particleName == "deuteron")
-       analysis -> SecondaryDeuteronEnergyDeposit(i, energyDeposit);
+       analysis -> SecondaryDeuteronEnergyDeposit(i, energyDeposit/MeV);
        
     if (particleName == "pi+" || particleName == "pi-" ||  particleName == "pi0")
-       analysis -> SecondaryPionEnergyDeposit(i, energyDeposit);   	
+       analysis -> SecondaryPionEnergyDeposit(i, energyDeposit/MeV);   	
    }
     }
 #endif
