@@ -93,21 +93,29 @@ void HadrontherapySteppingAction::UserSteppingAction(const G4Step* aStep)
  // Retrieve information about the secondaries originated in the phantom
 
 #ifdef G4ANALYSIS_USE 	
+  G4SteppingManager*  steppingManager = fpSteppingManager;
+  G4Track* theTrack = aStep -> GetTrack();
 
-if ((aStep -> GetTrack() -> GetTrackID() != 1) &&
-    (aStep -> GetTrack() -> GetVolume() -> GetName() == "PhantomPhys")  &&
-    (aStep -> GetTrack() -> GetCurrentStepNumber() == 1))   
+  // check if it is alive
+  if(theTrack-> GetTrackStatus() == fAlive) { return; }
+
+  // Retrieve the secondary particles
+  G4TrackVector* fSecondary = steppingManager -> GetfSecondary();
+     
+  for(size_t lp1=0;lp1<(*fSecondary).size(); lp1++)
+    { 
+      G4String volumeName = (*fSecondary)[lp1] -> GetVolume() -> GetName(); 
+ 
+      if (volumeName == "PhantomPhys")
 	{
-	  G4String secondaryParticleName = aStep -> GetTrack() -> GetDynamicParticle()
-                                                  -> GetDefinition() -> GetParticleName();  
-
-	  G4double secondaryParticleKineticEnergy = aStep -> GetTrack() -> GetKineticEnergy();     
+	  G4String secondaryParticleName =  (*fSecondary)[lp1]->GetDefinition() -> GetParticleName();  
+	  G4double secondaryParticleKineticEnergy =  (*fSecondary)[lp1] -> GetKineticEnergy();     
    
 	  HadrontherapyAnalysisManager* analysis =  HadrontherapyAnalysisManager::getInstance();   
         
           if (secondaryParticleName == "e-")
 	    analysis -> electronEnergyDistribution(secondaryParticleKineticEnergy/MeV);
-          
+	  	    
 	  if (secondaryParticleName == "gamma")
 	    analysis -> gammaEnergyDistribution(secondaryParticleKineticEnergy/MeV);
 
@@ -120,18 +128,17 @@ if ((aStep -> GetTrack() -> GetTrackID() != 1) &&
 	  if (secondaryParticleName == "alpha")
 	    analysis -> alphaEnergyDistribution(secondaryParticleKineticEnergy/MeV);
 	
-	  G4double z = aStep -> GetTrack() -> GetDynamicParticle() -> GetDefinition() -> GetPDGCharge();
-
+	  G4double z = (*fSecondary)[lp1]-> GetDynamicParticle() -> GetDefinition() -> GetPDGCharge();
 	  if (z > 0.)
             {      
-	      G4int a = aStep -> GetTrack() -> GetDynamicParticle() -> GetDefinition() -> GetBaryonNumber();
-	      G4int electronOccupancy =  aStep -> GetTrack() ->  GetDynamicParticle() -> GetTotalOccupancy(); 
+	      G4int a = (*fSecondary)[lp1]-> GetDynamicParticle() -> GetDefinition() -> GetBaryonNumber();
+	      G4int electronOccupancy = (*fSecondary)[lp1] ->  GetDynamicParticle() -> GetTotalOccupancy(); 
 	      // If a generic ion is originated in the phantom, its baryonic number, PDG charge, 
 	      // total number of electrons in the orbitals are stored in a ntuple 
 	      analysis -> genericIonInformation(a, z, electronOccupancy, secondaryParticleKineticEnergy/MeV);			
 	    }
 	}
-    
+    }
 #endif
 }
 

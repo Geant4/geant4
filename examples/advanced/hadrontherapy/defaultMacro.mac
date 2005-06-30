@@ -46,7 +46,8 @@
 #/beamLine/RangeShifter/RSMat Water
 #/vis/viewer/flush
 /beam/energy/meanEnergy 63.5 MeV
-/run/beamOn 100000
+/tracking/verbose 1
+/run/beamOn 100
 
 
 
