@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.cc,v 1.12 2005-03-01 14:04:49 link Exp $
+// $Id: G4VSurface.cc,v 1.13 2005-06-30 06:30:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,7 +37,6 @@
 // History:
 //   13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
 //                 from original version in Jupiter-2.5.02 application.
-//   01-Mar-2005 - O.Link Windows/VC++ Warning concering G4int i in for-loop fixed
 // --------------------------------------------------------------------
 
 #include "G4VSurface.hh"
@@ -351,11 +350,11 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
             G4int         tmpareacode[G4VSURFACENXX] ;
             G4bool        tmpisvalid[G4VSURFACENXX] ;
 
-	    for (G4int l = 0 ; l<G4VSURFACENXX ; l++ ) {
-	      tmpdist[l] = kInfinity ;
-	      tmpareacode[l] = sOutside ;
-	      tmpisvalid[l] = false ;
-	    }
+            for (G4int l = 0 ; l<G4VSURFACENXX ; l++ ) {
+              tmpdist[l] = kInfinity ;
+              tmpareacode[l] = sOutside ;
+              tmpisvalid[l] = false ;
+            }
 
             G4int tmpnxx = neighbours[j]->DistanceToSurface(
                                           gp, gv, tmpgxx, tmpdist,
@@ -474,14 +473,14 @@ G4double G4VSurface::DistanceToOut(const G4ThreeVector &gp,
      isvalid[i] = false ;
    }
 
-   G4int         nxx;
+   G4int         i, nxx;
    G4double      bestdistance   = kInfinity;
    G4int         besti          = -1;
 
    nxx = DistanceToSurface(gp, gv, gxx, distance, areacode,
                            isvalid, kValidateWithTol);
 
-   for (G4int i=0; i<nxx; i++) {
+   for (i=0; i<nxx; i++) {
       if (!(isvalid[i])) {
          continue;
       }
