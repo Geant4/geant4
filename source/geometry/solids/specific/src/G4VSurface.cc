@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.cc,v 1.13 2005-06-30 06:30:30 gcosmo Exp $
+// $Id: G4VSurface.cc,v 1.14 2005-06-30 06:35:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -880,12 +880,12 @@ G4VSurface::CurrentStatus::CurrentStatus()
     fAreacode[i] = sOutside;
     fIsValid[i]  = false;
     fXX[i].set(kInfinity, kInfinity, kInfinity);
-   }
-   fNXX   = 0;
-   fLastp.set(kInfinity, kInfinity, kInfinity);
-   fLastv.set(kInfinity, kInfinity, kInfinity);
-   fLastValidate = kUninitialized;
-   fDone = false;
+  }
+  fNXX   = 0;
+  fLastp.set(kInfinity, kInfinity, kInfinity);
+  fLastv.set(kInfinity, kInfinity, kInfinity);
+  fLastValidate = kUninitialized;
+  fDone = false;
 }
 
 //=====================================================================
@@ -956,7 +956,7 @@ G4VSurface::CurrentStatus::ResetfDone(EValidate     validate,
     fAreacode[i] = sOutside;
     fIsValid[i]  = false;
     fXX[i] = xx;   // bug in old code ( was fXX[i] =  xx[i]  )
-    }
+  }
   fNXX   = 0;
   fLastp.set(kInfinity, kInfinity, kInfinity);
   fLastv.set(kInfinity, kInfinity, kInfinity);
