@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SCDetectorConstruction.cc,v 1.2 2005-05-23 16:16:34 link Exp $
+// $Id: SCDetectorConstruction.cc,v 1.3 2005-07-01 12:13:50 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -133,8 +133,13 @@ SCDetectorConstruction::SelectDetector( const G4String& val )
   if (val == "Sphere")
   {
     // only solid sphere is supportet for now
-      fTrackerR = 11*cm ;
-      aVolume = new G4Sphere ("aSphere",  0, fTrackerR ,0*deg, 360*deg, 0*deg, 180*deg);
+      fTrackerR1 = 10*cm ;
+      fTrackerR2 = 12*cm ;
+      fPhi = 30*deg ;
+      fPhiSegment = 120*deg ;
+      fTheta = 10*deg ;
+      fThetaSegment = 100*deg ;
+      aVolume = new G4Sphere ("aSphere",  fTrackerR1, fTrackerR2 ,fPhi, fPhiSegment, fTheta, fThetaSegment);
 
   }
   else if (val == "Orb")

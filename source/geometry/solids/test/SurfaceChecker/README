@@ -4,6 +4,18 @@ README for SurfaceChecker
 
 History:
 ----------------------------------
+1.July 05
+- SurfaceChecker supports now G4Sphere("aSphere",rmin,rmax,phi,dphi,theta,dtheta) without
+  restricting the parameters.
+- corrected error in the surface equation of the twisted tubs solid. (The edge of the hyperbolic
+  surface was not compatible with the implementation in G4TwistedTubs).
+
+31.May 05
+- change in singlesolid.kumac: 
+   added an argument in order to specifiy the name of 
+   the hbook file directly, e.g
+      PAW>>  exec singlesolid hbk/yourfile.hbk 
+- corrected a misleading information in extract.pl
 
 27.May 05
 - change in testall.pl: additionally executes at the end the paw macro single.kumac 

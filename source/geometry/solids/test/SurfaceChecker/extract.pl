@@ -49,7 +49,7 @@ foreach $file ( @filelist ) {
 	next ;
     }
 
-    print "merge $file to $txtfile\n" ;
+    print "merge $file to temporary $txtfile\n" ;
 
     open(TXT,">$txtfile") || die "cannot open file $txtfile:$!\n";
 
@@ -119,7 +119,7 @@ foreach $file ( @filelist ) {
     close FH ;
     close TXT ;
 
-    print "start converting ascii $txtfile to ntuple $hbkfile...\n" ;
+    print "start converting ascii $txtfile to hbook file $hbkfile...\n" ;
 
     system("export arg1=$txtfile; export arg2=$hbkfile; export arg3=$mcount ; paw -w 0 -b ntuple") && die "cannot create the ntuple in $hbkfile:$!\n" ;
 

@@ -14,6 +14,7 @@ use strict ;
 # list of solids for testing
 my @solids = qw/Torus Box Sphere Tube Orb Cone TwistedTubs TwistedBox
     TwistedTrd TwistedTrap TwistedTrap2 TwistedTrap3/ ;
+# @solids = ( "Sphere" ) ; # in case if you want to process just one solid...
 
 my $nevents = 100000 ;   # sets the number of events
 

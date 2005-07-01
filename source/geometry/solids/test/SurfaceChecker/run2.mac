@@ -1,4 +1,21 @@
+# $Id: run2.mac,v 1.2 2005-07-01 12:13:46 link Exp $
+#
 #
 
-/gun/particle geantino
-/run/beamOn 100000
+/run/initialize
+
+/mydet/SelectDetector Torus
+#/mydet/SelectDetector Box
+#/mydet/SelectDetector Sphere
+#/mydet/SelectDetector Tube
+#/mydet/SelectDetector Orb
+#/mydet/SelectDetector Cone
+#/mydet/SelectDetector TwistedTubs 
+#/mydet/SelectDetector  TwistedBox
+#/mydet/SelectDetector TwistedTrd
+#/mydet/SelectDetector  TwistedTrap
+#/mydet/SelectDetector TwistedTrap2
+#/mydet/SelectDetector TwistedTrap3
+
+
+/run/beamOn 10

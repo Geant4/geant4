@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SCPrimaryGeneratorAction.cc,v 1.2 2005-05-23 16:16:36 link Exp $
+// $Id: SCPrimaryGeneratorAction.cc,v 1.3 2005-07-01 12:13:51 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -168,8 +168,26 @@ G4ThreeVector SCPrimaryGeneratorAction::GetSurfacePoint(G4double &u, G4double &v
 
   // get parameters
 
-    G4double r = myDetector->GetTrackerR() ;
-  
+    G4double r1 = myDetector->GetTrackerR1() ;   // inner surface
+    G4double r2 = myDetector->GetTrackerR2() ;   // outer surface
+    G4double r = r1 ;    // we check the inner surface
+
+    if ( r == 0 )       // but if no inner surface, then check outer instead.
+      r = r2 ;  
+
+    G4double phistart = myDetector->GetPhi() ;
+    G4double phiseg   = myDetector->GetPhiSegment() ;
+
+    G4double thetastart = myDetector->GetTheta() ;
+    G4double thetaseg   = myDetector->GetThetaSegment() ;
+
+    // Attention: theta goes from 0 to 180deg, but 
+    // cos from 1 to -1. Thats why I inverse the intervall for 
+    // the random number generation.
+    G4double CosTheta1 = std::cos(thetastart+thetaseg) ;
+    G4double CosTheta2   = std::cos(thetastart) ;
+    G4double CosThetaSeg   = CosTheta2 - CosTheta1 ;  
+
     G4double CosTheta;
     G4double SinTheta;
 
@@ -181,14 +199,14 @@ G4ThreeVector SCPrimaryGeneratorAction::GetSurfacePoint(G4double &u, G4double &v
 
     rand = G4UniformRand();
 
-    CosTheta = 2.0*rand -1.0;
+    CosTheta = CosTheta1 + rand * CosThetaSeg;
     SinTheta = sqrt (1.-CosTheta*CosTheta);
 
     rand = G4UniformRand();
-    Phi = twopi*rand;
+    Phi = phistart + rand * phiseg ;
 
-    SinPhi = sin (Phi);
-    CosPhi = cos (Phi);
+    SinPhi = std::sin (Phi);
+    CosPhi = std::cos (Phi);
 
     retval.setX(r*SinTheta*CosPhi);
     retval.setY(r*SinTheta*SinPhi);
@@ -196,6 +214,15 @@ G4ThreeVector SCPrimaryGeneratorAction::GetSurfacePoint(G4double &u, G4double &v
 
     u = Phi ;        // "rename" parameters
     v = CosTheta ;
+
+#if 0 
+    G4cout << "Sphere: " << G4endl <<
+      " r1,r2 = " << r1 << ", " << r2 << G4endl <<
+      " phistart, dphi = " << phistart  << ", " << phiseg << G4endl <<
+      " theta, dtheta  = " << thetastart     << ", " << thetaseg << G4endl <<
+      " CosTheta1, CosTheta2 = " << CosTheta1 << ", " << CosTheta2 << G4endl <<
+      " Phi, CosTheta = " << Phi  << ", " << CosTheta << G4endl ;
+#endif
 
   }
   else if (val == "Orb")
@@ -338,23 +365,57 @@ G4ThreeVector SCPrimaryGeneratorAction::GetSurfacePoint(G4double &u, G4double &v
     G4double r2 = myDetector->GetTrackerR2() ;
     G4double pdz = myDetector->GetTrackerpDz() ;
     G4double twistangle = myDetector->GetTwistAngle() ;
-    G4double phisegment = 0.9*myDetector->GetPhi() ;
+    G4double phisegment = myDetector->GetPhi() ;
 
     G4double zpos = (2*G4UniformRand()-1)*pdz ;
   // attention: twisted surface -> intervall of phi is z-dependent !
-    G4double Phi = (2*G4UniformRand()-1)*0.5*phisegment + zpos/pdz*twistangle/2. ;
 
+    // Corner x0 and direction d of boundary (from lower to uper endcap)
+    // between hyperbolic and twisted surface of G4TwistedTubs
+    // Corner0Min, Corner0Max are corners at lower endcap
+    // Corner1Min, Corner1Max are corners at upper endcap
+
+    G4ThreeVector Corner0Min( r2 * std::cos(-phisegment/2.-twistangle/2.) ,
+			 r2 * std::sin(-phisegment/2.-twistangle/2.) , 
+			 -pdz )  ; 
+    G4ThreeVector Corner0Max( r2 * std::cos(phisegment/2.-twistangle/2.) , 
+			 r2 * std::sin(phisegment/2.-twistangle/2.) ,
+			 -pdz )  ;
+    G4ThreeVector Corner1Min( r2 * std::cos(-phisegment/2.+twistangle/2.) ,
+			 r2 * std::sin(-phisegment/2.+twistangle/2.) , 
+			 pdz )  ;
+    G4ThreeVector Corner1Max(r2 * std::cos(phisegment/2.+twistangle/2.) , 
+			r2 * std::sin(phisegment/2.+twistangle/2.) ,
+			 pdz )  ;
+
+
+    G4ThreeVector dMin = (Corner1Min-Corner0Min).unit()  ;    // direction vectors
+    G4ThreeVector dMax = (Corner1Max-Corner0Max).unit()  ;
+
+    G4ThreeVector XMin =  ( zpos - Corner0Min.z() )/dMin.z() * dMin + Corner0Min ;  // coordinates of limits
+    G4ThreeVector XMax =  ( zpos - Corner0Max.z() )/dMax.z() * dMax + Corner0Max ;  // at a given z position 
+
+    G4double PhiMin  =  std::atan2( XMin.y(), XMin.x() ) ;  // limits in angle phi at given z position
+    G4double PhiMax  =  std::atan2( XMax.y(), XMax.x() ) ;
+
+    G4double Phi = G4UniformRand()*(PhiMax-PhiMin)+PhiMin ;  // generate a random angle between limits
 
     G4double tanAlpha = r2/pdz * std::sin(twistangle/2) ;
     G4double r0 = std::sqrt(r2*r2 - pdz*pdz*tanAlpha*tanAlpha) ;
-
     G4double r = std::sqrt( r0*r0 + zpos*zpos*tanAlpha*tanAlpha) ;
+
+#if 0
+    G4cout << "Corner0Min = " << Corner0Min    << G4endl ;
+    G4cout << "z position = " << zpos          << G4endl ;
+    G4cout << "XMin       = " << XMin          << G4endl ;
+    G4cout << "XMax       = " << XMax          << G4endl ;
+#endif
 
     retval.setX(r*std::cos(Phi));
     retval.setY(r*std::sin(Phi));
     retval.setZ(zpos);
 
-    u = Phi ;
+    u = Phi ;   // rename
     v = zpos ;
     
   }

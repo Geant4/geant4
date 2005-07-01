@@ -1,5 +1,5 @@
 
-MACRO SINGLESOLID
+MACRO SINGLESOLID   [FILE]
 
 * Author: Oliver Link, Oliver.Link@cern.ch
 * Description:
@@ -15,6 +15,12 @@ MACRO SINGLESOLID
 *
 *    the macros are similar to SINGLE macro ( set m = 1 )
 *    except the plot macro  : you have to give a title
+*
+* 31.May: 
+*  - added an argument in order to specifiy the name of 
+*    the hbook file directly, e.g
+*        exec singlesolid hbk/yourfile.hbk 
+* 
    
 ******************************************************************
 ******************************************************************
@@ -26,8 +32,6 @@ MACRO SINGLESOLID
 nbins = 200
 xmin  = 1e-12
 xmax  = 1e5
-
-file  = hbk/run_cone_100000.hbk
 
 string = basename [file] .hbk
 base = $shell([string])
