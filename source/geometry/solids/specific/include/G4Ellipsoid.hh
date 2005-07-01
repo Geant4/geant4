@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipsoid.hh,v 1.3 2005-06-20 17:29:36 gcosmo Exp $
+// $Id: G4Ellipsoid.hh,v 1.4 2005-07-01 15:54:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -97,6 +97,7 @@ class G4Ellipsoid : public G4VSolid
 
     // Visualisation functions
   
+    virtual G4Polyhedron* GetPolyhedron () const;
     void DescribeYourselfTo(G4VGraphicsScene& scene) const;
     G4VisExtent   GetExtent() const;
     G4Polyhedron* CreatePolyhedron() const;
@@ -106,6 +107,8 @@ class G4Ellipsoid : public G4VSolid
  
     G4ThreeVectorList* CreateRotatedVertices(const G4AffineTransform& pT,
                                                    G4int& noPV) const;
+
+  mutable G4Polyhedron* fpPolyhedron;
 
   private:
 

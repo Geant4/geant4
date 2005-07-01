@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc,v 1.1 2005-06-20 14:53:27 gcosmo Exp $
+// $Id: G4Ellipsoid.cc,v 1.2 2005-07-01 15:54:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Ellipsoid
@@ -895,4 +895,16 @@ G4Polyhedron* G4Ellipsoid::CreatePolyhedron () const
 {
   return new G4PolyhedronEllipsoid(xSemiAxis, ySemiAxis, zSemiAxis,
                                    zBottomCut, zTopCut);
+}
+
+G4Polyhedron* G4Ellipsoid::GetPolyhedron () const
+{
+  if (!fpPolyhedron ||
+      fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+      fpPolyhedron->GetNumberOfRotationSteps())
+    {
+      delete fpPolyhedron;
+      fpPolyhedron = CreatePolyhedron();
+    }
+  return fpPolyhedron;
 }
