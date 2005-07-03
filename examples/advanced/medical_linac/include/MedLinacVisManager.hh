@@ -21,28 +21,36 @@
 // ********************************************************************
 //
 //
-// $Id: MedLinacVGeometryComponent.hh,v 1.2 2005-07-03 23:27:37 mpiergen Exp $
+// $Id: MedLinacVisManager.hh,v 1.4 2005-07-03 23:27:37 mpiergen Exp $
+//
 //
 // Code developed by: M. Piergentili
-//
-//
 
-#ifndef MedLinacVGeometryComponent_h
-#define MedLinacVGeometryComponent_h 1
+//*********************************************************************
 
-#include "globals.hh"
+#ifndef MedLinacVisManager_h
+#define MedLinacVisManager_h 1
 
-class G4LogicalVolume;
-class G4VPhysicalVolume; 
-class G4Material;
-class G4VisAttributes;
-class MedLinacVGeometryComponent
-{
+#ifdef G4VIS_USE
+
+#include "G4VisManager.hh"
+
+//*********************************************************************
+
+class MedLinacVisManager: public G4VisManager {
+
 public:
-  MedLinacVGeometryComponent();
-  virtual ~MedLinacVGeometryComponent();
 
-  virtual void ConstructComponent(G4VPhysicalVolume*,G4VPhysicalVolume*)=0;
-  virtual void DestroyComponent()=0;
+  MedLinacVisManager ();
+
+private:
+
+  void RegisterGraphicsSystems ();
+
 };
+
+//*********************************************************************
+
+#endif
+
 #endif

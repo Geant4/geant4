@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // 
-// $Id: MedLinacAnalysisManager.hh,v 1.3 2004-05-14 18:25:39 mpiergen Exp $
+// $Id: MedLinacAnalysisManager.hh,v 1.4 2005-07-03 23:27:36 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -56,14 +56,14 @@ public:
   ~MedLinacAnalysisManager();
   static MedLinacAnalysisManager* getInstance();
   void book();
-  void FillHistogram1WithEnergy(G4double,G4double,G4float);
-  void FillHistogram3WithEnergy(G4double,G4double,G4float);
+  void FillHistogram1WithEnergy(G4double,G4float);
+  void FillHistogram2WithEnergy(G4double,G4float);
+  void FillHistogram3WithEnergy(G4double,G4float);
   void FillHistogram4WithEnergy(G4double,G4float);
   void FillHistogram5WithEnergy(G4double,G4float);
   void FillHistogram6WithEnergy(G4double,G4float);
   void FillHistogram7WithEnergy(G4double,G4float);
   void FillHistogram8WithEnergy(G4double,G4float);
-  void PrimaryParticleEnergySpectrum(G4double);
   void finish();
 
 private:
@@ -79,9 +79,9 @@ private:
   AIDA::ITree*             theTree;
   AIDA::IHistogramFactory *histFact;
   AIDA::ITreeFactory      *treeFact;
-  AIDA::IHistogram2D *h1;
+  AIDA::IHistogram1D *h1;
   AIDA::IHistogram1D *h2;
-  AIDA::IHistogram2D *h3;
+  AIDA::IHistogram1D *h3;
   AIDA::IHistogram1D *h4;
   AIDA::IHistogram1D *h5;
   AIDA::IHistogram1D *h6;

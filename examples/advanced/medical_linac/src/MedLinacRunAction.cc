@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinacRunAction.cc,v 1.3 2004-05-14 18:25:40 mpiergen Exp $
+// $Id: MedLinacRunAction.cc,v 1.4 2005-07-03 23:27:37 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -63,7 +63,7 @@ void MedLinacRunAction::BeginOfRunAction(const G4Run* aRun)
 #endif
 
 
-  G4cout << "Run " << aRun->GetRunID() << " start." << G4endl;
+  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
 }
 

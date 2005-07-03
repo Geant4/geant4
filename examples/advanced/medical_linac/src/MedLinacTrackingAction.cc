@@ -47,8 +47,6 @@ void MedLinacTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
    // Create trajectory only for primaries
 
       // check if particle is gamma
-
-
    G4ParticleDefinition* particleType = aTrack->GetDefinition();
    G4ThreeVector direction = aTrack->GetMomentumDirection();
    G4double theta  = std::acos(std::abs(direction.z()));
@@ -57,8 +55,8 @@ void MedLinacTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
    //fpTrackingManager->SetStoreTrajectory(true); 
 
        if(particleType==G4Gamma::GammaDefinition()) {
-	if(theta>=25.*deg){
-        // check if particle is in the target
+	if(theta>=20.*deg){
+        // check if particle is in target
         G4ThreeVector pos = aTrack->GetPosition();
         G4ThreeVector *ptr = NULL;
         G4VPhysicalVolume *theVolume;

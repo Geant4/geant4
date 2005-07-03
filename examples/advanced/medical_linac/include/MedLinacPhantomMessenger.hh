@@ -21,28 +21,43 @@
 // ********************************************************************
 //
 //
-// $Id: MedLinacVGeometryComponent.hh,v 1.2 2005-07-03 23:27:37 mpiergen Exp $
+// $Id: MedLinacPhantomMessenger.hh,v 1.1 2005-07-03 23:27:37 mpiergen Exp $
+//
 //
 // Code developed by: M. Piergentili
-//
-//
 
-#ifndef MedLinacVGeometryComponent_h
-#define MedLinacVGeometryComponent_h 1
+#ifndef MedLinacDetectorMessenger_h
+#define MedLinacDetectorMessenger_h 1
 
 #include "globals.hh"
+#include "G4UImessenger.hh"
 
-class G4LogicalVolume;
-class G4VPhysicalVolume; 
-class G4Material;
-class G4VisAttributes;
-class MedLinacVGeometryComponent
+class MedLinacPhantomSD;
+class G4UIdirectory;
+class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
+class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithoutParameter;
+
+//****************************************************************************
+
+class MedLinacPhantomMessenger: public G4UImessenger
 {
-public:
-  MedLinacVGeometryComponent();
-  virtual ~MedLinacVGeometryComponent();
+  public:
+    MedLinacPhantomMessenger(MedLinacPhantomSD*);
+   ~MedLinacPhantomMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
+    
+  private:
+    MedLinacPhantomSD* MedLinacP;
 
-  virtual void ConstructComponent(G4VPhysicalVolume*,G4VPhysicalVolume*)=0;
-  virtual void DestroyComponent()=0;
+    G4UIdirectory*             MedLinacDir;
+
+    G4UIcmdWithADoubleAndUnit* PhantomDimCmd;
+  G4UIcmdWithAnInteger* NVoxelsCmd;
 };
+
+//****************************************************************************
 #endif
+
