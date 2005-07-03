@@ -87,13 +87,14 @@ int main()
       G4cout <<" Electrons can reach it from "<< n <<" shells."<<G4endl;
 
       G4int a1 = 0;
-
+      G4int nMax = 0;
       if (a == b) {
 	G4cout << "Enter the index of the starting shell of the electron transition" << G4endl;
-	G4cin >>a1;
-	if (a1 >=n) G4Exception("max Index number must be less than number of available shells");
-	n = a1 + 1;
+	G4cin >> a1;
+       	nMax = n;
+	n = a1+1;
 
+	if (a1 >= nMax) G4Exception("max Index number must be less than number of available shells");
       }
       for (G4int initIndex = a1; initIndex < n; initIndex++){
 
@@ -109,10 +110,11 @@ int main()
 	  G4cout <<" Being a transition electron from here, an auger electron could came from  "
 		 << nAuger <<" shells."<<G4endl;	  
 	  G4cout << "Enter the index of the auger electron originating  shell" << G4endl;	
-	  G4cin >>a2;
-	  if (a2 >= nAuger) G4Exception("max Index number must be less than number of available shells");
-	  nAuger = a2 + 1;
+	  G4cin >> a2;
+	  nMax=nAuger;
+	  nAuger = a2 +1;
 	  
+	  if (a2 >= nMax) G4Exception("max Index number must be less than number of available shells");
 	}	
 
 	for (G4int augerIndex = a2; augerIndex < nAuger; augerIndex++){
