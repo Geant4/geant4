@@ -21,7 +21,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//// $Id: MedLinacPhantomSD.cc,v 1.4 2005-07-03 23:27:37 mpiergen Exp $
+//// $Id: MedLinacPhantomSD.cc,v 1.5 2005-07-04 11:56:33 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -134,13 +134,28 @@ G4bool MedLinacPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
 	 { if (y<=2.5*mm){if (y>= -2.5*mm)
        {analysis->FillHistogram3WithEnergy(x,energyDep/MeV);}
 	 }}}}
+
+//***** flatness  along x ***** Depth=100 mm********************************
+  if(energyDep != 0)
+    {
+      if (z<=52.5*mm){if (z>= 47.5*mm)
+         { if (y<=2.5*mm){if (y>= -2.5*mm)
+       {analysis->FillHistogram4WithEnergy(x,energyDep/MeV);}                                                             
+                        }}}}
+//***** flatness  along x ***** Depth=200 mm********************************
+  if(energyDep != 0)
+    {
+      if (z<=-47.5*mm){if (z>= -52.5*mm)
+         { if (y<=2.5*mm){if (y>= -2.5*mm)
+       {analysis->FillHistogram5WithEnergy(x,energyDep/MeV);} 
+                        }}}}
 //**** PDD in isocenter (Y and X Thickness = 5. mm) *********** 	   
 	  if(energyDep != 0)                       
 	    { 
 	      if (y<=2.5*mm){if (y>= -2.5*mm)
 		{
 		  if(x<=2.5*mm){if (x>= -2.5*mm)
-		{analysis->FillHistogram4WithEnergy(z,energyDep/MeV);}
+		{analysis->FillHistogram6WithEnergy(z,energyDep/MeV);}
 		  }}}}
 
 //***** flatness  along x ***** Depth=build-up (15 mm)*************************
@@ -148,32 +163,76 @@ G4bool MedLinacPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
     {  
        if (z<=137.5*mm){if (z>= 132.5*mm) 
 	 { if (y<=2.5*mm){if (y>= -2.5*mm)
-       {analysis->FillHistogram5WithEnergy(x,energyDep/MeV);}
+       {analysis->FillHistogram7WithEnergy(x,energyDep/MeV);}
 	                }}}}
 //***** flatness  along x ***** Depth=50mm*********************************
   if(energyDep != 0)                       
     {  
       if (z<=102.5*mm){if (z>= 97.5*mm)
 	 { if (y<=2.5*mm){if (y>= -2.5*mm)
-       {analysis->FillHistogram6WithEnergy(x,energyDep/MeV);}
+       {analysis->FillHistogram8WithEnergy(x,energyDep/MeV);}
 	                }}}}
 //***** flatness  along x ***** Depth=100 mm********************************
   if(energyDep != 0)                       
     {  
       if (z<=52.5*mm){if (z>= 47.5*mm) 
 	 { if (y<=2.5*mm){if (y>= -2.5*mm)
-       {analysis->FillHistogram7WithEnergy(x,energyDep/MeV);}
+       {analysis->FillHistogram9WithEnergy(x,energyDep/MeV);}
 	                }}}}
 //***** flatness  along x ***** Depth=200 mm********************************
   if(energyDep != 0)                       
     {  
       if (z<=-47.5*mm){if (z>= -52.5*mm)
 	 { if (y<=2.5*mm){if (y>= -2.5*mm)
-       {analysis->FillHistogram8WithEnergy(x,energyDep/MeV);}
+       {analysis->FillHistogram10WithEnergy(x,energyDep/MeV);}
 	                }
 	 }
                      }
     }
+
+//**** PDD in isocenter (Y and X Thickness = 5. mm) ***********
+          if(energyDep != 0)
+            {
+              if (y<=2.5*mm){if (y>= -2.5*mm)
+                {
+                  if(x<=2.5*mm){if (x>= -2.5*mm)
+                {analysis->FillHistogram11WithEnergy(z,energyDep/MeV);}
+                  }
+                }
+              }
+            }
+//***** flatness  along x ***** Depth=build-up (15 mm)*************************
+  if(energyDep != 0)
+    {
+       if (z<=137.5*mm){if (z>= 132.5*mm)
+         { if (y<=2.5*mm){if (y>= -2.5*mm)
+       {analysis->FillHistogram12WithEnergy(x,energyDep/MeV);}
+         }
+         }
+       }
+    }              
+//***** flatness  along x ***** Depth=50mm 5*********************************
+  if(energyDep != 0)
+    {
+      if (z<=102.5*mm){if (z>= 97.5*mm)
+         { if (y<=2.5*mm){if (y>= -2.5*mm)
+       {analysis->FillHistogram13WithEnergy(x,energyDep/MeV);}
+         }}}}
+//***** flatness  along x ***** Depth=100 mm********************************
+  if(energyDep != 0)
+    {
+      if (z<=52.5*mm){if (z>= 47.5*mm)
+         { if (y<=2.5*mm){if (y>= -2.5*mm)
+       {analysis->FillHistogram14WithEnergy(x,energyDep/MeV);}
+                        }}}}
+//***** flatness  along x ***** Depth=200 mm********************************
+  if(energyDep != 0)
+    {
+      if (z<=-47.5*mm){if (z>= -52.5*mm)
+         { if (y<=2.5*mm){if (y>= -2.5*mm)
+       {analysis->FillHistogram15WithEnergy(x,energyDep/MeV);}
+     }}}}
+
 #endif 	       
 	    }
 return true;
@@ -194,6 +253,4 @@ void MedLinacPhantomSD::DrawAll()
 void MedLinacPhantomSD::PrintAll()
 {
 }
-
-
 

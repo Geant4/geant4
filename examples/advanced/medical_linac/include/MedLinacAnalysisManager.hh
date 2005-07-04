@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // 
-// $Id: MedLinacAnalysisManager.hh,v 1.4 2005-07-03 23:27:36 mpiergen Exp $
+// $Id: MedLinacAnalysisManager.hh,v 1.5 2005-07-04 11:56:33 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -64,6 +64,13 @@ public:
   void FillHistogram6WithEnergy(G4double,G4float);
   void FillHistogram7WithEnergy(G4double,G4float);
   void FillHistogram8WithEnergy(G4double,G4float);
+  void FillHistogram9WithEnergy(G4double,G4float);
+  void FillHistogram10WithEnergy(G4double,G4float);
+  void FillHistogram11WithEnergy(G4double,G4float);
+  void FillHistogram12WithEnergy(G4double,G4float);
+  void FillHistogram13WithEnergy(G4double,G4float);
+  void FillHistogram14WithEnergy(G4double,G4float);
+  void FillHistogram15WithEnergy(G4double,G4float);
   void finish();
 
 private:
@@ -87,6 +94,13 @@ private:
   AIDA::IHistogram1D *h6;
   AIDA::IHistogram1D *h7;
   AIDA::IHistogram1D *h8;
+  AIDA::IHistogram1D *h9;
+  AIDA::IHistogram1D *h10;
+  AIDA::IHistogram1D *h11;
+  AIDA::IHistogram1D *h12;
+  AIDA::IHistogram1D *h13;
+  AIDA::IHistogram1D *h14;
+  AIDA::IHistogram1D *h15;
 };
 
 #endif

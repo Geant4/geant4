@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 // ********************************************************************
-// $Id: MedLinacAnalysisManager.cc,v 1.7 2005-07-03 23:27:37 mpiergen Exp $
+// $Id: MedLinacAnalysisManager.cc,v 1.8 2005-07-04 11:56:33 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -47,7 +47,9 @@
 MedLinacAnalysisManager* MedLinacAnalysisManager::instance = 0;
 
 MedLinacAnalysisManager::MedLinacAnalysisManager(): 
-  aFact(0), theTree(0), histFact(0),h1(0),h2(0),h3(0), h4(0),h5(0),h6(0),h7(0),h8(0)
+  aFact(0), theTree(0), histFact(0),h1(0),h2(0),h3(0), 
+  h4(0),h5(0),h6(0),h7(0),h8(0),h9(0),h10(0),
+  h11(0),h12(0),h13(0),h14(0),h15(0)
   
 {
   //build up  the  factories
@@ -96,23 +98,47 @@ void MedLinacAnalysisManager::book()
   h3 = histFact->createHistogram1D("14030","Flatness 50mm 5", //histoID,histo name
 				    60,-150.0,150.0); //bins' number, zmin, zmax
 
+ //creating an other 1D histogram ...
+  h4 = histFact->createHistogram1D("14040","Flatness 100mm 5", //histoID,histo name
+                                    60,-150.0,150.0); //bins' number, zmin, zmax
+ //creating an other 1D histogram ...
+  h5 = histFact->createHistogram1D("14050","Flatness 200mm 5", //histoID,histo name
+                                    60,-150.0,150.0); //bins' number, zmin, zmax
 
   //creating an other 1D histogram ...
-  h4 = histFact->createHistogram1D("14040","PDD", //histoID,histo name
+  h6 = histFact->createHistogram1D("14060","PDD 2", //histoID,histo name
 				    150,-150.0,150.0); //bins' number, zmin, zmax
   //creating an other 1D histogram ...
-  h5 = histFact->createHistogram1D("14050","Flatness build-up", //histoID,histo name
+  h7 = histFact->createHistogram1D("14070","Flatness build-up 2",//histoID,histo name
+				    150,-150.0,150.0); //bins' number, zmin, zmax
+ //creating an other 1D histogram ...
+  h8 = histFact->createHistogram1D("14080","Flatness 50mm 2", //histoID,histo name
+				    150,-150.0,150.0); //bins' number, zmin, zmax
+ //creating an other 1D histogram ...
+  h9 = histFact->createHistogram1D("14090","Flatness 100mm 2", //histoID,histo name
+				    150,-150.0,150.0); //bins' number, zmin, zmax
+ //creating an other 1D histogram ...
+  h10 = histFact->createHistogram1D("14100","Flatness 200mm 2", //histoID,histo name
 				    150,-150.0,150.0); //bins' number, zmin, zmax
 
+
+  //creating an other 1D histogram ...
+  h11 = histFact->createHistogram1D("14101","PDD 1", //histoID,histo name                                                    
+                                    300,-150.0,150.0); //bins' number, zmin, zmax
+  //creating an other 1D histogram ...
+  h12 = histFact->createHistogram1D("14102","Flatness build-up 1",//histoID,histo name                                       
+                                    300,-150.0,150.0); //bins' number, zmin, zmax
  //creating an other 1D histogram ...
-  h6 = histFact->createHistogram1D("14060","Flatness 50mm", //histoID,histo name
-				    150,-150.0,150.0); //bins' number, zmin, zmax
+  h13 = histFact->createHistogram1D("14103","Flatness 50mm 1", //histoID,histo name                                          
+                                    300,-150.0,150.0); //bins' number, zmin, zmax
  //creating an other 1D histogram ...
-  h7 = histFact->createHistogram1D("14070","Flatness 100mm", //histoID,histo name
-				    150,-150.0,150.0); //bins' number, zmin, zmax
+  h14 = histFact->createHistogram1D("14104","Flatness 100mm 1", //histoID,histo name                                         
+                                    300,-150.0,150.0); //bins' number, zmin, zmax
  //creating an other 1D histogram ...
-  h8 = histFact->createHistogram1D("14080","Flatness 200mm", //histoID,histo name
-				    150,-150.0,150.0); //bins' number, zmin, zmax
+  h15 = histFact->createHistogram1D("14105","Flatness 200mm 1", //histoID,histo name                                       
+                                    300,-150.0,150.0); //bins' number, zmin, zmax
+
+
 }
 
 void MedLinacAnalysisManager::FillHistogram1WithEnergy(G4double z, 
@@ -133,39 +159,41 @@ void MedLinacAnalysisManager::FillHistogram2WithEnergy(G4double x,
 void MedLinacAnalysisManager::FillHistogram3WithEnergy(G4double x, 
                                                     G4float energyDeposit)
 {
-  //G4cout << " fill HISTO2-------------"<<G4endl;
+  //G4cout << " fill HISTO3-------------"<<G4endl;
   //1DHistrogram: energy deposit in a voxel which center is fixed in position (x,0,135mm)  
   h3->fill(x,energyDeposit);
 } 
-void MedLinacAnalysisManager::FillHistogram4WithEnergy(G4double z, 
+
+void MedLinacAnalysisManager::FillHistogram4WithEnergy(G4double x,
                                                     G4float energyDeposit)
 {
   //G4cout << " fill HISTO4-------------"<<G4endl;
-  //1DHistrogram: energy deposit in a voxel which center is fixed in position (0,0,z)  
-  h4->fill(z,energyDeposit);
+  //1DHistrogram: energy deposit in a voxel which center is fixed in position (x,0,80mm)
+  h4->fill(x,energyDeposit);
 }
-
-void MedLinacAnalysisManager::FillHistogram5WithEnergy(G4double x, 
+  
+void MedLinacAnalysisManager::FillHistogram5WithEnergy(G4double x,
                                                     G4float energyDeposit)
 {
   //G4cout << " fill HISTO5-------------"<<G4endl;
-  //1DHistrogram: energy deposit in a voxel which center is fixed in position (x,0,135mm)  
+  //1DHistrogram: energy deposit in a voxel which center is fixed in position (x,0,30mm)
   h5->fill(x,energyDeposit);
 }
 
-void MedLinacAnalysisManager::FillHistogram6WithEnergy(G4double x, 
+
+void MedLinacAnalysisManager::FillHistogram6WithEnergy(G4double z, 
                                                     G4float energyDeposit)
 {
   //G4cout << " fill HISTO6-------------"<<G4endl;
-  //1DHistrogram: energy deposit in a voxel which center is fixed in position (x,0,80mm)
-  h6->fill(x,energyDeposit);
+  //1DHistrogram: energy deposit in a voxel which center is fixed in position (0,0,z)  
+  h6->fill(z,energyDeposit);
 }
 
 void MedLinacAnalysisManager::FillHistogram7WithEnergy(G4double x, 
                                                     G4float energyDeposit)
 {
-  //G4cout << " fill HISTO7-------------"<<G4endl; 
-  //1DHistrogram: energy deposit in a voxel which center is fixed in position (x,0,30mm)
+  //G4cout << " fill HISTO7-------------"<<G4endl;
+  //1DHistrogram: energy deposit in a voxel which center is fixed in position (x,0,135mm)  
   h7->fill(x,energyDeposit);
 }
 
@@ -173,10 +201,66 @@ void MedLinacAnalysisManager::FillHistogram8WithEnergy(G4double x,
                                                     G4float energyDeposit)
 {
   //G4cout << " fill HISTO8-------------"<<G4endl;
- //1DHistrogram: energy deposit in a voxel which center is fixed in position (x,0,-70mm)
+  //1DHistrogram: energy deposit in a voxel which center is fixed in position (x,0,80mm)
   h8->fill(x,energyDeposit);
 }
 
+void MedLinacAnalysisManager::FillHistogram9WithEnergy(G4double x, 
+                                                    G4float energyDeposit)
+{
+  //G4cout << " fill HISTO9-------------"<<G4endl; 
+  //1DHistrogram: energy deposit in a voxel which center is fixed in position (x,0,30mm)
+  h9->fill(x,energyDeposit);
+}
+
+void MedLinacAnalysisManager::FillHistogram10WithEnergy(G4double x, 
+                                                    G4float energyDeposit)
+{
+  //G4cout << " fill HISTO10-------------"<<G4endl;
+ //1DHistrogram: energy deposit in a voxel which center is fixed in position (x,0,-70mm)
+  h10->fill(x,energyDeposit);
+}
+
+
+void MedLinacAnalysisManager::FillHistogram11WithEnergy(G4double z,
+                                                    G4float energyDeposit)
+{
+  //G4cout << " fill HISTO11-------------"<<G4endl;
+  //1DHistrogram: energy deposit in a voxel which center is fixed in position (0,0,z)
+  h11->fill(z,energyDeposit);
+}
+                                                    
+void MedLinacAnalysisManager::FillHistogram12WithEnergy(G4double x,
+                                                    G4float energyDeposit)
+{
+  //G4cout << " fill HISTO12-------------"<<G4endl;
+  //1DHistrogram: energy deposit in a voxel which center is fixed in position (x,0,135mm)
+  h12->fill(x,energyDeposit);
+}
+                                                    
+void MedLinacAnalysisManager::FillHistogram13WithEnergy(G4double x,
+                                                    G4float energyDeposit)                                                
+{
+  //G4cout << " fill HISTO13-------------"<<G4endl;                                                                        
+  //1DHistrogram: energy deposit in a voxel which center is fixed in position (x,0,80mm)
+  h13->fill(x,energyDeposit);
+}
+
+void MedLinacAnalysisManager::FillHistogram14WithEnergy(G4double x,
+                                                    G4float energyDeposit)
+{
+  //G4cout << " fill HISTO14-------------"<<G4endl;
+  //1DHistrogram: energy deposit in a voxel which center is fixed in position (x,0,30mm)
+  h14->fill(x,energyDeposit);
+}
+
+void MedLinacAnalysisManager::FillHistogram15WithEnergy(G4double x,
+                                                    G4float energyDeposit)
+{
+  //G4cout << " fill HISTO15-------------"<<G4endl;
+ //1DHistrogram: energy deposit in a voxel which center is fixed in position (x,0,-70mm)
+  h15->fill(x,energyDeposit);
+} 
 
 void MedLinacAnalysisManager::finish() 
 {  
