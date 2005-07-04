@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SCDetectorConstruction.cc,v 1.3 2005-07-01 12:13:50 link Exp $
+// $Id: SCDetectorConstruction.cc,v 1.4 2005-07-04 10:03:32 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -43,6 +43,7 @@
 #include "G4Para.hh"
 #include "G4Torus.hh"
 #include "G4Trd.hh"
+#include "G4Ellipsoid.hh"
 
 #include "G4Polycone.hh"
 
@@ -142,6 +143,22 @@ SCDetectorConstruction::SelectDetector( const G4String& val )
       aVolume = new G4Sphere ("aSphere",  fTrackerR1, fTrackerR2 ,fPhi, fPhiSegment, fTheta, fThetaSegment);
 
   }
+  else if ( val == "Ellipsoid" ) {
+
+    fSemiAxisX = 10*cm ;
+    fSemiAxisY = 15*cm ;
+    fSemiAxisZ = 20*cm ;
+
+    aVolume = new  G4Ellipsoid("aEllipsoid",
+			       fSemiAxisX,
+			       fSemiAxisY,
+			       fSemiAxisZ,
+			       -fSemiAxisZ,fSemiAxisZ);
+
+
+  }
+
+
   else if (val == "Orb")
   {
 
@@ -194,11 +211,13 @@ SCDetectorConstruction::SelectDetector( const G4String& val )
   else if (val == "Torus")
   {
 
-    fTrackerR = 20*cm ;
+    fPhi = 30*deg ;
+    fPhiSegment = 120*deg ;
+
     fTrackerR1 = 5*cm ;
     fTrackerR2 = 6*cm ;
 
-    aVolume = new G4Torus("aTorus", fTrackerR1, fTrackerR2 ,fTrackerR, 0*deg, 360*deg) ;
+    aVolume = new G4Torus("aTorus", fTrackerR1, fTrackerR2 ,fTrackerR, fPhi, fPhiSegment) ;
 
   }
   else if (val == "Para")

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SCDetectorConstruction.hh,v 1.3 2005-07-01 12:13:49 link Exp $
+// $Id: SCDetectorConstruction.hh,v 1.4 2005-07-04 10:03:31 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,6 +81,10 @@ class SCDetectorConstruction : public G4VUserDetectorConstruction
      G4double GetPhiSegment()   { return fPhiSegment ; } ;
      G4double GetThetaSegment() { return fThetaSegment ; } ;
 
+     G4double GetSemiAxisX() { return fSemiAxisX ; }
+     G4double GetSemiAxisY() { return fSemiAxisY ; }
+     G4double GetSemiAxisZ() { return fSemiAxisZ ; }
+
      void  SwitchDetector();
      G4VPhysicalVolume* SelectDetector (const G4String& val);
 
@@ -122,6 +126,10 @@ class SCDetectorConstruction : public G4VUserDetectorConstruction
      G4double fPhi ;
      G4double fTheta ;
      G4double fAlph ;
+     G4double fSemiAxisX ;
+     G4double fSemiAxisY ;
+     G4double fSemiAxisZ ;
+
 
      G4double fPhiSegment ;    // e.g. for a sphere : phi in [phi,phi+segment]
      G4double fThetaSegment ;

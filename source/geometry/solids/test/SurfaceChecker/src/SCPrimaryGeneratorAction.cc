@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SCPrimaryGeneratorAction.cc,v 1.3 2005-07-01 12:13:51 link Exp $
+// $Id: SCPrimaryGeneratorAction.cc,v 1.4 2005-07-04 10:03:34 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -252,6 +252,37 @@ G4ThreeVector SCPrimaryGeneratorAction::GetSurfacePoint(G4double &u, G4double &v
     v = CosTheta ;
 
   }
+  else if (val == "Ellipsoid" ) {
+
+    G4double a = myDetector->GetSemiAxisX() ;
+    G4double b = myDetector->GetSemiAxisY() ;
+    G4double c = myDetector->GetSemiAxisZ() ;
+
+    G4double SinTheta;
+    G4double CosTheta;
+
+    G4double rand;
+    G4double Phi ;
+
+    rand = G4UniformRand();
+
+    CosTheta = 2.0*rand -1.0;
+    SinTheta = sqrt (1.-CosTheta*CosTheta);
+
+    rand = G4UniformRand();
+    Phi = twopi*rand;
+
+    retval.setX(a*SinTheta*std::cos(Phi));
+    retval.setY(b*SinTheta*std::sin(Phi));
+    retval.setZ(c*CosTheta);
+
+    u = Phi ;     // rename parameteres
+    v = CosTheta ;
+
+
+  }
+
+
   else if (val == "Box") 
   {    
 
@@ -315,8 +346,11 @@ G4ThreeVector SCPrimaryGeneratorAction::GetSurfacePoint(G4double &u, G4double &v
   else if (val == "Torus")
   {
 
-    u = twopi*G4UniformRand();
-    v = twopi*G4UniformRand();
+    G4double phistart = myDetector->GetPhi() ;
+    G4double phiseg   = myDetector->GetPhiSegment() ;
+
+    u = phistart + G4UniformRand() * phiseg ;   // from fPhi to fPhi+fPhiSegment
+    v = twopi*G4UniformRand();                    // from 0 to 2pi
 
     G4double c = myDetector->GetTrackerR() ;
     G4double a = myDetector->GetTrackerR2() ;   // take outer surface 

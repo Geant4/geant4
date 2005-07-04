@@ -4,6 +4,9 @@ README for SurfaceChecker
 
 History:
 ----------------------------------
+4.July 05
+- Added Ellipsoid to the check
+
 1.July 05
 - SurfaceChecker supports now G4Sphere("aSphere",rmin,rmax,phi,dphi,theta,dtheta) without
   restricting the parameters.
