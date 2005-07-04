@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc,v 1.4 2005-07-04 13:33:01 gcosmo Exp $
+// $Id: G4Ellipsoid.cc,v 1.5 2005-07-04 13:33:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Ellipsoid
@@ -81,8 +81,8 @@ G4Ellipsoid::G4Ellipsoid(const G4String& pName,
   {
      SetZCuts(-pzSemiAxis, pzSemiAxis);
   }
-  elseif ( (pzBottomCut < pzSemiAxis) && (pzTopCut > -pzSemiAxis)
-        && (pzBottomCut < pzTopCut) )
+  else if ( (pzBottomCut < pzSemiAxis) && (pzTopCut > -pzSemiAxis)
+         && (pzBottomCut < pzTopCut) )
   {
      SetZCuts(pzBottomCut, pzTopCut);
   }
