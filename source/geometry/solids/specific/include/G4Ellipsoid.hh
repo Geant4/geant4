@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipsoid.hh,v 1.4 2005-07-01 15:54:53 gcosmo Exp $
+// $Id: G4Ellipsoid.hh,v 1.5 2005-07-04 08:27:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -60,8 +60,8 @@ class G4Ellipsoid : public G4VSolid
                       G4double  pxSemiAxis,
                       G4double  pySemiAxis,
                       G4double  pzSemiAxis,
-                      G4double  pzBottomCut,
-                      G4double  pzTopCut);
+                      G4double  pzBottomCut=0,
+                      G4double  pzTopCut=0);
 
     virtual ~G4Ellipsoid();
 
@@ -72,6 +72,7 @@ class G4Ellipsoid : public G4VSolid
     inline G4double GetZTopCut() const;
     inline void SetSemiAxis (G4double x, G4double y, G4double z);
     inline void SetZCuts (G4double newzBottomCut, G4double newzTopCut);
+    inline G4double GetCubicVolume(); 
 
     // Solid standard methods
    

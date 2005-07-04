@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipsoid.icc,v 1.1 2005-06-20 14:53:27 gcosmo Exp $
+// $Id: G4Ellipsoid.icc,v 1.2 2005-07-04 08:27:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -67,4 +67,25 @@ void G4Ellipsoid::SetZCuts (G4double newzBottomCut, G4double newzTopCut)
   zTopCut = newzTopCut;
   if (zBottomCut < -zSemiAxis) { zBottomCut = -zSemiAxis; }
   if (zTopCut > +zSemiAxis) { zTopCut = +zSemiAxis; }
+}
+
+inline
+G4double G4Ellipsoid::GetCubicVolume()
+{
+  if(fCubicVolume != 0 ) {;}
+  else
+  {
+    if ((zTopCut > +zSemiAxis && zBottomCut < -zSemiAxis)
+     || (zTopCut == 0 && zBottomCut == 0) )
+    {
+      fCubicVolume = (4./3.)*pi*xSemiAxis*ySemiAxis*zSemiAxis;
+    }
+    else 
+    {   
+      fCubicVolume = pi*xSemiAxis*ySemiAxis
+                   * ((zTopCut-std::pow(zTopCut,3.)/(3.*sqr(zSemiAxis)))
+                   + (zBottomCut-std::pow(zBottomCut,3.)/(3.*sqr(zSemiAxis))));
+    }
+  }
+  return fCubicVolume;
 }

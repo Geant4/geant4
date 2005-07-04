@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc,v 1.2 2005-07-01 15:54:53 gcosmo Exp $
+// $Id: G4Ellipsoid.cc,v 1.3 2005-07-04 08:27:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Ellipsoid
@@ -58,8 +58,10 @@ G4Ellipsoid::G4Ellipsoid(const G4String& pName,
                                G4double pzSemiAxis,
                                G4double pzBottomCut,
                                G4double pzTopCut)
-  : G4VSolid(pName)
+  : G4VSolid(pName), fCubicVolume(0.)
 {
+ // note: for users that want to use the full ellipsoid it is useful to include 
+ // a default for the cuts 
 
   // Check Semi-Axis
   if ( (pxSemiAxis>0.) && (pySemiAxis>0.) && (pzSemiAxis>0.) )
@@ -73,6 +75,13 @@ G4Ellipsoid::G4Ellipsoid(const G4String& pName,
            << G4endl;
      G4Exception("G4Ellipsoid::G4Ellipsoid()", "InvalidSetup",
                  FatalException, "Invalid semi-axis.");
+  }
+
+  // set the default cuts as pzBottomCut == pzTopCut == 0
+  
+  if ( pzBottomCut == 0 && pzTopCut == 0 )
+  {
+    SetZCuts(-pzSemiAxis, pzSemiAxis);
   }
 
   if ( (pzBottomCut < pzSemiAxis) && (pzTopCut > -pzSemiAxis)
