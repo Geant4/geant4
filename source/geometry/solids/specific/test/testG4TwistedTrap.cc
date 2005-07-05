@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4TwistedTrap.cc,v 1.4 2005-03-18 15:35:55 link Exp $
+// $Id: testG4TwistedTrap.cc,v 1.5 2005-07-05 08:46:46 gcosmo Exp $
 // GEANT4 tag $Name: 
 //
 
@@ -50,6 +50,8 @@ G4bool testG4TwistedTrap()
     G4ThreeVector pzero(0,0,0);
     G4ThreeVector pout(100*cm,100*cm,100*cm) ;
     G4ThreeVector dir1 = pzero-pout ;
+    
+    dir1 *= 1./dir1.mag();    
 
     G4TwistedTrd t1("Solid Twisted Trd #1",
 		     10*cm,

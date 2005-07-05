@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4TwistedBox.cc,v 1.4 2005-03-18 15:35:54 link Exp $
+// $Id: testG4TwistedBox.cc,v 1.5 2005-07-05 08:46:46 gcosmo Exp $
 // GEANT4 tag $Name: 
 //
 
@@ -50,6 +50,8 @@ G4bool testG4TwistedBox()
     G4ThreeVector pzero(0,0,0);
     G4ThreeVector pout ( 200*cm,200*cm,200*cm) ;
     G4ThreeVector dir = pzero-pout ;
+    
+    dir *= 1./dir.mag();
 
     G4TwistedBox t1("Solid Twisted Box #1",
 			  20*deg ,    // twisted angle
