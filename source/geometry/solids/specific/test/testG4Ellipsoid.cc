@@ -56,9 +56,8 @@ G4bool testG4Ellipsoid()
     G4Ellipsoid t1("Solid Ellipsoid #1",
 		   20*cm,       // xSemiAxis
 		   10*cm,       // ySemiAxis
-		   15*cm,       // zSemiAxis
-		   -1*cm,       // set default cut to get full solid
-		   -1*cm) ;     // set default cut to get full solid
+		   15*cm) ;     // zSemiAxis
+		           
 
     G4double dist = t1.DistanceToIn(pout,dir) ;
     G4cout << "distance = " << dist << G4endl ;
@@ -70,7 +69,7 @@ G4bool testG4Ellipsoid()
     G4cout << "pzero : " << t1.Inside(pzero) << G4endl ;
    
     //test the name
-    G4cout << "The name is" << t2.GetName() << G4endl ; 
+    G4cout << "The name is" << t1.GetName() << G4endl ; 
 
     // testing the volume
 
@@ -88,8 +87,8 @@ G4bool testG4Ellipsoid()
 		   20*cm,
 		   10*cm,
 		   15*cm,
-		   10*cm,
-		   -8*cm) ;
+		   -10*cm,
+		   8*cm) ;
     
     dist = t2.DistanceToIn(onTop,axial) ;
     G4cout << "distance = " << dist << G4endl ;
