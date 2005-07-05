@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.73 2005-06-20 14:50:01 gcosmo Exp $
+cvs log $Id: History,v 1.74 2005-07-05 13:35:08 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-20th Jun 2005  Gabriele Cosmo
+20th Jun 2005  Gabriele Cosmo  (greps-V07-01-00)
 - Added Polyhedron description for new G4Ellipsoid shape.
   Contribution of G.Guerrieri (INFN Genova).
 
