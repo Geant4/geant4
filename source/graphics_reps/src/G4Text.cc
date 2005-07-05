@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Text.cc,v 1.6 2001-07-11 10:01:09 gunter Exp $
+// $Id: G4Text.cc,v 1.7 2005-07-05 14:04:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,25 +50,3 @@ fXOffset(0.) , fYOffset(0.)
 {}
 
 G4Text::~G4Text () {}
-
-G4Visible & G4Text::operator = (const G4Visible &from) {
-  return G4Visible::operator = (from);
-}
-
-G4VVisPrim & G4Text::operator = (const G4VVisPrim &from) {
-  return G4VVisPrim::operator = (from);
-}
-
-G4VMarker & G4Text::operator = (const G4VMarker &from) {
-  return G4VMarker::operator = (from);
-}
-
-G4Text & G4Text::operator = (const G4Text &from) {
-  if (&from == this) return *this;
-  G4VMarker::operator = (from);
-  fText    = from.fText;
-  fLayout  = from.fLayout;
-  fXOffset = from.fXOffset;
-  fYOffset = from.fYOffset;
-  return *this;
-}

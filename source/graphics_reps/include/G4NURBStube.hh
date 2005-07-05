@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBStube.hh,v 1.7 2003-04-03 15:31:06 gcosmo Exp $
+// $Id: G4NURBStube.hh,v 1.8 2005-07-05 14:04:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,8 +43,6 @@ class  G4NURBStube : public G4NURBS
 {
   public:
     G4NURBStube(G4double RMIN, G4double RMAX, G4double DZ);
-    virtual G4Visible&  operator = (const G4Visible& right);
-    virtual G4VVisPrim& operator = (const G4VVisPrim& right);
     const char*  Whoami() const;
 };
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Circle.hh,v 1.6 2001-07-11 10:01:01 gunter Exp $
+// $Id: G4Circle.hh,v 1.7 2005-07-05 14:04:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,16 +43,9 @@ class G4Circle: public G4VMarker {
 public: // With description
 
   G4Circle ();
-  G4Circle (const G4Point3D& pos);
   G4Circle (const G4VMarker& marker);
+  G4Circle (const G4Point3D& pos);
   virtual ~G4Circle ();
-
-  //////////////////////////////////////////////////////
-  // Assignment...
-  virtual G4Visible&  operator = (const G4Visible& right);
-  virtual G4VVisPrim& operator = (const G4VVisPrim& right);
-  virtual G4VMarker&  operator = (const G4VMarker& right);
-  virtual G4Circle &  operator = (const G4Circle& right);
 
  };
 

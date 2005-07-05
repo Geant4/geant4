@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scale.hh,v 1.5 2002-11-27 12:24:01 johna Exp $
+// $Id: G4Scale.hh,v 1.6 2005-07-05 14:04:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,12 +60,7 @@ public: // With description
 
   // Uses compiler-generated copy constructor.
 
-  virtual ~G4Scale ();
-
-  virtual G4Visible&  operator = (const G4Visible& from);
-  virtual G4VVisPrim& operator = (const G4VVisPrim& from);
-  virtual G4VMarker&  operator = (const G4VMarker& from);
-  virtual G4Scale&    operator = (const G4Scale& from);
+  ~G4Scale ();
 
   G4double        GetLength() const;
   const G4String& GetAnnotation() const;

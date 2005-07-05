@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedron.cc,v 1.16 2005-06-20 14:48:19 gcosmo Exp $
+// $Id: G4Polyhedron.cc,v 1.17 2005-07-05 14:04:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4Polyhedron.hh"
@@ -32,27 +32,11 @@ G4Polyhedron::G4Polyhedron ():
 
 G4Polyhedron::~G4Polyhedron () {}
 
-G4Polyhedron::G4Polyhedron (const G4Polyhedron& from)
-  : HepPolyhedron(from), G4VVisPrim(from)
-{
-  fNumberOfRotationStepsAtTimeOfCreation =
-    from.fNumberOfRotationStepsAtTimeOfCreation;
-}
-
 G4Polyhedron::G4Polyhedron (const HepPolyhedron& from)
   : HepPolyhedron(from)
 {
   fNumberOfRotationStepsAtTimeOfCreation =
     from.fNumberOfRotationSteps;
-}
-
-G4Polyhedron& G4Polyhedron::operator = (const G4Polyhedron& from) {
-  if (&from == this) return *this;
-  HepPolyhedron::operator = (from);
-  G4VVisPrim::operator = (from);
-  fNumberOfRotationStepsAtTimeOfCreation =
-    from.fNumberOfRotationStepsAtTimeOfCreation;
-  return *this;
 }
 
 G4PolyhedronBox::G4PolyhedronBox (G4double dx, G4double dy, G4double dz):

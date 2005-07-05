@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.74 2005-07-05 13:35:08 allison Exp $
+cvs log $Id: History,v 1.75 2005-07-05 14:04:02 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+5th July 2005  John Allison  (greps-V07-01-01)
+- Big clean-up:
+  o Removed redundant intermediate class, G4VVisPrim.
+  o Removed redundant virtual assignments and similar oddities.
 
 20th Jun 2005  Gabriele Cosmo  (greps-V07-01-00)
 - Added Polyhedron description for new G4Ellipsoid shape.

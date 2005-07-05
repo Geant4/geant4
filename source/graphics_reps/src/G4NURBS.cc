@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBS.cc,v 1.7 2003-06-16 16:55:20 gunter Exp $
+// $Id: G4NURBS.cc,v 1.8 2005-07-05 14:04:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,16 +40,6 @@
 ////////////////////////////////////////////////////////////////////////
 //    Here start the real world. Please, check your armored jacket.   //
 ////////////////////////////////////////////////////////////////////////
-
-G4Visible & G4NURBS::operator = (const G4Visible &right)
-{
-  return G4Visible::operator = (right);
-}
-
-G4VVisPrim & G4NURBS::operator = (const G4VVisPrim &right)
-{
-  return G4VVisPrim::operator = (right);
-}
 
 std::ostream & operator << (std::ostream & inout_outStream,
                               const G4NURBS & in_kNurb)
@@ -507,7 +497,7 @@ G4NURBS::G4NURBS( t_order in_Uorder, t_order in_Vorder,
 }
 
 G4NURBS::G4NURBS(const G4NURBS & in_krNurb)
-  : G4VVisPrim(in_krNurb)
+  : G4Visible(in_krNurb)
 {
   // we assume the in nurbs is ok
 

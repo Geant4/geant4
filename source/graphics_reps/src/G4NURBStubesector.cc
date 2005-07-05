@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBStubesector.cc,v 1.9 2004-12-10 17:48:51 gcosmo Exp $
+// $Id: G4NURBStubesector.cc,v 1.10 2005-07-05 14:04:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -184,16 +184,6 @@ G4NURBStubesector::G4NURBStubesector(G4double r, G4double R,
   tmpstr << "Tubs" << " \tPHI1=" << PHI1 << " ; PHI2=" << PHI2 << '\0';
   // could be more sophisticated, reallocating
   // mpwhoami to the exact length
-}
-
-G4Visible & G4NURBStubesector::operator = (const G4Visible &right)
-{
-  return G4Visible::operator = (right);
-}
-
-G4VVisPrim & G4NURBStubesector::operator = (const G4VVisPrim &right)
-{
-  return G4VVisPrim::operator = (right);
 }
 
 const char* G4NURBStubesector::Whoami() const

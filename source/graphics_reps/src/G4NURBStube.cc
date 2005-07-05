@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBStube.cc,v 1.6 2004-12-07 08:42:25 gcosmo Exp $
+// $Id: G4NURBStube.cc,v 1.7 2005-07-05 14:04:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,16 +95,6 @@ G4NURBStube::G4NURBStube(G4double r, G4double R, G4double DZ)
   CP(mpCtrlPts[42] ,  R, 0, -DZ, 1 );
   CP(mpCtrlPts[43] ,  r, 0, -DZ, 1 );
   CP(mpCtrlPts[44] ,  r, 0,  DZ, 1 );
-}
-
-G4Visible & G4NURBStube::operator = (const G4Visible &right)
-{
-  return G4Visible::operator = (right);
-}
-
-G4VVisPrim & G4NURBStube::operator = (const G4VVisPrim &right)
-{
-  return G4VVisPrim::operator = (right);
 }
 
 const char* G4NURBStube::Whoami() const

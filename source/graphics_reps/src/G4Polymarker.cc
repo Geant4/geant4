@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polymarker.cc,v 1.9 2004-11-11 16:41:27 johna Exp $
+// $Id: G4Polymarker.cc,v 1.10 2005-07-05 14:04:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,25 +34,6 @@ fMarkerType (G4Polymarker::dots)
 {}
 
 G4Polymarker::~G4Polymarker () {}
-
-G4Visible & G4Polymarker::operator = (const G4Visible &right) {
-  return G4Visible::operator = (right);
-}
-
-G4VVisPrim & G4Polymarker::operator = (const G4VVisPrim &right) {
-  return G4VVisPrim::operator = (right);
-}
-
-G4VMarker & G4Polymarker::operator = (const G4VMarker &right) {
-  return G4VMarker::operator = (right);
-}
-
-G4Polymarker & G4Polymarker::operator = (const G4Polymarker &right) {
-  if (&right == this) return *this;
-  G4VMarker::operator = (right);
-  fMarkerType = right.fMarkerType;
-  return *this;
-}
 
 std::ostream& operator << (std::ostream& os, const G4Polymarker& marker) {
   os << "G4Polymarker: type: ";
