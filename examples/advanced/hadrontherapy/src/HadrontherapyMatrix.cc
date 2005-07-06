@@ -37,6 +37,7 @@
 #include "HadrontherapyMatrix.hh"
 #include "HadrontherapyAnalysisManager.hh"
 #include "globals.hh"
+#include <fstream>
 
 HadrontherapyMatrix::HadrontherapyMatrix()
 {  
@@ -86,33 +87,40 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
   G4int k;
   G4int j;
   G4int i;
-
+  
   if (matrix)
     {  
-      for(G4int l = 0; l < numberVoxelZ; l++) 
-	{
-	  k = l;
-                        
-	  for(G4int m = 0; m < numberVoxelY; m++) 
-	    { 
-	      j = m * numberVoxelZ + k; 
-                         
-	      for(G4int n = 0; n <  numberVoxelX; n++)
-		{
-		  i =  n* numberVoxelZ * numberVoxelY + j;
-		  if(matrix[i] != 0)
-		    {			     
-#ifdef G4ANALYSIS_USE 	
-		      HadrontherapyAnalysisManager* analysis = 
-			HadrontherapyAnalysisManager::getInstance();
-		      analysis -> FillEnergyDeposit(n, m, k, matrix[i]);
-		      analysis -> BraggPeak(n, matrix[i]);
-#endif
-		    }
-		}       
+      std::ofstream ofs;    	
+      ofs.open("EnergyDeposit.out");  
+      {
+	for(G4int l = 0; l < numberVoxelZ; l++) 
+	  {
+	    k = l;
 	    
-	    }
-      
-	}
+	    for(G4int m = 0; m < numberVoxelY; m++) 
+	      { 
+		j = m * numberVoxelZ + k; 
+		
+		for(G4int n = 0; n <  numberVoxelX; n++)
+		  {
+		    i =  n* numberVoxelZ * numberVoxelY + j;
+		    if(matrix[i] != 0)
+		      {	
+			ofs << n <<'\t'<< m <<'\t'<<
+			  k<<'\t'<<matrix[i]<<G4endl;
+			
+#ifdef G4ANALYSIS_USE 	
+			HadrontherapyAnalysisManager* analysis = 
+			  HadrontherapyAnalysisManager::getInstance();
+			analysis -> FillEnergyDeposit(n, m, k, matrix[i]);
+			analysis -> BraggPeak(n, matrix[i]);
+#endif
+		      }
+		  }       
+	      }
+	  }
+	
+      	ofs.close();  
+      }
     }
 }

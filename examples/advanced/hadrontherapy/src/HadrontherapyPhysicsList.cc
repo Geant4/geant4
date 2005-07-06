@@ -52,15 +52,21 @@
 #include "HadrontherapyIonLowE.hh"
 #include "HadrontherapyIonStandard.hh"
 #include "HadrontherapyProtonPrecompound.hh"
+#include "HadrontherapyProtonPrecompoundFermi.hh"
+#include "HadrontherapyProtonPrecompoundGEM.hh"
+#include "HadrontherapyProtonPrecompoundGEMFermi.hh"
+#include "HadrontherapyProtonBinary.hh"
 #include "HadrontherapyMuonStandard.hh"
 #include "HadrontherapyDecay.hh"
+
+
 
 HadrontherapyPhysicsList::HadrontherapyPhysicsList(): G4VModularPhysicsList(),
 						      electronIsRegistered(false), 
 						      positronIsRegistered(false), 
 						      photonIsRegistered(false), 
 						      ionIsRegistered(false),
-						      protonPrecompoundIsRegistered(false), 
+						      protonHadronicIsRegistered(false),
 						      muonIsRegistered(false),
 						      decayIsRegistered(false)
 {
@@ -218,7 +224,7 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
       if (positronIsRegistered) 
 	{
 	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- positron List already existing"                  << G4endl;
+		 << " cannot be registered ---- positron List already existing"   << G4endl;
 	} 
       else 
 	{
@@ -228,9 +234,9 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	  positronIsRegistered = true;
 	}
     }
-
+  
   // Register Low Energy ICRU processes for protons and ions
-
+  
   if (name == "ion-LowE") 
     {
       if (ionIsRegistered) 
@@ -302,14 +308,20 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	  decayIsRegistered = true;
 	}
     }
-  //
-  //
-  // Register the hadronic physics for protons, neutrons, ions
-  //
-  // 
+ 
+
+//--------------------------------------------------------------------------------------------
+//Begin Hadronic Precompound models
+//--------------------------------------------------------------------------------------------
+//
+// Register the hadronic physics for protons, neutrons, ions
+// 
+  
+//Precompound Default Evaporation
+
   if (name == "proton-precompound") 
     {
-      if (protonPrecompoundIsRegistered) 
+      if (protonHadronicIsRegistered) 
 	{
 	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
 		 << " cannot be registered ---- decay List already existing" 
@@ -320,10 +332,103 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
                  << " is registered" << G4endl;
 	  RegisterPhysics( new HadrontherapyProtonPrecompound(name) );
-	  protonPrecompoundIsRegistered = true;
+	  protonHadronicIsRegistered = true;
+	}
+    }
+  
+  
+//Precompond Default Evaporation + Fermi Breck-up Model
+
+  if (name == "proton-precompoundFermi") 
+    {
+      if (protonHadronicIsRegistered) 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- decay List already existing" 
+                 << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics( new HadrontherapyProtonPrecompoundFermi(name) );
+	  protonHadronicIsRegistered = true;
 	}
     }
 
+//Precompound GEM Evaporation
+
+  if (name == "proton-precompoundGEM") 
+    {
+      if (protonHadronicIsRegistered) 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- decay List already existing" 
+                 << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics( new HadrontherapyProtonPrecompoundGEM(name) );
+	  protonHadronicIsRegistered = true;
+	}
+      
+    }
+  
+//Precompound GEM Evaporation + Fermi Breck-up Model
+  
+  if (name == "proton-precompoundGEMFermi") 
+    {
+      if (protonHadronicIsRegistered) 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- decay List already existing" 
+                 << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics( new HadrontherapyProtonPrecompoundGEMFermi(name) );
+	  protonHadronicIsRegistered = true;
+	}
+
+    }
+  
+//-------------------------------------------------------------------------------------------------
+// End Hadronic Precompound models
+//-------------------------------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------------------------
+//Begin Hadronic Binary models
+//--------------------------------------------------------------------------------------------
+
+// Binary cascade model with the default precompound
+
+
+if (name == "proton-precompound-binary") 
+    {
+      if (protonHadronicIsRegistered) 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- decay List already existing" 
+                 << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics( new HadrontherapyProtonBinary(name) );
+	  protonHadronicIsRegistered = true;
+	}
+
+    }
+
+//--------------------------------------------------------------------------------------------
+// End Hadronic Binary models
+//--------------------------------------------------------------------------------------------
+  
   if (electronIsRegistered && positronIsRegistered && photonIsRegistered &&
       ionIsRegistered) 
     {
@@ -331,11 +436,14 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	"Electromagnetic physics is registered for electron, positron, photons, protons" 
 	     << G4endl;
     }
-    if (protonPrecompoundIsRegistered && muonIsRegistered && decayIsRegistered)
-      {
-	G4cout << " Hadronic physics is registered" << G4endl;
-      }     
+  
+  if (protonHadronicIsRegistered && muonIsRegistered && decayIsRegistered)
+    {
+      G4cout << " Hadronic physics is registered" << G4endl;
+    }     
 }
+
+
 
 void HadrontherapyPhysicsList::SetCuts()
 {  

@@ -1,29 +1,27 @@
 #----------------------------------------------------------------------------
-# MACRO FILE FOR THE VISUALIZATION OF THE
-# HADRONTHERAPY EXAMPLE USING THE OPENGL LIBRARIES
+# DEFAULT MACRO FOR THE  
+# HADRONTHERAPY EXAMPLE
 #
 #
-# THIS MACRO ILLUSTRATES THE POSSIBILITY
-# FOR THE USER TO 
+# THIS MACRO SIMPLY PERMIT TO  RUN A SIMULATION 
+# WITHOUT THE VISUALISATION  
 #
-# 1. Insert a range shifter of PMMA (default is air i.e. no range shifter!);
-# 2. Define the thickness of the range shifter; 
-# 
+# THE RANGE SHIFTER MATERIAL AND THICKNESS CAN BE SPECIFIED 
 #
 # NOTE THAT THE MODULATOR MATERIAL IS POLTMETHYLMETHACRILATE 
 # (PMMA) FOR DEFAULT. IF ONE WANT CARRY OUT A SIMULATION WITHOUT 
 # THE MODULATOR HE/SHE MUST SET "Air" the <<ModMater>> in the
 # <<GetMater>> function of the HadrontherapyModulator.cc class
 #
-# THEN THE USER CAN RUN HIS/HER SIMULATION 
+# USERS SHOULD GIVE A LOOK TO THE HELP OF THE IDLE TO KNOW
+# THE ACTIVATED MESSSENGERS FOR THE GEOMETRY
 #
-# LOOKING ON THE HELP OF THE IDLE FOR HOW TO CHANGE OTHE TOPIC FEATURES
-# OF THE BEAM LINE.
 # ADDITIONAL INFORMATIONS ON THE MESSENGER AVAILABLE CAN BE FOUND
 # INSIDE THE HADRONTHERAPY DOCUMENTATION (http://www.ge.infn.it/geant4/examples/).
 # 
 # ANYWAY SEND ME AN E-MAIL FOR ANY QUESTION: cirrone@lns.infn.it.   
-#------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------  
+
 
 /control/verbose 1
 /tracking/verbose 0
@@ -37,29 +35,27 @@
 /physics/addPhysics ion-LowE
 /physics/addPhysics muon-standard
 /physics/addPhysics decay
-/physics/addPhysics proton-precompound
-
+#/physics/addPhysics proton-precompound
+/physics/addPhysics proton-precompoundGEM
 /run/initialize
 
+# IF YOU WANT A RANGE SHIFTER PLEASE CHANGE
+# THE FOLLOWIG PARAMETERS
+# SETTING FOR THE RANGE SHIFTER
+#/beamLine/RangeShifter/thickness 4 cm
+#/beamLine/RangeShifter/RSMat Water
+
+
 # SET OF THE VISUALISATION CHARACTERISTICS
-/vis/scene/create
-/vis/open OGLIX
+#/vis/scene/create
+#/vis/open OGLIX
+#/vis/viewer/flush
+
 /vis/viewer/flush
+/beam/energy/meanEnergy 63.5 MeV
+#/run/beamOn 2000
 
-/vis/viewer/set/viewpointThetaPhi 30 130 deg
-/vis/viewer/zoom 3
-/vis/viewer/pan -10  80 cm
-/tracking/storeTrajectory 1
-/vis/scene/endOfEventAction accumulate
-/vis/viewer/update
 
-# SETTING FOR THE RANGE SHIFTER 
-/beamLine/RangeShifter/thickness 4 cm
-/beamLine/RangeShifter/RSMat Water
 
-/tracking/verbose 1
-/vis/viewer/flush
-#/run/beamOn 1
 
-/run/beamOn 5000
 
