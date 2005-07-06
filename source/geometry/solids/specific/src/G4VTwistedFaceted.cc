@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc,v 1.3 2005-05-30 08:39:39 link Exp $
+// $Id: G4VTwistedFaceted.cc,v 1.4 2005-07-06 14:21:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1112,8 +1112,6 @@ G4GeometryType G4VTwistedFaceted::GetEntityType() const
 
 G4Polyhedron* G4VTwistedFaceted::GetPolyhedron() const
 {
-
-
   if (!fpPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())
@@ -1121,15 +1119,6 @@ G4Polyhedron* G4VTwistedFaceted::GetPolyhedron() const
       delete fpPolyhedron;
       fpPolyhedron = CreatePolyhedron();
     }
-
-
-  /*
-  double xy1[][2] ;
-  double xy2[][2] ;
-  
-  fpPolyhedron = createTwistedTrap(GetDz, xy1, xy2) ;
-
-  */
 
   return fpPolyhedron;
 }
