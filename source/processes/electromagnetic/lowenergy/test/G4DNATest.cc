@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4DNATest.cc,v 1.2 2005-06-02 15:02:54 sincerti Exp $
+// $Id: G4DNATest.cc,v 1.3 2005-07-07 16:37:47 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
@@ -110,7 +110,7 @@ struct Options
 };
 
 //! \brief Default output file name
-struct Options defaultOptions = { false, false, false, "G4DNATest.hbook", "Water", "DNAElectronElasticScatteringInWater", 7*eV, 10*keV, 300, 1 };
+struct Options defaultOptions = { false, false, false, "G4DNATest.hbook", "Water", "DNAElectronElasticBrenner", 7.5*eV, 200*eV, 300, 1 };
 
 //! \brief Creates some materials
 void CreateMaterials(void)

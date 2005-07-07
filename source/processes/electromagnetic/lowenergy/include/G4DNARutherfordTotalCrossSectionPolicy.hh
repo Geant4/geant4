@@ -21,13 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNARutherfordTotalCrossSectionPolicy.hh,v 1.1 2005-06-24 10:07:13 capra Exp $
+// $Id: G4DNARutherfordTotalCrossSectionPolicy.hh,v 1.2 2005-07-07 16:37:47 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef   G4DNARUTHERFORDTOTALCROSSSECTIONPOLICY_HH
  #define  G4DNARUTHERFORDTOTALCROSSSECTIONPOLICY_HH 1
  
  #include "globals.hh"
+ 
+ // EnergyLimitsPolicy must provide:
+ //  - [public] static const double lowEnergyLimit
+ //  - [public] static const double zeroBelowLowEnergyLimit
+ //  - [public] static const double highEnergyLimit
+ //  - [public] static const double zeroAboveLowEnergyLimit
 
  template <typename EnergyLimitsPolicy>
  class G4DNARutherfordTotalCrossSectionPolicy
@@ -36,7 +42,7 @@
                                         G4DNARutherfordTotalCrossSectionPolicy() {}
                                        ~G4DNARutherfordTotalCrossSectionPolicy() {}
  
-   const G4ParticleDefinition          *IncomingParticleDefinition(void) const;
+   const G4ParticleDefinition *         IncomingParticleDefinition(void) const;
    G4double                             TotalCrossSection(G4double k, G4int z) const;
    void                                 BuildTotalCrossSection(void) const {}
 

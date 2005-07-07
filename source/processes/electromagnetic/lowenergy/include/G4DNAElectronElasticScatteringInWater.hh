@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAElectronElasticScatteringInWater.hh,v 1.3 2005-06-24 10:07:13 capra Exp $
+// $Id: G4DNAElectronElasticScatteringInWater.hh,v 1.4 2005-07-07 16:37:47 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,6 +33,16 @@
  #define  G4DNAELECTRONELASTICSCATTERINGINWATER_HH 1
  
  #include "G4VDNAProcessInWater.hh"
+ 
+ // TotalCrossSectionPolicy must provide:
+ //  - [protected] const G4ParticleDefinition * IncomingParticleDefinition(void)
+ //  - [protected] G4double TotalCrossSection(G4double k, G4int z)
+ //  - [protected] void BuildTotalCrossSection(void)
+ 
+ // FinalStatesPolicy must provide:
+ //  - [protected] G4double RandomizeCosTheta(G4double k, G4int z)
+ //  - [protected] G4bool KillIncomingParticle(G4double k)
+ //  - [protected] void BuildFinalStatesData(void)
  
  template<typename TotalCrossSectionPolicy, typename FinalStatesPolicy>
  class G4DNAElectronElasticScatteringInWater : public G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>

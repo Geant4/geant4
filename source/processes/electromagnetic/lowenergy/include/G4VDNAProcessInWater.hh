@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDNAProcessInWater.hh,v 1.3 2005-06-24 10:07:13 capra Exp $
+// $Id: G4VDNAProcessInWater.hh,v 1.4 2005-07-07 16:37:47 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -30,6 +30,15 @@
  
  #include "G4VLowEnergyTestableDiscreteProcess.hh"
 
+ // TotalCrossSectionPolicy must provide:
+ //  - [protected] const G4ParticleDefinition * IncomingParticleDefinition(void)
+ //  - [protected] G4double TotalCrossSection(G4double k, G4int z)
+ //  - [protected] void BuildTotalCrossSection(void)
+ 
+ // FinalStatesPolicy must provide:
+ //  - [protected] G4bool KillIncomingParticle(G4double k)
+ //  - [protected] void BuildFinalStatesData(void)
+ 
  template<typename TotalCrossSectionPolicy, typename FinalStatesPolicy> 
  class G4VDNAProcessInWater : public G4VLowEnergyTestableDiscreteProcess, public TotalCrossSectionPolicy, public FinalStatesPolicy
  {

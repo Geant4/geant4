@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAElectronElasticBrenner.cc,v 1.2 2005-06-24 10:07:13 capra Exp $
+// $Id: G4DNAElectronElasticBrenner.cc,v 1.3 2005-07-07 16:37:47 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4DNAElectronElasticBrenner.hh"
 
-const G4double     G4DNABrennerEnergyLimitsPolicy::lowEnergyLimit(200*eV);
-const G4bool       G4DNABrennerEnergyLimitsPolicy::zeroBelowLowEnergyLimit(true);
-const G4double     G4DNABrennerEnergyLimitsPolicy::highEnergyLimit(10*keV);
+const G4double     G4DNABrennerEnergyLimitsPolicy::lowEnergyLimit(7.5*eV);
+const G4bool       G4DNABrennerEnergyLimitsPolicy::zeroBelowLowEnergyLimit(false);
+const G4double     G4DNABrennerEnergyLimitsPolicy::highEnergyLimit(200*eV);
 const G4bool       G4DNABrennerEnergyLimitsPolicy::zeroAboveHighEnergyLimit(true);
