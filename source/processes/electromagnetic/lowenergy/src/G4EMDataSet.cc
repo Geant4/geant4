@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.cc,v 1.10 2005-06-24 09:55:05 capra Exp $
+// $Id: G4EMDataSet.cc,v 1.11 2005-07-07 16:26:10 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -37,7 +37,7 @@
 #include <fstream>
 #include <sstream>
 
-                                                 G4EMDataSet :: G4EMDataSet(G4int argZ, const G4VDataSetAlgorithm * argAlgorithm, G4double argUnitEnergies, G4double argUnitData)
+                                                 G4EMDataSet :: G4EMDataSet(G4int argZ, G4VDataSetAlgorithm * argAlgorithm, G4double argUnitEnergies, G4double argUnitData)
 :
  z(argZ),
  energies(0),
@@ -52,7 +52,7 @@
 
 
 
-                                                 G4EMDataSet :: G4EMDataSet(G4int argZ, G4DataVector * argEnergies, G4DataVector * argData, const G4VDataSetAlgorithm * argAlgorithm, G4double argUnitEnergies, G4double argUnitData)
+                                                 G4EMDataSet :: G4EMDataSet(G4int argZ, G4DataVector * argEnergies, G4DataVector * argData, G4VDataSetAlgorithm * argAlgorithm, G4double argUnitEnergies, G4double argUnitData)
 :
  z(argZ),
  energies(argEnergies),
@@ -235,13 +235,40 @@ G4bool                                          G4EMDataSet :: SaveData(const G4
   
   while (i!=endI)
   {
-   out << (*i) << (*j) << std::endl;
+   out.precision(10);
+   out.width(15);
+   out.setf(std::ofstream::left);
+   out << ((*i)/unitEnergies) << ' ';
+
+   out.precision(10);
+   out.width(15);
+   out.setf(std::ofstream::left);
+   out << ((*j)/unitData) << std::endl;
+
    i++;
    j++;
   }
  }
  
- out << -1. << -1. << std::endl << -2. << -2. << std::endl;
+ out.precision(10);
+ out.width(15);
+ out.setf(std::ofstream::left);
+ out << -1.f << ' ';
+
+ out.precision(10);
+ out.width(15);
+ out.setf(std::ofstream::left);
+ out << -1.f << std::endl;
+
+ out.precision(10);
+ out.width(15);
+ out.setf(std::ofstream::left);
+ out << -2.f << ' ';
+
+ out.precision(10);
+ out.width(15);
+ out.setf(std::ofstream::left);
+ out << -2.f << std::endl;
 
  return true;
 }

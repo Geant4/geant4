@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.hh,v 1.5 2005-06-24 09:55:05 capra Exp $
+// $Id: G4EMDataSet.hh,v 1.6 2005-07-07 16:26:10 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -51,8 +51,8 @@
  class G4EMDataSet : public G4VEMDataSet
  {
   public:
-                                                G4EMDataSet(G4int argZ, const G4VDataSetAlgorithm * argAlgorithm, G4double argUnitEnergies=MeV, G4double argUnitData=barn);
-                                                G4EMDataSet(G4int argZ, G4DataVector * argEnergies, G4DataVector * argData, const G4VDataSetAlgorithm * argAlgorithm, G4double argUnitEnergues=MeV, G4double argUnitData=barn);
+                                                G4EMDataSet(G4int argZ, G4VDataSetAlgorithm * argAlgorithm, G4double argUnitEnergies=MeV, G4double argUnitData=barn);
+                                                G4EMDataSet(G4int argZ, G4DataVector * argEnergies, G4DataVector * argData, G4VDataSetAlgorithm * argAlgorithm, G4double argUnitEnergues=MeV, G4double argUnitData=barn);
    virtual                                     ~G4EMDataSet();
  
    virtual G4double                             FindValue(G4double argEnergy, G4int argComponentId=0) const;
@@ -85,7 +85,7 @@
    G4DataVector *                               energies;            // Owned pointer
    G4DataVector *                               data;                // Owned pointer
 
-   const G4VDataSetAlgorithm *                  algorithm;           // Owned pointer 
+   G4VDataSetAlgorithm *                        algorithm;           // Owned pointer 
   
    G4double                                     unitEnergies;
    G4double                                     unitData;

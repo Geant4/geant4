@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompositeEMDataSet.hh,v 1.6 2005-06-24 09:55:05 capra Exp $
+// $Id: G4CompositeEMDataSet.hh,v 1.7 2005-07-07 16:26:10 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -80,7 +80,7 @@
 
    std::vector<G4VEMDataSet *>                  components;          // Owned pointers
 
-   const G4VDataSetAlgorithm *                  algorithm;           // Owned pointer 
+   G4VDataSetAlgorithm *                        algorithm;           // Owned pointer 
   
    G4double                                     unitEnergies;
    G4double                                     unitData;

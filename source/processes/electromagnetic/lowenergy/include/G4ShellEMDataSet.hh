@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellEMDataSet.hh,v 1.6 2005-06-24 09:55:05 capra Exp $
+// $Id: G4ShellEMDataSet.hh,v 1.7 2005-07-07 16:26:10 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -70,9 +70,14 @@
    virtual G4bool                               LoadData(const G4String & argFileName);
    virtual G4bool                               SaveData(const G4String & argFileName) const;
    
-  private:
+  protected:
+   G4double                                     GetUnitEnergies() const { return unitEnergies; }
+   G4double                                     GetUnitData() const { return unitData; }
+   const G4VDataSetAlgorithm *                  GetAlgorithm() const { return algorithm; }
+   
    void                                         CleanUpComponents(void);
 
+  private:
    G4String                                     FullFileName(const G4String & argFileName) const;
   
    // Hide copy constructor and assignment operator 
@@ -84,7 +89,7 @@
 
    G4int                                        z;
 
-   const G4VDataSetAlgorithm *                  algorithm;           // Owned pointer 
+   G4VDataSetAlgorithm *                        algorithm;           // Owned pointer 
   
    G4double                                     unitEnergies;
    G4double                                     unitData;

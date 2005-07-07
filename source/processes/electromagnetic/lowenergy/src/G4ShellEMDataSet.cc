@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellEMDataSet.cc,v 1.11 2005-06-24 09:55:05 capra Exp $
+// $Id: G4ShellEMDataSet.cc,v 1.12 2005-07-07 16:26:10 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -200,10 +200,6 @@ G4bool                                          G4ShellEMDataSet :: SaveData(con
   G4Exception(message);
  }
  
- out.precision(10);
- out.width(15);
- out.setf(std::ofstream::left);
-  
  const size_t n(NumberOfComponents());
  size_t k(0);
  
@@ -222,18 +218,42 @@ G4bool                                          G4ShellEMDataSet :: SaveData(con
   
    while (i!=endI)
    {
-    out << (*i) << (*j) << std::endl;
+    out.precision(10);
+    out.width(15);
+    out.setf(std::ofstream::left);
+    out << ((*i)/unitEnergies) << ' ';
+
+    out.precision(10);
+    out.width(15);
+    out.setf(std::ofstream::left);
+    out << ((*j)/unitData) << std::endl;
     i++;
     j++;
    }
   }
   
-  out << -1. << -1. << std::endl;
+  out.precision(10);
+  out.width(15);
+  out.setf(std::ofstream::left);
+  out << -1.f << ' ';
+
+  out.precision(10);
+  out.width(15);
+  out.setf(std::ofstream::left);
+  out << -1.f << std::endl;
   
   k++;
  }
  
- out << -2. << -2. << std::endl;
+ out.precision(10);
+ out.width(15);
+ out.setf(std::ofstream::left);
+ out << -2.f << ' ';
+
+ out.precision(10);
+ out.width(15);
+ out.setf(std::ofstream::left);
+ out << -2.f << std::endl;
 
  return true;
 }
