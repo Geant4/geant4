@@ -97,7 +97,7 @@ If no name is specified, the default is test51.hbk.
 - Histogram 40: Energy distribution of transmitted photons
 - Histogram 50: Angular distribution of backscattered photons
 - Histogram 60: Energy  distribution of backscattered photons
-- Nutple 1: energy (kev), angle (deg) of the photons emerging from the slab
+- Nutple 1: energy (kev), theta (deg), phi (deg) of the photons emerging from the slab
 
 4. Set-up 
 
