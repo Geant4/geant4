@@ -89,7 +89,9 @@ How to change the cut (threshold of production of secondary particles) interacti
 
 3. Analysis
 
-The output of the test is test51.hbk;
+The output of the test is an hbook file, whose name (and path) can be set using the command 
+/analysis/filename myfilename.hbk
+If no name is specified, the default is test51.hbk.
 
 - Histogram 30: Angular distribution of transmitted photons
 - Histogram 40: Energy distribution of transmitted photons

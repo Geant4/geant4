@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2005-07-05 11:09:44 guatelli Exp $
+$Id: History,v 1.2 2005-07-07 07:32:36 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+7-07-2005 Luciano Pandola
+          Moved booking of the hbook file from main() to RunAction(). This allows the 
+          name of the file to be set via macro (messenger class added)
 
 5-07-2005 Susanna Guatelli
 	  Test created in CVS

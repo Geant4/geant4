@@ -21,45 +21,46 @@
 // ********************************************************************
 //
 //
-// $Id: Tst51RunAction.hh,v 1.2 2005-07-07 07:34:19 pandola Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-// 
+// $Id: XrayFluoRunActionMessenger.cc
+// GEANT4 tag $Name: xray_fluo-V04-01-03
 //
-//
-// $Id: Tst51RunAction.hh,v 1.2 2005-07-07 07:34:19 pandola Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
 // History:
 // -----------
-// 17 May  2003   S. Guatelli   1st implementation
-// 06 Jul  2005   L. Pandola    Added filename private member and messenger
 //
 // -------------------------------------------------------------------
 
-#ifndef Tst51RunAction_h
-#define Tst51RunAction_h 1
+#include "Tst51RunActionMessenger.hh"
+#include "Tst51RunAction.hh"
 
-#include "G4UserRunAction.hh"
-#include "globals.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithAString.hh"
 
-class G4Run;
-class Tst51RunActionMessenger;
-class Tst51RunAction : public G4UserRunAction
+Tst51RunActionMessenger::Tst51RunActionMessenger(Tst51RunAction * run)
+:fTst51RunAction(run)
 {
-public:
-    Tst51RunAction();
-   ~Tst51RunAction();
+  analysisDir = new G4UIdirectory("/analysis/");
+  analysisDir->SetGuidance("analysis commands");
 
-public:
-  void BeginOfRunAction(const G4Run*);
-  void EndOfRunAction(const G4Run*);
-  void SetFileName(G4String ff){filename = ff;};
+  fileNameCmd = new G4UIcmdWithAString("/analysis/filename",this);  
+  fileNameCmd->SetGuidance("Change the name of the hbook file");
+}
 
-private:
-  G4String filename;
-  Tst51RunActionMessenger* theMessenger;
-};
-#endif
+Tst51RunActionMessenger::~Tst51RunActionMessenger()
+{  
+  delete analysisDir;
+  delete fileNameCmd;
+}
+  
+void Tst51RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+{
+  if (command == fileNameCmd)
+   { fTst51RunAction->SetFileName(newValue); }
+}
+
+
+
+
+
+
 

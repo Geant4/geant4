@@ -34,6 +34,7 @@
 // History:
 // -----------
 // 17 May  2003   S. Guatelli   1st implementation
+// 06 Jul  2005   L. Pandola    Filename given as argument of book()
 //
 // -------------------------------------------------------------------
  
@@ -64,7 +65,7 @@ public:
   
   ~Tst51AnalysisManager();
   static Tst51AnalysisManager* getInstance();
-  void book();
+  void book(G4String);
   void angularDistributionTransmittedGamma(G4double);
   void energyDistributionTransmittedGamma(G4double);
   void angularDistributionBackGamma(G4double);

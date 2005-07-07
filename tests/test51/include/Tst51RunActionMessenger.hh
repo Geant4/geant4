@@ -21,45 +21,51 @@
 // ********************************************************************
 //
 //
-// $Id: Tst51RunAction.hh,v 1.2 2005-07-07 07:34:19 pandola Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-// 
+// $Id: Tst51RunActionMessenger.hh
+// GEANT4 tag $Name: xray_fluo-V04-01-03
 //
-//
-// $Id: Tst51RunAction.hh,v 1.2 2005-07-07 07:34:19 pandola Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
 // History:
 // -----------
-// 17 May  2003   S. Guatelli   1st implementation
-// 06 Jul  2005   L. Pandola    Added filename private member and messenger
 //
 // -------------------------------------------------------------------
 
-#ifndef Tst51RunAction_h
-#define Tst51RunAction_h 1
 
-#include "G4UserRunAction.hh"
+#ifndef Tst51RunActionMessenger_h
+#define Tst51RunActionMessenger_h 1
+
 #include "globals.hh"
+#include "G4UImessenger.hh"
 
-class G4Run;
-class Tst51RunActionMessenger;
-class Tst51RunAction : public G4UserRunAction
+class Tst51RunAction;
+class G4UIdirectory;
+class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithAString;
+
+class Tst51RunActionMessenger: public G4UImessenger
 {
+  
 public:
-    Tst51RunAction();
-   ~Tst51RunAction();
 
-public:
-  void BeginOfRunAction(const G4Run*);
-  void EndOfRunAction(const G4Run*);
-  void SetFileName(G4String ff){filename = ff;};
-
+  Tst51RunActionMessenger(Tst51RunAction*);
+  ~Tst51RunActionMessenger();
+  
+  void SetNewValue(G4UIcommand*, G4String);
+  
 private:
-  G4String filename;
-  Tst51RunActionMessenger* theMessenger;
+
+  Tst51RunAction*          fTst51RunAction;
+
+  G4UIdirectory* analysisDir;
+  G4UIcmdWithAString*  fileNameCmd;
 };
+
 #endif
+
+
+
+
+
+
+
 

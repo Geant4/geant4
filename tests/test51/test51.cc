@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test51.cc,v 1.1 2005-07-05 11:09:44 guatelli Exp $
+// $Id: test51.cc,v 1.2 2005-07-07 07:32:36 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,10 +44,12 @@
 #include "G4VisExecutive.hh"
 #endif
 
+
 int main(int argc,char** argv) {
  	
   HepRandom :: setTheEngine(new RanecuEngine);   
   G4int seed = time(0);
+  G4cout << "Random seed: " << seed << G4endl;
   HepRandom :: setTheSeed(seed);
  
   G4RunManager * runManager = new G4RunManager;
@@ -84,7 +86,6 @@ int main(int argc,char** argv) {
   G4cout<<"SteppingAction loaded"<<G4endl;
 
   Tst51AnalysisManager* analysis = Tst51AnalysisManager::getInstance();
-  analysis->book();
   G4cout<<"Analysis loaded"<<G4endl;
 
   //get the pointer to the User Interface manager 

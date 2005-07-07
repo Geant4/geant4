@@ -26,13 +26,14 @@
 //    *                             *
 //    *******************************
 //
-// $Id: Tst51AnalysisManager.cc,v 1.1 2005-07-05 11:06:27 guatelli Exp $
+// $Id: Tst51AnalysisManager.cc,v 1.2 2005-07-07 07:33:43 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
 // History:
 // -----------
 // 17 May  2003   S. Guatelli   1st implementation
+// 06 Jul  2005   L. Pandola    Filename given as argument of book()
 //
 // -------------------------------------------------------------------
  
@@ -99,11 +100,11 @@ Tst51AnalysisManager* Tst51AnalysisManager::getInstance()
   return instance;
 }
 
-void Tst51AnalysisManager::book() 
+void Tst51AnalysisManager::book(G4String histogramfile) 
 {
 
-  G4cout<<"Booking test51.hbk"<< G4endl;
- theTree = treeFact -> create("test51.hbk","hbook",false, true);
+  G4cout<<"Booking " << histogramfile << G4endl;
+  theTree = treeFact -> create(histogramfile,"hbook",false, true);
   
  histogramFactory = aFact -> createHistogramFactory( *theTree );
  
@@ -174,7 +175,7 @@ void Tst51AnalysisManager::finish()
 {  
   theTree -> commit();
   theTree -> close();
-  G4cout<<"Committing test51.hbk"<<G4endl;
+  G4cout<<"Committing hbook file"<<G4endl;
 }
 
 
