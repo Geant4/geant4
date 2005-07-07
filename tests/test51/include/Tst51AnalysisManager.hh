@@ -35,6 +35,7 @@
 // -----------
 // 17 May  2003   S. Guatelli   1st implementation
 // 06 Jul  2005   L. Pandola    Filename given as argument of book()
+// 07 Jul  2005   L. Pandola    Added phi dumping in ntuple
 //
 // -------------------------------------------------------------------
  
@@ -72,7 +73,7 @@ public:
   void energyDistributionBackGamma(G4double);
   void angularDistributionPostStep(G4double);
   void energyDistributionPostStep(G4double);
-  void fillNtuple(G4double, G4double);
+  void fillNtuple(G4double, G4double, G4double);
   void finish();
 
 private:

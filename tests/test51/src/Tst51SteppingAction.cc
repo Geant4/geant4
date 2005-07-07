@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst51SteppingAction.cc,v 1.1 2005-07-05 11:06:27 guatelli Exp $
+// $Id: Tst51SteppingAction.cc,v 1.2 2005-07-07 13:01:26 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -31,6 +31,7 @@
 // -----------
 //27 May  2003   S.Guatelli    first code review 
 //17 May  2003   S. Guatelli   1st implementation
+// 07 Jul  2005   L. Pandola    Added phi dumping in ntuple
 //
 // -------------------------------------------------------------------
 #include "G4ios.hh"
@@ -70,6 +71,7 @@ void Tst51SteppingAction::UserSteppingAction(const G4Step* aStep)
 	{
 
 	  G4double theta =  ( aStep -> GetPreStepPoint() -> GetMomentum()).theta();
+	  G4double phi = (aStep->GetPreStepPoint()->GetMomentum()).phi();
 	  G4double kineticEnergy = aStep -> GetPreStepPoint() -> GetKineticEnergy();
 	 
 	      if (theta < 90 * deg)
@@ -83,7 +85,7 @@ void Tst51SteppingAction::UserSteppingAction(const G4Step* aStep)
 		  analysis -> angularDistributionBackGamma(theta/deg);
 		  analysis -> energyDistributionBackGamma(kineticEnergy/keV); 
 		}
-	      analysis-> fillNtuple(kineticEnergy/keV, theta/deg);
+	      analysis-> fillNtuple(kineticEnergy/keV, theta/deg, phi/deg);
 	     }	
     }
     }

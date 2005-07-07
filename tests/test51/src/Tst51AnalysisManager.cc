@@ -26,7 +26,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: Tst51AnalysisManager.cc,v 1.2 2005-07-07 07:33:43 pandola Exp $
+// $Id: Tst51AnalysisManager.cc,v 1.3 2005-07-07 13:01:26 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
@@ -34,6 +34,7 @@
 // -----------
 // 17 May  2003   S. Guatelli   1st implementation
 // 06 Jul  2005   L. Pandola    Filename given as argument of book()
+// 07 Jul  2005   L. Pandola    Added phi dumping in ntuple
 //
 // -------------------------------------------------------------------
  
@@ -123,7 +124,7 @@ void Tst51AnalysisManager::book(G4String histogramfile)
  energyPostStep = histogramFactory -> createHistogram1D("90", "energy distribution post step", 100, 0., 80.);
 
  //ntuple
- G4String columnNames = "double energy; double angle";
+ G4String columnNames = "double energy; double theta; double phi";
  G4String options = "";
 
  if (tupFact) ntuple = tupFact -> create("1","1", columnNames,options);
@@ -157,15 +158,17 @@ void Tst51AnalysisManager::energyDistributionPostStep(G4double energy)
 {
   energyPostStep -> fill(energy);
 }
-void Tst51AnalysisManager::fillNtuple(G4double energy, G4double angle)
+void Tst51AnalysisManager::fillNtuple(G4double energy, G4double angle, G4double phi)
 {
 if (ntuple)
     {
       G4int iEnergy = ntuple -> findColumn("energy");
-      G4int iAngle = ntuple -> findColumn("angle");
+      G4int iAngle = ntuple -> findColumn("theta");
+      G4int iPhi = ntuple -> findColumn("phi");
      
       ntuple -> fill(iEnergy, energy);
       ntuple -> fill(iAngle, angle); 
+      ntuple -> fill(iPhi,phi);
     }
 
   ntuple -> addRow(); 
@@ -175,7 +178,7 @@ void Tst51AnalysisManager::finish()
 {  
   theTree -> commit();
   theTree -> close();
-  G4cout<<"Committing hbook file"<<G4endl;
+  G4cout<<"Committing test51.hbk"<<G4endl;
 }
 
 

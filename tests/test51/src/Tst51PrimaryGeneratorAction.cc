@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst51PrimaryGeneratorAction.cc,v 1.1 2005-07-05 11:06:27 guatelli Exp $
+// $Id: Tst51PrimaryGeneratorAction.cc,v 1.2 2005-07-07 13:01:26 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -62,7 +62,11 @@ Tst51PrimaryGeneratorAction::Tst51PrimaryGeneratorAction()
   
   particleGun -> SetParticlePosition(G4ThreeVector(0. , d, -d));
  
-  particleGun -> SetParticleMomentumDirection(G4ThreeVector(0., -dir, dir));
+  G4ThreeVector direction(0., -dir, dir);
+  particleGun -> SetParticleMomentumDirection(direction);
+  G4cout << "Initial beam direction " << G4endl;
+  G4cout << "Theta: " << direction.theta()/deg << " deg" << G4endl;
+  G4cout << "Phi: " << direction.phi()/deg << " deg" << G4endl;
   particleGun -> SetParticleEnergy(70. * keV);
 }
 
