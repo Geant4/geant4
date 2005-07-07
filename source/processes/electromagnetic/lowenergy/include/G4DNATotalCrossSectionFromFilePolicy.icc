@@ -1,0 +1,121 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4DNATotalCrossSectionFromFilePolicy.icc,v 1.1 2005-07-07 16:38:58 capra Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+
+#ifndef   G4DNATOTALCROSSSECTIONFROMFILEPOLICY_HH
+ #include "G4Electron.hh"
+
+ #include "Randomize.hh"
+
+ template <typename IncomingParticlePolicy, typename DataFilePolicy, typename InterpolationAlgorithmPolicy>
+ G4double                               G4DNATotalCrossSectionFromFilePolicy<IncomingParticlePolicy, DataFilePolicy, InterpolationAlgorithmPolicy> :: TotalCrossSection(G4double k, G4int /* z */) const
+ {
+  if (!dataset)
+  {
+   G4Exception("G4DNATotalCrossSectionFromFilePolicy<>::TotalCrossSection: dataset not loaded");
+   return 0;
+  }
+ 
+  if (k < DataFilePolicy::lowEnergyLimit)
+  {
+   if (DataFilePolicy::zeroBelowLowEnergyLimit)
+    return 0;
+  
+   k=DataFilePolicy::lowEnergyLimit;
+  }
+  else if (k > DataFilePolicy::highEnergyLimit)
+  {
+   if (DataFilePolicy::zeroAboveHighEnergyLimit)
+    return 0;
+    
+   k=DataFilePolicy::highEnergyLimit;
+  }
+
+  return dataset->FindValue(k);
+ }
+ 
+ G4int                                  G4DNATotalCrossSectionFromFilePolicy<IncomingParticlePolicy, DataFilePolicy, InterpolationAlgorithmPolicy> :: RandomizePartialCrossSection(G4double k)
+ {
+  if (!dataset)
+  {
+   G4Exception("G4DNATotalCrossSectionFromFilePolicy<>::RandomizePartialCrossSection: dataset not loaded");
+   return 0;
+  }
+  
+  const size_t n(dataset->NumberOfComponents());
+  size_t i(n);
+  G4double values[n];
+  G4double value(0);
+  
+  while (i>0)
+  {
+   i--;
+   values[i]=dataset->GetComponent(i)->FindValue(k);
+   value+=values[i];
+  }
+  
+  value*=G4UniformRand();
+  
+  i=n;
+  
+  while (i>0)
+  {
+   i--;
+   
+   if (values[i]>value)
+    return i;
+  
+   value-=values[i];
+  }
+  
+  return 0;
+ }
+ 
+ G4int                                  G4DNATotalCrossSectionFromFilePolicy<IncomingParticlePolicy, DataFilePolicy, InterpolationAlgorithmPolicy> :: NumberOfPartialCrossSections(void)
+ {
+  if (!dataset)
+  {
+   G4Exception("G4DNATotalCrossSectionFromFilePolicy<>::NumberOfPartialCrossSections: dataset not loaded");
+   return 0;
+  }
+  
+  return dataset->NumberOfComponents();
+ }
+
+ void                                   G4DNATotalCrossSectionFromFilePolicy<IncomingParticlePolicy, DataFilePolicy, InterpolationAlgorithmPolicy> :: BuildTotalCrossSection(void)
+ {
+  if (dataset)
+   delete dataset;
+   
+ //  - [public] static const double zeroAboveLowEnergyLimit
+ //  - [public] static const double dataFileEnergyUnit
+ //  - [public] static const double dataFileCrossSectionUnit
+ //  - [public] static char const * const dataFileName
+ 
+  dataset=new G4DNACrossSectionDataSet(new InterpolationAlgorithmPolicy, DataFilePolicy::dataFileEnergyUnit, DataFilePolicy::dataFileCrossSectionUnit);
+  dataset->LoadData(DataFilePolicy::dataFileName);
+ }
+#endif /* G4DNATOTALCROSSSECTIONFROMFILEPOLICY_HH */
