@@ -50,6 +50,9 @@
 #include "HadrontherapyPositronStandard.hh"
 #include "HadrontherapyPositronPenelope.hh"
 #include "HadrontherapyIonLowE.hh"
+#include "HadrontherapyIonLowEZiegler1977.hh"
+#include "HadrontherapyIonLowEZiegler1985.hh"
+#include "HadrontherapyIonLowEZiegler2000.hh"
 #include "HadrontherapyIonStandard.hh"
 #include "HadrontherapyProtonPrecompound.hh"
 #include "HadrontherapyProtonPrecompoundFermi.hh"
@@ -235,7 +238,8 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	}
     }
   
-  // Register Low Energy ICRU processes for protons and ions
+  // Register Low Energy  processes for protons and ions
+  // Stopping power parameterisation: ICRU49 (default model)
   
   if (name == "ion-LowE") 
     {
@@ -250,6 +254,65 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
                  << " is registered" << G4endl;
 	  RegisterPhysics( new HadrontherapyIonLowE(name) );
+	  ionIsRegistered = true;
+	}
+    }
+
+// Register Low Energy processes for protons and ions
+// Stopping power parameterisation: Ziegler 1977
+ if (name == "ion-LowE-ziegler1977") 
+    {
+      if (ionIsRegistered) 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- proton List already existing" 
+                 << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics( new HadrontherapyIonLowEZiegler1977(name) );
+	  ionIsRegistered = true;
+	}
+    }
+
+
+// Register Low Energy processes for protons and ions
+// Stopping power parameterisation: Ziegler 1985
+ if (name == "ion-LowE-ziegler1985") 
+    {
+      if (ionIsRegistered) 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- proton List already existing" 
+                 << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics( new HadrontherapyIonLowEZiegler1985(name) );
+	  ionIsRegistered = true;
+	}
+    }
+
+
+// Register Low Energy processes for protons and ions
+// Stopping power parameterisation: SRIM2000
+ if (name == "ion-LowE-ziegler2000") 
+    {
+      if (ionIsRegistered) 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- proton List already existing" 
+                 << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics( new HadrontherapyIonLowEZiegler2000(name) );
 	  ionIsRegistered = true;
 	}
     }

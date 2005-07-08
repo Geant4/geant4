@@ -19,37 +19,38 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// $Id: HadrontherapyIonStandard.cc; May 2005
+// $Id: HadrontherapyIonLowE.cc; May 2005
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// G.A.P. Cirrone(a)*, G. Candiano, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
 // 
 // (a) Laboratori Nazionali del Sud 
 //     of the National Institute for Nuclear Physics, Catania, Italy
 // (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
 // 
 // * cirrone@lns.infn.it
-// ----------------------------------------------------------------------------
+// --------------------------------------------------------------
 
-#include "HadrontherapyIonStandard.hh"
+#include "HadrontherapyIonLowEZiegler2000.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MultipleScattering.hh"
+#include "G4hLowEnergyIonisation.hh"
 #include "G4hIonisation.hh"
-#include "G4ionIonisation.hh"
-#include "G4MultipleScattering.hh"
+#include "G4hLowEnergyLoss.hh"
 #include "G4StepLimiter.hh"
+#include "G4hSRIM2000p.hh" 
 
-HadrontherapyIonStandard::HadrontherapyIonStandard(const G4String& name): G4VPhysicsConstructor(name)
+HadrontherapyIonLowEZiegler2000::HadrontherapyIonLowEZiegler2000(const G4String& name): G4VPhysicsConstructor(name)
 { }
 
-HadrontherapyIonStandard::~HadrontherapyIonStandard()
+HadrontherapyIonLowEZiegler2000::~HadrontherapyIonLowEZiegler2000()
 { }
 
-void HadrontherapyIonStandard::ConstructProcess()
+void HadrontherapyIonLowEZiegler2000::ConstructProcess()
 {
   theParticleIterator -> reset();
 
@@ -59,23 +60,30 @@ void HadrontherapyIonStandard::ConstructProcess()
       G4ProcessManager* manager = particle -> GetProcessManager();
       G4String particleName = particle -> GetParticleName();
       G4double charge = particle -> GetPDGCharge();
-      
-      if (particleName == "proton") 
+
+      // protons
+      if (particleName == "proton")
 	{
-          G4hIonisation* ionisation = new G4hIonisation();
-	  G4VProcess*  multipleScattering = new G4MultipleScattering(); 
-	  manager -> AddProcess(multipleScattering, -1,1,1);   
-	  manager -> AddProcess(ionisation, -1,2,2);
-	  manager -> AddProcess(new G4StepLimiter(),-1,-1, 3);
+         G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();
+         // Electronic Stopping Power: SRIM 2000 parameterisation
+         // Nuclear stopping power: ICRU 49
+         ionisation -> SetElectronicStoppingPowerModel(particle, "SRIM2000p");
+	 ionisation -> SetNuclearStoppingOn() ; 
+
+         G4VProcess*  multipleScattering = new G4MultipleScattering(); 
+         manager -> AddProcess(multipleScattering, -1,1,1);   
+         manager -> AddProcess(ionisation, -1,2,2);
+	 manager -> AddProcess(new G4StepLimiter(),-1,-1, 3);
 	}
-      // ions, pions, kaons, etc.
-      if (( charge != 0. ) && particleName != "e+" && particleName != "mu+" &&
+      // ions, alpha, pions, kaons, generic ion.....
+    if (( charge != 0. ) && particleName != "e+" && particleName != "mu+" &&
 	  particleName != "e-" && particleName != "mu-" && particleName != "proton") 
 	{
 	  if((!particle -> IsShortLived()) &&
 	     (particle -> GetParticleName() != "chargedgeantino"))
 	    {
-	      G4ionIonisation* ionisation = new G4ionIonisation();
+	      G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();
+	      ionisation -> SetNuclearStoppingOn() ;
 	      G4VProcess*  multipleScattering = new G4MultipleScattering(); 
 	      manager -> AddProcess(multipleScattering, -1,1,1);   
 	      manager -> AddProcess(ionisation, -1,2,2);
