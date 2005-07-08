@@ -171,8 +171,13 @@ to visualise the experimental set-up with OpenGL
 
 Both electromagnetic and hadronic physic processes are activated for the particles of the
 experimental set-up.
-Different physics models can be choosen. Examples of activation are provided in the macro files.
+Different physics models can b activated by the user.
+Examples of activation are provided in the macro files.
+- protonEMLowEnergy.mac: example to activate e.m. low energy physics with different 
+stopping power models for protons
+- protonEMStandard.mac: example to activate the e.m. standard physics.
 
+	
 ---->6. SIMULATION OUTPUT                                    
 
 The output is an .hbk file (hadrontherapy.hbk) produced 

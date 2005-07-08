@@ -59,23 +59,24 @@ void HadrontherapyIonStandard::ConstructProcess()
       G4ProcessManager* manager = particle -> GetProcessManager();
       G4String particleName = particle -> GetParticleName();
       G4double charge = particle -> GetPDGCharge();
-      
-      if (particleName == "proton") 
+  
+      if (particleName == "GenericIon")
 	{
-          G4hIonisation* ionisation = new G4hIonisation();
+	  G4ionIonisation* ionisation = new G4ionIonisation();
 	  G4VProcess*  multipleScattering = new G4MultipleScattering(); 
 	  manager -> AddProcess(multipleScattering, -1,1,1);   
 	  manager -> AddProcess(ionisation, -1,2,2);
 	  manager -> AddProcess(new G4StepLimiter(),-1,-1, 3);
+
 	}
-      // ions, pions, kaons, etc.
+      //protons and generic hadrons
       if (( charge != 0. ) && particleName != "e+" && particleName != "mu+" &&
-	  particleName != "e-" && particleName != "mu-" && particleName != "proton") 
+	  particleName != "e-" && particleName != "mu-" && particleName !="GenericIon") 
 	{
 	  if((!particle -> IsShortLived()) &&
 	     (particle -> GetParticleName() != "chargedgeantino"))
 	    {
-	      G4ionIonisation* ionisation = new G4ionIonisation();
+	      G4hIonisation* ionisation = new G4hIonisation();
 	      G4VProcess*  multipleScattering = new G4MultipleScattering(); 
 	      manager -> AddProcess(multipleScattering, -1,1,1);   
 	      manager -> AddProcess(ionisation, -1,2,2);

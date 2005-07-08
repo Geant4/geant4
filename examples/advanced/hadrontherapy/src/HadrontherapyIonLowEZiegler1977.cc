@@ -76,6 +76,7 @@ void HadrontherapyIonLowEZiegler1977::ConstructProcess()
          manager -> AddProcess(ionisation, -1,2,2);
 	 manager -> AddProcess(new G4StepLimiter(),-1,-1, 3);
 	}
+
       // ions, alpha, pions, kaons, generic ion.....
     if (( charge != 0. ) && particleName != "e+" && particleName != "mu+" &&
 	  particleName != "e-" && particleName != "mu-" && particleName != "proton") 

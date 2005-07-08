@@ -67,8 +67,7 @@ void HadrontherapyIonLowE::ConstructProcess()
 	     (particle -> GetParticleName() != "chargedgeantino"))
 	    {
 	      // ICRU49 parameterisation is the default one
-              G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();
-		
+              G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();		
 	      ionisation -> SetNuclearStoppingOn() ;
 	  
 	      G4VProcess*  multipleScattering = new G4MultipleScattering(); 

@@ -23,13 +23,13 @@
 /physics/addPhysics ion-LowE
 #
 ### ZIEGLER 1977 parameterisation
-#/physics/addPhysics ion-LowE-zielger1977
+#/physics/addPhysics ion-LowE-ziegler1977
 #
 ### ZIEGLER 1985 parameterisation
-#/physics/addPhysics ion-LowE-zielger19785
+#/physics/addPhysics ion-LowE-ziegler1985
 #
 ### ZIEGLER 2000 parameterisation
-#/physics/addPhysics ion-LowE-zielger19785
+#/physics/addPhysics ion-LowE-ziegler2000
 #
 /run/initialize
 /run/beamOn 100
