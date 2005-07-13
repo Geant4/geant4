@@ -1,0 +1,49 @@
+
+
+#-*-python-*-
+
+Application = "G4Analysis"
+
+WorkerInitData = {
+    'G4ApplicationComponentName' : 
+"G4MedLinac",
+    'initMacroFile' : """
+
+/PhysicsList/cut 0.1 mm
+/control/verbose 1
+/control/saveHistory
+/run/verbose 2
+
+
+/run/initialize
+/tracking/storeTrajectory 1
+
+/Phantom/dimension 15. cm
+/Phantom/Nvoxels 300
+/Phantom/maxStep 0.1 mm
+
+/PhantomSD/dimension 15. cm
+/PhantomSD/Nvoxels 300
+
+
+/Jaws/X1/DistanceFromAxis -2.5 cm
+/Jaws/X2/DistanceFromAxis 2.5 cm
+/Jaws/Y1/DistanceFromAxis -2.5 cm
+/Jaws/Y2/DistanceFromAxis 2.5 cm
+/Jaws/update
+
+/energy 6.0 MeV
+/sourceType 0.127 MeV
+
+"""
+}
+
+JobInitData = {
+    'runParams' : {
+       'seed' : 0 ,
+       'eventNumber' : 200,
+       'macroFileTemplate': "/run/beamOn " },
+    'eventsPerWorker' :100,
+    'workerInit' : WorkerInitData
+    }
+
