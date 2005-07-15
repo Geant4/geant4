@@ -290,7 +290,8 @@
 	 else
 	 {
 		 Radius = Rm * RadiusTail * std::sqrt( Random2/(1. - Random2) );
-	 }
+	 }	 
+	 Radius =  std::min(Radius,DBL_MAX);
 	 return Radius;
  }
  
