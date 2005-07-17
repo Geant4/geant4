@@ -21,44 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTSimpleScanner.cc,v 1.2 2005-07-17 13:59:24 allison Exp $
+// $Id: G4RayTracerXViewer.hh,v 1.1 2005-07-17 13:59:24 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-//
 
-#include "G4RTSimpleScanner.hh"
+// John Allison  17th March 2000
 
-G4RTSimpleScanner::G4RTSimpleScanner():
-  theGSName("RayTracer"), theGSNickname("RayTracer"),
-  theNRow(0), theNColumn(0), theIRow(0), theIColumn(0) {}
+#ifndef G4RAYTRACERXVIEWER_HH
+#define G4RAYTRACERXVIEWER_HH
 
-const G4String& G4RTSimpleScanner::GetGSName() const
-{return theGSName;}
+#include "G4RayTracerViewer.hh"
 
-const G4String& G4RTSimpleScanner::GetGSNickname() const
-{return theGSNickname;}
+class G4RayTracerXViewer: public G4RayTracerViewer {
+public:
+  G4RayTracerXViewer(G4VSceneHandler&,const G4String& name);
+  virtual ~G4RayTracerXViewer();
+};
 
-void G4RTSimpleScanner::Initialize(G4int nRow, G4int nColumn) {
-  theNRow = nRow;
-  theNColumn = nColumn;
-  theIRow = 0;
-  theIColumn = -1;
-}
-
-G4bool G4RTSimpleScanner::Coords(G4int& iRow, G4int& iColumn)
-{
-  // Increment column and, if necessary, increment row...
-  ++theIColumn;
-  if (theIColumn >= theNColumn) {
-    theIColumn = 0;
-    ++theIRow;
-  }
-
-  // Return if finished...
-  if (theIRow >= theNRow) return false;
-
-  // Return current row and column...
-  iRow = theIRow;
-  iColumn = theIColumn;
-  return true;
-}
+#endif

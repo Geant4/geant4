@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerViewer.cc,v 1.12 2004-12-07 23:41:01 perl Exp $
+// $Id: G4RayTracerViewer.cc,v 1.13 2005-07-17 13:59:24 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4RayTracerViewer.hh"
@@ -37,7 +37,13 @@
 G4RayTracerViewer::G4RayTracerViewer
 (G4VSceneHandler& sceneHandler, const G4String& name):
   G4VViewer(sceneHandler, sceneHandler.IncrementViewCount(), name),
-  fFileCount(0) {}
+  fFileCount(0)
+{
+  G4RayTracer* theTracer = 
+    (G4RayTracer*) fSceneHandler.GetGraphicsSystem();
+  theTracer->SetNColumn(fVP.GetWindowSizeHintX());
+  theTracer->SetNRow(fVP.GetWindowSizeHintY());
+}
 
 G4RayTracerViewer::~G4RayTracerViewer() {}
 

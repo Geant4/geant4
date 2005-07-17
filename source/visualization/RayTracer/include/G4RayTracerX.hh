@@ -21,44 +21,37 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTSimpleScanner.cc,v 1.2 2005-07-17 13:59:24 allison Exp $
+// $Id: G4RayTracerX.hh,v 1.1 2005-07-17 13:59:24 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
+// John Allison  11th September 2003
 
-#include "G4RTSimpleScanner.hh"
+#ifndef G4RAYTRACERX_HH
+#define G4RAYTRACERX_HH
 
-G4RTSimpleScanner::G4RTSimpleScanner():
-  theGSName("RayTracer"), theGSNickname("RayTracer"),
-  theNRow(0), theNColumn(0), theIRow(0), theIColumn(0) {}
+// class description:
+//
+// G4RayTracerX
+// X window version of RayTracer (also produces jpeg file - see class
+// description for G4RayTracer).
 
-const G4String& G4RTSimpleScanner::GetGSName() const
-{return theGSName;}
+#include "G4RayTracer.hh"
 
-const G4String& G4RTSimpleScanner::GetGSNickname() const
-{return theGSNickname;}
+#include <X11/Xutil.h>
 
-void G4RTSimpleScanner::Initialize(G4int nRow, G4int nColumn) {
-  theNRow = nRow;
-  theNColumn = nColumn;
-  theIRow = 0;
-  theIColumn = -1;
-}
-
-G4bool G4RTSimpleScanner::Coords(G4int& iRow, G4int& iColumn)
+class G4RayTracerX : public G4RayTracer
 {
-  // Increment column and, if necessary, increment row...
-  ++theIColumn;
-  if (theIColumn >= theNColumn) {
-    theIColumn = 0;
-    ++theIRow;
-  }
+public:
+  G4RayTracerX();
+  G4VSceneHandler* CreateSceneHandler (const G4String& );
+  G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& );
 
-  // Return if finished...
-  if (theIRow >= theNRow) return false;
+  // X Window variables...
+  Display* display;
+  Window win;
+  GC gc;
+  XStandardColormap *scmap;
+};
 
-  // Return current row and column...
-  iRow = theIRow;
-  iColumn = theIColumn;
-  return true;
-}
+#endif

@@ -21,44 +21,42 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTSimpleScanner.cc,v 1.2 2005-07-17 13:59:24 allison Exp $
+// $Id: G4RayTracerX.cc,v 1.1 2005-07-17 13:59:24 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
+//
 
-#include "G4RTSimpleScanner.hh"
+#include "G4RayTracerX.hh"
 
-G4RTSimpleScanner::G4RTSimpleScanner():
-  theGSName("RayTracer"), theGSNickname("RayTracer"),
-  theNRow(0), theNColumn(0), theIRow(0), theIColumn(0) {}
+#include "G4RayTracerFeatures.hh"
+#include "G4RTXScanner.hh"
+#include "G4RayTracerSceneHandler.hh"
+#include "G4RayTracerXViewer.hh"
 
-const G4String& G4RTSimpleScanner::GetGSName() const
-{return theGSName;}
-
-const G4String& G4RTSimpleScanner::GetGSNickname() const
-{return theGSNickname;}
-
-void G4RTSimpleScanner::Initialize(G4int nRow, G4int nColumn) {
-  theNRow = nRow;
-  theNColumn = nColumn;
-  theIRow = 0;
-  theIColumn = -1;
+G4RayTracerX::G4RayTracerX():
+  G4RayTracer(0, new G4RTXScanner)
+{
+  backgroundColour = G4Colour(0.,0.,0.);
 }
 
-G4bool G4RTSimpleScanner::Coords(G4int& iRow, G4int& iColumn)
-{
-  // Increment column and, if necessary, increment row...
-  ++theIColumn;
-  if (theIColumn >= theNColumn) {
-    theIColumn = 0;
-    ++theIRow;
+G4VSceneHandler* G4RayTracerX::CreateSceneHandler (const G4String& name) {
+  G4VSceneHandler* pSceneHandler = new G4RayTracerSceneHandler (*this, name);
+  return pSceneHandler;
+}
+
+G4VViewer* G4RayTracerX::CreateViewer (G4VSceneHandler& sceneHandler,
+				       const G4String& name) {
+  G4VViewer* pViewer = new G4RayTracerXViewer (sceneHandler, name);
+  if (pViewer) {
+    if (pViewer->GetViewId() < 0) {
+      G4cerr << "G4RayTracerX::CreateViewer: error flagged by negative"
+        "\n  view id in G4RayTracerXViewer creation."
+        "\n Destroying view and returning null pointer."
+           << G4endl;
+      delete pViewer;
+      pViewer = 0;
+    }
   }
-
-  // Return if finished...
-  if (theIRow >= theNRow) return false;
-
-  // Return current row and column...
-  iRow = theIRow;
-  iColumn = theIColumn;
-  return true;
+  return pViewer;
 }

@@ -21,44 +21,57 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTSimpleScanner.cc,v 1.2 2005-07-17 13:59:24 allison Exp $
+// $Id: G4RTXScanner.hh,v 1.1 2005-07-17 13:59:24 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 
-#include "G4RTSimpleScanner.hh"
+#ifndef G4RTXScanner_H
+#define G4RTXScanner_H 1
 
-G4RTSimpleScanner::G4RTSimpleScanner():
-  theGSName("RayTracer"), theGSNickname("RayTracer"),
-  theNRow(0), theNColumn(0), theIRow(0), theIColumn(0) {}
+// class description:
+//
+// G4RTXScanner
+// Provides a sequence of window coordinates suitable for a visible
+// window of ever increasing resolution.
 
-const G4String& G4RTSimpleScanner::GetGSName() const
-{return theGSName;}
+#include "G4VRTScanner.hh"
 
-const G4String& G4RTSimpleScanner::GetGSNickname() const
-{return theGSNickname;}
+class G4RayTracer;
 
-void G4RTSimpleScanner::Initialize(G4int nRow, G4int nColumn) {
-  theNRow = nRow;
-  theNColumn = nColumn;
-  theIRow = 0;
-  theIColumn = -1;
-}
+class G4RTXScanner: public G4VRTScanner {
 
-G4bool G4RTSimpleScanner::Coords(G4int& iRow, G4int& iColumn)
-{
-  // Increment column and, if necessary, increment row...
-  ++theIColumn;
-  if (theIColumn >= theNColumn) {
-    theIColumn = 0;
-    ++theIRow;
-  }
+public: // with description
 
-  // Return if finished...
-  if (theIRow >= theNRow) return false;
+  G4RTXScanner();
 
-  // Return current row and column...
-  iRow = theIRow;
-  iColumn = theIColumn;
-  return true;
-}
+  // Compiler defaults for destructor, copy constructor and
+  // assignmemt.
+
+  virtual const G4String& GetGSName() const;
+  // Get name that acts as graphics system name.
+
+  virtual const G4String& GetGSNickname() const;
+  // Get name that acts as graphics system nickname.  It is this that
+  // the user specifies on the /vis/open and /vis/sceneHandler/create
+  // commands.
+
+  virtual void Initialize(G4int nRow, G4int nColumn);
+  // Intialises scanner for window with nRow rows and nColumn columns.
+
+  virtual G4bool Coords(G4int& iRow, G4int& iColumn);
+  // Supplies coordinate (iRow,iColumn) and returns false when the
+  // sequence has finished, i.e., on the call *after* suplying the
+  // last valid coordinate.
+
+  virtual void Draw
+  (unsigned char red, unsigned char green, unsigned char blue,
+   G4RayTracer*);
+  // Draw coloured square at current position.
+
+protected:
+  G4String theGSName, theGSNickname;
+  G4int theNRow, theNColumn, theStep, theIRow, theIColumn;
+};
+
+#endif

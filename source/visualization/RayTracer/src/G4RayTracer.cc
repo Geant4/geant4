@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracer.cc,v 1.15 2005-06-02 17:43:46 allison Exp $
+// $Id: G4RayTracer.cc,v 1.16 2005-07-17 13:59:24 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,8 +56,11 @@
 
 G4RayTracer::G4RayTracer(G4VFigureFileMaker* figMaker,
 			 G4VRTScanner* scanner)
-:G4VGraphicsSystem("RayTracer","RayTracer",RAYTRACER_FEATURES,
-                     G4VGraphicsSystem::threeD)
+:G4VGraphicsSystem
+(scanner ? scanner->GetGSName() : "RayTracer",
+ scanner ? scanner->GetGSNickname() : "RayTracer",
+ RAYTRACER_FEATURES,
+ G4VGraphicsSystem::threeD)
 {
   theFigMaker = figMaker;
   if(!theFigMaker) theFigMaker = new G4RTJpegMaker();
@@ -223,17 +226,16 @@ G4bool G4RayTracer::CreateBitMap()
   while (theScanner->Coords(iRow,iColumn)) {
       G4int iCoord = iRow * nColumn + iColumn;
       G4Event* anEvent = new G4Event(iEvent++);
-      
       G4double angleX = -(viewSpanX/2. - iColumn*stepAngle);
       G4double angleY = viewSpanY/2. - iRow*stepAngle;
       G4ThreeVector rayDirection;
       if(distortionOn)
       {
-        rayDirection = G4ThreeVector(std::tan(angleX)/std::cos(angleY),-std::tan(angleY)/std::cos(angleX),1.0);
+	rayDirection = G4ThreeVector(std::tan(angleX)/std::cos(angleY),-std::tan(angleY)/std::cos(angleX),1.0);
       }
       else
       {
-        rayDirection = G4ThreeVector(std::tan(angleX),-std::tan(angleY),1.0);
+	rayDirection = G4ThreeVector(std::tan(angleX),-std::tan(angleY),1.0);
       }
       rayDirection.rotateZ(headAngle);
       rayDirection.rotateUz(eyeDirection);
@@ -261,15 +263,16 @@ G4bool G4RayTracer::CreateBitMap()
 	theRayShooter->Shoot(anEvent,rayPosition,rayDirection);
 	theEventManager->ProcessOneEvent(anEvent);
 	succeeded = GenerateColour(anEvent,iCoord);
-  //G4cout << iColumn << " " << iRow << " " << anEvent->GetEventID() << G4endl;
       }
       else {  // Ray does not intercept world at all.
 	// Store background colour...
 	colorR[iCoord] = (unsigned char)(int(255*backgroundColour.GetRed()));
 	colorG[iCoord] = (unsigned char)(int(255*backgroundColour.GetGreen()));
 	colorB[iCoord] = (unsigned char)(int(255*backgroundColour.GetBlue()));
+	theScanner->Draw(colorR[iCoord],colorG[iCoord],colorB[iCoord],this);
 	succeeded = true;
       }
+
       delete anEvent;
       if(!succeeded) return false;
   }
@@ -311,6 +314,7 @@ G4bool G4RayTracer::GenerateColour(G4Event* anEvent, G4int iCoord)
   colorR[iCoord] = (unsigned char)(int(255*rayColour.GetRed()));
   colorG[iCoord] = (unsigned char)(int(255*rayColour.GetGreen()));
   colorB[iCoord] = (unsigned char)(int(255*rayColour.GetBlue()));
+  theScanner->Draw(colorR[iCoord],colorG[iCoord],colorB[iCoord],this);
   return true;
 }
 
