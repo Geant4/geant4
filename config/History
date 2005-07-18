@@ -1,4 +1,4 @@
-$Id: History,v 1.267 2005-06-17 06:59:37 gcosmo Exp $
+$Id: History,v 1.268 2005-07-18 15:10:05 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18th July 2005 Gabriele Cosmo (config-V07-01-00)
+- Excluded usage of unnecessary 'ranlib' at creation of the libraries for
+  WIN32-VC system. Fixes an observed problem of debug-symbols corruption.
 
 16th June 2005 Sergey Sadilov (config-V07-00-05)
 - Updated Configure script and support files:
