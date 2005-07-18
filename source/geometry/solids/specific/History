@@ -1,4 +1,4 @@
-$Id: History,v 1.60 2005-07-06 14:25:22 gcosmo Exp $
+$Id: History,v 1.61 2005-07-18 14:57:59 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18-Jul-2005, G.Cosmo (geom-specific-V07-01-01)
+- Fixed compilation warning on WIN32-VC for G4VSurface.cc.
 
 06-Jul-2005, G.Cosmo (geom-specific-V07-01-00)
 - Added new shape G4Ellipsoid. Coworks with tag "greps-V07-01-00".
