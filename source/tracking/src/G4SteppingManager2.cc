@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.23 2004-12-07 09:16:54 gcosmo Exp $
+// $Id: G4SteppingManager2.cc,v 1.24 2005-07-18 15:19:45 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -402,7 +402,7 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
      
      // Set the track status according to what the process defined
      // if kinetic energy >0, otherwise set  fStopButAlive
-     //     fTrack->SetTrackStatus( fParticleChange->GetTrackStatus() );
+     fTrack->SetTrackStatus( fParticleChange->GetTrackStatus() );
      
      // clear ParticleChange
      fParticleChange->Clear();
