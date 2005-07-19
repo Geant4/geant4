@@ -104,7 +104,7 @@ G4bool testG4Ellipsoid()
 
     // testing the volume 
 
-    G4double volume = t2.GetCubicVolume() ;
+    volume = t2.GetCubicVolume() ;
     G4cout << G4endl << G4endl ;
     G4cout << "Test Ellipsoid #2 Volume = " << volume / cm / cm /cm << " cm^3" << G4endl ;
 
