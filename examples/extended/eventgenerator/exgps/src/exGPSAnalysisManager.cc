@@ -68,11 +68,13 @@ ITupleFactory* exGPSAnalysisManager::getTupleFactory()
 
 IPlotter* exGPSAnalysisManager::createPlotter()
 {
+#ifdef JAIDA_HOME 
   if (analysisFactory)
   {
     IPlotterFactory* pf = analysisFactory->createPlotterFactory(0,0);
     if (pf) return pf->create("Plotter");
   }
+#endif
   return 0;
 }
 
@@ -167,7 +169,7 @@ void exGPSAnalysisManager::BeginOfRun()
 						   , 100, -1, 1);
     anglTP = hFactory->createHistogram2D("Source phi-theta distribution",360,0,360
 						  ,180,0,180);
-
+#ifdef JAIDA_HOME
     plotter = createPlotter();
 
     if (plotter)
@@ -181,13 +183,14 @@ void exGPSAnalysisManager::BeginOfRun()
        plotter->region(5)->plot(*anglTP);
        plotter->show();
      }
+#endif
   }
 
   // Create a Tuple
 
   if (tFactory)
   {
-     tuple = tFactory->create("MyTuple","MyTuple","string Pname, double Energy, X, Y, Z, Theta, Phi, Weight","");
+     tuple = tFactory->create("MyTuple","MyTuple","std::string Pname, std::double Energy, X, Y, Z, Theta, Phi, Weight","");
   }
 
 }
