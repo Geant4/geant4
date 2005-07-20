@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4DNATest.cc,v 1.3 2005-07-07 16:37:47 capra Exp $
+// $Id: G4DNATest.cc,v 1.4 2005-07-20 10:04:47 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
@@ -81,8 +81,13 @@
 #include "AIDA/ITuple.h"
 
 // DNA
+#include "G4DNAGenericIonsManager.hh"
 #include "G4DNAElectronElasticBrenner.hh"
 #include "G4DNAElectronElasticEmfietzoglou.hh"
+#include "G4DNAProtonExcitation.hh"
+#include "G4DNAHeliumExcitation.hh"
+#include "G4DNAAlphaPlusExcitation.hh"
+#include "G4DNAAlphaPlusPlusExcitation.hh"
 
 //! \brief Options structure
 struct Options
@@ -99,6 +104,8 @@ struct Options
  const char *material;
  //! \brief Process name
  const char *process;
+ //! \brief Particle name
+ const char *particle;
  //! \brief Minimum energy
  G4double minEnergy;
  //! \brief Maximum energy
@@ -110,7 +117,7 @@ struct Options
 };
 
 //! \brief Default output file name
-struct Options defaultOptions = { false, false, false, "G4DNATest.hbook", "Water", "DNAElectronElasticBrenner", 7.5*eV, 200*eV, 300, 1 };
+struct Options defaultOptions = { false, false, false, "G4DNATest.hbook", "Water", "G4DNAElectronElasticBrenner", "electron", 7.5*eV, 200*eV, 300, 1 };
 
 //! \brief Creates some materials
 void CreateMaterials(void)
@@ -165,6 +172,7 @@ void processOptions(int argc, char ** argv, struct Options * options)
  options->outputFileName   = defaultOptions.outputFileName;
  options->material         = defaultOptions.material;
  options->process          = defaultOptions.process;
+ options->particle         = defaultOptions.particle;
  options->minEnergy        = defaultOptions.minEnergy;
  options->maxEnergy        = defaultOptions.maxEnergy;
  options->nEnergySteps     = defaultOptions.nEnergySteps;
@@ -180,7 +188,7 @@ void processOptions(int argc, char ** argv, struct Options * options)
    {
     case 'h':
     case '?':
-     G4cout << argv[0] << " [-h|-?] [-a] [-b] [-r] [-o <file name>] [-m <material name>] [-p <process name>] [-e <min energy in eV>] [-E <max energy in eV>] [-s <energy steps>] [-n <iterations>] " << G4endl
+     G4cout << argv[0] << " [-h|-?] [-a] [-b] [-r] [-o <file name>] [-m <material name>] [-p <process name>] [-P <particle name>] [-e <min energy in eV>] [-E <max energy in eV>] [-s <energy steps>] [-n <iterations>] " << G4endl
             << G4endl
             << "-h|-?     Shows this help" << G4endl
             << "-a        Enables mean free path test" << G4endl
@@ -189,6 +197,7 @@ void processOptions(int argc, char ** argv, struct Options * options)
             << "-o <arg>  Set the output file name (default: \"" << defaultOptions.outputFileName << "\")" << G4endl
             << "-m <arg>  Set the material (default: \"" << defaultOptions.material << "\")" << G4endl
             << "-p <arg>  Set the process (default: \"" << defaultOptions.process << "\")" << G4endl
+            << "-P <arg>  Set the incoming particle (default: \"" << defaultOptions.particle << "\")" << G4endl
             << "-e <arg>  Set the low energy range in eV (default: " << defaultOptions.minEnergy/eV << " eV)" << G4endl
             << "-E <arg>  Set the high energy range in eV (default: " << defaultOptions.maxEnergy/eV << " eV)" << G4endl
             << "-s <arg>  Set the energy range step (default: " << defaultOptions.nEnergySteps << ")"<< G4endl
@@ -229,6 +238,14 @@ void processOptions(int argc, char ** argv, struct Options * options)
      if (i<argc)
      {
       options->process        = argv[i];
+      break;
+     }
+
+    case 'P':
+     i++;
+     if (i<argc)
+     {
+      options->particle       = argv[i];
       break;
      }
 
@@ -396,10 +413,17 @@ G4VLowEnergyTestableDiscreteProcess * GetSelectedProcess(const struct Options & 
  static G4VLowEnergyTestableDiscreteProcess ** processes=0;
  if (!processes)
  {
-  processes=new G4VLowEnergyTestableDiscreteProcess *[3];
+  G4DNAGenericIonsManager * genericIonsManager;
+  genericIonsManager=G4DNAGenericIonsManager::Instance();
+  
+  processes=new G4VLowEnergyTestableDiscreteProcess * [7];
   processes[0]=new G4DNAElectronElasticBrenner;
   processes[1]=new G4DNAElectronElasticEmfietzoglou;
-  processes[2]=0;
+  processes[2]=new G4DNAProtonExcitation;
+  processes[3]=new G4DNAHeliumExcitation;
+  processes[4]=new G4DNAAlphaPlusExcitation;
+  processes[5]=new G4DNAAlphaPlusPlusExcitation;
+  processes[6]=0;
  }
  
  unsigned long i(0);
@@ -428,36 +452,90 @@ G4VLowEnergyTestableDiscreteProcess * GetSelectedProcess(const struct Options & 
  return 0;
 }
 
+G4ParticleDefinition * const * ParticleList()
+{
+ static G4ParticleDefinition * * particles=0;
+
+ if (!particles)
+ {
+  G4DNAGenericIonsManager * genericIonsManager;
+  genericIonsManager=G4DNAGenericIonsManager::Instance();
+  
+  particles=new G4ParticleDefinition * [9];
+  particles[0]=G4Electron::Electron();
+  particles[1]=G4Positron::Positron();
+  particles[2]=G4Gamma::Gamma();
+  particles[3]=G4AntiProton::AntiProton();
+  particles[4]=G4Proton::Proton();
+  particles[5]=genericIonsManager->GetIon("alpha++");
+  particles[6]=genericIonsManager->GetIon("alpha+");
+  particles[7]=genericIonsManager->GetIon("helium");
+  particles[8]=0;
+ }
+ 
+ return particles;
+}
+
+G4ParticleDefinition * GetSelectedParticle(const struct Options & options)
+{
+ G4ParticleDefinition * const * particles(ParticleList());
+ while (*particles)
+ {
+  if ((*particles)->GetParticleName()==options.particle)
+   return (*particles);
+  
+  particles++;
+ }
+ 
+ G4cout << "Available particles are: " << G4endl;
+ particles=ParticleList();
+
+ while (*particles)
+ {
+  G4cout << (*particles)->GetParticleName();
+  
+  particles++;
+
+  if (*particles)
+   G4cout << ", ";
+ }
+ 
+ G4cout << G4endl;
+ 
+ exit(-2);
+ return 0;
+}
+
 //! \brief Setup processes
 //! \param options Options for the process choice
 void SetPhysics(const struct Options & options)
 {
- G4ParticleDefinition * gamma(G4Gamma::GammaDefinition());
- G4ParticleDefinition * electron(G4Electron::ElectronDefinition());
- G4ParticleDefinition * positron(G4Positron::PositronDefinition());
-  
  G4ProductionCutsTable * cutsTable(G4ProductionCutsTable::GetProductionCutsTable());
  G4ProductionCuts * cuts(cutsTable->GetDefaultProductionCuts());
- G4double cutG(1*micrometer);
- G4double cutE(1*micrometer);
- cuts->SetProductionCut(cutG, gamma);
- cuts->SetProductionCut(cutE, electron);
- cuts->SetProductionCut(cutE, positron);
+
+ G4ParticleDefinition * const * particles(ParticleList());
+ while (*particles)
+ {
+  cuts->SetProductionCut(1*micrometer, *particles);
+  particles++;
+ }
+
  cutsTable->UpdateCoupleTable();
  G4cout << "[OK] Cuts are defined " << G4endl;
 
+ G4ParticleDefinition * particle(GetSelectedParticle(options));
  G4VProcess * eProcess=GetSelectedProcess(options);
- if (! (eProcess->IsApplicable(*electron)))
+ if (! (eProcess->IsApplicable(*particle)))
  {
-  G4cout<< "Process " << eProcess->GetProcessName() << " is not applicable to electrons" << G4endl;
+  G4cout<< "Process " << eProcess->GetProcessName() << " is not applicable to " << particle->GetParticleName() << G4endl;
   exit(0);
   return;
  }
  
- G4cout<< "[OK] Process " << eProcess->GetProcessName() << " is applicable to electrons" << G4endl;
+ G4cout<< "[OK] Process " << eProcess->GetProcessName() << " is applicable to " << particle->GetParticleName() << G4endl;
   
- G4ProcessManager * gProcessManager(new G4ProcessManager(electron));
- electron->SetProcessManager(gProcessManager);
+ G4ProcessManager * gProcessManager(new G4ProcessManager(particle));
+ particle->SetProcessManager(gProcessManager);
  gProcessManager->AddDiscreteProcess(eProcess);
 
 /* G4ProcessManager * eProcessManager(new G4ProcessManager(electron));
@@ -495,7 +573,7 @@ void SetPhysics(const struct Options & options)
  
 
  G4cout << "[OK] Building physics tables" << G4endl;
- eProcess->BuildPhysicsTable(* electron);
+ eProcess->BuildPhysicsTable(* particle);
 
 /* theEMinusMultipleScattering->BuildPhysicsTable(* electron);
  theEMinusIonisation->BuildPhysicsTable(* electron);        
@@ -518,7 +596,7 @@ G4Step * GenerateStep(const struct Options & options)
 
  G4double lnEnergyMin=std::log(options.minEnergy);
  G4double lnEnergyMax=std::log(options.maxEnergy); 
- G4DynamicParticle * dynamicElectron(new G4DynamicParticle(G4Electron::Electron(), momentumDirection, std::exp(lnEnergyMin+(lnEnergyMax-lnEnergyMin)*G4UniformRand())));
+ G4DynamicParticle * dynamicElectron(new G4DynamicParticle(GetSelectedParticle(options), momentumDirection, std::exp(lnEnergyMin+(lnEnergyMax-lnEnergyMin)*G4UniformRand())));
   
  G4Track * aTrack(new G4Track(dynamicElectron, 0., G4ThreeVector(0., 0., 0.)));
 
