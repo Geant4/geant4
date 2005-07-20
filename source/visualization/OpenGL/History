@@ -1,4 +1,4 @@
-$Id: History,v 1.46 2005-05-29 23:18:56 allison Exp $
+$Id: History,v 1.47 2005-07-20 16:00:14 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,21 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+20th July 2005  John Allison  (opengl-V07-01-00)
+- Introduced smooth shading, taking advantage of hitherto un-noticed
+  feature of HepPolyhedron::GetNextFacet that calculates the normals
+  at each vertex so that curved surfaces are rendered more
+  realistically (Gouraud shading).
+- G4OpenGLImmediateSceneHandler.cc: Removed unnecessary #include's.
+- G4OpenGLXmViewer.cc: Fixed to use window size hints.  This changes
+  the default window size.  It used to be 400x400, hardcoded in
+  G4OpenGLXmViewer.cc, but now it picks up the
+  G4ViewParameters::GetWindowSizeHintX/Y, which defaults to 600x600.
+  The user may change it on the command line, e.g:
+    /vis/open OGLSXm 500
+  or
+    /vis/viewer/create ! ! 500
 
 30th May 2005  John Allison  (opengl-V07-00-03)
 - Fixed compilation problem in OpenGL on SUN.  (Replaced multimap by
