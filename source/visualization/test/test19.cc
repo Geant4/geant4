@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test19.cc,v 1.21 2005-06-03 05:12:09 perl Exp $
+// $Id: test19.cc,v 1.22 2005-07-20 16:15:57 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,6 +65,7 @@
 // G4VisExecutive is a G4VisManager that implements graphics system
 // registration in the user domain.
 #include "G4XXX.hh"
+#include "G4RayTracerX.hh"
 #endif
 
 #ifdef G4UI_USE_WIN32
@@ -87,7 +88,7 @@ int main (int argc, char** argv) {
 #else
   if (argc >= 2) {
     if (strcmp (argv[1], "tcsh")==0)     session =
-					   new G4UIterminal();
+					   new G4UIterminal(new G4UItcsh);
 #ifdef G4UI_USE_WO
     else if (strcmp (argv[1], "Wo")==0)  session = new G4UIWo (argc, argv);
 #endif
@@ -131,6 +132,7 @@ int main (int argc, char** argv) {
   G4VisManager* visManager = new G4VisExecutive;
   visManager -> SetVerboseLevel (verbosityString);
   visManager -> RegisterGraphicsSystem(new G4XXX);
+  visManager -> RegisterGraphicsSystem(new G4RayTracerX);
   visManager -> Initialize ();
 #endif
 
