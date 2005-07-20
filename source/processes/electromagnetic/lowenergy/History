@@ -1,4 +1,4 @@
-$Id: History,v 1.229 2005-07-07 16:45:05 capra Exp $
+$Id: History,v 1.230 2005-07-20 10:08:58 capra Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20.07.2005   Riccardo Capra, tag emlowen-V07-01-01
+             * Small corrections in G4DNATotalCrossSectionFromFilePolicy
+             * Implementation of DNA excitation processes for protons and
+               alphas.
+               - Processes tested (preliminary test). Protons seems fine
+                 while alpha particle total cross section differs from
+                 plots in the reference documents
+             * G4DNATest upgrade in order to manage the new implemented
+               processes and in order to select the particle type from
+               command line
 
 07.07.2005   Riccardo Capra, tag emlowen-V07-01-00
              * G4DNAElectronElasticBrenner and G4DNAElectronElasticEmfietzoglou
