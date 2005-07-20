@@ -31,7 +31,7 @@
 /vis/scene/add/volume
 #
 # See list of graphics systems possibilities.
-help /vis/sceneHandler/create
+# help /vis/sceneHandler/create
 #
 # Create a scene handler for a specific graphics system.
 # Edit the next line(s) to choose another graphic system
