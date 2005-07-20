@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogoVisAction.cc,v 1.4 2005-06-27 15:32:49 gunter Exp $
+// $Id: G4LogoVisAction.cc,v 1.5 2005-07-20 16:19:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4LogoVisAction.hh"
@@ -91,7 +91,8 @@ G4LogoVisAction::G4LogoVisAction() {
     ("s5",&bS,&bS2,G4Transform3D(rm,G4ThreeVector(x9,y9,0.)));
   G4SubtractionSolid logo4("logo4",&s4,&s5,G4Translate3D(-xtr,-ytr,0.));
   fp4 = logo4.CreatePolyhedron();
-  /* Experiment with creating own polyhedron...
+
+  /* Experiment with creating own polyhedron (simple tetrahedron)...
   int nNodes = 4;
   int nFaces = 4;
   double xyz[][3] = {{0,0,0},{1*m,0,0},{0,1*m,0},{0,0,1*m}};
@@ -99,6 +100,16 @@ G4LogoVisAction::G4LogoVisAction() {
   fp4 = new G4Polyhedron();
   fp4->createPolyhedron(nNodes,nFaces,xyz,faces);
   */
+
+  /* Experiment with creating tetrahedron with a missing face...
+  int nNodes = 4;
+  int nFaces = 3;
+  double xyz[][3] = {{0,0,0},{1*m,0,0},{0,1*m,0},{0,0,1*m}};
+  int faces[][4] = {{1,3,2,0},{1,2,4,0},{1,4,3,0}};
+  fp4 = new G4Polyhedron();
+  fp4->createPolyhedron(nNodes,nFaces,xyz,faces);
+  */
+
   fp4->SetVisAttributes(fpVisAtts);
   fp4->Transform(G4Translate3D(0.55*h,0.,0.));
 }
