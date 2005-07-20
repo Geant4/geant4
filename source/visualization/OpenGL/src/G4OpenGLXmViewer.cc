@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.16 2005-04-22 12:02:47 allison Exp $
+// $Id: G4OpenGLXmViewer.cc,v 1.17 2005-07-20 15:49:30 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,6 +48,8 @@
 #include "G4Xt.hh"
 #include <X11/Shell.h>
 
+#include <sstream>
+
 void G4OpenGLXmViewer::ShowView () {
 
   G4Xt::getInstance () -> SecondaryLoop ();
@@ -68,26 +70,28 @@ void G4OpenGLXmViewer::GetXmConnection () {
   }
 
   // Better to put this in an X11 resource file !!!
-  interactorManager->PutStringInResourceDatabase ((char*)"\
-*glxarea*width: 500\n\
-*glxarea*height: 500\n\
-*frame*x: 10\n\
-*frame*y: 10\n\
-*frame*topOffset: 10\n\
-*frame*bottomOffset: 10\n\
-*frame*rightOffset: 10\n\
-*frame*leftOffset: 10\n\
-*frame*shadowType: SHADOW_IN\n\
-*frame*useColorObj: False\n\
-*frame*primaryColorSetId: 3\n\
-*frame*secondaryColorSetId: 3\n\
-*menubar*useColorObj: False\n\
-*menubar*primaryColorSetId: 3\n\
-*menubar*secondaryColorSetId: 3\n\
-*toplevel*useColorObj: False\n\
-*toplevel*primaryColorSetId: 3\n\
-*toplevel*secondaryColorSetId: 3\n\
-");
+  std::ostringstream oss;
+  oss <<
+    "*glxarea*width: " << fVP.GetWindowSizeHintX() << "\n"
+    "*glxarea*height: " << fVP.GetWindowSizeHintY() << "\n"
+    "*frame*x: 10\n"
+    "*frame*y: 10\n"
+    "*frame*topOffset: 10\n"
+    "*frame*bottomOffset: 10\n"
+    "*frame*rightOffset: 10\n"
+    "*frame*leftOffset: 10\n"
+    "*frame*shadowType: SHADOW_IN\n"
+    "*frame*useColorObj: False\n"
+    "*frame*primaryColorSetId: 3\n"
+    "*frame*secondaryColorSetId: 3\n"
+    "*menubar*useColorObj: False\n"
+    "*menubar*primaryColorSetId: 3\n"
+    "*menubar*secondaryColorSetId: 3\n"
+    "*toplevel*useColorObj: False\n"
+    "*toplevel*primaryColorSetId: 3\n"
+    "*toplevel*secondaryColorSetId: 3\n";
+  interactorManager->PutStringInResourceDatabase ((char*)oss.str().c_str());
+
   //  interactorManager->AddSecondaryLoopPostAction ((G4SecondaryLoopAction)G4OpenGLXmViewerSecondaryLoopPostAction);
   
   shell = XtAppCreateShell ((String)fName.data(),(String)fName.data(),topLevelShellWidgetClass,XtDisplay(toplevel),NULL,0); 
