@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNATotalCrossSectionFromFilePolicy.hh,v 1.1 2005-07-07 16:38:58 capra Exp $
+// $Id: G4DNATotalCrossSectionFromFilePolicy.hh,v 1.2 2005-07-20 10:03:54 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef   G4DNATOTALCROSSSECTIONFROMFILEPOLICY_HH
@@ -32,7 +32,7 @@
  // IncomingParticlePolicy must provide:
  //  - [protected] const G4ParticleDefinition * IncomingParticleDefinition(void);
  
- // EnergyLimitsPolicy must provide:
+ // DataFilePolicy must provide:
  //  - [public] static const double lowEnergyLimit
  //  - [public] static const double zeroBelowLowEnergyLimit
  //  - [public] static const double highEnergyLimit
@@ -51,7 +51,7 @@
                                        ~G4DNATotalCrossSectionFromFilePolicy() { if (dataset) delete dataset; }
  
    G4double                             TotalCrossSection(G4double k, G4int z) const;
-   G4int                                RandomizePartialCrossSection(G4double k);
+   G4int                                RandomizePartialCrossSection(G4double k, G4int z);
    G4int                                NumberOfPartialCrossSections(void);
    void                                 BuildTotalCrossSection(void);
 

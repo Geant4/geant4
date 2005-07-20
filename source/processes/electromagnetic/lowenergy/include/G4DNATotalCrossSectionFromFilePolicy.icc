@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNATotalCrossSectionFromFilePolicy.icc,v 1.1 2005-07-07 16:38:58 capra Exp $
+// $Id: G4DNATotalCrossSectionFromFilePolicy.icc,v 1.2 2005-07-20 10:03:54 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#ifndef   G4DNATOTALCROSSSECTIONFROMFILEPOLICY_HH
+#ifdef   G4DNATOTALCROSSSECTIONFROMFILEPOLICY_HH
  #include "G4Electron.hh"
 
  #include "Randomize.hh"
@@ -57,7 +57,8 @@
   return dataset->FindValue(k);
  }
  
- G4int                                  G4DNATotalCrossSectionFromFilePolicy<IncomingParticlePolicy, DataFilePolicy, InterpolationAlgorithmPolicy> :: RandomizePartialCrossSection(G4double k)
+ template <typename IncomingParticlePolicy, typename DataFilePolicy, typename InterpolationAlgorithmPolicy>
+ G4int                                  G4DNATotalCrossSectionFromFilePolicy<IncomingParticlePolicy, DataFilePolicy, InterpolationAlgorithmPolicy> :: RandomizePartialCrossSection(G4double k, G4int /* z */)
  {
   if (!dataset)
   {
@@ -94,6 +95,7 @@
   return 0;
  }
  
+ template <typename IncomingParticlePolicy, typename DataFilePolicy, typename InterpolationAlgorithmPolicy>
  G4int                                  G4DNATotalCrossSectionFromFilePolicy<IncomingParticlePolicy, DataFilePolicy, InterpolationAlgorithmPolicy> :: NumberOfPartialCrossSections(void)
  {
   if (!dataset)
@@ -105,16 +107,12 @@
   return dataset->NumberOfComponents();
  }
 
+ template <typename IncomingParticlePolicy, typename DataFilePolicy, typename InterpolationAlgorithmPolicy>
  void                                   G4DNATotalCrossSectionFromFilePolicy<IncomingParticlePolicy, DataFilePolicy, InterpolationAlgorithmPolicy> :: BuildTotalCrossSection(void)
  {
   if (dataset)
    delete dataset;
    
- //  - [public] static const double zeroAboveLowEnergyLimit
- //  - [public] static const double dataFileEnergyUnit
- //  - [public] static const double dataFileCrossSectionUnit
- //  - [public] static char const * const dataFileName
- 
   dataset=new G4DNACrossSectionDataSet(new InterpolationAlgorithmPolicy, DataFilePolicy::dataFileEnergyUnit, DataFilePolicy::dataFileCrossSectionUnit);
   dataset->LoadData(DataFilePolicy::dataFileName);
  }
