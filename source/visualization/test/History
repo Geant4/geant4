@@ -1,11 +1,11 @@
-$Id: History,v 1.51 2005-07-20 16:23:39 allison Exp $
+$Id: History,v 1.52 2005-07-20 16:24:32 allison Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
 
 $Log: not supported by cvs2svn $
-Revision 1.50  2005/07/20 16:20:55  allison
-vistest-V07-01-00
+Revision 1.51  2005/07/20 16:23:39  allison
+test19.g4m: Commented out help (gives error in a macro).
 
 Revision 1.49  2005/07/20 16:20:15  allison
 G4LogoVisAction.cc: Experiment with creating tetrahedron with a missing face.
