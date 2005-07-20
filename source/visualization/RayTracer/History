@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2005-07-17 13:59:24 allison Exp $
+$Id: History,v 1.27 2005-07-20 20:39:02 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -25,7 +25,10 @@ History file for visualization category
 ---------------------------------------
 
 17th July 2005  John Allison (raytracer-V07-01-00)
-- Introduced RayTracerX.
+- Introduced RayTracerX.  RayTracerX opens an X window and builds up
+  the picture, refining it gradually.  Already calculated pixels are
+  not recalculated, so it is as efficient as a top-to-bottom raster
+  scan.  It produces a jpeg file as well, just like RayTracer.
 
 11th June 2004  Gabriele Cosmo  (raytracer-V06-01-00)
 - Use global flag G4VIS_ALLOC_EXPORT to export extern symbols for DLLs.

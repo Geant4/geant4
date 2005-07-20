@@ -21,8 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerXViewer.cc,v 1.1 2005-07-17 13:59:24 allison Exp $
+// $Id: G4RayTracerXViewer.cc,v 1.2 2005-07-20 20:39:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+
+#ifdef G4VIS_BUILD_RAYTRACERX_DRIVER
 
 #include "G4RayTracerXViewer.hh"
 
@@ -33,9 +35,8 @@
 
 #include <cstdlib>
 
-//#include <X11/Xlib.h>
+#include <X11/Xlib.h>
 #include <X11/Xutil.h>
-//#include <X11/Xos.h>
 #include <X11/Xatom.h>
 
 extern "C" {
@@ -122,3 +123,5 @@ G4RayTracerXViewer::G4RayTracerXViewer
 }
 
 G4RayTracerXViewer::~G4RayTracerXViewer() {}
+
+#endif

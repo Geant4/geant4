@@ -21,11 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerX.hh,v 1.1 2005-07-17 13:59:24 allison Exp $
+// $Id: G4RayTracerX.hh,v 1.2 2005-07-20 20:39:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // John Allison  11th September 2003
+
+#if defined (G4VIS_BUILD_RAYTRACERX_DRIVER) || (G4VIS_USE_RAYTRACERX)
 
 #ifndef G4RAYTRACERX_HH
 #define G4RAYTRACERX_HH
@@ -38,6 +40,7 @@
 
 #include "G4RayTracer.hh"
 
+#include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
 class G4RayTracerX : public G4RayTracer
@@ -53,5 +56,7 @@ public:
   GC gc;
   XStandardColormap *scmap;
 };
+
+#endif
 
 #endif
