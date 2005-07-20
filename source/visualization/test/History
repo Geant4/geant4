@@ -1,9 +1,12 @@
-$Id: History,v 1.48 2005-07-20 16:15:57 allison Exp $
+$Id: History,v 1.49 2005-07-20 16:20:15 allison Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
 
 $Log: not supported by cvs2svn $
+Revision 1.48  2005/07/20 16:15:57  allison
+test19.cc: Added #include "G4RayTracerX.hh" and acted on command line argument, tcsh.
+
 Revision 1.47  2005/05/27 13:43:57  allison
 Passed vis attribs by reference to test SetVisAttributes.
 
