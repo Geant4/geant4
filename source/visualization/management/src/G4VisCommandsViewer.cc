@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.45 2005-03-16 17:55:02 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.46 2005-07-20 16:10:42 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -265,18 +265,22 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
   // Create viewer.
   fpVisManager -> CreateViewer (newName);
   G4VViewer* newViewer = fpVisManager -> GetCurrentViewer ();
-  if (newViewer -> GetName () == newName) {
+  if (newViewer && newViewer -> GetName () == newName) {
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "New viewer \"" << newName << "\" created." << G4endl;
     }
   }
   else {
     if (verbosity >= G4VisManager::errors) {
-      G4cout << "ERROR: New viewer doesn\'t match!!!  Curious!!" << G4endl;
+      if (newViewer) {
+	G4cout << "ERROR: New viewer doesn\'t match!!!  Curious!!" << G4endl;
+      } else {
+	G4cout << "WARNING: No viewer created." << G4endl;
+      }
     }
   }
   // Refresh if appropriate...
-  SetViewParameters(newViewer, newViewer->GetViewParameters());
+  if (newViewer) SetViewParameters(newViewer, newViewer->GetViewParameters());
 }
 
 ////////////// /vis/viewer/dolly and dollyTo ////////////////////////////
