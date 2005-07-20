@@ -1,4 +1,4 @@
-$Id: History,v 1.296 2005-06-07 17:10:55 allison Exp $
+$Id: History,v 1.297 2005-07-20 16:35:14 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,18 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+20th July 2005  John Allison (vis-V07-01-00)
+- opengl-V07-01-00: Introduced smooth shading.  Also window size hints for Xm.
+- openinventor-V07-01-00: Changed Geant4_SoPolyhedron to construct
+    from G4Polyhedron.  Functionality unchanged.
+- visman-V07-01-00: Protected new viewer pointer.
+- vistest-V07-01-00
+- Removed top level README files.  (All wisdom now transferred
+    properly to User Guides.)
+
+17th July 2005  John Allison
+- raytracer-V07-01-00: Introduced RayTracerX.
 
 7th June 2005  John Allison (vis-V07-00-19)
 - visXXX-V07-00-00: Fixed compiler warnings.
