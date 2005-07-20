@@ -25,7 +25,7 @@
 /*----------------------------HEPVis----------------------------------------*/
 /*                                                                          */
 /* Node:             SoPolyhedron                                           */
-/* Description:      SoNode to represent HepPolyhedron                      */
+/* Description:      SoNode to represent G4Polyhedron                      */
 /* Author:           Guy Barrand                                            */
 /*                                                                          */
 /*--------------------------------------------------------------------------*/
@@ -42,7 +42,7 @@
 #define SbMinimum(a,b) ((a)<(b)?a:b)
 #define SbMaximum(a,b) ((a)>(b)?a:b)
 
-#include "HepPolyhedron.h"
+#include "G4Polyhedron.hh"
 
 //typedef SbVec3f HVPoint3D;
 //typedef SbVec3f HVNormal3D;
@@ -72,7 +72,7 @@ Geant4_SoPolyhedron::Geant4_SoPolyhedron(
 }
 //////////////////////////////////////////////////////////////////////////////
 Geant4_SoPolyhedron::Geant4_SoPolyhedron(
- const HepPolyhedron& aPolyhedron
+ const G4Polyhedron& aPolyhedron
 )
 :fPolyhedron(0)
 //////////////////////////////////////////////////////////////////////////////
@@ -80,11 +80,11 @@ Geant4_SoPolyhedron::Geant4_SoPolyhedron(
 {
   SO_NODE_CONSTRUCTOR(Geant4_SoPolyhedron);
   SO_NODE_ADD_FIELD(solid,(TRUE));
-  fPolyhedron = new HepPolyhedron(aPolyhedron);
+  fPolyhedron = new G4Polyhedron(aPolyhedron);
 }
 //////////////////////////////////////////////////////////////////////////////
 Geant4_SoPolyhedron::Geant4_SoPolyhedron(
- HepPolyhedron* aPolyhedron
+ G4Polyhedron* aPolyhedron
 )
 :fPolyhedron(aPolyhedron)
 //////////////////////////////////////////////////////////////////////////////

@@ -28,7 +28,7 @@
 
 #include <Inventor/fields/SoSFBool.h>
 
-class HepPolyhedron;
+class G4Polyhedron;
 
 /**
  *  Geant4_SoPolyhedron is an Inventor encapsulation of the HepPolyedron
@@ -41,6 +41,7 @@ class HepPolyhedron;
  *  Note that a boolean operation could be rendered in wire frame
  * by drawing the contour of the resulting solid (not by drawing
  * the wire frame of a triangulation).
+ * (Note: Changed to use G4Polyhedron, which inherits from HepPolyhedron. JA.)
  */
 
 class Geant4_SoPolyhedron : public SoShape {
@@ -50,8 +51,8 @@ public:
   SoSFBool reducedWireFrame;
 public:
   Geant4_SoPolyhedron();
-  Geant4_SoPolyhedron(const HepPolyhedron&);
-  Geant4_SoPolyhedron(HepPolyhedron*);
+  Geant4_SoPolyhedron(const G4Polyhedron&);
+  Geant4_SoPolyhedron(G4Polyhedron*);
 public:
   static void initClass();
 protected:
@@ -60,7 +61,7 @@ protected:
 protected:
   virtual ~Geant4_SoPolyhedron();
 private: 
-  HepPolyhedron* fPolyhedron;
+  G4Polyhedron* fPolyhedron;
 };
 
 #endif

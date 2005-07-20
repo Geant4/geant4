@@ -1,4 +1,4 @@
-$Id: History,v 1.65 2005-06-02 16:51:56 allison Exp $
+$Id: History,v 1.66 2005-07-20 16:07:16 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+20th July 2005  John Allison  (openinventor-V07-01-00)
+- Changed Geant4_SoPolyhedron to construct from G4Polyhedron rather
+  than its base class, HepPolyhedron, for possible future
+  developments.  Functionality unchanged.
 
 2nd June 2005  John Allison  (openinventor-V07-00-02)
 - Changed char* to const char* in gl2psMsg.
