@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.32 2005-04-17 16:08:43 allison Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.33 2005-07-20 15:58:35 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -388,7 +388,16 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   materialColour [0] = c.GetRed ();
   materialColour [1] = c.GetGreen ();
   materialColour [2] = c.GetBlue ();
-  materialColour [3] = 1.0;
+  //  materialColour [3] = c.GetAlpha (); // The problem of blending
+  //  is quite severe.  It works by switching depth testing off - see
+  //  code for hsr below.  This is OK if the transparent objects are
+  //  nested in a mother-daughter geometry hierarchy because
+  //  G4PhysicalVolumeModel draws the daughters first, but it spoils
+  //  the view if there are other volumes at the same geoemtry level.
+  //  Npte also that in OGL*Xm, there is a button for transparency.
+  //  The default is "off".  But how does one get at the OGL*XmViewer
+  //  flag from this base class?  So for now...
+  materialColour [3] = 1.;
   GLdouble clear_colour[4];
   glGetDoublev (GL_COLOR_CLEAR_VALUE, clear_colour);
 
@@ -410,17 +419,24 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
     break;
   case (G4ViewParameters::hsr):
-    glEnable (GL_DEPTH_TEST);
-    glDepthFunc (GL_LESS);    
-    glEnable (GL_CULL_FACE);
-    glCullFace (GL_BACK); 
+    if (materialColour[3] == 1.) 
+      {
+	glEnable (GL_DEPTH_TEST);
+	glDepthFunc (GL_LESS);    
+	glEnable (GL_CULL_FACE);
+	glCullFace (GL_BACK);
+      }
+    else
+      {
+	glDisable (GL_DEPTH_TEST);
+	glDisable (GL_CULL_FACE);
+      }
     glEnable (GL_LIGHTING);
     glPolygonMode (GL_FRONT, GL_FILL);
     glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, materialColour);
     break;
   case (G4ViewParameters::wireframe):
   default:
-    //glDisable (GL_DEPTH_TEST);
     glEnable (GL_DEPTH_TEST);
     glDepthFunc (GL_ALWAYS);    
     glDisable (GL_CULL_FACE);
@@ -435,20 +451,16 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   G4bool notLastFace;
   do {
 
-    //First, find surface normal and note "not last facet"...
-    G4Normal3D SurfaceUnitNormal;
-    notLastFace = polyhedron.GetNextUnitNormal (SurfaceUnitNormal);
-
-    //Loop through the four edges of each G4Facet...
-    G4bool notLastEdge;
+    //First, find vertices, edgeflags and normals and note "not last facet"...
     G4Point3D vertex[4];
     G4int edgeFlag[4];
+    G4Normal3D normals[4];
+    G4int n;
+    notLastFace = polyhedron.GetNextFacet(n, vertex, edgeFlag, normals);
+
+    //Loop through the four edges of each G4Facet...
     G4int edgeCount = 0;
-    glNormal3d(SurfaceUnitNormal.x(), SurfaceUnitNormal.y(),
-	       SurfaceUnitNormal.z());
-    do {
-      notLastEdge = polyhedron.GetNextVertex (vertex[edgeCount], 
-					      edgeFlag[edgeCount]);
+    for(edgeCount = 0; edgeCount < n; ++edgeCount) {
       // Check to see if edge is visible or not...
       if (isAuxEdgeVisible) {
 	edgeFlag[edgeCount] = G4int (true);
@@ -458,27 +470,29 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       } else {
 	glEdgeFlag (GL_FALSE);
       }
+      glNormal3d (normals[edgeCount].x(), 
+		  normals[edgeCount].y(),
+		  normals[edgeCount].z());
       glVertex3d (vertex[edgeCount].x(), 
 		  vertex[edgeCount].y(),
 		  vertex[edgeCount].z());
-      edgeCount++;
-    } while (notLastEdge && edgeCount < 4);
+    }
     // HEPPolyhedron produces triangles too; in that case add an extra vertex..
-    while (edgeCount < 4) {
+    if (n == 3) {
+      edgeCount = 3;
+      normals[edgeCount] = normals[edgeCount-1];
       vertex[edgeCount] = vertex[edgeCount-1];
       edgeFlag[edgeCount] = G4int (false);
       glEdgeFlag (GL_FALSE);
+      glNormal3d (normals[edgeCount].x(),
+		  normals[edgeCount].y(), 
+		  normals[edgeCount].z());
       glVertex3d (vertex[edgeCount].x(),
 		  vertex[edgeCount].y(), 
 		  vertex[edgeCount].z());
-      edgeCount++;
     }
     // Trap situation where number of edges is > 4...
-    while (notLastEdge) {
-      notLastFace = polyhedron.GetNextUnitNormal (SurfaceUnitNormal);
-      edgeCount++;
-    }
-    if (edgeCount > 4) {
+    if (n > 4) {
       G4cerr <<
 	"G4OpenGLSceneHandler::AddPrimitive(G4Polyhedron): WARNING";
       if (fpCurrentPV) {
@@ -488,7 +502,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 	  " (" << fpCurrentLV->GetSolid()->GetEntityType();
       }
       G4cerr<<
-	"\n   G4Polyhedron facet with " << edgeCount << " edges" << G4endl;
+	"\n   G4Polyhedron facet with " << n << " edges" << G4endl;
     }
 
     // Do it all over again (twice) for hlr...
@@ -511,14 +525,15 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       } else {  // drawing_style == G4ViewParameters::hlhsr
 	glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, materialColour);
       }
-      glNormal3d(SurfaceUnitNormal.x(), SurfaceUnitNormal.y(),
-		 SurfaceUnitNormal.z());
       for (int edgeCount = 0; edgeCount < 4; ++edgeCount) {
 	if (edgeFlag[edgeCount]) {
 	  glEdgeFlag (GL_TRUE);
 	} else {
 	  glEdgeFlag (GL_FALSE);
 	}
+	glNormal3d (normals[edgeCount].x(), 
+		    normals[edgeCount].y(),
+		    normals[edgeCount].z());
 	glVertex3d (vertex[edgeCount].x(), 
 		    vertex[edgeCount].y(),
 		    vertex[edgeCount].z());
@@ -539,6 +554,9 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 	} else {
 	  glEdgeFlag (GL_FALSE);
 	}
+	glNormal3d (normals[edgeCount].x(), 
+		    normals[edgeCount].y(),
+		    normals[edgeCount].z());
 	glVertex3d (vertex[edgeCount].x(), 
 		    vertex[edgeCount].y(),
 		    vertex[edgeCount].z());

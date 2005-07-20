@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXmViewer.cc,v 1.11 2005-06-02 17:43:46 allison Exp $
+// $Id: G4OpenGLStoredXmViewer.cc,v 1.12 2005-07-20 15:58:35 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,7 +73,6 @@ void G4OpenGLStoredXmViewer::Initialise () {
   
   glEnable (GL_BLEND);
   glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glShadeModel (GL_FLAT);
 }
 
 void G4OpenGLStoredXmViewer::DrawView () {

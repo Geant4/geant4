@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.8 2005-02-23 11:24:52 allison Exp $
+// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.9 2005-07-20 15:58:35 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -173,7 +173,6 @@ void G4OpenGLXmViewer::transparency_callback (Widget w,
     pView->transparency_enabled = true;
     glEnable (GL_BLEND);
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glShadeModel (GL_FLAT);
     break;
 
   default:
