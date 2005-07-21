@@ -380,14 +380,14 @@ int main()
 #endif
   if(!material)
   {
-    G4cout<<"Test29:Material "<<material->GetName()<<" is not defined."<<G4endl;
+    G4cout<<"Test29: Last Material "<<material->GetName()<<" is not defined."<<G4endl;
 	   exit(1);
   }
   G4double nx = 0.;
   G4double ny = 0.;
   G4double nz = 0.;
   G4int npart=1;                                      // By default only one particle
-  if(!pPDG) npart=nPr;                                 // Make a LOOP ove all particles
+  if(!pPDG) npart=nPr;                                // Make a LOOP ove all particles
   // Different Process Managers are used for the atRest and onFlight processes
 		//G4ProcessManager* man = new G4ProcessManager(part);
   //G4VDiscreteProcess* proc = new G4QCollision;
@@ -395,7 +395,7 @@ int main()
   G4QCaptureAtRest* proc = new G4QCaptureAtRest;
   if(!proc)
   {
-    G4cout<<"Tst29: there is no G4QCaptureAtRest"<<G4endl;
+    G4cout<<"Tst29: there is no G4QCaptureAtRest process"<<G4endl;
 	   exit(1);
   }
 #ifdef debug
@@ -503,7 +503,7 @@ int main()
     G4Timer* timer = new G4Timer();
     timer->Start();
 #ifdef pverb
-    G4cout<<"Test29: timer is started, kinEnergy="<<energy<<G4endl;
+    G4cout<<"Test29: Rub is started, timer is started, kinEnergy="<<energy<<G4endl;
 #endif
     const G4DynamicParticle* sec = 0;
     G4ParticleDefinition* pd = 0;
@@ -585,7 +585,7 @@ int main()
       // @@ G4bool rad=false;
       // @@ G4bool hyp=false;
       // @@ G4bool badPDG=false;
-      // ------- LOOP over secondary particles -------
+      //-- LOOP over secondary particles (test of En/Mom & Quantum Numbers conservation) --
       for(G4int i=0; i<nSec; i++)
       {
         sec = aChange->GetSecondary(i)->GetDynamicParticle();
@@ -652,7 +652,7 @@ int main()
         if(c==22) EGamma+=e;                           // Energy of gammas
         G4int cCG=0;
         G4int cBN=0;
-        if(std::abs(c)>99)                                  // Do not count charge of leptons
+        if(std::abs(c)>99)                               // Do not count charge of leptons
         {
           cCG=static_cast<G4int>(pd->GetPDGCharge());
           cBN=static_cast<G4int>(pd->GetBaryonNumber());
@@ -663,16 +663,17 @@ int main()
         G4cout<<"Test29:#"<<i<<",PDG="<<c<<",C="<<cCG<<",B="<<cBN<<",4M="<<lorV<<m<<",T="
               <<lorV.e()-m<<G4endl;
 #endif
-        delete aChange->GetSecondary(i);
+        //delete aChange->GetSecondary(i);
 	     } // End of the LOOP over secondaries
 	     //	delete secondaries in the end of the event       	 
-      if(std::abs(pPDG)<99&&totCharge==totC&&totBaryN==totBN) // for lepton decay target mass=0
+      if(std::abs(pPDG)<99&&totCharge==totC&&totBaryN==totBN)//In lepton decay targetMass=0
 				  {
 						  totCharge=0;
         totBaryN=0;
         totSum-=G4LorentzVector(0., 0., 0., curM);
       }
-      G4double ss=std::fabs(totSum.t())+std::fabs(totSum.x())+std::fabs(totSum.y())+std::fabs(totSum.z());    
+      G4double ss=std::fabs(totSum.t())+std::fabs(totSum.x())+std::fabs(totSum.y())+
+                  std::fabs(totSum.z());    
 #ifdef pdebug
       G4cout<<"TEST29:r4M="<<totSum<<ss<<",rChg="<<totCharge<<",rBaryN="<<totBaryN<<G4endl;
 #endif
@@ -710,6 +711,7 @@ int main()
 #ifndef nout
 	     if(npart==1) ntp->FillEvt(aChange); // Fill the simulated event in the ASCII "ntuple"
 #endif
+      for(G4int ides=0; ides<nSec; ides++) delete aChange->GetSecondary(ides);
       aChange->Clear();
 #ifdef debug
       G4cout<<"Test29:--->>> After ntp.FillEvt"<<G4endl;

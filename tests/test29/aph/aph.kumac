@@ -1,6 +1,6 @@
-macro aph run=1 gen=1 com=0 scs=0.93 scm=1.10
+macro aph f=1 gen=1 com=0 scs=0.93 scm=1.10
 *
-  run=2000*[run]
+  run=2000*[f]
   hi/del *
   ve/del *
   pi/del *

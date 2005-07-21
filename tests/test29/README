@@ -8,21 +8,85 @@ Authors: Mikhail Kosov
 
 ======================================================================
 
----- Status: Under construction
+---- Status: Alpha version
 
----- Input:
+---- Input: chipstest.in
 
----- Output:
+---- Output: screan or chip_{name}.log in the subdirectory made by kumac
+---- Output ASCII ntuples: tuple3pi.out, tuplevta.out, tuplevtq.out, tuplincl.out
 
----- Location of the reference output: test29.out and test29.large_N.out
+---- Location of the reference output: any name defined after >
 
----- Macros: test29.in and test29.large_N.in
+---- Macros: kumac files in subdirectories started by PAW
 
----- Other files required
+---- Other files required: no additional files
 
 ---- How to run it?
-     >test29 test29.in >& result.out
-     >test29 test29.large_N.in >& result.large_N.out
+     > cd test29
+     [ edit the test29.cc file. If "#define nout" is uncommented, then the  ]
+     [ resulting executable is not providing the output ASCII files for PAW.]  
+     > make  (compile the cc files and make the executable)
+     > ln -s ../../bin/Linux-g++/test19 test19 (or another path for executable)
+     > test29 (uses internally chipstest.in file, >switch off the ASCII output!<)
+  ==>[ The standard chipstest.in file distributed in the releases defines a       ]
+  ==>[ complete double loop over all applicable particles and a long set of nuclei]
+     {> test29 test29.in >& result.out (style is not implemented in this test)}
+     {> test29 test29.large_N.in >& result.large_N.out (not implemented)}
+     ==>>: Before simulation of pictures in subdirectories, comment "#define nout"
+     ==>>: in the test29.cc file and recompile test29 (> make). By default
+     ==>>: test29.cc==test29_c.cc which calls the CHIPS atRest processes.
+     ==>>: If the comparison with the GHAD atRest processes is needed one
+     ==>>: should >cp test29_g.cc test29.cc which calls GHAD atRest processes.
+     ==>>: !!! GHAD atRest processes are covering only: antiP, antiN, pi-, K- !!!
+     > cd {subdirectory}
+     > ls *.kumac
+     name1.kumac ... nemeI.kumac (Not all kumac's are working! See below the list.)
+     > paw
+     paw >> exe nameI {param1 {param2...} [usually param1=f, nEv=f*2000, see in .kumac]
+     ----- test29 starts working using chipstest_nucleus.in files --------
+     ----- the last picture (usually the only picture) is on the screan -
+     paw >> pict/list
+     PICT1
+     ...
+     PICTI
+     paw >> pict/plot PICTI (just to look on the picture I)
+     paw >> meta 10 -113 (after that all pictures are stored to paw.metafile==.eps)
+     paw >> pict/plot PICTI (put picture I in the paw.metafile as eps)
+     paw >> exit (quit does not save the paw.metafile correctly!)
+     > mv paw.metafile nucleus.eps
+
+Directories:
+
+  apcap (antiproton capture by a nucleus)
+  -----
+     only apcap.kumac simulates C12 and U238(natural)
+          ......   uses chipstest_c0606.in & apcap/chipstest_u92146.in files
+                   param1 = Z of the nucleus
+                   param2 = nEvent/2000 (default 1)
+
+  aph (antiproton capture by a nucleon, faster than above on H1)
+  ---
+     only aph.kumac simulates antiproton capture by a proton
+          ...      uses chipsterst0000.in file
+                   param1 = nEvent/2000 (default 0.1)
+                   params2-5 are internal
+
+  picap (antiproton capture by a nucleus)
+  -----
+     only picap.kumac should be used for pion capture simulates on a set of nuclei
+          ......   uses files: (almost all are for secondaries A<9)
+                     chipstest_al1314.in, chipstest_b0505.in, chipstest_b0506.in,
+                     chipstest_be0405.in, chipstest_bi83126.in, chipstest_c0606.in,
+                     chipstest_ca2020.in, chipstest_co2732.in, chipstest_cu2935.in,
+                     chipstest_li0303.in, chipstest_li0304.in, chipstest_n0707.in,
+                     chipstest_nb4152.in, chipstest_o0808.in, chipstest_si1414.in,
+                     chipstest_sn5064.in, chipstest_sn5067.in, chipstest_sn5070.in,
+                     chipstest_sn5074.in, chipstest_ta73108.in, chipstest_tm69100.in,
+                     chipstest_ta73108cl4.in (makes secandary fragments limit to A<15)
+
+                   param1 = Z of the nucleus
+                   param2 = nEvent/2000 (default 1)
+                   param3 = a number of runs
 
 ---- Contactperson: Mikhail.Kossov@cern.ch
 
