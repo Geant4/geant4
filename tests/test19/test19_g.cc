@@ -41,7 +41,7 @@
 //       1         2         3         4         5         6         7         8         9
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 
-#define nout
+//#define nout
 //#define pscan
 //#define smear
 //#define escan
@@ -544,15 +544,24 @@ int main()
 		  // ------------- The model definition starts ---------------
     G4TheoFSGenerator* aModel = new G4TheoFSGenerator;
     G4StringChipsParticleLevelInterface* theCHIPS= new G4StringChipsParticleLevelInterface;
+#ifdef pdebug
+    G4cout<<"Tst19:*> Fragmentation model is defined"<<G4endl;
+#endif
     //hModel = aModel;                          // @@ Can it be more general ? (see above)
     // ------------- Defines a Kind of the intranuclear Transport (INC,Precompound)--------
     aModel->SetTransport(theCHIPS);
 				G4QGSModel<G4QGSParticipants>* aStringModel = new G4QGSModel<G4QGSParticipants>;
+#ifdef pdebug
+    G4cout<<"Tst19:*> Intranuclear transport model is defined"<<G4endl;
+#endif
 				// ----------- Defines a Kind of the QGS model -------------
     G4QGSMFragmentation aFragmentation;       // @@ Can be a general solution (move up)
     G4ExcitedStringDecay* aStringDecay = new G4ExcitedStringDecay(&aFragmentation);
     aStringModel->SetFragmentationModel(aStringDecay);
     aModel->SetHighEnergyGenerator(aStringModel);
+#ifdef pdebug
+    G4cout<<"Tst19:*> String model is defined"<<G4endl;
+#endif
     // ----------- Defines energy limits of the model ----------
 				aModel->SetMinEnergy(8*GeV);                // Do we need this ?
 				aModel->SetMaxEnergy(100*TeV);              // Do we need that ?
@@ -564,6 +573,7 @@ int main()
     else if(pPDG== 211) proc = new G4PionPlusInelasticProcess;
     else if(pPDG==-321) proc = new G4KaonMinusInelasticProcess;
     else if(pPDG== 321) proc = new G4KaonPlusInelasticProcess;
+    else G4cout<<"-Error-Tst19: Process is not defined for PDG="<<pPDG<<G4endl;
     //G4HadronInelasticProcess* proc = proc;    //@@ Can be a general solution (move up)
     // ------------- The process must be charged by the model ------------------------
     proc->RegisterMe(aModel); // from G4HadronicProcess
@@ -665,7 +675,7 @@ int main()
     for (G4int iter=0; iter<nEvt; iter++)
     {
 #ifdef debug
-      G4cout<<"Test19: ### "<<iter<< "-th event starts.### energu="<<energy<<G4endl;
+      G4cout<<"Test19: ### "<<iter<< "-th event starts.### energy="<<energy<<G4endl;
 #endif
       if(!(iter%1000)&&iter)G4cout<<"=>TEST19: "<<iter<<" events are simulated"<<G4endl;
       dParticle.SetKineticEnergy(energy);// Fill the Kinetic Energy of the projectile

@@ -164,8 +164,8 @@ macro chips targ=C file=c0606 np=6 nn=6 runn=2000 _
       wait ' ' 2
 	  exec makehbk
       wait ' ' 2
-      shell ./CHIPStest
-*****      shell ./CHIPStest  >& ./log/chips_[file]_[EkeV].log
+      shell ../test19
+*****      shell ../test19  >& ./log/chips_[file]_[EkeV].log
       shell mv chips.hbook [dir]chips_[file]_[EkeV].hbook
     endif
     hi/del *

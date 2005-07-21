@@ -95,7 +95,7 @@ macro chips targ=Al file=al1314_1 np=13 nn=14 runn=2000 egam=62. fil0=al1314
 *  shell rm chips_[file].log
   shell cp chipstest.in chipstest_[file].in
   wait ' ' 2
-  shell ./CHIPStest  | > chips_[file].log
+  shell ../test19  | > chips_[file].log
   wait ' ' 2
   exec makehbk
   wait ' ' 2

@@ -8,22 +8,64 @@ Authors: Mikhail Kosov
 
 ======================================================================
 
----- Status: Under construction
+---- Status: Beta version
 
----- Input: chipstest.in file (internal), test19(.large_N).in (external)
+---- Input file: chipstest.in
 
----- Output: screan or any file named after >&
+---- Output: screan or chip_{name}.log in the subdirectory made by kumac
+---- Output ntuples: tuple3pi.out, tuplevta.out, tuplevtq.out, tuplincl.out
 
----- Location of the reference output: test29.out and test19.large_N.out
+---- Location of the reference output: any name defined after >
 
----- Macros: test29.in and test19.large_N.in
+---- Macros: no macros
 
----- Other files required
+---- Other files required: no additional files
 
 ---- How to run it?
-     >test19 (uses internally chipstest.in file)
-     >test19 test19.in >& result.out (not implemented yet)
-     >test19 test19.large_N.in >& result.large_N.out (not yet)
+     > cd test19
+     [ edit the test19.cc file. If "#define nout" is uncommented, then the ]
+     [ resulting executable is not providing the output files for PAW.  ]  
+     > make  (compile the cc files and make the executable)
+     > ln -s ../../bin/Linux-g++/test19 test19 (ore another path)
+     > test19 (uses internally chipstest.in file, switch of the output)
+     {> test19 test19.in >& result.out (not implemented yet)}
+     {> test19 test19.large_N.in >& result.large_N.out (not yet)}
+     ==>>: Before the simulation of pictures, comment "#define nout" in
+     ==>>: the test19.cc file and recompile test19 (> make)
+     > cd {subdirectory}
+     > ls *.kumac
+     name1.kumac ... nemeI.kumac (not all kumac's are working, see below)
+     > paw
+     paw >> exe nameI {param1 {param2...} usually param1=f, nEv=f*2000
+     ----- test19 start working using chipstest_nucleus.in files --------
+     ----- the last picture (usually the only picture) is on the screan -
+     paw >> pict/list
+     PICT1
+     ...
+     PICTI
+     paw >> pict/plot PICTI (just to look on the picture I)
+     paw >> meta 10 -113 (after that all pictures are stored to paw.metafile)
+     paw >> pict/plot PICTI (put picture I in the paw.metafile as eps)
+     paw >> exit (quit does not save the paw.metafile correctly!)
+     > mv paw.metafile nucleus.eps
+
+Directories:
+
+  gamma
+  -----
+     gamma62.kumac makes simulation for Ca40, uses chipstest_ca2020.in
+     .......       param1=nEvent/2000 (D=1), nEvent=numberOfSimulatedEvents
+
+     gamma100.kumac makes simulation for C12, uses chipstest_c0606.in
+     ........      param1 = energy in MeV (123/default and 151 are possible)
+                   param2 = nEvent/2000, nEvent(default=3) in one Run
+                   param3 = nRun(default=3) = number of runs
+                   statistics is subdivided in runs to avoid overflow of files
+  photon
+  ------
+     only photon.kumac simulates Li7, Be9, C12, O16, Al27, Ca40 in GDR region
+          ......   uses corresponding chipsterst_nucleus.in files
+                   param1 = nEvent/2000 (default 0.1)
 
 ---- Contactperson: Mikhail.Kossov@cern.ch
 

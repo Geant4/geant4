@@ -217,7 +217,7 @@ macro chips targ=C file=c0606 np=6 nn=6 e=123 runn=2000 next=3 dir=./
       exec writepar pf=[dir]chipstest.in
 *      shell rm chips_[file].log
       wait ' ' 2
-      shell ./CHIPStest | > chips_[file].log
+      shell ../test19 | > chips_[file].log
       wait ' ' 2
 	  exec makehbk
       wait ' ' 2
