@@ -459,6 +459,10 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
 
   //  G4Sphere s5("Patch (phi/theta seg)",45,50,-pi/4,halfpi,pi/4,halfpi);
   //  G4Sphere s5("Patch (phi/theta seg)",45,50,-pi/4.,pi/4.,pi/4,pi/4.);
+  G4Sphere s3("Patch (phi/theta seg)",45,50,0.,2*pi,pi/6,pi/2);
+
+  G4Sphere s4("Patch (phi/theta seg)",45,50,pi/4.,pi/4.,0.,pi);
+
   G4Sphere s5("Patch (phi/theta seg)",45,50,-pi/4.,pi/4.,pi/2,pi/4.);
 
   G4Sphere s6("John example",300,500,0,5.76,0,pi) ; 
@@ -498,6 +502,8 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
   G4Sphere spAroundX("SpAroundX",  10.*mm, 1000.*mm, -1.0*degree, 
                                                      2.0*degree, 
                                         0.*degree, 180.0*degree );
+
+  G4Sphere st = s3;
 
 
   // G4Tubs t4("Hole Sector #4",45*mm,50*mm,50*mm,halfpi,halfpi);
@@ -708,8 +714,8 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
     {
       if(i%iCheck == 0) G4cout<<"i = "<<i<<G4endl;
 
-      G4ThreeVector p = GetVectorAroundSphere(s5);    
-      surfaceP = s5.Inside(p);
+      G4ThreeVector p = GetVectorAroundSphere(st);    
+      surfaceP = st.Inside(p);
 
       if(surfaceP != kSurface)
       {
@@ -719,13 +725,13 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
           {
             G4ThreeVector v = GetRandomUnitVector();
 
-            distIn   = s5.DistanceToIn(p,v);
+            distIn   = st.DistanceToIn(p,v);
 
 	    if(distIn != kInfinity)
 	    {
               iIn++;
               
-              surfaceP = s5.Inside(p + distIn*v);
+              surfaceP = st.Inside(p + distIn*v);
 
               if(surfaceP != kSurface )
 	      {
@@ -748,8 +754,8 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
 
             G4ThreeVector v = GetRandomUnitVector();
           
-            distOut  = s5.DistanceToOut(p,v,calcNorm,pgoodNorm,pNorm); 
-            surfaceP = s5.Inside(p + distOut*v);
+            distOut  = st.DistanceToOut(p,v,calcNorm,pgoodNorm,pNorm); 
+            surfaceP = st.Inside(p + distOut*v);
 
             if(surfaceP != kSurface )
 	    {
