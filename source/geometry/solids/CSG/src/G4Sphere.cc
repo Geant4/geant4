@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.48 2005-06-08 16:14:25 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.49 2005-07-22 09:01:25 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -30,6 +30,7 @@
 //
 // History:
 //
+// 22.07.05 O.Link    : Added check for intersection with double cone
 // 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
 // 16.09.04 V.Grichine: bug fixed in SurfaceNormal(p), theta normals
 // 16.07.04 V.Grichine: bug fixed in DistanceToOut(p,v), Rmin go outside
@@ -2218,6 +2219,18 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
           }
           if (s > flexRadMaxTolerance*0.5 )   // && s<sr)
           {
+
+
+	    // check against double cone solution
+	    zi=p.z()+s*v.z();
+	    if (fSTheta<pi*0.5 && zi<0) {
+	      s = kInfinity ;  // wrong cone
+	    }
+	    if (fSTheta>pi*0.5 && zi>0) {
+	      s = kInfinity ;  // wrong cone
+	    }
+
+
             stheta = s ;
             sidetheta = kSTheta ;
           }
@@ -2245,6 +2258,16 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
           }
           if (s > flexRadMaxTolerance*0.5 && s < stheta )
           {
+
+	    // check against double cone solution
+	    zi=p.z()+s*v.z();
+	    if (fSTheta+fDTheta<pi*0.5 && zi<0) {
+	      s = kInfinity ;  // wrong cone
+	    }
+	    if (fSTheta+fDTheta>pi*0.5 && zi>0) {
+	      s = kInfinity ;  // wrong cone
+	    }
+
             stheta = s ;
             sidetheta = kETheta ;
           }
