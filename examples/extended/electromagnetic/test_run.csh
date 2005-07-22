@@ -12,7 +12,7 @@
   cd ../examples/extended/electromagnetic
 
   set ncurr  = 1
-    while ($ncurr <= 10)
+    while ($ncurr <= 12)
       cd TestEm$ncurr
       gmake
       $G4MY/TestEm$ncurr TestEm$ncurr.in >& $1
@@ -28,7 +28,7 @@
     cd ../
 
   set ncurr  = 1
-    while ($ncurr <= 10)
+    while ($ncurr <= 12)
       tkdiff TestEm$ncurr/$2  TestEm$ncurr/$1
       @ ncurr++
     end
