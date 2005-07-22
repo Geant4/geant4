@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.22 2005-05-26 12:21:05 gcosmo Exp $
+// $Id: exampleN03.cc,v 1.23 2005-07-22 15:27:33 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -97,8 +97,9 @@ int main(int argc,char** argv) {
     
   // set user action classes
   runManager->SetUserAction(new ExN03PrimaryGeneratorAction(detector));
-  runManager->SetUserAction(new ExN03RunAction);
-  ExN03EventAction* eventaction = new ExN03EventAction;
+  ExN03RunAction* runaction = new ExN03RunAction;  
+  runManager->SetUserAction(runaction);
+  ExN03EventAction* eventaction = new ExN03EventAction(runaction);
   runManager->SetUserAction(eventaction);
   runManager->SetUserAction(new ExN03SteppingAction(detector, eventaction));
   
