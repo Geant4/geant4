@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.1 2005-07-22 11:08:48 maire Exp $
+// $Id: RunAction.cc,v 1.2 2005-07-22 11:48:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -147,8 +147,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   if (particle->GetPDGCharge() != 0.)
     csdaRange = emCalculator.GetRange(energy,particle,material);
   G4cout 
-    << "\n csda Range from EmCalculator  = " << G4BestUnit(csdaRange,"Length")
-    << G4endl;
+    << "\n Range from EmCalculator       = " << G4BestUnit(csdaRange,"Length")
+    << " (from restricted dE/dx)" << G4endl;
    	 	 
   //compute projected range of primary track
   //

@@ -1,4 +1,4 @@
-# $Id: TestEm12.in,v 1.1 2005-07-22 11:08:48 maire Exp $
+# $Id: TestEm12.in,v 1.2 2005-07-22 11:48:23 maire Exp $
 #
 # no constraint on tracking step
 #
@@ -30,6 +30,6 @@
 /testem/histo/setcsdaRange       2.037 cm
 /testem/histo/setHisto 8 120  0.   1.2 none	#normalized edep profile
 #
-/testem/event/printModulo 2000
+/testem/event/printModulo 1000
 #
-/run/beamOn 20000
+/run/beamOn 10000
