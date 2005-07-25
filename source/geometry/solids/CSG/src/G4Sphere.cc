@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.49 2005-07-22 09:01:25 link Exp $
+// $Id: G4Sphere.cc,v 1.50 2005-07-25 10:12:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -2219,18 +2219,16 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
           }
           if (s > flexRadMaxTolerance*0.5 )   // && s<sr)
           {
-
-
-	    // check against double cone solution
-	    zi=p.z()+s*v.z();
-	    if (fSTheta<pi*0.5 && zi<0) {
-	      s = kInfinity ;  // wrong cone
-	    }
-	    if (fSTheta>pi*0.5 && zi>0) {
-	      s = kInfinity ;  // wrong cone
-	    }
-
-
+            // check against double cone solution
+            zi=p.z()+s*v.z();
+            if (fSTheta<pi*0.5 && zi<0)
+            {
+              s = kInfinity ;  // wrong cone
+            }
+            if (fSTheta>pi*0.5 && zi>0)
+            {
+              s = kInfinity ;  // wrong cone
+            }
             stheta = s ;
             sidetheta = kSTheta ;
           }
@@ -2258,16 +2256,16 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
           }
           if (s > flexRadMaxTolerance*0.5 && s < stheta )
           {
-
-	    // check against double cone solution
-	    zi=p.z()+s*v.z();
-	    if (fSTheta+fDTheta<pi*0.5 && zi<0) {
-	      s = kInfinity ;  // wrong cone
-	    }
-	    if (fSTheta+fDTheta>pi*0.5 && zi>0) {
-	      s = kInfinity ;  // wrong cone
-	    }
-
+            // check against double cone solution
+            zi=p.z()+s*v.z();
+            if (fSTheta+fDTheta<pi*0.5 && zi<0)
+            {
+              s = kInfinity ;  // wrong cone
+            }
+            if (fSTheta+fDTheta>pi*0.5 && zi>0)
+            {
+              s = kInfinity ;  // wrong cone
+            }
             stheta = s ;
             sidetheta = kETheta ;
           }
