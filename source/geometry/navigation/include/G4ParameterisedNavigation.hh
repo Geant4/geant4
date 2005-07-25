@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.hh,v 1.3 2005-03-03 17:12:20 japost Exp $
+// $Id: G4ParameterisedNavigation.hh,v 1.4 2005-07-25 10:06:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,17 +96,18 @@ class G4ParameterisedNavigation : public G4VoxelNavigation
                             const G4double currentStep,
                             const EAxis pAxis );
   private:
-    //  Necessary to resolve cases with Nested parameterisations
 
-    G4VSolid* IdentifyAndPlaceSolid(const G4int num,
-				    G4VPhysicalVolume *apparentPhys, 
-				                    // potentially PhysV or PhysT
-				    G4VPVParameterisation *curParam ) ;
-       // Call virtual 'Compute' methods, and copy info if nested
+    // Necessary to resolve cases with nested parameterisations
+
+    G4VSolid* IdentifyAndPlaceSolid( G4int num,
+                                     G4VPhysicalVolume* apparentPhys, 
+                                     G4VPVParameterisation* curParam );
+       // Call virtual 'Compute' methods, and copy information if nested.
+       // 'ApparentPhys' is potentially a PhysV or PhysT.
 
     G4VPhysicalVolume* CreateVolumeWithParent(G4VPhysicalVolume* curPhysical,
-					      const G4NavigationHistory& history ); 
-       // Create necessary parent touchable and physical with parent
+                                              const G4NavigationHistory& hist );
+       // Create necessary parent touchable and physical with parent.
 
   private:
 
