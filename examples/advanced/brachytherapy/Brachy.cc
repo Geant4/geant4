@@ -117,7 +117,7 @@ int main(int argc ,char ** argv)
   BrachyEventAction *pEventAction = new BrachyEventAction();
   pRunManager->SetUserAction(pEventAction );
 
-  BrachyRunAction *pRunAction = new BrachyRunAction(sensitiveDetectorName);
+  BrachyRunAction *pRunAction = new BrachyRunAction();
   pRunManager->SetUserAction(pRunAction);
 
   //Initialize G4 kernel
