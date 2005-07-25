@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalTouchable.hh,v 1.2 2005-03-03 17:09:12 japost Exp $
+// $Id: G4PhysicalTouchable.hh,v 1.3 2005-07-25 10:02:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,8 +37,8 @@
 //    - respond to GetParentTouchable method
 //
 // History:
-// 14.02.05 J.Apostolakis Created
-
+// 14.02.05 J.Apostolakis - Created
+// ----------------------------------------------------------------------
 #ifndef G4PHYSICALTOUCHABLE_HH
 #define G4PHYSICALTOUCHABLE_HH
 
@@ -49,11 +49,11 @@
 
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
+#include "G4VTouchable.hh"
 #include "G4VPhysicalVolume.hh"
 
 class G4LogicalVolume;
 class G4VPVParameterisation;
-class G4VTouchable;
 class G4NavigationHistory; 
 
 class G4PhysicalTouchable : public G4VPhysicalVolume
@@ -61,16 +61,16 @@ class G4PhysicalTouchable : public G4VPhysicalVolume
   public:  // with description
 
     G4PhysicalTouchable( G4VPhysicalVolume* pCurrentVol, 
-			 const G4VTouchable* pParentTouchable); 
+                         const G4VTouchable* pParentTouchable); 
     G4PhysicalTouchable( G4VPhysicalVolume* pCurrentVol, 
-			 const G4NavigationHistory& parentHist); 
+                         const G4NavigationHistory& parentHist); 
       // Constructors, with existing touchable or history for use in one.
 
     virtual ~G4PhysicalTouchable();
-      // Destructor, will be subclassed. Removes volume from volume Store.
+      // Destructor, will be subclassed. Removes volume from volume-store.
 
     inline const G4VTouchable* GetParentTouchable() const; 
-    void SetParentTouchable( const G4VTouchable* newParentT );  
+    inline void SetParentTouchable( const G4VTouchable* newParentT );  
       // Provide / set parent touchable
     inline G4VPhysicalVolume* GetCurrentVolume(); 
     inline const G4VPhysicalVolume* GetCurrentVolume() const; 
@@ -79,37 +79,34 @@ class G4PhysicalTouchable : public G4VPhysicalVolume
     inline void SetCurrentVolume( G4VPhysicalVolume* pCurrentVol ); 
       // Revise current volume pointer
 
-    // inline G4VPhysicalVolume* operator ->(); 
-      // Refer other methods to physical volume ???
+    inline G4int GetMultiplicity() const;
+    inline G4bool IsMany() const;
 
-    G4int GetMultiplicity() const { return fpPhysVol->GetMultiplicity(); } 
-    G4bool IsMany() const { return fpPhysVol->IsMany(); } 
-
-    G4int GetCopyNo() const { return fpPhysVol->GetCopyNo(); } 
-    void  SetCopyNo(G4int CopyNo) { fpPhysVol->SetCopyNo(CopyNo); } 
+    inline G4int GetCopyNo() const;
+    inline void  SetCopyNo(G4int CopyNo);
       // Get/Set the volumes copy number.
-    G4bool IsReplicated() const { return fpPhysVol->IsReplicated(); } 
+    inline G4bool IsReplicated() const;
       // Return true if replicated (single object instance represents
       // many real volumes), else false.
-    G4bool IsParameterised() const { return fpPhysVol->IsParameterised(); }
+    inline G4bool IsParameterised() const;
       // Return true if parameterised (single object instance represents
       // many real parameterised volumes), else false.
-    G4VPVParameterisation* GetParameterisation() const 
-      { return fpPhysVol->GetParameterisation(); }
+    inline G4VPVParameterisation* GetParameterisation() const;
       // Return replicas parameterisation object 
-    void GetReplicationData(EAxis& axis,
-                                    G4int& nReplicas,
-                                    G4double& width,
-                                    G4double& offset,
-                                    G4bool& consuming) const 
-      { fpPhysVol->GetReplicationData(axis, nReplicas, width, offset, consuming); } 
-      // Return replication information. No-op for no replicated volumes.
+    inline void GetReplicationData(EAxis& axis,
+                                   G4int& nReplicas,
+                                   G4double& width,
+                                   G4double& offset,
+                                   G4bool& consuming) const;
+      // Return replication information. Nothing for no-replicated volumes.
 
-  private: 
+  private:
+
     void CopyAttributes( G4VPhysicalVolume* pCurrentVol );
     G4PhysicalTouchable( const G4PhysicalTouchable & ) ; 
   
   private:
+
     G4VPhysicalVolume*   fpPhysVol; 
       // Current volume pointer
 
@@ -118,28 +115,6 @@ class G4PhysicalTouchable : public G4VPhysicalVolume
 
 }; 
 
-inline G4VPhysicalVolume* G4PhysicalTouchable::GetCurrentVolume()
-{
-    return fpPhysVol;
-}
-inline const G4VPhysicalVolume* G4PhysicalTouchable::GetCurrentVolume() const
-{
-    return fpPhysVol;
-}
+#include "G4PhysicalTouchable.icc"
 
-inline const G4VTouchable* G4PhysicalTouchable::GetParentTouchable() const
-      // Provide touchable
-{
-   return fpTouchable; 
-}
-
-#if 0
-// Extra Inline methods
-inline G4VPhysicalVolume* G4PhysicalTouchable::operator ->() // const
-{
-    return( fpPhysVol ? fpPhysVol : 0 );
-}
-#endif
-
-  
 #endif
