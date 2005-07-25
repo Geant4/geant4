@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SCPrimaryGeneratorAction.cc,v 1.4 2005-07-04 10:03:34 link Exp $
+// $Id: SCPrimaryGeneratorAction.cc,v 1.5 2005-07-25 08:16:02 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -163,7 +163,21 @@ G4ThreeVector SCPrimaryGeneratorAction::GetSurfacePoint(G4double &u, G4double &v
 
   G4ThreeVector retval  ;
 
-  if (val == "Sphere")
+  if (val == "Sphere" 
+      or val == "Shell" 
+      or val == "HalfSphere" 
+      or val == "HollowSphere" 
+      or val == "HalfHollowSphere" 
+      or val == "Q1Shell" 
+      or val == "Q2Shell" 
+      or val == "Q3Shell" 
+      or val == "Q4Shell" 
+      or val == "Q5Shell" 
+      or val == "Q6Shell" 
+      or val == "Q7Shell" 
+      or val == "Q8Shell" 
+      or val == "Ring"
+      )
   {
 
   // get parameters

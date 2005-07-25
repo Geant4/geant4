@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SCDetectorConstruction.cc,v 1.4 2005-07-04 10:03:32 link Exp $
+// $Id: SCDetectorConstruction.cc,v 1.5 2005-07-25 08:16:00 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -134,20 +134,178 @@ SCDetectorConstruction::SelectDetector( const G4String& val )
   if (val == "Sphere")
   {
     // only solid sphere is supportet for now
+      fTrackerR1 = 0*cm ;
+      fTrackerR2 = 12*cm ;
+      fPhi = 0*deg ;
+      fPhiSegment = 360*deg ;
+      fTheta = 0*deg ;
+      fThetaSegment = 180*deg ;
+      aVolume = new G4Sphere ("aSphere",  fTrackerR1, fTrackerR2 ,fPhi, fPhiSegment, fTheta, fThetaSegment);
+  }
+
+  else if (val == "HalfSphere")
+  {
+    // only solid sphere is supportet for now
+      fTrackerR1 = 0*cm ;
+      fTrackerR2 = 12*cm ;
+      fPhi = 0*deg ;
+      fPhiSegment = 180*deg ;
+      fTheta = 0*deg ;
+      fThetaSegment = 180*deg ;
+      aVolume = new G4Sphere ("aHalfSphere",  fTrackerR1, fTrackerR2 ,fPhi, fPhiSegment, fTheta, fThetaSegment);
+
+  }
+  else if (val == "HollowSphere")
+  {
+    // only solid sphere is supportet for now
+      fTrackerR1 = 12*cm ;
+      fTrackerR2 = 14*cm ;
+      fPhi = 0*deg ;
+      fPhiSegment = 360*deg ;
+      fTheta = 0*deg ;
+      fThetaSegment = 180*deg ;
+      aVolume = new G4Sphere ("aHollowSphere",  fTrackerR1, fTrackerR2 ,fPhi, fPhiSegment, fTheta, fThetaSegment);
+
+  }
+  else if (val == "HalfHollowSphere")
+  {
+    // only solid sphere is supportet for now
+      fTrackerR1 = 12*cm ;
+      fTrackerR2 = 14*cm ;
+      fPhi = 0*deg ;
+      fPhiSegment = 180*deg ;
+      fTheta = 0*deg ;
+      fThetaSegment = 180*deg ;
+      aVolume = new G4Sphere ("aHalfHollowSphere",  fTrackerR1, fTrackerR2 ,fPhi, fPhiSegment, fTheta, fThetaSegment);
+
+  }
+  else if (val == "Q1Shell")
+  {
+    // only solid sphere is supportet for now
+      fTrackerR1 = 10*cm ;
+      fTrackerR2 = 12*cm ;
+      fPhi = 0*deg ;
+      fPhiSegment = 90*deg ;
+      fTheta = 0*deg ;
+      fThetaSegment = 90*deg ;
+      aVolume = new G4Sphere ("aQ1Shell",  fTrackerR1, fTrackerR2 ,fPhi, fPhiSegment, fTheta, fThetaSegment);
+
+  }
+  else if (val == "Q2Shell")
+  {
+    // only solid sphere is supportet for now
+      fTrackerR1 = 10*cm ;
+      fTrackerR2 = 12*cm ;
+      fPhi = 90*deg ;
+      fPhiSegment = 90*deg ;
+      fTheta = 0*deg ;
+      fThetaSegment = 90*deg ;
+      aVolume = new G4Sphere ("aQ2Shell",  fTrackerR1, fTrackerR2 ,fPhi, fPhiSegment, fTheta, fThetaSegment);
+
+  }  
+  else if (val == "Q3Shell")
+  {
+    // only solid sphere is supportet for now
+      fTrackerR1 = 10*cm ;
+      fTrackerR2 = 12*cm ;
+      fPhi = 180*deg ;
+      fPhiSegment = 90*deg ;
+      fTheta = 0*deg ;
+      fThetaSegment = 90*deg ;
+      aVolume = new G4Sphere ("aQ3Shell",  fTrackerR1, fTrackerR2 ,fPhi, fPhiSegment, fTheta, fThetaSegment);
+
+  }
+  else if (val == "Q4Shell")
+  {
+    // only solid sphere is supportet for now
+      fTrackerR1 = 10*cm ;
+      fTrackerR2 = 12*cm ;
+      fPhi = 270*deg ;
+      fPhiSegment = 90*deg ;
+      fTheta = 0*deg ;
+      fThetaSegment = 90*deg ;
+      aVolume = new G4Sphere ("aQ4Shell",  fTrackerR1, fTrackerR2 ,fPhi, fPhiSegment, fTheta, fThetaSegment);
+
+  }
+  else if (val == "Q5Shell")
+  {
+    // only solid sphere is supportet for now
+      fTrackerR1 = 10*cm ;
+      fTrackerR2 = 12*cm ;
+      fPhi = 0*deg ;
+      fPhiSegment = 90*deg ;
+      fTheta = 90*deg ;
+      fThetaSegment = 90*deg ;
+      aVolume = new G4Sphere ("aQ5Shell",  fTrackerR1, fTrackerR2 ,fPhi, fPhiSegment, fTheta, fThetaSegment);
+
+  }
+else if (val == "Q6Shell")
+  {
+    // only solid sphere is supportet for now
+      fTrackerR1 = 10*cm ;
+      fTrackerR2 = 12*cm ;
+      fPhi = 90*deg ;
+      fPhiSegment = 90*deg ;
+      fTheta = 90*deg ;
+      fThetaSegment = 90*deg ;
+      aVolume = new G4Sphere ("aQ5Shell",  fTrackerR1, fTrackerR2 ,fPhi, fPhiSegment, fTheta, fThetaSegment);
+
+  }  
+  else if (val == "Q7Shell")
+  {
+    // only solid sphere is supportet for now
+      fTrackerR1 = 10*cm ;
+      fTrackerR2 = 12*cm ;
+      fPhi = 180*deg ;
+      fPhiSegment = 90*deg ;
+      fTheta = 90*deg ;
+      fThetaSegment = 90*deg ;
+      aVolume = new G4Sphere ("aQ7Shell",  fTrackerR1, fTrackerR2 ,fPhi, fPhiSegment, fTheta, fThetaSegment);
+
+  }
+  else if (val == "Q8Shell")
+  {
+    // only solid sphere is supportet for now
+      fTrackerR1 = 10*cm ;
+      fTrackerR2 = 12*cm ;
+      fPhi = 270*deg ;
+      fPhiSegment = 90*deg ;
+      fTheta = 90*deg ;
+      fThetaSegment = 90*deg ;
+      aVolume = new G4Sphere ("aQ8Shell",  fTrackerR1, fTrackerR2 ,fPhi, fPhiSegment, fTheta, fThetaSegment);
+
+  }
+
+
+  else if (val == "Shell")
+  {
+    // only solid sphere is supportet for now
       fTrackerR1 = 10*cm ;
       fTrackerR2 = 12*cm ;
       fPhi = 30*deg ;
       fPhiSegment = 120*deg ;
       fTheta = 10*deg ;
       fThetaSegment = 100*deg ;
-      aVolume = new G4Sphere ("aSphere",  fTrackerR1, fTrackerR2 ,fPhi, fPhiSegment, fTheta, fThetaSegment);
+      aVolume = new G4Sphere ("aShell",  fTrackerR1, fTrackerR2 ,fPhi, fPhiSegment, fTheta, fThetaSegment);
+
+  }
+  else if (val == "Ring")
+  {
+    // only solid sphere is supportet for now
+      fTrackerR1 = 10*cm ;
+      fTrackerR2 = 12*cm ;
+      fPhi = 30*deg ;
+      fPhiSegment = 120*deg ;
+      fTheta = 10*deg ;
+      fThetaSegment = 40*deg ;
+      aVolume = new G4Sphere ("aRing",  fTrackerR1, fTrackerR2 ,fPhi, fPhiSegment, fTheta, fThetaSegment);
 
   }
   else if ( val == "Ellipsoid" ) {
 
-    fSemiAxisX = 10*cm ;
-    fSemiAxisY = 15*cm ;
-    fSemiAxisZ = 20*cm ;
+    fSemiAxisX = 1*cm ;
+    fSemiAxisY = 10*cm ;
+    fSemiAxisZ = 100*cm ;
 
     aVolume = new  G4Ellipsoid("aEllipsoid",
 			       fSemiAxisX,
@@ -157,8 +315,6 @@ SCDetectorConstruction::SelectDetector( const G4String& val )
 
 
   }
-
-
   else if (val == "Orb")
   {
 
