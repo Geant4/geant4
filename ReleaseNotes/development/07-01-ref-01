@@ -1,0 +1,110 @@
+
+                       geant4-07-01-ref-01
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Introduced support for nested parameterisations in geometry with ability
+    to use parent information to compute/change material.
+  o Added new specific shape G4Ellipsoid.
+  o Added protection against negative numbers in G4UniversalFluctuation
+    and fixes in chemical formula for G4BraggModel and G4BraggIonModel.
+  o Memory leak fix for nuclear mass management in CHIPS.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                                           config-V07-01-00
+------
+- Excluded usage of unnecessary 'ranlib' at creation of the libraries for
+  WIN32-VC system. Fixes an observed problem of debug-symbols corruption.
+
+geometry/navigation                              geomnav-V07-01-00
+-------------------
+- Added ability to use nested parameterisations to parameterised navigation.
+
+geometry/solids/CSG                              geom-csg-V07-01-00
+-------------------
+- Fixed bug in G4Sphere::DistanceToOut(p,v):
+  added check for intersection with double cone.
+- Added new unit test testDistanceAccuracy.
+
+geometry/solids/specific                         geom-specific-V07-01-01
+------------------------
+- Added new shape G4Ellipsoid. Contribution of G.Horton-Smith and G.Guerrieri.
+  Code cleanup, and added default arguments for cuts, added first
+  implementation of unit test.
+- Fixed compilation warning on WIN32-VC for G4VSurface.cc.
+- Corrected unit tests for twisted-box/trap.
+
+geometry/solids/test                             geom-solids-tests-V07-01-00
+--------------------
+- Added new test SurfaceCheck.
+
+geometry/volumes                                 geomvol-V07-01-00
+----------------
+- Added G4VNestedParameterisation class with ability to use parent
+  information to compute/change material.
+  Added G4PhysicalTouchable class to enable this type of parameterisation.
+  This class is an implementation class only, and its name especially
+  and potentially other aspect is/are likely to be changed.
+  A revision of the interface of G4VPVParamerisation can provide this
+  capability in future, in a simpler way.
+
+graphics_reps                                    greps-V07-01-00
+-------------
+- Added Polyhedron description for new G4Ellipsoid shape.
+
+processes/electromagnetic/highenergy             emhighenergy-V07-01-00
+------------------------------------
+- Fixed a misprint in G4BetheBlochNoDeltaModel.
+
+processes/electromagnetic/standard               emstand-V07-01-00
+----------------------------------
+- Added protection against negative numbers in G4UniversalFluctuation.
+- Increased number of bins for internal table to 200 in G4BetheHeitlerModel.
+- Fixes in chemical formula for G4BraggModel and G4BraggIonModel.
+
+processes/hadronic/models/chiral.../body         ghad-chips-body-V07-01-00
+----------------------------------------
+- Memory leak fix for nuclear mass management in G4QPDGCode to use
+  G4 masses of nuclear fragments.
+
+processes/hadronic/stopping                      ghad-stopping-V07-01-00
+---------------------------
+- Fixed bug in time of e- produced in bound decay of mu-.
+
+processes/management                             procman-V07-01-00
+--------------------
+- Added forward declaration of G4UImessenger in G4ProcessTable.hh.
+  Fixes problem report #768.
+
+tracking                                         tracking-V07-01-00
+--------
+- Fix in G4SteppingManager::InvokeAlongStepDoItProcs() for problem
+  report #761.
+
+examples                                         examples-V07-01-01
+--------
+- Updated reference outputs.
+- extended
+  o electromagnetic/TestEm11 (testem11-V07-01-00)
+    + Added comment in printout.
+  o electromagnetic/TestEm12 (testem12-V07-01-01)
+    + New example illustrating how to use the concept of 'process' in order
+      to implement a constraint on the step size of the particle trajectories.
+  o persistency (persistencyEx-V07-01-00)
+    + Added missing EXTRALIBS to link list for specialised setup.
+- novice
+  o N03 (exampleN03-V07-01-00)
+    + RunAction: compute and print statistic at the end of the run.
+
+tests                                            tests-V07-01-01
+-----
+- Updated reference outputs.
+- test19 (test19-V07-01-01)
+  o Beta version: removed redundant binaries and cleanup.
+- test29 (test29-V07-01-01)
+  o Alpha version: removed redundant binaries and cleanup.
