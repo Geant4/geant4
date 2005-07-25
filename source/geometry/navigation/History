@@ -1,4 +1,4 @@
-$Id: History,v 1.40 2005-06-14 16:29:41 japost Exp $
+$Id: History,v 1.41 2005-07-25 10:06:15 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,10 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Nov 19th, 2004 - J.Apostolakis  (geomnav-V07-00-00)
+Jul 25th, 2005 - G.Cosmo  (geomnav-V07-01-00)
+------------------------
+- Some cleanup and cosmetic changes for Software Reference Manual.
+
+Jun 14th, 2005 - J.Apostolakis  (geomnav-V07-00-00)
 ------------------------------
 - Added ability to use Nested Parameterisations to Parameterised Navigation
-   ** Note: Requires tag geomvol-V07-00-01 and coworks with it.
+  Coworks with tag "geomvol-V07-00-01".
 
 Dec 2nd, 2004 - G.Cosmo  (geomnav-V06-02-08)
 -----------------------
