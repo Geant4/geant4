@@ -61,11 +61,20 @@ processes/electromagnetic/highenergy             emhighenergy-V07-01-00
 ------------------------------------
 - Fixed a misprint in G4BetheBlochNoDeltaModel.
 
-processes/electromagnetic/standard               emstand-V07-01-00
+processes/electromagnetic/standard               emstand-V07-01-01
 ----------------------------------
 - Added protection against negative numbers in G4UniversalFluctuation.
 - Increased number of bins for internal table to 200 in G4BetheHeitlerModel.
 - Fixes in chemical formula for G4BraggModel and G4BraggIonModel.
+- Added extra protection in sampling of recoil direction of e+ in
+  G4MollerBHaBHaModel.
+
+processes/electromagnetic/utils                  emutils-V07-01-00
+-------------------------------
+- Fix in G4VEnergyLossProcess: added protection against zero energy post
+  step in non-integral mode.
+- Removed inlined constructors and destructors in G4VEmModel and
+  G4VEmFluctuationModel.
 
 processes/hadronic/models/chiral.../body         ghad-chips-body-V07-01-00
 ----------------------------------------
