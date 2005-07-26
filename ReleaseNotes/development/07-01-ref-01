@@ -105,8 +105,14 @@ examples                                         examples-V07-01-01
   o electromagnetic/TestEm12 (testem12-V07-01-01)
     + New example illustrating how to use the concept of 'process' in order
       to implement a constraint on the step size of the particle trajectories.
+  o eventgenerator/exgps (exgps-V07-01-00)
+    + Fixed GNUMakefile for linking with AIDA on WIN32-VC.
+      Fixes problem report #767.
   o persistency (persistencyEx-V07-01-00)
     + Added missing EXTRALIBS to link list for specialised setup.
+  o radioactivedecay/exrdm (exrdm-V07-01-00)
+    + Fixed GNUMakefile for linking with AIDA on WIN32-VC.
+      Fixes problem report #767.
 - novice
   o N03 (exampleN03-V07-01-00)
     + RunAction: compute and print statistic at the end of the run.
