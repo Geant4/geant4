@@ -75,6 +75,7 @@ processes/electromagnetic/utils                  emutils-V07-01-00
   step in non-integral mode.
 - Removed inlined constructors and destructors in G4VEmModel and
   G4VEmFluctuationModel.
+- G4VEmProcess: use integral mode only for charged particles.
 
 processes/hadronic/models/chiral.../body         ghad-chips-body-V07-01-00
 ----------------------------------------
