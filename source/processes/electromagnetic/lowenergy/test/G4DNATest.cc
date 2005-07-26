@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4DNATest.cc,v 1.4 2005-07-20 10:04:47 capra Exp $
+// $Id: G4DNATest.cc,v 1.5 2005-07-26 12:26:53 zfrancis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
@@ -88,6 +88,7 @@
 #include "G4DNAHeliumExcitation.hh"
 #include "G4DNAAlphaPlusExcitation.hh"
 #include "G4DNAAlphaPlusPlusExcitation.hh"
+#include "G4DNAElectronExcitation.hh"
 
 //! \brief Options structure
 struct Options
@@ -416,14 +417,15 @@ G4VLowEnergyTestableDiscreteProcess * GetSelectedProcess(const struct Options & 
   G4DNAGenericIonsManager * genericIonsManager;
   genericIonsManager=G4DNAGenericIonsManager::Instance();
   
-  processes=new G4VLowEnergyTestableDiscreteProcess * [7];
+  processes=new G4VLowEnergyTestableDiscreteProcess * [8];
   processes[0]=new G4DNAElectronElasticBrenner;
   processes[1]=new G4DNAElectronElasticEmfietzoglou;
   processes[2]=new G4DNAProtonExcitation;
   processes[3]=new G4DNAHeliumExcitation;
   processes[4]=new G4DNAAlphaPlusExcitation;
   processes[5]=new G4DNAAlphaPlusPlusExcitation;
-  processes[6]=0;
+  processes[6]=new G4DNAElectronExcitation;
+  processes[7]=0;
  }
  
  unsigned long i(0);
