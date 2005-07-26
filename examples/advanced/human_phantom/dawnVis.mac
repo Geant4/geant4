@@ -1,0 +1,14 @@
+#
+# Macro file for the initialization phase of "phantom.cc"
+# when runing in interactive mode
+#
+# Sets some default verbose
+#
+/control/verbose 1
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+/vis/scene/create
+/vis/open DAWNFILE
+/vis/viewer/flush
+#

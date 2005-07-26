@@ -1,0 +1,43 @@
+$Id: History,v 1.1 2005-07-26 13:41:22 gguerrie Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+July 26, 2005, G. Guerrieri
+- Commit the example
+
+June 30, 2005 G.Guerrieri
+- Add logical volume function to Construct();
+- Add other body part (now there's 20 body part on the Female ORNL model only)
+- UI operates in PreInit writing GDML file and then Construct().
+Future:
+*Design is to be changed: write GDML file directly from UI class!
+
+June 20, 2005 G.Guerrieri
+- UI with command defining:
+-- Sex of phantom : it open file phantomMale(Female).gdml that contains all parameters about 
+sizes, positions,rotations, materials for both the phantom model (MIRD, ORNL)
+-- Name of body part to be built
+-- Type of phantom model: MIRD, ORNL, MIX (<-not implemented)
+Then class creates userPhantom.gdml file to be read from Construct().
+Future: 
+*contruction of many body part, through command line or macro file.
+
+
+June 15rd, 2005 G.Guerrieri 
+- First implementation of phantom using GDML file for description persistency.
+

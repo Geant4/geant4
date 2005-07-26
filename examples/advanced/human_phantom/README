@@ -1,0 +1,47 @@
+$Id: README,v 1.1 2005-07-26 13:41:22 gguerrie Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                          Anthropomorphic Phantom
+                          -----------------------
+
+Anthropomorphic Phantom is built through use of GDML file. It allows
+to export geometry descriptions of body parts in an application independent 
+format (GDML, Geometry Description Markup Language).
+The GDML files can be then used to interchange geometries between different
+applications and users.
+
+The phantom construction consists of creation of a GDML file, through specification
+about sex of phantom, which body part build and in which model (MIRD, ORNL, MIX).
+Then construction consist of a call to GDMLProcessor which parses the
+GDML file (userPhantom.gdml) and returns the pointer to the world volume. The user
+can also write his/her own GDML file and use it as the primary input format for
+his/her Geant4 application.
+
+
+HOW TO BUILD THE PHANTOM ?
+
+- Install the GDML package with Geant4 extensions and Xerces.
+  See: http://cern.ch/gdml.
+
+- Set the environment variable GDML_BASE to point to the area where
+  GDML is installed. Specify the system architecture with SCRAM_ARCH.
+  Set XERCESCROOT to point to place where Xerces is installed.
+  You can also edit the GNUmakefile provided with the example and
+  customise it for your specific setup.
+
+- Customise the 'userPhantom.gdml' schema file, specifying in the top line the
+  right path where to retrieve the main GDML schema file (step that will
+  become automatic in future).
+
+- Compile and link to generate an executable:
+ 	      % gmake
+ 		
+- Execute the application:
+ 	      % phantom adultFemale.mac (adultMale.mac)
+	(default choice: openGL visualisator
+	 others macros: vrmlVis.mac, dawnVis.mac, openGLVis.mac, noVis.mac)
+
