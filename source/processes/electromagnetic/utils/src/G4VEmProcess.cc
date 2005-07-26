@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.30 2005-05-30 08:22:38 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.31 2005-07-26 07:46:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,6 +42,7 @@
 // 14-03-05 Update logic PostStepDoIt (V.Ivanchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 18-04-05 Use G4ParticleChangeForGamma (V.Ivantchenko)
+// 25-07-05 Add protection: integral mode only for charged particles (V.Ivantchenko)
 //
 //
 // Class Description:
@@ -338,6 +339,9 @@ void G4VEmProcess::PrintInfoDefinition()
   if(verboseLevel > 0) {
     G4cout << G4endl << GetProcessName() << ": " ;
     PrintInfo();
+    if(integral) {
+      G4cout << "      Integral mode is used  "<< G4endl;
+    }
   }
 
   if (!buildLambdaTable)  return;
@@ -570,7 +574,7 @@ const G4PhysicsTable* G4VEmProcess::LambdaTable() const
 
 void G4VEmProcess::SetIntegral(G4bool val)
 {
-  integral = val;
+  if(particle && particle != theGamma) integral = val;
   if(integral) buildLambdaTable = true;
 }
 

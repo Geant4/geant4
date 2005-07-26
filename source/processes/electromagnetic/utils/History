@@ -1,4 +1,4 @@
-$Id: History,v 1.202 2005-07-25 18:13:35 vnivanch Exp $
+$Id: History,v 1.203 2005-07-26 07:46:31 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,7 @@ committal in the CVS repository !
 25 July 05: V.Ivant (emutils-V07-01-00)
 - G4VEnergyLossProcess: add extra protection for non-integral mode
 - G4VEmModel, G4VEmFluctuationModel : move constructor anddestructor to the body
+- G4VEmProcess - use integral mode only for charged particles
 
 27 May 05: V.Ivant (utils-V07-00-13)
 - Fix problem observed for second run after adding/removal materials
