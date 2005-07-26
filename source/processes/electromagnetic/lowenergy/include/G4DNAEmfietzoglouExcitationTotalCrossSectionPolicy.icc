@@ -1,0 +1,127 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4DNAEmfietzoglouExcitationTotalCrossSectionPolicy.icc,v  2005/07/26 10:49:54 Francis
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+
+#ifdef   G4DNAEmfietzoglouExcitationTotalCrossSectionPolicy_HH
+ #include "Randomize.hh"
+
+ template <typename IncomingParticlePolicy, typename EnergyLimitsPolicy>
+ G4double                              G4DNAEmfietzoglouExcitationTotalCrossSectionPolicy<IncomingParticlePolicy, EnergyLimitsPolicy> :: TotalCrossSection(G4double k, G4int z ) const
+ {
+  if (k < EnergyLimitsPolicy::lowEnergyLimit)
+  {
+   if (EnergyLimitsPolicy::zeroBelowLowEnergyLimit)
+    return 0;
+
+   k=EnergyLimitsPolicy::lowEnergyLimit;
+  }
+  else if (k > EnergyLimitsPolicy::highEnergyLimit)
+  {
+   if (EnergyLimitsPolicy::zeroAboveHighEnergyLimit)
+    return 0;
+
+   k=EnergyLimitsPolicy::highEnergyLimit;
+  }
+
+  G4int i(5);
+  G4double totalCrossSection(0.);
+
+  while (i>0)
+  {
+   i--;
+   totalCrossSection+=PartialCrossSection(k,z, i);
+  }
+  return totalCrossSection;
+ }
+
+ template <typename IncomingParticlePolicy, typename EnergyLimitsPolicy>
+ G4int                                  G4DNAEmfietzoglouExcitationTotalCrossSectionPolicy<IncomingParticlePolicy, EnergyLimitsPolicy> :: RandomizePartialCrossSection(G4double k,G4int z) const
+ {
+  G4int i(5);
+  G4double values[5];
+  G4double value(0);
+
+  while (i>0)
+  {
+   i--;
+   values[i]=PartialCrossSection(k,z, i);
+   value+=values[i];
+  }
+
+  value*=G4UniformRand();
+
+  i=5;
+  while (i>0)
+  {
+   i--;
+
+   if (values[i]>value)
+    return i;
+
+   value-=values[i];
+  }
+
+  return 0;
+ }
+
+ template <typename IncomingParticlePolicy, typename EnergyLimitsPolicy>
+ G4double                               G4DNAEmfietzoglouExcitationTotalCrossSectionPolicy<IncomingParticlePolicy, EnergyLimitsPolicy> :: EnergyConstant(G4int excitationLevelIndex) const
+ {
+  const G4double ej[]={8.22*eV, 10.00*eV, 11.24*eV, 12.61*eV, 13.77*eV};
+  
+  return ej[excitationLevelIndex];
+ }
+
+ template <typename IncomingParticlePolicy, typename EnergyLimitsPolicy>
+ G4double                               G4DNAEmfietzoglouExcitationTotalCrossSectionPolicy<IncomingParticlePolicy, EnergyLimitsPolicy> :: PartialCrossSection(G4double T, G4int z, G4int excitationLevelIndex) const
+ {
+  //                 Aj                        T
+  // sigma(T) = ------------- (Bj /  T) ln(Cj ---) [1 - Bj / T]^Pj
+  //             2 pi alpha0                   R
+  //
+  // T      is the incoming electron kinetic energy
+  // alpha0 is the Bohr Radius (Bohr_radius)
+  // Aj, Bj, Cj & Pj are parameters that can be found in Emfietzoglou's papers
+  //
+  //
+  // From Phys. Med. Biol. 48 (2003) 2355-2371, D.Emfietzoglou,
+  // Monte Carlo Simulation of the energy loss of low energy electrons in liquid Water
+  //
+
+  const G4double sigma0((10./3.343e22)*cm2);
+  const G4double Aj[]={0.0205, 0.0209, 0.0130, 0.0026, 0.0025};
+  const G4double Cj[]={4.9801, 3.3850, 2.8095, 1.9242, 3.4624};
+  const G4double Pj[]={0.4757, 0.3483, 0.4443, 0.3429, 0.4379};
+  const G4double Bj[]={8.22*eV, 10.00*eV, 11.24*eV, 12.61*eV, 13.77*eV};
+  const G4double R(13.6*eV) ;
+  z=z*1;  
+  if(T<Bj[excitationLevelIndex]) return(0.); 
+  G4double excSigma = ( Aj[excitationLevelIndex] / (2.*pi*Bohr_radius)) * (Bj[excitationLevelIndex] / T) * log(Cj[excitationLevelIndex]*(T/R)) * pow((1.- (Bj[excitationLevelIndex]/T)), Pj[excitationLevelIndex]);
+return(excSigma * sigma0);
+ }
+
+#endif /* G4DNAEmfietzoglouExcitationTotalCrossSectionPolicy_HH */
+ 
