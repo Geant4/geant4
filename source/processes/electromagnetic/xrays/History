@@ -1,4 +1,4 @@
-$Id: History,v 1.39 2005-06-27 20:31:07 gum Exp $
+$Id: History,v 1.40 2005-07-28 23:54:51 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28 Jul 05: P.Gumplinger (xrays-V07-01-00)
+- add G4ProcessType to all constructors
 
 27 Jun 05: P.Gumplinger (xrays-V07-00-04)
 - Change IsApplicable for G4Cerenkov to exclude 'chargedgeantino'
