@@ -50,6 +50,7 @@
 //              2003-11-27 - Modified line 168-9 to reflect changes made to
 //                           G4OpticalSurface class ( by Fan Lei)
 //              2004-02-02 - Set theStatus = Undefined at start of DoIt
+//              2005-07-28 - add G4ProcessType to constructor
 //
 // Author:      Peter Gumplinger
 // 		adopted from work by Werner Keil - April 2/96
@@ -76,8 +77,9 @@
         // Constructors
         /////////////////
 
-G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName)
-             : G4VDiscreteProcess(processName)
+G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName,
+                                               G4ProcessType type)
+             : G4VDiscreteProcess(processName, type)
 {
         if ( verboseLevel > 0) {
            G4cout << GetProcessName() << " is created " << G4endl;
