@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc,v 1.17 2004-12-10 18:49:57 gcosmo Exp $
+// $Id: G4Cerenkov.cc,v 1.18 2005-07-28 23:58:44 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,9 @@
 // Version:     2.1
 // Created:     1996-02-21  
 // Author:      Juliet Armstrong
-// Updated:     2001-09-17, migration of Materials to pure STL (mma) 
+// Updated:     2005-07-28 by Peter Gumplinger
+//              > add G4ProcessType to constructor
+//              2001-09-17, migration of Materials to pure STL (mma) 
 //              2000-11-12 by Peter Gumplinger
 //              > add check on CerenkovAngleIntegrals->IsFilledVectorExist()
 //              in method GetAverageNumberOfPhotons 
@@ -73,8 +75,8 @@ using namespace std;
         // Constructors
         /////////////////
 
-G4Cerenkov::G4Cerenkov(const G4String& processName)
-           : G4VContinuousProcess(processName)
+G4Cerenkov::G4Cerenkov(const G4String& processName, G4ProcessType type)
+           : G4VContinuousProcess(processName, type)
 {
 	fTrackSecondariesFirst = false;
 	fMaxPhotons = 0;

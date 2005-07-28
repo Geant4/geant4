@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.hh,v 1.6 2005-06-27 20:30:16 gum Exp $
+// $Id: G4Cerenkov.hh,v 1.7 2005-07-28 23:57:07 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,7 +34,8 @@
 // Version:     2.0
 // Created:     1996-02-21
 // Author:      Juliet Armstrong
-// Updated:     1999-10-29 add method and class descriptors
+// Updated:     2005-07-28 add G4ProcessType to constructor
+//              1999-10-29 add method and class descriptors
 //              1997-04-09 by Peter Gumplinger
 //              > G4MaterialPropertiesTable; new physics/tracking scheme
 // mail:        gum@triumf.ca
@@ -88,7 +89,8 @@ public: // Without description
 	// Constructors and Destructor
 	////////////////////////////////
 
-	G4Cerenkov(const G4String& processName = "Cerenkov");
+	G4Cerenkov(const G4String& processName = "Cerenkov", 
+                            G4ProcessType type = fElectromagnetic);
 
 	// G4Cerenkov(const G4Cerenkov &right);
 

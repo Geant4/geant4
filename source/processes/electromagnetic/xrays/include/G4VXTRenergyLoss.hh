@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.hh,v 1.8 2005-04-05 08:27:21 grichine Exp $
+// $Id: G4VXTRenergyLoss.hh,v 1.9 2005-07-28 23:55:46 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,7 +32,8 @@
 // method
 // 
 // History:
-// 15.01.02 V. Grichine first version 
+// 15.01.02 V. Grichine first version
+// 28.07.05, P.Gumplinger add G4ProcessType to constructor
 //
 
 
@@ -68,7 +69,8 @@ public:
 
   G4VXTRenergyLoss (G4LogicalVolume *anEnvelope,G4Material*,G4Material*,
                     G4double,G4double,G4int,
-                     const G4String & processName = "XTRenergyLoss");
+                    const G4String & processName = "XTRenergyLoss",
+                    G4ProcessType type = fElectromagnetic);
    virtual  ~G4VXTRenergyLoss ();
 
   // Pure virtuals must be implemented in inherited particular TR radiators

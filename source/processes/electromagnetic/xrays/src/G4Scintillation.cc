@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.22 2004-12-10 18:49:57 gcosmo Exp $
+// $Id: G4Scintillation.cc,v 1.23 2005-07-28 23:58:58 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,9 @@
 // Version:     1.0
 // Created:     1998-11-07  
 // Author:      Peter Gumplinger
-// Updated:     2004-08-05 by Peter Gumplinger
+// Updated:     2005-07-28 by Peter Gumplinger
+//              > add G4ProcessType to constructor
+//              2004-08-05 by Peter Gumplinger
 //              > changed StronglyForced back to Forced in GetMeanLifeTime
 //              2002-11-21 by Peter Gumplinger
 //              > change to use G4Poisson for small MeanNumPhotons
@@ -76,8 +78,9 @@ using namespace std;
         // Constructors
         /////////////////
 
-G4Scintillation::G4Scintillation(const G4String& processName)
-                  : G4VRestDiscreteProcess(processName)
+G4Scintillation::G4Scintillation(const G4String& processName,
+                                       G4ProcessType type)
+                  : G4VRestDiscreteProcess(processName, type)
 {
 	fTrackSecondariesFirst = false;
 
