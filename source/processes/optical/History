@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28th July 2005 Peter Gumplinger (op-V07-01-00)
+               add G4ProcessType to all constructors
+
 10th December 2004 Gabriele Cosmo (op-V06-02-06)
                 replaced M_PI with CLHEP's pi
 
