@@ -67,7 +67,7 @@ EnergyAndMomentumCorrector(G4KineticTrackVector* Output, G4LorentzVector& TotalC
     G4LorentzVector SumMom;
     G4double        SumMass = 0;     
     G4double        TotalCollisionMass = TotalCollisionMom.m();
-    if( !(SumMom<1) && !(SumMom>-1) )
+    if( !(TotalCollisionMass<1) && !(TotalCollisionMass>-1) )
     {
       std::cout << "TotalCollisionMomentum = "<<TotalCollisionMom<<G4endl;
       throw G4HadronicException(__FILE__, __LINE__, "G4ExcitedStringDecay received nan mass...");
@@ -82,7 +82,7 @@ EnergyAndMomentumCorrector(G4KineticTrackVector* Output, G4LorentzVector& TotalC
           throw G4HadronicException(__FILE__, __LINE__, "G4ExcitedStringDecay generated nan momentum...");
 	}
         SumMass += Output->operator[](cHadron)->GetDefinition()->GetPDGMass();
-	if( !(SumMom<1) && !(SumMom>-1) )
+	if( !(SumMass<1) && !(SumMass>-1) )
 	{
           throw G4HadronicException(__FILE__, __LINE__, "G4ExcitedStringDecay generated nan mass...");
 	}
