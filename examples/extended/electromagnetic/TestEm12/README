@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2005-07-22 11:08:48 maire Exp $
+$Id: README,v 1.2 2005-07-29 14:14:47 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -104,8 +104,8 @@ $Id: README,v 1.1 2005-07-22 11:08:48 maire Exp $
       1 : energy profile dE/dr (in MeV/mm per event)
       2 : total energy deposited in the absorber
       3 : total track length of the primary track
-      4 : projected range of the primary track
-      5 : step size of the primary track
+      4 : step size of the primary track      
+      5 : projected range of the primary track
       6 : total track length of charged secondary tracks
       7 : step size of charged secondary tracks      
       8 : normalized energy profile d(E/E0)/d(r/r0), where r0 is the range of
