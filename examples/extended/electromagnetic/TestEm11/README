@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2005-06-03 15:18:43 maire Exp $
+$Id: README,v 1.2 2005-07-29 09:51:00 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -105,8 +105,8 @@ $Id: README,v 1.1 2005-06-03 15:18:43 maire Exp $
       1 : longitudinal energy profile (in MeV/mm and per event)
       2 : total energy deposited in the absorber
       3 : total track length of the primary track
-      4 : projected range of the primary track
-      5 : step size of the primary track
+      4 : step size of the primary track      
+      5 : projected range of the primary track
       6 : total track length of charged secondary tracks
       7 : step size of charged secondary tracks      
       
