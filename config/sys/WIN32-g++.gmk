@@ -7,7 +7,8 @@
 #
 ifeq ($(G4SYSTEM),WIN32-g++)
   CXX       := g++
-  CXXFLAGS  := -Wall -ansi -pedantic -pipe
+  CXXFLAGS  := -W -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long
+  CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe
   ifdef G4OPTIMISE
     CXXFLAGS  += -O
     FCFLAGS   := -O
