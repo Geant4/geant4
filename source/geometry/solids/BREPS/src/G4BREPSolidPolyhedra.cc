@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.29 2005-08-01 15:17:00 link Exp $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.30 2005-08-01 15:19:35 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -43,7 +43,6 @@
 // O.Link: Modification addresses minor bug (memory leak) in destructor
 //         (delete of RMIN, RMAX)
 //         
-
 // Bugfix 266 by Radovan Chytracek:
 // The situation when phi1 = 0 dphi1 = 2*pi and all RMINs = 0.0 is handled
 // now. In this case the inner planes are not created. The fix goes even
