@@ -22,7 +22,7 @@
 //
 //
 //
-// $Id: SoDetectorTreeKit.cc,v 1.9 2004-12-16 12:33:10 gcosmo Exp $
+// $Id: SoDetectorTreeKit.cc,v 1.10 2005-08-01 16:15:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*-----------------------------HEPVis----------------------------------------*/
@@ -58,7 +58,7 @@
 #include <Inventor/nodes/SoTexture2Transform.h>
 
 // This statement is required
-SO_KIT_SOURCE(SoDetectorTreeKit) 
+SO_KIT_SOURCE(SoDetectorTreeKit)
  
 // initClass
 void SoDetectorTreeKit::initClass(){
