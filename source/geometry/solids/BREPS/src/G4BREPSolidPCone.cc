@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPCone.cc,v 1.35 2004-12-02 09:31:25 gcosmo Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.36 2005-08-02 08:13:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -561,7 +561,7 @@ G4BREPSolidPCone::~G4BREPSolidPCone()
   {
     delete [] constructorParams.z_values;
     delete [] constructorParams.RMIN;
-    delete [] constructorParams.RMIN;
+    delete [] constructorParams.RMAX;
   }
 }
 
