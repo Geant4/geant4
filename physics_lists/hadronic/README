@@ -8,7 +8,7 @@ Installation instructions:
      directory for your specific installation of the hadronic physics-lists.
    - If you wish to work against the 'central' physics-lists installation,
      do NOT set G4LISTS_BASE, and use G4WORKDIR as usual.
-   - type 'gmake' for each physics list, and the packaging library.
+   - type 'make' from the directory 'hadronic'.
    - copy the example GNUmakefile (GNUmakefile.user.code.example), that comes
      with the package, to our application area and uncomment the physics lists
      you wish to use.
