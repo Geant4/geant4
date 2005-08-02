@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.31 2005-08-02 08:09:15 gcosmo Exp $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.32 2005-08-02 08:20:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -1172,19 +1172,17 @@ G4BREPSolidPolyhedra::DistanceToOut(register const G4ThreeVector& Pt,
     }
   }
 
+  G4double distance = 0.;
+
   // Be careful !
   // SurfaceVec->Distance is in fact the squared distance
   //
   if((ShortestDistance != kInfinity) && (parity&1))
   {
-    return std::sqrt(ShortestDistance);
+    distance = std::sqrt(ShortestDistance);
   }
-  else
-  {
-    // if no intersection is found, the point is outside
-    //
-    return 0; 
-  }
+
+  return distance;
 }
 
 G4double G4BREPSolidPolyhedra::DistanceToOut(const G4ThreeVector& Pt) const
