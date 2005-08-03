@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.33 2005-06-08 16:14:25 gcosmo Exp $
+// $Id: G4Para.cc,v 1.34 2005-08-03 16:00:37 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
@@ -1239,45 +1239,141 @@ G4NURBS* G4Para::CreateNURBS () const
   return 0 ;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////////
+// //
+// // Return a point (G4ThreeVector) randomly and uniformly selected on the solid surface
+
+// G4ThreeVector G4Para::GetPointOnSurface() const
+// {
+//   G4double px, py, pz, select, sumS;
+//   G4double Sxy, Sxz, Syz;
+
+//   Sxy = fDx*fDy; 
+//   Sxz = fDx*fDz; 
+//   Syz = fDy*fDz;
+
+//   sumS   = Sxy + Sxz + Syz;
+//   select = sumS*G4UniformRand();
+ 
+//   if( select < Sxy )
+//   {
+//     px = -fDx +2*fDx*G4UniformRand();
+//     py = -fDy +2*fDy*G4UniformRand();
+
+//     if(G4UniformRand() > 0.5) pz =  fDz;
+//     else                      pz = -fDz;
+//   }
+//   else if ( ( select - Sxy ) < Sxz ) 
+//   {
+//     px = -fDx +2*fDx*G4UniformRand();
+//     pz = -fDz +2*fDz*G4UniformRand();
+
+//     if(G4UniformRand() > 0.5) py =  fDy;
+//     else                      py = -fDy;
+//   }
+//   else  
+//   {
+//     py = -fDy +2*fDy*G4UniformRand();
+//     pz = -fDz +2*fDz*G4UniformRand();
+
+//     if(G4UniformRand() > 0.5) px =  fDx;
+//     else                      px = -fDx;
+//   } 
+//   return G4ThreeVector(px,py,pz);
+// }
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Get Point on Plane
+// Auxiliary method for Get Point on Surface
+//
+
+G4ThreeVector G4Para::GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1, 
+				      G4ThreeVector p2, G4ThreeVector p3, 
+				      G4double& area) const
+{
+  G4double lambda1, lambda2, chose, aOne, aTwo;
+  G4ThreeVector t, u, v, w, Area, normal;
+  
+  t = p1 - p0;
+  u = p2 - p1;
+  v = p3 - p2;
+  w = p0 - p3;
+
+  Area = G4ThreeVector(w.y()*v.z() - w.z()*v.y(),
+		       w.z()*v.x() - w.x()*v.z(),
+		       w.x()*v.y() - w.y()*v.x());
+  
+  aOne = 0.5*Area.mag();
+  
+  Area = G4ThreeVector(t.y()*u.z() - t.z()*u.y(),
+		       t.z()*u.x() - t.x()*u.z(),
+		       t.x()*u.y() - t.y()*u.x());
+  
+  aTwo = 0.5*Area.mag();
+  
+  area = aOne + aTwo;
+  
+  chose = RandFlat::shoot(0.,aOne+aTwo);
+
+  if(chose>=0. && chose < aOne){
+    lambda1 = RandFlat::shoot(0.,1.);
+    lambda2 = RandFlat::shoot(0.,lambda1);
+    return (p2+lambda1*v+lambda2*w);    
+  }
+  else{
+    lambda1 = RandFlat::shoot(0.,1.);
+    lambda2 = RandFlat::shoot(0.,lambda1);
+    return (p0+lambda1*t+lambda2*u);    
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////
 //
 // Return a point (G4ThreeVector) randomly and uniformly selected on the solid surface
 
 G4ThreeVector G4Para::GetPointOnSurface() const
 {
-  G4double px, py, pz, select, sumS;
-  G4double Sxy, Sxz, Syz;
+  G4ThreeVector One, Two, Three, Four, Five, Six;
+  G4ThreeVector pt[8] ;
+  G4double chose, aOne, aTwo, aThree, aFour, aFive, aSix;
 
-  Sxy = fDx*fDy; 
-  Sxz = fDx*fDz; 
-  Syz = fDy*fDz;
+  pt[0] = G4ThreeVector(-fDz*fTthetaCphi-fDy*fTalpha-fDx,
+			-fDz*fTthetaSphi-fDy, -fDz);
+  pt[1] = G4ThreeVector(-fDz*fTthetaCphi-fDy*fTalpha+fDx,
+			-fDz*fTthetaSphi-fDy, -fDz);
+  pt[2] = G4ThreeVector(-fDz*fTthetaCphi+fDy*fTalpha-fDx,
+			-fDz*fTthetaSphi+fDy, -fDz);
+  pt[3] = G4ThreeVector(-fDz*fTthetaCphi+fDy*fTalpha+fDx,
+			-fDz*fTthetaSphi+fDy, -fDz);
+  pt[4] = G4ThreeVector(+fDz*fTthetaCphi-fDy*fTalpha-fDx,
+			+fDz*fTthetaSphi-fDy, +fDz);
+  pt[5] = G4ThreeVector(+fDz*fTthetaCphi-fDy*fTalpha+fDx,
+			+fDz*fTthetaSphi-fDy, +fDz);
+  pt[6] = G4ThreeVector(+fDz*fTthetaCphi+fDy*fTalpha-fDx,
+			+fDz*fTthetaSphi+fDy, +fDz);
+  pt[7] = G4ThreeVector(+fDz*fTthetaCphi+fDy*fTalpha+fDx,
+			+fDz*fTthetaSphi+fDy, +fDz);
 
-  sumS   = Sxy + Sxz + Syz;
-  select = sumS*G4UniformRand();
- 
-  if( select < Sxy )
-  {
-    px = -fDx +2*fDx*G4UniformRand();
-    py = -fDy +2*fDy*G4UniformRand();
+  // make sure we provide the points in a clockwise fashion
+  One   = GetPointOnPlane(pt[0],pt[1],pt[3],pt[2], aOne);
+  Two   = GetPointOnPlane(pt[4],pt[5],pt[7],pt[6], aTwo);
+  Three = GetPointOnPlane(pt[6],pt[7],pt[3],pt[2], aThree);
+  Four  = GetPointOnPlane(pt[4],pt[5],pt[1],pt[0], aFour); 
+  Five  = GetPointOnPlane(pt[0],pt[2],pt[6],pt[4], aFive);
+  Six   = GetPointOnPlane(pt[1],pt[3],pt[7],pt[5], aSix);
 
-    if(G4UniformRand() > 0.5) pz =  fDz;
-    else                      pz = -fDz;
-  }
-  else if ( ( select - Sxy ) < Sxz ) 
-  {
-    px = -fDx +2*fDx*G4UniformRand();
-    pz = -fDz +2*fDz*G4UniformRand();
-
-    if(G4UniformRand() > 0.5) py =  fDy;
-    else                      py = -fDy;
-  }
-  else  
-  {
-    py = -fDy +2*fDy*G4UniformRand();
-    pz = -fDz +2*fDz*G4UniformRand();
-
-    if(G4UniformRand() > 0.5) px =  fDx;
-    else                      px = -fDx;
-  } 
-  return G4ThreeVector(px,py,pz);
+  chose = RandFlat::shoot(0.,aOne+aTwo+aThree+aFour+aFive+aSix);
+  
+  if(chose>=0. && chose<aOne)                    
+    return One;
+  else if(chose>=aOne && chose<aOne+aTwo)  
+    return Two;
+  else if(chose>=aOne+aTwo && chose<aOne+aTwo+aThree)
+    return Three;
+  else if(chose>=aOne+aTwo+aThree && chose<aOne+aTwo+aThree+aFour)
+    return Four;
+  else if(chose>=aOne+aTwo+aThree+aFour && chose<aOne+aTwo+aThree+aFour+aFive)
+    return Five;
+  else return Six;
 }

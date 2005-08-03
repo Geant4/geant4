@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.hh,v 1.19 2005-06-08 16:14:25 gcosmo Exp $
+// $Id: G4Torus.hh,v 1.20 2005-08-03 16:00:37 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -139,6 +139,8 @@ class G4Torus : public G4CSGSolid
     G4GeometryType GetEntityType() const;
 
     std::ostream& StreamInfo(std::ostream& os) const;
+
+    G4ThreeVector GetPointOnSurface() const;
 
     // Visualisation functions
 

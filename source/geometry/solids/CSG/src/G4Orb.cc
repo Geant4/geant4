@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.19 2005-06-08 16:14:25 gcosmo Exp $
+// $Id: G4Orb.cc,v 1.20 2005-08-03 16:00:37 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Orb
@@ -42,6 +42,8 @@
 #include "G4AffineTransform.hh"
 
 #include "G4VPVParameterisation.hh"
+
+#include "Randomize.hh"
 
 #include "meshdefs.hh"
 
@@ -613,6 +615,28 @@ G4NURBS* G4Orb::CreateNURBS () const
 {
   return new G4NURBSbox (fRmax, fRmax, fRmax);       // Box for now!!!
 }
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Methods for visualisationGet Point on Surface method
+
+G4ThreeVector G4Orb::GetPointOnSurface() const
+{
+  
+  //  generate a random number from zero to 2pi...
+  G4double phi      = RandFlat::shoot(0.,2.*pi);
+  G4double cosphi   = std::cos(phi);
+  G4double sinphi   = std::sin(phi);
+  
+  G4double theta    = RandFlat::shoot(0.,pi);
+  G4double costheta = std::cos(theta);
+  G4double sintheta = std::sqrt(1.-sqr(costheta));
+  
+  return G4ThreeVector (fRmax*sintheta*cosphi,fRmax*sintheta*sinphi,
+			fRmax*costheta); 
+  
+}
+
 
 // End of G4Orb.cc 
 //

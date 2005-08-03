@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.51 2005-06-08 16:14:25 gcosmo Exp $
+// $Id: G4Torus.cc,v 1.52 2005-08-03 16:00:37 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,6 +52,8 @@
 #include "G4VPVParameterisation.hh"
 
 #include "meshdefs.hh"
+
+#include "Randomize.hh"
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
@@ -3298,3 +3300,46 @@ G4TorusEquation::G4TorusEquation(G4double Rmax, G4double Rmin)
 G4TorusEquation::~G4TorusEquation()
 {
 }
+
+////////////////////////////////////////////////////////////////////////////
+//
+// GetPointOnSurface 
+//
+
+G4ThreeVector G4Torus::GetPointOnSurface() const
+{
+  G4double cosu, sinu,cosv, sinv, aOut, aIn, aSide, chose, phi, theta, rRand;
+   
+  phi   = RandFlat::shoot(fSPhi,fSPhi+fDPhi);
+  theta = RandFlat::shoot(0.,2.*pi);
+  
+  cosu   = std::cos(phi);    sinu = std::sin(phi);
+  cosv   = std::cos(theta);  sinv = std::sin(theta); 
+
+  // compute the areas
+  aOut   = (fDPhi)*2.*pi*fRtor*fRmax;
+  aIn    = (fDPhi)*2.*pi*fRtor*fRmin;
+  aSide  = pi*(fRmax*fRmax-fRmin*fRmin);
+  
+  if(fSPhi == 0 && fDPhi == twopi){ aSide = 0; }
+  chose = RandFlat::shoot(0.,aOut + aIn + 2.*aSide);
+
+  if(chose < aOut){
+    return G4ThreeVector ((fRtor+fRmax*cosv)*cosu,(fRtor+fRmax*cosv)*sinu,fRmax*sinv);
+  }
+  else if(chose >= aOut && chose < aOut + aIn){
+    return G4ThreeVector ((fRtor+fRmin*cosv)*cosu,(fRtor+fRmin*cosv)*sinu,fRmin*sinv);
+  }
+  else if(chose >= aOut + aIn && chose < aOut + aIn + aSide){
+    rRand = RandFlat::shoot(fRmin,fRmax);
+    return G4ThreeVector ((fRtor+rRand*cosv)*std::cos(fSPhi),
+			  (fRtor+rRand*cosv)*std::sin(fSPhi),rRand*sinv);
+  }
+  else{   
+    rRand = RandFlat::shoot(fRmin,fRmax);
+    return G4ThreeVector ((fRtor+rRand*cosv)*std::cos(fSPhi+fDPhi),
+			  (fRtor+rRand*cosv)*std::sin(fSPhi+fDPhi),rRand*sinv);
+   }
+}
+
+

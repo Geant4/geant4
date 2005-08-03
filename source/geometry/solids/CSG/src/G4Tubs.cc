@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.54 2005-06-08 16:14:25 gcosmo Exp $
+// $Id: G4Tubs.cc,v 1.55 2005-08-03 16:00:37 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,6 +58,8 @@
 #include "G4AffineTransform.hh"
 
 #include "G4VPVParameterisation.hh"
+
+#include "Randomize.hh"
 
 #include "meshdefs.hh"
 
@@ -1765,4 +1767,68 @@ G4NURBS* G4Tubs::CreateNURBS () const
     }
   }
   return pNURBS ;
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+//
+//  Get Point On Surface method
+//
+
+G4ThreeVector G4Tubs::GetPointOnSurface() const{
+
+  G4double xRand, yRand, zRand, phi, cosphi, sinphi, chose, aOne, aTwo, aThr, aFou;
+  G4double rRand;
+
+  aOne = 2.*fDz*fDPhi*fRMax;
+  aTwo = 2.*fDz*fDPhi*fRMin;
+  aThr = 0.5*fDPhi*(fRMax*fRMax-fRMin*fRMin);
+  aFou = 2.*fDz*(fRMax-fRMin);
+
+  phi    = RandFlat::shoot(fSPhi, fSPhi+fDPhi);
+  cosphi = std::cos(phi);
+  sinphi = std::sin(phi);
+
+  rRand  = RandFlat::shoot(fRMin,fRMax);
+  
+  if(fSPhi == 0 && fDPhi == twopi) 
+    aFou = 0;
+  
+  chose  = RandFlat::shoot(0.,aOne+aTwo+2.*aThr+2.*aFou);
+
+  if(chose >=0 && chose < aOne){
+    xRand = fRMax*cosphi;
+    yRand = fRMax*sinphi;
+    zRand = RandFlat::shoot(-1.*fDz,fDz);
+    return G4ThreeVector  (xRand, yRand, zRand);
+  }
+  else if(chose >= aOne && chose < aOne + aTwo){
+    xRand = fRMin*cosphi;
+    yRand = fRMin*sinphi;
+    zRand = RandFlat::shoot(-1.*fDz,fDz);
+    return G4ThreeVector  (xRand, yRand, zRand);
+  }
+  else if(chose >= aOne + aTwo && chose < aOne + aTwo + aThr){
+    xRand = rRand*cosphi;
+    yRand = rRand*sinphi;
+    zRand = fDz;
+    return G4ThreeVector  (xRand, yRand, zRand);
+  }
+  else if(chose >= aOne + aTwo + aThr && chose < aOne + aTwo + 2.*aThr){
+    xRand = rRand*cosphi;
+    yRand = rRand*sinphi;
+    zRand = -1.*fDz;
+    return G4ThreeVector  (xRand, yRand, zRand);
+  }
+  else if(chose >= aOne + aTwo + 2.*aThr && chose < aOne + aTwo + 2.*aThr + aFou){
+    xRand = rRand*std::cos(fSPhi);
+    yRand = rRand*std::sin(fSPhi);
+    zRand = RandFlat::shoot(-1.*fDz,fDz);
+    return G4ThreeVector  (xRand, yRand, zRand);
+  }
+  else{
+    xRand = rRand*std::cos(fSPhi+fDPhi);
+    yRand = rRand*std::sin(fSPhi+fDPhi);
+    zRand = RandFlat::shoot(-1.*fDz,fDz);
+    return G4ThreeVector  (xRand, yRand, zRand);
+  }
 }

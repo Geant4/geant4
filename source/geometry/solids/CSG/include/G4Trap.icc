@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.icc,v 1.4 2004-12-02 09:31:28 gcosmo Exp $
+// $Id: G4Trap.icc,v 1.5 2005-08-03 16:00:37 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -103,6 +103,19 @@ TrapSidePlane G4Trap::GetSidePlane( G4int n ) const
   return fPlanes[n] ;
 }
 
+///////////////////////////////////////////////////
+//
+// Return the area of a face specified by four clockwise points
+
+inline
+G4double G4Trap::GetFaceArea(const G4ThreeVector& p0, const G4ThreeVector& p1,
+		             const G4ThreeVector& p2, const G4ThreeVector& p3)
+{
+   G4double area;
+
+   area = 0.5*((p1-p0).cross(p2-p1).mag()+(p3-p2).cross(p0-p3).mag());
+   return area;
+}
 
 ///////////////////////////////////////////////////
 //

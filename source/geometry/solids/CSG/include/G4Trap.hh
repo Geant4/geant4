@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.hh,v 1.12 2005-06-08 16:14:25 gcosmo Exp $
+// $Id: G4Trap.hh,v 1.13 2005-08-03 16:00:37 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,7 @@
 //              at -/+pDz
 //      pPhi    Azimuthal angle of the line joing the centre of the face at
 //              -pDz to the centre of the face at +pDz
-//      pDy1     Half-length along y of the face at -pDz
+//      pDy1    Half-length along y of the face at -pDz
 //      pDx1    Half-length along x of the side at y=-pDy1 of the face at -pDz
 //      pDx2    Half-length along x of the side at y=+pDy1 of the face at -pDz
 //      pAlp1   Angle with respect to the y axis from the centre of the side
@@ -165,6 +165,10 @@ class G4Trap : public G4CSGSolid
     inline TrapSidePlane GetSidePlane( G4int n ) const;
     inline G4ThreeVector GetSymAxis() const;
     inline G4double GetCubicVolume();
+    
+    // provide four corners of plane in clockwise fashion, return area of finite face
+    inline G4double GetFaceArea(const G4ThreeVector& p1, const G4ThreeVector& p2, 
+			        const G4ThreeVector& p3, const G4ThreeVector& p4);
 
 
       //
@@ -211,6 +215,16 @@ class G4Trap : public G4CSGSolid
     G4double DistanceToOut( const G4ThreeVector& p ) const;
 
     G4GeometryType GetEntityType() const;
+
+    G4ThreeVector GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1, 
+					  G4ThreeVector p2, G4ThreeVector p3, 
+					  G4double& area) const;
+
+    G4ThreeVector GetPointOnSurface() const;
+
+    G4ThreeVector GetPointOnBottomZPlane(G4double& area) const;
+
+    G4ThreeVector GetPointOnTopZPlane(G4double& area) const;
 
     std::ostream& StreamInfo( std::ostream& os ) const;
 

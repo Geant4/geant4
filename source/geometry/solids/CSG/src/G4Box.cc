@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.39 2005-06-08 16:14:25 gcosmo Exp $
+// $Id: G4Box.cc,v 1.40 2005-08-03 16:00:37 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -966,7 +966,7 @@ G4NURBS* G4Box::CreateNURBS () const
   return new G4NURBSbox (fDx, fDy, fDz);
 }
     
-/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
 //
 // Return a point (G4ThreeVector) randomly and uniformly selected on the solid surface
 

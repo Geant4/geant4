@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.44 2005-06-08 16:14:25 gcosmo Exp $
+// $Id: G4Cons.cc,v 1.45 2005-08-03 16:00:37 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -54,6 +54,8 @@
 #include "G4VPVParameterisation.hh"
 
 #include "meshdefs.hh"
+
+#include "Randomize.hh"
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
@@ -2238,4 +2240,71 @@ G4NURBS* G4Cons::CreateNURBS () const
 {
   G4double RMax = (fRmax2 >= fRmax1) ? fRmax2 : fRmax1 ;
   return new G4NURBSbox (RMax, RMax, fDz);       // Box for now!!!
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Get Point On Surface Method
+//
+
+G4ThreeVector G4Cons::GetPointOnSurface() const
+{   
+  // declare working variables
+  G4double Aone, Atwo, Athree, Afour, Afive, slin, slout, phi;
+  G4double zRand, cosu, sinu, rRand1, rRand2, chose, rone, rtwo, qone, qtwo;
+    
+  rone = (fRmax1-fRmax2)/(2.*fDz); rtwo = (fRmin1-fRmin2)/(2.*fDz);
+  qone = fDz*(fRmax1+fRmax2)/(fRmax1-fRmax2);
+  qtwo = fDz*(fRmin1+fRmin2)/(fRmin1-fRmin2);
+  
+  slin   = std::sqrt(sqr(fRmin1-fRmin2)+sqr(2.*fDz));
+  slout  = std::sqrt(sqr(fRmax1-fRmax2)+sqr(2.*fDz));
+  Aone   = 0.5*fDPhi*(fRmax2 + fRmax1)*slout;       
+  Atwo   = 0.5*fDPhi*(fRmin2 + fRmin1)*slin;
+  Athree = 0.5*fDPhi*(fRmax1*fRmax1-fRmin1*fRmin1); 
+  Afour  = 0.5*fDPhi*(fRmax2*fRmax2-fRmin2*fRmin2);
+  Afive  = fDz*(fRmax1-fRmin1+fRmax2-fRmin2);
+  
+  phi    = RandFlat::shoot(fSPhi,fSPhi+fDPhi);
+  cosu   = std::cos(phi);  sinu = std::sin(phi);
+  rRand1 = RandFlat::shoot(fRmin1,fRmax1);
+  rRand2 = RandFlat::shoot(fRmin2,fRmax2);
+  
+  if(fSPhi == 0. && fDPhi == twopi){ Afive = 0.; }
+  chose  = RandFlat::shoot(0.,Aone+Atwo+Athree+Afour+2.*Afive);
+ 
+  if(chose >= 0. && chose < Aone){
+    if(fRmin1 != fRmin2){
+      zRand = RandFlat::shoot(-1.*fDz,fDz); 
+      return G4ThreeVector (rtwo*cosu*(qtwo-zRand),rtwo*sinu*(qtwo-zRand),zRand);
+    }
+    else return G4ThreeVector(fRmin1*cosu,fRmin2*sinu,RandFlat::shoot(-1.*fDz,fDz));
+  }
+  else if(chose >= Aone && chose <= Aone + Atwo){
+    if(fRmax1 != fRmax2){
+      zRand = RandFlat::shoot(-1.*fDz,fDz); 
+      return G4ThreeVector (rone*cosu*(qone-zRand),rone*sinu*(qone-zRand),zRand);
+    }    
+    else return G4ThreeVector(fRmax1*cosu,fRmax2*sinu,RandFlat::shoot(-1.*fDz,fDz));
+  }
+  else if(chose >= Aone + Atwo && chose < Aone + Atwo + Athree){
+    return G4ThreeVector (rRand1*cosu,rRand1*sinu,-1*fDz);
+  }
+  else if(chose >= Aone + Atwo + Athree && chose < Aone + Atwo + Athree + Afour){
+    return G4ThreeVector (rRand2*cosu,rRand2*sinu,fDz);
+  }
+  else if(chose >= Aone + Atwo + Athree + Afour && chose < Aone + Atwo + Athree + Afour + 
+	 Afive){
+    zRand  = RandFlat::shoot(-1.*fDz,fDz);
+    rRand1 = RandFlat::shoot(fRmin2-((zRand-fDz)/(2.*fDz))*(fRmin1-fRmin2),
+			     fRmax2-((zRand-fDz)/(2.*fDz))*(fRmax1-fRmax2)); 
+    return G4ThreeVector (rRand1*std::cos(fSPhi),rRand1*std::sin(fSPhi),zRand);
+  }
+  else{ 
+    zRand  = RandFlat::shoot(-1.*fDz,fDz);
+    rRand1 = RandFlat::shoot(fRmin2-((zRand-fDz)/(2.*fDz))*(fRmin1-fRmin2),
+			     fRmax2-((zRand-fDz)/(2.*fDz))*(fRmax1-fRmax2)); 
+    return G4ThreeVector (rRand1*std::cos(fSPhi+fDPhi),rRand1*std::sin(fSPhi+fDPhi),zRand);
+  }
 }

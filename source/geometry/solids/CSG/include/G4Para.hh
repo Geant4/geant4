@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.hh,v 1.13 2005-06-08 16:14:25 gcosmo Exp $
+// $Id: G4Para.hh,v 1.14 2005-08-03 16:00:37 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -130,6 +130,10 @@ class G4Para : public G4CSGSolid
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
     G4GeometryType GetEntityType() const;
+
+    G4ThreeVector GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1, 
+					  G4ThreeVector p2, G4ThreeVector p3, 
+					  G4double& area) const;
 
     G4ThreeVector GetPointOnSurface() const; 
 
