@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc,v 1.5 2005-07-04 13:33:48 gcosmo Exp $
+// $Id: G4Ellipsoid.cc,v 1.6 2005-08-03 07:53:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Ellipsoid
@@ -424,10 +424,7 @@ G4ThreeVector G4Ellipsoid::SurfaceNormal( const G4ThreeVector& p) const
   {
     return G4ThreeVector(0.,0.,(distZBottom < distZTop) ? -1.0 : 1.0);
   }
-  else
-  {
-    return ( norm *= radius );
-  }
+  return ( norm *= radius );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
