@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.hh,v 1.13 2004-10-10 10:39:11 johna Exp $
+// $Id: G4EllipticalTube.hh,v 1.14 2005-08-03 15:53:42 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -85,6 +85,8 @@ class G4EllipticalTube : public G4VSolid
     G4GeometryType GetEntityType() const;
 
     std::ostream& StreamInfo(std::ostream& os) const;
+
+    G4ThreeVector GetPointOnSurface() const;
 
     G4double GetCubicVolume();
 

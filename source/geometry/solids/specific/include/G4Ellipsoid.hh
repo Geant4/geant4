@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipsoid.hh,v 1.6 2005-07-04 08:48:09 gcosmo Exp $
+// $Id: G4Ellipsoid.hh,v 1.7 2005-08-03 15:53:42 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -95,6 +95,8 @@ class G4Ellipsoid : public G4VSolid
     virtual G4GeometryType GetEntityType() const;
 
     std::ostream& StreamInfo(std::ostream& os) const;
+
+    G4ThreeVector GetPointOnSurface() const;
 
     // Visualisation functions
   

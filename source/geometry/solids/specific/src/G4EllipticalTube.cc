@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.cc,v 1.22 2005-03-23 17:16:31 allison Exp $
+// $Id: G4EllipticalTube.cc,v 1.23 2005-08-03 15:53:42 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,6 +43,8 @@
 #include "G4SolidExtentList.hh"
 #include "G4VoxelLimits.hh"
 #include "meshdefs.hh"
+
+#include "Randomize.hh"
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
@@ -818,4 +820,54 @@ G4Polyhedron* G4EllipticalTube::GetPolyhedron () const
       fpPolyhedron = CreatePolyhedron();
     }
   return fpPolyhedron;
+}
+
+
+///////////////////////////////////////////////////////////////
+//
+//  PointOn Surface randomly generates a point on the surface, 
+//  with ~ uniform distribution across surface
+//
+
+G4ThreeVector G4EllipticalTube::GetPointOnSurface() const
+{
+  G4double xRand, yRand, zRand, phi, cosphi, sinphi, zArea, cArea,p, chose;
+  // G4double m, k;  
+  phi    = RandFlat::shoot(0., 2.*pi);
+  cosphi = std::cos(phi);
+  sinphi = std::sin(phi);
+  
+// the ellipse perimeter from: "http://mathworld.wolfram.com/Ellipse.html"
+//   m = (dx - dy)/(dx + dy);
+//   k = 1.+1./4.*m*m+1./64.*sqr(m)*sqr(m)+1./256.*sqr(m)*sqr(m)*sqr(m);
+//   p = pi*(a+b)*k;
+
+// perimeter below from "http://www.efunda.com/math/areas/EllipseGen.cfm"
+  p = 2.*pi*std::sqrt(0.5*(dx*dx+dy*dy));
+
+  cArea = 2.*dz*p;
+  zArea = pi*dx*dy;
+
+  xRand = dx*cosphi;
+  yRand = dy*sinphi;
+  zRand = RandFlat::shoot(dz, -1.*dz);
+    
+  chose = RandFlat::shoot(0.,2.*zArea+cArea);
+  
+  if(chose>=0 && chose < cArea){ return G4ThreeVector (xRand,yRand,zRand); }
+
+  else if(chose >= cArea && chose < cArea + zArea){
+    xRand = RandFlat::shoot(-1.*dx,dx);
+    yRand = std::sqrt(1.-sqr(xRand/dx));
+    yRand = RandFlat::shoot(-1.*yRand, yRand);
+    return G4ThreeVector (xRand,yRand,dz); 
+  }
+
+  else{ 
+    xRand = RandFlat::shoot(-1.*dx,dx);
+    yRand = std::sqrt(1.-sqr(xRand/dx));
+    yRand = RandFlat::shoot(-1.*yRand, yRand);
+    return G4ThreeVector (xRand,yRand,-1.*dz);
+  }
+  
 }

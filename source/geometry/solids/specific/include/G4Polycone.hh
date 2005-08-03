@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.hh,v 1.12 2003-11-05 17:41:24 gcosmo Exp $
+// $Id: G4Polycone.hh,v 1.13 2005-08-03 15:53:42 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -109,6 +109,23 @@ class G4Polycone : public G4VCSGfaceted
   EInside Inside( const G4ThreeVector &p ) const;
   G4double DistanceToIn( const G4ThreeVector &p, const G4ThreeVector &v ) const;
   G4double DistanceToIn( const G4ThreeVector &p ) const;
+  
+  // Methods for random point generation
+  G4ThreeVector GetPointOnCone(G4double fRmin1, G4double fRmax1,
+			       G4double fRmin2, G4double fRmax2,
+			       G4double zOne,   G4double zTwo,
+			       G4double& totArea) const;
+  
+  G4ThreeVector GetPointOnTubs(G4double fRMin, G4double fRMax,
+			       G4double zOne,  G4double zTwo,
+			       G4double& totArea) const;
+  
+  G4ThreeVector GetPointOnCut(G4double fRMin1, G4double fRMax1,
+			      G4double fRMin2, G4double fRMax2,
+			      G4double zOne,   G4double zTwo,
+			      G4double& totArea) const;
+
+  G4ThreeVector GetPointOnSurface() const;
   
   void ComputeDimensions(       G4VPVParameterisation* p,
                           const G4int n,

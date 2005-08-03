@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc,v 1.6 2005-08-03 07:53:44 gcosmo Exp $
+// $Id: G4Ellipsoid.cc,v 1.7 2005-08-03 15:53:42 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Ellipsoid
@@ -40,6 +40,8 @@
 #include "G4AffineTransform.hh"
 
 #include "meshdefs.hh"
+
+#include "Randomize.hh"
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
@@ -910,4 +912,64 @@ G4Polyhedron* G4Ellipsoid::GetPolyhedron () const
       fpPolyhedron = CreatePolyhedron();
     }
   return fpPolyhedron;
+}
+
+////////////////////////////////////////////////////////////////////
+//
+//  G4Ellipsoid GetPointOnSurface
+//
+
+G4ThreeVector G4Ellipsoid::GetPointOnSurface() const
+{
+  G4double aTop, aBottom, aCurved, chose, xRand, yRand, zRand, phi, theta;
+  G4double cosphi, sinphi, costheta, sintheta, alpha, beta, max1, max2, max3;
+
+  max1  = xSemiAxis > ySemiAxis ? xSemiAxis : ySemiAxis;
+  max1  = max1 > zSemiAxis ? max1 : zSemiAxis;
+  if(max1 == xSemiAxis){max2 = ySemiAxis; max3 = zSemiAxis;}
+  else if(max1 == ySemiAxis){max2 = xSemiAxis; max3 = zSemiAxis;}
+  else {max2 = xSemiAxis; max3 = ySemiAxis; }
+
+  phi   = RandFlat::shoot(0.,2.*pi);
+  theta = RandFlat::shoot(0.,pi);
+  
+  cosphi = std::cos(phi);   sinphi = std::sin(phi);
+  costheta = RandFlat::shoot(zBottomCut,zTopCut)/zSemiAxis;
+  sintheta = std::sqrt(1.-sqr(costheta));
+  
+  alpha = 1.-sqr(max2/max1); beta  = 1.-sqr(max3/max1);
+  
+  aTop    = pi*xSemiAxis*ySemiAxis*(1 - sqr(zTopCut/zSemiAxis));
+  aBottom = pi*xSemiAxis*ySemiAxis*(1 - sqr(zBottomCut/zSemiAxis));
+  
+  // approx. from:" http://www.citr.auckland.ac.nz/techreports/2004/CITR-TR-139.pdf"
+  aCurved = 4.*pi*max1*max2*(1.-1./6.*(alpha+beta)-
+			     1./120.*(3.*sqr(alpha)+2.*alpha*beta+3.*sqr(beta)));
+
+  aCurved *= 0.5*(1.2*zTopCut/zSemiAxis - 1.2*zBottomCut/zSemiAxis);
+  
+  if( zTopCut >= zSemiAxis && zBottomCut <= -1.*zSemiAxis ||
+       zTopCut == 0 && zBottomCut ==0 ){ aTop = 0; aBottom = 0; }
+  
+  chose = RandFlat::shoot(0.,aTop + aBottom + aCurved); 
+  
+  if(chose < aCurved){ 
+    xRand = xSemiAxis*sintheta*cosphi;
+    yRand = ySemiAxis*sintheta*sinphi;
+    zRand = zSemiAxis*costheta;
+    return G4ThreeVector (xRand,yRand,zRand); 
+  }
+  else if(chose >= aCurved && chose < aCurved + aTop){
+    xRand = RandFlat::shoot(-1.,1.)*xSemiAxis*std::sqrt(1-sqr(zTopCut/zSemiAxis));
+    yRand = RandFlat::shoot(-1.,1.)*ySemiAxis*std::sqrt(1.-sqr(zTopCut/zSemiAxis)-sqr(xRand/xSemiAxis));
+    zRand = zTopCut;
+    return G4ThreeVector (xRand,yRand,zRand);
+  }
+  else{
+    xRand = RandFlat::shoot(-1.,1.)*xSemiAxis*std::sqrt(1-sqr(zBottomCut/zSemiAxis));
+    yRand = RandFlat::shoot(-1.,1.)*ySemiAxis*std::sqrt(1.-sqr(zBottomCut/zSemiAxis)-sqr(xRand/xSemiAxis)); 
+    zRand = zBottomCut;
+    return G4ThreeVector (xRand,yRand,zRand);
+  }
+
 }

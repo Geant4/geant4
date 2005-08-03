@@ -70,6 +70,11 @@ public:
 
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
+    G4ThreeVector GetPointOnFace(G4ThreeVector p1, G4ThreeVector p2, 
+				 G4ThreeVector p3, G4double& area) const;
+
+    G4ThreeVector GetPointOnSurface() const;
+
     G4GeometryType GetEntityType() const;
 
     std::ostream& StreamInfo(std::ostream& os) const;
@@ -86,7 +91,7 @@ public:
 
   public:   // without description 
 	const char *CVSHeaderVers() { return 
-	   "$Id: G4Tet.hh,v 1.1 2005-06-15 14:44:00 japost Exp $";
+	   "$Id: G4Tet.hh,v 1.2 2005-08-03 15:53:42 danninos Exp $";
 	}
 
 	const char *CVSFileVers() { return CVSVers; }

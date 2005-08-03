@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.hh,v 1.9 2004-10-10 10:39:19 johna Exp $
+// $Id: G4Hype.hh,v 1.10 2005-08-03 15:53:42 danninos Exp $
 // $Original: G4Hype.hh,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -139,7 +139,10 @@ class G4Hype : public G4VSolid
   G4GeometryType  GetEntityType() const;
 
   std::ostream& StreamInfo(std::ostream& os) const;
-
+  
+  G4double asinh(G4double arg);
+  G4ThreeVector GetPointOnSurface() const;
+  
   G4double GetCubicVolume();
 
   void          DescribeYourselfTo (G4VGraphicsScene& scene) const;

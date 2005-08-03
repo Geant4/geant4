@@ -26,12 +26,14 @@
 // --------------------------------------------------------------------
 #include "G4Tet.hh"
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.1 2005-06-15 14:45:56 japost Exp $";
+const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.2 2005-08-03 15:53:42 danninos Exp $";
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 
 #include "G4VPVParameterisation.hh"
+
+#include "Randomize.hh"
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
@@ -540,4 +542,47 @@ G4Polyhedron* G4Tet::CreatePolyhedron () const
 G4NURBS* G4Tet::CreateNURBS () const 
 {
 	return new G4NURBSbox (fDx, fDy, fDz);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+//  Get Point on Face --> Auxialiary method for get point on surface
+//
+G4ThreeVector G4Tet::GetPointOnFace(G4ThreeVector p1, G4ThreeVector p2,
+				    G4ThreeVector p3, G4double& area) const
+{
+  G4double lambda1,lambda2;
+  G4ThreeVector v, w;
+
+  v = p3 - p1;
+  w = p1 - p2;
+
+  lambda1 = RandFlat::shoot(0.,1.);
+  lambda2 = RandFlat::shoot(0.,lambda1);
+
+  area = 0.5*(v.cross(w)).mag();
+
+  return (p2 + lambda1*w + lambda2*v);
+}
+
+////////////////////////////////////////////////////////////////////////////
+//
+// Get Point On Surface
+//
+G4ThreeVector G4Tet::GetPointOnSurface() const
+{
+  G4double chose,aOne,aTwo,aThree,aFour;
+  G4ThreeVector p1, p2, p3, p4;
+  
+  p1 = GetPointOnFace(fAnchor,fP2,fP3,aOne);
+  p2 = GetPointOnFace(fAnchor,fP4,fP3,aTwo);
+  p3 = GetPointOnFace(fAnchor,fP4,fP2,aThree);
+  p4 = GetPointOnFace(fP4,fP3,fP2,aFour);
+  
+  chose = RandFlat::shoot(0.,aOne+aTwo+aThree+aFour);
+  if(chose>=0. && chose <aOne){return p1;}
+  else if(chose>=aOne && chose < aOne+aTwo){return p2;}
+  else if(chose>=aOne+aTwo && chose<aOne+aTwo+aThree){return p3;}
+  else {return p4;}
+
 }
