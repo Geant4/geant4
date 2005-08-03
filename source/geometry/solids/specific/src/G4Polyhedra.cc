@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.20 2005-08-03 15:53:42 danninos Exp $
+// $Id: G4Polyhedra.cc,v 1.21 2005-08-03 16:23:43 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -702,130 +702,128 @@ G4PolyhedraHistorical::operator=( const G4PolyhedraHistorical& right )
   return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Get Point On Plane --> Auxiliary method for get point on surface
-//
-G4ThreeVector G4Polyhedra::GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1, 
-					   G4ThreeVector p2, G4ThreeVector p3, 
-					   G4double& area) const
-{
-  G4double lambda1, lambda2, chose, aOne, aTwo;
-  G4ThreeVector t, u, v, w, Area, normal;
+//This code is incomplete yet, still being worked on by Dionysios Anninos
+
+// /////////////////////////////////////////////////////////////////////////////
+// //
+// //  Get Point On Plane --> Auxiliary method for get point on surface
+// //
+// G4ThreeVector G4Polyhedra::GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1, 
+// 					   G4ThreeVector p2, G4ThreeVector p3, 
+// 					   G4double& area) const
+// {
+//   G4double lambda1, lambda2, chose, aOne, aTwo;
+//   G4ThreeVector t, u, v, w, Area, normal;
   
-  t = p1 - p0;
-  u = p2 - p1;
-  v = p3 - p2;
-  w = p0 - p3;
+//   t = p1 - p0;
+//   u = p2 - p1;
+//   v = p3 - p2;
+//   w = p0 - p3;
 
-  Area = G4ThreeVector(w.y()*v.z() - w.z()*v.y(),
-		       w.z()*v.x() - w.x()*v.z(),
-		       w.x()*v.y() - w.y()*v.x());
-  aOne = 0.5*Area.mag();
-  Area = G4ThreeVector(t.y()*u.z() - t.z()*u.y(),
-		       t.z()*u.x() - t.x()*u.z(),
-		       t.x()*u.y() - t.y()*u.x());
-  aTwo = 0.5*Area.mag();
-  area = aOne + aTwo;
+//   Area = G4ThreeVector(w.y()*v.z() - w.z()*v.y(),
+// 		       w.z()*v.x() - w.x()*v.z(),
+// 		       w.x()*v.y() - w.y()*v.x());
+//   aOne = 0.5*Area.mag();
+//   Area = G4ThreeVector(t.y()*u.z() - t.z()*u.y(),
+// 		       t.z()*u.x() - t.x()*u.z(),
+// 		       t.x()*u.y() - t.y()*u.x());
+//   aTwo = 0.5*Area.mag();
+//   area = aOne + aTwo;
   
-  chose = RandFlat::shoot(0.,aOne+aTwo);
-  if(chose>=0. && chose < aOne){
-    lambda1 = RandFlat::shoot(0.,1.);
-    lambda2 = RandFlat::shoot(0.,lambda1);
-    return (p2+lambda1*v+lambda2*w);    
-  }
-  else{
-    lambda1 = RandFlat::shoot(0.,1.);
-    lambda2 = RandFlat::shoot(0.,lambda1);
-    return (p0+lambda1*t+lambda2*u);    
-  }
-}
+//   chose = RandFlat::shoot(0.,aOne+aTwo);
+//   if(chose>=0. && chose < aOne){
+//     lambda1 = RandFlat::shoot(0.,1.);
+//     lambda2 = RandFlat::shoot(0.,lambda1);
+//     return (p2+lambda1*v+lambda2*w);    
+//   }
+//   else{
+//     lambda1 = RandFlat::shoot(0.,1.);
+//     lambda2 = RandFlat::shoot(0.,lambda1);
+//     return (p0+lambda1*t+lambda2*u);    
+//   }
+// }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Get Point On Plane --> Auxiliary method for get point on surface
-//
-G4ThreeVector G4Polyhedra::GetPointOnPlane(G4ThreeVector p1, G4ThreeVector p2,
-					   G4ThreeVector p3, G4double& area) const
-{
-  G4double lambda1,lambda2;
-  G4ThreeVector v, w;
+// /////////////////////////////////////////////////////////////////////////////
+// //
+// //  Get Point On Plane --> Auxiliary method for get point on surface
+// //
+// G4ThreeVector G4Polyhedra::GetPointOnPlane(G4ThreeVector p1, G4ThreeVector p2,
+// 					   G4ThreeVector p3, G4double& area) const
+// {
+//   G4double lambda1,lambda2;
+//   G4ThreeVector v, w;
 
-  v = p3 - p1;
-  w = p1 - p2;
+//   v = p3 - p1;
+//   w = p1 - p2;
 
-  lambda1 = RandFlat::shoot(0.,1.);
-  lambda2 = RandFlat::shoot(0.,lambda1);
+//   lambda1 = RandFlat::shoot(0.,1.);
+//   lambda2 = RandFlat::shoot(0.,lambda1);
 
-  area = 0.5*(v.cross(w)).mag();
+//   area = 0.5*(v.cross(w)).mag();
 
-  return (p2 + lambda1*w + lambda2*v);
-}
+//   return (p2 + lambda1*w + lambda2*v);
+// }
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Get Point On Surface
-//
-G4ThreeVector G4Polyhedra::GetPointOnSurface() const
-{
-  int i=0,j=0, numPlanes = original_parameters->Num_z_Planes;
+// //////////////////////////////////////////////////////////////////////////////////
+// //
+// // Get Point On Surface
+// //
+// G4ThreeVector G4Polyhedra::GetPointOnSurface() const
+// {
+//   int i=0,j=0, numPlanes = original_parameters->Num_z_Planes;
 
-  G4double a,b,h,l,ksi = (endPhi-startPhi)/numSide;
-  G4double areas[];
+//   G4double a,b,h,l,ksi = (endPhi-startPhi)/numSide;
+//   G4double areas[];
 
-  // first compute the area of each sub-side and put it into an array
-  // note that to do so, we only need the area of one sub-section and 
-  // side-section for each z-cut
+//   // first compute the area of each sub-side and put it into an array
+//   // note that to do so, we only need the area of one sub-section and 
+//   // side-section for each z-cut
 
-  for(j=0; j<numSide;j++){
-    a = original_parameters->Rmax[j]*std::cos(ksi/2.);
-    b = original_parameters->Rmax[j]*std::cos(ksi/2.);
-    l = sqr(original_parameters->Z-values[j]-original_parameters->Z_values[j+1])-
-        sqr(original_parameters->Rmax[j]-original_parameters->Rmax[j+1]);
-    l = std::sqrt(l);
-    areas[j] = std::sqrt(l*l-(a-b)*(a-b))*(a+b)/2.;
-  }
-  for(j=0; j<numSide; j++){
-    a = original_parameters->Rmin[j]*std::cos(ksi/2.);
-    b = original_parameters->Rmin[j]*std::cos(ksi/2.);
-    l = sqr(original_parameters->Z-values[j]-original_parameters->Z_values[j+1])-
-        sqr(original_parameters->Rmin[j]-original_parameters->Rmin[j+1]);
-    l = std::sqrt(l);
-    areas[j+numSide] = std::sqrt(l*l-(a-b)*(a-b))*(a+b)/2.;
-  }
-  for(j=0; j<numCorner; j++){
+//   for(j=0; j<numSide;j++){
+//     a = original_parameters->Rmax[j]*std::cos(ksi/2.);
+//     b = original_parameters->Rmax[j]*std::cos(ksi/2.);
+//     l = sqr(original_parameters->Z-values[j]-original_parameters->Z_values[j+1])-
+//         sqr(original_parameters->Rmax[j]-original_parameters->Rmax[j+1]);
+//     l = std::sqrt(l);
+//     areas[j] = std::sqrt(l*l-(a-b)*(a-b))*(a+b)/2.;
+//   }
+//   for(j=0; j<numSide; j++){
+//     a = original_parameters->Rmin[j]*std::cos(ksi/2.);
+//     b = original_parameters->Rmin[j]*std::cos(ksi/2.);
+//     l = sqr(original_parameters->Z-values[j]-original_parameters->Z_values[j+1])-
+//         sqr(original_parameters->Rmin[j]-original_parameters->Rmin[j+1]);
+//     l = std::sqrt(l);
+//     areas[j+numSide] = std::sqrt(l*l-(a-b)*(a-b))*(a+b)/2.;
+//   }
+//   for(j=0; j<numCorner; j++){
     
     
     
-  }
+//   }
 
 
 
   
-  for(i=0; i<Num_z_Planes-1; i++){
+//   for(i=0; i<Num_z_Planes-1; i++){
    
-    for(j=0; j<numSide; j++){
+//     for(j=0; j<numSide; j++){
     
-      G4ThreeVector p1, p2, p3, p4;
+//       G4ThreeVector p1, p2, p3, p4;
      
-      p1 = G4ThreeVector((original_parameters->Rmax[i])*cos(startPhi+j*ksi),
-			 (original_parameters->Rmax[i])*sin(startPhi+j*ksi),
-			 original_parameters->Z_values[i]);
-      p2 = G4ThreeVector((original_parameters->Rmax[i])*cos(startPhi+j*ksi),
-			 (original_parameters->Rmax[i])*sin(startPhi+j*ksi),
-			 original_parameters->Z_values[i+1]);
-      p3 = G4ThreeVector((original_parameters->Rmax[i])*cos(startPhi+(j+1)*ksi),
-			 (original_parameters->Rmax[i])*sin(startPhi+(j+1)*ksi),
-			 original_parameters->Z_values[i+1]);
-      p4 = G4ThreeVector((original_parameters->Rmax[i])*cos(startPhi+j*ksi),
-			 (original_parameters->Rmax[i])*sin(startPhi+j*ksi),
-			 original_parameters->Z_values[i]);
+//       p1 = G4ThreeVector((original_parameters->Rmax[i])*cos(startPhi+j*ksi),
+// 			 (original_parameters->Rmax[i])*sin(startPhi+j*ksi),
+// 			 original_parameters->Z_values[i]);
+//       p2 = G4ThreeVector((original_parameters->Rmax[i])*cos(startPhi+j*ksi),
+// 			 (original_parameters->Rmax[i])*sin(startPhi+j*ksi),
+// 			 original_parameters->Z_values[i+1]);
+//       p3 = G4ThreeVector((original_parameters->Rmax[i])*cos(startPhi+(j+1)*ksi),
+// 			 (original_parameters->Rmax[i])*sin(startPhi+(j+1)*ksi),
+// 			 original_parameters->Z_values[i+1]);
+//       p4 = G4ThreeVector((original_parameters->Rmax[i])*cos(startPhi+j*ksi),
+// 			 (original_parameters->Rmax[i])*sin(startPhi+j*ksi),
+// 			 original_parameters->Z_values[i]);
          
-    }
-  } 
-  
-  
-  
-  
-  
-}
+//     }
+//   } 
+
+// }
