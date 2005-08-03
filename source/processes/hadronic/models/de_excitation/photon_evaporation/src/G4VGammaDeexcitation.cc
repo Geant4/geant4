@@ -273,6 +273,7 @@ void G4VGammaDeexcitation::Update()
   if (_transition != 0) 
     {
       _transition->SetEnergyFrom(_nucleus.GetExcitationEnergy());
+      if ( _vSN != -1) (dynamic_cast <G4DiscreteGammaTransition*> (_transition))->SetICM(false);
     }
 
   return;
@@ -282,7 +283,9 @@ void G4VGammaDeexcitation::Update()
 void G4VGammaDeexcitation::Initialize()
 {
   _transition = CreateTransition();
-  if (_transition != 0) _transition->SetEnergyFrom(_nucleus.GetExcitationEnergy());
+  if (_transition != 0) {
+    _transition->SetEnergyFrom(_nucleus.GetExcitationEnergy());
+  }
   return;
 }
 
