@@ -112,6 +112,7 @@ private:
 
   void TableControl();
   void MuonTest();
+  void ElectronTest();
 
   test31Histo(const test31Histo&);
   const test31Histo& operator=(const test31Histo& right);

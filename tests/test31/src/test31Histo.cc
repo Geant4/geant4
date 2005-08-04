@@ -168,6 +168,7 @@ void test31Histo::EndOfHisto()
 
   TableControl();
   MuonTest();
+  ElectronTest();
   if(0 < nHisto) {
 
     // normalise histograms
@@ -645,6 +646,51 @@ void test31Histo::MuonTest()
       G4cout << G4endl;  
       G4cout << "### 1 - Geant4/Data " << G4endl;  
       for(j=0; j<43; j++) {G4cout << 1.0 - dedxn[i][j]/dedx[i][j] << " ";}
+      G4cout << G4endl;  
+    }
+    G4cout << G4endl;  
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void test31Histo::ElectronTest()
+{
+  G4NistManager*  mman = G4NistManager::Instance();
+  G4EmCalculator cal;
+  cal.SetVerbose(0);
+
+  //  const G4ParticleDefinition* part = cal.FindParticle("e-");
+  const G4ParticleDefinition* part = cal.FindParticle("e+");
+
+  G4bool imu = true;
+  if (imu) {
+    G4cout << "====================================================================" << G4endl;
+    G4cout << "             Stopping Powers" << G4endl;
+    G4cout << "====================================================================" << G4endl;
+
+    G4String nm[3] = {"G4_WATER", "G4_Si", "G4_W"};
+    const G4int nmax = 30;
+    
+    G4double e = MeV;    
+
+    G4cout << "###  Electron test for Energy (MeV) = " << e << G4endl;  
+    G4int i, j;
+    G4double cs;
+    G4double cut[nmax];
+
+    for(j=0; j<nmax; j++) {
+      cut[j] = pow(10.0, -3.0 + 0.1*G4double(j));
+      G4cout << cut[j] << " ";
+    }
+    G4cout << G4endl;  
+    for(i=0; i<3; i++) {
+      const G4Material* mat = mman->FindOrBuildMaterial(nm[i]);
+      G4cout << "###  Material ### " << mat->GetName() << "   Cross Sections: " <<G4endl;  
+      for(j=0; j<30; j++) {
+        cs  = (cal.ComputeCrossSectionPerVolume(e,part,"eIoni",mat,cut[j]))/barn;
+	G4cout << cs << " ";
+      }
       G4cout << G4endl;  
     }
     G4cout << G4endl;  
