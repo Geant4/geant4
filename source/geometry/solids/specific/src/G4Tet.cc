@@ -25,7 +25,7 @@
 // *                                                                  *
 // ********************************************************************
 //
-// $Id: G4Tet.cc,v 1.3 2005-08-04 09:18:11 gcosmo Exp $
+// $Id: G4Tet.cc,v 1.4 2005-08-04 12:05:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Tet
@@ -47,13 +47,13 @@
 //  20041102 - MHM added ability to check for degeneracy without throwing
 //             G4Exception
 //  20041103 - MHM removed many unused variables from class
-//  20040803 - Dionisyos Anninos, added GetPointOnSurface() method
+//  20040803 - Dionysios Anninos, added GetPointOnSurface() method
 //
 // --------------------------------------------------------------------
 
 #include "G4Tet.hh"
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.3 2005-08-04 09:18:11 gcosmo Exp $";
+const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.4 2005-08-04 12:05:16 gcosmo Exp $";
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
