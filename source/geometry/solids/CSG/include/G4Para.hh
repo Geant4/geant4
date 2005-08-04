@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.hh,v 1.14 2005-08-03 16:00:37 danninos Exp $
+// $Id: G4Para.hh,v 1.15 2005-08-04 10:57:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -131,10 +131,6 @@ class G4Para : public G4CSGSolid
 
     G4GeometryType GetEntityType() const;
 
-    G4ThreeVector GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1, 
-					  G4ThreeVector p2, G4ThreeVector p3, 
-					  G4double& area) const;
-
     G4ThreeVector GetPointOnSurface() const; 
 
     std::ostream& StreamInfo(std::ostream& os) const;
@@ -155,6 +151,11 @@ class G4Para : public G4CSGSolid
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p) const;
       // Algorithm for SurfaceNormal() following the original
       // specification for points not on the surface
+
+    G4ThreeVector GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1, 
+                                  G4ThreeVector p2, G4ThreeVector p3, 
+                                  G4double& area) const;
+      // Returns a random point on the surface of one of the faces.
 
  private:
 

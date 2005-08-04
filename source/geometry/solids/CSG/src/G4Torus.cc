@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.52 2005-08-03 16:00:37 danninos Exp $
+// $Id: G4Torus.cc,v 1.53 2005-08-04 10:57:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,6 @@
 // 19.11.99 V.Grichine: side = kNull in Distance ToOut(p,v,...)
 // 09.10.98 V.Grichine: modifications in Distance ToOut(p,v,...)
 // 30.10.96 V.Grichine: first implementation with G4Tubs elements in Fs
-//
 //
 
 #include "G4Torus.hh"
@@ -1821,7 +1820,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
         //
         // num = SolveBiQuadratic(c,s) ;
         // s[0] = s[0]; // We already take care of Rmin in SolveNumeric 
-	// s[0] = SolveNumericJT(c);
+        // s[0] = SolveNumericJT(c);
         num = 1;
    
         if(num)
@@ -2395,6 +2394,54 @@ std::ostream& G4Torus::StreamInfo( std::ostream& os ) const
      << "-----------------------------------------------------------\n";
 
   return os;
+}
+
+////////////////////////////////////////////////////////////////////////////
+//
+// GetPointOnSurface
+
+G4ThreeVector G4Torus::GetPointOnSurface() const
+{
+  G4double cosu, sinu,cosv, sinv, aOut, aIn, aSide, chose, phi, theta, rRand;
+   
+  phi   = RandFlat::shoot(fSPhi,fSPhi+fDPhi);
+  theta = RandFlat::shoot(0.,2.*pi);
+  
+  cosu   = std::cos(phi);    sinu = std::sin(phi);
+  cosv   = std::cos(theta);  sinv = std::sin(theta); 
+
+  // compute the areas
+
+  aOut   = (fDPhi)*2.*pi*fRtor*fRmax;
+  aIn    = (fDPhi)*2.*pi*fRtor*fRmin;
+  aSide  = pi*(fRmax*fRmax-fRmin*fRmin);
+  
+  if(fSPhi == 0 && fDPhi == twopi){ aSide = 0; }
+  chose = RandFlat::shoot(0.,aOut + aIn + 2.*aSide);
+
+  if(chose < aOut)
+  {
+    return G4ThreeVector ((fRtor+fRmax*cosv)*cosu,
+                          (fRtor+fRmax*cosv)*sinu, fRmax*sinv);
+  }
+  else if( (chose >= aOut) && (chose < aOut + aIn) )
+  {
+    return G4ThreeVector ((fRtor+fRmin*cosv)*cosu,
+                          (fRtor+fRmin*cosv)*sinu, fRmin*sinv);
+  }
+  else if( (chose >= aOut + aIn) && (chose < aOut + aIn + aSide) )
+  {
+    rRand = RandFlat::shoot(fRmin,fRmax);
+    return G4ThreeVector ((fRtor+rRand*cosv)*std::cos(fSPhi),
+                          (fRtor+rRand*cosv)*std::sin(fSPhi), rRand*sinv);
+  }
+  else
+  {   
+    rRand = RandFlat::shoot(fRmin,fRmax);
+    return G4ThreeVector ((fRtor+rRand*cosv)*std::cos(fSPhi+fDPhi),
+                          (fRtor+rRand*cosv)*std::sin(fSPhi+fDPhi), 
+                          rRand*sinv);
+   }
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -3300,46 +3347,3 @@ G4TorusEquation::G4TorusEquation(G4double Rmax, G4double Rmin)
 G4TorusEquation::~G4TorusEquation()
 {
 }
-
-////////////////////////////////////////////////////////////////////////////
-//
-// GetPointOnSurface 
-//
-
-G4ThreeVector G4Torus::GetPointOnSurface() const
-{
-  G4double cosu, sinu,cosv, sinv, aOut, aIn, aSide, chose, phi, theta, rRand;
-   
-  phi   = RandFlat::shoot(fSPhi,fSPhi+fDPhi);
-  theta = RandFlat::shoot(0.,2.*pi);
-  
-  cosu   = std::cos(phi);    sinu = std::sin(phi);
-  cosv   = std::cos(theta);  sinv = std::sin(theta); 
-
-  // compute the areas
-  aOut   = (fDPhi)*2.*pi*fRtor*fRmax;
-  aIn    = (fDPhi)*2.*pi*fRtor*fRmin;
-  aSide  = pi*(fRmax*fRmax-fRmin*fRmin);
-  
-  if(fSPhi == 0 && fDPhi == twopi){ aSide = 0; }
-  chose = RandFlat::shoot(0.,aOut + aIn + 2.*aSide);
-
-  if(chose < aOut){
-    return G4ThreeVector ((fRtor+fRmax*cosv)*cosu,(fRtor+fRmax*cosv)*sinu,fRmax*sinv);
-  }
-  else if(chose >= aOut && chose < aOut + aIn){
-    return G4ThreeVector ((fRtor+fRmin*cosv)*cosu,(fRtor+fRmin*cosv)*sinu,fRmin*sinv);
-  }
-  else if(chose >= aOut + aIn && chose < aOut + aIn + aSide){
-    rRand = RandFlat::shoot(fRmin,fRmax);
-    return G4ThreeVector ((fRtor+rRand*cosv)*std::cos(fSPhi),
-			  (fRtor+rRand*cosv)*std::sin(fSPhi),rRand*sinv);
-  }
-  else{   
-    rRand = RandFlat::shoot(fRmin,fRmax);
-    return G4ThreeVector ((fRtor+rRand*cosv)*std::cos(fSPhi+fDPhi),
-			  (fRtor+rRand*cosv)*std::sin(fSPhi+fDPhi),rRand*sinv);
-   }
-}
-
-

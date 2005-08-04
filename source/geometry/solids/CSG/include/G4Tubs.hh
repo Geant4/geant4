@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.hh,v 1.12 2005-08-03 16:00:37 danninos Exp $
+// $Id: G4Tubs.hh,v 1.13 2005-08-04 10:57:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -124,9 +124,9 @@ class G4Tubs : public G4CSGSolid
                                  G4bool *validNorm=0, G4ThreeVector *n=0) const;
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
-    G4ThreeVector GetPointOnSurface() const;
-
     G4GeometryType GetEntityType() const;
+
+    G4ThreeVector GetPointOnSurface() const;
 
     std::ostream& StreamInfo( std::ostream& os ) const;
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Orb.hh,v 1.7 2005-08-03 16:00:37 danninos Exp $
+// $Id: G4Orb.hh,v 1.8 2005-08-04 10:57:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -91,9 +91,9 @@ class G4Orb : public G4CSGSolid
 
     G4GeometryType GetEntityType() const;
  
-    std::ostream& StreamInfo(std::ostream& os) const;
-
     G4ThreeVector GetPointOnSurface() const;
+
+    std::ostream& StreamInfo(std::ostream& os) const;
 
     // Visualisation functions
   

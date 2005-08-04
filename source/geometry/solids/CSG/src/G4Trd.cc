@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.30 2005-06-08 16:14:25 gcosmo Exp $
+// $Id: G4Trd.cc,v 1.31 2005-08-04 10:57:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -34,9 +34,8 @@
 // 07.12.04, V.Grichine, SurfaceNoramal with edges/vertices.
 // 07.05.00, V.Grichine, in d = DistanceToIn(p,v), if d<0.5*kCarTolerance, d=0
 //    ~1996, V.Grichine, 1st implementation based on old code of P.Kent
-// 
 //
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 
 #include "G4Trd.hh"
 
@@ -1333,29 +1332,13 @@ std::ostream& G4Trd::StreamInfo( std::ostream& os ) const
   return os;
 }
 
-///////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////
 //
-// Methods for visualisation
-
-void G4Trd::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
-{
-  scene.AddSolid (*this);
-}
-
-G4Polyhedron* G4Trd::CreatePolyhedron () const
-{
-  return new G4PolyhedronTrd2 (fDx1, fDx2, fDy1, fDy2, fDz);
-}
-
-G4NURBS* G4Trd::CreateNURBS () const
-{
-  //  return new G4NURBSbox (fDx, fDy, fDz);
-  return 0;
-}
-
-/////////////////////////////////////////////////////////////////////////////
+// GetPointOnSurface
 //
-// Return a point (G4ThreeVector) randomly and uniformly selected on the solid surface
+// Return a point (G4ThreeVector) randomly and uniformly
+// selected on the solid surface
 
 G4ThreeVector G4Trd::GetPointOnSurface() const
 {
@@ -1400,8 +1383,8 @@ G4ThreeVector G4Trd::GetPointOnSurface() const
     px  = -tmp  + 2*tmp*G4UniformRand();
     tmp =  fDy1 + (pz + fDz)*tgY;
 
-    if(G4UniformRand() > 0.5) py =  tmp;
-    else                      py = -tmp;
+    if(G4UniformRand() > 0.5) { py =  tmp; }
+    else                      { py = -tmp; }
   }
   else                                   // Syz
   {
@@ -1410,8 +1393,28 @@ G4ThreeVector G4Trd::GetPointOnSurface() const
     py  = -tmp  + 2*tmp*G4UniformRand();
     tmp =  fDx1 + (pz + fDz)*tgX;
 
-    if(G4UniformRand() > 0.5) px =  tmp;
-    else                      px = -tmp;
+    if(G4UniformRand() > 0.5) { px =  tmp; }
+    else                      { px = -tmp; }
   } 
   return G4ThreeVector(px,py,pz);
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// Methods for visualisation
+
+void G4Trd::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
+{
+  scene.AddSolid (*this);
+}
+
+G4Polyhedron* G4Trd::CreatePolyhedron () const
+{
+  return new G4PolyhedronTrd2 (fDx1, fDx2, fDy1, fDy2, fDz);
+}
+
+G4NURBS* G4Trd::CreateNURBS () const
+{
+  //  return new G4NURBSbox (fDx, fDy, fDz);
+  return 0;
 }

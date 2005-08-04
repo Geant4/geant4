@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.hh,v 1.15 2005-08-03 16:00:37 danninos Exp $
+// $Id: G4Sphere.hh,v 1.16 2005-08-04 10:57:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -131,6 +131,8 @@ class G4Sphere : public G4CSGSolid
 
     G4GeometryType GetEntityType() const;
  
+    G4ThreeVector GetPointOnSurface() const;
+
     std::ostream& StreamInfo(std::ostream& os) const;
 
     // Visualisation functions
@@ -139,8 +141,6 @@ class G4Sphere : public G4CSGSolid
     G4Polyhedron* CreatePolyhedron() const;
     G4NURBS*      CreateNURBS() const;
   
-    G4ThreeVector GetPointOnSurface() const;
-
   public:  // without description
    
     // Old access functions

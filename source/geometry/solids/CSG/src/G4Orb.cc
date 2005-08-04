@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.20 2005-08-03 16:00:37 danninos Exp $
+// $Id: G4Orb.cc,v 1.21 2005-08-04 10:57:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Orb
@@ -544,7 +544,7 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
 
 /////////////////////////////////////////////////////////////////////////
 //
-// Calcluate distance (<=actual) to closest surface of shape from inside
+// Calculate distance (<=actual) to closest surface of shape from inside
 
 G4double G4Orb::DistanceToOut( const G4ThreeVector& p ) const
 {
@@ -597,7 +597,27 @@ std::ostream& G4Orb::StreamInfo( std::ostream& os ) const
   return os;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+//
+// GetPointOnSurface
+
+G4ThreeVector G4Orb::GetPointOnSurface() const
+{
+  //  generate a random number from zero to 2pi...
+  //
+  G4double phi      = RandFlat::shoot(0.,2.*pi);
+  G4double cosphi   = std::cos(phi);
+  G4double sinphi   = std::sin(phi);
+  
+  G4double theta    = RandFlat::shoot(0.,pi);
+  G4double costheta = std::cos(theta);
+  G4double sintheta = std::sqrt(1.-sqr(costheta));
+  
+  return G4ThreeVector (fRmax*sintheta*cosphi,
+                        fRmax*sintheta*sinphi, fRmax*costheta); 
+}
+
+////////////////////////////////////////////////////////////////////////
 //
 // Methods for visualisation
 
@@ -615,29 +635,3 @@ G4NURBS* G4Orb::CreateNURBS () const
 {
   return new G4NURBSbox (fRmax, fRmax, fRmax);       // Box for now!!!
 }
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Methods for visualisationGet Point on Surface method
-
-G4ThreeVector G4Orb::GetPointOnSurface() const
-{
-  
-  //  generate a random number from zero to 2pi...
-  G4double phi      = RandFlat::shoot(0.,2.*pi);
-  G4double cosphi   = std::cos(phi);
-  G4double sinphi   = std::sin(phi);
-  
-  G4double theta    = RandFlat::shoot(0.,pi);
-  G4double costheta = std::cos(theta);
-  G4double sintheta = std::sqrt(1.-sqr(costheta));
-  
-  return G4ThreeVector (fRmax*sintheta*cosphi,fRmax*sintheta*sinphi,
-			fRmax*costheta); 
-  
-}
-
-
-// End of G4Orb.cc 
-//
-/////////////////////////////////////////////////////////////////////

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.38 2005-08-03 16:00:37 danninos Exp $
+// $Id: G4Trap.cc,v 1.39 2005-08-04 10:57:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -1761,7 +1761,107 @@ std::ostream& G4Trap::StreamInfo( std::ostream& os ) const
   return os;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+//
+// GetPointOnPlane
+//
+// Auxiliary method for Get Point on Surface
+
+G4ThreeVector G4Trap::GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1, 
+                                      G4ThreeVector p2, G4ThreeVector p3,
+                                      G4double& area) const
+{
+  G4double lambda1, lambda2, chose, aOne, aTwo;
+  G4ThreeVector t, u, v, w, Area, normal;
+  
+  t = p1 - p0;
+  u = p2 - p1;
+  v = p3 - p2;
+  w = p0 - p3;
+
+  Area = G4ThreeVector(w.y()*v.z() - w.z()*v.y(),
+                       w.z()*v.x() - w.x()*v.z(),
+                       w.x()*v.y() - w.y()*v.x());
+  
+  aOne = 0.5*Area.mag();
+  
+  Area = G4ThreeVector(t.y()*u.z() - t.z()*u.y(),
+                       t.z()*u.x() - t.x()*u.z(),
+                       t.x()*u.y() - t.y()*u.x());
+  
+  aTwo = 0.5*Area.mag();
+  
+  area = aOne + aTwo;
+  
+  chose = RandFlat::shoot(0.,aOne+aTwo);
+
+  if( (chose>=0.) && (chose < aOne) )
+  {
+    lambda1 = RandFlat::shoot(0.,1.);
+    lambda2 = RandFlat::shoot(0.,lambda1);
+    return (p2+lambda1*v+lambda2*w);    
+  }
+  
+  // else
+
+  lambda1 = RandFlat::shoot(0.,1.);
+  lambda2 = RandFlat::shoot(0.,lambda1);
+
+  return (p0+lambda1*t+lambda2*u);    
+}
+
+///////////////////////////////////////////////////////////////
+//
+// GetPointOnSurface
+
+G4ThreeVector G4Trap::GetPointOnSurface() const
+{
+  G4double aOne, aTwo, aThree, aFour, aFive, aSix, chose;
+  G4ThreeVector One, Two, Three, Four, Five, Six, test;
+  G4ThreeVector pt[8];
+     
+  pt[0] = G4ThreeVector(-fDz*fTthetaCphi-fDy1*fTalpha1-fDx1,
+                        -fDz*fTthetaSphi-fDy1,-fDz);
+  pt[1] = G4ThreeVector(-fDz*fTthetaCphi-fDy1*fTalpha1+fDx1,
+                        -fDz*fTthetaSphi-fDy1,-fDz);
+  pt[2] = G4ThreeVector(-fDz*fTthetaCphi+fDy1*fTalpha1-fDx2,
+                        -fDz*fTthetaSphi+fDy1,-fDz);
+  pt[3] = G4ThreeVector(-fDz*fTthetaCphi+fDy1*fTalpha1+fDx2,
+                        -fDz*fTthetaSphi+fDy1,-fDz);
+  pt[4] = G4ThreeVector(+fDz*fTthetaCphi-fDy2*fTalpha2-fDx3,
+                        +fDz*fTthetaSphi-fDy2,+fDz);
+  pt[5] = G4ThreeVector(+fDz*fTthetaCphi-fDy2*fTalpha2+fDx3,
+                        +fDz*fTthetaSphi-fDy2,+fDz);
+  pt[6] = G4ThreeVector(+fDz*fTthetaCphi+fDy2*fTalpha2-fDx4,
+                        +fDz*fTthetaSphi+fDy2,+fDz);
+  pt[7] = G4ThreeVector(+fDz*fTthetaCphi+fDy2*fTalpha2+fDx4,
+                        +fDz*fTthetaSphi+fDy2,+fDz);
+  
+  // make sure we provide the points in a clockwise fashion
+
+  One   = GetPointOnPlane(pt[0],pt[1],pt[3],pt[2], aOne);
+  Two   = GetPointOnPlane(pt[4],pt[5],pt[7],pt[6], aTwo);
+  Three = GetPointOnPlane(pt[6],pt[7],pt[3],pt[2], aThree);
+  Four  = GetPointOnPlane(pt[4],pt[5],pt[1],pt[0], aFour); 
+  Five  = GetPointOnPlane(pt[0],pt[2],pt[6],pt[4], aFive);
+  Six   = GetPointOnPlane(pt[1],pt[3],pt[7],pt[5], aSix);
+ 
+  chose = RandFlat::shoot(0.,aOne+aTwo+aThree+aFour+aFive+aSix);
+  if( (chose>=0.) && (chose<aOne) )                    
+    { return One; }
+  else if( (chose>=aOne) && (chose<aOne+aTwo) )  
+    { return Two; }
+  else if( (chose>=aOne+aTwo) && (chose<aOne+aTwo+aThree) )
+    { return Three; }
+  else if( (chose>=aOne+aTwo+aThree) && (chose<aOne+aTwo+aThree+aFour) )
+    { return Four; }
+  else if( (chose>=aOne+aTwo+aThree+aFour)
+        && (chose<aOne+aTwo+aThree+aFour+aFive) )
+    { return Five; }
+  return Six;
+}
+
+//////////////////////////////////////////////////////////////////////////
 //
 // Methods for visualisation
 
@@ -1787,197 +1887,3 @@ G4NURBS* G4Trap::CreateNURBS () const
    // return new G4NURBSbox (fDx, fDy, fDz);
    return 0 ;
 }
-
-//////////////////////////////////////////////////////////////////////////////
-//
-// Get Point on Plane
-// Auxiliary method for Get Point on Surface
-//
-
-G4ThreeVector G4Trap::GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1, 
-				      G4ThreeVector p2, G4ThreeVector p3, G4double& area) const
-{
-  G4double lambda1, lambda2, chose, aOne, aTwo;
-  G4ThreeVector t, u, v, w, Area, normal;
-  
-  t = p1 - p0;
-  u = p2 - p1;
-  v = p3 - p2;
-  w = p0 - p3;
-
-  Area = G4ThreeVector(w.y()*v.z() - w.z()*v.y(),
-		       w.z()*v.x() - w.x()*v.z(),
-		       w.x()*v.y() - w.y()*v.x());
-  
-  aOne = 0.5*Area.mag();
-  
-  Area = G4ThreeVector(t.y()*u.z() - t.z()*u.y(),
-		       t.z()*u.x() - t.x()*u.z(),
-		       t.x()*u.y() - t.y()*u.x());
-  
-  aTwo = 0.5*Area.mag();
-  
-  area = aOne + aTwo;
-  
-  chose = RandFlat::shoot(0.,aOne+aTwo);
-
-  if(chose>=0. && chose < aOne){
-    lambda1 = RandFlat::shoot(0.,1.);
-    lambda2 = RandFlat::shoot(0.,lambda1);
-    return (p2+lambda1*v+lambda2*w);    
-  }
-  else{
-    lambda1 = RandFlat::shoot(0.,1.);
-    lambda2 = RandFlat::shoot(0.,lambda1);
-    return (p0+lambda1*t+lambda2*u);    
-  }
-}
-
-/////////////////////////////////////////////////////////////////
-//
-//  Get Point in z plane
-//
-
-G4ThreeVector G4Trap::GetPointOnBottomZPlane(G4double& area) const
-{
-  G4double xOne, xTwo, xThree, xFour, yOne, yTwo, yThree, yFour, mOne, mTwo, cOne, cTwo;
-  G4double xRand, yRand;
-  
-  xOne   = -fDz*fTthetaCphi-fDy1*fTalpha1-fDx1;
-  yOne   = -fDz*fTthetaSphi-fDy1;
-  xTwo   = -fDz*fTthetaCphi-fDy1*fTalpha1+fDx1;
-  yTwo   = -fDz*fTthetaSphi-fDy1;
-  xThree = -fDz*fTthetaCphi+fDy1*fTalpha1-fDx2;
-  yThree = -fDz*fTthetaSphi+fDy1;
-  xFour  = -fDz*fTthetaCphi+fDy1*fTalpha1+fDx2;
-  yFour  = -fDz*fTthetaSphi+fDy1;
-
-  yRand = RandFlat::shoot(yOne,yThree);
-  area  = 0.5*(xFour-xThree+xTwo-xOne)*(yThree-yOne);
-
-  if(xThree != xOne && xFour != xTwo){
-    mOne = (yThree-yOne)/(xThree-xOne);
-    cOne = yThree - mOne*xThree;
-    mTwo = (yFour-yTwo)/(xFour-xTwo);
-    cTwo = yFour - mTwo*xFour;
-    xRand = RandFlat::shoot((yRand-cOne)/mOne,(yRand-cTwo)/mTwo);
-    return G4ThreeVector(xRand, yRand, -fDz);
-  }
-  else if(xOne == xThree && xTwo != xFour){
-    mTwo = (yFour-yTwo)/(xFour-xTwo);
-    cTwo = yFour - mTwo*xFour;
-    xRand = RandFlat::shoot(xOne,(yRand-cTwo)/mTwo);
-    return G4ThreeVector(xRand, yRand, -fDz);
-  }
-  else if(xOne != xThree & xTwo == xFour){
-    mOne = (yThree-yOne)/(xThree-xOne);
-    cOne = yThree - mOne*xThree;
-    xRand = RandFlat::shoot((yRand-cOne)/mOne,xTwo);
-    return G4ThreeVector(xRand, yRand, -fDz);
-  }
-  else{
-    xRand = RandFlat::shoot(xOne, xTwo);
-    return G4ThreeVector(xRand,yRand,-fDz);
-  }
-}
-/////////////////////////////////////////////////////////////////
-//
-//  Get Point in z plane
-//
-
-G4ThreeVector G4Trap::GetPointOnTopZPlane(G4double& area) const
-{
-  G4double xOne, xTwo, xThree, xFour, yOne, yTwo, yThree, yFour, mOne, mTwo, cOne, cTwo;
-  G4double xRand, yRand;
-  
-  xOne   = fDz*fTthetaCphi-fDy2*fTalpha2-fDx3;
-  yOne   = fDz*fTthetaSphi-fDy2;
-  xTwo   = fDz*fTthetaCphi-fDy2*fTalpha2+fDx3;
-  yTwo   = fDz*fTthetaSphi-fDy2;
-  xThree = fDz*fTthetaCphi+fDy2*fTalpha2-fDx4;
-  yThree = fDz*fTthetaSphi+fDy2;
-  xFour  = fDz*fTthetaCphi+fDy2*fTalpha2+fDx4;
-  yFour  = fDz*fTthetaSphi+fDy2;
-
-  yRand = RandFlat::shoot(yOne,yThree);
-  area  = 0.5*(xFour-xThree+xTwo-xOne)*(yThree-yOne);
-
-  if(xThree != xOne && xFour != xTwo){
-    mOne = (yThree-yOne)/(xThree-xOne);
-    cOne = yThree - mOne*xThree;
-    mTwo = (yFour-yTwo)/(xFour-xTwo);
-    cTwo = yFour - mTwo*xFour;
-    xRand = RandFlat::shoot((yRand-cOne)/mOne,(yRand-cTwo)/mTwo);
-    return G4ThreeVector(xRand, yRand, fDz);
-  }
-  else if(xOne == xThree && xTwo != xFour){
-    mTwo = (yFour-yTwo)/(xFour-xTwo);
-    cTwo = yFour - mTwo*xFour;
-    xRand = RandFlat::shoot(xOne,(yRand-cTwo)/mTwo);
-    return G4ThreeVector(xRand, yRand, fDz);
-  }
-  else if(xOne != xThree & xTwo == xFour){
-    mOne = (yThree-yOne)/(xThree-xOne);
-    cOne = yThree - mOne*xThree;
-    xRand = RandFlat::shoot((yRand-cOne)/mOne,xTwo);
-    return G4ThreeVector(xRand, yRand, fDz);
-  }
-  else{
-    xRand = RandFlat::shoot(xOne, xTwo);
-    return G4ThreeVector(xRand,yRand,fDz);
-  }
-}
-
-///////////////////////////////////////////////////////////////
-//
-//  Get Point On Surface
-//
-G4ThreeVector G4Trap::GetPointOnSurface() const
-{
-  G4double aOne, aTwo, aThree, aFour, aFive, aSix, chose;
-  G4ThreeVector One, Two, Three, Four, Five, Six, test;
-  G4ThreeVector pt[8] ;
-  //G4double xRand, yRand, zRand;
-     
-  pt[0] = G4ThreeVector(-fDz*fTthetaCphi-fDy1*fTalpha1-fDx1,
-			-fDz*fTthetaSphi-fDy1,-fDz);
-  pt[1] = G4ThreeVector(-fDz*fTthetaCphi-fDy1*fTalpha1+fDx1,
-			-fDz*fTthetaSphi-fDy1,-fDz);
-  pt[2] = G4ThreeVector(-fDz*fTthetaCphi+fDy1*fTalpha1-fDx2,
-			-fDz*fTthetaSphi+fDy1,-fDz);
-  pt[3] = G4ThreeVector(-fDz*fTthetaCphi+fDy1*fTalpha1+fDx2,
-			-fDz*fTthetaSphi+fDy1,-fDz);
-  pt[4] = G4ThreeVector(+fDz*fTthetaCphi-fDy2*fTalpha2-fDx3,
-			+fDz*fTthetaSphi-fDy2,+fDz);
-  pt[5] = G4ThreeVector(+fDz*fTthetaCphi-fDy2*fTalpha2+fDx3,
-			+fDz*fTthetaSphi-fDy2,+fDz);
-  pt[6] = G4ThreeVector(+fDz*fTthetaCphi+fDy2*fTalpha2-fDx4,
-			+fDz*fTthetaSphi+fDy2,+fDz);
-  pt[7] = G4ThreeVector(+fDz*fTthetaCphi+fDy2*fTalpha2+fDx4,
-			+fDz*fTthetaSphi+fDy2,+fDz);
-  
-  // make sure we provide the points in a clockwise fashion
-  One   = GetPointOnPlane(pt[0],pt[1],pt[3],pt[2], aOne);
-  Two   = GetPointOnPlane(pt[4],pt[5],pt[7],pt[6], aTwo);
-  Three = GetPointOnPlane(pt[6],pt[7],pt[3],pt[2], aThree);
-  Four  = GetPointOnPlane(pt[4],pt[5],pt[1],pt[0], aFour); 
-  Five  = GetPointOnPlane(pt[0],pt[2],pt[6],pt[4], aFive);
-  Six   = GetPointOnPlane(pt[1],pt[3],pt[7],pt[5], aSix);
- 
-  chose = RandFlat::shoot(0.,aOne+aTwo+aThree+aFour+aFive+aSix);
-  if(chose>=0. && chose<aOne)                    
-    return One;
-  else if(chose>=aOne && chose<aOne+aTwo)  
-    return Two;
-  else if(chose>=aOne+aTwo && chose<aOne+aTwo+aThree)
-    return Three;
-  else if(chose>=aOne+aTwo+aThree && chose<aOne+aTwo+aThree+aFour)
-    return Four;
-  else if(chose>=aOne+aTwo+aThree+aFour && chose<aOne+aTwo+aThree+aFour+aFive)
-    return Five;
-  else return Six;
- 
-}
-
-
-     

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.40 2005-08-03 16:00:37 danninos Exp $
+// $Id: G4Box.cc,v 1.41 2005-08-04 10:57:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -942,33 +942,12 @@ std::ostream& G4Box::StreamInfo(std::ostream& os) const
   return os;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Methods for visualisation
-
-void G4Box::DescribeYourselfTo (G4VGraphicsScene& scene) const 
-{
-  scene.AddSolid (*this);
-}
-
-G4VisExtent G4Box::GetExtent() const 
-{
-  return G4VisExtent (-fDx, fDx, -fDy, fDy, -fDz, fDz);
-}
-
-G4Polyhedron* G4Box::CreatePolyhedron () const 
-{
-  return new G4PolyhedronBox (fDx, fDy, fDz);
-}
-
-G4NURBS* G4Box::CreateNURBS () const 
-{
-  return new G4NURBSbox (fDx, fDy, fDz);
-}
-    
 /////////////////////////////////////////////////////////////////////////////////////
 //
-// Return a point (G4ThreeVector) randomly and uniformly selected on the solid surface
+// GetPointOnSurface
+//
+// Return a point (G4ThreeVector) randomly and uniformly selected
+// on the solid surface
 
 G4ThreeVector G4Box::GetPointOnSurface() const
 {
@@ -1005,3 +984,26 @@ G4ThreeVector G4Box::GetPointOnSurface() const
   return G4ThreeVector(px,py,pz);
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Methods for visualisation
+
+void G4Box::DescribeYourselfTo (G4VGraphicsScene& scene) const 
+{
+  scene.AddSolid (*this);
+}
+
+G4VisExtent G4Box::GetExtent() const 
+{
+  return G4VisExtent (-fDx, fDx, -fDy, fDy, -fDz, fDz);
+}
+
+G4Polyhedron* G4Box::CreatePolyhedron () const 
+{
+  return new G4PolyhedronBox (fDx, fDy, fDz);
+}
+
+G4NURBS* G4Box::CreateNURBS () const 
+{
+  return new G4NURBSbox (fDx, fDy, fDz);
+}

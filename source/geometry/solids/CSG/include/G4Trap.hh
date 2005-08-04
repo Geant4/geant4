@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.hh,v 1.13 2005-08-03 16:00:37 danninos Exp $
+// $Id: G4Trap.hh,v 1.14 2005-08-04 10:57:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,8 +62,9 @@
 //   Member Data:
 //
 //      fDz     Half-length along the z axis
-//      fTthetaCphi = std::tan(pTheta)*std::cos(pPhi)  These combinations are suitable for
-//      fTthetaSphi = std::tan(pTheta)*std::sin(pPhi)  creation of the trapezoid corners
+//      fTthetaCphi = std::tan(pTheta)*std::cos(pPhi)
+//      fTthetaSphi = std::tan(pTheta)*std::sin(pPhi)
+//      These combinations are suitable for creation of the trapezoid corners
 //
 //      fDy1    Half-length along y of the face at -fDz
 //      fDx1    Half-length along x of the side at y=-fDy1 of the face at -fDz
@@ -162,18 +163,13 @@ class G4Trap : public G4CSGSolid
     inline G4double GetXHalfLength3() const;
     inline G4double GetXHalfLength4() const;
     inline G4double GetTanAlpha2()    const;
-    inline TrapSidePlane GetSidePlane( G4int n ) const;
-    inline G4ThreeVector GetSymAxis() const;
-    inline G4double GetCubicVolume();
-    
-    // provide four corners of plane in clockwise fashion, return area of finite face
-    inline G4double GetFaceArea(const G4ThreeVector& p1, const G4ThreeVector& p2, 
-			        const G4ThreeVector& p3, const G4ThreeVector& p4);
-
-
       //
       // Returns coordinates of unit vector along straight
       // line joining centers of -/+fDz planes   
+
+    inline TrapSidePlane GetSidePlane( G4int n ) const;
+    inline G4ThreeVector GetSymAxis() const;
+    inline G4double GetCubicVolume();
 
   // Modifiers
 
@@ -216,15 +212,7 @@ class G4Trap : public G4CSGSolid
 
     G4GeometryType GetEntityType() const;
 
-    G4ThreeVector GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1, 
-					  G4ThreeVector p2, G4ThreeVector p3, 
-					  G4double& area) const;
-
     G4ThreeVector GetPointOnSurface() const;
-
-    G4ThreeVector GetPointOnBottomZPlane(G4double& area) const;
-
-    G4ThreeVector GetPointOnTopZPlane(G4double& area) const;
 
     std::ostream& StreamInfo( std::ostream& os ) const;
 
@@ -254,6 +242,20 @@ class G4Trap : public G4CSGSolid
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
       // Algorithm for SurfaceNormal() following the original
       // specification for points not on the surface
+
+    inline G4double GetFaceArea(const G4ThreeVector& p1,
+                                const G4ThreeVector& p2, 
+                                const G4ThreeVector& p3,
+                                const G4ThreeVector& p4);
+      //
+      // Provided four corners of plane in clockwise fashion,
+      // it returns the area of finite face
+
+    G4ThreeVector GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1, 
+                                  G4ThreeVector p2, G4ThreeVector p3, 
+                                  G4double& area) const;
+      //
+      // Returns a random point on the surface of one of the faces
 
   private:
 
