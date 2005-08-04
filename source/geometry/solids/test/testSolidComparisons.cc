@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testSolidComparisons.cc,v 1.2 2005-08-04 11:26:03 gcosmo Exp $
+// $Id: testSolidComparisons.cc,v 1.3 2005-08-04 11:53:56 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,7 @@
 // Returns 0 if there no inconsistencies in the answers provided by the
 // compared solids.
 //
-// Author: Dionisyos Anninos
+// Author: Dionysios Anninos
 //
 // --------------------------------------------------------------
 #include <assert.h>
@@ -93,8 +93,8 @@ G4bool compareEllipsoidtoOrb(G4int N)
     yin  = RandFlat::shoot(-10.0*cm,10.0*cm);
     zin  = RandFlat::shoot(-10.0*cm,10.0*cm);
     
-    pin  = (xin,  yin,  zin );
-    pout = (xout, yout, zout);
+    pin  = G4ThreeVector(xin,  yin,  zin );
+    pout = G4ThreeVector(xout, yout, zout);
     
     dir  = pin - pout;
     dir /= dir.mag();
@@ -166,8 +166,8 @@ G4bool compareEllipsoidtoSphere(G4int N)
     yin  = RandFlat::shoot(-10.0*cm,10.0*cm);
     zin  = RandFlat::shoot(-10.0*cm,10.0*cm);
     
-    pin  = (xin, yin, zin);
-    pout = (xout, yout, zout);
+    pin  = G4ThreeVector(xin, yin, zin);
+    pout = G4ThreeVector(xout, yout, zout);
     
     dir  = pin - pout;
     dir /= dir.mag();
@@ -227,7 +227,7 @@ G4bool compareEllipticalTubetoTubs(G4int N)
 	    0*cm,
 	    20*cm,
 	    20*cm,
-	    0*rad, 2*pi*rad); 
+	    0., twopi); 
   
   for(i=0; i<N; i++)
   {
@@ -239,8 +239,8 @@ G4bool compareEllipticalTubetoTubs(G4int N)
     yin  = RandFlat::shoot(-1.0*cm , 1.0*cm)*std::sqrt(361.*cm*cm-sqr(xin));
     zin  = RandFlat::shoot(-19.0*cm,19.0*cm);
     
-    pin  = (xin, yin, zin);
-    pout = (xout, yout, zout);
+    pin  = G4ThreeVector(xin, yin, zin);
+    pout = G4ThreeVector(xout, yout, zout);
     
     dir  = pin - pout;
     dir /= dir.mag();
@@ -260,20 +260,20 @@ G4bool compareEllipticalTubetoTubs(G4int N)
       }
     }
 
-    dist1 = t1.DistanceToOut(pin,dir);
-    dist2 = t2.DistanceToOut(pin,dir);
+//     dist1 = t1.DistanceToOut(pin,dir);
+//     dist2 = t2.DistanceToOut(pin,dir);
  
-    if(dist1 != kInfinity && dist2 !=kInfinity)
-    {
-      if(std::fabs(dist1 - dist2) >= 5.*kCarTolerance)
-      {
-	what = false; 
-	dist = std::fabs(dist1 - dist2);
-	logErrors(pin.x(), pin.y(), pin.z(),
-		  dir.x(), dir.y(), dir.z(), dist);
-	n++;
-      }
-    }
+//     if(dist1 != kInfinity && dist2 !=kInfinity)
+//     {
+//       if(std::fabs(dist1 - dist2) >= 5.*kCarTolerance)
+//       {
+// 	what = false; 
+// 	dist = std::fabs(dist1 - dist2);
+// 	logErrors(pin.x(), pin.y(), pin.z(),
+// 		  dir.x(), dir.y(), dir.z(), dist);
+// 	n++;
+//       }
+//     }
   }
   
   G4cout <<"The number of inconsistencies when comparing EllipticalTube to Tubs were: "<<n<<"."<<G4endl;
@@ -318,8 +318,8 @@ G4bool compareBoxtoTrap(G4int N)
     yin  = RandFlat::shoot(-10.0*cm,10.0*cm);
     zin  = RandFlat::shoot(-10.0*cm,10.0*cm);
     
-    pin  = (xin, yin, zin);
-    pout = (xout, yout, zout);
+    pin  = G4ThreeVector(xin, yin, zin);
+    pout = G4ThreeVector(xout, yout, zout);
     
     dir  = pin - pout;
     dir /= dir.mag();
@@ -388,8 +388,8 @@ G4bool compareSpheretoOrb(G4int N)
     yin  = RandFlat::shoot(-10.0*cm,10.0*cm);
     zin  = RandFlat::shoot(-10.0*cm,10.0*cm);
     
-    pin  = (xin, yin, zin);
-    pout = (xout, yout, zout);
+    pin  = G4ThreeVector(xin, yin, zin);
+    pout = G4ThreeVector(xout, yout, zout);
     
     dir  = pin - pout;
     dir /= dir.mag();
