@@ -1,4 +1,4 @@
-$Id: History,v 1.81 2005-06-06 11:19:16 vnivanch Exp $
+$Id: History,v 1.82 2005-08-04 08:19:04 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03 August 05: V.Ivant (emmuons-V07-01-00)
+- Fix initialisation of G4MuPairProductionModel and G4MuBremsstrahlungModel
+- Fix angular distribution of gammas and energy momentum balance in G4MuBremsstrahlungModel
+- Fix angular distribution of e+,e- and energy momentum balance in G4MuPairProductionModel
 
 06 June 05: V.Ivant (muons-V07-00-04)
 - Fix Valgrind complain for non-initialised variable in 

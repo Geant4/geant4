@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.cc,v 1.18 2005-04-12 13:31:16 vnivanch Exp $
+// $Id: G4MuBetheBlochModel.cc,v 1.19 2005-08-04 08:19:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -78,6 +78,9 @@ G4MuBetheBlochModel::G4MuBetheBlochModel(const G4ParticleDefinition* p,
   taulim(8.4146e-3),
   alphaprime(fine_structure_const/twopi)
 {
+  theElectron = G4Electron::Electron();
+  corr = G4LossTableManager::Instance()->EmCorrections();
+
   if(p) SetParticle(p);
 }
 
@@ -90,10 +93,12 @@ G4MuBetheBlochModel::~G4MuBetheBlochModel()
 
 void G4MuBetheBlochModel::SetParticle(const G4ParticleDefinition* p)
 {
-  particle = p;
-  mass = particle->GetPDGMass();
-  massSquare = mass*mass;
-  ratio = electron_mass_c2/mass;
+  if(!particle) {
+    particle = p;
+    mass = particle->GetPDGMass();
+    massSquare = mass*mass;
+    ratio = electron_mass_c2/mass;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -109,16 +114,12 @@ G4double G4MuBetheBlochModel::MinEnergyCut(const G4ParticleDefinition*,
 void G4MuBetheBlochModel::Initialise(const G4ParticleDefinition* p,
                                      const G4DataVector&)
 {
-  if(!particle) SetParticle(p);
-
-  theElectron = G4Electron::Electron();
+  if(p) SetParticle(p);
 
   if(pParticleChange)
     fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
   else
     fParticleChange = new G4ParticleChangeForLoss();
-
-  corr = G4LossTableManager::Instance()->EmCorrections();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

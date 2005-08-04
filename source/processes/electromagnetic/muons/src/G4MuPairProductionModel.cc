@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.25 2005-04-12 18:12:33 vnivanch Exp $
+// $Id: G4MuPairProductionModel.cc,v 1.26 2005-08-04 08:19:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -50,6 +50,7 @@
 //          material (V.Ivanchenko)
 // 01-11-04 Fix bug in expression inside ComputeDMicroscopicCrossSection (R.Kokoulin)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 03-08-05 Add SetParticle method (V.Ivantchenko)
 
 //
 // Class Description:
@@ -86,7 +87,7 @@ G4double G4MuPairProductionModel::wgi[]={ 0.0506,0.1112,0.1569,0.1813,0.1813,0.1
 
 using namespace std;
 
-G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition*,
+G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition* p,
                                                  const G4String& nam)
   : G4VEmModel(nam),
   minPairEnergy(4.*electron_mass_c2),
@@ -94,9 +95,8 @@ G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition*,
   factorForCross(4.*fine_structure_const*fine_structure_const
                    *classic_electr_radius*classic_electr_radius/(3.*pi)),
   sqrte(sqrt(exp(1.))),
-  particleMass(G4MuonPlus::MuonPlus()->GetPDGMass()),
   currentZ(0),
-  particle(G4MuonPlus::MuonPlus()),
+  particle(0),
   nzdat(5),
   ntdat(8),
   nbiny(1000),
@@ -107,6 +107,11 @@ G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition*,
   samplingTablesAreFilled(false)
 {
   SetLowEnergyLimit(minPairEnergy);
+
+  theElectron = G4Electron::Electron();
+  thePositron = G4Positron::Positron();
+
+  if(p) SetParticle(p);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -122,15 +127,23 @@ G4double G4MuPairProductionModel::MinEnergyCut(const G4ParticleDefinition*,
   return minPairEnergy;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4MuPairProductionModel::SetParticle(const G4ParticleDefinition* p)
+{
+  if(!particle) {
+    particle = p;
+    particleMass = particle->GetPDGMass();
+  }
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4MuPairProductionModel::Initialise(const G4ParticleDefinition*,
+void G4MuPairProductionModel::Initialise(const G4ParticleDefinition* p,
                                          const G4DataVector&)
 { 
+  if(p) SetParticle(p);
   if (!samplingTablesAreFilled) MakeSamplingTables();
-
-  theElectron = G4Electron::Electron();
-  thePositron = G4Positron::Positron();
 
   if(pParticleChange)
     fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
@@ -506,17 +519,29 @@ vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
 
   //  angles of the emitted particles ( Z - axis along the parent particle)
   //      (mean theta for the moment)
-  G4double Teta = electron_mass_c2/totalEnergy ;
 
-  G4double Phi  = twopi * G4UniformRand() ;
-  G4double dirx = sin(Teta)*cos(Phi);
-  G4double diry = sin(Teta)*sin(Phi);
-  G4double dirz = cos(Teta) ;
+  //
+  // scattered electron (positron) angles. ( Z - axis along the parent photon)
+  //
+  //  universal distribution suggested by L. Urban
+  // (Geant3 manual (1993) Phys211),
+  //  derived from Tsai distribution (Rev Mod Phys 49,421(1977))
 
-  //G4double finalPx,finalPy,finalPz ;
+  G4double u;
+  const G4double a1 = 0.625 , a2 = 3.*a1 , d = 27. ;
+
+  if (9./(9.+d) >G4UniformRand()) u= - log(G4UniformRand()*G4UniformRand())/a1;
+  else                            u= - log(G4UniformRand()*G4UniformRand())/a2;
+
+  G4double TetEl = u*electron_mass_c2/ElectronEnergy;
+  G4double TetPo = u*electron_mass_c2/PositronEnergy;
+  G4double Phi  = twopi * G4UniformRand();
+  G4double dxEl= sin(TetEl)*cos(Phi),dyEl= sin(TetEl)*sin(Phi),dzEl=cos(TetEl);
+  G4double dxPo=-sin(TetPo)*cos(Phi),dyPo=-sin(TetPo)*sin(Phi),dzPo=cos(TetPo);
+
   G4double ElectKineEnergy = ElectronEnergy - electron_mass_c2 ;
 
-  G4ThreeVector ElectDirection ( dirx, diry, dirz );
+  G4ThreeVector ElectDirection (dxEl, dyEl, dzEl);
   ElectDirection.rotateUz(ParticleDirection);
 
   // create G4DynamicParticle object for the particle1
@@ -526,7 +551,7 @@ vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
 
   G4double PositKineEnergy = PositronEnergy - electron_mass_c2 ;
 
-  G4ThreeVector PositDirection ( -dirx, -diry, dirz );
+  G4ThreeVector PositDirection (dxPo, dyPo, dzPo);
   PositDirection.rotateUz(ParticleDirection);
 
   // create G4DynamicParticle object for the particle2
