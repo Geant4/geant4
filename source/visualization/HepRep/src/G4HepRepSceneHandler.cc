@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.90 2005-06-03 00:03:36 duns Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.91 2005-08-04 23:13:23 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -837,6 +837,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
         } else {
             face = getGeometryInstance("*Face", fCurrentDepth+1);
             setAttribute(face, "PickParent", true);
+            setAttribute(face, "DrawAs", "Polygon");
         }
         
         setLine(face, polyhedron);
