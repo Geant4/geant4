@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.22 2005-08-04 09:18:11 gcosmo Exp $
+// $Id: G4Polyhedra.cc,v 1.23 2005-08-04 09:49:16 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -795,8 +795,7 @@ G4PolyhedraHistorical::operator=( const G4PolyhedraHistorical& right )
 //     l = std::sqrt(l);
 //     areas[j+numSide] = std::sqrt(l*l-(a-b)*(a-b))*(a+b)/2.;
 //   }
-//   for(j=0; j<numCorner; j++){
-    
+//   for(j=0; j<numCorner-1; j++){
     
     
 //   }
