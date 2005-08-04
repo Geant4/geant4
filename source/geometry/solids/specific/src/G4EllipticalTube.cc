@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.cc,v 1.23 2005-08-03 15:53:42 danninos Exp $
+// $Id: G4EllipticalTube.cc,v 1.24 2005-08-04 09:18:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -678,68 +678,6 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p ) const
 
 
 //
-// CreatePolyhedron
-//
-G4Polyhedron* G4EllipticalTube::CreatePolyhedron() const
-{
-  // create cylinder with radius=1...
-  //
-  G4Polyhedron* eTube = new G4PolyhedronTube(0.,1.,dz);
-
-  // apply non-uniform scaling...
-  //
-  eTube->Transform(G4Scale3D(dx,dy,1.));
-  return  eTube;
-}
-
-
-//
-// GetEntityType
-//
-G4GeometryType G4EllipticalTube::GetEntityType() const
-{
-  return G4String("G4EllipticalTube");
-}
-
-
-//
-// Stream object contents to an output stream
-//
-std::ostream& G4EllipticalTube::StreamInfo(std::ostream& os) const
-{
-  os << "-----------------------------------------------------------\n"
-     << "    *** Dump for solid - " << GetName() << " ***\n"
-     << "    ===================================================\n"
-     << " Solid type: G4EllipticalTube\n"
-     << " Parameters: \n"
-     << "    length Z: " << dz/mm << " mm \n"
-     << "    surface equation in X and Y: \n"
-     << "       (X / " << dx << ")^2 + (Y / " << dy << ")^2 = 1 \n"
-     << "-----------------------------------------------------------\n";
-
-  return os;
-}
-
-
-//
-// DescribeYourselfTo
-//
-void G4EllipticalTube::DescribeYourselfTo( G4VGraphicsScene& scene ) const
-{
-  scene.AddSolid (*this);
-}
-
-
-//
-// GetExtent
-//
-G4VisExtent G4EllipticalTube::GetExtent() const
-{
-  return G4VisExtent( -dx, dx, -dy, dy, -dz, dz );
-}
-
-
-//
 // IntersectXY
 //
 // Decide if and where the x/y trajectory hits the elliptical cross
@@ -801,6 +739,15 @@ G4int G4EllipticalTube::IntersectXY( const G4ThreeVector &p,
 
 
 //
+// GetEntityType
+//
+G4GeometryType G4EllipticalTube::GetEntityType() const
+{
+  return G4String("G4EllipticalTube");
+}
+
+
+//
 // GetCubicVolume
 //
 G4double G4EllipticalTube::GetCubicVolume()
@@ -810,6 +757,98 @@ G4double G4EllipticalTube::GetCubicVolume()
   return fCubicVolume;
 }
 
+
+//
+// Stream object contents to an output stream
+//
+std::ostream& G4EllipticalTube::StreamInfo(std::ostream& os) const
+{
+  os << "-----------------------------------------------------------\n"
+     << "    *** Dump for solid - " << GetName() << " ***\n"
+     << "    ===================================================\n"
+     << " Solid type: G4EllipticalTube\n"
+     << " Parameters: \n"
+     << "    length Z: " << dz/mm << " mm \n"
+     << "    surface equation in X and Y: \n"
+     << "       (X / " << dx << ")^2 + (Y / " << dy << ")^2 = 1 \n"
+     << "-----------------------------------------------------------\n";
+
+  return os;
+}
+
+
+//
+// GetPointOnSurface
+//
+// Randomly generates a point on the surface, 
+// with ~ uniform distribution across surface.
+//
+G4ThreeVector G4EllipticalTube::GetPointOnSurface() const
+{
+  G4double xRand, yRand, zRand, phi, cosphi, sinphi, zArea, cArea,p, chose;
+
+  phi    = RandFlat::shoot(0., 2.*pi);
+  cosphi = std::cos(phi);
+  sinphi = std::sin(phi);
+  
+  // the ellipse perimeter from: "http://mathworld.wolfram.com/Ellipse.html"
+  //   m = (dx - dy)/(dx + dy);
+  //   k = 1.+1./4.*m*m+1./64.*sqr(m)*sqr(m)+1./256.*sqr(m)*sqr(m)*sqr(m);
+  //   p = pi*(a+b)*k;
+
+  // perimeter below from "http://www.efunda.com/math/areas/EllipseGen.cfm"
+
+  p = 2.*pi*std::sqrt(0.5*(dx*dx+dy*dy));
+
+  cArea = 2.*dz*p;
+  zArea = pi*dx*dy;
+
+  xRand = dx*cosphi;
+  yRand = dy*sinphi;
+  zRand = RandFlat::shoot(dz, -1.*dz);
+    
+  chose = RandFlat::shoot(0.,2.*zArea+cArea);
+  
+  if( (chose>=0) && (chose < cArea) )
+  {
+    return G4ThreeVector (xRand,yRand,zRand);
+  }
+  else if( (chose >= cArea) && (chose < cArea + zArea) )
+  {
+    xRand = RandFlat::shoot(-1.*dx,dx);
+    yRand = std::sqrt(1.-sqr(xRand/dx));
+    yRand = RandFlat::shoot(-1.*yRand, yRand);
+    return G4ThreeVector (xRand,yRand,dz); 
+  }
+  else
+  { 
+    xRand = RandFlat::shoot(-1.*dx,dx);
+    yRand = std::sqrt(1.-sqr(xRand/dx));
+    yRand = RandFlat::shoot(-1.*yRand, yRand);
+    return G4ThreeVector (xRand,yRand,-1.*dz);
+  }
+}
+
+
+//
+// CreatePolyhedron
+//
+G4Polyhedron* G4EllipticalTube::CreatePolyhedron() const
+{
+  // create cylinder with radius=1...
+  //
+  G4Polyhedron* eTube = new G4PolyhedronTube(0.,1.,dz);
+
+  // apply non-uniform scaling...
+  //
+  eTube->Transform(G4Scale3D(dx,dy,1.));
+  return  eTube;
+}
+
+
+//
+// GetPolyhedron
+//
 G4Polyhedron* G4EllipticalTube::GetPolyhedron () const
 {
   if (!fpPolyhedron ||
@@ -823,51 +862,19 @@ G4Polyhedron* G4EllipticalTube::GetPolyhedron () const
 }
 
 
-///////////////////////////////////////////////////////////////
 //
-//  PointOn Surface randomly generates a point on the surface, 
-//  with ~ uniform distribution across surface
+// DescribeYourselfTo
 //
-
-G4ThreeVector G4EllipticalTube::GetPointOnSurface() const
+void G4EllipticalTube::DescribeYourselfTo( G4VGraphicsScene& scene ) const
 {
-  G4double xRand, yRand, zRand, phi, cosphi, sinphi, zArea, cArea,p, chose;
-  // G4double m, k;  
-  phi    = RandFlat::shoot(0., 2.*pi);
-  cosphi = std::cos(phi);
-  sinphi = std::sin(phi);
-  
-// the ellipse perimeter from: "http://mathworld.wolfram.com/Ellipse.html"
-//   m = (dx - dy)/(dx + dy);
-//   k = 1.+1./4.*m*m+1./64.*sqr(m)*sqr(m)+1./256.*sqr(m)*sqr(m)*sqr(m);
-//   p = pi*(a+b)*k;
+  scene.AddSolid (*this);
+}
 
-// perimeter below from "http://www.efunda.com/math/areas/EllipseGen.cfm"
-  p = 2.*pi*std::sqrt(0.5*(dx*dx+dy*dy));
 
-  cArea = 2.*dz*p;
-  zArea = pi*dx*dy;
-
-  xRand = dx*cosphi;
-  yRand = dy*sinphi;
-  zRand = RandFlat::shoot(dz, -1.*dz);
-    
-  chose = RandFlat::shoot(0.,2.*zArea+cArea);
-  
-  if(chose>=0 && chose < cArea){ return G4ThreeVector (xRand,yRand,zRand); }
-
-  else if(chose >= cArea && chose < cArea + zArea){
-    xRand = RandFlat::shoot(-1.*dx,dx);
-    yRand = std::sqrt(1.-sqr(xRand/dx));
-    yRand = RandFlat::shoot(-1.*yRand, yRand);
-    return G4ThreeVector (xRand,yRand,dz); 
-  }
-
-  else{ 
-    xRand = RandFlat::shoot(-1.*dx,dx);
-    yRand = std::sqrt(1.-sqr(xRand/dx));
-    yRand = RandFlat::shoot(-1.*yRand, yRand);
-    return G4ThreeVector (xRand,yRand,-1.*dz);
-  }
-  
+//
+// GetExtent
+//
+G4VisExtent G4EllipticalTube::GetExtent() const
+{
+  return G4VisExtent( -dx, dx, -dy, dy, -dz, dz );
 }

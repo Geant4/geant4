@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.21 2005-08-03 16:23:43 danninos Exp $
+// $Id: G4Polyhedra.cc,v 1.22 2005-08-04 09:18:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -709,8 +709,8 @@ G4PolyhedraHistorical::operator=( const G4PolyhedraHistorical& right )
 // //  Get Point On Plane --> Auxiliary method for get point on surface
 // //
 // G4ThreeVector G4Polyhedra::GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1, 
-// 					   G4ThreeVector p2, G4ThreeVector p3, 
-// 					   G4double& area) const
+//                                            G4ThreeVector p2, G4ThreeVector p3, 
+//                                            G4double& area) const
 // {
 //   G4double lambda1, lambda2, chose, aOne, aTwo;
 //   G4ThreeVector t, u, v, w, Area, normal;
@@ -721,12 +721,12 @@ G4PolyhedraHistorical::operator=( const G4PolyhedraHistorical& right )
 //   w = p0 - p3;
 
 //   Area = G4ThreeVector(w.y()*v.z() - w.z()*v.y(),
-// 		       w.z()*v.x() - w.x()*v.z(),
-// 		       w.x()*v.y() - w.y()*v.x());
+//                        w.z()*v.x() - w.x()*v.z(),
+//                        w.x()*v.y() - w.y()*v.x());
 //   aOne = 0.5*Area.mag();
 //   Area = G4ThreeVector(t.y()*u.z() - t.z()*u.y(),
-// 		       t.z()*u.x() - t.x()*u.z(),
-// 		       t.x()*u.y() - t.y()*u.x());
+//                        t.z()*u.x() - t.x()*u.z(),
+//                        t.x()*u.y() - t.y()*u.x());
 //   aTwo = 0.5*Area.mag();
 //   area = aOne + aTwo;
   
@@ -748,7 +748,7 @@ G4PolyhedraHistorical::operator=( const G4PolyhedraHistorical& right )
 // //  Get Point On Plane --> Auxiliary method for get point on surface
 // //
 // G4ThreeVector G4Polyhedra::GetPointOnPlane(G4ThreeVector p1, G4ThreeVector p2,
-// 					   G4ThreeVector p3, G4double& area) const
+//                                            G4ThreeVector p3, G4double& area) const
 // {
 //   G4double lambda1,lambda2;
 //   G4ThreeVector v, w;
@@ -811,17 +811,17 @@ G4PolyhedraHistorical::operator=( const G4PolyhedraHistorical& right )
 //       G4ThreeVector p1, p2, p3, p4;
      
 //       p1 = G4ThreeVector((original_parameters->Rmax[i])*cos(startPhi+j*ksi),
-// 			 (original_parameters->Rmax[i])*sin(startPhi+j*ksi),
-// 			 original_parameters->Z_values[i]);
+//                          (original_parameters->Rmax[i])*sin(startPhi+j*ksi),
+//                          original_parameters->Z_values[i]);
 //       p2 = G4ThreeVector((original_parameters->Rmax[i])*cos(startPhi+j*ksi),
-// 			 (original_parameters->Rmax[i])*sin(startPhi+j*ksi),
-// 			 original_parameters->Z_values[i+1]);
+//                          (original_parameters->Rmax[i])*sin(startPhi+j*ksi),
+//                          original_parameters->Z_values[i+1]);
 //       p3 = G4ThreeVector((original_parameters->Rmax[i])*cos(startPhi+(j+1)*ksi),
-// 			 (original_parameters->Rmax[i])*sin(startPhi+(j+1)*ksi),
-// 			 original_parameters->Z_values[i+1]);
+//                          (original_parameters->Rmax[i])*sin(startPhi+(j+1)*ksi),
+//                          original_parameters->Z_values[i+1]);
 //       p4 = G4ThreeVector((original_parameters->Rmax[i])*cos(startPhi+j*ksi),
-// 			 (original_parameters->Rmax[i])*sin(startPhi+j*ksi),
-// 			 original_parameters->Z_values[i]);
+//                          (original_parameters->Rmax[i])*sin(startPhi+j*ksi),
+//                          original_parameters->Z_values[i]);
          
 //     }
 //   } 

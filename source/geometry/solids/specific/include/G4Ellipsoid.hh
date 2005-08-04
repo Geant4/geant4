@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipsoid.hh,v 1.7 2005-08-03 15:53:42 danninos Exp $
+// $Id: G4Ellipsoid.hh,v 1.8 2005-08-04 09:18:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -92,7 +92,7 @@ class G4Ellipsoid : public G4VSolid
                                  G4ThreeVector *n=0) const;
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
-    virtual G4GeometryType GetEntityType() const;
+    G4GeometryType GetEntityType() const;
 
     std::ostream& StreamInfo(std::ostream& os) const;
 
@@ -100,7 +100,7 @@ class G4Ellipsoid : public G4VSolid
 
     // Visualisation functions
   
-    virtual G4Polyhedron* GetPolyhedron () const;
+    G4Polyhedron* GetPolyhedron () const;
     void DescribeYourselfTo(G4VGraphicsScene& scene) const;
     G4VisExtent   GetExtent() const;
     G4Polyhedron* CreatePolyhedron() const;

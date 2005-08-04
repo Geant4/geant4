@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.hh,v 1.13 2005-08-03 15:53:42 danninos Exp $
+// $Id: G4Polycone.hh,v 1.14 2005-08-04 09:18:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,7 +82,8 @@ class G4PolyconeHistorical
 
 class G4Polycone : public G4VCSGfaceted 
 {
-  public:  // with description
+
+ public:  // with description
 
   G4Polycone( const G4String& name, 
                     G4double phiStart,     // initial phi starting angle
@@ -109,21 +110,6 @@ class G4Polycone : public G4VCSGfaceted
   EInside Inside( const G4ThreeVector &p ) const;
   G4double DistanceToIn( const G4ThreeVector &p, const G4ThreeVector &v ) const;
   G4double DistanceToIn( const G4ThreeVector &p ) const;
-  
-  // Methods for random point generation
-  G4ThreeVector GetPointOnCone(G4double fRmin1, G4double fRmax1,
-			       G4double fRmin2, G4double fRmax2,
-			       G4double zOne,   G4double zTwo,
-			       G4double& totArea) const;
-  
-  G4ThreeVector GetPointOnTubs(G4double fRMin, G4double fRMax,
-			       G4double zOne,  G4double zTwo,
-			       G4double& totArea) const;
-  
-  G4ThreeVector GetPointOnCut(G4double fRMin1, G4double fRMax1,
-			      G4double fRMin2, G4double fRMax2,
-			      G4double zOne,   G4double zTwo,
-			      G4double& totArea) const;
 
   G4ThreeVector GetPointOnSurface() const;
   
@@ -150,7 +136,33 @@ class G4Polycone : public G4VCSGfaceted
   inline G4PolyconeHistorical* GetOriginalParameters() const;
   inline void SetOriginalParameters(G4PolyconeHistorical* pars);
 
-  protected:  // without description
+ protected:  // without description
+
+  // Generic initializer, called by all constructors
+
+  void Create( G4double phiStart,        // initial phi starting angle
+               G4double phiTotal,        // total phi angle
+               G4ReduciblePolygon *rz ); // r/z coordinate of these corners
+
+  void CopyStuff( const G4Polycone &source );
+
+  // Methods for random point generation
+
+  G4ThreeVector GetPointOnCone(G4double fRmin1, G4double fRmax1,
+                               G4double fRmin2, G4double fRmax2,
+                               G4double zOne,   G4double zTwo,
+                               G4double& totArea) const;
+  
+  G4ThreeVector GetPointOnTubs(G4double fRMin, G4double fRMax,
+                               G4double zOne,  G4double zTwo,
+                               G4double& totArea) const;
+  
+  G4ThreeVector GetPointOnCut(G4double fRMin1, G4double fRMax1,
+                              G4double fRMin2, G4double fRMax2,
+                              G4double zOne,   G4double zTwo,
+                              G4double& totArea) const;
+
+ protected:  // without description
 
   // Here are our parameters
 
@@ -164,14 +176,6 @@ class G4Polycone : public G4VCSGfaceted
   // Our quick test
 
   G4EnclosingCylinder *enclosingCylinder;
-
-  // Generic initializer, called by all constructors
-
-  void Create( G4double phiStart,        // initial phi starting angle
-               G4double phiTotal,        // total phi angle
-               G4ReduciblePolygon *rz ); // r/z coordinate of these corners
-
-  void CopyStuff( const G4Polycone &source );
 };
 
 #include "G4Polycone.icc"
