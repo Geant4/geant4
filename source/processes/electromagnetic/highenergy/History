@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2005-06-30 10:27:05 vnivanch Exp $
+$Id: History,v 1.9 2005-08-05 13:43:14 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05 August 05: V.Ivant (emhighenergy-V07-01-01)
+- Remove inline constructors and destructors
 
 30 June 05: V.Ivant (emhighenergy-V07-01-00)
 - Fix a misprint in G4BetheBlochNoDeltaModel
