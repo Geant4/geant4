@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.19 2005-05-23 07:52:43 gcosmo Exp $
+// $Id: G4VSolid.hh,v 1.20 2005-08-05 15:42:38 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -175,6 +175,9 @@ class G4VSolid
     virtual G4GeometryType  GetEntityType() const = 0;
       // Provide identification of the class of an object.
       // (required for persistency and STEP interface)
+
+    virtual G4ThreeVector GetPointOnSurface() const;
+      // Returns a random point located on the surface of the solid.
 
     virtual std::ostream& StreamInfo(std::ostream& os) const = 0;
       // Dumps contents of the solid to a stream.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.25 2004-10-10 10:15:27 johna Exp $
+// $Id: G4VSolid.cc,v 1.26 2005-08-05 15:42:39 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -91,6 +91,20 @@ void G4VSolid::ComputeDimensions(G4VPVParameterisation*,
            << "        Method not overloaded by derived class !" << G4endl;
     G4Exception("G4VSolid::ComputeDimensions()", "NotApplicable",
                 FatalException, "Illegal call to case class.");
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Throw exception (warning) for solids not implementing the method
+
+G4ThreeVector G4VSolid::GetPointOnSurface() const
+{
+    G4cerr << "WARNING - G4VSolid::GetPointOnSurface()" << G4endl
+           << "          Not implemented for solid: "
+	   << this->GetEntityType() << " !" << G4endl;
+    G4Exception("G4VSolid::GetPointOnSurface()", "NotImplemented",
+        JustWarning, "Not implemented for this solid ! Returning origin.");
+    return G4ThreeVector(0,0,0);
 }
 
 ///////////////////////////////////////////////////////////////////////////
