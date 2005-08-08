@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.hh,v 1.12 2005-08-08 10:38:20 danninos Exp $
+// $Id: G4Polyhedra.hh,v 1.13 2005-08-08 14:52:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,7 +85,7 @@ class G4PolyhedraHistorical
 
 class G4Polyhedra : public G4VCSGfaceted
 {
-  public:  // with description
+ public:  // with description
 
   G4Polyhedra( const G4String& name, 
                      G4double phiStart,    // initial phi starting angle
@@ -122,15 +122,7 @@ class G4Polyhedra : public G4VCSGfaceted
 
   G4GeometryType  GetEntityType() const;
 
-  G4ThreeVector GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1,
-				G4ThreeVector p2, G4ThreeVector p3) const;
-
-  G4ThreeVector GetPointOnTriangle(G4ThreeVector p0, G4ThreeVector p1,
-				G4ThreeVector p2) const;
-  
   G4ThreeVector GetPointOnSurface() const;
-
-  G4ThreeVector GetPointOnSurfaceCorners() const;
 
   std::ostream& StreamInfo( std::ostream& os ) const;
 
@@ -150,9 +142,29 @@ class G4Polyhedra : public G4VCSGfaceted
   inline G4PolyhedraHistorical* GetOriginalParameters() const;
   inline void SetOriginalParameters(G4PolyhedraHistorical* pars);
 
-  protected:  // without description
+ protected:  // without description
 
-  // Here are our parameters
+  // Generic initializer, call by all constructors
+
+  inline void SetOriginalParameters();
+  
+  void Create( G4double phiStart,           // initial phi starting angle
+               G4double phiTotal,           // total phi angle
+               G4int    numSide,            // number sides
+               G4ReduciblePolygon *rz );    // rz coordinates
+
+  void CopyStuff( const G4Polyhedra &source );
+  void DeleteStuff();
+
+  // Methods for generation of random points on surface
+
+  G4ThreeVector GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1,
+                                G4ThreeVector p2, G4ThreeVector p3) const;
+  G4ThreeVector GetPointOnTriangle(G4ThreeVector p0, G4ThreeVector p1,
+                                   G4ThreeVector p2) const;
+  G4ThreeVector GetPointOnSurfaceCorners() const;
+
+ protected:  // without description
 
   G4int   numSide;      // Number of sides
   G4double startPhi;    // Starting phi value (0 < phiStart < 2pi)
@@ -162,25 +174,8 @@ class G4Polyhedra : public G4VCSGfaceted
   G4PolyhedraSideRZ *corners;  // our corners
   G4PolyhedraHistorical  *original_parameters;  // original input parameters
 
-  // Our quick test
-
   G4EnclosingCylinder *enclosingCylinder;
 
-  // Generic initializer, call by all constructors
-
-  void Create( G4double phiStart,           // initial phi starting angle
-               G4double phiTotal,           // total phi angle
-               G4int    numSide,            // number sides
-               G4ReduciblePolygon *rz );    // rz coordinates
-
-  void CopyStuff( const G4Polyhedra &source );
-  void DeleteStuff();
-  
-  private:
-
-  inline void SetOriginalParameters();
-  
-  
 };
 
 #include "G4Polyhedra.icc"

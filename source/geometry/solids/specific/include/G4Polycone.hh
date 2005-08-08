@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.hh,v 1.15 2005-08-08 10:38:20 danninos Exp $
+// $Id: G4Polycone.hh,v 1.16 2005-08-08 14:52:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -140,6 +140,8 @@ class G4Polycone : public G4VCSGfaceted
 
   // Generic initializer, called by all constructors
 
+  inline void SetOriginalParameters();
+
   void Create( G4double phiStart,        // initial phi starting angle
                G4double phiTotal,        // total phi angle
                G4ReduciblePolygon *rz ); // r/z coordinate of these corners
@@ -176,10 +178,6 @@ class G4Polycone : public G4VCSGfaceted
   // Our quick test
 
   G4EnclosingCylinder *enclosingCylinder;
-  
-  private:
-  
-  inline void SetOriginalParameters();
   
 };
 
