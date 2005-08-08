@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.hh,v 1.14 2005-08-04 09:18:11 gcosmo Exp $
+// $Id: G4Polycone.hh,v 1.15 2005-08-08 10:38:20 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -176,6 +176,11 @@ class G4Polycone : public G4VCSGfaceted
   // Our quick test
 
   G4EnclosingCylinder *enclosingCylinder;
+  
+  private:
+  
+  inline void SetOriginalParameters();
+  
 };
 
 #include "G4Polycone.icc"

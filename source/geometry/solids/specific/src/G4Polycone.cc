@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.24 2005-08-04 11:11:57 gcosmo Exp $
+// $Id: G4Polycone.cc,v 1.25 2005-08-08 10:38:20 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -120,13 +120,15 @@ G4Polycone::G4Polycone( const G4String& name,
                               G4int    numRZ,
                         const G4double r[],
                         const G4double z[]   )
-  : G4VCSGfaceted( name )
+  : G4VCSGfaceted( name ) 
 {
-  original_parameters = 0;
-
   G4ReduciblePolygon *rz = new G4ReduciblePolygon( r, z, numRZ );
   
   Create( phiStart, phiTotal, rz );
+  
+  // Set original_parameters struct for consistency
+  //
+  SetOriginalParameters();
   
   delete rz;
 }

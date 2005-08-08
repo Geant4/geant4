@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.hh,v 1.11 2003-11-05 17:41:24 gcosmo Exp $
+// $Id: G4Polyhedra.hh,v 1.12 2005-08-08 10:38:20 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -122,6 +122,16 @@ class G4Polyhedra : public G4VCSGfaceted
 
   G4GeometryType  GetEntityType() const;
 
+  G4ThreeVector GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1,
+				G4ThreeVector p2, G4ThreeVector p3) const;
+
+  G4ThreeVector GetPointOnTriangle(G4ThreeVector p0, G4ThreeVector p1,
+				G4ThreeVector p2) const;
+  
+  G4ThreeVector GetPointOnSurface() const;
+
+  G4ThreeVector GetPointOnSurfaceCorners() const;
+
   std::ostream& StreamInfo( std::ostream& os ) const;
 
   G4Polyhedron* CreatePolyhedron() const;
@@ -165,6 +175,12 @@ class G4Polyhedra : public G4VCSGfaceted
 
   void CopyStuff( const G4Polyhedra &source );
   void DeleteStuff();
+  
+  private:
+
+  inline void SetOriginalParameters();
+  
+  
 };
 
 #include "G4Polyhedra.icc"
