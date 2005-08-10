@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.h,v 1.18 2005-07-05 14:04:02 allison Exp $
+// $Id: HepPolyhedron.h,v 1.19 2005-08-10 08:20:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -460,6 +460,13 @@ public:
   HepPolyhedronEllipsoid(double dx, double dy, double dz, 
 			 double zcut1, double zcut2);
   virtual ~HepPolyhedronEllipsoid();
+};
+
+class HepPolyhedronEllipticalCone : public HepPolyhedron {
+public:
+  HepPolyhedronEllipticalCone(double dx, double dy, double z,
+			      double zcut1);
+  virtual ~HepPolyhedronEllipticalCone();
 };
 
 #endif /* HEP_POLYHEDRON_HH */

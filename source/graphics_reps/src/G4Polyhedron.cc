@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedron.cc,v 1.17 2005-07-05 14:04:02 allison Exp $
+// $Id: G4Polyhedron.cc,v 1.18 2005-08-10 08:20:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4Polyhedron.hh"
@@ -134,3 +134,10 @@ G4PolyhedronEllipsoid::G4PolyhedronEllipsoid (G4double ax, G4double by,
   G4Polyhedron (HepPolyhedronEllipsoid (ax, by, cz, zCut1, zCut2)) {}
 
 G4PolyhedronEllipsoid::~G4PolyhedronEllipsoid () {}
+
+G4PolyhedronEllipticalCone::G4PolyhedronEllipticalCone (G4double ax, G4double ay,
+                                                        G4double h, 
+					                G4double zCut1):
+  G4Polyhedron (HepPolyhedronEllipticalCone (ax, ay, h, zCut1)) {}
+
+G4PolyhedronEllipticalCone::~G4PolyhedronEllipticalCone () {}

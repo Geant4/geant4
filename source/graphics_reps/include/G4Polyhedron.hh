@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedron.hh,v 1.15 2005-07-05 14:04:02 allison Exp $
+// $Id: G4Polyhedron.hh,v 1.16 2005-08-10 08:20:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4POLYHEDRON_HH
@@ -226,6 +226,13 @@ class G4PolyhedronEllipsoid : public G4Polyhedron {
   G4PolyhedronEllipsoid(G4double dx, G4double dy, G4double dz, 
                         G4double zcut1, G4double zcut2);
   virtual ~G4PolyhedronEllipsoid ();
+};
+
+class G4PolyhedronEllipticalCone : public G4Polyhedron {
+ public:
+  G4PolyhedronEllipticalCone(G4double dx, G4double dy, G4double z, 
+                             G4double zcut1);
+  virtual ~G4PolyhedronEllipticalCone ();
 };
 
 #endif /* G4POLYHEDRON_HH */
