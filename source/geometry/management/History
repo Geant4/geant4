@@ -1,4 +1,4 @@
-$Id: History,v 1.89 2005-05-25 14:58:11 gcosmo Exp $
+$Id: History,v 1.90 2005-08-10 09:34:06 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+August 10, 2005  G.Cosmo                   geommng-V07-01-00
+- Added virtual method GetPointOnSurface() to G4VSolid to be implemented in
+  the concrete solids classed for returning a random-point uniformely
+  distributed on the surface.
 
 May 25, 2005  G.Cosmo                      geommng-V07-00-04
 - Fixed problem with previous tag, where version of G4LogicalVolume.cc was
