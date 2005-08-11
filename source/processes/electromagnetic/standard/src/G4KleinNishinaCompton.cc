@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaCompton.cc,v 1.5 2005-04-18 17:31:38 vnivanch Exp $
+// $Id: G4KleinNishinaCompton.cc,v 1.6 2005-08-11 10:03:33 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
