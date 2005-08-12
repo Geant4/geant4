@@ -1,4 +1,4 @@
-$Id: History,v 1.158 2005-08-12 10:12:45 maire Exp $
+$Id: History,v 1.159 2005-08-12 11:12:11 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+12 August 05: mma (emstand-V07-01-04)
+- G4eIonisation and G4hIonisation : SetStepLimits (0.2, 0.1*mm)
      
 11 August 05: Laszlo + mma (emstand-V07-01-03)
 - add G4MultipleScattering80 and G4MscModel80
