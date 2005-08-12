@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.58 2005-07-25 18:13:35 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.59 2005-08-12 12:12:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -82,6 +82,7 @@
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 11-04-05 Use MaxSecondaryEnergy from a model (V.Ivanchenko)
 // 25-07-05 Add extra protection PostStep for non-integral mode (V.Ivanchenko)
+// 12-08-05 Integral=false; SetStepFunction(0.2, 0.1*mm) (mma)
 //
 // Class Description:
 //
@@ -154,7 +155,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, G4ProcessType t
   lossFluctuationArePossible(true),
   rndmStepFlag(false),
   tablesAreBuilt(false),
-  integral(true),
+  integral(false),
   meanFreePath(false),
   aboveCSmax(true),
   isIonisation(true)
@@ -168,7 +169,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, G4ProcessType t
   pParticleChange = &fParticleChange;
 
   // default dRoverRange and finalRange
-  SetStepFunction(defaultIntegralRange, 1.0*mm);
+  SetStepFunction(defaultRoverRange, 0.1*mm);
   SetVerboseLevel(1);
 
   modelManager = new G4EmModelManager();
