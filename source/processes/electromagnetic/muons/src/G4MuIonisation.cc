@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.cc,v 1.47 2005-04-08 15:18:12 vnivanch Exp $
+// $Id: G4MuIonisation.cc,v 1.48 2005-08-12 11:23:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,6 +64,7 @@
 // 17-08-04 Utilise mu+ tables for mu- (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 12-08-05 SetStepLimits(0.2, 0.1*mm) (mma)
 //
 // -------------------------------------------------------------------
 //
@@ -130,7 +131,7 @@ void G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
     em2->SetHighEnergyLimit(100.0*TeV);
     AddEmModel(3, em2, flucModel);
 
-    SetStepLimits(0.2, 1.0*mm);
+    SetStepLimits(0.2, 0.1*mm);
 
     ratio = electron_mass_c2/mass;
     isInitialised = true;
