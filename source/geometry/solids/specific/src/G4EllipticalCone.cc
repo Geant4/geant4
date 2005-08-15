@@ -321,7 +321,7 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
       return distMin; 
 
     G4double lambda = (-zTopCut - p.z())/v.z();
-
+    
     if ( sqr((lambda*v.x()+p.x())/xSemiAxis)
         +sqr((lambda*v.y()+p.y())/ySemiAxis) <=
          sqr(zTopCut + zheight + 0.5*kRadTolerance) ) 
@@ -344,7 +344,23 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
         return distMin = std::fabs(lambda);
       }
   }
-
+  
+  if (p.z() > zTopCut - 0.5*kCarTolerance)
+  {
+    if (v.z() > 0.) 
+      return kInfinity;
+    
+    return distMin = 0.;
+  }
+  
+  if (p.z() < -zTopCut + 0.5*kCarTolerance)
+  {
+    if (v.z() < 0.)
+      return distMin = kInfinity;
+    
+    return distMin = 0.;
+  }
+  
   // if we are here then it either intersects or grazes the curved surface 
   // or it does not intersect at all
   //
@@ -355,21 +371,23 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
              - sqr(zheight - p.z());
  
   G4double discr = B*B - 4.*A*C;
-  
+   
   // if the discriminant is negative it never hits the curved object
   //
   if ( discr < -0.5*kCarTolerance )
     { return distMin; }
   
-  //case below is when it hits the surface
+  //case below is when it hits or grazes the surface
   //
-  if ( (discr >= - 0.5*kCarTolerance) && (discr < 0.5*kCarTolerance) )
+  if ( (discr >= - 0.5*kCarTolerance ) && (discr < 0.5*kCarTolerance ) )
   {
-    return distMin = 0; 
+    return distMin = std::fabs(-B/(2.*A)); 
   }
+  
   G4double plus  = (-B+std::sqrt(discr))/(2.*A);
   G4double minus = (-B-std::sqrt(discr))/(2.*A);
   G4double lambda   = std::fabs(plus) < std::fabs(minus) ? plus : minus;
+ 
   return std::fabs(lambda);
 }
 
@@ -383,7 +401,7 @@ G4double G4EllipticalCone::DistanceToIn(const G4ThreeVector& p) const
   G4double distR, distR2, distZ, maxDim;
   G4double distRad;  
 
-  // check if the point lies either below z=0 within bottom elliptical region
+  // check if the point lies either below z=-zTopCut in bottom elliptical region
   // or on top within cut elliptical region
   //
   if( (p.z() < -zTopCut) && (sqr(p.x()/xSemiAxis) + sqr(p.y()/ySemiAxis)
@@ -426,7 +444,7 @@ G4double G4EllipticalCone::DistanceToIn(const G4ThreeVector& p) const
     distR2 = sqr(distRad - maxDim*(zheight + zTopCut)) + sqr(p.z() + zTopCut);
     return std::sqrt( distR2 );    
   }   
-
+  
   return distR = 0;
 }
 
@@ -476,7 +494,7 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
   }
   
   // if we are here then it either intersects or grazes the 
-  // curved surface or does not at all
+  // curved surface...
   //
   G4double A = sqr(v.x()/xSemiAxis) + sqr(v.y()/ySemiAxis) - sqr(v.z());
   G4double B = 2.*(v.x()*p.x()/sqr(xSemiAxis) +  
@@ -486,17 +504,17 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
  
   G4double discr = B*B - 4.*A*C;
   
-  if ( discr >= - 0.5*kRadTolerance && discr < kRadTolerance/2.0 )
+  if ( discr >= - 0.5*kCarTolerance && discr < 0.5*kCarTolerance )
   { 
-    if(!calcNorm) { return distMin = 0; }
+    if(!calcNorm) { return distMin = std::fabs(-B/(2.*A)); }
   }
 
-  else if ( discr > 0.5*kRadTolerance )
+  else if ( discr > 0.5*kCarTolerance )
   {
     G4double plus  = (-B+std::sqrt(discr))/(2.*A);
     G4double minus = (-B-std::sqrt(discr))/(2.*A);
 
-    lambda   = plus < minus ? plus:minus;
+    lambda   = std::fabs(plus) < std::fabs(minus) ? plus:minus;
     distMin  = std::fabs(lambda);
     surface  = kCurvedSurf;
   }
