@@ -23,7 +23,7 @@
 //
 // $Id: testG4EllipticalCone.cc
 // GEANT4 tag $Name: 
-//
+// 
 // testG4EllipticalCone
 //
 //  Test file for class G4EllipticalCone

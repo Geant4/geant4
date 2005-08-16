@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalCone.icc,v 1.1 2005-08-10 08:21:56 gcosmo Exp $
+// $Id: G4EllipticalCone.icc,v 1.2 2005-08-16 10:19:16 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -70,12 +70,12 @@ G4double G4EllipticalCone::GetCubicVolume()
   {
     if (zTopCut > +zheight )
     {
-      fCubicVolume = (8./3.)*pi*xSemiAxis*ySemiAxis*zheight*zheight*zheight;
+      fCubicVolume = (8./3.)*pi*xSemiAxis*ySemiAxis*zheight*zheight*zheight/cm/cm;
     }
     else 
     {   
       fCubicVolume = pi*xSemiAxis*ySemiAxis*
-                    (2./3.*std::pow(zTopCut,3.)+2.*sqr(zheight)*zTopCut);
+                    (2./3.*std::pow(zTopCut,3.)+2.*sqr(zheight)*zTopCut)/cm/cm;
     }
   }
   return fCubicVolume;
