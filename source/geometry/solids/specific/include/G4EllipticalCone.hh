@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalCone.hh,v 1.2 2005-08-16 10:19:16 danninos Exp $
+// $Id: G4EllipticalCone.hh,v 1.3 2005-08-16 13:27:33 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,8 +36,8 @@
 //
 // Member Data:
 //
-//      xSemiAxis       semi-axis, x
-//      ySemiAxis       semi-axis, y
+//      xSemiAxis       semi-axis, x (should have mm units)
+//      ySemiAxis       semi-axis, y (should have mm units)
 //      zheight         height, z
 //      zTopCut         upper cut plane level, z 
 //
@@ -52,6 +52,9 @@
 // *           (x/xSemiAxis)^2 + (y/ySemiAxis)^2 = (zheight - z)^2           * 
 // *                                                                         *
 // ***************************************************************************
+//
+//  Note that this means that we should always construct an elliptical cone 
+//  with the xSemiAxis and ySemiAxis having units of mm.
 //
 // Author:
 //   Dionysios Anninos, 8.9.2005
