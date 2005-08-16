@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPointOnSurface.cc,v 1.2 2005-08-04 11:26:03 gcosmo Exp $
+// $Id: testPointOnSurface.cc,v 1.3 2005-08-16 12:21:47 danninos Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@
 // Test for GetPointOnSurface() method of various solids.
 // Returns 0 if generated random points are located on surface.
 //
-// Author: Dionisyos Anninos
+// Author: Dionysios Anninos
 //
 // --------------------------------------------------------------
 #include <assert.h>
@@ -55,6 +55,10 @@
 #include "G4Trd.hh"
 #include "G4Polycone.hh" 
 #include "G4Tet.hh"
+#include "G4Polyhedra.hh"
+#include "G4EllipticalCone.hh"
+
+#include "G4Timer.hh"
 
 #include "Randomize.hh"
 
@@ -62,61 +66,90 @@
 #include "G4AffineTransform.hh"
 #include "G4VoxelLimits.hh"
 
+
+
 G4bool checkBox(G4int N)
 {
+  
+  G4cout<<"**************************************"<<G4endl;
+  G4cout<<"************* G4BOX ******************"<<G4endl;
+  G4cout<<"**************************************"<<G4endl<<G4endl;
 
   G4ThreeVector point;
   G4bool what = true;  
   G4int i=0,n=0;
   EInside surf;
- 
+  
+  G4Timer time;
+  
   G4Box  t1("Solid Box #1", 
 	    20*cm,
 	    20*cm,
 	    20*cm);
   
-  for(i=0; i<N; i++){
+  time.Start();
+  
+  for(i=0; i<N; i++)
+  {
     point = t1.GetPointOnSurface();
     surf  = t1.Inside(point);
     if(surf != kSurface){ n++; what = false; }  
   }
   
-  G4cout <<"Check Box had "<<n<<" inconsistencies"<< G4endl; 
+  time.Stop();
+  
+  G4cout <<" Check Box had "<<n<<" inconsistencies..."<< G4endl; 
+  G4cout <<" Time taken was: "<<time.GetRealElapsed()<<" seconds."<<G4endl<<G4endl;
   return what;
 }
 
 G4bool checkEllipsoid(G4int N)
 {
-
+  G4cout<<"**************************************"<<G4endl;
+  G4cout<<"************* G4ELLIPSOID ************"<<G4endl;
+  G4cout<<"**************************************"<<G4endl<<G4endl;
+  
   G4ThreeVector point;
   G4bool what = true;  
   G4int i=0,n=0;
   EInside surf;
- 
+  
+  G4Timer time;
+  
   G4Ellipsoid t1("Solid Ellipsoid #1", 
 		 20*cm,
 		 15*cm,
 		 35*cm,
 		 -10*cm,
 		  10*cm);
+  time.Start();
   
-  for(i=0; i<N; i++){
+  for(i=0; i<N; i++)
+  {
     point = t1.GetPointOnSurface();
     surf  = t1.Inside(point);
     if(surf != kSurface){ n++; what = false; }  
   }
   
-  G4cout <<"Check Ellipsoid had "<<n<<" inconsistencies"<< G4endl; 
+  time.Stop();
+  
+  G4cout <<" Check Ellipsoid had "<<n<<" inconsistencies..."<< G4endl;
+  G4cout <<" Time taken was: "<<time.GetRealElapsed()<<" seconds."<<G4endl<<G4endl;
   return what;
 }
 
 G4bool checkHype(G4int N)
 {
-
-  G4ThreeVector point;
+  G4cout<<"**************************************"<<G4endl;
+  G4cout<<"************* G4HYPE *****************"<<G4endl;
+  G4cout<<"**************************************"<<G4endl<<G4endl;
+  
+G4ThreeVector point;
   G4bool what = true;  
   G4int i=0,n=0;
   EInside surf;
+ 
+  G4Timer time;
  
   G4Hype t1("Solid Hype #1", 
 	    10*cm,
@@ -125,67 +158,100 @@ G4bool checkHype(G4int N)
 	    75*deg,
 	    10*cm);
   
-  for(i=0; i<N; i++){
+  time.Start();
+  
+  for(i=0; i<N; i++)
+  {
     point = t1.GetPointOnSurface();
     surf  = t1.Inside(point);
     if(surf != kSurface){ n++; what = false; }  
   }
   
-  G4cout <<"Check Hype had "<<n<<" inconsistencies"<< G4endl; 
+  time.Stop();
+  
+  G4cout <<" Check Hype had "<<n<<" inconsistencies"<< G4endl; 
+  G4cout <<" Time taken was: "<<time.GetRealElapsed()<<" seconds."<<G4endl<<G4endl;
   return what;
 }
 
 G4bool checkEllipticalTube(G4int N)
 {
-
+  G4cout<<"**************************************"<<G4endl;
+  G4cout<<"************* G4ELLIPTICALTUBE *******"<<G4endl;
+  G4cout<<"**************************************"<<G4endl<<G4endl;
+  
   G4ThreeVector point;
   G4bool what = true;  
   G4int i=0,n=0;
   EInside surf;
  
+  G4Timer time;
+  
   G4EllipticalTube t1("Solid Ell Tube #1", 
 		      10*cm,
 		      20*cm,
 		      15*cm);
   
-  for(i=0; i<N; i++){
+  time.Start();
+
+  for(i=0; i<N; i++)
+  {
     point = t1.GetPointOnSurface();
     surf  = t1.Inside(point);
     if(surf != kSurface){ n++; what = false; }  
   }
   
-  G4cout <<"Check EllTube had "<<n<<" inconsistencies"<< G4endl; 
+  time.Stop();
+  
+  G4cout <<" Check EllTube had "<<n<<" inconsistencies"<< G4endl; 
+  G4cout <<" Time taken was: "<<time.GetRealElapsed()<<" seconds."<<G4endl<<G4endl;
   return what;
 }
 
 G4bool checkOrb(G4int N)
 {
-
+  G4cout<<"**************************************"<<G4endl;
+  G4cout<<"************* G4ORB ******************"<<G4endl;
+  G4cout<<"**************************************"<<G4endl<<G4endl;
+  
   G4ThreeVector point;
   G4bool what = true;  
   G4int i=0,n=0;
   EInside surf;
  
+  G4Timer time;
+
   G4Orb t1("Solid Orb #1",  
 	   10*cm);
-  
-  for(i=0; i<N; i++){
+
+  time.Start();
+
+  for(i=0; i<N; i++)
+  {
     point = t1.GetPointOnSurface();
     surf  = t1.Inside(point);
     if(surf != kSurface){ n++; what = false; }  
   }
   
-  G4cout <<"Check Orb had "<<n<<" inconsistencies"<< G4endl; 
+  time.Stop();
+
+  G4cout <<" Check Orb had "<<n<<" inconsistencies"<< G4endl; 
+  G4cout <<" Time taken was: "<<time.GetRealElapsed()<<" seconds."<<G4endl<<G4endl;
   return what;
 }
 
 G4bool checkTorus(G4int N)
 {
-
+  G4cout<<"**************************************"<<G4endl;
+  G4cout<<"************* G4TORUS ****************"<<G4endl;
+  G4cout<<"**************************************"<<G4endl<<G4endl;
+  
   G4ThreeVector point;
   G4bool what = true;       
   G4int i=0,n=0;
   EInside surf;
+  
+  G4Timer time;
  
   G4Torus t1("Torus  #1",   
 	     5*cm,
@@ -194,23 +260,34 @@ G4bool checkTorus(G4int N)
 	     33*deg,
 	     270*deg);
   
-  for(i=0; i<N; i++){
+  time.Start();
+  
+  for(i=0; i<N; i++)
+  {
     point = t1.GetPointOnSurface();
     surf  = t1.Inside(point);
     if(surf != kSurface){ n++; what = false; }  
   }
    
-  G4cout <<"Check Torus had "<<n<<" inconsistencies"<< G4endl; 
+  time.Stop();
+  
+  G4cout <<" Check Torus had "<<n<<" inconsistencies"<< G4endl; 
+  G4cout <<" Time taken was: "<<time.GetRealElapsed()<<" seconds."<<G4endl<<G4endl;
   return what;
 }
 
 G4bool checkTubs(G4int N)
 {
-
+  G4cout<<"**************************************"<<G4endl;
+  G4cout<<"************* G4TUBS *****************"<<G4endl;
+  G4cout<<"**************************************"<<G4endl<<G4endl;
+  
   G4ThreeVector point;
   G4bool what = true;  
   G4int i=0,n=0;
   EInside surf;
+
+  G4Timer time;
  
   G4Tubs t1("Tubs #1", 
 	     5*cm,
@@ -219,23 +296,34 @@ G4bool checkTubs(G4int N)
 	     42*deg,
 	     120*deg);
   
-  for(i=0; i<N; i++){
+  time.Start();
+  
+  for(i=0; i<N; i++)
+  {
     point = t1.GetPointOnSurface();
     surf  = t1.Inside(point);
     if(surf != kSurface){ n++; what = false; }  
   }
   
-  G4cout <<"Check Tubs had "<<n<<" inconsistencies"<< G4endl; 
+  time.Stop();
+  
+  G4cout <<" Check Tubs had "<<n<<" inconsistencies"<< G4endl; 
+  G4cout <<" Time taken was: "<<time.GetRealElapsed()<<" seconds."<<G4endl<<G4endl;
   return what;
 }
 
 G4bool checkCons(G4int N)
 { 
- 
+  G4cout<<"**************************************"<<G4endl;
+  G4cout<<"************* G4CONS *****************"<<G4endl;
+  G4cout<<"**************************************"<<G4endl<<G4endl;
+  
   G4ThreeVector point;
   G4bool what = true;   
   G4int i=0,n=0; 
   EInside surf;
+  
+  G4Timer time;
    
   G4Cons t1("Cons #1", 
 	    6*cm, 10*cm,   
@@ -243,138 +331,198 @@ G4bool checkCons(G4int N)
 	    10*cm,    
 	    43*deg,  221*deg);
   
-  for(i=0; i<N; i++){
+  time.Start();
+  
+  for(i=0; i<N; i++)
+  {
     point = t1.GetPointOnSurface();
     surf  = t1.Inside(point);
     if(surf != kSurface){ n++; what = false; }  
   }
+
+  time.Stop();
   
-  G4cout <<"Check Cons had "<<n<<" inconsistencies"<< G4endl; 
+  G4cout <<" Check Cons had "<<n<<" inconsistencies"<< G4endl; 
+  G4cout <<" Time taken was: "<<time.GetRealElapsed()<<" seconds."<<G4endl<<G4endl;
   return what;
 }
 
 G4bool checkTrap(G4int N)
 {
-
+  G4cout<<"**************************************"<<G4endl;
+  G4cout<<"************* G4TRAP *****************"<<G4endl;
+  G4cout<<"**************************************"<<G4endl<<G4endl;
+  
   G4ThreeVector point;
   G4bool what = true;  
   G4int i=0,n=0;
   EInside surf;
+  
+  G4Timer time;
    
   G4Trap t1("Trap #1", 
 	    20*mm,  10*deg, 5*deg, 
 	    5*mm,   5*mm,   10*mm,    
 	    20*deg, 4*mm,   7*mm, 11*mm, 20*deg);
   
-  for(i=0; i<N; i++){
+  time.Start();
+  
+  for(i=0; i<N; i++)
+  {
     point = t1.GetPointOnSurface();
     surf  = t1.Inside(point);
     if(surf != kSurface){ n++; what = false; }  
   }
   
-  G4cout <<"Check Trap had "<<n<<" inconsistencies"<< G4endl; 
+  time.Stop();
+  
+  G4cout <<" Check Trap had "<<n<<" inconsistencies"<< G4endl; 
+  G4cout <<" Time taken was: "<<time.GetRealElapsed()<<" seconds."<<G4endl<<G4endl;
   return what;
 }
 
 G4bool checkPara(G4int N)
 {
-
+  G4cout<<"**************************************"<<G4endl;
+  G4cout<<"************* G4PARA *****************"<<G4endl;
+  G4cout<<"**************************************"<<G4endl<<G4endl;
+  
   G4ThreeVector point;
   G4bool what = true;  
   G4int i=0,n=0;
   EInside surf;
    
+  G4Timer time;
+
   G4Para t1("Para #1", 
 	    5*mm,   10*mm,  20*mm, 
 	    15*deg, 20*deg, 70*deg);
+
+  time.Start();
   
-  for(i=0; i<N; i++){
+  for(i=0; i<N; i++)
+  {
     point = t1.GetPointOnSurface();
     surf  = t1.Inside(point);
     if(surf != kSurface){ n++; what = false; }  
   }
   
-  G4cout <<"Check Para had "<<n<<" inconsistencies"<< G4endl; 
+  time.Stop();
+
+  G4cout <<" Check Para had "<<n<<" inconsistencies"<< G4endl;
+  G4cout <<" Time taken was: "<<time.GetRealElapsed()<<" seconds."<<G4endl<<G4endl;
   return what;
 }
 
 G4bool checkTrd(G4int N)
 {
-
+  G4cout<<"**************************************"<<G4endl;
+  G4cout<<"************* G4TRD ******************"<<G4endl;
+  G4cout<<"**************************************"<<G4endl<<G4endl;
+    
   G4ThreeVector point;
   G4bool what = true;  
   G4int i=0,n=0;
   EInside surf;
    
+  G4Timer time;
+
   G4Trd t1("Trd #1", 
 	    10*mm,  6*mm,  12*mm, 
 	    8*mm,  15*mm);
   
-  for(i=0; i<N; i++){
+  time.Start();
+
+  for(i=0; i<N; i++)
+  {
     point = t1.GetPointOnSurface();
     surf  = t1.Inside(point);
     if(surf != kSurface){ n++; what = false; }  
   }
   
-  G4cout <<"Check Trd had "<<n<<" inconsistencies"<< G4endl; 
+  time.Stop();
+
+  G4cout <<" Check Trd had "<<n<<" inconsistencies"<< G4endl; 
+  G4cout <<" Time taken was: "<<time.GetRealElapsed()<<" seconds."<<G4endl<<G4endl;
   return what;
 }
 
 G4bool checkSphere(G4int N)
 {
-
+  G4cout<<"**************************************"<<G4endl;
+  G4cout<<"************* G4SPHERE ***************"<<G4endl;
+  G4cout<<"**************************************"<<G4endl<<G4endl;
+  
   G4ThreeVector point;
   G4bool what = true;  
   G4int i=0,n=0;
   EInside surf;
+
+  G4Timer time;
     
   G4Sphere t1("Sphere", 
 	      8*mm,  12*mm,     
 	      43*deg,350*deg,  
 	      21*deg,50*deg);  
+  
+  time.Start();
    
-  for(i=0; i<N; i++){
+  for(i=0; i<N; i++)
+  {
     point = t1.GetPointOnSurface();
     surf  = t1.Inside(point);
     if(surf != kSurface){ n++; what = false; }  
   }
+
+  time.Stop();
   
-  G4cout <<"Check Sphere had "<<n<<" inconsistencies"<< G4endl; 
+  G4cout <<" Check Sphere had "<<n<<" inconsistencies"<< G4endl; 
+  G4cout <<" Time taken was: "<<time.GetRealElapsed()<<" seconds."<<G4endl<<G4endl;
   return what;
 } 
 
 G4bool checkPolycone(G4int N)
 {
-
+  G4cout<<"**************************************"<<G4endl;
+  G4cout<<"************* G4POLYCONE *************"<<G4endl;
+  G4cout<<"**************************************"<<G4endl<<G4endl;
+  
   G4ThreeVector point;
   G4bool what = true;  
   G4int i=0,n=0;
   EInside surf;
-   
-  G4double zPlanes[5] = {0., 1., 3.,5., 10.};
-  G4double rInner[5]  = {6., 7.,  2., 2., 10.};
+       
+  G4double zPlanes[5] = {0., 1., 3.,  5., 10.};
+  G4double rInner[5]  = {6., 7., 2.,  2., 10.};
   G4double rOuter[5]  = {8., 8., 10.,10., 15.};     
   
   G4Polycone t1("aPcone",  
 		269*deg, 342*deg,       
 		5,zPlanes,rInner,rOuter); 
+  
+  G4Timer time;
+  time.Start();
    
-  for(i=0; i<N; i++){
+  for(i=0; i<N; i++)
+  {
     point = t1.GetPointOnSurface();
     surf  = t1.Inside(point);
-    if(surf != kSurface){ 
-      n++; what = false;
-      //G4cout <<" x "<<point.x()<<" y "<<point.y()<<" z "<<point.z()<<G4endl;
-     }  
+    if(surf != kSurface){ n++; what = false; }  
   }
   
-  G4cout <<"Check PolyCone had "<<n<<" inconsistencies"<< G4endl; 
+  time.Stop();
+  
+  G4cout <<" Check PolyCone had "<<n<<" inconsistencies"<< G4endl; 
+  G4cout <<" Time taken was: "<<time.GetRealElapsed()<<" seconds."<<G4endl<<G4endl;
   return what;
 }  
 
 G4bool checkTet(G4int N)
 {
-
+  G4cout<<"**************************************"<<G4endl;
+  G4cout<<"************* G4TET ******************"<<G4endl;
+  G4cout<<"**************************************"<<G4endl<<G4endl;
+  
   G4ThreeVector point;
   G4bool what = true;  
   G4int i=0,n=0;
@@ -385,40 +533,142 @@ G4bool checkTet(G4int N)
 	   G4ThreeVector(0.,3.*cm,0.*cm),
 	   G4ThreeVector(10.,10.*cm,5.*cm),
 	   G4ThreeVector(0.*cm,5.*cm,5.*cm)); 
-   
-  for(i=0; i<N; i++){
+  
+  G4Timer time;
+  time.Start();
+  
+  for(i=0; i<N; i++)
+  {
     point = t1.GetPointOnSurface();
     surf  = t1.Inside(point);
-    if(surf != kSurface){ 
-      n++; what = false;
-     }  
+    if(surf != kSurface){ n++; what = false; }  
   }
+
+  time.Stop();
   
-  G4cout <<"Check Tet had "<<n<<" inconsistencies"<< G4endl; 
+  G4cout <<" Check Tet had "<<n<<" inconsistencies"<< G4endl; 
+  G4cout <<" Time taken was: "<<time.GetRealElapsed()<<" seconds."<<G4endl<<G4endl;
   return what;
 }
+
+G4bool checkPolyhedra(G4int N)
+{
+  G4cout<<"**************************************"<<G4endl;
+  G4cout<<"************* G4POLYHEDRA ************"<<G4endl;
+  G4cout<<"**************************************"<<G4endl<<G4endl;
+ 
+  G4ThreeVector point;
+  G4bool what = true;   
+  G4int i=0,n=0;
+  EInside surf;
+       
+  G4double zPlanes[5] = {-1., 10., 15., 25., 30.};
+  G4double rInner[5]  = {0., 5., 0.,  7., 1.};
+  G4double rOuter[5]  = {21., 6., 15., 15., 38.}; 
+    
+//   G4double z[10] = {30.,25.,15.,10.,-1.,-1.,10.,15.,25.,30.};
+//   G4double r[10] = {1.,7.,0.,5.,0.,21.,6.,15.,15.,38.};
+    
+  G4Polyhedra t1("aPhedra",  
+		53.*deg, 163.*deg,         
+		8,5,zPlanes,rInner,rOuter); 
+     
+//   G4Polyhedra t1("aPhedra",  
+// 		 53.*deg, 163.*deg,         
+// 		 8, 10, r, z);
   
+  G4Timer time;
+  time.Start();
   
+  for(i=0; i<N; i++)
+  {
+    point = t1.GetPointOnSurface();  
+    surf  = t1.Inside(point);
+    if(surf != kSurface)
+    { 
+      n++; what = false;
+      G4cout <<" x "<<point.x()<<" y "<<point.y()<<" z "<<point.z()<<G4endl;
+    }  
+  }
+  
+  time.Stop();
+
+  G4cout <<" Check Polyhedra had "<<n<<" inconsistencies"<< G4endl; 
+  G4cout <<" Time taken was: "<<time.GetRealElapsed()<<" seconds."<<G4endl<<G4endl;
+  return what;
+}   
+
+G4bool checkEllipticalCone(G4int N)
+{
+  G4cout<<"**************************************"<<G4endl;
+  G4cout<<"************* G4ELLIPTICALCONE *******"<<G4endl;
+  G4cout<<"**************************************"<<G4endl<<G4endl;
+  
+  G4ThreeVector point;
+  G4bool what = true;   
+  G4int i=0,n=0;
+  EInside surf;
+       
+  G4EllipticalCone t1("aElliCone",  
+		      20*cm,25*cm,20*cm, 10*cm); 
+   
+  G4Timer time;
+  time.Start();
+  
+  for(i=0; i<N; i++)
+  {
+    point = t1.GetPointOnSurface();  
+    surf  = t1.Inside(point);
+    if(surf != kSurface){ n++; what = false; }  
+  }
+
+  time.Stop();
+  
+  G4cout <<" Check EllipticalCone had "<<n<<" inconsistencies"<< G4endl; 
+  G4cout <<" Time taken was: "<<time.GetRealElapsed()<<" seconds."<<G4endl<<G4endl;
+  return what;
+}   
+
+   
 int main() 
 { 
-  G4bool what;     
+  G4bool what;    
+  G4int N = 1000000;
+  
+  G4cout <<G4endl;
+  G4cout <<"********************************************************************************"<<G4endl;
+  G4cout <<"**************** TEST GET POINT ON SURFACE METHOD ******************************"<<G4endl;
+  G4cout <<"******************** FOR "<<N<<" RANDOM POINTS *********************************"<<G4endl;
+  G4cout <<"********************************************************************************"<<G4endl;
    
-   what = checkBox(1000000);        
-   what = checkEllipsoid(1000000);    
-   what = checkHype(1000000);       
-   what = checkEllipticalTube(1000000);          
-   what = checkOrb(1000000); 
-   what = checkTorus(1000000);
-   what = checkTubs(1000000);     
-   what = checkCons(1000000);     
-   what = checkTrap(1000000);      
-   what = checkPara(1000000);  
-   what = checkTrd(1000000); 
-   what = checkSphere(1000000);  
-   what = checkPolycone(1000000);    
-   what = checkTet(1000000);
-   return 0;
+  G4cout <<G4endl<<G4endl;
+
+  what = checkBox(1000000);  
+  what = checkEllipsoid(1000000);    
+  what = checkHype(1000000);        
+  what = checkEllipticalTube(1000000);           
+  what = checkOrb(1000000);    
+  what = checkTorus(1000000);    
+  what = checkTubs(1000000);     
+  what = checkCons(1000000);                
+  what = checkTrap(1000000);          
+  what = checkPara(1000000);        
+  what = checkTrd(1000000);   
+  what = checkSphere(1000000);  
+  what = checkPolycone(1000000);           
+  what = checkTet(1000000);           
+  what = checkPolyhedra(1000000);      
+  what = checkEllipticalCone(1000000);
+  
+  G4cout <<G4endl;
+    
+  G4cout <<"********************************************************************************"<<G4endl;
+  G4cout <<"********************** END OF TEST - THANK YOU!! *******************************"<<G4endl;
+  G4cout <<"********************************************************************************"<<G4endl;  
+  G4cout <<G4endl;
+
+  return 0;     
 }
-      
+       
    
  
