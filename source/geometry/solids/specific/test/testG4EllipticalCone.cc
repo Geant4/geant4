@@ -52,8 +52,8 @@ G4bool testG4EllipticalCone()
     dir *= 1/dir.mag();
     
     G4EllipticalCone t1("Solid EllipticalCone #1",
-			2*cm,       // xSemiAxis
-			1*cm,       // ySemiAxis
+			2*mm,       // xSemiAxis
+			1*mm,       // ySemiAxis
 			15*cm,      // zheight   
 			10*cm) ;    // zTopCut
 		           
