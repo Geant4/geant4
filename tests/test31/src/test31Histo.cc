@@ -660,7 +660,7 @@ void test31Histo::ElectronTest()
   G4EmCalculator cal;
   cal.SetVerbose(0);
 
-  //  const G4ParticleDefinition* part = cal.FindParticle("e-");
+  //const G4ParticleDefinition* part = cal.FindParticle("e-");
   const G4ParticleDefinition* part = cal.FindParticle("e+");
 
   G4bool imu = true;
@@ -686,9 +686,11 @@ void test31Histo::ElectronTest()
     G4cout << G4endl;  
     for(i=0; i<3; i++) {
       const G4Material* mat = mman->FindOrBuildMaterial(nm[i]);
+      //      G4double fact = gram/(barn*cm3*mat->GetDensity());
+      G4double fact = 1.0;
       G4cout << "###  Material ### " << mat->GetName() << "   Cross Sections: " <<G4endl;  
       for(j=0; j<30; j++) {
-        cs  = (cal.ComputeCrossSectionPerVolume(e,part,"eIoni",mat,cut[j]))/barn;
+        cs  = fact*(cal.ComputeCrossSectionPerVolume(e,part,"eIoni",mat,cut[j]));
 	G4cout << cs << " ";
       }
       G4cout << G4endl;  
