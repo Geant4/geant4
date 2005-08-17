@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.24 2005-08-17 17:22:59 gum Exp $
+// $Id: G4Scintillation.cc,v 1.25 2005-08-17 17:30:25 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,9 @@
 // Version:     1.0
 // Created:     1998-11-07  
 // Author:      Peter Gumplinger
-// Updated:     2005-07-28 by Peter Gumplinger
+// Updated:     2005-08-17 by Peter Gumplinger
+//              > change variable name MeanNumPhotons -> MeanNumberOfPhotons
+//              2005-07-28 by Peter Gumplinger
 //              > add G4ProcessType to constructor
 //              2004-08-05 by Peter Gumplinger
 //              > changed StronglyForced back to Forced in GetMeanLifeTime

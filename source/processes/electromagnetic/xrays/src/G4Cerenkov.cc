@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc,v 1.19 2005-08-17 17:23:22 gum Exp $
+// $Id: G4Cerenkov.cc,v 1.20 2005-08-17 17:30:39 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,9 @@
 // Version:     2.1
 // Created:     1996-02-21  
 // Author:      Juliet Armstrong
-// Updated:     2005-07-28 by Peter Gumplinger
+// Updated:     2005-08-17 by Peter Gumplinger
+//              > change variable name MeanNumPhotons -> MeanNumberOfPhotons
+//              2005-07-28 by Peter Gumplinger
 //              > add G4ProcessType to constructor
 //              2001-09-17, migration of Materials to pure STL (mma) 
 //              2000-11-12 by Peter Gumplinger
