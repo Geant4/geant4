@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc,v 1.18 2005-07-28 23:58:44 gum Exp $
+// $Id: G4Cerenkov.cc,v 1.19 2005-08-17 17:23:22 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -39,7 +39,7 @@
 //              2000-11-12 by Peter Gumplinger
 //              > add check on CerenkovAngleIntegrals->IsFilledVectorExist()
 //              in method GetAverageNumberOfPhotons 
-//              > and a test for MeanNumPhotons <= 0.0 in DoIt
+//              > and a test for MeanNumberOfPhotons <= 0.0 in DoIt
 //              2000-09-18 by Peter Gumplinger
 //              > change: aSecondaryPosition=x0+rand*aStep.GetDeltaPosition();
 //                        aSecondaryTrack->SetTouchable(0);
@@ -150,10 +150,10 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         if (!Rindex) 
 	   return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep);
 
-	G4double MeanNumPhotons = 
+	G4double MeanNumberOfPhotons = 
                  GetAverageNumberOfPhotons(aParticle,aMaterial,Rindex);
 
-        if (MeanNumPhotons <= 0.0) {
+        if (MeanNumberOfPhotons <= 0.0) {
 
                 // return unchanged particle and no secondaries
 
@@ -166,9 +166,9 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         G4double step_length;
         step_length = aStep.GetStepLength();
 
-	MeanNumPhotons = MeanNumPhotons * step_length;
+	MeanNumberOfPhotons = MeanNumberOfPhotons * step_length;
 
-	G4int NumPhotons = (G4int) G4Poisson(MeanNumPhotons);
+	G4int NumPhotons = (G4int) G4Poisson(MeanNumberOfPhotons);
 
 	if (NumPhotons <= 0) {
 
@@ -440,12 +440,12 @@ G4Cerenkov::GetContinuousStepLimit(const G4Track& aTrack,
                 aMaterialPropertiesTable->GetProperty("RINDEX");
         if (!Rindex) return DBL_MAX;
 
-	G4double MeanNumPhotons = 
+	G4double MeanNumberOfPhotons = 
                  GetAverageNumberOfPhotons(aParticle,aMaterial,Rindex);
 
-        if(MeanNumPhotons <= 0.0) return DBL_MAX;
+        if(MeanNumberOfPhotons <= 0.0) return DBL_MAX;
 
-	G4double StepLimit = fMaxPhotons / MeanNumPhotons;
+	G4double StepLimit = fMaxPhotons / MeanNumberOfPhotons;
 
 	return StepLimit;
 }

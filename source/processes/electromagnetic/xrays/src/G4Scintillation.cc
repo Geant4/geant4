@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.23 2005-07-28 23:58:58 gum Exp $
+// $Id: G4Scintillation.cc,v 1.24 2005-08-17 17:22:59 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -38,7 +38,7 @@
 //              2004-08-05 by Peter Gumplinger
 //              > changed StronglyForced back to Forced in GetMeanLifeTime
 //              2002-11-21 by Peter Gumplinger
-//              > change to use G4Poisson for small MeanNumPhotons
+//              > change to use G4Poisson for small MeanNumberOfPhotons
 //              2002-11-07 by Peter Gumplinger
 //              > now allow for fast and slow scintillation component
 //              2002-11-05 by Peter Gumplinger
@@ -179,15 +179,15 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         ScintillationYield = YieldFactor * ScintillationYield;
 
-	G4double MeanNumPhotons = ScintillationYield * TotalEnergyDeposit;
+	G4double MeanNumberOfPhotons = ScintillationYield * TotalEnergyDeposit;
 
         G4int NumPhotons;
-        if (MeanNumPhotons > 10.) {
-           G4double sigma = ResolutionScale * sqrt(MeanNumPhotons);
-           NumPhotons = G4int(G4RandGauss::shoot(MeanNumPhotons,sigma)+0.5);
+        if (MeanNumberOfPhotons > 10.) {
+          G4double sigma = ResolutionScale * sqrt(MeanNumberOfPhotons);
+          NumPhotons = G4int(G4RandGauss::shoot(MeanNumberOfPhotons,sigma)+0.5);
         }
         else {
-           NumPhotons = G4int(G4Poisson(MeanNumPhotons));
+          NumPhotons = G4int(G4Poisson(MeanNumberOfPhotons));
         }
 
 	if (NumPhotons <= 0) {
