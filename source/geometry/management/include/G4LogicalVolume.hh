@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.hh,v 1.23 2005-05-25 14:57:52 gcosmo Exp $
+// $Id: G4LogicalVolume.hh,v 1.24 2005-08-18 18:41:19 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -80,16 +80,18 @@
 //      per content.
 //    const G4VisAttributes* fVisAttributes
 //    - Pointer (possibly 0) to visualization attributes.
-//    G4FastSimulationManager* fFastSimulationManager
-//    - Pointer (possibly 0) to G4FastSimulationManager object.
 //    G4Region* fRegion
 //    - Pointer to the cuts region (if any)
 //    G4MaterialCutsCouple* fCutsCouple
 //    - Pointer (possibly 0) to associated production cuts.
-//    G4bool fIsEnvelope
-//    - Flags if the Logical Volume is an envelope for a FastSimulationManager.
 //    G4double fBiasWeight
 //    - Weight used in the event biasing technique.
+//
+// Following data members has been moved to G4Region - M.Asai (Aug/18/2005)
+//    G4FastSimulationManager* fFastSimulationManager
+//    - Pointer (possibly 0) to G4FastSimulationManager object.
+//    G4bool fIsEnvelope
+//    - Flags if the Logical Volume is an envelope for a FastSimulationManager.
 
 // History:
 // 12.11.04 G.Cosmo: Added GetMass() method for computing mass of the tree
@@ -267,15 +269,17 @@ class G4LogicalVolume
       // Gets and sets visualization attributes. A copy of 'VA' on the heap
       // will be made in the case the call with a const reference is used.
 
-    inline void BecomeEnvelopeForFastSimulation(G4FastSimulationManager* );
-      // Makes this an Envelope for given FastSimulationManager. 
-      // Ensures that all its daughter volumes get it too - unless they 
-      // have one already.
-    void  ClearEnvelopeForFastSimulation(G4LogicalVolume* motherLV= 0);
-      // Erase volume's Envelope status and propagate the FastSimulationManager 
-      // of its mother volume to itself and its daughters.
+    // Following methods have been moved to G4Region - M.Asai (Aug/18/2005)
+    //inline void BecomeEnvelopeForFastSimulation(G4FastSimulationManager* );
+    //  // Makes this an Envelope for given FastSimulationManager. 
+    //  // Ensures that all its daughter volumes get it too - unless they 
+    //  // have one already.
+    //void  ClearEnvelopeForFastSimulation(G4LogicalVolume* motherLV= 0);
+    //  // Erase volume's Envelope status and propagate the FastSimulationManager 
+    //  // of its mother volume to itself and its daughters.
+
     inline G4FastSimulationManager* GetFastSimulationManager () const;
-      // Gets current FastSimulationManager pointer.
+      // Gets current FastSimulationManager pointer if exists, otherwise null.
 
     inline void SetBiasWeight (G4double w);
     inline G4double GetBiasWeight() const;
@@ -283,14 +287,15 @@ class G4LogicalVolume
 
   private:
 
-    void  SetFastSimulationManager (G4FastSimulationManager* pPA, 
-                                    G4bool IsEnvelope);
-      // Sets the fast simulation manager. Private method called by the
-      // public SetIsEnvelope method with IsEnvelope = true. It is 
-      // then called recursivaly to the daughters to propagate the 
-      // FastSimulationManager pointer with IsEnvelope = false.
-
-    G4LogicalVolume* FindMotherLogicalVolumeForEnvelope(); 
+    // Following methods have been moved to G4Region - M.Asai (Aug/18/2005)
+    //void  SetFastSimulationManager (G4FastSimulationManager* pPA, 
+    //                                G4bool IsEnvelope);
+    //  // Sets the fast simulation manager. Private method called by the
+    //  // public SetIsEnvelope method with IsEnvelope = true. It is 
+    //  // then called recursivaly to the daughters to propagate the 
+    //  // FastSimulationManager pointer with IsEnvelope = false.
+    //
+    //G4LogicalVolume* FindMotherLogicalVolumeForEnvelope(); 
 
     G4LogicalVolume(const G4LogicalVolume&);
     G4LogicalVolume& operator=(const G4LogicalVolume&);
@@ -327,17 +332,19 @@ class G4LogicalVolume
       // Mass of the logical volume tree.
     const G4VisAttributes* fVisAttributes;
       // Pointer (possibly 0) to visualization attributes.
-    G4FastSimulationManager* fFastSimulationManager;
-      // Pointer (possibly 0) to G4FastSimulationManager object.
     G4Region* fRegion;
       // Pointer to the cuts region (if any)
     G4MaterialCutsCouple* fCutsCouple;
       // Pointer (possibly 0) to associated production cuts.
-    G4bool fIsEnvelope;
-      // Flags if the Logical Volume is an envelope for a
-      // FastSimulationManager.
     G4double fBiasWeight;
       // Weight used in the event biasing technique.
+
+// Following data members has been moved to G4Region - M.Asai (Aug/18/2005)
+//    G4FastSimulationManager* fFastSimulationManager;
+//      // Pointer (possibly 0) to G4FastSimulationManager object.
+//    G4bool fIsEnvelope;
+//      // Flags if the Logical Volume is an envelope for a
+//      // FastSimulationManager.
 };
 
 #include "G4LogicalVolume.icc"
