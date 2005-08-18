@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.14 2005-04-04 09:28:45 gcosmo Exp $
+// $Id: G4Region.cc,v 1.15 2005-08-18 16:51:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,8 @@
 // *******************************************************************
 //
 G4Region::G4Region(const G4String& pName)
-  : fName(pName), fRegionMod(true), fCut(0), fUserInfo(0), fUserLimits(0)
+  : fName(pName), fRegionMod(true), fCut(0), fUserInfo(0), fUserLimits(0),
+    fFastSimulationManager(0), fWorldPhys(0)
 {
   G4RegionStore* rStore = G4RegionStore::GetInstance();
   if (rStore->GetRegion(pName,false))
@@ -256,3 +257,44 @@ void G4Region::UpdateMaterialList()
     ScanVolumeTree(*pLV, true);
   }
 }
+
+// *******************************************************************
+// SetWorld:
+//  - Set the world physical volume if this region belongs to this
+//    world. If the given pointer is null, reset the pointer.
+// *******************************************************************
+//
+void G4Region::SetWorld(G4VPhysicalVolume* wp)
+{
+  if(!wp)
+  { fWorldPhys = 0; }
+  else
+  { if(BelongsTo(wp)) fWorldPhys = wp; }
+
+  return;
+}
+
+// *******************************************************************
+// BelongsTo:
+//  - Returns whether this region belongs to the given physical volume
+//    (recursively scanned to the bottom of the hierarchy)
+// *******************************************************************
+// 
+G4bool G4Region::BelongsTo(G4VPhysicalVolume* thePhys)
+{
+  if(thePhys->GetLogicalVolume()->GetRegion()==this) return true;
+
+  G4int nDaughters = thePhys->GetLogicalVolume()->GetNoDaughters();
+  while((nDaughters--)>0)
+  {
+    G4VPhysicalVolume* aPhys = thePhys->GetLogicalVolume()->GetDaughter(nDaughters);
+    if(aPhys->GetLogicalVolume()->GetRegion()==this) return true;
+    if(BelongsTo(aPhys)) return true;
+  }
+  return false;
+}
+
+
+
+
+
