@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.cc,v 1.17 2005-08-04 08:19:04 vnivanch Exp $
+// $Id: G4MuBremsstrahlungModel.cc,v 1.18 2005-08-18 14:38:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -81,6 +81,7 @@ using namespace std;
 G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p,
                                                  const G4String& nam)
   : G4VEmModel(nam),
+  particle(0),
   lowestKinEnergy(1.0*GeV),
   minThreshold(1.0*keV),
   nzdat(5),
@@ -468,16 +469,17 @@ void G4MuBremsstrahlungModel::MakeSamplingTables()
 vector<G4DynamicParticle*>* G4MuBremsstrahlungModel::SampleSecondaries(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp,
-                                   G4double minEnergy,
+                                   G4double tmin,
                                    G4double maxEnergy)
 {
+
   G4double kineticEnergy = dp->GetKineticEnergy();
   // check against insufficient energy
   G4double tmax = min(kineticEnergy, maxEnergy);
-  G4double tmin = min(tmax, minEnergy);
+  if(tmin >= tmax) return 0;
 
-  static G4double ysmall = -100. ;
-  static G4double ytablelow = -5. ;
+  static const G4double ysmall = -100. ;
+  static const G4double ytablelow = -5. ;
 
   G4ParticleMomentum partDirection = dp->GetMomentumDirection();
 
@@ -551,14 +553,14 @@ vector<G4DynamicParticle*>* G4MuBremsstrahlungModel::SampleSecondaries(
     x = exp(y) ;
 
     v = cutFixed*exp(x*log(tmax/cutFixed)) ;
-    
+
   } while ( v <= 0.);
 
   // create G4DynamicParticle object for the Gamma
   G4double gEnergy = v;
 
   // sample angle
-  G4double gam  = totalEnergy/mass; 
+  G4double gam  = totalEnergy/mass;
   G4double rmax = gam*min(1.0, totalEnergy/gEnergy - 1.0);
   rmax *= rmax;
   x = G4UniformRand()*rmax/(1.0 + rmax);

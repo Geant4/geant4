@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.cc,v 1.19 2005-08-04 08:19:04 vnivanch Exp $
+// $Id: G4MuBetheBlochModel.cc,v 1.20 2005-08-18 14:38:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -245,12 +245,12 @@ G4double G4MuBetheBlochModel::CrossSectionPerVolume(const G4Material* material,
 vector<G4DynamicParticle*>* G4MuBetheBlochModel::SampleSecondaries(
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle* dp,
-                                   G4double minEnergy,
+                                   G4double minKinEnergy,
                                    G4double maxEnergy)
 {
   G4double tmax = MaxSecondaryKinEnergy(dp);
   G4double maxKinEnergy = min(maxEnergy,tmax);
-  G4double minKinEnergy = min(minEnergy,maxKinEnergy);
+  if(minKinEnergy >= maxKinEnergy) return 0;
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double totEnergy     = kineticEnergy + mass;
