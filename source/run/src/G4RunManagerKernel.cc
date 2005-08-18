@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.27 2005-06-17 21:07:13 asaim Exp $
+// $Id: G4RunManagerKernel.cc,v 1.28 2005-08-18 16:49:56 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -325,8 +325,8 @@ void G4RunManagerKernel::ResetNavigator()
 
 void G4RunManagerKernel::UpdateRegion()
 {
-  G4RegionStore::GetInstance()->UpdateMaterialList();
-  G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable();
+  G4RegionStore::GetInstance()->UpdateMaterialList(currentWorld);
+  G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable(currentWorld);
 }
 
 void G4RunManagerKernel::BuildPhysicsTables()
@@ -346,14 +346,18 @@ void G4RunManagerKernel::BuildPhysicsTables()
 
 void G4RunManagerKernel::CheckRegions()
 {
+  G4RegionStore::GetInstance()->SetWorldVolume();
+
   for(size_t i=0;i<G4RegionStore::GetInstance()->size();i++)
   { 
     G4Region* region = (*(G4RegionStore::GetInstance()))[i];
+    if(region->GetWorldPhysical()!=currentWorld) continue;
     G4ProductionCuts* cuts = region->GetProductionCuts();
     if(!cuts)
     {
       G4cerr << "Warning : Region <" << region->GetName()
-             << "> does not have specific production cuts." << G4endl;
+             << "> does not have specific production cuts," << G4endl
+             << "even though it appears in the current tracking world." << G4endl;
       G4cerr << "Default cuts are used for this region." << G4endl;
       region->SetProductionCuts(
           G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
@@ -377,7 +381,13 @@ void G4RunManagerKernel::DumpRegion(G4Region* region) const
   else
   {
     G4cout << G4endl;
-    G4cout << "Region " << region->GetName() << G4endl;
+    G4cout << "Region <" << region->GetName() << "> -- appears in <" 
+           << region->GetWorldPhysical()->GetName() << "> world volume" << G4endl;
+    if(region->GetWorldPhysical()!=currentWorld)
+    {
+      G4cout << G4endl;
+      return;
+    }
     G4cout << " Materials : ";
     std::vector<G4Material*>::const_iterator mItr = region->GetMaterialIterator();
     size_t nMaterial = region->GetNumberOfMaterials();
