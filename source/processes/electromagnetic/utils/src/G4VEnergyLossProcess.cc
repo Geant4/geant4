@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.61 2005-08-18 10:25:37 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.62 2005-08-18 10:35:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -758,7 +758,7 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
 
   if (tcut < tmax) {
     std::vector<G4DynamicParticle*>* newp = SecondariesPostStep(
-      currentModel, currentCouple, dynParticle, tmax);
+      currentModel, currentCouple, dynParticle, tcut);
 
     if(newp) {
       G4int num = newp->size();
