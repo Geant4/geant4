@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracer.cc,v 1.16 2005-07-17 13:59:24 allison Exp $
+// $Id: G4RayTracer.cc,v 1.17 2005-08-18 17:08:25 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -199,8 +199,11 @@ G4bool G4RayTracer::CreateBitMap()
   G4bool succeeded;
 
 // Confirm process(es) of Geantino is initialized
-  G4RegionStore::GetInstance()->UpdateMaterialList();
-  G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable();
+  G4VPhysicalVolume* pWorld =
+	G4TransportationManager::GetTransportationManager()->
+	GetNavigatorForTracking()->GetWorldVolume();
+  G4RegionStore::GetInstance()->UpdateMaterialList(pWorld);
+  G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable(pWorld);
   G4ProcessVector* pVector
     = G4Geantino::GeantinoDefinition()->GetProcessManager()->GetProcessList();
   for (G4int j=0; j < pVector->size(); ++j) {
@@ -242,9 +245,6 @@ G4bool G4RayTracer::CreateBitMap()
       G4ThreeVector rayPosition(eyePosition);
       G4bool interceptable = true;
       // Check if rayPosition is in the world.
-      G4VPhysicalVolume* pWorld =
-	G4TransportationManager::GetTransportationManager()->
-	GetNavigatorForTracking()->GetWorldVolume ();
       EInside whereisit =
 	pWorld->GetLogicalVolume()->GetSolid()->Inside(rayPosition);
       if (whereisit != kInside) {
