@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.60 2005-08-18 10:07:46 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.61 2005-08-18 10:25:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -664,8 +664,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
   G4VEmModel* currentModel = SelectModel(preStepScaledEnergy);
-  G4double tmax = currentModel->MaxSecondaryKinEnergy(dynParticle);
-  tmax = std::min(tmax,(*theCuts)[currentMaterialIndex]);
+  G4double tmax = std::min(currentModel->MaxSecondaryKinEnergy(dynParticle),
+                           (*theCuts)[currentMaterialIndex]);
 
 /*
   //  G4double eloss0 = eloss;
@@ -723,13 +723,13 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
-                                                  const G4Step& step)
+                                                      const G4Step& step)
 {
   fParticleChange.InitializeForPostStep(track);
-  G4double kinEnergy = track.GetKineticEnergy();
-  if(kinEnergy == 0.0) return G4VContinuousDiscreteProcess::PostStepDoIt(track,step);
+  G4double finalT = track.GetKineticEnergy();
+  if(finalT == 0.0) return &fParticleChange;
 
-  G4double postStepScaledEnergy = kinEnergy*massRatio;
+  G4double postStepScaledEnergy = finalT*massRatio;
   /*
   if(-1 < verboseLevel) {
     G4cout << GetProcessName()
@@ -743,7 +743,7 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
     if(preStepLambda<lx && 1 < verboseLevel) {
       G4cout << "WARING: for " << particle->GetParticleName()
              << " and " << GetProcessName()
-             << " E(MeV)= " << kinEnergy/MeV
+             << " E(MeV)= " << finalT/MeV
              << " preLambda= " << preStepLambda << " < " << lx << " (postLambda) "
 	     << G4endl;
     }
@@ -760,15 +760,18 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
     std::vector<G4DynamicParticle*>* newp = SecondariesPostStep(
       currentModel, currentCouple, dynParticle, tmax);
 
-    G4int num = newp->size();
-    fParticleChange.SetNumberOfSecondaries(num);
-    for (G4int i=0; i<num; i++) {
-      fParticleChange.AddSecondary((*newp)[i]);
+    if(newp) {
+      G4int num = newp->size();
+      fParticleChange.SetNumberOfSecondaries(num);
+      for (G4int i=0; i<num; i++) {
+        fParticleChange.AddSecondary((*newp)[i]);
+      }
+      delete newp;
     }
-    delete newp;
+
+    finalT = fParticleChange.GetProposedKineticEnergy();
   }
 
-  G4double finalT = fParticleChange.GetProposedKineticEnergy();
   /*
   if(-1 < verboseLevel) {
     G4cout << "::PostStepDoIt: Sample secondary; Efin= " << finalT/MeV
