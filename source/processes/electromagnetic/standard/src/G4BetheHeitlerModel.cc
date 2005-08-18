@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.cc,v 1.4 2005-06-24 16:01:03 vnivanch Exp $
+// $Id: G4BetheHeitlerModel.cc,v 1.5 2005-08-18 15:05:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -196,17 +196,18 @@ std::vector<G4DynamicParticle*>* G4BetheHeitlerModel::SampleSecondaries(
 
   G4double epsil ;
   G4double epsil0 = electron_mass_c2/GammaEnergy ;
+  if(epsil0 > 1.0) return 0;
 
   // do it fast if GammaEnergy < 2. MeV
   static const G4double Egsmall=2.*MeV;
 
-  if (GammaEnergy < Egsmall) { 
+  if (GammaEnergy < Egsmall) {
 
-    epsil = epsil0 + (0.5-epsil0)*G4UniformRand(); 
+    epsil = epsil0 + (0.5-epsil0)*G4UniformRand();
 
-  } else {  
+  } else {
     // now comes the case with GammaEnergy >= 2. MeV
-    // select randomly one element constituing the material  
+    // select randomly one element constituing the material
     const G4Element* anElement = SelectRandomAtom(aMaterial, theGamma, GammaEnergy);
 
     // Extract Coulomb factor for this Element
@@ -223,7 +224,7 @@ std::vector<G4DynamicParticle*>* G4BetheHeitlerModel::SampleSecondaries(
     G4double epsilmin = max(epsil0,epsil1) , epsilrange = 0.5 - epsilmin;
 
     //
-    // sample the energy rate of the created electron (or positron) 
+    // sample the energy rate of the created electron (or positron)
     //
     //G4double epsil, screenvar, greject ;
     G4double  screenvar, greject ;

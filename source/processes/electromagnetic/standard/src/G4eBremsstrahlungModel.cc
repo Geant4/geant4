@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.26 2005-08-04 08:19:45 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.cc,v 1.27 2005-08-18 15:05:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -636,10 +636,9 @@ std::vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondaries(
 // A modified version of the random number techniques of Butcher & Messel is used
 //    (Nuc Phys 20(1960),15).
 {
-  std::vector<G4DynamicParticle*>* newp = new std::vector<G4DynamicParticle*>;
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double tmax = min(maxEnergy, kineticEnergy);
-  if(tmin > tmax) tmin = tmax;
+  if(tmin >= tmax) return 0;
 
 //
 // GEANT4 internal units.
@@ -825,6 +824,7 @@ std::vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondaries(
   fParticleChange->SetProposedKineticEnergy(kineticEnergy);
   
   // create G4DynamicParticle object for the Gamma
+  std::vector<G4DynamicParticle*>* newp = new std::vector<G4DynamicParticle*>;
   G4DynamicParticle* g = new G4DynamicParticle(theGamma,gammaDirection,gammaEnergy);
   newp->push_back(g);
   return newp;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.9 2005-06-16 16:06:36 vnivanch Exp $
+// $Id: G4BraggModel.cc,v 1.10 2005-08-18 15:05:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,7 +31,7 @@
 // File name:   G4BraggModel
 //
 // Author:        Vladimir Ivanchenko
-// 
+//
 // Creation date: 03.01.2002
 //
 // Modifications: 
@@ -174,12 +174,12 @@ G4double G4BraggModel::CrossSectionPerVolume(
 vector<G4DynamicParticle*>* G4BraggModel::SampleSecondaries(
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle* dp,
-                                   G4double tmin,
+                                   G4double xmin,
                                    G4double maxEnergy)
 {
   G4double tmax = MaxSecondaryKinEnergy(dp);
   G4double xmax = min(tmax, maxEnergy);
-  G4double xmin = min(xmax,tmin);
+  if(xmin >= xmax) return 0;
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double energy  = kineticEnergy + mass;

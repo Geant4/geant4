@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc,v 1.21 2005-07-25 17:53:59 vnivanch Exp $
+// $Id: G4MollerBhabhaModel.cc,v 1.22 2005-08-18 15:05:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -252,9 +252,8 @@ std::vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondaries(
                                    G4double tmin,
                                    G4double maxEnergy)
 {
-  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
   G4double tmax = std::min(maxEnergy, MaxSecondaryKinEnergy(dp));
-  if(tmin > tmax) tmin = tmax;
+  if(tmin >= tmax) return 0;
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double energy = kineticEnergy + electron_mass_c2;
@@ -359,6 +358,7 @@ std::vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondaries(
   }
 
   // create G4DynamicParticle object for delta ray
+  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
   G4DynamicParticle* delta = new G4DynamicParticle(theElectron,
 						   deltaDirection,deltaKinEnergy);
   vdp->push_back(delta);

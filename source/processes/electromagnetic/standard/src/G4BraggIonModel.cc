@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc,v 1.7 2005-06-16 16:06:36 vnivanch Exp $
+// $Id: G4BraggIonModel.cc,v 1.8 2005-08-18 15:05:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -97,7 +97,7 @@ void G4BraggIonModel::Initialise(const G4ParticleDefinition* p,
 {
   if(p != particle) SetParticle(p);
   G4String pname = particle->GetParticleName();
-  if(particle->GetParticleType() == "nucleus" && 
+  if(particle->GetParticleType() == "nucleus" &&
      pname != "deuteron" && pname != "triton") isIon = true;
 
   if(pParticleChange)
@@ -176,12 +176,12 @@ G4double G4BraggIonModel::CrossSectionPerVolume(const G4Material* material,
 std::vector<G4DynamicParticle*>* G4BraggIonModel::SampleSecondaries(
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle* dp,
-                                   G4double minEnergy,
+                                   G4double xmin,
                                    G4double maxEnergy)
 {
   G4double tmax = MaxSecondaryKinEnergy(dp);
   G4double xmax = min(tmax, maxEnergy);
-  G4double xmin = min(xmax, minEnergy);
+  if(xmin >= xmax) return 0;
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double energy  = kineticEnergy + mass;
