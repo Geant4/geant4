@@ -54,7 +54,7 @@ class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
 class XrayFluoDetectorMessenger;
-class XrayFluoMaterials;
+class XrayFluoNistMaterials;
 
 //class XrayFluoSD;
 //class XrayFluoVDetectorType;
@@ -190,7 +190,7 @@ private:
   G4VPhysicalVolume* physiGrain;
 
   //materials management
-  XrayFluoMaterials* materials;
+  XrayFluoNistMaterials* materials;
 
   G4Material*        OhmicPosMaterial;
   G4Material*        OhmicNegMaterial; 

@@ -52,7 +52,7 @@
 #include "G4ios.hh"
 #include "G4PVReplica.hh"
 #include "G4UserLimits.hh"
-#include "XrayFluoMaterials.hh"
+#include "XrayFluoNistMaterials.hh"
 
 
 #include "G4Region.hh"
@@ -78,7 +78,7 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
     defaultMaterial(0),HPGeSD(0)
   
 { 
-  materials = XrayFluoMaterials::GetInstance();
+  materials = XrayFluoNistMaterials::GetInstance();
  
   DefineDefaultMaterials();
 
@@ -202,11 +202,11 @@ void XrayFluoDetectorConstruction::DefineDefaultMaterials()
   //define materials of the apparate
 
   sampleMaterial = materials->GetMaterial("MadaBasalt");
-  Dia1Material = materials->GetMaterial("Lead");
+  Dia1Material = materials->GetMaterial("G4_Pb");
   Dia3Material = materials->GetMaterial("Galactic");
-  pixelMaterial = materials->GetMaterial("Silicon");
-  OhmicPosMaterial = materials->GetMaterial("Copper");
-  OhmicNegMaterial = materials->GetMaterial("Lead");
+  pixelMaterial = materials->GetMaterial("G4_Si");
+  OhmicPosMaterial = materials->GetMaterial("G4_Cu");
+  OhmicNegMaterial = materials->GetMaterial("G4_Pb");
   defaultMaterial = materials->GetMaterial("Galactic");
 
   

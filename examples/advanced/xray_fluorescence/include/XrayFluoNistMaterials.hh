@@ -32,66 +32,48 @@
 //
 // -------------------------------------------------------------------
 
-#ifndef XrayFluoMaterials_hh
-#define XrayFluoMaterials_hh 1
+#ifndef XrayFluoNistMaterials_hh
+#define XrayFluoNistMaterials_hh 1
 
 #include "globals.hh"
 #include "G4Material.hh"
+#include "G4NistManager.hh"
 
-class XrayFluoMaterials
+class XrayFluoNistMaterials
 {
 public:
 
-  ~XrayFluoMaterials();
+  ~XrayFluoNistMaterials();
   
-  static XrayFluoMaterials* GetInstance();
+  static XrayFluoNistMaterials* GetInstance();
   
   G4Material* GetMaterial(G4String);
 
   
 private:
   
-  XrayFluoMaterials();
+  XrayFluoNistMaterials();
   
   void CreateMaterials();
 
 private:
 
-  static XrayFluoMaterials* instance;
+  static XrayFluoNistMaterials* instance;
+
+  G4NistManager*     nistMan;
 
   G4Material*        dolorite;
-  G4Material*        FeMaterial;
-  G4Material*        Al;
-  G4Material*        Si;
-  G4Material*        Cu;
   G4Material*        HPGe;
-  G4Material*        materialMg;
-  G4Material*        materialNd;
-  G4Material*        Sn;
-  G4Material*        Ti;
   G4Material*        mars1;
   G4Material*        anorthosite;
-  G4Material*        Pb;
   G4Material*        basalt;
   G4Material*        Air;
   G4Material*        Sci;
   G4Material*        Vacuum;
-  G4Material*        Be;
-  G4Material*        materialW;
-  G4Material*        materialAg;
-  G4Material*        Au;
-  G4Material*        Cs;
-  G4Material*        materialK;
-  G4Material*        materialMn;
-  G4Material*        materialP;
-  G4Material*        materialS;
-  G4Material*        materialCa;
-  G4Material*        materialNa;
-  G4Material*        U;
-
-
-
-
+  G4Material*        madaBasalt;
+  G4Material*        icelandicBasalt;
+  G4Material*        GaAs;
+  G4Material*        galactic;
 
 };
 
