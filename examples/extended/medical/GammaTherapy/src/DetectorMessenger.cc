@@ -119,6 +119,11 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction* h):
   HistoCmd->SetParameterName("histo",false);
   HistoCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  HistoTCmd = new G4UIcmdWithAString("/testem/histoType",this);
+  HistoTCmd->SetGuidance("Set the type of the histo file");
+  HistoTCmd->SetParameterName("histoT",false);
+  HistoTCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   ntupCmd = new G4UIcmdWithABool("/testem/ntuple",this);
   ntupCmd->SetGuidance("Set ntuple to fill");
   ntupCmd->SetParameterName("ntuple",false);
@@ -183,6 +188,7 @@ DetectorMessenger::~DetectorMessenger()
   delete YMagFieldCmd;
   delete ZMagFieldCmd;
   delete HistoCmd;
+  delete HistoTCmd;
   delete NumOfEvt;
   delete verbCmd;
   delete intCmd;
@@ -234,6 +240,9 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if( command == HistoCmd )
    { (Histo::GetPointer())->SetHistoName(newValue);}
+
+  if( command == HistoTCmd )
+   { (Histo::GetPointer())->SetHistoType(newValue);}
 
   if( command == ntupCmd )
    { (Histo::GetPointer())->SetNtuple(ntupCmd->GetNewBoolValue(newValue));}

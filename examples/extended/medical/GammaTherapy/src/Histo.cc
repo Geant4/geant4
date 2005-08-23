@@ -60,7 +60,8 @@ Histo* Histo::GetPointer()
 Histo::Histo()
 {
   verbose   = 1;
-  histName  = G4String("histo.hbook");
+  histName  = G4String("histo");
+  histType  = G4String("hbook");
   nHisto    = 10;
   nHisto1   = 10;
   maxEnergy = 50.0*MeV;
@@ -244,7 +245,17 @@ void Histo::bookHisto()
   std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
 
   // Creating a tree mapped to a new hbook file.
-  tree = tf->create(histName,"hbook",false,false);
+  G4String tt = "hbook";
+  G4String nn = histName + ".hbook";
+  if(histType == "root") {
+    tt = "root";
+    nn = histName + ".root";
+  } else if(histType == "xml" || histType == "XML" || histType == "aida" || histType == "AIDA") {
+    tt = "xml";
+    nn = histName + ".aida";
+  }
+
+  tree = tf->create(nn,tt,false,true, "--noErrors uncompress");
   G4cout << "Tree store : " << tree->storeName() << G4endl;
 
   histo.resize(nHisto1);

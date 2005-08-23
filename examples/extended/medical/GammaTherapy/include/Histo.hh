@@ -79,6 +79,7 @@ public:
 public: // Without description
 
     void SetHistoName(const G4String& name) {histName = name;};
+    void SetHistoType(const G4String& type) {histType = type;};
     void bookHisto();
     void SaveToTuple(const G4String&, G4double);
     void SaveToTuple(const G4String&, G4double, G4double);
@@ -144,6 +145,7 @@ private:
     G4VPhysicalVolume* target1;
     G4VPhysicalVolume* target2;
     G4String histName;
+    G4String histType;
 
     std::vector<AIDA::IHistogram1D*> histo;
     AIDA::ITuple* ntup;

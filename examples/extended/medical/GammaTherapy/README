@@ -87,7 +87,8 @@ eval `aida-config --runtime csh`
 It is possible to choose the format of the output file with 
 histograms using UI command:
 
-/testem/histo/setFileType type
+/testem/histoName type
+/testem/histoType type
 
 The following types are available: hbook, root, xml.
 
