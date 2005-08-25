@@ -25,7 +25,12 @@
 #define G4ORNLLegBone_h 1
 
 #include "G4VPhysicalVolume.hh"
+
+#include "Saxana/SAXProcessor.h"
+#include "Saxana/ProcessingConfigurator.h"
+
 class G4VPhysicalVolume;
+class G4LogicalVolume;
 
 class G4ORNLLegBone
 {
@@ -33,6 +38,11 @@ public:
 
   G4ORNLLegBone();
   ~G4ORNLLegBone();
-  void ConstructLegBone(G4VPhysicalVolume*);
+  G4VPhysicalVolume* ConstructLegBone(G4VPhysicalVolume*, G4String, G4bool);
+ 
+private:
+    SAXProcessor sxp;
+    ProcessingConfigurator config;
+
 };
 #endif

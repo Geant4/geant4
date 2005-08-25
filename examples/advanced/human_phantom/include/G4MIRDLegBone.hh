@@ -25,7 +25,12 @@
 #define G4MIRDLegBone_h 1
 
 #include "G4VPhysicalVolume.hh"
+
+#include "Saxana/SAXProcessor.h"
+#include "Saxana/ProcessingConfigurator.h"
+
 class G4VPhysicalVolume;
+class G4LogicalVolume;
 
 class G4MIRDLegBone
 {
@@ -33,6 +38,11 @@ public:
 
   G4MIRDLegBone();
   ~G4MIRDLegBone();
-  void ConstructLegBone(G4VPhysicalVolume*);
+  G4VPhysicalVolume* ConstructLegBone(G4VPhysicalVolume*, G4String, G4bool);
+ 
+private:
+    SAXProcessor sxp;
+    ProcessingConfigurator config;
+
 };
 #endif

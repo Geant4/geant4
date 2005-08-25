@@ -21,19 +21,6 @@
 // ********************************************************************
 //
 //
-// Code developed by:
-//  S.Guatelli
-
-//
-//    *******************************
-//    *                             *
-//    *    BrachyFactory.cc         *
-//    *                             *
-//    *******************************
-//
-// $Id: G4VPhantomBuilder.cc,v 1.1 2005-07-26 13:41:22 gguerrie Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 #include"G4VPhantomBuilder.hh"
 
 G4VPhantomBuilder::G4VPhantomBuilder()

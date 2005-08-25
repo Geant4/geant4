@@ -25,7 +25,12 @@
 #define G4ORNLTrunk_h 1
 
 #include "G4VPhysicalVolume.hh"
+
+#include "Saxana/SAXProcessor.h"
+#include "Saxana/ProcessingConfigurator.h"
+
 class G4VPhysicalVolume;
+class G4LogicalVolume;
 
 class G4ORNLTrunk
 {
@@ -33,10 +38,11 @@ public:
 
   G4ORNLTrunk();
   ~G4ORNLTrunk();
-  void ConstructTrunk(G4VPhysicalVolume*, G4String);
-  G4VPhysicalVolume* GetTrunk(){return 0;};
-
+  G4VPhysicalVolume* ConstructTrunk(G4VPhysicalVolume*, G4String, G4bool);
+ 
 private:
+    SAXProcessor sxp;
+    ProcessingConfigurator config;
 
 };
 #endif

@@ -69,7 +69,7 @@ G4bool G4HumanPhantomSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 
   trackerCollection->insert( newHit );
   
-  newHit->Print();
+//  newHit->Print();
   //  newHit->Draw();
 
   return true;

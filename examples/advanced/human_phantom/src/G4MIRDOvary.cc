@@ -21,17 +21,59 @@
 // ********************************************************************
 //
 #include "G4MIRDOvary.hh"
+#include "G4SDManager.hh"
+#include "G4Processor/GDMLProcessor.h"
+#include "globals.hh"
+
+#include "G4VisAttributes.hh"
 
 G4MIRDOvary::G4MIRDOvary()
 {
-
 }
 
 G4MIRDOvary::~G4MIRDOvary()
 {
-
+  sxp.Finalize();
 }
-void G4MIRDOvary::ConstructOvary(G4VPhysicalVolume* mother)
+
+G4VPhysicalVolume* G4MIRDOvary::ConstructOvary(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
- G4cout << "Ovaries created !!!!!!" << G4endl;
+  // Initialize GDML Processor
+  sxp.Initialize();
+  config.SetURI( "gdmlData/"+sex+"/MIRDOvary.gdml" );
+  config.SetSetupName( "Default" );
+  sxp.Configure( &config );
+
+  // Run GDML Processor
+  sxp.Run();
+ 
+
+  G4LogicalVolume* logicOvary = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("OvaryVolume");
+
+  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("OvaryPos");
+  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("OvaryRot");
+  
+  // Define rotation and position here!
+  G4VPhysicalVolume* physOvary = new G4PVPlacement(rm,position,
+      			       "physicalOvary",
+  			       logicOvary,
+			       mother,
+			       false,
+			       0);
+
+  // Sensitive Body Part
+  if (sensitivity==true)
+  { 
+    G4SDManager* SDman = G4SDManager::GetSDMpointer();
+    logicOvary->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
+  }
+
+  // Visualization Attributes
+  G4VisAttributes* OvaryVisAtt = new G4VisAttributes(G4Colour(0.85,0.44,0.84));
+  OvaryVisAtt->SetForceSolid(true);
+  logicOvary->SetVisAttributes(OvaryVisAtt);
+
+  G4cout << "Ovary created !!!!!!" << G4endl;
+  
+  return physOvary;
 }

@@ -36,8 +36,8 @@ class G4MaleBuilder: public G4PhantomBuilder
 public:
   G4MaleBuilder();
   ~G4MaleBuilder();
-  void BuildMaleGenitalia();
-  void BuildTestes();
+  void BuildMaleGenitalia(G4bool);
+  void BuildTestes(G4bool);
 
 private:
  

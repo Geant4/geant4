@@ -76,13 +76,11 @@ int main(int argc,char** argv)
 
   G4HumanPhantomEventAction *eventAction = new G4HumanPhantomEventAction();
   runManager->SetUserAction(eventAction);
- 
-  runManager->SetUserAction(new G4HumanPhantomSteppingAction(eventAction));
 
-
+  runManager->SetUserAction(new G4HumanPhantomSteppingAction(eventAction)); 
 
   // initialize G4 kernel
-  runManager->Initialize();
+  //runManager->Initialize();
   
   // get the pointer to the UI manager
   G4UImanager* UI = G4UImanager::GetUIpointer();
@@ -97,7 +95,7 @@ int main(int argc,char** argv)
       session = new G4UIterminal();
 #endif
 
-      //UI->ApplyCommand("/control/execute noVis.mac"); 
+     UI->ApplyCommand("/control/execute adultFemale.mac"); 
 
      session->SessionStart();
      delete session;

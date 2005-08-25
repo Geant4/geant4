@@ -25,7 +25,12 @@
 #define G4ORNLUterus_h 1
 
 #include "G4VPhysicalVolume.hh"
+
+#include "Saxana/SAXProcessor.h"
+#include "Saxana/ProcessingConfigurator.h"
+
 class G4VPhysicalVolume;
+class G4LogicalVolume;
 
 class G4ORNLUterus
 {
@@ -33,6 +38,11 @@ public:
 
   G4ORNLUterus();
   ~G4ORNLUterus();
-  void ConstructUterus(G4VPhysicalVolume*);
+  G4VPhysicalVolume* ConstructUterus(G4VPhysicalVolume*, G4String, G4bool);
+ 
+private:
+    SAXProcessor sxp;
+    ProcessingConfigurator config;
+
 };
 #endif

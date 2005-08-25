@@ -38,10 +38,9 @@ public:
 
   G4MIRDHead();
   ~G4MIRDHead();
-  void ConstructHead(G4VPhysicalVolume*, G4String);
-  G4VPhysicalVolume* GetHead() {return physHead;};
+  G4VPhysicalVolume* ConstructHead(G4VPhysicalVolume*, G4String, G4bool);
+ 
 private:
-  G4VPhysicalVolume* physHead;
     SAXProcessor sxp;
     ProcessingConfigurator config;
 

@@ -25,15 +25,15 @@
 #define G4HumanPhantomConstruction_H 1
 
 #include "G4VUserDetectorConstruction.hh"
+#include "G4HumanPhantomMessenger.hh"
 
 #include "globals.hh"
+#include <map>
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
-class G4VisAttributes;
 
 class G4HumanPhantomSD;
-class G4VPhysicalVolume;
 
 class G4HumanPhantomConstruction : public G4VUserDetectorConstruction
 {
@@ -42,13 +42,25 @@ class G4HumanPhantomConstruction : public G4VUserDetectorConstruction
     ~G4HumanPhantomConstruction();
      G4VPhysicalVolume* Construct();
 
+  std::map<std::string,G4bool> sensitivities;
+
   void SetBodyPartSensitivity(G4String, G4bool);
+  void CleanPhantom();
+  void UpdatePhantom();
+  void SetPhantomSex(G4String);
+  void SetPhantomModel(G4String);
+
   G4VPhysicalVolume* GetMotherVolume(){return mother;};
  
  private:
-    G4HumanPhantomSD* userPhantomSD; 
-  G4VPhysicalVolume* mother;
+  
+  G4HumanPhantomMessenger* messenger;
 
+  G4HumanPhantomSD*        userPhantomSD; 
+  G4VPhysicalVolume*       mother;
+
+  G4String                 model;
+  G4String                 sex;
 };
 
 #endif

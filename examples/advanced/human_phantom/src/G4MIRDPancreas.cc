@@ -22,16 +22,57 @@
 //
 #include "G4MIRDPancreas.hh"
 
+#include "G4Processor/GDMLProcessor.h"
+#include "globals.hh"
+#include "G4SDManager.hh"
+#include "G4VisAttributes.hh"
+
 G4MIRDPancreas::G4MIRDPancreas()
 {
-
 }
 
 G4MIRDPancreas::~G4MIRDPancreas()
 {
-
+  sxp.Finalize();
 }
-void G4MIRDPancreas::ConstructPancreas(G4VPhysicalVolume* mother)
+
+G4VPhysicalVolume* G4MIRDPancreas::ConstructPancreas(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
- G4cout << "Pancreas created !!!!!!" << G4endl;
+  // Initialize GDML Processor
+  sxp.Initialize();
+  config.SetURI( "gdmlData/"+sex+"/MIRDPancreas.gdml" );
+  config.SetSetupName( "Default" );
+  sxp.Configure( &config );
+
+  // Run GDML Processor
+  sxp.Run();
+ 
+
+  G4LogicalVolume* logicPancreas = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("PancreasVolume");
+
+  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("PancreasPos");
+  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("PancreasRot");
+  
+  // Define rotation and position here!
+  G4VPhysicalVolume* physPancreas = new G4PVPlacement(rm,position,
+      			       "physicalPancreas",
+  			       logicPancreas,
+			       mother,
+			       false,
+			       0);
+  // Sensitive Body Part
+  if (sensitivity==true)
+  { 
+    G4SDManager* SDman = G4SDManager::GetSDMpointer();
+    logicPancreas->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
+  }
+
+  // Visualization Attributes
+  G4VisAttributes* PancreasVisAtt = new G4VisAttributes(G4Colour(0.28,0.82,0.8));
+  PancreasVisAtt->SetForceSolid(true);
+  logicPancreas->SetVisAttributes(PancreasVisAtt);
+
+  G4cout << "Pancreas created !!!!!!" << G4endl;
+  
+  return physPancreas;
 }

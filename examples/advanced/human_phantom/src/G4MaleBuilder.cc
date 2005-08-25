@@ -34,10 +34,10 @@ G4MaleBuilder::~G4MaleBuilder()
 {
 } 
 
-void G4MaleBuilder::BuildMaleGenitalia()
+void G4MaleBuilder::BuildMaleGenitalia(G4bool)
 {
 }
 
-void G4MaleBuilder::BuildTestes()
+void G4MaleBuilder::BuildTestes(G4bool)
 { 
 }

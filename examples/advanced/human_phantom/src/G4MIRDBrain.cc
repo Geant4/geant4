@@ -22,16 +22,58 @@
 //
 #include "G4MIRDBrain.hh"
 
+#include "G4Processor/GDMLProcessor.h"
+#include "globals.hh"
+#include "G4SDManager.hh"
+#include "G4VisAttributes.hh"
+
 G4MIRDBrain::G4MIRDBrain()
 {
-
 }
 
 G4MIRDBrain::~G4MIRDBrain()
 {
-
+  sxp.Finalize();
 }
-void G4MIRDBrain::ConstructBrain(G4VPhysicalVolume* mother)
+
+G4VPhysicalVolume* G4MIRDBrain::ConstructBrain(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
- G4cout << "Brain created !!!!!!" << G4endl;
+  // Initialize GDML Processor
+  sxp.Initialize();
+  config.SetURI( "gdmlData/"+sex+"/MIRDBrain.gdml" );
+  config.SetSetupName( "Default" );
+  sxp.Configure( &config );
+
+  // Run GDML Processor
+  sxp.Run();
+ 
+
+  G4LogicalVolume* logicBrain = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("BrainVolume");
+
+  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("BrainPos");
+  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("BrainRot");
+  
+  // Define rotation and position here!
+  G4VPhysicalVolume* physBrain = new G4PVPlacement(rm,position,
+      			       "physicalBrain",
+  			       logicBrain,
+			       mother,
+			       false,
+			       0);
+  // Sensitive Body Part
+  if (sensitivity==true)
+  { 
+    G4SDManager* SDman = G4SDManager::GetSDMpointer();
+    logicBrain->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
+  }
+
+
+  // Visualization Attributes
+  G4VisAttributes* BrainVisAtt = new G4VisAttributes(G4Colour(0.41,0.41,0.41));
+  BrainVisAtt->SetForceSolid(true);
+  logicBrain->SetVisAttributes(BrainVisAtt);
+
+  G4cout << "Brain created !!!!!!" << G4endl;
+  
+  return physBrain;
 }

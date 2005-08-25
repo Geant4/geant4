@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2005-07-26 13:41:22 gguerrie Exp $
+$Id: History,v 1.2 2005-08-25 14:54:04 gguerrie Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,26 +17,23 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+August 15, 2005, G. Guerrieri
+- Modified approximated legs and leg bones.
+- Commit the example
+
 July 26, 2005, G. Guerrieri
 - Commit the example
 
 June 30, 2005 G.Guerrieri
-- Add logical volume function to Construct();
-- Add other body part (now there's 20 body part on the Female ORNL model only)
-- UI operates in PreInit writing GDML file and then Construct().
-Future:
-*Design is to be changed: write GDML file directly from UI class!
+- Add other body part (now there's 26 body part on the Female MIRD/ORNL model)
+- UI operates in PreInit writing GDML file and then Initialize() construction.
 
 June 20, 2005 G.Guerrieri
-- UI with command defining:
--- Sex of phantom : it open file phantomMale(Female).gdml that contains all parameters about 
-sizes, positions,rotations, materials for both the phantom model (MIRD, ORNL)
--- Name of body part to be built
--- Type of phantom model: MIRD, ORNL, MIX (<-not implemented)
-Then class creates userPhantom.gdml file to be read from Construct().
-Future: 
-*contruction of many body part, through command line or macro file.
-
+- UI with command defining
+-- Sex of Phantom
+-- Model pf Phantom
+-- Name of body part to be built and their sensitivity
 
 June 15rd, 2005 G.Guerrieri 
 - First implementation of phantom using GDML file for description persistency.

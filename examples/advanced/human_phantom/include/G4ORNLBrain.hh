@@ -25,7 +25,12 @@
 #define G4ORNLBrain_h 1
 
 #include "G4VPhysicalVolume.hh"
+
+#include "Saxana/SAXProcessor.h"
+#include "Saxana/ProcessingConfigurator.h"
+
 class G4VPhysicalVolume;
+class G4LogicalVolume;
 
 class G4ORNLBrain
 {
@@ -33,6 +38,11 @@ public:
 
   G4ORNLBrain();
   ~G4ORNLBrain();
-  void ConstructBrain(G4VPhysicalVolume*);
+  G4VPhysicalVolume* ConstructBrain(G4VPhysicalVolume*, G4String, G4bool);
+ 
+private:
+    SAXProcessor sxp;
+    ProcessingConfigurator config;
+
 };
 #endif

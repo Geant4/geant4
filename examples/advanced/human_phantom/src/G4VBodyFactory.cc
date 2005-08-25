@@ -20,20 +20,6 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// Code developed by:
-//  S.Guatelli
-
-//
-//    *******************************
-//    *                             *
-//    *    BrachyFactory.cc         *
-//    *                             *
-//    *******************************
-//
-// $Id: G4VBodyFactory.cc,v 1.1 2005-07-26 13:41:22 gguerrie Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 #include"G4VBodyFactory.hh"
 
 G4VBodyFactory::G4VBodyFactory()

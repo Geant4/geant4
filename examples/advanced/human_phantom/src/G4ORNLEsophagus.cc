@@ -22,16 +22,51 @@
 //
 #include "G4ORNLEsophagus.hh"
 
+#include "G4Processor/GDMLProcessor.h"
+#include "globals.hh"
+
+#include "G4VisAttributes.hh"
+
 G4ORNLEsophagus::G4ORNLEsophagus()
 {
-
 }
 
 G4ORNLEsophagus::~G4ORNLEsophagus()
 {
-
+  sxp.Finalize();
 }
-void G4ORNLEsophagus::ConstructEsophagus(G4VPhysicalVolume* mother)
+
+G4VPhysicalVolume* G4ORNLEsophagus::ConstructEsophagus(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
- G4cout << "Esophagus created!!!!!!" << G4endl;
+  // Initialize GDML Processor
+  sxp.Initialize();
+  config.SetURI( "gdmlData/"+sex+"/ORNLEsophagus.gdml" );
+  config.SetSetupName( "Default" );
+  sxp.Configure( &config );
+
+  // Run GDML Processor
+  sxp.Run();
+ 
+
+  G4LogicalVolume* logicEsophagus = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("EsophagusVolume");
+
+  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("EsophagusPos");
+  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("EsophagusRot");
+  
+  // Define rotation and position here!
+  G4VPhysicalVolume* physEsophagus = new G4PVPlacement(rm,position,
+      			       "physicalEsophagus",
+  			       logicEsophagus,
+			       mother,
+			       false,
+			       0);
+
+  // Visualization Attributes
+  G4VisAttributes* EsophagusVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  EsophagusVisAtt->SetForceSolid(true);
+  logicEsophagus->SetVisAttributes(EsophagusVisAtt);
+
+  G4cout << "Esophagus created !!!!!!" << G4endl;
+  
+  return physEsophagus;
 }

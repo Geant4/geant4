@@ -22,16 +22,51 @@
 //
 #include "G4ORNLKidney.hh"
 
+#include "G4Processor/GDMLProcessor.h"
+#include "globals.hh"
+
+#include "G4VisAttributes.hh"
+
 G4ORNLKidney::G4ORNLKidney()
 {
-
 }
 
 G4ORNLKidney::~G4ORNLKidney()
 {
-
+  sxp.Finalize();
 }
-void G4ORNLKidney::ConstructKidney(G4VPhysicalVolume* mother)
+
+G4VPhysicalVolume* G4ORNLKidney::ConstructKidney(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
- G4cout << "Kidney created !!!!!!" << G4endl;
+  // Initialize GDML Processor
+  sxp.Initialize();
+  config.SetURI( "gdmlData/"+sex+"/ORNLKidney.gdml" );
+  config.SetSetupName( "Default" );
+  sxp.Configure( &config );
+
+  // Run GDML Processor
+  sxp.Run();
+ 
+
+  G4LogicalVolume* logicKidney = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("KidneyVolume");
+
+  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("KidneyPos");
+  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("KidneyRot");
+  
+  // Define rotation and position here!
+  G4VPhysicalVolume* physKidney = new G4PVPlacement(rm,position,
+      			       "physicalKidney",
+  			       logicKidney,
+			       mother,
+			       false,
+			       0);
+
+  // Visualization Attributes
+  G4VisAttributes* KidneyVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  KidneyVisAtt->SetForceSolid(true);
+  logicKidney->SetVisAttributes(KidneyVisAtt);
+
+  G4cout << "Kidney created !!!!!!" << G4endl;
+  
+  return physKidney;
 }

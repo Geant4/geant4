@@ -1,4 +1,3 @@
-# $Id: GNUmakefile,v 1.1 2005-07-26 13:41:22 gguerrie Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.
 # Author: Giorgio Guerrieri
@@ -19,7 +18,7 @@ endif
 
 ifndef GDML_BASE
 #  GDML_BASE := /afs/cern.ch/sw/lcg/app/releases/GDML/pro
-   GDML_BASE := /home3/gguerrie/devel/GDML_2_1_0
+   GDML_BASE := /home2/gguerrie/devel/GDML_2_1_0
 endif
 
 CPPFLAGS    += \

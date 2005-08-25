@@ -22,16 +22,51 @@
 //
 #include "G4ORNLLiver.hh"
 
+#include "G4Processor/GDMLProcessor.h"
+#include "globals.hh"
+
+#include "G4VisAttributes.hh"
+
 G4ORNLLiver::G4ORNLLiver()
 {
-
 }
 
 G4ORNLLiver::~G4ORNLLiver()
 {
-
+  sxp.Finalize();
 }
-void G4ORNLLiver::ConstructLiver(G4VPhysicalVolume* mother)
+
+G4VPhysicalVolume* G4ORNLLiver::ConstructLiver(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
- G4cout << "Liver created !!!!!!" << G4endl;
+  // Initialize GDML Processor
+  sxp.Initialize();
+  config.SetURI( "gdmlData/"+sex+"/ORNLLiver.gdml" );
+  config.SetSetupName( "Default" );
+  sxp.Configure( &config );
+
+  // Run GDML Processor
+  sxp.Run();
+ 
+
+  G4LogicalVolume* logicLiver = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("LiverVolume");
+
+  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("LiverPos");
+  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("LiverRot");
+  
+  // Define rotation and position here!
+  G4VPhysicalVolume* physLiver = new G4PVPlacement(rm,position,
+      			       "physicalLiver",
+  			       logicLiver,
+			       mother,
+			       false,
+			       0);
+
+  // Visualization Attributes
+  G4VisAttributes* LiverVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  LiverVisAtt->SetForceSolid(true);
+  logicLiver->SetVisAttributes(LiverVisAtt);
+
+  G4cout << "Liver created !!!!!!" << G4endl;
+  
+  return physLiver;
 }

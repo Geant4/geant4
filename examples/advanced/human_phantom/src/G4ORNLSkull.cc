@@ -22,16 +22,51 @@
 //
 #include "G4ORNLSkull.hh"
 
+#include "G4Processor/GDMLProcessor.h"
+#include "globals.hh"
+
+#include "G4VisAttributes.hh"
+
 G4ORNLSkull::G4ORNLSkull()
 {
-
 }
 
 G4ORNLSkull::~G4ORNLSkull()
 {
-
+  sxp.Finalize();
 }
-void G4ORNLSkull::ConstructSkull(G4VPhysicalVolume* mother)
+
+G4VPhysicalVolume* G4ORNLSkull::ConstructSkull(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
- G4cout << "Skull created !!!!!!" << G4endl;
+  // Initialize GDML Processor
+  sxp.Initialize();
+  config.SetURI( "gdmlData/"+sex+"/ORNLSkull.gdml" );
+  config.SetSetupName( "Default" );
+  sxp.Configure( &config );
+
+  // Run GDML Processor
+  sxp.Run();
+ 
+
+  G4LogicalVolume* logicSkull = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("SkullVolume");
+
+  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("SkullPos");
+  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("SkullRot");
+  
+  // Define rotation and position here!
+  G4VPhysicalVolume* physSkull = new G4PVPlacement(rm,position,
+      			       "physicalSkull",
+  			       logicSkull,
+			       mother,
+			       false,
+			       0);
+
+  // Visualization Attributes
+  G4VisAttributes* SkullVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  SkullVisAtt->SetForceSolid(true);
+  logicSkull->SetVisAttributes(SkullVisAtt);
+
+  G4cout << "Skull created !!!!!!" << G4endl;
+  
+  return physSkull;
 }

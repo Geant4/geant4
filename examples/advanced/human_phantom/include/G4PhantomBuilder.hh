@@ -38,55 +38,69 @@ class G4PhantomBuilder: public G4VPhantomBuilder
 public:
   G4PhantomBuilder();
   ~G4PhantomBuilder();
+
   void BuildWorld();
-  void BuildHead();
-  void BuildTrunk();
+
+  void BuildHead(G4bool);
+  void BuildTrunk(G4bool);
+  void BuildLegs(G4bool);
+  void BuildNeck(G4bool);
+
+  void BuildUpperSpine(G4bool);
+  void BuildMiddleLowerSpine(G4bool);
+  void BuildLegBone(G4bool);
+  void BuildArmBone(G4bool);
+  void BuildSkull(G4bool);
+  void BuildRibCage(G4bool);
+  void BuildPelvis(G4bool);
+  void BuildScapulae(G4bool);
+  void BuildClavicles(G4bool);
+
+  void BuildBreast(G4bool);
+  void BuildUterus(G4bool);
+  void BuildOvary(G4bool);
+
+  void BuildTestes(G4bool);
+  void BuildMaleGenitalia(G4bool);
+
+  void BuildBrain(G4bool);
+
+  void BuildHeart(G4bool);
+
+  void BuildLung(G4bool);
+
+  void BuildStomach(G4bool);
+  void BuildUpperLargeIntestine(G4bool);
+  void BuildLowerLargeIntestine(G4bool);
+  void BuildEsophagus(G4bool);
+
+  void BuildKidney(G4bool);
+  void BuildAdrenal(G4bool);
+  void BuildLiver(G4bool);
+  void BuildPancreas(G4bool);
+  void BuildSpleen(G4bool);
+  void BuildUrinaryBladder(G4bool);
+
+  void BuildThyroid(G4bool);
+
+  void SetSex(G4String);
+  void SetModel(G4String);
 
   G4VPhysicalVolume* GetPhantom();
 
 private:
   G4String sex; 
+  G4String model;
+  G4bool sensitivity;
   G4VPhysicalVolume* motherVolume;
   G4VPhysicalVolume* headVolume;
   G4VPhysicalVolume* trunkVolume;
+  G4VPhysicalVolume* legsVolume;
+  G4VPhysicalVolume* neckVolume;
+  G4VPhysicalVolume* maleGenitaliaVolume;
 
   G4VBodyFactory* body;
 
-//   virtual void BuildLegs(G4VPhysicalVolume*) = 0;
-//   virtual void BuildNeck(G4VPhysicalVolume*) = 0;
 
-//   virtual void BuildSpine(G4VPhysicalVolume*) = 0;
-//   virtual void BuildLegBone(G4VPhysicalVolume*) = 0;
-//   virtual void BuildArmBone(G4VPhysicalVolume*) = 0;
-//   virtual void BuildSkull(G4VPhysicalVolume*) = 0;
-//   virtual void BuildRibCage(G4VPhysicalVolume*) = 0;
-//   virtual void BuildPelvis(G4VPhysicalVolume*) = 0;
-//   virtual void BuildScapulae(G4VPhysicalVolume*) = 0;
-//   virtual void BuildClavicles(G4VPhysicalVolume*) = 0;
-
-//   virtual void BuildBreast(G4VPhysicalVolume*) = 0;
-//   virtual void BuildUterus(G4VPhysicalVolume*) = 0;
-//   virtual void BuildOvary(G4VPhysicalVolume*) = 0;
-
-//   virtual void BuildTestes(G4VPhysicalVolume*) = 0;
-//   virtual void BuildMaleGenitalia(G4VPhysicalVolume*) = 0;
-
-//   virtual void BuildBrain(G4VPhysicalVolume*) = 0;
-
-//   virtual void BuildHeart(G4VPhysicalVolume*) = 0;
-
-//   virtual void BuildLung(G4VPhysicalVolume*) = 0;
-
-//   virtual void BuildStomach(G4VPhysicalVolume*) = 0;
-//   virtual void BuildIntestine(G4VPhysicalVolume*) = 0;
-//   virtual void BuildEsophagus(G4VPhysicalVolume*) = 0;
-
-//   virtual void BuildKidney(G4VPhysicalVolume*) = 0;
-//   virtual void BuildAdrenal(G4VPhysicalVolume*) = 0;
-//   virtual void BuildLiver(G4VPhysicalVolume*) = 0;
-//   virtual void BuildPancreas(G4VPhysicalVolume*) = 0;
-//   virtual void BuildUrinaryBladder(G4VPhysicalVolume*) = 0;
-
-//   virtual void BuildThyroid(G4VPhysicalVolume*) = 0;
 };
 #endif

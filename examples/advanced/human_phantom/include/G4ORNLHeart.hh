@@ -25,7 +25,12 @@
 #define G4ORNLHeart_h 1
 
 #include "G4VPhysicalVolume.hh"
+
+#include "Saxana/SAXProcessor.h"
+#include "Saxana/ProcessingConfigurator.h"
+
 class G4VPhysicalVolume;
+class G4LogicalVolume;
 
 class G4ORNLHeart
 {
@@ -33,6 +38,11 @@ public:
 
   G4ORNLHeart();
   ~G4ORNLHeart();
-  void ConstructHeart(G4VPhysicalVolume*);
+  G4VPhysicalVolume* ConstructHeart(G4VPhysicalVolume*, G4String, G4bool);
+ 
+private:
+    SAXProcessor sxp;
+    ProcessingConfigurator config;
+
 };
 #endif

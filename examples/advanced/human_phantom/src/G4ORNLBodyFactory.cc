@@ -23,12 +23,14 @@
 //
 #include "G4ORNLBodyFactory.hh"
 #include "G4ORNLStomach.hh"
-#include "G4ORNLIntestine.hh"
+#include "G4ORNLUpperLargeIntestine.hh"
+#include "G4ORNLLowerLargeIntestine.hh"
 #include "G4ORNLEsophagus.hh"
 #include "G4ORNLKidney.hh"
 #include "G4ORNLAdrenal.hh"
 #include "G4ORNLLiver.hh"
 #include "G4ORNLPancreas.hh"
+#include "G4ORNLSpleen.hh"
 #include "G4ORNLUrinaryBladder.hh"
 #include "G4ORNLLung.hh"
 #include "G4ORNLHeart.hh"
@@ -40,7 +42,8 @@
 #include "G4ORNLUterus.hh"
 #include "G4ORNLBreast.hh"
 #include "G4ORNLOvary.hh"
-#include "G4ORNLSpine.hh"
+#include "G4ORNLUpperSpine.hh"
+#include "G4ORNLMiddleLowerSpine.hh"
 #include "G4ORNLLegBone.hh"
 #include "G4ORNLArmBone.hh"
 #include "G4ORNLSkull.hh"
@@ -57,145 +60,155 @@ G4ORNLBodyFactory::~G4ORNLBodyFactory()
 {
 }
 
-void G4ORNLBodyFactory::CreateStomach(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateStomach(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLStomach* stomach = new G4ORNLStomach();
-  stomach -> ConstructStomach(motherVolume);
+  return stomach -> ConstructStomach(motherVolume, sex, sensitivity);
 }
-
-void G4ORNLBodyFactory::CreateIntestine(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateUpperLargeIntestine(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
-  G4ORNLIntestine* intestine = new G4ORNLIntestine();
-  intestine -> ConstructIntestine(motherVolume);
+  G4ORNLUpperLargeIntestine* upperLargeIntestine = new G4ORNLUpperLargeIntestine();
+  return upperLargeIntestine -> ConstructUpperLargeIntestine(motherVolume, sex, sensitivity);
 }
-
-void G4ORNLBodyFactory::CreateEsophagus(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateLowerLargeIntestine(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
+{
+  G4ORNLLowerLargeIntestine* lowerLargeIntestine = new G4ORNLLowerLargeIntestine();
+  return lowerLargeIntestine -> ConstructLowerLargeIntestine(motherVolume, sex, sensitivity);
+}
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateEsophagus(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLEsophagus* esophagus = new G4ORNLEsophagus();
-  esophagus -> ConstructEsophagus(motherVolume);
+  return esophagus -> ConstructEsophagus(motherVolume, sex, sensitivity);
 }
-
-void G4ORNLBodyFactory::CreateKidney(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateKidney(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLKidney* kidney = new G4ORNLKidney();
-  kidney -> ConstructKidney(motherVolume);
+  return kidney -> ConstructKidney(motherVolume, sex, sensitivity);
 }
-void G4ORNLBodyFactory::CreateAdrenal(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateAdrenal(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLAdrenal* adrenal = new G4ORNLAdrenal();
-  adrenal -> ConstructAdrenal(motherVolume);
+  return adrenal -> ConstructAdrenal(motherVolume, sex, sensitivity);
 }
-void G4ORNLBodyFactory::CreateLiver(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateLiver(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLLiver* liver = new G4ORNLLiver();
-  liver -> ConstructLiver(motherVolume);
+  return liver -> ConstructLiver(motherVolume, sex, sensitivity);
 }
-void G4ORNLBodyFactory::CreatePancreas(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreatePancreas(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLPancreas* pancreas = new G4ORNLPancreas();
-  pancreas -> ConstructPancreas(motherVolume);
+  return pancreas -> ConstructPancreas(motherVolume, sex, sensitivity);
 }
-void G4ORNLBodyFactory::CreateUrinaryBladder(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateSpleen(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
+{
+  G4ORNLSpleen* spleen = new G4ORNLSpleen();
+  return spleen -> ConstructSpleen(motherVolume, sex, sensitivity);
+}
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateUrinaryBladder(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLUrinaryBladder* urinaryBladder = new G4ORNLUrinaryBladder();
-  urinaryBladder -> ConstructUrinaryBladder(motherVolume);
+  return urinaryBladder -> ConstructUrinaryBladder(motherVolume, sex, sensitivity);
 }
-void G4ORNLBodyFactory::CreateLung(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateLung(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLLung* lung = new G4ORNLLung();
-  lung -> ConstructLung(motherVolume);
+  return lung -> ConstructLung(motherVolume, sex, sensitivity);
 }
-void G4ORNLBodyFactory::CreateHeart(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateHeart(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLHeart* heart = new G4ORNLHeart();
-  heart -> ConstructHeart(motherVolume);
+  return heart -> ConstructHeart(motherVolume, sex, sensitivity);
 }
-void G4ORNLBodyFactory::CreateBrain(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateBrain(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLBrain* brain = new G4ORNLBrain();
-  brain -> ConstructBrain(motherVolume);
+  return brain -> ConstructBrain(motherVolume, sex, sensitivity);
 }
-G4VPhysicalVolume* G4ORNLBodyFactory::CreateHead(G4VPhysicalVolume* motherVolume, G4String sex)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateHead(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLHead* head = new G4ORNLHead();
-  head -> ConstructHead(motherVolume, sex);
-  return head -> GetHead();
+  return head -> ConstructHead(motherVolume, sex, sensitivity);
 }
-G4VPhysicalVolume* G4ORNLBodyFactory::CreateTrunk(G4VPhysicalVolume* motherVolume, G4String sex)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateTrunk(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLTrunk* trunk = new G4ORNLTrunk();
-  trunk -> ConstructTrunk(motherVolume, sex);
-  return trunk -> GetTrunk(); 
+  return trunk -> ConstructTrunk(motherVolume, sex, sensitivity);
 }
-void G4ORNLBodyFactory::CreateLegs(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateLegs(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLLegs* legs = new G4ORNLLegs();
-  legs -> ConstructLegs(motherVolume);
+  return legs -> ConstructLegs(motherVolume, sex, sensitivity);
 }
-void G4ORNLBodyFactory::CreateThyroid(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateThyroid(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLThyroid* thyroid = new G4ORNLThyroid();
-  thyroid -> ConstructThyroid(motherVolume);
+  return thyroid -> ConstructThyroid(motherVolume, sex, sensitivity);
 }
-void G4ORNLBodyFactory::CreateUterus(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateUterus(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLUterus* uterus = new G4ORNLUterus();
-  uterus -> ConstructUterus(motherVolume);
+  return uterus -> ConstructUterus(motherVolume, sex, sensitivity);
 }
-void G4ORNLBodyFactory::CreateBreast(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateBreast(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLBreast* breast = new G4ORNLBreast();
-  breast -> ConstructBreast(motherVolume);
+  return breast -> ConstructBreast(motherVolume, sex, sensitivity);
 }
-void G4ORNLBodyFactory::CreateOvary(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateOvary(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLOvary* ovary = new G4ORNLOvary();
-  ovary -> ConstructOvary(motherVolume);
+  return ovary -> ConstructOvary(motherVolume, sex, sensitivity);
 }
-void G4ORNLBodyFactory::CreateSpine(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateUpperSpine(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
-  G4ORNLSpine* spine = new G4ORNLSpine();
-  spine -> ConstructSpine(motherVolume);
+  G4ORNLUpperSpine* upperSpine = new G4ORNLUpperSpine();
+  return upperSpine -> ConstructUpperSpine(motherVolume, sex, sensitivity);
 }
-void G4ORNLBodyFactory::CreateLegBone(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateMiddleLowerSpine(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
+{
+  G4ORNLMiddleLowerSpine* middleLowerSpine = new G4ORNLMiddleLowerSpine();
+  return middleLowerSpine -> ConstructMiddleLowerSpine(motherVolume, sex, sensitivity);
+}
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateLegBone(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLLegBone* legBone = new G4ORNLLegBone();
-  legBone -> ConstructLegBone(motherVolume);
+  return legBone -> ConstructLegBone(motherVolume, sex, sensitivity);
 }
-void G4ORNLBodyFactory::CreateArmBone(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateArmBone(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLArmBone* armBone = new G4ORNLArmBone();
-  armBone -> ConstructArmBone(motherVolume);
+  return armBone -> ConstructArmBone(motherVolume, sex, sensitivity);
 }
-void G4ORNLBodyFactory::CreateSkull(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateSkull(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLSkull* skull = new G4ORNLSkull();
-  skull -> ConstructSkull(motherVolume);
+  return skull -> ConstructSkull(motherVolume, sex, sensitivity);
 }
-void G4ORNLBodyFactory::CreateRibCage(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateRibCage(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLRibCage* ribCage = new G4ORNLRibCage();
-  ribCage -> ConstructRibCage(motherVolume);
+  return ribCage -> ConstructRibCage(motherVolume, sex, sensitivity);
 }
-void G4ORNLBodyFactory::CreatePelvis(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreatePelvis(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLPelvis* pelvis = new G4ORNLPelvis();
-  pelvis -> ConstructPelvis(motherVolume);
+  return pelvis -> ConstructPelvis(motherVolume, sex, sensitivity);
 }
-void G4ORNLBodyFactory::CreateTestes(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateTestes(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLTestes* testes = new G4ORNLTestes();
-  testes -> ConstructTestes(motherVolume);
+  return testes -> ConstructTestes(motherVolume, sex, sensitivity);
 }
-void G4ORNLBodyFactory::CreateNeck(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateNeck(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
 }
-void G4ORNLBodyFactory::CreateScapulae(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateScapulae(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
 }
-void G4ORNLBodyFactory::CreateClavicles(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateClavicles(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
 }
-void G4ORNLBodyFactory::CreateMaleGenitalia(G4VPhysicalVolume* motherVolume)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateMaleGenitalia(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
 }

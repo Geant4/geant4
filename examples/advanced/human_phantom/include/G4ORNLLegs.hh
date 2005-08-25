@@ -25,7 +25,12 @@
 #define G4ORNLLegs_h 1
 
 #include "G4VPhysicalVolume.hh"
+
+#include "Saxana/SAXProcessor.h"
+#include "Saxana/ProcessingConfigurator.h"
+
 class G4VPhysicalVolume;
+class G4LogicalVolume;
 
 class G4ORNLLegs
 {
@@ -33,6 +38,11 @@ public:
 
   G4ORNLLegs();
   ~G4ORNLLegs();
-  void ConstructLegs(G4VPhysicalVolume*);
+  G4VPhysicalVolume* ConstructLegs(G4VPhysicalVolume*, G4String, G4bool);
+ 
+private:
+    SAXProcessor sxp;
+    ProcessingConfigurator config;
+
 };
 #endif

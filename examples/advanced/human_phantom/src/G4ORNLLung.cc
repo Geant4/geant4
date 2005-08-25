@@ -22,16 +22,51 @@
 //
 #include "G4ORNLLung.hh"
 
+#include "G4Processor/GDMLProcessor.h"
+#include "globals.hh"
+
+#include "G4VisAttributes.hh"
+
 G4ORNLLung::G4ORNLLung()
 {
-
 }
 
 G4ORNLLung::~G4ORNLLung()
 {
-
+  sxp.Finalize();
 }
-void G4ORNLLung::ConstructLung(G4VPhysicalVolume* mother)
+
+G4VPhysicalVolume* G4ORNLLung::ConstructLung(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
- G4cout << "Lungs created !!!!!!" << G4endl;
+  // Initialize GDML Processor
+  sxp.Initialize();
+  config.SetURI( "gdmlData/"+sex+"/ORNLLung.gdml" );
+  config.SetSetupName( "Default" );
+  sxp.Configure( &config );
+
+  // Run GDML Processor
+  sxp.Run();
+ 
+
+  G4LogicalVolume* logicLung = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("LungVolume");
+
+  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("LungPos");
+  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("LungRot");
+  
+  // Define rotation and position here!
+  G4VPhysicalVolume* physLung = new G4PVPlacement(rm,position,
+      			       "physicalLung",
+  			       logicLung,
+			       mother,
+			       false,
+			       0);
+
+  // Visualization Attributes
+  G4VisAttributes* LungVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  LungVisAtt->SetForceSolid(true);
+  logicLung->SetVisAttributes(LungVisAtt);
+
+  G4cout << "Lung created !!!!!!" << G4endl;
+  
+  return physLung;
 }

@@ -35,14 +35,17 @@ G4FemaleBuilder::~G4FemaleBuilder()
 {
 } 
 
-void G4FemaleBuilder::BuildBreast()
+void G4FemaleBuilder::BuildBreast(G4bool sensitivity)
 {
+  G4PhantomBuilder::BuildBreast(sensitivity);
 }
 
-void G4FemaleBuilder::BuildOvary()
+void G4FemaleBuilder::BuildOvary(G4bool sensitivity)
+{   
+  G4PhantomBuilder::BuildOvary(sensitivity);
+}
+
+void G4FemaleBuilder::BuildUterus(G4bool sensitivity )
 { 
-}
-
-void G4FemaleBuilder::BuildUterus()
-{
+  G4PhantomBuilder::BuildUterus(sensitivity);
 }

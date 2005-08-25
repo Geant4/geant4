@@ -22,16 +22,58 @@
 //
 #include "G4MIRDThyroid.hh"
 
+#include "G4Processor/GDMLProcessor.h"
+#include "globals.hh"
+#include "G4SDManager.hh"
+#include "G4VisAttributes.hh"
+
 G4MIRDThyroid::G4MIRDThyroid()
 {
-
 }
 
 G4MIRDThyroid::~G4MIRDThyroid()
 {
-
+  sxp.Finalize();
 }
-void G4MIRDThyroid::ConstructThyroid(G4VPhysicalVolume* mother)
+
+G4VPhysicalVolume* G4MIRDThyroid::ConstructThyroid(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
- G4cout << "Thyroid created !!!!!!" << G4endl;
+  // Initialize GDML Processor
+  sxp.Initialize();
+  config.SetURI( "gdmlData/"+sex+"/MIRDThyroid.gdml" );
+  config.SetSetupName( "Default" );
+  sxp.Configure( &config );
+
+  // Run GDML Processor
+  sxp.Run();
+ 
+
+  G4LogicalVolume* logicThyroid = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("ThyroidVolume");
+
+  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("ThyroidPos");
+  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("ThyroidRot");
+  
+  // Define rotation and position here!
+  G4VPhysicalVolume* physThyroid = new G4PVPlacement(rm,position,
+      			       "physicalThyroid",
+  			       logicThyroid,
+			       mother,
+			       false,
+			       0);
+
+  // Sensitive Body Part
+  if (sensitivity==true)
+  { 
+    G4SDManager* SDman = G4SDManager::GetSDMpointer();
+    logicThyroid->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
+  }
+
+  // Visualization Attributes
+  G4VisAttributes* ThyroidVisAtt = new G4VisAttributes(G4Colour(0.0,1.0,1.0));
+  ThyroidVisAtt->SetForceSolid(true);
+  logicThyroid->SetVisAttributes(ThyroidVisAtt);
+
+  G4cout << "Thyroid created !!!!!!" << G4endl;
+  
+  return physThyroid;
 }

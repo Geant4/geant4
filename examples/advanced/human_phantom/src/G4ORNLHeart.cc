@@ -22,16 +22,51 @@
 //
 #include "G4ORNLHeart.hh"
 
+#include "G4Processor/GDMLProcessor.h"
+#include "globals.hh"
+
+#include "G4VisAttributes.hh"
+
 G4ORNLHeart::G4ORNLHeart()
 {
-
 }
 
 G4ORNLHeart::~G4ORNLHeart()
 {
-
+  sxp.Finalize();
 }
-void G4ORNLHeart::ConstructHeart(G4VPhysicalVolume* mother)
+
+G4VPhysicalVolume* G4ORNLHeart::ConstructHeart(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
- G4cout << "Heart created !!!!!!" << G4endl;
+  // Initialize GDML Processor
+  sxp.Initialize();
+  config.SetURI( "gdmlData/"+sex+"/ORNLHeart.gdml" );
+  config.SetSetupName( "Default" );
+  sxp.Configure( &config );
+
+  // Run GDML Processor
+  sxp.Run();
+ 
+
+  G4LogicalVolume* logicHeart = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("HeartVolume");
+
+  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("HeartPos");
+  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("HeartRot");
+  
+  // Define rotation and position here!
+  G4VPhysicalVolume* physHeart = new G4PVPlacement(rm,position,
+      			       "physicalHeart",
+  			       logicHeart,
+			       mother,
+			       false,
+			       0);
+
+  // Visualization Attributes
+  G4VisAttributes* HeartVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  HeartVisAtt->SetForceSolid(true);
+  logicHeart->SetVisAttributes(HeartVisAtt);
+
+  G4cout << "Heart created !!!!!!" << G4endl;
+  
+  return physHeart;
 }

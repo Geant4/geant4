@@ -35,44 +35,47 @@ public:
   G4VBodyFactory();
   virtual ~G4VBodyFactory();
 
-  virtual G4VPhysicalVolume* CreateHead(G4VPhysicalVolume*, G4String) = 0;
-  virtual G4VPhysicalVolume* CreateTrunk(G4VPhysicalVolume*, G4String) = 0;
-  virtual void CreateLegs(G4VPhysicalVolume*) = 0;
-  virtual void CreateNeck(G4VPhysicalVolume*) = 0;
+  virtual G4VPhysicalVolume* CreateHead(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreateTrunk(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreateLegs(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreateNeck(G4VPhysicalVolume*,G4String,G4bool) = 0;
 
-  virtual void CreateSpine(G4VPhysicalVolume*) = 0;
-  virtual void CreateLegBone(G4VPhysicalVolume*) = 0;
-  virtual void CreateArmBone(G4VPhysicalVolume*) = 0;
-  virtual void CreateSkull(G4VPhysicalVolume*) = 0;
-  virtual void CreateRibCage(G4VPhysicalVolume*) = 0;
-  virtual void CreatePelvis(G4VPhysicalVolume*) = 0;
-  virtual void CreateScapulae(G4VPhysicalVolume*) = 0;
-  virtual void CreateClavicles(G4VPhysicalVolume*) = 0;
+  virtual G4VPhysicalVolume* CreateUpperSpine(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreateMiddleLowerSpine(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreateLegBone(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreateArmBone(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreateSkull(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreateRibCage(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreatePelvis(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreateScapulae(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreateClavicles(G4VPhysicalVolume*,G4String,G4bool) = 0;
 
-  virtual void CreateBreast(G4VPhysicalVolume*) = 0;
-  virtual void CreateUterus(G4VPhysicalVolume*) = 0;
-  virtual void CreateOvary(G4VPhysicalVolume*) = 0;
+  virtual G4VPhysicalVolume* CreateBreast(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreateUterus(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreateOvary(G4VPhysicalVolume*,G4String,G4bool) = 0;
 
-  virtual void CreateTestes(G4VPhysicalVolume*) = 0;
-  virtual void CreateMaleGenitalia(G4VPhysicalVolume*) = 0;
+  virtual G4VPhysicalVolume* CreateTestes(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreateMaleGenitalia(G4VPhysicalVolume*,G4String,G4bool) = 0;
 
-  virtual void CreateBrain(G4VPhysicalVolume*) = 0;
+  virtual G4VPhysicalVolume* CreateBrain(G4VPhysicalVolume*,G4String,G4bool) = 0;
 
-  virtual void CreateHeart(G4VPhysicalVolume*) = 0;
+  virtual G4VPhysicalVolume* CreateHeart(G4VPhysicalVolume*,G4String,G4bool) = 0;
 
-  virtual void CreateLung(G4VPhysicalVolume*) = 0;
+  virtual G4VPhysicalVolume* CreateLung(G4VPhysicalVolume*,G4String,G4bool) = 0;
 
-  virtual void CreateStomach(G4VPhysicalVolume*) = 0;
-  virtual void CreateIntestine(G4VPhysicalVolume*) = 0;
-  virtual void CreateEsophagus(G4VPhysicalVolume*) = 0;
+  virtual G4VPhysicalVolume* CreateStomach(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreateUpperLargeIntestine(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreateLowerLargeIntestine(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreateEsophagus(G4VPhysicalVolume*,G4String,G4bool) = 0;
 
-  virtual void CreateKidney(G4VPhysicalVolume*) = 0;
-  virtual void CreateAdrenal(G4VPhysicalVolume*) = 0;
-  virtual void CreateLiver(G4VPhysicalVolume*) = 0;
-  virtual void CreatePancreas(G4VPhysicalVolume*) = 0;
-  virtual void CreateUrinaryBladder(G4VPhysicalVolume*) = 0;
+  virtual G4VPhysicalVolume* CreateKidney(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreateAdrenal(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreateLiver(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreatePancreas(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreateSpleen(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreateUrinaryBladder(G4VPhysicalVolume*,G4String,G4bool) = 0;
 
-  virtual void CreateThyroid(G4VPhysicalVolume*) = 0;
+  virtual G4VPhysicalVolume* CreateThyroid(G4VPhysicalVolume*,G4String,G4bool) = 0;
 
 
 };

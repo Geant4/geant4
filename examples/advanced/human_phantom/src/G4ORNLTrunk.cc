@@ -22,16 +22,51 @@
 //
 #include "G4ORNLTrunk.hh"
 
+#include "G4Processor/GDMLProcessor.h"
+#include "globals.hh"
+
+#include "G4VisAttributes.hh"
+
 G4ORNLTrunk::G4ORNLTrunk()
 {
-
 }
 
 G4ORNLTrunk::~G4ORNLTrunk()
 {
-
+  sxp.Finalize();
 }
-void G4ORNLTrunk::ConstructTrunk(G4VPhysicalVolume* mother, G4String sex)
+
+G4VPhysicalVolume* G4ORNLTrunk::ConstructTrunk(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
- G4cout << "Trunk created !!!!!!" << G4endl;
+  // Initialize GDML Processor
+  sxp.Initialize();
+  config.SetURI( "gdmlData/"+sex+"/ORNLTrunk.gdml" );
+  config.SetSetupName( "Default" );
+  sxp.Configure( &config );
+
+  // Run GDML Processor
+  sxp.Run();
+ 
+
+  G4LogicalVolume* logicTrunk = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("TrunkVolume");
+
+  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("TrunkPos");
+  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("TrunkRot");
+  
+  // Define rotation and position here!
+  G4VPhysicalVolume* physTrunk = new G4PVPlacement(rm,position,
+      			       "physicalTrunk",
+  			       logicTrunk,
+			       mother,
+			       false,
+			       0);
+
+  // Visualization Attributes
+  G4VisAttributes* TrunkVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  TrunkVisAtt->SetForceSolid(true);
+  logicTrunk->SetVisAttributes(TrunkVisAtt);
+
+  G4cout << "Trunk created !!!!!!" << G4endl;
+  
+  return physTrunk;
 }

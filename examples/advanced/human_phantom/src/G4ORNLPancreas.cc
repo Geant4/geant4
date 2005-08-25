@@ -22,16 +22,51 @@
 //
 #include "G4ORNLPancreas.hh"
 
+#include "G4Processor/GDMLProcessor.h"
+#include "globals.hh"
+
+#include "G4VisAttributes.hh"
+
 G4ORNLPancreas::G4ORNLPancreas()
 {
-
 }
 
 G4ORNLPancreas::~G4ORNLPancreas()
 {
-
+  sxp.Finalize();
 }
-void G4ORNLPancreas::ConstructPancreas(G4VPhysicalVolume* mother)
+
+G4VPhysicalVolume* G4ORNLPancreas::ConstructPancreas(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
- G4cout << "Pancreas created !!!!!!" << G4endl;
+  // Initialize GDML Processor
+  sxp.Initialize();
+  config.SetURI( "gdmlData/"+sex+"/ORNLPancreas.gdml" );
+  config.SetSetupName( "Default" );
+  sxp.Configure( &config );
+
+  // Run GDML Processor
+  sxp.Run();
+ 
+
+  G4LogicalVolume* logicPancreas = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("PancreasVolume");
+
+  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("PancreasPos");
+  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("PancreasRot");
+  
+  // Define rotation and position here!
+  G4VPhysicalVolume* physPancreas = new G4PVPlacement(rm,position,
+      			       "physicalPancreas",
+  			       logicPancreas,
+			       mother,
+			       false,
+			       0);
+
+  // Visualization Attributes
+  G4VisAttributes* PancreasVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  PancreasVisAtt->SetForceSolid(true);
+  logicPancreas->SetVisAttributes(PancreasVisAtt);
+
+  G4cout << "Pancreas created !!!!!!" << G4endl;
+  
+  return physPancreas;
 }

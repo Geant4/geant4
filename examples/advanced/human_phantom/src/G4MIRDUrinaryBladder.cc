@@ -22,16 +22,58 @@
 //
 #include "G4MIRDUrinaryBladder.hh"
 
+#include "G4Processor/GDMLProcessor.h"
+#include "globals.hh"
+#include "G4SDManager.hh"
+#include "G4VisAttributes.hh"
+
 G4MIRDUrinaryBladder::G4MIRDUrinaryBladder()
 {
-
 }
 
 G4MIRDUrinaryBladder::~G4MIRDUrinaryBladder()
 {
-
+  sxp.Finalize();
 }
-void G4MIRDUrinaryBladder::ConstructUrinaryBladder(G4VPhysicalVolume* mother)
+
+G4VPhysicalVolume* G4MIRDUrinaryBladder::ConstructUrinaryBladder(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
- G4cout << "Urinary Bladder created !!!!!!" << G4endl;
+  // Initialize GDML Processor
+  sxp.Initialize();
+  config.SetURI( "gdmlData/"+sex+"/MIRDUrinaryBladder.gdml" );
+  config.SetSetupName( "Default" );
+  sxp.Configure( &config );
+
+  // Run GDML Processor
+  sxp.Run();
+ 
+
+  G4LogicalVolume* logicUrinaryBladder = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("UrinaryBladderVolume");
+
+  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("UrinaryBladderPos");
+  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("UrinaryBladderRot");
+  
+  // Define rotation and position here!
+  G4VPhysicalVolume* physUrinaryBladder = new G4PVPlacement(rm,position,
+      			       "physicalUrinaryBladder",
+  			       logicUrinaryBladder,
+			       mother,
+			       false,
+			       0);
+
+  // Sensitive Body Part
+  if (sensitivity==true)
+  { 
+    G4SDManager* SDman = G4SDManager::GetSDMpointer();
+    logicUrinaryBladder->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
+  }
+
+  // Visualization Attributes
+  G4VisAttributes* UrinaryBladderVisAtt = new G4VisAttributes(G4Colour(0.85,0.65,0.125));
+  UrinaryBladderVisAtt->SetForceSolid(true);
+  logicUrinaryBladder->SetVisAttributes(UrinaryBladderVisAtt);
+
+  G4cout << "UrinaryBladder created !!!!!!" << G4endl;
+  
+  return physUrinaryBladder;
 }

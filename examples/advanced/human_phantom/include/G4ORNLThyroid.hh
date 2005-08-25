@@ -25,7 +25,12 @@
 #define G4ORNLThyroid_h 1
 
 #include "G4VPhysicalVolume.hh"
+
+#include "Saxana/SAXProcessor.h"
+#include "Saxana/ProcessingConfigurator.h"
+
 class G4VPhysicalVolume;
+class G4LogicalVolume;
 
 class G4ORNLThyroid
 {
@@ -33,6 +38,11 @@ public:
 
   G4ORNLThyroid();
   ~G4ORNLThyroid();
-  void ConstructThyroid(G4VPhysicalVolume*);
+  G4VPhysicalVolume* ConstructThyroid(G4VPhysicalVolume*, G4String, G4bool);
+ 
+private:
+    SAXProcessor sxp;
+    ProcessingConfigurator config;
+
 };
 #endif

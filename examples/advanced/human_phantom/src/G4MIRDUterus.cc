@@ -22,16 +22,58 @@
 //
 #include "G4MIRDUterus.hh"
 
+#include "G4Processor/GDMLProcessor.h"
+#include "globals.hh"
+#include "G4SDManager.hh"
+#include "G4VisAttributes.hh"
+
 G4MIRDUterus::G4MIRDUterus()
 {
-
 }
 
 G4MIRDUterus::~G4MIRDUterus()
 {
-
+  sxp.Finalize();
 }
-void G4MIRDUterus::ConstructUterus(G4VPhysicalVolume* mother)
+
+G4VPhysicalVolume* G4MIRDUterus::ConstructUterus(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
- G4cout << "Uterus created !!!!!!" << G4endl;
+  // Initialize GDML Processor
+  sxp.Initialize();
+  config.SetURI( "gdmlData/"+sex+"/MIRDUterus.gdml" );
+  config.SetSetupName( "Default" );
+  sxp.Configure( &config );
+
+  // Run GDML Processor
+  sxp.Run();
+ 
+
+  G4LogicalVolume* logicUterus = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("UterusVolume");
+
+  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("UterusPos");
+  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("UterusRot");
+  
+  // Define rotation and position here!
+  G4VPhysicalVolume* physUterus = new G4PVPlacement(rm,position,
+      			       "physicalUterus",
+  			       logicUterus,
+			       mother,
+			       false,
+			       0);
+
+  // Sensitive Body Part
+  if (sensitivity==true)
+  { 
+    G4SDManager* SDman = G4SDManager::GetSDMpointer();
+    logicUterus->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
+  }
+
+  // Visualization Attributes
+  G4VisAttributes* UterusVisAtt = new G4VisAttributes(G4Colour(0.85,0.44,0.84));
+  UterusVisAtt->SetForceSolid(true);
+  logicUterus->SetVisAttributes(UterusVisAtt);
+
+  G4cout << "Uterus created !!!!!!" << G4endl;
+  
+  return physUterus;
 }

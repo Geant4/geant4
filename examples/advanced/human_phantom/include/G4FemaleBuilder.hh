@@ -37,9 +37,10 @@ class G4FemaleBuilder: public G4PhantomBuilder
 public:
   G4FemaleBuilder();
   ~G4FemaleBuilder();
-  void BuildBreast();
-  void BuildOvary();
-  void BuildUterus();
+
+  void BuildBreast(G4bool sensitivity);
+  void BuildOvary(G4bool sensitivity);
+  void BuildUterus(G4bool sensitivity);
 
 private:
  

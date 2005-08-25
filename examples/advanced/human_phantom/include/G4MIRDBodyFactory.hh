@@ -33,46 +33,48 @@ public:
   G4MIRDBodyFactory();
  ~G4MIRDBodyFactory();
 
-  G4VPhysicalVolume* CreateHead(G4VPhysicalVolume*, G4String);
-  G4VPhysicalVolume* CreateTrunk(G4VPhysicalVolume*, G4String);
+  G4VPhysicalVolume* CreateHead(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreateTrunk(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreateLegs(G4VPhysicalVolume*,G4String,G4bool);
 
-  void CreateLegs(G4VPhysicalVolume*);
+  G4VPhysicalVolume* CreateUpperSpine(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreateMiddleLowerSpine(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreateLegBone(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreateArmBone(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreateSkull(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreateRibCage(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreatePelvis(G4VPhysicalVolume*,G4String,G4bool);
 
-  void CreateSpine(G4VPhysicalVolume*);
-  void CreateLegBone(G4VPhysicalVolume*);
-  void CreateArmBone(G4VPhysicalVolume*);
-  void CreateSkull(G4VPhysicalVolume*);
-  void CreateRibCage(G4VPhysicalVolume*);
-  void CreatePelvis(G4VPhysicalVolume*);
+  G4VPhysicalVolume* CreateBreast(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreateUterus(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreateOvary(G4VPhysicalVolume*,G4String,G4bool);
 
-  void CreateBreast(G4VPhysicalVolume*);
-  void CreateUterus(G4VPhysicalVolume*);
-  void CreateOvary(G4VPhysicalVolume*);
+  G4VPhysicalVolume* CreateTestes(G4VPhysicalVolume*,G4String,G4bool);
 
-  void CreateTestes(G4VPhysicalVolume*);
+  G4VPhysicalVolume* CreateBrain(G4VPhysicalVolume*,G4String,G4bool);
 
-  void CreateBrain(G4VPhysicalVolume*);
+  G4VPhysicalVolume* CreateHeart(G4VPhysicalVolume*,G4String,G4bool);
 
-  void CreateHeart(G4VPhysicalVolume*);
+  G4VPhysicalVolume* CreateLung(G4VPhysicalVolume*,G4String,G4bool);
 
-  void CreateLung(G4VPhysicalVolume*);
+  G4VPhysicalVolume* CreateStomach(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreateUpperLargeIntestine(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreateLowerLargeIntestine(G4VPhysicalVolume*,G4String,G4bool);
 
-  void CreateStomach(G4VPhysicalVolume*);
-  void CreateIntestine(G4VPhysicalVolume*);
+  G4VPhysicalVolume* CreateKidney(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreateAdrenal(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreateLiver(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreatePancreas(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreateSpleen(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreateUrinaryBladder(G4VPhysicalVolume*,G4String,G4bool);
 
-  void CreateKidney(G4VPhysicalVolume*);
-  void CreateAdrenal(G4VPhysicalVolume*);
-  void CreateLiver(G4VPhysicalVolume*);
-  void CreatePancreas(G4VPhysicalVolume*);
-  void CreateUrinaryBladder(G4VPhysicalVolume*);
+  G4VPhysicalVolume* CreateThyroid(G4VPhysicalVolume*,G4String,G4bool);
 
-  void CreateThyroid(G4VPhysicalVolume*);
-
-  void CreateEsophagus(G4VPhysicalVolume*);
-  void CreateNeck(G4VPhysicalVolume*);
-  void CreateScapulae(G4VPhysicalVolume*);
-  void CreateClavicles(G4VPhysicalVolume*);
-  void CreateMaleGenitalia(G4VPhysicalVolume*);
+  G4VPhysicalVolume* CreateEsophagus(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreateNeck(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreateScapulae(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreateClavicles(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreateMaleGenitalia(G4VPhysicalVolume*,G4String,G4bool);
 
 private:
   

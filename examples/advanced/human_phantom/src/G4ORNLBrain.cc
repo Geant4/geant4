@@ -22,16 +22,51 @@
 //
 #include "G4ORNLBrain.hh"
 
+#include "G4Processor/GDMLProcessor.h"
+#include "globals.hh"
+
+#include "G4VisAttributes.hh"
+
 G4ORNLBrain::G4ORNLBrain()
 {
-
 }
 
 G4ORNLBrain::~G4ORNLBrain()
 {
-
+  sxp.Finalize();
 }
-void G4ORNLBrain::ConstructBrain(G4VPhysicalVolume* mother)
+
+G4VPhysicalVolume* G4ORNLBrain::ConstructBrain(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
- G4cout << "Brain created !!!!!!" << G4endl;
+  // Initialize GDML Processor
+  sxp.Initialize();
+  config.SetURI( "gdmlData/"+sex+"/ORNLBrain.gdml" );
+  config.SetSetupName( "Default" );
+  sxp.Configure( &config );
+
+  // Run GDML Processor
+  sxp.Run();
+ 
+
+  G4LogicalVolume* logicBrain = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("BrainVolume");
+
+  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("BrainPos");
+  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("BrainRot");
+  
+  // Define rotation and position here!
+  G4VPhysicalVolume* physBrain = new G4PVPlacement(rm,position,
+      			       "physicalBrain",
+  			       logicBrain,
+			       mother,
+			       false,
+			       0);
+
+  // Visualization Attributes
+  G4VisAttributes* BrainVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  BrainVisAtt->SetForceSolid(true);
+  logicBrain->SetVisAttributes(BrainVisAtt);
+
+  G4cout << "Brain created !!!!!!" << G4endl;
+  
+  return physBrain;
 }

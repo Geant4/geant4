@@ -22,16 +22,51 @@
 //
 #include "G4ORNLBreast.hh"
 
+#include "G4Processor/GDMLProcessor.h"
+#include "globals.hh"
+
+#include "G4VisAttributes.hh"
+
 G4ORNLBreast::G4ORNLBreast()
 {
-
 }
 
 G4ORNLBreast::~G4ORNLBreast()
 {
-
+  sxp.Finalize();
 }
-void G4ORNLBreast::ConstructBreast(G4VPhysicalVolume* mother)
+
+G4VPhysicalVolume* G4ORNLBreast::ConstructBreast(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
- G4cout << "Breast created !!!!!!" << G4endl;
+  // Initialize GDML Processor
+  sxp.Initialize();
+  config.SetURI( "gdmlData/"+sex+"/ORNLBreast.gdml" );
+  config.SetSetupName( "Default" );
+  sxp.Configure( &config );
+
+  // Run GDML Processor
+  sxp.Run();
+ 
+
+  G4LogicalVolume* logicBreast = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("BreastVolume");
+
+  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("BreastPos");
+  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("BreastRot");
+  
+  // Define rotation and position here!
+  G4VPhysicalVolume* physBreast = new G4PVPlacement(rm,position,
+      			       "physicalBreast",
+  			       logicBreast,
+			       mother,
+			       false,
+			       0);
+
+  // Visualization Attributes
+  G4VisAttributes* BreastVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  BreastVisAtt->SetForceSolid(true);
+  logicBreast->SetVisAttributes(BreastVisAtt);
+
+  G4cout << "Breast created !!!!!!" << G4endl;
+  
+  return physBreast;
 }

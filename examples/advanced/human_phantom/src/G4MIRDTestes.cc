@@ -22,16 +22,58 @@
 //
 #include "G4MIRDTestes.hh"
 
+#include "G4Processor/GDMLProcessor.h"
+#include "globals.hh"
+#include "G4SDManager.hh"
+#include "G4VisAttributes.hh"
+
 G4MIRDTestes::G4MIRDTestes()
 {
-
 }
 
 G4MIRDTestes::~G4MIRDTestes()
 {
-
+  sxp.Finalize();
 }
-void G4MIRDTestes::ConstructTestes(G4VPhysicalVolume* mother)
+
+G4VPhysicalVolume* G4MIRDTestes::ConstructTestes(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
- G4cout << "Testes created !!!!!!" << G4endl;
+  // Initialize GDML Processor
+  sxp.Initialize();
+  config.SetURI( "gdmlData/"+sex+"/MIRDTestes.gdml" );
+  config.SetSetupName( "Default" );
+  sxp.Configure( &config );
+
+  // Run GDML Processor
+  sxp.Run();
+ 
+
+  G4LogicalVolume* logicTestes = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("TestesVolume");
+
+  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("TestesPos");
+  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("TestesRot");
+  
+  // Define rotation and position here!
+  G4VPhysicalVolume* physTestes = new G4PVPlacement(rm,position,
+      			       "physicalTestes",
+  			       logicTestes,
+			       mother,
+			       false,
+			       0);
+
+  // Sensitive Body Part
+  if (sensitivity==true)
+  { 
+    G4SDManager* SDman = G4SDManager::GetSDMpointer();
+    logicTestes->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
+  }
+
+  // Visualization Attributes
+  G4VisAttributes* TestesVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  TestesVisAtt->SetForceSolid(true);
+  logicTestes->SetVisAttributes(TestesVisAtt);
+
+  G4cout << "Testes created !!!!!!" << G4endl;
+  
+  return physTestes;
 }

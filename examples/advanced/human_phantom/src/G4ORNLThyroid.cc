@@ -22,16 +22,51 @@
 //
 #include "G4ORNLThyroid.hh"
 
+#include "G4Processor/GDMLProcessor.h"
+#include "globals.hh"
+
+#include "G4VisAttributes.hh"
+
 G4ORNLThyroid::G4ORNLThyroid()
 {
-
 }
 
 G4ORNLThyroid::~G4ORNLThyroid()
 {
-
+  sxp.Finalize();
 }
-void G4ORNLThyroid::ConstructThyroid(G4VPhysicalVolume* mother)
+
+G4VPhysicalVolume* G4ORNLThyroid::ConstructThyroid(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
- G4cout << "Thyroid created !!!!!!" << G4endl;
+  // Initialize GDML Processor
+  sxp.Initialize();
+  config.SetURI( "gdmlData/"+sex+"/ORNLThyroid.gdml" );
+  config.SetSetupName( "Default" );
+  sxp.Configure( &config );
+
+  // Run GDML Processor
+  sxp.Run();
+ 
+
+  G4LogicalVolume* logicThyroid = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("ThyroidVolume");
+
+  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("ThyroidPos");
+  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("ThyroidRot");
+  
+  // Define rotation and position here!
+  G4VPhysicalVolume* physThyroid = new G4PVPlacement(rm,position,
+      			       "physicalThyroid",
+  			       logicThyroid,
+			       mother,
+			       false,
+			       0);
+
+  // Visualization Attributes
+  G4VisAttributes* ThyroidVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  ThyroidVisAtt->SetForceSolid(true);
+  logicThyroid->SetVisAttributes(ThyroidVisAtt);
+
+  G4cout << "Thyroid created !!!!!!" << G4endl;
+  
+  return physThyroid;
 }

@@ -22,16 +22,58 @@
 //
 #include "G4MIRDLegBone.hh"
 
+#include "G4Processor/GDMLProcessor.h"
+#include "globals.hh"
+#include "G4SDManager.hh"
+#include "G4VisAttributes.hh"
+
 G4MIRDLegBone::G4MIRDLegBone()
 {
-
 }
 
 G4MIRDLegBone::~G4MIRDLegBone()
 {
-
+  sxp.Finalize();
 }
-void G4MIRDLegBone::ConstructLegBone(G4VPhysicalVolume* mother)
+
+G4VPhysicalVolume* G4MIRDLegBone::ConstructLegBone(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
- G4cout << "Leg Bones created !!!!!!" << G4endl;
+  // Initialize GDML Processor
+  sxp.Initialize();
+  config.SetURI( "gdmlData/"+sex+"/MIRDLegBone.gdml" );
+  config.SetSetupName( "Default" );
+  sxp.Configure( &config );
+
+  // Run GDML Processor
+  sxp.Run();
+ 
+
+  G4LogicalVolume* logicLegBone = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("LegBoneVolume");
+
+  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("LegBonePos");
+  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("LegBoneRot");
+  
+  // Define rotation and position here!
+  G4VPhysicalVolume* physLegBone = new G4PVPlacement(rm,position,
+      			       "physicalLegBone",
+  			       logicLegBone,
+			       mother,
+			       false,
+			       0);
+
+  // Sensitive Body Part
+  if (sensitivity==true)
+  { 
+    G4SDManager* SDman = G4SDManager::GetSDMpointer();
+    logicLegBone->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
+  }
+
+  // Visualization Attributes
+  G4VisAttributes* LegBoneVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
+  LegBoneVisAtt->SetForceSolid(true);
+  logicLegBone->SetVisAttributes(LegBoneVisAtt);
+
+  G4cout << "LegBone created !!!!!!" << G4endl;
+  
+  return physLegBone;
 }

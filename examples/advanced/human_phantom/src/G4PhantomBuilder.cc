@@ -32,14 +32,16 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 
-G4PhantomBuilder::G4PhantomBuilder(): sex("female")
+#include "G4VisAttributes.hh"
+
+G4PhantomBuilder::G4PhantomBuilder(): sex("Female"), model("MIRD")
 {  
   // sex can be "female" or "male"
   motherVolume = 0;
   headVolume = 0;
   trunkVolume = 0;
-  
-  body = new G4MIRDBodyFactory();
+  neckVolume = 0;
+  maleGenitaliaVolume = 0;  
 }
 
 G4PhantomBuilder::~G4PhantomBuilder()
@@ -49,7 +51,7 @@ G4PhantomBuilder::~G4PhantomBuilder()
 
 void G4PhantomBuilder::BuildWorld()
 {
-// Elements
+  // Elements
   G4double A;
   G4double Z;
   A = 16.00*g/mole;
@@ -78,31 +80,286 @@ void G4PhantomBuilder::BuildWorld()
 						0,
 						false,
 						0);
+
+  // Visualization Attributes
+  G4VisAttributes* WorldVisAtt = new G4VisAttributes(G4VisAttributes::Invisible);
+  WorldVisAtt->SetForceSolid(false);
+  logicWorld->SetVisAttributes(WorldVisAtt);
+
+
 }
-void G4PhantomBuilder::BuildHead()
+
+void G4PhantomBuilder::BuildHead(G4bool sensitivity)
 { 
   if (motherVolume == 0)
     G4Exception("The world volume is missing !!!!!");
 
-  headVolume = body -> CreateHead(motherVolume,sex);
+  headVolume = body -> CreateHead(motherVolume,sex,sensitivity);
 }
 
-void G4PhantomBuilder::BuildTrunk()
+void G4PhantomBuilder::BuildTrunk(G4bool sensitivity)
 { 
   if (motherVolume == 0)
     G4Exception("The world volume is missing !!!!!");
 
-  trunkVolume = body -> CreateTrunk(motherVolume,sex);
+  trunkVolume = body -> CreateTrunk(motherVolume,sex,sensitivity);
 }
-//void G4PhantomBuilder::BuildBrain()
-//{ 
-  // if (headVolume == 0)
-  //  G4Exception("The head volume is missing !!!!!");
 
-  // body -> CreateBrain(headVolume);
-//}
+void G4PhantomBuilder::BuildLegs(G4bool sensitivity)
+{ 
+   if (motherVolume == 0)
+   G4Exception("The world volume is missing !!!!!");
+
+   legsVolume = body -> CreateLegs(motherVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildNeck(G4bool sensitivity)
+{ 
+   if (motherVolume == 0)
+   G4Exception("The world volume is missing !!!!!");
+
+   neckVolume = body -> CreateNeck(motherVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildUpperSpine(G4bool sensitivity)
+{ 
+   if (headVolume == 0)
+   G4Exception("The head volume is missing !!!!!");
+
+   body -> CreateUpperSpine(headVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildMiddleLowerSpine(G4bool sensitivity)
+{ 
+   if (trunkVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreateMiddleLowerSpine(trunkVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildSpleen(G4bool sensitivity)
+{ 
+   if (trunkVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreateSpleen(trunkVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildLegBone(G4bool sensitivity)
+{ 
+   if (legsVolume == 0)
+   G4Exception("The legs volume volume is missing !!!!!");
+
+   body -> CreateLegBone(legsVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildArmBone(G4bool sensitivity)
+{ 
+   if (trunkVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreateArmBone(trunkVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildSkull(G4bool sensitivity)
+{ 
+   if (headVolume == 0)
+   G4Exception("The head volume is missing !!!!!");
+
+   body -> CreateSkull(headVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildRibCage(G4bool sensitivity)
+{ 
+   if (trunkVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreateRibCage(trunkVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildPelvis(G4bool sensitivity)
+{ 
+   if (trunkVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreatePelvis(trunkVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildScapulae(G4bool sensitivity)
+{ 
+   if (trunkVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreateScapulae(trunkVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildClavicles(G4bool sensitivity)
+{ 
+   if (trunkVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreateClavicles(trunkVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildBreast(G4bool sensitivity)
+{ 
+   if (motherVolume == 0)
+   G4Exception("The world volume is missing !!!!!");
+
+   body -> CreateBreast(motherVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildUterus(G4bool sensitivity)
+{ 
+   if (trunkVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreateUterus(trunkVolume,sex,sensitivity);
+}
+void G4PhantomBuilder::BuildOvary(G4bool sensitivity)
+{ 
+   if (trunkVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreateOvary(trunkVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildMaleGenitalia(G4bool sensitivity)
+{ 
+   if (motherVolume == 0)
+   G4Exception("The world volume is missing !!!!!");
+
+   maleGenitaliaVolume = body -> CreateMaleGenitalia(motherVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildTestes(G4bool sensitivity)
+{ 
+   if (maleGenitaliaVolume == 0)
+   G4Exception("The world volume is missing !!!!!");
+
+   body -> CreateTestes(maleGenitaliaVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildBrain(G4bool sensitivity)
+{ 
+   if (headVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreateBrain(headVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildHeart(G4bool sensitivity)
+{ 
+   if (trunkVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreateHeart(trunkVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildLung(G4bool sensitivity)
+{ 
+   if (trunkVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreateLung(trunkVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildStomach(G4bool sensitivity)
+{ 
+   if (trunkVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreateStomach(trunkVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildUpperLargeIntestine(G4bool sensitivity)
+{ 
+   if (trunkVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreateUpperLargeIntestine(trunkVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildLowerLargeIntestine(G4bool sensitivity)
+{ 
+   if (trunkVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreateLowerLargeIntestine(trunkVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildEsophagus(G4bool sensitivity)
+{ 
+   if (trunkVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreateEsophagus(trunkVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildKidney(G4bool sensitivity)
+{ 
+   if (trunkVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreateKidney(trunkVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildAdrenal(G4bool sensitivity)
+{ 
+   if (trunkVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreateAdrenal(trunkVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildLiver(G4bool sensitivity)
+{ 
+   if (trunkVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreateLiver(trunkVolume,sex,sensitivity);
+}
+void G4PhantomBuilder::BuildPancreas(G4bool sensitivity)
+{ 
+   if (trunkVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreatePancreas(trunkVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildUrinaryBladder(G4bool sensitivity)
+{ 
+   if (trunkVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreateUrinaryBladder(trunkVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildThyroid(G4bool sensitivity)
+{ 
+   if (headVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreateThyroid(headVolume,sex,sensitivity);
+}
+
 
 G4VPhysicalVolume* G4PhantomBuilder::GetPhantom()
 {
   return motherVolume;
+}
+
+void G4PhantomBuilder::SetSex(G4String sexFlag)
+{
+  sex = sexFlag;
+}
+
+void G4PhantomBuilder::SetModel(G4String modelFlag)
+{
+  model = modelFlag;
+
+  if(model=="MIRD")
+    body = new G4MIRDBodyFactory();
+  if(model=="ORNL")
+    body = new G4ORNLBodyFactory();
 }

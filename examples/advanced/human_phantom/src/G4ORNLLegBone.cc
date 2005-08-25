@@ -22,16 +22,51 @@
 //
 #include "G4ORNLLegBone.hh"
 
+#include "G4Processor/GDMLProcessor.h"
+#include "globals.hh"
+
+#include "G4VisAttributes.hh"
+
 G4ORNLLegBone::G4ORNLLegBone()
 {
-
 }
 
 G4ORNLLegBone::~G4ORNLLegBone()
 {
-
+  sxp.Finalize();
 }
-void G4ORNLLegBone::ConstructLegBone(G4VPhysicalVolume* mother)
+
+G4VPhysicalVolume* G4ORNLLegBone::ConstructLegBone(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
- G4cout << "Leg Bones created !!!!!!" << G4endl;
+  // Initialize GDML Processor
+  sxp.Initialize();
+  config.SetURI( "gdmlData/"+sex+"/ORNLLegBone.gdml" );
+  config.SetSetupName( "Default" );
+  sxp.Configure( &config );
+
+  // Run GDML Processor
+  sxp.Run();
+ 
+
+  G4LogicalVolume* logicLegBone = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("LegBoneVolume");
+
+  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("LegBonePos");
+  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("LegBoneRot");
+  
+  // Define rotation and position here!
+  G4VPhysicalVolume* physLegBone = new G4PVPlacement(rm,position,
+      			       "physicalLegBone",
+  			       logicLegBone,
+			       mother,
+			       false,
+			       0);
+
+  // Visualization Attributes
+  G4VisAttributes* LegBoneVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  LegBoneVisAtt->SetForceSolid(true);
+  logicLegBone->SetVisAttributes(LegBoneVisAtt);
+
+  G4cout << "LegBone created !!!!!!" << G4endl;
+  
+  return physLegBone;
 }

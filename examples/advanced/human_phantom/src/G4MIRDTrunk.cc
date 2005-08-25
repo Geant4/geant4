@@ -22,73 +22,61 @@
 //
 #include "G4MIRDTrunk.hh"
 
-#include "G4EllipticalTube.hh"
+#include "G4Processor/GDMLProcessor.h"
+#include "globals.hh"
 
-#include "G4Element.hh"
-#include "G4CSGSolid.hh"
-#include "G4Material.hh"
+#include "G4SDManager.hh"
 
-#include "G4LogicalVolume.hh"
-#include "G4PVPlacement.hh"
+#include "G4VisAttributes.hh"
 
-#include "G4VisAttributes.hh"   
-#include "G4Colour.hh"
-
-
-G4MIRDTrunk::G4MIRDTrunk(): physTrunk(0)
+G4MIRDTrunk::G4MIRDTrunk()
 {
 }
 
 G4MIRDTrunk::~G4MIRDTrunk()
 {
+  sxp.Finalize();
 }
 
-void G4MIRDTrunk::ConstructTrunk(G4VPhysicalVolume* mother, G4String sex)
+G4VPhysicalVolume* G4MIRDTrunk::ConstructTrunk(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
+  // Initialize GDML Processor
+  sxp.Initialize();
+  config.SetURI( "gdmlData/"+sex+"/MIRDTrunk.gdml" );
+  config.SetSetupName( "Default" );
+  sxp.Configure( &config );
 
-  // *******************************************************************************//
+  // Run GDML Processor
+  sxp.Run();
+ 
 
-  // Elements
-  G4double A;
-  G4double Z;
-  A = 16.00*g/mole;
-  G4Element* elO = new G4Element("Oxygen","O",Z = 8.,A);
-  A = 14.01*g/mole;
-  G4Element* elN = new G4Element("Nitrogen","N",Z = 7.,A);
+  G4LogicalVolume* logicTrunk = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("TrunkVolume");
 
-  // Air Material
-  G4double  d = 1.290*mg/cm3;
-  G4Material* matAir = new G4Material("Air",d,2);
-  matAir->AddElement(elN,0.7);
-  matAir->AddElement(elO,0.3);
-
-
-  // ******************************************************************************//
+  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("TrunkPos");
+  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("TrunkRot");
+  
+  // Define rotation and position here!
+  G4VPhysicalVolume* physTrunk = new G4PVPlacement(rm,position,
+      			       "physicalTrunk",
+  			       logicTrunk,
+			       mother,
+			       false,
+			       0);
 
 
-  G4double Dx = 10.*cm;
-  G4double Dy = 20.*cm;
-  G4double Dz = 35.*cm;
+  // Sensitive Body Part
+  if (sensitivity == true)
+  { 
+    G4SDManager* SDman = G4SDManager::GetSDMpointer();
+    logicTrunk->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
+  }
 
-  G4EllipticalTube* trunk = new G4EllipticalTube("MIRDTrunk", 
-						 Dx,
-						 Dy,
-						 Dz );
-
-  G4LogicalVolume* logicTrunk = new G4LogicalVolume(trunk, 
-						    matAir, 
-						    "logicalTrunk", 0,0,0);
-
-  physTrunk = new G4PVPlacement(0,G4ThreeVector(),
-      				"physicalTrunk",
-				logicTrunk,
-				mother,
-				false,
-				0);
-
-  G4VisAttributes* TrunkVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  // Visualization Attributes
+  G4VisAttributes* TrunkVisAtt = new G4VisAttributes(G4Colour(0.94,0.5,0.5));
   TrunkVisAtt->SetForceSolid(false);
   logicTrunk->SetVisAttributes(TrunkVisAtt);
 
- G4cout << "Trunk created !!!!!!" << G4endl;
+  G4cout << "Trunk created !!!!!!" << G4endl;
+  
+  return physTrunk;
 }

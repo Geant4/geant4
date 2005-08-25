@@ -22,16 +22,51 @@
 //
 #include "G4ORNLOvary.hh"
 
+#include "G4Processor/GDMLProcessor.h"
+#include "globals.hh"
+
+#include "G4VisAttributes.hh"
+
 G4ORNLOvary::G4ORNLOvary()
 {
-
 }
 
 G4ORNLOvary::~G4ORNLOvary()
 {
-
+  sxp.Finalize();
 }
-void G4ORNLOvary::ConstructOvary(G4VPhysicalVolume* mother)
+
+G4VPhysicalVolume* G4ORNLOvary::ConstructOvary(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
- G4cout << "Ovaries created !!!!!!" << G4endl;
+  // Initialize GDML Processor
+  sxp.Initialize();
+  config.SetURI( "gdmlData/"+sex+"/ORNLOvary.gdml" );
+  config.SetSetupName( "Default" );
+  sxp.Configure( &config );
+
+  // Run GDML Processor
+  sxp.Run();
+ 
+
+  G4LogicalVolume* logicOvary = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("OvaryVolume");
+
+  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("OvaryPos");
+  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("OvaryRot");
+  
+  // Define rotation and position here!
+  G4VPhysicalVolume* physOvary = new G4PVPlacement(rm,position,
+      			       "physicalOvary",
+  			       logicOvary,
+			       mother,
+			       false,
+			       0);
+
+  // Visualization Attributes
+  G4VisAttributes* OvaryVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  OvaryVisAtt->SetForceSolid(true);
+  logicOvary->SetVisAttributes(OvaryVisAtt);
+
+  G4cout << "Ovary created !!!!!!" << G4endl;
+  
+  return physOvary;
 }
