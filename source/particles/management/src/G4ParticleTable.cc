@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.22 2004-12-08 00:07:24 asaim Exp $
+// $Id: G4ParticleTable.cc,v 1.23 2005-08-26 03:40:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParticleTable
@@ -106,7 +106,9 @@ G4ParticleTable::~G4ParticleTable()
 ////////////////////
 G4ParticleTable::G4ParticleTable(const G4ParticleTable &right)
 {
-  G4Exception("you call copy constructor of G4ParticleTable");    
+  G4Exception("G4ParticleTable::G4ParticleTable()",
+	      "illegal constructor call", JustWarning,
+	      "you call copy constructor of G4ParticleTable");    
   fDictionary = new G4PTblDictionary(*(right.fDictionary));
   fIterator   = new G4PTblDicIterator(*fDictionary);
 }

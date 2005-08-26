@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.24 2005-04-17 04:59:41 kurasige Exp $
+// $Id: G4ParticleDefinition.cc,v 1.25 2005-08-26 03:40:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -123,12 +123,16 @@ G4ParticleDefinition::G4ParticleDefinition(
 
 G4ParticleDefinition::G4ParticleDefinition(const G4ParticleDefinition &)
 {
-  G4Exception("You call Copy Constructor of G4ParticleDefinition ");
+  G4Exception("G4ParticleDefinition::G4ParticleDefinition()",
+	      "illegal constructor call", FatalException,
+	      "You call Copy Constructor of G4ParticleDefinition ");
 }
 
 G4ParticleDefinition::G4ParticleDefinition()
 {
-  G4Exception("You call Default Constructor of G4ParticleDefinition ");
+  G4Exception("G4ParticleDefinition::G4ParticleDefinition()",
+	      "illegal constructor call", FatalException,
+	      "You call Default Constructor of G4ParticleDefinition ");
 }
 
 
