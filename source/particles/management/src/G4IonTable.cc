@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.37 2005-08-26 03:40:43 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.38 2005-08-27 01:38:15 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -123,6 +123,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E, G4int 
 #endif
     G4Exception( "G4IonTable::CreateIon()","Illegal operation",
 		 JustWarning, "Can not create ions in PreInit state");
+    return 0;
   }
   
   // get ion name
