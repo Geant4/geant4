@@ -1,4 +1,4 @@
-$Id: History,v 1.47 2005-07-20 16:00:14 allison Exp $
+$Id: History,v 1.48 2005-08-28 11:50:24 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,28 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+28th August 2005  John Allison  (opengl-V07-01-01)
+- Half-way implementation of rendering of transparent polyhedron
+  objects.  In this implemenetation, no account is taken of the order
+  of rendering.  Transparent objects are rendered with depth testing
+  off so that objects behind can still be seen.  But this means that
+  opaque objects in front do not obscure them - and they jolly well
+  should!  A better algorithm is to render all opaque objects first,
+  then render the transparent objects with the depth buffer in
+  read-only mode (see OpenGL Programming Guide).  This is going to
+  take a little more thought*.
+
+  * The better algorithm (yet to be programmed) will still give the
+    wrong blended colour if two transparent objects are rendered front
+    first.  For nested transparent objects, this is OK, because
+    G4PhysicalVolumeModel traverses Geant4's mother-daughter hierarchy
+    in such a way that daughters come first.  But there is no
+    guaranteed relationship between the order of rendereing and the
+    depth of two transparent objects if they are at the same level or
+    in different branches of the hierarchy.  Still, the only error
+    will be an incorrect colour - the objects will still give the
+    appearance of transparency, so it's a pretty good algorithm.
 
 20th July 2005  John Allison  (opengl-V07-01-00)
 - Introduced smooth shading, taking advantage of hitherto un-noticed

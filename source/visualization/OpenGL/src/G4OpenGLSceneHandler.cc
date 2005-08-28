@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.33 2005-07-20 15:58:35 allison Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.34 2005-08-28 11:50:24 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -388,22 +388,18 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   materialColour [0] = c.GetRed ();
   materialColour [1] = c.GetGreen ();
   materialColour [2] = c.GetBlue ();
-  //  materialColour [3] = c.GetAlpha (); // The problem of blending
-  //  is quite severe.  It works by switching depth testing off - see
-  //  code for hsr below.  This is OK if the transparent objects are
-  //  nested in a mother-daughter geometry hierarchy because
-  //  G4PhysicalVolumeModel draws the daughters first, but it spoils
-  //  the view if there are other volumes at the same geoemtry level.
-  //  Npte also that in OGL*Xm, there is a button for transparency.
+  materialColour [3] = c.GetAlpha ();
+  //  The problem of blending is quite severe - see History of
+  //  opengl-V07-01-01.
+  //  Note also that in OGL*Xm, there is a button for transparency.
   //  The default is "off".  But how does one get at the OGL*XmViewer
-  //  flag from this base class?  So for now...
-  materialColour [3] = 1.;
+  //  flag from this base class?
   GLdouble clear_colour[4];
   glGetDoublev (GL_COLOR_CLEAR_VALUE, clear_colour);
 
   switch (drawing_style) {
   case (G4ViewParameters::hlhsr):
-    // Set up as for hidden line removal but paint polygons...
+    // Set up as for hidden line removal but paint polygon faces later...
   case (G4ViewParameters::hlr):
     glEnable (GL_STENCIL_TEST);
     // The stencil buffer is cleared in G4OpenGLViewer::ClearView.
@@ -518,7 +514,18 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       glStencilFunc (GL_EQUAL, 0, 1);
       glStencilOp (GL_KEEP, GL_KEEP, GL_KEEP);
       glPolygonMode (GL_FRONT, GL_FILL);
-      if (drawing_style == G4ViewParameters::hlhsr) glEnable (GL_LIGHTING);
+      if (drawing_style == G4ViewParameters::hlhsr) {
+	glEnable (GL_LIGHTING);
+	if (materialColour[3] == 1.) {
+	  glEnable (GL_DEPTH_TEST);
+	  glDepthFunc (GL_LESS);    
+	  glEnable (GL_CULL_FACE);
+	  glCullFace (GL_BACK);
+	} else {
+	  glDisable (GL_DEPTH_TEST);
+	  glDisable (GL_CULL_FACE);
+	}
+      }
       glBegin (GL_QUADS);
       if  (drawing_style == G4ViewParameters::hlr) {
 	glColor4dv (clear_colour);
@@ -539,7 +546,10 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 		    vertex[edgeCount].z());
       }
       glEnd ();
-      glDisable (GL_LIGHTING);
+      glEnable (GL_DEPTH_TEST); // Revert to normal.
+      glEnable (GL_CULL_FACE);  // Revert to normal.
+      glCullFace (GL_BACK);     // Revert to normal.
+      glDisable (GL_LIGHTING);  // Revert to normal.
 
       // and once more to reset the stencil bits...
       glStencilFunc (GL_ALWAYS, 0, 1);
@@ -562,8 +572,8 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 		    vertex[edgeCount].z());
       }
       glEnd ();
-      glDepthFunc (GL_LESS);   // Revert for next quadrilateral.
-      glBegin (GL_QUADS);      // Ready for next quadrilateral.  GL
+      glDepthFunc (GL_LESS);   // Revert for next facet.
+      glBegin (GL_QUADS);      // Ready for next facet.  GL
 			       // says it ignores incomplete
 			       // quadrilaterals, so final empty
 			       // glBegin/End sequence should be OK.
