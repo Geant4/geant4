@@ -1,4 +1,4 @@
- //
+//
 // ********************************************************************
 // * DISCLAIMER                                                       *
 // *                                                                  *
@@ -297,13 +297,13 @@ G4ThreeVector G4EllipticalCone::SurfaceNormal( const G4ThreeVector& p) const
     {
       if( p.x() == 0. ) 
       {
-	norm = G4ThreeVector( 0., p.y() < 0. ? -1. : 1., 1. ); 
-	return norm /= norm.mag();
+        norm = G4ThreeVector( 0., p.y() < 0. ? -1. : 1., 1. ); 
+        return norm /= norm.mag();
       } 
       if( p.y() == 0. )
       {
-	norm = G4ThreeVector( p.x() < 0. ? -1. : 1., 0., 1. ); 
-	return norm /= norm.mag();
+        norm = G4ThreeVector( p.x() < 0. ? -1. : 1., 0., 1. ); 
+        return norm /= norm.mag();
       } 
       
       G4double m =  std::fabs(p.x()/p.y());
@@ -315,8 +315,8 @@ G4ThreeVector G4EllipticalCone::SurfaceNormal( const G4ThreeVector& p) const
       y /= sqr(ySemiAxis);
       
       norm = G4ThreeVector( p.x() < 0. ? -x : x, 
-			    p.y() < 0. ? -y : y,
-			    zheight - zTopCut );
+                            p.y() < 0. ? -y : y,
+                            zheight - zTopCut );
       norm /= norm.mag();
       norm += G4ThreeVector( 0., 0., 1. );
       return norm /= norm.mag();      
@@ -347,8 +347,8 @@ G4ThreeVector G4EllipticalCone::SurfaceNormal( const G4ThreeVector& p) const
     y /= sqr(ySemiAxis);
     
     norm = G4ThreeVector( p.x() < 0. ? -x : x, 
-			  p.y() < 0. ? -y : y,
-			  zheight - zTopCut );
+                          p.y() < 0. ? -y : y,
+                          zheight - zTopCut );
     norm /= norm.mag();
     norm += G4ThreeVector( 0., 0., -1. );
     return norm /= norm.mag();      
@@ -385,7 +385,7 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
     G4double lambda = (-zTopCut - p.z())/v.z();
     
     if ( sqr((lambda*v.x()+p.x())/xSemiAxis) + 
-	 sqr((lambda*v.y()+p.y())/ySemiAxis) <=
+         sqr((lambda*v.y()+p.y())/ySemiAxis) <=
          sqr(zTopCut + zheight + 0.5*kRadTolerance) ) 
     { 
       return distMin = std::fabs(lambda);    
@@ -400,7 +400,7 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
     G4double lambda  = (zTopCut - p.z()) / v.z();
 
     if ( sqr((lambda*v.x() + p.x())/xSemiAxis) + 
-	 sqr((lambda*v.y() + p.y())/ySemiAxis) <=
+         sqr((lambda*v.y() + p.y())/ySemiAxis) <=
          sqr(zheight - zTopCut + 0.5*kRadTolerance) )
       {
         return distMin = std::fabs(lambda);
@@ -531,8 +531,8 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
   {
     lambda = (-p.z() - zTopCut)/v.z();
     if ( (sqr((p.x() + lambda*v.x())/xSemiAxis) + 
-	  sqr((p.y() + lambda*v.y())/ySemiAxis)) < 
-	  sqr(zheight + zTopCut + 0.5*kCarTolerance) )
+          sqr((p.y() + lambda*v.y())/ySemiAxis)) < 
+          sqr(zheight + zTopCut + 0.5*kCarTolerance) )
     {
       distMin = std::fabs(lambda);
       if (!calcNorm) { return distMin; }
