@@ -1,4 +1,4 @@
-$Id: History,v 1.63 2005-08-10 08:22:11 gcosmo Exp $
+$Id: History,v 1.64 2005-08-29 16:18:58 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29-Sep-2005, G.Cosmo (geom-specific-V07-01-04)
+- Fix in G4EllipticalCone methods DistanceToIn() and DistanceToOut().
+  Added unit test for it (by D.Anninos).
+- Coworks with tag "greps-V07-01-02".
 
 10-Aug-2005, G.Cosmo (geom-specific-V07-01-03)
 - Introduced new solid G4EllipticalCone, a full cone with elliptical base
