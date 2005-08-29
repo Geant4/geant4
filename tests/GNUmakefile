@@ -19,6 +19,7 @@ ELECTROMAGNETIC += 1 2 3 4 5 ## Awaiting description.
 ELECTROMAGNETIC += 6 7 ## G4GammaConversionToMuons process.
 ELECTROMAGNETIC += 8 9 10 ## Transistion radiation and PAI (photoabsorption
                         ## ionisation) model.
+ELECTROMAGNETIC += 11 12 ## Energy deposited by particles which cross a material
 
 # Symbolic links to extended g3tog4 examples using test601, etc...
 G3TOG4 += 01 02   ## 01 - clGeometry  02 cltog4 (actually hand coded for now)
@@ -64,6 +65,7 @@ SUBDIRS += test15
 SUBDIRS += test16
 SUBDIRS += test17
 SUBDIRS += test18
+SUBDIRS += test19
 SUBDIRS += test20
 SUBDIRS += test21
 SUBDIRS += test22
@@ -73,6 +75,7 @@ SUBDIRS += test25
 SUBDIRS += test26
 SUBDIRS += test27
 SUBDIRS += test28
+SUBDIRS += test29
 # SUBDIRS += test30 ## Not in testing yet!
 # SUBDIRS += test31 ## Not in testing yet!
 SUBDIRS += test32
@@ -505,7 +508,6 @@ clean_examples_links_source:
 	@rm -f test1001
 
 # Truc for test33/test34
-	@rm -f test34
 	@rm -f test33/test33.in
 	@rm -f test33/test33.out
 	@rm -f test33/test34.in
