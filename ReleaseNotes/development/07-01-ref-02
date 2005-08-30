@@ -1,0 +1,96 @@
+
+                       geant4-07-01-ref-02
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Added new specific shapes G4EllipticalCone and G4Tet.
+  o Added utility method to CSG solids and most specific solids to
+    return a random point on the surface.
+  o Major cleanup for graphics_reps classes (removed redundant intermediate
+    class G4VVisPrim).
+  o Introduced smooth shading in OpenGL driver. Introduced RayTracerX.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                                           config-V07-01-01
+------
+- Synchronized CXXFLAGS warning options of WIN32-g++ with Linux-g++.
+
+geometry/management                              geommng-V07-01-00
+-------------------
+- Added virtual method GetPointOnSurface() to G4VSolid to be implemented in
+  the concrete solids classed for returning a random-point uniformly
+  distributed on the surface.
+
+geometry/solids/BREPS                            breps-V07-01-00
+---------------------
+- Fixed problem of double-deletion in G4BREPSolidPolyhedra and
+  G4BREPSolidPCone destructors.
+
+geometry/solids/CSG                              geom-csg-V07-01-00
+-------------------
+- Added GetPointOnSurface() to all solids. The method returns a random
+  point according to a quasi-uniform distribution along the surface.
+
+geometry/solids/specific                         geom-specific-V07-01-01
+------------------------
+- Introduced new solid G4EllipticalCone, a full cone with elliptical base
+  that can be cut in Z. Added also unit test.
+- Introduced new solid G4Tet implementing a tetrahedra, contribution of
+  M.H.Mendenhall and R.A.Weller.
+- Added GetPointOnSurface() for all solids except twisted ones.
+  The method returns a random point according to a quasi-uniform
+  distribution along the surface.
+
+geometry/solids/test                             geom-solids-tests-V07-01-01
+--------------------
+- Added new tests testPointOnSurface and testSolidComparisons.
+
+graphics_reps                                    greps-V07-01-02
+-------------
+- Added Polyhedron description for new G4EllipticalCone shape.
+- Source code cleanup:
+  o removed redundant intermediate class, G4VVisPrim;
+  o removed redundant virtual assignments and similar oddities.
+
+processes/electromagnetic/highenergy             emhighenergy-V07-01-01
+------------------------------------
+- Minor cleanup: removed inline constructors and destructors.
+
+processes/electromagnetic/xrays                  xrays-V07-01-00
+-------------------------------
+- Added G4ProcessType identifier to all processes constructors.
+
+processes/optical                                op-V07-01-00
+-----------------
+- Added G4ProcessType identifier to all processes constructors.
+
+visualization                                    vis-V07-01-00
+-------------
+- OpenGL: introduced smooth shading. Also window size hints for Xm.
+- OpenInventor (openinventor-V07-01-01):
+  o changed Geant4_SoPolyhedron to construct from G4Polyhedron.
+    Functionality unchanged.
+  o Fixed compilation errors and warnings on gcc-4.0.X.
+- Raytracer: introduced RayTracerX.
+- HepRep (vis-HepRep-V07-01-00): fix for 'DrawAs' value which was wrong
+  for solids using Geant4 primitives.
+- management: protected new viewer pointer.
+- Revision of unit tests and removed obsolete top-level README files.
+
+examples                                         examples-V07-01-02
+--------
+- Updated reference outputs.
+- extended
+  o medical/GammaTherapy (gtherapy-V07-01-00)
+    + Added vis.mac and histogram type (aida, root, hbook).
+    + Use standard angular distribution for low-energy PhotoElectric.
+
+tests                                            tests-V07-01-02
+-----
+- Updated reference outputs.
+- Updated GNUmakefile (tests-gmk-V07-01-00) to include TestEm11,12
+  and test19,29.
