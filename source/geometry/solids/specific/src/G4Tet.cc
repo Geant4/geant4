@@ -25,7 +25,7 @@
 // *                                                                  *
 // ********************************************************************
 //
-// $Id: G4Tet.cc,v 1.4 2005-08-04 12:05:16 gcosmo Exp $
+// $Id: G4Tet.cc,v 1.5 2005-08-30 13:20:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Tet
@@ -53,7 +53,7 @@
 
 #include "G4Tet.hh"
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.4 2005-08-04 12:05:16 gcosmo Exp $";
+const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.5 2005-08-30 13:20:51 gcosmo Exp $";
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -68,12 +68,9 @@ const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.4 2005-08-04 12:05:16 gcosmo Exp 
 #include "G4NURBSbox.hh"
 #include "G4VisExtent.hh"
 
-// #include "G4Trd.hh"
-// #include "G4Trap.hh"
-
 #include "G4ThreeVector.hh"
 
-#include <math.h>
+#include <cmath>
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -114,20 +111,22 @@ G4Tet::G4Tet(const G4String& pName,
   G4ThreeVector fV43=p4-p3;
   G4ThreeVector fV32=p3-p2;
 
-  fXMin=fmin(fmin(fmin(anchor.x(), p2.x()),p3.x()),p4.x());
-  fXMax=fmax(fmax(fmax(anchor.x(), p2.x()),p3.x()),p4.x());
-  fYMin=fmin(fmin(fmin(anchor.y(), p2.y()),p3.y()),p4.y());
-  fYMax=fmax(fmax(fmax(anchor.y(), p2.y()),p3.y()),p4.y());
-  fZMin=fmin(fmin(fmin(anchor.z(), p2.z()),p3.z()),p4.z());
-  fZMax=fmax(fmax(fmax(anchor.z(), p2.z()),p3.z()),p4.z());
+  fXMin=std::min(std::min(std::min(anchor.x(), p2.x()),p3.x()),p4.x());
+  fXMax=std::max(std::max(std::max(anchor.x(), p2.x()),p3.x()),p4.x());
+  fYMin=std::min(std::min(std::min(anchor.y(), p2.y()),p3.y()),p4.y());
+  fYMax=std::max(std::max(std::max(anchor.y(), p2.y()),p3.y()),p4.y());
+  fZMin=std::min(std::min(std::min(anchor.z(), p2.z()),p3.z()),p4.z());
+  fZMax=std::max(std::max(std::max(anchor.z(), p2.z()),p3.z()),p4.z());
 
   fDx=(fXMax-fXMin)*0.5; fDy=(fYMax-fYMin)*0.5; fDz=(fZMax-fZMin)*0.5;
 
   fMiddle=G4ThreeVector(fXMax+fXMin, fYMax+fYMin, fZMax+fZMin)*0.5;
-  fMaxSize=fmax(fmax(fmax((anchor-fMiddle).mag(), (p2-fMiddle).mag()),
-                          (p3-fMiddle).mag()), (p4-fMiddle).mag());
+  fMaxSize=std::max(std::max(std::max((anchor-fMiddle).mag(),
+                                      (p2-fMiddle).mag()),
+                             (p3-fMiddle).mag()),
+                    (p4-fMiddle).mag());
 
-  G4bool degenerate=fabs(signed_vol) < 1e-9*fMaxSize*fMaxSize*fMaxSize;
+  G4bool degenerate=std::abs(signed_vol) < 1e-9*fMaxSize*fMaxSize*fMaxSize;
 
   if(degeneracyFlag) *degeneracyFlag=degenerate;
   else if (degenerate)
@@ -136,8 +135,8 @@ G4Tet::G4Tet(const G4String& pName,
                 "Degenerate tetrahedron not allowed.");
   }
 
-  fTol=1e-9*(fabs(fXMin)+fabs(fXMax)+fabs(fYMin)
-            +fabs(fYMax)+fabs(fZMin)+fabs(fZMax));
+  fTol=1e-9*(std::abs(fXMin)+std::abs(fXMax)+std::abs(fYMin)
+            +std::abs(fYMax)+std::abs(fZMin)+std::abs(fZMax));
   //fTol=kCarTolerance;
 
   fAnchor=anchor;
@@ -215,12 +214,12 @@ G4bool G4Tet::CalculateExtent(const EAxis pAxis,
     G4ThreeVector pp2=pTransform.TransformPoint(fP3);
     G4ThreeVector pp3=pTransform.TransformPoint(fP4);
 
-    xMin    = fmin(fmin(fmin(pp0.x(), pp1.x()),pp2.x()),pp3.x());
-    xMax    = fmax(fmax(fmax(pp0.x(), pp1.x()),pp2.x()),pp3.x());
-    yMin    = fmin(fmin(fmin(pp0.y(), pp1.y()),pp2.y()),pp3.y());
-    yMax    = fmax(fmax(fmax(pp0.y(), pp1.y()),pp2.y()),pp3.y());
-    zMin    = fmin(fmin(fmin(pp0.z(), pp1.z()),pp2.z()),pp3.z());
-    zMax    = fmax(fmax(fmax(pp0.z(), pp1.z()),pp2.z()),pp3.z());
+    xMin    = std::min(std::min(std::min(pp0.x(), pp1.x()),pp2.x()),pp3.x());
+    xMax    = std::max(std::max(std::max(pp0.x(), pp1.x()),pp2.x()),pp3.x());
+    yMin    = std::min(std::min(std::min(pp0.y(), pp1.y()),pp2.y()),pp3.y());
+    yMax    = std::max(std::max(std::max(pp0.y(), pp1.y()),pp2.y()),pp3.y());
+    zMin    = std::min(std::min(std::min(pp0.z(), pp1.z()),pp2.z()),pp3.z());
+    zMax    = std::max(std::max(std::max(pp0.z(), pp1.z()),pp2.z()),pp3.z());
 
   }
   else
@@ -242,8 +241,8 @@ G4bool G4Tet::CalculateExtent(const EAxis pAxis,
          (xMax < pVoxelLimit.GetMinXExtent()-fTol)  )  { return false; }
     else
     {
-      xMin = fmax(xMin, pVoxelLimit.GetMinXExtent());
-      xMax = fmin(xMax, pVoxelLimit.GetMaxXExtent());
+      xMin = std::max(xMin, pVoxelLimit.GetMinXExtent());
+      xMax = std::min(xMax, pVoxelLimit.GetMaxXExtent());
     }
   }
 
@@ -253,8 +252,8 @@ G4bool G4Tet::CalculateExtent(const EAxis pAxis,
          (yMax < pVoxelLimit.GetMinYExtent()-fTol)  )  { return false; }
     else
     {
-      yMin = fmax(yMin, pVoxelLimit.GetMinYExtent());
-      yMax = fmin(yMax, pVoxelLimit.GetMaxYExtent());
+      yMin = std::max(yMin, pVoxelLimit.GetMinYExtent());
+      yMax = std::min(yMax, pVoxelLimit.GetMaxYExtent());
     }
     }
 
@@ -264,8 +263,8 @@ G4bool G4Tet::CalculateExtent(const EAxis pAxis,
            (zMax < pVoxelLimit.GetMinZExtent()-fTol)  )  { return false; }
     else
     {
-      zMin = fmax(zMin, pVoxelLimit.GetMinZExtent());
-      zMax = fmin(zMax, pVoxelLimit.GetMaxZExtent());
+      zMin = std::max(zMin, pVoxelLimit.GetMinZExtent());
+      zMax = std::min(zMax, pVoxelLimit.GetMaxZExtent());
     }
   }
 
@@ -327,10 +326,10 @@ EInside G4Tet::Inside(const G4ThreeVector& p) const
 
 G4ThreeVector G4Tet::SurfaceNormal( const G4ThreeVector& p) const
 {
-  G4double r123=fabs(p.dot(fNormal123)-fCdotN123);
-  G4double r134=fabs(p.dot(fNormal134)-fCdotN134);
-  G4double r142=fabs(p.dot(fNormal142)-fCdotN142);
-  G4double r234=fabs(p.dot(fNormal234)-fCdotN234);
+  G4double r123=std::abs(p.dot(fNormal123)-fCdotN123);
+  G4double r134=std::abs(p.dot(fNormal134)-fCdotN134);
+  G4double r142=std::abs(p.dot(fNormal142)-fCdotN142);
+  G4double r234=std::abs(p.dot(fNormal234)-fCdotN234);
 
   if( (r123<=r134) && (r123<=r142) && (r123<=r234) )  { return fNormal123; }
   else if ( (r134<=r142) && (r134<=r234) )  { return fNormal134; }
@@ -416,7 +415,7 @@ G4double G4Tet::DistanceToIn(const G4ThreeVector& p,
       }
     }
 
-  return fmax(0.0,tmin);
+  return std::max(0.0,tmin);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -428,7 +427,7 @@ G4double G4Tet::DistanceToIn(const G4ThreeVector& p,
 G4double G4Tet::DistanceToIn(const G4ThreeVector& p) const
 {
   G4double dd=(p-fMiddle).mag() - fMaxSize - fTol;
-  return fmax(0.0, dd);
+  return std::max(0.0, dd);
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -468,7 +467,7 @@ G4double G4Tet::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
       t4=(fCdotN234-p.dot(fNormal234))/vdotn; // #  distance to intersection
     }
 
-    tt=fmin(fmin(fmin(t1,t2),t3),t4);
+    tt=std::min(std::min(std::min(t1,t2),t3),t4);
 
     if (warningFlag && (tt == kInfinity || tt < -fTol))
     {
@@ -496,8 +495,8 @@ G4double G4Tet::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
       if(validNorm) { *validNorm=true; }
     }
 
-    return fmax(tt,0.0); // avoid tt<0.0 by a tiny bit
-                         // if we are right on a face
+    return std::max(tt,0.0); // avoid tt<0.0 by a tiny bit
+                             // if we are right on a face
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -516,7 +515,7 @@ G4double G4Tet::DistanceToOut(const G4ThreeVector& p) const
   // if any one of these is negative, we are outside,
   // so return zero in that case
 
-  G4double tmin=fmin(fmin(fmin(t1,t2),t3),t4);
+  G4double tmin=std::min(std::min(std::min(t1,t2),t3),t4);
   return (tmin < fTol)? 0:tmin;
 }
 
