@@ -30,12 +30,12 @@ geometry/solids/BREPS                            breps-V07-01-00
 - Fixed problem of double-deletion in G4BREPSolidPolyhedra and
   G4BREPSolidPCone destructors.
 
-geometry/solids/CSG                              geom-csg-V07-01-00
+geometry/solids/CSG                              geom-csg-V07-01-01
 -------------------
 - Added GetPointOnSurface() to all solids. The method returns a random
   point according to a quasi-uniform distribution along the surface.
 
-geometry/solids/specific                         geom-specific-V07-01-01
+geometry/solids/specific                         geom-specific-V07-01-04
 ------------------------
 - Introduced new solid G4EllipticalCone, a full cone with elliptical base
   that can be cut in Z. Added also unit test.
