@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GlobalFastSimulationManager.cc,v 1.12 2002-12-04 21:29:50 asaim Exp $
+// $Id: G4GlobalFastSimulationManager.cc,v 1.13 2005-08-30 21:03:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -116,23 +116,28 @@ void G4GlobalFastSimulationManager::CloseFastSimulation()
   G4VPhysicalVolume* aClone=GiveMeAWorldVolumeClone();
   
   G4cout << "Closing FastSimulation\n";
-  for (G4int iParticle=0; iParticle<theParticleTable->entries(); iParticle++) {
-    G4bool Needed = false;
-    for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
-      Needed = Needed || ManagedManagers[ifsm]->
-	InsertGhostHereIfNecessary(aClone,
-				   *(theParticleTable->
-				     GetParticle(iParticle)));
-    // if some FSM inserted a ghost, keep this clone.
-    if(Needed) {
-      NeededFlavoredWorlds.push_back(new 
-				  G4FlavoredParallelWorld(theParticleTable->
-					  GetParticle(iParticle),
-							  aClone));
-      // and prepare a new one.
-      aClone=GiveMeAWorldVolumeClone();
-    }
-  }
+
+//===============================================================================
+//== Treatment of ghost volumes is to be moved to G4FastSimulationManagerProcess
+//==
+//==  for (G4int iParticle=0; iParticle<theParticleTable->entries(); iParticle++) {
+//==    G4bool Needed = false;
+//==    for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
+//==      Needed = Needed || ManagedManagers[ifsm]->
+//==	InsertGhostHereIfNecessary(aClone,
+//==				   *(theParticleTable->
+//==				     GetParticle(iParticle)));
+//==    // if some FSM inserted a ghost, keep this clone.
+//==    if(Needed) {
+//==      NeededFlavoredWorlds.push_back(new 
+//==				  G4FlavoredParallelWorld(theParticleTable->
+//==					  GetParticle(iParticle),
+//==							  aClone));
+//==      // and prepare a new one.
+//==      aClone=GiveMeAWorldVolumeClone();
+//==    }
+//==  }
+
   fClosed=true;
 }
 

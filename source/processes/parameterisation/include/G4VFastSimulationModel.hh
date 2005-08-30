@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VFastSimulationModel.hh,v 1.5 2003-05-21 16:32:11 gcosmo Exp $
+// $Id: G4VFastSimulationModel.hh,v 1.6 2005-08-30 21:03:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,7 +47,7 @@
 //---------------------------
 // For possible future needs:
 //---------------------------
-typedef G4LogicalVolume G4Envelope;
+typedef G4Region G4Envelope;
 
 //-------------------------------------------
 //

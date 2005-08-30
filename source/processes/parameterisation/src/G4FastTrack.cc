@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastTrack.cc,v 1.7 2003-11-10 08:57:22 gcosmo Exp $
+// $Id: G4FastTrack.cc,v 1.8 2005-08-30 21:03:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -49,7 +49,8 @@
 G4FastTrack::G4FastTrack(G4Envelope *anEnvelope,
 			 G4bool IsUnique) :
   fAffineTransformationDefined(false),   fEnvelope(anEnvelope),
-  fIsUnique(IsUnique),   fEnvelopeSolid(fEnvelope->GetSolid())
+  fIsUnique(IsUnique), fEnvelopeLogicalVolume(0), fEnvelopePhysicalVolume(0),
+  fEnvelopeSolid(0)
 {}
 
 // -----------
@@ -133,9 +134,11 @@ G4FastTrack::FRecordsAffineTransformation(const G4Navigator* theNavigator)
   int depth = history->GetHistory()->GetDepth();
   int idepth, Done = 0;
   for (idepth = 0; idepth <= depth; idepth++) {
-    if (history->GetHistory()->GetVolume(idepth)->GetLogicalVolume() == 
-	fEnvelope) {
+    if (history->GetHistory()->GetVolume(idepth)->GetLogicalVolume()->GetRegion()
+        == fEnvelope) {
       fEnvelopePhysicalVolume=history->GetHistory()->GetVolume(idepth);
+      fEnvelopeLogicalVolume=fEnvelopePhysicalVolume->GetLogicalVolume();
+      fEnvelopeSolid=fEnvelopeLogicalVolume->GetSolid();
       Done = 1;
       break;
     }
