@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EllipticalCone.cc,v 1.5 2005-08-29 16:16:17 gcosmo Exp $
+// $Id: G4EllipticalCone.cc,v 1.6 2005-08-30 13:25:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of G4EllipticalCone class
@@ -602,7 +602,6 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
 
         case kCurvedSurf:
         {
-          G4ThreeVector norm();
           G4ThreeVector pexit = p + distMin*v;
           G4ThreeVector truenorm(pexit.x()/(xSemiAxis*xSemiAxis),
                                  pexit.y()/(ySemiAxis*ySemiAxis),
