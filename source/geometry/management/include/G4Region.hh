@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.hh,v 1.12 2005-08-18 16:51:37 asaim Exp $
+// $Id: G4Region.hh,v 1.13 2005-08-30 18:10:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Region
@@ -136,6 +136,10 @@ class G4Region
       // Set and Get methods for G4FastSimulationManager.
       // The root logical volume that has the region with G4FastSimulationManager
       // becomes an envelope of fast simulation.
+    
+    void ClearFastSimulationManager();
+      // Set G4FastSimulationManager pointer to the one for the parent region
+      // if it exists. Otherwise set to null.
 
     inline G4VPhysicalVolume* GetWorldPhysical() const;
       // Get method for the world physical volume which this region
@@ -149,9 +153,12 @@ class G4Region
       // Set the world physical volume if this region belongs to this world.
       // If wp is null, reset the pointer.
 
-    G4bool BelongsTo(G4VPhysicalVolume* thePhys);
+    G4bool BelongsTo(G4VPhysicalVolume* thePhys) const;
       // Returns whether this region belongs to the given physical volume
       // (recursively scanned to the bottom of the hierarchy)
+
+    G4Region* GetParentRegion() const;
+      // Returns a region that contains this region. Otherwise null returned.
 
   private:
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.15 2005-08-18 16:51:37 asaim Exp $
+// $Id: G4Region.cc,v 1.16 2005-08-30 18:10:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -280,21 +280,74 @@ void G4Region::SetWorld(G4VPhysicalVolume* wp)
 //    (recursively scanned to the bottom of the hierarchy)
 // *******************************************************************
 // 
-G4bool G4Region::BelongsTo(G4VPhysicalVolume* thePhys)
+G4bool G4Region::BelongsTo(G4VPhysicalVolume* thePhys) const
 {
   if(thePhys->GetLogicalVolume()->GetRegion()==this) return true;
 
-  G4int nDaughters = thePhys->GetLogicalVolume()->GetNoDaughters();
-  while((nDaughters--)>0)
   {
-    G4VPhysicalVolume* aPhys = thePhys->GetLogicalVolume()->GetDaughter(nDaughters);
-    if(aPhys->GetLogicalVolume()->GetRegion()==this) return true;
-    if(BelongsTo(aPhys)) return true;
+    G4int nDaughters = thePhys->GetLogicalVolume()->GetNoDaughters();
+    while((nDaughters--)>0)
+    {
+      G4VPhysicalVolume* aPhys = thePhys->GetLogicalVolume()->GetDaughter(nDaughters);
+      if(aPhys->GetLogicalVolume()->GetRegion()==this) return true;
+      if(BelongsTo(aPhys)) return true;
+    }
   }
   return false;
 }
 
+// *******************************************************************
+// ClearFastSimulationManager:
+//  - Set G4FastSimulationManager pointer to the one for the parent region
+//    if it exists. Otherwise set to null.
+// *******************************************************************
+//
+void G4Region::ClearFastSimulationManager()
+{
+  G4Region* parent = GetParentRegion();
+  if(parent)
+  { fFastSimulationManager = parent->GetFastSimulationManager(); }
+  else
+  { fFastSimulationManager = 0; }
+}
 
-
+// *******************************************************************
+// GetParentRegion:
+//  - Returns a region that contains this region. Otherwise null
+//    returned.
+// *******************************************************************
+#include "G4LogicalVolumeStore.hh"
+// 
+G4Region* G4Region::GetParentRegion() const
+{
+  G4Region* parent = 0;
+  G4LogicalVolumeStore* lvStore = G4LogicalVolumeStore::GetInstance();
+  G4LogicalVolumeStore::iterator lvItr;
+  for(lvItr=lvStore->begin();lvItr!=lvStore->end();lvItr++)
+  {
+    G4int nD = (*lvItr)->GetNoDaughters();
+    for(G4int iD=0;iD<nD;iD++)
+    {
+      if((*lvItr)->GetDaughter(iD)->GetLogicalVolume()->GetRegion()==this)
+      { 
+        G4Region* aR = (*lvItr)->GetRegion();
+        if(parent)
+        {
+          if(parent!=aR)
+          {
+            G4cerr << "Region <" << fName << "> belongs to more than one parent regions" << G4endl;
+            G4cerr << " --- Regions found that directly contains this region are : "
+                   << parent->GetName() << ", " << aR->GetName() << G4endl;
+            G4Exception("G4Region::GetParentRegion","MoreThanOneParent",FatalException,
+                        "A region must not belong to more than one direct parent region.");
+          }
+        }
+        else
+        { parent = aR; }
+      }
+    }
+  }
+  return parent;
+}
 
 
