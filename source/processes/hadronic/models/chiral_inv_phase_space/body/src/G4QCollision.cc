@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.5 2005-06-27 15:30:32 gunter Exp $
+// $Id: G4QCollision.cc,v 1.6 2005-08-30 07:15:14 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -566,7 +566,17 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
 #endif
       theDefinition = G4ParticleTable::GetParticleTable()->FindIon(aZ,aA,0,aZ);
     }
-    else theDefinition = G4ParticleTable::GetParticleTable()->FindParticle(PDGCode);
+    //else theDefinition = G4ParticleTable::GetParticleTable()->FindParticle(PDGCode);
+    else
+    {
+#ifdef pdebug
+						G4cout<<"G4QCollision::PostStepDoIt:Define particle with PDG="<<PDGCode<<G4endl;
+#endif
+      theDefinition = G4QPDGToG4Particle::Get()->GetParticleDefinition(PDGCode);
+#ifdef pdebug
+						G4cout<<"G4QCollision::PostStepDoIt:AfterParticleDefinition PDG="<<PDGCode<<G4endl;
+#endif
+    }
     if(!theDefinition)
     {
       G4cout<<"---Worning---G4QCollision::PostStepDoIt: drop PDG="<<PDGCode<<G4endl;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QPDGToG4Particle.hh,v 1.2 2005-06-04 13:08:23 jwellisc Exp $
+// $Id: G4QPDGToG4Particle.hh,v 1.3 2005-08-30 07:15:14 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGToG4Particle header ----------------
@@ -31,6 +31,9 @@
 // ********* This HEADER is temporary moved from the photolepton_hadron directory *********
 // ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
 // ****************************************************************************************
+
+#ifndef G4QPDGToG4Particle_hh
+#define G4QPDGToG4Particle_hh
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -56,3 +59,4 @@ public:
 // Body
 private:
 };
+#endif
