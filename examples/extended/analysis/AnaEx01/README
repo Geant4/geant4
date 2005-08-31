@@ -1,4 +1,4 @@
-$Id: README,v 1.12 2003-06-20 14:55:44 gbarrand Exp $
+$Id: README,v 1.13 2005-08-31 10:49:18 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -93,12 +93,22 @@ $Id: README,v 1.12 2003-06-20 14:55:44 gbarrand Exp $
   To plot some histograms, spawn the Lab interactive tool with :
    csh> onx
   (DOS> onx     (for Windows))
- click in 'File/File/import' to map a file chooser, choose AnaEx01.py
- to execute the AnaEx01.py. You can also execute this script by issuing an :
-       import AnaEx01
- in the command prompt.
-  This file contains a Python script that
- do some analysis over the AnaEx01.root file by using the AIDA interfaces.
+ click in 'File/Open ROOT file...' to map a file chooser, 
+ then choose AnaEx01.root. The file name should appear in the left
+ tree widget beside the plotting area. Use the tree widget to browse
+ the file. You can visualize histos by selecting them with the mouse.
+
+  If the OpenScientist/OnX and Lab Python drivers had been
+ reconstructed at installation of OpenScientist, then 
+ you can also work with the OpenScientist/Lab/AIDA Python API. 
+ You can execute AnaEx01.py by doing :
+    OS> python AnaEx01.py
+ or : 
+    OS> python
+   (>>> import AIDA)
+    >>> import AnaEx01
+  The AnaEx01 file contains a Python script that
+ does some analysis over the AnaEx01.root file by using the AIDA interfaces.
  This script gets an histo (EAbs) and  plots it in a first drawing region.
  Then it gets the 'AnaEx01' tuple, books and fills another histo
  from the tuple colum 'EAbs' and plots it a secon drawing region.

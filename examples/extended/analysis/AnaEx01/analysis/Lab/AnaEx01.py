@@ -28,11 +28,22 @@
 #
 #/////////////////////////////////////////////////////////////////////////////
 
-from Lab import *
+#
+#  To be executed from the Python shell :
+#   OS> <setup Lab>
+#   OS> python
+#  (>>> import AIDA)
+#   >>> import AnaEx01
+#
+
+from AIDA import AIDA_createAnalysisFactory
+
+aida = AIDA_createAnalysisFactory()
 
 # Get some AIDA factories :
 plotterFactory = aida.createPlotterFactory()
 treeFactory = aida.createTreeFactory()
+memoryTree = treeFactory.createDefault()
 histogramFactory = aida.createHistogramFactory(memoryTree)
 functionFactory = aida.createFunctionFactory(memoryTree)
 
@@ -44,7 +55,7 @@ plotter.setParameter('title','AnaEx01 analysis')
 
 # If already loaded close (not delete) the file :
 fileName='AnaEx01.root'
-session.destroyManager(fileName)
+#FIXME : session.destroyManager(fileName)
 
 rioTree = treeFactory.create(fileName,'ROOT',1,0)
 rioTree.ls()
@@ -59,6 +70,9 @@ rioTree.ls()
 #  Get some histograms with the H1Get 
 # builtin Python procedure (defined in Lab/scripts/Python/Lab_init.py).
 
+# From an AIDA tree we retreive IManagedObjects, we have to cast.
+#FIXME : IManagedObject_to_IHistogram1D is not AIDA, it is OSC specific.
+from AIDA import IManagedObject_to_IHistogram1D
 EAbs = IManagedObject_to_IHistogram1D(rioTree.find('EAbs'))
 if EAbs == None:
  print 'EAbs not found or is not an AIDA::IHistogram1D.'
@@ -94,7 +108,9 @@ tuple.project(tuple_EAbs,evaluator,filter)
 plotter.next()
 region = plotter.currentRegion()
 region.plot(tuple_EAbs)
-region.setParameter('histogramContext','color red modeling solid')
+
+plotter.show()
+plotter.interact()
 
 del evaluator
 del filter
