@@ -586,15 +586,15 @@ if ( `uname -n` == pc-panoramix.lal.in2p3.fr ) then
   setenv MAKECMD make
   setenv CVSROOT :ext:gbarrand@sungeant.cern.ch:/afs/cern.ch/sw/geant4/cvs
   setenv CVS_RSH ssh
-  setenv G4INSTALL /geant4/geant4-07-01
+  setenv G4INSTALL /usr/local/geant4/geant4-07-01
   setenv G4SYSTEM Linux-g++
-  setenv G4WORKDIR $G4INSTALL/slc3_gcc322
+  setenv G4WORKDIR $G4INSTALL/slc3_gcc323
   setenv G4STTDIR $G4WORKDIR/stt
   setenv G4LIB $G4WORKDIR/lib
   setenv G4MAKESHLIB 1
 #  setenv G4DEBUG 1
   setenv CPPVERBOSE 1
-  setenv CLHEP_BASE_DIR /lal/CLHEP/1.8.0.0/slc3_gcc322
+  setenv CLHEP_BASE_DIR /usr/local/CLHEP/1.9.2.1/slc3_gcc323
   setenv NeutronHPCrossSections $G4WORKDIR/data/G4NDL3.5
   setenv G4LEVELGAMMADATA $G4WORKDIR/data/PhotonEvaporation
   setenv G4RADIOACTIVEDATA $G4WORKDIR/data/RadiativeDecay
