@@ -610,7 +610,7 @@ if ( `uname -n` == pc-panoramix.lal.in2p3.fr ) then
 #  setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
 # Set PYTHONPATH to access local scripts :
 #  setenv PYTHONPATH ${PYTHONPATH}:.
-  set string="$G4LIB/$G4SYSTEM"
+  set string="${CLHEP_BASE_DIR}/lib:${G4LIB}/${G4SYSTEM}"
   if ( $?LD_LIBRARY_PATH ) then
     echo $LD_LIBRARY_PATH | grep "$string" >& /dev/null
     if ( $status != 0 ) then
