@@ -98,5 +98,6 @@ alias g4_gdbN03  "gdb $G4WORKDIR/bin/$G4SYSTEM/exampleN03"
 alias g4_AnaEx01 "$G4WORKDIR/bin/$G4SYSTEM/AnaEx01"
 alias g4_XrayTel "$G4WORKDIR/bin/$G4SYSTEM/XrayTel"
 alias g4_Em1     "$G4WORKDIR/bin/$G4SYSTEM/TestEm1"
+alias g4_gdbEm1  "gdb $G4WORKDIR/bin/$G4SYSTEM/TestEm1"
 #
 #alias search "$G4INSTALL/tests/search.sh"
