@@ -24,6 +24,7 @@
 
 #include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
+#include "G4SDManager.hh"
 
 #include "G4VisAttributes.hh"
 
@@ -60,6 +61,14 @@ G4VPhysicalVolume* G4ORNLUpperLargeIntestine::ConstructUpperLargeIntestine(G4VPh
 			       mother,
 			       false,
 			       0);
+
+
+  // Sensitive Body Part
+  if (sensitivity==true)
+  { 
+    G4SDManager* SDman = G4SDManager::GetSDMpointer();
+    logicUpperLargeIntestine->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
+  }
 
   // Visualization Attributes
   G4VisAttributes* UpperLargeIntestineVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));

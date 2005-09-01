@@ -202,13 +202,29 @@ G4VPhysicalVolume* G4ORNLBodyFactory::CreateTestes(G4VPhysicalVolume* motherVolu
 }
 G4VPhysicalVolume* G4ORNLBodyFactory::CreateNeck(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
+   G4cout << motherVolume << ">>>> Cannot create Neck of " << sex 
+	 << "phantom and with sensitivity = " << sensitivity 
+	 << ": not yet implemented!" << G4endl;
+   return 0;
 }
 G4VPhysicalVolume* G4ORNLBodyFactory::CreateScapulae(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
+   G4cout << motherVolume << ">>>> Cannot create Scapulae of " << sex 
+	 << "phantom and with sensitivity = " << sensitivity 
+	 << ": not yet implemented!" << G4endl;
+   return 0;
 }
 G4VPhysicalVolume* G4ORNLBodyFactory::CreateClavicles(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
+   G4cout << motherVolume << ">>>> Cannot create Clavicles of " << sex 
+	 << "phantom and with sensitivity = " << sensitivity 
+	 << ": not yet implemented!" << G4endl;
+   return 0;
 }
 G4VPhysicalVolume* G4ORNLBodyFactory::CreateMaleGenitalia(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
+   G4cout << motherVolume << ">>>> Cannot create Male Genitalia of " << sex 
+	 << "phantom and with sensitivity = " << sensitivity 
+	 << ": not yet implemented!" << G4endl;
+   return 0;
 }

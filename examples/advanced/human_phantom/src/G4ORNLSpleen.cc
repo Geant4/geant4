@@ -24,6 +24,7 @@
 
 #include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
+#include "G4SDManager.hh"
 
 #include "G4VisAttributes.hh"
 
@@ -60,6 +61,13 @@ G4VPhysicalVolume* G4ORNLSpleen::ConstructSpleen(G4VPhysicalVolume* mother, G4St
 			       mother,
 			       false,
 			       0);
+
+  // Sensitive Body Part
+  if (sensitivity==true)
+  { 
+    G4SDManager* SDman = G4SDManager::GetSDMpointer();
+    logicSpleen->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
+  }
 
   // Visualization Attributes
   G4VisAttributes* SpleenVisAtt = new G4VisAttributes(G4Colour(0.41,0.41,0.41));

@@ -24,6 +24,7 @@
 
 #include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
+#include "G4SDManager.hh"
 
 #include "G4VisAttributes.hh"
 
@@ -60,6 +61,13 @@ G4VPhysicalVolume* G4ORNLEsophagus::ConstructEsophagus(G4VPhysicalVolume* mother
 			       mother,
 			       false,
 			       0);
+
+  // Sensitive Body Part
+  if (sensitivity==true)
+  { 
+    G4SDManager* SDman = G4SDManager::GetSDMpointer();
+    logicEsophagus->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
+  }
 
   // Visualization Attributes
   G4VisAttributes* EsophagusVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));

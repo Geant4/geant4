@@ -1,3 +1,4 @@
+
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -198,31 +199,36 @@ G4VPhysicalVolume* G4MIRDBodyFactory::CreateTestes(G4VPhysicalVolume* motherVolu
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateEsophagus(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
-  G4cout << motherVolume << ">>>> Cannot create Esophagus of " << sex 
-	 << "phantom and with sensitivity = " << sensitivity 
-	 << ": not yet implemented!" << G4endl; 
+   G4cout << motherVolume << ">>>> Cannot create Esophagus of " << sex 
+	  << "phantom and with sensitivity = " << sensitivity 
+	  << ": not yet implemented!" << G4endl;
+   return 0;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateClavicles(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
    G4cout << motherVolume << ">>>> Cannot create Clavicles of " << sex 
 	 << "phantom and with sensitivity = " << sensitivity 
 	 << ": not yet implemented!" << G4endl; 
+   return 0;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateScapulae(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
    G4cout << motherVolume << ">>>> Cannot create Scapulae of " << sex 
 	 << "phantom and with sensitivity = " << sensitivity 
-	 << ": not yet implemented!" << G4endl; 
+	 << ": not yet implemented!" << G4endl;
+   return 0;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateNeck(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
    G4cout << motherVolume << ">>>> Cannot create Neck of " << sex 
 	 << "phantom and with sensitivity = " << sensitivity 
-	 << ": not yet implemented!" << G4endl; 
+	 << ": not yet implemented!" << G4endl;
+   return 0;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateMaleGenitalia(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
    G4cout << motherVolume << ">>>> Cannot create Male Genitalia of " << sex 
 	 << "phantom and with sensitivity = " << sensitivity 
-	 << ": not yet implemented!" << G4endl; 
+	 << ": not yet implemented!" << G4endl;
+   return 0;
 }

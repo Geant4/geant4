@@ -112,9 +112,11 @@ void G4HumanPhantomMessenger::SetNewValue(G4UIcommand* command,G4String newValue
 void  G4HumanPhantomMessenger::AddBodyPart(G4String newBodyPartSensitivity)
 {
 
-  const char* str[] = {newBodyPartSensitivity,NULL};
+  char* str = new char[newBodyPartSensitivity.length()+1];
 
-  std::string bodypart = strtok(str[0]," ");
+  strcpy(str, newBodyPartSensitivity.c_str()); 
+  
+  std::string bodypart = strtok(str," ");
 
   std::string sensitivity = strtok(NULL," ");
 

@@ -24,7 +24,7 @@
 
 #include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
-
+#include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
 
 G4ORNLArmBone::G4ORNLArmBone()
@@ -60,6 +60,13 @@ G4VPhysicalVolume* G4ORNLArmBone::ConstructArmBone(G4VPhysicalVolume* mother, G4
 			       mother,
 			       false,
 			       0);
+
+  // Sensitive Body Part
+  if (sensitivity==true)
+  { 
+    G4SDManager* SDman = G4SDManager::GetSDMpointer();
+    logicArmBone->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
+  }
 
   // Visualization Attributes
   G4VisAttributes* ArmBoneVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
