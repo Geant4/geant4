@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: run-V07-00-05    (30-June-2005)
+ Geant4 version Name: geant4-07-01-ref-01    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -196,7 +196,7 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
+    Total CPU time elapsed for geometry optimisation: 0.01 seconds
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -227,7 +227,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=93.65s Real=899.99s Sys=91.45s
+  User=98.58s Real=1675.35s Sys=323.14s
 
  ======================== run summary ======================
 

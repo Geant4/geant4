@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: run-V07-00-05    (30-June-2005)
+ Geant4 version Name: geant4-07-01-ref-01    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -230,7 +230,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=314.43s Real=502.92s Sys=58.56s
+  User=315.58s Real=446.41s Sys=55.28s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of Water (density: 1 g/cm3 )
 
@@ -281,7 +281,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=92.37s Real=117.7s Sys=10.78s
+  User=93.68s Real=112.22s Sys=10.35s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of Water (density: 1 g/cm3 )
 

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: run-V07-00-05    (30-June-2005)
+ Geant4 version Name: geant4-07-01-ref-01    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -217,14 +217,14 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-     100.00         0.01         0.00            0k Layer
        0.00         0.00         0.00            2k Calorimeter
+       0.00         0.00         0.00            0k Layer
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
       91.70          1k         1       50         50         0.00    Calorimeter
-       8.30          0k         1        3          4         0.01    Layer
+       8.30          0k         1        3          4         0.00    Layer
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -239,7 +239,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=108.61s Real=116.66s Sys=6.64s
+  User=128.84s Real=136.33s Sys=6.35s
 
 ------------------------------------------------------------
 material             Total Edep   sqrt(E0(GeV))*rmsE/Emean     total tracklen 
