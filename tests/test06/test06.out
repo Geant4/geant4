@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: run-V07-00-05    (30-June-2005)
+ Geant4 version Name: geant4-07-01-ref-01    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -149,7 +149,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=28s Real=29s Sys=0.68s
+  User=30s Real=31s Sys=0.62s
 #
 # electron 500 MeV in Air
 #
@@ -282,7 +282,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.28s Real=1.28s Sys=0s
+  User=1.32s Real=1.35s Sys=0.03s
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

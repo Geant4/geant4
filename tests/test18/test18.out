@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: run-V07-00-05    (30-June-2005)
+ Geant4 version Name: geant4-07-01-ref-01    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -159,7 +159,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.13s Real=0.19s Sys=0.01s
+  User=0.1s Real=0.26s Sys=0.02s
     1000.000           1           0     Na24[0.0]
          259           1   6.089e+04     e-
     1.13e+03           1   6.089e+04     anti_nu_e
@@ -205,7 +205,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.08s Real=0.08s Sys=0s
+  User=0.08s Real=0.09s Sys=0.01s
        1e+03           1           0     Ne24[0.0]
          429           1       301.6     e-
          694           1       301.6     anti_nu_e
@@ -313,7 +313,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.08s Real=0.08s Sys=0s
+  User=0.07s Real=0.09s Sys=0.02s
        1e+03           1           0     Al24[0.0]
     4.21e+03           1       2.266     e+
     4.53e+03           1       2.266     nu_e
@@ -407,7 +407,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.04s Real=0.04s Sys=0s
+  User=0.05s Real=0.05s Sys=0s
        1e+03           1           0     Cr46[0.0]
     3.64e+03           1       0.319     e+
     2.94e+03           1       0.319     nu_e
@@ -454,7 +454,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.04s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
        1e+03           1           0     Po215[0.0]
     7.39e+03           1    0.001035     alpha
          140           1    0.001035     Pb211[0.0]

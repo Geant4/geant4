@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: run-V07-00-05    (30-June-2005)
+ Geant4 version Name: geant4-07-01-ref-01    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -216,6 +216,16 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ---> End of event: 0
    Absorber: total energy: 275.13135 MeV       total track length: 19.17602 cm 
         Gap: total energy: 14.088124 MeV       total track length: 7.5983475 cm 
+
+--------------------End of Run------------------------------
+
+ mean Energy in Absorber : 275.13135 MeV +- 0 eV 
+ mean Energy in Gap      : 14.088124 MeV +- 0 eV 
+
+ mean trackLength in Absorber : 19.17602 cm  +- 0 fm 
+ mean trackLength in Gap      : 7.5983475 cm  +- 0 fm 
+
+------------------------------------------------------------
      Transportation,              hIoni,                msc,              eIoni
               eBrem,            annihil,               conv,              compt
                phot,             muIoni,            muBrems,         muPairProd
@@ -231,6 +241,16 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ---> End of event: 0
    Absorber: total energy: 280.72963 MeV       total track length: 19.085929 cm 
         Gap: total energy: 20.29237 MeV       total track length: 9.7280438 cm 
+
+--------------------End of Run------------------------------
+
+ mean Energy in Absorber : 280.72963 MeV +- 0 eV 
+ mean Energy in Gap      : 20.29237 MeV +- 0 eV 
+
+ mean trackLength in Absorber : 19.085929 cm  +- 0 fm 
+ mean trackLength in Gap      : 9.7280438 cm  +- 0 fm 
+
+------------------------------------------------------------
 
 ------------------------------------------------------------
 ---> The calorimeter is 30 layers of: [ 20mm of Aluminium + 50mm of Aerogel ] 
@@ -345,5 +365,15 @@ msc:  Model variant of multiple scattering for pi-
 ---> End of event: 0
    Absorber: total energy: 428.22036 MeV       total track length: 1.0221799 m  
         Gap: total energy: 64.177519 MeV       total track length: 1.8519419 m  
+
+--------------------End of Run------------------------------
+
+ mean Energy in Absorber : 428.22036 MeV +- 0 eV 
+ mean Energy in Gap      : 64.177519 MeV +- 0 eV 
+
+ mean trackLength in Absorber : 1.0221799 m   +- 0 fm 
+ mean trackLength in Gap      : 1.8519419 m   +- 0 fm 
+
+------------------------------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
