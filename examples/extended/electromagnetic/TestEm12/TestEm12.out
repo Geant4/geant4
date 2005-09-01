@@ -56,6 +56,7 @@ Current available graphics systems are:
 #
 /testem/det/setMat G4_WATER
 /testem/det/setRadius  3 cm
+/testem/det/setNbOfLayers 1
 #
 /testem/phys/addPhysics  standard	# em physics
 PhysicsList::AddPhysicsList: <standard>
@@ -75,24 +76,31 @@ physicsList->Construct() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
 #
+/process/eLoss/integral 0
+/testem/phys/setCuts 1 mum
+#
 /gun/particle e-
 /gun/energy 4 MeV
 #
 /testem/histo/setFileType hbook
-/testem/histo/setFileName run01
+/testem/histo/setFileName noint.v71
 /testem/histo/setHisto 1 120  0.   2.4 cm	#edep profile
 ----> SetHisto 1: dE/dr (MeV/mm) along radius (cm);  120 bins from 0 cm to 2.4 cm
+/testem/histo/setHisto 2 180  0.   4.5 MeV	#total Edep
+----> SetHisto 2: total Energy deposited in absorber (MeV);  180 bins from 0 MeV to 4.5 MeV
 /testem/histo/setHisto 3 100  0.    3. cm	#true track length
 ----> SetHisto 3: true track length of the primary particle (cm);  100 bins from 0 cm to 3 cm
+/testem/histo/setHisto 4 100  0.  500. mum	#true step length
+----> SetHisto 4: true step size of the primary particle (mum);  100 bins from 0 mum to 500 mum
+/testem/histo/setHisto 5 200 -3.    3. cm	#proj range
+----> SetHisto 5: projected range of the primary particle (cm);  200 bins from -3 cm to 3 cm
 /testem/histo/setcsdaRange       2.037 cm
-/testem/histo/setHisto 8 120  0.    1.2 none	#normalized edep profile
+/testem/histo/setHisto 8 120  0.   1.2 none	#normalized edep profile
 ----> SetHisto 8: d(E/E0)/d(r/r0) along r/r0;  120 bins from 0 none to 1.2 none
 #
-/testem/stepMax 50 mum
+/testem/event/printModulo 1000
 #
-/testem/event/printModulo 2000
-#
-/run/beamOn 20000
+/run/beamOn 10000
 
 phot:  Total cross sections from Sandia parametrisation. 
 
@@ -114,7 +122,7 @@ eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 0
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -126,7 +134,7 @@ eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 0
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -147,7 +155,7 @@ hIoni:   tables are built for  proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 0
 
 msc:  Model variant of multiple scattering for GenericIon
 
@@ -156,7 +164,7 @@ ionIoni:   tables are built for  GenericIon
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 0
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -167,7 +175,7 @@ muIoni:   tables are built for  mu+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 0
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -184,7 +192,7 @@ muIoni:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 0
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -202,14 +210,14 @@ msc:  Model variant of multiple scattering for pi-
 
 Region DefaultRegionForTheWorld
  Materials : G4_WATER 
- Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Production cuts :  gamma 1 mum    e- 1 mum    e+ 1 mum
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_WATER
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.90186 keV    e- 347.138 keV    e+ 338.695 keV
+ Range cuts        :  gamma 1 mum    e- 1 mum    e+ 1 mum
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -230,46 +238,46 @@ Start Run processing.
 
 ---> Begin of Event: 0
 
+---> Begin of Event: 1000
+
 ---> Begin of Event: 2000
+
+---> Begin of Event: 3000
 
 ---> Begin of Event: 4000
 
+---> Begin of Event: 5000
+
 ---> Begin of Event: 6000
+
+---> Begin of Event: 7000
 
 ---> Begin of Event: 8000
 
----> Begin of Event: 10000
-
----> Begin of Event: 12000
-
----> Begin of Event: 14000
-
----> Begin of Event: 16000
-
----> Begin of Event: 18000
+---> Begin of Event: 9000
 Run terminated.
 Run Summary
-  Number of events processed : 20000
-  User=129.34s Real=132.38s Sys=2.02s
+  Number of events processed : 10000
+  User=611.69s Real=1281.82s Sys=136.5s
 
  ======================== run summary ======================
 
- The run consists of 20000 e- of 4.00 MeV through 3.00 cm  of G4_WATER (density: 1.00 g/cm3 )
+ The run consists of 10000 e- of 4.00 MeV through 3.00 cm  of G4_WATER (density: 1.00 g/cm3 )
 
  ============================================================
 
- Total Energy deposited        = 3.932 MeV +- 238.852 keV
+ Total Energy deposited        = 3.937 MeV +- 228.189 keV
 
- Track length of primary track = 2.012 cm  +- 2.779 mm 
- Range from EmCalculator       = 2.171 cm  (from restricted dE/dx)
+ Track length of primary track = 2.021 cm  +- 2.817 mm 
+ Range from EmCalculator       = 3.091 cm  (from restricted dE/dx)
 
- Projected range               = 1.244 cm  +- 4.285 mm 
+ Projected range               = 1.216 cm  +- 4.372 mm 
 
- Nb of steps of primary track  = 403.40 +- 0.00	 Step size= 49.873 mum +- 93.413 nm 
+ Nb of steps of primary track  = 210.45 +- 26.69	 Step size= 96.046 mum +- 7.082 mum
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2050711138, 916778490
+ Current couple of seeds = 1158589011, 1177393394
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
