@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisation.cc,v 1.44 2005-08-18 15:05:13 vnivanch Exp $
+// $Id: G4eIonisation.cc,v 1.45 2005-09-02 16:30:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -60,6 +60,7 @@
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 12-08-05 SetStepLimits(0.2, 0.1*mm) (mma)
+// 02-09-05 Return SetStepLimits(1, 1*mm) (V.Ivantchenko)
 //
 // -------------------------------------------------------------------
 //
