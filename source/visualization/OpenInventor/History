@@ -1,4 +1,4 @@
-$Id: History,v 1.67 2005-08-01 16:16:02 gcosmo Exp $
+$Id: History,v 1.68 2005-09-02 13:06:06 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+2nd September 2005  John Allison (openinventor-V07-01-02)
+- Corrected treatment of edgeflags.
 
 1st August 2005  Gabriele Cosmo  (openinventor-V07-01-01)
 - Fixed compilation errors and warnings on gcc-4.0.0. Modified files:

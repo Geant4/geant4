@@ -197,7 +197,7 @@ void Geant4_SoPolyhedron::generatePrimitives(
         notLastEdge = fPolyhedron->GetNextVertex(vertex,edgeFlag);
         if(reducedWireFrame.getValue()==FALSE) edgeFlag = 1;        
         if(firstEdge) {
-          if(edgeFlag) {
+          if(edgeFlag > 0) {
             pvb.setNormal(normal);
             point.setValue(vertex[0],vertex[1],vertex[2]);
             pvb.setPoint(point);
@@ -207,7 +207,7 @@ void Geant4_SoPolyhedron::generatePrimitives(
           prevEdgeFlag = edgeFlag;
         } else {
           if(edgeFlag!=prevEdgeFlag) { 
-            if(edgeFlag) { // Pass to a visible edge :
+            if(edgeFlag > 0) { // Pass to a visible edge :
               pvb.setNormal(normal);
               point.setValue(vertex[0],vertex[1],vertex[2]);
               pvb.setPoint(point);
@@ -219,7 +219,7 @@ void Geant4_SoPolyhedron::generatePrimitives(
             }
             prevEdgeFlag = edgeFlag;
           } else {
-            if(edgeFlag) {
+            if(edgeFlag > 0) {
               pve.setNormal(normal);
               point.setValue(vertex[0],vertex[1],vertex[2]);
               pve.setPoint(point);
