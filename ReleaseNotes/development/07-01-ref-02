@@ -94,5 +94,7 @@ tests                                            tests-V07-01-02
 - Updated reference outputs.
 - Updated GNUmakefile (tests-gmk-V07-01-00) to include TestEm11,12
   and test19,29.
+- test19 (test19-V07-01-02)
+  o Cleared compilation errors for redundant semicolons.
 - test29 (test29-V07-01-03)
   o Cleared compilation errors for redundant semicolons.
