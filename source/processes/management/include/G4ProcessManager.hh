@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.hh,v 1.10 2005-02-15 04:38:58 kurasige Exp $
+// $Id: G4ProcessManager.hh,v 1.11 2005-09-02 00:09:43 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -261,7 +261,7 @@ class G4ProcessManager
       void SetParticleType(const G4ParticleDefinition*);
       // set the particle type 
 
-      void StartTracking();
+      void StartTracking(G4Track* aTrack=0);
       void EndTracking();
       // these two methods are used by G4TrackingManager 
       // in order to inform Start/End of tracking for each track

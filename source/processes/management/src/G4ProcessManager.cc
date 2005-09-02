@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.cc,v 1.25 2005-02-15 04:38:58 kurasige Exp $
+// $Id: G4ProcessManager.cc,v 1.26 2005-09-02 00:09:43 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -935,13 +935,13 @@ void G4ProcessManager::CreateGPILvectors()
 
 
 //////////////////////////////////////////
-void G4ProcessManager::StartTracking()
+void G4ProcessManager::StartTracking(G4Track* aTrack)
 {
   for (G4int idx = 0; idx<theProcessList->entries(); idx++){
     if (GetAttribute(idx)->isActive)
-      ((*theProcessList)[idx])->StartTracking();
+      ((*theProcessList)[idx])->StartTracking(aTrack);
   }
-  duringTracking = true;
+  if(aTrack) duringTracking = true;
 }
 
 /////////////////////////////////////////////

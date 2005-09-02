@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.hh,v 1.19 2004-12-02 23:30:04 kurasige Exp $
+// $Id: G4VProcess.hh,v 1.20 2005-09-02 00:09:43 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -259,10 +259,12 @@ class G4VProcess
       static const G4String& GetProcessTypeName(G4ProcessType );
       //  Returns the process type name
 
-      virtual void StartTracking();
+      virtual void StartTracking(G4Track*);
       virtual void EndTracking();
       // inform Start/End of tracking for each track to the physics process 
- 
+  
+  protected:
+      virtual void StartTracking();
   public:
       virtual void SetProcessManager(const G4ProcessManager*); 
       // A process manager set its own pointer when the process is registered
