@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.34 2005-08-28 11:50:24 allison Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.35 2005-09-02 12:54:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,7 +61,7 @@
 G4OpenGLSceneHandler::G4OpenGLSceneHandler (G4VGraphicsSystem& system,
 			      G4int id,
 			      const G4String& name):
-G4VSceneHandler (system, id, name)
+  G4VSceneHandler (system, id, name)
 {}
 
 G4OpenGLSceneHandler::~G4OpenGLSceneHandler ()
@@ -368,8 +368,8 @@ void G4OpenGLSceneHandler::DrawXYPolygon
 //Method for handling G4Polyhedron objects for drawing solids.
 void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 
-  //Assume all facets are convex quadrilaterals.
-  //Draw each G4Facet individually
+  // Assume all facets are planar convex quadrilaterals.
+  // Draw each facet individually
   
   if (polyhedron.GetNoFacets() == 0) return;
 
@@ -380,8 +380,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   // Get view parameters that the user can force through the vis
   // attributes, thereby over-riding the current view parameter.
   G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (pVA);
-  G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVA);
-  
+
   //Get colour, etc..
   const G4Colour& c = pVA -> GetColour ();
   GLfloat materialColour [4];
@@ -389,14 +388,29 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   materialColour [1] = c.GetGreen ();
   materialColour [2] = c.GetBlue ();
   materialColour [3] = c.GetAlpha ();
-  //  The problem of blending is quite severe - see History of
-  //  opengl-V07-01-01.
+  //  The problem of blending/transparency/alpha is quite severe - see
+  //  History of opengl-V07-01-01.
   //  Note also that in OGL*Xm, there is a button for transparency.
   //  The default is "off".  But how does one get at the OGL*XmViewer
   //  flag from this base class?
+
+  //  Always draw if transients...
+  if (!fReadyForTransients) {
+    // ...but if not, draw opaque objects first...
+    if (!fSecondPass && materialColour [3] < 1.) {
+      // On first pass, transparent objects are not drawn, but flag is set...
+      fSecondPassRequested = true;
+      return;
+    }
+    // On second pass, opaque objects are not drwan...
+    if (fSecondPass && materialColour [3] >= 1.) return;
+  }
+
   GLdouble clear_colour[4];
   glGetDoublev (GL_COLOR_CLEAR_VALUE, clear_colour);
 
+  G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVA);
+  
   switch (drawing_style) {
   case (G4ViewParameters::hlhsr):
     // Set up as for hidden line removal but paint polygon faces later...
@@ -407,29 +421,38 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     glStencilFunc (GL_ALWAYS, 0, 1);
     glStencilOp (GL_INVERT, GL_INVERT, GL_INVERT);
     glEnable (GL_DEPTH_TEST);
-    glDepthFunc (GL_LESS);    
-    glEnable (GL_CULL_FACE);
-    glCullFace (GL_BACK);
-    glPolygonMode (GL_FRONT, GL_LINE);
+    glDepthFunc (GL_LESS);
+    if (materialColour[3] < 1.) {
+      // Transparent...
+      glDisable (GL_CULL_FACE);
+      glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
+    } else {
+      // Opaque...
+      glEnable (GL_CULL_FACE);
+      glCullFace (GL_BACK);
+      glPolygonMode (GL_FRONT, GL_LINE);
+    }
     glDisable (GL_LIGHTING);
     glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
     break;
   case (G4ViewParameters::hsr):
-    if (materialColour[3] == 1.) 
-      {
-	glEnable (GL_DEPTH_TEST);
-	glDepthFunc (GL_LESS);    
-	glEnable (GL_CULL_FACE);
-	glCullFace (GL_BACK);
-      }
-    else
-      {
-	glDisable (GL_DEPTH_TEST);
-	glDisable (GL_CULL_FACE);
-      }
+    glEnable (GL_DEPTH_TEST);
+    glDepthFunc (GL_LESS);    
+    if (materialColour[3] < 1.) {
+      // Transparent...
+      glDepthMask (0);  // Make depth buffer read-only.
+      glDisable (GL_CULL_FACE);
+      glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
+      glMaterialfv (GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, materialColour);
+    } else {
+      // Opaque...
+      glDepthMask (1);  // Make depth buffer writable (default).
+      glEnable (GL_CULL_FACE);
+      glCullFace (GL_BACK);
+      glPolygonMode (GL_FRONT, GL_FILL);
+      glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, materialColour);
+    }
     glEnable (GL_LIGHTING);
-    glPolygonMode (GL_FRONT, GL_FILL);
-    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, materialColour);
     break;
   case (G4ViewParameters::wireframe):
   default:
@@ -459,9 +482,9 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     for(edgeCount = 0; edgeCount < n; ++edgeCount) {
       // Check to see if edge is visible or not...
       if (isAuxEdgeVisible) {
-	edgeFlag[edgeCount] = G4int (true);
+	edgeFlag[edgeCount] = 1;
       }
-      if (edgeFlag[edgeCount]) {
+      if (edgeFlag[edgeCount] > 0) {
 	glEdgeFlag (GL_TRUE);
       } else {
 	glEdgeFlag (GL_FALSE);
@@ -478,7 +501,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       edgeCount = 3;
       normals[edgeCount] = normals[edgeCount-1];
       vertex[edgeCount] = vertex[edgeCount-1];
-      edgeFlag[edgeCount] = G4int (false);
+      edgeFlag[edgeCount] = -1;
       glEdgeFlag (GL_FALSE);
       glNormal3d (normals[edgeCount].x(),
 		  normals[edgeCount].y(), 
@@ -513,27 +536,37 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       // Draw through stencil...
       glStencilFunc (GL_EQUAL, 0, 1);
       glStencilOp (GL_KEEP, GL_KEEP, GL_KEEP);
-      glPolygonMode (GL_FRONT, GL_FILL);
       if (drawing_style == G4ViewParameters::hlhsr) {
 	glEnable (GL_LIGHTING);
-	if (materialColour[3] == 1.) {
-	  glEnable (GL_DEPTH_TEST);
-	  glDepthFunc (GL_LESS);    
+	glEnable (GL_DEPTH_TEST);
+	glDepthFunc (GL_LESS);    
+	if (materialColour[3] < 1.) {
+	  // Transparent...
+	  glDepthMask (0);  // Make depth buffer read-only.
+	  glDisable (GL_CULL_FACE);
+	  glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
+	} else {
+	  // Opaque...
+	  glDepthMask (1);  // Make depth buffer writable (default).
 	  glEnable (GL_CULL_FACE);
 	  glCullFace (GL_BACK);
-	} else {
-	  glDisable (GL_DEPTH_TEST);
-	  glDisable (GL_CULL_FACE);
+	  glPolygonMode (GL_FRONT, GL_FILL);
 	}
       }
       glBegin (GL_QUADS);
       if  (drawing_style == G4ViewParameters::hlr) {
 	glColor4dv (clear_colour);
       } else {  // drawing_style == G4ViewParameters::hlhsr
-	glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, materialColour);
+	if (materialColour[3] < 1.) {
+	  // Transparent...
+	  glMaterialfv (GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, materialColour);
+	} else {
+	  // Opaque...
+	  glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, materialColour);
+	}
       }
       for (int edgeCount = 0; edgeCount < 4; ++edgeCount) {
-	if (edgeFlag[edgeCount]) {
+	if (edgeFlag[edgeCount] > 0) {
 	  glEdgeFlag (GL_TRUE);
 	} else {
 	  glEdgeFlag (GL_FALSE);
@@ -546,7 +579,6 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 		    vertex[edgeCount].z());
       }
       glEnd ();
-      glEnable (GL_DEPTH_TEST); // Revert to normal.
       glEnable (GL_CULL_FACE);  // Revert to normal.
       glCullFace (GL_BACK);     // Revert to normal.
       glDisable (GL_LIGHTING);  // Revert to normal.
@@ -555,11 +587,20 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       glStencilFunc (GL_ALWAYS, 0, 1);
       glStencilOp (GL_INVERT, GL_INVERT, GL_INVERT);
       glDepthFunc (GL_LEQUAL);  // to make sure line gets drawn.  
-      glPolygonMode (GL_FRONT, GL_LINE);
+      if (materialColour[3] < 1.) {
+	// Transparent...
+	glDisable (GL_CULL_FACE);
+	glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
+      } else {
+	// Opaque...
+	glEnable (GL_CULL_FACE);
+	glCullFace (GL_BACK);
+	glPolygonMode (GL_FRONT, GL_LINE);
+      }
       glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
       glBegin (GL_QUADS);
       for (int edgeCount = 0; edgeCount < 4; ++edgeCount) {
-	if (edgeFlag[edgeCount]) {
+	if (edgeFlag[edgeCount] > 0) {
 	  glEdgeFlag (GL_TRUE);
 	} else {
 	  glEdgeFlag (GL_FALSE);
@@ -581,7 +622,8 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   } while (notLastFace);  
   
   glEnd ();
-  glDisable (GL_STENCIL_TEST);
+  glDisable (GL_STENCIL_TEST);  // Revert to default for next primitive.
+  glDepthMask (1);              // Revert to default for next primitive.
 }
 
 //Method for handling G4NURBS objects for drawing solids.
@@ -636,7 +678,9 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4NURBS& nurb) {
       materialColour [0] = c.GetRed ();
       materialColour [1] = c.GetGreen ();
       materialColour [2] = c.GetBlue ();
-      materialColour [3] = 1.0;
+      materialColour [3] = 1.0;  // = c.GetAlpha () for transparency -
+				 // but see complication in
+				 // AddPrimitive(const G4Polyhedron&).
       glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, materialColour);
       break;
     }
