@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.40 2005-06-07 17:03:17 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.41 2005-09-02 12:58:18 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,6 +76,8 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   fpViewer               (0),
   fpScene                (0),
   fMarkForClearingTransientStore (true), // Always clear and refesh first time.
+  fSecondPassRequested   (false),
+  fSecondPass            (false),
   fReadyForTransients    (false),
   fpModel                (0),
   fpObjectTransformation (&G4Transform3D::Identity),
@@ -439,10 +441,6 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 
   const std::vector<G4VModel*>& runDurationModelList =
     fpScene -> GetRunDurationModelList ();
-  /*
-  const std::vector<G4VModel*>& endOfEventModelList =
-    fpScene -> GetEndOfEventModelList ();
-  */
 
   if (runDurationModelList.size ()) {
     G4VisManager::Verbosity verbosity =
@@ -450,8 +448,12 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Traversing scene data..." << G4endl;
     }
+
     BeginModeling ();
+
+    // Create modeling parameters from view parameters...
     G4ModelingParameters* pMP = CreateModelingParameters ();
+
     for (size_t i = 0; i < runDurationModelList.size (); i++) {
       G4VModel* pModel = runDurationModelList[i];
       // Note: this is not the place to take action on
@@ -475,22 +477,28 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
       pModel -> DescribeYourselfTo (*this);
       pModel -> SetModelingParameters (tempMP);
     }
-    /*
-    for (size_t i = 0; i < endOfEventModelList.size (); i++) {
-      G4VModel* pModel = endOfEventModelList[i];
-      const G4ModelingParameters* tempMP =
-	pModel -> GetModelingParameters ();
-      pModel -> SetModelingParameters (pMP);
-      SetModel (pModel);  // Store for use by derived class.
-      pModel -> DescribeYourselfTo (*this);
-      pModel -> SetModelingParameters (tempMP);
+
+    // Repeat if required...
+    if (fSecondPassRequested) {
+      fSecondPass = true;
+      for (size_t i = 0; i < runDurationModelList.size (); i++) {
+	G4VModel* pModel = runDurationModelList[i];
+	const G4ModelingParameters* tempMP =
+	  pModel -> GetModelingParameters ();
+	pModel -> SetModelingParameters (pMP);
+	SetModel (pModel);  // Store for use by derived class.
+	pModel -> DescribeYourselfTo (*this);
+	pModel -> SetModelingParameters (tempMP);
+      }
+      fSecondPass = false;
+      fSecondPassRequested = false;
     }
-    */
+
     delete pMP;
     SetModel (0);  // Flags invalid model.
     EndModeling ();
-  }
-  else {
+
+  } else {
     G4VisManager::Verbosity verbosity =
       G4VisManager::GetInstance()->GetVerbosity();
     if (verbosity >= G4VisManager::errors) {

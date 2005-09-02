@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.24 2005-01-27 20:06:07 johna Exp $
+// $Id: G4VSceneHandler.hh,v 1.25 2005-09-02 12:58:18 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -279,6 +279,8 @@ protected:
   G4VViewer*             fpViewer;         // Current viewer.
   G4Scene*               fpScene;          // Scene for this scene handler.
   G4bool                 fMarkForClearingTransientStore;
+  G4bool                 fSecondPassRequested;
+  G4bool                 fSecondPass;      // ...in process.
 
   //////////////////////////////////////////////////////////////
   // Workspace...
