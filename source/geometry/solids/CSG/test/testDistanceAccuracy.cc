@@ -362,8 +362,8 @@ int main(int argc, char** argv)
 {
   G4int test_one_solid( Esolid, int, int ); 
 
-  G4int no_points      = 10000;
-  G4int dirs_per_point = 100000; 
+  G4int no_points      = 1000;
+  G4int dirs_per_point = 10000; 
 
   G4cout << "Usage: testDistanceAccuracy [ no_surface_points ]  [ no_directions_each ] " 
 	 << G4endl << G4endl;
