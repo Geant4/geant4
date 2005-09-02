@@ -40,7 +40,7 @@ Test19HadronProduction::Test19HadronProduction(const G4String& aName)
  :G4VDiscreteProcess(aName), theGenerator(0) { InitializeMe(); }
 
 // Model Navigation tool for initialization of the particular model (?)
-void Test19HadronProduction::InitializeMe() {}; // M.K.? What for is this member function?
+void Test19HadronProduction::InitializeMe() {} // M.K.? What for is this member function?
 
 // the G4VParticleChange must be cleaned up by caller! - Bad G4 style (?)
 Test19HadronProduction::~Test19HadronProduction() {if(theGenerator) delete theGenerator;}
