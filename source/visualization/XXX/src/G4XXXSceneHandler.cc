@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.23 2005-06-07 16:46:33 allison Exp $
+// $Id: G4XXXSceneHandler.cc,v 1.24 2005-09-02 13:08:26 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -438,43 +438,64 @@ void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
     }     
   }
 
+  // Copied from G4OpenGLSceneHandler.cc...
   //Loop through all the facets...
+  //glBegin (GL_QUADS);
   G4bool notLastFace;
-  G4Normal3D SurfaceUnitNormal;
-  do {  // loop over faces...
+  do {
 
-    //First, find surface normal for the facet...
-    notLastFace = polyhedron.GetNextUnitNormal (SurfaceUnitNormal);
-        
+    //First, find vertices, edgeflags and normals and note "not last facet"...
+    G4Point3D vertex[4];
+    G4int edgeFlag[4];
+    G4Normal3D normals[4];
+    G4int n;
+    notLastFace = polyhedron.GetNextFacet(n, vertex, edgeFlag, normals);
+
     //Loop through the four edges of each G4Facet...
-    G4bool notLastEdge;
-    G4Point3D vertex;
-    G4int edgeFlag;
     G4int edgeCount = 0;
-    do {  // loop over edges...
-      notLastEdge = polyhedron.GetNextVertex (vertex, edgeFlag);
+    for(edgeCount = 0; edgeCount < n; ++edgeCount) {
       // Check to see if edge is visible or not...
       if (isAuxEdgeVisible) {
-	edgeFlag = G4int (true);
+	edgeFlag[edgeCount] = 1;
       }
-      if (edgeFlag) {
-	// glEdgeFlag (GL_TRUE);
+      if (edgeFlag[edgeCount] > 0) {
+	//glEdgeFlag (GL_TRUE);
       } else {
-	// glEdgeFlag (GL_FALSE);
+	//glEdgeFlag (GL_FALSE);
       }
-      // glVertex3d (vertex.x(), 
-      //             vertex.y(),
-      //             vertex.z());
-      edgeCount++;
-    } while (notLastEdge);
-
-    // Duplicate last real vertex if necessary to guarantee quadrilateral....
-    while (edgeCount < 4) {
-      // glEdgeFlag (GL_FALSE);
-      // glVertex3d (vertex.x(),
-      //             vertex.y(), 
-      //             vertex.z());
-      edgeCount++;
+      //glNormal3d (normals[edgeCount].x(), 
+      //	  normals[edgeCount].y(),
+      //	  normals[edgeCount].z());
+      //glVertex3d (vertex[edgeCount].x(), 
+      //	  vertex[edgeCount].y(),
+      //	  vertex[edgeCount].z());
+    }
+    // HEPPolyhedron produces triangles too; in that case add an extra vertex..
+    if (n == 3) {
+      edgeCount = 3;
+      normals[edgeCount] = normals[edgeCount-1];
+      vertex[edgeCount] = vertex[edgeCount-1];
+      edgeFlag[edgeCount] = -1;
+      //glEdgeFlag (GL_FALSE);
+      //glNormal3d (normals[edgeCount].x(),
+      //	  normals[edgeCount].y(), 
+      ///	  normals[edgeCount].z());
+      //glVertex3d (vertex[edgeCount].x(),
+      //	  vertex[edgeCount].y(), 
+      //	  vertex[edgeCount].z());
+    }
+    // Trap situation where number of edges is > 4...
+    if (n > 4) {
+      G4cerr <<
+	"G4OpenGLSceneHandler::AddPrimitive(G4Polyhedron): WARNING";
+      if (fpCurrentPV) {
+	G4cerr <<
+	"\n  Volume " << fpCurrentPV->GetName() <<
+	", Solid " << fpCurrentLV->GetSolid()->GetName() <<
+	  " (" << fpCurrentLV->GetSolid()->GetEntityType();
+      }
+      G4cerr<<
+	"\n   G4Polyhedron facet with " << n << " edges" << G4endl;
     }
 
   } while (notLastFace);  
