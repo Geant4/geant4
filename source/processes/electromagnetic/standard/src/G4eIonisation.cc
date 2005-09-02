@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisation.cc,v 1.45 2005-09-02 16:30:13 vnivanch Exp $
+// $Id: G4eIonisation.cc,v 1.46 2005-09-02 16:33:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -112,7 +112,7 @@ void G4eIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part
     em->SetHighEnergyLimit(100*TeV);
     AddEmModel(1, em, flucModel);
 
-    SetStepLimits(1.0, 1.0*mm);
+    SetStepLimits(0.2, 0.1*mm);
 
     isInitialised = true;
   }
