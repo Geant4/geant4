@@ -8,7 +8,9 @@ $Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
 
                       Category History file
                       ---------------------
-
+02.09.2005 S. Guatelli (hadrontherapy-V07-01-03)
+         - Added Hadronic physics models
+ 
 08.07.2005 S. Guatelli (hadrontherapy-V07-01-02)
          - Added alternative stopping power parameterisations for protons:
            ICRU49, Ziegler 1977, Ziegler 1985, Ziegler (SRIM) 2000
