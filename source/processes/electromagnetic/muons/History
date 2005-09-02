@@ -1,4 +1,4 @@
-$Id: History,v 1.84 2005-09-02 16:12:42 vnivanch Exp $
+$Id: History,v 1.85 2005-09-02 16:20:50 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+2 September 05: V.Ivant. (emmuons-V07-01-03)
+- G4MuIonisation : SetStepLimits (0.2, 0.1*mm) + integral off
 
 2 September 05: V.Ivant. (emmuons-V07-01-02)
 - This tag is 7.1 + bug fixes
