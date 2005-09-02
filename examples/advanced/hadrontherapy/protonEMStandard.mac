@@ -15,9 +15,10 @@
 /physics/addPhysics electron-standard
 /physics/addPhysics positron-standard
 /physics/addPhysics ion-standard
-#############
+
+#######
 /run/initialize
-/run/beamOn 100
+/run/beamOn 3000000
 
 
 

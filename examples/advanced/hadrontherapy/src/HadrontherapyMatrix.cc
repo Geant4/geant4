@@ -91,7 +91,7 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
   if (matrix)
     {  
       std::ofstream ofs;    	
-      ofs.open("EnergyDeposit.out");  
+      ofs.open("EnergyDeposit2MTest3.out");  
       {
 	for(G4int l = 0; l < numberVoxelZ; l++) 
 	  {

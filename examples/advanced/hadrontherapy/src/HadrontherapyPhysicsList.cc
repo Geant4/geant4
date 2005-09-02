@@ -524,6 +524,8 @@ void HadrontherapyPhysicsList::SetCuts()
   cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("gamma"));
   cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("e-"));
   cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("e+"));
+  cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("proton"));
+  cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("genericIons"));
   region -> SetProductionCuts(cuts);
 
   if (verboseLevel>0) DumpCutValuesTable();
