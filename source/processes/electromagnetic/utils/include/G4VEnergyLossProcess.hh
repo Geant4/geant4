@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.39 2005-04-12 18:31:47 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.40 2005-09-02 16:06:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -412,8 +412,6 @@ private:
   G4double minSubRange;
   G4double dRoverRange;
   G4double finalRange;
-  G4double defaultRoverRange;
-  G4double defaultIntegralRange;
   G4double lambdaFactor;
   G4double mfpKinEnergy;
 

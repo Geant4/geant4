@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.62 2005-08-18 10:35:18 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.63 2005-09-02 16:06:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -84,6 +84,7 @@
 // 25-07-05 Add extra protection PostStep for non-integral mode (V.Ivanchenko)
 // 12-08-05 Integral=false; SetStepFunction(0.2, 0.1*mm) (mma)
 // 18-08-05 Return back both AlongStep and PostStep from 7.0 (V.Ivanchenko)
+// 02-09-05 Default StepFunction 0.2 1 mm + integral (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -148,8 +149,6 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, G4ProcessType t
   nLambdaBins(90),
   linLossLimit(0.05),
   minSubRange(0.1),
-  defaultRoverRange(0.2),
-  defaultIntegralRange(1.0),
   lambdaFactor(0.1),
   mfpKinEnergy(0.0),
   lossFluctuationFlag(true),
@@ -170,7 +169,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, G4ProcessType t
   pParticleChange = &fParticleChange;
 
   // default dRoverRange and finalRange
-  SetStepFunction(defaultIntegralRange, 1.0*mm);
+  SetStepFunction(0.2, 1.0*mm);
   SetVerboseLevel(1);
 
   modelManager = new G4EmModelManager();
@@ -1069,10 +1068,6 @@ void G4VEnergyLossProcess::SetStepLimits(G4double v1, G4double v2)
 
 void G4VEnergyLossProcess::SetIntegral(G4bool val)
 {
-  if(integral != val) {
-    if(val) dRoverRange = defaultIntegralRange;
-    else    dRoverRange = defaultRoverRange;
-  }
   integral = val;
 }
 
