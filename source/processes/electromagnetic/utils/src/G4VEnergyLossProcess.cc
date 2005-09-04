@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.64 2005-09-04 17:03:53 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.65 2005-09-04 17:41:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -151,7 +151,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, G4ProcessType t
   nWarnings(0),
   linLossLimit(0.05),
   minSubRange(0.1),
-  lambdaFactor(0.80),
+  lambdaFactor(0.8),
   mfpKinEnergy(0.0),
   lossFluctuationFlag(true),
   lossFluctuationArePossible(true),
@@ -741,14 +741,16 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   // Integral approach
   if (integral) {
     G4double lx = GetLambdaForScaledEnergy(postStepScaledEnergy);
+    /*
     if(preStepLambda<lx && 1 < verboseLevel && nWarnings<200) {
-      G4cout << "WARING: for " << particle->GetParticleName()
+      G4cout << "WARNING: for " << particle->GetParticleName()
              << " and " << GetProcessName()
              << " E(MeV)= " << finalT/MeV
              << " preLambda= " << preStepLambda << " < " << lx << " (postLambda) "
 	     << G4endl;
       nWarnings++;
     }
+    */
     if(preStepLambda*G4UniformRand() > lx)
       return G4VContinuousDiscreteProcess::PostStepDoIt(track,step);
   }
