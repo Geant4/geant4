@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.5 2005-06-16 16:07:17 vnivanch Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.6 2005-09-04 18:22:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -105,15 +105,15 @@ G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& name,
   if(!mat) mat = BuildMaterial(name, isotopes);
 
   if (mat) {
-    if( verbose > 1) {
+    if( verbose > 1) 
       G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial material "
              << name << " is available"
 	     << G4endl;
-    }
   } else {
-    G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial WARNING:"
-           << " material <" << name
-           << "> is not found out" << G4endl;
+    if( verbose > 0) 
+      G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial WARNING:"
+	     << " material <" << name
+	     << "> is not found out" << G4endl;
   }
 
   return mat;
@@ -125,7 +125,7 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(const G4String& name,
                                                  G4bool isotopes)
 
 {
-  if (verbose > 0) G4cout << "G4NistMaterialBuilder: BuildMaterial " << name
+  if (verbose > 1) G4cout << "G4NistMaterialBuilder: BuildMaterial " << name
                           << G4endl;
 
   G4Material* mat = 0;
@@ -136,7 +136,7 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(const G4String& name,
       G4int nc = components[i];
       mat = new G4Material(names[i],densities[i],nc,states[i]);
 
-      if (verbose>0) G4cout << "New material nComponents= " << nc << G4endl;
+      if (verbose>1) G4cout << "New material nComponents= " << nc << G4endl;
       if (nc > 0) {
 	G4int idx = indexes[i];
 	for (G4int j=0; j<nc; j++) {
@@ -333,7 +333,7 @@ void G4NistMaterialBuilder::AddMaterial(const G4String& nameMat, G4double dens,
 
   nMaterials++;
 
-  if(verbose > 0) {
+  if(verbose > 1) {
     G4cout << "New material " << nameMat << " is prepeared; "
            << " nMaterials= " << nMaterials
            << " nComponents= " << nComponents
@@ -394,7 +394,7 @@ void G4NistMaterialBuilder::AddElementByAtomCount(const G4String& name,
 void G4NistMaterialBuilder::Initialise()
 {
   if (verbose > 0)
-    G4cout << "G4NistMaterialBuilder::Initialise()" << G4endl;
+    G4cout << "### G4NistMaterialBuilder::Initialise()" << G4endl;
 
   if (!matManager) {
     G4cout << "G4NistMaterialBuilder::Initialise(): Warning : "
