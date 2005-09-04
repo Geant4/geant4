@@ -1,4 +1,4 @@
-$Id: History,v 1.205 2005-09-02 16:06:40 vnivanch Exp $
+$Id: History,v 1.206 2005-09-04 17:03:53 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04 September 05: V.Ivant (emutils-V07-01-03)
+- G4VEnergyLossProcess, G4VEmProcess: default lambdaFactor 0.8
 
 02 September 05: V.Ivant (emutils-V07-01-02)
 - This tag is 7.1 + bug fixes

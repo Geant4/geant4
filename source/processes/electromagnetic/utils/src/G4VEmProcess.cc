@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.31 2005-07-26 07:46:31 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.32 2005-09-04 17:03:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -40,9 +40,10 @@
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivanchenko)
 // 11-03-05 Shift verbose level by 1, add applyCuts and killPrimary flags (V.Ivanchenko)
 // 14-03-05 Update logic PostStepDoIt (V.Ivanchenko)
-// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
-// 18-04-05 Use G4ParticleChangeForGamma (V.Ivantchenko)
-// 25-07-05 Add protection: integral mode only for charged particles (V.Ivantchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivanchenko)
+// 18-04-05 Use G4ParticleChangeForGamma (V.Ivanchenko)
+// 25-07-05 Add protection: integral mode only for charged particles (V.Ivanchenko)
+// 04-09-05 default lambdaFactor 0.8 (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -82,7 +83,7 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   particle(0),
   secondaryParticle(0),
   nLambdaBins(90),
-  lambdaFactor(0.1),
+  lambdaFactor(0.8),
   currentCouple(0),
   integral(false),
   meanFreePath(true),

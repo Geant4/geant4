@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.63 2005-09-02 16:06:40 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.64 2005-09-04 17:03:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -85,6 +85,7 @@
 // 12-08-05 Integral=false; SetStepFunction(0.2, 0.1*mm) (mma)
 // 18-08-05 Return back both AlongStep and PostStep from 7.0 (V.Ivanchenko)
 // 02-09-05 Default StepFunction 0.2 1 mm + integral (V.Ivanchenko)
+// 04-09-05 default lambdaFactor 0.8 (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -147,9 +148,10 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, G4ProcessType t
   nDEDXBins(90),
   nDEDXBinsForRange(70),
   nLambdaBins(90),
+  nWarnings(0),
   linLossLimit(0.05),
   minSubRange(0.1),
-  lambdaFactor(0.1),
+  lambdaFactor(0.80),
   mfpKinEnergy(0.0),
   lossFluctuationFlag(true),
   lossFluctuationArePossible(true),
@@ -739,12 +741,13 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   // Integral approach
   if (integral) {
     G4double lx = GetLambdaForScaledEnergy(postStepScaledEnergy);
-    if(preStepLambda<lx && 1 < verboseLevel) {
+    if(preStepLambda<lx && 1 < verboseLevel && nWarnings<200) {
       G4cout << "WARING: for " << particle->GetParticleName()
              << " and " << GetProcessName()
              << " E(MeV)= " << finalT/MeV
              << " preLambda= " << preStepLambda << " < " << lx << " (postLambda) "
 	     << G4endl;
+      nWarnings++;
     }
     if(preStepLambda*G4UniformRand() > lx)
       return G4VContinuousDiscreteProcess::PostStepDoIt(track,step);
