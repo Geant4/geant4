@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.54 2005-08-30 13:38:23 link Exp $
+// $Id: G4Torus.cc,v 1.55 2005-09-05 15:15:27 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1132,8 +1132,12 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
 
   // rmax
 
-#if 0
+#if 1
 
+  // This is the version with the calculation of CalcNorm = true 
+  // To be done: Check the percision of this calculation.
+  // If you want return always validNorm = false, then take the version below.
+  
   G4double Rtor2 = fRtor*fRtor ;
   G4double rho2  = p.x()*p.x()+p.y()*p.y();
   G4double rho   = std::sqrt(rho2) ;
@@ -1193,7 +1197,12 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
       side = kRMin ;
     }
   }
+
+
 #else
+
+  // this is the "stupid" version which return always valisnorn = false
+  // Using this version the unit test testG4Torus will break.
 
   snxt = SolveNumericJT(p,v,fRmax,false);  
   side = kRMax ;

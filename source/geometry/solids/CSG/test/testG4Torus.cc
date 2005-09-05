@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Torus.cc,v 1.12 2005-06-07 08:00:43 grichine Exp $
+// $Id: testG4Torus.cc,v 1.13 2005-09-05 15:15:28 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -221,13 +221,13 @@ G4bool testG4Torus()
     */
 // DistanceToOut(P,V)
     Dist=t1.DistanceToOut(ponrmax,vx,calcNorm,pgoodNorm,pNorm);
-    assert(ApproxEqual(Dist,0)&&ApproxEqual(pNorm->unit(),vx)&&*pgoodNorm);
+    assert(ApproxEqual(Dist,0)&&*pgoodNorm&&ApproxEqual(pNorm->unit(),vx));
     Dist=t1.DistanceToOut(ponphi1,vz,calcNorm,pgoodNorm,pNorm);
     // G4cout<<"t1.DistanceToOut(ponphi1,vz,...) = "<<Dist<<G4endl ;
-    assert(ApproxEqual(Dist,90)&&ApproxEqual(pNorm->unit(),vz)&&*pgoodNorm);
+    assert(ApproxEqual(Dist,90)&&*pgoodNorm&&ApproxEqual(pNorm->unit(),vz));
     
     Dist=t1.DistanceToOut(ponrmin,vy,calcNorm,pgoodNorm,pNorm);
-    assert(ApproxEqual(Dist,80)&&ApproxEqual(pNorm->unit(),vy)&&*pgoodNorm);
+    assert(ApproxEqual(Dist,80)&&*pgoodNorm&&ApproxEqual(pNorm->unit(),vy));
     Dist=t1.DistanceToOut(ponrmin,vmy,calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(Dist,100) && !*pgoodNorm);
 //    Dist=t1.DistanceToOut(pzero,vz,calcNorm,pgoodNorm,pNorm);
@@ -237,16 +237,16 @@ G4bool testG4Torus()
 //    Dist=t1.DistanceToOut(pzero,vxy,calcNorm,pgoodNorm,pNorm);
 //    assert(ApproxEqual(Dist,50)&&ApproxEqual(pNorm->unit(),vxy)&&*pgoodNorm);
 
+
     Dist=t2.DistanceToOut(ponphi12,vxmy,calcNorm,pgoodNorm,pNorm);
 //    G4cout<<"Dist=t2.DistanceToOut(ponphi12,vxmy) = "<<Dist<<G4endl;
-    assert(ApproxEqual(Dist,0)&&ApproxEqual(pNorm->unit(),vxmy)&&*pgoodNorm);
+    assert(ApproxEqual(Dist,0)&&*pgoodNorm&&ApproxEqual(pNorm->unit(),vxmy));
     Dist=t2.DistanceToOut(ponphi22,vmxmy,calcNorm,pgoodNorm,pNorm);
 //    G4cout<<"Dist=t2.DistanceToOut(ponphi22,vmxmy) = "<<Dist<<G4endl;
-    assert(ApproxEqual(Dist,0)&&ApproxEqual(pNorm->unit(),vmxmy)&&*pgoodNorm);
+    assert(ApproxEqual(Dist,0)&&*pgoodNorm&&ApproxEqual(pNorm->unit(),vmxmy));
     Dist=t2.DistanceToOut(ponphi23,vmxmy,calcNorm,pgoodNorm,pNorm);
 //    G4cout<<"Dist=t2.DistanceToOut(ponphi23,vmxmy) = "<<Dist<<G4endl;
-    assert(ApproxEqual(Dist,0.353553)&&ApproxEqual(pNorm->unit(),vmxmy)
-	   &&*pgoodNorm);
+    assert(ApproxEqual(Dist,0.353553)&&*pgoodNorm&&ApproxEqual(pNorm->unit(),vmxmy));
   
 
 // Check for Distance to Out ( start from an internal point )
@@ -309,7 +309,9 @@ G4bool testG4Torus()
     Dist=t1.DistanceToIn(ponrmax,vmx);
     assert(ApproxEqual(Dist,0));
 
-    Dist=t2.DistanceToIn(pzero,vxy);
+    G4ThreeVector vnew(1,0,0) ;
+    vnew.rotateZ(pi/4-5*1e-9) ;    // old test: check pzero with vxy
+    Dist=t2.DistanceToIn(pzero,vnew);
     assert(ApproxEqual(Dist,kInfinity));
     Dist=t2.DistanceToIn(pzero,vy);
     assert(ApproxEqual(Dist,10));
