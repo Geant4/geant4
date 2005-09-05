@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.14 2005-07-20 15:47:50 allison Exp $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.15 2005-09-05 11:02:38 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,8 @@
 #include "G4OpenGLTransform3D.hh"
 
 #include "G4OpenGLImmediateSceneHandler.hh"
+
+#include "G4LogicalVolume.hh"
 
 G4OpenGLImmediateSceneHandler::G4OpenGLImmediateSceneHandler (G4VGraphicsSystem& system,
 						const G4String& name):
@@ -99,6 +101,37 @@ void G4OpenGLImmediateSceneHandler::ClearTransientStore () {
     fpViewer -> SetView ();
     fpViewer -> ClearView ();
     fpViewer -> DrawView ();
+  }
+}
+
+void G4OpenGLImmediateSceneHandler::RequestPrimitives (const G4VSolid& solid) {
+  if (fReadyForTransients) {
+    // Always draw transient solids, e.g., hits represented as solids.
+    // (As we have no control over the order of drawing of transient
+    // objects, we cannot do anything about transparent ones, as
+    // below, so always draw them.)
+    G4VSceneHandler::RequestPrimitives (solid);
+  }
+  else {
+    // For non-transient (run-duration) objects, ensure transparent
+    // objects are drawn last.  The problem of
+    // blending/transparency/alpha is quite a tricky one - see History
+    // of opengl-V07-01-01/2/3.
+    // Get vis attributes - pick up defaults if none.
+    const G4VisAttributes* pVA =
+      fpViewer -> GetApplicableVisAttributes
+      (fpCurrentLV->GetVisAttributes ());
+    const G4Colour& c = pVA -> GetColour ();
+    G4double opacity = c.GetAlpha ();
+    if (!fSecondPass && opacity < 1.) {
+      // On first pass, transparent objects are not drawn, but flag is set...
+      fSecondPassRequested = true;
+      return;
+    }
+    // On second pass, opaque objects are not drwan...
+    if (fSecondPass && opacity >= 1.) return;
+    // Else invoke base class method...
+    G4VSceneHandler::RequestPrimitives (solid);
   }
 }
 

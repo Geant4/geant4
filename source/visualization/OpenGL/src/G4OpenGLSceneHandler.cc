@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.35 2005-09-02 12:54:22 allison Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.36 2005-09-05 11:02:38 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -388,23 +388,6 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   materialColour [1] = c.GetGreen ();
   materialColour [2] = c.GetBlue ();
   materialColour [3] = c.GetAlpha ();
-  //  The problem of blending/transparency/alpha is quite severe - see
-  //  History of opengl-V07-01-01.
-  //  Note also that in OGL*Xm, there is a button for transparency.
-  //  The default is "off".  But how does one get at the OGL*XmViewer
-  //  flag from this base class?
-
-  //  Always draw if transients...
-  if (!fReadyForTransients) {
-    // ...but if not, draw opaque objects first...
-    if (!fSecondPass && materialColour [3] < 1.) {
-      // On first pass, transparent objects are not drawn, but flag is set...
-      fSecondPassRequested = true;
-      return;
-    }
-    // On second pass, opaque objects are not drwan...
-    if (fSecondPass && materialColour [3] >= 1.) return;
-  }
 
   GLdouble clear_colour[4];
   glGetDoublev (GL_COLOR_CLEAR_VALUE, clear_colour);

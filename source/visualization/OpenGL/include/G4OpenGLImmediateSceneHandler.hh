@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.7 2005-06-02 17:43:46 allison Exp $
+// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.8 2005-09-05 11:02:38 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,6 +54,7 @@ public:
   void ClearTransientStore ();
 
 private:
+  void RequestPrimitives (const G4VSolid& solid);
   static G4int    fSceneIdCount;  // static counter for OpenGLImmediate scenes.
 };
 
