@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering80.hh,v 1.1 2005-08-11 09:58:01 maire Exp $
+// $Id: G4MultipleScattering80.hh,v 1.2 2005-09-05 12:13:46 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,7 +52,7 @@
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering80.hh,v 1.1 2005-08-11 09:58:01 maire Exp $
+// $Id: G4MultipleScattering80.hh,v 1.2 2005-09-05 12:13:46 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -127,6 +127,7 @@ private:        // data members
   G4double facrange;
   G4double tlimit,tlimitmin,factlim;
   G4double geombig,geommin,facgeom; 
+  G4double tskin;
   G4int tid,pid,stepnobound,nsmallstep;
   G4double safety;
   G4double dtrl;

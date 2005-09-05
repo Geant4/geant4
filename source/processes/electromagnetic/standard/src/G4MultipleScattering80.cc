@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering80.cc,v 1.1 2005-08-11 09:58:01 maire Exp $
+// $Id: G4MultipleScattering80.cc,v 1.2 2005-09-05 12:13:46 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -95,10 +95,11 @@ G4MultipleScattering80::G4MultipleScattering80(const G4String& processName)
 
   tlimit           = 1.e10*mm;
   tlimitmin        = facrange*1.e-3*mm;
-  factlim          = 2.;
+  factlim          = 0.5;
   geombig          = 1.e50*mm;
   geommin          = 5.e-7*mm;
   facgeom          = 2.;
+  tskin            = tlimit/facgeom;
   tid              = -1;
   pid              = -1;
   stepnobound      = 100000000;
@@ -150,6 +151,7 @@ void G4MultipleScattering80::InitialiseProcess
   isInitialized = true;
   navigator = G4TransportationManager::GetTransportationManager()
     ->GetNavigatorForTracking();
+  SetFacrange(0.02); // **********************************************
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -159,106 +161,85 @@ G4double G4MultipleScattering80::TruePathLengthLimit(const G4Track&  track,
                                                    G4double  currentMinimalStep)
 {
   G4double tPathLength = currentMinimalStep;
+  G4double range = CurrentRange() ;
 
-  G4double geomlimit = GeomLimit(track);
-
-  G4double range = 0.;
   if((track.GetCurrentStepNumber() == 1) ||
      (track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary))
   {
-    range = CurrentRange() ;
-    
     // constraint from the physics
     if (range > lambda) tlimit = facrange*range;
     else                tlimit = facrange*lambda;
 
-    //lower limit for tlimit   
+    //lower limit for tlimit
     if(tlimit < tlimitmin) tlimit = tlimitmin;
-  }
-   
-  if(track.GetCurrentStepNumber() == 1) 
-  {  
-    // simple case: if particle is not able to reach the boundary
-    if(safety >= range) tlimit = range ;
+    tskin = tlimit/facgeom;
 
-    if(ipr < npr)
+    if(track.GetCurrentStepNumber() == 1)
     {
-      ipr += 1;
-      G4cout.precision(6);
-      G4cout << "\nSTART of track ID=" << track.GetTrackID()
-             << "  parent ID=" << track.GetParentID()
-             << "  particle=" << track.GetDefinition()->GetParticleName()
-             << "  material=" << track.GetMaterial()->GetName() << G4endl;
-      G4cout << "preStepPoint:" 
-             << track.GetStep()->GetPreStepPoint()->GetPosition() << G4endl;
-      G4cout << "direction:" << track.GetMomentumDirection() << G4endl;
-      G4cout << "Tkin=" << track.GetKineticEnergy()
-             << "  range=" << range << "  lambda=" << lambda << G4endl;
-      G4cout << "facrange=" << facrange
-             << "  tlimit=" << tlimit << G4endl;
-      G4cout << "  safety=" << safety << G4endl;
+      tid = track.GetTrackID() ;
+      pid = track.GetParentID() ;
+      stepnobound      = 100000000;
     }
-
-  }
-
-  if(track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary)
-  {
-    tid = track.GetTrackID() ;
-    pid = track.GetParentID() ;
-    stepnobound = track.GetCurrentStepNumber() ;
-  
-    if(ipr < npr)
+    if(track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary)
     {
-      ipr += 1;
-      G4cout << "\nAFTER BOUNDARY track ID=" << track.GetTrackID()
-             << "  parent ID=" << track.GetParentID()
-             << "  step number=" << track.GetCurrentStepNumber()
-             << "  particle=" << track.GetDefinition()->GetParticleName()
-             << "  material=" << track.GetMaterial()->GetName() << G4endl;
-      G4cout << "preStepPoint:" 
-             << track.GetStep()->GetPreStepPoint()->GetPosition() << G4endl;
-      G4cout << "direction:" << track.GetMomentumDirection() << G4endl;
-      G4cout << "Tkin=" << track.GetKineticEnergy()
-             << "  range=" << range << "  lambda=" << lambda << G4endl;
-      G4cout << "facrange=" << facrange
-             << "  tlimit=" << tlimit << G4endl;
-      G4cout << "  safety=" << safety << G4endl;
+      stepnobound = track.GetCurrentStepNumber() ;
     }
   }
-
-  if(tPathLength > tlimit) tPathLength = tlimit;
-
-  // is the particle far from boundaries ?
-  if((safety > factlim*tlimit) && (currentMinimalStep > factlim*tlimit))
-    tPathLength = factlim*tlimit;
-
-  //check geometry as well (small steps before reaching a boundary)
-  if(tPathLength > geomlimit) tPathLength = geomlimit;
-
-  // small steps just after crossing a boundary
-  if((track.GetCurrentStepNumber() >= stepnobound) &&
-     (track.GetCurrentStepNumber() < stepnobound+nsmallstep) &&
-     (track.GetTrackID() == tid) && (track.GetParentID() == pid) &&
-     (tPathLength > geommin))
-    tPathLength = geommin ;
-     
-
-  if(ipr < npr  )
+  if(ipr < npr)
   {
     ipr += 1;
-        G4cout << "\ntrack ID=" << track.GetTrackID()
-               << "  parent ID=" << track.GetParentID() 
-               << "  step number=" << track.GetCurrentStepNumber()
-               << "  particle=" << track.GetDefinition()->GetParticleName()
-               << "  material=" << track.GetMaterial()->GetName() << G4endl;
-        G4cout << "preStepPoint:" 
-	       << track.GetStep()->GetPreStepPoint()->GetPosition() << G4endl;
-        G4cout << "direction:" << track.GetMomentumDirection() << G4endl;
-        G4cout << "Tkin=" << track.GetKineticEnergy() << G4endl;
-        G4cout << "  safety=" << safety << G4endl;
-        G4cout << "  minstep=" << currentMinimalStep
-              << " tlimit=" << tlimit << "  geomlimit=" << geomlimit
-              << "  ------> tPathLength=" << tPathLength << G4endl;
+    G4cout.precision(6);
+    G4cout << "\nparticle=" << track.GetDefinition()->GetParticleName() 
+           << G4endl;
+    G4cout << "tID=" << track.GetTrackID() << "  pID=" << track.GetParentID()
+           << "  stepno=" << track.GetCurrentStepNumber() << G4endl;
+    G4cout << "tid=" << tid << "  pid=" << pid << "  stepnobound="
+           << stepnobound << G4endl;
+    G4cout << "material=" << track.GetMaterial()->GetName()
+           << "  Tkin=" << track.GetKineticEnergy() << "  range=" << range
+           << "  lambda=" << lambda << G4endl;
+    G4cout << "facrange=" << facrange << "  tlimit=" << tlimit
+           << "  tskin=" << tskin << G4endl;
+    G4cout << "x,y,z:" << track.GetStep()->GetPreStepPoint()->GetPosition()
+           << G4endl;
+    G4cout << "dir  :" << track.GetMomentumDirection() << G4endl;
+  }
+
+  G4double geomlimit = GeomLimit(track);
+  if(ipr < npr) G4cout << "safety=" << safety << G4endl;
+  if(ipr < npr) G4cout << "geomlimit=" << geomlimit << "  currentMinimalStep="
+                       << currentMinimalStep << G4endl;
+
+  // simple case: particle is not able to reach the boundary
+  if(safety >= range)
+    tPathLength = range ;
+  else
+  {
+    // small steps just after crossing a boundary
+    if((track.GetCurrentStepNumber() >= stepnobound) &&
+       (track.GetCurrentStepNumber() <= stepnobound+nsmallstep) &&
+       (track.GetTrackID() == tid) && (track.GetParentID() == pid))
+    {
+      if(track.GetCurrentStepNumber() == stepnobound)
+        tPathLength = geommin ;
+      else
+        if(tPathLength > tskin) tPathLength = tskin;
+    }
+    else
+    {
+      if(tPathLength > tlimit) tPathLength = tlimit;
+      if((factlim*safety > tlimit) && (currentMinimalStep > factlim*safety))
+        tPathLength = factlim*safety;
+
+    }
+    //check geometry as well (small steps before reaching a boundary)
+    if(tPathLength > geomlimit) tPathLength = geomlimit;
+  }
+
+  if(ipr < npr)
+  {
+    G4cout << "before return tPathLength=" << tPathLength
+           << " ---------------------------------------------- " << G4endl;
   }
 
   return tPathLength ;
@@ -270,8 +251,7 @@ G4double G4MultipleScattering80::GeomLimit(const G4Track&  track)
 {
   G4double geomlimit = geombig;
   safety = track.GetStep()->GetPreStepPoint()->GetSafety() ;
-
-  // do not call navigator for big geommin
+  // do not call navigator for big geommin and for World
   if((geommin < geombig) && (track.GetVolume() != 0)
            && (track.GetVolume()->GetName() != "World"))
   {
@@ -284,23 +264,11 @@ G4double G4MultipleScattering80::GeomLimit(const G4Track&  track)
                   cstep,
                   safety);
 
-    if(geomlimit > facgeom*geommin) geomlimit -= facgeom*geommin;
-    else geomlimit = geommin;
+    if(geomlimit > facgeom*tskin) geomlimit -= facgeom*tskin;
+    else if(geomlimit > tskin) geomlimit = tskin;
     if(geomlimit < geommin) geomlimit = geommin;
-
-    if(ipr < npr)
-    {
-      ipr += 1;
-      G4double safetyold = track.GetStep()->GetPreStepPoint()->GetSafety();
-      G4cout << "\nGeomLimit: prepoint : " 
-             << track.GetStep()->GetPreStepPoint()->GetPosition()
-             << "  dir:" << track.GetMomentumDirection() << G4endl;
-      G4cout << "  geomlimit=" << geomlimit << "  safety=" << safety
-             << "  safetyold=" << safetyold << G4endl;
-    }
-
   }
-   
+
   return geomlimit;
 }
 
