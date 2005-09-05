@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.hh,v 1.22 2005-08-30 13:38:21 link Exp $
+// $Id: G4Torus.hh,v 1.23 2005-09-05 16:08:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -157,13 +157,13 @@ class G4Torus : public G4CSGSolid
   protected:
 
     std::vector<G4double> TorusRootsJT(const G4ThreeVector& p,
-			  const G4ThreeVector& v,
-			  G4double r) const ;
+                                       const G4ThreeVector& v,
+                                             G4double r) const ;
 
     G4double SolveNumericJT(const G4ThreeVector& p,
-			    const G4ThreeVector& v,
-			    G4double r,
-			    G4bool IsDistanceToIn) const;
+                            const G4ThreeVector& v,
+                                  G4double r,
+                                  G4bool IsDistanceToIn) const;
 
     G4ThreeVectorList*
     CreateRotatedVertices(const G4AffineTransform& pTransform,
@@ -187,7 +187,6 @@ class G4Torus : public G4CSGSolid
 
 
 };
-
 
 #include "G4Torus.icc"
 
