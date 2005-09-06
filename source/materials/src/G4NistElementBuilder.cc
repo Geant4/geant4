@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc,v 1.6 2005-09-04 18:22:22 vnivanch Exp $
+// $Id: G4NistElementBuilder.cc,v 1.7 2005-09-06 08:28:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -119,7 +119,7 @@ G4Element* G4NistElementBuilder::BuildElement(G4int Z, G4bool buildIsotopes)
            << ">  Z= " << Zeff
 	   << "  A= " << Aeff;
     if(buildIsotopes) G4cout << "  with natural isotope composition" << G4endl; 
-    else              G4cout "  isotopes are not built" << G4endl;
+    else              G4cout << "  isotopes are not built" << G4endl;
   }
   G4Element* theElement = 0;
   
