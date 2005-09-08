@@ -332,12 +332,22 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
     {
       {
         BuildLossTable(*theProton) ;
+
+//      The following vector has a fixed dimension (see src/G4hLowEnergyLoss.cc for more details)        
+//      It happended in the past that caused memory corruption errors. The problem is still pending, even if temporary solved
+//        G4cout << "[NOTE]: __LINE__=" << __LINE__ << ", aParticleType=" << aParticleType.GetParticleName() << ", theProton=" << theProton << ", theLossTable=" << theLossTable << ", CounterOfpProcess=" << CounterOfpProcess << G4endl;
+        
         RecorderOfpProcess[CounterOfpProcess] = theLossTable ;
         CounterOfpProcess++;
       }
   } else {
       {
         BuildLossTable(*theAntiProton) ;
+        
+//      The following vector has a fixed dimension (see src/G4hLowEnergyLoss.cc for more details)        
+//      It happended in the past that caused memory corruption errors. The problem is still pending, even if temporary solved
+//        G4cout << "[NOTE]: __LINE__=" << __LINE__ << ", aParticleType=" << aParticleType.GetParticleName() << ", theAntiProton=" << theAntiProton << ", theLossTable=" << theLossTable << ", CounterOfpbarProcess=" << CounterOfpbarProcess << G4endl;
+        
         RecorderOfpbarProcess[CounterOfpbarProcess] = theLossTable ;
         CounterOfpbarProcess++;
       }
