@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4DNATest.cc,v 1.5 2005-07-26 12:26:53 zfrancis Exp $
+// $Id: G4DNATest.cc,v 1.6 2005-09-08 09:25:56 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
@@ -478,6 +478,23 @@ G4ParticleDefinition * const * ParticleList()
  return particles;
 }
 
+G4int GetParticleIndex(G4ParticleDefinition * const particle)
+{
+ G4int i(0);
+ G4ParticleDefinition * const * particles(ParticleList());
+
+ while (*particles)
+ {
+  if ((*particles)==particle)
+   return i;
+   
+  i++;
+  particles++;
+ }
+ 
+ return -1;
+}
+
 G4ParticleDefinition * GetSelectedParticle(const struct Options & options)
 {
  G4ParticleDefinition * const * particles(ParticleList());
@@ -540,50 +557,12 @@ void SetPhysics(const struct Options & options)
  particle->SetProcessManager(gProcessManager);
  gProcessManager->AddDiscreteProcess(eProcess);
 
-/* G4ProcessManager * eProcessManager(new G4ProcessManager(electron));
- G4VProcess * theEMinusMultipleScattering(new G4MultipleScattering());
- G4VProcess * theEMinusIonisation(new G4eIonisation());
- G4VProcess * theEMinusBremsstrahlung(new G4eBremsstrahlung());
- electron->SetProcessManager(eProcessManager);
- eProcessManager->AddProcess(theEMinusMultipleScattering);
- eProcessManager->AddProcess(theEMinusIonisation);
- eProcessManager->AddProcess(theEMinusBremsstrahlung);
- eProcessManager->SetProcessOrdering(theEMinusMultipleScattering, idxAlongStep, 1);
- eProcessManager->SetProcessOrdering(theEMinusIonisation,         idxAlongStep, 2);
- eProcessManager->SetProcessOrdering(theEMinusMultipleScattering, idxPostStep,  1);
- eProcessManager->SetProcessOrdering(theEMinusIonisation,         idxPostStep,  2);
- eProcessManager->SetProcessOrdering(theEMinusBremsstrahlung,     idxPostStep,  3);
-  
- G4ProcessManager * pProcessManager(new G4ProcessManager(positron));
- G4VProcess * theEPlusMultipleScattering(new G4MultipleScattering());
- G4VProcess * theEPlusIonisation(new G4eIonisation());
- G4VProcess * theEPlusBremsstrahlung(new G4eBremsstrahlung());
- G4VProcess * theEPlusAnnihilation(new G4eplusAnnihilation());
- positron->SetProcessManager(pProcessManager);
- pProcessManager->AddProcess(theEPlusMultipleScattering);
- pProcessManager->AddProcess(theEPlusIonisation);
- pProcessManager->AddProcess(theEPlusBremsstrahlung);
- pProcessManager->AddProcess(theEPlusAnnihilation);
- pProcessManager->SetProcessOrderingToFirst(theEPlusAnnihilation, idxAtRest);
- pProcessManager->SetProcessOrdering(theEPlusMultipleScattering,  idxAlongStep, 1);
- pProcessManager->SetProcessOrdering(theEPlusIonisation,          idxAlongStep, 2);
- pProcessManager->SetProcessOrdering(theEPlusMultipleScattering,  idxPostStep,  1);
- pProcessManager->SetProcessOrdering(theEPlusIonisation,          idxPostStep,  2);
- pProcessManager->SetProcessOrdering(theEPlusBremsstrahlung,      idxPostStep,  3);
- pProcessManager->SetProcessOrdering(theEPlusAnnihilation,        idxPostStep,  4);*/
  G4cout << "[OK] Processes are defined " << G4endl;
  
 
  G4cout << "[OK] Building physics tables" << G4endl;
  eProcess->BuildPhysicsTable(* particle);
 
-/* theEMinusMultipleScattering->BuildPhysicsTable(* electron);
- theEMinusIonisation->BuildPhysicsTable(* electron);        
- theEMinusBremsstrahlung->BuildPhysicsTable(* electron);
- theEPlusMultipleScattering->BuildPhysicsTable(* positron);
- theEPlusIonisation->BuildPhysicsTable(* positron);
- theEPlusBremsstrahlung->BuildPhysicsTable(* positron);     
- theEPlusAnnihilation->BuildPhysicsTable(* positron);*/
  G4cout << "[OK] Physics tables built" << G4endl;
 }
 
@@ -708,7 +687,7 @@ void MeanFreePathTest(AIDA::ITupleFactory * tupleFactory, const struct Options &
 //! \param options Options related to the post step do it test
 void PostStepDoItTest(AIDA::ITupleFactory * tupleFactory, const struct Options & options)
 {
- AIDA::ITuple* iTuple = tupleFactory->create("2", "Post Step Do It Test", "double iteration, step, in_k, log_in_k, in_theta, in_phi, e_deposit, log_e_deposit, trk_status, out_k, log_out_k, out_theta, out_phi, cpu_time");
+ AIDA::ITuple* iTuple = tupleFactory->create("2", "Post Step Do It Test", "double iteration, step, in_k, log_in_k, in_theta, in_phi, in_pol_theta, in_pol_phi, e_deposit, log_e_deposit, trk_status, out_k, log_out_k, out_theta, out_phi, out_pol_theta, out_pol_phi, n_secondaries, sec1_type, sec1_k, log_sec1_k, sec1_theta, sec1_phi, sec1_pol_theta, sec1_pol_phi, sec2_type, sec2_k, log_sec2_k, sec2_theta, sec2_phi, sec2_pol_theta, sec2_pol_phi, sec3_type, sec3_k, log_sec3_k, sec3_theta, sec3_phi, sec3_pol_theta, sec3_pol_phi, sec4_type, sec4_k, log_sec4_k, sec4_theta, sec4_phi, sec4_pol_theta, sec4_pol_phi, cpu_time");
  
  G4double energy(options.minEnergy);
  G4double stpEnergy(std::pow(options.maxEnergy/energy, 1./static_cast<G4double>(options.nEnergySteps-1)));
@@ -716,6 +695,8 @@ void PostStepDoItTest(AIDA::ITupleFactory * tupleFactory, const struct Options &
  
  G4VLowEnergyTestableDiscreteProcess * process(GetSelectedProcess(options));
  clock_t time;
+ 
+ char strBuffer[20];
  
  ProgressBar(0);
  while (step>0)
@@ -749,6 +730,9 @@ void PostStepDoItTest(AIDA::ITupleFactory * tupleFactory, const struct Options &
    vector=aParticle->GetMomentumDirection();
    iTuple->fill(iTuple->findColumn("in_theta"), vector.theta());
    iTuple->fill(iTuple->findColumn("in_phi"), vector.phi());
+   vector=aParticle->GetPolarization();
+   iTuple->fill(iTuple->findColumn("in_pol_theta"), vector.theta());
+   iTuple->fill(iTuple->findColumn("in_pol_phi"), vector.phi());
    
    time=clock();
    G4ParticleChange * particleChange(dynamic_cast<G4ParticleChange *>(process->PostStepDoIt(*aTrack, *aStep)));
@@ -767,6 +751,37 @@ void PostStepDoItTest(AIDA::ITupleFactory * tupleFactory, const struct Options &
    vector=aParticle->GetMomentumDirection();
    iTuple->fill(iTuple->findColumn("out_theta"), vector.theta());
    iTuple->fill(iTuple->findColumn("out_phi"), vector.phi());
+   vector=aParticle->GetPolarization();
+   iTuple->fill(iTuple->findColumn("out_pol_theta"), vector.theta());
+   iTuple->fill(iTuple->findColumn("out_pol_phi"), vector.phi());
+
+   G4int n(particleChange->GetNumberOfSecondaries());
+   iTuple->fill(iTuple->findColumn("n_secondaries"), n);
+   
+   while (n>0)
+   {
+    n--;
+    G4Track * aSecTrack(particleChange->GetSecondary(n));
+    const G4DynamicParticle * aSecParticle(aSecTrack->GetDynamicParticle());
+    
+    sprintf(strBuffer, "sec%d_type", n);
+    iTuple->fill(iTuple->findColumn(strBuffer), GetParticleIndex(aSecParticle->GetDefinition()));
+    sprintf(strBuffer, "sec%d_k", n);
+    iTuple->fill(iTuple->findColumn(strBuffer), aSecParticle->GetKineticEnergy()/eV);
+    sprintf(strBuffer, "log_sec%d_k", n);
+    iTuple->fill(iTuple->findColumn(strBuffer), std::log10(aSecParticle->GetKineticEnergy()/eV));
+    vector=aSecParticle->GetMomentumDirection();
+    sprintf(strBuffer, "sec%d_theta", n);
+    iTuple->fill(iTuple->findColumn(strBuffer), vector.theta());
+    sprintf(strBuffer, "sec%d_phi", n);
+    iTuple->fill(iTuple->findColumn(strBuffer), vector.phi());
+    vector=aSecParticle->GetPolarization();
+    sprintf(strBuffer, "sec%d_pol_theta", n);
+    iTuple->fill(iTuple->findColumn(strBuffer), vector.theta());
+    sprintf(strBuffer, "sec%d_pol_phi", n);
+    iTuple->fill(iTuple->findColumn(strBuffer), vector.phi());
+   }
+   
    iTuple->fill(iTuple->findColumn("cpu_time"), static_cast<G4double>(time)/static_cast<G4double>(CLOCKS_PER_SEC));
    
    iTuple->addRow();
