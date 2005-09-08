@@ -26,7 +26,7 @@
 //    *                                    *
 //    **************************************
 //
-// $Id: RemSimHadronicBertini.hh,v 1.2 2005-09-08 06:46:20 guatelli Exp $
+// $Id: RemSimHadronicBertini.hh,v 1.3 2005-09-08 06:56:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author : Susanna Guatelli, guatelli@ge.infn.it

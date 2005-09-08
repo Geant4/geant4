@@ -27,7 +27,7 @@
 //    *                                    *          
 //    **************************************
 //
-// $Id: RemSimDetectorConstruction.cc,v 1.15 2005-05-27 14:20:50 guatelli Exp $
+// $Id: RemSimDetectorConstruction.cc,v 1.16 2005-09-08 06:56:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 

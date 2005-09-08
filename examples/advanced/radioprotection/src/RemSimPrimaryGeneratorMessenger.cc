@@ -30,17 +30,15 @@
 //    *****************************************
 //
 //
-// $Id: RemSimPrimaryGeneratorMessenger.cc,v 1.7 2005-05-19 13:30:59 guatelli Exp $
+// $Id: RemSimPrimaryGeneratorMessenger.cc,v 1.8 2005-09-08 06:56:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
 #include "RemSimPrimaryGeneratorMessenger.hh"
-#include "RemSimRunAction.hh"
 #include "RemSimPrimaryGeneratorAction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 

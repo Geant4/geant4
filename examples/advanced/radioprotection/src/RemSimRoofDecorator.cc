@@ -29,7 +29,7 @@
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //
 //
-// $Id: RemSimRoofDecorator.cc,v 1.5 2005-05-27 14:21:42 guatelli Exp $
+// $Id: RemSimRoofDecorator.cc,v 1.6 2005-09-08 06:56:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "RemSimVGeometryComponent.hh"

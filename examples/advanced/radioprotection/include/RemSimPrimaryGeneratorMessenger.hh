@@ -27,7 +27,7 @@
 //    *                                              *
 //    ************************************************
 //
-// $Id: RemSimPrimaryGeneratorMessenger.hh,v 1.6 2005-05-19 13:30:59 guatelli Exp $
+// $Id: RemSimPrimaryGeneratorMessenger.hh,v 1.7 2005-09-08 06:56:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //Code developed by:  S.Guatelli, guatelli@ge.infn.it
@@ -40,10 +40,8 @@
 #include "G4UImessenger.hh"
 
 class RemSimPrimaryGeneratorAction;
-class RemSimRunAction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 
@@ -59,7 +57,6 @@ private:
   RemSimPrimaryGeneratorAction* primary;//pointer to detector
   G4UIdirectory*                gunDir; 
   G4UIcmdWithAString*           fluxCmd; //change vehicle
-  G4UIcmdWithAString*           particleCmd; //change vehicle  
   G4UIcmdWithAString*           dataCmd;
 };
 #endif

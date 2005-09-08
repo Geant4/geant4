@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimIonICRU.cc,v 1.7 2005-09-08 06:46:20 guatelli Exp $
+// $Id: RemSimIonICRU.cc,v 1.8 2005-09-08 06:56:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli, guatelli@ge.infn.it
@@ -57,8 +57,7 @@ void RemSimIonICRU::ConstructProcess()
              if((!particle -> IsShortLived()) &&
 		 (particle -> GetParticleName() != "chargedgeantino"))
 	       {
-		 G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation(); 
-		 ionisation -> SetNuclearStoppingOn() ;
+		 G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();
 		 G4VProcess*  multipleScattering = new G4MultipleScattering(); 
 		 manager -> AddProcess(multipleScattering, -1,1,1);   
 		 manager -> AddProcess(ionisation, -1,2,2);

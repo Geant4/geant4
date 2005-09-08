@@ -21,13 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimSensitiveDetector.cc,v 1.9 2005-05-27 14:21:42 guatelli Exp $
+// $Id: RemSimSensitiveDetector.cc,v 1.10 2005-09-08 06:56:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //
 #include "RemSimSensitiveDetector.hh"
-#include "RemSimHit.hh"
 #include "G4Step.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4TouchableHistory.hh"
@@ -39,20 +38,13 @@
 RemSimSensitiveDetector::RemSimSensitiveDetector(G4String name)
   :G4VSensitiveDetector(name)
 {
-  G4String HCname;
-  collectionName.insert(HCname="trackerCollection");
 }
 
 RemSimSensitiveDetector::~RemSimSensitiveDetector(){;}
 
-void RemSimSensitiveDetector::Initialize(G4HCofThisEvent* HCE)
+void RemSimSensitiveDetector::Initialize(G4HCofThisEvent*)
 {
-  static G4int HCID = -1;
-  trackerCollection = new RemSimHitsCollection
-    (SensitiveDetectorName,collectionName[0]); 
-  if(HCID<0)
-    { HCID = GetCollectionID(0); }
-  HCE -> AddHitsCollection(HCID,trackerCollection);
+
 }
 
 G4bool RemSimSensitiveDetector::ProcessHits(G4Step* aStep, 
@@ -62,12 +54,6 @@ G4bool RemSimSensitiveDetector::ProcessHits(G4Step* aStep,
   if(edep==0.) return false;
 
   G4int i = ROhist -> GetReplicaNumber();
-
-  RemSimHit* newHit = new RemSimHit();
-  newHit -> SetEdep(edep);
-  newHit -> SetIndexes(i);
-  newHit->SetPosition(aStep->GetPreStepPoint()->GetPosition());
-  trackerCollection -> insert( newHit );
 
 
 #ifdef G4ANALYSIS_USE
@@ -92,7 +78,6 @@ G4bool RemSimSensitiveDetector::ProcessHits(G4Step* aStep,
   if(aStep -> GetTrack() -> GetTrackID()!= 1)
     analysis -> SecondaryEnergyDeposit(i,edep/MeV);
 #endif
-
   return true;
 }
 

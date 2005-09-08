@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimIonICRU.hh,v 1.3 2004-12-15 15:41:04 gunter Exp $
+// $Id: RemSimIonICRU.hh,v 1.4 2005-09-08 06:56:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli, guatelli@ge.infn.it

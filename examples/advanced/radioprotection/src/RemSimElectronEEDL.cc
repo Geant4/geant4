@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimElectronEEDL.cc,v 1.4 2005-05-19 13:46:29 guatelli Exp $
+// $Id: RemSimElectronEEDL.cc,v 1.5 2005-09-08 06:56:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli, guatelloi@ge.infn.it

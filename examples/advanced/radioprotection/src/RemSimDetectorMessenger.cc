@@ -31,7 +31,7 @@
 //    *********************************
 //
 //
-// $Id: RemSimDetectorMessenger.cc,v 1.10 2005-05-27 14:21:42 guatelli Exp $
+// $Id: RemSimDetectorMessenger.cc,v 1.11 2005-09-08 06:56:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
