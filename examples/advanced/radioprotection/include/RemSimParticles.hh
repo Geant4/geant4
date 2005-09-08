@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimParticles.hh,v 1.4 2004-05-22 12:57:04 guatelli Exp $
+// $Id: RemSimParticles.hh,v 1.5 2005-09-08 06:46:20 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
