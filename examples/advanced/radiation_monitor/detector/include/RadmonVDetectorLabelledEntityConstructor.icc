@@ -1,0 +1,42 @@
+//
+// File name:     RadmonVDetectorLabelledEntityConstructor.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonVDetectorLabelledEntityConstructor.icc,v 1.1 2005-09-09 08:26:24 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONVDETECTORLABELLEDENTITYCONSTRUCTOR_HH
+ #error "RadmonVDetectorLabelledEntityConstructor.icc cannot be included directly. Please use RadmonVDetectorLabelledEntityConstructor.hh"
+#else  /* RADMONVDETECTORLABELLEDENTITYCONSTRUCTOR_HH */
+ inline                                         RadmonVDetectorLabelledEntityConstructor :: ~RadmonVDetectorLabelledEntityConstructor()
+ {
+ }
+ 
+ 
+ 
+ 
+
+ inline const G4String &                        RadmonVDetectorLabelledEntityConstructor :: GetLabel(void) const
+ {
+  return entityLabel;
+ }
+ 
+ 
+ 
+ inline void                                    RadmonVDetectorLabelledEntityConstructor :: SetEntityAttribute(const G4String & attributeName, const G4String & value)
+ {
+  SetAttribute(attributeName, value);
+ }
+
+
+
+
+ 
+ inline                                         RadmonVDetectorLabelledEntityConstructor :: RadmonVDetectorLabelledEntityConstructor(const G4String & label)
+ :
+  entityLabel(label)
+ {
+ }
+#endif /* RADMONVDETECTORLABELLEDENTITYCONSTRUCTOR_HH */

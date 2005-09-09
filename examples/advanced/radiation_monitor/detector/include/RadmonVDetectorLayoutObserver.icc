@@ -1,0 +1,22 @@
+//
+// File name:     RadmonVDetectorLayoutObserver.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonVDetectorLayoutObserver.icc,v 1.1 2005-09-09 08:26:24 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONVDETECTORLAYOUTOBSERVER_HH
+ #error "RadmonVDetectorLayoutObserver.icc cannot be included directly. Please use RadmonVDetectorLayoutObserver.hh"
+#else  /* RADMONVDETECTORLAYOUTOBSERVER_HH */
+ inline                                         RadmonVDetectorLayoutObserver :: RadmonVDetectorLayoutObserver()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonVDetectorLayoutObserver :: ~RadmonVDetectorLayoutObserver()
+ {
+ }
+#endif /* RADMONVDETECTORLAYOUTOBSERVER_HH */
