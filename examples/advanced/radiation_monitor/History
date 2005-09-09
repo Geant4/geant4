@@ -1,0 +1,23 @@
+$Id: History,v 1.1 2005-09-09 08:28:36 capra Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators to
+briefly summarize all major modifications introduced in the code and keep
+track of all category-tags. 
+It DOES NOT substitute the CVS log-message one should put at every committal
+in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+09 Sep 2005 - radmon-V07-01-00 - R. Capra - Internal subdirectories created
+                        and GNUmakefile(s). Implementation according to the
+                        design in progress. The code does not builds.
+                        This tag is only for backup purposes
