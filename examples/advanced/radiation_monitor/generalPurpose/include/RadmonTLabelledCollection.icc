@@ -1,0 +1,277 @@
+//
+// File name:     RadmonTLabelledCollection.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonTLabelledCollection.icc,v 1.1 2005-09-09 08:27:24 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONTLABELLEDCOLLECTION_HH
+ #error "RadmonTLabelledCollection.icc cannot be included directly. Please use RadmonTLabelledCollection.hh"
+#else  /* RADMONTLABELLEDCOLLECTION_HH */
+
+ // Include files
+ #include "globals.hh"
+
+ template <typename LabelledObject>
+                                                RadmonTLabelledCollection<LabelledObject> :: RadmonTLabelledCollection()
+ {
+ }
+ 
+ 
+ 
+ template <typename LabelledObject>
+                                                RadmonTLabelledCollection<LabelledObject> :: RadmonTLabelledCollection(const RadmonTLabelledCollection<LabelledObject> & copy)
+ {
+  collection=copy.collection;
+ }
+ 
+ 
+ 
+ template <typename LabelledObject>
+                                                RadmonTLabelledCollection<LabelledObject> :: ~RadmonTLabelledCollection()
+ {
+ }
+ 
+ 
+ 
+
+
+ template <typename LabelledObject>
+ RadmonTLabelledCollection<LabelledObject> &    RadmonTLabelledCollection<LabelledObject> :: operator=(const RadmonTLabelledCollection<LabelledObject> & copy)
+ {
+  collection=copy.collection;
+  
+  return (*this);
+ }
+ 
+ 
+ 
+
+
+ template <typename LabelledObject>
+ G4int                                          RadmonTLabelledCollection<LabelledObject> :: GetNItems() const
+ {
+  return collection.size();
+ }
+ 
+ 
+ 
+ template <typename LabelledObject>
+ G4bool                                         RadmonTLabelledCollection<LabelledObject> :: Empty() const
+ {
+  return collection.empty();
+ }
+ 
+ 
+ 
+
+
+ template <typename LabelledObject>
+ G4bool                                         RadmonTLabelledCollection<LabelledObject> :: ExistsItemByLabel(const G4String & label) const
+ {
+  size_t i(collection.size());
+  
+  while (i>0)
+  {
+   i--;
+   if (collection[i].GetLabel()==label)
+    return true;
+  }
+  
+  return false;
+ }
+ 
+ 
+ 
+ template <typename LabelledObject>
+ G4int                                          RadmonTLabelledCollection<LabelledObject> :: MultiplicityItemByLabel(const G4String & label) const
+ {
+  G4int count(0);
+  size_t i(collection.size());
+  
+  while (i>0)
+  {
+   i--;
+   if (collection[i].GetLabel()==label)
+    count++;
+  }
+  
+  return count;
+ }
+ 
+ 
+ 
+
+
+ template <typename LabelledObject>
+ const LabelledObject &                         RadmonTLabelledCollection<LabelledObject> :: GetItem(G4int index) const
+ {
+  return collection[index];
+ }
+ 
+ 
+ 
+ template <typename LabelledObject>
+ LabelledObject &                               RadmonTLabelledCollection<LabelledObject> :: GetItem(G4int index)
+ {
+  return collection[index];
+ }
+ 
+ 
+ 
+ template <typename LabelledObject>
+ const LabelledObject &                         RadmonTLabelledCollection<LabelledObject> :: FindItemByLabel(const G4String & label, G4int count) const
+ {
+  return const_cast<RadmonTLabelledCollection *>(this)->FindItemByLabel(label, count);
+ }
+ 
+ 
+ 
+ template <typename LabelledObject>
+ LabelledObject &                               RadmonTLabelledCollection<LabelledObject> :: FindItemByLabel(const G4String & label, G4int count)
+ {
+  typename Collection::iterator i(collection.begin());
+  typename Collection::iterator end(collection.end());
+  
+  while (i<end)
+  {
+   if (i->GetLabel()==label)
+   {
+    if (count==0)
+     return (*i);
+
+    count--;
+   }
+   
+   i++;
+  }
+  
+  G4String text("RadmonTLabelledCollection::FindItemByLabel: Label \"");
+  text+=label;
+  text+="\" not found";
+
+  G4Exception(text);
+
+  return collection.front();
+ }
+ 
+ 
+ 
+
+
+ template <typename LabelledObject>
+ LabelledObject &                               RadmonTLabelledCollection<LabelledObject> :: InsertItemAfter(G4int index)
+ {
+  return InsertBefore(index+1);
+ }
+ 
+ 
+ 
+ template <typename LabelledObject>
+ LabelledObject &                               RadmonTLabelledCollection<LabelledObject> :: InsertItemBefore(G4int index)
+ {
+  typename Collection::iterator i(collection.begin());
+  i+=index;
+  
+  collection.insert(i, LabelledObject());
+  
+  return collection[index];
+ }
+ 
+ 
+ 
+ template <typename LabelledObject>
+ LabelledObject &                               RadmonTLabelledCollection<LabelledObject> :: AppendItem(void)
+ {
+  collection.push_back(LabelledObject());
+  return collection.back();
+ }
+ 
+ 
+ 
+ template <typename LabelledObject>
+ LabelledObject &                               RadmonTLabelledCollection<LabelledObject> :: PrependItem(void)
+ {
+  collection.insert(collection.begin(), LabelledObject());
+  return collection.front();
+ }
+ 
+ 
+ 
+
+
+ template <typename LabelledObject>
+ void                                           RadmonTLabelledCollection<LabelledObject> :: RemoveItemByLabel(const G4String & label, G4int count)
+ {
+  typename Collection::iterator i(collection.begin());
+  typename Collection::iterator end(collection.end());
+  
+  while (i<end)
+  {
+   if (i->GetLabel()==label)
+   {
+    if (count==0)
+    {
+     collection.remove(i);
+     return;
+    }
+
+    count--;
+   }
+   
+   i++;
+  }
+ }
+ 
+ 
+ 
+ template <typename LabelledObject>
+ void                                           RadmonTLabelledCollection<LabelledObject> :: RemoveItemsByLabel(const G4String & label)
+ {
+  typename Collection::iterator i(collection.begin());
+  typename Collection::iterator end(collection.end());
+  
+  while (i<end)
+  {
+   if (i->GetLabel()==label)
+    i=collection.remove(i);
+   else
+    i++;
+  }
+ }
+ 
+ 
+ 
+ template <typename LabelledObject>
+ void                                           RadmonTLabelledCollection<LabelledObject> :: RemoveItem(G4int index)
+ {
+  typename Collection::iterator i(collection.begin());
+  i+=index;
+  
+  collection.remove(i);
+ }
+ 
+ 
+ 
+ template <typename LabelledObject>
+ void                                           RadmonTLabelledCollection<LabelledObject> :: RemoveItemsByRange(G4int first, G4int last)
+ {
+  typename Collection::iterator i(collection.begin());
+  typename Collection::iterator j(i);
+  
+  i+=first;
+  j+=last;
+  
+  collection.remove(i, j);
+ }
+ 
+ 
+ 
+ template <typename LabelledObject>
+ void                                           RadmonTLabelledCollection<LabelledObject> :: RemoveAllItems()
+ {
+  collection.clear();
+ }
+#endif /* RADMONTLABELLEDCOLLECTION_HH */
