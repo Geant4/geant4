@@ -1,0 +1,69 @@
+//
+// File name:     RadmonApplicationOptions.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonApplicationOptions.icc,v 1.1 2005-09-09 08:26:54 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONAPPLICATIONOPTIONS_HH
+ #error "RadmonApplicationOptions.icc cannot be included directly. Please use RadmonApplicationOptions.hh"
+#else  /* RADMONAPPLICATIONOPTIONS_HH */
+ inline                                         RadmonApplicationOptions :: ~RadmonApplicationOptions()
+ {
+ }
+
+
+
+
+
+ inline G4bool                                  RadmonApplicationOptions :: Valid(void) const
+ {
+  return valid;
+ }
+ 
+ 
+ 
+ 
+
+ inline G4bool                                  RadmonApplicationOptions :: Interactive(void) const
+ {
+  return interactive;
+ }
+ 
+ 
+ 
+ inline G4bool                                  RadmonApplicationOptions :: Help(void) const
+ {
+  return help;
+ }
+
+
+
+ inline G4bool                                  RadmonApplicationOptions :: Verbose(void) const 
+ {
+  return verbose; 
+ }
+ 
+
+  
+ inline const char *                            RadmonApplicationOptions :: ApplicationName(void) const 
+ {
+  return applicationName;
+ }
+ 
+ 
+ 
+ inline const char *                            RadmonApplicationOptions :: FileName(void) const 
+ {
+  return fileName;
+ }
+ 
+ 
+ 
+ inline const char *                            RadmonApplicationOptions :: StartupFileName(void) const 
+ {
+  return startupFileName;
+ }
+#endif /* RADMONAPPLICATIONOPTIONS_HH */

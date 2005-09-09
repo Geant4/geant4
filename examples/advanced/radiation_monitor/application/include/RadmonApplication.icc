@@ -1,0 +1,17 @@
+//
+// File name:     RadmonApplication.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonApplication.icc,v 1.1 2005-09-09 08:26:54 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONAPPLICATION_HH
+ #error "RadmonApplication.icc cannot be included directly. Please use RadmonApplication.hh"
+#else  /* RADMONAPPLICATION_HH */
+ inline G4bool                                  RadmonApplication :: Valid(void) const
+ {
+  return valid;
+ }
+#endif /* RADMONAPPLICATION_HH */
