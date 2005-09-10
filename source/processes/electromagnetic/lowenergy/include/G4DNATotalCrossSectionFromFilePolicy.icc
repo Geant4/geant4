@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNATotalCrossSectionFromFilePolicy.icc,v 1.2 2005-07-20 10:03:54 capra Exp $
+// $Id: G4DNATotalCrossSectionFromFilePolicy.icc,v 1.3 2005-09-10 09:34:33 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,6 +29,20 @@
  #include "G4Electron.hh"
 
  #include "Randomize.hh"
+
+ template <typename IncomingParticlePolicy, typename DataFilePolicy, typename InterpolationAlgorithmPolicy>
+                                        G4DNATotalCrossSectionFromFilePolicy<IncomingParticlePolicy, DataFilePolicy, InterpolationAlgorithmPolicy> :: G4DNATotalCrossSectionFromFilePolicy()
+ :
+  dataset(0),
+  valuesBuffer(0)
+ {
+ }
+ 
+ template <typename IncomingParticlePolicy, typename DataFilePolicy, typename InterpolationAlgorithmPolicy>
+                                        G4DNATotalCrossSectionFromFilePolicy<IncomingParticlePolicy, DataFilePolicy, InterpolationAlgorithmPolicy> :: ~G4DNATotalCrossSectionFromFilePolicy()
+ {
+  Free();
+ }
 
  template <typename IncomingParticlePolicy, typename DataFilePolicy, typename InterpolationAlgorithmPolicy>
  G4double                               G4DNATotalCrossSectionFromFilePolicy<IncomingParticlePolicy, DataFilePolicy, InterpolationAlgorithmPolicy> :: TotalCrossSection(G4double k, G4int /* z */) const
@@ -39,19 +53,19 @@
    return 0;
   }
  
-  if (k < DataFilePolicy::lowEnergyLimit)
+  if (k < dataFilePolicy.lowEnergyLimit)
   {
-   if (DataFilePolicy::zeroBelowLowEnergyLimit)
+   if (dataFilePolicy.zeroBelowLowEnergyLimit)
     return 0;
   
-   k=DataFilePolicy::lowEnergyLimit;
+   k=dataFilePolicy.lowEnergyLimit;
   }
-  else if (k > DataFilePolicy::highEnergyLimit)
+  else if (k > dataFilePolicy.highEnergyLimit)
   {
-   if (DataFilePolicy::zeroAboveHighEnergyLimit)
+   if (dataFilePolicy.zeroAboveHighEnergyLimit)
     return 0;
     
-   k=DataFilePolicy::highEnergyLimit;
+   k=dataFilePolicy.highEnergyLimit;
   }
 
   return dataset->FindValue(k);
@@ -68,14 +82,13 @@
   
   const size_t n(dataset->NumberOfComponents());
   size_t i(n);
-  G4double values[n];
   G4double value(0);
   
   while (i>0)
   {
    i--;
-   values[i]=dataset->GetComponent(i)->FindValue(k);
-   value+=values[i];
+   valuesBuffer[i]=dataset->GetComponent(i)->FindValue(k);
+   value+=valuesBuffer[i];
   }
   
   value*=G4UniformRand();
@@ -86,10 +99,10 @@
   {
    i--;
    
-   if (values[i]>value)
+   if (valuesBuffer[i]>value)
     return i;
   
-   value-=values[i];
+   value-=valuesBuffer[i];
   }
   
   return 0;
@@ -110,10 +123,21 @@
  template <typename IncomingParticlePolicy, typename DataFilePolicy, typename InterpolationAlgorithmPolicy>
  void                                   G4DNATotalCrossSectionFromFilePolicy<IncomingParticlePolicy, DataFilePolicy, InterpolationAlgorithmPolicy> :: BuildTotalCrossSection(void)
  {
+  Free();
+  
+  dataset=new G4DNACrossSectionDataSet(new InterpolationAlgorithmPolicy, dataFilePolicy.dataFileEnergyUnit, dataFilePolicy.dataFileCrossSectionUnit);
+  dataset->LoadData(dataFilePolicy.dataFileName);
+  
+  valuesBuffer=new G4double[dataset->NumberOfComponents()];
+ }
+
+ template <typename IncomingParticlePolicy, typename DataFilePolicy, typename InterpolationAlgorithmPolicy>
+ void                                   G4DNATotalCrossSectionFromFilePolicy<IncomingParticlePolicy, DataFilePolicy, InterpolationAlgorithmPolicy> :: Free(void)
+ {
   if (dataset)
    delete dataset;
    
-  dataset=new G4DNACrossSectionDataSet(new InterpolationAlgorithmPolicy, DataFilePolicy::dataFileEnergyUnit, DataFilePolicy::dataFileCrossSectionUnit);
-  dataset->LoadData(DataFilePolicy::dataFileName);
+  if (valuesBuffer)
+   delete[] valuesBuffer;
  }
 #endif /* G4DNATOTALCROSSSECTIONFROMFILEPOLICY_HH */

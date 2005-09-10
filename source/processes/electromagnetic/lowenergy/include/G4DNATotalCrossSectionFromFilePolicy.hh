@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNATotalCrossSectionFromFilePolicy.hh,v 1.2 2005-07-20 10:03:54 capra Exp $
+// $Id: G4DNATotalCrossSectionFromFilePolicy.hh,v 1.3 2005-09-10 09:34:33 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef   G4DNATOTALCROSSSECTIONFROMFILEPOLICY_HH
@@ -47,8 +47,8 @@
  class G4DNATotalCrossSectionFromFilePolicy : public IncomingParticlePolicy
  {
   protected:
-                                        G4DNATotalCrossSectionFromFilePolicy() : dataset(0) {}
-                                       ~G4DNATotalCrossSectionFromFilePolicy() { if (dataset) delete dataset; }
+                                        G4DNATotalCrossSectionFromFilePolicy();
+                                       ~G4DNATotalCrossSectionFromFilePolicy();
  
    G4double                             TotalCrossSection(G4double k, G4int z) const;
    G4int                                RandomizePartialCrossSection(G4double k, G4int z);
@@ -56,7 +56,11 @@
    void                                 BuildTotalCrossSection(void);
 
   private:
+   void                                 Free(void);
+  
    G4DNACrossSectionDataSet *           dataset;
+   G4double *                           valuesBuffer;
+   DataFilePolicy                       dataFilePolicy;
 
    // Hides default constructor and assignment operator as private 
                                         G4DNATotalCrossSectionFromFilePolicy(const G4DNATotalCrossSectionFromFilePolicy & copy);
