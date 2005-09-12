@@ -1,0 +1,64 @@
+//
+// File name:     RadmonDetectorEnvironmentLayout.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonDetectorEnvironmentLayout.icc,v 1.1 2005-09-12 17:13:26 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONDETECTORENVIRONMENTLAYOUT_HH
+ #error "RadmonDetectorEnvironmentLayout.icc cannot be included directly. Please use RadmonDetectorEnvironmentLayout.hh"
+#else  /* RADMONDETECTORENVIRONMENTLAYOUT_HH */
+ inline                                         RadmonDetectorEnvironmentLayout :: RadmonDetectorEnvironmentLayout()
+ :
+  enabled(false),
+  environmentType()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonDetectorEnvironmentLayout :: ~RadmonDetectorEnvironmentLayout()
+ {
+ }
+
+
+ 
+ 
+ 
+ inline G4bool                                  RadmonDetectorEnvironmentLayout :: IsEnabled(void) const
+ {
+  return enabled;
+ }
+ 
+ 
+ 
+ inline void                                    RadmonDetectorEnvironmentLayout :: Enable(void)
+ {
+  enabled=true;
+ }
+ 
+ 
+ 
+ inline void                                    RadmonDetectorEnvironmentLayout :: Disable(void)
+ {
+  enabled=false;
+ }
+ 
+ 
+ 
+
+
+ inline const G4String &                        RadmonDetectorEnvironmentLayout :: GetType(void) const
+ {
+  return environmentType;
+ }
+ 
+ 
+ 
+ inline void                                    RadmonDetectorEnvironmentLayout :: SetType(const G4String & type)
+ {
+  environmentType=type;
+ }
+#endif /* RADMONDETECTORENVIRONMENTLAYOUT_HH */

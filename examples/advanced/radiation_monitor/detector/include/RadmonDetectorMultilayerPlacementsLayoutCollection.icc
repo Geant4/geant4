@@ -1,0 +1,30 @@
+//
+// File name:     RadmonDetectorMultilayerPlacementsLayoutCollection.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonDetectorMultilayerPlacementsLayoutCollection.icc,v 1.1 2005-09-12 17:13:26 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONDETECTORMULTILAYERPLACEMENTSLAYOUTCOLLECTION_HH
+ #error "RadmonDetectorMultilayerPlacementsLayoutCollection.icc cannot be included directly. Please use RadmonDetectorMultilayerPlacementsLayoutCollection.hh"
+#else  /* RADMONDETECTORMULTILAYERPLACEMENTSLAYOUTCOLLECTION_HH */
+
+
+
+ // Include files
+ #include "RadmonDetectorMultilayerPlacementLayout.hh"
+
+
+
+ inline                                         RadmonDetectorMultilayerPlacementsLayoutCollection :: RadmonDetectorMultilayerPlacementsLayoutCollection()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonDetectorMultilayerPlacementsLayoutCollection :: ~RadmonDetectorMultilayerPlacementsLayoutCollection()
+ {
+ }
+#endif /* RADMONDETECTORMULTILAYERPLACEMENTSLAYOUTCOLLECTION_HH */
