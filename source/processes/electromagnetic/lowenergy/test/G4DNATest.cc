@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4DNATest.cc,v 1.6 2005-09-08 09:25:56 capra Exp $
+// $Id: G4DNATest.cc,v 1.7 2005-09-12 16:41:19 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
@@ -687,7 +687,7 @@ void MeanFreePathTest(AIDA::ITupleFactory * tupleFactory, const struct Options &
 //! \param options Options related to the post step do it test
 void PostStepDoItTest(AIDA::ITupleFactory * tupleFactory, const struct Options & options)
 {
- AIDA::ITuple* iTuple = tupleFactory->create("2", "Post Step Do It Test", "double iteration, step, in_k, log_in_k, in_theta, in_phi, in_pol_theta, in_pol_phi, e_deposit, log_e_deposit, trk_status, out_k, log_out_k, out_theta, out_phi, out_pol_theta, out_pol_phi, n_secondaries, sec1_type, sec1_k, log_sec1_k, sec1_theta, sec1_phi, sec1_pol_theta, sec1_pol_phi, sec2_type, sec2_k, log_sec2_k, sec2_theta, sec2_phi, sec2_pol_theta, sec2_pol_phi, sec3_type, sec3_k, log_sec3_k, sec3_theta, sec3_phi, sec3_pol_theta, sec3_pol_phi, sec4_type, sec4_k, log_sec4_k, sec4_theta, sec4_phi, sec4_pol_theta, sec4_pol_phi, cpu_time");
+ AIDA::ITuple* iTuple = tupleFactory->create("2", "Post Step Do It Test", "double iteration, step, in_k, log_in_k, in_theta, in_phi, in_pol_theta, in_pol_phi, e_deposit, log_e_deposit, trk_status, out_k, log_out_k, out_theta, out_phi, out_pol_theta, out_pol_phi, n_secondaries, sec0_type, sec0_k, log_sec0_k, sec0_theta, sec0_phi, sec0_pol_theta, sec0_pol_phi, sec1_type, sec1_k, log_sec1_k, sec1_theta, sec1_phi, sec1_pol_theta, sec1_pol_phi, sec2_type, sec2_k, log_sec2_k, sec2_theta, sec2_phi, sec2_pol_theta, sec2_pol_phi, sec3_type, sec3_k, log_sec3_k, sec3_theta, sec3_phi, sec3_pol_theta, sec3_pol_phi, cpu_time");
  
  G4double energy(options.minEnergy);
  G4double stpEnergy(std::pow(options.maxEnergy/energy, 1./static_cast<G4double>(options.nEnergySteps-1)));
@@ -780,12 +780,13 @@ void PostStepDoItTest(AIDA::ITupleFactory * tupleFactory, const struct Options &
     iTuple->fill(iTuple->findColumn(strBuffer), vector.theta());
     sprintf(strBuffer, "sec%d_pol_phi", n);
     iTuple->fill(iTuple->findColumn(strBuffer), vector.phi());
+    
+    delete aSecTrack;
    }
    
    iTuple->fill(iTuple->findColumn("cpu_time"), static_cast<G4double>(time)/static_cast<G4double>(CLOCKS_PER_SEC));
-   
    iTuple->addRow();
-   
+
    particleChange->Clear();
   }
 
