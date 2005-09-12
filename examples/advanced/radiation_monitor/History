@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2005-09-09 08:28:36 capra Exp $
+$Id: History,v 1.2 2005-09-12 17:14:41 capra Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 Sep 2005 - radmon-V07-01-01 - R. Capra - Implementation according to the
+                        design in progress. RadmonDetectorLayout completed
+                        Needs still some work Messenger and detector
+                        construction and materials . The code does not run
+                        but should build. This tag is only for backup
+                        purposes
 
 09 Sep 2005 - radmon-V07-01-00 - R. Capra - Internal subdirectories created
                         and GNUmakefile(s). Implementation according to the
