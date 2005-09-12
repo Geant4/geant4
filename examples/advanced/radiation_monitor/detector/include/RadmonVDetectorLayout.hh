@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonVDetectorLayout.hh,v 1.1 2005-09-09 08:26:24 capra Exp $
+// Id:            $Id: RadmonVDetectorLayout.hh,v 1.2 2005-09-12 17:14:17 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Abstract class to keep track of the configured detector
@@ -30,7 +30,7 @@
    virtual void                                 SetEnvironmentType(const G4String & type) = 0;
    virtual const G4String &                     GetEnvironmentType() const = 0;
    virtual void                                 SetEnvironmentAttribute(const G4String & attributeName, const G4String & attributeValue) = 0;
-   virtual const G4String &                     GetEnvironmentAttribute(const G4String & attributeName, const G4String & defaultAttributeValue) const = 0;
+   virtual const G4String                       GetEnvironmentAttribute(const G4String & attributeName, const G4String & defaultAttributeValue) const = 0;
    virtual void                                 ClearEnvironmentAttribute(const G4String & attributeName) = 0;
 
    virtual void                                 CreateMultilayer(const G4String & multilayerLabel) = 0;
@@ -50,13 +50,13 @@
    virtual const G4String &                     GetLayerType(const G4String & multilayerLabel, const G4String & layerLabel) const = 0;
 
    virtual void                                 SetLayerAttribute(const G4String & multilayerLabel, const G4String & layerLabel, const G4String & attributeName, const G4String & attributeValue) = 0;
-   virtual const G4String &                     GetLayerAttribute(const G4String & multilayerLabel, const G4String & layerLabel, const G4String & attributeName, const G4String & defaultAttributeValue) const = 0;
+   virtual const G4String                       GetLayerAttribute(const G4String & multilayerLabel, const G4String & layerLabel, const G4String & attributeName, const G4String & defaultAttributeValue) const = 0;
    virtual void                                 ClearLayerAttribute(const G4String & multilayerLabel, const G4String & layerLabel, const G4String & attributeName) = 0;
 
    virtual void                                 CreatePlacement(const G4String & placementLabel, const G4String & multilayerName) = 0;
    virtual G4int                                GetNPlacements() const = 0;
    virtual const G4String &                     GetPlacementLabel(G4int index) const = 0;
-   virtual void                                 DeleteMultilayerPlacement(const G4String & placementLabel) = 0;
+   virtual void                                 RemoveMultilayerPlacement(const G4String & placementLabel) = 0;
 
    virtual const G4String &                     GetPlacementMultilayerType(const G4String & placementLabel) const = 0;
    virtual void                                 SetPlacementPosition(const G4String & placementLabel, const G4ThreeVector & position) = 0;

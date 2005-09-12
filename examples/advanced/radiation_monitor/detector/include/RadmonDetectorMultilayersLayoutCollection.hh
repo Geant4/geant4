@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorMultilayersLayoutCollection.hh,v 1.1 2005-09-09 08:26:24 capra Exp $
+// Id:            $Id: RadmonDetectorMultilayersLayoutCollection.hh,v 1.2 2005-09-12 17:14:17 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Internal class to collect multilayers
@@ -19,8 +19,8 @@
  class RadmonDetectorMultilayersLayoutCollection
  {
   public:
-                                                RadmonDetectorMultilayersLayoutCollection();
-                                               ~RadmonDetectorMultilayersLayoutCollection();
+   inline                                       RadmonDetectorMultilayersLayoutCollection();
+   inline                                      ~RadmonDetectorMultilayersLayoutCollection();
 
    G4int                                        GetNMultilayers(void) const;
    G4bool                                       Empty(void) const;
@@ -41,7 +41,7 @@
    void                                         RemoveMultilayer(G4int index);
    void                                         RemoveAllMultilayers(void);
  
-   void                                         DumpLayout(std::ostream & out) const;
+   void                                         DumpLayout(std::ostream & out, const G4String &indent=G4String()) const;
 
   private:
   // Hidden constructors and operators
@@ -51,4 +51,7 @@
   // Private attributes
    RadmonTLabelledCollection<RadmonDetectorMultilayerLayout> multilayersCollection;
  };
+
+ // Inline implementations
+ #include "RadmonDetectorMultilayersLayoutCollection.icc"
 #endif /* RADMONDETECTORMULTILAYERSLAYOUTCOLLECTION_HH */

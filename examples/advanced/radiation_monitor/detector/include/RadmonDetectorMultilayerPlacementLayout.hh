@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorMultilayerPlacementLayout.hh,v 1.1 2005-09-09 08:26:24 capra Exp $
+// Id:            $Id: RadmonDetectorMultilayerPlacementLayout.hh,v 1.2 2005-09-12 17:14:17 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Internal class to manage placed multilayer
@@ -20,29 +20,29 @@
  class RadmonDetectorMultilayerPlacementLayout
  {
   public:
-                                                RadmonDetectorMultilayerPlacementLayout();
-                                                RadmonDetectorMultilayerPlacementLayout(const RadmonDetectorMultilayerPlacementLayout & copy);
-                                               ~RadmonDetectorMultilayerPlacementLayout();
+   inline                                       RadmonDetectorMultilayerPlacementLayout();
+   inline                                       RadmonDetectorMultilayerPlacementLayout(const RadmonDetectorMultilayerPlacementLayout & copy);
+   inline                                      ~RadmonDetectorMultilayerPlacementLayout();
 
-   RadmonDetectorMultilayerPlacementLayout &    operator=(const RadmonDetectorMultilayerPlacementLayout & copy);
+   inline RadmonDetectorMultilayerPlacementLayout & operator=(const RadmonDetectorMultilayerPlacementLayout & copy);
 
-   const G4String &                             GetLabel(void) const;
-   const G4String &                             GetMultilayerLabel(void) const;
+   inline const G4String &                      GetLabel(void) const;
+   inline const G4String &                      GetMultilayerLabel(void) const;
 
-   void                                         SetLabel(const G4String & label);
-   void                                         SetMultilayerLabel(const G4String & label);
+   inline void                                  SetLabel(const G4String & label);
+   inline void                                  SetMultilayerLabel(const G4String & label);
 
-   const G4ThreeVector &                        GetAbsolutePosition(void) const;
-   const G4RotationMatrix &                     GetAbsoluteRotation(void) const;
+   inline const G4ThreeVector &                 GetAbsolutePosition(void) const;
+   inline const G4RotationMatrix &              GetAbsoluteRotation(void) const;
    G4ThreeVector                                GetRelativePosition(const RadmonDetectorMultilayerPlacementLayout & reference) const;
    G4RotationMatrix                             GetRelativeRotation(const RadmonDetectorMultilayerPlacementLayout & reference) const;
 
-   void                                         SetAbsolutePosition(const G4ThreeVector & position);
-   void                                         SetAbsoluteRotation(const G4RotationMatrix & rotation);
+   inline void                                  SetAbsolutePosition(const G4ThreeVector & position);
+   inline void                                  SetAbsoluteRotation(const G4RotationMatrix & rotation);
    void                                         SetRelativePosition(const RadmonDetectorMultilayerPlacementLayout & reference, const G4ThreeVector & position);
    void                                         SetRelativeRotation(const RadmonDetectorMultilayerPlacementLayout & reference, const G4RotationMatrix & rotation);
 
-   void                                         DumpLayout(std::ostream & out) const;
+   void                                         DumpLayout(std::ostream & out, const G4String & indent=G4String()) const;
 
   private:
   // Private attributes
@@ -51,4 +51,7 @@
    G4RotationMatrix                             multilayerRotation;
    G4ThreeVector                                multilayerPosition;
  };
+
+ // Inline implementations
+ #include "RadmonDetectorMultilayerPlacementLayout.icc"
 #endif /* RADMONDETECTORMULTILAYERPLACEMENTLAYOUT_HH */

@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonTLabelledCollection.icc,v 1.1 2005-09-09 08:27:24 capra Exp $
+// Id:            $Id: RadmonTLabelledCollection.icc,v 1.2 2005-09-12 17:14:17 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -133,7 +133,7 @@
  LabelledObject &                               RadmonTLabelledCollection<LabelledObject> :: FindItemByLabel(const G4String & label, G4int count)
  {
   typename Collection::iterator i(collection.begin());
-  typename Collection::iterator end(collection.end());
+  typename Collection::iterator const end(collection.end());
   
   while (i<end)
   {
@@ -206,7 +206,7 @@
  void                                           RadmonTLabelledCollection<LabelledObject> :: RemoveItemByLabel(const G4String & label, G4int count)
  {
   typename Collection::iterator i(collection.begin());
-  typename Collection::iterator end(collection.end());
+  typename Collection::iterator const end(collection.end());
   
   while (i<end)
   {
@@ -214,7 +214,7 @@
    {
     if (count==0)
     {
-     collection.remove(i);
+     collection.erase(i);
      return;
     }
 
@@ -231,12 +231,12 @@
  void                                           RadmonTLabelledCollection<LabelledObject> :: RemoveItemsByLabel(const G4String & label)
  {
   typename Collection::iterator i(collection.begin());
-  typename Collection::iterator end(collection.end());
+  typename Collection::iterator const end(collection.end());
   
   while (i<end)
   {
    if (i->GetLabel()==label)
-    i=collection.remove(i);
+    i=collection.erase(i);
    else
     i++;
   }
@@ -250,7 +250,7 @@
   typename Collection::iterator i(collection.begin());
   i+=index;
   
-  collection.remove(i);
+  collection.erase(i);
  }
  
  
@@ -264,7 +264,7 @@
   i+=first;
   j+=last;
   
-  collection.remove(i, j);
+  collection.erase(i, j);
  }
  
  

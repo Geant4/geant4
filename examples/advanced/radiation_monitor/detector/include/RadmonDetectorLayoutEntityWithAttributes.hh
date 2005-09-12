@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorLayoutEntityWithAttributes.hh,v 1.1 2005-09-09 08:26:24 capra Exp $
+// Id:            $Id: RadmonDetectorLayoutEntityWithAttributes.hh,v 1.2 2005-09-12 17:14:17 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Provides attributes to other detector classes
@@ -32,7 +32,7 @@
    inline                                       RadmonDetectorLayoutEntityWithAttributes(const RadmonDetectorLayoutEntityWithAttributes & copy);
    inline                                      ~RadmonDetectorLayoutEntityWithAttributes();
 
-   void                                         DumpAttributesLayout(std::ostream & out) const;
+   void                                         DumpAttributesLayout(std::ostream & out, const G4String & indent=G4String()) const;
 
    inline RadmonDetectorLayoutEntityWithAttributes & operator=(const RadmonDetectorLayoutEntityWithAttributes & copy);
 
@@ -44,4 +44,7 @@
    typedef std::map<G4String, G4String>         AttributesMap;
    AttributesMap                                attributesMap;
  };
+ 
+ // Inline implementations
+ #include "RadmonDetectorLayoutEntityWithAttributes.icc"
 #endif /* RADMONDETECTORLAYOUTENTITYWITHATTRIBUTES_HH */

@@ -3,21 +3,16 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorLayerLayout.icc,v 1.1 2005-09-09 08:26:24 capra Exp $
+// Id:            $Id: RadmonDetectorLayerLayout.icc,v 1.2 2005-09-12 17:14:17 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
 #ifndef   RADMONDETECTORLAYERLAYOUT_HH
  #error "RadmonDetectorLayerLayout.icc cannot be included directly. Please use RadmonDetectorLayerLayout.hh"
 #else  /* RADMONDETECTORLAYERLAYOUT_HH */
-
- // Include files
- #include "RadmonDetectorDumpStyle.hh"
- #include <iomanip>
- 
- 
- 
  inline                                         RadmonDetectorLayerLayout :: RadmonDetectorLayerLayout()
+ :
+  layerThickness(0.)
  {
  }
  
@@ -95,15 +90,4 @@
  {
   layerThickness=thickness;
  }
-
- 
- 
- 
- 
- inline void                                    RadmonDetectorLayerLayout :: DumpLayout(std::ostream & out) const
- {
-  out << std::setw(RADMONDETECTORDUMPWIDTH+4) << "Label = \"" << layerLabel << '\"' << std::endl
-      << std::setw(RADMONDETECTORDUMPWIDTH+4) << "Type = \""  << layerType << '\"' << std::endl
-      << std::setw(RADMONDETECTORDUMPWIDTH+3) << "Thickness = " << std::setprecision(2) << layerThickness/mm << " mm" << std::endl;
- }  
 #endif /* RADMONDETECTORLAYERLAYOUT_HH */

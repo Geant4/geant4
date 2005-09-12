@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorLayout.hh,v 1.1 2005-09-09 08:26:24 capra Exp $
+// Id:            $Id: RadmonDetectorLayout.hh,v 1.2 2005-09-12 17:14:17 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Class to keep track of the configured detector layout
@@ -32,7 +32,7 @@
    virtual void                                 SetEnvironmentType(const G4String & type);
    virtual const G4String &                     GetEnvironmentType() const;
    virtual void                                 SetEnvironmentAttribute(const G4String & attributeName, const G4String & attributeValue);
-   virtual const G4String &                     GetEnvironmentAttribute(const G4String & attributeName, const G4String & defaultAttributeValue) const;
+   virtual const G4String                       GetEnvironmentAttribute(const G4String & attributeName, const G4String & defaultAttributeValue) const;
    virtual void                                 ClearEnvironmentAttribute(const G4String & attributeName);
 
    virtual void                                 CreateMultilayer(const G4String & multilayerLabel);
@@ -52,13 +52,13 @@
    virtual const G4String &                     GetLayerType(const G4String & multilayerLabel, const G4String & layerLabel) const;
 
    virtual void                                 SetLayerAttribute(const G4String & multilayerLabel, const G4String & layerLabel, const G4String & attributeName, const G4String & attributeValue);
-   virtual const G4String &                     GetLayerAttribute(const G4String & multilayerLabel, const G4String & layerLabel, const G4String & attributeName, const G4String & defaultAttributeValue) const;
+   virtual const G4String                       GetLayerAttribute(const G4String & multilayerLabel, const G4String & layerLabel, const G4String & attributeName, const G4String & defaultAttributeValue) const;
    virtual void                                 ClearLayerAttribute(const G4String & multilayerLabel, const G4String & layerLabel, const G4String & attributeName);
 
    virtual void                                 CreatePlacement(const G4String & placementLabel, const G4String & multilayerName);
    virtual G4int                                GetNPlacements() const;
    virtual const G4String &                     GetPlacementLabel(G4int index) const;
-   virtual void                                 DeleteMultilayerPlacement(const G4String & placementLabel);
+   virtual void                                 RemoveMultilayerPlacement(const G4String & placementLabel);
 
    virtual const G4String &                     GetPlacementMultilayerType(const G4String & placementLabel) const;
    virtual void                                 SetPlacementPosition(const G4String & placementLabel, const G4ThreeVector & position);
@@ -75,6 +75,18 @@
 
 
   private:
+   inline bool                                  IsPlaced(const G4String & multilayerLabel);
+   inline RadmonDetectorMultilayerLayout *      FindMultilayer(const G4String & multilayerLabel);
+   inline const RadmonDetectorMultilayerLayout *FindMultilayer(const G4String & multilayerLabel) const;
+   inline RadmonDetectorMultilayerPlacementLayout * FindPlacement(const G4String & placementLabel);
+   inline const RadmonDetectorMultilayerPlacementLayout *FindPlacement(const G4String & placementLabel) const;
+   inline RadmonDetectorLayerLayout *           FindLayer(const G4String & multilayerLabel, const G4String & layerLabel);
+   inline const RadmonDetectorLayerLayout *     FindLayer(const G4String & multilayerLabel, const G4String & layerLabel) const;
+
+   inline G4String &                            GetNullStr() const;
+   inline G4ThreeVector &                       GetNullPosition() const;
+   inline G4RotationMatrix &                    GetNullRotationMatrix() const;
+
   // Hidden constructors and operators
                                                 RadmonDetectorLayout(const RadmonDetectorLayout & copy);
    RadmonDetectorLayout &                       operator=(const RadmonDetectorLayout & copy);

@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorMultilayerLayout.icc,v 1.1 2005-09-09 08:26:24 capra Exp $
+// Id:            $Id: RadmonDetectorMultilayerLayout.icc,v 1.2 2005-09-12 17:14:17 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -11,6 +11,9 @@
  #error "RadmonDetectorMultilayerLayout.icc cannot be included directly. Please use RadmonDetectorMultilayerLayout.hh"
 #else  /* RADMONDETECTORMULTILAYERLAYOUT_HH */
  inline                                         RadmonDetectorMultilayerLayout :: RadmonDetectorMultilayerLayout()
+ :
+  multilayerWidth(0.),
+  multilayerHeight(0.)
  {
  }
  

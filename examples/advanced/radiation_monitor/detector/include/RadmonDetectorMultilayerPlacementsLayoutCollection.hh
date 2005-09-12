@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorMultilayerPlacementsLayoutCollection.hh,v 1.1 2005-09-09 08:26:24 capra Exp $
+// Id:            $Id: RadmonDetectorMultilayerPlacementsLayoutCollection.hh,v 1.2 2005-09-12 17:14:17 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Internal class to collect placed multilayer
@@ -24,8 +24,8 @@
  class RadmonDetectorMultilayerPlacementsLayoutCollection
  {
   public:
-                                                RadmonDetectorMultilayerPlacementsLayoutCollection();
-                                               ~RadmonDetectorMultilayerPlacementsLayoutCollection();
+   inline                                       RadmonDetectorMultilayerPlacementsLayoutCollection();
+   inline                                      ~RadmonDetectorMultilayerPlacementsLayoutCollection();
 
    G4int                                        GetNPlacements(void) const;
    G4bool                                       Empty(void) const;
@@ -36,17 +36,17 @@
    G4bool                                       ExistsPlacementByLabel(const G4String & label) const;
    G4int                                        MultiplicityPlacementByLabel(const G4String & label) const;
 
-   const RadmonDetectorMultilayerPlacementLayout & FindPlacementByLabel(const G4String & label, G4int count) const;
-   RadmonDetectorMultilayerPlacementLayout &    FindPlacementByLabel(const G4String & label, G4int count);
+   const RadmonDetectorMultilayerPlacementLayout & FindPlacementByLabel(const G4String & label, G4int count=0) const;
+   RadmonDetectorMultilayerPlacementLayout &    FindPlacementByLabel(const G4String & label, G4int count=0);
 
    RadmonDetectorMultilayerPlacementLayout &    CreatePlacement(void);
 
-   void                                         RemovePlacementByLabel(const G4String & label, G4int count);
+   void                                         RemovePlacementByLabel(const G4String & label, G4int count=0);
    void                                         RemovePlacementsByLabel(const G4String & label);
    void                                         RemovePlacement(G4int index);
    void                                         RemoveAllPlacements(void);
  
-   void                                         DumpLayout(std::ostream & out) const;
+   void                                         DumpLayout(std::ostream & out, const G4String & indent) const;
 
   private:
   // Hidden constructors and operators
@@ -56,4 +56,7 @@
   // Private attributes
    RadmonTLabelledCollection<RadmonDetectorMultilayerPlacementLayout> multilayerPlacementsCollection;
  };
+
+ // Inline implementations
+ #include "RadmonDetectorMultilayerPlacementsLayoutCollection.icc"
 #endif /* RADMONDETECTORMULTILAYERPLACEMENTSLAYOUTCOLLECTION_HH */

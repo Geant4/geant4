@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorMultilayerLayout.hh,v 1.1 2005-09-09 08:26:24 capra Exp $
+// Id:            $Id: RadmonDetectorMultilayerLayout.hh,v 1.2 2005-09-12 17:14:17 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Internal class to manage multilayers
@@ -51,13 +51,13 @@
    RadmonDetectorLayerLayout &                  AppendLayer(void);
    RadmonDetectorLayerLayout &                  PrependLayer(void);
 
-   void                                         RemoveLayerByLabel(const G4String & layerName, G4int count = 0);
-   void                                         RemoveLayersByLabel(const G4String & layerName);
+   void                                         RemoveLayerByLabel(const G4String & layerLabel, G4int count = 0);
+   void                                         RemoveLayersByLabel(const G4String & layerLabel);
    void                                         RemoveLayer(G4int index);
    void                                         RemoveLayersByRange(G4int first, G4int last);
    void                                         RemoveAllLayers(void);
 
-   void                                         DumpLayout(std::ostream & out) const;
+   void                                         DumpLayout(std::ostream & out, const G4String & indent=G4String()) const;
 
   private:
   // Private attributes
@@ -67,5 +67,6 @@
    RadmonTLabelledCollection<RadmonDetectorLayerLayout> multilayerLayersCollection;
  };
 
+ // Inline implementations
  #include "RadmonDetectorMultilayerLayout.icc"
 #endif /* RADMONDETECTORMULTILAYERLAYOUT_HH */

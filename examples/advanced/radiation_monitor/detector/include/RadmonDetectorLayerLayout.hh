@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorLayerLayout.hh,v 1.1 2005-09-09 08:26:24 capra Exp $
+// Id:            $Id: RadmonDetectorLayerLayout.hh,v 1.2 2005-09-12 17:14:17 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Internal class that describes layer informations
@@ -31,7 +31,7 @@
    inline void                                  SetType(const G4String & type);
    inline void                                  SetThickness(G4double thickness);
 
-   inline void                                  DumpLayout(std::ostream & out) const;
+   void                                         DumpLayout(std::ostream & out, const G4String &indent=G4String()) const;
 
   private:
   // Private attributes
@@ -43,4 +43,3 @@
  // Inline implementations
  #include "RadmonDetectorLayerLayout.icc"
 #endif /* RADMONDETECTORLAYERLAYOUT_HH */
-
