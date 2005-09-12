@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering80.cc,v 1.2 2005-09-05 12:13:46 urban Exp $
+// $Id: G4MultipleScattering80.cc,v 1.3 2005-09-12 11:55:50 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -65,6 +65,8 @@
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 07-02-05 correction in order to have a working Setsamplez function (L.Urban)
 // 15-04-05 optimize internal interface (V.Ivanchenko)
+// 12-09-05 new TruePathLengthLimit - facrange works for every track from
+//             start, geometry also influences the limit
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -95,7 +97,6 @@ G4MultipleScattering80::G4MultipleScattering80(const G4String& processName)
 
   tlimit           = 1.e10*mm;
   tlimitmin        = facrange*1.e-3*mm;
-  factlim          = 0.5;
   geombig          = 1.e50*mm;
   geommin          = 5.e-7*mm;
   facgeom          = 2.;
@@ -105,6 +106,7 @@ G4MultipleScattering80::G4MultipleScattering80(const G4String& processName)
   stepnobound      = 100000000;
   nsmallstep       = G4int(facgeom);
   safety           = 0.*mm;
+  facsafety        = 0.5;
 
   SetBinning(totBins);
   SetMinKinEnergy(lowKineticEnergy);
@@ -113,8 +115,6 @@ G4MultipleScattering80::G4MultipleScattering80(const G4String& processName)
   Setsamplez(false) ;
   SetLateralDisplasmentFlag(true);
 
-  ipr = 0;
-  npr = 0 ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -162,53 +162,34 @@ G4double G4MultipleScattering80::TruePathLengthLimit(const G4Track&  track,
 {
   G4double tPathLength = currentMinimalStep;
   G4double range = CurrentRange() ;
+  G4double geomlimit = GeomLimit(track);
 
-  if((track.GetCurrentStepNumber() == 1) ||
-     (track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary))
+  if((track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary)
+     || (track.GetCurrentStepNumber() == 1))   
   {
     // constraint from the physics
     if (range > lambda) tlimit = facrange*range;
     else                tlimit = facrange*lambda;
 
+    // constraint from the geometry (if tlimit above is too big)
+    if ((geomlimit > geommin) && (tlimit > geomlimit/facgeom))
+          tlimit = geomlimit/facgeom;
+
     //lower limit for tlimit
     if(tlimit < tlimitmin) tlimit = tlimitmin;
     tskin = tlimit/facgeom;
 
-    if(track.GetCurrentStepNumber() == 1)
+    if(track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary)
+    {
+      stepnobound = track.GetCurrentStepNumber() ;
+    }
+    else
     {
       tid = track.GetTrackID() ;
       pid = track.GetParentID() ;
       stepnobound      = 100000000;
     }
-    if(track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary)
-    {
-      stepnobound = track.GetCurrentStepNumber() ;
-    }
   }
-  if(ipr < npr)
-  {
-    ipr += 1;
-    G4cout.precision(6);
-    G4cout << "\nparticle=" << track.GetDefinition()->GetParticleName() 
-           << G4endl;
-    G4cout << "tID=" << track.GetTrackID() << "  pID=" << track.GetParentID()
-           << "  stepno=" << track.GetCurrentStepNumber() << G4endl;
-    G4cout << "tid=" << tid << "  pid=" << pid << "  stepnobound="
-           << stepnobound << G4endl;
-    G4cout << "material=" << track.GetMaterial()->GetName()
-           << "  Tkin=" << track.GetKineticEnergy() << "  range=" << range
-           << "  lambda=" << lambda << G4endl;
-    G4cout << "facrange=" << facrange << "  tlimit=" << tlimit
-           << "  tskin=" << tskin << G4endl;
-    G4cout << "x,y,z:" << track.GetStep()->GetPreStepPoint()->GetPosition()
-           << G4endl;
-    G4cout << "dir  :" << track.GetMomentumDirection() << G4endl;
-  }
-
-  G4double geomlimit = GeomLimit(track);
-  if(ipr < npr) G4cout << "safety=" << safety << G4endl;
-  if(ipr < npr) G4cout << "geomlimit=" << geomlimit << "  currentMinimalStep="
-                       << currentMinimalStep << G4endl;
 
   // simple case: particle is not able to reach the boundary
   if(safety >= range)
@@ -216,9 +197,9 @@ G4double G4MultipleScattering80::TruePathLengthLimit(const G4Track&  track,
   else
   {
     // small steps just after crossing a boundary
-    if((track.GetCurrentStepNumber() >= stepnobound) &&
-       (track.GetCurrentStepNumber() <= stepnobound+nsmallstep) &&
-       (track.GetTrackID() == tid) && (track.GetParentID() == pid))
+    if((track.GetTrackID() == tid) && (track.GetParentID() == pid)
+       && (track.GetCurrentStepNumber() >= stepnobound) &&
+       (track.GetCurrentStepNumber() <= stepnobound+nsmallstep))   
     {
       if(track.GetCurrentStepNumber() == stepnobound)
         tPathLength = geommin ;
@@ -228,18 +209,17 @@ G4double G4MultipleScattering80::TruePathLengthLimit(const G4Track&  track,
     else
     {
       if(tPathLength > tlimit) tPathLength = tlimit;
-      if((factlim*safety > tlimit) && (currentMinimalStep > factlim*safety))
-        tPathLength = factlim*safety;
 
+      //jyst to speed up the program
+      if((facsafety*safety > tlimit) && (currentMinimalStep > facsafety*safety))
+        tPathLength = facsafety*safety;
     }
     //check geometry as well (small steps before reaching a boundary)
-    if(tPathLength > geomlimit) tPathLength = geomlimit;
-  }
+    if(geomlimit > facgeom*tskin) geomlimit -= facgeom*tskin;
+    else if(geomlimit > tskin) geomlimit = tskin;
+    if(geomlimit < geommin) geomlimit = geommin;
 
-  if(ipr < npr)
-  {
-    G4cout << "before return tPathLength=" << tPathLength
-           << " ---------------------------------------------- " << G4endl;
+    if(tPathLength > geomlimit) tPathLength = geomlimit;
   }
 
   return tPathLength ;
@@ -264,8 +244,6 @@ G4double G4MultipleScattering80::GeomLimit(const G4Track&  track)
                   cstep,
                   safety);
 
-    if(geomlimit > facgeom*tskin) geomlimit -= facgeom*tskin;
-    else if(geomlimit > tskin) geomlimit = tskin;
     if(geomlimit < geommin) geomlimit = geommin;
   }
 
