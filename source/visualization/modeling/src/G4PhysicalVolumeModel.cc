@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.32 2005-06-07 16:54:33 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.33 2005-09-13 20:47:38 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -485,8 +485,9 @@ G4bool G4PhysicalVolumeModel::IsDaughterCulled
 	&&
 	// Cull only if mother is visible...
 	(pVisAttribs ? pVisAttribs -> IsVisible () : true)
-	// &&
-	// true // ...and opaque (transparency parameter not yet implemented).
+	&&
+	// ...and opaque...
+	(pVisAttribs ? (pVisAttribs -> GetColour ().GetAlpha() >= 1.) : true)
 	)
        )
       ;
