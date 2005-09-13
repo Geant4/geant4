@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorConstruction.cc,v 1.26 2005-03-09 16:05:48 allison Exp $
+// $Id: MyDetectorConstruction.cc,v 1.27 2005-09-13 16:53:34 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,6 +58,8 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 #include "G4VisExtent.hh"
+
+#include "G4Polyhedron.hh"
 
 MyDetectorConstruction::MyDetectorConstruction()
 {
@@ -176,6 +178,10 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   G4Tubs * tracker_tube
     = new G4Tubs("tracker_tube",0.*cm,trackerRadius,trackerHight,
                  0.*deg,360.*deg);
+  /*
+  G4cout << "Tracker tube polyhedron:\n"
+	 << (HepPolyhedron)(*(tracker_tube->GetPolyhedron())) << G4endl;
+  */
   G4LogicalVolume * tracker_log
     = new G4LogicalVolume(tracker_tube,Ar,"tracker_L",0,0,0);
   G4VisAttributes * trackerVisAtt
@@ -283,7 +289,8 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
     = new G4LogicalVolume(tube,Ar,"tube_L",0,0,0);
   G4VisAttributes * tube_VisAtt
     = new G4VisAttributes(G4Colour(0.,1.,0.,0.1));
-  tube_log->SetVisAttributes(tube_VisAtt);
+  //  tube_log->SetVisAttributes(tube_VisAtt);
+  tube_log->SetVisAttributes(G4VisAttributes::Invisible);
   new G4PVPlacement(0,G4ThreeVector(-200.*cm,0.,0.*cm),
                     "tube_phys",tube_log,experimentalHall_phys,
                     false,0);
@@ -319,7 +326,8 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
     = new G4LogicalVolume(divided_tube_inset,Ar,"divided_tube_inset_L",0,0,0);
   G4VisAttributes * divided_tube_inset_VisAtt
     = new G4VisAttributes(G4Colour(1.,0.,0.,0.2));
-  divided_tube_inset_log->SetVisAttributes(divided_tube_inset_VisAtt);
+  //  divided_tube_inset_log->SetVisAttributes(divided_tube_inset_VisAtt);
+  divided_tube_inset_log->SetVisAttributes(G4VisAttributes::Invisible);
   new G4PVPlacement(0,G4ThreeVector(),
                     divided_tube_inset_log,"divided_tube_inset_phys",
 		    divided_tube_log,false,0);
