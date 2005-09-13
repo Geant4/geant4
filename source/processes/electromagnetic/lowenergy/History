@@ -1,4 +1,4 @@
-$Id: History,v 1.234 2005-09-12 16:41:19 capra Exp $
+$Id: History,v 1.235 2005-09-13 09:05:07 zfrancis Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+13.09.2005   Ziad FRANCIS, tag emlowen-V07-01-06
+             * Implementation of slow protons (<500keV) ionization process according
+               to the Rudd semi empirical model, files created :
+                          - G4DNAIonizationInWater.hh .icc
+                          - G4DNAProtonRuddIonizationFinalStatesPolicy.hh .icc
+                          - G4DNAProtonRuddIonization.hh .cc
+             * Total integrated cross sections are in a data file
+               "RuddProtonIonizationCrossSection.dat"
+             * G4DNATest was modified in order to take into account this
+               ProtonRuddIonization process which was tested in a first
+               approach.
+             
 12.09.2005   R.Capra, tag emlowen-V07-01-05
              * Minor changes to G4DNATest in order to corectly support 
                secondaries. 
