@@ -96,7 +96,7 @@
  }
 
  template <typename IncomingParticlePolicy, typename EnergyLimitsPolicy>
- G4double                               G4DNAEmfietzoglouExcitationTotalCrossSectionPolicy<IncomingParticlePolicy, EnergyLimitsPolicy> :: PartialCrossSection(G4double T, G4int z, G4int excitationLevelIndex) const
+ G4double                               G4DNAEmfietzoglouExcitationTotalCrossSectionPolicy<IncomingParticlePolicy, EnergyLimitsPolicy> :: PartialCrossSection(G4double t, G4int /*z*/, G4int excitationLevelIndex) const
  {
   //                 Aj                        T
   // sigma(T) = ------------- (Bj /  T) ln(Cj ---) [1 - Bj / T]^Pj
@@ -112,14 +112,13 @@
   //
 
   const G4double sigma0((10./3.343e22)*cm2);
-  const G4double Aj[]={0.0205, 0.0209, 0.0130, 0.0026, 0.0025};
-  const G4double Cj[]={4.9801, 3.3850, 2.8095, 1.9242, 3.4624};
-  const G4double Pj[]={0.4757, 0.3483, 0.4443, 0.3429, 0.4379};
-  const G4double Bj[]={8.22*eV, 10.00*eV, 11.24*eV, 12.61*eV, 13.77*eV};
-  const G4double R(13.6*eV) ;
-  z=z*1;  
-  if(T<Bj[excitationLevelIndex]) return(0.); 
-  G4double excSigma = ( Aj[excitationLevelIndex] / (2.*pi*Bohr_radius)) * (Bj[excitationLevelIndex] / T) * log(Cj[excitationLevelIndex]*(T/R)) * pow((1.- (Bj[excitationLevelIndex]/T)), Pj[excitationLevelIndex]);
+  const G4double aj[]={0.0205, 0.0209, 0.0130, 0.0026, 0.0025};
+  const G4double cj[]={4.9801, 3.3850, 2.8095, 1.9242, 3.4624};
+  const G4double pj[]={0.4757, 0.3483, 0.4443, 0.3429, 0.4379};
+  const G4double r(13.6*eV) ;
+//  z=z*1;  
+  if(t<EnergyConstant(excitationLevelIndex)) return(0.); 
+  G4double excSigma = ( aj[excitationLevelIndex] / (2.*pi*Bohr_radius)) * (EnergyConstant(excitationLevelIndex) / t) * log(cj[excitationLevelIndex]*(t/r)) * pow((1.- (EnergyConstant(excitationLevelIndex)/t)), pj[excitationLevelIndex]);
 return(excSigma * sigma0);
  }
 

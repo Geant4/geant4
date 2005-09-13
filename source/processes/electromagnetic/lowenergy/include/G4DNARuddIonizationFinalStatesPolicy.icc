@@ -1,0 +1,144 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4DNARuddIonizationFinalStatesPolicy.icc,v 2005/07/27 14:52:54 Francis
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+
+#ifdef   G4DNARuddIonizationFinalStatesPolicy_HH
+ #include "Randomize.hh"
+
+
+ template <typename EnergyLimitsPolicy>
+ G4bool                                 G4DNARuddIonizationFinalStatesPolicy<EnergyLimitsPolicy> :: KillIncomingParticle(G4double energy) const
+ {
+ if(energy < EnergyLimitsPolicy::lowEnergyLimit) return(true);
+ else return (false);
+ }
+
+ template <typename EnergyLimitsPolicy>
+ G4double                               G4DNARuddIonizationFinalStatesPolicy<EnergyLimitsPolicy> ::ShellBindingEnergy(G4int ionizationLevelIndex) const
+ {
+ const G4double be[]={10.79*eV, 13.39*eV, 16.05*eV, 32.30*eV, 539.*eV};
+ return(be[ionizationLevelIndex]);
+ }
+
+ template <typename EnergyLimitsPolicy>
+ void                               G4DNARuddIonizationFinalStatesPolicy<EnergyLimitsPolicy> ::BuildFinalStatesData(void) const
+ {}
+
+ template <typename EnergyLimitsPolicy>
+ G4double                               G4DNARuddIonizationFinalStatesPolicy<EnergyLimitsPolicy> ::RandomizeEjectedElectronEnergy(G4double k, G4int shell) const
+ {
+ G4double maximumKineticEnergyTransfer = 4.* (electron_mass_c2 / proton_mass_c2) * k;
+ G4double crossSectionMaximum=0.;
+ for(G4double value=ShellBindingEnergy(shell); value<=4.*ShellBindingEnergy(shell) ; value+=0.1*eV){
+                                                         G4double differentialCrossSection = DifferentialCrossSection(k, value, shell);
+							 if(differentialCrossSection >= crossSectionMaximum) crossSectionMaximum = differentialCrossSection;
+							 }
+ G4double secElecKinetic=0.;
+ do{
+   secElecKinetic = G4UniformRand() * maximumKineticEnergyTransfer;
+   }while(G4UniformRand()*crossSectionMaximum > DifferentialCrossSection(k,secElecKinetic+ShellBindingEnergy(shell),shell));
+ return(secElecKinetic);
+ }
+ 
+ template <typename EnergyLimitsPolicy>
+ void                               G4DNARuddIonizationFinalStatesPolicy<EnergyLimitsPolicy> ::RandomizeEjectedElectronDirection(G4double k, G4double secKinetic, G4double & cosTheta, G4double & phi ) const
+ {
+ G4double maxSecKinetic = 4.* (electron_mass_c2 / proton_mass_c2) * k;
+ phi = twopi * G4UniformRand();
+ cosTheta = sqrt(secKinetic / maxSecKinetic);
+ }
+
+ template <typename EnergyLimitsPolicy>
+ G4double                               G4DNARuddIonizationFinalStatesPolicy<EnergyLimitsPolicy>::EnergyConstant(G4int ionizationLevel) const
+ {
+ const G4double bindingEnergy[5]={10.79*eV, 13.39*eV, 16.05*eV, 32.30*eV, 539.0*eV};
+ return(bindingEnergy[ionizationLevel]); 
+ }
+ 
+
+ template <typename EnergyLimitsPolicy>
+ G4double                               G4DNARuddIonizationFinalStatesPolicy<EnergyLimitsPolicy>::DifferentialCrossSection(G4double k, G4double energyTransfer, G4int ionizationLevelIndex) const
+ {
+  // Shells ids are 0 1 2 3 4 (4 is k shell)
+  // !!Attention, "energyTransfer" here is the energy transfered to the electron which means
+  //             that the secondary kinetic energy is w = energyTransfer - bindingEnergy
+  //
+  //   ds     S           F1(nu) + w * F2(nu)
+  //  ---- = --- -------------------------------------------
+  //   dw     Bj  (1+w)^3 * [1 + exp{alpha * (w - wc) / nu}]
+  //
+  // w is the secondary electron kinetic Energy in eV
+  //
+  // All the other parameters can be found in Rudd's Papers
+  //
+  // M.Eugene Rudd, 1988, User-Friendly model for the energy distribution of
+  // electrons from protons or electron collisions. Nucl. Tracks Rad. Meas.Vol 16 N0 2/3 pp 219-218
+  //
+  
+ const G4int j=ionizationLevelIndex;
+
+ G4double A1 ; G4double B1 ; G4double C1 ; G4double D1 ; G4double E1 ;
+ G4double A2 ; G4double B2 ; G4double C2 ; G4double D2 ; G4double Alpha ;
+
+ if(j == 4) {//Data For Liquid Water K SHELL from Dingfelder (Protons in Water)
+ A1 = 1.25; B1 = 0.5; C1 = 1.00; D1 = 1.00; E1 = 3.00; A2 = 1.10; B2 = 1.30;
+ C2 = 1.00; D2 = 0.00; Alpha = 0.66;}
+ else {//Data For Liquid Water from Dingfelder (Protons in Water)
+ A1 = 1.02; B1 = 82.0; C1 = 0.45; D1 = -0.80; E1 = 0.38; A2 = 1.07; B2 = 14.6;
+ C2 = 0.60; D2 = 0.04; Alpha = 0.64;}
+
+ const G4double n = 2.;
+ const G4double Gj[5] = {0.99, 1.11, 1.11, 0.52, 1.};
+
+ //const G4double I[5]={12.61*eV, 14.73*eV, 18.55*eV, 32.2*eV, 539.7*eV}; // for water Vapor
+ //const G4double energyConstant[]={10.79*eV, 13.39*eV, 16.05*eV, 32.30*eV, 539.*eV};
+
+ G4double W = (energyTransfer - ShellBindingEnergy(ionizationLevelIndex));
+ G4double w = W / ShellBindingEnergy(ionizationLevelIndex);
+ G4double Ry = 13.6*eV;
+
+ G4double tau = (electron_mass_c2/proton_mass_c2) * k ;
+
+ G4double S = 4.*pi*Bohr_radius*Bohr_radius*n*pow((Ry/ShellBindingEnergy(ionizationLevelIndex)),2);
+ G4double v2 = tau / ShellBindingEnergy(ionizationLevelIndex);
+ G4double v = sqrt(v2);
+ G4double wc = 4.*v2 - 2.*v - (Ry/(4.*ShellBindingEnergy(ionizationLevelIndex)));
+
+ G4double L1 = (C1* pow(v,(D1))) / (1.+ E1*pow(v, (D1+4.)));
+ G4double L2 = C2*pow(v,(D2));
+ G4double H1 = (A1*log(1.+v2)) / (v2+(B1/v2));
+ G4double H2 = (A2/v2) + (B2/(v2*v2));
+
+ G4double F1 = L1+H1;
+ G4double F2 = (L2*H2)/(L2+H2);
+
+
+ G4double sigma = Gj[j] * (S/ShellBindingEnergy(ionizationLevelIndex)) * ( (F1+w*F2) / ( pow((1.+w),3) * ( 1.+exp(Alpha*(w-wc)/v))) );
+return(sigma);
+}
+
+#endif /* G4DNARuddIonizationTotalCrossSectionPolicy_HH */
+

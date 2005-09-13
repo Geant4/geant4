@@ -1,0 +1,87 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4DNAIonizationInWater.icc,v 1.1 2005-09-13 08:59:06 zfrancis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+
+#ifdef    G4DNAIONIZATIONINWATER_HH
+#include "G4Electron.hh"
+
+ template<typename TotalCrossSectionPolicy, typename FinalStatesPolicy>
+ G4VParticleChange *                      G4DNAIonizationInWater<TotalCrossSectionPolicy, FinalStatesPolicy> :: PostStepDoIt(const G4Track & aTrack, const G4Step & aStep)
+ {
+  const G4int z(10); // H2O number of electrons
+
+  aParticleChange.Initialize(aTrack);
+
+  const G4DynamicParticle* aDynamicParticle = aTrack.GetDynamicParticle();
+  G4double k = aDynamicParticle->GetKineticEnergy();
+  G4ParticleMomentum primaryDirection = aDynamicParticle->GetMomentumDirection();
+  G4double particleMass = aDynamicParticle->GetDefinition()->GetPDGMass();
+  G4double TotalEnergy = k + particleMass;
+  G4double Psquare = k*(TotalEnergy+particleMass);
+  G4double TotalMomentum = sqrt(Psquare);
+
+
+  G4int ionizationShell(TotalCrossSectionPolicy::RandomizePartialCrossSection(k,z));
+  G4double secondaryKinetic(FinalStatesPolicy::RandomizeEjectedElectronEnergy(k,ionizationShell));
+  G4double bindingEnergy(FinalStatesPolicy::EnergyConstant(ionizationShell));
+ 
+  //Direction of the secondary electron
+  G4double cosTheta = 0.;
+  G4double phi = 0.; 
+  FinalStatesPolicy::RandomizeEjectedElectronDirection(k,secondaryKinetic, cosTheta, phi);
+  G4double sinTheta = sqrt(1.-cosTheta*cosTheta);
+  G4double dirx = sinTheta*cos(phi),diry = sinTheta*sin(phi),dirz = cosTheta;
+  G4ThreeVector DeltaDirection(dirx,diry,dirz);
+  DeltaDirection.rotateUz(primaryDirection);
+
+
+  G4double DeltaTotalMomentum = sqrt(secondaryKinetic*(secondaryKinetic +
+                                                     2.*electron_mass_c2 ));
+
+   //Primary Particle Direction
+      G4double finalPx = TotalMomentum*primaryDirection.x()
+                        - DeltaTotalMomentum*DeltaDirection.x();
+      G4double finalPy = TotalMomentum*primaryDirection.y()
+                        - DeltaTotalMomentum*DeltaDirection.y();
+      G4double finalPz = TotalMomentum*primaryDirection.z()
+                        - DeltaTotalMomentum*DeltaDirection.z();
+      G4double finalMomentum =
+                sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
+      finalPx /= finalMomentum;
+      finalPy /= finalMomentum;
+      finalPz /= finalMomentum;
+
+  aParticleChange.ProposeMomentumDirection( finalPx,finalPy,finalPz );
+  aParticleChange.ProposeEnergy(k-bindingEnergy-secondaryKinetic);
+  aParticleChange.ProposeLocalEnergyDeposit(bindingEnergy);
+  aParticleChange.SetNumberOfSecondaries(1);
+
+  G4DynamicParticle* aElectron = new G4DynamicParticle(G4Electron::Electron(),DeltaDirection,secondaryKinetic);
+  aParticleChange.AddSecondary(aElectron);
+
+  return G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>::PostStepDoIt(aTrack, aStep);
+ }
+#endif /* G4DNAIONIZATIONINWATER_HH */
