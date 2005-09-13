@@ -1,9 +1,12 @@
-$Id: History,v 1.54 2005-09-13 16:54:48 allison Exp $
+$Id: History,v 1.55 2005-09-13 16:55:26 allison Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
 
 $Log: not supported by cvs2svn $
+Revision 1.54  2005/09/13 16:54:48  allison
+Removed RayTracerX from test19.cc - now in G4VisExecutive.
+
 Revision 1.53  2005/09/13 16:53:34  allison
 Set replica mothers invisible.
 
