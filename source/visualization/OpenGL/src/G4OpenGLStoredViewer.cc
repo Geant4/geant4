@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.11 2004-11-18 15:19:40 johna Exp $
+// $Id: G4OpenGLStoredViewer.cc,v 1.12 2005-09-13 18:15:04 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,7 +78,8 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
                                  fVP.GetCutawayPlanes ().size ()) ||
       // No need to visit kernel if cutaway planes change.
       (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
-      (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())
+      (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
+      (lastVP.IsWhiteBackground ()  != fVP.IsWhiteBackground ())
       ) {
     return true;
   }

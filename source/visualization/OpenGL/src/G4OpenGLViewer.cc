@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.19 2004-07-09 15:44:26 johna Exp $
+// $Id: G4OpenGLViewer.cc,v 1.20 2005-09-13 18:15:04 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -169,7 +169,10 @@ void G4OpenGLViewer::SetView () {
     glDisable (GL_CLIP_PLANE0);
     glDisable (GL_CLIP_PLANE1);
   }
-  
+
+  // Background.
+  white_background = fVP.IsWhiteBackground ();
+
 }
 
 void G4OpenGLViewer::HaloingFirstPass () {

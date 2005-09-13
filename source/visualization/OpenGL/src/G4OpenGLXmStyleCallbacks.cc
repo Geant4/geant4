@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.9 2005-07-20 15:58:35 allison Exp $
+// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.10 2005-09-13 18:15:04 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -120,26 +120,22 @@ void G4OpenGLXmViewer::background_color_callback (Widget w,
 		 NULL);
 
 
-  //I need to revisit the kernel if the background colour changes and hidden
-  //line removal is enabled, because hlr drawing utilises the background
-  //colour in its drawing...
+  //I need to revisit the kernel if the background colour changes and
+  //hidden line removal is enabled, because hlr drawing utilises the
+  //background colour in its drawing...
+  // (Note added by JA 13/9/2005) Background now handled in view
+  // parameters.  A kernel visit is triggered on change of background.
   switch (choice) {
     
   case 0:
     if (!pView->white_background) {
-      pView->white_background = true;
-      if (pView->GetViewParameters().GetDrawingStyle() == G4ViewParameters::hlr) {
-	pView->SetNeedKernelVisit (true);
-      }
+      ((G4ViewParameters&)pView->GetViewParameters()).SetWhiteBackground(true);
     }
     break;
 
   case 1:
     if (pView->white_background) {
-      pView->white_background = false;
-      if (pView->GetViewParameters().GetDrawingStyle() == G4ViewParameters::hlr) {
-	pView->SetNeedKernelVisit (true);
-      }
+      ((G4ViewParameters&)pView->GetViewParameters()).SetWhiteBackground(false);
     }
     break;
 
