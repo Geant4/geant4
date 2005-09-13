@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: VisActionWithAttDefs.cc,v 1.6 2005-06-27 15:32:52 gunter Exp $
+// $Id: VisActionWithAttDefs.cc,v 1.7 2005-09-13 16:51:58 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "VisActionWithAttDefs.hh"
@@ -115,6 +115,7 @@ VisActionWithAttDefs::VisActionWithAttDefs ()
 
 VisActionWithAttDefs::~VisActionWithAttDefs ()
 {
+  delete fpTransform;
   delete fpVisAtts;
   delete fpAttValues;
   delete fpAttDefs;
