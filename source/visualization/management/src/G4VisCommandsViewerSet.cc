@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.34 2005-05-06 08:46:50 allison Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.35 2005-09-13 17:48:30 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -299,6 +299,15 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   parameter = new G4UIparameter ("z", 'd', omitable = true);
   parameter -> SetDefaultValue (1.);
   fpCommandViewpointVector -> SetParameter (parameter);
+
+  fpCommandWhiteBackground = new G4UIcmdWithABool
+    ("/vis/viewer/set/whiteBackground",this);
+  fpCommandWhiteBackground->SetGuidance("Sets flag for white background.");
+  fpCommandWhiteBackground->SetGuidance
+    ("If true, a white background is requested.  Otherwise, the default colour"
+     "\n for the viewer.");
+  fpCommandWhiteBackground->SetParameterName("white-background",omitable = true);
+  fpCommandWhiteBackground->SetDefaultValue(true);
 }
 
 G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
@@ -321,6 +330,7 @@ G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
   delete fpCommandUpVector;
   delete fpCommandViewpointThetaPhi;
   delete fpCommandViewpointVector;
+  delete fpCommandWhiteBackground;
 }
 
 G4String G4VisCommandsViewerSet::GetCurrentValue(G4UIcommand*) {
@@ -804,6 +814,17 @@ void G4VisCommandsViewerSet::SetNewValue
 	G4cout << "Lightpoint direction set to "
 	       << vp.GetActualLightpointDirection () << G4endl;
       }
+    }
+  }
+
+  else if (command == fpCommandWhiteBackground) {
+    G4bool autoRefresh = G4UIcommand::ConvertToBool(newValue);
+    vp.SetWhiteBackground(autoRefresh);
+    if (verbosity >= G4VisManager::confirmations) {
+      if (vp.IsWhiteBackground()) G4cout << "White";
+      else G4cout << "Default";
+      G4cout << " background requested."
+	     << G4endl;
     }
   }
 
