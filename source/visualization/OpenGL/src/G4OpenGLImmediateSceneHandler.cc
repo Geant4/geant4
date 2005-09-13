@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.15 2005-09-05 11:02:38 allison Exp $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.16 2005-09-13 18:16:33 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -119,8 +119,7 @@ void G4OpenGLImmediateSceneHandler::RequestPrimitives (const G4VSolid& solid) {
     // of opengl-V07-01-01/2/3.
     // Get vis attributes - pick up defaults if none.
     const G4VisAttributes* pVA =
-      fpViewer -> GetApplicableVisAttributes
-      (fpCurrentLV->GetVisAttributes ());
+      fpViewer -> GetApplicableVisAttributes(fpVisAttribs);
     const G4Colour& c = pVA -> GetColour ();
     G4double opacity = c.GetAlpha ();
     if (!fSecondPass && opacity < 1.) {
