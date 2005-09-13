@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.46 2005-07-20 16:10:42 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.47 2005-09-13 17:53:05 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -695,8 +695,8 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand*, G4String newValue) {
     G4cout << "Refreshing viewer \"" << viewer -> GetName () << "\"..."
 	   << G4endl;
   }
-  //??viewer -> SetView ();
-  //??viewer -> ClearView ();
+  viewer -> SetView ();
+  viewer -> ClearView ();
   viewer -> DrawView ();
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "Viewer \"" << viewer -> GetName () << "\"" << " refreshed."
