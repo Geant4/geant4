@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.41 2005-09-02 12:58:18 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.42 2005-09-13 18:03:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -558,9 +558,20 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters () {
 
 const G4Colour& G4VSceneHandler::GetColour (const G4Visible& visible) {
   // Colour is determined by the applicable vis attributes.
-  return fpViewer ->
+  const G4Colour& colour = fpViewer ->
     GetApplicableVisAttributes (visible.GetVisAttributes ()) ->
     GetColour ();
+  // But if white and opaque on white background...
+  static const G4Colour black(0,0,0);  // So that we can return a reference.
+  if (fpViewer -> GetViewParameters (). IsWhiteBackground () &&
+      colour.GetRed   () == 1. &&
+      colour.GetGreen () == 1. &&
+      colour.GetBlue  () == 1. &&
+      colour.GetAlpha () == 1.) {
+    return black;
+  } else {
+    return colour;
+  }
 }
 
 const G4Colour& G4VSceneHandler::GetTextColour (const G4Text& text) {
@@ -568,7 +579,18 @@ const G4Colour& G4VSceneHandler::GetTextColour (const G4Text& text) {
   if (!pVA) {
     pVA = fpViewer -> GetViewParameters (). GetDefaultTextVisAttributes ();
   }
-  return pVA -> GetColour ();
+  const G4Colour& colour = pVA -> GetColour ();
+  // But if white and opaque on white background...
+  static const G4Colour black(0,0,0);  // So that we can return a reference.
+  if (fpViewer -> GetViewParameters (). IsWhiteBackground () &&
+      colour.GetRed   () == 1. &&
+      colour.GetGreen () == 1. &&
+      colour.GetBlue  () == 1. &&
+      colour.GetAlpha () == 1.) {
+    return black;
+  } else {
+    return colour;
+  }
 }
 
 G4ViewParameters::DrawingStyle G4VSceneHandler::GetDrawingStyle
