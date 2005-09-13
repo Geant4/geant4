@@ -1,9 +1,12 @@
-$Id: History,v 1.53 2005-09-13 16:53:34 allison Exp $
+$Id: History,v 1.54 2005-09-13 16:54:48 allison Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
 
 $Log: not supported by cvs2svn $
+Revision 1.53  2005/09/13 16:53:34  allison
+Set replica mothers invisible.
+
 Revision 1.52  2005/07/20 16:24:32  allison
 vistest-V07-01-00
 
