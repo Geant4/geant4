@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.36 2005-09-05 11:02:38 allison Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.37 2005-09-13 20:41:57 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -116,7 +116,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
 
-  const G4Colour& c = GetColour (text);  // Picks up default if none.
+  const G4Colour& c = GetTextColour (text);  // Picks up default if none.
   MarkerSizeType sizeType;
   G4double size = GetMarkerSize (text, sizeType);
   G4ThreeVector position (*fpObjectTransformation * text.GetPosition ());
@@ -382,15 +382,15 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (pVA);
 
   //Get colour, etc..
-  const G4Colour& c = pVA -> GetColour ();
+  const G4Colour& c = GetColour (polyhedron);
   GLfloat materialColour [4];
   materialColour [0] = c.GetRed ();
   materialColour [1] = c.GetGreen ();
   materialColour [2] = c.GetBlue ();
   materialColour [3] = c.GetAlpha ();
 
-  GLdouble clear_colour[4];
-  glGetDoublev (GL_COLOR_CLEAR_VALUE, clear_colour);
+  GLfloat clear_colour[4];
+  glGetFloatv (GL_COLOR_CLEAR_VALUE, clear_colour);
 
   G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVA);
   
@@ -479,11 +479,12 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 		  vertex[edgeCount].y(),
 		  vertex[edgeCount].z());
     }
-    // HEPPolyhedron produces triangles too; in that case add an extra vertex..
+    // HepPolyhedron produces triangles too; in that case add an extra
+    // vertex identical to first...
     if (n == 3) {
       edgeCount = 3;
-      normals[edgeCount] = normals[edgeCount-1];
-      vertex[edgeCount] = vertex[edgeCount-1];
+      normals[edgeCount] = normals[0];
+      vertex[edgeCount] = vertex[0];
       edgeFlag[edgeCount] = -1;
       glEdgeFlag (GL_FALSE);
       glNormal3d (normals[edgeCount].x(),
@@ -521,33 +522,39 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       glStencilOp (GL_KEEP, GL_KEEP, GL_KEEP);
       if (drawing_style == G4ViewParameters::hlhsr) {
 	glEnable (GL_LIGHTING);
-	glEnable (GL_DEPTH_TEST);
-	glDepthFunc (GL_LESS);    
-	if (materialColour[3] < 1.) {
-	  // Transparent...
-	  glDepthMask (0);  // Make depth buffer read-only.
-	  glDisable (GL_CULL_FACE);
-	  glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
-	} else {
-	  // Opaque...
-	  glDepthMask (1);  // Make depth buffer writable (default).
-	  glEnable (GL_CULL_FACE);
-	  glCullFace (GL_BACK);
-	  glPolygonMode (GL_FRONT, GL_FILL);
-	}
       }
-      glBegin (GL_QUADS);
+      glEnable (GL_DEPTH_TEST);
+      glDepthFunc (GL_LESS);    
+      if (materialColour[3] < 1.) {
+	// Transparent...
+	glDepthMask (0);  // Make depth buffer read-only.
+	glDisable (GL_CULL_FACE);
+	glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
+      } else {
+	// Opaque...
+	glDepthMask (1);  // Make depth buffer writable (default).
+	glEnable (GL_CULL_FACE);
+	glCullFace (GL_BACK);
+	glPolygonMode (GL_FRONT, GL_FILL);
+      }
+      GLfloat* painting_colour;
       if  (drawing_style == G4ViewParameters::hlr) {
-	glColor4dv (clear_colour);
-      } else {  // drawing_style == G4ViewParameters::hlhsr
-	if (materialColour[3] < 1.) {
-	  // Transparent...
-	  glMaterialfv (GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, materialColour);
-	} else {
-	  // Opaque...
-	  glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, materialColour);
+	if (materialColour[3] < 1.) {  // Transparent - don't paint...
+	  goto end_of_drawing_through_stencil;
 	}
+	painting_colour = clear_colour;
+      } else {  // drawing_style == G4ViewParameters::hlhsr
+	painting_colour = materialColour;
       }
+      if (materialColour[3] < 1.) {
+	// Transparent...
+	glMaterialfv (GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, painting_colour);
+      } else {
+	// Opaque...
+	glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, painting_colour);
+      }
+      glColor4fv (painting_colour);
+      glBegin (GL_QUADS);
       for (int edgeCount = 0; edgeCount < 4; ++edgeCount) {
 	if (edgeFlag[edgeCount] > 0) {
 	  glEdgeFlag (GL_TRUE);
@@ -562,9 +569,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 		    vertex[edgeCount].z());
       }
       glEnd ();
-      glEnable (GL_CULL_FACE);  // Revert to normal.
-      glCullFace (GL_BACK);     // Revert to normal.
-      glDisable (GL_LIGHTING);  // Revert to normal.
+    end_of_drawing_through_stencil:
 
       // and once more to reset the stencil bits...
       glStencilFunc (GL_ALWAYS, 0, 1);
@@ -580,6 +585,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 	glCullFace (GL_BACK);
 	glPolygonMode (GL_FRONT, GL_LINE);
       }
+      glDisable (GL_LIGHTING);
       glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
       glBegin (GL_QUADS);
       for (int edgeCount = 0; edgeCount < 4; ++edgeCount) {
