@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.icc,v 1.7 2005-05-31 16:54:01 allison Exp $
+// $Id: G4ViewParameters.icc,v 1.8 2005-09-13 17:47:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -165,6 +165,10 @@ inline G4int G4ViewParameters::GetWindowSizeHintY () const {
 
 inline G4bool G4ViewParameters::IsAutoRefresh () const {
   return fAutoRefresh;
+}
+
+inline G4bool G4ViewParameters::IsWhiteBackground () const {
+  return fWhiteBackground;
 }
 
 inline void
@@ -313,4 +317,8 @@ inline void G4ViewParameters::SetWindowSizeHint (G4int xHint, G4int yHint) {
 
 inline void G4ViewParameters::SetAutoRefresh (G4bool state) {
   fAutoRefresh = state;
+}
+
+inline void G4ViewParameters::SetWhiteBackground (G4bool state) {
+  fWhiteBackground = state;
 }

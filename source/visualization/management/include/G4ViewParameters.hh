@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.hh,v 1.17 2005-05-31 16:54:01 allison Exp $
+// $Id: G4ViewParameters.hh,v 1.18 2005-09-13 17:47:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -147,6 +147,7 @@ public: // With description
         G4int            GetWindowSizeHintX      () const;
         G4int            GetWindowSizeHintY      () const;
         G4bool           IsAutoRefresh           () const;
+        G4bool           IsWhiteBackground       () const;
 
   // Here Follow functions to evaluate the above algorithms as a
   // function of the radius of the Bounding Sphere of the object being
@@ -205,6 +206,7 @@ public: // With description
   void SetMarkerNotHidden      ();
   void SetWindowSizeHint       (G4int xHint, G4int yHint);
   void SetAutoRefresh          (G4bool);
+  void SetWhiteBackground      (G4bool);
 
   void PrintDifferences (const G4ViewParameters& v) const;
 
@@ -251,6 +253,7 @@ private:
   G4int        fWindowSizeHintX; // Size hints for pixel-based window systems.
   G4int        fWindowSizeHintY;
   G4bool       fAutoRefresh;     // ...after change of view parameters.
+  G4bool       fWhiteBackground; // White background flag.
 };
 
 #include "G4ViewParameters.icc"

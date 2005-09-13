@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.20 2005-05-31 16:54:01 allison Exp $
+// $Id: G4ViewParameters.cc,v 1.21 2005-09-13 17:47:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,15 +69,14 @@ G4ViewParameters::G4ViewParameters ():
   fMarkerNotHidden (true),
   fWindowSizeHintX (600),
   fWindowSizeHintY (600),
-  fAutoRefresh (false)
+  fAutoRefresh (false),
+  fWhiteBackground (false)
 {
   fDefaultMarker.SetScreenSize (5.);
   // Markers are 5 pixels "overall" size, i.e., diameter.
 }
 
-G4ViewParameters::~G4ViewParameters () {
-// Clear cutaway planes?  Rogue Wave probably destroys OK.
-}
+G4ViewParameters::~G4ViewParameters () {}
 
 G4Vector3D& G4ViewParameters::GetActualLightpointDirection () {
   SetViewAndLights (fViewpointDirection);
@@ -260,7 +259,8 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       (fGlobalMarkerScale    != v.fGlobalMarkerScale)    ||
       (fMarkerNotHidden      != v.fMarkerNotHidden)      ||
       (fWindowSizeHintY      != v.fWindowSizeHintY)      ||
-      (fAutoRefresh          != v.fAutoRefresh))
+      (fAutoRefresh          != v.fAutoRefresh)          ||
+      (fWhiteBackground      != v.fWhiteBackground))
     G4cout << "Difference in 1st batch." << G4endl;
 
   if (fSection) {
@@ -431,6 +431,10 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
   if (v.fAutoRefresh) os << "true";
   else os << "false";
 
+  os << "\n  White Background: ";
+  if (v.fWhiteBackground) os << "true";
+  else os << "false";
+
   return os;
 }
 
@@ -470,7 +474,8 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       (fMarkerNotHidden      != v.fMarkerNotHidden)      ||
       (fWindowSizeHintX      != v.fWindowSizeHintX)      ||
       (fWindowSizeHintY      != v.fWindowSizeHintY)      ||
-      (fAutoRefresh          != v.fAutoRefresh))
+      (fAutoRefresh          != v.fAutoRefresh)          ||
+      (fWhiteBackground      != v.fWhiteBackground))
     return true;
 
   if (fDensityCulling &&
