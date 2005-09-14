@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.3 2004-05-27 13:43:17 vnivanch Exp $
+// $Id: DetectorConstruction.hh,v 1.4 2005-09-14 09:04:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -112,7 +112,6 @@ private:
   G4Region*   muonRegion;
 
   DetectorMessenger* detectorMessenger;  //pointer to the Messenger
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
