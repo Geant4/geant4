@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2005-09-12 17:14:41 capra Exp $
+$Id: History,v 1.3 2005-09-14 12:32:11 capra Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14 Sep 2005 - radmon-V07-01-02 - R. Capra - Implementation according to the
+                        design in progress. RadmonDetectorMessenger completed 
+                        and tested. Needs still some work on detector
+                        construction and materials. The code runs. Creation
+                        of the physics subpackage. This tag is only for
+                        backup purposes
 
 12 Sep 2005 - radmon-V07-01-01 - R. Capra - Implementation according to the
                         design in progress. RadmonDetectorLayout completed
