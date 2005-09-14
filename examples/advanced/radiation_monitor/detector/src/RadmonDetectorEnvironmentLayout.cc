@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorEnvironmentLayout.cc,v 1.1 2005-09-12 17:13:26 capra Exp $
+// Id:            $Id: RadmonDetectorEnvironmentLayout.cc,v 1.2 2005-09-14 12:28:31 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -16,10 +16,20 @@
 
 void                                            RadmonDetectorEnvironmentLayout :: DumpLayout(std::ostream & out, const G4String & indent) const
 {
- size_t width(RADMONDETECTORDUMPWIDTH-indent.length());
-
  if (!enabled)
-  out << indent << std::setw(width) << "Disabled\n";
+  out << indent << "Environment disabled\n";
  else
-  out << indent << std::setw(width) << "Type" << " = \""  << environmentType << "\"\n";
+ {
+  G4int width(RADMONDETECTORDUMP_INDENT_WIDTH-indent.length());
+  if (width<0)
+   width=0;
+  
+  out << indent << std::setw(width); out.setf(std::ostream::left, std::ostream::adjustfield); out << "Type" << " = \""  << environmentType << "\"\n"
+      << indent << "Attributes:\n";
+
+  G4String indent2(indent);
+  indent2.prepend("  ");
+
+  DumpAttributesLayout(out, indent2);
+ }
 }  

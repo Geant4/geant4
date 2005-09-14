@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorLayoutEntityWithAttributes.cc,v 1.2 2005-09-12 17:14:17 capra Exp $
+// Id:            $Id: RadmonDetectorLayoutEntityWithAttributes.cc,v 1.3 2005-09-14 12:28:31 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -68,11 +68,30 @@ void                                            RadmonDetectorLayoutEntityWithAt
  AttributesMap::const_iterator i(attributesMap.begin());
  AttributesMap::const_iterator end(attributesMap.end());
  
- size_t width(RADMONDETECTORDUMPWIDTH-2-indent.length());
+ if (i==end)
+ {
+  out << indent << "No attributes defined.\n";
+  return;
+ }
+
+ G4int width(RADMONDETECTORDUMP_INDENT_WIDTH-1-indent.length());
+ if (width<0)
+  width=0;
+  
+ G4int width2;
  
  while (i!=end)
  {
-  out << indent << '\"' << std::setw(width) << i->first << "\" = \"" << i->second << "\"\n";
+  width2=width-i->first.length();
+  if (width2<0)
+   width2=0;
+   
+  out << indent << '\"' << i->first << std::setw(width2); 
+  out.setf(std::ostream::left, std::ostream::adjustfield); 
+  out << "\""; 
+  out.setf(std::ostream::right, std::ostream::adjustfield); 
+  out << " = \"" << i->second << "\"\n";
+  
   i++;
  }
 }

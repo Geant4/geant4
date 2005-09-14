@@ -3,13 +3,15 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorMultilayerPlacementLayout.cc,v 1.1 2005-09-12 17:13:26 capra Exp $
+// Id:            $Id: RadmonDetectorMultilayerPlacementLayout.cc,v 1.2 2005-09-14 12:28:31 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
 // Include files
 #include "RadmonDetectorMultilayerPlacementLayout.hh"
 #include "RadmonDetectorDumpStyle.hh"
+#include "G4UnitsTable.hh"
+
 #include <iomanip>
 
 
@@ -53,11 +55,18 @@ void                                            RadmonDetectorMultilayerPlacemen
 
 void                                            RadmonDetectorMultilayerPlacementLayout :: DumpLayout(std::ostream & out, const G4String &indent) const
 {
- size_t width(RADMONDETECTORDUMPWIDTH-indent.length());
- out << indent << std::setw(width) << "Label" << " = \"" << placementLabel << "\"\n"
-     << indent << std::setw(width) << "Multilayer label" << " = \"" << multilayerLabel << "\"\n"
-     << indent << std::setw(width) << "Position" << " = (" << multilayerPosition.getX()/mm << " mm, " << multilayerPosition.getY()/mm << " mm, " << multilayerPosition.getZ()/mm << " mm)\n"
-     << indent << std::setw(width) << "Rotation" << " = |" << multilayerRotation.xx() << ", " << multilayerRotation.xy() << ", " << multilayerRotation.xz() << "|\n"
-     << indent << std::setw(width+4) << std::setiosflags(std::ostream::right) << " = |" << multilayerRotation.yx() << ", " << multilayerRotation.yy() << ", " << multilayerRotation.yz() << "|\n"
-     << indent << std::setw(width+4) << std::setiosflags(std::ostream::right) << " = |" << multilayerRotation.zx() << ", " << multilayerRotation.zy() << ", " << multilayerRotation.zz() << "|\n";
+ G4int width(RADMONDETECTORDUMP_INDENT_WIDTH-indent.length());
+ if (width<0)
+  width=0;
+  
+ G4int width2(width+4+indent.length());
+  
+ out << indent << std::setw(width); out.setf(std::ostream::left, std::ostream::adjustfield); out << "Label";            out.setf(std::ostream::right, std::ostream::adjustfield); out << " = \"" << placementLabel << "\"\n"
+     << indent << std::setw(width); out.setf(std::ostream::left, std::ostream::adjustfield); out << "Multilayer label"; out.setf(std::ostream::right, std::ostream::adjustfield); out << " = \"" << multilayerLabel << "\"\n"
+     << indent << std::setw(width); out.setf(std::ostream::left, std::ostream::adjustfield); out << "Position";         out.setf(std::ostream::right, std::ostream::adjustfield); out << " = ("  << std::setprecision(RADMONDETECTORDUMP_DOUBLE_PRECISION) << std::setw(RADMONDETECTORDUMP_DOUBLE_WIDTH) << G4BestUnit(multilayerPosition.getX(), "Length") << ", " 
+                                                                                                                                                                                                 << std::setprecision(RADMONDETECTORDUMP_DOUBLE_PRECISION) << std::setw(RADMONDETECTORDUMP_DOUBLE_WIDTH) << G4BestUnit(multilayerPosition.getY(), "Length") << ", "
+                                                                                                                                                                                                 << std::setprecision(RADMONDETECTORDUMP_DOUBLE_PRECISION) << std::setw(RADMONDETECTORDUMP_DOUBLE_WIDTH) << G4BestUnit(multilayerPosition.getZ(), "Length") << ")\n"
+               << std::setw(width2); out.setf(std::ostream::right, std::ostream::adjustfield); out <<                                                                                       "|"  << std::setprecision(RADMONDETECTORDUMP_DOUBLE_PRECISION) << std::setw(RADMONDETECTORDUMP_DOUBLE_WIDTH) << multilayerRotation.xx() << ", " << std::setprecision(RADMONDETECTORDUMP_DOUBLE_PRECISION) << std::setw(RADMONDETECTORDUMP_DOUBLE_WIDTH) << multilayerRotation.xy() << ", " << std::setprecision(RADMONDETECTORDUMP_DOUBLE_PRECISION) << std::setw(RADMONDETECTORDUMP_DOUBLE_WIDTH) << multilayerRotation.xz() << "|\n"
+     << indent << std::setw(width);  out.setf(std::ostream::left, std::ostream::adjustfield);  out << "Rotation";       out.setf(std::ostream::right, std::ostream::adjustfield); out << " = |"  << std::setprecision(RADMONDETECTORDUMP_DOUBLE_PRECISION) << std::setw(RADMONDETECTORDUMP_DOUBLE_WIDTH) << multilayerRotation.yx() << ", " << std::setprecision(RADMONDETECTORDUMP_DOUBLE_PRECISION) << std::setw(RADMONDETECTORDUMP_DOUBLE_WIDTH) << multilayerRotation.yy() << ", " << std::setprecision(RADMONDETECTORDUMP_DOUBLE_PRECISION) << std::setw(RADMONDETECTORDUMP_DOUBLE_WIDTH) << multilayerRotation.yz() << "|\n"
+               << std::setw(width2); out.setf(std::ostream::right, std::ostream::adjustfield); out <<                                                                                       "|"  << std::setprecision(RADMONDETECTORDUMP_DOUBLE_PRECISION) << std::setw(RADMONDETECTORDUMP_DOUBLE_WIDTH) << multilayerRotation.zx() << ", " << std::setprecision(RADMONDETECTORDUMP_DOUBLE_PRECISION) << std::setw(RADMONDETECTORDUMP_DOUBLE_WIDTH) << multilayerRotation.zy() << ", " << std::setprecision(RADMONDETECTORDUMP_DOUBLE_PRECISION) << std::setw(RADMONDETECTORDUMP_DOUBLE_WIDTH) << multilayerRotation.zz() << "|\n";
 }

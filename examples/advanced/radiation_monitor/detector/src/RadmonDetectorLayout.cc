@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorLayout.cc,v 1.1 2005-09-12 17:13:26 capra Exp $
+// Id:            $Id: RadmonDetectorLayout.cc,v 1.2 2005-09-14 12:28:31 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -63,7 +63,9 @@ void                                            RadmonDetectorLayout :: SetEnvir
   return;
  
  environment.SetType(type);
- NotifyChange();
+ 
+ if (environment.IsEnabled())
+  NotifyChange();
 }
 
 
@@ -81,7 +83,9 @@ void                                            RadmonDetectorLayout :: SetEnvir
   return;
  
  environment.SetAttribute(attributeName, attributeValue);
- NotifyChange();
+
+ if (environment.IsEnabled())
+  NotifyChange();
 }
 
 
@@ -102,7 +106,9 @@ void                                            RadmonDetectorLayout :: ClearEnv
  }
   
  environment.ClearAttribute(attributeName);
- NotifyChange();
+
+ if (environment.IsEnabled())
+  NotifyChange();
 }
 
 
@@ -241,11 +247,14 @@ void                                            RadmonDetectorLayout :: RemoveLa
  }
   
  multilayer->RemoveLayersByLabel(layerLabel);
+
+ if (IsPlaced(multilayerLabel))
+  NotifyChange();
 }
 
 
 
-void                                            RadmonDetectorLayout :: RemoveAllLayers(const G4String & multilayerLabel)
+void                                            RadmonDetectorLayout :: RemoveAllLayersFromMultilayer(const G4String & multilayerLabel)
 {
  RadmonDetectorMultilayerLayout * multilayer(FindMultilayer(multilayerLabel));
  
@@ -253,6 +262,9 @@ void                                            RadmonDetectorLayout :: RemoveAl
   return;
   
  multilayer->RemoveAllLayers();
+
+ if (IsPlaced(multilayerLabel))
+  NotifyChange();
 }
 
 
@@ -405,7 +417,7 @@ const G4String &                                RadmonDetectorLayout :: GetPlace
 
 
 
-void                                            RadmonDetectorLayout :: RemoveMultilayerPlacement(const G4String & placementLabel)
+void                                            RadmonDetectorLayout :: RemovePlacement(const G4String & placementLabel)
 {
  if (!multilayerPlacementsCollection.ExistsPlacementByLabel(placementLabel))
  {

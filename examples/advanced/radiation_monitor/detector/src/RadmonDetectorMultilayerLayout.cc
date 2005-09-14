@@ -3,13 +3,15 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorMultilayerLayout.cc,v 1.2 2005-09-12 17:14:17 capra Exp $
+// Id:            $Id: RadmonDetectorMultilayerLayout.cc,v 1.3 2005-09-14 12:28:31 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
 // Include files
 #include "RadmonDetectorMultilayerLayout.hh"
 #include "RadmonDetectorDumpStyle.hh"
+#include "G4UnitsTable.hh"
+
 #include <iomanip>
 
 
@@ -178,15 +180,33 @@ void                                            RadmonDetectorMultilayerLayout :
 
 void                                            RadmonDetectorMultilayerLayout :: DumpLayout(std::ostream & out, const G4String & indent) const
 {
- size_t width(RADMONDETECTORDUMPWIDTH-indent.length());
- out << indent << std::setw(width) << "Label" << " = \"" << multilayerLabel << "\"\n"
-     << indent << std::setw(width) << "Size" << " = "  << std::setprecision(2) << multilayerWidth/mm << " mm x " << std::setprecision(2) << multilayerHeight/mm << " mm\n";
+ G4int width(RADMONDETECTORDUMP_INDENT_WIDTH-indent.length());
+ if (width<0)
+  width=0;
+
+ out << indent << std::setw(width); out.setf(std::ostream::left, std::ostream::adjustfield); out << "Label"; out.setf(std::ostream::right, std::ostream::adjustfield); out << " = \"" << multilayerLabel << "\"\n"
+     << indent << std::setw(width); out.setf(std::ostream::left, std::ostream::adjustfield); out << "Size";  out.setf(std::ostream::right, std::ostream::adjustfield); out << " = (W) " << std::setprecision(RADMONDETECTORDUMP_DOUBLE_PRECISION) << std::setw(RADMONDETECTORDUMP_DOUBLE_WIDTH) << G4BestUnit(multilayerWidth, "Length") 
+                                                                                                                                                                           << " x (H) " << std::setprecision(RADMONDETECTORDUMP_DOUBLE_PRECISION) << std::setw(RADMONDETECTORDUMP_DOUBLE_WIDTH) << G4BestUnit(multilayerHeight, "Length") 
+                                                                                                                                                                           << " x (T) " << std::setprecision(RADMONDETECTORDUMP_DOUBLE_PRECISION) << std::setw(RADMONDETECTORDUMP_DOUBLE_WIDTH) << G4BestUnit(GetTotalThickness(), "Length") << '\n';
 
  G4String indent2(indent);
  indent2.prepend("  ");
 
  const G4int n(multilayerLayersCollection.GetNItems());
- 
+
+ if (n==0)
+ {
+  out << indent2 << "No layers defined.\n";
+  return;
+ }
+
+ G4String indent3(indent2);
+ indent3.prepend("  ");
+
  for(G4int i(0); i<n; i++)
-  GetLayer(i).DumpLayout(out, indent2);
+ {
+  out << indent2 << "Layer # " << i << '\n';
+   
+  GetLayer(i).DumpLayout(out, indent3);
+ }
 }

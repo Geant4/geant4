@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorMultilayerPlacementsLayoutCollection.cc,v 1.1 2005-09-12 17:13:26 capra Exp $
+// Id:            $Id: RadmonDetectorMultilayerPlacementsLayoutCollection.cc,v 1.2 2005-09-14 12:28:31 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -122,12 +122,15 @@ void                                            RadmonDetectorMultilayerPlacemen
 
  const G4int n(multilayerPlacementsCollection.GetNItems());
  
+ if (n==0)
+  out << indent << "No placements defined.\n";
+
  for(G4int i(0); i<n; i++)
  {
   if (i!=0)
    out << '\n';
    
-  out << indent << "Placement # " << i;
+  out << indent << "Placement # " << i << '\n';
   
   GetPlacement(i).DumpLayout(out, indent2);
  }

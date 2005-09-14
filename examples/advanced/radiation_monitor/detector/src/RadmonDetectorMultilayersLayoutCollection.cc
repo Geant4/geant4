@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorMultilayersLayoutCollection.cc,v 1.1 2005-09-12 17:13:26 capra Exp $
+// Id:            $Id: RadmonDetectorMultilayersLayoutCollection.cc,v 1.2 2005-09-14 12:28:31 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -119,17 +119,23 @@ void                                            RadmonDetectorMultilayersLayoutC
 
 void                                            RadmonDetectorMultilayersLayoutCollection :: DumpLayout(std::ostream & out, const G4String & indent) const
 {
+ const G4int n(multilayersCollection.GetNItems());
+ 
+ if (n==0)
+ {
+  out << indent << "No multilayers defined.\n";
+  return;
+ }
+
  G4String indent2(indent);
  indent2.prepend("  ");
 
- const G4int n(multilayersCollection.GetNItems());
- 
  for(G4int i(0); i<n; i++)
  {
   if (i!=0)
    out << '\n';
    
-  out << indent << "Multilayer # " << i;
+  out << indent << "Multilayer # " << i << '\n';
   
   GetMultilayer(i).DumpLayout(out, indent2);
  }

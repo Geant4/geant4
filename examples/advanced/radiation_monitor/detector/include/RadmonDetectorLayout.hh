@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorLayout.hh,v 1.2 2005-09-12 17:14:17 capra Exp $
+// Id:            $Id: RadmonDetectorLayout.hh,v 1.3 2005-09-14 12:28:31 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Class to keep track of the configured detector layout
@@ -44,7 +44,7 @@
 
    virtual void                                 AppendLayerToMultilayer(const G4String & multilayerLabel, const G4String & layerLabel);
    virtual void                                 RemoveLayerFromMultilayer(const G4String & multilayerLabel, const G4String & layerLabel);
-   virtual void                                 RemoveAllLayers(const G4String & multilayerLabel);
+   virtual void                                 RemoveAllLayersFromMultilayer(const G4String & multilayerLabel);
 
    virtual void                                 SetLayerThickness(const G4String & multilayerLabel, const G4String & layerLabel, G4double thickness);
    virtual G4double                             GetLayerThickness(const G4String & multilayerLabel, const G4String & layerLabel) const;
@@ -58,7 +58,7 @@
    virtual void                                 CreatePlacement(const G4String & placementLabel, const G4String & multilayerName);
    virtual G4int                                GetNPlacements() const;
    virtual const G4String &                     GetPlacementLabel(G4int index) const;
-   virtual void                                 RemoveMultilayerPlacement(const G4String & placementLabel);
+   virtual void                                 RemovePlacement(const G4String & placementLabel);
 
    virtual const G4String &                     GetPlacementMultilayerType(const G4String & placementLabel) const;
    virtual void                                 SetPlacementPosition(const G4String & placementLabel, const G4ThreeVector & position);
