@@ -1,0 +1,23 @@
+//
+// File name:     RadmonPhysicsDummyPhysicsList.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonPhysicsDummyPhysicsList.icc,v 1.1 2005-09-14 12:31:41 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONPHYSICSDUMMYPHYSICSLIST_HH
+ #error "RadmonPhysicsDummyPhysicsList.icc cannot be included directly. Please use RadmonPhysicsDummyPhysicsList.hh"
+#else  /* RADMONPHYSICSDUMMYPHYSICSLIST_HH */
+ inline                                         RadmonPhysicsDummyPhysicsList :: RadmonPhysicsDummyPhysicsList()
+ {
+  G4cout << "RadmonPhysicsDummyPhysicsList::RadmonPhysicsDummyPhysicsList(): YOU ARE USING A DUMMY PHYSICS LIST." << G4endl;
+ }
+ 
+ 
+ 
+ inline                                         RadmonPhysicsDummyPhysicsList :: ~RadmonPhysicsDummyPhysicsList()
+ {
+ }
+#endif /* RADMONPHYSICSDUMMYPHYSICSLIST_HH */
