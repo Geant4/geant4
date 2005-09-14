@@ -1,0 +1,43 @@
+//
+// File name:     RadmonTokenizer.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonTokenizer.icc,v 1.1 2005-09-14 12:30:15 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONTOKENIZER_HH
+ #error "RadmonTokenizer.icc cannot be included directly. Please use RadmonTokenizer.hh"
+#else  /* RADMONTOKENIZER_HH */
+ inline                                         RadmonTokenizer :: RadmonTokenizer(const G4String & str)
+ :
+  position(0),
+  data(str)
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonTokenizer :: ~RadmonTokenizer()
+ {
+ }
+
+
+
+
+
+ inline void                                    RadmonTokenizer :: rewind(void)
+ {
+  position=0;
+ }
+
+
+
+
+
+ inline G4bool                                  RadmonTokenizer :: eos(void) const
+ {
+  return position>=data.size();
+ }
+#endif /* RADMONTOKENIZER_HH */
