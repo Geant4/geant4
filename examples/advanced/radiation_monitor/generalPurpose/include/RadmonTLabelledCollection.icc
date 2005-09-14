@@ -3,17 +3,13 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonTLabelledCollection.icc,v 1.2 2005-09-12 17:14:17 capra Exp $
+// Id:            $Id: RadmonTLabelledCollection.icc,v 1.3 2005-09-14 12:30:57 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
 #ifndef   RADMONTLABELLEDCOLLECTION_HH
  #error "RadmonTLabelledCollection.icc cannot be included directly. Please use RadmonTLabelledCollection.hh"
 #else  /* RADMONTLABELLEDCOLLECTION_HH */
-
- // Include files
- #include "globals.hh"
-
  template <typename LabelledObject>
                                                 RadmonTLabelledCollection<LabelledObject> :: RadmonTLabelledCollection()
  {

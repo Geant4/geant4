@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplication.cc,v 1.1 2005-09-09 08:26:54 capra Exp $
+// Id:            $Id: RadmonApplication.cc,v 1.2 2005-09-14 12:30:57 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -15,10 +15,13 @@
 #include "RadmonDetectorConstruction.hh"
 #include "RadmonDetectorLabelledEntitiesConstructorsFactory.hh"
 #include "RadmonDetectorMessenger.hh"
+#include "RadmonPhysicsDummyPhysicsList.hh"
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
+#include "G4UIdirectory.hh"
 #include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
 
 #ifdef    G4VIS_USE
  #include "G4VisExecutive.hh"
@@ -37,7 +40,8 @@
  #endif /* G4VIS_USE */
  uiManager(0),
  messenger(0),
- session(0)
+ session(0),
+ directory(0)
 {
  // Construct the default run manager
  runManager=new G4RunManager();
@@ -92,8 +96,8 @@
  
  runManager->SetUserInitialization(detectorConstruction);
  
- // Set mandatory initialization classes
- // runManager->SetUserInitialization(new ExN01PhysicsList);
+ // Set mandatory physics list
+ runManager->SetUserInitialization(new RadmonPhysicsDummyPhysicsList);
          
  // Set mandatory user action class
  // runManager->SetUserAction(new ExN01PrimaryGeneratorAction);
@@ -127,6 +131,19 @@
  }
 
 
+ // Construct the Radmon directory
+ directory = new G4UIdirectory("/radmon/");
+ 
+ if (directory==0)
+ {
+  G4cerr << options.ApplicationName() << ": Radmon directory not allocated." << G4endl;
+  return;
+ }
+ 
+ directory->SetGuidance("Radmon application directory.");
+
+
+
  // Construct the messenger to modify the layout
  messenger=new RadmonDetectorMessenger(layout);
  
@@ -140,7 +157,7 @@
  // Construct the interactive session
  if (options.Interactive())
  {
-  session=new G4UIterminal();
+  session=new G4UIterminal(new G4UItcsh);
  
   if (session==0)
   {
@@ -167,7 +184,9 @@
    G4cout << options.ApplicationName() << ": Interactive session starts ..." << G4endl;
   
   session->SessionStart();
- } 
+ }
+ 
+ valid=true;
 }
 
 
@@ -181,6 +200,10 @@
  // Destruct the messenger to modify the layout 
  if (messenger)
   delete messenger;
+  
+ // Destruct the Radmon directory
+ if (directory)
+  delete directory;
  
  // Destruct the visualization manager
  #ifdef    G4VIS_USE
@@ -192,14 +215,13 @@
  if (factory)
   delete factory;
 
- // Destruct the detector layout
- if (layout)
-  delete layout;
- 
  // Destruct the default run manager
  if (runManager)
   delete runManager;
  
+ // Destruct the detector layout
+ if (layout)
+  delete layout; 
 }
 
 

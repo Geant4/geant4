@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2005-09-09 08:25:35 capra Exp $
+# $Id: GNUmakefile,v 1.2 2005-09-14 12:30:57 capra Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for exaple subpackage
 # R. Capra, 09 Sep 2005
@@ -11,6 +11,9 @@ ifndef G4INSTALL
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
+include $(G4INSTALL)/config/G4UI_USE.gmk
+include $(G4INSTALL)/config/G4VIS_USE.gmk
+include $(G4INSTALL)/config/interactivity.gmk
 
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPGeometry/include \
@@ -28,9 +31,13 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/materials/include \
             -I$(G4BASE)/processes/management/include \
+            -I$(G4BASE)/processes/cuts/include \
             -I$(G4BASE)/digits_hits/hits/include \
             -I$(G4BASE)/digits_hits/digits/include \
+            -I$(G4BASE)/visualization/management/include \
+            -I$(G4BASE)/graphics_reps/include \
             -I../generalPurpose/include \
-            -I../detector/include
+            -I../detector/include \
+            -I../physics/include
 
 include $(G4INSTALL)/config/common.gmk

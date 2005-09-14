@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplication.hh,v 1.1 2005-09-09 08:26:54 capra Exp $
+// Id:            $Id: RadmonApplication.hh,v 1.2 2005-09-14 12:30:57 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Radmon application
@@ -24,6 +24,7 @@
  class G4UImanager;
  class RadmonDetectorMessenger;
  class G4UIsession;
+ class G4UIdirectory;
 
  class RadmonApplication
  {
@@ -53,6 +54,7 @@
    G4UImanager *                                uiManager;
    RadmonDetectorMessenger *                    messenger;
    G4UIsession *                                session;
+   G4UIdirectory *                              directory;
  };
  
  #include "RadmonApplication.icc"
