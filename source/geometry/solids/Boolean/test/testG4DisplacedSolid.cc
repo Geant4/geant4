@@ -63,7 +63,7 @@
 
 int main()
 {
-    G4ThreeVector pzero(0,0,0);
+    G4ThreeVector pzero(0,0,0), p;
     G4ThreeVector ponxside(20,0,0),ponyside(0,30,0),ponzside(0,0,40),
                    ponb2x(10,0,0),ponb2y(0,10,0),ponb2z(0,0,10),
                    ponb2mx(-10,0,0),ponb2my(0,-10,0),ponb2mz(0,0,-10);
@@ -83,12 +83,13 @@ int main()
     G4ThreeVector vxmz(1/std::sqrt(2.0),0,-1/std::sqrt(2.0));
 
     G4double dist;
+    G4int i;
     G4ThreeVector *pNorm,norm;
     G4bool *pgoodNorm,goodNorm,calcNorm=true;
 
     pNorm=&norm;
     pgoodNorm=&goodNorm;
-
+    
     G4RotationMatrix identity, xRot ;
     
 // NOTE: xRot = rotation such that x axis->y axis & y axis->-x axis
@@ -117,6 +118,7 @@ int main()
     G4DisplacedSolid passRotT3("passRotT3",&t3,&xRot,ponb2mx) ;
     G4DisplacedSolid actiRotT3("actiRotT3",&t3,transform) ;
     G4DisplacedSolid actiRotB1("actiRotB3",&b1,transform) ;
+    G4DisplacedSolid passRotB2("passRotT3",&b2,&xRot,ponb2mx) ;
 
     G4ThreeVector pRmaxPlus(50,1,0) ;
    
@@ -231,7 +233,7 @@ int main()
 
 
 
-// DistanceToIn(P,V)
+    // DistanceToIn(P,V)
 
     dist=passRotT3.DistanceToIn(G4ThreeVector(100,10,0),vmx);
     assert(ApproxEqual(dist,110));
@@ -257,7 +259,20 @@ int main()
     dist=actiRotT3.DistanceToIn(pbigmx,vxy);
     assert(ApproxEqual(dist,kInfinity));
 
-// CalculateExtent
+
+    // Point on surface
+    G4cout<<G4endl;
+    G4cout<<"Point on surface of 10x10x10 box shifted -10 along x-axis:"<<G4endl<<G4endl;
+    for(i=0;i<10;i++)
+    {
+      p = passRotB2.GetPointOnSurface();
+      G4cout<<p.x()<<"\t"<<p.y()<<"\t"<<p.z()<<G4endl;
+    }
+    G4cout<<G4endl;
+
+
+
+    // CalculateExtent
 
     G4VoxelLimits limit ;		// Unlimited
     G4RotationMatrix noRot ;
