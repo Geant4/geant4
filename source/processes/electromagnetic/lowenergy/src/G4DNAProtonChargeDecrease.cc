@@ -1,4 +1,4 @@
- //
+//
 // ********************************************************************
 // * DISCLAIMER                                                       *
 // *                                                                  *
@@ -21,40 +21,26 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProtonRuddIonization.cc,v 1.2 2005-09-15 09:03:58 zfrancis Exp $
+// $Id: G4DNAProtonChargeDecrease.cc,v 1.1 2005-09-15 09:04:21 zfrancis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
-#include "G4DNAProtonRuddIonization.hh"
+#include "G4DNAProtonChargeDecrease.hh"
 #include "G4Proton.hh"
 
-                                        G4DNAProtonRuddIonizationEnergyLimitsPolicy :: G4DNAProtonRuddIonizationEnergyLimitsPolicy()
+                                        G4DNAProtonChargeDecreaseEnergyLimitsPolicy :: G4DNAProtonChargeDecreaseEnergyLimitsPolicy()
 :
  lowEnergyLimit(100*eV),
  zeroBelowLowEnergyLimit(true),
- highEnergyLimit(500*keV),
+ highEnergyLimit(2*MeV),
  zeroAboveHighEnergyLimit(true)
 {
 }
 
-                                        G4DNAProtonRuddIonizationIncomingParticlePolicy :: G4DNAProtonRuddIonizationIncomingParticlePolicy()
+                                        G4DNAProtonChargeDecreaseIncomingParticlePolicy :: G4DNAProtonChargeDecreaseIncomingParticlePolicy()
 
-{
-}
+{}
 
-                                        G4DNAProtonRuddDataFilePolicy :: G4DNAProtonRuddDataFilePolicy()
-:
- lowEnergyLimit(100*eV), 
- zeroBelowLowEnergyLimit(false),
- highEnergyLimit(1000*keV),
- zeroAboveHighEnergyLimit(true),
- dataFileEnergyUnit(eV),
- dataFileCrossSectionUnit(m*m),
- dataFileName("RuddProtonIonizationCrossSection")
-{
-}
-
-const G4ParticleDefinition *            G4DNAProtonRuddIonizationIncomingParticlePolicy :: IncomingParticleDefinition(void) const
+const G4ParticleDefinition *            G4DNAProtonChargeDecreaseIncomingParticlePolicy :: IncomingParticleDefinition(void) const
 {
  return G4Proton::Proton();
 }
-

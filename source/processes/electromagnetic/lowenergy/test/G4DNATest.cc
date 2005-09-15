@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4DNATest.cc,v 1.8 2005-09-13 08:46:28 zfrancis Exp $
+// $Id: G4DNATest.cc,v 1.9 2005-09-15 09:03:58 zfrancis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
@@ -90,6 +90,7 @@
 #include "G4DNAAlphaPlusPlusExcitation.hh"
 #include "G4DNAElectronExcitation.hh"
 #include "G4DNAProtonRuddIonization.hh"
+#include "G4DNAProtonChargeDecrease.hh"
 
 //! \brief Options structure
 struct Options
@@ -418,7 +419,7 @@ G4VLowEnergyTestableDiscreteProcess * GetSelectedProcess(const struct Options & 
   G4DNAGenericIonsManager * genericIonsManager;
   genericIonsManager=G4DNAGenericIonsManager::Instance();
   
-  processes=new G4VLowEnergyTestableDiscreteProcess * [9];
+  processes=new G4VLowEnergyTestableDiscreteProcess * [10];
   processes[0]=new G4DNAElectronElasticBrenner;
   processes[1]=new G4DNAElectronElasticEmfietzoglou;
   processes[2]=new G4DNAProtonExcitation;
@@ -427,7 +428,8 @@ G4VLowEnergyTestableDiscreteProcess * GetSelectedProcess(const struct Options & 
   processes[5]=new G4DNAAlphaPlusPlusExcitation;
   processes[6]=new G4DNAElectronExcitation;
   processes[7]=new G4DNAProtonRuddIonization;
-  processes[8]=0;
+  processes[8]=new G4DNAProtonChargeDecrease;
+  processes[9]=0;
  }
  
  unsigned long i(0);
@@ -465,7 +467,7 @@ G4ParticleDefinition * const * ParticleList()
   G4DNAGenericIonsManager * genericIonsManager;
   genericIonsManager=G4DNAGenericIonsManager::Instance();
   
-  particles=new G4ParticleDefinition * [9];
+  particles=new G4ParticleDefinition * [10];
   particles[0]=G4Electron::Electron();
   particles[1]=G4Positron::Positron();
   particles[2]=G4Gamma::Gamma();
@@ -474,7 +476,8 @@ G4ParticleDefinition * const * ParticleList()
   particles[5]=genericIonsManager->GetIon("alpha++");
   particles[6]=genericIonsManager->GetIon("alpha+");
   particles[7]=genericIonsManager->GetIon("helium");
-  particles[8]=0;
+  particles[8]=genericIonsManager->GetIon("hydrogen");
+  particles[9]=0;
  }
  
  return particles;

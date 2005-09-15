@@ -1,0 +1,69 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4DNAProtonChargeDecreaseFinalStatesPolicy.icc,v 2005/09/14 16:12:34 Francis
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+
+#ifdef   G4DNAProtonChargeDecreaseFinalStatesPolicy_HH
+ #include "Randomize.hh"
+ #include "G4DNAGenericIonsManager.hh"
+
+ template <typename EnergyLimitsPolicy>
+ G4bool                                 G4DNAProtonChargeDecreaseFinalStatesPolicy<EnergyLimitsPolicy>::KillIncomingParticle(G4double energy) const
+ {
+ if(energy < EnergyLimitsPolicy::lowEnergyLimit) return(true);
+ else return (false);
+ }
+
+ template <typename EnergyLimitsPolicy>
+ G4int                               G4DNAProtonChargeDecreaseFinalStatesPolicy<EnergyLimitsPolicy>::NumberOfFinalStates(void) const
+ 
+ {
+ return(1);
+ }
+
+ template <typename EnergyLimitsPolicy>
+ void                               G4DNAProtonChargeDecreaseFinalStatesPolicy<EnergyLimitsPolicy>::BuildFinalStatesData(void) const
+ {}
+ 
+ template <typename EnergyLimitsPolicy>
+ G4ParticleDefinition*                               G4DNAProtonChargeDecreaseFinalStatesPolicy<EnergyLimitsPolicy>::OutgoingParticleDefinition(G4int finalStateIndex) 
+ {
+ G4int dummy;
+ dummy=finalStateIndex*1; // Warning dummy
+ G4DNAGenericIonsManager *instance;
+ instance  =  G4DNAGenericIonsManager::Instance();
+ return instance->GetIon("hydrogen"); 
+ }
+ 
+ template <typename EnergyLimitsPolicy>
+ G4double                               G4DNAProtonChargeDecreaseFinalStatesPolicy<EnergyLimitsPolicy>::OverallBindingEnergyConstant(G4int finalStateIndex) const
+ {
+ G4int dummy;
+ dummy = finalStateIndex; // Unused parameter Warning dummy
+ return(13.6*eV);
+ }
+
+#endif /* G4DNAProtonChargeDecreaseTotalCrossSectionPolicy_HH */
+
