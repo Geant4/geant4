@@ -1,0 +1,59 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4DNAChargeIncreaseInWater.icc,v 1.1 2005-09-15 18:24:17 zfrancis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+
+#ifdef    G4DNACHARGEINCREASEINWATER_HH
+
+#include "G4Electron.hh"
+
+ template<typename TotalCrossSectionPolicy, typename FinalStatesPolicy>
+ G4VParticleChange *                      G4DNAChargeIncreaseInWater<TotalCrossSectionPolicy, FinalStatesPolicy> :: PostStepDoIt(const G4Track & aTrack, const G4Step & aStep)
+ {
+ aParticleChange.Initialize(aTrack);
+ G4double k=aTrack.GetDynamicParticle()->GetKineticEnergy();
+
+ G4int    finalStateIndex(FinalStatesPolicy::NumberOfFinalStates());
+ aParticleChange.ProposeLocalEnergyDeposit(0.);
+ aParticleChange.SetNumberOfSecondaries(finalStateIndex+1);
+ G4DynamicParticle *newSecParticle[2];
+
+ G4DynamicParticle *newParticle = new G4DynamicParticle(FinalStatesPolicy::OutgoingParticleDefinition(finalStateIndex),
+           aTrack.GetDynamicParticle()->GetMomentumDirection(),
+           k-finalStateIndex*(FinalStatesPolicy::ElectronsBindingEnergyConstant(finalStateIndex)));
+ aParticleChange.AddSecondary(newParticle);
+
+ for(G4int i=0; i<finalStateIndex; i++)
+ {
+ newSecParticle[i] = new G4DynamicParticle(G4Electron::Electron(),
+           aTrack.GetDynamicParticle()->GetMomentumDirection(),
+           k*electron_mass_c2/proton_mass_c2);
+ aParticleChange.AddSecondary(newSecParticle[i]);
+ }
+ aParticleChange.ProposeTrackStatus(fStopAndKill);
+ 
+ return G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>::PostStepDoIt(aTrack, aStep);
+ }
+#endif /* G4DNACHARGEINCREASEINWATER_HH */

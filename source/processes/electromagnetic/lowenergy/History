@@ -1,4 +1,4 @@
-$Id: History,v 1.236 2005-09-15 09:04:16 zfrancis Exp $
+$Id: History,v 1.237 2005-09-15 18:24:17 zfrancis Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+15.09.2005   Ziad FRANCIS, tag emlowen-V07-01-08
+             * Implementation of Proton Charge Increase process according to
+               the model proposed by Dingfelder(2000). Files created :
+                      - G4DNAChargeIncreaseInWater.hh .icc
+                      - G4DNAProtonChargeIncrease.hh .cc
+                      - G4DNAProtonChargeIncreaseTotalCrossSectionPolicy.hh
+                                                                        .icc
+                      - G4DNAProtonChargeIncreaseFinalStatesPolicy.hh .icc
+             * G4DNATest was modified in order to take into account this
+               proton charge increase process in liquid water.
+             * G4DNAProtonChargeIncrease was tested and seems to be OK!
+ 
 15.09.2005   Ziad FRANCIS, tag emlowen-V07-01-07
              * Implementation of slow protons Charge Transfer process
                according to the model used by M.Dingfelder(2000). Files
