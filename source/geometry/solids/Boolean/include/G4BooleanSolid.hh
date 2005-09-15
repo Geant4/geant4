@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.hh,v 1.11 2004-10-10 10:50:46 johna Exp $
+// $Id: G4BooleanSolid.hh,v 1.12 2005-09-15 08:08:54 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -85,6 +85,7 @@ class G4BooleanSolid : public G4VSolid
     inline G4double GetCubVolEpsilon() const;
     inline void SetCubVolStatistics(G4int st);
     inline void SetCubVolEpsilon(G4double ep);
+    G4ThreeVector GetPointOnSurface() const;
 
   protected:
   

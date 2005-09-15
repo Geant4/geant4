@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.hh,v 1.16 2004-10-10 10:50:48 johna Exp $
+// $Id: G4DisplacedSolid.hh,v 1.17 2005-09-15 08:08:55 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -100,6 +100,8 @@ class G4DisplacedSolid : public G4VSolid
                             const G4VPhysicalVolume* pRep ) ;
 
     void CleanTransformations();
+
+    G4ThreeVector GetPointOnSurface() const;
 
   public:  // with description 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.cc,v 1.16 2005-04-04 09:44:56 gcosmo Exp $
+// $Id: G4BooleanSolid.cc,v 1.17 2005-09-15 08:08:55 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for the abstract base class for solids created by boolean 
@@ -36,6 +36,7 @@
 #include "G4BooleanSolid.hh"
 #include "G4VSolid.hh"
 #include "G4Polyhedron.hh"
+#include "Randomize.hh"
 
 //////////////////////////////////////////////////////////////////
 //
@@ -181,4 +182,28 @@ G4Polyhedron* G4BooleanSolid::GetPolyhedron () const
       fpPolyhedron = CreatePolyhedron();
     }
   return fpPolyhedron;
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+//
+// Return a point (G4ThreeVector) randomly and uniformly selected
+// on the solid surface
+//
+
+G4ThreeVector G4BooleanSolid::GetPointOnSurface() const
+{
+  G4bool condition = true;
+  G4double rand;
+  G4ThreeVector p;
+
+  while(condition)
+  {
+    rand = G4UniformRand();
+
+    if(rand > 0.5) p = fPtrSolidA->GetPointOnSurface();
+    else           p = fPtrSolidB->GetPointOnSurface();
+
+    if(Inside(p) == kSurface) break;
+  }
+  return p;
 }

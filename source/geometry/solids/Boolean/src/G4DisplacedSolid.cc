@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.cc,v 1.23 2005-03-23 17:16:31 allison Exp $
+// $Id: G4DisplacedSolid.cc,v 1.24 2005-09-15 08:08:55 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for G4DisplacedSolid class for boolean 
@@ -328,6 +328,21 @@ G4DisplacedSolid::ComputeDimensions(       G4VPVParameterisation*,
                 "NotApplicable", FatalException,
                 "Method not applicable in this context!");
 }
+
+//////////////////////////////////////////////////////////////////////////////////
+//
+// Return a point (G4ThreeVector) randomly and uniformly selected
+// on the solid surface
+//
+
+G4ThreeVector G4DisplacedSolid::GetPointOnSurface() const
+{
+  G4ThreeVector p =  fPtrSolid->GetPointOnSurface();
+  return fDirectTransform->TransformPoint(p);
+}
+
+
+
 
 //////////////////////////////////////////////////////////////////////////
 //
