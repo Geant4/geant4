@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.hh,v 1.2 2004-10-10 10:15:09 johna Exp $
+// $Id: G4ReflectedSolid.hh,v 1.3 2005-09-15 09:03:38 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -62,32 +62,35 @@ class G4ReflectedSolid : public G4VSolid
 
     // Includes all the methods that a solid requires.
 
-    EInside Inside( const G4ThreeVector& p ) const ; 
+    EInside Inside( const G4ThreeVector& p ) const; 
 
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,
                             const G4AffineTransform& pTransform,
-                                  G4double& pMin, G4double& pMax) const ;
+                                  G4double& pMin, G4double& pMax) const;
 
-    G4ThreeVector SurfaceNormal( const G4ThreeVector& p ) const ;
+    G4ThreeVector SurfaceNormal( const G4ThreeVector& p ) const;
 
     G4double DistanceToIn( const G4ThreeVector& p,
-                           const G4ThreeVector& v  ) const ;
+                           const G4ThreeVector& v  ) const;
 
-    G4double DistanceToIn( const G4ThreeVector& p) const ;
+    G4double DistanceToIn( const G4ThreeVector& p) const;
 
     G4double DistanceToOut( const G4ThreeVector& p,
                             const G4ThreeVector& v,
                             const G4bool calcNorm=false,
                                   G4bool *validNorm=0,
-                                  G4ThreeVector *n=0      ) const ;
+                                  G4ThreeVector *n=0      ) const;
 
     G4double DistanceToOut( const G4ThreeVector& p ) const ;
 
     void ComputeDimensions(       G4VPVParameterisation* p,
                             const G4int n,
-                            const G4VPhysicalVolume* pRep ) ;
-                                   
+                            const G4VPhysicalVolume* pRep );
+
+    G4ThreeVector GetPointOnSurface() const;
+
+                                  
   public:  // with description 
 
     virtual G4GeometryType  GetEntityType() const;
