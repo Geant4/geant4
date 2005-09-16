@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering80.cc,v 1.3 2005-09-12 11:55:50 urban Exp $
+// $Id: G4MultipleScattering80.cc,v 1.4 2005-09-16 16:47:46 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -67,6 +67,7 @@
 // 15-04-05 optimize internal interface (V.Ivanchenko)
 // 12-09-05 new TruePathLengthLimit - facrange works for every track from
 //             start, geometry also influences the limit
+// 16-09-05 reordering the conditions in TruePathLengthLimit->improvement in timing
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -190,36 +191,39 @@ G4double G4MultipleScattering80::TruePathLengthLimit(const G4Track&  track,
       stepnobound      = 100000000;
     }
   }
-
-  // simple case: particle is not able to reach the boundary
-  if(safety >= range)
-    tPathLength = range ;
+  // small steps just after crossing a boundary
+  if((track.GetTrackID() == tid) && (track.GetParentID() == pid)
+     && (track.GetCurrentStepNumber() >= stepnobound) &&
+     (track.GetCurrentStepNumber() <= stepnobound+nsmallstep))
+  {
+    if(track.GetCurrentStepNumber() == stepnobound)
+      tPathLength = geommin ;
+    else
+      if(tPathLength > tskin) tPathLength = tskin;
+  }
   else
   {
-    // small steps just after crossing a boundary
-    if((track.GetTrackID() == tid) && (track.GetParentID() == pid)
-       && (track.GetCurrentStepNumber() >= stepnobound) &&
-       (track.GetCurrentStepNumber() <= stepnobound+nsmallstep))   
+    //check geometry again (small steps before reaching a boundary)
+    if(geomlimit > facgeom*tskin) geomlimit -= facgeom*tskin;
+    else if(geomlimit > tskin) geomlimit = tskin;
+    if(geomlimit < geommin) geomlimit = geommin;
+
+    if(tPathLength > geomlimit)
     {
-      if(track.GetCurrentStepNumber() == stepnobound)
-        tPathLength = geommin ;
-      else
-        if(tPathLength > tskin) tPathLength = tskin;
+      tPathLength = geomlimit;
+    }
+    else if(safety >= range)
+    {
+      tPathLength = range ;
     }
     else
     {
       if(tPathLength > tlimit) tPathLength = tlimit;
 
-      //jyst to speed up the program
+      //just to speed up the program
       if((facsafety*safety > tlimit) && (currentMinimalStep > facsafety*safety))
         tPathLength = facsafety*safety;
     }
-    //check geometry as well (small steps before reaching a boundary)
-    if(geomlimit > facgeom*tskin) geomlimit -= facgeom*tskin;
-    else if(geomlimit > tskin) geomlimit = tskin;
-    if(geomlimit < geommin) geomlimit = geommin;
-
-    if(tPathLength > geomlimit) tPathLength = geomlimit;
   }
 
   return tPathLength ;
