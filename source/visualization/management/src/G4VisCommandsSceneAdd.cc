@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.56 2005-06-27 15:32:46 gunter Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.57 2005-09-16 01:30:56 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -49,6 +49,7 @@
 #include "G4UnionSolid.hh"
 #include "G4SubtractionSolid.hh"
 #include "G4Polyhedron.hh"
+#include "G4UImanager.hh"
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
@@ -370,6 +371,30 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
     if (verbosity >= G4VisManager::errors) {
       G4cout << "ERROR: Logical volume " << name
 	     << " not found in logical volume Store." << G4endl;
+    }
+    return;
+  }
+
+  const std::vector<G4VModel*>& rdModelList = pScene -> GetRunDurationModelList();
+  std::vector<G4VModel*>::const_iterator i;
+  for (i = rdModelList.begin(); i != rdModelList.end(); ++i) {
+    if ((*i) -> GetGlobalDescription().find("Volume") != std::string::npos) break;
+  }
+  if (i != rdModelList.end()) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "There is already a volume, \""
+             << (*i) -> GetGlobalDescription()
+             << "\",\n in the run-duration model list of scene \""
+             << pScene -> GetName()
+             << "\".\n Your logical volume must be the only volume in the scene."
+	     << "\n Create a new scene and try again:"
+	     << "\n  /vis/specify " << name
+	     << "\n or"
+	     << "\n  /vis/scene/create"
+	     << "\n  /vis/scene/add/logicalVolume " << name
+	     << "\n  /vis/sceneHandler/attach"
+	     << "\n (and also, if necessary, /vis/viewer/flush)"
+             << G4endl;
     }
     return;
   }
@@ -1128,11 +1153,26 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
   G4TrajectoriesModel* model = new G4TrajectoriesModel(drawingMode);
   const G4String& currentSceneName = pScene -> GetName ();
   pScene -> AddEndOfEventModel (model, warn);
+
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  G4int keepVerbose = UImanager->GetVerboseLevel();
+  G4int newVerbose = 0;
+  if (keepVerbose >= 2 ||
+      fpVisManager->GetVerbosity() >= G4VisManager::confirmations)
+    newVerbose = 2;
+  UImanager->SetVerboseLevel(newVerbose);
+  UImanager->ApplyCommand("/tracking/storeTrajectory 1");
+  UImanager->SetVerboseLevel(keepVerbose);
+
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "Trajectories will be drawn with mode "
 	   << drawingMode
 	   << " in scene \""
 	   << currentSceneName << "\"."
+	   << G4endl;
+  }
+  if (verbosity >= G4VisManager::warnings) {
+    G4cout << "WARNING: \"storeTrajectory\" has been activated."
 	   << G4endl;
   }
 }
@@ -1345,6 +1385,31 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
   G4PhysicalVolumeModel* model = 0;
   G4VPhysicalVolume* foundVolume = 0;
   G4int foundDepth = 0;
+
+  const std::vector<G4VModel*>& rdModelList = pScene -> GetRunDurationModelList();
+  std::vector<G4VModel*>::const_iterator i;
+  for (i = rdModelList.begin(); i != rdModelList.end(); ++i) {
+    if ((*i) -> GetGlobalDescription().find("G4PhysicalVolumeModel")
+	!= std::string::npos) {
+      if (((G4PhysicalVolumeModel*)(*i)) -> GetTopPhysicalVolume () == world) break;
+    }
+  }
+  if (i != rdModelList.end()) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: There is already a volume, \""
+             << (*i) -> GetGlobalDescription()
+             << "\",\n in the run-duration model list of scene \""
+             << pScene -> GetName()
+             << "\".\n To get a clean scene:"
+	     << "\n  /vis/drawVolume " << name
+	     << "\n or"
+	     << "\n  /vis/scene/create"
+	     << "\n  /vis/scene/add/volume " << name
+	     << "\n  /vis/sceneHandler/attach"
+	     << "\n (and also, if necessary, /vis/viewer/flush)"
+             << G4endl;
+    }
+  }
 
   if (name == "world") {
     if (world) {
