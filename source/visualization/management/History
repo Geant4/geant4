@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2005-09-16 01:35:17 allison Exp $
+$Id: History,v 1.8 2005-09-16 20:45:48 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,12 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+16th September 2005  John Allison (visman-V07-01-04)
+- Simplified use of ConcreteInstance.  It is now always non-zero for
+  an instantiated vis manager; invalid views are reported by the vis
+  manager.  The exception is /vis/disable which zeros it; /vis/enable
+  or any valid command resets it.
 
 16th September 2005  John Allison (visman-V07-01-03)
 - Issue "/tracking/storeTrajectory 1" on /vis/scene/add/trajectories.
