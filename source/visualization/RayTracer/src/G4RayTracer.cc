@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracer.cc,v 1.17 2005-08-18 17:08:25 asaim Exp $
+// $Id: G4RayTracer.cc,v 1.18 2005-09-16 01:22:33 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -253,7 +253,11 @@ G4bool G4RayTracer::CreateBitMap()
 	  pWorld->GetLogicalVolume()->GetSolid()->
 	  DistanceToIn(rayPosition,rayDirection);  
 	if (outsideDistance != kInfinity) {
-	  rayPosition = rayPosition+outsideDistance*rayDirection;
+	  // Borrowing form geometry, where 1e-8 < epsilon < 1e-3, in
+	  // absolute/internal length units, is used for ensuring good
+	  // nehaviour, choose to add 0.001 to ensure rayPosition is
+	  // definitely inside the world volume (JA 16/9/2005)...
+	  rayPosition = rayPosition+(outsideDistance+0.001)*rayDirection;
 	}
 	else {
 	  interceptable = false;

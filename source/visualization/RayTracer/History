@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2005-08-19 12:52:48 allison Exp $
+$Id: History,v 1.29 2005-09-16 01:22:33 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+16th September 2005  John Allison (raytracer-V07-01-02)
+(On branch raytracer-V07-01-01-branch; changes merged into head.)
+- Bug fix (black holes): Made small epsilon push into world to ensure inside.
 
 20th July 2005  John Allison (raytracer-V07-01-01)
 - Protected RayTracerX by G4VIS macro.
