@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: VisActionWithAttDefs.cc,v 1.7 2005-09-13 16:51:58 allison Exp $
+// $Id: VisActionWithAttDefs.cc,v 1.8 2005-09-16 01:10:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "VisActionWithAttDefs.hh"
@@ -54,6 +54,8 @@ VisActionWithAttDefs::VisActionWithAttDefs ()
     G4AttDef("diag","Diagonal","Physics","mmm","G4double");
   (*fpAttDefs)["dims"] =
     G4AttDef("dims","Half sides","Physics","G4BestUnit","G4ThreeVector");
+  (*fpAttDefs)["time"] =
+    G4AttDef("time","Time of beholding","Physics","G4BestUnit","G4double");
 
   fpAttValues = new std::vector<G4AttValue>;
   fpAttValues->push_back(G4AttValue("name","Cyan box with attributes",""));
@@ -79,6 +81,8 @@ VisActionWithAttDefs::VisActionWithAttDefs ()
        "Length"),""));
   fpAttValues->push_back
     (G4AttValue("ScoobyDoo","Rubbish",""));
+  fpAttValues->push_back
+    (G4AttValue("time",G4BestUnit(5*s,"Time"),""));
 
   G4AttCheck(fpAttValues,fpAttDefs).Check
     ("VisActionWithAttDefs::VisActionWithAttDefs");  // Check only.
