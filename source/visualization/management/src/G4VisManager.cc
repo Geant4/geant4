@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.63 2005-03-09 23:48:15 allison Exp $
+// $Id: G4VisManager.cc,v 1.64 2005-09-16 20:44:54 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,6 +96,7 @@ G4VisManager::G4VisManager ():
   else {
 
     fpInstance = this;
+    SetConcreteInstance(this);
 
     fpStateDependent = new G4VisStateDependent (this);
     // No need to delete this; G4StateManager does this.
@@ -226,6 +227,7 @@ void G4VisManager::Disable() {
   if (fVerbosity >= confirmations) {
     G4cout <<
       "G4VisManager::Disable: visualization disabled."
+      "\n  The pointer returned by GetConcreteInstance will be zero."
       "\n  Note that it will become enabled after some valid vis commands."
 	   << G4endl;
   }
@@ -441,8 +443,6 @@ void G4VisManager::CreateViewer (G4String name) {
       fpViewer -> Initialise ();
       fpSceneHandler -> AddViewerToList (fpViewer);
       fpSceneHandler -> SetCurrentViewer (fpViewer);
-      // Make it possible for user action code to Draw.
-      SetConcreteInstance(this);
 
       const G4ViewParameters& vp = fpViewer->GetViewParameters();
       G4bool warn = false;
@@ -625,15 +625,11 @@ void G4VisManager::SetCurrentGraphicsSystem (G4VGraphicsSystem* pSystem) {
       }
       else {
 	fpViewer = 0;
-	// Make it impossible for user action code to Draw.
-	SetConcreteInstance(0);
       }
     }
     else {
       fpSceneHandler = 0;
       fpViewer = 0;
-      // Make it impossible for user action code to Draw.
-      SetConcreteInstance(0);
     }
   }
 }
@@ -676,8 +672,6 @@ void G4VisManager::SetCurrentSceneHandler (G4VSceneHandler* pSceneHandler) {
   }
   else {
     fpViewer = 0;
-    // Make it impossible for user action code to Draw.
-    SetConcreteInstance(0);
     if (fVerbosity >= warnings) {
       G4cout <<
 	"WARNING: No viewers for this scene handler - please create one."
@@ -800,11 +794,19 @@ void G4VisManager::PrintInvalidPointers () const {
       G4cout << "\n null graphics system pointer.";
     }
     else {
-      G4cout << "\n graphics system is " << fpGraphicsSystem -> GetName ()
+      G4cout << "\n  Graphics system is " << fpGraphicsSystem -> GetName ()
 	     << " but:";
-      if (!fpScene) G4cout << "\nNull scene pointer. ";
-      if (!fpSceneHandler) G4cout << "\nNull scene handler pointer. ";
-      if (!fpViewer ) G4cout << "\nNull viewer pointer. ";
+      if (!fpScene)
+	G4cout <<
+	  "\n  Null scene pointer. Use \"/vis/drawVolume\" or"
+	  " \"/vis/scene/create\".";
+      if (!fpSceneHandler)
+	G4cout <<
+	  "\n  Null scene handler pointer. Use \"/vis/open\" or"
+	  " \"/vis/sceneHandler/create\".";
+      if (!fpViewer )
+	G4cout <<
+	  "\n  Null viewer pointer. Use \"/vis/viewer/create\".";
     }
     G4cout << G4endl;
   }
@@ -971,12 +973,22 @@ G4bool G4VisManager::IsValidView () {
 
   if (!fInitialised) Initialise ();
 
-  SetConcreteInstance(0);
-  // Unless we survive a few preliminary tests, users must not use.
-
-  if (!fpGraphicsSystem) return false;
-  // Simply return without printing - we do not want printing if the
-  // user simply does not want to use graphics, e.g., in batch mode.
+  static G4bool noGSPrinting = true;
+  if (!fpGraphicsSystem) {
+    // Limit printing - we do not want printing if the user simply does
+    // not want to use graphics, e.g., in batch mode.
+    if (noGSPrinting) {
+      noGSPrinting = false;
+      if (fVerbosity >= errors) {
+	G4cout <<
+  "ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system."
+  "\n  Suppress instantiation of vis manager (G4VisExecutive) or"
+  "\n  use \"/vis/open\" or \"/vis/sceneHandler/create\"."
+	       << G4endl;
+      }
+    }
+    return false;
+  }
 
   if ((!fpScene) || (!fpSceneHandler) || (!fpViewer)) {
     if (fVerbosity >= errors) {
@@ -1035,7 +1047,6 @@ G4bool G4VisManager::IsValidView () {
     return false;
   }
 
-  SetConcreteInstance(this);  // Unless we find another problem, users can use!
   G4bool isValid = true;
   if (fpScene -> IsEmpty ()) {  // Add world by default if possible...
     G4bool warn(fVerbosity >= warnings);
@@ -1050,7 +1061,6 @@ G4bool G4VisManager::IsValidView () {
 	       << G4endl;
       }
       isValid = false;
-      SetConcreteInstance(0);  // Users must not use!
     }
     else {
       G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/viewer/reset");
@@ -1062,5 +1072,6 @@ G4bool G4VisManager::IsValidView () {
       }
     }
   }
+  if (isValid) SetConcreteInstance(this);
   return isValid;
 }
