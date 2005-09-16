@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.77 2005-08-10 08:23:50 gcosmo Exp $
+cvs log $Id: History,v 1.78 2005-09-16 01:05:07 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16th September 2005  John Allison  (greps-V07-01-02)
+- G4AttCheck.cc: Added time to legal G4AttValues.
 
 10th August 2005  Gabriele Cosmo  (greps-V07-01-02)
 - Added Polyhedron description for new G4EllipticalCone shape.
