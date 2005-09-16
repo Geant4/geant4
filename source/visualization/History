@@ -1,4 +1,4 @@
-$Id: History,v 1.299 2005-09-16 01:36:22 allison Exp $
+$Id: History,v 1.300 2005-09-16 20:47:57 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -29,6 +29,7 @@ New tags to be included 16th Sep 2005 (JA):
     + Issue "/tracking/storeTrajectory 1" on /vis/scene/add/trajectories.
     + Warning: Attempt to add volume to a scene already containing the world.
     + Error: Logical volume model must be only volume model in scene.
+  o visman-V07-01-04: Simplified use of ConcreteInstance..
   o raytracer-V07-01-02: Bug fix (black holes).
   o vistest-V07-01-02: Added a G4AttValue with time.
 
