@@ -21,27 +21,27 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNARuddIonizationFinalStatesPolicy.icc,v 2005/07/27 14:52:54 Francis
+// $Id: G4DNAHydrogenRuddIonizationFinalStatesPolicy.icc,v 2005/09/16 09:27:54 Ziad FRANCIS
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#ifdef   G4DNARuddIonizationFinalStatesPolicy_HH
+#ifdef   G4DNAHydrogenRuddIonizationFinalStatesPolicy_HH
  #include "Randomize.hh"
 
 
  template <typename EnergyLimitsPolicy>
- G4bool                                 G4DNARuddIonizationFinalStatesPolicy<EnergyLimitsPolicy> :: KillIncomingParticle(G4double energy) const
+ G4bool                                 G4DNAHydrogenRuddIonizationFinalStatesPolicy<EnergyLimitsPolicy> :: KillIncomingParticle(G4double energy) const
  {
  if(energy < EnergyLimitsPolicy::lowEnergyLimit) return(true);
  else return (false);
  }
 
  template <typename EnergyLimitsPolicy>
- void                               G4DNARuddIonizationFinalStatesPolicy<EnergyLimitsPolicy> ::BuildFinalStatesData(void) const
+ void                               G4DNAHydrogenRuddIonizationFinalStatesPolicy<EnergyLimitsPolicy> ::BuildFinalStatesData(void) const
  {}
 
  template <typename EnergyLimitsPolicy>
- G4double                               G4DNARuddIonizationFinalStatesPolicy<EnergyLimitsPolicy> ::RandomizeEjectedElectronEnergy(G4double k, G4int shell) const
+ G4double                               G4DNAHydrogenRuddIonizationFinalStatesPolicy<EnergyLimitsPolicy> ::RandomizeEjectedElectronEnergy(G4double k, G4int shell) const
  {
  G4double maximumKineticEnergyTransfer = 4.* (electron_mass_c2 / proton_mass_c2) * k;
  G4double crossSectionMaximum=0.;
@@ -57,7 +57,7 @@
  }
  
  template <typename EnergyLimitsPolicy>
- void                               G4DNARuddIonizationFinalStatesPolicy<EnergyLimitsPolicy> ::RandomizeEjectedElectronDirection(G4double k, G4double secKinetic, G4double & cosTheta, G4double & phi ) const
+ void                               G4DNAHydrogenRuddIonizationFinalStatesPolicy<EnergyLimitsPolicy> ::RandomizeEjectedElectronDirection(G4double k, G4double secKinetic, G4double & cosTheta, G4double & phi ) const
  {
  G4double maxSecKinetic = 4.* (electron_mass_c2 / proton_mass_c2) * k;
  phi = twopi * G4UniformRand();
@@ -65,23 +65,23 @@
  }
 
  template <typename EnergyLimitsPolicy>
- G4double                               G4DNARuddIonizationFinalStatesPolicy<EnergyLimitsPolicy>::EnergyConstant(G4int ionizationLevel) const
+ G4double                               G4DNAHydrogenRuddIonizationFinalStatesPolicy<EnergyLimitsPolicy>::EnergyConstant(G4int ionizationLevel) const
  {
- const G4double bindingEnergy[5]={10.79*eV, 13.39*eV, 16.05*eV, 32.30*eV, 539.0*eV};
- return(bindingEnergy[ionizationLevel]); 
+ const G4double bindingEnergy[]={10.79*eV, 13.39*eV, 16.05*eV, 32.30*eV, 539.0*eV};
+ return(bindingEnergy[ionizationLevel]);
  }
  
 
  template <typename EnergyLimitsPolicy>
- G4double                               G4DNARuddIonizationFinalStatesPolicy<EnergyLimitsPolicy>::DifferentialCrossSection(G4double k, G4double energyTransfer, G4int ionizationLevelIndex) const
+ G4double                               G4DNAHydrogenRuddIonizationFinalStatesPolicy<EnergyLimitsPolicy>::DifferentialCrossSection(G4double k, G4double energyTransfer, G4int ionizationLevelIndex) const
  {
   // Shells ids are 0 1 2 3 4 (4 is k shell)
   // !!Attention, "energyTransfer" here is the energy transfered to the electron which means
   //             that the secondary kinetic energy is w = energyTransfer - bindingEnergy
   //
-  //   ds     S           F1(nu) + w * F2(nu)
-  //  ---- = --- -------------------------------------------
-  //   dw     Bj  (1+w)^3 * [1 + exp{alpha * (w - wc) / nu}]
+  //   ds            S                F1(nu) + w * F2(nu)
+  //  ---- = g(k) * ----     -------------------------------------------
+  //   dw            Bj       (1+w)^3 * [1 + exp{alpha * (w - wc) / nu}]
   //
   // w is the secondary electron kinetic Energy in eV
   //
@@ -127,11 +127,14 @@
 
  G4double F1 = L1+H1;
  G4double F2 = (L2*H2)/(L2+H2);
+ 
+ G4double value = (log(k/eV)-4.2)/0.5;
+ G4double g = (0.8/(1+exp(value))) + 0.9;
 
 
- G4double sigma = Gj[j] * (S/EnergyConstant(ionizationLevelIndex)) * ( (F1+w*F2) / ( pow((1.+w),3) * ( 1.+exp(Alpha*(w-wc)/v))) );
+ G4double sigma = g * Gj[j] * (S/EnergyConstant(ionizationLevelIndex)) * ( (F1+w*F2) / ( pow((1.+w),3) * ( 1.+exp(Alpha*(w-wc)/v))) );
 return(sigma);
 }
 
-#endif /* G4DNARuddIonizationTotalCrossSectionPolicy_HH */
+#endif /* G4DNAHydrogenRuddIonizationTotalCrossSectionPolicy_HH */
 

@@ -1,4 +1,4 @@
-//
+ //
 // ********************************************************************
 // * DISCLAIMER                                                       *
 // *                                                                  *
@@ -21,28 +21,43 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProtonChargeIncrease.cc,v 1.2 2005-09-16 08:41:52 zfrancis Exp $
+// $Id: G4DNAHydrogenRuddIonization.cc,v 1.1 2005-09-16 08:41:52 zfrancis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
-#include "G4DNAProtonChargeIncrease.hh"
+#include "G4DNAHydrogenRuddIonization.hh"
 #include "G4DNAGenericIonsManager.hh"
 
-                                        G4DNAProtonChargeIncreaseEnergyLimitsPolicy :: G4DNAProtonChargeIncreaseEnergyLimitsPolicy()
+                                        G4DNAHydrogenRuddIonizationEnergyLimitsPolicy :: G4DNAHydrogenRuddIonizationEnergyLimitsPolicy()
 :
  lowEnergyLimit(100*eV),
- zeroBelowLowEnergyLimit(false),
+ zeroBelowLowEnergyLimit(true),
  highEnergyLimit(100*MeV),
- zeroAboveHighEnergyLimit(true)
+ zeroAboveHighEnergyLimit(false)
 {
 }
 
-                                        G4DNAProtonChargeIncreaseIncomingParticlePolicy :: G4DNAProtonChargeIncreaseIncomingParticlePolicy()
+                                        G4DNAHydrogenRuddIonizationIncomingParticlePolicy :: G4DNAHydrogenRuddIonizationIncomingParticlePolicy()
 
-{}
+{
+}
 
-const G4ParticleDefinition *            G4DNAProtonChargeIncreaseIncomingParticlePolicy :: IncomingParticleDefinition(void) const
+                                        G4DNAHydrogenRuddDataFilePolicy :: G4DNAHydrogenRuddDataFilePolicy()
+:
+ lowEnergyLimit(100*eV),
+ zeroBelowLowEnergyLimit(true),
+ highEnergyLimit(100*MeV),
+ zeroAboveHighEnergyLimit(false),
+ dataFileEnergyUnit(eV),
+ dataFileCrossSectionUnit(m*m),
+ dataFileName("RuddHydrogenIonizationCrossSection")
+{
+}
+
+const G4ParticleDefinition *            G4DNAHydrogenRuddIonizationIncomingParticlePolicy :: IncomingParticleDefinition(void) const
 {
  G4DNAGenericIonsManager *instance;
  instance = G4DNAGenericIonsManager::Instance();
+
  return instance->GetIon("hydrogen");
 }
+

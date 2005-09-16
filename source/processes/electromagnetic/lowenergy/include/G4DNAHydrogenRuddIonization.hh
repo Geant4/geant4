@@ -21,22 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProtonRuddIonization.hh,v 1.2 2005-09-16 08:41:52 zfrancis Exp $
+// $Id: G4DNAHydrogenRuddIonization.hh,v 1.1 2005-09-16 08:41:52 zfrancis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
-#ifndef   G4DNAPROTONRUDDIONIZATION_HH
- #define  G4DNAPROTONRUDDIONIZATION_HH 1
+#ifndef   G4DNAHYDROGENRUDDIONIZATION_HH
+ #define  G4DNAHYDROGENRUDDIONIZATION_HH 1
 
  #include "G4DNAIonizationInWater.hh"
  #include "G4DNATotalCrossSectionFromFilePolicy.hh"
- #include "G4DNARuddIonizationFinalStatesPolicy.hh"
+ #include "G4DNAHydrogenRuddIonizationFinalStatesPolicy.hh"
  #include "G4LogLogInterpolation.hh"
  #include "G4DNAStopAndKillBelowEnergyLimitPolicy.hh"
 
- class G4DNAProtonRuddIonizationEnergyLimitsPolicy
+ class G4DNAHydrogenRuddIonizationEnergyLimitsPolicy
  {
   protected:
-                      G4DNAProtonRuddIonizationEnergyLimitsPolicy();
+                      G4DNAHydrogenRuddIonizationEnergyLimitsPolicy();
 
    const G4double     lowEnergyLimit;
    const G4bool       zeroBelowLowEnergyLimit;
@@ -44,17 +44,17 @@
    const G4bool       zeroAboveHighEnergyLimit;
  };
 
- class G4DNAProtonRuddIonizationIncomingParticlePolicy
+ class G4DNAHydrogenRuddIonizationIncomingParticlePolicy
  {
   protected:
-                                        G4DNAProtonRuddIonizationIncomingParticlePolicy();
+                                        G4DNAHydrogenRuddIonizationIncomingParticlePolicy();
    const G4ParticleDefinition *         IncomingParticleDefinition(void) const;
  };
- 
- class G4DNAProtonRuddDataFilePolicy
+
+ class G4DNAHydrogenRuddDataFilePolicy
  {
   public :
-                                        G4DNAProtonRuddDataFilePolicy();
+                                        G4DNAHydrogenRuddDataFilePolicy();
    const G4double                       lowEnergyLimit;
    const G4bool                         zeroBelowLowEnergyLimit;
    const G4double                       highEnergyLimit;
@@ -64,10 +64,10 @@
    const char * const                   dataFileName;
  };
  
- class G4DNAProtonRuddIonization : public G4DNAIonizationInWater<G4DNATotalCrossSectionFromFilePolicy<G4DNAProtonRuddIonizationIncomingParticlePolicy, G4DNAProtonRuddDataFilePolicy, G4LogLogInterpolation>, G4DNARuddIonizationFinalStatesPolicy<G4DNAProtonRuddIonizationEnergyLimitsPolicy> >
+ class G4DNAHydrogenRuddIonization : public G4DNAIonizationInWater<G4DNATotalCrossSectionFromFilePolicy<G4DNAHydrogenRuddIonizationIncomingParticlePolicy, G4DNAHydrogenRuddDataFilePolicy, G4LogLogInterpolation>, G4DNAHydrogenRuddIonizationFinalStatesPolicy<G4DNAHydrogenRuddIonizationEnergyLimitsPolicy> >
  {
   public:
-                                         G4DNAProtonRuddIonization(const G4String & name = "G4DNAProtonRuddIonization") : G4DNAIonizationInWater<G4DNATotalCrossSectionFromFilePolicy<G4DNAProtonRuddIonizationIncomingParticlePolicy, G4DNAProtonRuddDataFilePolicy, G4LogLogInterpolation>, G4DNARuddIonizationFinalStatesPolicy<G4DNAProtonRuddIonizationEnergyLimitsPolicy> > (name) {}
-   virtual                              ~G4DNAProtonRuddIonization() {}
+                                         G4DNAHydrogenRuddIonization(const G4String & name = "G4DNAHydrogenRuddIonization") : G4DNAIonizationInWater<G4DNATotalCrossSectionFromFilePolicy<G4DNAHydrogenRuddIonizationIncomingParticlePolicy, G4DNAHydrogenRuddDataFilePolicy, G4LogLogInterpolation>, G4DNAHydrogenRuddIonizationFinalStatesPolicy<G4DNAHydrogenRuddIonizationEnergyLimitsPolicy> > (name) {}
+   virtual                              ~G4DNAHydrogenRuddIonization() {}
  };
-#endif /* G4DNAPROTONRUDDIONIZATION_HH */
+#endif /* G4DNAHYDROGENRUDDIONIZATION_HH */

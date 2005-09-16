@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNARuddIonizationTotalCrossSectionPolicy, 2005/09/13 10:17:45 francis
-// GEANT4 tag $Name: emlowen-V07-01-06
+// $Id: G4DNAHydrogenRuddIonizationTotalCrossSectionPolicy, 2005/09/16 9:25:45 Ziad FRANCIS
+// GEANT4 tag $Name: emlowen-V07-01-09
 
-#ifndef  G4DNARuddIonizationFinalStatesPolicy_HH
-#define  G4DNARuddIonizationFinalStatesPolicy_HH 1
+#ifndef  G4DNAHydrogenRuddIonizationFinalStatesPolicy_HH
+#define  G4DNAHydrogenRuddIonizationFinalStatesPolicy_HH 1
 
  #include "G4DNACrossSectionDataSet.hh"
 
@@ -39,11 +39,11 @@
  //  - [protected] const double zeroAboveLowEnergyLimit
 
  template <typename EnergyLimitsPolicy>
- class G4DNARuddIonizationFinalStatesPolicy : public EnergyLimitsPolicy
+ class G4DNAHydrogenRuddIonizationFinalStatesPolicy : public EnergyLimitsPolicy
  {
   protected:
-                                        G4DNARuddIonizationFinalStatesPolicy() {}
-                                       ~G4DNARuddIonizationFinalStatesPolicy() {}
+                                        G4DNAHydrogenRuddIonizationFinalStatesPolicy() {}
+                                       ~G4DNAHydrogenRuddIonizationFinalStatesPolicy() {}
 
 
   G4bool                                KillIncomingParticle(G4double energy) const;
@@ -55,13 +55,13 @@
 
   private:
   G4double                             DifferentialCrossSection(G4double k, G4double energyTransfer, G4int shell) const;
-
+ 
   // Hides default constructor and assignment operator as private
-                                        G4DNARuddIonizationFinalStatesPolicy(const G4DNARuddIonizationFinalStatesPolicy & copy);
-   G4DNARuddIonizationFinalStatesPolicy & operator=(const G4DNARuddIonizationFinalStatesPolicy & right);
+                                        G4DNAHydrogenRuddIonizationFinalStatesPolicy(const G4DNAHydrogenRuddIonizationFinalStatesPolicy & copy);
+   G4DNAHydrogenRuddIonizationFinalStatesPolicy & operator=(const G4DNAHydrogenRuddIonizationFinalStatesPolicy & right);
  };
 
- #include "G4DNARuddIonizationFinalStatesPolicy.icc"
-#endif /* G4DNARuddIonizationFinalStatesPolicy_HH */
+ #include "G4DNAHydrogenRuddIonizationFinalStatesPolicy.icc"
+#endif /* G4DNAHydrogenRuddIonizationFinalStatesPolicy_HH */
 
 
