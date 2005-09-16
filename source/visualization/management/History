@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2005-09-13 18:03:58 allison Exp $
+$Id: History,v 1.6 2005-09-16 01:31:43 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,14 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+16th September 2005  John Allison (visman-V07-01-03)
+- Issue "/tracking/storeTrajectory 1" on /vis/scene/add/trajectories.
+- Added warning:
+  o Attempt to a a volume to a scene already containing the world.
+- Added error message:
+  o Logical volume model must be only volume model in scene.
+- G4Scene.cc: Improvement - no functional change.
 
 13th September 2005  John Allison (visman-V07-01-02)
 - Added WhiteBackground to G4ViewParameters.
