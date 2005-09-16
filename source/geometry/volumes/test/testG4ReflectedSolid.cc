@@ -81,7 +81,7 @@ const G4String OutputInside(const EInside a)
 
 int main()
 {
-    G4ThreeVector pzero(0,0,0);
+    G4ThreeVector pzero(0,0,0), p;
     G4ThreeVector ponxside(20,0,0),ponyside(0,30,0),ponzside(0,0,40),
                    ponb2x(10,0,0),ponb2y(0,10,0),ponb2z(0,0,10),
                    ponb2mx(-10,0,0),ponb2my(0,-10,0),ponb2mz(0,0,-10);
@@ -101,6 +101,7 @@ int main()
     G4ThreeVector vxmz(1/std::sqrt(2.0),0,-1/std::sqrt(2.0));
 
     G4double dist;
+    G4int i;
     G4ThreeVector *pNorm,norm;
     G4bool *pgoodNorm,goodNorm,calcNorm=true;
 
@@ -310,6 +311,16 @@ int main()
 
     dist=passRotT3.DistanceToOut(G4ThreeVector(-20,2,0));
     assert(ApproxEqual(dist,2));
+
+  // Point on surface
+    G4cout<<G4endl;
+    G4cout<<"Point on surface of 10x10x10 box shifted -10 along x-axis:"<<G4endl<<G4endl;
+    for(i=0;i<10;i++)
+    {
+      p = rdb4.GetPointOnSurface();
+      G4cout<<p.x()<<"\t"<<p.y()<<"\t"<<p.z()<<G4endl;
+    }
+    G4cout<<G4endl;
 
 
 
