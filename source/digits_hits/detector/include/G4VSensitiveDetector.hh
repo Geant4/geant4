@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSensitiveDetector.hh,v 1.1 2003-10-03 10:10:18 gcosmo Exp $
+// $Id: G4VSensitiveDetector.hh,v 1.2 2005-09-19 18:40:56 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -89,7 +89,7 @@ class G4VSensitiveDetector
       //  "ROhist" will be given only is a Readout geometry is defined to this
       // sensitive detector. The G4TouchableHistory object of the tracking geometry
       // is stored in the PreStepPoint object of G4Step.
-      G4int GetCollectionID(G4int i);
+      virtual G4int GetCollectionID(G4int i);
       //  This is a utility method which returns the hits collection ID of the
       // "i"-th collection. "i" is the order (starting with zero) of the collection
       // whose name is stored to the collectionName protected vector.
