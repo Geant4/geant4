@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserDetectorConstruction.hh,v 1.4 2001-07-11 10:08:33 gunter Exp $
+// $Id: G4VUserDetectorConstruction.hh,v 1.5 2005-09-19 16:43:47 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,6 +29,9 @@
 #define G4VUserDetectorConstruction_h 1
 
 class G4VPhysicalVolume;
+
+#include <vector>
+#include "G4VUserParallelWorld.hh"
 
 // class description:
 //
@@ -47,6 +50,12 @@ class G4VUserDetectorConstruction
 
   public:
     virtual G4VPhysicalVolume* Construct() = 0;
+
+  public:
+    void RegisterParallelWorld(G4VUserParallelWorld*);
+
+  private:
+    std::vector<G4VUserParallelWorld*> parallelWorld;
 };
 
 #endif
