@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonVDetectorEntitiesConstructorsFactory.hh,v 1.1 2005-09-09 08:26:24 capra Exp $
+// Id:            $Id: RadmonVDetectorEntitiesConstructorsFactory.hh,v 1.2 2005-09-19 19:42:13 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Abstract class of a factory of detector-entity constructor
@@ -21,7 +21,7 @@
   public:
    inline virtual                              ~RadmonVDetectorEntitiesConstructorsFactory();
 
-   virtual RadmonVDetectorEntityConstructor *   GetEntityConstructor(const G4String & entityName) = 0;
+   virtual RadmonVDetectorEntityConstructor *   CreateEntityConstructor(const G4String & entityName) = 0;
 
   protected:
    inline                                       RadmonVDetectorEntitiesConstructorsFactory();

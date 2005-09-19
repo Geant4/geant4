@@ -3,12 +3,13 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorLabelledEntitiesConstructorsFactory.cc,v 1.1 2005-09-09 08:26:24 capra Exp $
+// Id:            $Id: RadmonDetectorLabelledEntitiesConstructorsFactory.cc,v 1.2 2005-09-19 19:42:13 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
 // Include files
 #include "RadmonDetectorLabelledEntitiesConstructorsFactory.hh"
+#include "RadmonDetectorLabelledEntitiesConstructorsMessenger.hh"
 #include "RadmonVDetectorLabelledEntityConstructor.hh"
 
 
@@ -17,8 +18,12 @@
  EntityConstructorsList::iterator i(entityConstructorsList.begin());
  EntityConstructorsList::iterator end(entityConstructorsList.end());
  
+ RadmonDetectorLabelledEntitiesConstructorsMessenger * messenger(RadmonDetectorLabelledEntitiesConstructorsMessenger::Instance());
+ 
  while (i!=end)
  {
+  messenger->RemoveAvailableConstructor((*i)->GetLabel());
+
   delete (*i);
   i++;
  }
@@ -28,7 +33,7 @@
 
 
 
-RadmonVDetectorEntityConstructor *              RadmonDetectorLabelledEntitiesConstructorsFactory :: GetEntityConstructor(const G4String & entityName)
+RadmonVDetectorEntityConstructor *              RadmonDetectorLabelledEntitiesConstructorsFactory :: CreateEntityConstructor(const G4String & entityName)
 {
  EntityConstructorsList::iterator i(entityConstructorsList.begin());
  EntityConstructorsList::iterator end(entityConstructorsList.end());
@@ -49,4 +54,7 @@ RadmonVDetectorEntityConstructor *              RadmonDetectorLabelledEntitiesCo
 void                                            RadmonDetectorLabelledEntitiesConstructorsFactory :: AppendLabelledEntityConstructor(RadmonVDetectorLabelledEntityConstructor * constructor)
 {
  entityConstructorsList.push_back(constructor);
+ 
+ RadmonDetectorLabelledEntitiesConstructorsMessenger * messenger(RadmonDetectorLabelledEntitiesConstructorsMessenger::Instance());
+ messenger->AddAvailableConstructor(constructor->GetLabel());
 }

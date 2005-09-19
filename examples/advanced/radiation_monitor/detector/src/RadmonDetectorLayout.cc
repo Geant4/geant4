@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorLayout.cc,v 1.2 2005-09-14 12:28:31 capra Exp $
+// Id:            $Id: RadmonDetectorLayout.cc,v 1.3 2005-09-19 19:42:13 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -77,8 +77,28 @@ const G4String &                                RadmonDetectorLayout :: GetEnvir
 
 
 
+G4int                                           RadmonDetectorLayout :: GetEnvironmentNAttributes(void) const
+{
+ return environment.GetNAttributes();
+}
+
+
+
+const G4String &                                RadmonDetectorLayout :: GetEnvironmentAttributeName(G4int index) const
+{
+ return environment.GetAttributeName(index);
+}
+
+
+
 void                                            RadmonDetectorLayout :: SetEnvironmentAttribute(const G4String & attributeName, const G4String & attributeValue)
 {
+ if (attributeName=="")
+ {
+  G4cout << "RadmonDetectorLayout::FindPlacement: \"\" is not a valid attribute name." << G4endl;
+  return;
+ }
+
  if (environment.GetAttribute(attributeName, attributeValue+"#")==attributeValue)
   return;
  
@@ -101,7 +121,7 @@ void                                            RadmonDetectorLayout :: ClearEnv
 {
  if (!environment.ExistsAttribute(attributeName))
  {
-  G4cerr << "RadmonDetectorLayout::ClearEnvironmentAttribute: Attribute \"" << attributeName << "\" missing in environment." << G4endl;
+  G4cout << "RadmonDetectorLayout::ClearEnvironmentAttribute: Attribute \"" << attributeName << "\" missing in environment." << G4endl;
   return;
  }
   
@@ -119,7 +139,7 @@ void                                            RadmonDetectorLayout :: CreateMu
 {
  if (multilayersCollection.ExistsMultilayerByLabel(multilayerLabel))
  {
-  G4cerr << "RadmonDetectorLayout::CreateMultilayer: Multilayer \"" << multilayerLabel << "\" just exists." << G4endl;
+  G4cout << "RadmonDetectorLayout::CreateMultilayer: Multilayer \"" << multilayerLabel << "\" just exists." << G4endl;
   return;
  }
   
@@ -133,13 +153,13 @@ void                                            RadmonDetectorLayout :: RemoveMu
 {
  if (IsPlaced(multilayerLabel))
  {
-  G4cerr << "RadmonDetectorLayout::RemoveMultilayer: Multilayer \"" << multilayerLabel << "\" is placed and cannot be deleted. Remove the placement first." << G4endl;
+  G4cout << "RadmonDetectorLayout::RemoveMultilayer: Multilayer \"" << multilayerLabel << "\" is placed and cannot be deleted. Remove the placement first." << G4endl;
   return;
  }
 
  if (!multilayersCollection.ExistsMultilayerByLabel(multilayerLabel))
  {
-  G4cerr << "RadmonDetectorLayout::RemoveMultilayer: Multilayer \"" << multilayerLabel << "\" does not exist." << G4endl;
+  G4cout << "RadmonDetectorLayout::RemoveMultilayer: Multilayer \"" << multilayerLabel << "\" does not exist." << G4endl;
   return;
  }
  
@@ -208,6 +228,18 @@ G4double                                        RadmonDetectorLayout :: GetMulti
 
 
 
+G4double                                        RadmonDetectorLayout :: GetMultilayerTotalThickness(const G4String & multilayerLabel) const
+{
+ const RadmonDetectorMultilayerLayout * multilayer(FindMultilayer(multilayerLabel));
+
+ if (!multilayer)
+  return 0.;
+
+ return multilayer->GetTotalThickness();
+}
+
+
+
 
 
 void                                            RadmonDetectorLayout :: AppendLayerToMultilayer(const G4String & multilayerLabel, const G4String & layerLabel)
@@ -219,7 +251,7 @@ void                                            RadmonDetectorLayout :: AppendLa
  
  if (multilayer->ExistsLayerByLabel(layerLabel))
  {
-  G4cerr << "RadmonDetectorLayout::AppendLayerToMultilayer: Layer \"" << layerLabel << "\" just exists in multilayer \"" << multilayerLabel << "\"." << G4endl;
+  G4cout << "RadmonDetectorLayout::AppendLayerToMultilayer: Layer \"" << layerLabel << "\" just exists in multilayer \"" << multilayerLabel << "\"." << G4endl;
   return;
  }
   
@@ -242,7 +274,7 @@ void                                            RadmonDetectorLayout :: RemoveLa
  
  if (!multilayer->ExistsLayerByLabel(layerLabel))
  {
-  G4cerr << "RadmonDetectorLayout::RemoveLayerFromMultilayer: Layer \"" << layerLabel << "\" does not exist in multilayer \"" << multilayerLabel << "\"." << G4endl;
+  G4cout << "RadmonDetectorLayout::RemoveLayerFromMultilayer: Layer \"" << layerLabel << "\" does not exist in multilayer \"" << multilayerLabel << "\"." << G4endl;
   return;
  }
   
@@ -265,6 +297,30 @@ void                                            RadmonDetectorLayout :: RemoveAl
 
  if (IsPlaced(multilayerLabel))
   NotifyChange();
+}
+
+
+
+G4int                                           RadmonDetectorLayout :: GetMultilayerNLayers(const G4String & multilayerLabel) const
+{
+ const RadmonDetectorMultilayerLayout * multilayer(FindMultilayer(multilayerLabel));
+ 
+ if (!multilayer)
+  return 0;
+  
+ return multilayer->GetNLayers();
+}
+
+
+
+const G4String &                                RadmonDetectorLayout :: GetMultilayerLayerLabel(const G4String & multilayerLabel, G4int index) const
+{
+ const RadmonDetectorMultilayerLayout * multilayer(FindMultilayer(multilayerLabel));
+ 
+ if (!multilayer)
+  return GetNullStr();
+  
+ return multilayer->GetLayer(index).GetLabel();
 }
 
 
@@ -333,8 +389,38 @@ const G4String &                                RadmonDetectorLayout :: GetLayer
 
 
 
+G4int                                           RadmonDetectorLayout :: GetLayerNAttributes(const G4String & multilayerLabel, const G4String & layerLabel) const
+{
+ const RadmonDetectorLayerLayout * layer(FindLayer(multilayerLabel, layerLabel));
+ 
+ if (!layer)
+  return 0;
+
+ return layer->GetNAttributes();
+}
+
+
+
+const G4String &                                RadmonDetectorLayout :: GetLayerAttributeName(const G4String & multilayerLabel, const G4String & layerLabel, G4int index) const
+{
+ const RadmonDetectorLayerLayout * layer(FindLayer(multilayerLabel, layerLabel));
+ 
+ if (!layer)
+  return GetNullStr();
+
+ return layer->GetAttributeName(index);
+}
+
+
+
 void                                            RadmonDetectorLayout :: SetLayerAttribute(const G4String & multilayerLabel, const G4String & layerLabel, const G4String & attributeName, const G4String & attributeValue)
 {
+ if (attributeName=="")
+ {
+  G4cout << "RadmonDetectorLayout::FindPlacement: \"\" is not a valid attribute name." << G4endl;
+  return;
+ }
+
  RadmonDetectorLayerLayout * layer(FindLayer(multilayerLabel, layerLabel));
  
  if (!layer)
@@ -372,7 +458,7 @@ void                                            RadmonDetectorLayout :: ClearLay
   
  if (!layer->ExistsAttribute(attributeName))
  {
-  G4cerr << "RadmonDetectorLayout::ClearLayerAttribute: Attribute \"" << attributeName << "\" missing in layer \"" << layerLabel << "\" of multilayer \"" << multilayerLabel << "\"." << G4endl;
+  G4cout << "RadmonDetectorLayout::ClearLayerAttribute: Attribute \"" << attributeName << "\" missing in layer \"" << layerLabel << "\" of multilayer \"" << multilayerLabel << "\"." << G4endl;
   return;
  }
   
@@ -390,7 +476,7 @@ void                                            RadmonDetectorLayout :: CreatePl
 {
  if (multilayerPlacementsCollection.ExistsPlacementByLabel(placementLabel))
  {
-  G4cerr << "RadmonDetectorLayout::CreateMultilayer: Placement \"" << placementLabel << "\" just exists." << G4endl;
+  G4cout << "RadmonDetectorLayout::CreateMultilayer: Placement \"" << placementLabel << "\" just exists." << G4endl;
   return;
  }
   
@@ -421,7 +507,7 @@ void                                            RadmonDetectorLayout :: RemovePl
 {
  if (!multilayerPlacementsCollection.ExistsPlacementByLabel(placementLabel))
  {
-  G4cerr << "RadmonDetectorLayout::CreateMultilayer: Placement \"" << placementLabel << "\" does not exist." << G4endl;
+  G4cout << "RadmonDetectorLayout::CreateMultilayer: Placement \"" << placementLabel << "\" does not exist." << G4endl;
   return;
  }
   
@@ -543,8 +629,6 @@ void                                            RadmonDetectorLayout :: DumpLayo
  
  out << "\n- Placements\n";
  multilayerPlacementsCollection.DumpLayout(out, indent);
- 
- out << '\n';
 }
 
 
@@ -594,7 +678,7 @@ inline RadmonDetectorMultilayerLayout *         RadmonDetectorLayout :: FindMult
 {
  if (!multilayersCollection.ExistsMultilayerByLabel(multilayerLabel))
  {
-  G4cerr << "RadmonDetectorLayout::FindMultilayer: Multilayer \"" << multilayerLabel << "\" does not exist." << G4endl;
+  G4cout << "RadmonDetectorLayout::FindMultilayer: Multilayer \"" << multilayerLabel << "\" does not exist." << G4endl;
   return 0;
  }
 
@@ -614,7 +698,7 @@ inline RadmonDetectorMultilayerPlacementLayout * RadmonDetectorLayout :: FindPla
 {
  if (!multilayerPlacementsCollection.ExistsPlacementByLabel(placementLabel))
  {
-  G4cerr << "RadmonDetectorLayout::FindPlacement: Placement \"" << placementLabel << "\" does not exist." << G4endl;
+  G4cout << "RadmonDetectorLayout::FindPlacement: Placement \"" << placementLabel << "\" does not exist." << G4endl;
   return 0;
  }
 
@@ -639,7 +723,7 @@ inline RadmonDetectorLayerLayout *              RadmonDetectorLayout :: FindLaye
  
  if (!multilayer->ExistsLayerByLabel(layerLabel))
  {
-  G4cerr << "RadmonDetectorLayout::FindLayer: Layer \"" << layerLabel << "\" does not exist in multilayer \"" << multilayerLabel << "\"." << G4endl;
+  G4cout << "RadmonDetectorLayout::FindLayer: Layer \"" << layerLabel << "\" does not exist in multilayer \"" << multilayerLabel << "\"." << G4endl;
   return 0;
  }
  

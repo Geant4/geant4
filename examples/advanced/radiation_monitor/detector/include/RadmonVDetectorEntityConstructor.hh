@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonVDetectorEntityConstructor.hh,v 1.1 2005-09-09 08:26:24 capra Exp $
+// Id:            $Id: RadmonVDetectorEntityConstructor.hh,v 1.2 2005-09-19 19:42:13 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Abstract class of a detector-entity constructor
@@ -19,17 +19,21 @@
  class RadmonVDetectorEntityConstructor
  {
   public:
-    virtual void                                SetEntityAttribute(const G4String & attributeName, const G4String &value) = 0;
-    virtual G4LogicalVolume *                   ConstructLogicalVolume() = 0;
+   inline virtual                              ~RadmonVDetectorEntityConstructor();
+    
+   virtual void                                 SetEntityAttribute(const G4String & attributeName, const G4String &value) = 0;
+   virtual G4LogicalVolume *                    ConstructLogicalVolume() = 0;
 
   protected:
-                                                RadmonVDetectorEntityConstructor();
-                                               ~RadmonVDetectorEntityConstructor();
+   inline                                       RadmonVDetectorEntityConstructor();
 
   private:
   // Hidden constructors and operators
                                                 RadmonVDetectorEntityConstructor(const RadmonVDetectorEntityConstructor & copy);
-    RadmonVDetectorEntityConstructor &          operator=(const RadmonVDetectorEntityConstructor & copy);
+   RadmonVDetectorEntityConstructor &           operator=(const RadmonVDetectorEntityConstructor & copy);
 
  };
+ 
+ // Inline implementations
+ #include "RadmonVDetectorEntityConstructor.icc"
 #endif /* RADMONVDETECTORENTITYCONSTRUCTOR_HH */

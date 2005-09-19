@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorConstruction.hh,v 1.1 2005-09-09 08:26:24 capra Exp $
+// Id:            $Id: RadmonDetectorConstruction.hh,v 1.2 2005-09-19 19:42:13 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Implementation of the G4VUserDetectorConstruction
@@ -13,40 +13,57 @@
  #define  RADMONDETECTORCONSTRUCTION_HH
 
  // Include files
+ #include "globals.hh"
  #include "G4VUserDetectorConstruction.hh"
  #include "RadmonVDetectorLayoutObserver.hh"
- #include <list>
+ #include <stack>
+ #include <utility>
  
  // Forward declaration
  class G4VPhysicalVolume;
+ class G4VSolid;
  class G4LogicalVolume;
  class RadmonVDetectorLayout;
  class RadmonVDetectorEntityConstructor;
  class RadmonVDetectorEntitiesConstructorsFactory;
+ class G4String;
 
  class RadmonDetectorConstruction : public G4VUserDetectorConstruction, public RadmonVDetectorLayoutObserver
  {
   public:
                                                 RadmonDetectorConstruction(RadmonVDetectorLayout * layout, RadmonVDetectorEntitiesConstructorsFactory * factory);
-    virtual                                    ~RadmonDetectorConstruction();
+   virtual                                     ~RadmonDetectorConstruction();
 
-    virtual G4VPhysicalVolume *                 Construct(void);
+   virtual G4VPhysicalVolume *                  Construct(void);
 
-    virtual void                                OnLayoutChange(void);
+   virtual void                                 OnLayoutChange(void);
 
   private:
+  // Private methods
+   void                                         Destruct(void);
+   
+   void                                         BuildEnvironmentFromType(const G4String & type);
+   void                                         BuildEnvironmentSphere(void);
+   void                                         BuildMultilayer(G4int index);
+
+  // Hidden constructors and operators
                                                 RadmonDetectorConstruction();
                                                 RadmonDetectorConstruction(const RadmonDetectorConstruction & copy);
-    RadmonDetectorConstruction &                operator=(const RadmonDetectorConstruction & copy);
+   RadmonDetectorConstruction &                 operator=(const RadmonDetectorConstruction & copy);
 
-    void                                        Destruct(void);
+  // Private data types
+   typedef std::pair<RadmonVDetectorEntityConstructor *, G4VPhysicalVolume *> LayerItem;
+   typedef std::stack<LayerItem>                LayersStack;
 
-    RadmonVDetectorLayout *                     detectorLayout;
-    RadmonVDetectorEntitiesConstructorsFactory * constructorsFactory;
+  // Private attributes
+   RadmonVDetectorLayout *                      detectorLayout;
+   RadmonVDetectorEntitiesConstructorsFactory * constructorsFactory;
     
-    std::list<RadmonVDetectorEntityConstructor *> constructorsList;
-    G4VPhysicalVolume *                         motherPhysicalVolume;
-    G4LogicalVolume *                           motherLogicalVolume;
-    std::list<G4VPhysicalVolume *>              daughtersPhysicalVolumesList;
+   LayersStack                                  layersStack;
+
+   RadmonVDetectorEntityConstructor *           environmentConstructor;
+   G4VPhysicalVolume *                          environmentPhysicalVolume;
+   G4LogicalVolume *                            environmentLogicalVolume;
+   G4VSolid *                                   environmentSolid;
  };
 #endif /* RADMONDETECTORCONSTRUCTION_HH */

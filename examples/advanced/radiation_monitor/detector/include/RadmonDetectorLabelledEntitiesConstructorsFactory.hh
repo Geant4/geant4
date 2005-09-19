@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorLabelledEntitiesConstructorsFactory.hh,v 1.1 2005-09-09 08:26:24 capra Exp $
+// Id:            $Id: RadmonDetectorLabelledEntitiesConstructorsFactory.hh,v 1.2 2005-09-19 19:42:13 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Concrete factory that constructs 
@@ -27,7 +27,7 @@
    inline                                       RadmonDetectorLabelledEntitiesConstructorsFactory();
    virtual                                     ~RadmonDetectorLabelledEntitiesConstructorsFactory();
 
-   virtual RadmonVDetectorEntityConstructor *   GetEntityConstructor(const G4String & entityName);
+   virtual RadmonVDetectorEntityConstructor *   CreateEntityConstructor(const G4String & entityName);
 
    void                                         AppendLabelledEntityConstructor(RadmonVDetectorLabelledEntityConstructor * constructor);
 
