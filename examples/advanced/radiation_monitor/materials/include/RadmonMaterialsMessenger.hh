@@ -3,30 +3,50 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonMaterialsMessenger.hh,v 1.1 2005-09-09 08:27:13 capra Exp $
+// Id:            $Id: RadmonMaterialsMessenger.hh,v 1.2 2005-09-19 19:40:26 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
-// Description:   UI commands for managing materials
+// Description:   UI commands for managing a layout
 //
 
-#ifndef   RADMONMATERIALMESSENGER_HH
- #define  RADMONMATERIALMESSENGER_HH
+#ifndef   RADMONMATERIALSMESSENGER_HH
+ #define  RADMONMATERIALSMESSENGER_HH
 
  // Include files
- #include "G4UImessenger.h"
+ #include "RadmonMessenger.hh"
+ #include "G4String.hh"
 
- class RadmonMaterialMessenger : public G4UImessenger
+ // Forward declarations
+ class RadmonMaterialsManager;
+ 
+ class RadmonMaterialsMessenger : public RadmonMessenger
  {
   public:
-                                                RadmonMaterialMessenger();
-                                               ~RadmonMaterialMessenger();
+                                                RadmonMaterialsMessenger(RadmonMaterialsManager * manager);
+                                               ~RadmonMaterialsMessenger();
 
-    virtual G4String                            GetCurrentValue(G4UIcommand * command);
-    virtual void                                SetNewValue(G4UIcommand * command, G4String newValue);
+   virtual G4String                             GetCurrentValue(G4UIcommand * command);
+   virtual void                                 SetNewValue(G4UIcommand * command, G4String newValue);
 
   private:
   // Hidden constructors and operators
-                                                RadmonMaterialMessenger(const RadmonMaterialMessenger & copy);
-    RadmonMaterialMessenger &                   operator=(const RadmonMaterialMessenger & copy);
+                                                RadmonMaterialsMessenger();
+                                                RadmonMaterialsMessenger(const RadmonMaterialsMessenger & copy);
+   RadmonMaterialsMessenger &                   operator=(const RadmonMaterialsMessenger & copy);
+
+  // Private Attributes
+   RadmonMaterialsManager *                     materialsManager;
+
+  // Commands
+   RADMON_DECLARE_COMMAND(CreateElement);
+   RADMON_DECLARE_COMMAND(CreateMaterial);
+   RADMON_DECLARE_COMMAND(AddComponentByAtoms);
+   RADMON_DECLARE_COMMAND(AddComponentByFraction);
+   RADMON_DECLARE_COMMAND(SetMaterialColor);
+   RADMON_DECLARE_COMMAND(SetMaterialVisibility);
+   RADMON_DECLARE_COMMAND(SetMaterialStyle);
+   RADMON_DECLARE_COMMAND(Dump);
+   RADMON_DECLARE_COMMAND(Insert);
+   RADMON_DECLARE_COMMAND(Save);
  };
-#endif /* RADMONMATERIALMESSENGER_HH */
+#endif /* RADMONMATERIALSMESSENGER_HH */

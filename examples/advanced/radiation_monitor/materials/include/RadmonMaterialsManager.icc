@@ -1,0 +1,75 @@
+//
+// File name:     RadmonMaterialsManager.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonMaterialsManager.icc,v 1.1 2005-09-19 19:39:29 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONMATERIALSMANAGER_HH
+ #error "RadmonMaterialsManager.icc cannot be included directly. Please use RadmonMaterialsManager.hh"
+#else  /* RADMONMATERIALSMANAGER_HH */
+ inline const G4Element &                       RadmonMaterialsManager :: GetElement(const G4String & elementName) const
+ {
+  return const_cast<RadmonMaterialsManager *>(this)->GetElement(elementName);
+ }
+
+
+
+ inline G4int                                   RadmonMaterialsManager :: GetNElements() const
+ {
+  return G4Element::GetNumberOfElements();
+ }
+
+
+
+ inline G4Element &                             RadmonMaterialsManager :: GetElement(G4int index)
+ {
+  return *G4Element::GetElementTable()->operator[](index);
+ }
+
+
+
+ inline const G4Element &                       RadmonMaterialsManager :: GetElement(G4int index) const
+ {
+  return const_cast<RadmonMaterialsManager *>(this)->GetElement(index);
+ }
+
+
+
+
+
+ inline const G4Material &                      RadmonMaterialsManager :: GetMaterial(const G4String & materialName) const
+ {
+  return const_cast<RadmonMaterialsManager *>(this)->GetMaterial(materialName);
+ }
+
+
+
+ inline G4int                                   RadmonMaterialsManager :: GetNMaterials() const
+ {
+  return G4Material::GetNumberOfMaterials();
+ }
+
+
+
+ inline G4Material &                            RadmonMaterialsManager :: GetMaterial(G4int index)
+ {
+  return *G4Material::GetMaterialTable()->operator[](index);
+ }
+
+
+
+ inline const G4Material &                      RadmonMaterialsManager :: GetMaterial(G4int index) const
+ {
+  return const_cast<RadmonMaterialsManager *>(this)->GetMaterial(index);
+ }
+
+
+
+ inline G4bool                                  RadmonMaterialsManager :: IsIncompleteMaterial(const G4String & materialName) const
+ {
+  return const_cast<RadmonMaterialsManager *>(this)->FindIncompleteMaterial(materialName)!=0;
+ }
+#endif /* RADMONMATERIALSMANAGER_HH */
