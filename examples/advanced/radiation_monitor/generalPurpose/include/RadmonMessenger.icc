@@ -1,0 +1,18 @@
+//
+// File name:     RadmonMessenger.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonMessenger.icc,v 1.1 2005-09-19 19:39:43 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONMESSENGER_HH
+ #error "RadmonMessenger.icc cannot be included directly. Please use RadmonMessenger.hh"
+#else  /* RADMONMESSENGER_HH */
+ inline                                         RadmonMessenger :: ~RadmonMessenger()
+ {
+  if (directory)
+   delete directory;
+ }
+#endif /* RADMONMESSENGER_HH */
