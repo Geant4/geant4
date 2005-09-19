@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2005-09-14 12:32:11 capra Exp $
+$Id: History,v 1.4 2005-09-19 19:42:43 capra Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19 Sep 2005 - radmon-V07-01-03 - R. Capra - Implementation according to the
+                        design in progress. Following functionality added
+                        - Materials creation through a messenger
+                        - Geometry creation and update
+                        - First Geometry constructor object created (Simple
+                          box)
+                        - macros directory created
 
 14 Sep 2005 - radmon-V07-01-02 - R. Capra - Implementation according to the
                         design in progress. RadmonDetectorMessenger completed 
