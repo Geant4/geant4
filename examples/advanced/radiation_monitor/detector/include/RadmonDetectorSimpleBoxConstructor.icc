@@ -1,0 +1,21 @@
+//
+// File name:     RadmonDetectorSimpleBoxConstructor.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonDetectorSimpleBoxConstructor.icc,v 1.1 2005-09-19 19:39:52 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONDETECTORSIMPLEBOXCONSTRUCTOR_HH
+ #error "RadmonDetectorSimpleBoxConstructor.icc cannot be included directly. Please use RadmonDetectorSimpleBoxConstructor.hh"
+#else  /* RADMONDETECTORSIMPLEBOXCONSTRUCTOR_HH */
+ inline                                         RadmonDetectorSimpleBoxConstructor :: RadmonDetectorSimpleBoxConstructor()
+ :
+  RadmonVDetectorLabelledEntityConstructor("SimpleBox"),
+  box(0),
+  visAttributes(0),
+  logicalVolume(0)
+ {
+ }
+#endif /* RADMONDETECTORSIMPLEBOXCONSTRUCTOR_HH */
