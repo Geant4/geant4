@@ -1,0 +1,22 @@
+//
+// File name:     RadmonVDetectorEntityConstructor.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonVDetectorEntityConstructor.icc,v 1.1 2005-09-19 19:38:41 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONVDETECTORENTITYCONSTRUCTOR_HH
+ #error "RadmonVDetectorEntityConstructor.icc cannot be included directly. Please use RadmonVDetectorEntityConstructor.hh"
+#else  /* RADMONVDETECTORENTITYCONSTRUCTOR_HH */
+ inline                                         RadmonVDetectorEntityConstructor :: RadmonVDetectorEntityConstructor()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonVDetectorEntityConstructor :: ~RadmonVDetectorEntityConstructor()
+ {
+ }
+#endif /* RADMONVDETECTORENTITYCONSTRUCTOR_HH */
