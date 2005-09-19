@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplication.cc,v 1.2 2005-09-14 12:30:57 capra Exp $
+// Id:            $Id: RadmonApplication.cc,v 1.3 2005-09-19 19:41:09 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -16,6 +16,8 @@
 #include "RadmonDetectorLabelledEntitiesConstructorsFactory.hh"
 #include "RadmonDetectorMessenger.hh"
 #include "RadmonPhysicsDummyPhysicsList.hh"
+
+#include "RadmonDetectorSimpleBoxConstructor.hh"
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -74,7 +76,7 @@
  
  
  // Construct the entity constructors
- if (!CreateEntityConstructors())
+ if (!CreateEntityConstructors(options))
  {
   G4cerr << options.ApplicationName() << ": Entity constructors not allocated." << G4endl;
   return;
@@ -122,7 +124,7 @@
  
  
  // Gets the user interface
- G4UImanager * uiManager(G4UImanager::GetUIpointer());
+ uiManager = G4UImanager::GetUIpointer();
  
  if (uiManager==0)
  {
@@ -141,7 +143,6 @@
  }
  
  directory->SetGuidance("Radmon application directory.");
-
 
 
  // Construct the messenger to modify the layout
@@ -228,8 +229,20 @@
 
 
 
-G4bool                                          RadmonApplication :: CreateEntityConstructors(void)
+#define DECLARE_CONSTRUCTOR(name)               constructor=new name();                                                           \
+                                                if (constructor==0)                                                               \
+                                                {                                                                                 \
+                                                 G4cerr << options.ApplicationName() << ": Cannot allocate " #name "." << G4endl; \
+                                                 return false;                                                                    \
+                                                }                                                                                 \
+                                                factory->AppendLabelledEntityConstructor(constructor)
+
+G4bool                                          RadmonApplication :: CreateEntityConstructors(const RadmonApplicationOptions & options)
 {
+ RadmonVDetectorLabelledEntityConstructor * constructor;
+ 
+ DECLARE_CONSTRUCTOR(RadmonDetectorSimpleBoxConstructor);
+ 
  return true;
 }
 

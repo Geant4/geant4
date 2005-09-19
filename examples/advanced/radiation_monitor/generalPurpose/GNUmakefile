@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2005-09-14 12:30:15 capra Exp $
+# $Id: GNUmakefile,v 1.3 2005-09-19 19:40:53 capra Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for exaple subpackage
 # R. Capra, 09 Sep 2005
@@ -12,6 +12,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-CPPFLAGS += -I$(G4BASE)/global/management/include
+CPPFLAGS += -I$(G4BASE)/global/management/include \
+            -I$(G4BASE)/intercoms/include
 
 include $(G4INSTALL)/config/common.gmk

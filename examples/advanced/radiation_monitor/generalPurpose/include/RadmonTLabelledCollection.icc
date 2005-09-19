@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonTLabelledCollection.icc,v 1.3 2005-09-14 12:30:57 capra Exp $
+// Id:            $Id: RadmonTLabelledCollection.icc,v 1.4 2005-09-19 19:40:53 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -146,7 +146,7 @@
   
   G4String text("RadmonTLabelledCollection::FindItemByLabel: Label \"");
   text+=label;
-  text+="\" not found";
+  text+="\" not found.";
 
   G4Exception(text);
 

@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplication.hh,v 1.2 2005-09-14 12:30:57 capra Exp $
+// Id:            $Id: RadmonApplication.hh,v 1.3 2005-09-19 19:41:09 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Radmon application
@@ -19,7 +19,7 @@
  class RadmonApplicationOptions;
  class G4RunManager;
  class RadmonDetectorLayout;
- class RadmonVDetectorEntitiesConstructorsFactory;
+ class RadmonDetectorLabelledEntitiesConstructorsFactory;
  class G4VisManager;
  class G4UImanager;
  class RadmonDetectorMessenger;
@@ -35,7 +35,7 @@
    inline G4bool                                Valid(void) const;
 
   private:
-   G4bool                                       CreateEntityConstructors(void);
+   G4bool                                       CreateEntityConstructors(const RadmonApplicationOptions & options);
    G4bool                                       RunMacro(const RadmonApplicationOptions & options, const char * fileName);
   
   // Hidden constructors and operators
@@ -47,7 +47,7 @@
 
    G4RunManager *                               runManager;
    RadmonDetectorLayout *                       layout;
-   RadmonVDetectorEntitiesConstructorsFactory * factory;
+   RadmonDetectorLabelledEntitiesConstructorsFactory * factory;
    #ifdef    G4VIS_USE
     G4VisManager *                              visManager;
    #endif /* G4VIS_USE */
