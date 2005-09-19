@@ -1,0 +1,48 @@
+/radmon/materials/CreateElement  Hydrogen H  1.  1.01   g/mole
+/radmon/materials/CreateElement  Carbon   C  6.  12.01  g/mole
+/radmon/materials/CreateElement  Nitrogen N  7.  14.01  g/mole
+/radmon/materials/CreateElement  Oxygen   O  8.  16.00  g/mole
+/radmon/materials/CreateElement  Aluminum Al 13. 26.98  g/mole
+/radmon/materials/CreateElement  Silicon  Si 14. 28.09  g/mole
+/radmon/materials/CreateElement  Argon    Ar 18. 39.95  g/mole
+/radmon/materials/CreateElement  Iron     Fe 26. 55.85  g/mole
+/radmon/materials/CreateElement  Copper   Cu 29  63.55  g/mole
+/radmon/materials/CreateElement  Tungsten W  74. 183.84 g/mole
+/radmon/materials/CreateElement  Lead     Pb 82. 207.20 g/mole
+
+/radmon/materials/CreateMaterial Aluminum 2.700 g/cm3 1
+/radmon/materials/AddComponentByFraction Aluminum Aluminum 1
+
+/radmon/materials/CreateMaterial liquidArgon 1.390 g/cm3 1
+/radmon/materials/AddComponentByFraction liquidArgon Argon 1
+
+/radmon/materials/CreateMaterial Copper 8.960 g/cm3 1
+/radmon/materials/AddComponentByFraction Copper Copper 1
+
+/radmon/materials/CreateMaterial Water 1.000 g/cm3 2
+/radmon/materials/AddComponentByAtoms Water Hydrogen 2
+/radmon/materials/AddComponentByAtoms Water Oxygen 1
+
+/radmon/materials/CreateMaterial Scintillator 1.032 g/cm3 2
+/radmon/materials/AddComponentByAtoms Scintillator Carbon 9
+/radmon/materials/AddComponentByAtoms Scintillator Hydrogen 10
+
+/radmon/materials/CreateMaterial Quartz 2.200 g/cm3 2
+/radmon/materials/AddComponentByAtoms Quartz Silicon 1
+/radmon/materials/AddComponentByAtoms Quartz Oxygen 2
+
+/radmon/materials/CreateMaterial PbWO4 8.280 g/cm3 3
+/radmon/materials/AddComponentByAtoms PbWO4 Oxygen 4
+/radmon/materials/AddComponentByAtoms PbWO4 Tungsten 1
+/radmon/materials/AddComponentByAtoms PbWO4 Lead 1
+
+/radmon/materials/CreateMaterial Air 1.290 mg/cm3 2
+/radmon/materials/AddComponentByFraction Air Nitrogen 0.7
+/radmon/materials/AddComponentByFraction Air Oxygen 0.3
+
+/radmon/materials/CreateMaterial Aerogel 0.200 g/cm3 3
+/radmon/materials/AddComponentByFraction Aerogel Quartz 0.625
+/radmon/materials/AddComponentByFraction Aerogel Water 0.374
+/radmon/materials/AddComponentByFraction Aerogel Carbon 0.001
+
+#/radmon/materials/Dump
