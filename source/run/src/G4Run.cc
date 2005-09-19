@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Run.cc,v 1.7 2004-06-11 14:27:45 gcosmo Exp $
+// $Id: G4Run.cc,v 1.8 2005-09-19 16:53:53 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,4 +35,7 @@ G4Run::G4Run()
 
 G4Run::~G4Run()
 {;}
+
+void G4Run::RecordEvent(const G4Event*)
+{ numberOfEvent++; }
 
