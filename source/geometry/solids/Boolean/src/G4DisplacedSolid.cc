@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.cc,v 1.24 2005-09-15 08:08:55 grichine Exp $
+// $Id: G4DisplacedSolid.cc,v 1.25 2005-09-21 10:36:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for G4DisplacedSolid class for boolean 
@@ -329,9 +329,9 @@ G4DisplacedSolid::ComputeDimensions(       G4VPVParameterisation*,
                 "Method not applicable in this context!");
 }
 
-//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
-// Return a point (G4ThreeVector) randomly and uniformly selected
+// Returns a point (G4ThreeVector) randomly and uniformly selected
 // on the solid surface
 //
 
@@ -340,9 +340,6 @@ G4ThreeVector G4DisplacedSolid::GetPointOnSurface() const
   G4ThreeVector p =  fPtrSolid->GetPointOnSurface();
   return fDirectTransform->TransformPoint(p);
 }
-
-
-
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -370,7 +367,7 @@ std::ostream& G4DisplacedSolid::StreamInfo(std::ostream& os) const
   return os;
 }
 
-/////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 //                    
 
@@ -380,7 +377,7 @@ G4DisplacedSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
   scene.AddSolid (*this);
 }
 
-////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 //
 
@@ -393,7 +390,7 @@ G4DisplacedSolid::CreatePolyhedron () const
   return polyhedron;
 }
 
-/////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 //
 
@@ -405,7 +402,7 @@ G4DisplacedSolid::CreateNURBS () const
   return 0;
 }
 
-/////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 //
 

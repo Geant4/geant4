@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.cc,v 1.17 2005-09-15 08:08:55 grichine Exp $
+// $Id: G4BooleanSolid.cc,v 1.18 2005-09-21 10:36:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for the abstract base class for solids created by boolean 
@@ -172,21 +172,9 @@ std::ostream& G4BooleanSolid::StreamInfo(std::ostream& os) const
   return os;
 }
 
-G4Polyhedron* G4BooleanSolid::GetPolyhedron () const
-{
-  if (!fpPolyhedron ||
-      fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
-      fpPolyhedron->GetNumberOfRotationSteps())
-    {
-      delete fpPolyhedron;
-      fpPolyhedron = CreatePolyhedron();
-    }
-  return fpPolyhedron;
-}
-
-//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
-// Return a point (G4ThreeVector) randomly and uniformly selected
+// Returns a point (G4ThreeVector) randomly and uniformly selected
 // on the solid surface
 //
 
@@ -200,10 +188,26 @@ G4ThreeVector G4BooleanSolid::GetPointOnSurface() const
   {
     rand = G4UniformRand();
 
-    if(rand > 0.5) p = fPtrSolidA->GetPointOnSurface();
-    else           p = fPtrSolidB->GetPointOnSurface();
+    if(rand > 0.5) { p = fPtrSolidA->GetPointOnSurface(); }
+    else           { p = fPtrSolidB->GetPointOnSurface(); }
 
-    if(Inside(p) == kSurface) break;
+    if(Inside(p) == kSurface)  { break; }
   }
   return p;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Returns polyhedron for visualization
+
+G4Polyhedron* G4BooleanSolid::GetPolyhedron () const
+{
+  if (!fpPolyhedron ||
+      fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+      fpPolyhedron->GetNumberOfRotationSteps())
+    {
+      delete fpPolyhedron;
+      fpPolyhedron = CreatePolyhedron();
+    }
+  return fpPolyhedron;
 }
