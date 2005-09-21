@@ -3,10 +3,10 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorFlatVolumeComponent.hh,v 1.1 2005-09-09 08:26:24 capra Exp $
+// Id:            $Id: RadmonDetectorFlatVolumeComponent.hh,v 1.2 2005-09-21 14:52:02 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
-// Description:   Component to create a uniform layer
+// Description:   Component to create a box
 //
 
 #ifndef   RADMONDETECTORFLATVOLUMECOMPONENT_HH
@@ -16,14 +16,15 @@
  #include "globals.hh"
  
  // Forward declarations
- class RadmonTDetectorLayerConstructor;
+ class RadmonVDetectorLabelledEntityConstructor;
  class RadmonDetectorLayerVolumesList;
- class G4box;
+ class G4Box;
+ class G4VisAttributes;
  
  class RadmonDetectorFlatVolumeComponent
  {
   public:
-                                                RadmonDetectorFlatVolumeComponent(const RadmonTDetectorLayerConstructor * owner);
+   inline                                       RadmonDetectorFlatVolumeComponent(const RadmonVDetectorLabelledEntityConstructor * constructor);
                                                ~RadmonDetectorFlatVolumeComponent();
    RadmonDetectorLayerVolumesList *             GenerateVolumesList(void);
 
@@ -34,9 +35,11 @@
    RadmonDetectorFlatVolumeComponent &          operator=(const RadmonDetectorFlatVolumeComponent & copy);
 
   // Private attributes
-   G4double                                     width;
-   G4double                                     height;
-   G4double                                     thickness;
+   const RadmonVDetectorLabelledEntityConstructor * owner;
    G4Box *                                      box;
+   G4VisAttributes *                            visAttributes;
  };
+ 
+ // Inline implementations
+ #include "RadmonDetectorFlatVolumeComponent.icc"
 #endif /* RADMONDETECTORFLATVOLUMECOMPONENT_HH */

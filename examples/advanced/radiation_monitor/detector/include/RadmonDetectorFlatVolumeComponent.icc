@@ -1,0 +1,20 @@
+//
+// File name:     RadmonDetectorFlatVolumeComponent.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonDetectorFlatVolumeComponent.icc,v 1.1 2005-09-21 14:52:02 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONDETECTORFLATVOLUMECOMPONENT_HH
+ #error "RadmonDetectorFlatVolumeComponent.icc cannot be included directly. Please use RadmonDetectorFlatVolumeComponent.hh"
+#else  /* RADMONDETECTORFLATVOLUMECOMPONENT_HH */
+ inline                                         RadmonDetectorFlatVolumeComponent :: RadmonDetectorFlatVolumeComponent(const RadmonVDetectorLabelledEntityConstructor * constructor)
+ :
+  owner(constructor),
+  box(0),
+  visAttributes(0)
+ {
+ }
+#endif /* RADMONDETECTORFLATVOLUMECOMPONENT_HH */
