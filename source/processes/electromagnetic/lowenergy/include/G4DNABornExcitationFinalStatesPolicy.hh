@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNARuddIonizationFinalStatesPolicy, 2005/09/19 19:06:45 Ziad FRANCIS
-// GEANT4 tag $Name: emlowen-V07-01-10
+// $Id: G4DNABornExcitationFinalStatesPolicy, 2005/09/19 13:51:45 Ziad FRANCIS
+// GEANT4 tag $Name: emlowen-V07-01-
 
-#ifndef  G4DNARuddIonizationFinalStatesPolicy_HH
-#define  G4DNARuddIonizationFinalStatesPolicy_HH 1
+#ifndef  G4DNABornExcitationFinalStatesPolicy_HH
+#define  G4DNABornExcitationFinalStatesPolicy_HH 1
 
  #include "G4DNACrossSectionDataSet.hh"
 
@@ -38,31 +38,25 @@
  //  - [protected] const double highEnergyLimit
  //  - [protected] const double zeroAboveLowEnergyLimit
 
- template <typename EnergyLimitsPolicy, typename IncomingParticlePolicy>
- class G4DNARuddIonizationFinalStatesPolicy : public EnergyLimitsPolicy, public IncomingParticlePolicy
+ template <typename EnergyLimitsPolicy>
+ class G4DNABornExcitationFinalStatesPolicy : public EnergyLimitsPolicy
  {
   protected:
-                                        G4DNARuddIonizationFinalStatesPolicy() {}
-                                       ~G4DNARuddIonizationFinalStatesPolicy() {}
+                                        G4DNABornExcitationFinalStatesPolicy() {}
+                                       ~G4DNABornExcitationFinalStatesPolicy() {}
 
 
   G4bool                                KillIncomingParticle(G4double energy) const;
   void                                  BuildFinalStatesData(void) const;
-  G4double                              RandomizeEjectedElectronEnergy(G4double incomingParticleEnergy, G4int shell) const;
-  void                                  RandomizeEjectedElectronDirection(G4double incomingParticleEnergy, G4double
-                                        outgoingParticleEnergy, G4double & cosTheta, G4double & phi ) const;
-  G4double                              EnergyConstant(G4int ionizationLevel) const;
+  G4double                              EnergyConstant(G4int excitationLevelIndex) const;
 
-  private:
-  G4double                             DifferentialCrossSection(G4double k, G4double energyTransfer, G4int shell) const;
-  G4double                             CorrectionFactor(G4double k) const;
 
-   // Hides default constructor and assignment operator as private
-                                        G4DNARuddIonizationFinalStatesPolicy(const G4DNARuddIonizationFinalStatesPolicy & copy);
-   G4DNARuddIonizationFinalStatesPolicy & operator=(const G4DNARuddIonizationFinalStatesPolicy & right);
+  // Hides default constructor and assignment operator as private
+                                        G4DNABornExcitationFinalStatesPolicy(const G4DNABornExcitationFinalStatesPolicy & copy);
+   G4DNABornExcitationFinalStatesPolicy & operator=(const G4DNABornExcitationFinalStatesPolicy & right);
  };
 
- #include "G4DNARuddIonizationFinalStatesPolicy.icc"
-#endif /* G4DNARuddIonizationFinalStatesPolicy_HH */
+ #include "G4DNABornExcitationFinalStatesPolicy.icc"
+#endif /* G4DNABornExcitationFinalStatesPolicy_HH */
 
 

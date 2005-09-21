@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4DNATest.cc,v 1.11 2005-09-16 08:41:52 zfrancis Exp $
+// $Id: G4DNATest.cc,v 1.12 2005-09-21 09:18:35 zfrancis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
@@ -93,6 +93,8 @@
 #include "G4DNAProtonChargeDecrease.hh"
 #include "G4DNAProtonChargeIncrease.hh"
 #include "G4DNAHydrogenRuddIonization.hh"
+#include "G4DNAProtonBornExcitation.hh"
+#include "G4DNAElectronBornExcitation.hh"
 
 //! \brief Options structure
 struct Options
@@ -421,7 +423,7 @@ G4VLowEnergyTestableDiscreteProcess * GetSelectedProcess(const struct Options & 
   G4DNAGenericIonsManager * genericIonsManager;
   genericIonsManager=G4DNAGenericIonsManager::Instance();
   
-  processes=new G4VLowEnergyTestableDiscreteProcess * [12];
+  processes=new G4VLowEnergyTestableDiscreteProcess * [14];
   processes[0]=new G4DNAElectronElasticBrenner;
   processes[1]=new G4DNAElectronElasticEmfietzoglou;
   processes[2]=new G4DNAProtonExcitation;
@@ -433,7 +435,9 @@ G4VLowEnergyTestableDiscreteProcess * GetSelectedProcess(const struct Options & 
   processes[8]=new G4DNAProtonChargeDecrease;
   processes[9]=new G4DNAProtonChargeIncrease;
   processes[10]=new G4DNAHydrogenRuddIonization;
-  processes[11]=0;
+  processes[11]=new G4DNAProtonBornExcitation;
+  processes[12]=new G4DNAElectronBornExcitation;
+  processes[13]=0;
  }
  
  unsigned long i(0);

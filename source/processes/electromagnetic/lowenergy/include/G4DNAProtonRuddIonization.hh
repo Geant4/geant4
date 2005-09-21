@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProtonRuddIonization.hh,v 1.2 2005-09-16 08:41:52 zfrancis Exp $
+// $Id: G4DNAProtonRuddIonization.hh,v 1.3 2005-09-21 09:18:35 zfrancis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef   G4DNAPROTONRUDDIONIZATION_HH
@@ -64,10 +64,10 @@
    const char * const                   dataFileName;
  };
  
- class G4DNAProtonRuddIonization : public G4DNAIonizationInWater<G4DNATotalCrossSectionFromFilePolicy<G4DNAProtonRuddIonizationIncomingParticlePolicy, G4DNAProtonRuddDataFilePolicy, G4LogLogInterpolation>, G4DNARuddIonizationFinalStatesPolicy<G4DNAProtonRuddIonizationEnergyLimitsPolicy> >
+ class G4DNAProtonRuddIonization : public G4DNAIonizationInWater<G4DNATotalCrossSectionFromFilePolicy<G4DNAProtonRuddIonizationIncomingParticlePolicy, G4DNAProtonRuddDataFilePolicy, G4LogLogInterpolation>, G4DNARuddIonizationFinalStatesPolicy<G4DNAProtonRuddIonizationEnergyLimitsPolicy, G4DNAProtonRuddIonizationIncomingParticlePolicy> >
  {
   public:
-                                         G4DNAProtonRuddIonization(const G4String & name = "G4DNAProtonRuddIonization") : G4DNAIonizationInWater<G4DNATotalCrossSectionFromFilePolicy<G4DNAProtonRuddIonizationIncomingParticlePolicy, G4DNAProtonRuddDataFilePolicy, G4LogLogInterpolation>, G4DNARuddIonizationFinalStatesPolicy<G4DNAProtonRuddIonizationEnergyLimitsPolicy> > (name) {}
+                                         G4DNAProtonRuddIonization(const G4String & name = "G4DNAProtonRuddIonization") : G4DNAIonizationInWater<G4DNATotalCrossSectionFromFilePolicy<G4DNAProtonRuddIonizationIncomingParticlePolicy, G4DNAProtonRuddDataFilePolicy, G4LogLogInterpolation>, G4DNARuddIonizationFinalStatesPolicy<G4DNAProtonRuddIonizationEnergyLimitsPolicy, G4DNAProtonRuddIonizationIncomingParticlePolicy> > (name) {}
    virtual                              ~G4DNAProtonRuddIonization() {}
  };
 #endif /* G4DNAPROTONRUDDIONIZATION_HH */
