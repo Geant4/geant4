@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonTLabelledCollection.hh,v 1.1 2005-09-09 08:27:24 capra Exp $
+// Id:            $Id: RadmonTLabelledCollection.hh,v 1.2 2005-09-21 14:55:28 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Container for objects with the following methods
@@ -25,7 +25,8 @@
  // Forward declarations
  class G4String;
 
- template <typename LabelledObject> class RadmonTLabelledCollection
+ template <typename LabelledObject>
+ class RadmonTLabelledCollection
  {
   public:
                                                 RadmonTLabelledCollection();
