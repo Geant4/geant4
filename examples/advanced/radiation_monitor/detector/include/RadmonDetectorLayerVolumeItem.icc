@@ -1,0 +1,132 @@
+//
+// File name:     RadmonDetectorLayerVolumeItem.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonDetectorLayerVolumeItem.icc,v 1.1 2005-09-21 14:52:32 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONDETECTORLAYERVOLUMEITEM_HH
+ #error "RadmonDetectorLayerVolumeItem.icc cannot be included directly. Please use RadmonDetectorLayerVolumeItem.hh"
+#else  /* RADMONDETECTORLAYERVOLUMEITEM_HH */
+ inline                                         RadmonDetectorLayerVolumeItem :: RadmonDetectorLayerVolumeItem()
+ :
+  volumeSolid(0),
+  volumeAttributes(0),
+  volumeMaterial(0),
+  volumeLogical(0),
+  volumePhysical(0),
+  volumeMother(0)
+ {
+ }
+
+
+
+
+
+ inline void                                    RadmonDetectorLayerVolumeItem :: SetSolid(G4VSolid * solid)
+ {
+  Assertion();
+  volumeSolid=solid;
+ }
+
+
+
+ inline void                                    RadmonDetectorLayerVolumeItem :: SetAttributes(G4VisAttributes * attrs)
+ {
+  Assertion();
+  volumeAttributes=attrs;
+ }
+
+
+
+ inline void                                    RadmonDetectorLayerVolumeItem :: SetMaterial(G4Material * material)
+ {
+  Assertion();
+  volumeMaterial=material;
+ }
+
+
+
+ inline void                                    RadmonDetectorLayerVolumeItem :: SetName(const G4String & name)
+ {
+  Assertion();
+  volumeName=name;
+ }
+
+
+
+ inline void                                    RadmonDetectorLayerVolumeItem :: SetPosition(const G4ThreeVector & position)
+ {
+  Assertion();
+  volumePosition=position;
+ }
+
+
+
+ inline void                                    RadmonDetectorLayerVolumeItem :: SetRotation(const G4RotationMatrix & rotation)
+ {
+  Assertion();
+  volumeRotation=rotation;
+ }
+
+
+
+ inline void                                    RadmonDetectorLayerVolumeItem :: SetMotherVolumeItem(RadmonDetectorLayerVolumeItem * item)
+ {
+  Assertion();
+  volumeMother=item;
+ }
+
+
+
+
+
+ inline G4VSolid *                              RadmonDetectorLayerVolumeItem :: GetSolid(void) const
+ {
+  return volumeSolid;
+ }
+
+
+
+ inline G4VisAttributes *                       RadmonDetectorLayerVolumeItem :: GetAttributes(void) const
+ {
+  return volumeAttributes;
+ }
+
+
+
+ inline G4Material *                            RadmonDetectorLayerVolumeItem :: GetMaterial(void) const
+ {
+  return volumeMaterial;
+ }
+
+
+
+ inline const G4String &                        RadmonDetectorLayerVolumeItem :: GetName(void) const
+ {
+  return volumeName;
+ }
+
+
+
+ inline const G4ThreeVector &                   RadmonDetectorLayerVolumeItem :: GetPosition(void) const
+ {
+  return volumePosition;
+ }
+
+
+
+ inline const G4RotationMatrix &                RadmonDetectorLayerVolumeItem :: GetRotation(void) const
+ {
+  return volumeRotation;
+ }
+
+
+
+ inline RadmonDetectorLayerVolumeItem *         RadmonDetectorLayerVolumeItem :: GetMotherVolumeItem(void) const
+ {
+  return volumeMother;
+ }
+#endif /* RADMONDETECTORLAYERVOLUMEITEM_HH */

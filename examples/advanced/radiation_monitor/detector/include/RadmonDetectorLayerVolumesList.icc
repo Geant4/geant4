@@ -1,0 +1,52 @@
+//
+// File name:     RadmonDetectorLayerVolumesList.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonDetectorLayerVolumesList.icc,v 1.1 2005-09-21 14:52:32 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONDETECTORLAYERVOLUMESLIST_HH
+ #error "RadmonDetectorLayerVolumesList.icc cannot be included directly. Please use RadmonDetectorLayerVolumesList.hh"
+#else  /* RADMONDETECTORLAYERVOLUMESLIST_HH */
+ inline                                         RadmonDetectorLayerVolumesList :: RadmonDetectorLayerVolumesList()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonDetectorLayerVolumesList :: ~RadmonDetectorLayerVolumesList()
+ {
+  RemoveAllItems();
+ }
+
+
+ inline G4int                                   RadmonDetectorLayerVolumesList :: GetNItems(void) const
+ {
+  return volumesVector.size();
+ }
+
+
+
+ inline G4bool                                  RadmonDetectorLayerVolumesList :: Empty(void) const
+ {
+  return volumesVector.empty();
+ }
+
+
+
+
+
+ inline const RadmonDetectorLayerVolumeItem *   RadmonDetectorLayerVolumesList :: GetItem(G4int index) const
+ {
+  return volumesVector[index];
+ }
+
+
+
+ inline RadmonDetectorLayerVolumeItem *         RadmonDetectorLayerVolumesList :: GetItem(G4int index)
+ {
+  return volumesVector[index];
+ }
+#endif /* RADMONDETECTORLAYERVOLUMESLIST_HH */
