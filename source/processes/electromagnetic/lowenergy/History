@@ -1,4 +1,4 @@
-$Id: History,v 1.239 2005-09-21 09:18:35 zfrancis Exp $
+$Id: History,v 1.240 2005-09-21 12:59:36 zfrancis Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+21.09.2005   Ziad FRANCIS, tag emlowen-V07-01-11
+             * Small corrections in G4DNAProtonBornExcitationProcess
+             * ProtonBornExcitationCrossSection data file created
+             * ProtonBornExcitation is tested an seems working fine.
+
 21.09.2005   Ziad FRANCIS, tag emlowen-V07-01-10
              * G4DNARuddIonizationFinalStatesPolicy modifications so it
                becomes a common policy for HydrogenRuddIonization and
