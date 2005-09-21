@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplication.cc,v 1.3 2005-09-19 19:41:09 capra Exp $
+// Id:            $Id: RadmonApplication.cc,v 1.4 2005-09-21 14:58:26 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -17,7 +17,10 @@
 #include "RadmonDetectorMessenger.hh"
 #include "RadmonPhysicsDummyPhysicsList.hh"
 
-#include "RadmonDetectorSimpleBoxConstructor.hh"
+#include "RadmonDetectorFlatVolumeConstructor.hh"
+#include "RadmonDetectorFlatVolumeWithHoleConstructor.hh"
+#include "RadmonDetectorCarvedFlatVolumeWithHoleConstructor.hh"
+#include "RadmonDetectorCarvedFlatVolumeConstructor.hh"
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -241,7 +244,10 @@ G4bool                                          RadmonApplication :: CreateEntit
 {
  RadmonVDetectorLabelledEntityConstructor * constructor;
  
- DECLARE_CONSTRUCTOR(RadmonDetectorSimpleBoxConstructor);
+ DECLARE_CONSTRUCTOR(RadmonDetectorFlatVolumeConstructor);
+ DECLARE_CONSTRUCTOR(RadmonDetectorFlatVolumeWithHoleConstructor);
+ DECLARE_CONSTRUCTOR(RadmonDetectorCarvedFlatVolumeConstructor);
+ DECLARE_CONSTRUCTOR(RadmonDetectorCarvedFlatVolumeWithHoleConstructor);
  
  return true;
 }
