@@ -1,8 +1,10 @@
+/vis/verbose errors
 #/vis/sceneHandler/create ATree DefaultHandler
 #/vis/ASCIITree/verbose 14
 /vis/sceneHandler/create OGLSX DefaultHandler
-#/vis/sceneHandler/create RayTracer DefaultHandler
 /vis/viewer/create DefaultHandler DefaultView 600
+#/vis/sceneHandler/create RayTracer DefaultHandler
+#/vis/viewer/create DefaultHandler DefaultView 1500
 /vis/scene/create DefaultScene
 /vis/scene/add/volume worldPV
 /vis/sceneHandler/attach DefaultScene
