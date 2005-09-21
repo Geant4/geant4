@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.hh,v 1.3 2005-09-15 09:03:38 grichine Exp $
+// $Id: G4ReflectedSolid.hh,v 1.4 2005-09-21 10:24:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -90,7 +90,6 @@ class G4ReflectedSolid : public G4VSolid
 
     G4ThreeVector GetPointOnSurface() const;
 
-                                  
   public:  // with description 
 
     virtual G4GeometryType  GetEntityType() const;

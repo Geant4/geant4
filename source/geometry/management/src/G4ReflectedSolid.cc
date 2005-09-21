@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.6 2005-09-15 09:03:38 grichine Exp $
+// $Id: G4ReflectedSolid.cc,v 1.7 2005-09-21 10:24:35 gcosmo Exp $
 //
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -492,11 +492,10 @@ G4ReflectedSolid::ComputeDimensions(       G4VPVParameterisation*,
                "Method not applicable in this context!");
 }
 
-//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
 //
 // Return a point (G4ThreeVector) randomly and uniformly selected
 // on the solid surface
-//
 
 G4ThreeVector G4ReflectedSolid::GetPointOnSurface() const
 {
@@ -505,10 +504,6 @@ G4ThreeVector G4ReflectedSolid::GetPointOnSurface() const
 
   return G4ThreeVector(newPoint.x(),newPoint.y(),newPoint.z());
 }
-
-
-
-
 
 //////////////////////////////////////////////////////////////////////////
 //
