@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonVDetectorLabelledEntityConstructor.hh,v 1.2 2005-09-19 19:42:13 capra Exp $
+// Id:            $Id: RadmonVDetectorLabelledEntityConstructor.hh,v 1.3 2005-09-21 14:56:43 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Abstract class of a detector-entity constructor with label
@@ -18,6 +18,7 @@
  #include "RadmonVDetectorEntityConstructor.hh"
  
  // Forward declaration
+ class G4Material;
  class G4VisAttributes;
  
  class RadmonVDetectorLabelledEntityConstructor : public RadmonVDetectorEntityConstructor, public RadmonDetectorLayoutEntityWithAttributes
@@ -27,17 +28,22 @@
 
    inline const G4String &                      GetLabel(void) const;
    inline virtual void                          SetEntityAttribute(const G4String & attributeName, const G4String & value);
-   virtual RadmonVDetectorLabelledEntityConstructor * New(void) = 0;
+   virtual RadmonVDetectorLabelledEntityConstructor * New(void) const = 0;
+
+   G4double                                     GetAttributeAsDouble(const G4String & attributeName, double defaultValue) const;
+   G4double                                     GetAttributeAsMeasure(const G4String & attributeName, const char * category, double defaultValue) const;
+   G4int                                        GetAttributeAsInteger(const G4String & attributeName, G4int defaultValue) const;
+   
+   G4double                                     GetWidth(void) const;
+   G4double                                     GetHeight(void) const;
+   G4double                                     GetThickness(void) const;
+
+   G4Material *                                 GetMaterial(const G4String & attributeName) const;
+   G4VisAttributes *                            AllocateVisAttributes(const G4String & attributeName, const G4Material * material) const;
 
   protected:
    inline                                       RadmonVDetectorLabelledEntityConstructor(const G4String & label);
    
-   G4double                                     GetAttributeAsDouble(const G4String & attributeName, double defaultValue);
-   G4double                                     GetAttributeAsMeasure(const G4String & attributeName, const char * category, double defaultValue);
-   G4int                                        GetAttributeAsInteger(const G4String & attributeName, G4int defaultValue);
-   
-   G4VisAttributes *                            AllocateVisAttributes(const G4String & attributeName, const G4String & materialName);
-
   private:
   // Hidden constructors and operators
                                                 RadmonVDetectorLabelledEntityConstructor(const RadmonVDetectorLabelledEntityConstructor & copy);

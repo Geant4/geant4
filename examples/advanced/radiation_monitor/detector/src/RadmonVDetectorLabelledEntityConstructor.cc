@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonVDetectorLabelledEntityConstructor.cc,v 1.1 2005-09-19 19:38:41 capra Exp $
+// Id:            $Id: RadmonVDetectorLabelledEntityConstructor.cc,v 1.2 2005-09-21 14:56:43 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -16,7 +16,7 @@
 #include "G4VisAttributes.hh"
 #include "globals.hh"
    
-G4double                                        RadmonVDetectorLabelledEntityConstructor :: GetAttributeAsDouble(const G4String & attributeName, double defaultValue)
+G4double                                        RadmonVDetectorLabelledEntityConstructor :: GetAttributeAsDouble(const G4String & attributeName, double defaultValue) const
 {
  G4String str;
  
@@ -33,7 +33,7 @@ G4double                                        RadmonVDetectorLabelledEntityCon
 
 
 
-G4double                                        RadmonVDetectorLabelledEntityConstructor :: GetAttributeAsMeasure(const G4String & attributeName, const char * category, double defaultValue)
+G4double                                        RadmonVDetectorLabelledEntityConstructor :: GetAttributeAsMeasure(const G4String & attributeName, const char * category, double defaultValue) const
 {
  G4String str;
  
@@ -54,7 +54,7 @@ G4double                                        RadmonVDetectorLabelledEntityCon
 
 
 
-G4int                                           RadmonVDetectorLabelledEntityConstructor :: GetAttributeAsInteger(const G4String & attributeName, G4int defaultValue)
+G4int                                           RadmonVDetectorLabelledEntityConstructor :: GetAttributeAsInteger(const G4String & attributeName, G4int defaultValue) const
 {
  G4String str;
  
@@ -73,7 +73,86 @@ G4int                                           RadmonVDetectorLabelledEntityCon
 
 
 
-G4VisAttributes *                               RadmonVDetectorLabelledEntityConstructor :: AllocateVisAttributes(const G4String & attributeName, const G4String & materialName)
+G4double                                        RadmonVDetectorLabelledEntityConstructor :: GetWidth(void) const
+{
+ G4double value(GetAttributeAsMeasure("_WIDTH", "Length", -1.));
+ 
+ if (value>=0)
+  return value;
+
+ value=GetAttributeAsMeasure("Width", "Length", -1.);
+ 
+ if (value>=0)
+  return value;
+
+ G4cout << "RadmonVDetectorLabelledEntityConstructor::GetWidth: \"Width\" attribute not defined." << G4endl;
+ return -1;
+}
+
+
+
+G4double                                        RadmonVDetectorLabelledEntityConstructor :: GetHeight(void) const
+{
+ G4double value(GetAttributeAsMeasure("_HEIGHT", "Length", -1.));
+ 
+ if (value>=0)
+  return value;
+
+ value=GetAttributeAsMeasure("Height", "Length", -1.);
+ 
+ if (value>=0)
+  return value;
+
+ G4cout << "RadmonVDetectorLabelledEntityConstructor::GetHeight: \"Height\" attribute not defined." << G4endl;
+ return -1;
+}
+
+
+
+G4double                                        RadmonVDetectorLabelledEntityConstructor :: GetThickness(void) const
+{
+ G4double value(GetAttributeAsMeasure("_THICKNESS", "Length", -1.));
+ 
+ if (value>=0)
+  return value;
+
+ value=GetAttributeAsMeasure("Thickness", "Length", -1.);
+ 
+ if (value>=0)
+  return value;
+
+ G4cout << "RadmonVDetectorLabelledEntityConstructor::GetThickness: \"Thickness\" attribute not defined." << G4endl;
+ return -1;
+}
+
+
+
+
+
+G4Material *                                    RadmonVDetectorLabelledEntityConstructor :: GetMaterial(const G4String & attributeName) const
+{
+ G4String materialStr(GetAttribute(attributeName, "#")); 
+ if (materialStr=="#")
+ {
+  G4cout << "RadmonDetectorSimpleBoxConstructor::ConstructLogicalVolume: \"" << attributeName << "\" attribute not defined." << G4endl;
+  return 0;
+ }
+ 
+ RadmonMaterialsManager * manager(RadmonMaterialsManager::Instance()); 
+ if (!manager->ExistsMaterial(materialStr))
+ {
+  G4cout << "RadmonDetectorSimpleBoxConstructor::ConstructLogicalVolume: \"" << materialStr << "\" material not existent." << G4endl;
+  return 0;
+ }
+ 
+ return &manager->GetMaterial(materialStr);
+}
+
+
+
+
+
+G4VisAttributes *                               RadmonVDetectorLabelledEntityConstructor :: AllocateVisAttributes(const G4String & attributeName, const G4Material * material) const
 {
  G4VisAttributes * visAttribute=new G4VisAttributes;
 
@@ -81,6 +160,8 @@ G4VisAttributes *                               RadmonVDetectorLabelledEntityCon
  str=GetAttribute(attributeName, "#");
  if (str=="#")
  {
+  G4String materialName(material->GetName());
+  
   RadmonMaterialsManager * instance(RadmonMaterialsManager::Instance());
   
   visAttribute->SetColor(instance->GetMaterialColor(materialName));
@@ -98,15 +179,16 @@ G4VisAttributes *                               RadmonVDetectorLabelledEntityCon
   G4bool forceSolid(false);
   G4bool forceWireframe(false);
   G4bool visible(true);
+  G4double alpha(1.);
   G4double red(1.);
   G4double green(1.);
   G4double blue(1.);
   
   G4bool forceFound(false);
   G4bool visibleFound(false);
-  G4int missingColors(3);
+  G4int missingColors(4);
   
-  for (G4int i(0); i<5; i++)
+  for (G4int i(0); i<6; i++)
   {
    if (args.eos())
     break;
@@ -115,7 +197,7 @@ G4VisAttributes *                               RadmonVDetectorLabelledEntityCon
    
    if (arg=="hidden" || arg=="visible")
    {
-    if (visibleFound || missingColors==1 || missingColors==2)
+    if (visibleFound || missingColors==2 || missingColors==3)
     {
      missingColors=-1;
      break;
@@ -127,7 +209,7 @@ G4VisAttributes *                               RadmonVDetectorLabelledEntityCon
    }
    else if (arg=="wireframe" || arg=="solid" || arg=="default")
    {
-    if (forceFound || missingColors==1 || missingColors==2)
+    if (forceFound || missingColors==2 || missingColors==3)
     {
      missingColors=-1;
      break;
@@ -150,16 +232,20 @@ G4VisAttributes *                               RadmonVDetectorLabelledEntityCon
     {
      switch(missingColors)
      {
-      case 3:
+      case 4:
        red=component;
        break;
 
-      case 2:
+      case 3:
        green=component;
        break;
 
-      case 1:
+      case 2:
        blue=component;
+       break;
+
+      case 1:
+       alpha=component;
        break;
      }
 
@@ -168,11 +254,11 @@ G4VisAttributes *                               RadmonVDetectorLabelledEntityCon
    }
   }
   
-  if (missingColors!=0 && missingColors!=3)
+  if (missingColors!=0 && missingColors!=4 && missingColors!=1)
    G4cout << "RadmonVDetectorLabelledEntityConstructor::AllocateVisAttribute: Invalid visualization attribute in \"" << attributeName << "\"." << G4endl; 
   else
   {
-   visAttribute->SetColor(red, green, blue);
+   visAttribute->SetColor(red, green, blue, alpha);
    visAttribute->SetVisibility(visible);
    if (forceWireframe)
     visAttribute->SetForceWireframe(true);
