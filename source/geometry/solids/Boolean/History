@@ -1,5 +1,5 @@
 
-$Id: History,v 1.53 2005-09-21 10:38:25 gcosmo Exp $
+$Id: History,v 1.54 2005-09-21 10:39:47 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,7 @@ committal in the CVS repository !
  Sep 15, 2005  V.Grichine                 geom-bool-V07-01-00
   - Added concrete implementation for GetPointOnSurface() to
     G4BooleanSolid and G4DisplacedSolid.
+  - Updated unit tests testG4DisplacedSolid and testG4IntersectionSolid.
 
  May 04, 2005  V.Grichine                 geom-bool-V07-00-03
   - Make the new implementation of Inside() with surface-normal for
