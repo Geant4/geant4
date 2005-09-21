@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2005-09-19 19:42:43 capra Exp $
+$Id: History,v 1.5 2005-09-21 15:01:08 capra Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,13 +17,20 @@ in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 Sep 2005 - radmon-V07-01-04 - R. Capra - Implementation according to the
+                        design almost completed. Following functionality
+                        added:
+                        - Alpha channel support for attributes
+                        - Carved geometry decorator
+                        - Hole geometry decorator
+
 19 Sep 2005 - radmon-V07-01-03 - R. Capra - Implementation according to the
-                        design in progress. Following functionality added
+                        design in progress. Following functionality added:
                         - Materials creation through a messenger
                         - Geometry creation and update
                         - First Geometry constructor object created (Simple
                           box)
-                        - macros directory created
+                        - Macros directory created
 
 14 Sep 2005 - radmon-V07-01-02 - R. Capra - Implementation according to the
                         design in progress. RadmonDetectorMessenger completed 
