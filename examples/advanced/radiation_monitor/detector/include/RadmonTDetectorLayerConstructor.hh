@@ -3,11 +3,11 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonTDetectorLayerConstructor.hh,v 1.1 2005-09-09 08:26:24 capra Exp $
+// Id:            $Id: RadmonTDetectorLayerConstructor.hh,v 1.2 2005-09-21 14:48:18 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Generates a layer using a component with the following methods
-//                 - Constructor
+//                 - Constructor with RadmonVDetectorLabelledEntityConstructor or its base classes as argument
 //                 - Destructor
 //                 - RadmonDetectorLayerVolumesList * GenerateVolumesList(void)
 //
@@ -23,18 +23,15 @@
  // Forward declaration
  class RadmonDetectorLayerVolumesList;
 
- template <class LayerVolumesComponent> class RadmonTDetectorLayerConstructor : public RadmonVDetectorLabelledEntityConstructor
+ template <class LayerVolumesComponent>
+ class RadmonTDetectorLayerConstructor : public RadmonVDetectorLabelledEntityConstructor
  {
   public:
                                                 RadmonTDetectorLayerConstructor(const G4String & label);
                                                ~RadmonTDetectorLayerConstructor();
 
    virtual G4LogicalVolume *                    ConstructLogicalVolume(void);
-   virtual void                                 DestructLogicalVolume(void);
-
-   G4double                                     GetWidth(void) const;
-   G4double                                     GetHeight(void) const;
-   G4double                                     GetThickness(void) const;
+   virtual RadmonVDetectorLabelledEntityConstructor * New(void) const;
 
   private:
   // Hidden constructors and operators
@@ -44,5 +41,9 @@
 
   // Private attributes
    RadmonDetectorLayerVolumesList *             volumesList;
+   LayerVolumesComponent                        component;
  };
+ 
+ // Inline implementations
+ #include "RadmonTDetectorLayerConstructor.icc"
 #endif /* RADMONTDETECTORLAYERCONSTRUCTOR_HH */
