@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplicationOptions.cc,v 1.1 2005-09-09 08:26:54 capra Exp $
+// Id:            $Id: RadmonApplicationOptions.cc,v 1.2 2005-09-21 14:51:25 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -42,6 +42,11 @@
     case 'b':
     case 'B':
      interactive=false;
+     break;
+    
+    case 'v':
+    case 'V':
+     verbose=true;
      break;
     
     default:
