@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorConstruction.cc,v 1.3 2005-09-19 19:42:13 capra Exp $
+// Id:            $Id: RadmonDetectorConstruction.cc,v 1.4 2005-09-21 14:54:20 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -230,11 +230,11 @@ void                                            RadmonDetectorConstruction :: Bu
 
  G4String heightStr(G4UIcommand::ConvertToString(height/mm)+" mm");
  
- G4double y(const_detectorLayout->GetMultilayerTotalThickness(multilayerLabel)); 
- if (y<=0.)
+ G4double z(const_detectorLayout->GetMultilayerTotalThickness(multilayerLabel)); 
+ if (z<=0.)
   return;
   
- y/=2.;
+ z/=2.;
  
  G4int n(const_detectorLayout->GetMultilayerNLayers(multilayerLabel));
  if (n==0)
@@ -255,6 +255,7 @@ void                                            RadmonDetectorConstruction :: Bu
   
   if (entityConstructor==0)
   {
+   z-=layerThickness;
    G4cout << "RadmonDetectorConstruction::BuildMultilayer: Layer type \"" << layerType << "\" not found. Layer ignored." << G4endl;
    continue;
   }
@@ -276,25 +277,26 @@ void                                            RadmonDetectorConstruction :: Bu
   entityConstructor->SetEntityAttribute("_HEIGHT", heightStr);
   entityConstructor->SetEntityAttribute("_THICKNESS", G4UIcommand::ConvertToString(layerThickness/mm)+" mm");
   
-  layerThickness/=2.;
-  
   G4LogicalVolume * entityLogicalVolume(entityConstructor->ConstructLogicalVolume());
   
   if (entityLogicalVolume==0)
   {
    delete entityConstructor;
    G4cout << "RadmonDetectorConstruction::BuildMultilayer: Layer \"" << layerLabel << "\" from \"" << multilayerLabel << "\" not built. Layer ignored." << G4endl;
+   z-=layerThickness;
    continue;
   }
   
-  y-=layerThickness;
-  G4ThreeVector layerPosition(rotation.colY());
-  layerPosition*=y;
+  layerThickness/=2.;
+  
+  z-=layerThickness;
+  G4ThreeVector layerPosition(rotation.colZ());
+  layerPosition*=z;
   layerPosition+=position;
   
   G4VPhysicalVolume * entityPhysicalVolume(new G4PVPlacement(G4Transform3D(rotation, layerPosition), entityLogicalVolume, placementLabel+"_"+multilayerLabel+"_"+layerLabel, environmentLogicalVolume, false, 0));
   
-  y-=layerThickness;
+  z-=layerThickness;
   
   layersStack.push(LayerItem(entityConstructor, entityPhysicalVolume));
  } 
