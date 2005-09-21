@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonTDetectorVolumesWithHoleDecorator.hh,v 1.1 2005-09-09 08:26:24 capra Exp $
+// Id:            $Id: RadmonTDetectorVolumesWithHoleDecorator.hh,v 1.2 2005-09-21 14:52:57 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Decorates with a hole a component with the following method
@@ -15,13 +15,19 @@
 #ifndef   RADMONTDETECTORVOLUMESWITHHOLEDECORATOR_HH
  #define  RADMONTDETECTORVOLUMESWITHHOLEDECORATOR_HH
 
- class RadmonTDetectorLayerConstructor;
- class RadmonDetectorLayerVolumesList;
+ // Include files
+ #include <stack>
 
- template <class LayerVolumesComponent> class RadmonTDetectorVolumesWithHoleDecorator
+ // Forward declaration
+ class RadmonVDetectorLabelledEntityConstructor;
+ class RadmonDetectorLayerVolumesList;
+ class G4VSolid;
+
+ template <class LayerVolumesComponent>
+ class RadmonTDetectorVolumesWithHoleDecorator
  {
   public:
-                                                RadmonTDetectorVolumesWithHoleDecorator(const RadmonTDetectorLayerConstructor * owner);
+                                                RadmonTDetectorVolumesWithHoleDecorator(const RadmonVDetectorLabelledEntityConstructor * constructor);
                                                ~RadmonTDetectorVolumesWithHoleDecorator();
 
    RadmonDetectorLayerVolumesList *             GenerateVolumesList(void);
@@ -32,7 +38,15 @@
                                                 RadmonTDetectorVolumesWithHoleDecorator(const  RadmonTDetectorVolumesWithHoleDecorator & copy);
    RadmonTDetectorVolumesWithHoleDecorator &    operator=(const  RadmonTDetectorVolumesWithHoleDecorator & copy);
 
+  // Private data types
+   typedef std::stack<G4VSolid *>               OwnedSolids;
+  
   // Private attributes
-   const RadmonTDetectorLayerConstructor *      attributesOwner;
+   const RadmonVDetectorLabelledEntityConstructor * owner;
+   LayerVolumesComponent                        component;
+   OwnedSolids                                  ownedSolids;
  };
+ 
+ // Inline implementations
+ #include "RadmonTDetectorVolumesWithHoleDecorator.icc"
 #endif /* RADMONTDETECTORVOLUMESWITHHOLEDECORATOR_HH */

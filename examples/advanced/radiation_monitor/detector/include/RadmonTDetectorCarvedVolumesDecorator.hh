@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonTDetectorCarvedVolumesDecorator.hh,v 1.1 2005-09-09 08:26:24 capra Exp $
+// Id:            $Id: RadmonTDetectorCarvedVolumesDecorator.hh,v 1.2 2005-09-21 14:52:57 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Carves the borders of a component with the following method
@@ -15,14 +15,21 @@
 #ifndef   RADMONTDETECTORCARVEDVOLUMESDECORATOR_HH
  #define  RADMONTDETECTORCARVEDVOLUMESDECORATOR_HH
 
- // Forward declaration
- class RadmonTDetectorLayerConstructor;
- class RadmonDetectorLayerVolumesList;
+ // Include files
+ #include <stack>
+ #include "G4RotationMatrix.hh"
 
- template <class LayerVolumesComponent> class RadmonTDetectorCarvedVolumesDecorator
+ // Forward declaration
+ class RadmonVDetectorLabelledEntityConstructor;
+ class RadmonDetectorLayerVolumesList;
+ class G4VSolid;
+ class G4VAttributes;
+
+ template <class LayerVolumesComponent>
+ class RadmonTDetectorCarvedVolumesDecorator
  {
   public:
-                                                RadmonTDetectorCarvedVolumesDecorator(const RadmonTDetectorLayerConstructor * owner);
+                                                RadmonTDetectorCarvedVolumesDecorator(const RadmonVDetectorLabelledEntityConstructor * constructor);
                                                ~RadmonTDetectorCarvedVolumesDecorator();
 
    RadmonDetectorLayerVolumesList *             GenerateVolumesList(void);
@@ -33,7 +40,17 @@
                                                 RadmonTDetectorCarvedVolumesDecorator(const RadmonTDetectorCarvedVolumesDecorator & copy);
    RadmonTDetectorCarvedVolumesDecorator &      operator=(const RadmonTDetectorCarvedVolumesDecorator & copy);
 
+  // Private data types
+   typedef std::stack<G4VSolid *>               OwnedSolids;
+  
   // Private attributes
-   const RadmonTDetectorLayerConstructor *      attributesOwner;
+   const RadmonVDetectorLabelledEntityConstructor * owner;
+   LayerVolumesComponent                        component;
+   OwnedSolids                                  ownedSolids;
+   G4VisAttributes *                            visAttributes;
+   G4RotationMatrix                             identity;
  };
+ 
+ // Inline implementations
+ #include "RadmonTDetectorCarvedVolumesDecorator.icc"
 #endif /* RADMONTDETECTORCARVEDVOLUMESDECORATOR_HH */

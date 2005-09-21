@@ -1,0 +1,133 @@
+//
+// File name:     RadmonTDetectorVolumesWithHoleDecorator.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonTDetectorVolumesWithHoleDecorator.icc,v 1.1 2005-09-21 14:52:57 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONTDETECTORVOLUMESWITHHOLEDECORATOR_HH
+ #error "RadmonTDetectorVolumesWithHoleDecorator.icc cannot be included directly. Please use RadmonTDetectorVolumesWithHoleDecorator.hh"
+#else  /* RADMONTDETECTORVOLUMESWITHHOLEDECORATOR_HH */
+ // Include files
+ #include "RadmonVDetectorLabelledEntityConstructor.hh"
+ #include "RadmonDetectorLayerVolumesList.hh"
+ #include "RadmonDetectorLayerVolumeItem.hh"
+ #include "G4SubtractionSolid.hh"
+ #include "G4Box.hh"
+ 
+ template <class LayerVolumesComponent>
+                                                RadmonTDetectorVolumesWithHoleDecorator<LayerVolumesComponent> :: RadmonTDetectorVolumesWithHoleDecorator(const RadmonVDetectorLabelledEntityConstructor * constructor)
+ :
+  owner(constructor),
+  component(constructor)
+ {
+ }
+ 
+ 
+ 
+ template <class LayerVolumesComponent>
+                                                RadmonTDetectorVolumesWithHoleDecorator<LayerVolumesComponent> :: ~RadmonTDetectorVolumesWithHoleDecorator()
+ {
+  while (! ownedSolids.empty())
+  {
+   delete ownedSolids.top();
+   ownedSolids.pop();
+  }
+ }
+ 
+ 
+ 
+ 
+ 
+ template <class LayerVolumesComponent>
+ RadmonDetectorLayerVolumesList *               RadmonTDetectorVolumesWithHoleDecorator<LayerVolumesComponent> :: GenerateVolumesList(void)
+ {
+  G4double width(owner->GetWidth());
+  if (width<0)
+   return 0;
+
+  G4double height(owner->GetHeight());
+  if (height<0)
+   return 0;
+  
+  G4double thickness(owner->GetThickness());
+  if (thickness<0)
+   return 0;
+  
+  G4double holeWidth(owner->GetAttributeAsMeasure("HoleWidth", "Length", -1.));
+  if (holeWidth<0)
+  {
+   holeWidth=owner->GetAttributeAsDouble("HoleScaleWidth", -1.);
+   
+   if (holeWidth<0)
+   {
+    G4cout << "RadmonTDetectorVolumesWithHoleDecorator::GenerateVolumesList: Neither \"HoleWidth\" nor \"HoleScaleWidth\" attributes are defined." << G4endl;
+    return 0;
+   }
+   
+   holeWidth*=width;
+  }
+  
+  if (width<holeWidth)
+  {
+   G4cout << "RadmonTDetectorVolumesWithHoleDecorator::GenerateVolumesList: Hole width exceeds layer width." << G4endl;
+   return 0;
+  }
+  
+  G4double holeHeight(owner->GetAttributeAsMeasure("HoleHeight", "Length", -1.));
+  if (holeHeight<0)
+  {
+   holeHeight=owner->GetAttributeAsDouble("HoleScaleHeight", -1.);
+   
+   if (holeHeight<0)
+   {
+    G4cout << "RadmonTDetectorVolumesWithHoleDecorator::GenerateVolumesList: Neither \"HoleHeight\" nor \"HoleScaleHeight attributes are defined." << G4endl;
+    return 0;
+   }
+   
+   holeHeight*=height;
+  }
+  
+  if (height<holeHeight)
+  {
+   G4cout << "RadmonTDetectorVolumesWithHoleDecorator::GenerateVolumesList: Hole height exceeds layer height." << G4endl;
+   return 0;
+  }
+  
+  RadmonDetectorLayerVolumesList * list(component.GenerateVolumesList());
+  
+  if (list==0)
+   return 0;
+   
+  G4int n(list->GetNItems());
+  
+  if (n==0)
+  {
+   delete list;
+   return 0;
+  }
+  
+  RadmonDetectorLayerVolumeItem * item;
+  G4Box * hole(new G4Box("Hole", holeWidth/2., holeHeight/2., (thickness/2.)*1.01));
+  G4VSolid * oldSolid;
+  G4SubtractionSolid * newSolid;
+  
+  ownedSolids.push(hole);
+
+  while (n>0)
+  {
+   n--;
+
+   item=list->GetItem(n);
+   oldSolid=item->GetSolid();
+   newSolid=new G4SubtractionSolid(oldSolid->GetName()+"WithHole", oldSolid, hole);
+   item->SetSolid(newSolid);
+   ownedSolids.push(newSolid);
+  }
+  
+  return list;
+ }
+#endif /* RADMONTDETECTORVOLUMESWITHHOLEDECORATOR_HH */
+ 
