@@ -6,60 +6,60 @@
 #/particle/list
 #
 # Sphere
-/run/beamOn 100
+/run/beamOn 25
 #
 # Orb
 /mydet/SelectDetector Orb
-/run/beamOn 100
+/run/beamOn 25
 #
 # Cone
 /mydet/SelectDetector Cone
-/run/beamOn 100
+/run/beamOn 25
 #
 # Box
 /mydet/SelectDetector Box
-/run/beamOn 100
+/run/beamOn 25
 #
 # Tube
 /mydet/SelectDetector Tube
-/run/beamOn 100
+/run/beamOn 25
 #
 # Hype
 /mydet/SelectDetector Hype
-/run/beamOn 100
+/run/beamOn 25
 #
 # Para
 /mydet/SelectDetector Para
-/run/beamOn 100
+/run/beamOn 25
 #
 # Trd
 /mydet/SelectDetector Trd
-/run/beamOn 100
+/run/beamOn 25
 #
 # Torus
 /mydet/SelectDetector Torus
-/run/beamOn 100
+/run/beamOn 25
 #
 # Polyhedra
 /mydet/SelectDetector Polyhedra
-/run/beamOn 100
+/run/beamOn 25
 #
 # Polycone
 /mydet/SelectDetector Polycone
-/run/beamOn 100
+/run/beamOn 25
 #
 # TwistedBox
 /mydet/SelectDetector TwistedBox
-/run/beamOn 100
+/run/beamOn 25
 #
 # TwistedTrd
 /mydet/SelectDetector TwistedTrd
-/run/beamOn 100
+/run/beamOn 25
 #
 # TwistedTrap
 /mydet/SelectDetector TwistedTrap
-/run/beamOn 100
+/run/beamOn 25
 #
 # TwistedTrap2
 /mydet/SelectDetector TwistedTrap2
-/run/beamOn 100
+/run/beamOn 25
