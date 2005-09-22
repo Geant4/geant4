@@ -21,52 +21,40 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimitiveSensitivity.cc,v 1.2 2005-09-22 22:21:36 asaim Exp $
+// $Id: G4VSDFilter.hh,v 1.1 2005-09-22 22:21:36 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// G4VPrimitiveSensitivity
-#include "G4VPrimitiveSensitivity.hh"
-#include "G4MultiFunctionalDetector.hh"
-#include "G4SDManager.hh"
-#include "G4Step.hh"
-#include "G4TouchableHistory.hh"
 
+#ifndef G4VSDFilter_h
+#define G4VSDFilter_h 1
 
-G4VPrimitiveSensitivity::G4VPrimitiveSensitivity(G4String name)
-:primitiveName(name),detector(0),filter(0),verboseLevel(0)
-{;} 
+class G4Step;
+#include "globals.hh"
 
-G4VPrimitiveSensitivity::~G4VPrimitiveSensitivity()
-{;}
+// class description:
+//
+//  This is the abstract base class of a filter to be associated with a
+// sensitive detector. 
 
-G4int G4VPrimitiveSensitivity::GetCollectionID(G4int)
+class G4VSDFilter 
 {
-  if(detector)
-   return G4SDManager::GetSDMpointer()
-    ->GetCollectionID(detector->GetName()+"/"+primitiveName); 
-  else
-   return -1;
-}
 
-void G4VPrimitiveSensitivity::Initialize(G4HCofThisEvent*)
-{;}
+  public: // with description
+      G4VSDFilter(G4String name);
 
-void G4VPrimitiveSensitivity::EndOfEvent(G4HCofThisEvent*)
-{;}
+  public:
+      virtual ~G4VSDFilter();
 
-void G4VPrimitiveSensitivity::clear()
-{;}
+  public: // with description
+      virtual G4bool Accept(const G4Step*) const = 0;
 
-void G4VPrimitiveSensitivity::DrawAll()
-{;}
+  protected:
+      G4String filterName;
 
-void G4VPrimitiveSensitivity::PrintAll()
-{;}
+  public:
+      inline G4String GetName() const
+      { return filterName; }
+};
 
-G4int G4VPrimitiveSensitivity::GetIndex(G4Step* aStep)
-{
-  G4StepPoint* preStep = aStep->GetPreStepPoint();
-  G4TouchableHistory* th = (G4TouchableHistory*)(preStep->GetTouchable());
-  return th->GetReplicaNumber();
-}
+#endif
 

@@ -21,52 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimitiveSensitivity.cc,v 1.2 2005-09-22 22:21:36 asaim Exp $
+// $Id: G4VSDFilter.cc,v 1.1 2005-09-22 22:21:36 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// G4VPrimitiveSensitivity
-#include "G4VPrimitiveSensitivity.hh"
-#include "G4MultiFunctionalDetector.hh"
-#include "G4SDManager.hh"
-#include "G4Step.hh"
-#include "G4TouchableHistory.hh"
+// G4VSensitiveDetector
+#include "G4VSDFilter.hh"
 
-
-G4VPrimitiveSensitivity::G4VPrimitiveSensitivity(G4String name)
-:primitiveName(name),detector(0),filter(0),verboseLevel(0)
-{;} 
-
-G4VPrimitiveSensitivity::~G4VPrimitiveSensitivity()
+G4VSDFilter::G4VSDFilter(G4String name)
+:filterName(name)
 {;}
 
-G4int G4VPrimitiveSensitivity::GetCollectionID(G4int)
-{
-  if(detector)
-   return G4SDManager::GetSDMpointer()
-    ->GetCollectionID(detector->GetName()+"/"+primitiveName); 
-  else
-   return -1;
-}
-
-void G4VPrimitiveSensitivity::Initialize(G4HCofThisEvent*)
+G4VSDFilter::~G4VSDFilter()
 {;}
-
-void G4VPrimitiveSensitivity::EndOfEvent(G4HCofThisEvent*)
-{;}
-
-void G4VPrimitiveSensitivity::clear()
-{;}
-
-void G4VPrimitiveSensitivity::DrawAll()
-{;}
-
-void G4VPrimitiveSensitivity::PrintAll()
-{;}
-
-G4int G4VPrimitiveSensitivity::GetIndex(G4Step* aStep)
-{
-  G4StepPoint* preStep = aStep->GetPreStepPoint();
-  G4TouchableHistory* th = (G4TouchableHistory*)(preStep->GetTouchable());
-  return th->GetReplicaNumber();
-}
-

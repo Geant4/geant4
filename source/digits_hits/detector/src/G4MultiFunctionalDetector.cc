@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiFunctionalDetector.cc,v 1.1 2005-09-19 18:40:56 asaim Exp $
+// $Id: G4MultiFunctionalDetector.cc,v 1.2 2005-09-22 22:21:36 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4MultiFunctionalDetector
@@ -40,7 +40,7 @@ G4bool G4MultiFunctionalDetector::ProcessHits(G4Step* aStep,G4TouchableHistory* 
 {
    G4int nPrim = primitives.size();
    for(G4int iPrim=0;iPrim<nPrim;iPrim++)
-   { primitives[iPrim]->ProcessHits(aStep,aTH); }
+   { primitives[iPrim]->HitPrimitive(aStep,aTH); }
    return true;
 }
 
@@ -59,6 +59,12 @@ G4bool G4MultiFunctionalDetector::RegisterPrimitive(G4VPrimitiveSensitivity* aPS
    primitives.push_back(aPS);
    aPS->SetMultiFunctionalDetector(this);
    collectionName.insert(aPS->GetName());
+   if(G4SDManager::GetSDMpointer()->FindSensitiveDetector(SensitiveDetectorName,false))
+   {
+    // This G4MultiFunctionalDetector has already been registered to G4SDManager.
+    // Make sure this new primitive is registered as well.
+    G4SDManager::GetSDMpointer()->AddNewCollection(SensitiveDetectorName,aPS->GetName());
+   }
    return true;
 }
 
@@ -71,7 +77,6 @@ G4bool G4MultiFunctionalDetector::RemovePrimitive(G4VPrimitiveSensitivity* aPS)
      if(*iterPS==aPS)
      {
        primitives.erase(iterPS);
-       collectionName.erase(iterName);
        aPS->SetMultiFunctionalDetector(0);
        return true;
      }
