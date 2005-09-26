@@ -1,0 +1,60 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: version.hh,v 1.1 2005-09-26 06:49:42 kmura Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Version information
+//
+// History:
+// 26.09.05 K.Murakami  - Created
+//
+
+#ifndef VERSION_HH
+#define VERSION_HH
+
+// Numbering rule for "G4VERSION_NUMBER":
+// - The number is consecutive (i.e. 711) as an integer.
+// - The meaning of each digit is as follows;
+//
+//   711
+//   |--> major version number 
+//    |--> minor version number
+//     |--> patch number
+
+#ifndef G4VERSION_NUMBER
+#define G4VERSION_NUMBER  711
+#endif
+
+#ifndef G4VERSION_TAG
+#define G4VERSION_TAG "$Name: not supported by cvs2svn $"
+#endif
+
+// as variables
+
+#include "G4String.hh"
+
+static const G4String G4Version = "$Name: not supported by cvs2svn $";
+static const G4String G4Date    = "(30-June-2005)";
+
+#endif
