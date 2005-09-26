@@ -15,7 +15,7 @@
 // cannot be instansiated with a template class. Thus G4HitsMap
 // class MUST NOT be directly used by the user.
 
-template <class T> class G4THitsMap : public G4HitsCollection 
+template <typename T> class G4THitsMap : public G4HitsCollection 
 {
   public:
       G4THitsMap();
@@ -25,7 +25,7 @@ template <class T> class G4THitsMap : public G4HitsCollection
   public:
       virtual ~G4THitsMap();
       G4int operator==(const G4THitsMap<T> &right) const;
-      G4THitsMap<T> operator+=(const G4THitsMap<T> &right) const;
+      G4THitsMap<T> & operator+=(const G4THitsMap<T> &right) const;
 
   public: // with description
       virtual void DrawAllHits();
@@ -40,7 +40,8 @@ template <class T> class G4THitsMap : public G4HitsCollection
       inline std::map<G4int,T*>* GetMap() const
       { return (std::map<G4int,T*>*)theCollection; }
       //  Returns a collection map.
-      inline G4int add(G4int & key, T * &aHit) const;
+      inline G4int add(const G4int & key, T * &aHit) const;
+      inline G4int add(const G4int & key, T &aHit) const;
       //  Insert a hit object. Total number of hit objects stored in this
       // map is returned.
       inline G4int entries() const
@@ -55,50 +56,45 @@ template <class T> class G4THitsMap : public G4HitsCollection
 
 };
 
-template <class T> G4THitsMap<T>::G4THitsMap()
-{ 
-  std::map<G4int,T*> * theHitsMap = new std::map<G4int,T*>;
-  theCollection = (void*)theHitsMap;
-}
-
-template <class T> G4THitsMap<T>::G4THitsMap(G4String detName,G4String colNam)
-    : G4HitsCollection(detName,colNam)
+template <typename T> G4THitsMap<T>::G4THitsMap()
 { 
   theCollection = (void*)new std::map<G4int,T*>;
 }
 
-template <class T> G4THitsMap<T>::~G4THitsMap()
-{
-  std::map<G4int,T*> theHitsMap = *(std::map<G4int,T*> *)theCollection;
-  G4int size = theHitsMap.size();
-  for(int i = 0; i < size; i++) {
-      delete theHitsMap.begin()->second;
-      theHitsMap.erase(theHitsMap.begin());
-  }
-  delete (std::map<G4int,T*> *)theCollection;
+template <typename T> G4THitsMap<T>::G4THitsMap(G4String detName,G4String colNam)
+    : G4HitsCollection(detName,colNam)
+{ 
+    theCollection = (void*)new std::map<G4int,T*>;
 }
 
-template <class T> G4int G4THitsMap<T>::operator==(const G4THitsMap<T> &right) const
+template <typename T> G4THitsMap<T>::~G4THitsMap()
+{
+  typename std::map<G4int,T*> * theHitsMap = GetMap();
+  typename std::map<G4int,T*>::iterator itr = theHitsMap->begin();
+  for(; itr != theHitsMap->end(); itr++) {
+      delete itr->second;
+  }
+
+  delete theHitsMap;
+}
+
+template <typename T> G4int G4THitsMap<T>::operator==(const G4THitsMap<T> &right) const
 { return (collectionName==right.collectionName); }
 
-template <class T> G4THitsMap<T> 
+template <typename T> G4THitsMap<T> &
 G4THitsMap<T>::operator+=(const G4THitsMap<T> &right) const
 {
-    std::map<G4int,T*> theHitsMap
-	= *(std::map<G4int,T*> *)(right.theCollection);
-    G4int size = theHitsMap.size();
-    for(int i = 0; i < size; i++) {
-	G4int key = theHitsMap.begin()->first;
-	G4double * edep = theHitsMap.begin()->second;
-	add(key, edep);
-	theHitsMap.erase(theHitsMap.begin());
+    std::map<G4int,T*> * aHitsMap = right.GetMap();
+    typename std::map<G4int,T*>::iterator itr = aHitsMap->begin();
+    for(; itr != aHitsMap->end(); itr++) {
+	add(itr->first, *(itr->second));
     }
-    return (G4THitsMap<T>)(*this);
+    return (G4THitsMap<T>&)(*this);
 }
 
-template <class T> inline T* 
+template <typename T> inline T* 
 G4THitsMap<T>::operator[](G4int key) const {
-    std::map<G4int,T*> * theHitsMap = (std::map<G4int,T*>*)theCollection;
+    std::map<G4int,T*> * theHitsMap = GetMap();
     if(theHitsMap->find(key) != theHitsMap->end()) {
 	return theHitsMap->find(key)->second;
     } else {
@@ -106,29 +102,47 @@ G4THitsMap<T>::operator[](G4int key) const {
     }
 }
 
-template <class T> inline G4int
-G4THitsMap<T>::add(G4int & key, T * &aHit) const {
-    std::map<G4int,T*> * theHitsMap = ((std::map<G4int,T*>*)theCollection);
-    if(theHitsMap->find(key) == theHitsMap->end()) {
-	(*theHitsMap)[key] = aHit;
+template <typename T> inline G4int
+G4THitsMap<T>::add(const G4int & key, T * &aHit) const {
+
+    typename std::map<G4int,T*> * theHitsMap = GetMap();
+    if(theHitsMap->find(key) != theHitsMap->end()) {
+	*(*theHitsMap)[key] += *aHit;
     } else {
-	*(theHitsMap->find(key)->second) += *aHit;
+	(*theHitsMap)[key] = aHit;
     }
     return theHitsMap->size();
 }
 
-template <class T> void G4THitsMap<T>::DrawAllHits() 
+template <typename T> inline G4int
+G4THitsMap<T>::add(const G4int & key, T &aHit) const {
+
+    typename std::map<G4int,T*> * theHitsMap = GetMap();
+    if(theHitsMap->find(key) != theHitsMap->end()) {
+	*(*theHitsMap)[key] += aHit;
+    } else {
+	T * hit = new T;
+	*hit = aHit;
+	(*theHitsMap)[key] = hit;
+    }
+
+    return theHitsMap->size();
+}
+
+template <typename T> void G4THitsMap<T>::DrawAllHits() 
 {;}
 
-template <class T> void G4THitsMap<T>::PrintAllHits() 
+template <typename T> void G4THitsMap<T>::PrintAllHits() 
 {;}
 
-template <class T> void G4THitsMap<T>::clear() {
+template <typename T> void G4THitsMap<T>::clear() {
 
-  std::map<G4int,T*> * theHitsMap = (std::map<G4int,T*> *)theCollection;
-  G4int size = theHitsMap->size();
-  for(int i = 0; i < size; i++) { delete theHitsMap->begin()->second; }
-  theHitsMap->clear();
+    std::map<G4int,T*> * theHitsMap = GetMap();
+    typename std::map<G4int, T*>::iterator itr = theHitsMap->begin();
+    for(; itr != theHitsMap->end(); itr++) {
+	delete itr->second;
+    }
+    theHitsMap->clear();
 
 }
 
