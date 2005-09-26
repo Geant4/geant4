@@ -1,4 +1,4 @@
-$Id: History,v 1.145 2005-08-12 13:36:02 maire Exp $
+$Id: History,v 1.146 2005-09-26 07:24:30 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,9 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
-Aug 12, 2005  M. Maire
-- G4UnitsTable.cc: Added cm2/g.
+
+Sep 26, 2005  K.Murakami (global-V07-01-00)
+- Added version.hh header, including definitions for software versioning.
+
+Aug 12, 2005  M.Maire
+- G4UnitsTable.cc: added Surface/Mass unit (cm2/g).
 
 May 19, 2005  V.Grichine (global-V07-00-06)
 - Improved accuracy to G4AnalyticalPolSolver for quartic case.
