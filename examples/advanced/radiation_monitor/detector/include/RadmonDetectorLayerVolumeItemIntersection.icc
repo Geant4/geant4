@@ -1,0 +1,56 @@
+//
+// File name:     RadmonDetectorLayerVolumeItemIntersection.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonDetectorLayerVolumeItemIntersection.icc,v 1.1 2005-09-27 13:53:30 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONDETECTORLAYERVOLUMEITEMINTERSECTION_HH
+ #error "RadmonDetectorLayerVolumeItemIntersection.icc cannot be included directly. Please use RadmonDetectorLayerVolumeItemIntersection.hh"
+#else  /* RADMONDETECTORLAYERVOLUMEITEMINTERSECTION_HH */
+ inline                                         RadmonDetectorLayerVolumeItemIntersection :: RadmonDetectorLayerVolumeItemIntersection()
+ :
+  RadmonVDetectorLayerVolumeItemOperation()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonDetectorLayerVolumeItemIntersection :: RadmonDetectorLayerVolumeItemIntersection(G4VSolid * solid, const G4RotationMatrix & rotation, const G4ThreeVector & position, G4bool ownSolid)
+ :
+  RadmonVDetectorLayerVolumeItemOperation(solid, rotation, position, ownSolid)
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonDetectorLayerVolumeItemIntersection :: RadmonDetectorLayerVolumeItemIntersection(G4VSolid * solid, const G4ThreeVector & position, G4bool ownSolid)
+ :
+  RadmonVDetectorLayerVolumeItemOperation(solid, position, ownSolid)
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonDetectorLayerVolumeItemIntersection :: RadmonDetectorLayerVolumeItemIntersection(G4VSolid * solid, G4bool ownSolid)
+ :
+  RadmonVDetectorLayerVolumeItemOperation(solid, ownSolid)
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonDetectorLayerVolumeItemIntersection :: RadmonDetectorLayerVolumeItemIntersection(const RadmonDetectorLayerVolumeItem * item)
+ :
+  RadmonVDetectorLayerVolumeItemOperation(item)
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonDetectorLayerVolumeItemIntersection :: ~RadmonDetectorLayerVolumeItemIntersection()
+ {
+ }
+#endif /* RADMONDETECTORLAYERVOLUMEITEMINTERSECTION_HH */

@@ -1,0 +1,56 @@
+//
+// File name:     RadmonDetectorLayerVolumeItemUnion.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonDetectorLayerVolumeItemUnion.icc,v 1.1 2005-09-27 13:53:30 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONDETECTORLAYERVOLUMEITEMUNION_HH
+ #error "RadmonDetectorLayerVolumeItemUnion.icc cannot be included directly. Please use RadmonDetectorLayerVolumeItemUnion.hh"
+#else  /* RADMONDETECTORLAYERVOLUMEITEMUNION_HH */
+ inline                                         RadmonDetectorLayerVolumeItemUnion :: RadmonDetectorLayerVolumeItemUnion()
+ :
+  RadmonVDetectorLayerVolumeItemOperation()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonDetectorLayerVolumeItemUnion :: RadmonDetectorLayerVolumeItemUnion(G4VSolid * solid, const G4RotationMatrix & rotation, const G4ThreeVector & position, G4bool ownSolid)
+ :
+  RadmonVDetectorLayerVolumeItemOperation(solid, rotation, position, ownSolid)
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonDetectorLayerVolumeItemUnion :: RadmonDetectorLayerVolumeItemUnion(G4VSolid * solid, const G4ThreeVector & position, G4bool ownSolid)
+ :
+  RadmonVDetectorLayerVolumeItemOperation(solid, position, ownSolid)
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonDetectorLayerVolumeItemUnion :: RadmonDetectorLayerVolumeItemUnion(G4VSolid * solid, G4bool ownSolid)
+ :
+  RadmonVDetectorLayerVolumeItemOperation(solid, ownSolid)
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonDetectorLayerVolumeItemUnion :: RadmonDetectorLayerVolumeItemUnion(const RadmonDetectorLayerVolumeItem * item)
+ :
+  RadmonVDetectorLayerVolumeItemOperation(item)
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonDetectorLayerVolumeItemUnion :: ~RadmonDetectorLayerVolumeItemUnion()
+ {
+ }
+#endif /* RADMONDETECTORLAYERVOLUMEITEMUNION_HH */

@@ -1,0 +1,51 @@
+//
+// File name:     RadmonVDetectorLayerVolumeItemOperation.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonVDetectorLayerVolumeItemOperation.icc,v 1.1 2005-09-27 13:58:00 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONVDETECTORLAYERVOLUMEITEMOPERATION_HH
+ #error "RadmonVDetectorLayerVolumeItemOperation.icc cannot be included directly. Please use RadmonVDetectorLayerVolumeItemOperation.hh"
+#else  /* RADMONVDETECTORLAYERVOLUMEITEMOPERATION_HH */
+ inline                                         RadmonVDetectorLayerVolumeItemOperation :: RadmonVDetectorLayerVolumeItemOperation()
+ :
+  leftSolid(0)
+ {
+ }
+
+
+
+
+
+ inline G4VSolid *                              RadmonVDetectorLayerVolumeItemOperation :: ApplyTo(G4VSolid * solid, const G4ThreeVector & position, G4bool ownSolid, G4bool ownResult)
+ {
+  return ApplyTo(solid, G4RotationMatrix::IDENTITY, position, ownSolid, ownResult);
+ }
+ 
+ 
+ 
+ inline G4VSolid *                              RadmonVDetectorLayerVolumeItemOperation :: ApplyTo(G4VSolid * solid, G4bool ownSolid, G4bool ownResult)
+ {
+  return ApplyTo(solid, G4ThreeVector(0, 0, 0), ownSolid, ownResult);
+ }
+
+
+
+
+
+ inline G4RotationMatrix *                      RadmonVDetectorLayerVolumeItemOperation :: AllocateMatrix()
+ {
+  ownedMatrices.push(G4RotationMatrix::IDENTITY);
+  return &ownedMatrices.top();
+ }
+ 
+ 
+ 
+ inline void                                    RadmonVDetectorLayerVolumeItemOperation :: OwnSolid(G4VSolid * solid)
+ {
+  ownedSolids.push(solid);
+ }
+#endif /* RADMONVDETECTORLAYERVOLUMEITEMOPERATION_HH */
