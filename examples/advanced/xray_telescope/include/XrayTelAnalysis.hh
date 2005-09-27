@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: XrayTelAnalysis.hh,v 1.8 2004-05-28 15:56:58 guatelli Exp $
+// $Id: XrayTelAnalysis.hh,v 1.9 2005-09-27 12:01:32 santin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
@@ -135,11 +135,14 @@ private:
   G4String asciiFileName;
   G4String histFileName;
   G4String histFileType;
+
+#ifdef G4ANALYSIS_USE
   AIDA::IHistogram1D *h1;
   AIDA::IHistogram2D *h2;
   AIDA::IHistogram1D *h3;
   AIDA::IHistogram2D *h4;
   AIDA::ITuple * ntuple;
+#endif
   //  std::ofstream asciiFile;
 
 };
