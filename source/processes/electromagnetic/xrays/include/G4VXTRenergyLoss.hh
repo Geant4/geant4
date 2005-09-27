@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.hh,v 1.9 2005-07-28 23:55:46 gum Exp $
+// $Id: G4VXTRenergyLoss.hh,v 1.10 2005-09-27 08:13:46 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,8 +37,8 @@
 //
 
 
-#ifndef G4VXTRenergyLoss_h
-#define G4VXTRenergyLoss_h 1
+#ifndef G4XTRenergyLoss_h
+#define G4XTRenergyLoss_h 1
 
 
 #include <complex>
@@ -63,20 +63,20 @@
 #include "G4Integrator.hh"
 
 
-class G4VXTRenergyLoss : public G4VContinuousProcess
+class G4XTRenergyLoss : public G4VContinuousProcess
 {
 public:
 
-  G4VXTRenergyLoss (G4LogicalVolume *anEnvelope,G4Material*,G4Material*,
+  G4XTRenergyLoss (G4LogicalVolume *anEnvelope,G4Material*,G4Material*,
                     G4double,G4double,G4int,
                     const G4String & processName = "XTRenergyLoss",
                     G4ProcessType type = fElectromagnetic);
-   virtual  ~G4VXTRenergyLoss ();
+   virtual  ~G4XTRenergyLoss ();
 
-  // Pure virtuals must be implemented in inherited particular TR radiators
+  // These virtual has to be implemented in inherited particular TR radiators
  
   virtual  G4double GetStackFactor( G4double energy, G4double gamma,
-                                                     G4double varAngle ) = 0  ;
+                                                     G4double varAngle );
 
 
   G4bool IsApplicable(const G4ParticleDefinition&);
@@ -204,5 +204,7 @@ protected:
   G4double   fGasThick ;     
   G4double fAlphaPlate, fAlphaGas ;
 };
+
+typedef G4XTRenergyLoss G4VXTRenergyLoss;
 
 #endif

@@ -21,8 +21,7 @@
 // ********************************************************************
 //
 //
-
-// $Id: G4VXTRenergyLoss.cc,v 1.16 2005-07-28 23:58:23 gum Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.17 2005-09-27 08:13:46 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -44,28 +43,28 @@
 
 // Initialization of local constants
 
-G4double G4VXTRenergyLoss::fTheMinEnergyTR   =    1.0*keV  ;
-G4double G4VXTRenergyLoss::fTheMaxEnergyTR   =  100.0*keV  ;
-G4double G4VXTRenergyLoss::fTheMaxAngle    =      1.0e-3   ;
-G4double G4VXTRenergyLoss::fTheMinAngle    =      5.0e-6   ;
-G4int    G4VXTRenergyLoss::fBinTR            =   50        ;
+G4double G4XTRenergyLoss::fTheMinEnergyTR   =    1.0*keV  ;
+G4double G4XTRenergyLoss::fTheMaxEnergyTR   =  100.0*keV  ;
+G4double G4XTRenergyLoss::fTheMaxAngle    =      1.0e-3   ;
+G4double G4XTRenergyLoss::fTheMinAngle    =      5.0e-6   ;
+G4int    G4XTRenergyLoss::fBinTR            =   50        ;
 
-G4double G4VXTRenergyLoss::fMinProtonTkin = 100.0*GeV  ;
-G4double G4VXTRenergyLoss::fMaxProtonTkin = 100.0*TeV  ;
-G4int    G4VXTRenergyLoss::fTotBin        =  50        ;
+G4double G4XTRenergyLoss::fMinProtonTkin = 100.0*GeV  ;
+G4double G4XTRenergyLoss::fMaxProtonTkin = 100.0*TeV  ;
+G4int    G4XTRenergyLoss::fTotBin        =  50        ;
 // Proton energy vector initialization
 
 using namespace std;
 
-G4PhysicsLogVector* G4VXTRenergyLoss::
+G4PhysicsLogVector* G4XTRenergyLoss::
 fProtonEnergyVector = new G4PhysicsLogVector(fMinProtonTkin,
                                              fMaxProtonTkin,
                                                     fTotBin  ) ;
 
-G4double G4VXTRenergyLoss::fPlasmaCof = 4.0*pi*fine_structure_const*
+G4double G4XTRenergyLoss::fPlasmaCof = 4.0*pi*fine_structure_const*
                                        hbarc*hbarc*hbarc/electron_mass_c2 ;
 
-G4double G4VXTRenergyLoss::fCofTR     = fine_structure_const/pi ;
+G4double G4XTRenergyLoss::fCofTR     = fine_structure_const/pi ;
 
 
 
@@ -75,7 +74,7 @@ G4double G4VXTRenergyLoss::fCofTR     = fine_structure_const/pi ;
 //
 // Constructor, destructor
 
-G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope,
+G4XTRenergyLoss::G4XTRenergyLoss(G4LogicalVolume *anEnvelope,
 				   G4Material* foilMat,G4Material* gasMat,
                                     G4double a, G4double b,
                                     G4int n,const G4String& processName,
@@ -126,7 +125,7 @@ G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope,
 
 ///////////////////////////////////////////////////////////////////////////
 
-G4VXTRenergyLoss::~G4VXTRenergyLoss()
+G4XTRenergyLoss::~G4XTRenergyLoss()
 {
    G4int i ;
 
@@ -150,7 +149,7 @@ G4VXTRenergyLoss::~G4VXTRenergyLoss()
 // Returns condition for application of the model depending on particle type
 
 
-G4bool G4VXTRenergyLoss::IsApplicable(const G4ParticleDefinition& particle)
+G4bool G4XTRenergyLoss::IsApplicable(const G4ParticleDefinition& particle)
 {
   return  ( particle.GetPDGCharge() != 0.0 ) ;
 }
@@ -161,7 +160,7 @@ G4bool G4VXTRenergyLoss::IsApplicable(const G4ParticleDefinition& particle)
 //
 
 G4double
-G4VXTRenergyLoss::GetContinuousStepLimit(const G4Track& ,
+G4XTRenergyLoss::GetContinuousStepLimit(const G4Track& ,
 				         G4double  ,
 				         G4double  ,
                                          G4double& )
@@ -175,7 +174,7 @@ G4VXTRenergyLoss::GetContinuousStepLimit(const G4Track& ,
 //
 // Build integral energy distribution of XTR photons
 
-void G4VXTRenergyLoss::BuildTable()
+void G4XTRenergyLoss::BuildTable()
 {
   G4int iTkin, iTR, iPlace ;
   G4double radiatorCof = 1.0 ;           // for tuning of XTR yield
@@ -195,6 +194,9 @@ void G4VXTRenergyLoss::BuildTable()
   G4cout.precision(4) ;
   G4Timer timer ;
   timer.Start() ;
+  G4cout<<G4endl;
+  G4cout<<"Lorentz Factor"<<"\t"<<"XTR photon number"<<G4endl;
+  G4cout<<G4endl;
 	
   for( iTkin = 0 ; iTkin < fTotBin ; iTkin++ )      // Lorentz factor loop
   {
@@ -209,51 +211,54 @@ void G4VXTRenergyLoss::BuildTable()
 
      fTheMinAngle = 1.0e-3 ; // was 5.e-6, e-6 !!!, e-5, e-4
  
-     if( fMaxThetaTR > fTheMaxAngle )    fMaxThetaTR = fTheMaxAngle ; 
+     if( fMaxThetaTR > fTheMaxAngle )    fMaxThetaTR = fTheMaxAngle; 
      else
      {
-       if( fMaxThetaTR < fTheMinAngle )  fMaxThetaTR = fTheMinAngle ;
+       if( fMaxThetaTR < fTheMinAngle )  fMaxThetaTR = fTheMinAngle;
      }
 G4PhysicsLinearVector* angleVector = new G4PhysicsLinearVector(0.0,
                                                                fMaxThetaTR,
                                                                fBinTR      );
 
-     G4double energySum = 0.0 ;
-     G4double angleSum  = 0.0 ;
+     G4double energySum = 0.0;
+     G4double angleSum  = 0.0;
 
-G4Integrator<G4VXTRenergyLoss,G4double(G4VXTRenergyLoss::*)(G4double)> integral;
+G4Integrator<G4XTRenergyLoss,G4double(G4XTRenergyLoss::*)(G4double)> integral;
 
-     energyVector->PutValue(fBinTR-1,energySum) ;
-     angleVector->PutValue(fBinTR-1,angleSum)   ;
+     energyVector->PutValue(fBinTR-1,energySum);
+     angleVector->PutValue(fBinTR-1,angleSum);
 
      for( iTR = fBinTR - 2 ; iTR >= 0 ; iTR-- )
      {
         energySum += radiatorCof*fCofTR*integral.Legendre10(
-		     this,&G4VXTRenergyLoss::SpectralXTRdEdx,
+		     this,&G4XTRenergyLoss::SpectralXTRdEdx,
                      energyVector->GetLowEdgeEnergy(iTR),
-                     energyVector->GetLowEdgeEnergy(iTR+1) ) ; 
+                     energyVector->GetLowEdgeEnergy(iTR+1) ); 
 
 	//    angleSum  += fCofTR*integral.Legendre96(
-	//       this,&G4VXTRenergyLoss::AngleXTRdEdx,
+	//       this,&G4XTRenergyLoss::AngleXTRdEdx,
 	//       angleVector->GetLowEdgeEnergy(iTR),
-	//       angleVector->GetLowEdgeEnergy(iTR+1) ) ;
+	//       angleVector->GetLowEdgeEnergy(iTR+1) );
 
-        energyVector->PutValue(iTR,energySum/fTotalDist) ;
-        //  angleVector ->PutValue(iTR,angleSum)   ;
+        energyVector->PutValue(iTR,energySum/fTotalDist);
+        //  angleVector ->PutValue(iTR,angleSum);
      }
-     G4cout<<iTkin<<"\t"
-           <<"fGamma = "<<fGamma<<"\t"  //  <<"  fMaxThetaTR = "<<fMaxThetaTR
-           <<"sumN = "<<energySum      // <<" ; sumA = "<<angleSum
-           <<G4endl ;
-     iPlace = iTkin ;
-     fEnergyDistrTable->insertAt(iPlace,energyVector) ;
-     //  fAngleDistrTable->insertAt(iPlace,angleVector) ;
+     G4cout
+       // <<iTkin<<"\t"
+       //   <<"fGamma = "
+       <<fGamma<<"\t"  //  <<"  fMaxThetaTR = "<<fMaxThetaTR
+       //  <<"sumN = "
+       <<energySum      // <<" ; sumA = "<<angleSum
+       <<G4endl;
+     iPlace = iTkin;
+     fEnergyDistrTable->insertAt(iPlace,energyVector);
+     //  fAngleDistrTable->insertAt(iPlace,angleVector);
   }     
-  timer.Stop() ;
-  G4cout.precision(6) ;
-  G4cout<<G4endl ;
+  timer.Stop();
+  G4cout.precision(6);
+  G4cout<<G4endl;
   G4cout<<"total time for build X-ray TR energy loss tables = "
-        <<timer.GetUserElapsed()<<" s"<<G4endl ;
+        <<timer.GetUserElapsed()<<" s"<<G4endl;
   return ;
 }
 
@@ -261,7 +266,7 @@ G4Integrator<G4VXTRenergyLoss,G4double(G4VXTRenergyLoss::*)(G4double)> integral;
 //
 //
 
-void G4VXTRenergyLoss::BuildEnergyTable()
+void G4XTRenergyLoss::BuildEnergyTable()
 {
   return ;
 }
@@ -270,7 +275,7 @@ void G4VXTRenergyLoss::BuildEnergyTable()
 //
 //
 
-void G4VXTRenergyLoss::BuildAngleTable()
+void G4XTRenergyLoss::BuildAngleTable()
 {
   return ;
 } 
@@ -281,7 +286,7 @@ void G4VXTRenergyLoss::BuildAngleTable()
 // The main function which is responsible for the treatment of a particle passage
 // trough G4Envelope
 
-G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack, 
+G4VParticleChange* G4XTRenergyLoss::AlongStepDoIt( const G4Track& aTrack, 
 		                                    const G4Step&  aStep   )
 {
   G4int iTkin, iPlace,   numOfTR, iTR ;
@@ -292,7 +297,7 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
 
   if(verboseLevel)
   {
-    G4cout<<"Start of G4VXTRenergyLoss::AlongStepDoIt "<<G4endl ;
+    G4cout<<"Start of G4XTRenergyLoss::AlongStepDoIt "<<G4endl ;
     G4cout<<"name of current material =  "
           <<aTrack.GetVolume()->GetLogicalVolume()->GetMaterial()->GetName()<<G4endl ;
   }
@@ -302,7 +307,7 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
   {
     if(verboseLevel)
     {
-      G4cout<<"Go out from G4VXTRenergyLoss::AlongStepDoIt: wrong volume "<<G4endl;
+      G4cout<<"Go out from G4XTRenergyLoss::AlongStepDoIt: wrong volume "<<G4endl;
     }
     return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep);
   }
@@ -345,7 +350,7 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
   {
     if(verboseLevel)
     {
-      G4cout<<"Go out from G4VXTRenergyLoss::AlongStepDoIt:iTkin = "<<iTkin<<G4endl;
+      G4cout<<"Go out from G4XTRenergyLoss::AlongStepDoIt:iTkin = "<<iTkin<<G4endl;
     }
     return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep);
   } 
@@ -383,7 +388,7 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
       aParticleChange.SetNumberOfSecondaries(0);
       if(verboseLevel)
       {
-      G4cout<<"Go out from G4VXTRenergyLoss::AlongStepDoIt: numOfTR = "
+      G4cout<<"Go out from G4XTRenergyLoss::AlongStepDoIt: numOfTR = "
             <<numOfTR<<G4endl ;
       }
       return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep); 
@@ -478,7 +483,7 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
 // varAngle =2* (1 - cos(theta)) or approximately = theta*theta
 //
 
-G4complex G4VXTRenergyLoss::OneInterfaceXTRdEdx( G4double energy,
+G4complex G4XTRenergyLoss::OneInterfaceXTRdEdx( G4double energy,
                                            G4double gamma,
                                            G4double varAngle ) 
 {
@@ -497,7 +502,7 @@ G4complex G4VXTRenergyLoss::OneInterfaceXTRdEdx( G4double energy,
 // For photon energy distribution tables. Integrate first over angle
 //
 
-G4double G4VXTRenergyLoss::SpectralAngleXTRdEdx(G4double varAngle)
+G4double G4XTRenergyLoss::SpectralAngleXTRdEdx(G4double varAngle)
 {
   G4double result =  GetStackFactor(fEnergy,fGamma,varAngle) ;
   if(result < 0.0) result = 0.0 ;
@@ -508,15 +513,15 @@ G4double G4VXTRenergyLoss::SpectralAngleXTRdEdx(G4double varAngle)
 //
 // For second integration over energy
  
-G4double G4VXTRenergyLoss::SpectralXTRdEdx(G4double energy)
+G4double G4XTRenergyLoss::SpectralXTRdEdx(G4double energy)
 {
   fEnergy = energy ;
-G4Integrator<G4VXTRenergyLoss,G4double(G4VXTRenergyLoss::*)(G4double)> integral ;
-  return integral.Legendre96(this,&G4VXTRenergyLoss::SpectralAngleXTRdEdx,
+G4Integrator<G4XTRenergyLoss,G4double(G4XTRenergyLoss::*)(G4double)> integral ;
+  return integral.Legendre96(this,&G4XTRenergyLoss::SpectralAngleXTRdEdx,
                              0.0,0.3*fMaxThetaTR) +
-         integral.Legendre96(this,&G4VXTRenergyLoss::SpectralAngleXTRdEdx,
+         integral.Legendre96(this,&G4XTRenergyLoss::SpectralAngleXTRdEdx,
                              0.3*fMaxThetaTR,0.6*fMaxThetaTR) +         
-         integral.Legendre96(this,&G4VXTRenergyLoss::SpectralAngleXTRdEdx,
+         integral.Legendre96(this,&G4XTRenergyLoss::SpectralAngleXTRdEdx,
 	                     0.6*fMaxThetaTR,fMaxThetaTR) ;
 } 
  
@@ -525,7 +530,7 @@ G4Integrator<G4VXTRenergyLoss,G4double(G4VXTRenergyLoss::*)(G4double)> integral 
 // for photon angle distribution tables
 //
 
-G4double G4VXTRenergyLoss::AngleSpectralXTRdEdx(G4double energy)
+G4double G4XTRenergyLoss::AngleSpectralXTRdEdx(G4double energy)
 {
   G4double result =  GetStackFactor(energy,fGamma,fVarAngle) ;
   if(result < 0) result = 0.0 ;
@@ -536,26 +541,13 @@ G4double G4VXTRenergyLoss::AngleSpectralXTRdEdx(G4double energy)
 //
 //
 
-G4double G4VXTRenergyLoss::AngleXTRdEdx(G4double varAngle) 
+G4double G4XTRenergyLoss::AngleXTRdEdx(G4double varAngle) 
 {
   fVarAngle = varAngle ;
-  G4Integrator<G4VXTRenergyLoss,G4double(G4VXTRenergyLoss::*)(G4double)> integral ;
-  return integral.Legendre10(this,&G4VXTRenergyLoss::AngleSpectralXTRdEdx,
+  G4Integrator<G4XTRenergyLoss,G4double(G4XTRenergyLoss::*)(G4double)> integral ;
+  return integral.Legendre10(this,&G4XTRenergyLoss::AngleSpectralXTRdEdx,
 			     fMinEnergyTR,fMaxEnergyTR) ;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //////////////////////////////////////////////////////////////////////
@@ -564,7 +556,7 @@ G4double G4VXTRenergyLoss::AngleXTRdEdx(G4double varAngle)
 //
 // Calculates formation zone for plates. Omega is energy !!!
 
-G4double G4VXTRenergyLoss::GetPlateFormationZone( G4double omega ,
+G4double G4XTRenergyLoss::GetPlateFormationZone( G4double omega ,
                                                 G4double gamma ,
                                                 G4double varAngle    ) 
 {
@@ -578,7 +570,7 @@ G4double G4VXTRenergyLoss::GetPlateFormationZone( G4double omega ,
 //
 // Calculates complex formation zone for plates. Omega is energy !!!
 
-G4complex G4VXTRenergyLoss::GetPlateComplexFZ( G4double omega ,
+G4complex G4XTRenergyLoss::GetPlateComplexFZ( G4double omega ,
                                              G4double gamma ,
                                              G4double varAngle    ) 
 {
@@ -600,7 +592,7 @@ G4complex G4VXTRenergyLoss::GetPlateComplexFZ( G4double omega ,
 // Computes matrix of Sandia photo absorption cross section coefficients for
 // plate material
 
-void G4VXTRenergyLoss::ComputePlatePhotoAbsCof() 
+void G4XTRenergyLoss::ComputePlatePhotoAbsCof() 
 {
    G4int i, j, numberOfElements ;
    static const G4MaterialTable* 
@@ -650,7 +642,7 @@ void G4VXTRenergyLoss::ComputePlatePhotoAbsCof()
 // Returns the value of linear photo absorption coefficient (in reciprocal 
 // length) for plate for given energy of X-ray photon omega
 
-G4double G4VXTRenergyLoss::GetPlateLinearPhotoAbs(G4double omega) 
+G4double G4XTRenergyLoss::GetPlateLinearPhotoAbs(G4double omega) 
 {
   G4int i ;
   G4double omega2, omega3, omega4 ; 
@@ -665,7 +657,7 @@ G4double G4VXTRenergyLoss::GetPlateLinearPhotoAbs(G4double omega)
   }
   if( i == 0 )
   { 
-    G4Exception("Invalid (<I1) energy in G4VXTRenergyLoss::GetPlateLinearPhotoAbs");
+    G4Exception("Invalid (<I1) energy in G4XTRenergyLoss::GetPlateLinearPhotoAbs");
   }
   else i-- ;
   
@@ -677,7 +669,7 @@ G4double G4VXTRenergyLoss::GetPlateLinearPhotoAbs(G4double omega)
 //
 // Calculates formation zone for gas. Omega is energy !!!
 
-G4double G4VXTRenergyLoss::GetGasFormationZone( G4double omega ,
+G4double G4XTRenergyLoss::GetGasFormationZone( G4double omega ,
                                               G4double gamma ,
                                               G4double varAngle   ) 
 {
@@ -693,7 +685,7 @@ G4double G4VXTRenergyLoss::GetGasFormationZone( G4double omega ,
 //
 // Calculates complex formation zone for gas gaps. Omega is energy !!!
 
-G4complex G4VXTRenergyLoss::GetGasComplexFZ( G4double omega ,
+G4complex G4XTRenergyLoss::GetGasComplexFZ( G4double omega ,
                                            G4double gamma ,
                                            G4double varAngle    ) 
 {
@@ -717,7 +709,7 @@ G4complex G4VXTRenergyLoss::GetGasComplexFZ( G4double omega ,
 // Computes matrix of Sandia photo absorption cross section coefficients for
 // gas material
 
-void G4VXTRenergyLoss::ComputeGasPhotoAbsCof() 
+void G4XTRenergyLoss::ComputeGasPhotoAbsCof() 
 {
    G4int i, j, numberOfElements ;
    static const G4MaterialTable* 
@@ -767,7 +759,7 @@ void G4VXTRenergyLoss::ComputeGasPhotoAbsCof()
 // Returns the value of linear photo absorption coefficient (in reciprocal 
 // length) for gas
 
-G4double G4VXTRenergyLoss::GetGasLinearPhotoAbs(G4double omega) 
+G4double G4XTRenergyLoss::GetGasLinearPhotoAbs(G4double omega) 
 {
   G4int i ;
   G4double omega2, omega3, omega4 ; 
@@ -782,7 +774,7 @@ G4double G4VXTRenergyLoss::GetGasLinearPhotoAbs(G4double omega)
   }
   if( i == 0 )
   { 
-   G4Exception("Invalid (<I1) energy in G4VXTRenergyLoss::GetGasLinearPhotoAbs");
+   G4Exception("Invalid (<I1) energy in G4XTRenergyLoss::GetGasLinearPhotoAbs");
   }
   else i-- ;
   
@@ -796,7 +788,7 @@ G4double G4VXTRenergyLoss::GetGasLinearPhotoAbs(G4double omega)
 // Calculates the product of linear cof by formation zone for plate. 
 // Omega is energy !!!
 
-G4double G4VXTRenergyLoss::GetPlateZmuProduct( G4double omega ,
+G4double G4XTRenergyLoss::GetPlateZmuProduct( G4double omega ,
                                              G4double gamma ,
                                              G4double varAngle   ) 
 {
@@ -807,7 +799,7 @@ G4double G4VXTRenergyLoss::GetPlateZmuProduct( G4double omega ,
 // Calculates the product of linear cof by formation zone for plate. 
 // G4cout and output in file in some energy range.
 
-void G4VXTRenergyLoss::GetPlateZmuProduct() 
+void G4XTRenergyLoss::GetPlateZmuProduct() 
 {
   ofstream outPlate("plateZmu.dat", ios::out ) ;
   outPlate.setf( ios::scientific, ios::floatfield );
@@ -831,7 +823,7 @@ void G4VXTRenergyLoss::GetPlateZmuProduct()
 // Calculates the product of linear cof by formation zone for gas. 
 // Omega is energy !!!
 
-G4double G4VXTRenergyLoss::GetGasZmuProduct( G4double omega ,
+G4double G4XTRenergyLoss::GetGasZmuProduct( G4double omega ,
                                              G4double gamma ,
                                              G4double varAngle   ) 
 {
@@ -842,7 +834,7 @@ G4double G4VXTRenergyLoss::GetGasZmuProduct( G4double omega ,
 // Calculates the product of linear cof byformation zone for gas. 
 // G4cout and output in file in some energy range.
 
-void G4VXTRenergyLoss::GetGasZmuProduct() 
+void G4XTRenergyLoss::GetGasZmuProduct() 
 {
   ofstream outGas("gasZmu.dat", ios::out ) ;
   outGas.setf( ios::scientific, ios::floatfield );
@@ -871,7 +863,7 @@ void G4VXTRenergyLoss::GetGasZmuProduct()
 //
 
 G4double
-G4VXTRenergyLoss::OneBoundaryXTRNdensity( G4double energy,G4double gamma,
+G4XTRenergyLoss::OneBoundaryXTRNdensity( G4double energy,G4double gamma,
                                          G4double varAngle ) const
 {
   G4double  formationLength1, formationLength2 ;
@@ -888,13 +880,20 @@ G4VXTRenergyLoss::OneBoundaryXTRNdensity( G4double energy,G4double gamma,
 
 }
 
+G4double G4XTRenergyLoss::GetStackFactor( G4double energy, G4double gamma,
+                                                     G4double varAngle )
+{
+  // return stack factor corresponding to one interface
+
+  return std::real( OneInterfaceXTRdEdx(energy,gamma,varAngle) );
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
 // For photon energy distribution tables. Integrate first over angle
 //
 
-G4double G4VXTRenergyLoss::XTRNSpectralAngleDensity(G4double varAngle)
+G4double G4XTRenergyLoss::XTRNSpectralAngleDensity(G4double varAngle)
 {
   return OneBoundaryXTRNdensity(fEnergy,fGamma,varAngle)*
          GetStackFactor(fEnergy,fGamma,varAngle)             ;
@@ -904,13 +903,13 @@ G4double G4VXTRenergyLoss::XTRNSpectralAngleDensity(G4double varAngle)
 //
 // For second integration over energy
  
-G4double G4VXTRenergyLoss::XTRNSpectralDensity(G4double energy)
+G4double G4XTRenergyLoss::XTRNSpectralDensity(G4double energy)
 {
   fEnergy = energy ;
-  G4Integrator<G4VXTRenergyLoss,G4double(G4VXTRenergyLoss::*)(G4double)> integral ;
-  return integral.Legendre96(this,&G4VXTRenergyLoss::XTRNSpectralAngleDensity,
+  G4Integrator<G4XTRenergyLoss,G4double(G4XTRenergyLoss::*)(G4double)> integral ;
+  return integral.Legendre96(this,&G4XTRenergyLoss::XTRNSpectralAngleDensity,
                              0.0,0.2*fMaxThetaTR) +
-         integral.Legendre10(this,&G4VXTRenergyLoss::XTRNSpectralAngleDensity,
+         integral.Legendre10(this,&G4XTRenergyLoss::XTRNSpectralAngleDensity,
 	                     0.2*fMaxThetaTR,fMaxThetaTR) ;
 } 
  
@@ -919,7 +918,7 @@ G4double G4VXTRenergyLoss::XTRNSpectralDensity(G4double energy)
 // for photon angle distribution tables
 //
 
-G4double G4VXTRenergyLoss::XTRNAngleSpectralDensity(G4double energy)
+G4double G4XTRenergyLoss::XTRNAngleSpectralDensity(G4double energy)
 {
   return OneBoundaryXTRNdensity(energy,fGamma,fVarAngle)*
          GetStackFactor(energy,fGamma,fVarAngle)             ;
@@ -929,11 +928,11 @@ G4double G4VXTRenergyLoss::XTRNAngleSpectralDensity(G4double energy)
 //
 //
 
-G4double G4VXTRenergyLoss::XTRNAngleDensity(G4double varAngle) 
+G4double G4XTRenergyLoss::XTRNAngleDensity(G4double varAngle) 
 {
   fVarAngle = varAngle ;
-  G4Integrator<G4VXTRenergyLoss,G4double(G4VXTRenergyLoss::*)(G4double)> integral ;
-  return integral.Legendre96(this,&G4VXTRenergyLoss::XTRNAngleSpectralDensity,
+  G4Integrator<G4XTRenergyLoss,G4double(G4XTRenergyLoss::*)(G4double)> integral ;
+  return integral.Legendre96(this,&G4XTRenergyLoss::XTRNAngleSpectralDensity,
 			     fMinEnergyTR,fMaxEnergyTR) ;
 }
 
@@ -942,7 +941,7 @@ G4double G4VXTRenergyLoss::XTRNAngleDensity(G4double varAngle)
 // Check number of photons for a range of Lorentz factors from both energy 
 // and angular tables
 
-void G4VXTRenergyLoss::GetNumberOfPhotons()
+void G4XTRenergyLoss::GetNumberOfPhotons()
 {
   G4int iTkin ;
   G4double gamma, numberE ;
@@ -972,7 +971,7 @@ void G4VXTRenergyLoss::GetNumberOfPhotons()
 // Returns randon energy of a X-ray TR photon for given scaled kinetic energy
 // of a charged particle
 
-G4double G4VXTRenergyLoss::GetXTRrandomEnergy( G4double scaledTkin, G4int iTkin )
+G4double G4XTRenergyLoss::GetXTRrandomEnergy( G4double scaledTkin, G4int iTkin )
 {
   G4int iTransfer, iPlace  ;
   G4double transfer = 0.0, position, E1, E2, W1, W2, W ;
@@ -1023,7 +1022,7 @@ G4double G4VXTRenergyLoss::GetXTRrandomEnergy( G4double scaledTkin, G4int iTkin 
 // Returns approximate position of X-ray photon energy during random sampling
 // over integral energy distribution
 
-G4double G4VXTRenergyLoss::GetXTRenergy( G4int    iPlace, 
+G4double G4XTRenergyLoss::GetXTRenergy( G4int    iPlace, 
                                        G4double position, 
                                        G4int    iTransfer )
 {
