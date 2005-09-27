@@ -1,0 +1,24 @@
+//
+// File name:     RadmonDetectorCarvedFlatVolumeWithPinsConstructor.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonDetectorCarvedFlatVolumeWithPinsConstructor.icc,v 1.1 2005-09-27 13:55:51 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONDETECTORCARVEDFLATVOLUMEWITHPINSCONSTRUCTOR_HH
+ #error "RadmonDetectorCarvedFlatVolumeWithPinsConstructor.icc cannot be included directly. Please use RadmonDetectorCarvedFlatVolumeWithPinsConstructor.hh"
+#else  /* RADMONDETECTORCARVEDFLATVOLUMEWITHPINSCONSTRUCTOR_HH */
+ inline                                         RadmonDetectorCarvedFlatVolumeWithPinsConstructor :: RadmonDetectorCarvedFlatVolumeWithPinsConstructor()
+ :
+  RadmonTDetectorLayerConstructor<RadmonTDetectorCarvedVolumesDecorator<RadmonTDetectorVolumesWithPinsDecorator<RadmonDetectorFlatVolumeComponent> > >("CarvedFlatVolumeWithPins")
+ {
+ }
+
+
+
+ inline                                         RadmonDetectorCarvedFlatVolumeWithPinsConstructor :: ~RadmonDetectorCarvedFlatVolumeWithPinsConstructor()
+ {
+ }
+#endif /* RADMONDETECTORCARVEDFLATVOLUMEWITHPINSCONSTRUCTOR_HH */

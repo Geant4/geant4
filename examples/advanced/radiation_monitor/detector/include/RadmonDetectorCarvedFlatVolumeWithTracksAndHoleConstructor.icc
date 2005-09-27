@@ -1,0 +1,24 @@
+//
+// File name:     RadmonDetectorCarvedFlatVolumeWithTracksAndHoleConstructor.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonDetectorCarvedFlatVolumeWithTracksAndHoleConstructor.icc,v 1.1 2005-09-27 13:55:51 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONDETECTORCARVEDFLATVOLUMEWITHTRACKSANDHOLECONSTRUCTOR_HH
+ #error "RadmonDetectorCarvedFlatVolumeWithTracksAndHoleConstructor.icc cannot be included directly. Please use RadmonDetectorCarvedFlatVolumeWithTracksAndHoleConstructor.hh"
+#else  /* RADMONDETECTORCARVEDFLATVOLUMEWITHTRACKSANDHOLECONSTRUCTOR_HH */
+ inline                                         RadmonDetectorCarvedFlatVolumeWithTracksAndHoleConstructor :: RadmonDetectorCarvedFlatVolumeWithTracksAndHoleConstructor()
+ :
+  RadmonTDetectorLayerConstructor<RadmonTDetectorVolumesWithTracksDecorator<RadmonTDetectorCarvedVolumesDecorator<RadmonTDetectorVolumesWithHoleDecorator<RadmonDetectorFlatVolumeComponent> > > >("CarvedFlatVolumeWithTracksAndHole")
+ {
+ }
+
+
+
+ inline                                         RadmonDetectorCarvedFlatVolumeWithTracksAndHoleConstructor :: ~RadmonDetectorCarvedFlatVolumeWithTracksAndHoleConstructor()
+ {
+ }
+#endif /* RADMONDETECTORCARVEDFLATVOLUMEWITHTRACKSANDHOLECONSTRUCTOR_HH */

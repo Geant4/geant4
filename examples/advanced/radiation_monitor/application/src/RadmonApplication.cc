@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplication.cc,v 1.4 2005-09-21 14:58:26 capra Exp $
+// Id:            $Id: RadmonApplication.cc,v 1.5 2005-09-27 14:00:22 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -19,8 +19,20 @@
 
 #include "RadmonDetectorFlatVolumeConstructor.hh"
 #include "RadmonDetectorFlatVolumeWithHoleConstructor.hh"
+#include "RadmonDetectorFlatVolumeWithGroundConstructor.hh"
+#include "RadmonDetectorFlatVolumeWithGroundAndKeyMarksConstructor.hh"
+#include "RadmonDetectorFlatVolumeWithGroundAndKeyMarksAndHoleConstructor.hh"
+#include "RadmonDetectorFlatVolumeWithTracksConstructor.hh"
+#include "RadmonDetectorFlatVolumeWithPinsConstructor.hh"
+#include "RadmonDetectorFlatVolumeWithTracksAndHoleConstructor.hh"
 #include "RadmonDetectorCarvedFlatVolumeWithHoleConstructor.hh"
 #include "RadmonDetectorCarvedFlatVolumeConstructor.hh"
+#include "RadmonDetectorCarvedFlatVolumeWithGroundConstructor.hh"
+#include "RadmonDetectorCarvedFlatVolumeWithGroundAndKeyMarksConstructor.hh"
+#include "RadmonDetectorCarvedFlatVolumeWithGroundAndKeyMarksAndHoleConstructor.hh"
+#include "RadmonDetectorCarvedFlatVolumeWithTracksConstructor.hh"
+#include "RadmonDetectorCarvedFlatVolumeWithPinsConstructor.hh"
+#include "RadmonDetectorCarvedFlatVolumeWithTracksAndHoleConstructor.hh"
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -246,8 +258,20 @@ G4bool                                          RadmonApplication :: CreateEntit
  
  DECLARE_CONSTRUCTOR(RadmonDetectorFlatVolumeConstructor);
  DECLARE_CONSTRUCTOR(RadmonDetectorFlatVolumeWithHoleConstructor);
+ DECLARE_CONSTRUCTOR(RadmonDetectorFlatVolumeWithGroundConstructor);
+ DECLARE_CONSTRUCTOR(RadmonDetectorFlatVolumeWithGroundAndKeyMarksConstructor);
+ DECLARE_CONSTRUCTOR(RadmonDetectorFlatVolumeWithGroundAndKeyMarksAndHoleConstructor);
+ DECLARE_CONSTRUCTOR(RadmonDetectorFlatVolumeWithTracksConstructor);
+ DECLARE_CONSTRUCTOR(RadmonDetectorFlatVolumeWithPinsConstructor);
+ DECLARE_CONSTRUCTOR(RadmonDetectorFlatVolumeWithTracksAndHoleConstructor);
  DECLARE_CONSTRUCTOR(RadmonDetectorCarvedFlatVolumeConstructor);
  DECLARE_CONSTRUCTOR(RadmonDetectorCarvedFlatVolumeWithHoleConstructor);
+ DECLARE_CONSTRUCTOR(RadmonDetectorCarvedFlatVolumeWithTracksConstructor);
+ DECLARE_CONSTRUCTOR(RadmonDetectorCarvedFlatVolumeWithPinsConstructor);
+ DECLARE_CONSTRUCTOR(RadmonDetectorCarvedFlatVolumeWithTracksAndHoleConstructor);
+ DECLARE_CONSTRUCTOR(RadmonDetectorCarvedFlatVolumeWithGroundConstructor);
+ DECLARE_CONSTRUCTOR(RadmonDetectorCarvedFlatVolumeWithGroundAndKeyMarksConstructor);
+ DECLARE_CONSTRUCTOR(RadmonDetectorCarvedFlatVolumeWithGroundAndKeyMarksAndHoleConstructor);
  
  return true;
 }

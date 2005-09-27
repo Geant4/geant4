@@ -1,0 +1,24 @@
+//
+// File name:     RadmonDetectorCarvedFlatVolumeWithGroundConstructor.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonDetectorCarvedFlatVolumeWithGroundConstructor.icc,v 1.1 2005-09-27 13:55:51 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONDETECTORCARVEDFLATVOLUMEWITHGROUNDCONSTRUCTOR_HH
+ #error "RadmonDetectorCarvedFlatVolumeWithGroundConstructor.icc cannot be included directly. Please use RadmonDetectorCarvedFlatVolumeWithGroundConstructor.hh"
+#else  /* RADMONDETECTORCARVEDFLATVOLUMEWITHGROUNDCONSTRUCTOR_HH */
+ inline                                         RadmonDetectorCarvedFlatVolumeWithGroundConstructor :: RadmonDetectorCarvedFlatVolumeWithGroundConstructor()
+ :
+  RadmonTDetectorLayerConstructor<RadmonTDetectorCarvedVolumesDecorator<RadmonTDetectorVolumesWithGroundDecorator<RadmonDetectorFlatVolumeComponent> > >("CarvedFlatVolumeWithGround")
+ {
+ }
+
+
+
+ inline                                         RadmonDetectorCarvedFlatVolumeWithGroundConstructor :: ~RadmonDetectorCarvedFlatVolumeWithGroundConstructor()
+ {
+ }
+#endif /* RADMONDETECTORCARVEDFLATVOLUMEWITHGROUNDCONSTRUCTOR_HH */

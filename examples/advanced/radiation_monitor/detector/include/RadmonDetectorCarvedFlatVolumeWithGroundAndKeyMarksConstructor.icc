@@ -1,0 +1,24 @@
+//
+// File name:     RadmonDetectorCarvedFlatVolumeWithGroundAndKeyMarksConstructor.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonDetectorCarvedFlatVolumeWithGroundAndKeyMarksConstructor.icc,v 1.1 2005-09-27 13:55:51 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONDETECTORCARVEDFLATVOLUMEWITHGROUNDANDKEYMARKSCONSTRUCTOR_HH
+ #error "RadmonDetectorCarvedFlatVolumeWithGroundAndKeyMarksConstructor.icc cannot be included directly. Please use RadmonDetectorCarvedFlatVolumeWithGroundAndKeyMarksConstructor.hh"
+#else  /* RADMONDETECTORCARVEDFLATVOLUMEWITHGROUNDANDKEYMARKSCONSTRUCTOR_HH */
+ inline                                         RadmonDetectorCarvedFlatVolumeWithGroundAndKeyMarksConstructor :: RadmonDetectorCarvedFlatVolumeWithGroundAndKeyMarksConstructor()
+ :
+  RadmonTDetectorLayerConstructor<RadmonTDetectorCarvedVolumesDecorator<RadmonTDetectorVolumesWithKeyMarksDecorator<RadmonTDetectorVolumesWithGroundDecorator<RadmonDetectorFlatVolumeComponent> > > >("CarvedFlatVolumeWithGroundAndKeyMarks")
+ {
+ }
+
+
+
+ inline                                         RadmonDetectorCarvedFlatVolumeWithGroundAndKeyMarksConstructor :: ~RadmonDetectorCarvedFlatVolumeWithGroundAndKeyMarksConstructor()
+ {
+ }
+#endif /* RADMONDETECTORCARVEDFLATVOLUMEWITHGROUNDANDKEYMARKSCONSTRUCTOR_HH */
