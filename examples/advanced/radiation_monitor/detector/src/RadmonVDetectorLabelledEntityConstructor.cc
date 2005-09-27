@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonVDetectorLabelledEntityConstructor.cc,v 1.2 2005-09-21 14:56:43 capra Exp $
+// Id:            $Id: RadmonVDetectorLabelledEntityConstructor.cc,v 1.3 2005-09-27 13:59:59 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -156,33 +156,31 @@ G4VisAttributes *                               RadmonVDetectorLabelledEntityCon
 {
  G4VisAttributes * visAttribute=new G4VisAttributes;
 
+ G4String materialName(material->GetName());
+  
+ RadmonMaterialsManager * instance(RadmonMaterialsManager::Instance());
+  
+ visAttribute->SetColor(instance->GetMaterialColor(materialName));
+ visAttribute->SetVisibility(instance->GetMaterialVisibility(materialName));
+ if (instance->GetMaterialForceSolid(materialName))
+  visAttribute->SetForceSolid(true);
+ else if (instance->GetMaterialForceWireframe(materialName))
+  visAttribute->SetForceWireframe(true);
+  
  G4String str;
  str=GetAttribute(attributeName, "#");
- if (str=="#")
- {
-  G4String materialName(material->GetName());
-  
-  RadmonMaterialsManager * instance(RadmonMaterialsManager::Instance());
-  
-  visAttribute->SetColor(instance->GetMaterialColor(materialName));
-  visAttribute->SetVisibility(instance->GetMaterialVisibility(materialName));
-  if (instance->GetMaterialForceSolid(materialName))
-   visAttribute->SetForceSolid(true);
-  else if (instance->GetMaterialForceWireframe(materialName))
-   visAttribute->SetForceWireframe(true);
- }
- else
+ if (str!="#")
  {
   G4String arg;
   RadmonTokenizer args(str);
   
-  G4bool forceSolid(false);
-  G4bool forceWireframe(false);
-  G4bool visible(true);
-  G4double alpha(1.);
-  G4double red(1.);
-  G4double green(1.);
-  G4double blue(1.);
+  G4bool forceSolid(visAttribute->GetForcedDrawingStyle()==G4VisAttributes::solid && visAttribute->IsForceDrawingStyle());
+  G4bool forceWireframe(visAttribute->GetForcedDrawingStyle()==G4VisAttributes::wireframe && visAttribute->IsForceDrawingStyle());
+  G4bool visible(visAttribute->IsVisible());
+  G4double alpha(visAttribute->GetColor().GetAlpha());
+  G4double red(visAttribute->GetColor().GetRed());
+  G4double green(visAttribute->GetColor().GetGreen());
+  G4double blue(visAttribute->GetColor().GetBlue());
   
   G4bool forceFound(false);
   G4bool visibleFound(false);
