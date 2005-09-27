@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimitiveSensitivity.hh,v 1.2 2005-09-22 22:21:36 asaim Exp $
+// $Id: G4VPrimitiveSensitivity.hh,v 1.3 2005-09-27 17:45:26 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -30,10 +30,10 @@
 
 class G4Step;
 class G4HCofThisEvent;
-class G4MultiFunctionalDetector;
 class G4TouchableHistory;
 #include "globals.hh"
 #include "G4VSDFilter.hh"
+#include "G4MultiFunctionalDetector.hh"
 
 // class description:
 //
@@ -74,7 +74,7 @@ class G4VPrimitiveSensitivity
       // These five methods are exactly identical to those in G4VSensitiveDetector.
       // These methods are invoked by G4SDManager through G4MultiFunctionalDetector.
 
-  private:
+  protected:
       G4String primitiveName;
       G4MultiFunctionalDetector* detector;
       G4VSDFilter* filter;
@@ -94,6 +94,8 @@ class G4VPrimitiveSensitivity
       { return filter; }
       inline void SetVerboseLevel(G4int vl)
       { verboseLevel = vl; }
+      inline G4int GetVerboseLevel() const
+      { return verboseLevel; }
 
   private:
       inline G4bool HitPrimitive(G4Step*aStep,G4TouchableHistory*ROhis)
