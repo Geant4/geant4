@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonMaterialsMessenger.cc,v 1.1 2005-09-19 19:39:29 capra Exp $
+// Id:            $Id: RadmonMaterialsMessenger.cc,v 1.2 2005-09-27 14:01:20 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -26,6 +26,7 @@
  RADMON_INITIALIZE_COMMAND(AddComponentByAtoms),
  RADMON_INITIALIZE_COMMAND(AddComponentByFraction),
  RADMON_INITIALIZE_COMMAND(SetMaterialColor),
+ RADMON_INITIALIZE_COMMAND(SetMaterialTrasparency),
  RADMON_INITIALIZE_COMMAND(SetMaterialVisibility),
  RADMON_INITIALIZE_COMMAND(SetMaterialStyle),
  RADMON_INITIALIZE_COMMAND(Dump),
@@ -37,6 +38,7 @@
  RADMON_CREATE_COMMAND_3ARGS(AddComponentByAtoms,       "Adds a element into a material specifying the number of atoms",                "material", "element", "atoms");
  RADMON_CREATE_COMMAND_3ARGS(AddComponentByFraction,    "Adds a element or material into another material specifying the percentage",   "material", "component", "fraction");
  RADMON_CREATE_COMMAND_4ARGS(SetMaterialColor,          "Set default color for all elements made of this material",                     "material", "red", "green", "blue");
+ RADMON_CREATE_COMMAND_2ARGS(SetMaterialTrasparency,    "Set default trasparency for all elements made of this material",               "material", "alpha");
  RADMON_CREATE_COMMAND_2ARGS(SetMaterialVisibility,     "Set default visibility for all elements made of this material",                "material", "visibility");
  RADMON_CREATE_COMMAND_2ARGS(SetMaterialStyle,          "Set default style for all elements made of this material",                     "material", "style");
  RADMON_CREATE_COMMAND_0ARGS(Dump,                      "Print currently declared elements and materials");
@@ -53,6 +55,7 @@
  RADMON_DESTROY_COMMAND(Dump);
  RADMON_DESTROY_COMMAND(SetMaterialStyle);
  RADMON_DESTROY_COMMAND(SetMaterialVisibility);
+ RADMON_DESTROY_COMMAND(SetMaterialTrasparency);
  RADMON_DESTROY_COMMAND(SetMaterialColor);
  RADMON_DESTROY_COMMAND(AddComponentByFraction);
  RADMON_DESTROY_COMMAND(AddComponentByAtoms);
@@ -81,6 +84,7 @@ void                                            RadmonMaterialsMessenger :: SetN
   RADMON_SET_COMMAND(AddComponentByAtoms)
   RADMON_SET_COMMAND(AddComponentByFraction)
   RADMON_SET_COMMAND(SetMaterialColor)
+  RADMON_SET_COMMAND(SetMaterialTrasparency)
   RADMON_SET_COMMAND(SetMaterialVisibility)
   RADMON_SET_COMMAND(SetMaterialStyle)
   RADMON_SET_COMMAND(Dump)
@@ -253,7 +257,34 @@ void                                            RadmonMaterialsMessenger :: OnSe
   return;
  }
  
- materialsManager->SetMaterialColor(args[0], G4Color(red, green, blue));
+ materialsManager->SetMaterialColor(args[0], G4Color(red, green, blue, materialsManager->GetMaterialColor(args[0]).GetAlpha()));
+}
+
+
+
+void                                            RadmonMaterialsMessenger :: OnSetMaterialTrasparency(const G4String & value)
+{
+ G4String args[2];
+ 
+ if (!ProcessArguments(value, 2, args))
+  return;
+  
+ if (!materialsManager->ExistsMaterial(args[0]) && !materialsManager->IsIncompleteMaterial(args[0]))
+ {
+  G4cout << "RadmonMaterialsMessenger::OnSetMaterialTrasparency(): Material \"" << args[0] << "\" not found." << G4endl;
+  return;
+ }
+ 
+ G4double alpha(G4UIcommand::ConvertToDouble(args[1]));
+ 
+ if (alpha<0. || alpha>1.)
+ {
+  G4cout << "RadmonMaterialsMessenger::OnSetMaterialTrasparency(): Alpha component must be set between 0 and 1." << G4endl;
+  return;
+ }
+ 
+ const G4Color &c(materialsManager->GetMaterialColor(args[0]));
+ materialsManager->SetMaterialColor(args[0], G4Color(c.GetRed(), c.GetGreen(), c.GetBlue(), alpha));
 }
 
 

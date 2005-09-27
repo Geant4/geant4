@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonMaterialsManager.cc,v 1.1 2005-09-19 19:39:29 capra Exp $
+// Id:            $Id: RadmonMaterialsManager.cc,v 1.2 2005-09-27 14:01:20 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -119,7 +119,10 @@ void                                            RadmonMaterialsManager :: Create
  }
  
  incompleteMaterialsList.push_back(material);
- attributesMap[materialName]=new G4VisAttributes;
+ G4VisAttributes * visAttributes(new G4VisAttributes);
+ attributesMap[materialName]=visAttributes;
+ visAttributes->SetColor(1., 1., 1., 1.);
+ visAttributes->SetVisibility(true);
  
  return;
 }

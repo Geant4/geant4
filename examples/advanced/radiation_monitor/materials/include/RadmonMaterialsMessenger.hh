@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonMaterialsMessenger.hh,v 1.2 2005-09-19 19:40:26 capra Exp $
+// Id:            $Id: RadmonMaterialsMessenger.hh,v 1.3 2005-09-27 14:01:20 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   UI commands for managing a layout
@@ -43,6 +43,7 @@
    RADMON_DECLARE_COMMAND(AddComponentByAtoms);
    RADMON_DECLARE_COMMAND(AddComponentByFraction);
    RADMON_DECLARE_COMMAND(SetMaterialColor);
+   RADMON_DECLARE_COMMAND(SetMaterialTrasparency);
    RADMON_DECLARE_COMMAND(SetMaterialVisibility);
    RADMON_DECLARE_COMMAND(SetMaterialStyle);
    RADMON_DECLARE_COMMAND(Dump);
