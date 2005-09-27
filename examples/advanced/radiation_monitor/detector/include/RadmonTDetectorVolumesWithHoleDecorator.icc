@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonTDetectorVolumesWithHoleDecorator.icc,v 1.1 2005-09-21 14:52:57 capra Exp $
+// Id:            $Id: RadmonTDetectorVolumesWithHoleDecorator.icc,v 1.2 2005-09-27 13:54:12 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -14,14 +14,15 @@
  #include "RadmonVDetectorLabelledEntityConstructor.hh"
  #include "RadmonDetectorLayerVolumesList.hh"
  #include "RadmonDetectorLayerVolumeItem.hh"
- #include "G4SubtractionSolid.hh"
+ #include "RadmonDetectorLayerVolumeItemSubtraction.hh"
  #include "G4Box.hh"
  
  template <class LayerVolumesComponent>
                                                 RadmonTDetectorVolumesWithHoleDecorator<LayerVolumesComponent> :: RadmonTDetectorVolumesWithHoleDecorator(const RadmonVDetectorLabelledEntityConstructor * constructor)
  :
   owner(constructor),
-  component(constructor)
+  component(constructor),
+  operation(RadmonDetectorLayerVolumeItemSubtraction::rightMinusLeft)
  {
  }
  
@@ -30,11 +31,6 @@
  template <class LayerVolumesComponent>
                                                 RadmonTDetectorVolumesWithHoleDecorator<LayerVolumesComponent> :: ~RadmonTDetectorVolumesWithHoleDecorator()
  {
-  while (! ownedSolids.empty())
-  {
-   delete ownedSolids.top();
-   ownedSolids.pop();
-  }
  }
  
  
@@ -111,20 +107,14 @@
   
   RadmonDetectorLayerVolumeItem * item;
   G4Box * hole(new G4Box("Hole", holeWidth/2., holeHeight/2., (thickness/2.)*1.01));
-  G4VSolid * oldSolid;
-  G4SubtractionSolid * newSolid;
+  operation.Initialize(hole);
   
-  ownedSolids.push(hole);
-
   while (n>0)
   {
    n--;
 
    item=list->GetItem(n);
-   oldSolid=item->GetSolid();
-   newSolid=new G4SubtractionSolid(oldSolid->GetName()+"WithHole", oldSolid, hole);
-   item->SetSolid(newSolid);
-   ownedSolids.push(newSolid);
+   operation.ApplyTo(item);
   }
   
   return list;

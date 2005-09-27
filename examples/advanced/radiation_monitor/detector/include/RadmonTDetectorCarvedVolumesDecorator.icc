@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonTDetectorCarvedVolumesDecorator.icc,v 1.1 2005-09-21 14:52:57 capra Exp $
+// Id:            $Id: RadmonTDetectorCarvedVolumesDecorator.icc,v 1.2 2005-09-27 13:54:12 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -16,10 +16,9 @@
  #include "RadmonDetectorLayerVolumeItem.hh"
  #include "G4VisAttributes.hh"
  #include "G4DisplacedSolid.hh"
- #include "G4IntersectionSolid.hh"
  #include "G4UnionSolid.hh"
- #include "G4SubtractionSolid.hh"
  #include "G4Tubs.hh"
+ #include "G4UIcommand.hh"
  
  template <class LayerVolumesComponent>
                                                 RadmonTDetectorCarvedVolumesDecorator<LayerVolumesComponent> :: RadmonTDetectorCarvedVolumesDecorator(const RadmonVDetectorLabelledEntityConstructor * constructor)
@@ -27,7 +26,7 @@
   owner(constructor),
   component(constructor),
   visAttributes(0),
-  identity(G4RotationMatrix::IDENTITY)
+  subtraction(RadmonDetectorLayerVolumeItemSubtraction::rightMinusLeft)
  {
  }
  
@@ -116,9 +115,9 @@
   G4double depositOnHolesThickness(owner->GetAttributeAsMeasure("DepositOnHolesThickness", "Length", -1.));
   if (depositOnHolesThickness>0)
   {
-   if (depositOnHolesThickness>holesRadius)
+   if (depositOnHolesThickness>=holesRadius)
    {
-    G4cout << "RadmonTDetectorCarvedVolumesDecorator::GenerateVolumesList: \"DepositOnHolesThickness\" > \"HolesRadius\"." << G4endl;
+    G4cout << "RadmonTDetectorCarvedVolumesDecorator::GenerateVolumesList: \"DepositOnHolesThickness\" >= \"HolesRadius\"." << G4endl;
     return 0;
    }
   
@@ -155,14 +154,22 @@
   G4VSolid * holes(0);
   G4int i(holesAlongWidth);
   
+  identity=G4RotationMatrix::IDENTITY;
+  
+  G4int index(0);
+  G4String indexStr;
+  
   while (i>0)
   {
-   displacedHole=new G4DisplacedSolid("DisplacedSingleHole", holeCylinder, &identity, offset);
+   index++;
+   indexStr=G4UIcommand::ConvertToString(index);
+  
+   displacedHole=new G4DisplacedSolid("DisplacedSingleHole"+indexStr, holeCylinder, &identity, offset);
    ownedSolids.push(displacedHole);
    
    if (holes)
    {
-    holes=new G4UnionSolid("DisplacedHoles", holes, displacedHole);
+    holes=new G4UnionSolid("DisplacedHoles"+indexStr, holes, displacedHole);
     ownedSolids.push(holes);
    }
    else
@@ -182,12 +189,15 @@
   
   while (i>0)
   {
-   displacedHole=new G4DisplacedSolid("DisplacedSingleHole", holeCylinder, &identity, offset);
+   index++;
+   indexStr=G4UIcommand::ConvertToString(index);
+  
+   displacedHole=new G4DisplacedSolid("DisplacedSingleHole"+indexStr, holeCylinder, &identity, offset);
    ownedSolids.push(displacedHole);
    
    if (holes)
    {
-    holes=new G4UnionSolid("DisplacedHoles", holes, displacedHole);
+    holes=new G4UnionSolid("DisplacedHoles"+indexStr, holes, displacedHole);
     ownedSolids.push(holes);
    }
    else
@@ -201,10 +211,9 @@
    }
   }
 
-  G4VSolid * oldSolid;
-  G4SubtractionSolid * newSolid;  
   RadmonDetectorLayerVolumeItem * item;
   RadmonDetectorLayerVolumeItem * motherItem;
+  subtraction.Initialize(holes, false);
 
   while (nItems>0)
   {
@@ -215,10 +224,7 @@
    if (item->GetMotherVolumeItem()==0)
     motherItem=item;
     
-   oldSolid=item->GetSolid();
-   newSolid=new G4SubtractionSolid(oldSolid->GetName()+"Carved", oldSolid, holes);
-   item->SetSolid(newSolid);
-   ownedSolids.push(newSolid);
+   subtraction.ApplyTo(item);
   }
 
   if (!motherItem)
@@ -226,27 +232,28 @@
 
   if (material)
   {
+   intersection.Initialize(motherItem);
+   
    G4Tubs * depositTub(new G4Tubs("SingleDeposit", holesRadius-depositOnHolesThickness, holesRadius, thickness/2., 0, 360.*deg));
-   G4VSolid * deposit;
+   ownedSolids.push(depositTub);
    
    offset.setX((fullHolesStep/2.)*static_cast<G4double>(holesAlongWidth-1));
    offset.setY(height/2.);
    offset.setZ(0.);
    
    i=holesAlongWidth;
-    
+   index=0;
+ 
    while (i>0)
    {
-    deposit=new G4IntersectionSolid("DisplacedSingleDeposit", depositTub, motherItem->GetSolid(), &identity, -offset);
-//    deposit=new G4DisplacedSolid("DisplacedSingleDeposit", depositTub, &identity, offset);
-    ownedSolids.push(deposit);
-    
+    index++;
+    indexStr=G4UIcommand::ConvertToString(index);
+
     item=list->AppendItem();
-    item->SetSolid(deposit);
-    item->SetPosition(offset);
+    item->SetSolid(intersection.ApplyTo(depositTub, offset, false, true));
     item->SetAttributes(visAttributes);
     item->SetMaterial(material);
-    item->SetName("DepositOnHole");
+    item->SetName("DepositOnHole"+indexStr);
     item->SetMotherVolumeItem(motherItem);
 
     offset.setY(-offset.getY());
@@ -263,16 +270,14 @@
 
    while (i>0)
    {
-    deposit=new G4IntersectionSolid("DisplacedSingleDeposit", depositTub, motherItem->GetSolid(), &identity, -offset);
-//    deposit=new G4DisplacedSolid("DisplacedSingleDeposit", depositTub, &identity, offset);
-    ownedSolids.push(deposit);
-    
+    index++;
+    indexStr=G4UIcommand::ConvertToString(index);
+
     item=list->AppendItem();
-    item->SetSolid(deposit);
-    item->SetPosition(offset);
+    item->SetSolid(intersection.ApplyTo(depositTub, offset, false, true));
     item->SetAttributes(visAttributes);
     item->SetMaterial(material);
-    item->SetName("DepositOnHole");
+    item->SetName("DepositOnHole"+indexStr);
     item->SetMotherVolumeItem(motherItem);
 
     offset.setX(-offset.getX());

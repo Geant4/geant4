@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonTDetectorCarvedVolumesDecorator.hh,v 1.2 2005-09-21 14:52:57 capra Exp $
+// Id:            $Id: RadmonTDetectorCarvedVolumesDecorator.hh,v 1.3 2005-09-27 13:54:12 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Carves the borders of a component with the following method
@@ -17,6 +17,8 @@
 
  // Include files
  #include <stack>
+ #include "RadmonDetectorLayerVolumeItemSubtraction.hh"
+ #include "RadmonDetectorLayerVolumeItemIntersection.hh"
  #include "G4RotationMatrix.hh"
 
  // Forward declaration
@@ -48,8 +50,10 @@
    LayerVolumesComponent                        component;
    OwnedSolids                                  ownedSolids;
    G4VisAttributes *                            visAttributes;
+   RadmonDetectorLayerVolumeItemSubtraction     subtraction;
+   RadmonDetectorLayerVolumeItemIntersection    intersection;
    G4RotationMatrix                             identity;
- };
+  };
  
  // Inline implementations
  #include "RadmonTDetectorCarvedVolumesDecorator.icc"
