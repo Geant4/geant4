@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2005-09-21 15:01:08 capra Exp $
+$Id: History,v 1.6 2005-09-27 14:03:09 capra Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27 Sep 2005 - radmon-V07-01-05 - R. Capra - Implementation according. All
+                        the packaging layers are now implemented.
+                        Trasparency support (alpha channel) has been
+                        provided.
 
 21 Sep 2005 - radmon-V07-01-04 - R. Capra - Implementation according to the
                         design almost completed. Following functionality
