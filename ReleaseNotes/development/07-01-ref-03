@@ -47,10 +47,6 @@ global                                           global-V07-01-00
 - G4UnitsTable.cc: added Surface/Mass unit (cm2/g).
 - Added version.hh header, including definitions for software versioning.
 
-graphics_reps                                    greps-V07-01-03
--------------
-- G4AttCheck.cc: Added time to legal G4AttValues.
-
 particles                                        particles-V07-01-01
 ---------
 - Fix to prohibit creation of ions in 'PreInit' state to make sure
