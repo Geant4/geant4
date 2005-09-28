@@ -1,0 +1,98 @@
+
+                       geant4-07-01-ref-03
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Reviewed implementation of DistanceToIn/Out for G4Torus.
+  o Fix to prohibit creation of ions in 'PreInit' state to make sure
+    that proper processes will be attached to the ions.
+  o Fix in elastic scattering for the case of target hydrogen in the
+    low-energy hadronic model.
+  o Fix in G4SteppingManager for the order of execution of
+    'ExclusivelyForced' processes like Fast-Simulation.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+event                                            event-V07-01-00
+-----
+- Corrected typo in printout in G4GeneralParticleMessenger.
+  Addresses problem report #786.
+
+geometry/management                              geommng-V07-01-01
+-------------------
+- Added concrete implementation for GetPointOnSurface() to G4ReflectedSolid.
+
+geometry/navigation                              geomnav-V07-01-01
+-------------------
+- G4DrawVoxels: removed unnecessary 'panic' message in
+  ComputeVoxelPolyhedra() and some code cleanup.
+
+geometry/solids/Boolean                          geom-bool-V07-01-00
+-----------------------
+- Added concrete implementation for GetPointOnSurface() to
+  G4BooleanSolid and G4DisplacedSolid.
+- Updated unit tests testG4DisplacedSolid and testG4IntersectionSolid.
+
+geometry/solids/CSG                              geom-csg-V07-01-02
+-------------------
+- Moved implementation for DistanceToIn/Out() in G4Torus to make use of
+  G4JTPolynomialSolver for precise calculation of the intersections.
+- Reviewed unit tests and reduced statistics.
+
+global                                           global-V07-01-00
+------
+- G4UnitsTable.cc: added Surface/Mass unit (cm2/g).
+- Added version.hh header, including definitions for software versioning.
+
+graphics_reps                                    greps-V07-01-03
+-------------
+- G4AttCheck.cc: Added time to legal G4AttValues.
+
+particles                                        particles-V07-01-01
+---------
+- Fix to prohibit creation of ions in 'PreInit' state to make sure
+  that proper processes will be attached to the ions.
+
+processes/electromagnetic/standard               emstand-V07-01-03
+----------------------------------
+- Fix for initialisation of G4eBremsstrahlungModel.
+- Added G4MultipleScattering80 and G4MscModel80 development models.
+
+processes/electromagnetic/xrays                  xrays-V07-01-01
+-------------------------------
+- Changed variable name 'MeanNumPhotons' to 'MeanNumberOfPhotons'
+  in G4Scintillation and G4Cerenkov to conform with the documentation
+  in the Application Developers Guide.
+
+processes/hadronic/models/low_energy             ghad_low_en-V07-01-00
+------------------------------------
+- Fix in elastic scattering for the case of target hydrogen: use
+  relativistic kinematic for the generation of the final state.
+  Fix tested in HARP.
+
+run                                              run-V07-01-01
+---
+- Removed unnecessary usage of G4Allocator for allocation of a run.
+
+tracking                                         tracking-V07-01-01
+--------
+- Fix in G4SteppingManager::DefinePhysicalStepLength() for the order
+  of execution of 'ExclusivelyForced' processes like Fast-Simulation.
+
+examples                                         examples-V07-01-03
+--------
+- Updated reference outputs.
+- extended
+  o electromagnetic/TestEm9 (testem9-V07-01-00)
+    + Fixed problem for changing cuts between runs.
+
+tests                                            tests-V07-01-03
+-----
+- Updated reference outputs.
+- test10 (test10-V07-01-00)
+  o Decreased statistics for largeN runs.
+- test22 (test22-V07-01-00)
+  o Decreased statistics for largeN runs.
