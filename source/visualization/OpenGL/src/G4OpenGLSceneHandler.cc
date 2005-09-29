@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.37 2005-09-13 20:41:57 allison Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.38 2005-09-29 14:27:03 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,6 +43,7 @@
 #include "G4OpenGLSceneHandler.hh"
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLFontBaseStore.hh"
+#include "G4OpenGLViewerDataStore.hh"
 #include "G4OpenGLTransform3D.hh"
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
@@ -382,12 +383,18 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (pVA);
 
   //Get colour, etc..
+  G4bool transparency_enabled =
+    G4OpenGLViewerDataStore::GetTransparencyEnabled(fpViewer);
   const G4Colour& c = GetColour (polyhedron);
   GLfloat materialColour [4];
   materialColour [0] = c.GetRed ();
   materialColour [1] = c.GetGreen ();
   materialColour [2] = c.GetBlue ();
-  materialColour [3] = c.GetAlpha ();
+  if (transparency_enabled) {
+    materialColour [3] = c.GetAlpha ();
+  } else {
+    materialColour [3] = 1.;
+  }
 
   GLfloat clear_colour[4];
   glGetFloatv (GL_COLOR_CLEAR_VALUE, clear_colour);
@@ -539,7 +546,8 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       }
       GLfloat* painting_colour;
       if  (drawing_style == G4ViewParameters::hlr) {
-	if (materialColour[3] < 1.) {  // Transparent - don't paint...
+	if (materialColour[3] < 1.) {
+	  // Transparent - don't paint...
 	  goto end_of_drawing_through_stencil;
 	}
 	painting_colour = clear_colour;

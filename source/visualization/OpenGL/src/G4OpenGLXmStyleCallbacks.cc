@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.10 2005-09-13 18:15:04 allison Exp $
+// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.11 2005-09-29 14:27:03 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,6 +34,8 @@
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
 #include "G4OpenGLXmViewer.hh"
+
+#include "G4OpenGLViewerDataStore.hh"
 
 void G4OpenGLXmViewer::drawing_style_callback (Widget w, 
 					     XtPointer clientData, 
@@ -162,19 +164,19 @@ void G4OpenGLXmViewer::transparency_callback (Widget w,
     
   case 0:
     pView->transparency_enabled = false;
-    glDisable (GL_BLEND);
+    G4OpenGLViewerDataStore::SetTransparencyEnabled(pView, false);
     break;
 
   case 1:
     pView->transparency_enabled = true;
-    glEnable (GL_BLEND);
-    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    G4OpenGLViewerDataStore::SetTransparencyEnabled(pView, true);
     break;
 
   default:
     G4Exception("Unrecognised case in transparency_callback.");
   }
 
+  pView->SetNeedKernelVisit (true);
   pView->SetView ();
   pView->ClearView ();
   pView->DrawView ();

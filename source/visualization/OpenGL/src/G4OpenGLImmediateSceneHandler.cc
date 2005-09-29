@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.16 2005-09-13 18:16:33 allison Exp $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.17 2005-09-29 14:27:03 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,6 +41,7 @@
 
 #include "G4OpenGLSceneHandler.hh"
 #include "G4OpenGLViewer.hh"
+#include "G4OpenGLViewerDataStore.hh"
 #include "G4OpenGLTransform3D.hh"
 
 #include "G4OpenGLImmediateSceneHandler.hh"
@@ -122,10 +123,14 @@ void G4OpenGLImmediateSceneHandler::RequestPrimitives (const G4VSolid& solid) {
       fpViewer -> GetApplicableVisAttributes(fpVisAttribs);
     const G4Colour& c = pVA -> GetColour ();
     G4double opacity = c.GetAlpha ();
-    if (!fSecondPass && opacity < 1.) {
-      // On first pass, transparent objects are not drawn, but flag is set...
-      fSecondPassRequested = true;
-      return;
+    if (!fSecondPass) {
+      G4bool transparency_enabled =
+	G4OpenGLViewerDataStore::GetTransparencyEnabled(fpViewer);
+      if (transparency_enabled && opacity < 1.) {
+	// On first pass, transparent objects are not drawn, but flag is set...
+	fSecondPassRequested = true;
+	return;
+      }
     }
     // On second pass, opaque objects are not drwan...
     if (fSecondPass && opacity >= 1.) return;

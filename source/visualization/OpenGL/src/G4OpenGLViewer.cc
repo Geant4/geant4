@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.20 2005-09-13 18:15:04 allison Exp $
+// $Id: G4OpenGLViewer.cc,v 1.21 2005-09-29 14:27:03 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,6 +32,7 @@
 
 #include "G4ios.hh"
 #include "G4OpenGLViewer.hh"
+#include "G4OpenGLViewerDataStore.hh"
 #include "G4OpenGLSceneHandler.hh"
 #include "G4OpenGLTransform3D.hh"
 
@@ -46,13 +47,15 @@
 G4OpenGLViewer::G4OpenGLViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
 white_background (false),
-transparency_enabled (false),
+transparency_enabled (true),
 antialiasing_enabled (false),
 haloing_enabled (false)
 {
   // Make changes to view parameters for OpenGL...
   fVP.SetAutoRefresh(true);
   fDefaultVP.SetAutoRefresh(true);
+
+  G4OpenGLViewerDataStore::SetTransparencyEnabled(this, transparency_enabled);
 
   //  glClearColor (0.0, 0.0, 0.0, 0.0);
   //  glClearDepth (1.0);
