@@ -600,7 +600,7 @@ int main()
         m   = pd->GetPDGMass();
         mom = sec->GetMomentumDirection();
         e   = sec->GetKineticEnergy();
-	       if (e < 0.0)
+	       if (e < -0.0)
         {
 	         G4cerr<<"**Test29:Event#"<<iter<<",Hadron#"<<i<<", E="<<e<<" <0 (Set 0)"<<G4endl;
           e = 0.0;
@@ -674,6 +674,8 @@ int main()
       }
       G4double ss=std::fabs(totSum.t())+std::fabs(totSum.x())+std::fabs(totSum.y())+
                   std::fabs(totSum.z());    
+      G4double sr=std::fabs(Residual.t())+std::fabs(Residual.x())+std::fabs(Residual.y())+
+                  std::fabs(Residual.z());    
 #ifdef pdebug
       G4cout<<"TEST29:r4M="<<totSum<<ss<<",rChg="<<totCharge<<",rBaryN="<<totBaryN<<G4endl;
 #endif
@@ -699,6 +701,11 @@ int main()
           G4QPDGCode cQPDG(c);
           sm   = cQPDG.GetMass();
           e    = sec->GetKineticEnergy();
+	         if (e < -0.0)
+          {
+	           G4cerr<<"**Test29:Event#"<<iter<<",Hadron#"<<i<<", E="<<e<<" <0 (Set 0)"<<G4endl;
+            e = 0.0;
+          }
 	         p    = std::sqrt(e*(e + m + m));
 	         mom *= p;
           lorV = G4LorentzVector(mom, e + m);    // "e" is a Kinetic energy!
@@ -706,7 +713,8 @@ int main()
           G4cerr<<"Test29:#"<<indx<<",PDG="<<c<<",m="<<m<<"("<<sm<<"),4M="<<lorV<<",T="<<e
                 <<",r4M="<<totSum<<G4endl;
         }
-        G4Exception("***Test29: ALARM or baryn/charge/energy/momentum is not conserved");
+        if(sr>.27)
+          G4Exception("***Test29: ALARM or baryn/charge/energy/momentum is not conserved");
       }
 #ifndef nout
 	     if(npart==1) ntp->FillEvt(aChange); // Fill the simulated event in the ASCII "ntuple"
