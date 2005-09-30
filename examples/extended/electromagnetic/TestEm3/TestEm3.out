@@ -212,7 +212,7 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   1 kByte
-    Total CPU time elapsed for geometry optimisation: 0.01 seconds
+    Total CPU time elapsed for geometry optimisation: 0 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
@@ -239,7 +239,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=128.84s Real=136.33s Sys=6.35s
+  User=107.82s Real=115.16s Sys=6.5s
 
 ------------------------------------------------------------
 material             Total Edep   sqrt(E0(GeV))*rmsE/Emean     total tracklen 

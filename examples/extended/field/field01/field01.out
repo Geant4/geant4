@@ -198,7 +198,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.07s Sys=0s
+  User=0s Real=0.07s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -228,7 +228,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -387,7 +387,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.07s Real=0.07s Sys=0s
+  User=0.04s Real=0.05s Sys=0.01s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

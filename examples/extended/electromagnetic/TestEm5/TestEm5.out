@@ -196,7 +196,7 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
-    Total CPU time elapsed for geometry optimisation: 0.01 seconds
+    Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -227,7 +227,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=98.58s Real=1675.35s Sys=323.14s
+  User=92.49s Real=870.88s Sys=70.79s
 
  ======================== run summary ======================
 

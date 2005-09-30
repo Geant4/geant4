@@ -111,7 +111,8 @@ PhysicsList::AddPhysicsList: <standard>
 Ecal is 36 cm  of G4_CESIUM_IODIDE
 Absorber is 2 mm  of G4_Al
 Vertex is 3 cm  of 3 layers of Si of 100 mum npads= 601
-world cuts are set
+### New geometry is constructed
+world cuts are set0.3 0.3
 Vertex cuts are set
 Muon cuts are set
 #
@@ -293,7 +294,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=87.26s Real=90.9s Sys=3.6s
+  User=82.53s Real=86.19s Sys=3.64s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
