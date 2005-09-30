@@ -17,7 +17,7 @@ SimpleBox is now made of Pb
 SimpleBox is now made of Al
 /gun/particle gamma
 /gun/energy 100 GeV
-/run/beamOn 10
+/run/beamOn 5
 
 phot:  Total cross sections from Sandia parametrisation. 
 
@@ -126,11 +126,6 @@ Event number 1
 Event number 2
 Event number 3
 Event number 4
-Event number 5
-Event number 6
-Event number 7
-Event number 8
-Event number 9
 #
 # electron 100 GeV in Air
 #
@@ -138,7 +133,7 @@ Event number 9
 SimpleBox is now made of Air
 /gun/particle e-
 /gun/energy 100 GeV
-/run/beamOn 10
+/run/beamOn 5
 
 phot:  Total cross sections from Sandia parametrisation. 
 
@@ -242,14 +237,9 @@ muPairProd:   tables are built for  mu-
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
-Event number 10
-Event number 11
-Event number 12
-Event number 13
-Event number 14
-Event number 15
-Event number 16
-Event number 17
-Event number 18
-Event number 19
+Event number 5
+Event number 6
+Event number 7
+Event number 8
+Event number 9
 #
