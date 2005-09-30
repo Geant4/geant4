@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonTDetectorVolumesWithGroundDecorator.hh,v 1.1 2005-09-27 13:55:51 capra Exp $
+// Id:            $Id: RadmonTDetectorVolumesWithGroundDecorator.hh,v 1.2 2005-09-30 08:31:23 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Decorates with a ground plane
@@ -15,13 +15,11 @@
 #ifndef   RADMONTDETECTORVOLUMESWITHGROUNDDECORATOR_HH
  #define  RADMONTDETECTORVOLUMESWITHGROUNDDECORATOR_HH
 
- // Include files
- #include <stack>
-
  // Forward declaration
  class RadmonVDetectorLabelledEntityConstructor;
  class RadmonDetectorLayerVolumesList;
- class G4VSolid;
+ class G4Box;
+ class G4VisAttributes;
 
  template <class LayerVolumesComponent>
  class RadmonTDetectorVolumesWithGroundDecorator
