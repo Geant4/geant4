@@ -48,8 +48,8 @@
 /radmon/materials/AddComponentByAtoms Ceramics Silicon 1
 /radmon/materials/AddComponentByAtoms Ceramics Oxygen 2
 /radmon/materials/SetMaterialColor Ceramics 1. .9 .7
-/radmon/materials/SetMaterialTrasparency Ceramics .3
-#/radmon/materials/SetMaterialTrasparency Ceramics 1.
+#/radmon/materials/SetMaterialTrasparency Ceramics .6
+/radmon/materials/SetMaterialTrasparency Ceramics 1.
 /radmon/materials/SetMaterialVisibility Ceramics visible
 /radmon/materials/SetMaterialStyle Ceramics solid
 

@@ -4,7 +4,7 @@
 #/vis/sceneHandler/create OGLSX DefaultHandler
 #/vis/viewer/create DefaultHandler DefaultView 600
 /vis/sceneHandler/create RayTracer DefaultHandler
-/vis/viewer/create DefaultHandler DefaultView 1500
+/vis/viewer/create DefaultHandler DefaultView 1600
 /vis/scene/create DefaultScene
 #/vis/scene/add/volume worldPV
 #/vis/sceneHandler/attach DefaultScene
