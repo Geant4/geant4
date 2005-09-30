@@ -1,2 +1,2 @@
 Test19:Par's: T=1.800000e+02,S=3.000000e-01,Eta=3.000000e-01,nop=152,p=2.000000e+02,e=0.000000e+00,pPDG=22,tPDG=90013014,nEv=100,fN=8.000000e-01,fD=5.000000e-02,cP=5.000000e+00,rM=1.000000e+00,sA=5.000000e-01
-Test19:CalculationTimePerEvent= 1.860000e-02 s
+---Worning---G4QCollision::PostStepDoIt: drop PDG=90009010

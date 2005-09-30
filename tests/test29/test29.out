@@ -1,4 +1,4 @@
-Test29:Par's: T=1.800000e+02,S=3.000000e-01,Eta=3.000000e-01,nop=152,p=0.000000e+00,e=0.000000e+00,pPDG=0,tPDG=0,nEv=2000,fN=7.500000e-01,fD=5.000000e-02,cP=5.000000e+00,rM=9.990000e+00,sA=8.000000e-01
+Test29:Par's: T=1.800000e+02,S=3.000000e-01,Eta=3.000000e-01,nop=152,p=0.000000e+00,e=0.000000e+00,pPDG=0,tPDG=0,nEv=200,fN=7.500000e-01,fD=5.000000e-02,cP=5.000000e+00,rM=9.990000e+00,sA=8.000000e-01
 Test29:-->Material(1,0):Hydrogen,1H
 Test29:-->Material(2,2):Helium,2H
 Test29:-->Material(3,4):Lithium,7Li
@@ -10,1840 +10,262 @@ Test29:-->Material(92,146):Uranium,238U
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29: New run for Target=90001000, Projectile=-2212
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 2.960000e-03 s
+Test29:CalculationTimePerEvent= 4.025000e-02 s
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29: New run for Target=90002002, Projectile=-2212
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 4.720000e-03 s
+Test29:CalculationTimePerEvent= 6.000000e-02 s
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29: New run for Target=90003004, Projectile=-2212
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 7.640000e-03 s
+Test29:CalculationTimePerEvent= 1.334000e-01 s
 Test29: Material=Carbon, Element[0]=Carbon,A[0]=14 is selected.
 Test29: New run for Target=90007007, Projectile=-2212
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.596000e-02 s
+Test29:CalculationTimePerEvent= 2.754000e-01 s
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29: New run for Target=90013014, Projectile=-2212
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 2.456000e-02 s
+Test29:CalculationTimePerEvent= 3.278500e-01 s
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29: New run for Target=90027032, Projectile=-2212
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 3.170000e-02 s
+Test29:CalculationTimePerEvent= 4.631500e-01 s
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29: New run for Target=90047060, Projectile=-2212
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 3.489000e-02 s
+Test29:CalculationTimePerEvent= 4.502000e-01 s
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29: New run for Target=90092146, Projectile=-2212
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 4.154500e-02 s
+Test29:CalculationTimePerEvent= 5.599500e-01 s
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29: New run for Target=90001000, Projectile=-211
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.000000e-05 s
+Test29:CalculationTimePerEvent= 1.500000e-04 s
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29: New run for Target=90002002, Projectile=-211
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 4.035000e-03 s
+Test29:CalculationTimePerEvent= 5.365000e-02 s
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29: New run for Target=90003004, Projectile=-211
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.167000e-02 s
+Test29:CalculationTimePerEvent= 1.539000e-01 s
 Test29: Material=Carbon, Element[0]=Carbon,A[0]=14 is selected.
 Test29: New run for Target=90007007, Projectile=-211
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.467000e-02 s
+Test29:CalculationTimePerEvent= 2.115500e-01 s
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29: New run for Target=90013014, Projectile=-211
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.507500e-02 s
+Test29:CalculationTimePerEvent= 2.336500e-01 s
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29: New run for Target=90027032, Projectile=-211
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.839500e-02 s
+Test29:CalculationTimePerEvent= 2.455500e-01 s
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29: New run for Target=90047060, Projectile=-211
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.988000e-02 s
+Test29:CalculationTimePerEvent= 2.630000e-01 s
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29: New run for Target=90092146, Projectile=-211
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 2.428500e-02 s
+Test29:CalculationTimePerEvent= 3.186500e-01 s
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29: New run for Target=90001000, Projectile=-321
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.415000e-03 s
+Test29:CalculationTimePerEvent= 1.845000e-02 s
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29: New run for Target=90002002, Projectile=-321
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 4.120000e-03 s
+Test29:CalculationTimePerEvent= 5.500000e-02 s
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29: New run for Target=90003004, Projectile=-321
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.303000e-02 s
+Test29:CalculationTimePerEvent= 1.652000e-01 s
 Test29: Material=Carbon, Element[0]=Carbon,A[0]=14 is selected.
 Test29: New run for Target=90007007, Projectile=-321
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 2.072000e-02 s
+Test29:CalculationTimePerEvent= 2.764000e-01 s
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29: New run for Target=90013014, Projectile=-321
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 2.546500e-02 s
+Test29:CalculationTimePerEvent= 3.390500e-01 s
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29: New run for Target=90027032, Projectile=-321
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 3.023000e-02 s
+Test29:CalculationTimePerEvent= 3.793500e-01 s
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29: New run for Target=90047060, Projectile=-321
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 3.154000e-02 s
+Test29:CalculationTimePerEvent= 4.307000e-01 s
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29: New run for Target=90092146, Projectile=-321
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 3.811000e-02 s
+Test29:CalculationTimePerEvent= 4.795000e-01 s
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29: New run for Target=90001000, Projectile=13
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 2.000000e-05 s
+Test29:CalculationTimePerEvent= 2.500000e-04 s
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29: New run for Target=90002002, Projectile=13
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 6.000000e-05 s
+Test29:CalculationTimePerEvent= 1.100000e-03 s
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29: New run for Target=90003004, Projectile=13
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 6.950000e-04 s
+Test29:CalculationTimePerEvent= 8.500000e-03 s
 Test29: Material=Carbon, Element[0]=Carbon,A[0]=14 is selected.
 Test29: New run for Target=90007007, Projectile=13
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 4.245000e-03 s
+Test29:CalculationTimePerEvent= 5.180000e-02 s
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29: New run for Target=90013014, Projectile=13
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 6.870000e-03 s
+Test29:CalculationTimePerEvent= 9.735000e-02 s
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29: New run for Target=90027032, Projectile=13
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 8.220000e-03 s
+Test29:CalculationTimePerEvent= 1.197000e-01 s
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29: New run for Target=90047060, Projectile=13
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 8.935000e-03 s
+Test29:CalculationTimePerEvent= 1.188500e-01 s
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29: New run for Target=90092146, Projectile=13
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.014500e-02 s
+Test29:CalculationTimePerEvent= 1.428500e-01 s
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29: New run for Target=90001000, Projectile=15
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 2.000000e-05 s
+Test29:CalculationTimePerEvent= 2.500000e-04 s
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29: New run for Target=90002002, Projectile=15
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.350000e-04 s
+Test29:CalculationTimePerEvent= 3.350000e-03 s
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29: New run for Target=90003004, Projectile=15
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 2.140000e-03 s
+Test29:CalculationTimePerEvent= 2.135000e-02 s
 Test29: Material=Carbon, Element[0]=Carbon,A[0]=14 is selected.
 Test29: New run for Target=90007007, Projectile=15
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 2.293500e-02 s
+Test29:CalculationTimePerEvent= 3.475000e-01 s
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29: New run for Target=90013014, Projectile=15
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 3.839500e-02 s
+Test29:CalculationTimePerEvent= 5.770500e-01 s
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29: New run for Target=90027032, Projectile=15
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 4.295500e-02 s
+Test29:CalculationTimePerEvent= 6.025000e-01 s
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29: New run for Target=90047060, Projectile=15
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 4.373500e-02 s
+Test29:CalculationTimePerEvent= 5.932500e-01 s
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29: New run for Target=90092146, Projectile=15
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 4.909000e-02 s
+Test29:CalculationTimePerEvent= 6.563000e-01 s
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29: New run for Target=90001000, Projectile=3112
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.415000e-03 s
+Test29:CalculationTimePerEvent= 1.875000e-02 s
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29: New run for Target=90002002, Projectile=3112
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 4.160000e-03 s
+Test29:CalculationTimePerEvent= 5.270000e-02 s
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29: New run for Target=90003004, Projectile=3112
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.217000e-02 s
+Test29:CalculationTimePerEvent= 1.600500e-01 s
 Test29: Material=Carbon, Element[0]=Carbon,A[0]=14 is selected.
 Test29: New run for Target=90007007, Projectile=3112
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.508000e-02 s
+Test29:CalculationTimePerEvent= 1.935000e-01 s
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29: New run for Target=90013014, Projectile=3112
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.508500e-02 s
+Test29:CalculationTimePerEvent= 1.912500e-01 s
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29: New run for Target=90027032, Projectile=3112
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.815000e-02 s
+Test29:CalculationTimePerEvent= 2.489000e-01 s
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29: New run for Target=90047060, Projectile=3112
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 2.021500e-02 s
+Test29:CalculationTimePerEvent= 2.670500e-01 s
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29: New run for Target=90092146, Projectile=3112
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 2.464500e-02 s
+Test29:CalculationTimePerEvent= 3.451500e-01 s
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29: New run for Target=90001000, Projectile=3312
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.380000e-03 s
+Test29:CalculationTimePerEvent= 1.870000e-02 s
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29: New run for Target=90002002, Projectile=3312
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 3.970000e-03 s
+Test29:CalculationTimePerEvent= 5.255000e-02 s
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29: New run for Target=90003004, Projectile=3312
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 7.595000e-03 s
+Test29:CalculationTimePerEvent= 1.011000e-01 s
 Test29: Material=Carbon, Element[0]=Carbon,A[0]=14 is selected.
 Test29: New run for Target=90007007, Projectile=3312
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 8.265000e-03 s
+Test29:CalculationTimePerEvent= 1.043000e-01 s
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29: New run for Target=90013014, Projectile=3312
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 8.310000e-03 s
+Test29:CalculationTimePerEvent= 1.061500e-01 s
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29: New run for Target=90027032, Projectile=3312
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.184500e-02 s
+Test29:CalculationTimePerEvent= 1.476000e-01 s
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29: New run for Target=90047060, Projectile=3312
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.407500e-02 s
+Test29:CalculationTimePerEvent= 1.778500e-01 s
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29: New run for Target=90092146, Projectile=3312
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.747500e-02 s
+Test29:CalculationTimePerEvent= 2.763000e-01 s
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29: New run for Target=90001000, Projectile=3334
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.415000e-03 s
+Test29:CalculationTimePerEvent= 1.905000e-02 s
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29: New run for Target=90002002, Projectile=3334
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.725000e-03 s
+Test29:CalculationTimePerEvent= 2.585000e-02 s
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29: New run for Target=90003004, Projectile=3334
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.845000e-03 s
+Test29:CalculationTimePerEvent= 3.570000e-02 s
 Test29: Material=Carbon, Element[0]=Carbon,A[0]=14 is selected.
 Test29: New run for Target=90007007, Projectile=3334
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.820000e-03 s
+Test29:CalculationTimePerEvent= 2.515000e-02 s
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29: New run for Target=90013014, Projectile=3334
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 3.245000e-03 s
+Test29:CalculationTimePerEvent= 2.700000e-02 s
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29: New run for Target=90027032, Projectile=3334
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 3.385000e-03 s
+Test29:CalculationTimePerEvent= 3.940000e-02 s
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29: New run for Target=90047060, Projectile=3334
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 3.390000e-03 s
+Test29:CalculationTimePerEvent= 3.950000e-02 s
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29: New run for Target=90092146, Projectile=3334
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 3.400000e-03 s
+Test29:CalculationTimePerEvent= 3.950000e-02 s
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29: New run for Target=90001000, Projectile=2112
 ****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.395000e-03 s
+Test29:CalculationTimePerEvent= 1.880000e-02 s
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29: New run for Target=90002002, Projectile=2112
-****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.715000e-03 s
-Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
-Test29: New run for Target=90003004, Projectile=2112
-****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.840000e-03 s
-Test29: Material=Carbon, Element[0]=Carbon,A[0]=14 is selected.
-Test29: New run for Target=90007007, Projectile=2112
-****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 2.030000e-03 s
-Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
-Test29: New run for Target=90013014, Projectile=2112
-****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 2.270000e-03 s
-Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
-Test29: New run for Target=90027032, Projectile=2112
-****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 2.095000e-03 s
-Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
-Test29: New run for Target=90047060, Projectile=2112
-****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 3.710000e-03 s
-Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
-Test29: New run for Target=90092146, Projectile=2112
-****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 3.050000e-03 s
-Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
-Test29: New run for Target=90001000, Projectile=-2112
-****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 2.990000e-03 s
-Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
-Test29: New run for Target=90002002, Projectile=-2112
-****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 4.535000e-03 s
-Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
-Test29: New run for Target=90003004, Projectile=-2112
-****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 9.710000e-03 s
-Test29: Material=Carbon, Element[0]=Carbon,A[0]=14 is selected.
-Test29: New run for Target=90007007, Projectile=-2112
-****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 1.757500e-02 s
-Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
-Test29: New run for Target=90013014, Projectile=-2112
-****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 2.164000e-02 s
-Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
-Test29: New run for Target=90027032, Projectile=-2112
-****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 2.758000e-02 s
-Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
-Test29: New run for Target=90047060, Projectile=-2112
-****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 3.045500e-02 s
-Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
-Test29: New run for Target=90092146, Projectile=-2112
-****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 3.549500e-02 s
-Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
-Test29: New run for Target=90001000, Projectile=-3222
-****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 2.735000e-03 s
-Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
-Test29: New run for Target=90002002, Projectile=-3222
-****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-****************>>TEST29: 1700 events are simulated
-****************>>TEST29: 1800 events are simulated
-****************>>TEST29: 1900 events are simulated
-Test29:CalculationTimePerEvent= 4.310000e-03 s
-Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
-Test29: New run for Target=90003004, Projectile=-3222
-****************>>TEST29: 100 events are simulated
-****************>>TEST29: 200 events are simulated
-****************>>TEST29: 300 events are simulated
-****************>>TEST29: 400 events are simulated
-****************>>TEST29: 500 events are simulated
-****************>>TEST29: 600 events are simulated
-****************>>TEST29: 700 events are simulated
-****************>>TEST29: 800 events are simulated
-****************>>TEST29: 900 events are simulated
-****************>>TEST29: 1000 events are simulated
-****************>>TEST29: 1100 events are simulated
-****************>>TEST29: 1200 events are simulated
-****************>>TEST29: 1300 events are simulated
-****************>>TEST29: 1400 events are simulated
-****************>>TEST29: 1500 events are simulated
-****************>>TEST29: 1600 events are simulated
-**Test29:Event#1682,Hadron#3, E=-1.13687e-13 <0 (Set 0)
-**Test29:#1682:n=13,4M=(1.68441e-05,-1.47894e-05,-1.28845e-05;-134.976),Charge=0,BaryN=0, R=(1.68441e-05,-1.47894e-05,-1.28845e-05;0.000103288),D2=134.976,nN=4
-Test29:#0,PDG=111,m=134.976(134.976),4M=(-190.731,397.964,163.508;489.599),T=354.622,r4M=(190.731,-397.964,-163.508;7233.61)
-Test29:#1,PDG=111,m=134.976(134.976),4M=(56.4883,-100.367,-59.6137;187.182),T=52.2052,r4M=(134.243,-297.596,-103.894;7046.42)
-Test29:#2,PDG=111,m=134.976(134.976),4M=(-54.1231,68.9771,-107.348;193.467),T=58.4903,r4M=(188.366,-366.573,3.45379;6852.96)
-Test29:#3,PDG=111,m=134.976(134.976),4M=(nan,nan,nan;134.976),T=-1.13687e-13,r4M=(nan,nan,nan;6717.98)
-Test29:#4,PDG=-211,m=139.57(139.57),4M=(-81.8251,18.4812,-135.96;212.136),T=72.5661,r4M=(nan,nan,nan;6505.85)
-Test29:#5,PDG=321,m=493.677(493.677),4M=(294.731,122.511,89.5173;594.647),T=100.97,r4M=(nan,nan,nan;5911.2)
-Test29:#6,PDG=2112,m=939.566(939.566),4M=(-16.0739,-10.9726,205.603;961.995),T=22.4297,r4M=(nan,nan,nan;4949.2)
-Test29:#7,PDG=111,m=134.976(134.976),4M=(-157.458,120.215,40.3491;243.087),T=108.111,r4M=(nan,nan,nan;4706.12)
-Test29:#8,PDG=2112,m=939.566(939.566),4M=(-85.7855,-353.682,-97.2689;1012.27),T=72.7066,r4M=(nan,nan,nan;3693.84)
-Test29:#9,PDG=2112,m=939.566(939.566),4M=(22.6599,-208.044,-79.1793;965.841),T=26.2753,r4M=(nan,nan,nan;2728)
-Test29:#10,PDG=2212,m=938.272(938.272),4M=(-5.38769,-72.5432,37.3949;941.831),T=3.55827,r4M=(nan,nan,nan;1786.17)
-Test29:#11,PDG=2112,m=939.566(939.566),4M=(159.968,48.9587,127.002;962.756),T=23.1907,r4M=(nan,nan,nan;823.416)
-Test29:#12,PDG=2212,m=938.272(938.272),4M=(57.5373,-31.4972,-184.005;958.392),T=20.1198,r4M=(nan,nan,nan;-134.976)
-***Test29: ALARM or baryn/charge/energy/momentum is not conserved
-
-*** G4Exception: Aborting execution ***
