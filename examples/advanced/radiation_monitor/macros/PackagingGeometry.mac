@@ -1,0 +1,100 @@
+/control/execute macros/PackagingParameters.mac
+
+/radmon/detector/CreateMultilayer        MIL-STD-105D
+/radmon/detector/SetMultilayerWidth      MIL-STD-105D     {Pkg-Width}
+/radmon/detector/SetMultilayerHeight     MIL-STD-105D     {Pkg-Height}
+
+/radmon/detector/AppendLayerToMultilayer MIL-STD-105D ly1
+/radmon/detector/SetLayerType            MIL-STD-105D ly1 CarvedFlatVolumeWithPins
+/radmon/detector/SetLayerThickness       MIL-STD-105D ly1 {Pkg-Tracks-Thickness}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly1 Material {Pkg-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly1 HolesAlongWidth {Pkg-Holes-Along-Width}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly1 HolesAlongHeight {Pkg-Holes-Along-Height}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly1 HolesRadius '{Pkg-Holes-Radius}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly1 HolesStep '{Pkg-Holes-Separation}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly1 DepositOnHolesMaterial {Pkg-Tracks-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly1 DepositOnHolesThickness '{Pkg-Tracks-Thickness}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly1 PinLength '{Pkg-Pins-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly1 PinsMaterial {Pkg-Tracks-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly1 MarkedPin {Pkg-Pin-Marked}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly1 MarkedPinLength '{Pkg-Pin-Marked-Length}'
+
+/radmon/detector/AppendLayerToMultilayer MIL-STD-105D ly2
+/radmon/detector/SetLayerType            MIL-STD-105D ly2 CarvedFlatVolume
+/radmon/detector/SetLayerThickness       MIL-STD-105D ly2 {Pkg-Layers-Thickness}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly2 Material {Pkg-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly2 HolesAlongWidth {Pkg-Holes-Along-Width}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly2 HolesAlongHeight {Pkg-Holes-Along-Height}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly2 HolesRadius '{Pkg-Holes-Radius}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly2 HolesStep '{Pkg-Holes-Separation}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly2 DepositOnHolesMaterial {Pkg-Tracks-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly2 DepositOnHolesThickness '{Pkg-Tracks-Thickness}'
+
+/radmon/detector/AppendLayerToMultilayer MIL-STD-105D ly3
+/radmon/detector/SetLayerType            MIL-STD-105D ly3 CarvedFlatVolumeWithGround
+/radmon/detector/SetLayerThickness       MIL-STD-105D ly3 {Pkg-Tracks-Thickness}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly3 Material {Pkg-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly3 GroundWidth '{Pkg-Ground-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly3 GroundHeight '{Pkg-Ground-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly3 GroundMaterial {Pkg-Tracks-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly3 HolesAlongWidth {Pkg-Holes-Along-Width}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly3 HolesAlongHeight {Pkg-Holes-Along-Height}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly3 HolesRadius '{Pkg-Holes-Radius}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly3 HolesStep '{Pkg-Holes-Separation}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly3 DepositOnHolesMaterial {Pkg-Tracks-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly3 DepositOnHolesThickness '{Pkg-Tracks-Thickness}'
+
+/radmon/detector/AppendLayerToMultilayer MIL-STD-105D ly4
+/radmon/detector/SetLayerType            MIL-STD-105D ly4 CarvedFlatVolumeWithHole
+/radmon/detector/SetLayerThickness       MIL-STD-105D ly4 {Pkg-Layers-Thickness}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly4 Material {Pkg-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly4 HoleWidth '{Pkg-Cavity-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly4 HoleHeight '{Pkg-Cavity-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly4 HolesAlongWidth {Pkg-Holes-Along-Width}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly4 HolesAlongHeight {Pkg-Holes-Along-Height}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly4 HolesRadius '{Pkg-Holes-Radius}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly4 HolesStep '{Pkg-Holes-Separation}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly4 DepositOnHolesMaterial {Pkg-Tracks-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly4 DepositOnHolesThickness '{Pkg-Tracks-Thickness}'
+
+/radmon/detector/AppendLayerToMultilayer MIL-STD-105D ly5
+/radmon/detector/SetLayerType            MIL-STD-105D ly5 CarvedFlatVolumeWithTracksAndHole
+/radmon/detector/SetLayerThickness       MIL-STD-105D ly5 {Pkg-Tracks-Thickness}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly5 Material {Pkg-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly5 HoleWidth '{Pkg-Cavity-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly5 HoleHeight '{Pkg-Cavity-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly5 TracksMaterial {Pkg-Tracks-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly5 HolesAlongWidth {Pkg-Holes-Along-Width}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly5 HolesAlongHeight {Pkg-Holes-Along-Height}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly5 HolesRadius '{Pkg-Holes-Radius}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly5 HolesStep '{Pkg-Holes-Separation}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly5 DepositOnHolesMaterial {Pkg-Tracks-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly5 DepositOnHolesThickness '{Pkg-Tracks-Thickness}'
+
+/radmon/detector/AppendLayerToMultilayer MIL-STD-105D ly6
+/radmon/detector/SetLayerType            MIL-STD-105D ly6 CarvedFlatVolumeWithHole
+/radmon/detector/SetLayerThickness       MIL-STD-105D ly6 {Pkg-Layers-Thickness}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly6 Material {Pkg-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly6 HoleWidth '{Pkg-AC-Cavity-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly6 HoleHeight '{Pkg-AC-Cavity-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly6 HolesAlongWidth {Pkg-Holes-Along-Width}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly6 HolesAlongHeight {Pkg-Holes-Along-Height}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly6 HolesRadius '{Pkg-Holes-Radius}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly6 HolesStep '{Pkg-Holes-Separation}'
+
+/radmon/detector/AppendLayerToMultilayer MIL-STD-105D ly7
+/radmon/detector/SetLayerType            MIL-STD-105D ly7 CarvedFlatVolumeWithGroundAndKeyMarksAndHole
+/radmon/detector/SetLayerThickness       MIL-STD-105D ly7 {Pkg-Tracks-Thickness}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly7 Material {Pkg-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly7 HolesAlongWidth {Pkg-Holes-Along-Width}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly7 HolesAlongHeight {Pkg-Holes-Along-Height}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly7 HolesRadius '{Pkg-Holes-Radius}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly7 HolesStep '{Pkg-Holes-Separation}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly7 HoleWidth '{Pkg-AC-Cavity-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly7 HoleHeight '{Pkg-AC-Cavity-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly7 MarkedPin {Pkg-Pin-Marked}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly7 MarkedPinRadius '.35 mm'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly7 MarkedPinStep '0 mm'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly7 GroundWidth '{Pkg-SealRing-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly7 GroundHeight '{Pkg-SealRing-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly7 GroundMaterial {Pkg-Tracks-Material}
