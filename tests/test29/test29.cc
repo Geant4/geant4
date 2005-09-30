@@ -703,7 +703,7 @@ int main()
           e    = sec->GetKineticEnergy();
 	         if (e < -0.0)
           {
-	           G4cerr<<"**Test29:Event#"<<iter<<",Hadron#"<<i<<", E="<<e<<" <0 (Set 0)"<<G4endl;
+	           G4cerr<<"**Test29:Ev#"<<iter<<",Hadr#"<<indx<<": E="<<e<<" <0 (Set 0)"<<G4endl;
             e = 0.0;
           }
 	         p    = std::sqrt(e*(e + m + m));
