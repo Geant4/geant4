@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplication.cc,v 1.5 2005-09-27 14:00:22 capra Exp $
+// Id:            $Id: RadmonApplication.cc,v 1.6 2005-09-30 08:33:30 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -24,6 +24,7 @@
 #include "RadmonDetectorFlatVolumeWithGroundAndKeyMarksAndHoleConstructor.hh"
 #include "RadmonDetectorFlatVolumeWithTracksConstructor.hh"
 #include "RadmonDetectorFlatVolumeWithPinsConstructor.hh"
+#include "RadmonDetectorFlatVolumeWithPadsConstructor.hh"
 #include "RadmonDetectorFlatVolumeWithTracksAndHoleConstructor.hh"
 #include "RadmonDetectorCarvedFlatVolumeWithHoleConstructor.hh"
 #include "RadmonDetectorCarvedFlatVolumeConstructor.hh"
@@ -264,6 +265,7 @@ G4bool                                          RadmonApplication :: CreateEntit
  DECLARE_CONSTRUCTOR(RadmonDetectorFlatVolumeWithTracksConstructor);
  DECLARE_CONSTRUCTOR(RadmonDetectorFlatVolumeWithPinsConstructor);
  DECLARE_CONSTRUCTOR(RadmonDetectorFlatVolumeWithTracksAndHoleConstructor);
+ DECLARE_CONSTRUCTOR(RadmonDetectorFlatVolumeWithPadsConstructor);
  DECLARE_CONSTRUCTOR(RadmonDetectorCarvedFlatVolumeConstructor);
  DECLARE_CONSTRUCTOR(RadmonDetectorCarvedFlatVolumeWithHoleConstructor);
  DECLARE_CONSTRUCTOR(RadmonDetectorCarvedFlatVolumeWithTracksConstructor);

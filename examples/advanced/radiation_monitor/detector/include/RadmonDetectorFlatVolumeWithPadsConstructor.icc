@@ -1,0 +1,24 @@
+//
+// File name:     RadmonDetectorFlatVolumeWithPadsConstructor.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonDetectorFlatVolumeWithPadsConstructor.icc,v 1.1 2005-09-30 08:33:30 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONDETECTORFLATVOLUMEWITHPADSCONSTRUCTOR_HH
+ #error "RadmonDetectorFlatVolumeWithPadsConstructor.icc cannot be included directly. Please use RadmonDetectorFlatVolumeWithPadsConstructor.hh"
+#else  /* RADMONDETECTORFLATVOLUMEWITHPADSCONSTRUCTOR_HH */
+ inline                                         RadmonDetectorFlatVolumeWithPadsConstructor :: RadmonDetectorFlatVolumeWithPadsConstructor()
+ :
+  RadmonTDetectorLayerConstructor<RadmonTDetectorVolumesWithPadsDecorator<RadmonDetectorFlatVolumeComponent> >("FlatVolumeWithPads")
+ {
+ }
+
+
+
+ inline                                         RadmonDetectorFlatVolumeWithPadsConstructor :: ~RadmonDetectorFlatVolumeWithPadsConstructor()
+ {
+ }
+#endif /* RADMONDETECTORFLATVOLUMEWITHPADSCONSTRUCTOR_HH */

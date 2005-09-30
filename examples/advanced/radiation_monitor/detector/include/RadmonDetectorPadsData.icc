@@ -1,0 +1,79 @@
+//
+// File name:     RadmonDetectorPadsData.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonDetectorPadsData.icc,v 1.1 2005-09-30 08:33:30 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONDETECTORPADSDATA_HH
+ #error "RadmonDetectorPadsData.icc cannot be included directly. Please use RadmonDetectorPadsData.hh"
+#else  /* RADMONDETECTORPADSDATA_HH */
+ inline                                         RadmonDetectorPadsData :: RadmonDetectorPadsData()
+ :
+  padWidth(0.),
+  padHeight(0.),
+  padMaterial(0)
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonDetectorPadsData :: ~RadmonDetectorPadsData()
+ {
+ }
+
+
+
+
+
+ inline G4double                                RadmonDetectorPadsData :: GetWidth(void) const
+ {
+  return padWidth;
+ }
+
+
+
+ inline G4double                                RadmonDetectorPadsData :: GetHeight(void) const
+ {
+  return padHeight;
+ }
+
+
+
+ inline G4Material *                            RadmonDetectorPadsData :: GetMaterial(void) const
+ {
+  return padMaterial;
+ }
+
+
+
+
+
+ inline void                                    RadmonDetectorPadsData :: SetWidth(G4double width)
+ {
+  padWidth=width;
+ }
+
+
+
+ inline void                                    RadmonDetectorPadsData :: SetHeight(G4double height)
+ {
+  padHeight=height;
+ }
+
+
+
+ inline void                                    RadmonDetectorPadsData :: SetMaterial(G4Material * material)
+ {
+  padMaterial=material;
+ }
+
+
+
+ inline void                                     RadmonDetectorPadsData :: AppendPosition(const G4ThreeVector & position)
+ {
+  AppendPositionAndRotation(position, G4RotationMatrix::IDENTITY);
+ }
+#endif /* RADMONDETECTORPADSDATA_HH */
