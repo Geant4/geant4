@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2005-09-16 01:22:33 allison Exp $
+$Id: History,v 1.30 2005-09-30 22:20:19 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+30th September 2005  Joseph Perl (raytracer-V07-01-03)
+New tag to include final change John made an hour after tagging V07-01-02.
+Change seems to just involve passing pWorld to material list where no argument was passed in previous version.
 
 16th September 2005  John Allison (raytracer-V07-01-02)
 (On branch raytracer-V07-01-01-branch; changes merged into head.)
