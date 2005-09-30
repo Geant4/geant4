@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BaryonConstructor.hh,v 1.3 2001-07-11 10:01:35 gunter Exp $
+// $Id: G4BaryonConstructor.hh,v 1.4 2005-09-30 22:59:05 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,20 +37,19 @@
 class G4BaryonConstructor
 {
   //This class is a utility class for construction 
-  //short lived particles
 
   public:
     G4BaryonConstructor();
     ~G4BaryonConstructor();
   
   public:
-    void ConstructParticle();
+    static void ConstructParticle();
 
   protected:
-    void ConstructNucleons();
-    void ConstructStrangeBaryons();
-    void ConstructCharmBaryons();
-    void ConstructBottomBaryons();
+    static void ConstructNucleons();
+    static void ConstructStrangeBaryons();
+    static void ConstructCharmBaryons();
+    static void ConstructBottomBaryons();
 };
 
 #endif

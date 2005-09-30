@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedConstructor.hh,v 1.4 2001-07-11 10:02:06 gunter Exp $
+// $Id: G4ShortLivedConstructor.hh,v 1.5 2005-09-30 22:59:05 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,13 +44,13 @@ class G4ShortLivedConstructor
     ~G4ShortLivedConstructor();
   
   public:
-    void ConstructParticle();
+    static void ConstructParticle();
  
   protected:
-    void ConstructResonances();
-    void ConstructBaryons();
-    void ConstructMesons();
-    void ConstructQuarks();
+    static void ConstructResonances();
+    static void ConstructBaryons();
+    static void ConstructMesons();
+    static void ConstructQuarks();
 
   private:
     static G4bool isConstructed;

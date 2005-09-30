@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BosonConstructor.hh,v 1.4 2004-09-02 01:52:25 asaim Exp $
+// $Id: G4BosonConstructor.hh,v 1.5 2005-09-30 22:59:05 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,14 +37,13 @@
 class G4BosonConstructor
 {
   //This class is a utility class for constructBoson 
-  //short lived particles
 
   public:
     G4BosonConstructor();
     ~G4BosonConstructor();
   
   public:
-    void ConstructParticle();
+    static void ConstructParticle();
 };
 
 #endif
