@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2005-09-27 14:03:09 capra Exp $
+$Id: History,v 1.7 2005-09-30 08:35:55 capra Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,10 +17,16 @@ in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-27 Sep 2005 - radmon-V07-01-05 - R. Capra - Implementation according. All
-                        the packaging layers are now implemented.
-                        Trasparency support (alpha channel) has been
-                        provided.
+30 Sep 2005 - radmon-V07-01-06 - R. Capra - Implementation according to the
+                        design. The layer with pads needed for detectors
+                        layout has been now implemented.
+                        Macros to generate the real packaging geometry has
+                        been provided.
+
+27 Sep 2005 - radmon-V07-01-05 - R. Capra - Implementation according to the
+                        design. All the packaging layers are now
+                        implemented.  Trasparency support (alpha channel)
+                        has been provided.
 
 21 Sep 2005 - radmon-V07-01-04 - R. Capra - Implementation according to the
                         design almost completed. Following functionality
