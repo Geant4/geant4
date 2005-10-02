@@ -1,4 +1,4 @@
-$Id: History,v 1.163 2005-10-02 06:38:22 urban Exp $
+$Id: History,v 1.164 2005-10-02 16:38:11 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-02 October   05: L.Urban
+     
+2 October 05: mma (emstand-V07-01-09)
+- G4eIonisation, G4hIonisation : SetStepLimits (0.2, 1*mm) + integral on
+     
+2 October 05: L.Urban
 - conditions for step limit now are considered 'final' in
   G4MultipleScattering80.cc + code cleaning
 - nuclear size correction has been removed from G4MscModel80,

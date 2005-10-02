@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.cc,v 1.50 2005-09-02 16:20:50 vnivanch Exp $
+// $Id: G4MuIonisation.cc,v 1.51 2005-10-02 16:39:50 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -133,8 +133,8 @@ void G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
     em2->SetHighEnergyLimit(100.0*TeV);
     AddEmModel(3, em2, flucModel);
 
-    SetStepLimits(0.2, 0.1*mm);
-    SetIntegral(false);
+    SetStepLimits(0.2, 1*mm);
+    SetIntegral(true);
 
     ratio = electron_mass_c2/mass;
     isInitialised = true;
