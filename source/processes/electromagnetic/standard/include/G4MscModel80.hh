@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel80.hh,v 1.1 2005-08-11 09:58:01 maire Exp $
+// $Id: G4MscModel80.hh,v 1.2 2005-10-02 06:29:52 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -49,7 +49,9 @@
 // 17-08-04 name of data member facxsi changed to factail (L.Urban)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 15-04-05 optimize internal interface - add SampleSecondaries method (V.Ivanchenko)
-
+// 11-08-05 computation of lateral correlation added (L.Urban)
+// 02-10-05 nuclear size correction computation removed, the correction
+//          included in the (theoretical) tabulated values (L.Urban)
 //
 // Class Description:
 //
@@ -76,8 +78,7 @@ class G4MscModel80 : public G4VEmModel
 
 public:
 
-  G4MscModel80(G4double dtrl, G4double NuclCorrPar, G4double FactPar,
-               G4double factail, G4bool samplez,
+  G4MscModel80(G4double dtrl,G4double factail, G4bool samplez, 
 	       const G4String& nam = "MscUni");
 
   ~G4MscModel80();
@@ -88,7 +89,7 @@ public:
                              const G4ParticleDefinition* particle,
                                    G4double KineticEnergy,
                                    G4double AtomicNumber,
-                                   G4double AtomicWeight,
+                                   G4double AtomicWeight=0., 
 				   G4double cut =0.,
 				   G4double emax=0.);
 
@@ -137,8 +138,6 @@ private:
   G4double taulim;
   G4double currentTau;
   G4double dtrl;
-  G4double NuclCorrPar;
-  G4double FactPar;
   G4double factail ;
 
   G4double b;

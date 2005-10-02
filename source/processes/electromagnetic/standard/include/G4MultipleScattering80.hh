@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering80.hh,v 1.3 2005-09-12 11:55:50 urban Exp $
+// $Id: G4MultipleScattering80.hh,v 1.4 2005-10-02 06:29:52 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -49,10 +49,11 @@
 //          with the corresponding set function (L.Urban)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 15-04-05 optimize internal interfaces (V.Ivanchenko)
+// 02-10-05 new algorithm for step limitation, new data members (L.Urban)
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering80.hh,v 1.3 2005-09-12 11:55:50 urban Exp $
+// $Id: G4MultipleScattering80.hh,v 1.4 2005-10-02 06:29:52 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -98,17 +99,19 @@ public:    // with description
   // geom. step length distribution should be sampled or not
   void Setsamplez(G4bool value) { samplez = value;};
 
-  // activate boundary algorithm
+  // activate boundary algorithm (in fact stepping algorithm)
   void SetBoundary(G4bool value) { boundary = value;};
 
   // to reduce the energy/step dependence
   void Setdtrl(G4double value) { dtrl = value;};
 
-  // Steplimit after boundary crossing = facrange*range
-  void SetFacrange(G4double val) { facrange=val; tlimitmin=val*1*micrometer;};
+  // Steplimit = facrange*max(range,lambda)
+  void SetFacrange(G4double val) { facrange=val; tlimitmin=val*1*nanometer;};
 
+  // min. steplimit at boundaries
   void SetGeommin(G4double val) { geommin = val;};   
 
+  // connected with step size reduction near to boundaries
   void SetFacgeom(G4double val) { facgeom=val; nsmallstep=G4int(facgeom);};   
 
 protected:
@@ -127,12 +130,10 @@ private:        // data members
   G4double facrange;
   G4double tlimit,tlimitmin;
   G4double geombig,geommin,facgeom; 
-  G4double tskin;
+  G4double facskin,tskin;
   G4int tid,pid,stepnobound,nsmallstep;
   G4double safety,facsafety;
   G4double dtrl;
-  G4double NuclCorrPar;
-  G4double FactPar;
   G4double factail;
 
   G4bool   samplez;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel80.cc,v 1.1 2005-08-11 09:58:01 maire Exp $
+// $Id: G4MscModel80.cc,v 1.2 2005-10-02 06:29:52 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -70,6 +70,9 @@
 //          solved in SampleCosineTheta (L.Urban).
 // 15-04-05 optimize internal interface 
 //          add SampleSecondaries method (V.Ivanchenko)
+// 11-08-05 computation of lateral correlation added (L.Urban)
+// 02-10-05 nuclear size correction computation removed, the correction
+//          included in the (theoretical) tabulated values (L.Urban)
 //
 
 // Class Description:
@@ -97,16 +100,13 @@
 
 using namespace std;
 
-G4MscModel80::G4MscModel80(G4double m_dtrl, G4double m_NuclCorrPar,
-		       G4double m_FactPar, G4double m_factail,
+G4MscModel80::G4MscModel80(G4double m_dtrl,G4double m_factail, 
 		       G4bool m_samplez, const G4String& nam)
   : G4VEmModel(nam),
   taubig(8.0),
   tausmall(1.e-20),
   taulim(1.e-6),
   dtrl(m_dtrl),
-  NuclCorrPar (m_NuclCorrPar),
-  FactPar(m_FactPar),
   factail(m_factail),
   samplez(m_samplez),
   isInitialized(false)
@@ -176,8 +176,7 @@ G4double G4MscModel80::CrossSectionPerVolume(const G4Material* material,
 G4double G4MscModel80::ComputeCrossSectionPerAtom( 
                              const G4ParticleDefinition* part,
                                    G4double KineticEnergy,
-                                   G4double AtomicNumber,
-                                   G4double AtomicWeight,
+                                   G4double AtomicNumber,G4double,
 				   G4double, G4double)
 {
  const G4double sigmafactor = twopi*classic_electr_radius*classic_electr_radius;
@@ -195,7 +194,7 @@ G4double G4MscModel80::ComputeCrossSectionPerAtom(
                                1*MeV,   2*MeV,   4*MeV,   7*MeV,
 			      10*MeV,  20*MeV};
 
-  // corr. factors for e-/e+ lambda
+  // corr. factors for e-/e+ lambda for T <= Tlim
           G4double celectron[15][22] =
           {{1.125,1.072,1.051,1.047,1.047,1.050,1.052,1.054,
             1.054,1.057,1.062,1.069,1.075,1.090,1.105,1.111,
@@ -296,11 +295,6 @@ G4double G4MscModel80::ComputeCrossSectionPerAtom(
                       ((Tlim+electron_mass_c2)*(Tlim+electron_mass_c2));
   G4double bg2lim   = Tlim*(Tlim+2.*electron_mass_c2)/
                       (electron_mass_c2*electron_mass_c2);
-///  G4double sig0[15] = {2.672e-23*mm2, 5.922e-23*mm2, 2.653e-22*mm2,
-///                       6.235e-22*mm2, 1.169e-21*mm2, 1.324e-21*mm2,
-///                       1.612e-21*mm2, 2.300e-21*mm2, 3.513e-21*mm2,
-///                       3.995e-21*mm2, 5.085e-21*mm2, 6.719e-21*mm2,
-///                       9.115e-21*mm2, 1.044e-20*mm2, 1.131e-20*mm2};
 
   G4double sig0[15] = {0.2672*barn,  0.5922*barn, 2.653*barn,  6.235*barn,
                       11.69*barn  , 13.24*barn  , 16.12*barn, 23.00*barn ,
@@ -351,30 +345,6 @@ G4double G4MscModel80::ComputeCrossSectionPerAtom(
   else                 sigma = log(2.*eps)-1.+1./eps;
 
   sigma *= ChargeSquare*AtomicNumber*AtomicNumber/(beta2*bg2);
-
-  // nuclear size effect correction for high energy
-  // ( a simple approximation at present)
-  G4double corrnuclsize,a,w1,w2,w;
-
-  G4double x0 = 1. - NuclCorrPar*mass/(KineticEnergy*
-               exp(log(AtomicWeight/(g/mole))/3.));
-  if ( x0 < -1. || eKineticEnergy  <= 10.*MeV)
-      {
-        x0 = -1.;
-        corrnuclsize = 1.;
-      }
-  else
-      {
-        a = 1.+1./eps;
-        if (eps > epsmax) w1=log(2.*eps)+1./eps-3./(8.*eps*eps);
-        else              w1=log((a+1.)/(a-1.))-2./(a+1.);
-        w = 1./((1.-x0)*eps);
-        if (w < epsmin)   w2=-log(w)-1.+2.*w-1.5*w*w;
-        else              w2 = log((a-x0)/(a-1.))-(1.-x0)/(a-x0);
-        corrnuclsize = w1/w2;
-        corrnuclsize = exp(-FactPar*mass/KineticEnergy)*
-                      (corrnuclsize-1.)+1.;
-      }
 
   // interpolate in AtomicNumber and beta2 
   G4double c1,c2,cc1,cc2,corr;
@@ -446,11 +416,6 @@ G4double G4MscModel80::ComputeCrossSectionPerAtom(
     else if(AtomicNumber > Z2)
       sigma = AtomicNumber*AtomicNumber*c2/(Z2*Z2);
   }
-
-  //  nucl. size correction for particles other than e+/e- only at present !!!!
-  if((particle->GetParticleName() != "e-") &&
-     (particle->GetParticleName() != "e+")   )
-     sigma /= corrnuclsize;
 
   return sigma;
 
@@ -612,6 +577,7 @@ std::vector<G4DynamicParticle*>* G4MscModel80::SampleSecondaries(
         else
           Phi = phi-std::acos(latcorr/(r*sth));
         if(Phi < 0.) Phi += twopi;
+
         dirx = std::cos(Phi);
         diry = std::sin(Phi);
 
