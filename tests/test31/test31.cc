@@ -87,7 +87,7 @@ int main(int argc,char** argv) {
   G4cout << "User actions will be initialized" << G4endl;
  
   // set user action classes
-  runManager->SetUserAction(new test31PrimaryGeneratorAction(det));
+  runManager->SetUserAction(new test31PrimaryGeneratorAction());
   if(verbose >0) G4cout << "test31PrimaryGeneratorAction is defined" << G4endl;
 
   runManager->SetUserAction(new test31RunAction());

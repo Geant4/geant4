@@ -65,8 +65,8 @@ test31EventAction::~test31EventAction()
 void test31EventAction::BeginOfEventAction(const G4Event*)
 {
   // New event
-  nEvt++;
-  (test31Histo::GetPointer())->AddEvent();
+  test31Histo::GetPointer()->AddEvent();
+  nEvt = test31Histo::GetPointer()->Event();
 
   // Switch on verbose mode
   if(theDet->GetFirstEventToDebug() == nEvt) {

@@ -122,11 +122,14 @@ void test31Histo::BeginOfHisto(G4int num)
 void test31Histo::EndOfHisto()
 {
 
-  G4cout << "test31Histo: End of run actions are started" << G4endl;
+  G4cout << "test31Histo: End of run actions" << G4endl;
 
   // Zend average
 
   G4cout<<"===================================================================="<<G4endl;
+  G4cout                         << "Initial particle               " 
+				 << beamParticle->GetParticleName() 
+                                 << "   Ekin(GeV)= " << beamEnergy/GeV << G4endl;
   if(zEvt > 0.0) {
     zend  /= zEvt;
     zend2 /= zEvt;
@@ -152,7 +155,7 @@ void test31Histo::EndOfHisto()
   G4double xgb = x*(G4double)n_gam_back;
   G4double xmu = x*(G4double)n_mumu;
   G4double xpi = x*(G4double)n_pipi;
-  G4cout                    << "Number of events               " << n_evt <<G4endl;
+  G4cout                         << "Number of events               " << n_evt <<G4endl;
   G4cout << std::setprecision(4) << "Average energy deposit         " << etot/MeV << " MeV" << G4endl;
   G4cout << std::setprecision(4) << "Average number of e-           " << xe << G4endl;
   G4cout << std::setprecision(4) << "Average number of gamma        " << xg << G4endl;

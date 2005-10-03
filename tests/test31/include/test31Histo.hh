@@ -43,6 +43,7 @@
 
 #include "globals.hh"
 #include "G4DynamicParticle.hh"
+#include "G4ParticleDefinition.hh"
 #include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -103,7 +104,10 @@ public: // Without description
   G4int GetNumAbsorbersSaved() const {return nAbsSaved;};
   void SetMaxEnergy(G4double val) {maxEnergy = val;};     
   G4double  GetMaxEnergy() const {return maxEnergy;};
+  void SetBeamEnergy(G4double val) {beamEnergy = val;};     
+  void SetBeamParticle(const G4ParticleDefinition* p) {beamParticle = p;};     
   void AddEvent() {n_evt++;};     
+  G4int Event() {return n_evt;};     
   void AddStep() {n_step++;};     
 
   void CountProcess(const G4String&);
@@ -152,6 +156,9 @@ private:
 
   G4int n_mumu;
   G4int n_pipi;
+
+  const G4ParticleDefinition* beamParticle;
+  G4double beamEnergy; 
 };
 
 #endif
