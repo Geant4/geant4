@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmQEDBuilder70.cc,v 1.1 2004-12-13 16:38:55 gcosmo Exp $
+// $Id: G4EmQEDBuilder71.cc,v 1.1 2005-10-03 01:40:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4EmQEDBuilder70
+// ClassName:   G4EmQEDBuilder71
 //
-// Author:      V.Ivanchenko 03.05.2004
+// Author:      V.Ivanchenko 03.10.2005
 //
 // Modified:
 //
@@ -38,7 +38,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4EmQEDBuilder70.hh"
+#include "G4EmQEDBuilder71.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
@@ -46,11 +46,11 @@
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4MultipleScattering71.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
-#include "G4eplusAnnihilation70.hh"
+#include "G4eplusAnnihilation.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -58,18 +58,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmQEDBuilder70::G4EmQEDBuilder70(const G4String& name)
+G4EmQEDBuilder71::G4EmQEDBuilder71(const G4String& name)
    :  G4VPhysicsConstructor(name)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmQEDBuilder70::~G4EmQEDBuilder70()
+G4EmQEDBuilder71::~G4EmQEDBuilder71()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EmQEDBuilder70::ConstructParticle()
+void G4EmQEDBuilder71::ConstructParticle()
 {
   G4Gamma::Gamma();
   G4Electron::Electron();
@@ -78,7 +78,7 @@ void G4EmQEDBuilder70::ConstructParticle()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EmQEDBuilder70::ConstructProcess()
+void G4EmQEDBuilder71::ConstructProcess()
 {
   // Add standard EM Processes for gamma
   G4ParticleDefinition* particle = G4Gamma::Gamma();
@@ -92,18 +92,18 @@ void G4EmQEDBuilder70::ConstructProcess()
   particle = G4Electron::Electron();
   pmanager = particle->GetProcessManager();
 
-  pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-  pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-  pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
+  pmanager->AddProcess(new G4MultipleScattering71, -1, 1, 1);
+  pmanager->AddProcess(new G4eIonisation,          -1, 2, 2);
+  pmanager->AddProcess(new G4eBremsstrahlung,      -1,-1, 3);
 
   // Add standard EM Processes for e+
   particle = G4Positron::Positron();
   pmanager = particle->GetProcessManager();
 
-  pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-  pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-  pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
-  pmanager->AddProcess(new G4eplusAnnihilation70, 0,-1,4);
+  pmanager->AddProcess(new G4MultipleScattering71, -1, 1, 1);
+  pmanager->AddProcess(new G4eIonisation,          -1, 2, 2);
+  pmanager->AddProcess(new G4eBremsstrahlung,      -1,-1, 3);
+  pmanager->AddProcess(new G4eplusAnnihilation,     0,-1, 4);
 
 }
 
