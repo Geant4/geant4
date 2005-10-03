@@ -1,4 +1,4 @@
-$Id: History,v 1.164 2005-10-02 16:38:11 maire Exp $
+$Id: History,v 1.165 2005-10-03 11:19:00 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3 October 05: L.Urban
+- G4MultipleScattering80 : weaker step limitation above 
+  Tkinlimit = 2 MeV for e+/e- (limit scaled with mass
+  for other particles).Soft limit: facrange increases
+  linearly with energy above Tkinlimit.
+- G4UniversalFluctuation : cut dependence of the en.loss
+  distribution has been reduced
      
 2 October 05: mma (emstand-V07-01-09)
 - G4eIonisation, G4hIonisation : SetStepLimits (0.2, 1*mm) + integral on
