@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.15 2005-05-04 18:35:41 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.16 2005-10-03 03:44:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -45,11 +45,14 @@
 #include "G4EmMuonBuilder.hh"
 #include "G4EmHadronBuilder.hh"
 #include "G4EmHighEnergyBuilder.hh"
-#include "G4EmQEDBuilder52.hh"
 #include "G4LowEnergyQEDBuilder.hh"
 #include "G4PenelopeQEDBuilder.hh"
+#include "G4EmQEDBuilder52.hh"
 #include "G4EmMuonBuilder52.hh"
 #include "G4EmHadronBuilder52.hh"
+#include "G4EmQEDBuilder71.hh"
+#include "G4EmMuonBuilder71.hh"
+#include "G4EmHadronBuilder71.hh"
 #include "G4StepLimiterBuilder.hh"
 #include "DecaysBuilder.hh"
 #include "EmHadronElasticBuilder.hh"
@@ -140,6 +143,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     RegisterPhysics(new G4EmQEDBuilder52());
     RegisterPhysics(new G4EmMuonBuilder52());
     RegisterPhysics(new G4EmHadronBuilder52());
+    emBuilderIsRegisted = true;
+    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
+
+  } else if (name == "g4v71" && !emBuilderIsRegisted) {
+    RegisterPhysics(new G4EmQEDBuilder71());
+    RegisterPhysics(new G4EmMuonBuilder71());
+    RegisterPhysics(new G4EmHadronBuilder71());
     emBuilderIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
