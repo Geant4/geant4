@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering80.hh,v 1.4 2005-10-02 06:29:52 urban Exp $
+// $Id: G4MultipleScattering80.hh,v 1.5 2005-10-03 11:10:48 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,7 +53,7 @@
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering80.hh,v 1.4 2005-10-02 06:29:52 urban Exp $
+// $Id: G4MultipleScattering80.hh,v 1.5 2005-10-03 11:10:48 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -105,6 +105,9 @@ public:    // with description
   // to reduce the energy/step dependence
   void Setdtrl(G4double value) { dtrl = value;};
 
+  // 'soften' step limitation above Tkinlimit
+  void SetTkinlimit(G4double value) { Tkinlimit = value;};
+
   // Steplimit = facrange*max(range,lambda)
   void SetFacrange(G4double val) { facrange=val; tlimitmin=val*1*nanometer;};
 
@@ -127,6 +130,7 @@ private:        // data members
   G4double highKineticEnergy;
   G4int    totBins;
 
+  G4double Tkinlimit,Tlimit;
   G4double facrange;
   G4double tlimit,tlimitmin;
   G4double geombig,geommin,facgeom; 

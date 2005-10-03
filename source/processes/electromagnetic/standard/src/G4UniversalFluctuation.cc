@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.5 2005-06-28 09:13:23 vnivanch Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.6 2005-10-03 11:10:48 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -46,6 +46,8 @@
 // 07-02-05 define problim = 5.e-3 (mma)
 // 03-05-05 conditions of Gaussian fluctuation changed (bugfix)
 //          + smearing for very small loss (L.Urban)
+// 03-10-05 energy dependent rate -> cut dependence of the
+//          distribution is much weaker (L.Urban)
 //          
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -160,7 +162,6 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
     e2Fluct      = material->GetIonisation()->GetEnergy2fluct();
     e1LogFluct   = material->GetIonisation()->GetLogEnergy1fluct();
     e2LogFluct   = material->GetIonisation()->GetLogEnergy2fluct();
-    rateFluct    = material->GetIonisation()->GetRateionexcfluct();
     ipotFluct    = material->GetIonisation()->GetMeanExcitationEnergy();
     ipotLogFluct = material->GetIonisation()->GetLogMeanExcEnergy();
     lastMaterial = material;
@@ -168,14 +169,17 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 
   G4double a1 = 0. , a2 = 0., a3 = 0. ;
   G4double p1,p2,p3;
-  G4double rate = rateFluct ;
+  // cut and material dependent rate --------------------------------
+  G4double rate = 0.173+0.027*log(tmax/ipotFluct) ;
+  if(rate < 0.) rate = 0. ;
+  if(rate > 1.) rate = 1. ;
 
   G4double w1 = tmax/ipotFluct;
   G4double w2 = log(2.*electron_mass_c2*beta2*gam2)-beta2;
 
   if(w2 > ipotLogFluct)
   {
-    G4double C = meanLoss*(1.-rateFluct)/(w2-ipotLogFluct);
+    G4double C = meanLoss*(1.-rate)/(w2-ipotLogFluct);
     a1 = C*f1Fluct*(w2-e1LogFluct)/e1Fluct;
     a2 = C*f2Fluct*(w2-e2LogFluct)/e2Fluct;
     if(a2 < 0.)

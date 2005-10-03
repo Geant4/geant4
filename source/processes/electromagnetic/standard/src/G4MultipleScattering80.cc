@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering80.cc,v 1.5 2005-10-02 06:29:52 urban Exp $
+// $Id: G4MultipleScattering80.cc,v 1.6 2005-10-03 11:10:48 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -67,8 +67,8 @@
 // 15-04-05 optimize internal interface (V.Ivanchenko)
 // 12-09-05 new TruePathLengthLimit - facrange works for every track from
 //             start, geometry also influences the limit
-// 16-09-05 reordering the conditions in TruePathLengthLimit->improvement in timing
 // 02-10-05 conditions limiting the step are finalized + code cleaning (L.Urban)
+// 03-10-05 weaker step limitation for Tkin > Tlimit (L.Urban)
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -86,7 +86,6 @@ using namespace std;
 G4MultipleScattering80::G4MultipleScattering80(const G4String& processName)
   : G4VMultipleScattering(processName),
     totBins(120),
-    facrange(0.02),
     dtrl(0.05),
     factail(1.0),
     boundary(true),
@@ -95,6 +94,7 @@ G4MultipleScattering80::G4MultipleScattering80(const G4String& processName)
   lowKineticEnergy = 0.1*keV;
   highKineticEnergy= 100.*TeV;
 
+  Tkinlimit        = 2.*MeV;
   tlimit           = 1.e10*mm;
   tlimitmin        = facrange*1.e-6*mm;
   geombig          = 1.e50*mm;
@@ -144,6 +144,8 @@ void G4MultipleScattering80::InitialiseProcess
   } else {
     SetBuildLambdaTable(true);
   }
+  // compute Tlimit for particle
+  Tlimit = Tkinlimit*electron_mass_c2/particle->GetPDGMass();
   G4MscModel80* em = new G4MscModel80(dtrl,factail,samplez);
   em->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
   em->SetLowEnergyLimit(lowKineticEnergy);
@@ -163,64 +165,72 @@ G4double G4MultipleScattering80::TruePathLengthLimit(const G4Track&  track,
 {
   G4double tPathLength = currentMinimalStep;
 
-  // do we need 'good' stepping (earlier: boundary algorithm) ?
-  if(boundary)
+  G4double range = CurrentRange() ;
+  G4double geomlimit = GeomLimit(track);
+
+  // range <= safety ---> particle is not able to leave volume
+  if(range <= facsafety*safety)
+    return range ;
+
+  // not so strong step restriction above Tlimit
+  G4double facr = facrange;
+  G4double facg = facgeom;
+  if(track.GetKineticEnergy() > Tlimit)
   {
-    G4double range = CurrentRange() ;
-    G4double geomlimit = GeomLimit(track);
+    facr *= track.GetKineticEnergy()/Tlimit;
+    if(facr > 1.) facr = 1.;
+    facg  = 1.;
+  }
+  facskin =1./facg;
 
-    // range <= safety ---> particle is not able to leave volume
-    if(range <= facsafety*safety)
-      return range ;
 
-    if((track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary)
-       || (track.GetCurrentStepNumber() == 1))   
-    {
-      // constraint from the physics
-      if (range > lambda) tlimit = facrange*range;
-      else                tlimit = facrange*lambda;
+  if((track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary)
+     || (track.GetCurrentStepNumber() == 1))   
+  {
+    // constraint from the physics
+    if (range > lambda) tlimit = facr*range;
+    else                tlimit = facr*lambda;
 
-      // constraint from the geometry (if tlimit above is too big)
-      if ((geomlimit > geommin) && (tlimit > geomlimit/facgeom))
-        tlimit = geomlimit/facgeom;
+    // constraint from the geometry (if tlimit above is too big)
+    if ((geomlimit > geommin) && (tlimit > geomlimit/facg))
+      tlimit = geomlimit/facg;
 
-      //lower limit for tlimit
-      if(tlimit < tlimitmin) tlimit = tlimitmin;
+    //lower limit for tlimit
+    if(tlimit < tlimitmin) tlimit = tlimitmin;
  
-      // steplimit near to boundaries
-      tskin = facskin*tlimit;
+    // steplimit near to boundaries
+    tskin = facskin*tlimit;
 
-      if(track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary)
-      {
-        stepnobound = track.GetCurrentStepNumber() ;
-      }
-      else
-      {
-        tid = track.GetTrackID() ;
-        pid = track.GetParentID() ;
-        stepnobound      = 100000000;
-      }
-    }
-
-    // small steps just after crossing a boundary
-    if((track.GetTrackID() == tid) && (track.GetParentID() == pid)
-       && (track.GetCurrentStepNumber() >= stepnobound) &&
-       (track.GetCurrentStepNumber() < stepnobound+nsmallstep))   
+    if(track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary)
     {
-      if(tPathLength > tskin) tPathLength = tskin;
+      stepnobound = track.GetCurrentStepNumber() ;
     }
     else
     {
-      if(tPathLength > tlimit) tPathLength = tlimit;
+      tid = track.GetTrackID() ;
+      pid = track.GetParentID() ;
+      stepnobound      = 100000000;
     }
-
-    //check geometry as well (small steps before reaching a boundary)
-    if(geomlimit > facgeom*tskin) geomlimit -= facgeom*tskin;
-    else if(geomlimit > tskin) geomlimit = tskin;
-    if(geomlimit < geommin) geomlimit = geommin;
-
-    if(tPathLength > geomlimit) tPathLength = geomlimit;
   }
+
+  // small steps just after crossing a boundary
+  if((track.GetTrackID() == tid) && (track.GetParentID() == pid)
+     && (track.GetCurrentStepNumber() >= stepnobound) &&
+     (track.GetCurrentStepNumber() < stepnobound+nsmallstep))   
+  {
+    if(tPathLength > tskin) tPathLength = tskin;
+  }
+  else
+  {
+    if(tPathLength > tlimit) tPathLength = tlimit;
+  }
+
+  //check geometry as well (small steps before reaching a boundary)
+  if(geomlimit > facg*tskin) geomlimit -= facg*tskin;
+  else if(geomlimit > tskin) geomlimit = tskin;
+  if(geomlimit < geommin) geomlimit = geommin;
+
+  if(tPathLength > geomlimit) tPathLength = geomlimit;
 
   return tPathLength ;
 }
