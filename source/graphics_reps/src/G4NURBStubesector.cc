@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBStubesector.cc,v 1.10 2005-07-05 14:04:02 allison Exp $
+// $Id: G4NURBStubesector.cc,v 1.11 2005-10-03 12:30:13 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,7 @@
 // OC 290896
 
 #include "G4NURBStubesector.hh"
-#include <strstream>
+#include <sstream>
 
 G4NURBStubesector::G4NURBStubesector(G4double r, G4double R,
                                      G4double DZ, G4double PHI1, G4double PHI2)
@@ -179,11 +179,10 @@ G4NURBStubesector::G4NURBStubesector(G4double r, G4double R,
   // to a line instead of a point
 
   // creating the nurbs identity
-  mpwhoami = new char [200];
-  std::ostrstream  tmpstr(mpwhoami, 200);
-  tmpstr << "Tubs" << " \tPHI1=" << PHI1 << " ; PHI2=" << PHI2 << '\0';
-  // could be more sophisticated, reallocating
-  // mpwhoami to the exact length
+  std::ostringstream  tmpstr;
+  tmpstr << "Tubs" << " \tPHI1=" << PHI1 << " ; PHI2=" << PHI2;
+  mpwhoami = new char [tmpstr.str().length() + 1];
+  mpwhoami = std::strcpy(mpwhoami, tmpstr.str().c_str());
 }
 
 const char* G4NURBStubesector::Whoami() const
