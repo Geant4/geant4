@@ -60,6 +60,7 @@ Histo::Histo()
   messenger  = 0;
 
 #ifdef G4ANALYSIS_USE
+  tree = 0;
   messenger = new HistoMessenger(this);
 #endif
 }
@@ -90,11 +91,12 @@ void Histo::book()
   // Creating a tree mapped to a new hbook file.
 
   tree = tf->create(histName,histType,false,true,"uncompress");
-  if(tree) 
+  if(tree) {
     G4cout << "Tree store  : " << tree->storeName() << G4endl;
-  else
+  } else {
     G4cout << "ERROR: Tree store " << histName  << " is not created!" << G4endl;
-
+    return;
+  }
   // Creating a histogram factory, whose histograms will be handled by the tree
   std::auto_ptr< AIDA::IHistogramFactory > hf(af->createHistogramFactory( *tree ));
 
@@ -119,10 +121,12 @@ void Histo::save()
 {
 #ifdef G4ANALYSIS_USE
   // Write histogram file
-  tree->commit();
-  G4cout << "Closing the tree..." << G4endl;
-  tree->close();
-  G4cout << "Histograms and Ntuples are saved" << G4endl;
+  if(tree) {
+    tree->commit();
+    G4cout << "Closing the tree..." << G4endl;
+    tree->close();
+    G4cout << "Histograms and Ntuples are saved" << G4endl;
+  }
 #endif
 } 
 
@@ -178,8 +182,9 @@ void Histo::fill(G4int i, G4double x, G4double w)
            << G4endl;   
   }
 #ifdef G4ANALYSIS_USE  
+  if(!tree) return;
   if(i>=0 && i<nHisto) {
-    histo[i]->fill((float)(x/unit[i]), (float)w);
+    if(active[i]) histo[i]->fill((float)(x/unit[i]), (float)w);
   } else {
     G4cout << "Histo::fill: WARNING! wrong histogram index " << i << G4endl;
   }
@@ -194,6 +199,7 @@ void Histo::scale(G4int i, G4double x)
     G4cout << "Scale histogram: #" << i << " by factor " << x << G4endl;   
   }
 #ifdef G4ANALYSIS_USE  
+  if(!tree) return;
   if(i>=0 && i<nHisto) {
     histo[i]->scale(x);
   } else {
