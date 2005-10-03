@@ -183,7 +183,8 @@ void PhysicsList::SetCuts()
   SetCutValue(cutForGamma, "gamma", "DefaultRegionForTheWorld");
   SetCutValue(cutForElectron, "e-", "DefaultRegionForTheWorld");
   SetCutValue(cutForPositron, "e+", "DefaultRegionForTheWorld");
-  G4cout << "world cuts are set" << cutForGamma/mm << " " << cutForElectron/mm << G4endl;
+  G4cout << "PhysicsList: world cuts are set cutG= " << cutForGamma/mm 
+	 << " mm    cutE= " << cutForElectron/mm << " mm " << G4endl;
 
   if( !vertexDetectorCuts ) SetVertexCut(cutForElectron);
   G4Region* region = (G4RegionStore::GetInstance())->GetRegion("VertexDetector");
