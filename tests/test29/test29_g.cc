@@ -81,6 +81,9 @@
 #include "G4PiMinusAbsorptionAtRest.hh"
 #include "G4PionMinusAbsorptionAtRest.hh"
 
+#include "G4ApplicationState.hh"
+#include "G4StateManager.hh"
+
 #include "G4UnitsTable.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleChange.hh"
@@ -143,6 +146,7 @@
 extern "C" double drand();
 int main()
 {
+		G4StateManager::GetStateManager()->SetNewState(G4State_Idle); // To let create ions
   const G4int nAZ=270;  // Dimension of the table
   const G4int mAZ=266;  // Mafimum filled A (at present). Must be mAZ<nAZ
   // Best Z for the given A - changed by MK (@@Not one-to-one correspondance! Make alt "-")

@@ -71,6 +71,9 @@
 #include "G4QCaptureAtRest.hh"
 #include "G4QuasmonString.hh"
 
+#include "G4ApplicationState.hh"
+#include "G4StateManager.hh"
+
 #include "G4UnitsTable.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleChange.hh"
@@ -131,6 +134,7 @@
 extern "C" double drand();
 int main()
 {
+		G4StateManager::GetStateManager()->SetNewState(G4State_Idle); // To let create ions
   const G4int nTg=8;   // Length of the target list for the Performance test
   G4int tli[nTg]={90001000,90002002,90003004,90007007,90013014,90027032,90047060,90092146};
   G4String tnm[nTg]={"Hydrogen","Helium","Lithium","Carbon","Aluminum","Cobalt","Silver"

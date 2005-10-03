@@ -86,6 +86,9 @@
 #include "G4ForceCondition.hh"
 //#include "G4QuasmonString.hh"
 
+#include "G4ApplicationState.hh"
+#include "G4StateManager.hh"
+
 #include "G4UnitsTable.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleChange.hh"
@@ -146,6 +149,7 @@
 //int main(int argc, char** argv)
 int main()
 {
+		G4StateManager::GetStateManager()->SetNewState(G4State_Idle); // To let create ions
   const G4int nT=20;           // Dimension of the t-distribution vectors
   //const G4int nT1=nT-1;        // The last bin of the t-distribution vector
   const G4double maxT=200000.; // -t_max for the T-vectors

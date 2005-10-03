@@ -72,6 +72,9 @@
 #include "G4QCollision.hh"
 //#include "G4QuasmonString.hh"
 
+#include "G4ApplicationState.hh"
+#include "G4StateManager.hh"
+
 #include "G4UnitsTable.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleChange.hh"
@@ -132,6 +135,7 @@
 //int main(int argc, char** argv)
 int main()
 {
+		G4StateManager::GetStateManager()->SetNewState(G4State_Idle); // To let create ions
   const G4int nT=20;           // Dimension of the t-distribution vectors
   //const G4int nT1=nT-1;        // The last bin of the t-distribution vector
   const G4double maxT=200000.; // -t_max for the T-vectors
@@ -467,7 +471,8 @@ int main()
 #ifdef pverb
   G4cout<<"Test19:###### Start new run #####" << G4endl; // only one run
 #endif
-  // Particles Definitions Factory for incident and secondary particles
+
+  // Possible Particles Definitions Factory for incident and secondary particles
   //G4ParticleDefinition* proton = G4Proton::Proton();
   //G4ParticleDefinition* neutron = G4Neutron::Neutron();
   //G4ParticleDefinition* lambda = G4Lambda::Lambda();
@@ -497,7 +502,7 @@ int main()
   else if(pPDG!=-15 )             // Leave **defaulf** definition of the tau+ projectile
 		{
     G4cerr<<"***Test19: pPDG="<<pPDG<<" is a PDG code of not negative particle"<<G4endl;
-    G4Exception("***Test29: At Rest Process is called for not negative particle");
+    G4Exception("***Test19: At Rest Process is called for not negative particle");
   }
   G4double pMass = part->GetPDGMass();                 // Mass of the projectile
 #ifdef debug
@@ -506,31 +511,31 @@ int main()
   G4cout<<"Test19:tC="<<totC<<"?="<<totCN<<",tB="<<totBN<<"?="<<totBNN<<G4endl;
 #endif
   G4double theStep   = 0.01*micrometer;
+  // Different Process Managers are used for the atRest and onFlight processes
+		G4ProcessManager* man = new G4ProcessManager(part); //Does not help to go out
+  //G4VDiscreteProcess* proc = new G4QCollision;
+  G4QCollision* proc = new G4QCollision;
+  if(!proc)
+  {
+    G4cout<<"Tst19: there is no G4QCollision process"<<G4endl;
+	   exit(1);
+  }
+#ifdef debug
+  G4cout<<"Test19:--***-- process is created --***--" << G4endl; // only one run
+#endif
+  man->AddDiscreteProcess(proc); //Does not help to go out
 
   // G4int maxz = (G4int)((*(material->GetElementVector()))[0]->GetZ()) + 1;
 #ifdef pdebug
   G4int targPDG=90000000+1000*tgZ+tgN;                 // PDG Code of the target
   G4cout<<"Test19: The particle: "<<part->GetParticleName()<<G4endl;
-  G4cout<<"Test29: The material: "<<material->GetName()<<G4endl;
+  G4cout<<"Test19: The material: "<<material->GetName()<<G4endl;
   G4cout<<"Test19: The target:   "<<targPDG<<G4endl;
   G4cout<<"Test19: The step:     "<<theStep/mm<<" mm"<<G4endl;
   G4cout<<"Test19: The position: "<<aPosition/mm<<" mm"<<G4endl;
   G4cout<<"Test19: The direction:"<<aDirection<<G4endl;
   G4cout<<"Test19: The time:     "<<aTime/ns<<" ns"<<G4endl;
 #endif
-  // Different Process Managers are used for the atRest and onFlight processes
-		//G4ProcessManager* man = new G4ProcessManager(part);
-  //G4VDiscreteProcess* proc = new G4QCollision;
-  G4QCollision* proc = new G4QCollision;
-  //G4VRestProcess* proc = new G4QCaptureAtRest;
-  //G4QCaptureAtRest* proc = new G4QCaptureAtRest;
-  if(!proc)
-  {
-    G4cout<<"Tst19:*> "<<part->GetParticleName()<<" isn't defined for the process"<<G4endl;
-	   exit(1);
-  }
-  //man->AddDiscreteProcess(proc);
-		// man->AddRestProcess(proc);
   for(G4int ip=0; ip<nT; ip++) tVal[ip]=(fT+dT*ip)/1000000.; // Fill the t-histogram
   // Create a DynamicParticle
   //G4int nEn=17;
@@ -542,35 +547,32 @@ int main()
 #ifdef pdebug
     G4cout<<"Test19: M="<<mp<<", T="<<energy<<", MeV"<<G4endl;
 #endif
-    G4DynamicParticle dParticle(part,aDirection,energy);       // !Kinetic Energy!
+    G4DynamicParticle* dParticle = new G4DynamicParticle(part,aDirection,energy); // !KinE!
 
     // General Track definition
-    G4Track* gTrack = new G4Track(&dParticle,aTime,aPosition); // Track definition (NoTarg)
+    G4Track* gTrack = new G4Track(dParticle,aTime,aPosition); // Track definition (NoTarg)
 
     // Step Definition
     G4Step* step = new G4Step();
     step->SetTrack(gTrack);          // Step is initialized by the Track (?)
 
-    G4StepPoint *aPoint = new G4StepPoint(); // It cant be initialized right away (!?)
+    G4StepPoint* aPoint = new G4StepPoint(); // It cant be initialized right away (!?)
     aPoint->SetPosition(aPosition);
     aPoint->SetMaterial(material);
     G4double safety = 10000.*cm;
     aPoint->SetSafety(safety);
     step->SetPreStepPoint(aPoint);   // Begin of the step
 
-    G4StepPoint* bPoint = aPoint;
+    //G4StepPoint* bPoint = aPoint;
+    G4StepPoint* bPoint = new G4StepPoint(); // It cant be initialized right away (!?)
+    bPoint->SetMaterial(material);
+    bPoint->SetSafety(safety);
     G4ThreeVector bPosition = aDirection*theStep+aPosition; // aDirection is defined byCard
     bPoint->SetPosition(bPosition);
     step->SetPostStepPoint(bPoint);  // End of the step
     step->SetStepLength(theStep);    // Step is set byCard above
-
-    G4RotationMatrix* rot  = new G4RotationMatrix(); //Is it necessary in this application?
-    G4double phi0 = aDirection.phi();
-    G4double theta0 = aDirection.theta();
-    rot->rotateZ(-phi0);
-    rot->rotateY(-theta0);
-#ifdef idebug
-    G4cout<<"Test19: rotation= "<<(*rot)*(aDirection)<<G4endl;
+#ifdef pverb
+    G4cout<<"Test19: The end point is defined and filled in the step "<<G4endl;
 #endif
     G4Timer* timer = new G4Timer();
     timer->Start();
@@ -607,29 +609,27 @@ int main()
 #ifdef debug
       G4cout<<"Test19: ### "<<iter<< "-th event starts.### energu="<<energy<<G4endl;
 #endif
-      if(!(iter%1000)&&iter)G4cout<<"=>TEST19: "<<iter<<" events are simulated"<<G4endl;
-      dParticle.SetKineticEnergy(energy);// Fill the Kinetic Energy of the projectile
+
+      if(!(iter%1000)&&iter)G4cout<<"***=>TEST19: "<<iter<<" events are simulated"<<G4endl;
+      //dParticle->SetKineticEnergy(energy);// Fill the Kinetic Energy of the projectile
 
       gTrack->SetStep(step);            // Now step is included in the Track (see above)
       gTrack->SetKineticEnergy(energy); // Duplication of Kin. Energy for the Track (?!)
-
       aChange = proc->PostStepDoIt(*gTrack,*step); // For On Flight
       //aChange = proc->AtRestDoIt(*gTrack,*step);  // For At Rest
-
+      G4int nSec = aChange->GetNumberOfSecondaries();
+      //G4cout<<"Test19: "<<nSec<<" secondary particles are generated"<<G4endl;
       G4double totCharge = totC;
       G4int    curN=proc->GetNumberOfNeutronsInTarget();
       G4int    dBN = curN-tgN;
       G4int    totBaryN = totBN+dBN;
       G4int    curPDG=tPDG+dBN;
       G4double curM=G4QPDGCode(curPDG).GetMass(); // Update mass of the TargetNucleus
-
       totSum = G4LorentzVector(0., 0., pmax, et+curM-mt);
-
       G4LorentzVector Residual=proc->GetEnegryMomentumConservation();
-      //G4double de = aChange->GetLocalEnergyDeposit();// Init TotalEnergy by EnergyDeposit
-      G4int nSec = aChange->GetNumberOfSecondaries();
 #ifdef debug
-      G4cout<<"Test19: "<<nSec<<" secondary particles are generated"<<G4endl;
+      G4double de = aChange->GetLocalEnergyDeposit();// Init TotalEnergy by EnergyDeposit
+      G4cout<<"Test19: "<<nSec<<" secondary particles are generated, dE="<<de<<G4endl;
 #endif
       // @@ ----------------------- Begin
       G4double weight = aChange->GetSecondary(0)->GetDynamicParticle()->GetKineticEnergy();
@@ -642,6 +642,7 @@ int main()
       //G4int nbar = 0;
 
       // @@ G4int npt=0;
+      G4int    c=0;    // Prototype of the PDG Code of the particle
       G4int nGamma=0;
       G4double EGamma=0;
       G4int nP0=0;
@@ -658,7 +659,6 @@ int main()
       G4int nOmega=0;
       // @@ G4int nDec=0;
       // @@ G4int dirN=0;
-      G4int    c=0;    // PDG Code of the particle
 #ifdef pdebug
       G4cout<<"Test19:----DONE^^^^^^^*******^^^^^^^^:ir="<<iter<<": #ofH="<<nSec<<G4endl;
       if(!(iter%100)) G4cerr<<"#"<<iter<<G4endl;
@@ -729,7 +729,7 @@ int main()
         //if(c==90002002) nAlphas++;                     // Alphas
         if(c==2212) nProtons++;                        // Protons
         if(c==2112) nNeutrons++;                       // Neutrons
-        if(c==2112 && std::fabs(e-1005.)<3.) nSpNeut++;     // Dibar-Neutrons
+        if(c==2112 && std::fabs(e-1005.)<3.) nSpNeut++;// Dibar-Neutrons
         //if(c==90002002 && e-m<7.) nSpAlph++;           // Special Alphas
         if(c==111) nP0++;                              // Neutral  pions
         if(c==-211) nPN++;                             // Negative pions
@@ -738,7 +738,7 @@ int main()
         if(c==22) EGamma+=e;                           // Energy of gammas
         G4int cCG=0;
         G4int cBN=0;
-        if(std::abs(c)>99)                                  // Do not count charge of leptons
+        if(std::abs(c)>99)                               // Do not count charge of leptons
         {
           cCG=static_cast<G4int>(pd->GetPDGCharge());
           cBN=static_cast<G4int>(pd->GetBaryonNumber());
@@ -749,12 +749,13 @@ int main()
         G4cout<<"Test19:#"<<i<<",PDG="<<c<<",C="<<cCG<<",B="<<cBN<<",4M="<<lorV<<m<<",T="
               <<lorV.e()-m<<G4endl;
 #endif
-        delete aChange->GetSecondary(i);
+        //delete aChange->GetSecondary(i);
 	     } // End of the LOOP over secondaries
 	     //	delete secondaries in the end of the event       	 
-      G4double ss=std::fabs(totSum.t())+std::fabs(totSum.x())+std::fabs(totSum.y())+std::fabs(totSum.z());    
+      G4double ss=std::fabs(totSum.t())+std::fabs(totSum.x())+std::fabs(totSum.y())+
+                  std::fabs(totSum.z());    
 #ifdef pdebug
-      G4cout<<">TEST19:r4M="<<totSum<<ss<<",rChrg="<<totCharge<<",rBaryN="<<totBaryN<<G4endl;
+      G4cout<<">TEST19:r4M="<<totSum<<ss<<",rCh="<<totCharge<<",rBaryN="<<totBaryN<<G4endl;
 #endif
 	     //if (1>2) // @@ The check is temporary closed
 						if (totCharge ||totBaryN || ss>.1 || alarm || nGamma&&!EGamma)
@@ -789,15 +790,15 @@ int main()
         G4Exception("***Test19: ALARM or baryn/charge/energy/momentum is not conserved");
       }
 #ifndef nout
-	   ntp->FillEvt(aChange); // Fill the simulated event in the ASCII "ntuple"
+	     ntp->FillEvt(aChange); // Fill the simulated event in the ASCII "ntuple"
 #endif
       // =============== May be print it here if it is not zero...
+      for(G4int ides=0; ides<nSec; ides++) delete aChange->GetSecondary(ides);
       aChange->Clear();
 #ifdef debug
       G4cout<<"Test19:--->>> After ntp.FillEvt"<<G4endl;
 #endif
     } // End of the LOOP over events
-
     // Stop the timer to estimate the speed of the generation
     timer->Stop();
     G4cout<<"Test19:CalculationTimePerEvent= "<<timer->GetUserElapsed()/nEvt<<" s"<<G4endl;
@@ -810,20 +811,35 @@ int main()
           <<",d="<<exr-dEl/dTot<<",ra="<<(exr-.178)/.822<<G4endl;
     for(G4int ir=0; ir<nT; ir++) G4cout<<tVal[ir]<<" "<<tSig[ir]<<G4endl;// Print t-vectors
 #endif
-    delete timer;
 #ifdef pverb
-    G4cerr<<"Test29: ########## End of run ##########"<<G4endl;
+    G4cerr<<"Test19: ########## End of run ##########"<<G4endl;
 #endif
-#ifndef nout
-	   delete ntp; // Delete the class to fill the#of events
-#endif
+    delete gTrack; // The G4Track delets the G4DynamicParticle (can be necessary in Loop)
+    delete step;   // The G4Step delets aPoint and bPoint (can be necessary in Loop)
+    ////delete dParticle; //  Can be necessary in Loop
 		//} // The Energy LOOP (@@ Temporary closed)
-  delete material;
-  //delete phys;
+  delete proc;
+  //delete man;      // == Should not be uncommented unless definition above is commented!
+  //delete pFrame;   // This
+  //delete lFrame;   // is
+  //delete sFrame;   // not
+  //delete material; // necessary
+  //delete element;  // -> (automaticaly
+  //delete isotope;  // in the end of main)
+  //G4cout << "Test19: After delete process etc." << G4endl;
+  //delete phys;                        // Absolete physics class
   //delete cmaterial;                   // Temporary material definition pointer (?)
-
+#ifndef nout
+  //G4cout << "Test19: Before ntp" << G4endl;
+	 delete ntp; // Delete the class to fill the#of events
+  //G4cout << "Test19: After ntp" << G4endl;
+#endif
 #ifdef pverb
-  G4cout << "###### End of Test29 #####" << G4endl;
+  G4cout << "###### End of Test19 #####" << G4endl;
 #endif
   //exit(1); // Never do this !
+  //return no_of_errors;
+  //return 0;
+  //abort();
+  //return EXIT_SUCCESS;
 }
