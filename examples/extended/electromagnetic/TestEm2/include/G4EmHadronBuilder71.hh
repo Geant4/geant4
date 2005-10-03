@@ -21,25 +21,25 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmQEDBuilder70.hh,v 1.1 2004-11-29 14:49:26 vnivanch Exp $
+// $Id: G4EmHadronBuilder71.hh,v 1.1 2005-10-03 01:59:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef G4EmQEDBuilder70_h
-#define G4EmQEDBuilder70_h 1
+#ifndef G4EmHadronBuilder71_h
+#define G4EmHadronBuilder71_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4EmQEDBuilder70 : public G4VPhysicsConstructor
+class G4EmHadronBuilder71 : public G4VPhysicsConstructor
 {
 public:
-  G4EmQEDBuilder70(const G4String& name = "EM_stan_QED");
-  virtual ~G4EmQEDBuilder70();
+  G4EmHadronBuilder71(const G4String& name = "EM_stand_had");
+  virtual ~G4EmHadronBuilder71();
 
 public:
   // This method is dummy for physics
@@ -53,8 +53,8 @@ public:
 private:
 
    // hide assignment operator
-  G4EmQEDBuilder70 & operator=(const G4EmQEDBuilder70 &right);
-  G4EmQEDBuilder70(const G4EmQEDBuilder70&);
+  G4EmHadronBuilder71 & operator=(const G4EmHadronBuilder71 &right);
+  G4EmHadronBuilder71(const G4EmHadronBuilder71&);
 
 };
 
