@@ -1,4 +1,4 @@
-$Id: History,v 1.167 2005-10-04 08:42:51 vnivanch Exp $
+$Id: History,v 1.168 2005-10-04 14:19:13 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4 October 05: L.Urban
+- G4MultipleScattering: upper limit for facrange 0.2,
+  facgeom =2 always, corr. in set function of facgeom
 
 4 October 05: V.Ivant (emstand-V07-01-11)
 - Move G4MultipleScattering80 and G4MscModel80 into
