@@ -20,11 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.13 2005-04-15 14:41:13 vnivanch Exp $
+// $Id: G4MultipleScattering.hh,v 1.14 2005-10-04 08:42:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-//------------- G4MultipleScattering physics process --------------------------
+//------------- G4MultipleScattering physics process -------------------------
 //               by Laszlo Urban, March 2001
 //
 // 07-08-01 new methods Store/Retrieve PhysicsTable
@@ -49,10 +49,11 @@
 //          with the corresponding set function (L.Urban)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 15-04-05 optimize internal interfaces (V.Ivanchenko)
+// 02-10-05 new algorithm for step limitation, new data members (L.Urban)
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering.hh,v 1.13 2005-04-15 14:41:13 vnivanch Exp $
+// $Id: G4MultipleScattering.hh,v 1.14 2005-10-04 08:42:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -70,6 +71,8 @@
 
 #include "G4VMultipleScattering.hh"
 
+class G4Navigator;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4MultipleScattering : public G4VMultipleScattering
@@ -79,7 +82,7 @@ public:    // with description
 
   G4MultipleScattering(const G4String& processName="msc");
 
-  virtual ~G4MultipleScattering();
+ ~G4MultipleScattering();
 
   // returns true for charged particles, false otherwise
   G4bool IsApplicable (const G4ParticleDefinition& p);
@@ -87,57 +90,55 @@ public:    // with description
   G4double TruePathLengthLimit(const G4Track&  track,
 			       G4double& lambda,
 			       G4double  currentMinimalStep);
+			       
+  G4double GeomLimit(const G4Track&  track);
 
   // Print few lines of informations about the process: validity range,
   void PrintInfo();
 
   // geom. step length distribution should be sampled or not
-  void Setsamplez(G4bool value);
+  void Setsamplez(G4bool value) { samplez = value;};
 
-  // activate boundary algorithm
-  void SetBoundary(G4bool value);
+  // activate boundary algorithm (in fact stepping algorithm)
+  void SetBoundary(G4bool value) { boundary = value;};
 
   // to reduce the energy/step dependence
-  void Setdtrl(G4double value);
+  void Setdtrl(G4double value) { dtrl = value;};
 
-  void Setfactail(G4double value);
+  // 'soften' step limitation above Tkinlimit
+  void SetTkinlimit(G4double value) { Tkinlimit = value;};
 
-  // Steplimit after boundary crossing = facrange*range
-  // estimated nb of steps at boundary nsmallstep = 1/facrange
-  void SetFacrange(G4double val);
+  // Steplimit = facrange*max(range,lambda)
+  void SetFacrange(G4double val) { facrange=val; tlimitmin=val*1*nanometer;};
 
-  // corrs to transport cross section for high energy
-  void SetNuclCorrPar(G4double val);
-  void SetFactPar(G4double val);
+  // min. steplimit at boundaries
+  void SetGeommin(G4double val) { geommin = val;};   
+
+  // connected with step size reduction near to boundaries
+  void SetFacgeom(G4double val) { facgeom=val; nsmallstep=G4int(facgeom);};   
 
 protected:
 
   // This function initialise models
   void InitialiseProcess(const G4ParticleDefinition*);
 
-private:
-
-  //  hide assignment operator as  private
-  G4MultipleScattering & operator = (const G4MultipleScattering &right);
-  G4MultipleScattering ( const G4MultipleScattering &);
-
 private:        // data members
+
+  G4Navigator* navigator;
 
   G4double lowKineticEnergy;
   G4double highKineticEnergy;
   G4int    totBins;
 
+  G4double Tkinlimit,Tlimit;
   G4double facrange;
-  G4double tlimit;
-  G4double tlimitmin;
+  G4double tlimit,tlimitmin;
+  G4double geombig,geommin,facgeom; 
+  G4double facskin,tskin;
+  G4int tid,pid,stepnobound,nsmallstep;
+  G4double safety,facsafety;
   G4double dtrl;
-  G4double NuclCorrPar;
-  G4double FactPar;
   G4double factail;
-  G4double cf;
-
-  G4int    stepnolastmsc;
-  G4int    nsmallstep;
 
   G4bool   samplez;
   G4bool   boundary;
@@ -145,58 +146,6 @@ private:        // data members
 
 };
 
-//--------------------------------------------------------------------
-//  inline methods
-//--------------------------------------------------------------------
-
-inline G4bool G4MultipleScattering::IsApplicable (const G4ParticleDefinition& p)
-{
-  return (p.GetPDGCharge() != 0.0 && !p.IsShortLived());
-}
-
-// geom. step length distribution should be sampled or not
-inline void G4MultipleScattering::Setsamplez(G4bool value)
-{
-  samplez = value;
-}
-
-// activate boundary algorithm
-inline void G4MultipleScattering::SetBoundary(G4bool value)
-{
-  boundary = value;
-}
-
-// to reduce the energy/step dependence
-inline void G4MultipleScattering::Setdtrl(G4double value)                
-{
-  dtrl = value;
-}
-
-inline void G4MultipleScattering::Setfactail(G4double value)              
-{
-  factail = value;
-}
-
-// Steplimit after boundary crossing = facrange*range
-// estimated nb of steps at boundary nsmallstep = 1/facrange
-inline void G4MultipleScattering::SetFacrange(G4double val)              
-{
-  facrange = val;
-  nsmallstep = G4int(std::log((cf+facrange-1.)/facrange)/std::log(cf))+1;
-}
-
-// corrs to transport cross section for high energy
-inline  void G4MultipleScattering::SetNuclCorrPar(G4double val)            
-{
-  NuclCorrPar = val;
-}
-
-inline  void G4MultipleScattering::SetFactPar(G4double val)                
-{
-  FactPar = val;
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
-

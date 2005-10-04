@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.27 2005-04-15 14:41:13 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.28 2005-10-04 08:42:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -41,7 +41,7 @@
 // 27-09-01 value of data member factlim changed, L.Urban
 // 31-10-01 big fixed in PostStepDoIt,L.Urban
 // 17-04-02 NEW angle distribution + boundary algorithm modified, L.Urban
-// 22-04-02 boundary algorithm modified -> important improvement in timing (L.Urban)
+// 22-04-02 boundary algorithm modified -> important improvement in timing 
 // 24-04-02 some minor changes in boundary algorithm, L.Urban
 // 06-05-02 bug fixed in GetContinuousStepLimit, L.Urban
 // 24-05-02 changes in angle distribution and boundary algorithm, L.Urban
@@ -65,6 +65,10 @@
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 07-02-05 correction in order to have a working Setsamplez function (L.Urban)
 // 15-04-05 optimize internal interface (V.Ivanchenko)
+// 12-09-05 new TruePathLengthLimit - facrange works for every track from
+//             start, geometry also influences the limit
+// 02-10-05 conditions limiting the step are finalized + code cleaning (L.Urban)
+// 03-10-05 weaker step limitation for Tkin > Tlimit (L.Urban)
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,6 +76,8 @@
 
 #include "G4MultipleScattering.hh"
 #include "G4MscModel.hh"
+#include "G4TransportationManager.hh"
+#include "G4Navigator.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -80,27 +86,36 @@ using namespace std;
 G4MultipleScattering::G4MultipleScattering(const G4String& processName)
   : G4VMultipleScattering(processName),
     totBins(120),
-    facrange(0.199),
     dtrl(0.05),
-    NuclCorrPar (0.0615),
-    FactPar(0.40),
     factail(1.0),
-    cf(1.001),
-    stepnolastmsc(-1000000),
-    nsmallstep(5),
-    samplez(true),
     boundary(true),
     isInitialized(false)
 {
   lowKineticEnergy = 0.1*keV;
   highKineticEnergy= 100.*TeV;
 
+  Tkinlimit        = 2.*MeV;
   tlimit           = 1.e10*mm;
-  tlimitmin        = 1.e-7*mm;
+  tlimitmin        = facrange*1.e-6*mm;
+  geombig          = 1.e50*mm;
+  geommin          = 5.e-6*mm;
+  facgeom          = 2.;
+  facskin          =1./facgeom;
+  tskin            = facskin*tlimit;
+  tid              = -1;
+  pid              = -1;
+  stepnobound      = 100000000;
+  nsmallstep       = G4int(facgeom);
+  safety           = 0.*mm;
+  facsafety        = 0.95;
 
   SetBinning(totBins);
   SetMinKinEnergy(lowKineticEnergy);
   SetMaxKinEnergy(highKineticEnergy);
+
+  Setsamplez(false) ;
+  SetLateralDisplasmentFlag(true);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -110,7 +125,15 @@ G4MultipleScattering::~G4MultipleScattering()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* particle)
+G4bool G4MultipleScattering::IsApplicable (const G4ParticleDefinition& p)
+{
+  return (p.GetPDGCharge() != 0.0 && !p.IsShortLived());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4MultipleScattering::InitialiseProcess
+                                         (const G4ParticleDefinition* particle)
 {
   if(isInitialized) return;
 
@@ -118,58 +141,124 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* particl
     boundary = false;
     SetLateralDisplasmentFlag(false);
     SetBuildLambdaTable(false);
-    Setsamplez(false) ;
   } else {
-    SetLateralDisplasmentFlag(true);
     SetBuildLambdaTable(true);
   }
-  G4MscModel* em = new G4MscModel(dtrl,NuclCorrPar,FactPar,factail,samplez);
+  // compute Tlimit for particle
+  Tlimit = Tkinlimit*electron_mass_c2/particle->GetPDGMass();
+  G4MscModel* em = new G4MscModel(dtrl,factail,samplez);
   em->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
   em->SetLowEnergyLimit(lowKineticEnergy);
   em->SetHighEnergyLimit(highKineticEnergy);
   AddEmModel(1, em);
   isInitialized = true;
+  navigator = G4TransportationManager::GetTransportationManager()
+    ->GetNavigatorForTracking();
+  SetFacrange(0.02); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MultipleScattering::TruePathLengthLimit(const G4Track&  track,
-                                                            G4double& lambda,
-                                                            G4double  currentMinimalStep)
+                                                   G4double& lambda,
+                                                   G4double  currentMinimalStep)
 {
-
   G4double tPathLength = currentMinimalStep;
 
-  // special treatment near boundaries ?
-  if (boundary) {
+  G4double range = CurrentRange() ;
+  G4double geomlimit = GeomLimit(track);
 
-    G4int stepno = track.GetCurrentStepNumber() ;
-    // first step
-    if (stepno == 1) {
-      stepnolastmsc = -1000000 ;
-      tlimit = 1.e10;
-    } else if (stepno > 1) {
+  // range <= safety ---> particle is not able to leave volume
+  if(range <= facsafety*safety)
+    return range ;
 
-      if (track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary) {
+  // not so strong step restriction above Tlimit
+  G4double facr = facrange;
+  G4double facg = facgeom;
+  if(track.GetKineticEnergy() > Tlimit)
+  {
+    facr *= track.GetKineticEnergy()/Tlimit;
+    if(facr > 1.) facr = 1.;
+    facg  = 1.;
+  }
+  facskin =1./facg;
 
-        stepnolastmsc = stepno;
-        //  if : diff.treatment for small/not small Z
-	G4double range = CurrentRange();
-        if (range > lambda) tlimit = facrange*range;
-        else                tlimit = facrange*lambda;
 
-        if(tlimit < tlimitmin) tlimit = tlimitmin;
-        if(tPathLength > tlimit) tPathLength = tlimit;
+  if((track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary)
+     || (track.GetCurrentStepNumber() == 1))   
+  {
+    // constraint from the physics
+    if (range > lambda) tlimit = facr*range;
+    else                tlimit = facr*lambda;
 
-      } else if (stepno > stepnolastmsc && stepno - stepnolastmsc < nsmallstep
-              && tPathLength > tlimit) {
-        tlimit *= cf;
-        tPathLength = tlimit;
-      }
+    // constraint from the geometry (if tlimit above is too big)
+    if ((geomlimit > geommin) && (tlimit > geomlimit/facg))
+      tlimit = geomlimit/facg;
+
+    //lower limit for tlimit
+    if(tlimit < tlimitmin) tlimit = tlimitmin;
+ 
+    // steplimit near to boundaries
+    tskin = facskin*tlimit;
+
+    if(track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary)
+    {
+      stepnobound = track.GetCurrentStepNumber() ;
+    }
+    else
+    {
+      tid = track.GetTrackID() ;
+      pid = track.GetParentID() ;
+      stepnobound      = 100000000;
     }
   }
 
-  return tPathLength;
+  // small steps just after crossing a boundary
+  if((track.GetTrackID() == tid) && (track.GetParentID() == pid)
+     && (track.GetCurrentStepNumber() >= stepnobound) &&
+     (track.GetCurrentStepNumber() < stepnobound+nsmallstep))   
+  {
+    if(tPathLength > tskin) tPathLength = tskin;
+  }
+  else
+  {
+    if(tPathLength > tlimit) tPathLength = tlimit;
+  }
+
+  //check geometry as well (small steps before reaching a boundary)
+  if(geomlimit > facg*tskin) geomlimit -= facg*tskin;
+  else if(geomlimit > tskin) geomlimit = tskin;
+  if(geomlimit < geommin) geomlimit = geommin;
+
+  if(tPathLength > geomlimit) tPathLength = geomlimit;
+
+  return tPathLength ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4MultipleScattering::GeomLimit(const G4Track&  track)
+{
+  G4double geomlimit = geombig;
+  safety = track.GetStep()->GetPreStepPoint()->GetSafety() ;
+
+  // do not call navigator for big geommin and for World
+  if((geommin < geombig) && (track.GetVolume() != 0)
+           && (track.GetVolume()->GetName() != "World"))
+  {
+    const G4double cstep = geombig;
+    navigator->LocateGlobalPointWithinVolume(
+                  track.GetStep()->GetPreStepPoint()->GetPosition());
+    geomlimit = navigator->ComputeStep(
+                  track.GetStep()->GetPreStepPoint()->GetPosition(),
+                  track.GetMomentumDirection(),
+                  cstep,
+                  safety);
+
+    if(geomlimit < geommin) geomlimit = geommin;
+  }
+
+  return geomlimit;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
