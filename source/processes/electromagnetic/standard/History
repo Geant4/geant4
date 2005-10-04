@@ -1,4 +1,4 @@
-$Id: History,v 1.168 2005-10-04 14:19:13 urban Exp $
+$Id: History,v 1.169 2005-10-04 16:40:28 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-4 October 05: L.Urban
+4 October 05: L.Urban (emstand-V07-01-12)
 - G4MultipleScattering: upper limit for facrange 0.2,
   facgeom =2 always, corr. in set function of facgeom
 
