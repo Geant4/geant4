@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AllocatorPool.hh,v 1.3 2005-03-15 19:11:35 gcosmo Exp $
+// $Id: G4AllocatorPool.hh,v 1.4 2005-10-04 13:01:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,7 @@ class G4AllocatorPool
 {
   public:
 
-    explicit G4AllocatorPool( unsigned int n );
+    explicit G4AllocatorPool( unsigned int n=0 );
       // Create a pool of elements of size n
     ~G4AllocatorPool();
       // Destructor. Return storage to the free store
