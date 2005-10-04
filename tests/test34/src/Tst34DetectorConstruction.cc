@@ -44,7 +44,7 @@
 #include "Tst34MaterialManager.hh"
 
 // Fast simulation
-#include "GFlashHomoShowerParamterisation.hh"
+#include "GFlashHomoShowerParameterisation.hh"
 #include "G4FastSimulationManager.hh"
 #include "GFlashShowerModel.hh"
 #include "GFlashHitMaker.hh"
@@ -153,7 +153,7 @@ G4VPhysicalVolume* Tst34DetectorConstruction::Construct()
   G4cout << "Shower parameterization" << G4endl;
   m_theFastShowerModel = new GFlashShowerModel("fastShowerModel",m_calo_log);
   m_theParametrisation =
-    new GFlashHomoShowerParamterisation(matManager->getMaterial(mat));
+    new GFlashHomoShowerParameterisation(matManager->getMaterial(mat));
   m_theFastShowerModel->SetParametrisation(*m_theParametrisation);
   m_theFastShowerModel->SetParticleBounds(*m_theParticleBounds) ;
   m_theFastShowerModel->SetHitMaker(*m_theHMaker); 

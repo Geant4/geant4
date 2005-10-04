@@ -29,7 +29,7 @@
 class G4Box;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
-class GFlashHomoShowerParamterisation;
+class GFlashHomoShowerParameterisation;
 class GFlashHitMaker;
 class GFlashShowerModel;
 class GFlashParticleBounds;
@@ -63,7 +63,7 @@ class Tst34DetectorConstruction : public G4VUserDetectorConstruction
 
   // Gflash members
 
-    GFlashHomoShowerParamterisation *m_theParametrisation;
+    GFlashHomoShowerParameterisation *m_theParametrisation;
     GFlashHitMaker *m_theHMaker;
     GFlashParticleBounds *m_theParticleBounds;
     GFlashShowerModel* m_theFastShowerModel;
