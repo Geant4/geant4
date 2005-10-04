@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.28 2005-10-04 08:42:51 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.29 2005-10-04 14:16:37 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -173,15 +173,13 @@ G4double G4MultipleScattering::TruePathLengthLimit(const G4Track&  track,
     return range ;
 
   // not so strong step restriction above Tlimit
+  // max. value of facr = 0.2
   G4double facr = facrange;
-  G4double facg = facgeom;
   if(track.GetKineticEnergy() > Tlimit)
   {
     facr *= track.GetKineticEnergy()/Tlimit;
-    if(facr > 1.) facr = 1.;
-    facg  = 1.;
+    if(facr > 0.2) facr = 0.2;
   }
-  facskin =1./facg;
 
 
   if((track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary)
@@ -192,8 +190,8 @@ G4double G4MultipleScattering::TruePathLengthLimit(const G4Track&  track,
     else                tlimit = facr*lambda;
 
     // constraint from the geometry (if tlimit above is too big)
-    if ((geomlimit > geommin) && (tlimit > geomlimit/facg))
-      tlimit = geomlimit/facg;
+    if ((geomlimit > geommin) && (tlimit > geomlimit/facgeom))
+      tlimit = geomlimit/facgeom;
 
     //lower limit for tlimit
     if(tlimit < tlimitmin) tlimit = tlimitmin;
@@ -226,7 +224,7 @@ G4double G4MultipleScattering::TruePathLengthLimit(const G4Track&  track,
   }
 
   //check geometry as well (small steps before reaching a boundary)
-  if(geomlimit > facg*tskin) geomlimit -= facg*tskin;
+  if(geomlimit > facgeom*tskin) geomlimit -= facgeom*tskin;
   else if(geomlimit > tskin) geomlimit = tskin;
   if(geomlimit < geommin) geomlimit = geommin;
 
