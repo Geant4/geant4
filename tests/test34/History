@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2005-06-13 15:56:48 gcosmo Exp $
+$Id: History,v 1.3 2005-10-04 09:25:41 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4th October 2005  G.Cosmo (test34-V07-01-00)
+- Corrected GFlashHomoShowerParamterisation to
+  GFlashHomoShowerParameterisation.
+- Cowork with "gflash-V07-01-00".
 
 13th June 2005  G.Cosmo (test34-V07-00-00)
 - Corrected initialisation of sensitive detector.
