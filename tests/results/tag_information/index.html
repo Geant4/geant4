@@ -3,6 +3,20 @@
 <title>System Testing report on large-N tests</title>
 <!-- Changed by: Serguei SADILOV, 20-Jan-2005 -->
 <!-- Changed by: Geant4 TESTING, 19-Mar-2005 -->
+<!--Changed by: Serguei SADILOV, 30-Jun-2005  -->
+<!--Changed by: Serguei SADILOV, 30-Jun-2005  -->
+<!--Changed by: Serguei SADILOV, 30-Jun-2005  -->
+<!--Changed by: Serguei SADILOV, 30-Jun-2005  -->
+<!--Changed by: Serguei SADILOV, 30-Jun-2005  -->
+<!--Changed by: Serguei SADILOV, 30-Jun-2005  -->
+<!--Changed by: Serguei SADILOV, 30-Jun-2005  -->
+<!--Changed by: Serguei SADILOV, 30-Jun-2005  -->
+<!--Changed by: Serguei SADILOV, 30-Jun-2005  -->
+<!--Changed by: Serguei SADILOV, 30-Jun-2005  -->
+<!--Changed by: Serguei SADILOV, 30-Jun-2005  -->
+<!--Changed by: Serguei SADILOV, 30-Jun-2005  -->
+<!--Changed by: Serguei SADILOV, 30-Jun-2005  -->
+<!--Changed by: Serguei SADILOV, 30-Jun-2005  -->
 <!--Changed by: Serguei SADILOV, 29-Nov-2004  -->
 <!--Changed by: Serguei SADILOV, 29-Nov-2004  -->
 <!--Changed by: Serguei SADILOV, 29-Nov-2004  -->
@@ -20,7 +34,7 @@
 </div>
 
 Report on Errors and Warnings arising from system testing on the
-<blink><b>geant4-07-00-ref-02</b></blink> development tag.
+<blink><b>geant4-07-01-ref-02</b></blink> development tag.
 
 <p>
 NOTE: the complete set of tests has not been run, with Large_N(umbers of events),
@@ -30,11 +44,11 @@ NOTE: the complete set of tests has not been run, with Large_N(umbers of events)
 
                                                                                                    
                                                                                                             
-               1        2           3         4        9             10      11         12       13          14         15        16
+               1        2           3         4        5             6      7         8           9          10         11        12
 -----------+---------+---------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
            | SUN-CC  | SUN-CC  | SUN-CC  | SUN-CC  | Linux-g++| Linux-g++|Linux-g++|Linux-g++| Linux-icc| Linux-icc|WIN32-VC7|WIN32-VC7|
-           |optim_54 |debug_54 |optim_55 |debug_55 |opt.73_295|deb.73_295|opt.73_32|deb.73_32|opt.A64_80|deb.A64_80|  optim  |  debug  |
-  	   | sungeant| sungeant| refsol8 | refsol8 | pcgeant2 | pcgeant2 |pcgeant3 | pcgeant3| opladev01| opladev01|pcepsft16|pcepsft16|
+           |optim_54 |debug_54 |optim_55 |debug_55 |opt.amd64 |deb.amd64 |opt.SLC3 |deb.SLC3 |       opt|    deb   |  optim  |  debug  |
+  	   | sungeant| sungeant| refsol8 | refsol8 |   	refslc3-amd64  	 |pcgeant3 | pcgeant3| pcg4speed| pcg4speed|pcepsft16|pcepsft16|
 -----------+---------+---------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
 test01     |         |         |         |         |          |          |         |         |          |          |         |         |
 test02     |         |         |         |         |          |          |         |         |          |          |         |         |
@@ -47,8 +61,8 @@ test09     |         |         |         |         |          |          |      
 test10     |         |         |         |         |   	      |          |         |         |          |          |         |         |
 -----------+---------+---------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
 test11     |         |         |         |         |          |          |         |         |          |          |         |         |
-test12     |         |         |         |         |          |          |         |         |          |          |         |         |
-test13     |         |         |  	 |  	   |          |          |         |         |          |          |         |         |
+test12     |         |         |         |         |          |          |  WL3    |         |          |          |         |         |
+test13     |  WL1WL2 |  WL1WL2 |  WL1  	 |  WL1	   |   WL1    |  WL1     |  WL1    |  WL1    |  WL1WL2  |   WL1    |   WL1   |  WL1    |
 test14     |         |         |         |         |          |          |         |         |          |          |         |         |
 test15     |         |         |         |         |          |          |         |         |          |          |         |         |
 -----------+---------+---------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
@@ -56,10 +70,11 @@ test16     |         |         |         |         |          |          |      
 test17     |         |         |         |         |          |          |         |         |          |          |         |         |
 test18     |         |         |         |         |          |          |         |         |          |          |         |         |
 test20     |         |         |         |         |          |          |         |         |          |          |         |         |
-test21     |         |         |       	 |         |  WL1     | WL1      |         |         |          |          |         | WE2     |
+test21     |         |  WE1    |       	 |         |   	      |          |  WL2    |         |          |          |         | WE2     |
 test22     |         |         |         |         |          |          |         |         |          |          |         |         |
 test24     |         |         |         |         |          |          |         |         |          |          |         |         |
 test25     |         |         |         |         |          |          |         |         |          |          |         |         |
+test33	   |  WL4    | 	WL4    |   WL4 	 |   WL4   |  WL4     |	 WL4   	 |  WL4	   |  WL4    | 	 WL4   	|    WL4   |   WL4   | WL4     |
 -----------+---------+---------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
 test103    |         |         |         |         |          |          |         |         |          |          |         |         |
 test104    |         |         |         |         |          |          |         |         |          |          |         |         |
@@ -71,28 +86,87 @@ test508    |         |         |         |         |          |          |      
 test5010   |         |         |         |         |          |          |         |         |          |          |         |         |
 test801	   |         |         |         |         |          |          |         |         |          |          |         |         |
 -----------+---------+---------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
-       													      			    
- abend  - crash without clue										      			    
- Labend - crash in large_N test										      			    
- testing - under testing now										      			  
- ? - last time was!											      			  
+       			   			      						      	      			    
+ abend  - crash without clue			      						      	      			    
+ Labend - crash in large_N test			      						      	      			    
+ testing - under testing now			      						      	      			  
+ ? - last time was!	   			      						      	      			  
  WL - warning in large_N test (the warning in tests is usually a combination: WL23A means WL2 and WL3 and WLA [where A=10, B=11 etc...])
- EL - error in large_N test										      			  
- 													      			  
- It would be really nice to get rid of these warnings, particularly for the Large_N tests.		      			  
- You can find debug info concerning these cases.							      			  
- 													      			  
-WL1													      			  
---------												      			  
-*** Error in G4HEInelastic::GenerateNBodyEvent								      			  
-    total mass (4.69395) >= total energy (4.51751)							      			  
- 													      			  
- 													      
+ EL - error in large_N test			      						      	      			  
+ 			   			      						      	      			  
+ It would be really nice to get rid of these warnings, particularly for the Large_N tests.	      	      			  
+ You can find debug info concerning these cases.      						      	      			  
+ 			   			      						      	      			  
+WL1			   			      						      	      			  
+--------		   			      						      	      			  
+*** Error in G4HEInelastic::GenerateNBodyEvent	      						      	      			  
+    total mass (4.69395) >= total energy (4.51751)    						      	      			  
+ 			   			      						      	      			  
+ 			   			      						      	      
+			   			      						      
+WL2			   			      						      
+---------		   			      						      
+			   			      						      
+G4HadronicProcess: track in unusable state - 1	      						      
+G4HadronicProcess: returning unchanged track 	      						      
+  			   			      						      
+*** G4Exception : 001	   			      						      
+issued by : G4HadronicProcess			      						      
+bailing out		   			      						      
+*** This is just a warning message.		      						      
+			   			      
+			   			      
+WL3			   			      
+------------		   
+*** G4Exception : Notification
+issued by : G4Box::DistanceToOut(p,v,..)
+Undefined side for valid surface normal to solid.
+*** This is just a warning message.
+			   
+			   
+WL4			   
+------------		   
+*** G4Exception : Notification
+issued by : G4ImportanceAlgorithm::Warning()
+~G4ImportanceAlgorithm: ipre_over_ipost ! in [0.25, 4] seen
+*** This is just a warning message.
+			   
 
- 													      
+
+WE1
+--------------
+#
+# proton at 400 GeV in Pb
+#
+/gun/particle proton
+/gun/energy 400 GeV
+/mydet/SelectMaterial Pb
+SimpleBox is now made of Pb
+/run/beamOn 10
+Event number 10
+Event number 11
+Event number 12
+Event number 13
+Event number 14
+Event number 15
+Event number 16
+Event number 17
+Event number 18
+Event number 19
+signal SEGV (no mapping at the fault address) in G4QNucleus::GetA at line 142 in file "G4QNucleus.hh"
+  142   inline G4int    G4QNucleus::GetA()  const {return Z+N+S;}
+dbx: read of 4 bytes at address ff3eff70 failed -- Error 0
+(dbx) where
+=>[1] G4QNucleus::GetA(this = <bad address 0xff3efffc>), line 142 in "G4QNucleus.hh"
+dbx: read of 4 bytes at address ff3effd8 failed -- Error 0
+dbx: attempt to read frame failed -- cannot derive frame pointer
+
+
+
+ 			   										      
 WE2 (crash - hard to get debug out currently...)							      
 -------------------------------------------------							      
-test21.out (last strings)										      
+test21.out (last strings)  										      
 -------------------------------------------------------------------------------				      
 MuIoni:   tables are built for  mu-									      
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.					      
