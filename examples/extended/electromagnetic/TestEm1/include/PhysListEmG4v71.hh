@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmG4v71.hh,v 1.1 2005-10-04 16:16:15 maire Exp $
+// $Id: PhysListEmG4v71.hh,v 1.2 2005-10-05 12:05:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,7 +38,7 @@
 class PhysListEmG4v71 : public G4VPhysicsConstructor
 {
   public: 
-    PhysListEmG4v71(const G4String& name = "standard");
+    PhysListEmG4v71(const G4String& name = "g4v71");
    ~PhysListEmG4v71();
 
   public: 
