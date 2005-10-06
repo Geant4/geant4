@@ -52,7 +52,7 @@ G4XTRGammaRadModel::G4XTRGammaRadModel(G4LogicalVolume* anEnvelope,
   fAlphaPlate = alphaPlate ;
   fAlphaGas   = alphaGas   ;
   G4cout<<"fAlphaPlate = "<<fAlphaPlate<<" ; fAlphaGas = "<<fAlphaGas<<G4endl ;
-
+  fExitFlux = true;
   BuildTable() ;
 }
 

@@ -42,6 +42,8 @@ G4XTRRegularRadModel::G4XTRRegularRadModel(G4LogicalVolume *anEnvelope,
 {
   G4cout<<" XTR Regular discrete radiator model is called"<<G4endl ;
 
+  fExitFlux = true;
+
   // Build energy and angular integral spectra of X-ray TR photons from
   // a radiator
 
