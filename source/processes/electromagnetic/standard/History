@@ -1,4 +1,4 @@
-$Id: History,v 1.169 2005-10-04 16:40:28 maire Exp $
+$Id: History,v 1.170 2005-10-06 13:14:58 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+6 October 05: L.Urban
+- G4MultipleScattering: change in conditions limiting
+  the step --> better timing with the same physics
 
 4 October 05: L.Urban (emstand-V07-01-12)
 - G4MultipleScattering: upper limit for facrange 0.2,
