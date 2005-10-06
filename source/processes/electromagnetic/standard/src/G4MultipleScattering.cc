@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.30 2005-10-06 13:12:42 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.31 2005-10-06 15:46:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -70,7 +70,7 @@
 // 02-10-05 conditions limiting the step are finalized + code cleaning (L.Urban)
 // 03-10-05 weaker step limitation for Tkin > Tlimit (L.Urban)
 // 05-10-05 value of data member tlimitmin has been changed (L.Urban)
-   06-10-05 correction in TruePathLengthLimit, timing improved.(L.Urban)
+// 06-10-05 correction in TruePathLengthLimit, timing improved.(L.Urban)
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
