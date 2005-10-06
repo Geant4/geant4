@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.17 2005-09-27 08:13:46 grichine Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.18 2005-10-06 08:30:29 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -37,9 +37,14 @@
 #include "G4VXTRenergyLoss.hh"
 #include "G4Poisson.hh"
 #include "G4MaterialTable.hh"
+#include "G4VDiscreteProcess.hh"
+#include "G4VParticleChange.hh"
+#include "G4VSolid.hh"
 
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsLinearVector.hh"
+
+using namespace std;
 
 // Initialization of local constants
 
@@ -53,8 +58,6 @@ G4double G4XTRenergyLoss::fMinProtonTkin = 100.0*GeV  ;
 G4double G4XTRenergyLoss::fMaxProtonTkin = 100.0*TeV  ;
 G4int    G4XTRenergyLoss::fTotBin        =  50        ;
 // Proton energy vector initialization
-
-using namespace std;
 
 G4PhysicsLogVector* G4XTRenergyLoss::
 fProtonEnergyVector = new G4PhysicsLogVector(fMinProtonTkin,
@@ -89,11 +92,13 @@ G4XTRenergyLoss::G4XTRenergyLoss(G4LogicalVolume *anEnvelope,
   {
     G4Exception("No plates in X-ray TR radiator") ;
   }
+  // default is XTR dEdx, not flux after radiator
+  fExitFlux = false;
+
   // Mean thicknesses of plates and gas gaps
 
   fPlateThick = a ;
   fGasThick   = b ;
-
   fTotalDist  = fPlateNumber*(fPlateThick+fGasThick) ;
   G4cout<<"total radiator thickness = "<<fTotalDist/cm<<" cm"<<G4endl ;
 
@@ -169,6 +174,67 @@ G4XTRenergyLoss::GetContinuousStepLimit(const G4Track& ,
 
 	return StepLimit;
 }
+
+/////////////////////////////////////////////////////////////////////////////////
+//
+// Calculate step size for XTR process inside raaditor
+
+G4double G4XTRenergyLoss::GetMeanFreePath(const G4Track& aTrack,
+					  G4double, // previousStepSize,
+                           G4ForceCondition* condition)
+{
+  G4int iTkin, iPlace;
+  G4double lambda, sigma, kinEnergy, mass; // gamma;
+  G4double charge, chargeSq, massRatio, TkinScaled;
+  G4double E1,E2,W,W1,W2;
+
+ *condition = NotForced;
+  
+  if( aTrack.GetVolume()->GetLogicalVolume() != fEnvelope ) lambda = DBL_MAX;
+  else
+  {
+    const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
+    charge = aParticle->GetDefinition()->GetPDGCharge();
+    chargeSq  = charge*charge ;
+    kinEnergy = aParticle->GetKineticEnergy() ;
+    mass      = aParticle->GetDefinition()->GetPDGMass() ;
+    // gamma     = 1.0 + kinEnergy/mass ;
+    massRatio = proton_mass_c2/mass ;
+    TkinScaled = kinEnergy*massRatio ;
+
+    for(iTkin = 0; iTkin < fTotBin; iTkin++)
+    {
+      if( TkinScaled < fProtonEnergyVector->GetLowEdgeEnergy(iTkin))  break ;    
+    }
+    iPlace = iTkin - 1 ;
+
+    if(iTkin == 0) lambda = DBL_MAX; // Tkin is too small, neglect of TR photon generation
+    else          // general case: Tkin between two vectors of the material
+    {
+      if(iTkin == fTotBin) 
+      {
+        sigma = (*(*fEnergyDistrTable)(iPlace))(0)*chargeSq;
+        if (sigma < DBL_MIN) lambda = DBL_MAX;
+        else                       lambda = 1./sigma;    
+      }
+      else
+      {
+        E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1) ; 
+        E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin)     ;
+         W = 1.0/(E2 - E1) ;
+        W1 = (E2 - TkinScaled)*W ;
+        W2 = (TkinScaled - E1)*W ;
+        sigma = ( (*(*fEnergyDistrTable)(iPlace  ))(0)*W1 +
+                (*(*fEnergyDistrTable)(iPlace+1))(0)*W2   )*chargeSq;
+      
+        if (sigma < DBL_MIN) lambda = DBL_MAX;
+        else                       lambda = 1./sigma;    
+      }
+    }
+  }  
+  return lambda;
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -284,6 +350,129 @@ void G4XTRenergyLoss::BuildAngleTable()
 //////////////////////////////////////////////////////////////////////////////
 //
 // The main function which is responsible for the treatment of a particle passage
+// trough G4Envelope with discrete generation of G4Gamma
+
+G4VParticleChange* G4XTRenergyLoss::PostStepDoIt( const G4Track& aTrack, 
+		                                  const G4Step&  aStep   )
+{
+  G4int iTkin, iPlace;
+  G4double energyTR, theta, phi, dirX, dirY, dirZ;
+ 
+
+  aParticleChange.Initialize(aTrack);
+  // pParticleChange->Initialize(aTrack);
+
+  if(verboseLevel)
+  {
+    G4cout<<"Start of G4XTRenergyLoss::PostStepDoIt "<<G4endl ;
+    G4cout<<"name of current material =  "
+          <<aTrack.GetVolume()->GetLogicalVolume()->GetMaterial()->GetName()<<G4endl ;
+  }
+// if(aStep.GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume() != fEnvelope) 
+
+  if( aTrack.GetVolume()->GetLogicalVolume() != fEnvelope ) 
+  {
+    if(verboseLevel)
+    {
+      G4cout<<"Go out from G4XTRenergyLoss::PostStepDoIt: wrong volume "<<G4endl;
+    }
+    //  return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+  }
+  else
+  {
+    G4StepPoint* pPostStepPoint        = aStep.GetPostStepPoint();
+    const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
+   
+    // Now we are ready to Generate one TR photon
+
+    G4double kinEnergy = aParticle->GetKineticEnergy() ;
+    G4double mass      = aParticle->GetDefinition()->GetPDGMass() ;
+    G4double gamma     = 1.0 + kinEnergy/mass ;
+
+    if(verboseLevel > 0 )
+    {
+      G4cout<<"gamma = "<<gamma<<G4endl ;
+    }
+    G4double         massRatio   = proton_mass_c2/mass ;
+    G4double          TkinScaled = kinEnergy*massRatio ;
+    G4ThreeVector      position  = pPostStepPoint->GetPosition();
+    G4ParticleMomentum direction = aParticle->GetMomentumDirection();
+    G4double           startTime = pPostStepPoint->GetGlobalTime();
+
+    for( iTkin = 0; iTkin < fTotBin; iTkin++ )
+    {
+      if(TkinScaled < fProtonEnergyVector->GetLowEdgeEnergy(iTkin))  break;    
+    }
+    iPlace = iTkin - 1;
+
+    if(iTkin == 0) // Tkin is too small, neglect of TR photon generation
+    {
+      if(verboseLevel)
+      {
+        G4cout<<"Go out from G4XTRenergyLoss::PostStepDoIt:iTkin = "<<iTkin<<G4endl;
+      }
+      // return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+    } 
+    else          // general case: Tkin between two vectors of the material
+    {
+      aParticleChange.SetNumberOfSecondaries(1);
+
+      energyTR = GetXTRrandomEnergy(TkinScaled,iTkin);
+
+      if(verboseLevel)
+      {
+            G4cout<<"energyTR = "<<energyTR/keV<<"keV"<<G4endl;
+      }
+      theta = fabs(G4RandGauss::shoot(0.0,pi/gamma));
+
+      if( theta >= 0.1 ) theta = 0.1;
+
+      // G4cout<<" : theta = "<<theta<<endl ;
+
+      phi = twopi*G4UniformRand();
+
+      dirX = sin(theta)*cos(phi);
+      dirY = sin(theta)*sin(phi);
+      dirZ = cos(theta);
+
+      G4ThreeVector directionTR(dirX,dirY,dirZ);
+      directionTR.rotateUz(direction);
+      directionTR.unit();
+
+      G4DynamicParticle* aPhotonTR = new G4DynamicParticle(G4Gamma::Gamma(),
+                                                           directionTR, energyTR);
+
+      // A XTR photon is set on the particle track inside the radiator 
+      // and is moved to the G4Envelope surface for standard X-ray TR models
+      // only. The case of fExitFlux=true
+
+      if( fExitFlux )
+      {
+        G4double distance = fEnvelope->GetSolid()->DistanceToOut(position, direction);
+        position         += distance*direction;
+        startTime        += distance/c_light;
+      }
+      G4Track* aSecondaryTrack = new G4Track( aPhotonTR, 
+		                                startTime, position );
+      aSecondaryTrack->SetTouchableHandle(
+                         aStep.GetPostStepPoint()->GetTouchableHandle());
+      aSecondaryTrack->SetParentID( aTrack.GetTrackID() );
+
+      aParticleChange.AddSecondary(aSecondaryTrack);
+        
+      kinEnergy -= energyTR;
+      aParticleChange.ProposeEnergy(kinEnergy);     
+    }
+  }
+  // return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+  return &aParticleChange;
+}
+
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// The main function which is responsible for the treatment of a particle passage
 // trough G4Envelope
 
 G4VParticleChange* G4XTRenergyLoss::AlongStepDoIt( const G4Track& aTrack, 
@@ -342,7 +531,7 @@ G4VParticleChange* G4XTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
 
   for(iTkin=0;iTkin<fTotBin;iTkin++)
   {
-    if(TkinScaled < fProtonEnergyVector->GetLowEdgeEnergy(iTkin))  break ;    
+    if(TkinScaled < fProtonEnergyVector->GetLowEdgeEnergy(iTkin))  break;    
   }
   iPlace = iTkin - 1 ;
 
@@ -472,6 +661,7 @@ G4VParticleChange* G4XTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
   // return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep);
   return &aParticleChange;
 }
+
 
 ///////////////////////////////////////////////////////////////////////
 //

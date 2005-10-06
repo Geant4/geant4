@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.hh,v 1.10 2005-09-27 08:13:46 grichine Exp $
+// $Id: G4VXTRenergyLoss.hh,v 1.11 2005-10-06 08:30:29 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,12 +55,15 @@
 #include "G4Step.hh"
 #include "G4Track.hh"
 #include "G4VContinuousProcess.hh"
+#include "G4VDiscreteProcess.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Material.hh" 
 #include "G4PhysicsTable.hh"
 #include "G4MaterialPropertiesTable.hh"
 #include "G4PhysicsOrderedFreeVector.hh"
 #include "G4Integrator.hh"
+
+class G4VParticleChange;
 
 
 class G4XTRenergyLoss : public G4VContinuousProcess
@@ -89,6 +92,13 @@ public:
 
   G4VParticleChange* AlongStepDoIt(const G4Track& aTrack, 
 				   const G4Step&  aStep);
+
+  G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
+				   const G4Step&  aStep);
+
+  G4double GetMeanFreePath(const G4Track& aTrack,
+                           G4double previousStepSize,
+                           G4ForceCondition* condition);
  
   void BuildTable() ;
   void BuildEnergyTable() ;
@@ -189,6 +199,8 @@ protected:
   static G4double fPlasmaCof ;               // physical consts for plasma energy
   static G4double fCofTR ;
 
+
+  G4bool fExitFlux;
   G4double fSigma1, fSigma2 ;               // plasma energy Sq of matter1/2
 
   G4int fMatIndex1, fMatIndex2 ;
