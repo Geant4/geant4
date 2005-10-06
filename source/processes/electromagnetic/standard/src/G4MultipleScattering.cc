@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.29 2005-10-04 14:16:37 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.30 2005-10-06 13:12:42 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -69,6 +69,8 @@
 //             start, geometry also influences the limit
 // 02-10-05 conditions limiting the step are finalized + code cleaning (L.Urban)
 // 03-10-05 weaker step limitation for Tkin > Tlimit (L.Urban)
+// 05-10-05 value of data member tlimitmin has been changed (L.Urban)
+   06-10-05 correction in TruePathLengthLimit, timing improved.(L.Urban)
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -96,7 +98,7 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
 
   Tkinlimit        = 2.*MeV;
   tlimit           = 1.e10*mm;
-  tlimitmin        = facrange*1.e-6*mm;
+  tlimitmin        = facrange*1.e-3*mm;
   geombig          = 1.e50*mm;
   geommin          = 5.e-6*mm;
   facgeom          = 2.;
@@ -108,6 +110,7 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
   nsmallstep       = G4int(facgeom);
   safety           = 0.*mm;
   facsafety        = 0.95;
+  facsafety2       = 0.10;
 
   SetBinning(totBins);
   SetMinKinEnergy(lowKineticEnergy);
@@ -208,6 +211,9 @@ G4double G4MultipleScattering::TruePathLengthLimit(const G4Track&  track,
       tid = track.GetTrackID() ;
       pid = track.GetParentID() ;
       stepnobound      = 100000000;
+      //if track starts far from boundaries increase tlimit!
+      if(tlimit < facsafety2*safety)
+        tlimit = facsafety2*safety ;
     }
   }
 
@@ -221,6 +227,10 @@ G4double G4MultipleScattering::TruePathLengthLimit(const G4Track&  track,
   else
   {
     if(tPathLength > tlimit) tPathLength = tlimit;
+
+    if((tPathLength < facsafety2*safety)
+         && (currentMinimalStep > facsafety2*safety))
+      tPathLength = facsafety2*safety;
   }
 
   //check geometry as well (small steps before reaching a boundary)

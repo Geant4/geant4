@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.15 2005-10-04 14:16:37 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.16 2005-10-06 13:12:42 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,10 +50,11 @@
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 15-04-05 optimize internal interfaces (V.Ivanchenko)
 // 02-10-05 new algorithm for step limitation, new data members (L.Urban)
+// 05-10-05 value of data member tlimitmin has been changed (L.Urban)
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering.hh,v 1.15 2005-10-04 14:16:37 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.16 2005-10-06 13:12:42 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -109,7 +110,7 @@ public:    // with description
   void SetTkinlimit(G4double value) { Tkinlimit = value;};
 
   // Steplimit = facrange*max(range,lambda)
-  void SetFacrange(G4double val) { facrange=val; tlimitmin=val*1*nanometer;};
+  void SetFacrange(G4double val) { facrange=val; tlimitmin=val*1*micrometer;};
 
   // min. steplimit at boundaries
   void SetGeommin(G4double val) { geommin = val;};   
@@ -138,7 +139,7 @@ private:        // data members
   G4double geombig,geommin,facgeom; 
   G4double facskin,tskin;
   G4int tid,pid,stepnobound,nsmallstep;
-  G4double safety,facsafety;
+  G4double safety,facsafety,facsafety2;
   G4double dtrl;
   G4double factail;
 
