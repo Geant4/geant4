@@ -109,7 +109,7 @@ G4XTRRegularRadModel::GetStackFactor( G4double energy,
   result      /= (1 - std::sqrt(Q))*(1 - std::sqrt(Q)) + 
                   4*std::sqrt(Q)*std::sin(0.5*(aZa+bZb))*std::sin(0.5*(aZa+bZb)) ;
 
-  I2           = 2.0*std::real(F2) ;
+  I2           = 1.; // 2.0*std::real(F2) ;
 
   I2           /= (1 - std::sqrt(Q))*(1 - std::sqrt(Q)) + 
                   4*std::sqrt(Q)*std::sin(0.5*(aZa+bZb))*std::sin(0.5*(aZa+bZb)) ;
@@ -117,7 +117,12 @@ G4XTRRegularRadModel::GetStackFactor( G4double energy,
   I2           /= Q*( (std::sqrt(Q)-std::cos(aZa+bZb))*(std::sqrt(Q)-std::cos(aZa+bZb)) + 
                       std::sin(aZa+bZb)*std::sin(aZa+bZb)   ) ;
 
-  result       += I2 ;
+  G4complex stack  = 2.*I2*F2;
+            stack += result;
+            stack *= OneInterfaceXTRdEdx(energy,gamma,varAngle);
+
+	    // result       += I2 ;
+  result = std::real(stack);
 
   return      result ;
 }

@@ -106,9 +106,14 @@ G4XTRGammaRadModel::GetStackFactor( G4double energy,
 
   result      = ( 1 - std::pow(Q,G4double(fPlateNumber)) )/( 1 - Q ) ;
 
-  result     *= 2.0*std::real(F1) ;
+  G4complex stack  = result*F1;
+            stack += F2;
+            stack *= 2.0*OneInterfaceXTRdEdx(energy,gamma,varAngle);
 
-  result     += 2.0*std::real(F2) ;
+	    result = std::real(stack);
+
+	    // result     *= 2.0*std::real(F1);
+	    // result     += 2.0*std::real(F2);
 
   return      result ;
 }

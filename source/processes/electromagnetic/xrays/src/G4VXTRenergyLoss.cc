@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.18 2005-10-06 08:30:29 grichine Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.19 2005-10-07 16:19:14 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -82,7 +82,8 @@ G4XTRenergyLoss::G4XTRenergyLoss(G4LogicalVolume *anEnvelope,
                                     G4double a, G4double b,
                                     G4int n,const G4String& processName,
                                     G4ProcessType type) :
-  G4VContinuousProcess(processName, type)
+  G4VDiscreteProcess(processName, type)
+  // G4VContinuousProcess(processName, type)
 {
   fEnvelope = anEnvelope ;
   //  fPlateNumber = fEnvelope->GetNoDaughters() ;
@@ -94,7 +95,7 @@ G4XTRenergyLoss::G4XTRenergyLoss(G4LogicalVolume *anEnvelope,
   }
   // default is XTR dEdx, not flux after radiator
   fExitFlux = false;
-
+  fLambda = DBL_MAX;
   // Mean thicknesses of plates and gas gaps
 
   fPlateThick = a ;
@@ -125,6 +126,8 @@ G4XTRenergyLoss::G4XTRenergyLoss(G4LogicalVolume *anEnvelope,
 
   ComputePlatePhotoAbsCof() ;
   ComputeGasPhotoAbsCof() ;
+
+  pParticleChange = &fParticleChange;
 
 }
 
@@ -184,7 +187,7 @@ G4double G4XTRenergyLoss::GetMeanFreePath(const G4Track& aTrack,
                            G4ForceCondition* condition)
 {
   G4int iTkin, iPlace;
-  G4double lambda, sigma, kinEnergy, mass; // gamma;
+  G4double lambda, sigma, kinEnergy, mass, gamma;
   G4double charge, chargeSq, massRatio, TkinScaled;
   G4double E1,E2,W,W1,W2;
 
@@ -194,41 +197,54 @@ G4double G4XTRenergyLoss::GetMeanFreePath(const G4Track& aTrack,
   else
   {
     const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-    charge = aParticle->GetDefinition()->GetPDGCharge();
-    chargeSq  = charge*charge ;
-    kinEnergy = aParticle->GetKineticEnergy() ;
-    mass      = aParticle->GetDefinition()->GetPDGMass() ;
-    // gamma     = 1.0 + kinEnergy/mass ;
-    massRatio = proton_mass_c2/mass ;
-    TkinScaled = kinEnergy*massRatio ;
-
-    for(iTkin = 0; iTkin < fTotBin; iTkin++)
+    kinEnergy = aParticle->GetKineticEnergy();
+    mass      = aParticle->GetDefinition()->GetPDGMass();
+    gamma     = 1.0 + kinEnergy/mass;
+    if(verboseLevel)
     {
-      if( TkinScaled < fProtonEnergyVector->GetLowEdgeEnergy(iTkin))  break ;    
+      G4cout<<" gamma = "<<gamma<<";   fGamma = "<<fGamma<<G4endl;
     }
-    iPlace = iTkin - 1 ;
 
-    if(iTkin == 0) lambda = DBL_MAX; // Tkin is too small, neglect of TR photon generation
-    else          // general case: Tkin between two vectors of the material
+    if ( fabs( gamma - fGamma ) < 0.05*gamma ) lambda = fLambda;
+    else
     {
-      if(iTkin == fTotBin) 
+      charge = aParticle->GetDefinition()->GetPDGCharge();
+      chargeSq  = charge*charge;
+      massRatio = proton_mass_c2/mass;
+      TkinScaled = kinEnergy*massRatio;
+
+      for(iTkin = 0; iTkin < fTotBin; iTkin++)
       {
-        sigma = (*(*fEnergyDistrTable)(iPlace))(0)*chargeSq;
-        if (sigma < DBL_MIN) lambda = DBL_MAX;
-        else                       lambda = 1./sigma;    
+        if( TkinScaled < fProtonEnergyVector->GetLowEdgeEnergy(iTkin))  break ;    
       }
-      else
+      iPlace = iTkin - 1 ;
+
+      if(iTkin == 0) lambda = DBL_MAX; // Tkin is too small, neglect of TR photon generation
+      else          // general case: Tkin between two vectors of the material
       {
-        E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1) ; 
-        E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin)     ;
-         W = 1.0/(E2 - E1) ;
-        W1 = (E2 - TkinScaled)*W ;
-        W2 = (TkinScaled - E1)*W ;
-        sigma = ( (*(*fEnergyDistrTable)(iPlace  ))(0)*W1 +
+        if(iTkin == fTotBin) 
+        {
+          sigma = (*(*fEnergyDistrTable)(iPlace))(0)*chargeSq;
+        }
+        else
+        {
+          E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1) ; 
+          E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin)     ;
+           W = 1.0/(E2 - E1) ;
+          W1 = (E2 - TkinScaled)*W ;
+          W2 = (TkinScaled - E1)*W ;
+          sigma = ( (*(*fEnergyDistrTable)(iPlace  ))(0)*W1 +
                 (*(*fEnergyDistrTable)(iPlace+1))(0)*W2   )*chargeSq;
       
+        }
         if (sigma < DBL_MIN) lambda = DBL_MAX;
-        else                       lambda = 1./sigma;    
+        else                 lambda = 1./sigma; 
+        fLambda = lambda;
+        fGamma  = gamma;   
+        if(verboseLevel)
+        {
+	  G4cout<<" lambda = "<<lambda/mm<<" mm"<<G4endl;
+        }
       }
     }
   }  
@@ -242,12 +258,12 @@ G4double G4XTRenergyLoss::GetMeanFreePath(const G4Track& aTrack,
 
 void G4XTRenergyLoss::BuildTable()
 {
-  G4int iTkin, iTR, iPlace ;
-  G4double radiatorCof = 1.0 ;           // for tuning of XTR yield
+  G4int iTkin, iTR, iPlace;
+  G4double radiatorCof = 1.0;           // for tuning of XTR yield
 
-  fEnergyDistrTable = new G4PhysicsTable(fTotBin) ;
+  fEnergyDistrTable = new G4PhysicsTable(fTotBin);
 
-  fGammaTkinCut = 0.0 ;
+  fGammaTkinCut = 0.0;
   
   // setting of min/max TR energies 
   
@@ -325,6 +341,7 @@ G4Integrator<G4XTRenergyLoss,G4double(G4XTRenergyLoss::*)(G4double)> integral;
   G4cout<<G4endl;
   G4cout<<"total time for build X-ray TR energy loss tables = "
         <<timer.GetUserElapsed()<<" s"<<G4endl;
+  fGamma = 0.;
   return ;
 }
 
@@ -359,8 +376,7 @@ G4VParticleChange* G4XTRenergyLoss::PostStepDoIt( const G4Track& aTrack,
   G4double energyTR, theta, phi, dirX, dirY, dirZ;
  
 
-  aParticleChange.Initialize(aTrack);
-  // pParticleChange->Initialize(aTrack);
+  fParticleChange.Initialize(aTrack);
 
   if(verboseLevel)
   {
@@ -368,15 +384,13 @@ G4VParticleChange* G4XTRenergyLoss::PostStepDoIt( const G4Track& aTrack,
     G4cout<<"name of current material =  "
           <<aTrack.GetVolume()->GetLogicalVolume()->GetMaterial()->GetName()<<G4endl ;
   }
-// if(aStep.GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume() != fEnvelope) 
-
   if( aTrack.GetVolume()->GetLogicalVolume() != fEnvelope ) 
   {
     if(verboseLevel)
     {
       G4cout<<"Go out from G4XTRenergyLoss::PostStepDoIt: wrong volume "<<G4endl;
     }
-    //  return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+    return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
   }
   else
   {
@@ -407,21 +421,21 @@ G4VParticleChange* G4XTRenergyLoss::PostStepDoIt( const G4Track& aTrack,
 
     if(iTkin == 0) // Tkin is too small, neglect of TR photon generation
     {
-      if(verboseLevel)
+      if( verboseLevel )
       {
         G4cout<<"Go out from G4XTRenergyLoss::PostStepDoIt:iTkin = "<<iTkin<<G4endl;
       }
-      // return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+      return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
     } 
     else          // general case: Tkin between two vectors of the material
     {
-      aParticleChange.SetNumberOfSecondaries(1);
+      fParticleChange.SetNumberOfSecondaries(1);
 
       energyTR = GetXTRrandomEnergy(TkinScaled,iTkin);
 
-      if(verboseLevel)
+      if( verboseLevel )
       {
-            G4cout<<"energyTR = "<<energyTR/keV<<"keV"<<G4endl;
+            G4cout<<"energyTR = "<<energyTR/keV<<" keV"<<G4endl;
       }
       theta = fabs(G4RandGauss::shoot(0.0,pi/gamma));
 
@@ -458,14 +472,11 @@ G4VParticleChange* G4XTRenergyLoss::PostStepDoIt( const G4Track& aTrack,
                          aStep.GetPostStepPoint()->GetTouchableHandle());
       aSecondaryTrack->SetParentID( aTrack.GetTrackID() );
 
-      aParticleChange.AddSecondary(aSecondaryTrack);
-        
-      kinEnergy -= energyTR;
-      aParticleChange.ProposeEnergy(kinEnergy);     
+      fParticleChange.AddSecondary(aSecondaryTrack);
+      fParticleChange.ProposeEnergy(kinEnergy);     
     }
   }
-  // return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
-  return &aParticleChange;
+  return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 }
 
 
@@ -498,7 +509,7 @@ G4VParticleChange* G4XTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
     {
       G4cout<<"Go out from G4XTRenergyLoss::AlongStepDoIt: wrong volume "<<G4endl;
     }
-    return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep);
+    //  return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep);
   }
   G4StepPoint* pPreStepPoint  = aStep.GetPreStepPoint();
   G4StepPoint* pPostStepPoint = aStep.GetPostStepPoint();
@@ -541,7 +552,7 @@ G4VParticleChange* G4XTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
     {
       G4cout<<"Go out from G4XTRenergyLoss::AlongStepDoIt:iTkin = "<<iTkin<<G4endl;
     }
-    return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep);
+    //  return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep);
   } 
   else          // general case: Tkin between two vectors of the material
   {
@@ -580,7 +591,7 @@ G4VParticleChange* G4XTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
       G4cout<<"Go out from G4XTRenergyLoss::AlongStepDoIt: numOfTR = "
             <<numOfTR<<G4endl ;
       }
-      return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep); 
+      // return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep); 
     }
     else
     {
