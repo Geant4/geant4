@@ -135,7 +135,18 @@
 //int main(int argc, char** argv)
 int main()
 {
-		G4StateManager::GetStateManager()->SetNewState(G4State_Idle); // To let create ions
+		G4StateManager::GetStateManager()->SetNewState(G4State_Init); // To let create ions
+  const G4int nTg=5;   // Length of the target list for the Performance test
+  G4int tli[nTg]={90001000,90002002,90007007,90027032,90092146}; // PDG Codes of targets
+  G4String tnm[nTg]={"Hydrogen","Helium","Nitrogen","Cobalt","Uranium"}; // Target names
+  G4String tsy[nTg]={"1H","He","14N","59Co","238U"}; // Target symbols for the Target Loop
+  G4Material* mat[nTg]={0,0,0,0,0}; // Material pointers for the Target Loop
+  const G4int nPr=4;  // Length of the projectile list for the Performance test
+  G4int pli[nPr] = {22, 11, 13, 15}; // PDG Codes of the projectile particles
+  const G4int nEn=3;  // Length of the kin. energy list for the Performance test
+  G4double eli[nEn] = {27., 227., 999.}; //
+  // ^^^ End of the Performance On Flight test definition for targets/projectiles/energies
+#ifdef tdebug
   const G4int nT=20;           // Dimension of the t-distribution vectors
   //const G4int nT1=nT-1;        // The last bin of the t-distribution vector
   const G4double maxT=200000.; // -t_max for the T-vectors
@@ -143,6 +154,7 @@ int main()
 		const G4double fT=dT/2;      // Center of the first bin of the t-histogram
   G4double tVal[nT];           // -t values for centers of bins of the t-hystogram
   G4int tSig[nT];              // t-histogram (filled and reset many times
+#endif
   const G4int nAZ=270;         // Dimension of the table
   const G4int mAZ=266;         // Maximum filled A (at present). Must be mAZ<nAZ
   // Best Z for the given A - changed by MK (@@Not one-to-one correspondance! Make alt "-")
@@ -268,6 +280,10 @@ int main()
 
   // Test of not overlaping four tables above (can be commented)
   if(mAZ>=nAZ) G4cout<<"***Test19: Too big mAZ="<<mAZ<<", nAZ="<<nAZ<<G4endl;
+
+  // Run manager
+  G4RunManager* runManager = new G4RunManager;
+
   for(G4int a=1; a<nAZ; a++)
   {
     G4int z1=bestZ[a]; // First table
@@ -326,193 +342,75 @@ int main()
   G4QCHIPSWorld* theW=G4QCHIPSWorld::Get();
   theW->GetParticles(nop);           // Create CHIPS World of nop particles
   //G4Exception("***CHIPStest: TMP");
-  G4QCaptureAtRest::SetParameters(temperature,ssin2g,eteps,fN,fD,cP,rM,nop,sA);
-  G4QCaptureAtRest::SetManual();
-  // *********** Now momb is a momentum of the incident particle *************
+  G4QCollision::SetParameters(temperature,ssin2g,eteps,fN,fD,cP,rM,nop,sA);
+  G4QCollision::SetManual();
+  // ********** Now momb is a momentum of the incident particle, if =0 => LOOP ************
   G4double mp=G4QPDGCode(pPDG).GetMass();
-  G4double ep=std::sqrt(mp*mp+momb*momb);
-  if(enb>0.) ep=enb;
+  G4double ep=mp;
+  G4int cnE=1;
+  if(momb==0.) cnE=nEn;
+  else
+		{
+    ep=std::sqrt(mp*mp+momb*momb);
+    if(enb>0.) ep=enb;
+  }
   //G4int tPDG=90000000+tgZ*1000+tgN;
   G4int    tgZ=(tPDG-90000000)/1000;
   G4int    tgN=tPDG-90000000-tgZ*1000;
-  G4double mt=G4QPDGCode(tPDG).GetMass();             // @@ just for the check
-  G4QContent pQC=G4QPDGCode(pPDG).GetQuarkContent();
-  G4int    cp=pQC.GetCharge();
-  if(pPDG==-11 || pPDG==-13 || pPDG==-15) cp=1;//@@ QuarkContent of leptons isn't supported
-  else if(pPDG==11 || pPDG==13 || pPDG==15) cp=-1;//QuarkContent of leptons isn't supported
-  G4int    bnp=pQC.GetBaryonNumber();
-  G4QContent tQC=G4QPDGCode(tPDG).GetQuarkContent();
-  G4int    ct=tQC.GetCharge();
-  G4int    bnt=tQC.GetBaryonNumber();
+  // ---------- Define material for the simulation ------------------
+  G4int tgA        = tgZ+tgN; // Mass number - fake
+  G4double tgR     = 2.7;   // @@ Not important for the thin target example. Can be any
+  // The material can be copied from the commented cMaterial Factory above
+  G4Isotope* isotope=0;
+  G4Element* element=0;
+  G4Material* material=0;
+  // LOOPs for the wide performance test
+  G4double      aTime      = 0. ;
+  G4ThreeVector aDirection = G4ThreeVector(0.,0.,1.);
+  G4int tgm=1;                                        // By default only one target
+  if(!tPDG) // Make max for the LOOP over all targets and define materials
+  {
+    tgm=nTg;
+    for(G4int tgi=0; tgi<tgm; tgi++)
+				{
+      tPDG=tli[tgi];
+      tgZ = (tPDG-90000000)/1000;
+      tgN = tPDG-90000000-tgZ*1000;
+      tgA = tgZ+tgN; // Baryon number
+      // The material can be copied from the commented cMaterial Factory above
+      isotope = new G4Isotope(tsy[tgi], tgZ, tgA, tgR*g/mole);
+      element = new G4Element(tnm[tgi], tsy[tgi], 1);
+      element->AddIsotope(isotope, 100.*perCent);
+      material = new G4Material(tnm[tgi], 1.*g/cm3, 1);
+      material->AddElement(element, 1);
+      G4cout<<"Test29:-->Material("<<tgZ<<","<<tgN<<"):"<<tnm[tgi]<<","<<tsy[tgi]<<G4endl;
+      mat[tgi]=material;
+    }
+  }
+  else
+  {
+    isotope = new G4Isotope("Isotop", tgZ, tgA, tgR*g/mole);
+    element = new G4Element("ZA_Isotop", "ZA", 1);
+    element->AddIsotope(isotope, 100.*perCent);
+    material = new G4Material("ZA_Isomer", 1.*g/cm3, 1);
+    material->AddElement(element, 1);
+  }
 #ifdef debug
-  G4cout<<"Test19: pQC"<<pQC<<", pch="<<cp<<", tQC"<<tQC<<", tch="<<ct<<G4endl;
+  G4cout<<"Test29:--- Material "<<material->GetName()<<" is defined ---" << G4endl;
 #endif
-  G4int    totC=cp+ct;
-  G4int    totBN=bnp+bnt;
-  G4LorentzVector proj4Mom(0.,0.,momb,ep);
-  // @@ G4double fEvt=nEvt;
-  // @@ G4double sumE=0.;
-  // @@ G4double sumK=0.;
-  // @@ G4double sumG=0.;
-  // @@ G4double sumT=0.;
-  // @@ G4double sumN=0.;
-  // @@ G4double sum0=0.;
-  // @@ G4double sumP=0.;
-  // @@ G4double sum1N=0.;
-  // @@ G4double sumNN=0.;
-  // @@ G4double sumPP=0.;
-  // @@ G4double sumAL=0.;
-  // @@ G4double time=clock()/CLOCKS_PER_SEC;
+  if(!material)
+  {
+    G4cout<<"Test29: Last Material "<<material->GetName()<<" is not defined."<<G4endl;
+	   exit(1);
+  }
   // ---------------------- PSEUDO-TRACK DEFINISIONS -------------------------
   G4double nx = 0.;
   G4double ny = 0.;
   G4double nz = 0.;
-  G4ThreeVector aPosition(nx*mm, ny*mm, nz*mm);
-  G4double      aTime      = 0. ;
-  G4ThreeVector aDirection = G4ThreeVector(0.,0.,1.);
-
-  // ====================== CREATE G4 ENVIRONMENT =========================
-  // ----------- Material Factory: Definition of Elements & Materials ----------
-
-  //G4Element*   H  = new G4Element ("Hydrogen", "H",   1. ,  1.01*g/mole);
-  //G4Element*   N  = new G4Element ("Nitrigen", "N",   7. , 14.00*g/mole);
-  //G4Element*   O  = new G4Element ("Oxygen"  , "O",   8. , 16.00*g/mole);
-  //G4Element*   C  = new G4Element ("Carbon"  , "C",   6. , 12.00*g/mole);
-  //G4Element*  Cs  = new G4Element ("Cesium"  , "Cs", 55. , 132.905*g/mole);
-  //G4Element*   I  = new G4Element ("Iodide"  , "I",  53. , 126.9044*g/mole);
-
-  //G4Material* cmaterial = 0;
-  //cmaterial  = new G4Material("H",       1.,   1.0000*g/mole,  1.000*g/cm3);
-  //cmaterial  = new G4Material("D",       1.,   2.0000*g/mole,  1.000*g/cm3);
-  //cmaterial  = new G4Material("Li",      3.,   6.9410*g/mole,  1.000*g/cm3);
-  //cmaterial  = new G4Material("Be",      4.,   9.0100*g/mole,  1.848*g/cm3);
-  //cmaterial  = new G4Material("C",       6.,  12.0000*g/mole,  2.000*g/cm3);
-  //cmaterial  = new G4Material("Al",     13.,  26.9800*g/mole,  2.700*g/cm3);
-  //cmaterial  = new G4Material("Si",     14.,  28.0550*g/mole,  2.330*g/cm3);
-  //cmaterial  = new G4Material("LAr",    18.,  39.9500*g/mole,  1.393*g/cm3);
-  //cmaterial  = new G4Material("Zr",     40.,  91.2240*g/mole,  4.000*g/cm3);
-  //cmaterial  = new G4Material("LXe",    54., 131.2900*g/mole,  3.020*g/cm3);
-  //cmaterial  = new G4Material("Fe",     26.,  55.8500*g/mole,  7.870*g/cm3);
-  //cmaterial  = new G4Material("Ni",     28.,  58.6934*g/mole,  8.000*g/cm3);
-  //cmaterial  = new G4Material("Cu",     29.,  63.5500*g/mole,  8.960*g/cm3);
-  //cmaterial  = new G4Material("Au",     79., 196.9700*g/mole, 19.320*g/cm3);
-  //cmaterial  = new G4Material("Ta",     73., 180.9479*g/mole, 16.670*g/cm3);
-  //cmaterial  = new G4Material("W",      74., 183.8500*g/mole, 19.300*g/cm3);
-  //cmaterial  = new G4Material("Pb",     82., 207.1900*g/mole, 11.350*g/cm3);
-  //cmaterial  = new G4Material("Bi",     83., 208.9800*g/mole, 12.000*g/cm3);
-  //cmaterial  = new G4Material("U",      92., 238.0300*g/mole, 18.950*g/cm3);
-
-  //cmaterial = new G4Material("O2", 8., 16.00*g/mole, 1.1*g/cm3);
-  //cmaterial->SetChemicalFormula("O_2");
-
-  //cmaterial = new G4Material ("Water" , 1.*g/cm3, 2);
-  //cmaterial->AddElement(H,2);
-  //cmaterial->AddElement(O,1);
-  //cmaterial->SetChemicalFormula("H_2O");
-
-  //cmaterial = new G4Material ("Ethane" , 0.4241*g/cm3, 2);
-  //cmaterial->AddElement(H,6);
-  //cmaterial->AddElement(C,2);
-  //cmaterial->SetChemicalFormula("C_2H_6");
-
-  //cmaterial  = new G4Material("Graphite",6.,  12.0000*g/mole,  2.265*g/cm3);
-  //cmaterial->SetChemicalFormula("Graphite");
-
-  //cmaterial = new G4Material ("CsI" , 4.53*g/cm3, 2);
-  //cmaterial->AddElement(Cs,1);
-  //cmaterial->AddElement(I,1);
-  //cmaterial->SetChemicalFormula("CsI");
-
-  //cmaterial = new G4Material("Air"  , 1.290*mg/cm3, 2);
-  //cmaterial->AddElement(N, 0.7);
-  //cmaterial->AddElement(O, 0.3);
-
-  // Make the G4ParticleTable ready to use
-  //G4ParticleTable::GetParticleTable()->SetReadiness();
-  // Construct a fake run manager
-  //G4RunManager* runManager = new G4RunManager;
-  //runManager->SetUserInitialization(new G4VUserDetectorConstruction); // Make real class
-  //runManager->SetUserInitialization(new Test19PhysicsList);
-
-  // ----------- Hadronic Physics definition ---------------------
-  //Test19Physics*   phys = new Test19Physics(); //
-  // ---------- Define material for the simulation ------------------
-  //G4double tgA     = 26.98; // @@ Important? Can it be just tgZ+tgN?
-  G4int tgA        = tgZ+tgN; // @@ Temporary, not good
-  G4double tgR     = 1.;   // @@ Not important for the thin target example. Can be any
-  G4String nameMat = "Thin Target";  // @@ Not important can be an arbitrary name
-  // The material can be copied from the commented cMaterial Factory above
-  G4Isotope* isotope = new G4Isotope("Isotop", tgZ, tgA, tgR*g/mole);
-  G4Element* element = new G4Element("ZA_Isotop", "ZA", 1);
-  element->AddIsotope(isotope, 100.*perCent);
-  G4Material* material = new G4Material("ZA_Isomer", 1.*g/cm3, 1);
-  material->AddElement(element, 1);
-  //G4Material* material = new G4Material(nameMat, tgZ*1., tgA*g/mole, tgR*g/cm3);
-#ifdef debug
-  G4cout<<"Test19:--- Material is defined ---" << G4endl; // only one run
-#endif
-  // For the Material Factory case
-  //G4String  nameMat  = "Si";
-  //G4Material* material = G4Material::GetMaterial(nameMat); // Get definition of Material
-  if(!material)
-  {
-    G4cout<<"Test19:Material "<<nameMat<<" is not defined in the Test19Material"<<G4endl;
-	   exit(1);
-  }
-  // ----------- Geometry definition (simple BOX) ----------------
-  G4double dimX = 100.*cm;
-  G4double dimY = 100.*cm;
-  G4double dimZ = 100.*cm;
-  G4Box* sFrame = new G4Box ("Box",dimX, dimY, dimZ);
-  // Zero,Zero,Zero position
-  G4LogicalVolume* lFrame = new G4LogicalVolume(sFrame,material,"Box",0,0,0);
-  G4PVPlacement* pFrame = new G4PVPlacement(0,G4ThreeVector(),"Box", lFrame,0,false,0);
-  assert(pFrame);
-#ifdef pverb
-  G4cout<<"Test19:###### Start new run #####" << G4endl; // only one run
-#endif
-
-  // Possible Particles Definitions Factory for incident and secondary particles
-  //G4ParticleDefinition* proton = G4Proton::Proton();
-  //G4ParticleDefinition* neutron = G4Neutron::Neutron();
-  //G4ParticleDefinition* lambda = G4Lambda::Lambda();
-  //G4ParticleDefinition* sigmam = G4SigmaMinus::SigmaMinus();
-  //G4ParticleDefinition* sigmaz = G4SigmaZero::SigmaZero();
-  //G4ParticleDefinition* sigmap = G4SigmaPlus::SigmaPlus();
-  //G4ParticleDefinition* gamma  = G4Gamma::Gamma();
-  //G4ParticleDefinition* elect  = G4Electron::Electron();
-  //G4ParticleDefinition* negmu  = G4MuonMinus::MuonMinus();
-  //G4ParticleDefinition* pin    = G4PionMinus::PionMinus();
-  //G4ParticleDefinition* pip    = G4PionPlus::PionPlus();
-  //G4ParticleDefinition* pi0    = G4PionZero::PionZero();
-  //G4ParticleDefinition* deu    = G4Deuteron::DeuteronDefinition();
-  //G4ParticleDefinition* tri    = G4Triton::TritonDefinition();
-  //G4ParticleDefinition* he3    = G4He3::He3Definition();
-  //G4ParticleDefinition* alp    = G4Alpha::AlphaDefinition();
-
-  //G4ParticleDefinition* part=G4MuonMinus::MuonMinus(); // Definition of the projectile
-  G4ParticleDefinition* part=G4TauPlus::TauPlus();  //DefaultProjectile is Tau Plus
-  if(pPDG==22) part=G4Gamma::Gamma();               // Definition of the Photon projectile
-  else if(pPDG==-11 ) part=G4Positron::Positron();  // Definition of thePositron projectile
-  else if(pPDG== 11 ) part=G4Electron::Electron();  // Definition of theElectron projectile
-  else if(pPDG==2212) part=G4Proton::Proton();      // Definition of the Proton projectile
-  else if(pPDG==-13 ) part=G4MuonPlus::MuonPlus();  // Definition of the muon+ projectile
-  else if(pPDG== 13 ) part=G4MuonMinus::MuonMinus();// Definition of the muon- projectile
-  else if(pPDG== 15 ) part=G4TauMinus::TauMinus();  // Definition of the tau- projectile
-  else if(pPDG!=-15 )             // Leave **defaulf** definition of the tau+ projectile
-		{
-    G4cerr<<"***Test19: pPDG="<<pPDG<<" is a PDG code of not negative particle"<<G4endl;
-    G4Exception("***Test19: At Rest Process is called for not negative particle");
-  }
-  G4double pMass = part->GetPDGMass();                 // Mass of the projectile
-#ifdef debug
-  G4double totCN  = tgZ+part->GetPDGCharge();
-  G4int    totBNN = tgZ+tgN+part->GetBaryonNumber();
-  G4cout<<"Test19:tC="<<totC<<"?="<<totCN<<",tB="<<totBN<<"?="<<totBNN<<G4endl;
-#endif
-  G4double theStep   = 0.01*micrometer;
+  G4int npart=1;                                      // By default only one particle
+  if(!pPDG) npart=nPr;                                // Make a LOOP ove all particles
   // Different Process Managers are used for the atRest and onFlight processes
-		G4ProcessManager* man = new G4ProcessManager(part); //Does not help to go out
+		//G4ProcessManager* man = new G4ProcessManager(part); //Does not help to go out
   //G4VDiscreteProcess* proc = new G4QCollision;
   G4QCollision* proc = new G4QCollision;
   if(!proc)
@@ -523,95 +421,206 @@ int main()
 #ifdef debug
   G4cout<<"Test19:--***-- process is created --***--" << G4endl; // only one run
 #endif
-  man->AddDiscreteProcess(proc); //Does not help to go out
+  proc->SetParameters(temperature, ssin2g, eteps, fN, fD, cP, rM, nop, sA);
+  //man->AddDiscreteProcess(proc); //Does not help to go out
 
-  // G4int maxz = (G4int)((*(material->GetElementVector()))[0]->GetZ()) + 1;
-#ifdef pdebug
-  G4int targPDG=90000000+1000*tgZ+tgN;                 // PDG Code of the target
-  G4cout<<"Test19: The particle: "<<part->GetParticleName()<<G4endl;
-  G4cout<<"Test19: The material: "<<material->GetName()<<G4endl;
-  G4cout<<"Test19: The target:   "<<targPDG<<G4endl;
-  G4cout<<"Test19: The step:     "<<theStep/mm<<" mm"<<G4endl;
-  G4cout<<"Test19: The position: "<<aPosition/mm<<" mm"<<G4endl;
-  G4cout<<"Test19: The direction:"<<aDirection<<G4endl;
-  G4cout<<"Test19: The time:     "<<aTime/ns<<" ns"<<G4endl;
+  for(G4int pnb=0; pnb<npart; pnb++) // LOOP over particles
+  {
+   if (npart>1) pPDG=pli[pnb];
+   G4QContent pQC=G4QPDGCode(pPDG).GetQuarkContent();
+   G4int        cp = pQC.GetCharge();
+   if(pPDG==22) cp = 0;                        // QuarkContent of photon is not supported
+   if(pPDG==11 || pPDG==13 || pPDG==15) cp=-1; // QuarkContent of leptons is not supported
+   if(pPDG==-11|| pPDG==-13|| pPDG==-15) cp=1; // QuarkContent of antilept isn't supported
+   G4ParticleDefinition* part=0;               // DefaultProj is particle is empty
+   if(pPDG==2212) part=G4Proton::Proton();           // Definition of Proton projectile
+   else if(pPDG==22) part=G4Gamma::Gamma();          // Definition of gamma projectile
+   else if(pPDG==11) part=G4Electron::Electron();    // Definition of electron projectile
+   else if(pPDG==-11) part=G4Positron::Positron();   // Definition of positron projectile
+   else if(pPDG==13) part=G4MuonMinus::MuonMinus();  // Definition of mu- projectile
+   else if(pPDG==-13) part=G4MuonPlus::MuonPlus();   // Definition of the mu+ projectile
+   else if(pPDG==15) part=G4TauMinus::TauMinus();    // Definition of tau- projectile
+   else if(pPDG==-15) part=G4TauPlus::TauPlus();     // Definition of tau+ projectile
+   else if(pPDG==2112) part=G4Neutron::Neutron();    // Definition of Neutron projectile
+   else if(pPDG==-211) part=G4PionMinus::PionMinus();// Definition of Pi- projectile
+   else if(pPDG==211)  part=G4PionMinus::PionMinus();// Definition of Pi+ projectile
+   else if(pPDG==321)  part=G4KaonPlus::KaonPlus();  // Definition of K+ projectile
+   else if(pPDG==-321) part=G4KaonMinus::KaonMinus();// Definition of K- projectile
+   else if(pPDG==130)part=G4KaonZeroLong::KaonZeroLong();//Definition of K0_L projectile
+   else if(pPDG==310)part=G4KaonZeroShort::KaonZeroShort();//Definition of K0S projectile
+   else if(pPDG==-2212)part=G4AntiProton::AntiProton();//Define antiProton projectile
+   else if(pPDG==-2112)part=G4AntiNeutron::AntiNeutron();// Define AntiNeutron projectile
+   else if(pPDG==3122) part=G4Lambda::Lambda();      // Definition of Lambda projectile
+   else if(pPDG==3112) part=G4SigmaMinus::SigmaMinus();// Definition of Sigma- projectile
+   else if(pPDG==3222) part=G4SigmaPlus::SigmaPlus();// Definition of Sigma+ projectile
+   else if(pPDG==3322) part=G4XiMinus::XiMinus();    // Definition of the Xi- projectile
+   else if(pPDG==3312) part=G4XiZero::XiZero();      // Definition of the Xi- projectile
+   else if(pPDG==3334) part=G4OmegaMinus::OmegaMinus(); // Definition of Omega- projectile
+   else if(pPDG==2112) part=G4Neutron::Neutron();    // Definition of Neutron projectile
+   else if(pPDG!=-3222) // Leave defaulf definition for Anti Sigma+ projectile
+		 {
+     G4cerr<<"***Test19: "<<pPDG<<" is a PDG code of not supported particle"<<G4endl;
+     G4Exception("***Test19: OnFlight Process is called for not supported particle");
+   }
+   G4double pMass = part->GetPDGMass();                 // Mass of the projectile
+   //
+   G4ThreeVector aPosition(nx*mm, ny*mm, nz*mm);
+   G4DynamicParticle* dParticle = new G4DynamicParticle(part,aDirection,0.);// Dummy Energy
+
+   // General Track definition
+   G4Track* gTrack = new G4Track(dParticle,aTime,aPosition); // Track definition (NoTarg)
+
+   G4int    bnp=pQC.GetBaryonNumber();
+   G4LorentzVector proj4Mom(0.,0.,momb,ep);
+   // ---------- Define material for the simulation ------------------
+   //G4double tgA     = 26.98; // @@ Important? Can it be just tgZ+tgN?
+   G4int tgA        = tgZ+tgN; // @@ Temporary, not good
+   G4double tgR     = 1.;   // @@ Not important for the thin target example. Can be any
+   G4String nameMat = "Thin Target";  // @@ Not important can be an arbitrary name
+   // The material can be copied from the commented cMaterial Factory above
+   G4Isotope* isotope = new G4Isotope("Isotop", tgZ, tgA, tgR*g/mole);
+   G4Element* element = new G4Element("ZA_Isotop", "ZA", 1);
+   element->AddIsotope(isotope, 100.*perCent);
+   G4Material* material = new G4Material("ZA_Isomer", 1.*g/cm3, 1);
+   material->AddElement(element, 1);
+   //G4Material* material = new G4Material(nameMat, tgZ*1., tgA*g/mole, tgR*g/cm3);
+#ifdef debug
+   G4cout<<"Test19:--- Material is defined ---" << G4endl; // only one run
 #endif
-  for(G4int ip=0; ip<nT; ip++) tVal[ip]=(fT+dT*ip)/1000000.; // Fill the t-histogram
-  // Create a DynamicParticle
-  //G4int nEn=17;
-  //G4double energy=1000.*MeV/64.;
-  //for (G4int nen=0; nen<nEn; nen++)
-		//{
-  //  energy*=2.;
-    G4double  energy = (ep-mp)*MeV;                              // kinetic particle energy
+   // For the Material Factory case
+   //G4String  nameMat  = "Si";
+   //G4Material* material = G4Material::GetMaterial(nameMat); // Get definition of Material
+   if(!material)
+   {
+     G4cout<<"Test19:Material "<<nameMat<<" is not defined in the Test19Material"<<G4endl;
+	    exit(1);
+   }
+   // ----------- Geometry definition (simple BOX) ----------------
+   G4double dimX = 100.*cm;
+   G4double dimY = 100.*cm;
+   G4double dimZ = 100.*cm;
+   G4Box* sFrame = new G4Box ("Box",dimX, dimY, dimZ);
+   // Zero,Zero,Zero position
+   G4LogicalVolume* lFrame = new G4LogicalVolume(sFrame,material,"Box",0,0,0);
+   G4PVPlacement* pFrame = new G4PVPlacement(0,G4ThreeVector(),"Box", lFrame,0,false,0);
+   assert(pFrame);
+#ifdef pverb
+   G4cout<<"Test19:###### Start new run #####" << G4endl; // only one run
+#endif
+#ifdef debug
+   G4double totCN  = tgZ+part->GetPDGCharge();
+   G4int    totBNN = tgZ+tgN+part->GetBaryonNumber();
+   G4cout<<"Test19:tC="<<totC<<"?="<<totCN<<",tB="<<totBN<<"?="<<totBNN<<G4endl;
+#endif
+   G4double theStep   = 0.01*micrometer;
+   // G4int maxz = (G4int)((*(material->GetElementVector()))[0]->GetZ()) + 1;
+#ifdef pdebug
+   G4int targPDG=90000000+1000*tgZ+tgN;                 // PDG Code of the target
+   G4cout<<"Test19: The particle: "<<part->GetParticleName()<<G4endl;
+   G4cout<<"Test19: The material: "<<material->GetName()<<G4endl;
+   G4cout<<"Test19: The target:   "<<targPDG<<G4endl;
+   G4cout<<"Test19: The step:     "<<theStep/mm<<" mm"<<G4endl;
+   G4cout<<"Test19: The position: "<<aPosition/mm<<" mm"<<G4endl;
+   G4cout<<"Test19: The direction:"<<aDirection<<G4endl;
+   G4cout<<"Test19: The time:     "<<aTime/ns<<" ns"<<G4endl;
+#endif
+#ifdef tdebug
+   for(G4int ip=0; ip<nT; ip++) tVal[ip]=(fT+dT*ip)/1000000.;// Fill the t-histogram
+#endif
+   // Create a DynamicParticle
+   for (G4int nen=0; nen<cnE; nen++)                         // LOOP over projectile energy
+		 {
+    G4double  energy = (ep-mp)*MeV;                          // kinetic particle energy
+    if(cnE>1) energy = eli[nen]*MeV;
 #ifdef pdebug
     G4cout<<"Test19: M="<<mp<<", T="<<energy<<", MeV"<<G4endl;
 #endif
-    G4DynamicParticle* dParticle = new G4DynamicParticle(part,aDirection,energy); // !KinE!
+    dParticle->SetKineticEnergy(energy);// Fill the Kinetic Energy of the projectile
 
-    // General Track definition
-    G4Track* gTrack = new G4Track(dParticle,aTime,aPosition); // Track definition (NoTarg)
-
-    // Step Definition
-    G4Step* step = new G4Step();
-    step->SetTrack(gTrack);          // Step is initialized by the Track (?)
-
-    G4StepPoint* aPoint = new G4StepPoint(); // It cant be initialized right away (!?)
-    aPoint->SetPosition(aPosition);
-    aPoint->SetMaterial(material);
-    G4double safety = 10000.*cm;
-    aPoint->SetSafety(safety);
-    step->SetPreStepPoint(aPoint);   // Begin of the step
-
-    //G4StepPoint* bPoint = aPoint;
-    G4StepPoint* bPoint = new G4StepPoint(); // It cant be initialized right away (!?)
-    bPoint->SetMaterial(material);
-    bPoint->SetSafety(safety);
-    G4ThreeVector bPosition = aDirection*theStep+aPosition; // aDirection is defined byCard
-    bPoint->SetPosition(bPosition);
-    step->SetPostStepPoint(bPoint);  // End of the step
-    step->SetStepLength(theStep);    // Step is set byCard above
-#ifdef pverb
-    G4cout<<"Test19: The end point is defined and filled in the step "<<G4endl;
-#endif
-    G4Timer* timer = new G4Timer();
-    timer->Start();
-#ifdef idebug
-    G4cout<<"Test19: Run is started, timer is started, kinEnergy="<<energy<<G4endl;
-#endif
-    const G4DynamicParticle* sec = 0;
-    G4ParticleDefinition* pd = 0;
-    G4ThreeVector  mom;
-    G4LorentzVector totSum, lorV;
-    G4double e, p, m, sm;
-    // @@ G4double px, py, pz, pt;
-    G4VParticleChange* aChange = 0;
-    G4double e0 = energy+pMass;
-    G4double pmax=std::sqrt(e0*e0-pMass*pMass);
-    G4double et=e0+mt;
-    //G4int nEvt=100;
-    // Randomization loop: cycle random generator, using 2 lower digits in nEvt
-    G4int    iRandCount = nEvt%100;
-    G4double vRandCount = 0.;
-    while (iRandCount>0)                // Shift of the RNDN values 
+    for(G4int tgi=0; tgi<tgm; tgi++) // Loop over materials
     {
+     if (tgm>1)
+     {
+      tPDG=tli[tgi];
+      tgZ = (tPDG-90000000)/1000;
+      tgN = tPDG-90000000-tgZ*1000;
+      material=mat[tgi];
+      G4Element* curEl=(*(material->GetElementVector()))[0];
+      G4cout<<"Test19: Material="<<material->GetName()<<", Element[0]="<<curEl->GetName()
+												<<",A[0]="<<(*(curEl->GetIsotopeVector()))[0]->GetN()<<" is selected."<<G4endl;
+     }
+ 			 G4cout<<"Test19:NewRun: Target="<<tPDG<<", Projectile="<<pPDG<<", E="<<energy<<G4endl;
+     G4double mt=G4QPDGCode(tPDG).GetMass();             // @@ just for check
+     G4QContent tQC=G4QPDGCode(tPDG).GetQuarkContent();
+     G4int    ct=tQC.GetCharge();
+     G4int    bnt=tQC.GetBaryonNumber();
+#ifdef debug
+     G4cout<<"Test19: pQC"<<pQC<<", pch="<<cp<<", tQC"<<tQC<<", tch="<<ct<<G4endl;
+#endif
+
+     G4int    totC=cp+ct;
+     G4int    totBN=bnp+bnt;
+     // Step Definition
+     G4Step* step = new G4Step();
+     step->SetTrack(gTrack);          // Step is initialized by the Track (?)
+
+     G4StepPoint* aPoint = new G4StepPoint(); // It cant be initialized right away (!?)
+     aPoint->SetPosition(aPosition);
+     aPoint->SetMaterial(material);
+     G4double safety = 10000.*cm;
+     aPoint->SetSafety(safety);
+     step->SetPreStepPoint(aPoint);   // Begin of the step
+
+     //G4StepPoint* bPoint = aPoint;
+     G4StepPoint* bPoint = new G4StepPoint(); // It cant be initialized right away (!?)
+     bPoint->SetMaterial(material);
+     bPoint->SetSafety(safety);
+     G4ThreeVector bPosition = aDirection*theStep+aPosition; // aDirection is defined byCard
+     bPoint->SetPosition(bPosition);
+     step->SetPostStepPoint(bPoint);  // End of the step
+     step->SetStepLength(theStep);    // Step is set byCard above
+#ifdef pverb
+     G4cout<<"Test19: The end point is defined and filled in the step "<<G4endl;
+#endif
+     G4Timer* timer = new G4Timer();
+     timer->Start();
+#ifdef idebug
+     G4cout<<"Test19: Run is started, timer is started, kinEnergy="<<energy<<G4endl;
+#endif
+     const G4DynamicParticle* sec = 0;
+     G4ParticleDefinition* pd = 0;
+     G4ThreeVector  mom;
+     G4LorentzVector totSum, lorV;
+     G4double e, p, m, sm;
+     // @@ G4double px, py, pz, pt;
+     G4VParticleChange* aChange = 0;
+     G4double e0 = energy+pMass;
+     G4double pmax=std::sqrt(e0*e0-pMass*pMass);
+     G4double et=e0+mt;
+     //G4int nEvt=100;
+     // Randomization loop: cycle random generator, using 2 lower digits in nEvt
+     G4int    iRandCount = nEvt%100;
+     G4double vRandCount = 0.;
+     while (iRandCount>0)                // Shift of the RNDN values 
+     {
       vRandCount = G4UniformRand();     // Fake calls
       iRandCount--;
-    }
-    for(G4int it=0; it<nT; it++) tSig[it]=0; // Reset the output value
-#ifdef idebug
-    G4cout<<"Test19: Before the event loop, nEvents= "<<nEvt<<G4endl;
+     }
+#ifdef tdebug
+     for(G4int it=0; it<nT; it++) tSig[it]=0; // Reset the output value
 #endif
-    G4double dTot=0.;
-    G4double dEl=0.;
-    for (G4int iter=0; iter<nEvt; iter++)
-    {
+#ifdef idebug
+     G4cout<<"Test19: Before the event loop, nEvents= "<<nEvt<<G4endl;
+#endif
+     G4double dTot=0.;
+     G4double dEl=0.;
+     for (G4int iter=0; iter<nEvt; iter++)
+     {
 #ifdef debug
       G4cout<<"Test19: ### "<<iter<< "-th event starts.### energu="<<energy<<G4endl;
 #endif
 
-      if(!(iter%1000)&&iter)G4cout<<"***=>TEST19: "<<iter<<" events are simulated"<<G4endl;
-      //dParticle->SetKineticEnergy(energy);// Fill the Kinetic Energy of the projectile
+      if(!(iter%100)&&iter)G4cout<<"***=>TEST19: "<<iter<<" events are simulated"<<G4endl;
 
       gTrack->SetStep(step);            // Now step is included in the Track (see above)
       gTrack->SetKineticEnergy(energy); // Duplication of Kin. Energy for the Track (?!)
@@ -753,12 +762,14 @@ int main()
 	     } // End of the LOOP over secondaries
 	     //	delete secondaries in the end of the event       	 
       G4double ss=std::fabs(totSum.t())+std::fabs(totSum.x())+std::fabs(totSum.y())+
-                  std::fabs(totSum.z());    
+                  std::fabs(totSum.z());
+      G4double sr=std::fabs(Residual.t())+std::fabs(Residual.x())+std::fabs(Residual.y())+
+                  std::fabs(Residual.z());    
 #ifdef pdebug
       G4cout<<">TEST19:r4M="<<totSum<<ss<<",rCh="<<totCharge<<",rBaryN="<<totBaryN<<G4endl;
 #endif
 	     //if (1>2) // @@ The check is temporary closed
-						if (totCharge ||totBaryN || ss>.1 || alarm || nGamma&&!EGamma)
+						if (totCharge ||totBaryN || ss>.27 || alarm || nGamma&&!EGamma)
       {
         totSum = G4LorentzVector(0., 0., pmax, et);
         G4cerr<<"**Test19:#"<<iter<<":n="<<nSec<<",4M="<<totSum<<",Charge="<<totCharge
@@ -787,7 +798,8 @@ int main()
           G4cerr<<"Test19:#"<<indx<<",PDG="<<c<<",m="<<m<<",4M="<<lorV<<",T="<<e
                 <<", d4M="<<totSum<<G4endl;
         }
-        G4Exception("***Test19: ALARM or baryn/charge/energy/momentum is not conserved");
+        if(sr>.27)
+          G4Exception("***Test19: ALARM or baryn/charge/energy/momentum is not conserved");
       }
 #ifndef nout
 	     ntp->FillEvt(aChange); // Fill the simulated event in the ASCII "ntuple"
@@ -798,26 +810,27 @@ int main()
 #ifdef debug
       G4cout<<"Test19:--->>> After ntp.FillEvt"<<G4endl;
 #endif
-    } // End of the LOOP over events
-    // Stop the timer to estimate the speed of the generation
-    timer->Stop();
-    G4cout<<"Test19:CalculationTimePerEvent= "<<timer->GetUserElapsed()/nEvt<<" s"<<G4endl;
-    delete timer;
+     } // End of the LOOP over events
+     // Stop the timer to estimate the speed of the generation
+     timer->Stop();
+     G4cout<<"Test19:CalculationTimePerEvent= "<<timer->GetUserElapsed()/nEvt<<" s"<<G4endl;
+     delete timer;
 #ifdef tdebug
-    G4double pGeV=pmax/1000.;
-    G4double alp=std::log(pGeV/(1.+1./pGeV/pGeV/pGeV));
-    G4double exr=1.-.822/(1.+std::exp(-(alp-.2)*1.15));
-    G4cout<<"Test19:EndOfRun,p="<<pmax<<",dT="<<dTot<<",r="<<dEl/dTot<<",e="<<exr
-          <<",d="<<exr-dEl/dTot<<",ra="<<(exr-.178)/.822<<G4endl;
-    for(G4int ir=0; ir<nT; ir++) G4cout<<tVal[ir]<<" "<<tSig[ir]<<G4endl;// Print t-vectors
+     G4double pGeV=pmax/1000.;
+     G4double alp=std::log(pGeV/(1.+1./pGeV/pGeV/pGeV));
+     G4double exr=1.-.822/(1.+std::exp(-(alp-.2)*1.15));
+     G4cout<<"Test19:EndOfRun,p="<<pmax<<",dT="<<dTot<<",r="<<dEl/dTot<<",e="<<exr
+           <<",d="<<exr-dEl/dTot<<",ra="<<(exr-.178)/.822<<G4endl;
+     for(G4int ir=0; ir<nT; ir++) G4cout<<tVal[ir]<<" "<<tSig[ir]<<G4endl;// Print t-vectors
 #endif
 #ifdef pverb
-    G4cerr<<"Test19: ########## End of run ##########"<<G4endl;
+     G4cerr<<"Test19: ########## End of run ##########"<<G4endl;
 #endif
-    delete gTrack; // The G4Track delets the G4DynamicParticle (can be necessary in Loop)
-    delete step;   // The G4Step delets aPoint and bPoint (can be necessary in Loop)
-    ////delete dParticle; //  Can be necessary in Loop
-		//} // The Energy LOOP (@@ Temporary closed)
+     delete step;   // The G4Step delets aPoint and bPoint (can be necessary in Loop)
+    } // End of the target LOOP
+		 } // End of the Energy LOOP
+   delete gTrack; // The G4Track delets the G4DynamicParticle
+  } // End of the projectile LOOP
   delete proc;
   //delete man;      // == Should not be uncommented unless definition above is commented!
   //delete pFrame;   // This
@@ -834,6 +847,7 @@ int main()
 	 delete ntp; // Delete the class to fill the#of events
   //G4cout << "Test19: After ntp" << G4endl;
 #endif
+  delete runManager;
 #ifdef pverb
   G4cout << "###### End of Test19 #####" << G4endl;
 #endif
