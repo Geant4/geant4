@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.31 2005-10-06 15:46:11 maire Exp $
+// $Id: G4MultipleScattering.cc,v 1.32 2005-10-07 04:55:06 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -71,6 +71,7 @@
 // 03-10-05 weaker step limitation for Tkin > Tlimit (L.Urban)
 // 05-10-05 value of data member tlimitmin has been changed (L.Urban)
 // 06-10-05 correction in TruePathLengthLimit, timing improved.(L.Urban)
+// 07-10-05 bug fixed in TruePathLengthLimit (L.Urban)
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -173,7 +174,9 @@ G4double G4MultipleScattering::TruePathLengthLimit(const G4Track&  track,
 
   // range <= safety ---> particle is not able to leave volume
   if(range <= facsafety*safety)
-    return range ;
+   //bug, corrected 07/10/05.        return range ;
+    return currentMinimalStep;
+
 
   // not so strong step restriction above Tlimit
   // max. value of facr = 0.2
