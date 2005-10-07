@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc,v 1.7 2004-11-23 14:05:31 maire Exp $
+// $Id: DetectorMessenger.cc,v 1.8 2005-10-07 16:26:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,7 +57,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   NbLayersCmd = new G4UIcmdWithAnInteger("/testem/det/setNbOfLayers",this);
   NbLayersCmd->SetGuidance("Set number of layers.");
   NbLayersCmd->SetParameterName("NbLayers",false);
-  NbLayersCmd->SetRange("NbLayers>0 && NbLayers<500");
+  NbLayersCmd->SetRange("NbLayers>0");
   NbLayersCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   NbAbsorCmd = new G4UIcmdWithAnInteger("/testem/det/setNbOfAbsor",this);

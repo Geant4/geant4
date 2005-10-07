@@ -1,4 +1,4 @@
-# $Id: TestEm3.in,v 1.20 2005-05-18 15:28:37 maire Exp $
+# $Id: TestEm3.in,v 1.21 2005-10-07 16:26:07 maire Exp $
 #
 # Macro file for "exampleN03.cc"
 # (can be run in batch, without graphic)
@@ -8,7 +8,7 @@
 /control/verbose 2
 /run/verbose 2
 #
-#### /testem/phys/addPhysics  g4v52
+#### /testem/phys/addPhysics  g4v71
 /testem/phys/addPhysics  standard
 #
 /run/initialize

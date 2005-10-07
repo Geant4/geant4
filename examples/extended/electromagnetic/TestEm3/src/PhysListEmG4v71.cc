@@ -20,13 +20,13 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.9 2005-10-07 16:26:07 maire Exp $
+// $Id: PhysListEmG4v71.cc,v 1.1 2005-10-07 16:26:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
-#include "PhysListEmStandard.hh"
+#include "PhysListEmG4v71.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
@@ -34,7 +34,7 @@
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4MultipleScattering71.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -49,18 +49,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmStandard::PhysListEmStandard(const G4String& name)
+PhysListEmG4v71::PhysListEmG4v71(const G4String& name)
    :  G4VPhysicsConstructor(name)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmStandard::~PhysListEmStandard()
+PhysListEmG4v71::~PhysListEmG4v71()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysListEmStandard::ConstructProcess()
+void PhysListEmG4v71::ConstructProcess()
 {
   // Add standard EM Processes
 
@@ -78,35 +78,35 @@ void PhysListEmStandard::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
+      pmanager->AddProcess(new G4MultipleScattering71, -1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,          -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,      -1, 3,3);
 	    
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
-      pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
-
+      pmanager->AddProcess(new G4MultipleScattering71, -1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,          -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,      -1, 3,3);
+      pmanager->AddProcess(new G4eplusAnnihilation,     0,-1,4);
+      
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon  
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4MuIonisation,       -1, 2,2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,   -1, 3,3);
-      pmanager->AddProcess(new G4MuPairProduction,   -1, 4,4);       
+      pmanager->AddProcess(new G4MultipleScattering71, -1, 1,1);
+      pmanager->AddProcess(new G4MuIonisation,         -1, 2,2);
+      pmanager->AddProcess(new G4MuBremsstrahlung,     -1, 3,3);
+      pmanager->AddProcess(new G4MuPairProduction,     -1, 4,4);       
      
     } else if( particleName == "alpha" || particleName == "GenericIon" ) { 
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4ionIonisation,      -1, 2,2);
+      pmanager->AddProcess(new G4MultipleScattering71, -1, 1,1);
+      pmanager->AddProcess(new G4ionIonisation,        -1, 2,2);
 
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
-      pmanager->AddProcess(new G4MultipleScattering, -1,1,1);
-      pmanager->AddProcess(new G4hIonisation,        -1,2,2);
+      pmanager->AddProcess(new G4MultipleScattering71, -1,1,1);
+      pmanager->AddProcess(new G4hIonisation,          -1,2,2);
     }
   }
 }
