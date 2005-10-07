@@ -146,7 +146,7 @@
 extern "C" double drand();
 int main()
 {
-		G4StateManager::GetStateManager()->SetNewState(G4State_Idle); // To let create ions
+		G4StateManager::GetStateManager()->SetNewState(G4State_Init); // To let create ions
   const G4int nAZ=270;  // Dimension of the table
   const G4int mAZ=266;  // Mafimum filled A (at present). Must be mAZ<nAZ
   // Best Z for the given A - changed by MK (@@Not one-to-one correspondance! Make alt "-")
@@ -272,6 +272,10 @@ int main()
 
   // Test of not overlaping four tables above (can be commented)
   if(mAZ>=nAZ) G4cout<<"***Test29: Too big mAZ="<<mAZ<<", nAZ="<<nAZ<<G4endl;
+
+  // Run manager
+  G4RunManager* runManager = new G4RunManager;
+
   for(G4int a=1; a<nAZ; a++)
   {
     G4int z1=bestZ[a]; // First table
@@ -834,9 +838,9 @@ int main()
   delete material;
   //delete phys;
   //delete cmaterial;                   // Temporary material definition pointer (?)
-
+  delete runManager;
 #ifdef pverb
-  G4cout << "###### End of Test29 #####" << G4endl;
+  G4cout << "###### End of Test29(g) #####" << G4endl;
 #endif
   //exit(1); // Never do this !
 }

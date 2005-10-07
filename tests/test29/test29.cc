@@ -134,7 +134,7 @@
 extern "C" double drand();
 int main()
 {
-		G4StateManager::GetStateManager()->SetNewState(G4State_Idle); // To let create ions
+		G4StateManager::GetStateManager()->SetNewState(G4State_Init); // To let create ions
   const G4int nTg=8;   // Length of the target list for the Performance test
   G4int tli[nTg]={90001000,90002002,90003004,90007007,90013014,90027032,90047060,90092146};
   G4String tnm[nTg]={"Hydrogen","Helium","Lithium","Carbon","Aluminum","Cobalt","Silver"
@@ -268,6 +268,10 @@ int main()
 
   // Test of not overlaping four tables above (can be commented)
   if(mAZ>=nAZ) G4cout<<"***Test29: Too big mAZ="<<mAZ<<", nAZ="<<nAZ<<G4endl;
+
+  // Run manager
+  G4RunManager* runManager = new G4RunManager;
+
   for(G4int a=1; a<nAZ; a++)
   {
     G4int z1=bestZ[a]; // First table
@@ -748,7 +752,7 @@ int main()
 	 delete ntp; // Delete the class to fill the#of events
 #endif
   //delete phys;
-
+  delete runManager;
 #ifdef pverb
   G4cout << "###### End of Test29 #####" << G4endl;
 #endif
