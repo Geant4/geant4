@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.27 2005-08-18 15:05:13 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.cc,v 1.28 2005-10-08 20:31:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -820,13 +820,18 @@ std::vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondaries(
   G4ThreeVector gammaDirection(sint*cos(phi),sint*sin(phi), cos(theta));
   gammaDirection.rotateUz(direction);
 
-  kineticEnergy -= gammaEnergy;
-  fParticleChange->SetProposedKineticEnergy(kineticEnergy);
-  
   // create G4DynamicParticle object for the Gamma
   std::vector<G4DynamicParticle*>* newp = new std::vector<G4DynamicParticle*>;
   G4DynamicParticle* g = new G4DynamicParticle(theGamma,gammaDirection,gammaEnergy);
   newp->push_back(g);
+  
+  G4double totMomentum = sqrt(kineticEnergy*(totalEnergy + electron_mass_c2));
+  G4ThreeVector dir = totMomentum*direction - gammaEnergy*gammaDirection;
+  direction = dir.unit();
+  fParticleChange->SetProposedMomentumDirection(direction);
+
+  fParticleChange->SetProposedKineticEnergy(kineticEnergy - gammaEnergy);
+
   return newp;
 }
 
