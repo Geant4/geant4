@@ -1,4 +1,4 @@
-$Id: History,v 1.172 2005-10-07 13:49:51 maire Exp $
+$Id: History,v 1.173 2005-10-10 15:07:51 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10 October 05: V.Ivant (emstand-07-01-15)
+- Fix non-initilised variable in G4MultipleScattering
      
 7 October 05: L.Urban (emstand-V07-01-14)
 - G4MultipleScattering.cc: bug fixed in TruePathLengthLimit.

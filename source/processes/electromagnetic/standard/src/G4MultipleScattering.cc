@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.32 2005-10-07 04:55:06 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.33 2005-10-10 15:07:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -95,7 +95,8 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
     isInitialized(false)
 {
   lowKineticEnergy = 0.1*keV;
-  highKineticEnergy= 100.*TeV;
+  highKineticEnergy= 100.*TeV; 
+  SetFacrange(0.02); 
 
   Tkinlimit        = 2.*MeV;
   tlimit           = 1.e10*mm;
@@ -158,7 +159,6 @@ void G4MultipleScattering::InitialiseProcess
   isInitialized = true;
   navigator = G4TransportationManager::GetTransportationManager()
     ->GetNavigatorForTracking();
-  SetFacrange(0.02); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
