@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.20 2005-10-11 08:24:37 grichine Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.21 2005-10-11 14:24:34 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -471,14 +471,14 @@ G4VParticleChange* G4XTRenergyLoss::PostStepDoIt( const G4Track& aTrack,
         G4AffineTransform transform = G4AffineTransform(rotM,transl);
         transform.Invert();
         G4ThreeVector localP = transform.TransformPoint(position);
-        G4ThreeVector localV = transform.TransformAxis(direction);
+        G4ThreeVector localV = transform.TransformAxis(directionTR);
 
         G4double distance = fEnvelope->GetSolid()->DistanceToOut(localP, localV);
         if(verboseLevel)
         {
           G4cout<<"distance to exit = "<<distance/mm<<" mm"<<G4endl;
         }
-        position         += distance*direction;
+        position         += distance*directionTR;
         startTime        += distance/c_light;
       }
       G4Track* aSecondaryTrack = new G4Track( aPhotonTR, 
@@ -671,7 +671,24 @@ G4VParticleChange* G4XTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
 
         G4ThreeVector positionTR = startPos + delta*direction ;
 
+        if( fExitFlux )
+        {
+          const G4RotationMatrix* rotM = pPostStepPoint->GetTouchable()->GetRotation();
+          G4ThreeVector transl = pPostStepPoint->GetTouchable()->GetTranslation();
+          G4AffineTransform transform = G4AffineTransform(rotM,transl);
+          transform.Invert();
+          G4ThreeVector localP = transform.TransformPoint(positionTR);
+          G4ThreeVector localV = transform.TransformAxis(directionTR);
 
+          G4double distance = fEnvelope->GetSolid()->DistanceToOut(localP, localV);
+          if(verboseLevel)
+          {
+            G4cout<<"distance to exit = "<<distance/mm<<" mm"<<G4endl;
+          }
+          positionTR         += distance*directionTR;
+          aSecondaryTime        += distance/c_light;
+        }
+ 
         G4Track* aSecondaryTrack = new G4Track( aPhotonTR, 
 		                                aSecondaryTime,positionTR ) ;
         aSecondaryTrack->SetTouchableHandle(aStep.GetPostStepPoint()
