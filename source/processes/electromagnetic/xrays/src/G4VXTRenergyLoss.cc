@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.19 2005-10-07 16:19:14 grichine Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.20 2005-10-11 08:24:37 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -40,6 +40,10 @@
 #include "G4VDiscreteProcess.hh"
 #include "G4VParticleChange.hh"
 #include "G4VSolid.hh"
+
+#include "G4RotationMatrix.hh"
+#include "G4ThreeVector.hh"
+#include "G4AffineTransform.hh"
 
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsLinearVector.hh"
@@ -462,7 +466,18 @@ G4VParticleChange* G4XTRenergyLoss::PostStepDoIt( const G4Track& aTrack,
 
       if( fExitFlux )
       {
-        G4double distance = fEnvelope->GetSolid()->DistanceToOut(position, direction);
+        const G4RotationMatrix* rotM = pPostStepPoint->GetTouchable()->GetRotation();
+        G4ThreeVector transl = pPostStepPoint->GetTouchable()->GetTranslation();
+        G4AffineTransform transform = G4AffineTransform(rotM,transl);
+        transform.Invert();
+        G4ThreeVector localP = transform.TransformPoint(position);
+        G4ThreeVector localV = transform.TransformAxis(direction);
+
+        G4double distance = fEnvelope->GetSolid()->DistanceToOut(localP, localV);
+        if(verboseLevel)
+        {
+          G4cout<<"distance to exit = "<<distance/mm<<" mm"<<G4endl;
+        }
         position         += distance*direction;
         startTime        += distance/c_light;
       }
@@ -719,11 +734,15 @@ G4double G4XTRenergyLoss::SpectralXTRdEdx(G4double energy)
   fEnergy = energy ;
 G4Integrator<G4XTRenergyLoss,G4double(G4XTRenergyLoss::*)(G4double)> integral ;
   return integral.Legendre96(this,&G4XTRenergyLoss::SpectralAngleXTRdEdx,
-                             0.0,0.3*fMaxThetaTR) +
+                             0.0,0.1*fMaxThetaTR) +
          integral.Legendre96(this,&G4XTRenergyLoss::SpectralAngleXTRdEdx,
-                             0.3*fMaxThetaTR,0.6*fMaxThetaTR) +         
+                             0.1*fMaxThetaTR,0.2*fMaxThetaTR) +         
          integral.Legendre96(this,&G4XTRenergyLoss::SpectralAngleXTRdEdx,
-	                     0.6*fMaxThetaTR,fMaxThetaTR) ;
+                             0.2*fMaxThetaTR,0.4*fMaxThetaTR) +         
+         integral.Legendre96(this,&G4XTRenergyLoss::SpectralAngleXTRdEdx,
+                             0.4*fMaxThetaTR,0.7*fMaxThetaTR) +         
+         integral.Legendre96(this,&G4XTRenergyLoss::SpectralAngleXTRdEdx,
+	                     0.7*fMaxThetaTR,fMaxThetaTR) ;
 } 
  
 //////////////////////////////////////////////////////////////////////////
