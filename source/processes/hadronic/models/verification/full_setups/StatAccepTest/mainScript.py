@@ -45,7 +45,7 @@ PARTICLE    = "n"
 ENERGY      = "5GeV"
 #***endLOOKHERE***
 
-os.system( "simuDriver.sh " +
+os.system( "./simuDriver.sh " +
            REF1 + " " + SIM_REF1 + " " +
            REF2 + " " + SIM_REF2 + " " +
            RUN_STAT + " " +
