@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.16 2005-10-06 13:12:42 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.17 2005-10-11 13:03:34 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,7 +54,7 @@
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering.hh,v 1.16 2005-10-06 13:12:42 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.17 2005-10-11 13:03:34 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -116,9 +116,7 @@ public:    // with description
   void SetGeommin(G4double val) { geommin = val;};   
 
   // connected with step size reduction near to boundaries
-  void SetFacgeom(G4double val) { facgeom=val; 
-                                  facskin=1./facgeom;
-                                  nsmallstep=G4int(facgeom);};   
+  void SetFacgeom(G4double val) { facgeom=val;};
 
 protected:
 
@@ -136,9 +134,7 @@ private:        // data members
   G4double Tkinlimit,Tlimit;
   G4double facrange;
   G4double tlimit,tlimitmin;
-  G4double geombig,geommin,facgeom; 
-  G4double facskin,tskin;
-  G4int tid,pid,stepnobound,nsmallstep;
+  G4double geombig,geommin,facgeom;
   G4double safety,facsafety,facsafety2;
   G4double dtrl;
   G4double factail;

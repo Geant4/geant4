@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.33 2005-10-10 15:07:51 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.34 2005-10-11 13:03:34 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -72,6 +72,8 @@
 // 05-10-05 value of data member tlimitmin has been changed (L.Urban)
 // 06-10-05 correction in TruePathLengthLimit, timing improved.(L.Urban)
 // 07-10-05 bug fixed in TruePathLengthLimit (L.Urban)
+// 11-10-05 change in TruePathLengthLimit conditions,slightly better 
+//          timing and much weaker cut dependence (L.Urban)
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -103,13 +105,7 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
   tlimitmin        = facrange*1.e-3*mm;
   geombig          = 1.e50*mm;
   geommin          = 5.e-6*mm;
-  facgeom          = 2.;
-  facskin          =1./facgeom;
-  tskin            = facskin*tlimit;
-  tid              = -1;
-  pid              = -1;
-  stepnobound      = 100000000;
-  nsmallstep       = G4int(facgeom);
+  facgeom          = 4.;
   safety           = 0.*mm;
   facsafety        = 0.95;
   facsafety2       = 0.10;
@@ -159,6 +155,7 @@ void G4MultipleScattering::InitialiseProcess
   isInitialized = true;
   navigator = G4TransportationManager::GetTransportationManager()
     ->GetNavigatorForTracking();
+  SetFacrange(0.02); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -168,82 +165,60 @@ G4double G4MultipleScattering::TruePathLengthLimit(const G4Track&  track,
                                                    G4double  currentMinimalStep)
 {
   G4double tPathLength = currentMinimalStep;
-
   G4double range = CurrentRange() ;
-  G4double geomlimit = GeomLimit(track);
-
-  // range <= safety ---> particle is not able to leave volume
-  if(range <= facsafety*safety)
-   //bug, corrected 07/10/05.        return range ;
-    return currentMinimalStep;
-
-
-  // not so strong step restriction above Tlimit
-  // max. value of facr = 0.2
-  G4double facr = facrange;
-  if(track.GetKineticEnergy() > Tlimit)
-  {
-    facr *= track.GetKineticEnergy()/Tlimit;
-    if(facr > 0.2) facr = 0.2;
-  }
-
+  safety = track.GetStep()->GetPreStepPoint()->GetSafety() ;
 
   if((track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary)
-     || (track.GetCurrentStepNumber() == 1))   
+     || (track.GetCurrentStepNumber() == 1))
   {
+    // not so strong step restriction above Tlimit
+    // upper limit for facr 0.2
+    G4double facr = facrange;
+    if(track.GetKineticEnergy() > Tlimit)
+    {
+      facr *= track.GetKineticEnergy()/Tlimit;
+      if(facr > 0.2) facr = 0.2;
+    }
+
     // constraint from the physics
     if (range > lambda) tlimit = facr*range;
     else                tlimit = facr*lambda;
 
+    G4double geomlimit = GeomLimit(track);
     // constraint from the geometry (if tlimit above is too big)
     if ((geomlimit > geommin) && (tlimit > geomlimit/facgeom))
-      tlimit = geomlimit/facgeom;
+    {
+      if(track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary)
+        tlimit = geomlimit/facgeom;
+      else
+        tlimit = 2.*geomlimit/facgeom;
+    }
 
     //lower limit for tlimit
     if(tlimit < tlimitmin) tlimit = tlimitmin;
- 
-    // steplimit near to boundaries
-    tskin = facskin*tlimit;
-
-    if(track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary)
-    {
-      stepnobound = track.GetCurrentStepNumber() ;
-    }
-    else
-    {
-      tid = track.GetTrackID() ;
-      pid = track.GetParentID() ;
-      stepnobound      = 100000000;
-      //if track starts far from boundaries increase tlimit!
-      if(tlimit < facsafety2*safety)
-        tlimit = facsafety2*safety ;
-    }
   }
-
-  // small steps just after crossing a boundary
-  if((track.GetTrackID() == tid) && (track.GetParentID() == pid)
-     && (track.GetCurrentStepNumber() >= stepnobound) &&
-     (track.GetCurrentStepNumber() < stepnobound+nsmallstep))   
+  if(track.GetCurrentStepNumber() == 1)
   {
-    if(tPathLength > tskin) tPathLength = tskin;
+    // range <= safety ---> particle is not able to leave volume
+    if(range <= facsafety*safety)
+      return currentMinimalStep;
+
+    //if track starts far from boundaries increase tlimit!
+    if(tlimit < facsafety2*safety)
+      tlimit = facsafety2*safety ;
   }
-  else
-  {
-    if(tPathLength > tlimit) tPathLength = tlimit;
+  // range <= safety ---> particle is not able to leave volume
+  if(range <= facsafety*safety)
+    return currentMinimalStep;
 
-    if((tPathLength < facsafety2*safety)
-         && (currentMinimalStep > facsafety2*safety))
-      tPathLength = facsafety2*safety;
-  }
+  if(tPathLength > tlimit) tPathLength = tlimit;
 
-  //check geometry as well (small steps before reaching a boundary)
-  if(geomlimit > facgeom*tskin) geomlimit -= facgeom*tskin;
-  else if(geomlimit > tskin) geomlimit = tskin;
-  if(geomlimit < geommin) geomlimit = geommin;
-
-  if(tPathLength > geomlimit) tPathLength = geomlimit;
+  if((tPathLength < facsafety2*safety)
+       && (currentMinimalStep > facsafety2*safety))
+    tPathLength = facsafety2*safety;
 
   return tPathLength ;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -251,7 +226,6 @@ G4double G4MultipleScattering::TruePathLengthLimit(const G4Track&  track,
 G4double G4MultipleScattering::GeomLimit(const G4Track&  track)
 {
   G4double geomlimit = geombig;
-  safety = track.GetStep()->GetPreStepPoint()->GetSafety() ;
 
   // do not call navigator for big geommin and for World
   if((geommin < geombig) && (track.GetVolume() != 0)
