@@ -134,7 +134,6 @@
 extern "C" double drand();
 int main()
 {
-		G4StateManager::GetStateManager()->SetNewState(G4State_Init); // To let create ions
   const G4int nTg=8;   // Length of the target list for the Performance test
   G4int tli[nTg]={90001000,90002002,90003004,90007007,90013014,90027032,90047060,90092146};
   G4String tnm[nTg]={"Hydrogen","Helium","Lithium","Nitrogen","Aluminum","Cobalt","Silver"
@@ -271,6 +270,16 @@ int main()
 
   // Run manager
   G4RunManager* runManager = new G4RunManager;
+		G4StateManager::GetStateManager()->SetNewState(G4State_Init); // To let create ions
+  G4ParticleDefinition* ionDefinition=0;
+  ionDefinition=G4ParticleTable::GetParticleTable()->FindIon(6,12,0,6);
+		if(!ionDefinition)
+		{
+    G4cerr<<"*** Error! *** Test29:(6,6) ion can not be defined"<<G4endl;
+    return 0;
+  }
+  else G4cout<<"Test29: (6,6) ion is OK, Run State="<<G4StateManager::GetStateManager()->
+              GetStateString(G4StateManager::GetStateManager()->GetCurrentState())<<G4endl;
 
   for(G4int a=1; a<nAZ; a++)
   {
@@ -410,7 +419,8 @@ int main()
   proc->SetParameters(temperature, ssin2g, eteps, fN, fD, cP, rM, nop, sA);
   //man->AddDiscreteProcess(proc);
 		// man->AddRestProcess(proc);
-
+  G4int nTot=npart*tgm;
+  G4int nCur=0;
   for(G4int pnb=0; pnb<npart; pnb++) // LOOP over particles
   {
    if (npart>1) pPDG=pli[pnb];
@@ -445,6 +455,7 @@ int main()
 
    for(G4int tgi=0; tgi<tgm; tgi++) // Loop over materials
    {
+				nCur++;
     if (tgm>1)
     {
       tPDG=tli[tgi];
@@ -455,7 +466,7 @@ int main()
       G4cout<<"Test29: Material="<<material->GetName()<<", Element[0]="<<curEl->GetName()
 												<<",A[0]="<<(*(curEl->GetIsotopeVector()))[0]->GetN()<<" is selected."<<G4endl;
     }
- 			G4cout<<"Test29: New run for Target="<<tPDG<<", Projectile="<<pPDG<<G4endl;
+ 			G4cout<<"Test29:NewRun: Targ="<<tPDG<<",Proj="<<pPDG<<", "<<nCur<<" of "<<nTot<<G4endl;
     G4int    bnp=pQC.GetBaryonNumber();
     G4QContent tQC=G4QPDGCode(tPDG).GetQuarkContent();
     G4int    ct=tQC.GetCharge();

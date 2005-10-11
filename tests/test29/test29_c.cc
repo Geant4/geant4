@@ -134,12 +134,11 @@
 extern "C" double drand();
 int main()
 {
-		G4StateManager::GetStateManager()->SetNewState(G4State_Init); // To let create ions
   const G4int nTg=8;   // Length of the target list for the Performance test
   G4int tli[nTg]={90001000,90002002,90003004,90007007,90013014,90027032,90047060,90092146};
-  G4String tnm[nTg]={"Hydrogen","Helium","Lithium","Carbon","Aluminum","Cobalt","Silver"
+  G4String tnm[nTg]={"Hydrogen","Helium","Lithium","Nitrogen","Aluminum","Cobalt","Silver"
 																					,"Uranium"};
-  G4String tsy[nTg]={"1H","2H","7Li","14N","27Al","59Co","107Ag","238U"};
+  G4String tsy[nTg]={"1H","He","7Li","14N","27Al","59Co","107Ag","238U"};
   G4Material* mat[nTg]={0,0,0,0,0,0,0,0};
   const G4int nPr=11;  // Length of the projectile list for the Performance test
   G4int pli[nPr] = {-2212, -211, -321, 13, 15, 3112, 3312, 3334, 2112, -2112, -3222};
@@ -271,6 +270,16 @@ int main()
 
   // Run manager
   G4RunManager* runManager = new G4RunManager;
+		G4StateManager::GetStateManager()->SetNewState(G4State_Init); // To let create ions
+  G4ParticleDefinition* ionDefinition=0;
+  ionDefinition=G4ParticleTable::GetParticleTable()->FindIon(6,12,0,6);
+		if(!ionDefinition)
+		{
+    G4cerr<<"*** Error! *** Test29:(6,6) ion can not be defined"<<G4endl;
+    return 0;
+  }
+  else G4cout<<"Test29: (6,6) ion is OK, Run State="<<G4StateManager::GetStateManager()->
+              GetStateString(G4StateManager::GetStateManager()->GetCurrentState())<<G4endl;
 
   for(G4int a=1; a<nAZ; a++)
   {
@@ -343,8 +352,6 @@ int main()
   // *********** Find tgZ and tgN from tPDG *************
   G4int tgZ=(tPDG-90000000)/1000;
   G4int tgN=tPDG-90000000-tgZ*1000;
-  // ----------- Hadronic Physics definition ---------------------
-  //Test29Physics*   phys = new Test29Physics(); //
   // ---------- Define material for the simulation ------------------
   G4int tgA        = tgZ+tgN; // Mass number - fake
   G4double tgR     = 2.7;   // @@ Not important for the thin target example. Can be any
@@ -356,7 +363,7 @@ int main()
   G4double      aTime      = 0. ;
   G4ThreeVector aDirection = G4ThreeVector(0.,0.,1.);
   G4int tgm=1;                                        // By default only one target
-  if(!tPDG) // Make max for the LOOP ove all targets and define materials
+  if(!tPDG) // Make max for the LOOP over all targets and define materials
   {
     tgm=nTg;
     for(G4int tgi=0; tgi<tgm; tgi++)
@@ -412,8 +419,9 @@ int main()
   proc->SetParameters(temperature, ssin2g, eteps, fN, fD, cP, rM, nop, sA);
   //man->AddDiscreteProcess(proc);
 		// man->AddRestProcess(proc);
-
-  for(G4int pnb=0; pnb<npart; pnb++)
+  G4int nTot=npart*tgm;
+  G4int nCur=0;
+  for(G4int pnb=0; pnb<npart; pnb++) // LOOP over particles
   {
    if (npart>1) pPDG=pli[pnb];
    G4QContent pQC=G4QPDGCode(pPDG).GetQuarkContent();
@@ -436,6 +444,7 @@ int main()
      G4Exception("***Test29: At Rest Process is called for not negative particle");
    }
    G4double pMass = part->GetPDGMass();                 // Mass of the projectile
+   //
    G4ThreeVector aPosition(nx*mm, ny*mm, nz*mm);
    // Create a DynamicParticle
    G4double  energy   = 0.*MeV;                              // 0 GeV particle energy(Cap)
@@ -446,6 +455,7 @@ int main()
 
    for(G4int tgi=0; tgi<tgm; tgi++) // Loop over materials
    {
+				nCur++;
     if (tgm>1)
     {
       tPDG=tli[tgi];
@@ -456,7 +466,7 @@ int main()
       G4cout<<"Test29: Material="<<material->GetName()<<", Element[0]="<<curEl->GetName()
 												<<",A[0]="<<(*(curEl->GetIsotopeVector()))[0]->GetN()<<" is selected."<<G4endl;
     }
- 			G4cout<<"Test29: New run for Target="<<tPDG<<", Projectile="<<pPDG<<G4endl;
+ 			G4cout<<"Test29:NewRun: Targ="<<tPDG<<",Proj="<<pPDG<<", "<<nCur<<" of "<<nTot<<G4endl;
     G4int    bnp=pQC.GetBaryonNumber();
     G4QContent tQC=G4QPDGCode(tPDG).GetQuarkContent();
     G4int    ct=tQC.GetCharge();
@@ -746,7 +756,7 @@ int main()
     delete step;  // The G4Step delets aPoint and bPoint
    }
    delete gTrack; // The G4Track delets the G4DynamicParticle
-  }
+  } // End of the projectile LOOP
   delete proc;
 #ifndef nout
 	 delete ntp; // Delete the class to fill the#of events

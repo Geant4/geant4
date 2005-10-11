@@ -135,7 +135,6 @@
 //int main(int argc, char** argv)
 int main()
 {
-		G4StateManager::GetStateManager()->SetNewState(G4State_Init); // To let create ions
   const G4int nTg=5;   // Length of the target list for the Performance test
   G4int tli[nTg]={90001000,90002002,90007007,90027032,90092146}; // PDG Codes of targets
   G4String tnm[nTg]={"Hydrogen","Helium","Nitrogen","Cobalt","Uranium"}; // Target names
@@ -283,6 +282,16 @@ int main()
 
   // Run manager
   G4RunManager* runManager = new G4RunManager;
+		G4StateManager::GetStateManager()->SetNewState(G4State_Init); // To let create ions
+  G4ParticleDefinition* ionDefinition=0;
+  ionDefinition=G4ParticleTable::GetParticleTable()->FindIon(6,12,0,6);
+		if(!ionDefinition)
+		{
+    G4cerr<<"*** Error! *** Test29:(6,6) ion can not be defined"<<G4endl;
+    return 0;
+  }
+  else G4cout<<"Test29: (6,6) ion is OK, Run State="<<G4StateManager::GetStateManager()->
+              GetStateString(G4StateManager::GetStateManager()->GetCurrentState())<<G4endl;
 
   for(G4int a=1; a<nAZ; a++)
   {
@@ -423,7 +432,8 @@ int main()
 #endif
   proc->SetParameters(temperature, ssin2g, eteps, fN, fD, cP, rM, nop, sA);
   //man->AddDiscreteProcess(proc); //Does not help to go out
-
+  G4int nTot=npart*tgm*cnE;
+  G4int nCur=0;
   for(G4int pnb=0; pnb<npart; pnb++) // LOOP over particles
   {
    if (npart>1) pPDG=pli[pnb];
@@ -528,7 +538,7 @@ int main()
    for(G4int ip=0; ip<nT; ip++) tVal[ip]=(fT+dT*ip)/1000000.;// Fill the t-histogram
 #endif
    // Create a DynamicParticle
-   for (G4int nen=0; nen<cnE; nen++)                         // LOOP over projectile energy
+   for(G4int nen=0; nen<cnE; nen++)                         // LOOP over projectile energy
 		 {
     G4double  energy = (ep-mp)*MeV;                          // kinetic particle energy
     if(cnE>1) energy = eli[nen]*MeV;
@@ -539,6 +549,7 @@ int main()
 
     for(G4int tgi=0; tgi<tgm; tgi++) // Loop over materials
     {
+ 				nCur++;
      if (tgm>1)
      {
       tPDG=tli[tgi];
@@ -549,7 +560,7 @@ int main()
       G4cout<<"Test19: Material="<<material->GetName()<<", Element[0]="<<curEl->GetName()
 												<<",A[0]="<<(*(curEl->GetIsotopeVector()))[0]->GetN()<<" is selected."<<G4endl;
      }
- 			 G4cout<<"Test19:NewRun: Target="<<tPDG<<", Projectile="<<pPDG<<", E="<<energy<<G4endl;
+  			G4cout<<"Test19:NewRun:Targ="<<tPDG<<",Proj="<<pPDG<<", "<<nCur<<" of "<<nTot<<G4endl;
      G4double mt=G4QPDGCode(tPDG).GetMass();             // @@ just for check
      G4QContent tQC=G4QPDGCode(tPDG).GetQuarkContent();
      G4int    ct=tQC.GetCharge();

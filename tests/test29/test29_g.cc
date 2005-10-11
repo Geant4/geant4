@@ -146,7 +146,6 @@
 extern "C" double drand();
 int main()
 {
-		G4StateManager::GetStateManager()->SetNewState(G4State_Init); // To let create ions
   const G4int nAZ=270;  // Dimension of the table
   const G4int mAZ=266;  // Mafimum filled A (at present). Must be mAZ<nAZ
   // Best Z for the given A - changed by MK (@@Not one-to-one correspondance! Make alt "-")
@@ -275,6 +274,16 @@ int main()
 
   // Run manager
   G4RunManager* runManager = new G4RunManager;
+		G4StateManager::GetStateManager()->SetNewState(G4State_Init); // To let create ions
+  G4ParticleDefinition* ionDefinition=0;
+  ionDefinition=G4ParticleTable::GetParticleTable()->FindIon(6,12,0,6);
+		if(!ionDefinition)
+		{
+    G4cerr<<"*** Error! *** Test29:(6,6) ion can not be defined"<<G4endl;
+    return 0;
+  }
+  else G4cout<<"Test29: (6,6) ion is OK, Run State="<<G4StateManager::GetStateManager()->
+              GetStateString(G4StateManager::GetStateManager()->GetCurrentState())<<G4endl;
 
   for(G4int a=1; a<nAZ; a++)
   {
