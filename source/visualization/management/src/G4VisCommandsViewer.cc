@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.47 2005-09-13 17:53:05 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.48 2005-10-12 20:22:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -835,6 +835,14 @@ void G4VisCommandViewerUpdate::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4String& updateName = newValue;
   G4VViewer* viewer = fpVisManager -> GetViewer (updateName);
+  if (!viewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+      "ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer."
+           << G4endl;
+    }
+    return;
+  }
 
   G4VSceneHandler* sceneHandler = viewer->GetSceneHandler();
   if (!sceneHandler) {
