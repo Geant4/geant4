@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2005-09-16 20:45:48 allison Exp $
+$Id: History,v 1.9 2005-10-12 19:56:11 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,10 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+12th October 2005  John Allison (vis-V07-01-03)
+- G4VisCommandsViewer.cc: Trapped zero viewer pointer in /vis/viewer/update
+  (bug found by system test of vis-V07-01-02).
 
 16th September 2005  John Allison (visman-V07-01-04)
 - Simplified use of ConcreteInstance.  It is now always non-zero for
