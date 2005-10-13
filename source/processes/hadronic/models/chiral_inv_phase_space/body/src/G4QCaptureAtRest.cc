@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.20 2005-06-27 15:30:29 gunter Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.21 2005-10-13 16:03:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -131,10 +131,14 @@ G4bool G4QCaptureAtRest::IsApplicable(const G4ParticleDefinition& particle)
 
 G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4Step& step)
 {
-  static const G4double mNeut= G4QPDGCode(2112).GetMass();
-  static const G4double mProt= G4QPDGCode(2212).GetMass();
-  static const G4double mPi0 = G4QPDGCode(111).GetMass();
-  static const G4double mDeut= G4QPDGCode(2112).GetNuclMass(1,1,0);
+  static const G4double mNeut = G4QPDGCode(2112).GetMass();
+  static const G4double mNeut2= mNeut*mNeut;
+  static const G4double dmNeut= mNeut+mNeut;
+  static const G4double mProt = G4QPDGCode(2212).GetMass();
+  static const G4double dmProt= mProt+mProt;
+  static const G4double mPi0  = G4QPDGCode(111).GetMass();
+  static const G4double mDeut = G4QPDGCode(2112).GetNuclMass(1,1,0);
+  static const G4double mAlph = G4QPDGCode(2112).GetNuclMass(2,2,0);
   //static const G4double mPi  = G4QPDGCode(211).GetMass();
   //static const G4double mMu  = G4QPDGCode(13).GetMass();
   //static const G4double mTau = G4QPDGCode(15).GetMass();
@@ -147,7 +151,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #ifdef debug
   G4cout<<"G4QCaptureAtRest::AtRestDoIt is called,EnDeposition="<<EnergyDeposition<<G4endl;
 #endif
-  if (! IsApplicable(*particle))  // Check applicability
+  if (!IsApplicable(*particle))  // Check applicability
   {
     G4cerr<<"G4QCaptureAtRest::AtRestDoIt: Only mu-,pi-,K-,S-,X-,O-,aP,aN,aS+."<< G4endl;
     return 0;
@@ -285,12 +289,83 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
   localtime += Time;
 	 std::vector<G4double>* cascE = new std::vector<G4double>;
 	 std::vector<G4Track*>* cascT = new std::vector<G4Track*>;
+  G4bool neutronElastic = false;             // Flag of elastic neutro-nucleeus Scattering
+  G4bool chargExElastic = false;             // Flag of charge exchange Quasi-Elastic Scat.
+  G4LorentzVector proj4M;
+  G4double mAT=0.;                           // Prototype of mass of the GS target nucleus
+  G4double totNE=0.;                         // Prototype of total neutron energy
+  G4double mAP=0.;                           // Prototype of M_GSCompoundNucleus-proton
+  if(projPDG==2112)
+  {
+    proj4M=stoppedHadron->Get4Momentum();
+    totNE=proj4M.e();
+    // For low energy neutrons the threshold of the capture must be checked
+    G4QPDGCode QPDGbase;
+    mAT=QPDGbase.GetNuclMass(Z,N,0);          // mass of the GS target nucleus
+    G4double mAR=sqrt(mAT*(mAT+totNE+totNE)+mNeut2); // Real compound mass
+    G4double mAN=QPDGbase.GetNuclMass(Z,N+1,0); // mass of the GS compound nucleus
+    mAP=QPDGbase.GetNuclMass(Z-1,N+1,0);      // M_GSCompoundNucleus-proton
+    G4double mAA=1000000.; // Default (light nuclei) mass of the GSCompoundNucleus-alpha
+    if(Z>=2 && N>=1) mAA=QPDGbase.GetNuclMass(Z-2,N-1,0); // mass of GSCompNucleus-alpha
+    G4double eProt=mAR-mAP-mProt;
+    if(mAR<mAN && eProt>0.)
+    {
+      G4double eNeut=totNE-mNeut;
+      if(eNeut<0.) eNeut=0.;
+      if(totNE-mNeut<.0001) chargExElastic=true; // neutron is too soft -> chargeExchange
+      else
+						{
+        G4double probP=sqrt(eProt*(dmProt+eProt));
+        G4double probN=sqrt(eNeut*(dmNeut+eNeut));
+        if((probN+probP)*G4UniformRand()<probN) neutronElastic=true; // nElastic Scattering
+        else chargExElastic=true; // proton's phase space is bigger -> chargeExchange
+      }
+    }
+				else if(mAR<mAN||(mAR<mAP+mProt&&mAR<mAA+mAlph)) neutronElastic=true; // nElaScattering
+  }
   G4int           nuPDG=14;                  // Prototype for weak decay
   if(projPDG==15) nuPDG=16;
-  if(projPDG==-211 && targPDG==90001000)     // Use Panofsky ratio for (p+pi-) system decay
+  if(projPDG==2112 && neutronElastic)        // Elastic scattering of low energy neutron
+  {
+#ifdef debug
+    G4cout<<"G4QCaptureAtRest::AtRestDoIt:nElast, 4M="<<proj4M<<",Z="<<Z<<",N="<<N<<G4endl;
+#endif
+    G4LorentzVector a4Mom(0.,0.,0.,mAT);     // 4-momentum of the target nucleus
+    G4LorentzVector totLV=proj4M+a4Mom;      // 4-momentum of the compound system
+    G4LorentzVector n4Mom(0.,0.,0.,mNeut);   // mass of the secondary neutron
+    if(!G4QHadron(totLV).DecayIn2(a4Mom,n4Mom))
+    {
+      G4cerr<<"---Worning---G4QCaptureAtRest::AtRestDoIt:n+A=>n+A,Z="<<Z<<",N="<<N<<G4endl;
+      return 0;
+    }
+    G4QHadron* secnuc = new G4QHadron(targPDG,a4Mom); // Create recoil nucleus
+    output->push_back(secnuc);               // Fill recoil nucleus to the output
+    G4QHadron* neutron = new G4QHadron(2112,n4Mom);    // Create Hadron for the Neutron
+    output->push_back(neutron);              // Fill the neutron to the output
+  }
+  if(projPDG==2112 && chargExElastic)        // ChargeEx from neutron to proton: (n,p) reac
+  {
+#ifdef debug
+    G4cout<<"G4QCaptureAtRest::AtRestDoIt:npChEx, 4M="<<proj4M<<",Z="<<Z<<",N="<<N<<G4endl;
+#endif
+    G4LorentzVector totLV(0.,0.,0.,mAT);     // 4-momentum of the target nucleus
+    totLV+=proj4M;                           // 4-momentum of the compound system
+    G4LorentzVector a4Mom(0.,0.,0.,mAP);     // 4-momentum of the residual to (n,p)
+    G4LorentzVector p4Mom(0.,0.,0.,mProt);   // mass of the secondary proton
+    if(!G4QHadron(totLV).DecayIn2(a4Mom,p4Mom))
+    {
+      G4cerr<<"---Worning---G4QCaptureAtRest::AtRestDoIt:n+A=p+A',Z="<<Z<<",N="<<N<<G4endl;
+      return 0;
+    }
+    G4QHadron* secnuc = new G4QHadron(targPDG-999,a4Mom); // Create recharged nucleus
+    output->push_back(secnuc);               // Fill recharged nucleus to the output
+    G4QHadron* proton = new G4QHadron(2212,p4Mom); // Create Hadron for the Proton
+    output->push_back(proton) ;              // Fill the proton to the output
+  }
+		else if(projPDG==-211 && targPDG==90001000)// Use Panofsky Ratio for (p+pi-) system decay
   {                                          // (p+pi-=>n+pi0)/p+pi-=>n+gamma) = 3/2
 #ifdef debug
-  G4cout<<"G4QCaptureAtRest::AtRestDoIt: Panofsky targPDG="<<targPDG<<G4endl;
+    G4cout<<"G4QCaptureAtRest::AtRestDoIt: Panofsky targPDG="<<targPDG<<G4endl;
 #endif
     G4LorentzVector totLV(0.,0.,0.,mp+mProt);// 4-momentum of the compound system
     G4int pigamPDG=111;                      // Prototype is for pi0
@@ -459,8 +534,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 	   G4cout<<"G4QCaptureAtRest::AtRestDoIt: CHIPS M="<<mp<<",dE="<<EnergyDeposition<<G4endl;
 #endif
     G4LorentzVector projLV(0.,0.,0.,mp);
-    // @@ it can be a flag @@ now for tau it is only energy deposition, for mu +EMCascade
-    if(projPDG==13)
+    if(projPDG==13) // now for tau it is only energy deposition, for mu this EMCascade
     {
       MuCaptureEMCascade(Z, N, cascE);
       G4int nsec=cascE->size();

@@ -20,14 +20,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCollision.hh,v 1.4 2005-08-30 07:15:14 mkossov Exp $
+// $Id: G4QCollision.hh,v 1.5 2005-10-13 16:03:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision header ----------------
 //                 by Mikhail Kossov, December 2003.
 //  Header of G4QCollision class (mu-,pi-,K-) of the CHIPS Simulation Branch in GEANT4
 // -------------------------------------------------------------------------------
-// This is a unique CHIPS class for the Nuclear Capture At Rest Prosesses.
+// This is a unique CHIPS class for the Hadron-Nuclear Inelastic Interaction Prosesses.
 // -------------------------------------------------------------------------------
 // At present (Dec.04) only pi+/-, K+/- proton, neutron, antiproton and antineutron
 // collisions with protons are implemented, which are fundamental for the in matter

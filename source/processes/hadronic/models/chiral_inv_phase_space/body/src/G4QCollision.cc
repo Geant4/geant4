@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.6 2005-08-30 07:15:14 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.7 2005-10-13 16:03:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -29,7 +29,6 @@
 // ---------------------------------------------------------------
 // ****************************************************************************************
 // ********** This CLASS is temporary moved from the photolepton_hadron directory *********
-// ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
 // ****************************************************************************************
 
 //#define debug
@@ -219,7 +218,8 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   G4LorentzVector proj4M=projHadron->Get4Momentum();
   G4double momentum = projHadron->GetTotalMomentum(); // 3-momentum of the Particle
   G4double Momentum=proj4M.rho();
-  if(std::fabs(Momentum-momentum)>.001)G4cerr<<"G4QC::PSDI P="<<Momentum<<"="<<momentum<<G4endl;
+  if(std::fabs(Momentum-momentum)>.001)
+    G4cerr<<"G4QCollision::PostStepDoIt: P="<<Momentum<<"="<<momentum<<G4endl;
 #ifdef debug
   G4double mp=proj4M.m();
   G4cout<<"G4QCollision::PostStepDoIt is called, P="<<Momentum<<"="<<momentum<<G4endl;
@@ -271,7 +271,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
 #endif
   if(!projPDG)
   {
-    G4cerr<<"---Worning---G4QCollision::PostStepDoIt: Undefined captured hadron"<<G4endl;
+    G4cerr<<"---Warning---G4QCollision::PostStepDoIt: Undefined captured hadron"<<G4endl;
     return 0;
   }
   // @@ It's a standard randomization procedure, which can be placed in G4QMaterial class
@@ -288,7 +288,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   Z=static_cast<G4int>(pElement->GetZ());
   if(Z<=0)
   {
-    G4cerr<<"---Worning---G4QCollision::PostStepDoIt:Element with Z="<<Z<< G4endl;
+    G4cerr<<"---Warning---G4QCollision::PostStepDoIt:Element with Z="<<Z<< G4endl;
     if(Z<0) return 0;
   }
   G4int N = Z;
@@ -344,7 +344,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
 #endif
   if(N<0)
   {
-    G4cerr<<"---Worning---G4QCollision::PostStepDoIt:Element with N="<<N<< G4endl;
+    G4cerr<<"---Warning---G4QCollision::PostStepDoIt:Element with N="<<N<< G4endl;
     return 0;
   }
 		if(projPDG==11||projPDG==-11||projPDG==13||projPDG==-13||projPDG==15||projPDG==-15)
@@ -579,7 +579,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     }
     if(!theDefinition)
     {
-      G4cout<<"---Worning---G4QCollision::PostStepDoIt: drop PDG="<<PDGCode<<G4endl;
+      G4cout<<"---Warning---G4QCollision::PostStepDoIt: drop PDG="<<PDGCode<<G4endl;
       delete hadr;
       continue;
     }
