@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.17 2005-07-20 15:49:30 allison Exp $
+// $Id: G4OpenGLXmViewer.cc,v 1.18 2005-10-13 17:30:08 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -315,18 +315,18 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      XtNbackground, bgnd,
      NULL);
   
-  if (white_background == true) {
+  if (background.GetRed() == 1. &&
+      background.GetGreen() == 1. &&
+      background.GetBlue() == 1.) {
     special_widget = XtNameToWidget(background_color_pullright, "button_0");
     if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
-  } else if (white_background == false) {
+  } else {
     special_widget = XtNameToWidget(background_color_pullright, "button_1");
     if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
-  } else {
-    G4Exception("white_background in G4OpenGLXmViewer is neither true nor false!!");
   }
 
   XmStringFree (white_str);

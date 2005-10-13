@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXmViewer.cc,v 1.12 2005-07-20 15:58:35 allison Exp $
+// $Id: G4OpenGLImmediateXmViewer.cc,v 1.13 2005-10-13 17:30:08 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -98,11 +98,11 @@ void G4OpenGLImmediateXmViewer::Initialise () {
 
 void G4OpenGLImmediateXmViewer::DrawView () {
 
-  if (white_background == true) {
-    glClearColor (1., 1., 1., 1.);
-  } else {
-    glClearColor (0., 0., 0., 1.);
-  }
+  glClearColor (background.GetRed(),
+		background.GetGreen(),
+		background.GetBlue(),
+		1.);
+
   glClearDepth (1.0);
 
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();

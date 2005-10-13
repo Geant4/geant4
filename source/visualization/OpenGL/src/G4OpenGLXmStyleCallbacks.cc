@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.11 2005-09-29 14:27:03 allison Exp $
+// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.12 2005-10-13 17:30:08 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -130,15 +130,13 @@ void G4OpenGLXmViewer::background_color_callback (Widget w,
   switch (choice) {
     
   case 0:
-    if (!pView->white_background) {
-      ((G4ViewParameters&)pView->GetViewParameters()).SetWhiteBackground(true);
-    }
+    ((G4ViewParameters&)pView->GetViewParameters()).
+      SetBackgroundColour(G4Colour(1.,1.,1.));  // White
     break;
 
   case 1:
-    if (pView->white_background) {
-      ((G4ViewParameters&)pView->GetViewParameters()).SetWhiteBackground(false);
-    }
+    ((G4ViewParameters&)pView->GetViewParameters()).
+      SetBackgroundColour(G4Colour(0.,0.,0.));  // Black
     break;
 
   default:
