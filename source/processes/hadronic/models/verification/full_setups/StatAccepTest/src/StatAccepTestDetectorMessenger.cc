@@ -20,8 +20,10 @@ StatAccepTestDetectorMessenger(StatAccepTestDetectorConstruction* myDet)
   
   theFieldCommand = new G4UIcmdWithADoubleAndUnit("/mydet/setField",this);  
   theFieldCommand->SetGuidance("Define magnetic field.");
-  theFieldCommand->SetGuidance("Magnetic field will be in X direction.");
-  theFieldCommand->SetParameterName("Bx",false);
+  // theFieldCommand->SetGuidance("Magnetic field will be in X direction.");
+  // theFieldCommand->SetGuidance("Magnetic field will be in Y direction.");
+  theFieldCommand->SetGuidance("Magnetic field will be in Z direction.");
+  theFieldCommand->SetParameterName("B",false);
   theFieldCommand->SetDefaultUnit("tesla");
   theFieldCommand->SetUnitCategory("Magnetic flux density");
   theFieldCommand->AvailableForStates(G4State_PreInit,G4State_Idle);  

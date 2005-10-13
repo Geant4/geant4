@@ -1,24 +1,31 @@
                  History file
                  ------------
 
-29-June-2005 - A.Ribon (statAccepTest-V07-00-09)
+13-Oct-2005 - A.Ribon (statAccepTest-V07-01-01)
+- Changes to ensure that the transportation in field
+  is not used if the magnetic field is zero (which
+  is the default value). Removed also all the 
+  compilation warnings.
+
+
+29-Jun-2005 - A.Ribon (statAccepTest-V07-00-09)
 - Change in observables.py in order to plot all
   beam energies even if not found in log files.
   The kumacs now plot as a function of the
   logarithm of the beam energy.
 
 
-13-June-2005 - A.Ribon (statAccepTest-V07-00-08)
+13-Jun-2005 - A.Ribon (statAccepTest-V07-00-08)
 - Change of the ordering of  pvalue.cpp  to avoid
   a bug in PI when reading ntuples from two files.
 
 
-10-June-2005 - A.Ribon (statAccepTest-V07-00-07)
+10-Jun-2005 - A.Ribon (statAccepTest-V07-00-07)
 - Preparing the version to be use for the June 
   release testing. Only few minor changes.
 
 
-6-June-2005 - A.Ribon (statAccepTest-V07-00-06)
+6-Jun-2005 - A.Ribon (statAccepTest-V07-00-06)
 - Preparing the version to be use for the June 
   release testing. Only a minor change in plot.py
   to pick  paw  from the installation.

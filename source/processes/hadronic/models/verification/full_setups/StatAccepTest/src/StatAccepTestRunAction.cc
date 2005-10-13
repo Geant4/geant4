@@ -31,7 +31,7 @@ void StatAccepTestRunAction::BeginOfRunAction(const G4Run* aRun) {
 }
 
 
-void StatAccepTestRunAction::EndOfRunAction(const G4Run* aRun) {
+void StatAccepTestRunAction::EndOfRunAction(const G4Run* ) {
 
   // Commit the histograms/ntuples.
   StatAccepTestAnalysis::getInstance()->finish();

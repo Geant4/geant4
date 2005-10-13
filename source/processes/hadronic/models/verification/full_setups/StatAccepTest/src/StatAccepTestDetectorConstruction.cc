@@ -43,7 +43,8 @@ StatAccepTestDetectorConstruction::StatAccepTestDetectorConstruction() :
   logicModule(0), physiModule(0),
   logicAbsorber(0), physiAbsorber(0),
   logicActive(0), physiActive(0),
-  uniformMagField(0), detectorMessenger(0), 
+  fieldMgr(0), uniformMagField(0), 
+  detectorMessenger(0), 
   theSensitiveCalorimeter(0), 
   theVisAttAbsorber(0), theVisAttActive(0),
 
@@ -60,15 +61,7 @@ StatAccepTestDetectorConstruction::StatAccepTestDetectorConstruction() :
 {
   // G4cout << " BEGIN  StatAccepTestDetectorConstruction::StatAccepTestDetectorConstruction()" << G4endl; //***DEBUG***
 
-  G4FieldManager* fieldMgr 
-    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-
-  if ( uniformMagField ) delete uniformMagField;
-
-  // Apply a global uniform magnetic field along Z axis.
-  uniformMagField = new G4UniformMagField( G4ThreeVector(0.0, 0.0, 0.0*tesla) );
-  fieldMgr->SetDetectorField( uniformMagField );
-  fieldMgr->CreateChordFinder( uniformMagField );
+  fieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
 
   // materials
   DefineMaterials();
@@ -113,16 +106,16 @@ void StatAccepTestDetectorConstruction::DefineMaterials() {
   G4Element* elH = new G4Element(name="Hydrogen", symbol="H2", z=1., a);
 
   a = 2.01*g/mole;
-  G4Element* elD = new G4Element(name="Deuterium", symbol="D", z=1., a);
+  //G4Element* elD = new G4Element(name="Deuterium", symbol="D", z=1., a);
 
   a = 4.*g/mole;
-  G4Element* elHe = new G4Element(name="Helium", symbol="He", z=2., a);
+  //G4Element* elHe = new G4Element(name="Helium", symbol="He", z=2., a);
 
   a = 6.94*g/mole;
-  G4Element* elLi = new G4Element(name="Lithium", symbol="Li", z=3., a);
+  //G4Element* elLi = new G4Element(name="Lithium", symbol="Li", z=3., a);
 
   a = 9.01*g/mole;
-  G4Element* elBe = new G4Element(name="Berillium", symbol="Be", z=4., a);
+  //G4Element* elBe = new G4Element(name="Berillium", symbol="Be", z=4., a);
 
   a = 12.01*g/mole;
   G4Element* elC = new G4Element(name="Carbon", symbol="C", z=6., a);
@@ -134,25 +127,25 @@ void StatAccepTestDetectorConstruction::DefineMaterials() {
   G4Element* elO = new G4Element(name="Oxygen", symbol="O2", z=8., a);
 
   a = 20.18*g/mole;
-  G4Element* elNe = new G4Element(name="Neon", symbol="Ne", z=10., a);
+  //G4Element* elNe = new G4Element(name="Neon", symbol="Ne", z=10., a);
 
   a = 22.99*g/mole;
-  G4Element* elNa = new G4Element(name="Sodium", symbol="Na", z=11., a);
+  //G4Element* elNa = new G4Element(name="Sodium", symbol="Na", z=11., a);
 
   a = 26.98*g/mole;
-  G4Element* elAl = new G4Element(name="Aluminium", symbol="Al", z=13., a);
+  //G4Element* elAl = new G4Element(name="Aluminium", symbol="Al", z=13., a);
 
   a = 28.085*g/mole;
   G4Element* elSi = new G4Element(name="Silicon", symbol="Si", z=14., a);
 
   a = 40.08*g/mole;
-  G4Element* elCa = new G4Element(name="Calcium", symbol="Ca", z=20., a);
+  //G4Element* elCa = new G4Element(name="Calcium", symbol="Ca", z=20., a);
 
   a = 55.850*g/mole;
-  G4Element* elFe = new G4Element(name="Iron", symbol="Fe", z=26., a);
+  //G4Element* elFe = new G4Element(name="Iron", symbol="Fe", z=26., a);
 
   a = 63.54*g/mole;
-  G4Element* elCu = new G4Element(name="Copper", symbol="Cu", z=29., a);
+  //G4Element* elCu = new G4Element(name="Copper", symbol="Cu", z=29., a);
 
   a = 183.85*g/mole;
   G4Element* elW = new G4Element(name="Tungstenm", symbol="W", z=74., a);
@@ -161,13 +154,13 @@ void StatAccepTestDetectorConstruction::DefineMaterials() {
   G4Element* elPb = new G4Element(name="Lead", symbol="Pb", z=82., a);
 
   a = 238.03*g/mole;
-  G4Element* elU = new G4Element(name="Uranium", symbol="U", z=92., a);
+  //G4Element* elU = new G4Element(name="Uranium", symbol="U", z=92., a);
 
   //--- simple materials
 
   density = 2.7*g/cm3;
   a = 26.98*g/mole;
-  G4Material* Aluminium = new G4Material(name="Aluminium", z=13., a, density);
+  //G4Material* Aluminium = new G4Material(name="Aluminium", z=13., a, density);
   
   // Iron has a  X0 = 1.7585 cm  and  lambda_I = 16.760 cm.   
   density = 7.87*g/cm3;
@@ -200,7 +193,7 @@ void StatAccepTestDetectorConstruction::DefineMaterials() {
 
   density = 0.002*g/cm3;
   a = 39.95*g/mole;
-  G4Material* ArgonGas = new G4Material(name="ArgonGas", z=18., a, density);
+  //G4Material* ArgonGas = new G4Material(name="ArgonGas", z=18., a, density);
 
   density = 2.33*g/cm3;
   a = 28.085*g/mole;
@@ -208,7 +201,7 @@ void StatAccepTestDetectorConstruction::DefineMaterials() {
   
   density = 8.96*g/cm3;
   a = 58.69*g/mole;
-  G4Material* Nickel = new G4Material(name="Nickel", z=28., a, density);
+  //G4Material* Nickel = new G4Material(name="Nickel", z=28., a, density);
 
   //--- mixtures
 
@@ -571,7 +564,24 @@ void StatAccepTestDetectorConstruction::PrintParameters() {
 
 
 void StatAccepTestDetectorConstruction::SetMagField(G4double fieldValue) {
-  uniformMagField->SetFieldValue( G4ThreeVector(0.0, 0.0, fieldValue) );
+  if ( uniformMagField ) {
+    delete uniformMagField;
+  }
+  if ( fabs( fieldValue ) > 0.0 ) {
+    // Apply a global uniform magnetic field along one axis: uncomment
+    // below the line that specify the axis you want, in the order (x,y,z),
+    // and similarly in StatAccepTestDetectorMessenger constructor.
+    // Notice that only if the magnetic field is not zero, the Geant4
+    // transportion in field gets activated.
+
+    // uniformMagField = new G4UniformMagField( G4ThreeVector(fieldValue, 0.0, 0.0) );
+    // uniformMagField = new G4UniformMagField( G4ThreeVector(0.0, fieldValue, 0.0) );
+    uniformMagField = new G4UniformMagField( G4ThreeVector(0.0, 0.0, fieldValue) );
+
+    fieldMgr->SetDetectorField( uniformMagField );
+    fieldMgr->CreateChordFinder( uniformMagField );
+
+  } 
 }
 
 

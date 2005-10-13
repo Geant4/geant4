@@ -10,7 +10,7 @@ StatAccepTestCalorimeterHit::~StatAccepTestCalorimeterHit() {}
 
 StatAccepTestCalorimeterHit::
 StatAccepTestCalorimeterHit(const StatAccepTestCalorimeterHit &right) :
-  edep(right.edep), layer(right.layer) 
+  G4VHit(right), edep(right.edep), layer(right.layer) 
 {}
 
 

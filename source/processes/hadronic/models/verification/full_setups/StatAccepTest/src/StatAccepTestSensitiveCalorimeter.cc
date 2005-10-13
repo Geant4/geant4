@@ -28,7 +28,7 @@ StatAccepTestSensitiveCalorimeter( const G4String name, const G4int numberOfRepl
 StatAccepTestSensitiveCalorimeter::~StatAccepTestSensitiveCalorimeter() {}
 
 
-void StatAccepTestSensitiveCalorimeter::Initialize(G4HCofThisEvent* HCE) {
+void StatAccepTestSensitiveCalorimeter::Initialize(G4HCofThisEvent* ) {
   calCollection = new StatAccepTestCalorimeterHitsCollection
     (SensitiveDetectorName,collectionName[0]);
   positionID.clear();
@@ -39,7 +39,7 @@ void StatAccepTestSensitiveCalorimeter::Initialize(G4HCofThisEvent* HCE) {
 
 
 G4bool StatAccepTestSensitiveCalorimeter::
-ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist) {
+ProcessHits(G4Step* aStep, G4TouchableHistory* ) {
 
   G4double edep = aStep->GetTotalEnergyDeposit() * aStep->GetTrack()->GetWeight();
   // Multiply the energy deposit with the weight of the track,
