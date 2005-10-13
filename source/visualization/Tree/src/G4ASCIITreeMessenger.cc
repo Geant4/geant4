@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeMessenger.cc,v 1.13 2005-05-06 08:38:36 allison Exp $
+// $Id: G4ASCIITreeMessenger.cc,v 1.14 2005-10-13 17:37:57 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,15 +69,15 @@ G4ASCIITreeMessenger::G4ASCIITreeMessenger
   fVerbosityGuidance.push_back
     (">=  3: prints volume and density.");
   fVerbosityGuidance.push_back
-    (">=  4: prints mass of each top physical volume in scene to depth specified.");
+    (">=  4: prints mass of top physical volume(s) in scene to depth specified.");
   fVerbosityGuidance.push_back
-    (">=  5: prints mass of branch at each volume (can be time consuming).");
+    (">=  5: prints mass of volume less daughters.");
   fVerbosityGuidance.push_back
     ("Note: by default, culling is switched off so all volumes are seen.");
   fVerbosityGuidance.push_back
-    ("Note: the mass calculation takes into account daughters, normally"
-      " to unlimited depth, which can be time consuuming.  If you want the"
-      " mass of a particular subtree to a particular depth:");
+    ("Note: the mass calculation takes into account daughters, which can be"
+     " time consuuming.  If you want the mass of a particular subtree to a"
+     " particular depth:");
   fVerbosityGuidance.push_back
     ("  /vis/open ATree");
   fVerbosityGuidance.push_back

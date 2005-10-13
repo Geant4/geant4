@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.20 2005-05-06 08:38:36 allison Exp $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.21 2005-10-13 17:37:57 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -260,7 +260,11 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
       *fpOutFile << ", "
 		 << G4BestUnit
 	(fpCurrentLV->GetMass(fpCurrentPV->IsParameterised(),  // Force if so.
-			      fpCurrentMaterial),"Mass");
+			      false,  // Do not propagate - this
+				      // volume less volume of
+				      // daughters.
+			      fpCurrentMaterial),
+	 "Mass");
     }
 
     if (fLVSet.find(fpCurrentLV) == fLVSet.end()) {
