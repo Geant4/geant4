@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorConstruction.cc,v 1.27 2005-09-13 16:53:34 allison Exp $
+// $Id: MyDetectorConstruction.cc,v 1.28 2005-10-13 17:13:08 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -280,7 +280,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   const G4double alp = 10 * mrad;
 
   G4VisAttributes * grey
-    = new G4VisAttributes(G4Colour(0.5,0.5,0.5,0.5));
+    = new G4VisAttributes(G4Colour(0.5,0.5,0.5,0.1));
 
 
   G4double tube_dPhi = twopi;
