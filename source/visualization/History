@@ -1,4 +1,4 @@
-$Id: History,v 1.304 2005-10-12 19:56:11 allison Exp $
+$Id: History,v 1.305 2005-10-13 18:26:11 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,22 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+13th October 2005  John Allison
+- Implemented non-uniform scaling in management and OpenGL.
+- Implemented arbitrary background in management, OpenGL and RayTracer.
+- Migrated to <sstream>.
+- The above consist of:
+  o vistest-V07-01-03: Migrated to <sstream> plus minor changes.
+  o DAWN-V07-01-00: Migrated to <sstream>.
+  o vis-HepRep-V07-01-03: Migrated to <sstream>.
+  o opengl-V07-01-06: Migrated to <sstream>, non-uniform scaling, any
+    background.
+  o vistree-V07-01-00: Migrated to <sstream>, fixed bug in mass calculations.
+  o visXXX-V07-01-01: Migrated to <sstream>.
+  o modeling-V07-01-01: Migrated to <sstream>.
+  o visman-V07-01-05: Migrated to <sstream>, non-uniform scaling, any
+    background.
 
 12th October 2005  John Allison (vis-V07-01-03)
 - G4VisCommandsViewer.cc: Trapped zero viewer pointer in /vis/viewer/update
