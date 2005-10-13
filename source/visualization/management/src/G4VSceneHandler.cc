@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.43 2005-10-13 18:14:31 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.44 2005-10-13 18:16:37 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
