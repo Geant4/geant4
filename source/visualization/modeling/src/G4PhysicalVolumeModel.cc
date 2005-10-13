@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.33 2005-09-13 20:47:38 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.34 2005-10-13 17:48:32 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@
 #include "G4VVisManager.hh"
 #include "G4Polyhedron.hh"
 
-#include <strstream>
+#include <sstream>
 
 G4PhysicalVolumeModel::G4PhysicalVolumeModel
 (G4VPhysicalVolume*          pVPV,
@@ -68,10 +68,9 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   fppCurrentLV    (0),
   fppCurrentMaterial (0)
 {
-  const int len = 8; char a [len];
-  std::ostrstream o (a, len); o.seekp (std::ios::beg);
-  o << fpTopPV -> GetCopyNo () << std::ends;
-  fGlobalTag = fpTopPV -> GetName () + "." + a;
+  std::ostringstream o;
+  o << fpTopPV -> GetCopyNo ();
+  fGlobalTag = fpTopPV -> GetName () + "." + o.str();
   fGlobalDescription = "G4PhysicalVolumeModel " + fGlobalTag;
 
   CalculateExtent ();
@@ -158,11 +157,10 @@ void G4PhysicalVolumeModel::DescribeYourselfTo
 }
 
 G4String G4PhysicalVolumeModel::GetCurrentTag () const {
-  const int len = 8; char a [len];
-  std::ostrstream o (a, len); o.seekp (std::ios::beg);
   if (fpCurrentPV) {
-    o << fpCurrentPV -> GetCopyNo () << std::ends;
-    return fpCurrentPV -> GetName () + "." + a;
+    std::ostringstream o;
+    o << fpCurrentPV -> GetCopyNo ();
+    return fpCurrentPV -> GetName () + "." + o.str();
   }
   else {
     return "WARNING: NO CURRENT VOLUME - global tag is " + fGlobalTag;
