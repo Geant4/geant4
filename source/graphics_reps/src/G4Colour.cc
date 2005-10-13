@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Colour.cc,v 1.6 2003-09-18 11:03:12 johna Exp $
+// $Id: G4Colour.cc,v 1.7 2005-10-13 20:48:11 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,4 +65,75 @@ G4bool G4Colour::operator != (const G4Colour& c) const {
       )
     return true;
   return false;
+}
+
+const G4Colour G4Colour::White   = G4Colour(1.0, 1.0, 1.0);   
+const G4Colour G4Colour::Gray    = G4Colour(0.5, 0.5, 0.5);  
+const G4Colour G4Colour::Grey    = G4Colour::Gray;  
+const G4Colour G4Colour::Black   = G4Colour(0.0, 0.0, 0.0); 
+const G4Colour G4Colour::Red     = G4Colour(1.0, 0.0, 0.0); 
+const G4Colour G4Colour::Green   = G4Colour(0.0, 1.0, 0.0); 
+const G4Colour G4Colour::Blue    = G4Colour(0.0, 0.0, 1.0); 
+const G4Colour G4Colour::Cyan    = G4Colour(0.0, 1.0, 1.0); 
+const G4Colour G4Colour::Magenta = G4Colour(1.0, 0.0, 1.0);  
+const G4Colour G4Colour::Yellow  = G4Colour(1.0, 1.0, 0.0);
+
+map<G4String, G4Colour> G4Colour::fColourMap;
+bool G4Colour::fInitColourMap = false;
+
+void
+G4Colour::AddToMap(const G4String& key, const G4Colour& colour) 
+{
+  // Convert to lower case since colour map is case insensitive
+  G4String myKey(key);
+  myKey.toLower();
+
+  map<G4String, G4Colour>::iterator iter = fColourMap.find(myKey);
+  
+  if (iter == fColourMap.end()) fColourMap[myKey] = colour;  
+  else {
+    std::ostringstream o; 
+    o << "G4Colour with key "<<myKey<<" already exists ";
+    G4Exception
+      ("G4Colour::AddToMap(const G4String& key, const G4Colour& colour)",
+       "ColourKeyExists", JustWarning, o.str().c_str());
+  }
+}
+
+void
+G4Colour::InitialiseColourMap() 
+{
+  // Standard colours
+  AddToMap("white",   G4Colour::White);
+  AddToMap("gray",    G4Colour::Gray);
+  AddToMap("grey",    G4Colour::Grey);
+  AddToMap("black",   G4Colour::Black);
+  AddToMap("red",     G4Colour::Red);
+  AddToMap("green",   G4Colour::Green);
+  AddToMap("blue",    G4Colour::Blue);
+  AddToMap("cyan",    G4Colour::Cyan);
+  AddToMap("magneta", G4Colour::Magenta);
+  AddToMap("yellow",  G4Colour::Yellow);
+}
+
+bool
+G4Colour::GetColour(const G4String& key, G4Colour& result) 
+{
+  if (false == fInitColourMap) {
+    fInitColourMap = true;
+    // Add standard colours to map
+    InitialiseColourMap();
+  }
+ 
+  G4String myKey(key);
+  myKey.toLower();
+ 
+  map<G4String, G4Colour>::iterator iter = fColourMap.find(myKey);
+
+  // Don't modify "result" if colour was not found in map
+  if (iter == fColourMap.end()) return false;
+  
+  result = iter->second;
+
+  return true;
 }
