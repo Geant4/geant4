@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorMessenger.cc,v 1.7 2005-01-14 11:42:13 grichine Exp $
+// $Id: Em10DetectorMessenger.cc,v 1.8 2005-10-13 13:12:33 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -188,7 +188,7 @@ void Em10DetectorMessenger::SetNewValue(G4UIcommand* command,G4int newValue)
 { 
   if( command == ModelCmd )
     { 
-      Em10Detector->SetParametrisationModel(newValue);
+      //  Em10Detector->SetParametrisationModel(newValue);
       Em10Detector->Construct();
     }
 }
@@ -200,8 +200,8 @@ void Em10DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
   if( command == ModelCmd )
   { 
-    Em10Detector->SetParametrisationModel(ModelCmd->GetNewIntValue(newValue));
-    Em10Detector->ParametrisationModel();
+    // Em10Detector->SetParametrisationModel(ModelCmd->GetNewIntValue(newValue));
+    // Em10Detector->ParametrisationModel();
   }
   if( command == FoilNumCmd )
   { 

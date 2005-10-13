@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.hh,v 1.6 2005-01-14 11:42:13 grichine Exp $
+// $Id: Em10DetectorConstruction.hh,v 1.7 2005-10-13 13:12:33 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@ class G4Region;
 class G4UniformMagField;
 class Em10DetectorMessenger;
 class Em10CalorimeterSD;
-class G4VXrayTRmodel;
+class G4Region;
 
 
 class Em10DetectorConstruction : public G4VUserDetectorConstruction
@@ -53,7 +53,6 @@ class Em10DetectorConstruction : public G4VUserDetectorConstruction
    ~Em10DetectorConstruction();
 
   public:
-     void SetParametrisationModel (G4int i){fModelNumber=i;};     
      void ParametrisationModel ();     
      
      void SetAbsorberMaterial (G4String);     
@@ -189,17 +188,17 @@ class Em10DetectorConstruction : public G4VUserDetectorConstruction
   Em10DetectorMessenger* detectorMessenger;  //pointer to the Messenger
   Em10CalorimeterSD*     calorimeterSD;  //pointer to the sensitive detector
   G4Region*             fRegGasDet;
+  G4Region*             fRadRegion;
   
 
 
-
-  G4VXrayTRmodel*        fXTRModel ;
       
 private:
     
   void DefineMaterials();
   void ComputeCalorParameters();
   G4VPhysicalVolume* ConstructCalorimeter();     
+
 };
 
 ////////////////////////////////////////////////////////////////////////

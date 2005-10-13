@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.cc,v 1.12 2005-04-19 14:57:56 grichine Exp $
+// $Id: Em10PhysicsList.cc,v 1.13 2005-10-13 13:12:33 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -203,7 +203,7 @@ void Em10PhysicsList::ConstructProcess()
 #include "G4eplusAnnihilation.hh"
 #include "G4PAIModel.hh"
 #include "G4PAIPhotonModel.hh"
-#include "G4PAIwithPhotons.hh"
+// #include "G4PAIwithPhotons.hh"
 
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
@@ -211,11 +211,15 @@ void Em10PhysicsList::ConstructProcess()
 
 #include "G4hIonisation.hh"
 
-#include "G4ForwardXrayTR.hh"
+// #include "G4ForwardXrayTR.hh"
 #include "G4RegularXTRadiator.hh"
 #include "G4TransparentRegXTRadiator.hh"
 #include "G4GammaXTRadiator.hh"
+#include "G4StrawTubeXTRadiator.hh"
 
+#include "G4XTRGammaRadModel.hh"
+#include "G4XTRRegularRadModel.hh"
+#include "G4XTRTransparentRegRadModel.hh"
 
 #include "Em10StepCut.hh"
 
@@ -233,9 +237,45 @@ void Em10PhysicsList::ConstructEM()
   const G4RegionStore* theRegionStore = G4RegionStore::GetInstance();
   G4Region* gas = theRegionStore->GetRegion("XTRdEdxDetector");
 
-  /* 
+      
+  /*          
         
-  G4RegularXTRadiator* regXTRprocess = 
+  G4GammaXTRadiator* processXTR =
+                 new G4GammaXTRadiator(pDet->GetLogicalRadiator(),
+				       1000.,
+				       100.,
+				       pDet->GetFoilMaterial(),
+				       pDet->GetGasMaterial(),
+				       pDet->GetFoilThick(),
+				       pDet->GetGasThick(),
+				       pDet->GetFoilNumber(),
+				       "GammaXTRadiator");
+
+  
+  
+  G4XTRGammaRadModel* processXTR =
+                 new G4XTRGammaRadModel(pDet->GetLogicalRadiator(),
+				       1000.,
+				       100.,
+				       pDet->GetFoilMaterial(),
+				       pDet->GetGasMaterial(),
+				       pDet->GetFoilThick(),
+				       pDet->GetGasThick(),
+				       pDet->GetFoilNumber(),
+				       "GammaXTRadiator");
+  
+
+  G4StrawTubeXTRadiator* processXTR = 
+                 new G4StrawTubeXTRadiator(pDet->GetLogicalRadiator(),
+					 pDet->GetFoilMaterial(),
+					 pDet->GetGasMaterial(),
+				0.53,	   // pDet->GetFoilThick(),
+				3.14159,	   // pDet->GetGasThick(),
+					 pDet->GetAbsorberMaterial(),
+                                         true,
+					 "strawXTRadiator");
+       
+  G4RegularXTRadiator* processXTR = 
                  new G4RegularXTRadiator(pDet->GetLogicalRadiator(),
 					 pDet->GetFoilMaterial(),
 					 pDet->GetGasMaterial(),
@@ -244,23 +284,9 @@ void Em10PhysicsList::ConstructEM()
 					 pDet->GetFoilNumber(),
 					 "RegularXTRadiator");
   				    
-      
+  
     
-
-  G4GammaXTRadiator* gammaXTRprocess =
-                 new G4GammaXTRadiator(pDet->GetLogicalRadiator(),
-				       25.,
-				       10.,
-				       pDet->GetFoilMaterial(),
-				       pDet->GetGasMaterial(),
-				       pDet->GetFoilThick(),
-				       pDet->GetGasThick(),
-				       pDet->GetFoilNumber(),
-				       "GammaXTRadiator");
-
-  */ 
-    
-  G4TransparentRegXTRadiator* regXTRprocess = 
+  G4TransparentRegXTRadiator* processXTR = 
                  new G4TransparentRegXTRadiator(pDet->GetLogicalRadiator(),
 					 pDet->GetFoilMaterial(),
 					 pDet->GetGasMaterial(),
@@ -268,8 +294,33 @@ void Em10PhysicsList::ConstructEM()
 					 pDet->GetGasThick(),
 					 pDet->GetFoilNumber(),
 					 "RegularXTRadiator");
+  
        
-
+  
+  
+  G4XTRRegularRadModel* processXTR = 
+                 new G4XTRRegularRadModel(pDet->GetLogicalRadiator(),
+					 pDet->GetFoilMaterial(),
+					 pDet->GetGasMaterial(),
+					 pDet->GetFoilThick(),
+					 pDet->GetGasThick(),
+					 pDet->GetFoilNumber(),
+					 "RegularXTRadiator");
+       
+  */  
+  
+  G4XTRTransparentRegRadModel* processXTR = 
+                 new G4XTRTransparentRegRadModel(pDet->GetLogicalRadiator(),
+					 pDet->GetFoilMaterial(),
+					 pDet->GetGasMaterial(),
+					 pDet->GetFoilThick(),
+					 pDet->GetGasThick(),
+					 pDet->GetFoilNumber(),
+					 "RegularXTRadiator");
+       
+    
+  
+  
    
   theParticleIterator->reset();
 
@@ -342,8 +393,12 @@ void Em10PhysicsList::ConstructEM()
 				       "GammaXTRadiator"));
        // ,-1,1,-1);
        */
-      // pmanager->AddContinuousProcess(gammaXTRprocess);
-      pmanager->AddContinuousProcess(regXTRprocess);
+      // pmanager->AddContinuousProcess(processXTR);
+   
+      // pmanager->AddContinuousProcess(strawXTRprocess);
+      // pmanager->AddProcess(new G4ForwardXrayTR("Air","Mylar","fXTR"),-1,-1,1);
+
+      pmanager->AddDiscreteProcess(processXTR);
 
       pmanager->AddProcess(theeminusStepCut,-1,-1,4);
       theeminusStepCut->SetMaxStep(MaxChargedStep) ;
