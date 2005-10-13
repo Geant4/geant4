@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.64 2005-09-16 20:44:54 allison Exp $
+// $Id: G4VisManager.cc,v 1.65 2005-10-13 18:14:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,6 +58,8 @@
 #include "G4NullModel.hh"
 #include "G4ModelingParameters.hh"
 #include "G4TransportationManager.hh"
+
+#include <sstream>
 
 G4VisManager* G4VisManager::fpInstance = 0;
 
@@ -752,6 +754,7 @@ void G4VisManager::RegisterMessengers () {
   fMessengerList.push_back (new G4VisCommandViewerPan);
   fMessengerList.push_back (new G4VisCommandViewerRefresh);
   fMessengerList.push_back (new G4VisCommandViewerReset);
+  fMessengerList.push_back (new G4VisCommandViewerScale);
   fMessengerList.push_back (new G4VisCommandViewerSelect);
   fMessengerList.push_back (new G4VisCommandViewerUpdate);
   fMessengerList.push_back (new G4VisCommandViewerZoom);
@@ -934,7 +937,7 @@ G4VisManager::GetVerbosityValue(const G4String& verbosityString) {
   else if (s(0) == 'a') verbosity = all;
   else {
     G4int intVerbosity;
-    std::istrstream is(s);
+    std::istringstream is(s);
     is >> intVerbosity;
     if (!is) {
       G4cout << "ERROR: G4VisManager::GetVerbosityValue: invalid verbosity \""
