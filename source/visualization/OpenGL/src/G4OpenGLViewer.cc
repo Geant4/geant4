@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.21 2005-09-29 14:27:03 allison Exp $
+// $Id: G4OpenGLViewer.cc,v 1.22 2005-10-13 17:31:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,7 @@
 
 G4OpenGLViewer::G4OpenGLViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
-white_background (false),
+background (G4Colour(0.,0.,0.)),
 transparency_enabled (true),
 antialiasing_enabled (false),
 haloing_enabled (false)
@@ -123,6 +123,9 @@ void G4OpenGLViewer::SetView () {
   
   glMatrixMode (GL_PROJECTION); // set up Frustum.
   glLoadIdentity();
+
+  const G4Vector3D scale = fVP.GetScaleFactor();
+  glScaled(scale.x(),scale.y(),scale.z());
   
   if (fVP.GetFieldHalfAngle() == 0.) {
     glOrtho (left, right, bottom, top, pnear, pfar);
@@ -174,7 +177,7 @@ void G4OpenGLViewer::SetView () {
   }
 
   // Background.
-  white_background = fVP.IsWhiteBackground ();
+  background = fVP.GetBackgroundColour ();
 
 }
 
