@@ -21,13 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXViewer.cc,v 1.6 2003-11-06 15:06:51 johna Exp $
+// $Id: G4XXXViewer.cc,v 1.7 2005-10-13 17:45:52 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4XXXViewer.hh"
-
-#include "G4ios.hh"
-#include <strstream>
 
 #include "G4VSceneHandler.hh"
 
