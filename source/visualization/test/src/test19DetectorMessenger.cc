@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test19DetectorMessenger.cc,v 1.6 2004-07-01 15:52:09 johna Exp $
+// $Id: test19DetectorMessenger.cc,v 1.7 2005-10-13 17:14:04 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,8 @@
 #include "BuildGeom_Example2.hh"
 #include "BuildParametrised.hh"
 #include "BuildHouse.hh"
+
+#include <sstream>
 
 #ifdef ATLAS
 #include "ATLASdetector.hh"
@@ -90,8 +92,7 @@ void test19DetectorMessenger::SetNewValue
 {
   if (command == fpDetectorCommand) {
     G4int id;
-    const char* aString = newValues;
-    std::istrstream is((char*) aString) ; is >> id;
+    std::istringstream is(newValues) ; is >> id;
 #ifdef ATLAS
     const G4int idMax = 6;
 #else
