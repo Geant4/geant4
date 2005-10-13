@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.66 2005-10-13 18:17:40 allison Exp $
+// $Id: G4VisManager.cc,v 1.67 2005-10-13 18:20:20 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
