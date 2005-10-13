@@ -20,13 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileViewer.cc,v 1.12 2004-03-15 08:00:22 perl Exp $
+// $Id: G4HepRepFileViewer.cc,v 1.13 2005-10-13 17:23:42 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4HepRepFileViewer.hh"
-
-#include "G4ios.hh"
-#include <strstream>
 
 #include "G4VSceneHandler.hh"
 

@@ -1,4 +1,4 @@
-.$Id: History,v 1.101 2005-10-12 21:56:49 duns Exp $
+.$Id: History,v 1.102 2005-10-13 17:23:42 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+13 October 2005 John Allison (vis-HepRep-V07-01-03)
+- Migrated to <sstream>.
+
 12 October 2005 Mark Donszelmann (vis-HepRep-V07-01-02)
 - Fixed compilation warning on MacOSX
 - Further fix for GEANT-61.
