@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.35 2005-09-13 17:48:30 allison Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.36 2005-10-13 18:10:29 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -36,6 +36,9 @@
 #include "G4UnitsTable.hh"
 #include "G4VisManager.hh"
 #include "G4Polyhedron.hh"
+
+#include <sstream>
+#include <cctype>
 
 G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fLightsVector    (G4ThreeVector(1.,1.,1.)),
@@ -300,14 +303,21 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   parameter -> SetDefaultValue (1.);
   fpCommandViewpointVector -> SetParameter (parameter);
 
-  fpCommandWhiteBackground = new G4UIcmdWithABool
-    ("/vis/viewer/set/whiteBackground",this);
-  fpCommandWhiteBackground->SetGuidance("Sets flag for white background.");
-  fpCommandWhiteBackground->SetGuidance
-    ("If true, a white background is requested.  Otherwise, the default colour"
-     "\n for the viewer.");
-  fpCommandWhiteBackground->SetParameterName("white-background",omitable = true);
-  fpCommandWhiteBackground->SetDefaultValue(true);
+  fpCommandBackground = new G4UIcommand
+    ("/vis/viewer/set/background",this);
+  fpCommandBackground->SetGuidance
+    ("Set background colour (default black).");
+  fpCommandBackground->SetGuidance
+    ("Accepts RGB triplet or string such as \"white\", \"black\", \"grey\", \"red\"...");
+  parameter = new G4UIparameter("red_or_string", 's', omitable = true);
+  parameter -> SetDefaultValue (0.);
+  fpCommandBackground -> SetParameter (parameter);
+  parameter = new G4UIparameter("green", 'd', omitable = true);
+  parameter -> SetDefaultValue (0.);
+  fpCommandBackground -> SetParameter (parameter);
+  parameter = new G4UIparameter ("blue", 'd', omitable = true);
+  parameter -> SetDefaultValue (0.);
+  fpCommandBackground -> SetParameter (parameter);
 }
 
 G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
@@ -330,7 +340,7 @@ G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
   delete fpCommandUpVector;
   delete fpCommandViewpointThetaPhi;
   delete fpCommandViewpointVector;
-  delete fpCommandWhiteBackground;
+  delete fpCommandBackground;
 }
 
 G4String G4VisCommandsViewerSet::GetCurrentValue(G4UIcommand*) {
@@ -411,7 +421,7 @@ void G4VisCommandsViewerSet::SetNewValue
     G4String cullingOption, stringFlag, unit;
     G4double density;
     G4bool boolFlag;
-    std::istrstream is (newValue);
+    std::istringstream is (newValue);
     is >> cullingOption >> stringFlag >> density >> unit;
     boolFlag = G4UIcommand::ConvertToBool(stringFlag);
     if (cullingOption == "global") {
@@ -627,14 +637,14 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandProjection) {
     G4double fieldHalfAngle;
-    size_t iPos = 0;
-    if (newValue[iPos] == 'o') {  // "orthogonal"
+    const size_t iPos0 = 0;
+    if (newValue[iPos0] == 'o') {  // "orthogonal"
       fieldHalfAngle = 0.;
     }
-    else if (newValue[iPos] == 'p') {  // "perspective"
+    else if (newValue[iPos0] == 'p') {  // "perspective"
       G4String dummy;
       G4String unit;
-      std::istrstream is (newValue);
+      std::istringstream is (newValue);
       is >> dummy >> fieldHalfAngle >> unit;
       fieldHalfAngle *= G4UIcommand::ValueOf(unit);
       if (fieldHalfAngle > 89.5 * deg || fieldHalfAngle <= 0.0) {
@@ -671,7 +681,7 @@ void G4VisCommandsViewerSet::SetNewValue
   else if (command == fpCommandSectionPlane) {
     G4String choice, unit;
     G4double x, y, z, nx, ny, nz;
-    std::istrstream is (newValue);
+    std::istringstream is (newValue);
     is >> choice >> x >> y >> z >> unit >> nx >> ny >> nz;
 
     G4int iSelector = -1;
@@ -722,8 +732,8 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandStyle) {
     G4ViewParameters::DrawingStyle existingStyle = vp.GetDrawingStyle();
-    size_t iPos = 0;
-    if (newValue[iPos] == 'w') {  // "wireframe"
+    const size_t iPos0 = 0;
+    if (newValue[iPos0] == 'w') {  // "wireframe"
       switch (existingStyle) {
       case G4ViewParameters::wireframe:
 	break;
@@ -737,7 +747,7 @@ void G4VisCommandsViewerSet::SetNewValue
         break;
       }
     }
-    else if (newValue[iPos] == 's') {  // "surface"
+    else if (newValue[iPos0] == 's') {  // "surface"
       switch (existingStyle) {
       case G4ViewParameters::wireframe:
 	vp.SetDrawingStyle(G4ViewParameters::hsr);
@@ -817,13 +827,25 @@ void G4VisCommandsViewerSet::SetNewValue
     }
   }
 
-  else if (command == fpCommandWhiteBackground) {
-    G4bool autoRefresh = G4UIcommand::ConvertToBool(newValue);
-    vp.SetWhiteBackground(autoRefresh);
+  else if (command == fpCommandBackground) {
+    G4String redOrString;
+    G4double green, blue;
+    std::istringstream iss(newValue);
+    iss >> redOrString >> green >> blue;
+    G4Colour colour(0.,0.,0.);  // Default black.
+    const size_t iPos0 = 0;
+    if (std::isalpha(redOrString[iPos0])) {
+      //G4Colour::GetColour(redOrString, colour); // Remains default (black) if
+						// not found.
+      colour = G4Colour(1.,1.,1.);  // White for any letter for now.
+    } else {
+      colour = G4Colour(G4UIcommand::ConvertTo3Vector(newValue));
+    }
+    vp.SetBackgroundColour(colour);
     if (verbosity >= G4VisManager::confirmations) {
-      if (vp.IsWhiteBackground()) G4cout << "White";
-      else G4cout << "Default";
-      G4cout << " background requested."
+      G4cout << "Background colour "
+	     << vp.GetBackgroundColour()
+	     << " requested."
 	     << G4endl;
     }
   }
