@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.hh,v 1.17 2005-03-09 23:48:15 allison Exp $
+// $Id: G4VisCommandsViewer.hh,v 1.18 2005-10-13 18:06:44 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -37,6 +37,7 @@ class G4UIcommand;
 class G4UIcmdWithAString;
 class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWith3Vector;
 
 class G4VVisCommandViewer: public G4VVisCommand {
 public:
@@ -151,6 +152,21 @@ private:
   G4VisCommandViewerReset (const G4VisCommandViewerReset&);
   G4VisCommandViewerReset& operator = (const G4VisCommandViewerReset&);
   G4UIcmdWithAString* fpCommand;
+};
+
+class G4VisCommandViewerScale: public G4VVisCommandViewer {
+public:
+  G4VisCommandViewerScale ();
+  virtual ~G4VisCommandViewerScale ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandViewerScale (const G4VisCommandViewerScale&);
+  G4VisCommandViewerScale& operator = (const G4VisCommandViewerScale&);
+  G4UIcmdWith3Vector* fpCommandScale;
+  G4UIcmdWith3Vector* fpCommandScaleTo;
+  G4Vector3D fScaleMultiplier;
+  G4Vector3D fScaleTo;
 };
 
 class G4VisCommandViewerSelect: public G4VVisCommandViewer {

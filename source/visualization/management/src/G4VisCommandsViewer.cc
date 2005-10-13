@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.48 2005-10-12 20:22:36 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.49 2005-10-13 18:06:44 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -36,9 +36,10 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWith3Vector.hh"
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
-#include <strstream>
+#include <sstream>
 
 G4VVisCommandViewer::G4VVisCommandViewer () {}
 
@@ -138,19 +139,17 @@ G4VisCommandViewerCreate::~G4VisCommandViewerCreate () {
 }
 
 G4String G4VisCommandViewerCreate::NextName () {
-  const int charLength = 100;
-  char nextName [charLength];
-  std::ostrstream ost (nextName, charLength);
+  std::ostringstream oss;
   G4VSceneHandler* sceneHandler = fpVisManager -> GetCurrentSceneHandler ();
-  ost << "viewer-" << fId << " (";
+  oss << "viewer-" << fId << " (";
   if (sceneHandler) {
-    ost << sceneHandler -> GetGraphicsSystem () -> GetName ();
+    oss << sceneHandler -> GetGraphicsSystem () -> GetName ();
   }
   else {
-    ost << "no_scene_handlers";
+    oss << "no_scene_handlers";
   }
-  ost << ")" << std::ends;
-  return nextName;
+  oss << ")";
+  return oss.str();
 }
 
 G4String G4VisCommandViewerCreate::GetCurrentValue (G4UIcommand*) {
@@ -179,7 +178,7 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4String sceneHandlerName, newName;
   G4int windowSizeHint;
-  std::istrstream is (newValue);
+  std::istringstream is (newValue);
   is >> sceneHandlerName;
 
   // Now need to handle the possibility that the second string
@@ -450,7 +449,7 @@ G4String G4VisCommandViewerList::GetCurrentValue (G4UIcommand*) {
 
 void G4VisCommandViewerList::SetNewValue (G4UIcommand*, G4String newValue) {
   G4String name, verbosityString;
-  std::istrstream is (newValue);
+  std::istringstream is (newValue);
   is >> name >> verbosityString;
   G4String shortName = fpVisManager -> ViewerShortName (name);
   G4VisManager::Verbosity verbosity =
@@ -750,6 +749,86 @@ void G4VisCommandViewerReset::SetNewValue (G4UIcommand*, G4String newValue) {
   SetViewParameters(viewer, viewer->GetDefaultViewParameters());
 }
 
+////////////// /vis/viewer/scale and scaleTo ////////////////////////////
+
+G4VisCommandViewerScale::G4VisCommandViewerScale ():
+  fScaleMultiplier (G4Vector3D (1., 1., 1.)),
+  fScaleTo         (G4Vector3D (1., 1., 1.))
+{
+  G4bool omitable, currentAsDefault;
+
+  fpCommandScale = new G4UIcmdWith3Vector
+    ("/vis/viewer/scale", this);
+  fpCommandScale -> SetGuidance ("Incremental (non-uniform) scaling.");
+  fpCommandScale -> SetGuidance
+    ("Multiplies components of current scaling by components of this factor."
+     "\n Scales (x,y,z) by corresponding components of the resulting factor.");
+  fpCommandScale -> SetGuidance
+    ("");
+  fpCommandScale -> SetParameterName
+    ("x-scale-multiplier","y-scale-multiplier","z-scale-multiplier",
+     omitable=true, currentAsDefault=true);
+
+  fpCommandScaleTo = new G4UIcmdWith3Vector
+    ("/vis/viewer/scaleTo", this);
+  fpCommandScaleTo -> SetGuidance ("Absolute (non-uniform) scaling.");
+  fpCommandScaleTo -> SetGuidance
+    ("Scales (x,y,z) by corresponding components of this factor.");
+  fpCommandScaleTo -> SetParameterName
+    ("x-scale-factor","y-scale-factor","z-scale-factor",
+     omitable=true, currentAsDefault=true);
+}
+
+G4VisCommandViewerScale::~G4VisCommandViewerScale () {
+  delete fpCommandScale;
+  delete fpCommandScaleTo;
+}
+
+G4String G4VisCommandViewerScale::GetCurrentValue (G4UIcommand* command) {
+  G4String currentValue;
+  if (command == fpCommandScale) {
+    currentValue = fpCommandScale->ConvertToString(fScaleMultiplier);
+  }
+  else if (command == fpCommandScaleTo) {
+    currentValue = fpCommandScaleTo->ConvertToString(fScaleTo);
+  }
+  return currentValue;
+}
+
+void G4VisCommandViewerScale::SetNewValue (G4UIcommand* command,
+					   G4String newValue) {
+
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
+  if (!currentViewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+	"ERROR: G4VisCommandsViewerScale::SetNewValue: no current viewer."
+	     << G4endl;
+    }
+    return;
+  }
+
+  G4ViewParameters vp = currentViewer->GetViewParameters();
+
+  if (command == fpCommandScale) {
+    fScaleMultiplier = fpCommandScale->GetNew3VectorValue(newValue);
+    vp.MultiplyScaleFactor(fScaleMultiplier);
+  }
+  else if (command == fpCommandScaleTo) {
+    fScaleTo = fpCommandScale->GetNew3VectorValue(newValue);
+    vp.SetScaleFactor(fScaleTo);
+  }
+
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "Scale factor changed to " << vp.GetScaleFactor() << G4endl;
+  }
+
+  SetViewParameters(currentViewer, vp);
+}
+
 ////////////// /vis/viewer/select ///////////////////////////////////////
 
 G4VisCommandViewerSelect::G4VisCommandViewerSelect () {
@@ -834,12 +913,13 @@ void G4VisCommandViewerUpdate::SetNewValue (G4UIcommand*, G4String newValue) {
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   G4String& updateName = newValue;
+
   G4VViewer* viewer = fpVisManager -> GetViewer (updateName);
   if (!viewer) {
     if (verbosity >= G4VisManager::errors) {
       G4cout <<
-      "ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer."
-           << G4endl;
+	"ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer."
+	     << G4endl;
     }
     return;
   }
