@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.hh,v 1.18 2005-09-13 17:47:11 allison Exp $
+// $Id: G4ViewParameters.hh,v 1.19 2005-10-13 17:54:04 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -130,6 +130,7 @@ public: // With description
   const G4Vector3D&      GetUpVector             () const;
         G4double         GetFieldHalfAngle       () const;
         G4double         GetZoomFactor           () const;
+  const G4Vector3D&      GetScaleFactor          () const;
   const G4Point3D&       GetCurrentTargetPoint   () const;
         G4double         GetDolly                () const;
         G4bool           GetLightsMoveWithCamera () const;
@@ -147,7 +148,7 @@ public: // With description
         G4int            GetWindowSizeHintX      () const;
         G4int            GetWindowSizeHintY      () const;
         G4bool           IsAutoRefresh           () const;
-        G4bool           IsWhiteBackground       () const;
+  const G4Colour&        GetBackgroundColour     () const;
 
   // Here Follow functions to evaluate the above algorithms as a
   // function of the radius of the Bounding Sphere of the object being
@@ -185,6 +186,8 @@ public: // With description
   void SetFieldHalfAngle       (G4double fieldHalfAngle);
   void SetZoomFactor           (G4double zoomFactor);
   void MultiplyZoomFactor      (G4double zoomFactorMultiplier);
+  void SetScaleFactor          (const G4Vector3D& scaleFactor);
+  void MultiplyScaleFactor     (const G4Vector3D& scaleFactorMultiplier);
   void SetCurrentTargetPoint   (const G4Point3D& currentTargetPoint);
   void SetDolly                (G4double dolly);
   void IncrementDolly          (G4double dollyIncrement);
@@ -206,7 +209,7 @@ public: // With description
   void SetMarkerNotHidden      ();
   void SetWindowSizeHint       (G4int xHint, G4int yHint);
   void SetAutoRefresh          (G4bool);
-  void SetWhiteBackground      (G4bool);
+  void SetBackgroundColour     (const G4Colour&);
 
   void PrintDifferences (const G4ViewParameters& v) const;
 
@@ -232,6 +235,7 @@ private:
                                  // to fViewpointDirection!)
   G4double     fFieldHalfAngle;  // Radius / camara distance, 0 for parallel.
   G4double     fZoomFactor;      // Magnification relative to Standard View.
+  G4Vector3D   fScaleFactor;     // (Non-uniform) scale/magnification factor.
   G4Point3D    fCurrentTargetPoint;  // Relative to standard target point.
   G4double     fDolly;           // Distance towards current target point.
   G4bool       fLightsMoveWithCamera;
@@ -253,7 +257,7 @@ private:
   G4int        fWindowSizeHintX; // Size hints for pixel-based window systems.
   G4int        fWindowSizeHintY;
   G4bool       fAutoRefresh;     // ...after change of view parameters.
-  G4bool       fWhiteBackground; // White background flag.
+  G4Colour     fBackgroundColour;
 };
 
 #include "G4ViewParameters.icc"

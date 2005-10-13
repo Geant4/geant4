@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.21 2005-09-13 17:47:11 allison Exp $
+// $Id: G4ViewParameters.cc,v 1.22 2005-10-13 17:54:04 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,6 +54,7 @@ G4ViewParameters::G4ViewParameters ():
   fUpVector (G4Vector3D (0., 1., 0.)),            // y-axis up.
   fFieldHalfAngle (0.),                           // Orthogonal projection.
   fZoomFactor (1.),
+  fScaleFactor (G4Vector3D (1., 1., 1.)),
   fCurrentTargetPoint (),
   fDolly (0.),
   fLightsMoveWithCamera (false),
@@ -70,13 +71,20 @@ G4ViewParameters::G4ViewParameters ():
   fWindowSizeHintX (600),
   fWindowSizeHintY (600),
   fAutoRefresh (false),
-  fWhiteBackground (false)
+  fBackgroundColour (G4Colour(0.,0.,0.))          // Black
 {
   fDefaultMarker.SetScreenSize (5.);
   // Markers are 5 pixels "overall" size, i.e., diameter.
 }
 
 G4ViewParameters::~G4ViewParameters () {}
+
+void G4ViewParameters::MultiplyScaleFactor
+(const G4Vector3D& scaleFactorMultiplier) {
+  fScaleFactor.setX(fScaleFactor.x() * scaleFactorMultiplier.x());
+  fScaleFactor.setY(fScaleFactor.y() * scaleFactorMultiplier.y());
+  fScaleFactor.setZ(fScaleFactor.z() * scaleFactorMultiplier.z());
+}
 
 G4Vector3D& G4ViewParameters::GetActualLightpointDirection () {
   SetViewAndLights (fViewpointDirection);
@@ -246,6 +254,7 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       (fUpVector             != v.fUpVector)             ||
       (fFieldHalfAngle       != v.fFieldHalfAngle)       ||
       (fZoomFactor           != v.fZoomFactor)           ||
+      (fScaleFactor          != v.fScaleFactor)          ||
       (fCurrentTargetPoint   != v.fCurrentTargetPoint)   ||
       (fDolly                != v.fDolly)                ||
       (fRelativeLightpointDirection != v.fRelativeLightpointDirection)  ||
@@ -260,7 +269,7 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       (fMarkerNotHidden      != v.fMarkerNotHidden)      ||
       (fWindowSizeHintY      != v.fWindowSizeHintY)      ||
       (fAutoRefresh          != v.fAutoRefresh)          ||
-      (fWhiteBackground      != v.fWhiteBackground))
+      (fBackgroundColour     != v.fBackgroundColour))
     G4cout << "Difference in 1st batch." << G4endl;
 
   if (fSection) {
@@ -369,6 +378,8 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
 
   os << "\n  Zoom factor:          " << v.fZoomFactor;
 
+  os << "\n  Scale factor:         " << v.fScaleFactor;
+
   os << "\n  Current target point: " << v.fCurrentTargetPoint;
 
   os << "\n  Dolly distance:       " << v.fDolly;
@@ -431,9 +442,7 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
   if (v.fAutoRefresh) os << "true";
   else os << "false";
 
-  os << "\n  White Background: ";
-  if (v.fWhiteBackground) os << "true";
-  else os << "false";
+  os << "\n  Background colour: " << v.fBackgroundColour;
 
   return os;
 }
@@ -460,6 +469,7 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       (fUpVector             != v.fUpVector)             ||
       (fFieldHalfAngle       != v.fFieldHalfAngle)       ||
       (fZoomFactor           != v.fZoomFactor)           ||
+      (fScaleFactor          != v.fScaleFactor)          ||
       (fCurrentTargetPoint   != v.fCurrentTargetPoint)   ||
       (fDolly                != v.fDolly)                ||
       (fRelativeLightpointDirection != v.fRelativeLightpointDirection)  ||
@@ -475,7 +485,7 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       (fWindowSizeHintX      != v.fWindowSizeHintX)      ||
       (fWindowSizeHintY      != v.fWindowSizeHintY)      ||
       (fAutoRefresh          != v.fAutoRefresh)          ||
-      (fWhiteBackground      != v.fWhiteBackground))
+      (fBackgroundColour     != v.fBackgroundColour))
     return true;
 
   if (fDensityCulling &&

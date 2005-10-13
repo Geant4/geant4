@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.icc,v 1.8 2005-09-13 17:47:11 allison Exp $
+// $Id: G4ViewParameters.icc,v 1.9 2005-10-13 17:54:04 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -105,6 +105,10 @@ inline G4double G4ViewParameters::GetZoomFactor () const {
   return fZoomFactor;
 }
 
+inline const G4Vector3D& G4ViewParameters::GetScaleFactor () const {
+  return fScaleFactor;
+}
+
 inline const G4Point3D& G4ViewParameters::GetCurrentTargetPoint () const {
   return fCurrentTargetPoint;
 }
@@ -167,8 +171,8 @@ inline G4bool G4ViewParameters::IsAutoRefresh () const {
   return fAutoRefresh;
 }
 
-inline G4bool G4ViewParameters::IsWhiteBackground () const {
-  return fWhiteBackground;
+inline const G4Colour& G4ViewParameters::GetBackgroundColour () const {
+  return fBackgroundColour;
 }
 
 inline void
@@ -239,6 +243,10 @@ inline void G4ViewParameters::SetZoomFactor (G4double zoomFactor) {
 inline void
 G4ViewParameters::MultiplyZoomFactor (G4double zoomFactorMultiplier) {
   fZoomFactor *= zoomFactorMultiplier;
+}
+
+inline void G4ViewParameters::SetScaleFactor (const G4Vector3D& scaleFactor) {
+  fScaleFactor = scaleFactor;
 }
 
 inline void
@@ -319,6 +327,6 @@ inline void G4ViewParameters::SetAutoRefresh (G4bool state) {
   fAutoRefresh = state;
 }
 
-inline void G4ViewParameters::SetWhiteBackground (G4bool state) {
-  fWhiteBackground = state;
+inline void G4ViewParameters::SetBackgroundColour (const G4Colour& colour) {
+  fBackgroundColour = colour;
 }
