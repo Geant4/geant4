@@ -1,4 +1,4 @@
-$Id: History,v 1.54 2005-09-29 14:28:22 allison Exp $
+$Id: History,v 1.55 2005-10-13 17:33:56 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+13th October 2005  John Allison  (opengl-V07-01-06)
+- Allowed any colour background.
+- Implemented non-uniform scaling.
+- Migration to <sstream>.
 
 29th September 2005  John Allison  (opengl-V07-01-05)
 - Added G4OpenGLViewerDataStore to facilitate access of viewer data by
