@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.cc,v 1.18 2005-02-23 11:35:58 allison Exp $
+// $Id: G4VViewer.cc,v 1.19 2005-10-13 18:00:20 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,7 @@
 #include "G4VViewer.hh"
 
 #include "G4ios.hh"
-#include <strstream>
+#include <sstream>
 
 #include "G4VisManager.hh"
 #include "G4VGraphicsSystem.hh"
@@ -48,10 +48,9 @@ fModified (true),
 fNeedKernelVisit (true)
 {
   if (name == "") {
-    char charname [50];
-    std::ostrstream ost (charname, 50);
-    ost << fSceneHandler.GetName () << '-' << fViewId << std::ends;
-    fName = charname;
+    std::ostringstream ost;
+    ost << fSceneHandler.GetName () << '-' << fViewId;
+    fName = ost.str();
   }
   else {
     fName = name;

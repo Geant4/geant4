@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc,v 1.28 2005-03-03 16:13:08 allison Exp $
+// $Id: G4VisCommandsCompound.cc,v 1.29 2005-10-13 18:00:20 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
@@ -31,6 +31,8 @@
 #include "G4VisManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIcmdWithAString.hh"
+
+#include <sstream>
 
 ////////////// /vis/drawTree ///////////////////////////////////////
 
@@ -57,7 +59,7 @@ G4VisCommandDrawTree::~G4VisCommandDrawTree() {
 void G4VisCommandDrawTree::SetNewValue(G4UIcommand*, G4String newValue) {
 
   G4String pvname, system;
-  std::istrstream is(newValue);
+  std::istringstream is(newValue);
   is >> pvname >> system;
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
@@ -133,7 +135,7 @@ void G4VisCommandDrawView::SetNewValue(G4UIcommand*, G4String newValue) {
   G4String zoomFactor;
   G4String dolly;
   G4String dollyUnit;
-  std::istrstream is(newValue);
+  std::istringstream is(newValue);
   is >> thetaDeg >> phiDeg >> panRight >> panUp >> panUnit
      >> zoomFactor >> dolly >> dollyUnit;
   
@@ -239,7 +241,7 @@ G4VisCommandOpen::~G4VisCommandOpen() {
 
 void G4VisCommandOpen::SetNewValue (G4UIcommand*, G4String newValue) {
   G4String systemName, windowSizeHint;
-  std::istrstream is(newValue);
+  std::istringstream is(newValue);
   is >> systemName >> windowSizeHint;
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();

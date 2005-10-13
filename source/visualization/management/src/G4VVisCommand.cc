@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.cc,v 1.15 2005-03-09 23:48:15 allison Exp $
+// $Id: G4VVisCommand.cc,v 1.16 2005-10-13 18:00:20 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Base class for visualization commands - John Allison  9th August 1998
@@ -32,7 +32,7 @@
 #include "G4UIcommand.hh"
 #include "G4UImanager.hh"
 #include "G4UnitsTable.hh"
-#include <strstream>
+#include <sstream>
 
 G4VVisCommand::~G4VVisCommand () {}
 
@@ -43,11 +43,9 @@ G4String G4VVisCommand::ConvertToString
 {
   G4double uv = G4UIcommand::ValueOf(unitName);
   
-  char st[50];
-  std::ostrstream os(st,50);
-  os << x/uv << " " << y/uv << " " << unitName << std::ends;
-  G4String vl = st;
-  return vl;
+  std::ostringstream oss;
+  oss << x/uv << " " << y/uv << " " << unitName;
+  return oss.str();
 }
 
 void G4VVisCommand::ConvertToDoublePair(const G4String& paramString,
@@ -57,7 +55,7 @@ void G4VVisCommand::ConvertToDoublePair(const G4String& paramString,
   G4double x, y;
   char unts[30];
   
-  std::istrstream is(paramString);
+  std::istringstream is(paramString);
   is >> x >> y >> unts;
   G4String unt = unts;
 

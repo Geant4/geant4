@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.57 2005-09-16 01:30:56 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.58 2005-10-13 18:00:20 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -56,7 +56,7 @@
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4Tokenizer.hh"
 #include "G4ios.hh"
-#include <strstream>
+#include <sstream>
 
 // Local function with some frequently used error printing...
 static void G4VisCommandsSceneAddUnsuccessful
@@ -118,7 +118,7 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4String unitString;
   G4double x0, y0, z0, length;
-  std::istrstream is (newValue);
+  std::istringstream is (newValue);
   is >> x0 >> y0 >> z0 >> length >> unitString;
 
   G4double unit = G4UIcommand::ValueOf(unitString);
@@ -356,7 +356,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
   G4String name;
   G4int requestedDepthOfDescent;
   G4bool booleans, voxels, readout;
-  std::istrstream is (newValue);
+  std::istringstream is (newValue);
   is >> name >> requestedDepthOfDescent >>  booleans >> voxels >> readout;
 
   G4LogicalVolumeStore *pLVStore = G4LogicalVolumeStore::GetInstance();
@@ -496,7 +496,7 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4double userHeight, red, green, blue, xmid, ymid, zmid;
   G4String userHeightUnit, direction, auto_manual, positionUnit;
-  std::istrstream is (newValue);
+  std::istringstream is (newValue);
   is >> userHeight >> userHeightUnit >> direction
      >> red >> green >> blue
      >> auto_manual
@@ -822,7 +822,7 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4double userLength, red, green, blue, xmid, ymid, zmid;
   G4String userLengthUnit, direction, auto_manual, positionUnit;
-  std::istrstream is (newValue);
+  std::istringstream is (newValue);
   is >> userLength >> userLengthUnit >> direction
      >> red >> green >> blue
      >> auto_manual
@@ -832,10 +832,9 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
   G4double unit = G4UIcommand::ValueOf(positionUnit);
   xmid *= unit; ymid *= unit; zmid *= unit;
 
-  char tempcharstring [50];
-  std::ostrstream ost (tempcharstring, 50);
-  ost << userLength << ' ' << userLengthUnit << std::ends;
-  G4String annotation(tempcharstring);
+  std::ostringstream oss;
+  oss << userLength << ' ' << userLengthUnit;
+  G4String annotation(oss.str());
 
   G4Scale::Direction scaleDirection (G4Scale::x);
   if (direction(0) == 'y') scaleDirection = G4Scale::y;
@@ -1148,7 +1147,7 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
   }
 
   G4int drawingMode;
-  std::istrstream is (newValue);
+  std::istringstream is (newValue);
   is >> drawingMode;
   G4TrajectoriesModel* model = new G4TrajectoriesModel(drawingMode);
   const G4String& currentSceneName = pScene -> GetName ();
@@ -1248,7 +1247,7 @@ void G4VisCommandSceneAddUserAction::SetNewValue (G4UIcommand*,
 
   G4String unitString;
   G4double xmin, xmax, ymin, ymax, zmin, zmax;
-  std::istrstream is (newValue);
+  std::istringstream is (newValue);
   is >> xmin >> xmax >> ymin >> ymax >> zmin >> zmax >> unitString;
   G4double unit = G4UIcommand::ValueOf(unitString);
   xmin *= unit; xmax *= unit;
@@ -1321,7 +1320,8 @@ G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
   parameter -> SetDefaultValue ("none");
   parameter -> SetGuidance
     ("For \"box\", the parameters are xmin,xmax,ymin,ymax,zmin,zmax."
-     "\n Only \"box\" is programmed at present.");
+     // "\n Only \"box\" is programmed at present."); No '\n' for GAG (temp).
+     " Only \"box\" is programmed at present.");
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("parameter-unit", 's', omitable = true);
   parameter -> SetDefaultValue ("m");
@@ -1371,7 +1371,7 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
   G4String name, clipVolumeType, parameterUnit;
   G4int copyNo, requestedDepthOfDescent;
   G4double param1, param2, param3, param4, param5, param6;
-  std::istrstream is (newValue);
+  std::istringstream is (newValue);
   is >> name >> copyNo >> requestedDepthOfDescent
      >> clipVolumeType >> parameterUnit
      >> param1 >> param2 >> param3 >> param4 >> param5 >> param6;
