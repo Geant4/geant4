@@ -25,9 +25,6 @@
 
 #include "G4GAGTreeViewer.hh"
 
-#include "G4ios.hh"
-#include <strstream>
-
 G4GAGTreeViewer::G4GAGTreeViewer
 (G4VSceneHandler& sceneHandler, const G4String& name):
   G4VTreeViewer(sceneHandler, name) {
