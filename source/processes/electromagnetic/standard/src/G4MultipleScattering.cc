@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.34 2005-10-11 13:03:34 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.35 2005-10-13 11:21:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -74,6 +74,7 @@
 // 07-10-05 bug fixed in TruePathLengthLimit (L.Urban)
 // 11-10-05 change in TruePathLengthLimit conditions,slightly better 
 //          timing and much weaker cut dependence (L.Urban)
+// 13-10-05 move SetFacrange(0.02) from InitialiseProcess to constructor
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -155,7 +156,6 @@ void G4MultipleScattering::InitialiseProcess
   isInitialized = true;
   navigator = G4TransportationManager::GetTransportationManager()
     ->GetNavigatorForTracking();
-  SetFacrange(0.02); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
