@@ -1,4 +1,4 @@
-$Id: History,v 1.41 2005-08-17 17:21:56 gum Exp $
+$Id: History,v 1.42 2005-10-14 06:33:09 grichine Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+14 Oct 05: V. Grichine
+- new XTR models were added with G4VXTRenergyLoss::fExitFlux=true for
+  the description of XTR after radiator. These are: G4XTRRegularRadModel,
+  G4XTRGammaRadModel, G4XTRTransparentRegRadModel. XTR process was 
+  transformed to be discrete.      
+
 
 17 Aug 05: P.Gumplinger (xrays-V07-01-01)
 - change variable name MeanNumPhotons to MeanNumberOfPhotons
