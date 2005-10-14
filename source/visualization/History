@@ -1,4 +1,4 @@
-$Id: History,v 1.305 2005-10-13 18:26:11 allison Exp $
+$Id: History,v 1.306 2005-10-14 08:22:26 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,11 +24,11 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-13th October 2005  John Allison
+13th October 2005  John Allison (vis-V07-01-04)
 - Implemented non-uniform scaling in management and OpenGL.
 - Implemented arbitrary background in management, OpenGL and RayTracer.
 - Migrated to <sstream>.
-- The above consist of:
+- The above consists of:
   o vistest-V07-01-03: Migrated to <sstream> plus minor changes.
   o DAWN-V07-01-00: Migrated to <sstream>.
   o vis-HepRep-V07-01-03: Migrated to <sstream>.
