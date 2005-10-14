@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.11 2005-10-13 18:19:07 allison Exp $
+# $Id: GNUmakefile,v 1.12 2005-10-14 08:21:49 allison Exp $
 # -------------------------------------------------------------
 # GNUmakefile for visualization library.  John Allison, 5/7/95.
 
@@ -23,7 +23,6 @@ CPPFLAGS += -I$(G4BASE)/visualization/modeling/include
 CPPFLAGS += -I$(G4BASE)/graphics_reps/include
 CPPFLAGS += -I$(G4BASE)/global/management/include
 CPPFLAGS += -I$(G4BASE)/global/HEPGeometry/include
-CPPFLAGS += -I$(G4BASE)/global/HEPRandom/include ##### For G4ExtendedTajectory.
 CPPFLAGS += -I$(G4BASE)/geometry/solids/CSG/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/specific/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/Boolean/include
@@ -32,10 +31,8 @@ CPPFLAGS += -I$(G4BASE)/geometry/volumes/include
 CPPFLAGS += -I$(G4BASE)/geometry/navigation/include
 CPPFLAGS += -I$(G4BASE)/intercoms/include
 CPPFLAGS += -I$(G4BASE)/tracking/include
-CPPFLAGS += -I$(G4BASE)/track/include  ##############  For G4ExtendedTajectory.
 CPPFLAGS += -I$(G4BASE)/digits_hits/hits/include
 CPPFLAGS += -I$(G4BASE)/particles/management/include
-CPPFLAGS += -I$(G4BASE)/processes/management/include # For G4ExtendedTajectory.
 CPPFLAGS += -I$(G4BASE)/materials/include
 
 include $(G4INSTALL)/config/common.gmk
