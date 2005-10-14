@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc,v 1.8 2005-08-18 15:05:13 vnivanch Exp $
+// $Id: G4BraggIonModel.cc,v 1.9 2005-10-14 06:03:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -496,7 +496,8 @@ G4double G4BraggIonModel::DEDX(const G4Material* material,
   // compaund material with parametrisation
   if( HasMaterial(material) ) {
 
-    eloss = StoppingPower(material, kineticEnergy)*Avogadro;
+    eloss = StoppingPower(material, kineticEnergy)*
+      material->GetDensity()/amu;
 
   // pure material
   } else if(1 == numberOfElements) {
