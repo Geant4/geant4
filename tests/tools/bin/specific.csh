@@ -530,7 +530,7 @@ if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == wl-72106.lal.in2p3.fr
   setenv CVSROOT :ext:gbarrand@geant4.cvs.cern.ch:/cvs/Geant4
   setenv CVS_RSH ssh
 #  setenv G4INSTALL /geant4/geant4.6.0
-  setenv G4INSTALL /geant4/geant4-07-00-ref-01
+  setenv G4INSTALL /geant4/geant4-07-01
   setenv G4SYSTEM Darwin-g++
   setenv G4WORKDIR $G4INSTALL/Darwin
   setenv G4STTDIR $G4WORKDIR/stt
@@ -540,7 +540,7 @@ if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == wl-72106.lal.in2p3.fr
   # Shareable library
   #FIXME setenv G4LIB_BUILD_SHARED 1
   setenv DYLD_LIBRARY_PATH $G4LIB/$G4SYSTEM
-  setenv CLHEP_BASE_DIR /usr/local/CLHEP/1.8.1.0
+  setenv CLHEP_BASE_DIR /usr/local/CLHEP/1.9.2.1
   setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
   setenv NeutronHPCrossSections $G4WORKDIR/data/G4NDL3.5
   setenv G4LEVELGAMMADATA $G4WORKDIR/data/PhotonEvaporation
