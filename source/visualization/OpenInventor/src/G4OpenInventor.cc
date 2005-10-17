@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventor.cc,v 1.17 2005-06-02 17:43:46 allison Exp $
+// $Id: G4OpenInventor.cc,v 1.18 2005-10-17 07:39:26 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifdef G4VIS_BUILD_OI_DRIVER
@@ -39,6 +39,7 @@
 #include "HEPVis/nodekits/SoDetectorTreeKit.h"
 #include "HEPVis/actions/SoGL2PSAction.h"
 #include "HEPVis/actions/SoCounterAction.h"
+#include "HEPVis/actions/SoAlternateRepAction.h"
 
 #include "Geant4_SoPolyhedron.h"
 
@@ -81,6 +82,7 @@ void G4OpenInventor::InitNodes()
 
   SoGL2PSAction::initClass();
   SoCounterAction::initClass();
+  SoAlternateRepAction::initClass();
 }
 
 
