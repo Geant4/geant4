@@ -22,7 +22,7 @@
 //
 //
 //
-// $Id: SoDetectorTreeKit.cc,v 1.10 2005-08-01 16:15:49 gcosmo Exp $
+// $Id: SoDetectorTreeKit.cc,v 1.11 2005-10-17 07:21:03 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*-----------------------------HEPVis----------------------------------------*/
@@ -36,29 +36,32 @@
 #ifdef G4VIS_BUILD_OI_DRIVER
 
 // this :
-
 #include "HEPVis/nodekits/SoDetectorTreeKit.h"
 
-#include <cmath>
-#include <Inventor/nodes/SoSeparator.h>
-#include <Inventor/events/SoMouseButtonEvent.h>
 #include <Inventor/SoPickedPoint.h>
+#include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoPickStyle.h>
 #include <Inventor/nodes/SoDrawStyle.h>
+#include <Inventor/nodes/SoSwitch.h>
+#include <Inventor/nodes/SoMaterial.h>
+#include <Inventor/nodes/SoUnits.h>
+#include <Inventor/nodes/SoTransform.h>
+#include <Inventor/nodes/SoEventCallback.h>
+#include <Inventor/nodekits/SoSeparatorKit.h>
+#include <Inventor/nodekits/SoShapeKit.h>
 #include <Inventor/nodekits/SoAppearanceKit.h>
 #include <Inventor/nodekits/SoNodeKitListPart.h>
 #include <Inventor/nodekits/SoBaseKit.h>
-#include <Inventor/nodes/SoSwitch.h>
-#include <Inventor/nodekits/SoSeparatorKit.h>
-#include <Inventor/nodekits/SoShapeKit.h>
-#include <Inventor/nodes/SoMaterial.h>
-#include <Inventor/actions/SoHandleEventAction.h>
-#include <Inventor/nodes/SoUnits.h>
-#include <Inventor/nodes/SoTransform.h>
 #include <Inventor/nodes/SoTexture2Transform.h>
+#include <Inventor/events/SoMouseButtonEvent.h>
+#include <Inventor/actions/SoHandleEventAction.h>
+
+#include <HEPVis/actions/SoAlternateRepAction.h>
+
+#include <math.h>
 
 // This statement is required
-SO_KIT_SOURCE(SoDetectorTreeKit)
+SO_KIT_SOURCE(SoDetectorTreeKit) 
  
 // initClass
 void SoDetectorTreeKit::initClass(){
@@ -222,6 +225,16 @@ void SoDetectorTreeKit::generateAlternateRep() {
 
 void SoDetectorTreeKit::clearAlternateRep() {
   alternateRep.setValue(NULL);
+}
+//////////////////////////////////////////////////////////////////////////////
+void SoDetectorTreeKit::doAction(
+ SoAction* aAction
+)
+//////////////////////////////////////////////////////////////////////////////
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+{
+  SO_ALTERNATEREP_DO_ACTION(aAction)
+  SoBaseKit::doAction(aAction);
 }
 
 #endif
