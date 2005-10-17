@@ -45,7 +45,7 @@
 
 #include <HEPVis/actions/SoAlternateRepAction.h>
 
-#include "G4Polyhedron.h"
+#include "G4Polyhedron.hh"
 
 //typedef SbVec3f HVPoint3D;
 //typedef SbVec3f HVNormal3D;
