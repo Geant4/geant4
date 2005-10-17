@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.81 2005-10-13 20:48:11 tinslay Exp $
+cvs log $Id: History,v 1.82 2005-10-17 20:08:36 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-13th October 2005 Jane Tinslay
+13th October 2005 Jane Tinslay  (greps-V07-01-04)
 - Additions to G4Colour
   o Add static data members for common colours.
   o Add G4String->G4Colour colour map.
