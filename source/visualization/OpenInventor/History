@@ -1,4 +1,4 @@
-$Id: History,v 1.68 2005-09-02 13:06:06 allison Exp $
+$Id: History,v 1.69 2005-10-17 07:40:17 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,22 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+17th October 2005  Guy Barrand
+- G4OpenInventorViewer::G4OpenInventorViewer : read a g4view.iv
+  file at creating of a view. If found, the scene graph in g4view.iv
+  if added at head of the overall scene graph. This permits easy
+  out of band customization of the scene without having to touch
+  the code.
+- Modification in order to save geometry in an Inventor file.
+  Addition of an "alternateRep" for the SoPolyhedron (see Inventor doc).
+  Addition of an "alternateRep" for the SoDetectorTreeKit.
+  Addition of the SoAlternaterRepAction to traverse a scene graph
+  and construct / delete the alternate reps.
+  Modification of G4OpenInventorViewer::WriteInventor to write the
+  alternateRep of the SoPolyhedron and then save geometry in a 
+  .iv file by using Inventor standard lib. In particular the produced
+  .iv files are readable by the ivview standard tool.
 
 2nd September 2005  John Allison (openinventor-V07-01-02)
 - Corrected treatment of edgeflags.
