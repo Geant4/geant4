@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.66 2005-10-05 14:26:06 urban Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.67 2005-10-17 13:02:24 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -87,6 +87,7 @@
 // 02-09-05 Default StepFunction 0.2 1 mm + integral (V.Ivanchenko)
 // 04-09-05 default lambdaFactor 0.8 (V.Ivanchenko)
 // 05-10-05 protection against 0 energy loss added (L.Urban)
+// 17-10-05 protection above has been removed (L.Urban)
 //
 // Class Description:
 //
@@ -682,13 +683,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   }
 */
 
-  // protection against 0 mean energy loss
-  if(eloss < lowestKinEnergy)
-    eloss =  std::min(lowestKinEnergy,preStepKinEnergy);
-
   // Sample fluctuations
- // if (lossFluctuationFlag && eloss + lowestKinEnergy < preStepKinEnergy) {
-  if (lossFluctuationFlag && eloss < preStepKinEnergy) {
+  if (lossFluctuationFlag && eloss + lowestKinEnergy < preStepKinEnergy) {
 
     eloss = currentModel->GetModelOfFluctuations()->
       SampleFluctuations(currentMaterial,dynParticle,tmax,length,eloss);
