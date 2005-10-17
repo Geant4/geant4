@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.6 2005-10-03 11:10:48 urban Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.7 2005-10-17 13:01:05 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -48,6 +48,7 @@
 //          + smearing for very small loss (L.Urban)
 // 03-10-05 energy dependent rate -> cut dependence of the
 //          distribution is much weaker (L.Urban)
+// 17-10-05 correction for very small loss (L.Urban)
 //          
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -274,7 +275,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   //
   G4double e0 = material->GetIonisation()->GetEnergy0fluct();
 
-  if(tmax <= e0) a3 = 0.0;
+  if(tmax <= e0) return meanLoss;
   else a3 = meanLoss*(tmax-e0)/(tmax*e0*log(tmax/e0));
 
   if (a3 > alim)
