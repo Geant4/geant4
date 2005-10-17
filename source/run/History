@@ -1,4 +1,4 @@
-$Id: History,v 1.131 2005-09-26 08:36:26 gcosmo Exp $
+$Id: History,v 1.132 2005-10-17 21:26:45 tinslay Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+October 17th, 2005 Jane Tinslay
+- Modify GNUmakefile to follow intercoms->graphics_reps migration for 
+  G4VGraphicsScene and G4VVisManager
 
 September 26th, 2005 G.Cosmo (run-V07-01-01)
 - Removed definition of G4Allocator<G4Run> after changes made in
