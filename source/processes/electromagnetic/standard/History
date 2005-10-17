@@ -1,4 +1,4 @@
-$Id: History,v 1.175 2005-10-13 11:29:52 maire Exp $
+$Id: History,v 1.176 2005-10-17 13:07:02 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17 October 05: L.Urban
+- G4UniversalFluctuation.cc: correction for very small loss
+  to avoid 0 energy loss 
      
 13 October 05: mma (emstand-V07-01-17)     
 - G4MultipleScattering.cc: remove SetFacrange(0.02) from InitialiseProcess
