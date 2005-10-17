@@ -1,4 +1,4 @@
-$Id: README,v 1.24 2005-05-18 15:28:37 maire Exp $
+$Id: README,v 1.25 2005-10-17 15:47:27 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -126,8 +126,8 @@ $Id: README,v 1.24 2005-05-18 15:28:37 maire Exp $
   histo 12 : longitudinal profile of energy deposit in absorber 2 (MeV/event)  
   ...etc...........  
   
-  histo 21 :  forward energy flow (MeV/event)
-  histo 22 : backward energy flow (MeV/event)  
+  histo 21 : energy flow (MeV/event)
+  histo 22 : lateral energy leak (MeV/event)  
 
  One can control the name of the histograms file with the command:
  /testem/histo/setFileName  name  (default testem3.hbook)
