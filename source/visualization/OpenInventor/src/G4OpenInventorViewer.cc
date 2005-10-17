@@ -461,7 +461,8 @@ void G4OpenInventorViewer::WriteInventor(const G4String& aFile) {
   G4cout << "Produce " << aFile << "..." << G4endl;
 
   SbBool genAlternateRep = TRUE;
-  SbBool binary = FALSE;
+  //SbBool binary = FALSE;
+  SbBool binary = TRUE;
   SoAlternateRepAction alternateRepAction;
   if(genAlternateRep==TRUE) {
     alternateRepAction.setGenerate(TRUE); //Clear alternate reps.
