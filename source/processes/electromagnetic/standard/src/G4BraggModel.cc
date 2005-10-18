@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.10 2005-08-18 15:05:13 vnivanch Exp $
+// $Id: G4BraggModel.cc,v 1.11 2005-10-18 18:46:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -102,9 +102,9 @@ void G4BraggModel::Initialise(const G4ParticleDefinition* p,
   if(particle->GetParticleType() == "nucleus" && 
      pname != "deuteron" && pname != "triton") isIon = true;
 
-  if(pParticleChange) 
+  if(pParticleChange)
     fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
-  else 
+  else
     fParticleChange = new G4ParticleChangeForLoss();
 }
 
@@ -290,7 +290,7 @@ G4double G4BraggModel::StoppingPower(const G4Material* material,
    {1.286E+1, 1.462E+1, 5.625E+3, 2.621E+3, 3.512E-2}, 
    {3.229E+1, 3.696E+1, 8.918E+3, 3.244E+3, 1.273E-1}, 
    {1.604E+1, 1.825E+1, 6.967E+3, 2.307E+3, 3.775E-2}, 
-   {8.049E+0, 9.099E+0, 9.257E+3, 3.846E+2, 1.007E-2}, 
+   {8.049E+0, 9.099E+0, 9.257E+3, 3.846E+2, 1.007E-2},
    {4.015E+0, 4.542E+0, 3.955E+3, 4.847E+2, 7.904E-3}, 
    {4.571E+0, 5.173E+0, 4.346E+3, 4.779E+2, 8.572E-3},
    {2.631E+0, 2.601E+0, 1.701E+3, 1.279E+3, 1.638E-2} };
@@ -311,7 +311,7 @@ G4double G4BraggModel::StoppingPower(const G4Material* material,
 
     if ( ionloss < 0.0) ionloss = 0.0 ;
     if ( 10 == iMolecula ) { 
-      if (T < 100.0) {    
+      if (T < 100.0) {
 	ionloss *= (1.0+0.023+0.0066*log10(T));  
       }
       else if (T < 700.0) {   
@@ -490,7 +490,8 @@ G4double G4BraggModel::DEDX(const G4Material* material,
   // compaund material with parametrisation
   if( HasMaterial(material) ) {
 
-    eloss = StoppingPower(material, kineticEnergy)*Avogadro;
+    eloss = StoppingPower(material, kineticEnergy)*
+                          material->GetDensity()/amu;
 
   // pure material
   } else if(1 == numberOfElements) {
