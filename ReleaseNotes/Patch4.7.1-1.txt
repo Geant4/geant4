@@ -83,6 +83,9 @@ List of fixes included in this public patch since the public release 7.1:
 
   o Hadronic Processes:
     ------------------
+    + management:
+      o Correctly set the type of a hadronic process.
+        Fixes problem report #744.
     + models/chiral_inv_phase_space/body:
       o Memory leak fix for nuclear mass management in G4QPDGCode to use
         G4 masses of nuclear fragments.
