@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVParameterised.hh,v 1.2 2003-11-02 16:06:05 gcosmo Exp $
+// $Id: G4PVParameterised.hh,v 1.3 2005-10-19 13:09:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,11 +51,13 @@ class G4PVParameterised : public G4PVReplica
                             G4LogicalVolume* pMotherLogical,
                       const EAxis pAxis,
                       const G4int nReplicas,
-                            G4VPVParameterisation *pParam);
+                            G4VPVParameterisation *pParam,
+                            G4bool pSurfChk=false);
       // Replicate the volume nReplicas Times using the paramaterisation pParam,
       // within the mother volume pMotherLogical.
       // The positioning of the replicas is dominant along the specified axis.
-
+      // pSurfChk if true activates check for overlaps with existing volumes.
+ 
   public:  // without description
 
     G4PVParameterised(const G4String& pName,
@@ -63,8 +65,9 @@ class G4PVParameterised : public G4PVReplica
                             G4VPhysicalVolume* pMother,
                       const EAxis pAxis,
                       const G4int nReplicas,
-                            G4VPVParameterisation *pParam);
-      // Almost exactly similar to first constructor, changing only mother 
+                            G4VPVParameterisation *pParam,
+                            G4bool pSurfChk=false);
+       // Almost exactly similar to first constructor, changing only mother 
       // pointer's type to PhysicalVolume.
 
   public:  // with description
@@ -84,6 +87,12 @@ class G4PVParameterised : public G4PVReplica
                             G4double& offset,
                             G4bool& consuming) const;
       // Fills arguments with the attributes from the base replica.
+
+    G4bool CheckOverlaps(G4int res=1000);
+      // Verifies if each instance of the parameterised volume is overlapping
+      // with other instances or with the mother volume. Provides default
+      // resolution for the number of points to be generated and verified.
+      // Returns true if an overlap occurs.
 
   private:
 
