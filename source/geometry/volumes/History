@@ -1,4 +1,4 @@
-$Id: History,v 1.128 2005-07-25 10:03:02 gcosmo Exp $
+$Id: History,v 1.129 2005-10-19 13:08:36 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 19th, 2005      G. Cosmo - geomvol-V07-01-01
+- Introduced first implementation for optional check of overlaps at
+  construction to G4PVPlacement and G4PVParameterised volumes. Default
+  resolution of 1000 points is defined for the check.
+  The check is disabled by default.
+- Introduced method CheckOverlaps(p) for placements and parameterised
+  volumes. The resolution for the check can be specified providing the
+  number of points wished to be generated.
+- Updated unit test for G4ReflectedSolid.
 
 Jul 25th, 2005      G. Cosmo - geomvol-V07-01-00
 - Cleanup and fixes in use of inline methods in G4VNestedParameterisation
