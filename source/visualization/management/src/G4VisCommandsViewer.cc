@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.49 2005-10-13 18:06:44 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.50 2005-10-20 11:48:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -787,10 +787,10 @@ G4VisCommandViewerScale::~G4VisCommandViewerScale () {
 G4String G4VisCommandViewerScale::GetCurrentValue (G4UIcommand* command) {
   G4String currentValue;
   if (command == fpCommandScale) {
-    currentValue = fpCommandScale->ConvertToString(fScaleMultiplier);
+    currentValue = fpCommandScale->ConvertToString(G4ThreeVector(fScaleMultiplier));
   }
   else if (command == fpCommandScaleTo) {
-    currentValue = fpCommandScaleTo->ConvertToString(fScaleTo);
+    currentValue = fpCommandScaleTo->ConvertToString(G4ThreeVector(fScaleTo));
   }
   return currentValue;
 }
