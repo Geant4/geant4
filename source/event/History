@@ -1,4 +1,4 @@
-$Id: History,v 1.92 2005-10-17 21:21:53 tinslay Exp $
+$Id: History,v 1.93 2005-10-20 20:23:14 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+October 20, 2005, Joseph Perl (event-V07-01-01)
+- Tag to co-work with vis-V07-01-05.
+
 Oct 17, 2005 Jane Tinslay
 - Modify GNUmakefile to follow intercoms->graphics_reps migration for 
   G4VGraphicsScene and G4VVisManager
