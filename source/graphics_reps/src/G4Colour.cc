@@ -21,14 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4Colour.cc,v 1.7 2005-10-13 20:48:11 tinslay Exp $
+// $Id: G4Colour.cc,v 1.8 2005-10-20 12:18:49 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison 20th October 1996
 
 #include "G4Colour.hh"
-#include "G4ios.hh"
+
+#include <sstream>
 
 G4Colour::G4Colour (G4double r, G4double g, G4double b, G4double a):
 red (r), green (g), blue (b), alpha (a)
