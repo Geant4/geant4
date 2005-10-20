@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.83 2005-10-17 20:54:29 tinslay Exp $
+cvs log $Id: History,v 1.84 2005-10-20 12:19:13 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20th October 2005  John Allison (greps-V07-01-06)
+- G4Colour.cc: Added #include <sstream>.
+
 17th October 2005 Jane Tinslay (greps-V07-01-05)
 - intercoms->graphics_reps migration for G4VGraphicsScene and G4VVisManager  
 
