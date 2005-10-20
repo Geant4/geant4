@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2005-10-13 18:14:31 allison Exp $
+$Id: History,v 1.11 2005-10-20 11:50:02 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,11 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+20th October 2005  John Allison (visman-V07-01-06)
+- Get standard colours with "/vis/viewer/set/background red", for example.
+- G4VisCommandsViewer.cc: Fixed G4ThreeVector/G4Vector3D problem with
+  CLHEP-1.9.2.1.
 
 13th October 2005  John Allison (visman-V07-01-05)
 - Background colour - /vis/viewer/set/background.
