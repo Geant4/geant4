@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.36 2005-10-13 18:10:29 allison Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.37 2005-10-20 11:49:28 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -835,9 +835,8 @@ void G4VisCommandsViewerSet::SetNewValue
     G4Colour colour(0.,0.,0.);  // Default black.
     const size_t iPos0 = 0;
     if (std::isalpha(redOrString[iPos0])) {
-      //G4Colour::GetColour(redOrString, colour); // Remains default (black) if
+      G4Colour::GetColour(redOrString, colour); // Remains default (black) if
 						// not found.
-      colour = G4Colour(1.,1.,1.);  // White for any letter for now.
     } else {
       colour = G4Colour(G4UIcommand::ConvertTo3Vector(newValue));
     }
