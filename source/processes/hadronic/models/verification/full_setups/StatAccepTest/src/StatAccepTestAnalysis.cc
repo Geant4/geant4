@@ -130,11 +130,11 @@ void StatAccepTestAnalysis::init( const G4int numberOfReplicasIn,
   if ( numberOfReplicasIn > 0 )    numberOfReplicas   = numberOfReplicasIn;
   if ( numberOfRadiusBinsIn > 0 )  numberOfRadiusBins = numberOfRadiusBinsIn;
   if ( radiusBinIn > 0 )           radiusBin = radiusBinIn;
-  G4cout << " StatAccepTestAnalysis::init( , , , ) : DEBUG Info " << G4endl
-         << "\t numberOfReplicas   = " << numberOfReplicas << G4endl
-         << "\t numberOfRadiusBins = " << numberOfRadiusBins << G4endl
-         << "\t radiusBin          = " << radiusBin/mm << " mm" 
-	 << G4endl;  //***DEBUG***
+  //G4cout << " StatAccepTestAnalysis::init( , , , ) : DEBUG Info " << G4endl
+  //       << "\t numberOfReplicas   = " << numberOfReplicas << G4endl
+  //       << "\t numberOfRadiusBins = " << numberOfRadiusBins << G4endl
+  //       << "\t radiusBin          = " << radiusBin/mm << " mm" 
+  //       << G4endl;  //***DEBUG***
 
   // Create two histograms: one for the longitudinal shower profile,
   // and one for the transverse shower profile.

@@ -157,6 +157,8 @@ g4file.write( "/gun/particle " + ParticleType + " \n" )
 
 g4file.write( "/gun/energy " + EnergyValue + " \n" )			
 
+g4file.write( "#/mydet/setField 4.0 tesla \n" )  #***LOOKHERE****
+
 g4file.write( "/mydet/absorberMaterial " + Absorber + " \n" )		
 g4file.write( "/mydet/activeMaterial " + Active + " \n" )
 g4file.write( "/mydet/isCalHomogeneous " + isHomogeneous + " \n" )		
@@ -181,8 +183,8 @@ setupFile = open( "setup.sh", "w" )
 setupFile.write( "export G4SYSTEM=Linux-g++ \n" )
 
 setupFile.write( "export G4_RELEASE=" + Release + " \n" )
+###setupFile.write( "export VO_DTEAM_SW_DIR=/users/ribon/dirGrid \n" )  #***LOOKHERE***
 setupFile.write( "export DIR_INSTALLATIONS=$VO_DTEAM_SW_DIR/dirInstallations \n" )
-###setupFile.write( "export DIR_INSTALLATIONS=$PWD/.. \n" )
 setupFile.write( "export G4INSTALL=$DIR_INSTALLATIONS/$G4_RELEASE \n" )
 setupFile.write( "export G4LIB=$DIR_INSTALLATIONS/$G4_RELEASE/lib \n" )
 

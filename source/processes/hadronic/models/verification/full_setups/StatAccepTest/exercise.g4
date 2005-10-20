@@ -1,5 +1,4 @@
 #----------------------------------------------------------------
-# 11-Aug-2004 A.R.   
 #
 # This is the prototype of the Geant4 command script for the
 # statistical acceptance suite, based on a Calorimeter setup.
@@ -12,7 +11,10 @@
 #  2) Choice of the  * Beam Energy * :
 #       1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 60, 80,
 #       100, 120, 150, 180, 200, 250, 300, 1000    GeV.
-#  3) Choice of the  * Calorimeter Type * :
+#  3) Choice is of the uniform magnetic field along the Y-direction.
+#     By default, it is 0.0 . 
+#     Explicit unit (e.g. tesla) should be used to express the B value.
+#  4) Choice of the  * Calorimeter Type * :
 #       I) Absorber and Active materials (and whether it is
 #          an homogeneous calorimeter or a sampling one):
 #            Fe-Sci, Cu-Sci, Pb-Sci, Cu-LAr, Pb-LAr, W-LAr  (Sampling) 
@@ -88,6 +90,10 @@
 #/gun/energy  250 GeV
 #/gun/energy  300 GeV
 #/gun/energy 1000 GeV
+#
+#=======================  MAGNETIC FIELD  ====================
+#
+#/mydet/setField 4.0 tesla
 #
 #=======================  CALORIMETER TYPE  ====================
 #

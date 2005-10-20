@@ -1,6 +1,13 @@
                  History file
                  ------------
 
+20-Oct-2005 - A.Ribon (statAccepTest-V07-01-02)
+- Introduced the possibility to have magnetic field
+  (only along the y-axis, i.e. transverse to the
+   beam direction) in the Geant4 macros. Also some
+  clean up of the information which are printed out.
+
+
 13-Oct-2005 - A.Ribon (statAccepTest-V07-01-01)
 - Changes to ensure that the transportation in field
   is not used if the magnetic field is zero (which

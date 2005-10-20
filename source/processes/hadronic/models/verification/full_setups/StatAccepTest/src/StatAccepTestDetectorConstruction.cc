@@ -68,8 +68,6 @@ StatAccepTestDetectorConstruction::StatAccepTestDetectorConstruction() :
   theAbsorberMaterial = Iron;
   theActiveMaterial   = Polystyrene;
 
-  PrintParameters();
-
   detectorMessenger = new StatAccepTestDetectorMessenger(this);
 
   // G4cout << " END  StatAccepTestDetectorConstruction::StatAccepTestDetectorConstruction()" << G4endl; //***DEBUG***
@@ -424,13 +422,13 @@ G4VPhysicalVolume* StatAccepTestDetectorConstruction::ConstructCalorimeter() {
                                 false,                 // boolean operation
                                 100);                  // copy number
 
-  G4cout << " StatAccepTestDetectorConstruction::ConstructCalorimeter() : DEBUG Info " 
-	 << G4endl
-         << "\t xAbsorber      = " << xAbsorber / mm <<  " mm " << G4endl
-	 << "\t xActive        = " << xActive / mm <<  " mm " << G4endl
-	 << "\t xModule        = " << xModule / mm << " mm " << G4endl
-	 << "\t total Absorber = " << xAbsorber*numberOfModules / m << " m " << G4endl
-	 << "\t xCalo          = " << xCalo / m << " m " << G4endl; //***DEBUG***
+  // G4cout << " StatAccepTestDetectorConstruction::ConstructCalorimeter() : DEBUG Info "
+  //        << G4endl
+  //        << "\t xAbsorber      = " << xAbsorber / mm <<  " mm " << G4endl
+  //	    << "\t xActive        = " << xActive / mm <<  " mm " << G4endl
+  //	    << "\t xModule        = " << xModule / mm << " mm " << G4endl
+  //	    << "\t total Absorber = " << xAbsorber*numberOfModules / m << " m " << G4endl
+  //	    << "\t xCalo          = " << xCalo / m << " m " << G4endl; //***DEBUG***
 
   // --- Sensitive detectors
   if ( ! theSensitiveCalorimeter ) { 
@@ -477,7 +475,6 @@ G4VPhysicalVolume* StatAccepTestDetectorConstruction::ConstructCalorimeter() {
   }
   StatAccepTestAnalysis::getInstance()->init( numberOfModules, 
 				   theRadiusBinNumber, radiusBinSize );
-  PrintParameters();
 
   // G4cout << " END  StatAccepTestDetectorConstruction::ConstructCalorimeter()" 
   //        << G4endl; //***DEBUG***
@@ -522,61 +519,16 @@ G4bool StatAccepTestDetectorConstruction::areParametersOK() {
 }
 
 
-void StatAccepTestDetectorConstruction::PrintParameters() {
-
-  G4cout << G4endl << G4endl
-         << " ------  StatAccepTestDetectorConstruction::PrintParameters() ------ " 
-	 << G4endl
-         << " Absorber Material = ";
-  if ( theAbsorberMaterial ) {
-    G4cout << theAbsorberMaterial->GetName();
-  } else {
-    G4cout << " UNDEFINED ";
-  }
-  G4cout << G4endl << " Active Material   = ";
-  if ( theActiveMaterial ) {
-    G4cout << theActiveMaterial->GetName();
-  } else {
-    G4cout << " UNDEFINED ";
-  }
-  G4cout << G4endl << " Is the Calorimeter Homogeneous ? " << theIsCalHomogeneous;
-  G4cout << G4endl << " Is the Unit in Lambda ? " << theIsUnitInLambda;
-  G4cout << G4endl << " Absorber Total Length = ";
-  if ( theIsUnitInLambda ) {
-    G4cout << theAbsorberTotalLength << "  lambdas";
-  } else {
-    G4cout << theAbsorberTotalLength / m << " m";
-  }
-  G4cout << G4endl << " Active Layer Number   = " << theActiveLayerNumber;
-  G4cout << G4endl << " Active Layer Size     = " << theActiveLayerSize/mm << " mm";
-  G4cout << G4endl << " Is the Radius Unit in Lambda ? " << theIsRadiusUnitInLambda;
-  G4cout << G4endl << " Radius Bin Size       = ";
-  if ( theIsRadiusUnitInLambda ) {
-    G4cout << theRadiusBinSize << "  lambdas";
-  } else {
-    G4cout << theRadiusBinSize / mm << " mm";
-  }
-  G4cout << G4endl << " Radius Bin Number     = " << theRadiusBinNumber;
-  G4cout << G4endl << " -------------------------------------------------------- "
-         << G4endl << G4endl;
-
-}
-
-
 void StatAccepTestDetectorConstruction::SetMagField(G4double fieldValue) {
   if ( uniformMagField ) {
     delete uniformMagField;
   }
   if ( fabs( fieldValue ) > 0.0 ) {
-    // Apply a global uniform magnetic field along one axis: uncomment
-    // below the line that specify the axis you want, in the order (x,y,z),
-    // and similarly in StatAccepTestDetectorMessenger constructor.
+    // Apply a global uniform magnetic field along the Y axis.
     // Notice that only if the magnetic field is not zero, the Geant4
     // transportion in field gets activated.
 
-    // uniformMagField = new G4UniformMagField( G4ThreeVector(fieldValue, 0.0, 0.0) );
-    // uniformMagField = new G4UniformMagField( G4ThreeVector(0.0, fieldValue, 0.0) );
-    uniformMagField = new G4UniformMagField( G4ThreeVector(0.0, 0.0, fieldValue) );
+    uniformMagField = new G4UniformMagField( G4ThreeVector(0.0, fieldValue, 0.0) );
 
     fieldMgr->SetDetectorField( uniformMagField );
     fieldMgr->CreateChordFinder( uniformMagField );
@@ -614,9 +566,8 @@ void StatAccepTestDetectorConstruction::SetAbsorberMaterial(const G4String name)
   
   logicAbsorber->SetMaterial( theAbsorberMaterial );
   
-  G4cout << G4endl
-	 << " Absorber Material = " << logicAbsorber->GetMaterial()->GetName() 
-	 << G4endl;
+  // G4cout << " Absorber Material = " << logicAbsorber->GetMaterial()->GetName() 
+  //	    << G4endl;
   
 }
 
@@ -645,9 +596,8 @@ void StatAccepTestDetectorConstruction::SetActiveMaterial(const G4String name) {
   
   logicActive->SetMaterial( theActiveMaterial );
   
-  G4cout << G4endl
-	 << " Active Material = " << logicActive->GetMaterial()->GetName() 
-	 << G4endl;
+  // G4cout << " Active Material = " << logicActive->GetMaterial()->GetName() 
+  //        << G4endl;
   
 }
 
@@ -658,5 +608,55 @@ void StatAccepTestDetectorConstruction::UpdateGeometry() {
 
   G4RunManager::GetRunManager()->DefineWorldVolume( ConstructCalorimeter() );
 
+  PrintParameters();
+
   // G4cout << " END  StatAccepTestDetectorConstruction::UpdateGeometry" << G4endl; //***DEBUG***
+}
+
+
+void StatAccepTestDetectorConstruction::PrintParameters() {
+
+  G4cout << G4endl << G4endl
+         << " ------  StatAccepTestDetectorConstruction::PrintParameters() ------ " 
+	 << G4endl
+         << " Absorber Material = ";
+  if ( theAbsorberMaterial ) {
+    G4cout << theAbsorberMaterial->GetName();
+  } else {
+    G4cout << " UNDEFINED ";
+  }
+  G4cout << G4endl << " Active Material   = ";
+  if ( theActiveMaterial ) {
+    G4cout << theActiveMaterial->GetName();
+  } else {
+    G4cout << " UNDEFINED ";
+  }
+  G4cout << G4endl << " Is the Calorimeter Homogeneous ? " << theIsCalHomogeneous;
+  G4cout << G4endl << " Is the Unit in Lambda ? " << theIsUnitInLambda;
+  G4cout << G4endl << " Absorber Total Length = ";
+  if ( theIsUnitInLambda ) {
+    G4cout << theAbsorberTotalLength << "  lambdas";
+  } else {
+    G4cout << theAbsorberTotalLength / m << " m";
+  }
+  G4cout << G4endl << " Active Layer Number   = " << theActiveLayerNumber;
+  G4cout << G4endl << " Active Layer Size     = " << theActiveLayerSize/mm << " mm";
+  G4cout << G4endl << " Is the Radius Unit in Lambda ? " << theIsRadiusUnitInLambda;
+  G4cout << G4endl << " Radius Bin Size       = ";
+  if ( theIsRadiusUnitInLambda ) {
+    G4cout << theRadiusBinSize << "  lambdas";
+  } else {
+    G4cout << theRadiusBinSize / mm << " mm";
+  }
+  G4cout << G4endl << " Radius Bin Number     = " << theRadiusBinNumber;
+  G4cout << G4endl << " Magnetic field [T]    = ";
+  if ( uniformMagField ) {
+    G4cout << uniformMagField->GetConstantFieldValue() / tesla;
+  } else {
+    G4cout << "(0,0,0)";
+  }
+
+  G4cout << G4endl << " -------------------------------------------------------- "
+         << G4endl << G4endl;
+
 }
