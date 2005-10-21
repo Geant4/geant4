@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.hh,v 1.3 2005-10-17 20:54:29 tinslay Exp $
+// $Id: G4VVisManager.hh,v 1.4 2005-10-21 19:57:49 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // John Allison 19/Oct/1996.
 // 
@@ -157,6 +157,9 @@ public: // With description
 
   virtual void GeometryHasChanged () = 0;
   // This is used by the run manager to notify a change of geometry.
+
+  virtual void DispatchToCurrentDrawer(const G4VTrajectory& trajectory, G4int i_mode = 0) = 0;
+  // Draw the trajectory
 
 protected:
 
