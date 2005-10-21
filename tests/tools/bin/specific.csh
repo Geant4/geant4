@@ -523,7 +523,7 @@ if ( `uname -n` == "pc-88172" ) then
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/DMX
 endif
 
-if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == wl-72106.lal.in2p3.fr || `uname -n` == Ordinateur-de-Guy-Barrand.local ) then
+if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == wl-72130.lal.in2p3.fr || `uname -n` == Ordinateur-de-Guy-Barrand.local ) then
   set prompt='mac-91114-g4> ' 
 # Core :
   setenv MAKECMD make
@@ -558,13 +558,20 @@ if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == wl-72106.lal.in2p3.fr
   # Inventor :
   setenv G4VIS_BUILD_OIX_DRIVER 1
   setenv G4VIS_USE_OIX 1
+  # SGI-Inventor :
   setenv OIVHOME /usr/local/SGI-Inventor/2.1.5.10/usr
   setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:"$OIVHOME/lib"
-  #setenv OIVHOME $HOME/OpenScientsit/v12r0/CoinGL/v1r200p0
-  #setenv OIXHOME $HOME/OpenScientsit/v12r0/CoinXt/v1r50p0
-  #setenv OIVFLAGS "-I$OIVHOME/include -I$OIXHOME/include"
-  #setenv OIVLIBS "-L$OIXHOME/Darwin -lSoXt -L$OIVHOME/Darwin -lCoin"
-  #setenv DYLD_LIBRARY_PATH "$OIVHOME/lib:$OIXHOME/Darwin"
+  # OpenScientist RTK Coin* :
+  #setenv OIVHOME /Applications/OpenScientist/v15r0
+  #setenv OIVFLAGS "-I${OIVHOME}/Resources/CoinXt/include -I${OIVHOME}/Resources/CoinGL/include"
+  #setenv OIVLIBS "-L${OIVHOME}/lib -lCoinXt -losc_Coin"
+  #setenv DYLD_LIBRARY_PATH "${DYLD_LIBRARY_PATH}:${OIVHOME}/lib"
+  # OpenScientist devel Coin* :
+  #setenv COINGLHOME /barrand/OpenScientist/mak_release_15/bin/OpenScientist/v15r0/CoinGL/v1r200p3
+  #setenv COINXTHOME /barrand/OpenScientist/mak_release_15/bin/OpenScientist/v15r0/CoinXt/v1r50p4
+  #setenv OIVFLAGS "-I${COINGLHOME}/include -I${COINXTHOME}/include"
+  #setenv OIVLIBS "-L${COINXTHOME}/Darwin -lCoinXt -L${COINGLHOME}/Darwin -losc_Coin"
+  #setenv DYLD_LIBRARY_PATH "${DYLD_LIBRARY_PATH}:${OIVHOME}/lib"
   #setenv XENVIRONMENT visTutor/g4Xt.xrm
 #  setenv DYLD_BIND_AT_LAUNCH 1
 # AIDA :
