@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.27 2005-08-18 14:38:55 vnivanch Exp $
+// $Id: G4MuPairProductionModel.cc,v 1.28 2005-10-23 16:47:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -51,6 +51,7 @@
 // 01-11-04 Fix bug in expression inside ComputeDMicroscopicCrossSection (R.Kokoulin)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 03-08-05 Add SetParticle method (V.Ivantchenko)
+// 23-10-05 Add protection in sampling of e+e- pair energy needed for low cuts (V.Ivantchenko)
 
 //
 // Class Description:
@@ -448,7 +449,7 @@ void G4MuPairProductionModel::MakeSamplingTables()
 vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* aDynamicParticle,
-                                   G4double minEnergy,
+                                   G4double tmin,
                                    G4double tmax)
 {
   G4double kineticEnergy = aDynamicParticle->GetKineticEnergy();
@@ -461,23 +462,28 @@ vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
   G4double dt = log(kineticEnergy/tdat[it-1])/log(tdat[it]/tdat[it-1]);
 
   // select randomly one element constituing the material
-  G4int iymin = 0;
-  G4int iymax = nbiny-1;
   const G4Element* anElement = SelectRandomAtom(kineticEnergy, dt, it, couple);
   SetCurrentElement(anElement->GetZ());
 
   G4double maxPairEnergy = MaxSecondaryEnergy(particle,kineticEnergy);
-  G4double maxEnergy     = min(tmax, maxPairEnergy);
+  G4double maxEnergy     = std::min(tmax, maxPairEnergy);
+  G4double minEnergy     = std::max(tmin, minPairEnergy);
   if(minEnergy >= maxEnergy) return 0;
-
+  //G4cout << "emin= " << minEnergy << " emax= " << maxEnergy 
+  //	 << " minPair= " << minPairEnergy << " maxpair= " << maxPairEnergy 
+  //       << " ymin= " << ymin << " dy= " << dy << G4endl;
+  G4int iymin = 0;
+  G4int iymax = nbiny-1;
   if( minEnergy > minPairEnergy)
   {
     G4double xc = log(minEnergy/minPairEnergy)/log(maxPairEnergy/minPairEnergy);
     iymin = (G4int)((log(xc) - ymin)/dy);
     if(iymin >= nbiny) iymin = nbiny-1;
+    else if(iymin < 0) iymin = 0;
     xc = log(maxEnergy/minPairEnergy)/log(maxPairEnergy/minPairEnergy);
     iymax = (G4int)((log(xc) - ymin)/dy) + 1;
     if(iymax >= nbiny) iymax = nbiny-1;
+    else if(iymax < 0) iymax = 0;
   }
 
   // sample e-e+ energy, pair energy first
@@ -501,6 +507,7 @@ vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
     p2 = InterpolatedIntegralCrossSection(dt, dz, iz, it, iy, currentZ);
     if(p <= p2) break;
   }
+  // G4cout << "iy= " << iy << " iymin= " << iymin << " iymax= " << iymax << " Z= " << currentZ << G4endl;
   G4double y = ya[iy-1] + dy*(p - p1)/(p2 - p1);
 
   G4double PairEnergy = minPairEnergy*exp(exp(y)*log(maxPairEnergy/minPairEnergy));
@@ -526,7 +533,7 @@ vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
   //  universal distribution suggested by L. Urban
   // (Geant3 manual (1993) Phys211),
   //  derived from Tsai distribution (Rev Mod Phys 49,421(1977))
-
+  //  G4cout << "Ee= " << ElectronEnergy << " Ep= " << PositronEnergy << G4endl;
   G4double u;
   const G4double a1 = 0.625 , a2 = 3.*a1 , d = 27. ;
 
