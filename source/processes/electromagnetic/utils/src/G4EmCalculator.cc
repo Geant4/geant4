@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.19 2005-05-30 08:55:51 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.20 2005-10-23 17:33:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -39,6 +39,7 @@
 // 17.11.2004 Change signature of methods, add new methods (V.Ivanchenko)
 // 08.04.2005 Major optimisation of internal interfaces (V.Ivantchenko)
 // 08.05.2005 Use updated interfaces (V.Ivantchenko)
+// 23.10.2005 Fix computations for ions (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -63,6 +64,7 @@
 #include "G4RegionStore.hh"
 #include "G4Element.hh"
 #include "G4EmCorrections.hh"
+#include "G4GenericIon.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -669,11 +671,18 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
   if (p != currentParticle || processName != currentName) {
     currentName     = processName;
     currentLambda   = 0;
+
+    G4String partname =  p->GetParticleName();
+    const G4ParticleDefinition* part = p;
+    if(p->GetParticleType() == "nucleus" && partname != "deuteron" && partname != "triton")
+      part = G4GenericIon::GenericIon(); 
+
+
     G4LossTableManager* lManager = G4LossTableManager::Instance();
     const std::vector<G4VEnergyLossProcess*> vel = lManager->GetEnergyLossProcessVector();
     G4int n = vel.size();
     for(G4int i=0; i<n; i++) {
-      if((vel[i])->GetProcessName() == currentName && (vel[i])->Particle() == p) {
+      if((vel[i])->GetProcessName() == currentName && (vel[i])->Particle() == part) {
         currentLambda = (vel[i])->LambdaTable();
 	isApplicable    = true;
 	break;
@@ -683,7 +692,7 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
       const std::vector<G4VEmProcess*> vem = lManager->GetEmProcessVector();
       G4int n = vem.size();
       for(G4int i=0; i<n; i++) {
-        if((vem[i])->GetProcessName() == currentName && (vem[i])->Particle() == p) {
+        if((vem[i])->GetProcessName() == currentName && (vem[i])->Particle() == part) {
           currentLambda = (vem[i])->LambdaTable();
           isApplicable    = true;
 	  break;
@@ -694,7 +703,7 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
       const std::vector<G4VMultipleScattering*> vmsc = lManager->GetMultipleScatteringVector();
       G4int n = vmsc.size();
       for(G4int i=0; i<n; i++) {
-        if((vmsc[i])->GetProcessName() == currentName && (vmsc[i])->Particle() == p) {
+        if((vmsc[i])->GetProcessName() == currentName && (vmsc[i])->Particle() == part) {
           currentLambda = (vmsc[i])->LambdaTable();
 	  isApplicable    = true;
 	  break;
@@ -711,11 +720,18 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
 	  	 		         G4double kinEnergy)
 {
   G4bool res = false;
+  G4String partname =  p->GetParticleName();
+  const G4ParticleDefinition* part = p;
+  if(p->GetParticleType() == "nucleus" && partname != "deuteron" && partname != "triton")
+    part = G4GenericIon::GenericIon(); 
+
   if(verbose > 1) {
-    G4cout << "G4EmCalculator::FindEmModel for " << p->GetParticleName()
-           << " and " << processName << " at e(MeV)= " << kinEnergy
-           << G4endl;
+    G4cout << "G4EmCalculator::FindEmModel for " << partname
+           << " and " << processName << " at e(MeV)= " << kinEnergy;
+    if(p != part) G4cout << "  GenericIon is the base particle";       
+    G4cout << G4endl;
   }
+
   // Search for the process
   currentName = processName;
   currentModel = 0;
@@ -724,7 +740,7 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
   const std::vector<G4VEnergyLossProcess*> vel = lManager->GetEnergyLossProcessVector();
   G4int n = vel.size();
   for(G4int i=0; i<n; i++) {
-    if((vel[i])->GetProcessName() == currentName && (vel[i])->Particle() == p) {
+    if((vel[i])->GetProcessName() == currentName && (vel[i])->Particle() == part) {
       const G4ParticleDefinition* bp = (vel[i])->BaseParticle();
       //      G4cout << "i= " << i << " bp= " << bp << G4endl;
       if(!bp) {
@@ -745,7 +761,7 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
     const std::vector<G4VEmProcess*> vem = lManager->GetEmProcessVector();
     G4int n = vem.size();
     for(G4int i=0; i<n; i++) {
-      if((vem[i])->GetProcessName() == currentName && (vem[i])->Particle() == p) {
+      if((vem[i])->GetProcessName() == currentName && (vem[i])->Particle() == part) {
         currentModel = (vem[i])->SelectModelForMaterial(kinEnergy, idx);
 	isApplicable    = true;
         break;
@@ -756,7 +772,7 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
     const std::vector<G4VMultipleScattering*> vmsc = lManager->GetMultipleScatteringVector();
     G4int n = vmsc.size();
     for(G4int i=0; i<n; i++) {
-      if((vmsc[i])->GetProcessName() == currentName && (vmsc[i])->Particle() == p) {
+      if((vmsc[i])->GetProcessName() == currentName && (vmsc[i])->Particle() == part) {
         currentModel = (vmsc[i])->SelectModelForMaterial(kinEnergy, idx);
 	isApplicable    = true;
         break;
@@ -773,12 +789,16 @@ const G4VEnergyLossProcess* G4EmCalculator::FindEnergyLossProcess(
                       const G4ParticleDefinition* p)
 {
   const G4VEnergyLossProcess* elp = 0;
+  G4String partname =  p->GetParticleName();
+  const G4ParticleDefinition* part = p;
+  if(p->GetParticleType() == "nucleus" && partname != "deuteron" && partname != "triton")
+    part = G4GenericIon::GenericIon(); 
   
   G4LossTableManager* lManager = G4LossTableManager::Instance();
   const std::vector<G4VEnergyLossProcess*> vel = lManager->GetEnergyLossProcessVector();
   G4int n = vel.size();
   for(G4int i=0; i<n; i++) {
-    if((vel[i])->Particle() == p) {
+    if((vel[i])->Particle() == part) {
       elp = vel[i];
       break;
     }
