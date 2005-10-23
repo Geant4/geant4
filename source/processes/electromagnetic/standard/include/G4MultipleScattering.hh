@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.17 2005-10-11 13:03:34 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.18 2005-10-23 17:59:44 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,10 +51,12 @@
 // 15-04-05 optimize internal interfaces (V.Ivanchenko)
 // 02-10-05 new algorithm for step limitation, new data members (L.Urban)
 // 05-10-05 value of data member tlimitmin has been changed (L.Urban)
+// 23-10-05 new Boolean data member prec (false ~ 7.1 like, true new step
+//          limit in TruePathLengthLimit, L.Urban)
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering.hh,v 1.17 2005-10-11 13:03:34 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.18 2005-10-23 17:59:44 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -89,13 +91,16 @@ public:    // with description
   G4bool IsApplicable (const G4ParticleDefinition& p);
 
   G4double TruePathLengthLimit(const G4Track&  track,
-			       G4double& lambda,
-			       G4double  currentMinimalStep);
-			       
+                               G4double& lambda,
+                               G4double  currentMinimalStep);
+
   G4double GeomLimit(const G4Track&  track);
 
   // Print few lines of informations about the process: validity range,
   void PrintInfo();
+
+  // set boolean flag prec ( true/false : standard or 7.1 style process)
+  void Setprec(G4bool value) { prec = value;};
 
   // geom. step length distribution should be sampled or not
   void Setsamplez(G4bool value) { samplez = value;};
@@ -112,10 +117,7 @@ public:    // with description
   // Steplimit = facrange*max(range,lambda)
   void SetFacrange(G4double val) { facrange=val; tlimitmin=val*1*micrometer;};
 
-  // min. steplimit at boundaries
-  void SetGeommin(G4double val) { geommin = val;};   
-
-  // connected with step size reduction near to boundaries
+  // connected with step size reduction due to geometry
   void SetFacgeom(G4double val) { facgeom=val;};
 
 protected:
@@ -138,6 +140,7 @@ private:        // data members
   G4double safety,facsafety,facsafety2;
   G4double dtrl;
   G4double factail;
+  G4bool   prec;
 
   G4bool   samplez;
   G4bool   boundary;
