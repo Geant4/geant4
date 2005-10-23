@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.35 2005-08-04 10:57:55 gcosmo Exp $
+// $Id: G4Para.cc,v 1.36 2005-10-23 13:07:41 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
@@ -30,6 +30,7 @@
 //
 // History:
 //
+// 23.10.05 V.Grichine: bug fixed in DistanceToOut(p,v,...) for the v.x()<0 case 
 // 28.04.05 V.Grichine: new SurfaceNormal according to J. Apostolakis proposal 
 // 30.11.04 V.Grichine: modifications in SurfaceNormal for edges/vertices and
 //                      in constructor with vertices
@@ -1007,8 +1008,8 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
         tntheta=fTthetaCphi*calpha+fTthetaSphi*salpha;
         cosntheta=-1/std::sqrt(1+tntheta*tntheta);
         *n=G4ThreeVector(calpha*cosntheta,salpha*cosntheta,-tntheta*cosntheta);
-        return snxt=0;
       }
+      return snxt=0;
     }
   }
 
