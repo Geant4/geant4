@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.icc,v 1.9 2005-02-19 22:07:21 allison Exp $
+// $Id: G4VisManager.icc,v 1.10 2005-10-24 11:32:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,6 +74,10 @@ inline void G4VisManager::GetWindowSizeHint
   xHint = fWindowSizeHintX; yHint = fWindowSizeHintY;
 }
 
+inline const G4String& G4VisManager::GetXGeometryString () const {
+  return fXGeometryString;
+}
+
 inline void G4VisManager::SetUserActionExtent (const G4VisExtent& extent) {
   fUserVisActionExtent = extent;
 }
@@ -96,4 +100,8 @@ inline void G4VisManager::SetVerboseLevel (G4VisManager::Verbosity verbosity) {
 
 inline void G4VisManager::SetWindowSizeHint (G4int xHint, G4int yHint) {
   fWindowSizeHintX = xHint; fWindowSizeHintY = yHint;
+}
+
+inline void G4VisManager::SetXGeometryString (const G4String& geomString) {
+  fXGeometryString = geomString;
 }

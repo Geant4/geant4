@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.67 2005-10-13 18:20:20 allison Exp $
+// $Id: G4VisManager.cc,v 1.68 2005-10-24 11:32:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,6 +58,8 @@
 #include "G4NullModel.hh"
 #include "G4ModelingParameters.hh"
 #include "G4TransportationManager.hh"
+#include "G4VTrajectoryModel.hh"
+#include "G4VTrajectoryModelMaker.hh"
 
 #include <sstream>
 
@@ -72,7 +74,8 @@ G4VisManager::G4VisManager ():
   fpViewer         (0),
   fVerbosity       (warnings),
   fVerbose         (1),
-  fpStateDependent (0)   // All other objects use default constructors.
+  fpStateDependent (0),
+  fpCurrentTrajectoryModel(0)  // All other objects use default constructors.
 {
   VerbosityGuidanceStrings.push_back
     ("Simple graded message scheme - digit or string (1st character defines):");
@@ -202,7 +205,27 @@ void G4VisManager::Initialise () {
     PrintAvailableGraphicsSystems ();
   }
 
+  // Make top level directory...
+  G4UIcommand* directory;
+  directory = new G4UIdirectory ("/vis/");
+  directory -> SetGuidance ("Visualization commands.");
+  fDirectoryList.push_back (directory);
+
+  // ...and register messengers.
   RegisterMessengers ();
+
+  // make command directory for commands instantiated in the modeling
+  // subcategory...
+  directory = new G4UIdirectory ("/vis/modeling/");
+  directory -> SetGuidance ("Modeling commands.");
+  fDirectoryList.push_back (directory);
+  // Trajectory model commands...
+  directory = new G4UIdirectory ("/vis/modeling/trajectories/");
+  directory -> SetGuidance ("Trajectory model commands.");
+  fDirectoryList.push_back (directory);
+
+  // ...and register trajectory model makers...
+  RegisterTrajectoryModelMakers ("/vis/modeling/trajectories/");
 
   fInitialised = true;
 }
@@ -256,7 +279,7 @@ const G4GraphicsSystemList& G4VisManager::GetAvailableGraphicsSystems () {
 }
 
 G4bool G4VisManager::RegisterGraphicsSystem (G4VGraphicsSystem* pSystem) {
-  G4bool happy(true);
+  G4bool happy = true;
   if (pSystem) {
     fAvailableGraphicsSystems.push_back (pSystem);
     if (fVerbosity >= confirmations) {
@@ -271,7 +294,34 @@ G4bool G4VisManager::RegisterGraphicsSystem (G4VGraphicsSystem* pSystem) {
   else {
     if (fVerbosity >= errors) {
       G4cout << "G4VisManager::RegisterGraphicsSystem: null pointer!"
-	     <<G4endl;
+	     << G4endl;
+    }
+    happy=false;
+  }
+  return happy;
+}
+
+G4bool G4VisManager::RegisterTrajectoryModelMaker
+(G4VTrajectoryModelMaker* pTModelMaker) {
+  G4bool happy = true;
+  if (pTModelMaker) {
+    // For now just make a model and make it current (implement list later)...
+    fpCurrentTrajectoryModel = pTModelMaker->CreateModel();
+    if (fVerbosity >= confirmations) {
+      G4cout << "G4VisManager::RegisterTrajectoryModelMaker: "
+	     << pTModelMaker -> GetName ()
+	     << " registered." << G4endl;
+    }
+    // Debug...
+    G4cout << "Model description: "
+	   << fpCurrentTrajectoryModel->GetGlobalDescription()
+	   << G4endl;
+    // End debug.
+  }
+  else {
+    if (fVerbosity >= errors) {
+      G4cout << "G4VisManager::RegisterTrajectoryModelMaker: null pointer!"
+	     << G4endl;
     }
     happy=false;
   }
@@ -574,6 +624,16 @@ void G4VisManager::GeometryHasChanged () {
 
 }
 
+void G4VisManager::DispatchToCurrentModel
+(const G4VTrajectory& traj, G4int i_mode)
+{
+  if (fpCurrentTrajectoryModel && IsValidView ()) {
+    fpSceneHandler->SetModel(fpCurrentTrajectoryModel);
+    fpCurrentTrajectoryModel->SetTrajectory(&traj, i_mode);
+    fpCurrentTrajectoryModel->DescribeYourselfTo(*fpSceneHandler);
+  }
+}
+
 void G4VisManager::SetUserAction
 (G4VUserVisAction* pVisAction,
  const G4VisExtent& extent) {
@@ -705,9 +765,6 @@ void G4VisManager::RegisterMessengers () {
 
   G4UIcommand* directory;
 
-  directory = new G4UIdirectory ("/vis/");
-  directory -> SetGuidance ("Visualization commands.");
-  fDirectoryList.push_back (directory);
   fMessengerList.push_back (new G4VisCommandEnable);
   fMessengerList.push_back (new G4VisCommandVerbose);
 
