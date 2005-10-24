@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModel.cc,v 1.9 2003-06-16 17:14:32 gunter Exp $
+// $Id: G4VModel.cc,v 1.10 2005-10-24 11:11:33 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,21 +34,24 @@
 
 G4VModel::G4VModel (const G4Transform3D& modelTransformation,
 		    const G4ModelingParameters* pMP):
+  fGlobalTag ("Empty"),
+  fGlobalDescription ("Empty"),
   fTransform (modelTransformation),
   fpMP (pMP)
-{
-  fGlobalTag = "Default Global Tag";
-  fGlobalDescription = "Default Global Description";
-}
+{}
 
 G4VModel::~G4VModel () {}
 
 G4String G4VModel::GetCurrentTag () const {
-  return G4String("Default Current Tag");
+  return G4String
+    ("WARNING: GetCurrentTag() not implemented by concrete class."
+     "\n  Global tag: " + fGlobalTag);
 }
 
 G4String G4VModel::GetCurrentDescription () const {
-  return G4String("Default Current Description");
+  return G4String
+    ("WARNING: GetCurrentDescription() not implemented by concrete class."
+     "\n  Global description: " + fGlobalDescription);
 }
 
 G4bool G4VModel::Validate (G4bool) {
