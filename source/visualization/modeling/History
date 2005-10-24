@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2005-10-13 17:48:32 allison Exp $
+$Id: History,v 1.38 2005-10-24 11:21:22 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+24th October 2005  John Allison (modeling-V07-01-02)
+- Added: G4VTrajectoryModel, G4VTrajectoryModelMaker, G4TrajectoryModelMaker
+  and G4TrajectoryTestModel.
+- G4VModel: cosmetic changes.
 
 13th October 2005  John Allison (modeling-V07-01-01)
 - Migrated to <sstream>.
