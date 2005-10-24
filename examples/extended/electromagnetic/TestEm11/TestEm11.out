@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-ref-01    (30-June-2005)
+ Geant4 version Name: geant4-07-01-patch-01-ref    (25-October-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -252,7 +252,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=43.07s Real=841.69s Sys=64.06s
+  User=48.93s Real=889.6s Sys=74.06s
 
  ======================== run summary ======================
 
@@ -263,7 +263,7 @@ Run Summary
  Total Energy deposited        = 497.563 keV +- 17.455 keV
 
  Track length of primary track = 936.820 mum +- 38.988 mum
- Range from EmCalculator       = 941.718 mum (from restricted dE/dx)
+ csda Range from EmCalculator  = 941.718 mum
 
  Projected range               = 336.831 mum +- 21.956 mum
 

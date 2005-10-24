@@ -1,2 +1,75 @@
-Test19:Par's: T=1.800000e+02,S=3.000000e-01,Eta=3.000000e-01,nop=152,p=2.000000e+02,e=0.000000e+00,pPDG=22,tPDG=90013014,nEv=100,fN=8.000000e-01,fD=5.000000e-02,cP=5.000000e+00,rM=1.000000e+00,sA=5.000000e-01
----Worning---G4QCollision::PostStepDoIt: drop PDG=90009010
+
+*************************************************************
+ Geant4 version Name: geant4-07-01-patch-01-ref    (25-October-2005)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+Test29: (6,6) ion is OK, Run State=Init
+Test19:Par's: T=1.800000e+02,S=3.000000e-01,Eta=3.000000e-01,nop=152,p=0.000000e+00,e=0.000000e+00,pPDG=22,tPDG=0,nEv=200,fN=8.000000e-01,fD=5.000000e-02,cP=5.000000e+00,rM=1.000000e+00,sA=5.000000e-01
+Test29:-->Material(1,0):Hydrogen,1H
+Test29:-->Material(2,2):Helium,He
+Test29:-->Material(7,7):Nitrogen,14N
+Test29:-->Material(27,32):Cobalt,59Co
+Test29:-->Material(92,146):Uranium,238U
+Test19: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
+Test19:NewRun:Targ=90001000,Proj=22, 1 of 15
+***=>TEST19: 100 events are simulated
+Test19:CalculationTimePerEvent= 1.500000e-03 s
+Test19: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
+Test19:NewRun:Targ=90002002,Proj=22, 2 of 15
+***=>TEST19: 100 events are simulated
+Test19:CalculationTimePerEvent= 8.660000e-02 s
+Test19: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
+Test19:NewRun:Targ=90007007,Proj=22, 3 of 15
+***=>TEST19: 100 events are simulated
+Test19:CalculationTimePerEvent= 1.106500e-01 s
+Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
+Test19:NewRun:Targ=90027032,Proj=22, 4 of 15
+***=>TEST19: 100 events are simulated
+Test19:CalculationTimePerEvent= 1.182000e-01 s
+Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
+Test19:NewRun:Targ=90092146,Proj=22, 5 of 15
+***=>TEST19: 100 events are simulated
+Test19:CalculationTimePerEvent= 1.581000e-01 s
+Test19: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
+Test19:NewRun:Targ=90001000,Proj=22, 6 of 15
+***=>TEST19: 100 events are simulated
+Test19:CalculationTimePerEvent= 1.930000e-02 s
+Test19: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
+Test19:NewRun:Targ=90002002,Proj=22, 7 of 15
+***=>TEST19: 100 events are simulated
+Test19:CalculationTimePerEvent= 5.825000e-02 s
+Test19: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
+Test19:NewRun:Targ=90007007,Proj=22, 8 of 15
+***=>TEST19: 100 events are simulated
+Test19:CalculationTimePerEvent= 2.379500e-01 s
+Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
+Test19:NewRun:Targ=90027032,Proj=22, 9 of 15
+***=>TEST19: 100 events are simulated
+Test19:CalculationTimePerEvent= 3.582000e-01 s
+Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
+Test19:NewRun:Targ=90092146,Proj=22, 10 of 15
+***=>TEST19: 100 events are simulated
+Test19:CalculationTimePerEvent= 4.026000e-01 s
+Test19: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
+Test19:NewRun:Targ=90001000,Proj=22, 11 of 15
+***=>TEST19: 100 events are simulated
+Test19:CalculationTimePerEvent= 2.190000e-02 s
+Test19: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
+Test19:NewRun:Targ=90002002,Proj=22, 12 of 15
+***=>TEST19: 100 events are simulated
+Test19:CalculationTimePerEvent= 6.135000e-02 s
+Test19: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
+Test19:NewRun:Targ=90007007,Proj=22, 13 of 15
+***=>TEST19: 100 events are simulated
+Test19:CalculationTimePerEvent= 5.340000e-01 s
+Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
+Test19:NewRun:Targ=90027032,Proj=22, 14 of 15
+***=>TEST19: 100 events are simulated
+Test19:CalculationTimePerEvent= 9.081500e-01 s
+Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
+Test19:NewRun:Targ=90092146,Proj=22, 15 of 15
+***=>TEST19: 100 events are simulated
+Test19:CalculationTimePerEvent= 7.630000e-01 s

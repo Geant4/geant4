@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-ref-01    (30-June-2005)
+ Geant4 version Name: geant4-07-01-patch-01-ref    (25-October-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -191,7 +191,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.03s Sys=0s
+  User=0s Real=0.07000000000000001s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -221,7 +221,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.96s Real=0.97s Sys=0s
+  User=0.99s Real=0.99s Sys=0s
 # 
 /gun/energy 2 keV
 /gun/polarization 0. 1. 0.
@@ -303,7 +303,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.95s Real=0.96s Sys=0.01s
+  User=0.99s Real=0.99s Sys=0s
 #
 /gun/energy 600 eV
 /gun/polarization 0. 0. 0.
@@ -385,7 +385,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.95s Real=0.95s Sys=0s
+  User=0.98s Real=0.98s Sys=0s
 #
 /gun/energy 300 eV
 /gun/polarization 0. 0. 1.
@@ -467,7 +467,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.95s Real=0.95s Sys=0s
+  User=0.98s Real=0.98s Sys=0s
 #
 /calor/setAbsMat Lead      
 #====================
@@ -597,7 +597,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.36s Real=1.37s Sys=0s
+  User=1.4s Real=1.4s Sys=0s
 # 
 /gun/energy 2 keV
 /gun/polarization 0. 1. 0.
@@ -689,7 +689,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.38s Real=1.39s Sys=0s
+  User=1.41s Real=1.41s Sys=0s
 #
 /gun/energy 600 eV
 /gun/polarization 0. 0. 0.
@@ -781,7 +781,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.35s Real=1.35s Sys=0s
+  User=1.39s Real=1.39s Sys=0s
 #
 /gun/energy 300 eV
 /gun/polarization 0. 0. 1.
@@ -873,7 +873,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.33s Real=1.33s Sys=0s
+  User=1.36s Real=1.36s Sys=0s
 #
 /calor/setAbsMat Water
 #======================
@@ -1015,7 +1015,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.26s Real=2.38s Sys=0.12s
+  User=2.32s Real=2.41s Sys=0.09s
 # 
 /gun/energy 2 keV
 /gun/polarization 0. 1. 0.
@@ -1124,7 +1124,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.13s Real=2.24s Sys=0.11s
+  User=2.19s Real=2.26s Sys=0.07000000000000001s
 #
 /gun/energy 600 eV
 /gun/polarization 0. 0. 0.
@@ -1186,7 +1186,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -1226,7 +1226,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.52s Real=4.69s Sys=0.16s
+  User=4.62s Real=4.72s Sys=0.1s
 #
 /gun/energy 300 eV
 /gun/polarization 0. 0. 1.
@@ -1291,7 +1291,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -1331,7 +1331,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.83s Real=2.87s Sys=0.04s
+  User=2.85s Real=2.89s Sys=0.04s
 #
 /gun/particle gamma
 #------------------
@@ -1386,7 +1386,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.78s Real=1.8s Sys=0.02s
+  User=1.82s Real=1.82s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -1426,7 +1426,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.99s Real=0.99s Sys=0s
+  User=1s Real=1s Sys=0s
 /calor/setAbsMat Lead
 #======================
 /tracking/verbose 0
@@ -1469,7 +1469,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=7.53s Real=7.78s Sys=0.25s
+  User=7.5s Real=7.79s Sys=0.29s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -1509,7 +1509,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.66s Real=4.85s Sys=0.19s
+  User=4.69s Real=4.86s Sys=0.17s
 /calor/setAbsMat Water
 #======================
 /tracking/verbose 0
@@ -1552,7 +1552,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.01s Real=1.04s Sys=0.03s
+  User=1.04s Real=1.04s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -1592,7 +1592,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.68s Real=0.68s Sys=0s
+  User=0.69s Real=0.69s Sys=0s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
