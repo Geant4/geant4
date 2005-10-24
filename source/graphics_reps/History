@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.85 2005-10-21 19:57:49 tinslay Exp $
+cvs log $Id: History,v 1.86 2005-10-24 09:51:38 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24th October 2005  John Allison (greps-V07-01-08)
+- Moved G4VTrajectoryDrawer to modeling (renamed G4VTrajectoryModel).
+- G4VVisManager.hh: Changed DispatchToCurrentDrawer to DispatchToCurrentModel.
 
 21st October 2005 Jane Tinslay (greps-V07-01-07)
 - Add G4VTrajectoryDrawer, an abstract base class for trajectory drawers
