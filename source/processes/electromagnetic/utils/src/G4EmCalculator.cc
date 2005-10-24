@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.20 2005-10-23 17:33:45 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.21 2005-10-24 11:25:43 starkov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -319,6 +319,7 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
 				     const G4Material* mat,
                                            G4double cut)
 {
+  currentMaterial = mat;
   G4double res = 0.0;
   if(verbose > 1) {
     G4cout << "ComputeDEDX: " << p->GetParticleName()
@@ -548,6 +549,17 @@ G4bool G4EmCalculator::UpdateParticle(const G4ParticleDefinition* p, G4double ki
     currentParticle = p;
     baseParticle    = 0;
     currentParticleName = p->GetParticleName();
+    if(p->GetParticleType() == "nucleus" && 
+       currentParticleName != "deuteron" && currentParticleName != "triton") {
+      baseParticle = G4GenericIon::GenericIon(); 
+      massRatio = baseParticle->GetPDGMass()/p->GetPDGMass();
+      isIon = true;
+      //      G4cout << p->GetParticleName() << " in " << currentMaterial->GetName()
+      //       << "  e= " << kinEnergy << G4endl;
+      chargeSquare =
+          ionEffCharge->EffectiveChargeSquareRatio(p, currentMaterial, kinEnergy);
+      //G4cout << "q2= " << chargeSquare << G4endl;
+    }
   }
   isApplicable    = false;
   if(p->GetPDGCharge() != 0.0) {
@@ -717,17 +729,25 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
 
 G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
                                    const G4String& processName,
-	  	 		         G4double kinEnergy)
+	  	 		         G4double kineticEnergy)
 {
   G4bool res = false;
+  if(!p) {
+    G4cout << "G4EmCalculator::FindEmModel WARNING: no particle defined" << G4endl;
+    return res;
+  }
   G4String partname =  p->GetParticleName();
   const G4ParticleDefinition* part = p;
-  if(p->GetParticleType() == "nucleus" && partname != "deuteron" && partname != "triton")
+  G4double kinEnergy = kineticEnergy;
+  if(p->GetParticleType() == "nucleus" && partname != "deuteron" && partname != "triton") {
     part = G4GenericIon::GenericIon(); 
+    kinEnergy *= part->GetPDGMass()/p->GetPDGMass();
+  }
 
   if(verbose > 1) {
     G4cout << "G4EmCalculator::FindEmModel for " << partname
-           << " and " << processName << " at e(MeV)= " << kinEnergy;
+           << " (type= " << p->GetParticleType()
+           << ") and " << processName << " at e(MeV)= " << kinEnergy;
     if(p != part) G4cout << "  GenericIon is the base particle";       
     G4cout << G4endl;
   }
@@ -740,6 +760,8 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
   const std::vector<G4VEnergyLossProcess*> vel = lManager->GetEnergyLossProcessVector();
   G4int n = vel.size();
   for(G4int i=0; i<n; i++) {
+    //    G4cout << "i= " << i << " part= " << (vel[i])->Particle()->GetParticleName()
+    //	   << "   proc= " << (vel[i])->GetProcessName()  << G4endl;
     if((vel[i])->GetProcessName() == currentName && (vel[i])->Particle() == part) {
       const G4ParticleDefinition* bp = (vel[i])->BaseParticle();
       //      G4cout << "i= " << i << " bp= " << bp << G4endl;
@@ -754,6 +776,7 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
 	  }
 	}
       }
+      //      G4cout << "model= " << currentModel  << G4endl;
       break;
     }
   }
