@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01AnalysisManager.hh,v 1.6 2003-06-20 14:55:44 gbarrand Exp $
+// $Id: AnaEx01AnalysisManager.hh,v 1.7 2005-10-24 16:14:51 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@ namespace AIDA {
 
 class AnaEx01AnalysisManager {
 public:
-  AnaEx01AnalysisManager();
+  AnaEx01AnalysisManager(AIDA::IAnalysisFactory*);
   virtual ~AnaEx01AnalysisManager();
 public:
   virtual void BeginOfRun(const G4Run*); 
@@ -54,7 +54,7 @@ public:
   virtual void Step(const G4Step*);
 private:
   int fCalorimeterCollID;                
-  AIDA::IAnalysisFactory* fAnalysisFactory;
+  AIDA::IAnalysisFactory* fAIDA;
   AIDA::ITree* fTree;
   AIDA::IHistogram1D* fEAbs;
   AIDA::IHistogram1D* fLAbs;

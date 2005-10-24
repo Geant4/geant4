@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01.cc,v 1.9 2003-12-03 10:33:39 gcosmo Exp $
+// $Id: AnaEx01.cc,v 1.10 2005-10-24 16:14:51 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,14 +37,20 @@
 //   See the README file within the same directory to have more infos.
 // --------------------------------------------------------------
 
+// Geant4 :
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 
 #include "Randomize.hh"
 
-#include "AnaEx01AnalysisManager.hh"
+// AIDA :
+#ifdef G4ANALYSIS_USE
+#include <AIDA/IAnalysisFactory.h>
+#endif
 
+// AnaEx01 :
+#include "AnaEx01AnalysisManager.hh"
 #include "AnaEx01DetectorConstruction.hh"
 #include "AnaEx01PhysicsList.hh"
 #include "AnaEx01PrimaryGeneratorAction.hh"
@@ -72,7 +78,8 @@ int main(int,char**) {
   runManager->SetUserAction(new AnaEx01PrimaryGeneratorAction(detector));
 
 #ifdef G4ANALYSIS_USE
-  AnaEx01AnalysisManager* analysisManager = new AnaEx01AnalysisManager();
+  AIDA::IAnalysisFactory* aida = AIDA_createAnalysisFactory();
+  AnaEx01AnalysisManager* analysisManager = new AnaEx01AnalysisManager(aida);
   runManager->SetUserAction(new AnaEx01RunAction(analysisManager));
   runManager->SetUserAction(new AnaEx01EventAction(analysisManager));
   runManager->SetUserAction(new AnaEx01SteppingAction(analysisManager));
@@ -96,6 +103,10 @@ int main(int,char**) {
   delete analysisManager;
 #endif
   delete runManager;
+
+#ifdef G4ANALYSIS_USE
+  delete aida;
+#endif
 
   return 0;
 }
