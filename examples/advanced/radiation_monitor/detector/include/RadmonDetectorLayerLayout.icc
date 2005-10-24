@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorLayerLayout.icc,v 1.2 2005-09-12 17:14:17 capra Exp $
+// Id:            $Id: RadmonDetectorLayerLayout.icc,v 1.3 2005-10-24 14:51:36 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -20,7 +20,7 @@
  
  inline                                         RadmonDetectorLayerLayout :: RadmonDetectorLayerLayout(const RadmonDetectorLayerLayout & copy)
  :
-  RadmonDetectorLayoutEntityWithAttributes(copy),
+  RadmonLayoutEntityWithAttributes(copy),
   layerLabel(copy.layerLabel),
   layerType(copy.layerType),
   layerThickness(copy.layerThickness)
@@ -39,7 +39,7 @@
 
  inline RadmonDetectorLayerLayout &             RadmonDetectorLayerLayout :: operator=(const RadmonDetectorLayerLayout & copy)
  {
-  RadmonDetectorLayoutEntityWithAttributes::operator=(copy);
+  RadmonLayoutEntityWithAttributes::operator=(copy);
   layerLabel=copy.layerLabel;
   layerType=copy.layerType;
   layerThickness=copy.layerThickness;

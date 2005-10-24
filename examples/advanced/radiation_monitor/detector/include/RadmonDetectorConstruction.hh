@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorConstruction.hh,v 1.2 2005-09-19 19:42:13 capra Exp $
+// Id:            $Id: RadmonDetectorConstruction.hh,v 1.3 2005-10-24 14:51:36 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Implementation of the G4VUserDetectorConstruction
@@ -15,7 +15,7 @@
  // Include files
  #include "globals.hh"
  #include "G4VUserDetectorConstruction.hh"
- #include "RadmonVDetectorLayoutObserver.hh"
+ #include "RadmonVLayoutObserver.hh"
  #include <stack>
  #include <utility>
  
@@ -28,7 +28,7 @@
  class RadmonVDetectorEntitiesConstructorsFactory;
  class G4String;
 
- class RadmonDetectorConstruction : public G4VUserDetectorConstruction, public RadmonVDetectorLayoutObserver
+ class RadmonDetectorConstruction : public G4VUserDetectorConstruction, public RadmonVLayoutObserver
  {
   public:
                                                 RadmonDetectorConstruction(RadmonVDetectorLayout * layout, RadmonVDetectorEntitiesConstructorsFactory * factory);

@@ -3,13 +3,13 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorMultilayerLayout.cc,v 1.5 2005-09-21 14:54:40 capra Exp $
+// Id:            $Id: RadmonDetectorMultilayerLayout.cc,v 1.6 2005-10-24 14:51:36 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
 // Include files
 #include "RadmonDetectorMultilayerLayout.hh"
-#include "RadmonDetectorDumpStyle.hh"
+#include "RadmonDumpStyle.hh"
 #include "G4UnitsTable.hh"
 
 #include <iomanip>
@@ -180,14 +180,14 @@ void                                            RadmonDetectorMultilayerLayout :
 
 void                                            RadmonDetectorMultilayerLayout :: DumpLayout(std::ostream & out, const G4String & indent) const
 {
- G4int width(RADMONDETECTORDUMP_INDENT_WIDTH-indent.length());
+ G4int width(RADMONDUMP_INDENT_WIDTH-indent.length());
  if (width<0)
   width=0;
 
  out << indent << std::setw(width); out.setf(std::ostream::left, std::ostream::adjustfield); out << "Label"; out.setf(std::ostream::right, std::ostream::adjustfield); out << " = \"" << multilayerLabel << "\"\n"
-     << indent << std::setw(width); out.setf(std::ostream::left, std::ostream::adjustfield); out << "Size";  out.setf(std::ostream::right, std::ostream::adjustfield); out << " = (W) " << std::setprecision(RADMONDETECTORDUMP_DOUBLE_PRECISION) << std::setw(RADMONDETECTORDUMP_DOUBLE_WIDTH) << G4BestUnit(multilayerWidth, "Length") 
-                                                                                                                                                                           << " x (H) " << std::setprecision(RADMONDETECTORDUMP_DOUBLE_PRECISION) << std::setw(RADMONDETECTORDUMP_DOUBLE_WIDTH) << G4BestUnit(multilayerHeight, "Length")
-                                                                                                                                                                           << " x (T) " << std::setprecision(RADMONDETECTORDUMP_DOUBLE_PRECISION) << std::setw(RADMONDETECTORDUMP_DOUBLE_WIDTH) << G4BestUnit(GetTotalThickness(), "Length") << '\n';
+     << indent << std::setw(width); out.setf(std::ostream::left, std::ostream::adjustfield); out << "Size";  out.setf(std::ostream::right, std::ostream::adjustfield); out << " = (W) " << std::setprecision(RADMONDUMP_DOUBLE_PRECISION) << std::setw(RADMONDUMP_DOUBLE_WIDTH) << G4BestUnit(multilayerWidth, "Length") 
+                                                                                                                                                                           << " x (H) " << std::setprecision(RADMONDUMP_DOUBLE_PRECISION) << std::setw(RADMONDUMP_DOUBLE_WIDTH) << G4BestUnit(multilayerHeight, "Length")
+                                                                                                                                                                           << " x (T) " << std::setprecision(RADMONDUMP_DOUBLE_PRECISION) << std::setw(RADMONDUMP_DOUBLE_WIDTH) << G4BestUnit(GetTotalThickness(), "Length") << '\n';
 
  G4String indent2(indent);
  indent2.prepend("  ");

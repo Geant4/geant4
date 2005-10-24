@@ -1,34 +1,34 @@
 //
-// File name:     RadmonDetectorLayoutEntityWithAttributes.cc
+// File name:     RadmonLayoutEntityWithAttributes.cc
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorLayoutEntityWithAttributes.cc,v 1.4 2005-09-19 19:42:13 capra Exp $
+// Id:            $Id: RadmonLayoutEntityWithAttributes.cc,v 1.1 2005-10-24 14:51:36 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
 // Include files
-#include "RadmonDetectorLayoutEntityWithAttributes.hh"
-#include "RadmonDetectorDumpStyle.hh"
+#include "RadmonLayoutEntityWithAttributes.hh"
+#include "RadmonDumpStyle.hh"
 #include <iomanip>
 
 
 
-G4int                                           RadmonDetectorLayoutEntityWithAttributes :: GetNAttributes(void) const
+G4int                                           RadmonLayoutEntityWithAttributes :: GetNAttributes(void) const
 {
  return attributesVector.size();
 }
 
 
 
-const G4String &                                RadmonDetectorLayoutEntityWithAttributes :: GetAttributeName(G4int index) const
+const G4String &                                RadmonLayoutEntityWithAttributes :: GetAttributeName(G4int index) const
 {
  return attributesVector[index].first;
 }
 
 
  
-G4String                                        RadmonDetectorLayoutEntityWithAttributes :: GetAttribute(const G4String & attributeName, const G4String & defaultValue) const
+G4String                                        RadmonLayoutEntityWithAttributes :: GetAttribute(const G4String & attributeName, const G4String & defaultValue) const
 {
  AttributesVector::const_iterator i(attributesVector.begin());
  AttributesVector::const_iterator end(attributesVector.end());
@@ -46,7 +46,7 @@ G4String                                        RadmonDetectorLayoutEntityWithAt
 
 
 
-G4bool                                          RadmonDetectorLayoutEntityWithAttributes :: ExistsAttribute(const G4String & attributeName) const
+G4bool                                          RadmonLayoutEntityWithAttributes :: ExistsAttribute(const G4String & attributeName) const
 {
  AttributesVector::const_iterator i(attributesVector.begin());
  AttributesVector::const_iterator end(attributesVector.end());
@@ -64,7 +64,7 @@ G4bool                                          RadmonDetectorLayoutEntityWithAt
 
 
 
-void                                            RadmonDetectorLayoutEntityWithAttributes :: SetAttribute(const G4String & attributeName, const G4String & value)
+void                                            RadmonLayoutEntityWithAttributes :: SetAttribute(const G4String & attributeName, const G4String & value)
 {
  AttributesVector::iterator i(attributesVector.begin());
  AttributesVector::iterator end(attributesVector.end());
@@ -88,7 +88,7 @@ void                                            RadmonDetectorLayoutEntityWithAt
 
 
 
-void                                            RadmonDetectorLayoutEntityWithAttributes :: ClearAttribute(const G4String & attributeName)
+void                                            RadmonLayoutEntityWithAttributes :: ClearAttribute(const G4String & attributeName)
 {
  AttributesVector::iterator i(attributesVector.begin());
  AttributesVector::iterator end(attributesVector.end());
@@ -107,7 +107,7 @@ void                                            RadmonDetectorLayoutEntityWithAt
 
 
 
-void                                            RadmonDetectorLayoutEntityWithAttributes :: ClearAllAttributes(void)
+void                                            RadmonLayoutEntityWithAttributes :: ClearAllAttributes(void)
 {
  attributesVector.clear();
 }
@@ -116,7 +116,7 @@ void                                            RadmonDetectorLayoutEntityWithAt
 
 
 
-void                                            RadmonDetectorLayoutEntityWithAttributes :: DumpAttributesLayout(std::ostream & out, const G4String & indent) const
+void                                            RadmonLayoutEntityWithAttributes :: DumpAttributesLayout(std::ostream & out, const G4String & indent) const
 {
  AttributesVector::const_iterator i(attributesVector.begin());
  AttributesVector::const_iterator end(attributesVector.end());
@@ -127,7 +127,7 @@ void                                            RadmonDetectorLayoutEntityWithAt
   return;
  }
 
- G4int width(RADMONDETECTORDUMP_INDENT_WIDTH-1-indent.length());
+ G4int width(RADMONDUMP_INDENT_WIDTH-1-indent.length());
  if (width<0)
   width=0;
   
@@ -153,7 +153,7 @@ void                                            RadmonDetectorLayoutEntityWithAt
 
 
 
-void                                            RadmonDetectorLayoutEntityWithAttributes :: CopyFrom(const RadmonDetectorLayoutEntityWithAttributes & copy)
+void                                            RadmonLayoutEntityWithAttributes :: CopyFrom(const RadmonLayoutEntityWithAttributes & copy)
 {
  attributesVector=copy.attributesVector;
 }

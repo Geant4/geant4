@@ -1,0 +1,40 @@
+//
+// File name:     RadmonLayoutEntityWithAttributes.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonLayoutEntityWithAttributes.icc,v 1.1 2005-10-24 14:51:36 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONLAYOUTENTITYWITHATTRIBUTES_HH
+ #error "RadmonLayoutEntityWithAttributes.icc cannot be included directly. Please use RadmonLayoutEntityWithAttributes.hh"
+#else  /* RADMONLAYOUTENTITYWITHATTRIBUTES_HH */
+ inline                                         RadmonLayoutEntityWithAttributes :: RadmonLayoutEntityWithAttributes()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonLayoutEntityWithAttributes :: RadmonLayoutEntityWithAttributes(const RadmonLayoutEntityWithAttributes & copy)
+ {
+  CopyFrom(copy);
+ }
+
+
+
+
+ inline                                         RadmonLayoutEntityWithAttributes :: ~RadmonLayoutEntityWithAttributes()
+ {
+ }
+
+
+
+
+
+ inline RadmonLayoutEntityWithAttributes &      RadmonLayoutEntityWithAttributes :: operator=(const RadmonLayoutEntityWithAttributes & copy)
+ {
+  CopyFrom(copy);
+  return (*this); 
+ }
+#endif /* RADMONLAYOUTENTITYWITHATTRIBUTES_HH */

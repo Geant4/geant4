@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorEnvironmentLayout.hh,v 1.2 2005-09-12 17:14:17 capra Exp $
+// Id:            $Id: RadmonDetectorEnvironmentLayout.hh,v 1.3 2005-10-24 14:51:36 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Internal class to describe the environment layout
@@ -13,9 +13,9 @@
  #define  RADMONDETECTORENVIRONMENTLAYOUT_HH
  
  // Include files
- #include "RadmonDetectorLayoutEntityWithAttributes.hh"
+ #include "RadmonLayoutEntityWithAttributes.hh"
  
- class RadmonDetectorEnvironmentLayout : public RadmonDetectorLayoutEntityWithAttributes
+ class RadmonDetectorEnvironmentLayout : public RadmonLayoutEntityWithAttributes
  {
   public:
    inline                                     RadmonDetectorEnvironmentLayout();

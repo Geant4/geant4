@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2005-09-30 08:35:55 capra Exp $
+$Id: History,v 1.8 2005-10-24 14:51:36 capra Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24 Oct 2005 - radmon-V07-01-07 - R. Capra - Design iteration: classes:
+                        
+                        * RadmonVDetectorLayoutObserver
+                        * RadmonVDetectorLayoutSubject
+                        * RadmonDetectorLayoutEntityWithAttributes
+                        
+                        has been moved in generalPurpose package without the
+                        Detector suffix. They will be used for the primary
+                        generator too.
 
 30 Sep 2005 - radmon-V07-01-06 - R. Capra - Implementation according to the
                         design. The layer with pads needed for detectors

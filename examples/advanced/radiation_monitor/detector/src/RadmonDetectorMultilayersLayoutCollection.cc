@@ -3,13 +3,13 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorMultilayersLayoutCollection.cc,v 1.2 2005-09-14 12:28:31 capra Exp $
+// Id:            $Id: RadmonDetectorMultilayersLayoutCollection.cc,v 1.3 2005-10-24 14:51:36 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
 // Include files
 #include "RadmonDetectorMultilayersLayoutCollection.hh"
-#include "RadmonDetectorDumpStyle.hh"
+#include "RadmonDumpStyle.hh"
 #include <iomanip>
 
 

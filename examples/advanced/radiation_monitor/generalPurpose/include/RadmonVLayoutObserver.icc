@@ -1,0 +1,22 @@
+//
+// File name:     RadmonVLayoutObserver.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonVLayoutObserver.icc,v 1.1 2005-10-24 14:51:36 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONVLAYOUTOBSERVER_HH
+ #error "RadmonVLayoutObserver.icc cannot be included directly. Please use RadmonVLayoutObserver.hh"
+#else  /* RADMONVLAYOUTOBSERVER_HH */
+ inline                                         RadmonVLayoutObserver :: RadmonVLayoutObserver()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonVLayoutObserver :: ~RadmonVLayoutObserver()
+ {
+ }
+#endif /* RADMONVLAYOUTOBSERVER_HH */

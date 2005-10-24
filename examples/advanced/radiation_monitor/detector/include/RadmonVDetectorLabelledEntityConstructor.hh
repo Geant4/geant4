@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonVDetectorLabelledEntityConstructor.hh,v 1.3 2005-09-21 14:56:43 capra Exp $
+// Id:            $Id: RadmonVDetectorLabelledEntityConstructor.hh,v 1.4 2005-10-24 14:52:03 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Abstract class of a detector-entity constructor with label
@@ -14,14 +14,14 @@
  #define  RADMONVDETECTORLABELLEDENTITYCONSTRUCTOR_HH
  
  // Include files
- #include "RadmonDetectorLayoutEntityWithAttributes.hh"
+ #include "RadmonLayoutEntityWithAttributes.hh"
  #include "RadmonVDetectorEntityConstructor.hh"
  
  // Forward declaration
  class G4Material;
  class G4VisAttributes;
  
- class RadmonVDetectorLabelledEntityConstructor : public RadmonVDetectorEntityConstructor, public RadmonDetectorLayoutEntityWithAttributes
+ class RadmonVDetectorLabelledEntityConstructor : public RadmonVDetectorEntityConstructor, public RadmonLayoutEntityWithAttributes
  {
   public:
    inline virtual                               ~RadmonVDetectorLabelledEntityConstructor();

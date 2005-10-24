@@ -1,16 +1,16 @@
 //
-// File name:     RadmonDetectorLayoutEntityWithAttributes.hh
+// File name:     RadmonLayoutEntityWithAttributes.hh
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorLayoutEntityWithAttributes.hh,v 1.3 2005-09-19 19:42:13 capra Exp $
+// Id:            $Id: RadmonLayoutEntityWithAttributes.hh,v 1.1 2005-10-24 14:51:36 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Provides attributes to other detector classes
 //
 
-#ifndef   RADMONDETECTORLAYOUTENTITYWITHATTRIBUTES_HH
- #define  RADMONDETECTORLAYOUTENTITYWITHATTRIBUTES_HH
+#ifndef   RADMONLAYOUTENTITYWITHATTRIBUTES_HH
+ #define  RADMONLAYOUTENTITYWITHATTRIBUTES_HH
  
  // Include files
  #include "G4String.hh"
@@ -19,7 +19,7 @@
  #include <vector>
  #include <utility>
  
- class RadmonDetectorLayoutEntityWithAttributes
+ class RadmonLayoutEntityWithAttributes
  {
   public:
    G4int                                        GetNAttributes(void) const;
@@ -32,17 +32,17 @@
    void                                         ClearAllAttributes(void);
 
   protected:
-   inline                                       RadmonDetectorLayoutEntityWithAttributes();
-   inline                                       RadmonDetectorLayoutEntityWithAttributes(const RadmonDetectorLayoutEntityWithAttributes & copy);
-   inline                                      ~RadmonDetectorLayoutEntityWithAttributes();
+   inline                                       RadmonLayoutEntityWithAttributes();
+   inline                                       RadmonLayoutEntityWithAttributes(const RadmonLayoutEntityWithAttributes & copy);
+   inline                                      ~RadmonLayoutEntityWithAttributes();
 
    void                                         DumpAttributesLayout(std::ostream & out, const G4String & indent=G4String()) const;
 
-   inline RadmonDetectorLayoutEntityWithAttributes & operator=(const RadmonDetectorLayoutEntityWithAttributes & copy);
+   inline RadmonLayoutEntityWithAttributes &    operator=(const RadmonLayoutEntityWithAttributes & copy);
 
   private:
   // Private methods
-   void                                         CopyFrom(const RadmonDetectorLayoutEntityWithAttributes & copy);
+   void                                         CopyFrom(const RadmonLayoutEntityWithAttributes & copy);
    
   // Private attributes
    typedef std::pair<G4String, G4String>        AttributeItem;
@@ -51,5 +51,5 @@
  };
  
  // Inline implementations
- #include "RadmonDetectorLayoutEntityWithAttributes.icc"
-#endif /* RADMONDETECTORLAYOUTENTITYWITHATTRIBUTES_HH */
+ #include "RadmonLayoutEntityWithAttributes.icc"
+#endif /* RADMONLAYOUTENTITYWITHATTRIBUTES_HH */

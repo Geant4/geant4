@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonVDetectorLayout.hh,v 1.4 2005-09-19 19:42:13 capra Exp $
+// Id:            $Id: RadmonVDetectorLayout.hh,v 1.5 2005-10-24 14:51:36 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Abstract class to keep track of the configured detector
@@ -14,13 +14,13 @@
  #define  RADMONVDETECTORLAYOUT_HH
  
  // Include files
- #include "RadmonVDetectorLayoutSubject.hh"
+ #include "RadmonVLayoutSubject.hh"
 
  #include "globals.hh"
  #include "G4ThreeVector.hh"
  #include "G4RotationMatrix.hh"
  
- class RadmonVDetectorLayout : public RadmonVDetectorLayoutSubject
+ class RadmonVDetectorLayout : public RadmonVLayoutSubject
  {
   public:
    virtual void                                 EnableEnvironment(void) = 0;

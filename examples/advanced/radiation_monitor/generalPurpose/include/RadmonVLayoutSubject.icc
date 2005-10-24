@@ -1,0 +1,22 @@
+//
+// File name:     RadmonVLayoutSubject.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonVLayoutSubject.icc,v 1.1 2005-10-24 14:51:36 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONVLAYOUTSUBJECT_HH
+ #error "RadmonVLayoutSubject.icc cannot be included directly. Please use RadmonVLayoutSubject.hh"
+#else  /* RADMONVLAYOUTSUBJECT_HH */
+ inline                                         RadmonVLayoutSubject :: RadmonVLayoutSubject()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonVLayoutSubject :: ~RadmonVLayoutSubject()
+ {
+ }
+#endif /* RADMONVLAYOUTSUBJECT_HH */
