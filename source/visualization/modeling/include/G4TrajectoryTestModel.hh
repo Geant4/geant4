@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryTestModel.hh,v 1.1 2005-10-24 11:20:18 allison Exp $
+// $Id: G4TrajectoryTestModel.hh,v 1.2 2005-10-24 14:03:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
@@ -43,7 +43,7 @@ public: // With description
 
   G4TrajectoryTestModel
   (const G4String& name,
-   const G4String& commandPrefix = "");
+   const G4String& commandPrefix = "/");
 
   ~G4TrajectoryTestModel();
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.39 2005-10-24 11:32:43 allison Exp $
+// $Id: G4VisManager.hh,v 1.40 2005-10-24 14:03:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -336,7 +336,7 @@ protected:
   // RegisterGraphicsSystem.
 
   virtual void RegisterTrajectoryModelMakers
-  (const G4String& commandPrefix) = 0;
+  (const G4String& commandPrefix = "/") = 0;
   // The sub-class must implement and make successive calls to
   // RegisterTrajectoryModelMaker and arrange to pass on the command
   // prefix to any messengers.  Those messengers then prefix their

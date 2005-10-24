@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.hh,v 1.2 2005-10-24 11:35:30 allison Exp $
+// $Id: G4VisExecutive.hh,v 1.3 2005-10-24 14:03:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,7 +95,7 @@ public: // With description
 private:
 
   void RegisterGraphicsSystems ();
-  void RegisterTrajectoryModelMakers (const G4String& commandPrefix);
+  void RegisterTrajectoryModelMakers (const G4String& commandPrefix = "/");
 
 };
 
