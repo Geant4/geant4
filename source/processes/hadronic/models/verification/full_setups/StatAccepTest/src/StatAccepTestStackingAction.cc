@@ -9,6 +9,7 @@
 #include "G4VProcess.hh"
 #include <iostream>
 #include <string>
+#include <cmath>
 
 
 StatAccepTestStackingAction::StatAccepTestStackingAction() :
@@ -124,7 +125,8 @@ StatAccepTestStackingAction::~StatAccepTestStackingAction() {
   for ( int i = 0; i < Nmax; i++ ) {
     totNumTracks += weightGammaVec[ i ];
     std::cout << "\t exponent=" << i 
-              << "\t weight=" << pow( gammaBiasingFactor2, i )
+              << "\t weight=" << std::pow( static_cast<double>( gammaBiasingFactor2 ), 
+					   i )
 	      << "\t number of tracks=" << weightGammaVec[ i ] << std::endl;  
   }
   std::cout << " Total number of Gammas = " << totNumTracks << std::endl;
@@ -134,7 +136,8 @@ StatAccepTestStackingAction::~StatAccepTestStackingAction() {
   for ( int i = 0; i < Nmax; i++ ) {
     totNumTracks += weightElectronVec[ i ];
     std::cout << "\t exponent=" << i 
-              << "\t weight=" << pow( electronBiasingFactor2, i )
+              << "\t weight=" << std::pow( static_cast<double>( electronBiasingFactor2 ),
+					   i )
 	      << "\t number of tracks=" << weightElectronVec[ i ] << std::endl;  
   }
   std::cout << " Total number of Electrons = " << totNumTracks << std::endl;
@@ -144,7 +147,8 @@ StatAccepTestStackingAction::~StatAccepTestStackingAction() {
   for ( int i = 0; i < Nmax; i++ ) {
     totNumTracks += weightPositronVec[ i ];
     std::cout << "\t exponent=" << i 
-              << "\t weight=" << pow( positronBiasingFactor2, i )
+              << "\t weight=" << std::pow( static_cast<double>( positronBiasingFactor2 ),
+					   i )
 	      << "\t number of tracks=" << weightPositronVec[ i ] << std::endl;  
   }
   std::cout << " Total number of Positron = " << totNumTracks << std::endl;
@@ -154,7 +158,8 @@ StatAccepTestStackingAction::~StatAccepTestStackingAction() {
   for ( int i = 0; i < Nmax; i++ ) {
     totNumTracks += weightNeutronVec[ i ];
     std::cout << "\t exponent=" << i 
-              << "\t weight=" << pow( neutronBiasingFactor, i )
+              << "\t weight=" << std::pow( static_cast<double>( neutronBiasingFactor ),
+					   i )
 	      << "\t number of tracks=" << weightNeutronVec[ i ] << std::endl;  
   }
   std::cout << " Total number of Neutron = " << totNumTracks << std::endl;

@@ -1,6 +1,6 @@
 #
 #***LOOKHERE***
-export VO_DTEAM_SW_DIR=/users/ribon/dirGrid
+export VO_GEANT4_SW_DIR=/users/ribon/dirGrid
 #
 # ==============
 # === GEANT4 ===
@@ -10,7 +10,7 @@ export G4SYSTEM=Linux-g++
 #
 export G4_RELEASE=dirGeant4-7.1
 #
-export DIR_INSTALLATIONS=$VO_DTEAM_SW_DIR/dirInstallations
+export DIR_INSTALLATIONS=$VO_GEANT4_SW_DIR/dirInstallations
 export G4INSTALL=$DIR_INSTALLATIONS/$G4_RELEASE
 export G4LIB=$G4INSTALL/lib
 #

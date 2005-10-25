@@ -1,13 +1,15 @@
- A.R. Created 20-Aug-2004 ; Last change 29-Apr-2005.
- 
+
+ Last update: 25-Oct-2005
+ ========================
+
  This directory contains a configurable calorimeter setup to be used
  as statistical acceptance suite of Geant4, that is to validate a
  new release with respect the previous one (regression test).
 
  The setup Bash script, exerciseSetup.sh, is meant for the Grid,
  under the assumption that all the needed software is installed
- in the directory  $VO_DTEAM_SW_DIR/dirInstallations 
- (the environmental variable VO_DTEAM_SW_DIR is automatically
+ in the directory  $VO_GEANT4_SW_DIR/dirInstallations 
+ (the environmental variable VO_GEANT4_SW_DIR is automatically
   defined when you run on the Grid).
  If you want to run on your computer, then you need to modify
  this setup script.
@@ -16,8 +18,8 @@
  the Physics List (LHEP, QGSP, QGSP_BERT, QGSP_BIC), in the macro
  command file  * exercise.g4 *  you can choose which particle to shoot,
  the beam energy, the number of events, and the kind of calorimeter
- you are interested in (see that command file to look at the various
- options available).
+ you are interested in, and also, eventually, a transverse magnetic 
+ field (see that command file to look at the various options available).
 
  The calorimeter is a box, with the beam along the x-axis, and
  whose dimensions are the same along y, z (i.e. transverse dimensions

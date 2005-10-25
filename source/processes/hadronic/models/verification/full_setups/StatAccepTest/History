@@ -1,6 +1,12 @@
                  History file
                  ------------
 
+25-Oct-2005 - A.Ribon (statAccepTest-V07-01-03)
+- Geant4 is now a Virtual Organization, so I have
+  replaced  VO_DTEAM_SW_DIR  to  VO_GEANT4_SW_DIR .
+  Also better usage of  pow  in the Tracking action.
+
+
 20-Oct-2005 - A.Ribon (statAccepTest-V07-01-02)
 - Introduced the possibility to have magnetic field
   (only along the y-axis, i.e. transverse to the
