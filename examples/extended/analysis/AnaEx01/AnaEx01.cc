@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01.cc,v 1.10 2005-10-24 16:14:51 gbarrand Exp $
+// $Id: AnaEx01.cc,v 1.11 2005-10-25 13:45:09 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,17 +77,14 @@ int main(int,char**) {
 
   runManager->SetUserAction(new AnaEx01PrimaryGeneratorAction(detector));
 
+  AnaEx01AnalysisManager* analysisManager = 0;
 #ifdef G4ANALYSIS_USE
   AIDA::IAnalysisFactory* aida = AIDA_createAnalysisFactory();
-  AnaEx01AnalysisManager* analysisManager = new AnaEx01AnalysisManager(aida);
+  analysisManager = new AnaEx01AnalysisManager(aida);
+#endif
   runManager->SetUserAction(new AnaEx01RunAction(analysisManager));
   runManager->SetUserAction(new AnaEx01EventAction(analysisManager));
   runManager->SetUserAction(new AnaEx01SteppingAction(analysisManager));
-#else
-  runManager->SetUserAction(new AnaEx01RunAction());
-  runManager->SetUserAction(new AnaEx01EventAction());
-  runManager->SetUserAction(new AnaEx01SteppingAction());
-#endif
 
   //Initialize G4 kernel
   runManager->Initialize();

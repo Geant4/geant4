@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01AnalysisManager.hh,v 1.7 2005-10-24 16:14:51 gbarrand Exp $
+// $Id: AnaEx01AnalysisManager.hh,v 1.8 2005-10-25 13:46:11 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,6 +62,10 @@ private:
   AIDA::IHistogram1D* fLGap;
   AIDA::ITuple* fTuple;
 };
+
+#else
+
+class AnaEx01AnalysisManager;
 
 #endif
 

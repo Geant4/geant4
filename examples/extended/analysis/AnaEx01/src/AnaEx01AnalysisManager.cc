@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01AnalysisManager.cc,v 1.13 2005-10-24 16:14:51 gbarrand Exp $
+// $Id: AnaEx01AnalysisManager.cc,v 1.14 2005-10-25 13:46:58 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,9 +65,13 @@ AnaEx01AnalysisManager::AnaEx01AnalysisManager(AIDA::IAnalysisFactory* aAIDA)
   AIDA::ITreeFactory* treeFactory = fAIDA->createTreeFactory();
   if(!treeFactory) return;
 
-  // Create a "tree" to handle histograms.
-  // This tree is associated to a writable ROOT "store".
-  fTree = treeFactory->create("AnaEx01.root","ROOT",0,1);
+  // Create a tree-like container to handle histograms.
+  // This tree is associated to a AnaEx01.aida file.  
+  //std::string opts = "compress=yes";
+  std::string opts = "compress=no";
+  fTree = treeFactory->create("AnaEx01.aida","xml",false,true,opts);
+  //std::string opts = "export=root";
+  //fTree = treeFactory->create("AnaEx01.root","ROOT",false,true,opts);
 
   // Factories are not "managed" by an AIDA analysis system.
   // They must be deleted by the AIDA user code.
