@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.58 2005-05-27 18:38:33 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.59 2005-10-25 11:38:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -488,11 +488,11 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(const G4ParticleDefinition
 
   loss_map[aParticle] = em;
   for (G4int j=0; j<n_dedx; j++) {
-    G4PhysicsTable* lambdaTable = loss_list[j]->BuildLambdaTable();
-    loss_list[j]->SetLambdaTable(lambdaTable);
-    if (0 < loss_list[j]->NumberOfSubCutoffRegions()) {
-      lambdaTable = loss_list[j]->BuildLambdaSubTable();
-      loss_list[j]->SetSubLambdaTable(lambdaTable);
+    G4VEnergyLossProcess* p = loss_list[j];
+    p->SetLambdaTable(p->BuildLambdaTable());
+    if (0 < p->NumberOfSubCutoffRegions()) {
+      p->SetSubLambdaTable(p->BuildLambdaSubTable());
+      if( p != em) em->AddCollaborativeProcess(p);
     }
   }
   if (1 < verbose) {

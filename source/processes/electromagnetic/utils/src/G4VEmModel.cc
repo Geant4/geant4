@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.1 2005-07-25 18:14:26 vnivanch Exp $
+// $Id: G4VEmModel.cc,v 1.2 2005-10-25 11:38:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,6 +35,7 @@
 // Creation date: 25.07.2005
 //
 // Modifications:
+// 25.10.2005 Set default highLimit=100.TeV (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -49,11 +50,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VEmModel::G4VEmModel(const G4String& nam): 
-  lowLimit(0.0), highLimit(0.0), fluc(0), name(nam), pParticleChange(0) 
+G4VEmModel::G4VEmModel(const G4String& nam):
+  lowLimit(0.0), highLimit(100.0*TeV), fluc(0), name(nam), pParticleChange(0)
 {}
 
-G4VEmModel::~G4VEmModel() 
+G4VEmModel::~G4VEmModel()
 {}
 
 G4double G4VEmModel::CrossSectionPerVolume(
@@ -70,7 +71,7 @@ G4double G4VEmModel::CrossSectionPerVolume(
   for (size_t i=0; i<nelm; i++) {
     const G4Element* elm = (*theElementVector)[i];
     cross += theAtomNumDensityVector[i]*
-             ComputeCrossSectionPerAtom(p,ekin,elm->GetZ(),elm->GetN(),emin,emax); 
+             ComputeCrossSectionPerAtom(p,ekin,elm->GetZ(),elm->GetN(),emin,emax);
     xsec[i] = cross;
   }
   return cross;
