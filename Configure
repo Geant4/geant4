@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.73 2005-10-25 22:06:48 stesting Exp $
+# $Id: Configure,v 1.74 2005-10-25 22:28:19 stesting Exp $
 #
-# Generated on Wed Oct 26 00:03:58 CEST 2005 [metaconfig 3.0 PL70]
+# Generated on Wed Oct 26 00:25:52 CEST 2005 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -1926,7 +1926,12 @@ fi
 	INCFLAGS=`echo $INCFLAGS_AAA_NEW| $sed -e "s/AAA/\//g"`
 
 #	echo INCFLAGS=$INCFLAGS
+
+	if [ X$G4INCLUDE = X ] ; then
 	echo $INCFLAGS
+	else
+	echo -I$G4INCLUDE
+	fi
 	
 	$rm -rf .config/UU
 	exit 1
