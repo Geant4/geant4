@@ -1,0 +1,24 @@
+//
+// File name:     RadmonGeneratorFixedPosition.icc
+// Creation date: Oct 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonGeneratorFixedPosition.icc,v 1.1 2005-10-25 16:36:41 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONGENERATORFIXEDPOSITION_HH
+ #error "RadmonGeneratorFixedPosition.icc cannot be included directly. Please use RadmonGeneratorFixedPosition.hh"
+#else  /* RADMONGENERATORFIXEDPOSITION_HH */
+ inline                                         RadmonGeneratorFixedPosition :: RadmonGeneratorFixedPosition()
+ :
+  RadmonVGeneratorWithLabel("FixedPosition")
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonGeneratorFixedPosition :: ~RadmonGeneratorFixedPosition()
+ {
+ }
+#endif /* RADMONGENERATORFIXEDPOSITION_HH */

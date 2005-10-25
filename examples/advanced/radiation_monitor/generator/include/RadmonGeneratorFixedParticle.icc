@@ -1,0 +1,24 @@
+//
+// File name:     RadmonGeneratorFixedParticle.icc
+// Creation date: Oct 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonGeneratorFixedParticle.icc,v 1.1 2005-10-25 16:36:41 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONGENERATORFIXEDPARTICLE_HH
+ #error "RadmonGeneratorFixedParticle.icc cannot be included directly. Please use RadmonGeneratorFixedParticle.hh"
+#else  /* RADMONGENERATORFIXEDPARTICLE_HH */
+ inline                                         RadmonGeneratorFixedParticle :: RadmonGeneratorFixedParticle()
+ :
+  RadmonVGeneratorWithLabel("FixedParticle")
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonGeneratorFixedParticle :: ~RadmonGeneratorFixedParticle()
+ {
+ }
+#endif /* RADMONGENERATORFIXEDPARTICLE_HH */

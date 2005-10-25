@@ -1,0 +1,22 @@
+//
+// File name:     RadmonVGeneratorsFactory.icc
+// Creation date: Oct 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonVGeneratorsFactory.icc,v 1.1 2005-10-25 16:36:41 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONVGENERATORSFACTORY_HH
+ #error "RadmonVGeneratorsFactory.icc cannot be included directly. Please use RadmonVGeneratorsFactory.hh"
+#else  /* RADMONVGENERATORSFACTORY_HH */
+ inline                                         RadmonVGeneratorsFactory :: RadmonVGeneratorsFactory()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonVGeneratorsFactory :: ~RadmonVGeneratorsFactory()
+ {
+ }
+#endif /* RADMONVGENERATORSFACTORY_HH */

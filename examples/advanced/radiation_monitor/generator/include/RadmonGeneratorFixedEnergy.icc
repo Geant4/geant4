@@ -1,0 +1,24 @@
+//
+// File name:     RadmonGeneratorFixedEnergy.icc
+// Creation date: Oct 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonGeneratorFixedEnergy.icc,v 1.1 2005-10-25 16:36:41 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONGENERATORFIXEDENERGY_HH
+ #error "RadmonGeneratorFixedEnergy.icc cannot be included directly. Please use RadmonGeneratorFixedEnergy.hh"
+#else  /* RADMONGENERATORFIXEDENERGY_HH */
+ inline                                         RadmonGeneratorFixedEnergy :: RadmonGeneratorFixedEnergy()
+ :
+  RadmonVGeneratorWithLabel("FixedEnergy")
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonGeneratorFixedEnergy :: ~RadmonGeneratorFixedEnergy()
+ {
+ }
+#endif /* RADMONGENERATORFIXEDENERGY_HH */

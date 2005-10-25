@@ -1,0 +1,24 @@
+//
+// File name:     RadmonGeneratorUniformPlane.icc
+// Creation date: Oct 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonGeneratorUniformPlane.icc,v 1.1 2005-10-25 16:36:41 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONGENERATORUNIFORMPLANE_HH
+ #error "RadmonGeneratorUniformPlane.icc cannot be included directly. Please use RadmonGeneratorUniformPlane.hh"
+#else  /* RADMONGENERATORUNIFORMPLANE_HH */
+ inline                                         RadmonGeneratorUniformPlane :: RadmonGeneratorUniformPlane()
+ :
+  RadmonVGeneratorWithLabel("UniformPlane")
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonGeneratorUniformPlane :: ~RadmonGeneratorUniformPlane()
+ {
+ }
+#endif /* RADMONGENERATORUNIFORMPLANE_HH */

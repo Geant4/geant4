@@ -1,0 +1,70 @@
+//
+// File name:     RadmonGeneratorSourceLayout.icc
+// Creation date: Oct 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonGeneratorSourceLayout.icc,v 1.1 2005-10-25 16:36:41 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONGENERATORSOURCELAYOUT_HH
+ #error "RadmonGeneratorSourceLayout.icc cannot be included directly. Please use RadmonGeneratorSourceLayout.hh"
+#else  /* RADMONGENERATORSOURCELAYOUT_HH */
+ inline                                         RadmonGeneratorSourceLayout :: RadmonGeneratorSourceLayout()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonGeneratorSourceLayout :: ~RadmonGeneratorSourceLayout()
+ {
+ }
+ 
+ 
+ 
+
+
+ inline const G4String &                        RadmonGeneratorSourceLayout :: GetLabel(void) const
+ {
+  return sourceLabel;
+ }
+ 
+ 
+ 
+ inline void                                    RadmonGeneratorSourceLayout :: SetLabel(const G4String & label)
+ {
+  sourceLabel=label;
+ }
+ 
+ 
+ 
+
+
+ inline G4double                                RadmonGeneratorSourceLayout :: GetIntensity(void) const
+ {
+  return sourceIntensity;
+ }
+ 
+ 
+ 
+ inline void                                    RadmonGeneratorSourceLayout :: SetIntensity(G4double intensity)
+ {
+  sourceIntensity=intensity;
+ }
+ 
+ 
+ 
+
+
+ inline G4int                                   RadmonGeneratorSourceLayout :: GetNAlgorithms(void) const
+ {
+  return algorithmsCollection.GetNItems();
+ }
+ 
+ 
+ 
+ inline G4bool                                  RadmonGeneratorSourceLayout :: Empty(void) const
+ {
+  return algorithmsCollection.Empty();
+ }
+#endif /* RADMONGENERATORSOURCELAYOUT_HH */

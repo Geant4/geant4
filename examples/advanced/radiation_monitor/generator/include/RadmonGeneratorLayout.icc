@@ -1,0 +1,22 @@
+//
+// File name:     RadmonGeneratorLayout.icc
+// Creation date: Oct 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonGeneratorLayout.icc,v 1.1 2005-10-25 16:36:41 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONGENERATORLAYOUT_HH
+ #error "RadmonGeneratorLayout.icc cannot be included directly. Please use RadmonGeneratorLayout.hh"
+#else  /* RADMONGENERATORLAYOUT_HH */
+ inline                                         RadmonGeneratorLayout :: RadmonGeneratorLayout()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonGeneratorLayout :: ~RadmonGeneratorLayout()
+ {
+ }
+#endif /* RADMONGENERATORLAYOUT_HH */

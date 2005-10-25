@@ -1,0 +1,24 @@
+//
+// File name:     RadmonGeneratorUniformSphere.icc
+// Creation date: Oct 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonGeneratorUniformSphere.icc,v 1.1 2005-10-25 16:36:41 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONGENERATORUNIFORMSPHERE_HH
+ #error "RadmonGeneratorUniformSphere.icc cannot be included directly. Please use RadmonGeneratorUniformSphere.hh"
+#else  /* RADMONGENERATORUNIFORMSPHERE_HH */
+ inline                                         RadmonGeneratorUniformSphere :: RadmonGeneratorUniformSphere()
+ :
+  RadmonVGeneratorWithLabel("UniformSphere")
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonGeneratorUniformSphere :: ~RadmonGeneratorUniformSphere()
+ {
+ }
+#endif /* RADMONGENERATORUNIFORMSPHERE_HH */

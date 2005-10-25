@@ -1,0 +1,24 @@
+//
+// File name:     RadmonGeneratorFixedDirection.icc
+// Creation date: Oct 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonGeneratorFixedDirection.icc,v 1.1 2005-10-25 16:36:41 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONGENERATORFIXEDDIRECTION_HH
+ #error "RadmonGeneratorFixedDirection.icc cannot be included directly. Please use RadmonGeneratorFixedDirection.hh"
+#else  /* RADMONGENERATORFIXEDDIRECTION_HH */
+ inline                                         RadmonGeneratorFixedDirection :: RadmonGeneratorFixedDirection()
+ :
+  RadmonVGeneratorWithLabel("FixedDirection")
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonGeneratorFixedDirection :: ~RadmonGeneratorFixedDirection()
+ {
+ }
+#endif /* RADMONGENERATORFIXEDDIRECTION_HH */

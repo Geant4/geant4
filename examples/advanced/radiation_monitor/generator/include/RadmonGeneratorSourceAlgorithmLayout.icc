@@ -1,0 +1,54 @@
+//
+// File name:     RadmonGeneratorSourceAlgorithmLayout.icc
+// Creation date: Oct 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonGeneratorSourceAlgorithmLayout.icc,v 1.1 2005-10-25 16:36:41 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONGENERATORSOURCEALGORITHMLAYOUT_HH
+ #error "RadmonGeneratorSourceAlgorithmLayout.icc cannot be included directly. Please use RadmonGeneratorSourceAlgorithmLayout.hh"
+#else  /* RADMONGENERATORSOURCEALGORITHMLAYOUT_HH */
+ inline                                         RadmonGeneratorSourceAlgorithmLayout :: RadmonGeneratorSourceAlgorithmLayout()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonGeneratorSourceAlgorithmLayout :: ~RadmonGeneratorSourceAlgorithmLayout()
+ {
+ }
+
+
+
+
+
+ inline const G4String &                        RadmonGeneratorSourceAlgorithmLayout :: GetLabel(void) const
+ {
+  return algorithmLabel;
+ }
+ 
+ 
+ 
+ inline void                                    RadmonGeneratorSourceAlgorithmLayout :: SetLabel(const G4String & label)
+ {
+  algorithmLabel=label;
+ }
+ 
+ 
+ 
+ 
+
+ inline const G4String &                        RadmonGeneratorSourceAlgorithmLayout :: GetType(void) const
+ {
+  return algorithmType;
+ }
+ 
+ 
+ 
+ inline void                                    RadmonGeneratorSourceAlgorithmLayout :: SetType(const G4String & type)
+ {
+  algorithmType=type;
+ }
+#endif /* RADMONGENERATORSOURCEALGORITHMLAYOUT_HH */

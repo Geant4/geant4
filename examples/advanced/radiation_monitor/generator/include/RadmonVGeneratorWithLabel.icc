@@ -1,0 +1,44 @@
+//
+// File name:     RadmonVGeneratorWithLabel.icc
+// Creation date: Oct 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonVGeneratorWithLabel.icc,v 1.1 2005-10-25 16:36:41 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONVGENERATORWITHLABEL_HH
+ #error "RadmonVGeneratorWithLabel.icc cannot be included directly. Please use RadmonVGeneratorWithLabel.hh"
+#else  /* RADMONVGENERATORWITHLABEL_HH */
+ inline                                         RadmonVGeneratorWithLabel :: ~RadmonVGeneratorWithLabel()
+ {
+ }
+
+
+
+
+
+ inline const G4String &                        RadmonVGeneratorWithLabel :: GetLabel(void) const
+ {
+  return generatorLabel;
+ }
+ 
+ 
+ 
+
+
+ inline void                                    RadmonVGeneratorWithLabel :: SetGeneratorAttribute(const G4String & attribute, const G4String & value)
+ {
+  SetAttribute(attribute, value);
+ }
+
+
+
+
+
+ inline                                         RadmonVGeneratorWithLabel :: RadmonVGeneratorWithLabel(const G4String & label)
+ :
+  generatorLabel(label)
+ {
+ }
+#endif /* RADMONVGENERATORWITHLABEL_HH */
