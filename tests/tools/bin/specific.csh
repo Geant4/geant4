@@ -575,16 +575,17 @@ if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == wl-72130.lal.in2p3.fr
   #setenv XENVIRONMENT visTutor/g4Xt.xrm
 #  setenv DYLD_BIND_AT_LAUNCH 1
 # AIDA :
-#  setenv G4ANALYSIS_USE 1
+  setenv G4ANALYSIS_USE 1
 # Falsetto implementation :
-#  source $HOME_BARRAND/OpenScientist/Falsetto/v1r2/cmt/setup.csh
+#  source $HOME_BARRAND/OpenScientist/dev/Falsetto/v1r2/cmt/setup.csh
 # Lab implementation :
-#  source $HOME_BARRAND/OpenScientist/Lab/v10r0/cmt/setup.csh
+  source $HOME_BARRAND/OpenScientist/dev/aida-setup.csh
+  #source $HOME_BARRAND/OpenScientist/dev/Lab/v11r1/cmt/setup.csh
 # Set AIDA compile and link access :
-#  setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
-#  setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
+  setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
+  setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
 # Set PYTHONPATH to access local scripts :
-#  setenv PYTHONPATH ${PYTHONPATH}:.
+  setenv PYTHONPATH ${PYTHONPATH}:.
 endif
 
 if ( `uname -n` == pc-panoramix.lal.in2p3.fr ) then
