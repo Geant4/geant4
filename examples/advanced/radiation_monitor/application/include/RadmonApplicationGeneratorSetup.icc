@@ -1,0 +1,24 @@
+//
+// File name:     RadmonApplicationGeneratorSetup.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonApplicationGeneratorSetup.icc,v 1.1 2005-10-25 16:39:12 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONAPPLICATIONGENERATORSETUP_HH
+ #error "RadmonApplicationGeneratorSetup.icc cannot be included directly. Please use RadmonApplicationGeneratorSetup.hh"
+#else  /* RADMONAPPLICATIONGENERATORSETUP_HH */
+ inline                                         RadmonApplicationGeneratorSetup :: RadmonApplicationGeneratorSetup(const RadmonApplicationOptions & options)
+ :
+  currentOptions(options)
+ {
+ }
+
+
+
+ inline                                         RadmonApplicationGeneratorSetup :: ~RadmonApplicationGeneratorSetup()
+ {
+ }
+#endif /* RADMONAPPLICATIONGENERATORSETUP_HH */

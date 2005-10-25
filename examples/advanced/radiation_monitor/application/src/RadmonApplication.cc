@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplication.cc,v 1.6 2005-09-30 08:33:30 capra Exp $
+// Id:            $Id: RadmonApplication.cc,v 1.7 2005-10-25 16:39:12 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -15,25 +15,13 @@
 #include "RadmonDetectorConstruction.hh"
 #include "RadmonDetectorLabelledEntitiesConstructorsFactory.hh"
 #include "RadmonDetectorMessenger.hh"
+
 #include "RadmonPhysicsDummyPhysicsList.hh"
 
-#include "RadmonDetectorFlatVolumeConstructor.hh"
-#include "RadmonDetectorFlatVolumeWithHoleConstructor.hh"
-#include "RadmonDetectorFlatVolumeWithGroundConstructor.hh"
-#include "RadmonDetectorFlatVolumeWithGroundAndKeyMarksConstructor.hh"
-#include "RadmonDetectorFlatVolumeWithGroundAndKeyMarksAndHoleConstructor.hh"
-#include "RadmonDetectorFlatVolumeWithTracksConstructor.hh"
-#include "RadmonDetectorFlatVolumeWithPinsConstructor.hh"
-#include "RadmonDetectorFlatVolumeWithPadsConstructor.hh"
-#include "RadmonDetectorFlatVolumeWithTracksAndHoleConstructor.hh"
-#include "RadmonDetectorCarvedFlatVolumeWithHoleConstructor.hh"
-#include "RadmonDetectorCarvedFlatVolumeConstructor.hh"
-#include "RadmonDetectorCarvedFlatVolumeWithGroundConstructor.hh"
-#include "RadmonDetectorCarvedFlatVolumeWithGroundAndKeyMarksConstructor.hh"
-#include "RadmonDetectorCarvedFlatVolumeWithGroundAndKeyMarksAndHoleConstructor.hh"
-#include "RadmonDetectorCarvedFlatVolumeWithTracksConstructor.hh"
-#include "RadmonDetectorCarvedFlatVolumeWithPinsConstructor.hh"
-#include "RadmonDetectorCarvedFlatVolumeWithTracksAndHoleConstructor.hh"
+#include "RadmonGeneratorLayout.hh"
+#include "RadmonPrimaryGeneratorAction.hh"
+#include "RadmonGeneratorsWithLabelFactory.hh"
+#include "RadmonGeneratorMessenger.hh"
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -49,15 +37,20 @@
 
                                                 RadmonApplication :: RadmonApplication(const RadmonApplicationOptions & options)
 :
+ RadmonApplicationDetectorSetup(options),
+ RadmonApplicationGeneratorSetup(options),
  valid(false),
  runManager(0),
- layout(0),
- factory(0),
+ detectorLayout(0),
+ generatorLayout(0),
+ detectorsFactory(0),
+ generatorsFactory(0),
  #ifdef    G4VIS_USE
   visManager(0),
  #endif /* G4VIS_USE */
  uiManager(0),
- messenger(0),
+ detectorMessenger(0),
+ generatorMessenger(0),
  session(0),
  directory(0)
 {
@@ -72,35 +65,63 @@
  
  
  // Construct the detector layout
- layout=new RadmonDetectorLayout;
+ detectorLayout=new RadmonDetectorLayout;
  
- if (layout==0)
+ if (detectorLayout==0)
  {
-  G4cerr << options.ApplicationName() << ": Layout not allocated." << G4endl;
+  G4cerr << options.ApplicationName() << ": Detector layout not allocated." << G4endl;
+  return;
+ }
+ 
+ 
+ // Construct the generator layout
+ generatorLayout=new RadmonGeneratorLayout;
+ 
+ if (generatorLayout==0)
+ {
+  G4cerr << options.ApplicationName() << ": Generator layout not allocated." << G4endl;
   return;
  }
  
  
  // Construct the detectors factory
- factory=new RadmonDetectorLabelledEntitiesConstructorsFactory;
+ detectorsFactory=new RadmonDetectorLabelledEntitiesConstructorsFactory;
  
- if (factory==0)
+ if (detectorsFactory==0)
  {
-  G4cerr << options.ApplicationName() << ": Factory not allocated." << G4endl;
+  G4cerr << options.ApplicationName() << ": Detectors factory not allocated." << G4endl;
   return;
  }
  
  
  // Construct the entity constructors
- if (!CreateEntityConstructors(options))
+ if (!CreateDetectorEntityConstructors(detectorsFactory))
  {
   G4cerr << options.ApplicationName() << ": Entity constructors not allocated." << G4endl;
   return;
  }
  
  
+ // Construct the generators factory
+ generatorsFactory=new RadmonGeneratorsWithLabelFactory;
+ 
+ if (generatorsFactory==0)
+ {
+  G4cerr << options.ApplicationName() << ": Generators factory not allocated." << G4endl;
+  return;
+ }
+ 
+ 
+ // Construct the generators algorithms
+ if (!CreateGenerators(generatorsFactory))
+ {
+  G4cerr << options.ApplicationName() << ": Generator algorithms not allocated." << G4endl;
+  return;
+ }
+ 
+ 
  // Construct the detector construction
- RadmonDetectorConstruction * detectorConstruction(new RadmonDetectorConstruction(layout, factory));
+ RadmonDetectorConstruction * detectorConstruction(new RadmonDetectorConstruction(detectorLayout, detectorsFactory));
  
  if (detectorConstruction==0)
  {
@@ -109,18 +130,32 @@
  }
  
  
- // The factory will is owned by the detectorConstruction
- factory=0; 
+ // The detectors factory will is owned by the detectorConstruction
+ detectorsFactory=0; 
  
  runManager->SetUserInitialization(detectorConstruction);
  
+
+ // Construct the detector construction
+ RadmonPrimaryGeneratorAction * primaryGenerator(new RadmonPrimaryGeneratorAction(generatorLayout, generatorsFactory));
+ 
+ if (detectorConstruction==0)
+ {
+  G4cerr << options.ApplicationName() << ": Primary generator not allocated." << G4endl;
+  return;
+ }
+ 
+ 
+ // The primary generators factory will is owned by the primaryGenerator
+ generatorsFactory=0;
+ 
+ runManager->SetUserAction(primaryGenerator);
+ 
+            
  // Set mandatory physics list
  runManager->SetUserInitialization(new RadmonPhysicsDummyPhysicsList);
          
- // Set mandatory user action class
- // runManager->SetUserAction(new ExN01PrimaryGeneratorAction);
- 
-            
+
  // Initialize the run manager
  runManager->Initialize();
 
@@ -161,12 +196,22 @@
  directory->SetGuidance("Radmon application directory.");
 
 
- // Construct the messenger to modify the layout
- messenger=new RadmonDetectorMessenger(layout);
+ // Construct the messenger to modify the detector layout
+ detectorMessenger=new RadmonDetectorMessenger(detectorLayout);
  
- if (messenger==0)
+ if (detectorMessenger==0)
  {
   G4cerr << options.ApplicationName() << ": Detector layout messenger not allocated." << G4endl;
+  return;
+ }
+ 
+ 
+ // Construct the messenger to modify the generator layout
+ generatorMessenger=new RadmonGeneratorMessenger(generatorLayout);
+ 
+ if (generatorMessenger==0)
+ {
+  G4cerr << options.ApplicationName() << ": Generator layout messenger not allocated." << G4endl;
   return;
  }
  
@@ -211,71 +256,36 @@
                                                 RadmonApplication :: ~RadmonApplication()
 {
  // Desctruct the interactive session
- if (session)
-  delete session;
+ delete session;
   
- // Destruct the messenger to modify the layout 
- if (messenger)
-  delete messenger;
+ // Destruct the generator messenger to modify the layout 
+ delete generatorMessenger;
+  
+ // Destruct the detector messenger to modify the layout 
+ delete detectorMessenger;
   
  // Destruct the Radmon directory
- if (directory)
-  delete directory;
+ delete directory;
  
  // Destruct the visualization manager
  #ifdef    G4VIS_USE
-  if (visManager)
-   delete visManager;
+  delete visManager;
  #endif /* G4VIS_USE */
 
+ // Destruct the generators factory
+ delete generatorsFactory;
+
  // Destruct the detectors factory
- if (factory)
-  delete factory;
+ delete detectorsFactory;
 
  // Destruct the default run manager
- if (runManager)
-  delete runManager;
+ delete runManager;
  
+ // Destruct the generator layout
+ delete generatorLayout; 
+
  // Destruct the detector layout
- if (layout)
-  delete layout; 
-}
-
-
-
-
-
-#define DECLARE_CONSTRUCTOR(name)               constructor=new name();                                                           \
-                                                if (constructor==0)                                                               \
-                                                {                                                                                 \
-                                                 G4cerr << options.ApplicationName() << ": Cannot allocate " #name "." << G4endl; \
-                                                 return false;                                                                    \
-                                                }                                                                                 \
-                                                factory->AppendLabelledEntityConstructor(constructor)
-
-G4bool                                          RadmonApplication :: CreateEntityConstructors(const RadmonApplicationOptions & options)
-{
- RadmonVDetectorLabelledEntityConstructor * constructor;
- 
- DECLARE_CONSTRUCTOR(RadmonDetectorFlatVolumeConstructor);
- DECLARE_CONSTRUCTOR(RadmonDetectorFlatVolumeWithHoleConstructor);
- DECLARE_CONSTRUCTOR(RadmonDetectorFlatVolumeWithGroundConstructor);
- DECLARE_CONSTRUCTOR(RadmonDetectorFlatVolumeWithGroundAndKeyMarksConstructor);
- DECLARE_CONSTRUCTOR(RadmonDetectorFlatVolumeWithGroundAndKeyMarksAndHoleConstructor);
- DECLARE_CONSTRUCTOR(RadmonDetectorFlatVolumeWithTracksConstructor);
- DECLARE_CONSTRUCTOR(RadmonDetectorFlatVolumeWithPinsConstructor);
- DECLARE_CONSTRUCTOR(RadmonDetectorFlatVolumeWithTracksAndHoleConstructor);
- DECLARE_CONSTRUCTOR(RadmonDetectorFlatVolumeWithPadsConstructor);
- DECLARE_CONSTRUCTOR(RadmonDetectorCarvedFlatVolumeConstructor);
- DECLARE_CONSTRUCTOR(RadmonDetectorCarvedFlatVolumeWithHoleConstructor);
- DECLARE_CONSTRUCTOR(RadmonDetectorCarvedFlatVolumeWithTracksConstructor);
- DECLARE_CONSTRUCTOR(RadmonDetectorCarvedFlatVolumeWithPinsConstructor);
- DECLARE_CONSTRUCTOR(RadmonDetectorCarvedFlatVolumeWithTracksAndHoleConstructor);
- DECLARE_CONSTRUCTOR(RadmonDetectorCarvedFlatVolumeWithGroundConstructor);
- DECLARE_CONSTRUCTOR(RadmonDetectorCarvedFlatVolumeWithGroundAndKeyMarksConstructor);
- DECLARE_CONSTRUCTOR(RadmonDetectorCarvedFlatVolumeWithGroundAndKeyMarksAndHoleConstructor);
- 
- return true;
+ delete detectorLayout; 
 }
 
 

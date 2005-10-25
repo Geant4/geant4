@@ -1,0 +1,24 @@
+//
+// File name:     RadmonApplicationDetectorSetup.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonApplicationDetectorSetup.icc,v 1.1 2005-10-25 16:39:12 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONAPPLICATIONDETECTORSETUP_HH
+ #error "RadmonApplicationDetectorSetup.icc cannot be included directly. Please use RadmonApplicationDetectorSetup.hh"
+#else  /* RADMONAPPLICATIONDETECTORSETUP_HH */
+ inline                                         RadmonApplicationDetectorSetup :: RadmonApplicationDetectorSetup(const RadmonApplicationOptions & options)
+ :
+  currentOptions(options)
+ {
+ }
+
+
+
+ inline                                         RadmonApplicationDetectorSetup :: ~RadmonApplicationDetectorSetup()
+ {
+ }
+#endif /* RADMONAPPLICATIONDETECTORSETUP_HH */
