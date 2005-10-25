@@ -1,4 +1,4 @@
-$Id: History,v 1.180 2005-10-23 18:03:13 urban Exp $
+$Id: History,v 1.181 2005-10-25 18:35:14 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+25 October 05: L.Urban
+- G4MultipleScattering: data member prec renamed to stepLimitAlgorithm
+  SetstepLimitAlgorithm(G4bool) triggers 'default' facrange
+  values (true 0.02, false 0.2), but facrange can be set separately too.
+
 23 October 05: L.Urban
 - G4MultipleScattering: 'new' msc stepping + 7.1 like stepping
   together, one can choose between them using data members
