@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.2 2005-10-25 11:38:15 vnivanch Exp $
+// $Id: G4VEmModel.cc,v 1.3 2005-10-25 18:28:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -51,7 +51,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VEmModel::G4VEmModel(const G4String& nam):
-  lowLimit(0.0), highLimit(100.0*TeV), fluc(0), name(nam), pParticleChange(0)
+  lowLimit(0.1*keV), highLimit(100.0*TeV), fluc(0), name(nam), pParticleChange(0)
 {}
 
 G4VEmModel::~G4VEmModel()
