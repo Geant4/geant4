@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2005-10-24 14:51:36 capra Exp $
+$Id: History,v 1.9 2005-10-25 16:41:16 capra Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,11 +17,23 @@ in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25 Oct 2005 - radmon-V07-01-08 - R. Capra - Development of the particle
+                        generator according to the design:
+
+                        - Minor changes in the detector package.
+                        - RadmonApplication has been splietted into classes
+                          for management purposes and in order to improve
+                          the compilation time and dependencies.
+                        - Completely new generator package with a design
+                          similar to the detector one.
+
+                        Code builds. Primary generator code not tested yet.
+
 24 Oct 2005 - radmon-V07-01-07 - R. Capra - Design iteration: classes:
                         
-                        * RadmonVDetectorLayoutObserver
-                        * RadmonVDetectorLayoutSubject
-                        * RadmonDetectorLayoutEntityWithAttributes
+                        - RadmonVDetectorLayoutObserver
+                        - RadmonVDetectorLayoutSubject
+                        - RadmonDetectorLayoutEntityWithAttributes
                         
                         has been moved in generalPurpose package without the
                         Detector suffix. They will be used for the primary
