@@ -1,5 +1,10 @@
 //
 //  To do some analysis over the AnaEx01.root file with the ROOT tool.
+//
+//  Note that .root is not the default file format and that someone has 
+// to ask for an export of a ROOT file in the AnaEx01AnalysisManager.cc 
+// constructor.
+//
 //  Usage :
 //    UNIX> root
 //    root[0] .X AnaEx01.C
