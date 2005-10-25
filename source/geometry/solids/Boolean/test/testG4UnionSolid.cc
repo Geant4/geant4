@@ -505,8 +505,57 @@ int main()
     dist=t2Ut4.DistanceToOut(G4ThreeVector(0,-45,0),vx,
                              calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(dist,21.7945));
+
     // G4cout<<"(21.8) t2Ut4.DistanceToOut(G4ThreeVector(0,-45,0),vx) = "
     //      <<dist<<G4endl ;
+
+   const G4double dx=15.3125;
+   const G4double dy=100;
+   const G4double dz=3.75;
+   const G4double theta=0.283794;
+
+   const G4double radius=2;
+   const G4double length=200; // cm
+
+   // Building solid
+
+   G4Para* para=new G4Para("Para",dx*cm,dy*cm,dz*cm,0,theta,0);
+   G4Tubs* tube = new G4Tubs("Tube",0.0,radius*cm*0.99, length*cm/2.0, 0.0, 2*M_PI);
+
+   G4ThreeVector transv(-164.062,0,-17.5); // mm
+   G4Transform3D trans1=G4Translate3D(transv*mm)*G4RotateX3D(M_PI/2);
+
+   G4VSolid* solid=new G4UnionSolid("solid",para,tube,trans1);
+
+   // Checking points
+   G4ThreeVector point1(-142.188*mm,0,-0.5*mm); // mm
+   G4ThreeVector point2(-142.188*mm,0,-1*mm); // mm
+   G4ThreeVector direction(-1,0,0);
+
+ if (solid->Inside(point1)==kInside) {
+   //  G4cout<<"Test point "<<point1<<" is inside. That's right!"<<G4endl;
+   }
+   else {
+     //  G4cout<<"Test point "<<point1<<" is not inside. That's wrong!"<<G4endl;
+   }
+
+   dist=solid->DistanceToOut(point1,direction);
+
+   //  G4cout<<"Distance is "<<dist<<G4endl;
+
+   if (solid->Inside(point2)==kInside) {
+     //  G4cout<<"Test point "<<point2<<" is inside. That's right!"<<G4endl;
+   }
+   else {
+     //  G4cout<<"Test point "<<point2<<" is not inside. That's wrong!"<<G4endl;
+   }
+
+   // dist=solid->DistanceToOut(point2,direction);
+
+   //  G4cout<<"Distance is "<<dist<<G4endl;
+
+
+
 
 // DistanceToIn(P)
 
