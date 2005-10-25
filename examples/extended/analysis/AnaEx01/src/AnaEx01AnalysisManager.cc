@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01AnalysisManager.cc,v 1.14 2005-10-25 13:46:58 gbarrand Exp $
+// $Id: AnaEx01AnalysisManager.cc,v 1.15 2005-10-25 18:19:56 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -102,7 +102,8 @@ AnaEx01AnalysisManager::AnaEx01AnalysisManager(AIDA::IAnalysisFactory* aAIDA)
   if(tupleFactory) {
     
     // Create a tuple :
-    fTuple = tupleFactory->create("AnaEx01","AnaEx01","EAbs LAbs EGap LGap");
+    fTuple = tupleFactory->create("AnaEx01","AnaEx01",
+      "double EAbs,double LAbs,double EGap,double LGap");
     
     delete tupleFactory;
   }
