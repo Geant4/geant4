@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.36 2005-10-23 17:59:44 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.37 2005-10-25 18:31:28 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -77,6 +77,9 @@
 // 13-10-05 move SetFacrange(0.02) from InitialiseProcess to constructor
 // 23-10-05 new Boolean data member prec (false ~ 7.1 like, true new step
 //          limit in TruePathLengthLimit, L.Urban)
+// 25-10-05 prec renamed to stepLimitAlgorithm, set function triggers
+//          'default' facrange too, true - 0.02, false - 0.2 (L.Urban)
+//
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -102,7 +105,7 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
   lowKineticEnergy = 0.1*keV;
   highKineticEnergy= 100.*TeV;
 
-  Setprec(true);
+  SetstepLimitAlgorithm(true);
   SetFacrange(0.02);
 
   Tkinlimit        = 2.*MeV;
@@ -169,8 +172,9 @@ G4double G4MultipleScattering::TruePathLengthLimit(const G4Track&  track,
 {
   G4double tPathLength = currentMinimalStep;
   G4double range = CurrentRange() ;
-  //standard (precise) version
-  if(prec)
+
+  //standard  version
+  if(stepLimitAlgorithm)
   {
     safety = track.GetStep()->GetPreStepPoint()->GetSafety() ;
     if((track.GetStep()->GetPreStepPoint()->GetStepStatus() ==
