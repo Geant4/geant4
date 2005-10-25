@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonLayoutEntityWithAttributes.hh,v 1.1 2005-10-24 14:51:36 capra Exp $
+// Id:            $Id: RadmonLayoutEntityWithAttributes.hh,v 1.2 2005-10-25 16:40:56 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Provides attributes to other detector classes
@@ -15,6 +15,7 @@
  // Include files
  #include "G4String.hh"
  #include "globals.hh"
+ #include "G4ThreeVector.hh"
 
  #include <vector>
  #include <utility>
@@ -31,6 +32,13 @@
    void                                         ClearAttribute(const G4String & attributeName);
    void                                         ClearAllAttributes(void);
 
+   G4double                                     GetAttributeAsDouble(const G4String & attributeName, double defaultValue) const;
+   G4double                                     GetAttributeAsMeasure(const G4String & attributeName, const char * category, double defaultValue) const;
+   G4int                                        GetAttributeAsInteger(const G4String & attributeName, G4int defaultValue) const;
+   G4ThreeVector                                GetAttributeAsThreeVector(const G4String & attributeName, const G4ThreeVector & defaultValue) const;
+   G4ThreeVector                                GetAttributeAsThreeVectorWithMeasure(const G4String & attributeName, const char * category, const G4ThreeVector & defaultValue) const;
+   G4ThreeVector                                GetAttributeAsDirection(const G4String & attributeName, const G4ThreeVector & defaultValue) const;
+   
   protected:
    inline                                       RadmonLayoutEntityWithAttributes();
    inline                                       RadmonLayoutEntityWithAttributes(const RadmonLayoutEntityWithAttributes & copy);

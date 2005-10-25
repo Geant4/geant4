@@ -3,76 +3,18 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonVDetectorLabelledEntityConstructor.cc,v 1.3 2005-09-27 13:59:59 capra Exp $
+// Id:            $Id: RadmonVDetectorLabelledEntityConstructor.cc,v 1.4 2005-10-25 16:40:56 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
 // Include files
 #include "RadmonVDetectorLabelledEntityConstructor.hh"
-#include "RadmonMessenger.hh"
 #include "RadmonTokenizer.hh"
 #include "RadmonMaterialsManager.hh"
 #include "G4UIcommand.hh"
 #include "G4VisAttributes.hh"
 #include "globals.hh"
    
-G4double                                        RadmonVDetectorLabelledEntityConstructor :: GetAttributeAsDouble(const G4String & attributeName, double defaultValue) const
-{
- G4String str;
- 
- str=GetAttribute(attributeName, "#");
- if (str=="#")
-  return defaultValue;
-  
- G4String args[1];
- if (!RadmonMessenger::ProcessArguments(str, 1, args))
-  return defaultValue;
-  
- return G4UIcommand::ConvertToDouble(args[0]);
-}
-
-
-
-G4double                                        RadmonVDetectorLabelledEntityConstructor :: GetAttributeAsMeasure(const G4String & attributeName, const char * category, double defaultValue) const
-{
- G4String str;
- 
- str=GetAttribute(attributeName, "#");
- if (str=="#")
-  return defaultValue;
- 
- G4String args[2];
- if (!RadmonMessenger::ProcessArguments(str, 2, args))
-  return defaultValue;
-
- G4double unit(RadmonMessenger::GetUnit(args[1], category));
- if (unit<=0.)
-  return defaultValue;
-  
- return G4UIcommand::ConvertToDouble(args[0])*unit;
-}
-
-
-
-G4int                                           RadmonVDetectorLabelledEntityConstructor :: GetAttributeAsInteger(const G4String & attributeName, G4int defaultValue) const
-{
- G4String str;
- 
- str=GetAttribute(attributeName, "#");
- if (str=="#")
-  return defaultValue;
-  
- G4String args[1];
- if (!RadmonMessenger::ProcessArguments(str, 1, args))
-  return defaultValue;
-  
- return G4UIcommand::ConvertToInt(args[0]);
-}
-
-
-
-
-
 G4double                                        RadmonVDetectorLabelledEntityConstructor :: GetWidth(void) const
 {
  G4double value(GetAttributeAsMeasure("_WIDTH", "Length", -1.));

@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonVDetectorLabelledEntityConstructor.hh,v 1.4 2005-10-24 14:52:03 capra Exp $
+// Id:            $Id: RadmonVDetectorLabelledEntityConstructor.hh,v 1.5 2005-10-25 16:40:56 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Abstract class of a detector-entity constructor with label
@@ -30,10 +30,6 @@
    inline virtual void                          SetEntityAttribute(const G4String & attributeName, const G4String & value);
    virtual RadmonVDetectorLabelledEntityConstructor * New(void) const = 0;
 
-   G4double                                     GetAttributeAsDouble(const G4String & attributeName, double defaultValue) const;
-   G4double                                     GetAttributeAsMeasure(const G4String & attributeName, const char * category, double defaultValue) const;
-   G4int                                        GetAttributeAsInteger(const G4String & attributeName, G4int defaultValue) const;
-   
    G4double                                     GetWidth(void) const;
    G4double                                     GetHeight(void) const;
    G4double                                     GetThickness(void) const;

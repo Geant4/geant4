@@ -3,13 +3,15 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonLayoutEntityWithAttributes.cc,v 1.1 2005-10-24 14:51:36 capra Exp $
+// Id:            $Id: RadmonLayoutEntityWithAttributes.cc,v 1.2 2005-10-25 16:40:56 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
 // Include files
 #include "RadmonLayoutEntityWithAttributes.hh"
 #include "RadmonDumpStyle.hh"
+#include "RadmonMessenger.hh"
+#include "G4UIcommand.hh"
 #include <iomanip>
 
 
@@ -110,6 +112,131 @@ void                                            RadmonLayoutEntityWithAttributes
 void                                            RadmonLayoutEntityWithAttributes :: ClearAllAttributes(void)
 {
  attributesVector.clear();
+}
+
+
+
+
+
+G4double                                        RadmonLayoutEntityWithAttributes :: GetAttributeAsDouble(const G4String & attributeName, double defaultValue) const
+{
+ G4String str;
+ 
+ str=GetAttribute(attributeName, "#");
+ if (str=="#")
+  return defaultValue;
+  
+ G4String args[1];
+ if (!RadmonMessenger::ProcessArguments(str, 1, args))
+  return defaultValue;
+  
+ return G4UIcommand::ConvertToDouble(args[0]);
+}
+
+
+
+G4double                                        RadmonLayoutEntityWithAttributes :: GetAttributeAsMeasure(const G4String & attributeName, const char * category, double defaultValue) const
+{
+ G4String str;
+ 
+ str=GetAttribute(attributeName, "#");
+ if (str=="#")
+  return defaultValue;
+ 
+ G4String args[2];
+ if (!RadmonMessenger::ProcessArguments(str, 2, args))
+  return defaultValue;
+
+ G4double unit(RadmonMessenger::GetUnit(args[1], category));
+ if (unit<=0.)
+  return defaultValue;
+  
+ return G4UIcommand::ConvertToDouble(args[0])*unit;
+}
+
+
+
+G4int                                           RadmonLayoutEntityWithAttributes :: GetAttributeAsInteger(const G4String & attributeName, G4int defaultValue) const
+{
+ G4String str;
+ 
+ str=GetAttribute(attributeName, "#");
+ if (str=="#")
+  return defaultValue;
+  
+ G4String args[1];
+ if (!RadmonMessenger::ProcessArguments(str, 1, args))
+  return defaultValue;
+  
+ return G4UIcommand::ConvertToInt(args[0]);
+}
+
+
+
+
+
+G4ThreeVector                                   RadmonLayoutEntityWithAttributes :: GetAttributeAsThreeVector(const G4String & attributeName, const G4ThreeVector & defaultValue) const
+{
+ G4String str;
+ 
+ str=GetAttribute(attributeName, "#");
+ if (str=="#")
+  return defaultValue;
+  
+ G4String args[3];
+ if (!RadmonMessenger::ProcessArguments(str, 3, args))
+  return defaultValue;
+
+ return G4ThreeVector(G4UIcommand::ConvertToDouble(args[0]), G4UIcommand::ConvertToDouble(args[1]), G4UIcommand::ConvertToDouble(args[2])); 
+}
+
+
+
+
+
+G4ThreeVector                                   RadmonLayoutEntityWithAttributes :: GetAttributeAsThreeVectorWithMeasure(const G4String & attributeName, const char * category, const G4ThreeVector & defaultValue) const
+{
+ G4String str;
+ 
+ str=GetAttribute(attributeName, "#");
+ if (str=="#")
+  return defaultValue;
+  
+ G4String args[4];
+ if (!RadmonMessenger::ProcessArguments(str, 4, args))
+  return defaultValue;
+
+ G4double unit(RadmonMessenger::GetUnit(args[3], category));
+ if (unit<=0.)
+  return defaultValue;
+  
+ return G4ThreeVector(G4UIcommand::ConvertToDouble(args[0])*unit, G4UIcommand::ConvertToDouble(args[1])*unit, G4UIcommand::ConvertToDouble(args[2])*unit);
+}
+
+
+
+
+
+G4ThreeVector                                   RadmonLayoutEntityWithAttributes :: GetAttributeAsDirection(const G4String & attributeName, const G4ThreeVector & defaultValue) const
+{
+ G4String str;
+ 
+ str=GetAttribute(attributeName, "#");
+ if (str=="#")
+  return defaultValue;
+  
+ G4String args[3];
+ if (!RadmonMessenger::ProcessArguments(str, 3, args))
+  return defaultValue;
+
+ G4double unit(RadmonMessenger::GetUnit(args[2], "Angle"));
+ if (unit<=0.)
+  return defaultValue;
+  
+ G4ThreeVector direction;
+ direction.setRThetaPhi(1., G4UIcommand::ConvertToDouble(args[0])*unit, G4UIcommand::ConvertToDouble(args[1])*unit);
+ 
+ return direction;
 }
 
 
