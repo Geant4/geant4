@@ -21,66 +21,60 @@
 // ********************************************************************
 //
 //
-// $Id: G4strstreambuf.hh,v 1.12 2004-06-09 07:30:02 gcosmo Exp $
+// $Id: G4strstreambuf.hh,v 1.13 2005-10-26 05:54:19 kmura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+// ====================================================================
+//   G4strstreambuf.hh
 //
-// 
-// ---------------------------------------------------------------
-// GEANT 4 class header file
+//   28/Nov/2005  K. Murakami
+//   - revised version of stream buffer class
+//   - disuse of "strsteam" because it has been obsolete in ANSI C++.
 //
-// G4strstrambuf.hh
-//
-// ---------------------------------------------------------------
-#ifndef G4STRSTREAM_HH
-#define G4STRSTREAM_HH
+// ====================================================================
+#ifndef G4_STR_STREAM_BUF_HH
+#define G4_STR_STREAM_BUF_HH
 
-#include "G4Types.hh"
-#include <strstream>
-#include "globals.hh"     
+#include "globals.hh"
 #include "G4coutDestination.hh"
+#include <streambuf>
 
 class G4strstreambuf;
 
 #if defined G4IOS_EXPORT
-  extern G4DLLEXPORT G4strstreambuf G4coutbuf;
-  extern G4DLLEXPORT G4strstreambuf G4cerrbuf;
+extern G4DLLEXPORT G4strstreambuf G4coutbuf;
+extern G4DLLEXPORT G4strstreambuf G4cerrbuf;
 #else
-  extern G4DLLIMPORT G4strstreambuf G4coutbuf;
-  extern G4DLLIMPORT G4strstreambuf G4cerrbuf;
+extern G4DLLIMPORT G4strstreambuf G4coutbuf;
+extern G4DLLIMPORT G4strstreambuf G4cerrbuf;
 #endif
 
-class G4strstreambuf : public std::streambuf
-{
+class G4strstreambuf : public std::basic_streambuf<char> {
+private:
+  char* buffer;
+  G4int count, size;
+  G4coutDestination* destination;
 
-  typedef std::streambuf std_streambuf;
+  // hiden...
+  G4strstreambuf(const G4strstreambuf&);
+  G4strstreambuf& operator=(const G4strstreambuf&);
+  
+public:
+  G4strstreambuf();
+  ~G4strstreambuf();
+    
+  virtual G4int overflow(G4int c=EOF);
+  virtual G4int sync();
 
-  public:
-
-    G4strstreambuf();
-    ~G4strstreambuf();
-
-    inline void SetDestination(G4coutDestination * value);
-
-    inline G4int overflow(G4int c=EOF);
-    inline G4int sync();
 #ifdef WIN32
-    inline G4int underflow();
+  virtual G4int underflow();
 #endif
 
-    inline G4int ReceiveString ();
-
-  private:
-
-    G4strstreambuf(const G4strstreambuf&);
-    G4strstreambuf& operator=(const G4strstreambuf&);
-
-  private:
-
-    G4coutDestination * destination;
-    char* buffer;
-    G4int count,size;
+  void SetDestination(G4coutDestination* dest);
+  G4int ReceiveString ();
+  
 };
 
 #include "G4strstreambuf.icc"
 
 #endif
+
