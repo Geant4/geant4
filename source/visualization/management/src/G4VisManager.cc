@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.68 2005-10-24 11:32:43 allison Exp $
+// $Id: G4VisManager.cc,v 1.69 2005-10-26 10:32:13 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -211,20 +211,17 @@ void G4VisManager::Initialise () {
   directory -> SetGuidance ("Visualization commands.");
   fDirectoryList.push_back (directory);
 
-  // ...and register messengers.
-  RegisterMessengers ();
-
-  // make command directory for commands instantiated in the modeling
-  // subcategory...
+  // ... and make command directory for commands instantiated in the
+  // modeling subcategory...
   directory = new G4UIdirectory ("/vis/modeling/");
   directory -> SetGuidance ("Modeling commands.");
   fDirectoryList.push_back (directory);
-  // Trajectory model commands...
   directory = new G4UIdirectory ("/vis/modeling/trajectories/");
   directory -> SetGuidance ("Trajectory model commands.");
   fDirectoryList.push_back (directory);
 
-  // ...and register trajectory model makers...
+  RegisterMessengers ();
+
   RegisterTrajectoryModelMakers ("/vis/modeling/trajectories/");
 
   fInitialised = true;
@@ -886,8 +883,8 @@ void G4VisManager::EndOfEvent () {
     const std::vector<G4VModel*>& EOEModelList =
       fpScene -> GetEndOfEventModelList ();
     size_t nModels = EOEModelList.size();
-    ClearTransientStoreIfMarked();
     if (nModels) {
+      ClearTransientStoreIfMarked();
       fVisManagerModelingParameters
 	= *(fpSceneHandler -> CreateModelingParameters ());
       for (size_t i = 0; i < nModels; i++) {
