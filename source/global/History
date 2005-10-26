@@ -1,4 +1,4 @@
-$Id: History,v 1.147 2005-10-04 13:04:09 gcosmo Exp $
+$Id: History,v 1.148 2005-10-26 05:59:37 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 26, 2005  K.Murakami (global-V07-01-02)
+- version.hh: modified for the release 8.0
+- G4strstreambuf: revised for migration to sstream
 
 Oct 04, 2005  G.Cosmo (global-V07-01-01)
 - G4Allocator: initialise esplicitely data in copy-ctor.
