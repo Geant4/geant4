@@ -12,6 +12,7 @@ List of fixes included in this public patch since the public release 7.1:
       for WIN32-VC system. Fixes an observed problem of debug-symbols
       corruption.
     + Synchronized CXXFLAGS warning options of WIN32-g++ with Linux-g++.
+    + Fixed Configure script for --incflags and --ldflags options.
 
   o Event:
     -----
