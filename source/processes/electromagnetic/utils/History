@@ -1,4 +1,4 @@
-$Id: History,v 1.213 2005-10-27 11:33:26 vnivanch Exp $
+$Id: History,v 1.214 2005-10-27 14:57:54 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28 October 05: V.Ivant (emutils-V07-01-09)
+- Fix problem in G4EmCalculator in ComputeDEDX for ions
+- Provide subcutoff regime inside G4VEnergyLossProcess - do not
+  use G4VSubCutoffProcessor anymore  
+
 27 October 05: V.Ivant (emutils-V07-01-08)
 - add virtual method MscStepLimitation() to G4VMultipleScattering
+- add SetMscStepLimitation to G4EmProcessOptions
 
 25 October 05: V.Ivant (emutils-V07-01-07)
 - G4VEmModel.cc - default energy range from 0.1*keV to 100*TeV to
