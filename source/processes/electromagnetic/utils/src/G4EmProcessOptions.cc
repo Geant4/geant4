@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.8 2005-10-27 14:04:35 vnivanch Exp $
+// $Id: G4EmProcessOptions.cc,v 1.9 2005-10-27 14:09:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -80,7 +80,7 @@ void G4EmProcessOptions::SetLossFluctuations(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmProcessOptions::SetSubCutoff(G4bool val)
+void G4EmProcessOptions::SetSubCutoff(G4bool val, const G4Region*)
 {
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
@@ -404,7 +404,7 @@ void G4EmProcessOptions::SetMscStepLimitation(G4bool algorithm, G4double factor)
   std::vector<G4VMultipleScattering*>::const_iterator itm;
   for(itm = u.begin(); itm != u.end(); itm++) {
     G4VMultipleScattering* s = *itm;
-    if(s) s->SetMscStepLimitation(algorithm, factor);
+    if(s) s->MscStepLimitation(algorithm, factor);
   }
 }
 
