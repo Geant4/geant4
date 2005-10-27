@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.59 2005-10-25 11:38:15 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.60 2005-10-27 14:04:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -520,7 +520,7 @@ void G4LossTableManager::SetSubCutoff(G4bool val)
 {
   subCutoffFlag = val;
   for(G4int i=0; i<n_loss; i++) {
-    if(loss_vector[i]) loss_vector[i]->SetSubCutoff(val);
+    if(loss_vector[i]) loss_vector[i]->ActivateSubCutoff(val);
   }
 }
 

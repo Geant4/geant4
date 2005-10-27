@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.68 2005-10-25 11:38:15 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.69 2005-10-27 14:04:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -116,7 +116,6 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Proton.hh"
-#include "G4VSubCutoffProcessor.hh"
 #include "G4ProcessManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4GenericIon.hh"
@@ -395,18 +394,22 @@ void G4VEnergyLossProcess::UpdateEmModel(const G4String& nam, G4double emin, G4d
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossProcess::ActivateSubCutoff(const G4Region* r)
+void G4VEnergyLossProcess::ActivateSubCutoff(G4bool val, const G4Region* r)
 {
   G4RegionStore* regionStore = G4RegionStore::GetInstance();
-  if (!r) r = regionStore->GetRegion("DefaultRegionForTheWorld", false);
-  if (nSCoffRegions) {
-    for (G4int i=0; i<nSCoffRegions; i++) {
-      if (r == scoffRegions[i]) return;
+  if(val) {
+    if (!r) r = regionStore->GetRegion("DefaultRegionForTheWorld", false);
+    if (nSCoffRegions) {
+      for (G4int i=0; i<nSCoffRegions; i++) {
+	if (r == scoffRegions[i]) return;
+      }
     }
+    scoffRegions.push_back(r);
+    nSCoffRegions++;
+    useSubCutoff = true;
+  } else {
+    useSubCutoff = false;
   }
-  scoffRegions.push_back(r);
-  nSCoffRegions++;
-  useSubCutoff = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.42 2005-10-25 11:38:15 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.43 2005-10-27 14:04:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -90,7 +90,6 @@ class G4VEmFluctuationModel;
 class G4DataVector;
 class G4PhysicsTable;
 class G4PhysicsVector;
-class G4VSubCutoffProcessor;
 class G4Region;
 class G4Navigator;
 
@@ -218,8 +217,7 @@ public:
   void UpdateEmModel(const G4String&, G4double, G4double);
 
   // Add subcutoff processor for the region
-  void ActivateSubCutoff(const G4Region* region = 0);
-  void SetSubCutoff(G4bool) {};
+  void ActivateSubCutoff(G4bool val, const G4Region* region = 0);
 
   // Activate deexcitation code
   virtual void ActivateDeexcitation(G4bool, const G4Region* region = 0);
