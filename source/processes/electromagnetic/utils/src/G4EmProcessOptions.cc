@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.9 2005-10-27 14:09:20 vnivanch Exp $
+// $Id: G4EmProcessOptions.cc,v 1.10 2005-10-27 15:01:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -80,14 +80,14 @@ void G4EmProcessOptions::SetLossFluctuations(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmProcessOptions::SetSubCutoff(G4bool val, const G4Region*)
+void G4EmProcessOptions::SetSubCutoff(G4bool val, const G4Region* r)
 {
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
   for(itr = v.begin(); itr != v.end(); itr++) {
     G4VEnergyLossProcess* p = *itr;
-    if(p) p->SetSubCutoff(val);
+    if(p) p->ActivateSubCutoff(val, r);
   }
 }
 

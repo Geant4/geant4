@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.60 2005-10-27 14:04:35 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.61 2005-10-27 15:05:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -179,7 +179,7 @@ void G4LossTableManager::Register(G4VEnergyLossProcess* p)
   tables_are_built.push_back(false);
   all_tables_are_built = false;
   if(!lossFluctuationFlag) p->SetLossFluctuations(false);
-  if(subCutoffFlag)        p->SetSubCutoff(true);
+  if(subCutoffFlag)        p->ActivateSubCutoff(true);
   if(stepFunctionActive)   p->SetStepFunction(maxRangeVariation, maxFinalStep);
   if(integralActive)       p->SetIntegral(integral);
   if(minEnergyActive)      p->SetMinKinEnergy(minKinEnergy);
