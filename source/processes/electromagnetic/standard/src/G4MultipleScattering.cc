@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.37 2005-10-25 18:31:28 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.38 2005-10-27 10:24:03 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -77,8 +77,9 @@
 // 13-10-05 move SetFacrange(0.02) from InitialiseProcess to constructor
 // 23-10-05 new Boolean data member prec (false ~ 7.1 like, true new step
 //          limit in TruePathLengthLimit, L.Urban)
-// 25-10-05 prec renamed to stepLimitAlgorithm, set function triggers
+// 25-10-05 prec renamed to steppingAlgorithm, set function triggers
 //          'default' facrange too, true - 0.02, false - 0.2 (L.Urban)
+// 26-10-05 the above is put in the function MscStepLimitation() (mma)
 //
 // -----------------------------------------------------------------------------
 //
@@ -95,20 +96,14 @@
 using namespace std;
 
 G4MultipleScattering::G4MultipleScattering(const G4String& processName)
-  : G4VMultipleScattering(processName),
-    totBins(120),
-    dtrl(0.05),
-    factail(1.0),
-    boundary(true),
-    isInitialized(false)
+  : G4VMultipleScattering(processName)
 {
-  lowKineticEnergy = 0.1*keV;
-  highKineticEnergy= 100.*TeV;
-
-  SetstepLimitAlgorithm(true);
-  SetFacrange(0.02);
+  lowKineticEnergy  = 0.1*keV;
+  highKineticEnergy = 100.*TeV;
+  totBins           = 120;
 
   Tkinlimit        = 2.*MeV;
+  facrange         = 0.02;
   tlimit           = 1.e10*mm;
   tlimitmin        = facrange*1.e-3*mm;
   geombig          = 1.e50*mm;
@@ -117,12 +112,18 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
   safety           = 0.*mm;
   facsafety        = 0.95;
   facsafety2       = 0.10;
+  dtrl             = 0.05;
+  factail          = 1.0;
+  
+  steppingAlgorithm = true;
+  samplez           = false;  
+  boundary          = true;
+  isInitialized     = false;  
 
   SetBinning(totBins);
   SetMinKinEnergy(lowKineticEnergy);
   SetMaxKinEnergy(highKineticEnergy);
 
-  Setsamplez(false) ;
   SetLateralDisplasmentFlag(true);
 }
 
@@ -136,6 +137,18 @@ G4MultipleScattering::~G4MultipleScattering()
 G4bool G4MultipleScattering::IsApplicable (const G4ParticleDefinition& p)
 {
   return (p.GetPDGCharge() != 0.0 && !p.IsShortLived());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4MultipleScattering::MscStepLimitation(G4bool algorithm, G4double factor) 
+{
+  steppingAlgorithm = algorithm;
+  if (factor > 0.) SetFacrange(factor);
+  else { if (algorithm) SetFacrange(0.02); else SetFacrange(0.2);}
+  
+  G4cout << "Stepping algorithm is set to " << steppingAlgorithm 
+         << " with facrange = " << facrange << G4endl;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -173,8 +186,9 @@ G4double G4MultipleScattering::TruePathLengthLimit(const G4Track&  track,
   G4double tPathLength = currentMinimalStep;
   G4double range = CurrentRange() ;
 
-  //standard  version
-  if(stepLimitAlgorithm)
+  // standard  version
+  //
+  if (steppingAlgorithm)
   {
     safety = track.GetStep()->GetPreStepPoint()->GetSafety() ;
     if((track.GetStep()->GetPreStepPoint()->GetStepStatus() ==
@@ -224,7 +238,9 @@ G4double G4MultipleScattering::TruePathLengthLimit(const G4Track&  track,
          && (currentMinimalStep > facsafety2*safety))
       tPathLength = facsafety2*safety;
   }
+  
   // version similar to 7.1 (needed for some experiments)
+  //
   else
   {
     if(track.GetCurrentStepNumber() == 1)

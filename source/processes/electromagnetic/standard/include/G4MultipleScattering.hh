@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.19 2005-10-25 18:31:28 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.20 2005-10-27 10:24:03 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,12 +53,13 @@
 // 05-10-05 value of data member tlimitmin has been changed (L.Urban)
 // 23-10-05 new Boolean data member prec (false ~ 7.1 like, true new step
 //          limit in TruePathLengthLimit, L.Urban)
-// 25-10-05 prec renamed to stepLimitAlgorithm, set function triggers
+// 25-10-05 prec renamed to steppingAlgorithm, set function triggers
 //          'default' facrange too, true - 0.02, false - 0.2 (L.Urban)
+// 26-10-05 the above is put in the function MscStepLimitation() (mma)
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering.hh,v 1.19 2005-10-25 18:31:28 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.20 2005-10-27 10:24:03 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -101,16 +102,9 @@ public:    // with description
   // Print few lines of informations about the process: validity range,
   void PrintInfo();
 
-  // set boolean flag stepLimitAlgorithm
+  // set boolean flag steppingAlgorithm
   // ( true/false : standard or 7.1 style process)
-  void SetstepLimitAlgorithm(G4bool value)
-               { stepLimitAlgorithm = value;
-                 if(stepLimitAlgorithm && (facrange == 0.2))
-                  //  facrange = 0.02;
-                   SetFacrange(0.02);
-                 if(!stepLimitAlgorithm && (facrange == 0.02))
-                  //  facrange = 0.2;};
-                   SetFacrange(0.2);};
+  void MscStepLimitation(G4bool algorithm, G4double factor = -1.);
 
   // geom. step length distribution should be sampled or not
   void Setsamplez(G4bool value) { samplez = value;};
@@ -150,7 +144,7 @@ private:        // data members
   G4double safety,facsafety,facsafety2;
   G4double dtrl;
   G4double factail;
-  G4bool   stepLimitAlgorithm;
+  G4bool   steppingAlgorithm;
 
   G4bool   samplez;
   G4bool   boundary;
