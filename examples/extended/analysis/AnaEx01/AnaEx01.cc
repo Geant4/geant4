@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01.cc,v 1.11 2005-10-25 13:45:09 gbarrand Exp $
+// $Id: AnaEx01.cc,v 1.12 2005-10-27 14:39:22 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,6 @@
 // Geant4 :
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
 
 #include "Randomize.hh"
 
