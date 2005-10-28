@@ -68,6 +68,8 @@ void test31EventAction::BeginOfEventAction(const G4Event*)
   test31Histo::GetPointer()->AddEvent();
   nEvt = test31Histo::GetPointer()->Event();
 
+  //  if(nEvt == 9) G4cout << "Nan= " << std::sqrt(-9.0) << G4endl;
+
   // Switch on verbose mode
   if(theDet->GetFirstEventToDebug() == nEvt) {
     verbose = 2;

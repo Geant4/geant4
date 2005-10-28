@@ -57,10 +57,22 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#include <stdio.h>
+#include <fenv.h>
+void fpu_ ()
+{
+  fesetenv (FE_NOMASK_ENV);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 int main(int argc,char** argv) {
 
   G4Timer* timer = new G4Timer();
   timer->Start();
+
+  //fpu_();
 
   G4int verbose = 1;
   //choose the Random engine
