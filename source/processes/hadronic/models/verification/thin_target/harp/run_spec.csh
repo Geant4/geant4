@@ -6,10 +6,10 @@
 #  Standard EM test for hadronic generator of HARP
 #----------------------------------------------------------------
 
-cd $G4INSTALL/source
-gmake
+#cd $G4INSTALL/source
+#gmake
 source ~/bin/pi_setup.csh
-cd processes/hadronic/models/verification/thin_target/harp
+cd $G4INSTALL/source/processes/hadronic/models/verification/thin_target/harp
 setenv TARGET p_al_13gev
 gmake
 echo "Start of run for " $TARGET
@@ -17,10 +17,8 @@ mkdir $1
 cd $1
 
 #$G4MY/harp ../$TARGET/run.mac  >&  res.out
-$G4MY/harp ../$TARGET/runMay05.mac  >&  resJune22.out
+$G4MY/harp ../$TARGET/runMay05.mac >& res.out
 
 cd ../
 
 echo $TARGET " is done!"
-
-source run_all.csh

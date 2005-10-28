@@ -89,6 +89,8 @@
 
 #include "G4Timer.hh"
 
+using namespace std;
+
 int main(int argc, char** argv)
 {
   G4cout << "========================================================" << G4endl;
@@ -428,11 +430,11 @@ int main(int argc, char** argv)
     if(m_p > 0.0) energy = sqrt(m_p*m_p + mass*mass);
 
     G4double pmax = sqrt(energy*(energy + 2.0*mass));
-    G4double binlog = log10(ebinlog);
-    G4int nbinlog = (G4int)(log10(2.0*emax)/binlog);
-    G4double logmax = binlog*nbinlog;
-    G4double bine = emax/(G4double)nbinse;
-    G4double bind = emax/(G4double)nbinsd;
+    // G4double binlog = log10(ebinlog);
+    // G4int nbinlog = (G4int)(log10(2.0*emax)/binlog);
+    // G4double logmax = binlog*nbinlog;
+    //    G4double bine = emax/(G4double)nbinse;
+    //    G4double bind = emax/(G4double)nbinsd;
 
     double m_pmin = 0.0;
     double m_ptmax = 0.65;
@@ -494,8 +496,8 @@ int main(int argc, char** argv)
     }
 
     G4double factor = cross_sec*MeV*1000.0*(G4double)nbinse/(energy*barn*(G4double)nevt);
-    G4double factora= cross_sec*MeV*1000.0*(G4double)nbinsa/(twopi*2.0*barn*(G4double)nevt);
-    G4double factorb= cross_sec*1000.0/(barn*(G4double)nevt);
+    //    G4double factora= cross_sec*MeV*1000.0*(G4double)nbinsa/(twopi*2.0*barn*(G4double)nevt);
+    //    G4double factorb= cross_sec*1000.0/(barn*(G4double)nevt);
     G4cout << "### factor  = " << factor
            << "### factora = " << factor
            << "    cross(b)= " << cross_sec/barn << G4endl;
@@ -566,6 +568,10 @@ int main(int argc, char** argv)
       mom0 = mompi[k];
     }    
 
+    G4cout << "dTheta= " << dthetad 
+	   << " nbinTheta= " << nanglpi 
+	   << " nbinP= " << nmompi << G4endl; 
+
     G4Track* gTrack;
     gTrack = new G4Track(&dParticle,aTime,aPosition);
 
@@ -590,33 +596,23 @@ int main(int argc, char** argv)
     step->SetPostStepPoint(bPoint);
     step->SetStepLength(theStep);
 
-    G4RotationMatrix* rot  = new G4RotationMatrix();
-    G4double phi0 = aDirection.phi();
-    G4double theta0 = aDirection.theta();
-    rot->rotateZ(-phi0);
-    rot->rotateY(-theta0);
-
-    G4cout << "Test rotation= " << (*rot)*(aDirection) << G4endl;
-
     G4Timer* timer = new G4Timer();
     timer->Start();
     const G4DynamicParticle* sec = 0;
     G4ParticleDefinition* pd;
     G4ThreeVector  mom;
     G4LorentzVector labv, fm;
-    G4double e, p, m, px, py, pz, pt, theta;
+    G4double e, p, m, px, py, pz, pt, theta, x;
     G4VParticleChange* aChange = 0;
 
     for (G4int iter=0; iter<nevt; iter++) {
 
-      if(verbose>1) {
+      if(verbose>1) 
         G4cout << "### " << iter << "-th event start " << G4endl;
-      }
 
       G4double e0 = energy;
-      do {
-        if(sigmae > 0.0) e0 = G4RandGauss::shoot(energy,sigmae);
-      } while (e0 < 0.0);
+      if(sigmae > 0.0) 
+        do {e0 = G4RandGauss::shoot(energy,sigmae);} while (e0 < 0.0);
 
       dParticle.SetKineticEnergy(e0);
 
@@ -626,18 +622,16 @@ int main(int argc, char** argv)
       labv = G4LorentzVector(0.0, 0.0, pmax, energy + mass + amass);
       aChange = proc->PostStepDoIt(*gTrack,*step);
 
-      G4double de = aChange->GetLocalEnergyDeposit();
+      //      G4double de = aChange->GetLocalEnergyDeposit();
       G4int n = aChange->GetNumberOfSecondaries();
 
-      if(iter == 1000*(iter/1000)) {
-        G4cerr << "##### " << iter << "-th event  #####" << G4endl;
-      }
+      if(verbose==1 and iter == 1000*(iter/1000)) 
+        G4cout << "##### " << iter << "-th event  #####" << G4endl;
 
       G4int nbar = 0;
       int n_pr = 0;
       int n_pi = 0;
       
-
       for(G4int j=0; j<n; j++) {
 
         sec = aChange->GetSecondary(j)->GetDynamicParticle();
@@ -651,36 +645,27 @@ int main(int argc, char** argv)
         pd  = sec->GetDefinition();
         mom = sec->GetMomentumDirection();
         e   = sec->GetKineticEnergy();
+	if (e < 0.0) e = 0.0;
 
-	if (e < 0.0) {
-           e = 0.0;
-	}
-
-	// for exclusive reaction 2 particles in final state
-        if(!inclusive && nbar != 2) break;
+        theta = mom.theta();
+        double cost  = cos(theta);
+	//        double sint  = sin(theta);
 
         m = pd->GetPDGMass();
 	p = sqrt(e*(e + 2.0*m));
 	mom *= p;
-        m  = pd->GetPDGMass();
-        fm = G4LorentzVector(mom, e + m);
-        labv -= fm;
-        mom = (*rot)*mom;
+	fm = G4LorentzVector(mom, e + m);
+	labv -= fm;
         px = mom.x();
         py = mom.y();
         pz = mom.z();
-        p  = sqrt(px*px +py*py + pz*pz);
         pt = sqrt(px*px +py*py);
 
-        theta = mom.theta();
-        double cost  = cos(theta);
-        double sint  = sin(theta);
-        G4double thetad = theta/degree;
         G4double thetamr = theta*1000.;
 
-        std::string nam = pd->GetParticleName();
-	if(thetamr>= m_thetamin && thetamr <= m_thetamax && p>m_pth) {
-          if(nam == "proton") {
+	//        std::string nam = pd->GetParticleName();
+	if(cost > cosmin && cost <= cosmax && p>m_pth) {
+          if(pd == proton) {
             h[2]->fill(float(p/GeV),1.0);
             h[4]->fill(float(pt/GeV),1.0);
 //            h2[0]->fill(p,cost);
@@ -689,7 +674,7 @@ int main(int argc, char** argv)
               h[8]->fill(float(cost),1.0);
               n_pr++;
             }
-	  } else if(nam == "pi+" || nam == "pi-" ) {
+	  } else if(pd == pip || pd == pin ) {
             h[3]->fill(float(p/GeV),1.0);
             h[5]->fill(float(pt/GeV),1.0);
 //            h2[1]->fill(p,cost);
@@ -705,13 +690,13 @@ int main(int argc, char** argv)
 	}
 
 	if(p < mompi[nmompi-1] && theta < angpi[nanglpi-1] 
-	   && (nam == "pi+" || nam == "pi-" )) {
+	   && (pd == pip || pd == pin )) {
+
 	  int kang = int(theta/dthetad);
-	  if(kang >= nanglpi) kang = nanglpi - 1; 
-	  int kp = -1;
-	  do {kp++;} while (kp < nmompi - 1 && p > mompi[kp]);  
-	  if(nam == "pi+") nmomtet[kp][kang] += 1;
-	  else             nmomtetm[kp][kang] += 1;
+	  int kp   = -1;
+	  do {kp++;} while (p > mompi[kp]);  
+	  if(pd == pip) nmomtet[kp][kang] += 1;
+	  else          nmomtetm[kp][kang] += 1;
 	}        
         delete aChange->GetSecondary(i);
       }
@@ -732,7 +717,9 @@ int main(int argc, char** argv)
 
     G4cout.setf(std::ios::fixed);
     G4int prec = G4cout.precision(6);
-    G4cout << "###### Cross section per bin " << std::setw(6) << G4endl;
+    G4cout << "#################################################################" << G4endl;
+    G4cout << "###### Cross section per bin for pi+" << std::setw(6) << G4endl;
+    G4cout << G4endl;    
 
     mom0 = 0.0;
     G4double mom1;
@@ -743,7 +730,7 @@ int main(int argc, char** argv)
     G4double cross;
     G4double crossm;
     for(int k=0; k<nmompi; k++) {
-      double mom1 = mompi[k];
+      mom1 = mompi[k];
       dsdm[k] = 0.0;
       G4cout << "## Next momentum bin " 
 	     << mom0 << "  -  " << mom1 << "  MeV/c" 
@@ -758,12 +745,19 @@ int main(int argc, char** argv)
         crossm= double(nmomtetm[k][j])*harpcsm[k][j];
         G4cout << "  " << cross;
 
-        if(k>0) dsda[j] += cross*(mom1 - mom0)/GeV;
-        else    dsda[j] = 0.0;
-        if(j>0) dsdm[k] += cross*twopi*(cos(ang0) - cos(ang1));
-        if(k>0) dsdam[j] += crossm*(mom1 - mom0)/GeV;
-        else    dsdam[j] = 0.0;
-        if(j>0) dsdmm[k] += crossm*twopi*(cos(ang0) - cos(ang1));
+        if(k>0) {
+          x = (mom1 - mom0)/GeV;
+          dsda[j]  += cross*x;
+	  dsdam[j] += crossm*x;
+        } else {
+          dsda[j] = 0.0;
+	  dsdam[j] = 0.0;
+	}
+        if(j>0) {
+          x = twopi*(cos(ang0) - cos(ang1));
+          dsdm[k]  += cross*x;
+	  dsdmm[k] += crossm*x;
+	}
 
 	harpcsm[k][j] = crossm;
 
@@ -773,13 +767,13 @@ int main(int argc, char** argv)
       mom0 = mom1;
     }
     G4cout << G4endl;    
-    G4cout << "## ds/dtheta(mb/rad) for pi+ with momentum cut: " 
+    G4cout << G4endl;    
+    G4cout << "## ds/do(mb/strad) for pi+ with momentum cut: " 
            << mompi[0] << "  -  " << mompi[nmompi-1] 
            << "  MeV/c" << G4endl;
     for(int j=0; j<nanglpi; j++) {
       G4cout << "  " << dsda[j];
     }
-    G4cout << G4endl;    
     G4cout << G4endl;    
     G4cout << "## ds/dp(mb/GeV) for pi+ with theta cut " 
            << angpi[0] << "  -  " << angpi[nanglpi-1] << " radian" << G4endl;
@@ -787,7 +781,9 @@ int main(int argc, char** argv)
       G4cout << "  " << dsdm[kk];
     }
     G4cout << G4endl;
-    G4cout << "## ds/dtheta(mb/rad) for pi- with momentum cut: " 
+    G4cout << G4endl;    
+    G4cout << "#################################################################" << G4endl;
+    G4cout << "## ds/do(mb/strad) for pi- with momentum cut: " 
            << mompi[0] << "  -  " << mompi[nmompi-1] 
            << "  MeV/c" << G4endl;
     for(int j=0; j<nanglpi; j++) {
