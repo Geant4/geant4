@@ -22,7 +22,7 @@
 //
 //
 
-// $Id: PhysicsList.cc,v 1.6 2004-12-03 10:51:12 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.7 2005-10-28 09:09:27 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -121,13 +121,14 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
-
+    G4cout<<"PhysListEmStandard is called"<<G4endl;
   } 
   else if (name == "g4v52") 
   {
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmG4v52(name);
+    G4cout<<"PhysListEmG4v52 is called"<<G4endl;
 
 
   } 
@@ -136,12 +137,14 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmModelPai(name);
+    G4cout<<"PhysListEmModelPai is called"<<G4endl;
   }
   else if (name == "pai_photon") 
   {
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmPaiPhoton(name);
+    G4cout<<"PhysListEmModelPaiPhoton is called"<<G4endl;
   } 
   else 
   {

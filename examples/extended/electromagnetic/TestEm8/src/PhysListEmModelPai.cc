@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmModelPai.cc,v 1.2 2005-04-15 15:20:34 vnivanch Exp $
+// $Id: PhysListEmModelPai.cc,v 1.3 2005-10-28 09:09:27 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,6 +77,10 @@ void PhysListEmModelPai::ConstructProcess()
 
   const G4RegionStore* theRegionStore = G4RegionStore::GetInstance();
   G4Region* gas = theRegionStore->GetRegion("VertexDetector");
+
+  // one class object ?!
+
+  //  G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
 
   theParticleIterator->reset();
 
@@ -162,6 +166,8 @@ void PhysListEmModelPai::ConstructProcess()
       G4hIonisation* pion =     new G4hIonisation();
 
       G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
+      // pai->SetLowEnergyLimit(0.1*keV);
+      // pai->SetHighEnergyLimit(100.0*TeV);
 
       pion->AddEmModel(0,pai,pai,gas);
 
