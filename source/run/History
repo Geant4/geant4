@@ -1,4 +1,4 @@
-$Id: History,v 1.133 2005-10-20 20:20:54 perl Exp $
+$Id: History,v 1.134 2005-10-28 23:17:18 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 28th, 2005, Makoto Asai (run-V07-01-03)
+- Working tag for merging "envelope" to G4Region.
+- This tag does NOT contain run-V07-01-02 tag.
+
 October 20, 2005, Joseph Perl (run-V07-01-02)
 - Tag to co-work with vis-V07-01-05.
 
