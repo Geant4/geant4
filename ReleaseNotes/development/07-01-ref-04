@@ -1,0 +1,214 @@
+
+                       geant4-07-01-ref-04
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Introduced first implementation for optional check of overlaps at
+    construction to G4PVPlacement and G4PVParameterised volumes. Default
+    resolution of 1000 points is defined for the check.
+  o Archived old TRD parameterised models. Functionality now included
+    in standard EM processes.
+  o New MSC models (G4MultipleScattering80 and G4MscModel80) become the
+    default.
+  o Fixes for initialization and for angular distribution in
+    G4MuBremsstrahlungModel and G4MuPairProductionModel.
+  o New RayTracerX visualization driver selectable at build time.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                                           config-V07-01-02
+------
+- G4VIS*.gmk: Added G4VIS_BUILD_RAYTRACERX_DRIVER and G4VIS_USE_RAYTRACERX.
+
+digits_hits                                      digits_hits-V07-01-01
+-----------
+- Introduced new classes G4MultiFunctionalDetector, G4VPrimitiveSensitivity
+  and G4VSDFilter
+
+geometry/solids/CSG                              geom-csg-V07-01-03 (*)
+-------------------
+- G4Para: fixed bug in DistanceToOut(p,v) for the case v.x()<0.
+  Following problem report from user posted on Hypernews geometry
+  forum (#452).
+
+geometry/volumes                                 geomvol-V07-01-01
+----------------
+- Introduced first implementation for optional check of overlaps at
+  construction to G4PVPlacement and G4PVParameterised volumes. Default
+  resolution of 1000 points is defined for the check.
+  The check is disabled by default.
+- Introduced method CheckOverlaps(p) for placements and parameterised
+  volumes. The resolution for the check can be specified providing the
+  number of points wished to be generated.
+- Updated unit test for G4ReflectedSolid.
+
+global                                           global-V07-01-01
+------
+- G4Allocator: initialise esplicitely data in copy-ctor.
+- G4AllocatorPool: added default dummy argument to ctor to allow for
+  default-ctor
+
+graphics_reps                                    greps-V07-01-03
+-------------
+- G4AttCheck: added time to legal G4AttValues.
+
+parameterisations                                gpara-V07-01-00
+-----------------
+- Archived old TRD parameterised models. Functionality now included
+  in standard EM processes.
+- Corrected typo to name GFlashHomoShowerParamterisation, to become
+  GFlashHomoShowerParameterisation. Replaced affected files.
+- Code cleanup for Software Reference Manual.
+- Fixed usage of random numbers in GFlashHomoShowerParameterisation
+  to allow for event reproducibility.
+- Added overflow protection in method GenerateRadius() for
+  GFlashHomoShowerParameterisation.
+
+processes/electromagnetic/muons                  emmuons-V07-01-05 (*)
+-------------------------------
+- G4MuBremsstrahlungModel: fix in initialization and for angular
+  distribution of gammas and energy momentum balance.
+- G4MuPairProductionModel: fix in initialisation and for angular
+  distribution of e+, e- and energy momentum balance.
+  Added protection needed for sampling of pair energy in the case
+  of low cuts.
+
+processes/electromagnetic/standard               emstand-V07-01-03
+----------------------------------
+- G4eIonisation and G4hIonisation:
+  o SetStepLimits (0.2, 1*mm) and Integral on.
+- Moved G4MultipleScattering80 and G4MscModel80 into
+  G4MultipleScattering and G4MscModel respectively.
+- G4MultipleScattering:
+  o The true path length limit is determined by the physics (facrange)
+    and geometry. Conditions are reordered and reviewd upper limits.
+  o Weaker step limitation above Tkinlimit = 2 MeV for e+/e- (limit
+    scaled with mass for other particles). Soft limit: facrange increases
+    linearly with energy above Tkinlimit.
+  o Changed conditions limiting the step to allow for better timing with
+    no physics performance degradation and weaker cut dependence. 
+  o Fixed bug in TruePathLengthLimit and problem with non-initilised
+    variable.
+  o Removed SetFacrange(0.02) from InitialiseProcess().
+- G4MscModel:
+  o Nuclear size correction are removed, the correction is already
+    included in the (theoretical) tabulated cross section values for
+    Tkin > 10 MeV.
+- G4UniversalFluctuation:
+  o Cut dependence of the energy-loss distribution has been reduced.
+  o Introduced correction for very small loss to avoid zero energy loss.
+- Fix in G4BraggIonModel and G4BraggModel for chemical formula correction.
+
+processes/electromagnetic/utils                  emutils-V07-01-07
+-------------------------------
+- G4VEnergyLossProcess:
+  o SetStepFunction(0.2, 1*mm) and Integral on. Fixes problem report
+    #780 connected with d-electron production tmax < cut.
+  o Set default lambda-factor to 0.8.
+- G4VEmProcess: set default lambda-factor to 0.8.
+- G4EmManager: fixed a cut calculation for e+e- pair.
+- G4VMultipleScattering: corrected error in a protection in
+  GetContinuousStepLimit().
+- G4VEmModel: set default energy range from 0.1*keV to 100*TeV.
+
+processes/electromagnetic/xrays                  xrays-V07-01-02
+-------------------------------
+- Added new XTR models with G4VXTRenergyLoss::fExitFlux=true for the
+  description of XTR after radiator. Classes: G4XTRRegularRadModel,
+  G4XTRGammaRadModel, G4XTRTransparentRegRadModel.
+- XTR process is transformed to be discrete.
+
+processes/hadronic/management                    ghad-man-V07-01-00 (*)
+-----------------------------
+- Correctly set the type of a hadronic process.
+  Fixes problem report #744.
+
+processes/hadronic/models/CHIPS/body      ghad-chips-body-V07-01-01
+------------------------------------
+- Memory leak fix for nuclear mass management in G4QPDGCode to use
+  G4 masses of nuclear fragments.
+
+visualization                                    vis-V07-01-03
+-------------
+- G4VisCommandsViewer: trapped zero viewer pointer in /vis/viewer/update.
+- RayTracer:
+  o Bug fix correcting problem of black spots.
+  o Protected RayTracerX by G4VIS macro.
+- OpenGL:
+  o Added G4OpenGLViewerDataStore to facilitate access of viewer data by
+    scene handler.
+  o Re-implemented transparency button in OpenGLXm.
+  o Fixed hidden line removal and implemented better algorithm for
+    transparency.
+- OpenInventor:
+  o Corrected treatment of edgeflags.
+- management:
+  o Fixed issue "/tracking/storeTrajectory 1" on /vis/scene/add/trajectories.
+  o Warning: Attempt to add volume to a scene already containing the world.
+  o Error: Logical volume model must be only volume model in scene.
+  o Simplified use of ConcreteInstance.
+  o Introduced (optional) second pass over scene.
+  o Added /vis/viewer/set/whiteBackground.
+    Added RayTracerX to G4VisExecutive.
+- modeling:
+  o Fixed (non-)culling of transparent volumes.
+- HepRep (vis-HepRep-V07-01-02):
+  o Fix for cones face wrong way.
+  o Fixed compilation warning on MacOSX.
+- XXX:
+  o Improved guidance for rendering polyhedron objects.
+
+physics_lists                                    phys-lists-V07-01-00 (*)
+-------------
+- Corrected README of hadronic lists for build instructions.
+
+examples                                         examples-V07-01-04
+--------
+- Updated reference outputs.
+- extended
+  o electromagnetic/TestEm1 (testem1-V07-01-00)
+    + Created PhysListEmG4v71 (g4v71) for G4MultipleScattering71.
+  o electromagnetic/TestEm2 (testem2-V07-01-00)
+    + vis.mac : /vis/viewer/set/style surface
+    + Using updated PhysicsList with g4v71.
+    + Added protection for the case when histogram tree is not created
+  o electromagnetic/TestEm3 (testem3-V07-01-01)
+    + Created PhysListEmG4v71 (g4v71) for G4MultipleScattering71.
+    + Modified energy flow calculation.
+  o electromagnetic/TestEm5 (testem5-V07-01-00)
+    + Created PhysListEmG4v71 (g4v71) for G4MultipleScattering71.
+  o electromagnetic/TestEm7 (testem7-V07-01-00)
+    + Created PhysListEmG4v71 (g4v71) for G4MultipleScattering71.
+  o electromagnetic/TestEm9 (testem9-V07-01-01)
+    + Added protection for tree and extended printout.
+  o electromagnetic/TestEm10 (testem10-V07-01-00)
+    + Updated physics list.
+  o electromagnetic/TestEm11 (testem11-V07-01-01)
+    + Created PhysListEmG4v71 (g4v71) for G4MultipleScattering71.
+  o electromagnetic/TestEm12 (testem12-V07-01-02)
+    + Created PhysListEmG4v71 (g4v71) for G4MultipleScattering71.
+  o field/field02 (fieldex02-V07-01-00)
+    + Removed cluster models from detector construction.
+  o field/field03 (fieldex03-V07-01-00)
+    + Removed cluster models from detector construction.
+  o medical/GammaTherapy (gtherapy-V07-01-01)
+    + Added g4v71 builder.
+  o visualization (exam-ext-vix-V07-01-00)
+    + New examples for UserVisAction and standalone demo.
+- novice:
+  o N03 (exampleN03-V07-01-01)
+    + Modified physics list.
+ 
+tests                                            tests-V07-01-04
+-----
+- Updated reference outputs.
+- test19 (test19-V07-01-05)
+  o Fix on initialisation: state is Init after G4RunManager activation.
+- test29 (test29-V07-01-09)
+  o Fix on initialisation: state is Init after G4RunManager activation.
+- test34 (test34-V07-01-00)
+  o Corrected typo for name of GFlashHomoShowerParameterisation.
+
