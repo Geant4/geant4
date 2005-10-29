@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.93 2005-10-12 21:56:49 duns Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.94 2005-10-29 21:07:46 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -570,7 +570,7 @@ void G4HepRepSceneHandler::AddSolid(const G4Cons& cons) {
     outer->addAttValue("showParentAttributes",true);
     
     HepRepPoint* op1 = factory->createHepRepPoint(outer, vertex1.x(), vertex1.y(), vertex1.z());
-    op1->addAttValue("Radius",cons.GetInnerRadiusPlusZ());
+    op1->addAttValue("Radius",cons.GetOuterRadiusPlusZ());
     
     HepRepPoint* op2 = factory->createHepRepPoint(outer, vertex2.x(), vertex2.y(), vertex2.z());
     op2->addAttValue("Radius",cons.GetOuterRadiusMinusZ());
@@ -584,7 +584,7 @@ void G4HepRepSceneHandler::AddSolid(const G4Cons& cons) {
     ip1->addAttValue("Radius",cons.GetInnerRadiusPlusZ());
     
     HepRepPoint* ip2 = factory->createHepRepPoint(inner, vertex2.x(), vertex2.y(), vertex2.z());
-    ip2->addAttValue("Radius",cons.GetOuterRadiusMinusZ());
+    ip2->addAttValue("Radius",cons.GetInnerRadiusMinusZ());
 }
 
 
