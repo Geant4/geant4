@@ -19,9 +19,12 @@ Some of the development/fixes included since the last reference tag are:
 
 Summarised, the list of changes is the following:
 
+(*) tag also included in patch-01 to release 7.1.
+
 config                                           config-V07-01-02
 ------
 - G4VIS*.gmk: Added G4VIS_BUILD_RAYTRACERX_DRIVER and G4VIS_USE_RAYTRACERX.
+- Configure: fixes for --incflags and --ldflags options.  (*)
 
 digits_hits                                      digits_hits-V07-01-01
 -----------
