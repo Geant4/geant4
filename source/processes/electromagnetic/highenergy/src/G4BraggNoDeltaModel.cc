@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggNoDeltaModel.cc,v 1.1 2005-08-05 13:43:14 vnivanch Exp $
+// $Id: G4BraggNoDeltaModel.cc,v 1.2 2005-10-29 20:09:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -39,7 +39,7 @@
 //
 // Class Description:
 //
-// Ionisation of heavy charged particles including the monopole
+// Ionisation of heavy charged particles
 
 // -------------------------------------------------------------------
 //
@@ -50,10 +50,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-G4BraggNoDeltaModel::G4BraggNoDeltaModel(G4double ch, const G4ParticleDefinition*p,
-					 const G4String& nam) : 
-  G4BraggIonModel(p, nam), 
-  mcharge2(ch*ch)
+G4BraggNoDeltaModel::G4BraggNoDeltaModel(const G4ParticleDefinition*p,
+					 const G4String& nam) :
+  G4BraggIonModel(p, nam)
 {}
 
 G4BraggNoDeltaModel::~G4BraggNoDeltaModel()

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggNoDeltaModel.hh,v 1.3 2005-08-05 13:43:14 vnivanch Exp $
+// $Id: G4BraggNoDeltaModel.hh,v 1.4 2005-10-29 20:09:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,7 +54,7 @@ class G4BraggNoDeltaModel : public G4BraggIonModel
 
 public:
 
-  G4BraggNoDeltaModel(G4double ch = 1.0, const G4ParticleDefinition* p = 0,
+  G4BraggNoDeltaModel(const G4ParticleDefinition* p = 0,
                       const G4String& nam = "BraggNoD");
 
   virtual ~G4BraggNoDeltaModel();
@@ -76,8 +76,6 @@ private:
   G4BraggNoDeltaModel & operator=(const  G4BraggNoDeltaModel &right);
   G4BraggNoDeltaModel(const  G4BraggNoDeltaModel&);
 
-  G4double mcharge2;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -88,10 +86,6 @@ inline G4double G4BraggNoDeltaModel::ComputeDEDXPerVolume(
                             G4double kinEnergy, G4double)
 {
   G4double dedx = G4BraggIonModel::ComputeDEDXPerVolume(material, pd, kinEnergy, DBL_MAX);
-  if(mcharge2 > 2.0) {
-    G4double m = pd->GetPDGMass();
-    dedx *= mcharge2*kinEnergy*(kinEnergy + 2.0*m)/((kinEnergy + m)*(kinEnergy + m));
-  }
   return dedx;
 }
 

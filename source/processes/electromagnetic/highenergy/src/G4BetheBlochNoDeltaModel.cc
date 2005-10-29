@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheBlochNoDeltaModel.cc,v 1.1 2005-08-05 13:43:14 vnivanch Exp $
+// $Id: G4BetheBlochNoDeltaModel.cc,v 1.2 2005-10-29 20:09:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -39,7 +39,7 @@
 //
 // Class Description:
 //
-// Ionisation of heavy charged particles including the monopole
+// Ionisation of heavy charged particles
 
 // -------------------------------------------------------------------
 //
@@ -49,10 +49,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4BetheBlochNoDeltaModel::G4BetheBlochNoDeltaModel(G4double ch, 
+G4BetheBlochNoDeltaModel::G4BetheBlochNoDeltaModel(
   const G4ParticleDefinition*p, const G4String& nam) :
-  G4BetheBlochModel(p, nam), 
-  mcharge2(ch*ch)
+  G4BetheBlochModel(p, nam)
 {}
 
 G4BetheBlochNoDeltaModel::~G4BetheBlochNoDeltaModel()
