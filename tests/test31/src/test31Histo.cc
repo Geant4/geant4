@@ -170,8 +170,8 @@ void test31Histo::EndOfHisto()
   G4cout<<"===================================================================="<<G4endl;
 
   TableControl();
-  MuonTest();
-  ElectronTest();
+  //  MuonTest();
+  //  ElectronTest();
   if(0 < nHisto) {
 
     // normalise histograms
@@ -316,30 +316,34 @@ void test31Histo::TableControl()
   G4double tmin = 1.*keV;
   G4double tmax = 1.*GeV;
   G4int    nbin = 60;
+  G4String part_name = "proton";
+  G4String proc_name = "ionIoni";
+  G4String mat_name  = "G4_WATER";
+
   //  G4int   index = 1;
   //  G4double cut  = 100.*GeV; 
-  //G4ParticleDefinition* part = G4Proton::Proton();
-  //  G4ParticleDefinition* part = G4Electron::Electron();
-  //  G4ParticleDefinition* part = G4Alpha::Alpha();
+  // part = G4Proton::Proton();
+  // part = G4Electron::Electron();
+  // part = G4Alpha::Alpha();
   // cal.PrintDEDXTable(part);
   // cal.PrintRangeTable(part);
   // cal.PrintInverseRangeTable(part);
-
-  //  G4String part_name = "proton";
-     G4String part_name = "alpha";
-     // G4String part_name = "C12[0.0]";
-   //   G4String mat_name  = "Tangsten";
-    G4String mat_name  = "G4_Al";
-   //     G4String mat_name  = "Silicon";
-   //  G4String mat_name  = "Gold";
-    //   G4String mat_name  = "Iron";
-   // G4String mat_name  = "Beryllium";
-  G4String proc_name = "ionIoni";
-  //G4String proc_name = "hLowEIoni";
-
+ 
+  //  part_name = "alpha";
+    part_name = "C12[0.0]";
+  //   mat_name  = "G4_W";
+  // mat_name  = "G4_Al";
+  //    mat_name  = "G4_Si";
+  //  mat_name  = "G4_AU"; 
+  //  mat_name  = "G4_Fe";
+  // mat_name  = "G4_Be";
+  // proc_name = "hLowEIoni";
+  //  proc_name = "hIoni";
+ 
   const G4ParticleDefinition* part = cal.FindParticle(part_name);
-  const G4Material* mat = mman->FindOrBuildMaterial(mat_name);
-  //  G4double fact = gram/(MeV*cm2*mat->GetDensity());
+  G4Material* mat = mman->FindOrBuildMaterial(mat_name);
+  mat->SetChemicalFormula("H_2O");
+  G4double fact = 0.001*gram/(MeV*cm2*mat->GetDensity());
 
   G4double xmin = std::log10(tmin);
   G4double xmax = std::log10(tmax);
@@ -350,17 +354,20 @@ void test31Histo::TableControl()
   G4cout << "   Material            " << mat_name << G4endl;
   G4cout << "====================================================================" << G4endl;
 
-  for(G4int i=0; i<=nbin; i++) {
-    /*    
-    G4double e = std::pow(10.,x);
+  const G4int ne = 8;
+  G4double e0[ne]={0.025, 0.1, 0.2, 0.3, 1.0, 10., 100., 1000.};
+
+  for(G4int i=0; i<ne; i++) {
+    
+    G4double e = e0[i]*12.0;
     G4double dedx0 = cal.GetDEDX(e,part,mat);
-    G4double dedx = cal.ComputeDEDX(e,part_name,proc_name,mat_name,cut);
+    G4double dedx = cal.ComputeDEDX(e,part_name,proc_name,mat_name,e);
     G4cout << i << ".   e(MeV)= " << e/MeV 
-           << ";  Computed  dedx(MeV*cm^2/g)= " << dedx*fact
-           << ";  Tabled  dedx(MeV*cm^2/g)= " << dedx0*fact
+	   << "  e0= " << e0[i]
+           << ";  Computed  dedx(MeV*cm^2/mg)= " << dedx*fact
+           << ";  Tabled  dedx(MeV*cm^2/mg)= " << dedx0*fact
            << G4endl;
-    */
-    x += step;
+    
   }
 
   G4bool icorr = false;
