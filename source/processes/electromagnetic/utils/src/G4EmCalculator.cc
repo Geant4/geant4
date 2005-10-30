@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.22 2005-10-25 10:55:59 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.23 2005-10-30 19:03:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -40,7 +40,6 @@
 // 08.04.2005 Major optimisation of internal interfaces (V.Ivantchenko)
 // 08.05.2005 Use updated interfaces (V.Ivantchenko)
 // 23.10.2005 Fix computations for ions (V.Ivantchenko)
-// 24.10.2005 Fix bug in ComputeDEDX - material initialisation (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -79,6 +78,7 @@ G4EmCalculator::G4EmCalculator()
   currentCouple      = 0;
   currentMaterial    = 0;
   currentParticle    = 0;
+  baseParticle       = 0;
   currentLambda      = 0;
   chargeSquare       = 1.0;
   massRatio          = 1.0;
@@ -325,31 +325,35 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
   G4double res = 0.0;
   if(verbose > 1) {
     G4cout << "ComputeDEDX: " << p->GetParticleName()
-           << " in " << currentMaterialName  
+           << " in " << currentMaterialName
            << " e(MeV)= " << kinEnergy/MeV << "  cut(MeV)= " << cut/MeV << G4endl;
   }
   if(FindEmModel(p, processName, kinEnergy)) {
     //    G4cout << "currentModel= " << currentModel << G4endl;
     if(UpdateParticle(p, kinEnergy)) {
-      G4double escaled = kinEnergy*massRatio; 
+      G4double escaled = kinEnergy*massRatio;
       if(baseParticle) {
         res = currentModel->ComputeDEDXPerVolume(mat, baseParticle, escaled, cut)
             * chargeSquare;
-        if(verbose > 1) {
-          G4cout <<  baseParticle->GetParticleName() << " E(MeV)= " << escaled
-                 << " DEDX(MeV/mm)= " << res*mm/MeV
-                 << " DEDX(MeV*cm^2/g)= " << res*gram/(MeV*cm2*mat->GetDensity())
-                 << G4endl;
-	}          
+        if(verbose > 1)
+          G4cout <<  baseParticle->GetParticleName() << " Escaled(MeV)= " << escaled;
       } else {
         res = currentModel->ComputeDEDXPerVolume(mat, p, kinEnergy, cut);
+        if(verbose > 1) G4cout <<  " no basePart E(MeV)= " << kinEnergy;
       }
-      if(isIon && currentModel->HighEnergyLimit() > 100.*MeV) 
+      if(verbose > 1)
+	G4cout << " DEDX(MeV/mm)= " << res*mm/MeV
+	       << " DEDX(MeV*cm^2/g)= " << res*gram/(MeV*cm2*mat->GetDensity())
+	       << G4endl;
+      if(isIon && currentModel->HighEnergyLimit() > 100.*MeV) {
         res += corr->HighOrderCorrections(p,mat,kinEnergy);
-
+	if(verbose > 1)
+	  G4cout << "After Corrections: DEDX(MeV/mm)= " << res*mm/MeV
+		 << " DEDX(MeV*cm^2/g)= " << res*gram/(MeV*cm2*mat->GetDensity())
+		 << G4endl;
+      }
       // emulate boundary region for different parameterisations
       G4double eth = currentModel->LowEnergyLimit();
-      G4double f = 1.0;
       if(eth > 0.05*MeV && eth < 10.*MeV && escaled > eth) {
         G4double res1 = 0.0;
         if(baseParticle) {
@@ -358,7 +362,7 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
 	} else {
 	  res1 = currentModel->ComputeDEDXPerVolume(mat, p, eth, cut);
 	}
-        if(isIon) res1 += corr->HighOrderCorrections(p,mat,eth/massRatio);  
+        if(isIon) res1 += corr->HighOrderCorrections(p,mat,eth/massRatio);
         G4double res0 = res1;
         if(FindEmModel(p, processName, eth-1.0*keV)) {
 	  if(baseParticle) {
@@ -368,10 +372,9 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
 	    res0 = currentModel->ComputeDEDXPerVolume(mat, p, eth, cut);
 	  }
 	}
-        //G4cout << "eth= " << eth << " escaled= " << escaled << " res0= " << res0 << " res1= " 
-        //       << res1 <<  "  q2= " << chargeSquare << G4endl; 
-        f += (res0/res1 - 1.0)*eth/escaled;
-        res *= f;
+        //G4cout << "eth= " << eth << " escaled= " << escaled << " res0= " << res0 << " res1= "
+        //       << res1 <<  "  q2= " << chargeSquare << G4endl;
+        res *= (1.0 + (res0/res1 - 1.0)*eth/escaled);
       }
       if(verbose > 0) {
         G4cout << "E(MeV)= " << kinEnergy/MeV
@@ -379,9 +382,8 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
                << " DEDX(MeV*cm^2/g)= " << res*gram/(MeV*cm2*mat->GetDensity())
                << " cut(MeV)= " << cut/MeV
                << "  " <<  p->GetParticleName()
-               << " in " <<  mat->GetName()
+               << " in " <<  currentMaterialName
                << " Zi^2= " << chargeSquare
-               << " f= " << f
                << G4endl;
       }
     }
@@ -556,34 +558,34 @@ G4bool G4EmCalculator::UpdateParticle(const G4ParticleDefinition* p, G4double ki
     currentParticle = p;
     baseParticle    = 0;
     currentParticleName = p->GetParticleName();
-    isIon = false;
-    if(p->GetParticleType() == "nucleus" && 
+    massRatio       = 1.0;
+    chargeSquare    = 1.0;
+    if(p->GetParticleType() == "nucleus" &&
        currentParticleName != "deuteron" && currentParticleName != "triton") {
-      baseParticle = G4GenericIon::GenericIon(); 
+      baseParticle = G4GenericIon::GenericIon();
       massRatio = baseParticle->GetPDGMass()/p->GetPDGMass();
       isIon = true;
       //      G4cout << p->GetParticleName() << " in " << currentMaterial->GetName()
       //       << "  e= " << kinEnergy << G4endl;
       chargeSquare =
           ionEffCharge->EffectiveChargeSquareRatio(p, currentMaterial, kinEnergy);
+      //G4cout << "q2= " << chargeSquare << G4endl;
     } else {
+      isIon = false;
       const G4VEnergyLossProcess* proc = FindEnergyLossProcess(p);
-      if(!proc) return false;
-      baseParticle = proc->BaseParticle();
+      if(proc) {
+        baseParticle    = proc->BaseParticle();
 
-      if(baseParticle) {
-        massRatio = baseParticle->GetPDGMass()/p->GetPDGMass();
-	G4double q = p->GetPDGCharge()/baseParticle->GetPDGCharge();
-	chargeSquare = q*q;
-      } else {
-	chargeSquare = 1.0;
+	if(baseParticle) {
+          massRatio = baseParticle->GetPDGMass()/p->GetPDGMass();
+          G4double q = p->GetPDGCharge()/baseParticle->GetPDGCharge();
+	  chargeSquare *= q*q;
+        }
       }
     }
   }
-
-  if(isIon) 
-    chargeSquare = ionEffCharge->EffectiveChargeSquareRatio(p, currentMaterial, kinEnergy);
-
+  if(isIon) chargeSquare =
+     ionEffCharge->EffectiveChargeSquareRatio(p, currentMaterial, kinEnergy);
   return true;
 }
 
@@ -591,14 +593,16 @@ G4bool G4EmCalculator::UpdateParticle(const G4ParticleDefinition* p, G4double ki
 
 const G4ParticleDefinition* G4EmCalculator::FindParticle(const G4String& name)
 {
+  const G4ParticleDefinition* p = 0;
   if(name != currentParticleName) {
-    currentParticle = G4ParticleTable::GetParticleTable()->FindParticle(name);
-    if(!currentParticle) {
+    p = G4ParticleTable::GetParticleTable()->FindParticle(name);
+    if(!p) {
       G4cout << "### WARNING: G4EmCalculator::FindParticle fails to find " << name << G4endl;
     }
-    currentParticleName = name;
+  } else {
+    p = currentParticle;
   }
-  return currentParticle;
+  return p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -678,7 +682,7 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
     G4String partname =  p->GetParticleName();
     const G4ParticleDefinition* part = p;
     if(p->GetParticleType() == "nucleus" && partname != "deuteron" && partname != "triton")
-      part = G4GenericIon::GenericIon(); 
+      part = G4GenericIon::GenericIon();
 
 
     G4LossTableManager* lManager = G4LossTableManager::Instance();
