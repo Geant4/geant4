@@ -84,6 +84,8 @@
 #include "G4PreCompoundModel.hh"
 #include "G4Evaporation.hh"
 
+#include "G4StateManager.hh"
+
 #include <memory> // for the auto_ptr(T>
 #include "AIDA/AIDA.h"
 
@@ -595,6 +597,9 @@ int main(int argc, char** argv)
     bPoint->SetPosition(bPosition);
     step->SetPostStepPoint(bPoint);
     step->SetStepLength(theStep);
+
+    if(!G4StateManager::GetStateManager()->SetNewState(G4State_Idle))
+      G4cout << "G4StateManager PROBLEM! " << G4endl;
 
     G4Timer* timer = new G4Timer();
     timer->Start();
