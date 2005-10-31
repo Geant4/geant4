@@ -84,7 +84,7 @@ processes/electromagnetic/muons                  emmuons-V07-01-05 (*)
   G4MuBremsstrahlungModel and G4MuPairProductionModel; in the latter a
   protection is added for sampling of pair energy in the case of low cuts.
 
-processes/electromagnetic/standard               emstand-V07-01-03
+processes/electromagnetic/standard               emstand-V07-01-19
 ----------------------------------
 - In all energy loss models return protection against the case tmin>tmax
   (fix bug reports).
