@@ -8,7 +8,7 @@
 class G4Box;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
-class GFlashHomoShowerParamterisation;
+class GFlashHomoShowerParameterisation;
 class GFlashHitMaker;
 class GFlashShowerModel;
 class GFlashParticleBounds;
@@ -52,7 +52,7 @@ class ExGflashDetectorConstruction : public G4VUserDetectorConstruction
 	G4VPhysicalVolume*  m_crystal_phys[100];
 	
 	// Gflash members	
-	GFlashHomoShowerParamterisation *m_theParametrisation;
+	GFlashHomoShowerParameterisation *m_theParameterisation;
 	GFlashHitMaker *m_theHMaker;
 	GFlashParticleBounds *m_theParticleBounds;
 	GFlashShowerModel* m_theFastShowerModel;     

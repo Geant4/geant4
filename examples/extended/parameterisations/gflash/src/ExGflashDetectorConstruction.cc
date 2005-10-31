@@ -21,7 +21,7 @@
 #include "ExGflashSensitiveDetector.hh"
 #include "ExGflashMaterialManager.hh"
 //fast simulation
-#include "GFlashHomoShowerParamterisation.hh"
+#include "GFlashHomoShowerParameterisation.hh"
 #include "G4FastSimulationManager.hh"
 #include "GFlashShowerModel.hh"
 #include "GFlashHitMaker.hh"
@@ -50,7 +50,7 @@ m_calo_phys(0)
 ExGflashDetectorConstruction::~ExGflashDetectorConstruction()
 { 
 //@@@ ExGflashDetectorConstruction::Soll ich alles dlete
-	delete m_theParametrisation;
+	delete m_theParameterisation;
 	delete m_theParticleBounds;
 	delete m_theHMaker;
 	delete m_theFastShowerModel;
@@ -177,8 +177,8 @@ G4VPhysicalVolume* ExGflashDetectorConstruction::Construct()
 	***********************************************/	
 	cout<<"Shower parameterization"<<endl;
 	m_theFastShowerModel =  new GFlashShowerModel("fastShowerModel",m_calo_log);
-	m_theParametrisation = new GFlashHomoShowerParamterisation(matManager->getMaterial(mat));
-	m_theFastShowerModel->SetParametrisation(*m_theParametrisation);
+	m_theParameterisation = new GFlashHomoShowerParameterisation(matManager->getMaterial(mat));
+	m_theFastShowerModel->SetParametrisation(*m_theParameterisation);
 	m_theFastShowerModel->SetParticleBounds(*m_theParticleBounds) ;
 	m_theFastShowerModel->SetHitMaker(*m_theHMaker);	 
 	cout<<"end shower parameterization"<<endl;
