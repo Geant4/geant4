@@ -10,7 +10,13 @@ Some of the development/fixes included since the last reference tag are:
   o Archived old TRD parameterised models. Functionality now included
     in standard EM processes.
   o New MSC models (G4MultipleScattering80 and G4MscModel80) become the
-    default.
+    default. NOTE: these changes provide more precise simulation o sampling
+    calorimeters (mean energy deposition and RMS) and much less cut/step
+    dependent. It improves results for many other applications, however, a
+    CPU penalty, whose entity depends on the geometry, is observed at the
+    moment. For backward compatibility the process G4MultipleScattering71
+    is included, it corresponds to multiple-scattering model as present in
+    release 7.1.
   o Fixes for initialization and for angular distribution in
     G4MuBremsstrahlungModel and G4MuPairProductionModel.
   o New RayTracerX visualization driver selectable at build time.
@@ -72,49 +78,48 @@ parameterisations                                gpara-V07-01-00
 
 processes/electromagnetic/muons                  emmuons-V07-01-05 (*)
 -------------------------------
-- G4MuBremsstrahlungModel: fix in initialization and for angular
-  distribution of gammas and energy momentum balance.
-- G4MuPairProductionModel: fix in initialisation and for angular
-  distribution of e+, e- and energy momentum balance.
-  Added protection needed for sampling of pair energy in the case
-  of low cuts.
+- In all energy loss models returning protection against the case tmin>tmax
+  (fix bug reports).
+- Fixed angular distributions of secondaries and 4-momentum balance in
+  G4MuBremsstrahlungModel and G4MuPairProductionModel; in the latter a
+  protection is added for sampling of pair energy in the case of low cuts.
 
 processes/electromagnetic/standard               emstand-V07-01-03
 ----------------------------------
+- In all energy loss models return protection against the case tmin>tmax
+  (fix bug reports).
+- Fix a bug in calculation of chemical correction in G4BraggIonModel and
+  G4BraggModel.
+- Critical update of G4MultipleScattering process and G4MscModel:
+  o Added correlation between scattering angle and lateral displacement.
+  o Added more precise calculation of safety.
+  o Update mechanism of step limitation: defined default values
+    for facrange=0.2 and gacgeom=4.
+- NOTE: these changes provide more precise simulation o sampling calorimeters
+  (mean energy deposition and RMS) and much less cut/step dependent.
+  It improves results for many other applications, however, a CPU penalty,
+  whose entity depends on the geometry, is observed at the moment. 
+  For backward compatibility the process G4MultipleScattering71 is included,
+  it corresponds to multiple-scattering model as present in release 7.1.
 - G4eIonisation and G4hIonisation:
   o SetStepLimits (0.2, 1*mm) and Integral on.
-- Moved G4MultipleScattering80 and G4MscModel80 into
-  G4MultipleScattering and G4MscModel respectively.
-- G4MultipleScattering:
-  o The true path length limit is determined by the physics (facrange)
-    and geometry. Conditions are reordered and reviewd upper limits.
-  o Weaker step limitation above Tkinlimit = 2 MeV for e+/e- (limit
-    scaled with mass for other particles). Soft limit: facrange increases
-    linearly with energy above Tkinlimit.
-  o Changed conditions limiting the step to allow for better timing with
-    no physics performance degradation and weaker cut dependence. 
-  o Fixed bug in TruePathLengthLimit and problem with non-initilised
-    variable.
-  o Removed SetFacrange(0.02) from InitialiseProcess().
-- G4MscModel:
-  o Nuclear size correction are removed, the correction is already
-    included in the (theoretical) tabulated cross section values for
-    Tkin > 10 MeV.
 - G4UniversalFluctuation:
   o Cut dependence of the energy-loss distribution has been reduced.
   o Introduced correction for very small loss to avoid zero energy loss.
-- Fix in G4BraggIonModel and G4BraggModel for chemical formula correction.
 
 processes/electromagnetic/utils                  emutils-V07-01-07
 -------------------------------
 - G4VEnergyLossProcess:
-  o SetStepFunction(0.2, 1*mm) and Integral on. Fixes problem report
-    #780 connected with d-electron production tmax < cut.
-  o Set default lambda-factor to 0.8.
-- G4VEmProcess: set default lambda-factor to 0.8.
-- G4EmManager: fixed a cut calculation for e+e- pair.
-- G4VMultipleScattering: corrected error in a protection in
-  GetContinuousStepLimit().
+  o SetStepFunction(0.2, 1*mm) and Integral on. Fixes problem
+    report #780 connected with d-electron production tmax < cut.
+  o Return number protections against numerical imprecision.
+  o Set default lambda-factor to 0.8 for integral mode (CPU
+    performance improvement for low cuts).
+- G4VEmProcess: using integral mode only for charged particles; default
+  lambdaFactor=0.8.  
+- G4EmModelManager: fixed a cut calculation for e+e- pair production process
+- G4VMultipleScattering: fixed error in a protection in the
+  GetContinuousStepLimit() method.
 - G4VEmModel: set default energy range from 0.1*keV to 100*TeV.
 
 processes/electromagnetic/xrays                  xrays-V07-01-02
