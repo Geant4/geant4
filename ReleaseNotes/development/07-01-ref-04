@@ -94,7 +94,7 @@ processes/electromagnetic/standard               emstand-V07-01-03
   o Added correlation between scattering angle and lateral displacement.
   o Added more precise calculation of safety.
   o Update mechanism of step limitation: defined default values
-    for facrange=0.2 and gacgeom=4.
+    for facrange=0.02 and gacgeom=4.
 - NOTE: these changes provide more precise simulation o sampling calorimeters
   (mean energy deposition and RMS) and much less cut/step dependent.
   It improves results for many other applications, however, a CPU penalty,
