@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-patch-01-ref    (25-October-2005)
+ Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -39,13 +39,13 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -57,7 +57,7 @@ eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -89,6 +89,9 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Start Run processing.
 
 ---> Begin of Event: 0
+ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
+  Suppress instantiation of vis manager (G4VisExecutive) or
+  use "/vis/open" or "/vis/sceneHandler/create".
 
 ---> Begin of Event: 10000
 
@@ -100,11 +103,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=34.12s Real=425.63s Sys=31.25s
+  User=44.38s Real=446.92s Sys=33.89s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 126892025, 2114464292
+ Current couple of seeds = 247405260, 949970828
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

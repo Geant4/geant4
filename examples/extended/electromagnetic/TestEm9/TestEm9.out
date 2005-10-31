@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-patch-01-ref    (25-October-2005)
+ Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -112,7 +112,7 @@ Ecal is 36 cm  of G4_CESIUM_IODIDE
 Absorber is 2 mm  of G4_Al
 Vertex is 3 cm  of 3 layers of Si of 100 mum npads= 601
 ### New geometry is constructed
-world cuts are set0.3 0.3
+PhysicsList: world cuts are set cutG= 0.3 mm    cutE= 0.3 mm 
 Vertex cuts are set
 Muon cuts are set
 #
@@ -136,13 +136,13 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -154,7 +154,7 @@ eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -168,7 +168,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -188,7 +188,7 @@ ionIoni:   tables are built for  GenericIon
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -226,7 +226,7 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 ========= Table of registered couples ==============================
 
@@ -290,34 +290,42 @@ Index : 7     used in the geometry : Yes     recalculation needed : No
 
 ### Run 0 start
 HistoManager: Histograms are booked and run has been started
+/vis/scene/notifyHandlers
+WARNING: Scene "refresh" not found.
+  /vis/scene/list to see scenes.
 Start Run processing.
+ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
+  Suppress instantiation of vis manager (G4VisExecutive) or
+  use "/vis/open" or "/vis/sceneHandler/create".
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=83.85s Real=87.59s Sys=3.7s
+  User=120.13s Real=130.37s Sys=10.21s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Number of events             100
-Average number of e-         1333
-Average number of gamma      705
-Average number of e+         49.03
-Average number of steps      3918
-Edep 1x1 =                   0.8285 +- 0.003159
-Edep 3x3 =                   0.9575 +- 0.001335
-Edep 5x5 =                   0.9798 +- 0.0008959
+Average number of e-         1321
+Average number of gamma      698.5
+Average number of e+         47.67
+Average number of steps      5422
+Edep 1x1 =                   0.8179 +- 0.003344  res=  4.088 %
+Edep 3x3 =                   0.9521 +- 0.001572  res=  1.651 %
+Edep 5x5 =                   0.9764 +- 0.00127  res=  1.301 %
 ========================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8285  delEdep1x1= 0.002511 nrms= 0.7154
-Erms1x1: 0.03159  delErms1x1= -0.003508 nrms= -0.9993
-Edep3x3: 0.9575  delEdep3x3= 0.001133 nrms= 0.7081
-Erms3x3: 0.01335  delErms3x3= -0.002649 nrms= -1.656
-Edep5x5: 0.9798  delEdep5x5= 0.0007885 nrms= 0.6626
-Erms5x5: 0.008959  delErms5x5= -0.002941 nrms= -2.471
+Edep1x1: 0.8179  delEdep1x1= -0.008059 nrms= -2.296
+Erms1x1: 0.03344  delErms1x1= -0.00166 nrms= -0.473
+Edep3x3: 0.9521  delEdep3x3= -0.004267 nrms= -2.667
+Erms3x3: 0.01572  delErms3x3= -0.0002823 nrms= -0.1764
+Edep5x5: 0.9764  delEdep5x5= -0.002595 nrms= -2.18
+Erms5x5: 0.0127  delErms5x5= 0.0008047 nrms= 0.6762
 <<<<<END>>>>>   IS ACCEPTED
 
+/vis/viewer/update
+ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 #
 Graphics systems deleted.
 Visualization Manager deleting...

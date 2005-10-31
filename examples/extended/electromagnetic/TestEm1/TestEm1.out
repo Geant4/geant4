@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-patch-01-ref    (25-October-2005)
+ Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -110,7 +110,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -142,7 +142,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -162,7 +162,7 @@ ionIoni:   tables are built for  GenericIon
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -200,7 +200,7 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 Region DefaultRegionForTheWorld
  Materials : Aluminium 
@@ -231,10 +231,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Start Run processing.
 
 ---> Begin of Event: 0
+ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
+  Suppress instantiation of vis manager (G4VisExecutive) or
+  use "/vis/open" or "/vis/sceneHandler/create".
 Run terminated.
 Run Summary
   Number of events processed : 200
-  User=128.09s Real=149.37s Sys=19.55s
+  User=132.18s Real=154.77s Sys=20.56s
 
  ======================== run summary ======================
 
@@ -242,29 +245,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.831 MeV
+ total energy deposit: 99.784 MeV
 
- nb tracks/event   neutral:     27.315   charged:    697.055
- nb  steps/event   neutral:    142.335   charged:   3364.225
+ nb tracks/event   neutral:     27.560   charged:    693.775
+ nb  steps/event   neutral:    140.580   charged:   3354.055
 
  nb of process calls per event: 
-          eIoni        brem       compt        phot        conv     annihilTransportation
-       3337.220      25.560     115.020      24.955       1.435       1.435       0.935
+          eIoni        brem       compt        phot         msc        conv     annihilTransportation
+       3324.605      25.790     113.020      25.075       2.195       1.455       1.455       1.040
 
 ---------------------------------------------------------
  Primary particle : 
- CSDA Range = 10.997 cm    rms = 3.596 cm 
- proj Range = 9.402 cm    rms = 3.252 cm 
- proj/CSDA  = 0.855
- transverse dispersion at end = 1.935 cm 
+ CSDA Range = 11.184 cm    rms = 3.618 cm 
+ proj Range = 9.609 cm    rms = 3.306 cm 
+ proj/CSDA  = 0.859
+ transverse dispersion at end = 1.830 cm 
 
- mass CSDA Range from simulation = 29.693 g/cm2
+ mass CSDA Range from simulation = 30.198 g/cm2
                from PhysicsTable = 85.395 g/cm2
 ---------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 361058625, 112620413
+ Current couple of seeds = 1261365639, 1403033250
 ----------------------------------------
 #
 /testem/phys/setCuts 1 mm
@@ -285,7 +288,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -317,7 +320,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -337,7 +340,7 @@ ionIoni:   tables are built for  GenericIon
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -375,7 +378,7 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 Region DefaultRegionForTheWorld
  Materials : Aluminium 
@@ -396,7 +399,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 361058625, 112620413
+ Current couple of seeds = 1261365639, 1403033250
 ----------------------------------------
 Start Run processing.
 
@@ -404,7 +407,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 200
-  User=42.58s Real=55.12s Sys=10.91s
+  User=45.64s Real=58.32s Sys=10.84s
 
  ======================== run summary ======================
 
@@ -412,29 +415,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.692 MeV
+ total energy deposit: 99.844 MeV
 
- nb tracks/event   neutral:     27.755   charged:    146.585
- nb  steps/event   neutral:    139.345   charged:   1078.915
+ nb tracks/event   neutral:     28.345   charged:    151.845
+ nb  steps/event   neutral:    144.820   charged:   1115.885
 
  nb of process calls per event: 
-           brem       eIoni        phot       compt        conv     annihilTransportation
-         26.000    1051.470      25.255     111.590       1.440       1.440       1.065
+           brem       eIoni       compt        photTransportation        conv     annihil         msc
+         26.695    1086.775     116.475      25.955       0.960       1.430       1.430       0.985
 
 ---------------------------------------------------------
  Primary particle : 
- CSDA Range = 11.154 cm    rms = 3.795 cm 
- proj Range = 9.521 cm    rms = 3.517 cm 
- proj/CSDA  = 0.854
- transverse dispersion at end = 1.773 cm 
+ CSDA Range = 11.016 cm    rms = 3.744 cm 
+ proj Range = 9.594 cm    rms = 3.450 cm 
+ proj/CSDA  = 0.871
+ transverse dispersion at end = 1.716 cm 
 
- mass CSDA Range from simulation = 30.115 g/cm2
+ mass CSDA Range from simulation = 29.742 g/cm2
                from PhysicsTable = 67.818 g/cm2
 ---------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 865246279, 2017276671
+ Current couple of seeds = 1920134127, 1513716869
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

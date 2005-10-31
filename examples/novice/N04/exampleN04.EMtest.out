@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-patch-01-ref    (25-October-2005)
+ Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -51,11 +51,11 @@ eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -75,7 +75,7 @@ eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -86,7 +86,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -116,7 +116,7 @@ muPairProd:   tables are built for  mu+
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -137,7 +137,7 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 ========= Table of registered couples ==============================
 
@@ -179,27 +179,39 @@ Index : 4     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 ### Run 0 start.
+WARNING: Scene "refresh" not found.
+  /vis/scene/list to see scenes.
 Stage 0->1 : 1 hits found in the muon chamber.
-Stage 1->2 : 1 isolated muon found.
+Stage 1->2 : 0 isolated muon found.
+++++++++ event aborted
 >>> Event 0
-     12 hits are stored in ExN04TrackerHitsCollection.
-     6 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.25439558 (GeV)
+ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
+  Suppress instantiation of vis manager (G4VisExecutive) or
+  use "/vis/open" or "/vis/sceneHandler/create".
+     25 hits are stored in ExN04TrackerHitsCollection.
+     1 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.17356712 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
+ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 ### Run 1 start.
+WARNING: Scene "refresh" not found.
+  /vis/scene/list to see scenes.
 Stage 0->1 : 1 hits found in the muon chamber.
-Stage 1->2 : 1 isolated muon found.
+Stage 1->2 : 0 isolated muon found.
+++++++++ event aborted
 >>> Event 0
-     7 hits are stored in ExN04TrackerHitsCollection.
-     13 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 2.77261 (GeV)
+     21 hits are stored in ExN04TrackerHitsCollection.
+     2 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.1730288 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
-Stage 1->2 : 1 isolated muon found.
+Stage 1->2 : 0 isolated muon found.
+++++++++ event aborted
 >>> Event 1
-     30 hits are stored in ExN04TrackerHitsCollection.
-     23 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 13.548025 (GeV)
+     20 hits are stored in ExN04TrackerHitsCollection.
+     2 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.17373797 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
+ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-patch-01-ref    (25-October-2005)
+ Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -103,13 +103,13 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -121,7 +121,7 @@ eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -135,7 +135,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -155,7 +155,7 @@ ionIoni:   tables are built for  GenericIon
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -193,7 +193,7 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 Region DefaultRegionForTheWorld
  Materials : Mylar 
@@ -230,11 +230,17 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 9876, 54321
+ Current couple of seeds = 752908830, 1734568202
 ----------------------------------------
+/vis/scene/notifyHandlers
+WARNING: Scene "refresh" not found.
+  /vis/scene/list to see scenes.
 Start Run processing.
 
 ---> Begin of Event: 0
+ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
+  Suppress instantiation of vis manager (G4VisExecutive) or
+  use "/vis/open" or "/vis/sceneHandler/create".
 
 ---> Begin of Event: 100
 
@@ -256,54 +262,56 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.08s Real=1.17s Sys=0.04s
+  User=11.07s Real=11.18s Sys=0.08s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=23.4266 +- 0.282233  mm  
+    mean charged track length   in absorber=23.4658 +- 0.128498  mm  
 
-            mean energy deposit in absorber=0.0169247 +- 0.000450718  MeV 
+            mean energy deposit in absorber=0.0167136 +- 0.000394898  MeV 
 
- mean number of steps in absorber (charged) =0.005 +- 0.00223047      
+ mean number of steps in absorber (charged) =0.482 +- 0.144047      
  mean number of steps in absorber (neutral) =0 +- 0      
 
-   mean number of charged secondaries = 0.004 +- 0.001996
+   mean number of charged secondaries = 0.017 +- 0.00408791
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.004  and e+s =0
+   mean number of e-s =0.017  and e+s =0
 
-(number) transmission coeff=0.514  reflection coeff=0
+(number) transmission coeff=0.497  reflection coeff=0
 
  energy deposit distribution 
-#entries=1000    #underflows=0    #overflows=15
+#entries=1000    #underflows=0    #overflows=21
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3           2       0.002
-    2         6          77       0.077
-    3         9         264       0.264
-    4        12         266       0.266
-    5        15         150        0.15
-    6        18          72       0.072
-    7        21          47       0.047
-    8        24          28       0.028
-    9        27          16       0.016
-   10        30          17       0.017
-   11        33          10        0.01
-   12        36          10        0.01
-   13        39           6       0.006
-   14        42           7       0.007
+    1         3           5       0.005
+    2         6          97       0.097
+    3         9         244       0.244
+    4        12         256       0.256
+    5        15         158       0.158
+    6        18          88       0.088
+    7        21          42       0.042
+    8        24          30        0.03
+    9        27          12       0.012
+   10        30          16       0.016
+   11        33          11       0.011
+   12        36           5       0.005
+   13        39           2       0.002
+   14        42           2       0.002
    15        45           3       0.003
-   16        48           2       0.002
-   17        51           5       0.005
-   18        54           0           0
-   19        57           3       0.003
+   16        48           3       0.003
+   17        51           3       0.003
+   18        54           1       0.001
+   19        57           1       0.001
 
  Emp =           0.012   width=          0.006  MeV 
 
+/vis/viewer/update
+ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1486551451, 1187403336
+ Current couple of seeds = 698095602, 1970345245
 ----------------------------------------
 #
 Graphics systems deleted.

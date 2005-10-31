@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-patch-01-ref    (25-October-2005)
+ Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -110,13 +110,13 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -128,7 +128,7 @@ eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -142,7 +142,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -162,7 +162,7 @@ ionIoni:   tables are built for  GenericIon
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -200,7 +200,7 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 Region DefaultRegionForTheWorld
  Materials : G4_Si 
@@ -231,6 +231,9 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Start Run processing.
 
 ---> Begin of Event: 0
+ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
+  Suppress instantiation of vis manager (G4VisExecutive) or
+  use "/vis/open" or "/vis/sceneHandler/create".
 
 ---> Begin of Event: 10000
 
@@ -252,7 +255,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=48.93s Real=889.6s Sys=74.06s
+  User=679.71s Real=1745.96s Sys=329.34s
 
  ======================== run summary ======================
 
@@ -260,20 +263,20 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 497.563 keV +- 17.455 keV
+ Total Energy deposited        = 449.857 keV +- 102.264 keV
 
- Track length of primary track = 936.820 mum +- 38.988 mum
- csda Range from EmCalculator  = 941.718 mum
+ Track length of primary track = 871.435 mum +- 184.608 mum
+ Range from EmCalculator       = 941.718 mum (from restricted dE/dx)
 
- Projected range               = 336.831 mum +- 21.956 mum
+ Projected range               = 322.060 mum +- 201.711 mum
 
- Nb of steps of primary track  = 1.06 +- 0.24	 Step size= 912.127 mum +- 121.061 mum
+ Nb of steps of primary track  = 43.03 +- 9.54	 Step size= 20.375 mum +- 2.367 mum
 
- absorbed = 99.96 %   transmit = 0.02 %   reflected = 0.02 %
+ absorbed = 78.42 %   transmit = 4.99 %   reflected = 16.60 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1761431756, 1759622299
+ Current couple of seeds = 1266904991, 1942953079
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

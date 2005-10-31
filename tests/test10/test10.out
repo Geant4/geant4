@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-patch-01-ref    (25-October-2005)
+ Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -29,6 +29,9 @@ Tst10PhysicsList::SetCuts:CutLength : 1 (mm)
 
 ---> Begin of Event: 0
   A 10000 optical photons vertex has been generated at (-690.585,174.228,404.117)
+ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
+  Suppress instantiation of vis manager (G4VisExecutive) or
+  use "/vis/open" or "/vis/sceneHandler/create".
   A 10000 optical photons vertex has been generated at (508.32929,-2.2475354,691.63072)
   A 10000 optical photons vertex has been generated at (188.85905,-405.95834,-555.17008)
   A 10000 optical photons vertex has been generated at (-663.4491,-350.48139,719.92482)

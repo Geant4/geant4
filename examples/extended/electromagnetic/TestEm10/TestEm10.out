@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-patch-01-ref    (25-October-2005)
+ Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -21,7 +21,7 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
 
-***** Table : Nb of materials = 32 *****
+***** Table : Nb of materials = 34 *****
 
  Material: Aluminium     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
    --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
@@ -48,10 +48,11 @@ Current available graphics systems are:
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  62.49 %  Abundance  45.45 %
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   4.20 %  Abundance  36.36 %
 
- Material:   Kapton     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  28.743 cm 
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  33.30 %  Abundance  18.18 %
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  62.49 %  Abundance  45.45 %
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   4.20 %  Abundance  36.36 %
+ Material:   Kapton     density:  1.413 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  28.717 cm 
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  20.92 %  Abundance  12.82 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  69.11 %  Abundance  56.41 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:   7.33 %  Abundance   5.13 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   2.64 %  Abundance  25.64 %
 
  Material:      CH2     density: 910.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  49.214 cm 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  14.40 %  Abundance  66.67 %
@@ -88,7 +89,7 @@ Current available graphics systems are:
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  27.29 %  Abundance  33.33 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  72.71 %  Abundance  66.67 %
 
- Material:      CO2     density:  1.977 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 183.083 m  
+ Material:      CO2     density:  1.842 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 196.496 m  
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  27.29 %  Abundance  33.33 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  72.71 %  Abundance  66.67 %
 
@@ -103,17 +104,27 @@ Current available graphics systems are:
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  23.15 %  Abundance  21.05 %
    --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:   1.28 %  Abundance   0.47 %
 
+ Material:  Xe15CO2     density:  4.900 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  17.592 m  
+   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  97.90 %  Abundance  83.89 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   0.57 %  Abundance   5.37 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   1.53 %  Abundance  10.74 %
+
  Material:  Xe20CO2     density:  5.082 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  17.750 m  
    --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  92.20 %  Abundance  56.91 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   2.13 %  Abundance  14.36 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   5.67 %  Abundance  28.73 %
+
+ Material: Xe27CO23O2     density:  4.358 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  21.487 m  
+   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  87.67 %  Abundance  44.43 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   3.11 %  Abundance  17.25 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   9.21 %  Abundance  38.32 %
 
  Material:  Kr20CO2     density:  3.601 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  34.158 m  
    --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass:  89.00 %  Abundance  58.62 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   3.00 %  Abundance  13.79 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   8.00 %  Abundance  27.59 %
 
- Material: Xe55He15CH4     density:  1.963 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  47.504 m  
+ Material: Xe55He15CH4     density:  1.829 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  50.984 m  
    --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  89.50 %  Abundance  18.71 %
    --->  Element: He ( )   Z =  2.0   N =   4.0   A =   4.00 g/mole  fractionMass:   5.00 %  Abundance  34.28 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   4.12 %  Abundance   9.40 %
@@ -150,109 +161,119 @@ Current available graphics systems are:
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.29 %  Abundance  18.87 %
    --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:  22.72 %  Abundance  37.84 %
 
- Material: radiatorMat     density: 24.058 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  16.527 m  
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  32.77 %  Abundance  18.27 %
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  59.19 %  Abundance  43.98 %
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   3.98 %  Abundance  35.18 %
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:   3.99 %  Abundance   2.54 %
-   --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:   0.07 %  Abundance   0.02 %
+ Material: radiatorMat     density: 104.160 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.832 m  
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  33.19 %  Abundance  18.20 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  61.78 %  Abundance  45.14 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   4.16 %  Abundance  36.11 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:   0.87 %  Abundance   0.54 %
+   --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:   0.01 %  Abundance   0.00 %
 
 
 
- The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 200 mm. 
- The ABSORBER is made of 15mm of Ar7CH4, the transverse size (R) is 100 mm. 
- Z position of the (middle of the) absorber 360  mm.
+ The  WORLD   is made of 4000mm of Air, the transverse size (R) of the world is 200 mm. 
+ The ABSORBER is made of 38.3mm of Xe15CO2, the transverse size (R) is 1 mm. 
+ Z position of the (middle of the) absorber 1360  mm.
 
-zRad = 138.359 mm
-radThick = 76.718 mm
-fFoilNumber = 100
+zRad = 129.58 mm
+radThick = 59.16 mm
+fFoilNumber = 220
 fRadiatorMat = radiatorMat
 WorldMaterial = Air
 zModule = 100 mm
-zAbsorber = 200.309 mm
-the number of TR radiator plates = 100
-total radiator thickness = 7.747 cm
+zAbsorber = 194.401 mm
+the number of TR radiator plates = 220
+total radiator thickness = 5.94 cm
 plate material = Mylar
 gas material = Air
 plate plasma energy = 24.5068 eV
 gas plasma energy = 0.731967 eV
-Regular X-ray TR  radiator EM process is called
-fAlphaPlate = 10000 ; fAlphaGas = 1000
-0	fGamma = 107.6	sumN = -NaN
-1	fGamma = 123.4	sumN = -NaN
-2	fGamma = 141.5	sumN = -NaN
-3	fGamma = 162.3	sumN = -NaN
-4	fGamma = 186.2	sumN = -NaN
-5	fGamma = 213.7	sumN = -NaN
-6	fGamma = 245.2	sumN = -NaN
-7	fGamma = 281.3	sumN = -NaN
-8	fGamma = 322.9	sumN = -NaN
-9	fGamma = 370.5	sumN = -NaN
-10	fGamma = 425.3	sumN = -NaN
-11	fGamma = 488.2	sumN = -NaN
-12	fGamma = 560.3	sumN = -NaN
-13	fGamma = 643.2	sumN = -NaN
-14	fGamma = 738.3	sumN = -NaN
-15	fGamma = 847.6	sumN = -NaN
-16	fGamma = 973	sumN = -NaN
-17	fGamma = 1117	sumN = -NaN
-18	fGamma = 1282	sumN = -NaN
-19	fGamma = 1472	sumN = -NaN
-20	fGamma = 1690	sumN = -NaN
-21	fGamma = 1940	sumN = -NaN
-22	fGamma = 2228	sumN = -NaN
-23	fGamma = 2558	sumN = -NaN
-24	fGamma = 2936	sumN = -NaN
-25	fGamma = 3371	sumN = -NaN
-26	fGamma = 3871	sumN = -NaN
-27	fGamma = 4444	sumN = -NaN
-28	fGamma = 5102	sumN = -NaN
-29	fGamma = 5858	sumN = -NaN
-30	fGamma = 6726	sumN = -NaN
-31	fGamma = 7722	sumN = -NaN
-32	fGamma = 8866	sumN = -NaN
-33	fGamma = 1.018e+04	sumN = -NaN
-34	fGamma = 1.169e+04	sumN = -NaN
-35	fGamma = 1.342e+04	sumN = -NaN
-36	fGamma = 1.541e+04	sumN = -NaN
-37	fGamma = 1.769e+04	sumN = -NaN
-38	fGamma = 2.031e+04	sumN = -NaN
-39	fGamma = 2.332e+04	sumN = -NaN
-40	fGamma = 2.677e+04	sumN = -NaN
-41	fGamma = 3.074e+04	sumN = -NaN
-42	fGamma = 3.529e+04	sumN = -NaN
-43	fGamma = 4.052e+04	sumN = -NaN
-44	fGamma = 4.652e+04	sumN = -NaN
-45	fGamma = 5.342e+04	sumN = -NaN
-46	fGamma = 6.133e+04	sumN = -NaN
-47	fGamma = 7.042e+04	sumN = -NaN
-48	fGamma = 8.085e+04	sumN = -NaN
-49	fGamma = 9.283e+04	sumN = -NaN
+Regular transparent X-ray TR  radiator EM process is called
 
-total time for build X-ray TR energy loss tables = 242.2 s
-Em10PhysicsList::SetCuts:CutLength : 1 mm 
+Lorentz Factor	XTR photon number
+
+107.6	0.0007452
+123.4	0.001275
+141.5	0.001982
+162.3	0.003046
+186.2	0.005026
+213.7	0.007482
+245.2	0.01052
+281.3	0.0164
+322.9	0.02706
+370.5	0.04102
+425.3	0.05536
+488.2	0.06845
+560.3	0.08596
+643.2	0.1142
+738.3	0.162
+847.6	0.2389
+973	0.3585
+1117	0.5073
+1282	0.6604
+1472	0.8048
+1690	1.179
+1940	1.606
+2228	1.988
+2558	2.304
+2936	2.557
+3371	2.755
+3871	2.907
+4444	3.022
+5102	3.11
+5858	3.176
+6726	3.227
+7722	3.265
+8866	3.294
+1.018e+04	3.316
+1.169e+04	3.333
+1.342e+04	3.345
+1.541e+04	3.355
+1.769e+04	3.362
+2.031e+04	3.368
+2.332e+04	3.372
+2.677e+04	3.375
+3.074e+04	3.378
+3.529e+04	3.379
+4.052e+04	3.381
+4.652e+04	3.382
+5.342e+04	3.383
+6.133e+04	3.383
+7.042e+04	3.384
+8.085e+04	3.384
+9.283e+04	3.384
+
+total time for build X-ray TR energy loss tables = 0.85 s
 
 phot:  Total cross sections from Sandia parametrisation. 
+Em10PhysicsList::SetCuts:CutLength : 1 mm 
+PAIModel DeltaCutInKineticEnergyNow = 61.9458 keV
+PAIModel DeltaCutInKineticEnergyNow = 61.9458 keV
+PAIModel DeltaCutInKineticEnergyNow = 61.9458 keV
+PAIModel DeltaCutInKineticEnergyNow = 61.9458 keV
+PAIModel DeltaCutInKineticEnergyNow = 61.9458 keV
+PAIModel DeltaCutInKineticEnergyNow = 61.9458 keV
+PAIModel DeltaCutInKineticEnergyNow = 61.9458 keV
+PAIModel DeltaCutInKineticEnergyNow = 61.9458 keV
+PAIModel DeltaCutInKineticEnergyNow = 61.9458 keV
 
-compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
-      Sampling according Klein-Nishina model
-      tables are built for  gamma
-      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according to the Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
-msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.02
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -264,7 +285,7 @@ eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -278,7 +299,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -289,7 +310,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -327,37 +348,44 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary algorithm is active with facrange= 0.02
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Range cuts        :  gamma 1 mm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 990 eV     e- 89.6195 keV    e+ 88.523 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : radiatorMat
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 35.598 keV    e+ 35.1625 keV
+ Range cuts        :  gamma 1 mm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 1.05919 keV    e- 2.09445 MeV    e+ 1.96942 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Mylar
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.97898 keV    e- 417.539 keV    e+ 402.4 keV
+ Material : Air
+ Range cuts        :  gamma 2.3 cm     e- 2.3 cm     e+ 2.3 cm 
+ Energy thresholds :  gamma 990 eV     e- 38.3269 keV    e+ 38.3269 keV
  Region(s) which use this couple : 
-    DefaultRegionForTheWorld
+    XTRradiator
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : Ar7CH4
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Material : Mylar
+ Range cuts        :  gamma 2.3 cm     e- 2.3 cm     e+ 2.3 cm 
+ Energy thresholds :  gamma 10.6962 keV    e- 6.34224 MeV    e+ 5.89067 MeV
  Region(s) which use this couple : 
-    DefaultRegionForTheWorld
+    XTRradiator
+
+Index : 4     used in the geometry : Yes     recalculation needed : No 
+ Material : Xe15CO2
+ Range cuts        :  gamma 2.3 cm     e- 2.3 cm     e+ 2.3 cm 
+ Energy thresholds :  gamma 3.83995 keV    e- 61.9458 keV    e+ 61.1879 keV
+ Region(s) which use this couple : 
+    XTRdEdxDetector
 
 ====================================================================
 
@@ -365,67 +393,89 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 9876, 54321
+ Current couple of seeds = 805317675, 1677695139
 ----------------------------------------
+WARNING: Scene "refresh" not found.
+  /vis/scene/list to see scenes.
 Start Run processing.
 
 ---> Begin of Event: 0
+ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
+  Suppress instantiation of vis manager (G4VisExecutive) or
+  use "/vis/open" or "/vis/sceneHandler/create".
+Tkin of secondary e- <= 0.
+G4PAIModel::SampleSecondary::deltaTkin = 0
+Set G4PAIModel::SampleSecondary::deltaTkin = 1e-05
+Tkin of secondary e- <= 0.
+G4PAIModel::SampleSecondary::deltaTkin = 0
+Set G4PAIModel::SampleSecondary::deltaTkin = 1e-05
+Tkin of secondary e- <= 0.
+G4PAIModel::SampleSecondary::deltaTkin = 0
+Set G4PAIModel::SampleSecondary::deltaTkin = 1e-05
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=11.17s Real=11.33s Sys=0.14s
+  User=30.06s Real=32.03s Sys=1.88s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=16.0529 +- 0.197904  mm  
+    mean charged track length   in absorber=38.4042 +- 0.0471682  mm  
 
-            mean energy deposit in absorber=0.00477119 +- 0.000129782  MeV 
+            mean energy deposit in absorber=0.0555449 +- 0.000815944  MeV 
 
- mean number of steps in absorber (charged) =1.458 +- 0.0409419      
- mean number of steps in absorber (neutral) =0.108 +- 0.0105989      
+ mean number of steps in absorber (charged) =4.709 +- 0.0202563      
+ mean number of steps in absorber (neutral) =3.555 +- 0.0592028      
 
-   mean number of charged secondaries = 0.205 +- 0.0186273
+   mean number of charged secondaries = 0.023 +- 0.00474036
 
-   mean number of neutral secondaries = 0.002 +- 0.0014128
+   mean number of neutral secondaries = 0.041 +- 0.00642799
 
-   mean number of e-s =0.205  and e+s =0
+   mean number of e-s =0.023  and e+s =0
 
-(number) transmission coeff=0.518  reflection coeff=0.002
+(number) transmission coeff=0.498  reflection coeff=0.005
 
+ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1179282853, 1887762536
+ Current couple of seeds = 523332873, 1291571922
 ----------------------------------------
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Range cuts        :  gamma 1 mm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 990 eV     e- 89.619506 keV    e+ 88.523013 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : radiatorMat
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 35.598002 keV    e+ 35.162461 keV
+ Range cuts        :  gamma 1 mm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 1.0591879 keV    e- 2.094452 MeV    e+ 1.9694213 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Mylar
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.978977 keV    e- 417.53934 keV    e+ 402.40033 keV
+ Material : Air
+ Range cuts        :  gamma 2.3 cm     e- 2.3 cm     e+ 2.3 cm 
+ Energy thresholds :  gamma 990 eV     e- 38.326908 keV    e+ 38.326908 keV
  Region(s) which use this couple : 
-    DefaultRegionForTheWorld
+    XTRradiator
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : Ar7CH4
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Material : Mylar
+ Range cuts        :  gamma 2.3 cm     e- 2.3 cm     e+ 2.3 cm 
+ Energy thresholds :  gamma 10.696181 keV    e- 6.3422406 MeV    e+ 5.8906682 MeV
  Region(s) which use this couple : 
-    DefaultRegionForTheWorld
+    XTRradiator
+
+Index : 4     used in the geometry : Yes     recalculation needed : No 
+ Material : Xe15CO2
+ Range cuts        :  gamma 2.3 cm     e- 2.3 cm     e+ 2.3 cm 
+ Energy thresholds :  gamma 3.8399514 keV    e- 61.945787 keV    e+ 61.187882 keV
+ Region(s) which use this couple : 
+    XTRdEdxDetector
 
 ====================================================================
 
