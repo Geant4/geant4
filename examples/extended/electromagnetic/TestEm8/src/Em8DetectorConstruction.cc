@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorConstruction.cc,v 1.17 2004-12-03 10:51:12 vnivanch Exp $
+// $Id: Em8DetectorConstruction.cc,v 1.18 2005-11-01 08:23:48 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,7 +82,7 @@ fCalorimeterSD(NULL),fRegGasDet(NULL)
   // G4double delta = 0.0001*mm;
 
   // fAbsorberThickness = 85.*mm;
-  fAbsorberThickness = 23.0*mm;
+  fAbsorberThickness = 0.3*mm;  // 23.0*mm;
 
   fAbsorberRadius    = 10.*cm;
   fAbsorberZ         = 0.*cm ;
@@ -452,10 +452,11 @@ H2O->AddElement(elO, natoms=1);
   
   // fWindowMat = Mylar ;
  
-  fAbsorberMaterial = XeCH4C3H8;
+  fAbsorberMaterial = Si; // XeCH4C3H8;
+
   // Al; // Si; // Xe; // Ar7CH4; // C3H8; // XeCH4C3H8; 
 
-  fWorldMaterial    = Mylar; // Air ;
+  fWorldMaterial    = Air;  // Mylar; // 
 }
 
 /////////////////////////////////////////////////////////////////////////
