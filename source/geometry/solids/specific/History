@@ -1,4 +1,4 @@
-$Id: History,v 1.64 2005-08-29 16:18:58 gcosmo Exp $
+$Id: History,v 1.65 2005-11-02 16:02:09 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02-Nov-2005, G.Cosmo (geom-specific-V07-01-05)
+- G4Polyhedra, G4Polycone:
+  o Protected case of generic construct for visualization.
+  o Introduced explicit flag and method IsGeneric() to identify the kind
+    of constructor used.
 
 29-Sep-2005, G.Cosmo (geom-specific-V07-01-04)
 - Fix in G4EllipticalCone methods DistanceToIn() and DistanceToOut().
