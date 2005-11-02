@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2005-06-06 09:53:24 gcosmo Exp $
+$Id: History,v 1.17 2005-11-02 16:06:43 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 2nd, 2005      G.Cosmo  (geomdiv-V07-01-00)
+- Protected case of generic construct for G4Polyhedra and G4Polycone
+  currently NOT supported for divisions.
+- Coworks with tag "geom-specific-V07-01-05".
 
 June 6th, 2005          G.Cosmo  (geomdiv-V07-00-00)
 - Fixed compilation problems on unit test.
