@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.25 2005-08-08 10:38:20 danninos Exp $
+// $Id: G4Polycone.cc,v 1.26 2005-11-02 15:59:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,7 +57,7 @@ G4Polycone::G4Polycone( const G4String& name,
                         const G4double zPlane[],
                         const G4double rInner[],
                         const G4double rOuter[]  )
-  : G4VCSGfaceted( name )
+  : G4VCSGfaceted( name ), genericPcon(false)
 {
   //
   // Some historical ugliness
@@ -120,7 +120,7 @@ G4Polycone::G4Polycone( const G4String& name,
                               G4int    numRZ,
                         const G4double r[],
                         const G4double z[]   )
-  : G4VCSGfaceted( name ) 
+  : G4VCSGfaceted( name ), genericPcon(true)
 {
   G4ReduciblePolygon *rz = new G4ReduciblePolygon( r, z, numRZ );
   
@@ -357,6 +357,7 @@ void G4Polycone::CopyStuff( const G4Polycone &source )
   endPhi    = source.endPhi;
   phiIsOpen  = source.phiIsOpen;
   numCorner  = source.numCorner;
+  genericPcon= source.genericPcon;
 
   //
   // The corner array
@@ -391,7 +392,7 @@ void G4Polycone::CopyStuff( const G4Polycone &source )
 //
 G4bool G4Polycone::Reset()
 {
-  if (!original_parameters)
+  if (genericPcon)
   {
     G4cerr << "Solid " << GetName() << " built using generic construct."
            << G4endl << "Specify original parameters first !" << G4endl;
@@ -505,7 +506,7 @@ std::ostream& G4Polycone::StreamInfo( std::ostream& os ) const
      << "    starting phi angle : " << startPhi/degree << " degrees \n"
      << "    ending phi angle   : " << endPhi/degree << " degrees \n";
   G4int i=0;
-  if (original_parameters)
+  if (!genericPcon)
   {
     G4int numPlanes = original_parameters->Num_z_planes;
     os << "    number of Z planes: " << numPlanes << "\n"
@@ -797,7 +798,7 @@ G4Polyhedron* G4Polycone::CreatePolyhedron() const
   //
   // This has to be fixed in visualization. Fake it for the moment.
   // 
-  if (original_parameters)
+  if (!genericPcon)
   {
     return new G4PolyhedronPcon( original_parameters->Start_angle,
                                  original_parameters->Opening_angle,
@@ -809,8 +810,9 @@ G4Polyhedron* G4Polycone::CreatePolyhedron() const
   else
   {
     G4cerr << "ERROR - G4Polycone::CreatePolyhedron(): " << GetName() << G4endl
-           << "        Visualization of this type of G4Polycone" << G4endl
-           << "        is not supported at this time !" << G4endl;
+           << "        Visualization of the 'generic' G4Polycone type" << G4endl
+           << "        is not supported at this time !" << G4endl
+           << "        Use the alternative constructor instead." << G4endl;
     return 0;
   }
 }  

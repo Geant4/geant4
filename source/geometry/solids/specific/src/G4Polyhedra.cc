@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.25 2005-08-08 14:52:20 gcosmo Exp $
+// $Id: G4Polyhedra.cc,v 1.26 2005-11-02 15:59:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,7 +77,7 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
                           const G4double zPlane[],
                           const G4double rInner[],
                           const G4double rOuter[]  )
-  : G4VCSGfaceted( name )
+  : G4VCSGfaceted( name ), genericPgon(false)
 {
   if (theNumSide <= 0)
   {
@@ -161,7 +161,7 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
                                 G4int    numRZ,
                           const G4double r[],
                           const G4double z[]   )
-  : G4VCSGfaceted( name )
+  : G4VCSGfaceted( name ), genericPgon(true)
 { 
   G4ReduciblePolygon *rz = new G4ReduciblePolygon( r, z, numRZ );
   
@@ -404,10 +404,11 @@ void G4Polyhedra::CopyStuff( const G4Polyhedra &source )
   // Simple stuff
   //
   numSide    = source.numSide;
-  startPhi  = source.startPhi;
-  endPhi    = source.endPhi;
+  startPhi   = source.startPhi;
+  endPhi     = source.endPhi;
   phiIsOpen  = source.phiIsOpen;
   numCorner  = source.numCorner;
+  genericPgon= source.genericPgon;
 
   //
   // The corner array
@@ -445,7 +446,7 @@ void G4Polyhedra::CopyStuff( const G4Polyhedra &source )
 //
 G4bool G4Polyhedra::Reset()
 {
-  if (!original_parameters)
+  if (genericPgon)
   {
     G4Exception("G4Polyhedra::Reset()", "NotApplicableConstruct",
                 JustWarning, "Parameters NOT resetted.");
@@ -570,7 +571,7 @@ std::ostream& G4Polyhedra::StreamInfo( std::ostream& os ) const
      << "    starting phi angle : " << startPhi/degree << " degrees \n"
      << "    ending phi angle   : " << endPhi/degree << " degrees \n";
   G4int i=0;
-  if (original_parameters)
+  if (!genericPgon)
   {
     G4int numPlanes = original_parameters->Num_z_planes;
     os << "    number of Z planes: " << numPlanes << "\n"
@@ -868,13 +869,28 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
 //
 G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
 { 
-  return new G4PolyhedronPgon( original_parameters->Start_angle,
-                               original_parameters->Opening_angle,
-                               original_parameters->numSide,
-                               original_parameters->Num_z_planes,
-                               original_parameters->Z_values,
-                               original_parameters->Rmin,
-                               original_parameters->Rmax);
+  //
+  // This has to be fixed in visualization. Fake it for the moment.
+  //
+  if (!genericPgon)
+  {
+    return new G4PolyhedronPgon( original_parameters->Start_angle,
+                                 original_parameters->Opening_angle,
+                                 original_parameters->numSide,
+                                 original_parameters->Num_z_planes,
+                                 original_parameters->Z_values,
+                                 original_parameters->Rmin,
+                                 original_parameters->Rmax);
+  }
+  else
+  {
+    G4cerr << "ERROR - G4Polyhedra::CreatePolyhedron() " << GetName() << G4endl
+           << "        Visualization of the 'generic' G4Polyhedra type"
+           << G4endl
+           << "        is not supported at this time !" << G4endl
+           << "        Use the alternative constructor instead." << G4endl;
+    return 0;
+  }
 }  
 
 

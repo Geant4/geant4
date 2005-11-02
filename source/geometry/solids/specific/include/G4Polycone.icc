@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.icc,v 1.8 2005-08-08 14:52:20 gcosmo Exp $
+// $Id: G4Polycone.icc,v 1.9 2005-11-02 15:59:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -44,9 +44,16 @@ G4double G4Polycone::GetEndPhi() const
   return endPhi;
 }
 
-inline G4bool G4Polycone::IsOpen() const
+inline
+G4bool G4Polycone::IsOpen() const
 {
   return phiIsOpen;
+}
+
+inline
+G4bool G4Polycone::IsGeneric() const
+{
+  return genericPcon;
 }
 
 inline

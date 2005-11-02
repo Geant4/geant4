@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.hh,v 1.16 2005-08-08 14:52:20 gcosmo Exp $
+// $Id: G4Polycone.hh,v 1.17 2005-11-02 15:59:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -131,6 +131,7 @@ class G4Polycone : public G4VCSGfaceted
   inline G4double GetStartPhi()  const;
   inline G4double GetEndPhi()    const;
   inline G4bool IsOpen()         const;
+  inline G4bool IsGeneric()      const;
   inline G4int  GetNumRZCorner() const;
   inline G4PolyconeSideRZ GetCorner(G4int index) const;
   inline G4PolyconeHistorical* GetOriginalParameters() const;
@@ -171,6 +172,7 @@ class G4Polycone : public G4VCSGfaceted
   G4double startPhi;    // Starting phi value (0 < phiStart < 2pi)
   G4double endPhi;      // end phi value (0 < endPhi-phiStart < 2pi)
   G4bool   phiIsOpen;   // true if there is a phi segment
+  G4bool   genericPcon; // true if created through the 2nd generic constructor
   G4int   numCorner;    // number RZ points
   G4PolyconeSideRZ *corners;  // corner r,z points
   G4PolyconeHistorical  *original_parameters;  // original input parameters
