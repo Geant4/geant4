@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2005-10-28 23:58:03 asaim Exp $
+$Id: History,v 1.24 2005-11-02 09:22:02 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 02, 2005 G.Cosmo - param-V07-01-01
+- Corrected setting of envelope volumes and solid in G4FastTrack.
+- Migrated old scheme for G4Exception and some cosmetics...
 
 October 28, 2005 M.Asai - param-V07-01-00
 - Working tag for merging "envelope" to G4Region.
