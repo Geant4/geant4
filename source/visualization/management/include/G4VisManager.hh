@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.40 2005-10-24 14:03:36 allison Exp $
+// $Id: G4VisManager.hh,v 1.41 2005-11-02 16:54:13 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,6 +96,7 @@ class G4UIcommand;
 class G4UImessenger;
 class G4VisStateDependent;
 class G4VUserVisAction;
+class G4VTrajectoryDrawer;
 class G4VTrajectoryModel;
 class G4VTrajectoryModelMaker;
 
@@ -238,6 +239,9 @@ public: // With description
   void GeometryHasChanged ();
   // Used by run manager to notify change.
 
+  void DispatchToCurrentDrawer(const G4VTrajectory&, G4int i_mode);
+  // Draw the trajectory.
+
   void DispatchToCurrentModel(const G4VTrajectory&, G4int i_mode);
   // Draw the trajectory.
 
@@ -378,6 +382,7 @@ protected:
   G4NullModel fVisManagerNullModel;         // As a default.
   G4TrajectoriesModel dummyTrajectoriesModel;  // For passing drawing mode.
   G4ModelingParameters fVisManagerModelingParameters;  // Useful memory.
+  G4VTrajectoryDrawer* fpCurrentTrajectoryDrawer;
   G4VTrajectoryModel* fpCurrentTrajectoryModel;
 };
 

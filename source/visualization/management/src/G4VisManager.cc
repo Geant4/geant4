@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.69 2005-10-26 10:32:13 allison Exp $
+// $Id: G4VisManager.cc,v 1.70 2005-11-02 16:54:13 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,6 +58,7 @@
 #include "G4NullModel.hh"
 #include "G4ModelingParameters.hh"
 #include "G4TransportationManager.hh"
+#include "G4VTrajectoryDrawer.hh"
 #include "G4VTrajectoryModel.hh"
 #include "G4VTrajectoryModelMaker.hh"
 
@@ -75,7 +76,9 @@ G4VisManager::G4VisManager ():
   fVerbosity       (warnings),
   fVerbose         (1),
   fpStateDependent (0),
-  fpCurrentTrajectoryModel(0)  // All other objects use default constructors.
+  fpCurrentTrajectoryDrawer(0),
+  fpCurrentTrajectoryModel(0)
+  // All other objects use default constructors.
 {
   VerbosityGuidanceStrings.push_back
     ("Simple graded message scheme - digit or string (1st character defines):");
@@ -619,6 +622,14 @@ void G4VisManager::GeometryHasChanged () {
     }
   }
 
+}
+
+void G4VisManager::DispatchToCurrentDrawer
+(const G4VTrajectory& traj, G4int i_mode)
+{
+  if (fpCurrentTrajectoryModel) {
+    fpCurrentTrajectoryDrawer->Draw(traj, i_mode);
+  }
 }
 
 void G4VisManager::DispatchToCurrentModel
