@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2005-10-04 09:25:41 gcosmo Exp $
+$Id: History,v 1.4 2005-11-04 14:07:44 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4th November 2005  J.Weng (test34-V07-01-01)
+- Porting to new scheme for G4Region as envelope.
+  Coworks with: gpara-V07-01-01, run-V07-01-03, geommng-V07-01-02,
+  procuts-V07-01-00, param-V07-01-01, raytracer-V07-01-05.
 
 4th October 2005  G.Cosmo (test34-V07-01-00)
 - Corrected GFlashHomoShowerParamterisation to
