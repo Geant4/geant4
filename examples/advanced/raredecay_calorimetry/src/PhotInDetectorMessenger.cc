@@ -21,16 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInDetectorMessenger.cc,v 1.3 2005-11-04 13:51:36 mkossov Exp $
+// $Id: PhotInDetectorMessenger.cc,v 1.4 2005-11-04 16:47:30 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#define debug
+//#define debug
 
 #include "PhotInDetectorMessenger.hh"
 
-PhotInDetectorMessenger::PhotInDetectorMessenger(PhotInDetectorConstruction* PhotInDet):
-PhotInDetector(PhotInDet)
+PhotInDetectorMessenger::PhotInDetectorMessenger(PhotInDetectorConstruction* PhotInDet,
+  PhotInPrimaryGeneratorAction* PhotInGen):
+		PhotInDetector(PhotInDet),PhotInGenerator(PhotInGen)
 { 
 #ifdef debug
   G4cout<<"PhotInDetectorMessenger::Constructor is called"<<G4endl;
@@ -146,7 +147,7 @@ void PhotInDetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValu
   {
     PhotInGenerator->SetProjectileName(newValue);
 #ifdef debug
-    G4cout<<"PhotInDetectorMessenger::SetNewValue: After SetProjName"<<newValue<<G4endl;
+    G4cout<<"PhotInDetectorMessenger::SetNewValue: After SetProjName="<<newValue<<G4endl;
 #endif
   }
   else if( command == setEnergyCmd)

@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInPrimaryGeneratorAction.cc,v 1.3 2005-11-04 13:51:36 mkossov Exp $
+// $Id: PhotInPrimaryGeneratorAction.cc,v 1.4 2005-11-04 16:47:30 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#define debug
+//#define debug
 
 #include "PhotInPrimaryGeneratorAction.hh"
 
@@ -33,7 +33,7 @@ PhotInPrimaryGeneratorAction::PhotInPrimaryGeneratorAction():
   section(1),detector(0),part("gamma"),energy(100.)
 {
 #ifdef debug
-  G4cout<<"PhotInPrimaryGeneratorAction::Constructor: is called"<<G4endl;
+  G4cout<<"PhotInPrimaryGeneratorAction::Constructor: part="<<part<<", E="<<energy<<G4endl;
 #endif
   G4int n_particle = 1;
   particleGun  = new G4ParticleGun(n_particle); // Initialization of the pointer from BODY
@@ -52,9 +52,14 @@ PhotInPrimaryGeneratorAction::~PhotInPrimaryGeneratorAction() {delete particleGu
 void PhotInPrimaryGeneratorAction::SetProjectileName(G4String partName)
 {
 #ifdef debug
-  G4cout<<"PhotInPrimaryGeneratorAction::SetProjectileName: Name="<<partName<<G4endl;
+  G4cout<<"PhotInPrimaryGeneratorAction::SetProjectileName:Before Name="<<partName
+								<<", oldName="<<part<<G4endl;
 #endif
+  //@@ Make a check that such a particle exists (M.K.)
   part=partName;
+#ifdef debug
+  G4cout<<"PhotInPrimaryGeneratorAction::SetProjectileName: After Name="<<part<<G4endl;
+#endif
 }
 
 void PhotInPrimaryGeneratorAction::SetProjectileEnergy(G4double partEnergy)

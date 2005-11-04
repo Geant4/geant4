@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInDetectorMessenger.hh,v 1.3 2005-11-04 13:51:36 mkossov Exp $
+// $Id: PhotInDetectorMessenger.hh,v 1.4 2005-11-04 16:47:30 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -46,7 +46,8 @@
 class PhotInDetectorMessenger: public G4UImessenger
 {
   public:
-    PhotInDetectorMessenger(PhotInDetectorConstruction* detector);
+    PhotInDetectorMessenger(PhotInDetectorConstruction* detector,
+                             PhotInPrimaryGeneratorAction* generator);
     virtual ~PhotInDetectorMessenger();
     
     virtual void SetNewValue(G4UIcommand*, G4String);

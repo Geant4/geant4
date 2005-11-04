@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotIn.cc,v 1.3 2005-11-04 13:51:36 mkossov Exp $
+// $Id: PhotIn.cc,v 1.4 2005-11-04 16:47:30 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -136,9 +136,18 @@ int main(int argc,char** argv)
 #ifdef debug
   G4cout<<"PhotIn: Detector is created with hx="<<hx<<", hy="<<hy<<", hz="<<hz<<G4endl;
 #endif
+    
+  // set user action classes
+  PhotInPrimaryGeneratorAction* primaryGenerator = new PhotInPrimaryGeneratorAction;
+  runManager->SetUserAction(primaryGenerator);
 
-		//PhotInDetectorMessenger* detectorMessenger=new PhotInDetectorMessenger(detector);//Del?
-  new PhotInDetectorMessenger(detector);// Del?
+#ifdef debug
+  G4cout<<"PhotIn: Primary Generator is constructed"<<G4endl;
+#endif
+
+		//PhotInDetectorMessenger* detectorMessenger=
+  //                        new PhotInDetectorMessenger(detector, primaryGenerator);//Del?
+  new PhotInDetectorMessenger(detector, primaryGenerator);
 
 #ifdef debug
   G4cout<<"PhotIn: Detector Messenger is constructed"<<G4endl;
@@ -172,14 +181,6 @@ int main(int argc,char** argv)
 #endif
 
 #endif
-    
-  // set user action classes
-  PhotInPrimaryGeneratorAction* primaryGeneration = new PhotInPrimaryGeneratorAction;
-  runManager->SetUserAction(primaryGeneration);
-
-#ifdef debug
-  G4cout<<"PhotIn: Primary Generator is constructed"<<G4endl;
-#endif
 
   //PhotInPrimaryGeneratorAction* gen = (PhotInPrimaryGeneratorAction*)
   //                       G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction();
@@ -187,7 +188,7 @@ int main(int argc,char** argv)
   //else G4cout<<"---Warning--- PhotIn: PhotInPrimaryGeneratorAction* ="<<gen<<G4endl;
   // In the example detectorMessenger is created only for DetectorConstruction to change it
 
-  primaryGeneration->SetDetector(detector);
+  primaryGenerator->SetDetector(detector);
 
 #ifdef debug
   G4cout<<"PhotIn: Detector is transfered to the primary generator"<<G4endl;
