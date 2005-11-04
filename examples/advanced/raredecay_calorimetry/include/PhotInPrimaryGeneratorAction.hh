@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInPrimaryGeneratorAction.hh,v 1.2 2005-05-31 15:23:01 mkossov Exp $
+// $Id: PhotInPrimaryGeneratorAction.hh,v 1.3 2005-11-04 13:51:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -47,6 +47,8 @@ public:
 
   //void SetSerial(G4bool ser) {serial  = ser;} // Different positions for different setups
   void SetDetector(PhotInDetectorConstruction* det);
+  void SetProjectileName(G4String partName);
+  void SetProjectileEnergy(G4double partEnergy);
   void SetSection(G4int sec)                  // Define position for the particular section
   {
     if(sec<0||sec>PhotInNumSections)
@@ -58,12 +60,15 @@ public:
   }
   //G4bool GetSerial() {return serial;} // Get the setups
   G4int GetSection() {return section;} // Get the starting section
+  G4String GetProjectileName() {return part;} // Get the projectile name
+  G4double GetProjectileEnergy() {return energy;} // Get the projectile energy
 
 private: //--- BODY ---
   G4ParticleGun*                particleGun;
   G4int                         section;
   PhotInDetectorConstruction*   detector;
-
+  G4String                      part;
+  G4double                      energy;
 };
 
 #endif

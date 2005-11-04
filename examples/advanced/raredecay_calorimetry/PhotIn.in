@@ -16,17 +16,19 @@
 ##
 ##
 ##
+#/PhotIn/projParticle gamma
+#/PhotIn/projEnergy 200.
 /PhotIn/setAbsMat Aluminium
-/PhotIn/setGapMat Water
+/PhotIn/setGapMat Scintillator
 /run/dumpRegion
 /run/beamOn 1
 /run/dumpCouples
 ##
 ##
 ##
-/run/setCutForRegion Region0 0.01 mm
-/run/setCutForRegion Region1 0.1 mm
-/run/setCutForRegion Region2 1 mm
-/run/dumpRegion
-/run/beamOn 1
-/run/dumpCouples
+#/run/setCutForRegion Region0 0.01 mm
+#/run/setCutForRegion Region1 0.1 mm
+#/run/setCutForRegion Region2 1 mm
+#/run/dumpRegion
+#/run/beamOn 1
+#/run/dumpCouples

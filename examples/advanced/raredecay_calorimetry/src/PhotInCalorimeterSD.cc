@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInCalorimeterSD.cc,v 1.2 2005-05-31 15:23:01 mkossov Exp $
+// $Id: PhotInCalorimeterSD.cc,v 1.3 2005-11-04 13:51:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#define debug
+//#define debug
 #define errors
 
 #include "PhotInCalorimeterSD.hh"

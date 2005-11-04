@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInRun.cc,v 1.2 2005-05-31 15:23:01 mkossov Exp $
+// $Id: PhotInRun.cc,v 1.3 2005-11-04 13:51:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -78,9 +78,9 @@ void PhotInRun::RecordEvent(const G4Event* evt)
       G4int nHit = CHC->entries();
       for (G4int ii=0;ii<nHit;ii++)
       {
-        totE[i] += (*CHC)[ii]->GetEdep();
-        totL[i] += (*CHC)[ii]->GetTrak();
-        nStep[i] += (*CHC)[ii]->GetNStep();
+        totE[i] += (*CHC)[ii]->GetEDepos();
+        totL[i] += (*CHC)[ii]->GetTrackL();
+        nStep[i]+= (*CHC)[ii]->GetNSteps();
       }
     }
   }

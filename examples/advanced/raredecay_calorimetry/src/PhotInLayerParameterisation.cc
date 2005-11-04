@@ -21,38 +21,36 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInGapParameterisation.cc,v 1.3 2005-11-04 13:51:36 mkossov Exp $
+// $Id: PhotInLayerParameterisation.cc,v 1.1 2005-11-04 13:51:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 //#define debug
 
-#include "PhotInGapParameterisation.hh"
+#include "PhotInLayerParameterisation.hh"
 
-PhotInGapParameterisation::PhotInGapParameterisation()
-:numberOfSlabs(PhotInNOfSlabs),gapMaterial(0),hyTot(1.),hzLay(1.),sampFract(.5) {}
+PhotInLayerParameterisation::PhotInLayerParameterisation()
+:numberOfLayers(PhotInNOfLayers),absMaterial(0),hzTot(1.) {}
 
-PhotInGapParameterisation::~PhotInGapParameterisation() {}
+PhotInLayerParameterisation::~PhotInLayerParameterisation() {}
 
-void PhotInGapParameterisation::ComputeTransformation(const G4int copyNo,
-                                                      G4VPhysicalVolume* physVol) const
+void PhotInLayerParameterisation::ComputeTransformation(const G4int copyNo,
+                                                        G4VPhysicalVolume* physVol) const
 {
-  G4double halfZ = hzLay*sampFract;     // half thichness of a slab of active part of layer
-  G4double halfY = hyTot/numberOfSlabs; // half width of each slab after the subdivision
-  G4double Zposition= halfZ - hzLay;    // Z-Position of all Active Gaps (rest is absorber)
-  G4double Yposition= (copyNo+copyNo)*halfY - (hyTot-halfY); // Trans (y) position of slabs
+  G4double halfZ = hzTot/numberOfLayers; // half width of one layer
+  G4double Zposition= (copyNo+copyNo)*halfZ - (hzTot-halfZ); // Z-positions of hte layers
 #ifdef debug
-  G4cout<<"PhotInGapParameterisation::ComputeTransformation: hZ="<<halfZ<<", hY="<<halfY
-        <<", Z="<<Zposition<<", Y="<<Yposition<<G4endl;
+  G4cout<<"PhotInLayerParameterisation::ComputeTransformation: hZ="<<halfZ
+        <<", Z="<<Zposition<<G4endl;
 #endif
-  G4ThreeVector origin(0,Yposition,Zposition); // 3-vector for positioning of the slabs
-  physVol->SetTranslation(origin);      // Positioning of the slab
-  physVol->SetRotation(0);              // without rotation (which is possible!)
-  physVol->SetName(PhotInSlabName);             // Name of the positioned slab              
+  G4ThreeVector origin(0,0,Zposition);   // 3-vector for positioning of the layers
+  physVol->SetTranslation(origin);       // positioning of the layer
+  physVol->SetRotation(0);               // without rotation (can be turned!)
+  physVol->SetName(PhotInAbsorberName);          // Name of the layer which is primarily absorber
 }
 
-G4Material* PhotInGapParameterisation::ComputeMaterial (const G4int, G4VPhysicalVolume*)
+G4Material* PhotInLayerParameterisation::ComputeMaterial(const G4int, G4VPhysicalVolume*)
 {
-  return gapMaterial;                   // Material can be different for different slabs
+  return absMaterial;                    // MaterialOfAbsorber in diff. layers can be diff.
 }
   

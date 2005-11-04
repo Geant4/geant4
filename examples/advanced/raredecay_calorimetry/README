@@ -1,12 +1,12 @@
-$Id: README,v 1.2 2005-05-31 15:23:01 mkossov Exp $
+$Id: README,v 1.3 2005-11-04 13:51:36 mkossov Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                    Photon_Inefficiency advanced example
-                    ------------------------------------
+     Photon_Inefficiency (raredecay_calorimetry) advanced example
+     ------------------------------------------------------------
 
 
      This example simulates a simplified sandwitch calorimeter (developed from N07).
@@ -129,7 +129,28 @@ $Id: README,v 1.2 2005-05-31 15:23:01 mkossov Exp $
     when the interactive execution starts.
 
  9- UI commands defined in the "Photon_inefficiency" example:
+
+    --------------------------------------------------
  
+    Command : /PhotIn/projParticle
+    Guidance: Select Incident Beam Particle.
+
+    Parameter     : particle
+    Parameter type: s
+    Omittable     : False
+    Candidates    : < List of all Geant4 particles> 
+
+    --------------------------------------------------
+
+    Command : /PhotIn/projEnergy
+    Guidance: Select Energy for the Beam Particle.
+
+    Parameter     : Energy
+    Parameter type: d
+    Omittable     : False
+
+    --------------------------------------------------
+
     Command : /PhotIn/setAbsMat
     Guidance: Select Material of the Absorber.
 
@@ -138,6 +159,7 @@ $Id: README,v 1.2 2005-05-31 15:23:01 mkossov Exp $
     Omittable     : False
     Candidates    : Aluminium liquidArgon Lead Water Scintillator Air Galactic 
 
+    --------------------------------------------------
 
     Command : /PhotIn/setGapMat
     Guidance: Select Material of the Gap.
@@ -147,6 +169,7 @@ $Id: README,v 1.2 2005-05-31 15:23:01 mkossov Exp $
     Omittable     : False
     Candidates    : Aluminium liquidArgon Lead Water Scintillator Air Galactic 
 
+    --------------------------------------------------
 
     Command : /PhoyIn/numberOfLayers
     Guidance: Set number of layers.
@@ -156,6 +179,7 @@ $Id: README,v 1.2 2005-05-31 15:23:01 mkossov Exp $
     Parameter type: i
     Omittable     : False
 
+    --------------------------------------------------
 
     Command : /PhoyIn/numberOfSlabs
     Guidance: Set number of slabs in a layer.
@@ -165,6 +189,7 @@ $Id: README,v 1.2 2005-05-31 15:23:01 mkossov Exp $
     Parameter type: i
     Omittable     : False
 
+    --------------------------------------------------
 
     Command : /PhotIn/serialGeometry
     Guidance: Select calorimeters to be placed in serial or parallel.
@@ -173,6 +198,7 @@ $Id: README,v 1.2 2005-05-31 15:23:01 mkossov Exp $
     Parameter type: b
     Omittable     : False
 
+    --------------------------------------------------
 
     Command : /PhotIn/verbose
     Guidance: Set verbosity of each event.
@@ -182,6 +208,8 @@ $Id: README,v 1.2 2005-05-31 15:23:01 mkossov Exp $
     Parameter type: i
     Omittable     : True
     Default value : taken from the current value
+
+    --------------------------------------------------
 
 General comments about the structure of the example:
 ====================================================
@@ -202,20 +230,44 @@ General comments about the structure of the example:
 4. All cuts are made in the PhotInPhysicsList::SetCuts(), while in future cuts can be more
    complicated than the scaling of the standard cuts and can be out of the Physics List.
 
-The dependency structure (general Constants.hh and PhotIn prefix are skipped).
-==============================================================================
+The dependency structure (general Constants.hh and PhotIn prefix is skipped).
+=============================================================================
 
-               __________________________________________________Main________.
-              /          /         /        /              /     |  |        |
-        VisManager  PhysicsList   /        /              /      | RunAction |
-                                 /        /              /       |  |        |
-                PrimaryGeneratorAction   /    DetectorMessenger  | Run   EventAction
-                                |       /    /           \     \ |  |   /   /
-                         DetectorConstruction             \ StackingAction /
+    .____________________________________________________________Main________.
+    |         /          /         /                  /          |  |        |
+    |   VisManager  PhysicsList   /           DetectorMessenger  | RunAction |
+    |                            /           / /       \     \   |  |        |
+     \                 PrimaryGeneratorAction /         \     \  | Run   EventAction
+      \                         |            /           \     \ |  |   /   /
+        -----------------DetectorConstruction             \ StackingAction /
                         /       |            \             \              /
    LayerParameterization  GapParameterization CalorimeerSD  \            /
                                                    |         \          /
-                                          CalorHitsCollection \        /
+    (defined in the "CalorHit" as a type) CalorHitsCollection \        /
                                                              \ \      /
                                                               CalorHit
-              
+Description of classes:
+=======================
+
+"CalorHit" handles (Reset/Add/Get) EnergyDeposition, TrackLengt, NumberOfSteps of the Hit
+(+ "CalorHitsCollection" a container for CalorHits in different parts of the detector)
+
+"CalorimeerSD" SensetiveDetector, nLay & nSlab definition, Layers & Slabs HitsCollections
+
+"LayerParameterization" & "GapParameterization" parameterization of Layers & Slabs
+
+"DetectorConstruction" create, change, and replace three calorimeters of the example
+
+"StackingAction" calculates number of each kind of particles, their min & max energies
+
+"PrimaryGeneratorAction" ParticleGun of events changes kind of particle, energy, direction
+
+"DetectorMessenger" on flight change of the detector geometry, regions, and HitsCollections
+
+"Run" run manager which can treat/reset information about particles and their energy range
+
+"EventAction" & "RunAction" treat of the collected information of simulation
+
+"PhysicsList" defines physics (now is not used and ReferencePhysicsLists are used instead) 
+
+"VisManager" defines a way of visualization of the particular/overlaped events

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInEventAction.cc,v 1.2 2005-05-31 15:23:01 mkossov Exp $
+// $Id: PhotInEventAction.cc,v 1.3 2005-11-04 13:51:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -36,7 +36,7 @@ PhotInEventAction::PhotInEventAction()
 #ifdef debug
   G4cout<<"PhotInEventAction::Constructor is called"<<G4endl;
 #endif
-  for(G4int i=0; i<PhotInDiNSections; i++)calorimeterCollID[i] = -1;
+  for(G4int i=0; i<PhotInDiNSections; i++) calorimeterCollID[i] = -1; // Reset CalorCollect
 }
 
 PhotInEventAction::~PhotInEventAction(){}
@@ -45,7 +45,7 @@ void PhotInEventAction::BeginOfEventAction(const G4Event*)
 {
   for(G4int i=0; i<PhotInDiNSections; i++)
   {
-    if(calorimeterCollID[i]==-1)
+    if(calorimeterCollID[i]==-1) // Name the unnamed CalorimeterCollections in the Begining
     {
       G4String colName=PhotInColNms[i];
 #ifdef debug
@@ -58,20 +58,20 @@ void PhotInEventAction::BeginOfEventAction(const G4Event*)
 
 void PhotInEventAction::EndOfEventAction(const G4Event* evt)
 {
-  if(verboseLevel==0) return;
-  if(evt->GetEventID()>4 && (evt->GetEventID())%10>(verboseLevel-1)) return;
+  if(verboseLevel==0) return; // Report of the Collection made in SD during this Event
+  if(evt->GetEventID()>4 && (evt->GetEventID())%10>(verboseLevel-1)) return; // Only first
 
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
-  if(!HCE) return;
+  if(!HCE) return; // There is no collected information for this Event
 #ifdef debug
-  G4cerr<<"PhotInEventAction::EndOfEventAction:"<<evt->GetEventID()<<G4endl;
+  G4cerr<<"PhotInEventAction::EndOfEventAction:(HCE#0), Event="<<evt->GetEventID()<<G4endl;
 #endif
   PhotInCalorHitsCollection* CHC = 0;
   for(G4int i=0; i<PhotInDiNSections; i++) // Make final sums for each collection and print
   {
     G4double totE=0.;
     G4double totL=0.;
-    G4int nStep=0;         // @@ Do we need the # of steps ?
+    G4int    nStep=0;
     
     if (HCE) CHC = (PhotInCalorHitsCollection*)(HCE->GetHC(calorimeterCollID[i]));
     if (CHC)
@@ -79,9 +79,9 @@ void PhotInEventAction::EndOfEventAction(const G4Event* evt)
       G4int nHit = CHC->entries();
       for (G4int ii=0; ii<nHit; ii++)
       {
-        totE += (*CHC)[ii]->GetEdep(); 
-        totL += (*CHC)[ii]->GetTrak();
-        nStep += (*CHC)[ii]->GetNStep();
+        totE  += (*CHC)[ii]->GetEDepos(); 
+        totL  += (*CHC)[ii]->GetTrackL();
+        nStep += (*CHC)[ii]->GetNSteps();
       }
     }
 				G4cout<<PhotInColNms[i]<<" : "<<G4endl;
@@ -98,6 +98,7 @@ void PhotInEventAction::EndOfEventAction(const G4Event* evt)
     //      <<"  e+    "<<G4BestUnit(PhotInStackingAction::GetEMinPositron(i),"Energy")
     //      <<G4endl;
     G4cout<<" total track length of neutrons ="<<G4BestUnit(totL,"Length")<<" consists of "
-          <<nStep<<", meanStep="<<G4BestUnit(totL/nStep,"Length")<<G4endl;
+          <<nStep<<" steps, meanStepLength="<<G4BestUnit(totL/nStep,"Length")<<G4endl;
+    //@@ This can be written to the file !!
   }
 }  

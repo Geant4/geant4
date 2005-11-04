@@ -21,53 +21,50 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInDetectorMessenger.hh,v 1.3 2005-11-04 13:51:36 mkossov Exp $
+// $Id: PhotInLayerParameterisation.hh,v 1.1 2005-11-04 13:51:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+//
+//  A parameterisation that describes a series of boxes along Z
+//    The boxes have equal size.
+//
 
-#ifndef PhotInDetectorMessenger_h
-#define PhotInDetectorMessenger_h 1
+#ifndef PhotInLayerParameterisation_H
+#define PhotInLayerParameterisation_H 1
 
 #include "globals.hh"
-#include "G4UImessenger.hh"
-
-#include "PhotInDetectorConstruction.hh"
-#include "PhotInPrimaryGeneratorAction.hh"
-#include "PhotInEventAction.hh"
-
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithABool.hh"
-#include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWithADouble.hh"
+#include "G4VPVParameterisation.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4ThreeVector.hh"
 #include "G4Material.hh"
-#include "G4ParticleTable.hh"
 
-class PhotInDetectorMessenger: public G4UImessenger
-{
-  public:
-    PhotInDetectorMessenger(PhotInDetectorConstruction* detector);
-    virtual ~PhotInDetectorMessenger();
-    
-    virtual void SetNewValue(G4UIcommand*, G4String);
-    virtual G4String GetCurrentValue(G4UIcommand * command);
-    
-  private:
-    PhotInDetectorConstruction* PhotInDetector;
-    PhotInPrimaryGeneratorAction* PhotInGenerator;
-    
-    G4UIdirectory*             PhotInDir;
-    G4UIcmdWithAString*        setPartCmd;
-    G4UIcmdWithADouble*        setEnergyCmd;
-    G4UIcmdWithAString*        AddMaterCmd;
-    G4UIcmdWithAString*        AbsMaterCmd;
-    G4UIcmdWithAString*        GapMaterCmd;
-    G4UIcmdWithAnInteger*      numLayerCmd;
-    G4UIcmdWithAnInteger*      numSlabsCmd;
-    G4UIcmdWithABool*          SerialCmd;
-    G4UIcmdWithAnInteger*      verboseCmd;
+#include "PhotInConstants.hh"
+
+class PhotInLayerParameterisation : public G4VPVParameterisation
+{ 
+public:  // Constructors & Destructors
+  PhotInLayerParameterisation();
+  virtual ~PhotInLayerParameterisation(); // Means that it can be a basic class
+
+  // -v-v-v-v-v- Virtual functions (can be overloaded) -v-v-v-v-v-v-v
+  virtual void ComputeTransformation(const G4int copyNo, G4VPhysicalVolume* physVol) const;
+  virtual G4Material* ComputeMaterial(const G4int copyNo, G4VPhysicalVolume* physVol);
+
+  void SetNumberOfLayers(G4int nl)          { numberOfLayers = nl; }
+  void SetAbsorberMaterial(G4Material* mat) { absMaterial = mat; }
+  void SetHalfTotalThickness(G4double hz)   { hzTot = hz; }
+  G4int GetNumberOfLayers()                 { return numberOfLayers; }
+  G4Material* GetAbsorberMaterial()         { return absMaterial; }
+  G4double GetHalfTotalThickness()          { return hzTot; }
+
+private: // --- BODY ---
+  G4int       numberOfLayers;             // Subdivision of the calorimeter in a few layers
+  G4Material* absMaterial;                // Material of the absorber of the calorimeter
+  G4double    hzTot;                      // TotalThickness of calorimeter to be subdivided
+
 };
 
 
 #endif
+
 

@@ -21,68 +21,33 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInCalorHit.hh,v 1.3 2005-11-04 13:51:36 mkossov Exp $
+// $Id: PhotInConstants.hh,v 1.1 2005-11-04 13:51:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#ifndef PhotInCalorHit_h
-#define PhotInCalorHit_h 1
+#ifndef PhotInConstants_h
+#define PhotInConstants_h 1
 
-#include "G4VHit.hh"
-#include "G4THitsCollection.hh"
-#include "G4Allocator.hh"
+#include "globals.hh"
 
-class PhotInCalorHit : public G4VHit
-{
-public:
-  PhotInCalorHit();
-  virtual ~PhotInCalorHit();
-  PhotInCalorHit(const PhotInCalorHit&);
-  const PhotInCalorHit& operator=(const PhotInCalorHit&);
-  int operator==(const PhotInCalorHit&) const;
-
-  inline void* operator new(size_t);
-  inline void  operator delete(void*);
-
-  virtual void Draw();
-  virtual void Print();
-      
-  void AddEnergy(G4double de) { Edep += de; }
-
-  void AddStep(G4double dl)
-  {
-    TrackLength += dl; 
-    nSteps++;
-  }
-  void ResetEDepos() { Edep=0.; }
-  void ResetTrackL() { TrackLength=0.; }
-  void ResetNSteps() { nSteps=0; }
-
-  G4double GetEDepos() const { return Edep; }
-  G4double GetTrackL() const { return TrackLength; }
-  G4int    GetNSteps() const { return nSteps; }
-    
-private: //--- BODY ---
-  G4double Edep;
-  G4double TrackLength;
-  G4int    nSteps;
-};
-
-typedef G4THitsCollection<PhotInCalorHit> PhotInCalorHitsCollection;
-
-extern G4Allocator<PhotInCalorHit> PhotInCalorHitAllocator;
-
-inline void* PhotInCalorHit::operator new(size_t)
-{
-  void* aHit;
-  aHit = (void*) PhotInCalorHitAllocator.MallocSingle();
-  return aHit;
-}
-
-inline void PhotInCalorHit::operator delete(void* aHit)
-  { PhotInCalorHitAllocator.FreeSingle((PhotInCalorHit*) aHit); }
-
+static const G4int PhotInNumCollections=2; // The # of hit collections in each section
+static const G4int PhotInNumSections=3;    // The # of sections in the example
+static const G4int PhotInDiNSections=PhotInNumSections*PhotInNumCollections;
+static const G4int PhotInNOfLayers=10;     // Default # of Layers
+static const G4int PhotInNOfSlabs=10;      // Default # of Slabs
+static const G4double PhotInSampFract=0.5; // Default sampling fraction
+static const G4String PhotInAbsorberName = "Absorber";
+static const G4String PhotInSlabName     = "Slab";
+static const G4String PhotInCalName[PhotInNumSections] = {"Sect-0","Sect-1","Sect-2"};
+static const G4String PhotInRegName[PhotInNumSections] = {"Region0","Region1","Region2"};
+static const G4String PhotInDetName[PhotInNumSections] = {"CalSD-0","CalSD-1","CalSD-2"};
+static const G4String PhotInCollect[PhotInNumSections] =
+                                                  {"AbsorberCollection","SlabsCollection"};
+//@@Can make in PhotInDetectorConstruction::Construct() using PhotInDetName & PhotInCollect
+static const G4String PhotInColNms[PhotInDiNSections] = {
+  PhotInDetName[0]+"/"+PhotInCollect[0], PhotInDetName[0]+"/"+PhotInCollect[1],
+  PhotInDetName[1]+"/"+PhotInCollect[0], PhotInDetName[1]+"/"+PhotInCollect[1],
+  PhotInDetName[2]+"/"+PhotInCollect[0], PhotInDetName[2]+"/"+PhotInCollect[1]};
 
 #endif
-
 

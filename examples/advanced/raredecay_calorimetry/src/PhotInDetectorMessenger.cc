@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInDetectorMessenger.cc,v 1.2 2005-05-31 15:23:01 mkossov Exp $
+// $Id: PhotInDetectorMessenger.cc,v 1.3 2005-11-04 13:51:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -51,6 +51,28 @@ PhotInDetector(PhotInDet)
     matList += (*matTbl)[i]->GetName();
     matList += " ";
   }
+
+  // Make a list of existing particles separated by a space
+  G4String partList;
+  //const G4ParticleTable* partTbl = G4ParticleTable::GetParticleTable();
+  for(G4int j=0; j<G4ParticleTable::GetParticleTable()->size(); j++)
+  {
+    G4String newName=G4ParticleTable::GetParticleTable()->GetParticleName(j);
+    partList += newName;
+    partList += " ";
+  }
+
+  setPartCmd = new G4UIcmdWithAString("/PhotIn/projParticle",this);
+  setPartCmd->SetGuidance("Select Incident Beam Particle.");
+  setPartCmd->SetParameterName("particle",false);
+  setPartCmd->AvailableForStates(G4State_Idle);
+  setPartCmd->SetCandidates(partList);
+
+  setEnergyCmd = new G4UIcmdWithADouble("/PhotIn/projEnergy",this);
+  setEnergyCmd->SetGuidance("Set energy of the beam particle.");
+  setEnergyCmd->SetParameterName("Energy",false);
+  setEnergyCmd->AvailableForStates(G4State_Idle);
+  setEnergyCmd->SetRange("Energy>0");
 
   AbsMaterCmd = new G4UIcmdWithAString("/PhotIn/setAbsMat",this);
   AbsMaterCmd->SetGuidance("Select Material of the Absorber.");
@@ -90,6 +112,8 @@ PhotInDetector(PhotInDet)
 PhotInDetectorMessenger::~PhotInDetectorMessenger()
 {
   delete AddMaterCmd;
+  delete setPartCmd;
+  delete setEnergyCmd;
   delete AbsMaterCmd;
   delete GapMaterCmd;
   delete numLayerCmd;
@@ -117,17 +141,25 @@ void PhotInDetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValu
     }
     GapMaterCmd->SetCandidates(matList);
     AbsMaterCmd->SetCandidates(matList);
-
   }
+  else if( command == setPartCmd  )
+  {
+    PhotInGenerator->SetProjectileName(newValue);
+#ifdef debug
+    G4cout<<"PhotInDetectorMessenger::SetNewValue: After SetProjName"<<newValue<<G4endl;
+#endif
+  }
+  else if( command == setEnergyCmd)
+    PhotInGenerator->SetProjectileEnergy(setEnergyCmd->GetNewDoubleValue(newValue));
   else if( command == AbsMaterCmd ) PhotInDetector->SetAbsorberMaterial(newValue);
   else if( command == GapMaterCmd ) PhotInDetector->SetGapMaterial(newValue);
   else if( command == numLayerCmd )
     PhotInDetector->SetNumberOfLayers(numLayerCmd->GetNewIntValue(newValue));
   else if( command == numSlabsCmd )
     PhotInDetector->SetNumberOfSlabs(numSlabsCmd->GetNewIntValue(newValue));
-  else if( command == SerialCmd )
+  else if( command == SerialCmd   )
     PhotInDetector->SetSerialGeometry(SerialCmd->GetNewBoolValue(newValue));
-  else if( command == verboseCmd )
+  else if( command == verboseCmd  )
    PhotInEventAction::SetVerboseLevel(verboseCmd->GetNewIntValue(newValue));
   else G4cerr<<"***PhotInDetectorMessenger::SetNewValue: Command not found"<<G4endl;
 }
@@ -136,6 +168,9 @@ G4String PhotInDetectorMessenger::GetCurrentValue(G4UIcommand * command)
 {
   G4String ans;
   if( command == AbsMaterCmd ) ans=PhotInDetector->GetAbsorberMaterial();
+  else if( command == setPartCmd  ) ans=PhotInGenerator->GetProjectileName();
+  else if( command == setEnergyCmd )
+    ans=setEnergyCmd->ConvertToString(PhotInGenerator->GetProjectileEnergy());
   else if( command == GapMaterCmd ) ans=PhotInDetector->GetGapMaterial();
   else if( command == numLayerCmd )
     ans=numLayerCmd->ConvertToString(PhotInDetector->GetNumberOfLayers());

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotIn.cc,v 1.2 2005-05-31 15:23:01 mkossov Exp $
+// $Id: PhotIn.cc,v 1.3 2005-11-04 13:51:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,6 +43,7 @@
 #ifdef G4VIS_USE
 #include "PhotInVisManager.hh"
 #endif
+
 #include "PhotInDetectorConstruction.hh"
 #include "PhotInDetectorMessenger.hh"
 #include "PhotInPhysicsList.hh"
@@ -50,6 +51,55 @@
 #include "PhotInRunAction.hh"
 #include "PhotInEventAction.hh"
 #include "PhotInStackingAction.hh"
+
+// === Old Reference Physics Lists ===
+#include "FTFC.hh"
+#include "FTFP.hh"
+#include "LBE.hh"
+#include "LHEP.hh"
+#include "LHEP_BERT.hh"
+#include "LHEP_BERT_HP.hh"
+#include "LHEP_BIC.hh"
+#include "LHEP_BIC_HP.hh"
+#include "LHEP_GN.hh"
+#include "LHEP_HP.hh"
+#include "LHEP_LEAD.hh"
+#include "LHEP_LEAD_HP.hh"
+#include "LHEP_PRECO.hh"
+#include "LHEP_PRECO_HP.hh"
+#include "QGSC.hh"
+#include "QGSC_LEAD.hh"
+#include "QGSC_LEAD_HP.hh"
+#include "QGSP.hh"
+#include "QGSP_BERT.hh"
+#include "QGSP_BIC.hh"
+#include "QGSP_GN.hh"
+#include "QGSP_HP.hh"
+
+#include "G4ModularPhysicsList.hh"
+// === Corresponding New Reference Physics Lists ===
+#include "G4PL_FTFC_CASP.hh"
+#include "G4PL_FTFP_CASP.hh"
+#include "G4PL_UNDERGROUND.hh"
+#include "G4PL_LHEP_CASP.hh"
+#include "G4PL_LHEP_BERT.hh"
+#include "G4PL_LHEP_BERT_HP.hh"
+#include "G4PL_LHEP_BINC.hh"
+#include "G4PL_LHEP_BINC_HP.hh"
+#include "G4PL_LHEP_CASP_GN.hh"
+#include "G4PL_LHEP_CASP_HP.hh"
+#include "G4PL_LHEP_MARS.hh"
+#include "G4PL_LHEP_MARS_HP.hh"
+#include "G4PL_LHEP_PREC.hh"
+#include "G4PL_LHEP_PREC_HP.hh"
+#include "G4PL_QGSC_CASP.hh"
+#include "G4PL_QGSC_MARS.hh"
+#include "G4PL_QGSC_MARS_HP.hh"
+#include "G4PL_QGSP_CASP.hh"
+#include "G4PL_QGSP_BERT.hh"
+#include "G4PL_QGSP_BINC.hh"
+#include "G4PL_QGSP_CASP_GN.hh"
+#include "G4PL_QGSP_CASP_GN_HP.hh"
 
 int main(int argc,char** argv)
 {
@@ -62,6 +112,18 @@ int main(int argc,char** argv)
 
 #ifdef debug
   G4cout<<"PhotIn: Run manager is created"<<G4endl;
+#endif
+
+  //PhotInPhysicsList* physList = new PhotInPhysicsList; // Del? M.K.
+  //
+#ifdef debug
+  //G4cout<<"PhotIn: Physics List is constructed"<<G4endl;
+#endif
+  //
+  //runManager->SetUserInitialization(physList);
+  //
+#ifdef debug
+  //G4cout<<"PhotIn: Physics List is transfered to Run Manager"<<G4endl;
 #endif
 
  // set mandatory initialization classes
@@ -88,16 +150,17 @@ int main(int argc,char** argv)
   G4cout<<"PhotIn: Detector Messenger is constructed"<<G4endl;
 #endif
 
-  PhotInPhysicsList* physList = new PhotInPhysicsList; // Del? M.K.
+  //***LOOKHERE*** CHOOSE THE PHYSICS LIST.
+  // ==== Initialization of old RPL ====
+  runManager->SetUserInitialization(new LHEP);     // LHEP     
+  // ==== Initialization of new RPL ====
+  //runManager->SetUserInitialization(new G4PL_LHEP_CASP);     // LHEP     
+  // ==== Initialization of Modular Physics List ====
+  //runManager->SetUserInitialization(new G4ModularPhysicsList);     // MPL     
+  //***endLOOKHERE***
 
 #ifdef debug
-  G4cout<<"PhotIn: Physics List is constructed"<<G4endl;
-#endif
-
-  runManager->SetUserInitialization(physList);
-
-#ifdef debug
-  G4cout<<"PhotIn: Physics List is transfered to Run Manager"<<G4endl;
+  G4cout<<"PhotIn: Old Reference Physics List QGSP is initialized"<<G4endl;
 #endif
   
 #ifdef G4VIS_USE

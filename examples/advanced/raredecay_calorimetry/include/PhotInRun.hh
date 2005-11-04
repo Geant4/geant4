@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInRun.hh,v 1.2 2005-05-31 15:23:01 mkossov Exp $
+// $Id: PhotInRun.hh,v 1.3 2005-11-04 13:51:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -66,10 +66,24 @@ class PhotInRun : public G4Run
     G4int nGamma[PhotInDiNSections];
     G4int nElectron[PhotInDiNSections];
     G4int nPositron[PhotInDiNSections];
+    G4int nProton[PhotInDiNSections];
+    G4int nNeutron[PhotInDiNSections];
+    G4int nPion[PhotInDiNSections];
+    G4int nKaon[PhotInDiNSections];
     G4double eMinGamma[PhotInDiNSections];
     G4double eMinElectron[PhotInDiNSections];
     G4double eMinPositron[PhotInDiNSections];
-
+    G4double eMinProton[PhotInDiNSections];
+    G4double eMinNeutron[PhotInDiNSections];
+    G4double eMinPion[PhotInDiNSections];
+    G4double eMinKaon[PhotInDiNSections];
+    G4double eMaxGamma[PhotInDiNSections];
+    G4double eMaxElectron[PhotInDiNSections];
+    G4double eMaxPositron[PhotInDiNSections];
+    G4double eMaxProton[PhotInDiNSections];
+    G4double eMaxNeutron[PhotInDiNSections];
+    G4double eMaxPion[PhotInDiNSections];
+    G4double eMaxKaon[PhotInDiNSections];
 };
 
 extern G4Allocator<PhotInRun> anPhotInRunAllocator;

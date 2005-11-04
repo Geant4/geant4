@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInPrimaryGeneratorAction.cc,v 1.2 2005-05-31 15:23:01 mkossov Exp $
+// $Id: PhotInPrimaryGeneratorAction.cc,v 1.3 2005-11-04 13:51:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -30,7 +30,7 @@
 #include "PhotInPrimaryGeneratorAction.hh"
 
 PhotInPrimaryGeneratorAction::PhotInPrimaryGeneratorAction():
-  section(1),detector(0)
+  section(1),detector(0),part("gamma"),energy(100.)
 {
 #ifdef debug
   G4cout<<"PhotInPrimaryGeneratorAction::Constructor: is called"<<G4endl;
@@ -41,14 +41,30 @@ PhotInPrimaryGeneratorAction::PhotInPrimaryGeneratorAction():
   // default particle kinematic
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
-  G4ParticleDefinition* particle = particleTable->FindParticle(particleName="gamma");//@@
+  G4ParticleDefinition* particle = particleTable->FindParticle(particleName=part);
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticleEnergy(100.*GeV); // @@ Make a possibility to change on flight
+  particleGun->SetParticleEnergy(energy*GeV);
 }
 
 PhotInPrimaryGeneratorAction::~PhotInPrimaryGeneratorAction() {delete particleGun;}
 
+void PhotInPrimaryGeneratorAction::SetProjectileName(G4String partName)
+{
+#ifdef debug
+  G4cout<<"PhotInPrimaryGeneratorAction::SetProjectileName: Name="<<partName<<G4endl;
+#endif
+  part=partName;
+}
+
+void PhotInPrimaryGeneratorAction::SetProjectileEnergy(G4double partEnergy)
+{
+#ifdef debug
+  G4cout<<"PhotInPrimaryGeneratorAction::SetProjectileEnergy: E="<<partEnergy<<G4endl;
+#endif
+  energy=partEnergy;
+}
+ 
 void PhotInPrimaryGeneratorAction::SetDetector(PhotInDetectorConstruction* det)
 {
 #ifdef debug
