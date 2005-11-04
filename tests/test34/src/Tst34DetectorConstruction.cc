@@ -146,15 +146,19 @@ G4VPhysicalVolume* Tst34DetectorConstruction::Construct()
 
   m_calo_log->SetVisAttributes(CaloVisAtt);
   m_calo_log->SetSensitiveDetector(CaloSD);
+	// define the parameterisation region
+  aRegion = new G4Region("crystals");
+  m_calo_log->SetRegion(aRegion);
+  aRegion->AddRootLogicalVolume(m_calo_log);
 
   /**********************************************
   * Initializing shower modell
   ***********************************************/
   G4cout << "Shower parameterization" << G4endl;
-  m_theFastShowerModel = new GFlashShowerModel("fastShowerModel",m_calo_log);
+  m_theFastShowerModel = new GFlashShowerModel("fastShowerModel",aRegion);
   m_theParametrisation =
     new GFlashHomoShowerParameterisation(matManager->getMaterial(mat));
-  m_theFastShowerModel->SetParametrisation(*m_theParametrisation);
+  m_theFastShowerModel->SetParameterisation(*m_theParametrisation);
   m_theFastShowerModel->SetParticleBounds(*m_theParticleBounds) ;
   m_theFastShowerModel->SetHitMaker(*m_theHMaker); 
   G4cout << "end shower parameterization" << G4endl;
