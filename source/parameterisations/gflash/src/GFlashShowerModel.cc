@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: GFlashShowerModel.cc,v 1.6 2005-10-04 09:08:33 gcosmo Exp $
+// $Id: GFlashShowerModel.cc,v 1.7 2005-11-04 09:59:12 weng Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,7 +53,7 @@
 
 
 GFlashShowerModel::GFlashShowerModel(G4String modelName,
-                                     G4LogicalVolume* envelope)
+                                     G4Envelope* envelope)
   : G4VFastSimulationModel(modelName, envelope)
 {
   FlagParamType           = 0;
@@ -103,7 +103,7 @@ G4bool GFlashShowerModel::ModelTrigger(const G4FastTrack & fastTrack )
     {
       // check conditions depending on particle flavour
       // performance to be optimized @@@@@@@
-      Parametrisation->GenerateLongitudinalProfile(ParticleEnergy);
+      Parameterisation->GenerateLongitudinalProfile(ParticleEnergy);
       select     = CheckParticleDefAndContainment(fastTrack);  
       if (select) EnergyStop= PBound->GetEneToKill(ParticleType);
     }
@@ -144,8 +144,8 @@ G4bool GFlashShowerModel::CheckContainment(const G4FastTrack& fastTrack)
   // Shower in direction perpendicular to OrthoShower and DirectionShower
   CrossShower = DirectionShower.cross(OrthoShower);
   
-  G4double  R     = Parametrisation->GetAveR90();
-  G4double  Z     = Parametrisation->GetAveT90();
+  G4double  R     = Parameterisation->GetAveR90();
+  G4double  Z     = Parameterisation->GetAveT90();
   G4int CosPhi[4] = {1,0,-1,0};
   G4int SinPhi[4] = {0,1,0,-1};
   
@@ -210,7 +210,7 @@ GFlashShowerModel::ElectronDoIt(const G4FastTrack& fastTrack,
   //--------------------------------
   ///Generate longitudinal profile
   //--------------------------------
-  Parametrisation->GenerateLongitudinalProfile(Energy);
+  Parameterisation->GenerateLongitudinalProfile(Energy);
     // performane iteration @@@@@@@
   
   ///Initialisation of long. loop variables
@@ -245,7 +245,7 @@ GFlashShowerModel::ElectronDoIt(const G4FastTrack& fastTrack,
   do
   {  
     //determine step size=min(1Xo,next boundary)
-    G4double stepLength = StepInX0*Parametrisation->GetX0();
+    G4double stepLength = StepInX0*Parameterisation->GetX0();
     if(Bound < stepLength)
     { 
       Dz    = Bound;
@@ -262,17 +262,17 @@ GFlashShowerModel::ElectronDoIt(const G4FastTrack& fastTrack,
     if(EnergyNow > EnergyStop)
     {
       LastEneIntegral  = EneIntegral;
-      EneIntegral      = Parametrisation->IntegrateEneLongitudinal(ZEndStep);
+      EneIntegral      = Parameterisation->IntegrateEneLongitudinal(ZEndStep);
       DEne             = std::min( EnergyNow, (EneIntegral-LastEneIntegral)*Energy);
       LastNspIntegral  = NspIntegral;
-      NspIntegral      = Parametrisation->IntegrateNspLongitudinal(ZEndStep);
-      DNsp             = std::max(1., std::floor( (NspIntegral-LastNspIntegral)*Parametrisation->GetNspot() ) );
+      NspIntegral      = Parameterisation->IntegrateNspLongitudinal(ZEndStep);
+      DNsp             = std::max(1., std::floor( (NspIntegral-LastNspIntegral)*Parameterisation->GetNspot() ) );
     }
     // end of the shower
     else
     {    
       DEne             = EnergyNow;
-      DNsp             = std::max(1., std::floor( (1.- NspIntegral)*Parametrisation->GetNspot() ));
+      DNsp             = std::max(1., std::floor( (1.- NspIntegral)*Parameterisation->GetNspot() ));
     } 
     EnergyNow  = EnergyNow - DEne;
     
@@ -293,8 +293,8 @@ GFlashShowerModel::ElectronDoIt(const G4FastTrack& fastTrack,
       
       //Spot energy: the same for all spots
       Spot.SetEnergy( DEne / DNsp );
-      G4double PhiSpot = Parametrisation->GeneratePhi(); // phi of spot
-      G4double RSpot   = Parametrisation                 // radius of spot
+      G4double PhiSpot = Parameterisation->GeneratePhi(); // phi of spot
+      G4double RSpot   = Parameterisation                 // radius of spot
                          ->GenerateRadius(i,Energy,ZEndStep-Dz/2.);
 
       // check reference-> may be need to introduce rot matrix @@@

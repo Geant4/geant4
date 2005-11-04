@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GFlashShowerModel.hh,v 1.4 2005-10-04 09:08:33 gcosmo Exp $
+// $Id: GFlashShowerModel.hh,v 1.5 2005-11-04 09:59:28 weng Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -59,7 +59,7 @@ class GFlashShowerModel : public G4VFastSimulationModel
   public:
 
     /// Constructor, destructor
-    GFlashShowerModel (G4String, G4LogicalVolume*);
+    GFlashShowerModel (G4String, G4Envelope*);
     GFlashShowerModel (G4String);
     ~GFlashShowerModel ();  
   
@@ -76,8 +76,8 @@ class GFlashShowerModel : public G4VFastSimulationModel
       { FlagParticleContainment = I; }
     inline void SetStepInX0(G4double Lenght)
       { StepInX0=Lenght; }
-    inline void SetParametrisation(GFlashHomoShowerParameterisation &DP)
-      { Parametrisation=&DP;}
+    inline void SetParameterisation(GFlashHomoShowerParameterisation &DP)
+      { Parameterisation=&DP;}
     inline void SetHitMaker(GFlashHitMaker &Maker)
       { HMaker=&Maker; }
     inline void SetParticleBounds(GFlashParticleBounds &SpecificBound)
@@ -95,7 +95,7 @@ class GFlashShowerModel : public G4VFastSimulationModel
   
   private:
 
-    GFlashHomoShowerParameterisation *Parametrisation;  
+    GFlashHomoShowerParameterisation *Parameterisation;  
     GFlashHitMaker *HMaker;  
     GFlashShowerModelMessenger* Messenger;
   
