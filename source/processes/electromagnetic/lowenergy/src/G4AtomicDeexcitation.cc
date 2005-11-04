@@ -311,7 +311,7 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
 
       // Now we have that shellnum is the shellIndex of the shell named ShellId
 
-      G4cout << " the index of the shell is: "<<shellNum<<G4endl;
+      //      G4cout << " the index of the shell is: "<<shellNum<<G4endl;
 
       // But we have now to select two shells: one for the transition, 
       // and another for the auger emission.
