@@ -21,14 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4strstreambuf.hh,v 1.13 2005-10-26 05:54:19 kmura Exp $
+// $Id: G4strstreambuf.hh,v 1.14 2005-11-04 08:18:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ====================================================================
-//   G4strstreambuf.hh
 //
-//   28/Nov/2005  K. Murakami
-//   - revised version of stream buffer class
-//   - disuse of "strsteam" because it has been obsolete in ANSI C++.
+//   G4strstreambuf
 //
 // ====================================================================
 #ifndef G4_STR_STREAM_BUF_HH
@@ -48,30 +45,32 @@ extern G4DLLIMPORT G4strstreambuf G4coutbuf;
 extern G4DLLIMPORT G4strstreambuf G4cerrbuf;
 #endif
 
-class G4strstreambuf : public std::basic_streambuf<char> {
-private:
-  char* buffer;
-  G4int count, size;
-  G4coutDestination* destination;
+class G4strstreambuf : public std::basic_streambuf<char>
+{
+  public:
 
-  // hiden...
-  G4strstreambuf(const G4strstreambuf&);
-  G4strstreambuf& operator=(const G4strstreambuf&);
-  
-public:
-  G4strstreambuf();
-  ~G4strstreambuf();
+    G4strstreambuf();
+    ~G4strstreambuf();
     
-  virtual G4int overflow(G4int c=EOF);
-  virtual G4int sync();
+    virtual G4int overflow(G4int c=EOF);
+    virtual G4int sync();
 
 #ifdef WIN32
-  virtual G4int underflow();
+    virtual G4int underflow();
 #endif
 
-  void SetDestination(G4coutDestination* dest);
-  G4int ReceiveString ();
+    void SetDestination(G4coutDestination* dest);
+    G4int ReceiveString ();
   
+  private:
+
+    char* buffer;
+    G4int count, size;
+    G4coutDestination* destination;
+
+    // hidden...
+    G4strstreambuf(const G4strstreambuf&);
+    G4strstreambuf& operator=(const G4strstreambuf&);
 };
 
 #include "G4strstreambuf.icc"

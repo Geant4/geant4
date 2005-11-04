@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Normal3D.hh,v 1.3 2001-07-11 10:00:38 gunter Exp $
+// $Id: G4Normal3D.hh,v 1.4 2005-11-04 08:18:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NORMAL3D_HH
@@ -30,6 +30,6 @@
 #include "globals.hh"
 #include <CLHEP/Geometry/Normal3D.h>
 
-typedef HepNormal3D G4Normal3D;
+typedef HepGeom::Normal3D<G4double> G4Normal3D;
 
 #endif /* G4NORMAL3D_HH */

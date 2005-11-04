@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ThreeVector.hh,v 1.3 2001-07-11 10:00:51 gunter Exp $
+// $Id: G4ThreeVector.hh,v 1.4 2005-11-04 08:18:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,6 @@
 #include "globals.hh"
 #include <CLHEP/Vector/ThreeVector.h>
 
-typedef Hep3Vector G4ThreeVector;
+typedef CLHEP::Hep3Vector G4ThreeVector;
 
 #endif

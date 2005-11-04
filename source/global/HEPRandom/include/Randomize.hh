@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Randomize.hh,v 1.5 2001-07-11 10:00:43 gunter Exp $
+// $Id: Randomize.hh,v 1.6 2005-11-04 08:18:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef randomize_h
@@ -38,7 +38,7 @@
 #include <CLHEP/Random/RandLandau.h>
 #include <CLHEP/Random/RandBit.h>
 
-#define G4RandGauss RandGaussQ
-#define G4UniformRand() HepRandom::getTheEngine()->flat()
+#define G4RandGauss CLHEP::RandGaussQ
+#define G4UniformRand() CLHEP::HepRandom::getTheEngine()->flat()
 
 #endif // randomize_h 

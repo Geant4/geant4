@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LorentzRotation.hh,v 1.3 2001-07-11 10:00:38 gunter Exp $
+// $Id: G4LorentzRotation.hh,v 1.4 2005-11-04 08:18:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4LorentzRotation_hh
@@ -30,7 +30,7 @@
 #include "globals.hh"
 #include <CLHEP/Vector/LorentzRotation.h>
 
-typedef HepLorentzRotation G4LorentzRotation;
+typedef CLHEP::HepLorentzRotation G4LorentzRotation;
 
 #endif // G4LorentzRotation_hh
 

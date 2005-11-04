@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Plane3D.hh,v 1.3 2001-07-11 10:00:38 gunter Exp $
+// $Id: G4Plane3D.hh,v 1.4 2005-11-04 08:18:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4PLANE3D_HH
@@ -32,6 +32,6 @@
 #include "G4Normal3D.hh"
 #include <CLHEP/Geometry/Plane3D.h>
 
-typedef HepPlane3D G4Plane3D;
+typedef HepGeom::Plane3D<G4double> G4Plane3D;
 
 #endif /* G4PLANE3D_HH */
