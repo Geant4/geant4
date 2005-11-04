@@ -129,7 +129,8 @@ G4VPhysicalVolume* ExGflashDetectorConstruction::Construct()
 	"calorimeter",						//its name
 	m_experimentalHall_log,  			//its mother  volume
 	false,                  			//no boolean operation
-	1);			       					//Visibility
+	1);
+			       					//Visibility
 	for (int i=0; i<m_NbOfCrystals;i++)
 	{
 		
@@ -141,7 +142,7 @@ G4VPhysicalVolume* ExGflashDetectorConstruction::Construct()
 			m_crystal_log[n] = new G4LogicalVolume(m_crystal[n],	//its solid
 			matManager->getMaterial(mat),							//its material
 			"Crystal_log");											//its name
-			
+	      
 			m_crystal_phys[n] = new G4PVPlacement(0,				//no rotation
 			G4ThreeVector((i*m_CrystalWidht)-135,(j*m_CrystalWidht)-135,0 ),			//at (0,0,0)
 			m_crystal_log[n],										//its logical volume				     
@@ -171,12 +172,17 @@ G4VPhysicalVolume* ExGflashDetectorConstruction::Construct()
 		m_crystal_log[i]->SetVisAttributes(CrystalVisAtt);
 		m_crystal_log[i]->SetSensitiveDetector(CaloSD);
 	}
+	// define the parameterisation region
+	aRegion = new G4Region("crystals");
+	m_calo_log->SetRegion(aRegion);
+	aRegion->AddRootLogicalVolume(m_calo_log);
+  
 	
 	/**********************************************
 	* Initializing shower modell
 	***********************************************/	
 	cout<<"Shower parameterization"<<endl;
-	m_theFastShowerModel =  new GFlashShowerModel("fastShowerModel",m_calo_log);
+	m_theFastShowerModel =  new GFlashShowerModel("fastShowerModel",aRegion);
 	m_theParameterisation = new GFlashHomoShowerParameterisation(matManager->getMaterial(mat));
 	m_theFastShowerModel->SetParametrisation(*m_theParameterisation);
 	m_theFastShowerModel->SetParticleBounds(*m_theParticleBounds) ;
@@ -186,8 +192,6 @@ G4VPhysicalVolume* ExGflashDetectorConstruction::Construct()
 	
 	return m_experimentalHall_phys;
 }
-
-
 
 
 

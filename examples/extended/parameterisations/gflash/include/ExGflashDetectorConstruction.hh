@@ -56,7 +56,7 @@ class ExGflashDetectorConstruction : public G4VUserDetectorConstruction
 	GFlashHitMaker *m_theHMaker;
 	GFlashParticleBounds *m_theParticleBounds;
 	GFlashShowerModel* m_theFastShowerModel;     
-	
+        G4Region* aRegion;
 };
 
 #endif
