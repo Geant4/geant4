@@ -1,4 +1,4 @@
-$Id: History,v 1.182 2005-10-27 10:24:03 maire Exp $
+$Id: History,v 1.183 2005-11-05 19:06:44 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+05 November 05: L.Urban
+- G4MultipleScattering: minimum stepsize depends on cut in range
+  tlimitmin = facrange*rangecut
+
 27 October 05: mma (emstand-V07-01-20)
 - G4MultipleScattering: stepLimitAlgorithm renamed to steppingAlgorithm;
   Function MscStepLimitation (G4bool algorithm, G4double facrange)
