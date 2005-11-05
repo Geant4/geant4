@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.38 2005-10-27 10:24:03 maire Exp $
+// $Id: G4MultipleScattering.cc,v 1.39 2005-11-05 19:03:59 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -80,6 +80,7 @@
 // 25-10-05 prec renamed to steppingAlgorithm, set function triggers
 //          'default' facrange too, true - 0.02, false - 0.2 (L.Urban)
 // 26-10-05 the above is put in the function MscStepLimitation() (mma)
+// 05-11-05 tlimitmin = facrange*rungecut (instead of a fixed value)L.Urban
 //
 // -----------------------------------------------------------------------------
 //
@@ -104,13 +105,14 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
 
   Tkinlimit        = 2.*MeV;
   facrange         = 0.02;
+  rangecut         = 0.*mm;
   tlimit           = 1.e10*mm;
-  tlimitmin        = facrange*1.e-3*mm;
+  tlimitmin        = facrange*rangecut;
   geombig          = 1.e50*mm;
   geommin          = 5.e-6*mm;
   facgeom          = 4.;
   safety           = 0.*mm;
-  facsafety        = 0.95;
+  facsafety        = 1.00;
   facsafety2       = 0.10;
   dtrl             = 0.05;
   factail          = 1.0;
@@ -195,6 +197,12 @@ G4double G4MultipleScattering::TruePathLengthLimit(const G4Track&  track,
                                                  fGeomBoundary)
        || (track.GetCurrentStepNumber() == 1))
     {
+      // get production threshold - cut in range
+      // lower limit for step depends on the cut in range
+      rangecut = track.GetMaterialCutsCouple()->GetProductionCuts()
+         ->GetProductionCut(track.GetDefinition()->GetParticleName());
+      tlimitmin = facrange*rangecut;
+
       // not so strong step restriction above Tlimit
       G4double facr = facrange;
       if(track.GetKineticEnergy() > Tlimit)

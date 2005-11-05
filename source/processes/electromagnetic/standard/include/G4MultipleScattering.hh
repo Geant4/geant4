@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.20 2005-10-27 10:24:03 maire Exp $
+// $Id: G4MultipleScattering.hh,v 1.21 2005-11-05 19:03:58 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,10 +56,11 @@
 // 25-10-05 prec renamed to steppingAlgorithm, set function triggers
 //          'default' facrange too, true - 0.02, false - 0.2 (L.Urban)
 // 26-10-05 the above is put in the function MscStepLimitation() (mma)
+// 05-11-05 new data member rangecut (L.Urban)
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering.hh,v 1.20 2005-10-27 10:24:03 maire Exp $
+// $Id: G4MultipleScattering.hh,v 1.21 2005-11-05 19:03:58 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -119,7 +120,7 @@ public:    // with description
   void SetTkinlimit(G4double value) { Tkinlimit = value;};
 
   // Steplimit = facrange*max(range,lambda)
-  void SetFacrange(G4double val) { facrange=val; tlimitmin=val*1*micrometer;};
+  void SetFacrange(G4double val) { facrange=val;};
 
   // connected with step size reduction due to geometry
   void SetFacgeom(G4double val) { facgeom=val;};
@@ -139,6 +140,7 @@ private:        // data members
 
   G4double Tkinlimit,Tlimit;
   G4double facrange;
+  G4double rangecut;
   G4double tlimit,tlimitmin;
   G4double geombig,geommin,facgeom;
   G4double safety,facsafety,facsafety2;
