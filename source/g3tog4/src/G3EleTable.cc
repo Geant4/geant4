@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G3EleTable.cc,v 1.13 2003-06-16 16:50:49 gunter Exp $
+// $Id: G3EleTable.cc,v 1.14 2005-11-05 10:30:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4Types.hh"
-#include "G4strstreambuf.hh"
+#include <strstream>
 #include "G4ios.hh"
 #include "G3EleTable.hh"
 
