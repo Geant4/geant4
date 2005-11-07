@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplication.hh,v 1.4 2005-10-25 16:39:12 capra Exp $
+// Id:            $Id: RadmonApplication.hh,v 1.5 2005-11-07 17:54:19 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Radmon application
@@ -16,22 +16,26 @@
  #include "globals.hh"
  #include "RadmonApplicationDetectorSetup.hh"
  #include "RadmonApplicationGeneratorSetup.hh"
+ #include "RadmonApplicationPhysicsSetup.hh"
 
  // Forward declarations
  class RadmonApplicationOptions;
  class G4RunManager;
  class RadmonDetectorLayout;
  class RadmonGeneratorLayout;
+ class RadmonPhysicsLayout;
  class RadmonDetectorLabelledEntitiesConstructorsFactory;
  class RadmonGeneratorsWithLabelFactory;
+ class RadmonSubPhysicsListWithLabelFactory;
  class G4VisManager;
  class G4UImanager;
  class RadmonDetectorMessenger;
  class RadmonGeneratorMessenger;
+ class RadmonPhysicsMessenger;
  class G4UIsession;
  class G4UIdirectory;
 
- class RadmonApplication : public RadmonApplicationDetectorSetup, RadmonApplicationGeneratorSetup
+ class RadmonApplication : public RadmonApplicationDetectorSetup, RadmonApplicationGeneratorSetup, RadmonApplicationPhysicsSetup
  {
   public:
                                                 RadmonApplication(const RadmonApplicationOptions & options);
@@ -53,14 +57,17 @@
    G4RunManager *                               runManager;
    RadmonDetectorLayout *                       detectorLayout;
    RadmonGeneratorLayout *                      generatorLayout;
+   RadmonPhysicsLayout *                        physicsLayout;
    RadmonDetectorLabelledEntitiesConstructorsFactory * detectorsFactory;
    RadmonGeneratorsWithLabelFactory *           generatorsFactory;
+   RadmonSubPhysicsListWithLabelFactory *       physicsFactory;
    #ifdef    G4VIS_USE
     G4VisManager *                              visManager;
    #endif /* G4VIS_USE */
    G4UImanager *                                uiManager;
    RadmonDetectorMessenger *                    detectorMessenger;
    RadmonGeneratorMessenger *                   generatorMessenger;
+   RadmonPhysicsMessenger *                     physicsMessenger;
    G4UIsession *                                session;
    G4UIdirectory *                              directory;
  };

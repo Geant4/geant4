@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplication.cc,v 1.7 2005-10-25 16:39:12 capra Exp $
+// Id:            $Id: RadmonApplication.cc,v 1.8 2005-11-07 17:54:19 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -16,7 +16,10 @@
 #include "RadmonDetectorLabelledEntitiesConstructorsFactory.hh"
 #include "RadmonDetectorMessenger.hh"
 
-#include "RadmonPhysicsDummyPhysicsList.hh"
+#include "RadmonPhysicsLayout.hh"
+#include "RadmonPhysicsList.hh"
+#include "RadmonSubPhysicsListWithLabelFactory.hh"
+#include "RadmonPhysicsMessenger.hh"
 
 #include "RadmonGeneratorLayout.hh"
 #include "RadmonPrimaryGeneratorAction.hh"
@@ -39,18 +42,22 @@
 :
  RadmonApplicationDetectorSetup(options),
  RadmonApplicationGeneratorSetup(options),
+ RadmonApplicationPhysicsSetup(options),
  valid(false),
  runManager(0),
  detectorLayout(0),
  generatorLayout(0),
+ physicsLayout(0),
  detectorsFactory(0),
  generatorsFactory(0),
+ physicsFactory(0),
  #ifdef    G4VIS_USE
   visManager(0),
  #endif /* G4VIS_USE */
  uiManager(0),
  detectorMessenger(0),
  generatorMessenger(0),
+ physicsMessenger(0),
  session(0),
  directory(0)
 {
@@ -80,6 +87,16 @@
  if (generatorLayout==0)
  {
   G4cerr << options.ApplicationName() << ": Generator layout not allocated." << G4endl;
+  return;
+ }
+ 
+ 
+ // Construct the physics list layout
+ physicsLayout=new RadmonPhysicsLayout;
+ 
+ if (physicsLayout==0)
+ {
+  G4cerr << options.ApplicationName() << ": Physics list layout not allocated." << G4endl;
   return;
  }
  
@@ -120,6 +137,24 @@
  }
  
  
+ // Construct the physics list factory
+ physicsFactory=new RadmonSubPhysicsListWithLabelFactory;
+ 
+ if (physicsFactory==0)
+ {
+  G4cerr << options.ApplicationName() << ": Physics list factory not allocated." << G4endl;
+  return;
+ }
+ 
+ 
+ // Construct the generators algorithms
+ if (!CreateSubPhysicsList(physicsFactory))
+ {
+  G4cerr << options.ApplicationName() << ": Sub physics lists not allocated." << G4endl;
+  return;
+ }
+ 
+ 
  // Construct the detector construction
  RadmonDetectorConstruction * detectorConstruction(new RadmonDetectorConstruction(detectorLayout, detectorsFactory));
  
@@ -130,13 +165,13 @@
  }
  
  
- // The detectors factory will is owned by the detectorConstruction
+ // The detectors factory will be owned by the detectorConstruction
  detectorsFactory=0; 
  
  runManager->SetUserInitialization(detectorConstruction);
  
 
- // Construct the detector construction
+ // Construct the primary generator
  RadmonPrimaryGeneratorAction * primaryGenerator(new RadmonPrimaryGeneratorAction(generatorLayout, generatorsFactory));
  
  if (detectorConstruction==0)
@@ -146,16 +181,28 @@
  }
  
  
- // The primary generators factory will is owned by the primaryGenerator
+ // The primary generators factory will be owned by the primaryGenerator
  generatorsFactory=0;
  
  runManager->SetUserAction(primaryGenerator);
  
             
- // Set mandatory physics list
- runManager->SetUserInitialization(new RadmonPhysicsDummyPhysicsList);
-         
-
+ // Construct the physics list
+ RadmonPhysicsList * physicsList(new RadmonPhysicsList(physicsLayout, physicsFactory));
+ 
+ if (physicsList==0)
+ {
+  G4cerr << options.ApplicationName() << ": Physics list not allocated." << G4endl;
+  return;
+ }
+ 
+ 
+ // The subphysics list factory will be owned by the physicsList
+ physicsFactory=0;
+ 
+ runManager->SetUserInitialization(physicsList);
+ 
+            
  // Initialize the run manager
  runManager->Initialize();
 
@@ -258,6 +305,9 @@
  // Desctruct the interactive session
  delete session;
   
+ // Destruct the physics list messenger to modify the layout 
+ delete physicsMessenger;
+  
  // Destruct the generator messenger to modify the layout 
  delete generatorMessenger;
   
@@ -272,6 +322,9 @@
   delete visManager;
  #endif /* G4VIS_USE */
 
+ // Destruct the sub physics list factory
+ delete physicsFactory;
+
  // Destruct the generators factory
  delete generatorsFactory;
 
@@ -281,6 +334,9 @@
  // Destruct the default run manager
  delete runManager;
  
+ // Destruct the physics list layout
+ delete physicsLayout; 
+
  // Destruct the generator layout
  delete generatorLayout; 
 
