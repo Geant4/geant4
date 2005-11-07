@@ -1,4 +1,4 @@
-$Id: History,v 1.65 2005-11-02 16:02:09 gcosmo Exp $
+$Id: History,v 1.66 2005-11-07 10:56:37 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07-Nov-2005, G.Cosmo (geom-specific-V07-01-06)
+- G4Ellipsoid: replaced call to hypot(x,y) with std::sqrt(x*x+y*y)
+  for porting to ISO standard.
 
 02-Nov-2005, G.Cosmo (geom-specific-V07-01-05)
 - G4Polyhedra, G4Polycone:
