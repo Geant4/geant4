@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc,v 1.8 2005-08-04 09:18:11 gcosmo Exp $
+// $Id: G4Ellipsoid.cc,v 1.9 2005-11-07 10:56:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Ellipsoid
@@ -783,7 +783,8 @@ G4Ellipsoid::CreateRotatedVertices(const G4AffineTransform& pTransform,
     
   startTheta = -meshTheta*0.5;
 
-  meshRMaxFactor =  1.0/std::cos(0.5*hypot(meshAnglePhi,meshTheta));
+  meshRMaxFactor =  1.0/std::cos(0.5*
+                    std::sqrt(meshAnglePhi*meshAnglePhi+meshTheta*meshTheta));
   rMaxMax= (xSemiAxis > ySemiAxis ? xSemiAxis : ySemiAxis);
   if (zSemiAxis > rMaxMax) rMaxMax= zSemiAxis;
   rMaxX= xSemiAxis + rMaxMax*(meshRMaxFactor-1.0);
