@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2005-10-25 16:41:16 capra Exp $
+$Id: History,v 1.10 2005-11-07 17:54:36 capra Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07 Nov 2005 - radmon-V07-01-09 - R. Capra - Development of the physics list
+                        code:
+                        - RadmonPhysicsDummyPhysicsList class removed
+
+                        Code builds, but not tested yet. Physics list still
+                        to be implemented
 
 25 Oct 2005 - radmon-V07-01-08 - R. Capra - Development of the particle
                         generator according to the design:
