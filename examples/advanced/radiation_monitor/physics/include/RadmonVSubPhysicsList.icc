@@ -1,0 +1,22 @@
+//
+// File name:     RadmonVSubPhysicsList.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonVSubPhysicsList.icc,v 1.1 2005-11-07 17:52:36 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONVSUBPHYSICSLIST_HH
+ #error "RadmonVSubPhysicsList.icc cannot be included directly. Please use RadmonVSubPhysicsList.hh"
+#else  /* RADMONVSUBPHYSICSLIST_HH */
+ inline                                         RadmonVSubPhysicsList :: RadmonVSubPhysicsList()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonVSubPhysicsList :: ~RadmonVSubPhysicsList()
+ {
+ }
+#endif /* RADMONVSUBPHYSICSLIST_HH */

@@ -1,0 +1,42 @@
+//
+// File name:     RadmonVSubPhysicsListWithLabel.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonVSubPhysicsListWithLabel.icc,v 1.1 2005-11-07 17:52:36 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONVSUBPHYSICSLISTWITHLABEL_HH
+ #error "RadmonVSubPhysicsListWithLabel.icc cannot be included directly. Please use RadmonVSubPhysicsListWithLabel.hh"
+#else  /* RADMONVSUBPHYSICSLISTWITHLABEL_HH */
+ inline                                         RadmonVSubPhysicsListWithLabel :: ~RadmonVSubPhysicsListWithLabel()
+ {
+ }
+ 
+ 
+ 
+ 
+
+ inline const G4String &                        RadmonVSubPhysicsListWithLabel :: GetLabel(void) const
+ {
+  return physiscListLabel;
+ }
+ 
+ 
+ 
+ inline void                                    RadmonVSubPhysicsListWithLabel :: SetEntityAttribute(const G4String & attributeName, const G4String & value)
+ {
+  SetAttribute(attributeName, value);
+ }
+
+
+
+
+ 
+ inline                                         RadmonVSubPhysicsListWithLabel :: RadmonVSubPhysicsListWithLabel(const G4String & label)
+ :
+  physiscListLabel(label)
+ {
+ }
+#endif /* RADMONVSUBPHYSICSLISTWITHLABEL_HH */

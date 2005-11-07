@@ -1,0 +1,59 @@
+//
+// File name:     RadmonSubPhysicsListLayout.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonSubPhysicsListLayout.icc,v 1.1 2005-11-07 17:53:48 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONSUBPHYSICSLISTLAYOUT_HH
+ #error "RadmonSubPhysicsListLayout.icc cannot be included directly. Please use RadmonSubPhysicsListLayout.hh"
+#else  /* RADMONSUBPHYSICSLISTLAYOUT_HH */
+ inline                                         RadmonSubPhysicsListLayout :: RadmonSubPhysicsListLayout()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonSubPhysicsListLayout :: RadmonSubPhysicsListLayout(const RadmonSubPhysicsListLayout & copy)
+ :
+  RadmonLayoutEntityWithAttributes(copy),
+  layerLabel(copy.layerLabel)
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonSubPhysicsListLayout :: ~RadmonSubPhysicsListLayout()
+ {
+ }
+ 
+ 
+ 
+ 
+
+ inline RadmonSubPhysicsListLayout &             RadmonSubPhysicsListLayout :: operator=(const RadmonSubPhysicsListLayout & copy)
+ {
+  RadmonLayoutEntityWithAttributes::operator=(copy);
+  layerLabel=copy.layerLabel;
+  
+  return (*this);
+ }
+ 
+ 
+ 
+ 
+
+ inline const G4String &                        RadmonSubPhysicsListLayout :: GetLabel(void) const
+ {
+  return layerLabel; 
+ }
+ 
+ 
+ 
+ inline void                                    RadmonSubPhysicsListLayout :: SetLabel(const G4String & label)
+ {
+  layerLabel=label; 
+ }
+#endif /* RADMONSUBPHYSICSLISTLAYOUT_HH */

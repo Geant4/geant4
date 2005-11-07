@@ -1,0 +1,22 @@
+//
+// File name:     RadmonVPhysicsLayout.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonVPhysicsLayout.icc,v 1.1 2005-11-07 17:53:48 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONVPHYSICSLAYOUT_HH
+ #error "RadmonVPhysicsLayout.icc cannot be included directly. Please use RadmonVPhysicsLayout.hh"
+#else  /* RADMONVPHYSICSLAYOUT_HH */
+ inline                                         RadmonVPhysicsLayout :: RadmonVPhysicsLayout()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonVPhysicsLayout :: ~RadmonVPhysicsLayout()
+ {
+ }
+#endif /* RADMONVPHYSICSLAYOUT_HH */

@@ -1,0 +1,16 @@
+//
+// File name:     RadmonSubPhysicsListWithLabelFactory.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonSubPhysicsListWithLabelFactory.icc,v 1.1 2005-11-07 17:52:36 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONSUBPHYSICSLISTWITHLABELFACTORY_HH
+ #error "RadmonSubPhysicsListWithLabelFactory.icc cannot be included directly. Please use RadmonSubPhysicsListWithLabelFactory.hh"
+#else  /* RADMONSUBPHYSICSLISTWITHLABELFACTORY_HH */
+ inline                                         RadmonSubPhysicsListWithLabelFactory :: RadmonSubPhysicsListWithLabelFactory()
+ {
+ }
+#endif /* RADMONSUBPHYSICSLISTWITHLABELFACTORY_HH */
