@@ -13,6 +13,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09 November 2005 Gabriele Cosmo (radioactive_decay-V07-01-00)
+- implemented migration to <sstream> for messenger.
+
 02 June 2005 Fan Lei (radioactive_decay-V07-00-01)
 - added lines 667-669 to G4NuclearDeceyChannel.cc, to avoid rounding erros
   in cos calculations. A bug reported by Ben Morgan
