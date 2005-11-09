@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.86 2004-12-30 19:37:32 asaim Exp $
+// $Id: G4RunManager.cc,v 1.87 2005-11-09 09:58:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,6 +53,7 @@
 #include "G4ios.hh"
 #include <strstream>
 
+using namespace CLHEP;
 
 G4RunManager* G4RunManager::fRunManager = 0;
 
