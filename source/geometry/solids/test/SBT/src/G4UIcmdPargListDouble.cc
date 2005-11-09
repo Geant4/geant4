@@ -29,7 +29,7 @@
 
 #include "G4UIcmdPargListDouble.hh"
 
-#include <strstream>
+#include <sstream>
 
 //
 // Constructor
@@ -60,7 +60,7 @@ G4UIcmdPargListDouble::~G4UIcmdPargListDouble()
 //
 G4bool G4UIcmdPargListDouble::FetchItem( const char *string, const G4int item )
 {
-	std::istrstream is( (char *)string );
+	std::istringstream is( string );
 	is >> storage[item];
 	if (is.fail()) {
 		G4cerr << "Error interpreting '" << string << "' as a double value" << G4endl;

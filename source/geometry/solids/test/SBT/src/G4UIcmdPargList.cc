@@ -28,7 +28,7 @@
 
 #include "G4UIcmdPargList.hh"
 
-#include <strstream>
+#include <sstream>
 #include <iomanip>
 
 //
@@ -170,10 +170,9 @@ G4String G4UIcmdPargList::ConvertToString()
 	// a command and '()'. Each item is allowed to take 255 
 	// characters.
 	//
-	G4int buffSize = 255*nItem+4;
+	// buffSize = 255*nItem+4;
 	
-	char *buff = new char[buffSize];
-	std::ostrstream os(buff,buffSize);
+	std::ostringstream os;
 	
 	//
 	// Write out everything in turn
@@ -191,13 +190,8 @@ G4String G4UIcmdPargList::ConvertToString()
 	//
 	// Convert to G4String
 	//
-	G4String answer(buff);
-	
-	//
-	// Deallocate buffer
-	//
-	delete [] buff;
-	
+	G4String answer = os.str();
+		
 	//
 	// Return G4String
 	//

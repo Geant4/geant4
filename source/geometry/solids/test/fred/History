@@ -10,6 +10,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 09, 2005 - G.Cosmo
+----------------------
+- Implemented migration to <sstream> from deprecated <strstream>.
+
 Dec 01, 2003 - G.Cosmo
 ----------------------
 - Cleared compilation warnings...

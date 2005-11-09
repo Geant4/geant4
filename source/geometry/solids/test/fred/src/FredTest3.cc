@@ -33,7 +33,7 @@
 
 #include <time.h>
 #include <iomanip>
-#include <strstream>
+#include <sstream>
 
 //
 // Constructor
@@ -260,21 +260,22 @@ G4int FredTest3::DebugError( const G4VSolid *, std::istream &logger,
 	// If you are writing your own serious GEANT4 application,
 	// please do something better.
 	//
-	char commandBuffer[255];
 	G4UImanager *UI = G4UImanager::GetUIpointer();
 
 	UI->ApplyCommand( "/fred/gun G4" );
 	
 	UI->ApplyCommand( "/gun/particle geantino" );
 	
-	std::ostrstream formatter1( commandBuffer, 255 );
+	std::ostringstream formatter1;
 	formatter1 << std::setprecision(14);
 	formatter1 << "/gun/position "  << p.x() << " " << p.y() << " " << p.z() << " mm" << G4endl;
+        G4String commandBuffer=formatter1.str();
 	UI->ApplyCommand( commandBuffer );
 	
-	std::ostrstream formatter2( commandBuffer, 255 );
+	std::ostringstream formatter2;
 	formatter2 << std::setprecision(14);
 	formatter2 << "/gun/direction " << v.x() << " " << v.y() << " " << v.z() << " mm" << G4endl;
+        commandBuffer=formatter2.str();
 	UI->ApplyCommand( commandBuffer );
 	return 0;
 }

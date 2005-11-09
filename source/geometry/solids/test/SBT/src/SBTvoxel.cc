@@ -41,7 +41,7 @@
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 #include <iomanip>
-#include <strstream>
+#include <sstream>
 
 #include <time.h>
 

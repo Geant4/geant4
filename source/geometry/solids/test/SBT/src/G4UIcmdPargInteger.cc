@@ -28,7 +28,7 @@
 
 #include "G4UIcmdPargInteger.hh"
 
-#include <strstream>
+#include <sstream>
 
 //
 // Fetch argument value from input stream
@@ -49,11 +49,10 @@ std::istream &G4UIcmdPargInteger::FetchValue( std::istream &istr )
 //
 G4String G4UIcmdPargInteger::ConvertToString()
 {
-	char buff[20];
-	std::ostrstream os(buff,20);
+	std::ostringstream os;
 	
 	os << value << '\0';
 	
-	G4String answer(buff);
+	G4String answer = os.str();
 	return answer;
 }

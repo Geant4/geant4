@@ -10,6 +10,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 9, 2005 - G.Cosmo
+---------------------
+- Implemented migration to <sstream> from deprecated <strstream>.
+
 Dec 1, 2003 - G.Cosmo
 ---------------------
 - Updated vis-manager to recent visualisation drivers.

@@ -36,7 +36,7 @@
 #include "G4Color.hh"
 #include "G4VisAttributes.hh"
 #include <iomanip>
-#include <strstream>
+#include <sstream>
 
 #include "G4SolidStore.hh"
 

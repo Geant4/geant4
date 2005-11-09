@@ -29,6 +29,8 @@
 #include "G4UIcmdWithPargs.hh"
 #include "G4UIcmdParg.hh"
 
+#include <sstream>
+
 //
 // Constructor
 //
@@ -69,7 +71,7 @@ G4UIcmdWithPargs::~G4UIcmdWithPargs() {;}
 G4bool G4UIcmdWithPargs::GetArguments( G4String argumentString )
 {
 	const char *buff = argumentString;
-	std::istrstream is( (char *)buff );
+	std::istringstream is( buff );
 	
 	G4UIcmdParg **thisArg = args;
 	while( thisArg < args + numArgs ) {
