@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.86 2005-10-24 09:51:38 allison Exp $
+cvs log $Id: History,v 1.87 2005-11-09 07:38:38 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+9th November 2005  Gabriele Cosmo
+- Implemented migration to support CLHEP-2.0.X, adding explicit namespace
+  to CLHEP types. Affected files: HepPolyhedron[.h.cc], BooleanProcessor.src.
 
 24th October 2005  John Allison (greps-V07-01-08)
 - Moved G4VTrajectoryDrawer to modeling (renamed G4VTrajectoryModel).
