@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.hh,v 1.14 2005-08-03 16:00:37 danninos Exp $
+// $Id: G4Cons.hh,v 1.15 2005-11-09 15:03:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -140,6 +140,11 @@ class G4Cons : public G4CSGSolid
 
   public:  // without description
        
+        G4Cons(__void__&);
+          // Fake default constructor for usage restricted to direct object
+          // persistency for clients requiring preallocation of memory for
+          // persistifiable objects.
+
         //  Old access functions
 
         inline G4double    GetRmin1() const;

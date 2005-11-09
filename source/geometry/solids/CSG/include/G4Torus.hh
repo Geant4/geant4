@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.hh,v 1.23 2005-09-05 16:08:42 gcosmo Exp $
+// $Id: G4Torus.hh,v 1.24 2005-11-09 15:03:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -153,6 +153,10 @@ class G4Torus : public G4CSGSolid
     void SetAllParameters(G4double pRmin, G4double pRmax, G4double pRtor,
                           G4double pSPhi, G4double pDPhi);
  
+    G4Torus(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
   protected:
 

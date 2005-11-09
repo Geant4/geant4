@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.hh,v 1.14 2005-06-08 16:14:25 gcosmo Exp $
+// $Id: G4Box.hh,v 1.15 2005-11-09 15:03:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -112,6 +112,13 @@ class G4Box : public G4CSGSolid
     G4VisExtent   GetExtent          () const;
     G4Polyhedron* CreatePolyhedron   () const;
     G4NURBS*      CreateNURBS        () const;
+
+  public:  // without description
+
+    G4Box(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
   protected:  // with description
 

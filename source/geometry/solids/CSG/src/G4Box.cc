@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.41 2005-08-04 10:57:55 gcosmo Exp $
+// $Id: G4Box.cc,v 1.42 2005-11-09 15:03:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,6 +77,16 @@ G4Box::G4Box(const G4String& pName,
     G4Exception("G4Box::G4Box()", "InvalidSetup",
                 FatalException, "Invalid dimensions. Too small.");
   }
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+
+G4Box::G4Box( __void__& a )
+  : G4CSGSolid(a)
+{
 }
 
 //////////////////////////////////////////////////////////////////////////

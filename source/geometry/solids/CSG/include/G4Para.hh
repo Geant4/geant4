@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.hh,v 1.15 2005-08-04 10:57:55 gcosmo Exp $
+// $Id: G4Para.hh,v 1.16 2005-11-09 15:03:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -140,6 +140,13 @@ class G4Para : public G4CSGSolid
     void          DescribeYourselfTo (G4VGraphicsScene& scene) const;
     G4Polyhedron* CreatePolyhedron   () const;
     G4NURBS*      CreateNURBS        () const;
+
+  public:  // without description
+
+    G4Para(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
   protected:  // without description
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.56 2005-08-04 10:57:55 gcosmo Exp $
+// $Id: G4Tubs.cc,v 1.57 2005-11-09 15:03:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,6 +71,8 @@
 #include "G4NURBStube.hh"
 #include "G4NURBScylinder.hh"
 #include "G4NURBStubesector.hh"
+
+using namespace CLHEP;
 
 /////////////////////////////////////////////////////////////////////////
 //
@@ -145,6 +147,16 @@ G4Tubs::G4Tubs( const G4String &pName,
   {
     fSPhi -= twopi ;
   }
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4Tubs::G4Tubs( __void__& a )
+  : G4CSGSolid(a)
+{
 }
 
 //////////////////////////////////////////////////////////////////////////

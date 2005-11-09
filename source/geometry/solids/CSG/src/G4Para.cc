@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.36 2005-10-23 13:07:41 grichine Exp $
+// $Id: G4Para.cc,v 1.37 2005-11-09 15:03:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
@@ -53,6 +53,8 @@
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
 #include "G4NURBSbox.hh"
+
+using namespace CLHEP;
 
 // Private enum: Not for external use 
     
@@ -153,6 +155,16 @@ G4Para::G4Para( const G4String& pName,
     G4Exception("G4Para::G4Para()", "InvalidSetup",
                 FatalException, "Invalid vertice coordinates.");
   }    
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4Para::G4Para( __void__& a )
+  : G4CSGSolid(a)
+{
 }
 
 //////////////////////////////////////////////////////////////////////////

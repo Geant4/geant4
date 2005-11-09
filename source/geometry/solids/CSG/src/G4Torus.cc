@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.56 2005-09-05 16:08:43 gcosmo Exp $
+// $Id: G4Torus.cc,v 1.57 2005-11-09 15:03:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,6 +48,7 @@
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "G4JTPolynomialSolver.hh"
 
 #include "G4VPVParameterisation.hh"
 
@@ -61,7 +62,8 @@
 #include "G4NURBStube.hh"
 #include "G4NURBScylinder.hh"
 #include "G4NURBStubesector.hh"
-#include "G4JTPolynomialSolver.hh"
+
+using namespace CLHEP;
 
 ///////////////////////////////////////////////////////////////
 //
@@ -146,6 +148,16 @@ G4Torus::SetAllParameters( G4double pRmin,
   else            { fSPhi = std::fmod(fSPhi,twopi) ; }
 
   if (fSPhi+fDPhi > twopi)  { fSPhi-=twopi ; }
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4Torus::G4Torus( __void__& a )
+  : G4CSGSolid(a)
+{
 }
 
 //////////////////////////////////////////////////////////////////////

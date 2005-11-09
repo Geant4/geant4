@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.39 2005-08-04 10:57:55 gcosmo Exp $
+// $Id: G4Trap.cc,v 1.40 2005-11-09 15:03:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -60,6 +60,8 @@
 #include "G4NURBS.hh"
 #include "G4NURBSbox.hh"
 
+using namespace CLHEP;
+
 ////////////////////////////////////////////////////////////////////////
 //
 // Accuracy of coplanarity
@@ -71,14 +73,6 @@ const G4double kCoplanar_Tolerance = 1E-4 ;
 // Private enum: Not for external use 
     
 enum Eside {kUndef,ks0,ks1,ks2,ks3,kPZ,kMZ};
-
-////////////////////////////////////////////////////////////////////////
-//
-// Destructor
-
-G4Trap::~G4Trap()
-{
-}
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -525,6 +519,24 @@ G4Trap::G4Trap( const G4String& pName )
     fTalpha2    (0.)
 {
  MakePlanes();
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4Trap::G4Trap( __void__& a )
+  : G4CSGSolid(a)
+{
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Destructor
+
+G4Trap::~G4Trap()
+{
 }
 
 ///////////////////////////////////////////////////////////////////////

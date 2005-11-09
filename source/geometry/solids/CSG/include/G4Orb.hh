@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Orb.hh,v 1.8 2005-08-04 10:57:55 gcosmo Exp $
+// $Id: G4Orb.hh,v 1.9 2005-11-09 15:03:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -100,6 +100,13 @@ class G4Orb : public G4CSGSolid
     void          DescribeYourselfTo(G4VGraphicsScene& scene) const;
     G4Polyhedron* CreatePolyhedron() const;
     G4NURBS*      CreateNURBS() const;
+
+  public:  // without description
+
+    G4Orb(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
   protected:
   

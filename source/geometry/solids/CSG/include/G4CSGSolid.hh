@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CSGSolid.hh,v 1.9 2004-10-10 10:44:14 johna Exp $
+// $Id: G4CSGSolid.hh,v 1.10 2005-11-09 15:03:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -54,6 +54,13 @@ class G4CSGSolid : public G4VSolid
     virtual std::ostream& StreamInfo(std::ostream& os) const;
 
     virtual G4Polyhedron* GetPolyhedron () const;
+
+  public:  // without description
+
+    G4CSGSolid(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
   protected:
 

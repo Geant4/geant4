@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.52 2005-08-04 10:57:55 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.53 2005-11-09 15:03:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -67,6 +67,8 @@
 #include "G4NURBS.hh"
 #include "G4NURBSbox.hh"
 
+using namespace CLHEP;
+
 // Private enum: Not for external use - used by distanceToOut
 
 enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kSTheta,kETheta};
@@ -74,14 +76,6 @@ enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kSTheta,kETheta};
 // used by normal
 
 enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNSTheta,kNETheta};
-
-/////////////////////////////////////////////////////////////////////
-//
-// Destructor
-
-G4Sphere::~G4Sphere()
-{
-}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -175,6 +169,24 @@ G4Sphere::G4Sphere( const G4String& pName,
     G4Exception("G4Sphere::G4Sphere()", "InvalidSetup", FatalException,
                 "Invalid pDTheta.");
   }
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4Sphere::G4Sphere( __void__& a )
+  : G4CSGSolid(a)
+{
+}
+
+/////////////////////////////////////////////////////////////////////
+//
+// Destructor
+
+G4Sphere::~G4Sphere()
+{
 }
 
 //////////////////////////////////////////////////////////////////////////

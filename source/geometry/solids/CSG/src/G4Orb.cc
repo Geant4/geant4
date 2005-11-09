@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.21 2005-08-04 10:57:55 gcosmo Exp $
+// $Id: G4Orb.cc,v 1.22 2005-11-09 15:03:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Orb
@@ -51,6 +51,8 @@
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
 #include "G4NURBSbox.hh"
+
+using namespace CLHEP;
 
 // Private enum: Not for external use - used by distanceToOut
 
@@ -84,6 +86,16 @@ G4Orb::G4Orb( const G4String& pName,G4double pRmax )
 
 }
 
+///////////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4Orb::G4Orb( __void__& a )
+  : G4CSGSolid(a)
+{
+}
+
 /////////////////////////////////////////////////////////////////////
 //
 // Destructor
@@ -91,7 +103,6 @@ G4Orb::G4Orb( const G4String& pName,G4double pRmax )
 G4Orb::~G4Orb()
 {
 }
-
 
 //////////////////////////////////////////////////////////////////////////
 //

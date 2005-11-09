@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.46 2005-08-04 10:57:55 gcosmo Exp $
+// $Id: G4Cons.cc,v 1.47 2005-11-09 15:03:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -62,6 +62,8 @@
 #include "G4NURBS.hh"
 #include "G4NURBSbox.hh"
 
+using namespace CLHEP;
+ 
 ////////////////////////////////////////////////////////////////////////
 //
 // Private enum: Not for external use - used by distanceToOut
@@ -71,14 +73,6 @@ enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kPZ,kMZ};
 // used by normal
 
 enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
-
-///////////////////////////////////////////////////////////////////////
-//
-// Destructor
-
-G4Cons::~G4Cons()
-{
-}
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -153,6 +147,24 @@ G4Cons::G4Cons( const G4String& pName,
       
     if (fSPhi + fDPhi > twopi) fSPhi -= twopi ;
   }
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4Cons::G4Cons( __void__& a )
+  : G4CSGSolid(a)
+{
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// Destructor
+
+G4Cons::~G4Cons()
+{
 }
 
 /////////////////////////////////////////////////////////////////////

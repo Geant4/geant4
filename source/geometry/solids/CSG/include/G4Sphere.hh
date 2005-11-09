@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.hh,v 1.16 2005-08-04 10:57:55 gcosmo Exp $
+// $Id: G4Sphere.hh,v 1.17 2005-11-09 15:03:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -143,6 +143,11 @@ class G4Sphere : public G4CSGSolid
   
   public:  // without description
    
+    G4Sphere(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
+
     // Old access functions
 
     inline G4double  GetRmin()   const;

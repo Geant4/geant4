@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.31 2005-08-04 10:57:55 gcosmo Exp $
+// $Id: G4Trd.cc,v 1.32 2005-11-09 15:03:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -48,6 +48,8 @@
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
 #include "G4NURBSbox.hh"
+
+using namespace CLHEP;
 
 /////////////////////////////////////////////////////////////////////////
 //
@@ -105,6 +107,16 @@ void G4Trd::CheckAndSetAllParameters ( G4double pdx1,  G4double pdx2,
   }
   fCubicVolume= 0.;
   fpPolyhedron = 0;
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4Trd::G4Trd( __void__& a )
+  : G4CSGSolid(a)
+{
 }
 
 //////////////////////////////////////////////////////////////////////////
