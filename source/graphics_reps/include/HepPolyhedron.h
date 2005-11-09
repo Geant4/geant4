@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.h,v 1.19 2005-08-10 08:20:02 gcosmo Exp $
+// $Id: HepPolyhedron.h,v 1.20 2005-11-09 07:32:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -166,6 +166,7 @@
 #define HEP_POLYHEDRON_HH
 
 #include <CLHEP/Geometry/Point3D.h>
+#include <CLHEP/Geometry/Normal3D.h>
 
 #ifndef DEFAULT_NUMBER_OF_STEPS
 #define DEFAULT_NUMBER_OF_STEPS 24
@@ -181,7 +182,7 @@ class G4Facet {
 
  public:
   G4Facet(int v1=0, int f1=0, int v2=0, int f2=0, 
-	  int v3=0, int f3=0, int v4=0, int f4=0)
+          int v3=0, int f3=0, int v4=0, int f4=0)
   { edge[0].v=v1; edge[0].f=f1; edge[1].v=v2; edge[1].f=f2;
     edge[2].v=v3; edge[2].f=f3; edge[3].v=v4; edge[3].f=f4; }
 };
@@ -192,7 +193,7 @@ class HepPolyhedron {
  protected:
   static int fNumberOfRotationSteps;
   int nvert, nface;
-  HepPoint3D *pV;
+  HepGeom::Point3D<double> *pV;
   G4Facet    *pF;
 
   // Re-allocate memory for HepPolyhedron
@@ -202,7 +203,7 @@ class HepPolyhedron {
   int FindNeighbour(int iFace, int iNode, int iOrder) const;
 
   // Find normal at node
-  HepNormal3D FindNodeNormal(int iFace, int iNode) const;
+  HepGeom::Normal3D<double> FindNodeNormal(int iFace, int iNode) const;
 
   // Create HepPolyhedron for prism with quadrilateral base
   void CreatePrism();
@@ -249,58 +250,60 @@ class HepPolyhedron {
   int GetNoFacets() const { return nface; }
 
   // Transform the polyhedron
-  HepPolyhedron & Transform(const HepTransform3D & t);
+  HepPolyhedron & Transform(const HepGeom::Transform3D & t);
 
   // Get next vertex index of the quadrilateral
   bool GetNextVertexIndex(int & index, int & edgeFlag) const;
 
   // Get vertex by index 
-  HepPoint3D GetVertex(int index) const;
+  HepGeom::Point3D<double> GetVertex(int index) const;
 
   // Get next vertex + edge visibility of the quadrilateral
-  bool GetNextVertex(HepPoint3D & vertex, int & edgeFlag) const;
+  bool GetNextVertex(HepGeom::Point3D<double> & vertex, int & edgeFlag) const;
 
   // Get next vertex + edge visibility + normal of the quadrilateral
-  bool GetNextVertex(HepPoint3D & vertex, int & edgeFlag,
-			   HepNormal3D & normal) const;
+  bool GetNextVertex(HepGeom::Point3D<double> & vertex, int & edgeFlag,
+                     HepGeom::Normal3D<double> & normal) const;
 
   // Get indeces of the next edge with indeces of the faces
   bool GetNextEdgeIndeces(int & i1, int & i2, int & edgeFlag,
-				int & iface1, int & iface2) const;
+                          int & iface1, int & iface2) const;
 
   // Get indeces of the next edge
   bool GetNextEdgeIndeces(int & i1, int & i2, int & edgeFlag) const;
 
   // Get next edge
-  bool GetNextEdge(HepPoint3D &p1, HepPoint3D &p2, int &edgeFlag) const;
+  bool GetNextEdge(HepGeom::Point3D<double> &p1,
+                   HepGeom::Point3D<double> &p2, int &edgeFlag) const;
 
   // Get next edge
-  bool GetNextEdge(HepPoint3D &p1, HepPoint3D &p2, int &edgeFlag,
-			 int &iface1, int &iface2) const;
+  bool GetNextEdge(HepGeom::Point3D<double> &p1,
+                   HepGeom::Point3D<double> &p2, int &edgeFlag,
+                   int &iface1, int &iface2) const;
 
   // Get face by index
   void GetFacet(int iFace, int &n, int *iNodes,
-		int *edgeFlags = 0, int *iFaces = 0) const;
+                int *edgeFlags = 0, int *iFaces = 0) const;
 
   // Get face by index
-  void GetFacet(int iFace, int &n, HepPoint3D *nodes,
-		int *edgeFlags = 0, HepNormal3D *normals = 0) const;
+  void GetFacet(int iFace, int &n, HepGeom::Point3D<double> *nodes,
+                int *edgeFlags=0, HepGeom::Normal3D<double> *normals=0) const;
 
   // Get next face with normals at the nodes
-  bool GetNextFacet(int &n, HepPoint3D *nodes,
-			  int *edgeFlags=0, HepNormal3D *normals=0) const;
+  bool GetNextFacet(int &n, HepGeom::Point3D<double> *nodes, int *edgeFlags=0,
+                    HepGeom::Normal3D<double> *normals=0) const;
 
   // Get normal of the face given by index
-  HepNormal3D GetNormal(int iFace) const;
+  HepGeom::Normal3D<double> GetNormal(int iFace) const;
 
   // Get unit normal of the face given by index
-  HepNormal3D GetUnitNormal(int iFace) const;
+  HepGeom::Normal3D<double> GetUnitNormal(int iFace) const;
 
   // Get normal of the next face
-  bool GetNextNormal(HepNormal3D &normal) const;
+  bool GetNextNormal(HepGeom::Normal3D<double> &normal) const;
 
   // Get normal of unit length of the next face 
-  bool GetNextUnitNormal(HepNormal3D &normal) const;
+  bool GetNextUnitNormal(HepGeom::Normal3D<double> &normal) const;
 
   // Boolean operations 
   HepPolyhedron add(const HepPolyhedron &p) const;
@@ -334,7 +337,7 @@ class HepPolyhedron {
    * @return status of the operation - is non-zero in case of problem
    */
   int createTwistedTrap(double Dz,
-			const double xy1[][2], const double xy2[][2]);
+                        const double xy1[][2], const double xy2[][2]);
 
   /**
    * Creates user defined polyhedron.
@@ -354,20 +357,20 @@ class HepPolyhedron {
    * @return status of the operation - is non-zero in case of problem
    */
   int createPolyhedron(int Nnodes, int Nfaces,
-		       const double xyz[][3], const int faces[][4]);
+                       const double xyz[][3], const int faces[][4]);
 };
 
 class HepPolyhedronTrd2 : public HepPolyhedron {
  public:
   HepPolyhedronTrd2(double Dx1, double Dx2,
-		    double Dy1, double Dy2, double Dz);
+                    double Dy1, double Dy2, double Dz);
   virtual ~HepPolyhedronTrd2();
 };
 
 class HepPolyhedronTrd1 : public HepPolyhedronTrd2 {
  public:
   HepPolyhedronTrd1(double Dx1, double Dx2,
-		    double Dy, double Dz);
+                    double Dy, double Dz);
   virtual ~HepPolyhedronTrd1();
 };
 
@@ -380,39 +383,39 @@ class HepPolyhedronBox : public HepPolyhedronTrd2 {
 class HepPolyhedronTrap : public HepPolyhedron {
 public:
   HepPolyhedronTrap(double Dz, double Theta, double Phi,
-		    double Dy1,
-		    double Dx1, double Dx2, double Alp1,
-		    double Dy2,
-		    double Dx3, double Dx4, double Alp2);
+                    double Dy1,
+                    double Dx1, double Dx2, double Alp1,
+                    double Dy2,
+                    double Dx3, double Dx4, double Alp2);
   virtual ~HepPolyhedronTrap();
 };
 
 class HepPolyhedronPara : public HepPolyhedronTrap {
 public:
   HepPolyhedronPara(double Dx, double Dy, double Dz,
-		    double Alpha, double Theta, double Phi);
+                    double Alpha, double Theta, double Phi);
   virtual ~HepPolyhedronPara();
 };
 
 class HepPolyhedronCons : public HepPolyhedron {
 public:
   HepPolyhedronCons(double Rmn1, double Rmx1, 
-		    double Rmn2, double Rmx2, double Dz,
-		    double Phi1, double Dphi); 
+                    double Rmn2, double Rmx2, double Dz,
+                    double Phi1, double Dphi); 
   virtual ~HepPolyhedronCons();
 };
 
 class HepPolyhedronCone : public HepPolyhedronCons {
 public:
   HepPolyhedronCone(double Rmn1, double Rmx1, 
-		    double Rmn2, double Rmx2, double Dz);
+                    double Rmn2, double Rmx2, double Dz);
   virtual ~HepPolyhedronCone();
 };
 
 class HepPolyhedronTubs : public HepPolyhedronCons {
 public:
   HepPolyhedronTubs(double Rmin, double Rmax, double Dz, 
-		    double Phi1, double Dphi);
+                    double Phi1, double Dphi);
   virtual ~HepPolyhedronTubs();
 };
 
@@ -425,26 +428,26 @@ public:
 class HepPolyhedronPgon : public HepPolyhedron {
 public:
   HepPolyhedronPgon(double phi, double dphi, int npdv, int nz,
-		    const double *z,
-		    const double *rmin,
-		    const double *rmax);
+                    const double *z,
+                    const double *rmin,
+                    const double *rmax);
   virtual ~HepPolyhedronPgon();
 };
 
 class HepPolyhedronPcon : public HepPolyhedronPgon {
 public:
   HepPolyhedronPcon(double phi, double dphi, int nz,
-		    const double *z,
-		    const double *rmin,
-		    const double *rmax);
+                    const double *z,
+                    const double *rmin,
+                    const double *rmax);
   virtual ~HepPolyhedronPcon();
 };
 
 class HepPolyhedronSphere : public HepPolyhedron {
 public:
   HepPolyhedronSphere(double rmin, double rmax,
-		      double phi, double dphi,
-		      double the, double dthe);
+                      double phi, double dphi,
+                      double the, double dthe);
   virtual ~HepPolyhedronSphere();
 };
 
@@ -458,14 +461,14 @@ public:
 class HepPolyhedronEllipsoid : public HepPolyhedron {
 public:
   HepPolyhedronEllipsoid(double dx, double dy, double dz, 
-			 double zcut1, double zcut2);
+                         double zcut1, double zcut2);
   virtual ~HepPolyhedronEllipsoid();
 };
 
 class HepPolyhedronEllipticalCone : public HepPolyhedron {
 public:
   HepPolyhedronEllipticalCone(double dx, double dy, double z,
-			      double zcut1);
+                              double zcut1);
   virtual ~HepPolyhedronEllipticalCone();
 };
 
