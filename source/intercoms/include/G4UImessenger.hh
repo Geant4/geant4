@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImessenger.hh,v 1.7 2005-10-26 06:08:58 kmura Exp $
+// $Id: G4UImessenger.hh,v 1.8 2005-11-09 10:09:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -30,7 +30,6 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <strstream> // temporal solution! must be eliminated.
 
 class G4UIcommand;
 
