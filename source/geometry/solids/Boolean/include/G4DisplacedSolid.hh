@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.hh,v 1.17 2005-09-15 08:08:55 grichine Exp $
+// $Id: G4DisplacedSolid.hh,v 1.18 2005-11-09 15:00:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -138,6 +138,11 @@ class G4DisplacedSolid : public G4VSolid
     std::ostream& StreamInfo(std::ostream& os) const;
 
   public:  // without description
+
+    G4DisplacedSolid(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
     G4Polyhedron* CreatePolyhedron () const ;

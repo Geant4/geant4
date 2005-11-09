@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrd.cc,v 1.2 2005-04-04 11:56:59 gcosmo Exp $
+// $Id: G4TwistedTrd.cc,v 1.3 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,6 +53,14 @@ G4TwistedTrd::G4TwistedTrd( const G4String& pName,
                                   G4double  pPhiTwist )
   : G4VTwistedFaceted( pName, pPhiTwist,pDz,0.,0.,
                        pDy1, pDx1, pDx1, pDy2, pDx2, pDx2,0.)
+{
+}
+
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4TwistedTrd::G4TwistedTrd( __void__& a )
+  : G4VTwistedFaceted(a)
 {
 }
 

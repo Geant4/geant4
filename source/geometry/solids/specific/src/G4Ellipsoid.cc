@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc,v 1.9 2005-11-07 10:56:23 gcosmo Exp $
+// $Id: G4Ellipsoid.cc,v 1.10 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Ellipsoid
@@ -51,6 +51,8 @@
 #include "G4NURBSbox.hh"
 #include "G4VisExtent.hh"
 
+using namespace CLHEP;
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
@@ -62,7 +64,7 @@ G4Ellipsoid::G4Ellipsoid(const G4String& pName,
                                G4double pzSemiAxis,
                                G4double pzBottomCut,
                                G4double pzTopCut)
-  : G4VSolid(pName), fCubicVolume(0.)
+  : G4VSolid(pName), fpPolyhedron(0), fCubicVolume(0.)
 {
  // note: for users that want to use the full ellipsoid it is useful to include 
  // a default for the cuts 
@@ -98,6 +100,16 @@ G4Ellipsoid::G4Ellipsoid(const G4String& pName,
      G4Exception("G4Ellipsoid::G4Ellipsoid()", "InvalidSetup",
                  FatalException, "Invalid z-coordinate for cutting plane.");
   }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4Ellipsoid::G4Ellipsoid( __void__& a )
+  : G4VSolid(a), fpPolyhedron(0), fCubicVolume(0.)
+{
 }
 
 ///////////////////////////////////////////////////////////////////////////////

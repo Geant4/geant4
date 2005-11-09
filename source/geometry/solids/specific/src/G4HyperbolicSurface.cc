@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HyperbolicSurface.cc,v 1.7 2004-12-02 09:31:32 gcosmo Exp $
+// $Id: G4HyperbolicSurface.cc,v 1.8 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -121,8 +121,13 @@ G4HyperbolicSurface::G4HyperbolicSurface(const G4String      &name,
    SetBoundaries();
 }
 
+//=====================================================================
+//* Fake default constructor ------------------------------------------
 
-
+G4HyperbolicSurface::G4HyperbolicSurface( __void__& a )
+  : G4VSurface(a)
+{
+}
 
 //=====================================================================
 //* destructor --------------------------------------------------------

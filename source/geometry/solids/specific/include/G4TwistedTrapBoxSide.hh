@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapBoxSide.hh,v 1.2 2005-03-18 17:11:53 gcosmo Exp $
+// $Id: G4TwistedTrapBoxSide.hh,v 1.3 2005-11-09 15:04:28 gcosmo Exp $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -80,7 +80,12 @@ class G4TwistedTrapBoxSide : public G4VSurface
                                           G4double       distance[],
                                           G4int          areacode[]);
 
+  public:  // without description
 
+    G4TwistedTrapBoxSide(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
   private:
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalCone.hh,v 1.4 2005-08-29 16:15:33 gcosmo Exp $
+// $Id: G4EllipticalCone.hh,v 1.5 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -120,6 +120,13 @@ class G4EllipticalCone : public G4VSolid
     G4Polyhedron* CreatePolyhedron() const;
     G4NURBS*      CreateNURBS() const;
        
+  public:  // without description
+
+    G4EllipticalCone(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
+
   protected:  // without description
  
     G4ThreeVectorList* CreateRotatedVertices(const G4AffineTransform& pT,

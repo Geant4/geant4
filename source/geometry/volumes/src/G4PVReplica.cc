@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.cc,v 1.4 2003-11-17 11:29:26 gcosmo Exp $
+// $Id: G4PVReplica.cc,v 1.5 2005-11-09 15:08:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -147,6 +147,11 @@ void G4PVReplica::CheckAndSetParameters( const EAxis pAxis,
                   FatalException, "Unknown axis of replication.");
       break;
   }
+}
+
+G4PVReplica::G4PVReplica( __void__& a )
+  : G4VPhysicalVolume(a)
+{
 }
 
 G4PVReplica::~G4PVReplica()

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HyperbolicSurface.hh,v 1.7 2004-12-02 09:31:30 gcosmo Exp $
+// $Id: G4HyperbolicSurface.hh,v 1.8 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,6 +100,13 @@ class G4HyperbolicSurface : public G4VSurface
    inline virtual G4double GetRhoAtPZ(const G4ThreeVector &p,
                                             G4bool isglobal = false) const ;
    
+  public:  // without description
+
+   G4HyperbolicSurface(__void__&);
+     // Fake default constructor for usage restricted to direct object
+     // persistency for clients requiring preallocation of memory for
+     // persistifiable objects.
+
   private:
 
    virtual G4int GetAreaCode(const G4ThreeVector &xx, 

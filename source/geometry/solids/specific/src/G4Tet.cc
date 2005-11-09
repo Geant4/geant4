@@ -25,7 +25,7 @@
 // *                                                                  *
 // ********************************************************************
 //
-// $Id: G4Tet.cc,v 1.5 2005-08-30 13:20:51 gcosmo Exp $
+// $Id: G4Tet.cc,v 1.6 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Tet
@@ -53,7 +53,7 @@
 
 #include "G4Tet.hh"
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.5 2005-08-30 13:20:51 gcosmo Exp $";
+const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.6 2005-11-09 15:04:28 gcosmo Exp $";
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -71,6 +71,8 @@ const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.5 2005-08-30 13:20:51 gcosmo Exp 
 #include "G4ThreeVector.hh"
 
 #include <cmath>
+
+using namespace CLHEP;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -158,6 +160,16 @@ G4Tet::G4Tet(const G4String& pName,
   fCdotN134=fCenter134.dot(fNormal134);
   fCdotN142=fCenter142.dot(fNormal142);
   fCdotN234=fCenter234.dot(fNormal234);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4Tet::G4Tet( __void__& a )
+  : G4VSolid(a), warningFlag(0)
+{
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.cc,v 1.10 2004-12-10 16:22:38 gcosmo Exp $
+// $Id: G4PolyconeSide.cc,v 1.11 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -138,6 +138,16 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
   lAdj = std::sqrt( rNormEdge[1]*rNormEdge[1] + zNormEdge[1]*zNormEdge[1] );
   rNormEdge[1] /= lAdj;
   zNormEdge[1] /= lAdj;
+}
+
+
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4PolyconeSide::G4PolyconeSide( __void__& )
+  : cone(0), corners(0)
+{
 }
 
 

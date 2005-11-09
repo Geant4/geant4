@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.hh,v 1.8 2005-04-04 11:56:59 gcosmo Exp $
+// $Id: G4TwistedTubs.hh,v 1.9 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -169,6 +169,11 @@ class G4TwistedTubs : public G4VSolid
     // solid. Caches the computed value once computed the first time.
 
  public:  // without description
+
+  G4TwistedTubs(__void__&);
+    // Fake default constructor for usage restricted to direct object
+    // persistency for clients requiring preallocation of memory for
+    // persistifiable objects.
 
 #ifdef G4SPECSDEBUG
   G4VSurface * GetOuterHype() const { return fOuterHype; }

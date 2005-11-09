@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyhedraSide.cc,v 1.9 2004-12-10 16:22:38 gcosmo Exp $
+// $Id: G4PolyhedraSide.cc,v 1.10 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -275,6 +275,16 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
   // from the edge. (see routine DistanceAway)
   //
   edgeNorm = 1.0/std::sqrt( 1.0 + lenPhi[1]*lenPhi[1] );
+}
+
+
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4PolyhedraSide::G4PolyhedraSide( __void__&)
+  : cone(0), vecs(0), edges(0)
+{
 }
 
 

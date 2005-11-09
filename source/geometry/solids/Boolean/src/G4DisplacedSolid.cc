@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.cc,v 1.25 2005-09-21 10:36:19 gcosmo Exp $
+// $Id: G4DisplacedSolid.cc,v 1.26 2005-11-09 15:00:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for G4DisplacedSolid class for boolean 
@@ -55,7 +55,7 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
                                           G4VSolid* pSolid ,
                                           G4RotationMatrix* rotMatrix,
                                     const G4ThreeVector& transVector    )
-  : G4VSolid(pName), fpPolyhedron (0)
+  : G4VSolid(pName), fpPolyhedron(0)
 {
   fPtrSolid = pSolid ;
   fPtrTransform = new G4AffineTransform(rotMatrix,transVector) ;
@@ -70,7 +70,7 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
 G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
                                           G4VSolid* pSolid ,
                                     const G4Transform3D& transform  )
-  : G4VSolid(pName), fpPolyhedron (0)
+  : G4VSolid(pName), fpPolyhedron(0)
 {
   fPtrSolid = pSolid ;
   fDirectTransform = new G4AffineTransform(transform.getRotation().inverse(),
@@ -89,11 +89,22 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
 G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
                                           G4VSolid* pSolid ,
                                     const G4AffineTransform directTransform )
-  : G4VSolid(pName), fpPolyhedron (0)
+  : G4VSolid(pName), fpPolyhedron(0)
 {
   fPtrSolid = pSolid ;
   fDirectTransform = new G4AffineTransform( directTransform );
   fPtrTransform    = new G4AffineTransform( directTransform.Inverse() ) ; 
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+
+G4DisplacedSolid::G4DisplacedSolid( __void__& a )
+  : G4VSolid(a), fPtrSolid(0), fPtrTransform(0),
+    fDirectTransform(0), fpPolyhedron(0)
+{
 }
 
 ///////////////////////////////////////////////////////////////////

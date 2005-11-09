@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipsoid.hh,v 1.8 2005-08-04 09:18:11 gcosmo Exp $
+// $Id: G4Ellipsoid.hh,v 1.9 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -106,6 +106,13 @@ class G4Ellipsoid : public G4VSolid
     G4Polyhedron* CreatePolyhedron() const;
     G4NURBS*      CreateNURBS() const;
        
+  public:  // without description
+
+    G4Ellipsoid(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
+
   protected:  // without description
  
     G4ThreeVectorList* CreateRotatedVertices(const G4AffineTransform& pT,

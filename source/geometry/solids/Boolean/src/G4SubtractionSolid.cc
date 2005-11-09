@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.cc,v 1.25 2005-05-09 13:44:58 gcosmo Exp $
+// $Id: G4SubtractionSolid.cc,v 1.26 2005-11-09 15:00:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -83,6 +83,15 @@ G4SubtractionSolid::G4SubtractionSolid( const G4String& pName,
 {
 }
 
+//////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+
+G4SubtractionSolid::G4SubtractionSolid( __void__& a )
+  : G4BooleanSolid(a)
+{
+}
 
 ///////////////////////////////////////////////////////////////
 //

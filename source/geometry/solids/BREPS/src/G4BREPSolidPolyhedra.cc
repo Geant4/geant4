@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.32 2005-08-02 08:20:12 gcosmo Exp $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.33 2005-11-09 15:01:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -62,7 +62,7 @@
 #include "G4BREPSolidPolyhedra.hh"
 #include "G4FPlane.hh"
 
-#include <strstream>
+#include <sstream>
 
 G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
                                                  G4double  start_angle,
@@ -156,7 +156,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     {
       // ERROR! Invalid sequence of z-values
       //
-      std::ostrstream msgstr;
+      std::ostringstream msgstr;
       msgstr << G4endl
              << "ERROR: unordered, non-increasing or non-decreasing sequence"
              << G4endl
@@ -164,8 +164,9 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
              << G4endl
              << "       Check z_values with indexes: "
              << idx << " " << (idx+1) << "." << G4endl << std::ends;
+      G4String message = msgstr.str();
       G4Exception( "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()",
-                   "InvalidSetup", FatalException, msgstr.str() );
+                   "InvalidSetup", FatalException, message );
     }
   }
 
@@ -215,7 +216,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
         {
           // ERROR! The surface conflict!
           //
-          std::ostrstream msgstr;
+          std::ostringstream msgstr;
           msgstr << G4endl
                  << "ERROR: unordered sequence of z_values detected with"
                  << G4endl
@@ -399,13 +400,14 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
         //
         if( RMIN[a] > RMAX[a+1] || RMAX[a] < RMIN[a+1] )
         {
-          std::strstream s;
+          std::stringstream s;
           s << G4endl  << "The values of RMIN[" << a << "] & RMAX[" << a+1
                        << "] or RMAX[" << a << "] & RMIN[" << a+1 << "] "
                        << "generate an invalid configuration of solid: "
                        << name.c_str() << "!" << G4endl << std::ends;
+          G4String message = s.str();
           G4Exception( "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()",
-                       "InvalidSetup", FatalException, s.str() );
+                       "InvalidSetup", FatalException, message );
         }
 
         // We need to clasify all the cases in order to figure out
@@ -803,6 +805,11 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
 
   active=1;
   Initialize(); 
+}
+
+G4BREPSolidPolyhedra::G4BREPSolidPolyhedra( __void__& a )
+  : G4BREPSolid(a)
+{
 }
 
 G4BREPSolidPolyhedra::~G4BREPSolidPolyhedra()

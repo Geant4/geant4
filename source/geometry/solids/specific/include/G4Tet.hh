@@ -26,7 +26,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tet.hh,v 1.3 2005-08-04 09:18:11 gcosmo Exp $
+// $Id: G4Tet.hh,v 1.4 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -103,8 +103,13 @@ class G4Tet : public G4VSolid
 
   public:   // without description
 
+    G4Tet(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
+
     const char* CVSHeaderVers()
-      { return "$Id: G4Tet.hh,v 1.3 2005-08-04 09:18:11 gcosmo Exp $"; }
+      { return "$Id: G4Tet.hh,v 1.4 2005-11-09 15:04:28 gcosmo Exp $"; }
     const char* CVSFileVers()
       { return CVSVers; }
     void PrintWarnings(G4bool flag)

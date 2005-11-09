@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.cc,v 1.24 2005-08-04 09:18:11 gcosmo Exp $
+// $Id: G4EllipticalTube.cc,v 1.25 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,6 +50,8 @@
 #include "G4Polyhedron.hh"
 #include "G4VisExtent.hh"
 
+using namespace CLHEP;
+
 //
 // Constructor
 //
@@ -64,6 +66,15 @@ G4EllipticalTube::G4EllipticalTube( const G4String &name,
   dz = theDz;
 }
 
+
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4EllipticalTube::G4EllipticalTube( __void__& a )
+  : G4VSolid(a), fCubicVolume(0.), fpPolyhedron(0)
+{
+}
 
 //
 // Destructor

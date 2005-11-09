@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidTorus.hh,v 1.8 2003-06-16 16:52:30 gunter Exp $
+// $Id: G4BREPSolidTorus.hh,v 1.9 2005-11-09 15:01:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -64,6 +64,13 @@ class G4BREPSolidTorus : public G4BREPSolid
 
   virtual std::ostream& StreamInfo(std::ostream& os) const;
     // Streams solid contents to output stream.
+
+ public:  // without description
+
+  G4BREPSolidTorus(__void__&);
+    // Fake default constructor for usage restricted to direct object
+    // persistency for clients requiring preallocation of memory for
+    // persistifiable objects.
 
  private:
 

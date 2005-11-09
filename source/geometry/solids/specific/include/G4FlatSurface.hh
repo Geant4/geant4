@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatSurface.hh,v 1.6 2004-11-13 18:26:24 gcosmo Exp $
+// $Id: G4FlatSurface.hh,v 1.7 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -86,6 +86,13 @@ class G4FlatSurface : public G4VSurface
                                          G4double       distance[],
                                          G4int          areacode[]);
                                                   
+  public:  // without description
+
+   G4FlatSurface(__void__&);
+     // Fake default constructor for usage restricted to direct object
+     // persistency for clients requiring preallocation of memory for
+     // persistifiable objects.
+
   protected:  // with description
 
    virtual G4int GetAreaCode(const G4ThreeVector &xx, 

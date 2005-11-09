@@ -99,6 +99,15 @@ G4TwistedTrapBoxSide::G4TwistedTrapBoxSide(const G4String     &name,
 
 
 //=====================================================================
+//* Fake default constructor ------------------------------------------
+
+G4TwistedTrapBoxSide::G4TwistedTrapBoxSide( __void__& a )
+  : G4VSurface(a)
+{
+}
+
+
+//=====================================================================
 //* destructor --------------------------------------------------------
 
 G4TwistedTrapBoxSide::~G4TwistedTrapBoxSide()

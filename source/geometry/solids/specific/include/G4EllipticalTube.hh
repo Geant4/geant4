@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.hh,v 1.15 2005-08-04 09:18:11 gcosmo Exp $
+// $Id: G4EllipticalTube.hh,v 1.16 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -107,6 +107,13 @@ class G4EllipticalTube : public G4VSolid
     inline void SetDy( const G4double newDy );
     inline void SetDz( const G4double newDz );
  
+  public:  // without description
+
+    G4EllipticalTube(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
+
   protected:  // without description
 
     G4double dx, dy, dz;

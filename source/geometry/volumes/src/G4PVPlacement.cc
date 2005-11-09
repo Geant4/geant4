@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.cc,v 1.4 2005-10-19 13:09:14 gcosmo Exp $
+// $Id: G4PVPlacement.cc,v 1.5 2005-11-09 15:08:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -139,6 +139,15 @@ G4PVPlacement::G4PVPlacement( const G4Transform3D &Transform3D,
   SetMotherLogical(pMotherLogical);
   if (pMotherLogical) { pMotherLogical->AddDaughter(this); }
   if (pSurfChk) { CheckOverlaps(); }
+}
+
+// ----------------------------------------------------------------------
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4PVPlacement::G4PVPlacement( __void__& a )
+  : G4VPhysicalVolume(a)
+{
 }
 
 // ----------------------------------------------------------------------

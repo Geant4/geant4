@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.cc,v 1.33 2005-03-23 17:16:31 allison Exp $
+// $Id: G4BREPSolid.cc,v 1.34 2005-11-09 15:01:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -68,6 +68,16 @@ G4BREPSolid::G4BREPSolid( const G4String&   name        ,
    fpPolyhedron(0)
 {
   Initialize();
+}
+
+G4BREPSolid::G4BREPSolid( __void__& a )
+  : G4VSolid(a),
+   Box(0), Convex(0), AxisBox(0), PlaneSolid(0), place(0), bbox(0),
+   intersectionDistance(kInfinity), active(1), startInside(0),
+   nb_of_surfaces(0), SurfaceVec(0),
+   fCubVolStatistics(1000000), fCubVolEpsilon(0.001), fCubicVolume(0.),
+   fpPolyhedron(0)
+{
 }
 
 G4BREPSolid::~G4BREPSolid()

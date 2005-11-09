@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrap.cc,v 1.9 2005-04-04 11:56:59 gcosmo Exp $
+// $Id: G4TwistedTrap.cc,v 1.10 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,6 +71,14 @@ G4TwistedTrap(const G4String &pName,      // Name of instance
               )
   : G4VTwistedFaceted( pName, pPhiTwist, pDz, pTheta,
                        pPhi, pDy1, pDx1, pDx2, pDy2, pDx3, pDx4, pAlph )
+{
+}
+
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4TwistedTrap::G4TwistedTrap( __void__& a )
+  : G4VTwistedFaceted(a)
 {
 }
 

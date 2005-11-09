@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.26 2005-11-02 15:59:14 gcosmo Exp $
+// $Id: G4Polycone.cc,v 1.27 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,8 @@
 #include "G4EnclosingCylinder.hh"
 #include "G4ReduciblePolygon.hh"
 #include "G4VPVParameterisation.hh"
+
+using namespace CLHEP;
 
 //
 // Constructor (GEANT3 style parameters)
@@ -300,6 +302,17 @@ void G4Polycone::Create( G4double phiStart,
   //
   enclosingCylinder =
     new G4EnclosingCylinder( rz, phiIsOpen, phiStart, phiTotal );
+}
+
+
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4Polycone::G4Polycone( __void__& a )
+  : G4VCSGfaceted(a), genericPcon(false),
+    original_parameters(0), enclosingCylinder(0)
+{
 }
 
 

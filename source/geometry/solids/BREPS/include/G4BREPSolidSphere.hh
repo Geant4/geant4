@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidSphere.hh,v 1.9 2003-06-16 16:52:29 gunter Exp $
+// $Id: G4BREPSolidSphere.hh,v 1.10 2005-11-09 15:01:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -100,6 +100,11 @@ class G4BREPSolidSphere : public G4BREPSolid
     // Streams solid contents to output stream.
 
  public:  // without description
+
+  G4BREPSolidSphere(__void__&);
+    // Fake default constructor for usage restricted to direct object
+    // persistency for clients requiring preallocation of memory for
+    // persistifiable objects.
 
   inline void SphReset() { active=1; }
 

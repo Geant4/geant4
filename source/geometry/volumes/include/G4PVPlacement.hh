@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.hh,v 1.3 2005-10-19 13:09:14 gcosmo Exp $
+// $Id: G4PVPlacement.hh,v 1.4 2005-11-09 15:08:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -131,6 +131,11 @@ class G4PVPlacement : public G4VPhysicalVolume
       // Returns true if the volume is overlapping.
 
   public:  // without description
+
+    G4PVPlacement(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
     G4bool IsMany() const;
     G4bool IsReplicated() const;

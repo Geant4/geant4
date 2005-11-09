@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.hh,v 1.2 2003-11-02 16:06:05 gcosmo Exp $
+// $Id: G4PVReplica.hh,v 1.3 2005-11-09 15:08:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -94,6 +94,11 @@ class G4PVReplica : public G4VPhysicalVolume
                 const G4double width,
                 const G4double offset=0);
 
+    G4PVReplica(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
+
   public:  // with description
 
     virtual ~G4PVReplica();
@@ -111,8 +116,7 @@ class G4PVReplica : public G4VPhysicalVolume
                                     G4double& width,
                                     G4double& offset,
                                     G4bool& consuming) const;
-
- private:
+  private:
 
     void CheckAndSetParameters(
                          const EAxis pAxis,

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.hh,v 1.11 2005-08-04 09:18:11 gcosmo Exp $
+// $Id: G4Hype.hh,v 1.12 2005-11-09 15:04:28 gcosmo Exp $
 // $Original: G4Hype.hh,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -119,6 +119,13 @@ class G4Hype : public G4VSolid
   G4Polyhedron* CreatePolyhedron   () const;
   G4NURBS*      CreateNURBS        () const;
   G4Polyhedron* GetPolyhedron      () const;
+
+ public:  // without description
+
+  G4Hype(__void__&);
+    // Fake default constructor for usage restricted to direct object
+    // persistency for clients requiring preallocation of memory for
+    // persistifiable objects.
 
  protected:  // without description
   

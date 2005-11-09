@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidCylinder.cc,v 1.9 2003-06-16 16:52:46 gunter Exp $
+// $Id: G4BREPSolidCylinder.cc,v 1.10 2005-11-09 15:01:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -95,6 +95,11 @@ G4BREPSolidCylinder::G4BREPSolidCylinder(const G4String& name,
   constructorParams.radius       = radius;
   
   Initialize();
+}
+
+G4BREPSolidCylinder::G4BREPSolidCylinder( __void__& a )
+  : G4BREPSolid(a)
+{
 }
 
 G4BREPSolidCylinder::~G4BREPSolidCylinder()

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc,v 1.12 2005-04-04 11:56:59 gcosmo Exp $
+// $Id: G4TwistedTubs.cc,v 1.13 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -170,6 +170,16 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
    fDPhi = totphi / nseg;
    SetFields(twistedangle, innerrad, outerrad, negativeEndz, positiveEndz);
    CreateSurfaces();
+}
+
+//=====================================================================
+//* Fake default constructor ------------------------------------------
+
+G4TwistedTubs::G4TwistedTubs( __void__& a )
+  : G4VSolid(a), fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
+    fFormerTwisted(0), fInnerHype(0), fOuterHype(0), fCubicVolume(0.),
+    fpPolyhedron(0)
+{
 }
 
 //=====================================================================

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.hh,v 1.12 2005-09-15 08:08:54 grichine Exp $
+// $Id: G4BooleanSolid.hh,v 1.13 2005-11-09 15:00:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -86,6 +86,13 @@ class G4BooleanSolid : public G4VSolid
     inline void SetCubVolStatistics(G4int st);
     inline void SetCubVolEpsilon(G4double ep);
     G4ThreeVector GetPointOnSurface() const;
+
+  public:  // without description
+
+    G4BooleanSolid(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
   protected:
   

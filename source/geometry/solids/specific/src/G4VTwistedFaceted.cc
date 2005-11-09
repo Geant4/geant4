@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc,v 1.4 2005-07-06 14:21:27 gcosmo Exp $
+// $Id: G4VTwistedFaceted.cc,v 1.5 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -187,6 +187,17 @@ G4VTwistedFaceted( const G4String &pname,     // Name of instance
   fCubicVolume = 2 * fDz * ( ( fDx1 + fDx2 ) * fDy1 + ( fDx3 + fDx4 ) * fDy2 );
 }
 
+
+//=====================================================================
+//* Fake default constructor ------------------------------------------
+
+G4VTwistedFaceted::G4VTwistedFaceted( __void__& a )
+  : G4VSolid(a), 
+    fLowerEndcap(0), fUpperEndcap(0), fSide0(0),
+    fSide90(0), fSide180(0), fSide270(0),
+    fCubicVolume(0.), fpPolyhedron(0)
+{
+}
 
 //=====================================================================
 //* destructor --------------------------------------------------------

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapAlphaSide.hh,v 1.5 2005-03-18 17:11:53 gcosmo Exp $
+// $Id: G4TwistedTrapAlphaSide.hh,v 1.6 2005-11-09 15:04:28 gcosmo Exp $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -83,6 +83,12 @@ class G4TwistedTrapAlphaSide : public G4VSurface
                                           G4int          areacode[]);
 
 
+  public:  // without description
+
+    G4TwistedTrapAlphaSide(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
   private:
 

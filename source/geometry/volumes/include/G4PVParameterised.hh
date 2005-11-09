@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVParameterised.hh,v 1.3 2005-10-19 13:09:14 gcosmo Exp $
+// $Id: G4PVParameterised.hh,v 1.4 2005-11-09 15:08:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,8 +67,13 @@ class G4PVParameterised : public G4PVReplica
                       const G4int nReplicas,
                             G4VPVParameterisation *pParam,
                             G4bool pSurfChk=false);
-       // Almost exactly similar to first constructor, changing only mother 
+      // Almost exactly similar to first constructor, changing only mother 
       // pointer's type to PhysicalVolume.
+
+    G4PVParameterised(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
   public:  // with description
 

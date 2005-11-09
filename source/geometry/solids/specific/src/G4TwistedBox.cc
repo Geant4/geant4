@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedBox.cc,v 1.7 2005-04-04 11:56:59 gcosmo Exp $
+// $Id: G4TwistedBox.cc,v 1.8 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,6 +51,14 @@ G4TwistedBox::G4TwistedBox( const G4String& pName,
                                   G4double  pDz )
   : G4VTwistedFaceted( pName, pPhiTwist,pDz,0.,0.,
                        pDy, pDx, pDx, pDy, pDx, pDx,0. )
+{
+}
+
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4TwistedBox::G4TwistedBox( __void__& a )
+  : G4VTwistedFaceted(a)
 {
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidOpenPCone.hh,v 1.7 2003-06-16 16:52:26 gunter Exp $
+// $Id: G4BREPSolidOpenPCone.hh,v 1.8 2005-11-09 15:01:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -72,6 +72,13 @@ class G4BREPSolidOpenPCone : public G4IntersectionSolid
   
   virtual std::ostream& StreamInfo(std::ostream& os) const;
     // Streams solid contents to output stream.
+
+ public:  // without description
+
+  G4BREPSolidOpenPCone(__void__&);
+    // Fake default constructor for usage restricted to direct object
+    // persistency for clients requiring preallocation of memory for
+    // persistifiable objects.
 
  private:
 

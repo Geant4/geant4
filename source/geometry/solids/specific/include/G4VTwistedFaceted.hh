@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistedFaceted.hh,v 1.3 2005-04-04 11:56:59 gcosmo Exp $
+// $Id: G4VTwistedFaceted.hh,v 1.4 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------------
@@ -131,6 +131,13 @@ class G4VTwistedFaceted: public G4VSolid
 
   virtual G4VisExtent     GetExtent    () const;
   virtual G4GeometryType  GetEntityType() const;
+
+ public:  // without description
+
+  G4VTwistedFaceted(__void__&);
+    // Fake default constructor for usage restricted to direct object
+    // persistency for clients requiring preallocation of memory for
+    // persistifiable objects.
 
  protected:  // with description
 

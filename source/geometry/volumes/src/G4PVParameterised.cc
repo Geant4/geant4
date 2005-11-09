@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVParameterised.cc,v 1.3 2005-10-19 13:09:14 gcosmo Exp $
+// $Id: G4PVParameterised.cc,v 1.4 2005-11-09 15:08:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,6 +81,15 @@ G4PVParameterised::G4PVParameterised( const G4String& pName,
     fparam(pParam)
 {
   if (pSurfChk) { CheckOverlaps(); }
+}
+
+// ----------------------------------------------------------------------
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4PVParameterised::G4PVParameterised( __void__& a )
+  : G4PVReplica(a), fparam(0)
+{
 }
 
 // ----------------------------------------------------------------------

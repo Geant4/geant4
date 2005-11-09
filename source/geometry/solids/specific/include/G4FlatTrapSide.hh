@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatTrapSide.hh,v 1.4 2005-03-11 16:03:57 link Exp $
+// $Id: G4FlatTrapSide.hh,v 1.5 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,6 +76,13 @@ class G4FlatTrapSide : public G4VSurface
                                          G4double       distance[],
                                          G4int          areacode[]);
                                                   
+  public:  // without description
+
+   G4FlatTrapSide(__void__&);
+     // Fake default constructor for usage restricted to direct object
+     // persistency for clients requiring preallocation of memory for
+     // persistifiable objects.
+
   protected:  // with description
 
    virtual G4int GetAreaCode(const G4ThreeVector &xx, 

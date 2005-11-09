@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatTrapSide.cc,v 1.6 2005-03-10 17:17:59 link Exp $
+// $Id: G4FlatTrapSide.cc,v 1.7 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -94,6 +94,14 @@ G4FlatTrapSide::G4FlatTrapSide( const G4String        &name,
    SetBoundaries();
 }
 
+
+//=====================================================================
+//* Fake default constructor ------------------------------------------
+
+G4FlatTrapSide::G4FlatTrapSide( __void__& a )
+  : G4VSurface(a)
+{
+}
 
 
 //=====================================================================

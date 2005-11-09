@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatSurface.cc,v 1.8 2004-12-02 09:31:31 gcosmo Exp $
+// $Id: G4FlatSurface.cc,v 1.9 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,6 +99,14 @@ G4FlatSurface::G4FlatSurface( const G4String        &name,
    SetBoundaries();
 }
 
+
+//=====================================================================
+//* Fake default constructor ------------------------------------------
+
+G4FlatSurface::G4FlatSurface( __void__& a )
+  : G4VSurface(a)
+{
+}
 
 
 //=====================================================================

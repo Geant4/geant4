@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedSurface.hh,v 1.7 2004-12-02 09:31:31 gcosmo Exp $
+// $Id: G4TwistedSurface.hh,v 1.8 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -94,6 +94,13 @@ class G4TwistedSurface : public G4VSurface
  
    inline G4ThreeVector ProjectAtPXPZ(const G4ThreeVector &p,
                                             G4bool isglobal = false) const ;
+
+ public:  // without description
+
+   G4TwistedSurface(__void__&);
+     // Fake default constructor for usage restricted to direct object
+     // persistency for clients requiring preallocation of memory for
+     // persistifiable objects.
 
  private:
 

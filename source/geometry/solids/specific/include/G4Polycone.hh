@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.hh,v 1.17 2005-11-02 15:59:14 gcosmo Exp $
+// $Id: G4Polycone.hh,v 1.18 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -136,6 +136,13 @@ class G4Polycone : public G4VCSGfaceted
   inline G4PolyconeSideRZ GetCorner(G4int index) const;
   inline G4PolyconeHistorical* GetOriginalParameters() const;
   inline void SetOriginalParameters(G4PolyconeHistorical* pars);
+
+ public:  // without description
+
+  G4Polycone(__void__&);
+    // Fake default constructor for usage restricted to direct object
+    // persistency for clients requiring preallocation of memory for
+    // persistifiable objects.
 
  protected:  // without description
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.hh,v 1.8 2003-11-03 17:48:45 gcosmo Exp $
+// $Id: G4UnionSolid.hh,v 1.9 2005-11-09 15:00:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -71,6 +71,11 @@ class G4UnionSolid : public G4BooleanSolid
     virtual G4GeometryType  GetEntityType() const ;
 
   public:  // without description
+
+    G4UnionSolid(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,

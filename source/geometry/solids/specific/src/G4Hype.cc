@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc,v 1.21 2005-08-04 09:18:11 gcosmo Exp $
+// $Id: G4Hype.cc,v 1.22 2005-11-09 15:04:28 gcosmo Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -63,6 +63,8 @@
 #include "G4NURBStube.hh"
 #include "G4NURBScylinder.hh"
 #include "G4NURBStubesector.hh"
+
+using namespace CLHEP;
 
 // Constructor - check parameters, and fills protected data members
 G4Hype::G4Hype(const G4String& pName,
@@ -128,6 +130,16 @@ G4Hype::G4Hype(const G4String& pName,
     
   SetInnerStereo( newInnerStereo );
   SetOuterStereo( newOuterStereo );
+}
+
+
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4Hype::G4Hype( __void__& a  )
+  : G4VSolid(a), fCubicVolume(0.), fpPolyhedron(0)
+{
 }
 
 

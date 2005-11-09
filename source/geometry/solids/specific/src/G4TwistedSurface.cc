@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedSurface.cc,v 1.10 2005-04-29 13:08:24 link Exp $
+// $Id: G4TwistedSurface.cc,v 1.11 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,6 +100,14 @@ G4TwistedSurface::G4TwistedSurface(const G4String     &name,
    SetBoundaries();
 }
 
+
+//=====================================================================
+//* Fake default constructor ------------------------------------------
+
+G4TwistedSurface::G4TwistedSurface( __void__& a )
+  : G4VSurface(a)
+{
+}
 
 
 //=====================================================================

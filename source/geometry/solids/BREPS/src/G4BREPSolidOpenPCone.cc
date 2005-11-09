@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidOpenPCone.cc,v 1.9 2005-03-03 16:06:06 allison Exp $
+// $Id: G4BREPSolidOpenPCone.cc,v 1.10 2005-11-09 15:01:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -70,6 +70,11 @@ G4BREPSolidOpenPCone::G4BREPSolidOpenPCone
   ((G4Tubs*)fPtrSolidB)->SetOuterRadius ( MaxRMAX );
   ((G4Tubs*)fPtrSolidB)->SetZHalfLength ( length );
 
+}
+
+G4BREPSolidOpenPCone::G4BREPSolidOpenPCone( __void__& a )
+  : G4IntersectionSolid(a)
+{
 }
 
 G4BREPSolidOpenPCone::~G4BREPSolidOpenPCone()

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.cc,v 1.18 2005-09-21 10:36:19 gcosmo Exp $
+// $Id: G4BooleanSolid.cc,v 1.19 2005-11-09 15:00:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for the abstract base class for solids created by boolean 
@@ -81,6 +81,18 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
 {
   fPtrSolidA = pSolidA ;
   fPtrSolidB = new G4DisplacedSolid("placedB",pSolidB,transform) ;
+}
+
+///////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+
+G4BooleanSolid::G4BooleanSolid( __void__& a )
+  : G4VSolid(a), fPtrSolidA(0), fPtrSolidB(0),
+    fCubVolStatistics(1000000), fCubVolEpsilon(0.001), 
+    fCubicVolume(0.), fpPolyhedron(0), createdDisplacedSolid(false)
+{
 }
 
 ///////////////////////////////////////////////////////////////

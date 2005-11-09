@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.cc,v 1.15 2005-07-18 14:55:47 gcosmo Exp $
+// $Id: G4VSurface.cc,v 1.16 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -124,6 +124,14 @@ G4VSurface::G4VSurface(const G4String         &name,
    
    fAmIOnLeftSide.me.set(kInfinity, kInfinity, kInfinity);
    fAmIOnLeftSide.vec.set(kInfinity, kInfinity, kInfinity);
+}
+
+//=====================================================================
+//* Fake default constructor ------------------------------------------
+
+G4VSurface::G4VSurface( __void__& )
+  : fName("")
+{
 }
 
 //=====================================================================

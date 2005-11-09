@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EllipticalCone.cc,v 1.6 2005-08-30 13:25:41 gcosmo Exp $
+// $Id: G4EllipticalCone.cc,v 1.7 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of G4EllipticalCone class
@@ -54,6 +54,8 @@
 #include "G4NURBSbox.hh"
 #include "G4VisExtent.hh"
 
+using namespace CLHEP;
+
 //////////////////////////////////////////////////////////////////////
 //
 // Constructor - check parameters
@@ -63,7 +65,7 @@ G4EllipticalCone::G4EllipticalCone(const G4String& pName,
                                          G4double  pySemiAxis,
                                          G4double  pzMax,
                                          G4double  pzTopCut)
-  : G4VSolid(pName), fCubicVolume(0.)
+  : G4VSolid(pName), fpPolyhedron(0), fCubicVolume(0.)
 {
 
   // Check Semi-Axis
@@ -93,6 +95,16 @@ G4EllipticalCone::G4EllipticalCone(const G4String& pName,
      G4Exception("G4EllipticalCone::G4EllipticalCone()", "InvalidSetup",
                  FatalException, "Invalid z-coordinate for cutting plane.");
   }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4EllipticalCone::G4EllipticalCone( __void__& a )
+  : G4VSolid(a), fpPolyhedron(0), fCubicVolume(0.)
+{
 }
 
 ///////////////////////////////////////////////////////////////////////////////

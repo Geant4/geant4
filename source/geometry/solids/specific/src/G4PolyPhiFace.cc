@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyPhiFace.cc,v 1.8 2004-12-02 09:31:32 gcosmo Exp $
+// $Id: G4PolyPhiFace.cc,v 1.9 2005-11-09 15:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -255,6 +255,15 @@ void G4PolyPhiFace::Diagnose( G4VSolid *owner )
       G4Exception( "G4PolyPhiFace::Diagnose()", "InvalidSetup",
                    FatalException, "Bad vertex normal found." );
   } while( ++corner < corners+numEdges );
+}
+
+
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4PolyPhiFace::G4PolyPhiFace( __void__&)
+{
 }
 
 

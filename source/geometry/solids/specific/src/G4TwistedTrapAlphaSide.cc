@@ -114,6 +114,15 @@ G4TwistedTrapAlphaSide::G4TwistedTrapAlphaSide(const G4String     &name,
 
 
 //=====================================================================
+//* Fake default constructor ------------------------------------------
+
+G4TwistedTrapAlphaSide::G4TwistedTrapAlphaSide( __void__& a )
+  : G4VSurface(a)
+{
+}
+
+
+//=====================================================================
 //* destructor --------------------------------------------------------
 
 G4TwistedTrapAlphaSide::~G4TwistedTrapAlphaSide()

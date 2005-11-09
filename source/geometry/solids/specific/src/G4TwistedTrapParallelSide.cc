@@ -110,6 +110,15 @@ G4TwistedTrapParallelSide::G4TwistedTrapParallelSide(const G4String     &name,
 
 
 //=====================================================================
+//* Fake default constructor ------------------------------------------
+
+G4TwistedTrapParallelSide::G4TwistedTrapParallelSide( __void__& a )
+  : G4VSurface(a)
+{
+}
+
+
+//=====================================================================
 //* destructor --------------------------------------------------------
 
 G4TwistedTrapParallelSide::~G4TwistedTrapParallelSide()
