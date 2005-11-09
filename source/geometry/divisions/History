@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2005-11-02 16:06:43 gcosmo Exp $
+$Id: History,v 1.18 2005-11-09 14:50:05 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 9th, 2005      G.Cosmo  (geomdiv-V07-01-01)
+- Migration to <sstream> from deprecated <strstream> for the
+  unit test ExDivisions.
 
 November 2nd, 2005      G.Cosmo  (geomdiv-V07-01-00)
 - Protected case of generic construct for G4Polyhedra and G4Polycone
