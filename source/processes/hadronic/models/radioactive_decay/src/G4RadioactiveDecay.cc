@@ -106,6 +106,8 @@
 #include <algorithm>
 #include <fstream>
 
+using namespace CLHEP;
+
 const G4double   G4RadioactiveDecay::levelTolerance =2.0*keV;
 
 ///////////////////////////////////////////////////////////////////////////////
