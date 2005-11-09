@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Types.hh,v 1.12 2005-04-22 09:32:01 gcosmo Exp $
+// $Id: G4Types.hh,v 1.13 2005-11-09 10:26:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,13 +54,6 @@
   #define G4DLLIMPORT
 #endif
 
-// Disable deprecated warnings for usage of strstream on Linux
-// architectures with gcc >= 3.0 release
-//
-#if (__GNUC__>=3) && (__GNUC_MINOR__>=0)
-  #undef __DEPRECATED
-#endif
-  
 #include <complex>
 
 // Typedefs to decouple from library classes
@@ -72,5 +65,10 @@ typedef int G4int;
 typedef bool G4bool;
 typedef long G4long;
 typedef std::complex<G4double> G4complex;
+
+// Forward declation of void type argument for usage in direct object
+// persistency to define fake default constructors
+//
+class __void__;
 
 #endif /* G4TYPES_HH */
