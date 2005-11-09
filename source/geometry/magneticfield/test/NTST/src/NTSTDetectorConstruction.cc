@@ -40,7 +40,8 @@
 #include "G4Point3D.hh"
 #include "globals.hh"
 #include "NTSTFileRead.hh"
-#include <iomanip.h>
+
+#include <iomanip>
 
 #include "G4Mag_UsualEqRhs.hh"
 #include "G4ClassicalRK4.hh"
@@ -160,9 +161,9 @@ NTSTDetectorConstruction::PrintCorners(const G4Transform3D& theT,
   G4Point3D u7 = theT*t7;
   G4Point3D u8 = theT*t8;
 
-  G4cout << setw(9) << u1.z() << setw(9) << u2.z() << setw(9) << u3.z()
-	 << setw(9) << u4.z() << setw(9) << u5.z() << setw(9) << u6.z()
-	 << setw(9) << u7.z() << setw(9) << u8.z() << G4endl;
+  G4cout << std::setw(9) << u1.z() << std::setw(9) << u2.z() << std::setw(9) << u3.z()
+	 << std::setw(9) << u4.z() << std::setw(9) << u5.z() << std::setw(9) << u6.z()
+	 << std::setw(9) << u7.z() << std::setw(9) << u8.z() << G4endl;
 };
 
 
@@ -300,10 +301,11 @@ NTSTDetectorConstruction::Construct()
 			Svt_log,"Svt",experimentalHall_log,false,0);
       
     if (debug)
-      G4cout << "Placed SVT mother of length: " << setw(7) << lengthOfTheSvt/cm
+      G4cout << "Placed SVT mother of length: "
+             << std::setw(7) << lengthOfTheSvt/cm
 	     << " and radii (cm): "
-	     << setw(7) << innerRadiusOfTheSvt/cm
-	     << setw(7) << outerRadiusOfTheSvt/cm << G4endl;
+	     << std::setw(7) << innerRadiusOfTheSvt/cm
+	     << std::setw(7) << outerRadiusOfTheSvt/cm << G4endl;
       
     //------------------------------ SVT guts
       
@@ -331,11 +333,11 @@ NTSTDetectorConstruction::Construct()
       G4double Hmin, Hmax, Hzlen, Hthick;
       G4int IwafType;
       _FileRead->StreamLine() >> IwafType >> Hmin >> Hmax >> Hzlen >> Hthick;
-      if (debug) G4cout << "Wafer type " << setw(3) << IwafType
-			<< " Hmin " << setw(10) << Hmin/cm
-			<< " Hmax " << setw(10) << Hmax/cm
-			<< " Hzlen " << setw(10) << Hzlen/cm
-			<< " Hthick " << setw(6) << Hthick/cm << G4endl;
+      if (debug) G4cout << "Wafer type " << std::setw(3) << IwafType
+			<< " Hmin " << std::setw(10) << Hmin/cm
+			<< " Hmax " << std::setw(10) << Hmax/cm
+			<< " Hzlen " << std::setw(10) << Hzlen/cm
+			<< " Hthick " << std::setw(6) << Hthick/cm << G4endl;
           
       G4Trd* aWafer = new G4Trd("aWafer", Hthick*mm, Hthick*mm,
 				Hmin*mm, Hmax*mm, Hzlen*mm);
@@ -361,30 +363,34 @@ NTSTDetectorConstruction::Construct()
     for (G4int Isublay=0; Isublay<Nsublayer;Isublay++){
       G4int Ilayer, Isublayer, Nmodule;
       _FileRead->StreamLine() >> Ilayer >> Isublayer >> Nmodule;
-      if (debug) G4cout << "Number of modules for layer " << setw(3) << Ilayer
-			<< " sublayer " << setw(3) << Isublayer << " = "
-			<< setw(3) << Nmodule << G4endl;
+      if (debug) G4cout << "Number of modules for layer "
+                        << std::setw(3) << Ilayer
+			<< " sublayer " << std::setw(3) << Isublayer << " = "
+			<< std::setw(3) << Nmodule << G4endl;
           
       // loop over the number of modules
           
       for (G4int Imod=0; Imod<Nmodule; Imod++){
 	G4int Imodule, Nwafer;
 	_FileRead->StreamLine() >> Imodule >> Nwafer;
-	if (debug) G4cout << "Number of wafers in module " << setw(3) << Imodule
-			  << " = " << setw(3) << Nwafer << G4endl;
+	if (debug) G4cout << "Number of wafers in module "
+                          << std::setw(3) << Imodule
+			  << " = " << std::setw(3) << Nwafer << G4endl;
               
 	// loop over the number of wafers in a module
               
 	for (G4int Iwaf=0; Iwaf < Nwafer; Iwaf++){
 	  G4int Iwafer, IwaferType;
 	  _FileRead->StreamLine() >> Iwafer >> IwaferType;
-	  if (debug) G4cout << "Wafer " << setw(3) << Iwafer << " type " << setw(3)
+	  if (debug) G4cout << "Wafer " << std::setw(3) << Iwafer
+                            << " type " << std::setw(3)
 			    << IwaferType << G4endl;
 	  G4double x,y,z;
 	  _FileRead->StreamLine() >> x >> y >> z;
 	  G4ThreeVector WafPos(x*mm, y*mm, z*mm);
-	  if (debug) G4cout << " position " << setw(9) << x << " " << setw(9) << y
-			    << " " << setw(9) << z << G4endl;
+	  if (debug) G4cout << " position " << std::setw(9) << x << " "
+                            << std::setw(9) << y
+			    << " " << std::setw(9) << z << G4endl;
                   
 	  _FileRead->StreamLine() >> x >> y >> z;
 	  if (debug) G4cout << "Rotation Matrix:" << G4endl;
@@ -412,7 +418,7 @@ NTSTDetectorConstruction::Construct()
 	    new G4PVPlacement(theTransform, theWafer_log[IwaferType-1],
 			      "WaferPos",Svt_log,false,0);
 	  if (Imod==0 && debug) {
-	    G4cout << "lay " << setw(3) << Ilayer << " Waf "
+	    G4cout << "lay " << std::setw(3) << Ilayer << " Waf "
 		   << Iwafer;
 	    PrintCorners(theTransform, theWafer_log[IwaferType-1]);
 	  }
@@ -438,10 +444,11 @@ NTSTDetectorConstruction::Construct()
 			Dch_log,"Dch",experimentalHall_log,false,0);
       
     if (debug)
-      G4cout << "Placed DCH mother of length: " << setw(7) << lengthOfTheDch/cm
+      G4cout << "Placed DCH mother of length: "
+             << std::setw(7) << lengthOfTheDch/cm
 	     << " and radii (cm): "
-	     << setw(7) << innerRadiusOfTheDch/cm
-	     << setw(7) << outerRadiusOfTheDch/cm << G4endl;
+	     << std::setw(7) << innerRadiusOfTheDch/cm
+	     << std::setw(7) << outerRadiusOfTheDch/cm << G4endl;
 
     G4double r[41] = {25, 26, 27, 28, 30, 32, 33, 34, 35, 37, 38, 39, 41, 42,
 		      43, 45, 46, 48, 49, 50, 52, 53, 54, 56, 57, 59, 60, 61,
@@ -467,10 +474,11 @@ NTSTDetectorConstruction::Construct()
 			  G4ThreeVector(0),
 			  Layer_log,"Layer", Dch_log,false,0);
       if (debug)
-	G4cout << "Placed LAYER mother of length: " << setw(7) << lengthOfTheLayer/cm
+	G4cout << "Placed LAYER mother of length: "
+               << std::setw(7) << lengthOfTheLayer/cm
 	       << " and radii (cm): "
-	       << setw(7) << innerRadiusOfTheLayer/cm
-	       << setw(7) << outerRadiusOfTheLayer/cm << G4endl;
+	       << std::setw(7) << innerRadiusOfTheLayer/cm
+	       << std::setw(7) << outerRadiusOfTheLayer/cm << G4endl;
     }
 
   } // end DCH block

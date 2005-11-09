@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TstVADetectorConstruction.cc,v 1.9 2003-11-02 14:02:00 gcosmo Exp $
+// $Id: TstVADetectorConstruction.cc,v 1.10 2005-11-09 14:53:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -29,7 +29,7 @@
 #include "TstVADetectorConstruction.hh"
 #include "TstVADetectorMessenger.hh"
 
-#include <strstream>
+#include <sstream>
 
 #include "G4ios.hh"
 #include "G4Material.hh"
@@ -262,7 +262,7 @@ void TstVADetectorConstruction::ConstructClassic()
     // Create layers of quazi calorimeter
     for( unsigned int i = 0; i < layers; i++ )
     {
-      std::strstream pvName;
+      std::stringstream pvName;
 
       pvName << "CaloPV_" << i << std::ends;
       

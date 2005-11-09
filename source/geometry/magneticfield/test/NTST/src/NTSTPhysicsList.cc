@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: NTSTPhysicsList.cc,v 1.3 2003-12-09 15:35:38 gunter Exp $
+// $Id: NTSTPhysicsList.cc,v 1.4 2005-11-09 14:50:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,7 @@
 #include "G4Material.hh"
 #include "G4ios.hh"
 #include "NTSTLooperDeath.hh"
-#include <iomanip.h>                
+#include <iomanip>                
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -461,9 +461,3 @@ void
 NTSTPhysicsList::SetLooperCut(const G4double e) { 
   LooperCut = e; 
 }
-
-
-
-
-
-

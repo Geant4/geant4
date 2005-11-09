@@ -154,9 +154,9 @@ NTSTLooperDeath::PostStepDoIt( const G4Track &track, const G4Step & ) // step )
   const G4DynamicParticle *particle = track.GetDynamicParticle();
   G4double energyDeposited = particle->GetTotalEnergy();
 
-  pParticleChange->SetStatusChange( fStopAndKill );
+  pParticleChange->ProposeTrackStatus( fStopAndKill );
   pParticleChange->SetNumberOfSecondaries( 0 );
-  pParticleChange->SetLocalEnergyDeposit( energyDeposited );
+  pParticleChange->ProposeLocalEnergyDeposit( energyDeposited );
   ClearNumberOfInteractionLengthLeft();
 
   return pParticleChange;

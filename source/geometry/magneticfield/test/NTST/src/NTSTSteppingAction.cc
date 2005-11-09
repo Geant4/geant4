@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: NTSTSteppingAction.cc,v 1.2 2003-12-09 15:35:44 gunter Exp $
+// $Id: NTSTSteppingAction.cc,v 1.3 2005-11-09 14:50:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,7 +43,7 @@ NTSTSteppingAction::~NTSTSteppingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void NTSTSteppingAction::UserSteppingAction(const G4Step* aStep)
+void NTSTSteppingAction::UserSteppingAction(const G4Step*)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

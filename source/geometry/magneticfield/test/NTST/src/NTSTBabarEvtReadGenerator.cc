@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: NTSTBabarEvtReadGenerator.cc,v 1.2 2003-12-09 15:35:28 gunter Exp $
+// $Id: NTSTBabarEvtReadGenerator.cc,v 1.3 2005-11-09 14:50:48 gcosmo Exp $
 //
 // -- Bogus -- BaBar Object-Oriented Geant-based Unified Simulation
 //
@@ -41,14 +41,9 @@
 //-----------------------------------------------------------------------------
 
 // ====== C/C++ headers ======
-// #include <sstream>
-// #include <iostream>
-// #include <iomanip>
-
-// -- Older C++ headers
-#include <strstream.h>
-#include <iostream.h>
-#include <iomanip.h>
+#include <sstream>
+#include <iostream>
+#include <iomanip>
 
 // ====== This class header ======
 #include "NTSTBabarEvtReadGenerator.hh"

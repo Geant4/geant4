@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: NTSTEventAction.cc,v 1.4 2004-12-02 09:55:21 gcosmo Exp $
+// $Id: NTSTEventAction.cc,v 1.5 2005-11-09 14:50:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,7 +57,7 @@ NTSTEventAction::NTSTEventAction()
   eventMessenger = new NTSTEventActionMessenger(this);
 }
 
-#include <iomanip.h>
+#include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -76,14 +76,16 @@ NTSTEventAction::~NTSTEventAction()
     G4double ErrRealEventTime = 
       std::sqrt((RmsRealEventTime - MeanRealEventTime*MeanRealEventTime)
 	   /NumberOfEvents);
-    G4cout << setprecision(3) 
-	   << "### Event user time = " << setw(6) << MeanUserEventTime
-	   << setprecision(3) 
-	   << " +- " << setw(6) << ErrUserEventTime << " (sec) " << G4endl;   
-    G4cout << setprecision(3)
-	   << "### Event real time = " << setw(6) << MeanRealEventTime
-	   << setprecision(3) 
-	   << " +- " << setw(6) << ErrRealEventTime << " (sec) " << G4endl;   
+    G4cout << std::setprecision(3) 
+	   << "### Event user time = " << std::setw(6) << MeanUserEventTime
+	   << std::setprecision(3) 
+	   << " +- " << std::setw(6)
+           << ErrUserEventTime << " (sec) " << G4endl;   
+    G4cout << std::setprecision(3)
+	   << "### Event real time = " << std::setw(6) << MeanRealEventTime
+	   << std::setprecision(3) 
+	   << " +- " << std::setw(6)
+           << ErrRealEventTime << " (sec) " << G4endl;   
   
     MeanVertices = MeanVertices / NumberOfEvents;
     RmsVertices = RmsVertices / NumberOfEvents;
@@ -94,11 +96,11 @@ NTSTEventAction::~NTSTEventAction()
     G4double ErrTracks =
       std::sqrt((RmsTracks - MeanTracks*MeanTracks)/NumberOfEvents);
 
-    G4cout << setprecision(3)
-	   << "### Number of Vertices = " << setw(6) << MeanVertices << " +- "
-	   << setw(6) << ErrVertices
-	   << " Number of Tracks = " << setw(6) << MeanTracks << " +- "
-	   << setw(6) << ErrTracks << G4endl;
+    G4cout << std::setprecision(3)
+	   << "### Number of Vertices = " << std::setw(6) << MeanVertices << " +- "
+	   << std::setw(6) << ErrVertices
+	   << " Number of Tracks = " << std::setw(6) << MeanTracks << " +- "
+	   << std::setw(6) << ErrTracks << G4endl;
 
 				
   }
@@ -118,7 +120,7 @@ void NTSTEventAction::BeginOfEventAction(const G4Event* ) // evt)
 void NTSTEventAction::EndOfEventAction(const G4Event* evt)
 {
   EventTime->Stop();
-  G4cout << "### Event " << setprecision(3) 
+  G4cout << "### Event " << std::setprecision(3) 
 	 << evt->GetEventID()+1 << " " << *EventTime << G4endl;
 
   // event statistics

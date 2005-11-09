@@ -20,13 +20,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-#include <iomanip.h>
-#include <fstream.h>
+#include <iomanip>
+#include <fstream>
 #include "NTSTFileRead.hh"
 #include "globals.hh"
+
 NTSTFileRead::NTSTFileRead(const char* FileName, G4bool echo)
   : _LineLength(0), _Istr(0), _echo(0), stuff(0){
-  _Istr = new ifstream(FileName);
+  _Istr = new std::ifstream(FileName);
   if (!*_Istr) {
     G4cerr << "Whoops! No such input file: " << FileName << G4endl;
   } else {
@@ -48,10 +49,9 @@ char* NTSTFileRead::ReadLine(){
   return _Line;
 }
 
-istrstream &NTSTFileRead::StreamLine(){
-  //   return istrstream(ReadLine(), _LineLength);
+std::istringstream &NTSTFileRead::StreamLine(){
   delete stuff;
-  stuff = new istrstream( ReadLine(), _LineLength );
+  stuff = new std::istringstream(ReadLine());
   return *stuff;
 }
 

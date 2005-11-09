@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: NTSTRunAction.cc,v 1.2 2003-12-09 15:35:43 gunter Exp $
+// $Id: NTSTRunAction.cc,v 1.3 2005-11-09 14:50:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,7 +66,7 @@ void NTSTRunAction::BeginOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void NTSTRunAction::EndOfRunAction(const G4Run* aRun)
+void NTSTRunAction::EndOfRunAction(const G4Run*)
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   

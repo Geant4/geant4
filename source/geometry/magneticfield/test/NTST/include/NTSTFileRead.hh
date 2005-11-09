@@ -23,10 +23,10 @@
 #ifndef _NTSTFileRead_
 #define _NTSTFileRead_ 1
 
-#include <strstream.h>
+#include <sstream>
 #include "globals.hh"
 
-#include <fstream.h>
+#include <fstream>
 
 class NTSTFileRead{
 
@@ -34,15 +34,15 @@ public:
   NTSTFileRead(const char* FileName, G4bool echo=false);
   ~NTSTFileRead();
   char* ReadLine();
-  istrstream &StreamLine();
+  std::istringstream &StreamLine();
   
 private:
   char _Line[255];
   int _LineLength;
-  ifstream* _Istr;
+  std::ifstream* _Istr;
   G4bool _echo;
   
-  istrstream *stuff;
+  std::istringstream *stuff;
 };
 
 #endif

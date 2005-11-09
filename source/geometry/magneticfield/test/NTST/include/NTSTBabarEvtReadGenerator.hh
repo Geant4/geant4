@@ -22,7 +22,7 @@
 //
 //--------------------------------------------------------------------------
 // File and Version Information:
-// 	$Id: NTSTBabarEvtReadGenerator.hh,v 1.2 2003-12-09 15:35:10 gunter Exp $
+// 	$Id: NTSTBabarEvtReadGenerator.hh,v 1.3 2005-11-09 14:50:48 gcosmo Exp $
 //
 // Description:
 //	Class NTSTBabarEvtReadGenerator
@@ -41,9 +41,7 @@
 #ifndef NTSTBabarEvtReadGenerator_hh
 #define NTSTBabarEvtReadGenerator_hh 1
 
-// #include <fstream>
-#include <fstream.h>
-//#include <g4rw/tpordvec.h>
+#include <fstream>
 #include "globals.hh"
 #include "G4VPrimaryGenerator.hh"
 
@@ -59,7 +57,7 @@ public:
   
 private:
   G4String fileName;
-  ifstream inputFile;
+  std::ifstream inputFile;
 };
 
 #endif

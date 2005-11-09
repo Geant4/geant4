@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExVDivTester.cc,v 1.3 2004-12-02 09:31:22 gcosmo Exp $
+// $Id: ExVDivTester.cc,v 1.4 2005-11-09 14:49:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class ExVDivTester Implementation file
@@ -45,7 +45,7 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 
-#include <strstream>
+#include <sstream>
 #include <fstream>
 
 G4bool ExVDivTester::bDivCylindrical = 0;
@@ -256,9 +256,9 @@ void ExVDivTester::BuildParentVolumes( G4LogicalVolume* worldLog )
   for( ii = 0; ii < nParents; ii++ )
   {
     G4String parentstr = "parent-";
-    char buf[10];
-    std::ostrstream os(buf,10);
+    std::ostringstream os;
     os << ii << '\0';
+    G4String buf = os.str();
     parentstr += buf;
     if ( thePosType == pvReflected )
     {
@@ -309,9 +309,9 @@ void ExVDivTester::BuildChildrenVolumes()
   for( ii = 0; ii < nParents; ii++ )
   {
     G4String childlogstr = "childLog-";
-    char buf[10];
-    std::ostrstream os(buf,10);
+    std::ostringstream os;
     os << ii << '\0';
+    G4String buf = os.str();
     childlogstr += buf;
     G4LogicalVolume* childLog = new G4LogicalVolume(theChildSolids[ii],
                                 theMate, childlogstr,0,0,0);
@@ -327,9 +327,9 @@ void ExVDivTester::BuildChildrenVolumes()
       if( verbose >= 1 )
         G4cout << " @@@@ Building Child volume " << ii << G4endl;
       G4String childstr = "child-";
-      char buf[10];
-      std::ostrstream os(buf,10);
+      std::ostringstream os;
       os << ii << '\0';
+      G4String buf = os.str();
       childstr += buf;
 
       if ( thePosType == pvReflected )
@@ -422,9 +422,9 @@ void ExVDivTester::BuildChildrenVolumes()
     for( ii = 0; ii < nParents; ii++ )
     {
       G4String childstr = "child-";
-      char buf[10];
-      std::ostrstream os(buf,10);
+      std::ostringstream os;
       os << ii << '\0';
+      G4String buf = os.str();
       childstr += buf;
       if ( thePosType == pvReflected )
       {
