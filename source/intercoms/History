@@ -1,4 +1,4 @@
-$Id: History,v 1.63 2005-10-26 06:10:44 kmura Exp $
+$Id: History,v 1.64 2005-11-09 10:11:57 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 9, 2005  Gabriele Cosmo (intercoms-V07-01-03)
+- Removed inclusion od <strstream> from G4UImessenger.hh.
+- The tag coworks with: run-V07-01-05, radioactive_decay-V07-01-00.
+
 October 26, 2005  Koichi Murakami (intercoms-V07-01-02)
-- migration from strstream to sstream
+- Migration from strstream to sstream
 
 October 20, 2005, Joseph Perl (intercoms-V07-01-01)
 - Tag to co-work with vis-V07-01-05.
