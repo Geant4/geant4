@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.hh,v 1.18 2005-04-01 12:41:11 maire Exp $
+// $Id: G4Element.hh,v 1.19 2005-11-09 15:38:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -192,6 +192,11 @@ public:  // without description
 
   G4int operator==(const G4Element&) const;
   G4int operator!=(const G4Element&) const;
+
+  G4Element(__void__&);
+    // Fake default constructor for usage restricted to direct object
+    // persistency for clients requiring preallocation of memory for
+    // persistifiable objects.
 
 private:
 

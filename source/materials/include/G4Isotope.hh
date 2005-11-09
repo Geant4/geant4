@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.hh,v 1.16 2005-04-01 12:41:11 maire Exp $
+// $Id: G4Isotope.hh,v 1.17 2005-11-09 15:38:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -109,7 +109,12 @@ class G4Isotope
  
     G4int operator==(const G4Isotope&) const;
     G4int operator!=(const G4Isotope&) const;
-    
+
+    G4Isotope(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
+   
  private:
      
     G4Isotope(G4Isotope&);

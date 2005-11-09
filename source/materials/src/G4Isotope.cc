@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.cc,v 1.16 2005-04-01 12:41:11 maire Exp $
+// $Id: G4Isotope.cc,v 1.17 2005-11-09 15:38:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,6 +62,16 @@ G4Isotope::G4Isotope(const G4String& Name, G4int Z, G4int N, G4double A)
 
   theIsotopeTable.push_back(this);
   fIndexInTable = theIsotopeTable.size() - 1;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency
+
+G4Isotope::G4Isotope(__void__&)
+  : fZ(0), fN(0), fA(0), fCountUse(0)
+{
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.20 2005-04-01 12:41:11 maire Exp $
+// $Id: G4Element.cc,v 1.21 2005-11-09 15:38:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,7 +59,7 @@ G4ElementTable G4Element::theElementTable;
 
 G4Element::G4Element(const G4String& name, const G4String& symbol,
                      G4double zeff, G4double aeff)
-:fName(name),fSymbol(symbol)		     
+  : fName(name), fSymbol(symbol)		     
 {
     if (zeff<1.) G4Exception (" ERROR from G4Element::G4Element !"
        " It is not allowed to create an Element with Z < 1" );
@@ -105,8 +105,9 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
 // Constructor to Generate element from a List of 'nIsotopes' isotopes, added
 // via AddIsotope
 
-G4Element::G4Element(const G4String& name, const G4String& symbol, G4int nIsotopes)
-:fName(name),fSymbol(symbol)
+G4Element::G4Element(const G4String& name,
+                     const G4String& symbol, G4int nIsotopes)
+  : fName(name),fSymbol(symbol)
 {
     InitializePointers();
 
@@ -186,6 +187,19 @@ void G4Element::InitializePointers()
     fRelativeAbundanceVector = 0;
     fAtomicShells = 0;
     fIonisation = 0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency
+
+G4Element::G4Element( __void__& )
+  : fZeff(0), fNeff(0), fAeff(0), fNbOfAtomicShells(0), 
+    fAtomicShells(0), fNumberOfIsotopes(0), theIsotopeVector(0), 
+    fRelativeAbundanceVector(0), fCountUse(0), fIndexInTable(0), 
+    fCoulomb(0), fRadTsai(0), fIonisation(0)
+{
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.27 2005-04-01 12:41:11 maire Exp $
+// $Id: G4Material.cc,v 1.28 2005-11-09 15:38:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -76,7 +76,7 @@ G4MaterialTable G4Material::theMaterialTable;
 G4Material::G4Material(const G4String& name, G4double z,
                        G4double a, G4double density, 
                        G4State state, G4double temp, G4double pressure)
-:fName(name)		       
+  : fName(name)		       
 {
   InitializePointers();
     
@@ -127,7 +127,7 @@ G4Material::G4Material(const G4String& name, G4double z,
 G4Material::G4Material(const G4String& name, G4double density,
                        G4int nComponents,
                        G4State state, G4double temp, G4double pressure)
-:fName(name)		       
+  : fName(name)		       
 {
   InitializePointers();
     
@@ -157,6 +157,19 @@ G4Material::G4Material(const G4String& name, G4double density,
      if (fDensity > kGasThreshold) fState = kStateSolid;
      else                          fState = kStateGas;
     }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency
+
+G4Material::G4Material(__void__&)
+  : fNumberOfComponents(0), fNumberOfElements(0), theElementVector(0), 
+    fImplicitElement(false), fMassFractionVector(0), fAtomsVector(0), 
+    fMaterialPropertiesTable(0), fIndexInTable(10000000), 
+    VecNbOfAtomsPerVolume(0), fIonisation(0), fSandiaTable(0)
+{
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

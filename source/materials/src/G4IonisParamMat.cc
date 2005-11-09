@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.15 2005-05-12 17:29:08 vnivanch Exp $
+// $Id: G4IonisParamMat.cc,v 1.16 2005-11-09 15:38:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,11 +44,21 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 G4IonisParamMat::G4IonisParamMat(G4Material* material)
-:fMaterial(material)
+  : fMaterial(material)
 {
   ComputeMeanParameters();
   ComputeDensityEffect();
   ComputeFluctModel();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency
+
+G4IonisParamMat::G4IonisParamMat(__void__&)
+  : fMaterial(0), fShellCorrectionVector(0)
+{
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

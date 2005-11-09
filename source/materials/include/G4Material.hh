@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.hh,v 1.22 2003-06-16 16:56:18 gunter Exp $
+// $Id: G4Material.hh,v 1.23 2005-11-09 15:38:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -231,6 +231,10 @@ public:  // without description
        
   G4int operator==(const G4Material&) const;
   G4int operator!=(const G4Material&) const;
+  G4Material(__void__&);
+    // Fake default constructor for usage restricted to direct object
+    // persistency for clients requiring preallocation of memory for
+    // persistifiable objects.
 
 private:
 
