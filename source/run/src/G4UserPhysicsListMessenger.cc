@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.24 2004-11-01 16:47:56 kurasige Exp $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.25 2005-11-09 10:06:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,7 @@
 #include "G4ios.hh"
 #include "G4Tokenizer.hh"           
 
+#include <sstream>
 
 G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pParticleList):thePhysicsList(pParticleList)
 {
@@ -209,7 +210,7 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
     //G4String cValue = G4String(next())+" "+G4String(next());
     //G4double newCut = setCutCmd->GetNewDoubleValue(cValue); 
     //thePhysicsList->SetCutsForRegion(newCut,rName);
-    std::istrstream is(newValue);
+    std::istringstream is(newValue);
     char regName[50];
     G4double cVal;
     char uniName[10];

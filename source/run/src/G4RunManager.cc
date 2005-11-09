@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.87 2005-11-09 09:58:38 gcosmo Exp $
+// $Id: G4RunManager.cc,v 1.88 2005-11-09 10:06:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,7 +51,7 @@
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
-#include <strstream>
+#include <sstream>
 
 using namespace CLHEP;
 
@@ -393,7 +393,7 @@ void G4RunManager::rndmSaveThisRun()
   
   G4String fileIn  = randomNumberStatusDir + "currentRun.rndm";
  
-  std::ostrstream os;
+  std::ostringstream os;
   os << "run" << runNumber << ".rndm" << '\0';
   G4String fileOut = randomNumberStatusDir + os.str();  
 
@@ -413,7 +413,7 @@ void G4RunManager::rndmSaveThisEvent()
   
   G4String fileIn  = randomNumberStatusDir + "currentEvent.rndm";
 
-  std::ostrstream os;
+  std::ostringstream os;
   os << "run" << currentRun->GetRunID() << "evt" << currentEvent->GetEventID()
      << ".rndm" << '\0';
   G4String fileOut = randomNumberStatusDir + os.str();       
