@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.26 2005-08-05 15:42:39 danninos Exp $
+// $Id: G4VSolid.cc,v 1.27 2005-11-09 14:54:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -57,6 +57,21 @@
 G4VSolid::G4VSolid(const G4String& name)
   : fshapeName(name)
 {
+    // Register to store
+    //
+    G4SolidStore::GetInstance()->Register(this);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4VSolid::G4VSolid( __void__& )
+  : fshapeName("")
+{
+    // Register to store
+    //
     G4SolidStore::GetInstance()->Register(this);
 }
 

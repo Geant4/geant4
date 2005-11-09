@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.icc,v 1.22 2005-08-18 18:41:19 asaim Exp $
+// $Id: G4LogicalVolume.icc,v 1.23 2005-11-09 14:54:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -120,22 +120,6 @@ void G4LogicalVolume::AddDaughter(G4VPhysicalVolume* pNewDaughter)
   fDaughters.push_back(pNewDaughter);
 
   G4LogicalVolume* pDaughterLogical = pNewDaughter->GetLogicalVolume();
-
-  // Propagates the mother's FastSimulationManager pointer. If we are in
-  // the World logical volume, propagates only if pointer != 0.
-  // (one could also parameterise all the World volume for a particle type!)
-
-// This part is removed along fFastSimulationManager has been moved to G4Region
-//  G4LogicalVolume* myLogical = pNewDaughter->GetMotherLogical();
-//  if( myLogical !=0 )
-//  {
-//    if( pDaughterLogical->GetFastSimulationManager()!=fFastSimulationManager )
-//      pDaughterLogical->SetFastSimulationManager(fFastSimulationManager,false);
-//  }
-//  else
-//  {
-//    pDaughterLogical->SetFastSimulationManager(0, false);
-//  }
 
   // Propagate the Field Manager, if the daughter has no field Manager.
   //
@@ -497,17 +481,4 @@ G4double G4LogicalVolume::GetBiasWeight() const
 {
   return fBiasWeight;
 }
-
-// Following methods have been moved to G4Region - M.Asai (Aug/18/2005)
-//
-//// ********************************************************************
-//// BecomeEnvelopeForFastSimulation
-//// ********************************************************************
-////
-//inline
-//void 
-//G4LogicalVolume::BecomeEnvelopeForFastSimulation(G4FastSimulationManager* pPA)
-//{
-//  SetFastSimulationManager(pPA, true);
-//}
 

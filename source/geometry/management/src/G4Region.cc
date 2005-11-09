@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.16 2005-08-30 18:10:17 asaim Exp $
+// $Id: G4Region.cc,v 1.17 2005-11-09 14:54:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,6 +58,20 @@ G4Region::G4Region(const G4String& pName)
   {
     rStore->Register(this);
   }
+}
+
+// ********************************************************************
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+// ********************************************************************
+//
+G4Region::G4Region( __void__& )
+  : fName(""), fRegionMod(true), fCut(0), fUserInfo(0), fUserLimits(0),
+    fFastSimulationManager(0), fWorldPhys(0)
+{
+  // Register to store
+  //
+  G4RegionStore::GetInstance()->Register(this);
 }
 
 // *******************************************************************

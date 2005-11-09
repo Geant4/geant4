@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.20 2005-08-05 15:42:38 danninos Exp $
+// $Id: G4VSolid.hh,v 1.21 2005-11-09 14:54:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -209,8 +209,12 @@ class G4VSolid
       // If the solid is a "G4DisplacedSolid", return a self pointer
       // else return 0.
 
-  //  virtual G4ThreeVectorList* 
-  //  CreateRotatedVertices(const G4AffineTransform& pTransform) const = 0 ;
+  public:  // without description
+
+    G4VSolid(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
   protected:  // with description
 

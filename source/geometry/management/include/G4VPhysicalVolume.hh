@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.hh,v 1.10 2003-11-02 14:01:22 gcosmo Exp $
+// $Id: G4VPhysicalVolume.hh,v 1.11 2005-11-09 14:54:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -155,6 +155,13 @@ class G4VPhysicalVolume
                                     G4double& offset,
                                     G4bool& consuming) const = 0;
       // Return replication information. No-op for no replicated volumes.
+
+  public:  // without description
+
+    G4VPhysicalVolume(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
   private:
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.hh,v 1.13 2005-08-30 18:10:17 asaim Exp $
+// $Id: G4Region.hh,v 1.14 2005-11-09 14:54:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Region
@@ -31,9 +31,6 @@
 // Defines a region or a group of regions in the detector geometry
 // setup, sharing properties associated to materials or production
 // cuts which may affect or bias specific physics processes. 
-//
-// Member data:
-//
 
 // History:
 // 18.09.02 G.Cosmo Initial version
@@ -159,6 +156,13 @@ class G4Region
 
     G4Region* GetParentRegion() const;
       // Returns a region that contains this region. Otherwise null returned.
+
+  public:  // without description
+
+    G4Region(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
   private:
 
