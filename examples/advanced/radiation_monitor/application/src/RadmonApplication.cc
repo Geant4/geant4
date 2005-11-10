@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplication.cc,v 1.8 2005-11-07 17:54:19 capra Exp $
+// Id:            $Id: RadmonApplication.cc,v 1.9 2005-11-10 08:17:16 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -147,7 +147,7 @@
  }
  
  
- // Construct the generators algorithms
+ // Construct the sub physics lists
  if (!CreateSubPhysicsList(physicsFactory))
  {
   G4cerr << options.ApplicationName() << ": Sub physics lists not allocated." << G4endl;
@@ -203,8 +203,8 @@
  runManager->SetUserInitialization(physicsList);
  
             
- // Initialize the run manager
- runManager->Initialize();
+ // Initialize the run manager (disabled in order to have UI physics list)
+ // runManager->Initialize();
 
  
  // Construct the visualization manager
@@ -259,6 +259,16 @@
  if (generatorMessenger==0)
  {
   G4cerr << options.ApplicationName() << ": Generator layout messenger not allocated." << G4endl;
+  return;
+ }
+ 
+ 
+ // Construct the messenger to modify the physics list layout
+ physicsMessenger=new RadmonPhysicsMessenger(physicsLayout);
+ 
+ if (physicsMessenger==0)
+ {
+  G4cerr << options.ApplicationName() << ": Physics list layout messenger not allocated." << G4endl;
   return;
  }
  
