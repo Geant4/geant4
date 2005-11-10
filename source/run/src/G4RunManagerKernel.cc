@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.29 2005-11-07 08:08:41 gcosmo Exp $
+// $Id: G4RunManagerKernel.cc,v 1.30 2005-11-10 11:37:33 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -76,7 +76,7 @@ G4RunManagerKernel::G4RunManagerKernel()
     G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
 
   // Following line is tentatively moved from SetPhysics method
-  G4ParticleTable::GetParticleTable()->SetReadiness();
+  // Commented out for introduction of non-static particle definition // G4ParticleTable::GetParticleTable()->SetReadiness();
   // set the initial application state
   G4StateManager::GetStateManager()->SetNewState(G4State_PreInit);
 
@@ -203,7 +203,7 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
 void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
 {
   physicsList = uPhys;
-  // G4ParticleTable::GetParticleTable()->SetReadiness();
+  G4ParticleTable::GetParticleTable()->SetReadiness();
   physicsList->ConstructParticle();
   if(verboseLevel>2) G4ParticleTable::GetParticleTable()->DumpTable();
   if(verboseLevel>1)
