@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2005-10-25 16:37:59 capra Exp $
+# $Id: GNUmakefile,v 1.5 2005-11-10 08:16:30 capra Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples with internal subpackages
 # R. Capra, 09 Sep 2005
@@ -7,7 +7,7 @@
 name := Radmon
 G4TARGET := $(name)
 G4EXLIB := true
-SUBDIRS := application detector physics generalPurpose materials generator
+SUBDIRS := generalPurpose materials detector physics generator application
 
 ifndef G4INSTALL
   G4INSTALL = ../../..

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2005-11-07 17:53:48 capra Exp $
+# $Id: GNUmakefile,v 1.3 2005-11-10 08:16:30 capra Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for exaple subpackage
 # R. Capra, 09 Sep 2005
@@ -18,7 +18,47 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/bosons/include \
+            -I$(G4BASE)/particles/leptons/include \
+            -I$(G4BASE)/particles/hadrons/barions/include \
+            -I$(G4BASE)/particles/hadrons/ions/include \
+            -I$(G4BASE)/particles/hadrons/mesons/include \
+            -I$(G4BASE)/processes/decay/include \
+            -I$(G4BASE)/processes/management/include \
+            -I$(G4BASE)/processes/hadronic/cross_sections/include \
+            -I$(G4BASE)/processes/hadronic/processes/include \
+            -I$(G4BASE)/processes/hadronic/management/include \
+            -I$(G4BASE)/processes/hadronic/models/binary_cascade/include \
+            -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/interface/include \
+            -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/body/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/fermi_breakup/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/handler/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/management/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/multifragmentation/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/photon_evaporation/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include \
+            -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
+            -I$(G4BASE)/processes/hadronic/models/low_energy/include \
+            -I$(G4BASE)/processes/hadronic/models/management/include \
+            -I$(G4BASE)/processes/hadronic/models/parton_string/hadronization/include \
+            -I$(G4BASE)/processes/hadronic/models/parton_string/qgsm/include \
+            -I$(G4BASE)/processes/hadronic/models/parton_string/management/include \
+            -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include \
+            -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/include \
+            -I$(G4BASE)/processes/hadronic/models/theo_high_energy/include \
+            -I$(G4BASE)/processes/hadronic/models/util/include \
+            -I$(G4BASE)/processes/hadronic/stopping/include \
+            -I$(G4BASE)/processes/hadronic/util/include \
+            -I$(G4BASE)/processes/electromagnetic/lowenergy/include \
+            -I$(G4BASE)/processes/electromagnetic/muons/include \
+            -I$(G4BASE)/processes/electromagnetic/standard/include \
+            -I$(G4BASE)/processes/electromagnetic/utils/include \
+            -I$(G4BASE)/processes/transportation/include \
             -I$(G4BASE)/processes/cuts/include \
+            -I$(G4BASE)/materials/include \
+            -I$(G4BASE)/track/include \
+            -I$(G4BASE)/global/HEPRandom/include \
+            -I$(G4BASE)/global/HEPGeometry/include \
             -I../generalPurpose/include
 
 include $(G4INSTALL)/config/common.gmk
