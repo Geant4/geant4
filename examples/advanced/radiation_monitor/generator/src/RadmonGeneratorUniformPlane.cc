@@ -3,7 +3,7 @@
 // Creation date: Oct 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonGeneratorUniformPlane.cc,v 1.1 2005-10-25 16:36:43 capra Exp $
+// Id:            $Id: RadmonGeneratorUniformPlane.cc,v 1.2 2005-11-10 08:11:26 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -56,7 +56,7 @@ void                                            RadmonGeneratorUniformPlane :: C
  G4ThreeVector offset(x, y, 0.);
  
  G4RotationMatrix rotation;
- rotation.rotate(delta, direction);
+ rotation.rotate(delta/rad, direction);
  
  offset.transform(rotation);
  

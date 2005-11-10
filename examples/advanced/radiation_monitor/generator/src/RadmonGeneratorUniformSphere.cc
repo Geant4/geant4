@@ -3,7 +3,7 @@
 // Creation date: Oct 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonGeneratorUniformSphere.cc,v 1.1 2005-10-25 16:36:43 capra Exp $
+// Id:            $Id: RadmonGeneratorUniformSphere.cc,v 1.2 2005-11-10 08:11:26 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -29,8 +29,9 @@ void                                            RadmonGeneratorUniformSphere :: 
  G4ThreeVector direction;
  direction.setRThetaPhi(1., std::acos(cosTheta), phi);
  
- G4RotationMatrix rotation;
- rotation.rotate(0., direction);
+ G4RotationMatrix rotation(G4RotationMatrix::IDENTITY);
+ rotation.rotateY(direction.getTheta());
+ rotation.rotateZ(phi);
  
  direction*=radius;
  

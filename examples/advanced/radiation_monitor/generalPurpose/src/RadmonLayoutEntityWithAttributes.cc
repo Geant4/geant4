@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonLayoutEntityWithAttributes.cc,v 1.2 2005-10-25 16:40:56 capra Exp $
+// Id:            $Id: RadmonLayoutEntityWithAttributes.cc,v 1.3 2005-11-10 08:11:26 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -229,14 +229,45 @@ G4ThreeVector                                   RadmonLayoutEntityWithAttributes
  if (!RadmonMessenger::ProcessArguments(str, 3, args))
   return defaultValue;
 
- G4double unit(RadmonMessenger::GetUnit(args[2], "Angle"));
- if (unit<=0.)
+ G4double theta(RadmonMessenger::GetUnit(args[2], "Angle"));
+ if (theta<=0.)
+  return defaultValue;
+
+ G4double phi(theta*G4UIcommand::ConvertToDouble(args[1]));
+ theta*=G4UIcommand::ConvertToDouble(args[0]);
+  
+ G4ThreeVector axis;
+ axis.setRThetaPhi(1., theta/rad, phi/rad);
+ 
+ return axis;
+}
+
+
+
+G4RotationMatrix                                RadmonLayoutEntityWithAttributes :: GetAttributeAsRotationMatrix(const G4String & attributeName, const G4RotationMatrix & defaultValue) const
+{
+ G4String str;
+ 
+ str=GetAttribute(attributeName, "#");
+ if (str=="#")
   return defaultValue;
   
- G4ThreeVector direction;
- direction.setRThetaPhi(1., G4UIcommand::ConvertToDouble(args[0])*unit, G4UIcommand::ConvertToDouble(args[1])*unit);
+ G4String args[4];
+ if (!RadmonMessenger::ProcessArguments(str, 4, args))
+  return defaultValue;
+
+ G4double theta(RadmonMessenger::GetUnit(args[3], "Angle"));
+ if (theta<=0.)
+  return defaultValue;
+
+ G4double phi(theta*G4UIcommand::ConvertToDouble(args[1]));
+ G4double delta(theta*G4UIcommand::ConvertToDouble(args[2]));
+ theta*=G4UIcommand::ConvertToDouble(args[0]);
+  
+ G4ThreeVector axis;
+ axis.setRThetaPhi(1., theta/rad, phi/rad);
  
- return direction;
+ return G4RotationMatrix(axis, delta/rad);
 }
 
 

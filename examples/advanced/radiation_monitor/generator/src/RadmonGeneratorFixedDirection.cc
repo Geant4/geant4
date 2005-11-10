@@ -3,7 +3,7 @@
 // Creation date: Oct 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonGeneratorFixedDirection.cc,v 1.1 2005-10-25 16:36:41 capra Exp $
+// Id:            $Id: RadmonGeneratorFixedDirection.cc,v 1.2 2005-11-10 08:11:26 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -20,16 +20,7 @@ void                                            RadmonGeneratorFixedDirection ::
   return;
  }
  
- G4ThreeVector direction(GetAttributeAsDirection("Directon", G4ThreeVector()));
- 
- if (direction.getR()<0.5)
- {
-  G4cout << "RadmonGeneratorFixedDirection::ConvolveParticleGun: \"Direction\" attribute has invalid format." << G4endl;
-  return;
- }
- 
- G4RotationMatrix rotation;
- rotation.rotate(0., direction);
+ G4RotationMatrix rotation(GetAttributeAsRotationMatrix("Direction", G4RotationMatrix::IDENTITY));
  
  gun.SetParticleMomentumDirection(rotation * gun.GetParticleMomentumDirection());
 }

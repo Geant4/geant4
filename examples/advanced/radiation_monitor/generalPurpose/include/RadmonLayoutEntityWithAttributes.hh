@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonLayoutEntityWithAttributes.hh,v 1.2 2005-10-25 16:40:56 capra Exp $
+// Id:            $Id: RadmonLayoutEntityWithAttributes.hh,v 1.3 2005-11-10 08:11:26 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Provides attributes to other detector classes
@@ -16,6 +16,7 @@
  #include "G4String.hh"
  #include "globals.hh"
  #include "G4ThreeVector.hh"
+ #include "G4RotationMatrix.hh"
 
  #include <vector>
  #include <utility>
@@ -38,6 +39,7 @@
    G4ThreeVector                                GetAttributeAsThreeVector(const G4String & attributeName, const G4ThreeVector & defaultValue) const;
    G4ThreeVector                                GetAttributeAsThreeVectorWithMeasure(const G4String & attributeName, const char * category, const G4ThreeVector & defaultValue) const;
    G4ThreeVector                                GetAttributeAsDirection(const G4String & attributeName, const G4ThreeVector & defaultValue) const;
+   G4RotationMatrix                             GetAttributeAsRotationMatrix(const G4String & attributeName, const G4RotationMatrix & defaultValue) const;
    
   protected:
    inline                                       RadmonLayoutEntityWithAttributes();
