@@ -25,7 +25,7 @@
 // *                                                                  *
 // ********************************************************************
 //
-// $Id: G4Tet.cc,v 1.6 2005-11-09 15:04:28 gcosmo Exp $
+// $Id: G4Tet.cc,v 1.7 2005-11-10 15:59:19 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Tet
@@ -53,7 +53,7 @@
 
 #include "G4Tet.hh"
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.6 2005-11-09 15:04:28 gcosmo Exp $";
+const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.7 2005-11-10 15:59:19 allison Exp $";
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -88,7 +88,7 @@ G4Tet::G4Tet(const G4String& pName,
                    G4ThreeVector p2,
                    G4ThreeVector p3,
                    G4ThreeVector p4, G4bool *degeneracyFlag)
-  : G4VSolid(pName), warningFlag(0)
+  : G4VSolid(pName), fpPolyhedron(0), warningFlag(0)
 {
   // fV<x><y> is vector from vertex <y> to vertex <x>
   //
@@ -108,6 +108,7 @@ G4Tet::G4Tet(const G4String& pName,
     fV41=fV31;
     fV31=temp; 
   }
+  fCubicVolume = std::abs(signed_vol) / 6.;
 
   G4ThreeVector fV24=p2-p4;
   G4ThreeVector fV43=p4-p3;
@@ -178,6 +179,7 @@ G4Tet::G4Tet( __void__& a )
 
 G4Tet::~G4Tet()
 {
+  delete fpPolyhedron;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -670,7 +672,7 @@ G4Polyhedron* G4Tet::CreatePolyhedron () const
 {
   G4Polyhedron *ph=new G4Polyhedron;
   G4double xyz[4][3];
-  static G4int faces[4][4]={{1,2,3,0},{1,3,4,0},{1,4,2,0},{2,3,4,0}};
+  static G4int faces[4][4]={{1,3,2,0},{1,4,3,0},{1,2,4,0},{2,3,4,0}};
   xyz[0][0]=fAnchor.x(); xyz[0][1]=fAnchor.y(); xyz[0][2]=fAnchor.z();
   xyz[1][0]=fP2.x(); xyz[1][1]=fP2.y(); xyz[1][2]=fP2.z();
   xyz[2][0]=fP3.x(); xyz[2][1]=fP3.y(); xyz[2][2]=fP3.z();
@@ -688,4 +690,20 @@ G4Polyhedron* G4Tet::CreatePolyhedron () const
 G4NURBS* G4Tet::CreateNURBS () const 
 {
   return new G4NURBSbox (fDx, fDy, fDz);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// GetPolyhedron
+
+G4Polyhedron* G4Tet::GetPolyhedron () const
+{
+  if (!fpPolyhedron ||
+      fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+      fpPolyhedron->GetNumberOfRotationSteps())
+    {
+      delete fpPolyhedron;
+      fpPolyhedron = CreatePolyhedron();
+    }
+  return fpPolyhedron;
 }

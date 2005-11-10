@@ -26,7 +26,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tet.hh,v 1.4 2005-11-09 15:04:28 gcosmo Exp $
+// $Id: G4Tet.hh,v 1.5 2005-11-10 15:59:19 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -88,6 +88,8 @@ class G4Tet : public G4VSolid
 
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
+    G4double GetCubicVolume() {return fCubicVolume;}
+
     G4GeometryType GetEntityType() const;
 
     std::ostream& StreamInfo(std::ostream& os) const;
@@ -100,6 +102,7 @@ class G4Tet : public G4VSolid
     G4VisExtent   GetExtent          () const;
     G4Polyhedron* CreatePolyhedron   () const;
     G4NURBS*      CreateNURBS        () const;
+    G4Polyhedron* GetPolyhedron      () const;
 
   public:   // without description
 
@@ -109,7 +112,7 @@ class G4Tet : public G4VSolid
       // persistifiable objects.
 
     const char* CVSHeaderVers()
-      { return "$Id: G4Tet.hh,v 1.4 2005-11-09 15:04:28 gcosmo Exp $"; }
+      { return "$Id: G4Tet.hh,v 1.5 2005-11-10 15:59:19 allison Exp $"; }
     const char* CVSFileVers()
       { return CVSVers; }
     void PrintWarnings(G4bool flag)
@@ -127,6 +130,10 @@ class G4Tet : public G4VSolid
       // for G4VSolid:: ClipCrossSection and ClipBetweenSections.
 
   private:
+
+    G4double fCubicVolume;
+
+    mutable G4Polyhedron* fpPolyhedron;
 
     G4ThreeVector GetPointOnFace(G4ThreeVector p1, G4ThreeVector p2, 
                                  G4ThreeVector p3, G4double& area) const;
