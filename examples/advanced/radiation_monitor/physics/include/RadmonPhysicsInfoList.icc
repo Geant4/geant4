@@ -1,0 +1,38 @@
+//
+// File name:     RadmonPhysicsInfoList.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonPhysicsInfoList.icc,v 1.1 2005-11-10 08:14:10 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONPHYSICSINFOLIST_HH
+ #error "RadmonPhysicsInfoList.icc cannot be included directly. Please use RadmonPhysicsInfoList.hh"
+#else  /* RADMONPHYSICSINFOLIST_HH */
+ inline                                         RadmonPhysicsInfoList :: RadmonPhysicsInfoList()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonPhysicsInfoList :: ~RadmonPhysicsInfoList()
+ {
+ }
+ 
+ 
+ 
+
+
+ inline G4int                                   RadmonPhysicsInfoList :: GetNPhysicsInfos(void) const
+ {
+  return static_cast<G4int>(infoVector.size());
+ }
+ 
+ 
+ 
+ inline const RadmonPhysicsInfo &               RadmonPhysicsInfoList :: GetPhysicsInfo(G4int index) const
+ {
+  return infoVector[index];
+ }
+#endif /* RADMONPHYSICSINFOLIST_HH */

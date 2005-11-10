@@ -3,7 +3,7 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonPhysicsList.hh,v 1.1 2005-11-07 17:52:36 capra Exp $
+// Id:            $Id: RadmonPhysicsList.hh,v 1.2 2005-11-10 08:14:10 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Implementation of the G4VUserPhysicsList
@@ -31,7 +31,6 @@
 
    virtual void                                 OnLayoutChange(void);
 
-  protected:
    virtual void                                 ConstructParticle(void);
    virtual void                                 ConstructProcess(void);
    virtual void                                 SetCuts(void);
@@ -50,8 +49,10 @@
 
   // Private attributes
    RadmonVPhysicsLayout *                       physicsLayout;
-   RadmonVSubPhysicsListFactory *               constructorsFactory;
+   RadmonVSubPhysicsListFactory *               subPhysicsListFactory;
     
    SubPhysiscsLists                             subPhysiscsLists;
+   
+   G4bool                                       initializationMethodsCalled;
  };
 #endif /* RADMONPHYSICSLIST_HH */

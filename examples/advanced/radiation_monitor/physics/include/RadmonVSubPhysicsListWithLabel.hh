@@ -1,12 +1,12 @@
 //
 // File name:     RadmonVSubPhysicsListWithLabel.hh
-// Creation date: Sep 2005
+// Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonVSubPhysicsListWithLabel.hh,v 1.1 2005-11-07 17:52:36 capra Exp $
+// Id:            $Id: RadmonVSubPhysicsListWithLabel.hh,v 1.2 2005-11-10 08:14:10 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
-// Description:   Abstract class of a detector-entity constructor with label
+// Description:   Abstract class of a physics list piece with label
 //                and attributes
 //
 
@@ -17,17 +17,13 @@
  #include "RadmonLayoutEntityWithAttributes.hh"
  #include "RadmonVSubPhysicsList.hh"
  
- // Forward declaration
- class G4Material;
- class G4VisAttributes;
- 
  class RadmonVSubPhysicsListWithLabel : public RadmonVSubPhysicsList, public RadmonLayoutEntityWithAttributes
  {
   public:
-   inline virtual                               ~RadmonVSubPhysicsListWithLabel();
+   inline virtual                              ~RadmonVSubPhysicsListWithLabel();
 
    inline const G4String &                      GetLabel(void) const;
-   inline virtual void                          SetEntityAttribute(const G4String & attributeName, const G4String & value);
+   inline virtual void                          SetPhysicsListAttribute(const G4String & attributeName, const G4String & value);
 
    virtual RadmonVSubPhysicsListWithLabel *     New(void) const = 0;
 
@@ -36,8 +32,9 @@
    
   private:
   // Hidden constructors and operators
+                                                RadmonVSubPhysicsListWithLabel();
                                                 RadmonVSubPhysicsListWithLabel(const RadmonVSubPhysicsListWithLabel & copy);
-   RadmonVSubPhysicsListWithLabel &   operator=(const RadmonVSubPhysicsListWithLabel & copy);
+   RadmonVSubPhysicsListWithLabel &             operator=(const RadmonVSubPhysicsListWithLabel & copy);
 
   // Private attributes
    G4String                                     physiscListLabel;

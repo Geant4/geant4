@@ -1,9 +1,9 @@
 //
 // File name:     RadmonSubPhysicsListWithLabelMessenger.hh
-// Creation date: Sep 2005
+// Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonSubPhysicsListWithLabelMessenger.hh,v 1.1 2005-11-07 17:52:36 capra Exp $
+// Id:            $Id: RadmonSubPhysicsListWithLabelMessenger.hh,v 1.2 2005-11-10 08:14:10 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   UI commands for dumping the available constructors

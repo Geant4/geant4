@@ -3,7 +3,7 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonPhysicsMessenger.cc,v 1.1 2005-11-07 17:52:36 capra Exp $
+// Id:            $Id: RadmonPhysicsMessenger.cc,v 1.2 2005-11-10 08:14:10 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -37,8 +37,8 @@
  RADMON_CREATE_COMMAND_3ARGS(SetPhysicsListAttribute,           "Set the attributes of a physics list",    "physicsListName", "attributeName", "value");
  RADMON_CREATE_COMMAND_2ARGS(ClearPhysicsListAttribute,         "Remove the attributes of a physics list", "physicsListName", "attributeName");
  RADMON_CREATE_COMMAND_0ARGS(DumpLayout,                        "Print out the current layout");
- RADMON_CREATE_COMMAND_1ARG (Load,                              "Loads a layout from file",                                                                             "fileName");
- RADMON_CREATE_COMMAND_1ARG (Save,                              "Saves a layout to file",                                                                               "fileName");
+ RADMON_CREATE_COMMAND_1ARG (Load,                              "Loads a layout from file",                "fileName");
+ RADMON_CREATE_COMMAND_1ARG (Save,                              "Saves a layout to file",                  "fileName");
 }
 
 

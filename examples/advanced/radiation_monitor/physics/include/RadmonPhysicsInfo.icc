@@ -1,0 +1,87 @@
+//
+// File name:     RadmonPhysicsInfo.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonPhysicsInfo.icc,v 1.1 2005-11-10 08:14:10 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONPHYSICSINFO_HH
+ #error "RadmonPhysicsInfo.icc cannot be included directly. Please use RadmonPhysicsInfo.hh"
+#else  /* RADMONPHYSICSINFO_HH */
+ inline                                         RadmonPhysicsInfo :: RadmonPhysicsInfo()
+ :
+  minEnergy(1e-6*eV),
+  maxEnergy(0.*eV),
+  name(""),
+  particle(0)
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonPhysicsInfo :: ~RadmonPhysicsInfo()
+ {
+ }
+
+
+
+
+
+ inline const G4String &                        RadmonPhysicsInfo :: GetProcessName(void) const
+ {
+  return name;
+ }
+ 
+ 
+ 
+ inline const G4ParticleDefinition *            RadmonPhysicsInfo :: GetParticleDefinition(void) const
+ {
+  return particle;
+ }
+ 
+ 
+ 
+ inline G4double                                RadmonPhysicsInfo :: GetMinEnergy(void) const
+ {
+  return minEnergy;
+ }
+ 
+ 
+ 
+ inline G4double                                RadmonPhysicsInfo :: GetMaxEnergy(void) const
+ {
+  return maxEnergy;
+ }
+ 
+ 
+ 
+
+
+ inline void                                    RadmonPhysicsInfo :: SetProcessName(const G4String & processName)
+ {
+  name=processName;
+ }
+ 
+ 
+ 
+ inline void                                    RadmonPhysicsInfo :: SetParticleDefinition(const G4ParticleDefinition * particleDefinition)
+ {
+  particle=particleDefinition;
+ }
+ 
+ 
+ 
+ inline void                                    RadmonPhysicsInfo :: SetMinEnergy(G4double energy)
+ {
+  minEnergy=energy;
+ }
+ 
+ 
+ 
+ inline void                                    RadmonPhysicsInfo :: SetMaxEnergy(G4double energy)
+ {
+  maxEnergy=energy;
+ }
+#endif /* RADMONPHYSICSINFO_HH */
