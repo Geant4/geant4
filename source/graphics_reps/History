@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.88 2005-11-10 15:39:16 allison Exp $
+cvs log $Id: History,v 1.89 2005-11-10 21:30:13 tinslay Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10th November 2005  Jane Tinslay (greps-V07-01-09)
+- G4VVisManager: Fix Dispatch method name to "DispatchToModel".
+- G4Colour: Use public static member functions instead of public 
+  static data members to avoid problems with dynamic libraries.
 
 10th November 2005  John Allison
 - G4VVisManager and G4VGraphicsScene: Replaced default arguments
