@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsScene.hh,v 1.4 2005-10-17 20:54:29 tinslay Exp $
+// $Id: G4VGraphicsScene.hh,v 1.5 2005-11-10 15:39:16 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // John Allison  19th July 1996
 //
@@ -115,7 +115,7 @@ public: // With description
   // number of calls the have the same transformation.
 
   virtual void BeginPrimitives
-  (const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+  (const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
   // objectTransformation is the transformation in the world
   // coordinate system of the object about to be added.
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.hh,v 1.6 2005-11-02 16:46:10 allison Exp $
+// $Id: G4VVisManager.hh,v 1.7 2005-11-10 15:39:16 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // John Allison 19/Oct/1996.
 // 
@@ -107,28 +107,28 @@ public: // With description
   // for representing hits, digis, etc.
 
   virtual void Draw (const G4Circle&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+    const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
 
   virtual void Draw (const G4NURBS&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+    const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
 
   virtual void Draw (const G4Polyhedron&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+    const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
 
   virtual void Draw (const G4Polyline&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+    const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
 
   virtual void Draw (const G4Polymarker&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+    const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
 
   virtual void Draw (const G4Scale&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+    const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
 
   virtual void Draw (const G4Square&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+    const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
 
   virtual void Draw (const G4Text&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+    const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
 
   ///////////////////////////////////////////////////////////////////////
   // Draw methods for Geant4 Objects as if they were Visualization
@@ -144,13 +144,13 @@ public: // With description
   // the trajectory.  See, e.g., G4VTrajectory::DrawTrajectory.
 
   virtual void Draw (const G4LogicalVolume&, const G4VisAttributes&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+    const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
 
   virtual void Draw (const G4VPhysicalVolume&, const G4VisAttributes&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+    const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
 
   virtual void Draw (const G4VSolid&, const G4VisAttributes&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+    const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
 
   //////////////////////////////////////////////////////////////////////
   // Other methods...

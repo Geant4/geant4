@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.87 2005-11-09 07:38:38 gcosmo Exp $
+cvs log $Id: History,v 1.88 2005-11-10 15:39:16 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10th November 2005  John Allison
+- G4VVisManager and G4VGraphicsScene: Replaced default arguments
+  G4Transform3D::Identity by G4Transform3D().  (This is a avoid
+  initialisation problems with static objects with dynamic libraries.)
 
 9th November 2005  Gabriele Cosmo
 - Implemented migration to support CLHEP-2.0.X, adding explicit namespace
