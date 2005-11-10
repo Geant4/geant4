@@ -9,106 +9,111 @@
 /radmon/detector/CreatePlacement              detector03 LAAS
 /radmon/detector/CreatePlacement              detector04 LAAS
 
-/vis/scene/add/volume worldPV
-/vis/sceneHandler/attach DefaultScene
+#/vis/scene/add/volume worldPV
+#/vis/sceneHandler/attach DefaultScene
+#
+#/vis/disable
+#/radmon/detector/SetPlacementRotation packaging 75 55 0 deg
+#/control/execute macros/ApplyRelativePositioning.mac
+#/vis/enable
+#/vis/viewer/refresh
+#/vis/disable
+#/radmon/detector/SetPlacementRotation packaging 75 55 18 deg
+#/control/execute macros/ApplyRelativePositioning.mac
+#/vis/enable
+#/vis/viewer/refresh
+#/vis/disable
+#/radmon/detector/SetPlacementRotation packaging 75 55 36 deg
+#/control/execute macros/ApplyRelativePositioning.mac
+#/vis/enable
+#/vis/viewer/refresh
+#/vis/disable
+#/radmon/detector/SetPlacementRotation packaging 75 55 54 deg
+#/control/execute macros/ApplyRelativePositioning.mac
+#/vis/enable
+#/vis/viewer/refresh
+#/vis/disable
+#/radmon/detector/SetPlacementRotation packaging 75 55 72 deg
+#/control/execute macros/ApplyRelativePositioning.mac
+#/vis/enable
+#/vis/viewer/refresh
+#/vis/disable
+#/radmon/detector/SetPlacementRotation packaging 75 55 90 deg
+#/control/execute macros/ApplyRelativePositioning.mac
+#/vis/enable
+#/vis/viewer/refresh
+#/vis/disable
+#/radmon/detector/SetPlacementRotation packaging 75 55 108 deg
+#/control/execute macros/ApplyRelativePositioning.mac
+#/vis/enable
+#/vis/viewer/refresh
+#/vis/disable
+#/radmon/detector/SetPlacementRotation packaging 75 55 126 deg
+#/control/execute macros/ApplyRelativePositioning.mac
+#/vis/enable
+#/vis/viewer/refresh
+#/vis/disable
+#/radmon/detector/SetPlacementRotation packaging 75 55 144 deg
+#/control/execute macros/ApplyRelativePositioning.mac
+#/vis/enable
+#/vis/viewer/refresh
+#/vis/disable
+#/radmon/detector/SetPlacementRotation packaging 75 55 162 deg
+#/control/execute macros/ApplyRelativePositioning.mac
+#/vis/enable
+#/vis/viewer/refresh
+#/vis/disable
+#/radmon/detector/SetPlacementRotation packaging 75 55 180 deg
+#/control/execute macros/ApplyRelativePositioning.mac
+#/vis/enable
+#/vis/viewer/refresh
+#/vis/disable
+#/radmon/detector/SetPlacementRotation packaging 75 55 198 deg
+#/control/execute macros/ApplyRelativePositioning.mac
+#/vis/enable
+#/vis/viewer/refresh
+#/vis/disable
+#/radmon/detector/SetPlacementRotation packaging 75 55 216 deg
+#/control/execute macros/ApplyRelativePositioning.mac
+#/vis/enable
+#/vis/viewer/refresh
+#/vis/disable
+#/radmon/detector/SetPlacementRotation packaging 75 55 234 deg
+#/control/execute macros/ApplyRelativePositioning.mac
+#/vis/enable
+#/vis/viewer/refresh
+#/vis/disable
+#/radmon/detector/SetPlacementRotation packaging 75 55 252 deg
+#/control/execute macros/ApplyRelativePositioning.mac
+#/vis/enable
+#/vis/viewer/refresh
+#/vis/disable
+#/radmon/detector/SetPlacementRotation packaging 75 55 270 deg
+#/control/execute macros/ApplyRelativePositioning.mac
+#/vis/enable
+#/vis/viewer/refresh
+#/vis/disable
+#/radmon/detector/SetPlacementRotation packaging 75 55 288 deg
+#/control/execute macros/ApplyRelativePositioning.mac
+#/vis/enable
+#/vis/viewer/refresh
+#/vis/disable
+#/radmon/detector/SetPlacementRotation packaging 75 55 306 deg
+#/control/execute macros/ApplyRelativePositioning.mac
+#/vis/enable
+#/vis/viewer/refresh
+#/vis/disable
+#/radmon/detector/SetPlacementRotation packaging 75 55 324 deg
+#/control/execute macros/ApplyRelativePositioning.mac
+#/vis/enable
+#/vis/viewer/refresh
+#/vis/disable
+#/radmon/detector/SetPlacementRotation packaging 75 55 342 deg
+#/control/execute macros/ApplyRelativePositioning.mac
+#/vis/enable
+#/vis/viewer/refresh
 
-/vis/disable
-/radmon/detector/SetPlacementRotation packaging 75 55 0 deg
-/control/execute macros/ApplyRelativePositioning.mac
-/vis/enable
-/vis/viewer/refresh
-/vis/disable
-/radmon/detector/SetPlacementRotation packaging 75 55 18 deg
-/control/execute macros/ApplyRelativePositioning.mac
-/vis/enable
-/vis/viewer/refresh
-/vis/disable
-/radmon/detector/SetPlacementRotation packaging 75 55 36 deg
-/control/execute macros/ApplyRelativePositioning.mac
-/vis/enable
-/vis/viewer/refresh
-/vis/disable
-/radmon/detector/SetPlacementRotation packaging 75 55 54 deg
-/control/execute macros/ApplyRelativePositioning.mac
-/vis/enable
-/vis/viewer/refresh
-/vis/disable
-/radmon/detector/SetPlacementRotation packaging 75 55 72 deg
-/control/execute macros/ApplyRelativePositioning.mac
-/vis/enable
-/vis/viewer/refresh
-/vis/disable
-/radmon/detector/SetPlacementRotation packaging 75 55 90 deg
-/control/execute macros/ApplyRelativePositioning.mac
-/vis/enable
-/vis/viewer/refresh
-/vis/disable
-/radmon/detector/SetPlacementRotation packaging 75 55 108 deg
-/control/execute macros/ApplyRelativePositioning.mac
-/vis/enable
-/vis/viewer/refresh
-/vis/disable
-/radmon/detector/SetPlacementRotation packaging 75 55 126 deg
-/control/execute macros/ApplyRelativePositioning.mac
-/vis/enable
-/vis/viewer/refresh
-/vis/disable
-/radmon/detector/SetPlacementRotation packaging 75 55 144 deg
-/control/execute macros/ApplyRelativePositioning.mac
-/vis/enable
-/vis/viewer/refresh
-/vis/disable
-/radmon/detector/SetPlacementRotation packaging 75 55 162 deg
-/control/execute macros/ApplyRelativePositioning.mac
-/vis/enable
-/vis/viewer/refresh
-/vis/disable
-/radmon/detector/SetPlacementRotation packaging 75 55 180 deg
-/control/execute macros/ApplyRelativePositioning.mac
-/vis/enable
-/vis/viewer/refresh
-/vis/disable
-/radmon/detector/SetPlacementRotation packaging 75 55 198 deg
-/control/execute macros/ApplyRelativePositioning.mac
-/vis/enable
-/vis/viewer/refresh
-/vis/disable
-/radmon/detector/SetPlacementRotation packaging 75 55 216 deg
-/control/execute macros/ApplyRelativePositioning.mac
-/vis/enable
-/vis/viewer/refresh
-/vis/disable
-/radmon/detector/SetPlacementRotation packaging 75 55 234 deg
-/control/execute macros/ApplyRelativePositioning.mac
-/vis/enable
-/vis/viewer/refresh
-/vis/disable
-/radmon/detector/SetPlacementRotation packaging 75 55 252 deg
-/control/execute macros/ApplyRelativePositioning.mac
-/vis/enable
-/vis/viewer/refresh
-/vis/disable
-/radmon/detector/SetPlacementRotation packaging 75 55 270 deg
-/control/execute macros/ApplyRelativePositioning.mac
-/vis/enable
-/vis/viewer/refresh
-/vis/disable
-/radmon/detector/SetPlacementRotation packaging 75 55 288 deg
-/control/execute macros/ApplyRelativePositioning.mac
-/vis/enable
-/vis/viewer/refresh
-/vis/disable
-/radmon/detector/SetPlacementRotation packaging 75 55 306 deg
-/control/execute macros/ApplyRelativePositioning.mac
-/vis/enable
-/vis/viewer/refresh
-/vis/disable
-/radmon/detector/SetPlacementRotation packaging 75 55 324 deg
-/control/execute macros/ApplyRelativePositioning.mac
-/vis/enable
-/vis/viewer/refresh
-/vis/disable
-/radmon/detector/SetPlacementRotation packaging 75 55 342 deg
-/control/execute macros/ApplyRelativePositioning.mac
-/vis/enable
-/vis/viewer/refresh
+
+
+
+
