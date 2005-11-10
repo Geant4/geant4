@@ -1,0 +1,24 @@
+//
+// File name:     RadmonPhysicsNeutronBinary.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonPhysicsNeutronBinary.icc,v 1.1 2005-11-10 08:15:26 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONPHYSICSNEUTRONBINARY_HH
+ #error "RadmonPhysicsNeutronBinary.icc cannot be included directly. Please use RadmonPhysicsNeutronBinary.hh"
+#else  /* RADMONPHYSICSNEUTRONBINARY_HH */
+ inline                                         RadmonPhysicsNeutronBinary :: RadmonPhysicsNeutronBinary()
+ :
+  RadmonVSubPhysicsListWithLabel("NeutronBinary")
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonPhysicsNeutronBinary :: ~RadmonPhysicsNeutronBinary()
+ {
+ }
+#endif /* RADMONPHYSICSNEUTRONBINARY_HH */

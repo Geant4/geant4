@@ -1,0 +1,24 @@
+//
+// File name:     RadmonPhysicsPhotonStandard.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonPhysicsPhotonStandard.icc,v 1.1 2005-11-10 08:15:26 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONPHYSICSPHOTONSTANDARD_HH
+ #error "RadmonPhysicsPhotonStandard.icc cannot be included directly. Please use RadmonPhysicsPhotonStandard.hh"
+#else  /* RADMONPHYSICSPHOTONSTANDARD_HH */
+ inline                                         RadmonPhysicsPhotonStandard :: RadmonPhysicsPhotonStandard()
+ :
+  RadmonVSubPhysicsListWithLabel("PhotonStandard")
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonPhysicsPhotonStandard :: ~RadmonPhysicsPhotonStandard()
+ {
+ }
+#endif /* RADMONPHYSICSPHOTONSTANDARD_HH */

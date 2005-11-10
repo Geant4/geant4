@@ -1,0 +1,24 @@
+//
+// File name:     RadmonPhysicsTauStandard.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonPhysicsTauStandard.icc,v 1.1 2005-11-10 08:15:26 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONPHYSICSTAUSTANDARD_HH
+ #error "RadmonPhysicsTauStandard.icc cannot be included directly. Please use RadmonPhysicsTauStandard.hh"
+#else  /* RADMONPHYSICSTAUSTANDARD_HH */
+ inline                                         RadmonPhysicsTauStandard :: RadmonPhysicsTauStandard()
+ :
+  RadmonVSubPhysicsListWithLabel("TauStandard")
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonPhysicsTauStandard :: ~RadmonPhysicsTauStandard()
+ {
+ }
+#endif /* RADMONPHYSICSTAUSTANDARD_HH */

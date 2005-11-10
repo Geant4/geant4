@@ -1,0 +1,24 @@
+//
+// File name:     RadmonPhysicsElectronStandard.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonPhysicsElectronStandard.icc,v 1.1 2005-11-10 08:15:26 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONPHYSICSELECTRONSTANDARD_HH
+ #error "RadmonPhysicsElectronStandard.icc cannot be included directly. Please use RadmonPhysicsElectronStandard.hh"
+#else  /* RADMONPHYSICSELECTRONSTANDARD_HH */
+ inline                                         RadmonPhysicsElectronStandard :: RadmonPhysicsElectronStandard()
+ :
+  RadmonVSubPhysicsListWithLabel("ElectronStandard")
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonPhysicsElectronStandard :: ~RadmonPhysicsElectronStandard()
+ {
+ }
+#endif /* RADMONPHYSICSELECTRONSTANDARD_HH */

@@ -1,0 +1,24 @@
+//
+// File name:     RadmonPhysicsPhotonEPDL.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonPhysicsPhotonEPDL.icc,v 1.1 2005-11-10 08:15:26 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONPHYSICSPHOTONEPDL_HH
+ #error "RadmonPhysicsPhotonEPDL.icc cannot be included directly. Please use RadmonPhysicsPhotonEPDL.hh"
+#else  /* RADMONPHYSICSPHOTONEPDL_HH */
+ inline                                         RadmonPhysicsPhotonEPDL :: RadmonPhysicsPhotonEPDL()
+ :
+  RadmonVSubPhysicsListWithLabel("PhotonEPDL")
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonPhysicsPhotonEPDL :: ~RadmonPhysicsPhotonEPDL()
+ {
+ }
+#endif /* RADMONPHYSICSPHOTONEPDL_HH */

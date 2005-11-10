@@ -1,0 +1,24 @@
+//
+// File name:     RadmonPhysicsMuonStandard.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonPhysicsMuonStandard.icc,v 1.1 2005-11-10 08:15:26 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONPHYSICSMUONSTANDARD_HH
+ #error "RadmonPhysicsMuonStandard.icc cannot be included directly. Please use RadmonPhysicsMuonStandard.hh"
+#else  /* RADMONPHYSICSMUONSTANDARD_HH */
+ inline                                         RadmonPhysicsMuonStandard :: RadmonPhysicsMuonStandard()
+ :
+  RadmonVSubPhysicsListWithLabel("MuonStandard")
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonPhysicsMuonStandard :: ~RadmonPhysicsMuonStandard()
+ {
+ }
+#endif /* RADMONPHYSICSMUONSTANDARD_HH */

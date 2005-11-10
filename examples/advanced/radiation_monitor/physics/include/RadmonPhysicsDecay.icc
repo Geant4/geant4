@@ -1,0 +1,24 @@
+//
+// File name:     RadmonPhysicsDecay.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonPhysicsDecay.icc,v 1.1 2005-11-10 08:15:26 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONPHYSICSDECAY_HH
+ #error "RadmonPhysicsDecay.icc cannot be included directly. Please use RadmonPhysicsDecay.hh"
+#else  /* RADMONPHYSICSDECAY_HH */
+ inline                                         RadmonPhysicsDecay :: RadmonPhysicsDecay()
+ :
+  RadmonVSubPhysicsListWithLabel("Decay")
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonPhysicsDecay :: ~RadmonPhysicsDecay()
+ {
+ }
+#endif /* RADMONPHYSICSDECAY_HH */
