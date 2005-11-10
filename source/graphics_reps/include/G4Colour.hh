@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Colour.hh,v 1.10 2005-10-13 20:48:11 tinslay Exp $
+// $Id: G4Colour.hh,v 1.11 2005-11-10 20:34:45 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,16 +97,16 @@ public: // With description
   G4double GetBlue  () const;
   G4double GetAlpha () const;  // alpha = opacity = 1. - transparency.
 
-  static const G4Colour White;
-  static const G4Colour Gray; 
-  static const G4Colour Grey; 
-  static const G4Colour Black;
-  static const G4Colour Red;  
-  static const G4Colour Green;
-  static const G4Colour Blue; 
-  static const G4Colour Cyan; 
-  static const G4Colour Magenta;
-  static const G4Colour Yellow; 
+  static const G4Colour& White();
+  static const G4Colour& Gray();
+  static const G4Colour& Grey();
+  static const G4Colour& Black();
+  static const G4Colour& Red();
+  static const G4Colour& Green();
+  static const G4Colour& Blue(); 
+  static const G4Colour& Cyan();
+  static const G4Colour& Magenta();
+  static const G4Colour& Yellow();
 
   static void AddToMap(const G4String& key, const G4Colour& colour);
   // Add user defined colour to colour map with given key. Standard
@@ -119,6 +119,17 @@ public: // With description
   
 private:
   G4double red, green, blue, alpha;
+
+  static const G4Colour fWhite;
+  static const G4Colour fGray; 
+  static const G4Colour fGrey; 
+  static const G4Colour fBlack;
+  static const G4Colour fRed;  
+  static const G4Colour fGreen;
+  static const G4Colour fBlue; 
+  static const G4Colour fCyan; 
+  static const G4Colour fMagenta;
+  static const G4Colour fYellow; 
   
   static map<G4String, G4Colour> fColourMap;
   static bool fInitColourMap;
