@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2005-11-07 17:54:36 capra Exp $
+$Id: History,v 1.11 2005-11-10 08:17:37 capra Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,25 @@ in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07 Nov 2005 - radmon-V07-01-10 - R. Capra - Development of the physics list
+                        code. Frametwork completed and working. Insertion of
+                        modular physics list in progress. Current physics
+                        models are:
+                        - Electron: EEDL, Standard
+                        - Photon: EPDL, Standard
+                        - Positron: Standard
+                        - Muon+/-: Standard
+                        - Tau+/-: Standard
+                        - Neutron: Binary Cascade
+                        - Decay for all short living particles
+                        - Nuclear reactions of photons and e+/- on nuclei
+                        
+                        Small corrections to some primary generator
+                        algorithms
+                        Default macros for beam and physics defined
+                        
+                        Code builds, test in progress
 
 07 Nov 2005 - radmon-V07-01-09 - R. Capra - Development of the physics list
                         code:
