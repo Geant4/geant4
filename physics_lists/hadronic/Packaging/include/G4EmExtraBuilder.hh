@@ -20,55 +20,58 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QGSP.hh,v 1.2 2005-11-11 22:56:29 vnivanch Exp $
+// $Id: G4EmExtraBuilder.hh,v 1.1 2005-11-11 22:56:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   QGSP
+// ClassName:   G4EmExtraBuilder
 //
 // Author: 2002 J.P. Wellisch
 //
 // Modified:
-// 10.11.2005 V.Ivanchenko edit to provide a standard 
+// 10.11.2005 V.Ivanchenko edit to provide a standard
 //
 //----------------------------------------------------------------------------
 //
 
-#ifndef QGSP_h
-#define QGSP_h 1
+#ifndef G4EmExtraBuilder_h
+#define G4EmExtraBuilder_h 1
 
-#include "G4VModularPhysicsList.hh"
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-//class G4EmPhysicsListMessenger;
+class G4EmMessenger;
+class G4SynchrotronRadiation;
+class G4ElectroNuclearBuilder;
 
-class QGSP: public G4VModularPhysicsList
+class G4EmExtraBuilder : public G4VPhysicsConstructor
 {
 public:
-  QGSP();
-  virtual ~QGSP();
+  G4EmExtraBuilder(const G4String& name = "EM extra");
+  virtual ~G4EmExtraBuilder();
 
-  void SetCuts();
+  void ConstructParticle();
+  void ConstructProcess();
 
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-
-  void SetVerbose(G4int val);
+  void Synch(G4String & aState);
+  void GammaNuclear(G4String & aState);
 
 private:
 
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-  G4int    verbose;
+  G4bool wasActivated;
+  G4bool synchOn;
+  G4bool gammNucOn;
 
-  //  G4EmPhysicsListMessenger* pMessenger;
-
+  G4EmMessenger*           theMessenger;
+  G4SynchrotronRadiation*  theElectronSynch;
+  G4SynchrotronRadiation*  thePositronSynch;
+  G4ElectroNuclearBuilder* theGNPhysics;
 };
 
 #endif
+
+
 
 
 

@@ -20,55 +20,56 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QGSP.hh,v 1.2 2005-11-11 22:56:29 vnivanch Exp $
+// $Id: G4DecayBuilder.hh,v 1.1 2005-11-11 22:56:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   QGSP
+// ClassName:   G4DecayBuilder
 //
 // Author: 2002 J.P. Wellisch
 //
 // Modified:
-// 10.11.2005 V.Ivanchenko edit to provide a standard 
+// 10.11.2005 V.Ivanchenko edit to provide a standard
 //
 //----------------------------------------------------------------------------
 //
 
-#ifndef QGSP_h
-#define QGSP_h 1
+#ifndef G4DecayBuilder_h
+#define G4DecayBuilder_h 1
 
-#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+#include "G4VPhysicsConstructor.hh"
 
-//class G4EmPhysicsListMessenger;
+class G4Decay;
 
-class QGSP: public G4VModularPhysicsList
+class G4DecayBuilder : public G4VPhysicsConstructor
 {
-public:
-  QGSP();
-  virtual ~QGSP();
+  public: 
+    G4DecayBuilder(const G4String& name = "decay");
+    virtual ~G4DecayBuilder();
 
-  void SetCuts();
-
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-
-  void SetVerbose(G4int val);
+  public: 
+    // This method will be invoked in the Construct() method. 
+    // each particle type will be instantiated
+  virtual void ConstructParticle();
+ 
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type 
+  virtual void ConstructProcess();
 
 private:
-
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-  G4int    verbose;
-
-  //  G4EmPhysicsListMessenger* pMessenger;
-
+  G4Decay* fDecayProcess;
+  G4bool   wasActivated;
 };
 
 #endif
+
+
+
+
+
 
 
 

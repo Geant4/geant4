@@ -20,55 +20,44 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QGSP.hh,v 1.2 2005-11-11 22:56:29 vnivanch Exp $
+// $Id: G4EmMessenger.hh,v 1.1 2005-11-11 22:56:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   QGSP
+// ClassName:   G4EmMessenger
 //
 // Author: 2002 J.P. Wellisch
 //
 // Modified:
-// 10.11.2005 V.Ivanchenko edit to provide a standard 
+// 09.11.2005 V.Ivanchenko edit to provide a standard
 //
 //----------------------------------------------------------------------------
 //
 
-#ifndef QGSP_h
-#define QGSP_h 1
+#ifndef G4EmMessenger_h
+#define G4EmMessenger_h
 
-#include "G4VModularPhysicsList.hh"
-#include "globals.hh"
+class G4EmExtraBuilder;
 
-//class G4EmPhysicsListMessenger;
+#include "G4UImessenger.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithAString.hh"
 
-class QGSP: public G4VModularPhysicsList
+class G4EmMessenger: public G4UImessenger
 {
 public:
-  QGSP();
-  virtual ~QGSP();
+  G4EmMessenger(G4EmExtraBuilder* af);
+  virtual ~G4EmMessenger();
 
-  void SetCuts();
-
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-
-  void SetVerbose(G4int val);
+  void SetNewValue(G4UIcommand* aComm, G4String aS);
 
 private:
-
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-  G4int    verbose;
-
-  //  G4EmPhysicsListMessenger* pMessenger;
-
+  G4EmExtraBuilder*   theB;
+  G4UIcmdWithAString* theSynch;
+  G4UIcmdWithAString* theGN;
+  G4UIdirectory*      aDir1;
+  G4UIdirectory*      aDir2;
 };
 
 #endif
-
-
-

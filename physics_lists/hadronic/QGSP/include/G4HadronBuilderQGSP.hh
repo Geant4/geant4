@@ -20,12 +20,12 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QGSP.hh,v 1.2 2005-11-11 22:56:29 vnivanch Exp $
+// $Id: G4HadronBuilderQGSP.hh,v 1.1 2005-11-11 22:57:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   QGSP
+// ClassName:   G4HadronBuilderQGSP
 //
 // Author: 2002 J.P. Wellisch
 //
@@ -35,40 +35,68 @@
 //----------------------------------------------------------------------------
 //
 
-#ifndef QGSP_h
-#define QGSP_h 1
+#ifndef G4HadronBuilderQGSP_h
+#define G4HadronBuilderQGSP_h 1
 
-#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
-//class G4EmPhysicsListMessenger;
+#include "G4VPhysicsConstructor.hh"
+#include "G4HadronQEDBuilder.hh"
+#include "G4StoppingHadronBuilder.hh"
+#include "G4MiscLHEPBuilder.hh"
 
-class QGSP: public G4VModularPhysicsList
+#include "G4PiKBuilder.hh"
+#include "G4LEPPiKBuilder.hh"
+#include "G4QGSPPiKBuilder.hh"
+
+#include "G4ProtonBuilder.hh"
+#include "G4LEPProtonBuilder.hh"
+#include "G4QGSPProtonBuilder.hh"
+
+#include "G4NeutronBuilder.hh"
+#include "G4LEPNeutronBuilder.hh"
+#include "G4QGSPNeutronBuilder.hh"
+
+class G4NeutronBuilder;
+class G4LEPNeutronBuilder;
+class G4QGSPNeutronBuilder;
+class G4PiKBuilder;
+class G4LEPPiKBuilder;
+class G4QGSPPiKBuilder;
+class G4ProtonBuilder;
+class G4LEPProtonBuilder;
+class G4QGSPProtonBuilder; 
+class G4MiscLHEPBuilder;
+class G4StoppingHadronBuilder;
+
+class G4HadronBuilderQGSP : public G4VPhysicsConstructor
 {
-public:
-  QGSP();
-  virtual ~QGSP();
+public: 
+  G4HadronBuilderQGSP(const G4String& name ="QGSP");
+  virtual ~G4HadronBuilderQGSP();
 
-  void SetCuts();
-
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-
-  void SetVerbose(G4int val);
+  virtual void ConstructParticle();
+  virtual void ConstructProcess();
 
 private:
 
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-  G4int    verbose;
+  G4bool wasActivated;
 
-  //  G4EmPhysicsListMessenger* pMessenger;
-
+  G4NeutronBuilder* theNeutrons;
+  G4LEPNeutronBuilder* theLEPNeutron;
+  G4QGSPNeutronBuilder* theQGSPNeutron;
+  
+  G4PiKBuilder* thePiK;
+  G4LEPPiKBuilder* theLEPPiK;
+  G4QGSPPiKBuilder* theQGSPPiK;
+    
+  G4ProtonBuilder* thePro;
+  G4LEPProtonBuilder* theLEPPro;
+  G4QGSPProtonBuilder* theQGSPPro;    
+    
+  G4MiscLHEPBuilder* theMiscLHEP;
+  G4StoppingHadronBuilder* theStoppingHadron;
 };
 
 #endif
-
-
 

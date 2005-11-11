@@ -20,55 +20,59 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QGSP.hh,v 1.2 2005-11-11 22:56:29 vnivanch Exp $
+// $Id: G4EmMessenger.cc,v 1.1 2005-11-11 22:56:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   QGSP
+// ClassName:   G4EmMessenger
 //
 // Author: 2002 J.P. Wellisch
 //
 // Modified:
-// 10.11.2005 V.Ivanchenko edit to provide a standard 
+// 09.11.2005 V.Ivanchenko edit to provide a standard
 //
 //----------------------------------------------------------------------------
 //
 
-#ifndef QGSP_h
-#define QGSP_h 1
+#include "G4EmMessenger.hh"
+#include "G4EmExtraBuilder.hh"
 
-#include "G4VModularPhysicsList.hh"
-#include "globals.hh"
-
-//class G4EmPhysicsListMessenger;
-
-class QGSP: public G4VModularPhysicsList
+G4EmMessenger::G4EmMessenger(G4EmExtraBuilder* ab)
 {
-public:
-  QGSP();
-  virtual ~QGSP();
+  theB = ab;
+  aDir1 = new G4UIdirectory("/physics_engine/");
+  aDir1->SetGuidance("commands related to the physics simulation engine.");
 
-  void SetCuts();
+  // general stuff.
+  aDir2 = new G4UIdirectory("/physics_engine/tailor/");
+  aDir2->SetGuidance("tailoring the processes");
 
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
+  // command for synchrotron radiation.
+  theSynch = new G4UIcmdWithAString("/physics_engine/tailor/SyncRadiation",this);
+  theSynch->SetGuidance("Switching on/off synchrotron radiation.");
+  theSynch->SetParameterName("status","off");
+  theSynch->SetCandidates("on off");
+  theSynch->SetDefaultValue("off");
+  theSynch->AvailableForStates(G4State_PreInit);
 
-  void SetVerbose(G4int val);
+  // command for gamma nuclear physics.
+  theGN = new G4UIcmdWithAString("/physics_engine/tailor/GammaNuclear",this);
+  theGN->SetGuidance("Switching on gamma nuclear physics.");
+  theGN->SetParameterName("status","off");
+  theGN->SetCandidates("on off");
+  theGN->SetDefaultValue("off");
+  theGN->AvailableForStates(G4State_PreInit);
+}
 
-private:
+G4EmMessenger::~G4EmMessenger()
+{
+  delete theSynch;
+  delete theGN;
+}
 
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-  G4int    verbose;
-
-  //  G4EmPhysicsListMessenger* pMessenger;
-
-};
-
-#endif
-
-
-
+void G4EmMessenger::SetNewValue(G4UIcommand* aComm, G4String aS)
+{
+  if(aComm==theSynch) theB->Synch(aS);
+  if(aComm==theGN)    theB->GammaNuclear(aS);
+}
