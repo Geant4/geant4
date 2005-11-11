@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.hh,v 1.4 2005-11-09 15:08:42 gcosmo Exp $
+// $Id: G4PVPlacement.hh,v 1.5 2005-11-11 22:39:00 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -146,6 +146,8 @@ class G4PVPlacement : public G4VPhysicalVolume
                             G4double& width,
                             G4double& offset,
                             G4bool& consuming) const;
+    G4bool  IsRegularStructure() const; 
+    G4int  GetRegularStructureId() const; 
 
   private:
 

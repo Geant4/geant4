@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVParameterised.hh,v 1.4 2005-11-09 15:08:42 gcosmo Exp $
+// $Id: G4PVParameterised.hh,v 1.5 2005-11-11 22:39:00 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -92,6 +92,8 @@ class G4PVParameterised : public G4PVReplica
                             G4double& offset,
                             G4bool& consuming) const;
       // Fills arguments with the attributes from the base replica.
+    virtual void SetRegularStructureId( G4int Code ); 
+      // Method sets code and can prepare for special type of regular volumes.
 
     G4bool CheckOverlaps(G4int res=1000);
       // Verifies if each instance of the parameterised volume is overlapping

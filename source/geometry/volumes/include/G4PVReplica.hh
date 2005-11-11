@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.hh,v 1.3 2005-11-09 15:08:42 gcosmo Exp $
+// $Id: G4PVReplica.hh,v 1.4 2005-11-11 22:39:00 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -116,7 +116,18 @@ class G4PVReplica : public G4VPhysicalVolume
                                     G4double& width,
                                     G4double& offset,
                                     G4bool& consuming) const;
-  private:
+
+    // Methods for specialised geometries
+    G4bool  IsRegularStructure()   const; 
+    G4int  GetRegularStructureId() const;
+      // return values
+    virtual void SetRegularStructureId( G4int Code ); 
+      // This method must set a unique code for each type
+      //  of regular structure.
+      //  - It must be called only during detector construction.
+      //  - It can also be used to prepare a/any corresponding 
+      //    special navigation 'conditions'.
+ private:
 
     void CheckAndSetParameters(
                          const EAxis pAxis,
@@ -127,6 +138,9 @@ class G4PVReplica : public G4VPhysicalVolume
     G4PVReplica(const G4PVReplica&);
     const G4PVReplica& operator=(const G4PVReplica&);
 
+ private:
+    G4int fRegularStructureCode; 
+
  protected:
 
     EAxis faxis;
@@ -134,6 +148,10 @@ class G4PVReplica : public G4VPhysicalVolume
     G4double fwidth,foffset;
     
     G4int    fcopyNo;
-};
+
+  private:
+    G4int fRegularVolsId; 
+
+ };
 
 #endif

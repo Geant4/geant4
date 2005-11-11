@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVParameterised.cc,v 1.4 2005-11-09 15:08:42 gcosmo Exp $
+// $Id: G4PVParameterised.cc,v 1.5 2005-11-11 22:39:00 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -130,6 +130,17 @@ void G4PVParameterised::GetReplicationData( EAxis& axis,
   offset = foffset;
   consuming = false;
 }
+
+// ----------------------------------------------------------------------
+// SetRegularStructureId
+//
+void  G4PVParameterised::SetRegularStructureId( G4int Code )
+{
+  G4PVReplica::SetRegularStructureId( Code );
+  // To undertake additional preparation, a derived volume must
+  //   redefine this method, while calling also the above method.
+}
+
 
 // ----------------------------------------------------------------------
 // CheckOverlaps

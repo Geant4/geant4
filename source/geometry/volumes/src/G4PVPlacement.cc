@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.cc,v 1.5 2005-11-09 15:08:42 gcosmo Exp $
+// $Id: G4PVPlacement.cc,v 1.6 2005-11-11 22:39:00 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -214,6 +214,25 @@ GetReplicationData( EAxis&, G4int&, G4double&, G4double&, G4bool& ) const
 {
   // No-operations
 }
+
+// The next methods are for specialised repeated volumes 
+//     (replicas, parameterised vol.) which are completely regular.
+// ----------------------------------------------------------------------
+// IsRegularRepeatedStructure()
+//
+G4bool G4PVPlacement::IsRegularStructure() const
+{
+  return true;
+}           
+
+// ----------------------------------------------------------------------
+// IsRegularRepeatedStructure()
+//
+G4int G4PVPlacement::GetRegularStructureId() const
+{
+  return 0;  
+}           
+// This is for specialised repeated volumes (replicas, parameterised vol.)
 
 // ----------------------------------------------------------------------
 // CheckOverlaps

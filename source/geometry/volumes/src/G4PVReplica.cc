@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.cc,v 1.5 2005-11-09 15:08:42 gcosmo Exp $
+// $Id: G4PVReplica.cc,v 1.6 2005-11-11 22:39:00 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,7 @@ G4PVReplica::G4PVReplica( const G4String& pName,
                           const G4double width,
                           const G4double offset )
   : G4VPhysicalVolume(0, G4ThreeVector(), pName, pLogical, pMother),
-    fcopyNo(-1)
+    fcopyNo(-1), fRegularVolsId(0)
 {
   if ((!pMother) || (!pMother->GetLogicalVolume()))
   {
@@ -76,7 +76,7 @@ G4PVReplica::G4PVReplica( const G4String& pName,
                           const G4double width,
                           const G4double offset )
   : G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0),
-    fcopyNo(-1)
+    fcopyNo(-1), fRegularVolsId(0)
 {
   if (!pMotherLogical)
   {
@@ -150,7 +150,7 @@ void G4PVReplica::CheckAndSetParameters( const EAxis pAxis,
 }
 
 G4PVReplica::G4PVReplica( __void__& a )
-  : G4VPhysicalVolume(a)
+  : G4VPhysicalVolume(a), fRegularVolsId(0)
 {
 }
 
@@ -197,6 +197,8 @@ G4int G4PVReplica::GetMultiplicity() const
   return fnReplicas;
 }
 
+
+
 void G4PVReplica::GetReplicationData( EAxis& axis,
                                       G4int& nReplicas,
                                       G4double& width,
@@ -209,3 +211,18 @@ void G4PVReplica::GetReplicationData( EAxis& axis,
   offset = foffset;
   consuming = true;
 }
+
+G4bool G4PVReplica::IsRegularStructure() const
+{
+  return (fRegularVolsId!=0); 
+}
+
+G4int  G4PVReplica::GetRegularStructureId() const
+{
+  return fRegularVolsId; 
+}
+
+void   G4PVReplica::SetRegularStructureId( G4int Code )
+{
+  fRegularVolsId= Code; 
+} 
