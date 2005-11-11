@@ -1,4 +1,4 @@
-$Id: History,v 1.130 2005-11-09 15:09:01 gcosmo Exp $
+$Id: History,v 1.131 2005-11-11 22:40:10 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 11th, 2005      J. Apostolakis - geomvol-V07-01-03
+- Added methods to identify  Regular Structures in  Physical volume derived
+  classes (Replica, Parameterised Volume, but also Placement). 
+  New virtual methods implemented:
+    - IsRegularStructure()     from G4VPhysicalVolume, defined in Replica
+    - GetRegularStructureId()
+   * Note that Placement always return 'false' and 0 respectively.
+  New method defined (Replica), and implemented that can be redefined:
+    - SetRegularStructureId()  virtual 
 
 Nov 9th, 2005       G. Cosmo - geomvol-V07-01-02
 - Added fake default constructor for concrete types of volumes (placements,
