@@ -20,15 +20,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4EmStandardBuilder.cc,v 1.1 2005-11-11 11:12:01 vnivanch Exp $
+// $Id: G4EmStandardBuilder.cc,v 1.2 2005-11-11 11:13:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
 // ClassName:   G4EmStandardBuilder
 //
-// Author:      V.Ivanchenko 09.11.2009
+// Author:      V.Ivanchenko 09.11.2005
 //
 // Modified:
 //
@@ -38,6 +37,7 @@
 #include "G4EmStandardBuilder.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
+#include "G4LossTableManager.hh"
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"

@@ -20,6 +20,21 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4EMTailorer.hh,v 1.2 2005-11-11 11:13:07 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4EMTailorer
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 09.11.2005 V.Ivanchenko edit to provide a standard
+//
+//----------------------------------------------------------------------------
+//
+
 #ifndef G4EMTailorer_h
 #define G4EMTailorer_h
 
@@ -30,23 +45,18 @@ class G4EMBuilder;
 
 class G4EMTailorer: public G4UImessenger
 {
-  public:
-    G4EMTailorer(G4EMBuilder * af);
-    
-    virtual ~G4EMTailorer()
-    {
-      delete theSynch;
-      delete theGN;
-    }
+public:
+  G4EMTailorer(G4EMBuilder * af);
+  virtual ~G4EMTailorer();
 
-    void SetNewValue(G4UIcommand* aComm, G4String aS);
-    
-  private:
-    G4EMBuilder * theB;
-    G4UIcmdWithAString * theSynch;
-    G4UIcmdWithAString * theGN;
-    G4UIdirectory *aDir1;
-    G4UIdirectory *aDir2;
+  void SetNewValue(G4UIcommand* aComm, G4String aS);
+
+private:
+  G4EMBuilder * theB;
+  G4UIcmdWithAString * theSynch;
+  G4UIcmdWithAString * theGN;
+  G4UIdirectory *aDir1;
+  G4UIdirectory *aDir2;
 };
 
 #endif

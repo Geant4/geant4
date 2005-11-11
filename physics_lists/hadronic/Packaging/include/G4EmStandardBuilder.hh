@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmStandardBuilder.hh,v 1.1 2005-11-11 11:12:01 vnivanch Exp $
+// $Id: G4EmStandardBuilder.hh,v 1.2 2005-11-11 11:13:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
 // ClassName:   G4EmStandardBuilder
 //
-// Author:      V.Ivanchenko 09.11.2009
+// Author:      V.Ivanchenko 09.11.2005
 //
 // Modified:
 //
@@ -57,8 +57,6 @@ public:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
 
 
 

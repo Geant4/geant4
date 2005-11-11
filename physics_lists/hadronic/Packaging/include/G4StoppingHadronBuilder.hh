@@ -20,38 +20,50 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4StoppingHadronBuilder.hh,v 1.2 2005-11-11 11:13:07 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4StoppingHadronBuilder
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 10.11.2005 V.Ivanchenko edit to provide a standard and add mu-
+//
+//----------------------------------------------------------------------------
+//
+
 #ifndef G4StoppingHadronBuilder_h
 #define G4StoppingHadronBuilder_h 1
 
 #include "globals.hh"
-#include "G4ios.hh"
 
-// At rest processes
-#include "G4AntiProtonAnnihilationAtRest.hh"
-#include "G4AntiNeutronAnnihilationAtRest.hh"
-#include "G4PionMinusAbsorptionAtRest.hh"
-#include "G4KaonMinusAbsorption.hh"
+class G4MuonMinusCaptureAtRest;
+class G4PionMinusAbsorptionAtRest;
+class G4KaonMinusAbsorption;
+class G4AntiProtonAnnihilationAtRest;
+class G4AntiNeutronAnnihilationAtRest;
 
-class G4StoppingHadronBuilder 
+class G4StoppingHadronBuilder
 {
-  public: 
-    G4StoppingHadronBuilder();
-    virtual ~G4StoppingHadronBuilder();
+public:
+  G4StoppingHadronBuilder();
+  virtual ~G4StoppingHadronBuilder();
 
-  public: 
-    virtual void Build();
+  virtual void Build();
 
-  private:
+private:
 
-   G4PionMinusAbsorptionAtRest thePionMinusAbsorption;
-   G4KaonMinusAbsorption theKaonMinusAbsorption;
-   G4AntiProtonAnnihilationAtRest  theAntiProtonAnnihilation;
-   G4AntiNeutronAnnihilationAtRest  theAntiNeutronAnnihilation;
-         
-   G4bool wasActivated;
+  G4MuonMinusCaptureAtRest*        theMuonMinusAbsorption;
+  G4PionMinusAbsorptionAtRest*     thePionMinusAbsorption;
+  G4KaonMinusAbsorption*           theKaonMinusAbsorption;
+  G4AntiProtonAnnihilationAtRest*  theAntiProtonAnnihilation;
+  G4AntiNeutronAnnihilationAtRest* theAntiNeutronAnnihilation;
+
+  G4bool wasActivated;
 };
-// 2002 by J.P. Wellisch
-
 
 #endif
 
