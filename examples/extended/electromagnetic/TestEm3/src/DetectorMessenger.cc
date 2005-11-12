@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc,v 1.8 2005-10-07 16:26:07 maire Exp $
+// $Id: DetectorMessenger.cc,v 1.9 2005-11-12 00:28:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -138,11 +138,10 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if (command == AbsorCmd)
    {
      G4int num; G4double tick;
-     char mat[30],unts[30];
-     const char* t = newValue;
-     std::istrstream is((char*)t);
-     is >> num >> mat >> tick >> unts;
-     G4String material=mat, unt=unts;
+     G4String unt, mat;
+     std::istringstream is(newValue);
+     is >> num >> mat >> tick >> unt;
+     G4String material=mat;
      tick *= G4UIcommand::ValueOf(unt);
      Detector->SetAbsorMaterial (num,material);
      Detector->SetAbsorThickness(num,tick);

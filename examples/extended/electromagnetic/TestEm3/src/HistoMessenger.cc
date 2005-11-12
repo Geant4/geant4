@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoMessenger.cc,v 1.5 2005-03-01 17:55:19 maire Exp $
+// $Id: HistoMessenger.cc,v 1.6 2005-11-12 00:28:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -112,9 +112,9 @@ void HistoMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
     histoManager->SetFileOption(newValues);
     
   if (command == histoCmd)
-   { G4int ih,nbBins; G4double vmin,vmax; char unts[30];
-     const char* t = newValues;
-     std::istrstream is((char*)t);
+   { G4int ih,nbBins; G4double vmin,vmax;
+     std::istringstream is(newValues);
+     G4String unts;
      is >> ih >> nbBins >> vmin >> vmax >> unts;
      G4String unit = unts;
      G4double vUnit = 1. ;

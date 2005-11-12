@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMaxMessenger.cc,v 1.1 2004-11-24 11:25:02 maire Exp $
+// $Id: StepMaxMessenger.cc,v 1.2 2005-11-12 00:28:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,9 +70,9 @@ StepMaxMessenger::~StepMaxMessenger()
 void StepMaxMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
 { 
   if (command == StepMaxCmd)
-   { G4int k; G4double sMax; char unts[30];
-     const char* t = newValues;
-     std::istrstream is((char*)t);
+   { G4int k; G4double sMax; 
+     G4String unts;
+     std::istringstream is(newValues);
      is >> k >> sMax >> unts;
      G4String unit = unts;
      G4double vUnit = G4UIcommand::ValueOf(unit);  

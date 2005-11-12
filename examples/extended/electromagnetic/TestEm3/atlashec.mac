@@ -1,4 +1,4 @@
-# $Id: atlashec.mac,v 1.4 2005-10-17 15:47:27 maire Exp $
+# $Id: atlashec.mac,v 1.5 2005-11-12 00:28:55 vnivanch Exp $
 #
 # Macro file for "TestEm3.cc" 
 #
@@ -25,8 +25,10 @@
 /testem/histo/setHisto 2 100   9.   10.  GeV
 #
 /gun/particle e-
-/gun/energy 10 GeV
+/gun/particle pi+
+/gun/energy 100 GeV
 /gun/position -40.635 0 0
 #
-/testem/event/printModulo 20
-/run/beamOn 200
+/testem/event/printModulo 100
+/run/beamOn 100
+

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListEmG4v71.cc,v 1.1 2005-10-07 16:26:07 maire Exp $
+// $Id: PhysListEmG4v71.cc,v 1.2 2005-11-12 00:28:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -97,7 +97,9 @@ void PhysListEmG4v71::ConstructProcess()
       pmanager->AddProcess(new G4MuBremsstrahlung,     -1, 3,3);
       pmanager->AddProcess(new G4MuPairProduction,     -1, 4,4);       
      
-    } else if( particleName == "alpha" || particleName == "GenericIon" ) { 
+    } else if( particleName == "alpha" || 
+	       particleName == "He3" ||
+	       particleName == "GenericIon" ) { 
       pmanager->AddProcess(new G4MultipleScattering71, -1, 1,1);
       pmanager->AddProcess(new G4ionIonisation,        -1, 2,2);
 
