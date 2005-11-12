@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: test201.cc,v 1.14 2003-11-14 15:41:20 johna Exp $
+// $Id: test201.cc,v 1.15 2005-11-12 16:19:03 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,7 +65,7 @@ std::ostream& g4cerr = G4cerr;
 #include "G4RunManager.hh"
 
 #ifdef G4VIS_USE
-#include "MyVisManager.cc"
+#include "G4VisExecutive.hh"
 #endif
 
 #ifdef G4UI_USE_WIN32
@@ -127,7 +127,7 @@ int main (int argc, char** argv) {
   runManager -> SetUserAction (new MySteppingAction);
 
 #ifdef G4VIS_USE
-  G4VisManager* visManager = new MyVisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager -> SetVerboseLevel (Verbose);
   visManager -> Initialize ();
 #endif

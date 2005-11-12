@@ -1,7 +1,11 @@
-$Id: History,v 1.8 2004-12-10 22:38:32 gcosmo Exp $
+$Id: History,v 1.9 2005-11-12 16:19:03 allison Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
+
+12th November 2005  John Allison  (test201-V07-01-00)
+- Replaced MyVisManager by G4VisExecutive.
+- Committed test201.g4m.
 
 10th December 2004  G.Cosmo  (test201-V06-02-01)
 - Replaced usage of M_PI with CLHEP's pi.
