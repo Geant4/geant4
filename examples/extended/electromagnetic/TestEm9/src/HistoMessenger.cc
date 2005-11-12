@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HistoMessenger.cc,v 1.3 2005-05-13 11:46:02 vnivanch Exp $
+// $Id: HistoMessenger.cc,v 1.4 2005-11-12 00:37:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -98,9 +98,9 @@ void HistoMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
     histo->setFileType(newValues);
     
   if (command == histoCmd)
-   { G4int ih,nbBins; G4double vmin,vmax; char unts[30];
-     const char* t = newValues;
-     std::istrstream is((char*)t);
+   { G4int ih,nbBins; G4double vmin,vmax;
+     std::istringstream is(newValues);
+     G4String unts;
      is >> ih >> nbBins >> vmin >> vmax >> unts;
      G4String unit = unts;
      G4double vUnit = 1. ;
