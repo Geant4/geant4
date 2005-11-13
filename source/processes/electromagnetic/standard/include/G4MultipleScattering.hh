@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.21 2005-11-05 19:03:58 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.22 2005-11-13 08:39:48 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,10 +57,11 @@
 //          'default' facrange too, true - 0.02, false - 0.2 (L.Urban)
 // 26-10-05 the above is put in the function MscStepLimitation() (mma)
 // 05-11-05 new data member rangecut (L.Urban)
+// 13-11-05 some code cleaning (L.Urban)
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering.hh,v 1.21 2005-11-05 19:03:58 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.22 2005-11-13 08:39:48 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -143,7 +144,7 @@ private:        // data members
   G4double rangecut;
   G4double tlimit,tlimitmin;
   G4double geombig,geommin,facgeom;
-  G4double safety,facsafety,facsafety2;
+  G4double safety,facsafety;
   G4double dtrl;
   G4double factail;
   G4bool   steppingAlgorithm;

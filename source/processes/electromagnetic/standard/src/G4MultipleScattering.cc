@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.39 2005-11-05 19:03:59 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.40 2005-11-13 08:39:48 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -81,6 +81,7 @@
 //          'default' facrange too, true - 0.02, false - 0.2 (L.Urban)
 // 26-10-05 the above is put in the function MscStepLimitation() (mma)
 // 05-11-05 tlimitmin = facrange*rungecut (instead of a fixed value)L.Urban
+// 13-11-05 some code cleaning, slightly better timing (L.Urban)
 //
 // -----------------------------------------------------------------------------
 //
@@ -112,8 +113,7 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
   geommin          = 5.e-6*mm;
   facgeom          = 4.;
   safety           = 0.*mm;
-  facsafety        = 1.00;
-  facsafety2       = 0.10;
+  facsafety        = 0.20;
   dtrl             = 0.05;
   factail          = 1.0;
   
@@ -229,22 +229,18 @@ G4double G4MultipleScattering::TruePathLengthLimit(const G4Track&  track,
     if(track.GetCurrentStepNumber() == 1)
     {
       // range <= safety ---> particle is not able to leave volume
-      if(range <= facsafety*safety)
+      if(range <= safety)
         return currentMinimalStep;
 
       //if track starts far from boundaries increase tlimit!
-      if(tlimit < facsafety2*safety)
-        tlimit = facsafety2*safety ;
+      if(tlimit < facsafety*safety)
+        tlimit = facsafety*safety ;
     }
     // range <= safety ---> particle is not able to leave volume
-    if(range <= facsafety*safety)
+    if(range <= safety)
       return currentMinimalStep;
 
     if(tPathLength > tlimit) tPathLength = tlimit;
-
-    if((tPathLength < facsafety2*safety)
-         && (currentMinimalStep > facsafety2*safety))
-      tPathLength = facsafety2*safety;
   }
   
   // version similar to 7.1 (needed for some experiments)
