@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc,v 1.29 2005-10-13 18:00:20 allison Exp $
+// $Id: G4VisCommandsCompound.cc,v 1.30 2005-11-13 15:34:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
@@ -229,9 +229,11 @@ G4VisCommandOpen::G4VisCommandOpen() {
   candidates = candidates.strip();
   parameter->SetParameterCandidates(candidates);
   fpCommand->SetParameter(parameter);
-  parameter = new G4UIparameter("window-size-hint", 'i', omitable = true);
-  parameter->SetGuidance("pixels");
-  parameter->SetDefaultValue(600);
+  parameter = new G4UIparameter("window-size-hint", 's', omitable = true);
+  parameter->SetGuidance
+    ("integer (pixels) for square window placed by window manager or"
+     " X-Windows-type geometry string, e.g. 600x600-100+100");
+  parameter->SetDefaultValue("600");
   fpCommand->SetParameter(parameter);
 }
 

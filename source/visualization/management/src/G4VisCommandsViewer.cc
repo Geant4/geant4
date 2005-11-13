@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.50 2005-10-20 11:48:47 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.51 2005-11-13 15:34:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -128,9 +128,11 @@ G4VisCommandViewerCreate::G4VisCommandViewerCreate (): fId (0) {
   parameter = new G4UIparameter ("viewer-name", 's', omitable = true);
   parameter -> SetCurrentAsDefault (true);
   fpCommand -> SetParameter (parameter);
-  parameter = new G4UIparameter ("window-size-hint", 'i', omitable = true);
-  parameter -> SetGuidance ("pixels");
-  parameter -> SetDefaultValue (600);
+  parameter = new G4UIparameter ("window-size-hint", 's', omitable = true);
+  parameter->SetGuidance
+    ("integer (pixels) for square window placed by window manager or"
+     " X-Windows-type geometry string, e.g. 600x600-100+100");
+  parameter->SetDefaultValue("600");
   fpCommand -> SetParameter (parameter);
 }
 
@@ -177,7 +179,7 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   G4String sceneHandlerName, newName;
-  G4int windowSizeHint;
+  G4String windowSizeHintString;
   std::istringstream is (newValue);
   is >> sceneHandlerName;
 
@@ -195,8 +197,8 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
   newName = newName.strip (G4String::both, ' ');
   newName = newName.strip (G4String::both, '"');
 
-  // Now get number of pixels...
-  is >> windowSizeHint;
+  // Now get window size hint...
+  is >> windowSizeHintString;
 
   const G4SceneHandlerList& sceneHandlerList =
     fpVisManager -> GetAvailableSceneHandlers ();
@@ -256,10 +258,37 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
 
+  // Parse windowSizeHintString...
+  std::istringstream issw;
+  G4int windowSizeHint;
+  size_t i;
+  for (i = 0; i < windowSizeHintString.size(); ++i) {
+    char c = windowSizeHintString[i];
+    if (c == 'x' || c == 'X' || c == '+' || c == '-') break;
+  }
+  if (i != windowSizeHintString.size()) {
+    // x or X or + or - found - must be a X-Window-type geometry string...
+    fpVisManager->SetXGeometryString (windowSizeHintString);
+    // All the same, pick out the first field for backwards compatibility...
+    issw.str(windowSizeHintString.substr(0,i));
+    issw >> windowSizeHint;
+  } else { // ...convert to integer...
+    issw.str(windowSizeHintString);
+    if (!(issw >> windowSizeHint)) {
+      if (verbosity >= G4VisManager::errors) {
+	G4cout << "ERROR: Unrecognised geometry string \""
+	       << windowSizeHintString
+	       << "\".  Using 600."
+	       << G4endl;
+      }
+      windowSizeHint = 600;
+    }
+    fpVisManager->SetXGeometryString ("");
+  }
   fpVisManager->SetWindowSizeHint (windowSizeHint, windowSizeHint);
-  // These are picked up in the G4VViewer constructor.  The problem is
-  // these have to be set *before* construction, i.e., before we have
-  // a viewer.
+  // These are picked upfrom the vis manager in the G4VViewer
+  // constructor.  The problem is these have to be set *before*
+  // construction, i.e., before we have a viewer.
 
   // Create viewer.
   fpVisManager -> CreateViewer (newName);
