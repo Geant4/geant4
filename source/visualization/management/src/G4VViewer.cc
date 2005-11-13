@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.cc,v 1.19 2005-10-13 18:00:20 allison Exp $
+// $Id: G4VViewer.cc,v 1.20 2005-11-13 15:31:51 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,8 +61,11 @@ fNeedKernelVisit (true)
   G4VisManager* pVisMan = G4VisManager::GetInstance();
   G4int xHint, yHint;
   pVisMan->GetWindowSizeHint(xHint, yHint);
+  const G4String& XGeometryString = pVisMan->GetXGeometryString();
   fVP.SetWindowSizeHint(xHint,yHint);
+  fVP.SetXGeometryString(XGeometryString);
   fDefaultVP.SetWindowSizeHint(xHint,yHint);
+  fDefaultVP.SetXGeometryString(XGeometryString);
 }
 
 G4VViewer::~G4VViewer () {}
