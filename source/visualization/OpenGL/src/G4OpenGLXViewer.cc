@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.26 2005-11-13 15:46:55 allison Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.27 2005-11-13 15:56:18 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -228,7 +228,7 @@ void G4OpenGLXViewer::CreateMainWindow () {
     height = fVP.GetWindowSizeHintY();
   x_origin = 0;
   y_origin = 0;
-  XSizeHints* size_hints = XAllocSizeHints();
+  size_hints = XAllocSizeHints();
 
   // Check if user has specified an X-Windows-type geometry string...
   const G4String& XGeometryString = fVP.GetXGeometryString();
