@@ -1,4 +1,4 @@
-$Id: History,v 1.183 2005-11-05 19:06:44 urban Exp $
+$Id: History,v 1.184 2005-11-13 08:43:06 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+13 November 05: L.urban
+- G4MultipleScattering: some code cleaning, slightly better timing
+  for sampling calorimeters (by 1 - 6 %, depending on cut and
+  geometry)
+
 05 November 05: L.Urban
 - G4MultipleScattering: minimum stepsize depends on cut in range
   tlimitmin = facrange*rangecut
