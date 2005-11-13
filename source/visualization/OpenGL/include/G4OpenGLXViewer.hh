@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.hh,v 1.21 2005-04-22 12:02:47 allison Exp $
+// $Id: G4OpenGLXViewer.hh,v 1.22 2005-11-13 15:46:54 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -112,7 +112,7 @@ protected:
   XClassHint                        *class_hints;
   Pixmap                            icon_pixmap;
   XSizeHints                        *size_hints;
-  G4int                             WinSize_x,
+  unsigned int                      WinSize_x,
                                     WinSize_y;
   Atom                              Xatom;
   XTextProperty                     windowName,
