@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.37 2005-10-20 11:49:28 allison Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.38 2005-11-13 15:37:24 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -306,17 +306,24 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandBackground = new G4UIcommand
     ("/vis/viewer/set/background",this);
   fpCommandBackground->SetGuidance
-    ("Set background colour (default black).");
+    ("Set background colour and transparency (default black and opaque).");
   fpCommandBackground->SetGuidance
-    ("Accepts RGB triplet or string such as \"white\", \"black\", \"grey\", \"red\"...");
+    ("Accepts (a) RGB triplet. e.g., \".3 .4 .5\", or"
+     "\n(b) string such as \"white\", \"black\", \"grey\", \"red\"..."
+     "\n(c) an additional number for opacity, e.g., \".3 .4 .5 .6\""
+     "\n    or \"grey ! ! .6\" (note \"!\"'s for unused green and blue parameters),"
+     "\n    e.g. \"! ! ! 0.\" for a transparent background.");
   parameter = new G4UIparameter("red_or_string", 's', omitable = true);
-  parameter -> SetDefaultValue (0.);
+  parameter -> SetDefaultValue ("0.");
   fpCommandBackground -> SetParameter (parameter);
   parameter = new G4UIparameter("green", 'd', omitable = true);
   parameter -> SetDefaultValue (0.);
   fpCommandBackground -> SetParameter (parameter);
   parameter = new G4UIparameter ("blue", 'd', omitable = true);
   parameter -> SetDefaultValue (0.);
+  fpCommandBackground -> SetParameter (parameter);
+  parameter = new G4UIparameter ("opacity", 'd', omitable = true);
+  parameter -> SetDefaultValue (1.);
   fpCommandBackground -> SetParameter (parameter);
 }
 
@@ -829,10 +836,10 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandBackground) {
     G4String redOrString;
-    G4double green, blue;
+    G4double green, blue, opacity;
     std::istringstream iss(newValue);
-    iss >> redOrString >> green >> blue;
-    G4Colour colour(0.,0.,0.);  // Default black.
+    iss >> redOrString >> green >> blue >> opacity;
+    G4Colour colour(0.,0.,0.);  // Default black and opaque.
     const size_t iPos0 = 0;
     if (std::isalpha(redOrString[iPos0])) {
       G4Colour::GetColour(redOrString, colour); // Remains default (black) if
@@ -840,6 +847,7 @@ void G4VisCommandsViewerSet::SetNewValue
     } else {
       colour = G4Colour(G4UIcommand::ConvertTo3Vector(newValue));
     }
+    colour = G4Colour(colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
     vp.SetBackgroundColour(colour);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Background colour "
