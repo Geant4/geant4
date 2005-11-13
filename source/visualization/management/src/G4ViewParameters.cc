@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.22 2005-10-13 17:54:04 allison Exp $
+// $Id: G4ViewParameters.cc,v 1.23 2005-11-13 15:26:18 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -267,7 +267,9 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       (fDefaultMarker        != v.fDefaultMarker)        ||
       (fGlobalMarkerScale    != v.fGlobalMarkerScale)    ||
       (fMarkerNotHidden      != v.fMarkerNotHidden)      ||
+      (fWindowSizeHintX      != v.fWindowSizeHintX)      ||
       (fWindowSizeHintY      != v.fWindowSizeHintY)      ||
+      (fXGeometryString      != v.fXGeometryString)      ||
       (fAutoRefresh          != v.fAutoRefresh)          ||
       (fBackgroundColour     != v.fBackgroundColour))
     G4cout << "Difference in 1st batch." << G4endl;
@@ -438,6 +440,8 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
   os << "\n  Window size hint: "
      << v.fWindowSizeHintX << 'x'<< v.fWindowSizeHintX;
 
+  os << "\n  X geometry string: " << v.fXGeometryString;
+
   os << "\n  Auto refresh: ";
   if (v.fAutoRefresh) os << "true";
   else os << "false";
@@ -484,6 +488,7 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       (fMarkerNotHidden      != v.fMarkerNotHidden)      ||
       (fWindowSizeHintX      != v.fWindowSizeHintX)      ||
       (fWindowSizeHintY      != v.fWindowSizeHintY)      ||
+      (fXGeometryString      != v.fXGeometryString)      ||
       (fAutoRefresh          != v.fAutoRefresh)          ||
       (fBackgroundColour     != v.fBackgroundColour))
     return true;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.icc,v 1.9 2005-10-13 17:54:04 allison Exp $
+// $Id: G4ViewParameters.icc,v 1.10 2005-11-13 15:26:18 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -165,6 +165,10 @@ inline G4int G4ViewParameters::GetWindowSizeHintX () const {
 
 inline G4int G4ViewParameters::GetWindowSizeHintY () const {
   return fWindowSizeHintY;
+}
+
+inline const G4String& G4ViewParameters::GetXGeometryString () const {
+  return fXGeometryString;
 }
 
 inline G4bool G4ViewParameters::IsAutoRefresh () const {
@@ -321,6 +325,10 @@ inline void G4ViewParameters::SetMarkerNotHidden () {
 inline void G4ViewParameters::SetWindowSizeHint (G4int xHint, G4int yHint) {
   fWindowSizeHintX = xHint;
   fWindowSizeHintY = yHint;
+}
+
+inline void G4ViewParameters::SetXGeometryString (const G4String& geomString) {
+  fXGeometryString = geomString;
 }
 
 inline void G4ViewParameters::SetAutoRefresh (G4bool state) {

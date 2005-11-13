@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.hh,v 1.19 2005-10-13 17:54:04 allison Exp $
+// $Id: G4ViewParameters.hh,v 1.20 2005-11-13 15:26:18 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -147,6 +147,9 @@ public: // With description
         G4bool           IsMarkerNotHidden       () const;
         G4int            GetWindowSizeHintX      () const;
         G4int            GetWindowSizeHintY      () const;
+  const G4String&        GetXGeometryString      () const;
+  // If non-null, can be interpreted with XParseGeometry (see man
+  // pages).  Supercedes GetWindowSizeHintX/Y.
         G4bool           IsAutoRefresh           () const;
   const G4Colour&        GetBackgroundColour     () const;
 
@@ -208,6 +211,7 @@ public: // With description
   void SetMarkerHidden         ();
   void SetMarkerNotHidden      ();
   void SetWindowSizeHint       (G4int xHint, G4int yHint);
+  void SetXGeometryString      (const G4String&);
   void SetAutoRefresh          (G4bool);
   void SetBackgroundColour     (const G4Colour&);
 
@@ -256,6 +260,7 @@ private:
   // removed.
   G4int        fWindowSizeHintX; // Size hints for pixel-based window systems.
   G4int        fWindowSizeHintY;
+  G4String     fXGeometryString; // If non-null, geometry string for X Windows.
   G4bool       fAutoRefresh;     // ...after change of view parameters.
   G4Colour     fBackgroundColour;
 };
