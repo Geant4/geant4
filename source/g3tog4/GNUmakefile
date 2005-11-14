@@ -91,9 +91,6 @@ endif
 ### versions. You can use cernlib -v option to specify the cernlib version 
 ###############################################################################
 
-cernlibv = pro
-cernlibs := $(shell cernlib -v $(cernlibv) geant321 packlib)
-
 ### .PHONY targets are executed regardless of time-stamp of any file of same 
 ###  name
 
@@ -141,7 +138,7 @@ $(G4BINDIR)/$(G4TARGET) : $(Fbinobjects) $(G4LIBDIR)/lib$(name)F.a
 	@echo Linking $(G4TARGET)
 	$(RM) $@
 	echo $(G4TARGET) dependencies: $^
-	$(FC) $(Fbinobjects) -o $@ $(G4LIBDIR)/lib$(name)F.a $(cernlibs)
+	$(FC) $(Fbinobjects) -o $@ $(G4LIBDIR)/lib$(name)F.a $(shell cernlib -v pro geant321 packlib)
 	@echo Finished linking $(G4TARGET)
 
 ###-------------------- locally defined pattern rules ------------------------
