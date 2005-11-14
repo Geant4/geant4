@@ -1,4 +1,4 @@
-$Id: History,v 1.309 2005-11-13 16:08:39 allison Exp $
+$Id: History,v 1.310 2005-11-14 19:04:37 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,14 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+14th November 2005  John Allison (vis-V07-01-06)
+- Minor modification of vis-V07-01-03 + vis-HepRep-V07-01-04 (to avoid
+  warnings on Sun), i.e., it excludes all development since then. This
+  tag is purely to facilitate acceptance of greps-V07-01-09.  To
+  achieve this, the modification was made on a branch -
+  vis-V07-01-03-branch - of just one file, namely G4VisManager.hh.
+  This should subsequently simply be ignored.
 
 13th November 2005  John Allison
 - visman-V07-01-08: Added XGeometryString and background opacity parameter.
