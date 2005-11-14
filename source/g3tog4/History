@@ -1,7 +1,11 @@
-$Id: History,v 1.60 2005-11-05 10:30:10 gcosmo Exp $
+$Id: History,v 1.61 2005-11-14 18:21:56 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V07-01-01 14-Nov-2005 G.Cosmo
+- Implemented migration to <sstream> from deprecated <strstream>.
+- GNUmakefile: moved call to 'cernlib' to 'bin' target.
 
 g3tog4-V07-01-00 05-Nov-2005 G.Cosmo
 - G3EleTable.cc: corrected inclusion of <strstrem> in implementation.
