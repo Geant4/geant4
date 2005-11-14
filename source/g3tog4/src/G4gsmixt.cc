@@ -21,14 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsmixt.cc,v 1.11 2004-12-07 08:33:38 gcosmo Exp $
+// $Id: G4gsmixt.cc,v 1.12 2005-11-14 18:21:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 27 Sep 99
 
 #include "globals.hh"
 #include <iomanip>
-#include <strstream>
 #include <iomanip>
 
 #include "G3toG4.hh"
