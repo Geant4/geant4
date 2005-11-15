@@ -21,13 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: EmAnalysisMessenger.cc,v 1.1 2004-08-26 15:07:50 vnivanch Exp $
+// $Id: EmAnalysisMessenger.cc,v 1.2 2005-11-15 16:13:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "EmAnalysisMessenger.hh"
+
+#include <sstream>
 
 #include "EmAnalysis.hh"
 #include "G4UIdirectory.hh"
@@ -111,7 +113,7 @@ void EmAnalysisMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
   if (command == histoCmd) { 
     G4String part, mat, proc, type, hid;
     const char* t = newValues;
-    std::istrstream is((char*)t);
+    std::istringstream is(t);
     is >> part >> mat >> proc >> type >> hid;
     G4int n = ema->AddHistOnCrossSection(part,mat,proc,type,hid);
     G4cout << "### Histogram ID= " << n << " is booked" << G4endl;
