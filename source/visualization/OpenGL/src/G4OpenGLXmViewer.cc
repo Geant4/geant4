@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.19 2005-11-13 15:46:55 allison Exp $
+// $Id: G4OpenGLXmViewer.cc,v 1.20 2005-11-15 16:22:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,10 +74,10 @@ void G4OpenGLXmViewer::GetXmConnection () {
   oss <<
     "*glxarea*width: " << fVP.GetWindowSizeHintX() << "\n"
     "*glxarea*height: " << fVP.GetWindowSizeHintY() << "\n"
-    /* Tried this, but sub-windows (rotation, etc.) came same size!!
-    "*geometry: "
-      << fVP.GetWindowSizeHintX() << 'x'
-      << fVP.GetWindowSizeHintY() << "\n"
+    /*
+    // Tried this as a replacement for the above two lines, but
+    // sub-windows (rotation, etc.) came same size!!
+    "*geometry: " << fVP.GetXGeometryString() << "\n"
     */
     "*frame*x: 10\n"
     "*frame*y: 10\n"
