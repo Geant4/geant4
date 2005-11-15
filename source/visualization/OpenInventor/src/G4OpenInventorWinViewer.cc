@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.23 2005-11-15 08:39:03 gbarrand Exp $
+// $Id: G4OpenInventorWinViewer.cc,v 1.24 2005-11-15 09:32:58 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -61,7 +61,7 @@ public:
   }
 };
 
-#define SIZE 400
+#define SIZE 600
 // File : 
 #define ID_FILE_POSTSCRIPT 1
 #define ID_FILE_PIXMAP_POSTSCRIPT 2
