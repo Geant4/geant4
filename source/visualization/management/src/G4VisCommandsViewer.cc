@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.51 2005-11-13 15:34:41 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.52 2005-11-15 16:18:56 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -258,7 +258,8 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
 
-  // Parse windowSizeHintString...
+  // Parse windowSizeHintString to extract first field for backwards
+  // compatibility...
   std::istringstream issw;
   G4int windowSizeHint;
   size_t i;
@@ -268,11 +269,10 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
   }
   if (i != windowSizeHintString.size()) {
     // x or X or + or - found - must be a X-Window-type geometry string...
-    fpVisManager->SetXGeometryString (windowSizeHintString);
-    // All the same, pick out the first field for backwards compatibility...
+    // Pick out the first field for backwards compatibility...
     issw.str(windowSizeHintString.substr(0,i));
     issw >> windowSizeHint;
-  } else { // ...convert to integer...
+  } else { // ...old-style integer...
     issw.str(windowSizeHintString);
     if (!(issw >> windowSizeHint)) {
       if (verbosity >= G4VisManager::errors) {
@@ -283,12 +283,16 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
       }
       windowSizeHint = 600;
     }
-    fpVisManager->SetXGeometryString ("");
+    // Reconstitute windowSizeHintString...
+    std::ostringstream ossw;
+    ossw << windowSizeHint << 'x' << windowSizeHint;
+    windowSizeHintString = ossw.str();
   }
   fpVisManager->SetWindowSizeHint (windowSizeHint, windowSizeHint);
-  // These are picked upfrom the vis manager in the G4VViewer
-  // constructor.  The problem is these have to be set *before*
-  // construction, i.e., before we have a viewer.
+  fpVisManager->SetXGeometryString(windowSizeHintString);
+  // WindowSizeHint and XGeometryString are picked up from the vis
+  // manager in the G4VViewer constructor.  They have to be held by
+  // the vis manager until the viewer is contructed - next line...
 
   // Create viewer.
   fpVisManager -> CreateViewer (newName);
