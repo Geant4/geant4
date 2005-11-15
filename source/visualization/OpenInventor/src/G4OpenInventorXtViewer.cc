@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc,v 1.21 2004-11-26 08:38:51 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.cc,v 1.22 2005-11-15 08:39:03 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -195,6 +195,16 @@ void G4OpenInventorXtViewer::FinishView () {
   fViewer->viewAll();
   fViewer->saveHomePosition();
 }
+
+void G4OpenInventorXtViewer::SetView () {
+  G4OpenInventorViewer::SetView ();
+  if(!fViewer) return;
+  // Background.
+  G4Colour b = fVP.GetBackgroundColour ();
+  fViewer->setBackgroundColor
+    (SbColor((float)b.GetRed(),(float)b.GetGreen(),(float)b.GetBlue()));
+}
+
 
 void G4OpenInventorXtViewer::ViewerRender () {
   if(!fViewer) return;

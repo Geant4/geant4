@@ -249,8 +249,6 @@ void G4OpenInventorViewer::SetView () {
       //FIXME :   (2.*fVP.GetFieldHalfAngle());
     }
   }
-
-
 }
 
 //COIN_FUNCTION_EXTENSION
