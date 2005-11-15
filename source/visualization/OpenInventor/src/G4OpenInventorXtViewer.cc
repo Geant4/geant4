@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc,v 1.22 2005-11-15 08:39:03 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.cc,v 1.23 2005-11-15 09:32:03 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -75,16 +75,20 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer(
 
   G4String wName = fName;
 
-#define SIZE 400
+#define SIZE 600
   Widget parent = (Widget)fInteractorManager->GetParentInteractor ();
   if(!parent) {  
+    // Check if user has specified an X-Windows-type geometry string...
+    char s[32];
+    sprintf(s,"%dx%d",SIZE,SIZE);
+    G4String sgeometry = fVP.GetXGeometryString();
+    if(sgeometry.empty()) sgeometry = s;
+
     //Create a shell window :
     G4String shellName = wName;
     shellName += "_shell"; 
     Arg args[10];
-    char s[32];
-    sprintf(s,"%dx%d",SIZE,SIZE);
-    XtSetArg(args[0],XtNgeometry,XtNewString(s));
+    XtSetArg(args[0],XtNgeometry,XtNewString(sgeometry.c_str()));
     XtSetArg(args[1],XtNborderWidth,0);
     XtSetArg(args[2],XtNtitle,XtNewString(wName.c_str()));
     fShell = XtAppCreateShell(shellName.c_str(),"Inventor",
