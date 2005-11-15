@@ -1,0 +1,179 @@
+
+                       geant4-07-01-ref-05
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Started migration to <sstream> from deprecated <strstream>.
+  o Started migration to support CLHEP-2.0.X.
+  o Added fake default constructor for all concrete volumes, solids,
+    base classes materials and relevant utility classes for handling of
+    direct object persistency.
+  o Merged concept of "envelope" to G4Region for fast-parameterisation
+    and migrated relevant modules.
+  o Moved G4VGraphicsScene and G4VVisManager from intercoms to
+    graphics_reps modules.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+event                                            event-V07-01-01
+-----
+- Modified GNUmakefile to follow intercoms->graphics_reps migration for
+  G4VGraphicsScene and G4VVisManager classes.
+
+g3tog4                                           g3tog4-V07-01-00
+------
+- G3EleTable.cc: corrected inclusion of <strstrem> in implementation.
+  Temporary solution pending migration to <sstream>.
+  Fixes compilation problem on gcc/AMD64.
+
+geometry                                         geometry-V07-01-00
+--------
+- Implemented changes for support of CLHEP-2.0.X.
+- Added fake default constructor for all concrete volumes, solids, base
+  classes and relevant utility classes for handling of direct object
+  persistency.
+- Merged concept of "envelope" to G4Region for fast-parameterisation.
+- Implemented migration to <sstream> from deprecated <strstream>.
+
+geometry/divisions                               geomdiv-V07-01-01
+------------------
+- Protected case of generic construct for G4Polyhedra and G4Polycone
+  currently NOT supported for divisions.
+
+geometry/solids/specific                         geom-specific-V07-01-08
+------------------------
+- G4Tet:
+  o Added implementation for GetPolyhedron() and GetCubicVolume().
+  o Corrected order of specifying vertices in CreatePolyhedron().
+- G4Ellipsoid: replaced case of call to hypot(x,y) with std::sqrt(x*x+y*y)
+  for porting to ISO standard.
+- G4Polyhedra, G4Polycone:
+  o Protected case of generic construct for visualization.
+  o Introduced explicit flag and method IsGeneric() to identify the kind
+    of constructor used.
+
+global                                           global-V07-01-04
+------
+- Revised G4strstreambuf for migration to <sstream> from deprecated
+  <strstream>
+- Support for CLHEP-2.0.X series:
+  o Introduced explicit usage of 'CLHEP::' and 'HepGeom::' namespaces for
+    vector and geometry types.
+  o Added wrapper headers for units and constants to allow for usage in the
+    global namespace. NOTE: units and constants are currently NOT moved to the
+    CLHEP namespace.
+  o Works with both 1.9.X and 2.0.X series of CLHEP.
+- G4Types.hh:
+  o Removed '#undef __DEPRECATED' statement in G4Types.hh for strstream
+    deprecation by the gcc compiler. Will cause compilation warnings on gcc
+    compiler for code still using strstream.
+  o Added forward declaration for __void__ type in G4Types.hh to be used for
+    definition of fake default constructors for usage of direct object
+    persistency.
+- version.hh: modified for the release 8.0.
+
+graphics_reps                                    greps-V07-01-06
+-------------
+- Moved G4VGraphicsScene and G4VVisManager from intercoms to graphics_reps.
+- G4Colour:
+  o Added static data members for common colours.
+  o Added G4String->G4Colour colour map.
+  o Migrated to use <sstream>
+- G4NURBStubesector: migrated to <sstream>.
+
+intercoms                                        intercoms-V07-01-03
+---------
+- Moved G4VGraphicsScene and G4VVisManager from intercoms to graphics_reps.
+- Implemented migration to <sstream> from deprecated <strstream>.
+
+interfaces                                       interfaces-V07-01-00
+----------
+- Implemented migration to <sstream> for G4UItcsh, G4UIterminal
+  and G4VBasicShell.
+
+materials                                        materials-V07-01-00
+---------
+- G4NistMaterialBuilder: added chemical formulas for number of materials,
+  added temperature and pressure explicitly for each material; it will
+  allow to have other than STP parameters for gases.
+- Added fake default constructor for isotopes, elements, materials and
+  relevant related classes, for usage of direct object persistency of
+  detector description.
+
+parameterisations                                gpara-V07-01-01
+-----------------
+- Implemented migration to new scheme considering G4Region as envelope
+  for fast-parameterisation.
+
+processes/cuts                                   procuts-V07-01-00
+--------------
+- Implemented migration to new scheme considering G4Region as envelope
+  for fast-parameterisation.
+
+processes/hadronic/models/radioactive_decay      radioactive_decay-V07-01-00
+-------------------------------------------
+- Implemented migration to <sstream> from deprecated <strstream>.
+- Added changes for support of CLHEP-2.0.X.
+- Replaced usage of NULL with 0.
+
+processes/parameterisation                       param-V07-01-01
+--------------------------
+- Implemented migration to new scheme considering G4Region as envelope
+  for fast-parameterisation.
+- Corrected setting of envelope volumes and solid in G4FastTrack.
+- Migrated old scheme for G4Exception and some cosmetics...
+
+run                                              run-V07-01-05
+---
+- Implemented migration to new scheme considering G4Region as envelope
+  for fast-parameterisation.
+- Use version.hh for version and date in G4RunManagerKernel constructor.
+- Implemented migration to <sstream> from deprecated <strstream>.
+- Added changes for support of CLHEP-2.0.X.
+- GNUmakefile: modified to follow intercoms->graphics_reps migration
+  for G4VGraphicsScene and G4VVisManager classes.
+
+visualization                                    vis-V07-01-05
+-------------
+- Updates following intercoms->graphics_reps migration for
+  G4VGraphicsScene and G4VVisManager classes.
+- Fixed bug in mass calculations.
+- Implemented non-uniform scaling in management and OpenGL.
+- Implemented arbitrary background in management, OpenGL and RayTracer.
+- Implemented migration to <sstream> from deprecated <strstream>.
+- HepRep (vis-HepRep-V07-01-04)
+  o Fixed a problem with Cons.
+- RayTracer (raytracer-V07-01-05)
+  o Implemented migration to new scheme considering G4Region as envelope.
+
+examples                                         examples-V07-01-05
+--------
+- Updated reference outputs.
+- extended
+  o electromagnetic/TestEm1 (testem1-V07-01-01)
+    + Implemented migration to <sstream> for HistoMessenger.
+  o electromagnetic/TestEm3 (testem3-V07-01-02)
+    + Implemented migration to <sstream>.
+  o electromagnetic/TestEm5 (testem5-V07-01-01)
+    + Implemented migration to <sstream> for HistoMessenger.
+  o electromagnetic/TestEm9 (testem9-V07-01-02)
+    + Implemented migration to <sstream>.
+  o electromagnetic/TestEm11 (testem11-V07-01-02)
+    + Implemented migration to <sstream> for HistoMessenger.
+  o electromagnetic/TestEm12 (testem12-V07-01-03)
+    + Implemented migration to <sstream> for HistoMessenger.
+  o parameterisations/gflash (exparam-V07-01-01)
+    + New example showing usage of gflash fast shower parameterisation.
+- novice:
+  o N05 (exampleN03-V07-01-01)
+    + Use RandGamma from CLHEP end removed custom RandomGamma function.
+ 
+tests                                            tests-V07-01-05
+-----
+- Updated reference outputs.
+- test34 (test34-V07-01-01)
+  o Implemented migration to new scheme considering G4Region as envelope.
+
