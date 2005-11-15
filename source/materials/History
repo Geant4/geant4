@@ -1,4 +1,4 @@
-$Id: History,v 1.66 2005-11-09 15:42:32 gcosmo Exp $
+$Id: History,v 1.67 2005-11-15 15:24:37 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+15-11-05 mma (materials-V07-01-01)
+- G4bool warning=true in GetMaterial(), GetElement(), GetIsotope()
+  
 09-11-05 G.Cosmo (materials-V07-01-00)
 - Added fake default constructor for isotopes, elements, materials and
   relevant related classes, for usage of direct object persistency of

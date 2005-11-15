@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.28 2005-11-09 15:38:43 gcosmo Exp $
+// $Id: G4Material.cc,v 1.29 2005-11-15 15:24:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -419,7 +419,7 @@ size_t G4Material::GetNumberOfMaterials()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Material* G4Material::GetMaterial(G4String materialName)
+G4Material* G4Material::GetMaterial(G4String materialName, G4bool warning)
 {  
   // search the material by its name 
   for (size_t J=0 ; J<theMaterialTable.size() ; J++)
@@ -429,9 +429,11 @@ G4Material* G4Material::GetMaterial(G4String materialName)
    }
    
   // the material does not exist in the table
+  if (warning) {
   G4cout << "\n---> warning from G4Material::GetMaterial(). The material: "
          << materialName << " does not exist in the table. Return NULL pointer."
 	 << G4endl;
+  }	 
   return 0;          
 }
 

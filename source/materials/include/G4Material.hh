@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.hh,v 1.23 2005-11-09 15:38:43 gcosmo Exp $
+// $Id: G4Material.hh,v 1.24 2005-11-15 15:24:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -76,6 +76,7 @@
 // 31-10-01, new function SetChemicalFormula() (mma)
 // 26-02-02, fIndexInTable renewed
 // 06-08-02, remove constructors with ChemicalFormula (mma)
+// 15-11-05, GetMaterial(materialName, G4bool warning=true)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -218,7 +219,7 @@ public:  // with description
   size_t GetIndex() const {return fIndexInTable;};
     
   //return  pointer to a material, given its name:    
-  static  G4Material* GetMaterial(G4String name);
+  static  G4Material* GetMaterial(G4String name, G4bool warning=true);
   
   //
   //printing methods

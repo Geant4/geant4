@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.hh,v 1.17 2005-11-09 15:38:43 gcosmo Exp $
+// $Id: G4Isotope.hh,v 1.18 2005-11-15 15:24:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,6 +41,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+// 15.11.05: GetIsotope(isotopeName, G4bool warning=false)
 // 31.03.05: A becomes optional. Taken from Nist data base by default (mma)  
 // 26.02.02: fIndexInTable renewed 
 // 14.09.01: fCountUse: nb of elements which use this isotope 
@@ -86,7 +87,7 @@ class G4Isotope
     void  decreaseCountUse()  {fCountUse--;};
     
     static  
-    G4Isotope* GetIsotope(G4String name);
+    G4Isotope* GetIsotope(G4String name, G4bool warning=false);
     
     static const
     G4IsotopeTable* GetIsotopeTable();

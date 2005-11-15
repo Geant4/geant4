@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.21 2005-11-09 15:38:43 gcosmo Exp $
+// $Id: G4Element.cc,v 1.22 2005-11-15 15:24:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,7 +44,8 @@
 // 13-09-01: suppression of the data member fIndexInTable
 // 14-09-01: fCountUse: nb of materials which use this element
 // 26-02-02: fIndexInTable renewed
-// 30-03-05: warning in GetElement(elementName) 
+// 30-03-05: warning in GetElement(elementName)
+// 15-11-05: GetElement(elementName, G4bool warning=true) 
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -270,7 +271,7 @@ void G4Element::ComputeLradTsaiFactor()
   G4double Lrad, Lprad;
   G4int iz = (int)(fZeff+0.5) - 1 ;
   if (iz <= 3) { Lrad = Lrad_light[iz] ;  Lprad = Lprad_light[iz] ; }
-     else { Lrad = std::log(184.15) - logZ3 ; Lprad = std::log(1194.) - 2*logZ3 ; }
+    else { Lrad = std::log(184.15) - logZ3 ; Lprad = std::log(1194.) - 2*logZ3;}
 
   fRadTsai = 4*alpha_rcl2*fZeff*(fZeff*(Lrad-fCoulomb) + Lprad); 
 }
@@ -300,7 +301,7 @@ size_t G4Element::GetNumberOfElements()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Element* G4Element::GetElement(G4String elementName)
+G4Element* G4Element::GetElement(G4String elementName, G4bool warning)
 {  
   // search the element by its name 
   for (size_t J=0 ; J<theElementTable.size() ; J++)
@@ -310,9 +311,11 @@ G4Element* G4Element::GetElement(G4String elementName)
    }
    
   // the element does not exist in the table
+  if (warning) {
   G4cout << "\n---> warning from G4Element::GetElement(). The element: "
          << elementName << " does not exist in the table. Return NULL pointer."
-	 << G4endl;   
+	 << G4endl;
+  }   
   return 0;   
 }
 

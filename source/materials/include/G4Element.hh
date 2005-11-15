@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.hh,v 1.19 2005-11-09 15:38:43 gcosmo Exp $
+// $Id: G4Element.hh,v 1.20 2005-11-15 15:24:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -158,7 +158,7 @@ public:  // with description
   //return pointer to an element, given its name:
   //
   static
-  G4Element* GetElement(G4String name);
+  G4Element* GetElement(G4String name, G4bool warning=true);
   
   //count number of materials which use this element
   //

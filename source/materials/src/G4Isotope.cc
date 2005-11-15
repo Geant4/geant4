@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.cc,v 1.17 2005-11-09 15:38:43 gcosmo Exp $
+// $Id: G4Isotope.cc,v 1.18 2005-11-15 15:24:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -185,7 +185,7 @@ size_t G4Isotope::GetNumberOfIsotopes()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Isotope* G4Isotope::GetIsotope(G4String isotopeName)
+G4Isotope* G4Isotope::GetIsotope(G4String isotopeName, G4bool warning)
 {  
   // search the isotope by its name 
   for (size_t J=0 ; J<theIsotopeTable.size() ; J++)
@@ -195,6 +195,11 @@ G4Isotope* G4Isotope::GetIsotope(G4String isotopeName)
    }
    
   // the isotope does not exist in the table
+  if (warning) {
+  G4cout << "\n---> warning from G4Isotope::GetIsotope(). The isotope: "
+         << isotopeName << " does not exist in the table. Return NULL pointer."
+	 << G4endl;
+  }     
   return 0;          
 }
 
