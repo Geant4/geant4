@@ -24,6 +24,8 @@
 //
 #include "exrdmMaterialMessenger.hh"
 
+#include <sstream>
+
 #include "exrdmMaterial.hh"
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -113,7 +115,7 @@ void exrdmMaterialMessenger::SetNewValue (G4UIcommand* command,G4String newValue
     stat[0] = ' ';
     tem = pres = -1.;
     const char* t = newValue;
-    std::istrstream is((char*)t);
+    std::istringstream is(t);
     is >>mat >>form >>den >>stat >> tem >> pres ;
     G4String material=mat;
     G4String formula=form;

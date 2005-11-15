@@ -24,6 +24,8 @@
 
 #include "exrdmHistoMessenger.hh"
 
+#include <sstream>
+
 #include "exrdmHisto.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
@@ -100,7 +102,7 @@ void exrdmHistoMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
   if (command == histoCmd)
    { G4int ih,nbBins; G4double vmin,vmax; char unts[30];
      const char* t = newValues;
-     std::istrstream is((char*)t);
+     std::istringstream is(t);
      is >> ih >> nbBins >> vmin >> vmax >> unts;
      G4String unit = unts;
      G4double vUnit = 1. ;

@@ -37,7 +37,7 @@
 #include "G4Colour.hh"
 
 #include "G4ios.hh"
-#include <strstream>
+#include <sstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
@@ -191,10 +191,9 @@ G4VPhysicalVolume* exrdmDetectorConstruction::Construct()
 
   G4double zpos = -fWorldLength/2.;
   G4String command = "/gps/pos/centre ";
-  char x[10];
-  std::ostrstream os(x,10);
+  std::ostringstream os;
   os << zpos << '\0'; 
-  G4String xs = x;
+  G4String xs = os.str();
   UI->ApplyCommand(command+"0. 0. "+xs+" mm");
   UI->ApplyCommand("/gps/pos/type Point");
   command = "/gps/position ";
