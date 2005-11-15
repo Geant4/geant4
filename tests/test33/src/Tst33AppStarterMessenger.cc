@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarterMessenger.cc,v 1.9 2003-11-25 10:32:54 gcosmo Exp $
+// $Id: Tst33AppStarterMessenger.cc,v 1.10 2005-11-15 16:18:28 gcosmo Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -32,7 +32,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4Types.hh"
-#include <strstream>
+#include <sstream>
 
 #include "Tst33AppStarterMessenger.hh"
 #include "G4UIcommand.hh"
@@ -95,7 +95,7 @@ void Tst33AppStarterMessenger::SetNewValue(G4UIcommand* pCmd,
   if (pCmd==fWWCmd) {
     G4int ipoa;
     G4bool zeroWindow;
-    std::istrstream is(szValue);
+    std::istringstream is(szValue);
     is >> ipoa >>zeroWindow;
 
     G4PlaceOfAction poa = onBoundary;

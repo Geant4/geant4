@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33PVolumeStore.cc,v 1.6 2003-06-16 17:15:58 gunter Exp $
+// $Id: Tst33PVolumeStore.cc,v 1.7 2005-11-15 16:18:28 gcosmo Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -32,7 +32,7 @@
 // ----------------------------------------------------------------------
 
 #include "Tst33PVolumeStore.hh"
-#include <strstream>
+#include <sstream>
 
 
 #include "G4VPhysicalVolume.hh"
@@ -79,14 +79,13 @@ GetGeometryCell(G4int i, const G4String &nameExt) const {
 }
 
 G4String Tst33PVolumeStore::GetCellName(G4int i) const {
-  char st[200];
-  std::ostrstream os(st,200);
+  std::ostringstream os;
   os << "cell_";
   if (i<10) {
     os << "0";
   }
   os << i 
      << '\0';
-  G4String name(st);
+  G4String name = os.str();
   return name;
 }

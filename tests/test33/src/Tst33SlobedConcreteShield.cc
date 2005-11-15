@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33SlobedConcreteShield.cc,v 1.8 2003-06-16 17:16:02 gunter Exp $
+// $Id: Tst33SlobedConcreteShield.cc,v 1.9 2005-11-15 16:18:28 gcosmo Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -32,8 +32,6 @@
 // ----------------------------------------------------------------------
 
 #include "Tst33SlobedConcreteShield.hh"
-
-#include <strstream>
 
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
