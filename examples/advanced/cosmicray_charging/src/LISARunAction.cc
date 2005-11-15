@@ -53,7 +53,7 @@
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
 #include "globals.hh"
-#include <strstream>
+#include <sstream>
 
 #include "Randomize.hh"
 #include <time.h>
@@ -101,8 +101,7 @@ void LISARunAction::BeginOfRunAction(const G4Run* aRun) {
   G4cout << "### Run " << run_id << " start." << G4endl;
 
 
-  char filename[100];
-  std::ostrstream os(filename,100);
+  std::ostringstream os;
 
   if(autoSeed) {
     // automatic (time-based) random seeds and filenames for each run
@@ -125,19 +124,19 @@ void LISARunAction::BeginOfRunAction(const G4Run* aRun) {
     // default filename, seeds set by /random/reset
     os << "charge" << std::ends;
   }
-  //  G4cout << "Filename: " << G4String(filename) << G4endl;
+  //  G4cout << "Filename: " << G4String(os.str()) << G4endl;
 
 
   // send filename to eventAction
   LISAEventAction* eventAction = (LISAEventAction*)
     G4RunManager::GetRunManager()->GetUserEventAction();
-  eventAction->SetFilename( G4String(filename)+G4String(".out") );
+  eventAction->SetFilename( G4String(os.str())+G4String(".out") );
 
 
 #ifdef G4ANALYSIS_USE
   // Book histograms and ntuples
   LISAAnalysisManager* analysis = LISAAnalysisManager::getInstance();
-  analysis->bookRun( G4String(filename)+G4String(".hbook") );
+  analysis->bookRun( G4String(os.str())+G4String(".hbook") );
 #endif
 
 

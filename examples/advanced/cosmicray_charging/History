@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15.11.2005 - Gabriele Cosmo, tag cosmicray_charging-V07-01-00
+             Migration to <sstream> from deprecated <strstream>.
+
 06.06.2005 - Gabriele Cosmo, tag cosmicray_charging-V07-00-00
              Fixed trivial compilation error on gcc-3.4.X (double semicolon).
 

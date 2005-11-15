@@ -36,7 +36,6 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 #include "G4ios.hh"
-#include <strstream>
 
 class LISAPrimaryGeneratorAction;
 class LISASteppingAction;
