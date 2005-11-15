@@ -152,7 +152,24 @@ visualization                                    vis-V07-01-05
 examples                                         examples-V07-01-05
 --------
 - Updated reference outputs.
+- advanced
+  o air_shower (air_shower-V07-01-00)
+    + Implemented migration to <sstream>.
+  o composite_calorimeter (ccal-V07-01-00)
+    + Implemented migration to <sstream>.
+    + Updated hadronic physics list (commented QGSP_Model).
+  o cosmicray_charging (cosmicray_charging-V07-01-00)
+    + Implemented migration to <sstream>.
+  o Tiara (Tiara-V07-01-00)
+    + Implemented migration to <sstream>.
+  o underground_physics (DMX-V07-01-00)
+    + Implemented migration to <sstream>.
+  o xray_fluorescence (XrayFluo-V07-01-00)
+    + Implemented migration to <sstream>.
+    + Fixed compilation problem with UIXm.
 - extended
+  o biasing (exbiasing-V07-01-00)
+    + Implemented migration to <sstream>.
   o electromagnetic/TestEm1 (testem1-V07-01-01)
     + Implemented migration to <sstream> for HistoMessenger.
   o electromagnetic/TestEm3 (testem3-V07-01-02)
@@ -165,8 +182,16 @@ examples                                         examples-V07-01-05
     + Implemented migration to <sstream> for HistoMessenger.
   o electromagnetic/TestEm12 (testem12-V07-01-03)
     + Implemented migration to <sstream> for HistoMessenger.
+  o eventgenerator/HepMC (exHepMC-V07-01-00)
+    + Implemented migration to <sstream>.
+  o geometry/olap (olapex-V07-01-00)
+    + Implemented migration to <sstream>.
+  o parallel (ParN02-V07-01-00, ParN04-V07-01-00)
+    + Implemented migration to <sstream>.
   o parameterisations/gflash (exparam-V07-01-01)
     + New example showing usage of gflash fast shower parameterisation.
+  o radioactivedecay/exrdm (exrdm-V07-01-01)
+    + + Implemented migration to <sstream>.
 - novice:
   o N05 (exampleN03-V07-01-01)
     + Use RandGamma from CLHEP end removed custom RandomGamma function.
@@ -174,6 +199,14 @@ examples                                         examples-V07-01-05
 tests                                            tests-V07-01-05
 -----
 - Updated reference outputs.
+- test18 (test18-V07-01-00)
+  o Implemented migration to <sstream>.
+  o Fixed problem in EM PhysicsList.
+- test33 (test33-V07-01-00)
+  o Implemented migration to <sstream>.
 - test34 (test34-V07-01-01)
   o Implemented migration to new scheme considering G4Region as envelope.
-
+- test201 (test201-V07-01-00)
+  o Implemented migration to <sstream>.
+  o Replaced MyVisManager by G4VisExecutive.
+  o Committed test201.g4m.
