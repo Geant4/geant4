@@ -35,10 +35,8 @@
 // 28 Nov 2001 Elena Guardincerri     Created
 //
 // -------------------------------------------------------------------
-#include <stdlib.h>
 #include "G4VProcess.hh"
 #include <fstream>
-#include <strstream>
 #include "G4ios.hh"
 #include "XrayFluoAnalysisManager.hh"
 #include "G4Step.hh"

@@ -34,7 +34,6 @@
 
 #include "XrayFluoDataSet.hh"
 #include <fstream>
-#include <strstream>
 #include "G4VDataSetAlgorithm.hh"
 
 XrayFluoDataSet::XrayFluoDataSet(G4int Z,

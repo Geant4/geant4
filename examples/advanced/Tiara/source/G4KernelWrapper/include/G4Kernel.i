@@ -1,4 +1,4 @@
-# $Id: G4Kernel.i,v 1.5 2003-06-20 12:41:06 dressel Exp $
+# $Id: G4Kernel.i,v 1.6 2005-11-15 16:01:55 gcosmo Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -41,7 +41,7 @@
 #include "G4VIStore.hh"
 #include "G4IStore.hh"
 #include "G4UserSteppingAction.hh"
-#include <strstream>
+#include <sstream>
 #include "G4VisManager.hh"
 #include "G4VUserDetectorConstruction.hh"
 %}
@@ -89,7 +89,7 @@
 %include G4ScoreTable.hh
 %extend G4ScoreTable {
   const char *Write(const G4MapGeometryCellCellScorer &cs){
-    std::ostrstream tmpout;
+    std::ostringstream tmpout;
     self->Print(cs, &tmpout);
     std::string *value = new std::string(tmpout.str());
     return value->c_str();

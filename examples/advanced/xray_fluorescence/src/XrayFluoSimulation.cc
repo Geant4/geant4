@@ -135,7 +135,7 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
     {
       // G4UIterminal is a (dumb) terminal.
 #ifdef G4UI_USE_XM
-      session = new G4UIXm(argc,argv[1]);
+      session = new G4UIXm(argc,&argv[1]);
 #else           
 #ifdef G4UI_USE_TCSH
       session = new G4UIterminal(new G4UItcsh);

@@ -38,7 +38,7 @@
 #include "G4LogLogInterpolation.hh"
 #include "G4ios.hh"
 #include <fstream>
-#include <strstream>
+#include <sstream>
 #include "G4UnitsTable.hh"
 #include "Randomize.hh"
 
@@ -242,13 +242,11 @@ G4double XrayFluoHPGeDetectorType::GetSupData(G4double energy, G4double random, 
 }
 void XrayFluoHPGeDetectorType::LoadResponseData(G4String fileName)
 {
-  char nameChar[100] = {""};
-  std::ostrstream ost(nameChar, 100, std::ios::out);
-  
+  std::ostringstream ost;
   
   ost << fileName<<".dat";
   
-  G4String name(nameChar);
+  G4String name = ost.str();
   
   char* path = getenv("XRAYDATA");
   

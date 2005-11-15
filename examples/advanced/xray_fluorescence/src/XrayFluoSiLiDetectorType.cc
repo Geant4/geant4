@@ -38,7 +38,7 @@
 #include "G4LogLogInterpolation.hh"
 #include "G4ios.hh"
 #include <fstream>
-#include <strstream>
+#include <sstream>
 #include "G4UnitsTable.hh"
 #include "Randomize.hh"
 
@@ -306,13 +306,11 @@ G4double XrayFluoSiLiDetectorType::GetSupData(G4double, G4double random, G4int p
 }
 void XrayFluoSiLiDetectorType::LoadResponseData(G4String fileName)
 {
-  char nameChar[100] = {""};
-  std::ostrstream ost(nameChar, 100, std::ios::out);
-  
-  
+  std::ostringstream ost;
+    
   ost << fileName<<".dat";
   
-  G4String name(nameChar);
+  G4String name = ost.str();
   
   char* path = getenv("XRAYDATA");
   
