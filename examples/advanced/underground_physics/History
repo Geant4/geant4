@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id:
+$Id: History,v 1.8 2005-11-15 15:40:06 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,11 +9,14 @@ $Id:
                       Category History file
                       ---------------------
 
-3rd May 2005  John Allison  (examples-V07-00-03)
-- Replaced vis manager with G4VisExecutive.
+15.11.2005 - G.Cosmo (DMX-V07-01-00)
+             Migration to <sstream> from deprecated <strstream>.
+
+03.05.2005 - J.Allison
+             Replaced vis manager with G4VisExecutive.
 
 07.12.2004 - S. Guatelli (DMX-V06-02-02)
-            G4VParticleChange migrated
+             G4VParticleChange migrated
 
 29.11.2004 - S. Guatelli (DMX-V06-02-00)
              Migrated to <cmath>

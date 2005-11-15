@@ -37,6 +37,9 @@
 // --------------------------------------------------------------
 
 #include "DMXStackingActionMessenger.hh"
+
+#include <sstream>
+
 #include "DMXStackingAction.hh"
 
 #include "G4UIcmdWithABool.hh"
@@ -67,7 +70,7 @@ void DMXStackingActionMessenger::SetNewValue
   if(command==KillGammasCmd) {
     G4int vl;
     const char* t = newValue;
-    std::istrstream is((char*)t);
+    std::istringstream is(t);
     is >> vl;
     DMXAction->SetKillGammasFlag(vl!=0);
   }
