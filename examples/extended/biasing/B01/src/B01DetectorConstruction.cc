@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: B01DetectorConstruction.cc,v 1.14 2004-12-08 17:39:07 daquinog Exp $
+// $Id: B01DetectorConstruction.cc,v 1.15 2005-11-15 14:10:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4Types.hh"
-#include <strstream>
+#include <sstream>
 #include <set>
 #include "globals.hh"
 
@@ -327,8 +327,7 @@ G4VWeightWindowStore *B01DetectorConstruction::CreateWeightWindowStore()
 
 G4String B01DetectorConstruction::GetCellName(G4int i)
 {
-  char st[200];
-  std::ostrstream os(st,200);
+  std::ostringstream os;
   os << "cell_";
   if (i<10)
   {
@@ -336,6 +335,6 @@ G4String B01DetectorConstruction::GetCellName(G4int i)
   }
   os << i 
      << '\0';
-  G4String name(st);
+  G4String name = os.str();
   return name;
 }

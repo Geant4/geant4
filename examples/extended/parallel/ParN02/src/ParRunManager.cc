@@ -24,8 +24,6 @@
 
 #include "G4Timer.hh"
 
-
-
 #include "G4RunManager.hh"
 
 #include "Randomize.hh"
@@ -53,7 +51,6 @@
 #include "MarshaledG4HCofThisEvent.h"
 
 #include "G4ios.hh"
-#include <strstream>
 
 /*
  * The TopC call backs are implemented by using the 5 static data members to store

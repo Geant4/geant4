@@ -16,7 +16,7 @@
 #include "G4ScoreTable.hh"
 #include "G4VIStore.hh"
 #include <string>
-#include <strstream>
+#include <sstream>
 #include <memory>
 #include "G4VPhysicalVolume.hh"
 #include "B03ImportanceDetectorConstruction.hh"
@@ -141,7 +141,7 @@ public:
 	     std::ostream *out = 0);
   %extend {
     const char *Write(const G4MapGeometryCellCellScorer &cs){
-      std::ostrstream tmpout;
+      std::ostringstream tmpout;
       self->Print(cs, &tmpout);
       std::string *value = new std::string(tmpout.str());
       return value->c_str();

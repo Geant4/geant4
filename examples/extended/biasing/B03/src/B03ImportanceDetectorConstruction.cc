@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: B03ImportanceDetectorConstruction.cc,v 1.6 2003-07-31 11:59:41 dressel Exp $
+// $Id: B03ImportanceDetectorConstruction.cc,v 1.7 2005-11-15 14:10:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "globals.hh"
 #include "G4Types.hh"
-#include <strstream>
+#include <sstream>
 
 #include "B03ImportanceDetectorConstruction.hh"
 
@@ -184,15 +184,14 @@ G4String B03ImportanceDetectorConstruction::ListPhysNamesAsG4String(){
 
 
 G4String B03ImportanceDetectorConstruction::GetCellName(G4int i) {
-  char st[200];
-  std::ostrstream os(st,200);
+  std::ostringstream os;
   os << "cell_";
   if (i<10) {
     os << "0";
   }
   os << i 
      << '\0';
-  G4String name(st);
+  G4String name = os.str();
   return name;
 }
 
