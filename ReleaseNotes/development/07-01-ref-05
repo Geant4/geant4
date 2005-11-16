@@ -191,10 +191,13 @@ examples                                         examples-V07-01-05
   o parameterisations/gflash (exparam-V07-01-01)
     + New example showing usage of gflash fast shower parameterisation.
   o radioactivedecay/exrdm (exrdm-V07-01-01)
-    + + Implemented migration to <sstream>.
+    + Implemented migration to <sstream>.
 - novice:
-  o N05 (exampleN03-V07-01-01)
+  o N05 (exampleN05-V07-01-01)
     + Use RandGamma from CLHEP end removed custom RandomGamma function.
+    + Implemented migration to new scheme considering G4Region as envelope;
+      not yet completed for ghost volumes, though.
+    + Implemented migration to <sstream>.
  
 tests                                            tests-V07-01-05
 -----
