@@ -1,4 +1,4 @@
-$Id: History,v 1.131 2005-11-11 22:40:10 japost Exp $
+$Id: History,v 1.132 2005-11-16 19:46:00 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 16th, 2005      J. Apostolakis - geomvol-V07-01-04
+- Corrections to tag below:
+   * fixing PVPlacement's 'IsRegularStructureMethod'
+   * adding missing RegularStructure methods for G4PhysicalTouchable
 
 Nov 11th, 2005      J. Apostolakis - geomvol-V07-01-03
 - Added methods to identify  Regular Structures in  Physical volume derived
