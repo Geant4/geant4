@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2005-11-09 14:50:05 gcosmo Exp $
+$Id: History,v 1.19 2005-11-16 19:25:54 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+November 16th, 2005     J.Apostolakis  (geomdiv-V07-01-02)
+- Adapted to revision of G4VPhysicalVolume that identifies some 
+  regular structures 
+   * added two RegularStructure methods for G4PVDivision (IsRS, GetRSId)
 
 November 9th, 2005      G.Cosmo  (geomdiv-V07-01-01)
 - Migration to <sstream> from deprecated <strstream> for the
