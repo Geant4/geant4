@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalTouchable.hh,v 1.3 2005-07-25 10:02:43 gcosmo Exp $
+// $Id: G4PhysicalTouchable.hh,v 1.4 2005-11-16 19:09:15 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -99,6 +99,11 @@ class G4PhysicalTouchable : public G4VPhysicalVolume
                                    G4double& offset,
                                    G4bool& consuming) const;
       // Return replication information. Nothing for no-replicated volumes.
+ 
+     
+    G4bool  IsRegularStructure() const; 
+    G4int  GetRegularStructureId() const; 
+      // Methods for regular structures  (special repeated PVs)
 
   private:
 
