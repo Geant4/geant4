@@ -1,4 +1,4 @@
-$Id: History,v 1.185 2005-11-16 12:23:28 maire Exp $
+$Id: History,v 1.186 2005-11-16 12:28:44 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+16 November 05: V. Ivanchenko (emstand-V07-01-22)
+- G4eBremsstrahlungModel.cc: add electron deviation
      
 13 November 05: L.urban (emstand-V07-01-21)
 - G4MultipleScattering: some code cleaning, slightly better timing
