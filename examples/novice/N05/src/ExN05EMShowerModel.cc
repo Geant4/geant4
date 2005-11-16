@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05EMShowerModel.cc,v 1.12 2005-11-16 07:39:03 mverderi Exp $
+// $Id: ExN05EMShowerModel.cc,v 1.13 2005-11-16 08:26:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "ExN05EMShowerModel.hh"
@@ -144,7 +144,7 @@ void ExN05EMShowerModel::Explode(const G4FastTrack& fastTrack)
     {
       // Longitudinal profile:
       // -- shoot z according to Gamma distribution:
-      bt = RandGamma::shoot(a,1.0);
+      bt = CLHEP::RandGamma::shoot(a,1.0);
       t  = bt/b;
       z  = t*X0;
       
