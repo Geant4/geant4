@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalTouchable.cc,v 1.3 2005-07-25 10:02:43 gcosmo Exp $
+// $Id: G4PhysicalTouchable.cc,v 1.4 2005-11-16 19:09:31 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -129,3 +129,23 @@ G4PhysicalTouchable::~G4PhysicalTouchable()
   fpTouchable = 0; 
   fCreatedParentTouch = false; 
 }
+
+
+// The next methods are for specialised repeated volumes 
+//     (replicas, parameterised vol.) which are completely regular.
+// ----------------------------------------------------------------------
+// IsRegularRepeatedStructure()
+//
+G4bool G4PhysicalTouchable::IsRegularStructure() const
+{
+  return false;
+}           
+
+// ----------------------------------------------------------------------
+// IsRegularRepeatedStructure()
+//
+G4int G4PhysicalTouchable::GetRegularStructureId() const
+{
+  return 0;  
+}           
+// This is for specialised repeated volumes (replicas, parameterised vol.)
