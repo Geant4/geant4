@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05DetectorConstruction.cc,v 1.6 2005-11-16 07:39:03 mverderi Exp $
+// $Id: ExN05DetectorConstruction.cc,v 1.7 2005-11-16 07:41:08 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "ExN05DetectorConstruction.hh"
@@ -249,6 +249,7 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
   //
 
   //--------------- Ghost Volumes ------------------------------------
+  // *** ghost functionnality does not work for now ***
   // Ghost volumes will be placed in an automatic copy of the world volume.
   // The placement of the ghost logical volume are specified by the
   // G4FastSimulationManager object attached to it.
