@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.cc,v 1.6 2005-11-11 22:39:00 japost Exp $
+// $Id: G4PVPlacement.cc,v 1.7 2005-11-16 19:08:00 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -222,7 +222,7 @@ GetReplicationData( EAxis&, G4int&, G4double&, G4double&, G4bool& ) const
 //
 G4bool G4PVPlacement::IsRegularStructure() const
 {
-  return true;
+  return false;
 }           
 
 // ----------------------------------------------------------------------
