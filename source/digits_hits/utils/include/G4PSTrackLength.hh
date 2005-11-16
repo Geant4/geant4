@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSTrackLength.hh,v 1.1 2005-11-16 23:12:42 asaim Exp $
+// $Id: G4PSTrackLength.hh,v 1.2 2005-11-16 23:24:08 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,7 +40,7 @@
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
-class G4PSTrackLength : public G4VPrimitiveSensitivity
+class G4PSTrackLength : public G4VPrimitiveScorer
 {
  
  public: // with description

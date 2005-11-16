@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSSphereSurfaceCurrent.cc,v 1.1 2005-11-16 23:12:42 asaim Exp $
+// $Id: G4PSSphereSurfaceCurrent.cc,v 1.2 2005-11-16 23:24:08 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSSphereSurfaceCurrent
@@ -46,7 +46,7 @@
 
 G4PSSphereSurfaceCurrent::G4PSSphereSurfaceCurrent(G4String name, 
 					 G4int direction, G4int depth)
-  :G4VPrimitiveSensitivity(name,depth),HCID(-1),fDirection(direction)
+  :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction)
 {;}
 
 G4PSSphereSurfaceCurrent::~G4PSSphereSurfaceCurrent()
