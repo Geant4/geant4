@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimitiveSensitivity.hh,v 1.3 2005-09-27 17:45:26 asaim Exp $
+// $Id: G4VPrimitiveSensitivity.hh,v 1.4 2005-11-16 22:41:28 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -48,7 +48,7 @@ class G4VPrimitiveSensitivity
   friend class G4MultiFunctionalDetector;
 
   public: // with description
-      G4VPrimitiveSensitivity(G4String);
+      G4VPrimitiveSensitivity(G4String name, G4int depth=0);
       virtual ~G4VPrimitiveSensitivity();
 
   protected: // with description
@@ -79,6 +79,7 @@ class G4VPrimitiveSensitivity
       G4MultiFunctionalDetector* detector;
       G4VSDFilter* filter;
       G4int verboseLevel;
+      G4int indexDepth;
 
   public: // with description
       // Set/Get methods

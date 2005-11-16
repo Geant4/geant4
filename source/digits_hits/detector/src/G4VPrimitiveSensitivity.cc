@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimitiveSensitivity.cc,v 1.2 2005-09-22 22:21:36 asaim Exp $
+// $Id: G4VPrimitiveSensitivity.cc,v 1.3 2005-11-16 22:41:28 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VPrimitiveSensitivity
@@ -32,8 +32,8 @@
 #include "G4TouchableHistory.hh"
 
 
-G4VPrimitiveSensitivity::G4VPrimitiveSensitivity(G4String name)
-:primitiveName(name),detector(0),filter(0),verboseLevel(0)
+G4VPrimitiveSensitivity::G4VPrimitiveSensitivity(G4String name, G4int depth)
+ :primitiveName(name),detector(0),filter(0),verboseLevel(0),indexDepth(depth)
 {;} 
 
 G4VPrimitiveSensitivity::~G4VPrimitiveSensitivity()
@@ -67,6 +67,6 @@ G4int G4VPrimitiveSensitivity::GetIndex(G4Step* aStep)
 {
   G4StepPoint* preStep = aStep->GetPreStepPoint();
   G4TouchableHistory* th = (G4TouchableHistory*)(preStep->GetTouchable());
-  return th->GetReplicaNumber();
+  return th->GetReplicaNumber(indexDepth);
 }
 
