@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.cc,v 1.5 2005-08-18 15:05:13 vnivanch Exp $
+// $Id: G4BetheHeitlerModel.cc,v 1.6 2005-11-16 15:23:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,6 +37,7 @@
 // Modifications:
 // 18-04-05 Use G4ParticleChangeForGamma (V.Ivantchenko)
 // 24-06-05 Increase number of bins to 200 (V.Ivantchenko)
+// 16-11-05 replace shootBit() by G4UniformRand()  mma
 //
 // Class Description:
 //
@@ -255,7 +256,7 @@ std::vector<G4DynamicParticle*>* G4BetheHeitlerModel::SampleSecondaries(
   //
 
   G4double ElectTotEnergy, PositTotEnergy;
-  if (RandBit::shootBit()) {
+  if (G4UniformRand() > 0.5) {
 
     ElectTotEnergy = (1.-epsil)*GammaEnergy;
     PositTotEnergy = epsil*GammaEnergy;
