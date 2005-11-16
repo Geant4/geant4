@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PiModel.cc,v 1.5 2004-11-25 23:43:02 mverderi Exp $
+// $Id: ExN05PiModel.cc,v 1.6 2005-11-16 07:39:03 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "ExN05PiModel.hh"
@@ -30,7 +30,7 @@
 #include "G4PionPlus.hh"
 #include "G4Gamma.hh"
 
-ExN05PiModel::ExN05PiModel(G4Envelope *anEnvelope) :
+ExN05PiModel::ExN05PiModel(G4Region *anEnvelope) :
   G4VFastSimulationModel("ExN05PiModel",anEnvelope)
 {;}
 

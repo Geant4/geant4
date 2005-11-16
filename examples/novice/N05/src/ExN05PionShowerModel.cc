@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PionShowerModel.cc,v 1.12 2005-06-27 15:28:03 gunter Exp $
+// $Id: ExN05PionShowerModel.cc,v 1.13 2005-11-16 07:39:03 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "ExN05PionShowerModel.hh"
@@ -37,7 +37,7 @@
 
 #include "G4Colour.hh"
 
-ExN05PionShowerModel::ExN05PionShowerModel(G4String modelName, G4LogicalVolume* envelope)
+ExN05PionShowerModel::ExN05PionShowerModel(G4String modelName, G4Region* envelope)
 : G4VFastSimulationModel(modelName, envelope)
 {
   fFakeStep          = new G4Step();

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05DetectorConstruction.cc,v 1.5 2002-01-09 17:24:19 ranjard Exp $
+// $Id: ExN05DetectorConstruction.cc,v 1.6 2005-11-16 07:39:03 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "ExN05DetectorConstruction.hh"
@@ -254,21 +254,21 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
   // G4FastSimulationManager object attached to it.
   // Those placement are given compared to the world.
   // -- Solid:
-   G4Box *ghostBox
-     = new G4Box("GhostBox", detectSize+5*cm, detectSize+5*cm, 80*cm);
-   // -- Logical volume:
-   G4LogicalVolume* ghostLogical
-     = new G4LogicalVolume(ghostBox,Air,
-  			  "GhostLogical", 
-  			  0, 0, 0);
+  //    G4Box *ghostBox
+  //      = new G4Box("GhostBox", detectSize+5*cm, detectSize+5*cm, 80*cm);
+  //    // -- Logical volume:
+  //    G4LogicalVolume* ghostLogical
+  //      = new G4LogicalVolume(ghostBox,Air,
+  //   			  "GhostLogical", 
+  //   			  0, 0, 0);
   
-   // G4FastSimulationManager doesn't exist yet: we set it
-   // (not needed if we set a G4VFastSimulationModel which
-   // takes care of creating one if needed)
-   new G4FastSimulationManager(ghostLogical);
+  //    // G4FastSimulationManager doesn't exist yet: we set it
+  //    // (not needed if we set a G4VFastSimulationModel which
+  //    // takes care of creating one if needed)
+  //    new G4FastSimulationManager(ghostLogical);
   
-   ghostLogical->GetFastSimulationManager()->
-     AddGhostPlacement(0,G4ThreeVector(0., 0., 175*cm));
+  //    ghostLogical->GetFastSimulationManager()->
+  //      AddGhostPlacement(0,G4ThreeVector(0., 0., 175*cm));
   
   //--------- Sensitive detector -------------------------------------
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
@@ -283,14 +283,17 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
    theTowerLog->SetSensitiveDetector(HadCalorimeterSD); 
   
   //------------------ Parameterisation ------------------------------
+  // -- Makes the calorimeterLog volume becoming a G4Region: 
+   G4Region* caloRegion = new G4Region("EM_calo_region");
+   caloRegion->AddRootLogicalVolume(calorimeterLog);
   // builds a model and sets it to the envelope of the calorimeter:
   // ExN05EMShowerModel* emShowerModel =
-    new ExN05EMShowerModel("emShowerModel",calorimeterLog);
+   new ExN05EMShowerModel("emShowerModel",caloRegion);
   
-  // and a model attached to the ghost:
-  // ExN05PionShowerModel* ghostPionShowerModel =
-    new ExN05PionShowerModel("ghostPionShowerModel",ghostLogical);
-  
+    //   // and a model attached to the ghost:
+    //   // ExN05PionShowerModel* ghostPionShowerModel =
+    //     new ExN05PionShowerModel("ghostPionShowerModel",ghostLogical);
+    
   //--------- Visualization attributes -------------------------------
   WorldLog->SetVisAttributes(G4VisAttributes::Invisible);
 
@@ -319,10 +322,10 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
   towerVisAtt->SetForceWireframe(true);
   theTowerLog->SetVisAttributes(towerVisAtt);
   
-  G4VisAttributes * ghostVisAtt
-    = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  ghostVisAtt->SetForceWireframe(true);
-  ghostLogical->SetVisAttributes(ghostVisAtt);
+  //   G4VisAttributes * ghostVisAtt
+  //     = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
+  //   ghostVisAtt->SetForceWireframe(true);
+  //   ghostLogical->SetVisAttributes(ghostVisAtt);
   
   //------------------------------------------------------------------
   

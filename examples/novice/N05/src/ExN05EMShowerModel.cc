@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05EMShowerModel.cc,v 1.11 2005-11-04 17:24:03 gcosmo Exp $
+// $Id: ExN05EMShowerModel.cc,v 1.12 2005-11-16 07:39:03 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "ExN05EMShowerModel.hh"
@@ -36,7 +36,7 @@
 #include "G4VSensitiveDetector.hh"
 #include "G4TouchableHandle.hh"
 
-ExN05EMShowerModel::ExN05EMShowerModel(G4String modelName, G4LogicalVolume* envelope)
+ExN05EMShowerModel::ExN05EMShowerModel(G4String modelName, G4Region* envelope)
 : G4VFastSimulationModel(modelName, envelope)
 {
   fFakeStep          = new G4Step();
@@ -144,7 +144,7 @@ void ExN05EMShowerModel::Explode(const G4FastTrack& fastTrack)
     {
       // Longitudinal profile:
       // -- shoot z according to Gamma distribution:
-      bt = CLHEP::RandGamma::shoot(a,1.0);
+      bt = RandGamma::shoot(a,1.0);
       t  = bt/b;
       z  = t*X0;
       
