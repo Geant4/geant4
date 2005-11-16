@@ -21,25 +21,25 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimitiveSensitivity.cc,v 1.3 2005-11-16 22:41:28 asaim Exp $
+// $Id: G4VPrimitiveScorer.cc,v 1.1 2005-11-16 22:59:01 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// G4VPrimitiveSensitivity
-#include "G4VPrimitiveSensitivity.hh"
+// G4VPrimitiveScorer
+#include "G4VPrimitiveScorer.hh"
 #include "G4MultiFunctionalDetector.hh"
 #include "G4SDManager.hh"
 #include "G4Step.hh"
 #include "G4TouchableHistory.hh"
 
 
-G4VPrimitiveSensitivity::G4VPrimitiveSensitivity(G4String name, G4int depth)
+G4VPrimitiveScorer::G4VPrimitiveScorer(G4String name, G4int depth)
  :primitiveName(name),detector(0),filter(0),verboseLevel(0),indexDepth(depth)
 {;} 
 
-G4VPrimitiveSensitivity::~G4VPrimitiveSensitivity()
+G4VPrimitiveScorer::~G4VPrimitiveScorer()
 {;}
 
-G4int G4VPrimitiveSensitivity::GetCollectionID(G4int)
+G4int G4VPrimitiveScorer::GetCollectionID(G4int)
 {
   if(detector)
    return G4SDManager::GetSDMpointer()
@@ -48,22 +48,22 @@ G4int G4VPrimitiveSensitivity::GetCollectionID(G4int)
    return -1;
 }
 
-void G4VPrimitiveSensitivity::Initialize(G4HCofThisEvent*)
+void G4VPrimitiveScorer::Initialize(G4HCofThisEvent*)
 {;}
 
-void G4VPrimitiveSensitivity::EndOfEvent(G4HCofThisEvent*)
+void G4VPrimitiveScorer::EndOfEvent(G4HCofThisEvent*)
 {;}
 
-void G4VPrimitiveSensitivity::clear()
+void G4VPrimitiveScorer::clear()
 {;}
 
-void G4VPrimitiveSensitivity::DrawAll()
+void G4VPrimitiveScorer::DrawAll()
 {;}
 
-void G4VPrimitiveSensitivity::PrintAll()
+void G4VPrimitiveScorer::PrintAll()
 {;}
 
-G4int G4VPrimitiveSensitivity::GetIndex(G4Step* aStep)
+G4int G4VPrimitiveScorer::GetIndex(G4Step* aStep)
 {
   G4StepPoint* preStep = aStep->GetPreStepPoint();
   G4TouchableHistory* th = (G4TouchableHistory*)(preStep->GetTouchable());

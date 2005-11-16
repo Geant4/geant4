@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiFunctionalDetector.hh,v 1.1 2005-09-19 18:40:56 asaim Exp $
+// $Id: G4MultiFunctionalDetector.hh,v 1.2 2005-11-16 22:59:01 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -36,12 +36,12 @@
 #include "G4TouchableHistory.hh"
 #include "G4CollectionNameVector.hh"
 #include <vector>
-class G4VPrimitiveSensitivity;
+class G4VPrimitiveScorer;
 
 // class description:
 //
 //  This is the base class of the sensitive detector which owns
-// one or more G4VPrimitiveSensitivity class objects.
+// one or more G4VPrimitiveScorer class objects.
 
 class G4MultiFunctionalDetector : public G4VSensitiveDetector
 {
@@ -52,14 +52,14 @@ class G4MultiFunctionalDetector : public G4VSensitiveDetector
   protected: // with description
       virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
 
-      std::vector<G4VPrimitiveSensitivity*> primitives;
+      std::vector<G4VPrimitiveScorer*> primitives;
 
   public: // with description
-      G4bool RegisterPrimitive(G4VPrimitiveSensitivity*);
-      G4bool RemovePrimitive(G4VPrimitiveSensitivity*);
+      G4bool RegisterPrimitive(G4VPrimitiveScorer*);
+      G4bool RemovePrimitive(G4VPrimitiveScorer*);
       inline G4int GetNumberOfPrimitives() const
       { return primitives.size(); }
-      G4VPrimitiveSensitivity* GetPrimitive(G4int id) const
+      G4VPrimitiveScorer* GetPrimitive(G4int id) const
       { return primitives[id]; }
 
   public:

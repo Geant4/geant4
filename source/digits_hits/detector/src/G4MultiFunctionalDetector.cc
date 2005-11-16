@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiFunctionalDetector.cc,v 1.2 2005-09-22 22:21:36 asaim Exp $
+// $Id: G4MultiFunctionalDetector.cc,v 1.3 2005-11-16 22:59:01 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4MultiFunctionalDetector
 #include "G4MultiFunctionalDetector.hh"
 #include "G4SDManager.hh"
-#include "G4VPrimitiveSensitivity.hh"
+#include "G4VPrimitiveScorer.hh"
 
 G4MultiFunctionalDetector::G4MultiFunctionalDetector(G4String name)
 :G4VSensitiveDetector(name)
@@ -44,7 +44,7 @@ G4bool G4MultiFunctionalDetector::ProcessHits(G4Step* aStep,G4TouchableHistory* 
    return true;
 }
 
-G4bool G4MultiFunctionalDetector::RegisterPrimitive(G4VPrimitiveSensitivity* aPS)
+G4bool G4MultiFunctionalDetector::RegisterPrimitive(G4VPrimitiveScorer* aPS)
 {
    G4int nPrim = primitives.size();
    for(G4int iPrim=0;iPrim<nPrim;iPrim++)
@@ -68,9 +68,9 @@ G4bool G4MultiFunctionalDetector::RegisterPrimitive(G4VPrimitiveSensitivity* aPS
    return true;
 }
 
-G4bool G4MultiFunctionalDetector::RemovePrimitive(G4VPrimitiveSensitivity* aPS)
+G4bool G4MultiFunctionalDetector::RemovePrimitive(G4VPrimitiveScorer* aPS)
 {
-   std::vector<G4VPrimitiveSensitivity*>::iterator iterPS;
+   std::vector<G4VPrimitiveScorer*>::iterator iterPS;
    std::vector<G4String>::iterator iterName = collectionName.begin();
    for(iterPS=primitives.begin();iterPS!=primitives.end();iterPS++)
    { 

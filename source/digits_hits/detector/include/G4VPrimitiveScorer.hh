@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimitiveSensitivity.hh,v 1.4 2005-11-16 22:41:28 asaim Exp $
+// $Id: G4VPrimitiveScorer.hh,v 1.1 2005-11-16 22:59:01 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#ifndef G4VPrimitiveSensitivity_h
-#define G4VPrimitiveSensitivity_h 1
+#ifndef G4VPrimitiveScorer_h
+#define G4VPrimitiveScorer_h 1
 
 class G4Step;
 class G4HCofThisEvent;
@@ -43,13 +43,13 @@ class G4TouchableHistory;
 // used either as a sensitive detector or to be registered to 
 // G4MultiFunctionalDetector to define multiple functionalities.
 
-class G4VPrimitiveSensitivity
+class G4VPrimitiveScorer
 {
   friend class G4MultiFunctionalDetector;
 
   public: // with description
-      G4VPrimitiveSensitivity(G4String name, G4int depth=0);
-      virtual ~G4VPrimitiveSensitivity();
+      G4VPrimitiveScorer(G4String name, G4int depth=0);
+      virtual ~G4VPrimitiveScorer();
 
   protected: // with description
       virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*)=0;
