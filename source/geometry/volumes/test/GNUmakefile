@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.11 2004-05-13 15:23:25 gcosmo Exp $
+# $Id: GNUmakefile,v 1.12 2005-11-16 19:35:42 japost Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -34,7 +34,7 @@ LDLIBS   := -lG4csg -lG4geomBoolean -lG4navigation -lG4volumes \
             -lG4magneticfield -lG4geometrymng \
             -lG4materials -lG4graphics_reps \
             -lG4intercoms -lG4UIbasic -lG4UIcommon \
-            -lG4globman 
+            -lG4hepnumerics -lG4globman 
             
 
 include $(G4INSTALL)/config/binmake.gmk
