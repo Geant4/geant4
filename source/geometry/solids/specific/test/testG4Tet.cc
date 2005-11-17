@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Tet.cc,v 1.1 2005-06-15 14:47:20 japost Exp $
+// $Id: testG4Tet.cc,v 1.2 2005-11-17 14:54:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -50,9 +50,8 @@ G4bool testG4Tet()
     G4ThreeVector pzero(0,0,0);
     G4ThreeVector pnt1(10.,0.,0.),pnt2(5.0,10.,0), pnt3(5.,5.,10.);
 
-    G4double Dist;
     G4ThreeVector *pNorm,norm;
-    G4bool *pgoodNorm,goodNorm,calcNorm=true;
+    G4bool *pgoodNorm,goodNorm;
 
     pNorm=&norm;
     pgoodNorm=&goodNorm;
