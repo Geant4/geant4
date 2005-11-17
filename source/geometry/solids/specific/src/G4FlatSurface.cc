@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatSurface.cc,v 1.9 2005-11-09 15:04:28 gcosmo Exp $
+// $Id: G4FlatSurface.cc,v 1.10 2005-11-17 16:59:33 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,6 +68,9 @@ G4FlatSurface::G4FlatSurface(const G4String         &name,
 
    SetCorners();
    SetBoundaries();
+
+   fSurfaceArea = 1 ;  // not yet implemented. This is NOT a problem for tracking
+
 }
 
 
@@ -97,6 +100,10 @@ G4FlatSurface::G4FlatSurface( const G4String        &name,
 
    SetCorners();
    SetBoundaries();
+
+   fSurfaceArea =  0.5*DPhi * (EndOuterRadius[i]*EndOuterRadius[i]  
+			       - EndInnerRadius[i]*EndInnerRadius[i] ) ; 
+
 }
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapParallelSide.hh,v 1.4 2005-11-09 15:04:28 gcosmo Exp $
+// $Id: G4TwistedTrapParallelSide.hh,v 1.5 2005-11-17 16:59:28 link Exp $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -100,12 +100,14 @@ class G4TwistedTrapParallelSide : public G4VSurface
     G4ThreeVector ProjectPoint(const G4ThreeVector &p,
                                      G4bool isglobal = false);
 
-    inline G4ThreeVector SurfacePoint(G4double phi, G4double u);
+    inline virtual G4ThreeVector SurfacePoint(G4double phi, G4double u, G4bool isGlobal = false);
+    inline virtual G4double GetBoundaryMin(G4double phi) ;
+    inline virtual G4double GetBoundaryMax(G4double phi) ;
+    inline virtual G4double GetSurfaceArea() ;
+
     inline G4ThreeVector NormAng(G4double phi, G4double u);
     inline G4double Xcoef(G4double u);    // to calculate the w(u) function
     inline G4double GetValueB(G4double phi) ;
-    inline G4double GetUmin(G4double phi) ;
-    inline G4double GetUmax(G4double phi) ;
 
   private:
 
@@ -129,17 +131,21 @@ class G4TwistedTrapParallelSide : public G4VSurface
 
     G4double fAngleSide;
 
-    G4double fa1md1 ;   // 2 fDx2 - 2 fDx1  == a1 - d1
-    G4double fa2md2 ;  // 2 fDx4 - 2 fDx3 
-
     G4double fdeltaX ;
     G4double fdeltaY ;
 
+    G4double fDx4plus2 ;  // fDx4 + fDx2  == a2/2 + a1/2
+    G4double fDx4minus2 ; // fDx4 - fDx2          -
+    G4double fDx3plus1  ; // fDx3 + fDx1  == d2/2 + d1/2
+    G4double fDx3minus1 ; // fDx3 - fDx1          -
     G4double fDy2plus1 ;  // fDy2 + fDy1  == b2/2 + b1/2
     G4double fDy2minus1 ; // fDy2 - fDy1          -
+    G4double fa1md1 ;   // 2 fDx2 - 2 fDx1  == a1 - d1
+    G4double fa2md2 ;  // 2 fDx4 - 2 fDx3 
+
 
   // temporary
-  G4double fDy ;
+    G4double fDy ;
 
 };   
 
@@ -147,24 +153,12 @@ class G4TwistedTrapParallelSide : public G4VSurface
 // inline functions
 //========================================================
 
-inline 
-G4double G4TwistedTrapParallelSide::GetUmin(G4double phi)
-{
-  return ( - (2*fDx2*(fPhiTwist - 2*phi) + 2*fDx4*(fPhiTwist + 2*phi) + (2*fDy1*(fPhiTwist - 2*phi) + 2*fDy2*(fPhiTwist + 2*phi))*fTAlph)/(4.*fPhiTwist) ) ;
-}
-
-inline
-G4double G4TwistedTrapParallelSide::GetUmax(G4double phi)
-{
-  return   (2*fDx2*(fPhiTwist - 2*phi) + 2*fDx4*(fPhiTwist + 2*phi) - (2*fDy1*(fPhiTwist - 2*phi) + 2*fDy2*(fPhiTwist + 2*phi))*fTAlph)/(4.*fPhiTwist) ;
-}
 
 inline 
 G4double G4TwistedTrapParallelSide::GetValueB(G4double phi) 
 {
   return ( fDy2plus1 + fDy2minus1 * ( 2 * phi ) / fPhiTwist ) ;
 }
-
 
 inline
 G4double G4TwistedTrapParallelSide::Xcoef(G4double phi)
@@ -175,16 +169,40 @@ G4double G4TwistedTrapParallelSide::Xcoef(G4double phi)
 }
 
 inline
-G4ThreeVector G4TwistedTrapParallelSide::SurfacePoint( G4double phi, G4double u ) 
+G4ThreeVector G4TwistedTrapParallelSide::SurfacePoint( G4double phi, G4double u, G4bool isGlobal ) 
 {
   // function to calculate a point on the surface, given by parameters phi,u
 
-  G4ThreeVector SurfPoint ( ( u + fdeltaX*phi/fPhiTwist ) * std::cos(phi) 
-			    - ( Xcoef(phi) + fdeltaY*phi/fPhiTwist ) * std::sin(phi),
-                            ( u + fdeltaX*phi/fPhiTwist ) * std::sin(phi)
-			    + ( Xcoef(phi) + fdeltaY*phi/fPhiTwist )  * std::cos(phi),
+  G4ThreeVector SurfPoint ( u*std::cos(phi) - Xcoef(phi)*std::sin(phi)+ fdeltaX*phi/fPhiTwist,
+                            u*std::sin(phi) + Xcoef(phi)*std::cos(phi)+ fdeltaY*phi/fPhiTwist,
 			    2*fDz*phi/fPhiTwist  );
-  return SurfPoint ;
+  if (isGlobal) {
+    return (fRot * SurfPoint + fTrans);
+  } else {
+    return SurfPoint;
+  }
+
+}
+
+
+inline
+G4double G4TwistedTrapParallelSide::GetBoundaryMin(G4double phi) {
+
+  return  -(fPhiTwist*(fDx2 + fDx4 - fDy2plus1*fTAlph) + 2*fDx4minus2*phi - 2*fDy2minus1*fTAlph*phi)/(2.*fPhiTwist) ;
+
+}
+
+inline
+G4double G4TwistedTrapParallelSide::GetBoundaryMax(G4double phi) {
+
+  return (fDx2 + fDx4 + fDy2plus1*fTAlph)/ 2. + ((fDx4minus2 + fDy2minus1*fTAlph)*phi)/fPhiTwist ;
+
+}
+
+inline
+G4double  G4TwistedTrapParallelSide::GetSurfaceArea() {
+
+  return 2*fDx4plus2*fDz ;
 
 }
 
@@ -194,14 +212,13 @@ G4ThreeVector G4TwistedTrapParallelSide::NormAng( G4double phi, G4double u )
   // function to calculate the norm at a given point on the surface
   // replace a1-d1
 
-  G4ThreeVector nvec( 
-		     -2*fDz*std::sin(phi),
-		     2*fDz*std::cos(phi),
-		     fDy1 - fDy2 - fdeltaY - fdeltaX*phi - fPhiTwist*u
- ) ;
-
+  G4ThreeVector nvec(
+		     -2*fDz*std::sin(phi) ,
+		      2*fDz*std::cos(phi) ,
+		     -(fDy2minus1 + fPhiTwist*u + fdeltaY*std::cos(phi) - fdeltaX*std::sin(phi))) ;
 
   return nvec.unit();
+
 }
 
 

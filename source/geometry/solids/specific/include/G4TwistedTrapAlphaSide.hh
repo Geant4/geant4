@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapAlphaSide.hh,v 1.6 2005-11-09 15:04:28 gcosmo Exp $
+// $Id: G4TwistedTrapAlphaSide.hh,v 1.7 2005-11-17 16:59:26 link Exp $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -101,7 +101,11 @@ class G4TwistedTrapAlphaSide : public G4VSurface
     G4ThreeVector ProjectPoint(const G4ThreeVector &p,
                                      G4bool isglobal = false);
 
-    inline G4ThreeVector SurfacePoint(G4double phi, G4double u);
+    inline virtual G4ThreeVector SurfacePoint(G4double phi, G4double u, G4bool isGlobal = false ) ;
+    inline virtual G4double GetBoundaryMin(G4double phi) ;
+    inline virtual G4double GetBoundaryMax(G4double phi) ;
+    inline virtual G4double GetSurfaceArea() ;
+
     inline G4ThreeVector NormAng(G4double phi, G4double u);
     inline G4double Xcoef(G4double u,G4double phi);    // to calculate the w(u) function
     inline G4double GetValueA(G4double phi) ;
@@ -173,23 +177,48 @@ G4double G4TwistedTrapAlphaSide::Xcoef(G4double u, G4double phi)
 {
   
   return GetValueA(phi)/2. + (GetValueD(phi)-GetValueA(phi))/4. 
-    - u*( ( GetValueD(phi)-GetValueA(phi) ) / ( 2 * GetValueB(phi) ) + fTAlph )   ;
+    - u*( ( GetValueD(phi)-GetValueA(phi) ) / ( 2 * GetValueB(phi) ) - fTAlph )   ;
 
 }
 
 inline
-G4ThreeVector G4TwistedTrapAlphaSide::SurfacePoint( G4double phi, G4double u ) 
+G4ThreeVector G4TwistedTrapAlphaSide::SurfacePoint( G4double phi, G4double u , G4bool isGlobal) 
 {
   // function to calculate a point on the surface, given by parameters phi,u
 
-  G4ThreeVector SurfPoint ( ( Xcoef(u,phi) + fdeltaX*phi/fPhiTwist ) * std::cos(phi) 
-			    - ( u + fdeltaY*phi/fPhiTwist )          * std::sin(phi),
-                            ( Xcoef(u,phi) + fdeltaX*phi/fPhiTwist ) * std::sin(phi)
-			    + ( u + fdeltaY*phi/fPhiTwist )          * std::cos(phi),
+  //  G4cout << "G4TwistedTrapAlphaSide: fdeltaX,Y = " << fdeltaX << ", " << fdeltaY << G4endl ;
+ 
+  G4ThreeVector SurfPoint ( Xcoef(u,phi) * std::cos(phi) - u * std::sin(phi) + fdeltaX*phi/fPhiTwist,
+			    Xcoef(u,phi) * std::sin(phi) + u * std::cos(phi) + fdeltaY*phi/fPhiTwist,
 			    2*fDz*phi/fPhiTwist  );
-  return SurfPoint ;
+
+
+  if (isGlobal) {
+    return (fRot * SurfPoint + fTrans);
+  } else {
+    return SurfPoint;
+  }
+
 
 }
+
+inline
+G4double G4TwistedTrapAlphaSide::GetBoundaryMin(G4double phi) {
+  return -0.5*GetValueB(phi) ;
+}
+
+inline
+G4double G4TwistedTrapAlphaSide::GetBoundaryMax(G4double phi) {
+  return 0.5*GetValueB(phi) ;
+}
+
+inline
+G4double G4TwistedTrapAlphaSide::GetSurfaceArea() {
+
+  return (fDz*(std::sqrt(16*fDy1*fDy1 + (fa1md1 + 4*fDy1*fTAlph)*(fa1md1 + 4*fDy1*fTAlph)) + std::sqrt(16*fDy2*fDy2 + (fa2md2 + 4*fDy2*fTAlph)*(fa2md2 + 4*fDy2*fTAlph))))/2. ;
+
+}
+
 
 inline
 G4ThreeVector G4TwistedTrapAlphaSide::NormAng( G4double phi, G4double u ) 
@@ -197,18 +226,13 @@ G4ThreeVector G4TwistedTrapAlphaSide::NormAng( G4double phi, G4double u )
   // function to calculate the norm at a given point on the surface
   // replace a1-d1
 
-  G4ThreeVector nvec( 16*fDy1*2*fDz*(4*fDy1*(std::cos(phi)-std::sin(phi)*fTAlph) + fa1md1*std::sin(phi)),
-		      16*fDy1*2*fDz*(4*fDy1*std::sin(phi) + std::cos(phi)*(-fa1md1 + 4*fDy1*fTAlph)),
-		      2*fDy1*(-16*fDy1*(fDx4minus2 + fDx3minus1)  + 4*fDx2*fDx4plus2*fPhiTwist -
-			      (fDx4+fDx1)*4*fDx1*fPhiTwist + 2*fa1md1*fDx3*fPhiTwist  -  
-			      32*fDy1*fdeltaX + 8*fa1md1*fdeltaY  + 
-			      2*(-(fa1md1*(-2*(fDx4minus2 + fDx3minus1) - 4*fdeltaX)) + 16*fDy1*fdeltaY)*phi) + 
-		      4*(16*fDy1*fDy1 + (fa1md1)*(fa1md1))*fPhiTwist*u - 
-		      4*fDy1*fTAlph*(2*fDy1*(2*(fDx4plus2+fDx3plus1)*fPhiTwist 
-					     + 8*fdeltaY - 2*(-2*(fDx4minus2+fDx3minus1) - 4*fdeltaX)*phi) 
-				     + 8*(fa1md1)*fPhiTwist*u - 16*fDy1*fPhiTwist*u*fTAlph) ) ;
 
-
+  G4ThreeVector nvec ( 
+		     fDy1* fDz*(4*fDy1*std::cos(phi) + (fa1md1 + 4*fDy1*fTAlph)*std::sin(phi)),
+		     -(fDy1* fDz*((fa1md1 + 4*fDy1*fTAlph)*std::cos(phi) - 4*fDy1*std::sin(phi))),
+		     (fDy1*(-8*(fDx3minus1 + fDx4minus2)*fDy1 + fa1md1*(fDx2 + fDx3plus1 + fDx4)*fPhiTwist + 4*(fDx2 + fDx3plus1 + fDx4)*fDy1*fPhiTwist*fTAlph + 2*(fDx3minus1 + fDx4minus2)*(fa1md1 + 4*fDy1*fTAlph)*phi) + fPhiTwist*(16*fDy1*fDy1 + (fa1md1 + 4*fDy1*fTAlph)*(fa1md1 + 4*fDy1*fTAlph))*u + 4*fDy1*(fa1md1*fdeltaY - 4*fdeltaX*fDy1 + 4*fdeltaY*fDy1*fTAlph)* std::cos(phi) - 4*fDy1*(fa1md1*fdeltaX + 4*fDy1*(fdeltaY + fdeltaX*fTAlph))*std::sin(phi))/ 8.
+		      ) ;
+  
   return nvec.unit();
 }
 

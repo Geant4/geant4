@@ -52,9 +52,11 @@ G4TwistedTrapBoxSide::G4TwistedTrapBoxSide(const G4String     &name,
 			   G4double      pPhi,        // defined by polar and azimutal angles.
 			   G4double      pDy1,        // half y length at -pDz
 			   G4double      pDx1,        // half x length at -pDz,-pDy
-			   G4double      pDy2,        // half y length at +pDz
 			   G4double      pDx2,        // half x length at -pDz,+pDy
-			   G4double      pAlph,      // tilt angle at +pDz
+			   G4double      pDy2,        // half y length at +pDz
+			   G4double      pDx3,        // half x length at +pDz,-pDy
+			   G4double      pDx4,        // half x length at +pDz,+pDy
+			   G4double      pAlph,       // tilt angle at +pDz
                            G4double      AngleSide    // parity
 					       ) : G4VSurface(name)
 {  
@@ -68,8 +70,20 @@ G4TwistedTrapBoxSide::G4TwistedTrapBoxSide(const G4String     &name,
   fAxisMax[1] = pDz ;
   
   fDx1  = pDx1 ;
-  fDx2  = pDx2 ;
-  
+  fDx2  = pDx2 ;  // box
+  fDx3  = pDx3 ;
+  fDx4  = pDx4 ;  // box
+
+  // this is an overhead. But the parameter naming scheme fits to the other surfaces.
+ 
+  if ( ! (fDx1 == fDx2 && fDx3 == fDx4 ) ) {
+    G4cerr << "ERROR - G4TwistedTrapBoxSide::G4TwistedTrapBoxSide(): "
+           << GetName() << G4endl
+           << "        Not a box ! - " << G4endl ;
+    G4Exception("G4TwistedTrapBoxSide::G4TwistedTrapBoxSide()", "InvalidSetup",
+                FatalException, "TwistedTrapBoxSide is not used as a the side of a box.");
+  }
+ 
   fDy1   = pDy1 ;
   fDy2   = pDy2 ;
 
@@ -80,6 +94,18 @@ G4TwistedTrapBoxSide::G4TwistedTrapBoxSide(const G4String     &name,
 
   fTheta = pTheta ;
   fPhi   = pPhi ;
+
+ // precalculate frequently used parameters
+  fDx4plus2  = fDx4 + fDx2 ;
+  fDx4minus2 = fDx4 - fDx2 ;
+  fDx3plus1  = fDx3 + fDx1 ; 
+  fDx3minus1 = fDx3 - fDx1 ;
+  fDy2plus1  = fDy2 + fDy1 ;
+  fDy2minus1 = fDy2 - fDy1 ;
+
+  fa1md1 = 2*fDx2 - 2*fDx1  ; 
+  fa2md2 = 2*fDx4 - 2*fDx3 ;
+
 
   fPhiTwist = PhiTwist ;     // dphi
   fAngleSide = AngleSide ;  // 0,90,180,270 deg
@@ -227,9 +253,8 @@ G4int G4TwistedTrapBoxSide::DistanceToSurface(const G4ThreeVector &gp,
 
   G4double L = 2*fDz ;
 
-  G4double phiy    = fPhiTwist * ( v.y()*p.z() - v.z()*p.y() )   ;
-  G4double phix    = fPhiTwist * ( v.x()*p.z() - v.z()*p.x() )   ;
-
+  G4double phixz = fPhiTwist * ( p.x() * v.z() - p.z() * v.x() ) ;
+  G4double phiyz = fPhiTwist * ( p.y() * v.z() - p.z() * v.y() ) ;
 
   // special case vz = 0
 
@@ -239,9 +264,7 @@ G4int G4TwistedTrapBoxSide::DistanceToSurface(const G4ThreeVector &gp,
       
       phi = p.z() * fPhiTwist / L ;  // phi is determined by the z-position 
 
-      u = (4*fPhiTwist*(p.y()*v.x() - p.x()*v.y()) + (-4*fdeltaY*v.x()*phi + v.y()*(2*(fDx1 + fDx2)*fPhiTwist + 4*(-fDx1 + fDx2 + fdeltaX)*phi))*
-	   std::cos(phi) - (2*(fDx1 + fDx2)*fPhiTwist*v.x() + 4*((-fDx1 + fDx2 + fdeltaX)*v.x() + fdeltaY*v.y())*phi)*std::sin(phi))/
-	(4.*fPhiTwist*((v.x() + fTAlph*v.y())*std::cos(phi) + (-(fTAlph*v.x()) + v.y())*std::sin(phi)))   ;
+      u = (2*(-(fdeltaY*phi*v.x()) + fPhiTwist*p.y()*v.x() + fdeltaX*phi*v.y() - fPhiTwist*p.x()*v.y()) + (fDx4plus2*fPhiTwist + 2*fDx4minus2*phi)*(v.y()*std::cos(phi) - v.x()*std::sin(phi)))/(2.* fPhiTwist*((v.x() - fTAlph*v.y())*std::cos(phi) + (fTAlph*v.x() + v.y())*std::sin(phi)))  ;
 
       xbuftmp.phi = phi ;
       xbuftmp.u = u ;
@@ -277,14 +300,15 @@ G4int G4TwistedTrapBoxSide::DistanceToSurface(const G4ThreeVector &gp,
 
     G4double c[8],sr[7],si[7] ;  
 
-    c[7] = 3600*( fPhiTwist*(fDx1 + fDx2)*v.z() + 2*fTAlph*phiy+ 2*phix  ) ;
-    c[6] = -7200*(phix*fTAlph  - phiy + 2*fDz*(v.x() + fTAlph*v.y()) - (fdeltaX - fDx1 + fDx2 + fdeltaY*fTAlph ) *v.z()) ;
-    c[5] = 300*(48*fDz*(fTAlph*v.x() - v.y()) -  10*phix  +  fPhiTwist*(fDx1 + fDx2)*v.z()   - 10*phiy*fTAlph ) ;
-    c[4] = 600*(10*fDz*v.x() + fTAlph*phix + 10*fDz*fTAlph*v.y() - phiy + fdeltaX*v.z() + (fDx2-fDx1)*v.z() + fdeltaY*fTAlph*v.z() ) ;
-    c[3] = -1200*fDz*fTAlph*v.x() + 12*phix  + 1200*fDz*v.y() + 12*phiy*fTAlph + 6*(fDx1+fDx2)*fPhiTwist*v.z();
-    c[2] = -24*fDz*v.x() - 24*fDz*fTAlph*v.y() + 28*phix*fTAlph + 12*fdeltaX*v.z()  + 12*(fDx2-fDx1)*v.z() + 12*fdeltaY*fTAlph*v.z() - 28*phiy ;
-    c[1] = -56*fDz*fTAlph*v.x() + 9*phix + 56*fDz*v.y() + 9*phiy*fTAlph ;
-    c[0] = -18*fDz*v.x() - 18*fDz*fTAlph*v.y() ;
+    c[7] = -14400*(-2*phixz + 2*fTAlph*phiyz + fDx4plus2*fPhiTwist*v.z()) ;
+    c[6] = 28800*(phiyz + 2*fDz*v.x() - (fdeltaX + fDx4minus2)*v.z() + fTAlph*(phixz - 2*fDz*v.y() + fdeltaY*v.z())) ;
+    c[5] = -1200*(10*phixz - 48*fDz*v.y() + 24*fdeltaY*v.z() + fDx4plus2*fPhiTwist*v.z() - 2*fTAlph*(5*phiyz + 24*fDz*v.x() - 12*fdeltaX*v.z())) ;
+    c[4] = -2400*(phiyz + 10*fDz*v.x() - 5*fdeltaX*v.z() + fDx4minus2*v.z() + fTAlph*(phixz - 10*fDz*v.y() + 5*fdeltaY*v.z())) ;
+    c[3] = 24*(2*phixz - 200*fDz*v.y() + 100*fdeltaY*v.z() - fDx4plus2*fPhiTwist*v.z() - 2*fTAlph*(phiyz + 100*fDz*v.x() - 50*fdeltaX*v.z())) ;
+    c[2] = -16*(7*fTAlph* phixz + 7*phiyz - 6*fDz*v.x() + 6*fDz*fTAlph*v.y() + 3*(fdeltaX + fDx4minus2 - fdeltaY*fTAlph)*v.z()) ;
+    c[1] = 4*(9*phixz - 9*fTAlph*phiyz - 56*fDz*fTAlph*v.x() - 56*fDz*v.y() + 28*(fdeltaY + fdeltaX*fTAlph)*v.z()) ;
+    c[0] = 36*(2* fDz*(v.x() - fTAlph*v.y()) - fdeltaX*v.z() + fdeltaY*fTAlph*v.z()) ;
+
 
 #ifdef G4SPECSDEBUG
     G4cout << "coef = " << c[0] << " " 
@@ -308,9 +332,7 @@ G4int G4TwistedTrapBoxSide::DistanceToSurface(const G4ThreeVector &gp,
 #endif
 	phi = std::fmod(sr[i] , pihalf)  ;
 
-	u   = - (-4*( -phiy  + L*v.y()*phi) + 4*fdeltaY*v.z()*phi*std::cos(phi) + 
-	       v.z()*(2*(fDx1 + fDx2)*fPhiTwist + 4*(-fDx1 + fDx2 + fdeltaX)*phi)*std::sin(phi))/
-	  (4.*fPhiTwist*v.z()*(std::cos(phi) - fTAlph*std::sin(phi))) ;
+	u   = (2*phiyz + 4*fDz*phi*v.y() - 2*fdeltaY*phi*v.z() - fDx4plus2*fPhiTwist*v.z()*std::sin(phi) - 2*fDx4minus2*phi*v.z()*std::sin(phi))/(2*fPhiTwist*v.z()*std::cos(phi) + 2*fPhiTwist*fTAlph*v.z()*std::sin(phi)) ;
 
 	xbuftmp.phi = phi ;
 	xbuftmp.u = u ;
@@ -384,6 +406,9 @@ G4int G4TwistedTrapBoxSide::DistanceToSurface(const G4ThreeVector &gp,
     }  // end iterative loop (i)
     
 
+    // new code  21.09.05 O.Link
+    if ( std::fabs(tmpdist)<ctol ) tmpdist = 0 ; 
+
 #ifdef G4SPECSDEBUG
     G4cout << "refined solution "  << phi << " , " << u  <<  G4endl ;
     G4cout << "distance = " << tmpdist << G4endl ;
@@ -451,9 +476,7 @@ G4int G4TwistedTrapBoxSide::DistanceToSurface(const G4ThreeVector &gp,
 #endif
 
     phi = fPhiTwist/2 ;
-    u   = - (-4*( -phiy  + L*v.y()*phi) + 4*fdeltaY*v.z()*phi*std::cos(phi) + 
-	     v.z()*(2*(fDx1 + fDx2)*fPhiTwist + 4*(-fDx1 + fDx2 + fdeltaX)*phi)*std::sin(phi))/
-      (4.*fPhiTwist*v.z()*(std::cos(phi) - fTAlph*std::sin(phi))) ;
+    u   = 0 ;
 
     
      
@@ -471,9 +494,7 @@ G4int G4TwistedTrapBoxSide::DistanceToSurface(const G4ThreeVector &gp,
 #endif
 
     phi = -fPhiTwist/2 ;
-    u   = - (-4*( -phiy  + L*v.y()*phi) + 4*fdeltaY*v.z()*phi*std::cos(phi) + 
-	     v.z()*(2*(fDx1 + fDx2)*fPhiTwist + 4*(-fDx1 + fDx2 + fdeltaX)*phi)*std::sin(phi))/
-      (4.*fPhiTwist*v.z()*(std::cos(phi) - fTAlph*std::sin(phi))) ;
+    u   = 0 ;
 
     xbuftmp.phi = phi ;
     xbuftmp.u = u ;
@@ -525,6 +546,9 @@ G4int G4TwistedTrapBoxSide::DistanceToSurface(const G4ThreeVector &gp,
       
       }  // end iterative loop (i)
     
+
+    // new code  21.09.05 O.Link
+    if ( std::fabs(tmpdist)<ctol ) tmpdist = 0 ; 
 
 #ifdef G4SPECSDEBUG
       G4cout << "refined solution "  << phi << " , " << u  <<  G4endl ;
@@ -691,7 +715,7 @@ G4int G4TwistedTrapBoxSide::DistanceToSurface(const G4ThreeVector &gp,
    // check validity of solution ( valid phi,psi ) 
 
    G4double halfphi = 0.5*fPhiTwist ;
-   G4double uMax = GetValueB(phiR) ;
+   G4double uMax = GetBoundaryMax(phiR) ;
 
    if (  phiR > halfphi ) phiR =  halfphi ;
    if ( phiR < -halfphi ) phiR = -halfphi ;
@@ -741,7 +765,7 @@ G4int G4TwistedTrapBoxSide::GetAreaCode(const G4ThreeVector &xx,
    G4double yprime ;
    GetPhiUAtX(xx, phi,yprime ) ;
 
-   G4double fYAxisMax =  0.5 * GetValueB(phi) ;
+   G4double fYAxisMax =  GetBoundaryMax(phi) ;   // Boundaries are symmetric
    G4double fYAxisMin =  - fYAxisMax ;
 
 #ifdef G4SPECSDEBUG
@@ -845,37 +869,35 @@ void G4TwistedTrapBoxSide::SetCorners()
   if (fAxis[0] == kYAxis && fAxis[1] == kZAxis) {
     
     G4double x, y, z;
-    G4double CosPhi =  std::cos(fPhiTwist/2) ;
-    G4double SinPhi =  std::sin(fPhiTwist/2) ;
 
     // corner of Axis0min and Axis1min
 
-    x = (-fdeltaX/2. + fDx1 + fDy1*fTAlph)*CosPhi - ((fdeltaY + 2*fDy1)*SinPhi)/2. ;
-    y = (-((fdeltaY + 2*fDy1)*CosPhi) + (fdeltaX - 2*(fDx1 + fDy1*fTAlph))*SinPhi)/2. ; 
+    x = -fdeltaX/2. + (fDx2 - fDy1*fTAlph)*std::cos(fPhiTwist/2.) - fDy1*std::sin(fPhiTwist/2.) ;
+    y = -fdeltaY/2. - fDy1*std::cos(fPhiTwist/2.) + (-fDx2 + fDy1*fTAlph)*std::sin(fPhiTwist/2.) ;
     z = -fDz ;
 
     SetCorner(sC0Min1Min, x, y, z);
 
     // corner of Axis0max and Axis1min
 
-    x = (-fdeltaX/2. + fDx1 - fDy1*fTAlph)*CosPhi - ((fdeltaY - 2*fDy1)*SinPhi)/2. ;
-    y = (-fdeltaY/2. + fDy1)*CosPhi +  ((fdeltaX - 2*fDx1 + 2*fDy1*fTAlph)*SinPhi)/2. ;
+    x = -fdeltaX/2. + (fDx2 + fDy1*fTAlph)*std::cos(fPhiTwist/2.) + fDy1*std::sin(fPhiTwist/2.) ;
+    y = -fdeltaY/2. + fDy1*std::cos(fPhiTwist/2.) - (fDx2 + fDy1*fTAlph)*std::sin(fPhiTwist/2.) ;
     z = -fDz ;
 
     SetCorner(sC0Max1Min, x, y, z);
       
     // corner of Axis0max and Axis1max
 
-    x = (fdeltaX/2. + fDx2 - fDy2*fTAlph)*CosPhi - ((fdeltaY + 2*fDy2)*SinPhi)/ 2. ;
-    y = (fdeltaY/2. + fDy2)*CosPhi + (fdeltaX/2. + fDx2 - fDy2*fTAlph)*SinPhi ;
+    x = fdeltaX/2. + (fDx4 + fDy2*fTAlph)*std::cos(fPhiTwist/2.) - fDy2*std::sin(fPhiTwist/2.) ;
+    y = fdeltaY/2. + fDy2*std::cos(fPhiTwist/2.) + (fDx4 + fDy2*fTAlph)*std::sin(fPhiTwist/2.) ;
     z = fDz ;
 
     SetCorner(sC0Max1Max, x, y, z);
       
     // corner of Axis0min and Axis1max
 
-    x = (fdeltaX/2. + fDx2 + fDy2*fTAlph)*CosPhi - ((fdeltaY - 2*fDy2)*SinPhi)/2. ;
-    y = ((fdeltaY - 2*fDy2)*CosPhi)/2. + (fdeltaX/2. + fDx2 + fDy2*fTAlph)*SinPhi ; 
+    x = fdeltaX/2. + (fDx4 - fDy2*fTAlph)*std::cos(fPhiTwist/2.) + fDy2*std::sin(fPhiTwist/2.) ;
+    y = fdeltaY/2. - fDy2*std::cos(fPhiTwist/2.) + (fDx4 - fDy2*fTAlph)*std::sin(fPhiTwist/2.) ;
     z = fDz ;
 
     SetCorner(sC0Min1Max, x, y, z);
@@ -944,9 +966,7 @@ void G4TwistedTrapBoxSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double 
 
   phi = p.z()/(2*fDz)*fPhiTwist ;
 
-  u = (-4*fdeltaY*phi + fTAlph*(2*(fDx1 + fDx2)*fPhiTwist + 4*(-fDx1 + fDx2 + fdeltaX)*phi) + 
-     4*fPhiTwist*(-(fTAlph*p.x()) + p.y())*std::cos(phi) - 4*fPhiTwist*(p.x() + fTAlph*p.y())*std::sin(phi))/
-    (4.*fPhiTwist*(1 + fTAlph*fTAlph )) ;
+  u =  -(fTAlph*(fDx4plus2*fPhiTwist + 2*fDx4minus2*phi) + 2*(fdeltaY*phi + fdeltaX*fTAlph*phi - fPhiTwist*(fTAlph*p.x() + p.y()))* std::cos(phi) + 2*(-(fdeltaX*phi) + fdeltaY*fTAlph*phi + fPhiTwist*(p.x() - fTAlph*p.y()))*std::sin(phi))/(2.*(fPhiTwist + fPhiTwist*fTAlph*fTAlph)) ;
 
 
 }

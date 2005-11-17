@@ -242,15 +242,8 @@ G4int G4TwistedTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
 
   G4double L = 2*fDz ;
 
-  //  G4double phipzvx = fPhiTwist*p.z()*v.x() ;
-  // G4double phipzvy = fPhiTwist*p.z()*v.y() ;
-
-  //  G4double phipxvz = fPhiTwist*p.x()*v.z() ;
-  // G4double phipyvz = fPhiTwist*p.y()*v.z() ;
-
-  // G4double phivz   = fPhiTwist*v.z();
-  G4double phix    = fPhiTwist * ( v.x()*p.z() - v.z()*p.x() )   ;
-  G4double phiy    = fPhiTwist * ( v.y()*p.z() - v.z()*p.y() )   ;
+  G4double phixz = fPhiTwist * ( p.x() * v.z() - p.z() * v.x() ) ;
+  G4double phiyz = fPhiTwist * ( p.y() * v.z() - p.z() * v.y() ) ;
 
 
   // special case vz = 0
@@ -260,10 +253,7 @@ G4int G4TwistedTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
     if ( std::fabs(p.z()) <= L ) {     // intersection possible in z
       
       phi = p.z() * fPhiTwist / L ;  // phi is determined by the z-position 
-      u = (2*fDy1*(8*fPhiTwist*(p.y()*v.x() - p.x()*v.y()) + 
-          (2*(fDx4plus2 + fDx3plus1)*fPhiTwist*v.y() - 2*(4*fdeltaY*v.x() + (-2*(fDx4minus2 + fDx3minus1) - 4*fdeltaX)*v.y())*phi)*std::cos(phi) - 
-          (2*(fDx4plus2 + fDx3plus1)*fPhiTwist*v.x() - 2*((-2*(fDx4minus2 + fDx3minus1) - 4*fdeltaX)*v.x() - 4*fdeltaY*v.y())*phi)*std::sin(phi)))/
-      (4.*fPhiTwist*(std::sin(phi)*(fa1md1*v.x() + 4*fDy1*v.y() - 4*fDy1*v.x()*fTAlph) + std::cos(phi)*(4*fDy1*v.x() - fa1md1 *v.y()  + 4*fDy1*v.y()*fTAlph)))  ;
+      u = (fDy1*(4*(-(fdeltaY*phi*v.x()) + fPhiTwist*p.y()*v.x() + fdeltaX*phi*v.y() - fPhiTwist*p.x()*v.y()) + ((fDx3plus1 + fDx4plus2)*fPhiTwist +  2*(fDx3minus1 + fDx4minus2)*phi)*(v.y()*std::cos(phi) - v.x()*std::sin(phi))))/(fPhiTwist*(4*fDy1* v.x() - (fa1md1 + 4*fDy1*fTAlph)*v.y())*std::cos(phi) + fPhiTwist*(fa1md1*v.x() + 4*fDy1*(fTAlph*v.x() + v.y()))*std::sin(phi))  ;
 
       xbuftmp.phi = phi ;
       xbuftmp.u = u ;
@@ -299,20 +289,44 @@ G4int G4TwistedTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
 
     G4double c[8],sr[7],si[7] ;  
 
-    c[7] = -1800*(-4*fa1md1*phiy + 16*fDy1*(phix + phiy*fTAlph) +  4*(fDx4plus2 + fDx3plus1)*fDy1*fPhiTwist*v.z()) ;
-    c[6] = -3600*(8*fDy1*(phiy - L*v.x()) + 2*(phix - fdeltaY*v.z() + L*v.y())*(fa1md1 - 4*fDy1*fTAlph) - 
-		  2*fDy1*(-2*(fDx4minus2 + fDx3minus1) - 4*fdeltaX)*v.z()) ;
-    c[5] = 150*(fa1md1*(-20*phiy + 48*L*v.x()) + 2*fDy1*(40*phix + 96*L*v.y() + 40*phiy*fTAlph - 96*L*v.x()*fTAlph - 
-							 2*(fDx4plus2 + fDx3plus1)*fPhiTwist*v.z())) ;
-    c[4] = -300*(-8*fDy1*(phiy - 5*L*v.x()) - 2*(phix + fdeltaY*v.z() + 5*L*v.y())*(fa1md1 - 4*fDy1*fTAlph) - 
-		 2*fDy1*(-2*(fDx4minus2 + fDx3minus1) - 4*fdeltaX)*v.z()) ;
-    c[3] = -3*(-4*fa1md1*(phiy - 50*L*v.x()) + 16*fDy1*(phix + 50*L*v.y() + phiy*fTAlph - 50*L*v.x()*fTAlph) + 
-	       2*(fDx4plus2 + fDx3plus1)*2*fDy1*fPhiTwist*v.z()) ;
-    c[2] = 16*fDy1*(7*phiy + 3*L*v.x()) + 4*(7*phix + 3*fdeltaY*v.z() 
-					     - 3*L*v.y())*(fa1md1 - 4*fDy1*fTAlph) + 12*fDy1*(-2*(fDx4minus2 + fDx3minus1) - 4*fdeltaX)*v.z() ;
-    c[1] = -4*fDy1*(9*fPhiTwist*p.z()*v.x() - 9*fPhiTwist*p.x()*v.z() + 
-		    28*L*v.y()) + (9*phiy - 28*L*v.x())*(fa1md1 - 4*fDy1*fTAlph)  ;
-    c[0] = 9*(-(fa1md1*L*v.y()) + 4*fDy1*(L*v.x() + L*v.y()*fTAlph)) ;
+    c[7] = 57600*
+      fDy1*(fa1md1*phiyz + 
+	    fDy1*(-4*phixz + 
+		  4*fTAlph*phiyz + (fDx3plus1 + fDx4plus2)*fPhiTwist*v.z())) ;
+    c[6] = -57600*
+      fDy1*(4*fDy1*(phiyz + 2*fDz*v.x() + fTAlph*(phixz - 2*fDz*v.y())) - 
+	    2*fDy1*(2*fdeltaX + fDx3minus1 + fDx4minus2 - 2*fdeltaY*fTAlph)*v.z() + 
+	    fa1md1*(phixz - 2*fDz*v.y() + fdeltaY*v.z()))  ;
+    c[5] = 4800*
+      fDy1*(fa1md1*(-5*phiyz - 24*fDz*v.x() + 12*fdeltaX*v.z()) + 
+	    fDy1*(20*phixz - 
+		  4*(5*fTAlph*phiyz + 24*fDz*fTAlph*v.x() + 
+		     24*fDz*v.y()) + (48*fdeltaY + (fDx3plus1 + fDx4plus2)*
+				      fPhiTwist + 48*fdeltaX*fTAlph)*v.z())) ;
+    c[4] = 4800*
+      fDy1*(fa1md1*(phixz - 10*fDz*v.y() + 5*fdeltaY*v.z()) + 
+	    2*fDy1*(2*phiyz + 
+		    20*fDz*v.x() + (-10*fdeltaX + fDx3minus1 + fDx4minus2)*v.z() + 
+		    2*fTAlph*(phixz - 10*fDz*v.y() + 5*fdeltaY*v.z())))  ;
+    c[3] = -96*
+      fDy1*(-(fa1md1*(phiyz + 100*fDz*v.x() - 50*fdeltaX*v.z())) + 
+	    fDy1*(4*phixz - 
+		  400*fDz*v.y() + (200*fdeltaY - (fDx3plus1 + fDx4plus2)*fPhiTwist)*
+		  v.z() - 4*fTAlph*(phiyz + 100*fDz*v.x() - 50*fdeltaX*v.z()))) ;
+    c[2] = 32*
+      fDy1*(4*fDy1*(7*fTAlph*phixz + 7*phiyz - 6*fDz*v.x() + 6*fDz*fTAlph*v.y()) + 
+	    6*fDy1*(2*fdeltaX + fDx3minus1 + fDx4minus2 - 2*fdeltaY*fTAlph)*v.z() + 
+	    fa1md1*(7*phixz + 6*fDz*v.y() - 3*fdeltaY*v.z())) ;
+    c[1] = -8*
+      fDy1*(fa1md1*(-9*phiyz - 56*fDz*v.x() + 28*fdeltaX*v.z()) + 
+	    4*fDy1*(9*phixz - 9*fTAlph*phiyz - 56*fDz*fTAlph*v.x() - 56*fDz*v.y() + 
+		    28*(fdeltaY + fdeltaX*fTAlph)*v.z()))  ;
+    c[0] = 72*
+      fDy1*(fa1md1*(2*fDz*v.y() - fdeltaY*v.z()) + 
+	    fDy1*(-8*fDz*v.x() + 8*fDz*fTAlph*v.y() + 4*fdeltaX*v.z() - 
+		  4*fdeltaY*fTAlph*v.z())) ;
+       
+
 
 #ifdef G4SPECSDEBUG
     G4cout << "coef = " << c[0] << " " 
@@ -322,7 +336,7 @@ G4int G4TwistedTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
 	   <<  c[4] << " "  
 	   <<  c[5] << " "  
 	   <<  c[6] << " "  
-	   <<  c[7] << G4endl ;
+	   <<  c[7] << G4endl ; 
 #endif    
 
     G4JTPolynomialSolver trapEq ;
@@ -335,10 +349,10 @@ G4int G4TwistedTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
 	G4cout << "Solution " << i << " : " << sr[i] << G4endl ;
 #endif
 	phi = std::fmod(sr[i] , pihalf)  ;
-
-	u   = (16*fDy1*(-phiy + L*v.y()*phi - fdeltaY*v.z()*phi*std::cos(phi)) - 
-     2*fDy1*v.z()*( 2*(fDx4plus2 + fDx3plus1)*fPhiTwist -2*(-2*(fDx4minus2 + fDx3minus1) - 4*fdeltaX)*phi)*std::sin(phi))/
-   (4.*fPhiTwist*v.z()*(4*fDy1*(std::cos(phi) - std::sin(phi)*fTAlph) + fa1md1*std::sin(phi)))  ;
+	u   = (fDy1*(4*(phiyz + 2*fDz*phi*v.y() - 
+			fdeltaY*phi*v.z()) - ((fDx3plus1 + fDx4plus2)*fPhiTwist + 
+					      2*(fDx3minus1 + fDx4minus2)*phi)*v.z()*std::sin(phi)))/(fPhiTwist*v.z()*(4*fDy1*std::cos(phi) + (fa1md1 + 4*fDy1*fTAlph)*std::sin(phi))) ;
+	
 	
 	xbuftmp.phi = phi ;
 	xbuftmp.u = u ;
@@ -385,6 +399,7 @@ G4int G4TwistedTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
       
       xxonsurface = SurfacePoint(phi,u) ;
       surfacenormal = NormAng(phi,u) ;
+
       tmpdist = DistanceToPlaneWithV(p, v, xxonsurface, surfacenormal, tmpxx); 
       deltaX = ( tmpxx - xxonsurface ).mag() ; 
       theta = std::fabs(std::acos(v*surfacenormal) - pihalf) ;
@@ -411,6 +426,9 @@ G4int G4TwistedTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
       
     }  // end iterative loop (i)
     
+    // new code  21.09.05 O.Link
+    if ( std::fabs(tmpdist)<ctol ) tmpdist = 0 ; 
+
 
 #ifdef G4SPECSDEBUG
     G4cout << "refined solution "  << phi << " , " << u  <<  G4endl ;
@@ -479,9 +497,7 @@ G4int G4TwistedTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
 #endif
 
     phi = fPhiTwist/2 ;
-    u   =  (16*fDy1*(-phiy + L*v.y()*phi - fdeltaY*v.z()*phi*std::cos(phi)) - 
-     2*fDy1*v.z()*( 2*(fDx4plus2 + fDx3plus1)*fPhiTwist -2*(-2*(fDx4minus2 + fDx3minus1) - 4*fdeltaX)*phi)*std::sin(phi))/
-   (4.*fPhiTwist*v.z()*(4*fDy1*(std::cos(phi) - std::sin(phi)*fTAlph) + fa1md1*std::sin(phi))) ;
+    u   = 0 ;
     
     xbuftmp.phi = phi ;
     xbuftmp.u = u ;
@@ -497,9 +513,7 @@ G4int G4TwistedTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
 #endif
 
     phi = -fPhiTwist/2 ;
-    u   = (16*fDy1*(-phiy + L*v.y()*phi - fdeltaY*v.z()*phi*std::cos(phi)) - 
-     2*fDy1*v.z()*( 2*(fDx4plus2 + fDx3plus1)*fPhiTwist -2*(-2*(fDx4minus2 + fDx3minus1) - 4*fdeltaX)*phi)*std::sin(phi))/
-      (4.*fPhiTwist*v.z()*(4*fDy1*(std::cos(phi) - std::sin(phi)*fTAlph) + fa1md1*std::sin(phi))) ;
+    u   = 0 ;
     
     xbuftmp.phi = phi ;
     xbuftmp.u = u ;
@@ -551,6 +565,9 @@ G4int G4TwistedTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
       
       }  // end iterative loop (i)
     
+
+    // new code  21.09.05 O.Link
+    if ( std::fabs(tmpdist)<ctol ) tmpdist = 0 ; 
 
 #ifdef G4SPECSDEBUG
       G4cout << "refined solution "  << phi << " , " << u  <<  G4endl ;
@@ -717,7 +734,7 @@ G4int G4TwistedTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
    // check validity of solution ( valid phi,psi ) 
 
    G4double halfphi = 0.5*fPhiTwist ;
-   G4double uMax = GetValueB(phiR)/2 ;
+   G4double uMax = GetBoundaryMax(phiR) ;
 
    if (  phiR > halfphi ) phiR =  halfphi ;
    if ( phiR < -halfphi ) phiR = -halfphi ;
@@ -767,8 +784,8 @@ G4int G4TwistedTrapAlphaSide::GetAreaCode(const G4ThreeVector &xx,
    G4double yprime ;
    GetPhiUAtX(xx, phi,yprime ) ;
 
-   G4double fYAxisMax =  0.5 * GetValueB(phi) ;
-   G4double fYAxisMin =  - fYAxisMax ;
+   G4double fYAxisMax =  GetBoundaryMax(phi) ;
+   G4double fYAxisMin =  GetBoundaryMin(phi) ;
 
 #ifdef G4SPECSDEBUG
    G4cout << "GetAreaCode: phi = " << phi << G4endl ;
@@ -871,35 +888,49 @@ void G4TwistedTrapAlphaSide::SetCorners()
   if (fAxis[0] == kYAxis && fAxis[1] == kZAxis) {
     
     G4double x, y, z;
-    G4double CosPhi =  std::cos(fPhiTwist/2) ;
-    G4double SinPhi =  std::sin(fPhiTwist/2) ;
 
     // corner of Axis0min and Axis1min
-
-    x = (-( 2*fDy1 + fdeltaY)*SinPhi + CosPhi*( 2*fDx1 - fdeltaX + 2*fDy1*fTAlph))/2. ;
-    y = (-( 2*fDy1 + fdeltaY)*CosPhi - SinPhi*( 2*fDx1 - fdeltaX + 2*fDy1*fTAlph))/2. ;
+    x = -fdeltaX/2. + (fDx1 - fDy1*fTAlph)*std::cos(fPhiTwist/2.) - 
+      fDy1*std::sin(fPhiTwist/2.)  ;
+    y = -fdeltaY/2. - 
+      fDy1*std::cos(fPhiTwist/2.) + (-fDx1 + fDy1*fTAlph)*std::sin(fPhiTwist/2.)  ;
     z = -fDz ;
+
+    //    G4cout << "SetCorners: " << x << ", " << y << ", " << z << G4endl ;
 
     SetCorner(sC0Min1Min, x, y, z);
       
     // corner of Axis0max and Axis1min
-    x = ( ( 2*fDy1 - fdeltaY)*SinPhi + CosPhi*( 2*fDx2 - fdeltaX - 2*fDy1*fTAlph))/2. ;
-    y = ( ( 2*fDy1 - fdeltaY)*CosPhi + SinPhi*(-2*fDx2 + fdeltaX + 2*fDy1*fTAlph))/2. ; 
+    x = -fdeltaX/2. + (fDx2 + fDy1*fTAlph)*std::cos(fPhiTwist/2.) + 
+      fDy1*std::sin(fPhiTwist/2.) ;
+    y = -fdeltaY/2. + 
+      fDy1*std::cos(fPhiTwist/2.) - (fDx2 + fDy1*fTAlph)*std::sin(fPhiTwist/2.)  ;
     z = -fDz ;
+
+    //    G4cout << "SetCorners: " << x << ", " << y << ", " << z << G4endl ;
 
     SetCorner(sC0Max1Min, x, y, z);
       
-    // corner of Axis0max and Axis1max
-    x = (-( 2*fDy2 + fdeltaY)*SinPhi + CosPhi*( 2*fDx4 + fdeltaX - 2*fDy2*fTAlph))/2. ;
-    y = ( ( 2*fDy2 + fdeltaY)*CosPhi + SinPhi*( 2*fDx4 + fdeltaX - 2*fDy2*fTAlph))/2. ;
+    // corner of Axis0max and Axis1max 
+    x = fdeltaX/2. + (fDx4 + fDy2*fTAlph)*std::cos(fPhiTwist/2.) - 
+      fDy2*std::sin(fPhiTwist/2.) ;
+    y = fdeltaY/2. + 
+      fDy2*std::cos(fPhiTwist/2.) + (fDx4 + fDy2*fTAlph)*std::sin(fPhiTwist/2.) ;
+    z = fDz ;
+    
+    //    G4cout << "SetCorners: " << x << ", " << y << ", " << z << G4endl ;
+    
+    SetCorner(sC0Max1Max, x, y, z);
+    
+    
+    // corner of Axis0min and Axis1max
+    x = fdeltaX/2. + (fDx3 - fDy2*fTAlph)*std::cos(fPhiTwist/2.) + 
+      fDy2*std::sin(fPhiTwist/2.) ;
+    y = fdeltaY/2. - 
+      fDy2*std::cos(fPhiTwist/2.) + (fDx3 - fDy2*fTAlph)*std::sin(fPhiTwist/2.) ;
     z = fDz ;
 
-    SetCorner(sC0Max1Max, x, y, z);
-      
-    // corner of Axis0min and Axis1max
-    x = ( ( 2*fDy2 - fdeltaY)*SinPhi + CosPhi*( 2*fDx3 + fdeltaX + 2*fDy2*fTAlph))/2. ;
-    y = ( (-2*fDy2 + fdeltaY)*CosPhi + SinPhi*( 2*fDx3 + fdeltaX + 2*fDy2*fTAlph))/2. ; 
-    z = fDz ;
+    //    G4cout << "SetCorners: " << x << ", " << y << ", " << z << G4endl ;
 
     SetCorner(sC0Min1Max, x, y, z);
 
@@ -965,20 +996,9 @@ void G4TwistedTrapAlphaSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4doubl
   
   // phi is given by the z coordinate of p
 
-  phi = p.z()/(2*fDz)*fPhiTwist ;
 
-  G4double CosPhi = std::cos(phi) ;
-  G4double SinPhi = std::sin(phi) ;
-  G4double c0 = 2*(CosPhi - SinPhi*fTAlph) + (fa1md1*SinPhi)/(2*fDy1) ;
-  G4double c1 = (-4*fDy1*SinPhi + CosPhi*(fa1md1 - 4*fDy1*fTAlph))/(2*fDy1) ;
-
-  u = ( -(fa1md1*  2*(fDx4plus2  + fDx3plus1 )*fPhiTwist) + 
-       2*(fa1md1*(-2*(fDx4minus2 + fDx3minus1) - 4*fdeltaX) - 16*fDy1*fdeltaY)*phi + 
-       4*fDy1*(2*(fDx4plus2 + fDx3plus1)*fPhiTwist 
-	     - 2*(-2*(fDx4minus2 + fDx3minus1) - 4*fdeltaX)*phi)*fTAlph + 
-	8*fPhiTwist*CosPhi*(2*fDx2*p.x() - 2*fDx1*p.x() + 4*fDy1*p.y() - 4*fDy1*p.x()*fTAlph) - 
-       8*fPhiTwist*SinPhi*(4*fDy1*p.x() - 2*fDx2*p.y() + 2*fDx1*p.y() + 4*fDy1*p.y()*fTAlph))/
-    (8.*fDy1*fPhiTwist*(c0*c0 +  c1*c1))  ;
+  phi =  p.z()/(2*fDz)*fPhiTwist ;
+  u = (fPhiTwist*(2*fDx1*fDx1 - 2*fDx2*fDx2 - fa1md1*(fDx3 + fDx4) - 4*(fDx3plus1 + fDx4plus2)*fDy1*fTAlph) - 2*(2*fDx1*fDx1 - 2*fDx2*fDx2 + fa1md1*(fDx3 + fDx4) + 4*(fDx3minus1 + fDx4minus2)*fDy1*fTAlph)*phi - 4*(fa1md1*(fdeltaX*phi - fPhiTwist*p.x()) + 4*fDy1*(fdeltaY*phi + fdeltaX*fTAlph*phi - fPhiTwist*(fTAlph*p.x() + p.y())))*std::cos(phi) - 4*(fa1md1*fdeltaY*phi - 4*fdeltaX*fDy1*phi + 4*fdeltaY*fDy1*fTAlph*phi + 4*fDy1*fPhiTwist*p.x() - fPhiTwist*(fa1md1 + 4*fDy1*fTAlph)*p.y())*std::sin(phi))/(fDy1* fPhiTwist*((std::fabs(((fa1md1 + 4*fDy1*fTAlph)*std::cos(phi))/fDy1 - 4*std::sin(phi)))*(std::fabs(((fa1md1 + 4*fDy1*fTAlph)*std::cos(phi))/fDy1 - 4*std::sin(phi))) + (std::fabs(4*std::cos(phi) + ((fa1md1 + 4*fDy1*fTAlph)*std::sin(phi))/fDy1))*(std::fabs(4*std::cos(phi) + ((fa1md1 + 4*fDy1*fTAlph)*std::sin(phi))/fDy1)))) ;
 
 }
 

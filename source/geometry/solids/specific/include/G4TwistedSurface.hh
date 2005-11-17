@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedSurface.hh,v 1.8 2005-11-09 15:04:28 gcosmo Exp $
+// $Id: G4TwistedSurface.hh,v 1.9 2005-11-17 16:59:25 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,6 +95,11 @@ class G4TwistedSurface : public G4VSurface
    inline G4ThreeVector ProjectAtPXPZ(const G4ThreeVector &p,
                                             G4bool isglobal = false) const ;
 
+   inline virtual G4ThreeVector SurfacePoint(G4double, G4double, G4bool isGlobal = false) ;  
+   inline virtual G4double GetBoundaryMin(G4double phi) ;
+   inline virtual G4double GetBoundaryMax(G4double phi) ;
+   inline virtual G4double GetSurfaceArea() ;
+
  public:  // without description
 
    G4TwistedSurface(__void__&);
@@ -153,5 +158,40 @@ G4ThreeVector G4TwistedSurface::ProjectAtPXPZ(const G4ThreeVector &p,
      return xx;
   }
 }
+
+inline
+G4ThreeVector G4TwistedSurface::SurfacePoint(G4double x, G4double z, G4bool isGlobal) {
+
+  G4ThreeVector SurfPoint( x , x * fKappa * z , z ) ;
+
+
+  if (isGlobal) {
+    return (fRot * SurfPoint + fTrans);
+  } else {
+    return SurfPoint;
+  }
+  
+}
+
+
+inline
+G4double G4TwistedSurface::GetBoundaryMin(G4double) {
+  return  fAxisMin[0] ;  // inner radius at z = 0
+}
+
+inline
+G4double G4TwistedSurface::GetBoundaryMax(G4double) {
+  return  fAxisMax[0] ;  // outer radius at z = 0
+}
+
+inline
+G4double G4TwistedSurface::GetSurfaceArea() {
+
+  // approximation only
+
+  return ( fAxisMax[0] - fAxisMin[0] ) * ( fAxisMax[1] - fAxisMin[1] ) ;
+
+}
+
 
 #endif

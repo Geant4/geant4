@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatTrapSide.hh,v 1.5 2005-11-09 15:04:28 gcosmo Exp $
+// $Id: G4FlatTrapSide.hh,v 1.6 2005-11-17 16:59:22 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,12 +76,20 @@ class G4FlatTrapSide : public G4VSurface
                                          G4double       distance[],
                                          G4int          areacode[]);
                                                   
+
+   inline virtual G4ThreeVector SurfacePoint(G4double x, G4double y, G4bool isGlobal = false) ;  
+   inline virtual G4double GetBoundaryMin(G4double u) ;
+   inline virtual G4double GetBoundaryMax(G4double u) ;
+   inline virtual G4double GetSurfaceArea() ;
+
+
   public:  // without description
 
    G4FlatTrapSide(__void__&);
      // Fake default constructor for usage restricted to direct object
      // persistency for clients requiring preallocation of memory for
      // persistifiable objects.
+
 
   protected:  // with description
 
@@ -115,8 +123,37 @@ class G4FlatTrapSide : public G4VSurface
 inline 
 G4double G4FlatTrapSide::xAxisMax(G4double u, G4double fTanAlpha) const
 {
-  return (  ( fDx2 + fDx1 )/2. + u*(fDx2 - fDx1)/(2.*fDy) - u *fTanAlpha  ) ;
+  return (  ( fDx2 + fDx1 )/2. + u*(fDx2 - fDx1)/(2.*fDy) + u *fTanAlpha  ) ;
 }
 
+inline
+G4ThreeVector G4FlatTrapSide::SurfacePoint(G4double x, G4double y, G4bool isGlobal) {
+
+  G4ThreeVector SurfPoint ( x,y,0) ;
+
+  if (isGlobal) {
+    return (fRot*SurfPoint + fTrans);
+  } else {
+    return SurfPoint;
+  }
+
+}
+
+inline
+G4double G4FlatTrapSide::GetBoundaryMin(G4double y ) {
+  return -xAxisMax(y, -fTAlph ) ;
+
+}
+
+inline
+G4double G4FlatTrapSide::GetBoundaryMax(G4double y ) {
+  return xAxisMax(y, fTAlph ) ; 
+}
+
+inline
+G4double G4FlatTrapSide::GetSurfaceArea() {
+
+  return 2*(fDx1 + fDx2)*fDy ;
+}
 
 #endif

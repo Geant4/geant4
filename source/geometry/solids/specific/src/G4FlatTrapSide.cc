@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatTrapSide.cc,v 1.7 2005-11-09 15:04:28 gcosmo Exp $
+// $Id: G4FlatTrapSide.cc,v 1.8 2005-11-17 16:59:34 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,6 +82,7 @@ G4FlatTrapSide::G4FlatTrapSide( const G4String        &name,
 	      fHandedness > 0 ? fDz : -fDz ) ;
 
    fIsValidNorm = true;
+
 
    fAxis[0] = kXAxis ;
    fAxis[1] = kYAxis ;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc,v 1.5 2005-11-09 15:04:28 gcosmo Exp $
+// $Id: G4VTwistedFaceted.cc,v 1.6 2005-11-17 16:59:42 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,6 +52,8 @@
 #include "G4NURBStube.hh"
 #include "G4NURBScylinder.hh"
 #include "G4NURBStubesector.hh"
+
+#include "Randomize.hh"
 
 //=====================================================================
 //* constructors ------------------------------------------------------
@@ -140,8 +142,7 @@ G4VTwistedFaceted( const G4String &pname,     // Name of instance
 
   // tilt angle
   //
-  fAlph = - pAlph ;  // important: definition of angle alpha
-                     //            is different in equations !!!
+  fAlph = pAlph ; 
   fTAlph = std::tan(fAlph) ;
   
   fTheta = pTheta ;
@@ -466,7 +467,7 @@ EInside G4VTwistedFaceted::Inside(const G4ThreeVector& p) const
      return fLastInside.inside;
    } else {
       tmpp      = const_cast<G4ThreeVector*>(&(fLastInside.p));
-      tmpin = const_cast<EInside*>(&(fLastInside.inside));
+      tmpin     = const_cast<EInside*>(&(fLastInside.inside));
       tmpp->set(p.x(), p.y(), p.z());
    }
 
@@ -475,12 +476,14 @@ EInside G4VTwistedFaceted::Inside(const G4ThreeVector& p) const
    G4double phi = p.z()/(2*fDz) * fPhiTwist ;  // rotate the point to z=0
    G4double cphi = std::cos(-phi) ;
    G4double sphi = std::sin(-phi) ;
-   G4double posx = p.x() * cphi - p.y() * sphi   ;
-   G4double posy = p.x() * sphi + p.y() * cphi   ;
-   G4double posz = p.z()  ;
 
-   posx += fdeltaX * ( -phi/fPhiTwist) ;  // shift
-   posy += fdeltaY * ( -phi/fPhiTwist) ;
+   G4double px  = p.x() + fdeltaX * ( -phi/fPhiTwist) ;  // shift
+   G4double py  = p.y() + fdeltaY * ( -phi/fPhiTwist) ;
+   G4double pz  = p.z() ;
+
+   G4double posx = px * cphi - py * sphi   ;  // rotation
+   G4double posy = px * sphi + py * cphi   ;
+   G4double posz = pz  ;
 
    G4double xMin = Xcoef(posy,phi,fTAlph) - 2*Xcoef(posy,phi,0.) ; 
    G4double xMax = Xcoef(posy,phi,fTAlph) ;  
@@ -680,6 +683,7 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p,
    G4int i;
    G4int besti = -1;
    for (i=0; i < 6 ; i++)
+     //for (i=1; i < 2 ; i++)
    {
 
 #ifdef G4SPECSDEBUG
@@ -1072,9 +1076,9 @@ void G4VTwistedFaceted::CreateSurfaces()
   if ( fDx1 == fDx2 && fDx3 == fDx4 )    // special case : Box
   {
     fSide0   = new G4TwistedTrapBoxSide("0deg",   fPhiTwist, fDz, fTheta, fPhi,
-                                        fDy1, fDx1, fDy2, fDx3, fAlph, 0.*deg);
-    fSide180 = new G4TwistedTrapBoxSide("180deg", fPhiTwist, fDz, fTheta,
-                            fPhi+pi , fDy1, fDx1, fDy2, fDx3, fAlph, 180.*deg);
+                                        fDy1, fDx1, fDx1, fDy2, fDx3, fDx3, fAlph, 0.*deg);
+    fSide180 = new G4TwistedTrapBoxSide("180deg", fPhiTwist, fDz, fTheta, fPhi+pi,
+					fDy1, fDx1, fDx1, fDy2, fDx3, fDx3, fAlph, 180.*deg);
   }
   else   // default general case
   {
@@ -1106,6 +1110,7 @@ void G4VTwistedFaceted::CreateSurfaces()
   fSide270->SetNeighbours(fSide180 , fLowerEndcap , fSide0   , fUpperEndcap );
   fUpperEndcap->SetNeighbours( fSide180, fSide270 , fSide0 , fSide90  );
   fLowerEndcap->SetNeighbours( fSide180, fSide270 , fSide0 , fSide90  );
+
 }
 
 
@@ -1132,4 +1137,121 @@ G4Polyhedron* G4VTwistedFaceted::GetPolyhedron() const
     }
 
   return fpPolyhedron;
+}
+
+////////////////////////////////////////////////////////////////////////////
+//
+// GetPointInSolid
+G4ThreeVector G4VTwistedFaceted::GetPointInSolid(G4double z) const
+{
+
+  if ( z == fDz ) z -= 0.1*fDz ;
+  if ( z == -fDz ) z += 0.1*fDz ;
+
+  G4double phi = z/(2*fDz)*fPhiTwist ;
+
+  return G4ThreeVector( 
+		       fdeltaX * phi/fPhiTwist ,
+		       fdeltaY * phi/fPhiTwist ,
+		       z ) ;
+
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////
+//
+// GetPointOnSurface
+
+G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
+{
+
+  G4double  phi   = RandFlat::shoot(-fPhiTwist/2.,fPhiTwist/2.);
+  G4double u , umin, umax ;  //  variable for twisted surfaces
+  G4double y  ;              //  variable for flat surface (top and bottom)
+
+  // Compute the areas. Attention: Only correct for trapezoids
+  // where the twisting is done along the z-axis. In the general case
+  // the computed surface area is more difficult. However this simplification
+  // does not affect the tracking through the solid. 
+ 
+  G4double a1   = fSide0->GetSurfaceArea();
+  G4double a2   = fSide90->GetSurfaceArea();
+  G4double a3   = fSide180->GetSurfaceArea() ;
+  G4double a4   = fSide270->GetSurfaceArea() ;
+  G4double a5   = fLowerEndcap->GetSurfaceArea() ;
+  G4double a6   = fUpperEndcap->GetSurfaceArea() ;
+
+#ifdef G4SPECSDEBUG
+  G4cout << "Surface 0   deg = " << a1 << G4endl ;
+  G4cout << "Surface 90  deg = " << a2 << G4endl ;
+  G4cout << "Surface 180 deg = " << a3 << G4endl ;
+  G4cout << "Surface 270 deg = " << a4 << G4endl ;
+  G4cout << "Surface Lower   = " << a5 << G4endl ;
+  G4cout << "Surface Upper   = " << a6 << G4endl ;
+#endif 
+
+  G4double chose = RandFlat::shoot(0.,a1 + a2 + a3 + a4 + a5 + a6) ;
+
+  if(chose < a1)
+  {
+
+    umin = fSide0->GetBoundaryMin(phi) ;
+    umax = fSide0->GetBoundaryMax(phi) ;
+    u = RandFlat::shoot(umin,umax) ;
+
+    return  fSide0->SurfacePoint(phi, u, true) ;   // point on 0deg surface
+  }
+
+  else if( (chose >= a1) && (chose < a1 + a2 ) )
+  {
+
+    umin = fSide90->GetBoundaryMin(phi) ;
+    umax = fSide90->GetBoundaryMax(phi) ;
+    
+    u = RandFlat::shoot(umin,umax) ;
+
+    return fSide90->SurfacePoint(phi, u, true);   // point on 90deg surface
+  }
+
+  else if( (chose >= a1 + a2 ) && (chose < a1 + a2 + a3 ) )
+  {
+
+    umin = fSide180->GetBoundaryMin(phi) ;
+    umax = fSide180->GetBoundaryMax(phi) ;
+    u = RandFlat::shoot(umin,umax) ;
+
+     return fSide180->SurfacePoint(phi, u, true); // point on 180 deg surface
+  }
+
+  else if( (chose >= a1 + a2 + a3  ) && (chose < a1 + a2 + a3 + a4  ) )
+  {
+
+    umin = fSide270->GetBoundaryMin(phi) ;
+    umax = fSide270->GetBoundaryMax(phi) ;
+    u = RandFlat::shoot(umin,umax) ;
+
+    return fSide270->SurfacePoint(phi, u, true); // point on 270 deg surface
+  }
+
+  else if( (chose >= a1 + a2 + a3 + a4  ) && (chose < a1 + a2 + a3 + a4 + a5 ) )
+  {
+
+    y = RandFlat::shoot(-fDy1,fDy1) ;
+    umin = fLowerEndcap->GetBoundaryMin(y) ;
+    umax = fLowerEndcap->GetBoundaryMax(y) ;
+    u = RandFlat::shoot(umin,umax) ;
+
+    return fLowerEndcap->SurfacePoint(u,y,true); // point on lower endcap
+  }
+  else {
+
+    y = RandFlat::shoot(-fDy2,fDy2) ;
+    umin = fUpperEndcap->GetBoundaryMin(y) ;
+    umax = fUpperEndcap->GetBoundaryMax(y) ;
+    u = RandFlat::shoot(umin,umax) ;
+
+    return fUpperEndcap->SurfacePoint(u,y,true) ; // point on upper endcap
+
+  }
 }

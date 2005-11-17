@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatSurface.hh,v 1.7 2005-11-09 15:04:28 gcosmo Exp $
+// $Id: G4FlatSurface.hh,v 1.8 2005-11-17 16:59:21 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -86,6 +86,14 @@ class G4FlatSurface : public G4VSurface
                                          G4double       distance[],
                                          G4int          areacode[]);
                                                   
+  inline virtual G4ThreeVector SurfacePoint(G4double, G4double, G4bool isGlobal = false ) ;  
+  inline virtual G4double GetBoundaryMin(G4double phi) ;
+  inline virtual G4double GetBoundaryMax(G4double phi) ;
+  inline virtual G4double GetSurfaceArea() { return fSurfaceArea ; } ;
+
+
+  G4double fSurfaceArea ;
+
   public:  // without description
 
    G4FlatSurface(__void__&);
@@ -104,5 +112,37 @@ class G4FlatSurface : public G4VSurface
    virtual void SetBoundaries();
    
 };
+
+inline
+G4ThreeVector G4FlatSurface::SurfacePoint(G4double phi , G4double rho , G4bool isGlobal ) {
+
+  G4ThreeVector SurfPoint (rho*std::cos(phi) ,
+				  rho*std::sin(phi) ,
+				  0) ;
+
+  if (isGlobal) {
+    return (fRot * SurfPoint + fTrans);
+  } else {
+    return SurfPoint;
+  }
+
+}
+
+inline
+G4double G4FlatSurface::GetBoundaryMin(G4double) {
+
+  G4ThreeVector dphimin = GetCorner(sC0Max1Min);
+  return  std::atan2( dphimin.y(), dphimin.x() ) ;  
+
+}
+
+inline
+G4double G4FlatSurface::GetBoundaryMax(G4double) {
+
+  G4ThreeVector dphimax = GetCorner(sC0Max1Max);   
+  return  std::atan2( dphimax.y(), dphimax.x() ) ;  
+
+}
+
 
 #endif

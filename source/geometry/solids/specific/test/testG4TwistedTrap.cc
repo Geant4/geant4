@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4TwistedTrap.cc,v 1.5 2005-07-05 08:46:46 gcosmo Exp $
+// $Id: testG4TwistedTrap.cc,v 1.6 2005-11-17 16:59:44 link Exp $
 // GEANT4 tag $Name: 
 //
 
@@ -43,6 +43,17 @@
 #include "G4RotationMatrix.hh"
 #include "G4AffineTransform.hh"
 #include "G4VoxelLimits.hh"
+
+const G4String OutputInside(const EInside a)
+{
+	switch(a) 
+        {
+		case kInside:  return "Inside"; 
+		case kOutside: return "Outside";
+		case kSurface: return "Surface";
+	}
+	return "????";
+}
 
 
 G4bool testG4TwistedTrap()
@@ -96,13 +107,31 @@ G4bool testG4TwistedTrap()
 
     G4cout << "Test " << t1.GetName() << " Inside(pzero) is "   << t1.Inside(pzero) << G4endl ;
     G4cout << "Test " << t1.GetName() << " Inside(pout) is "    << t1.Inside(pout) << G4endl ;
-
     G4cout << "Test " << t2.GetName() << " Inside(pzero) is "   << t2.Inside(pzero) << G4endl ;
     G4cout << "Test " << t2.GetName() << " Inside(pout) is "    << t2.Inside(pout) << G4endl ;
 
     G4cout << "Test " << t3.GetName() << " Inside(pzero) is "   << t3.Inside(pzero) << G4endl ;
     G4cout << "Test " << t3.GetName() << " Inside(pout) is "    << t3.Inside(pout) << G4endl ;
     //assert(t1.Inside(pzero)==kInside) ;
+
+    // test GetPointOnSurface
+
+    G4ThreeVector Spoint ;
+    G4ThreeVector Opoint ;
+    G4ThreeVector dir ;
+
+    EInside side ;
+    for ( int i = 0 ; i < 10 ; i++ ) {
+      //  G4cout << "Event " << i << G4endl << G4endl ;
+      Spoint = t3.GetPointOnSurface() ;
+      Opoint = t3.GetPointInSolid(Spoint.z()) ;
+      dir = Opoint - Spoint ;
+      
+      side = t3.Inside(Spoint) ;
+      //      G4cout << "SInside = " << OutputInside(side) << G4endl ;
+      dist = t3.DistanceToIn(Spoint,dir/dir.mag()) ;
+      G4cout << "Spoint " << Spoint << " " <<  dist << G4endl ;
+    }
 
     return true;
 }

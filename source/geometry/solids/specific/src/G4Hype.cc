@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc,v 1.22 2005-11-09 15:04:28 gcosmo Exp $
+// $Id: G4Hype.cc,v 1.23 2005-11-17 16:59:35 link Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -1353,13 +1353,14 @@ std::ostream& G4Hype::StreamInfo(std::ostream& os) const
 }
 
 
+
 //
 // GetPointOnSurface
 //
 G4ThreeVector G4Hype::GetPointOnSurface() const
 {
-  G4double xRand, yRand, zRand, aOne, aTwo, aThree, chose, sinhu;
-  G4double phi, cosphi, sinphi, rBar2Out, rBar2In, alpha, t, rIn, rOut;
+  G4double xRand, yRand, zRand, r2 , aOne, aTwo, aThree, chose, sinhu;
+  G4double phi, cosphi, sinphi, rBar2Out, rBar2In, alpha, t, rOut, rIn2, rOut2;
 
   // we use the formula of the area of a surface of revolution to compute 
   // the areas, using the equation of the hyperbola:
@@ -1369,14 +1370,15 @@ G4ThreeVector G4Hype::GetPointOnSurface() const
   alpha = 2.*pi*rBar2Out*std::cos(outerStereo)/tanOuterStereo;
   t     = halfLenZ*tanOuterStereo/(outerRadius*std::cos(outerStereo));
   t     = std::log(t+std::sqrt(sqr(t)+1));
-  aOne  = std::fabs(2.*alpha*(std::cosh(2.*t)+2.*t));
+  aOne  = std::fabs(2.*alpha*(std::sinh(2.*t)/4.+t/2.));
+
 
   rBar2In = innerRadius2;
   alpha = 2.*pi*rBar2In*std::cos(innerStereo)/tanInnerStereo;
   t     = halfLenZ*tanInnerStereo/(innerRadius*std::cos(innerStereo));
   t     = std::log(t+std::sqrt(sqr(t)+1));
-  aTwo  = std::fabs(2.*alpha*(std::cosh(2.*t)+2.*t));
-  
+  aTwo  = std::fabs(2.*alpha*(std::sinh(2.*t)/4.+t/2.));
+
   aThree = pi*((outerRadius2+sqr(halfLenZ*tanOuterStereo)
               -(innerRadius2+sqr(halfLenZ*tanInnerStereo))));
   
@@ -1424,19 +1426,31 @@ G4ThreeVector G4Hype::GetPointOnSurface() const
   }
   else if(chose>=aOne+aTwo && chose<aOne+aTwo+aThree)
   {
-    rIn  = std::sqrt(innerRadius2+tanInnerStereo2*halfLenZ*halfLenZ);
-    rOut = std::sqrt(outerRadius2+tanOuterStereo2*halfLenZ*halfLenZ);
-    xRand = RandFlat::shoot(rIn,rOut)*cosphi;
-    yRand = RandFlat::shoot(rIn,rOut)*sinphi;
+    rIn2  = innerRadius2+tanInnerStereo2*halfLenZ*halfLenZ;
+    rOut2 = outerRadius2+tanOuterStereo2*halfLenZ*halfLenZ;
+    rOut  = std::sqrt(rOut2) ;
+ 
+    do {
+      xRand = RandFlat::shoot(-rOut,rOut) ;
+      yRand = RandFlat::shoot(-rOut,rOut) ;
+      r2 = xRand*xRand + yRand*yRand ;
+    } while ( ! ( r2 >= rIn2 && r2 <= rOut2 ) ) ;
+
     zRand = halfLenZ;
     return G4ThreeVector (xRand, yRand, zRand);
   }
   else
   {
-    rIn  = std::sqrt(innerRadius2+tanInnerStereo2*halfLenZ*halfLenZ);
-    rOut = std::sqrt(outerRadius2+tanOuterStereo2*halfLenZ*halfLenZ);
-    xRand = RandFlat::shoot(rIn,rOut)*cosphi;
-    yRand = RandFlat::shoot(rIn,rOut)*sinphi;
+    rIn2  = innerRadius2+tanInnerStereo2*halfLenZ*halfLenZ;
+    rOut2 = outerRadius2+tanOuterStereo2*halfLenZ*halfLenZ;
+    rOut  = std::sqrt(rOut2) ;
+ 
+    do {
+      xRand = RandFlat::shoot(-rOut,rOut) ;
+      yRand = RandFlat::shoot(-rOut,rOut) ;
+      r2 = xRand*xRand + yRand*yRand ;
+    } while ( ! ( r2 >= rIn2 && r2 <= rOut2 ) ) ;
+
     zRand = -1.*halfLenZ;
     return G4ThreeVector (xRand, yRand, zRand);
   }

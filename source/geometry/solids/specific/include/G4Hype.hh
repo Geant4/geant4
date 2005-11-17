@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.hh,v 1.12 2005-11-09 15:04:28 gcosmo Exp $
+// $Id: G4Hype.hh,v 1.13 2005-11-17 16:59:23 link Exp $
 // $Original: G4Hype.hh,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -186,6 +186,7 @@ class G4Hype : public G4VSolid
  private:
   
   G4double fCubicVolume;
+
   mutable G4Polyhedron* fpPolyhedron;
 
 };

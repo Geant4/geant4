@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4TwistedTubs.cc,v 1.2 2004-12-02 09:31:34 gcosmo Exp $
+// $Id: testG4TwistedTubs.cc,v 1.3 2005-11-17 16:59:45 link Exp $
 // GEANT4 tag $Name: 
 //
 
@@ -53,25 +53,29 @@ G4bool testG4TwistedTubs()
     G4ThreeVector pbigmx(-100,0,0),pbigmy(0,-100,0),pbigmz(0,0,-100);
     G4ThreeVector pin1 ;
 
-    double Rin=10;
-    double Rout=15;
-    double alpha=10;
-    double phi1=90;
-    double len=40;
+    double Rin=10*cm;
+    double Rout=15*cm;
+    double alpha=10*deg;
+    double phi1=90*deg;
+    double len=40*cm;
 
     G4TwistedTubs t1("Solid Twisted Tub #1",alpha,Rin,Rout,len,phi1);    
 
-// Check name
-    assert(t1.GetName()=="Solid Twisted Tub #1");
+    G4ThreeVector Spoint ;
+    G4ThreeVector Opoint ;
+    G4ThreeVector dir ;
+    G4double dist ;
+    G4ThreeVector nvec ;
 
-// Check Inside
-    assert(t1.Inside(pzero)==kOutside);
-    assert(t1.Inside(pbigx)==kOutside);
-    assert(t1.Inside(pbigy)==kOutside);
-    assert(t1.Inside(pbigz)==kOutside);
-    assert(t1.Inside(pbigmx)==kOutside);
-    assert(t1.Inside(pbigmy)==kOutside);
-    assert(t1.Inside(pbigmz)==kOutside);
+    for ( int i = 0 ; i < 10 ; i++ ) {
+      //  G4cout << "Event " << i << G4endl << G4endl ;
+      Spoint = t1.GetPointOnSurface() ;
+      nvec = t1.SurfaceNormal(Spoint) ;
+      dir = - nvec ;
+      dist = t1.DistanceToIn(Spoint,dir/dir.mag()) ;
+      G4cout << "Spoint " << Spoint << " " <<  dist << G4endl ;
+    }
+
 
     return true;
 }

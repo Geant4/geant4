@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistedFaceted.hh,v 1.4 2005-11-09 15:04:28 gcosmo Exp $
+// $Id: G4VTwistedFaceted.hh,v 1.5 2005-11-17 16:59:32 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------------
@@ -98,6 +98,9 @@ class G4VTwistedFaceted: public G4VSolid
 
   virtual G4ThreeVector SurfaceNormal(const G4ThreeVector &p) const;
 
+  G4ThreeVector GetPointOnSurface() const;
+  G4ThreeVector GetPointInSolid(G4double z) const;
+  
   virtual inline G4double GetCubicVolume() ;
 
   virtual void            DescribeYourselfTo (G4VGraphicsScene &scene) const;
@@ -297,7 +300,7 @@ inline
 G4double G4VTwistedFaceted::Xcoef(G4double u, G4double phi, G4double ftg) const 
 {
   return GetValueA(phi)/2. + (GetValueD(phi)-GetValueA(phi))/4. 
-    - u*( ( GetValueD(phi)-GetValueA(phi) ) / ( 2 * GetValueB(phi) ) + ftg );
+    - u*( ( GetValueD(phi)-GetValueA(phi) ) / ( 2 * GetValueB(phi) ) - ftg );
 }
 
 #endif

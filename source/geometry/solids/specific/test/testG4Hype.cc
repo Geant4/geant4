@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Hype.cc,v 1.6 2004-12-10 16:22:39 gcosmo Exp $
+// $Id: testG4Hype.cc,v 1.7 2005-11-17 16:59:43 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -73,11 +73,24 @@ G4bool testG4Hype()
     double iR2=45;
     double oR2=50;
     double noStereo=0;
-    double yesStereo=0.07;
+    double yesStereo=0.3;
     double len=50;
 
     G4Hype t1("Solid Hype #1",iR1,oR1,noStereo,yesStereo,len);    
     G4Hype t2("Hole  Hype #2",iR2,oR2,yesStereo,yesStereo,len);
+
+    G4ThreeVector Spoint ;
+    G4double dist ;
+    for ( int i = 0 ; i < 10 ; i++ ) {
+      //  G4cout << "Event " << i << G4endl << G4endl ;
+      Spoint = t1.GetPointOnSurface() ;
+      dist = t1.DistanceToIn(Spoint,-Spoint/Spoint.mag()) ;
+      G4cout << "Spoint " << Spoint << " " <<  dist << G4endl ;
+    }
+
+    t1.GetPointOnSurface() ;
+    t2.GetPointOnSurface() ; 
+
 
 // Check name
     assert(t1.GetName()=="Solid Hype #1");

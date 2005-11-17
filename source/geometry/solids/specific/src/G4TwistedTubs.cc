@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc,v 1.13 2005-11-09 15:04:28 gcosmo Exp $
+// $Id: G4TwistedTubs.cc,v 1.14 2005-11-17 16:59:41 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,6 +55,8 @@
 #include "G4NURBStube.hh"
 #include "G4NURBScylinder.hh"
 #include "G4NURBStubesector.hh"
+
+#include "Randomize.hh"
 
 //=====================================================================
 //* constructors ------------------------------------------------------
@@ -1050,4 +1052,108 @@ G4double G4TwistedTubs::GetCubicVolume()
   if(fCubicVolume != 0.) ;
     else fCubicVolume = G4VSolid::GetCubicVolume(); 
   return fCubicVolume;
+}
+
+////////////////////////////////////////////////////////////////////////////
+//
+// GetPointOnSurface
+
+G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
+{
+
+  G4double  z   = RandFlat::shoot(fEndZ[0],fEndZ[1]);
+  G4double phi , phimin, phimax ;
+  G4double x   , xmin,   xmax ;
+  G4double r   , rmin,   rmax ;
+
+  G4double a1 = fOuterHype->GetSurfaceArea() ;
+  G4double a2 = fInnerHype->GetSurfaceArea() ;
+  G4double a3 = fLatterTwisted->GetSurfaceArea() ;
+  G4double a4 = fFormerTwisted->GetSurfaceArea() ;
+  G4double a5 = fLowerEndcap->GetSurfaceArea()  ;
+  G4double a6 = fUpperEndcap->GetSurfaceArea() ;
+
+  //  G4cout << "a1 .. a6 = " << a1 << ", " << a2 << ", " << a3 << ", " << a4 << ", " << a5 << ", " << a6 << G4endl ;
+  G4double chose = RandFlat::shoot(0.,a1 + a2 + a3 + a4 + a5 + a6) ;
+
+  if(chose < a1)
+  {
+
+    phimin = fOuterHype->GetBoundaryMin(z) ;
+    phimax = fOuterHype->GetBoundaryMax(z) ;
+    phi = RandFlat::shoot(phimin,phimax) ;  // generate a random angle between limits
+
+    //    G4cout << "Outer: phi, z = " << phi << ", " << z << G4endl ;
+
+    return fOuterHype->SurfacePoint(phi,z,true) ;
+
+  }
+  else if ( (chose >= a1) && (chose < a1 + a2 ) )
+  {
+
+    phimin = fInnerHype->GetBoundaryMin(z) ;
+    phimax = fInnerHype->GetBoundaryMax(z) ;
+    phi = RandFlat::shoot(phimin,phimax) ;  // generate a random angle between limits
+
+    // G4cout << "Inner: phi, z = " << phi << ", " << z << G4endl ;
+
+    return fInnerHype->SurfacePoint(phi,z,true) ;
+
+  }
+  else if ( (chose >= a1 + a2 ) && (chose < a1 + a2 + a3 ) ) 
+  {
+
+    xmin = fLatterTwisted->GetBoundaryMin(z) ; 
+    xmax = fLatterTwisted->GetBoundaryMax(z) ;
+    x = RandFlat::shoot(xmin,xmax) ;
+    
+    // G4cout << "latter twisted : " << xmin << " , " << xmax << G4endl ;
+
+    return fLatterTwisted->SurfacePoint(x,z,true) ;
+
+  }
+  else if ( (chose >= a1 + a2 + a3  ) && (chose < a1 + a2 + a3 + a4  ) )
+  {
+
+    xmin = fFormerTwisted->GetBoundaryMin(z) ; 
+    xmax = fFormerTwisted->GetBoundaryMax(z) ;
+    x = RandFlat::shoot(xmin,xmax) ;
+
+    // G4cout << "former twisted : " << xmin << " , " << xmax << G4endl ;
+    
+    return fFormerTwisted->SurfacePoint(x,z,true) ;
+  
+  }
+  else if( (chose >= a1 + a2 + a3 + a4  ) && (chose < a1 + a2 + a3 + a4 + a5 ) )
+  {
+
+    rmin = GetEndInnerRadius(0) ;
+    rmax = GetEndOuterRadius(0) ;
+    r = RandFlat::shoot(rmin,rmax) ;
+
+    phimin = fLowerEndcap->GetBoundaryMin(r) ; 
+    phimax = fLowerEndcap->GetBoundaryMax(r) ;
+    phi    = RandFlat::shoot(phimin,phimax) ;
+
+    // G4cout << "lower endcap : " << rmin << " , " << rmax << " , " << phimin << " , " << phimax << G4endl ;
+    return fLowerEndcap->SurfacePoint(phi,r,true) ;
+
+  }
+  else {
+
+    rmin = GetEndInnerRadius(1) ;
+    rmax = GetEndOuterRadius(1) ;
+    r = RandFlat::shoot(rmin,rmax) ;
+
+    phimin = fUpperEndcap->GetBoundaryMin(r) ; 
+    phimax = fUpperEndcap->GetBoundaryMax(r) ;
+    phi    = RandFlat::shoot(phimin,phimax) ;
+
+    // G4cout << "upper endcap : " << rmin << " , " << rmax << " , " << phimin << " , " << phimax << G4endl ;
+
+    return fUpperEndcap->SurfacePoint(phi,r,true) ;
+
+  }
+    
+
 }

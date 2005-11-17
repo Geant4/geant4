@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedSurface.cc,v 1.11 2005-11-09 15:04:28 gcosmo Exp $
+// $Id: G4TwistedSurface.cc,v 1.12 2005-11-17 16:59:37 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

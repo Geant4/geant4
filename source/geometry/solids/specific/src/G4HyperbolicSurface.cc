@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HyperbolicSurface.cc,v 1.8 2005-11-09 15:04:28 gcosmo Exp $
+// $Id: G4HyperbolicSurface.cc,v 1.9 2005-11-17 16:59:36 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,6 +99,7 @@ G4HyperbolicSurface::G4HyperbolicSurface(const G4String      &name,
    fAxisMin[1] = EndZ[0];
    fAxisMax[1] = EndZ[1];
    fKappa      = Kappa;
+   fDPhi       = DPhi ;
 
    if (handedness < 0) { // inner hyperbolic surface
       fTanStereo  = TanInnerStereo;
@@ -915,3 +916,5 @@ void G4HyperbolicSurface::SetBoundaries()
                   "Feature NOT implemented !");
    }
 }
+
+

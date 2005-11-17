@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.hh,v 1.12 2005-11-09 15:04:28 gcosmo Exp $
+// $Id: G4VSurface.hh,v 1.13 2005-11-17 16:59:31 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -164,6 +164,11 @@ class G4VSurface
    inline void SetAxis(G4int i, const EAxis axis)  { fAxis[i] = axis; }
    inline void SetNeighbours(G4VSurface* axis0min, G4VSurface* axis1min, 
                              G4VSurface* axis0max, G4VSurface* axis1max);
+
+   virtual G4ThreeVector SurfacePoint(G4double , G4double, G4bool isGlobal = false ) = 0 ;
+   virtual G4double GetBoundaryMin(G4double) = 0 ;
+   virtual G4double GetBoundaryMax(G4double) = 0 ;
+   virtual G4double GetSurfaceArea() = 0 ;
 
  public:  // without description
 

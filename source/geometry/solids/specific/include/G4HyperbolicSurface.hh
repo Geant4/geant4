@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HyperbolicSurface.hh,v 1.8 2005-11-09 15:04:28 gcosmo Exp $
+// $Id: G4HyperbolicSurface.hh,v 1.9 2005-11-17 16:59:24 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,8 @@
 #define __G4HYPERBOLICSURFACE__
 
 #include "G4VSurface.hh"
+#include "G4Integrator.hh"
+#include "G4SimpleIntegration.hh"
 
 class G4HyperbolicSurface : public G4VSurface
 {
@@ -100,6 +102,12 @@ class G4HyperbolicSurface : public G4VSurface
    inline virtual G4double GetRhoAtPZ(const G4ThreeVector &p,
                                             G4bool isglobal = false) const ;
    
+   inline virtual G4ThreeVector SurfacePoint(G4double, G4double, G4bool isGlobal = false) ;  
+   inline virtual G4double GetBoundaryMin(G4double phi) ;
+   inline virtual G4double GetBoundaryMax(G4double phi) ;
+   inline virtual G4double GetSurfaceArea() ;
+
+ 
   public:  // without description
 
    G4HyperbolicSurface(__void__&);
@@ -129,6 +137,8 @@ class G4HyperbolicSurface : public G4VSurface
    G4double          fTan2Stereo;   // std::tan(StereoAngle)**2
    G4double          fR0;           // radius at z = 0
    G4double          fR02;          // radius**2 at z = 0
+   G4double          fDPhi ;        // segment
+
    class Insidetype
    {
      public:
@@ -154,6 +164,52 @@ G4double G4HyperbolicSurface::GetRhoAtPZ(const G4ThreeVector &p,
      tmpp = p;
   }
   return std::sqrt(fR02 + tmpp.z() * tmpp.z() * fTan2Stereo); 
+}
+
+inline
+G4ThreeVector G4HyperbolicSurface::SurfacePoint(G4double phi , G4double z , G4bool isGlobal) {
+
+  G4double rho = std::sqrt(fR02 + z * z * fTan2Stereo) ;
+
+  G4ThreeVector SurfPoint (rho*std::cos(phi),
+			     rho*std::sin(phi),
+			     z) ;
+
+  if (isGlobal) {
+    return (fRot * SurfPoint + fTrans);
+  } else {
+    return SurfPoint;
+  }
+
+
+}
+
+inline
+G4double G4HyperbolicSurface::GetBoundaryMin(G4double z) {
+
+  G4ThreeVector ptmp(0,0,z) ;  // temporary point with z Komponent only
+  G4ThreeVector lowerlimit;    // lower phi-boundary limit at z = ptmp.z()
+  lowerlimit = GetBoundaryAtPZ(sAxis0 & sAxisMin, ptmp);
+  return  std::atan2( lowerlimit.y(), lowerlimit.x() ) ;  
+
+}
+
+inline
+G4double G4HyperbolicSurface::GetBoundaryMax(G4double z ) {
+
+  G4ThreeVector ptmp(0,0,z) ;  // temporary point with z Komponent only
+  G4ThreeVector upperlimit;    // upper phi-boundary limit at z = ptmp.z()
+  upperlimit = GetBoundaryAtPZ(sAxis0 & sAxisMax, ptmp);
+  return   std::atan2( upperlimit.y(), upperlimit.x() ) ;
+
+}
+
+inline
+G4double G4HyperbolicSurface::GetSurfaceArea() {
+
+  // approximation with tube surface
+
+  return ( fAxisMax[1] - fAxisMin[1] ) * fR0 * fDPhi ;
 }
 
 #endif

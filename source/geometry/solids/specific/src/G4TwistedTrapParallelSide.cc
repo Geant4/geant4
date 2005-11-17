@@ -84,8 +84,11 @@ G4TwistedTrapParallelSide::G4TwistedTrapParallelSide(const G4String     &name,
   fTheta = pTheta ;
   fPhi   = pPhi ;
 
-  // precalculate frequently used parameters
-
+ // precalculate frequently used parameters
+  fDx4plus2  = fDx4 + fDx2 ;
+  fDx4minus2 = fDx4 - fDx2 ;
+  fDx3plus1  = fDx3 + fDx1 ; 
+  fDx3minus1 = fDx3 - fDx1 ;
   fDy2plus1  = fDy2 + fDy1 ;
   fDy2minus1 = fDy2 - fDy1 ;
 
@@ -237,8 +240,9 @@ G4int G4TwistedTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
   // prepare some variables for the intersection finder
 
   G4double L = 2*fDz ;
-  G4double phix    = fPhiTwist * ( v.x()*p.z() - v.z()*p.x() )   ;
-  G4double phiy    = fPhiTwist * ( v.y()*p.z() - v.z()*p.y() )   ;
+
+  G4double phixz = fPhiTwist * ( p.x() * v.z() - p.z() * v.x() ) ;
+  G4double phiyz = fPhiTwist * ( p.y() * v.z() - p.z() * v.y() ) ;
 
   // special case vz = 0
 
@@ -247,10 +251,8 @@ G4int G4TwistedTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
     if ( std::fabs(p.z()) <= L ) {     // intersection possible in z
       
       phi = p.z() * fPhiTwist / L ;  // phi is determined by the z-position 
-      u = (-4*fPhiTwist*p.y()*v.x() + 4*fPhiTwist*p.x()*v.y() + 
-	  (2*(fDy1+fDy2)*fPhiTwist*v.x() - 2*(2*fDy1*v.x() - (2*fDy2 + 2*fdeltaY)*v.x()+ 2*fdeltaX*v.y())*phi)*std::cos(phi) + 
-	  (2*(fDy1+fDy2)*fPhiTwist*v.y() + 2*(2*fdeltaX*v.x() +     (-2*fDy1 + 2*fDy2 + 2*fdeltaY)*v.y())*phi)*std::sin(phi))/
-	(4.*fPhiTwist*(v.y()*std::cos(phi) - v.x()*std::sin(phi))) ;
+
+      u = (2*(fdeltaY*phi*v.x() - fPhiTwist*p.y()*v.x() - fdeltaX*phi*v.y() + fPhiTwist*p.x()*v.y()) + (fDy2plus1*fPhiTwist + 2*fDy2minus1*phi)*(v.x()*std::cos(phi) + v.y()*std::sin(phi)))/(2.* fPhiTwist*(v.y()*std::cos(phi) - v.x()*std::sin(phi))) ;
 
       xbuftmp.phi = phi ;
       xbuftmp.u = u ;
@@ -284,16 +286,18 @@ G4int G4TwistedTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
 
   else {
 
-    G4double c[8],sr[7],si[7] ;  
+    G4double c[9],sr[8],si[8] ;  
 
-    c[7] =  1800*(4*phiy                                                  +  2*(fDy1 + fDy2)*fPhiTwist*v.z());
-    c[6] = -3600*(2*phix -  2*fdeltaY*v.z()                +  2*L*v.y()   +  2*(fDy1 - fDy2)*v.z());
-    c[5] = 150*(-20*phiy                    +  48*L*v.x()                 +  2*(fDy1 + fDy2)*fPhiTwist*v.z());
-    c[4] =  300*( 2*phix +  2*fdeltaY*v.z()                + 10*L*v.y()   -  2*(fDy1 - fDy2)*v.z()) ;
-    c[3] =    3*( 4*phiy                    - 200*L*v.x()                 +  2*(fDy1 + fDy2)*fPhiTwist*v.z());
-    c[2] =       28*phix + 12*fdeltaY*v.z()                - 12*L*v.y()   - 12*(fDy1 - fDy2)*v.z() ;
-    c[1] =        9*phiy                    -  28*L*v.x()               ;
-    c[0] =                                                 -  9*L*v.y() ;
+    c[8] = -3600*(-2*phiyz + fDy2plus1*fPhiTwist*v.z()) ;
+    c[7] = -7200*(phixz - 2*fDz*v.y() + (fdeltaY + fDy2minus1)*v.z()) ;
+    c[6] = 120*(-52*phiyz - 120*fDz*v.x() + 60*fdeltaX*v.z() + 11*fDy2plus1*fPhiTwist*v.z()) ;
+    c[5] = 240*(16*phixz - 52*fDz*v.y() + 26*fdeltaY*v.z() + 11*fDy2minus1*v.z()) ;
+    c[4] = 12*(127*phiyz + 640*fDz*v.x() - 320*fdeltaX*v.z() + 4*fDy2plus1*fPhiTwist*v.z()) ;
+    c[3] = -404*phixz + 3048*fDz*v.y() - 1524*fdeltaY*v.z() + 96*fDy2minus1*v.z() ;
+    c[2] = -72*phiyz + 404*(-2*fDz*v.x() + fdeltaX*v.z()) ;
+    c[1] = 12*(phixz - 12*fDz*v.y() + 6*fdeltaY*v.z()) ;
+    c[0] = 24*fDz*v.x() - 12*fdeltaX*v.z() ;
+
 
 #ifdef G4SPECSDEBUG
     G4cout << "coef = " << c[0] << " " 
@@ -303,11 +307,12 @@ G4int G4TwistedTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
 	   <<  c[4] << " "  
 	   <<  c[5] << " "  
 	   <<  c[6] << " "  
-	   <<  c[7] << G4endl ;
+	   <<  c[7] << " "  
+	   <<  c[8] << G4endl ;
 #endif    
 
     G4JTPolynomialSolver trapEq ;
-    G4int num = trapEq.FindRoots(c,7,sr,si);
+    G4int num = trapEq.FindRoots(c,8,sr,si);
   
 
     for (G4int i = 0 ; i<num ; i++ ) {  // loop over all mathematical solutions
@@ -317,11 +322,8 @@ G4int G4TwistedTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
 #endif
 	phi = std::fmod(sr[i] , pihalf)  ;
 
-	u   = (-4*fPhiTwist*p.y()*v.x() + 4*fPhiTwist*p.x()*v.y() + 
-	  (2*(fDy1+fDy2)*fPhiTwist*v.x() - 2*(2*fDy1*v.x() - (2*fDy2 + 2*fdeltaY)*v.x()+ 2*fdeltaX*v.y())*phi)*std::cos(phi) + 
-	  (2*(fDy1+fDy2)*fPhiTwist*v.y() + 2*(2*fdeltaX*v.x() +     (-2*fDy1 + 2*fDy2 + 2*fdeltaY)*v.y())*phi)*std::sin(phi))/
-	(4.*fPhiTwist*(v.y()*std::cos(phi) - v.x()*std::sin(phi))) ;
-	
+	u = (1/std::cos(phi)*(2*phixz + 4*fDz*phi*v.x() - 2*fdeltaX*phi*v.z() + (fDy2plus1*fPhiTwist + 2*fDy2minus1*phi)*v.z()* std::sin(phi)))/(2.*fPhiTwist*v.z()) ;
+
 	xbuftmp.phi = phi ;
 	xbuftmp.u = u ;
 	xbuftmp.areacode = sOutside ;
@@ -394,6 +396,10 @@ G4int G4TwistedTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
     }  // end iterative loop (i)
     
 
+    // new code  21.09.05 O.Link
+    if ( std::fabs(tmpdist)<ctol ) tmpdist = 0 ; 
+
+
 #ifdef G4SPECSDEBUG
     G4cout << "refined solution "  << phi << " , " << u  <<  G4endl ;
     G4cout << "distance = " << tmpdist << G4endl ;
@@ -461,10 +467,7 @@ G4int G4TwistedTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
 #endif
 
     phi = fPhiTwist/2 ;
-    u   =  (-4*fPhiTwist*p.y()*v.x() + 4*fPhiTwist*p.x()*v.y() + 
-	  (2*(fDy1+fDy2)*fPhiTwist*v.x() - 2*(2*fDy1*v.x() - (2*fDy2 + 2*fdeltaY)*v.x()+ 2*fdeltaX*v.y())*phi)*std::cos(phi) + 
-	  (2*(fDy1+fDy2)*fPhiTwist*v.y() + 2*(2*fdeltaX*v.x() +     (-2*fDy1 + 2*fDy2 + 2*fdeltaY)*v.y())*phi)*std::sin(phi))/
-      (4.*fPhiTwist*(v.y()*std::cos(phi) - v.x()*std::sin(phi))) ;
+    u   =  0 ;
     
     xbuftmp.phi = phi ;
     xbuftmp.u = u ;
@@ -480,11 +483,7 @@ G4int G4TwistedTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
 #endif
 
     phi = -fPhiTwist/2 ;
-    u   = (-4*fPhiTwist*p.y()*v.x() + 4*fPhiTwist*p.x()*v.y() + 
-	  (2*(fDy1+fDy2)*fPhiTwist*v.x() - 2*(2*fDy1*v.x() - (2*fDy2 + 2*fdeltaY)*v.x()+ 2*fdeltaX*v.y())*phi)*std::cos(phi) + 
-	  (2*(fDy1+fDy2)*fPhiTwist*v.y() + 2*(2*fdeltaX*v.x() +     (-2*fDy1 + 2*fDy2 + 2*fdeltaY)*v.y())*phi)*std::sin(phi))/
-      (4.*fPhiTwist*(v.y()*std::cos(phi) - v.x()*std::sin(phi))) ;
-
+    u   = 0 ;
 
     xbuftmp.phi = phi ;
     xbuftmp.u = u ;
@@ -536,6 +535,10 @@ G4int G4TwistedTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
       
       }  // end iterative loop (i)
     
+
+      // new code  21.09.05 O.Link
+      if ( std::fabs(tmpdist)<ctol ) tmpdist = 0 ; 
+
 
 #ifdef G4SPECSDEBUG
       G4cout << "refined solution "  << phi << " , " << u  <<  G4endl ;
@@ -702,12 +705,13 @@ G4int G4TwistedTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
    // check validity of solution ( valid phi,psi ) 
 
    G4double halfphi = 0.5*fPhiTwist ;
-   G4double uMax = fDy ;
+   G4double uMax = GetBoundaryMax(phiR) ;
+   G4double uMin = GetBoundaryMin(phiR) ;
 
    if (  phiR > halfphi ) phiR =  halfphi ;
    if ( phiR < -halfphi ) phiR = -halfphi ;
    if ( uR > uMax ) uR = uMax ;
-   if ( uR < -uMax ) uR = -uMax ;
+   if ( uR < uMin ) uR = uMin ;
 
    xxonsurface = SurfacePoint(phiR,uR) ;
    distance[0] = (  p - xx ).mag() ;
@@ -752,8 +756,8 @@ G4int G4TwistedTrapParallelSide::GetAreaCode(const G4ThreeVector &xx,
    G4double yprime ;
    GetPhiUAtX(xx, phi,yprime ) ;
 
-   G4double fXAxisMax = GetUmax(phi) ;
-   G4double fXAxisMin = GetUmin(phi) ;
+   G4double fXAxisMax = GetBoundaryMax(phi) ;
+   G4double fXAxisMin = GetBoundaryMin(phi) ;
 
 #ifdef G4SPECSDEBUG
    G4cout << "GetAreaCode: phi = " << phi << G4endl ;
@@ -856,35 +860,33 @@ void G4TwistedTrapParallelSide::SetCorners()
   if (fAxis[0] == kXAxis && fAxis[1] == kZAxis) {
     
     G4double x, y, z;
-    G4double CosPhi =  std::cos(fPhiTwist/2) ;
-    G4double SinPhi =  std::sin(fPhiTwist/2) ;
 
     // corner of Axis0min and Axis1min
 
-    x = ((2*fDy1 - fdeltaY)*SinPhi - CosPhi*(2*fDx2 + fdeltaX + 2*fDy1*fTAlph))/2. ;
-    y = ((2*fDy1 - fdeltaY)*CosPhi + SinPhi*(2*fDx2 + fdeltaX + 2*fDy1*fTAlph))/2. ;
+    x = -fdeltaX/2. + (-fDx2 + fDy1*fTAlph)*std::cos(fPhiTwist/2.) + fDy1*std::sin(fPhiTwist/2.) ;
+    y = -fdeltaY/2. + fDy1*std::cos(fPhiTwist/2.) + (fDx2 - fDy1*fTAlph)*std::sin(fPhiTwist/2.) ;
     z = -fDz ;
 
     SetCorner(sC0Min1Min, x, y, z);
       
     // corner of Axis0max and Axis1min
 
-    x = ((2*fDy1 - fdeltaY)*SinPhi + CosPhi*( 2*fDx2 - fdeltaX - 2*fDy1*fTAlph))/2. ;
-    y = ((2*fDy1 - fdeltaY)*CosPhi + SinPhi*(-2*fDx2 + fdeltaX + 2*fDy1*fTAlph))/2. ;
-    z = -fDz ;
+    x = -fdeltaX/2. + (fDx2 + fDy1*fTAlph)*std::cos(fPhiTwist/2.) + fDy1*std::sin(fPhiTwist/2.) ;
+    y = -fdeltaY/2. + fDy1*std::cos(fPhiTwist/2.) - (fDx2 + fDy1*fTAlph)*std::sin(fPhiTwist/2.) ;
+    z = -fDz;
 
     SetCorner(sC0Max1Min, x, y, z);
       
     // corner of Axis0max and Axis1max
-    x = (- (2*fDy2 + fdeltaY)*SinPhi  + CosPhi*(2*fDx4 + fdeltaX - 2*fDy2*fTAlph))/2. ;
-    y = (  (2*fDy2 + fdeltaY)*CosPhi  + SinPhi*(2*fDx4 + fdeltaX - 2*fDy2*fTAlph))/2. ;
+    x = fdeltaX/2. + (fDx4 + fDy2*fTAlph)*std::cos(fPhiTwist/2.) - fDy2*std::sin(fPhiTwist/2.) ;
+    y = fdeltaY/2. + fDy2*std::cos(fPhiTwist/2.) + (fDx4 + fDy2*fTAlph)*std::sin(fPhiTwist/2.) ;
     z = fDz ;
 
     SetCorner(sC0Max1Max, x, y, z);
       
     // corner of Axis0min and Axis1max
-    x = -((2*fDy2 + fdeltaY)*SinPhi + CosPhi*(2*fDx4 - fdeltaX + 2*fDy2*fTAlph))/2. ;
-    y =  ((2*fDy2 + fdeltaY)*CosPhi - SinPhi*(2*fDx4 - fdeltaX + 2*fDy2*fTAlph))/2. ;
+    x = fdeltaX/2. + (-fDx4 + fDy2*fTAlph)*std::cos(fPhiTwist/2.) - fDy2*std::sin(fPhiTwist/2.) ;
+    y = fdeltaY/2. + fDy2*std::cos(fPhiTwist/2.) + (-fDx4 + fDy2*fTAlph)*std::sin(fPhiTwist/2.) ;
     z = fDz ;
 
     SetCorner(sC0Min1Max, x, y, z);
@@ -953,7 +955,8 @@ void G4TwistedTrapParallelSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4do
 
   phi = p.z()/(2*fDz)*fPhiTwist ;
 
-  u = -(fdeltaX*phi)/fPhiTwist + p.x()*std::cos(phi) + p.y()*std::sin(phi) ;
+  u = ((-(fdeltaX*phi) + fPhiTwist*p.x())* std::cos(phi) + (-(fdeltaY*phi) + fPhiTwist*p.y())*std::sin(phi))/fPhiTwist ;
+
 }
 
 
