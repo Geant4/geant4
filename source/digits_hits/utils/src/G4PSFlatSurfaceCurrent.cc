@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSFlatSurfaceCurrent.cc,v 1.1 2005-11-16 23:12:42 asaim Exp $
+// $Id: G4PSFlatSurfaceCurrent.cc,v 1.2 2005-11-17 22:53:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSFlatSurfaceCurrent
 #include "G4PSFlatSurfaceCurrent.hh"
 #include "G4StepStatus.hh"
 #include "G4Track.hh"
-
+#include "G4UnitsTable.hh"
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring only Surface Flux.
@@ -67,7 +67,7 @@ G4bool G4PSFlatSurfaceCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   G4int dirFlag =IsSelectedSurface(aStep,boxSolid);
   if ( dirFlag > 0 ) {
     G4int index = GetIndex(aStep);
-    G4double square = 4.*boxSolid->GetXHalfLength()*boxSolid->GetXHalfLength();
+    G4double square = 4.*boxSolid->GetXHalfLength()*boxSolid->GetYHalfLength();
     G4TouchableHandle theTouchable = preStep->GetTouchableHandle();
     G4ThreeVector pdirection = preStep->GetMomentumDirection();
     G4ThreeVector localdir  = 
@@ -79,10 +79,6 @@ G4bool G4PSFlatSurfaceCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*)
       EvtMap->add(index,current);
     }
 
-#ifdef debug
-    G4cout << " PASSED vol " 
-	   << index << " trk "<<trkid<<" len " << fFlatSurfaceCurrent<<G4endl;
-#endif
   }
 
   return TRUE;
@@ -136,12 +132,13 @@ void G4PSFlatSurfaceCurrent::DrawAll()
 
 void G4PSFlatSurfaceCurrent::PrintAll()
 {
-  G4cout << " PrimitiveSenstivity " << GetName() <<G4endl; 
+  G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
+  G4cout << " PrimitiveScorer " << GetName() <<G4endl; 
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  current  : " << *(itr->second) /mm2
+	   << "  current  : " << G4BestUnit(*(itr->second),"Surface")
 	   << G4endl;
   }
 }

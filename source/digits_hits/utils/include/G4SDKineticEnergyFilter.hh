@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDKineticEnergyFilter.hh,v 1.1 2005-11-16 23:04:04 asaim Exp $
+// $Id: G4SDKineticEnergyFilter.hh,v 1.2 2005-11-17 22:53:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,6 +37,10 @@
 //  This is the class of a filter to be associated with a
 // sensitive detector. 
 //
+//  This filter accepts particles defined energy range.
+//  The energy range is given at constructor, or Set methods.
+//
+//
 //
 // Created: 2005-11-14  Tsukasa ASO.
 // 
@@ -45,10 +49,12 @@
 class G4SDKineticEnergyFilter : public G4VSDFilter 
 {
 
+//-------
   public: // with description
       G4SDKineticEnergyFilter(G4String name,
 			      G4double elow=0.0, 
 			      G4double ehigh=DBL_MAX);
+      // Constructor. Filter name and kinetic energy range( elow, ehigh).
 
      virtual ~G4SDKineticEnergyFilter();
 
@@ -58,6 +64,8 @@ class G4SDKineticEnergyFilter : public G4VSDFilter
      void SetKineticEnergy(G4double elow, G4double ehigh);
      void SetLowEnergy(G4double elow);
      void SetHighEnergy(G4double ehigh);
+     // Set methods for kinetic energy range.
+     //
      void show();
 
   private:

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCurrent.hh,v 1.1 2005-11-16 23:12:42 asaim Exp $
+// $Id: G4PSPassageCurrent.hh,v 1.2 2005-11-17 22:53:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -34,7 +34,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring current.
-//   The number of tracks which has passed the geometry are taken 
+//   The number of tracks passing through the geometry are taken 
 //  into account.
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.

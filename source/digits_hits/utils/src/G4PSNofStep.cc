@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofStep.cc,v 1.1 2005-11-16 23:12:42 asaim Exp $
+// $Id: G4PSNofStep.cc,v 1.2 2005-11-17 22:53:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSNofStep
@@ -68,7 +68,8 @@ void G4PSNofStep::DrawAll()
 
 void G4PSNofStep::PrintAll()
 {
-  G4cout << " PrimitiveSenstivity " << GetName() << G4endl;
+  G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
+  G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {

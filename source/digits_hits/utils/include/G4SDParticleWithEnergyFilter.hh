@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDParticleWithEnergyFilter.hh,v 1.1 2005-11-16 23:04:04 asaim Exp $
+// $Id: G4SDParticleWithEnergyFilter.hh,v 1.2 2005-11-17 22:53:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -57,7 +57,11 @@ class G4SDParticleWithEnergyFilter : public G4VSDFilter
       virtual G4bool Accept(const G4Step*) const;
 
       void add(const G4String& particleName);
+      // add the particle into accepatable particle list.
+      //
       void SetKineticEnergy(G4double elow, G4double ehigh);
+      // Set acceptable kinetic energy range.
+      //
       void show();
 
   private:

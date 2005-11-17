@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCellFlux.cc,v 1.1 2005-11-16 23:12:42 asaim Exp $
+// $Id: G4PSPassageCellFlux.cc,v 1.2 2005-11-17 22:53:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSPassageCellFlux
@@ -29,13 +29,16 @@
 #include "G4StepStatus.hh"
 #include "G4Track.hh"
 #include "G4VSolid.hh"
-
+#include "G4UnitsTable.hh"
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring cell flux.
 //   The Cell Flux is defined by  a track length divided by a geometry
 //   volume, where only tracks passing through the geometry are taken 
-//  into account.
+//  into account. e.g. the unit of Cell Flux is mm/mm3.
+//
+//   If you want to score all tracks in the geometry volume,
+//  please use G4PSCellFlux.
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 
@@ -55,7 +58,7 @@ G4bool G4PSPassageCellFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
     fCellFlux /= 
       aStep->GetPreStepPoint()->GetPhysicalVolume()
       ->GetLogicalVolume()->GetSolid()->GetCubicVolume();
-    fCellFlux = fCellFlux*aStep->GetPreStepPoint()->GetWeight();
+    fCellFlux *= aStep->GetPreStepPoint()->GetWeight();
     G4int index = GetIndex(aStep);
     EvtMap->add(index,fCellFlux);
   }
@@ -79,13 +82,13 @@ G4bool G4PSPassageCellFlux::IsPassed(G4Step* aStep){
     fCurrentTrkID = trkid;         // Resetting the current track.
     fCellFlux  = trklength;     
   }else if ( IsExit ){             // Exit a current geometry
-    if ( fCurrentTrkID == trkid ) {
-      fCellFlux  += trklength;  // Adding the track length to current one,
-      Passed = TRUE;               // if the track is same as entered.
+    if ( fCurrentTrkID == trkid ) {// if the track is same as entered,
+      fCellFlux  += trklength;     // add the track length to current one.
+      Passed = TRUE;               
     }
   }else{                           // Inside geometry
-    if ( fCurrentTrkID == trkid ){ // Adding the track length to current one ,
-      fCellFlux  += trklength;  // if the track is same as entered.
+    if ( fCurrentTrkID == trkid ){ // if the track is same as entered,
+      fCellFlux  += trklength;     // adding the track length to current one.
     }
   }
 
@@ -115,12 +118,13 @@ void G4PSPassageCellFlux::DrawAll()
 
 void G4PSPassageCellFlux::PrintAll()
 {
-  G4cout << " PrimitiveSenstivity " << GetName() <<G4endl; 
+  G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
+  G4cout << " PrimitiveScorer " << GetName() <<G4endl; 
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  cell flux : " << *(itr->second) /(mm/mm3)
+	   << "  cell flux : " << G4BestUnit(*(itr->second),"Surface")
 	   << G4endl;
   }
 }

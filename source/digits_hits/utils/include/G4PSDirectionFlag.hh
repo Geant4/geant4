@@ -21,51 +21,47 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDKineticEnergyFilter.cc,v 1.2 2005-11-17 22:53:38 asaim Exp $
+// $Id: G4PSDirectionFlag.hh,v 1.1 2005-11-17 22:53:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// G4VSensitiveDetector
-#include "G4SDKineticEnergyFilter.hh"
-#include "G4Step.hh"
-#include "G4UnitsTable.hh"
-////////////////////////////////////////////////////////////////////////////////
-// class description:
 //
-//  This is the class of a filter to be associated with a
-// sensitive detector. 
+//---------------------------------------------------------------
+//
+// G4PSDirectionFlag.hh
+//
+// Class Description:
+//   This is an enumerator to define the direction of
+// the particle's Surface Current or Flux for PrimitiveScorer
 //
 //
-// Created: 2005-11-14  Tsukasa ASO.
-// 
-///////////////////////////////////////////////////////////////////////////////
+//---------------------------------------------------------------
 
-G4SDKineticEnergyFilter::G4SDKineticEnergyFilter(G4String name,
-						 G4double elow, 
-						 G4double ehigh)
-  :G4VSDFilter(name),fLowEnergy(elow),fHighEnergy(ehigh)
-{;}
+#ifndef G4PSDirectionFlag_h
+#define G4PSDirectionFlag_h 1
 
-G4SDKineticEnergyFilter::~G4SDKineticEnergyFilter()
-{;}
+//////////////////
+enum G4PSFluxFlag
+//////////////////
+{ 
+    fFlux_InOut, 
+    // For both direction In / Out.
+    fFlux_In, 
+    // IN : Direction which comes into the geometry
+    fFlux_Out 
+};
 
-G4bool G4SDKineticEnergyFilter::Accept(const G4Step* aStep) const
-{
-  G4double kinetic = aStep->GetTrack()->GetKineticEnergy();
-  if ( kinetic < fLowEnergy  ) return FALSE;
-  if ( kinetic > fHighEnergy ) return FALSE;
-  return TRUE;
-}
+/////////////////////
+enum G4PSCurrentFlag
+/////////////////////
+{ 
+    fCurrent_InOut, 
+    // For both direction In / Out.
+    fCurrent_In, 
+    // IN : Direction which comes into the geometry
+    fCurrent_Out 
+    // OUT : Direction which goes out fromthe geometry
+};
 
-void G4SDKineticEnergyFilter::SetKineticEnergy(G4double elow, G4double ehigh){
-  fLowEnergy  = elow;
-  fHighEnergy = ehigh;
-}
-
-void G4SDKineticEnergyFilter::show() {
-    G4cout << " G4SDKineticEnergyFilter:: " << GetName()
-	 << " LowE  " << G4BestUnit(fLowEnergy,"Energy") 
-	 << " HighE " << G4BestUnit(fHighEnergy,"Energy")
-	 <<G4endl;
-}
+#endif
 
 

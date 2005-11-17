@@ -21,22 +21,24 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCellFlux.cc,v 1.1 2005-11-16 23:12:42 asaim Exp $
+// $Id: G4PSCellFlux.cc,v 1.2 2005-11-17 22:53:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSCellFlux
 #include "G4PSCellFlux.hh"
 #include "G4Track.hh"
 #include "G4VSolid.hh"
+#include "G4UnitsTable.hh"
 
 ///////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring cell flux.
-//   The Cell Flux is defined by  a track length divided by a geometry
-//   volume, where all of the tracks in the geometry are taken 
-//  into account. 
-//    Please use G4PSPassageCellFlux, if you want to score only 
-//  tracks which passed through the volume.
+//   The Cell Flux is defined by  a sum of track length divided 
+//   by the geometry volume, where all of the tracks in the geometry 
+//   are taken into account. 
+//
+//   If you want to score only tracks passing through the geometry volume,
+//  please use G4PSPassageCellFlux.
 //
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
@@ -84,12 +86,13 @@ void G4PSCellFlux::DrawAll()
 
 void G4PSCellFlux::PrintAll()
 {
-  G4cout << " PrimitiveSenstivity " << GetName() <<G4endl; 
+  G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
+  G4cout << " PrimitiveScorer " << GetName() <<G4endl; 
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  cell flux : " << *(itr->second) /(mm/mm3)
+	   << "  cell flux : " << G4BestUnit(*(itr->second),"Surface") 
 	   << G4endl;
   }
 }

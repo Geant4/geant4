@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDChargedFilter.hh,v 1.1 2005-11-16 23:04:04 asaim Exp $
+// $Id: G4SDChargedFilter.hh,v 1.2 2005-11-17 22:53:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -38,6 +38,7 @@ class G4ChargedDefinition;
 //
 //  This is the class of a filter to be associated with a
 // sensitive detector. 
+//  This fileter accepts charged particles.
 //
 // Created: 2005-11-14  Tsukasa ASO.
 // 

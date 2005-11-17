@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSDoseDeposit.hh,v 1.1 2005-11-16 23:12:42 asaim Exp $
+// $Id: G4PSDoseDeposit.hh,v 1.2 2005-11-17 22:53:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,7 +33,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)
-//   Primitive scorer class for scoring energy deposit.
+//   Primitive scorer class for scoring dose deposit in the geometry volume.
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 

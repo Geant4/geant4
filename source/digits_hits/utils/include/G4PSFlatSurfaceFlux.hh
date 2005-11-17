@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSFlatSurfaceFlux.hh,v 1.1 2005-11-16 23:12:42 asaim Exp $
+// $Id: G4PSFlatSurfaceFlux.hh,v 1.2 2005-11-17 22:53:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -31,23 +31,28 @@
 #include "G4VPrimitiveScorer.hh"
 #include "G4THitsMap.hh"
 #include "G4Box.hh"
-
+#include "G4PSDirectionFlag.hh"
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)
-//   This is a primitive scorer class for scoring only Surface Flux.
-//  Current version assumes only for G4Box shape. 
+//   This is a primitive scorer class for scoring Surface Flux.
+//  Current version assumes only for G4Box shape, and the surface
+//  is defined at the -Z plane of the box.
+//   The surface flux is given in the unit of area. 
+//    e.g.  sum of 1/cos(T)/mm2,  where T is a incident angle of the
+//                                track on the surface.
+//
 //
 // Surface is defined at the -Z surface.
 // Direction                  -Z   +Z
-//   0  IN || OUT            ->|<-  |
-//   1  IN                   ->|    |
-//   2  OUT                    |<-  |
+//   0  IN || OUT            ->|<-  |        fFlux_InOut
+//   1  IN                   ->|    |        fFlux_In
+//   2  OUT                    |<-  |        fFlux_Out
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 
+// 18-Nov-2005  T.Aso,  To use always positive value for anglefactor.
+//                      Bug fix. Area definition.
 ///////////////////////////////////////////////////////////////////////////////
-
-enum { fFlux_InOut, fFlux_In, fFlux_Out };
 
 class G4PSFlatSurfaceFlux : public G4VPrimitiveScorer
 {

@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSSphereSurfaceCurrent.cc,v 1.2 2005-11-16 23:24:08 asaim Exp $
+// $Id: G4PSSphereSurfaceCurrent.cc,v 1.3 2005-11-17 22:53:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSSphereSurfaceCurrent
 #include "G4PSSphereSurfaceCurrent.hh"
 #include "G4StepStatus.hh"
 #include "G4Track.hh"
-
+#include "G4UnitsTable.hh"
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring only Surface Current.
@@ -65,18 +65,17 @@ G4bool G4PSSphereSurfaceCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 
   G4int dirFlag =IsSelectedSurface(aStep,sphereSolid);
   if ( dirFlag > 0 ) {
-    G4int index = GetIndex(aStep);
-    G4double square = 
-      sphereSolid->GetInsideRadius()*sphereSolid->GetDeltaPhiAngle()/radian
-      *sphereSolid->GetInsideRadius()*sphereSolid->GetDeltaThetaAngle()/radian;
-    G4TouchableHandle theTouchable = preStep->GetTouchableHandle();
-    G4ThreeVector pdirection = preStep->GetMomentumDirection();
-    G4ThreeVector localdir  = 
-      theTouchable->GetHistory()->GetTopTransform().TransformAxis(pdirection);
+
+    G4double radi   = sphereSolid->GetInsideRadius();
+    G4double dph    = sphereSolid->GetDeltaPhiAngle()/radian;
+    G4double stth   = sphereSolid->GetStartThetaAngle()/radian;
+    G4double enth   = stth+sphereSolid->GetDeltaThetaAngle()/radian;
+    G4double square = radi*radi*dph*( -std::cos(enth) + std::cos(stth) );
+
     G4double current = preStep->GetWeight(); // Current (Particle Weight)
     current = current/square;  // Current with angle.
-
     if ( fDirection == fCurrent_InOut || fDirection == dirFlag ){
+      G4int index = GetIndex(aStep);
       EvtMap->add(index,current);
     }
   }
@@ -94,7 +93,6 @@ G4int G4PSSphereSurfaceCurrent::IsSelectedSurface(G4Step* aStep, G4Sphere* spher
     G4ThreeVector stppos1= aStep->GetPreStepPoint()->GetPosition();
     G4ThreeVector localpos1 = 
       theTouchable->GetHistory()->GetTopTransform().TransformPoint(stppos1);
-    //G4cout << " Enter " << localpos1 << " " <<GetIndex(aStep)<<G4endl;
     G4double localR2 = localpos1.x()*localpos1.x()
                       +localpos1.y()*localpos1.y()
                       +localpos1.z()*localpos1.z();
@@ -142,12 +140,13 @@ void G4PSSphereSurfaceCurrent::DrawAll()
 
 void G4PSSphereSurfaceCurrent::PrintAll()
 {
-  G4cout << " PrimitiveSenstivity " << GetName() <<G4endl; 
+  G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
+  G4cout << " PrimitiveScorer " << GetName() <<G4endl; 
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  current  : " << *(itr->second) /mm2
+	   << "  current  : " << *(itr->second)
 	   << G4endl;
   }
 }

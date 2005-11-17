@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSFlatSurfaceCurrent.hh,v 1.1 2005-11-16 23:12:42 asaim Exp $
+// $Id: G4PSFlatSurfaceCurrent.hh,v 1.2 2005-11-17 22:53:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,24 +32,26 @@
 #include "G4THitsMap.hh"
 
 #include "G4Box.hh"
-
+#include "G4PSDirectionFlag.hh"
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)
-//   This is a primitive scorer class for scoring only Surface Current.
-//  Current version assumes only for G4Box shape. 
+//   This is a primitive scorer class for scoring Surface Current.
+//  Current version assumes only for G4Box shape, and the surface
+//  is defined at the -Z plane of the box.
+//   The current is given in the unit of area. 
+//    e.g.  (Number of tracks)/mm2.
 //
 // Surface is defined at the -Z surface.
 // Direction                  -Z   +Z
-//   0  IN || OUT            ->|<-  |
-//   1  IN                   ->|    |
-//   2  OUT                    |<-  |
+//   0  IN || OUT            ->|<-  |      fCurrent_InOut
+//   1  IN                   ->|    |      fCurrent_In
+//   2  OUT                    |<-  |      fCurrent_Out
 //
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
+// 17-Nov-2005 T.Aso, Bug fix for area definition.
 // 
 ///////////////////////////////////////////////////////////////////////////////
-
-enum { fCurrent_InOut, fCurrent_In, fCurrent_Out };
 
 class G4PSFlatSurfaceCurrent : public G4VPrimitiveScorer
 {

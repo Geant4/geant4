@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDParticleFilter.hh,v 1.1 2005-11-16 23:04:04 asaim Exp $
+// $Id: G4SDParticleFilter.hh,v 1.2 2005-11-17 22:53:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,6 +41,7 @@ class G4ParticleDefinition;
 //  This is the class of a filter to be associated with a
 // sensitive detector. 
 //  This class filters steps by partilce definition.
+// The particles are given at constructor or add() method.
 //
 // Created: 2005-11-14  Tsukasa ASO.
 // 
@@ -56,12 +57,17 @@ class G4SDParticleFilter : public G4VSDFilter
 			 const std::vector<G4String>&  particleNames);
       G4SDParticleFilter(G4String name,
 			 const std::vector<G4ParticleDefinition*>&  particleDef);
+    // Constructors. Filter name and particle's name.
+    //
+
       virtual ~G4SDParticleFilter();
 
   public: // with description
       virtual G4bool Accept(const G4Step*) const;
 
       void add(const G4String& particleName);
+      // set method for acceptable particle name.
+      //
       void show();
 
   private:

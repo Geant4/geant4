@@ -21,19 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSFlatSurfaceFlux.cc,v 1.1 2005-11-16 23:12:42 asaim Exp $
+// $Id: G4PSFlatSurfaceFlux.cc,v 1.2 2005-11-17 22:53:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSFlatSurfaceFlux
 #include "G4PSFlatSurfaceFlux.hh"
 #include "G4StepStatus.hh"
 #include "G4Track.hh"
-#include "G4MultiFunctionalDetector.hh"
-
+#include "G4UnitsTable.hh"
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)
-//   This is a primitive scorer class for scoring only Surface Flux.
-//  Current version assumes only for G4Box shape. 
+//   This is a primitive scorer class for scoring Surface Flux.
+//  Current version assumes only for G4Box shape, and the surface
+//  is fixed on -Z plane.
 //
 // Surface is defined at the -Z surface.
 // Direction                  -Z   +Z
@@ -43,6 +43,7 @@
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 
+// 18-Nov-2005  T.Aso,  To use always positive value for anglefactor.
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSFlatSurfaceFlux::G4PSFlatSurfaceFlux(G4String name, 
@@ -67,12 +68,13 @@ G4bool G4PSFlatSurfaceFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   G4int dirFlag =IsSelectedSurface(aStep,boxSolid);
   if ( dirFlag > 0 ) {
     G4int index = GetIndex(aStep);
-    G4double square = 4.*boxSolid->GetXHalfLength()*boxSolid->GetXHalfLength();
+    G4double square = 4.*boxSolid->GetXHalfLength()*boxSolid->GetYHalfLength();
     G4TouchableHandle theTouchable = preStep->GetTouchableHandle();
     G4ThreeVector pdirection = preStep->GetMomentumDirection();
     G4ThreeVector localdir  = 
       theTouchable->GetHistory()->GetTopTransform().TransformAxis(pdirection);
     G4double angleFactor = localdir.z();
+    if ( angleFactor < 0 ) angleFactor *= -1.;
     G4double flux = preStep->GetWeight(); // Current (Particle Weight)
     flux = flux/angleFactor/square;  // Flux with angle.
 
@@ -137,12 +139,13 @@ void G4PSFlatSurfaceFlux::DrawAll()
 
 void G4PSFlatSurfaceFlux::PrintAll()
 {
-  G4cout << " PrimitiveSenstivity " << GetName() <<G4endl; 
+  G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
+  G4cout << " PrimitiveScorer" << GetName() <<G4endl; 
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  flux  : " << *(itr->second) /mm2
+	   << "  flux  : " << G4BestUnit(*(itr->second),"Surface")
 	   << G4endl;
   }
 }
