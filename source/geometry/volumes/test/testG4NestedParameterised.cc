@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4NestedParameterised.cc,v 1.2 2005-06-14 16:30:55 japost Exp $
+// $Id: testG4NestedParameterised.cc,v 1.3 2005-11-17 09:32:13 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -137,6 +137,28 @@ private:
     G4RotationMatrix *fRotationVec;
     G4double fTwistAngle;
 };
+
+  
+G4Material* MoveNRotate::ComputeMaterial(const G4int no_lev, 
+				      G4VPhysicalVolume *currentVol,
+				      const G4VTouchable *parentTouch) 
+{
+    // Get the information about the parent volume
+    G4int no_parent= parentTouch->GetReplicaNumber(); 
+
+    G4int no_total= no_parent + no_lev; 
+    if (no_total == 0) no_total += 32; 
+
+    G4Material *material= 0;
+    // Can add a material here ... that depends on no_parent & no_lev
+
+    G4LogicalVolume* currentLogVol= currentVol->GetLogicalVolume(); 
+
+    currentLogVol->SetMaterial( material ); 
+
+    return material;
+}
+
 
 G4double    angle1= 15.0*pi/180.;
 MoveNRotate myParam(angle1);
