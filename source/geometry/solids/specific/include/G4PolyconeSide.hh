@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.hh,v 1.6 2005-11-09 15:04:28 gcosmo Exp $
+// $Id: G4PolyconeSide.hh,v 1.7 2005-11-17 14:08:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,10 +57,10 @@
 
 class G4IntersectingCone;
 
-typedef struct
+struct G4PolyconeSideRZ
 {
   G4double r, z;  // start of vector
-} G4PolyconeSideRZ;
+};
  
 class G4PolyconeSide : public G4VCSGface
 {

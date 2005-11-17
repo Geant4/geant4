@@ -1,4 +1,4 @@
-$Id: History,v 1.69 2005-11-14 08:43:44 gcosmo Exp $
+$Id: History,v 1.70 2005-11-17 14:08:00 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17-Nov-2005, G.Cosmo (geom-specific-V07-01-09)
+- More fixes required for direct object persistency to G4Polycone,
+  G4polyhedra and related utility classes.
 
 10-Nov-2005, J.Allison (geom-specific-V07-01-08)
 - G4Tet:

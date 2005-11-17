@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyPhiFace.hh,v 1.6 2005-11-09 15:04:28 gcosmo Exp $
+// $Id: G4PolyPhiFace.hh,v 1.7 2005-11-17 14:08:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,21 +57,22 @@
 
 class G4ReduciblePolygon;
 
-typedef struct
+struct G4PolyPhiFaceVertex
 {
   G4double x, y, r, z;   // position
   G4double rNorm, 
            zNorm;        // r/z normal
   G4ThreeVector norm3D;  // 3D normal
-} G4PolyPhiFaceVertex;
+};
 
-typedef struct
+struct G4PolyPhiFaceEdge
 {
+  G4PolyPhiFaceEdge(): v0(0), v1(0) {}
   G4PolyPhiFaceVertex  *v0, *v1;  // Corners
   G4double tr, tz,                // Unit vector along edge
            length;                // Length of edge
   G4ThreeVector norm3D;           // 3D edge normal vector
-} G4PolyPhiFaceEdge;
+};
 
 class G4PolyPhiFace : public G4VCSGface
 {

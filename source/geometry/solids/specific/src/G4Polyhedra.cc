@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.27 2005-11-09 15:04:28 gcosmo Exp $
+// $Id: G4Polyhedra.cc,v 1.28 2005-11-17 14:08:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -920,6 +920,7 @@ G4NURBS *G4Polyhedra::CreateNURBS() const
 // G4PolyhedraHistorical stuff
 //
 G4PolyhedraHistorical::G4PolyhedraHistorical()
+  : Z_values(0), Rmin(0), Rmax(0)
 {
 }
 

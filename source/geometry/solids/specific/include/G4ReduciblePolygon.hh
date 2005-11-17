@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReduciblePolygon.hh,v 1.7 2005-11-09 15:04:28 gcosmo Exp $
+// $Id: G4ReduciblePolygon.hh,v 1.8 2005-11-17 14:08:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -134,10 +134,11 @@ class G4ReduciblePolygon
     // Yeah, call me an old-fashioned c hacker, but I cannot make
     // myself use the rogue tools for this trivial list.
     //
-    struct ABVertex;
-    friend struct ABVertex;
+    struct ABVertex;              // Secret recipe for allowing
+    friend struct ABVertex;       // protected nested structures
     struct ABVertex
     {
+      ABVertex() { next = 0; }
       G4double a, b;
       ABVertex *next;
     };
