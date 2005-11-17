@@ -172,11 +172,11 @@ examples                                         examples-V07-01-05
     + Implemented migration to <sstream>.
   o electromagnetic/TestEm1 (testem1-V07-01-01)
     + Implemented migration to <sstream> for HistoMessenger.
-  o electromagnetic/TestEm3 (testem3-V07-01-02)
+  o electromagnetic/TestEm3 (testem3-V07-01-03)
     + Implemented migration to <sstream>.
   o electromagnetic/TestEm5 (testem5-V07-01-01)
     + Implemented migration to <sstream> for HistoMessenger.
-  o electromagnetic/TestEm9 (testem9-V07-01-02)
+  o electromagnetic/TestEm9 (testem9-V07-01-03)
     + Implemented migration to <sstream>.
   o electromagnetic/TestEm11 (testem11-V07-01-02)
     + Implemented migration to <sstream> for HistoMessenger.
