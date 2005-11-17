@@ -21,13 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: HistoMessenger.cc,v 1.4 2005-11-12 00:37:44 vnivanch Exp $
+// $Id: HistoMessenger.cc,v 1.5 2005-11-17 08:21:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoMessenger.hh"
+
+#include <sstream>
 
 #include "Histo.hh"
 #include "G4UIdirectory.hh"
