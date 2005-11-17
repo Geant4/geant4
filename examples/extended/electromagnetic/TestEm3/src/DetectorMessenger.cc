@@ -20,13 +20,15 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc,v 1.9 2005-11-12 00:28:55 vnivanch Exp $
+// $Id: DetectorMessenger.cc,v 1.10 2005-11-17 08:16:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorMessenger.hh"
+
+#include <sstream>
 
 #include "DetectorConstruction.hh"
 #include "G4UIdirectory.hh"

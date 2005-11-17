@@ -20,13 +20,15 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoMessenger.cc,v 1.6 2005-11-12 00:28:55 vnivanch Exp $
+// $Id: HistoMessenger.cc,v 1.7 2005-11-17 08:16:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoMessenger.hh"
+
+#include <sstream>
 
 #include "HistoManager.hh"
 #include "G4UIdirectory.hh"
