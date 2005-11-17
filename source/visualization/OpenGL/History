@@ -1,4 +1,4 @@
-$Id: History,v 1.56 2005-11-13 15:47:41 allison Exp $
+$Id: History,v 1.57 2005-11-17 07:36:04 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+17th November 2005  Gabriele Cosmo
+- Fixed settings of background style for WIN32 viewers.
 
 13th November 2005  John Allison  (opengl-V07-01-07)
 - Implemented X-Window-style geometry hints in G4OpenGLXViewer.

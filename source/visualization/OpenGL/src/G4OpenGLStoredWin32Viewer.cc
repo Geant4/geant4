@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredWin32Viewer.cc,v 1.9 2005-06-02 17:43:46 allison Exp $
+// $Id: G4OpenGLStoredWin32Viewer.cc,v 1.10 2005-11-17 07:36:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,11 +63,10 @@ void G4OpenGLStoredWin32Viewer::Initialise () {
 
 void G4OpenGLStoredWin32Viewer::DrawView () {
 
-  if (white_background == true) {
-    glClearColor (1., 1., 1., 1.);
-  } else {
-    glClearColor (0., 0., 0., 1.);
-  }
+  glClearColor (background.GetRed(),
+                background.GetGreen(),
+                background.GetBlue(),
+                1.);
 
   //Make sure current viewer is attached and clean...
   //Win32 version needed

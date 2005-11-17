@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.9 2005-06-02 17:43:46 allison Exp $
+// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.10 2005-11-17 07:36:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,11 +77,10 @@ void G4OpenGLImmediateWin32Viewer::DrawView () {
     glDrawBuffer (GL_FRONT);
   }
 
-  if (white_background == true) {
-    glClearColor (1., 1., 1., 1.);
-  } else {
-    glClearColor (0., 0., 0., 1.);
-  }
+  glClearColor (background.GetRed(),
+                background.GetGreen(),
+                background.GetBlue(),
+                1.);
   glClearDepth (1.0);
 
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
