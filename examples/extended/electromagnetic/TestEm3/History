@@ -1,4 +1,4 @@
-$Id: History,v 1.82 2005-11-12 00:28:55 vnivanch Exp $
+$Id: History,v 1.83 2005-11-17 08:16:48 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
+
+17-11-05 G.Cosmo (testem3-V07-01-03) 
+- corrected fixes for migration to <sstream> to fix compilation
+  errors on SUN-CC.
 
 12-11-05 V.Ivant (testem3-V07-01-02) 
 - fix compilation problems with streams
