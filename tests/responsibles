@@ -23,55 +23,54 @@ interfaces/basic             yoshidah@naruto-u.ac.jp	     Hajime Yoshida
 interfaces/GAG               yoshidah@naruto-u.ac.jp	     Hajime Yoshida
 interfaces/common            barrand@lal.in2p3.fr            Guy Barrand
 materials                    Marc.Verderi@in2p3.fr           Marc Verderi
-parameterisations            Vladimir.Grichine@cern.ch       Vladimir Grichine
+parameterisations            Marc.Verderi@in2p3.fr           Marc Verderi
 "/gflash                     Joanna.Weng@cern.ch             Joanna Weng
-"/trd_clusters               Vladimir.Grichine@cern.ch       Vladimir Grichine
 particles                    kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
-persistency                  Youhei.Morita@cern.ch           Youhei Morita
+persistency                  Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 processes                    John Apostolakis                John Apostolakis
 "/cuts                       kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
 "/electromagnetic            Michel.Maire@lapp.in2p3.fr      Michel Maire
 "/"/lowenergy                MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
 "/decay                      kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
-"/hadronic                   Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+"/hadronic                   dwright@slac.stanford.edu       Dennis Wright
 "/"/cross_sections           fwj@triumf.ca                   Fred Jones
 "/"/management               kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
 "/"/stopping                 felawka@triumf.ca               Larry Felawka
 "/"/util                     chuma@triumf.ca                 Joe Chuma
-"/"/processes                Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+"/"/processes                dwright@slac.stanford.edu       Dennis Wright
 "/"/models/abrasion          flei@space.qinetiq.com          Fan Lei
 "/"/models/binary_cascade    Gunter.Folger@cern.ch           Gunter Folger
 "/"/models/cascade           aatos.heikkinen@cern.ch         Aatos Heikkinen
 "/"/"/chiral_inv_phase_space Mikhail.Kossov@cern.ch          Mikhail Kossov
 "/"/"/coherent_elastic       fwj@triumf.ca                   Fred Jones
-"/"/"/de_excitation          Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+"/"/"/de_excitation          dwright@slac.stanford.edu       Dennis Wright
 "/"/"/"/ablation             flei@space.qinetiq.com          Fan Lei
-"/"/"/"/evaporation          Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+"/"/"/"/evaporation          dwright@slac.stanford.edu       Dennis Wright
 "/"/"/"/fermi_breakup        Vicente.Lara@cern.ch            Vincente Lara
 "/"/"/"/fission              Vicente.Lara@cern.ch            Vincente Lara
-"/"/"/"/gem_evaporation      Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+"/"/"/"/gem_evaporation      dwright@slac.stanford.edu       Dennis Wright
 "/"/"/"/handler              Vicente.Lara@cern.ch            Vincente Lara
-"/"/"/"/management           Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-"/"/"/"/multifragmentation   Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-"/"/"/"/photon_evaporation   Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-"/"/"/"/util                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+"/"/"/"/management           dwright@slac.stanford.edu       Dennis Wright
+"/"/"/"/multifragmentation   dwright@slac.stanford.edu       Dennis Wright
+"/"/"/"/photon_evaporation   dwright@slac.stanford.edu       Dennis Wright
+"/"/"/"/util                 dwright@slac.stanford.edu       Dennis Wright
 "/"/"/em_dissociation        flei@space.qinetiq.com          Fan Lei
 "/"/"/high_energy            harm@physik.rwth-aachen.de      Harm Fesefeldt
-"/"/"/im_r_matrix            Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-"/"/"/isotope_production     Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+"/"/"/im_r_matrix            dwright@slac.stanford.edu       Dennis Wright
+"/"/"/isotope_production     dwright@slac.stanford.edu       Dennis Wright
 "/"/"/leading_particle       Naoko.Kanaya@cern.ch            Naoko Kanaya
 "/"/"/low_energy             chuma@triumf.ca                 Joe Chuma
-"/"/"/management             Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-"/"/"/neutron_hp             Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+"/"/"/management             dwright@slac.stanford.edu       Dennis Wright
+"/"/"/neutron_hp             dwright@slac.stanford.edu       Dennis Wright
 "/"/"/parton_string/diffraction    Gunter.Folger@cern.ch     Gunter Folger
 "/"/"/"/hadronization        Gunter.Folger@cern.ch           Gunter Folger
-"/"/"/"/management           Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-"/"/"/"/qgsm                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-"/"/"/photolepton_hadron     Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+"/"/"/"/management           dwright@slac.stanford.edu       Dennis Wright
+"/"/"/"/qgsm                 dwright@slac.stanford.edu       Dennis Wright
+"/"/"/photolepton_hadron     dwright@slac.stanford.edu       Dennis Wright
 "/"/"/pre_equilibrium        Vicente.Lara@cern.ch            Vincente Lara
 "/"/"/radioactive_decay      flei@space.qinetiq.com          Fan Lei
-"/"/"/theo_high_energy       Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-"/"/"/util                   Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+"/"/"/theo_high_energy       dwright@slac.stanford.edu       Dennis Wright
+"/"/"/util                   dwright@slac.stanford.edu       Dennis Wright
 "/optical                    gum@triumf.ca                   Peter Gumplinger
 "/parameterisation           Marc.Verderi@in2p3.fr           Marc Verderi
 "/transportation             John.Apostolakis@cern.ch        John Apostolakis
@@ -140,14 +139,19 @@ examples/extended/optical:
 examples/extended/parallel:
   ParN02, ParN04             gene@ccs.neu.edu                Gene Cooperman
   ExDiane                    Susanna.Guatelli@ge.infn.it     Susanna Guatelli
+examples/extended/parameterisations:
+  gflash                     Joanna.Weng@cern.ch             Joanna Weng
 examples/extended/persistency:
-  PersEx01                   Youhei.Morita@kek.jp            Youhei Morita
+  PersEx01                   Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 examples/extended/radioactivedecay:
   exrdm                      flei@space.qinetiq.com          Fan Lei
+examples/extended/visualization:
+  standalone                 John.Allison@man.ac.uk          John Allison
+  userVisAction              John.Allison@man.ac.uk          John Allison
 tests                        Serguei.Sadilov@cern.ch         Serguei Sadilov
       test01                 Gabriele.Cosmo@cern.ch          Gabriele Cosmo
       test02                 Michel.Maire@lapp.in2p3.fr      Michel Maire
-      test02.hadron          Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+      test02.hadron          dwright@slac.stanford.edu       Dennis Wright
       test03                 (not currently used - see tests/GNUmakefile)
       test04                 (not currently used - see tests/GNUmakefile)
       test05                 (not currently used - see tests/GNUmakefile)
@@ -156,28 +160,28 @@ tests                        Serguei.Sadilov@cern.ch         Serguei Sadilov
       test08                 (not currently used - see tests/GNUmakefile)
       test09                 Michel.Maire@lapp.in2p3.fr      Michel Maire
       test10                 gum@triumf.ca                   Peter Gumplinger
-      test11                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-      test12                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-      test13                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+      test11                 dwright@slac.stanford.edu       Dennis Wright
+      test12                 dwright@slac.stanford.edu       Dennis Wright
+      test13                 dwright@slac.stanford.edu       Dennis Wright
       test14                 MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
-      test15                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-      test16                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+      test15                 dwright@slac.stanford.edu       Dennis Wright
+      test16                 dwright@slac.stanford.edu       Dennis Wright
       test17                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test18                 flei@space.qinetiq.com          Fan Lei
       test19                 Mikhail.Kossov@cern.ch          Mikhail Kossov
       test20                 MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
-      test21                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-      test22                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+      test21                 dwright@slac.stanford.edu       Dennis Wright
+      test22                 dwright@slac.stanford.edu       Dennis Wright
       test23                 Mikhail.Kossov@cern.ch          Mikhail Kossov
-      test24                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-      test25                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+      test24                 dwright@slac.stanford.edu       Dennis Wright
+      test25                 dwright@slac.stanford.edu       Dennis Wright
       test26                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test27                 Gunter.Folger@cern.ch           Gunter Folger
       test28                 flei@space.qinetiq.com          Fan Lei
       test29                 Mikhail.Kossov@cern.ch          Mikhail Kossov
       test30                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test31                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
-      test32                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
+      test32                 dwright@slac.stanford.edu       Dennis Wright
       test33                 Michael.Dressel@cern.ch         Michael Dressel
       test34                 Joanna.Weng@cern.ch             Joanna Weng
       test40                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
