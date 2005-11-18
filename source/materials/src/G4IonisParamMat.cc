@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.16 2005-11-09 15:38:43 gcosmo Exp $
+// $Id: G4IonisParamMat.cc,v 1.17 2005-11-18 14:54:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,7 +84,7 @@ void G4IonisParamMat::ComputeMeanParameters()
   fLogMeanExcEnergy /= fMaterial->GetTotNbOfElectPerVolume();
   fMeanExcitationEnergy = std::exp(fLogMeanExcEnergy);
 
-  fShellCorrectionVector = new G4double[3];
+  fShellCorrectionVector = new G4double[3]; //[3]
 
   for (G4int j=0; j<=2; j++)
   {

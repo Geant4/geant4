@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamElm.cc,v 1.12 2005-11-09 15:38:43 gcosmo Exp $
+// $Id: G4IonisParamElm.cc,v 1.13 2005-11-18 14:54:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -90,7 +90,7 @@ G4IonisParamElm::G4IonisParamElm(G4double Z)
     fBlow =-3.229020*fClow/(fTau0*std::sqrt(Taum));
 
     // Shell correction factors
-    fShellCorrectionVector = new G4double[3];
+    fShellCorrectionVector = new G4double[3]; //[3]
     rate = 0.001*fMeanExcitationEnergy/eV;
     G4double rate2 = rate*rate;
     /*    
