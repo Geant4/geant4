@@ -1,4 +1,4 @@
-$Id: History,v 1.310 2005-11-14 19:04:37 allison Exp $
+$Id: History,v 1.311 2005-11-18 23:11:12 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+18th November 2005  John Allison
+- raytracer-V07-01-06: merged developments to the head, including RayTracerX.
 
 14th November 2005  John Allison (vis-V07-01-06)
 - Minor modification of vis-V07-01-03 + vis-HepRep-V07-01-04 (to avoid
