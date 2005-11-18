@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerViewer.cc,v 1.13 2005-07-17 13:59:24 allison Exp $
+// $Id: G4RayTracerViewer.cc,v 1.14 2005-11-18 23:07:04 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4RayTracerViewer.hh"
 
 #include "G4ios.hh"
-#include <strstream>
+#include <sstream>
 
 #include "G4VSceneHandler.hh"
 #include "G4Scene.hh"
@@ -75,6 +75,7 @@ void G4RayTracerViewer::SetView() {
   const G4Vector3D
     actualLightpointDirection(-fVP.GetActualLightpointDirection());
   theTracer->SetLightDirection(actualLightpointDirection);
+  theTracer->SetBackgroundColour(fVP.GetBackgroundColour());
 }
 
 
@@ -99,9 +100,7 @@ void G4RayTracerViewer::DrawView() {
   }
   G4RayTracer* theTracer = 
     (G4RayTracer*) fSceneHandler.GetGraphicsSystem();
-  char fileName [100];
-  std::ostrstream ost(fileName, 100);
-  ost << "g4RayTracer." << fShortName << '_' << fFileCount++ << ".jpeg"
-      << std::ends;
-  theTracer->Trace(fileName);
+  std::ostringstream filename;
+  filename << "g4RayTracer." << fShortName << '_' << fFileCount++ << ".jpeg";
+  theTracer->Trace(filename.str());
 }

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.10 2005-07-20 20:39:02 allison Exp $
+# $Id: GNUmakefile,v 1.11 2005-11-18 23:07:04 allison Exp $
 
 name := G4RayTracer
 
@@ -18,11 +18,6 @@ include $(G4INSTALL)/config/G4VIS_BUILD.gmk
 include $(G4INSTALL)/config/interactivity.gmk
 
 CPPFLAGS += -DG4VIS_ALLOC_EXPORT
-
-# Temporary conditional build.  This will go in config/G4VIS_BUILD.gmk...
-ifdef G4VIS_BUILD_RAYTRACERX_DRIVER
-  CPPFLAGS += -DG4VIS_BUILD_RAYTRACERX_DRIVER
-endif
 
 CPPFLAGS += -I$(G4BASE)/visualization/modeling/include
 CPPFLAGS += -I$(G4BASE)/visualization/management/include

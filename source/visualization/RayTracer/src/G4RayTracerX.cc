@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerX.cc,v 1.2 2005-07-20 20:39:02 allison Exp $
+// $Id: G4RayTracerX.cc,v 1.3 2005-11-18 23:07:04 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,9 +37,7 @@
 
 G4RayTracerX::G4RayTracerX():
   G4RayTracer(0, new G4RTXScanner)
-{
-  backgroundColour = G4Colour(0.,0.,0.);
-}
+{}
 
 G4VSceneHandler* G4RayTracerX::CreateSceneHandler (const G4String& name) {
   G4VSceneHandler* pSceneHandler = new G4RayTracerSceneHandler (*this, name);
