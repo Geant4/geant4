@@ -58,12 +58,6 @@
 #include "G4UIcmdWithABool.hh"
 #include "G4ios.hh"
 
-//#include <iostream.h>
-#include <fstream>
-
-#include <iomanip>
-#include <strstream>
-
 #include "G4Tokenizer.hh"
 #include "G4GeneralParticleSourceMessenger.hh"
 #include "G4SingleParticleSource.hh"

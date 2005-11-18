@@ -1,4 +1,4 @@
-$Id: History,v 1.93 2005-10-20 20:23:14 perl Exp $
+$Id: History,v 1.94 2005-11-18 21:46:24 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 18, 2005, M.Asai (event-V07-01-02)
+- Migration to sstream.
+- Move G4HepMC classes to examples/extended/eventgenerator/HepMC.
+
 October 20, 2005, Joseph Perl (event-V07-01-01)
 - Tag to co-work with vis-V07-01-05.
 

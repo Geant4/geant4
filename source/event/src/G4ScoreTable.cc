@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreTable.cc,v 1.3 2003-06-16 16:50:36 gunter Exp $
+// $Id: G4ScoreTable.cc,v 1.4 2005-11-18 21:46:24 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -32,7 +32,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4ScoreTable.hh"
-#include <strstream>
+#include <sstream>
 
 #include "G4VPhysicalVolume.hh"
 #include "G4VIStore.hh"
@@ -86,12 +86,10 @@ void G4ScoreTable::PrintHeader(std::ostream *out)
 
 G4String G4ScoreTable::CreateName(const G4GeometryCell &gCell) {
   
-  char st[200];
-  std::ostrstream os(st,200);
+  std::ostringstream os;
   os << gCell.GetPhysicalVolume().GetName()
-     << "_rep:" << gCell.GetReplicaNumber()
-     << '\0';
-  G4String name(st);
+     << "_rep:" << gCell.GetReplicaNumber();
+  G4String name = os.str();
 
   return name;
 }
