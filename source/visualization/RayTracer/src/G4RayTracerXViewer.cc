@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerXViewer.cc,v 1.2 2005-07-20 20:39:02 allison Exp $
+// $Id: G4RayTracerXViewer.cc,v 1.3 2005-11-18 23:05:04 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifdef G4VIS_BUILD_RAYTRACERX_DRIVER
@@ -67,11 +67,46 @@ G4RayTracerXViewer::G4RayTracerXViewer
 
   int screen_num = DefaultScreen(display);
 
+  // Window size and position...
+  int xOffset = 0, yOffset = 0;
+  unsigned int width, height;
+  XSizeHints* size_hints = XAllocSizeHints();
+  const G4String& XGeometryString = fVP.GetXGeometryString();
+  if (!XGeometryString.empty()) {
+    G4int geometryResultMask = XParseGeometry
+      ((char*)XGeometryString.c_str(),
+       &xOffset, &yOffset, &width, &height);
+    if (geometryResultMask & (WidthValue | HeightValue)) {
+      if (geometryResultMask & XValue) {
+	if (geometryResultMask & XNegative) {
+	  xOffset = DisplayWidth(display, screen_num) + xOffset - width;
+	}
+	size_hints->flags |= PPosition;
+	size_hints->x = xOffset;
+      }
+      if (geometryResultMask & YValue) {
+	if (geometryResultMask & YNegative) {
+	  yOffset = DisplayHeight(display, screen_num) + yOffset - height;
+	}
+	size_hints->flags |= PPosition;
+	size_hints->y = yOffset;
+      }
+    } else {
+      G4cout << "ERROR: Geometry string \""
+	     << XGeometryString
+	     << "\" invalid.  Using \"600x600\"."
+	     << G4endl;
+      width = 600;
+      height = 600;
+    }
+  }
+  size_hints->width = width;
+  size_hints->height = height;
+  size_hints->flags |= PSize;
+
   win = XCreateSimpleWindow
     (display, RootWindow(display, screen_num),
-     0, 0,                              // Corner position.
-     fVP.GetWindowSizeHintX(),          // Width.
-     fVP.GetWindowSizeHintY(),          // Height.
+     xOffset, yOffset, width, height,
      0,                                 // Border width.
      WhitePixel(display, screen_num),   // Border colour.
      BlackPixel(display, screen_num));  // Background colour.
@@ -104,12 +139,12 @@ G4RayTracerXViewer::G4RayTracerXViewer
     return;
   }
 
-  XSizeHints* size_hints = XAllocSizeHints();
   XWMHints* wm_hints = XAllocWMHints();
   XClassHint* class_hint = XAllocClassHint();
   const char* window_name = fName.c_str();
   XTextProperty windowName;
   XStringListToTextProperty((char**)&window_name, 1, &windowName);
+
   XSetWMProperties(display, win, &windowName, &windowName,
 		   0, 0, size_hints, wm_hints, class_hint);
 
