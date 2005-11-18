@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForElectron.cc,v 1.3 2004-12-02 06:53:56 kurasige Exp $
+// $Id: G4RToEConvForElectron.cc,v 1.4 2005-11-18 21:20:13 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,8 +37,6 @@
 #include "G4PhysicsLogVector.hh"
 
 #include "G4ios.hh"
-#include <iomanip>
-#include <strstream>
 
 G4RToEConvForElectron::G4RToEConvForElectron() : G4VRangeToEnergyConverter()
 {    

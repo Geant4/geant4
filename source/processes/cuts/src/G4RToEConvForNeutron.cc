@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForNeutron.cc,v 1.1 2003-09-19 14:47:18 gcosmo Exp $
+// $Id: G4RToEConvForNeutron.cc,v 1.2 2005-11-18 21:20:13 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,8 +36,6 @@
 #include "G4PhysicsLogVector.hh"
 
 #include "G4ios.hh"
-#include <iomanip>
-#include <strstream>
 
 G4RToEConvForNeutron::G4RToEConvForNeutron() : G4VRangeToEnergyConverter()
 {    
