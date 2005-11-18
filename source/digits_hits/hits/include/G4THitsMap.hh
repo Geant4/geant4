@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4THitsMap.hh,v 1.3 2005-11-16 23:24:08 asaim Exp $
+// $Id: G4THitsMap.hh,v 1.4 2005-11-18 21:02:55 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4THitsMap_h
@@ -69,6 +69,10 @@ template <typename T> class G4THitsMap : public G4HitsCollection
       inline G4int add(const G4int & key, T * &aHit) const;
       inline G4int add(const G4int & key, T &aHit) const;
       //  Insert a hit object. Total number of hit objects stored in this
+      // map is returned.
+      inline G4int set(const G4int & key, T * &aHit) const;
+      inline G4int set(const G4int & key, T &aHit) const;
+      //  Overwrite a hit object. Total number of hit objects stored in this
       // map is returned.
       inline G4int entries() const
       { return ((std::map<G4int,T*>*)theCollection)->size(); }
@@ -120,6 +124,7 @@ G4THitsMap<T>::operator+=(const G4THitsMap<T> &right) const
 
 template <typename T> inline T* 
 G4THitsMap<T>::operator[](G4int key) const {
+    if(theHitsMap->size()==0) return 0;
     std::map<G4int,T*> * theHitsMap = GetMap();
     if(theHitsMap->find(key) != theHitsMap->end()) {
 	return theHitsMap->find(key)->second;
@@ -155,6 +160,32 @@ G4THitsMap<T>::add(const G4int & key, T &aHit) const {
     return theHitsMap->size();
 }
 
+template <typename T> inline G4int
+G4THitsMap<T>::set(const G4int & key, T * &aHit) const {
+                                                                                             
+    typename std::map<G4int,T*> * theHitsMap = GetMap();
+    if(theHitsMap->find(key) != theHitsMap->end()) {
+        delete (*theHitsMap)[key]->second;
+    }
+    (*theHitsMap)[key] = aHit;
+    return theHitsMap->size();
+}
+                                                                                             
+template <typename T> inline G4int
+G4THitsMap<T>::set(const G4int & key, T &aHit) const {
+                                                                                             
+    typename std::map<G4int,T*> * theHitsMap = GetMap();
+    if(theHitsMap->find(key) != theHitsMap->end()) {
+        *(*theHitsMap)[key] = aHit;
+    } else {
+        T * hit = new T;
+        *hit = aHit;
+        (*theHitsMap)[key] = hit;
+    }
+                                                                                             
+    return theHitsMap->size();
+}
+                                                                                             
 template <typename T> void G4THitsMap<T>::DrawAllHits() 
 {;}
 
