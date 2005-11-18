@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedTable.cc,v 1.11 2003-06-16 16:58:43 gunter Exp $
+// $Id: G4ShortLivedTable.cc,v 1.12 2005-11-18 21:07:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,9 +38,6 @@
 #include "G4ParticleTable.hh"
 
 #include "G4ios.hh"
-
-#include <strstream>
-
 
 G4ShortLivedTable::G4ShortLivedTable()
 {

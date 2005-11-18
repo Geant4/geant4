@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.38 2005-08-27 01:38:15 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.39 2005-11-18 21:07:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,7 +56,7 @@
 #include <iostream>               
 #include <iomanip>               
 
-#include <strstream>
+#include <sstream>
 
 
 ////////////////////
@@ -288,11 +288,10 @@ G4String G4IonTable::GetIonName(G4int Z, G4int A, G4double E) const
   } else {
     return "?";
   }
-  char val[50];
-  std::ostrstream os(val,50);
+  std::ostringstream os;
   os.setf(std::ios::fixed);
-  os << A << '[' << std::setprecision(1) << E/keV << ']' << '\0';
-  name += val;
+  os << A << '[' << std::setprecision(1) << E/keV << ']';
+  name += os.str();
   return name;
 }
 
@@ -479,9 +478,9 @@ G4int G4IonTable::GetVerboseLevel() const
 void  G4IonTable::AddProcessManager(const G4String& name)
 {
   // create command string for addProcManager
-  char cmdAdd[60];
-  std::ostrstream osAdd(cmdAdd,60);
-  osAdd << "/run/particle/addProcManager "<< name << '\0';
+  std::ostringstream osAdd;
+  osAdd << "/run/particle/addProcManager "<< name;
+  G4String cmdAdd = osAdd.str();
 
   // set /control/verbose 0
   G4int tempVerboseLevel = G4UImanager::GetUIpointer()->GetVerboseLevel();
