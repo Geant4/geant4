@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4THitsMap.hh,v 1.4 2005-11-18 21:02:55 asaim Exp $
+// $Id: G4THitsMap.hh,v 1.5 2005-11-18 22:47:06 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4THitsMap_h
@@ -124,7 +124,6 @@ G4THitsMap<T>::operator+=(const G4THitsMap<T> &right) const
 
 template <typename T> inline T* 
 G4THitsMap<T>::operator[](G4int key) const {
-    if(theHitsMap->size()==0) return 0;
     std::map<G4int,T*> * theHitsMap = GetMap();
     if(theHitsMap->find(key) != theHitsMap->end()) {
 	return theHitsMap->find(key)->second;
