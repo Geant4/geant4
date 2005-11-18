@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
+ Geant4 version Name: global-V07-01-03    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -161,4 +161,5 @@ ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
   A 10000 optical photons vertex has been generated at (372.08053,-34.031965,-270.63432)
   A 10000 optical photons vertex has been generated at (-311.4222,701.86422,-313.34373)
   A 10000 optical photons vertex has been generated at (-26.690864,-221.6976,107.73529)
+  A 10000 optical photons vertex has been generated at (-736.40525,561.44419,-273.71056)
   A 10000 optical photons vertex has been generated at (-736.40525,561.44419,-273.71056)

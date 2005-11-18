@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
+ Geant4 version Name: global-V07-01-03    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -125,7 +125,7 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.02
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Aluminium 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
@@ -149,7 +149,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=34.59s Real=35.83s Sys=1.23s
+  User=35.76s Real=37.14s Sys=1.36s
 #
 # electron 500 MeV in Air
 #
@@ -258,7 +258,7 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.02
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Air 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
@@ -282,7 +282,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.28s Real=1.33s Sys=0.05s
+  User=1.37s Real=1.39s Sys=0.02s
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
@@ -293,4 +293,5 @@ EventManager deleted.
 UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted.
+RunManager is deleting.
 RunManager is deleting.
