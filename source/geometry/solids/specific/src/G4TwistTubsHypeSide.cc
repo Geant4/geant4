@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HyperbolicSurface.cc,v 1.9 2005-11-17 16:59:36 link Exp $
+// $Id: G4TwistTubsHypeSide.cc,v 1.1 2005-11-18 16:46:17 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@
 // GEANT 4 class source file
 //
 //
-// G4HyperbolicSurface.cc
+// G4TwistTubsHypeSide.cc
 //
 // Author: 
 //   01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
@@ -39,12 +39,12 @@
 //                 from original version in Jupiter-2.5.02 application.
 // --------------------------------------------------------------------
 
-#include "G4HyperbolicSurface.hh"
+#include "G4TwistTubsHypeSide.hh"
 
 //=====================================================================
 //* constructors ------------------------------------------------------
 
-G4HyperbolicSurface::G4HyperbolicSurface(const G4String         &name,
+G4TwistTubsHypeSide::G4TwistTubsHypeSide(const G4String         &name,
                                          const G4RotationMatrix &rot,
                                          const G4ThreeVector    &tlate,
                                          const G4int             handedness,
@@ -57,13 +57,13 @@ G4HyperbolicSurface::G4HyperbolicSurface(const G4String         &name,
                                                G4double          axis1min,
                                                G4double          axis0max,
                                                G4double          axis1max )
-  : G4VSurface(name, rot, tlate, handedness, axis0, axis1,
+  : G4VTwistSurface(name, rot, tlate, handedness, axis0, axis1,
                axis0min, axis1min, axis0max, axis1max),
     fKappa(kappa), fTanStereo(tanstereo),
     fTan2Stereo(tanstereo*tanstereo), fR0(r0), fR02(r0*r0)
 {
    if (axis0 == kZAxis && axis1 == kPhi) {
-      G4Exception("G4HyperbolicSurface::G4HyperbolicSurface()", "InvalidSetup",
+      G4Exception("G4TwistTubsHypeSide::G4TwistTubsHypeSide()", "InvalidSetup",
                   FatalException, "Should swap axis0 and axis1!");
    }
    
@@ -76,7 +76,7 @@ G4HyperbolicSurface::G4HyperbolicSurface(const G4String         &name,
 
 }
 
-G4HyperbolicSurface::G4HyperbolicSurface(const G4String      &name,
+G4TwistTubsHypeSide::G4TwistTubsHypeSide(const G4String      &name,
                                          G4double         EndInnerRadius[2],
                                          G4double         EndOuterRadius[2],
                                          G4double         DPhi,
@@ -88,7 +88,7 @@ G4HyperbolicSurface::G4HyperbolicSurface(const G4String      &name,
                                          G4double         TanInnerStereo,
                                          G4double         TanOuterStereo,
                                          G4int            handedness)
-   : G4VSurface(name)
+   : G4VTwistSurface(name)
 {
 
    fHandedness = handedness;   // +z = +ve, -z = -ve
@@ -125,22 +125,22 @@ G4HyperbolicSurface::G4HyperbolicSurface(const G4String      &name,
 //=====================================================================
 //* Fake default constructor ------------------------------------------
 
-G4HyperbolicSurface::G4HyperbolicSurface( __void__& a )
-  : G4VSurface(a)
+G4TwistTubsHypeSide::G4TwistTubsHypeSide( __void__& a )
+  : G4VTwistSurface(a)
 {
 }
 
 //=====================================================================
 //* destructor --------------------------------------------------------
 
-G4HyperbolicSurface::~G4HyperbolicSurface()
+G4TwistTubsHypeSide::~G4TwistTubsHypeSide()
 {
 }
 
 //=====================================================================
 //* GetNormal ---------------------------------------------------------
 
-G4ThreeVector G4HyperbolicSurface::GetNormal(const G4ThreeVector &tmpxx, 
+G4ThreeVector G4TwistTubsHypeSide::GetNormal(const G4ThreeVector &tmpxx, 
                                                    G4bool isGlobal) 
 {
    // GetNormal returns a normal vector at a surface (or very close
@@ -178,7 +178,7 @@ G4ThreeVector G4HyperbolicSurface::GetNormal(const G4ThreeVector &tmpxx,
 //=====================================================================
 //* Inside() ----------------------------------------------------------
 
-EInside G4HyperbolicSurface::Inside(const G4ThreeVector &gp) 
+EInside G4TwistTubsHypeSide::Inside(const G4ThreeVector &gp) 
 {
    // Inside returns 
    static const G4double halftol = 0.5 * kRadTolerance;
@@ -218,7 +218,7 @@ EInside G4HyperbolicSurface::Inside(const G4ThreeVector &gp)
             fInside.inside = kInside;
          }
       } else {
-         G4cout << "WARNING - G4HyperbolicSurface::Inside()" << G4endl
+         G4cout << "WARNING - G4TwistTubsHypeSide::Inside()" << G4endl
                 << "          Invalid option !" << G4endl
                 << "          name, areacode, distanceToOut = "
                 << GetName() << ", " << std::hex << areacode << std::dec << ", "
@@ -232,7 +232,7 @@ EInside G4HyperbolicSurface::Inside(const G4ThreeVector &gp)
 //=====================================================================
 //* DistanceToSurface -------------------------------------------------
 
-G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
+G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector &gp,
                                              const G4ThreeVector &gv,
                                                    G4ThreeVector  gxx[],
                                                    G4double       distance[],
@@ -482,7 +482,7 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
                                      isvalid[0], 0, validate, &gp, &gv);
       return 0;
    }
-   G4Exception("G4HyperbolicSurface::DistanceToSurface(p,v)",
+   G4Exception("G4TwistTubsHypeSide::DistanceToSurface(p,v)",
                "InvalidCondition", FatalException, "Illegal operation !");
    return 1;
 }
@@ -491,7 +491,7 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
 //=====================================================================
 //* DistanceToSurface -------------------------------------------------
 
-G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
+G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector &gp,
                                                    G4ThreeVector  gxx[],
                                                    G4double       distance[],
                                                    G4int          areacode[])
@@ -640,7 +640,7 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
 //=====================================================================
 //* GetAreaCode -------------------------------------------------------
 
-G4int G4HyperbolicSurface::GetAreaCode(const G4ThreeVector &xx, 
+G4int G4TwistTubsHypeSide::GetAreaCode(const G4ThreeVector &xx, 
                                              G4bool         withTol)
 {
    static const G4double ctol = 0.5 * kCarTolerance;
@@ -741,10 +741,10 @@ G4int G4HyperbolicSurface::GetAreaCode(const G4ThreeVector &xx,
          return areacode;
       }
    } else {
-      G4cerr << "ERROR - G4HyperbolicSurface::GetAreaCode()" << G4endl
+      G4cerr << "ERROR - G4TwistTubsHypeSide::GetAreaCode()" << G4endl
              << "        fAxis[0] = " << fAxis[0] << G4endl
              << "        fAxis[1] = " << fAxis[1] << G4endl;
-      G4Exception("G4HyperbolicSurface::GetAreaCode()",
+      G4Exception("G4TwistTubsHypeSide::GetAreaCode()",
                   "NotImplemented", FatalException,
                   "Feature NOT implemented !");
    }
@@ -754,7 +754,7 @@ G4int G4HyperbolicSurface::GetAreaCode(const G4ThreeVector &xx,
 //=====================================================================
 //* GetAreaCodeInPhi --------------------------------------------------
 
-G4int G4HyperbolicSurface::GetAreaCodeInPhi(const G4ThreeVector &xx,
+G4int G4TwistTubsHypeSide::GetAreaCodeInPhi(const G4ThreeVector &xx,
                                                   G4bool withTol)
 {
    
@@ -801,7 +801,7 @@ G4int G4HyperbolicSurface::GetAreaCodeInPhi(const G4ThreeVector &xx,
 //=====================================================================
 //* SetCorners(EndInnerRadius, EndOuterRadius,DPhi,EndPhi,EndZ) -------
 
-void G4HyperbolicSurface::SetCorners(
+void G4TwistTubsHypeSide::SetCorners(
                                      G4double         EndInnerRadius[2],
                                      G4double         EndOuterRadius[2],
                                      G4double         DPhi,
@@ -852,10 +852,10 @@ void G4HyperbolicSurface::SetCorners(
       SetCorner(sC0Min1Max, x, y, z);
 
    } else {
-      G4cerr << "ERROR - G4FlatSurface::SetCorners()" << G4endl
+      G4cerr << "ERROR - G4TwistTubsFlatSide::SetCorners()" << G4endl
              << "        fAxis[0] = " << fAxis[0] << G4endl
              << "        fAxis[1] = " << fAxis[1] << G4endl;
-      G4Exception("G4HyperbolicSurface::SetCorners()",
+      G4Exception("G4TwistTubsHypeSide::SetCorners()",
                   "NotImplemented", FatalException,
                   "Feature NOT implemented !");
    }
@@ -865,9 +865,9 @@ void G4HyperbolicSurface::SetCorners(
 //=====================================================================
 //* SetCorners() ------------------------------------------------------
 
-void G4HyperbolicSurface::SetCorners()
+void G4TwistTubsHypeSide::SetCorners()
 {
-   G4Exception("G4HyperbolicSurface::SetCorners()",
+   G4Exception("G4TwistTubsHypeSide::SetCorners()",
                "NotImplemented", FatalException,
                "Method NOT implemented !");
 }
@@ -875,7 +875,7 @@ void G4HyperbolicSurface::SetCorners()
 //=====================================================================
 //* SetBoundaries() ---------------------------------------------------
 
-void G4HyperbolicSurface::SetBoundaries()
+void G4TwistTubsHypeSide::SetBoundaries()
 {
    // Set direction-unit vector of phi-boundary-lines in local coodinate.
    // sAxis0 must be kPhi.
@@ -908,10 +908,10 @@ void G4HyperbolicSurface::SetBoundaries()
       SetBoundary(sAxis1 & (sAxisZ | sAxisMax), direction, 
                   GetCorner(sC0Min1Max), sAxisPhi);
    } else {
-      G4cerr << "ERROR - G4HyperbolicSurface::SetBoundaries()" << G4endl
+      G4cerr << "ERROR - G4TwistTubsHypeSide::SetBoundaries()" << G4endl
              << "        fAxis[0] = " << fAxis[0] << G4endl
              << "        fAxis[1] = " << fAxis[1] << G4endl;
-      G4Exception("G4HyperbolicSurface::SetBoundaries()",
+      G4Exception("G4TwistTubsHypeSide::SetBoundaries()",
                   "NotImplemented", FatalException,
                   "Feature NOT implemented !");
    }

@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.icc,v 1.6 2004-12-02 09:31:31 gcosmo Exp $
+// $Id: G4VTwistSurface.icc,v 1.1 2005-11-18 16:48:01 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------
-// G4VSurface class inline methods
+// G4VTwistSurface class inline methods
 //
 // Author: 
 //   01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
@@ -40,7 +40,7 @@
 //* DistanceToPlaneWithV ----------------------------------------------
 
 inline
-G4double G4VSurface::DistanceToPlaneWithV(const G4ThreeVector &p,
+G4double G4VTwistSurface::DistanceToPlaneWithV(const G4ThreeVector &p,
                                           const G4ThreeVector &v,
                                           const G4ThreeVector &x0,
                                           const G4ThreeVector &n0,
@@ -55,7 +55,7 @@ G4double G4VSurface::DistanceToPlaneWithV(const G4ThreeVector &p,
 //* DistanceToPlane ---------------------------------------------------
 
 inline
-G4double G4VSurface::DistanceToPlane(const G4ThreeVector &p,
+G4double G4VTwistSurface::DistanceToPlane(const G4ThreeVector &p,
                                      const G4ThreeVector &x0,
                                      const G4ThreeVector &n0,
                                            G4ThreeVector &xx)
@@ -90,7 +90,7 @@ G4double G4VSurface::DistanceToPlane(const G4ThreeVector &p,
 //* DistanceToPlane ---------------------------------------------------
 
 inline
-G4double G4VSurface::DistanceToPlane(const G4ThreeVector &p,
+G4double G4VTwistSurface::DistanceToPlane(const G4ThreeVector &p,
                                      const G4ThreeVector &x0,
                                      const G4ThreeVector &t1,
                                      const G4ThreeVector &t2,
@@ -111,7 +111,7 @@ G4double G4VSurface::DistanceToPlane(const G4ThreeVector &p,
 //* DistanceToLine ----------------------------------------------------
 
 inline
-G4double G4VSurface::DistanceToLine(const G4ThreeVector &p,
+G4double G4VTwistSurface::DistanceToLine(const G4ThreeVector &p,
                                     const G4ThreeVector &x0,
                                     const G4ThreeVector &d,
                                           G4ThreeVector &xx)
@@ -152,7 +152,7 @@ G4double G4VSurface::DistanceToLine(const G4ThreeVector &p,
 //* IsAxis0 -----------------------------------------------------------
 
 inline
-G4bool G4VSurface::IsAxis0(G4int areacode) const 
+G4bool G4VTwistSurface::IsAxis0(G4int areacode) const 
 {
    if (areacode & sAxis0) return true;
    return false;
@@ -162,7 +162,7 @@ G4bool G4VSurface::IsAxis0(G4int areacode) const
 //* IsAxis1 -----------------------------------------------------------
 
 inline
-G4bool G4VSurface::IsAxis1(G4int areacode) const 
+G4bool G4VTwistSurface::IsAxis1(G4int areacode) const 
 {
    if (areacode & sAxis1) return true;
    return false;
@@ -172,7 +172,7 @@ G4bool G4VSurface::IsAxis1(G4int areacode) const
 //* IsOutside ---------------------------------------------------------
 
 inline
-G4bool G4VSurface::IsOutside(G4int areacode) const 
+G4bool G4VTwistSurface::IsOutside(G4int areacode) const 
 {
    if (areacode & sInside) return false;
    return true;
@@ -182,7 +182,7 @@ G4bool G4VSurface::IsOutside(G4int areacode) const
 //* IsInside ----------------------------------------------------------
 
 inline
-G4bool G4VSurface::IsInside(G4int areacode, G4bool testbitmode) const 
+G4bool G4VTwistSurface::IsInside(G4int areacode, G4bool testbitmode) const 
 {
    if (areacode & sInside) {
       if (testbitmode) {
@@ -198,7 +198,7 @@ G4bool G4VSurface::IsInside(G4int areacode, G4bool testbitmode) const
 //* IsBoundary --------------------------------------------------------
 
 inline
-G4bool G4VSurface::IsBoundary(G4int areacode, G4bool testbitmode) const 
+G4bool G4VTwistSurface::IsBoundary(G4int areacode, G4bool testbitmode) const 
 {
    if ((areacode & sBoundary) == sBoundary) {
       if (testbitmode) {
@@ -214,7 +214,7 @@ G4bool G4VSurface::IsBoundary(G4int areacode, G4bool testbitmode) const
 //* IsCorner ----------------------------------------------------------
 
 inline
-G4bool G4VSurface::IsCorner(G4int areacode, G4bool testbitmode) const 
+G4bool G4VTwistSurface::IsCorner(G4int areacode, G4bool testbitmode) const 
 {
    if ((areacode & sCorner) == sCorner) {
       if (testbitmode) {
@@ -230,7 +230,7 @@ G4bool G4VSurface::IsCorner(G4int areacode, G4bool testbitmode) const
 //* GetAxisType -------------------------------------------------------
 
 inline
-G4int G4VSurface::GetAxisType(G4int areacode, G4int whichaxis) const
+G4int G4VTwistSurface::GetAxisType(G4int areacode, G4int whichaxis) const
 {
    G4int axiscode = areacode & sAxisMask & whichaxis;
    
@@ -250,9 +250,9 @@ G4int G4VSurface::GetAxisType(G4int areacode, G4int whichaxis) const
               axiscode == (sAxisPhi & sAxis1)) {
       return sAxisPhi;
    } else {
-      G4cerr << "ERROR - G4VSurface::GetAxisType()" << G4endl
+      G4cerr << "ERROR - G4VTwistSurface::GetAxisType()" << G4endl
              << "        areacode = " << areacode << G4endl;
-      G4Exception("G4VSurface::GetAxisType()","NotSupported",
+      G4Exception("G4VTwistSurface::GetAxisType()","NotSupported",
                   FatalException, "Configuration not supported.");
    }
    return 1;
@@ -262,7 +262,7 @@ G4int G4VSurface::GetAxisType(G4int areacode, G4int whichaxis) const
 //* ComputeGlobalPoint ------------------------------------------------
 
 inline
-G4ThreeVector G4VSurface::ComputeGlobalPoint(const G4ThreeVector &lp) const
+G4ThreeVector G4VTwistSurface::ComputeGlobalPoint(const G4ThreeVector &lp) const
 {
    return fRot * G4ThreeVector(lp) + fTrans;
 }
@@ -271,7 +271,7 @@ G4ThreeVector G4VSurface::ComputeGlobalPoint(const G4ThreeVector &lp) const
 //* ComputeGlobalPoint ------------------------------------------------
 
 inline
-G4ThreeVector G4VSurface::ComputeLocalPoint(const G4ThreeVector &gp) const
+G4ThreeVector G4VTwistSurface::ComputeLocalPoint(const G4ThreeVector &gp) const
 {
    return fRot.inverse() * G4ThreeVector(gp) - fTrans;
 }
@@ -280,7 +280,7 @@ G4ThreeVector G4VSurface::ComputeLocalPoint(const G4ThreeVector &gp) const
 //* ComputeGlobalDirection --------------------------------------------
 
 inline
-G4ThreeVector G4VSurface::ComputeGlobalDirection(const G4ThreeVector &lp) const
+G4ThreeVector G4VTwistSurface::ComputeGlobalDirection(const G4ThreeVector &lp) const
 {
    return fRot * G4ThreeVector(lp); 
 }
@@ -289,7 +289,7 @@ G4ThreeVector G4VSurface::ComputeGlobalDirection(const G4ThreeVector &lp) const
 //* ComputeLocalDirection ---------------------------------------------
 
 inline
-G4ThreeVector G4VSurface::ComputeLocalDirection(const G4ThreeVector &gp) const
+G4ThreeVector G4VTwistSurface::ComputeLocalDirection(const G4ThreeVector &gp) const
 {
    return fRot.inverse() * G4ThreeVector(gp);
 }
@@ -298,8 +298,8 @@ G4ThreeVector G4VSurface::ComputeLocalDirection(const G4ThreeVector &gp) const
 //* SetNeighbours -----------------------------------------------------
 
 inline
-void G4VSurface::SetNeighbours(G4VSurface* axis0min, G4VSurface* axis1min, 
-                               G4VSurface* axis0max, G4VSurface* axis1max)
+void G4VTwistSurface::SetNeighbours(G4VTwistSurface* axis0min, G4VTwistSurface* axis1min, 
+                               G4VTwistSurface* axis0max, G4VTwistSurface* axis1max)
 {
    fNeighbours[0] = axis0min;
    fNeighbours[1] = axis1min;
@@ -311,7 +311,7 @@ void G4VSurface::SetNeighbours(G4VSurface* axis0min, G4VSurface* axis1min,
 //* GetNeighbours -----------------------------------------------------
 
 inline
-G4int G4VSurface::GetNeighbours(G4int areacode, G4VSurface** surfaces) 
+G4int G4VTwistSurface::GetNeighbours(G4int areacode, G4VTwistSurface** surfaces) 
 {
 
   int sAxis0Min = sAxis0 & sAxisMin ;
@@ -351,12 +351,12 @@ G4int G4VSurface::GetNeighbours(G4int areacode, G4VSurface** surfaces)
 //* GetCorner ---------------------------------------------------------
 
 inline
-G4ThreeVector G4VSurface::GetCorner(G4int areacode) const
+G4ThreeVector G4VTwistSurface::GetCorner(G4int areacode) const
 {
    if (!(areacode & sCorner)){
-      G4cerr << "ERROR - G4VSurface::GetCorner()" << G4endl
+      G4cerr << "ERROR - G4VTwistSurface::GetCorner()" << G4endl
              << "        areacode = " << areacode << G4endl;
-      G4Exception("G4VSurface::GetCorner()","InvalidSetup",
+      G4Exception("G4VTwistSurface::GetCorner()","InvalidSetup",
                   FatalException, "Area code must represent corner.");
    }
    
@@ -369,9 +369,9 @@ G4ThreeVector G4VSurface::GetCorner(G4int areacode) const
    } else if ((areacode & sC0Min1Max) == sC0Min1Max) { 
       return fCorners[3];
    } else {
-      G4cerr << "ERROR - G4VSurface::GetCorner()" << G4endl
+      G4cerr << "ERROR - G4VTwistSurface::GetCorner()" << G4endl
              << "        areacode = " << areacode << G4endl;
-      G4Exception("G4VSurface::GetCorner()", "NotSupported",
+      G4Exception("G4VTwistSurface::GetCorner()", "NotSupported",
                   FatalException, "Configuration not supported.");
    }
    return fCorners[0];

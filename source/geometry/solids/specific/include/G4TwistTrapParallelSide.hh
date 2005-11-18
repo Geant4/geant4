@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapAlphaSide.hh,v 1.7 2005-11-17 16:59:26 link Exp $
+// $Id: G4TwistTrapParallelSide.hh,v 1.1 2005-11-18 16:48:01 link Exp $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class header file
 //
 //
-// G4TwistedTrapAlphaSide
+// G4TwistTrapParallelSide
 //
 // Class description:
 //
@@ -38,18 +38,18 @@
 //   Oliver Link (Oliver.Link@cern.ch)
 //
 // --------------------------------------------------------------------
-#ifndef __G4TWISTEDTRAPALPHASIDE__
-#define __G4TWISTEDTRAPALPHASIDE__
+#ifndef __G4TWISTTRAPPARALLELSIDE__
+#define __G4TWISTTRAPPARALLELSIDE__
 
-#include "G4VSurface.hh"
+#include "G4VTwistSurface.hh"
 
 #include <vector>
 
-class G4TwistedTrapAlphaSide : public G4VSurface
+class G4TwistTrapParallelSide : public G4VTwistSurface
 {
   public:  // with description
    
-    G4TwistedTrapAlphaSide(const G4String     &name,
+    G4TwistTrapParallelSide(const G4String     &name,
 			   G4double      PhiTwist,    // twist angle
 			   G4double      pDz,         // half z lenght
 			   G4double      pTheta,      // direction between end planes
@@ -64,7 +64,7 @@ class G4TwistedTrapAlphaSide : public G4VSurface
                            G4double      AngleSide    // parity
 			   );
   
-    virtual ~G4TwistedTrapAlphaSide();
+    virtual ~G4TwistTrapParallelSide();
    
     virtual G4ThreeVector  GetNormal(const G4ThreeVector &xx,
                                            G4bool isGlobal = false) ;   
@@ -82,10 +82,9 @@ class G4TwistedTrapAlphaSide : public G4VSurface
                                           G4double       distance[],
                                           G4int          areacode[]);
 
-
   public:  // without description
 
-    G4TwistedTrapAlphaSide(__void__&);
+    G4TwistTrapParallelSide(__void__&);
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
@@ -101,16 +100,14 @@ class G4TwistedTrapAlphaSide : public G4VSurface
     G4ThreeVector ProjectPoint(const G4ThreeVector &p,
                                      G4bool isglobal = false);
 
-    inline virtual G4ThreeVector SurfacePoint(G4double phi, G4double u, G4bool isGlobal = false ) ;
+    inline virtual G4ThreeVector SurfacePoint(G4double phi, G4double u, G4bool isGlobal = false);
     inline virtual G4double GetBoundaryMin(G4double phi) ;
     inline virtual G4double GetBoundaryMax(G4double phi) ;
     inline virtual G4double GetSurfaceArea() ;
 
     inline G4ThreeVector NormAng(G4double phi, G4double u);
-    inline G4double Xcoef(G4double u,G4double phi);    // to calculate the w(u) function
-    inline G4double GetValueA(G4double phi) ;
+    inline G4double Xcoef(G4double u);    // to calculate the w(u) function
     inline G4double GetValueB(G4double phi) ;
-    inline G4double GetValueD(G4double phi) ;
 
   private:
 
@@ -134,6 +131,9 @@ class G4TwistedTrapAlphaSide : public G4VSurface
 
     G4double fAngleSide;
 
+    G4double fdeltaX ;
+    G4double fdeltaY ;
+
     G4double fDx4plus2 ;  // fDx4 + fDx2  == a2/2 + a1/2
     G4double fDx4minus2 ; // fDx4 - fDx2          -
     G4double fDx3plus1  ; // fDx3 + fDx1  == d2/2 + d1/2
@@ -143,9 +143,9 @@ class G4TwistedTrapAlphaSide : public G4VSurface
     G4double fa1md1 ;   // 2 fDx2 - 2 fDx1  == a1 - d1
     G4double fa2md2 ;  // 2 fDx4 - 2 fDx3 
 
-    G4double fdeltaX ;
-    G4double fdeltaY ;
 
+  // temporary
+    G4double fDy ;
 
 };   
 
@@ -153,87 +153,72 @@ class G4TwistedTrapAlphaSide : public G4VSurface
 // inline functions
 //========================================================
 
-inline
-G4double G4TwistedTrapAlphaSide::GetValueA(G4double phi)
-{
-  return ( fDx4plus2 + fDx4minus2 * ( 2 * phi ) / fPhiTwist  ) ;
-}
-
-inline
-G4double G4TwistedTrapAlphaSide::GetValueD(G4double phi) 
-{
-  return ( fDx3plus1 + fDx3minus1 * ( 2 * phi) / fPhiTwist  ) ;
-} 
 
 inline 
-G4double G4TwistedTrapAlphaSide::GetValueB(G4double phi) 
+G4double G4TwistTrapParallelSide::GetValueB(G4double phi) 
 {
   return ( fDy2plus1 + fDy2minus1 * ( 2 * phi ) / fPhiTwist ) ;
 }
 
-
 inline
-G4double G4TwistedTrapAlphaSide::Xcoef(G4double u, G4double phi)
+G4double G4TwistTrapParallelSide::Xcoef(G4double phi)
 {
   
-  return GetValueA(phi)/2. + (GetValueD(phi)-GetValueA(phi))/4. 
-    - u*( ( GetValueD(phi)-GetValueA(phi) ) / ( 2 * GetValueB(phi) ) - fTAlph )   ;
+  return GetValueB(phi)/2. ;
 
 }
 
 inline
-G4ThreeVector G4TwistedTrapAlphaSide::SurfacePoint( G4double phi, G4double u , G4bool isGlobal) 
+G4ThreeVector G4TwistTrapParallelSide::SurfacePoint( G4double phi, G4double u, G4bool isGlobal ) 
 {
   // function to calculate a point on the surface, given by parameters phi,u
 
-  //  G4cout << "G4TwistedTrapAlphaSide: fdeltaX,Y = " << fdeltaX << ", " << fdeltaY << G4endl ;
- 
-  G4ThreeVector SurfPoint ( Xcoef(u,phi) * std::cos(phi) - u * std::sin(phi) + fdeltaX*phi/fPhiTwist,
-			    Xcoef(u,phi) * std::sin(phi) + u * std::cos(phi) + fdeltaY*phi/fPhiTwist,
+  G4ThreeVector SurfPoint ( u*std::cos(phi) - Xcoef(phi)*std::sin(phi)+ fdeltaX*phi/fPhiTwist,
+                            u*std::sin(phi) + Xcoef(phi)*std::cos(phi)+ fdeltaY*phi/fPhiTwist,
 			    2*fDz*phi/fPhiTwist  );
-
-
   if (isGlobal) {
     return (fRot * SurfPoint + fTrans);
   } else {
     return SurfPoint;
   }
 
-
-}
-
-inline
-G4double G4TwistedTrapAlphaSide::GetBoundaryMin(G4double phi) {
-  return -0.5*GetValueB(phi) ;
-}
-
-inline
-G4double G4TwistedTrapAlphaSide::GetBoundaryMax(G4double phi) {
-  return 0.5*GetValueB(phi) ;
-}
-
-inline
-G4double G4TwistedTrapAlphaSide::GetSurfaceArea() {
-
-  return (fDz*(std::sqrt(16*fDy1*fDy1 + (fa1md1 + 4*fDy1*fTAlph)*(fa1md1 + 4*fDy1*fTAlph)) + std::sqrt(16*fDy2*fDy2 + (fa2md2 + 4*fDy2*fTAlph)*(fa2md2 + 4*fDy2*fTAlph))))/2. ;
-
 }
 
 
 inline
-G4ThreeVector G4TwistedTrapAlphaSide::NormAng( G4double phi, G4double u ) 
+G4double G4TwistTrapParallelSide::GetBoundaryMin(G4double phi) {
+
+  return  -(fPhiTwist*(fDx2 + fDx4 - fDy2plus1*fTAlph) + 2*fDx4minus2*phi - 2*fDy2minus1*fTAlph*phi)/(2.*fPhiTwist) ;
+
+}
+
+inline
+G4double G4TwistTrapParallelSide::GetBoundaryMax(G4double phi) {
+
+  return (fDx2 + fDx4 + fDy2plus1*fTAlph)/ 2. + ((fDx4minus2 + fDy2minus1*fTAlph)*phi)/fPhiTwist ;
+
+}
+
+inline
+G4double  G4TwistTrapParallelSide::GetSurfaceArea() {
+
+  return 2*fDx4plus2*fDz ;
+
+}
+
+inline
+G4ThreeVector G4TwistTrapParallelSide::NormAng( G4double phi, G4double u ) 
 {
   // function to calculate the norm at a given point on the surface
   // replace a1-d1
 
+  G4ThreeVector nvec(
+		     -2*fDz*std::sin(phi) ,
+		      2*fDz*std::cos(phi) ,
+		     -(fDy2minus1 + fPhiTwist*u + fdeltaY*std::cos(phi) - fdeltaX*std::sin(phi))) ;
 
-  G4ThreeVector nvec ( 
-		     fDy1* fDz*(4*fDy1*std::cos(phi) + (fa1md1 + 4*fDy1*fTAlph)*std::sin(phi)),
-		     -(fDy1* fDz*((fa1md1 + 4*fDy1*fTAlph)*std::cos(phi) - 4*fDy1*std::sin(phi))),
-		     (fDy1*(-8*(fDx3minus1 + fDx4minus2)*fDy1 + fa1md1*(fDx2 + fDx3plus1 + fDx4)*fPhiTwist + 4*(fDx2 + fDx3plus1 + fDx4)*fDy1*fPhiTwist*fTAlph + 2*(fDx3minus1 + fDx4minus2)*(fa1md1 + 4*fDy1*fTAlph)*phi) + fPhiTwist*(16*fDy1*fDy1 + (fa1md1 + 4*fDy1*fTAlph)*(fa1md1 + 4*fDy1*fTAlph))*u + 4*fDy1*(fa1md1*fdeltaY - 4*fdeltaX*fDy1 + 4*fdeltaY*fDy1*fTAlph)* std::cos(phi) - 4*fDy1*(fa1md1*fdeltaX + 4*fDy1*(fdeltaY + fdeltaX*fTAlph))*std::sin(phi))/ 8.
-		      ) ;
-  
   return nvec.unit();
+
 }
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatTrapSide.cc,v 1.8 2005-11-17 16:59:34 link Exp $
+// $Id: G4TwistTrapFlatSide.cc,v 1.1 2005-11-18 16:46:17 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,19 +29,19 @@
 // GEANT 4 class source file
 //
 //
-// G4FlatTrapSide.cc
+// G4TwistTrapFlatSide.cc
 //
 // Author: 
 //   30-Aug-2002 - Oliver Link (Oliver.Link@cern.ch)
 //
 // --------------------------------------------------------------------
 
-#include "G4FlatTrapSide.hh"
+#include "G4TwistTrapFlatSide.hh"
 
 //=====================================================================
 //* constructors ------------------------------------------------------
 
-G4FlatTrapSide::G4FlatTrapSide( const G4String        &name,
+G4TwistTrapFlatSide::G4TwistTrapFlatSide( const G4String        &name,
                               G4double      PhiTwist,
                               G4double      pDx1,
                               G4double      pDx2,
@@ -52,7 +52,7 @@ G4FlatTrapSide::G4FlatTrapSide( const G4String        &name,
                               G4double      pTheta,
                               G4int         handedness) 
 
-  : G4VSurface(name)
+  : G4VTwistSurface(name)
 {
    fHandedness = handedness;   // +z = +ve, -z = -ve
 
@@ -99,8 +99,8 @@ G4FlatTrapSide::G4FlatTrapSide( const G4String        &name,
 //=====================================================================
 //* Fake default constructor ------------------------------------------
 
-G4FlatTrapSide::G4FlatTrapSide( __void__& a )
-  : G4VSurface(a)
+G4TwistTrapFlatSide::G4TwistTrapFlatSide( __void__& a )
+  : G4VTwistSurface(a)
 {
 }
 
@@ -108,14 +108,14 @@ G4FlatTrapSide::G4FlatTrapSide( __void__& a )
 //=====================================================================
 //* destructor --------------------------------------------------------
 
-G4FlatTrapSide::~G4FlatTrapSide()
+G4TwistTrapFlatSide::~G4TwistTrapFlatSide()
 {
 }
 
 //=====================================================================
 //* GetNormal ---------------------------------------------------------
 
-G4ThreeVector G4FlatTrapSide::GetNormal(const G4ThreeVector & /* xx */ , 
+G4ThreeVector G4TwistTrapFlatSide::GetNormal(const G4ThreeVector & /* xx */ , 
                                              G4bool isGlobal)
 {
    if (isGlobal) {
@@ -128,7 +128,7 @@ G4ThreeVector G4FlatTrapSide::GetNormal(const G4ThreeVector & /* xx */ ,
 //=====================================================================
 //* DistanceToSurface(p, v) -------------------------------------------
 
-G4int G4FlatTrapSide::DistanceToSurface(const G4ThreeVector &gp,
+G4int G4TwistTrapFlatSide::DistanceToSurface(const G4ThreeVector &gp,
                                        const G4ThreeVector &gv,
                                              G4ThreeVector  gxx[],
                                              G4double       distance[],
@@ -224,7 +224,7 @@ G4int G4FlatTrapSide::DistanceToSurface(const G4ThreeVector &gp,
                                   isvalid[0], 1, validate, &gp, &gv);
 
 #ifdef G4SPECSDEBUG
-   G4cerr << "ERROR - G4FlatTrapSide::DistanceToSurface(p,v)" << G4endl;
+   G4cerr << "ERROR - G4TwistTrapFlatSide::DistanceToSurface(p,v)" << G4endl;
    G4cerr << "        Name        : " << GetName() << G4endl;
    G4cerr << "        xx          : " << xx << G4endl;
    G4cerr << "        gxx[0]      : " << gxx[0] << G4endl;
@@ -238,7 +238,7 @@ G4int G4FlatTrapSide::DistanceToSurface(const G4ThreeVector &gp,
 //=====================================================================
 //* DistanceToSurface(p) ----------------------------------------------
 
-G4int G4FlatTrapSide::DistanceToSurface(const G4ThreeVector &gp,
+G4int G4TwistTrapFlatSide::DistanceToSurface(const G4ThreeVector &gp,
                                              G4ThreeVector  gxx[],
                                              G4double       distance[],
                                              G4int          areacode[])
@@ -289,7 +289,7 @@ G4int G4FlatTrapSide::DistanceToSurface(const G4ThreeVector &gp,
 
 }
 
-G4int G4FlatTrapSide::GetAreaCode(const G4ThreeVector &xx, 
+G4int G4TwistTrapFlatSide::GetAreaCode(const G4ThreeVector &xx, 
                                        G4bool withTol)
 {
 
@@ -374,7 +374,7 @@ G4int G4FlatTrapSide::GetAreaCode(const G4ThreeVector &xx,
     }
     return areacode;
   } else {
-    G4Exception("G4FlatTrapSide::GetAreaCode()",
+    G4Exception("G4TwistTrapFlatSide::GetAreaCode()",
                 "NotImplemented", FatalException,
                 "Feature NOT implemented !");
   }
@@ -386,7 +386,7 @@ G4int G4FlatTrapSide::GetAreaCode(const G4ThreeVector &xx,
 //=====================================================================
 //* SetCorners --------------------------------------------------------
 
-void G4FlatTrapSide::SetCorners()
+void G4TwistTrapFlatSide::SetCorners()
 {
    // Set Corner points in local coodinate.
 
@@ -419,10 +419,10 @@ void G4FlatTrapSide::SetCorners()
      SetCorner(sC0Min1Max, x, y, z);
      
    } else {
-     G4cerr << "ERROR - G4FlatTrapSide::SetCorners()" << G4endl
+     G4cerr << "ERROR - G4TwistTrapFlatSide::SetCorners()" << G4endl
             << "        fAxis[0] = " << fAxis[0] << G4endl
             << "        fAxis[1] = " << fAxis[1] << G4endl;
-     G4Exception("G4FlatTrapSide::SetCorners()",
+     G4Exception("G4TwistTrapFlatSide::SetCorners()",
                  "NotImplemented", FatalException,
                  "Feature NOT implemented !");
    }
@@ -431,7 +431,7 @@ void G4FlatTrapSide::SetCorners()
 //=====================================================================
 //* SetBoundaries() ---------------------------------------------------
 
-void G4FlatTrapSide::SetBoundaries()
+void G4TwistTrapFlatSide::SetBoundaries()
 {
    // Set direction-unit vector of phi-boundary-lines in local coodinate.
    // Don't call the function twice.
@@ -465,10 +465,10 @@ void G4FlatTrapSide::SetBoundaries()
                 GetCorner(sC0Max1Max), sAxisX);
     
   } else {
-    G4cerr << "ERROR - G4FlatTrapSide::SetBoundaries()" << G4endl
+    G4cerr << "ERROR - G4TwistTrapFlatSide::SetBoundaries()" << G4endl
            << "        fAxis[0] = " << fAxis[0] << G4endl
            << "        fAxis[1] = " << fAxis[1] << G4endl;
-    G4Exception("G4FlatTrapSide::SetCorners()",
+    G4Exception("G4TwistTrapFlatSide::SetCorners()",
                 "NotImplemented", FatalException,
                 "Feature NOT implemented !");
    }

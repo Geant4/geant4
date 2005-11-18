@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc,v 1.14 2005-11-17 16:59:41 link Exp $
+// $Id: G4TwistedTubs.cc,v 1.15 2005-11-18 16:46:17 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@
 // GEANT 4 class source file
 //
 //
-// G4TwistedSurface.cc
+// G4TwistTubsSide.cc
 //
 // Author: 
 //   01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
@@ -469,8 +469,8 @@ EInside G4TwistedTubs::Inside(const G4ThreeVector& p) const
    }
    
    
-   EInside  outerhypearea = ((G4HyperbolicSurface *)fOuterHype)->Inside(p);
-   G4double innerhyperho  = ((G4HyperbolicSurface *)fInnerHype)->GetRhoAtPZ(p);
+   EInside  outerhypearea = ((G4TwistTubsHypeSide *)fOuterHype)->Inside(p);
+   G4double innerhyperho  = ((G4TwistTubsHypeSide *)fInnerHype)->GetRhoAtPZ(p);
    G4double distanceToOut = p.getRho() - innerhyperho; // +ve: inside
 
    if (outerhypearea == kOutside || distanceToOut < -halftol) {
@@ -514,12 +514,12 @@ G4ThreeVector G4TwistedTubs::SurfaceNormal(const G4ThreeVector& p) const
    }    
    G4ThreeVector *tmpp       = const_cast<G4ThreeVector*>(&(fLastNormal.p));
    G4ThreeVector *tmpnormal  = const_cast<G4ThreeVector*>(&(fLastNormal.vec));
-   G4VSurface    **tmpsurface = const_cast<G4VSurface**>(fLastNormal.surface);
+   G4VTwistSurface    **tmpsurface = const_cast<G4VTwistSurface**>(fLastNormal.surface);
    tmpp->set(p.x(), p.y(), p.z());
 
    G4double      distance = kInfinity;
 
-   G4VSurface *surfaces[6];
+   G4VTwistSurface *surfaces[6];
    surfaces[0] = fLatterTwisted;
    surfaces[1] = fFormerTwisted;
    surfaces[2] = fInnerHype;
@@ -603,7 +603,7 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p,
    G4double      distance = kInfinity;   
 
    // find intersections and choose nearest one.
-   G4VSurface *surfaces[6];
+   G4VTwistSurface *surfaces[6];
    surfaces[0] = fLowerEndcap;
    surfaces[1] = fUpperEndcap;
    surfaces[2] = fLatterTwisted;
@@ -676,7 +676,7 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p) const
          G4double      distance = kInfinity;   
 
          // find intersections and choose nearest one.
-         G4VSurface *surfaces[6];
+         G4VTwistSurface *surfaces[6];
          surfaces[0] = fLowerEndcap;
          surfaces[1] = fUpperEndcap;
          surfaces[2] = fLatterTwisted;
@@ -756,7 +756,7 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p,
       // particle is just on a boundary.
       // if the particle is exiting from the volume, return 0.
       G4ThreeVector normal = SurfaceNormal(p);
-      G4VSurface *blockedsurface = fLastNormal.surface[0];
+      G4VTwistSurface *blockedsurface = fLastNormal.surface[0];
       if (normal*v > 0) {
 
             if (calcNorm) {
@@ -774,7 +774,7 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p,
    G4double      distance = kInfinity;
        
    // find intersections and choose nearest one.
-   G4VSurface *surfaces[6];
+   G4VTwistSurface *surfaces[6];
    surfaces[0] = fLatterTwisted;
    surfaces[1] = fFormerTwisted;
    surfaces[2] = fInnerHype;
@@ -853,7 +853,7 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p ) const
          G4double      distance = kInfinity;
    
          // find intersections and choose nearest one.
-         G4VSurface *surfaces[6];
+         G4VTwistSurface *surfaces[6];
          surfaces[0] = fLatterTwisted;
          surfaces[1] = fFormerTwisted;
          surfaces[2] = fInnerHype;
@@ -986,34 +986,34 @@ void G4TwistedTubs::CreateSurfaces()
    G4ThreeVector x0(0, 0, fEndZ[0]);
    G4ThreeVector n (0, 0, -1);
 
-   fLowerEndcap = new G4FlatSurface("LowerEndcap",
+   fLowerEndcap = new G4TwistTubsFlatSide("LowerEndcap",
                                     fEndInnerRadius, fEndOuterRadius,
                                     fDPhi, fEndPhi, fEndZ, -1) ;
 
-   fUpperEndcap = new G4FlatSurface("UpperEndcap",  
+   fUpperEndcap = new G4TwistTubsFlatSide("UpperEndcap",  
                                     fEndInnerRadius, fEndOuterRadius,
                                     fDPhi, fEndPhi, fEndZ, 1) ;
 
    G4RotationMatrix    rotHalfDPhi;
    rotHalfDPhi.rotateZ(0.5*fDPhi);
 
-   fLatterTwisted = new G4TwistedSurface("LatterTwisted",
+   fLatterTwisted = new G4TwistTubsSide("LatterTwisted",
                                          fEndInnerRadius, fEndOuterRadius,
                                          fDPhi, fEndPhi, fEndZ, 
                                          fInnerRadius, fOuterRadius, fKappa,
                                          1 ) ; 
-   fFormerTwisted = new G4TwistedSurface("FormerTwisted", 
+   fFormerTwisted = new G4TwistTubsSide("FormerTwisted", 
                                          fEndInnerRadius, fEndOuterRadius,
                                          fDPhi, fEndPhi, fEndZ, 
                                          fInnerRadius, fOuterRadius, fKappa,
                                          -1 ) ; 
 
-   fInnerHype = new G4HyperbolicSurface("InnerHype",
+   fInnerHype = new G4TwistTubsHypeSide("InnerHype",
                                         fEndInnerRadius, fEndOuterRadius,
                                         fDPhi, fEndPhi, fEndZ, 
                                         fInnerRadius, fOuterRadius,fKappa,
                                         fTanInnerStereo, fTanOuterStereo, -1) ;
-   fOuterHype = new G4HyperbolicSurface("OuterHype", 
+   fOuterHype = new G4TwistTubsHypeSide("OuterHype", 
                                         fEndInnerRadius, fEndOuterRadius,
                                         fDPhi, fEndPhi, fEndZ, 
                                         fInnerRadius, fOuterRadius,fKappa,

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc,v 1.6 2005-11-17 16:59:42 link Exp $
+// $Id: G4VTwistedFaceted.cc,v 1.7 2005-11-18 16:46:17 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -571,12 +571,12 @@ G4ThreeVector G4VTwistedFaceted::SurfaceNormal(const G4ThreeVector& p) const
    
    G4ThreeVector *tmpp       = const_cast<G4ThreeVector*>(&(fLastNormal.p));
    G4ThreeVector *tmpnormal  = const_cast<G4ThreeVector*>(&(fLastNormal.vec));
-   G4VSurface    **tmpsurface = const_cast<G4VSurface**>(fLastNormal.surface);
+   G4VTwistSurface    **tmpsurface = const_cast<G4VTwistSurface**>(fLastNormal.surface);
    tmpp->set(p.x(), p.y(), p.z());
 
    G4double      distance = kInfinity;
 
-   G4VSurface *surfaces[6];
+   G4VTwistSurface *surfaces[6];
 
    surfaces[0] = fSide0 ;
    surfaces[1] = fSide90 ;
@@ -669,7 +669,7 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p,
 
    // Find intersections and choose nearest one
    //
-   G4VSurface *surfaces[6];
+   G4VTwistSurface *surfaces[6];
 
    surfaces[0] = fSide0;
    surfaces[1] = fSide90 ;
@@ -762,7 +762,7 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p) const
 
          // Find intersections and choose nearest one
          //
-         G4VSurface *surfaces[6];
+         G4VTwistSurface *surfaces[6];
 
          surfaces[0] = fSide0;
          surfaces[1] = fSide90 ;
@@ -851,7 +851,7 @@ G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p,
       // if the particle is exiting from the volume, return 0
       //
       G4ThreeVector normal = SurfaceNormal(p);
-      G4VSurface *blockedsurface = fLastNormal.surface[0];
+      G4VTwistSurface *blockedsurface = fLastNormal.surface[0];
       if (normal*v > 0)
       {
             if (calcNorm)
@@ -871,7 +871,7 @@ G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p,
    G4double      distance = kInfinity;
        
    // find intersections and choose nearest one.
-   G4VSurface *surfaces[6];
+   G4VTwistSurface *surfaces[6];
 
    surfaces[0] = fSide0;
    surfaces[1] = fSide90 ;
@@ -958,7 +958,7 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p ) const
    
          // find intersections and choose nearest one
          //
-         G4VSurface *surfaces[6];
+         G4VTwistSurface *surfaces[6];
 
          surfaces[0] = fSide0;
          surfaces[1] = fSide90 ;
@@ -1075,31 +1075,31 @@ void G4VTwistedFaceted::CreateSurfaces()
 
   if ( fDx1 == fDx2 && fDx3 == fDx4 )    // special case : Box
   {
-    fSide0   = new G4TwistedTrapBoxSide("0deg",   fPhiTwist, fDz, fTheta, fPhi,
+    fSide0   = new G4TwistBoxSide("0deg",   fPhiTwist, fDz, fTheta, fPhi,
                                         fDy1, fDx1, fDx1, fDy2, fDx3, fDx3, fAlph, 0.*deg);
-    fSide180 = new G4TwistedTrapBoxSide("180deg", fPhiTwist, fDz, fTheta, fPhi+pi,
+    fSide180 = new G4TwistBoxSide("180deg", fPhiTwist, fDz, fTheta, fPhi+pi,
 					fDy1, fDx1, fDx1, fDy2, fDx3, fDx3, fAlph, 180.*deg);
   }
   else   // default general case
   {
-    fSide0   = new G4TwistedTrapAlphaSide("0deg"   ,fPhiTwist, fDz, fTheta,
+    fSide0   = new G4TwistTrapAlphaSide("0deg"   ,fPhiTwist, fDz, fTheta,
                       fPhi, fDy1, fDx1, fDx2, fDy2, fDx3, fDx4, fAlph, 0.*deg);
-    fSide180 = new G4TwistedTrapAlphaSide("180deg", fPhiTwist, fDz, fTheta,
+    fSide180 = new G4TwistTrapAlphaSide("180deg", fPhiTwist, fDz, fTheta,
                  fPhi+pi, fDy1, fDx2, fDx1, fDy2, fDx4, fDx3, fAlph, 180.*deg);
   }
 
   // create parallel sides
   //
-  fSide90 = new G4TwistedTrapParallelSide("90deg",  fPhiTwist, fDz, fTheta,
+  fSide90 = new G4TwistTrapParallelSide("90deg",  fPhiTwist, fDz, fTheta,
                       fPhi, fDy1, fDx1, fDx2, fDy2, fDx3, fDx4, fAlph, 0.*deg);
-  fSide270 = new G4TwistedTrapParallelSide("270deg", fPhiTwist, fDz, fTheta,
+  fSide270 = new G4TwistTrapParallelSide("270deg", fPhiTwist, fDz, fTheta,
                  fPhi+pi, fDy1, fDx2, fDx1, fDy2, fDx4, fDx3, fAlph, 180.*deg);
 
   // create endcaps
   //
-  fUpperEndcap = new G4FlatTrapSide("UpperCap",fPhiTwist, fDx3, fDx4, fDy2,
+  fUpperEndcap = new G4TwistTrapFlatSide("UpperCap",fPhiTwist, fDx3, fDx4, fDy2,
                                     fDz, fAlph, fPhi, fTheta,  1 );
-  fLowerEndcap = new G4FlatTrapSide("LowerCap",fPhiTwist, fDx1, fDx2, fDy1,
+  fLowerEndcap = new G4TwistTrapFlatSide("LowerCap",fPhiTwist, fDx1, fDx2, fDy1,
                                     fDz, fAlph, fPhi, fTheta, -1 );
  
   // Set neighbour surfaces

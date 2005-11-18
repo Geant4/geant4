@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrd.hh,v 1.3 2005-11-09 15:04:28 gcosmo Exp $
+// $Id: G4TwistedTrd.hh,v 1.4 2005-11-18 16:48:01 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

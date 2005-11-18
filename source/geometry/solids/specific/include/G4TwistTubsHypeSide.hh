@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HyperbolicSurface.hh,v 1.9 2005-11-17 16:59:24 link Exp $
+// $Id: G4TwistTubsHypeSide.hh,v 1.1 2005-11-18 16:48:01 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@
 // GEANT 4 class header file
 //
 //
-// G4HyperbolicSurface
+// G4TwistTubsHypeSide
 //
 // Class description:
 //
@@ -42,18 +42,18 @@
 //   13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
 //                 from original version in Jupiter-2.5.02 application.
 // --------------------------------------------------------------------
-#ifndef __G4HYPERBOLICSURFACE__
-#define __G4HYPERBOLICSURFACE__
+#ifndef __G4TWISTTUBSHYPESIDE__
+#define __G4TWISTTUBSHYPESIDE__
 
-#include "G4VSurface.hh"
+#include "G4VTwistSurface.hh"
 #include "G4Integrator.hh"
 #include "G4SimpleIntegration.hh"
 
-class G4HyperbolicSurface : public G4VSurface
+class G4TwistTubsHypeSide : public G4VTwistSurface
 {
   public:  // with description
                        
-   G4HyperbolicSurface(const G4String         &name,
+   G4TwistTubsHypeSide(const G4String         &name,
                        const G4RotationMatrix &rot,  // 0.5*(phi-width segment)
                        const G4ThreeVector    &tlate,
                        const G4int     handedness,// R-hand = 1, L-hand = -1
@@ -67,7 +67,7 @@ class G4HyperbolicSurface : public G4VSurface
                              G4double  axis0max = kInfinity,
                              G4double  axis1max = kInfinity); 
                              
-  G4HyperbolicSurface(const G4String  &name,
+  G4TwistTubsHypeSide(const G4String  &name,
                             G4double   EndInnerRadius[2],
                             G4double   EndOuterRadius[2],
                             G4double   DPhi,
@@ -80,7 +80,7 @@ class G4HyperbolicSurface : public G4VSurface
                             G4double   TanOuterStereo,
                             G4int      handedness) ;
 
-   virtual ~G4HyperbolicSurface();
+   virtual ~G4TwistTubsHypeSide();
 
    virtual G4int DistanceToSurface(const G4ThreeVector &gp,
                                    const G4ThreeVector &gv,
@@ -110,7 +110,7 @@ class G4HyperbolicSurface : public G4VSurface
  
   public:  // without description
 
-   G4HyperbolicSurface(__void__&);
+   G4TwistTubsHypeSide(__void__&);
      // Fake default constructor for usage restricted to direct object
      // persistency for clients requiring preallocation of memory for
      // persistifiable objects.
@@ -153,7 +153,7 @@ class G4HyperbolicSurface : public G4VSurface
 //========================================================
 
 inline
-G4double G4HyperbolicSurface::GetRhoAtPZ(const G4ThreeVector &p,
+G4double G4TwistTubsHypeSide::GetRhoAtPZ(const G4ThreeVector &p,
                                                G4bool isglobal) const 
 {
   // Get Rho at p.z() on Hyperbolic Surface.
@@ -167,7 +167,7 @@ G4double G4HyperbolicSurface::GetRhoAtPZ(const G4ThreeVector &p,
 }
 
 inline
-G4ThreeVector G4HyperbolicSurface::SurfacePoint(G4double phi , G4double z , G4bool isGlobal) {
+G4ThreeVector G4TwistTubsHypeSide::SurfacePoint(G4double phi , G4double z , G4bool isGlobal) {
 
   G4double rho = std::sqrt(fR02 + z * z * fTan2Stereo) ;
 
@@ -185,7 +185,7 @@ G4ThreeVector G4HyperbolicSurface::SurfacePoint(G4double phi , G4double z , G4bo
 }
 
 inline
-G4double G4HyperbolicSurface::GetBoundaryMin(G4double z) {
+G4double G4TwistTubsHypeSide::GetBoundaryMin(G4double z) {
 
   G4ThreeVector ptmp(0,0,z) ;  // temporary point with z Komponent only
   G4ThreeVector lowerlimit;    // lower phi-boundary limit at z = ptmp.z()
@@ -195,7 +195,7 @@ G4double G4HyperbolicSurface::GetBoundaryMin(G4double z) {
 }
 
 inline
-G4double G4HyperbolicSurface::GetBoundaryMax(G4double z ) {
+G4double G4TwistTubsHypeSide::GetBoundaryMax(G4double z ) {
 
   G4ThreeVector ptmp(0,0,z) ;  // temporary point with z Komponent only
   G4ThreeVector upperlimit;    // upper phi-boundary limit at z = ptmp.z()
@@ -205,7 +205,7 @@ G4double G4HyperbolicSurface::GetBoundaryMax(G4double z ) {
 }
 
 inline
-G4double G4HyperbolicSurface::GetSurfaceArea() {
+G4double G4TwistTubsHypeSide::GetSurfaceArea() {
 
   // approximation with tube surface
 

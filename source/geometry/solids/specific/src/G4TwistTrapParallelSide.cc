@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapParallelSide.cc,v 
+// $Id: G4TwistTrapParallelSide.cc,v 
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@
 // GEANT 4 class source file
 //
 //
-// G4TwistedTrapParallelSide.cc
+// G4TwistTrapParallelSide.cc
 //
 // Author:
 //
@@ -39,13 +39,13 @@
 
 #include <cmath>
 
-#include "G4TwistedTrapParallelSide.hh"
+#include "G4TwistTrapParallelSide.hh"
 #include "G4JTPolynomialSolver.hh"
 
 //=====================================================================
 //* constructors ------------------------------------------------------
 
-G4TwistedTrapParallelSide::G4TwistedTrapParallelSide(const G4String     &name,
+G4TwistTrapParallelSide::G4TwistTrapParallelSide(const G4String     &name,
 			   G4double      PhiTwist,    // twist angle
 			   G4double      pDz,         // half z lenght
 			   G4double      pTheta,      // direction between end planes
@@ -58,7 +58,7 @@ G4TwistedTrapParallelSide::G4TwistedTrapParallelSide(const G4String     &name,
 			   G4double      pDx4,        // half x length at +pDz,+pDy
 			   G4double      pAlph,      // tilt angle at +pDz
                            G4double      AngleSide    // parity
-					       ) : G4VSurface(name)
+					       ) : G4VTwistSurface(name)
 {  
   
   fAxis[0]    = kXAxis; // in local coordinate system
@@ -115,8 +115,8 @@ G4TwistedTrapParallelSide::G4TwistedTrapParallelSide(const G4String     &name,
 //=====================================================================
 //* Fake default constructor ------------------------------------------
 
-G4TwistedTrapParallelSide::G4TwistedTrapParallelSide( __void__& a )
-  : G4VSurface(a)
+G4TwistTrapParallelSide::G4TwistTrapParallelSide( __void__& a )
+  : G4VTwistSurface(a)
 {
 }
 
@@ -124,14 +124,14 @@ G4TwistedTrapParallelSide::G4TwistedTrapParallelSide( __void__& a )
 //=====================================================================
 //* destructor --------------------------------------------------------
 
-G4TwistedTrapParallelSide::~G4TwistedTrapParallelSide()
+G4TwistTrapParallelSide::~G4TwistTrapParallelSide()
 {
 }
 
 //=====================================================================
 //* GetNormal ---------------------------------------------------------
 
-G4ThreeVector G4TwistedTrapParallelSide::GetNormal(const G4ThreeVector &tmpxx, 
+G4ThreeVector G4TwistTrapParallelSide::GetNormal(const G4ThreeVector &tmpxx, 
                                                 G4bool isGlobal) 
 {
    // GetNormal returns a normal vector at a surface (or very close
@@ -177,7 +177,7 @@ G4ThreeVector G4TwistedTrapParallelSide::GetNormal(const G4ThreeVector &tmpxx,
 //=====================================================================
 //* DistanceToSurface -------------------------------------------------
 
-G4int G4TwistedTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
+G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
                                           const G4ThreeVector &gv,
                                                 G4ThreeVector  gxx[],
                                                 G4double       distance[],
@@ -421,7 +421,7 @@ G4int G4TwistedTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
 	  if (tmpdist >= 0) tmpisvalid = true;
 	}
       } else { // kDontValidate
-	G4Exception("G4TwistedTrapParallelSide::DistanceToSurface()",
+	G4Exception("G4TwistTrapParallelSide::DistanceToSurface()",
 		    "NotImplemented kDontValidate", FatalException,
 		    "Feature NOT implemented !");
       }
@@ -623,7 +623,7 @@ G4int G4TwistedTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
 
     
 #ifdef G4SPECSDEBUG
-  G4cout << "G4TwistedTrapParallelSide finished " << G4endl ;
+  G4cout << "G4TwistTrapParallelSide finished " << G4endl ;
   G4cout << nxx << " possible physical solutions found" << G4endl ;
   for ( G4int k= 0 ; k< nxx ; k++ ) {
     G4cout << "global intersection Point found: " << gxx[k] << G4endl ;
@@ -641,7 +641,7 @@ G4int G4TwistedTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
 //=====================================================================
 //* DistanceToSurface -------------------------------------------------
 
-G4int G4TwistedTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
+G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
                                                 G4ThreeVector  gxx[],
                                                 G4double       distance[],
                                                 G4int          areacode[])
@@ -744,7 +744,7 @@ G4int G4TwistedTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
 //=====================================================================
 //* GetAreaCode -------------------------------------------------------
 
-G4int G4TwistedTrapParallelSide::GetAreaCode(const G4ThreeVector &xx, 
+G4int G4TwistTrapParallelSide::GetAreaCode(const G4ThreeVector &xx, 
                                           G4bool withTol)
 {
    // We must use the function in local coordinate system.
@@ -842,7 +842,7 @@ G4int G4TwistedTrapParallelSide::GetAreaCode(const G4ThreeVector &xx,
       }
       return areacode;
    } else {
-      G4Exception("G4TwistedTrapParallelSide::GetAreaCode()",
+      G4Exception("G4TwistTrapParallelSide::GetAreaCode()",
                   "NotImplemented", FatalException,
                   "Feature NOT implemented !");
    }
@@ -852,7 +852,7 @@ G4int G4TwistedTrapParallelSide::GetAreaCode(const G4ThreeVector &xx,
 //=====================================================================
 //* SetCorners() ------------------------------------------------------
 
-void G4TwistedTrapParallelSide::SetCorners()
+void G4TwistTrapParallelSide::SetCorners()
 {
 
   // Set Corner points in local coodinate.   
@@ -893,7 +893,7 @@ void G4TwistedTrapParallelSide::SetCorners()
 
   } else {
 
-    G4Exception("G4TwistedTrapParallelSide::SetCorners()",
+    G4Exception("G4TwistTrapParallelSide::SetCorners()",
                 "NotImplemented", FatalException,
                 "Method NOT implemented !");
   }
@@ -902,7 +902,7 @@ void G4TwistedTrapParallelSide::SetCorners()
 //=====================================================================
 //* SetBoundaries() ---------------------------------------------------
 
-void G4TwistedTrapParallelSide::SetBoundaries()
+void G4TwistTrapParallelSide::SetBoundaries()
 {
    // Set direction-unit vector of boundary-lines in local coodinate. 
    //   
@@ -937,7 +937,7 @@ void G4TwistedTrapParallelSide::SetBoundaries()
     
   } else {
     
-  G4Exception("G4TwistedTrapParallelSide::SetCorners()",
+  G4Exception("G4TwistTrapParallelSide::SetCorners()",
               "NotImplemented", FatalException,
               "Feature NOT implemented !");
   }
@@ -946,7 +946,7 @@ void G4TwistedTrapParallelSide::SetBoundaries()
 
 
 
-void G4TwistedTrapParallelSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u) 
+void G4TwistTrapParallelSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u) 
 {
   // find closest point XX on surface for a given point p
   // X0 is a point on the surface,  d is the direction ( both for a fixed z = pz)
@@ -960,7 +960,7 @@ void G4TwistedTrapParallelSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4do
 }
 
 
-G4ThreeVector G4TwistedTrapParallelSide::ProjectPoint(const G4ThreeVector &p, 
+G4ThreeVector G4TwistTrapParallelSide::ProjectPoint(const G4ThreeVector &p, 
                                                     G4bool isglobal) 
 {
   // Get Rho at p.z() on Hyperbolic Surface.

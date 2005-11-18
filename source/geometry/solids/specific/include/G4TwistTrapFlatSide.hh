@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatSurface.hh,v 1.8 2005-11-17 16:59:21 link Exp $
+// $Id: G4TwistTrapFlatSide.hh,v 1.1 2005-11-18 16:48:01 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,48 +29,38 @@
 // GEANT 4 class header file
 //
 //
-// G4FlatSurface
+// G4FlatTrapSurface
 //
 // Class description:
 //
-//  Class describing a flat boundary surface for a cylinder.
+//  Class describing a flat boundary surface for a trapezoid.
 
-// Author: 
-//   01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
+// Author:
 //
-// History:
-//   13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
-//                 from original version in Jupiter-2.5.02 application.
+//   27-Oct-2004 - O.Link (Oliver.Link@cern.ch)
+//
 // --------------------------------------------------------------------
-#ifndef __G4FLATSURFACE__
-#define __G4FLATSURFACE__
+#ifndef __G4TWISTTRAPFLATSIDE__
+#define __G4TWISTTRAPFLATSIDE__
 
-#include "G4VSurface.hh"
+#include "G4VTwistSurface.hh"
 
-class G4FlatSurface : public G4VSurface
+class G4TwistTrapFlatSide : public G4VTwistSurface
 {
   public:  // with description
 
-   G4FlatSurface(const G4String         &name,
-                 const G4RotationMatrix &rot,
-                 const G4ThreeVector    &tlate,
-                 const G4ThreeVector    &n,
-                 const EAxis             axis1 = kRho, // RHO axis !
-                 const EAxis             axis2 = kPhi, // PHI axis !
-                       G4double          axis0min = -kInfinity,
-                       G4double          axis1min = -kInfinity,
-                       G4double          axis0max = kInfinity,
-                       G4double          axis1max = kInfinity );
-                       
-   G4FlatSurface( const G4String        &name,
-                        G4double         EndInnerRadius[2],
-                        G4double         EndOuterRadius[2],
-                        G4double         DPhi,
-                        G4double         EndPhi[2],
-                        G4double         EndZ[2], 
-                        G4int            handedness ) ;
+   G4TwistTrapFlatSide( const G4String& name,
+                         G4double  PhiTwist,
+                         G4double  pDx1,
+                         G4double  pDx2,
+                         G4double  pDy,
+                         G4double  pDz,
+                         G4double  pAlpha,
+                         G4double  pPhi,
+                         G4double  pTheta,
+                         G4int     handedness  );
+   virtual ~G4TwistTrapFlatSide();
 
-   virtual ~G4FlatSurface();
    virtual G4ThreeVector  GetNormal(const G4ThreeVector & /* xx */ ,
                                           G4bool isGlobal = false);
    virtual G4int DistanceToSurface(const G4ThreeVector &gp,
@@ -86,20 +76,20 @@ class G4FlatSurface : public G4VSurface
                                          G4double       distance[],
                                          G4int          areacode[]);
                                                   
-  inline virtual G4ThreeVector SurfacePoint(G4double, G4double, G4bool isGlobal = false ) ;  
-  inline virtual G4double GetBoundaryMin(G4double phi) ;
-  inline virtual G4double GetBoundaryMax(G4double phi) ;
-  inline virtual G4double GetSurfaceArea() { return fSurfaceArea ; } ;
 
+   inline virtual G4ThreeVector SurfacePoint(G4double x, G4double y, G4bool isGlobal = false) ;  
+   inline virtual G4double GetBoundaryMin(G4double u) ;
+   inline virtual G4double GetBoundaryMax(G4double u) ;
+   inline virtual G4double GetSurfaceArea() ;
 
-  G4double fSurfaceArea ;
 
   public:  // without description
 
-   G4FlatSurface(__void__&);
+   G4TwistTrapFlatSide(__void__&);
      // Fake default constructor for usage restricted to direct object
      // persistency for clients requiring preallocation of memory for
      // persistifiable objects.
+
 
   protected:  // with description
 
@@ -110,18 +100,39 @@ class G4FlatSurface : public G4VSurface
 
    virtual void SetCorners();
    virtual void SetBoundaries();
-   
+
+   inline double xAxisMax(G4double u, G4double fTanAlpha) const ;
+ 
+  private:
+  
+   G4double fDx1 ;
+   G4double fDx2 ;
+   G4double fDy ;
+   G4double fDz ;
+   G4double fPhiTwist ;
+   G4double fAlpha ;
+   G4double fTAlph ;
+   G4double fPhi ;
+   G4double fTheta ;
+   G4double fdeltaX ;
+   G4double fdeltaY ;
+
 };
 
-inline
-G4ThreeVector G4FlatSurface::SurfacePoint(G4double phi , G4double rho , G4bool isGlobal ) {
 
-  G4ThreeVector SurfPoint (rho*std::cos(phi) ,
-				  rho*std::sin(phi) ,
-				  0) ;
+inline 
+G4double G4TwistTrapFlatSide::xAxisMax(G4double u, G4double fTanAlpha) const
+{
+  return (  ( fDx2 + fDx1 )/2. + u*(fDx2 - fDx1)/(2.*fDy) + u *fTanAlpha  ) ;
+}
+
+inline
+G4ThreeVector G4TwistTrapFlatSide::SurfacePoint(G4double x, G4double y, G4bool isGlobal) {
+
+  G4ThreeVector SurfPoint ( x,y,0) ;
 
   if (isGlobal) {
-    return (fRot * SurfPoint + fTrans);
+    return (fRot*SurfPoint + fTrans);
   } else {
     return SurfPoint;
   }
@@ -129,20 +140,20 @@ G4ThreeVector G4FlatSurface::SurfacePoint(G4double phi , G4double rho , G4bool i
 }
 
 inline
-G4double G4FlatSurface::GetBoundaryMin(G4double) {
-
-  G4ThreeVector dphimin = GetCorner(sC0Max1Min);
-  return  std::atan2( dphimin.y(), dphimin.x() ) ;  
+G4double G4TwistTrapFlatSide::GetBoundaryMin(G4double y ) {
+  return -xAxisMax(y, -fTAlph ) ;
 
 }
 
 inline
-G4double G4FlatSurface::GetBoundaryMax(G4double) {
-
-  G4ThreeVector dphimax = GetCorner(sC0Max1Max);   
-  return  std::atan2( dphimax.y(), dphimax.x() ) ;  
-
+G4double G4TwistTrapFlatSide::GetBoundaryMax(G4double y ) {
+  return xAxisMax(y, fTAlph ) ; 
 }
 
+inline
+G4double G4TwistTrapFlatSide::GetSurfaceArea() {
+
+  return 2*(fDx1 + fDx2)*fDy ;
+}
 
 #endif

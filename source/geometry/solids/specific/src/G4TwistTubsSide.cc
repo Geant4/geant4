@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedSurface.cc,v 1.12 2005-11-17 16:59:37 link Exp $
+// $Id: G4TwistTubsSide.cc,v 1.1 2005-11-18 16:46:17 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@
 // GEANT 4 class source file
 //
 //
-// G4TwistedSurface.cc
+// G4TwistTubsSide.cc
 //
 // Author: 
 //   01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
@@ -40,12 +40,12 @@
 //   29-Apr-2004 - O.Link. Bug fixed in GetAreaCode
 // --------------------------------------------------------------------
 
-#include "G4TwistedSurface.hh"
+#include "G4TwistTubsSide.hh"
 
 //=====================================================================
 //* constructors ------------------------------------------------------
 
-G4TwistedSurface::G4TwistedSurface(const G4String         &name,
+G4TwistTubsSide::G4TwistTubsSide(const G4String         &name,
                                    const G4RotationMatrix &rot,
                                    const G4ThreeVector    &tlate,
                                          G4int             handedness,
@@ -56,12 +56,12 @@ G4TwistedSurface::G4TwistedSurface(const G4String         &name,
                                          G4double          axis1min,
                                          G4double          axis0max,
                                          G4double          axis1max)
-   : G4VSurface(name, rot, tlate, handedness, axis0, axis1,
+   : G4VTwistSurface(name, rot, tlate, handedness, axis0, axis1,
                 axis0min, axis1min, axis0max, axis1max),
      fKappa(kappa)
 {
    if (axis0 == kZAxis && axis1 == kXAxis) {
-      G4Exception("G4TwistedSurface::G4TwistedSurface()", "InvalidSetup",
+      G4Exception("G4TwistTubsSide::G4TwistTubsSide()", "InvalidSetup",
                   FatalException, "Should swap axis0 and axis1!");
    }
    fIsValidNorm = false;
@@ -69,7 +69,7 @@ G4TwistedSurface::G4TwistedSurface(const G4String         &name,
    SetBoundaries();
 }
 
-G4TwistedSurface::G4TwistedSurface(const G4String     &name,
+G4TwistTubsSide::G4TwistTubsSide(const G4String     &name,
                                          G4double      EndInnerRadius[2],
                                          G4double      EndOuterRadius[2],
                                          G4double      DPhi,
@@ -79,7 +79,7 @@ G4TwistedSurface::G4TwistedSurface(const G4String     &name,
                                          G4double      OuterRadius,
                                          G4double      Kappa,
                                          G4int         handedness)
-  : G4VSurface(name)
+  : G4VTwistSurface(name)
 {  
    fHandedness = handedness;   // +z = +ve, -z = -ve
    fAxis[0]    = kXAxis; // in local coordinate system
@@ -104,8 +104,8 @@ G4TwistedSurface::G4TwistedSurface(const G4String     &name,
 //=====================================================================
 //* Fake default constructor ------------------------------------------
 
-G4TwistedSurface::G4TwistedSurface( __void__& a )
-  : G4VSurface(a)
+G4TwistTubsSide::G4TwistTubsSide( __void__& a )
+  : G4VTwistSurface(a)
 {
 }
 
@@ -113,14 +113,14 @@ G4TwistedSurface::G4TwistedSurface( __void__& a )
 //=====================================================================
 //* destructor --------------------------------------------------------
 
-G4TwistedSurface::~G4TwistedSurface()
+G4TwistTubsSide::~G4TwistTubsSide()
 {
 }
 
 //=====================================================================
 //* GetNormal ---------------------------------------------------------
 
-G4ThreeVector G4TwistedSurface::GetNormal(const G4ThreeVector &tmpxx, 
+G4ThreeVector G4TwistTubsSide::GetNormal(const G4ThreeVector &tmpxx, 
                                                 G4bool isGlobal) 
 {
    // GetNormal returns a normal vector at a surface (or very close
@@ -155,7 +155,7 @@ G4ThreeVector G4TwistedSurface::GetNormal(const G4ThreeVector &tmpxx,
 //=====================================================================
 //* DistanceToSurface -------------------------------------------------
 
-G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
+G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
                                           const G4ThreeVector &gv,
                                                 G4ThreeVector  gxx[],
                                                 G4double       distance[],
@@ -427,10 +427,10 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
                                xx[k].z());
             }
             if (l == maxcount) {
-               G4cerr << "ERROR - G4TwistedSurface::DistanceToSurface(p,v)"
+               G4cerr << "ERROR - G4TwistTubsSide::DistanceToSurface(p,v)"
                       << G4endl
                       << "        maxloop count " << maxcount << G4endl;
-               G4Exception("G4FlatSurface::DistanceToSurface(p,v)",
+               G4Exception("G4TwistTubsFlatSide::DistanceToSurface(p,v)",
                            "InvalidSetup",  FatalException,
                            "Exceeded maxloop count!");
             }
@@ -447,7 +447,7 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
 
       return 0;
    }
-   G4Exception("G4TwistedSurface::DistanceToSurface(p,v)",
+   G4Exception("G4TwistTubsSide::DistanceToSurface(p,v)",
                "InvalidCondition", FatalException, "Illegal operation !");
    return 1;
 }
@@ -455,7 +455,7 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
 //=====================================================================
 //* DistanceToSurface -------------------------------------------------
 
-G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
+G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
                                                 G4ThreeVector  gxx[],
                                                 G4double       distance[],
                                                 G4int          areacode[])
@@ -634,8 +634,8 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
    G4ThreeVector AB(A.x(), A.y(), 0);
    G4ThreeVector DC(C.x(), C.y(), 0);
 
-   G4double distToACB = G4VSurface::DistanceToPlane(p, A, C-A, AB, xxacb, nacb) * parity;
-   G4double distToCAD = G4VSurface::DistanceToPlane(p, C, C-A, DC, xxcad, ncad) * parity;
+   G4double distToACB = G4VTwistSurface::DistanceToPlane(p, A, C-A, AB, xxacb, nacb) * parity;
+   G4double distToCAD = G4VTwistSurface::DistanceToPlane(p, C, C-A, DC, xxcad, ncad) * parity;
 
    // if calculated distance = 0, return  
 
@@ -690,7 +690,7 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
 //=====================================================================
 //* DistanceToPlane ---------------------------------------------------
 
-G4double G4TwistedSurface::DistanceToPlane(const G4ThreeVector &p,
+G4double G4TwistTubsSide::DistanceToPlane(const G4ThreeVector &p,
                                            const G4ThreeVector &A,
                                            const G4ThreeVector &B,
                                            const G4ThreeVector &C,
@@ -708,12 +708,12 @@ G4double G4TwistedSurface::DistanceToPlane(const G4ThreeVector &p,
    G4ThreeVector xxcmn;  // foot of normal from p to plane CMN
    G4ThreeVector ncmn;   // normal of plane CMN
 
-   G4double distToanm = G4VSurface::DistanceToPlane(p, A, (N - A), (M - A), xxanm, nanm) * parity;
-   G4double distTocmn = G4VSurface::DistanceToPlane(p, C, (M - C), (N - C), xxcmn, ncmn) * parity;
+   G4double distToanm = G4VTwistSurface::DistanceToPlane(p, A, (N - A), (M - A), xxanm, nanm) * parity;
+   G4double distTocmn = G4VTwistSurface::DistanceToPlane(p, C, (M - C), (N - C), xxcmn, ncmn) * parity;
 
    // if p is behind of both surfaces, abort.
    if (distToanm * distTocmn > 0 && distToanm < 0) {
-     G4Exception("G4TwistedSurface::DistanceToPlane()",
+     G4Exception("G4TwistTubsSide::DistanceToPlane()",
                  "InvalidCondition", FatalException,
                  "Point p is behind the surfaces.");
    }
@@ -755,7 +755,7 @@ G4double G4TwistedSurface::DistanceToPlane(const G4ThreeVector &p,
 //=====================================================================
 //* GetAreaCode -------------------------------------------------------
 
-G4int G4TwistedSurface::GetAreaCode(const G4ThreeVector &xx, 
+G4int G4TwistTubsSide::GetAreaCode(const G4ThreeVector &xx, 
                                           G4bool withTol)
 {
    // We must use the function in local coordinate system.
@@ -839,7 +839,7 @@ G4int G4TwistedSurface::GetAreaCode(const G4ThreeVector &xx,
       }
       return areacode;
    } else {
-      G4Exception("G4TwistedSurface::GetAreaCode()",
+      G4Exception("G4TwistTubsSide::GetAreaCode()",
                   "NotImplemented", FatalException,
                   "Feature NOT implemented !");
    }
@@ -849,7 +849,7 @@ G4int G4TwistedSurface::GetAreaCode(const G4ThreeVector &xx,
 //=====================================================================
 //* SetCorners( arglist ) -------------------------------------------------
 
-void G4TwistedSurface::SetCorners(
+void G4TwistTubsSide::SetCorners(
                                   G4double      endInnerRad[2],
                                   G4double      endOuterRad[2],
                                   G4double      endPhi[2],
@@ -889,10 +889,10 @@ void G4TwistedSurface::SetCorners(
       SetCorner(sC0Min1Max, x, y, z);
 
    } else {
-      G4cerr << "ERROR - G4FlatSurface::SetCorners()" << G4endl
+      G4cerr << "ERROR - G4TwistTubsFlatSide::SetCorners()" << G4endl
              << "        fAxis[0] = " << fAxis[0] << G4endl
              << "        fAxis[1] = " << fAxis[1] << G4endl;
-      G4Exception("G4TwistedSurface::SetCorners()",
+      G4Exception("G4TwistTubsSide::SetCorners()",
                   "NotImplemented", FatalException,
                   "Feature NOT implemented !");
    }
@@ -904,9 +904,9 @@ void G4TwistedSurface::SetCorners(
 //=====================================================================
 //* SetCorners() ------------------------------------------------------
 
-void G4TwistedSurface::SetCorners()
+void G4TwistTubsSide::SetCorners()
 {
-   G4Exception("G4TwistedSurface::SetCorners()",
+   G4Exception("G4TwistTubsSide::SetCorners()",
                "NotImplemented", FatalException,
                "Method NOT implemented !");
 }
@@ -914,7 +914,7 @@ void G4TwistedSurface::SetCorners()
 //=====================================================================
 //* SetBoundaries() ---------------------------------------------------
 
-void G4TwistedSurface::SetBoundaries()
+void G4TwistTubsSide::SetBoundaries()
 {
    // Set direction-unit vector of boundary-lines in local coodinate. 
    //   
@@ -947,10 +947,10 @@ void G4TwistedSurface::SetBoundaries()
                   GetCorner(sC0Min1Max), sAxisX);
                   
    } else {
-      G4cerr << "ERROR - G4FlatSurface::SetBoundaries()" << G4endl
+      G4cerr << "ERROR - G4TwistTubsFlatSide::SetBoundaries()" << G4endl
              << "        fAxis[0] = " << fAxis[0] << G4endl
              << "        fAxis[1] = " << fAxis[1] << G4endl;
-      G4Exception("G4TwistedSurface::SetCorners()",
+      G4Exception("G4TwistTubsSide::SetCorners()",
                   "NotImplemented", FatalException,
                   "Feature NOT implemented !");
    }

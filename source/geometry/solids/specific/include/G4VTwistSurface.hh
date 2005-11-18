@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.hh,v 1.13 2005-11-17 16:59:31 link Exp $
+// $Id: G4VTwistSurface.hh,v 1.1 2005-11-18 16:48:01 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@
 // GEANT 4 class header file
 //
 //
-// G4VSurface
+// G4VTwistSurface
 //
 // Class description:
 //
@@ -42,8 +42,8 @@
 //   13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
 //                 from original version in Jupiter-2.5.02 application.
 // --------------------------------------------------------------------
-#ifndef __G4VSURFACE__
-#define __G4VSURFACE__
+#ifndef __G4VTWISTSURFACE__
+#define __G4VTWISTSURFACE__
 
 #include "G4VSolid.hh"
 #include "geomdefs.hh"
@@ -52,7 +52,7 @@
 
 #define G4VSURFACENXX 10
 
-class G4VSurface
+class G4VTwistSurface
 {
  public:  // without description
 
@@ -61,8 +61,8 @@ class G4VSurface
 
  public:  // with description
 
-   G4VSurface (const G4String &name);
-   G4VSurface (const G4String &name,
+   G4VTwistSurface (const G4String &name);
+   G4VTwistSurface (const G4String &name,
                const G4RotationMatrix &rot,
                const G4ThreeVector    &tlate,
                      G4int             handedness,
@@ -73,7 +73,7 @@ class G4VSurface
                      G4double          axis0max = kInfinity,
                      G4double          axis1max = kInfinity);
 
-   virtual ~G4VSurface();
+   virtual ~G4VTwistSurface();
 
    virtual G4int     AmIOnLeftSide(const G4ThreeVector &me, 
                                    const G4ThreeVector &vec, 
@@ -150,8 +150,8 @@ class G4VSurface
    inline  G4bool IsBoundary (G4int areacode, G4bool testbitmode = false) const;
    inline  G4bool IsCorner   (G4int areacode, G4bool testbitmode = false) const;
    inline  G4bool IsValidNorm() const { return fIsValidNorm; }
-           G4bool IsSameBoundary (G4VSurface *surface1, G4int areacode1,
-                                  G4VSurface *surface2, G4int areacode2 ) const;
+           G4bool IsSameBoundary (G4VTwistSurface *surface1, G4int areacode1,
+                                  G4VTwistSurface *surface2, G4int areacode2 ) const;
    inline  G4int  GetAxisType(G4int areacode, G4int whichaxis) const;
 
    inline  G4ThreeVector ComputeGlobalPoint     (const G4ThreeVector &lp) const;
@@ -162,8 +162,8 @@ class G4VSurface
    // set methods
 
    inline void SetAxis(G4int i, const EAxis axis)  { fAxis[i] = axis; }
-   inline void SetNeighbours(G4VSurface* axis0min, G4VSurface* axis1min, 
-                             G4VSurface* axis0max, G4VSurface* axis1max);
+   inline void SetNeighbours(G4VTwistSurface* axis0min, G4VTwistSurface* axis1min, 
+                             G4VTwistSurface* axis0max, G4VTwistSurface* axis1max);
 
    virtual G4ThreeVector SurfacePoint(G4double , G4double, G4bool isGlobal = false ) = 0 ;
    virtual G4double GetBoundaryMin(G4double) = 0 ;
@@ -172,7 +172,7 @@ class G4VSurface
 
  public:  // without description
 
-   G4VSurface(__void__&);
+   G4VTwistSurface(__void__&);
      // Fake default constructor for usage restricted to direct object
      // persistency for clients requiring preallocation of memory for
      // persistifiable objects.
@@ -181,8 +181,8 @@ class G4VSurface
  
    // get methods
 
-   inline  G4VSurface**  GetNeighbours() { return fNeighbours; } 
-   inline  G4int         GetNeighbours(G4int areacode, G4VSurface* surfaces[]);
+   inline  G4VTwistSurface**  GetNeighbours() { return fNeighbours; } 
+   inline  G4int         GetNeighbours(G4int areacode, G4VTwistSurface* surfaces[]);
    inline  G4ThreeVector GetCorner(G4int areacode) const;
            void GetBoundaryAxis(G4int areacode, EAxis axis[]) const;
            void GetBoundaryLimit(G4int areacode, G4double limit[]) const;
@@ -325,7 +325,7 @@ class G4VSurface
                         
  private:
                      
-   G4VSurface    *fNeighbours[4]; // {0,1,2,3} = sAxis0min, sAxis1min, 
+   G4VTwistSurface    *fNeighbours[4]; // {0,1,2,3} = sAxis0min, sAxis1min, 
                                   //             sAxis0max, sAxis1max
    G4ThreeVector fCorners[4];     // corners of the surface in local coordinate
    Boundary      fBoundaries[4];  // boundaries of the surface.
@@ -371,6 +371,6 @@ G4bool EqualIntersection( const Intersection &a, const Intersection &b)
 }
 
 
-#include "G4VSurface.icc"
+#include "G4VTwistSurface.icc"
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedSurface.hh,v 1.9 2005-11-17 16:59:25 link Exp $
+// $Id: G4TwistTubsSide.hh,v 1.1 2005-11-18 16:48:01 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@
 // GEANT 4 class header file
 //
 //
-// G4TwistedSurface
+// G4TwistTubsSide
 //
 // Class description:
 //
@@ -42,16 +42,16 @@
 //   13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
 //                 from original version in Jupiter-2.5.02 application.
 // --------------------------------------------------------------------
-#ifndef __G4TWISTEDSURFACE__
-#define __G4TWISTEDSURFACE__
+#ifndef __G4TWISTTUBSSIDE__
+#define __G4TWISTTUBSSIDE__
 
-#include "G4VSurface.hh"
+#include "G4VTwistSurface.hh"
 
-class G4TwistedSurface : public G4VSurface
+class G4TwistTubsSide : public G4VTwistSurface
 {
   public:  // with description
    
-   G4TwistedSurface(const G4String         &name,
+   G4TwistTubsSide(const G4String         &name,
                     const G4RotationMatrix &rot,   // 0.5*(phi-width segment)
                     const G4ThreeVector    &tlate,
                           G4int    handedness, // R-hand = 1, L-hand = -1
@@ -63,7 +63,7 @@ class G4TwistedSurface : public G4VSurface
                           G4double axis0max = kInfinity,
                           G4double axis1max = kInfinity );
     
-   G4TwistedSurface(const G4String     &name,
+   G4TwistTubsSide(const G4String     &name,
                           G4double      EndInnerRadius[2],
                           G4double      EndOuterRadius[2],
                           G4double      DPhi,
@@ -74,7 +74,7 @@ class G4TwistedSurface : public G4VSurface
                           G4double      Kappa,
                           G4int         handedness);
 
-   virtual ~G4TwistedSurface();
+   virtual ~G4TwistTubsSide();
    
    virtual G4ThreeVector  GetNormal(const G4ThreeVector &xx,
                                           G4bool isGlobal = false) ;   
@@ -102,7 +102,7 @@ class G4TwistedSurface : public G4VSurface
 
  public:  // without description
 
-   G4TwistedSurface(__void__&);
+   G4TwistTubsSide(__void__&);
      // Fake default constructor for usage restricted to direct object
      // persistency for clients requiring preallocation of memory for
      // persistifiable objects.
@@ -141,7 +141,7 @@ class G4TwistedSurface : public G4VSurface
 //========================================================
 
 inline
-G4ThreeVector G4TwistedSurface::ProjectAtPXPZ(const G4ThreeVector &p, 
+G4ThreeVector G4TwistTubsSide::ProjectAtPXPZ(const G4ThreeVector &p, 
                                                     G4bool isglobal) const 
 {
   // Get Rho at p.z() on Hyperbolic Surface.
@@ -160,7 +160,7 @@ G4ThreeVector G4TwistedSurface::ProjectAtPXPZ(const G4ThreeVector &p,
 }
 
 inline
-G4ThreeVector G4TwistedSurface::SurfacePoint(G4double x, G4double z, G4bool isGlobal) {
+G4ThreeVector G4TwistTubsSide::SurfacePoint(G4double x, G4double z, G4bool isGlobal) {
 
   G4ThreeVector SurfPoint( x , x * fKappa * z , z ) ;
 
@@ -175,17 +175,17 @@ G4ThreeVector G4TwistedSurface::SurfacePoint(G4double x, G4double z, G4bool isGl
 
 
 inline
-G4double G4TwistedSurface::GetBoundaryMin(G4double) {
+G4double G4TwistTubsSide::GetBoundaryMin(G4double) {
   return  fAxisMin[0] ;  // inner radius at z = 0
 }
 
 inline
-G4double G4TwistedSurface::GetBoundaryMax(G4double) {
+G4double G4TwistTubsSide::GetBoundaryMax(G4double) {
   return  fAxisMax[0] ;  // outer radius at z = 0
 }
 
 inline
-G4double G4TwistedSurface::GetSurfaceArea() {
+G4double G4TwistTubsSide::GetSurfaceArea() {
 
   // approximation only
 

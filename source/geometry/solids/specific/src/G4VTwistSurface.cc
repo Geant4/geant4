@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.cc,v 1.16 2005-11-09 15:04:28 gcosmo Exp $
+// $Id: G4VTwistSurface.cc,v 1.1 2005-11-18 16:46:17 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@
 // GEANT 4 class source file
 //
 //
-// G4VSurface.cc
+// G4VTwistSurface.cc
 //
 // Author: 
 //   01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
@@ -39,36 +39,36 @@
 //                 from original version in Jupiter-2.5.02 application.
 // --------------------------------------------------------------------
 
-#include "G4VSurface.hh"
+#include "G4VTwistSurface.hh"
 #include <iomanip>
 
-const G4int  G4VSurface::sOutside        = 0x00000000;
-const G4int  G4VSurface::sInside         = 0x10000000;
-const G4int  G4VSurface::sBoundary       = 0x20000000;
-const G4int  G4VSurface::sCorner         = 0x40000000;
-const G4int  G4VSurface::sC0Min1Min      = 0x40000101; 
-const G4int  G4VSurface::sC0Max1Min      = 0x40000201;
-const G4int  G4VSurface::sC0Max1Max      = 0x40000202; 
-const G4int  G4VSurface::sC0Min1Max      = 0x40000102; 
-const G4int  G4VSurface::sAxisMin        = 0x00000101; 
-const G4int  G4VSurface::sAxisMax        = 0x00000202; 
-const G4int  G4VSurface::sAxisX          = 0x00000404;
-const G4int  G4VSurface::sAxisY          = 0x00000808;
-const G4int  G4VSurface::sAxisZ          = 0x00000C0C;
-const G4int  G4VSurface::sAxisRho        = 0x00001010;
-const G4int  G4VSurface::sAxisPhi        = 0x00001414;
+const G4int  G4VTwistSurface::sOutside        = 0x00000000;
+const G4int  G4VTwistSurface::sInside         = 0x10000000;
+const G4int  G4VTwistSurface::sBoundary       = 0x20000000;
+const G4int  G4VTwistSurface::sCorner         = 0x40000000;
+const G4int  G4VTwistSurface::sC0Min1Min      = 0x40000101; 
+const G4int  G4VTwistSurface::sC0Max1Min      = 0x40000201;
+const G4int  G4VTwistSurface::sC0Max1Max      = 0x40000202; 
+const G4int  G4VTwistSurface::sC0Min1Max      = 0x40000102; 
+const G4int  G4VTwistSurface::sAxisMin        = 0x00000101; 
+const G4int  G4VTwistSurface::sAxisMax        = 0x00000202; 
+const G4int  G4VTwistSurface::sAxisX          = 0x00000404;
+const G4int  G4VTwistSurface::sAxisY          = 0x00000808;
+const G4int  G4VTwistSurface::sAxisZ          = 0x00000C0C;
+const G4int  G4VTwistSurface::sAxisRho        = 0x00001010;
+const G4int  G4VTwistSurface::sAxisPhi        = 0x00001414;
 
 // mask
-const G4int  G4VSurface::sAxis0          = 0x0000FF00;
-const G4int  G4VSurface::sAxis1          = 0x000000FF;
-const G4int  G4VSurface::sSizeMask       = 0x00000303;
-const G4int  G4VSurface::sAxisMask       = 0x0000FCFC;
-const G4int  G4VSurface::sAreaMask       = 0XF0000000;
+const G4int  G4VTwistSurface::sAxis0          = 0x0000FF00;
+const G4int  G4VTwistSurface::sAxis1          = 0x000000FF;
+const G4int  G4VTwistSurface::sSizeMask       = 0x00000303;
+const G4int  G4VTwistSurface::sAxisMask       = 0x0000FCFC;
+const G4int  G4VTwistSurface::sAreaMask       = 0XF0000000;
 
 //=====================================================================
 //* constructors ------------------------------------------------------
 
-G4VSurface::G4VSurface(const G4String &name)
+G4VTwistSurface::G4VTwistSurface(const G4String &name)
   : fName(name)
 {
 
@@ -92,7 +92,7 @@ G4VSurface::G4VSurface(const G4String &name)
    fAmIOnLeftSide.vec.set(kInfinity, kInfinity, kInfinity);
 }
 
-G4VSurface::G4VSurface(const G4String         &name,
+G4VTwistSurface::G4VTwistSurface(const G4String         &name,
                        const G4RotationMatrix &rot,
                        const G4ThreeVector    &tlate,
                              G4int             handedness,
@@ -129,7 +129,7 @@ G4VSurface::G4VSurface(const G4String         &name,
 //=====================================================================
 //* Fake default constructor ------------------------------------------
 
-G4VSurface::G4VSurface( __void__& )
+G4VTwistSurface::G4VTwistSurface( __void__& )
   : fName("")
 {
 }
@@ -137,14 +137,14 @@ G4VSurface::G4VSurface( __void__& )
 //=====================================================================
 //* destructor --------------------------------------------------------
 
-G4VSurface::~G4VSurface()
+G4VTwistSurface::~G4VTwistSurface()
 {
 }
 
 //=====================================================================
 //* AmIOnLeftSide -----------------------------------------------------
 
-G4int G4VSurface::AmIOnLeftSide(const G4ThreeVector &me, 
+G4int G4VTwistSurface::AmIOnLeftSide(const G4ThreeVector &me, 
                                 const G4ThreeVector &vec,
                                       G4bool        withtol) 
 {
@@ -200,7 +200,7 @@ G4int G4VSurface::AmIOnLeftSide(const G4ThreeVector &me,
    }
 
 #ifdef G4SPECSDEBUG
-   G4cout << "         === G4VSurface::AmIOnLeftSide() =============="
+   G4cout << "         === G4VTwistSurface::AmIOnLeftSide() =============="
           << G4endl;
    G4cout << "             Name , returncode  : " << fName << " " 
                        << fAmIOnLeftSide.amIOnLeftSide <<  G4endl;
@@ -221,7 +221,7 @@ G4int G4VSurface::AmIOnLeftSide(const G4ThreeVector &me,
 //=====================================================================
 //* DistanceToBoundary ------------------------------------------------
 
-G4double G4VSurface::DistanceToBoundary(G4int areacode,
+G4double G4VTwistSurface::DistanceToBoundary(G4int areacode,
                                         G4ThreeVector &xx,
                                         const G4ThreeVector &p) 
 {
@@ -240,12 +240,12 @@ G4double G4VSurface::DistanceToBoundary(G4int areacode,
    G4int         boundarytype;
 
    if (IsAxis0(areacode) && IsAxis1(areacode)) {
-      G4cerr << "ERROR - G4VSurface::DistanceToBoundary()" << G4endl
+      G4cerr << "ERROR - G4VTwistSurface::DistanceToBoundary()" << G4endl
              << "        Point is in the corner area. This function returns"
              << G4endl
              << "        a direction vector of a boundary line." << G4endl
              << "        areacode = " << areacode << G4endl;
-      G4Exception("G4VSurface::DistanceToBoundary()", "InvalidSetup",
+      G4Exception("G4VTwistSurface::DistanceToBoundary()", "InvalidSetup",
                   FatalException, "Point is in the corner area.");
    } else if (IsAxis0(areacode) || IsAxis1(areacode)) {
       GetBoundaryParameters(areacode, d, x0, boundarytype);
@@ -259,9 +259,9 @@ G4double G4VSurface::DistanceToBoundary(G4int areacode,
          dist = DistanceToLine(p, x0, d, xx);
       }
    } else {
-      G4cerr << "ERROR - G4VSurface::DistanceToBoundary()" << G4endl
+      G4cerr << "ERROR - G4VTwistSurface::DistanceToBoundary()" << G4endl
              << "        areacode = " << areacode << G4endl;
-      G4Exception("G4VSurface::DistanceToBoundary()", "InvalidSetup",
+      G4Exception("G4VTwistSurface::DistanceToBoundary()", "InvalidSetup",
                   FatalException, "Bad areacode of boundary.");
    }
    return dist;
@@ -270,12 +270,12 @@ G4double G4VSurface::DistanceToBoundary(G4int areacode,
 //=====================================================================
 //* DistanceToIn ------------------------------------------------------
 
-G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
+G4double G4VTwistSurface::DistanceToIn(const G4ThreeVector &gp,
                                   const G4ThreeVector &gv,
                                         G4ThreeVector &gxxbest)
 {
 #ifdef G4SPECSDEBUG
-   G4cout << " ~~~~~ G4VSurface::DistanceToIn(p,v) - Start ~~~~~" << G4endl;
+   G4cout << " ~~~~~ G4VTwistSurface::DistanceToIn(p,v) - Start ~~~~~" << G4endl;
    G4cout << "      Name : " << fName << G4endl;
    G4cout << "      gp   : " << gp << G4endl;
    G4cout << "      gv   : " <<  gv << G4endl;
@@ -316,7 +316,7 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
       if ((normal * gv) >= 0) {
 
 #ifdef G4SPECSDEBUG
-         G4cout << "   G4VSurface::DistanceToIn(p,v): "
+         G4cout << "   G4VTwistSurface::DistanceToIn(p,v): "
                 << "particle goes outword the surface." << G4endl;
 #endif 
          continue; 
@@ -333,7 +333,7 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
             besti   = i;
 
 #ifdef G4SPECSDEBUG
-            G4cout << "   G4VSurface::DistanceToIn(p,v): "
+            G4cout << "   G4VTwistSurface::DistanceToIn(p,v): "
                    << " areacode sInside name, distance = "
                    << fName <<  " "<< bestdistance << G4endl;
 #endif 
@@ -345,7 +345,7 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
 
       } else {
 
-         G4VSurface *neighbours[2];
+         G4VTwistSurface *neighbours[2];
          G4bool      isaccepted[2] = {false, false};
          G4int       nneighbours   = GetNeighbours(areacode[i], neighbours);
             
@@ -381,11 +381,11 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
                if (IsInside(tmpareacode[k])) {
 
 #ifdef G4SPECSDEBUG
-                  G4cout << "   G4VSurface:DistanceToIn(p,v): "
+                  G4cout << "   G4VTwistSurface:DistanceToIn(p,v): "
                          << " intersection "<< tmpgxx[k] << G4endl
                          << "   is inside of neighbour surface of " << fName 
                          << " . returning kInfinity." << G4endl;
-                  G4cout << "~~~~~ G4VSurface::DistanceToIn(p,v) - return ~~~~"
+                  G4cout << "~~~~~ G4VTwistSurface::DistanceToIn(p,v) - return ~~~~"
                          << G4endl;
                   G4cout << "      No intersections " << G4endl; 
                   G4cout << "      Name : " << fName << G4endl; 
@@ -424,7 +424,7 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
                 gxxbest = gxx[i];
                 besti   = i;
 #ifdef G4SPECSDEBUG
-               G4cout << "   G4VSurface::DistanceToIn(p,v): "
+               G4cout << "   G4VTwistSurface::DistanceToIn(p,v): "
                       << " areacode sBoundary & sBoundary distance = "
                       << fName  << " " << distance[i] << G4endl;
 #endif 
@@ -438,12 +438,12 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
 
 #ifdef G4SPECSDEBUG
    if (besti < 0) {
-      G4cout << "~~~~~ G4VSurface::DistanceToIn(p,v) - return ~~~~" << G4endl;
+      G4cout << "~~~~~ G4VTwistSurface::DistanceToIn(p,v) - return ~~~~" << G4endl;
       G4cout << "      No intersections " << G4endl; 
       G4cout << "      Name : " << fName << G4endl; 
       G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << G4endl;
    } else {
-      G4cout << "~~~~~ G4VSurface::DistanceToIn(p,v) : return ~~~~" << G4endl;
+      G4cout << "~~~~~ G4VTwistSurface::DistanceToIn(p,v) : return ~~~~" << G4endl;
       G4cout << "      Name, i  : " << fName << " , " << besti << G4endl; 
       G4cout << "      gxx[i]   : " << gxxbest << G4endl; 
       G4cout << "      bestdist : " << bestdistance << G4endl;
@@ -458,12 +458,12 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
 //=====================================================================
 //* DistanceToOut(p, v) -----------------------------------------------
 
-G4double G4VSurface::DistanceToOut(const G4ThreeVector &gp,
+G4double G4VTwistSurface::DistanceToOut(const G4ThreeVector &gp,
                                    const G4ThreeVector &gv,
                                          G4ThreeVector &gxxbest)
 {
 #ifdef G4SPECSDEBUG
-   G4cout << "~~~~~ G4VSurface::DistanceToOut(p,v) - Start ~~~~" << G4endl;
+   G4cout << "~~~~~ G4VTwistSurface::DistanceToOut(p,v) - Start ~~~~" << G4endl;
    G4cout << "      Name : " << fName << G4endl;
    G4cout << "      gp   : " << gp << G4endl;
    G4cout << "      gv   : " <<  gv << G4endl;
@@ -499,7 +499,7 @@ G4double G4VSurface::DistanceToOut(const G4ThreeVector &gp,
       if (normal * gv <= 0) {
          // particle goes toword inside of solid, return kInfinity
 #ifdef G4SPECSDEBUG
-          G4cout << "   G4VSurface::DistanceToOut(p,v): normal*gv < 0, normal " 
+          G4cout << "   G4VTwistSurface::DistanceToOut(p,v): normal*gv < 0, normal " 
                  << fName << " " << normal 
                  << G4endl;
 #endif 
@@ -515,13 +515,13 @@ G4double G4VSurface::DistanceToOut(const G4ThreeVector &gp,
 
 #ifdef G4SPECSDEBUG
    if (besti < 0) {
-      G4cout << "~~~~~ G4VSurface::DistanceToOut(p,v) - return ~~~" << G4endl;
+      G4cout << "~~~~~ G4VTwistSurface::DistanceToOut(p,v) - return ~~~" << G4endl;
       G4cout << "      No intersections   " << G4endl; 
       G4cout << "      Name     : " << fName << G4endl; 
       G4cout << "      bestdist : " << bestdistance << G4endl;
       G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << G4endl;
    } else {
-      G4cout << "~~~~~ G4VSurface::DistanceToOut(p,v) : return ~~~" << G4endl;
+      G4cout << "~~~~~ G4VTwistSurface::DistanceToOut(p,v) : return ~~~" << G4endl;
       G4cout << "      Name, i  : " << fName << " , " << i << G4endl; 
       G4cout << "      gxx[i]   : " << gxxbest << G4endl; 
       G4cout << "      bestdist : " << bestdistance << G4endl;
@@ -535,11 +535,11 @@ G4double G4VSurface::DistanceToOut(const G4ThreeVector &gp,
 //=====================================================================
 //* DistanceTo(p) -----------------------------------------------------
 
-G4double G4VSurface::DistanceTo(const G4ThreeVector &gp,
+G4double G4VTwistSurface::DistanceTo(const G4ThreeVector &gp,
                                       G4ThreeVector &gxxbest)
 {
 #ifdef G4SPECSDEBUG
-   G4cout << "~~~~~ G4VSurface::DistanceTo(p) - Start ~~~~~~~~~" << G4endl;
+   G4cout << "~~~~~ G4VTwistSurface::DistanceTo(p) - Start ~~~~~~~~~" << G4endl;
    G4cout << "      Name : " << fName << G4endl;
    G4cout << "      gp   : " << gp << G4endl;
    G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << G4endl;
@@ -561,7 +561,7 @@ G4double G4VSurface::DistanceTo(const G4ThreeVector &gp,
    gxxbest = gxx[0];
 
 #ifdef G4SPECSDEBUG
-   G4cout << "~~~~~ G4VSurface::DistanceTo(p) - return ~~~~~~~~" << G4endl;
+   G4cout << "~~~~~ G4VTwistSurface::DistanceTo(p) - return ~~~~~~~~" << G4endl;
    G4cout << "      Name     : " << fName << G4endl; 
    G4cout << "      gxx      : " << gxxbest << G4endl; 
    G4cout << "      bestdist : " << distance[0] << G4endl;
@@ -574,8 +574,8 @@ G4double G4VSurface::DistanceTo(const G4ThreeVector &gp,
 //=====================================================================
 //* IsSameBoundary ----------------------------------------------------
 
-G4bool G4VSurface::IsSameBoundary(G4VSurface *surface1, G4int areacode1,
-                                  G4VSurface *surface2, G4int areacode2 ) const
+G4bool G4VTwistSurface::IsSameBoundary(G4VTwistSurface *surface1, G4int areacode1,
+                                  G4VTwistSurface *surface2, G4int areacode2 ) const
 {
    //
    // IsSameBoundary
@@ -629,7 +629,7 @@ G4bool G4VSurface::IsSameBoundary(G4VSurface *surface1, G4int areacode1,
 //=====================================================================
 //* GetBoundaryParameters ---------------------------------------------
 
-void G4VSurface::GetBoundaryParameters(const G4int         &areacode,
+void G4VTwistSurface::GetBoundaryParameters(const G4int         &areacode,
                                              G4ThreeVector &d,
                                              G4ThreeVector &x0,
                                              G4int         &boundarytype) const
@@ -646,18 +646,18 @@ void G4VSurface::GetBoundaryParameters(const G4int         &areacode,
       }
    }
 
-   G4cerr << "ERROR - G4VSurface::GetBoundaryParameters()" << G4endl
+   G4cerr << "ERROR - G4VTwistSurface::GetBoundaryParameters()" << G4endl
           << "        Boundary at areacode " << std::hex << areacode
           << std::dec << G4endl
           << "        is not be registered." << G4endl;
-   G4Exception("G4VSurface::GetBoundaryParameters()", "InvalidSetup",
+   G4Exception("G4VTwistSurface::GetBoundaryParameters()", "InvalidSetup",
                FatalException, "Not registered boundary.");
 }
 
 //=====================================================================
 //* GetBoundaryAtPZ ---------------------------------------------------
 
-G4ThreeVector G4VSurface::GetBoundaryAtPZ(G4int areacode,
+G4ThreeVector G4VTwistSurface::GetBoundaryAtPZ(G4int areacode,
                                           const G4ThreeVector &p) const
 {
    // areacode must be one of them:
@@ -665,12 +665,12 @@ G4ThreeVector G4VSurface::GetBoundaryAtPZ(G4int areacode,
    // sAxis1 & sAxisMin, sAxis1 & sAxisMax.
 
    if (areacode & sAxis0 && areacode & sAxis1) {
-     G4cerr << "ERROR - G4VSurface::GetBoundaryAtPZ()" << G4endl
+     G4cerr << "ERROR - G4VTwistSurface::GetBoundaryAtPZ()" << G4endl
             << "        Point is in the corner area. This function returns"
             << G4endl
             << "        a direction vector of a boundary line." << G4endl
             << "        areacode = " << areacode << G4endl;
-     G4Exception("G4VSurface::GetBoundaryAtPZ()", "InvalidCondition",
+     G4Exception("G4VTwistSurface::GetBoundaryAtPZ()", "InvalidCondition",
                  FatalException, "Point is in the corner area.");
    }
 
@@ -688,19 +688,19 @@ G4ThreeVector G4VSurface::GetBoundaryAtPZ(G4int areacode,
    }
 
    if (!found) {
-     G4cerr << "ERROR - G4VSurface::GetBoundaryAtPZ()" << G4endl
+     G4cerr << "ERROR - G4VTwistSurface::GetBoundaryAtPZ()" << G4endl
             << "        Boundary at areacode " << areacode << G4endl
             << "        is not be registered." << G4endl;
-     G4Exception("G4VSurface::GetBoundaryAtPZ()", "InvalidSetup",
+     G4Exception("G4VTwistSurface::GetBoundaryAtPZ()", "InvalidSetup",
                  FatalException, "Not registered boundary.");
    }
 
    if (((boundarytype & sAxisPhi) == sAxisPhi) ||
        ((boundarytype & sAxisRho) == sAxisRho)) {
-     G4cerr << "ERROR - G4VSurface::GetBoundaryAtPZ()" << G4endl
+     G4cerr << "ERROR - G4VTwistSurface::GetBoundaryAtPZ()" << G4endl
             << "        Boundary at areacode " << areacode << G4endl
             << "        is not a z-depended line." << G4endl;
-     G4Exception("G4VSurface::GetBoundaryAtPZ()", "InvalidSetup",
+     G4Exception("G4VTwistSurface::GetBoundaryAtPZ()", "InvalidSetup",
                  FatalException, "Not a z-depended line boundary.");
    }
    return ((p.z() - x0.z()) / d.z()) * d + x0;
@@ -709,12 +709,12 @@ G4ThreeVector G4VSurface::GetBoundaryAtPZ(G4int areacode,
 //=====================================================================
 //* SetCorner ---------------------------------------------------------
 
-void G4VSurface::SetCorner(G4int areacode, G4double x, G4double y, G4double z)
+void G4VTwistSurface::SetCorner(G4int areacode, G4double x, G4double y, G4double z)
 {
    if ((areacode & sCorner) != sCorner){
-     G4cerr << "ERROR - G4VSurface::SetCorner()" << G4endl
+     G4cerr << "ERROR - G4VTwistSurface::SetCorner()" << G4endl
             << "        areacode " << areacode << G4endl;
-     G4Exception("G4VSurface::SetCorner()", "InvalidSetup",
+     G4Exception("G4VTwistSurface::SetCorner()", "InvalidSetup",
                  FatalException, "Area code must represents corner.");
    }
 
@@ -732,10 +732,10 @@ void G4VSurface::SetCorner(G4int areacode, G4double x, G4double y, G4double z)
 //=====================================================================
 //* SetBoundaryAxis ---------------------------------------------------
 
-void G4VSurface::GetBoundaryAxis(G4int areacode, EAxis axis[]) const
+void G4VTwistSurface::GetBoundaryAxis(G4int areacode, EAxis axis[]) const
 {
    if ((areacode & sBoundary) != sBoundary) {
-     G4Exception("G4VSurface::GetBoundaryAxis()", "InvalidCondition",
+     G4Exception("G4VTwistSurface::GetBoundaryAxis()", "InvalidCondition",
                  FatalException, "Not located on a boundary!");
    }
    G4int i;
@@ -762,9 +762,9 @@ void G4VSurface::GetBoundaryAxis(G4int areacode, EAxis axis[]) const
          } else if (axiscode == (whichaxis & sAxisPhi)) {
             axis[i] = kPhi;
          } else {
-           G4cerr << "ERROR - G4VSurface::GetBoundaryAxis()" << G4endl
+           G4cerr << "ERROR - G4VTwistSurface::GetBoundaryAxis()" << G4endl
                   << "        areacode " << areacode << G4endl;
-           G4Exception("G4VSurface::GetBoundaryAxis()", "InvalidSetup",
+           G4Exception("G4VTwistSurface::GetBoundaryAxis()", "InvalidSetup",
                        FatalException, "Not supported areacode.");
          }
       }
@@ -774,7 +774,7 @@ void G4VSurface::GetBoundaryAxis(G4int areacode, EAxis axis[]) const
 //=====================================================================
 //* SetBoundaryLimit --------------------------------------------------
 
-void G4VSurface::GetBoundaryLimit(G4int areacode, G4double limit[]) const
+void G4VTwistSurface::GetBoundaryLimit(G4int areacode, G4double limit[]) const
 {
    if (areacode & sCorner) {
       if (areacode & sC0Min1Max) {
@@ -801,9 +801,9 @@ void G4VSurface::GetBoundaryLimit(G4int areacode, G4double limit[]) const
          limit[0] = fAxisMax[1];
       }
    } else {
-     G4cerr << "WARNING - G4VSurface::GetBoundaryAxis()" << G4endl
+     G4cerr << "WARNING - G4VTwistSurface::GetBoundaryAxis()" << G4endl
             << "          areacode " << areacode << G4endl;
-     G4Exception("G4VSurface::GetBoundaryLimit()", "InvalidCondition",
+     G4Exception("G4VTwistSurface::GetBoundaryLimit()", "InvalidCondition",
                  JustWarning, "Not located on a boundary!");
    }
 }
@@ -811,7 +811,7 @@ void G4VSurface::GetBoundaryLimit(G4int areacode, G4double limit[]) const
 //=====================================================================
 //* SetBoundary -------------------------------------------------------
 
-void G4VSurface::SetBoundary(const G4int         &axiscode,
+void G4VTwistSurface::SetBoundary(const G4int         &axiscode,
                              const G4ThreeVector &direction,
                              const G4ThreeVector &x0,
                              const G4int         &boundarytype)
@@ -834,14 +834,14 @@ void G4VSurface::SetBoundary(const G4int         &axiscode,
       }
 
       if (!done) {
-         G4Exception("G4VSurface::SetBoundary()", "InvalidCondition",
+         G4Exception("G4VTwistSurface::SetBoundary()", "InvalidCondition",
                       FatalException, "Number of boundary exceeding 4!");
       }
    } else {
-      G4cerr << "ERROR - G4VSurface::SetBoundary()" << G4endl
+      G4cerr << "ERROR - G4VTwistSurface::SetBoundary()" << G4endl
              << "        invalid axiscode. axiscode = "
              << std::hex << axiscode << std::dec << G4endl;
-      G4Exception("G4VSurface::SetBoundary()", "InvalidCondition",
+      G4Exception("G4VTwistSurface::SetBoundary()", "InvalidCondition",
                   FatalException, "Invalid axis-code.");
    }
 }
@@ -849,14 +849,14 @@ void G4VSurface::SetBoundary(const G4int         &axiscode,
 //=====================================================================
 //* DebugPrint --------------------------------------------------------
 
-void G4VSurface::DebugPrint() const
+void G4VTwistSurface::DebugPrint() const
 {
    G4ThreeVector A = fRot * GetCorner(sC0Min1Min) + fTrans;
    G4ThreeVector B = fRot * GetCorner(sC0Max1Min) + fTrans;
    G4ThreeVector C = fRot * GetCorner(sC0Max1Max) + fTrans;
    G4ThreeVector D = fRot * GetCorner(sC0Min1Max) + fTrans;
   
-   G4cout << "/* G4VSurface::DebugPrint():-------------------------------"
+   G4cout << "/* G4VTwistSurface::DebugPrint():-------------------------------"
           << G4endl;
    G4cout << "/* Name = " << fName << G4endl;
    G4cout << "/* Axis = " << std::hex << fAxis[0] << " "
@@ -876,13 +876,13 @@ void G4VSurface::DebugPrint() const
 }
 
 //=====================================================================
-// G4VSurface::CurrentStatus class
+// G4VTwistSurface::CurrentStatus class
 //=====================================================================
 
 //=====================================================================
 //* CurrentStatus::CurrentStatus --------------------------------------
 
-G4VSurface::CurrentStatus::CurrentStatus() 
+G4VTwistSurface::CurrentStatus::CurrentStatus() 
 {
   for (size_t i=0; i<G4VSURFACENXX; i++)
   {
@@ -901,7 +901,7 @@ G4VSurface::CurrentStatus::CurrentStatus()
 //=====================================================================
 //* CurrentStatus::~CurrentStatus -------------------------------------
 
-G4VSurface::CurrentStatus::~CurrentStatus() 
+G4VTwistSurface::CurrentStatus::~CurrentStatus() 
 {
 }
 
@@ -909,7 +909,7 @@ G4VSurface::CurrentStatus::~CurrentStatus()
 //* CurrentStatus::SetCurrentStatus -----------------------------------
 
 void
-G4VSurface::CurrentStatus::SetCurrentStatus(G4int                i, 
+G4VTwistSurface::CurrentStatus::SetCurrentStatus(G4int                i, 
                                             G4ThreeVector       &xx, 
                                             G4double            &dist, 
                                             G4int               &areacode, 
@@ -931,7 +931,7 @@ G4VSurface::CurrentStatus::SetCurrentStatus(G4int                i,
   }
   else
   {
-    G4Exception("G4VSurface::CurrentStatus::CurrentStatus()",
+    G4Exception("G4VTwistSurface::CurrentStatus::CurrentStatus()",
                 "InvalidCondition", FatalException,
                 "SetCurrentStatus: p = 0!");
   }
@@ -950,7 +950,7 @@ G4VSurface::CurrentStatus::SetCurrentStatus(G4int                i,
 //* CurrentStatus::ResetfDone -----------------------------------------
 
 void
-G4VSurface::CurrentStatus::ResetfDone(EValidate     validate,
+G4VTwistSurface::CurrentStatus::ResetfDone(EValidate     validate,
                                 const G4ThreeVector *p, 
                                 const G4ThreeVector *v)
 
@@ -978,7 +978,7 @@ G4VSurface::CurrentStatus::ResetfDone(EValidate     validate,
 //* CurrentStatus::DebugPrint -----------------------------------------
 
 void
-G4VSurface::CurrentStatus::DebugPrint() const
+G4VTwistSurface::CurrentStatus::DebugPrint() const
 {
   G4cout << "CurrentStatus::Dist0,1= " << fDistance[0] 
          << " " << fDistance[1] << " areacode = " << fAreacode[0] 
@@ -986,13 +986,13 @@ G4VSurface::CurrentStatus::DebugPrint() const
 }
 
 //=====================================================================
-// G4VSurface::Boundary class
+// G4VTwistSurface::Boundary class
 //=====================================================================
 
 //=====================================================================
 //* Boundary::Boundary ------------------------------------------------
 
-G4VSurface::Boundary::Boundary()
+G4VTwistSurface::Boundary::Boundary()
  : fBoundaryAcode(-1), fBoundaryType(0)
 {
 }
@@ -1000,7 +1000,7 @@ G4VSurface::Boundary::Boundary()
 //=====================================================================
 //* Boundary::~Boundary -----------------------------------------------
 
-G4VSurface::Boundary::~Boundary()
+G4VTwistSurface::Boundary::~Boundary()
 {
 }
 
@@ -1008,7 +1008,7 @@ G4VSurface::Boundary::~Boundary()
 //* Boundary::SetFields -----------------------------------------------
 
 void
-G4VSurface::Boundary::SetFields(const G4int         &areacode, 
+G4VTwistSurface::Boundary::SetFields(const G4int         &areacode, 
                                 const G4ThreeVector &d, 
                                 const G4ThreeVector &x0, 
                                 const G4int         &boundarytype)
@@ -1022,7 +1022,7 @@ G4VSurface::Boundary::SetFields(const G4int         &areacode,
 //=====================================================================
 //* Boundary::IsEmpty -------------------------------------------------
 
-G4bool G4VSurface::Boundary::IsEmpty() const 
+G4bool G4VTwistSurface::Boundary::IsEmpty() const 
 {
   if (fBoundaryAcode == -1) return true;
   return false;
@@ -1032,7 +1032,7 @@ G4bool G4VSurface::Boundary::IsEmpty() const
 //* Boundary::GetBoundaryParameters -----------------------------------
 
 G4bool
-G4VSurface::Boundary::GetBoundaryParameters(const G4int         &areacode, 
+G4VTwistSurface::Boundary::GetBoundaryParameters(const G4int         &areacode, 
                                                   G4ThreeVector &d,
                                                   G4ThreeVector &x0, 
                                                   G4int  &boundarytype) const 
@@ -1042,12 +1042,12 @@ G4VSurface::Boundary::GetBoundaryParameters(const G4int         &areacode,
   // sAxis1 & sAxisMin, sAxis1 & sAxisMax
   if ((areacode & sAxis0) && (areacode & sAxis1))
   {
-    G4cerr << "ERROR - G4VSurface::Boundary::GetBoundaryParameters()"
+    G4cerr << "ERROR - G4VTwistSurface::Boundary::GetBoundaryParameters()"
            << G4endl
            << "        Located in the corner area. This function"
            << "        returns a direction vector of a boundary line."
            << "        areacode = " << areacode << G4endl;
-    G4Exception("G4VSurface::Boundary::GetBoundaryParameters()",
+    G4Exception("G4VTwistSurface::Boundary::GetBoundaryParameters()",
                 "InvalidCondition", FatalException,
                 "Located in the corner area.");
   } 

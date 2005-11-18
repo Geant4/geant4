@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistedFaceted.hh,v 1.5 2005-11-17 16:59:32 link Exp $
+// $Id: G4VTwistedFaceted.hh,v 1.6 2005-11-18 16:48:01 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------------
@@ -43,10 +43,10 @@
 #define __G4VTWISTEDFACETED__
 
 #include "G4VSolid.hh"
-#include "G4TwistedTrapAlphaSide.hh"
-#include "G4TwistedTrapParallelSide.hh"
-#include "G4TwistedTrapBoxSide.hh"
-#include "G4FlatTrapSide.hh" 
+#include "G4TwistTrapAlphaSide.hh"
+#include "G4TwistTrapParallelSide.hh"
+#include "G4TwistBoxSide.hh"
+#include "G4TwistTrapFlatSide.hh" 
 
 class G4SolidExtentList;
 class G4ClippablePolygon;
@@ -181,13 +181,13 @@ class G4VTwistedFaceted: public G4VSolid
 
   G4double fAngleSide;
      
-  G4VSurface *fLowerEndcap ;  // surface of -ve z
-  G4VSurface *fUpperEndcap ;  // surface of +ve z
+  G4VTwistSurface *fLowerEndcap ;  // surface of -ve z
+  G4VTwistSurface *fUpperEndcap ;  // surface of +ve z
   
-  G4VSurface *fSide0 ;         // Twisted Side at phi = 0 deg
-  G4VSurface *fSide90 ;        // Twisted Side at phi = 90 deg
-  G4VSurface *fSide180 ;       // Twisted Side at phi = 180 deg
-  G4VSurface *fSide270 ;       // Twisted Side at phi = 270 deg
+  G4VTwistSurface *fSide0 ;         // Twisted Side at phi = 0 deg
+  G4VTwistSurface *fSide90 ;        // Twisted Side at phi = 90 deg
+  G4VTwistSurface *fSide180 ;       // Twisted Side at phi = 180 deg
+  G4VTwistSurface *fSide270 ;       // Twisted Side at phi = 270 deg
 
   G4double fCubicVolume ;      // volume of the twisted trapezoid
 
@@ -214,7 +214,7 @@ class G4VTwistedFaceted: public G4VSolid
       {
         p.set(kInfinity,kInfinity,kInfinity);
         vec.set(kInfinity,kInfinity,kInfinity);
-        surface = new G4VSurface*[1];
+        surface = new G4VTwistSurface*[1];
       }
       ~LastVector()
       {
@@ -223,7 +223,7 @@ class G4VTwistedFaceted: public G4VSolid
     public:
       G4ThreeVector   p;
       G4ThreeVector   vec;
-      G4VSurface    **surface;
+      G4VTwistSurface    **surface;
   };
 
   class LastValue              // last G4double value
