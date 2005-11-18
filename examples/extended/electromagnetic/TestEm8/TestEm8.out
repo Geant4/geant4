@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
+ Geant4 version Name: global-V07-01-03    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -195,11 +195,11 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.02
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Materials : Mylar 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
-Region VertexDetector
+Region <VertexDetector> -- appears in <World> world volume
  Materials : XeCH4C3H8 
  Production cuts :  gamma 2.3 cm     e- 2.3 cm     e+ 2.3 cm 
 
@@ -262,7 +262,7 @@ ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=11.07s Real=11.18s Sys=0.08s
+  User=11.01s Real=11.15s Sys=0.11s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
     mean charged track length   in absorber=23.4658 +- 0.128498  mm  
@@ -326,4 +326,5 @@ EventManager deleted.
 UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted.
+RunManager is deleting.
 RunManager is deleting.

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
+ Geant4 version Name: global-V07-01-03    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -202,7 +202,7 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.02
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <Aluminium> world volume
  Materials : Aluminium 
  Production cuts :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
 
@@ -237,7 +237,7 @@ ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
 Run terminated.
 Run Summary
   Number of events processed : 200
-  User=132.18s Real=154.77s Sys=20.56s
+  User=131.83s Real=153.33s Sys=19.6s
 
  ======================== run summary ======================
 
@@ -261,14 +261,14 @@ Run Summary
  proj/CSDA  = 0.859
  transverse dispersion at end = 1.830 cm 
 
- mass CSDA Range from simulation = 30.198 g/cm2
-               from PhysicsTable = 85.395 g/cm2
----------------------------------------------------------
-
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
  Current couple of seeds = 1261365639, 1403033250
 ----------------------------------------
+
+ mass CSDA Range from simulation = 30.198 g/cm2
+               from PhysicsTable = 85.395 g/cm2
+---------------------------------------------------------
 #
 /testem/phys/setCuts 1 mm
 /testem/histo/setFileName run1
@@ -380,7 +380,7 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.02
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <Aluminium> world volume
  Materials : Aluminium 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
@@ -407,7 +407,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 200
-  User=45.64s Real=58.32s Sys=10.84s
+  User=44.55s Real=57.3s Sys=10.93s
 
  ======================== run summary ======================
 
@@ -431,14 +431,14 @@ Run Summary
  proj/CSDA  = 0.871
  transverse dispersion at end = 1.716 cm 
 
- mass CSDA Range from simulation = 29.742 g/cm2
-               from PhysicsTable = 67.818 g/cm2
----------------------------------------------------------
-
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
  Current couple of seeds = 1920134127, 1513716869
 ----------------------------------------
+
+ mass CSDA Range from simulation = 29.742 g/cm2
+               from PhysicsTable = 67.818 g/cm2
+---------------------------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
 UserDetectorConstruction deleted.
@@ -450,4 +450,5 @@ EventManager deleted.
 UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted.
+RunManager is deleting.
 RunManager is deleting.

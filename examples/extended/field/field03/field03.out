@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
+ Geant4 version Name: global-V07-01-03    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -215,7 +215,7 @@ ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.07s Sys=0s
+  User=0.02s Real=0.06s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 ========= Table of registered couples ==============================
@@ -268,4 +268,5 @@ Run Summary
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...
+G4 kernel has come to Quit state.
 G4 kernel has come to Quit state.

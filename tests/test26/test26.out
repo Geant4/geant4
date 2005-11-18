@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
+ Geant4 version Name: global-V07-01-03    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -266,7 +266,7 @@ ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=65.93s Real=73.4s Sys=6.48s
+  User=66.49s Real=73.94s Sys=6.42s
 
 ============   SUMMARY   ============
 
@@ -379,7 +379,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=5.71000000s Real=7.83000000s Sys=1.20000000s
+  User=5.86000000s Real=7.94000000s Sys=1.08000000s
 
 ============   SUMMARY   ============
 
@@ -491,7 +491,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=6.02000000s Real=8.09000000s Sys=1.23000000s
+  User=6.00000000s Real=8.05000000s Sys=1.26000000s
 
 ============   SUMMARY   ============
 
@@ -603,7 +603,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=66.16000000s Real=73.75000000s Sys=6.69000000s
+  User=66.76000000s Real=74.39000000s Sys=6.69000000s
 
 ============   SUMMARY   ============
 
@@ -641,4 +641,5 @@ Run Summary
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
+G4 kernel has come to Quit state.
 G4 kernel has come to Quit state.

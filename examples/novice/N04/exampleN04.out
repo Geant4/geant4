@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
+ Geant4 version Name: global-V07-01-03    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -215,9 +215,10 @@ Stage 1->2 : 0 isolated muon found.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=2.4s Real=2.62s Sys=0.05s
+  User=2.38s Real=2.58s Sys=0.05s
 /vis/viewer/update
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 G4 kernel has come to Quit state.
 Graphics systems deleted.
+Visualization Manager deleting...
 Visualization Manager deleting...

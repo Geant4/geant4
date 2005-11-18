@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
+ Geant4 version Name: global-V07-01-03    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -118,7 +118,7 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.02
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -142,30 +142,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.02s Sys=0s
+  User=0s Real=0.05s Sys=0s
 
-Region DefaultRegionForTheWorld
- Materials : Copper 
- Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
-
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -186,7 +165,7 @@ Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -205,9 +184,30 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.04s Real=0.15s Sys=0s
+  User=0s Real=0s Sys=0s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Materials : Copper 
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.04s Real=0.18s Sys=0s
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -226,9 +226,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.47s Real=2.66s Sys=0.08s
+  User=2.49s Real=2.6s Sys=0.07s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -247,10 +247,10 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=4.5s Real=4.65s Sys=0.15s
+  User=4.53s Real=4.68s Sys=0.15s
 SimpleBox is now made of Cu
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -269,9 +269,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.15s Real=0.16s Sys=0.01s
+  User=0.17s Real=0.17s Sys=0s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -290,9 +290,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.04s Real=0.04s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -311,9 +311,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.37s Real=0.39s Sys=0.02s
+  User=0.36s Real=0.39s Sys=0.03s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -334,7 +334,7 @@ Run Summary
   Number of events processed : 1
   User=1.04s Real=1.08s Sys=0.04s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -353,9 +353,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.9s Real=2.99s Sys=0.09s
+  User=2.95s Real=3.01s Sys=0.06s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -374,7 +374,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=4.53s Real=4.68s Sys=0.13s
+  User=4.59s Real=4.71s Sys=0.11s
 SimpleBox is now made of U
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=4
@@ -485,7 +485,7 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.02
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -511,7 +511,7 @@ Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -535,9 +535,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -561,9 +561,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0.02s Sys=0s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -589,7 +589,7 @@ Run Summary
   Number of events processed : 1
   User=0.02s Real=0.02s Sys=0s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -613,9 +613,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=7.35s Real=7.48s Sys=0.09s
+  User=7.34s Real=7.49s Sys=0.11s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -639,10 +639,10 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=4.83s Real=4.91s Sys=0.08s
+  User=4.86s Real=4.92s Sys=0.06s
 SimpleBox is now made of U
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -668,33 +668,7 @@ Run Summary
   Number of events processed : 1
   User=0.42s Real=0.42s Sys=0s
 
-Region DefaultRegionForTheWorld
- Materials : Uranium 
- Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 949.55059 GeV    e+ 779.78768 GeV
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Uranium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.51s Real=0.53s Sys=0.02s
-
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -720,7 +694,7 @@ Run Summary
   Number of events processed : 1
   User=0.51s Real=0.52s Sys=0.01s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -744,9 +718,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=5.53s Real=5.6s Sys=0.07s
+  User=0.53s Real=0.53s Sys=0s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -770,9 +744,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=8.94s Real=9.08s Sys=0.14s
+  User=5.57s Real=5.62s Sys=0.05s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -796,7 +770,33 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=15.9s Real=16.1s Sys=0.2s
+  User=8.99s Real=9.09s Sys=0.1s
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Materials : Uranium 
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 949.55059 GeV    e+ 779.78768 GeV
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=15.92s Real=16.12s Sys=0.2s
 SimpleBox is now made of Si
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=1
@@ -901,7 +901,7 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.02
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -932,7 +932,7 @@ Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -963,7 +963,7 @@ Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -992,9 +992,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.46s Real=0.47s Sys=0.01s
+  User=0.45s Real=0.47s Sys=0.02s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1023,9 +1023,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.77s Real=0.8s Sys=0.03s
+  User=0.78s Real=0.8s Sys=0.02s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1056,7 +1056,7 @@ Run Summary
   Number of events processed : 1
   User=0.36s Real=0.37s Sys=0.01s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1085,10 +1085,10 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.68s Real=0.7s Sys=0.01s
+  User=0.67s Real=0.71s Sys=0.02s
 SimpleBox is now made of Si
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1117,9 +1117,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.13s Real=0.13s Sys=0s
+  User=0.14s Real=0.14s Sys=0s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1148,9 +1148,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.3s Real=0.3s Sys=0s
+  User=0.29s Real=0.3s Sys=0.01s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1179,9 +1179,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.69s Real=0.72s Sys=0.03s
+  User=0.71s Real=0.73s Sys=0.02s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1210,9 +1210,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.92s Real=0.95s Sys=0.03s
+  User=0.95s Real=0.95s Sys=0s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1241,9 +1241,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.74s Real=1.77s Sys=0.03s
+  User=1.73s Real=1.77s Sys=0.04s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1272,7 +1272,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.69s Real=2.76s Sys=0.07s
+  User=2.74s Real=2.75s Sys=0.01s
 SimpleBox is now made of H
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
@@ -1374,7 +1374,7 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.02
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1410,7 +1410,7 @@ Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1446,7 +1446,7 @@ Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1482,7 +1482,7 @@ Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1518,7 +1518,7 @@ Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1554,7 +1554,7 @@ Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1591,7 +1591,7 @@ Run Summary
   User=0s Real=0s Sys=0s
 SimpleBox is now made of H
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1627,7 +1627,7 @@ Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1663,7 +1663,7 @@ Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1699,7 +1699,7 @@ Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1735,7 +1735,7 @@ Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1771,7 +1771,7 @@ Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1815,4 +1815,5 @@ EventManager deleted.
 UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted.
+RunManager is deleting.
 RunManager is deleting.

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
+ Geant4 version Name: global-V07-01-03    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -173,7 +173,7 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.02
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Materials : Galactic Water 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
@@ -233,7 +233,7 @@ ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=329.53s Real=481.36s Sys=57.16s
+  User=351.74s Real=501.11s Sys=57.88s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of Water (density: 1 g/cm3 )
 
@@ -250,7 +250,7 @@ Run Summary
 #
 /run/beamOn 1000
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Materials : Galactic Water 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
@@ -284,7 +284,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=96.56s Real=118.41s Sys=13.31s
+  User=97.49s Real=119.38s Sys=13.14s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of Water (density: 1 g/cm3 )
 
@@ -305,4 +305,5 @@ EventManager deleted.
 UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted.
+RunManager is deleting.
 RunManager is deleting.

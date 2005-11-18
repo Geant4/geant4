@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
+ Geant4 version Name: global-V07-01-03    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -179,7 +179,7 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.02
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Materials : Galactic Lead liquidArgon 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
@@ -242,7 +242,7 @@ ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=230.74s Real=278.02s Sys=46.15s
+  User=229.43s Real=277.27s Sys=46.69s
 
 ------------------------------------------------------------
 material             Total Edep   sqrt(E0(GeV))*rmsE/Emean     total tracklen 
@@ -276,4 +276,5 @@ EventManager deleted.
 UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted.
+RunManager is deleting.
 RunManager is deleting.

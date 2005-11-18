@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
+ Geant4 version Name: global-V07-01-03    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -58,19 +58,19 @@ Current available graphics systems are:
 ExN07PhysicsList::SetCuts: default cut length : 1 mm 
 /run/dumpRegion
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Materials : Galactic 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
-Region Calor-A
+Region <Calor-A> -- appears in <World> world volume
  Materials : Lead liquidArgon 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
-Region Calor-B
+Region <Calor-B> -- appears in <World> world volume
  Materials : Lead liquidArgon 
  Production cuts :  gamma 1 cm     e- 1 cm     e+ 1 cm 
 
-Region Calor-C
+Region <Calor-C> -- appears in <World> world volume
  Materials : Lead liquidArgon 
  Production cuts :  gamma 10 cm     e- 10 cm     e+ 10 cm 
 /run/beamOn 10
@@ -234,7 +234,7 @@ ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=35.49s Real=40.06s Sys=4.47s
+  User=36.33s Real=40.57s Sys=4.19s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -355,19 +355,19 @@ Index : 6     used in the geometry : Yes     recalculation needed : No
 /run/setCutForRegion Calor-C 2 cm
 /run/dumpRegion
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Materials : Galactic 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
-Region Calor-A
+Region <Calor-A> -- appears in <World> world volume
  Materials : Lead liquidArgon 
  Production cuts :  gamma 200 mum    e- 200 mum    e+ 200 mum
 
-Region Calor-B
+Region <Calor-B> -- appears in <World> world volume
  Materials : Lead liquidArgon 
  Production cuts :  gamma 2 mm     e- 2 mm     e+ 2 mm 
 
-Region Calor-C
+Region <Calor-C> -- appears in <World> world volume
  Materials : Lead liquidArgon 
  Production cuts :  gamma 2 cm     e- 2 cm     e+ 2 cm 
 /run/beamOn 10
@@ -528,7 +528,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=46.01s Real=51.33s Sys=5.32s
+  User=46.74s Real=52.08s Sys=5.34s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -648,19 +648,19 @@ Index : 6     used in the geometry : Yes     recalculation needed : No
 /N07/setGapMat Water
 /run/dumpRegion
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Materials : Galactic 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
-Region Calor-A
+Region <Calor-A> -- appears in <World> world volume
  Materials : Aluminium Water 
  Production cuts :  gamma 200 mum    e- 200 mum    e+ 200 mum
 
-Region Calor-B
+Region <Calor-B> -- appears in <World> world volume
  Materials : Aluminium Water 
  Production cuts :  gamma 2 mm     e- 2 mm     e+ 2 mm 
 
-Region Calor-C
+Region <Calor-C> -- appears in <World> world volume
  Materials : Aluminium Water 
  Production cuts :  gamma 2 cm     e- 2 cm     e+ 2 cm 
 /run/beamOn 10
@@ -851,7 +851,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=15.28s Real=16.87s Sys=1.56s
+  User=15.55s Real=17.09s Sys=1.54s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1002,19 +1002,19 @@ Index : 12     used in the geometry : Yes     recalculation needed : No
 /run/setCutForRegion Calor-C 1 mm
 /run/dumpRegion
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Materials : Galactic 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
-Region Calor-A
+Region <Calor-A> -- appears in <World> world volume
  Materials : Aluminium Water 
  Production cuts :  gamma 10 mum    e- 10 mum    e+ 10 mum
 
-Region Calor-B
+Region <Calor-B> -- appears in <World> world volume
  Materials : Aluminium Water 
  Production cuts :  gamma 100 mum    e- 100 mum    e+ 100 mum
 
-Region Calor-C
+Region <Calor-C> -- appears in <World> world volume
  Materials : Aluminium Water 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 /run/beamOn 10
@@ -1205,7 +1205,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=32.09s Real=35.74s Sys=3.64s
+  User=32.3s Real=36.24s Sys=3.94s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1350,4 +1350,5 @@ Index : 12     used in the geometry : Yes     recalculation needed : No
 
 Graphics systems deleted.
 Visualization Manager deleting...
+G4 kernel has come to Quit state.
 G4 kernel has come to Quit state.

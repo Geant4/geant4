@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
+ Geant4 version Name: global-V07-01-03    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -136,7 +136,7 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.02
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -160,7 +160,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=67s Real=68s Sys=0.15s
+  User=68s Real=69s Sys=0.09s
 #
 # neutron at 10 GeV in U
 #
@@ -170,7 +170,7 @@ Run Summary
 SimpleBox is now made of U
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -189,7 +189,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=27s Real=28s Sys=0.09s
+  User=28s Real=28s Sys=0.07s
 #
 # pi+ at 10 GeV in U
 #
@@ -199,7 +199,7 @@ Run Summary
 SimpleBox is now made of U
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -218,7 +218,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=45s Real=45s Sys=0.06s
+  User=45s Real=45s Sys=0.13s
 #
 # pi- at 10 GeV in U
 #
@@ -228,7 +228,7 @@ Run Summary
 SimpleBox is now made of U
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -247,7 +247,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=65s Real=65s Sys=0.13s
+  User=66s Real=66s Sys=0.07s
 #
 # proton at 10 GeV in Cu
 #
@@ -359,7 +359,7 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.02
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -383,7 +383,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=21s Real=22s Sys=0.24s
+  User=21s Real=22s Sys=0.26s
 #
 # neutron at 10 GeV in Cu
 #
@@ -393,7 +393,7 @@ Run Summary
 SimpleBox is now made of Cu
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -417,7 +417,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=20s Real=22s Sys=0.12s
+  User=21s Real=21s Sys=0.1s
 #
 # pi+ at 10 GeV in Cu
 #
@@ -427,7 +427,7 @@ Run Summary
 SimpleBox is now made of Cu
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -451,7 +451,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=22s Real=22s Sys=0.07s
+  User=22s Real=23s Sys=0.04s
 #
 # pi- at 10 GeV in Cu
 #
@@ -461,7 +461,7 @@ Run Summary
 SimpleBox is now made of Cu
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -485,7 +485,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=21s Real=21s Sys=0.04s
+  User=21s Real=21s Sys=0.06s
 #
 # proton at 10 GeV in Si
 #
@@ -597,7 +597,7 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.02
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -626,7 +626,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=8.2s Real=8.36s Sys=0.05s
+  User=8.28s Real=8.46s Sys=0.04s
 #
 # neutron at 10 GeV in Si
 #
@@ -636,7 +636,7 @@ Run Summary
 SimpleBox is now made of Si
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -665,7 +665,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=10.22s Real=10.29s Sys=0.03s
+  User=10.39s Real=10.41s Sys=0s
 #
 # pi+ at 10 GeV in Si
 #
@@ -675,7 +675,7 @@ Run Summary
 SimpleBox is now made of Si
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -704,7 +704,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=8.89s Real=8.89s Sys=0s
+  User=8.99s Real=9s Sys=0.01s
 #
 # pi- at 10 GeV in Si
 #
@@ -714,7 +714,7 @@ Run Summary
 SimpleBox is now made of Si
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -743,7 +743,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=9.19s Real=9.24s Sys=0.02s
+  User=9.33s Real=9.39s Sys=0.03s
 #
 # proton at 10 GeV in H
 #
@@ -852,95 +852,7 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.02
 
-Region DefaultRegionForTheWorld
- Materials : H 
- Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Uranium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 949.55059 GeV    e+ 779.78768 GeV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 1.0114457 GeV    e+ 962.84668 MeV
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : H
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 990 eV     e- 708.90956 keV    e+ 683.20614 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 20
-  User=0.02s Real=0.02s Sys=0s
-#
-# neutron at 10 GeV in H
-#
-/gun/particle neutron
-/gun/energy 10 GeV
-/mydet/SelectMaterial H
-SimpleBox is now made of H
-/run/beamOn 20
-
-Region DefaultRegionForTheWorld
- Materials : H 
- Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Uranium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 949.55059 GeV    e+ 779.78768 GeV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 1.0114457 GeV    e+ 962.84668 MeV
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : H
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 990 eV     e- 708.90956 keV    e+ 683.20614 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 20
-  User=0s Real=0s Sys=0s
-#
-# pi+ at 10 GeV in H
-#
-/gun/particle pi+
-/gun/energy 10 GeV
-/mydet/SelectMaterial H
-SimpleBox is now made of H
-/run/beamOn 20
-
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -976,15 +888,59 @@ Run Summary
   Number of events processed : 20
   User=0.01s Real=0.01s Sys=0s
 #
-# pi- at 10 GeV in H
+# neutron at 10 GeV in H
 #
-/gun/particle pi-
+/gun/particle neutron
 /gun/energy 10 GeV
 /mydet/SelectMaterial H
 SimpleBox is now made of H
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Materials : H 
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 949.55059 GeV    e+ 779.78768 GeV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 1.0114457 GeV    e+ 962.84668 MeV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : H
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 990 eV     e- 708.90956 keV    e+ 683.20614 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 20
+  User=0.01s Real=0.01s Sys=0s
+#
+# pi+ at 10 GeV in H
+#
+/gun/particle pi+
+/gun/energy 10 GeV
+/mydet/SelectMaterial H
+SimpleBox is now made of H
+/run/beamOn 20
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1019,6 +975,50 @@ Run terminated.
 Run Summary
   Number of events processed : 20
   User=0.02s Real=0.02s Sys=0s
+#
+# pi- at 10 GeV in H
+#
+/gun/particle pi-
+/gun/energy 10 GeV
+/mydet/SelectMaterial H
+SimpleBox is now made of H
+/run/beamOn 20
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Materials : H 
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 949.55059 GeV    e+ 779.78768 GeV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 1.0114457 GeV    e+ 962.84668 MeV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : H
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 990 eV     e- 708.90956 keV    e+ 683.20614 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 20
+  User=0.01s Real=0.01s Sys=0s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
@@ -1028,4 +1028,5 @@ EventManager deleted.
 UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted.
+RunManager is deleting.
 RunManager is deleting.

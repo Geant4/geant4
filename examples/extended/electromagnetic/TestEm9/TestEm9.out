@@ -1,35 +1,16 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
+ Geant4 version Name: global-V07-01-03    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
 ### NIST DataBase for Materials is used
-G4NistMaterialBuilder: BuildMaterial G4_AIR
-New material nComponents= 4
-G4NistElementBuilder: Build Element <C>  Z= 6  A= 12.0107
-G4NistElementBuilder: Build Element <N>  Z= 7  A= 14.0068
-G4NistElementBuilder: Build Element <O>  Z= 8  A= 15.9994
-G4NistElementBuilder: Build Element <Ar>  Z= 18  A= 39.9477
 G4Material: Mean excitation energy is changed for G4_AIR Iold= 85.627eV; Inew= 85.7 eV;
-G4NistMaterialBuilder: BuildMaterial G4_Al
-New material nComponents= 1
-G4NistElementBuilder: Build Element <Al>  Z= 13  A= 26.9815
 G4Material: Mean excitation energy is changed for G4_Al Iold= 166.4eV; Inew= 166 eV;
-G4NistMaterialBuilder: BuildMaterial G4_Si
-New material nComponents= 1
-G4NistElementBuilder: Build Element <Si>  Z= 14  A= 28.0854
 G4Material: Mean excitation energy is changed for G4_Si Iold= 173.6eV; Inew= 173 eV;
-G4NistMaterialBuilder: BuildMaterial G4_Fe
-New material nComponents= 1
-G4NistElementBuilder: Build Element <Fe>  Z= 26  A= 55.8451
 G4Material: Mean excitation energy is changed for G4_Fe Iold= 286eV; Inew= 286 eV;
-G4NistMaterialBuilder: BuildMaterial G4_CESIUM_IODIDE
-New material nComponents= 2
-G4NistElementBuilder: Build Element <I>  Z= 53  A= 126.904
-G4NistElementBuilder: Build Element <Cs>  Z= 55  A= 132.905
 G4Material: Mean excitation energy is changed for G4_CESIUM_IODIDE Iold= 491.166eV; Inew= 553.1 eV;
 Visualization Manager instantiating...
 Visualization Manager initialising...
@@ -300,7 +281,7 @@ ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=120.13s Real=130.37s Sys=10.21s
+  User=116.48s Real=127.52s Sys=10.88s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
@@ -329,4 +310,5 @@ ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 #
 Graphics systems deleted.
 Visualization Manager deleting...
+G4 kernel has come to Quit state.
 G4 kernel has come to Quit state.

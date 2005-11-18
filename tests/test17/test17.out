@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
+ Geant4 version Name: global-V07-01-03    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -258,7 +258,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.4s Real=7.41s Sys=1.98s
+  User=5.57s Real=7.54s Sys=1.93s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -301,7 +301,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.31s Real=7.25s Sys=1.94s
+  User=5.56s Real=7.3s Sys=1.74s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -341,7 +341,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=8.73s Real=11.01s Sys=2.28s
+  User=8.93s Real=11.23s Sys=2.3s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for IonC12 with Ekin = 6 MeV p= 365.827 MeV/c
@@ -383,7 +383,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=46.69s Real=47.06s Sys=0.37s
+  User=47.27s Real=47.48s Sys=0.21s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -427,7 +427,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=108.88s Real=109.17s Sys=0.26s
+  User=108.38s Real=108.67s Sys=0.29s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -443,4 +443,5 @@ Run Summary
 Average Number electrons per event = 510.2
 Average Number photons per event   = 2.73
 
+G4 kernel has come to Quit state.
 G4 kernel has come to Quit state.

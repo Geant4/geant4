@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
+ Geant4 version Name: global-V07-01-03    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -136,4 +136,5 @@ Test23 event # 800
 Test23 event # 900
 Test23 event # 1000
 Test23_Result: gam=2640(0.82902995), e-=14138(0.42202478), e+=56(3.8689492), p=441(5.0993473), n=1628(4.5717486), d=76(3.9537621), t=53(7.147995), He3=2(8.4422301), alph=362(6.1564927), nu=1000(70.435809), anu=113(32.578304), others=15328*0.1509865
+Test23 is done
 Test23 is done

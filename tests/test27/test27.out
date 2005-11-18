@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
+ Geant4 version Name: global-V07-01-03    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -138,7 +138,7 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.02
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -162,7 +162,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=25s Real=25s Sys=0.12s
+  User=25s Real=25s Sys=0.1s
 #
 # deuteron at 1 GeV/nucleon on H 
 #
@@ -271,7 +271,7 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.02
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -295,7 +295,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.03s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 # deuteron at 1 GeV/nucleon on Silicon 
 #
@@ -407,7 +407,7 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.02
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -436,7 +436,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=7.37s Real=7.45s Sys=0.08s
+  User=7.29s Real=7.38s Sys=0.08s
 #
 #
 # deuteron at 200 MeV in U
@@ -447,7 +447,7 @@ Run Summary
 SimpleBox is now made of U
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -476,7 +476,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.43s Real=0.44s Sys=0.01s
+  User=0.4s Real=0.44s Sys=0.03s
 #
 # deuteron at 200 MeV/nucleon on H 
 #
@@ -486,7 +486,7 @@ Run Summary
 SimpleBox is now made of H
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -525,7 +525,7 @@ Run Summary
 SimpleBox is now made of Si
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -566,7 +566,7 @@ Run Summary
 SimpleBox is now made of U
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -595,7 +595,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=8.9s Real=8.98s Sys=0.04s
+  User=8.9s Real=8.96s Sys=0.03s
 #
 # alpha at 1 GeV/nucleon on H 
 #
@@ -605,7 +605,7 @@ Run Summary
 SimpleBox is now made of H
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -644,7 +644,7 @@ Run Summary
 SimpleBox is now made of Si
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -673,7 +673,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.03s Real=3.04s Sys=0.01s
+  User=3s Real=3s Sys=0s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -683,7 +683,7 @@ Run Summary
 SimpleBox is now made of U
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -722,7 +722,7 @@ Run Summary
 SimpleBox is now made of H
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -761,7 +761,7 @@ Run Summary
 SimpleBox is now made of Si
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -790,7 +790,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.04s Real=0.04s Sys=0s
+  User=0.02s Real=0.03s Sys=0.01s
 #
 #  .....end alpha............
 #
@@ -803,7 +803,7 @@ Run Summary
 SimpleBox is now made of U
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -832,7 +832,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=28.14s Real=28.43s Sys=0.09s
+  User=28.16s Real=28.4s Sys=0.1s
 #
 # C(12,6)++ at 1 GeV/nucleon on H 
 #
@@ -843,7 +843,7 @@ Run Summary
 SimpleBox is now made of H
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -883,7 +883,7 @@ Run Summary
 SimpleBox is now made of Si
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -912,7 +912,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=8.4s Real=8.56s Sys=0.03s
+  User=8.31s Real=8.49s Sys=0.01s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water 
 #
@@ -1022,7 +1022,7 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.02
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Water 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1056,7 +1056,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=5.65s Real=5.91s Sys=0.04s
+  User=5.53s Real=5.66s Sys=0.08s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1068,7 +1068,7 @@ Run Summary
 SimpleBox is now made of U
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1102,7 +1102,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.48s Real=0.51s Sys=0.01s
+  User=0.48s Real=0.51s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on H 
 #
@@ -1113,7 +1113,7 @@ Run Summary
 SimpleBox is now made of H
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1147,7 +1147,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon 
 #
@@ -1158,7 +1158,7 @@ Run Summary
 SimpleBox is now made of Si
 /run/beamOn 20
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1192,7 +1192,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.54s Real=0.55s Sys=0.01s
+  User=0.52s Real=0.53s Sys=0.01s
 #
 #  .....end C(12,6)++............
 #
@@ -1314,7 +1314,7 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.02
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Lead 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1363,4 +1363,5 @@ EventManager deleted.
 UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted.
+RunManager is deleting.
 RunManager is deleting.

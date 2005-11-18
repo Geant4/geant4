@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
+ Geant4 version Name: global-V07-01-03    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -20,56 +20,57 @@ Test19:CalculationTimePerEvent= 1.400000e-03 s
 Test19: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test19:NewRun:Targ=90002002,Proj=22, 2 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 8.670000e-02 s
+Test19:CalculationTimePerEvent= 8.690000e-02 s
 Test19: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test19:NewRun:Targ=90007007,Proj=22, 3 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 1.114500e-01 s
+Test19:CalculationTimePerEvent= 1.117500e-01 s
 Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test19:NewRun:Targ=90027032,Proj=22, 4 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 1.189500e-01 s
+Test19:CalculationTimePerEvent= 1.186500e-01 s
 Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test19:NewRun:Targ=90092146,Proj=22, 5 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 1.591000e-01 s
+Test19:CalculationTimePerEvent= 1.589500e-01 s
 Test19: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test19:NewRun:Targ=90001000,Proj=22, 6 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 1.960000e-02 s
+Test19:CalculationTimePerEvent= 1.945000e-02 s
 Test19: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test19:NewRun:Targ=90002002,Proj=22, 7 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 5.795000e-02 s
+Test19:CalculationTimePerEvent= 5.830000e-02 s
 Test19: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test19:NewRun:Targ=90007007,Proj=22, 8 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 2.388500e-01 s
+Test19:CalculationTimePerEvent= 2.404000e-01 s
 Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test19:NewRun:Targ=90027032,Proj=22, 9 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 3.615500e-01 s
+Test19:CalculationTimePerEvent= 3.611500e-01 s
 Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test19:NewRun:Targ=90092146,Proj=22, 10 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 4.051000e-01 s
+Test19:CalculationTimePerEvent= 4.046500e-01 s
 Test19: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test19:NewRun:Targ=90001000,Proj=22, 11 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 2.190000e-02 s
+Test19:CalculationTimePerEvent= 2.195000e-02 s
 Test19: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test19:NewRun:Targ=90002002,Proj=22, 12 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 6.200000e-02 s
+Test19:CalculationTimePerEvent= 6.235000e-02 s
 Test19: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test19:NewRun:Targ=90007007,Proj=22, 13 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 5.370000e-01 s
+Test19:CalculationTimePerEvent= 5.372000e-01 s
 Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test19:NewRun:Targ=90027032,Proj=22, 14 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 9.145000e-01 s
+Test19:CalculationTimePerEvent= 9.148500e-01 s
 Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test19:NewRun:Targ=90092146,Proj=22, 15 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 7.684500e-01 s
+Test19:CalculationTimePerEvent= 7.672500e-01 s
+Test19:CalculationTimePerEvent= 7.672500e-01 s

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
+ Geant4 version Name: global-V07-01-03    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -33,7 +33,7 @@
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  23.18 %  Abundance  21.07 %
    --->  Element: Ar (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:   1.28 %  Abundance   0.47 %
 
- Material: G4_WATER     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.083 cm 
+ Material: G4_WATER H_2O   density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.083 cm 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.19 %  Abundance  66.67 %
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.81 %  Abundance  33.33 %
 
@@ -208,7 +208,7 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.02
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <Absorber> world volume
  Materials : G4_WATER 
  Production cuts :  gamma 1 mum    e- 1 mum    e+ 1 mum
 
@@ -261,7 +261,7 @@ ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1363.17s Real=1582.94s Sys=131.92s
+  User=1360.93s Real=1597.35s Sys=131.46s
 
  ======================== run summary ======================
 
@@ -293,4 +293,5 @@ EventManager deleted.
 UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted.
+RunManager is deleting.
 RunManager is deleting.

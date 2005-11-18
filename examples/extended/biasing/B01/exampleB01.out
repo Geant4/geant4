@@ -1,31 +1,13 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
+ Geant4 version Name: global-V07-01-03    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
 B01PhysicsList::SetCuts:CutLength : 1 (mm)
-Going to assign importance: 1, to volume: cell_01
-Going to assign importance: 2, to volume: cell_02
-Going to assign importance: 4, to volume: cell_03
-Going to assign importance: 8, to volume: cell_04
-Going to assign importance: 16, to volume: cell_05
-Going to assign importance: 32, to volume: cell_06
-Going to assign importance: 64, to volume: cell_07
-Going to assign importance: 128, to volume: cell_08
-Going to assign importance: 256, to volume: cell_09
-Going to assign importance: 512, to volume: cell_10
-Going to assign importance: 1024, to volume: cell_11
-Going to assign importance: 2048, to volume: cell_12
-Going to assign importance: 4096, to volume: cell_13
-Going to assign importance: 8192, to volume: cell_14
-Going to assign importance: 16384, to volume: cell_15
-Going to assign importance: 32768, to volume: cell_16
-Going to assign importance: 65536, to volume: cell_17
-Going to assign importance: 131072, to volume: cell_18
-=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+Going to assign importance: 1, to volume: cell_01Going to assign importance: 2, to volume: cell_02Going to assign importance: 4, to volume: cell_03Going to assign importance: 8, to volume: cell_04Going to assign importance: 16, to volume: cell_05Going to assign importance: 32, to volume: cell_06Going to assign importance: 64, to volume: cell_07Going to assign importance: 128, to volume: cell_08Going to assign importance: 256, to volume: cell_09Going to assign importance: 512, to volume: cell_10Going to assign importance: 1024, to volume: cell_11Going to assign importance: 2048, to volume: cell_12Going to assign importance: 4096, to volume: cell_13Going to assign importance: 8192, to volume: cell_14Going to assign importance: 16384, to volume: cell_15Going to assign importance: 32768, to volume: cell_16Going to assign importance: 65536, to volume: cell_17Going to assign importance: 131072, to volume: cell_18=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
   ProcessName: MScoreProcess
 The initial Vectors: 
 GPIL Vector: 
@@ -199,24 +181,24 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.02
 Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
-cell_01_rep:0............ |           1 |         111 |         129 |         111 |         111 |    7.247483 |   9.1784339 |           1 |
-cell_02_rep:0............ |           2 |          77 |         160 |         142 |          71 |   8.4467211 |   9.3299547 |           1 |
-cell_03_rep:0............ |           4 |          99 |         220 |         205 |       51.25 |   8.2895397 |   8.9091955 |           1 |
-cell_04_rep:0............ |           8 |         112 |         231 |         236 |        29.5 |   8.2560219 |   8.8162423 |           1 |
-cell_05_rep:0............ |          16 |         137 |         282 |         310 |      19.375 |   7.7608963 |   8.4725518 |           1 |
-cell_06_rep:0............ |          32 |         154 |         316 |         348 |      10.875 |   7.0783993 |   8.0298295 |           1 |
-cell_07_rep:0............ |          64 |         166 |         361 |         416 |         6.5 |   6.0740865 |   7.5349636 |           1 |
-cell_08_rep:0............ |         128 |         194 |         415 |         534 |    4.171875 |   5.8273579 |   7.1866551 |           1 |
-cell_09_rep:0............ |         256 |         218 |         457 |         557 |   2.1757812 |   5.2017204 |   7.1057325 |           1 |
-cell_10_rep:0............ |         512 |         245 |         530 |         662 |   1.2929688 |   4.0095797 |    6.780818 |           1 |
-cell_11_rep:0............ |        1024 |         287 |         592 |         874 |  0.85351562 |   3.4920965 |   6.3952277 |           1 |
-cell_12_rep:0............ |        2048 |         307 |         626 |         878 |  0.42871094 |   3.0586991 |   6.1787981 |           1 |
-cell_13_rep:0............ |        4096 |         332 |         678 |        1068 |  0.26074219 |   2.7774233 |   5.9307169 |           1 |
-cell_14_rep:0............ |        8192 |         348 |         738 |        1150 |  0.14038086 |   2.5257827 |   5.6965561 |           1 |
-cell_15_rep:0............ |       16384 |         392 |         785 |        1293 | 0.078918457 |   2.2253925 |   5.3165692 |           1 |
-cell_16_rep:0............ |       32768 |         446 |         884 |        1517 | 0.046295166 |   3.3991364 |    5.280691 |           1 |
-cell_17_rep:0............ |       65536 |         495 |        1011 |        1772 | 0.027038574 |   3.3750474 |   5.0606802 |           1 |
-cell_18_rep:0............ |      131072 |         431 |         998 |        1822 | 0.013900757 |   2.9808878 |   4.7785023 |           1 |
+cell_01.................. |           1 |         111 |         129 |         111 |         111 |    7.247483 |   9.1784339 |           1 |
+cell_02.................. |           2 |          77 |         160 |         142 |          71 |   8.4467211 |   9.3299547 |           1 |
+cell_03.................. |           4 |          99 |         220 |         205 |       51.25 |   8.2895397 |   8.9091955 |           1 |
+cell_04.................. |           8 |         112 |         231 |         236 |        29.5 |   8.2560219 |   8.8162423 |           1 |
+cell_05.................. |          16 |         137 |         282 |         310 |      19.375 |   7.7608963 |   8.4725518 |           1 |
+cell_06.................. |          32 |         154 |         316 |         348 |      10.875 |   7.0783993 |   8.0298295 |           1 |
+cell_07.................. |          64 |         166 |         361 |         416 |         6.5 |   6.0740865 |   7.5349636 |           1 |
+cell_08.................. |         128 |         194 |         415 |         534 |    4.171875 |   5.8273579 |   7.1866551 |           1 |
+cell_09.................. |         256 |         218 |         457 |         557 |   2.1757812 |   5.2017204 |   7.1057325 |           1 |
+cell_10.................. |         512 |         245 |         530 |         662 |   1.2929688 |   4.0095797 |    6.780818 |           1 |
+cell_11.................. |        1024 |         287 |         592 |         874 |  0.85351562 |   3.4920965 |   6.3952277 |           1 |
+cell_12.................. |        2048 |         307 |         626 |         878 |  0.42871094 |   3.0586991 |   6.1787981 |           1 |
+cell_13.................. |        4096 |         332 |         678 |        1068 |  0.26074219 |   2.7774233 |   5.9307169 |           1 |
+cell_14.................. |        8192 |         348 |         738 |        1150 |  0.14038086 |   2.5257827 |   5.6965561 |           1 |
+cell_15.................. |       16384 |         392 |         785 |        1293 | 0.078918457 |   2.2253925 |   5.3165692 |           1 |
+cell_16.................. |       32768 |         446 |         884 |        1517 | 0.046295166 |   3.3991364 |    5.280691 |           1 |
+cell_17.................. |       65536 |         495 |        1011 |        1772 | 0.027038574 |   3.3750474 |   5.0606802 |           1 |
+cell_18.................. |      131072 |         431 |         998 |        1822 | 0.013900757 |   2.9808878 |   4.7785023 |           1 |
 rest_rep:0............... |      131072 |         458 |         458 |           0 |           0 |           0 |           0 |           0 |
 shieldWorld_rep:0........ |           1 |          11 |         111 |           0 |           0 |          10 |          10 |           1 |
 === G4ProcessPlacer::RemoveProcess: for: neutron
@@ -292,4 +274,5 @@ DoIt Vector:
    LFission
    LCapture
    Decay
+================================================
 ================================================

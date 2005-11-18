@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-07-01-ref-03    (30-June-2005)
+ Geant4 version Name: global-V07-01-03    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -125,7 +125,7 @@ muPairProd:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <Iron> world volume
  Materials : Iron 
  Production cuts :  gamma 1 km     e- 1 km     e+ 1 km 
 
@@ -293,7 +293,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.05s Real=0.14s Sys=0s
+  User=0.04s Real=0.11s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -310,4 +310,5 @@ EventManager deleted.
 UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted.
+RunManager is deleting.
 RunManager is deleting.
