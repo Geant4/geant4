@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSFlatSurfaceCurrent.cc,v 1.2 2005-11-17 22:53:38 asaim Exp $
+// $Id: G4PSFlatSurfaceCurrent.cc,v 1.3 2005-11-19 03:16:07 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSFlatSurfaceCurrent
@@ -138,7 +138,7 @@ void G4PSFlatSurfaceCurrent::PrintAll()
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  current  : " << G4BestUnit(*(itr->second),"Surface")
+	   << "  current  : " << *(itr->second)*cm*cm << " [cm^-2]"
 	   << G4endl;
   }
 }

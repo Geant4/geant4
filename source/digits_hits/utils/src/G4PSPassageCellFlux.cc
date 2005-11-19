@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCellFlux.cc,v 1.3 2005-11-19 00:44:00 asaim Exp $
+// $Id: G4PSPassageCellFlux.cc,v 1.4 2005-11-19 03:16:07 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSPassageCellFlux
@@ -124,7 +124,7 @@ void G4PSPassageCellFlux::PrintAll()
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  cell flux : " << G4BestUnit(*(itr->second),"Surface")
+	   << "  cell flux : " << *(itr->second)*cm*cm << " [cm^-2]"
 	   << G4endl;
   }
 }

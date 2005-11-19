@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCurrent.cc,v 1.2 2005-11-17 22:53:38 asaim Exp $
+// $Id: G4PSPassageCurrent.cc,v 1.3 2005-11-19 03:16:07 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSPassageCurrent
@@ -112,7 +112,7 @@ void G4PSPassageCurrent::PrintAll()
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  cell flux : " << G4BestUnit(*(itr->second),"Surface")
+	   << "  cell current : " << *(itr->second)
 	   << G4endl;
   }
 }
