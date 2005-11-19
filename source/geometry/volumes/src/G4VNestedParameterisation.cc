@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNestedParameterisation.cc,v 1.4 2005-07-25 10:02:43 gcosmo Exp $
+// $Id: G4VNestedParameterisation.cc,v 1.5 2005-11-19 02:28:44 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VNestedParameterisation implementation
@@ -34,6 +34,14 @@
 
 #include "G4PhysicalTouchable.hh"
 #include "G4VNestedParameterisation.hh" 
+
+G4VNestedParameterisation::G4VNestedParameterisation() :
+  G4VPVParameterisation(), G4VVolumeMaterialScanner()
+{
+}
+
+G4VNestedParameterisation::~G4VNestedParameterisation() {}
+
 
 G4VPhysicalVolume* G4VNestedParameterisation::
 ObtainParts( G4VPhysicalVolume* thisVolPlus,                      // Input 
@@ -48,7 +56,7 @@ ObtainParts( G4VPhysicalVolume* thisVolPlus,                      // Input
     ReportErrorInTouchable( method, thisVolPlus );
   }
 
-  // ParameterisedNavigator must provide a G4PhysicalTouchable !!
+  // ParameterisedNG4VNestedParameterisationavigator must provide a G4PhysicalTouchable !!
   //
   G4VPhysicalVolume* pCurrentVol= pPhysTouchable->GetCurrentVolume(); 
   *pPtrTouchableParent = pPhysTouchable->GetParentTouchable();  // Parent Touch
@@ -77,6 +85,7 @@ ObtainParts( const G4VPhysicalVolume* thisVolPlus,                // Input
   return pCurrentVol; 
 }
 
+#ifdef OLD
 G4Material*
 G4VNestedParameterisation::ComputeMaterial(const G4int no, 
                                            G4VPhysicalVolume *currVolPlus)
@@ -90,6 +99,7 @@ G4VNestedParameterisation::ComputeMaterial(const G4int no,
   //
   return this->ComputeMaterial(no, pCurrentVol, pTouchableParent);  
 }
+#endif
 
 void G4VNestedParameterisation::
 ReportErrorInTouchable( const G4String& method, 
@@ -121,4 +131,22 @@ G4VSolid* G4VNestedParameterisation::ComputeSolid(const G4int,
                                      G4VPhysicalVolume  *pvol)
 { 
   return pvol->GetLogicalVolume()->GetSolid(); 
+}
+
+G4bool G4VNestedParameterisation::IsNested() const 
+{ 
+  return true;
+}
+
+G4VVolumeMaterialScanner* G4VNestedParameterisation::GetMaterialScanner() 
+{ 
+  return this; 
+} 
+
+G4Material* 
+G4VNestedParameterisation::ComputeMaterial(const G4int repNo, 
+					   G4VPhysicalVolume *currentVol,
+					   const G4VTouchable *parentTouch)
+{
+    return ComputeMaterial( currentVol, repNo, parentTouch );
 }
