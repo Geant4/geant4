@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNestedParameterisation.hh,v 1.3 2005-07-25 10:02:43 gcosmo Exp $
+// $Id: G4VNestedParameterisation.hh,v 1.4 2005-11-19 02:27:28 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VNestedParameterisation
@@ -72,25 +72,38 @@ class G4Polycone;
 class G4Polyhedra;
 class G4Hype;
 
-class G4VNestedParameterisation: public G4VPVParameterisation
+class G4VNestedParameterisation: public G4VPVParameterisation, 
+                                 public G4VVolumeMaterialScanner
 {
   public:  // with description
 
-    virtual G4Material* ComputeMaterial(const G4int repNo, 
-                                        G4VPhysicalVolume *currentVol,
-                                        const G4VTouchable *parentTouch) = 0;
-      // Mandatory method, required as reason for this class
+    G4VNestedParameterisation(); 
+    virtual ~G4VNestedParameterisation(); 
+
+    // Methods required in derived classes
+    // -----------------------------------
+    virtual G4Material* ComputeMaterial(G4VPhysicalVolume *currentVol,
+					const G4int repNo, 
+                                        const G4VTouchable *parentTouch=0
+                                        )=0;
+      // Required method, as it is the reason for this class.
+      //   Must cope with parentTouch=0 for navigator's SetupHierarchy
+
+    virtual G4int       GetNumberOfMaterials() const=0;
+    virtual G4Material* GetMaterial(G4int idx) const=0;
+      // Needed to define materials for instances of Nested Parameterisation 
+      //   Current convention: each call should return the materials 
+      //   of all instances with the same mother/ancestor volume.
 
     virtual void ComputeTransformation(const G4int no,
                                        G4VPhysicalVolume *currentPV) const = 0;
 
+    // Methods optional in derived classes
+    // -----------------------------------
     virtual G4VSolid* ComputeSolid(const G4int no, G4VPhysicalVolume *thisVol);
 
-    virtual G4Material* ComputeMaterial(const G4int, G4VPhysicalVolume *);
-      // This methood is implemented in terms of the methods above 
-      // providing 're-interpretation' to add information of parent
-
-    // Additional standard Parameterisation methods
+    // Additional standard Parameterisation methods, 
+    //   which can be optionally defined, in case solid is used.
 
     virtual void ComputeDimensions(G4Box &,
                                    const G4int,
@@ -139,6 +152,17 @@ class G4VNestedParameterisation: public G4VPVParameterisation
     virtual void ComputeDimensions(G4Hype &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
+ 
+
+    // Method  implemented in this class in terms of above ComputeMaterial
+    G4Material* ComputeMaterial(const G4int repNo, 
+				G4VPhysicalVolume *currentVol,
+				const G4VTouchable *parentTouch=0);
+
+    // Methods identifying Nested Params, implemented in this class
+    virtual G4bool IsNested() const;
+    virtual G4VVolumeMaterialScanner* GetMaterialScanner(); 
+       //   These enable material scan for nested parameterisations
 
   private:
 
