@@ -35,16 +35,23 @@
 
 void G4NeutronHPInelasticCompFS::InitGammas(G4double AR, G4double ZR)
 {
-   char the[100] = {""};
-   std::ostrstream ost(the, 100, std::ios::out);
+  //   char the[100] = {""};
+  //   std::ostrstream ost(the, 100, std::ios::out);
+  //   ost <<gammaPath<<"z"<<ZR<<".a"<<AR;
+  //   G4String * aName = new G4String(the);
+  //   std::ifstream from(*aName, std::ios::in);
+
+   std::ostringstream ost;
    ost <<gammaPath<<"z"<<ZR<<".a"<<AR;
-   G4String * aName = new G4String(the);
-   std::ifstream from(*aName, std::ios::in);
+   G4String aName = ost.str();
+   std::ifstream from(aName, std::ios::in);
+
    if(!from) return; // no data found for this isotope
-   std::ifstream theGammaData(*aName, std::ios::in);
+   //   std::ifstream theGammaData(*aName, std::ios::in);
+   std::ifstream theGammaData(aName, std::ios::in);
     
    theGammas.Init(theGammaData);
-   delete aName;
+   //   delete aName;
 }
 
 void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType)

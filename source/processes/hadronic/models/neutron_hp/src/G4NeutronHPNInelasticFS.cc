@@ -31,7 +31,7 @@
 #include "G4Gamma.hh"
 #include "G4ios.hh"
 #include <fstream>
-#include <strstream>
+// #include <strstream>
 
 void G4NeutronHPNInelasticFS::Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType)
 {
