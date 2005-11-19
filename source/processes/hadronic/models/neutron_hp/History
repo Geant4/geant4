@@ -1,0 +1,27 @@
+-------------------------------------------------------------------
+
+          ==================================================
+          Geant4 - an Object-Oriented Toolkit for Simulation
+          ==================================================
+
+            History file for High Precision Neutron model
+            ---------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+18 Nov 2005 Dennis Wright (hadr-hpn-V07-01-00)
+----------------------------------------------
+
+- <sstream> migration for
+         G4NeutronHPInelasticBaseFS.cc, G4NeutronHPInelasticCompFS.cc, 
+         G4NeutronHPNInelasticFS.cc, G4NeutronHPIsoData.hh 
+
+- fix division NAN compiler warning in outer while loop for
+         G4NeutronHPCaptureData.cc, G4NeutronHPElasticData.cc, 
+         G4NeutronHPInelasticData.cc, G4NeutronHPFissionData.cc
+
