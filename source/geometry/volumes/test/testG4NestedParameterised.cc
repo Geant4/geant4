@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4NestedParameterised.cc,v 1.3 2005-11-17 09:32:13 japost Exp $
+// $Id: testG4NestedParameterised.cc,v 1.4 2005-11-19 02:30:06 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -94,6 +94,9 @@ private:
     pBox.SetYHalfLength(half_len);
     pBox.SetZHalfLength(half_len);
   }
+ 
+  G4int       GetNumberOfMaterials() const { return 0; } 
+  G4Material* GetMaterial(G4int)     const { return 0; } 
 
   virtual void ComputeDimensions(G4Tubs &,
 				 const G4int ,
@@ -130,18 +133,17 @@ private:
 				 const G4VPhysicalVolume*) const {}
 
   // Mandatory method, required as reason for this class
-  virtual G4Material* ComputeMaterial(const G4int repNo, 
-				      G4VPhysicalVolume *currentVol,
+  virtual G4Material* ComputeMaterial(G4VPhysicalVolume *currentVol,
+				      const G4int no_lev, 
 				      const G4VTouchable *parentTouch);
  private:
     G4RotationMatrix *fRotationVec;
     G4double fTwistAngle;
 };
-
   
-G4Material* MoveNRotate::ComputeMaterial(const G4int no_lev, 
-				      G4VPhysicalVolume *currentVol,
-				      const G4VTouchable *parentTouch) 
+G4Material* MoveNRotate::ComputeMaterial(G4VPhysicalVolume *currentVol,
+					 const G4int no_lev, 
+					 const G4VTouchable *parentTouch)
 {
     // Get the information about the parent volume
     G4int no_parent= parentTouch->GetReplicaNumber(); 
