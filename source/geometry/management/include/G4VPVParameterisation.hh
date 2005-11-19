@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPVParameterisation.hh,v 1.9 2005-06-20 15:03:16 gcosmo Exp $
+// $Id: G4VPVParameterisation.hh,v 1.10 2005-11-19 02:21:04 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VPVParamterisation
@@ -42,6 +42,7 @@
 #define G4VPVPARAMETERISATION_HH
 
 #include "G4Types.hh"
+#include "G4VVolumeMaterialScanner.hh"
 
 class G4VPhysicalVolume;
 class G4VTouchable; 
@@ -63,6 +64,9 @@ class G4Polycone;
 class G4Polyhedra;
 class G4Hype;
 
+class G4VAlternativeNavigation; 
+class G4VVolumeMaterialScanner; 
+
 class G4VPVParameterisation
 {
   public:
@@ -72,8 +76,21 @@ class G4VPVParameterisation
 
     virtual G4VSolid*   ComputeSolid(const G4int, G4VPhysicalVolume *);
 				       
-    virtual G4Material* ComputeMaterial(const G4int, G4VPhysicalVolume *);
-				       
+    virtual G4Material* ComputeMaterial(const G4int repNo, 
+                                        G4VPhysicalVolume *currentVol,
+                                        const G4VTouchable *parentTouch=0);
+       //  Refined method, enabling nested parameterisations
+
+    virtual G4bool IsNested() const;
+    virtual G4VVolumeMaterialScanner* GetMaterialScanner(); 
+       //   These enable material scan for nested parameterisations
+
+#ifdef G4ALTNAV
+    virtual G4VAlternativeNavigation*  GetAlternativeNavigation() const; 
+       //   If parameterising regular structure, this must 
+       //     return the 'faster' sub-navigation 
+#endif
+
     virtual void ComputeDimensions(G4Box &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
