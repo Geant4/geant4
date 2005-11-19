@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageTrackLength.hh,v 1.1 2005-11-16 23:12:42 asaim Exp $
+// $Id: G4PSPassageTrackLength.hh,v 1.2 2005-11-19 00:44:00 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -48,6 +48,9 @@ class G4PSPassageTrackLength : public G4VPrimitiveScorer
       G4PSPassageTrackLength(G4String name, G4int depth=0);
       virtual ~G4PSPassageTrackLength();
 
+      inline void Weighted(G4bool flg=true) { weighted = flg; }
+      // Multiply track weight
+
   protected: // with description
       virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
       G4bool IsPassed(G4Step*);
@@ -64,6 +67,7 @@ class G4PSPassageTrackLength : public G4VPrimitiveScorer
       G4int fCurrentTrkID;
       G4double fTrackLength;
       G4THitsMap<G4double>* EvtMap;
+      G4bool weighted;
 
 };
 

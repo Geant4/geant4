@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSMinKinEAtGeneration.cc,v 1.1 2005-11-18 22:43:10 asaim Exp $
+// $Id: G4PSMinKinEAtGeneration.cc,v 1.2 2005-11-19 00:44:00 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSMinKinEAtGeneration
@@ -77,9 +77,7 @@ G4bool G4PSMinKinEAtGeneration::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   // -
   // Current Track is a newly produced secondary and has lower
   // kinetic energy than previous one in this geometry.
-  //  Let's Store it!.
   //
-  kinetic *= aStep->GetPreStepPoint()->GetWeight();
   EvtMap->set(index, kinetic);
   return TRUE;
 }

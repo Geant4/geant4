@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSTrackLength.hh,v 1.2 2005-11-16 23:24:08 asaim Exp $
+// $Id: G4PSTrackLength.hh,v 1.3 2005-11-19 00:44:00 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -47,6 +47,9 @@ class G4PSTrackLength : public G4VPrimitiveScorer
       G4PSTrackLength(G4String name, G4int depth=0);
       virtual ~G4PSTrackLength();
 
+      inline void Weighted(G4bool flg=true) { weighted = flg; }
+      // Multiply track weight
+
   protected: // with description
       virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
 
@@ -60,5 +63,6 @@ class G4PSTrackLength : public G4VPrimitiveScorer
   private:
       G4int HCID;
       G4THitsMap<G4double>* EvtMap;
+      G4bool weighted;
 };
 #endif

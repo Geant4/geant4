@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofStep.cc,v 1.2 2005-11-17 22:53:38 asaim Exp $
+// $Id: G4PSNofStep.cc,v 1.3 2005-11-19 00:44:00 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSNofStep
@@ -44,8 +44,8 @@ G4PSNofStep::~G4PSNofStep()
 G4bool G4PSNofStep::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   G4int  index = GetIndex(aStep);
-  G4double weight = aStep->GetPreStepPoint()->GetWeight();
-  EvtMap->add(index,weight);  
+  G4double val = 1.0;
+  EvtMap->add(index,val);  
   return TRUE;
 }
 

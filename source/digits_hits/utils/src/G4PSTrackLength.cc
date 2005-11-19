@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSTrackLength.cc,v 1.2 2005-11-17 22:53:38 asaim Exp $
+// $Id: G4PSTrackLength.cc,v 1.3 2005-11-19 00:44:00 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSTrackLength
@@ -37,7 +37,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSTrackLength::G4PSTrackLength(G4String name, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1)
+  :G4VPrimitiveScorer(name,depth),HCID(-1),weighted(false)
 {;}
 
 G4PSTrackLength::~G4PSTrackLength()
@@ -47,7 +47,7 @@ G4bool G4PSTrackLength::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   G4double trklength  = aStep->GetStepLength();
   if ( trklength == 0. ) return FALSE;
-  trklength *= aStep->GetPreStepPoint()->GetWeight();
+  if(weighted) trklength *= aStep->GetPreStepPoint()->GetWeight();
   G4int  index = GetIndex(aStep);
   EvtMap->add(index,trklength);  
   return TRUE;

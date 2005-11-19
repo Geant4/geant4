@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCellFlux.cc,v 1.2 2005-11-17 22:53:38 asaim Exp $
+// $Id: G4PSPassageCellFlux.cc,v 1.3 2005-11-19 00:44:00 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSPassageCellFlux
@@ -58,7 +58,6 @@ G4bool G4PSPassageCellFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
     fCellFlux /= 
       aStep->GetPreStepPoint()->GetPhysicalVolume()
       ->GetLogicalVolume()->GetSolid()->GetCubicVolume();
-    fCellFlux *= aStep->GetPreStepPoint()->GetWeight();
     G4int index = GetIndex(aStep);
     EvtMap->add(index,fCellFlux);
   }
@@ -74,6 +73,7 @@ G4bool G4PSPassageCellFlux::IsPassed(G4Step* aStep){
 
   G4int  trkid  = aStep->GetTrack()->GetTrackID();
   G4double trklength  = aStep->GetStepLength();
+  trklength *= aStep->GetPreStepPoint()->GetWeight();
 
   if ( IsEnter &&IsExit ){         // Passed at one step
     fCellFlux = trklength;         // Track length is absolutely given.

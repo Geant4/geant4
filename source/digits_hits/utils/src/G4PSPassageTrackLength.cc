@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageTrackLength.cc,v 1.1 2005-11-16 23:12:42 asaim Exp $
+// $Id: G4PSPassageTrackLength.cc,v 1.2 2005-11-19 00:44:00 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSPassageTrackLength
@@ -41,7 +41,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSPassageTrackLength::G4PSPassageTrackLength(G4String name, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fTrackLength(0)
+  :G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fTrackLength(0.),
+   weighted(false)
 {;}
 
 G4PSPassageTrackLength::~G4PSPassageTrackLength()
@@ -51,7 +52,6 @@ G4bool G4PSPassageTrackLength::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
 
   if ( IsPassed(aStep) ) {
-    fTrackLength *= aStep->GetPreStepPoint()->GetWeight();
     G4int index = GetIndex(aStep);
     EvtMap->add(index,fTrackLength);
   }
@@ -67,6 +67,7 @@ G4bool G4PSPassageTrackLength::IsPassed(G4Step* aStep){
 
   G4int  trkid  = aStep->GetTrack()->GetTrackID();
   G4double trklength  = aStep->GetStepLength();
+  if(weighted) trklength *= aStep->GetPreStepPoint()->GetWeight();
 
   if ( IsEnter &&IsExit ){         // Passed at one step
     fTrackLength = trklength;      // Track length is absolutely given.
