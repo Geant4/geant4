@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.57 2005-11-09 15:03:09 gcosmo Exp $
+// $Id: G4Torus.cc,v 1.58 2005-11-20 16:35:39 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,6 +29,7 @@
 //
 // Implementation
 //
+// 20.11.05 V.Grichine: Bug fixed in Inside(p) for phi sections, b.810 
 // 25.08.05 O.Link: new methods for DistanceToIn/Out using JTPolynomialSolver
 // 07.06.05 V.Grichine: SurfaceNormal(p) for rho=0, Constructor as G4Cons 
 // 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
@@ -578,16 +579,21 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
       if ( pPhi < -kAngTolerance*0.5 )  { pPhi += twopi ; }  // 0<=pPhi<2pi
       if ( fSPhi >= 0 )
       {
-          if ( (std::abs(pPhi) < kAngTolerance*0.5)
+        if ( (std::abs(pPhi) < kAngTolerance*0.5)
             && (std::abs(fSPhi + fDPhi - twopi) < kAngTolerance*0.5) )
-          { 
+        { 
             pPhi += twopi ; // 0 <= pPhi < 2pi
-          }
-          if ( (pPhi >= fSPhi - kAngTolerance*0.5)
-            && (pPhi <= fSPhi + fDPhi + kAngTolerance*0.5) )
-          {
-            in = kSurface;
-          }
+        }
+        if ( (pPhi >= fSPhi + kAngTolerance*0.5)
+            && (pPhi <= fSPhi + fDPhi - kAngTolerance*0.5) )
+        {
+          in = kInside ;
+        }
+          else if ( (pPhi >= fSPhi - kAngTolerance*0.5)
+                 && (pPhi <= fSPhi + fDPhi + kAngTolerance*0.5) )
+        {
+          in = kSurface ;
+        }
       }
       else  // fSPhi < 0
       {

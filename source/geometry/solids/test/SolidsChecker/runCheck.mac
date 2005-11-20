@@ -9,11 +9,11 @@
 /particle/list
 /run/initialize
 #
-#/tracking/verbose 1
+/tracking/verbose 1
 #
 #/mydet/SelectDetector Cone
 #
-/mydet/SelectDetector manyCons
+#/mydet/SelectDetector manyCons
 #
 #/mydet/SelectDetector Trd
 #
@@ -31,8 +31,8 @@
 #
 /mydet/SelectDetector TwistedTrap2
 #
-/event/printModulo 10000000
-/run/beamOn 100000000
+/event/printModulo 1
+/run/beamOn 1
 #/event/printModulo 1
 #/tracking/verbose 3
 #/run/beamOn 1

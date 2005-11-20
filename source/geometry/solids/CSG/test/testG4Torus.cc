@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Torus.cc,v 1.13 2005-09-05 15:15:28 link Exp $
+// $Id: testG4Torus.cc,v 1.14 2005-11-20 16:35:40 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -74,7 +74,7 @@ G4bool testG4Torus()
    G4double x; 
    G4double z;
  
-   G4double Dist, vol, volCheck;
+   G4double Dist, dist, vol, volCheck;
    EInside side;
    G4ThreeVector *pNorm,norm;
    G4bool *pgoodNorm,goodNorm,calcNorm=true;
@@ -132,6 +132,15 @@ G4bool testG4Torus()
    G4Torus t6("t6",100*mm, 150*mm, 200*mm,0*degree,
                                        59.99999999999999*degree);
 
+    G4Torus* clad =
+      new G4Torus("clad",0.,1.*cm,10.*cm,0.*deg,180.*deg);    // external
+
+    G4Torus* core =
+      new G4Torus("core",0.,0.5*cm,10.*cm,0.*deg,180.*deg); // internal
+
+
+   G4cout.precision(20);
+
    G4ThreeVector p1t6( 60.73813233071262,  
                       -27.28494547459707,
                        37.47827539879173);
@@ -175,9 +184,9 @@ G4bool testG4Torus()
     assert(t2.Inside(ponphi22)==kSurface);
 
     side=t6.Inside(p1t6);    
-    G4cout<<"t6.Inside(p1t6) = "<<OutputInside(side)<<G4endl;
+    // G4cout<<"t6.Inside(p1t6) = "<<OutputInside(side)<<G4endl;
     side=t6.Inside(p2t6);    
-    G4cout<<"t6.Inside(p2t6) = "<<OutputInside(side)<<G4endl;
+    // G4cout<<"t6.Inside(p2t6) = "<<OutputInside(side)<<G4endl;
 
 // Check Surface Normal
     G4ThreeVector normal;
@@ -340,10 +349,43 @@ G4bool testG4Torus()
     assert(ApproxEqual(Dist,kInfinity));
 
     Dist=t6.DistanceToIn(p1t6,vt6);
-    G4cout<<"t6.DistanceToIn(p1t6,vt6) = "<<Dist<<G4endl;
+    // G4cout<<"t6.DistanceToIn(p1t6,vt6) = "<<Dist<<G4endl;
 
+    // Bug 810
 
+    G4ThreeVector pTmp(0.,0.,0.);
 
+    dist = clad->DistanceToIn(pTmp,vy);   
+    pTmp += dist*vy;
+    G4cout<<"pTmpX = "<<pTmp.x()<<";  pTmpY = "<<pTmp.y()<<";  pTmpZ = "<<pTmp.z()<<G4endl;
+    side=core->Inside(pTmp);    
+    G4cout<<"core->Inside(pTmp) = "<<OutputInside(side)<<G4endl;
+    side=clad->Inside(pTmp);    
+    G4cout<<"clad->Inside(pTmp) = "<<OutputInside(side)<<G4endl;
+
+    dist = core->DistanceToIn(pTmp,vy);   
+    pTmp += dist*vy;
+    G4cout<<"pTmpX = "<<pTmp.x()<<";  pTmpY = "<<pTmp.y()<<";  pTmpZ = "<<pTmp.z()<<G4endl;
+    side=core->Inside(pTmp);    
+    G4cout<<"core->Inside(pTmp) = "<<OutputInside(side)<<G4endl;
+    side=clad->Inside(pTmp);    
+    G4cout<<"clad->Inside(pTmp) = "<<OutputInside(side)<<G4endl;
+
+    dist = core->DistanceToOut(pTmp,vy,calcNorm,pgoodNorm,pNorm);   
+    pTmp += dist*vy;
+    G4cout<<"pTmpX = "<<pTmp.x()<<";  pTmpY = "<<pTmp.y()<<";  pTmpZ = "<<pTmp.z()<<G4endl;
+    side=core->Inside(pTmp);    
+    G4cout<<"core->Inside(pTmp) = "<<OutputInside(side)<<G4endl;
+    side=clad->Inside(pTmp);    
+    G4cout<<"clad->Inside(pTmp) = "<<OutputInside(side)<<G4endl;
+
+    dist = clad->DistanceToOut(pTmp,vy,calcNorm,pgoodNorm,pNorm);   
+    pTmp += dist*vy;
+    G4cout<<"pTmpX = "<<pTmp.x()<<";  pTmpY = "<<pTmp.y()<<";  pTmpZ = "<<pTmp.z()<<G4endl;
+    side=core->Inside(pTmp);    
+    G4cout<<"core->Inside(pTmp) = "<<OutputInside(side)<<G4endl;
+    side=clad->Inside(pTmp);    
+    G4cout<<"clad->Inside(pTmp) = "<<OutputInside(side)<<G4endl;
 
 // Check for Distance to In ( start from an external point )
 
@@ -369,6 +411,7 @@ G4bool testG4Torus()
     
     
 // CalculateExtent
+
     G4VoxelLimits limit;		// Unlimited
     G4RotationMatrix noRot;
     G4AffineTransform origin;

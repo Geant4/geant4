@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Tubs.cc,v 1.16 2005-06-06 09:17:22 gcosmo Exp $
+// $Id: testG4Tubs.cc,v 1.17 2005-11-20 16:35:40 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -69,7 +69,7 @@ const G4String OutputInside(const EInside a)
 G4bool testG4Tubs()
 {
     G4cout.precision(16) ;
-
+    EInside side;
     G4ThreeVector pzero(0,0,0);
 
     G4ThreeVector pbigx(100,0,0),pbigy(0,100,0),pbigz(0,0,100);
@@ -84,7 +84,7 @@ G4bool testG4Tubs()
     G4ThreeVector vmxmy(-1/std::sqrt(2.0),-1/std::sqrt(2.0),0);
     G4ThreeVector vxmy(1/std::sqrt(2.0),-1/std::sqrt(2.0),0);
 
-    G4double Dist, vol;
+    G4double Dist, dist, vol;
     G4ThreeVector *pNorm,norm;
     G4bool *pgoodNorm,goodNorm,calcNorm=true;
 
@@ -121,6 +121,14 @@ G4bool testG4Tubs()
 
   G4Tubs tube10("tube10",400*mm,405*mm,400*mm,0*degree,360*degree) ;
 
+    G4Tubs* clad =
+      new G4Tubs("clad",90.,110.,10.5*cm,0.*deg,180.*deg);    // external
+
+    G4Tubs* core =
+      new G4Tubs("core",95.,105.,10.*cm,0.*deg,180.*deg); // internal
+
+
+   G4cout.precision(20);
 
 // Check name
 
@@ -180,8 +188,7 @@ G4bool testG4Tubs()
 					   382.7843220719649*mm,
                                            -32.20788536438663*mm)) ;
     //  assert(in == kSurface);
-    G4cout<<"tube10.Inside(G4ThreeVector(-114.821...)) = "
-         <<OutputInside(in)<<G4endl;
+    // G4cout<<"tube10.Inside(G4ThreeVector(-114.821...)) = "<<OutputInside(in)<<G4endl;
 
 // Check Surface Normal
 
@@ -297,14 +304,14 @@ G4bool testG4Tubs()
  G4ThreeVector(6.71645645882942,2579.415860329989,-1.519530725281157),
  G4ThreeVector(-0.6305220496340839,-0.07780451841562354,0.7722618738739774),
     calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=tube8.DistanceToOut(p,v) = "<<Dist<<G4endl;
+    // G4cout<<"Dist=tube8.DistanceToOut(p,v) = "<<Dist<<G4endl;
     // assert(ApproxEqual(Dist,4950.348576972614));
 
     Dist=tube9.DistanceToOut(
  G4ThreeVector(2.267347771505638,1170.164934028592,4.820317321984064),
  G4ThreeVector(-0.1443054266272111,-0.01508874701037938,0.9894181489944458),
     calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=tube9.DistanceToOut(p,v) = "<<Dist<<G4endl;
+    // G4cout<<"Dist=tube9.DistanceToOut(p,v) = "<<Dist<<G4endl;
     // assert(ApproxEqual(Dist,4950.348576972614));
 
 
@@ -396,6 +403,41 @@ G4bool testG4Tubs()
     //  G4cout<<"Dist=t5.DistanceToIn((30.0,-100.0,0),vmx) = "<<Dist<<G4endl;
     assert(ApproxEqual(Dist,kInfinity));
    
+    // Bug 810
+
+    G4ThreeVector pTmp(0.,0.,0.);
+
+    dist = clad->DistanceToIn(pTmp,vy);   
+    pTmp += dist*vy;
+    G4cout<<"pTmpX = "<<pTmp.x()<<";  pTmpY = "<<pTmp.y()<<";  pTmpZ = "<<pTmp.z()<<G4endl;
+    side=core->Inside(pTmp);    
+    G4cout<<"core->Inside(pTmp) = "<<OutputInside(side)<<G4endl;
+    side=clad->Inside(pTmp);    
+    G4cout<<"clad->Inside(pTmp) = "<<OutputInside(side)<<G4endl;
+
+    dist = core->DistanceToIn(pTmp,vy);   
+    pTmp += dist*vy;
+    G4cout<<"pTmpX = "<<pTmp.x()<<";  pTmpY = "<<pTmp.y()<<";  pTmpZ = "<<pTmp.z()<<G4endl;
+    side=core->Inside(pTmp);    
+    G4cout<<"core->Inside(pTmp) = "<<OutputInside(side)<<G4endl;
+    side=clad->Inside(pTmp);    
+    G4cout<<"clad->Inside(pTmp) = "<<OutputInside(side)<<G4endl;
+
+    dist = core->DistanceToOut(pTmp,vy,calcNorm,pgoodNorm,pNorm);   
+    pTmp += dist*vy;
+    G4cout<<"pTmpX = "<<pTmp.x()<<";  pTmpY = "<<pTmp.y()<<";  pTmpZ = "<<pTmp.z()<<G4endl;
+    side=core->Inside(pTmp);    
+    G4cout<<"core->Inside(pTmp) = "<<OutputInside(side)<<G4endl;
+    side=clad->Inside(pTmp);    
+    G4cout<<"clad->Inside(pTmp) = "<<OutputInside(side)<<G4endl;
+
+    dist = clad->DistanceToOut(pTmp,vy,calcNorm,pgoodNorm,pNorm);   
+    pTmp += dist*vy;
+    G4cout<<"pTmpX = "<<pTmp.x()<<";  pTmpY = "<<pTmp.y()<<";  pTmpZ = "<<pTmp.z()<<G4endl;
+    side=core->Inside(pTmp);    
+    G4cout<<"core->Inside(pTmp) = "<<OutputInside(side)<<G4endl;
+    side=clad->Inside(pTmp);    
+    G4cout<<"clad->Inside(pTmp) = "<<OutputInside(side)<<G4endl;
 
 
 // CalculateExtent

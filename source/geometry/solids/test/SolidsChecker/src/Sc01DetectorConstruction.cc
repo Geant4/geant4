@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Sc01DetectorConstruction.cc,v 1.8 2005-03-18 15:53:29 link Exp $
+// $Id: Sc01DetectorConstruction.cc,v 1.9 2005-11-20 16:36:33 grichine Exp $
 // 
 //  GEANT 4 class header file 
 //
@@ -102,6 +102,19 @@ void Sc01DetectorConstruction::SwitchDetector()
 G4VPhysicalVolume*
 Sc01DetectorConstruction::SelectDetector( const G4String& val )
 {
+
+  // fHallSize = 2.8*m;
+  fHallSize = 4.8*m;
+
+  G4Box * Hall
+          = new G4Box("Hall", fHallSize,fHallSize,fHallSize );
+
+  G4LogicalVolume * Hall_log
+          = new G4LogicalVolume (Hall, Water, "Hall_L", 0,0,0);
+
+  PhysicalVolume
+          = new G4PVPlacement(0,G4ThreeVector(),"Hall_P",Hall_log,0,false,0);
+
   
 
   G4Box* b1 = new G4Box ( "b1", 100*cm, 50*cm, 50*cm );
@@ -236,21 +249,8 @@ Sc01DetectorConstruction::SelectDetector( const G4String& val )
 
   else
   {
-    G4Exception("Sc01DetectorConstruction::SelectDetector() - Invalid shape!");
+    //   G4Exception("Sc01DetectorConstruction::SelectDetector() - Invalid shape!");
   }
-
-  // fHallSize = 2.8*m;
-  fHallSize = 4.8*m;
-
-  G4Box * Hall
-          = new G4Box("Hall", fHallSize,fHallSize,fHallSize );
-
-  G4LogicalVolume * Hall_log
-          = new G4LogicalVolume (Hall, Water, "Hall_L", 0,0,0);
-
-  PhysicalVolume
-          = new G4PVPlacement(0,G4ThreeVector(),"Hall_P",Hall_log,0,false,0);
-
   if(val == "manyCons")
   {
 
@@ -274,19 +274,38 @@ Sc01DetectorConstruction::SelectDetector( const G4String& val )
   }  
   else
   {    
-   
+    G4Torus* solidFiber =
+      new G4Torus("clad",0.,1.*cm,10.*cm,0.*deg,180.*deg);    // external
+
+    G4Torus* solidCore =
+      new G4Torus("core",0.,0.5*cm,10.*cm,0.*deg,180.*deg); // internal
+
+    G4LogicalVolume* logicFiber =
+    new G4LogicalVolume(solidFiber,Water1,"FiberClad",0,0,0);
+
+    G4LogicalVolume* logicCore =
+    new G4LogicalVolume(solidCore,Water1,"FiberCore",0,0,0);
+
+  G4VPhysicalVolume * aVolume_phys1 =
+  new G4PVPlacement(0,0,logicFiber,"FiberClad",Hall_log,false,0);
+
+  G4VPhysicalVolume * aVolume_phys2 =
+    //  new G4PVPlacement(0,0,logicCore,"FiberCore",logicFiber,false,0);
+  new G4PVPlacement(0,0,"FiberCore",logicCore,aVolume_phys1,false,0);
+
+  /*
   G4LogicalVolume* aVolume_log 
 
     //  = new G4LogicalVolume(aVolume, Water1, "aVolume_L", 0,0,0);
 
-     =  GetConePolycone();
-
+    //  =  GetConePolycone();
+   
   G4VPhysicalVolume * aVolume_phys1
     = new G4PVPlacement(0,G4ThreeVector(0*cm, 0*cm, 0*cm),val, 
                         aVolume_log, PhysicalVolume, false, 0);
 
 
-
+  */
 //--------- Visualization attributes -------------------------------
 
   //  G4VisAttributes* BoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
@@ -297,7 +316,7 @@ Sc01DetectorConstruction::SelectDetector( const G4String& val )
   // logicTracker->SetVisAttributes(BoxVisAtt);
 
   G4VisAttributes* ChamberVisAtt = new G4VisAttributes(G4Colour(0.0,1.0,0.0));
-  aVolume_log->SetVisAttributes(ChamberVisAtt);
+  //  aVolume_log->SetVisAttributes(ChamberVisAtt);
 
 //--------- example of User Limits -------------------------------
 

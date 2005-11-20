@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Sc01PrimaryGeneratorAction.cc,v 1.2 2004-12-02 09:31:34 gcosmo Exp $
+// $Id: Sc01PrimaryGeneratorAction.cc,v 1.3 2005-11-20 16:36:33 grichine Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -65,8 +65,8 @@ void Sc01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   // create a new vertex in a random position 
 
-  G4ThreeVector VertexPosition (GetRandomPosition());
-//  G4ThreeVector VertexPosition (G4ThreeVector(0,0,0));
+  //  G4ThreeVector VertexPosition (GetRandomPosition());
+  G4ThreeVector VertexPosition (G4ThreeVector(0,0,0));
   G4PrimaryVertex* aVertex = 
     new G4PrimaryVertex( VertexPosition, 0);
 
@@ -78,8 +78,8 @@ void Sc01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // create new primaries and set them to the vertex
   for( int i=0; i<NumberOfParticlesToBeGenerated; i++ )
   {
-		G4ThreeVector m = GetRandomDirection();
-//		G4ThreeVector m(1,0,0);
+    //	G4ThreeVector m = GetRandomDirection();
+		G4ThreeVector m(0.,1.,0.);
     G4PrimaryParticle* aPrimaryParticle =
       new G4PrimaryParticle(aParticleDefinition, m.x(), m.y(), m.z());
     aPrimaryParticle->SetMass (0);
