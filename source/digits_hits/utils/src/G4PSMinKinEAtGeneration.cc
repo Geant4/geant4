@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSMinKinEAtGeneration.cc,v 1.2 2005-11-19 00:44:00 asaim Exp $
+// $Id: G4PSMinKinEAtGeneration.cc,v 1.3 2005-11-21 06:26:23 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSMinKinEAtGeneration
@@ -62,8 +62,8 @@ G4bool G4PSMinKinEAtGeneration::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   //  Confirm this track has lower energy than previous one.
   //
 
-  // -Kinetic energy of this particle.
-  G4double kinetic = aStep->GetTrack()->GetKineticEnergy();
+  // -Kinetic energy of this particle at the starting point.
+  G4double kinetic = aStep->GetPreStepPoint()->GetKineticEnergy();
 
   // -Stored value in the current HitsMap.
   G4int  index = GetIndex(aStep);
