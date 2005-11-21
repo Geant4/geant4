@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.cc,v 1.26 2005-09-02 00:09:43 asaim Exp $
+// $Id: G4ProcessManager.cc,v 1.27 2005-11-21 03:47:32 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,9 +44,6 @@
 #include <iomanip>
 #include "G4ProcessTable.hh"
 #include "G4ios.hh"
-
-#include <strstream>
-
 
 
 // ---------------------------------
