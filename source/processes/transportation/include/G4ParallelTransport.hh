@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelTransport.hh,v 1.8 2003-11-26 14:51:48 gcosmo Exp $
+// $Id: G4ParallelTransport.hh,v 1.9 2005-11-21 21:41:29 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -41,7 +41,6 @@
 #define G4ParallelTransport_hh G4ParallelTransport_hh
 
 #include "G4Types.hh"
-#include <strstream>
 
 #include "G4VProcess.hh"
 
@@ -75,7 +74,7 @@ public:  // with description
     // move a track in a "parallel" geometry
     // and update a G4PArallelStepper
 
-  virtual void StartTracking();
+  virtual void StartTracking(G4Track*);
   virtual void EndTracking();
 
 

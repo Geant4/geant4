@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelTransport.cc,v 1.12 2003-11-26 14:51:50 gcosmo Exp $
+// $Id: G4ParallelTransport.cc,v 1.13 2005-11-21 21:41:29 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -32,10 +32,10 @@
 // ----------------------------------------------------------------------
 
 #include "G4Types.hh"
-#include <strstream>
 #include "G4ParallelTransport.hh"
 #include "G4VPGeoDriver.hh"
 #include "G4VParallelStepper.hh"
+#include <sstream>
 
 G4ParallelTransport::G4ParallelTransport(G4VPGeoDriver &pgeodriver,
                                          G4VParallelStepper &aStepper,
@@ -61,7 +61,7 @@ G4ParallelTransport::~G4ParallelTransport()
   delete fParticleChange;
 }
 
-void G4ParallelTransport::StartTracking()
+void G4ParallelTransport::StartTracking(G4Track*)
 {
   fInitStep = true;
 }
@@ -115,13 +115,11 @@ G4ParallelTransport::PostStepDoIt(const G4Track& aTrack,
 {
   if (!(aStep.GetStepLength() > 0.))
   {
-    char st[1000];
-    std::ostrstream os(st,1000);
+    std::ostringstream os
     os << "G4PArallelTransport::InitPostDoIt: StepLength() == 0.\n"
        << "pos: " << aTrack.GetPosition() << ", " 
-       << "dir: " << aTrack.GetMomentumDirection() << "\n"
-       << '\0';
-    G4String m(st);
+       << "dir: " << aTrack.GetMomentumDirection() << "\n";
+    G4String m = os.str();
     Warning(m);
   }
   fParticleChange->Initialize(aTrack);

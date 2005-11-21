@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWWnTransportProcess.cc,v 1.4 2004-10-19 00:59:39 kurasige Exp $
+// $Id: G4ParallelWWnTransportProcess.cc,v 1.5 2005-11-21 21:41:29 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -32,7 +32,6 @@
 // ----------------------------------------------------------------------
 
 #include "G4Types.hh"
-#include <strstream>
 #include "G4ParallelWWnTransportProcess.hh"
 #include "G4VWeightWindowExaminer.hh"
 #include "G4VTrackTerminator.hh"
