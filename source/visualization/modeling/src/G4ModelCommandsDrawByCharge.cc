@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ModelCommandsDrawByCharge.cc,v 1.1 2005-11-21 05:44:44 tinslay Exp $
+// $Id: G4ModelCommandsDrawByCharge.cc,v 1.2 2005-11-21 17:00:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -27,7 +27,7 @@
 #include "G4ModelCommandsDrawByCharge.hh"
 #include "G4TrajectoryDrawByCharge.hh"
 #include "G4UIcmdWithAString.hh"
-#include "G4UICommand.hh"
+#include "G4UIcommand.hh"
 
 //Set colour with string
 G4ModelCommandDrawByChargeSet::G4ModelCommandDrawByChargeSet(G4TrajectoryDrawByCharge* model, const G4String& placement)
