@@ -1,4 +1,4 @@
-$Id: History,v 1.88 2005-11-09 15:03:31 gcosmo Exp $
+$Id: History,v 1.89 2005-11-21 07:59:18 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 20, 2005  V.Grichine                 geom-csg-V07-01-05
+- G4Torus: fixed bug in Inside(p) for phi sections.
+  Fixes problem report #810.
 
 Nov 9, 2005  G.Cosmo                     geom-csg-V07-01-04
 - Added fake default constructor for all concrete solids and relevant
