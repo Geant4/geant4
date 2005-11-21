@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManagerProcess.hh,v 1.8 2001-07-11 10:08:23 gunter Exp $
+// $Id: G4FastSimulationManagerProcess.hh,v 1.9 2005-11-21 18:13:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -88,7 +88,7 @@ public:
   //     Process interface
   //--------------------------------------------------------------
 
-  void StartTracking();
+  void StartTracking(G4Track*);
   
   //---------------------------------------------------
   // GetPhysicalInteractionLength() and DoIt() methods:

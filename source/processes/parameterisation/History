@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2005-11-02 09:22:02 gcosmo Exp $
+$Id: History,v 1.25 2005-11-21 18:13:14 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 21, 2005 M.Asai - param-V07-01-01
+- Fix warning message.
 
 November 02, 2005 G.Cosmo - param-V07-01-01
 - Corrected setting of envelope volumes and solid in G4FastTrack.
