@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.cc,v 1.12 2005-09-02 00:09:43 asaim Exp $
+// $Id: G4VProcess.cc,v 1.13 2005-11-21 21:59:19 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -91,11 +91,6 @@ void G4VProcess::SubtractNumberOfInteractionLengthLeft(
 }
 
 void G4VProcess::StartTracking(G4Track*)
-{
-  StartTracking();
-}
-
-void G4VProcess::StartTracking()
 {
   currentInteractionLength = -1.0;
   theNumberOfInteractionLengthLeft = -1.0;

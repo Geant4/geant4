@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.hh,v 1.21 2005-11-21 17:07:34 asaim Exp $
+// $Id: G4VProcess.hh,v 1.22 2005-11-21 21:59:19 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -260,7 +260,6 @@ class G4VProcess
       //  Returns the process type name
 
       virtual void StartTracking(G4Track*);
-      virtual void StartTracking();
       virtual void EndTracking();
       // inform Start/End of tracking for each track to the physics process 
 
