@@ -1,4 +1,4 @@
-$Id: History,v 1.76 2005-10-26 06:17:24 kmura Exp $
+$Id: History,v 1.77 2005-11-21 13:49:41 hajime Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21 November 2005, Hajime Yoshida (interface-V07-01-01)
+- G4UIGAG.cc and G4UIGainServer.cc migrated to sstream
 
 26 October 2005, Koichi Murakami (interfaces-V07-01-00)
 - G4UItcsh/G4UIterminal/G4VBasicShell: 
