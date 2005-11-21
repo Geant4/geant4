@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.icc,v 1.10 2005-10-24 11:32:43 allison Exp $
+// $Id: G4VisManager.icc,v 1.11 2005-11-21 05:45:42 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -105,3 +105,9 @@ inline void G4VisManager::SetWindowSizeHint (G4int xHint, G4int yHint) {
 inline void G4VisManager::SetXGeometryString (const G4String& geomString) {
   fXGeometryString = geomString;
 }
+
+inline void G4VisManager::RegisterMessenger(G4UImessenger* msgr)
+{
+  fMessengerList.push_back(msgr);
+}
+

@@ -19,43 +19,55 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VTrajectoryDrawer.hh,v 1.1 2005-11-02 16:56:05 allison Exp $
+// $Id: G4ModelCommandsDrawByCharge.hh,v 1.1 2005-11-21 05:44:44 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+// 
+// Jane Tinslay, John Allison, Joseph Perl November 2005
 //
-// Jane Tinslay, John Allison, Joseph Perl October 2005
-//
-// Class Description:
-// Abstract base class for trajectory drawers. Drawers are responsible
-// for drawing trajectories according to a particular style.
+// Class Description
+// Trajectory model commands.
 // Class Description - End:
 
-#ifndef G4VTRAJECTORYDRAWER_HH
-#define G4VTRAJECTORYDRAWER_HH
+#ifndef G4MODELCOMMANDDRAWBYCHARGE_HH
+#define G4MODELCOMMANDDRAWBYCHARGE_HH
 
-#include "globals.hh"
 #include "G4String.hh"
+#include "G4VModelCommand.hh"
 
-class G4VTrajectory;
+class G4TrajectoryDrawByCharge;
+class G4UIcmdWithAString;
+class G4UIcommand;
 
-class G4VTrajectoryDrawer {
+// Command to set positive/negative/neutral trajectory colouring through a string
+class G4ModelCommandDrawByChargeSet : public G4VModelCommand<G4TrajectoryDrawByCharge> {
 
 public: // With description
 
-  G4VTrajectoryDrawer(const G4String& name = "Unspecified");
+  G4ModelCommandDrawByChargeSet(G4TrajectoryDrawByCharge* model, const G4String& placement);
 
-  virtual ~G4VTrajectoryDrawer();
+  virtual ~G4ModelCommandDrawByChargeSet();
 
-  const G4String& GetName() const;
-   
-  virtual void Draw(const G4VTrajectory&, G4int i_mode = 0) = 0;
-  // Draw the trajectory with optional i_mode parameter
-
-  virtual void Print() const = 0;
-  // Print drawer configuration
+  void SetNewValue(G4UIcommand* command, G4String newValue);
 
 private:
-  
-  G4String fName; // Drawer name
+
+  G4UIcmdWithAString* fpCommand;
+
+};
+
+// Command to set positive/negative/neutral trajectory colouring through G4Colour components
+class G4ModelCommandDrawByChargeSetRGBA : public G4VModelCommand<G4TrajectoryDrawByCharge> {
+
+public:
+
+  G4ModelCommandDrawByChargeSetRGBA(G4TrajectoryDrawByCharge* model, const G4String& placement) ;
+  virtual ~G4ModelCommandDrawByChargeSetRGBA();
+
+  void SetNewValue(G4UIcommand* command, G4String newValue);
+
+private:
+
+  G4UIcmdWithAString* fpCommand;
 
 };
 

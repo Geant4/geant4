@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByParticleID.cc,v 1.1 2005-11-02 00:41:13 tinslay Exp $
+// $Id: G4TrajectoryDrawByParticleID.cc,v 1.2 2005-11-21 05:44:44 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay October 2005
@@ -31,7 +31,7 @@
 #include "G4VisAttributes.hh"
 #include "G4VTrajectory.hh"
 #include "G4VVisManager.hh"
-
+/*
 G4TrajectoryDrawByParticleID::G4TrajectoryDrawByParticleID(const G4String& name)
   :G4VTrajectoryDrawer(name)
   ,fDefault(G4Color::Grey)
@@ -71,7 +71,6 @@ G4TrajectoryDrawByParticleID::Set(const G4String& particle, const G4String& colo
        "ParticleColourExists", JustWarning, o.str().c_str());
   }
 }
-/*
 void
 G4TrajectoryDrawByParticleID::Set(const G4String& particle, const G4Colour& colour)
 {
@@ -86,7 +85,6 @@ G4TrajectoryDrawByParticleID::Set(const G4String& particle, const G4Colour& colo
        "ParticleColourExists", JustWarning, o.str().c_str());
   }
 }
-*/
 void
 G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& traj, G4int i_mode) 
 {
@@ -151,3 +149,4 @@ G4TrajectoryDrawByParticleID::Print() const
     iter++;
   }
 }
+*/

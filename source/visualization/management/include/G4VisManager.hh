@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.41 2005-11-02 16:54:13 allison Exp $
+// $Id: G4VisManager.hh,v 1.42 2005-11-21 05:45:42 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,12 +81,13 @@
 
 #include "globals.hh"
 #include "G4GraphicsSystemList.hh"
+#include "G4ModelingParameters.hh"
+#include "G4NullModel.hh"
 #include "G4SceneHandlerList.hh"
 #include "G4SceneList.hh"
-#include "G4Transform3D.hh"
-#include "G4NullModel.hh"
 #include "G4TrajectoriesModel.hh"
-#include "G4ModelingParameters.hh"
+#include "G4Transform3D.hh"
+#include "G4UImessenger.hh"
 
 #include <iostream>
 #include <vector>
@@ -95,10 +96,16 @@ class G4Scene;
 class G4UIcommand;
 class G4UImessenger;
 class G4VisStateDependent;
-class G4VUserVisAction;
-class G4VTrajectoryDrawer;
 class G4VTrajectoryModel;
-class G4VTrajectoryModelMaker;
+class G4VUserVisAction;
+template <typename T> class G4VisListManager;
+template <typename T> class G4VModelFactory;
+
+namespace {
+  // Typedef's for trajectory drawing
+  typedef G4VModelFactory<G4VTrajectoryModel> G4TrajectoryModelFactory;
+  typedef G4VisListManager<G4VTrajectoryModel> G4TrajectoryModelManager;
+}
 
 class G4VisManager: public G4VVisManager {
 
@@ -172,13 +179,14 @@ public: // With description
   // a sub-class implementation of the protected virtual function,
   // RegisterGraphicsSystems.  See, e.g., G4VisExecutive.icc.
 
-  G4bool RegisterTrajectoryModelMaker (G4VTrajectoryModelMaker*);
-  // Register an trajectory model maker.  Normally this is done in
-  // a sub-class implementation of the protected virtual function,
-  // RegisterTrajectoryModelMakers.  See, e.g., G4VisExecutive.icc.
+  void RegisterModelFactory(G4TrajectoryModelFactory* factory);
+  // Register trajectory model factory. Assumes ownership of factory.
 
-  G4bool RegisterTrajectoryModel (G4VTrajectoryModel*);
-  // Register an individual trajectory model.
+  void RegisterModel(G4VTrajectoryModel*);
+  // Register trajectory model. Assumes ownership of model.
+
+  void RegisterMessenger(G4UImessenger*);
+  // Register messenger. Assumes ownership of messenger.
 
   /////////////////////////////////////////////////////////////////
   // Now functions that implement the pure virtual functions of
@@ -239,10 +247,7 @@ public: // With description
   void GeometryHasChanged ();
   // Used by run manager to notify change.
 
-  void DispatchToCurrentDrawer(const G4VTrajectory&, G4int i_mode);
-  // Draw the trajectory.
-
-  void DispatchToCurrentModel(const G4VTrajectory&, G4int i_mode);
+  void DispatchToModel(const G4VTrajectory&, G4int i_mode);
   // Draw the trajectory.
 
   ////////////////////////////////////////////////////////////////////////
@@ -339,12 +344,8 @@ protected:
   // The sub-class must implement and make successive calls to
   // RegisterGraphicsSystem.
 
-  virtual void RegisterTrajectoryModelMakers
-  (const G4String& commandPrefix = "/") = 0;
-  // The sub-class must implement and make successive calls to
-  // RegisterTrajectoryModelMaker and arrange to pass on the command
-  // prefix to any messengers.  Those messengers then prefix their
-  // command names with this string.
+  virtual void RegisterModelFactories() = 0;
+  // Sub-class must register desired models
 
   void RegisterMessengers              ();   // Command messengers.
   void PrintAvailableGraphicsSystems   () const;
@@ -382,8 +383,14 @@ protected:
   G4NullModel fVisManagerNullModel;         // As a default.
   G4TrajectoriesModel dummyTrajectoriesModel;  // For passing drawing mode.
   G4ModelingParameters fVisManagerModelingParameters;  // Useful memory.
-  G4VTrajectoryDrawer* fpCurrentTrajectoryDrawer;
-  G4VTrajectoryModel* fpCurrentTrajectoryModel;
+
+private:
+
+  // Trajectory model related data members
+  G4String fTrajectoryPlacement; // Placement for trajectory model commands
+  G4TrajectoryModelManager* fpTrajectoryModelMgr; // Trajectory model manager
+  std::vector<G4TrajectoryModelFactory*> fTrajectoryModelFactoryList; // Trajectory model factories
+  
 };
 
 #include "G4VisManager.icc"

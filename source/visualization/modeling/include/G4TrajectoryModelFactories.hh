@@ -19,43 +19,39 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryModelMaker.hh,v 1.2 2005-10-24 14:03:36 allison Exp $
+// $Id: G4TrajectoryModelFactories.hh,v 1.1 2005-11-21 05:44:44 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
 //
 // Class Description:
-// Template class for "factories" for making trajectory drawers.
+// Trajectory model factories creating trajectory models
+// and associated messengers
 // Class Description - End:
 
-#ifndef G4TRAJECTORYMODELMAKER_HH
-#define G4TRAJECTORYMODELMAKER_HH
+#ifndef G4TRAJECTORYMODELFACTORIES_HH
+#define G4TRAJECTORYMODELFACTORIES_HH
 
-#include "G4VTrajectoryModelMaker.hh"
+#include "G4VModelFactory.hh"
+#include "G4VTrajectoryModel.hh"
 
-template <class T> class G4TrajectoryModelMaker:
-  public G4VTrajectoryModelMaker {
-
-public: // With description
-  
-  G4TrajectoryModelMaker
-  (const G4String& name,
-   const G4String& commandPrefix = "/"):
-    G4VTrajectoryModelMaker(name, commandPrefix)
-  {}
-
-  ~G4TrajectoryModelMaker() {}
-
-  G4VTrajectoryModel* CreateModel();
-
-};
-
-template <class T>
-G4VTrajectoryModel* G4TrajectoryModelMaker<T>::CreateModel()
-{
-  std::ostringstream oss;
-  oss << fName << '-' << fID++;
-  return new T(oss.str(), fCommandPrefix);
+namespace {
+  typedef std::vector<G4UImessenger*> Messengers;
+  typedef std::pair<G4VTrajectoryModel*, Messengers > ModelAndMessengers;
 }
 
+class G4TrajectoryDrawByChargeFactory : public G4VModelFactory<G4VTrajectoryModel> {
+
+public: // With description
+
+  G4TrajectoryDrawByChargeFactory();
+
+  virtual ~G4TrajectoryDrawByChargeFactory();
+  
+  ModelAndMessengers Create(const G4String& placement, const G4String& name);
+    
+};
+
 #endif
+
+

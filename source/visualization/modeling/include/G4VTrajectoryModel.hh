@@ -19,42 +19,49 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VTrajectoryModel.hh,v 1.1 2005-10-24 11:20:18 allison Exp $
+// $Id: G4VTrajectoryModel.hh,v 1.2 2005-11-21 05:44:44 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
 //
 // Class Description:
 // Abstract base class for trajectory models. Trajectory models are responsible
-// for drawing trajectories according to a particular style.
+// for drawing individual trajectories according to a particular style.
 // Class Description - End:
 
 #ifndef G4VTRAJECTORYMODEL_HH
 #define G4VTRAJECTORYMODEL_HH
 
-#include "G4VModel.hh"
+#include "G4String.hh"
+#include <iostream>
 
 class G4VTrajectory;
 
-class G4VTrajectoryModel: public G4VModel {
+class G4VTrajectoryModel {
 
 public: // With description
 
-  G4VTrajectoryModel() {}
+  G4VTrajectoryModel(const G4String& name):fName(name) {}
 
   virtual ~G4VTrajectoryModel() {}
 
-  virtual void SetTrajectory(const G4VTrajectory*, G4int i_mode = 0) = 0;
-  // Set the trajectory with optional i_mode parameter
+  virtual void Draw(const G4VTrajectory& trajectory, G4int i_mode = 0) const = 0;
+  // Draw the trajectory with optional i_mode parameter
 
-  virtual void Print() const = 0;
-  // Print drawer configuration
+  virtual void Print(std::ostream& ostr) const = 0;
+  // Print configuration
+
+  G4String Name() const ;
 
 protected:
 
-  const G4VTrajectory* fpTrajectory;
-  G4int fI_mode;
+  // Data member
+  G4String fName;
 
 };
 
+G4String
+inline G4VTrajectoryModel::Name() const {return fName;}
+
 #endif
+

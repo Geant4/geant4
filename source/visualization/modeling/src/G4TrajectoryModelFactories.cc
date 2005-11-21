@@ -19,42 +19,32 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryTestModel.hh,v 1.2 2005-10-24 14:03:36 allison Exp $
+// $Id: G4TrajectoryModelFactories.cc,v 1.1 2005-11-21 05:44:44 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
-//
-// Class Description:
-// Test model for drawing trajectories.
-// Class Description - End:
 
-#ifndef G4TRAJECTORYTESTMODEL_HH
-#define G4TRAJECTORYTESTMODEL_HH
+#include "G4TrajectoryModelFactories.hh"
+#include "G4ModelCommandsDrawByCharge.hh"
+#include "G4TrajectoryDrawByCharge.hh"
 
-#include "globals.hh"
-#include "G4String.hh"
-#include "G4VTrajectoryModel.hh"
+G4TrajectoryDrawByChargeFactory::G4TrajectoryDrawByChargeFactory()
+  :G4VModelFactory<G4VTrajectoryModel>("drawByCharge") 
+{}
 
-class G4VTrajectory;
+G4TrajectoryDrawByChargeFactory::~G4TrajectoryDrawByChargeFactory() {}
 
-class G4TrajectoryTestModel: public G4VTrajectoryModel {
+ModelAndMessengers
+G4TrajectoryDrawByChargeFactory::Create(const G4String& placement, const G4String& name)
+{
+  // Create model
+  G4TrajectoryDrawByCharge* model = new G4TrajectoryDrawByCharge(name);
+  
+  // Create associated messengers
+  Messengers messengers;
 
-public: // With description
-
-  G4TrajectoryTestModel
-  (const G4String& name,
-   const G4String& commandPrefix = "/");
-
-  ~G4TrajectoryTestModel();
-
-  void SetTrajectory(const G4VTrajectory*, G4int i_mode = 0);
-  // Set the trajectory with optional i_mode parameter
-
-  void DescribeYourselfTo(G4VGraphicsScene&);
-
-  void Print() const {}
-  // Print drawer configuration
-
-};
-
-#endif
+  messengers.push_back(new G4ModelCommandDrawByChargeSet(model, placement));
+  messengers.push_back(new G4ModelCommandDrawByChargeSetRGBA(model, placement));
+  
+  return ModelAndMessengers(model, messengers);
+}

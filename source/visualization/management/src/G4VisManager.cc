@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.70 2005-11-02 16:54:13 allison Exp $
+// $Id: G4VisManager.cc,v 1.71 2005-11-21 05:45:42 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,10 +58,11 @@
 #include "G4NullModel.hh"
 #include "G4ModelingParameters.hh"
 #include "G4TransportationManager.hh"
-#include "G4VTrajectoryDrawer.hh"
+#include "G4VisListManager.hh"
+#include "G4VisCommandModelCreate.hh"
+#include "G4VisCommandsListManager.hh"
+#include "G4VModelFactory.hh"
 #include "G4VTrajectoryModel.hh"
-#include "G4VTrajectoryModelMaker.hh"
-
 #include <sstream>
 
 G4VisManager* G4VisManager::fpInstance = 0;
@@ -76,8 +77,8 @@ G4VisManager::G4VisManager ():
   fVerbosity       (warnings),
   fVerbose         (1),
   fpStateDependent (0),
-  fpCurrentTrajectoryDrawer(0),
-  fpCurrentTrajectoryModel(0)
+  fTrajectoryPlacement("/vis/modeling/trajectories"),
+  fpTrajectoryModelMgr(new G4TrajectoryModelManager())
   // All other objects use default constructors.
 {
   VerbosityGuidanceStrings.push_back
@@ -161,6 +162,12 @@ G4VisManager::~G4VisManager () {
   for (i = 0; i < fDirectoryList.size (); ++i) {
     delete fDirectoryList[i];
   }
+
+  for (i = 0; i < fTrajectoryModelFactoryList.size(); ++i) {
+    delete fTrajectoryModelFactoryList[i];
+  }
+
+  delete fpTrajectoryModelMgr;
 }
 
 G4VisManager* G4VisManager::GetInstance () {
@@ -224,8 +231,7 @@ void G4VisManager::Initialise () {
   fDirectoryList.push_back (directory);
 
   RegisterMessengers ();
-
-  RegisterTrajectoryModelMakers ("/vis/modeling/trajectories/");
+  RegisterModelFactories();
 
   fInitialised = true;
 }
@@ -301,31 +307,19 @@ G4bool G4VisManager::RegisterGraphicsSystem (G4VGraphicsSystem* pSystem) {
   return happy;
 }
 
-G4bool G4VisManager::RegisterTrajectoryModelMaker
-(G4VTrajectoryModelMaker* pTModelMaker) {
-  G4bool happy = true;
-  if (pTModelMaker) {
-    // For now just make a model and make it current (implement list later)...
-    fpCurrentTrajectoryModel = pTModelMaker->CreateModel();
-    if (fVerbosity >= confirmations) {
-      G4cout << "G4VisManager::RegisterTrajectoryModelMaker: "
-	     << pTModelMaker -> GetName ()
-	     << " registered." << G4endl;
-    }
-    // Debug...
-    G4cout << "Model description: "
-	   << fpCurrentTrajectoryModel->GetGlobalDescription()
-	   << G4endl;
-    // End debug.
-  }
-  else {
-    if (fVerbosity >= errors) {
-      G4cout << "G4VisManager::RegisterTrajectoryModelMaker: null pointer!"
-	     << G4endl;
-    }
-    happy=false;
-  }
-  return happy;
+void G4VisManager::RegisterModel(G4VTrajectoryModel* model) 
+{
+  fpTrajectoryModelMgr->Register(model);
+}
+
+void
+G4VisManager::RegisterModelFactory(G4TrajectoryModelFactory* factory) 
+{
+  // vis manager takes ownership
+  fTrajectoryModelFactoryList.push_back(factory);
+
+  // Create messenger for this factory
+  RegisterMessenger(new G4VisCommandModelCreate<G4TrajectoryModelFactory>(factory, fTrajectoryPlacement));
 }
 
 void G4VisManager::Draw (const G4Circle& circle,
@@ -624,22 +618,14 @@ void G4VisManager::GeometryHasChanged () {
 
 }
 
-void G4VisManager::DispatchToCurrentDrawer
-(const G4VTrajectory& traj, G4int i_mode)
+void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory, G4int i_mode)
 {
-  if (fpCurrentTrajectoryModel) {
-    fpCurrentTrajectoryDrawer->Draw(traj, i_mode);
-  }
-}
+  assert (0 != fpTrajectoryModelMgr);
 
-void G4VisManager::DispatchToCurrentModel
-(const G4VTrajectory& traj, G4int i_mode)
-{
-  if (fpCurrentTrajectoryModel && IsValidView ()) {
-    fpSceneHandler->SetModel(fpCurrentTrajectoryModel);
-    fpCurrentTrajectoryModel->SetTrajectory(&traj, i_mode);
-    fpCurrentTrajectoryModel->DescribeYourselfTo(*fpSceneHandler);
-  }
+  const G4VTrajectoryModel* model = fpTrajectoryModelMgr->Current();
+  assert (0 != model); //jane fixme - make sure there's a default model 
+
+  model->Draw(trajectory, i_mode);
 }
 
 void G4VisManager::SetUserAction
@@ -773,68 +759,74 @@ void G4VisManager::RegisterMessengers () {
 
   G4UIcommand* directory;
 
-  fMessengerList.push_back (new G4VisCommandEnable);
-  fMessengerList.push_back (new G4VisCommandVerbose);
+  RegisterMessenger(new G4VisCommandEnable);
+  RegisterMessenger(new G4VisCommandVerbose);
 
   directory = new G4UIdirectory ("/vis/scene/");
   directory -> SetGuidance ("Operations on Geant4 scenes.");
   fDirectoryList.push_back (directory);
-  fMessengerList.push_back (new G4VisCommandSceneCreate);
-  fMessengerList.push_back (new G4VisCommandSceneEndOfEventAction);
-  fMessengerList.push_back (new G4VisCommandSceneEndOfRunAction);
-  fMessengerList.push_back (new G4VisCommandSceneList);
-  fMessengerList.push_back (new G4VisCommandSceneNotifyHandlers);
-  fMessengerList.push_back (new G4VisCommandSceneSelect);
+  RegisterMessenger(new G4VisCommandSceneCreate);
+  RegisterMessenger(new G4VisCommandSceneEndOfEventAction);
+  RegisterMessenger(new G4VisCommandSceneEndOfRunAction);
+  RegisterMessenger(new G4VisCommandSceneList);
+  RegisterMessenger(new G4VisCommandSceneNotifyHandlers);
+  RegisterMessenger(new G4VisCommandSceneSelect);
 
   directory = new G4UIdirectory ("/vis/scene/add/");
   directory -> SetGuidance ("Add model to current scene.");
   fDirectoryList.push_back (directory);
-  fMessengerList.push_back (new G4VisCommandSceneAddAxes);
-  fMessengerList.push_back (new G4VisCommandSceneAddGhosts);
-  fMessengerList.push_back (new G4VisCommandSceneAddHits);
-  fMessengerList.push_back (new G4VisCommandSceneAddLogicalVolume);
-  fMessengerList.push_back (new G4VisCommandSceneAddLogo);
-  fMessengerList.push_back (new G4VisCommandSceneAddScale);
-  fMessengerList.push_back (new G4VisCommandSceneAddText);
-  fMessengerList.push_back (new G4VisCommandSceneAddTrajectories);
-  fMessengerList.push_back (new G4VisCommandSceneAddUserAction);
-  fMessengerList.push_back (new G4VisCommandSceneAddVolume);
+  RegisterMessenger(new G4VisCommandSceneAddAxes);
+  RegisterMessenger(new G4VisCommandSceneAddGhosts);
+  RegisterMessenger(new G4VisCommandSceneAddHits);
+  RegisterMessenger(new G4VisCommandSceneAddLogicalVolume);
+  RegisterMessenger(new G4VisCommandSceneAddLogo);
+  RegisterMessenger(new G4VisCommandSceneAddScale);
+  RegisterMessenger(new G4VisCommandSceneAddText);
+  RegisterMessenger(new G4VisCommandSceneAddTrajectories);
+  RegisterMessenger(new G4VisCommandSceneAddUserAction);
+  RegisterMessenger(new G4VisCommandSceneAddVolume);
 
   directory = new G4UIdirectory ("/vis/sceneHandler/");
   directory -> SetGuidance ("Operations on Geant4 scene handlers.");
   fDirectoryList.push_back (directory);
-  fMessengerList.push_back (new G4VisCommandSceneHandlerAttach);
-  fMessengerList.push_back (new G4VisCommandSceneHandlerCreate);
-  fMessengerList.push_back (new G4VisCommandSceneHandlerList);
-  fMessengerList.push_back (new G4VisCommandSceneHandlerSelect);
+  RegisterMessenger(new G4VisCommandSceneHandlerAttach);
+  RegisterMessenger(new G4VisCommandSceneHandlerCreate);
+  RegisterMessenger(new G4VisCommandSceneHandlerList);
+  RegisterMessenger(new G4VisCommandSceneHandlerSelect);
 
   directory = new G4UIdirectory ("/vis/viewer/");
   directory -> SetGuidance ("Operations on Geant4 viewers.");
   fDirectoryList.push_back (directory);
-  fMessengerList.push_back (new G4VisCommandViewerClear);
-  fMessengerList.push_back (new G4VisCommandViewerCreate);
-  fMessengerList.push_back (new G4VisCommandViewerDolly);
-  fMessengerList.push_back (new G4VisCommandViewerFlush);
-  fMessengerList.push_back (new G4VisCommandViewerList);
-  fMessengerList.push_back (new G4VisCommandViewerPan);
-  fMessengerList.push_back (new G4VisCommandViewerRefresh);
-  fMessengerList.push_back (new G4VisCommandViewerReset);
-  fMessengerList.push_back (new G4VisCommandViewerScale);
-  fMessengerList.push_back (new G4VisCommandViewerSelect);
-  fMessengerList.push_back (new G4VisCommandViewerUpdate);
-  fMessengerList.push_back (new G4VisCommandViewerZoom);
+  RegisterMessenger(new G4VisCommandViewerClear);
+  RegisterMessenger(new G4VisCommandViewerCreate);
+  RegisterMessenger(new G4VisCommandViewerDolly);
+  RegisterMessenger(new G4VisCommandViewerFlush);
+  RegisterMessenger(new G4VisCommandViewerList);
+  RegisterMessenger(new G4VisCommandViewerPan);
+  RegisterMessenger(new G4VisCommandViewerRefresh);
+  RegisterMessenger(new G4VisCommandViewerReset);
+  RegisterMessenger(new G4VisCommandViewerScale);
+  RegisterMessenger(new G4VisCommandViewerSelect);
+  RegisterMessenger(new G4VisCommandViewerUpdate);
+  RegisterMessenger(new G4VisCommandViewerZoom);
 
   directory = new G4UIdirectory ("/vis/viewer/set/");
   directory -> SetGuidance ("Set view parameters of current viewer.");
   fDirectoryList.push_back (directory);
-  fMessengerList.push_back (new G4VisCommandsViewerSet);
+  RegisterMessenger(new G4VisCommandsViewerSet);
 
   // Compound commands...
-  fMessengerList.push_back (new G4VisCommandDrawTree);
-  fMessengerList.push_back (new G4VisCommandDrawView);
-  fMessengerList.push_back (new G4VisCommandDrawVolume);
-  fMessengerList.push_back (new G4VisCommandOpen);
-  fMessengerList.push_back (new G4VisCommandSpecify);
+  RegisterMessenger(new G4VisCommandDrawTree);
+  RegisterMessenger(new G4VisCommandDrawView);
+  RegisterMessenger(new G4VisCommandDrawVolume);
+  RegisterMessenger(new G4VisCommandOpen);
+  RegisterMessenger(new G4VisCommandSpecify);
+
+  // List manager commands
+  RegisterMessenger(new G4VisCommandListManagerList<G4TrajectoryModelManager>
+		    (fpTrajectoryModelMgr, fTrajectoryPlacement));
+  RegisterMessenger(new G4VisCommandListManagerSelect<G4TrajectoryModelManager>
+		    (fpTrajectoryModelMgr, fTrajectoryPlacement));  
 }
 
 void G4VisManager::PrintAvailableGraphicsSystems () const {

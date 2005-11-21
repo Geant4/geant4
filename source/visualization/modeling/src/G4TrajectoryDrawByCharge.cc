@@ -19,38 +19,44 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByCharge.cc,v 1.1 2005-11-02 00:41:13 tinslay Exp $
+// $Id: G4TrajectoryDrawByCharge.cc,v 1.2 2005-11-21 05:44:44 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Jane Tinslay October 2005
+// Jane Tinslay, John Allison, Joseph Perl November 2005
 
 #include "G4TrajectoryDrawByCharge.hh"
 #include "G4Polyline.hh"
 #include "G4Polymarker.hh"
 #include "G4TrajectoryDrawerUtils.hh"
-#include "G4VTrajectory.hh"
 #include "G4VisAttributes.hh"
+#include "G4VTrajectory.hh"
 #include "G4VVisManager.hh"
+#include <sstream>
 
 G4TrajectoryDrawByCharge::G4TrajectoryDrawByCharge(const G4String& name)
-  :G4VTrajectoryDrawer(name)
-  ,fPositive(G4Color::Blue)
-  ,fNegative(G4Colour::Red)
-  ,fNeutral(G4Colour::Green)
-{}
+  :G4VTrajectoryModel(name)
+{
+  // Default configuration
+  fMap[Positive] = G4Color::Blue();
+  fMap[Negative] = G4Colour::Red();
+  fMap[Neutral] = G4Colour::Green();
+}
 
-G4TrajectoryDrawByCharge::G4TrajectoryDrawByCharge(const G4Colour& positive,
+G4TrajectoryDrawByCharge::G4TrajectoryDrawByCharge(const G4String& name,
+						   const G4Colour& positive,
 						   const G4Colour& negative,
 						   const G4Colour& neutral)
-  :fPositive(positive)
-  ,fNegative(negative)
-  ,fNeutral(neutral)
-{}
+  :G4VTrajectoryModel(name)
+{
+  fMap[Positive] = positive;
+  fMap[Negative] = negative;
+  fMap[Neutral] = neutral;
+}
 
 G4TrajectoryDrawByCharge::~G4TrajectoryDrawByCharge() {}
 
 void
-G4TrajectoryDrawByCharge::Draw(const G4VTrajectory& traj, G4int i_mode) 
+G4TrajectoryDrawByCharge::Draw(const G4VTrajectory& traj, G4int i_mode) const
 {
   // If i_mode>=0, draws a trajectory as a polyline (default is blue for
   // positive, red for negative, green for neutral) and, if i_mode!=0,
@@ -60,7 +66,7 @@ G4TrajectoryDrawByCharge::Draw(const G4VTrajectory& traj, G4int i_mode)
   // visible markers.
 
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if (!pVVisManager) return;
+  if (0 == pVVisManager) return;
 
   const G4double markerSize = std::abs(i_mode)/1000;
   G4bool lineRequired (i_mode >= 0);
@@ -80,9 +86,9 @@ G4TrajectoryDrawByCharge::Draw(const G4VTrajectory& traj, G4int i_mode)
   if (lineRequired) {
     G4Colour colour;
     const G4double charge = traj.GetCharge();
-    if(charge>0.)      colour = fPositive; 
-    else if(charge<0.) colour = fNegative; 
-    else               colour = fNeutral; 
+    if(charge>0.)      colour = fMap.find(Positive)->second; 
+    else if(charge<0.) colour = fMap.find(Negative)->second; 
+    else               colour = fMap.find(Neutral)->second; 
     
     G4VisAttributes trajectoryLineAttribs(colour);
     trajectoryLine.SetVisAttributes(&trajectoryLineAttribs);
@@ -104,16 +110,40 @@ G4TrajectoryDrawByCharge::Draw(const G4VTrajectory& traj, G4int i_mode)
     stepPoints.SetVisAttributes(&stepPointsAttribs);
     pVVisManager->Draw(stepPoints);
   }
-  
-  return;
 }
 
 void
-G4TrajectoryDrawByCharge::Print() const
+G4TrajectoryDrawByCharge::Print(std::ostream& ostr) const
 {
-  G4cout<<"G4TrajectoryDrawByCharge drawer with name " <<GetName()<<G4endl;
-  G4cout<<"Trajectory colour scheme: "<<G4endl;
-  G4cout<<"Positive: "<< fPositive <<G4endl;
-  G4cout<<"Negative: "<< fNegative <<G4endl;
-  G4cout<<"Neutral : "<< fNeutral <<G4endl;
+  ostr<<"G4TrajectoryDrawByCharge model "<< Name() <<" colour scheme: "<<std::endl;
+  std::map<Charge, G4Colour>::const_iterator iter = fMap.begin();
+
+  //jane fixme - improve formatting
+  while (iter != fMap.end()) {
+    ostr<<"         "<< iter->first <<" : "<< iter->second <<G4endl;
+    iter++;
+  }
+}
+
+void
+G4TrajectoryDrawByCharge::Set(Charge charge, const G4String& colour)
+{
+  G4Colour myColour(G4Colour::White());
+
+  // Will not modify myColour if colour key does not exist
+  if (!G4Colour::GetColour(colour, myColour)) {
+    std::ostringstream o;
+    o << "G4Colour with key "<<colour<<" does not exist ";
+    G4Exception
+      ("G4TrajectoryDrawByCharge::Set(Charge charge, const G4String& colour)",
+       "NonExistentColour", JustWarning, o.str().c_str());
+  }
+
+  Set(charge, myColour);
+}
+
+void
+G4TrajectoryDrawByCharge::Set(Charge charge, const G4Colour& colour)
+{
+  fMap[charge] = colour;
 }

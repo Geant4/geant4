@@ -1,13 +1,12 @@
 #ifndef G4TRAJECTORYDRAWBYPARTICLEID
 #define G4TRAJECTORYDRAWBYPARTICLEID
 
-#include "G4VTrajectoryDrawer.hh"
 #include "G4Colour.hh"
 #include "G4String.hh"
 #include <map>
 
 using std::map;
-
+/*
 class G4TrajectoryDrawByParticleID : public G4VTrajectoryDrawer {
 
 public:
@@ -28,5 +27,5 @@ private:
   map<G4String, G4Colour> fMap;
   G4Colour fDefault;
 };
-
+*/
 #endif

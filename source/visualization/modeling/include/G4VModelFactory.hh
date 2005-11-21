@@ -19,49 +19,62 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VTrajectoryModelMaker.hh,v 1.1 2005-10-24 11:20:18 allison Exp $
+// $Id: G4VModelFactory.hh,v 1.1 2005-11-21 05:44:44 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
 //
 // Class Description:
-// Abstract base class for "factories" for making trajectory models.
+// Abstract base class for model factories. Derived classes
+// must implement the Create method, creating a new model
+// and associated messengers.
 // Class Description - End:
 
-#ifndef G4VTRAJECTORYMODELMAKER_HH
-#define G4VTRAJECTORYMODELMAKER_HH
+#ifndef G4VMODELFACTORY
+#define G4VMODELFACTORY
 
-#include "globals.hh"
 #include "G4String.hh"
+#include <utility>
+#include <vector>
 
-class G4VTrajectoryModel;
+class G4UImessenger;
 
-class G4VTrajectoryModelMaker {
+template <class T>
+class G4VModelFactory {
 
 public: // With description
 
-  G4VTrajectoryModelMaker
-  (const G4String& name,
-   const G4String& commandPrefix):
-    fName(name),
-    fCommandPrefix(commandPrefix),
-    fID (0)
-  {}
-
-  virtual ~G4VTrajectoryModelMaker() {}
-
-  virtual G4VTrajectoryModel* CreateModel() = 0;
-
-  const G4String& GetName() {return fName;}
-  const G4String& GetCommandPrefix() {return fCommandPrefix;}
-  G4int GetID() {return fID;}
-
-protected:
+  typedef std::vector<G4UImessenger*> Messengers;
+  typedef std::pair<T*, Messengers> ModelAndMessengers;
   
-  G4String fName;           // Model maker name.
-  G4String fCommandPrefix;  // Model messeneger will place commands here.
-  G4int fID;                // Incremented for each instance of drawer.
+  G4VModelFactory(const G4String& name);
+
+  virtual ~G4VModelFactory();
+
+  G4String Name();
+
+  virtual ModelAndMessengers Create(const G4String& placement, const G4String& modelName) = 0;
+
+private:
+
+  G4String fName;
 
 };
 
+template <typename T>
+G4VModelFactory<T>::G4VModelFactory(const G4String& name)
+  :fName(name) 
+{}
+
+template <typename T>
+G4VModelFactory<T>::~G4VModelFactory() {}
+
+template <typename T>
+G4String 
+G4VModelFactory<T>::Name() 
+{
+  return fName;
+}
+
 #endif
+

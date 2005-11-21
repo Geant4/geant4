@@ -19,45 +19,52 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByCharge.hh,v 1.1 2005-11-02 00:41:13 tinslay Exp $
+// $Id: G4TrajectoryDrawByCharge.hh,v 1.2 2005-11-21 05:44:44 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Jane Tinslay October 2005
+// Jane Tinslay, John Allison, Joseph Perl November 2005
 //
 // Class Description:
-// Trajectory drawer which colours trajectories according to particle charge.
-// Guts taken from G4VTrajectory::DrawTrajectory method.
+// Trajectory model which colours a trajectory according to  
+// charge. Guts taken from G4VTrajectory::DrawTrajectory method.
 // Class Description - End:
 
 #ifndef G4TRAJECTORYDRAWBYCHARGE_HH
 #define G4TRAJECTORYDRAWBYCHARGE_HH
 
-#include "G4VTrajectoryDrawer.hh"
 #include "G4Colour.hh"
-#include "G4String.hh"
+#include "G4VTrajectoryModel.hh"
+#include <map>
 
-class G4TrajectoryDrawByCharge : public G4VTrajectoryDrawer {
+class G4TrajectoryDrawByCharge : public G4VTrajectoryModel {
 
 public: // With description
  
-  G4TrajectoryDrawByCharge(const G4String& name = "Unspecified");
-  // Use default charge colour scheme
+  enum Charge {Negative=-1, Neutral=0, Positive=1}; 
 
-  G4TrajectoryDrawByCharge(const G4Colour& positive,
+  G4TrajectoryDrawByCharge(const G4String& name = "Unspecified");
+
+  G4TrajectoryDrawByCharge(const G4String& name,
+			   const G4Colour& positive,
 			   const G4Colour& negative,
 			   const G4Colour& neutral);
-
+  
   virtual ~G4TrajectoryDrawByCharge();
 
-  virtual void Draw(const G4VTrajectory&, G4int);
-  virtual void Print() const;
+  virtual void Draw(const G4VTrajectory& trajectory, G4int i_mode = 0) const;
+  // Draw the trajectory with optional i_mode parameter
+
+  virtual void Print(std::ostream& ostr) const;
+  // Print configuration
+
+  void Set(Charge charge, const G4String& colour);
+  void Set(Charge charge, const G4Colour& colour);
+  // Configuration functions functions
 
 private:
   
-  //Data members
-  G4Colour fPositive;
-  G4Colour fNegative;
-  G4Colour fNeutral;
+  // Data member
+  std::map<Charge, G4Colour> fMap;
   
 };
 

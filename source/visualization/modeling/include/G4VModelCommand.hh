@@ -19,48 +19,71 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryTestModel.cc,v 1.1 2005-10-24 11:20:18 allison Exp $
+// $Id: G4VModelCommand.hh,v 1.1 2005-11-21 05:44:44 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+// 
+// Jane Tinslay, John Allison, Joseph Perl November 2005
 //
-// Jane Tinslay, John Allison, Joseph Perl October 2005
+// Class Description
+// Templated base class for model messengers. Commands specific to a particular
+// concrete model should inherit from G4VModelCommand, with the concrete model
+// type as the template parameter.
+// Class Description - End:
 
-#include "G4TrajectoryTestModel.hh"
+#ifndef G4VMODELCOMMAND_HH
+#define G4VMODELCOMMAND_HH
 
-#include "G4VTrajectory.hh"
+#include "G4UImessenger.hh"
+#include "G4String.hh"
 
-G4TrajectoryTestModel::G4TrajectoryTestModel
-(const G4String& name,
-const G4String& commandPrefix) 
+class G4UIcommand;
+
+template <typename T>
+class G4VModelCommand : public G4UImessenger {
+
+public: // With description
+
+  G4VModelCommand(T* model);
+  // Input model
+
+  virtual ~G4VModelCommand();
+
+  G4String GetCurrentValue(G4UIcommand* command);
+
+protected:
+
+  T* Model();
+  // Access to model
+
+private:
+
+  T* fpModel;
+
+};
+
+template <typename T>
+G4VModelCommand<T>::G4VModelCommand(T* model)
+  :fpModel(model)
+{}
+
+template <typename T>
+G4VModelCommand<T>::~G4VModelCommand() {}
+
+template <typename T>
+G4String 
+G4VModelCommand<T>::GetCurrentValue(G4UIcommand* command) 
 {
-  fGlobalTag = name;
-  fGlobalDescription =
-    "G4TrajectoryTestModel: " + fGlobalTag +
-    ", command prefix: " + commandPrefix;
-
-  // Create messenger, passing commandPrefix.
+  return "";
 }
 
-G4TrajectoryTestModel::~G4TrajectoryTestModel() {}
-
-void G4TrajectoryTestModel::SetTrajectory
-(const G4VTrajectory* trajectory, G4int i_mode)
+template <typename T>
+T*
+G4VModelCommand<T>::Model() 
 {
-  fpTrajectory = trajectory;
-  fI_mode = i_mode;
+  return fpModel;
 }
 
-void G4TrajectoryTestModel::DescribeYourselfTo(G4VGraphicsScene& sceneHandler)
-{
-  // Check pointer to protect against mis-use.
-  if (fpTrajectory) {
-    G4cout <<
-      "G4TrajectoryTestModel::DescribeYourselfTo(G4VGraphicsScene&):"
-      "\n  Drawing trajectory with i_mode = " << fI_mode
-	   << G4endl;
-    fpTrajectory->ShowTrajectory();
-    G4cout << G4endl;
-   }
+#endif
 
-  // Zero pointer to protect against future mis-use.
-  fpTrajectory = 0;
-}
+
+
