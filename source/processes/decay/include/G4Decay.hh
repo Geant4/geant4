@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.hh,v 1.13 2004-12-02 07:06:30 kurasige Exp $
+// $Id: G4Decay.hh,v 1.14 2005-11-21 18:06:07 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -133,7 +133,7 @@ class G4Decay : public G4VRestDiscreteProcess
                             );
 
    public: //With Description
-     virtual void StartTracking();
+     virtual void StartTracking(G4Track*);
      virtual void EndTracking();
       // inform Start/End of tracking for each track to the physics process 
 
