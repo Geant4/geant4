@@ -1,4 +1,4 @@
-$Id: History,v 1.270 2005-10-05 17:19:22 allison Exp $
+$Id: History,v 1.271 2005-11-21 08:13:50 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,10 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-5th October 2005  John Allison  (config-V07-01-02)
-- G4VIS*.gmk: Added RAYTRACERX.
+21st November 2005  Makoto Asai (config-V07-01-03)
+- binmake.gmk: added 'digits_hits/utils' module to INCFLAGS.
 
-29th of July Mark Donszelmann (config-V07-01-01)
+5th October 2005 John Allison (config-V07-01-02)
+- G4VIS*.gmk: added G4VIS_BUILD_RAYTRACERX_DRIVER and G4VIS_USE_RAYTRACERX.
+
+29th July 2005 Mark Donszelmann (config-V07-01-01)
 - Synchronized CXXFLAGS warning options of WIN32-g++ with Linux-g++.
 
 18th July 2005 Gabriele Cosmo (config-V07-01-00)
