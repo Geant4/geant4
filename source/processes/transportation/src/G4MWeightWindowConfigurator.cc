@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MWeightWindowConfigurator.cc,v 1.4 2003-11-26 14:51:49 gcosmo Exp $
+// $Id: G4MWeightWindowConfigurator.cc,v 1.5 2005-11-21 21:46:53 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------

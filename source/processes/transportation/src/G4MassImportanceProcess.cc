@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceProcess.cc,v 1.17 2004-10-19 00:59:39 kurasige Exp $
+// $Id: G4MassImportanceProcess.cc,v 1.18 2005-11-21 21:46:53 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------

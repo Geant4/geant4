@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelGeometrySampler.cc,v 1.10 2003-11-26 14:51:50 gcosmo Exp $
+// $Id: G4ParallelGeometrySampler.cc,v 1.11 2005-11-21 21:46:53 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------

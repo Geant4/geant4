@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelTransport.cc,v 1.13 2005-11-21 21:41:29 asaim Exp $
+// $Id: G4ParallelTransport.cc,v 1.14 2005-11-21 21:46:53 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -115,7 +115,7 @@ G4ParallelTransport::PostStepDoIt(const G4Track& aTrack,
 {
   if (!(aStep.GetStepLength() > 0.))
   {
-    std::ostringstream os
+    std::ostringstream os;
     os << "G4PArallelTransport::InitPostDoIt: StepLength() == 0.\n"
        << "pos: " << aTrack.GetPosition() << ", " 
        << "dir: " << aTrack.GetMomentumDirection() << "\n";
