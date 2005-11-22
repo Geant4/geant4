@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.21 2005-10-13 17:37:57 allison Exp $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.22 2005-11-22 16:21:26 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,7 +100,7 @@ void G4ASCIITreeSceneHandler::WriteHeader (std::ostream& os)
   if (detail >= 1) os << " / LV (SD,RO)";
   if (detail >= 2) os << " / Solid(type)";
   if (detail >= 3) os << ", volume, density";
-  if (detail >= 5) os << ", mass of branch";
+  if (detail >= 5) os << ", daughter-subtracted volume and mass";
   os <<
     "\n#  Abbreviations: PV = Physical Volume,     LV = Logical Volume,"
     "\n#                 SD = Sensitive Detector,  RO = Read Out Geometry.";
@@ -134,9 +134,11 @@ void G4ASCIITreeSceneHandler::EndModeling () {
 	       << pvModel->GetTopPhysicalVolume()->GetCopyNo()
 	       << ", is "
 	       << G4BestUnit (volume, "Volume")
-	       << "\nMass of tree";
+	       << " and the daughter-included mass";
 	G4int requestedDepth = pvModel->GetRequestedDepth();
-	if (requestedDepth != G4PhysicalVolumeModel::UNLIMITED) {
+	if (requestedDepth == G4PhysicalVolumeModel::UNLIMITED) {
+	  G4cout << " to unlimited depth";
+	} else {
 	  G4cout << ", ignoring daughters at depth "
 		 << requestedDepth
 		 << " and below,";
@@ -257,14 +259,17 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
     }
 
     if (detail >= 5) {
+      G4double daughter_subtracted_mass = fpCurrentLV->GetMass
+	(fpCurrentPV->IsParameterised(),  // Force if parametrised.
+	 false,  // Do not propagate - calculate for this volume minus
+        	 // volume of daughters.
+	 fpCurrentMaterial);
+      G4double daughter_subtracted_volume =
+	daughter_subtracted_mass / fpCurrentMaterial->GetDensity();
       *fpOutFile << ", "
-		 << G4BestUnit
-	(fpCurrentLV->GetMass(fpCurrentPV->IsParameterised(),  // Force if so.
-			      false,  // Do not propagate - this
-				      // volume less volume of
-				      // daughters.
-			      fpCurrentMaterial),
-	 "Mass");
+		 << G4BestUnit(daughter_subtracted_volume,"Volume")
+		 << ", "
+		 << G4BestUnit(daughter_subtracted_mass,"Mass");
     }
 
     if (fLVSet.find(fpCurrentLV) == fLVSet.end()) {

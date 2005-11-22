@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeMessenger.cc,v 1.14 2005-10-13 17:37:57 allison Exp $
+// $Id: G4ASCIITreeMessenger.cc,v 1.15 2005-11-22 16:21:26 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,30 +53,35 @@ G4ASCIITreeMessenger::G4ASCIITreeMessenger
 
   fpCommandVerbose = new G4UIcmdWithAnInteger ("/vis/ASCIITree/verbose", this);
   fVerbosityGuidance.push_back
-    ("<  10: - does not print daughters of repeated placements,"
+    ("  <  10: - does not print daughters of repeated placements,"
      " does not repeat replicas.");
   fVerbosityGuidance.push_back
-    (">= 10: prints all physical volumes.");
+    ("  >= 10: prints all physical volumes.");
   fVerbosityGuidance.push_back
-    ("The level of detail is given by the units (verbosity%10):");
+    ("The level of detail is given by verbosity%10:");
   fVerbosityGuidance.push_back
-    (">=  0: prints physical volume name.");
+    ("for each volume:");
   fVerbosityGuidance.push_back
-    (">=  1: prints logical volume name (and names of sensitive detector"
+    ("  >=  0: physical volume name.");
+  fVerbosityGuidance.push_back
+    ("  >=  1: logical volume name (and names of sensitive detector"
      " and readout geometry, if any).");
   fVerbosityGuidance.push_back
-    (">=  2: prints solid name and type.");
+    ("  >=  2: solid name and type.");
   fVerbosityGuidance.push_back
-    (">=  3: prints volume and density.");
+    ("  >=  3: volume and density.");
   fVerbosityGuidance.push_back
-    (">=  4: prints mass of top physical volume(s) in scene to depth specified.");
+    ("  >=  5: daughter-subtracted volume and mass.");
   fVerbosityGuidance.push_back
-    (">=  5: prints mass of volume less daughters.");
+    ("and in the summary at the end of printing:");
+  fVerbosityGuidance.push_back
+    ("  >=  4: daughter-included mass of top physical volume(s) in scene"
+     " to depth specified.");
   fVerbosityGuidance.push_back
     ("Note: by default, culling is switched off so all volumes are seen.");
   fVerbosityGuidance.push_back
     ("Note: the mass calculation takes into account daughters, which can be"
-     " time consuuming.  If you want the mass of a particular subtree to a"
+     " time consuming.  If you want the mass of a particular subtree to a"
      " particular depth:");
   fVerbosityGuidance.push_back
     ("  /vis/open ATree");
