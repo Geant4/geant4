@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisListManager.hh,v 1.1 2005-11-21 05:45:42 tinslay Exp $
+// $Id: G4VisListManager.hh,v 1.2 2005-11-22 04:55:49 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
@@ -93,7 +93,7 @@ G4VisListManager<T>::Register(T* ptr)
   }
   else {
     std::ostringstream o;
-    o << ptr->Name()<<" already exists in map";
+    o << "Key "<<ptr->Name()<<" already registered";
     G4Exception
       ("G4VisListManager<T>::Register(T* ptr) ",
        "KeyExists", FatalErrorInArgument, o.str().c_str());
@@ -109,7 +109,7 @@ G4VisListManager<T>::SetCurrent(const G4String& name)
   if (iter != fMap.end()) fpCurrent = fMap[name];
   else {
     std::ostringstream o;
-    o << name<<" does not exist in map";
+    o << "Key "<<name<<" has not been registered";
     G4Exception
       ("G4VisListManager<T>::SetCurrent(T* ptr) ",
        "NonExistentName", FatalErrorInArgument, o.str().c_str());
