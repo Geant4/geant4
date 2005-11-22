@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ModelCommandsDrawByCharge.cc,v 1.3 2005-11-21 17:03:53 allison Exp $
+// $Id: G4ModelCommandsDrawByCharge.cc,v 1.4 2005-11-22 17:32:00 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -66,10 +66,10 @@ void G4ModelCommandDrawByChargeSet::SetNewValue(G4UIcommand* cmd, G4String newVa
     break;
   default:
     std::ostringstream o;
-    o << "Unknown charge "<<charge;
+    o << "Invalid charge "<<charge;
     G4Exception
       ("G4ModelCommandDrawByChargeSet::SetNewValue (G4UIcommand* cmd, G4String newValue) ",
-       "UnknownCharge", FatalErrorInArgument, o.str().c_str());
+       "InvalidCharge", FatalErrorInArgument, o.str().c_str());
   }
   
   // Configure model as requested
@@ -111,10 +111,10 @@ void G4ModelCommandDrawByChargeSetRGBA::SetNewValue(G4UIcommand* cmd, G4String n
     break;
   default:
     std::ostringstream o;
-    o << "Unknown charge "<<charge;
+    o << "Invalid charge "<<charge;
     G4Exception
       ("G4ModelCommandDrawByChargeSetRGBA::SetNewValue (G4UIcommand* cmd, G4String newValue) ",
-       "UnknownCharge", FatalErrorInArgument, o.str().c_str());
+       "InvalidCharge", FatalErrorInArgument, o.str().c_str());
   }
 
   G4Colour myColour(red, green, blue, alpha);
