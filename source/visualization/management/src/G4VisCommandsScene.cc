@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.43 2005-10-13 18:00:20 allison Exp $
+// $Id: G4VisCommandsScene.cc,v 1.44 2005-11-22 17:14:44 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -362,8 +362,8 @@ G4VisCommandSceneNotifyHandlers::G4VisCommandSceneNotifyHandlers () {
      "\n  The default action \"refresh\" does not issue \"update\" (see"
      "\n    /vis/viewer/update)."
      "\nIf \"flush\" is specified, it issues an \"update\" as well as"
-     "\n  \"refresh\" - useful for refreshing and initiating post-processing"
-     "\n  for graphics systems which need post-processing.");
+     "\n  \"refresh\" - \"update\" and initiates post-processing"
+     "\n  for graphics systems which need it.");
   fpCommand -> SetGuidance 
     ("The default for <scene-name> is the current scene name.");
   fpCommand -> SetGuidance
