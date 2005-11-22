@@ -1,4 +1,4 @@
-$Id: History,v 1.57 2005-11-17 07:36:04 gcosmo Exp $
+$Id: History,v 1.58 2005-11-22 16:12:57 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+22nd November 2005  John Allison  (opengl-V07-01-08)
+- Added G4OpenGLXmViewerMessenger.
+- Corrected text position.
+- Made depth test for polyhedron GL_LEQUAL (slightly dominant).
 
 17th November 2005  Gabriele Cosmo
 - Fixed settings of background style for WIN32 viewers.
