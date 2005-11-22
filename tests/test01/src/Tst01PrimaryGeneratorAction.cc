@@ -56,7 +56,7 @@ Tst01PrimaryGeneratorAction::Tst01PrimaryGeneratorAction():
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
   G4ParticleDefinition* particle 
-    = particleTable->FindParticle(particleName="e-");
+    = particleTable->FindParticle(particleName="geantino");
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
   particleGun->SetParticleEnergy(1.*GeV);
