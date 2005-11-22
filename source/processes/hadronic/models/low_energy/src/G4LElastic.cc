@@ -36,9 +36,8 @@
 //           on hydrogen, use relativistic Lorentz transformation
 //
 
-#include "globals.hh"
+#include <cfloat>
 #include "G4LElastic.hh"
-#include "Randomize.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 
@@ -149,7 +148,7 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
    G4double t1 = -std::log(ran)/bb;
    G4double t2 = -std::log(ran)/dd;
    if (verboseLevel > 1) {
-      G4cout << "std::log(FLT_MAX)=" << std::log(FLT_MAX) << G4endl;
+      G4cout << "std::log(FLT_MAX)=" << std::log(std::numeric_limits<float>::max()) << G4endl;
       G4cout << "t1,Fctcos " << t1 << " " << Fctcos(t1, aa, bb, cc, dd, rr) << 
               G4endl;
       G4cout << "t2,Fctcos " << t2 << " " << Fctcos(t2, aa, bb, cc, dd, rr) << 
