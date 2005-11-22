@@ -1,9 +1,12 @@
-$Id: History,v 1.63 2005-11-22 15:45:04 allison Exp $
+$Id: History,v 1.64 2005-11-22 15:47:21 allison Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
 
 $Log: not supported by cvs2svn $
+Revision 1.63  2005/11/22 15:45:04  allison
+test19.g4m: Changed RayTracer to RayTracerX.
+
 Revision 1.62  2005/11/22 15:43:54  allison
 MyDetectorConstruction.cc: Added G4Tet.  Refined G4Polyhedra (generic
 constructor).
