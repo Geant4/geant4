@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.34 2005-10-13 17:48:32 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.35 2005-11-22 16:33:05 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -250,8 +250,16 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
       //   They have phi of offset+n*width to offset+(n+1)*width where
       //   n=0..nReplicas-1
       // 
+      pSol = pLV -> GetSolid ();
+      pMaterial = pLV -> GetMaterial ();
       G4ThreeVector originalTranslation = pVPV -> GetTranslation ();
       G4RotationMatrix* pOriginalRotation = pVPV -> GetRotation ();
+      G4double originalRMin, originalRMax;
+      if (axis == kRho && pSol->GetEntityType() == "G4Tubs") {
+	originalRMin = ((G4Tubs*)pSol)->GetInnerRadius();
+	originalRMax = ((G4Tubs*)pSol)->GetOuterRadius();
+      }
+      G4bool visualisable = true;
       for (int n = 0; n < nReplicas; n++) {
 	G4ThreeVector translation;  // Null.
 	G4RotationMatrix rotation;  // Null - life long enough for visualizing.
@@ -268,11 +276,20 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	  translation = G4ThreeVector (0,0,-width*(nReplicas-1)*0.5+n*width);
 	  break;
 	case kRho:
-	  G4cout <<
-	    "G4PhysicalVolumeModel::VisitGeometryAndGetVisReps: WARNING:"
-	    "\n  built-in replicated volumes replicated in radius are not yet"
-	    "\n  properly visualizable."
-	       << G4endl;
+	  if (pSol->GetEntityType() == "G4Tubs") {
+	    ((G4Tubs*)pSol)->SetInnerRadius(width*n+offset);
+	    ((G4Tubs*)pSol)->SetOuterRadius(width*(n+1)+offset);
+	  } else {
+	    G4cout <<
+	      "G4PhysicalVolumeModel::VisitGeometryAndGetVisReps: WARNING:"
+	      "\n  built-in replicated volumes replicated in radius for "
+		   << pSol->GetEntityType() <<
+	      "-type\n  solids (your solid \""
+		   << pSol->GetName() <<
+	      "\") are not visualisable."
+		   << G4endl;
+	    visualisable = false;
+	  }
 	  break;
 	case kPhi:
 	  rotation.rotateZ (-(offset+(n+0.5)*width));
@@ -284,14 +301,18 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	pVPV -> SetTranslation (translation);
 	pVPV -> SetRotation    (pRotation);
 	pVPV -> SetCopyNo (n);
-	pSol = pLV -> GetSolid ();
-	pMaterial = pLV -> GetMaterial ();
-	DescribeAndDescend (pVPV, requestedDepth, pLV, pSol, pMaterial,
+	if (visualisable) {
+	  DescribeAndDescend (pVPV, requestedDepth, pLV, pSol, pMaterial,
 			    theAT, sceneHandler);
+	}
       }
       // Restore originals...
       pVPV -> SetTranslation (originalTranslation);
       pVPV -> SetRotation    (pOriginalRotation);
+      if (axis == kRho && pSol->GetEntityType() == "G4Tubs") {
+	((G4Tubs*)pSol)->SetInnerRadius(originalRMin);
+	((G4Tubs*)pSol)->SetOuterRadius(originalRMax);
+      }
     }
   }
 
