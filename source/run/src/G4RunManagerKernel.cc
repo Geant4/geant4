@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.31 2005-11-16 17:23:44 gcosmo Exp $
+// $Id: G4RunManagerKernel.cc,v 1.32 2005-11-22 19:54:53 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -242,8 +242,8 @@ void G4RunManagerKernel::InitializePhysics()
                 "G4VUserPhysicsList is not defined");
   }
 
-  if(verboseLevel>1) G4cout << "physicsList->ConstructParticle() start." << G4endl;
-  physicsList->ConstructParticle();
+  //if(verboseLevel>1) G4cout << "physicsList->ConstructParticle() start." << G4endl;
+  //physicsList->ConstructParticle();
 
   if(verboseLevel>1) G4cout << "physicsList->Construct() start." << G4endl;
   physicsList->Construct();
