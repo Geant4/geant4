@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.71 2005-11-21 05:45:42 tinslay Exp $
+// $Id: G4VisManager.cc,v 1.72 2005-11-22 17:26:25 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -118,20 +118,21 @@ G4VisManager::G4VisManager ():
     // higher level library to avoid circular dependencies.  Also,
     // some specifically need additional external libararies that the
     // user must supply.  Therefore we ask the user to implement
-    // RegisterGraphicsSystems() in a subclass.  We have to wait for
-    // the subclass to instantiate so RegisterGraphicsSystems() cannot
-    // be called from this constructor; it is called from
-    // Initialise().  So we ask the user:
-    //   (a) to write a subclass and implement
-    //       RegisterGraphicsSystems().  See
-    //       visualization/include/MyVisManager.hh/cc as an example.
+    // RegisterGraphicsSystems() and RegisterModelFactories()
+    // in a subclass.  We have to wait for the subclass to instantiate
+    // so RegisterGraphicsSystems() cannot be called from this
+    // constructor; it is called from Initialise().  So we ask the
+    // user:
+    //   (a) to write a subclass and implement  RegisterGraphicsSystems()
+    //       and RegisterModelFactories().  See
+    //       visualization/include/G4VisExecutive.hh/icc as an example.
     //   (b) instantiate the subclass.
     //   (c) invoke the Initialise() method of the subclass.
     // For example:
     //   ...
     // #ifdef G4VIS_USE
     //   // Instantiate and initialise Visualization Manager.
-    //   G4VisManager* visManager = new MyVisManager;
+    //   G4VisManager* visManager = new G4VisExecutive;
     //   visManager -> SetVerboseLevel (Verbose);
     //   visManager -> Initialise ();
     // #endif
@@ -191,14 +192,16 @@ void G4VisManager::Initialise () {
       "\n  you should, normally, instantiate drivers which do not need"
       "\n  external packages or libraries, and, optionally, drivers under"
       "\n  control of environment variables."
-      "\n  See visualization/include/MyVisManager.hh/cc, for example."
+      "\n  Also you should implement RegisterModelFactories()."
+      "\n  See visualization/include/G4VisExecutive.hh/icc, for example."
       "\n  In your main() you will have something like:"
       "\n  #ifdef G4VIS_USE"
-      "\n    G4VisManager* visManager = new MyVisManager;"
+      "\n    G4VisManager* visManager = new G4VisExecutive;"
       "\n    visManager -> SetVerboseLevel (Verbose);"
       "\n    visManager -> Initialize ();"
       "\n  #endif"
       "\n  (Don't forget to delete visManager;)"
+      "\n"
 	 << G4endl;
   }
 
@@ -208,11 +211,12 @@ void G4VisManager::Initialise () {
 
   RegisterGraphicsSystems ();
 
-  if (fVerbosity >= confirmations) {
+  if (fVerbosity >= startup) {
     G4cout <<
       "\nYou have successfully chosen to use the following graphics systems."
 	 << G4endl;
     PrintAvailableGraphicsSystems ();
+    G4cout << G4endl;
   }
 
   // Make top level directory...
@@ -231,6 +235,11 @@ void G4VisManager::Initialise () {
   fDirectoryList.push_back (directory);
 
   RegisterMessengers ();
+
+  if (fVerbosity >= startup) {
+    G4cout << "Registering model factories..." << G4endl;
+  }
+
   RegisterModelFactories();
 
   fInitialised = true;
@@ -803,6 +812,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandViewerFlush);
   RegisterMessenger(new G4VisCommandViewerList);
   RegisterMessenger(new G4VisCommandViewerPan);
+  RegisterMessenger(new G4VisCommandViewerRebuild);
   RegisterMessenger(new G4VisCommandViewerRefresh);
   RegisterMessenger(new G4VisCommandViewerReset);
   RegisterMessenger(new G4VisCommandViewerScale);
