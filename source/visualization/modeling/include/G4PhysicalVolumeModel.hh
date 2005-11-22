@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.20 2005-03-09 16:23:21 allison Exp $
+// $Id: G4PhysicalVolumeModel.hh,v 1.21 2005-11-22 16:29:40 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,7 +60,7 @@ public: // With description
   G4PhysicalVolumeModel
   (G4VPhysicalVolume*,
    G4int requestedDepth = UNLIMITED,
-   const G4Transform3D& modelTransformation = G4Transform3D::Identity,
+   const G4Transform3D& modelTransformation = G4Transform3D(),
    const G4ModelingParameters* = 0,
    G4bool useFullExtent = false);
 
