@@ -20,8 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4VisManager.cc,v 1.72 2005-11-22 17:26:25 allison Exp $
+// $Id: G4VisManager.cc,v 1.73 2005-11-22 18:36:33 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,6 +62,7 @@
 #include "G4VisCommandsListManager.hh"
 #include "G4VModelFactory.hh"
 #include "G4VTrajectoryModel.hh"
+#include "G4TrajectoryDrawByCharge.hh"
 #include <sstream>
 
 G4VisManager* G4VisManager::fpInstance = 0;
@@ -632,7 +632,15 @@ void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory, G4int i_mode
   assert (0 != fpTrajectoryModelMgr);
 
   const G4VTrajectoryModel* model = fpTrajectoryModelMgr->Current();
-  assert (0 != model); //jane fixme - make sure there's a default model 
+  if (0 == model) {
+    // No model was registered with the trajectory model manager. 
+    // Use G4TrajectoryDrawByCharge as a default.
+    fpTrajectoryModelMgr->Register(new G4TrajectoryDrawByCharge());
+  }
+
+  model = fpTrajectoryModelMgr->Current();
+
+  assert (0 != model); // Should definitely exist now
 
   model->Draw(trajectory, i_mode);
 }
