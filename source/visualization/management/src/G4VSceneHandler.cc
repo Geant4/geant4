@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.44 2005-10-13 18:16:37 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.45 2005-11-22 17:09:12 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,12 +75,12 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   fViewCount             (0),
   fpViewer               (0),
   fpScene                (0),
-  fMarkForClearingTransientStore (true), // Always clear and refesh first time.
+  fMarkForClearingTransientStore (false),
   fSecondPassRequested   (false),
   fSecondPass            (false),
   fReadyForTransients    (true),  // Only false while processing scene.
   fpModel                (0),
-  fpObjectTransformation (&G4Transform3D::Identity),
+  fpObjectTransformation (0),
   fNestingDepth          (0),
   fpVisAttribs           (0),
   fCurrentDepth          (0),
@@ -115,7 +115,7 @@ void G4VSceneHandler::PreAddSolid (const G4Transform3D& objectTransformation,
 }
 
 void G4VSceneHandler::PostAddSolid () {
-  fpObjectTransformation = &G4Transform3D::Identity;
+  fpObjectTransformation = 0;
   fpVisAttribs = 0;
 }
 
@@ -221,7 +221,7 @@ void G4VSceneHandler::EndPrimitives () {
   if (fNestingDepth <= 0)
     G4Exception("G4VSceneHandler::EndPrimitives: Nesting error");
   fNestingDepth--;
-  fpObjectTransformation = &G4Transform3D::Identity;
+  fpObjectTransformation = 0;
 }
 
 void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
