@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.20 2005-11-15 16:22:15 allison Exp $
+// $Id: G4OpenGLXmViewer.cc,v 1.21 2005-11-22 16:03:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,8 +34,7 @@
 #include "globals.hh"
 
 #include "G4OpenGLXmViewer.hh"
-
-#include "G4ios.hh"
+#include "G4OpenGLXmViewerMessenger.hh"
 
 #include "G4VisExtent.hh"
 #include "G4LogicalVolume.hh"
@@ -618,16 +617,19 @@ rot_sens (4.),
 wob_sens (20.),
 original_vp(fVP.GetViewpointDirection()),
 frameNo (0),
-fprotation_top (NULL),
-fprotation_slider (NULL),
-fppanning_top (NULL),
-fppanning_slider (NULL),
-fpzoom_slider (NULL),
-fpdolly_slider (NULL),
-fpsetting_top (NULL),
-fpmiscellany_top (NULL),
-fpprint_top (NULL)
+fprotation_top (0),
+fprotation_slider (0),
+fppanning_top (0),
+fppanning_slider (0),
+fpzoom_slider (0),
+fpdolly_slider (0),
+fpsetting_top (0),
+fpmiscellany_top (0),
+fpprint_top (0),
+fpMessenger (0)
 {
+
+  fpMessenger = new G4OpenGLXmViewerMessenger(this, fShortName);
 
   WinSize_x = 100;
   WinSize_y = 100;
@@ -661,6 +663,8 @@ G4OpenGLXmViewer::~G4OpenGLXmViewer ()
     delete fpmiscellany_top;
   }
 ******************************/
+
+  delete fpMessenger;
 }
 
 #endif
