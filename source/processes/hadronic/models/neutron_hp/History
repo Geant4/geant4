@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+22 Nov 2005 Dennis Wright (hadr-hpn-V07-01-03)
+----------------------------------------------
+- fix division NAN compiler warning in outer while loop for
+    G4NeutronHPorLEInelasticData.cc, G4NeutronHPorLElasticData.cc,
+    G4NeutronHPorLEFissionData.cc, G4NeutronHPorLFissionData.cc
+
 22 Nov 2005 Dennis Wright for Tatsumi Koi (hadr-hpn-V07-01-02)
 --------------------------------------------------------------
 - T. Koi implemented new process which switches from HP neutron model 
