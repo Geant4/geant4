@@ -5,8 +5,6 @@
 /control/verbose 2
 /run/verbose 1
 #
-/test17/cutG 10 micrometer
-/test17/cutE 10 micrometer
 /run/initialize
 #
 /gun/particle proton
@@ -16,8 +14,6 @@
 #
 /gun/particle anti_proton
 /run/beamOn 10000
-
-/testem/stepMax 0.001 mm
 #scaled energy
 /gun/particle ion
 /gun/ion 6 12 6
