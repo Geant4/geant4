@@ -35,7 +35,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyRunAction.cc,v 1.15 2005-07-25 16:51:28 guatelli Exp $
+// $Id: BrachyRunAction.cc,v 1.16 2005-11-22 11:00:47 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -57,7 +57,9 @@
 #include "BrachyFactoryI.hh"
 #include "BrachyFactory.hh"
 #include "BrachyRunAction.hh"
+
 BrachyRunAction::BrachyRunAction()
+
 {
   runMessenger = new BrachyRunMessenger(this);
 }
@@ -80,6 +82,7 @@ void BrachyRunAction::BeginOfRunAction(const G4Run* aRun)
  else { G4cout << "The results of Run:"<< runNb << " are summed to the" << 
         " results of the previous Run in brachytherapy.hbk" << G4endl;} 
 #endif  
+
   G4RunManager* runManager = G4RunManager::GetRunManager();
 
   if(runManager)

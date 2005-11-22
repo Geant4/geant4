@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyRunAction.hh,v 1.8 2005-07-25 16:51:28 guatelli Exp $
+// $Id: BrachyRunAction.hh,v 1.9 2005-11-22 11:00:47 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -58,7 +58,6 @@ public:
   void SelectEnergy(G4int); 
 
 private:
-   
   BrachyRunMessenger* runMessenger;
   BrachyFactory *factory; 
   G4int sourceChoice; //select primary particle 
