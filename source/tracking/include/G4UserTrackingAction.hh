@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserTrackingAction.hh,v 1.9 2003-05-21 20:41:21 asaim Exp $
+// $Id: G4UserTrackingAction.hh,v 1.10 2005-11-22 21:04:07 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -58,8 +58,8 @@ public: // with description
 //--------
 
 // Constructor & Destructor
-   G4UserTrackingAction(){;}
-   virtual ~G4UserTrackingAction(){;}
+   G4UserTrackingAction();
+   virtual ~G4UserTrackingAction();
 
 // Member functions
    void SetTrackingManagerPointer(G4TrackingManager* pValue);
