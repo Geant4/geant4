@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.58 2005-10-13 18:00:20 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.59 2005-11-22 17:17:37 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -1171,7 +1171,7 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
 	   << G4endl;
   }
   if (verbosity >= G4VisManager::warnings) {
-    G4cout << "WARNING: \"storeTrajectory\" has been activated."
+    G4cout << "WARNING: \"/tracking/storeTrajectory 1\" has been executed."
 	   << G4endl;
   }
 }
