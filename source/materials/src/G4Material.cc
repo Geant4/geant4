@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.30 2005-11-18 14:54:30 gcosmo Exp $
+// $Id: G4Material.cc,v 1.31 2005-11-22 17:24:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -167,7 +167,7 @@ G4Material::G4Material(const G4String& name, G4double density,
 G4Material::G4Material(__void__&)
   : fNumberOfComponents(0), fNumberOfElements(0), theElementVector(0), 
     fImplicitElement(false), fMassFractionVector(0), fAtomsVector(0), 
-    fMaterialPropertiesTable(0), fIndexInTable(INT_MAX), 
+    fMaterialPropertiesTable(0), fIndexInTable(0), 
     VecNbOfAtomsPerVolume(0), fIonisation(0), fSandiaTable(0)
 {
 }
@@ -465,10 +465,8 @@ G4Material::~G4Material()
   if (fSandiaTable)           delete    fSandiaTable;
   
   // Remove this material from theMaterialTable.
-  // Index is set to INT_MAX in case the table has been read from a file
-  // for direct object persistency, in which case do not reset the table.
   //
-  if (fIndexInTable != INT_MAX) { theMaterialTable[fIndexInTable] = 0; }
+  theMaterialTable[fIndexInTable] = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
