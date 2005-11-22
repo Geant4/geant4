@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.21 2005-10-17 15:47:27 maire Exp $
+// $Id: SteppingAction.cc,v 1.22 2005-11-22 15:29:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,32 +59,19 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   const G4StepPoint* endPoint = aStep->GetPostStepPoint();
   const G4Track*     track    = aStep->GetTrack();
   const G4ParticleDefinition* particle = track->GetDefinition(); 
-
-  //for Energy flow initialisation
-  G4int  plane; G4double Eflow;
-  G4bool primaryVertex = ((track->GetParentID() == 0) &&
-                          (track->GetCurrentStepNumber() == 1));
-      
+    
   //if World, return
   //
   G4VPhysicalVolume* volume = prePoint->GetPhysicalVolume();    
   //if sum of absorbers do not fill exactly a layer: check material, not volume.
   G4Material* mat = volume->GetLogicalVolume()->GetMaterial();
-  if (mat == detector->GetWorldMaterial()) {
-    if (primaryVertex) {
-      Eflow = prePoint->GetKineticEnergy();
-      if (particle == G4Positron::Positron()) Eflow += 2*electron_mass_c2;    
-      runAct->sumEnergyFlow(plane=1, Eflow);
-    }  
-    return;
-  } 
+  if (mat == detector->GetWorldMaterial()) return; 
  
   //here we are in an absorber. Locate it
   //
   G4int absorNum  = volume->GetCopyNo();
   G4int layerNum  = prePoint->GetTouchable()->GetReplicaNumber(1);
-  
-     
+       
   // collect energy deposit
   G4double edep = aStep->GetTotalEnergyDeposit();
   
@@ -102,26 +89,20 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   //
   // unique identificator of layer+absorber
   G4int Idnow = (detector->GetNbOfAbsor())*layerNum + absorNum;
+  G4int plane;
   //
   //leaving the absorber ?
   if (endPoint->GetStepStatus() == fGeomBoundary) {
     G4ThreeVector position  = endPoint->GetPosition();
     G4ThreeVector direction = endPoint->GetMomentumDirection();
-    G4double sizeYZ = detector->GetCalorSizeYZ();       
+    G4double sizeYZ = 0.5*detector->GetCalorSizeYZ();       
     G4double Eflow = endPoint->GetKineticEnergy();
     if (particle == G4Positron::Positron()) Eflow += 2*electron_mass_c2;
-    if ((position.y() >= sizeYZ) || (position.z() >= sizeYZ)) 
+    if ((std::abs(position.y()) >= sizeYZ) || (std::abs(position.z()) >= sizeYZ)) 
                                   runAct->sumLateralEleak(Idnow, Eflow);
     else if (direction.x() >= 0.) runAct->sumEnergyFlow(plane=Idnow+1, Eflow);
     else                          runAct->sumEnergyFlow(plane=Idnow,  -Eflow);    
   }   
-  
-  //flux artefact, if primary vertex is inside the calorimeter
-  if (primaryVertex) {
-    Eflow = prePoint->GetKineticEnergy();
-    if (particle == G4Positron::Positron()) Eflow += 2*electron_mass_c2;
-    for (G4int pl=1; pl<=Idnow; pl++) runAct->sumEnergyFlow(pl, Eflow);
-  }  
 
 ////  example of Birk attenuation
 ////  G4double destep   = aStep->GetTotalEnergyDeposit();

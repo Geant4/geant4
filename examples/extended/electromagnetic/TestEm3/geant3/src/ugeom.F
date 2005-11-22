@@ -136,7 +136,7 @@
         PAR(1) = thickAbs(k)/2.
         PAR(2) = calorYZ/2.
         PAR(3) = calorYZ/2.
-	volnam(4:4) = char(ichar('0')+k-1)
+	volnam(4:4) = char(ichar('0')+k)
         CALL GSVOLU(volnam,'BOX ',k,PAR,3,IVOL)
         xcenter = xfront + 0.5*thickAbs(k)
         CALL GSPOS (volnam,1,'layr',xcenter,0.,0.,0,'ONLY')

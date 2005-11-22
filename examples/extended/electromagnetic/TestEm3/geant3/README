@@ -30,8 +30,8 @@
   histo 12 : longitudinal profile of energy deposit in absorber 2 (MeV/event)  
   ...etc...........  
   
-  histo 21 : forward energy flow (MeV/event)
-  histo 22 : backward energy flow (MeV/event)  
+  histo 21 : energy flow (MeV/event)
+  histo 22 : lateral energy leakage (MeV/event)  
   
  One can control the binning of the histograms with the data card:
   *HISTO  id1  nbBins  valMin  valMax  valUnit 

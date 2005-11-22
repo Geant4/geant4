@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TestEm3.cc,v 1.17 2005-05-18 15:28:37 maire Exp $
+// $Id: TestEm3.cc,v 1.18 2005-11-22 15:29:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,6 +37,7 @@
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "EventAction.hh"
+#include "TrackingAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
 #include "HistoManager.hh"
@@ -79,10 +80,12 @@ int main(int argc,char** argv) {
   // set user action classes
   RunAction*      runAct = new RunAction(detector,primary,histo);
   EventAction*    evtAct = new EventAction(detector,runAct,histo);
+  TrackingAction* trkAct = new TrackingAction(detector,runAct,evtAct,histo);
   SteppingAction* stpAct = new SteppingAction(detector,runAct,evtAct,histo);
   
   runManager->SetUserAction(runAct);
   runManager->SetUserAction(evtAct);
+  runManager->SetUserAction(trkAct);
   runManager->SetUserAction(stpAct);
 
   // get the pointer to the User Interface manager 
