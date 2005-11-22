@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeSearchScene.cc,v 1.8 2005-01-26 17:07:37 johna Exp $
+// $Id: G4PhysicalVolumeSearchScene.cc,v 1.9 2005-11-22 16:34:20 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -90,9 +90,9 @@ void G4PhysicalVolumeSearchScene::FindVolume (const G4VSolid&) {
 	}
 	G4cout << " found more than once."
 	  "\n  This function is not smart enough to distinguish identical"
-	  "\n  physical volumes which have different parentage.  Besides,"
-	  "\n  it's tricky to specify in general; we plan a GUI to do this."
-	  "\n  This function gives you access to the first occurrence only."
+	  "\n  physical volumes which have different parentage.  It is"
+	  "\n  tricky to specify in general.  This function gives you access"
+	  "\n  to the first occurrence only."
 	       << G4endl;
       }
     }
