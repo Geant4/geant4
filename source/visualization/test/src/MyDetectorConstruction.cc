@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorConstruction.cc,v 1.28 2005-10-13 17:13:08 allison Exp $
+// $Id: MyDetectorConstruction.cc,v 1.29 2005-11-22 15:43:54 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,7 @@
 #include "G4Trap.hh"
 #include "G4EllipticalTube.hh"
 #include "G4Polyhedra.hh"
+#include "G4Tet.hh"
 #include "G4IntersectionSolid.hh"
 #include "G4SubtractionSolid.hh"
 #include "G4UnionSolid.hh"
@@ -139,7 +140,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   //      = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   //  experimentalHallVisAtt->SetForceWireframe(true);
   //  experimentalHall_log->SetVisAttributes(experimentalHallVisAtt);
-  experimentalHall_log -> SetVisAttributes (G4VisAttributes::Invisible);
+  experimentalHall_log -> SetVisAttributes (&G4VisAttributes::GetInvisible());
   G4VPhysicalVolume * experimentalHall_phys
     = new G4PVPlacement(0,G4ThreeVector(),"expHall_P",
                         experimentalHall_log,0,false,0);
@@ -290,7 +291,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   G4VisAttributes * tube_VisAtt
     = new G4VisAttributes(G4Colour(0.,1.,0.,0.1));
   //  tube_log->SetVisAttributes(tube_VisAtt);
-  tube_log->SetVisAttributes(G4VisAttributes::Invisible);
+  tube_log->SetVisAttributes(G4VisAttributes::GetInvisible());
   new G4PVPlacement(0,G4ThreeVector(-200.*cm,0.,0.*cm),
                     "tube_phys",tube_log,experimentalHall_phys,
                     false,0);
@@ -430,8 +431,13 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
 //-------------------------------------------- Polyhedra(!)
 
   const G4int numRZ = 10;
-  G4double polyhedra_r[numRZ] = {1,5,3,4,7,9,3,4,3,2};
+  G4double polyhedra_r[numRZ] = {1,5,3,4,7,9,3,3,2,1};
   G4double polyhedra_z[numRZ] = {0,1,2,3,4,5,4,3,2,1};
+  /*
+  const G4int numRZ = 8;
+  G4double polyhedra_r[numRZ] = {1,2,2,3,3,4,4,1};
+  G4double polyhedra_z[numRZ] = {1,1,2,2,1,1,3,3};
+  */
   for (int i = 0; i < numRZ; ++i) {
     polyhedra_r[i] *= 10*cm;
     polyhedra_z[i] *= 10.*cm;
@@ -573,6 +579,43 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   new G4PVPlacement(0,G4ThreeVector(900.*cm, 200.*cm, 0.),alSpaceCraft_log,"alLayer_phys",experimentalHall_log,false,0);
   // new G4PVPlacement(G4Translate3D(G4ThreeVector(900.*cm, 200.*cm, 0.)),"alLayer_phys",alSpaceCraft_log,experimentalHall_log,false,0);
   */
+
+  //----------- Radially replicated tube sector
+
+  G4double rMin = 50.*cm;
+  G4double DeltaR = 50.*cm;
+  G4VSolid* rrTubs = new G4Tubs
+    ("rrTubs",rMin,rMin + DeltaR,200*cm,180*deg,90*deg);
+  G4LogicalVolume* rrTubsLog = new G4LogicalVolume
+    (rrTubs,Ar,"rrTubs-log");
+  rrTubsLog->SetVisAttributes(G4VisAttributes::Invisible);
+  new G4PVPlacement(G4Translate3D(G4ThreeVector(400.*cm,-200.*cm,0)),
+		    "rrTubs-phys", rrTubsLog,
+		    experimentalHall_phys,false,0);
+  G4double deltaR = DeltaR / 6.;
+  G4Tubs* drrTubs = new G4Tubs
+    ("drrTubs",rMin,rMin + deltaR,200*cm,180*deg,90*deg);
+  G4LogicalVolume * drrTubsLog = new G4LogicalVolume
+    (drrTubs,Ar,"drrTubs-log");
+  drrTubsLog->SetVisAttributes(G4Colour::Red());
+  new G4PVReplica("drrTubs-phys",drrTubsLog,rrTubsLog,
+  		  kRho,6,deltaR,rMin);
+
+
+  //----------- tetrahedron
+
+  G4VSolid* tet = new G4Tet
+    ("tet",
+     G4ThreeVector(),
+     G4ThreeVector(0.,100.*cm,0.),
+     G4ThreeVector(0.,0.,100.*cm),
+     G4ThreeVector(100*cm,0.,0.));
+  G4LogicalVolume* tet_log = new G4LogicalVolume
+    (tet,Ar,"tet-log");
+  new G4PVPlacement
+    (G4Translate3D(G4ThreeVector(300.*cm,-400.*cm,0.)),
+     "tet-phys", tet_log,
+     experimentalHall_phys,false,0);
 
   //-------------------------------------------- return
   return experimentalHall_phys;
