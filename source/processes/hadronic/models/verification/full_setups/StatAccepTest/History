@@ -1,6 +1,13 @@
                  History file
                  ------------
 
+22-Nov-2005 - A.Ribon (statAccepTest-V07-01-04)
+- Added Cramer-von Mises and Anderson-Darling
+  statistical tests. 
+  Extended to use of more Physics Lists (LHEP_GN, 
+  LHEP_HP, LHEP_BERT_HP, LHEP_BIC_HP, QGSP_GN, QGSP_HP).
+
+
 25-Oct-2005 - A.Ribon (statAccepTest-V07-01-03)
 - Geant4 is now a Virtual Organization, so I have
   replaced  VO_DTEAM_SW_DIR  to  VO_GEANT4_SW_DIR .

@@ -56,13 +56,18 @@ Release = "dirGeant4-" + REFERENCE
 print '  Release = ', Release                 
                  
 # ---------------- Physics ---------------------
-if ( PHYSICS != "LHEP" and
-     PHYSICS != "QGSP" and
-     PHYSICS != "QGSC" and
-     PHYSICS != "QGSP_BERT" and
-     PHYSICS != "QGSP_BIC" and
-     PHYSICS != "QGSP_GN"
-    ) :
+if ( PHYSICS != "LHEP"          and
+     PHYSICS != "LHEP_GN"       and
+     PHYSICS != "LHEP_HP"       and
+     PHYSICS != "LHEP_BERT_HP"  and
+     PHYSICS != "LHEP_BIC_HP"   and
+     PHYSICS != "QGSP"          and
+     PHYSICS != "QGSP_GN"       and
+     PHYSICS != "QGSP_HP"       and
+     PHYSICS != "QGSP_BERT"     and
+     PHYSICS != "QGSP_BIC"      and
+     PHYSICS != "QGSC" 
+   ) :
     print '  ***ERROR*** in build.py : WRONG PHYSICS LIST = ', PHYSICS
     sys.exit(0)        
 
@@ -180,11 +185,14 @@ g4file.close()
 
 setupFile = open( "setup.sh", "w" )
 
-setupFile.write( "export G4SYSTEM=Linux-g++ \n" )
-
-setupFile.write( "export G4_RELEASE=" + Release + " \n" )
 ###setupFile.write( "export VO_GEANT4_SW_DIR=/users/ribon/dirGrid \n" )  #***LOOKHERE***
 setupFile.write( "export DIR_INSTALLATIONS=$VO_GEANT4_SW_DIR/dirInstallations \n" )
+
+setupFile.write( "export PATH=$DIR_INSTALLATIONS/dirGCC/bin:$PATH \n" )
+setupFile.write( "export LD_LIBRARY_PATH=$DIR_INSTALLATIONS/dirGCC/lib:$LD_LIBRARY_PATH \n" )
+
+setupFile.write( "export G4SYSTEM=Linux-g++ \n" )
+setupFile.write( "export G4_RELEASE=" + Release + " \n" )
 setupFile.write( "export G4INSTALL=$DIR_INSTALLATIONS/$G4_RELEASE \n" )
 setupFile.write( "export G4LIB=$DIR_INSTALLATIONS/$G4_RELEASE/lib \n" )
 
@@ -227,11 +235,16 @@ mainProgram.write( "#include \"G4RunManager.hh\" \n" )
 mainProgram.write( "#include \"G4UImanager.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestDetectorConstruction.hh\" \n" )
 mainProgram.write( "#include \"LHEP.hh\" \n" )
+mainProgram.write( "#include \"LHEP_GN.hh\" \n" )
+mainProgram.write( "#include \"LHEP_HP.hh\" \n" )
+mainProgram.write( "#include \"LHEP_BERT_HP.hh\" \n" )
+mainProgram.write( "#include \"LHEP_BIC_HP.hh\" \n" )
 mainProgram.write( "#include \"QGSP.hh\" \n" )
-mainProgram.write( "#include \"QGSC.hh\" \n" )
+mainProgram.write( "#include \"QGSP_GN.hh\" \n" )
+mainProgram.write( "#include \"QGSP_HP.hh\" \n" )
 mainProgram.write( "#include \"QGSP_BERT.hh\" \n" )
 mainProgram.write( "#include \"QGSP_BIC.hh\" \n" )
-mainProgram.write( "#include \"QGSP_GN.hh\" \n" )
+mainProgram.write( "#include \"QGSC.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestPrimaryGeneratorAction.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestEventAction.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestRunAction.hh\" \n" )
@@ -266,12 +279,7 @@ mainProgram.write( "  runManager->SetUserInitialization( new StatAccepTestDetect
 mainProgram.write( "  runManager->SetUserAction( new StatAccepTestPrimaryGeneratorAction ); \n" )
 mainProgram.write( "  " + PHYSICS + "  *thePL = new " + PHYSICS + "; \n" )
 
-# If the beam energy is below a given threshold (in GeV) then
-# the default production range cut (700 microns) is used.
-if ( float( EnergyValue.split()[0] ) < energyThresholdInGeVNoBiasBelow ) :
-    mainProgram.write( "  //thePL->SetDefaultCutValue( 1.0*cm ); \n" ) #***LOOKHERE***
-else :
-    mainProgram.write( "  thePL->SetDefaultCutValue( 1.0*cm ); \n" ) #***LOOKHERE***
+mainProgram.write( "  //thePL->SetDefaultCutValue( 1.0*cm ); \n" ) #***LOOKHERE***
     
 mainProgram.write( "  runManager->SetUserInitialization( thePL ); \n" )
 mainProgram.write( "  runManager->SetUserAction( new StatAccepTestRunAction ); \n" )  

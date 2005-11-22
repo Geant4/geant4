@@ -1,4 +1,4 @@
-# $Id: hadronic_lists.gmk,v 1.2 2005-10-13 09:39:34 ribon Exp $
+# $Id: hadronic_lists.gmk,v 1.3 2005-11-22 18:06:21 ribon Exp $
 # --------------------------------------------------------------
 # hadronic physics-lists setup
 # --------------------------------------------------------------
@@ -10,27 +10,27 @@ else
   EXTRALIBS += -L$(G4LISTS_BASE)/hadronic/plists/lib/$(G4SYSTEM)
 endif
 
-# EXTRALIBS += -lFTFC
+EXTRALIBS += -lFTFC
 EXTRALIBS += -lFTFP
-# EXTRALIBS += -lLBE
+EXTRALIBS += -lLBE
 EXTRALIBS += -lLHEP
-# EXTRALIBS += -lLHEP_GN
-# EXTRALIBS += -lLHEP_HP
-# EXTRALIBS += -lLHEP_LEAD
-# EXTRALIBS += -lLHEP_BERT_HP
-# EXTRALIBS += -lLHEP_BIC_HP
-# EXTRALIBS += -lLHEP_LEAD_HP
-# EXTRALIBS += -lLHEP_PRECO
+EXTRALIBS += -lLHEP_GN
+EXTRALIBS += -lLHEP_HP
+EXTRALIBS += -lLHEP_LEAD
+EXTRALIBS += -lLHEP_BERT_HP
+EXTRALIBS += -lLHEP_BIC_HP
+EXTRALIBS += -lLHEP_LEAD_HP
+EXTRALIBS += -lLHEP_PRECO
 EXTRALIBS += -lQGSP_BERT
-# EXTRALIBS += -lLHEP_PRECO_HP
+EXTRALIBS += -lLHEP_PRECO_HP
 EXTRALIBS += -lQGSC
-# EXTRALIBS += -lQGSC_LEAD
-# EXTRALIBS += -lQGSC_LEAD_HP
+EXTRALIBS += -lQGSC_LEAD
+EXTRALIBS += -lQGSC_LEAD_HP
 EXTRALIBS += -lQGSP
 EXTRALIBS += -lQGSP_GN
-# EXTRALIBS += -lQGSP_HP
-# EXTRALIBS += -lLHEP_BERT
-# EXTRALIBS += -lLHEP_BIC
+EXTRALIBS += -lQGSP_HP
+EXTRALIBS += -lLHEP_BERT
+EXTRALIBS += -lLHEP_BIC
 EXTRALIBS += -lQGSP_BIC
 EXTRALIBS += -lPackaging
 

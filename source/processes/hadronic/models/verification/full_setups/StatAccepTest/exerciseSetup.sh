@@ -2,15 +2,29 @@
 #***LOOKHERE***
 export VO_GEANT4_SW_DIR=/users/ribon/dirGrid
 #
+export DIR_INSTALLATIONS=$VO_GEANT4_SW_DIR/dirInstallations
+#
+# ===========
+# === GCC ===
+# ===========
+#
+export PATH=$DIR_INSTALLATIONS/dirGCC/bin:$PATH
+export LD_LIBRARY_PATH=$DIR_INSTALLATIONS/dirGCC/lib:$LD_LIBRARY_PATH
+#
+echo ' which g++ '
+which g++
+echo ' g++ -v '
+g++ -v
+echo ' '
+#
 # ==============
 # === GEANT4 ===
 # ==============
 #
 export G4SYSTEM=Linux-g++
 #
-export G4_RELEASE=dirGeant4-7.1
+export G4_RELEASE=dirGeant4-7.1.p01
 #
-export DIR_INSTALLATIONS=$VO_GEANT4_SW_DIR/dirInstallations
 export G4INSTALL=$DIR_INSTALLATIONS/$G4_RELEASE
 export G4LIB=$G4INSTALL/lib
 #

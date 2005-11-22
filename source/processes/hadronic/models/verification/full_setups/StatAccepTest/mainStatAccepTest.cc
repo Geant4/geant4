@@ -2,11 +2,16 @@
 #include "G4UImanager.hh" 
 #include "StatAccepTestDetectorConstruction.hh" 
 #include "LHEP.hh" 
+#include "LHEP_GN.hh" 
+#include "LHEP_HP.hh" 
+#include "LHEP_BERT_HP.hh" 
+#include "LHEP_BIC_HP.hh" 
 #include "QGSP.hh" 
-#include "QGSC.hh" 
+#include "QGSP_GN.hh" 
+#include "QGSP_HP.hh" 
 #include "QGSP_BERT.hh" 
 #include "QGSP_BIC.hh" 
-#include "QGSP_GN.hh" 
+#include "QGSC.hh" 
 #include "StatAccepTestPrimaryGeneratorAction.hh" 
 #include "StatAccepTestEventAction.hh" 
 #include "StatAccepTestRunAction.hh" 
@@ -39,7 +44,7 @@ int main(int argc,char** argv) {
 #endif 
   runManager->SetUserInitialization( new StatAccepTestDetectorConstruction ); 
   runManager->SetUserAction( new StatAccepTestPrimaryGeneratorAction ); 
-  QGSP  *thePL = new QGSP; 
+  LHEP_BERT_HP  *thePL = new LHEP_BERT_HP; 
   //thePL->SetDefaultCutValue( 1.0*cm ); 
   runManager->SetUserInitialization( thePL ); 
   runManager->SetUserAction( new StatAccepTestRunAction ); 
