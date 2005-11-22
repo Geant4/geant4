@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.cc,v 1.16 2005-10-13 18:00:20 allison Exp $
+// $Id: G4VVisCommand.cc,v 1.17 2005-11-22 17:12:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Base class for visualization commands - John Allison  9th August 1998
@@ -70,7 +70,7 @@ void G4VVisCommand::UpdateVisManagerScene
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
-  G4SceneList& sceneList = fpVisManager -> SetSceneList ();
+  const G4SceneList& sceneList = fpVisManager -> GetSceneList ();
 
   G4int iScene, nScenes = sceneList.size ();
   for (iScene = 0; iScene < nScenes; iScene++) {
@@ -92,11 +92,12 @@ void G4VVisCommand::UpdateVisManagerScene
 
   fpVisManager -> SetCurrentScene (pScene);
 
-  // Scene has changed.  Trigger a rebuild of graphical database...
+  // Scene has changed.  Refresh viewers of all sceneHandlers using
+  // this scene...
   G4VViewer* pViewer = fpVisManager -> GetCurrentViewer();
   G4VSceneHandler* sceneHandler = fpVisManager -> GetCurrentSceneHandler();
   if (sceneHandler && sceneHandler -> GetScene ()) {
-    if (pViewer && pViewer -> GetViewParameters().IsAutoRefresh()) {
+    if (pViewer) {
       G4UImanager::GetUIpointer () ->
 	ApplyCommand ("/vis/scene/notifyHandlers");
     }
