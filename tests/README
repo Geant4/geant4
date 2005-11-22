@@ -1,4 +1,4 @@
-$Id: README,v 1.11 2005-06-09 10:44:43 gcosmo Exp $
+$Id: README,v 1.12 2005-11-22 14:11:51 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -41,17 +41,17 @@ test15 ## Isotope Production
 test16 ## n and p Cross-Sections
 test17 ## LowEnergy e.m. (protons, antiprotons and ions). 
 test18 ## Radioactive decay.
-test19 ## CHIPS model: descrete process test for Physics On Flight
+test19 ## discrete process verification test for Physics On Flight
 test20 ## Polarised LowE processes.
-test21 ## CHIPS as intra-nuclear transport replacement.
+test21 ## CHIPS as intra-nuclear transport, with photo/lepton + T>1GeV cut.
 test22 ## Gamma and electro-nuclear physics.
-test23 ## Muon capture for CHIPS
+test23 ## Muon capture for CHIPS, stopping.
 test24 ## Binary cascade hadronic model.
 test25 ## Classical cascade hadronic model.
 test26 ## Cuts by region modeling.
 test27 ## Binary cascade for light ions (G4BinaryLightIonReaction).
 test28 ## Hadronic abrasion/ablation and em-dissociation.
-test29 ## CHIPS model + electroweak interface (G4QCaptureAtRest).
+test29 ## Electroweak interface (G4QCaptureAtRest).
 test31 ## General acceptance test for EM physics.
 test32 ## Leading_particle biasing model of G4Mars5Ge on MARS13.
 test33 ## Importance biasing and scoring.
