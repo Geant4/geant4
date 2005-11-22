@@ -1,4 +1,4 @@
-$Id: README,v 1.12 2005-11-22 14:11:51 gcosmo Exp $
+$Id: README,v 1.13 2005-11-22 15:39:45 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -34,8 +34,8 @@ test09 ## Basic e.m. processes, Polarised Compton, new photelectric
        ## (Action?  Add magnetic field, ElossPLus, muon test script)
 test10 ## Uses optical photons to test geometry (csg/specific solids).
 test11 ## Neutron transport.
-test12 ## FTF String Model.
-test13 ## Dual Parton Model.
+test12 ## FTF String Model + precompound.
+test13 ## QGSM, Dual Parton Model + precompound.
 test14 ## LowEnergy em (photons and electrons).
 test15 ## Isotope Production
 test16 ## n and p Cross-Sections
