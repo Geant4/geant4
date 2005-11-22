@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneHandler.cc,v 1.28 2005-10-13 18:00:20 allison Exp $
+// $Id: G4VisCommandsSceneHandler.cc,v 1.29 2005-11-22 17:23:52 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
@@ -86,8 +86,7 @@ void G4VisCommandSceneHandlerAttach::SetNewValue (G4UIcommand*,
     return;
   }
 
-  G4SceneList& sceneList =
-    fpVisManager -> SetSceneList ();
+  G4SceneList& sceneList = fpVisManager -> SetSceneList ();
 
   if (sceneList.empty ()) {
     if (verbosity >= G4VisManager::errors) {
@@ -105,12 +104,22 @@ void G4VisCommandSceneHandlerAttach::SetNewValue (G4UIcommand*,
   if (iScene < nScenes) {
     G4Scene* pScene = sceneList [iScene];
     pSceneHandler -> SetScene (pScene);
-    UpdateVisManagerScene(sceneName);
+    // Make sure scene is current...
+    fpVisManager -> SetCurrentScene (pScene);
+    // Refresh viewer, if any (only if auto-refresh)...
+    G4VViewer* pViewer = pSceneHandler -> GetCurrentViewer();
+    if (pViewer && pViewer -> GetViewParameters().IsAutoRefresh()) {
+      pViewer -> SetView ();
+      pViewer -> ClearView ();
+      pViewer -> DrawView ();
+    }
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Scene \"" << sceneName
 	     << "\" attached to scene handler \""
-	     << pSceneHandler -> GetName ()
-	     << "." << G4endl;
+	     << pSceneHandler -> GetName () <<
+	".\n  (You may have to refresh with \"/vis/viewer/flush\" if view"
+	" is not \"auto-refresh\".)"
+	     << G4endl;
     }
   }
   else {
@@ -262,8 +271,19 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand*,
 
   //Create scene handler.
   fpVisManager -> CreateSceneHandler (newName);
-  if (fpVisManager -> GetCurrentSceneHandler () -> GetName () != newName)
+  if (fpVisManager -> GetCurrentSceneHandler () -> GetName () != newName) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
+	" Curious name mismatch."
+	"\n Current name \""
+	     << fpVisManager -> GetCurrentSceneHandler () -> GetName ()
+	     << "\" is not the new name \""
+	     << newName
+	     << "\".\n  Please report to vis coordinator."
+	     << G4endl;
+    }
     return;
+  }
 
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "New scene handler \"" << newName << "\" created." << G4endl;
