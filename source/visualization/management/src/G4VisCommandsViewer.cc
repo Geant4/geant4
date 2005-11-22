@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.52 2005-11-15 16:18:56 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.53 2005-11-22 17:00:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -648,6 +648,53 @@ void G4VisCommandViewerPan::SetNewValue (G4UIcommand* command,
   }
 
   SetViewParameters(currentViewer, vp);
+}
+
+////////////// /vis/viewer/rebuild ///////////////////////////////////////
+
+G4VisCommandViewerRebuild::G4VisCommandViewerRebuild () {
+  G4bool omitable, currentAsDefault;
+  fpCommand = new G4UIcmdWithAString ("/vis/viewer/rebuild", this);
+  fpCommand -> SetGuidance ("Forces rebuild of graphical database.");
+  fpCommand -> SetGuidance 
+    ("By default, acts on current viewer.  \"/vis/viewer/list\""
+     "\nto see possible viewers.  Viewer becomes current.");
+  fpCommand -> SetParameterName ("viewer-name",
+				 omitable = true,
+				 currentAsDefault = true);
+}
+
+G4VisCommandViewerRebuild::~G4VisCommandViewerRebuild () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandViewerRebuild::GetCurrentValue (G4UIcommand*) {
+  G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
+  if (viewer) {
+    return viewer -> GetName ();
+  }
+  else {
+    return "none";
+  }
+}
+
+void G4VisCommandViewerRebuild::SetNewValue (G4UIcommand*, G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4String& rebuildName = newValue;
+  G4VViewer* viewer = fpVisManager -> GetViewer (rebuildName);
+  if (!viewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: Viewer \"" << rebuildName
+	     << "\" not found - \"/vis/viewer/list\" to see possibilities."
+	     << G4endl;
+    }
+    return;
+  }
+
+  viewer->SetNeedKernelVisit(true);
+  SetViewParameters(viewer, viewer->GetDefaultViewParameters());
 }
 
 ////////////// /vis/viewer/refresh ///////////////////////////////////////

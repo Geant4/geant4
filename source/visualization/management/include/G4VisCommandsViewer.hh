@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.hh,v 1.18 2005-10-13 18:06:44 allison Exp $
+// $Id: G4VisCommandsViewer.hh,v 1.19 2005-11-22 17:00:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -130,6 +130,18 @@ private:
   G4double fPanToRight, fPanToUp;
 };
 
+class G4VisCommandViewerReset: public G4VVisCommandViewer {
+public:
+  G4VisCommandViewerReset ();
+  virtual ~G4VisCommandViewerReset ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandViewerReset (const G4VisCommandViewerReset&);
+  G4VisCommandViewerReset& operator = (const G4VisCommandViewerReset&);
+  G4UIcmdWithAString* fpCommand;
+};
+
 class G4VisCommandViewerRefresh: public G4VVisCommandViewer {
 public:
   G4VisCommandViewerRefresh ();
@@ -142,15 +154,15 @@ private:
   G4UIcmdWithAString* fpCommand;
 };
 
-class G4VisCommandViewerReset: public G4VVisCommandViewer {
+class G4VisCommandViewerRebuild: public G4VVisCommandViewer {
 public:
-  G4VisCommandViewerReset ();
-  virtual ~G4VisCommandViewerReset ();
+  G4VisCommandViewerRebuild ();
+  virtual ~G4VisCommandViewerRebuild ();
   G4String GetCurrentValue (G4UIcommand* command);
   void SetNewValue (G4UIcommand* command, G4String newValue);
 private:
-  G4VisCommandViewerReset (const G4VisCommandViewerReset&);
-  G4VisCommandViewerReset& operator = (const G4VisCommandViewerReset&);
+  G4VisCommandViewerRebuild (const G4VisCommandViewerRebuild&);
+  G4VisCommandViewerRebuild& operator = (const G4VisCommandViewerRebuild&);
   G4UIcmdWithAString* fpCommand;
 };
 
