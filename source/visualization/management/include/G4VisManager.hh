@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.42 2005-11-21 05:45:42 tinslay Exp $
+// $Id: G4VisManager.hh,v 1.43 2005-11-22 17:02:04 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,7 +38,7 @@
 // class from G4VisManager, implement the pure virtual function
 // RegisterGraphicsSystems, and instantiate an object of the derived
 // class - for an example see
-// visualization/include/MyVisManager.hh/cc.
+// visualization/include/G4VisExecutive.hh/icc.
 //
 // The recommended way for users to obtain a pointer to the vis
 // manager is with G4VVisManager::GetConcreteInstance (), being always
@@ -194,28 +194,28 @@ public: // With description
   // for representing hits, digis, etc.
 
   void Draw (const G4Circle&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation = G4Transform3D());
 
   void Draw (const G4NURBS&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation = G4Transform3D());
 
   void Draw (const G4Polyhedron&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation = G4Transform3D());
 
   void Draw (const G4Polyline&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation = G4Transform3D());
 
   void Draw (const G4Polymarker&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation = G4Transform3D());
 
   void Draw (const G4Scale&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation = G4Transform3D());
 
   void Draw (const G4Square&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation = G4Transform3D());
 
   void Draw (const G4Text&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation = G4Transform3D());
 
   ////////////////////////////////////////////////////////////////////
   // Now functions that implement the pure virtual functions of
@@ -233,13 +233,13 @@ public: // With description
   // i_mode defaults to 0 by inheritance from G4VVisManager.
 
   void Draw (const G4LogicalVolume&, const G4VisAttributes&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation = G4Transform3D());
 
   void Draw (const G4VPhysicalVolume&, const G4VisAttributes&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation = G4Transform3D());
 
   void Draw (const G4VSolid&, const G4VisAttributes&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation = G4Transform3D());
 
   ////////////////////////////////////////////////////////////////////////
   // Now other pure virtual functions of G4VVisManager...
@@ -297,6 +297,13 @@ public: // With description
   void  GetWindowSizeHint (G4int& xHint, G4int& yHint) const;
   // Note: GetWindowSizeHint information is returned via the G4int& arguments.
   const G4String&              GetXGeometryString          () const;
+  // GetXGeometryString is intended to be parsed by XParseGeometry.
+  // It contains the size information, as in GetWindowSizeHint, but
+  // may also contain the window position, e.g., "600x600-0+200.  The
+  // viewer should use this in preference to GetWindowSizeHint, since
+  // it contains more information.  (The size information in
+  // GetXGeometryString and GetWindowSizeHint is guaranteed to be
+  // identical.)
 
   void SetUserAction (G4VUserVisAction* pVisAction,
 		      const G4VisExtent& = G4VisExtent::NullExtent);
