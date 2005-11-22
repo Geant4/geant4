@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDParticleFilter.cc,v 1.1 2005-11-16 23:04:04 asaim Exp $
+// $Id: G4SDParticleFilter.cc,v 1.2 2005-11-22 21:41:55 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VSensitiveDetector
@@ -52,8 +52,16 @@ G4SDParticleFilter::G4SDParticleFilter(G4String name,
   :G4VSDFilter(name)
 {
   thePdef.clear();
-  thePdef.push_back(G4ParticleTable::GetParticleTable()
-		    ->FindParticle(particleName));
+  G4ParticleDefinition* pd = G4ParticleTable::GetParticleTable()->FindParticle(particleName);
+  if(!pd)
+  {
+    G4String msg = "Particle <";
+    msg += particleName;
+    msg += "> not found.";
+    G4Exception("G4SDParticleFilter::G4SDParticleFilter()",
+                "DetUtil0000",FatalException,msg);
+  }
+  thePdef.push_back(pd);
 }
 
 G4SDParticleFilter::G4SDParticleFilter(G4String name, 
@@ -62,15 +70,28 @@ G4SDParticleFilter::G4SDParticleFilter(G4String name,
 {
   thePdef.clear();
   for ( size_t i = 0; i < particleNames.size(); i++){
-    thePdef.push_back(G4ParticleTable::GetParticleTable()
-		      ->FindParticle(particleNames[i]));
+   G4ParticleDefinition* pd = G4ParticleTable::GetParticleTable()->FindParticle(particleNames[i]);
+   if(!pd)
+   {
+     G4String msg = "Particle <";
+     msg += particleNames[i];
+     msg += "> not found.";
+     G4Exception("G4SDParticleFilter::G4SDParticleFilter()",
+                "DetUtil0000",FatalException,msg);
+   }
+   thePdef.push_back(pd);
   }
 }
 
 G4SDParticleFilter::G4SDParticleFilter(G4String name, 
 		       const std::vector<G4ParticleDefinition*>& particleDef)
   :G4VSDFilter(name), thePdef(particleDef)
-{;}
+{
+  for ( size_t i = 0; i < particleDef.size(); i++){
+    if(!particleDef[i]) G4Exception("G4SDParticleFilter::G4SDParticleFilter()","DetUtil0001",FatalException,
+       "NULL pointer is found in the given particleDef vector.");
+  }
+}
 
 G4SDParticleFilter::~G4SDParticleFilter()
 { 
@@ -89,6 +110,14 @@ void G4SDParticleFilter::add(const G4String& particleName)
 {
   G4ParticleDefinition* pd = 
     G4ParticleTable::GetParticleTable()->FindParticle(particleName);
+  if(!pd)
+  {
+     G4String msg = "Particle <";
+     msg += particleName;
+     msg += "> not found.";
+     G4Exception("G4SDParticleFilter::add()",
+                "DetUtil0002",FatalException,msg);
+  }
   for ( size_t i = 0; i < thePdef.size(); i++){
     if ( thePdef[i] == pd ) return;
   }

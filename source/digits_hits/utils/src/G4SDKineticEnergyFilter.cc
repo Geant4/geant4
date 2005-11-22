@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDKineticEnergyFilter.cc,v 1.3 2005-11-21 20:44:04 asaim Exp $
+// $Id: G4SDKineticEnergyFilter.cc,v 1.4 2005-11-22 21:41:55 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VSensitiveDetector
@@ -52,7 +52,7 @@ G4bool G4SDKineticEnergyFilter::Accept(const G4Step* aStep) const
 {
   G4double kinetic = aStep->GetPreStepPoint()->GetKineticEnergy();
   if ( kinetic < fLowEnergy  ) return FALSE;
-  if ( kinetic > fHighEnergy ) return FALSE;
+  if ( kinetic >= fHighEnergy ) return FALSE;
   return TRUE;
 }
 
