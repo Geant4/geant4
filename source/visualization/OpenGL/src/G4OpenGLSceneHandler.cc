@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.38 2005-09-29 14:27:03 allison Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.39 2005-11-22 16:11:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,7 +100,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
 
   if (fpViewer -> GetViewParameters ().IsMarkerNotHidden ())
     glDisable (GL_DEPTH_TEST);
-  else glEnable (GL_DEPTH_TEST);
+  else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LESS);}
 
   glDisable (GL_LIGHTING);
   glBegin (GL_LINE_STRIP);
@@ -120,7 +120,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
   const G4Colour& c = GetTextColour (text);  // Picks up default if none.
   MarkerSizeType sizeType;
   G4double size = GetMarkerSize (text, sizeType);
-  G4ThreeVector position (*fpObjectTransformation * text.GetPosition ());
+  G4ThreeVector position (text.GetPosition ());
   G4String textString = text.GetText();
 
   G4int font_base = G4OpenGLFontBaseStore::GetFontBase(fpViewer,size);
@@ -175,7 +175,7 @@ void G4OpenGLSceneHandler::AddCircleSquare
   
   if (fpViewer -> GetViewParameters ().IsMarkerNotHidden ())
     glDisable (GL_DEPTH_TEST);
-  else glEnable (GL_DEPTH_TEST);
+  else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LESS);}
   
   glDisable (GL_LIGHTING);
   
@@ -400,7 +400,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   glGetFloatv (GL_COLOR_CLEAR_VALUE, clear_colour);
 
   G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVA);
-  
+
   switch (drawing_style) {
   case (G4ViewParameters::hlhsr):
     // Set up as for hidden line removal but paint polygon faces later...
@@ -411,7 +411,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     glStencilFunc (GL_ALWAYS, 0, 1);
     glStencilOp (GL_INVERT, GL_INVERT, GL_INVERT);
     glEnable (GL_DEPTH_TEST);
-    glDepthFunc (GL_LESS);
+    glDepthFunc (GL_LEQUAL);
     if (materialColour[3] < 1.) {
       // Transparent...
       glDisable (GL_CULL_FACE);
@@ -427,7 +427,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     break;
   case (G4ViewParameters::hsr):
     glEnable (GL_DEPTH_TEST);
-    glDepthFunc (GL_LESS);    
+    glDepthFunc (GL_LEQUAL);    
     if (materialColour[3] < 1.) {
       // Transparent...
       glDepthMask (0);  // Make depth buffer read-only.
@@ -447,7 +447,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   case (G4ViewParameters::wireframe):
   default:
     glEnable (GL_DEPTH_TEST);
-    glDepthFunc (GL_ALWAYS);    
+    glDepthFunc (GL_LEQUAL);    //??? was GL_ALWAYS
     glDisable (GL_CULL_FACE);
     glDisable (GL_LIGHTING);
     glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
@@ -531,7 +531,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 	glEnable (GL_LIGHTING);
       }
       glEnable (GL_DEPTH_TEST);
-      glDepthFunc (GL_LESS);    
+      glDepthFunc (GL_LEQUAL);    
       if (materialColour[3] < 1.) {
 	// Transparent...
 	glDepthMask (0);  // Make depth buffer read-only.
@@ -610,7 +610,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 		    vertex[edgeCount].z());
       }
       glEnd ();
-      glDepthFunc (GL_LESS);   // Revert for next facet.
+      glDepthFunc (GL_LEQUAL);   // Revert for next facet.
       glBegin (GL_QUADS);      // Ready for next facet.  GL
 			       // says it ignores incomplete
 			       // quadrilaterals, so final empty
