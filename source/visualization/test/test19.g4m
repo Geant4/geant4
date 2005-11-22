@@ -361,7 +361,7 @@
 /vis/viewer/refresh
 /vis/viewer/update
 #
-/vis/sceneHandler/create RayTracer
+/vis/sceneHandler/create RayTracerX
 /vis/viewer/create
 /vis/viewer/set/viewpointThetaPhi 30 30
 /vis/viewer/refresh
