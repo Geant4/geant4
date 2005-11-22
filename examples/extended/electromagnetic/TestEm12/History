@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2005-11-14 14:37:26 gcosmo Exp $
+$Id: History,v 1.5 2005-11-22 16:48:28 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+22-11-05 mma (testem12-V07-01-04)
+- update README for OpenScientist
      
 14-11-05 Gabriele Cosmo (testem12-V07-01-03)
 - Migration to <sstream> for HistoMessenger.
