@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.53 2005-11-21 21:46:53 asaim Exp $
+// $Id: G4Transportation.cc,v 1.54 2005-11-23 16:07:16 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -157,7 +157,8 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
   // Get initial Energy/Momentum of the track
   //
-  const G4DynamicParticle*  pParticle  = track.GetDynamicParticle() ;
+  const G4DynamicParticle*    pParticle  = track.GetDynamicParticle() ;
+  const G4ParticleDefinition* pParticleDef   = pParticle->GetDefinition() ;
   G4ThreeVector startMomentumDir       = pParticle->GetMomentumDirection() ;
   G4ThreeVector startPosition          = track.GetPosition() ;
 
@@ -180,8 +181,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
   // Is the particle charged ?
   //
-  G4ParticleDefinition* pParticleDef   = pParticle->GetDefinition() ;
-  G4double              particleCharge = pParticleDef->GetPDGCharge() ; 
+  G4double              particleCharge = pParticle->GetCharge() ; 
 
   fGeometryLimitedStep = false ;
   // fEndGlobalTimeComputed = false ;
