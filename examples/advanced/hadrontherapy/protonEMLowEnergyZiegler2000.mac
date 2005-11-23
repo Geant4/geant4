@@ -33,7 +33,7 @@
 /physics/addPhysics ion-LowE-ziegler2000
 
 /run/initialize
-/run/beamOn 3000000
+/run/beamOn 300
 
 
 

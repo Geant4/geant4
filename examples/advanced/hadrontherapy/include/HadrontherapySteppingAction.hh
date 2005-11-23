@@ -42,8 +42,6 @@
 #include "G4EventManager.hh"
 #include "G4ios.hh"
 #include "globals.hh"
-#include <iostream.h>
-
 
 class HadrontherapyRunAction;
 class HadrontherapySteppingMessenger;

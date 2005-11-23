@@ -90,9 +90,6 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
   
   if (matrix)
     {  
-      std::ofstream ofs;    	
-      ofs.open("EnergyDeposit2MTest3.out");  
-      {
 	for(G4int l = 0; l < numberVoxelZ; l++) 
 	  {
 	    k = l;
@@ -106,9 +103,7 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
 		    i =  n* numberVoxelZ * numberVoxelY + j;
 		    if(matrix[i] != 0)
 		      {	
-			ofs << n <<'\t'<< m <<'\t'<<
-			  k<<'\t'<<matrix[i]<<G4endl;
-			
+					
 #ifdef G4ANALYSIS_USE 	
 			HadrontherapyAnalysisManager* analysis = 
 			  HadrontherapyAnalysisManager::getInstance();
@@ -119,8 +114,5 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
 		  }       
 	      }
 	  }
-	
-      	ofs.close();  
-      }
     }
 }

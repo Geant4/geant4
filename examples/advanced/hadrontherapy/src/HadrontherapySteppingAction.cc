@@ -38,7 +38,6 @@
 #include "G4TrackVector.hh"
 #include "HadrontherapySteppingAction.hh"
 #include "G4ios.hh"
-#include <iomanip.h>
 #include "G4SteppingManager.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"

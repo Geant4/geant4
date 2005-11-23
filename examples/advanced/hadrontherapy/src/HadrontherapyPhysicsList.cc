@@ -62,8 +62,6 @@
 #include "HadrontherapyMuonStandard.hh"
 #include "HadrontherapyDecay.hh"
 
-
-
 HadrontherapyPhysicsList::HadrontherapyPhysicsList(): G4VModularPhysicsList(),
 						      electronIsRegistered(false), 
 						      positronIsRegistered(false), 
