@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.12 2005-11-23 09:22:11 guatelli Exp $
+$Id: History,v 1.13 2005-11-23 09:43:46 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,8 @@ $Id: History,v 1.12 2005-11-23 09:22:11 guatelli Exp $
 
                       Category History file
                       ---------------------
+23th November 2005 Susanna Guatelli (radioprotection-V07-01-02)
+- Ions introduced
 
 23th November 2005 Susanna Guatelli (radioprotection-V07-01-01)
 - Deleted warning due to standard C++ libraries concerning reading 
