@@ -21,10 +21,12 @@
 // ********************************************************************
 //
 // CLASS DESCRIPTION
-// G4CascadeInterface defines an interface to HETC and INUCL 
-// models of an medium energy (~ 0.5 - 5 GeV) intra-nuclear transport.
+// G4ElasticCascadeInterface defines an interface to INUCL 
+// models of an medium energy (~ 0.5 - 10 GeV) intra-nuclear transport.
+// Elastic reaction is forced in this interface
 // If you have any questions, please contact 
-// package writer aatos.heikkinen@cern.ch.
+// package writer aatos.heikkinen@cern.ch., 
+// Also coded by Pekka Kaitataniemi, Helsinki Institute of Physics
 // --------------------------------------------------------------------
 #ifndef G4ELASTICCASCADEINTERFACE_H
 #define G4ELASTICCASCADEINTERFACE_H 1
