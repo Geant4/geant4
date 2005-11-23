@@ -19,10 +19,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByParticleID.cc,v 1.2 2005-11-21 05:44:44 tinslay Exp $
+// $Id: G4TrajectoryDrawByParticleID.cc,v 1.3 2005-11-23 05:19:23 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Jane Tinslay October 2005
+// Jane Tinslay, John Allison, Joseph Perl November 2005
 
 #include "G4TrajectoryDrawByParticleID.hh"
 #include "G4Polyline.hh"
@@ -31,13 +31,31 @@
 #include "G4VisAttributes.hh"
 #include "G4VTrajectory.hh"
 #include "G4VVisManager.hh"
-/*
+#include <sstream>
+
 G4TrajectoryDrawByParticleID::G4TrajectoryDrawByParticleID(const G4String& name)
-  :G4VTrajectoryDrawer(name)
-  ,fDefault(G4Color::Grey)
+  :G4VTrajectoryModel(name)
+  ,fDefault(G4Color::Grey())
 {}
 
 G4TrajectoryDrawByParticleID::~G4TrajectoryDrawByParticleID() {}
+
+void
+G4TrajectoryDrawByParticleID::SetDefault(const G4String& colour)
+{
+  G4Colour myColour(G4Colour::White());      
+
+  // Will not modify myColour if colour key does not exist  
+  if (!G4Colour::GetColour(colour, myColour)) {
+    std::ostringstream o;
+    o << "G4Colour with key "<<colour<<" does not exist ";
+    G4Exception
+      ("G4TrajectoryDrawByParticleID::SetDefault(const G4String& colour)",
+       "NonExistentColour", JustWarning, o.str().c_str());
+  }
+
+  SetDefault(myColour);
+}
 
 void
 G4TrajectoryDrawByParticleID::SetDefault(const G4Colour& colour)
@@ -48,45 +66,40 @@ G4TrajectoryDrawByParticleID::SetDefault(const G4Colour& colour)
 void
 G4TrajectoryDrawByParticleID::Set(const G4String& particle, const G4String& colour)
 {
-  map<G4String, G4Colour>::iterator iter = fMap.find(particle);
+  G4Colour myColour(fDefault);
+
+ // Will not modify myColour if colour key does not exist  
+
+  if (!G4Colour::GetColour(colour, myColour)) {
+    std::ostringstream o;
+    o << "G4Colour with key "<<colour<<" does not exist ";
+    G4Exception
+      ("G4TrajectoryDrawByParticleID::Set(const G4String& particle, const G4String& colour)",
+       "NonExistentColour", JustWarning, o.str().c_str());
+  }
+
+  Set(particle, myColour);
+}
+
+void
+G4TrajectoryDrawByParticleID::Set(const G4String& particle, const G4Colour& colour)
+{
+  std::map<G4String, G4Colour>::iterator iter = fMap.find(particle);
   
   if (iter == fMap.end()) {
-    G4Colour myColour(fDefault);
-
-    if (!G4Colour::GetColour(colour, myColour)) {
-      std::ostringstream o;
-      o << "Failed to retrieve colour with key "<<colour<<" Using default " <<myColour;
-      G4Exception
-	("G4TrajectoryDrawByParticleID::Set(const G4String& particle, const G4String& colour)",
-	 "MissingColourKey", JustWarning, o.str().c_str());
-    }
-
-    fMap[particle] = myColour;
+    fMap[particle] = colour;
   }
   else {
     std::ostringstream o;
-    o << "Particle "<<particle<<" already has colour assigned ";
+    o << "Particle "<<particle<<" already has colour "<<colour<<" assigned.";
     G4Exception
       ("G4TrajectoryDrawByParticleID::Set(const G4String& particle, const G4String& colour)",
        "ParticleColourExists", JustWarning, o.str().c_str());
   }
 }
+
 void
-G4TrajectoryDrawByParticleID::Set(const G4String& particle, const G4Colour& colour)
-{
-  map<G4String, G4Colour>::iterator iter = fMap.find(particle);
-  
-  if (iter == fMap.end()) fMap[particle] = colour;
-  else {
-    std::ostringstream o;
-    o << "Particle "<<particle<<" already has colour assigned ";
-    G4Exception
-      ("G4TrajectoryDrawByParticleID::Set(const G4String& particle, const G4Colour& colour)",
-       "ParticleColourExists", JustWarning, o.str().c_str());
-  }
-}
-void
-G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& traj, G4int i_mode) 
+G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& traj, G4int i_mode) const
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if (!pVVisManager) return;
@@ -110,8 +123,8 @@ G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& traj, G4int i_mode)
     G4Colour colour(fDefault);
     G4String particle = traj.GetParticleName();
 
-    map<G4String, G4Colour>::iterator iter = fMap.find(particle);
-    if (iter != fMap.end()) colour = fMap[particle];
+    map<G4String, G4Colour>::const_iterator iter = fMap.find(particle);
+    if (iter != fMap.end()) colour = iter->second;
 
     G4VisAttributes trajectoryLineAttribs(colour);
     trajectoryLine.SetVisAttributes(&trajectoryLineAttribs);
@@ -138,15 +151,14 @@ G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& traj, G4int i_mode)
 }
 
 void
-G4TrajectoryDrawByParticleID::Print() const
+G4TrajectoryDrawByParticleID::Print(std::ostream& ostr) const
 {
-  G4cout<<"G4TrajectoryDrawByParticleID drawer with name " <<GetName()<<G4endl;
-  G4cout<<"Trajectory colour scheme: "<<G4endl;
+  ostr<<"G4TrajectoryDrawByParticleID model "<< Name() <<" colour scheme: "<<std::endl;
+  std::map<G4String, G4Colour>::const_iterator iter = fMap.begin();
 
-  map<G4String, G4Colour>::const_iterator iter = fMap.begin();
+  //jane fixme - improve formatting
   while (iter != fMap.end()) {
-    G4cout<<"Particle, colour: "<<iter->first<<" : "<<iter->second<<G4endl;
+    ostr<<"         "<< iter->first <<" : "<< iter->second <<G4endl;
     iter++;
   }
 }
-*/

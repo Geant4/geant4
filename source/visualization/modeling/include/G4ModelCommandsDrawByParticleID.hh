@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ModelCommandsDrawByCharge.hh,v 1.2 2005-11-23 05:19:23 tinslay Exp $
+// $Id: G4ModelCommandsDrawByParticleID.hh,v 1.1 2005-11-23 05:19:23 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -28,24 +28,24 @@
 // Trajectory model commands.
 // Class Description - End:
 
-#ifndef G4MODELCOMMANDDRAWBYCHARGE_HH
-#define G4MODELCOMMANDDRAWBYCHARGE_HH
+#ifndef G4MODELCOMMANDDRAWBYPARTICLEID_HH
+#define G4MODELCOMMANDDRAWBYPARTICLEID_HH
 
 #include "G4String.hh"
 #include "G4VModelCommand.hh"
 
-class G4TrajectoryDrawByCharge;
+class G4TrajectoryDrawByParticleID;
 class G4UIcmdWithAString;
 class G4UIcommand;
 
 // Command to set positive/negative/neutral trajectory colouring through a string
-class G4ModelCommandDrawByChargeSet : public G4VModelCommand<G4TrajectoryDrawByCharge> {
+class G4ModelCommandDrawByParticleIDSet : public G4VModelCommand<G4TrajectoryDrawByParticleID> {
 
 public: // With description
 
-  G4ModelCommandDrawByChargeSet(G4TrajectoryDrawByCharge* model, const G4String& placement);
+  G4ModelCommandDrawByParticleIDSet(G4TrajectoryDrawByParticleID* model, const G4String& placement);
 
-  virtual ~G4ModelCommandDrawByChargeSet();
+  virtual ~G4ModelCommandDrawByParticleIDSet();
 
   void SetNewValue(G4UIcommand* command, G4String newValue);
 
@@ -55,13 +55,46 @@ private:
 
 };
 
-// Command to set positive/negative/neutral trajectory colouring through G4Colour components
-class G4ModelCommandDrawByChargeSetRGBA : public G4VModelCommand<G4TrajectoryDrawByCharge> {
+// Command to set default positive/negative/neutral trajectory colouring through G4Colour components
+class G4ModelCommandDrawByParticleIDSetRGBA : public G4VModelCommand<G4TrajectoryDrawByParticleID> {
 
 public:
 
-  G4ModelCommandDrawByChargeSetRGBA(G4TrajectoryDrawByCharge* model, const G4String& placement) ;
-  virtual ~G4ModelCommandDrawByChargeSetRGBA();
+  G4ModelCommandDrawByParticleIDSetRGBA(G4TrajectoryDrawByParticleID* model, const G4String& placement) ;
+  virtual ~G4ModelCommandDrawByParticleIDSetRGBA();
+
+  void SetNewValue(G4UIcommand* command, G4String newValue);
+
+private:
+
+  G4UIcmdWithAString* fpCommand;
+
+};
+
+// Command to set positive/negative/neutral trajectory colouring through a string
+class G4ModelCommandDrawByParticleIDSetDefault : public G4VModelCommand<G4TrajectoryDrawByParticleID> {
+
+public: // With description
+
+  G4ModelCommandDrawByParticleIDSetDefault(G4TrajectoryDrawByParticleID* model, const G4String& placement);
+
+  virtual ~G4ModelCommandDrawByParticleIDSetDefault();
+
+  void SetNewValue(G4UIcommand* command, G4String newValue);
+
+private:
+
+  G4UIcmdWithAString* fpCommand;
+
+};
+
+// Command to set default positive/negative/neutral trajectory colouring through G4Colour components
+class G4ModelCommandDrawByParticleIDSetDefaultRGBA : public G4VModelCommand<G4TrajectoryDrawByParticleID> {
+
+public:
+
+  G4ModelCommandDrawByParticleIDSetDefaultRGBA(G4TrajectoryDrawByParticleID* model, const G4String& placement) ;
+  virtual ~G4ModelCommandDrawByParticleIDSetDefaultRGBA();
 
   void SetNewValue(G4UIcommand* command, G4String newValue);
 
