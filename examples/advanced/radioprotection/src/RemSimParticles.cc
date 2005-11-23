@@ -70,7 +70,8 @@ void RemSimParticles::ConstructParticle()
   G4PionZero::PionZeroDefinition();
   G4KaonPlus::KaonPlusDefinition();
   G4KaonMinus::KaonMinusDefinition();
-    
+  G4Eta::EtaDefinition();
+  G4EtaPrime::EtaPrimeDefinition();
   // **********//
   //  barions  //
   // **********//

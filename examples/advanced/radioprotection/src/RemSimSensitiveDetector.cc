@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimSensitiveDetector.cc,v 1.10 2005-09-08 06:56:18 guatelli Exp $
+// $Id: RemSimSensitiveDetector.cc,v 1.11 2005-11-23 09:22:11 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
@@ -53,18 +53,13 @@ G4bool RemSimSensitiveDetector::ProcessHits(G4Step* aStep,
   G4double edep = aStep -> GetTotalEnergyDeposit();
   if(edep==0.) return false;
 
-  G4int i = ROhist -> GetReplicaNumber();
-
-
 #ifdef G4ANALYSIS_USE
   RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
- 
+  G4int i = ROhist -> GetReplicaNumber();
   // Energy deposit in the phantom
   analysis -> energyDepositStore(i,edep/MeV);
-  //  G4cout << "energy deposit:"<< i <<","<< edep/MeV << G4endl;
   G4double xx = aStep -> GetPreStepPoint() -> GetPosition().x();
   G4double yy = aStep -> GetPreStepPoint() -> GetPosition().y();
-  //G4double zz = aStep -> GetPreStepPoint() -> GetPosition().z();
 
   // Project the hits of primary and secondary particles
   // in the phantom in the plane x, y
