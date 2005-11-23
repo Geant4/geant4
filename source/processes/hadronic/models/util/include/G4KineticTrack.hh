@@ -328,8 +328,7 @@ inline void G4KineticTrack::UpdateTrackingMomentum(const G4ThreeVector & aMoment
 
 inline G4double G4KineticTrack::GetActualMass() const
 {
- G4double      theMass = std::sqrt(std::abs(the4Momentum.mag2()));
- return        theMass;
+  return std::sqrt(std::abs(the4Momentum.mag2()));
 }
 
 
