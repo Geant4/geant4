@@ -27,6 +27,7 @@
 
 #include "globals.hh"
 #include "G4DynamicParticle.hh"
+/*
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
 #include "G4Lambda.hh"
@@ -51,7 +52,7 @@
 #include "G4PionMinus.hh"
 #include "G4KaonPlus.hh"
 #include "G4KaonMinus.hh"
-
+*/
 #define MyPi      3.141593
 #define MbToGeV2  2.568
 #define GeV2ToMb  0.38939

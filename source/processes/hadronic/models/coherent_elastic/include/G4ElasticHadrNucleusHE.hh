@@ -21,10 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.hh,v 1.15 2005-06-10 13:28:07 gcosmo Exp $
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.16 2005-11-23 10:34:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ElasticHadrNucleusHe.hh
+
+//  The generator of high energy hadron-nucleus elastic scattering
+//  The hadron kinetic energy T > 1 GeV
+//  N.  Starkov 2003.
+
+//  19.05.04 Variant for G4 6.1: The 'ApplyYourself' was changed
+
+//  November 2005 - The HE elastic scattering on proton is added
+//  N. Starkov
 
 #ifndef G4ElasticHadrNucleusHE_h
 #define G4ElasticHadrNucleusHE_h 1
@@ -70,16 +79,14 @@
      {
        G4int k;
 
-          hadrName         = t.hadrName;
-          nuclAtomicNumber = t.nuclAtomicNumber;
-          for(k = 0; k<ONE*AreaNumb; k++)
-	       TableE[k] = t.TableE[k];
+       hadrName         = t.hadrName;
+       nuclAtomicNumber = t.nuclAtomicNumber;
+       for(k = 0; k<ONE*AreaNumb; k++) TableE[k] = t.TableE[k];
 
-          for(k = 0; k<ONQ2; k++)
-	       TableQ2[k] = t.TableQ2[k];
+       for(k = 0; k<ONQ2; k++) TableQ2[k] = t.TableQ2[k];
 
-          for(k = 0; k< ONQ2XE*AreaNumb; k++)
-	    TableCrossSec[k] = t.TableCrossSec[k];
+       for(k = 0; k< ONQ2XE*AreaNumb; k++)
+                TableCrossSec[k] = t.TableCrossSec[k];
      }
 
      ElasticData & operator=(const ElasticData &t)
@@ -90,15 +97,29 @@
           hadrName         = t.hadrName;
           nuclAtomicNumber = t.nuclAtomicNumber;
           for(k = 0; k<ONE*AreaNumb; k++)
-	       TableE[k] = t.TableE[k];
+	              TableE[k] = t.TableE[k];
 
-          for(k = 0; k<ONQ2; k++)
-	       TableQ2[k] = t.TableQ2[k];
+          for(k = 0; k<ONQ2; k++) TableQ2[k] = t.TableQ2[k];
 
           for(k = 0; k< ONQ2XE*AreaNumb; k++)
-	    TableCrossSec[k] = t.TableCrossSec[k];
+	       TableCrossSec[k] = t.TableCrossSec[k];
          }
      return *this;
+     }
+
+     void Clean()
+     {
+       G4int k;
+
+       hadrName         = "Nothing";
+       nuclAtomicNumber = 0;
+       for(k = 0; k<ONE*AreaNumb; k++) TableE[k] = 0;
+
+       for(k = 0; k<ONQ2; k++) TableQ2[k] = 0;
+
+       for(k = 0; k< ONQ2XE*AreaNumb; k++) TableCrossSec[k] = 0;
+
+//     return *this;
      }
    };
 
@@ -121,11 +142,15 @@
          G4double RandomElastic1( const G4DynamicParticle *   aHadron,
                                   const ElasticData       *   aData);
 
+         void  GetHadronNucleusData(G4DynamicParticle * aParticle,
+                                    G4Nucleus         * aNucleus,
+                                    ElasticData & ElD );
  private:
+ public:
          G4int   ReadOfData(G4ParticleDefinition * aParticle,
                             G4Nucleus            * aNucleus);
 
-         G4String GetHadronName(const G4DynamicParticle * aHadron);
+//         G4String GetHadronName(const G4DynamicParticle * aHadron);
 
          G4double GetQ2limit(G4double R1);
 
@@ -141,45 +166,59 @@
          G4double InterPol(G4double X1, G4double X2, G4double X3,
                            G4double Y1, G4double Y2, G4double Y3, 
                            G4double X);
-//    +++++++++++++++++++++++++++++++++++++++++++++++++++++
-   G4double Factorial1(G4int N)
+         G4double HadronNucleusQ2(G4DynamicParticle * aHadron,
+                                  G4Nucleus         & aNucleus);
+
+//  ======================================================
+      G4DynamicParticle  aHad;
+
+      G4float  GetFt(G4double T);
+      G4float  GetDistrFun(G4double Q2);
+      G4double GetQ2(G4double Ran);
+      G4double HadronProtonQ2(G4DynamicParticle * aHadron);
+                                                                          
+      G4int     HadrCode;
+      G4String  HadronName;
+//  ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     G4double Factorial1(G4int N)
      {
-        G4double  Res;
-                  Res = 1;
-              if(N == 0) return Res;
+        G4double  Res=1;
 
-          if(N < 100) for(G4int M = 1; M<=N; M++)  Res = Res*M;         
+        if(N == 0) return Res;
 
-           else  Res = 2.50662827*std::exp(static_cast<double>(-N-1))*
-                         std::pow(static_cast<double>(N+1),N+0.5)*
-                         (1+1/12/(N+1)+1/288/(N+1)/(N+1)-
-                         139/51840/(N+1)/(N+1)/(N+1)-
-                         571/2488320/(N+1)/(N+1)/(N+1)/(N+1));
-              return Res;
+        if(N < 100) for(G4int M = 1; M<=N; M++)  Res = Res*M;         
+
+        else  Res = 2.50662827*
+                       std::exp(static_cast<double>(-N-1))*
+                       std::pow(static_cast<double>(N+1),N+0.5)*
+                       (1+1/12/(N+1)+1/288/(N+1)/(N+1)-
+                        139/51840/(N+1)/(N+1)/(N+1)-
+                        571/2488320/(N+1)/(N+1)/(N+1)/(N+1));
+        return Res;
      }
 //     ++++++++++++++++++++++++++++++++++++++++++++++++++
-         std::vector<ElasticData> SetOfElasticData;
+     std::vector<ElasticData> SetOfElasticData;
 
-         G4IonTable                * MyIonTable;
-         G4DiffElasticHadrNucleus    aDiffElHadNcls;
-//         G4HadFinalState  FinState; 
+     G4IonTable                * MyIonTable;
+     G4DiffElasticHadrNucleus    aDiffElHadNcls;
+//     G4HadFinalState  FinState; 
 
-         G4int     Nstep,         // The number of steps on Q2
-                   iKindWork,     // 
-                   iContr,        //
-                   iPoE;          // The number of steps on E
-         G4int     iTypeWork;
-         G4double  aNucleon;  //, 
-//                 * pTableCrSec,   //  The array of distr. func.
-//                                  //  at all energies
-//                 * pTableE;       //  The array of E values
-         G4double  iQ2[ONQ2],     //  The array of Q2 values
-                   pTableCrSec[ONQ2XE*AreaNumb],
-                   pTableE[ONE*AreaNumb],
-                   iIntgr[ONQ2],  //  The array of distr. func.   
+     G4int     Nstep,         // The number of steps on Q2
+               iKindWork,     // 
+               iContr,        //
+               iPoE;          // The number of steps on E
+     G4int     iTypeWork;
+     G4double  aNucleon;
+//              ,* pTableCrSec,   //  The array of distr. func.
+//                              //  at all energies
+//             * pTableE;       //  The array of E values
+     G4double  iQ2[ONQ2],     //  The array of Q2 values
+               pTableCrSec[ONQ2XE*AreaNumb],
+               pTableE[ONE*AreaNumb],
+               iIntgr[ONQ2],  //  The array of distr. func.   
                                   //    at one energy
-                   Factorials1[250]; // The array for factorials
-         G4double  dEbeg1, dEend1, dQ2, maxQ2;
+               Factorials1[250]; // The array for factorials
+     G4double  dEbeg1, dEend1, dQ2, maxQ2;
 
   };     //   The end of the class description
 

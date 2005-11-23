@@ -21,9 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffElasticHadrNucleus.hh,v 1.10 2005-06-10 13:23:42 gcosmo Exp $
+// $Id: G4DiffElasticHadrNucleus.hh,v 1.11 2005-11-23 10:34:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+
+//  High energy hadron-nucleus elastic scattering
+//  Kinetic energy T > 1 GeV
+//  N. Starkov 2003.
+
+//  November 2005 - The HE elastic scattering on proton is added
+//  N. Starkov
+
 #ifndef G4DiffElasticHadrNucleus_h
 #define G4DiffElasticHadrNucleus_h 1
 
@@ -67,7 +75,17 @@ class G4DiffElasticHadrNucleus: public //G4HadronValues
     G4double GetIntegrandS(G4int  Anucleus, G4double b, G4int Kind);
 
     void     GetNucleusParameters(G4Nucleus   * aNucleus);
+  
+    G4double HadronProtonDiffCrSec(G4double Q2);
 
+    void     GetKinematics(const G4DynamicParticle * aHadron);
+
+    void     GetParametersHP(const G4DynamicParticle * aHadron);
+
+    G4double LineInterpol(G4double p0, G4double p1,
+                          G4double c1, G4double c1, 
+                          G4double p);
+//  ====================================================
    G4double MyJ0(G4double x)
    {
      G4double x1, x2, x3, x4, x5, x6, x7, f0, th0, res;
@@ -104,7 +122,7 @@ class G4DiffElasticHadrNucleus: public //G4HadronValues
        }
      return res;
    }
-
+//  +++++++++++++++++++++++++++++++++++++++++++++
    G4double MyI0(G4double x)
    {
      G4double p1=1.0,       p2=3.5156229, p3=3.0899424,
@@ -139,7 +157,7 @@ class G4DiffElasticHadrNucleus: public //G4HadronValues
           G4double  Fact1 = 1;
        if ((N>1) & (N>=M)) 
           {
-              Fact1 = Factorials[N]/Factorials[M]/
+            Fact1 = Factorials[N]/Factorials[M]/
                       Factorials[N-M];
           }
         return Fact1;
@@ -148,69 +166,78 @@ class G4DiffElasticHadrNucleus: public //G4HadronValues
 // +++++++++++++++++++++++++++++++++++++++++++++++++++
    G4double Factorial(G4int N)
      {
-        G4double  Res;
-                  Res = 1;
-              if(N == 0) return Res;
+      G4double  Res=1;
 
-          if(N < 100) for(G4int M = 1; M<=N; M++)  Res = Res*M;         
+        if(N == 0) return Res;
 
-          if(N >= 100)  Res = 2.50662827*std::exp(static_cast<double>(-N-1))*
+        if(N < 100) for(G4int M = 1; M<=N; M++)  Res = Res*M;         
+
+        if(N >= 100)  Res = 2.50662827*
+                         std::exp(static_cast<double>(-N-1))*
                          std::pow(static_cast<double>(N+1),N+0.5)*
                          (1+1/12/(N+1)+1/288/(N+1)/(N+1)-
                          139/51840/(N+1)/(N+1)/(N+1)-
                          571/2488320/(N+1)/(N+1)/(N+1)/(N+1));
 
-              return Res;
-            }
+      return Res;
+    }
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++
    void Factors()
-    {
+   {
      G4int ii, ll, mm;
      G4double Sum1, Fac1, Fac3, Sum3;
 
           Factorials[0] = 1;
 
      for( ii = 1; ii<250; ii++)
-        {
-          if(ii >= 100) Mnoj[ii] = 3.03;  //  there is the saturation
-          else
+     {
+       if(ii >= 100) Mnoj[ii] = 3.03;  //  there is the saturation
+       else
+       {
+         Sum1 = 0;
+         Fac1 = 1;
+         Factorials[ii] = Factorial(ii);
+
+         for( ll = 0; ll<=ii; ll++)
+         {
+           Fac1 = binom(ii,ll);
+           Fac3 = 1;
+           Sum3 = 1;
+           for( mm = 1; mm<=ii-ll; mm++)
            {
-           Sum1 = 0;
-           Fac1 = 1;
-
-               Factorials[ii] = Factorial(ii);
-
-           for( ll = 0; ll<=ii; ll++)
-             {
-              Fac1 = binom(ii,ll);
-
-                 Fac3 = 1;
-                 Sum3 = 1;
-                 for( mm = 1; mm<=ii-ll; mm++)
-                   {
-                     Fac3 = binom(ii-ll,mm);
-                     Sum3 = Sum3 + 1/Fac3;
-                   }  //  mm
-                  Sum1 = Sum1 + Sum3/Fac1;
-             }      //  ll
-             Mnoj[ii] = Sum1;
-           }       //  else
-         }           //  ii
-             Mnoj[0] = 1;
-
+             Fac3 = binom(ii-ll,mm);
+             Sum3 = Sum3 + 1/Fac3;
+           }  //  mm
+         Sum1 = Sum1 + Sum3/Fac1;
+         }      //  ll
+       Mnoj[ii] = Sum1;
+       }       //  else
+     }           //  ii
+   Mnoj[0] = 1;
   }   //   Factors
 //  --------------------------------------------------------
+  public:
 
-     G4double Mnoj[250], Factorials[250];
-     G4double ReIntegrand[1000], ImIntegrand[1000], Thick[1000];
-     G4double rAfm, rAGeV, stepB, MomentumCMN;
+  G4double  SigTot, Slope, ReOnIm, HdrE, ConstU, Q2;
+  G4double  ProtonM, HadronM, HadronE, Sh, PM2, HM2;
+
+  G4double  EcmP, EcmH, Kcm, CosCM, SqrtS, MaxT, FmaxT, DsigDt;
+  G4double  Slope1, Slope2, Coeff1, Coeff2, IntConst, MaxTR;
+  G4double  Slope0, Coeff0;
+  G4int     NumbPointsB, NumbPointsT, HadrCode;
+  G4String  HadronName;
+
+  G4double  Mnoj[250], Factorials[250];
+  G4double  ReIntegrand[1000], ImIntegrand[1000], Thick[1000];
+  G4double  rAfm, rAGeV, stepB, MomentumCMN, MomentumH;
 
   public:
     
-     G4double  R1, R2, Pnucl, Aeff, AIm, ARe, Dem, DIm, InCoh, InCohI;
-     G4double  r0, r01, rAmax;
-     G4int     NpointsB;
+  G4double  R1, R2, Pnucl, Aeff, AIm, ARe, Dem, DIm, InCoh, InCohI;
+  G4double  r0, r01, rAmax;
+  G4double  BoundaryP[7], BoundaryTL[7], BoundaryTG[7];
+  G4int     NpointsB, HadrCodes[7], Intern;
   };
 
 #endif
