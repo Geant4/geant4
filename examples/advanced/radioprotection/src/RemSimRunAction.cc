@@ -28,8 +28,7 @@
 //    *******************************
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
-//
-// $Id: RemSimRunAction.cc,v 1.12 2005-09-08 06:56:18 guatelli Exp $
+// $Id: RemSimRunAction.cc,v 1.13 2005-11-23 08:49:10 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -43,8 +42,6 @@
 #include "G4RunManager.hh"
 #include "G4ios.hh"
 #include "RemSimRunAction.hh"
-#include <fstream>
-#include <strstream>
 
 RemSimRunAction::RemSimRunAction()
 {

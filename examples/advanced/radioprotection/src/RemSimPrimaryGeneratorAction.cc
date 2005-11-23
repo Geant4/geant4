@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimPrimaryGeneratorAction.cc,v 1.12 2005-09-08 06:56:18 guatelli Exp $// Author: Susanna Guatelli, guatelli@ge.infn.it
+// $Id: RemSimPrimaryGeneratorAction.cc,v 1.13 2005-11-23 08:49:10 guatelli Exp $// Author: Susanna Guatelli, guatelli@ge.infn.it
 
 #include "RemSimPrimaryGeneratorAction.hh"
 #include "RemSimPrimaryGeneratorMessenger.hh"
@@ -35,7 +35,7 @@
 #include "RemSimAnalysisManager.hh"
 #endif
 #include <fstream>
-#include <strstream>
+#include <sstream>
 #include "Randomize.hh"
 
 RemSimPrimaryGeneratorAction::RemSimPrimaryGeneratorAction()
@@ -91,8 +91,23 @@ void RemSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
        }
 
      G4String particleName = particleGun -> GetParticleDefinition() -> GetParticleName();	 
-     if (particleName == "alpha") n = 4;
-     else{ if (particleName == "proton") n = 1 ;}
+   
+  if (particleName == "alpha") n = 4;
+  else {
+    if (particleName == "IonC12") n = 12;
+    else
+      { if (particleName == "IonSi28") n = 28;
+      else {
+        if (particleName == "IonFe52") n = 52;
+	else {
+	  if (particleName == "IonO16") n = 16;
+	  else {
+	    if (particleName == "proton") n = 1 ;
+	  }
+	}
+      }
+      }
+  }
      particleGun -> SetParticleEnergy((*energies)[j] * n);    
  }
  
@@ -131,12 +146,9 @@ void RemSimPrimaryGeneratorAction::Read(G4String fileName)
 
 void RemSimPrimaryGeneratorAction::ReadData(G4double unitE, G4String fileName)
 {
-  char nameChar[100] = {""};
-  std::ostrstream ost(nameChar, 100, std::ios::out);
+  std::ostringstream ost;
  
   ost << fileName;
-  
-  G4String name(nameChar);
   
   std::ifstream file(fileName);
   std::filebuf* lsdp = file.rdbuf();
