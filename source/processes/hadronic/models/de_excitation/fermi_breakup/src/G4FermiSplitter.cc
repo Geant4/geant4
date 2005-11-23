@@ -27,7 +27,7 @@
 #include "G4FermiSplitter.hh"
 #include "G4FermiIntegerPartition.hh"
 #include "G4HadronicException.hh"
-#include <strstream>
+#include <sstream>
 
 
 G4int G4FermiSplitter::Initialize(const G4int a, const G4int z, const G4int n)
@@ -35,14 +35,14 @@ G4int G4FermiSplitter::Initialize(const G4int a, const G4int z, const G4int n)
   // Check argument correctness
   if (a < 0 || z < 0 || n < 0) 
     {
-      std::ostrstream errOs;
+      std::ostringstream errOs;
       errOs << "G4FermiSplitter::Initialize() Error: Non valid arguments A = "
 	    << a << " Z = " << z << " #fragments = " << n;
       throw G4HadronicException(__FILE__, __LINE__, errOs.str());
     }
   if (z > a || n > a)
     {
-      std::ostrstream errOs;
+      std::ostringstream errOs;
       errOs << "G4FermiSplitter::Initialize() Error: Non physical arguments = "
 	    << a << " Z = " << z << " #fragments = " << n;
       throw G4HadronicException(__FILE__, __LINE__, errOs.str());
