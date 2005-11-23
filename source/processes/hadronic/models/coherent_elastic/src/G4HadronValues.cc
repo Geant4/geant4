@@ -20,18 +20,34 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// G4HadronValues.cc
+// $Id: G4HadronValues.cc,v 1.12 2005-11-23 11:24:08 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+
+//
+//  G4HadronValues class
+//
+//
+//  Kinematic and dynamic values 
+//  N.  Starkov 2003.
+//
+//  Modifications:
+//  14.11.05 Use PDG code instead of static particle pointers (N.Starkov)
+//  23.11.05 cleanup (V.Ivanchenko)
+//
 
 #include "globals.hh"
 #include "G4HadronValues.hh"
 
+G4HadronValues::G4HadronValues()
+{}
 
- void 
- G4HadronValues::GetHadronValues(const G4DynamicParticle* aHadron)
+G4HadronValues::~G4HadronValues()
+{}
+
+void 
+G4HadronValues::GetHadronValues(const G4DynamicParticle* aHadron)
   {
-
-//       G4ParticleDefinition * dHadron = aHadron->GetDefinition();
-
        G4int iHadron(-1), iHadrCode;
        iHadrCode = aHadron->GetDefinition()->GetPDGEncoding();
 
