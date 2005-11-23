@@ -42,9 +42,9 @@
 HadrontherapyMatrix::HadrontherapyMatrix()
 {  
   // Number of the voxels of the phantom
-  numberVoxelX = 80;
-  numberVoxelY = 80;
-  numberVoxelZ = 80; 
+  numberVoxelX = 200;
+  numberVoxelY = 200;
+  numberVoxelZ = 200; 
  
   // Create the matrix
   matrix = new G4double[numberVoxelX*numberVoxelY*numberVoxelZ];
