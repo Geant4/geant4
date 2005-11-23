@@ -33,44 +33,44 @@ processes                    John Apostolakis                John Apostolakis
 "/"/lowenergy                MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
 "/decay                      kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
 "/hadronic                   dwright@slac.stanford.edu       Dennis Wright
-"/"/cross_sections           fwj@triumf.ca                   Fred Jones
-"/"/management               kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
-"/"/stopping                 felawka@triumf.ca               Larry Felawka
-"/"/util                     chuma@triumf.ca                 Joe Chuma
+"/"/cross_sections           dwright@slac.stanford.edu       Dennis Wright
+"/"/management               dwright@slac.stanford.edu       Dennis Wright
+"/"/stopping                 dwright@slac.stanford.edu       Dennis Wright
+"/"/util                     dwright@slac.stanford.edu       Dennis Wright
 "/"/processes                dwright@slac.stanford.edu       Dennis Wright
 "/"/models/abrasion          flei@space.qinetiq.com          Fan Lei
 "/"/models/binary_cascade    Gunter.Folger@cern.ch           Gunter Folger
 "/"/models/cascade           aatos.heikkinen@cern.ch         Aatos Heikkinen
 "/"/"/chiral_inv_phase_space Mikhail.Kossov@cern.ch          Mikhail Kossov
-"/"/"/coherent_elastic       fwj@triumf.ca                   Fred Jones
-"/"/"/de_excitation          dwright@slac.stanford.edu       Dennis Wright
-"/"/"/"/ablation             flei@space.qinetiq.com          Fan Lei
-"/"/"/"/evaporation          dwright@slac.stanford.edu       Dennis Wright
-"/"/"/"/fermi_breakup        Vicente.Lara@cern.ch            Vincente Lara
-"/"/"/"/fission              Vicente.Lara@cern.ch            Vincente Lara
-"/"/"/"/gem_evaporation      dwright@slac.stanford.edu       Dennis Wright
-"/"/"/"/handler              Vicente.Lara@cern.ch            Vincente Lara
-"/"/"/"/management           dwright@slac.stanford.edu       Dennis Wright
-"/"/"/"/multifragmentation   dwright@slac.stanford.edu       Dennis Wright
-"/"/"/"/photon_evaporation   dwright@slac.stanford.edu       Dennis Wright
-"/"/"/"/util                 dwright@slac.stanford.edu       Dennis Wright
-"/"/"/em_dissociation        flei@space.qinetiq.com          Fan Lei
-"/"/"/high_energy            harm@physik.rwth-aachen.de      Harm Fesefeldt
-"/"/"/im_r_matrix            dwright@slac.stanford.edu       Dennis Wright
-"/"/"/isotope_production     dwright@slac.stanford.edu       Dennis Wright
-"/"/"/leading_particle       Naoko.Kanaya@cern.ch            Naoko Kanaya
-"/"/"/low_energy             chuma@triumf.ca                 Joe Chuma
-"/"/"/management             dwright@slac.stanford.edu       Dennis Wright
-"/"/"/neutron_hp             dwright@slac.stanford.edu       Dennis Wright
+"/"/"/coherent_elastic       Nikolai.Starkov@cern.ch         Nikolai Starkov
+"/"/"/de_excitation          aatos.heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/"/ablation             PRTruscott@space.qinetiq.com    Pete Truscott
+"/"/"/"/evaporation          aatos.heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/"/fermi_breakup        aatos.heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/"/fission              aatos.heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/"/gem_evaporation      aatos.heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/"/handler              aatos.heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/"/management           aatos.heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/"/multifragmentation   aatos.heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/"/photon_evaporation   aatos.heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/"/util                 aatos.heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/em_dissociation        PRTruscott@space.qinetiq.com    Pete Truscott
+"/"/"/high_energy            dwright@slac.stanford.edu       Dennis Wright
+"/"/"/im_r_matrix            Gunter.Folger@cern.ch           Gunter Folger
+"/"/"/isotope_production     aatos.heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/leading_particle       asai@slac.stanford.edu          Makoto Asai
+"/"/"/low_energy             dwright@slac.stanford.edu       Dennis Wright
+"/"/"/management             Gunter.Folger@cern.ch           Gunter Folger
+"/"/"/neutron_hp             tkoi@slac.stanford.edu          Tatsumi Koi
 "/"/"/parton_string/diffraction    Gunter.Folger@cern.ch     Gunter Folger
 "/"/"/"/hadronization        Gunter.Folger@cern.ch           Gunter Folger
-"/"/"/"/management           dwright@slac.stanford.edu       Dennis Wright
-"/"/"/"/qgsm                 dwright@slac.stanford.edu       Dennis Wright
+"/"/"/"/management           Gunter.Folger@cern.ch           Gunter Folger
+"/"/"/"/qgsm                 Gunter.Folger@cern.ch           Gunter Folger
 "/"/"/photolepton_hadron     dwright@slac.stanford.edu       Dennis Wright
-"/"/"/pre_equilibrium        Vicente.Lara@cern.ch            Vincente Lara
+"/"/"/pre_equilibrium        aatos.heikkinen@cern.ch         Aatos Heikkinen
 "/"/"/radioactive_decay      flei@space.qinetiq.com          Fan Lei
-"/"/"/theo_high_energy       dwright@slac.stanford.edu       Dennis Wright
-"/"/"/util                   dwright@slac.stanford.edu       Dennis Wright
+"/"/"/theo_high_energy       Gunter.Folger@cern.ch           Gunter Folger
+"/"/"/util                   Gunter.Folger@cern.ch           Gunter Folger
 "/optical                    gum@triumf.ca                   Peter Gumplinger
 "/parameterisation           Marc.Verderi@in2p3.fr           Marc Verderi
 "/transportation             John.Apostolakis@cern.ch        John Apostolakis
@@ -160,11 +160,11 @@ tests                        Serguei.Sadilov@cern.ch         Serguei Sadilov
       test08                 (not currently used - see tests/GNUmakefile)
       test09                 Michel.Maire@lapp.in2p3.fr      Michel Maire
       test10                 gum@triumf.ca                   Peter Gumplinger
-      test11                 dwright@slac.stanford.edu       Dennis Wright
+      test11                 tkoi@slac.stanford.edu          Tatsumi Koi
       test12                 Gunter.Folger@cern.ch           Gunter Folger
       test13                 Gunter.Folger@cern.ch           Gunter Folger
       test14                 MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
-      test15                 dwright@slac.stanford.edu       Dennis Wright
+      test15                 aatos.heikkinen@cern.ch         Aatos Heikkinen
       test16                 dwright@slac.stanford.edu       Dennis Wright
       test17                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test18                 flei@space.qinetiq.com          Fan Lei
@@ -181,7 +181,7 @@ tests                        Serguei.Sadilov@cern.ch         Serguei Sadilov
       test29                 Mikhail.Kossov@cern.ch          Mikhail Kossov
       test30                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test31                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
-      test32                 dwright@slac.stanford.edu       Dennis Wright
+      test32                 asai@slac.stanford.edu          Makoto Asai
       test33                 Michael.Dressel@cern.ch         Michael Dressel
       test34                 Joanna.Weng@cern.ch             Joanna Weng
       test40                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
