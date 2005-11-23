@@ -1,8 +1,10 @@
 *-------------------------------------------------------------
-* 29-Apr-2005    Compare energy resolutions vs. beam energy.  
-*                Input:  beam_energies.txt : beam energy values;
-*                        energy_resolutions.txt-a  
+* 23-Nov-2005    Compare energy resolutions vs. beam energy.  
+*                Input:  beam_energies.txt : beam energy values
+*                        energy_resolutions.txt-a
 *                        energy_resolutions.txt-b  
+*                The latter two files have two columns:
+*                   energy_resolution  error_energy_resolution
 *                The kumac should be able to work even if one
 *                of the two input files is missing.
 *-------------------------------------------------------------
@@ -14,6 +16,7 @@ xmin = 999.9
 xmax = 0.0
 IF ($FEXIST(beam_energies.txt)) THEN
   VEC/READ vx beam_energies.txt
+  VEC/CREATE vxe($VLEN(vx,1)) 
   xmin = 0.0
   xmax = $RSIGMA(1.0+int(VMAX(vx)*1.1))
 ***  MESSAGE ' xmax=', [xmax]
@@ -25,9 +28,11 @@ ENDIF
 y1min = 999.9
 y1max = 0.0   
 IF ($FEXIST(energy_resolutions.txt-a)) THEN
-  VEC/READ vy1 energy_resolutions.txt-a
+  VEC/READ vy1,ve1 energy_resolutions.txt-a
 ***  MESSAGE ' vy1 : '
 ***  vec/print vy1
+***  MESSAGE ' ve1 : '
+***  vec/print ve1
 ***  y1min = $RSIGMA(VMIN(vy1)*0.9)
   y1min = 0.0
   y1max = $RSIGMA(VMAX(vy1)*1.1)
@@ -38,9 +43,11 @@ ENDIF
 y2min = 999.9
 y2max = 0.0 
 IF ($FEXIST(energy_resolutions.txt-b)) THEN
-  VEC/READ vy2 energy_resolutions.txt-b
+  VEC/READ vy2,ve2 energy_resolutions.txt-b
 ***  message ' vy2 : '
 ***  vec/print vy2
+***  message ' ve2 : '
+***  vec/print ve2
 ***  y2min = $RSIGMA(VMIN(vy2)*0.9)
   y2min = 0.0
   y2max = $RSIGMA(VMAX(vy2)*1.1)
@@ -74,11 +81,11 @@ NULL [xmin] [xmax] [ymin] [ymax]
 *
 IF ($FEXIST(energy_resolutions.txt-a)) THEN
   SET PMCI 2
-  GRAPHICS/HPLOT/SYMBOLS vx vy1 $VLEN(vy1,1) 20 0.20 
+  GRAPHICS/HPLOT/ERRORS vx vy1 vxe ve1 $VLEN(vy1,1) 20 0.20 
 ENDIF
 IF ($FEXIST(energy_resolutions.txt-b)) THEN
   SET PMCI 4
-  GRAPHICS/HPLOT/SYMBOLS vx vy2 $VLEN(vy2,1) 21 0.20
+  GRAPHICS/HPLOT/ERRORS vx vy2 vxe ve2 $VLEN(vy2,1) 21 0.20
 ENDIF
 *
 ATITLE 'Beam energy' 'Energy resolution'

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #----------------------------------------------------------------
-# Created: 29-Apr-2005. Last modification: 29-June-2005.  
+# Last update: 23-Nov-2005.  
 #
 # This Python script is used for post-processing analysis, i.e.
 # to produce plots (in PostScript format) of calorimeter
@@ -67,10 +67,11 @@
 #                                   been retrieved: of course, this should
 #                                   never happens, and so this file should
 #                                   always be empty if everything is ok.
-#    o  The beam energy values, used by the kumacs to plot some quantities
-#       as a function of the beam energy.
-#       (These beam energy values are those expected, not those that
-#        have been found.)
+#    o  beam_energies.txt : the beam energy values, used by the kumacs
+#                           to plot some quantities as a function of the
+#                           beam energy. These beam energy values are those
+#                           expected, not those that have been found.
+#    o  listCPUtimes.txt : the CPU times for each found output file.
 #    o  A set of ascii files, extracted from the list of found
 #       simulation log files, whose names are:
 #          -  energy_resolutions.txt-LABEL
@@ -102,33 +103,44 @@
 # in the Grid). In these cases in which a log file is not found,
 # the observable (energy resolution, sampling fraction, ratio_e_pi)
 # is set to 0.0.
+# Statistical errors are also calculated for all the quantities:
+# however, very often, you cannot see the error bars because they
+# are smaller than the bullet points!
 #
 #----------------------------------------------------------------
 
 import os
 import sys
 import string
+import math
 
 #***LOOKHERE***
 # Look for the files in this directory and recursively in all
 # its subdirectories.
-directory = "/afs/cern.ch/sw/geant4/stat_testing/june05"
+#directory = "/afs/cern.ch/sw/geant4/stat_testing/june05"
+directory = "/users/ribon/dirAcceptanceSuite/dirObservables/dirBUTTA"                 
 
 # Prepare all the cases.
-tupleG4Versions   = ("7.0.p01", "7.1.cand01")
+tupleG4Versions   = ("6.2.p02", "7.0.cand04")
 
-tuplePhysicsLists = ("LHEP", "QGSP", "QGSC", "QGSP_BIC", "QGSP_BERT")
+###tuplePhysicsLists = ("LHEP", "QGSP", "QGSC", "QGSP_BIC", "QGSP_BERT")
+tuplePhysicsLists = ("QGSP",)
 
-tupleCaloTypes    = ("FeSci", "CuSci", "PbSci", "CuLAr", "PbLAr", "WLAr", "PbWO4")
+###tupleCaloTypes    = ("FeSci", "CuSci", "PbSci", "CuLAr", "PbLAr", "WLAr", "PbWO4")
+tupleCaloTypes    = ("CuLAr",)
 
-tupleParticles    = ("e-", "pi+", "pi-", "k+", "k-", "k0L", "p", "n")
+###tupleParticles    = ("e-", "pi+", "pi-", "k+", "k-", "k0L", "p", "n")
+tupleParticles    = ("e-", "pi+")
 
 tupleEnergies     = ("1GeV", "2GeV", "3GeV", "4GeV", "5GeV", "6GeV", "7GeV",
                      "8GeV", "9GeV", "10GeV", "20GeV", "30GeV", "40GeV",
                      "50GeV", "60GeV", "80GeV", "100GeV", "120GeV", "150GeV",
                      "180GeV", "200GeV", "250GeV", "300GeV", "1000GeV")
+###                     "180GeV", "200GeV", "250GeV", "300GeV")
+#tupleEnergies     = ("20GeV",)
 
 tupleEvents       = ("5000",)
+
 #***endLOOKHERE***
 
 # Collect in files the following lists:
@@ -140,6 +152,7 @@ foundFiles = open( "listFoundFiles.txt", "w" )
 missingFiles = open( "listMissingFiles.txt", "w" )
 createdFiles = open( "listCreatedFiles.txt", "w" )
 nonRetrievedFiles = open( "listNonRetrievedFiles.txt", "w" )
+cpuTimes = open( "listCPUtimes.txt", "w" )
 
 #-------------------------------------------------------------
 # ---------------------   FUNCTIONS   ------------------------
@@ -213,40 +226,107 @@ def extractInfo( theFile , label , fileResolution , fileSampling , fileRatio ) :
     statusLongitudinalProfile = 0
     statusTransverseProfile = 0
     statusVisibleEnergy = 0
+    beamEnergy = 0.0
+    numberOfEvents = 0
+    mu_Evis = 0.0
+    sigma_Evis = 0.0
+    sigma_mu_Evis = 0.0
+    sigma_sigma_Evis = 0.0
     for line in theFile :
         #print " line : ", line
         if ( ( not statusRunSummary )  and  line.find("Run Summary") > -1 ) :
             statusRunSummary = 1
             #print " === FOUND RUN SUMMARY === ", line #***DEBUG***
+
+        if ( statusRunSummary  and  line.find("User=") > -1 ) :
+            cpuTimes.write( label + line )
+            #print " CPU time: " , label, " ", line
+
+        if ( statusRunSummary  and  line.find("Number of events") > -1 ) :
+            # Check that the number of events is one of the expected values.
+            numberOfEvents = int( line.split()[5] )
+            #print " ", label, " ", line, " numberOfEvents=", numberOfEvents
+            isOneExpected = 0
+            for iN in tupleEvents :
+                numEvt = int( iN )
+                #print " iN=", iN, " numEvt=", numEvt, " numberOfEvents=", numberOfEvents
+                if ( numEvt == numberOfEvents ) :
+                    isOneExpected = 1
+            if ( not isOneExpected ) :
+                print " ERROR: unexpected number of Events! ", numberOfEvents
+
+        if ( statusRunSummary  and  line.find("Beam energy") > -1 ) :
+            # Check that the beam energy is one of the expected values.
+            beamEnergy = float( line.split()[4] )
+            #print " ", label, " ", line, " beamEnergy=", beamEnergy
+            isOneExpected = 0
+            for iE in tupleEnergies :
+                E = float( iE.replace("GeV","") ) * 1000.0   # GeV -> MeV
+                #print " iE=", iE, " E=", E, " beamEnergy=", beamEnergy
+                if ( math.fabs( E - beamEnergy ) < 0.1 ) :
+                    isOneExpected = 1
+            if ( not isOneExpected ) :
+                print " ERROR: unexpected beam energy! ", beamEnergy
+
         if ( statusRunSummary  and  line.find("in each Layer") > -1 ) :
             statusLongitudinalProfile = 1
-        if ( statusRunSummary  and  line.find("in each Radius bin") > -1 ) :
-            statusLongitudinalProfile = 0
-            statusTransverseProfile   = 1
-        if ( statusRunSummary  and  line.find("Visible energy information") > -1 ) :
-            statusTransverseProfile = 0
-            statusVisibleEnergy     = 1
         if ( statusLongitudinalProfile  and  line.find("layer = ") > -1 ) :
             fileLongitudinal.write( line.split()[5] + "\t" + line.split()[7] + "\n" )  
             #print ' longitudinal line: ' , line.split()[5] , ' +/- ', line.split()[7]
+        if ( statusRunSummary  and  line.find("in each Radius bin") > -1 ) :
+            statusLongitudinalProfile = 0
+            statusTransverseProfile   = 1
         if ( statusTransverseProfile  and  line.find("iBinR = ") > -1 ) :
             fileTransverse.write( line.split()[5] + "\t" + line.split()[7] + "\n" )
             #print ' transverse line: ' , line.split()[5] , ' +/- ', line.split()[7]
+        if ( statusRunSummary  and  line.find("Visible energy information") > -1 ) :
+            statusTransverseProfile = 0
+            statusVisibleEnergy     = 1
+
         if ( statusVisibleEnergy  and  line.find("mu_Evis") > -1 ) :
-            if ( fileRatio ) :
-                fileRatio.write( line.split()[2] + "\n" )
-            #print ' mu_Evis line: ', line.split()[2]
+            mu_Evis = float( line.split()[2] )
+            #print " mu_Evis line: ", line, " mu_Evis=", mu_Evis
+
         if ( statusVisibleEnergy  and  line.find("sigma_Evis") > -1 ) :
-            pass;
-            #print ' sigma_Evis line: ', line.split()[2]
+            sigma_Evis = float( line.split()[2] )
+            #print " sigma_Evis line: ", line, " sigma_Evis=", sigma_Evis
+            # Calculate the statistical error of mu_Evis .
+            sigma_mu_Evis = 0.0
+            if ( numberOfEvents > 0 ) :
+                sigma_mu_Evis = sigma_Evis / math.sqrt( numberOfEvents )
+            #print ' sigma_mu_Evis=', sigma_mu_Evis
+            if ( fileRatio ) :
+                fileRatio.write( str( mu_Evis ) + "  " + str( sigma_mu_Evis ) + "\n" )
+            # Calculate the statistical error of sigma_Evis .
+            sigma_sigma_Evis = 0.0
+            if ( numberOfEvents > 1 ) :
+                sigma_sigma_Evis = sigma_Evis / math.sqrt( 2.0*( numberOfEvents - 1 ) )
+            #print ' sigma_sigma_Evis=', sigma_sigma_Evis
+
         if ( statusVisibleEnergy  and  line.find("energy resolution") > -1 ) :
-            fileResolution.write( line.split()[3] + "\n" )
-            #print ' energy resolution line: ', line.split()[3]
+            res = float( line.split()[3] )
+            #print " energy resolution line: ", line, " res=", res
+            # Calculate the statistical error of  res = mu_Evis / sigma_Evis :
+            sigma_res = 0.0
+            if ( sigma_Evis > 0.0  and  mu_Evis > 0.0 ) :
+                sigma_res = res * math.sqrt( (sigma_sigma_Evis*sigma_sigma_Evis) /
+                                             (sigma_Evis*sigma_Evis) +
+                                             (sigma_mu_Evis*sigma_mu_Evis ) /
+                                             (mu_Evis*mu_Evis) )
+            #print ' sigma_res=', sigma_res                
+            fileResolution.write( str( res ) + "  " + str( sigma_res ) + "\n" )
+
         if ( statusVisibleEnergy  and  line.find("sampling fraction") > - 1) :
-            fileSampling.write( line.split()[3] + "\n" )
-            #print ' sampling fraction line: ', line.split()[3]
+            sf = float( line.split()[3] )
+            #print " sampling fraction line: ", line, "  sf=", sf
+            # Calculate the statistical error of  sf = mu_Evis / beamEnergy
+            sigma_sf = 0.0
+            if ( mu_Evis > 0.0 ) :
+                sigma_sf = sf * sigma_mu_Evis / mu_Evis
+            #print ' sigma_sf=', sigma_sf                
+            fileSampling.write( str( sf ) + "  " + str( sigma_sf ) + "\n" )
             statusVisibleEnergy = 0
-            
+
     fileLongitudinal.close()
     fileTransverse.close()
     
@@ -520,12 +600,23 @@ def makeRatioPlots( label , strNumEvents , g4version_a , g4version_b ) :
             isThereFileRatio_e_pi_a = 1
             for i in xrange( len( tupleE_a ) ) :
                 numerator = float( tupleE_a[i].split()[0] )
+                sigma_numerator = float( tupleE_a[i].split()[1] )
                 denominator = float( tuplePi_a[i].split()[0] )
-                #print '  numerator=', numerator, ' denominator=', denominator
+                sigma_denominator = float( tuplePi_a[i].split()[1] )
+                #print '  numerator=', numerator, ' sigma_numerator=', sigma_numerator
+                #print '  denominator=', denominator, ' sigma_denominator=', sigma_denominator
                 ratio = 0.0
-                if ( abs(denominator) > 0.001 ) :
+                sigma_ratio = 0.0
+                if ( math.fabs( denominator ) > 0.001 ) :
                     ratio = numerator/denominator
-                fileRatio_e_pi_a.write( str( ratio ) + "\n" )
+                    if ( math.fabs( numerator ) > 0.001 ) :
+                        sigma_ratio = ratio * math.sqrt(
+                            ( sigma_numerator*sigma_numerator ) /
+                            ( numerator*numerator ) +
+                            ( sigma_denominator*sigma_denominator ) /
+                            ( denominator*denominator ) )
+                #print ' ratio=', ratio, '  sigma_ratio=', sigma_ratio
+                fileRatio_e_pi_a.write( str( ratio ) + "  " + str( sigma_ratio ) + "\n" )
         else :
             print ' ERROR: E and PI files of DIFFERENT SIZE! ', \
                   len( tupleE_a ), '  ', len( tuplePi_a )
@@ -544,12 +635,23 @@ def makeRatioPlots( label , strNumEvents , g4version_a , g4version_b ) :
             isThereFileRatio_e_pi_b = 1
             for i in xrange( len( tupleE_b ) ) :
                 numerator = float( tupleE_b[i].split()[0] )
+                sigma_numerator = float( tupleE_b[i].split()[1] )                
                 denominator = float( tuplePi_b[i].split()[0] )
-                #print '  numerator=', numerator, ' denominator=', denominator
+                sigma_denominator = float( tuplePi_b[i].split()[1] )                
+                #print '  numerator=', numerator, ' sigma_numerator=', sigma_numerator
+                #print '  denominator=', denominator, ' sigma_denominator=', sigma_denominator
                 ratio = 0.0
-                if ( abs(denominator) > 0.001 ) :
+                sigma_ratio = 0.0
+                if ( math.fabs( denominator ) > 0.001 ) :
                     ratio = numerator/denominator
-                fileRatio_e_pi_b.write( str( ratio ) + "\n" )
+                    if ( math.fabs( numerator ) > 0.001 ) :
+                        sigma_ratio = ratio * math.sqrt(
+                            ( sigma_numerator*sigma_numerator ) /
+                            ( numerator*numerator ) +
+                            ( sigma_denominator*sigma_denominator ) /
+                            ( denominator*denominator ) )
+                #print ' ratio=', ratio, '  sigma_ratio=', sigma_ratio
+                fileRatio_e_pi_b.write( str( ratio ) + "  " + str( sigma_ratio ) + "\n" )
         else :
             print ' ERROR: E and PI files of DIFFERENT SIZE! ', \
                   len( tupleE_b ), '  ', len( tuplePi_b )
@@ -601,6 +703,7 @@ createdFiles.write( "listFoundFiles.txt" + " \n" )
 createdFiles.write( "listMissingFiles.txt" + " \n" )
 createdFiles.write( "listCreatedFiles.txt" + " \n" )
 createdFiles.write( "listNonRetrievedFiles.txt" + " \n" )
+createdFiles.write( "listCPUtime" + " \n" )
 createdFiles.write( "thePath.log" + " \n" )
 
 # Prepare two strings which contains the (max) two Geant4 versions.
@@ -766,6 +869,7 @@ foundFiles.close()
 missingFiles.close()
 createdFiles.close()
 nonRetrievedFiles.close()
+cpuTimes.close()
 
 print '  ========== END observables.py ========== '
 
