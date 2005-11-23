@@ -1,4 +1,4 @@
-$Id: History,v 1.312 2005-11-22 17:32:29 allison Exp $
+$Id: History,v 1.313 2005-11-23 16:22:54 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -38,6 +38,10 @@ History file for visualization category
 - Minor modification of geant4-07-01-ref-05 to facilitate acceptance
   of greps-V07-01-09 and tracking tracking-V07-01-02.  As with
   vis-V07-01-06, it should subsequently simply be ignored.
+
+15th November 2005  Guy Barrand
+- openinventor-V07-01-03: Background, scaling and window positioning.  Also
+  reading and wroting of .iv files.
 
 14th November 2005  John Allison (vis-V07-01-06)
 - Minor modification of vis-V07-01-03 + vis-HepRep-V07-01-04 (to avoid
