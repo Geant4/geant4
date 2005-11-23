@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByCharge.cc,v 1.2 2005-11-21 05:44:44 tinslay Exp $
+// $Id: G4TrajectoryDrawByCharge.cc,v 1.3 2005-11-23 20:24:15 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -118,9 +118,8 @@ G4TrajectoryDrawByCharge::Print(std::ostream& ostr) const
   ostr<<"G4TrajectoryDrawByCharge model "<< Name() <<" colour scheme: "<<std::endl;
   std::map<Charge, G4Colour>::const_iterator iter = fMap.begin();
 
-  //jane fixme - improve formatting
   while (iter != fMap.end()) {
-    ostr<<"         "<< iter->first <<" : "<< iter->second <<G4endl;
+    ostr<< iter->first <<" : "<< iter->second <<G4endl;
     iter++;
   }
 }

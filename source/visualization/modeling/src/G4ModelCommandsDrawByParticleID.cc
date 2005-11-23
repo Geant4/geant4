@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ModelCommandsDrawByParticleID.cc,v 1.1 2005-11-23 05:19:23 tinslay Exp $
+// $Id: G4ModelCommandsDrawByParticleID.cc,v 1.2 2005-11-23 20:24:15 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -28,7 +28,6 @@
 #include "G4TrajectoryDrawByParticleID.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcommand.hh"
-
 #include <sstream>
 
 //Set colour with string
@@ -40,10 +39,18 @@ G4ModelCommandDrawByParticleIDSet::G4ModelCommandDrawByParticleIDSet(G4Trajector
 
   fpCommand = new G4UIcmdWithAString(myCommand, this);      
   fpCommand->SetGuidance("Set trajectory colour through a string.");
+  fpCommand->SetGuidance("Two inputs are expected, for example");
+
+  G4String example = myCommand+" gamma red";
+
+  fpCommand->SetGuidance(example);
   fpCommand->SetParameterName("parameters", false); 
 }
 
-G4ModelCommandDrawByParticleIDSet::~G4ModelCommandDrawByParticleIDSet() {} 
+G4ModelCommandDrawByParticleIDSet::~G4ModelCommandDrawByParticleIDSet() 
+{
+  delete fpCommand;
+} 
 
 void G4ModelCommandDrawByParticleIDSet::SetNewValue(G4UIcommand* cmd, G4String newValue) 
 {
@@ -65,10 +72,19 @@ G4ModelCommandDrawByParticleIDSetRGBA::G4ModelCommandDrawByParticleIDSetRGBA(G4T
 
   fpCommand = new G4UIcmdWithAString(myCommand, this);      
   fpCommand->SetGuidance("Set trajectory colour through red, green, blue and alpha components.");
+  fpCommand->SetGuidance("Five inputs are expected, for example");
+
+  G4String example = myCommand+" gamma 1 1 1 1";
+;
+  fpCommand->SetGuidance(example);
   fpCommand->SetParameterName("parameters", false); 
+
 }
 
-G4ModelCommandDrawByParticleIDSetRGBA::~G4ModelCommandDrawByParticleIDSetRGBA() {} 
+G4ModelCommandDrawByParticleIDSetRGBA::~G4ModelCommandDrawByParticleIDSetRGBA() 
+{
+  delete fpCommand;
+} 
 
 void G4ModelCommandDrawByParticleIDSetRGBA::SetNewValue(G4UIcommand* cmd, G4String newValue) 
 {
@@ -93,10 +109,18 @@ G4ModelCommandDrawByParticleIDSetDefault::G4ModelCommandDrawByParticleIDSetDefau
 
   fpCommand = new G4UIcmdWithAString(myCommand, this);      
   fpCommand->SetGuidance("Set default trajectory colour through a string.");
+  fpCommand->SetGuidance("One input is expected, for example");
+
+  G4String example = myCommand+" red";
+
+  fpCommand->SetGuidance(example);
   fpCommand->SetParameterName("parameters", false); 
 }
 
-G4ModelCommandDrawByParticleIDSetDefault::~G4ModelCommandDrawByParticleIDSetDefault() {} 
+G4ModelCommandDrawByParticleIDSetDefault::~G4ModelCommandDrawByParticleIDSetDefault() 
+{
+  delete fpCommand;
+} 
 
 void G4ModelCommandDrawByParticleIDSetDefault::SetNewValue(G4UIcommand* cmd, G4String newValue) 
 {
@@ -113,10 +137,18 @@ G4ModelCommandDrawByParticleIDSetDefaultRGBA::G4ModelCommandDrawByParticleIDSetD
 
   fpCommand = new G4UIcmdWithAString(myCommand, this);      
   fpCommand->SetGuidance("Set default trajectory colour through red, green, blue and alpha components.");
+  fpCommand->SetGuidance("Four inputs are expected, for example");
+
+  G4String example = myCommand+" 1 1 1 1";
+;
+  fpCommand->SetGuidance(example);
   fpCommand->SetParameterName("parameters", false); 
 }
 
-G4ModelCommandDrawByParticleIDSetDefaultRGBA::~G4ModelCommandDrawByParticleIDSetDefaultRGBA() {} 
+G4ModelCommandDrawByParticleIDSetDefaultRGBA::~G4ModelCommandDrawByParticleIDSetDefaultRGBA() 
+{
+  delete fpCommand;
+} 
 
 void G4ModelCommandDrawByParticleIDSetDefaultRGBA::SetNewValue(G4UIcommand* cmd, G4String newValue) 
 {

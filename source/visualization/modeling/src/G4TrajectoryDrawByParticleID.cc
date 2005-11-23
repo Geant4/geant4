@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByParticleID.cc,v 1.3 2005-11-23 05:19:23 tinslay Exp $
+// $Id: G4TrajectoryDrawByParticleID.cc,v 1.4 2005-11-23 20:24:15 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -68,8 +68,8 @@ G4TrajectoryDrawByParticleID::Set(const G4String& particle, const G4String& colo
 {
   G4Colour myColour(fDefault);
 
- // Will not modify myColour if colour key does not exist  
-
+  // Will not modify myColour if colour key does not exist  
+  
   if (!G4Colour::GetColour(colour, myColour)) {
     std::ostringstream o;
     o << "G4Colour with key "<<colour<<" does not exist ";
@@ -102,7 +102,7 @@ void
 G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& traj, G4int i_mode) const
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if (!pVVisManager) return;
+  if (0 == pVVisManager) return;
 
   const G4double markerSize = std::abs(i_mode)/1000;
   G4bool lineRequired (i_mode >= 0);
@@ -154,11 +154,13 @@ void
 G4TrajectoryDrawByParticleID::Print(std::ostream& ostr) const
 {
   ostr<<"G4TrajectoryDrawByParticleID model "<< Name() <<" colour scheme: "<<std::endl;
-  std::map<G4String, G4Colour>::const_iterator iter = fMap.begin();
+  
+  ostr<<"Default : "<<fDefault<<G4endl;
 
-  //jane fixme - improve formatting
+  std::map<G4String, G4Colour>::const_iterator iter = fMap.begin();
+  
   while (iter != fMap.end()) {
-    ostr<<"         "<< iter->first <<" : "<< iter->second <<G4endl;
+    ostr<<iter->first <<" : "<< iter->second <<G4endl;
     iter++;
   }
 }

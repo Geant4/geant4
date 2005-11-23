@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ModelCommandsDrawByCharge.cc,v 1.4 2005-11-22 17:32:00 tinslay Exp $
+// $Id: G4ModelCommandsDrawByCharge.cc,v 1.5 2005-11-23 20:24:15 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -40,10 +40,18 @@ G4ModelCommandDrawByChargeSet::G4ModelCommandDrawByChargeSet(G4TrajectoryDrawByC
 
   fpCommand = new G4UIcmdWithAString(myCommand, this);      
   fpCommand->SetGuidance("Set trajectory colour through a string.");
+  fpCommand->SetGuidance("Two inputs are expected, for example");
+
+  G4String example = myCommand+" -1 red";
+
+  fpCommand->SetGuidance(example);
   fpCommand->SetParameterName("parameters", false); 
 }
 
-G4ModelCommandDrawByChargeSet::~G4ModelCommandDrawByChargeSet() {} 
+G4ModelCommandDrawByChargeSet::~G4ModelCommandDrawByChargeSet() 
+{
+  delete fpCommand;
+} 
 
 void G4ModelCommandDrawByChargeSet::SetNewValue(G4UIcommand* cmd, G4String newValue) 
 {
@@ -85,10 +93,19 @@ G4ModelCommandDrawByChargeSetRGBA::G4ModelCommandDrawByChargeSetRGBA(G4Trajector
 
   fpCommand = new G4UIcmdWithAString(myCommand, this);      
   fpCommand->SetGuidance("Set trajectory colour through red, green, blue and alpha components.");
+  fpCommand->SetGuidance("Five inputs are expected, for example");
+  
+  G4String example = myCommand+" -1 1 1 1 1";
+  ;
+  fpCommand->SetGuidance(example);
+
   fpCommand->SetParameterName("parameters", false); 
 }
 
-G4ModelCommandDrawByChargeSetRGBA::~G4ModelCommandDrawByChargeSetRGBA() {} 
+G4ModelCommandDrawByChargeSetRGBA::~G4ModelCommandDrawByChargeSetRGBA() 
+{
+  delete fpCommand;
+} 
 
 void G4ModelCommandDrawByChargeSetRGBA::SetNewValue(G4UIcommand* cmd, G4String newValue) 
 {

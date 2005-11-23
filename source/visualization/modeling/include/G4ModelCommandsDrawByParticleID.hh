@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ModelCommandsDrawByParticleID.hh,v 1.1 2005-11-23 05:19:23 tinslay Exp $
+// $Id: G4ModelCommandsDrawByParticleID.hh,v 1.2 2005-11-23 20:24:15 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -71,7 +71,7 @@ private:
 
 };
 
-// Command to set positive/negative/neutral trajectory colouring through a string
+// Command to set default positive/negative/neutral trajectory colouring through a string
 class G4ModelCommandDrawByParticleIDSetDefault : public G4VModelCommand<G4TrajectoryDrawByParticleID> {
 
 public: // With description
