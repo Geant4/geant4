@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisListManager.hh,v 1.2 2005-11-22 04:55:49 tinslay Exp $
+// $Id: G4VisListManager.hh,v 1.3 2005-11-23 20:25:22 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
@@ -137,6 +137,7 @@ G4VisListManager<T>::Print(std::ostream& ostr, const G4String& name) const
     typename std::map<G4String, T*>::const_iterator iter = fMap.begin();
     while (iter != fMap.end()) {
       iter->second->Print(ostr);
+      ostr<<G4endl;
       iter++;
     }
   }

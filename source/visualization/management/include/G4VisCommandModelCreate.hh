@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisCommandModelCreate.hh,v 1.1 2005-11-21 05:45:42 tinslay Exp $
+// $Id: G4VisCommandModelCreate.hh,v 1.2 2005-11-23 20:25:21 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
@@ -36,6 +36,8 @@
 #include "G4String.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcommand.hh"
+#include "G4UIdirectory.hh"
+#include <vector>
 
 template <typename Factory>
 class G4VisCommandModelCreate : public G4VVisCommand {
@@ -61,6 +63,7 @@ private:
   G4String fPlacement;
   G4int fId;
   G4UIcmdWithAString* fpCommand;
+  std::vector<G4UIcommand*>   fDirectoryList;
 
 };
 
@@ -78,13 +81,18 @@ G4VisCommandModelCreate<Factory>::G4VisCommandModelCreate(Factory* factory, cons
   fpCommand = new G4UIcmdWithAString(command, this);      
   fpCommand->SetGuidance(guidance);
   fpCommand->SetGuidance("Generated model becomes current.");  
-  fpCommand->SetParameterName("model-name", true);       
+  fpCommand->SetParameterName("model-name", true);    
 }
 
 template <typename Factory>
 G4VisCommandModelCreate<Factory>::~G4VisCommandModelCreate()
 {
   delete fpCommand;
+  
+  unsigned i(0);
+  for (i=0; i<fDirectoryList.size(); ++i) {
+    delete fDirectoryList[i];
+  }
 }
 
 template <typename Factory>
@@ -116,6 +124,14 @@ void G4VisCommandModelCreate<Factory>::SetNewValue(G4UIcommand*, G4String newNam
   if (newName.isNull()) newName = NextName();
 
   assert (0 != fpFactory);
+
+  // Create directory for new model commands
+  G4String title = Placement()+"/"+newName+"/";
+  G4String guidance = "Commands for "+newName+" model.";
+
+  G4UIcommand* directory = new G4UIdirectory(title);
+  directory->SetGuidance(guidance);
+  fDirectoryList.push_back(directory);   
 
   // Create the model.
   typename Factory::ModelAndMessengers creation = fpFactory->Create(Placement(), newName);

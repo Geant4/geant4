@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.73 2005-11-22 18:36:33 tinslay Exp $
+// $Id: G4VisManager.cc,v 1.74 2005-11-23 20:25:22 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -233,6 +233,9 @@ void G4VisManager::Initialise () {
   directory = new G4UIdirectory ("/vis/modeling/trajectories/");
   directory -> SetGuidance ("Trajectory model commands.");
   fDirectoryList.push_back (directory);
+  directory = new G4UIdirectory ("/vis/modeling/trajectories/create/");
+  directory -> SetGuidance ("Create trajectory models and messengers.");
+  fDirectoryList.push_back (directory);
 
   RegisterMessengers ();
 
@@ -329,6 +332,11 @@ G4VisManager::RegisterModelFactory(G4TrajectoryModelFactory* factory)
 
   // Create messenger for this factory
   RegisterMessenger(new G4VisCommandModelCreate<G4TrajectoryModelFactory>(factory, fTrajectoryPlacement));
+}
+
+void G4VisManager::SelectTrajectoryModel(const G4String& model) 
+{
+   fpTrajectoryModelMgr->SetCurrent(model);
 }
 
 void G4VisManager::Draw (const G4Circle& circle,

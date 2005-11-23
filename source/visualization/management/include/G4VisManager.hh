@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.43 2005-11-22 17:02:04 allison Exp $
+// $Id: G4VisManager.hh,v 1.44 2005-11-23 20:25:22 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -182,10 +182,13 @@ public: // With description
   void RegisterModelFactory(G4TrajectoryModelFactory* factory);
   // Register trajectory model factory. Assumes ownership of factory.
 
-  void RegisterModel(G4VTrajectoryModel*);
+  void RegisterModel(G4VTrajectoryModel* model);
   // Register trajectory model. Assumes ownership of model.
 
-  void RegisterMessenger(G4UImessenger*);
+  void SelectTrajectoryModel(const G4String& model);
+  // Set default trajectory model. Useful for use in compiled code
+
+  void RegisterMessenger(G4UImessenger* messenger);
   // Register messenger. Assumes ownership of messenger.
 
   /////////////////////////////////////////////////////////////////
