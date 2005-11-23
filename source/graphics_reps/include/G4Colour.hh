@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Colour.hh,v 1.11 2005-11-10 20:34:45 tinslay Exp $
+// $Id: G4Colour.hh,v 1.12 2005-11-23 22:10:34 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,7 +58,7 @@
 //      G4Colour  magenta (1.0, 0.0, 1.0) ;  // magenta 
 //      G4Colour  yellow  (1.0, 1.0, 0.0) ;  // yellow
 // 
-// For convenience, static data members are also defined for the above colours. 
+// For convenience, static member functions are also defined for the above colours. 
 //
 // After instantiation of a G4Colour object, you can access to its components 
 // with the following access functions: 
