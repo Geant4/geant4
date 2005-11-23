@@ -22,7 +22,7 @@
 //
 #include <fstream>
 #include <iostream>
-#include <strstream>
+#include <sstream>
 #include "globals.hh"
 
 main()
@@ -62,12 +62,11 @@ main()
     {
       for(int i3=0;i3<11;i3++)
       {
-        char the[100] = {""};
-        std::ostrstream ost(the, 100, std::ios::out);
+        std::ostringstream ost;
         ost << a[ii][i]<<"_"<<z[ii]<<"_";
         if(energy[i3]<2) ost<<0;
         ost<<energy[i3];
-        G4String * biff = new G4String(the);
+        G4String * biff = new G4String(ost.str());
         theName = name + *biff;
         cout << theName<<G4endl;
         std::ofstream outFile( theName, std::ios::out);
