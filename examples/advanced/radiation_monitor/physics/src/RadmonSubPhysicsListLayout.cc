@@ -3,7 +3,7 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonSubPhysicsListLayout.cc,v 1.2 2005-11-10 08:14:10 capra Exp $
+// Id:            $Id: RadmonSubPhysicsListLayout.cc,v 1.3 2005-11-24 02:37:40 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -22,7 +22,7 @@ void                                            RadmonSubPhysicsListLayout :: Du
  if (width<0)
   width=0;
 
- out << indent << std::setw(width); out.setf(std::ostream::left, std::ostream::adjustfield); out << "Label";     out.setf(std::ostream::right, std::ostream::adjustfield); out << " = \"" << layerLabel << "\"\n"
+ out << indent << std::setw(width); out.setf(std::ostream::left, std::ostream::adjustfield); out << "Label";     out.setf(std::ostream::right, std::ostream::adjustfield); out << " = \"" << subPhysicsListLabel << "\"\n"
      << indent << "Attributes:\n";
 
  G4String indent2(indent);

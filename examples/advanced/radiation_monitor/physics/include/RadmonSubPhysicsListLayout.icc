@@ -3,7 +3,7 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonSubPhysicsListLayout.icc,v 1.2 2005-11-10 08:14:10 capra Exp $
+// Id:            $Id: RadmonSubPhysicsListLayout.icc,v 1.3 2005-11-24 02:38:43 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -19,7 +19,7 @@
  inline                                         RadmonSubPhysicsListLayout :: RadmonSubPhysicsListLayout(const RadmonSubPhysicsListLayout & copy)
  :
   RadmonLayoutEntityWithAttributes(copy),
-  layerLabel(copy.layerLabel)
+  subPhysicsListLabel(copy.subPhysicsListLabel)
  {
  }
  
@@ -36,7 +36,7 @@
  inline RadmonSubPhysicsListLayout &             RadmonSubPhysicsListLayout :: operator=(const RadmonSubPhysicsListLayout & copy)
  {
   RadmonLayoutEntityWithAttributes::operator=(copy);
-  layerLabel=copy.layerLabel;
+  subPhysicsListLabel=copy.subPhysicsListLabel;
   
   return (*this);
  }
@@ -47,13 +47,13 @@
 
  inline const G4String &                        RadmonSubPhysicsListLayout :: GetLabel(void) const
  {
-  return layerLabel; 
+  return subPhysicsListLabel; 
  }
  
  
  
  inline void                                    RadmonSubPhysicsListLayout :: SetLabel(const G4String & label)
  {
-  layerLabel=label; 
+  subPhysicsListLabel=label; 
  }
 #endif /* RADMONSUBPHYSICSLISTLAYOUT_HH */

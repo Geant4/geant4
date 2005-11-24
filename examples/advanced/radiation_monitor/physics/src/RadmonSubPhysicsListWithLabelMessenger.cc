@@ -3,7 +3,7 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonSubPhysicsListWithLabelMessenger.cc,v 1.2 2005-11-10 08:14:10 capra Exp $
+// Id:            $Id: RadmonSubPhysicsListWithLabelMessenger.cc,v 1.3 2005-11-24 02:37:40 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -50,10 +50,10 @@ void                                            RadmonSubPhysicsListWithLabelMes
 
                                                 RadmonSubPhysicsListWithLabelMessenger :: RadmonSubPhysicsListWithLabelMessenger()
 :
- RadmonMessenger(COMMANDS_PATH, "Interactive labelled detector entities constructors factory commands."),
+ RadmonMessenger(COMMANDS_PATH, "Interactive labelled physics lists factory commands."),
  RADMON_INITIALIZE_COMMAND(Dump)
 {
- RADMON_CREATE_COMMAND_0ARGS(Dump, "Print out the current available detector enetity constructors");
+ RADMON_CREATE_COMMAND_0ARGS(Dump, "Print out the current available physics lists");
 }
 
 

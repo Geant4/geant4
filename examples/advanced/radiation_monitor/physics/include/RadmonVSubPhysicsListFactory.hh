@@ -3,10 +3,10 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonVSubPhysicsListFactory.hh,v 1.1 2005-11-07 17:52:36 capra Exp $
+// Id:            $Id: RadmonVSubPhysicsListFactory.hh,v 1.2 2005-11-24 02:38:43 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
-// Description:   Abstract class of a factory of detector-entity constructor
+// Description:   Abstract class of a factory of sub physics lists
 //
 
 #ifndef   RADMONVSUBPHYSICSLISTFACTORY_HH

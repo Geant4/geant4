@@ -3,10 +3,10 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonSubPhysicsListLayout.hh,v 1.2 2005-11-10 08:14:10 capra Exp $
+// Id:            $Id: RadmonSubPhysicsListLayout.hh,v 1.3 2005-11-24 02:38:43 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
-// Description:   Internal class that describes layer informations
+// Description:   Internal class that describes sub physics list informations
 //
 
 #ifndef   RADMONSUBPHYSICSLISTLAYOUT_HH
@@ -31,7 +31,7 @@
 
   private:
   // Private attributes
-   G4String                                     layerLabel;
+   G4String                                     subPhysicsListLabel;
  };
 
  // Inline implementations
