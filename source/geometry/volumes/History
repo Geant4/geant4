@@ -1,4 +1,4 @@
-$Id: History,v 1.133 2005-11-24 18:18:47 japost Exp $
+$Id: History,v 1.134 2005-11-24 18:24:30 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,6 +21,7 @@ Nov 24th, 2005      J. Apostolakis - geomvol-V07-01-05
    of G4PhysicalTouchable.
 - Added implementations of virtual methods to identify materials 
    for nested parameterisations.
+- Removed G4PhysicalTouchable helper class.
 
 
 Nov 16th, 2005      J. Apostolakis - geomvol-V07-01-04
