@@ -1,6 +1,12 @@
                  History file
                  ------------
 
+24-Nov-2005 - A.Ribon (statAccepTest-V07-01-05)
+- Fixed an ordering problem in the main due to the new
+  dynamic particles. Added also statistical errors
+  for energy resolution, sampling fraction, and ratio e/pi.
+
+
 22-Nov-2005 - A.Ribon (statAccepTest-V07-01-04)
 - Added Cramer-von Mises and Anderson-Darling
   statistical tests. 

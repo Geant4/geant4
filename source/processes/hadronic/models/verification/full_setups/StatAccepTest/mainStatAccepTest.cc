@@ -43,10 +43,10 @@ int main(int argc,char** argv) {
   visManager->Initialize(); 
 #endif 
   runManager->SetUserInitialization( new StatAccepTestDetectorConstruction ); 
-  runManager->SetUserAction( new StatAccepTestPrimaryGeneratorAction ); 
   LHEP_BERT_HP  *thePL = new LHEP_BERT_HP; 
   //thePL->SetDefaultCutValue( 1.0*cm ); 
   runManager->SetUserInitialization( thePL ); 
+  runManager->SetUserAction( new StatAccepTestPrimaryGeneratorAction ); 
   runManager->SetUserAction( new StatAccepTestRunAction ); 
   runManager->SetUserAction( new StatAccepTestEventAction ); 
   //runManager->SetUserAction( new StatAccepTestStackingAction ); 

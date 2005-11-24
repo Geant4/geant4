@@ -276,12 +276,11 @@ mainProgram.write( "  StatAccepTestVisManager *visManager = new StatAccepTestVis
 mainProgram.write( "  visManager->Initialize(); \n" )
 mainProgram.write( "#endif \n" )        
 mainProgram.write( "  runManager->SetUserInitialization( new StatAccepTestDetectorConstruction ); \n" )
-mainProgram.write( "  runManager->SetUserAction( new StatAccepTestPrimaryGeneratorAction ); \n" )
 mainProgram.write( "  " + PHYSICS + "  *thePL = new " + PHYSICS + "; \n" )
-
 mainProgram.write( "  //thePL->SetDefaultCutValue( 1.0*cm ); \n" ) #***LOOKHERE***
-    
 mainProgram.write( "  runManager->SetUserInitialization( thePL ); \n" )
+
+mainProgram.write( "  runManager->SetUserAction( new StatAccepTestPrimaryGeneratorAction ); \n" )
 mainProgram.write( "  runManager->SetUserAction( new StatAccepTestRunAction ); \n" )  
 mainProgram.write( "  runManager->SetUserAction( new StatAccepTestEventAction ); \n" )
 
