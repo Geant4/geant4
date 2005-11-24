@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronValues.cc,v 1.12 2005-11-23 11:24:08 vnivanch Exp $
+// $Id: G4HadronValues.cc,v 1.13 2005-11-24 12:17:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -79,7 +79,11 @@ G4HadronValues::GetHadronValues(const G4DynamicParticle* aHadron)
        else if(  iHadrCode ==  321)     iHadron = 4;
        else if(  iHadrCode == -321)     iHadron = 5;
 
-       else   G4Exception(" There is not method for this hadron ");
+       else {   
+         G4cout << "G4HadronValues::GetHadronValues iHadrCode= " 
+		<< iHadrCode<< G4endl;
+         G4Exception(" There is not method for this hadron ");
+       }
 
        G4double mHadr      = aHadron->GetMass()/1000.;         // In GeV
        G4double HadrEnergy = aHadron->GetTotalEnergy()/1000.;  // In GeV
