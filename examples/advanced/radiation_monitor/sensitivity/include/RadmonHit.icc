@@ -1,0 +1,38 @@
+//
+// File name:     RadmonHit.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonHit.icc,v 1.1 2005-11-24 02:31:47 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONHIT_HH
+ #error "RadmonHit.icc cannot be included directly. Please use RadmonHit.hh"
+#else  /* RADMONHIT_HH */
+ inline                                         RadmonHit :: RadmonHit()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonHit :: ~RadmonHit()
+ {
+ }
+ 
+ 
+ 
+
+
+ inline G4double                                RadmonHit :: RetrieveByLabel(const G4String & label) const
+ {
+  return RetrieveById(RadmonHitsManager::Instance()->ReserveIdByLabel(label));
+ }
+ 
+ 
+ 
+ inline void                                    RadmonHit :: StoreByLabel(const G4String & label, G4double value)
+ {
+  StoreById(RadmonHitsManager::Instance()->ReserveIdByLabel(label), value);
+ }
+#endif /* RADMONHIT_HH */

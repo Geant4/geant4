@@ -1,0 +1,16 @@
+//
+// File name:     RadmonSensitiveDetector.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonSensitiveDetector.icc,v 1.1 2005-11-24 02:31:47 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONSENSITIVEDETECTOR_HH
+ #error "RadmonSensitiveDetector.icc cannot be included directly. Please use RadmonSensitiveDetector.hh"
+#else  /* RADMONSENSITIVEDETECTOR_HH */
+ inline void                                    RadmonSensitiveDetector :: EndOfEvent(G4HCofThisEvent * /* hitsCollections */)
+ {
+ }
+#endif /* RADMONSENSITIVEDETECTOR_HH */

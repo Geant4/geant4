@@ -1,0 +1,22 @@
+//
+// File name:     RadmonSensitiveDetectorDataStorer.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonSensitiveDetectorDataStorer.icc,v 1.1 2005-11-24 02:31:47 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONSENSITIVEDETECTORDATASTORER_HH
+ #error "RadmonSensitiveDetectorDataStorer.icc cannot be included directly. Please use RadmonSensitiveDetectorDataStorer.hh"
+#else  /* RADMONSENSITIVEDETECTORDATASTORER_HH */
+ inline                                         RadmonSensitiveDetectorDataStorer :: RadmonSensitiveDetectorDataStorer()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonSensitiveDetectorDataStorer :: ~RadmonSensitiveDetectorDataStorer()
+ {
+ }
+#endif /* RADMONSENSITIVEDETECTORDATASTORER_HH */

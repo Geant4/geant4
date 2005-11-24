@@ -1,0 +1,37 @@
+//
+// File name:     RadmonHitsManager.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonHitsManager.icc,v 1.1 2005-11-24 02:31:47 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONHITSMANAGER_HH
+ #error "RadmonHitsManager.icc cannot be included directly. Please use RadmonHitsManager.hh"
+#else  /* RADMONHITSMANAGER_HH */
+ inline RadmonHitsManager *                     RadmonHitsManager :: Instance()
+ {
+  if (!instance)
+   instance=new RadmonHitsManager;
+   
+  return instance;
+ }
+ 
+ 
+ 
+ 
+
+ inline RadmonHitsManager::Allocator &          RadmonHitsManager :: HitsAllocator()
+ {
+  return * allocator;
+ }
+ 
+ 
+ 
+ 
+ 
+ inline                                         RadmonHitsManager :: ~RadmonHitsManager()
+ {
+ }
+#endif /* RADMONHITSMANAGER_HH */
