@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2005-11-23 21:37:21 tinslay Exp $
+$Id: History,v 1.17 2005-11-24 00:38:28 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,9 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+23rd November 2005  Joseph Perl  (visman-V07-01-09)
+- Tagged in preparation for Geant4 8.0
 
 23rd November 2005 Jane Tinslay
 - Enhanced trajectory implementation
