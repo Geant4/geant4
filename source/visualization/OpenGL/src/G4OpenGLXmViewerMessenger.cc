@@ -21,8 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewerMessenger.cc,v 1.1 2005-11-22 16:03:23 allison Exp $
+// $Id: G4OpenGLXmViewerMessenger.cc,v 1.2 2005-11-24 10:23:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+
+#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
 #include "G4OpenGLXmViewerMessenger.hh"
 
@@ -255,3 +257,5 @@ void G4OpenGLXmViewerMessenger::SetNewValue
 
   G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/rebuild");
 }
+
+#endif

@@ -21,8 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewerMessenger.hh,v 1.1 2005-11-22 16:03:23 allison Exp $
+// $Id: G4OpenGLXmViewerMessenger.hh,v 1.2 2005-11-24 10:23:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+
+#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
 #ifndef G4OPENGLXMVIEWERMESSENGER_HH
 #define G4OPENGLXMVIEWERMESSENGER_HH
@@ -55,6 +57,8 @@ private:
   G4UIcmdWithADouble* fpCommandSetZoomHigh;
   G4UIcmdWithADouble* fpCommandSetZoomLow;
 };
+
+#endif
 
 #endif
 
