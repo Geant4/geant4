@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronValues.cc,v 1.13 2005-11-24 12:17:02 vnivanch Exp $
+// $Id: G4HadronValues.cc,v 1.14 2005-11-24 19:05:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -81,7 +81,9 @@ G4HadronValues::GetHadronValues(const G4DynamicParticle* aHadron)
 
        else {   
          G4cout << "G4HadronValues::GetHadronValues iHadrCode= " 
-		<< iHadrCode<< G4endl;
+		<< iHadrCode
+		<< "  " << aHadron->GetDefinition()->GetParticleName()
+		<< G4endl;
          G4Exception(" There is not method for this hadron ");
        }
 

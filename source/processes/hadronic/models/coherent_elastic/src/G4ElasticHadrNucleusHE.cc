@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.22 2005-11-23 11:24:08 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.23 2005-11-24 19:05:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  G4ElasticHadrNucleusHE class 
@@ -359,10 +359,6 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
                           const  G4HadProjectile  &aHadron,
                                  G4Nucleus        &aNucleus)
 {
-    G4int    nN, nZ;
-
-    G4IonTable  * MyIonTable = const_cast<G4IonTable *>
-             (G4ParticleTable::GetParticleTable()->GetIonTable());
 
  iContr = 133;
 
@@ -371,37 +367,45 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
 
     G4Nucleus * aNucl      = &aNucleus;
 
-    G4double    hadrMass;
-    G4String    hadrName;
+    //    G4double    hadrMass;
+    //    G4String    hadrName;
 
     theParticleChange.Clear();
 
 //  ---------------  Hadron Definition  ---------------
-    hadrMass = aHadron.GetDefinition()->GetPDGMass();
-    hadrName = aHadron.GetDefinition()->GetParticleName();
 
-    G4ParticleDefinition * hadrDef = new G4ParticleDefinition(
-           hadrName, hadrMass,0,0,0,0,0,0,0,0," a ",0,0,0,0,0,0,0);
+    G4ParticleDefinition * hadrDef = 
+      const_cast<G4ParticleDefinition *>(aHadron.GetDefinition());
+    // hadrMass = hadrDef->GetPDGMass();
+    // hadrName = hadrDef->GetParticleName();
 
     G4ThreeVector  hadrMomentum = aHadron.Get4Momentum().vect();
 
     G4DynamicParticle *   aParticle  = new G4DynamicParticle(); 
     aParticle->SetDefinition(hadrDef);
     aParticle->SetMomentum(hadrMomentum);
-
+    /*
     G4double   inLabMom  = aHadron.GetTotalMomentum(); // MeV
     G4double   inEnHadr  = aHadron.GetTotalEnergy();   // MeV
-
+    
  if(iContr==137)
  G4cout<<" Hadr: Energy TotMom  "<<inLabMom<<"  "<<inEnHadr<<G4endl;
+    */
 //  ---------------  Nucleus Definition  ---------------
-    nN   = (G4int) aNucl->GetN();
-    nZ   = (G4int) aNucl->GetZ();
+    G4double A = aNucl->GetN();
+    G4int nA   = (G4int) A;
+    G4int nZ   = (G4int) (aNucl->GetZ()+0.5);
 
-    G4ParticleDefinition * secNuclDef;
+    G4ParticleDefinition * secNuclDef = 0;
+
+    if(nZ == 1 && nA == 1) {
+      secNuclDef = G4Proton::Proton();
+    } else { 
+      if(G4UniformRand()<A-nA) nA++;
+      secNuclDef = G4ParticleTable::GetParticleTable()->FindIon(nZ,nA,0,nZ);
+    }
+
     G4DynamicParticle    * secNuclDyn = new G4DynamicParticle();
-
-    secNuclDef  =   MyIonTable->GetIon(nZ,  nN);
     secNuclDyn->SetDefinition(secNuclDef);
 //  ----------------------------------------------------
 // ----------------_ Randomization of Q2 as dSig/dt --------------
@@ -410,7 +414,7 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
 
     G4double ranQ2;
 
-    if(nN>1)
+    if(nA>1)
     {
        ElasticData ElD;
 
@@ -420,6 +424,50 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
     else ranQ2 = HadronProtonQ2(aParticle);
 
 //  ----------------  Hadron kinematics ----------------
+
+    G4double m1=aParticle->GetDefinition()->GetPDGMass();
+    G4double m2 = secNuclDef->GetPDGMass();
+    G4LorentzVector lv1 = aParticle->Get4Momentum();
+    G4LorentzVector lv0(0.0,0.0,0.0,m2);
+
+    G4LorentzVector lv  = lv0 + lv1;
+    G4ThreeVector bst = lv.boostVector();
+    lv1.boost(-bst);
+    lv0.boost(-bst);
+    G4ThreeVector p1 = lv1.vect();
+    G4double ptot = p1.mag();
+
+    // Sampling in CM system
+    G4double phi  = G4UniformRand()*twopi;
+    G4double cost = 1. - 0.5*ranQ2/(ptot*ptot);
+    G4double sint = 0.0;
+    if(cost > 1.0) cost = 1.0;
+    else if(cost < -1.0) cost = -1.0;
+    else sint = std::sqrt((1.0-cost)*(1.0+cost));
+
+    // G4cout << "Entering elastic scattering 3"<<G4endl;
+    if (verboseLevel > 1) 
+      G4cout << "cos(t)=" << cost << " sin(t)=" << sint << G4endl;
+
+    G4ThreeVector v1(sint*std::cos(phi),sint*std::sin(phi),cost);
+    p1 = p1.unit();
+    v1.rotateUz(p1);
+    v1 *= ptot;
+    G4LorentzVector nlv11(v1.x(),v1.y(),v1.z(),std::sqrt(ptot*ptot + m1*m1));
+    G4LorentzVector nlv01 = lv0 + lv1 - nlv11;
+    nlv01.boost(bst);
+    nlv11.boost(bst); 
+
+    theParticleChange.SetMomentumChange(nlv11.vect().unit());
+    theParticleChange.SetEnergyChange(nlv11.e() - m1);
+
+    secNuclDyn->SetMomentum(nlv01.vect());
+    theParticleChange.AddSecondary(secNuclDyn);
+
+    //G4cout << " ion info "<<atno2 << " "<<A<<" "<<Z<<" "<<zTarget<<G4endl;
+    return &theParticleChange;
+}
+/*
     G4double   MassHadr  = aParticle->GetMass();          // MeV
     G4double   MassNucl  = aNucleus.GetN()*938.27;        // MeV
     G4double   sqrMass   = MassNucl*MassNucl+MassHadr*MassHadr;
@@ -529,6 +577,7 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
 //  ----------------------------------------------------
   return &theParticleChange;
 }
+*/
 
 //  ==========================================================
 

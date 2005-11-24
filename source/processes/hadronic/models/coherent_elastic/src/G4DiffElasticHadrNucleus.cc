@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4DiffElasticHadrNucleus.cc,v 1.17 2005-11-23 11:24:08 vnivanch Exp $
+// $Id: G4DiffElasticHadrNucleus.cc,v 1.18 2005-11-24 19:05:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //
@@ -199,6 +199,12 @@ void  G4DiffElasticHadrNucleus::
      G4double MassH      = aHadron->GetMass()/1000;
 
      G4int    Nucleus    = (G4int)aNucleus->GetN();
+
+     G4cout << "G4DiffElasticHadrNucleus:: HadrNuclDifferCrSec: "
+	    << aHadron->GetDefinition()->GetParticleName()
+	    << " code= " << aHadron->GetDefinition()->GetPDGEncoding()
+	    << "  nuc= " <<  Nucleus 
+	    << G4endl;
 
   if(Nucleus==2 || Nucleus == 3)
   G4Exception(" This model does not work for nuclei with A=3 0r A= 4");
@@ -488,6 +494,13 @@ void  G4DiffElasticHadrNucleus::
      G4double HadrEnergy = aHadron->GetTotalEnergy()/1000;  //  GeV
      G4int    Nucleus    = (G4int)aNucleus->GetN();
      G4double MassH      = aHadron->GetMass()/1000;
+
+     G4cout << "G4DiffElasticHadrNucleus:: HadrNuclDifferCrSec: "
+	    << aHadron->GetDefinition()->GetParticleName()
+	    << " code= " << aHadron->GetDefinition()->GetPDGEncoding()
+	    << "  nuc= " <<  Nucleus 
+	    << G4endl;
+
 
   if(Nucleus==2 || Nucleus==3)
     G4Exception(" This nucleus is very light for this model !!!");
