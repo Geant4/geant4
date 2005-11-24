@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4NestedParameterisedNav.cc,v 1.4 2005-11-24 17:27:58 japost Exp $
+// $Id: testG4NestedParameterisedNav.cc,v 1.5 2005-11-24 18:01:11 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,6 @@
 #include "G4PVPlacement.hh"
 #include "G4PVParameterised.hh"
 #include "G4VPVParameterisation.hh"
-#include "G4PhysicalTouchable.hh"
 #include "G4VNestedParameterisation.hh"
 
 #include "G4Box.hh"
@@ -452,6 +451,7 @@ G4bool testG4Navigator1(G4VPhysicalVolume *pTopNode)
 		       G4ThreeVector(0.0*cm, 5.*cm, 25.*cm)));
     assert(located->GetLogicalVolume()->GetMaterial()==brightMaterial); 
 
+    /*---------------------------------------------------------------------------
     G4PhysicalTouchable *locPT= dynamic_cast<G4PhysicalTouchable*>(located); 
     if( locPT != 0 ){ 
       G4VPhysicalVolume *parent= locPT->GetParentTouchable()->GetVolume(); 
@@ -470,6 +470,7 @@ G4bool testG4Navigator1(G4VPhysicalVolume *pTopNode)
 	assert(parent2->GetName()=="Top 2-pv");
       }
     }
+    *****************************************************************************/
 
     return true;
 }
@@ -518,6 +519,7 @@ G4bool testG4Navigator2(G4VPhysicalVolume *pTopNode)
 
     // The following tests depend on physical touchables -- obsolete
     // 
+    /**********************************************************************
     G4PhysicalTouchable *locPT= dynamic_cast<G4PhysicalTouchable*>(located); 
     G4VPhysicalVolume *parent= locPT->GetParentTouchable()->GetVolume();  
 
@@ -528,6 +530,7 @@ G4bool testG4Navigator2(G4VPhysicalVolume *pTopNode)
 	   << G4endl; 
 
     assert(parent2->GetName()=="Top 1-pv");
+    ***********************************************************************/
 
     G4cerr << " Testing in TestNavigator2() is ending line " << __LINE__ 
 	   << " for the time being. " << G4endl; 
