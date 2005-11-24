@@ -1,0 +1,24 @@
+-------------------------------------------------------------------
+
+     ==========================================================
+     Geant4 - an Object-Oriented Toolkit for Physics Simulation
+     ==========================================================
+
+            History file for hadronic/models/cascade
+            ----------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+24 Nov 2005 Dennis Wright (hadr-casc-V07-01-00)
+----------------------------------------------
+
+- cascade (bertini-V07-01-00 by Aatos Heikkinen)
+   elastic scattering interface added:
+   G4ElasticCascadeInterface.hh, .cc added
+   G4CascadeInterface.hh modified
+
