@@ -34,6 +34,7 @@
 // 25-JUN-98 FWJ: replaced missing Initialize for ParticleChange.
 // 09-Set-05 V.Ivanchenko HARP version of the model: fix scattering
 //           on hydrogen, use relativistic Lorentz transformation
+// 24-Nov-05 V.Ivanchenko sample cost in center of mass reference system
 //
 
 #include <cfloat>
@@ -156,7 +157,7 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
    }
    G4double eps = 0.001;
    G4int ind1 = 10;
-   G4double t;
+   G4double t = 0.0;
    G4int ier1;
    ier1 = Rtmi(&t, t1, t2, eps, ind1,
                aa, bb, cc, dd, rr);
@@ -170,16 +171,6 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
       G4cout << "t, Fctcos " << t << " " << Fctcos(t, aa, bb, cc, dd, rr) << 
               G4endl;
    }
-   G4double phi = G4UniformRand()*twopi;
-   rr = 0.5*t/(p*p);
-   if (rr > 1.) rr = 0.;
-   if (verboseLevel > 1)
-      G4cout << "rr=" << rr << G4endl;
-   G4double cost = 1. - rr;
-   G4double sint = std::sqrt(std::max(rr*(2. - rr), 0.));
-   if (sint == 0.) return &theParticleChange;
-   // G4cout << "Entering elastic scattering 3"<<G4endl;
-   if (verboseLevel > 1) G4cout << "cos(t)=" << cost << "  std::sin(t)=" << sint << G4endl;
 
    // Scattered particle referred to axis of incident particle
    G4double m1=aParticle->GetDefinition()->GetPDGMass();
@@ -204,6 +195,19 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
    lv0.boost(-bst);
    G4ThreeVector p1 = lv1.vect();
    G4double ptot = p1.mag();
+
+   // Sampling in CM system
+   G4double phi  = G4UniformRand()*twopi;
+   G4double cost = 1. - 0.5*t/(ptot*ptot);
+   G4double sint = 0.0;
+   if(cost > 1.0) cost = 1.0;
+   else if(cost < -1.0) cost = -1.0;
+   else sint = std::sqrt((1.0-cost)*(1.0+cost));
+
+   // G4cout << "Entering elastic scattering 3"<<G4endl;
+   if (verboseLevel > 1) 
+     G4cout << "cos(t)=" << cost << " sin(t)=" << sint << G4endl;
+
    G4ThreeVector v1(sint*std::cos(phi),sint*std::sin(phi),cost);
    p1 = p1.unit();
    v1.rotateUz(p1);
