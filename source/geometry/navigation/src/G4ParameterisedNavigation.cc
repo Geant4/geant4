@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.cc,v 1.8 2005-11-24 17:35:14 japost Exp $
+// $Id: G4ParameterisedNavigation.cc,v 1.9 2005-11-24 17:49:37 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -29,7 +29,8 @@
 //
 // Initial Author: P.Kent, 1996
 // Revisions:
-//  J. Apostolakis  4 Feb 2004, Reintroducting multi-level parameterisation
+//  J. Apostolakis 24 Nov 2005, Revised/fixed treatment of nested params
+//  J. Apostolakis  4 Feb 2005, Reintroducting multi-level parameterisation
 //                                for materials only - see note 1 below
 //  G. Cosmo       11 Mar 2004, Added Check mode 
 //  G. Cosmo       15 May 2002, Extended to 3-d voxelisation, made subclass
@@ -213,9 +214,6 @@ G4double G4ParameterisedNavigation::
   sampleParam = samplePhysical->GetParameterisation();
 
   // G4cerr << " Attaching parent touchable information to Phys Volume " << G4endl; 
-  // Attach parent touchable information to Phys Volume
-  // nG4VPhysicalVolume* newPhysical= CreateVolumeWithParent( samplePhysical, history );
-  // if( newPhysical ) { samplePhysical= newPhysical; }
 
   do
   {
@@ -382,9 +380,6 @@ G4double G4ParameterisedNavigation::
     }
   } while (noStep);
 
-  // delete pParentTouchable; 
-  // if( newPhysical ) delete newPhysical; 
-
   return ourStep;
 }
 
@@ -440,8 +435,6 @@ G4ParameterisedNavigation::ComputeSafety(const G4ThreeVector& localPoint,
   // Check development  
   // G4cerr << "DebugLOG - G4ParameterisedNavigation::ComputeSafety()" << G4endl
   //       << "            Current solid " << motherSolid->GetName() << G4endl; 
-  // G4cerr << " No longer attaching parent touchable information to Phys Volume "
-  //       << G4endl;
 
   // Look inside the current Voxel only at the current point
   //
@@ -485,7 +478,6 @@ G4ParameterisedNavigation::ComputeSafety(const G4ThreeVector& localPoint,
   {
     ourSafety=voxelSafety;
   }
-  // if( newPhysical ) delete newPhysical; 
 
   return ourSafety;
 }
@@ -645,7 +637,7 @@ G4ParameterisedNavigation::LevelLocate( G4NavigationHistory& history,
 
   // Save parent history in touchable history
   //   ... for use as parent t-h in ComputeMaterial method of param
-  G4TouchableHistory* parentTouchable= new G4TouchableHistory( history ); 
+  G4TouchableHistory parentTouchable( history ); 
 
   // Search replicated daughter volume
   //
@@ -690,14 +682,12 @@ G4ParameterisedNavigation::LevelLocate( G4NavigationHistory& history,
         pLogical->SetSolid(pSolid);
 
         pLogical->UpdateMaterial(
-				 pParam->ComputeMaterial(replicaNo, pPhysical, parentTouchable)  );
+				 pParam->ComputeMaterial(replicaNo, pPhysical, &parentTouchable)  );
 	
-	delete parentTouchable; 
         return true;
       }
     }
   }
 
-  delete parentTouchable; 
   return false;
 }
