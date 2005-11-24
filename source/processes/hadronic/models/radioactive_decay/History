@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 November 2005 Dennis Wright (radioactive_decay-V07-01-01)
+- migrated two remaining files to <sstream>:
+   G4RIsotopeTable.cc, G4UIcmdWithNucleusLimits.cc
+
 09 November 2005 Gabriele Cosmo (radioactive_decay-V07-01-00)
 - Implemented migration to <sstream> from deprecated <strstream>.
 - Added changes for support of CLHEP-2.0.X.
