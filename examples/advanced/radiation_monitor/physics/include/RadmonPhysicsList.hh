@@ -3,7 +3,7 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonPhysicsList.hh,v 1.2 2005-11-10 08:14:10 capra Exp $
+// Id:            $Id: RadmonPhysicsList.hh,v 1.3 2005-11-24 02:38:17 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Implementation of the G4VUserPhysicsList
@@ -38,6 +38,7 @@
   private:
   // Private methods
    void                                         Destruct(void);
+   void                                         CheckUpdate(void);
 
   // Hidden constructors and operators
                                                 RadmonPhysicsList();
@@ -54,5 +55,6 @@
    SubPhysiscsLists                             subPhysiscsLists;
    
    G4bool                                       initializationMethodsCalled;
+   G4bool                                       changed;
  };
 #endif /* RADMONPHYSICSLIST_HH */

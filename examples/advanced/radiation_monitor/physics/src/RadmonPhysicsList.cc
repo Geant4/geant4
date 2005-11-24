@@ -3,7 +3,7 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonPhysicsList.cc,v 1.2 2005-11-10 08:14:10 capra Exp $
+// Id:            $Id: RadmonPhysicsList.cc,v 1.3 2005-11-24 02:38:17 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -19,7 +19,8 @@
 :
  physicsLayout(layout),
  subPhysicsListFactory(factory),
- initializationMethodsCalled(false)
+ initializationMethodsCalled(false),
+ changed(true)
 {
  if (physicsLayout==0)
   G4Exception("RadmonPhysicsList::RadmonPhysicsList: layout==0.");
@@ -52,6 +53,101 @@ void                                            RadmonPhysicsList :: OnLayoutCha
   G4cout << "RadmonPhysicsList::OnLayoutChange: Physics initialization done, changes to the physics will be ignored" << G4endl;
   return;
  }
+ 
+ changed=true;
+}
+
+
+
+
+
+void                                            RadmonPhysicsList :: ConstructParticle(void)
+{
+}
+
+
+
+void                                            RadmonPhysicsList :: ConstructProcess(void)
+{
+ CheckUpdate();
+ initializationMethodsCalled=true;
+ 
+ AddTransportation();
+
+ SubPhysiscsLists::iterator i(subPhysiscsLists.begin());
+ const SubPhysiscsLists::iterator end(subPhysiscsLists.end());
+ 
+ while (i!=end)
+ {
+  (*i)->ConstructParticle();
+  
+  i++;
+ }
+
+ i=subPhysiscsLists.begin();
+ while (i!=end)
+ {
+  (*i)->ConstructProcess();
+  
+  i++;
+ }
+}
+
+
+
+void                                            RadmonPhysicsList :: SetCuts(void)
+{
+ CheckUpdate();
+ initializationMethodsCalled=true;
+
+ SubPhysiscsLists::iterator i(subPhysiscsLists.begin());
+ const SubPhysiscsLists::iterator end(subPhysiscsLists.end());
+ 
+ while (i!=end)
+ {
+  (*i)->ConstructParticle();
+  
+  i++;
+ }
+
+ i=subPhysiscsLists.begin();
+ while (i!=end)
+ {
+  (*i)->SetCuts();
+  
+  i++;
+ }
+}
+
+
+
+
+
+void                                            RadmonPhysicsList :: Destruct(void)
+{
+ SubPhysiscsLists::iterator i(subPhysiscsLists.begin());
+ const SubPhysiscsLists::iterator end(subPhysiscsLists.end());
+ 
+ while (i!=end)
+ {
+  delete (*i);
+  
+  i++;
+ }
+ 
+ subPhysiscsLists.clear();
+}
+
+
+
+
+
+void                                            RadmonPhysicsList :: CheckUpdate(void)
+{
+ if (!changed)
+  return;
+  
+ changed=false;
  
  Destruct();
  
@@ -91,83 +187,4 @@ void                                            RadmonPhysicsList :: OnLayoutCha
   else
    G4cout << "RadmonPhysicsList::OnLayoutChange: Physics list with name \"" << name << "\" not found." << G4endl;
  }
-}
-
-
-
-
-
-void                                            RadmonPhysicsList :: ConstructParticle(void)
-{
-}
-
-
-
-void                                            RadmonPhysicsList :: ConstructProcess(void)
-{
- initializationMethodsCalled=true;
- 
- AddTransportation();
-
- SubPhysiscsLists::iterator i(subPhysiscsLists.begin());
- const SubPhysiscsLists::iterator end(subPhysiscsLists.end());
- 
- while (i!=end)
- {
-  (*i)->ConstructParticle();
-  
-  i++;
- }
-
- i=subPhysiscsLists.begin();
- while (i!=end)
- {
-  (*i)->ConstructProcess();
-  
-  i++;
- }
-}
-
-
-
-void                                            RadmonPhysicsList :: SetCuts(void)
-{
- initializationMethodsCalled=true;
-
- SubPhysiscsLists::iterator i(subPhysiscsLists.begin());
- const SubPhysiscsLists::iterator end(subPhysiscsLists.end());
- 
- while (i!=end)
- {
-  (*i)->ConstructParticle();
-  
-  i++;
- }
-
- i=subPhysiscsLists.begin();
- while (i!=end)
- {
-  (*i)->SetCuts();
-  
-  i++;
- }
-}
-
-
-
-
-
-void                                            RadmonPhysicsList :: Destruct(void)
-{
- SubPhysiscsLists::iterator i(subPhysiscsLists.begin());
- const SubPhysiscsLists::iterator end(subPhysiscsLists.end());
- 
- while (i!=end)
- {
-  delete (*i);
-  
-  i++;
- }
- 
- subPhysiscsLists.clear();
 }
