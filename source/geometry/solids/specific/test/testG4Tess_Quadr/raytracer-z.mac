@@ -1,0 +1,26 @@
+#
+# Macro file for the initialization phase of "exampleN02.cc"
+# when runing in interactive mode
+#
+# Sets some default verbose
+#
+/control/verbose 2
+/run/verbose 2
+#
+# create empty scene
+#
+#/vis/open VRML2FILE
+/vis/open RayTracer
+/vis/viewer/create
+/vis/drawVolume
+/vis/rayTracer/target 0 0 0 mm
+/vis/rayTracer/eyePosition  0 0 -3000 mm
+/vis/rayTracer/span 1.0  
+/vis/rayTracer/trace
+#
+/tracking/verbose 2
+/gps/pos/type Surface
+/gps/pos/shape Sphere
+/gps/pos/radius 5 cm
+/gps/ang/type cos
+/run/beamOn 10

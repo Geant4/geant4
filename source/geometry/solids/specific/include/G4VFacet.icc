@@ -1,0 +1,155 @@
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//
+// MODULE:		G4VFacet.icc
+//
+// Version:		0.B
+// Date:		15/06/2005
+// Author:		P R Truscott
+// Organisation:	QinetiQ Ltd, UK
+// Customer:		UK Ministry of Defence : RAO CRP TD Electronic Systems
+// Contract:		C/MAT/N03517
+//
+// This software is the intelectual property of QinetiQ Ltd, subject
+// DEFCON 705 IPR conditions.
+//
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//
+// CHANGE HISTORY
+// --------------
+//
+// 31 October 2004, P R Truscott, QinetiQ Ltd, UK
+// Created.
+//
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//
+// DISCLAIMER
+// ----------
+//
+//
+//
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//
+// DESCRIPTION
+// -----------
+//
+//
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+//
+#include "globals.hh"
+///////////////////////////////////////////////////////////////////////////////
+//
+inline G4VFacet::G4VFacet ()
+{
+  dirTolerance = 1.0E-14;
+  
+  P.clear();
+  E.clear();
+    
+  centroid  = G4ThreeVector(0.0,0.0,0.0);
+  radius    = 0.0;
+  radiusSqr = 0.0;
+}
+///////////////////////////////////////////////////////////////////////////////
+//
+inline G4VFacet::~G4VFacet ()
+{
+  P.clear();
+  E.clear();
+}
+///////////////////////////////////////////////////////////////////////////////
+//
+inline G4ThreeVector G4VFacet::GetSurfaceNormal () const
+  {return surfaceNormal;}
+///////////////////////////////////////////////////////////////////////////////
+//
+inline G4GeometryType G4VFacet::GetEntityType () const
+  {return geometryType;}
+///////////////////////////////////////////////////////////////////////////////
+//
+inline G4bool G4VFacet::IsInside (const G4ThreeVector &p) const
+{
+  G4ThreeVector D       = p - P0;
+  G4double displacement = D.dot(surfaceNormal);
+  G4bool inside         = (displacement <= 0.0);
+  
+  return inside;
+}
+///////////////////////////////////////////////////////////////////////////////
+//
+inline G4bool G4VFacet::IsDefined () const
+  {return isDefined;}
+///////////////////////////////////////////////////////////////////////////////
+//
+inline size_t G4VFacet::GetVertexIndex (const size_t i) const
+{
+  if (i < I.size()) return I[i];
+  else              return 999999999;
+}
+///////////////////////////////////////////////////////////////////////////////
+//
+inline size_t G4VFacet::GetNumberOfVertices () const
+{
+  return nVertices;
+}
+ ///////////////////////////////////////////////////////////////////////////////
+//
+inline void G4VFacet::SetVertexIndex (const size_t i, const size_t j)
+  {I[i] = j;}
+///////////////////////////////////////////////////////////////////////////////
+//
+inline G4ThreeVector G4VFacet::GetVertex (size_t i) const
+{
+  if (i == 0)             return P0;
+  else if (i < nVertices) return P[i-1];
+  else                    return G4ThreeVector(0.0,0.0,0.0);
+}
+///////////////////////////////////////////////////////////////////////////////
+//
+inline void G4VFacet::ApplyTranslation(const G4ThreeVector v)
+{
+  P0 += v;
+  for (G4ThreeVectorList::iterator it=P.begin(); it!=P.end(); it++)
+    (*it) += v;
+}
+///////////////////////////////////////////////////////////////////////////////
+//
+inline G4bool G4VFacet::operator== (const G4VFacet &right) const
+{
+  G4double tolerance = kCarTolerance*kCarTolerance/4.0;
+  if (nVertices != right.GetNumberOfVertices())
+    return false;
+  else if ((centroid-right.GetCentroid()).mag2() > tolerance)
+    return false;
+  else if (fabs((right.GetSurfaceNormal()).dot(surfaceNormal)) < 0.9999999999)
+    return false;
+
+  G4bool coincident  = true;
+  size_t i           = 0;
+  do
+  {
+    coincident = false;
+    size_t j   = 0;
+    do
+    {
+      coincident = (GetVertex(i)-right.GetVertex(j)).mag2() < tolerance;
+    } while (!coincident && j++ < nVertices);
+  } while (coincident && i++ < nVertices);
+  
+  return coincident;
+}
+///////////////////////////////////////////////////////////////////////////////
+//
+inline G4ThreeVector G4VFacet::GetCentroid () const
+  {return centroid;}
+///////////////////////////////////////////////////////////////////////////////
+//
+inline G4double G4VFacet::GetRadius () const
+  {return radius;}
+///////////////////////////////////////////////////////////////////////////////
+//
+inline G4double G4VFacet::GetRadiusSquared () const
+  {return radiusSqr;}
+///////////////////////////////////////////////////////////////////////////////
+//
