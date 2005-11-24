@@ -1,4 +1,4 @@
-$Id: History,v 1.94 2005-11-11 22:34:37 japost Exp $
+$Id: History,v 1.95 2005-11-24 18:16:54 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 19, 2005  J. Apostolakis          geommng-V07-01-05
+- Revised G4VPVParameterisation
+   Changed signature of ComputeMaterial, adding parent touchable pointer
+   -> this refinement enables easy use of nested parameterisations
+   Additional methods allow nested parameterisation to be identified
+     G4bool IsNested() const;
+   and to provide their material via new interface class
+     G4VVolumeMaterialScanner* GetMaterialScanner(); 
+   [ As a result is that G4PhysicalTouchable in volumes is not needed 
+     in the implementation (and is supressed.)
+
 November 11, 2005  J. Apostolakis          geommng-V07-01-04
 - Added methods to identify  Regular Structures in  Physical volume 
   New pure virtual methods:
