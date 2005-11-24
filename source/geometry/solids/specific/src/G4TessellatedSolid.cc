@@ -50,7 +50,8 @@ using namespace std;
 //
 // Standard contructor has blank name and defines no facets.
 //
-G4TessellatedSolid::G4TessellatedSolid () : G4VSolid("dummy")
+G4TessellatedSolid::G4TessellatedSolid () : G4VSolid("dummy"),
+					    fpPolyhedron(0), cubicVolume(0.)
 {
   dirTolerance = 1.0E-14;
   
@@ -70,7 +71,8 @@ G4TessellatedSolid::G4TessellatedSolid () : G4VSolid("dummy")
 // Alternative constructor. Simple define name and geometry type - no facets
 // to detine.
 //
-G4TessellatedSolid::G4TessellatedSolid (const G4String &name) : G4VSolid(name)
+G4TessellatedSolid::G4TessellatedSolid (const G4String &name) :
+  G4VSolid(name), fpPolyhedron(0), cubicVolume(0.)
 {
   dirTolerance = 1.0E-14;
   
