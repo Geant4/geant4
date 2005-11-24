@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.35 2005-11-22 16:33:05 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.36 2005-11-24 11:15:21 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -254,7 +254,7 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
       pMaterial = pLV -> GetMaterial ();
       G4ThreeVector originalTranslation = pVPV -> GetTranslation ();
       G4RotationMatrix* pOriginalRotation = pVPV -> GetRotation ();
-      G4double originalRMin, originalRMax;
+      G4double originalRMin = 0., originalRMax = 0.;
       if (axis == kRho && pSol->GetEntityType() == "G4Tubs") {
 	originalRMin = ((G4Tubs*)pSol)->GetInnerRadius();
 	originalRMax = ((G4Tubs*)pSol)->GetOuterRadius();
