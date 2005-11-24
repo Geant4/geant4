@@ -1,0 +1,75 @@
+//
+// File name:     RadmonDataAnalysisLayout.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonDataAnalysisLayout.icc,v 1.1 2005-11-24 02:33:32 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONDATAANALYSISLAYOUT_HH
+ #error "RadmonDataAnalysisLayout.icc cannot be included directly. Please use RadmonDataAnalysisLayout.hh"
+#else  /* RADMONDATAANALYSISLAYOUT_HH */
+ inline                                         RadmonDataAnalysisLayout :: RadmonDataAnalysisLayout()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonDataAnalysisLayout :: RadmonDataAnalysisLayout(const RadmonDataAnalysisLayout & copy)
+ :
+  RadmonLayoutEntityWithAttributes(copy),
+  dataAnalysisLabel(copy.dataAnalysisLabel),
+  dataAnalysisType(copy.dataAnalysisType)
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonDataAnalysisLayout :: ~RadmonDataAnalysisLayout()
+ {
+ }
+ 
+ 
+ 
+ 
+
+ inline RadmonDataAnalysisLayout &             RadmonDataAnalysisLayout :: operator=(const RadmonDataAnalysisLayout & copy)
+ {
+  RadmonLayoutEntityWithAttributes::operator=(copy);
+  dataAnalysisLabel=copy.dataAnalysisLabel;
+  dataAnalysisType=copy.dataAnalysisType;
+  
+  return (*this);
+ }
+ 
+ 
+ 
+ 
+
+ inline const G4String &                        RadmonDataAnalysisLayout :: GetLabel(void) const
+ {
+  return dataAnalysisLabel; 
+ }
+ 
+ 
+ 
+ inline void                                    RadmonDataAnalysisLayout :: SetLabel(const G4String & label)
+ {
+  dataAnalysisLabel=label; 
+ }
+
+
+
+ inline const G4String &                        RadmonDataAnalysisLayout :: GetType(void) const
+ {
+  return dataAnalysisType; 
+ }
+ 
+ 
+ 
+ inline void                                    RadmonDataAnalysisLayout :: SetType(const G4String & type)
+ {
+  dataAnalysisType=type; 
+ }
+#endif /* RADMONDATAANALYSISLAYOUT_HH */

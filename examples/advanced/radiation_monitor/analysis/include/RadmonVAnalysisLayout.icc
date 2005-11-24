@@ -1,0 +1,22 @@
+//
+// File name:     RadmonVAnalysisLayout.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonVAnalysisLayout.icc,v 1.1 2005-11-24 02:33:32 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONVANALYSISLAYOUT_HH
+ #error "RadmonVAnalysisLayout.icc cannot be included directly. Please use RadmonVAnalysisLayout.hh"
+#else  /* RADMONVANALYSISLAYOUT_HH */
+ inline                                         RadmonVAnalysisLayout :: RadmonVAnalysisLayout()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonVAnalysisLayout :: ~RadmonVAnalysisLayout()
+ {
+ }
+#endif /* RADMONVANALYSISLAYOUT_HH */

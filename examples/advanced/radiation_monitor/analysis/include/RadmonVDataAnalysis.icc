@@ -1,0 +1,22 @@
+//
+// File name:     RadmonVDataAnalysis.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonVDataAnalysis.icc,v 1.1 2005-11-24 02:33:32 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONVDATAANALYSIS_HH
+ #error "RadmonVDataAnalysis.icc cannot be included directly. Please use RadmonVDataAnalysis.hh"
+#else  /* RADMONVDATAANALYSIS_HH */
+ inline                                         RadmonVDataAnalysis :: RadmonVDataAnalysis()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonVDataAnalysis :: ~RadmonVDataAnalysis()
+ {
+ }
+#endif /* RADMONVDATAANALYSIS_HH */

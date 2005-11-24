@@ -1,0 +1,42 @@
+//
+// File name:     RadmonVDataAnalysisWithLabel.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonVDataAnalysisWithLabel.icc,v 1.1 2005-11-24 02:33:32 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONVDATAANALYSISWITHLABEL_HH
+ #error "RadmonVDataAnalysisWithLabel.icc cannot be included directly. Please use RadmonVDataAnalysisWithLabel.hh"
+#else  /* RADMONVDATAANALYSISWITHLABEL_HH */
+ inline                                         RadmonVDataAnalysisWithLabel :: ~RadmonVDataAnalysisWithLabel()
+ {
+ }
+ 
+ 
+ 
+ 
+
+ inline const G4String &                        RadmonVDataAnalysisWithLabel :: GetLabel(void) const
+ {
+  return physiscListLabel;
+ }
+ 
+ 
+ 
+ inline void                                    RadmonVDataAnalysisWithLabel :: SetDataAnalysisAttribute(const G4String & attributeName, const G4String & value)
+ {
+  SetAttribute(attributeName, value);
+ }
+
+
+
+
+ 
+ inline                                         RadmonVDataAnalysisWithLabel :: RadmonVDataAnalysisWithLabel(const G4String & label)
+ :
+  physiscListLabel(label)
+ {
+ }
+#endif /* RADMONVDATAANALYSISWITHLABEL_HH */

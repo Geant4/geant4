@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2005-11-10 08:16:30 capra Exp $
+# $Id: GNUmakefile,v 1.6 2005-11-24 02:34:48 capra Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples with internal subpackages
 # R. Capra, 09 Sep 2005
@@ -7,7 +7,13 @@
 name := Radmon
 G4TARGET := $(name)
 G4EXLIB := true
-SUBDIRS := generalPurpose materials detector physics generator application
+SUBDIRS := userActions generalPurpose materials sensitivity detector physics generator 
+
+ifdef G4ANALYSIS_USE
+ SUBDIRS += analysis
+endif
+
+SUBDIRS += application
 
 ifndef G4INSTALL
   G4INSTALL = ../../..
@@ -22,7 +28,7 @@ ifdef G4ANALYSIS_USE
  CPPFLAGS += `aida-config --include`
  CPPFLAGS += -DG4ANALYSIS_USE
  LDFLAGS  += `aida-config --lib`
- LOADLIBS += `aida-config --lib` 
+ LOADLIBS += `aida-config --lib`
 endif
 
 CPPFLAGS += -I./detector/include \

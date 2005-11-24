@@ -1,0 +1,16 @@
+//
+// File name:     RadmonDataAnalysisWithLabelFactory.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonDataAnalysisWithLabelFactory.icc,v 1.1 2005-11-24 02:33:32 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONDATAANALYSISWITHLABELFACTORY_HH
+ #error "RadmonDataAnalysisWithLabelFactory.icc cannot be included directly. Please use RadmonDataAnalysisWithLabelFactory.hh"
+#else  /* RADMONDATAANALYSISWITHLABELFACTORY_HH */
+ inline                                         RadmonDataAnalysisWithLabelFactory :: RadmonDataAnalysisWithLabelFactory()
+ {
+ }
+#endif /* RADMONDATAANALYSISWITHLABELFACTORY_HH */

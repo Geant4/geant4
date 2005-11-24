@@ -1,0 +1,38 @@
+//
+// File name:     RadmonAnalysisSensitiveDetectorTypeLayout.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonAnalysisSensitiveDetectorTypeLayout.icc,v 1.1 2005-11-24 02:33:32 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONANALYSISSENSITIVEDETECTORTYPELAYOUT_HH
+ #error "RadmonAnalysisSensitiveDetectorTypeLayout.icc cannot be included directly. Please use RadmonAnalysisSensitiveDetectorTypeLayout.hh"
+#else  /* RADMONANALYSISSENSITIVEDETECTORTYPELAYOUT_HH */
+ inline                                         RadmonAnalysisSensitiveDetectorTypeLayout :: RadmonAnalysisSensitiveDetectorTypeLayout()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonAnalysisSensitiveDetectorTypeLayout :: ~RadmonAnalysisSensitiveDetectorTypeLayout()
+ {
+ }
+
+
+
+
+
+ inline const G4String &                        RadmonAnalysisSensitiveDetectorTypeLayout :: GetLabel(void) const
+ {
+  return sensitiveDetectorLabel;
+ }
+ 
+ 
+ 
+ inline void                                    RadmonAnalysisSensitiveDetectorTypeLayout :: SetLabel(const G4String & label)
+ {
+  sensitiveDetectorLabel=label;
+ }
+#endif /* RADMONANALYSISSENSITIVEDETECTORTYPELAYOUT_HH */

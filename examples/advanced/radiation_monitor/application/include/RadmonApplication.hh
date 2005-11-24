@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplication.hh,v 1.5 2005-11-07 17:54:19 capra Exp $
+// Id:            $Id: RadmonApplication.hh,v 1.6 2005-11-24 02:33:32 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Radmon application
@@ -17,6 +17,9 @@
  #include "RadmonApplicationDetectorSetup.hh"
  #include "RadmonApplicationGeneratorSetup.hh"
  #include "RadmonApplicationPhysicsSetup.hh"
+ #ifdef    G4ANALYSIS_USE
+  #include "RadmonApplicationAnalysisSetup.hh"
+ #endif /* G4ANALYSIS_USE */
 
  // Forward declarations
  class RadmonApplicationOptions;
@@ -24,18 +27,26 @@
  class RadmonDetectorLayout;
  class RadmonGeneratorLayout;
  class RadmonPhysicsLayout;
+ class RadmonAnalysisLayout;
  class RadmonDetectorLabelledEntitiesConstructorsFactory;
  class RadmonGeneratorsWithLabelFactory;
  class RadmonSubPhysicsListWithLabelFactory;
+ class RadmonDataAnalysisWithLabelFactory;
+ class RadmonAnalysis;
  class G4VisManager;
  class G4UImanager;
  class RadmonDetectorMessenger;
  class RadmonGeneratorMessenger;
  class RadmonPhysicsMessenger;
+ class RadmonAnalysisMessenger;
+ class RadmonApplicationMessenger;
  class G4UIsession;
  class G4UIdirectory;
 
- class RadmonApplication : public RadmonApplicationDetectorSetup, RadmonApplicationGeneratorSetup, RadmonApplicationPhysicsSetup
+ class RadmonApplication : public RadmonApplicationDetectorSetup, public RadmonApplicationGeneratorSetup, public RadmonApplicationPhysicsSetup
+ #ifdef    G4ANALYSIS_USE
+                         , public RadmonApplicationAnalysisSetup
+ #endif /* G4ANALYSIS_USE */
  {
   public:
                                                 RadmonApplication(const RadmonApplicationOptions & options);
@@ -58,9 +69,16 @@
    RadmonDetectorLayout *                       detectorLayout;
    RadmonGeneratorLayout *                      generatorLayout;
    RadmonPhysicsLayout *                        physicsLayout;
+   #ifdef    G4ANALYSIS_USE
+    RadmonAnalysisLayout *                      analysisLayout;
+   #endif /* G4ANALYSIS_USE */
    RadmonDetectorLabelledEntitiesConstructorsFactory * detectorsFactory;
    RadmonGeneratorsWithLabelFactory *           generatorsFactory;
    RadmonSubPhysicsListWithLabelFactory *       physicsFactory;
+   #ifdef    G4ANALYSIS_USE
+    RadmonDataAnalysisWithLabelFactory *        analysisFactory;
+    RadmonAnalysis *                            analysis;
+   #endif /* G4ANALYSIS_USE */
    #ifdef    G4VIS_USE
     G4VisManager *                              visManager;
    #endif /* G4VIS_USE */
@@ -68,6 +86,10 @@
    RadmonDetectorMessenger *                    detectorMessenger;
    RadmonGeneratorMessenger *                   generatorMessenger;
    RadmonPhysicsMessenger *                     physicsMessenger;
+   #ifdef    G4ANALYSIS_USE
+    RadmonAnalysisMessenger *                   analysisMessenger;
+   #endif /* G4ANALYSIS_USE */
+   RadmonApplicationMessenger *                 applicationMessenger;
    G4UIsession *                                session;
    G4UIdirectory *                              directory;
  };

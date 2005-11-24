@@ -1,0 +1,22 @@
+//
+// File name:     RadmonVDataAnalysisFactory.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonVDataAnalysisFactory.icc,v 1.1 2005-11-24 02:33:32 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONVDATAANALYSISFACTORY_HH
+ #error "RadmonVDataAnalysisFactory.icc cannot be included directly. Please use RadmonVDataAnalysisFactory.hh"
+#else  /* RADMONVDATAANALYSISFACTORY_HH */
+ inline                                         RadmonVDataAnalysisFactory :: ~RadmonVDataAnalysisFactory()
+ {
+ }
+
+
+
+ inline                                         RadmonVDataAnalysisFactory :: RadmonVDataAnalysisFactory()
+ {
+ }
+#endif /* RADMONVDATAANALYSISFACTORY_HH */

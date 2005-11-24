@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplication.cc,v 1.9 2005-11-10 08:17:16 capra Exp $
+// Id:            $Id: RadmonApplication.cc,v 1.10 2005-11-24 02:33:32 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -16,15 +16,22 @@
 #include "RadmonDetectorLabelledEntitiesConstructorsFactory.hh"
 #include "RadmonDetectorMessenger.hh"
 
+#include "RadmonGeneratorLayout.hh"
+#include "RadmonPrimaryGeneratorAction.hh"
+#include "RadmonGeneratorsWithLabelFactory.hh"
+#include "RadmonGeneratorMessenger.hh"
+
 #include "RadmonPhysicsLayout.hh"
 #include "RadmonPhysicsList.hh"
 #include "RadmonSubPhysicsListWithLabelFactory.hh"
 #include "RadmonPhysicsMessenger.hh"
 
-#include "RadmonGeneratorLayout.hh"
-#include "RadmonPrimaryGeneratorAction.hh"
-#include "RadmonGeneratorsWithLabelFactory.hh"
-#include "RadmonGeneratorMessenger.hh"
+#include "RadmonAnalysisLayout.hh"
+#include "RadmonAnalysis.hh"
+#include "RadmonDataAnalysisWithLabelFactory.hh"
+#include "RadmonAnalysisMessenger.hh"
+
+#include "RadmonApplicationMessenger.hh"
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -43,14 +50,24 @@
  RadmonApplicationDetectorSetup(options),
  RadmonApplicationGeneratorSetup(options),
  RadmonApplicationPhysicsSetup(options),
+ #ifdef    G4ANALYSIS_USE
+  RadmonApplicationAnalysisSetup(options),
+#endif /* G4ANALYSIS_USE */
  valid(false),
  runManager(0),
  detectorLayout(0),
  generatorLayout(0),
  physicsLayout(0),
+ #ifdef    G4ANALYSIS_USE
+  analysisLayout(0),
+ #endif /* G4ANALYSIS_USE */
  detectorsFactory(0),
  generatorsFactory(0),
  physicsFactory(0),
+ #ifdef    G4ANALYSIS_USE
+  analysisFactory(0),
+  analysis(0),
+ #endif /* G4ANALYSIS_USE */
  #ifdef    G4VIS_USE
   visManager(0),
  #endif /* G4VIS_USE */
@@ -58,6 +75,10 @@
  detectorMessenger(0),
  generatorMessenger(0),
  physicsMessenger(0),
+ #ifdef    G4ANALYSIS_USE
+  analysisMessenger(0),
+ #endif /* G4ANALYSIS_USE */
+ applicationMessenger(0),
  session(0),
  directory(0)
 {
@@ -99,6 +120,18 @@
   G4cerr << options.ApplicationName() << ": Physics list layout not allocated." << G4endl;
   return;
  }
+ 
+ 
+ // Construct the analysis list layout
+ #ifdef    G4ANALYSIS_USE
+  analysisLayout=new RadmonAnalysisLayout;
+ 
+  if (analysisLayout==0)
+  {
+   G4cerr << options.ApplicationName() << ": Analysis layout not allocated." << G4endl;
+   return;
+  }
+ #endif /* G4ANALYSIS_USE */ 
  
  
  // Construct the detectors factory
@@ -155,6 +188,26 @@
  }
  
  
+ // Construct the analysis list factory
+ #ifdef    G4ANALYSIS_USE
+  analysisFactory=new RadmonDataAnalysisWithLabelFactory;
+ 
+  if (analysisFactory==0)
+  {
+   G4cerr << options.ApplicationName() << ": Analysis factory not allocated." << G4endl;
+   return;
+  }
+ 
+ 
+  // Construct the data analyses
+  if (!CreateDataAnalysis(analysisFactory))
+  {
+   G4cerr << options.ApplicationName() << ": Data analyses not allocated." << G4endl;
+   return;
+  }
+ #endif /* G4ANALYSIS_USE */
+ 
+ 
  // Construct the detector construction
  RadmonDetectorConstruction * detectorConstruction(new RadmonDetectorConstruction(detectorLayout, detectorsFactory));
  
@@ -202,6 +255,32 @@
  
  runManager->SetUserInitialization(physicsList);
  
+            
+ // Construct the analysis
+ #ifdef    G4ANALYSIS_USE
+  AIDA::IAnalysisFactory * aida(AIDA_createAnalysisFactory());
+ 
+  if (aida==0)
+  {
+   G4cerr << options.ApplicationName() << ": AIDA_createAnalysisFactory returned 0." << G4endl;
+   return;
+  }
+ 
+  analysis=new RadmonAnalysis(analysisLayout, analysisFactory, aida);
+ 
+  if (analysis==0)
+  {
+   delete aida;
+   G4cerr << options.ApplicationName() << ": Analysis not allocated." << G4endl;
+   return;
+  }
+ 
+ 
+  // The data analyses factory will be owned by the analysis
+  analysisFactory=0;
+ 
+  runManager->SetUserInitialization(physicsList);
+ #endif /* G4ANALYSIS_USE */
             
  // Initialize the run manager (disabled in order to have UI physics list)
  // runManager->Initialize();
@@ -273,6 +352,28 @@
  }
  
  
+ // Construct the messenger to modify the analysis layout
+ #ifdef    G4ANALYSIS_USE
+  analysisMessenger=new RadmonAnalysisMessenger(analysisLayout);
+ 
+  if (analysisMessenger==0)
+  {
+   G4cerr << options.ApplicationName() << ": Analysis layout messenger not allocated." << G4endl;
+   return;
+  }
+ #endif /* G4ANALYSIS_USE */
+ 
+ 
+ // Construct the messenger to modify applications options
+ applicationMessenger=new RadmonApplicationMessenger;
+ 
+ if (applicationMessenger==0)
+ {
+  G4cerr << options.ApplicationName() << ": Application messenger not allocated." << G4endl;
+  return;
+ }
+ 
+ 
  // Construct the interactive session
  if (options.Interactive())
  {
@@ -314,7 +415,15 @@
 {
  // Desctruct the interactive session
  delete session;
-  
+
+ // Destruct the messenger to modify applications options
+ delete applicationMessenger;  
+
+ // Destruct the analysis messenger to modify the layout
+ #ifdef    G4ANALYSIS_USE
+  delete analysisMessenger;  
+ #endif /* G4ANALYSIS_USE */
+ 
  // Destruct the physics list messenger to modify the layout 
  delete physicsMessenger;
   
@@ -332,6 +441,14 @@
   delete visManager;
  #endif /* G4VIS_USE */
 
+ // Destruct the analysis
+ #ifdef    G4ANALYSIS_USE
+  delete analysis;  
+
+  // Destruct the analyses factory
+  delete analysisFactory;  
+ #endif /* G4ANALYSIS_USE */
+ 
  // Destruct the sub physics list factory
  delete physicsFactory;
 
@@ -344,6 +461,11 @@
  // Destruct the default run manager
  delete runManager;
  
+ // Destruct the analysis layout
+ #ifdef    G4VIS_USE
+  delete analysisLayout; 
+ #endif /* G4ANALYSIS_USE */
+
  // Destruct the physics list layout
  delete physicsLayout; 
 
