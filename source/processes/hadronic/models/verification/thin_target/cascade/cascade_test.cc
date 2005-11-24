@@ -83,6 +83,8 @@
 #include "G4PreCompoundModel.hh"
 #include "G4Evaporation.hh"
 
+#include "G4StateManager.hh"
+
 #include <memory> // for the auto_ptr(T>
 #include "AIDA/AIDA.h"
 
@@ -649,6 +651,9 @@ int main(int argc, char** argv)
     step->SetPostStepPoint(bPoint);
     step->SetStepLength(theStep);
 
+    if(!G4StateManager::GetStateManager()->SetNewState(G4State_Idle))
+      G4cout << "G4StateManager PROBLEM! " << G4endl;
+
     G4RotationMatrix* rot  = new G4RotationMatrix();
     G4double phi0 = aDirection.phi();
     G4double theta0 = aDirection.theta();
@@ -850,7 +855,6 @@ int main(int argc, char** argv)
       if(verbose > 0) {
         G4cout << "Energy/Momentum balance= " << labv << G4endl;
       }
-
 
       px = labv.px();
       py = labv.py();

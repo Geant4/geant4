@@ -86,6 +86,8 @@
 #include "G4BinaryLightIonReaction.hh"
 #include "G4CascadeInterface.hh"
 #include "G4WilsonAbrasionModel.hh"
+#include "G4ElasticHadrNucleusHE.hh"
+#include "G4LElastic.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -246,6 +248,18 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
   } else if(gen_name == "bertini") {
     G4CascadeInterface* hkm = new G4CascadeInterface();
     sg = new Test30VSecondaryGenerator(hkm, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
+  } else if(gen_name == "LElastic") {
+    G4LElastic* els = new G4LElastic();
+    sg = new Test30VSecondaryGenerator(els, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
+  } else if(gen_name == "HElastic") {
+    G4ElasticHadrNucleusHE* els = new G4ElasticHadrNucleusHE();
+    sg = new Test30VSecondaryGenerator(els, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
