@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4NestedParameterisedNav.cc,v 1.3 2005-06-14 16:12:07 japost Exp $
+// $Id: testG4NestedParameterisedNav.cc,v 1.4 2005-11-24 17:27:58 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -138,10 +138,18 @@ public:
     pRep->SetRotation(0);  
  }
   
-  virtual G4Material* ComputeMaterial(const G4int no_lev, 
-				      G4VPhysicalVolume *currentVol,
+  virtual G4Material* ComputeMaterial(G4VPhysicalVolume *currentVol,
+				      const G4int no_lev, 
 				      const G4VTouchable *parentTouch) 
   {
+    G4Material *material;
+
+    if( parentTouch == 0) {
+      G4Exception( "YSecondNestedParam::ComputeMaterial()", 
+		   "Null parent TouchHist",  FatalException,
+		   " Null pointer as parent touchable pointer. " );
+    }
+
     // Get the information about the parent volume
     G4int no_parent= parentTouch->GetReplicaNumber(); 
 
@@ -150,7 +158,6 @@ public:
     num= no_lev + no_parent;
     odd= ( num % 2 ); 
 
-    G4Material *material;
     if( odd == 1 ) { 
       material= darkMaterial;
     } else {
@@ -161,6 +168,19 @@ public:
 
     return material;
   }
+
+  G4int       GetNumberOfMaterials() const  { return 2; }
+
+  G4Material* GetMaterial(G4int idx) const 
+  {
+    G4Material *mat;
+    if (idx % 2 == 0){ 
+      mat= darkMaterial;
+    }else{
+      mat= brightMaterial;
+    }
+    return mat; 
+ }
 
   virtual void ComputeDimensions(G4Box &pBox,
 				 const G4int,
@@ -433,20 +453,23 @@ G4bool testG4Navigator1(G4VPhysicalVolume *pTopNode)
     assert(located->GetLogicalVolume()->GetMaterial()==brightMaterial); 
 
     G4PhysicalTouchable *locPT= dynamic_cast<G4PhysicalTouchable*>(located); 
-    G4VPhysicalVolume *parent= locPT->GetParentTouchable()->GetVolume(); 
-    G4cout << " **   Parent volume " << locPT << G4endl
-	   << "  Expected '" << "Slab Blocks in X" << "'" << G4endl 
-    	   << "  Obtained '" << parent->GetName() << "' copy no " << parent->GetCopyNo()
-	   << G4endl; 
- 
-    G4VPhysicalVolume *parent2= locPT->GetParentTouchable()->GetVolume(1); 
-    G4cout << " **** Parent 2 volume " << locPT << G4endl
-	   << "  Expected " << "Top 2-pv" << G4endl
-    	   << "  Obtained " << parent2->GetName() << " copy no " << parent2->GetCopyNo()
-	   << G4endl; 
+    if( locPT != 0 ){ 
+      G4VPhysicalVolume *parent= locPT->GetParentTouchable()->GetVolume(); 
+      G4cout << " **   Parent volume " << locPT << G4endl
+	     << "  Expected '" << "Slab Blocks in X" << "'" << G4endl 
+	     << "  Obtained '" << parent->GetName() << "' copy no " << parent->GetCopyNo()
+	     << G4endl; 
+      assert(parent->GetCopyNo() == 6 ); 
 
-    assert(parent2->GetName()=="Top 2-pv");
-    assert(parent->GetCopyNo() == 6 ); 
+      G4VPhysicalVolume *parent2= locPT->GetParentTouchable()->GetVolume(1); 
+      if( parent2 != 0){
+	G4cout << " **** Parent 2 volume " << locPT << G4endl
+	       << "  Expected " << "Top 2-pv" << G4endl
+	       << "  Obtained " << parent2->GetName() << " copy no " << parent2->GetCopyNo()
+	       << G4endl; 
+	assert(parent2->GetName()=="Top 2-pv");
+      }
+    }
 
     return true;
 }
@@ -491,9 +514,12 @@ G4bool testG4Navigator2(G4VPhysicalVolume *pTopNode)
     located=myNav.LocateGlobalPointAndSetup(newPoint,0,true);
     assert(located->GetName()=="Level 2 blocks in y"); 
 
+    return true;
+
+    // The following tests depend on physical touchables -- obsolete
+    // 
     G4PhysicalTouchable *locPT= dynamic_cast<G4PhysicalTouchable*>(located); 
-    G4VPhysicalVolume *parent= locPT->GetParentTouchable()->GetVolume(); 
- 
+    G4VPhysicalVolume *parent= locPT->GetParentTouchable()->GetVolume();  
 
     G4VPhysicalVolume *parent2= locPT->GetParentTouchable()->GetVolume(1); 
     G4cout << " Parent 2 volume " << locPT << G4endl
@@ -505,7 +531,7 @@ G4bool testG4Navigator2(G4VPhysicalVolume *pTopNode)
 
     G4cerr << " Testing in TestNavigator2() is ending line " << __LINE__ 
 	   << " for the time being. " << G4endl; 
-    return;
+    return true;
 // ------------------------------------------------------------------
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(0,0,-10));
     assert(located->GetName()=="World");
