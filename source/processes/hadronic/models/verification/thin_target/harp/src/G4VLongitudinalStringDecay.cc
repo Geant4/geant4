@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.cc,v 1.2 2005-10-30 18:10:11 vnivanch Exp $
+// $Id: G4VLongitudinalStringDecay.cc,v 1.3 2005-11-24 10:50:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -55,6 +55,7 @@
 
 G4VLongitudinalStringDecay::G4VLongitudinalStringDecay()
 {
+
    MassCut  = 0.35*GeV; 
    ClusterMass = 0.15*GeV;
 
@@ -65,6 +66,7 @@ G4VLongitudinalStringDecay::G4VLongitudinalStringDecay()
 // Changable Parameters below.
    
    SigmaQT = 0.5 * GeV;
+   G4cout << "!!! Use local version of G4VLongitudinalStringDecay !!! Gt= " << SigmaQT << G4endl;
    
    StrangeSuppress  = 0.44;    //  27 % strange quarks produced, ie. u:d:s=1:1:0.27
    DiquarkSuppress  = 0.1;

@@ -35,6 +35,7 @@
 //
 //      Modifications:
 //      14.11.03 Renamed to cascade
+//      24.11.05 Use binning corresponding to HARP 
 //
 // -------------------------------------------------------------------
 
@@ -501,7 +502,7 @@ int main(int argc, char** argv)
     //    G4double factora= cross_sec*MeV*1000.0*(G4double)nbinsa/(twopi*2.0*barn*(G4double)nevt);
     //    G4double factorb= cross_sec*1000.0/(barn*(G4double)nevt);
     G4cout << "### factor  = " << factor
-           << "### factora = " << factor
+      //           << "### factora = " << factor
            << "    cross(b)= " << cross_sec/barn << G4endl;
 
     if(nangl > 0) {
@@ -668,12 +669,10 @@ int main(int argc, char** argv)
 
         G4double thetamr = theta*1000.;
 
-	//        std::string nam = pd->GetParticleName();
-	if(cost > cosmin && cost <= cosmax && p>m_pth) {
+	if(usepaw && cost > cosmin && cost <= cosmax && p>m_pth) {
           if(pd == proton) {
             h[2]->fill(float(p/GeV),1.0);
             h[4]->fill(float(pt/GeV),1.0);
-//            h2[0]->fill(p,cost);
             if(p>m_pth) {
               h[6]->fill(float(thetamr),1.0);
               h[8]->fill(float(cost),1.0);
@@ -682,7 +681,6 @@ int main(int argc, char** argv)
 	  } else if(pd == pip || pd == pin ) {
             h[3]->fill(float(p/GeV),1.0);
             h[5]->fill(float(pt/GeV),1.0);
-//            h2[1]->fill(p,cost);
             if(p>m_pth) {
               h[7]->fill(float(thetamr),1.0);
               h[9]->fill(float(cost),1.0);
