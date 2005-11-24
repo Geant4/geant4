@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectory.hh,v 1.13 2004-07-05 17:08:15 gcosmo Exp $
+// $Id: G4VTrajectory.hh,v 1.14 2005-11-24 12:47:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -94,14 +94,19 @@ class G4VTrajectory
    { return 0; }
    // If implemented by a derived class, returns a pointer to a map of
    // attribute definitions for the attribute values below.  The user
-   // must test the validity of this pointer.
+   // must test the validity of this pointer.  See G4Trajectory for an
+   // example of a concrete implementation of this method.
    virtual std::vector<G4AttValue>* CreateAttValues() const
    { return 0; }
    // If implemented by a derived class, returns a pointer to a list
    // of attribute values suitable, e.g., for picking.  Each must
    // refer to an attribute definition in the above map; its name is
-   // the key.  The user must test the validity of this pointer and
-   // delete the list after use.
+   // the key.  The user must test the validity of this pointer (it
+   // must be non-zero and conform to the G4AttDefs, which may be
+   // checked with G4AttCheck) and delete the list after use.  See
+   // G4Trajectory for an example of a concrete implementation of this
+   // method and G4VTrajectory::ShowTrajectory for an example of its
+   // use.
 
  public:
    // Following methods MUST be invoked exclusively by G4TrackingManager
