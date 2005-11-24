@@ -1,0 +1,7 @@
+/vis/verbose errors
+#/vis/verbose quiet
+/tracking/storeTrajectory 1
+
+/radmon/application/EnableTracksVisualisation
+/radmon/application/EnableRunsDump
+/radmon/application/DumpEventsEvery 10

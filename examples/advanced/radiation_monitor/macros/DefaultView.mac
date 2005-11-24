@@ -1,4 +1,3 @@
-/vis/verbose errors
 #/vis/sceneHandler/create ATree DefaultHandler
 #/vis/ASCIITree/verbose 14
 /vis/sceneHandler/create OGLSX DefaultHandler
@@ -9,3 +8,4 @@
 /vis/scene/add/volume worldPV
 /vis/sceneHandler/attach DefaultScene
 #/vis/viewer/set/culling global false
+/vis/scene/endOfEventAction accumulate

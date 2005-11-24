@@ -2,6 +2,5 @@
 /radmon/physics/AddPhysicsList PositronStandard
 /radmon/physics/AddPhysicsList PhotonEPDL
 /radmon/physics/AddPhysicsList Nuclear
-/radmon/physics/AddPhysicsList Nuclear
 /radmon/physics/AddPhysicsList MuonStandard
 /radmon/physics/AddPhysicsList TauStandard
