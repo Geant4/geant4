@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPVParameterisation.hh,v 1.10 2005-11-19 02:21:04 japost Exp $
+// $Id: G4VPVParameterisation.hh,v 1.11 2005-11-24 18:09:22 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VPVParamterisation
@@ -64,7 +64,6 @@ class G4Polycone;
 class G4Polyhedra;
 class G4Hype;
 
-class G4VAlternativeNavigation; 
 class G4VVolumeMaterialScanner; 
 
 class G4VPVParameterisation
@@ -84,12 +83,6 @@ class G4VPVParameterisation
     virtual G4bool IsNested() const;
     virtual G4VVolumeMaterialScanner* GetMaterialScanner(); 
        //   These enable material scan for nested parameterisations
-
-#ifdef G4ALTNAV
-    virtual G4VAlternativeNavigation*  GetAlternativeNavigation() const; 
-       //   If parameterising regular structure, this must 
-       //     return the 'faster' sub-navigation 
-#endif
 
     virtual void ComputeDimensions(G4Box &,
                                    const G4int,
