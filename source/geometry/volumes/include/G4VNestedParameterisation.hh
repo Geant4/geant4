@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNestedParameterisation.hh,v 1.4 2005-11-19 02:27:28 japost Exp $
+// $Id: G4VNestedParameterisation.hh,v 1.5 2005-11-24 18:19:25 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VNestedParameterisation
@@ -163,21 +163,6 @@ class G4VNestedParameterisation: public G4VPVParameterisation,
     virtual G4bool IsNested() const;
     virtual G4VVolumeMaterialScanner* GetMaterialScanner(); 
        //   These enable material scan for nested parameterisations
-
-  private:
-
-    void ReportErrorInTouchable(const G4String& method, 
-                                const G4VPhysicalVolume* thisVol) const; 
-
-    G4VPhysicalVolume* ObtainParts( G4VPhysicalVolume* thisVolPlus,
-                       const G4String& method, 
-                       const G4VTouchable** pPtrTouchableParent) const;
-    const G4VPhysicalVolume* ObtainParts( const G4VPhysicalVolume* thisVolPlus,
-                       const G4String& method, 
-                       const G4VTouchable** pPtrTouchableParent) const;
-       // Demux the expected PhysicalTouchable into 
-       //   - pointer to this physical volume
-       //   - pointer to parent touchable
 };
 
 #endif
