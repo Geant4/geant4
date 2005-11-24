@@ -17,20 +17,20 @@ code and to keep track of all tags.
 24 Nov 2005 Dennis Wright (hadr-deex-V07-01-00)
 ----------------------------------------------
 
-- photon_evaporation (tag hadr-deex-photo-V07-01-00 Aatos Heikkinen)
+- photon_evaporation (tag hadr-deex-photo-V07-01-00 by Aatos Heikkinen)
    <sstream> migration for G4NuclearLevelManager.cc, 
                            G4NuclearLevelDataStore.cc,
                            G4DiscreteGammaDeexcitation.cc
    minor update of G4VGammaDeexcitation.cc
 
-- util (tag hadr-deex-util-V07-01-00 Aatos Heikkinen)
+- util (tag hadr-deex-util-V07-01-00 by Aatos Heikkinen)
    <sstream> migration for G4CoulombBarrier.cc
                            G4VCoulombBarrier.cc,
 
-- gem_evaporation (tag hadr-deex-gem-V07-01-00 Aatos Heikkinen)
+- gem_evaporation (tag hadr-deex-gem-V07-01-00 by Aatos Heikkinen)
    <sstream> migration for G4GEMCoulombBarrierHE.cc
 
-- fermi_breakup (tag hadr-deex-fermi-V07-01-00 Aatos Heikkinen)
+- fermi_breakup (tag hadr-deex-fermi-V07-01-00 by Aatos Heikkinen)
    <sstream> migration for G4FermiSplitter.cc
 
 
