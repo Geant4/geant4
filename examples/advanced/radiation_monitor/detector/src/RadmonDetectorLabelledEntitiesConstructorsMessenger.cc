@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorLabelledEntitiesConstructorsMessenger.cc,v 1.2 2005-10-25 16:40:56 capra Exp $
+// Id:            $Id: RadmonDetectorLabelledEntitiesConstructorsMessenger.cc,v 1.3 2005-11-24 02:35:26 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -53,7 +53,7 @@ void                                            RadmonDetectorLabelledEntitiesCo
  RadmonMessenger(COMMANDS_PATH, "Interactive labelled detector entities constructors factory commands."),
  RADMON_INITIALIZE_COMMAND(Dump)
 {
- RADMON_CREATE_COMMAND_0ARGS(Dump, "Print out the current available detector enetity constructors");
+ RADMON_CREATE_COMMAND_0ARGS(Dump, "Print out the current available detector entity constructors");
 }
 
 
