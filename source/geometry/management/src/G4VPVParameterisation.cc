@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPVParameterisation.cc,v 1.5 2005-11-19 02:24:53 japost Exp $
+// $Id: G4VPVParameterisation.cc,v 1.6 2005-11-24 18:15:42 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Default implementations for Parameterisations that do not
@@ -60,13 +60,3 @@ G4VPVParameterisation::GetMaterialScanner()
   return 0;
 }
 //   These enable material scan for nested parameterisations
-
-
-
-#ifdef G4ALTNAV
-G4VAlternativeNavigation*  
-G4VPVParameterisation::GetAlternativeNavigation() const
-{
-  return 0;
-}
-#endif
