@@ -578,7 +578,8 @@ int main(int argc, char** argv)
     G4double factora= cross_sec*MeV*1000.0*(G4double)nbinsa/(twopi*2.0*barn*(G4double)nevt);
     G4double factorb= cross_sec*1000.0/(barn*(G4double)nevt);
     G4cout << "### factor  = " << factor
-           << "### factora = " << factor
+           << "### factora = " << factora
+           << "### factorb = " << factorb
            << "    cross(b)= " << cross_sec/barn << G4endl;
 
     if(nangl > 0) {
@@ -653,7 +654,12 @@ int main(int argc, char** argv)
 
     if(!G4StateManager::GetStateManager()->SetNewState(G4State_Idle))
       G4cout << "G4StateManager PROBLEM! " << G4endl;
-
+    /*
+    G4cout << "### proton:" << G4endl;
+    proton->DumpTable();
+    G4cout << "### pin:" << G4endl;
+    pin->DumpTable();
+    */
     G4RotationMatrix* rot  = new G4RotationMatrix();
     G4double phi0 = aDirection.phi();
     G4double theta0 = aDirection.theta();

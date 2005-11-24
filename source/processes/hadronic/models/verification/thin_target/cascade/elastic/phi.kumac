@@ -1,0 +1,34 @@
+opt zfl
+opt nfit
+opt sta
+opt nbox
+opt ngri
+set MSCF 0.80
+set XLAB 0.6
+set NDVX 010206
+set NDVY 010205
+ zone
+ zone 2 2
+ 
+ hi/file 1 par.paw
+ hi/pl 3 hist
+* itx 100 900 'protons 160.3 MeV on Al'
+ itx 0 400 'LEPAR'
+ close 1
+ 
+ hi/file 1 prec.paw
+ hi/pl 3 hist
+ itx 0 400 'PREC'
+ close 1
+ 
+ hi/file 1 chips.paw
+ hi/pl 3 hist
+ itx 0 400 'CHIPS'
+ close 1
+ 
+ hi/file 1 kin.paw
+ hi/pl 3 hist
+ itx 0 100 'KIN'
+ close 1
+ 
+exe ../prf phi eps
