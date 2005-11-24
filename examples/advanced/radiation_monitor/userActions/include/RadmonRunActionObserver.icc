@@ -1,0 +1,22 @@
+//
+// File name:     RadmonRunActionObserver.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonRunActionObserver.icc,v 1.1 2005-11-24 02:31:56 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONRUNACTIONOBSERVER_HH
+ #error "RadmonRunActionObserver.icc cannot be included directly. Please use RadmonRunActionObserver.hh"
+#else  /* RADMONRUNACTIONOBSERVER_HH */
+ inline                                         RadmonRunActionObserver :: RadmonRunActionObserver()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonRunActionObserver :: ~RadmonRunActionObserver()
+ {
+ }
+#endif /* RADMONRUNACTIONOBSERVER_HH */

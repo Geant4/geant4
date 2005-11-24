@@ -1,0 +1,22 @@
+//
+// File name:     RadmonEventActionObserver.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonEventActionObserver.icc,v 1.1 2005-11-24 02:31:56 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONEVENTACTIONOBSERVER_HH
+ #error "RadmonEventActionObserver.icc cannot be included directly. Please use RadmonEventActionObserver.hh"
+#else  /* RADMONEVENTACTIONOBSERVER_HH */
+ inline                                         RadmonEventActionObserver :: RadmonEventActionObserver()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonEventActionObserver :: ~RadmonEventActionObserver()
+ {
+ }
+#endif /* RADMONEVENTACTIONOBSERVER_HH */

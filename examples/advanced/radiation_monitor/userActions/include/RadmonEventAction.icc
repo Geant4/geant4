@@ -1,0 +1,28 @@
+//
+// File name:     RadmonEventAction.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonEventAction.icc,v 1.1 2005-11-24 02:31:56 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONEVENTACTION_HH
+ #error "RadmonEventAction.icc cannot be included directly. Please use RadmonEventAction.hh"
+#else  /* RADMONEVENTACTION_HH */
+ inline                                         RadmonEventAction :: ~RadmonEventAction()
+ {
+ }
+   
+
+
+
+
+ inline RadmonEventAction *                     RadmonEventAction :: Instance(void)
+ {
+  if (instance==0)
+   instance=new RadmonEventAction;
+  
+  return instance;
+ }
+#endif /* RADMONEVENTACTION_HH */
