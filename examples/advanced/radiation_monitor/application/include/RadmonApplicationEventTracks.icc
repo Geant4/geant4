@@ -1,0 +1,48 @@
+//
+// File name:     RadmonApplicationEventTracks.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonApplicationEventTracks.icc,v 1.1 2005-11-24 02:34:21 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONAPPLICATIONEVENTTRACKS_HH
+ #error "RadmonApplicationEventTracks.icc cannot be included directly. Please use RadmonApplicationEventTracks.hh"
+#else  /* RADMONAPPLICATIONEVENTTRACKS_HH */
+ inline                                         RadmonApplicationEventTracks :: RadmonApplicationEventTracks()
+ :
+  enable(false)
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonApplicationEventTracks :: ~RadmonApplicationEventTracks()
+ {
+ }
+ 
+ 
+ 
+
+
+ inline void                                    RadmonApplicationEventTracks :: Enable(void)
+ {
+  enable=true;
+ }
+ 
+ 
+ 
+ inline void                                    RadmonApplicationEventTracks :: Disable(void)
+ {
+  enable=false;
+ }
+ 
+ 
+ 
+
+
+ inline void                                    RadmonApplicationEventTracks :: OnBeginOfEvent(const G4Event * /* event */)
+ {
+ }
+#endif /* RADMONAPPLICATIONEVENTTRACKS_HH */

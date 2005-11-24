@@ -1,0 +1,41 @@
+//
+// File name:     RadmonApplicationEventNumbering.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonApplicationEventNumbering.icc,v 1.1 2005-11-24 02:34:21 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONAPPLICATIONEVENTNUMBERING_HH
+ #error "RadmonApplicationEventNumbering.icc cannot be included directly. Please use RadmonApplicationEventNumbering.hh"
+#else  /* RADMONAPPLICATIONEVENTNUMBERING_HH */
+ inline                                         RadmonApplicationEventNumbering :: RadmonApplicationEventNumbering()
+ :
+  dumpEvery(0)
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonApplicationEventNumbering :: ~RadmonApplicationEventNumbering()
+ {
+ }
+ 
+ 
+ 
+
+
+ inline void                                    RadmonApplicationEventNumbering :: SetDumpEvery(G4int events)
+ {
+  dumpEvery=events;
+ }
+ 
+ 
+ 
+
+
+ inline void                                    RadmonApplicationEventNumbering :: OnEndOfEvent(const G4Event * /* event */)
+ {
+ }
+#endif /* RADMONAPPLICATIONEVENTNUMBERING_HH */

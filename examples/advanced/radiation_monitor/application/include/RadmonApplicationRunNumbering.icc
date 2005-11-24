@@ -1,0 +1,48 @@
+//
+// File name:     RadmonApplicationRunNumbering.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonApplicationRunNumbering.icc,v 1.1 2005-11-24 02:34:21 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONAPPLICATIONRUNNUMBERING_HH
+ #error "RadmonApplicationRunNumbering.icc cannot be included directly. Please use RadmonApplicationRunNumbering.hh"
+#else  /* RADMONAPPLICATIONRUNNUMBERING_HH */
+ inline                                         RadmonApplicationRunNumbering :: RadmonApplicationRunNumbering()
+ :
+  enable(false)
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonApplicationRunNumbering :: ~RadmonApplicationRunNumbering()
+ {
+ }
+ 
+ 
+ 
+
+
+ inline void                                    RadmonApplicationRunNumbering :: Enable(void)
+ {
+  enable=true;
+ }
+ 
+ 
+ 
+ inline void                                    RadmonApplicationRunNumbering :: Disable(void)
+ {
+  enable=false;
+ }
+ 
+ 
+ 
+
+
+ inline void                                    RadmonApplicationRunNumbering :: OnEndOfRun(const G4Run * /* run */)
+ {
+ }
+#endif /* RADMONAPPLICATIONRUNNUMBERING_HH */
