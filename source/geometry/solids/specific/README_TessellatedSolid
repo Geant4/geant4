@@ -1,0 +1,99 @@
+The following classes (.hh. icc and .cc) are related to the tessellated solid:
+
+     G4PolyhedronArbitrary
+     G4QuadrangularFacet
+     G4TessellatedSolid
+     G4TriangularFacet
+     G4VFacet
+
+
+
+How to contruct a G4TessellatedSolid
+
+    G4TessellatedSolid is a special Geant4 Solid defined by a number of 
+    G4VFacet.It is important that the supplied facets shall form a fully 
+    enclose space which is the solid. 
+    At the moment only two types of facet can be used for the construction of 
+    a G4TessellatedSolid, i.e. the G4TriangularFacet and G4QuadrangularFacet.
+
+    Example:
+  
+       .....
+      First declare a tessellated solid 
+           G4TessellatedSolid solidTarget = new G4TessellatedSolid("Solid_name");
+      Define the facets which form the solid
+ 
+           G4double targetSiz = 10*cm ;
+           G4TriangularFacet *facet1 = new
+           G4TriangularFacet (G4ThreeVector(-targetSize,-targetSize,        0.0),
+                     G4ThreeVector(+targetSize,-targetSize,        0.0),
+                     G4ThreeVector(        0.0,        0.0,+targetSize),
+                     ABSOLUTE);
+           G4TriangularFacet *facet2 = new
+           G4TriangularFacet (G4ThreeVector(+targetSize,-targetSize,        0.0),
+                                G4ThreeVector(+targetSize,+targetSize,        0.0),
+                                G4ThreeVector(        0.0,        0.0,+targetSize),
+                                ABSOLUTE);
+           G4TriangularFacet *facet3 = new
+           G4TriangularFacet (G4ThreeVector(+targetSize,+targetSize,        0.0),
+                                G4ThreeVector(-targetSize,+targetSize,        0.0),
+                                G4ThreeVector(        0.0,        0.0,+targetSize),
+                                ABSOLUTE);
+           G4TriangularFacet *facet4 = new
+           G4TriangularFacet (G4ThreeVector(-targetSize,+targetSize,        0.0),
+                                G4ThreeVector(-targetSize,-targetSize,        0.0),
+                                G4ThreeVector(        0.0,        0.0,+targetSize),
+                                ABSOLUTE);
+           G4QuadrangularFacet *facet5 = new
+           G4QuadrangularFacet (G4ThreeVector(-targetSize,-targetSize,        0.0),
+                                G4ThreeVector(-targetSize,+targetSize,        0.0),
+                                G4ThreeVector(+targetSize,+targetSize,        0.0),
+                                G4ThreeVector(+targetSize,-targetSize,        0.0),
+                                ABSOLUTE);
+      Noew add the facets to the solid     
+             solidTarget->AddFacet((G4VFacet*) facet1);
+             solidTarget->AddFacet((G4VFacet*) facet2);
+             solidTarget->AddFacet((G4VFacet*) facet3);
+             solidTarget->AddFacet((G4VFacet*) facet4);
+             solidTarget->AddFacet((G4VFacet*) facet5);
+      Finally declare the solid is complete  
+             solidTarget->SetSolidClosed(true);
+
+  ...............
+
+How to construct G4TriangularFacet:
+
+    The G4TriangularFacet class is used for the contruction of G4TessellatedSolid.
+    It is defined by three vertices, which shall be supplied 
+    in anti-clockwise order looking from the outsider of the solid where 
+    it belongs.Its constructor
+   
+      G4TriangularFacet (const G4ThreeVector Pt0, const G4ThreeVector vt1,
+          const G4ThreeVector vt2, G4FacetVertexType);
+
+    takes 4 parameters to define the three vertices:
+          1) G4FacetvertexType = "ABSOLUTE": in this case Pt0, vt1 and vt2 are 
+             the three vertices in anti-clockwise order looking from the outsider.
+          2) G4FacetvertexType = "RELATIVE": in this case the first vertex is Pt0,
+             the second vertex is Pt0+vt1 and the third vertex is Pt0+vt2, all  
+             in anti-clockwise order when looking from the outsider.
+
+How to construct G4QuadrangularFacet
+
+    The G4QuadrangularFacet class is used for the contruction of G4TessellatedSolid.
+    It is defined by four vertices, which shall be in the same plane and be supplied 
+    in anti-clockwise order looking from the outsider of the solid where 
+    it belongs. Its constructor
+   
+        G4QuadrangularFacet (const G4ThreeVector Pt0, const G4ThreeVector vt1,
+            const G4ThreeVector vt2, const G4ThreeVector vt3, G4FacetVertexType);
+
+    takes 5 parameters to define the four vertices
+:
+          1) G4FacetvertexType = "ABSOLUTE": in this case Pt0, vt1, vt2 and vt3 are 
+             the four vertices required in anti-clockwise order when looking from 
+             the outsider.
+          2) G4FacetvertexType = "RELATIVE": in this case the first vertex is Pt0,
+             the second vertex is Pt0+vt, the third vertex is Pt0+vt2 and 
+             the fourth vertex is Pt0+vt3, in anti-clockwise order when looking 
+             from the outsider.
