@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.cc,v 1.7 2005-07-25 10:06:01 gcosmo Exp $
+// $Id: G4ParameterisedNavigation.cc,v 1.8 2005-11-24 17:35:14 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -48,7 +48,6 @@
 #include "G4ParameterisedNavigation.hh"
 #include "G4TouchableHistory.hh"
 #include "G4VNestedParameterisation.hh"
-#include "G4PhysicalTouchable.hh"
 
 // ********************************************************************
 // Constructor
@@ -86,71 +85,7 @@ IdentifyAndPlaceSolid( G4int num,
   sampleSolid->ComputeDimensions(curParam, num, apparentPhys);
   curParam->ComputeTransformation(num, apparentPhys);
 
-  // Copy the attributes of the 'auxiliary' physical volume 
-  // to the one that is part of the setup
-  //
-  G4PhysicalTouchable* physicalTouch= 
-     dynamic_cast<G4PhysicalTouchable*> (apparentPhys); 
-  if( physicalTouch )
-  {
-    G4VPhysicalVolume* truePhysical= physicalTouch->GetCurrentVolume();
-
-    if( ! truePhysical )
-    {
-      G4cerr << "Apparent physical-touchable has " << truePhysical
-             << " as the current physical volume !" << G4endl;
-      G4Exception("G4ParameterisedNavigation::IdentifyAndPlaceSolid()",
-                  "NullPhysicalVolume", FatalException,
-                  "Physical touchable hides null volume!" ); 
-    }
-    else
-    {
-      // Copy pointer to rotation matrix
-      //
-      truePhysical->SetRotation( apparentPhys->GetRotation() ); 
-
-      // Copy translation
-      //
-      truePhysical->SetTranslation( apparentPhys->GetTranslation() ); 
-
-      // To be extra safe: copy logical volume ptr, in case user switches it
-      //
-      truePhysical->SetLogicalVolume( apparentPhys->GetLogicalVolume() ); 
-    }
-  }
   return sampleSolid; 
-}
-
-// ***************************************************************************
-// CreateVolumeWithParent
-// If volume's parameterisation is nested, then create a NEW object coupling
-// physical-volume with parent touchable else return 0.
-// ***************************************************************************
-//
-G4VPhysicalVolume* G4ParameterisedNavigation::
-CreateVolumeWithParent(G4VPhysicalVolume* curPhysical,
-                       const G4NavigationHistory& history )
-{
-  G4VPhysicalVolume* newPhysical=0;
-  G4VPVParameterisation* curParam = curPhysical->GetParameterisation();
-
-  // Deal with multi-level parameterisations
-  // --> Ad interim, until a new 'full' solution is created
-  //
-  G4VNestedParameterisation* multiLevelParam=
-     dynamic_cast<G4VNestedParameterisation*> (curParam); 
-  // G4TouchableHistory* pParentTouchable=0; 
-  if( multiLevelParam )
-  {
-     // Must create a real Touchable History (or other touchable)
-     // for use by parameterisations that need parent information.
-
-     // pParentTouchable= new G4TouchableHistory( history ); 
-     // newPhysical= new G4PhysicalTouchable( curPhysical, pParentTouchable );
-
-     newPhysical= new G4PhysicalTouchable( curPhysical, history);
-  }
-  return newPhysical; 
 }
 
 // ***************************************************************************
@@ -279,8 +214,8 @@ G4double G4ParameterisedNavigation::
 
   // G4cerr << " Attaching parent touchable information to Phys Volume " << G4endl; 
   // Attach parent touchable information to Phys Volume
-  G4VPhysicalVolume* newPhysical= CreateVolumeWithParent( samplePhysical, history );
-  if( newPhysical ) { samplePhysical= newPhysical; }
+  // nG4VPhysicalVolume* newPhysical= CreateVolumeWithParent( samplePhysical, history );
+  // if( newPhysical ) { samplePhysical= newPhysical; }
 
   do
   {
@@ -448,7 +383,7 @@ G4double G4ParameterisedNavigation::
   } while (noStep);
 
   // delete pParentTouchable; 
-  if( newPhysical ) delete newPhysical; 
+  // if( newPhysical ) delete newPhysical; 
 
   return ourStep;
 }
@@ -504,17 +439,9 @@ G4ParameterisedNavigation::ComputeSafety(const G4ThreeVector& localPoint,
 
   // Check development  
   // G4cerr << "DebugLOG - G4ParameterisedNavigation::ComputeSafety()" << G4endl
-  //        << "            Current solid " << motherSolid->GetName() << G4endl; 
-  // G4cerr << " Attaching parent touchable information to Phys Volume "
-  //        << G4endl;
-
-  // Attach parent touchable information to Phys Volume
-  // --> note: when a new object is created, it must be deleted.
-  //
-  G4VPhysicalVolume* newPhysical=
-                     CreateVolumeWithParent( samplePhysical, history );
-
-  if( newPhysical ) { samplePhysical= newPhysical; }
+  //       << "            Current solid " << motherSolid->GetName() << G4endl; 
+  // G4cerr << " No longer attaching parent touchable information to Phys Volume "
+  //       << G4endl;
 
   // Look inside the current Voxel only at the current point
   //
@@ -558,7 +485,7 @@ G4ParameterisedNavigation::ComputeSafety(const G4ThreeVector& localPoint,
   {
     ourSafety=voxelSafety;
   }
-  if( newPhysical ) delete newPhysical; 
+  // if( newPhysical ) delete newPhysical; 
 
   return ourSafety;
 }
@@ -716,15 +643,9 @@ G4ParameterisedNavigation::LevelLocate( G4NavigationHistory& history,
   // G4cerr << " Attaching parent touchable information to Phys Volume "
   //        << G4endl; 
 
-  // Attach parent touchable information to Phys Volume
-  // --> note: when a new object is created, it must be deleted.
-  //
-  G4VPhysicalVolume* newPhysical= CreateVolumeWithParent( pPhysical, history );
-
-  if( newPhysical )
-  { 
-     pPhysical= newPhysical; 
-  }
+  // Save parent history in touchable history
+  //   ... for use as parent t-h in ComputeMaterial method of param
+  G4TouchableHistory* parentTouchable= new G4TouchableHistory( history ); 
 
   // Search replicated daughter volume
   //
@@ -754,7 +675,7 @@ G4ParameterisedNavigation::LevelLocate( G4NavigationHistory& history,
         history.BackLevel();
       }
       else
-      {
+      { 
         // Enter this daughter
         //
         localPoint = samplePoint;
@@ -767,14 +688,16 @@ G4ParameterisedNavigation::LevelLocate( G4NavigationHistory& history,
         //
         G4LogicalVolume *pLogical = pPhysical->GetLogicalVolume();
         pLogical->SetSolid(pSolid);
-        pLogical->UpdateMaterial(pParam->ComputeMaterial(replicaNo, pPhysical));
 
-        // Check that 'physicalTouchable' acts correctly as proxy here !
-        // TODO JA
-
+        pLogical->UpdateMaterial(
+				 pParam->ComputeMaterial(replicaNo, pPhysical, parentTouchable)  );
+	
+	delete parentTouchable; 
         return true;
       }
     }
   }
+
+  delete parentTouchable; 
   return false;
 }
