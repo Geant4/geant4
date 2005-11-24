@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.cc,v 1.24 2005-06-27 15:32:43 gunter Exp $
+// $Id: G4Track.cc,v 1.25 2005-11-24 03:55:30 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -34,6 +34,7 @@
 //   Fix GetVelocity                 Hisaya Feb. 17 01
 //   Modification for G4TouchableHandle             22 Oct. 2001  R.Chytracek//
 //   Fix GetVelocity (bug report #741)   Horton-Smith Apr 14 2005
+//   Fix a problem of getting material pointer in GetVelocity by H.Kurashige  24 Nov. 2005
 
 #include "G4Track.hh"
 
@@ -169,7 +170,7 @@ G4double G4Track::GetVelocity() const
 	 (fpDynamicParticle->GetDefinition()==fOpticalPhoton) ){
                                                                                 
        G4Material*
-          mat=fpTouchable->GetVolume()->GetLogicalVolume()->GetMaterial();
+          mat=GetMaterial();
                                                                                 
        if(mat->GetMaterialPropertiesTable() != 0){
          // light velocity = c/(rindex+d(rindex)/d(log(E_phot)))

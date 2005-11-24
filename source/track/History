@@ -1,4 +1,4 @@
-$Id: History,v 1.79 2005-05-30 18:23:35 vnivanch Exp $
+$Id: History,v 1.80 2005-11-24 03:55:30 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 24, 05 H.Kurashige (track-V07-01-00)
+- Fix GetVelocity : use the material pointer in PreStepPoint
 
 May 30, 05 V.Ivantchenko (track-V07-00-02)
 - Fix in G4ParticleChangeForGamma : add UpdateStepForAtRest method
