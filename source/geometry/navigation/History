@@ -1,4 +1,4 @@
-$Id: History,v 1.43 2005-11-24 17:48:17 japost Exp $
+$Id: History,v 1.44 2005-11-24 18:25:17 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Nov 22nd, 2005 - J.Apostolakis (geomnav-V07-01-02)
+Nov 24th, 2005 - J.Apostolakis (geomnav-V07-01-02)
 ------------------------------
 - Revised Parameterised Navigation, to use new interface for 
    ComputeMaterial -- it no longer needs 'Physical Touchable'.
