@@ -17,4 +17,5 @@ code and to keep track of all tags.
 25 Nov 2005 - V.Ivanchenko (ghad-cohe-V07-01-03)
 ------------------------------------------------
   Integration of recent development of the subpackage
+  Remove of the G4Rutherford for the time being
 
