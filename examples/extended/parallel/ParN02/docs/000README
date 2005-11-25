@@ -1,9 +1,6 @@
-$Id: 000README,v 1.4 2004-12-03 13:33:32 gcosmo Exp $
-------------------------------------------------------------------------------
 
   ParGeant4:  Geant4/TOP-C, a parallelization of Geant4
-                      Version 0.9
-              (event-level parallelism only)
+              (event-level parallelism)
 
 	  Gene Cooperman
 	  Northeastern University
@@ -90,16 +87,13 @@ New or modified files:
   src/ParRunManager.cc - ParRunManger derived from G4RunManager
 		  replaces Gr4RunManager::DoEventLoop w/ TOP-C parallel loop,
                   Adds certain local vars of DoEventLoop as ParRunManager members
-  src/ParMarshaledObj.cc - run-time utilities for marshalling
-  src/ParExN02MarshaledHits.cc - marshals N02 hits (calorimeter hits)
-  include/Par*.hh - Currently just ParRunManager.hh
+  include/MarshaledObj.h - run-time utilities for marshalling
+  include/MarshaledEx*Hit.h - marshals N02 hits (calorimeter hits)
+  include/MarshaledG4*.h - marshaling routines for Geant4 data structures
+
   ~/slave*.out	- Contains outputs of slave1, slave2, etc.
                   Generated each time parallel ParN02 is executed.
                   These files are specified in the file procgroup.
-  thwap         - A script I inherited from our N.U. systems group
-                  `thwap ParN02' will clobber all processes you own
-                  whose command line includes `ParN02' as substring.
-                  Handy for runaway processes when doing parallelism.
 
 ====================================================================
 This version passes an event number to the slave and lets the
