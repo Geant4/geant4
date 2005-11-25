@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.23 2005-11-24 19:05:56 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.24 2005-11-25 08:55:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  G4ElasticHadrNucleusHE class 
@@ -463,6 +463,8 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
 
     secNuclDyn->SetMomentum(nlv01.vect());
     theParticleChange.AddSecondary(secNuclDyn);
+
+    delete aParticle;
 
     //G4cout << " ion info "<<atno2 << " "<<A<<" "<<Z<<" "<<zTarget<<G4endl;
     return &theParticleChange;
