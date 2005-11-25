@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+25 Nov 2005 - D. Wright (hadr-cohe-V07-01-04)
+---------------------------------------------
+  From Solaris testing:  line 83 of G4DiffElasticHadrScattering.hh:
+     multiple declaration of variable c1.   Fixed.
+
 25 Nov 2005 - D. Wright (hadr-cohe-V07-01-03)
 ---------------------------------------------
   Add detailed comments of N. Starkov from previous tags to History 
