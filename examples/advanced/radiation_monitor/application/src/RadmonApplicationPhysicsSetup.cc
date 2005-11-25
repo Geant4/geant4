@@ -3,7 +3,7 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplicationPhysicsSetup.cc,v 1.3 2005-11-25 01:56:26 capra Exp $
+// Id:            $Id: RadmonApplicationPhysicsSetup.cc,v 1.4 2005-11-25 11:54:36 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -27,6 +27,7 @@
 #include "RadmonPhysicsHadronsBinary.hh"
 #include "RadmonPhysicsHadronsBertini.hh"
 #include "RadmonPhysicsICRUIonization.hh"
+#include "RadmonPhysicsProductionCuts.hh"
 
 #define DECLARE_SUBPHYSICS_LIST(name)           subPhysicsList=new name();                                                               \
                                                 if (subPhysicsList==0)                                                                   \
@@ -54,6 +55,7 @@ G4bool                                          RadmonApplicationPhysicsSetup ::
  DECLARE_SUBPHYSICS_LIST(RadmonPhysicsHadronsBinary);
  DECLARE_SUBPHYSICS_LIST(RadmonPhysicsHadronsBertini);
  DECLARE_SUBPHYSICS_LIST(RadmonPhysicsICRUIonization);
+ DECLARE_SUBPHYSICS_LIST(RadmonPhysicsProductionCuts);
 
  return true;
 }

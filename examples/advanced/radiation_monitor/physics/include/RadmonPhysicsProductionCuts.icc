@@ -1,0 +1,24 @@
+//
+// File name:     RadmonPhysicsProductionCuts.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonPhysicsProductionCuts.icc,v 1.1 2005-11-25 11:52:26 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONPHYSICSPRODUCTIONCUTS_HH
+ #error "RadmonPhysicsProductionCuts.icc cannot be included directly. Please use RadmonPhysicsProductionCuts.hh"
+#else  /* RADMONPHYSICSPRODUCTIONCUTS_HH */
+ inline                                         RadmonPhysicsProductionCuts :: RadmonPhysicsProductionCuts()
+ :
+  RadmonVSubPhysicsListWithLabel("ProductionCuts")
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonPhysicsProductionCuts :: ~RadmonPhysicsProductionCuts()
+ {
+ }
+#endif /* RADMONPHYSICSPRODUCTIONCUTS_HH */
