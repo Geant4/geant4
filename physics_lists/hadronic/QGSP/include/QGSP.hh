@@ -20,7 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QGSP.hh,v 1.2 2005-11-11 22:56:29 vnivanch Exp $
+//
+// $Id: QGSP.hh,v 1.3 2005-11-25 17:33:40 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -30,43 +31,34 @@
 // Author: 2002 J.P. Wellisch
 //
 // Modified:
-// 10.11.2005 V.Ivanchenko edit to provide a standard 
 //
 //----------------------------------------------------------------------------
-//
-
-#ifndef QGSP_h
-#define QGSP_h 1
+#ifndef TQGSP_h
+#define TQGSP_h 1
 
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+#include "CompileTimeConstraints.hh"
 
-//class G4EmPhysicsListMessenger;
-
-class QGSP: public G4VModularPhysicsList
+template<class T>
+class TQGSP: public T
 {
 public:
-  QGSP();
-  virtual ~QGSP();
-
-  void SetCuts();
-
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-
-  void SetVerbose(G4int val);
-
+  TQGSP();
+  virtual ~TQGSP();
+  
+public:
+  // SetCuts() 
+  virtual void SetCuts();
+  
 private:
-
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-  G4int    verbose;
-
-  //  G4EmPhysicsListMessenger* pMessenger;
+  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
 
 };
+#include "QGSP.icc"
+typedef TQGSP<G4VModularPhysicsList> QGSP;
+
+// 2002 by J.P. Wellisch
 
 #endif
 
