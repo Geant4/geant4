@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.1 2005-11-25 20:29:25 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.2 2005-11-25 21:34:17 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -149,7 +149,7 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
   }
   else if(incidentParticleDefinition == G4AntiNeutrinoMu::AntiNeutrinoMu() )
   {
-    //CSmanager=G4QANuMuNuclearCrossSection::GetPointer();
+    CSmanager=G4QANuMuNuclearCrossSection::GetPointer();
     leptoNuc=true;
   }
   else G4cout<<"G4QCollision::GetMeanFreePath:Particle isn't implemented in CHIPS"<<G4endl;
@@ -464,12 +464,12 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     G4VQCrossSection* CSmanager=G4QNuMuNuclearCrossSection::GetPointer();
     G4bool nuanu=true;
     scatPDG=13;                         // Prototype = secondary scattered mu-
-    //if(aProjPDG== 14)
-    //{
-    //  nuanu=false;
-    //  CSmanager=G4QANuMuNuclearCrossSection::GetPointer(); // @@ open
-    //  scatPDG=-13;                    // secondary scattered mu+
-    //}
+    if(aProjPDG== 14)
+    {
+      nuanu=false;
+      CSmanager=G4QANuMuNuclearCrossSection::GetPointer(); // @@ open
+      scatPDG=-13;                    // secondary scattered mu+
+    }
     G4double xSec=CSmanager->GetCrossSection(Momentum, Z, N);// Recalculate Cross Section
     // @@ check a possibility to separate p, n, or alpha (!)
     if(xSec <= 0.) // The cross-section iz 0 -> Do Nothing
@@ -483,28 +483,27 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     scat=true;                                  // event with changed scattered projectile
     G4double totCS = CSmanager->GetLastTOTCS(); // the last total cross section (isotope?)
     G4double qelCS = CSmanager->GetLastQELCS(); // the last total cross section
-    G4double nqeCS = totCS - qelCS;
     if(totCS - qelCS < 0.) totCS = qelCS;
     if(totCS*G4UniformRand()<qelCS)             // ***** Quasi Elastic interaction
     {
-      G4double Q2=CSmanager->GetQE_ExchangeQ2();
+      G4double Q2=CSmanager->GetQEL_ExchangeQ2();
       G4double mIN=mProt;                       // @@ split from the nucleus
       G4double mOT=mNeut;
       if(nuanu)
       {
-        G4double mIN=mNeut;                     // @@ split from the nucleus
-        G4double mOT=mProt;
+        mIN=mNeut;                              // @@ split from the nucleus
+        mOT=mProt;
         projPDG=2212;                           // proton is going out
       }
       else projPDG=2112;                        // neutron is going out
       // make a new projectile from the scattered nucleon
-      proj4M=G4LorentzVector();                 // 4m of the pion
+      proj4M=G4LorentzVector(Q2,mIN,mOT,Q2);    // 4m of the pion
     }
     else                                        // ***** Non Quasi Elastic interaction
     {
       G4double Q2=CSmanager->GetNQE_ExchangeQ2();
       projPDG=CSmanager->GetExchangePDGCode();
-      proj4M=G4LorentzVector();                 // 4m of the pion
+      proj4M=G4LorentzVector(Q2,Q2,Q2,Q2);      // 4m of the pion
     }
     aParticleChange.ProposeEnergy(0.) ;
     aParticleChange.ProposeTrackStatus(fStopAndKill); // the initial neutrino is killed
@@ -588,7 +587,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   // --- the scattered hadron with changed nature can be added here ---
   if(scat)
   {
-    G4QHadron* scatHadron = new G4QHadron(scatPDG,scat4Mom);
+    G4QHadron* scatHadron = new G4QHadron(scatPDG,scat4M);
     output->push_back(scatHadron);
   }
   // ------------- From here the secondaries are filled -------------------------
@@ -604,7 +603,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     G4cout<<"-Warning-G4QCollision::PostStepDoIt: only one secondary! Make 0."<<G4endl;
     tNH=0;
     delete output->operator[](0);          // delete the creazy hadron
-    output.pop_back();                     // clean up the output vector
+    output->pop_back();                     // clean up the output vector
   }
   if(tNH==2&&2!=nOut) G4cout<<"--Warning--G4QCollision::PostStepDoIt: 2 # "<<nOut<<G4endl;
   // Deal with ParticleChange final state interface to GEANT4 output of the process

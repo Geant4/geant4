@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VQCrossSection.cc,v 1.1 2005-11-25 20:29:25 mkossov Exp $
+// $Id: G4VQCrossSection.cc,v 1.2 2005-11-25 21:34:17 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -118,18 +118,26 @@ G4double G4VQCrossSection::GetCrossSection(G4double Momentum, G4int targZ, G4int
 	   } // End of creation of the new set of parameters
   } // End of parameters udate
   else if(Momentum<=lastTH) return 0.; // Momentum is below the Threshold value
-  else if(std::fabs(lastP/Momentum-1.)<tolerance) return lastCS*millibarn; // Use the last CS
+  else if(std::fabs(lastP/Momentum-1.)<tolerance) return lastCS*millibarn; // Use theLastCS
   else lastCS=CalculateCrossSection(1,lastI,lastN,lastZ,Momentum); // Update DB, calc. CS
   colP[lastI]=Momentum;
   colCS[lastI]=lastCS;
   return lastCS*millibarn;
 }
 
+G4double G4VQCrossSection::GetLastTOTCS() {return 0.;} // Get the last total CS
+
+G4double G4VQCrossSection::GetLastQELCS() {return 0.;} // Get the last quasi-elast CS
+
 G4double G4VQCrossSection::GetExchangeEnergy() {return 0.;}
 
 G4double G4VQCrossSection::GetExchangeQ2(G4double) {return 0.;}
 
-G4int G4VQCrossSection::GetExchangePDGCode(G4double, G4double) {return 0;}
+G4double G4VQCrossSection::GetQEL_ExchangeQ2() {return 0.;}
+
+G4double G4VQCrossSection::GetNQE_ExchangeQ2() {return 0.;}
+
+G4int G4VQCrossSection::GetExchangePDGCode() {return 0;}
 
 G4double G4VQCrossSection::GetVirtualFactor(G4double nu, G4double Q2) {return 0.*nu*Q2;}
 

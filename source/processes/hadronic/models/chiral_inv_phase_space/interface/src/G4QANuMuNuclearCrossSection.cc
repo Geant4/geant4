@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNuMuNuclearCrossSection.cc,v 1.2 2005-11-25 21:34:17 mkossov Exp $
+// $Id: G4QANuMuNuclearCrossSection.cc,v 1.1 2005-11-25 21:34:17 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// G4 Physics class: G4QNuMuNuclearCrossSection for gamma+A cross sections
+// G4 Physics class: G4QANuMuNuclearCrossSection for gamma+A cross sections
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-01
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 17-Oct-03
 // 
@@ -42,25 +42,25 @@
 //#define tdebug
 //#define sdebug
 
-#include "G4QNuMuNuclearCrossSection.hh"
+#include "G4QANuMuNuclearCrossSection.hh"
 
 // Initialization of the
-G4double  G4QNuMuNuclearCrossSection::lastSig=0.;// Last calculated total cross section
-G4double  G4QNuMuNuclearCrossSection::lastQEL=0.;// Last calculated quasi-el. cross section
-G4int     G4QNuMuNuclearCrossSection::lastL=0;   // Last used in cross section TheLastBin
-G4double  G4QNuMuNuclearCrossSection::lastE=0.;  // Last used in cross section TheEnergy
-G4double* G4QNuMuNuclearCrossSection::lastTX=0;  // Pointer to the LastArray of TX function
-G4double* G4QNuMuNuclearCrossSection::lastQE=0;  // Pointer to the LastArray of QE function
+G4double  G4QANuMuNuclearCrossSection::lastSig=0.;//Last calculated total cross section
+G4double  G4QANuMuNuclearCrossSection::lastQEL=0.;//Last calculated quasi-el. cross section
+G4int     G4QANuMuNuclearCrossSection::lastL=0;   //Last used in cross section TheLastBin
+G4double  G4QANuMuNuclearCrossSection::lastE=0.;  //Last used in cross section TheEnergy
+G4double* G4QANuMuNuclearCrossSection::lastTX=0;  //Pointer to the LastArray of TX function
+G4double* G4QANuMuNuclearCrossSection::lastQE=0;  //Pointer to the LastArray of QE function
 
 // Returns Pointer to the G4VQCrossSection class
-G4VQCrossSection* G4QNuMuNuclearCrossSection::GetPointer()
+G4VQCrossSection* G4QANuMuNuclearCrossSection::GetPointer()
 {
-  static G4QNuMuNuclearCrossSection theCrossSection; //**Static body of the Cross Section**
+  static G4QANuMuNuclearCrossSection theCrossSection;//**Static body of the Cross Section**
   return &theCrossSection;
 }
 
 // Gives the threshold energy = the same for all nuclei (@@ can be reduced for hevy nuclei)
-G4double G4QNuMuNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
+G4double G4QANuMuNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
 {
   //static const G4double mNeut = G4NucleiProperties::GetNuclearMass(1.,0.)/GeV;
   //static const G4double mProt = G4NucleiProperties::GetNuclearMass(1.,1.)/GeV;
@@ -79,7 +79,7 @@ G4double G4QNuMuNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
 }
 
 // The main member function giving the gamma-A cross section (E_kin in MeV, CS in mb)
-G4double G4QNuMuNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G4int targZ,
+G4double G4QANuMuNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G4int targZ,
                                                            G4int targN, G4double Momentum)
 {
   static const G4int nE=33;   // !! If change this, change it in GetFunctions() (*.hh) !!
@@ -181,7 +181,8 @@ G4double G4QNuMuNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G4i
 // *** This tables are the same for all lepto-nuclear reactions, only mass is different ***
 // ***@@ IT'S REASONABLE TO MAKE ADDiTIONAL VIRTUAL CLASS FOR LEPTO-NUCLEAR WITH THIS@@ ***
 // ****************************************************************************************
-G4int G4QNuMuNuclearCrossSection::GetFunctions(G4double a,G4double*t,G4double*q,G4double*e)
+G4int G4QANuMuNuclearCrossSection::GetFunctions
+                                              (G4double a,G4double*t,G4double*q,G4double*e)
 {
   static const G4double mN=.931494043;// Nucleon mass (inside nucleus, AtomicMassUnit, GeV)
   static const G4double dmN=mN+mN;    // Doubled nucleon mass (2*AtomicMassUnit, GeV)
@@ -213,7 +214,7 @@ G4int G4QNuMuNuclearCrossSection::GetFunctions(G4double a,G4double*t,G4double*q,
   }
   if(a<=.9999 || a>238.49)             // Plutonium 244 is forbidden
   {
-    G4cout<<"***G4QNuMuNuclearCrossSection::GetFunctions:A="<<a<<".No CS returned"<<G4endl;
+    G4cout<<"**G4QANuMuNuclearCrossSection::GetFunctions:A="<<a<<".No CS returned"<<G4endl;
     return -1;
   }
   for(G4int k=0; k<nE; k++)
@@ -226,7 +227,7 @@ G4int G4QNuMuNuclearCrossSection::GetFunctions(G4double a,G4double*t,G4double*q,
 }
 
 // Randomize Q2 from neutrino to the scattered muon when the scattering is quasi-elastic
-G4double G4QNuMuNuclearCrossSection::GetQEL_ExchangeQ2()
+G4double G4QANuMuNuclearCrossSection::GetQEL_ExchangeQ2()
 {
   static const G4double mmu=.105658369;// Mass of muon in GeV
   static const G4double mmu2=mmu*mmu;  // Squared Mass of muon in GeV^2
@@ -311,7 +312,7 @@ G4double G4QNuMuNuclearCrossSection::GetQEL_ExchangeQ2()
 }
 
 // Randomize Q2 from neutrino to the scattered muon when the scattering is not quasiElastic
-G4double G4QNuMuNuclearCrossSection::GetNQE_ExchangeQ2()
+G4double G4QANuMuNuclearCrossSection::GetNQE_ExchangeQ2()
 {
   static const double mpi=.13957018;    // charged pi meson mass in GeV
   static const G4double mmu=.105658369; // Mass of muon in GeV
@@ -543,4 +544,4 @@ G4double G4QNuMuNuclearCrossSection::GetNQE_ExchangeQ2()
 }
 
 // This class can provide only virtual exchange pi+ (a substitute for W+ boson)
-G4int G4QNuMuNuclearCrossSection::GetExchangePDGCode() {return 211;}
+G4int G4QANuMuNuclearCrossSection::GetExchangePDGCode() {return 211;}

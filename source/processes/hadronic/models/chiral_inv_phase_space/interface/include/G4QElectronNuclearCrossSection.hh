@@ -60,7 +60,7 @@ public:
 
   G4double CalculateCrossSection(G4int F, G4int I, G4int Z, G4int N, G4double Momentum);
 
-  G4int    GetExchangePDGCode(G4double nu=0., G4double Q2=0.);
+  G4int    GetExchangePDGCode();
 
   G4double GetExchangeEnergy();
 

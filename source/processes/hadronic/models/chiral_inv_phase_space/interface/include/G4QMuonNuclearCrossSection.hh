@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QMuonNuclearCrossSection.hh,v 1.1 2005-11-25 20:26:36 mkossov Exp $
+// $Id: G4QMuonNuclearCrossSection.hh,v 1.2 2005-11-25 21:34:17 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -64,7 +64,7 @@ public:
 
   G4double CalculateCrossSection(G4int F, G4int I, G4int Z, G4int N, G4double Momentum);
 
-  G4int    GetExchangePDGCode(G4double nu=0., G4double Q2=0.);
+  G4int    GetExchangePDGCode();
 
   G4double GetExchangeEnergy();
 

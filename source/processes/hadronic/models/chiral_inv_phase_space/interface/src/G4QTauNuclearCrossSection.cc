@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QTauNuclearCrossSection.cc,v 1.1 2005-11-25 20:29:25 mkossov Exp $
+// $Id: G4QTauNuclearCrossSection.cc,v 1.2 2005-11-25 21:34:17 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -2557,7 +2557,7 @@ G4double G4QTauNuclearCrossSection::GetExchangeQ2(G4double nu)
 }
 
 // This class can provide only virtual exchange photons for all nu's and Q2's
-G4int G4QTauNuclearCrossSection::GetExchangePDGCode(G4double, G4double) {return 22;}
+G4int G4QTauNuclearCrossSection::GetExchangePDGCode() {return 22;}
 
 G4double G4QTauNuclearCrossSection::GetVirtualFactor(G4double nu, G4double Q2)
 {

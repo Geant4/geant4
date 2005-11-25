@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VQCrossSection.hh,v 1.1 2005-11-25 20:26:36 mkossov Exp $
+// $Id: G4VQCrossSection.hh,v 1.2 2005-11-25 21:34:17 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -99,6 +99,10 @@ public:
   // Define in the derived class, F=0 - create DAMDB, F=-1 - read DAMDB, F=1 - update DAMDB
   virtual G4double CalculateCrossSection(G4int F, G4int I, G4int Z, G4int N, G4double P)=0;
 
+  virtual G4double GetLastTOTCS(); // Get the last calculated total cross-section
+
+  virtual G4double GetLastQELCS(); // Get the last calculated quasi-elastic cross-section
+
   // Subroutines for the t-chanel processes with a leader (DIS, Elastic, Quasielastic etc.)
 
   virtual G4double GetExchangeEnergy(); // Returns energy of the t-chanel particle (gam,pi)
@@ -107,7 +111,11 @@ public:
 
   virtual G4double GetVirtualFactor(G4double nu, G4double Q2); // Returns a ReductionFactor
 
-  virtual G4int GetExchangePDGCode(G4double nu=0., G4double Q2=0.);//PDGCode of ExchangePrt
+  virtual G4double GetQEL_ExchangeQ2(); // Get randomized Q2 for quasi-elastic scattering
+
+  virtual G4double GetNQE_ExchangeQ2(); // Get randomized Q2 for non quasi-elastic scat.
+
+  virtual G4int GetExchangePDGCode(); // PDGCode of the Exchange Particle
 
   // Body: Basic Parameters of DAMDB (each derived class can add it's own values)
   // -----------------------------------------------------------------------------
