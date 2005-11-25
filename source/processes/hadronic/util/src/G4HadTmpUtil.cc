@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 #include "G4HadTmpUtil.hh"
-#include <strstream>
+#include <sstream>
 
 G4int G4lrint(double ad)
   {
@@ -40,9 +40,8 @@ G4int G4rint(double ad)
 
 G4String G4inttostring(int ai)
 {
-  char the[100] = {""};
-  std::ostrstream ost(the, 100, std::ios::out);
+  std::ostringstream ost;
   ost << ai;
-  G4String result(the);
+  G4String result = ost.str();
   return result;
 }
