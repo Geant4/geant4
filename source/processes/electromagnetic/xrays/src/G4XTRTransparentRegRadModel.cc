@@ -108,16 +108,16 @@ G4double G4XTRTransparentRegRadModel::SpectralXTRdEdx(G4double energy)
 
     if( k == kMin && kMin == G4int(cofMin) )
     {
-      sum   += 0.5*sin(tmp)*sin(tmp)*abs(k-cofMin)/result;
+      sum   += 0.5*sin(tmp)*sin(tmp)*std::abs(k-cofMin)/result;
     }
     else
     {
-      sum   += sin(tmp)*sin(tmp)*abs(k-cofMin)/result;
+      sum   += sin(tmp)*sin(tmp)*std::abs(k-cofMin)/result;
     }
     //  G4cout<<"k = "<<k<<";    sum = "<<sum<<G4endl;    
   }
-  result = 4*( cof1 + cof2 )*( cof1 + cof2 )*sum/energy;
-  result *= ( 1 - exp(-fPlateNumber*sigma) )/( 1 - exp(-sigma) );  
+  result = 4.*( cof1 + cof2 )*( cof1 + cof2 )*sum/energy;
+  result *= ( 1. - exp(-fPlateNumber*sigma) )/( 1. - exp(-sigma) );  
   return result;
 }
 
