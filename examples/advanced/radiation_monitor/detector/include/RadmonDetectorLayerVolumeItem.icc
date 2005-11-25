@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorLayerVolumeItem.icc,v 1.1 2005-09-21 14:52:32 capra Exp $
+// Id:            $Id: RadmonDetectorLayerVolumeItem.icc,v 1.2 2005-11-25 01:53:30 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -17,6 +17,7 @@
   volumeMaterial(0),
   volumeLogical(0),
   volumePhysical(0),
+  volumeSensitiveDetector(0),
   volumeMother(0)
  {
  }
@@ -73,6 +74,14 @@
 
 
 
+ inline void                                    RadmonDetectorLayerVolumeItem :: SetSensitiveDetector(G4VSensitiveDetector * detector)
+ {
+  Assertion();
+  volumeSensitiveDetector=detector;
+ }
+ 
+ 
+ 
  inline void                                    RadmonDetectorLayerVolumeItem :: SetMotherVolumeItem(RadmonDetectorLayerVolumeItem * item)
  {
   Assertion();
@@ -125,6 +134,13 @@
 
 
 
+ inline G4VSensitiveDetector *                  RadmonDetectorLayerVolumeItem :: GetSensitiveDetector(void) const
+ {
+  return volumeSensitiveDetector;
+ }
+ 
+ 
+ 
  inline RadmonDetectorLayerVolumeItem *         RadmonDetectorLayerVolumeItem :: GetMotherVolumeItem(void) const
  {
   return volumeMother;

@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorLayerVolumeItem.hh,v 1.2 2005-09-21 14:52:32 capra Exp $
+// Id:            $Id: RadmonDetectorLayerVolumeItem.hh,v 1.3 2005-11-25 01:53:30 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   solids, physical and logical volumes
@@ -23,6 +23,7 @@
  class G4Material;
  class G4LogicalVolume;
  class G4VPhysicalVolume;
+ class G4VSensitiveDetector;
 
  class RadmonDetectorLayerVolumeItem
  {
@@ -36,6 +37,7 @@
    inline void                                  SetName(const G4String & name);
    inline void                                  SetPosition(const G4ThreeVector & position);
    inline void                                  SetRotation(const G4RotationMatrix & rotation);
+   inline void                                  SetSensitiveDetector(G4VSensitiveDetector * detector);
    inline void                                  SetMotherVolumeItem(RadmonDetectorLayerVolumeItem * item);
 
    inline G4VSolid *                            GetSolid(void) const;
@@ -44,6 +46,7 @@
    inline const G4String &                      GetName(void) const;
    inline const G4ThreeVector &                 GetPosition(void) const;
    inline const G4RotationMatrix &              GetRotation(void) const;
+   inline G4VSensitiveDetector *                GetSensitiveDetector(void) const;
    inline RadmonDetectorLayerVolumeItem *       GetMotherVolumeItem(void) const;
 
    G4LogicalVolume *                            GetLogicalVolume(void);
@@ -65,6 +68,7 @@
    G4ThreeVector                                volumePosition;
    G4LogicalVolume *                            volumeLogical;
    G4VPhysicalVolume *                          volumePhysical;
+   G4VSensitiveDetector *                       volumeSensitiveDetector;
    RadmonDetectorLayerVolumeItem *              volumeMother;
  };
  

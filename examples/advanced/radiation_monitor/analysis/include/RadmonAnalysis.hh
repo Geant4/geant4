@@ -3,7 +3,7 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonAnalysis.hh,v 1.1 2005-11-24 02:33:32 capra Exp $
+// Id:            $Id: RadmonAnalysis.hh,v 1.2 2005-11-25 01:53:30 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Analysis main class
@@ -19,12 +19,16 @@
  #include "AIDA/IAnalysisFactory.h"
  #include "AIDA/ITreeFactory.h"
  #include "AIDA/ITree.h"
+ #include "AIDA/ITupleFactory.h"
+ #include "AIDA/ITuple.h"
+ #include <utility>
  #include <list>
  
  // Forward declaration
  class RadmonVDataAnalysisFactory;
  class RadmonVDataAnalysis;
  class RadmonVAnalysisLayout;
+ class RadmonSensitiveDetector;
 
  class RadmonAnalysis : public RadmonEventActionObserver, public RadmonVLayoutObserver
  {
@@ -39,8 +43,12 @@
 
   private:
   // Private methods
-   void                                         Destruct(void);
+   G4bool                                       InitializeSensitiveDetectorsList(std::list<G4String> & tupleLabels, G4String & columns);
+   G4bool                                       OpenFile(void);
+   G4bool                                       InitializeTuple(const std::list<G4String> & tupleLabels, const G4String & columns);
 
+   void                                         Destruct(void);
+   
   // Hidden constructors and operators
                                                 RadmonAnalysis();
                                                 RadmonAnalysis(const RadmonAnalysis & copy);
@@ -48,6 +56,8 @@
 
   // Private data types
    typedef std::list<RadmonVDataAnalysis *>     DataAnalysesList;
+   typedef std::pair<RadmonSensitiveDetector *, DataAnalysesList *> SensitiveDetectorPair;
+   typedef std::list<SensitiveDetectorPair>     SensitiveDetectorsList;
 
   // Private attributes
    RadmonVAnalysisLayout *                      analysisLayout;
@@ -56,9 +66,14 @@
    AIDA::IAnalysisFactory *                     analysisFactory;
    AIDA::ITreeFactory *                         treeFactory;
    AIDA::ITree *                                tree;
+   AIDA::ITupleFactory *                        tupleFactory;
+   AIDA::ITuple *                               tuple;
+   
+   G4int                                        indexRunId;
+   G4int                                        indexEventId;
   
    G4bool                                       changed;
   
-   DataAnalysesList                             dataAnalysesList;
+   SensitiveDetectorsList                       sensitiveDetectorsList;
  };
 #endif /* RADMONANALYSIS_HH */

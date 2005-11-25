@@ -3,22 +3,26 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonSensitiveDetector.cc,v 1.1 2005-11-24 02:31:47 capra Exp $
+// Id:            $Id: RadmonSensitiveDetector.cc,v 1.2 2005-11-25 01:53:30 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
 // Include files
 #include "RadmonSensitiveDetector.hh"
 #include "RadmonSensitiveDetectorDataStorer.hh"
+#include "G4SDManager.hh"
+#include "G4RunManager.hh"
 
-#define RADMONSENSITIVEDETECTOR_COLLECTIONNAME "radmon_default"
+#define RADMONSENSITIVEDETECTOR_COLLECTIONNAME "radmon_default_"
 
                                                 RadmonSensitiveDetector :: RadmonSensitiveDetector(const G4String & name)
 :
  G4VSensitiveDetector(name),
- hitCollection(0)
+ hitsCollection(0)
 {
- collectionName.insert(RADMONSENSITIVEDETECTOR_COLLECTIONNAME);
+ collName=name;
+ collName+=RADMONSENSITIVEDETECTOR_COLLECTIONNAME;
+ collectionName.insert(collName);
 }
  
  
@@ -49,8 +53,8 @@ void                                            RadmonSensitiveDetector :: Attac
 
 void                                            RadmonSensitiveDetector :: Initialize(G4HCofThisEvent * hitsCollections)
 {
- hitCollection=new RadmonHitsCollection(GetName(), RADMONSENSITIVEDETECTOR_COLLECTIONNAME);
- hitsCollections->AddHitsCollection(GetCollectionID(0), hitCollection);
+ hitsCollection=new RadmonHitsCollection(GetName(), collName);
+ hitsCollections->AddHitsCollection(GetCollectionID(0), hitsCollection);
 }
  
  
@@ -62,7 +66,7 @@ G4bool                                          RadmonSensitiveDetector :: Proce
   
  RadmonHit * hit(new RadmonHit);
  
- hitCollection->insert(hit);
+ hitsCollection->insert(hit);
 
  DataStorersSet::iterator i(dataStorersSet.begin());
  const DataStorersSet::iterator end(dataStorersSet.end());
@@ -75,3 +79,25 @@ G4bool                                          RadmonSensitiveDetector :: Proce
 
  return true;
 }
+
+
+
+
+
+RadmonHitsCollection *                          RadmonSensitiveDetector :: GetDetectorCollection(void) const
+{
+ G4SDManager * sdManager(G4SDManager::GetSDMpointer());
+ 
+ if (!sdManager)
+  return 0;
+ 
+ G4RunManager * rManager(G4RunManager::GetRunManager());
+ 
+ if (!rManager)
+  return 0;
+ 
+ const G4Event * currentEvent(rManager->GetCurrentEvent());
+ G4HCofThisEvent * hitsCollections(currentEvent->GetHCofThisEvent());
+ return reinterpret_cast<RadmonHitsCollection *>(hitsCollections->GetHC(sdManager->GetCollectionID(collName)));
+}
+

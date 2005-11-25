@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorLayerVolumeItem.cc,v 1.1 2005-09-21 14:52:32 capra Exp $
+// Id:            $Id: RadmonDetectorLayerVolumeItem.cc,v 1.2 2005-11-25 01:53:30 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -13,6 +13,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4Material.hh"
+#include "G4SDManager.hh"
 
                                                 RadmonDetectorLayerVolumeItem :: ~RadmonDetectorLayerVolumeItem()
 {
@@ -26,6 +27,15 @@
   G4Exception("RadmonDetectorLayerVolumeItem::~RadmonDetectorLayerVolumeItem: Logical volume removed prior of daughters");
  
  delete volumeLogical;
+
+ if (volumeSensitiveDetector)
+ {
+  G4SDManager * manager(G4SDManager::GetSDMpointer());
+
+  if (manager)
+   if (! manager->FindSensitiveDetector(volumeSensitiveDetector->GetFullPathName(), false))
+    delete volumeSensitiveDetector;
+ }
 }
 
 
@@ -36,7 +46,27 @@ G4LogicalVolume *                               RadmonDetectorLayerVolumeItem ::
 {
  if (! volumeLogical)
  {
-  volumeLogical=new G4LogicalVolume(volumeSolid, volumeMaterial, volumeName+"LV", 0, 0, 0);
+  if (volumeSensitiveDetector)
+  {
+   G4SDManager * manager(G4SDManager::GetSDMpointer());
+   
+   if (manager)
+   {
+    G4VSensitiveDetector * sensitiveDetector(manager->FindSensitiveDetector(volumeSensitiveDetector->GetFullPathName(), false));
+  
+    if (!sensitiveDetector)
+     manager->AddNewDetector(volumeSensitiveDetector);
+    else if (sensitiveDetector!=volumeSensitiveDetector)
+    {
+     delete volumeSensitiveDetector;
+     volumeSensitiveDetector=sensitiveDetector;
+    }
+  
+    volumeSensitiveDetector->Activate(true);
+   }
+  }
+  
+  volumeLogical=new G4LogicalVolume(volumeSolid, volumeMaterial, volumeName+"LV", 0, volumeSensitiveDetector, 0);
   if (volumeAttributes)
     volumeLogical->SetVisAttributes(volumeAttributes);
   

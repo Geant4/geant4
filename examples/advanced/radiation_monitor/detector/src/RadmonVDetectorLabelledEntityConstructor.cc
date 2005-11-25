@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonVDetectorLabelledEntityConstructor.cc,v 1.4 2005-10-25 16:40:56 capra Exp $
+// Id:            $Id: RadmonVDetectorLabelledEntityConstructor.cc,v 1.5 2005-11-25 01:53:30 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -11,6 +11,8 @@
 #include "RadmonVDetectorLabelledEntityConstructor.hh"
 #include "RadmonTokenizer.hh"
 #include "RadmonMaterialsManager.hh"
+#include "RadmonSensitiveDetector.hh"
+#include "G4SDManager.hh"
 #include "G4UIcommand.hh"
 #include "G4VisAttributes.hh"
 #include "globals.hh"
@@ -209,3 +211,25 @@ G4VisAttributes *                               RadmonVDetectorLabelledEntityCon
  
  return visAttribute;
 }
+
+
+
+
+
+G4VSensitiveDetector *                          RadmonVDetectorLabelledEntityConstructor :: AllocateSensitiveDetector(const G4String & attributeName, const G4String & defaultAttrbuteValue) const
+{
+ G4String name(GetAttribute(attributeName, defaultAttrbuteValue));
+ 
+ if (name.empty())
+  return 0;
+  
+ G4SDManager * manager(G4SDManager::GetSDMpointer());
+  
+ G4VSensitiveDetector * sensitiveDetector(manager->FindSensitiveDetector(name, false));
+
+ if (sensitiveDetector)
+  return sensitiveDetector;
+  
+ return new RadmonSensitiveDetector(name);
+}
+

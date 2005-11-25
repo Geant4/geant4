@@ -3,7 +3,7 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonVDataAnalysis.hh,v 1.1 2005-11-24 02:33:32 capra Exp $
+// Id:            $Id: RadmonVDataAnalysis.hh,v 1.2 2005-11-25 01:53:30 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Abstract class of an analysis piece
@@ -25,7 +25,8 @@
     
    virtual void                                 SetDataAnalysisAttribute(const G4String & attributeName, const G4String &value) = 0;
 
-   virtual G4String                             ObtainColumnsDeclaration(void) = 0;
+   virtual G4String                             ObtainColumnsDeclaration(const G4String & prefix) = 0;
+   virtual void                                 InitializeFromTuple(const G4String & prefix, const AIDA::ITuple * tuple) = 0;
    virtual void                                 StoreIntoTuple(RadmonHitsCollection * hitsCollection, AIDA::ITuple * tuple) = 0;
    
   protected:

@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorFlatVolumeComponent.cc,v 1.1 2005-09-21 14:52:02 capra Exp $
+// Id:            $Id: RadmonDetectorFlatVolumeComponent.cc,v 1.2 2005-11-25 01:53:30 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -42,7 +42,7 @@ RadmonDetectorLayerVolumesList *                RadmonDetectorFlatVolumeComponen
  G4Material * material(owner->GetMaterial("Material"));  
  if (!material)
   return 0;
-
+  
  visAttributes=owner->AllocateVisAttributes("VisAttributes", material);
  box=new G4Box("FlatVolume", width/2., height/2., thickness/2.);
 
@@ -52,6 +52,7 @@ RadmonDetectorLayerVolumesList *                RadmonDetectorFlatVolumeComponen
  item->SetSolid(box);
  item->SetAttributes(visAttributes);
  item->SetMaterial(material);
+ item->SetSensitiveDetector(owner->AllocateSensitiveDetector("SensitiveDetector", ""));
  item->SetName("FlatVolume");
  
  return list;

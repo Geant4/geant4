@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonVDetectorLabelledEntityConstructor.hh,v 1.5 2005-10-25 16:40:56 capra Exp $
+// Id:            $Id: RadmonVDetectorLabelledEntityConstructor.hh,v 1.6 2005-11-25 01:53:30 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Abstract class of a detector-entity constructor with label
@@ -20,6 +20,7 @@
  // Forward declaration
  class G4Material;
  class G4VisAttributes;
+ class G4VSensitiveDetector;
  
  class RadmonVDetectorLabelledEntityConstructor : public RadmonVDetectorEntityConstructor, public RadmonLayoutEntityWithAttributes
  {
@@ -36,6 +37,8 @@
 
    G4Material *                                 GetMaterial(const G4String & attributeName) const;
    G4VisAttributes *                            AllocateVisAttributes(const G4String & attributeName, const G4Material * material) const;
+   
+   G4VSensitiveDetector *                       AllocateSensitiveDetector(const G4String & attributeName, const G4String & defaultAttrbuteValue) const;
 
   protected:
    inline                                       RadmonVDetectorLabelledEntityConstructor(const G4String & label);
