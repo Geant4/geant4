@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2005-11-24 02:33:32 capra Exp $
+# $Id: GNUmakefile,v 1.7 2005-11-25 01:56:26 capra Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for exaple subpackage
 # R. Capra, 09 Sep 2005
@@ -44,7 +44,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I../materials/include \
             -I../physics/include \
             -I../analysis/include \
-            -I../sensibility/include \
+            -I../sensitivity/include \
             -I../userActions/include
 
 ifdef G4ANALYSIS_USE  

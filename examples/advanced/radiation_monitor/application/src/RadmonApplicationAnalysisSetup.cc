@@ -3,13 +3,15 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplicationAnalysisSetup.cc,v 1.1 2005-11-24 02:34:48 capra Exp $
+// Id:            $Id: RadmonApplicationAnalysisSetup.cc,v 1.2 2005-11-25 01:56:26 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
 // Include files
 #include "RadmonApplicationAnalysisSetup.hh"
 #include "RadmonApplicationOptions.hh"
+
+#include "RadmonDataAnalysisDepositedEnergy.hh"
 
 #include "RadmonDataAnalysisWithLabelFactory.hh"
 
@@ -20,11 +22,13 @@
                                                  G4cerr << currentOptions.ApplicationName() << ": Cannot allocate " #name "." << G4endl; \
                                                  return false;                                                                           \
                                                 }                                                                                        \
-                                                factory->AppendAnalysis(constructor)
+                                                factory->AppendDataAnalysisWithLabel(constructor)
 
-G4bool                                          RadmonApplicationAnalysisSetup :: CreateDataAnalysis(RadmonDataAnalysisWithLabelFactory * /* factory */)
+G4bool                                          RadmonApplicationAnalysisSetup :: CreateDataAnalysis(RadmonDataAnalysisWithLabelFactory * factory)
 {
-// RadmonVAnalysisWithLabel * constructor;
+ RadmonVDataAnalysisWithLabel * constructor;
+
+ DECLARE_ANALYSIS_CONSTRUCTOR(RadmonDataAnalysisDepositedEnergy);
 
  return true;
 }

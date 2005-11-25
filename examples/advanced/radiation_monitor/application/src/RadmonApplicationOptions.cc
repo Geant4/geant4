@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplicationOptions.cc,v 1.2 2005-09-21 14:51:25 capra Exp $
+// Id:            $Id: RadmonApplicationOptions.cc,v 1.3 2005-11-25 01:56:26 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -76,7 +76,7 @@
 
 void                                            RadmonApplicationOptions :: DumpHelp(void) const
 {
- G4cout << "Usage: " << applicationName << " [ -h | -H | -? ] [-b] [ <filename> ]" << G4endl;
+ G4cout << "Usage: " << applicationName << " [-h|-H|-?] [-b] [-v] [<filename>]" << G4endl;
  G4cout << G4endl;
  G4cout << "-h  -H  -?         Usage help" << G4endl;
  G4cout << "-b                 Force non-interactive mode" << G4endl;
