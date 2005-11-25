@@ -1,25 +1,3 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
 #ifndef G4Pair_h
 #define G4Pair_h
 
@@ -135,60 +113,34 @@ class G4Terminator
 #define GROUP98(t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40,t41,t42,t43,t44,t45,t46,t47,t48,t49,t50,t51,t52,t53,t54,t55,t56,t57,t58,t59,t60,t61,t62,t63,t64,t65,t66,t67,t68,t69,t70,t71,t72,t73,t74,t75,t76,t77,t78,t79,t80,t81,t82,t83,t84,t85,t86,t87,t88,t89,t90,t91,t92,t93,t94,t95,t96,t97,t98) G4Pair<t1, GROUP97(t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40,t41,t42,t43,t44,t45,t46,t47,t48,t49,t50,t51,t52,t53,t54,t55,t56,t57,t58,t59,t60,t61,t62,t63,t64,t65,t66,t67,t68,t69,t70,t71,t72,t73,t74,t75,t76,t77,t78,t79,t80,t81,t82,t83,t84,t85,t86,t87,t88,t89,t90,t91,t92,t93,t94,t95,t96,t97,t98) >
 #define GROUP99(t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40,t41,t42,t43,t44,t45,t46,t47,t48,t49,t50,t51,t52,t53,t54,t55,t56,t57,t58,t59,t60,t61,t62,t63,t64,t65,t66,t67,t68,t69,t70,t71,t72,t73,t74,t75,t76,t77,t78,t79,t80,t81,t82,t83,t84,t85,t86,t87,t88,t89,t90,t91,t92,t93,t94,t95,t96,t97,t98,t99) G4Pair<t1, GROUP98(t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40,t41,t42,t43,t44,t45,t46,t47,t48,t49,t50,t51,t52,t53,t54,t55,t56,t57,t58,t59,t60,t61,t62,t63,t64,t65,t66,t67,t68,t69,t70,t71,t72,t73,t74,t75,t76,t77,t78,t79,t80,t81,t82,t83,t84,t85,t86,t87,t88,t89,t90,t91,t92,t93,t94,t95,t96,t97,t98,t99) >
 
-
-template <class A>
-class VCall
-{
-  public:
-  virtual void call(A* aA) = 0;
-};
-
-template <class g, class f, class A>
-class Call : public VCall<A>
-{
-  public:
-  virtual void call(A* aA) 
-  {
-    typename g::first aL;
-    f aF; 
-    aF(&aL, aA);
-  }
-};
-
-
-template <class group>
+template <class group, class functor>
 class G4ForEach
 {
   private:
-  template <class T1> static void ActOn(T1* aT1, VCall<T1> * aV)
+  template <class T1> static void ActOn(T1* aT1)
   {
-    aV->call(aT1);
+    typename group::first aL;
+    functor aF;
+    aF(&aL, aT1);
   }
   public:
-  template <class T1, class functor> static void Apply(functor * aFP, T1* aT1=0)
+  template <class T1> static void Apply(T1* aT1=0)
   {
-    Call<group, functor, T1> aCall;
-    aCall.call(aT1);
-    typedef typename group::rest tail;
-    G4ForEach<tail>::Apply(aFP, aT1);
+    ActOn(aT1);
+    G4ForEach<typename group::rest, functor>::Apply(aT1);
   }
-  template <class functor>
   static void Apply()
   {
-    Call<group, functor, int> aCall;
-    int i=0;
-    aCall.call(i);
-    typedef typename group::rest tail;
-    G4ForEach<tail>::Apply();
+    ActOn<int>(0);
+    G4ForEach<typename group::rest, functor>::Apply();
   }
 };
 
-template<>
-class G4ForEach<G4Terminator>
+template <class functor>
+struct G4ForEach<G4Terminator, functor>
 {
-  public:
-  template <class T1, class functor> static void Apply(functor *, T1*){}
-   template <class functor> static void Apply(){}
+  template <class T1> static void Apply(T1* ){};
+  static void Apply(){};
 };
 
 template <class t1, int i2, class t3>
@@ -200,13 +152,20 @@ class G4IntGrp
   typedef t3 rest;
 };
 
-template<class T1, int I1, int I2, int I3, int I4>
-class INT4
-{
-  public:
-  typedef T1 it;
-  enum {i1=I1, i2=I2, i3=I3, i4=I4};
-};
-
+#define INT1(t1,i2) G4IntGrp<t1, i2, G4Terminator >
+#define INT2(t1,i2,i3) G4IntGrp<t1, i3, INT1(t1,i2) >
+#define INT3(t1,i2,i3,i4) G4IntGrp<t1, i4, INT2(t1,i2,i3) >
+#define INT4(t1,i2,i3,i4,i5) G4IntGrp<t1, i5, INT3(t1,i2,i3,i4) >
+#define INT5(t1,i2,i3,i4,i5,i6) G4IntGrp<t1, i6, INT4(t1,i2,i3,i4,i5) >
+#define INT6(t1,i2,i3,i4,i5,i6,i7) G4IntGrp<t1, i7, INT5(t1,i2,i3,i4,i5,i6) >
+#define INT7(t1,i2,i3,i4,i5,i6,i7,i8) G4IntGrp<t1, i8, INT6(t1,i2,i3,i4,i5,i6,i7) >
+#define INT8(t1,i2,i3,i4,i5,i6,i7,i8,i9) G4IntGrp<t1, i9, INT7(t1,i2,i3,i4,i5,i6,i7,i8) >
+#define INT9(t1,i2,i3,i4,i5,i6,i7,i8,i9,i10) G4IntGrp<t1 i10, INT8(t1,i2,i3,i4,i5,i6,i7,i8,i9) >
+#define INT10(t1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11) G4IntGrp<t1, i11, INT9(t1,i2,i3,i4,i5,i6,i7,i8,i9,i10) >
+#define INT11(t1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12) G4IntGrp<t1, i12, INT10(t1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11) >
+#define INT12(t1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13) G4IntGrp<t1, i13, INT11(t1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12) >
+#define INT13(t1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14) G4IntGrp<t1, i14, INT12(t1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13) >
+#define INT14(t1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14,i15) G4IntGrp<t1, i15, INT13(t1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14) >
+#define INT15(t1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14,i15,i16) G4IntGrp<t1, i16, INT14(t1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14,i15) >
 #endif
 
