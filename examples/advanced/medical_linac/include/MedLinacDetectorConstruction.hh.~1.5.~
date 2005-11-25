@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MedLinacDetectorConstruction.hh,v 1.6 2005-11-25 22:02:04 mpiergen Exp $
+// $Id: MedLinacDetectorConstruction.hh.~1.5.~,v 1.1 2005-11-25 22:02:04 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -108,7 +108,6 @@ public:
   MedLinacVGeometryComponent* pHead;
   MedLinacDetectorMessenger* detectorMessenger; 
   MedLinacDecorator* decorator;
-  MedLinacDecorator* decorator1;
   MedLinacDetectorConstruction(G4String);
 
   static MedLinacDetectorConstruction* instance;

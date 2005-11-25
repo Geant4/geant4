@@ -20,35 +20,137 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinac.cc,v 1.6 2005-07-03 23:27:36 mpiergen Exp $
+// $Id: MedLinac.cc,v 1.7 2005-11-25 22:02:03 mpiergen Exp $
 //
 // --------------------------------------------------------------
 //      GEANT 4 -  medical_linac
 //
 // Code developed by: M. Piergentili
 
-#include "MedLinacSimulation.hh"
+#include "G4RunManager.hh"
+#include "G4UImanager.hh"
+#include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
+#include "globals.hh"
+#include "G4SDManager.hh"
+#include "G4UImessenger.hh"
+#include "Randomize.hh" 
 
-int main(int argc, char** argv){
 
-  MedLinacSimulation * simulation = new MedLinacSimulation(0);  
+#include "MedLinacDetectorMessenger.hh"
+#include "MedLinacDetectorConstruction.hh"
+#include "MedLinacPhysicsList.hh"
+#include "MedLinacPhantomSD.hh"
+#include "MedLinacPhantomHit.hh"
+#include "MedLinacPrimaryGeneratorAction.hh"
+#include "MedLinacEventAction.hh"
+#include "MedLinacRunAction.hh"
+#include "MedLinacTrackingAction.hh"
+#include "G4SDManager.hh"
 
-  simulation->initialize(argc,argv);
 
-  std::string mn;
+#ifdef G4UI_USE_XM
+#include "G4UIXm.hh"
+#endif
 
-  if(argc>1)
-    mn = argv[1];
+#ifdef G4VIS_USE
+#include "G4VisExecutive.hh"
+#endif
 
-  if(mn=="")
+int main(int argc ,char ** argv)
+{
+
+//choose the Random engine
+  HepRandom::setTheEngine(new RanecuEngine);
+  G4int seed = time(0);
+  HepRandom :: setTheSeed(seed);
+
+ // Construct the default run manager
+  G4RunManager* runManager = new G4RunManager;
+  G4String sensitiveDetectorName = "Phantom";
+  MedLinacDetectorConstruction* pDetectorConstruction = 
+MedLinacDetectorConstruction::GetInstance(sensitiveDetectorName);
+
+
+  // set mandatory initialization classes
+  runManager->SetUserInitialization(pDetectorConstruction);
+  runManager->SetUserInitialization(new MedLinacPhysicsList);
+
+
+#ifdef G4VIS_USE
+  // Visualization manager
+  G4VisManager* visManager = new G4VisExecutive;
+  visManager->Initialize();
+#endif
+
+
+  // output environment variables:
+#ifdef G4ANALYSIS_USE
+  G4cout << G4endl << G4endl << G4endl 
+	 << " User Environment " << G4endl
+	 << " Using AIDA 3.0 analysis " << G4endl;
+# else
+  G4cout << G4endl << G4endl << G4endl 
+	 << " User Environment " << G4endl
+	 << " G4ANALYSIS_USE environment variable not set, NO ANALYSIS " 
+	 << G4endl;
+#endif
+  
+
+
+
+ G4UIsession* session = 0;
+  if (argc == 1)   // Define UI session for interactive mode.
     {
-      std::cerr << "error: please give a macro file name" << std::endl;
-      return -1;
+      session = new G4UIterminal();
     }
-  
-  simulation->executeMacro(mn);
-  
-  delete simulation;
 
-  return 0;
+  // set mandatory user action class
+  
+  runManager->SetUserAction(new MedLinacPrimaryGeneratorAction);
+  MedLinacEventAction *pMedLinacEventAction = new MedLinacEventAction();
+  runManager->SetUserAction(pMedLinacEventAction);
+
+  MedLinacRunAction *pRunAction = new MedLinacRunAction();
+
+  runManager->SetUserAction(pRunAction);  
+  runManager->SetUserAction(new MedLinacTrackingAction);
+
+
+  // Initialize  G4 kernel
+  //runManager->Initialize();
+
+  // get the pointer to the UI manager
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  
+ if (session)   // Define UI session for interactive mode.
+    { 
+      G4cout<<" UI session starts ..."<< G4endl;
+       session->SessionStart();
+       delete session;
+    }
+
+  else           // Batch mode
+    { 
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UI->ApplyCommand(command+fileName);
+    }  
+  
+
+
+
+
+  //job termination
+
+#ifdef G4VIS_USE
+ delete visManager;
+#endif
+
+ delete runManager;
+
+ return 0;
 }
+
+
+
