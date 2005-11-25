@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 November 2005 Dennis Wright (radioactive_decay-V07-01-02)
+- more <sstream> migration: replace istrstream with istringstream in
+   G4RIsotopeTable.cc, G4UIcmdWithNucleusLimits.cc
+
 24 November 2005 Dennis Wright (radioactive_decay-V07-01-01)
 - migrated two remaining files to <sstream>:
    G4RIsotopeTable.cc, G4UIcmdWithNucleusLimits.cc
