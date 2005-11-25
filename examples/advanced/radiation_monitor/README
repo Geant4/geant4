@@ -1,0 +1,26 @@
+Documentation
+--------------
+Available at the http://www.ge.infn.it/~geant4/hep/radmon/ website. For any
+question please feel free to contact Riccardo Capra <capra@ge.infn.it>
+
+Build instructions
+-------------------
+Run gmake
+
+Syntax
+-------
+Run "Radmon -h" for syntax help. .startup.mac file is always run, if it
+exists. An example of .startup.mac can be found in README directory
+
+Radmon [-h|-H|-?] [-b] [-v] [<filename>]
+
+-b option suppress interactive session
+-v option sets the verbosity level
+filename is run after .startup.mac, if present. Then interactive session
+starts if -b is absent.
+
+To do
+------
+High precision neutron physics module
+Alternative analysis modules
+Beam generation algorithms
