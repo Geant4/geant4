@@ -88,7 +88,8 @@ New or modified files:
 		  replaces Gr4RunManager::DoEventLoop w/ TOP-C parallel loop,
                   Adds certain local vars of DoEventLoop as ParRunManager members
   include/MarshaledObj.h - run-time utilities for marshalling
-  include/MarshaledEx*Hit.h - marshals N02 hits (calorimeter hits)
+  include/MarshaledEx*Hit.h - marshals N04 hits (tracker, muon and
+  						 calorimeter hits)
   include/MarshaledG4*.h - marshaling routines for Geant4 data structures
 
   ~/slave*.out	- Contains outputs of slave1, slave2, etc.
