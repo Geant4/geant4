@@ -1,0 +1,16 @@
+//
+// File name:     RadmonDataAnalysisDepositedEnergy.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonDataAnalysisDepositedEnergy.icc,v 1.1 2005-11-25 01:56:47 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONDATAANALYSISDEPOSITEDENERGY_HH
+ #error "RadmonDataAnalysisDepositedEnergy.icc cannot be included directly. Please use RadmonDataAnalysisDepositedEnergy.hh"
+#else  /* RADMONDATAANALYSISDEPOSITEDENERGY_HH */
+ inline                                         RadmonDataAnalysisDepositedEnergy :: ~RadmonDataAnalysisDepositedEnergy()
+ {
+ }
+#endif /* RADMONDATAANALYSISDEPOSITEDENERGY_HH */
