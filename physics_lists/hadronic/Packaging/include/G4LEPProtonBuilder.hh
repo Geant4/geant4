@@ -39,8 +39,8 @@ class G4LEPProtonBuilder : public G4VProtonBuilder
     virtual ~G4LEPProtonBuilder();
 
   public: 
-    virtual void Build(G4ProtonInelasticProcess & aP);
-    virtual void Build(G4HadronElasticProcess & aP);
+    virtual void Build(G4ProtonInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess * aP);
     
     void SetMinEnergy(G4double aM) 
     {

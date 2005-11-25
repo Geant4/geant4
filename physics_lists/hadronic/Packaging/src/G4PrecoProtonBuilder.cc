@@ -25,29 +25,31 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 
+#include "G4ExcitationHandler.hh"  
+
 G4PrecoProtonBuilder::
 G4PrecoProtonBuilder() 
 {
   theMin = 0;
   theMax = 170.*MeV;
-  theModel = new G4PreCompoundModel(&theHandler);
+  theModel = new G4PreCompoundModel(new G4ExcitationHandler);
 }
 
 G4PrecoProtonBuilder::
 ~G4PrecoProtonBuilder() {}
 
 void G4PrecoProtonBuilder::
-Build(G4HadronElasticProcess & )
+Build(G4HadronElasticProcess * )
 {
 }
 
 void G4PrecoProtonBuilder::
-Build(G4ProtonInelasticProcess & aP)
+Build(G4ProtonInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
-  aP.RegisterMe(theModel);
-  aP.AddDataSet(&theXSec);  
+  aP->RegisterMe(theModel);
+  aP->AddDataSet(&theXSec);  
 }
 
 // 2002 by J.P. Wellisch

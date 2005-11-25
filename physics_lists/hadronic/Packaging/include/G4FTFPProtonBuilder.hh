@@ -49,19 +49,17 @@ class G4FTFPProtonBuilder : public G4VProtonBuilder
     virtual ~G4FTFPProtonBuilder();
 
   public: 
-    virtual void Build(G4HadronElasticProcess & aP);
-    virtual void Build(G4ProtonInelasticProcess & aP);
+    virtual void Build(G4HadronElasticProcess * aP);
+    virtual void Build(G4ProtonInelasticProcess * aP);
     
     void SetMinEnergy(G4double aM) {theMin = aM;}
 
   private:
     G4ProtonInelasticCrossSection theXSec;
     G4TheoFSGenerator * theModel;
-    G4ExcitationHandler theHandler;
     G4PreCompoundModel * thePreEquilib;
     G4GeneratorPrecompoundInterface * theCascade;
-    G4FTFModel theStringModel;
-    G4LundStringFragmentation theFragmentation;
+    G4FTFModel * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
     G4double theMin;
 

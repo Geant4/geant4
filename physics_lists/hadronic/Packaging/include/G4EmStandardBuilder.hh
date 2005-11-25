@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmStandardBuilder.hh,v 1.2 2005-11-11 11:13:07 vnivanch Exp $
+// $Id: G4EmStandardBuilder.hh,v 1.3 2005-11-25 15:38:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -40,6 +40,10 @@
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
+
+// for lib list detection....
+#include "G4MuBremsstrahlung.hh"
+#include "G4MuPairProduction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

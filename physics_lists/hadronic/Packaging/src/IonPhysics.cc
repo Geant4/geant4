@@ -20,136 +20,123 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
- #include "IonPhysics.hh"
- #include "G4ParticleDefinition.hh"
- #include "G4ParticleTable.hh"
- #include "G4ProcessManager.hh"
+// $Id: IonPhysics.cc,v 1.2 2005-11-25 15:38:50 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   IonPhysics
+//
+// Author:      V.Ivanchenko 09.11.2005
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
 
- // Nuclei
- #include "G4IonConstructor.hh"
+#include "IonPhysics.hh"
+#include "G4HadronElasticProcess.hh"
+#include "G4LElastic.hh"
 
- #include "globals.hh"
- #include "G4ios.hh"
+#include "G4DeuteronInelasticProcess.hh"
+#include "G4LEDeuteronInelastic.hh"
 
- IonPhysics::IonPhysics(const G4String& name)
+#include "G4TritonInelasticProcess.hh"
+#include "G4LETritonInelastic.hh"
+
+#include "G4AlphaInelasticProcess.hh"
+#include "G4LEAlphaInelastic.hh"
+
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include "G4ProcessManager.hh"
+
+// Nuclei
+#include "G4IonConstructor.hh"
+
+IonPhysics::IonPhysics(const G4String& name)
                   :  G4VPhysicsConstructor(name), wasActivated(false)
- {
- }
+{
+}
 
- IonPhysics::~IonPhysics()
- {
-   if(wasActivated)
-   {
-   G4ProcessManager * pManager = 0;
+IonPhysics::~IonPhysics()
+{
+  if(wasActivated) {
 
-   pManager = G4GenericIon::GenericIon()->GetProcessManager();
-   //if(pManager) pManager->RemoveProcess(&theIonElasticProcess);
-   //if(pManager) pManager->RemoveProcess(&fIonIonisation);
-   // if(pManager) pManager->RemoveProcess(&fIonMultipleScattering);
+    delete theElasticModel;
+    delete theIonElasticProcess;
+    delete theDElasticProcess;
+    delete fDeuteronProcess;
+    delete fDeuteronModel;
+    delete theTElasticProcess;
+    delete fTritonProcess;
+    delete fTritonModel;
+    delete theAElasticProcess;
+    delete fAlphaProcess;
+    delete fAlphaModel;
+    delete theHe3ElasticProcess;
 
-   pManager = G4Deuteron::Deuteron()->GetProcessManager();
-   if(pManager) pManager->RemoveProcess(&theDElasticProcess);
-   if(pManager) pManager->RemoveProcess(&fDeuteronProcess);
-   if(pManager) pManager->RemoveProcess(&fDeuteronIonisation);
-   if(pManager) pManager->RemoveProcess(&fDeuteronMultipleScattering);
-
-   pManager = G4Triton::Triton()->GetProcessManager();
-   if(pManager) pManager->RemoveProcess(&theTElasticProcess);
-   if(pManager) pManager->RemoveProcess(&fTritonProcess);
-   if(pManager) pManager->RemoveProcess(&fTritonIonisation);
-   if(pManager) pManager->RemoveProcess(&fTritonMultipleScattering);
-
-   pManager = G4Alpha::Alpha()->GetProcessManager();
-   if(pManager) pManager->RemoveProcess(&theAElasticProcess);
-   if(pManager) pManager->RemoveProcess(&fAlphaProcess);
-   if(pManager) pManager->RemoveProcess(&fAlphaIonisation);
-   if(pManager) pManager->RemoveProcess(&fAlphaMultipleScattering);
-
-   pManager = G4He3::He3()->GetProcessManager();
-   //if(pManager) pManager->RemoveProcess(&theHe3ElasticProcess);
-   //if(pManager) pManager->RemoveProcess(&fHe3Ionisation);
-   //if(pManager) pManager->RemoveProcess(&fHe3MultipleScattering);
    }
  }
 
- void IonPhysics::ConstructProcess()
- {
-   G4ProcessManager * pManager = 0;
+void IonPhysics::ConstructProcess()
+{
+  G4ProcessManager * pManager = 0;
 
-   // Elastic Process
-   theElasticModel = new G4LElastic();
-   theIonElasticProcess.RegisterMe(theElasticModel);
-   theDElasticProcess.RegisterMe(theElasticModel);
-   theTElasticProcess.RegisterMe(theElasticModel);
-   theAElasticProcess.RegisterMe(theElasticModel);
-   theHe3ElasticProcess.RegisterMe(theElasticModel);
+  // Elastic Process
+  theElasticModel = new G4LElastic();
 
-   // Generic Ion
-   pManager = G4GenericIon::GenericIon()->GetProcessManager();
-   // add process
-   pManager->AddDiscreteProcess(&theIonElasticProcess);
-   pManager->AddProcess(&fIonIonisation, ordInActive, 2, 2);
+  theIonElasticProcess = new G4HadronElasticProcess();
+  theDElasticProcess   = new G4HadronElasticProcess();
+  theTElasticProcess   = new G4HadronElasticProcess();
+  theAElasticProcess   = new G4HadronElasticProcess();
+  theHe3ElasticProcess = new G4HadronElasticProcess();
 
-   pManager->AddProcess(&fIonMultipleScattering);
-   pManager->SetProcessOrdering(&fIonMultipleScattering, idxAlongStep,  1);
-   pManager->SetProcessOrdering(&fIonMultipleScattering, idxPostStep,  1);
+  theIonElasticProcess->RegisterMe(theElasticModel);
+  theDElasticProcess->RegisterMe(theElasticModel);
+  theTElasticProcess->RegisterMe(theElasticModel);
+  theAElasticProcess->RegisterMe(theElasticModel);
+  theHe3ElasticProcess->RegisterMe(theElasticModel);
 
-   // Deuteron 
-   pManager = G4Deuteron::Deuteron()->GetProcessManager();
-   // add process
-   pManager->AddDiscreteProcess(&theDElasticProcess);
+  // Generic Ion
+  pManager = G4GenericIon::GenericIon()->GetProcessManager();
+  // add process
+  pManager->AddDiscreteProcess(theIonElasticProcess);
 
-   fDeuteronModel = new G4LEDeuteronInelastic();
-   fDeuteronProcess.RegisterMe(fDeuteronModel);
-   pManager->AddDiscreteProcess(&fDeuteronProcess);
+  // Deuteron
+  pManager = G4Deuteron::Deuteron()->GetProcessManager();
+  // add process
+  fDeuteronModel = new G4LEDeuteronInelastic();
+  fDeuteronProcess = new G4DeuteronInelasticProcess();
+  fDeuteronProcess->RegisterMe(fDeuteronModel);
+  pManager->AddDiscreteProcess(theDElasticProcess);
+  pManager->AddDiscreteProcess(fDeuteronProcess);
 
-   pManager->AddProcess(&fDeuteronIonisation, ordInActive, 2, 2);
+  // Triton
+  pManager = G4Triton::Triton()->GetProcessManager();
+  // add process
+  fTritonModel = new G4LETritonInelastic();
+  fTritonProcess = new G4TritonInelasticProcess();
+  fTritonProcess->RegisterMe(fTritonModel);
+  pManager->AddDiscreteProcess(theTElasticProcess);
+  pManager->AddDiscreteProcess(fTritonProcess);
 
-   pManager->AddProcess(&fDeuteronMultipleScattering);
-   pManager->SetProcessOrdering(&fDeuteronMultipleScattering, idxAlongStep,  1);
-   pManager->SetProcessOrdering(&fDeuteronMultipleScattering, idxPostStep,  1);
+  // Alpha
+  pManager = G4Alpha::Alpha()->GetProcessManager();
+  // add process
+  fAlphaModel = new G4LEAlphaInelastic();
+  fAlphaProcess = new G4AlphaInelasticProcess();
+  fAlphaProcess->RegisterMe(fAlphaModel);
+  pManager->AddDiscreteProcess(theAElasticProcess);
+  pManager->AddDiscreteProcess(fAlphaProcess);
 
-   // Triton 
-   pManager = G4Triton::Triton()->GetProcessManager();
-   // add process
-   pManager->AddDiscreteProcess(&theTElasticProcess);
+  // He3
+  pManager = G4He3::He3()->GetProcessManager();
+  // add process
+  pManager->AddDiscreteProcess(theHe3ElasticProcess);
 
-   fTritonModel = new G4LETritonInelastic();
-   fTritonProcess.RegisterMe(fTritonModel);
-   pManager->AddDiscreteProcess(&fTritonProcess);
-
-   pManager->AddProcess(&fTritonIonisation, ordInActive, 2, 2);
-
-   pManager->AddProcess(&fTritonMultipleScattering);
-   pManager->SetProcessOrdering(&fTritonMultipleScattering, idxAlongStep,  1);
-   pManager->SetProcessOrdering(&fTritonMultipleScattering, idxPostStep,  1);
-
-   // Alpha 
-   pManager = G4Alpha::Alpha()->GetProcessManager();
-   // add process
-   pManager->AddDiscreteProcess(&theAElasticProcess);
-
-   fAlphaModel = new G4LEAlphaInelastic();
-   fAlphaProcess.RegisterMe(fAlphaModel);
-   pManager->AddDiscreteProcess(&fAlphaProcess);
-   pManager->AddProcess(&fAlphaIonisation, ordInActive, 2, 2);
-
-   pManager->AddProcess(&fAlphaMultipleScattering);
-   pManager->SetProcessOrdering(&fAlphaMultipleScattering, idxAlongStep,  1);
-   pManager->SetProcessOrdering(&fAlphaMultipleScattering, idxPostStep,  1);
-
-   // He3
-   pManager = G4He3::He3()->GetProcessManager();
-   // add process
-   pManager->AddDiscreteProcess(&theHe3ElasticProcess);
-   pManager->AddProcess(&fHe3Ionisation, ordInActive, 2, 2);
-
-   pManager->AddProcess(&fHe3MultipleScattering);
-   pManager->SetProcessOrdering(&fHe3MultipleScattering, idxAlongStep,  1);
-   pManager->SetProcessOrdering(&fHe3MultipleScattering, idxPostStep,  1);
-
-   wasActivated = true;
- }
+  wasActivated = true;
+}
 
  void IonPhysics::ConstructParticle()
  {

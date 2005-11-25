@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4StoppingHadronBuilder.hh,v 1.2 2005-11-11 11:13:07 vnivanch Exp $
+// $Id: G4StoppingHadronBuilder.hh,v 1.3 2005-11-25 15:38:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -40,11 +40,12 @@
 
 #include "globals.hh"
 
-class G4MuonMinusCaptureAtRest;
-class G4PionMinusAbsorptionAtRest;
-class G4KaonMinusAbsorption;
-class G4AntiProtonAnnihilationAtRest;
-class G4AntiNeutronAnnihilationAtRest;
+#include "G4MuonMinusCaptureAtRest.hh"
+#include "G4AntiProtonAnnihilationAtRest.hh"
+#include "G4AntiNeutronAnnihilationAtRest.hh"
+#include "G4PionMinusAbsorptionAtRest.hh"
+#include "G4KaonMinusAbsorption.hh"
+
 
 class G4StoppingHadronBuilder
 {

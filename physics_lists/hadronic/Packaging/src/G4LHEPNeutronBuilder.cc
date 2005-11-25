@@ -36,39 +36,39 @@
  ~G4LHEPNeutronBuilder() {}
 
  void G4LHEPNeutronBuilder::
- Build(G4NeutronInelasticProcess & aP)
+ Build(G4NeutronInelasticProcess * aP)
  {
    theLENeutronModel = new G4LENeutronInelastic();
    theHENeutronModel = new G4HENeutronInelastic();
    theLENeutronModel->SetMinEnergy(theIMin);
    theLENeutronModel->SetMaxEnergy(55*GeV);
    theHENeutronModel->SetMinEnergy(25*GeV);
-   aP.RegisterMe(theLENeutronModel);
-   aP.RegisterMe(theHENeutronModel);
+   aP->RegisterMe(theLENeutronModel);
+   aP->RegisterMe(theHENeutronModel);
  }
 
  void G4LHEPNeutronBuilder::
- Build(G4HadronFissionProcess & aP)
+ Build(G4HadronFissionProcess * aP)
  {
    theNeutronFissionModel = new G4LFission();
    theNeutronFissionModel->SetMinEnergy(theMin);
-   aP.RegisterMe(theNeutronFissionModel);
+   aP->RegisterMe(theNeutronFissionModel);
  }
 
  void G4LHEPNeutronBuilder::
- Build(G4HadronElasticProcess & aP)
+ Build(G4HadronElasticProcess * aP)
  {
    theElasticModel = new G4LElastic();
    theElasticModel->SetMinEnergy(theMin);
-   aP.RegisterMe(theElasticModel);
+   aP->RegisterMe(theElasticModel);
  }
 
  void G4LHEPNeutronBuilder::
- Build(G4HadronCaptureProcess & aP)
+ Build(G4HadronCaptureProcess * aP)
  {
    theNeutronCaptureModel = new G4LCapture();
    theNeutronCaptureModel->SetMinEnergy(theMin);
-   aP.RegisterMe(theNeutronCaptureModel);
+   aP->RegisterMe(theNeutronCaptureModel);
  }
 
  // 2002 by J.P. Wellisch

@@ -47,10 +47,10 @@ class G4NeutronHPBuilder : public G4VNeutronBuilder
     virtual ~G4NeutronHPBuilder();
 
   public: 
-    virtual void Build(G4HadronElasticProcess & aP);
-    virtual void Build(G4HadronFissionProcess & aP);
-    virtual void Build(G4HadronCaptureProcess & aP);
-    virtual void Build(G4NeutronInelasticProcess & aP);
+    virtual void Build(G4HadronElasticProcess * aP);
+    virtual void Build(G4HadronFissionProcess * aP);
+    virtual void Build(G4HadronCaptureProcess * aP);
+    virtual void Build(G4NeutronInelasticProcess * aP);
 
   private:
     G4NeutronHPElastic * theHPElastic;

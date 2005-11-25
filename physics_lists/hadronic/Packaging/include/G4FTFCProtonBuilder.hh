@@ -47,8 +47,8 @@ class G4FTFCProtonBuilder : public G4VProtonBuilder
     virtual ~G4FTFCProtonBuilder(){};
 
   public: 
-    virtual void Build(G4HadronElasticProcess & ){};
-    virtual void Build(G4ProtonInelasticProcess & aP);
+    virtual void Build(G4HadronElasticProcess * ){};
+    virtual void Build(G4ProtonInelasticProcess * aP);
     
     void SetMinEnergy(G4double aM) {theMin = aM;}
 

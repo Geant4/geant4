@@ -30,31 +30,37 @@ G4QGSCProtonBuilder()
 {
   theMin = 8*GeV;
   theModel = new G4TheoFSGenerator;
+
+  theStringModel = new G4QGSModel< G4QGSParticipants >;
+  theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
+  theStringModel->SetFragmentationModel(theStringDecay);
+  
   theCascade = new G4StringChipsParticleLevelInterface;
+
+  theModel->SetHighEnergyGenerator(theStringModel);
   theModel->SetTransport(theCascade);
-  theModel->SetHighEnergyGenerator(&theStringModel);
-  theStringDecay = new G4ExcitedStringDecay(&theFragmentation);
-  theStringModel.SetFragmentationModel(theStringDecay);
 }
 
 G4QGSCProtonBuilder::
 ~G4QGSCProtonBuilder() 
 {
+  delete theCascade;
   delete theStringDecay;
+  delete theStringModel; 
 }
 
 void G4QGSCProtonBuilder::
-Build(G4HadronElasticProcess & )
+Build(G4HadronElasticProcess * )
 {
 }
 
 void G4QGSCProtonBuilder::
-Build(G4ProtonInelasticProcess & aP)
+Build(G4ProtonInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(100*TeV);
-  aP.RegisterMe(theModel);
-  aP.AddDataSet(&theXSec);  
+  aP->RegisterMe(theModel);
+  aP->AddDataSet(&theXSec);  
 }
 
 // 2002 by J.P. Wellisch

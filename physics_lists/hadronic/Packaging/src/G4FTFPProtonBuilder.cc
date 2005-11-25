@@ -30,22 +30,26 @@
  {
    theMin = 15*GeV;
    theModel = new G4TheoFSGenerator;
+
+   theStringModel = new G4FTFModel;
+   theStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation);
+   theStringModel->SetFragmentationModel(theStringDecay);
+
    theCascade = new G4GeneratorPrecompoundInterface;
-   thePreEquilib = new G4PreCompoundModel(&theHandler);
+   thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
    theCascade->SetDeExcitation(thePreEquilib);  
+
+   theModel->SetHighEnergyGenerator(theStringModel);
    theModel->SetTransport(theCascade);
-   theModel->SetHighEnergyGenerator(&theStringModel);
-   theStringDecay = new G4ExcitedStringDecay(&theFragmentation);
-   theStringModel.SetFragmentationModel(theStringDecay);
  }
 
  void G4FTFPProtonBuilder::
- Build(G4ProtonInelasticProcess & aP)
+ Build(G4ProtonInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(100*TeV);
-   aP.RegisterMe(theModel);
-   aP.AddDataSet(&theXSec);  
+   aP->RegisterMe(theModel);
+   aP->AddDataSet(&theXSec);  
  }
 
  G4FTFPProtonBuilder::
@@ -55,7 +59,7 @@
  }
 
  void G4FTFPProtonBuilder::
- Build(G4HadronElasticProcess & )
+ Build(G4HadronElasticProcess * )
  {
  }
 

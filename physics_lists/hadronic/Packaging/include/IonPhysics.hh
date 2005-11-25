@@ -20,85 +20,77 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//========================
-// taken from example N04 of G4 distribution
-//========================
+// $Id: IonPhysics.hh,v 1.2 2005-11-25 15:38:50 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4IonBuilder
+//
+// Author:      V.Ivanchenko 09.11.2005
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
+
 #ifndef IonPhysics_h
 #define IonPhysics_h 1
 
 #include "globals.hh"
-#include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
 
-#include "G4HadronElasticProcess.hh"
-#include "G4LElastic.hh"
-
-#include "G4DeuteronInelasticProcess.hh"
-#include "G4LEDeuteronInelastic.hh"
-
-#include "G4TritonInelasticProcess.hh"
-#include "G4LETritonInelastic.hh"
-
-#include "G4AlphaInelasticProcess.hh"
-#include "G4LEAlphaInelastic.hh"
-
-#include "G4hIonisation.hh"
-#include "G4ionIonisation.hh"
-#include "G4MultipleScattering.hh"
+class  G4LElastic;
+class  G4HadronElasticProcess;
+class  G4DeuteronInelasticProcess;
+class  G4LEDeuteronInelastic;
+class  G4TritonInelasticProcess;
+class  G4LETritonInelastic;
+class  G4AlphaInelasticProcess;
+class  G4LEAlphaInelastic;
 
 class IonPhysics : public G4VPhysicsConstructor
 {
-  public: 
-    IonPhysics(const G4String& name="ion");
-    virtual ~IonPhysics();
+public:
+  IonPhysics(const G4String& name="ions");
+  virtual ~IonPhysics();
 
-  public: 
-    // This method will be invoked in the Construct() method. 
-    // each particle type will be instantiated
-    virtual void ConstructParticle();
- 
-    // This method will be invoked in the Construct() method.
-    // each physics process will be instantiated and
-    // registered to the process manager of each particle type 
-    virtual void ConstructProcess();
+  // This method will be invoked in the Construct() method.
+  // each particle type will be instantiated
+  virtual void ConstructParticle();
 
-  protected:
-   // Elastic Process
-   G4LElastic*            theElasticModel;
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type
+  virtual void ConstructProcess();
 
-   // Generic Ion physics
-   G4HadronElasticProcess theIonElasticProcess;
-   G4MultipleScattering   fIonMultipleScattering;
-   G4ionIonisation          fIonIonisation;
+private:
+  // Elastic Process
+  G4LElastic*            theElasticModel;
 
-   // Deuteron physics
-   G4HadronElasticProcess      theDElasticProcess;
-   G4MultipleScattering        fDeuteronMultipleScattering;
-   G4hIonisation               fDeuteronIonisation;
-   G4DeuteronInelasticProcess  fDeuteronProcess;
-   G4LEDeuteronInelastic*      fDeuteronModel;
+  // Generic Ion physics
+  G4HadronElasticProcess* theIonElasticProcess;
 
-   // Triton physics
-   G4HadronElasticProcess      theTElasticProcess;
-   G4MultipleScattering        fTritonMultipleScattering;
-   G4hIonisation               fTritonIonisation;
-   G4TritonInelasticProcess    fTritonProcess;
-   G4LETritonInelastic*        fTritonModel;
-  
-   // Alpha physics
-   G4HadronElasticProcess      theAElasticProcess;
-   G4MultipleScattering        fAlphaMultipleScattering;
-   G4hIonisation               fAlphaIonisation;
-   G4AlphaInelasticProcess     fAlphaProcess;
-   G4LEAlphaInelastic*         fAlphaModel;
+  // Deuteron physics
+  G4HadronElasticProcess*     theDElasticProcess;
+  G4DeuteronInelasticProcess* fDeuteronProcess;
+  G4LEDeuteronInelastic*      fDeuteronModel;
 
-   // He3 physics
-   G4HadronElasticProcess      theHe3ElasticProcess;
-   G4MultipleScattering        fHe3MultipleScattering;
-   G4hIonisation               fHe3Ionisation;
+  // Triton physics
+  G4HadronElasticProcess*     theTElasticProcess;
+  G4TritonInelasticProcess*   fTritonProcess;
+  G4LETritonInelastic*        fTritonModel;
 
-   G4bool wasActivated;
+  // Alpha physics
+  G4HadronElasticProcess*     theAElasticProcess;
+  G4AlphaInelasticProcess*    fAlphaProcess;
+  G4LEAlphaInelastic*         fAlphaModel;
+
+  // He3 physics
+  G4HadronElasticProcess*     theHe3ElasticProcess;
+
+  G4bool wasActivated;
 };
 
 // 2002 by J.P. Wellisch

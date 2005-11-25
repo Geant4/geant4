@@ -20,6 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: EM_GNPhysics.cc,v 1.2 2005-11-25 15:38:50 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   EMPhysics
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 09.11.2005 G.Folger: standard EM is now seperate
+//
+//----------------------------------------------------------------------------
+//
 #include "EM_GNPhysics.hh"
 #include "globals.hh"
 #include "G4ios.hh"
@@ -42,9 +56,8 @@ EM_GNPhysics::
 void EM_GNPhysics::
 ConstructParticle()
 {
-  G4Gamma::GammaDefinition();
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
+  theEMStandardPhysics.ConstructParticle();
+
   G4NeutrinoE::NeutrinoEDefinition();
   G4AntiNeutrinoE::AntiNeutrinoEDefinition();
 }
@@ -52,6 +65,7 @@ ConstructParticle()
 void EM_GNPhysics::
 ConstructProcess()
 {
+  theEMStandardPhysics.ConstructProcess();
   theEMPhysics.Build();
   #ifndef NO_ELECTRO_AND_GAMMA_NUCLEAR
   theGNPhysics.Build();

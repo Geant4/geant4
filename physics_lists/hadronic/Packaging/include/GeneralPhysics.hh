@@ -20,6 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: GeneralPhysics.hh,v 1.2 2005-11-25 15:38:50 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   GeneralPhysics
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 09.11.2005 G.Folger: don't  keep processes as data members, but new these
+//
+//----------------------------------------------------------------------------
+//
 #ifndef GeneralPhysics_h
 #define GeneralPhysics_h 1
 
@@ -52,7 +66,7 @@ class GeneralPhysics : public G4VPhysicsConstructor
     G4bool wasActivated;
 
   private:
-    G4Decay fDecayProcess;
+    G4Decay * pDecayProcess;
 };
 
 // 2002 by J.P. Wellisch

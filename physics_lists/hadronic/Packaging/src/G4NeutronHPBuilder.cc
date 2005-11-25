@@ -28,17 +28,17 @@
 G4NeutronHPBuilder::
 G4NeutronHPBuilder() 
 {
-  theHPElastic = NULL;
-  theHPElasticData = NULL;
+  theHPElastic = 0;
+  theHPElasticData = 0;
   
-  theHPFission = NULL;
-  theHPFissionData = NULL;
+  theHPFission = 0;
+  theHPFissionData = 0;
   
-  theHPCapture = NULL;
-  theHPCaptureData = NULL;
+  theHPCapture = 0;
+  theHPCaptureData = 0;
   
-  theHPInelastic = NULL;
-  theHPInelasticData = NULL;
+  theHPInelastic = 0;
+  theHPInelasticData = 0;
 }
 
 G4NeutronHPBuilder::
@@ -51,38 +51,38 @@ G4NeutronHPBuilder::
 }
 
 void G4NeutronHPBuilder::
-Build(G4HadronElasticProcess & aP)
+Build(G4HadronElasticProcess * aP)
 {
-  if(theHPElastic==NULL) theHPElastic = new G4NeutronHPElastic;
-  if(theHPElasticData == NULL) theHPElasticData = new G4NeutronHPElasticData;
-  aP.AddDataSet(theHPElasticData);
-  aP.RegisterMe(theHPElastic);
+  if(theHPElastic==0) theHPElastic = new G4NeutronHPElastic;
+  if(theHPElasticData == 0) theHPElasticData = new G4NeutronHPElasticData;
+  aP->AddDataSet(theHPElasticData);
+  aP->RegisterMe(theHPElastic);
 }
 
 void G4NeutronHPBuilder::
-Build(G4HadronFissionProcess & aP)
+Build(G4HadronFissionProcess * aP)
 {
-  if(theHPFission == NULL) theHPFission = new G4NeutronHPFission;
-  if(theHPFissionData==NULL) theHPFissionData=new G4NeutronHPFissionData;
-  aP.AddDataSet(theHPFissionData);
-  aP.RegisterMe(theHPFission);
+  if(theHPFission == 0) theHPFission = new G4NeutronHPFission;
+  if(theHPFissionData==0) theHPFissionData=new G4NeutronHPFissionData;
+  aP->AddDataSet(theHPFissionData);
+  aP->RegisterMe(theHPFission);
 }
 
 void G4NeutronHPBuilder::
-Build(G4HadronCaptureProcess & aP)
+Build(G4HadronCaptureProcess * aP)
 {
-  if(theHPCapture==NULL) theHPCapture = new G4NeutronHPCapture;
-  if(theHPCaptureData==NULL) theHPCaptureData = new G4NeutronHPCaptureData;
-  aP.AddDataSet(theHPCaptureData);
-  aP.RegisterMe(theHPCapture);
+  if(theHPCapture==0) theHPCapture = new G4NeutronHPCapture;
+  if(theHPCaptureData==0) theHPCaptureData = new G4NeutronHPCaptureData;
+  aP->AddDataSet(theHPCaptureData);
+  aP->RegisterMe(theHPCapture);
 }
 
 void G4NeutronHPBuilder::
-Build(G4NeutronInelasticProcess & aP)
+Build(G4NeutronInelasticProcess * aP)
 {
-  if(theHPInelastic==NULL) theHPInelastic = new G4NeutronHPInelastic;
-  if(theHPInelasticData==NULL) theHPInelasticData = new G4NeutronHPInelasticData;
-  aP.AddDataSet(theHPInelasticData);
-  aP.RegisterMe(theHPInelastic);
+  if(theHPInelastic==0) theHPInelastic = new G4NeutronHPInelastic;
+  if(theHPInelasticData==0) theHPInelasticData = new G4NeutronHPInelasticData;
+  aP->AddDataSet(theHPInelasticData);
+  aP->RegisterMe(theHPInelastic);
 }
 // 2002 by J.P. Wellisch

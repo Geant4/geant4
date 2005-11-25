@@ -25,8 +25,8 @@
  #include "G4ParticleTable.hh"
  #include "G4ProcessManager.hh"
 
- void G4ProtonBuilder::
- Build()
+ 
+ void G4ProtonBuilder::Build()
  {
    wasActivated = true;
    std::vector<G4VProtonBuilder *>::iterator i;
@@ -36,12 +36,16 @@
      (*i)->Build(theProtonInelastic);
    }
    G4ProcessManager * theProcMan = G4Proton::Proton()->GetProcessManager();
-   theProcMan->AddDiscreteProcess(&theProtonElasticProcess);
-   theProcMan->AddDiscreteProcess(&theProtonInelastic);
+   theProcMan->AddDiscreteProcess(theProtonElasticProcess);
+   theProcMan->AddDiscreteProcess(theProtonInelastic);
  }
 
  G4ProtonBuilder::
- G4ProtonBuilder(): wasActivated(false)  {}
+ G4ProtonBuilder(): wasActivated(false)  
+ {
+   theProtonElasticProcess=new G4HadronElasticProcess;
+   theProtonInelastic=new G4ProtonInelasticProcess;
+ }
 
  G4ProtonBuilder::
  ~G4ProtonBuilder() 
@@ -49,9 +53,11 @@
    if(wasActivated)
    {
      G4ProcessManager * theProcMan = G4Proton::Proton()->GetProcessManager();
-     if(theProcMan) theProcMan->RemoveProcess(&theProtonElasticProcess);
-     if(theProcMan) theProcMan->RemoveProcess(&theProtonInelastic);
+     if(theProcMan) theProcMan->RemoveProcess(theProtonElasticProcess);
+     if(theProcMan) theProcMan->RemoveProcess(theProtonInelastic);
    }
+   delete theProtonElasticProcess;
+   delete theProtonInelastic;
  }
 
  // 2002 by J.P. Wellisch

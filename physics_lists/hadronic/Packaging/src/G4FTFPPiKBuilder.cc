@@ -30,72 +30,79 @@
  {
    theMin = 15*GeV;
    theModel = new G4TheoFSGenerator;
+
+   theStringModel = new G4FTFModel;
+   theStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation);
+   theStringModel->SetFragmentationModel(theStringDecay);
+
    theCascade = new G4GeneratorPrecompoundInterface;
-   thePreEquilib = new G4PreCompoundModel(&theHandler);
+   thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
    theCascade->SetDeExcitation(thePreEquilib);  
+
+   theModel->SetHighEnergyGenerator(theStringModel);
    theModel->SetTransport(theCascade);
-   theModel->SetHighEnergyGenerator(&theStringModel);
-   theStringDecay = new G4ExcitedStringDecay(&theFragmentation);
-   theStringModel.SetFragmentationModel(theStringDecay);
  }
 
  G4FTFPPiKBuilder::
  ~G4FTFPPiKBuilder() 
  {
+   delete theCascade;
    delete theStringDecay;
+   delete theStringModel;
+   delete theModel;
  }
 
  void G4FTFPPiKBuilder::
- Build(G4HadronElasticProcess & ) {}
+ Build(G4HadronElasticProcess * ) {}
 
  void G4FTFPPiKBuilder::
- Build(G4PionPlusInelasticProcess & aP)
+ Build(G4PionPlusInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(100*TeV);
-   aP.AddDataSet(&thePiData);
-   aP.RegisterMe(theModel);
+   aP->AddDataSet(&thePiData);
+   aP->RegisterMe(theModel);
  }
 
  void G4FTFPPiKBuilder::
- Build(G4PionMinusInelasticProcess & aP)
+ Build(G4PionMinusInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(100*TeV);
-   aP.AddDataSet(&thePiData);
-   aP.RegisterMe(theModel);
+   aP->AddDataSet(&thePiData);
+   aP->RegisterMe(theModel);
  }
 
  void G4FTFPPiKBuilder::
- Build(G4KaonPlusInelasticProcess & aP)
+ Build(G4KaonPlusInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(100*TeV);
-   aP.RegisterMe(theModel);
+   aP->RegisterMe(theModel);
  }
 
  void G4FTFPPiKBuilder::
- Build(G4KaonMinusInelasticProcess & aP)
+ Build(G4KaonMinusInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(100*TeV);
-   aP.RegisterMe(theModel);
+   aP->RegisterMe(theModel);
  }
 
  void G4FTFPPiKBuilder::
- Build(G4KaonZeroLInelasticProcess & aP)
+ Build(G4KaonZeroLInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(100*TeV);
-   aP.RegisterMe(theModel);
+   aP->RegisterMe(theModel);
  }
 
  void G4FTFPPiKBuilder::
- Build(G4KaonZeroSInelasticProcess & aP)
+ Build(G4KaonZeroSInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(100*TeV);
-   aP.RegisterMe(theModel);
+   aP->RegisterMe(theModel);
  }
 
  // 2002 by J.P. Wellisch

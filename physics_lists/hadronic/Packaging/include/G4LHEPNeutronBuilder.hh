@@ -44,10 +44,10 @@ class G4LHEPNeutronBuilder : public G4VNeutronBuilder
     virtual ~G4LHEPNeutronBuilder();
 
   public: 
-    virtual void Build(G4HadronElasticProcess & aP);
-    virtual void Build(G4HadronFissionProcess & aP);
-    virtual void Build(G4HadronCaptureProcess & aP);
-    virtual void Build(G4NeutronInelasticProcess & aP);
+    virtual void Build(G4HadronElasticProcess * aP);
+    virtual void Build(G4HadronFissionProcess * aP);
+    virtual void Build(G4HadronCaptureProcess * aP);
+    virtual void Build(G4NeutronInelasticProcess * aP);
     
     void SetMinEnergy(G4double aM) 
     {

@@ -41,10 +41,10 @@ class G4BinaryNeutronBuilder : public G4VNeutronBuilder
     virtual ~G4BinaryNeutronBuilder();
 
   public: 
-    virtual void Build(G4HadronElasticProcess & aP);
-    virtual void Build(G4HadronFissionProcess & aP);
-    virtual void Build(G4HadronCaptureProcess & aP);
-    virtual void Build(G4NeutronInelasticProcess & aP);
+    virtual void Build(G4HadronElasticProcess * aP);
+    virtual void Build(G4HadronFissionProcess * aP);
+    virtual void Build(G4HadronCaptureProcess * aP);
+    virtual void Build(G4NeutronInelasticProcess * aP);
     
     void SetMinEnergy(G4double aM) {theMin = aM;}
     void SetMaxEnergy(G4double aM) {theMax = aM;}

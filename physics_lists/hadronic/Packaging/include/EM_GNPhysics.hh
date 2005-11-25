@@ -20,12 +20,27 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: EM_GNPhysics.hh,v 1.2 2005-11-25 15:38:50 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   EMPhysics
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 09.11.2005 G.Folger: standard EM is now seperate
+//
+//----------------------------------------------------------------------------
+//
 #ifndef EM_GNPhysics_h
 #define EM_GNPhysics_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4VPhysicsConstructor.hh"
+#include "G4EmStandardBuilder.hh"
 #include "G4EMBuilder.hh"
 #include "G4ElectroNuclearBuilder.hh"
 
@@ -41,6 +56,7 @@ class EM_GNPhysics : public G4VPhysicsConstructor
     virtual void ConstructProcess();
 
   private:
+    G4EmStandardBuilder theEMStandardPhysics;
     G4EMBuilder theEMPhysics;
     G4ElectroNuclearBuilder theGNPhysics;
 };

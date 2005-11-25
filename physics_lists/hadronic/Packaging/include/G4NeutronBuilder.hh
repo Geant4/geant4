@@ -44,10 +44,10 @@ class G4NeutronBuilder
     void RegisterMe(G4VNeutronBuilder * aB) {theModelCollections.push_back(aB);}
 
   private:
-    G4HadronElasticProcess theNeutronElasticProcess;
-    G4NeutronInelasticProcess  theNeutronInelastic;
-    G4HadronFissionProcess theNeutronFission;
-    G4HadronCaptureProcess  theNeutronCapture;
+    G4HadronElasticProcess * theNeutronElasticProcess;
+    G4NeutronInelasticProcess * theNeutronInelastic;
+    G4HadronFissionProcess * theNeutronFission;
+    G4HadronCaptureProcess  * theNeutronCapture;
     
     std::vector<G4VNeutronBuilder *> theModelCollections;
 

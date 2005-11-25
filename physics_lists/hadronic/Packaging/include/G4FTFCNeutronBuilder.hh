@@ -45,18 +45,17 @@ class G4FTFCNeutronBuilder : public G4VNeutronBuilder
     virtual ~G4FTFCNeutronBuilder();
 
   public: 
-    virtual void Build(G4HadronElasticProcess & aP);
-    virtual void Build(G4HadronFissionProcess & aP);
-    virtual void Build(G4HadronCaptureProcess & aP);
-    virtual void Build(G4NeutronInelasticProcess & aP);
+    virtual void Build(G4HadronElasticProcess * aP);
+    virtual void Build(G4HadronFissionProcess * aP);
+    virtual void Build(G4HadronCaptureProcess * aP);
+    virtual void Build(G4NeutronInelasticProcess * aP);
     
     void SetMinEnergy(G4double aM) {theMin = aM;}
 
   private:
     G4TheoFSGenerator * theModel;
     G4StringChipsParticleLevelInterface * theCascade;
-    G4FTFModel theStringModel;
-    G4LundStringFragmentation theFragmentation;
+    G4FTFModel * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
 
     G4NeutronInelasticCrossSection theXSec;

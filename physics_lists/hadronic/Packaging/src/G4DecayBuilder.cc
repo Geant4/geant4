@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4DecayBuilder.cc,v 1.1 2005-11-11 22:56:07 vnivanch Exp $
+// $Id: G4DecayBuilder.cc,v 1.2 2005-11-25 15:38:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -62,6 +62,8 @@ G4DecayBuilder::~G4DecayBuilder()
 
 void G4DecayBuilder::ConstructParticle()
 {
+
+ G4cout << "G4DecayBuilder::ConstructParticle" << G4endl;
   G4BosonConstructor  pBosonConstructor; 
   pBosonConstructor.ConstructParticle();
 

@@ -49,24 +49,22 @@ class G4QGSPPiKBuilder : public G4VPiKBuilder
     virtual ~G4QGSPPiKBuilder();
 
   public: 
-    virtual void Build(G4HadronElasticProcess & aP);
-    virtual void Build(G4PionPlusInelasticProcess & aP);
-    virtual void Build(G4PionMinusInelasticProcess & aP);
-    virtual void Build(G4KaonPlusInelasticProcess & aP);
-    virtual void Build(G4KaonMinusInelasticProcess & aP);
-    virtual void Build(G4KaonZeroLInelasticProcess & aP);
-    virtual void Build(G4KaonZeroSInelasticProcess & aP);
+    virtual void Build(G4HadronElasticProcess * aP);
+    virtual void Build(G4PionPlusInelasticProcess * aP);
+    virtual void Build(G4PionMinusInelasticProcess * aP);
+    virtual void Build(G4KaonPlusInelasticProcess * aP);
+    virtual void Build(G4KaonMinusInelasticProcess * aP);
+    virtual void Build(G4KaonZeroLInelasticProcess * aP);
+    virtual void Build(G4KaonZeroSInelasticProcess * aP);
     
     void SetMinEnergy(G4double aM) {theMin = aM;}
 
   private:
     G4PiNuclearCrossSection thePiData;
     G4TheoFSGenerator * theModel;
-    G4ExcitationHandler theHandler;
     G4PreCompoundModel * thePreEquilib;
     G4GeneratorPrecompoundInterface * theCascade;
-    G4QGSModel< G4QGSParticipants > theStringModel;
-    G4QGSMFragmentation theFragmentation;
+    G4QGSModel< G4QGSParticipants > * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
     G4double theMin;
 

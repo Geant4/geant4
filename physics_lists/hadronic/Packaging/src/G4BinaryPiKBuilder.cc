@@ -39,43 +39,43 @@ G4BinaryPiKBuilder::
 ~G4BinaryPiKBuilder() {}
 
 void G4BinaryPiKBuilder::
-Build(G4HadronElasticProcess & ) {}
+Build(G4HadronElasticProcess * ) {}
 
 void G4BinaryPiKBuilder::
-Build(G4PionPlusInelasticProcess & aP)
+Build(G4PionPlusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
-  aP.RegisterMe(theModel);
-  aP.AddDataSet(&thePiData);
+  aP->RegisterMe(theModel);
+  aP->AddDataSet(&thePiData);
 }
 
 void G4BinaryPiKBuilder::
-Build(G4PionMinusInelasticProcess & aP)
+Build(G4PionMinusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
-  aP.RegisterMe(theModel);
-  aP.AddDataSet(&thePiData);
+  aP->RegisterMe(theModel);
+  aP->AddDataSet(&thePiData);
 }
 
 void G4BinaryPiKBuilder::
-Build(G4KaonPlusInelasticProcess & )
+Build(G4KaonPlusInelasticProcess * )
 {
 }
 
 void G4BinaryPiKBuilder::
-Build(G4KaonMinusInelasticProcess & )
+Build(G4KaonMinusInelasticProcess * )
 {
 }
 
 void G4BinaryPiKBuilder::
-Build(G4KaonZeroLInelasticProcess & )
+Build(G4KaonZeroLInelasticProcess * )
 {
 }
 
 void G4BinaryPiKBuilder::
-Build(G4KaonZeroSInelasticProcess & )
+Build(G4KaonZeroSInelasticProcess * )
 {
 }
 

@@ -49,16 +49,16 @@ class G4ElectroNuclearBuilder
     virtual void Build();
 
   protected:
-    G4PhotoNuclearProcess thePhotoNuclearProcess;
-    G4ElectronNuclearProcess theElectronNuclearProcess;
-    G4PositronNuclearProcess thePositronNuclearProcess;
+    G4PhotoNuclearProcess * thePhotoNuclearProcess;
+    G4ElectronNuclearProcess * theElectronNuclearProcess;
+    G4PositronNuclearProcess * thePositronNuclearProcess;
     G4ElectroNuclearReaction * theElectroReaction;
     G4GammaNuclearReaction * theGammaReaction;  
     
     G4TheoFSGenerator * theModel;
     G4GeneratorPrecompoundInterface * theCascade;
-    G4QGSModel< G4GammaParticipants > theStringModel;
-    G4QGSMFragmentation theFragmentation;
+    G4QGSModel< G4GammaParticipants > * theStringModel;
+    G4QGSMFragmentation * theFragmentation;
     G4ExcitedStringDecay * theStringDecay;
     G4bool wasActivated;
 };

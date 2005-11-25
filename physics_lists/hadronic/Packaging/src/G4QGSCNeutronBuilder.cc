@@ -30,26 +30,32 @@
  {
    theMin = 8*GeV;
    theModel = new G4TheoFSGenerator;
+
+   theStringModel= new G4QGSModel< G4QGSParticipants >;
+   theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
+   theStringModel->SetFragmentationModel(theStringDecay);
+
    theCascade = new G4StringChipsParticleLevelInterface;
+
    theModel->SetTransport(theCascade);
-   theModel->SetHighEnergyGenerator(&theStringModel);
-   theStringDecay = new G4ExcitedStringDecay(&theFragmentation);
-   theStringModel.SetFragmentationModel(theStringDecay);
+   theModel->SetHighEnergyGenerator(theStringModel);
  }
 
  G4QGSCNeutronBuilder::
  ~G4QGSCNeutronBuilder() 
  {
    delete theStringDecay;
+   delete theStringModel;
+   delete theCascade;
  }
 
  void G4QGSCNeutronBuilder::
- Build(G4NeutronInelasticProcess & aP)
+ Build(G4NeutronInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(100*TeV);
-   aP.RegisterMe(theModel);
-   aP.AddDataSet(&theXSec);  
+   aP->RegisterMe(theModel);
+   aP->AddDataSet(&theXSec);  
  }
 
  // 2002 by J.P. Wellisch

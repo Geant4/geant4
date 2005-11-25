@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmStandardBuilder.cc,v 1.2 2005-11-11 11:13:07 vnivanch Exp $
+// $Id: G4EmStandardBuilder.cc,v 1.3 2005-11-25 15:38:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -166,7 +166,7 @@ void G4EmStandardBuilder::ConstructProcess()
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) &&
 	       (particle->GetParticleName() != "chargedgeantino")) {
-
+G4cout << "Emstandard : " << particle->GetParticleName() << G4endl;
       pmanager->AddProcess(new G4MultipleScattering,-1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,       -1, 2, 2);
     }
