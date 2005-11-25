@@ -3,7 +3,7 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonPhysicsDecay.cc,v 1.1 2005-11-10 08:15:26 capra Exp $
+// Id:            $Id: RadmonPhysicsDecay.cc,v 1.2 2005-11-25 01:52:01 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -63,7 +63,7 @@ const RadmonPhysicsInfoList &                   RadmonPhysicsDecay :: Provides(v
 
   RadmonPhysicsInfo info;
   
-  info.SetProcessName("MultipleScattering");
+  info.SetProcessName("AtRestDecay");
   info.SetMinEnergy(0*eV);
   info.SetMaxEnergy(1.e6*TeV);
 

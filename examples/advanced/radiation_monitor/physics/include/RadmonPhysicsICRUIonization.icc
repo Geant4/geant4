@@ -1,0 +1,24 @@
+//
+// File name:     RadmonPhysicsICRUIonization.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonPhysicsICRUIonization.icc,v 1.1 2005-11-25 01:52:01 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONPHYSICSICRUIONIZATION_HH
+ #error "RadmonPhysicsICRUIonization.icc cannot be included directly. Please use RadmonPhysicsICRUIonization.hh"
+#else  /* RADMONPHYSICSICRUIONIZATION_HH */
+ inline                                         RadmonPhysicsICRUIonization :: RadmonPhysicsICRUIonization()
+ :
+  RadmonVSubPhysicsListWithLabel("ICRUIonization")
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonPhysicsICRUIonization :: ~RadmonPhysicsICRUIonization()
+ {
+ }
+#endif /* RADMONPHYSICSICRUIONIZATION_HH */

@@ -1,0 +1,24 @@
+//
+// File name:     RadmonPhysicsNeutronBertini.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonPhysicsNeutronBertini.icc,v 1.1 2005-11-25 01:52:01 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONPHYSICSNEUTRONBERTINI_HH
+ #error "RadmonPhysicsNeutronBertini.icc cannot be included directly. Please use RadmonPhysicsNeutronBertini.hh"
+#else  /* RADMONPHYSICSNEUTRONBERTINI_HH */
+ inline                                         RadmonPhysicsNeutronBertini :: RadmonPhysicsNeutronBertini()
+ :
+  RadmonVSubPhysicsListWithLabel("NeutronBertini")
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonPhysicsNeutronBertini :: ~RadmonPhysicsNeutronBertini()
+ {
+ }
+#endif /* RADMONPHYSICSNEUTRONBERTINI_HH */

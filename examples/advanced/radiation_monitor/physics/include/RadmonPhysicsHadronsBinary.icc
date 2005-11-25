@@ -1,0 +1,24 @@
+//
+// File name:     RadmonPhysicsHadronsBinary.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonPhysicsHadronsBinary.icc,v 1.1 2005-11-25 01:52:01 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONPHYSICSHADRONSBINARY_HH
+ #error "RadmonPhysicsHadronsBinary.icc cannot be included directly. Please use RadmonPhysicsHadronsBinary.hh"
+#else  /* RADMONPHYSICSHADRONSBINARY_HH */
+ inline                                         RadmonPhysicsHadronsBinary :: RadmonPhysicsHadronsBinary()
+ :
+  RadmonVSubPhysicsListWithLabel("HadronsBinary")
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonPhysicsHadronsBinary :: ~RadmonPhysicsHadronsBinary()
+ {
+ }
+#endif /* RADMONPHYSICSHADRONSBINARY_HH */

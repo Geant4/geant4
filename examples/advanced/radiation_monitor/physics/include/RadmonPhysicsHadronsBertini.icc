@@ -1,0 +1,24 @@
+//
+// File name:     RadmonPhysicsHadronsBertini.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonPhysicsHadronsBertini.icc,v 1.1 2005-11-25 01:52:01 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONPHYSICSHADRONSBERTINI_HH
+ #error "RadmonPhysicsHadronsBertini.icc cannot be included directly. Please use RadmonPhysicsHadronsBertini.hh"
+#else  /* RADMONPHYSICSHADRONSBERTINI_HH */
+ inline                                         RadmonPhysicsHadronsBertini :: RadmonPhysicsHadronsBertini()
+ :
+  RadmonVSubPhysicsListWithLabel("HadronsBertini")
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonPhysicsHadronsBertini :: ~RadmonPhysicsHadronsBertini()
+ {
+ }
+#endif /* RADMONPHYSICSHADRONSBERTINI_HH */

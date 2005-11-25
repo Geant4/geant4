@@ -3,10 +3,10 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonPhysicsDecay.hh,v 1.1 2005-11-10 08:15:26 capra Exp $
+// Id:            $Id: RadmonPhysicsDecay.hh,v 1.2 2005-11-25 01:52:01 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
-// Description:   EEDL processes for electrons
+// Description:   Decay processes
 //
 
 #ifndef   RADMONPHYSICSDECAY_HH

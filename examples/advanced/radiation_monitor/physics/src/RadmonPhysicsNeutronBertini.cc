@@ -1,13 +1,13 @@
 //
-// File name:     RadmonPhysicsNeutronBinary.cc
+// File name:     RadmonPhysicsNeutronBertini.cc
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonPhysicsNeutronBinary.cc,v 1.2 2005-11-25 01:52:01 capra Exp $
+// Id:            $Id: RadmonPhysicsNeutronBertini.cc,v 1.1 2005-11-25 01:52:01 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
-#include "RadmonPhysicsNeutronBinary.hh"
+#include "RadmonPhysicsNeutronBertini.hh"
 
 #include "G4Neutron.hh"
 
@@ -15,7 +15,7 @@
 
 #include "G4HadronElasticProcess.hh"
 #include "G4LElastic.hh"
-#include "G4BinaryCascade.hh"
+#include "G4CascadeInterface.hh"
 #include "G4LENeutronInelastic.hh"
 #include "G4TheoFSGenerator.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
@@ -34,21 +34,21 @@
 
 
 
-RadmonVSubPhysicsListWithLabel *                RadmonPhysicsNeutronBinary :: New(void) const
+RadmonVSubPhysicsListWithLabel *                RadmonPhysicsNeutronBertini :: New(void) const
 {
- return new RadmonPhysicsNeutronBinary;
+ return new RadmonPhysicsNeutronBertini;
 }
 
 
 
-void                                            RadmonPhysicsNeutronBinary :: ConstructParticle(void)
+void                                            RadmonPhysicsNeutronBertini :: ConstructParticle(void)
 {
  G4Neutron::NeutronDefinition();
 }
 
 
 
-void                                            RadmonPhysicsNeutronBinary :: ConstructProcess(void)
+void                                            RadmonPhysicsNeutronBertini :: ConstructProcess(void)
 {
  G4ProcessManager * manager(G4Neutron::NeutronDefinition()->GetProcessManager());
 
@@ -60,11 +60,11 @@ void                                            RadmonPhysicsNeutronBinary :: Co
 
 
 
- G4BinaryCascade * binaryCascadeModel(new G4BinaryCascade());
- binaryCascadeModel->SetMaxEnergy(10.*GeV);
+ G4CascadeInterface * bertiniCascadeModel(new G4CascadeInterface());
+ bertiniCascadeModel->SetMaxEnergy(3.2*GeV);
 
  G4LENeutronInelastic * lepModel(new G4LENeutronInelastic());
- lepModel->SetMinEnergy(8.*GeV);
+ lepModel->SetMinEnergy(2.8*GeV);
  lepModel->SetMaxEnergy(25.*GeV);
 
  G4TheoFSGenerator * qgspModel(new G4TheoFSGenerator());
@@ -79,7 +79,7 @@ void                                            RadmonPhysicsNeutronBinary :: Co
 
  G4NeutronInelasticProcess * inelasticProcess(new G4NeutronInelasticProcess());
  inelasticProcess->AddDataSet(new G4NeutronInelasticCrossSection());
- inelasticProcess->RegisterMe(binaryCascadeModel);
+ inelasticProcess->RegisterMe(bertiniCascadeModel);
  inelasticProcess->RegisterMe(lepModel);
  inelasticProcess->RegisterMe(qgspModel);
  manager->AddDiscreteProcess(inelasticProcess);
@@ -105,7 +105,7 @@ void                                            RadmonPhysicsNeutronBinary :: Co
 
 
 
-void                                            RadmonPhysicsNeutronBinary :: SetCuts(void)
+void                                            RadmonPhysicsNeutronBertini :: SetCuts(void)
 {
 }
 
@@ -113,7 +113,7 @@ void                                            RadmonPhysicsNeutronBinary :: Se
 
 
 
-const RadmonPhysicsInfoList &                   RadmonPhysicsNeutronBinary :: Provides(void) const
+const RadmonPhysicsInfoList &                   RadmonPhysicsNeutronBertini :: Provides(void) const
 {
  if (infoList.GetNPhysicsInfos()==0)
  {
