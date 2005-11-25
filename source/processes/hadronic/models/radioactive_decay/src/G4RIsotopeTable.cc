@@ -207,7 +207,7 @@ G4double G4RIsotopeTable::GetMeanLifeTime (G4int Z, G4int A, G4double& aE)
 
       if (inputChars[0] != '#' && inputLine.length() != 0)
       {
-        std::istrstream tmpstream(inputLine);
+        std::istringstream tmpstream(inputLine);
  //       tmpstream = inputLine;
         tmpstream >>recordType >>a >>b;
         if (recordType == "P")
