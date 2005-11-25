@@ -3,4 +3,6 @@
 /radmon/physics/AddPhysicsList PhotonEPDL
 /radmon/physics/AddPhysicsList Nuclear
 /radmon/physics/AddPhysicsList MuonStandard
-/radmon/physics/AddPhysicsList TauStandard
+/radmon/physics/AddPhysicsList NeutronBinary
+/radmon/physics/AddPhysicsList HadronsBinary
+/radmon/physics/AddPhysicsList ICRUIonization

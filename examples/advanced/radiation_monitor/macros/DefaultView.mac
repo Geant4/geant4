@@ -9,3 +9,4 @@
 /vis/sceneHandler/attach DefaultScene
 #/vis/viewer/set/culling global false
 /vis/scene/endOfEventAction accumulate
+/vis/viewer/set/viewpointThetaPhi 150 60 deg
