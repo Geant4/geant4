@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffElasticHadrNucleus.hh,v 1.12 2005-11-23 11:24:08 vnivanch Exp $
+// $Id: G4DiffElasticHadrNucleus.hh,v 1.13 2005-11-25 19:17:32 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -80,7 +80,7 @@ public:
   void     GetParametersHP(const G4DynamicParticle * aHadron);
 
   G4double LineInterpol(G4double p0, G4double p1,
-			G4double c1, G4double c1, 
+			G4double c0, G4double c1, 
 			G4double p);
 //  ====================================================
   G4double MyJ0(G4double x)
