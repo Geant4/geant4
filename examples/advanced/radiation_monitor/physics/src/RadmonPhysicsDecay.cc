@@ -3,7 +3,7 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonPhysicsDecay.cc,v 1.2 2005-11-25 01:52:01 capra Exp $
+// Id:            $Id: RadmonPhysicsDecay.cc,v 1.3 2005-11-25 11:53:02 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -34,6 +34,7 @@ void                                            RadmonPhysicsDecay :: ConstructP
     
  G4Decay * decayProcess(new G4Decay);
 
+ particleIterator.reset();
  while (particleIterator())
  {
   G4ParticleDefinition * particle(particleIterator.value());

@@ -3,7 +3,7 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonPhysicsICRUIonization.cc,v 1.1 2005-11-25 01:52:01 capra Exp $
+// Id:            $Id: RadmonPhysicsICRUIonization.cc,v 1.2 2005-11-25 11:53:02 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -35,12 +35,11 @@ void                                            RadmonPhysicsICRUIonization :: C
  G4ParticleTable * particleTable(G4ParticleTable::GetParticleTable());
  G4ParticleTable::G4PTblDicIterator & particleIterator(*particleTable->GetIterator());
  
+ particleIterator.reset();
  while (particleIterator())
  {
   G4ParticleDefinition * particle(particleIterator.value());
   G4String particleName(particle->GetParticleName());
-
-
 
   if ((particle->GetPDGCharge()!=0) && (!particle -> IsShortLived()) && 
       particleName!="e+" && particleName!="mu+" && 
