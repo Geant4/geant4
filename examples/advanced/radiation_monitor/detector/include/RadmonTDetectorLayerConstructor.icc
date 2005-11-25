@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonTDetectorLayerConstructor.icc,v 1.1 2005-09-21 14:48:18 capra Exp $
+// Id:            $Id: RadmonTDetectorLayerConstructor.icc,v 1.2 2005-11-25 11:53:32 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -14,6 +14,9 @@
  // Include files
  #include "RadmonDetectorLayerVolumesList.hh"
  #include "RadmonDetectorLayerVolumeItem.hh"
+ 
+ #include "G4LogicalVolume.hh"
+ #include "G4UserLimits.hh"
  
  template <class LayerVolumesComponent>
  inline                                         RadmonTDetectorLayerConstructor<LayerVolumesComponent> :: RadmonTDetectorLayerConstructor(const G4String & label)
@@ -41,11 +44,20 @@
  {
   if (volumesList)
    G4Exception("RadmonTDetectorLayerConstructor::ConstructLogicalVolume: Called twice.");
-  
+   
   volumesList=component.GenerateVolumesList();
   
   if (volumesList==0)
    return 0;
+   
+  G4double width(GetWidth());
+  G4double height(GetHeight());
+  G4double thickness(GetThickness());
+  
+  if (width<thickness)
+   thickness=width;
+  if (height<thickness)
+   thickness=height;
   
   RadmonDetectorLayerVolumeItem * item;
   G4LogicalVolume * motherVolume(0);
@@ -62,6 +74,7 @@
    
    if (volume)
    {
+    volume->SetUserLimits(new G4UserLimits(thickness/10.));
     if (item->GetMotherVolumeItem()==0)
     {
      if (motherVolume)
