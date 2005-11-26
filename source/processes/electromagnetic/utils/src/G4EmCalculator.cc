@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.23 2005-10-30 19:03:11 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.24 2005-11-26 15:33:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -109,7 +109,7 @@ G4double G4EmCalculator::GetDEDX(G4double kinEnergy, const G4ParticleDefinition*
   if(couple && UpdateParticle(p, kinEnergy) ) {
     res = manager->GetDEDX(p, kinEnergy, couple);
     if(verbose>0) {
-      G4cout << "E(MeV)= " << kinEnergy/MeV
+      G4cout << "G4EmCalculator::GetDEDX: E(MeV)= " << kinEnergy/MeV
 	     << " DEDX(MeV/mm)= " << res*mm/MeV
 	     << " DEDX(MeV*cm^2/g)= " << res*gram/(MeV*cm2*mat->GetDensity())
 	     << "  " <<  p->GetParticleName()
@@ -138,7 +138,7 @@ G4double G4EmCalculator::GetRange(G4double kinEnergy, const G4ParticleDefinition
   if(couple && UpdateParticle(p, kinEnergy)) {
     res = manager->GetRange(p, kinEnergy, couple);
     if(verbose>0) {
-      G4cout << "E(MeV)= " << kinEnergy/MeV
+      G4cout << "G4EmCalculator::GetRange: E(MeV)= " << kinEnergy/MeV
 	     << " range(mm)= " << res/mm
 	     << "  " <<  p->GetParticleName()
 	     << " in " <<  mat->GetName()
@@ -166,7 +166,7 @@ G4double G4EmCalculator::GetKinEnergy(G4double range, const G4ParticleDefinition
   if(couple && UpdateParticle(p, 1.0*GeV)) {
     res = manager->GetEnergy(p, range, couple);
     if(verbose>0) {
-      G4cout << "Range(mm)= " << range/mm
+      G4cout << "G4EmCalculator::GetKinEnergy: Range(mm)= " << range/mm
 	     << " KinE(MeV)= " << res/MeV
 	     << "  " <<  p->GetParticleName()
 	     << " in " <<  mat->GetName()
@@ -264,7 +264,7 @@ G4double G4EmCalculator::GetMeanFreePath(G4double kinEnergy,
   G4double x = GetCrossSectionPerVolume(kinEnergy,p, processName, mat,region);
   if(x > 0.0) res = 1.0/x;
   if(verbose>1) {
-    G4cout << "E(MeV)= " << kinEnergy/MeV
+    G4cout << "G4EmCalculator::GetMeanFreePath: E(MeV)= " << kinEnergy/MeV
 	   << " MFP(mm)= " << res/mm
 	   << "  " <<  p->GetParticleName()
 	   << " in " <<  mat->GetName()
@@ -324,7 +324,7 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
   currentMaterialName = mat->GetName();
   G4double res = 0.0;
   if(verbose > 1) {
-    G4cout << "ComputeDEDX: " << p->GetParticleName()
+    G4cout << "### G4EmCalculator::ComputeDEDX: " << p->GetParticleName()
            << " in " << currentMaterialName
            << " e(MeV)= " << kinEnergy/MeV << "  cut(MeV)= " << cut/MeV << G4endl;
   }
@@ -362,6 +362,9 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
 	} else {
 	  res1 = currentModel->ComputeDEDXPerVolume(mat, p, eth, cut);
 	}
+	if(verbose > 1)
+	  G4cout << "At boundary energy(MeV)= " << eth/MeV << " DEDX(MeV/mm)= " << res1*mm/MeV
+		 << G4endl;
         if(isIon) res1 += corr->HighOrderCorrections(p,mat,eth/massRatio);
         G4double res0 = res1;
         if(FindEmModel(p, processName, eth-1.0*keV)) {
