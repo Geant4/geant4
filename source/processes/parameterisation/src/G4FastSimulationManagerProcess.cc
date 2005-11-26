@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManagerProcess.cc,v 1.11 2005-11-26 00:35:02 mverderi Exp $
+// $Id: G4FastSimulationManagerProcess.cc,v 1.12 2005-11-26 00:47:54 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -525,8 +525,7 @@ G4VParticleChange* G4FastSimulationManagerProcess::AtRestDoIt(
   return fFastSimulationManager->InvokeAtRestDoIt();
 }
 
-// -- void G4FastSimulationManagerProcess::StartTracking(G4Track*) 
-void G4FastSimulationManagerProcess::StartTracking() 
+void G4FastSimulationManagerProcess::StartTracking(G4Track*) 
 {
   fStartTracking = true;
 }

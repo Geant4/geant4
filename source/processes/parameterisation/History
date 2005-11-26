@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2005-11-26 00:35:02 mverderi Exp $
+$Id: History,v 1.28 2005-11-26 00:47:54 mverderi Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 25, 2005, M. Verderi param-V07-01-04
+- put back Makoto's change: StartTracking(G4Track*)
 
 November 25, 2005, M. Verderi param-V07-01-03
 - Make ghost functionnality available with G4Region
