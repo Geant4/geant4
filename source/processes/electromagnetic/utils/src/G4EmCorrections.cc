@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.12 2005-11-26 16:22:58 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.13 2005-11-26 16:59:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -131,7 +131,7 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
       G4int iw = Index(W, engBarkas, 47);
       val = Value(W, engBarkas[iw], engBarkas[iw+1], corBarkas[iw], corBarkas[iw+1]);
     }
-    BarkasTerm += val*atomDensity[i] * std::sqrt(Z /X)/ X;
+    BarkasTerm += 1.29*val*atomDensity[i] * std::sqrt(Z /X)/ X;
     Zeff += Z*atomDensity[i];
     norm += atomDensity[i];
   }
