@@ -78,8 +78,8 @@
 #include "G4LEPionPlusInelastic.hh"
 #include "G4LEPionMinusInelastic.hh"
 #include "G4LEProtonInelastic.hh"
-//#include "G4PionMinusNuclearReaction.hh"
-//#include "G4StringChipsInterface.hh"
+//#include "G4PionMinusNuclearReaction.hh" 
+#include "G4StringChipsInterface.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4BinaryCascade.hh"
@@ -88,6 +88,7 @@
 #include "G4WilsonAbrasionModel.hh"
 #include "G4ElasticHadrNucleusHE.hh"
 #include "G4LElastic.hh"
+#include "G4CascadeElasticInterface.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -203,7 +204,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     sg = new Test30VSecondaryGenerator(new G4PionMinusNuclearReaction(),mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
-
+*/
   } else if(gen_name == "strCHIPS") {
     sg = new Test30VSecondaryGenerator(new G4StringChipsInterface(),mat);
 
@@ -211,7 +212,6 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theProcess->SetSecondaryGenerator(sg);
     //G4cout <<  "Generator is set" << G4endl;
     man->AddDiscreteProcess(theProcess);
-*/
 
   } else if(gen_name == "preCompound") {
     theDeExcitation = new G4ExcitationHandler();
@@ -259,6 +259,12 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
 
   } else if(gen_name == "HElastic") {
     G4ElasticHadrNucleusHE* els = new G4ElasticHadrNucleusHE();
+    sg = new Test30VSecondaryGenerator(els, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
+  } else if(gen_name == "BertiniElastic") {
+    G4CascadeElasticInterface* els = new G4CascadeElasticInterface();
     sg = new Test30VSecondaryGenerator(els, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
