@@ -1,7 +1,7 @@
 RunManager construction starting....
 
 *************************************************************
- Geant4 version Name: global-V07-01-03    (16-December-2005)
+ Geant4 version Name: geant4-07-01-ref-05    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -10,6 +10,10 @@ RunManager construction starting....
 
 ExN05DetectorConstruction....
 
+Warning : Region <EM_calo_region> does not have specific production cuts,
+even though it appears in the current tracking world.
+Default cuts are used for this region.
+Closing Fast-Simulation ...
 Instantiating Visualization Manager.......
 Visualization Manager instantiating...
 Visualization Manager initialising...
@@ -25,6 +29,8 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according to the Bethe-Heitler model
@@ -256,184 +262,184 @@ ExN05EMShowerModel::DoIt
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 number of event = 5
 ### Run 4 start.
-ExN05EMShowerModel::DoIt
+ExN05PionShowerModel::DoIt
 >>> Event 0
      9 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.9999 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
-ExN05EMShowerModel::DoIt
+     Total energy deposition in EM calorimeter crytals : 0.219987 (GeV)
+     10 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 0.639963 (GeV)
+ExN05PionShowerModel::DoIt
 >>> Event 1
-     10 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.999912 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
-ExN05EMShowerModel::DoIt
->>> Event 2
-     11 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.999918 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
-ExN05EMShowerModel::DoIt
->>> Event 3
-     10 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.999915 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
-ExN05EMShowerModel::DoIt
->>> Event 4
      13 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.999911 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.399976 (GeV)
+     13 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 1.37992 (GeV)
+ExN05PionShowerModel::DoIt
+>>> Event 2
+     18 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 0.639962 (GeV)
+     17 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 2.09987 (GeV)
+ExN05PionShowerModel::DoIt
+>>> Event 3
+     23 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 0.879949 (GeV)
+     18 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 2.83983 (GeV)
+ExN05PionShowerModel::DoIt
+>>> Event 4
+     27 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 1.21993 (GeV)
+     18 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 3.3798 (GeV)
 number of event = 5
 ### Run 5 start.
-ExN05EMShowerModel::DoIt
+ExN05PionShowerModel::DoIt
 >>> Event 0
-     11 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.999918 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
-ExN05EMShowerModel::DoIt
+     29 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 1.25992 (GeV)
+     31 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 4.33962 (GeV)
+ExN05PionShowerModel::DoIt
 >>> Event 1
-     10 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.999927 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
-ExN05EMShowerModel::DoIt
+     31 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 1.29992 (GeV)
+     32 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 5.29957 (GeV)
+ExN05PionShowerModel::DoIt
 >>> Event 2
-     11 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.999924 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
-ExN05EMShowerModel::DoIt
+     31 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 1.29992 (GeV)
+     34 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 6.29952 (GeV)
+ExN05PionShowerModel::DoIt
 >>> Event 3
-     9 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.999933 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
-ExN05EMShowerModel::DoIt
+     32 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 1.31992 (GeV)
+     36 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 7.27942 (GeV)
+ExN05PionShowerModel::DoIt
 >>> Event 4
-     11 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.999928 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
+     33 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 1.33992 (GeV)
+     37 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 8.25937 (GeV)
 number of event = 5
 ### Run 6 start.
-ExN05EMShowerModel::DoIt
+ExN05PionShowerModel::DoIt
 >>> Event 0
-     11 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.999925 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
-ExN05EMShowerModel::DoIt
+     34 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 1.35992 (GeV)
+     51 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 9.23932 (GeV)
+ExN05PionShowerModel::DoIt
 >>> Event 1
-     12 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.999927 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
-ExN05EMShowerModel::DoIt
+     34 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 1.37991 (GeV)
+     54 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 10.2193 (GeV)
+ExN05PionShowerModel::DoIt
 >>> Event 2
-     8 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.999921 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
-ExN05EMShowerModel::DoIt
+     36 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 1.41991 (GeV)
+     57 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 11.1792 (GeV)
+ExN05PionShowerModel::DoIt
 >>> Event 3
-     11 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.999928 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
-ExN05EMShowerModel::DoIt
+     38 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 1.45991 (GeV)
+     60 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 12.1392 (GeV)
+ExN05PionShowerModel::DoIt
 >>> Event 4
-     10 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.999916 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
+     42 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 1.5599 (GeV)
+     60 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 13.0391 (GeV)
 number of event = 5
 ### Run 7 start.
-ExN05EMShowerModel::DoIt
+ExN05PionShowerModel::DoIt
 >>> Event 0
-     11 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.9999 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
-ExN05EMShowerModel::DoIt
+     50 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 1.75989 (GeV)
+     71 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 13.8191 (GeV)
+ExN05PionShowerModel::DoIt
 >>> Event 1
-     13 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.999916 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
-ExN05EMShowerModel::DoIt
+     59 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 2.09987 (GeV)
+     73 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 14.459 (GeV)
+ExN05PionShowerModel::DoIt
 >>> Event 2
-     12 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.9999 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
-ExN05EMShowerModel::DoIt
+     64 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 2.33986 (GeV)
+     73 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 15.159 (GeV)
+ExN05PionShowerModel::DoIt
 >>> Event 3
-     9 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.99987 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
-ExN05EMShowerModel::DoIt
+     66 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 2.59985 (GeV)
+     73 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 15.859 (GeV)
+ExN05PionShowerModel::DoIt
 >>> Event 4
-     9 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.999894 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
+     67 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 2.71984 (GeV)
+     73 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 16.7389 (GeV)
 number of event = 5
 ### Run 8 start.
 >>> Event 0
-     35 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.99782639 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
+     41 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 0.99537672 (GeV)
+     1 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 0.0030680057 (GeV)
 >>> Event 1
-     42 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.99134793 (GeV)
+     41 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 0.9961303 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 >>> Event 2
-     35 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.99711347 (GeV)
-     1 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.00048016497 (GeV)
->>> Event 3
-     34 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.99760684 (GeV)
+     42 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 0.9985867 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
->>> Event 4
-     33 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.97840126 (GeV)
+>>> Event 3
+     41 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 0.99300103 (GeV)
      1 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.00037935471 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.001827451 (GeV)
+>>> Event 4
+     35 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 0.99794359 (GeV)
+     1 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 0.00051099906 (GeV)
 number of event = 5
 ### Run 9 start.
 >>> Event 0
-     19 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.99991349 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
+     27 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 0.99392564 (GeV)
+     2 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 0.0059742969 (GeV)
 >>> Event 1
-     16 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.99256289 (GeV)
+     24 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 0.99346778 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 >>> Event 2
-     20 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.99883608 (GeV)
-     1 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.0010731246 (GeV)
->>> Event 3
-     28 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.99990589 (GeV)
+     22 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 0.99887836 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
+>>> Event 3
+     21 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 0.99449343 (GeV)
+     1 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 0.0054207098 (GeV)
 >>> Event 4
-     15 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.97769252 (GeV)
+     24 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 0.99874054 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 number of event = 5
