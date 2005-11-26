@@ -3,10 +3,11 @@ digits_hits                  asai@slac.stanford.edu          Makoto Asai
 digits_hits/detector         asai@slac.stanford.edu          Makoto Asai
 digits_hits/digits           asai@slac.stanford.edu          Makoto Asai
 digits_hits/hits             asai@slac.stanford.edu          Makoto Asai
+digits_hits/utils            asai@slac.stanford.edu          Makoto Asai
 event                        asai@slac.stanford.edu          Makoto Asai
 g3tog4                       Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 geometry                     Gabriele.Cosmo@cern.ch          Gabriele Cosmo
-geometry/biasing             Giuseppe.Daquino@cern.ch        Giuseppe Daquino
+geometry/biasing             Alexander.Howard@cern.ch        Alexander Howard
 geometry/magneticfield       John.Apostolakis@cern.ch        John Apostolakis
 geometry/management          Gabriele Cosmo@cern.ch          Gabriele Cosmo
 geometry/navigation          Gabriele Cosmo@cern.ch          Gabriele Cosmo
@@ -110,12 +111,12 @@ examples/advanced            asai@slac.stanford.edu          Makoto Asai
   purging_magnet             John.Apostolakis@cern.ch        John Apostolakis
   radioprotection            Susanna.Guatelli@ge.infn.it     Susanna Guatelli
   Rich                       Alberto.Ribon@cern.ch           Alberto Ribon
-  Tiara                      Giuseppe.Daquino@cern.ch        Giuseppe Daquino
-  underground_physics        a.s.howard@ic.ac.uk             Alex Howard
+  Tiara                      Alexander.Howard@cern.ch        Alexander Howard
+  underground_physics        Alexander.Howard@cern.ch        Alexander Howard 
   xray_fluorescence          Susanna.Guatelli@ge.infn.it     Susanna Guatelli
   xray_telescope             Giovanni.Santin@esa.int         Giovanni Santin
 examples/extended/analysis   duns@slac.stanford.edu          Mark Donszelmann
-examples/extended/biasing    Giuseppe.Daquino@cern.ch        Giuseppe Daquino
+examples/extended/biasing    Alexander.Howard@cern.ch        Alexander Howard
 examples/extended/electromagnetic:
   TestEm1,2,5,6,7,9          Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
   TestEm3,4                  Michel.Maire@lapp.in2p3.fr      Michel Maire
@@ -128,9 +129,9 @@ examples/extended/eventgenerator:
   HepMCEx01,02               Koichi.Murakami@kek.jp          Koichi Murakami
 examples/extended/field      John.Apostolakis@cern.ch        John Apostolakis
 examples/extended/g3tog4     Gabriele.Cosmo@cern.ch          Gabriele Cosmo
-examples/extended/gdml       Radovan.Chytracek@cern.ch       Radovan Chytracek
+examples/extended/gdml       Witold.Pokorski@cern.ch         Witold Pokorski
 examples/extended/geometry   Gabriele.Cosmo@cern.ch          Gabriele Cosmo
-  olap                       Martin.Liendl@cern.ch           Martin Liendl
+  olap                       Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 examples/extended/medical    MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
   DICOM                      Susanna.Guatelli@ge.infn.it     Susanna Guatelli
   GammaTherapy               Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
@@ -145,6 +146,9 @@ examples/extended/persistency:
   PersEx01                   Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 examples/extended/radioactivedecay:
   exrdm                      flei@space.qinetiq.com          Fan Lei
+examples/extended/runAndEvent:
+  RE01                       asai@slac.stanford.edu          Makoto Asai
+  RE02                       asai@slac.stanford.edu          Makoto Asai
 examples/extended/visualization:
   standalone                 John.Allison@man.ac.uk          John Allison
   userVisAction              John.Allison@man.ac.uk          John Allison
