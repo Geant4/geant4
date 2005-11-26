@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNuMuNuclearCrossSection.cc,v 1.3 2005-11-26 07:53:25 mkossov Exp $
+// $Id: G4QNuMuNuclearCrossSection.cc,v 1.4 2005-11-26 16:11:29 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -82,6 +82,7 @@ G4double G4QNuMuNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
 G4double G4QNuMuNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G4int targZ,
                                                            G4int targN, G4double Momentum)
 {
+  static const G4double mb38=1.E-11*millibarn;// Conversion 10^-38 cm^2 to mb=10^-27 cm^2
   static const G4int nE=33;   // !! If change this, change it in GetFunctions() (*.hh) !!
   static const G4int mL=nE-1;
   static const G4double mN=.931494043;// Nucleon mass (inside nucleus, AtomicMassUnit, GeV)
@@ -98,14 +99,14 @@ G4double G4QNuMuNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G4i
   // *** End of Static Definitions (Associative Memory) ***
   //const G4double Energy = aPart->GetKineticEnergy()/MeV; // Energy of the Muon
   //G4double TotEnergy2=Momentum;
-  lastE=Momentum;                    // Kinetic energy of the muon neutrino
+  lastE=Momentum/GeV;                // Kinetic energy of the muon neutrino (in GeV!)
   if (lastE<=EMi)                    // Energy is below the minimum energy in the table
   {
     lastE=0.;
     lastSig=0.;
     return 0.;
   }
-  G4double A=targN+targZ;            // New A (can be different from targetAtomicNumber)
+  G4int Z=targZ;                     // New Z, which can change the sign
   if(F<=0)                           // This isotope was not the last used isotop
   {
     if(F<0)                          // This isotope was found in DAMDB =========> RETRIEVE
@@ -118,12 +119,12 @@ G4double G4QNuMuNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G4i
       if(first)
       {
         lastEN = new G4double[nE];   // This must be done only once!
-        A=-A;                        // To explain GetFunctions that E-axis must be filled
+        Z=-Z;                        // To explain GetFunctions that E-axis must be filled
         first=false;                 // To make it only once
       }
       lastTX = new G4double[nE];     // Allocate memory for the new TX function
       lastQE = new G4double[nE];     // Allocate memory for the new QE function
-      G4int res=GetFunctions(A,lastTX,lastQE,lastEN); //@@ analize! (0=first,-1=bad,1=OK)
+      G4int res=GetFunctions(Z,targN,lastTX,lastQE,lastEN);//@@analize(0=first,-1=bad,1=OK)
       if(res<0) G4cerr<<"*W*G4NuMuNuclearCS::CalcCrossSect:Bad Function Retrieve"<<G4endl;
       // *** The synchronization check ***
       G4int sync=TX.size();
@@ -133,7 +134,7 @@ G4double G4QNuMuNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G4i
 	   } // End of creation of the new set of parameters
   } // End of parameters udate
   // ============================== NOW Calculate the Cross Section =====================
-  if (lastE<=EMi)                 // Check that muKiE is higher than ThreshE
+  if (lastE<=EMi)                   // Check that the neutrinoEnergy is higher than ThreshE
   {
     lastE=0.;
     lastSig=0.;
@@ -173,6 +174,9 @@ G4double G4QNuMuNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G4i
   }
   if(lastQEL<0.) lastQEL = 0.;
   if(lastSig<0.) lastSig = 0.;
+  // The cross-sections are expected to be in mb
+  lastSig*=mb38;
+  lastQEL*=mb38;
   return lastSig;
 }
 
@@ -181,7 +185,8 @@ G4double G4QNuMuNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G4i
 // *** This tables are the same for all lepto-nuclear reactions, only mass is different ***
 // ***@@ IT'S REASONABLE TO MAKE ADDiTIONAL VIRTUAL CLASS FOR LEPTO-NUCLEAR WITH THIS@@ ***
 // ****************************************************************************************
-G4int G4QNuMuNuclearCrossSection::GetFunctions(G4double a,G4double*t,G4double*q,G4double*e)
+G4int G4QNuMuNuclearCrossSection::GetFunctions(G4int z, G4int n,
+                                                     G4double* t, G4double* q, G4double* e)
 {
   static const G4double mN=.931494043;// Nucleon mass (inside nucleus, AtomicMassUnit, GeV)
   static const G4double dmN=mN+mN;    // Doubled nucleon mass (2*AtomicMassUnit, GeV)
@@ -206,21 +211,26 @@ G4int G4QNuMuNuclearCrossSection::GetFunctions(G4double a,G4double*t,G4double*q,
 	          .6680500,	.6687700,	.6692590,	.6694790,	.6697380,	.6699010,	.6700020,	.6699120};
   // --------------------------------
   G4int first=0;
-  if(a<0.)
+  if(z<0.)
 		{
     first=1;
-    a=-a;
+    z=-z;
   }
-  if(a<=.9999 || a>238.49)             // Plutonium 244 is forbidden
+  if(z<1 || z>92)             // neutron and plutonium are forbidden
   {
-    G4cout<<"***G4QNuMuNuclearCrossSection::GetFunctions:A="<<a<<".No CS returned"<<G4endl;
+    G4cout<<"***G4QNuMuNuclearCrossSection::GetFunctions:Z="<<z<<".No CS returned"<<G4endl;
     return -1;
   }
   for(G4int k=0; k<nE; k++)
   {
+    G4double a=n+z;
+    G4double na=n+a;
+    G4double dn=n+n;
+    G4double da=a+a;
+    G4double ta=da+a;
     if(first) e[k]=nuEn[k];       // Energy of neutrino E (first bin k=0 can be modified)
-    t[k]=TOTX[k]*a;               // TotalCrossSection/E
-    q[k]=QELX[k]*a;               // QuasiElasticCrossSection
+    t[k]=TOTX[k]*nuEn[k]*(na+na)/ta+QELX[k]*(dn+dn-da)/ta; // TotalCrossSection
+    q[k]=QELX[k]*dn/a;                                     // QuasiElasticCrossSection
 	 }
   return first;
 }

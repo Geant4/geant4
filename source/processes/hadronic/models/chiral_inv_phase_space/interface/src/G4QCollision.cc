@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.3 2005-11-26 07:53:25 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.4 2005-11-26 16:11:29 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -211,7 +211,6 @@ G4bool G4QCollision::IsApplicable(const G4ParticleDefinition& particle)
   else if (particle == *(      G4Positron::Positron()      )) return true;
   else if (particle == *(         G4Gamma::Gamma()         )) return true;
   else if (particle == *(        G4Proton::Proton()        )) return true;
-
   else if (particle == *(G4AntiNeutrinoMu::AntiNeutrinoMu())) return true;
   else if (particle == *(   G4NeutrinoMu::NeutrinoMu()   )) return true;
   //else if (particle == *(       G4Neutron::Neutron()       )) return true;
@@ -395,6 +394,9 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     G4cerr<<"---Warning---G4QCollision::PostStepDoIt:Element with N="<<N<< G4endl;
     return 0;
   }
+  G4int targPDG=90000000+Z*1000+N;       // PDG Code of the target nucleus
+  G4QPDGCode targQPDG(targPDG);
+  G4double tM=targQPDG.GetMass();
 		if(aProjPDG==11 || aProjPDG==13 || aProjPDG==15) // leptons with photonuclear
 		{ // Lepto-nuclear case with the equivalent photon algorithm. @@InFuture + neutrino & QE
     G4double kinEnergy= projHadron->GetKineticEnergy();
@@ -483,13 +485,14 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     proj4M=G4LorentzVector(photon3M,photon3M.mag()); //@@ photon is real?
   }
 		if(aProjPDG==14) // *** neutrino nuclear interactions (only nu_mu & only CC) ***
-		{ // Lepto-nuclear case with the equivalent photon algorithm. @@InFuture + neutrino & QE
-    G4double kinEnergy= projHadron->GetKineticEnergy(); // For neutrino it is total energy
-    G4ParticleMomentum dir = projHadron->GetMomentumDirection();
+		{
+    G4double kinEnergy= projHadron->GetKineticEnergy();// For neutrino this is total energy
+    G4ParticleMomentum dir = projHadron->GetMomentumDirection(); // unit vector
     G4VQCrossSection* CSmanager=G4QNuMuNuclearCrossSection::GetPointer();
+    proj4M=G4LorentzVector(dir*kinEnergy,kinEnergy);   // temporary
     G4bool nuanu=true;
     scatPDG=13;                         // Prototype = secondary scattered mu-
-    if(aProjPDG== 14)
+    if(projPDG==-14)
     {
       nuanu=false;
       CSmanager=G4QANuMuNuclearCrossSection::GetPointer(); // @@ open
@@ -497,7 +500,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     }
     G4double xSec=CSmanager->GetCrossSection(Momentum, Z, N);// Recalculate Cross Section
     // @@ check a possibility to separate p, n, or alpha (!)
-    if(xSec <= 0.) // The cross-section iz 0 -> Do Nothing
+    if(xSec <= 0.) // The cross-section = 0 -> Do Nothing
     {
       //Do Nothing Action insead of the reaction
       aParticleChange.ProposeEnergy(kinEnergy);
@@ -507,20 +510,38 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     }
     scat=true;                                  // event with changed scattered projectile
     G4double totCS = CSmanager->GetLastTOTCS(); // the last total cross section (isotope?)
+    if(std::fabs(xSec-totCS)/xSec>.0001)
+          G4cout<<"-Warning-G4QCollision::PostStepDoIt: xS="<<xSec<<"# CS="<<totCS<<G4endl;
     G4double qelCS = CSmanager->GetLastQELCS(); // the last total cross section
-    if(totCS - qelCS < 0.) totCS = qelCS;
-    if(totCS*G4UniformRand()<qelCS)             // ***** Quasi Elastic interaction
+    if(totCS - qelCS < 0.) totCS = qelCS;       // only at low energies
+    if(totCS*G4UniformRand()<qelCS&&(!nuanu||N))// ***** Quasi-Elastic interaction
     {
-      G4double Q2=CSmanager->GetQEL_ExchangeQ2();
-      G4double mIN=mProt;                       // @@ split from the nucleus
+      G4double Q2=CSmanager->GetQEL_ExchangeQ2(); // OK, im MeV^2
+      G4double mIN=mProt;                       // Just a prototype (for anu, Z=1, N=0)
       G4double mOT=mNeut;
       if(nuanu)
       {
-        mIN=mNeut;                              // @@ split from the nucleus
+        targPDG-=1;
+        G4QPDGCode targQPDG(targPDG);
+        G4double rM=targQPDG.GetMass();
+        mIN=tM-rM;                              // bounded mass of the neutron
+        tM=rM;
         mOT=mProt;
         projPDG=2212;                           // proton is going out
       }
-      else projPDG=2112;                        // neutron is going out
+      else
+      {
+        if(Z>1||N>0)                            // Calculate the splitted mass
+								{
+          targPDG-=1000;
+          G4QPDGCode targQPDG(targPDG);
+          G4double rM=targQPDG.GetMass();
+          mIN=tM-rM;                            // bounded mass of the proton
+          tM=rM;
+        }
+        else targPDG=0;
+        projPDG=2112;                           // neutron is going out
+      }
       // make a new projectile from the scattered nucleon
       proj4M=G4LorentzVector(Q2,mIN,mOT,Q2);    // 4m of the pion
     }
@@ -533,9 +554,6 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     aParticleChange.ProposeEnergy(0.) ;
     aParticleChange.ProposeTrackStatus(fStopAndKill); // the initial neutrino is killed
   }
-  G4int targPDG=90000000+Z*1000+N;       // PDG Code of the target nucleus
-  G4QPDGCode targQPDG(targPDG);
-  G4double tM=targQPDG.GetMass();
   EnMomConservation=proj4M+G4LorentzVector(0.,0.,0.,tM);    // Total 4-mom of the reaction
   G4QHadronVector* output=new G4QHadronVector; // Prototype of the output G4QHadronVector
   // @@@@@@@@@@@@@@ Temporary for the testing purposes --- Begin

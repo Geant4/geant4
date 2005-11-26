@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNuMuNuclearCrossSection.hh,v 1.1 2005-11-25 20:26:36 mkossov Exp $
+// $Id: G4QNuMuNuclearCrossSection.hh,v 1.2 2005-11-26 16:11:29 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -71,7 +71,7 @@ public:
   G4double GetLastQELCS() {return lastQEL;}
 
 private:
-  G4int    GetFunctions(G4double a, G4double* t, G4double* q, G4double* e);
+  G4int    GetFunctions(G4int z, G4int n, G4double* t, G4double* q, G4double* e);
   G4double HighEnergyTX(G4double lE);
   G4double HighEnergyQE(G4double lE);
 
