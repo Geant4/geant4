@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2005-10-03 03:44:45 vnivanch Exp $
+$Id: History,v 1.9 2005-11-26 16:54:43 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26 Nov 05: V.Ivant (test31-V07-01-01)
+- update printout, fix Valgrind complains
 
 3 Oct 05: V.Ivant (test31-V07-01-00)
 - add g4v71

@@ -169,7 +169,7 @@ void test31Histo::EndOfHisto()
   G4cout << std::setprecision(4) << "Average number of pi+pi-       " << xpi << G4endl;
   G4cout<<"===================================================================="<<G4endl;
 
-  TableControl();
+  //  TableControl();
   //  MuonTest();
   //  ElectronTest();
   if(0 < nHisto) {
@@ -330,7 +330,8 @@ void test31Histo::TableControl()
   // cal.PrintInverseRangeTable(part);
  
   //  part_name = "alpha";
-    part_name = "C12[0.0]";
+  part_name = "C12[0.0]";
+  //  part_name = "Pb208[0.0]";
   //   mat_name  = "G4_W";
   // mat_name  = "G4_Al";
   //    mat_name  = "G4_Si";
@@ -341,8 +342,9 @@ void test31Histo::TableControl()
   //  proc_name = "hIoni";
  
   const G4ParticleDefinition* part = cal.FindParticle(part_name);
+  if(!part) return;
   G4Material* mat = mman->FindOrBuildMaterial(mat_name);
-  mat->SetChemicalFormula("H_2O");
+  //mat->SetChemicalFormula("H_2O");
   G4double fact = 0.001*gram/(MeV*cm2*mat->GetDensity());
 
   G4double xmin = std::log10(tmin);
@@ -354,20 +356,21 @@ void test31Histo::TableControl()
   G4cout << "   Material            " << mat_name << G4endl;
   G4cout << "====================================================================" << G4endl;
 
-  const G4int ne = 8;
-  G4double e0[ne]={0.025, 0.1, 0.2, 0.3, 1.0, 10., 100., 1000.};
+  const G4int ne = 12;
+  G4double e0[ne]={0.025, 0.1, 0.2, 0.3, 1.0, 2.0, 5.0, 10., 15.0, 20.0, 100., 1000.};
 
   for(G4int i=0; i<ne; i++) {
     
     G4double e = e0[i]*12.0;
+    //e = e0[i]*208.0;
     G4double dedx0 = cal.GetDEDX(e,part,mat);
-    G4double dedx = cal.ComputeDEDX(e,part_name,proc_name,mat_name,e);
+    G4double dedx  = cal.ComputeDEDX(e,part,proc_name,mat,e);
     G4cout << i << ".   e(MeV)= " << e/MeV 
 	   << "  e0= " << e0[i]
            << ";  Computed  dedx(MeV*cm^2/mg)= " << dedx*fact
            << ";  Tabled  dedx(MeV*cm^2/mg)= " << dedx0*fact
            << G4endl;
-    
+    // G4cout << G4endl;    
   }
 
   G4bool icorr = false;

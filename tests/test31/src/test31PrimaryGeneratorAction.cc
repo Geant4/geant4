@@ -69,9 +69,8 @@ void test31PrimaryGeneratorAction::InitializeMe()
   SetBeamEnergy(10.0*MeV);
   position  = G4ThreeVector(x0,y0,z0);
   direction = G4ThreeVector(0.0,0.0,1.0);
+  verbose = 0;
   m_gauss = true;
-  if(energy < (test31Histo::GetPointer())->GetMaxEnergy())
-              (test31Histo::GetPointer())->SetMaxEnergy(energy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
