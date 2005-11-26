@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.2 2005-11-25 21:34:17 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.3 2005-11-26 07:53:25 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -64,6 +64,8 @@ G4bool   G4QCollision::EnergyFlux=false; // Flag for Energy Flux use (not MultyQ
 G4double G4QCollision::PiPrThresh=141.4; // Pion Production Threshold for gammas
 G4double G4QCollision::M2ShiftVir=20000.;// Shift for M2=-Q2=m_pi^2 of the virtualGamma
 G4double G4QCollision::DiNuclMass=1880.; // DoubleNucleon Mass for VirtualNormalization
+G4double G4QCollision::photNucBias=1.;   // BiasingParameter for photo(e,mu,tau)Nuclear
+G4double G4QCollision::weakNucBias=1.;   // BiasingParameter for ChargedCurrents(nu,mu) 
 
 void G4QCollision::SetManual()   {manualFlag=true;}
 void G4QCollision::SetStandard() {manualFlag=false;}
@@ -92,6 +94,9 @@ void G4QCollision::SetParameters(G4double temper, G4double ssin2g, G4double etae
   G4Quasmon::SetParameters(Temperature,SSin2Gluons,EtaEtaprime);  // Hadronic parameters
   G4QEnvironment::SetParameters(SolidAngle); // SolAngle of pbar-A secondary mesons capture
 }
+
+void G4QCollision::SetPhotNucBias(G4double phnB) {photNucBias=phnB;}
+void G4QCollision::SetWeakNucBias(G4double ccnB) {weakNucBias=ccnB;}
 
 // Destructor
 
@@ -129,7 +134,7 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
   if(incidentParticleDefinition == G4Proton::Proton())
       CSmanager=G4QProtonNuclearCrossSection::GetPointer();
   else if(incidentParticleDefinition == G4Gamma::Gamma())
-      CSmanager=G4QPhotonNuclearCrossSection::GetPointer();
+                                      CSmanager=G4QPhotonNuclearCrossSection::GetPointer();
   else if(incidentParticleDefinition == G4Electron::Electron() ||
           incidentParticleDefinition == G4Positron::Positron())
   {
@@ -140,6 +145,12 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
           incidentParticleDefinition == G4MuonMinus::MuonMinus())
   {
     CSmanager=G4QMuonNuclearCrossSection::GetPointer();
+    leptoNuc=true;
+  }
+  else if(incidentParticleDefinition == G4TauPlus::TauPlus() ||
+          incidentParticleDefinition == G4TauMinus::TauMinus())
+  {
+    CSmanager=G4QTauNuclearCrossSection::GetPointer();
     leptoNuc=true;
   }
   else if(incidentParticleDefinition == G4NeutrinoMu::NeutrinoMu() )
@@ -171,6 +182,20 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
   } // End of LOOP over Elements
 
   // Check that cross section is not zero and return the mean free path
+  if(photNucBias!=1.) if(incidentParticleDefinition == G4MuonPlus::MuonPlus()   ||
+                         incidentParticleDefinition == G4MuonMinus::MuonMinus() ||
+                         incidentParticleDefinition == G4Electron::Electron()   ||
+                         incidentParticleDefinition == G4Positron::Positron()   ||  
+                         incidentParticleDefinition == G4TauMinus::TauMinus()   ||
+                         incidentParticleDefinition == G4TauPlus::TauPlus()       )
+                                                                        sigma*=photNucBias;
+  if(photNucBias!=1.) if(incidentParticleDefinition==G4NeutrinoE::NeutrinoE()            ||
+                         incidentParticleDefinition==G4AntiNeutrinoE::AntiNeutrinoE()    ||
+                         incidentParticleDefinition==G4NeutrinoTau::NeutrinoTau()        ||
+                         incidentParticleDefinition==G4AntiNeutrinoTau::AntiNeutrinoTau()||
+                         incidentParticleDefinition==G4NeutrinoMu::NeutrinoMu()          ||
+                         incidentParticleDefinition==G4AntiNeutrinoMu::AntiNeutrinoMu()   )
+                                                                        sigma*=weakNucBias;
   if(sigma > 0.) return 1./sigma;                 // Mean path [distance] 
   return DBL_MAX;
 }

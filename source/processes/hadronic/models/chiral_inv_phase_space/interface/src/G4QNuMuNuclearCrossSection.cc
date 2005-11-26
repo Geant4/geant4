@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNuMuNuclearCrossSection.cc,v 1.2 2005-11-25 21:34:17 mkossov Exp $
+// $Id: G4QNuMuNuclearCrossSection.cc,v 1.3 2005-11-26 07:53:25 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -272,14 +272,14 @@ G4double G4QNuMuNuclearCrossSection::GetQEL_ExchangeQ2()
   G4double dME=ME+ME;                 // 2*M*E
   G4double dEMN=(dEnu+MN)*ME;
   G4double MEm=ME-hmmu2;
-  G4double sqE=Enu*sqrt(MEm*MEm-mmu2*MN2);
+  G4double sqE=Enu*std::sqrt(MEm*MEm-mmu2*MN2);
   G4double E2M=MN*Enu2-(Enu+MN)*hmmu2;
   G4double ymax=(E2M+sqE)/dEMN;
   G4double ymin=(E2M-sqE)/dEMN;
   G4double rmin=1.-ymin;
   G4double rhm2E=hmmu2/Enu2;
-  G4double Q2mi=(Enu2+Enu2)*(rmin-rhm2E-sqrt(rmin*rmin-rhm2E-rhm2E)); // Q2_min(E_nu)
-  G4double Q2ma=dME*ymax;                                             // Q2_max(E_nu)
+  G4double Q2mi=(Enu2+Enu2)*(rmin-rhm2E-std::sqrt(rmin*rmin-rhm2E-rhm2E)); // Q2_min(E_nu)
+  G4double Q2ma=dME*ymax;                                                  // Q2_max(E_nu)
   G4double Xma=pow((1.+Q2mi),power);  // X_max(E_nu)
   G4double Xmi=pow((1.+Q2ma),power);  // X_min(E_nu)
   // Find the integral values integ(Xmi) & integ(Xma) using the direct table
@@ -471,7 +471,7 @@ G4double G4QNuMuNuclearCrossSection::GetNQE_ExchangeQ2()
   static const G4double dlE=(lEma-lEmi)/bE;
 	 //***************************************************************************************
   G4double Enu=lastE;                 // Get energy of the last calculated cross-section
-  G4double lEn=log(Enu);              // log(E) for interpolation
+  G4double lEn=std::log(Enu);         // log(E) for interpolation
   G4double rE=(lEn-lEmi)/dlE;         // Position of the energy
   G4int fE=static_cast<int>(rE);      // Left bin for interpolation
   if(fE<0) fE=0;
@@ -485,14 +485,14 @@ G4double G4QNuMuNuclearCrossSection::GetNQE_ExchangeQ2()
   G4double dME=ME+ME;                 // 2*M*E
   G4double dEMN=(dEnu+MN)*ME;
   G4double MEm=ME-hmmu2;
-  G4double sqE=Enu*sqrt(MEm*MEm-mmu2*MN2);
+  G4double sqE=Enu*std::sqrt(MEm*MEm-mmu2*MN2);
   G4double E2M=MN*Enu2-(Enu+MN)*hmmu2;
   G4double ymax=(E2M+sqE)/dEMN;
   G4double ymin=(E2M-sqE)/dEMN;
   G4double rmin=1.-ymin;
   G4double rhm2E=hmmu2/Enu2;
-  G4double Q2mi=(Enu2+Enu2)*(rmin-rhm2E-sqrt(rmin*rmin-rhm2E-rhm2E)); // Q2_min(E_nu)
-  G4double Q2ma=dME*ymax;                                             // Q2_max(E_nu)
+  G4double Q2mi=(Enu2+Enu2)*(rmin-rhm2E-std::sqrt(rmin*rmin-rhm2E-rhm2E)); // Q2_min(E_nu)
+  G4double Q2ma=dME*ymax;                                                  // Q2_max(E_nu)
   G4double Q2nq=Emu*dMN-mcV;
   if(Q2ma>Q2nq) Q2ma=Q2nq;            // Correction for Non Quasi Elastic
   // --- now r_min=Q2mi/Q2ma and r_max=1.; when r is randomized -> Q2=r*Q2ma ---

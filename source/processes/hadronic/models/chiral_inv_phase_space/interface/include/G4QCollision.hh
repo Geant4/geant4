@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCollision.hh,v 1.2 2005-11-25 21:34:17 mkossov Exp $
+// $Id: G4QCollision.hh,v 1.3 2005-11-26 07:53:25 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision header ----------------
@@ -130,13 +130,19 @@ public:
 
   G4int GetNumberOfNeutronsInTarget();
 
-  // Static functions
+  // Static functions ---------------------------------------------------------------------
   static void SetManual();
   static void SetStandard();
   static void SetParameters(G4double temper=180., G4double ssin2g=.1, G4double etaetap=.3,
                             G4double fN=0., G4double fD=0., G4double cP=1., G4double mR=1.,
                             G4int npCHIPSWorld=234, G4double solAn=.5, G4bool efFlag=false,
                             G4double piTh=141.4,G4double mpi2=20000.,G4double dinum=1880.);
+  static void SetPhotNucBias(G4double phnB=1.);
+  static void SetWeakNucBias(G4double ccnB=1.);
+  //--- End of static member functions ----------------------------------------------------
+
+  G4double GetPhotNucBias(){return photNucBias;}
+  G4double GetWeakNucBias(){return weakNucBias;}
 
 private:
 
@@ -147,7 +153,7 @@ private:
   G4QCollision(const G4QCollision&);
 
 		// BODY
-  // Static Parameters
+  // Static Parameters --------------------------------------------------------------------
   static G4bool   manualFlag;  // If false then standard parameters are used
   static G4int    nPartCWorld; // The#of particles for hadronization (limit of A of fragm.)
   // -> Parameters of the G4Quasmon class:
@@ -165,7 +171,10 @@ private:
   static G4double PiPrThresh;  // Pion Production Threshold for gammas
   static G4double M2ShiftVir;  // Shift for M2=-Q2=m_pi^2 of the virtual gamma
   static G4double DiNuclMass;  // Double Nucleon Mass for virtual normalization
-  //
+  // -> Biasing parameters:
+  static G4double photNucBias; // Biasing parameter for photo-($e,mu,tau)Nuclear reactions
+  static G4double weakNucBias; // Biasing parameter for Charged Currents (nu,mu) reactions
+  //--------------------------------- End of static parameters ---------------------------
   // Working parameters
   G4VQCrossSection* theCS;
   G4LorentzVector EnMomConservation;                  // Residual of Energy/Momentum Cons.
