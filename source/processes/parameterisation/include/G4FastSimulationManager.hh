@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManager.hh,v 1.9 2005-08-30 21:03:14 asaim Exp $
+// $Id: G4FastSimulationManager.hh,v 1.10 2005-11-26 00:35:02 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -144,34 +144,31 @@ public:  // without description
 
 
 
-//===================================================================
-// Ghost volume is no longer usable. Use parallel geometry instead
-//===================================================================
-//==
-//==
-//==  // Methods to add/remove GhostPlacements to/from the 
-//==  // GhostPlacements List.
-//==  //
-//==  G4Transform3D* AddGhostPlacement(G4RotationMatrix*,
-//==				   const G4ThreeVector&);
-//==  // Flag that the envelope is a ghost volume giving its global 
-//==  // placement, where the rotation matrix and the translatation 
-//==  // vector of 3D transformation describe the placement relative 
-//==  // to the world coordinates. 
-//==
-//==  G4Transform3D* AddGhostPlacement(G4Transform3D*);
-//==  // The same but using a G4Transform3D.
-//==  
-//==  G4bool RemoveGhostPlacement(const G4Transform3D*);
-//==  // Removes a Ghost placement.
-//==  //
-//==  //----------------------------------------------
-//==  // Interface methods for the G4GlobalFastSimulationManager
-//==  //----------------------------------------------
-//==  // Parallel geometry placements
-//==  
-//==  G4bool InsertGhostHereIfNecessary(G4VPhysicalVolume* ,
-//==				    const G4ParticleDefinition&);
+  // -------------------------------------------------  
+  // Methods to add/remove GhostPlacements to/from the 
+  // GhostPlacements List.
+  // -------------------------------------------------
+  //
+  G4Transform3D* AddGhostPlacement(G4RotationMatrix*,
+				   const G4ThreeVector&);
+  // Flag that the envelope is a ghost volume giving its global 
+  // placement, where the rotation matrix and the translatation 
+  // vector of 3D transformation describe the placement relative 
+  // to the world coordinates. 
+  
+  G4Transform3D* AddGhostPlacement(G4Transform3D*);
+  // The same but using a G4Transform3D.
+  
+  G4bool RemoveGhostPlacement(const G4Transform3D*);
+  // Removes a Ghost placement.
+  //
+  //----------------------------------------------
+  // Interface methods for the G4GlobalFastSimulationManager
+  //----------------------------------------------
+  // Parallel geometry placements
+  
+  G4bool InsertGhostHereIfNecessary(G4VPhysicalVolume* ,
+				    const G4ParticleDefinition&);
 
   //
   //----------------------------------------------

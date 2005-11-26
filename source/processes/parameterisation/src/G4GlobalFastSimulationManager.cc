@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GlobalFastSimulationManager.cc,v 1.14 2005-11-02 09:22:02 gcosmo Exp $
+// $Id: G4GlobalFastSimulationManager.cc,v 1.15 2005-11-26 00:35:02 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -103,7 +103,7 @@ RemoveFastSimulationManager(G4FastSimulationManager* fsmanager)
 void G4GlobalFastSimulationManager::CloseFastSimulation()
 {
   if(fClosed) return;
-
+  
   G4ParticleTable* theParticleTable;
   
   // Reset the NeededFlavoredWorlds List
@@ -113,33 +113,29 @@ void G4GlobalFastSimulationManager::CloseFastSimulation()
   theParticleTable=G4ParticleTable::GetParticleTable();
   
   // Creates the first world volume clone.
-  // G4VPhysicalVolume* aClone=
-  GiveMeAWorldVolumeClone();
+  G4VPhysicalVolume* aClone = GiveMeAWorldVolumeClone();
   
   G4cout << "Closing Fast-Simulation ..." << G4endl;
-
-//=============================================================================
-//== Treatment of ghost volumes is to be moved to
-//== G4FastSimulationManagerProcess
-//==
-//==  for (G4int iParticle=0;
-//==       iParticle<theParticleTable->entries(); iParticle++) {
-//==    G4bool Needed = false;
-//==    for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
-//==      Needed = Needed || ManagedManagers[ifsm]->
-//==        InsertGhostHereIfNecessary(aClone,
-//==                                   *(theParticleTable->
-//==                                     GetParticle(iParticle)));
-//==    // if some FSM inserted a ghost, keep this clone.
-//==    if(Needed) {
-//==      NeededFlavoredWorlds.push_back(new 
-//==         G4FlavoredParallelWorld(theParticleTable->GetParticle(iParticle),
-//==                                 aClone));
-//==      // and prepare a new one.
-//==      aClone=GiveMeAWorldVolumeClone();
-//==    }
-//==  }
-
+  
+  for (G4int iParticle=0;
+       iParticle<theParticleTable->entries(); iParticle++) {
+    G4bool Needed = false;
+    for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
+      Needed = Needed || ManagedManagers[ifsm]->
+        InsertGhostHereIfNecessary(aClone,
+                                   *(theParticleTable->
+                                     GetParticle(iParticle)));
+    // if some FSM inserted a ghost, keep this clone.
+    if(Needed)
+      {
+	G4Region* aWorldGhostRegion = new G4Region("Ghost world region for " + theParticleTable->GetParticle(iParticle)->GetParticleName());
+	aWorldGhostRegion->AddRootLogicalVolume(aClone->GetLogicalVolume());
+	NeededFlavoredWorlds.push_back(new G4FlavoredParallelWorld(theParticleTable->GetParticle(iParticle), aClone));
+	// and prepare a new one.
+	aClone=GiveMeAWorldVolumeClone();
+      }
+  }
+  
   fClosed=true;
 }
 

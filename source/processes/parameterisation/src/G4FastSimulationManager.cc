@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManager.cc,v 1.9 2005-08-30 21:03:14 asaim Exp $
+// $Id: G4FastSimulationManager.cc,v 1.10 2005-11-26 00:35:02 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -151,78 +151,78 @@ G4FastSimulationManager::GetFastSimulationModel(const G4String& modelName,
   return model;
 }
 
-//===================================================================
-// Ghost volume is no longer usable. Use parallel geometry instead
-//===================================================================
-//==
-//==//----------------------------------------
-//==// Methods to add/remove GhostPlacements 
-//==//----------------------------------------
-//==
-//==G4Transform3D*
-//==G4FastSimulationManager::AddGhostPlacement(G4RotationMatrix *prot,
-//==					   const G4ThreeVector &tlate)
-//=={
-//==  G4Transform3D* newghostplace;
-//==  if(prot==0) prot = new G4RotationMatrix();
-//==  newghostplace = new G4Transform3D(*prot,tlate);
-//==  AddGhostPlacement(newghostplace);
-//==  return newghostplace;
-//==}
-//==
-//==G4Transform3D*
-//==G4FastSimulationManager::AddGhostPlacement(G4Transform3D *trans3d)
-//=={
-//==  GhostPlacements.push_back (trans3d);
-//==  G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()->
-//==    FastSimulationNeedsToBeClosed();  
-//==  return trans3d;
-//==}
-//==
-//==G4bool 
-//==G4FastSimulationManager::RemoveGhostPlacement(const G4Transform3D *trans3d)
-//=={
-//==  G4bool found;
-//==  if((found=(GhostPlacements.remove(trans3d) != 0)))
-//==    G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()->
-//==      FastSimulationNeedsToBeClosed();
-//==  return found;
-//==}
-//==
-//==G4bool 
-//==G4FastSimulationManager::
-//==InsertGhostHereIfNecessary(G4VPhysicalVolume* theClone,
-//==			   const G4ParticleDefinition& theParticle)
-//=={
-//==  G4PVPlacement *GhostPhysical;
-//==  // Not to do if there aren't glost placements
-//==  if(GhostPlacements.size()==0) return false;
-//==
-//==  // If there are, verifies if at least one model is applicable
-//==  // for theParticle.
-//==  for (size_t iModel=0; iModel<ModelList.size(); iModel++)
-//==    if(ModelList[iModel]->IsApplicable(theParticle)) {
-//==      // Ok, we find one. Place the ghost(s).
-//==      for (size_t ighost=0; ighost<GhostPlacements.size(); ighost++)
-//==      {
-//==       std::vector<G4LogicalVolume*>::iterator rlvItr
-//==        = fFastTrack.GetEnvelope()->GetRootLogicalVolumeIterator();
-//==       size_t nrlv = fFastTrack.GetEnvelope()->GetNumberOfRootVolumes();
-//==       for(size_t igv=0;igv<nrlv;igv++)
-//==       {
-//==	GhostPhysical=new 
-//==	  G4PVPlacement(*(GhostPlacements[ighost]),
-//==			fFastTrack.GetEnvelope()->GetName(),
-//==			(*rlvItr), theClone, false,0);
-//==        rlvItr++;
-//==       }
-//==      }
-//==      //  And answer true
-//==      return true;
-//==    }
-//==  //otherwise answer false
-//==  return false;  
-//==}
+
+//----------------------------------------
+// Methods to add/remove GhostPlacements 
+//----------------------------------------
+
+G4Transform3D*
+G4FastSimulationManager::AddGhostPlacement(G4RotationMatrix *prot,
+					   const G4ThreeVector &tlate)
+{
+  G4Transform3D* newghostplace;
+  if(prot==0) prot = new G4RotationMatrix();
+  newghostplace = new G4Transform3D(*prot,tlate);
+  AddGhostPlacement(newghostplace);
+  return newghostplace;
+}
+
+G4Transform3D*
+G4FastSimulationManager::AddGhostPlacement(G4Transform3D *trans3d)
+{
+  GhostPlacements.push_back (trans3d);
+  G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()->
+    FastSimulationNeedsToBeClosed();  
+  return trans3d;
+}
+
+G4bool 
+G4FastSimulationManager::RemoveGhostPlacement(const G4Transform3D *trans3d)
+{
+  G4bool found;
+  if((found=(GhostPlacements.remove(trans3d) != 0)))
+    G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()->
+      FastSimulationNeedsToBeClosed();
+  return found;
+}
+
+G4bool 
+G4FastSimulationManager::
+InsertGhostHereIfNecessary(G4VPhysicalVolume* theClone,
+			   const G4ParticleDefinition& theParticle)
+{
+  G4PVPlacement *GhostPhysical;
+  // Not to do if there aren't glost placements
+  if(GhostPlacements.size()==0) return false;
+  
+  // If there are, verifies if at least one model is applicable
+  // for theParticle.
+  for (size_t iModel=0; iModel<ModelList.size(); iModel++)
+    if(ModelList[iModel]->IsApplicable(theParticle)) {
+      // Ok, we find one. Place the ghost(s).
+      for (size_t ighost=0; ighost<GhostPlacements.size(); ighost++)
+	{
+	  std::vector<G4LogicalVolume*>::iterator ghostIter = fFastTrack.GetEnvelope()->GetRootLogicalVolumeIterator();
+	  G4LogicalVolume* rootGhostLV = (*ghostIter);
+	  GhostPhysical=new 
+	    G4PVPlacement(*(GhostPlacements[ighost]),
+			  rootGhostLV->GetName(),
+			  rootGhostLV,
+			  theClone,
+			  false,0);
+	  // -- I'd like to check if other root LV exist, since it can not be handled today,
+	  // -- but how stop the iterator loop ???
+	  //	  ghostIter++;
+	  //	  rootGhostLV = (*ghostIter);
+	  //	  if (rootGhostLV) G4Exception("G4FastSimulationManager does not know today how to handle ghost regions with several root logical volumes.");
+	}
+      //  And answer true
+      return true;
+    }
+  //otherwise answer false
+  return false;  
+}
+
 
 //
 //-------------------------------------
