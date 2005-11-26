@@ -20,61 +20,95 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//
+// --------------------------------------------------------------
+//   GEANT 4 - Underground Dark Matter Detector Advanced Example
+//
+//      For information related to this code contact: Alex Howard
+//      e-mail: a.s.howard@ic.ac.uk
+// --------------------------------------------------------------
+// Comments
+//
+//
+// TrackerHit header
+// --------------------------------------------------------------
 
 #ifndef ExN04TrackerHit_h
 #define ExN04TrackerHit_h 1
+
+
+//MSH_include_begin
+#include "MarshaledG4String.h"
+//MSH_include_end
 
 #include "G4VHit.hh"
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
 
-class ExN04TrackerHit : public G4VHit
+
+//MSH_BEGIN
+class ExN04TrackerHit : public G4VHit 
 {
   public:
 
       ExN04TrackerHit();
-      ~ExN04TrackerHit();
+     ~ExN04TrackerHit();
+
       ExN04TrackerHit(const ExN04TrackerHit &right);
       const ExN04TrackerHit& operator=(const ExN04TrackerHit &right);
-      G4int operator==(const ExN04TrackerHit &right) const;
+      int operator==(const ExN04TrackerHit &right) const;
 
-      inline void *operator new(size_t);
-      inline void operator delete(void *aHit);
+      inline void* operator new(size_t);
+      inline void  operator delete(void* aHit);
 
       void Draw();
       void Print();
 
+
   private:
-      G4double edep;
-      G4ThreeVector pos;
+  G4ThreeVector pos; /*MSH: primitive
+  [elementGet: { $ELEMENT = $THIS->GetPos(); }]
+  [elementSet: { $THIS->SetPos($ELEMENT); }] */
+
+  G4double edep; /*MSH: primitive
+  [elementGet: { $ELEMENT = $THIS->GetEdep(); }]
+  [elementSet: { $THIS->SetEdep($ELEMENT); }] */
+
 
   public:
-      inline void SetEdep(G4double de)
-      { edep = de; }
-      inline G4double GetEdep()
-      { return edep; }
-      inline void SetPos(G4ThreeVector xyz)
-      { pos = xyz; }
-      inline G4ThreeVector GetPos()
-      { return pos; }
+     
+ 
+  inline void SetEdep(G4double de)            {edep=de;};
+  inline void SetPos(G4ThreeVector xyz)       {pos=xyz;};
+
+   inline G4double GetEdep()                   const {return edep;};
+  inline G4ThreeVector GetPos()               const {return pos;};
 
 };
+//MSH_END
 
+// vector collection of one type of hits
 typedef G4THitsCollection<ExN04TrackerHit> ExN04TrackerHitsCollection;
+
 
 extern G4Allocator<ExN04TrackerHit> ExN04TrackerHitAllocator;
 
-inline void* ExN04TrackerHit::operator new(size_t)
-{
-  void *aHit;
-  aHit = (void *) ExN04TrackerHitAllocator.MallocSingle();
+
+inline void* ExN04TrackerHit::operator new(size_t) {
+  void* aHit;
+  aHit = (void*) ExN04TrackerHitAllocator.MallocSingle();
   return aHit;
 }
 
-inline void ExN04TrackerHit::operator delete(void *aHit)
-{
+
+inline void ExN04TrackerHit::operator delete(void* aHit) {
   ExN04TrackerHitAllocator.FreeSingle((ExN04TrackerHit*) aHit);
 }
 
 #endif
+
+
+
+
+

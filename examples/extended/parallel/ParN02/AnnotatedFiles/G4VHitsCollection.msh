@@ -3,9 +3,12 @@
 
 %}
 
+// This file is generated automatically from G4VHitsCollection.hh .  It is an
+//   intermediate file useful for debugging, but otherwise may be deleted.
+
  marshaling class MarshaledG4VHitsCollection (G4VHitsCollection* param) {
 
-     G4String collectionName;
+      G4String collectionName;
     //FIELDMARSHAL:
     {
 	G4String $ELEMENT;
@@ -52,11 +55,11 @@
 	// no need to declare size since $SIZE is already assigned in the MARSHAL field
 
     }
-    int __dummy100; // marshaling code for MSH_derivedclass
+    int __dummy630; // marshaling code for MSH_derivedclass
     //FIELDMARSHAL:
     {
-		G4THitsCollection<ExN02TrackerHit> *aObj100 = (G4THitsCollection<ExN02TrackerHit>*)$THIS;
-		MarshaledG4THitsCollection<ExN02TrackerHit> marChild(aObj100);
+		G4THitsCollection<ExN02TrackerHit> *aObj630 = (G4THitsCollection<ExN02TrackerHit>*)$THIS;
+		MarshaledG4THitsCollection<ExN02TrackerHit> marChild(aObj630);
 		EXTEND_BUFFER(marChild.getBufferSize());
 		memcpy($$,marChild.getBuffer(), marChild.getBufferSize());
 		$SIZE = marChild.getBufferSize();

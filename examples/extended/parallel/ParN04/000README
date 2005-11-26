@@ -1,5 +1,5 @@
 
-   ParGeant4:  Geant4/TOP-C, a parallelization of Geant4
+  ParGeant4:  Geant4/TOP-C, a parallelization of Geant4
               (event-level parallelism)
 
 	  Gene Cooperman
@@ -13,11 +13,10 @@ Please write to gene@ccs.neu.edu for further information.
 To port other applications to a parallel version, read the
   files ../../info/PAR_INSTALL and ../../info/PAR_README.
 
-
 See the beginning of GNUmakefile for reasonable `make' targets to run it.
 To run it:
 0.  a. Follow the standard Geant4 installation procedure.
-    b. Download and install TOP-C.
+    b. Download and install TOP-C
        The TOP-C home page is at http://www.ccs.neu.edu/home/gene/topc.html
         cd <TOPC_INSTALL_DIR>
         gzip -dc topc.tar.gz | tar -xvf -
@@ -26,10 +25,10 @@ To run it:
 	make
 	make test
 	[ Copy bin/topc-config to your path ]
-    c. Verify that the Geant4 example installs for you:
+    c. Verify that the Geant4 example installs:
         cd $G4INSTALL/examples/extended/parallel/ParN04
-        make
-        $G4WORKDIR/bin/$G4SYSTEM/ParN04 ParN04.in
+	make
+	$G4WORKDIR/bin/$G4SYSTEM/ParN04 ParN04.in
 2.  make run
     [ By default, the included `procgroup' file creates two slave processes
       on localhost. ]
@@ -38,15 +37,16 @@ To run it:
     [ To remove intermediate files and start over:  make parclean  ]
 3.  Try running it with slave processes on remote processes.
     First, test that your local environment is set up correctly.
-    Try:  ssh <REMOTE_HOSTNAME> $G4WORKDIR/bin/$G4SYSTEM/ParN04 `pwd`/ParN04.in
+    Try:
+    ssh <REMOTE_HOSTNAME> $G4WORKDIR/bin/$G4SYSTEM/ParN04 `pwd`/ParN04.in
     The above command needs to work without asking for a password.
     [ If you use dynamic libraries (*.so), make sure the LD_LIBRARY_PATH
       in your shell startup file (e.g. ~.tcshrc) includes both:
       $G4INSTALL/lib/$G4SYSTEM and $CLHEP_BASE_DIR/lib
       If you use AFS, you may need to type 'klog' to renew your AFS token. ]
     In `procgroup' file, replace `localhost' by desired remote hosts;
-    Add additional remote hosts (additional slaves) if you like.
-    Then:  make run
+    Add additional remote hosts (additional slaves) if you like.  
+    Then:  make run 
 
 ============================================================================
 If you read ParGNUmakefile, you'll find other things that you can
@@ -71,14 +71,14 @@ make parclean - Start over with clean set of files.
 
 ============================================================================
 New or modified files:
-  ParN04.cc     - Adds one line:  #include "ParN04.icc"
+  ParN04.cc -     Adds one line:  #include "ParN04.icc"
 		  ParExample.icc inserts:  #include "topc.h"
 		  and causes main to calls TOPC_init, TOPC_finalize,
                   and to use: `new ParRunManager' instead of `new G4RunManager'
   GNUmakefile   - Adds one line at beginning:  include ParGNUmakefile
 		  ParGNUmakefile defines EXTRALIBS and CPPFLAGS so as to
-		  modify behavior of config/binmake.gmk
-		  in order to use TOP-C libraries and includes
+		    modify behavior of config/binmake.gmk
+		    in order to use TOP-C libraries and includes
   procgroup     - Specifies which slave hosts to use, and where to put output
 		  For example:  localhost 1 - > slave1.out
                                 host=`localhost', executable=`same as master',
@@ -88,8 +88,7 @@ New or modified files:
 		  replaces Gr4RunManager::DoEventLoop w/ TOP-C parallel loop,
                   Adds certain local vars of DoEventLoop as ParRunManager members
   include/MarshaledObj.h - run-time utilities for marshalling
-  include/MarshaledEx*Hit.h - marshals N04 hits (tracker, muon and
-  						 calorimeter hits)
+  include/MarshaledEx*Hit.h - marshals N04 hits (calorimeter hits)
   include/MarshaledG4*.h - marshaling routines for Geant4 data structures
 
   ~/slave*.out	- Contains outputs of slave1, slave2, etc.
@@ -123,13 +122,15 @@ identical commands.
 ====================================================================
 If you are curious about some of the layers, the following
 stack trace [somewhat out of date now] gives some idea.
+[ This stack trace is from a run based on ParN02.]
+
    G4RunManager::BeamOn calls ParRunManager::DoEventLoop
 (since G4RunManager::DoEventLoop is virtual)
   ParRunManager::DoEventLoop calls TOPC_master_slave
   TOPC_master_slave calls submit_task_input
   submit_task_input eventually calls COMM_send_msg which calls MPI_Send
 (COMM_send_msg is the communication layer of TOPC;
- The exampleN02.cc was linked with the TOP-C MPI communication layer.
+ ParN04.cc was linked with the TOP-C MPI communication layer.
  The same source could have been linked with a POSIX threads layer,
  a communication layer, or some other communication layer.
 )
@@ -153,4 +154,4 @@ stack trace [somewhat out of date now] gives some idea.
 #11 0x416810a3 in G4UImanager::ApplyCommand () from /afs/cern.ch/user/c/cooperma/scratch-pcitapi07/geant4/lib/libG4intercoms.so
 #12 0x805db7e in G4UIterminal::ExecuteCommand () at /afs/cern.ch/sw/lhcxx/specific/redhat61/3.2.0/include/CLHEP/Random/Randomize.h:64
 #13 0x805d42d in G4UIterminal::SessionStart () at /afs/cern.ch/sw/lhcxx/specific/redhat61/3.2.0/include/CLHEP/Random/Randomize.h:64
-#14 0x8056a3d in main (argc=1, argv=0x80bfa00) at ParN04.cc:98
+#14 0x8056a3d in main (argc=1, argv=0x80bfa00) at ParN02.cc:98

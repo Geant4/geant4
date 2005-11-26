@@ -3,6 +3,9 @@
 
 %}
 
+// This file is generated automatically from G4String.hh .  It is an
+//   intermediate file useful for debugging, but otherwise may be deleted.
+
  marshaling class MarshaledG4String (G4String* param) {
 
     int dummy;

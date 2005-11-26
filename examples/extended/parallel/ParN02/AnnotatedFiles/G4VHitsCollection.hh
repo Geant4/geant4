@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHitsCollection.hh,v 1.1 2004-11-22 17:39:48 cooperma Exp $
+// $Id: G4VHitsCollection.hh,v 1.2 2005-11-26 09:47:01 cooperma Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,9 +55,9 @@ class G4VHitsCollection
   protected:
 
       // Collection name
-     G4String collectionName;  /*MSH: predefined
-     [elementGet: { $ELEMENT = $THIS->GetName(); }]
-     [elementSet: { Shadowed_param->collectionName=$ELEMENT; }]
+      G4String collectionName;  /*MSH: predefined
+      [elementGet: { $ELEMENT = $THIS->GetName(); }]
+      [elementSet: { Shadowed_param->collectionName=$ELEMENT; }]
 			       */
 
       G4String SDname;   /* MSH: predefined
@@ -77,7 +77,7 @@ class G4VHitsCollection
       // GetHit and GetSize are given a default implementation here so
       // that the template G4THitsCollection can be used, but they
       // are re-implemented G4THitsCollection.
-      virtual G4VHit* GetHit(size_t i) const { return 0; } 
+      virtual G4VHit* GetHit(size_t) const { return 0; } 
       virtual size_t GetSize() const { return 0; };
 
 };

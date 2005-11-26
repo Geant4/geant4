@@ -10,6 +10,9 @@
 //MSH_include_end
 %}
 
+// This file is generated automatically from G4THitsCollection.hh .  It is an
+//   intermediate file useful for debugging, but otherwise may be deleted.
+
  marshaling class MarshaledG4HitsCollection (G4HitsCollection* param) {
 
       void* theCollection;
@@ -150,7 +153,7 @@
 }
 
 template <class T> marshaling class MarshaledG4THitsCollection<T> (G4THitsCollection<T>* param)  : public G4HitsCollection {
-    int __dummy208; // marshaling code for MSH_superclass
+    int __dummy812; // marshaling code for MSH_superclass
     //FIELDMARSHAL:
     {
 		MarshaledG4HitsCollection marParent($THIS);

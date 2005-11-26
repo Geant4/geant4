@@ -3,9 +3,12 @@
 
 %}
 
+// This file is generated automatically from G4VHitsCollection.hh .  It is an
+//   intermediate file useful for debugging, but otherwise may be deleted.
+
  marshaling class MarshaledG4VHitsCollection (G4VHitsCollection* param) {
 
-     G4String collectionName;
+      G4String collectionName;
     //FIELDMARSHAL:
     {
 	G4String $ELEMENT;
@@ -52,29 +55,29 @@
 	// no need to declare size since $SIZE is already assigned in the MARSHAL field
 
     }
-    int __dummy949; // marshaling code for MSH_derivedclass
+    int __dummy621; // marshaling code for MSH_derivedclass
     //FIELDMARSHAL:
     {
 	if(0){}
 	else if(($THIS->GetName() == "calCollection") ){
-		G4THitsCollection<ExN04CalorimeterHit> *aObj949 = (G4THitsCollection<ExN04CalorimeterHit>*)$THIS;
-		MarshaledG4THitsCollection<ExN04CalorimeterHit> marChild(aObj949);
+		G4THitsCollection<ExN04CalorimeterHit> *aObj621 = (G4THitsCollection<ExN04CalorimeterHit>*)$THIS;
+		MarshaledG4THitsCollection<ExN04CalorimeterHit> marChild(aObj621);
 		EXTEND_BUFFER(marChild.getBufferSize());
 		memcpy($$,marChild.getBuffer(), marChild.getBufferSize());
 		$SIZE = marChild.getBufferSize();
 		$TYPE_CHOICE = 0;
 	}
 	else if( ($THIS->GetName() == "muonCollection") ){
-		G4THitsCollection<ExN04MuonHit> *aObj949 = (G4THitsCollection<ExN04MuonHit>*)$THIS;
-		MarshaledG4THitsCollection<ExN04MuonHit> marChild(aObj949);
+		G4THitsCollection<ExN04MuonHit> *aObj621 = (G4THitsCollection<ExN04MuonHit>*)$THIS;
+		MarshaledG4THitsCollection<ExN04MuonHit> marChild(aObj621);
 		EXTEND_BUFFER(marChild.getBufferSize());
 		memcpy($$,marChild.getBuffer(), marChild.getBufferSize());
 		$SIZE = marChild.getBufferSize();
 		$TYPE_CHOICE = 1;
 	}
 	else if( true ){
-		G4THitsCollection<ExN04TrackerHit> *aObj949 = (G4THitsCollection<ExN04TrackerHit>*)$THIS;
-		MarshaledG4THitsCollection<ExN04TrackerHit> marChild(aObj949);
+		G4THitsCollection<ExN04TrackerHit> *aObj621 = (G4THitsCollection<ExN04TrackerHit>*)$THIS;
+		MarshaledG4THitsCollection<ExN04TrackerHit> marChild(aObj621);
 		EXTEND_BUFFER(marChild.getBufferSize());
 		memcpy($$,marChild.getBuffer(), marChild.getBufferSize());
 		$SIZE = marChild.getBufferSize();
