@@ -5,9 +5,9 @@
 //      Created: 13.03.2002 V.Ivanchenko
 //---------------------------------------
 #verbose
-2
+0
 #events
-10
+10000
 //--------Proton_processes
 #particle
 proton
