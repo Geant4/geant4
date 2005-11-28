@@ -195,10 +195,11 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
    lv0.boost(-bst);
    G4ThreeVector p1 = lv1.vect();
    G4double ptot = p1.mag();
+   G4double ptotgev = ptot/GeV;
 
    // Sampling in CM system
    G4double phi  = G4UniformRand()*twopi;
-   G4double cost = 1. - 0.5*t/(ptot*ptot);
+   G4double cost = 1. - 0.5*t/(ptotgev*ptotgev);
    G4double sint = 0.0;
    if(cost > 1.0) cost = 1.0;
    else if(cost < -1.0) cost = -1.0;
