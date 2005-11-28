@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.24 2005-11-25 08:55:35 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.25 2005-11-28 18:00:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  G4ElasticHadrNucleusHE class 
@@ -39,7 +39,7 @@
 
 #include  "G4ElasticHadrNucleusHE.hh"
 #include  "Randomize.hh"
-#include  <strstream>
+#include  <sstream>
 #include  <iostream>
 #include  <fstream>
 #include  "G4ios.hh"
@@ -140,11 +140,12 @@ G4ElasticHadrNucleusHE::
 
 //  G4cout<<" Path : "<<sPath<<G4endl;
 
-  std::ostrstream sNameFile;
+  std::ostringstream sNameFile;
   sNameFile<<sPath<<sNameHdr<<"_"<<iNnucl<<".dat"<<std::ends;
 
 //       sNameFile<<"Elastic//"<<sNameHdr<<"_"<<iNnucl<<".dat"<<ends;
-  std::ofstream TestFile(sNameFile.str(), std::ios::out);
+  G4String str = sNameFile.str();
+  std::ofstream TestFile(str, std::ios::out);
   TestFile.setf(std::ios::scientific, std::ios::floatfield);
   TestFile.precision(9);
 
@@ -211,7 +212,7 @@ G4int G4ElasticHadrNucleusHE::ReadOfData(G4ParticleDefinition * aHadron,
     }
     else  sPath =       "./Elastic/";
 
-    std::ostrstream sNameFile;
+    std::ostringstream sNameFile;
     sNameFile<<sPath<<sNameHdr<<"_"<<iNnucl<<".dat"<<std::ends;
   
     if(getenv("HEElastic_debug"))
@@ -233,7 +234,8 @@ G4int G4ElasticHadrNucleusHE::ReadOfData(G4ParticleDefinition * aHadron,
 //    R1             = 0.74*std::pow(nuclMass,0.3333)*5.0;
     maxQ2          = GetQ2limit(R1);   //   MeV^2
 
-    std::ifstream TestFile(sNameFile.str(), std::ios::in);
+    G4String str = sNameFile.str();
+    std::ifstream TestFile(str, std::ios::in);
     TestFile.setf(std::ios::scientific);
 
     if(TestFile)
