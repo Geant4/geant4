@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ModelCommandsDrawByParticleID.cc,v 1.2 2005-11-23 20:24:15 tinslay Exp $
+// $Id: G4ModelCommandsDrawByParticleID.cc,v 1.3 2005-11-28 20:07:11 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -52,7 +52,7 @@ G4ModelCommandDrawByParticleIDSet::~G4ModelCommandDrawByParticleIDSet()
   delete fpCommand;
 } 
 
-void G4ModelCommandDrawByParticleIDSet::SetNewValue(G4UIcommand* cmd, G4String newValue) 
+void G4ModelCommandDrawByParticleIDSet::SetNewValue(G4UIcommand*, G4String newValue) 
 {
   G4String particle;
   G4String colour;
@@ -86,7 +86,7 @@ G4ModelCommandDrawByParticleIDSetRGBA::~G4ModelCommandDrawByParticleIDSetRGBA()
   delete fpCommand;
 } 
 
-void G4ModelCommandDrawByParticleIDSetRGBA::SetNewValue(G4UIcommand* cmd, G4String newValue) 
+void G4ModelCommandDrawByParticleIDSetRGBA::SetNewValue(G4UIcommand*, G4String newValue) 
 {
   G4String particle;
   G4double red(0), green(0), blue(0), alpha(0);
@@ -122,7 +122,7 @@ G4ModelCommandDrawByParticleIDSetDefault::~G4ModelCommandDrawByParticleIDSetDefa
   delete fpCommand;
 } 
 
-void G4ModelCommandDrawByParticleIDSetDefault::SetNewValue(G4UIcommand* cmd, G4String newValue) 
+void G4ModelCommandDrawByParticleIDSetDefault::SetNewValue(G4UIcommand*, G4String newValue) 
 {
   // Configure model as requested
   Model()->SetDefault(newValue);
@@ -150,7 +150,7 @@ G4ModelCommandDrawByParticleIDSetDefaultRGBA::~G4ModelCommandDrawByParticleIDSet
   delete fpCommand;
 } 
 
-void G4ModelCommandDrawByParticleIDSetDefaultRGBA::SetNewValue(G4UIcommand* cmd, G4String newValue) 
+void G4ModelCommandDrawByParticleIDSetDefaultRGBA::SetNewValue(G4UIcommand*, G4String newValue) 
 {
   G4double red(0), green(0), blue(0), alpha(0);
   std::istringstream is (newValue);

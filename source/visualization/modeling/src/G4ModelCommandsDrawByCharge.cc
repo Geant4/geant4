@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ModelCommandsDrawByCharge.cc,v 1.5 2005-11-23 20:24:15 tinslay Exp $
+// $Id: G4ModelCommandsDrawByCharge.cc,v 1.6 2005-11-28 20:07:11 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -53,7 +53,7 @@ G4ModelCommandDrawByChargeSet::~G4ModelCommandDrawByChargeSet()
   delete fpCommand;
 } 
 
-void G4ModelCommandDrawByChargeSet::SetNewValue(G4UIcommand* cmd, G4String newValue) 
+void G4ModelCommandDrawByChargeSet::SetNewValue(G4UIcommand*, G4String newValue) 
 {
   G4int charge(-999);
   G4String colour;
@@ -76,7 +76,7 @@ void G4ModelCommandDrawByChargeSet::SetNewValue(G4UIcommand* cmd, G4String newVa
     std::ostringstream o;
     o << "Invalid charge "<<charge;
     G4Exception
-      ("G4ModelCommandDrawByChargeSet::SetNewValue (G4UIcommand* cmd, G4String newValue) ",
+      ("G4ModelCommandDrawByChargeSet::SetNewValue (G4UIcommand*, G4String newValue) ",
        "InvalidCharge", FatalErrorInArgument, o.str().c_str());
   }
   
@@ -107,7 +107,7 @@ G4ModelCommandDrawByChargeSetRGBA::~G4ModelCommandDrawByChargeSetRGBA()
   delete fpCommand;
 } 
 
-void G4ModelCommandDrawByChargeSetRGBA::SetNewValue(G4UIcommand* cmd, G4String newValue) 
+void G4ModelCommandDrawByChargeSetRGBA::SetNewValue(G4UIcommand*, G4String newValue) 
 {
   G4int charge(-999);
   G4double red(0), green(0), blue(0), alpha(0);
@@ -130,7 +130,7 @@ void G4ModelCommandDrawByChargeSetRGBA::SetNewValue(G4UIcommand* cmd, G4String n
     std::ostringstream o;
     o << "Invalid charge "<<charge;
     G4Exception
-      ("G4ModelCommandDrawByChargeSetRGBA::SetNewValue (G4UIcommand* cmd, G4String newValue) ",
+      ("G4ModelCommandDrawByChargeSetRGBA::SetNewValue (G4UIcommand*, G4String newValue) ",
        "InvalidCharge", FatalErrorInArgument, o.str().c_str());
   }
 

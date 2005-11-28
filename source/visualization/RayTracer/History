@@ -1,4 +1,4 @@
-$Id: History,v 1.34 2005-11-18 23:07:04 allison Exp $
+$Id: History,v 1.35 2005-11-28 20:07:44 tinslay Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+28th November 2005  Jane Tinslay
+- Remove names of unused parameters to stop compiler warnings
 
 18th November 2005  John Allison  (raytracer-V07-01-06)
 - Merged in raytracer-V07-01-04 - see below.

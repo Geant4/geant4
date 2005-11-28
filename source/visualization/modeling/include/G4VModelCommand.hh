@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VModelCommand.hh,v 1.1 2005-11-21 05:44:44 tinslay Exp $
+// $Id: G4VModelCommand.hh,v 1.2 2005-11-28 20:07:11 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -71,7 +71,7 @@ G4VModelCommand<T>::~G4VModelCommand() {}
 
 template <typename T>
 G4String 
-G4VModelCommand<T>::GetCurrentValue(G4UIcommand* command) 
+G4VModelCommand<T>::GetCurrentValue(G4UIcommand*) 
 {
   return "";
 }

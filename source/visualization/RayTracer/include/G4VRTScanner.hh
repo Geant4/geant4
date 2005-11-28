@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRTScanner.hh,v 1.2 2005-07-17 13:59:24 allison Exp $
+// $Id: G4VRTScanner.hh,v 1.3 2005-11-28 20:07:44 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -59,7 +59,7 @@ public: // with description
   // last valid coordinate.
 
   virtual void Draw
-  (unsigned char red, unsigned char green, unsigned char blue,
+  (unsigned char, unsigned char, unsigned char,
    G4RayTracer*) {}
   // Draw coloured square at current position.
 
