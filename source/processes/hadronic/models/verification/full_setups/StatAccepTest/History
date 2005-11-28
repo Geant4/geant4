@@ -1,6 +1,15 @@
                  History file
                  ------------
 
+28-Nov-2005 - A.Ribon (statAccepTest-V07-01-06)
+- Added in dirObservables two scripts, unpack.py and
+  pvalues.py, and a kumac, pvalues.kumac . They are
+  useful to, respectively, unpack the tar-balls we 
+  get from the Grid jobs, and to monitor the overall
+  p-values (per each Physics List, and per each
+  statistical tests).
+
+
 24-Nov-2005 - A.Ribon (statAccepTest-V07-01-05)
 - Fixed an ordering problem in the main due to the new
   dynamic particles. Added also statistical errors
