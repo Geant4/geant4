@@ -124,14 +124,14 @@ class MarshaledObj {
     char* msh_field_begin;
 
     // msh_size contains the total size of msh_buffer. i.e.,
-    int msh_size;
+    size_t msh_size;
 
     // msh_cursor points to the next field to be marshaled.
     char *msh_cursor;
 
     // msh_extent is the total allocated space for msh_buffer.
     // msh_extent is always >= msh_size
-    int msh_extent;
+    size_t msh_extent;
 
     bool msh_isUnmarshalDone; //Is unmarshaling done yet?
 
@@ -143,7 +143,7 @@ class MarshaledObj {
 		}
     }
 
-	void resizeBuffer(int new_size ) {
+	void resizeBuffer(size_t new_size ) {
 		int msh_displacement = msh_cursor - msh_buffer;
 		int field_displacement = msh_field_begin - msh_buffer;
 
