@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: GFlashShowerModelMessenger.cc,v 1.4 2005-10-04 09:08:33 gcosmo Exp $
+// $Id: GFlashShowerModelMessenger.cc,v 1.5 2005-11-28 18:09:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,7 +45,7 @@
 #include "globals.hh"
 
 #include <iomanip>                
-#include <strstream>
+#include <sstream>
 
 GFlashShowerModelMessenger::
 GFlashShowerModelMessenger(GFlashShowerModel * aModel)
@@ -141,33 +141,32 @@ SetNewValue(G4UIcommand * command,G4String newValues)
 G4String GFlashShowerModelMessenger::GetCurrentValue(G4UIcommand * command)
 {
   G4String returnValue('\0');
-  char line[255];
-  std::ostrstream os(line,255);
+  std::ostringstream os;
   
   if( command == FlagCmd ) { 
     os << "/GFlash/flag " << myModel->GetFlagParamType()  << '\0';
-    returnValue = G4String(line);
+    returnValue = G4String(os.str());
   }
   
   else if( command == EkillCmd ) {    
     os << "/GFlash/Ekill "
        << myModel->PBound->GetEneToKill(*G4Electron::ElectronDefinition())/GeV
        << " GeV" << '\0';
-    returnValue = G4String(line);
+    returnValue = G4String(os.str());
   }
   
   else if( command == EminCmd ) {    
     os << "/GFlash/Emin "
        << myModel->PBound->GetMinEneToParametrise(*G4Electron::ElectronDefinition())/GeV
        << " GeV" << '\0';
-    returnValue = G4String(line);  
+    returnValue = G4String(os.str());  
   }
   
   else if( command == EmaxCmd ) {
     os << "/GFlash/Emax "
        << myModel->PBound->GetMaxEneToParametrise(*G4Electron::ElectronDefinition())/GeV
        << " GeV" << '\0';
-    returnValue = G4String(line);
+    returnValue = G4String(os.str());
   }
   
   return returnValue;
