@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: version.hh,v 1.2 2005-10-26 05:52:36 kmura Exp $
+// $Id: G4Version.hh,v 1.1 2005-11-28 10:59:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Version information
@@ -30,8 +30,8 @@
 // 26.09.05 K.Murakami  - Created
 //
 
-#ifndef VERSION_HH
-#define VERSION_HH
+#ifndef G4VERSION_HH
+#define G4VERSION_HH
 
 // Numbering rule for "G4VERSION_NUMBER":
 // - The number is consecutive (i.e. 711) as an integer.
