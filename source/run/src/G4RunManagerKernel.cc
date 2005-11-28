@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.32 2005-11-22 19:54:53 asaim Exp $
+// $Id: G4RunManagerKernel.cc,v 1.33 2005-11-28 10:57:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,8 +46,8 @@
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4Version.hh"
 #include "G4ios.hh"
-#include "version.hh"
 #include <vector>
 
 G4RunManagerKernel* G4RunManagerKernel::fRunManagerKernel = 0;
