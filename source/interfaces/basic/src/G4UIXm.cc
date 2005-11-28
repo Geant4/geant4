@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIXm.cc,v 1.12 2004-11-21 16:56:34 gbarrand Exp $
+// $Id: G4UIXm.cc,v 1.13 2005-11-28 18:20:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -31,7 +31,6 @@
 #ifdef G4UI_BUILD_XM_SESSION
 
 #include "G4Types.hh"
-#include <strstream>
 
 #include <string.h>
 

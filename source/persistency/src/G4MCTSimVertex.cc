@@ -25,7 +25,7 @@
 // ====================================================================
 
 #include "globals.hh"
-#include <strstream>
+#include <sstream>
 #include <iomanip>
 #include "G4ios.hh"
 #include "G4MCTSimParticle.hh"
@@ -77,12 +77,11 @@ G4MCTSimVertex::~G4MCTSimVertex()
 void G4MCTSimVertex::Print(std::ostream& ostr) const
 //////////////////////////////////////////////////
 {
-  char st[20];
-  std::ostrstream os(st,20);
+  std::ostringstream os;
   char cq=' ';
   if(storeFlag) cq='+';
   os << cq << id << '\0';
-  std::string sid(st);
+  std::string sid(os.str());
   
   ostr.unsetf(std::ios::fixed);
   ostr.setf(std::ios::scientific|std::ios::right|std::ios::showpoint);
