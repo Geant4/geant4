@@ -1,4 +1,4 @@
-$Id: History,v 1.187 2005-11-16 15:23:02 maire Exp $
+$Id: History,v 1.188 2005-11-29 07:58:42 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 November 05: V.Ivant (emstand-V07-01-24)
+- Do not use G4Alpha inside G4BraggIonModel to avoid clash with 
+  new particle design
      
 16 November 05: mma (emstand-V07-01-23)
 - replace RandBit() by G4UniformRand() in G4GammaConversion52 and

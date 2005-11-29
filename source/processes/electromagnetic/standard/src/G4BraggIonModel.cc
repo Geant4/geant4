@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc,v 1.9 2005-10-14 06:03:41 vnivanch Exp $
+// $Id: G4BraggIonModel.cc,v 1.10 2005-11-29 07:58:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,6 +36,7 @@
 //
 // Modifications:
 // 11-05-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 29-11-05 Do not use G4Alpha class (V.Ivantchenko)
 //
 
 // Class Description:
@@ -53,7 +54,6 @@
 #include "G4BraggIonModel.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
-#include "G4Alpha.hh"
 #include "G4ParticleChangeForLoss.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -70,7 +70,7 @@ G4BraggIonModel::G4BraggIonModel(const G4ParticleDefinition* p, const G4String& 
   highKinEnergy    = 2.0*MeV;
   lowKinEnergy     = 0.0*MeV;
   lowestKinEnergy  = 1.0*keV;
-  HeMass           = G4Alpha::Alpha()->GetPDGMass();
+  HeMass           = 3.72742*GeV;
   rateMassHe2p     = HeMass/proton_mass_c2;
   massFactor       = 1000.*amu_c2/HeMass;
   theZieglerFactor = eV*cm2*1.0e-15;
