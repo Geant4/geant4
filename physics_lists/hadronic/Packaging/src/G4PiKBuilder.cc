@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PiKBuilder.cc,v 1.2 2005-11-25 15:38:50 gunter Exp $
+// $Id: G4PiKBuilder.cc,v 1.3 2005-11-29 16:55:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -40,7 +40,22 @@
 #include "G4ProcessManager.hh"
 
 G4PiKBuilder::
-G4PiKBuilder(): wasActivated(false) {}
+G4PiKBuilder(): wasActivated(false) 
+{  
+  thePionPlusElasticProcess=new G4HadronElasticProcess;
+  thePionMinusElasticProcess=new G4HadronElasticProcess;
+  theKaonPlusElasticProcess=new G4HadronElasticProcess;
+  theKaonMinusElasticProcess=new G4HadronElasticProcess;
+  theKaonZeroLElasticProcess=new G4HadronElasticProcess;
+  theKaonZeroSElasticProcess=new G4HadronElasticProcess;
+
+  thePionPlusInelastic=new G4PionPlusInelasticProcess;
+  thePionMinusInelastic=new G4PionMinusInelasticProcess;
+  theKaonPlusInelastic=new G4KaonPlusInelasticProcess;
+  theKaonMinusInelastic=new G4KaonMinusInelasticProcess;
+  theKaonZeroLInelastic=new G4KaonZeroLInelasticProcess;
+  theKaonZeroSInelastic=new G4KaonZeroSInelasticProcess;
+}
 
 G4PiKBuilder::
 ~G4PiKBuilder(){
@@ -72,39 +87,45 @@ void G4PiKBuilder::
 Build()
 {
   wasActivated = true;
+
   std::vector<G4VPiKBuilder *>::iterator i;
   for(i=theModelCollections.begin(); i!=theModelCollections.end(); i++)
   {
-    (*i)->Build(thePionPlusElasticProcess=new G4HadronElasticProcess);
-    (*i)->Build(thePionMinusElasticProcess=new G4HadronElasticProcess);
-    (*i)->Build(theKaonPlusElasticProcess=new G4HadronElasticProcess);
-    (*i)->Build(theKaonMinusElasticProcess=new G4HadronElasticProcess);
-    (*i)->Build(theKaonZeroLElasticProcess=new G4HadronElasticProcess);
-    (*i)->Build(theKaonZeroSElasticProcess=new G4HadronElasticProcess);
+    (*i)->Build(thePionPlusElasticProcess);
+    (*i)->Build(thePionMinusElasticProcess);
+    (*i)->Build(theKaonPlusElasticProcess);
+    (*i)->Build(theKaonMinusElasticProcess);
+    (*i)->Build(theKaonZeroLElasticProcess);
+    (*i)->Build(theKaonZeroSElasticProcess);
 
-    (*i)->Build(thePionPlusInelastic=new G4PionPlusInelasticProcess);
-    (*i)->Build(thePionMinusInelastic=new G4PionMinusInelasticProcess);
-    (*i)->Build(theKaonPlusInelastic=new G4KaonPlusInelasticProcess);
-    (*i)->Build(theKaonMinusInelastic=new G4KaonMinusInelasticProcess);
-    (*i)->Build(theKaonZeroLInelastic=new G4KaonZeroLInelasticProcess);
-    (*i)->Build(theKaonZeroSInelastic=new G4KaonZeroSInelasticProcess);
+    (*i)->Build(thePionPlusInelastic);
+    (*i)->Build(thePionMinusInelastic);
+    (*i)->Build(theKaonPlusInelastic);
+    (*i)->Build(theKaonMinusInelastic);
+    (*i)->Build(theKaonZeroLInelastic);
+    (*i)->Build(theKaonZeroSInelastic);
   }
   G4ProcessManager * theProcMan;
   theProcMan = G4PionPlus::PionPlus()->GetProcessManager();
   theProcMan->AddDiscreteProcess(thePionPlusElasticProcess);
   theProcMan->AddDiscreteProcess(thePionPlusInelastic);
+  
   theProcMan = G4PionMinus::PionMinus()->GetProcessManager();
   theProcMan->AddDiscreteProcess(thePionMinusElasticProcess);
   theProcMan->AddDiscreteProcess(thePionMinusInelastic);
+  
   theProcMan = G4KaonPlus::KaonPlus()->GetProcessManager();
   theProcMan->AddDiscreteProcess(theKaonPlusElasticProcess);
   theProcMan->AddDiscreteProcess(theKaonPlusInelastic);
+  
   theProcMan = G4KaonMinus::KaonMinus()->GetProcessManager();
   theProcMan->AddDiscreteProcess(theKaonMinusElasticProcess);
   theProcMan->AddDiscreteProcess(theKaonMinusInelastic);
+  
   theProcMan = G4KaonZeroLong::KaonZeroLong()->GetProcessManager();
   theProcMan->AddDiscreteProcess(theKaonZeroLElasticProcess);
   theProcMan->AddDiscreteProcess(theKaonZeroLInelastic);
+  
   theProcMan = G4KaonZeroShort::KaonZeroShort()->GetProcessManager();
   theProcMan->AddDiscreteProcess(theKaonZeroSElasticProcess);
   theProcMan->AddDiscreteProcess(theKaonZeroSInelastic);
