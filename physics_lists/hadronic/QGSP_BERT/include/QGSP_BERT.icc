@@ -20,6 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: QGSP_BERT.icc,v 1.3 2005-11-29 17:02:23 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   QGSP_BERT
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 25.11.2005 G.Folger: migration to non static particles
+//
+//----------------------------------------------------------------------------
+//
 
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
@@ -36,7 +50,6 @@
 
 #include "GeneralPhysics.hh"
 #include "EMPhysics.hh"
-#include "MuonPhysics.hh"
 #include "IonPhysics.hh"
 
 #include "G4DataQuestionaire.hh"
@@ -44,11 +57,9 @@
 
 template<class T> TQGSP_BERT<T>::TQGSP_BERT():  T()
 {
-  // default cut value  (1.0mm) 
-  // defaultCutValue = 1.0*mm;
 
   G4DataQuestionaire it(photon);
-  G4cout << "You are using the simulation engine: QGSP_BERT 1.2"<<G4endl;
+  G4cout << "You are using the simulation engine: QGSP_BERT 3.0-beta-0"<<G4endl;
   G4cout <<G4endl<<G4endl;
 
   this->defaultCutValue = 0.7*mm;  
@@ -60,15 +71,11 @@ template<class T> TQGSP_BERT<T>::TQGSP_BERT():  T()
   // EM Physics
   this->RegisterPhysics( new EMPhysics("standard EM"));
 
-  // Muon Physics
-  this->RegisterPhysics(  new MuonPhysics("muon"));
-
    // Hadron Physics
-  this->RegisterPhysics(  new HadronPhysicsQGSP_BERT("hadron"));
+  this->RegisterPhysics( new HadronPhysicsQGSP_BERT("hadron"));
 
   // Ion Physics
   this->RegisterPhysics( new IonPhysics("ion"));
-
 
 }
 

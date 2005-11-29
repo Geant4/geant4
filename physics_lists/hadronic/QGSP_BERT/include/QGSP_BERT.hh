@@ -20,6 +20,19 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: QGSP_BERT.hh,v 1.2 2005-11-29 17:02:23 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   QGSP_BERT
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
 #ifndef TQGSP_BERT_h
 #define TQGSP_BERT_h 1
 
@@ -41,6 +54,7 @@ public:
 private:
   enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
 };
+
 #include "QGSP_BERT.icc"
 typedef TQGSP_BERT<G4VModularPhysicsList> QGSP_BERT;
 

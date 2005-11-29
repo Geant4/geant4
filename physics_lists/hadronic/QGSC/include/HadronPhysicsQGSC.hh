@@ -20,6 +20,16 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//---------------------------------------------------------------------------
+//
+// ClassName:   HadronPhysicsQGSC
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 23.11.2005 G.Folger: don't  keep processes as data members, but new these
+//
+//----------------------------------------------------------------------------
 #ifndef HadronPhysicsQGSC_h
 #define HadronPhysicsQGSC_h 1
 
@@ -27,7 +37,6 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4HadronQEDBuilder.hh"
 #include "G4StoppingHadronBuilder.hh"
 #include "G4MiscLHEPBuilder.hh"
 
@@ -54,21 +63,21 @@ class HadronPhysicsQGSC : public G4VPhysicsConstructor
     virtual void ConstructProcess();
 
   private:
-    G4NeutronBuilder theNeutrons;
-    G4LEPNeutronBuilder theLEPNeutron;
-    G4QGSCNeutronBuilder theQGSCNeutron;
+    void CreateModels();
+    G4NeutronBuilder * theNeutrons;
+    G4LEPNeutronBuilder * theLEPNeutron;
+    G4QGSCNeutronBuilder * theQGSCNeutron;
     
-    G4PiKBuilder thePiK;
-    G4LEPPiKBuilder theLEPPiK;
-    G4QGSCPiKBuilder theQGSCPiK;
+    G4PiKBuilder * thePiK;
+    G4LEPPiKBuilder * theLEPPiK;
+    G4QGSCPiKBuilder * theQGSCPiK;
     
-    G4ProtonBuilder thePro;
-    G4LEPProtonBuilder theLEPPro;
-    G4QGSCProtonBuilder theQGSCPro;    
+    G4ProtonBuilder * thePro;
+    G4LEPProtonBuilder * theLEPPro;
+    G4QGSCProtonBuilder * theQGSCPro;    
     
-    G4MiscLHEPBuilder theMiscLHEP;
-    G4StoppingHadronBuilder theStoppingHadron;
-    G4HadronQEDBuilder theHadronQED;
+    G4MiscLHEPBuilder * theMiscLHEP;
+    G4StoppingHadronBuilder * theStoppingHadron;
 };
 
 // 2002 by J.P. Wellisch

@@ -20,6 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: FTFP.icc,v 1.3 2005-11-29 17:00:07 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 28.11.2005 G.Folger: migration to non static particles
+//
+//----------------------------------------------------------------------------
+//
 
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
@@ -36,7 +50,6 @@
 
 #include "GeneralPhysics.hh"
 #include "EMPhysics.hh"
-#include "MuonPhysics.hh"
 #include "IonPhysics.hh"
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsFTFP.hh"
@@ -56,9 +69,6 @@ template<class T> TFTFP<T>::TFTFP():  T()
 
   // EM Physics
   this->RegisterPhysics( new EMPhysics("standard EM"));
-
-  // Muon Physics
-  this->RegisterPhysics(  new MuonPhysics("muon"));
 
    // Hadron Physics
   this->RegisterPhysics(  new HadronPhysicsFTFP("hadron"));
