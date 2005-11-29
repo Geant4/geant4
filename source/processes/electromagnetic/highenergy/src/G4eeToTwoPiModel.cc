@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToTwoPiModel.cc,v 1.2 2004-12-01 18:13:44 vnivanch Exp $
+// $Id: G4eeToTwoPiModel.cc,v 1.3 2005-11-29 08:13:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -85,7 +85,7 @@ G4PhysicsVector* G4eeToTwoPiModel::PhysicsVector(G4double emin,
 {
   G4double tmin = max(emin, 2.0*massPi);
   G4double tmax = max(tmin, emax);
-  G4int nbins = (G4int)((tmax - tmin)/MeV);
+  G4int nbins = (G4int)((tmax - tmin)/(5.*MeV));
   G4PhysicsVector* v = new G4PhysicsLinearVector(emin,emax,nbins);
   return v;
 }
