@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.74 2005-11-23 20:25:22 tinslay Exp $
+// $Id: G4VisManager.cc,v 1.75 2005-11-29 22:23:01 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1160,4 +1160,14 @@ G4bool G4VisManager::IsValidView () {
   }
   if (isValid) SetConcreteInstance(this);
   return isValid;
+}
+
+void
+G4VisManager::RegisterModelFactories() 
+{
+  if (fVerbosity >= warnings) {
+    G4cout<<"No model factories registered with G4VisManager."<<G4endl;
+    G4cout<<"G4VisManager::RegisterModelFactories should be overridden in derived"<<G4endl;
+    G4cout<<"class. See G4VisExecutive for an example."<<G4endl;
+  }
 }

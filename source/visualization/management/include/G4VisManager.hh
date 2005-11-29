@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.44 2005-11-23 20:25:22 tinslay Exp $
+// $Id: G4VisManager.hh,v 1.45 2005-11-29 22:23:01 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -354,7 +354,7 @@ protected:
   // The sub-class must implement and make successive calls to
   // RegisterGraphicsSystem.
 
-  virtual void RegisterModelFactories() = 0;
+  virtual void RegisterModelFactories();
   // Sub-class must register desired models
 
   void RegisterMessengers              ();   // Command messengers.
