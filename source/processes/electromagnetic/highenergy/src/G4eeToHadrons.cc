@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadrons.cc,v 1.5 2005-11-23 19:17:26 vnivanch Exp $
+// $Id: G4eeToHadrons.cc,v 1.6 2005-11-29 08:15:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -56,9 +56,12 @@ using namespace std;
 
 G4eeToHadrons::G4eeToHadrons(const G4String& name)
   : G4VEmProcess(name),
-    csFactor(1.0),
+    multimodel(0),
+    csFactor(1.0), 
     isInitialised(false)
-{}
+{
+    SetVerboseLevel(1);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -81,7 +84,7 @@ void G4eeToHadrons::InitialiseProcess(const G4ParticleDefinition*)
 
     multimodel = new G4eeToHadronsMultiModel(verboseLevel);
     if(csFactor > 1.0) multimodel->SetCrossSecFactor(csFactor);
-    AddEmModel(0, multimodel);
+    AddEmModel(1, multimodel);
   }
 }
 
