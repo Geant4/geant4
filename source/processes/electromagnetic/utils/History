@@ -1,4 +1,4 @@
-$Id: History,v 1.217 2005-11-26 16:59:26 vnivanch Exp $
+$Id: History,v 1.218 2005-11-29 08:06:32 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 November 05: V.Ivant (emutils-V07-01-12)
+- G4EmModelmanager - add protection for arithmetic operations with cut=DBL_MAX
 
 26 November 05: V.Ivant (emutils-V07-01-11)
 - G4EmCalculator - upgrade printout

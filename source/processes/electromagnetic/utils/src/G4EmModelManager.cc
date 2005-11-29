@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.30 2005-10-25 11:38:15 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.31 2005-11-29 08:06:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -52,6 +52,7 @@
 // 24-03-05 Remove check or IsInCharge (V.Ivanchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 18-08-05 Fix cut for e+e- pair production (V.Ivanchenko)
+// 29-11-05 Add protection for arithmetic operations with cut=DBL_MAX (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -353,6 +354,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
     const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
     const G4Material* material = couple->GetMaterial();
     const G4ProductionCuts* pcuts = couple->GetProductionCuts();
+ 
     G4int reg = nRegions;
     do {reg--;} while (reg>0 && pcuts != (set[reg]->GetProductionCuts()));
     idxOfRegionModels[i] = reg;
@@ -365,15 +367,15 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
              << G4endl;
     }
 
-    G4double cut = 0.0;
-    G4double subcut = 0.0;
+    G4double cut = DBL_MAX;
+    G4double subcut = DBL_MAX;
     if(secondaryParticle) {
       size_t idx = 1;
       if( secondaryParticle == G4Gamma::Gamma() ) idx = 0;
       cut = (*theCoupleTable->GetEnergyCutsVector(idx))[i];
-      if( secondaryParticle == G4Positron::Positron() )
+      if( secondaryParticle == G4Positron::Positron() && cut < DBL_MAX )
         cut += (*theCoupleTable->GetEnergyCutsVector(2))[i] + 2.0*electron_mass_c2;
-      subcut = minSubRange*cut;
+      if( cut < DBL_MAX ) subcut = minSubRange*cut;
     }
 
     G4int nm = setOfRegionModels[reg]->NumberOfModels();
