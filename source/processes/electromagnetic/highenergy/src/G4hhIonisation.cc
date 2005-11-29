@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hhIonisation.cc,v 1.1 2005-10-30 15:40:05 vnivanch Exp $
+// $Id: G4hhIonisation.cc,v 1.2 2005-11-29 08:13:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -48,6 +48,7 @@
 #include "G4UniversalFluctuation.hh"
 #include "G4BohrFluctuations.hh"
 #include "G4UnitsTable.hh"
+#include "G4Electron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -62,7 +63,7 @@ G4hhIonisation::G4hhIonisation(const G4String& name)
   SetLambdaBinning(120);
   SetMinKinEnergy(minKinEnergy);
   SetMaxKinEnergy(100.0*TeV);
-  SetVerboseLevel(0);
+  SetVerboseLevel(2);
   mass = 0.0;
   ratio = 0.0;
 }
@@ -85,24 +86,30 @@ void G4hhIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
 		   << GetProcessName() << G4endl;
 
   SetBaseParticle(0);
+  SetSecondaryParticle(G4Electron::Electron());
   mass  = theParticle->GetPDGMass();
   ratio = electron_mass_c2/mass;
   eth = 2.0*MeV*mass/proton_mass_c2;
   flucModel = new G4BohrFluctuations();
 
+  G4int nm = 1;
+
   if(eth > minKinEnergy) {
     G4VEmModel* em = new G4BraggNoDeltaModel();
     em->SetLowEnergyLimit(minKinEnergy);
     em->SetHighEnergyLimit(eth);
-    AddEmModel(1, em, flucModel);
+    AddEmModel(nm, em, flucModel);
+    nm++;
   }
 
   G4VEmModel* em1 = new G4BetheBlochNoDeltaModel();
   em1->SetLowEnergyLimit(std::max(eth,minKinEnergy));
   em1->SetHighEnergyLimit(100.0*TeV);
-  AddEmModel(2, em1, flucModel);
+  AddEmModel(nm, em1, flucModel);
 
   SetStepLimits(0.1, 0.1*mm);
+
+  G4cout << "G4hhIonisation is initialised: nm= " << nm << G4endl;
 
   isInitialised = true;
 }
