@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EMBuilder.hh,v 1.2 2005-11-11 11:13:07 vnivanch Exp $
+// $Id: G4EMBuilder.hh,v 1.3 2005-11-29 16:53:35 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -41,8 +41,8 @@
 #include "G4EMTailorer.hh"
 #include "globals.hh"
 
-class G4SynchrotronRadiation;
-class G4ElectroNuclearBuilder;
+#include "G4SynchrotronRadiation.hh"
+#include "G4ElectroNuclearBuilder.hh"
 
 class G4EMBuilder
 {
