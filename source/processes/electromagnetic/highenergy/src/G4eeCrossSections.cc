@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeCrossSections.cc,v 1.3 2005-11-29 08:16:26 vnivanch Exp $
+// $Id: G4eeCrossSections.cc,v 1.4 2005-11-29 08:20:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -234,7 +234,7 @@ G4double G4eeCrossSections::Width3p(G4double s, G4double mres,
 G4double G4eeCrossSections::PhaseSpace3p(G4double e) 
 {
   
-  G4bool b;
+  //  G4bool b;
   //  G4double x = ph3p->GetValue(e, b);
   G4double x = 1.0; 
   G4double emev = e/MeV;
