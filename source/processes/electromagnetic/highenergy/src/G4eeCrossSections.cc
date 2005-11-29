@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeCrossSections.cc,v 1.4 2005-11-29 08:20:20 vnivanch Exp $
+// $Id: G4eeCrossSections.cc,v 1.5 2005-11-29 08:21:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -157,11 +157,12 @@ void G4eeCrossSections::Initialise()
   aomsigg = 0.;
   phomsigg = 0.;
 
-  G4double emin, emax;
   G4String w0, w1, w2;
-  G4int nbins;
   ph3p = 0;
+
   /*
+  G4double emin, emax;
+  G4int nbins;
   const G4String fname = "wrhopi.wid"; 
   ifstream  fi(fname.c_str()); 
   fi >> w0 >> nbins >> w1 >> emin >> w2 >> emax;
