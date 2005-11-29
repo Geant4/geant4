@@ -37,7 +37,6 @@
 // 24-Nov-05 V.Ivanchenko sample cost in center of mass reference system
 //
 
-#include <cfloat>
 #include "G4LElastic.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
@@ -149,7 +148,6 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
    G4double t1 = -std::log(ran)/bb;
    G4double t2 = -std::log(ran)/dd;
    if (verboseLevel > 1) {
-      G4cout << "std::log(FLT_MAX)=" << std::log(std::numeric_limits<float>::max()) << G4endl;
       G4cout << "t1,Fctcos " << t1 << " " << Fctcos(t1, aa, bb, cc, dd, rr) << 
               G4endl;
       G4cout << "t2,Fctcos " << t2 << " " << Fctcos(t2, aa, bb, cc, dd, rr) << 
