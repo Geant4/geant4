@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorMessenger.hh,v 1.4 2005-01-14 11:42:13 grichine Exp $
+// $Id: Em10DetectorMessenger.hh,v 1.5 2005-11-29 14:42:22 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,9 +78,9 @@ class Em10DetectorMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* MagFieldCmd;
     G4UIcmdWithoutParameter*   UpdateCmd;
 
-    G4UIcmdWithADoubleAndUnit* ElectronCutCmd;
-    G4UIcmdWithADoubleAndUnit* PositronCutCmd;
-    G4UIcmdWithADoubleAndUnit* GammaCutCmd;
+  // G4UIcmdWithADoubleAndUnit* ElectronCutCmd;
+  // G4UIcmdWithADoubleAndUnit* PositronCutCmd;
+  // G4UIcmdWithADoubleAndUnit* GammaCutCmd;
 
 
 };

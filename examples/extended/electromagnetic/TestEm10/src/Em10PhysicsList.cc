@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.cc,v 1.13 2005-10-13 13:12:33 grichine Exp $
+// $Id: Em10PhysicsList.cc,v 1.14 2005-11-29 14:42:22 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,6 +45,14 @@
 
 #include "G4FastSimulationManagerProcess.hh"
 
+#include "G4Region.hh"
+#include "G4RegionStore.hh"
+
+
+#include "G4ProductionCuts.hh"
+
+
+
 
 /////////////////////////////////////////////////////////////
 //
@@ -61,13 +69,23 @@ Em10PhysicsList::Em10PhysicsList(Em10DetectorConstruction* p)
      theeplusBremsstrahlung(0),
      theeplusAnnihilation(0),
      theeminusStepCut(0),            theeplusStepCut(0),
-     fMinElectronEnergy(1.0*keV),fMinGammaEnergy(1.0*keV)
+     fMinElectronEnergy(1.0*keV),fMinGammaEnergy(1.0*keV),
+     fRadiatorCuts(0),fDetectorCuts(0)
 {
   pDet = p;
 
-  defaultCutValue = 1.000*mm ;
-  cutForGamma     = defaultCutValue ;
-  cutForElectron  = 100*defaultCutValue ;
+  // world cuts
+
+  defaultCutValue = 1.000*mm;
+  cutForGamma     = defaultCutValue;
+  cutForElectron  = defaultCutValue;
+  cutForPositron  = defaultCutValue;
+
+  // Region cuts
+
+  fGammaCut    = defaultCutValue;
+  fElectronCut = defaultCutValue;
+  fPositronCut = defaultCutValue;
 
   SetVerboseLevel(1);
   physicsListMessenger = new Em10PhysicsListMessenger(this);
@@ -222,10 +240,6 @@ void Em10PhysicsList::ConstructProcess()
 #include "G4XTRTransparentRegRadModel.hh"
 
 #include "Em10StepCut.hh"
-
-#include "G4Region.hh"
-#include "G4RegionStore.hh"
-
 
 
 void Em10PhysicsList::ConstructEM()
@@ -568,20 +582,32 @@ void Em10PhysicsList::AddParameterisation()
 
 void Em10PhysicsList::SetCuts()
 {
-  if (verboseLevel >0)
-  {
-    G4cout << "Em10PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }  
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
  
-  SetCutValue(cutForGamma,"gamma");
+  SetCutValue(cutForGamma, "gamma", "DefaultRegionForTheWorld");
+  SetCutValue(cutForElectron, "e-", "DefaultRegionForTheWorld");
+  SetCutValue(cutForPositron, "e+", "DefaultRegionForTheWorld");
 
-  SetCutValue(cutForElectron,"e-");
-  SetCutValue(cutForElectron,"e+");
+  if (verboseLevel > 0)
+  {
+    G4cout << "Em10PhysicsList::SetCuts:";
+    G4cout << "CutLength for e-, e+ and gamma is: " 
+           << G4BestUnit(defaultCutValue,"Length") << G4endl;
+  }
+  
+  if( !fRadiatorCuts ) SetRadiatorCuts();
 
-  if (verboseLevel>1)     DumpCutValuesTable();
+  G4Region* region = (G4RegionStore::GetInstance())->GetRegion("XTRradiator");
+  region->SetProductionCuts(fRadiatorCuts);
+  G4cout << "Radiator cuts are set" << G4endl;
+
+if( !fDetectorCuts ) SetDetectorCuts();
+  region = (G4RegionStore::GetInstance())->GetRegion("XTRdEdxDetector");
+  region->SetProductionCuts(fDetectorCuts);
+  G4cout << "Detector cuts are set" << G4endl;
+
+  if (verboseLevel > 1)     DumpCutValuesTable();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -607,3 +633,33 @@ void Em10PhysicsList::SetMaxStep(G4double step)
   G4cout << G4endl;
 }
 
+/////////////////////////////////////////////////////
+
+void Em10PhysicsList::SetRadiatorCuts()
+{
+  if( !fRadiatorCuts ) fRadiatorCuts = new G4ProductionCuts();
+
+  fRadiatorCuts->SetProductionCut(fGammaCut, idxG4GammaCut);
+  fRadiatorCuts->SetProductionCut(fElectronCut, idxG4ElectronCut);
+  fRadiatorCuts->SetProductionCut(fPositronCut, idxG4PositronCut);
+
+  G4cout<<"Radiator gamma cut    = "<<fGammaCut/mm<<" mm"<<G4endl;
+  G4cout<<"Radiator electron cut = "<<fElectronCut/mm<<" mm"<<G4endl;
+  G4cout<<"Radiator positron cut = "<<fPositronCut/mm<<" mm"<<G4endl;
+}
+
+/////////////////////////////////////////////////////////////
+
+void Em10PhysicsList::SetDetectorCuts()
+{
+  if( !fDetectorCuts ) fDetectorCuts = new G4ProductionCuts();
+
+  fDetectorCuts->SetProductionCut(fGammaCut, idxG4GammaCut);
+  fDetectorCuts->SetProductionCut(fElectronCut, idxG4ElectronCut);
+  fDetectorCuts->SetProductionCut(fPositronCut, idxG4PositronCut);
+
+  G4cout<<"Detector gamma cut    = "<<fGammaCut/mm<<" mm"<<G4endl;
+  G4cout<<"Detector electron cut = "<<fElectronCut/mm<<" mm"<<G4endl;
+  G4cout<<"Detector positron cut = "<<fPositronCut/mm<<" mm"<<G4endl;
+
+}

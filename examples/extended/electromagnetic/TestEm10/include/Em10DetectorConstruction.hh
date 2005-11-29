@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.hh,v 1.7 2005-10-13 13:12:33 grichine Exp $
+// $Id: Em10DetectorConstruction.hh,v 1.8 2005-11-29 14:42:22 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,7 +53,7 @@ class Em10DetectorConstruction : public G4VUserDetectorConstruction
    ~Em10DetectorConstruction();
 
   public:
-     void ParametrisationModel ();     
+       
      
      void SetAbsorberMaterial (G4String);     
      void SetAbsorberThickness(G4double);     
@@ -73,9 +73,9 @@ class Em10DetectorConstruction : public G4VUserDetectorConstruction
      void SetWorldSizeZ(G4double);
      void SetWorldSizeR(G4double);
 
-     void SetGammaCut(G4double    cut){fGammaCut    = cut;};
-     void SetElectronCut(G4double cut){fElectronCut = cut;};
-     void SetPositronCut(G4double cut){fPositronCut = cut;};
+  //  void SetGammaCut(G4double    cut){fGammaCut    = cut;};
+  // void SetElectronCut(G4double cut){fElectronCut = cut;};
+  //  void SetPositronCut(G4double cut){fPositronCut = cut;};
 
 
 
@@ -183,7 +183,7 @@ class Em10DetectorConstruction : public G4VUserDetectorConstruction
      
   G4UniformMagField* magField;      //pointer to the magnetic field
 
-  G4double fElectronCut, fGammaCut, fPositronCut;
+  // G4double fElectronCut, fGammaCut, fPositronCut;
        
   Em10DetectorMessenger* detectorMessenger;  //pointer to the Messenger
   Em10CalorimeterSD*     calorimeterSD;  //pointer to the sensitive detector

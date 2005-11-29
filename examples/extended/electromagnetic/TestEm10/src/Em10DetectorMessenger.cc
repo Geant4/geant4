@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorMessenger.cc,v 1.8 2005-10-13 13:12:33 grichine Exp $
+// $Id: Em10DetectorMessenger.cc,v 1.9 2005-11-29 14:42:22 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -134,7 +134,7 @@ Em10DetectorMessenger::Em10DetectorMessenger(Em10DetectorConstruction * Em10Det)
   MagFieldCmd->SetParameterName("Bz",false,false);
   MagFieldCmd->SetDefaultUnit("tesla");
   MagFieldCmd->AvailableForStates(G4State_Idle); 
- 
+  /* 
   ElectronCutCmd = new G4UIcmdWithADoubleAndUnit("/XTRdetector/setElectronCut",this);
   ElectronCutCmd->SetGuidance("Set electron cut in mm for vertex region");
   ElectronCutCmd->SetParameterName("ElectronCut",false,false);
@@ -157,7 +157,7 @@ Em10DetectorMessenger::Em10DetectorMessenger(Em10DetectorConstruction * Em10Det)
   GammaCutCmd->SetDefaultUnit("mm");
   GammaCutCmd->SetRange("GammaCut>0.");
   GammaCutCmd->AvailableForStates(G4State_Idle);
-
+  */
 
 }
 
@@ -186,7 +186,7 @@ Em10DetectorMessenger::~Em10DetectorMessenger()
 
 void Em10DetectorMessenger::SetNewValue(G4UIcommand* command,G4int newValue)
 { 
-  if( command == ModelCmd )
+  if( command == ModelCmd && newValue == 0 )
     { 
       //  Em10Detector->SetParametrisationModel(newValue);
       Em10Detector->Construct();
@@ -244,7 +244,7 @@ void Em10DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if( command == MagFieldCmd )
    { Em10Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
-
+  /*
   if( command == ElectronCutCmd )
   { 
     Em10Detector->SetElectronCut(WorldRCmd->GetNewDoubleValue(newValue));
@@ -257,7 +257,7 @@ void Em10DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   { 
     Em10Detector->SetGammaCut(WorldRCmd->GetNewDoubleValue(newValue));
   }
- 
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

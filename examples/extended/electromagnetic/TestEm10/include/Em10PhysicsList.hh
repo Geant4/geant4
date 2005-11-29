@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.hh,v 1.7 2005-04-19 14:57:56 grichine Exp $
+// $Id: Em10PhysicsList.hh,v 1.8 2005-11-29 14:42:22 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -54,6 +54,7 @@ class Em10StepCut;
 class Em10DetectorConstruction;
 // class ALICEDetectorConstruction;
 class Em10PhysicsListMessenger;
+class G4ProductionCuts;
 
 
 class Em10PhysicsList: public G4VUserPhysicsList
@@ -90,6 +91,13 @@ class Em10PhysicsList: public G4VUserPhysicsList
     void SetGammaCut(G4double);
     void SetElectronCut(G4double);
 
+    void SetRegGammaCut(G4double    cut){fGammaCut    = cut;};
+    void SetRegElectronCut(G4double cut){fElectronCut = cut;};
+    void SetRegPositronCut(G4double cut){fPositronCut = cut;};
+
+    void SetRadiatorCuts();
+    void SetDetectorCuts();
+
     void SetMaxStep(G4double);
     void SetMinElectronEnergy(G4double E){fMinElectronEnergy=E;};     
     void SetMinGammaEnergy(G4double E)   {fMinGammaEnergy=E;};       
@@ -119,14 +127,18 @@ class Em10PhysicsList: public G4VUserPhysicsList
     Em10StepCut* theeplusStepCut ;
 
     G4double cutForGamma;
-    G4double cutForElectron;
+    G4double cutForElectron, cutForPositron;
 
     Em10DetectorConstruction* pDet;
   //  ALICEDetectorConstruction* apDet;
     Em10PhysicsListMessenger* physicsListMessenger;
 
     G4double fMinElectronEnergy;      // minimalEnergy of produced electrons
-    G4double fMinGammaEnergy;         // minimalEnergy of scattered photons
+    G4double fMinGammaEnergy; 
+        // minimalEnergy of scattered photons
+    G4ProductionCuts* fRadiatorCuts;
+    G4ProductionCuts* fDetectorCuts;
+    G4double fElectronCut, fGammaCut, fPositronCut;
 };
 
 #endif

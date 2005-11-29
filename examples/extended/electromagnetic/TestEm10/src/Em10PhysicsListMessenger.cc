@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsListMessenger.cc,v 1.5 2005-02-01 09:37:46 grichine Exp $
+// $Id: Em10PhysicsListMessenger.cc,v 1.6 2005-11-29 14:42:22 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,18 +74,61 @@ Em10PhysicsListMessenger::Em10PhysicsListMessenger(Em10PhysicsList* List)
   setMaxStepCmd->SetParameterName("mxStep",true);
   setMaxStepCmd->SetDefaultUnit("mm");
 
+
+  ElectronCutCmd = new G4UIcmdWithADoubleAndUnit("/emphyslist/setElectronCut",this);
+  ElectronCutCmd->SetGuidance("Set electron cut in mm for vertex region");
+  ElectronCutCmd->SetParameterName("ElectronCut",false,false);
+  ElectronCutCmd->SetDefaultUnit("mm");
+  ElectronCutCmd->SetRange("ElectronCut>0.");
+  ElectronCutCmd->AvailableForStates(G4State_Idle);
+
+
+  PositronCutCmd = new G4UIcmdWithADoubleAndUnit("/emphyslist/setPositronCut",this);
+  PositronCutCmd->SetGuidance("Set positron cut in mm for vertex region");
+  PositronCutCmd->SetParameterName("PositronCut",false,false);
+  PositronCutCmd->SetDefaultUnit("mm");
+  PositronCutCmd->SetRange("PositronCut>0.");
+  PositronCutCmd->AvailableForStates(G4State_Idle);
+
+
+  GammaCutCmd = new G4UIcmdWithADoubleAndUnit("/emphyslist/setGammaCut",this);
+  GammaCutCmd->SetGuidance("Set gamma cut in mm for vertex region");
+  GammaCutCmd->SetParameterName("GammaCut",false,false);
+  GammaCutCmd->SetDefaultUnit("mm");
+  GammaCutCmd->SetRange("GammaCut>0.");
+  GammaCutCmd->AvailableForStates(G4State_Idle);
+
+  RadiatorCutCmd = new G4UIcmdWithADoubleAndUnit("/emphyslist/setRadiatorCuts",this);
+  RadiatorCutCmd->SetGuidance("Set radiator cut in mm for vertex region");
+  RadiatorCutCmd->SetParameterName("RadiatorCuts",false,false);
+  RadiatorCutCmd->SetDefaultUnit("mm");
+  RadiatorCutCmd->SetRange("RadiatorCuts > 0.");
+  RadiatorCutCmd->AvailableForStates(G4State_Idle);
+
+  DetectorCutCmd = new G4UIcmdWithADoubleAndUnit("/emphyslist/setDetectorCuts",this);
+  DetectorCutCmd->SetGuidance("Set radiator cut in mm for vertex region");
+  DetectorCutCmd->SetParameterName("DetectorCuts",false,false);
+  DetectorCutCmd->SetDefaultUnit("mm");
+  DetectorCutCmd->SetRange("DetectorCuts > 0.");
+  DetectorCutCmd->AvailableForStates(G4State_Idle);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Em10PhysicsListMessenger::~Em10PhysicsListMessenger()
 {
-
-  delete setMaxStepCmd;
-
   delete cutGCmd;
   delete cutECmd;
 
+  delete eMinEnergyCmd;
+  delete gMinEnergyCmd;
+
+  delete setMaxStepCmd;
+
+  delete ElectronCutCmd;
+  delete PositronCutCmd;
+  delete GammaCutCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -102,6 +145,27 @@ void Em10PhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newValu
     { Em10List->SetMinElectronEnergy(eMinEnergyCmd->GetNewDoubleValue(newValue));}
   if(command == gMinEnergyCmd)
     { Em10List->SetMinGammaEnergy(gMinEnergyCmd->GetNewDoubleValue(newValue));}
+
+  if( command == ElectronCutCmd )
+  {
+    Em10List->SetRegElectronCut(ElectronCutCmd->GetNewDoubleValue(newValue));
+  }
+  if( command == PositronCutCmd )
+  {
+    Em10List->SetRegPositronCut(PositronCutCmd->GetNewDoubleValue(newValue));
+  }
+  if( command == GammaCutCmd )
+  {
+    Em10List->SetRegGammaCut(GammaCutCmd->GetNewDoubleValue(newValue));
+  }
+  if( command == RadiatorCutCmd )
+  {
+    Em10List->SetRadiatorCuts();
+  }
+  if( command == DetectorCutCmd )
+  {
+    Em10List->SetDetectorCuts();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

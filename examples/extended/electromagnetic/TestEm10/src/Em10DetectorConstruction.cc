@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.cc,v 1.13 2005-10-13 13:12:33 grichine Exp $
+// $Id: Em10DetectorConstruction.cc,v 1.14 2005-11-29 14:42:22 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ Em10DetectorConstruction::Em10DetectorConstruction()
 
 
   G4double inch = 2.54*cm ;
-  G4double  mil = inch/1000.0 ;
+  // G4double  mil = inch/1000.0 ;
 
   WorldSizeZ = 400.*cm; // 200.*cm;
   WorldSizeR = 20.*cm;
@@ -111,9 +111,9 @@ Em10DetectorConstruction::Em10DetectorConstruction()
 
   // create commands for interactive definition of the calorimeter  
 
-  fGammaCut    = 23*mm; 
-  fElectronCut = 23*mm; 
-  fPositronCut = 23*mm; 
+  // fGammaCut    = 23*mm; 
+  // fElectronCut = 23*mm; 
+  // fPositronCut = 23*mm; 
 
 
   detectorMessenger = new Em10DetectorMessenger(this);
@@ -533,9 +533,9 @@ G4VPhysicalVolume* Em10DetectorConstruction::ConstructCalorimeter()
 
 
   //  G4int i, j ; 
-  G4int j ;
+  // G4int j ;
   //  G4double zModule, zRadiator, rModule, rRadiator ; 
-  G4double zModule, zRadiator ;
+  G4double zModule; // zRadiator ;
   
   // complete the Calor parameters definition and Print 
 
@@ -647,25 +647,26 @@ G4VPhysicalVolume* Em10DetectorConstruction::ConstructCalorimeter()
 
   if( fRadRegion != 0 )  // remove obsolete root logical volume
   {
-    fRadRegion->RemoveRootLogicalVolume(logicWindowR);
+    // fRadRegion->RemoveRootLogicalVolume(logicWindowR);
+    delete fRadRegion;
   }
-  G4ProductionCuts* cutsR = 0;
+  // G4ProductionCuts* cutsR = 0;
 
   if( fRadRegion == 0 ) // First time - instantiate a region and a cut objects
   {    
     fRadRegion = new G4Region("XTRradiator");
-    cutsR = new G4ProductionCuts();
-    fRadRegion->SetProductionCuts(cutsR);
+    // cutsR = new G4ProductionCuts();
+    // fRadRegion->SetProductionCuts(cutsR);
   }
   else  // Second time - get a cut object from region
   {   
-    cutsR = fRadRegion->GetProductionCuts();
+    // cutsR = fRadRegion->GetProductionCuts();
   }
   fRadRegion->AddRootLogicalVolume(logicWindowR);                               
 
-  cutsR->SetProductionCut(fGammaCut,"gamma");
-  cutsR->SetProductionCut(fElectronCut,"e-");
-  cutsR->SetProductionCut(fPositronCut,"e+");
+  // cutsR->SetProductionCut(fGammaCut,"gamma");
+  // cutsR->SetProductionCut(fElectronCut,"e-");
+  // cutsR->SetProductionCut(fPositronCut,"e+");
 
 
 
@@ -727,25 +728,26 @@ G4VPhysicalVolume* Em10DetectorConstruction::ConstructCalorimeter()
 
   if( fRegGasDet != 0 )  // remove obsolete root logical volume
   {
-    fRegGasDet->RemoveRootLogicalVolume(logicAbsorber);
+    // fRegGasDet->RemoveRootLogicalVolume(logicAbsorber);
+    delete fRegGasDet;
   }
-  G4ProductionCuts* cuts = 0;
+  // G4ProductionCuts* cuts = 0;
 
   if( fRegGasDet == 0 ) // First time - instantiate a region and a cut objects
   {    
     fRegGasDet = new G4Region("XTRdEdxDetector");
-    cuts = new G4ProductionCuts();
-    fRegGasDet->SetProductionCuts(cuts);
+    // cuts = new G4ProductionCuts();
+    //  fRegGasDet->SetProductionCuts(cuts);
   }
   else  // Second time - get a cut object from region
   {   
-    cuts = fRegGasDet->GetProductionCuts();
+    //  cuts = fRegGasDet->GetProductionCuts();
   }
   fRegGasDet->AddRootLogicalVolume(logicAbsorber);                               
 
-  cuts->SetProductionCut(fGammaCut,"gamma");
-  cuts->SetProductionCut(fElectronCut,"e-");
-  cuts->SetProductionCut(fPositronCut,"e+");
+  // cuts->SetProductionCut(fGammaCut,"gamma");
+  // cuts->SetProductionCut(fElectronCut,"e-");
+  // cuts->SetProductionCut(fPositronCut,"e+");
 
                                  
   // Sensitive Detectors: Absorber 
@@ -759,28 +761,11 @@ G4VPhysicalVolume* Em10DetectorConstruction::ConstructCalorimeter()
   }
   if (logicAbsorber)  logicAbsorber->SetSensitiveDetector(calorimeterSD);
 
-  // Parameterisation
-
-  //  ParametrisationModel();
-
   // always return physics world
 
   return physiWorld;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Construct parametrisation model depending on the current value of fModelNumber
-
-void Em10DetectorConstruction::ParametrisationModel()
-{
-  G4cout<<"Em10DetectorConstruction::ParametrisationModel() is called"<<G4endl;
-
-  G4double alphaPlate = 160.0 ;
-  G4double alphaGas   = 160.0 ;
-  //  fXTRModel->GetNumberOfPhotons() ;  
-  return;
-}
 ////////////////////////////////////////////////////////////////////////////
 //
 //

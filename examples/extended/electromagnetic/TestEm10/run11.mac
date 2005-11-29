@@ -39,27 +39,38 @@
 #  PLOT: energy deposit distribution in absorber (g4.11)
 #
 /plots/sethistName g4.p11
-/plots/setnbinEn 50
+/plots/setnbinEn 35
 /plots/setEnlow 0.0 MeV
-/plots/setEnhigh 0.050  MeV
+/plots/setEnhigh 0.07  MeV
 #
 # these commands do not change energy cuts???
 #
 #/emphyslist/eMinEnergy 100.  
 #/emphyslist/gMinEnergy 100.  
 #
-/run/initialize
+#/run/initialize
 #
 #/run/particle/dumpCutValues
 #
 /run/particle/applyCuts
 #
+# set cuts in XTR radiator
+#
+/emphyslist/setGammaCut 1.0
+/emphyslist/setElectronCut 100.0
+/emphyslist/setPositronCut 100.
+/emphyslist/setRadiatorCuts 1.
+#
 # set cuts in XTR detector
 #
-/XTRdetector/setGammaCut 100.0
-/XTRdetector/setElectronCut 100.0
-/XTRdetector/setPositronCut 100.
-/XTRdetector/update
+/emphyslist/setGammaCut 100.0
+/emphyslist/setElectronCut 100.0
+/emphyslist/setPositronCut 100.
+/emphyslist/setDetectorCuts 1.
+#
+/run/initialize
+#
+#/XTRdetector/update
 #
 #Innactivate some processes: msc eIoni eBrem RegularXTRadiator
 #                            hIoni 
@@ -70,13 +81,13 @@
 /process/inactivate eIoni
 /process/inactivate hIoni
 #
-/process/inactivate eBrem
+#/process/inactivate eBrem
 #
 # Inactivate gamma processes
 #
 #/process/inactivate phot
 #/process/inactivate compt
-/process/inactivate conv
+#/process/inactivate conv
 #
 #/process/inactivate RegularXTRadiator
 #
@@ -85,6 +96,7 @@
 #/process/eLoss/fluct false
 #
 #/process/verbose 1
+#
 #
 # Particle and its energy
 #
@@ -97,7 +109,7 @@
 #/tracking/verbose 2
 #
 /event/printModulo 1000
-/run/beamOn 10000
+/run/beamOn 5000
 #
 #/run/beamOn 1
 #/process/inactivate eIoni
