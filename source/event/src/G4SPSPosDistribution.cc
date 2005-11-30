@@ -42,7 +42,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
 #include "Randomize.hh"
-//#include <cmath>
 #include "G4TransportationManager.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PhysicalVolumeStore.hh"
@@ -69,14 +68,14 @@ G4SPSPosDistribution::G4SPSPosDistribution()
   ParTheta = 0.;
   ParPhi = 0.;
   CentreCoords = G4ThreeVector(0., 0., 0.);
-  Rotx = HepXHat;
-  Roty = HepYHat;
-  Rotz = HepZHat;
+  Rotx = CLHEP::HepXHat;
+  Roty = CLHEP::HepYHat;
+  Rotz = CLHEP::HepZHat;
   Confine = false; //If true confines source distribution to VolName
   VolName = "NULL";
-  SideRefVec1 = HepXHat; // x-axis
-  SideRefVec2 = HepYHat; // y-axis
-  SideRefVec3 = HepZHat; // z-axis
+  SideRefVec1 = CLHEP::HepXHat; // x-axis
+  SideRefVec2 = CLHEP::HepYHat; // y-axis
+  SideRefVec3 = CLHEP::HepZHat; // z-axis
   verbosityLevel = 0 ;
   gNavigator = G4TransportationManager::GetTransportationManager()
     ->GetNavigatorForTracking();
