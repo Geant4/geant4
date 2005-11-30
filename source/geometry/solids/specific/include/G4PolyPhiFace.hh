@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyPhiFace.hh,v 1.7 2005-11-17 14:08:00 gcosmo Exp $
+// $Id: G4PolyPhiFace.hh,v 1.8 2005-11-30 10:33:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -154,9 +154,9 @@ class G4PolyPhiFace : public G4VCSGface
 
   protected:
 
+    G4int      numEdges;            // Number of edges
     G4PolyPhiFaceEdge   *edges;     // The edges of the face
     G4PolyPhiFaceVertex *corners;   // And the corners
-    G4int      numEdges;            // Number of edges
     G4ThreeVector    normal;        // Normal unit vector
     G4ThreeVector    radial;        // Unit vector along radial direction
     G4ThreeVector    surface;       // Point on surface
