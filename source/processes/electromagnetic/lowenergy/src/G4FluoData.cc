@@ -34,7 +34,7 @@
 #include "G4DataVector.hh"
 #include "G4FluoTransition.hh"
 #include <fstream>
-#include <strstream>
+#include <sstream>
 
 G4FluoData::G4FluoData()
 {
@@ -175,15 +175,14 @@ void G4FluoData::LoadData(G4int Z)
 { 
   // Build the complete string identifying the file with the data set
   
-  char nameChar[100] = {""};
-  std::ostrstream ost(nameChar, 100, std::ios::out);
+  std::ostringstream ost;
   if(Z != 0){
     ost << "fl-tr-pr-"<< Z << ".dat";
   }
   else{
     ost << "fl-tr-pr-"<<".dat"; 
   }
-  G4String name(nameChar);
+  G4String name(ost.str());
   
   char* path = getenv("G4LEDATA");
   if (!path)

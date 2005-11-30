@@ -40,7 +40,7 @@
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
 #include <fstream>
-#include <strstream>
+#include <sstream>
 
 G4AugerData::G4AugerData()
 {
@@ -232,15 +232,14 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 { 
   // Build the complete string identifying the file with the data set
   
-  char nameChar[100] = {""};
-  std::ostrstream ost(nameChar, 100, std::ios::out);
+  std::ostringstream ost;
   if(Z != 0){
     ost << "au-tr-pr-"<< Z << ".dat";
   }
   else{
     ost << "au-tr-pr-"<<".dat"; 
   }
-  G4String name(nameChar);
+  G4String name(ost.str());
   
   char* path = getenv("G4LEDATA");
   if (!path)
