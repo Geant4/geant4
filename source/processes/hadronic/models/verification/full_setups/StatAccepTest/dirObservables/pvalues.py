@@ -1,14 +1,13 @@
 #!/usr/bin/python
 
 #----------------------------------------------------------------
-# Last update: 28-Nov-2005.  
+# Last update: 30-Nov-2005.  
 #
 # This Python script is used for post-processing analysis, i.e.
 # to monitor the overall p-value distributions for all jobs.
 # We are assuming here that the log files of these simulation
 # runs are collected in a directory, eventually with a
-# subdirectory structure. This script should be run the tree
-# parent directory.
+# subdirectory structure.
 #
 # This script does not have input arguments, but you have to set
 # appropriately some parameters, that you can find below (search
@@ -318,26 +317,25 @@ def printParameters() :
     return
 
 
-def extractInfo( inputFile ) :
+def extractInfo( inputFile , pValueDist_list ) :
     # 
-    # This function receives in input a file, and then it extracts
-    # from it the distribution of p-values for 4 different
-    # statistical tests:
+    # This function receives in input a file, and a list of
+    # p-values distributions. Then it extracts from the file
+    # the p-values, for the following 4 statistical tests:
     #   1) Chi2 : "C2"
     #   2) Kolmogorov-Smirnov : "KS"
     #   3) Cramer-von Mises : "CVM"
     #   4) Anderson-Darling : "AD"
+    # and then fills with them the corresponding p-values
+    # distributions.
     # The function returs these four distributions.
     # Notice that it takes into account also anomalous p-values,
     # like "nan" or "inf"; negative values, or values >= 1 are
     # also described as underflow and overflow entries.
        
-    print '  --- Start function  extractInfo  --- '
+    #print '  --- Start function  extractInfo  --- '
 
-    pValueDistC2  = Pdistribution( iPL + "-C2" )
-    pValueDistKS  = Pdistribution( iPL + "-KS" )
-    pValueDistCVM = Pdistribution( iPL + "-CVM" )
-    pValueDistAD  = Pdistribution( iPL + "-AD" )
+    ( pValueDistC2, pValueDistKS, pValueDistCVM, pValueDistAD ) = pValueDist_list
 
     # Just for debugging, fill the distributions with random numbers.
     #for n in xrange( 10000 ) :
@@ -351,7 +349,7 @@ def extractInfo( inputFile ) :
          if ( line.find( "pvalue=" ) > -1 ) :
               testName = line.split()[0]
               pValueStr = line.split()[3].replace( 'pvalue=', '' )
-              print " testName=", testName, " pValueStr=", pValueStr
+              #print " testName=", testName, " pValueStr=", pValueStr
               pValueDist = 0
               if ( testName.find( "Chi2" ) > - 1 ) :
                    pValueDist = pValueDistC2
@@ -364,20 +362,19 @@ def extractInfo( inputFile ) :
               else :
                    print " ***ERROR*** : not recognized testName=", testName
               if ( pValueDist ) :
-                   print " pValueStr=", pValueStr
+                   #print " pValueStr=", pValueStr
                    if ( pValueStr.find( "nan" ) > -1 ) :
                         pValueDist.increaseNumberOfNan()
-                        print " Nan : ", pValueStr
+                        #print " Nan : ", pValueStr
                    elif ( pValueStr.find( "inf" ) > -1 ) :
                         pValueDist.increaseNumberOfInf()
-                        print " Inf : ", pValueStr
+                        #print " Inf : ", pValueStr
                    else :
                         pValueDist.fill( float( pValueStr ) )
-                        print " number : ", pValueStr
+                        #print " number : ", pValueStr
 
-    print '  --- End   function  extractInfo  --- '
-    
-    return ( pValueDistC2, pValueDistKS, pValueDistCVM, pValueDistAD )
+    #print '  --- End   function  extractInfo  --- '
+    return
 
 
 #-------------------------------------------------------------
@@ -391,7 +388,7 @@ printParameters();
 for iPL in tuplePhysicsLists :
     print ' --- Physics List : ', iPL, ' --- ' 
 
-    # Creates the text files to be read by Paw.
+    # Create the text files to be read by Paw.
     filePvaluesC2 = open( "filePvalues.txt-" + iPL + "-C2", "w" ) 
     createdFiles.write( "filePvalues.txt-" + iPL + "-C2" + "\n" )
     filePvaluesKS = open( "filePvalues.txt-" + iPL + "-KS", "w" ) 
@@ -401,8 +398,15 @@ for iPL in tuplePhysicsLists :
     filePvaluesAD = open( "filePvalues.txt-" + iPL + "-AD", "w" ) 
     createdFiles.write( "filePvalues.txt-" + iPL + "-AD" + "\n" )
 
+    # Create the pvalue distrbutions for the statistical tests.
+    pValueDistC2  = Pdistribution( iPL + "-C2" )
+    pValueDistKS  = Pdistribution( iPL + "-KS" )
+    pValueDistCVM = Pdistribution( iPL + "-CVM" )
+    pValueDistAD  = Pdistribution( iPL + "-AD" )
+    pValueDist_list = ( pValueDistC2, pValueDistKS, pValueDistCVM, pValueDistAD )
+
     # Look for the  outputPvalues.log-*  files in all the subdirectories
-    # of the current directory.
+    # of the  "directory" .
     fileName = "outputPvalues.log-" + iPL.strip() + "-*" 
     command = "find " + directory + "/." + " -name " + fileName
     command = command + " -follow -print > thePath.txt"
@@ -415,40 +419,40 @@ for iPL in tuplePhysicsLists :
          thePathFile = open( "thePath.txt", "r" )
          fullNameInputFile = ""
          for line in thePathFile :
-              print " file : ", line.strip()
+              #print " file : ", line.strip()
               fullNameInputFile = line.strip()
               foundFiles.write( fullNameInputFile + "\n" )
               inputFile = open( fullNameInputFile, "r" )
+              extractInfo( inputFile, pValueDist_list )
 
-              pValueDist_list = extractInfo( inputFile )
-              for pValueDist in pValueDist_list :
-                   # Print all the information on the distribution
-                   print " --- Distribution : ", pValueDist.name(), " --- " 
-                   print " onlyBinEntriesVec=", pValueDist.onlyBinEntriesVec()
-                   print " numberOfNan=", pValueDist.getNumberOfNan()
-                   print " numberOfInf=", pValueDist.getNumberOfInf()
-                   print " underflowEntries=", pValueDist.underflowEntries()
-                   print " overflowEntries=", pValueDist.overflowEntries()
-                   print " numberOfBinEntries=", pValueDist.sum_onlyBinEntriesVec()
-                   ( mean, rms_mean, rms, rms_rms ) = pValueDist.meanAndSigma()
-                   print " mean=", mean, " +/- ", rms_mean, "  (expected:  0.5 )"
-                   print " rms=", rms, " +/- ", rms_rms, "  (expected:  1/sqrt(12) = 0.288675 )"
-                   if ( rms_mean > 0.0  and
-                        math.fabs( mean - 0.5 ) / rms_mean > 3.0 ) :
-                        print " MEAN more than  3 Sigma  away from the expected value "
-                   if ( rms_rms > 0.0  and
-                        math.fabs( rms - 1.0/math.sqrt( 12.0 ) ) / rms_rms > 3.0 ) :
-                        print " RMS more than  3 Sigma  away from the expected value "                    
-                   # Write the distribution on a text file to be read by Paw.
-                   for val in pValueDist.onlyBinEntriesVec() :
-                        if ( pValueDist.name().find( "C2" ) > - 1 ) :
-                             filePvaluesC2.write( str( val ) + "\n" )
-                        elif ( pValueDist.name().find( "KS" ) > - 1 ):
-                             filePvaluesKS.write( str( val ) + "\n" )
-                        elif ( pValueDist.name().find( "CVM" ) > - 1 ):
-                             filePvaluesCVM.write( str( val ) + "\n" )
-                        elif ( pValueDist.name().find( "AD" ) > - 1 ):
-                             filePvaluesAD.write( str( val ) + "\n" )
+    for pValueDist in pValueDist_list :
+         # Print all the information on the distribution
+         print " --- Distribution : ", pValueDist.name(), " --- " 
+         print " onlyBinEntriesVec=", pValueDist.onlyBinEntriesVec()
+         print " numberOfNan=", pValueDist.getNumberOfNan()
+         print " numberOfInf=", pValueDist.getNumberOfInf()
+         print " underflowEntries=", pValueDist.underflowEntries()
+         print " overflowEntries=", pValueDist.overflowEntries()
+         print " numberOfBinEntries=", pValueDist.sum_onlyBinEntriesVec()
+         ( mean, rms_mean, rms, rms_rms ) = pValueDist.meanAndSigma()
+         print " mean=", mean, " +/- ", rms_mean, "  (expected:  0.5 )"
+         print " rms=", rms, " +/- ", rms_rms, "  (expected:  1/sqrt(12) = 0.288675 )"
+         if ( rms_mean > 0.0  and
+              math.fabs( mean - 0.5 ) / rms_mean > 3.0 ) :
+              print " MEAN more than  3 Sigma  away from the expected value "
+         if ( rms_rms > 0.0  and
+              math.fabs( rms - 1.0/math.sqrt( 12.0 ) ) / rms_rms > 3.0 ) :
+              print " RMS more than  3 Sigma  away from the expected value "                    
+         # Write the distribution on a text file to be read by Paw.
+         for val in pValueDist.onlyBinEntriesVec() :
+              if ( pValueDist.name().find( "C2" ) > - 1 ) :
+                   filePvaluesC2.write( str( val ) + "\n" )
+              elif ( pValueDist.name().find( "KS" ) > - 1 ):
+                   filePvaluesKS.write( str( val ) + "\n" )
+              elif ( pValueDist.name().find( "CVM" ) > - 1 ):
+                   filePvaluesCVM.write( str( val ) + "\n" )
+              elif ( pValueDist.name().find( "AD" ) > - 1 ):
+                   filePvaluesAD.write( str( val ) + "\n" )
 
     filePvaluesC2.close()
     filePvaluesKS.close()
