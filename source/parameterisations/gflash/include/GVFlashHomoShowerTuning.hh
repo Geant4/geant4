@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GVFlashHomoShowerTuning.hh,v 1.4 2005-10-04 09:08:33 gcosmo Exp $
+// $Id: GVFlashHomoShowerTuning.hh,v 1.5 2005-11-30 14:47:38 weng Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -62,10 +62,10 @@ class GVFlashHomoShowerTuning
 {
   public: // with description
 
-    virtual G4double ParAveT1(){ return -0.858;} // t1
-    virtual G4double ParAveA1(){ return 0.21;  } // a1
-    virtual G4double ParAveA2(){ return 0.492; } // a2
-    virtual G4double ParAveA3(){ return 2.38;  } // a3
+    virtual G4double ParAveT1(){ return -0.812;} // t1
+    virtual G4double ParAveA1(){ return 0.81;  } // a1
+    virtual G4double ParAveA2(){ return 0.458; } // a2
+    virtual G4double ParAveA3(){ return 2.26;  } // a3
   
     // std::sqrt(var(ln(T))) = 1/(t+t2*ln(y))
     virtual G4double ParSigLogT1(){ return -1.4;} // t1
