@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: GFlashShowerModel.cc,v 1.8 2005-11-30 14:47:06 weng Exp $
+// $Id: GFlashShowerModel.cc,v 1.9 2005-11-30 19:17:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -34,7 +34,6 @@
 
 #include "G4Electron.hh"
 #include "G4Positron.hh"
-#include "G4Gamma.hh"
 #include "G4NeutrinoE.hh"
 #include "G4NeutrinoMu.hh"
 #include "G4NeutrinoTau.hh"
@@ -56,7 +55,8 @@
 
 GFlashShowerModel::GFlashShowerModel(G4String modelName,
                                      G4Envelope* envelope)
-  : G4VFastSimulationModel(modelName, envelope)
+  : G4VFastSimulationModel(modelName, envelope),
+    PBound(0), Parameterisation(0), HMaker(0)
 {
   FlagParamType           = 0;
   FlagParticleContainment = 1;  
@@ -65,7 +65,8 @@ GFlashShowerModel::GFlashShowerModel(G4String modelName,
 }
 
 GFlashShowerModel::GFlashShowerModel(G4String modelName)
-  : G4VFastSimulationModel(modelName)
+  : G4VFastSimulationModel(modelName),
+    PBound(0), Parameterisation(0), HMaker(0)
 {
   FlagParamType           =1;
   FlagParticleContainment = 1;  
@@ -73,10 +74,9 @@ GFlashShowerModel::GFlashShowerModel(G4String modelName)
   Messenger       = new GFlashShowerModelMessenger(this); 
 }
 
-
 GFlashShowerModel::~GFlashShowerModel()
 {
-  Messenger       = new GFlashShowerModelMessenger(this);
+  delete Messenger;
 }
 
 G4bool
@@ -87,8 +87,8 @@ GFlashShowerModel::IsApplicable(const G4ParticleDefinition& particleType)
   &particleType == G4Positron::PositronDefinition(); 
 }
 
-/*********************************************************************/
-/* Checks whether conditions of fast parametrisation  are fullfilled */
+/**********************************************************************/
+/* Checks whether conditions of fast parameterisation  are fullfilled */
 /**********************************************************************/
 
 G4bool GFlashShowerModel::ModelTrigger(const G4FastTrack & fastTrack )
@@ -153,7 +153,7 @@ G4bool GFlashShowerModel::CheckContainment(const G4FastTrack& fastTrack)
   
   G4ThreeVector Position;
   G4int NlateralInside=0;
-  //pointer to soild we're in
+  // pointer to solid we're in
   G4VSolid *SolidCalo = fastTrack.GetEnvelopeSolid();
   for(int i=0; i<4 ;i++)
   {
@@ -213,7 +213,7 @@ GFlashShowerModel::ElectronDoIt(const G4FastTrack& fastTrack,
   ///Generate longitudinal profile
   //--------------------------------
   Parameterisation->GenerateLongitudinalProfile(Energy);
-    // performane iteration @@@@@@@
+    // performance iteration @@@@@@@
   
   ///Initialisation of long. loop variables
   G4VSolid *SolidCalo = fastTrack.GetEnvelopeSolid();
@@ -265,27 +265,32 @@ GFlashShowerModel::ElectronDoIt(const G4FastTrack& fastTrack,
     {
       LastEneIntegral  = EneIntegral;
       EneIntegral      = Parameterisation->IntegrateEneLongitudinal(ZEndStep);
-      DEne             = std::min( EnergyNow, (EneIntegral-LastEneIntegral)*Energy);
+      DEne             = std::min( EnergyNow,
+                                   (EneIntegral-LastEneIntegral)*Energy);
       LastNspIntegral  = NspIntegral;
       NspIntegral      = Parameterisation->IntegrateNspLongitudinal(ZEndStep);
-      DNsp             = std::max(1., std::floor( (NspIntegral-LastNspIntegral)*Parameterisation->GetNspot() ) );
+      DNsp             = std::max(1., std::floor( (NspIntegral-LastNspIntegral)
+                                                 *Parameterisation->GetNspot() ));
     }
     // end of the shower
     else
     {    
-      DEne             = EnergyNow;
-      DNsp             = std::max(1., std::floor( (1.- NspIntegral)*Parameterisation->GetNspot() ));
+      DEne = EnergyNow;
+      DNsp = std::max(1., std::floor( (1.- NspIntegral)
+                                     *Parameterisation->GetNspot() ));
     } 
     EnergyNow  = EnergyNow - DEne;
     
-    //  apply sampling fluctuation - only in sampling calorimeters
-       GFlashSamplingShowerParameterisation* sp;
-    if  ( dynamic_cast<GFlashSamplingShowerParameterisation*>(Parameterisation)) {
-		sp =  dynamic_cast<GFlashSamplingShowerParameterisation*>(Parameterisation);
-		G4double DEneSampling =  sp->ApplySampling(DEne,Energy);
-		DEne = DEneSampling;
-		//	std::cout <<" Sampling  " << std::endl;
-		}
+    // Apply sampling fluctuation - only in sampling calorimeters
+    //
+    if (Parameterisation)
+    {
+      GFlashSamplingShowerParameterisation* sp =
+        dynamic_cast<GFlashSamplingShowerParameterisation*>(Parameterisation);
+      G4double DEneSampling = sp->ApplySampling(DEne,Energy);
+      DEne = DEneSampling;
+    }
+
     //move particle in the middle of the step
     StepLenght        = StepLenght + Dz/2.00;  
     NewPositionShower = NewPositionShower + 
@@ -343,10 +348,12 @@ GFlashShowerModel::GammaDoIt(const G4FastTrack& fastTrack,
   fastStep.SetTotalEnergyDeposited(fastTrack.GetPrimaryTrack()
                                    ->GetKineticEnergy());
   // other settings????
-  feSpotList.clear();   
+  feSpotList.clear(); 
+  
   //-----------------------------
   // Get track parameters 
   //-----------------------------
+
   // E,vect{p} and t,vec(x)
   G4double Energy = 
     fastTrack.GetPrimaryTrack()->GetKineticEnergy();
@@ -357,12 +364,12 @@ GFlashShowerModel::GammaDoIt(const G4FastTrack& fastTrack,
   G4ThreeVector PositionShower =
     fastTrack.GetPrimaryTrack()->GetPosition();
   
-  //G4double DEneSampling = Parametrisation->ApplySampling(Energy,Energy);
+  //G4double DEneSampling = Parameterisation->ApplySampling(Energy,Energy);
   //if(DEneSampling <= 0.00) DEneSampling=Energy;  
   
   if(Energy > 0.0)
   {
-    G4double dist = Parametrisation->GenerateExponential(Energy);      
+    G4double dist = Parameterisation->GenerateExponential(Energy);      
     
     GFlashEnergySpot Spot;
     Spot.SetEnergy( Energy );
