@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc,v 1.7 2005-11-18 16:46:17 link Exp $
+// $Id: G4VTwistedFaceted.cc,v 1.8 2005-11-30 10:34:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1166,7 +1166,7 @@ G4ThreeVector G4VTwistedFaceted::GetPointInSolid(G4double z) const
 G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
 {
 
-  G4double  phi   = RandFlat::shoot(-fPhiTwist/2.,fPhiTwist/2.);
+  G4double  phi = CLHEP::RandFlat::shoot(-fPhiTwist/2.,fPhiTwist/2.);
   G4double u , umin, umax ;  //  variable for twisted surfaces
   G4double y  ;              //  variable for flat surface (top and bottom)
 
@@ -1191,14 +1191,14 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
   G4cout << "Surface Upper   = " << a6 << G4endl ;
 #endif 
 
-  G4double chose = RandFlat::shoot(0.,a1 + a2 + a3 + a4 + a5 + a6) ;
+  G4double chose = CLHEP::RandFlat::shoot(0.,a1 + a2 + a3 + a4 + a5 + a6) ;
 
   if(chose < a1)
   {
 
     umin = fSide0->GetBoundaryMin(phi) ;
     umax = fSide0->GetBoundaryMax(phi) ;
-    u = RandFlat::shoot(umin,umax) ;
+    u = CLHEP::RandFlat::shoot(umin,umax) ;
 
     return  fSide0->SurfacePoint(phi, u, true) ;   // point on 0deg surface
   }
@@ -1209,7 +1209,7 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
     umin = fSide90->GetBoundaryMin(phi) ;
     umax = fSide90->GetBoundaryMax(phi) ;
     
-    u = RandFlat::shoot(umin,umax) ;
+    u = CLHEP::RandFlat::shoot(umin,umax) ;
 
     return fSide90->SurfacePoint(phi, u, true);   // point on 90deg surface
   }
@@ -1219,7 +1219,7 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
 
     umin = fSide180->GetBoundaryMin(phi) ;
     umax = fSide180->GetBoundaryMax(phi) ;
-    u = RandFlat::shoot(umin,umax) ;
+    u = CLHEP::RandFlat::shoot(umin,umax) ;
 
      return fSide180->SurfacePoint(phi, u, true); // point on 180 deg surface
   }
@@ -1229,7 +1229,7 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
 
     umin = fSide270->GetBoundaryMin(phi) ;
     umax = fSide270->GetBoundaryMax(phi) ;
-    u = RandFlat::shoot(umin,umax) ;
+    u = CLHEP::RandFlat::shoot(umin,umax) ;
 
     return fSide270->SurfacePoint(phi, u, true); // point on 270 deg surface
   }
@@ -1237,19 +1237,19 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
   else if( (chose >= a1 + a2 + a3 + a4  ) && (chose < a1 + a2 + a3 + a4 + a5 ) )
   {
 
-    y = RandFlat::shoot(-fDy1,fDy1) ;
+    y = CLHEP::RandFlat::shoot(-fDy1,fDy1) ;
     umin = fLowerEndcap->GetBoundaryMin(y) ;
     umax = fLowerEndcap->GetBoundaryMax(y) ;
-    u = RandFlat::shoot(umin,umax) ;
+    u = CLHEP::RandFlat::shoot(umin,umax) ;
 
     return fLowerEndcap->SurfacePoint(u,y,true); // point on lower endcap
   }
   else {
 
-    y = RandFlat::shoot(-fDy2,fDy2) ;
+    y = CLHEP::RandFlat::shoot(-fDy2,fDy2) ;
     umin = fUpperEndcap->GetBoundaryMin(y) ;
     umax = fUpperEndcap->GetBoundaryMax(y) ;
-    u = RandFlat::shoot(umin,umax) ;
+    u = CLHEP::RandFlat::shoot(umin,umax) ;
 
     return fUpperEndcap->SurfacePoint(u,y,true) ; // point on upper endcap
 
