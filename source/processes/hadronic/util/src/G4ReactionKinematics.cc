@@ -59,8 +59,8 @@ void G4ReactionKinematics::TwoBodyScattering(
 
 // - random decay angle
    G4double theta=pi*G4UniformRand();  // isotropic decay angle theta
-   G4double phi  =RandFlat::shoot(G4double(0.),G4double(twopi));  // isotropic decay angle phi
-
+   G4double phi  =CLHEP::RandFlat::shoot(G4double(0.),G4double(twopi));
+                                       // isotropic decay angle phi
 // - setup LorentzVectors
    G4double pz=std::cos(theta)*breakupMomentum;
    G4double px=std::sin(theta)*std::cos(phi)*breakupMomentum;
