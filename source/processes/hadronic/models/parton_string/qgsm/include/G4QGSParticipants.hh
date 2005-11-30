@@ -44,7 +44,7 @@ class G4QGSParticipants : public G4VParticipants
     int operator==(const G4QGSParticipants &right) const;
     int operator!=(const G4QGSParticipants &right) const;
 
-    virtual void DoLorentzBoost(Hep3Vector aBoost) 
+    virtual void DoLorentzBoost(G4ThreeVector aBoost) 
     {
       if(theNucleus) theNucleus->DoLorentzBoost(aBoost);
       theBoost = aBoost;
