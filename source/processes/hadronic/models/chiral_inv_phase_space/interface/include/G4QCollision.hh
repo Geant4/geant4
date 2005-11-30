@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCollision.hh,v 1.3 2005-11-26 07:53:25 mkossov Exp $
+// $Id: G4QCollision.hh,v 1.4 2005-11-30 16:26:42 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision header ----------------
@@ -95,8 +95,7 @@
 #include "G4QANuMuNuclearCrossSection.hh"
 #include "G4QuasmonString.hh"
 #include "G4QPDGToG4Particle.hh"
-//<vector> is included in G4QIsotope.hh
-//#include <vector>
+#include <vector>
 
 class G4QCollision : public G4VDiscreteProcess
 {
@@ -183,6 +182,10 @@ private:
   // Modifires for the reaction
   G4double Time;                                      // Time shift of the capture reaction
   G4double EnergyDeposition;                          // Energy deposited in the reaction
+  static std::vector <G4int> ElementZ;                // Z of the element(i) in theLastCalc
+  static std::vector <G4double> ElProbInMat;          // SumProbabilityElements in Material
+  static std::vector <std::vector<G4int>*> ElIsoN;    // N of isotope(j) of Element(i)
+  static std::vector <std::vector<G4double>*> IsoProbInEl;// SumProbabIsotopes in Element i
 };
 #endif
 

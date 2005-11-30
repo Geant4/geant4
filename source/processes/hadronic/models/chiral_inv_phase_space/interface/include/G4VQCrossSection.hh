@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VQCrossSection.hh,v 1.2 2005-11-25 21:34:17 mkossov Exp $
+// $Id: G4VQCrossSection.hh,v 1.3 2005-11-30 16:26:42 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -83,10 +83,12 @@ class G4VQCrossSection
 {
 protected:
 
-  G4VQCrossSection()  {}
+  G4VQCrossSection() {;} // for each particle a separate instance of G4QCollision should be
+                         // used (and inside use a separate instance of G4Q*CrossSection)
 
 public:
-  virtual ~G4VQCrossSection() {}
+  virtual ~G4VQCrossSection() {;}// for each particle a separate instance of G4QCollision
+  //@@ can be improved in future)// should be used and inside a separate istance of CS's
 
   virtual G4double GetCrossSection(G4double Momentum, G4int Z, G4int N);
 
@@ -102,6 +104,10 @@ public:
   virtual G4double GetLastTOTCS(); // Get the last calculated total cross-section
 
   virtual G4double GetLastQELCS(); // Get the last calculated quasi-elastic cross-section
+
+  virtual G4double GetDirectPart(G4double Q2); // Direct interaction with quark-partons
+
+  virtual G4double GetNPartons(G4double Q2); // #of quark-partons in non-perturbative PhSp
 
   // Subroutines for the t-chanel processes with a leader (DIS, Elastic, Quasielastic etc.)
 

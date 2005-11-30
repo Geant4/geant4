@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNuMuNuclearCrossSection.cc,v 1.4 2005-11-26 16:11:29 mkossov Exp $
+// $Id: G4QNuMuNuclearCrossSection.cc,v 1.5 2005-11-30 16:26:42 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -550,6 +550,23 @@ G4double G4QNuMuNuclearCrossSection::GetNQE_ExchangeQ2()
   G4double R=shift-pow(X,pconv);
   G4double Q2=R*Q2ma;
   return Q2*GeV*GeV;
+}
+
+// It returns a fraction of the direct interaction of the neutrino with quark-partons
+G4double G4QNuMuNuclearCrossSection::GetDirectPart(G4double Q2)
+{
+  G4double f=Q2/4.62;
+  G4double ff=f*f;
+  G4double r=ff*ff;
+  G4double s=pow((1.+.6/Q2),(-1.-(1.+r)/(12.5+r/.3)));
+  //@@ It is the same for nu/anu, but for nu it is a bit less, and for anu a bit more (par)
+  return 1.-s*(1.-s/2);
+}
+
+// #of quark-partons in the nonperturbative phase space is the same for neut and anti-neut
+G4double G4QNuMuNuclearCrossSection::GetNPartons(G4double Q2)
+{
+  return 3.+.3581*std::log(1.+Q2/.04); // a#of partons in the nonperturbative phase space
 }
 
 // This class can provide only virtual exchange pi+ (a substitute for W+ boson)

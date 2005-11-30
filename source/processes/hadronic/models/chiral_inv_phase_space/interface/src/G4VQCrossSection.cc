@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VQCrossSection.cc,v 1.2 2005-11-25 21:34:17 mkossov Exp $
+// $Id: G4VQCrossSection.cc,v 1.3 2005-11-30 16:26:42 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -29,7 +29,7 @@
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-04
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 27-Nov-04
 // 
-//===============================================================================================
+//=========================================================================================
 // ****************************************************************************************
 // ********** This CLASS is temporary moved from the photolepton_hadron directory *********
 // ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
@@ -96,7 +96,7 @@ G4double G4VQCrossSection::GetCrossSection(G4double Momentum, G4int targZ, G4int
       lastTH =colTH[i];                // Last THreshold (A-dependent)
       lastCS =colCS[i];                // Last CrossSect (A-dependent)
       if(Momentum<=lastTH) return 0.;  // Momentum is below the Threshold value
-      else if(std::fabs(lastP/Momentum-1.)<tolerance) return lastCS*millibarn; // Use last CS
+      else if(std::fabs(lastP/Momentum-1.)<tolerance) return lastCS*millibarn;// Use lastCS
       lastI  = i;                      // Make the found isotope to be current isotope
       lastCS=CalculateCrossSection(-1,lastI,lastN,lastZ,Momentum);//read&update DB, calc.CS
       break;                           // Go out of the LOOP
@@ -124,6 +124,10 @@ G4double G4VQCrossSection::GetCrossSection(G4double Momentum, G4int targZ, G4int
   colCS[lastI]=lastCS;
   return lastCS*millibarn;
 }
+
+G4double G4VQCrossSection::GetDirectPart(G4double) {return 0.;} // Direct interaction
+
+G4double G4VQCrossSection::GetNPartons(G4double) {return 3.;} // Direct interaction
 
 G4double G4VQCrossSection::GetLastTOTCS() {return 0.;} // Get the last total CS
 

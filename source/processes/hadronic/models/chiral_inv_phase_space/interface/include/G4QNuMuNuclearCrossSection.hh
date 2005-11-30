@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNuMuNuclearCrossSection.hh,v 1.2 2005-11-26 16:11:29 mkossov Exp $
+// $Id: G4QNuMuNuclearCrossSection.hh,v 1.3 2005-11-30 16:26:42 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -63,7 +63,12 @@ public:
 
   G4int    GetExchangePDGCode();
 
+  G4double GetDirectPart(G4double Q2);
+
+  G4double GetNPartons(G4double Q2);
+
   G4double GetQEL_ExchangeQ2();
+
   G4double GetNQE_ExchangeQ2();
 
   // Get static members
