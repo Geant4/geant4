@@ -797,7 +797,7 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
     else                 lambda = DBL_MAX;
     while(numb)
     {
-     stepDelta = RandExponential::shoot(lambda);
+     stepDelta = CLHEP::RandExponential::shoot(lambda);
      stepSum += stepDelta;
      if(stepSum >= step) break;
      numOfCollisions++;
@@ -829,13 +829,13 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
     {
       meanNumber =((*(*fPAItransferTable)(iPlace+1))(0)-dNdxCut2)*step*charge2;
       if( meanNumber < 0. ) meanNumber = 0. ;
-      //  numOfCollisions = RandPoisson::shoot(meanNumber) ;
+      //  numOfCollisions = CLHEP::RandPoisson::shoot(meanNumber) ;
       //  numOfCollisions = G4Poisson(meanNumber) ;
     if( meanNumber > 0.) lambda = step/meanNumber;
     else                 lambda = DBL_MAX;
     while(numb)
     {
-     stepDelta = RandExponential::shoot(lambda);
+     stepDelta = CLHEP::RandExponential::shoot(lambda);
      stepSum += stepDelta;
      if(stepSum >= step) break;
      numOfCollisions++;
@@ -881,7 +881,7 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
     else                 lambda = DBL_MAX;
     while(numb)
     {
-     stepDelta = RandExponential::shoot(lambda);
+     stepDelta = CLHEP::RandExponential::shoot(lambda);
      stepSum += stepDelta;
      if(stepSum >= step) break;
      numOfCollisions++;

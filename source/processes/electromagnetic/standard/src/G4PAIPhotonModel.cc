@@ -1075,7 +1075,7 @@ G4PAIPhotonModel::GetAlongStepTransfer( G4PhysicsTable* pTable,
     else                 lambda = DBL_MAX;
     while(numb)
     {
-      stepDelta = RandExponential::shoot(lambda);
+      stepDelta = CLHEP::RandExponential::shoot(lambda);
       stepSum += stepDelta;
       if(stepSum >= step) break;
       numOfCollisions++;
@@ -1105,12 +1105,12 @@ G4PAIPhotonModel::GetAlongStepTransfer( G4PhysicsTable* pTable,
     {
       meanNumber = ((*(*pTable)(iPlace+1))(0) - dNdxCut2)*cof;
       if( meanNumber < 0. ) meanNumber = 0. ;
-      //  numOfCollisions = RandPoisson::shoot(meanNumber) ;
+      //  numOfCollisions = CLHEP::RandPoisson::shoot(meanNumber) ;
       if( meanNumber > 0.) lambda = step/meanNumber;
       else                 lambda = DBL_MAX;
       while(numb)
       {
-        stepDelta = RandExponential::shoot(lambda);
+        stepDelta = CLHEP::RandExponential::shoot(lambda);
         stepSum += stepDelta;
         if(stepSum >= step) break;
         numOfCollisions++;
@@ -1148,12 +1148,12 @@ G4PAIPhotonModel::GetAlongStepTransfer( G4PhysicsTable* pTable,
       meanNumber=( ((*(*pTable)(iPlace))(0)-dNdxCut1)*W1 + 
 		   ((*(*pTable)(iPlace+1))(0)-dNdxCut2)*W2 )*cof;
       if(meanNumber<0.0) meanNumber = 0.0;
-      //  numOfCollisions = RandPoisson::shoot(meanNumber) ;
+      //  numOfCollisions = CLHEP::RandPoisson::shoot(meanNumber) ;
       if( meanNumber > 0.) lambda = step/meanNumber;
       else                 lambda = DBL_MAX;
       while(numb)
       {
-        stepDelta = RandExponential::shoot(lambda);
+        stepDelta = CLHEP::RandExponential::shoot(lambda);
         stepSum += stepDelta;
         if(stepSum >= step) break;
         numOfCollisions++;
