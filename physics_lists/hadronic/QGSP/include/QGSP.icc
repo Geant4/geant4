@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QGSP.icc,v 1.4 2005-11-25 17:33:40 gunter Exp $
+// $Id: QGSP.icc,v 1.5 2005-11-30 18:16:40 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -49,7 +49,8 @@
 #include <iomanip>   
 
 #include "GeneralPhysics.hh"
-#include "EMPhysics.hh"
+#include "G4EmStandardPhysics.hh"
+#include "G4EmExtraPhysics.hh"
 #include "IonPhysics.hh"
 
 #include "G4DataQuestionaire.hh"
@@ -67,11 +68,14 @@ template<class T> TQGSP<T>::TQGSP():  T()
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(1);
 
+  // EM Physics
+  this->RegisterPhysics( new G4EmStandardPhysics("standard EM"));
+
+  // Synchroton Radiation & GN Physics
+  this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
+
   // General Physics - i.e. decay
   this->RegisterPhysics( new GeneralPhysics("general") );
-
-  // EM Physics
-  this->RegisterPhysics( new EMPhysics("standard EM"));
 
    // Hadron Physics
   this->RegisterPhysics( new HadronPhysicsQGSP("hadron"));
