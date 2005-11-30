@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test22.cc,v 1.1 2001-11-15 15:10:10 hpw Exp $
+// $Id: test22.cc,v 1.2 2005-11-30 17:51:12 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -53,8 +53,8 @@ int main(int argc,char** argv) {
 
   // UserAction classes
   runManager->SetUserAction(new Tst22RunAction);
-  runManager->SetUserAction(new Tst22EventAction);
   runManager->SetUserAction(new Tst22PrimaryGeneratorAction);
+  runManager->SetUserAction(new Tst22EventAction);
   //runManager->SetUserAction(new Tst22SteppingAction);
 
   if(argc==1)
