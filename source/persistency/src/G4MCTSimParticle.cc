@@ -50,7 +50,7 @@ G4MCTSimParticle::G4MCTSimParticle()
 /////////////////////////////////////////////////////////////
 G4MCTSimParticle::G4MCTSimParticle(std::string aname, int apcode, 
 			       int atid, int ptid,
-			       const HepLorentzVector& p)
+			       const G4LorentzVector& p)
   : parentParticle(0), 
     name(aname), pdgID(apcode), 
     trackID(atid), parentTrackID(ptid),
@@ -63,7 +63,7 @@ G4MCTSimParticle::G4MCTSimParticle(std::string aname, int apcode,
 /////////////////////////////////////////////////////////////
 G4MCTSimParticle::G4MCTSimParticle(std::string aname, int apcode, 
 			       int atid, int ptid,
-			       const HepLorentzVector& p,
+			       const G4LorentzVector& p,
 			       const G4MCTSimVertex* v )
   : parentParticle(0), 
     name(aname), pdgID(apcode), 

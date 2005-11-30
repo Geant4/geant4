@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModel.cc,v 1.10 2005-10-24 11:11:33 allison Exp $
+// $Id: G4VModel.cc,v 1.11 2005-11-30 16:06:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,6 +30,7 @@
 
 #include "G4VModel.hh"
 
+#include "G4RotationMatrix.hh"
 #include "G4ModelingParameters.hh"
 
 G4VModel::G4VModel (const G4Transform3D& modelTransformation,
@@ -70,7 +71,7 @@ std::ostream& operator << (std::ostream& os, const G4VModel& m) {
   os << "\n  Extent: " << m.fExtent;
   os << "\n  Transformation: ";
   os << "\n    Rotation: ";
-  HepRotation rotation = m.fTransform.getRotation ();
+  G4RotationMatrix rotation = m.fTransform.getRotation ();
   os << rotation.thetaX() << ", "
      << rotation.phiX() << ", "
      << rotation.thetaY() << ", "

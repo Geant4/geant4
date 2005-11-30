@@ -48,7 +48,7 @@ G4MCTSimVertex::G4MCTSimVertex()
 }
 
 /////////////////////////////////////////////////////////
-G4MCTSimVertex::G4MCTSimVertex(const Hep3Vector& x, double t)
+G4MCTSimVertex::G4MCTSimVertex(const G4ThreeVector& x, double t)
   : inParticleTrackID(0), id(-1), position(x), time(t),
     volumeName(""), volumeNumber(-1),
     creatorProcessName("none"), storeFlag(false)
@@ -57,7 +57,7 @@ G4MCTSimVertex::G4MCTSimVertex(const Hep3Vector& x, double t)
 }
 
 ///////////////////////////////////////////////////////////////
-G4MCTSimVertex::G4MCTSimVertex(const Hep3Vector& x, double t,
+G4MCTSimVertex::G4MCTSimVertex(const G4ThreeVector& x, double t,
 	       std::string vname, int ncopy, std::string pname)
   : inParticleTrackID(0), id(-1), position(x), time(t),
     volumeName(vname), volumeNumber(ncopy),
