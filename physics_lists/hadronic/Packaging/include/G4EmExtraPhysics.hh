@@ -20,12 +20,12 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmExtraBuilder.hh,v 1.2 2005-11-30 18:28:52 vnivanch Exp $
+// $Id: G4EmExtraPhysics.hh,v 1.1 2005-11-30 18:28:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4EmExtraBuilder
+// ClassName:   G4EmExtraPhysics
 //
 // Author: 2002 J.P. Wellisch
 //
@@ -35,8 +35,8 @@
 //----------------------------------------------------------------------------
 //
 
-#ifndef G4EmExtraBuilder_h
-#define G4EmExtraBuilder_h 1
+#ifndef G4EmExtraPhysics_h
+#define G4EmExtraPhysics_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
@@ -45,11 +45,11 @@ class G4EmMessenger;
 class G4SynchrotronRadiation;
 class G4ElectroNuclearBuilder;
 
-class G4EmExtraBuilder : public G4VPhysicsConstructor
+class G4EmExtraPhysics : public G4VPhysicsConstructor
 {
 public:
-  G4EmExtraBuilder(const G4String& name = "EM extra");
-  virtual ~G4EmExtraBuilder();
+  G4EmExtraPhysics(const G4String& name = "EM extra");
+  virtual ~G4EmExtraPhysics();
 
   void ConstructParticle();
   void ConstructProcess();
@@ -63,7 +63,7 @@ private:
   G4bool synchOn;
   G4bool gammNucOn;
 
-//  G4EmMessenger*           theMessenger;
+  G4EmMessenger*           theMessenger;
   G4SynchrotronRadiation*  theElectronSynch;
   G4SynchrotronRadiation*  thePositronSynch;
   G4ElectroNuclearBuilder* theGNPhysics;

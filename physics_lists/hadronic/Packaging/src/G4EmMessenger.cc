@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmMessenger.cc,v 1.1 2005-11-11 22:56:07 vnivanch Exp $
+// $Id: G4EmMessenger.cc,v 1.2 2005-11-30 18:28:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -36,9 +36,9 @@
 //
 
 #include "G4EmMessenger.hh"
-#include "G4EmExtraBuilder.hh"
+#include "G4EmExtraPhysics.hh"
 
-G4EmMessenger::G4EmMessenger(G4EmExtraBuilder* ab)
+G4EmMessenger::G4EmMessenger(G4EmExtraPhysics* ab)
 {
   theB = ab;
   aDir1 = new G4UIdirectory("/physics_engine/");

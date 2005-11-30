@@ -20,12 +20,12 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmExtraBuilder.cc,v 1.2 2005-11-30 18:28:52 vnivanch Exp $
+// $Id: G4EmExtraPhysics.cc,v 1.1 2005-11-30 18:28:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4EmExtraBuilder
+// ClassName:   G4EmExtraPhysics
 //
 // Author: 2002 J.P. Wellisch
 //
@@ -35,7 +35,7 @@
 //----------------------------------------------------------------------------
 //
 
-#include "G4EmExtraBuilder.hh"
+#include "G4EmExtraPhysics.hh"
 #include "G4EmMessenger.hh"
 
 #include "G4SynchrotronRadiation.hh"
@@ -48,42 +48,42 @@
 #include "G4Positron.hh"
 #include "G4ProcessManager.hh"
 
-G4EmExtraBuilder::G4EmExtraBuilder(const G4String& name): G4VPhysicsConstructor(name),
+G4EmExtraPhysics::G4EmExtraPhysics(const G4String& name): G4VPhysicsConstructor(name),
   wasActivated(false), synchOn(false),
-  gammNucOn(false), theElectronSynch(0), thePositronSynch(0),
+  gammNucOn(true), theElectronSynch(0), thePositronSynch(0),
   theGNPhysics(0)
 {
- // theMessenger = new G4EmMessenger(this);
+  theMessenger = new G4EmMessenger(this);
 }
 
-G4EmExtraBuilder::~G4EmExtraBuilder()
+G4EmExtraPhysics::~G4EmExtraPhysics()
 {
-  //delete theMessenger;
+  delete theMessenger;
   if(theElectronSynch) delete theElectronSynch;
   if(thePositronSynch) delete thePositronSynch;
   if(theGNPhysics)     delete theGNPhysics;
 }
 
-void G4EmExtraBuilder::Synch(G4String & newState)
+void G4EmExtraPhysics::Synch(G4String & newState)
 {
   if(newState == "on") synchOn = true;
   else                 synchOn = false;
 }
 
-void G4EmExtraBuilder::GammaNuclear(G4String & newState)
+void G4EmExtraPhysics::GammaNuclear(G4String & newState)
 {
   if(newState == "on") gammNucOn = true;
   else                 gammNucOn = false;
 }
 
-void G4EmExtraBuilder::ConstructParticle()
+void G4EmExtraPhysics::ConstructParticle()
 {
   G4Gamma::Gamma();
   G4Electron::Electron();
   G4Positron::Positron();
 }
 
-void G4EmExtraBuilder::ConstructProcess()
+void G4EmExtraPhysics::ConstructProcess()
 {
   G4ProcessManager * pManager = 0;
   wasActivated = true;

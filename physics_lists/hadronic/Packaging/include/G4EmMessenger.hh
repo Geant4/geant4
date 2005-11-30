@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmMessenger.hh,v 1.1 2005-11-11 22:56:07 vnivanch Exp $
+// $Id: G4EmMessenger.hh,v 1.2 2005-11-30 18:28:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -36,9 +36,9 @@
 //
 
 #ifndef G4EmMessenger_h
-#define G4EmMessenger_h
+#define G4EmMessenger_h 1
 
-class G4EmExtraBuilder;
+class G4EmExtraPhysics;
 
 #include "G4UImessenger.hh"
 #include "G4UIdirectory.hh"
@@ -47,13 +47,13 @@ class G4EmExtraBuilder;
 class G4EmMessenger: public G4UImessenger
 {
 public:
-  G4EmMessenger(G4EmExtraBuilder* af);
+  G4EmMessenger(G4EmExtraPhysics* af);
   virtual ~G4EmMessenger();
 
   void SetNewValue(G4UIcommand* aComm, G4String aS);
 
 private:
-  G4EmExtraBuilder*   theB;
+  G4EmExtraPhysics*   theB;
   G4UIcmdWithAString* theSynch;
   G4UIcmdWithAString* theGN;
   G4UIdirectory*      aDir1;
