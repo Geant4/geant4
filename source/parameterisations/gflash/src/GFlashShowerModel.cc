@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: GFlashShowerModel.cc,v 1.7 2005-11-04 09:59:12 weng Exp $
+// $Id: GFlashShowerModel.cc,v 1.8 2005-11-30 14:47:06 weng Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -48,7 +48,9 @@
 #include "geomdefs.hh"
 
 #include "GFlashShowerModel.hh"
+#include "GFlashShowerParameterisation.hh"
 #include "GFlashHomoShowerParameterisation.hh"
+#include "GFlashSamplingShowerParameterisation.hh"
 #include "GFlashEnergySpot.hh"
 
 
@@ -276,9 +278,14 @@ GFlashShowerModel::ElectronDoIt(const G4FastTrack& fastTrack,
     } 
     EnergyNow  = EnergyNow - DEne;
     
-    //  apply sampling fluctuation
-    // G4double DEneSampling = Parametrisation->ApplySampling(DEne,Energy);
-    
+    //  apply sampling fluctuation - only in sampling calorimeters
+       GFlashSamplingShowerParameterisation* sp;
+    if  ( dynamic_cast<GFlashSamplingShowerParameterisation*>(Parameterisation)) {
+		sp =  dynamic_cast<GFlashSamplingShowerParameterisation*>(Parameterisation);
+		G4double DEneSampling =  sp->ApplySampling(DEne,Energy);
+		DEne = DEneSampling;
+		//	std::cout <<" Sampling  " << std::endl;
+		}
     //move particle in the middle of the step
     StepLenght        = StepLenght + Dz/2.00;  
     NewPositionShower = NewPositionShower + 
