@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParametrizedHadronicVertex.cc,v 1.4 2005-06-04 13:47:45 jwellisc Exp $
+// $Id: G4ParametrizedHadronicVertex.cc,v 1.5 2005-11-30 11:33:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -41,7 +41,7 @@ ApplyYourself(G4Nucleus & theTarget, const G4Track &thePhoton)
     G4double theKineticEnergy = thePhoton.GetKineticEnergy();
     G4HadFinalState * aR = 0;
     G4HadProjectile thePro(thePhoton);
-    if(RandBit::shootBit())
+    if(CLHEP::RandBit::shootBit())
     {
       if(theKineticEnergy<20*GeV) aR = theLowEPionMinus->ApplyYourself(thePro, theTarget);
       else aR = theHighEPionMinus->ApplyYourself(thePro, theTarget);
