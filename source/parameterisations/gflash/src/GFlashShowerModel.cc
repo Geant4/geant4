@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: GFlashShowerModel.cc,v 1.9 2005-11-30 19:17:08 gcosmo Exp $
+// $Id: GFlashShowerModel.cc,v 1.10 2005-11-30 19:29:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,7 +47,6 @@
 #include "geomdefs.hh"
 
 #include "GFlashShowerModel.hh"
-#include "GFlashShowerParameterisation.hh"
 #include "GFlashHomoShowerParameterisation.hh"
 #include "GFlashSamplingShowerParameterisation.hh"
 #include "GFlashEnergySpot.hh"

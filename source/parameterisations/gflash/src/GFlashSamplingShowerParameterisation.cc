@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: GFlashSamplingShowerParameterisation.cc,v 1.2 2005-11-30 19:17:08 gcosmo Exp $
+// $Id: GFlashSamplingShowerParameterisation.cc,v 1.3 2005-11-30 19:29:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,7 +32,7 @@
 // Authors: E.Barberio & Joanna Weng - 11.2005
 // ------------------------------------------------------------
 
-#include "GFlashShowerParameterisation.hh"
+#include "GVFlashShowerParameterisation.hh"
 #include "GFlashSamplingShowerParameterisation.hh"
 #include <cmath>
 #include "Randomize.hh"
@@ -44,7 +44,7 @@ GFlashSamplingShowerParameterisation::
 GFlashSamplingShowerParameterisation(G4Material* aMat1, G4Material* aMat2,
                                      G4double d1, G4double d2,
                                      GFlashSamplingShowerTuning* aPar)
-  : GFlashShowerParameterisation()
+  : GVFlashShowerParameterisation()
 {  
   if(!aPar) { thePar = new GFlashSamplingShowerTuning; }
   else      { thePar = aPar; }

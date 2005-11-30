@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: GFlashShowerParameterisation.hh,v 1.2 2005-11-30 19:17:08 gcosmo Exp $
+// $Id: GVFlashShowerParameterisation.hh,v 1.1 2005-11-30 19:29:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //---------------------------------------------------------------
 //  GEANT 4 class header file
 //
-//  GFlashShowerParameterisation
+//  GVFlashShowerParameterisation
 //
 //  Class description:
 //
@@ -36,20 +36,20 @@
 
 // Author: Joanna Weng - 11.2005
 //---------------------------------------------------------------
-#ifndef GFlashShowerParameterisation_h
-#define GFlashShowerParameterisation_h 1
+#ifndef GVFlashShowerParameterisation_h
+#define GVFlashShowerParameterisation_h 1
 
 #include "globals.hh"
 #include "GVFlashHomoShowerTuning.hh"
 
 class G4Material;
 
-class GFlashShowerParameterisation
+class GVFlashShowerParameterisation
 {
   public:  // with description
 
-    GFlashShowerParameterisation();
-    virtual ~GFlashShowerParameterisation();
+    GVFlashShowerParameterisation();
+    virtual ~GVFlashShowerParameterisation();
 
     virtual void ComputeRadialParameters(G4double y, G4double Tau)       = 0;
     virtual void GenerateLongitudinalProfile(G4double Energy)            = 0; 

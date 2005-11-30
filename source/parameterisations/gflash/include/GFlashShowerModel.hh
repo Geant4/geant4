@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GFlashShowerModel.hh,v 1.7 2005-11-30 19:17:08 gcosmo Exp $
+// $Id: GFlashShowerModel.hh,v 1.8 2005-11-30 19:29:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,7 +51,7 @@
 #include "GFlashHitMaker.hh"
 #include  <vector>
 
-class GFlashShowerParameterisation;
+class GVFlashShowerParameterisation;
 class GFlashHomoShowerParameterisation;
 class GFlashSamplingShowerParameterisation;
 
@@ -77,7 +77,7 @@ class GFlashShowerModel : public G4VFastSimulationModel
       { FlagParticleContainment = I; }
     inline void SetStepInX0(G4double Lenght)
       { StepInX0=Lenght; } 
-    inline void SetParameterisation(GFlashShowerParameterisation &DP)
+    inline void SetParameterisation(GVFlashShowerParameterisation &DP)
       { Parameterisation=&DP;}
     inline void SetHitMaker(GFlashHitMaker &Maker)
       { HMaker=&Maker; }
@@ -97,7 +97,7 @@ class GFlashShowerModel : public G4VFastSimulationModel
 
     // Gets ?  
     GFlashParticleBounds  *PBound;
-    GFlashShowerParameterisation *Parameterisation;  
+    GVFlashShowerParameterisation *Parameterisation;  
 
   private:
 

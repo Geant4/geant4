@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GFlashSamplingShowerParameterisation.hh,v 1.2 2005-11-30 19:17:08 gcosmo Exp $
+// $Id: GFlashSamplingShowerParameterisation.hh,v 1.3 2005-11-30 19:29:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,12 +41,12 @@
 
 #include "globals.hh"
 #include "GFlashSamplingShowerTuning.hh"
-#include "GFlashShowerParameterisation.hh"
+#include "GVFlashShowerParameterisation.hh"
 
 class G4Material;
 
 class GFlashSamplingShowerParameterisation
-  : public GFlashShowerParameterisation
+  : public GVFlashShowerParameterisation
 {
   public:
 

@@ -20,19 +20,19 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: GFlashShowerParameterisation.cc,v 1.2 2005-11-30 19:17:08 gcosmo Exp $
+// $Id: GVFlashShowerParameterisation.cc,v 1.1 2005-11-30 19:29:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // ------------------------------------------------------------
 // GEANT 4 class implementation
 //
-//      ------- GFlashShowerParameterisation -------
+//      ------- GVFlashShowerParameterisation -------
 //
 // Authors: Joanna Weng - 11.2005
 // ------------------------------------------------------------
 
-#include "GFlashShowerParameterisation.hh"
+#include "GVFlashShowerParameterisation.hh"
 #include <cmath>
 #include "Randomize.hh"
 #include "G4ios.hh"
@@ -40,16 +40,16 @@
 #include "Gamma.hh" // @@@@
 #include "G4MaterialTable.hh"
 
-GFlashShowerParameterisation::GFlashShowerParameterisation()
+GVFlashShowerParameterisation::GVFlashShowerParameterisation()
   : thePar(0)
 {
 }
 
-GFlashShowerParameterisation::~GFlashShowerParameterisation()
+GVFlashShowerParameterisation::~GVFlashShowerParameterisation()
 {
 }
 
-G4double GFlashShowerParameterisation::GetEffZ(const G4Material * mat  )
+G4double GVFlashShowerParameterisation::GetEffZ(const G4Material * mat  )
 {
   // Returns Z or effective Z=sum(pi*Zi) (if compound/mixture)
   // of given material
@@ -72,7 +72,7 @@ G4double GFlashShowerParameterisation::GetEffZ(const G4Material * mat  )
   return z;
 }
 
-G4double GFlashShowerParameterisation::GetEffA  (const G4Material * mat  )
+G4double GVFlashShowerParameterisation::GetEffA  (const G4Material * mat  )
 {
   // Returns A or effective A=sum(pi*Ai) (if compound/mixture)
   // of given material
@@ -92,10 +92,10 @@ G4double GFlashShowerParameterisation::GetEffA  (const G4Material * mat  )
   return a;
 }
 
-void GFlashShowerParameterisation::PrintMaterial(const G4Material * mat)
+void GVFlashShowerParameterisation::PrintMaterial(const G4Material * mat)
 {
   G4cout<<"/********************************************/ " << G4endl;
-  G4cout<<"  - GFlashShowerParameterisation::Material -  " << G4endl;
+  G4cout<<"  - GVFlashShowerParameterisation::Material -  " << G4endl;
   G4cout<<"        Material : " << mat->GetName()  << G4endl;
   G4cout<<"   Z = "<< Z  << G4endl;
   G4cout<<"   A = "<< A  << G4endl;
@@ -105,13 +105,13 @@ void GFlashShowerParameterisation::PrintMaterial(const G4Material * mat)
   G4cout<<"/********************************************/ " << G4endl; 
 }
 
-G4double GFlashShowerParameterisation::GeneratePhi()
+G4double GVFlashShowerParameterisation::GeneratePhi()
 {
   G4double Phi = twopi*G4UniformRand() ;
   return Phi;
 }
 
-G4double GFlashShowerParameterisation::gam(G4double x, G4double a) const 
+G4double GVFlashShowerParameterisation::gam(G4double x, G4double a) const 
 {
   static MyGamma theG;
   return  theG.Gamma(a, x); 
