@@ -87,8 +87,8 @@ G4FermiPhaseSpaceDecay::BetaKopylov(const G4int K) const
   // Notice that alpha > beta always
   const G4double beta = 1.5;
   G4double alpha = 1.5*(K-1);
-  G4double Y1 = G4RandGamma::shoot(alpha,1);
-  G4double Y2 = G4RandGamma::shoot(beta,1);
+  G4double Y1 = CLHEP::RandGamma::shoot(alpha,1);
+  G4double Y2 = CLHEP::RandGamma::shoot(beta,1);
   
   return Y1/(Y1+Y2);
 }
