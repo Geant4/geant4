@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EMTailorer.cc,v 1.2 2005-11-11 11:13:07 vnivanch Exp $
+// $Id: G4EMTailorer.cc,v 1.3 2005-11-30 22:23:11 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -36,9 +36,9 @@
 //
 
 #include "G4EMTailorer.hh"
-#include "G4EMBuilder.hh"
+#include "G4EmExtraBuilder.hh"
 
-G4EMTailorer::G4EMTailorer(G4EMBuilder * ab)
+G4EMTailorer::G4EMTailorer(G4EmExtraBuilder * ab)
 {
   theB = ab;
   aDir1 = new G4UIdirectory("/physics_engine/");
