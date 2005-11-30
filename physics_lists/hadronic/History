@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2005-02-17 11:49:25 gcosmo Exp $
+$Id: History,v 1.5 2005-11-30 07:56:47 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29.11.2005, G.Folger - hadr-lists-V07-01-00
+- (Partial) migration of physics lists to non static particles scheme.
+  A copy of the standard EM Builder is also used.
 
 17.02.2005, G.Cosmo - ghad-lists-V07-00-01
 - Added missing fix in LBE physics-list for usage of 'this' pointer for
