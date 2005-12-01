@@ -179,9 +179,10 @@ void HistoManager::EndOfRun()
   G4cout << std::setprecision(4) << "Average number of steps      " << xs << G4endl;
   for(j=0; j<3; j++) {
     G4cout << std::setprecision(4) << "Edep " << nam[j] << " =                   " << edep[j]
-           << " +- " << erms[j]*std::sqrt(x)
-           << "  res=  " << f*erms[j]/edep[j] << " %"
-	   << G4endl;
+           << " +- " << erms[j]*std::sqrt(x);
+    if(edep[j] > 0.0)
+      G4cout << "  res=  " << f*erms[j]/edep[j] << " %";
+    G4cout << G4endl;
   }
   G4cout<<"========================================================"<<G4endl;
   G4cout<<G4endl;

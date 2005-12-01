@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.2 2003-10-31 12:08:50 vnivanch Exp $
+// $Id: PhysicsList.hh,v 1.3 2005-12-01 09:55:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,6 +56,7 @@ public:
   void SetCutForGamma(G4double);
   void SetCutForElectron(G4double);
   void SetCutForPositron(G4double);
+  void SetMscStepLimit(G4bool val);
 
   void AddPhysicsList(const G4String& name);
   void ConstructProcess();
@@ -87,7 +88,7 @@ private:
   PhysicsListMessenger* pMessenger;
   G4ProductionCuts* vertexDetectorCuts;
   G4ProductionCuts* muonDetectorCuts;
-
+  G4bool mscStepLimit;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

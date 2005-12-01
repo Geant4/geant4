@@ -50,6 +50,8 @@
 #include "G4LossTableManager.hh"
 #include "StepMax.hh"
 
+#include "G4EmProcessOptions.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList()
@@ -64,6 +66,8 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   muonDetectorCuts   = 0;
 
   stepMaxProcess  = 0;
+
+  mscStepLimit = true;
 
   pMessenger = new PhysicsListMessenger(this);
   stepMaxProcess = new StepMax();
@@ -113,6 +117,10 @@ void PhysicsList::ConstructProcess()
     hadronPhys[i]->ConstructProcess();
   }
   AddStepMax();
+  if(!mscStepLimit) {
+    G4EmProcessOptions opt;
+    opt.SetMscStepLimitation(false);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -247,3 +255,11 @@ void PhysicsList::SetMuonCut(G4double cut)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::SetMscStepLimit(G4bool val)
+{
+  mscStepLimit = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
