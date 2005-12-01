@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QGSP_GN.icc,v 1.3 2005-11-29 17:03:07 gunter Exp $
+// $Id: QGSP_GN.icc,v 1.4 2005-12-01 18:27:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -31,6 +31,8 @@
 //
 // Modified:
 // 23.11.2005 G.Folger: migration to non static particles 
+// 30.11.2005 G.Folger: Register EmStandard first,
+//                      Use EmStandard71 
 //
 //----------------------------------------------------------------------------
 //
@@ -65,11 +67,14 @@ template<class T> TQGSP_GN<T>::TQGSP_GN():  T()
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(1);
 
-  // General Physics
-  this->RegisterPhysics( new GeneralPhysics("general") );
-
   // EM Physics
-  this->RegisterPhysics( new EM_GNPhysics("standard EM plus electron nuclear"));
+  this->RegisterPhysics( new G4EmStandardPhysics71("standard EM7.1"));
+
+  // Synchroton Radiation & GN Physics
+  this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
+
+  // General Physics - i.e. decay
+  this->RegisterPhysics( new GeneralPhysics("general") );
 
    // Hadron Physics
   this->RegisterPhysics(  new HadronPhysicsQGSP("hadron"));
