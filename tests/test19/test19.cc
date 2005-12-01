@@ -282,6 +282,7 @@ int main()
 
   // Run manager
   G4RunManager* runManager = new G4RunManager;
+  runManager->SetUserInitialization(new Test19PhysicsList);
 		G4StateManager::GetStateManager()->SetNewState(G4State_Init); // To let create ions
   G4ParticleDefinition* ionDefinition=0;
   ionDefinition=G4ParticleTable::GetParticleTable()->FindIon(6,12,0,6);
@@ -520,7 +521,6 @@ int main()
 #ifdef debug
    G4double totCN  = tgZ+part->GetPDGCharge();
    G4int    totBNN = tgZ+tgN+part->GetBaryonNumber();
-   G4cout<<"Test19:tC="<<totC<<"?="<<totCN<<",tB="<<totBN<<"?="<<totBNN<<G4endl;
 #endif
    G4double theStep   = 0.01*micrometer;
    // G4int maxz = (G4int)((*(material->GetElementVector()))[0]->GetZ()) + 1;
@@ -571,6 +571,9 @@ int main()
 
      G4int    totC=cp+ct;
      G4int    totBN=bnp+bnt;
+#ifdef debug
+     G4cout<<"Test19:tC="<<totC<<"?="<<totCN<<",tB="<<totBN<<"?="<<totBNN<<G4endl;
+#endif
      // Step Definition
      G4Step* step = new G4Step();
      step->SetTrack(gTrack);          // Step is initialized by the Track (?)
@@ -628,15 +631,20 @@ int main()
      for (G4int iter=0; iter<nEvt; iter++)
      {
 #ifdef debug
-      G4cout<<"Test19: ### "<<iter<< "-th event starts.### energu="<<energy<<G4endl;
+      G4cout<<"Test19: ### "<<iter<< "-th event starts.### energy="<<energy<<G4endl;
 #endif
 
       if(!(iter%100)&&iter)G4cout<<"***=>TEST19: "<<iter<<" events are simulated"<<G4endl;
 
       gTrack->SetStep(step);            // Now step is included in the Track (see above)
       gTrack->SetKineticEnergy(energy); // Duplication of Kin. Energy for the Track (?!)
+#ifdef debug
+      G4cout<<"Test19: Before PostStepDoIt"<<G4endl;
+#endif
       aChange = proc->PostStepDoIt(*gTrack,*step); // For On Flight
-      //aChange = proc->AtRestDoIt(*gTrack,*step);  // For At Rest
+#ifdef debug
+      G4cout<<"Test19: After PostStepDoIt"<<G4endl;
+#endif
       G4int nSec = aChange->GetNumberOfSecondaries();
       //G4cout<<"Test19: "<<nSec<<" secondary particles are generated"<<G4endl;
       G4double totCharge = totC;
