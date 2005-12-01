@@ -20,6 +20,19 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: HadronPhysicsLHEP_GN.cc,v 1.2 2005-12-01 18:48:15 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   HadronPhysicsLHEP_GN
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+//  1.12.2005 G.Folger: don't  keep processes as data members, but new these
+//
+//----------------------------------------------------------------------------
 #include "HadronPhysicsLHEP_GN.hh"
 
 #include "globals.hh"
@@ -28,13 +41,29 @@
 
 HadronPhysicsLHEP_GN::HadronPhysicsLHEP_GN(const G4String& name)
                     :  G4VPhysicsConstructor(name) 
+{}
+
+void HadronPhysicsLHEP_GN::CreateModels()
 {
-  theNeutrons.RegisterMe(&theLHEPNeutron);
-  theProton.RegisterMe(&theLHEPProton);
-  thePiK.RegisterMe(&theLHEPPiK);
+  theNeutrons=new G4NeutronBuilder;
+  theNeutrons->RegisterMe(theLHEPNeutron=new G4LHEPNeutronBuilder);
+
+  thePro=new G4ProtonBuilder;
+  thePro->RegisterMe(theLHEPPro=new G4LHEPProtonBuilder);
+
+  thePiK=new G4PiKBuilder;
+  thePiK->RegisterMe(theLHEPPiK=new G4LHEPPiKBuilder);
 }
 
-HadronPhysicsLHEP_GN::~HadronPhysicsLHEP_GN() {}
+HadronPhysicsLHEP_GN::~HadronPhysicsLHEP_GN()
+{
+   delete theLHEPNeutron;
+   delete theNeutrons;
+   delete theLHEPPro;
+   delete thePro;
+   delete theLHEPPiK;
+   delete thePiK;
+}
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -53,16 +82,19 @@ void HadronPhysicsLHEP_GN::ConstructParticle()
 
   G4ShortLivedConstructor pShortLivedConstructor;
   pShortLivedConstructor.ConstructParticle();  
+  
+  theMiscLHEP=new G4MiscLHEPBuilder;
+  theStoppingHadron=new G4StoppingHadronBuilder;
 }
 
 #include "G4ProcessManager.hh"
 void HadronPhysicsLHEP_GN::ConstructProcess()
 {
-  theNeutrons.Build();
-  thePiK.Build();
-  theProton.Build();
-  theMiscLHEP.Build();
-  theStoppingHadron.Build();
-  theHadronQED.Build();
+  CreateModels();
+  theNeutrons->Build();
+  thePro->Build();
+  thePiK->Build();
+  theMiscLHEP->Build();
+  theStoppingHadron->Build();
 }
 // 2002 by J.P. Wellisch
