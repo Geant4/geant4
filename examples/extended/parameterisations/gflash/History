@@ -1,12 +1,12 @@
-$Id: History,v 1.1 2005-11-04 15:18:14 gcosmo Exp $
+$Id: History,v 1.2 2005-12-01 18:26:30 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                      Category History file
-                      ---------------------
+                           History file
+                           ------------
 This file should be used by G4 developers and category coordinators
 to briefly summarize all major modifications introduced in the code
 and keep track of all category-tags.
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 1st, 2005 G.Cosmo 
+---------------------
+- Adapted to new gflash redesign. Coworks with "gflash-V07-01-02".
 
 Nov 4th, 2005 J.Weng
 --------------------
