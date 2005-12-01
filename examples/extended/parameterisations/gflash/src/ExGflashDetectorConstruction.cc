@@ -184,7 +184,7 @@ G4VPhysicalVolume* ExGflashDetectorConstruction::Construct()
 	cout<<"Shower parameterization"<<endl;
 	m_theFastShowerModel =  new GFlashShowerModel("fastShowerModel",aRegion);
 	m_theParameterisation = new GFlashHomoShowerParameterisation(matManager->getMaterial(mat));
-	m_theFastShowerModel->SetParametrisation(*m_theParameterisation);
+	m_theFastShowerModel->SetParameterisation(*m_theParameterisation);
 	m_theFastShowerModel->SetParticleBounds(*m_theParticleBounds) ;
 	m_theFastShowerModel->SetHitMaker(*m_theHMaker);	 
 	cout<<"end shower parameterization"<<endl;
