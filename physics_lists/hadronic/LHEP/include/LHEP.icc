@@ -20,7 +20,21 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-
+// $Id: LHEP.icc,v 1.4 2005-12-01 18:28:08 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 25.11.2005 G.Folger: migration to non static particles
+// 30.11.2005 G.Folger: Register EmStandard first, split Em Standard and Extra
+//
+//----------------------------------------------------------------------------
+/
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
@@ -35,7 +49,8 @@
 #include <iomanip>   
 
 #include "GeneralPhysics.hh"
-#include "EMPhysics.hh"
+#include "G4EmStandardPhysics.hh"
+#include "G4EmExtraPhysics.hh"
 #include "IonPhysics.hh"
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsLHEP.hh"
@@ -45,16 +60,19 @@ template<class T> TLHEP<T>::TLHEP():  T()
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
   G4DataQuestionaire it(photon);
-  G4cout << "You are using the simulation engine: LHEP 3.7"<<G4endl;
+  G4cout << "You are using the simulation engine: LHEP 4.0-beta-0"<<G4endl;
   G4cout <<G4endl<<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(1);
 
-  // General Physics
-  this->RegisterPhysics( new GeneralPhysics("general") );
-
   // EM Physics
-  this->RegisterPhysics( new EMPhysics("standard EM"));
+  this->RegisterPhysics( new G4EmStandardPhysics("standard EM"));
+
+  // Synchroton Radiation & GN Physics
+  this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
+
+  // General Physics - i.e. decay
+  this->RegisterPhysics( new GeneralPhysics("general") );
 
    // Hadron Physics
   this->RegisterPhysics(  new HadronPhysicsLHEP("hadron"));

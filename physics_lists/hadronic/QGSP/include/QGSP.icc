@@ -20,17 +20,18 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QGSP.icc,v 1.5 2005-11-30 18:16:40 gunter Exp $
+// $Id: QGSP.icc,v 1.6 2005-12-01 18:27:28 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   QGSP
+// ClassName:
 //
 // Author: 2002 J.P. Wellisch
 //
 // Modified:
-// 23.11.2005 G.Folger: migration to non static particles
+// 25.11.2005 G.Folger: migration to non static particles
+// 30.11.2005 G.Folger: Register EmStandard first, split Em Standard and Extra
 //
 //----------------------------------------------------------------------------
 //
