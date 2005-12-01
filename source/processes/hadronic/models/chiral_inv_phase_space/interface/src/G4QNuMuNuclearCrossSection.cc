@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNuMuNuclearCrossSection.cc,v 1.5 2005-11-30 16:26:42 mkossov Exp $
+// $Id: G4QNuMuNuclearCrossSection.cc,v 1.6 2005-12-01 17:28:18 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -49,6 +49,7 @@ G4double  G4QNuMuNuclearCrossSection::lastSig=0.;// Last calculated total cross 
 G4double  G4QNuMuNuclearCrossSection::lastQEL=0.;// Last calculated quasi-el. cross section
 G4int     G4QNuMuNuclearCrossSection::lastL=0;   // Last used in cross section TheLastBin
 G4double  G4QNuMuNuclearCrossSection::lastE=0.;  // Last used in cross section TheEnergy
+G4double* G4QNuMuNuclearCrossSection::lastEN=0;  // Pointer to the Energy Scale of TX & QE
 G4double* G4QNuMuNuclearCrossSection::lastTX=0;  // Pointer to the LastArray of TX function
 G4double* G4QNuMuNuclearCrossSection::lastQE=0;  // Pointer to the LastArray of QE function
 

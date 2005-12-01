@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.5 2005-11-30 16:26:42 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.6 2005-12-01 17:28:18 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -35,6 +35,12 @@
 //#define pdebug
 
 #include "G4QCollision.hh"
+
+// Initialization of static vectors
+std::vector<G4int> G4QCollision::ElementZ;            // Z of the element(i) in theLastCalc
+std::vector<G4double> G4QCollision::ElProbInMat;      // SumProbabilityElements in Material
+std::vector<std::vector<G4int>*> G4QCollision::ElIsoN;    // N of isotope(j) of Element(i)
+std::vector<std::vector<G4double>*>G4QCollision::IsoProbInEl;//SumProbabIsotopes inElementI
 
 G4QCollision::G4QCollision(const G4String& processName) : G4VDiscreteProcess(processName)
 {
@@ -334,6 +340,14 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   //
   const G4DynamicParticle* projHadron = track.GetDynamicParticle();
   const G4ParticleDefinition* particle=projHadron->GetDefinition();
+#ifdef debug
+  G4cout<<"G4QCollision::PostStepDoIt: Before the GetMeanFreePath is called"<<G4endl;
+#endif
+  G4ForceCondition cond=NotForced;
+  GetMeanFreePath(track, 1., &cond);
+#ifdef debug
+  G4cout<<"G4QCollision::PostStepDoIt: After the GetMeanFreePath is called"<<G4endl;
+#endif
   G4bool scat=false;
   G4int  scatPDG=0;                                   // Must be filled if true
   G4LorentzVector proj4M=projHadron->Get4Momentum();
@@ -355,7 +369,6 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   const G4Material* material = track.GetMaterial();      // Get the current material
   G4int Z=0;
   const G4ElementVector* theElementVector = material->GetElementVector();
-  G4int i=0;
   G4int nE=material->GetNumberOfElements();
 #ifdef debug
   G4cout<<"G4QCollision::PostStepDoIt: "<<nE<<" elements in the material."<<G4endl;
@@ -395,7 +408,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   G4int aProjPDG=std::abs(projPDG);
 #ifdef debug
   G4int prPDG=particle->GetPDGEncoding();
-		G4cout<<"G4QCollision::PostStepRestDoIt: projPDG="<<projPDG<<",stPDG="<<prPDG<<G4endl;
+		G4cout<<"G4QCollision::PostStepDoIt: projPDG="<<projPDG<<", stPDG="<<prPDG<<G4endl;
 #endif
   if(!projPDG)
   {
@@ -403,27 +416,52 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     return 0;
   }
   G4int EPIM=ElProbInMat.size();
+#ifdef debug
+		G4cout<<"G4QCollis::PostStDoIt: m="<<EPIM<<",n="<<nE<<",T="<<ElProbInMat[EPIM-1]<<G4endl;
+#endif
   G4double rnd = ElProbInMat[EPIM-1]*G4UniformRand();
-  for(i=0; i<nE; ++i) if (rnd<ElProbInMat[i]) break;
+  G4int i=0;
+  for(i=0; i<nE; ++i)
+		{
+#ifdef debug
+				G4cout<<"G4QCollision::PostStepDoIt:EPM["<<i<<"]="<<ElProbInMat[i]<<",r="<<rnd<<G4endl;
+#endif
+    if (rnd<ElProbInMat[i]) break;
+  }
   if(i>=nE) i=nE-1;                        // Top limit for the Element
   G4Element* pElement=(*theElementVector)[i];
   Z=static_cast<G4int>(pElement->GetZ());
+#ifdef debug
+				G4cout<<"G4QCollision::PostStepDoIt: i="<<i<<", Z(element)="<<Z<<G4endl;
+#endif
   if(Z<=0)
   {
-    G4cerr<<"---Warning---G4QCollision::PostStepDoIt:Element with Z="<<Z<<G4endl;
+    G4cerr<<"---Warning---G4QCollision::PostStepDoIt: Element with Z="<<Z<<G4endl;
     if(Z<0) return 0;
   }
   std::vector<G4double>* SPI = IsoProbInEl[i];// Vector of summedProbabilities for isotopes
   std::vector<G4int>* IsN = ElIsoN[i];     // Vector of "#of neutrons" in the isotope El[i]
   G4int nofIsot=SPI->size();               // #of isotopes in the element i
+#ifdef debug
+		G4cout<<"G4QCollis::PosStDoIt:n="<<nofIsot<<",T="<<(*SPI)[nofIsot-1]<<",r="<<rnd<<G4endl;
+#endif
   rnd = (*SPI)[nofIsot-1]*G4UniformRand(); // Randomize the isotop of the Element
   G4int j=0;
-  for(j=0; j<nofIsot; ++j) if(rnd < (*SPI)[i]) break;
+  for(j=0; j<nofIsot; ++j)
+  {
+#ifdef debug
+				G4cout<<"G4QCollision::PostStepDoIt: SP["<<j<<"]="<<(*SPI)[j]<<", r="<<rnd<<G4endl;
+#endif
+    if(rnd < (*SPI)[j]) break;
+  }
   if(j>=nofIsot) j=nofIsot-1;              // Top limit for the isotope
   G4int N =(*IsN)[j]; ;                    // Randomized number of neutrons
+#ifdef debug
+		G4cout<<"G4QCollision::PostStepDoIt: j="<<i<<", N(isotope)="<<Z<<G4endl;
+#endif
   if(N<0)
   {
-    G4cerr<<"-Warning-G4QCollision::PostStepDoIt:Isotope with Z="<<Z<<", 0>N="<<N<<G4endl;
+    G4cerr<<"-Warning-G4QCollision::PostStepDoIt: Isotope with Z="<<Z<<", 0>N="<<N<<G4endl;
     return 0;
   }
   nOfNeutrons=N;                           // Remember it for the energy-momentum check
@@ -455,17 +493,19 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     if(projPDG==  14) CSmanager=G4QNuMuNuclearCrossSection::GetPointer();
     if(projPDG== -14) CSmanager=G4QANuMuNuclearCrossSection::GetPointer();
     if(aProjPDG== 15) CSmanager=G4QTauNuclearCrossSection::GetPointer();
+    // @@ Probably this is not necessary any more
     G4double xSec=CSmanager->GetCrossSection(Momentum, Z, N);// Recalculate Cross Section!
     // @@ check a possibility to separate p, n, or alpha (!)
+    G4double photonEnergy = CSmanager->GetExchangeEnergy(); // Energy of EqivExchangePart
     if(xSec <= 0.) // The cross-section iz 0 -> Do Nothing
     {
+      G4cerr<<"-Warning-G4QCollision::PSDoIt: IsStillCalled photE="<<photonEnergy<<G4endl;
       //Do Nothing Action insead of the reaction
       aParticleChange.ProposeEnergy(kinEnergy);
       aParticleChange.ProposeLocalEnergyDeposit(0.);
       aParticleChange.ProposeMomentumDirection(dir) ;
       return G4VDiscreteProcess::PostStepDoIt(track,step);
     }
-    G4double photonEnergy = CSmanager->GetExchangeEnergy(); // Energy of EqivExchangePart
     if( kinEnergy < photonEnergy )
     {
       //Do Nothing Action insead of the reaction
@@ -550,10 +590,12 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       CSmanager=G4QANuMuNuclearCrossSection::GetPointer(); // @@ open
       scatPDG=-13;                       // secondary scattered mu+
     }
+    // @@ Probably this is not necessary any more
     G4double xSec=CSmanager->GetCrossSection(Momentum, Z, N);// Recalculate Cross Section
     // @@ check a possibility to separate p, n, or alpha (!)
     if(xSec <= 0.) // The cross-section = 0 -> Do Nothing
     {
+      G4cerr<<"-Warning-G4QCollision::PSDoIt: IsStillCalled nuE="<<kinEnergy<<G4endl;
       //Do Nothing Action insead of the reaction
       aParticleChange.ProposeEnergy(kinEnergy);
       aParticleChange.ProposeLocalEnergyDeposit(0.);
