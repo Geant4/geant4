@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.40 2005-11-13 08:39:48 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.41 2005-12-01 09:53:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -82,6 +82,7 @@
 // 26-10-05 the above is put in the function MscStepLimitation() (mma)
 // 05-11-05 tlimitmin = facrange*rungecut (instead of a fixed value)L.Urban
 // 13-11-05 some code cleaning, slightly better timing (L.Urban)
+// 01-12-05 add control on verbosity in SetMscStepLimitation
 //
 // -----------------------------------------------------------------------------
 //
@@ -148,9 +149,10 @@ void G4MultipleScattering::MscStepLimitation(G4bool algorithm, G4double factor)
   steppingAlgorithm = algorithm;
   if (factor > 0.) SetFacrange(factor);
   else { if (algorithm) SetFacrange(0.02); else SetFacrange(0.2);}
-  
-  G4cout << "Stepping algorithm is set to " << steppingAlgorithm 
-         << " with facrange = " << facrange << G4endl;  
+
+  if(verboseLevel > 1)  
+    G4cout << "Stepping algorithm is set to " << steppingAlgorithm 
+	   << " with facrange = " << facrange << G4endl;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -295,6 +297,7 @@ void G4MultipleScattering::PrintInfo()
   if(boundary) {
     G4cout << "      Boundary/stepping algorithm is active with facrange= "
            << facrange
+           << "  Step limitation " << steppingAlgorithm
            << G4endl;
   }
 }
