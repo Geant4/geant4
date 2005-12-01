@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: GFlashShowerModel.cc,v 1.10 2005-11-30 19:29:44 gcosmo Exp $
+// $Id: GFlashShowerModel.cc,v 1.11 2005-12-01 17:01:03 weng Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -282,10 +282,12 @@ GFlashShowerModel::ElectronDoIt(const G4FastTrack& fastTrack,
     
     // Apply sampling fluctuation - only in sampling calorimeters
     //
-    if (Parameterisation)
+    GFlashSamplingShowerParameterisation* sp =
+      dynamic_cast<GFlashSamplingShowerParameterisation*>(Parameterisation);
+    if (sp)
     {
-      GFlashSamplingShowerParameterisation* sp =
-        dynamic_cast<GFlashSamplingShowerParameterisation*>(Parameterisation);
+      //GFlashSamplingShowerParameterisation* sp =
+      // dynamic_cast<GFlashSamplingShowerParameterisation*>(Parameterisation);
       G4double DEneSampling = sp->ApplySampling(DEne,Energy);
       DEne = DEneSampling;
     }
