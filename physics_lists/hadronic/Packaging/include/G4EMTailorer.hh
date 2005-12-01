@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EMTailorer.hh,v 1.4 2005-12-01 06:45:21 vnivanch Exp $
+// $Id: G4EMTailorer.hh,v 1.5 2005-12-01 18:25:32 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -38,7 +38,7 @@
 #ifndef G4EMTailorer_h
 #define G4EMTailorer_h
 
-class G4EMBuilder;
+class G4EmExtraPhysics;
 #include "G4UImessenger.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
@@ -46,13 +46,13 @@ class G4EMBuilder;
 class G4EMTailorer: public G4UImessenger
 {
 public:
-  G4EMTailorer(G4EMBuilder * af);
+  G4EMTailorer(G4EmExtraPhysics * af);
   virtual ~G4EMTailorer();
 
   void SetNewValue(G4UIcommand* aComm, G4String aS);
 
 private:
-  G4EMBuilder * theB;
+  G4EmExtraPhysics * theB;
   G4UIcmdWithAString * theSynch;
   G4UIcmdWithAString * theGN;
   G4UIdirectory *aDir1;
