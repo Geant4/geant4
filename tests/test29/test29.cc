@@ -270,6 +270,7 @@ int main()
 
   // Run manager
   G4RunManager* runManager = new G4RunManager;
+  runManager->SetUserInitialization(new Test29PhysicsList);
 		G4StateManager::GetStateManager()->SetNewState(G4State_Init); // To let create ions
   G4ParticleDefinition* ionDefinition=0;
   ionDefinition=G4ParticleTable::GetParticleTable()->FindIon(6,12,0,6);
