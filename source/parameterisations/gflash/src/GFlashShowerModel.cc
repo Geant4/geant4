@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: GFlashShowerModel.cc,v 1.11 2005-12-01 17:01:03 weng Exp $
+// $Id: GFlashShowerModel.cc,v 1.12 2005-12-01 18:20:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -100,7 +100,7 @@ G4bool GFlashShowerModel::ModelTrigger(const G4FastTrack & fastTrack )
     G4ParticleDefinition &ParticleType =
       *(fastTrack.GetPrimaryTrack()->GetDefinition()); 
     if(ParticleEnergy > PBound->GetMinEneToParametrise(ParticleType) ||
-      ParticleEnergy < PBound->GetMaxEneToParametrise(ParticleType) )
+       ParticleEnergy < PBound->GetMaxEneToParametrise(ParticleType) )
     {
       // check conditions depending on particle flavour
       // performance to be optimized @@@@@@@
@@ -286,8 +286,6 @@ GFlashShowerModel::ElectronDoIt(const G4FastTrack& fastTrack,
       dynamic_cast<GFlashSamplingShowerParameterisation*>(Parameterisation);
     if (sp)
     {
-      //GFlashSamplingShowerParameterisation* sp =
-      // dynamic_cast<GFlashSamplingShowerParameterisation*>(Parameterisation);
       G4double DEneSampling = sp->ApplySampling(DEne,Energy);
       DEne = DEneSampling;
     }
