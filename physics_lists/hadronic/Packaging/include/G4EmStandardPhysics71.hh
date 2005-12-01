@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmStandardPhysics71.hh,v 1.1 2005-11-30 18:00:38 vnivanch Exp $
+// $Id: G4EmStandardPhysics71.hh,v 1.2 2005-12-01 06:45:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -44,6 +44,8 @@
 // for lib list detection....
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
+
+#include "G4EmProcessOptions.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
