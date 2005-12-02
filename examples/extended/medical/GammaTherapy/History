@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2005-10-03 02:22:03 vnivanch Exp $
+$Id: History,v 1.18 2005-12-02 17:33:11 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02 Dec 05: V.Ivant (gtherapy-V07-01-02)
+- Fix crash connected with non-static hadrons
 
 23 August 05: V.Ivant (gtherapy-V07-01-01)
 - Add g4v71 builder 
