@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSC_LEAD_HP.cc,v 1.3 2005-12-02 18:04:01 gunter Exp $
+// $Id: HadronPhysicsQGSC_LEAD_HP.cc,v 1.4 2005-12-02 18:26:58 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -75,6 +75,9 @@ void HadronPhysicsQGSC_LEAD_HP::CreateModels()
   theLEPPiK->SetMaxEnergy(25*GeV);
   theLEPPiK->SetMinEnergy(4.99*GeV);
   thePiK->RegisterMe(theLEADPiK=new G4LEADPiKBuilder);
+
+  theMiscLHEP=new G4MiscLHEPBuilder;
+  theStoppingHadron=new G4StoppingHadronBuilder;
 }
 
 HadronPhysicsQGSC_LEAD_HP::~HadronPhysicsQGSC_LEAD_HP()
