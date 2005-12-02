@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QGSC_LEAD_HP.icc,v 1.4 2005-12-02 18:04:01 gunter Exp $
+// $Id: QGSC_LEAD_HP.icc,v 1.5 2005-12-02 18:43:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -61,7 +61,7 @@ template<class T> TQGSC_LEAD_HP<T>::TQGSC_LEAD_HP():  T()
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
   G4DataQuestionaire it(photon, neutron);
-  G4cout << "You are using the simulation engine: QGSC_LEAD_HP 1.7"<<G4endl;
+  G4cout << "You are using the simulation engine: QGSC_LEAD_HP 3.0-beta-0"<<G4endl;
   G4cout <<G4endl<<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(1);
