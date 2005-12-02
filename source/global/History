@@ -1,4 +1,4 @@
-$Id: History,v 1.152 2005-11-28 11:00:11 gcosmo Exp $
+$Id: History,v 1.153 2005-12-02 15:11:23 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 02, 2005  G.Cosmo (global-V07-01-06)
+- templates.hh: get rid of hard-coded numbers for DBL_MIN, FLT_MIN, DBL_DIG,
+  DBL_MAX, FLT_DIG, FLT_MAX/MAXFLOAT. Use numeric_limits from <limits> instead.
+  Fix necessary to allow for porting on VC++8 compiler.
+- Added unit test LimitsTest.cc.
 
 Nov 28, 2005  G.Cosmo (global-V07-01-05)
 - Changed header file from version.hh to G4Version.hh.
