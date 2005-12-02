@@ -27,7 +27,6 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4HadronQEDBuilder.hh"
 #include "G4StoppingHadronBuilder.hh"
 #include "G4MiscLHEPBuilder.hh"
 
@@ -76,7 +75,6 @@ class HadronPhysicsQGSC_LEAD_HP : public G4VPhysicsConstructor
     
     G4MiscLHEPBuilder theMiscLHEP;
     G4StoppingHadronBuilder theStoppingHadron;
-    G4HadronQEDBuilder theHadronQED;
 };
 
 // 2002 by J.P. Wellisch

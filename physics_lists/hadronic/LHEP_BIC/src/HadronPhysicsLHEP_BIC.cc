@@ -71,6 +71,5 @@ void HadronPhysicsLHEP_BIC::ConstructProcess()
   thePiK.Build();
   theMiscLHEP.Build();
   theStoppingHadron.Build();
-  theHadronQED.Build();
 }
 // 2002 by J.P. Wellisch

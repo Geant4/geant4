@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: LHEP_GN.icc,v 1.3 2005-12-01 18:48:15 gunter Exp $
+// $Id: LHEP_GN.icc,v 1.4 2005-12-02 12:42:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -32,6 +32,7 @@
 // Modified:
 // 30.11.2005 G.Folger: migration to non static particles
 // 30.11.2005 G.Folger: Register EmStandard first, split Em Standard and Extra
+// 02.12.2005 V.Ivanchenko: rename components
 //
 //----------------------------------------------------------------------------
 //
@@ -49,10 +50,11 @@
 #include "G4ios.hh"
 #include <iomanip>   
 
-#include "GeneralPhysics.hh"
+#include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
-#include "IonPhysics.hh"
+#include "G4IonPhysics.hh"
+
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsLHEP_GN.hh"
 
@@ -73,15 +75,13 @@ template<class T> TLHEP_GN<T>::TLHEP_GN():  T()
   this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
 
   // General Physics - i.e. decay
-  this->RegisterPhysics( new GeneralPhysics("general") );
+  this->RegisterPhysics( new G4DecayPhysics("general") );
 
    // Hadron Physics
   this->RegisterPhysics(  new HadronPhysicsLHEP_GN("hadron"));
 
   // Ion Physics
-  this->RegisterPhysics( new IonPhysics("ion"));
-
-
+  this->RegisterPhysics( new G4IonPhysics("ion"));
 }
 
 template<class T> TLHEP_GN<T>::~TLHEP_GN()
@@ -98,7 +98,8 @@ template<class T> void TLHEP_GN<T>::SetCuts()
 
   this->SetCutsWithDefault();   
  
-  G4VUserPhysicsList::DumpCutValuesTable();  
+  if (this->verboseLevel >0)
+    G4VUserPhysicsList::DumpCutValuesTable();  
  
   
 }

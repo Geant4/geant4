@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: FTFC.icc,v 1.3 2005-11-29 16:59:40 gunter Exp $
+// $Id: FTFC.icc,v 1.4 2005-12-02 12:42:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -31,6 +31,7 @@
 //
 // Modified:
 // 28.11.2005 G.Folger: migration to non static particles
+// 02.12.2005 V.Ivanchenko: rename components
 //
 //----------------------------------------------------------------------------
 //
@@ -48,12 +49,12 @@
 #include "G4ios.hh"
 #include <iomanip>   
 
-#include "GeneralPhysics.hh"
-#include "EMPhysics.hh"
-#include "IonPhysics.hh"
+#include "G4DecayPhysics.hh"
+#include "G4EmStandardPhysics.hh"
+#include "G4EmExtraPhysics.hh"
+#include "G4IonPhysics.hh"
 
 #include "G4DataQuestionaire.hh"
-#include "HadronPhysicsFTFC.hh"
 #include "HadronPhysicsFTFC.hh"
 
 template<class T> TFTFC<T>::TFTFC():  T()
@@ -61,23 +62,25 @@ template<class T> TFTFC<T>::TFTFC():  T()
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
   G4DataQuestionaire it(photon);
-  G4cout << "You are using the simulation engine: FTFC 2.8"<<G4endl;
+  G4cout << "You are using the simulation engine: FTFC 3.0"<<G4endl;
   G4cout <<G4endl<<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(1);
 
-  // General Physics
-  this->RegisterPhysics( new GeneralPhysics("general") );
-
   // EM Physics
-  this->RegisterPhysics( new EMPhysics("standard EM"));
+  this->RegisterPhysics( new G4EmStandardPhysics("standard EM"));
+
+  // Synchroton Radiation & GN Physics
+  this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
+
+  // General Physics - i.e. decay
+  this->RegisterPhysics( new G4DecayPhysics("decay") );
 
    // Hadron Physics
   this->RegisterPhysics(  new HadronPhysicsFTFC("hadron"));
 
   // Ion Physics
-  this->RegisterPhysics( new IonPhysics("ion"));
-
+  this->RegisterPhysics( new G4IonPhysics("ion"));
 
 }
 
@@ -95,8 +98,8 @@ template<class T> void TFTFC<T>::SetCuts()
 
   this->SetCutsWithDefault();   
  
-  G4VUserPhysicsList::DumpCutValuesTable();  
-  
+  if (this->verboseLevel > 0)
+    G4VUserPhysicsList::DumpCutValuesTable();  
 }
 
 
