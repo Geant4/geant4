@@ -20,6 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: LHEP_BIC_HP.hh,v 1.2 2005-12-02 16:51:45 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:  LHEP_BIC_HP
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 30.11.2005 G.Folger: migration to non static particles
+//
+//----------------------------------------------------------------------------
+//
 #ifndef TLHEP_BIC_HP_h
 #define TLHEP_BIC_HP_h 1
 
