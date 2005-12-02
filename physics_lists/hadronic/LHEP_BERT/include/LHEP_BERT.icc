@@ -20,6 +20,21 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: LHEP_BERT.icc,v 1.4 2005-12-02 16:09:51 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName: LHEP_BERT
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 30.11.2005 G.Folger: migration to non static particles
+// 30.11.2005 G.Folger: Register EmStandard first, split Em Standard and Extra
+//
+//----------------------------------------------------------------------------
+//
 
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
@@ -48,7 +63,8 @@ template<class T> TLHEP_BERT<T>::TLHEP_BERT():  T()
   // defaultCutValue = 1.0*mm;
 
   G4DataQuestionaire it(photon);
-  G4cout << "You are using the simulation engine: LHEP_BERT 3.0"<<G4endl;
+  G4cout << "You are using the simulation engine: LHEP_BERT 3.0-beta-0"<<G4endl;
+//  G4cout << "You are using the simulation engine: LHEP_BERT 1.1"<<G4endl;
   G4cout <<G4endl<<G4endl;
 
   this->defaultCutValue = 0.7*mm;  

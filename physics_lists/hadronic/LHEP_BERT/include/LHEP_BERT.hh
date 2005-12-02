@@ -20,6 +20,19 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: LHEP_BERT.hh,v 1.2 2005-12-02 16:09:51 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:  LHEP_BERT
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
 #ifndef TLHEP_BERT_h
 #define TLHEP_BERT_h 1
 

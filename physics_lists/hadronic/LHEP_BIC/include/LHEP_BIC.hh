@@ -20,6 +20,19 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: LHEP_BIC.hh,v 1.2 2005-12-02 16:13:42 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName: HadronPhysicsLHEP_BIC
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
 #ifndef TLHEP_BIC_h
 #define TLHEP_BIC_h 1
 
