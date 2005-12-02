@@ -46,7 +46,7 @@
  void G4QGSPProtonBuilder::
  Build(G4ProtonInelasticProcess * aP)
  {
- G4cout << "adding inelastic Proton in QGSP" << G4endl;
+// G4cout << "adding inelastic Proton in QGSP" << G4endl;
    aP->AddDataSet(&theXSec);  
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(100*TeV);

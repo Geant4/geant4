@@ -45,7 +45,7 @@ Build(G4HadronElasticProcess * aP)
 void G4LEPProtonBuilder::
 Build(G4ProtonInelasticProcess * aP)
 {
- G4cout << "adding inelastic Proton in LHEP" << G4endl;
+// G4cout << "adding inelastic Proton in LHEP" << G4endl;
   theLEProtonModel = new G4LEProtonInelastic();
   theLEProtonModel->SetMinEnergy(theMin);
   theLEProtonModel->SetMaxEnergy(theMax);

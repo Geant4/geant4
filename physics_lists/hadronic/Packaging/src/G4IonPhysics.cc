@@ -20,12 +20,12 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4IonPhysics.cc,v 1.1 2005-12-02 10:57:32 vnivanch Exp $
+// $Id: G4IonPhysics.cc,v 1.2 2005-12-02 12:40:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4IonPhyics
+// ClassName:   G4IonPhysics
 //
 // Author:      V.Ivanchenko 09.11.2005
 //
@@ -34,7 +34,7 @@
 //----------------------------------------------------------------------------
 //
 
-#include "G4IonPhyics.hh"
+#include "G4IonPhysics.hh"
 #include "G4HadronElasticProcess.hh"
 #include "G4LElastic.hh"
 
@@ -54,12 +54,12 @@
 // Nuclei
 #include "G4IonConstructor.hh"
 
-G4IonPhyics::G4IonPhyics(const G4String& name)
+G4IonPhysics::G4IonPhysics(const G4String& name)
                   :  G4VPhysicsConstructor(name), wasActivated(false)
 {
 }
 
-G4IonPhyics::~G4IonPhyics()
+G4IonPhysics::~G4IonPhysics()
 {
   if(wasActivated) {
 
@@ -79,7 +79,7 @@ G4IonPhyics::~G4IonPhyics()
    }
  }
 
-void G4IonPhyics::ConstructProcess()
+void G4IonPhysics::ConstructProcess()
 {
   G4ProcessManager * pManager = 0;
 
@@ -138,7 +138,7 @@ void G4IonPhyics::ConstructProcess()
   wasActivated = true;
 }
 
- void G4IonPhyics::ConstructParticle()
+ void G4IonPhysics::ConstructParticle()
  {
    //  Construct light ions
    G4IonConstructor pConstructor;

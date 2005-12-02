@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4IonPhysics.hh,v 1.1 2005-12-02 10:57:32 vnivanch Exp $
+// $Id: G4IonPhysics.hh,v 1.2 2005-12-02 12:40:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -34,8 +34,8 @@
 //----------------------------------------------------------------------------
 //
 
-#ifndef G4IonPhyics_h
-#define G4IonPhyics_h 1
+#ifndef G4IonPhysics_h
+#define G4IonPhysics_h 1
 
 #include "globals.hh"
 
@@ -50,11 +50,11 @@ class  G4LETritonInelastic;
 class  G4AlphaInelasticProcess;
 class  G4LEAlphaInelastic;
 
-class G4IonPhyics : public G4VPhysicsConstructor
+class G4IonPhysics : public G4VPhysicsConstructor
 {
 public:
-  G4IonPhyics(const G4String& name="ions");
-  virtual ~G4IonPhyics();
+  G4IonPhysics(const G4String& name="ions");
+  virtual ~G4IonPhysics();
 
   // This method will be invoked in the Construct() method.
   // each particle type will be instantiated
@@ -67,10 +67,10 @@ public:
 
 private:
   // Elastic Process
-  G4LElastic*            theElasticModel;
+  G4LElastic*                 theElasticModel;
 
   // Generic Ion physics
-  G4HadronElasticProcess* theIonElasticProcess;
+  G4HadronElasticProcess*     theIonElasticProcess;
 
   // Deuteron physics
   G4HadronElasticProcess*     theDElasticProcess;

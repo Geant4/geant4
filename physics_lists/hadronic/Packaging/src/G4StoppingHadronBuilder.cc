@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4StoppingHadronBuilder.cc,v 1.3 2005-11-25 15:38:50 gunter Exp $
+// $Id: G4StoppingHadronBuilder.cc,v 1.4 2005-12-02 12:40:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -62,7 +62,7 @@ void G4StoppingHadronBuilder::Build()
 {
   G4ProcessManager * aProcMan = 0;
   wasActivated=true;
-G4cout << " adding stopping hadron Physics" << G4endl;
+//G4cout << " adding stopping hadron Physics" << G4endl;
 
   // Muon Minus Physics
   aProcMan = G4MuonMinus::MuonMinus()->GetProcessManager();
