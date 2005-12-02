@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QGSC.icc,v 1.4 2005-12-02 12:42:21 vnivanch Exp $
+// $Id: QGSC.icc,v 1.5 2005-12-02 15:28:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -31,6 +31,7 @@
 //
 // Modified:
 // 21.11.2005 G.Folger: don't  keep processes as data members, but new these
+// 30.11.2005 G.Folger: Register EmStandard first, split Em Standard and Extra
 // 02.12.2005 V.Ivanchenko: rename components
 //
 //----------------------------------------------------------------------------
@@ -72,7 +73,7 @@ template<class T> TQGSC<T>::TQGSC():  T()
   // Synchroton Radiation & GN Physics
   this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
 
-  // General Physics - i.e. decay
+  // Decays
   this->RegisterPhysics( new G4DecayPhysics("decay") );
 
    // Hadron Physics
