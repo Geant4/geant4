@@ -20,7 +20,21 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-
+// $Id: LHEP_LEAD.icc,v 1.4 2005-12-02 18:24:30 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:  LHEP_LEAD
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 30.11.2005 G.Folger: migration to non static particles
+// 30.11.2005 G.Folger: Register EmStandard first, split Em Standard and Extra
+//
+//----------------------------------------------------------------------------
+//
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
@@ -58,7 +72,7 @@ template<class T> TLHEP_LEAD<T>::TLHEP_LEAD():  T()
   // Synchroton Radiation & GN Physics
   this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
 
-  // General Physics - i.e. decay
+  // Decays
   this->RegisterPhysics( new G4DecayPhysics("decay") );
 
    // Hadron Physics
