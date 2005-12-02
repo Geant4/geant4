@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QGSP.icc,v 1.7 2005-12-02 12:42:21 vnivanch Exp $
+// $Id: QGSP.icc,v 1.8 2005-12-02 16:00:13 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -75,7 +75,7 @@ template<class T> TQGSP<T>::TQGSP():  T()
   // Synchroton Radiation & GN Physics
   this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
 
-  // General Physics - i.e. decay
+  // Decays
   this->RegisterPhysics( new G4DecayPhysics("decay") );
 
    // Hadron Physics
