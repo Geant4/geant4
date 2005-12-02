@@ -20,6 +20,21 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: LHEP_PRECO.icc,v 1.4 2005-12-02 17:30:34 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:  LHEP_PRECO
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 25.11.2005 G.Folger: migration to non static particles
+// 30.11.2005 G.Folger: Register EmStandard first, split Em Standard and Extra
+//
+//----------------------------------------------------------------------------
+//
 
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
@@ -58,7 +73,7 @@ template<class T> TLHEP_PRECO<T>::TLHEP_PRECO():  T()
   // Synchroton Radiation & GN Physics
   this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
 
-  // General Physics - i.e. decay
+  // Decays
   this->RegisterPhysics( new G4DecayPhysics("decay") );
 
    // Hadron Physics

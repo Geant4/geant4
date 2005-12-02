@@ -20,6 +20,19 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: LHEP_PRECO.hh,v 1.2 2005-12-02 17:30:34 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:  LHEP_PRECO
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
 #ifndef TLHEP_PRECO_h
 #define TLHEP_PRECO_h 1
 
