@@ -32,15 +32,19 @@
 #/tracking/storeTrajectory 1
 ################
 # Generation of primary particles
-/gun/generator Interplanetary
-/gun/particle proton
-/gun/data gcrZ=1.txt
+#/gun/generator Interplanetary
+#/gun/particle proton
+#/gun/data gcrZ=1.txt
 # Geometrical configuration
 /configuration/choose vehicle
 /configuration/AddShielding On
+/control/execute gcrZ=1gps.mac
 #/analysis/formatFile hbook
 # Number of events
 /run/beamOn 100
+
+
+
 
 
 

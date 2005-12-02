@@ -37,10 +37,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
-#include "G4IonO16.hh"
-#include "G4IonC12.hh"
-#include "G4IonSi28.hh"
-#include "G4IonFe52.hh"
 
 RemSimParticles::RemSimParticles(const G4String& name)
   :  G4VPhysicsConstructor(name)
