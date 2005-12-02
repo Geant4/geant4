@@ -20,6 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: LHEP_PRECO_HP.icc,v 1.4 2005-12-02 17:42:10 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:  LHEP_PRECO_HP
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 30.11.2005 G.Folger: Register EmStandard first, split Em Standard and Extra
+//
+//----------------------------------------------------------------------------
+//
 
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
@@ -47,7 +61,7 @@ template<class T> TLHEP_PRECO_HP<T>::TLHEP_PRECO_HP():  T()
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
   G4DataQuestionaire it(photon, neutron);
-  G4cout << "You are using the simulation engine: LHEP_PRECO_HP 2.5"<<G4endl;
+  G4cout << "You are using the simulation engine: LHEP_PRECO_HP 3.0-beta-0"<<G4endl;
   G4cout <<G4endl<<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(1);
@@ -58,7 +72,7 @@ template<class T> TLHEP_PRECO_HP<T>::TLHEP_PRECO_HP():  T()
   // Synchroton Radiation & GN Physics
   this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
 
-  // General Physics - i.e. decay
+  // Decays
   this->RegisterPhysics( new G4DecayPhysics("decay") );
 
    // Hadron Physics
