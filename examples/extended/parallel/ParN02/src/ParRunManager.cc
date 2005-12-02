@@ -53,8 +53,9 @@
 #include "MarshaledG4HCofThisEvent.h"
 
 #include "G4ios.hh"
-#include <strstream> // Geant4 7.x and below
+
 #include <sstream> // Geant4 8.x and beyond
+#include <strstream> // Geant4 7.x and below
 
 using namespace CLHEP;
 

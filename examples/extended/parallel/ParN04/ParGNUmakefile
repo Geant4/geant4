@@ -1,4 +1,4 @@
-# $Id: ParGNUmakefile,v 1.5 2005-11-28 08:33:02 cooperma Exp $
+# $Id: ParGNUmakefile,v 1.6 2005-12-02 07:51:43 cooperma Exp $
 # --------------------------------------------------------------
 #This file should be included in GNUmakefile of local directory.
 
@@ -60,7 +60,7 @@ TOPC_OPTIONS = --TOPC-verbose
 EXTRALIBS=${TOPC_LIBS}
 CPPFLAGS=${TOPC_CFLAGS}
 
-TIMESTAMP=${G4BINDIR}/timestamp
+TIMESTAMP=${G4BINDIR}/ParN04.timestamp
 
 # Unfortunately, .../geant4.x.x/config/binmake.gmk has target:
 #    $(G4BINDIR)/$(G4TARGET)
@@ -80,10 +80,17 @@ compile:
 	  echo '***' topc-config is not in your path; \
 	  exit 1; \
 	fi
+	@ echo ""
+	@ echo 'To run, now type "make run"'
+	@ echo 'To remove built files, type "make parclean"'
 
 ${TIMESTAMP}: *.cc *.icc src/*.cc include/*.hh ParGNUmakefile
-	# Test for presence of topc-config
-	topc-config ${MEM_MODEL} --libs > /dev/null
+	@ if which topc-config > /dev/null; then :; \
+	else \
+	  echo ''; \
+	  echo '***' topc-config is not in your path; \
+	  exit 1; \
+	fi
 	${MAKE} all
 	rm -f ${TIMESTAMP}
 	echo "" > ${TIMESTAMP}
