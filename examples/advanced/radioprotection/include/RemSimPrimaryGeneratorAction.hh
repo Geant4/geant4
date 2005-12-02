@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimPrimaryGeneratorAction.hh,v 1.11 2005-09-08 06:56:18 guatelli Exp $// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: RemSimPrimaryGeneratorAction.hh,v 1.12 2005-12-02 10:08:34 guatelli Exp $// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli, guatelli@ge.infn.it
 //
@@ -30,11 +30,10 @@
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
-#include "G4DataVector.hh"
 
-class G4ParticleGun;
+class G4GeneralParticleSource;
 class G4Event;
-class RemSimPrimaryGeneratorMessenger;
+
 class RemSimPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
@@ -44,19 +43,9 @@ public:
 public:
   G4double GetInitialEnergy();
   void GeneratePrimaries(G4Event* anEvent);
-  void SelectPrimaries(G4String value); 
-  void Read(G4String);
-
-private:
-  void ReadData(G4double, G4String);
-  G4double GetPrimaryParticleEnergyDistributionSum();
 
 private:  
-  G4ParticleGun* particleGun;
-  G4String value;
-  RemSimPrimaryGeneratorMessenger* messenger;
-  G4DataVector* energies;
-  G4DataVector* data;
+  G4GeneralParticleSource* particleGun;
 };
 #endif
 

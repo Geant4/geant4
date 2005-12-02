@@ -21,50 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimPrimaryGeneratorAction.cc,v 1.13 2005-11-23 08:49:10 guatelli Exp $// Author: Susanna Guatelli, guatelli@ge.infn.it
+// $Id: RemSimPrimaryGeneratorAction.cc,v 1.14 2005-12-02 10:08:34 guatelli Exp $// Author: Susanna Guatelli, guatelli@ge.infn.it
 
 #include "RemSimPrimaryGeneratorAction.hh"
-#include "RemSimPrimaryGeneratorMessenger.hh"
-#include "G4Event.hh"
-#include "G4ParticleGun.hh"
-#include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
-#include "CLHEP/Random/RandGeneral.h"
-#include "globals.hh"
 #ifdef G4ANALYSIS_USE  
 #include "RemSimAnalysisManager.hh"
 #endif
-#include <fstream>
-#include <sstream>
-#include "Randomize.hh"
-
+#include "G4Event.hh"
+#include "G4GeneralParticleSource.hh"
 RemSimPrimaryGeneratorAction::RemSimPrimaryGeneratorAction()
 {
-  G4int n_particle = 1;
-  particleGun = new G4ParticleGun(n_particle);
-
-  //moon = false;
-
-  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4String particleName = "proton";
-  
-  particleGun -> SetParticleDefinition(particleTable->FindParticle(particleName));
-  particleGun -> SetParticlePosition(G4ThreeVector(0., 0., -25.*m));  
-  G4ThreeVector v(0.0,0.0,1.0);
-  particleGun -> SetParticleEnergy(1.*GeV);
-  particleGun -> SetParticleMomentumDirection(v);
-  value = "Basic";
-  messenger = new RemSimPrimaryGeneratorMessenger(this);
-  energies = new G4DataVector;
-  data = new G4DataVector;
+  particleGun = new G4GeneralParticleSource();
 }
 
 RemSimPrimaryGeneratorAction::~RemSimPrimaryGeneratorAction()
 {
-  delete data;
-  delete energies;
-  delete messenger;
-  delete particleGun;
+   delete particleGun;
 }
 
 G4double RemSimPrimaryGeneratorAction::GetInitialEnergy()
@@ -75,133 +47,12 @@ G4double RemSimPrimaryGeneratorAction::GetInitialEnergy()
 
 void RemSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-
-  G4int n = 1;
-
-  if(value == "Interplanetary") 
-   { 
-     G4double sum = GetPrimaryParticleEnergyDistributionSum();
-     G4double partSum = 0;
-     G4int j = 0;
-     G4double random = sum*G4UniformRand();
-     while (partSum<random)
-       {
-	 partSum += (*data)[j];
-	 j++;
-       }
-
-     G4String particleName = particleGun -> GetParticleDefinition() -> GetParticleName();	 
-   
-  if (particleName == "alpha") n = 4;
-  else {
-    if (particleName == "IonC12") n = 12;
-    else
-      { if (particleName == "IonSi28") n = 28;
-      else {
-        if (particleName == "IonFe52") n = 52;
-	else {
-	  if (particleName == "IonO16") n = 16;
-	  else {
-	    if (particleName == "proton") n = 1 ;
-	  }
-	}
-      }
-      }
-  }
-     particleGun -> SetParticleEnergy((*energies)[j] * n);    
- }
  
 #ifdef G4ANALYSIS_USE   
  G4double energy = particleGun -> GetParticleEnergy(); 
  RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
- analysis -> primaryParticleEnergyDistribution((energy/n) / MeV);
-#endif
+ analysis -> primaryParticleEnergyDistribution(energy/MeV);
+#endif 
 
 particleGun -> GeneratePrimaryVertex(anEvent);
 }
-
-void RemSimPrimaryGeneratorAction::SelectPrimaries(G4String val)
-{ 
-  value = val;
-
-  if(value == "Basic") 
-    G4cout<< "The configuration is the basic generator" <<G4endl;
-
-  else if(value == "Interplanetary") 
-    {
-      G4cout<< "The configuration is the interplanetary space configuration" 	    <<G4endl;
-     
-      G4cout<< 
-	"Remember to type /run/data file.txt with the energy spectrum of primary particles!!!" <<G4endl;
-     
-    }
-  else G4cout << "This Generator is not defined!" <<G4endl;  
-}
-
-void RemSimPrimaryGeneratorAction::Read(G4String fileName)
-{
-  ReadData(MeV,fileName);
-  G4cout << fileName << "  is the input file!" << G4endl;
-}
-
-void RemSimPrimaryGeneratorAction::ReadData(G4double unitE, G4String fileName)
-{
-  std::ostringstream ost;
- 
-  ost << fileName;
-  
-  std::ifstream file(fileName);
-  std::filebuf* lsdp = file.rdbuf();
-  
-  if (! (lsdp->is_open()) )
-    {
-	  G4String excep = "RemSimInterplanteraySpaceConfiguration - data file: not found";
-	  G4Exception(excep);
-    }
-  G4double a = 0;
-  G4int k = 1;
-  
-  do
-    {
-      file >> a;
-      G4int nColumns = 2;
-      // The file is organized into two columns:
-      // 1st column is the energy
-      // 2nd column is the corresponding value
-      // The file terminates with the pattern: -1   -1
-      //                                       -2   -2
-      if (a == -1 || a == -2)
-	{
-	  
-	}
-      else
-	{
-	  if (k%nColumns != 0)
-	    {	
-	      G4double e = a * unitE;
-	      energies->push_back(e);  
-	      
-	      k++;
-	      
-	    }
-	  else if (k%nColumns == 0)
-	    {
-	      G4double value = a;
-	      data->push_back(value);
-	      
-	      k = 1;
-	    }
-	}
-      
-    } while (a != -2); // end of file
-}
-G4double RemSimPrimaryGeneratorAction::GetPrimaryParticleEnergyDistributionSum()
-{
-  G4double sum = 0;
-  size_t size = data -> size();
-  for (size_t i = 0; i < size; i++)
-     {
-       sum+=(*data)[i];
-     }
-   return sum;
- }
