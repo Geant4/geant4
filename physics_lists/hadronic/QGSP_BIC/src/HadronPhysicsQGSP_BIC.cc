@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_BIC.cc,v 1.2 2005-11-29 17:02:44 gunter Exp $
+// $Id: HadronPhysicsQGSP_BIC.cc,v 1.3 2005-12-02 16:26:26 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -76,7 +76,6 @@ void HadronPhysicsQGSP_BIC::CreateModels()
   thePiK->RegisterMe(theLEPPiK=new G4LEPPiKBuilder);
   theLEPPiK->SetMaxEnergy(25*GeV);
 
-  
   theMiscLHEP=new G4MiscLHEPBuilder;
   theStoppingHadron=new G4StoppingHadronBuilder;
 }
