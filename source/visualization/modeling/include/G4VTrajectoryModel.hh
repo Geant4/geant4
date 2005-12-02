@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VTrajectoryModel.hh,v 1.2 2005-11-21 05:44:44 tinslay Exp $
+// $Id: G4VTrajectoryModel.hh,v 1.3 2005-12-02 19:16:15 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
@@ -60,8 +60,7 @@ protected:
 
 };
 
-G4String
-inline G4VTrajectoryModel::Name() const {return fName;}
+inline G4String G4VTrajectoryModel::Name() const {return fName;}
 
 #endif
 
