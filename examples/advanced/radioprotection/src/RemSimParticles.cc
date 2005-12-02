@@ -92,9 +92,4 @@ void RemSimParticles::ConstructParticle()
   G4He3::He3Definition();
   G4Alpha::AlphaDefinition();
   G4GenericIon::GenericIonDefinition();
-  G4IonO16::IonO16Definition();  
-  G4IonC12::IonC12Definition();
-  G4IonSi28::IonSi28Definition();
-  G4IonFe52::IonFe52Definition();
-
 }
