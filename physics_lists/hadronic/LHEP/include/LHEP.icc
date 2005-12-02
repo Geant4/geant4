@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: LHEP.icc,v 1.5 2005-12-02 12:42:21 vnivanch Exp $
+// $Id: LHEP.icc,v 1.6 2005-12-02 19:07:16 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -35,7 +35,7 @@
 // 02.12.2005 V.Ivanchenko: rename components
 //
 //----------------------------------------------------------------------------
-/
+//
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
