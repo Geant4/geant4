@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2005-11-30 07:56:47 gcosmo Exp $
+$Id: History,v 1.6 2005-12-02 12:44:36 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02.12.2005, V.Ivanchenko - hadr-lists-V07-01-01
+- Rename Builder -> Physics for all PhysicsConstructors;
+                    fix compilation problems
 
 29.11.2005, G.Folger - hadr-lists-V07-01-00
 - (Partial) migration of physics lists to non static particles scheme.
