@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4DecayPhysics.cc,v 1.2 2005-12-02 12:40:04 vnivanch Exp $
+// $Id: G4DecayPhysics.cc,v 1.3 2005-12-02 16:30:20 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -36,8 +36,6 @@
 //
 
 #include "G4DecayPhysics.hh"
-
-#include "G4Decay.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"

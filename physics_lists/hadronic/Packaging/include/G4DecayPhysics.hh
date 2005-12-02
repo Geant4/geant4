@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4DecayPhysics.hh,v 1.1 2005-12-02 09:56:24 vnivanch Exp $
+// $Id: G4DecayPhysics.hh,v 1.2 2005-12-02 16:30:20 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -41,7 +41,7 @@
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
 
-class G4Decay;
+#include "G4Decay.hh"
 
 class G4DecayPhysics : public G4VPhysicsConstructor
 {
