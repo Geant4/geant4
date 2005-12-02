@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.14 2005-12-02 10:17:51 guatelli Exp $
+$Id: History,v 1.15 2005-12-02 10:24:09 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,8 @@ $Id: History,v 1.14 2005-12-02 10:17:51 guatelli Exp $
 2nd December 2005 Susanna Guatelli (radioprotection-V07-01-03)
 - Ions updated
 - General Particle source introduced
+- Macros updated
+- README updated
 
 23th November 2005 Susanna Guatelli (radioprotection-V07-01-02)
 - Ions introduced

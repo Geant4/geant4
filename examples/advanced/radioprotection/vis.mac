@@ -29,8 +29,7 @@
 ######################
 /run/initialize
 /vis/viewer/set/viewpointThetaPhi 90 180 deg
-/gun/generator Basic
-/gun/energy 400. MeV
+/control/execute gcrZ=1gps.mac
 /configuration/choose vehicle
 /configuration/AddShielding On
 #/tracking/verbose 1
