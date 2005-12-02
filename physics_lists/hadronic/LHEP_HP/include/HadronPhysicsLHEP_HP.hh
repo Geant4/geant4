@@ -20,6 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: HadronPhysicsLHEP_HP.hh,v 1.3 2005-12-02 17:16:20 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:  HadronPhysicsLHEP_HP_h
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+//  1.12.2005 G.Folger: migration to non static particles
+//
+//----------------------------------------------------------------------------
+//
 #ifndef HadronPhysicsLHEP_HP_h
 #define HadronPhysicsLHEP_HP_h 1
 
@@ -48,17 +62,18 @@ class HadronPhysicsLHEP_HP : public G4VPhysicsConstructor
     virtual void ConstructProcess();
 
   private:
-    G4NeutronBuilder theNeutrons;
-    G4LHEPNeutronBuilder theLHEPNeutron;
-    G4NeutronHPBuilder theHPNeutron;
+    void CreateModels();
+    G4NeutronBuilder * theNeutrons;
+    G4LHEPNeutronBuilder * theLHEPNeutron;
+    G4NeutronHPBuilder * theHPNeutron;
     
-    G4LHEPPiKBuilder theLHEPPiK;
-    G4PiKBuilder thePiK;
-    G4LHEPProtonBuilder theLHEPProton;
-    G4ProtonBuilder theProton;
+    G4LHEPPiKBuilder * theLHEPPiK;
+    G4PiKBuilder * thePiK;
+    G4LHEPProtonBuilder * theLHEPProton;
+    G4ProtonBuilder * theProton;
     
-    G4MiscLHEPBuilder theMiscLHEP;
-    G4StoppingHadronBuilder theStoppingHadron;
+    G4MiscLHEPBuilder * theMiscLHEP;
+    G4StoppingHadronBuilder * theStoppingHadron;
 };
 
 // 2002 by J.P. Wellisch
