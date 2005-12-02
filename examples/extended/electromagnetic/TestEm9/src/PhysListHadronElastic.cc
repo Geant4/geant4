@@ -55,9 +55,11 @@ void PhysListHadronElastic::ConstructProcess()
     if (particle->GetPDGMass() > 110.*MeV && theElasticProcess.IsApplicable(*particle)
         && !particle->IsShortLived()) { 
       pManager->AddDiscreteProcess(&theElasticProcess);
+      /*
       G4cout << "### Elastic model are registered for " 
              << particle->GetParticleName()
              << G4endl;
+      */
     }
   }
 
