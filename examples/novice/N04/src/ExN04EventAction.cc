@@ -64,24 +64,6 @@ void ExN04EventAction::EndOfEventAction(const G4Event* evt)
 {
   G4cout << ">>> Event " << evt->GetEventID() << G4endl;
   
-  // get number of stored trajectories
-  //
-  G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
-  G4int n_trajectories = 0;
-  if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
-  
-  // extract the trajectories and draw them
-  //
-  if (G4VVisManager::GetConcreteInstance())
-    {
-     for (G4int i=0; i<n_trajectories; i++) 
-        { G4Trajectory* trj = (G4Trajectory*)
-	                            ((*(evt->GetTrajectoryContainer()))[i]);
-          trj->DrawTrajectory(50);
-        }
-    }
-    
-    
   if(trackerCollID<0||calorimeterCollID<0||muonCollID<0) return;
 
   G4HCofThisEvent * HCE = evt->GetHCofThisEvent();

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN04RunAction.hh,v 1.1 2002-05-02 14:18:51 maire Exp $
+// $Id: ExN04RunAction.hh,v 1.2 2005-12-03 20:28:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,7 +45,6 @@ class ExN04RunAction : public G4UserRunAction
 
   public:
     void BeginOfRunAction(const G4Run*);
-    void EndOfRunAction(const G4Run*);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
