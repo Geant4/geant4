@@ -5,8 +5,6 @@ Installation instructions:
      installation point different from the default one. G4LISTS_BASE must
      point to the 'physics_lists' directory that contains the subdirectory
      'hadronic'.
- to point to a different directory than the
-     default.
    - type 'gmake' from physics_lists/hadronic directory
    - copy the provided GNUmakefile.user.code.example file
      to your application area and uncomment the 
