@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: LHEP_BERT_HP.icc,v 1.4 2005-12-02 16:16:59 gunter Exp $
+// $Id: LHEP_BERT_HP.icc,v 1.5 2005-12-03 14:49:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -61,8 +61,7 @@ template<class T> TLHEP_BERT_HP<T>::TLHEP_BERT_HP():  T()
 {
 
   G4DataQuestionaire it(photon);
-//  G4cout << "You are using the simulation engine: LHEP_BERT_HP 1.1"<<G4endl;
-  G4cout << "You are using the simulation engine: LHEP_BERT_HP 3.0-beta-0"<<G4endl;
+  G4cout << "You are using the simulation engine: LHEP_BERT_HP 3.0"<<G4endl;
   G4cout <<G4endl<<G4endl;
 
   this->defaultCutValue = 0.7*mm;  
