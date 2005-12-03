@@ -35,6 +35,9 @@
 // 09-Set-05 V.Ivanchenko HARP version of the model: fix scattering
 //           on hydrogen, use relativistic Lorentz transformation
 // 24-Nov-05 V.Ivanchenko sample cost in center of mass reference system
+// 03-Dec-05 V.Ivanchenko add protection to initial momentum 20 MeV/c in
+//           center of mass system (before it was in lab system)
+//           below model is not valid
 //
 
 #include "G4LElastic.hh"
@@ -194,6 +197,7 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
    G4ThreeVector p1 = lv1.vect();
    G4double ptot = p1.mag();
    G4double ptotgev = ptot/GeV;
+   if (ptotgev < 0.01) return &theParticleChange;
 
    // Sampling in CM system
    G4double phi  = G4UniformRand()*twopi;
@@ -215,17 +219,18 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
    G4LorentzVector nlv01 = lv0 + lv1 - nlv11;
    nlv01.boost(bst);
    nlv11.boost(bst); 
+   //G4cout << " P0= "<< nlv01 << "   P1= "<< nlv11<<" m= " << m1 <<G4endl;
 
    if (aSecondary) {
      aSecondary->SetMomentum(nlv11.vect());
    } else {
      theParticleChange.SetMomentumChange(nlv11.vect().unit());
-     theParticleChange.SetEnergyChange(nlv11.e() - m1);
+     theParticleChange.SetEnergyChange(std::max(nlv11.e() - m1,0.0));
    }
    G4DynamicParticle * aSec = new G4DynamicParticle(theDef, nlv01);
    theParticleChange.AddSecondary(aSec);
 
-   //G4cout << " ion info "<<atno2 << " "<<A<<" "<<Z<<" "<<zTarget<<G4endl;
+   //   G4cout << " ion info "<<atno2 << " "<<A<<" "<<Z<<" "<<zTarget<<G4endl;
    return &theParticleChange;
 }
 
