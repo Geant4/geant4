@@ -15,8 +15,9 @@ endif
 include $(G4INSTALL)/config/architecture.gmk
 
 #
-# define G4LISTS_BASE, if you have your own physics lists area installed point
-# G4LISTS_BASE to the directory, that contains the subdirectory 'hadronic'.
+# define G4LISTS_BASE, if you have your own physics lists area install point
+# different from the default one, G4LISTS_BASE should point to the directory
+# that contains the subdirectory 'hadronic'.
 #
 ifndef G4LISTS_BASE
   EXTRALIBS += -L$(G4LIB)/plists/$(G4SYSTEM)
