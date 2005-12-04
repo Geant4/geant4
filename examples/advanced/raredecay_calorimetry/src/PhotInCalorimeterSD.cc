@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInCalorimeterSD.cc,v 1.3 2005-11-04 13:51:36 mkossov Exp $
+// $Id: PhotInCalorimeterSD.cc,v 1.4 2005-12-04 16:54:35 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-//#define debug
+#define debug
 #define errors
 
 #include "PhotInCalorimeterSD.hh"
@@ -96,8 +96,8 @@ G4bool PhotInCalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   G4int SlabNumber = -1;                                   // absorber
   if(histDepth>1) SlabNumber = theTouchable->GetReplicaNumber(1); // replica # on level 1
 #ifdef debug
-  G4cout<<"PhotInCalorimeterSD::Initialize: historyDepth="<<histDepth<<", L# "<<LayerNumber
-        <<", S# "<<SlabNumber<<G4endl;
+  G4cout<<"PhotInCalorimeterSD:::ProcessHits: historyDepth="<<histDepth<<", L# "
+        <<LayerNumber<<", S# "<<SlabNumber<<G4endl;
 #endif
 		//G4int NoVolumesInLayer = 1+numberOfSlabs; // User should calculate created volumes (!)
   //G4int LayerNumber = LayerSlabNumber/NoVolumesInLayer;    // # in the AbsorberCollection
@@ -117,6 +117,10 @@ G4bool PhotInCalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   if(SlabNumber>-1 && LayerNumber>-1 && LayerNumber<numberOfLayers &&
      SlabNumber<numberOfSlabs) // Sensetive Slab
   {
+#ifdef debug
+  G4cout<<"PhotInCalorimeterSD:::ProcessHits: write in (L# "<<LayerNumber
+        <<", S# "<<SlabNumber<<"): dE="<<edep<<",stepL="<<stepl<<G4endl;
+#endif
     (*SlabsCollection)[CopyNumber]->AddEnergy(edep);
     //if(charged) (*SlabsCollection)[CopyNumber]->AddStep(stepl);
     if(neutr) (*SlabsCollection)[CopyNumber]->AddStep(stepl);

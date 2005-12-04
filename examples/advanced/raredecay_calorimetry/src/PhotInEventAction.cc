@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInEventAction.cc,v 1.3 2005-11-04 13:51:36 mkossov Exp $
+// $Id: PhotInEventAction.cc,v 1.4 2005-12-04 16:54:35 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -54,10 +54,16 @@ void PhotInEventAction::BeginOfEventAction(const G4Event*)
       calorimeterCollID[i] = G4SDManager::GetSDMpointer()->GetCollectionID(colName);
     }
   }
+#ifdef debug
+  G4cout<<"PhotInEventAction::BeginOfEventAction: End of Begin"<<G4endl;
+#endif
 }
 
 void PhotInEventAction::EndOfEventAction(const G4Event* evt)
 {
+#ifdef debug
+  G4cerr<<"PhotInEventAction::EndOfEventAction: is called"<<G4endl;
+#endif
   if(verboseLevel==0) return; // Report of the Collection made in SD during this Event
   if(evt->GetEventID()>4 && (evt->GetEventID())%10>(verboseLevel-1)) return; // Only first
 
@@ -101,4 +107,7 @@ void PhotInEventAction::EndOfEventAction(const G4Event* evt)
           <<nStep<<" steps, meanStepLength="<<G4BestUnit(totL/nStep,"Length")<<G4endl;
     //@@ This can be written to the file !!
   }
+#ifdef debug
+  G4cerr<<"PhotInEventAction::EndOfEventAction: End of End"<<G4endl;
+#endif
 }  

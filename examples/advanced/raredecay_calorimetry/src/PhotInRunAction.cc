@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInRunAction.cc,v 1.2 2005-05-31 15:23:01 mkossov Exp $
+// $Id: PhotInRunAction.cc,v 1.3 2005-12-04 16:54:35 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -43,6 +43,9 @@ G4Run* PhotInRunAction::GenerateRun()
 
 void PhotInRunAction::EndOfRunAction(const G4Run* aRun)
 {
+#ifdef debug
+  G4cout<<"PhotInRunAction::EndOfRunAction is called"<<G4endl;
+#endif
   const PhotInRun* theRun = (const PhotInRun*) aRun; // change the type
   // @@ Writing without any conditions (? M.K.)
   G4cout<<"##############################################################"<< G4endl;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInRun.cc,v 1.3 2005-11-04 13:51:36 mkossov Exp $
+// $Id: PhotInRun.cc,v 1.4 2005-12-04 16:54:35 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,6 +33,9 @@ G4Allocator<PhotInRun> anPhotInRunAllocator;
 
 PhotInRun::PhotInRun()
 {
+#ifdef debug
+  G4cout<<"PhotInRun::PhotInRun Conctructor is called"<<G4endl;
+#endif
   for(G4int i=0; i<PhotInDiNSections; i++)
   {
     totE[i] = 0.;
@@ -84,4 +87,7 @@ void PhotInRun::RecordEvent(const G4Event* evt)
       }
     }
   }
+#ifdef debug
+  G4cout<<"PhotInRun::RecordEvent: End "<<G4endl;
+#endif
 }

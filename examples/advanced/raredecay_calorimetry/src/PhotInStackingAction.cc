@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 
-//#define debug
-//#define errors
+#define debug
+#define errors
 
 #include "PhotInStackingAction.hh"
 
