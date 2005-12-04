@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN06.cc,v 1.8 2005-05-03 10:21:16 allison Exp $
+// $Id: exampleN06.cc,v 1.9 2005-12-04 00:45:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -118,6 +118,9 @@ int main(int argc,char** argv) {
    
   else         // Batch mode
    {
+#ifdef G4VIS_USE
+     visManager->SetVerboseLevel("quiet");
+#endif
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
      UI->ApplyCommand(command+fileName);
