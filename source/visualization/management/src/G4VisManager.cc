@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.76 2005-11-29 23:18:09 tinslay Exp $
+// $Id: G4VisManager.cc,v 1.77 2005-12-04 01:19:04 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -913,7 +913,8 @@ void G4VisManager::BeginOfEvent () {
 
 void G4VisManager::EndOfEvent () {
   //G4cout << "G4VisManager::EndOfEvent" << G4endl;
-  if (GetConcreteInstance() && IsValidView ()) {
+  // Don't call IsValidView unless at least there is a scene handler...
+  if (GetConcreteInstance() && fpSceneHandler && IsValidView()) {
     const std::vector<G4VModel*>& EOEModelList =
       fpScene -> GetEndOfEventModelList ();
     size_t nModels = EOEModelList.size();
@@ -938,7 +939,8 @@ void G4VisManager::EndOfEvent () {
 
 void G4VisManager::EndOfRun () {
   //G4cout << "G4VisManager::EndOfRun" << G4endl;
-  if (GetConcreteInstance() && IsValidView ()) {
+  // Don't call IsValidView unless at least there is a scene handler...
+  if (GetConcreteInstance() && fpSceneHandler && IsValidView()) {
     if (!fpSceneHandler->GetMarkForClearingTransientStore()) {
       if (fpScene->GetRefreshAtEndOfRun()) {
 	fpViewer->ShowView();  // ...for systems needing post processing.
