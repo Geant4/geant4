@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.77 2005-12-04 01:19:04 allison Exp $
+// $Id: G4VisManager.cc,v 1.78 2005-12-04 01:36:17 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -913,7 +913,9 @@ void G4VisManager::BeginOfEvent () {
 
 void G4VisManager::EndOfEvent () {
   //G4cout << "G4VisManager::EndOfEvent" << G4endl;
-  // Don't call IsValidView unless at least there is a scene handler...
+  // Don't call IsValidView unless there is a scene handler.  This
+  // avoids ERROR messages at end of event and run when the user has
+  // not instantiated a scene handler, e.g., in batch mode.
   if (GetConcreteInstance() && fpSceneHandler && IsValidView()) {
     const std::vector<G4VModel*>& EOEModelList =
       fpScene -> GetEndOfEventModelList ();
@@ -939,7 +941,9 @@ void G4VisManager::EndOfEvent () {
 
 void G4VisManager::EndOfRun () {
   //G4cout << "G4VisManager::EndOfRun" << G4endl;
-  // Don't call IsValidView unless at least there is a scene handler...
+  // Don't call IsValidView unless there is a scene handler.  This
+  // avoids ERROR messages at end of event and run when the user has
+  // not instantiated a scene handler, e.g., in batch mode.
   if (GetConcreteInstance() && fpSceneHandler && IsValidView()) {
     if (!fpSceneHandler->GetMarkForClearingTransientStore()) {
       if (fpScene->GetRefreshAtEndOfRun()) {
