@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN05.cc,v 1.11 2005-05-03 10:21:16 allison Exp $
+// $Id: exampleN05.cc,v 1.12 2005-12-04 00:10:37 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -131,6 +131,9 @@ int main(int argc, char** argv) {
   }
   else
   {
+#ifdef G4VIS_USE
+    visManager->SetVerboseLevel("quiet");
+#endif
     G4UImanager* UImanager = G4UImanager::GetUIpointer();
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
