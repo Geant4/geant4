@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2005-12-02 19:16:15 perl Exp $
+$Id: History,v 1.46 2005-12-05 00:16:34 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,7 +20,7 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
-2nd December 2005  Joseph Perl
+2nd December 2005  Joseph Perl (modeling-V07-01-07)
 - Change "G4String inline" to "inline G4String" to correct compiler
   warning in G4VTrajectoryModel.hh.
 
