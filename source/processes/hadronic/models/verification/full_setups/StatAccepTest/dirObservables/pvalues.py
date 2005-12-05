@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #----------------------------------------------------------------
-# Last update: 30-Nov-2005.  
+# Last update: 5-Dec-2005.  
 #
 # This Python script is used for post-processing analysis, i.e.
 # to monitor the overall p-value distributions for all jobs.
@@ -18,6 +18,14 @@
 #                    the specified directory and, recursively,
 #                    to all its subdirectories.
 #    2)  tuplePhysicsLists : Geant4 Physics Lists to be considered.
+#    3)  checkObservable : which observable you want to monitor.
+#                          The default, "All", considers all the
+#                          observables together, without distinction.
+#                          If you want to monitor a particular
+#                          observable, you have to set checkObservable
+#                          equal to the string name of the observable
+#                          you are interested in (e.g. "1", "2",
+#                          "L0", ... ,"L19", "R0", ... , "R9").
 #
 # This script produces in output, in the same directory where this
 # script is located, the following files:
@@ -48,10 +56,19 @@ import random
 # Look for the files in this directory and recursively in all
 # its subdirectories.
 #directory = "/afs/cern.ch/sw/geant4/stat_testing/june05"
-directory = "/users/ribon/dirAcceptanceSuite/dirObservables/dirTestPvaluesPY"
+#directory = "/users/ribon/dirAcceptanceSuite/dirObservables/dirTestPvaluesPY"
+directory = "/users/ribon/dirGrid/dirDec05/Dec02/LHEP/outputs"
 
 ###tuplePhysicsLists = ("LHEP", "QGSP", "QGSC", "QGSP_BIC", "QGSP_BERT")
 tuplePhysicsLists = ("LHEP",)
+
+checkObservable = "All"
+#checkObservable = "1"
+#checkObservable = "2"
+#checkObservable = "L0"
+#checkObservable = "L19"
+#checkObservable = "R0"
+#checkObservable = "R9"
 
 #***endLOOKHERE***
 
@@ -313,6 +330,7 @@ def printParameters() :
     print '  Physics Lists : '
     for iPL in tuplePhysicsLists :
         print '                  ' , iPL
+    print '  checkObservable = ', checkObservable
     print '  --- End   function  printParameters  --- '
     return
 
@@ -343,10 +361,18 @@ def extractInfo( inputFile , pValueDist_list ) :
     #     pValueDistKS.fill( random.random() ) 
     #     pValueDistCVM.fill( random.random() ) 
     #     pValueDistAD.fill( random.random() ) 
-
+    
+    isActive = 0
     for line in inputFile :
          #print line.strip()
-         if ( line.find( "pvalue=" ) > -1 ) :
+         if ( line.find( "Observable" ) > -1 ) :
+              if ( checkObservable == "All" ) :
+                   isActive = 1
+              elif ( line.find( checkObservable ) > -1 ) :
+                   isActive = 1
+              else :
+                   isActive = 0
+         if ( isActive  and  line.find( "pvalue=" ) > -1 ) :
               testName = line.split()[0]
               pValueStr = line.split()[3].replace( 'pvalue=', '' )
               #print " testName=", testName, " pValueStr=", pValueStr
