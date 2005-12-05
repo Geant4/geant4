@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2005-12-05 00:24:02 perl Exp $
+$Id: History,v 1.37 2005-12-05 06:08:48 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+5th December 2005  Makoto Asai (raytracer-V07-01-08)
+- Correct initialization of G4RTTrackingAction and G4RTSteppingAction
 
 28th November 2005  Jane Tinslay (raytracer-V07-01-07)
 - Remove names of unused parameters to stop compiler warnings
