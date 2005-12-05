@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PEEffectModel.cc,v 1.3 2005-08-11 10:03:33 maire Exp $
+// $Id: G4PEEffectModel.cc,v 1.4 2005-12-05 16:44:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,6 +35,8 @@
 // Creation date: 21.03.2005
 //
 // Modifications:
+//
+// 04.12.05 : SetProposedKineticEnergy(0.) for the killed photon (mma)
 //
 // Class Description:
 //
@@ -73,13 +75,14 @@ G4PEEffectModel::~G4PEEffectModel()
 void G4PEEffectModel::Initialise(const G4ParticleDefinition*,
 				 const G4DataVector&)
 {
-  if(isInitialized) return;
-  if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
+ if (isInitialized) return;
+ if (pParticleChange)
+   fParticleChange =
+                  reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
   else
-    fParticleChange = new G4ParticleChangeForGamma();
+   fParticleChange = new G4ParticleChangeForGamma();
 
-  fminimalEnergy = 1.0*eV;
+ fminimalEnergy = 1.0*eV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -129,8 +132,9 @@ std::vector<G4DynamicParticle*>* G4PEEffectModel::SampleSecondaries(
                        theElectron,ElecDirection, ElecKineEnergy);
      fvect->push_back(aParticle);
     }
-
-  fParticleChange->ProposeTrackStatus(fStopAndKill);   
+    
+  fParticleChange->SetProposedKineticEnergy(0.);
+  fParticleChange->ProposeTrackStatus(fStopAndKill);
   fParticleChange->ProposeLocalEnergyDeposit(bindingEnergy);
   return fvect;
 }

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.cc,v 1.6 2005-11-16 15:23:02 maire Exp $
+// $Id: G4BetheHeitlerModel.cc,v 1.7 2005-12-05 16:44:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,6 +38,7 @@
 // 18-04-05 Use G4ParticleChangeForGamma (V.Ivantchenko)
 // 24-06-05 Increase number of bins to 200 (V.Ivantchenko)
 // 16-11-05 replace shootBit() by G4UniformRand()  mma
+// 04-12-05 SetProposedKineticEnergy(0.) for the killed photon (mma)
 //
 // Class Description:
 //
@@ -317,6 +318,8 @@ std::vector<G4DynamicParticle*>* G4BetheHeitlerModel::SampleSecondaries(
   fvect->push_back(aParticle1);
   fvect->push_back(aParticle2);
 
+  // kill incident photon
+  fParticleChange->SetProposedKineticEnergy(0.);
   fParticleChange->ProposeTrackStatus(fStopAndKill);   
  
   return fvect;
