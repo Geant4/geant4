@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.10 2005-10-27 15:01:41 vnivanch Exp $
+// $Id: G4EmProcessOptions.cc,v 1.11 2005-12-05 12:13:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -330,6 +330,9 @@ void G4EmProcessOptions::SetVerbose(G4int val, const G4String& name)
   if("all" == name) all = true;
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
+
+  if(all) theManager->SetVerbose(val);
+
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
   for(itr = v.begin(); itr != v.end(); itr++) {
     G4VEnergyLossProcess* p = *itr;

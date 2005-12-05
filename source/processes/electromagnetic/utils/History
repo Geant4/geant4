@@ -1,4 +1,4 @@
-$Id: History,v 1.218 2005-11-29 08:06:32 vnivanch Exp $
+$Id: History,v 1.219 2005-12-05 12:13:07 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05 December 05: V.Ivant (emutils-V07-01-13)
+- G4EmProcessOptions - fix verbosity definition for energy loss processes
 
 29 November 05: V.Ivant (emutils-V07-01-12)
 - G4EmModelmanager - add protection for arithmetic operations with cut=DBL_MAX
