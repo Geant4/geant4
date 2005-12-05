@@ -1,4 +1,4 @@
-$Id: History,v 1.35 2005-11-28 20:07:44 tinslay Exp $
+$Id: History,v 1.36 2005-12-05 00:24:02 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,7 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-28th November 2005  Jane Tinslay
+28th November 2005  Jane Tinslay (raytracer-V07-01-07)
 - Remove names of unused parameters to stop compiler warnings
 
 18th November 2005  John Allison  (raytracer-V07-01-06)
