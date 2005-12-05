@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracer.cc,v 1.18 2005-09-16 01:22:33 allison Exp $
+// $Id: G4RayTracer.cc,v 1.19 2005-12-05 03:51:22 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -69,8 +69,8 @@ G4RayTracer::G4RayTracer(G4VFigureFileMaker* figMaker,
   theRayShooter = new G4RayShooter();
   theRayTracerEventAction = 0;
   theRayTracerStackingAction = 0;
-  theRayTracerTrackingAction = new G4RTTrackingAction();
-  theRayTracerSteppingAction = new G4RTSteppingAction();
+  theRayTracerTrackingAction = 0;
+  theRayTracerSteppingAction = 0;
   theMessenger = new G4RTMessenger(this,theRayTracerSteppingAction);
   theEventManager = G4EventManager::GetEventManager();
 
@@ -92,8 +92,8 @@ G4RayTracer::G4RayTracer(G4VFigureFileMaker* figMaker,
 G4RayTracer::~G4RayTracer()
 {
   delete theRayShooter;
-  delete theRayTracerTrackingAction;
-  delete theRayTracerSteppingAction;
+  if(theRayTracerTrackingAction) delete theRayTracerTrackingAction;
+  if(theRayTracerSteppingAction) delete theRayTracerSteppingAction;
   delete theMessenger;
   delete theScanner;
   delete theFigMaker;
@@ -159,6 +159,9 @@ void G4RayTracer::StoreUserActions()
   theUserStackingAction = theEventManager->GetUserStackingAction();
   theUserTrackingAction = theEventManager->GetUserTrackingAction();
   theUserSteppingAction = theEventManager->GetUserSteppingAction();
+
+  if(!theRayTracerTrackingAction) theRayTracerTrackingAction = new G4RTTrackingAction();
+  if(!theRayTracerSteppingAction) theRayTracerSteppingAction = new G4RTSteppingAction();
 
   theEventManager->SetUserAction(theRayTracerEventAction);
   theEventManager->SetUserAction(theRayTracerStackingAction);
