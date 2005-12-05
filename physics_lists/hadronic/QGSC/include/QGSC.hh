@@ -36,7 +36,7 @@ public:
   
 public:
   // SetCuts() 
-  virtual void SetCuts();
+  virtual void SetCuts(G4int ver = 1);
 
 private:
   enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };

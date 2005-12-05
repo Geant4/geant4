@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2005-12-03 15:12:26 gcosmo Exp $
+$Id: History,v 1.10 2005-12-05 18:25:06 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05.12.2005, V.Ivanchenko - hadr-lists-V07-01-03
+- Add verbosity level as a parameter of Physics Lists
+- Update cout
 
 02.12.2005, G.Folger - hadr-lists-V07-01-02
 - Completed migration of physics lists to non static particles scheme.

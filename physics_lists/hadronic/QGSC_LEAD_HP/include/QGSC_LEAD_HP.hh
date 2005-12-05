@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QGSC_LEAD_HP.hh,v 1.2 2005-12-02 18:04:01 gunter Exp $
+// $Id: QGSC_LEAD_HP.hh,v 1.3 2005-12-05 18:25:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -44,7 +44,7 @@ template<class T>
 class TQGSC_LEAD_HP: public T
 {
 public:
-  TQGSC_LEAD_HP();
+  TQGSC_LEAD_HP(G4int ver = 1);
   virtual ~TQGSC_LEAD_HP();
   
 public:

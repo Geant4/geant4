@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: FTFC.icc,v 1.6 2005-12-05 12:55:27 vnivanch Exp $
+// $Id: FTFC.icc,v 1.7 2005-12-05 18:25:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -37,7 +37,7 @@
 //
 //----------------------------------------------------------------------------
 //
-
+ 
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"

@@ -31,7 +31,7 @@ template<class T>
 class TQGSP_GN: public T
 {
 public:
-  TQGSP_GN();
+  TQGSP_GN(G4int ver = 1);
   virtual ~TQGSP_GN();
   
 public:

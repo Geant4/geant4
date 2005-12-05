@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: LHEP_BIC.hh,v 1.2 2005-12-02 16:13:42 gunter Exp $
+// $Id: LHEP_BIC.hh,v 1.3 2005-12-05 18:25:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -44,7 +44,7 @@ template<class T>
 class TLHEP_BIC: public T
 {
 public:
-  TLHEP_BIC();
+  TLHEP_BIC(G4int ver = 1);
   virtual ~TLHEP_BIC();
   
 public:

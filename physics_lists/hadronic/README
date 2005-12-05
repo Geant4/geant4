@@ -13,4 +13,9 @@ Installation instructions:
 Setting default cut values:
  - The default is: defaultCutValue = 0.7*mm;  
  - To override this value, please call the 
-  "void SetDefaultCutValue(G4double newCutValue)" method.
+  "void SetDefaultCutValue(G4double newCutValue)" method of the Physics List.
+
+Verbosity Level:
+ - verbosity level of any Physics List can be established via its
+   constructor, e.g. "new QGSP(0)" means 0 verbosity level for
+   the Physics List. The default level is 1.

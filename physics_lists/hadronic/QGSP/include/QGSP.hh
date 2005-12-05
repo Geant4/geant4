@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: QGSP.hh,v 1.3 2005-11-25 17:33:40 gunter Exp $
+// $Id: QGSP.hh,v 1.4 2005-12-05 18:25:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -44,7 +44,7 @@ template<class T>
 class TQGSP: public T
 {
 public:
-  TQGSP();
+  TQGSP(G4int ver = 1);
   virtual ~TQGSP();
   
 public:

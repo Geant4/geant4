@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: LHEP_GN.hh,v 1.2 2005-12-01 18:48:15 gunter Exp $
+// $Id: LHEP_GN.hh,v 1.3 2005-12-05 18:25:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -44,7 +44,7 @@ template<class T>
 class TLHEP_GN: public T
 {
 public:
-  TLHEP_GN();
+  TLHEP_GN(G4int ver = 1);
   virtual ~TLHEP_GN();
   
 public:

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: LHEP_LEAD_HP.icc,v 1.5 2005-12-03 14:49:38 gcosmo Exp $
+// $Id: LHEP_LEAD_HP.icc,v 1.6 2005-12-05 18:25:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -57,24 +57,24 @@
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsLHEP_LEAD_HP.hh"
 
-template<class T> TLHEP_LEAD_HP<T>::TLHEP_LEAD_HP():  T()
+template<class T> TLHEP_LEAD_HP<T>::TLHEP_LEAD_HP(G4int ver):  T()
 {
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
   G4DataQuestionaire it(photon, neutron);
-  G4cout << "You are using the simulation engine: LHEP_LEAD_HP 3.0"<<G4endl;
-  G4cout <<G4endl<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: LHEP_LEAD_HP 3.0"<<G4endl;
+  G4cout <<G4endl;
   this->defaultCutValue = 0.7*mm;  
-  this->SetVerboseLevel(1);
+  this->SetVerboseLevel(ver);
 
   // EM Physics
-  this->RegisterPhysics( new G4EmStandardPhysics("standard EM"));
+  this->RegisterPhysics( new G4EmStandardPhysics("standard EM",ver));
 
   // Synchroton Radiation & GN Physics
   this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
 
   // Decays
-  this->RegisterPhysics( new G4DecayPhysics("decay") );
+  this->RegisterPhysics( new G4DecayPhysics("decay",ver) );
 
   // Hadron Physics
   this->RegisterPhysics(  new HadronPhysicsLHEP_LEAD_HP("hadron"));

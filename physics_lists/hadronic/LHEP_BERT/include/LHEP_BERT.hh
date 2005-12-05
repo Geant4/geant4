@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: LHEP_BERT.hh,v 1.2 2005-12-02 16:09:51 gunter Exp $
+// $Id: LHEP_BERT.hh,v 1.3 2005-12-05 18:25:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -44,7 +44,7 @@ template <class T>
 class TLHEP_BERT: public T
 {
 public:
-  TLHEP_BERT();
+  TLHEP_BERT(G4int ver = 1);
   virtual ~TLHEP_BERT();
   
 public:

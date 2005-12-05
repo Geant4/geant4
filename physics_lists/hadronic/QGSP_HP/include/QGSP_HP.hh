@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QGSP_HP.hh,v 1.2 2005-11-29 17:03:28 gunter Exp $
+// $Id: QGSP_HP.hh,v 1.3 2005-12-05 18:25:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -44,7 +44,7 @@ template<class T>
 class TQGSP_HP: public T
 {
 public:
-  TQGSP_HP();
+  TQGSP_HP(G4int ver = 1);
   virtual ~TQGSP_HP();
   
 public:
