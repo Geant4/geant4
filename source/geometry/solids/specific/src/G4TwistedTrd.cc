@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrd.cc,v 1.4 2005-11-18 16:46:17 link Exp $
+// $Id: G4TwistedTrd.cc,v 1.5 2005-12-05 17:03:46 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -89,15 +89,6 @@ std::ostream& G4TwistedTrd::StreamInfo(std::ostream& os) const
   return os;
 }
 
-//=====================================================================
-//* CreatePolyhedron --------------------------------------------------
-
-G4Polyhedron* G4TwistedTrd::CreatePolyhedron () const 
-{
-  // Returns simple Trd for now !!
-  //
-  return new G4PolyhedronTrd2 (GetDx1(),GetDx3(),GetDy1(),GetDy2(),GetDz());
-}
 
 //=====================================================================
 //* GetEntityType -----------------------------------------------------

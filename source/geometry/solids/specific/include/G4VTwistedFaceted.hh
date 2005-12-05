@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistedFaceted.hh,v 1.6 2005-11-18 16:48:01 link Exp $
+// $Id: G4VTwistedFaceted.hh,v 1.7 2005-12-05 17:03:36 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------------
@@ -104,7 +104,8 @@ class G4VTwistedFaceted: public G4VSolid
   virtual inline G4double GetCubicVolume() ;
 
   virtual void            DescribeYourselfTo (G4VGraphicsScene &scene) const;
-  virtual G4Polyhedron   *CreatePolyhedron   () const = 0 ;
+  //  virtual G4Polyhedron   *CreatePolyhedron   () const = 0 ;
+  virtual G4Polyhedron   *CreatePolyhedron   () const ;
   virtual G4NURBS        *CreateNURBS        () const;
   virtual G4Polyhedron   *GetPolyhedron      () const;
 

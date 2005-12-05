@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTrapFlatSide.cc,v 1.1 2005-11-18 16:46:17 link Exp $
+// $Id: G4TwistTrapFlatSide.cc,v 1.2 2005-12-05 17:03:39 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -472,4 +472,61 @@ void G4TwistTrapFlatSide::SetBoundaries()
                 "NotImplemented", FatalException,
                 "Feature NOT implemented !");
    }
+}
+
+void G4TwistTrapFlatSide::GetFacets( G4int m, G4int n, G4double xyz[][3], G4int faces[][4], G4int iside ) 
+{
+
+  G4double x,y    ;     // the two parameters for the surface equation
+  G4ThreeVector p ;  // a point on the surface, given by (z,u)
+
+  G4int nnode ;
+  G4int nface ;
+
+  G4double xmin,xmax ;
+
+  // calculate the (n-1)*(m-1) vertices
+
+  G4int i,j ;
+
+  for ( i = 0 ; i<n ; i++ ) {
+
+    y = -fDy + i*(2*fDy)/(n-1) ;
+
+    for ( j = 0 ; j<m ; j++ ) {
+
+      xmin = GetBoundaryMin(y) ;
+      xmax = GetBoundaryMax(y) ;
+      x = xmin + j*(xmax-xmin)/(m-1) ;
+
+      nnode = GetNode(i,j,m,n,iside) ;
+      p = SurfacePoint(x,y,true) ;  // surface point in global coordinate system
+
+      xyz[nnode][0] = p.x() ;
+      xyz[nnode][1] = p.y() ;
+      xyz[nnode][2] = p.z() ;
+
+      if ( i<n-1 && j<m-1 ) {   // conterclock wise filling
+	
+	nface = GetFace(i,j,m,n,iside) ;
+
+	if (fHandedness < 0) {  // lower side
+	  faces[nface][0] = GetNode(i  ,j  ,m,n,iside)+1 ;  
+	  faces[nface][1] = GetNode(i+1,j  ,m,n,iside)+1 ;
+	  faces[nface][2] = GetNode(i+1,j+1,m,n,iside)+1 ;
+	  faces[nface][3] = GetNode(i  ,j+1,m,n,iside)+1 ;
+	} else {                // upper side
+	  faces[nface][0] = GetNode(i  ,j  ,m,n,iside)+1 ;  
+	  faces[nface][1] = GetNode(i  ,j+1,m,n,iside)+1 ;
+	  faces[nface][2] = GetNode(i+1,j+1,m,n,iside)+1 ;
+	  faces[nface][3] = GetNode(i+1,j  ,m,n,iside)+1 ;
+	}
+
+	
+      }
+      
+    }
+
+  }
+
 }

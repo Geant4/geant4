@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedBox.cc,v 1.9 2005-11-18 16:46:17 link Exp $
+// $Id: G4TwistedBox.cc,v 1.10 2005-12-05 17:03:44 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,15 +85,6 @@ std::ostream& G4TwistedBox::StreamInfo(std::ostream& os) const
   return os;
 }
 
-//=====================================================================
-//* CreatePolyhedron --------------------------------------------------
-
-G4Polyhedron* G4TwistedBox::CreatePolyhedron () const 
-{
-  // Normal box for now!!
-  //
-  return new G4PolyhedronBox (GetDx1(), GetDy1(), GetDz());
-}
 
 //=====================================================================
 //* GetEntityType -----------------------------------------------------

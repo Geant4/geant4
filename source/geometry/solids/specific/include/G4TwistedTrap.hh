@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrap.hh,v 1.7 2005-11-18 16:48:01 link Exp $
+// $Id: G4TwistedTrap.hh,v 1.8 2005-12-05 17:03:33 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -109,7 +109,6 @@ class G4TwistedTrap : public G4VTwistedFaceted
     inline G4double GetAzimuthalAnglePhi() const { return GetPhi()   ; }
 
     G4GeometryType GetEntityType() const;
-    G4Polyhedron*  CreatePolyhedron() const;
 
     std::ostream &StreamInfo(std::ostream& os) const;
 

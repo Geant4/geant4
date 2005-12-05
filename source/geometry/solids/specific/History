@@ -1,4 +1,4 @@
-$Id: History,v 1.73 2005-11-30 10:34:04 gcosmo Exp $
+$Id: History,v 1.74 2005-12-05 17:03:24 link Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05-Dec-2005, O.Link
+- Added visualisation for twisted solids.
+  (TwistedTrap, TwistedTrd, TwistedBox, TwistedTubs)
 
 30-Nov-2005, G.Cosmo (geom-specific-V07-01-11)
 - Trivial fixes for porting on CLHEP-2.0.X series.

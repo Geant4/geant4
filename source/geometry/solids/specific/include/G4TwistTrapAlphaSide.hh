@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTrapAlphaSide.hh,v 1.1 2005-11-18 16:48:01 link Exp $
+// $Id: G4TwistTrapAlphaSide.hh,v 1.2 2005-12-05 17:03:26 link Exp $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -105,6 +105,7 @@ class G4TwistTrapAlphaSide : public G4VTwistSurface
     inline virtual G4double GetBoundaryMin(G4double phi) ;
     inline virtual G4double GetBoundaryMax(G4double phi) ;
     inline virtual G4double GetSurfaceArea() ;
+    virtual void GetFacets( G4int m , G4int m , G4double xyz[][3], G4int faces[][4], G4int iside ) ;
 
     inline G4ThreeVector NormAng(G4double phi, G4double u);
     inline G4double Xcoef(G4double u,G4double phi);    // to calculate the w(u) function

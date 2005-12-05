@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc,v 1.8 2005-11-30 10:34:04 gcosmo Exp $
+// $Id: G4VTwistedFaceted.cc,v 1.9 2005-12-05 17:03:49 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1142,8 +1142,13 @@ G4Polyhedron* G4VTwistedFaceted::GetPolyhedron() const
 ////////////////////////////////////////////////////////////////////////////
 //
 // GetPointInSolid
+
 G4ThreeVector G4VTwistedFaceted::GetPointInSolid(G4double z) const
 {
+
+
+  // this routine is only used for a test
+  // can be deleted ...
 
   if ( z == fDz ) z -= 0.1*fDz ;
   if ( z == -fDz ) z += 0.1*fDz ;
@@ -1255,3 +1260,35 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
 
   }
 }
+
+
+
+//=====================================================================
+//* CreatePolyhedron --------------------------------------------------
+
+G4Polyhedron* G4VTwistedFaceted::CreatePolyhedron () const 
+{
+
+  const G4int m = 8  ;  // number of meshes
+  const G4int n = 20  ;
+
+  const G4int nnodes = 4*(m-1)*(n-2) + 2*m*m ;
+  const G4int nfaces = 4*(m-1)*(n-1) + 2*(m-1)*(m-1) ;
+
+  G4Polyhedron *ph=new G4Polyhedron;
+  G4double xyz[nnodes ][3];         // number of nodes 
+  G4int  faces[nfaces][4] ; // number of faces
+
+  fLowerEndcap->GetFacets(m,m,xyz,faces,0) ;
+  fUpperEndcap->GetFacets(m,m,xyz,faces,1) ;
+  fSide270->GetFacets(m,n,xyz,faces,2) ;
+  fSide0->GetFacets(m,n,xyz,faces,3) ;
+  fSide90->GetFacets(m,n,xyz,faces,4) ;
+  fSide180->GetFacets(m,n,xyz,faces,5) ;
+
+  ph->createPolyhedron(nnodes,nfaces,xyz,faces);
+
+  return ph;
+
+}
+

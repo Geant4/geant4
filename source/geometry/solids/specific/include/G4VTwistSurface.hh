@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistSurface.hh,v 1.1 2005-11-18 16:48:01 link Exp $
+// $Id: G4VTwistSurface.hh,v 1.2 2005-12-05 17:03:35 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -169,6 +169,10 @@ class G4VTwistSurface
    virtual G4double GetBoundaryMin(G4double) = 0 ;
    virtual G4double GetBoundaryMax(G4double) = 0 ;
    virtual G4double GetSurfaceArea() = 0 ;
+   virtual void GetFacets(G4int m, G4int n, G4double xyz[][3], G4int faces[][4], G4int iside) = 0 ;
+   G4int GetNode( G4int i, G4int j, G4int m, G4int n, G4int iside )  ;
+   G4int GetFace( G4int i, G4int j, G4int m, G4int n, G4int iside )  ;
+
 
  public:  // without description
 

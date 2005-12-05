@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistSurface.cc,v 1.1 2005-11-18 16:46:17 link Exp $
+// $Id: G4VTwistSurface.cc,v 1.2 2005-12-05 17:03:48 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1060,3 +1060,117 @@ G4VTwistSurface::Boundary::GetBoundaryParameters(const G4int         &areacode,
   boundarytype = fBoundaryType;
   return true;
 }
+
+G4int G4VTwistSurface::GetFace( G4int i, G4int j, G4int m, G4int n, G4int iside ) 
+{
+  // this is the face mapping function
+  // (i,j) -> face number
+
+  if ( iside == 0 ) {
+    return i * ( m - 1 ) + j ;
+  }
+
+  else if ( iside == 1 ) {
+    return (m-1)*(m-1) + i*(m-1) + j ;
+  }
+
+  else if ( iside == 2 ) {
+    return 2*(m-1)*(m-1) + i*(m-1) + j ;
+  }
+
+  else if ( iside == 3 ) {
+    return 2*(m-1)*(m-1) + (n-1)*(m-1) + i*(m-1) + j ;
+  }
+  
+  else if ( iside == 4 ) {
+    return 2*(m-1)*(m-1) + 2*(n-1)*(m-1) + i*(m-1) + j ;
+  }
+  
+  else if ( iside == 5 ) {
+    return 2*(m-1)*(m-1) + 3*(n-1)*(m-1) + i*(m-1) + j ;
+  }
+
+  else {
+
+   G4cerr << "ERROR - G4VTwistSurface::GetFace(): "
+	   << GetName() << G4endl
+	   << "        Not correct side number! - " << G4endl 
+	   << "iside is " << iside << " but should be "
+           << "0,1,2,3,4 or 5" << "." << G4endl ;
+    G4Exception("G4TwistSurface::G4GetFace()", "InvalidSetup",
+		FatalException, "Not correct side number.");
+
+
+  }
+
+  return -1 ;  // wrong face
+}
+
+
+
+G4int G4VTwistSurface::GetNode( G4int i, G4int j, G4int m, G4int n, G4int iside ) 
+{
+  // this is the node mapping function
+  // (i,j) -> node number
+  // Depends on the side iside and the used meshing of the surface
+
+  if ( iside == 0 ) {
+    // lower endcap is mxm squared. 
+    // n = m 
+    return i * m + j ;
+  }
+
+  if ( iside == 1 ) {
+    // upper endcap is mxm squared. Shift by m*m
+    // n = m 
+    return  m*m + i*m + j ;
+  }
+
+  else if ( iside == 2 ) {
+    // front side.
+    if      ( i == 0 )     {   return       j ;  }
+    else if ( i == n-1 )   {   return m*m + j ;  } 
+    else                   {   return 2*m*m + 4*(i-1)*(m-1) + j ; }
+  }
+
+  else if ( iside == 3 ) {
+    // right side
+    if      ( i == 0 )     {   return       (j+1)*m - 1 ; } 
+    else if ( i == n-1 )   {   return m*m + (j+1)*m - 1 ; }
+    else                   {   return 2*m*m + 4*(i-1)*(m-1) + (m-1) + j ; }
+  }
+  else if ( iside == 4 ) {
+    // back side.
+    if      ( i == 0 )     {   return   m*m - 1 - j ; }               // reversed order
+    else if ( i == n-1 )   {   return 2*m*m - 1 - j ; }               // reversed order 
+    else                   {   return 2*m*m + 4*(i-1)*(m-1) + 2*(m-1) + j ; // normal order
+    }
+  }
+  else if ( iside == 5 ) {
+    // left side 
+    if      ( i == 0 )     {   return m*m   - (j+1)*m ; }             // reversed order
+    else if ( i == n-1)    {   return 2*m*m - (j+1)*m ; }             // reverded order
+    else {
+      if ( j == m-1 )      {   return 2*m*m + 4*(i-1)*(m-1) ; }       // special case
+      else                 {   return 2*m*m + 4*(i-1)*(m-1) + 3*(m-1) + j ; }  // normal order
+    }  
+  }
+
+  else {
+
+    G4cerr << "ERROR - G4VTwistSurface::GetNode(): "
+	   << GetName() << G4endl
+	   << "        Not correct side number! - " << G4endl 
+	   << "iside is " << iside << " but should be "
+           << "0,1,2,3,4 or 5" << "." << G4endl ;
+    G4Exception("G4TwistSurface::G4GetNode()", "InvalidSetup",
+		FatalException, "Not correct side number.");
+
+  
+  } 
+
+  return -1 ;  // wrong node 
+} 
+ 
+
+

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrd.hh,v 1.4 2005-11-18 16:48:01 link Exp $
+// $Id: G4TwistedTrd.hh,v 1.5 2005-12-05 17:03:34 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -80,7 +80,6 @@ class G4TwistedTrd : public G4VTwistedFaceted
     inline G4double GetPhiTwist()     const { return GetTwistAngle() ; }
 
     G4GeometryType GetEntityType() const;
-    G4Polyhedron*  CreatePolyhedron   () const;
 
     std::ostream&  StreamInfo(std::ostream& os) const;
 

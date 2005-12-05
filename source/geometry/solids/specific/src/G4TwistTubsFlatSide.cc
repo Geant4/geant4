@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTubsFlatSide.cc,v 1.1 2005-11-18 16:46:17 link Exp $
+// $Id: G4TwistTubsFlatSide.cc,v 1.2 2005-12-05 17:03:41 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -493,4 +493,61 @@ void G4TwistTubsFlatSide::SetBoundaries()
       G4Exception("G4TwistTubsFlatSide::SetBoundaries()", "NotImplemented",
                   FatalException, "Feature NOT implemented !");
    }
+}
+
+void G4TwistTubsFlatSide::GetFacets( G4int m, G4int n, G4double xyz[][3], G4int faces[][4], G4int iside ) 
+{
+
+  G4ThreeVector p ;
+
+  G4double rmin = fAxisMin[0] ;
+  G4double rmax = fAxisMax[0] ;
+  G4double phimin, phimax ;
+
+  G4double r,phi ;
+
+  G4int i,j ;
+
+  G4int nnode,nface ;
+
+  for ( i = 0 ; i<n ; i++ ) {
+
+    r = rmin + i*(rmax-rmin)/(n-1) ;
+
+    phimin = GetBoundaryMin(r) ; 
+    phimax = GetBoundaryMax(r) ;
+
+    for ( j = 0 ; j<m ; j++ ) {
+
+      phi = phimin + j*(phimax-phimin)/(m-1) ;
+
+      nnode = GetNode(i,j,m,n,iside) ;
+      p = SurfacePoint(phi,r,true) ;  // surface point in global coordinate system
+
+      xyz[nnode][0] = p.x() ;
+      xyz[nnode][1] = p.y() ;
+      xyz[nnode][2] = p.z() ;
+
+      if ( i<n-1 && j<m-1 ) {   // conterclock wise filling
+	
+	nface = GetFace(i,j,m,n,iside) ;
+
+	if (fHandedness < 0) {  // lower side
+	  faces[nface][0] = GetNode(i  ,j  ,m,n,iside)+1 ;  
+	  faces[nface][1] = GetNode(i  ,j+1,m,n,iside)+1 ;
+	  faces[nface][2] = GetNode(i+1,j+1,m,n,iside)+1 ;
+	  faces[nface][3] = GetNode(i+1,j  ,m,n,iside)+1 ;
+	} else {                // upper side
+	  faces[nface][0] = GetNode(i  ,j  ,m,n,iside)+1 ;  
+	  faces[nface][1] = GetNode(i+1,j  ,m,n,iside)+1 ;
+	  faces[nface][2] = GetNode(i+1,j+1,m,n,iside)+1 ;
+	  faces[nface][3] = GetNode(i  ,j+1,m,n,iside)+1 ;
+	}
+	
+      }
+      
+    }
+
+  }
+
 }

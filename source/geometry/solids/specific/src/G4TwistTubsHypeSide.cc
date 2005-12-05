@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTubsHypeSide.cc,v 1.1 2005-11-18 16:46:17 link Exp $
+// $Id: G4TwistTubsHypeSide.cc,v 1.2 2005-12-05 17:03:42 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -918,3 +918,57 @@ void G4TwistTubsHypeSide::SetBoundaries()
 }
 
 
+void G4TwistTubsHypeSide::GetFacets( G4int m, G4int n, G4double xyz[][3], G4int faces[][4], G4int iside ) 
+{
+
+  G4double z ;     // the two parameters for the surface equation
+  G4double x,xmin,xmax ;
+
+  G4ThreeVector p ;  // a point on the surface, given by (z,u)
+
+  G4int nnode ;
+  G4int nface ;
+
+  // calculate the (n-1)*(m-1) vertices
+
+  G4int i,j ;
+
+  for ( i = 0 ; i<n ; i++ ) {
+
+    z = fAxisMin[1] + i*(fAxisMax[1]-fAxisMin[1])/(n-1) ;
+
+    for ( j = 0 ; j<m ; j++ ) {
+
+      nnode = GetNode(i,j,m,n,iside) ;
+
+      xmin = GetBoundaryMin(z) ; 
+      xmax = GetBoundaryMax(z) ;
+
+      if (fHandedness < 0) { // inner hyperbolic surface
+	x = xmin + j*(xmax-xmin)/(m-1) ;
+      } else {               // outer hyperbolic surface
+	x = xmax - j*(xmax-xmin)/(m-1) ;
+      }
+
+      p = SurfacePoint(x,z,true) ;  // surface point in global coordinate system
+
+      xyz[nnode][0] = p.x() ;
+      xyz[nnode][1] = p.y() ;
+      xyz[nnode][2] = p.z() ;
+
+      if ( i<n-1 && j<m-1 ) {   // clock wise filling
+	
+	nface = GetFace(i,j,m,n,iside) ;
+
+	faces[nface][0] = GetNode(i  ,j  ,m,n,iside)+1 ;  
+	faces[nface][1] = GetNode(i+1,j  ,m,n,iside)+1 ;
+	faces[nface][2] = GetNode(i+1,j+1,m,n,iside)+1 ;
+	faces[nface][3] = GetNode(i  ,j+1,m,n,iside)+1 ;
+	
+      }
+      
+    }
+
+  }
+
+}

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc,v 1.16 2005-11-30 10:34:04 gcosmo Exp $
+// $Id: G4TwistedTubs.cc,v 1.17 2005-12-05 17:03:47 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -944,10 +944,36 @@ G4VisExtent G4TwistedTubs::GetExtent() const
 
 G4Polyhedron* G4TwistedTubs::CreatePolyhedron () const 
 {
+
+  const G4int m = 8  ;  // number of meshes
+  const G4int n = 20  ;
+
+  const G4int nnodes = 4*(m-1)*(n-2) + 2*m*m ;
+  const G4int nfaces = 4*(m-1)*(n-1) + 2*(m-1)*(m-1) ;
+
+  G4Polyhedron *ph=new G4Polyhedron;
+  G4double xyz[nnodes ][3];         // number of nodes 
+  G4int  faces[nfaces][4] ; // number of faces
+
+  fLowerEndcap->GetFacets(m,m,xyz,faces,0) ;
+  fUpperEndcap->GetFacets(m,m,xyz,faces,1) ;
+  fInnerHype->GetFacets(m,n,xyz,faces,2) ;
+  fFormerTwisted->GetFacets(m,n,xyz,faces,3) ;
+  fOuterHype->GetFacets(m,n,xyz,faces,4) ;
+  fLatterTwisted->GetFacets(m,n,xyz,faces,5) ;
+
+  ph->createPolyhedron(nnodes,nfaces,xyz,faces);
+
+  return ph;
+
+#if 0
   // Tube for now!!!
   //
   return new G4PolyhedronTubs (fInnerRadius, fOuterRadius, fZHalfLength,
                                fEndPhi[0], fDPhi);
+#endif
+
+
 }
 
 //=====================================================================

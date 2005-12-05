@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrap.cc,v 1.11 2005-11-18 16:46:17 link Exp $
+// $Id: G4TwistedTrap.cc,v 1.12 2005-12-05 17:03:45 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -116,17 +116,6 @@ std::ostream& G4TwistedTrap::StreamInfo(std::ostream& os) const
   return os;
 }
 
-//=====================================================================
-//* CreatePolyhedron --------------------------------------------------
-
-G4Polyhedron* G4TwistedTrap::CreatePolyhedron () const 
-{
-  // Returns simple trap for now!!
-  //
-  return new G4PolyhedronTrap(GetDz(), GetTheta(), GetPhi(),
-                              GetDy1(), GetDx1(), GetDx2(), GetAlpha(),
-                              GetDy2(), GetDx3(), GetDx4(), GetAlpha());
-}
 
 //=====================================================================
 //* GetEntityType -----------------------------------------------------

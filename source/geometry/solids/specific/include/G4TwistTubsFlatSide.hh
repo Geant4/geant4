@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTubsFlatSide.hh,v 1.1 2005-11-18 16:48:01 link Exp $
+// $Id: G4TwistTubsFlatSide.hh,v 1.2 2005-12-05 17:03:29 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -90,7 +90,7 @@ class G4TwistTubsFlatSide : public G4VTwistSurface
   inline virtual G4double GetBoundaryMin(G4double phi) ;
   inline virtual G4double GetBoundaryMax(G4double phi) ;
   inline virtual G4double GetSurfaceArea() { return fSurfaceArea ; } ;
-
+  virtual void GetFacets( G4int m , G4int m , G4double xyz[][3], G4int faces[][4], G4int iside ) ;
 
   G4double fSurfaceArea ;
 
