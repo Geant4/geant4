@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4DecayPhysics.cc,v 1.3 2005-12-02 16:30:20 gunter Exp $
+// $Id: G4DecayPhysics.cc,v 1.4 2005-12-05 12:55:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -31,6 +31,7 @@
 //
 // Modified:
 // 10.11.2005 V.Ivanchenko edit to provide a standard
+// 05.12.2005 V.Ivanchenko add controlled verbosity
 //
 //----------------------------------------------------------------------------
 //
@@ -49,8 +50,8 @@
 #include "G4ShortLivedConstructor.hh"
 
 
-G4DecayPhysics::G4DecayPhysics(const G4String& name)
-  :  G4VPhysicsConstructor(name), wasActivated(false)
+G4DecayPhysics::G4DecayPhysics(const G4String& name, G4int ver)
+  :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
 {}
 
 G4DecayPhysics::~G4DecayPhysics()
@@ -97,6 +98,8 @@ void G4DecayPhysics::ConstructProcess()
     pmanager = particle->GetProcessManager();
     if( fDecayProcess->IsApplicable(*particle) ) 
     { 
+      if(verbose > 1)
+        G4cout << "### Decays for " << particle->GetParticleName() << G4endl;
       pmanager -> AddProcess(fDecayProcess);
       pmanager -> SetProcessOrdering(fDecayProcess, idxPostStep);
       pmanager -> SetProcessOrdering(fDecayProcess, idxAtRest);

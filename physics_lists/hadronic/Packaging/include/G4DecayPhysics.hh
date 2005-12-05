@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4DecayPhysics.hh,v 1.2 2005-12-02 16:30:20 gunter Exp $
+// $Id: G4DecayPhysics.hh,v 1.3 2005-12-05 12:55:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -31,6 +31,7 @@
 //
 // Modified:
 // 10.11.2005 V.Ivanchenko edit to provide a standard
+// 05.12.2005 V.Ivanchenko add controlled verbosity
 //
 //----------------------------------------------------------------------------
 //
@@ -46,7 +47,7 @@
 class G4DecayPhysics : public G4VPhysicsConstructor
 {
   public: 
-    G4DecayPhysics(const G4String& name = "decay");
+    G4DecayPhysics(const G4String& name = "decay", G4int ver = 1);
     virtual ~G4DecayPhysics();
 
   public: 
@@ -61,6 +62,7 @@ class G4DecayPhysics : public G4VPhysicsConstructor
 
 private:
   G4Decay* fDecayProcess;
+  G4int    verbose;
   G4bool   wasActivated;
 };
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics.cc,v 1.2 2005-12-01 06:45:21 vnivanch Exp $
+// $Id: G4EmStandardPhysics.cc,v 1.3 2005-12-05 12:55:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -30,6 +30,7 @@
 // Author:      V.Ivanchenko 09.11.2005
 //
 // Modified:
+// 05.12.2005 V.Ivanchenko add controlled verbosity
 //
 //----------------------------------------------------------------------------
 //
@@ -75,8 +76,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmStandardPhysics::G4EmStandardPhysics(const G4String& name, G4bool msc)
-   :  G4VPhysicsConstructor(name), mscStepLimit(msc)
+G4EmStandardPhysics::G4EmStandardPhysics(const G4String& name, G4int ver,
+   G4bool msc): G4VPhysicsConstructor(name), verbose(ver), mscStepLimit(msc)
 {
   G4LossTableManager::Instance();
 }
@@ -165,16 +166,18 @@ void G4EmStandardPhysics::ConstructProcess()
 
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) &&
-	       (particle->GetParticleName() != "chargedgeantino")) {
-      //G4cout << "Emstandard : " << particle->GetParticleName() << G4endl;
+	       (particleName != "chargedgeantino")) {
+      if(verbose > 1)
+        G4cout << "### EmStandard instantiates hIoni for " 
+               << particleName << G4endl;
       pmanager->AddProcess(new G4MultipleScattering,-1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,       -1, 2, 2);
     }
   }
-  if(!mscStepLimit) {
-    G4EmProcessOptions opt;
+  G4EmProcessOptions opt;
+  opt.SetVerbose(verbose);
+  if(!mscStepLimit) 
     opt.SetMscStepLimitation(false);
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

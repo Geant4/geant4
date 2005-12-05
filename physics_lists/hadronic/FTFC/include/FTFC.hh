@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: FTFC.hh,v 1.2 2005-11-29 16:59:40 gunter Exp $
+// $Id: FTFC.hh,v 1.3 2005-12-05 12:55:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -30,6 +30,7 @@
 // Author: 2002 J.P. Wellisch
 //
 // Modified:
+// 05.12.2005 V.Ivanchenko add controlled verbosity
 //
 //----------------------------------------------------------------------------
 //
@@ -44,7 +45,7 @@ template<class T>
 class TFTFC: public T
 {
 public:
-  TFTFC();
+  TFTFC(G4int ver = 1);
   virtual ~TFTFC();
   
 public:

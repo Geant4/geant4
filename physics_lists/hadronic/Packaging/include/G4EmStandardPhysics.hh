@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmStandardPhysics.hh,v 1.2 2005-12-01 06:45:21 vnivanch Exp $
+// $Id: G4EmStandardPhysics.hh,v 1.3 2005-12-05 12:55:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -31,6 +31,7 @@
 // Author:      V.Ivanchenko 09.11.2005
 //
 // Modified:
+// 05.12.2005 V.Ivanchenko add controlled verbosity
 //
 //----------------------------------------------------------------------------
 //
@@ -52,7 +53,8 @@
 class G4EmStandardPhysics : public G4VPhysicsConstructor
 {
 public:
-  G4EmStandardPhysics(const G4String& name = "EMstandard", G4bool msc=true);
+  G4EmStandardPhysics(const G4String& name = "EMstandard", G4int ver = 1,
+		      G4bool msc=true);
   virtual ~G4EmStandardPhysics();
 
 public:
@@ -60,6 +62,7 @@ public:
   virtual void ConstructProcess();
 
 private:
+  G4int  verbose;
   G4bool mscStepLimit;
 };
 
