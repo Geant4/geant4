@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForGamma.hh,v 1.3 2005-05-30 18:23:35 vnivanch Exp $
+// $Id: G4ParticleChangeForGamma.hh,v 1.4 2005-12-05 17:19:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -30,10 +30,11 @@
 //
 //
 // ------------------------------------------------------------
-//   15 April 2005 V.Ivanchenko for gamma EM processes
+// 15 April 2005 V.Ivanchenko for gamma EM processes
 //
-//   Modified:
-//   30.05.05 V.Ivanchenko add UpdateStepForAtRest
+// Modified:
+// 30.05.05 : add   UpdateStepForAtRest (V.Ivanchenko)
+// 04.12.05 : apply UpdateStepForPostStep in any case (mma) 
 //
 // ------------------------------------------------------------
 //
@@ -188,16 +189,16 @@ inline G4Step* G4ParticleChangeForGamma::UpdateStepForAtRest(G4Step* pStep)
 
 inline G4Step* G4ParticleChangeForGamma::UpdateStepForPostStep(G4Step* pStep)
 {
-  if(theStatusChange == fAlive) {
-    G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
-    pPostStepPoint->SetKineticEnergy( proposedKinEnergy );
-    pPostStepPoint->SetMomentumDirection( proposedMomentumDirection );
-    pPostStepPoint->AddPolarization( proposedPolarization );
-  }
+  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
+  pPostStepPoint->SetKineticEnergy( proposedKinEnergy );
+  pPostStepPoint->SetMomentumDirection( proposedMomentumDirection );
+  pPostStepPoint->AddPolarization( proposedPolarization );
+
   // update weight
   // this feature is commented out, it should be overwritten in case
   // if energy loss processes will use biasing
   // pPostStepPoint->SetWeight( theProposedWeight );
+  
   pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
   return pStep;
 }
