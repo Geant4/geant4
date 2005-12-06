@@ -3,7 +3,7 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonPhysicsICRUIonization.cc,v 1.2 2005-11-25 11:53:02 capra Exp $
+// Id:            $Id: RadmonPhysicsICRUIonization.cc,v 1.3 2005-12-06 19:37:17 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -42,8 +42,8 @@ void                                            RadmonPhysicsICRUIonization :: C
   G4String particleName(particle->GetParticleName());
 
   if ((particle->GetPDGCharge()!=0) && (!particle -> IsShortLived()) && 
-      particleName!="e+" && particleName!="mu+" && 
-      particleName!="e-" && particleName!="mu-" && particleName!="chargedgeantino")
+      particleName!="e+" && particleName!="mu+" && particleName!="tau+" &&
+      particleName!="e-" && particleName!="mu-" && particleName!="tau-" && particleName!="chargedgeantino")
   {
    G4ProcessManager * manager(particle->GetProcessManager());
  
@@ -85,16 +85,25 @@ const RadmonPhysicsInfoList &                   RadmonPhysicsICRUIonization :: P
   info[2].SetMinEnergy(0*eV);
   info[2].SetMaxEnergy(DBL_MAX);
 
+  particleIterator.reset();
   while (particleIterator())
   {
-   G4int i(3);
-   
-   while (i>0)
+   G4ParticleDefinition * particle(particleIterator.value());
+   G4String particleName(particle->GetParticleName());
+
+   if ((particle->GetPDGCharge()!=0) && (!particle -> IsShortLived()) && 
+        particleName!="e+" && particleName!="mu+" && particleName!="tau+" &&
+        particleName!="e-" && particleName!="mu-" && particleName!="tau-" && particleName!="chargedgeantino")
    {
-    i--;
+    G4int i(3);
+   
+    while (i>0)
+    {
+     i--;
     
-    info[i].SetParticleDefinition(particleIterator.value());
-    infoList.InsertPhysicsInfo(info[i]);
+     info[i].SetParticleDefinition(particleIterator.value());
+     infoList.InsertPhysicsInfo(info[i]);
+    }
    }
   }
  }

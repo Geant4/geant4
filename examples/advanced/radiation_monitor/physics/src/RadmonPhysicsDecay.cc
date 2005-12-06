@@ -3,7 +3,7 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonPhysicsDecay.cc,v 1.3 2005-11-25 11:53:02 capra Exp $
+// Id:            $Id: RadmonPhysicsDecay.cc,v 1.4 2005-12-06 19:37:17 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -68,6 +68,7 @@ const RadmonPhysicsInfoList &                   RadmonPhysicsDecay :: Provides(v
   info.SetMinEnergy(0*eV);
   info.SetMaxEnergy(1.e6*TeV);
 
+  particleIterator.reset();
   while (particleIterator())
   {  
    info.SetParticleDefinition(particleIterator.value());

@@ -3,7 +3,7 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonPhysicsHadronsBertini.cc,v 1.1 2005-11-25 01:52:01 capra Exp $
+// Id:            $Id: RadmonPhysicsHadronsBertini.cc,v 1.2 2005-12-06 19:37:17 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -127,7 +127,7 @@ void                                            RadmonPhysicsHadronsBertini :: C
 
  G4PionPlusInelasticProcess * pionPlusInelasticProcess(new G4PionPlusInelasticProcess());
  pionPlusInelasticProcess->AddDataSet(piNuclear);
- protonInelasticProcess->RegisterMe(bertiniCascadeModel);
+ pionPlusInelasticProcess->RegisterMe(bertiniCascadeModel);
  pionPlusInelasticProcess->RegisterMe(pionPlusLEPModel);
  pionPlusInelasticProcess->RegisterMe(qgspModel);
  manager->AddDiscreteProcess(pionPlusInelasticProcess);
@@ -153,7 +153,7 @@ void                                            RadmonPhysicsHadronsBertini :: C
 
  G4PionMinusInelasticProcess * pionMinusInelasticProcess(new G4PionMinusInelasticProcess());
  pionMinusInelasticProcess->AddDataSet(piNuclear);
- protonInelasticProcess->RegisterMe(bertiniCascadeModel);
+ pionMinusInelasticProcess->RegisterMe(bertiniCascadeModel);
  pionMinusInelasticProcess->RegisterMe(pionMinusLEPModel);
  pionMinusInelasticProcess->RegisterMe(qgspModel);
  manager->AddDiscreteProcess(pionMinusInelasticProcess);
