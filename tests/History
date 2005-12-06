@@ -1,4 +1,4 @@
-$Id: History,v 1.64 2005-12-06 16:45:23 gcosmo Exp $
+$Id: History,v 1.65 2005-12-06 16:46:50 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,7 @@ committal in the CVS repository !
 
 tests-V07-01-05 6th December 2005  Gabriele Cosmo
 - Fixes for support of CLHEP-2.0.X series.
+- Correction to GNUmakefile for test33 to use its two input macros.
 
 tests-V07-01-05 18th November 2005  Gabriele Cosmo
 - Updated reference outputs according to reference tag geant4-07-01-ref-05.
