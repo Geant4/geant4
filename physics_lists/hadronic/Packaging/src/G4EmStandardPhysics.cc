@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics.cc,v 1.4 2005-12-06 11:46:31 vnivanch Exp $
+// $Id: G4EmStandardPhysics.cc,v 1.5 2005-12-06 11:57:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -138,12 +138,18 @@ void G4EmStandardPhysics::ConstructProcess()
 
     } else if (particleName == "e-") {
 
+      if(verbose > 1)
+        G4cout << "### EmStandard instantiates eIoni for " 
+               << particleName << G4endl;
       pmanager->AddProcess(new G4MultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung(),  -1, 3, 3);
 
     } else if (particleName == "e+") {
 
+      if(verbose > 1)
+        G4cout << "### EmStandard instantiates eIoni for " 
+               << particleName << G4endl;
       pmanager->AddProcess(new G4MultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3, 3);
@@ -152,6 +158,9 @@ void G4EmStandardPhysics::ConstructProcess()
     } else if (particleName == "mu+" ||
                particleName == "mu-"    ) {
 
+      if(verbose > 1)
+        G4cout << "### EmStandard instantiates muIoni for " 
+               << particleName << G4endl;
       pmanager->AddProcess(new G4MultipleScattering,-1, 1, 1);
       pmanager->AddProcess(new G4MuIonisation,      -1, 2, 2);
       pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3, 3);
