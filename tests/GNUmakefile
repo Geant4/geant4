@@ -357,9 +357,9 @@ examples_links_source:
 	exdir=$(G4INSTALL)/tests/test33; \
          ln -s $$exdir $$testdir; \
          ln -s MassGeo_TimedApp.mac  $$testdir/test33.in;  \
-         ln -s ParallelGeo_TimedApp.mac $$testdir/test34.in; \
+         ln -s ParallelGeo_TimedApp.mac $$testdir/test35.in; \
          ln -s MassGeo_TimedApp.out  $$testdir/test33.out;  \
-         ln -s ParallelGeo_TimedApp.out $$testdir/test34.out; :
+         ln -s ParallelGeo_TimedApp.out $$testdir/test35.out; :
 
 ################################################################
 
