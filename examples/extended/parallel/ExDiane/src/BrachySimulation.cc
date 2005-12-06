@@ -76,12 +76,12 @@ BrachySimulation::~BrachySimulation()
 void BrachySimulation::setSeed(G4int sd)
 {
   seed = sd;
-  HepRandom ::setTheSeed(seed);
+  CLHEP::HepRandom::setTheSeed(seed);
 }
 
 G4bool BrachySimulation::initialize(int ,char** )
 { 
-  HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
  
   G4cout << "G4 initializing" << G4endl;
  
