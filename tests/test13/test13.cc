@@ -40,8 +40,8 @@
 int main(int argc,char** argv) {
 
   // Set the default random engine to RanecuEngine
-  RanecuEngine defaultEngine;
-  HepRandom::setTheEngine(&defaultEngine);
+  CLHEP::RanecuEngine defaultEngine;
+  CLHEP::HepRandom::setTheEngine(&defaultEngine);
 
   // Run manager
   G4RunManager * runManager = new G4RunManager;

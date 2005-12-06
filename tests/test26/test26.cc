@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test26.cc,v 1.5 2003-03-26 17:29:30 vnivanch Exp $
+// $Id: test26.cc,v 1.6 2005-12-06 16:17:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -64,7 +64,7 @@
 int main(int argc,char** argv) {
 
   //choose the Random engine
-  HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   
   //my Verbose output class
   Tst26SteppingVerbose* stepvb = new Tst26SteppingVerbose();

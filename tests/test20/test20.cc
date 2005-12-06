@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test20.cc,v 1.3 2001-07-11 10:10:15 gunter Exp $
+// $Id: test20.cc,v 1.4 2005-12-06 16:07:50 gcosmo Exp $
 //
 
 #include "Tst20DetectorConstruction.hh"
@@ -40,7 +40,7 @@
 int main(int argc,char** argv) {
 
   // Set the default random engine to RanecuEngine
-  HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
 
   // Run manager
   G4RunManager * runManager = new G4RunManager;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26RunAction.cc,v 1.7 2004-12-08 12:20:30 gcosmo Exp $
+// $Id: Tst26RunAction.cc,v 1.8 2005-12-06 16:17:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 /////////////////////////////////////////////////////////////////////////
@@ -87,7 +87,7 @@ void Tst26RunAction::BeginOfRunAction(const G4Run* aRun)
 
   // save Rndm status
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  HepRandom::showEngineStatus();
+  CLHEP::HepRandom::showEngineStatus();
 
 }
 
@@ -168,7 +168,7 @@ void Tst26RunAction::EndOfRunAction(const G4Run*)
                    
 
   // show Rndm status
-  HepRandom::showEngineStatus();
+  CLHEP::HepRandom::showEngineStatus();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

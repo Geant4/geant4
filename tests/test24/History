@@ -12,6 +12,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6th December 2005  Gabriele Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
+
 16th March 2004  Gabriele Cosmo
 - Fixed compilation warnings.
 - Replaced usage of NULL with 0.

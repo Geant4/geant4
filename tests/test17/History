@@ -1,4 +1,4 @@
-$Id: History,v 1.43 2005-11-21 19:44:29 gcosmo Exp $
+$Id: History,v 1.44 2005-12-06 16:05:01 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06 Dec 2005  G.Cosmo
+             Trivial changes for support of CLHEP-2.0.X series.
 
 21 Nov 2005  G.Cosmo (test17-V07-01-00)
              Tagged HEAD to use with new non-static particles.

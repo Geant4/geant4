@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test14.cc,v 1.9 2003-02-23 22:42:32 pia Exp $
+// $Id: test14.cc,v 1.10 2005-12-06 16:01:18 gcosmo Exp $
 //
 
 #include "Tst14DetectorConstruction.hh"
@@ -40,7 +40,7 @@
 int main(int argc,char** argv) {
 
   // Set the default random engine to RanecuEngine
-  HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
 
   // Run manager
   G4RunManager * runManager = new G4RunManager;

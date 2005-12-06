@@ -35,7 +35,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4TransportationManager.hh"
 #include "globals.hh"
-#include "CLHEP/Random/RandFlat.h"
+#include <CLHEP/Random/RandFlat.h>
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -131,9 +131,9 @@ void Tst01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 //...................................................................
     case randomDirectionGun:   
 
-    costheta = RandFlat::shoot (-1., 1.);
+    costheta = CLHEP::RandFlat::shoot (-1., 1.);
     sintheta = std::sqrt (1. - costheta * costheta);
-    phi      = RandFlat::shoot (twopi);
+    phi      = CLHEP::RandFlat::shoot (twopi);
     cosphi   = std::cos (phi);
     sinphi   = std::sin (phi);
     particleGun->SetParticleMomentumDirection
@@ -158,9 +158,9 @@ void Tst01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     particleGun->SetParticlePosition
       (G4ThreeVector
-       (RandFlat::shoot (worldExtent.GetXmin (), worldExtent.GetXmax ()),
-	RandFlat::shoot (worldExtent.GetYmin (), worldExtent.GetYmax ()),
-	RandFlat::shoot (worldExtent.GetZmin (), worldExtent.GetZmax ())));
+       (CLHEP::RandFlat::shoot (worldExtent.GetXmin (), worldExtent.GetXmax ()),
+	CLHEP::RandFlat::shoot (worldExtent.GetYmin (), worldExtent.GetYmax ()),
+	CLHEP::RandFlat::shoot (worldExtent.GetZmin (), worldExtent.GetZmax ())));
 
     particleGun->GeneratePrimaryVertex(anEvent);
     break;
@@ -181,13 +181,13 @@ void Tst01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     particleGun->SetParticlePosition
       (G4ThreeVector
-       (RandFlat::shoot (worldExtent.GetXmin (), worldExtent.GetXmax ()),
-	RandFlat::shoot (worldExtent.GetYmin (), worldExtent.GetYmax ()),
-	RandFlat::shoot (worldExtent.GetZmin (), worldExtent.GetZmax ())));
+       (CLHEP::RandFlat::shoot (worldExtent.GetXmin (), worldExtent.GetXmax ()),
+	CLHEP::RandFlat::shoot (worldExtent.GetYmin (), worldExtent.GetYmax ()),
+	CLHEP::RandFlat::shoot (worldExtent.GetZmin (), worldExtent.GetZmax ())));
 
-    costheta = RandFlat::shoot (-1., 1.);
+    costheta = CLHEP::RandFlat::shoot (-1., 1.);
     sintheta = std::sqrt (1. - costheta * costheta);
-    phi      = RandFlat::shoot (twopi);
+    phi      = CLHEP::RandFlat::shoot (twopi);
     cosphi   = std::cos (phi);
     sinphi   = std::sin (phi);
     particleGun->SetParticleMomentumDirection
@@ -205,10 +205,10 @@ void Tst01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                                  -fGunPosition.y()/fPosition ,
                                  -fGunPosition.z()/fPosition    ) ;
 
-      costheta = RandFlat::shoot (fPosition/std::sqrt(fPosition*fPosition +
+      costheta = CLHEP::RandFlat::shoot (fPosition/std::sqrt(fPosition*fPosition +
                                                   fSize*fSize), 1.);
       sintheta = std::sqrt (1. - costheta * costheta);
-      phi      = RandFlat::shoot (twopi);
+      phi      = CLHEP::RandFlat::shoot (twopi);
       cosphi   = std::cos (phi) ;
       sinphi   = std::sin (phi) ;
       position = G4ThreeVector (sintheta * cosphi, 
@@ -220,9 +220,9 @@ void Tst01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     }
     else
     {
-      costheta = RandFlat::shoot (-1., 1.);
+      costheta = CLHEP::RandFlat::shoot (-1., 1.);
       sintheta = std::sqrt (1. - costheta * costheta);
-      phi      = RandFlat::shoot (twopi);
+      phi      = CLHEP::RandFlat::shoot (twopi);
       cosphi   = std::cos (phi);
       sinphi   = std::sin (phi);
       particleGun->SetParticleMomentumDirection
@@ -240,12 +240,12 @@ void Tst01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                                  -fGunPosition.z()/fPosition    ) ;
       particleGun->SetParticleMomentumDirection(direction) ;
 
-   // rho = fSize*randFlat::shoot(0.0,1.0) ; phi = RandFlat::shoot (twopi) ; 
+   // rho = fSize*CLHEP::RandFlat::shoot(0.0,1.0) ; phi = CLHEP::RandFlat::shoot (twopi) ; 
    // cosphi   = std::cos (phi); sinphi   = std::sin (phi);
    // position = G4ThreeVector(rho*cosphi,rho*sinphi,0.0) ;
 
-      position = G4ThreeVector(RandFlat::shoot (-0.5*fSize,0.5*fSize) ,
-                               RandFlat::shoot (-0.5*fSize,0.5*fSize) , 0.0 ) ;
+      position = G4ThreeVector(CLHEP::RandFlat::shoot (-0.5*fSize,0.5*fSize) ,
+                               CLHEP::RandFlat::shoot (-0.5*fSize,0.5*fSize) , 0.0 ) ;
       position.rotateUz(direction) ;
       particleGun->SetParticlePosition(fGunPosition+position) ;
     }

@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2004-03-16 16:18:55 gcosmo Exp $
+$Id: History,v 1.9 2005-12-06 15:58:30 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+6th December 2005  Gabriele Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
 
 16th March 2004  Gabriele Cosmo
 - Fixed compilation warnings.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: History,v 1.4 2004-03-05 15:25:57 mkossov Exp $
+// $Id: History,v 1.5 2005-12-06 16:12:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -38,6 +38,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 6, 2005  Gabriele Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
 
 Jan 27, 2004 Mikhail Kossov
 - converted to the CHIPS test of nuclear capture at rest
