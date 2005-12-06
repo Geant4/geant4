@@ -1,0 +1,22 @@
+//
+// File name:     RadmonSteppingActionObserver.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonSteppingActionObserver.icc,v 1.1 2005-12-06 19:36:23 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONSTEPPINGACTIONOBSERVER_HH
+ #error "RadmonSteppingActionObserver.icc cannot be included directly. Please use RadmonSteppingActionObserver.hh"
+#else  /* RADMONSTEPPINGACTIONOBSERVER_HH */
+ inline                                         RadmonSteppingActionObserver :: RadmonSteppingActionObserver()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonSteppingActionObserver :: ~RadmonSteppingActionObserver()
+ {
+ }
+#endif /* RADMONSTEPPINGACTIONOBSERVER_HH */

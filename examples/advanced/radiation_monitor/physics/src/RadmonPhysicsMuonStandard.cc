@@ -3,7 +3,7 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonPhysicsMuonStandard.cc,v 1.1 2005-11-10 08:15:26 capra Exp $
+// Id:            $Id: RadmonPhysicsMuonStandard.cc,v 1.2 2005-12-06 19:37:38 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -14,6 +14,7 @@
 #include "G4Positron.hh"
 #include "G4MuonPlus.hh"
 #include "G4MuonMinus.hh"
+#include "G4LeptonConstructor.hh"
 
 #include "G4ProcessManager.hh"
 
@@ -34,10 +35,7 @@ RadmonVSubPhysicsListWithLabel *                RadmonPhysicsMuonStandard :: New
 void                                            RadmonPhysicsMuonStandard :: ConstructParticle(void)
 {
  G4Gamma::GammaDefinition();
- G4MuonPlus::MuonPlusDefinition();
- G4MuonMinus::MuonMinusDefinition();
- G4Electron::ElectronDefinition();
- G4Positron::PositronDefinition();
+ G4LeptonConstructor::ConstructParticle();
 }
 
 

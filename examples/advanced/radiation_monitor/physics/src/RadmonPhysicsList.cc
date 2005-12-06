@@ -3,7 +3,7 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonPhysicsList.cc,v 1.3 2005-11-24 02:38:17 capra Exp $
+// Id:            $Id: RadmonPhysicsList.cc,v 1.4 2005-12-06 19:36:23 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -14,11 +14,14 @@
 #include "RadmonVSubPhysicsList.hh"
 #include "RadmonVSubPhysicsListFactory.hh"
 #include "RadmonPhysicsInfoList.hh"
+#include "RadmonSteppingAction.hh"
+#include "RadmonPhysicsSteppingAction.hh"
 
                                                 RadmonPhysicsList :: RadmonPhysicsList(RadmonVPhysicsLayout * layout, RadmonVSubPhysicsListFactory * factory)
 :
  physicsLayout(layout),
  subPhysicsListFactory(factory),
+ steppingAction(0),
  initializationMethodsCalled(false),
  changed(true)
 {
@@ -36,6 +39,12 @@
                                                 RadmonPhysicsList :: ~RadmonPhysicsList()
 {
  physicsLayout->DetachObserver(this);
+ 
+ if (steppingAction)
+ {
+  RadmonSteppingAction::Instance()->DetachObserver(steppingAction);
+  delete steppingAction;
+ }
  
  Destruct();
  
@@ -72,8 +81,12 @@ void                                            RadmonPhysicsList :: ConstructPr
  CheckUpdate();
  initializationMethodsCalled=true;
  
- AddTransportation();
-
+ if (!steppingAction)
+ {
+  steppingAction=new RadmonPhysicsSteppingAction;
+  RadmonSteppingAction::Instance()->AttachObserver(steppingAction);
+ }
+ 
  SubPhysiscsLists::iterator i(subPhysiscsLists.begin());
  const SubPhysiscsLists::iterator end(subPhysiscsLists.end());
  
@@ -83,14 +96,19 @@ void                                            RadmonPhysicsList :: ConstructPr
   
   i++;
  }
+ 
+ UpdateProcessManagers();
 
  i=subPhysiscsLists.begin();
  while (i!=end)
  {
   (*i)->ConstructProcess();
+  UpdateProcessManagers();
   
   i++;
  }
+
+ AddTransportation();
 }
 
 
@@ -188,3 +206,23 @@ void                                            RadmonPhysicsList :: CheckUpdate
    G4cout << "RadmonPhysicsList::OnLayoutChange: Physics list with name \"" << name << "\" not found." << G4endl;
  }
 }
+
+
+
+
+
+void                                            RadmonPhysicsList :: UpdateProcessManagers(void)
+{
+ G4ParticleTable * particleTable(G4ParticleTable::GetParticleTable());
+ G4ParticleTable::G4PTblDicIterator & particleIterator(*particleTable->GetIterator());
+ 
+ particleIterator.reset();
+ while (particleIterator())
+ {
+  G4ParticleDefinition * particle(particleIterator.value());
+  
+  if (particle->GetProcessManager()==0)
+   AddProcessManager(particle);
+ }
+}
+

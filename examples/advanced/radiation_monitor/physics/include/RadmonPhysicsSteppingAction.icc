@@ -1,0 +1,22 @@
+//
+// File name:     RadmonPhysicsSteppingAction.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonPhysicsSteppingAction.icc,v 1.1 2005-12-06 19:36:23 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONPHYSICSSTEPPINGACTION_HH
+ #error "RadmonPhysicsSteppingAction.icc cannot be included directly. Please use RadmonPhysicsSteppingAction.hh"
+#else  /* RADMONPHYSICSSTEPPINGACTION_HH */
+ inline                                         RadmonPhysicsSteppingAction :: RadmonPhysicsSteppingAction()
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonPhysicsSteppingAction :: ~RadmonPhysicsSteppingAction()
+ {
+ }
+#endif /* RADMONPHYSICSSTEPPINGACTION_HH */

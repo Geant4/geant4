@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2005-11-24 02:31:56 capra Exp $
+# $Id: GNUmakefile,v 1.2 2005-12-06 19:36:23 capra Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for exaple subpackage
 # R. Capra, 09 Sep 2005
@@ -36,6 +36,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/cuts/include \
             -I$(G4BASE)/digits_hits/hits/include \
             -I$(G4BASE)/digits_hits/digits/include \
+            -I$(G4BASE)/tracking/include \
             -I$(G4BASE)/visualization/management/include \
             -I$(G4BASE)/graphics_reps/include \
 

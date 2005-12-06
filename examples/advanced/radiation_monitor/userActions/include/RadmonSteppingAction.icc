@@ -1,0 +1,28 @@
+//
+// File name:     RadmonSteppingAction.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonSteppingAction.icc,v 1.1 2005-12-06 19:36:23 capra Exp $
+// Tag:           $Name: not supported by cvs2svn $
+//
+
+#ifndef   RADMONSTEPPINGACTION_HH
+ #error "RadmonSteppingAction.icc cannot be included directly. Please use RadmonSteppingAction.hh"
+#else  /* RADMONSTEPPINGACTION_HH */
+ inline                                         RadmonSteppingAction :: ~RadmonSteppingAction()
+ {
+ }
+   
+
+
+
+
+ inline RadmonSteppingAction *                  RadmonSteppingAction :: Instance(void)
+ {
+  if (instance==0)
+   instance=new RadmonSteppingAction;
+  
+  return instance;
+ }
+#endif /* RADMONSTEPPINGACTION_HH */

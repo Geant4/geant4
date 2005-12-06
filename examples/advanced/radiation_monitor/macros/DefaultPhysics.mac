@@ -5,6 +5,6 @@
 /radmon/physics/AddPhysicsList MuonStandard
 /radmon/physics/AddPhysicsList NeutronBinary
 /radmon/physics/AddPhysicsList HadronsBinary
-/radmon/physics/AddPhysicsList ICRUIonization
+#/radmon/physics/AddPhysicsList ICRUIonization
 /radmon/physics/AddPhysicsList ProductionCuts
 /radmon/physics/SetPhysicsListAttribute ProductionCuts Cuts '0.001 mm'

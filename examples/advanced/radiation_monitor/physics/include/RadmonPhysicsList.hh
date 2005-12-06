@@ -3,7 +3,7 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonPhysicsList.hh,v 1.3 2005-11-24 02:38:17 capra Exp $
+// Id:            $Id: RadmonPhysicsList.hh,v 1.4 2005-12-06 19:36:23 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Implementation of the G4VUserPhysicsList
@@ -22,6 +22,7 @@
  class RadmonVPhysicsLayout;
  class RadmonVSubPhysicsListFactory;
  class RadmonVSubPhysicsList;
+ class RadmonPhysicsSteppingAction;
 
  class RadmonPhysicsList : public G4VUserPhysicsList, public RadmonVLayoutObserver
  {
@@ -39,6 +40,7 @@
   // Private methods
    void                                         Destruct(void);
    void                                         CheckUpdate(void);
+   void                                         UpdateProcessManagers(void);
 
   // Hidden constructors and operators
                                                 RadmonPhysicsList();
@@ -53,6 +55,8 @@
    RadmonVSubPhysicsListFactory *               subPhysicsListFactory;
     
    SubPhysiscsLists                             subPhysiscsLists;
+
+   RadmonPhysicsSteppingAction *                steppingAction;
    
    G4bool                                       initializationMethodsCalled;
    G4bool                                       changed;

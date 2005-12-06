@@ -3,7 +3,7 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonPhysicsElectronEEDL.cc,v 1.1 2005-11-10 08:15:26 capra Exp $
+// Id:            $Id: RadmonPhysicsElectronEEDL.cc,v 1.2 2005-12-06 19:37:38 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -11,6 +11,7 @@
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
+#include "G4LeptonConstructor.hh"
 
 #include "G4ProcessManager.hh"
 #include "G4MultipleScattering.hh"
@@ -28,7 +29,7 @@ RadmonVSubPhysicsListWithLabel *                RadmonPhysicsElectronEEDL :: New
 void                                            RadmonPhysicsElectronEEDL :: ConstructParticle(void)
 {
  G4Gamma::GammaDefinition();
- G4Electron::ElectronDefinition();
+ G4LeptonConstructor::ConstructParticle();
 }
 
 
