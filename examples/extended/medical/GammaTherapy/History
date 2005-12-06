@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2005-12-02 17:33:11 vnivanch Exp $
+$Id: History,v 1.19 2005-12-06 14:32:29 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-02 Dec 05: V.Ivant (gtherapy-V07-01-02)
+06 Deember 05: G.Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
+
+02 December 05: V.Ivant (gtherapy-V07-01-02)
 - Fix crash connected with non-static hadrons
 
 23 August 05: V.Ivant (gtherapy-V07-01-01)
