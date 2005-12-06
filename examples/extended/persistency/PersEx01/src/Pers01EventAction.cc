@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Pers01EventAction.cc,v 1.2 2003-06-16 16:49:44 gunter Exp $
+// $Id: Pers01EventAction.cc,v 1.3 2005-12-06 15:40:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ void Pers01EventAction::BeginOfEventAction(const G4Event* evt)
  if (evtNb%printModulo == 0)
    { 
     G4cout << "\n---> Begin of event: " << evtNb << G4endl;
-    HepRandom::showEngineStatus();
+    CLHEP::HepRandom::showEngineStatus();
    }
     
  if (calorimeterCollID==-1)
