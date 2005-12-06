@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B01DetectorConstruction.cc,v 1.15 2005-11-15 14:10:56 gcosmo Exp $
+// $Id: B01DetectorConstruction.cc,v 1.16 2005-12-06 16:35:59 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -333,8 +333,7 @@ G4String B01DetectorConstruction::GetCellName(G4int i)
   {
     os << "0";
   }
-  os << i 
-     << '\0';
+  os << i ;
   G4String name = os.str();
   return name;
 }
