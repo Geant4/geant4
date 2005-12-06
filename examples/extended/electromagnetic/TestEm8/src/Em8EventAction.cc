@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8EventAction.cc,v 1.7 2003-11-24 17:52:47 vnivanch Exp $
+// $Id: Em8EventAction.cc,v 1.8 2005-12-06 12:17:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -161,12 +161,12 @@ void Em8EventAction::EndOfEventAction(const G4Event* evt)
   //save rndm status
   if (runaction->GetRndmFreq() == 2)
     { 
-     HepRandom::saveEngineStatus("endOfEvent.rndm");   
+     CLHEP::HepRandom::saveEngineStatus("endOfEvent.rndm");   
      G4int evtNb = evt->GetEventID();
      if (evtNb%printModulo == 0)
        { 
         G4cout << "\n---> End of Event: " << evtNb << G4endl;
-        HepRandom::showEngineStatus();
+        CLHEP::HepRandom::showEngineStatus();
        }
     }     
 }
