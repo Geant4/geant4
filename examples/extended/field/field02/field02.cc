@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: field02.cc,v 1.6 2005-05-03 10:21:16 allison Exp $
+// $Id: field02.cc,v 1.7 2005-12-06 13:58:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,7 +57,7 @@ int main(int argc,char** argv)
 
   //choose the Random engine
 
-  HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new RanecuEngine);
   
   //my Verbose output class
 
