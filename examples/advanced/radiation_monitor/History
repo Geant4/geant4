@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2005-11-25 11:54:48 capra Exp $
+$Id: History,v 1.16 2005-12-06 19:39:09 capra Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,23 @@ in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06 Dec 2005 - radmon-V07-01-14 - R. Capra - Documentation extended README
+                        file now covers all the aspects of the application
+                        in great details. Small changes in RadmonApplication
+                        and RadmonApplicationAnalysisSetup so that when
+                        G4ANALYSIS_USE is not set, code builds without
+                        analysis. RadmonPhysicsList changed in order to
+                        manage particles changes present from tag
+                        geant4-08-00-cand01. Stepping action added in order
+                        to manage these changes. Errors present in
+                        RadmonPhysicsHadronsBertini, RadmonPhysicsDecay,
+                        RadmonPhysicsICRUIonization corrected. The error
+                        present in RadmonPhysicsHadronsBertini caused the
+                        application crash. The error present in
+                        RadmonPhysicsDecay, RadmonPhysicsICRUIonization
+                        caused a not true warning message appear.
+
 25 Nov 2005 - radmon-V07-01-13 - R. Capra - Introduced step limitations and
                         secondary production thresholds. Geometry materials
                         corrected.
