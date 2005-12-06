@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB02.cc,v 1.17 2004-12-08 19:18:45 daquinog Exp $
+// $Id: exampleB02.cc,v 1.18 2005-12-06 11:17:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -93,7 +93,7 @@ int main(int , char **)
 
   G4long myseed = 345354;
 
-  HepRandom::setTheSeed(myseed);
+  CLHEP::HepRandom::setTheSeed(myseed);
 
   G4RunManager *runManager = new G4RunManager;
   

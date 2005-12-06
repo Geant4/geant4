@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhotonProcesses.cc,v 1.6 2005-05-03 10:21:16 allison Exp $
+// $Id: PhotonProcesses.cc,v 1.7 2005-12-06 11:25:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,7 +51,7 @@
 int main(int argc,char** argv) {
  
   //choose the Random engine
-  HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);

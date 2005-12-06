@@ -1,4 +1,4 @@
-$Id: History,v 1.84 2005-11-22 15:29:06 maire Exp $
+$Id: History,v 1.85 2005-12-06 11:41:55 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
+
+06-12-05 Gabriele Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
 
 22-11-05 mma (testem3-V07-01-04)
 - correct bug in lateral leakage calculation (stepping action)

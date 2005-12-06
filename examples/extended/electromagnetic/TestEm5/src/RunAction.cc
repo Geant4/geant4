@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.19 2005-03-16 16:03:47 maire Exp $
+// $Id: RunAction.cc,v 1.20 2005-12-06 11:46:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,7 +73,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
   // save Rndm status
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  HepRandom::showEngineStatus();
+  CLHEP::HepRandom::showEngineStatus();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -221,7 +221,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   histoManager->save();
 
   // show Rndm status
-  HepRandom::showEngineStatus();
+  CLHEP::HepRandom::showEngineStatus();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2005-11-29 08:24:15 vnivanch Exp $
+$Id: History,v 1.27 2005-12-06 11:50:01 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06-12-05 Gabriele Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
 
 29-11-05 V.Ivant (testem6-V07-01-02)
 - Add GenericIon to the PhysicsList

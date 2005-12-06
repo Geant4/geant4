@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2005-11-22 16:44:28 maire Exp $
+$Id: History,v 1.19 2005-12-06 11:22:03 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+06-12-05 G.Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
+
 22-11-05 mma (muonprocesses-V07-01-01)
 - update README for OpenScientist
      

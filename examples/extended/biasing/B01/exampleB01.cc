@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB01.cc,v 1.20 2004-03-24 10:11:25 gcosmo Exp $
+// $Id: exampleB01.cc,v 1.21 2005-12-06 11:14:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
   std::ostream *myout = &G4cout;
   G4int numberOfEvent = 100;
   G4long myseed = 345354;
-  HepRandom::setTheSeed(myseed);
+  CLHEP::HepRandom::setTheSeed(myseed);
 
   G4RunManager *runManager = new G4RunManager;
   

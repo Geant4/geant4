@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2005-11-29 15:03:39 vnivanch Exp $
+$Id: History,v 1.17 2005-12-06 11:27:37 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06 Dec 05: Gabriele Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
 
 29 Oct 05: V.Ivant (testem10-V07-01-01)
 - V.Grichine:Production cuts were moved to Physics list providing 
