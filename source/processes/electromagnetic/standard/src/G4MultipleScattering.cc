@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.41 2005-12-01 09:53:35 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.42 2005-12-06 20:49:17 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -83,7 +83,8 @@
 // 05-11-05 tlimitmin = facrange*rungecut (instead of a fixed value)L.Urban
 // 13-11-05 some code cleaning, slightly better timing (L.Urban)
 // 01-12-05 add control on verbosity in SetMscStepLimitation
-//
+// 06-12-05 tlimitmin = facrange*rangecut(e-) for every particle
+//   
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -199,10 +200,10 @@ G4double G4MultipleScattering::TruePathLengthLimit(const G4Track&  track,
                                                  fGeomBoundary)
        || (track.GetCurrentStepNumber() == 1))
     {
-      // get production threshold - cut in range
-      // lower limit for step depends on the cut in range
+      // get production threshold - cut in range for e-
+      // lower limit for step depends on this cut in range 
       rangecut = track.GetMaterialCutsCouple()->GetProductionCuts()
-         ->GetProductionCut(track.GetDefinition()->GetParticleName());
+                 ->GetProductionCut("e-");
       tlimitmin = facrange*rangecut;
 
       // not so strong step restriction above Tlimit
