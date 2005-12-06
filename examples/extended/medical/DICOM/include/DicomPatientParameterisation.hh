@@ -66,47 +66,59 @@ public:
 
   virtual ~DicomPatientParameterisation();
 
-  virtual void ComputeTransformation (const G4int copyNo, G4VPhysicalVolume* physVol) const;
+  void ComputeTransformation (const G4int copyNo, G4VPhysicalVolume* physVol) const;
 
-  //  virtual void ComputeDimensions (G4Box & voxels, const G4int copyNo, const G4VPhysicalVolume* physVol) const;
-
-  virtual void ComputeDimensions (G4Box&, 
+  void ComputeDimensions(G4Box&, 
 				  const G4int, 
 				  const G4VPhysicalVolume* ) const;
 
-   virtual void ComputeDimensions(G4Tubs &,
+  void ComputeDimensions(G4Tubs &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 
-    virtual void ComputeDimensions(G4Trd &,
+  void ComputeDimensions(G4Trd &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 	
-    virtual void ComputeDimensions(G4Trap &,
+  void ComputeDimensions(G4Trap &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 	
-    virtual void ComputeDimensions(G4Cons &,
+  void ComputeDimensions(G4Cons &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 
-    virtual void ComputeDimensions(G4Sphere &,
+  void ComputeDimensions(G4Sphere &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 
-    virtual void ComputeDimensions(G4Torus &,
+  void ComputeDimensions(G4Orb &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 
-    virtual void ComputeDimensions(G4Para &,
+  void ComputeDimensions(G4Torus &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 
-    virtual void ComputeDimensions(G4Hype &,
+  void ComputeDimensions(G4Para &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 
-  virtual G4Material* ComputeMaterial(const G4int copyNo, G4VPhysicalVolume* physVol);
+  void ComputeDimensions(G4Polycone &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
+
+  void ComputeDimensions(G4Polyhedra &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
+
+  void ComputeDimensions(G4Hype &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
+
+  G4Material* ComputeMaterial(const G4int copyNo,
+                                    G4VPhysicalVolume* physVol,
+                              const G4VTouchable*);
 
   void GetDensity( G4double maxDensity, G4double minDensity );
 

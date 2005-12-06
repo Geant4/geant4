@@ -76,7 +76,7 @@ int main(int argc,char** argv)
   visManager->Initialize();
 #endif
 
-  HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
 
   G4UImanager* UI = G4UImanager::GetUIpointer();
  
