@@ -34,6 +34,12 @@
 //                    (27th November 2001)
 //
 // PhysicsList header
+//
+//  History:
+//  -------
+//  5/12/05: AH - modified member functions for new hadronic constructor
+//  
+//
 // --------------------------------------------------------------
 
 #ifndef DMXPhysicsList_h
@@ -94,9 +100,7 @@ private:
   // these methods Construct particles 
   void ConstructMyBosons();
   void ConstructMyLeptons();
-  void ConstructMyMesons();
-  void ConstructMyBaryons();
-  void ConstructMyIons();
+  void ConstructMyHadrons();
   void ConstructMyShortLiveds();
 
 };
