@@ -62,7 +62,6 @@ void HadrontherapyPositronStandard::ConstructProcess()
      
       if (particleName == "e+") 
 	{
-          G4cout << particleName << " from Positron standard" << G4endl;
 	  manager -> AddProcess(new G4MultipleScattering, -1, 1,1);
 	  manager -> AddProcess(new G4eIonisation,        -1, 2,2);
 	  manager -> AddProcess(new G4eBremsstrahlung,    -1,-1,3);

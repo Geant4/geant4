@@ -31,9 +31,8 @@
 
 ### ZIEGLER 2000 parameterisation
 /physics/addPhysics ion-LowE-ziegler2000
-
 /run/initialize
-/run/beamOn 300
+/run/beamOn 100
 
 
 

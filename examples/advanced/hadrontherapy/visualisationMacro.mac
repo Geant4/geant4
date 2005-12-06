@@ -56,10 +56,7 @@
 # SETTING FOR THE RANGE SHIFTER 
 /beamLine/RangeShifter/thickness 0.001 mm
 /beamLine/RangeShifter/RSMat Air
-
-/tracking/verbose 1
+#/tracking/verbose 1
 /vis/viewer/flush
-#/run/beamOn 1
-
-/run/beamOn 1000
+/run/beamOn 10
 

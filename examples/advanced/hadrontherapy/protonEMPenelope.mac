@@ -16,22 +16,13 @@
 /physics/addPhysics electron-penelope
 /physics/addPhysics positron-penelope
 
-############################################################
-####
-#### Quale fisica elettromagnetica per gli ioni????!?!?!?!?
-#### Standard o Low Energy???????
-####
-###########################################################
-
-/physics/addPhysics ion-standard
-
 ###################################################
 #### Alternative Low Energy models for protons
 #### Same Low Energy model for ions
 ##################################################
 
 ### ICRU49 parameterisation
-#/physics/addPhysics ion-LowE
+/physics/addPhysics ion-LowE
 
 ### ZIEGLER 1977 parameterisation
 #/physics/addPhysics ion-LowE-ziegler1977
@@ -42,7 +33,6 @@
 ### ZIEGLER 2000 parameterisation
 #/physics/addPhysics ion-LowE-ziegler2000
 
-
 /run/initialize
-/run/beamOn 1000
+/run/beamOn 100
 

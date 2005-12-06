@@ -9,7 +9,9 @@ $Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
                       Category History file
                       ---------------------
 06.12.2005 S. Guatelli (hadrontherapy-V07-01-05)
-         - Particles updated 
+         - Particles updated
+         - Updated macros
+ 
 23.11.2005 S. Guatelli (hadrontherapy-V07-01-04)
          - File ASCII as output file deleted
 

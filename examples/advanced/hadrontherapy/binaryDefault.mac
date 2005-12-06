@@ -20,7 +20,6 @@
 /tracking/verbose 0
 /run/verbose 0
 /event/verbose 0
-/process/verbose 2
 # SETTING FOR THE PHYSICS MODELS
 /physics/addPhysics photon-epdl
 /physics/addPhysics electron-eedl
@@ -37,9 +36,9 @@
  
 #/beamLine/RangeShifter/thickness 0 cm
 #/beamLine/RangeShifter/RSMat Water
-
-/vis/viewer/flush
+#/tracking/verbose 1
 /beam/energy/meanEnergy 25 MeV
-/run/beamOn 3000
+/run/beamOn 1
+
 
 

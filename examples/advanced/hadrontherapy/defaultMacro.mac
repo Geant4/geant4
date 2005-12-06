@@ -47,9 +47,9 @@
 
 
 # SET OF THE VISUALISATION CHARACTERISTICS
-#/vis/scene/create
-#/vis/open OGLIX
-#/vis/viewer/flush
+/vis/scene/create
+/vis/open OGLIX
+/vis/viewer/flush
 
 /vis/viewer/flush
 /beam/energy/meanEnergy 63.5 MeV

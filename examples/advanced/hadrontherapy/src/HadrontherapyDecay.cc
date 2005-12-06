@@ -47,9 +47,7 @@ HadrontherapyDecay::~HadrontherapyDecay()
 { }
 
 void HadrontherapyDecay::ConstructProcess()
- 
 {
-G4cout << "Decay! " << G4endl;
   // Add Decay Process
   G4Decay* theDecayProcess = new G4Decay();
   theParticleIterator -> reset();
