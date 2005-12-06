@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics71.cc,v 1.7 2005-12-06 12:32:26 vnivanch Exp $
+// $Id: G4EmStandardPhysics71.cc,v 1.8 2005-12-06 14:53:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -192,9 +192,7 @@ void G4EmStandardPhysics71::ConstructProcess()
                particleName == "tau+" ||
                particleName == "tau-" ||
                particleName == "triton" ||
-               particleName == "xi-" ||
-               particleName == "D+" ||
-               particleName == "D-" ) {
+               particleName == "xi-" ) {
       if(verbose > 1)
         G4cout << "### EmStandard71 instantiates hIoni and msc71 for " 
                << particleName << G4endl;
