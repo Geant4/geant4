@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistSurface.hh,v 1.2 2005-12-05 17:03:35 link Exp $
+// $Id: G4VTwistSurface.hh,v 1.3 2005-12-06 09:22:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -165,11 +165,13 @@ class G4VTwistSurface
    inline void SetNeighbours(G4VTwistSurface* axis0min, G4VTwistSurface* axis1min, 
                              G4VTwistSurface* axis0max, G4VTwistSurface* axis1max);
 
-   virtual G4ThreeVector SurfacePoint(G4double , G4double, G4bool isGlobal = false ) = 0 ;
+   virtual G4ThreeVector SurfacePoint(G4double , G4double,
+                                      G4bool isGlobal = false ) = 0 ;
    virtual G4double GetBoundaryMin(G4double) = 0 ;
    virtual G4double GetBoundaryMax(G4double) = 0 ;
    virtual G4double GetSurfaceArea() = 0 ;
-   virtual void GetFacets(G4int m, G4int n, G4double xyz[][3], G4int faces[][4], G4int iside) = 0 ;
+   virtual void GetFacets(G4int m, G4int n, G4double xyz[][3],
+                          G4int faces[][4], G4int iside) = 0 ;
    G4int GetNode( G4int i, G4int j, G4int m, G4int n, G4int iside )  ;
    G4int GetFace( G4int i, G4int j, G4int m, G4int n, G4int iside )  ;
 
@@ -186,7 +188,7 @@ class G4VTwistSurface
    // get methods
 
    inline  G4VTwistSurface**  GetNeighbours() { return fNeighbours; } 
-   inline  G4int         GetNeighbours(G4int areacode, G4VTwistSurface* surfaces[]);
+   inline  G4int GetNeighbours(G4int areacode, G4VTwistSurface* surfaces[]);
    inline  G4ThreeVector GetCorner(G4int areacode) const;
            void GetBoundaryAxis(G4int areacode, EAxis axis[]) const;
            void GetBoundaryLimit(G4int areacode, G4double limit[]) const;
@@ -350,8 +352,8 @@ class G4VTwistSurface
 // inline functions
 //========================================================
 
-struct Intersection {
-    
+struct Intersection
+{    
   G4double phi ;  // parameter phi
   G4double u ;    // parameter u
   G4ThreeVector xx ;   // intersection point in cartesian
@@ -359,8 +361,7 @@ struct Intersection {
   G4int areacode;      // the areacode of the intersection
   G4bool isvalid ;     // valid intersection ??
 
-} ;
-  
+};
 
 inline
 G4bool DistanceSort( const Intersection &a, const Intersection &b) 
@@ -373,7 +374,6 @@ G4bool EqualIntersection( const Intersection &a, const Intersection &b)
 {
   return ( ( a.xx - b.xx ).mag() < kCarTolerance ) ;
 }
-
 
 #include "G4VTwistSurface.icc"
 

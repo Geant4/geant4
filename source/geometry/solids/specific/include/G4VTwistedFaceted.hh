@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistedFaceted.hh,v 1.7 2005-12-05 17:03:36 link Exp $
+// $Id: G4VTwistedFaceted.hh,v 1.8 2005-12-06 09:22:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------------
@@ -35,7 +35,9 @@
 //  G4VTwistedFaceted is an abstract base class for twisted boxoids:
 //  G4TwistedTrd, G4TwistedTrap and G4TwistedBox
 
-// Author:  O.Link (Oliver.Link@cern.ch)
+// Author:
+//
+//   27-Oct-2004 - O.Link (Oliver.Link@cern.ch)
 //
 // --------------------------------------------------------------------
 
@@ -104,7 +106,6 @@ class G4VTwistedFaceted: public G4VSolid
   virtual inline G4double GetCubicVolume() ;
 
   virtual void            DescribeYourselfTo (G4VGraphicsScene &scene) const;
-  //  virtual G4Polyhedron   *CreatePolyhedron   () const = 0 ;
   virtual G4Polyhedron   *CreatePolyhedron   () const ;
   virtual G4NURBS        *CreateNURBS        () const;
   virtual G4Polyhedron   *GetPolyhedron      () const;

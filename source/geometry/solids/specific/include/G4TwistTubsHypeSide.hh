@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTubsHypeSide.hh,v 1.2 2005-12-05 17:03:30 link Exp $
+// $Id: G4TwistTubsHypeSide.hh,v 1.3 2005-12-06 09:22:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,8 +57,8 @@ class G4TwistTubsHypeSide : public G4VTwistSurface
                        const G4RotationMatrix &rot,  // 0.5*(phi-width segment)
                        const G4ThreeVector    &tlate,
                        const G4int     handedness,// R-hand = 1, L-hand = -1
-                       const G4double  kappa,     // std::tan(TwistAngle/2)/fZHalfLen
-                       const G4double  tanstereo, // std::tan(stereo angle)
+                       const G4double  kappa,     // tan(TwistAngle/2)/fZHalfLen
+                       const G4double  tanstereo, // tan(stereo angle)
                        const G4double  r0,        // radius at z = 0
                        const EAxis     axis0 = kPhi,
                        const EAxis     axis1 = kZAxis,
@@ -99,14 +99,16 @@ class G4TwistTubsHypeSide : public G4VTwistSurface
                                          G4bool isGlobal = false) ;
    virtual EInside Inside(const G4ThreeVector &gp) ;
    
-   inline virtual G4double GetRhoAtPZ(const G4ThreeVector &p,
-                                            G4bool isglobal = false) const ;
+   virtual G4double GetRhoAtPZ(const G4ThreeVector &p,
+                                     G4bool isglobal = false) const ;
    
-   inline virtual G4ThreeVector SurfacePoint(G4double, G4double, G4bool isGlobal = false) ;  
-   inline virtual G4double GetBoundaryMin(G4double phi) ;
-   inline virtual G4double GetBoundaryMax(G4double phi) ;
-   inline virtual G4double GetSurfaceArea() ;
-   virtual void GetFacets( G4int m , G4int m , G4double xyz[][3], G4int faces[][4], G4int iside ) ;
+   virtual G4ThreeVector SurfacePoint(G4double, G4double,
+                                      G4bool isGlobal = false) ;  
+   virtual G4double GetBoundaryMin(G4double phi) ;
+   virtual G4double GetBoundaryMax(G4double phi) ;
+   virtual G4double GetSurfaceArea() ;
+   virtual void GetFacets( G4int m , G4int m , G4double xyz[][3],
+                           G4int faces[][4], G4int iside ) ;
  
   public:  // without description
 
@@ -167,46 +169,38 @@ G4double G4TwistTubsHypeSide::GetRhoAtPZ(const G4ThreeVector &p,
 }
 
 inline
-G4ThreeVector G4TwistTubsHypeSide::SurfacePoint(G4double phi , G4double z , G4bool isGlobal) {
-
+G4ThreeVector G4TwistTubsHypeSide::
+SurfacePoint(G4double phi , G4double z , G4bool isGlobal)
+{
   G4double rho = std::sqrt(fR02 + z * z * fTan2Stereo) ;
 
-  G4ThreeVector SurfPoint (rho*std::cos(phi),
-			     rho*std::sin(phi),
-			     z) ;
+  G4ThreeVector SurfPoint (rho*std::cos(phi), rho*std::sin(phi), z) ;
 
-  if (isGlobal) {
-    return (fRot * SurfPoint + fTrans);
-  } else {
-    return SurfPoint;
-  }
-
-
+  if (isGlobal) { return (fRot * SurfPoint + fTrans); }
+  return SurfPoint;
 }
 
 inline
-G4double G4TwistTubsHypeSide::GetBoundaryMin(G4double z) {
-
+G4double G4TwistTubsHypeSide::GetBoundaryMin(G4double z)
+{
   G4ThreeVector ptmp(0,0,z) ;  // temporary point with z Komponent only
   G4ThreeVector lowerlimit;    // lower phi-boundary limit at z = ptmp.z()
   lowerlimit = GetBoundaryAtPZ(sAxis0 & sAxisMin, ptmp);
   return  std::atan2( lowerlimit.y(), lowerlimit.x() ) ;  
-
 }
 
 inline
-G4double G4TwistTubsHypeSide::GetBoundaryMax(G4double z ) {
-
+G4double G4TwistTubsHypeSide::GetBoundaryMax(G4double z )
+{
   G4ThreeVector ptmp(0,0,z) ;  // temporary point with z Komponent only
   G4ThreeVector upperlimit;    // upper phi-boundary limit at z = ptmp.z()
   upperlimit = GetBoundaryAtPZ(sAxis0 & sAxisMax, ptmp);
   return   std::atan2( upperlimit.y(), upperlimit.x() ) ;
-
 }
 
 inline
-G4double G4TwistTubsHypeSide::GetSurfaceArea() {
-
+G4double G4TwistTubsHypeSide::GetSurfaceArea()
+{
   // approximation with tube surface
 
   return ( fAxisMax[1] - fAxisMin[1] ) * fR0 * fDPhi ;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistBoxSide.cc,v 
+// $Id: G4TwistBoxSide.cc,v 1.3 2005-12-06 09:22:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,7 +33,7 @@
 //
 // Author:
 //
-//   Oliver Link (Oliver.Link@cern.ch)
+//   18/03/2005 - O.Link (Oliver.Link@cern.ch)
 //
 // --------------------------------------------------------------------
 
@@ -46,19 +46,19 @@
 //* constructors ------------------------------------------------------
 
 G4TwistBoxSide::G4TwistBoxSide(const G4String     &name,
-			   G4double      PhiTwist,    // twist angle
-			   G4double      pDz,         // half z lenght
-			   G4double      pTheta,      // direction between end planes
-			   G4double      pPhi,        // defined by polar and azimutal angles.
-			   G4double      pDy1,        // half y length at -pDz
-			   G4double      pDx1,        // half x length at -pDz,-pDy
-			   G4double      pDx2,        // half x length at -pDz,+pDy
-			   G4double      pDy2,        // half y length at +pDz
-			   G4double      pDx3,        // half x length at +pDz,-pDy
-			   G4double      pDx4,        // half x length at +pDz,+pDy
-			   G4double      pAlph,       // tilt angle at +pDz
+                           G4double      PhiTwist,    // twist angle
+                           G4double      pDz,         // half z lenght
+                           G4double      pTheta,      // direction between end planes
+                           G4double      pPhi,        // defined by polar and azimutal angles.
+                           G4double      pDy1,        // half y length at -pDz
+                           G4double      pDx1,        // half x length at -pDz,-pDy
+                           G4double      pDx2,        // half x length at -pDz,+pDy
+                           G4double      pDy2,        // half y length at +pDz
+                           G4double      pDx3,        // half x length at +pDz,-pDy
+                           G4double      pDx4,        // half x length at +pDz,+pDy
+                           G4double      pAlph,       // tilt angle at +pDz
                            G4double      AngleSide    // parity
-					       ) : G4VTwistSurface(name)
+                                               ) : G4VTwistSurface(name)
 {  
   
                  
@@ -190,12 +190,12 @@ G4ThreeVector G4TwistBoxSide::GetNormal(const G4ThreeVector &tmpxx,
 //* DistanceToSurface -------------------------------------------------
 
 G4int G4TwistBoxSide::DistanceToSurface(const G4ThreeVector &gp,
-                                          const G4ThreeVector &gv,
-                                                G4ThreeVector  gxx[],
-                                                G4double       distance[],
-                                                G4int          areacode[],
-                                                G4bool         isvalid[],
-                                                EValidate      validate)
+                                        const G4ThreeVector &gv,
+                                              G4ThreeVector  gxx[],
+                                              G4double       distance[],
+                                              G4int          areacode[],
+                                              G4bool         isvalid[],
+                                              EValidate      validate)
 {
 
   static const G4double ctol = 0.5 * kCarTolerance;
@@ -312,13 +312,13 @@ G4int G4TwistBoxSide::DistanceToSurface(const G4ThreeVector &gp,
 
 #ifdef G4SPECSDEBUG
     G4cout << "coef = " << c[0] << " " 
-	   <<  c[1] << " "  
-	   <<  c[2] << " "  
-	   <<  c[3] << " "  
-	   <<  c[4] << " "  
-	   <<  c[5] << " "  
-	   <<  c[6] << " "  
-	   <<  c[7] << G4endl ;
+           <<  c[1] << " "  
+           <<  c[2] << " "  
+           <<  c[3] << " "  
+           <<  c[4] << " "  
+           <<  c[5] << " "  
+           <<  c[6] << " "  
+           <<  c[7] << G4endl ;
 #endif    
 
     G4JTPolynomialSolver trapEq ;
@@ -328,22 +328,22 @@ G4int G4TwistBoxSide::DistanceToSurface(const G4ThreeVector &gp,
     for (G4int i = 0 ; i<num ; i++ ) {  // loop over all mathematical solutions
       if ( si[i]==0.0 ) {  // only real solutions
 #ifdef G4SPECSDEBUG
-	G4cout << "Solution " << i << " : " << sr[i] << G4endl ;
+        G4cout << "Solution " << i << " : " << sr[i] << G4endl ;
 #endif
-	phi = std::fmod(sr[i] , pihalf)  ;
+        phi = std::fmod(sr[i] , pihalf)  ;
 
-	u   = (2*phiyz + 4*fDz*phi*v.y() - 2*fdeltaY*phi*v.z() - fDx4plus2*fPhiTwist*v.z()*std::sin(phi) - 2*fDx4minus2*phi*v.z()*std::sin(phi))/(2*fPhiTwist*v.z()*std::cos(phi) + 2*fPhiTwist*fTAlph*v.z()*std::sin(phi)) ;
+        u   = (2*phiyz + 4*fDz*phi*v.y() - 2*fdeltaY*phi*v.z() - fDx4plus2*fPhiTwist*v.z()*std::sin(phi) - 2*fDx4minus2*phi*v.z()*std::sin(phi))/(2*fPhiTwist*v.z()*std::cos(phi) + 2*fPhiTwist*fTAlph*v.z()*std::sin(phi)) ;
 
-	xbuftmp.phi = phi ;
-	xbuftmp.u = u ;
-	xbuftmp.areacode = sOutside ;
-	xbuftmp.distance = kInfinity ;
-	xbuftmp.isvalid = false ;
-	
-	xbuf.push_back(xbuftmp) ;  // store it to xbuf
+        xbuftmp.phi = phi ;
+        xbuftmp.u = u ;
+        xbuftmp.areacode = sOutside ;
+        xbuftmp.distance = kInfinity ;
+        xbuftmp.isvalid = false ;
+        
+        xbuf.push_back(xbuftmp) ;  // store it to xbuf
       
 #ifdef G4SPECSDEBUG
-	G4cout << "solution " << i << " = " << phi << " , " << u  << G4endl ;
+        G4cout << "solution " << i << " = " << phi << " , " << u  << G4endl ;
 #endif
 
       }  // end if real solution
@@ -366,8 +366,8 @@ G4int G4TwistBoxSide::DistanceToSurface(const G4ThreeVector &gp,
 
 #ifdef G4SPECSDEBUG
     G4cout << "Solution " << k << " : " 
-	   << "reconstructed phiR = " << xbuf[k].phi
-	   << ", uR = " << xbuf[k].u << G4endl ; 
+           << "reconstructed phiR = " << xbuf[k].phi
+           << ", uR = " << xbuf[k].u << G4endl ; 
 #endif
     
     phi = xbuf[k].phi ;  // get the stored values for phi and u
@@ -383,11 +383,11 @@ G4int G4TwistBoxSide::DistanceToSurface(const G4ThreeVector &gp,
       deltaX = ( tmpxx - xxonsurface ).mag() ; 
       theta = std::fabs(std::acos(v*surfacenormal) - pihalf) ;
       if ( theta < 0.001 ) { 
-	factor = 50 ;
-	IsParallel = true ;
+        factor = 50 ;
+        IsParallel = true ;
       }
       else {
-	factor = 1 ;
+        factor = 1 ;
       }
 
 #ifdef G4SPECSDEBUG
@@ -420,19 +420,19 @@ G4int G4TwistBoxSide::DistanceToSurface(const G4ThreeVector &gp,
     if ( IsConverged ) {
       
       if (validate == kValidateWithTol) {
-	tmpareacode = GetAreaCode(tmpxx);
-	if (!IsOutside(tmpareacode)) {
-	  if (tmpdist >= 0) tmpisvalid = true;
-	}
+        tmpareacode = GetAreaCode(tmpxx);
+        if (!IsOutside(tmpareacode)) {
+          if (tmpdist >= 0) tmpisvalid = true;
+        }
       } else if (validate == kValidateWithoutTol) {
-	tmpareacode = GetAreaCode(tmpxx, false);
-	if (IsInside(tmpareacode)) {
-	  if (tmpdist >= 0) tmpisvalid = true;
-	}
+        tmpareacode = GetAreaCode(tmpxx, false);
+        if (IsInside(tmpareacode)) {
+          if (tmpdist >= 0) tmpisvalid = true;
+        }
       } else { // kDontValidate
-	G4Exception("G4TwistBoxSide::DistanceToSurface()",
-		    "NotImplemented kDontValidate", FatalException,
-		    "Feature NOT implemented !");
+        G4Exception("G4TwistBoxSide::DistanceToSurface()",
+                    "NotImplemented kDontValidate", FatalException,
+                    "Feature NOT implemented !");
       }
 
     } 
@@ -508,8 +508,8 @@ G4int G4TwistBoxSide::DistanceToSurface(const G4ThreeVector &gp,
 
 #ifdef G4SPECSDEBUG
       G4cout << "Solution " << k << " : " 
-	     << "reconstructed phiR = " << xbuf[k].phi
-	     << ", uR = " << xbuf[k].u << G4endl ; 
+             << "reconstructed phiR = " << xbuf[k].phi
+             << ", uR = " << xbuf[k].u << G4endl ; 
 #endif
       
       phi = xbuf[k].phi ;  // get the stored values for phi and u
@@ -518,31 +518,31 @@ G4int G4TwistBoxSide::DistanceToSurface(const G4ThreeVector &gp,
       IsConverged = false ;   // no convergence at the beginning
       
       for ( G4int i = 1 ; i<maxint ; i++ ) {
-	
-	xxonsurface = SurfacePoint(phi,u) ;
-	surfacenormal = NormAng(phi,u) ;
-	tmpdist = DistanceToPlaneWithV(p, v, xxonsurface, surfacenormal, tmpxx); 
-	deltaX = ( tmpxx - xxonsurface ).mag() ; 
-	theta = std::fabs(std::acos(v*surfacenormal) - pihalf) ;
-	if ( theta < 0.001 ) { 
-	  factor = 50 ;    
-	}
-	else {
-	  factor = 1 ;
-	}
-	
+        
+        xxonsurface = SurfacePoint(phi,u) ;
+        surfacenormal = NormAng(phi,u) ;
+        tmpdist = DistanceToPlaneWithV(p, v, xxonsurface, surfacenormal, tmpxx); 
+        deltaX = ( tmpxx - xxonsurface ).mag() ; 
+        theta = std::fabs(std::acos(v*surfacenormal) - pihalf) ;
+        if ( theta < 0.001 ) { 
+          factor = 50 ;    
+        }
+        else {
+          factor = 1 ;
+        }
+        
 #ifdef G4SPECSDEBUG
-	G4cout << "Step i = " << i << ", distance = " << tmpdist << ", " << deltaX << G4endl ;
-	G4cout << "X = " << tmpxx << G4endl ;
+        G4cout << "Step i = " << i << ", distance = " << tmpdist << ", " << deltaX << G4endl ;
+        G4cout << "X = " << tmpxx << G4endl ;
 #endif
 
-	GetPhiUAtX(tmpxx, phi, u) ; // the new point xx is accepted and phi/u replaced
+        GetPhiUAtX(tmpxx, phi, u) ; // the new point xx is accepted and phi/u replaced
       
 #ifdef G4SPECSDEBUG
-	G4cout << "approximated phi = " << phi << ", u = " << u << G4endl ; 
+        G4cout << "approximated phi = " << phi << ", u = " << u << G4endl ; 
 #endif
       
-	if ( deltaX <= factor*ctol ) { IsConverged = true ; break ; }
+        if ( deltaX <= factor*ctol ) { IsConverged = true ; break ; }
       
       }  // end iterative loop (i)
     
@@ -560,29 +560,29 @@ G4int G4TwistBoxSide::DistanceToSurface(const G4ThreeVector &gp,
 
       if ( IsConverged ) {
 
-	if (validate == kValidateWithTol) {
-	  tmpareacode = GetAreaCode(tmpxx);
-	  if (!IsOutside(tmpareacode)) {
-	    if (tmpdist >= 0) tmpisvalid = true;
-	  }
-	} else if (validate == kValidateWithoutTol) {
-	  tmpareacode = GetAreaCode(tmpxx, false);
-	  if (IsInside(tmpareacode)) {
-	    if (tmpdist >= 0) tmpisvalid = true;
-	  }
-	} else { // kDontValidate
-	  G4Exception("G4TwistedBoxSide::DistanceToSurface()",
-		      "NotImplemented kDontValidate", FatalException,
-		      "Feature NOT implemented !");
-	}
-	
+        if (validate == kValidateWithTol) {
+          tmpareacode = GetAreaCode(tmpxx);
+          if (!IsOutside(tmpareacode)) {
+            if (tmpdist >= 0) tmpisvalid = true;
+          }
+        } else if (validate == kValidateWithoutTol) {
+          tmpareacode = GetAreaCode(tmpxx, false);
+          if (IsInside(tmpareacode)) {
+            if (tmpdist >= 0) tmpisvalid = true;
+          }
+        } else { // kDontValidate
+          G4Exception("G4TwistedBoxSide::DistanceToSurface()",
+                      "NotImplemented kDontValidate", FatalException,
+                      "Feature NOT implemented !");
+        }
+        
       } 
       else {
-	tmpdist = kInfinity;     // no convergence after 10 steps 
-	tmpisvalid = false ;     // solution is not vaild
+        tmpdist = kInfinity;     // no convergence after 10 steps 
+        tmpisvalid = false ;     // solution is not vaild
       }  
-	
-	
+        
+        
       // store the found values 
       xbuf[k].xx = tmpxx ;
       xbuf[k].distance = tmpdist ;
@@ -617,16 +617,16 @@ G4int G4TwistBoxSide::DistanceToSurface(const G4ThreeVector &gp,
     isvalid[i]  = xbuf[i].isvalid ;
     
     fCurStatWithV.SetCurrentStatus(i, gxx[i], distance[i], areacode[i],
-				     isvalid[i], nxx, validate, &gp, &gv);
+                                     isvalid[i], nxx, validate, &gp, &gv);
 
 #ifdef G4SPECSDEBUG
     G4cout << "element Nr. " << i 
-	   << ", local Intersection = " << xbuf[i].xx 
-	   << ", distance = " << xbuf[i].distance 
-	   << ", u = " << xbuf[i].u 
-	   << ", phi = " << xbuf[i].phi 
-	   << ", isvalid = " << xbuf[i].isvalid 
-	   << G4endl ;
+           << ", local Intersection = " << xbuf[i].xx 
+           << ", distance = " << xbuf[i].distance 
+           << ", u = " << xbuf[i].u 
+           << ", phi = " << xbuf[i].phi 
+           << ", isvalid = " << xbuf[i].isvalid 
+           << G4endl ;
 #endif
 
   }  // end for( i ) loop
@@ -645,7 +645,6 @@ G4int G4TwistBoxSide::DistanceToSurface(const G4ThreeVector &gp,
   return nxx ;
     
 }
-
 
 
 //=====================================================================
@@ -952,9 +951,7 @@ void G4TwistBoxSide::SetBoundaries()
               "NotImplemented", FatalException,
               "Feature NOT implemented !");
   }
-  
 }
-
 
 
 void G4TwistBoxSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u) 
@@ -1030,21 +1027,13 @@ void G4TwistBoxSide::GetFacets( G4int m, G4int n,  G4double xyz[][3], G4int face
       xyz[nnode][2] = p.z() ;
 
       if ( i<n-1 && j<m-1 ) {   // conterclock wise filling
-	
-	nface = GetFace(i,j,m,n,iside) ;
-	faces[nface][0] = GetNode(i  ,j  ,m,n,iside)+1 ;  // fortran numbering
-	faces[nface][1] = GetNode(i  ,j+1,m,n,iside)+1 ;
-	faces[nface][2] = GetNode(i+1,j+1,m,n,iside)+1 ;
-	faces[nface][3] = GetNode(i+1,j  ,m,n,iside)+1 ;
-	
+        
+        nface = GetFace(i,j,m,n,iside) ;
+        faces[nface][0] = GetNode(i  ,j  ,m,n,iside)+1 ;  // fortran numbering
+        faces[nface][1] = GetNode(i  ,j+1,m,n,iside)+1 ;
+        faces[nface][2] = GetNode(i+1,j+1,m,n,iside)+1 ;
+        faces[nface][3] = GetNode(i+1,j  ,m,n,iside)+1 ;
       }
-      
     }
-
   }
-
-
-
 }
-
-

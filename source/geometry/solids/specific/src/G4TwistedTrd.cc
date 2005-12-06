@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrd.cc,v 1.5 2005-12-05 17:03:46 link Exp $
+// $Id: G4TwistedTrd.cc,v 1.6 2005-12-06 09:22:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,11 +33,7 @@
 //
 // Author:
 //
-//   Oliver Link (Oliver.Link@cern.ch)
-//
-// History:
-//
-//   18/03/2005 - Created.
+//   18/03/2005 - O.Link (Oliver.Link@cern.ch)
 //
 // --------------------------------------------------------------------
 

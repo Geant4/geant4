@@ -46,19 +46,19 @@
 //* constructors ------------------------------------------------------
 
 G4TwistTrapParallelSide::G4TwistTrapParallelSide(const G4String     &name,
-			   G4double      PhiTwist,    // twist angle
-			   G4double      pDz,         // half z lenght
-			   G4double      pTheta,      // direction between end planes
-			   G4double      pPhi,        // defined by polar and azimutal angles.
-			   G4double      pDy1,        // half y length at -pDz
-			   G4double      pDx1,        // half x length at -pDz,-pDy
-			   G4double      pDx2,        // half x length at -pDz,+pDy
-			   G4double      pDy2,        // half y length at +pDz
-			   G4double      pDx3,        // half x length at +pDz,-pDy
-			   G4double      pDx4,        // half x length at +pDz,+pDy
-			   G4double      pAlph,      // tilt angle at +pDz
+                           G4double      PhiTwist,    // twist angle
+                           G4double      pDz,         // half z lenght
+                           G4double      pTheta,      // direction between end planes
+                           G4double      pPhi,        // defined by polar and azimutal angles.
+                           G4double      pDy1,        // half y length at -pDz
+                           G4double      pDx1,        // half x length at -pDz,-pDy
+                           G4double      pDx2,        // half x length at -pDz,+pDy
+                           G4double      pDy2,        // half y length at +pDz
+                           G4double      pDx3,        // half x length at +pDz,-pDy
+                           G4double      pDx4,        // half x length at +pDz,+pDy
+                           G4double      pAlph,      // tilt angle at +pDz
                            G4double      AngleSide    // parity
-					       ) : G4VTwistSurface(name)
+                                               ) : G4VTwistSurface(name)
 {  
   
   fAxis[0]    = kXAxis; // in local coordinate system
@@ -301,14 +301,14 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
 
 #ifdef G4SPECSDEBUG
     G4cout << "coef = " << c[0] << " " 
-	   <<  c[1] << " "  
-	   <<  c[2] << " "  
-	   <<  c[3] << " "  
-	   <<  c[4] << " "  
-	   <<  c[5] << " "  
-	   <<  c[6] << " "  
-	   <<  c[7] << " "  
-	   <<  c[8] << G4endl ;
+           <<  c[1] << " "  
+           <<  c[2] << " "  
+           <<  c[3] << " "  
+           <<  c[4] << " "  
+           <<  c[5] << " "  
+           <<  c[6] << " "  
+           <<  c[7] << " "  
+           <<  c[8] << G4endl ;
 #endif    
 
     G4JTPolynomialSolver trapEq ;
@@ -318,22 +318,22 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
     for (G4int i = 0 ; i<num ; i++ ) {  // loop over all mathematical solutions
       if ( si[i]==0.0 ) {  // only real solutions
 #ifdef G4SPECSDEBUG
-	G4cout << "Solution " << i << " : " << sr[i] << G4endl ;
+        G4cout << "Solution " << i << " : " << sr[i] << G4endl ;
 #endif
-	phi = std::fmod(sr[i] , pihalf)  ;
+        phi = std::fmod(sr[i] , pihalf)  ;
 
-	u = (1/std::cos(phi)*(2*phixz + 4*fDz*phi*v.x() - 2*fdeltaX*phi*v.z() + (fDy2plus1*fPhiTwist + 2*fDy2minus1*phi)*v.z()* std::sin(phi)))/(2.*fPhiTwist*v.z()) ;
+        u = (1/std::cos(phi)*(2*phixz + 4*fDz*phi*v.x() - 2*fdeltaX*phi*v.z() + (fDy2plus1*fPhiTwist + 2*fDy2minus1*phi)*v.z()* std::sin(phi)))/(2.*fPhiTwist*v.z()) ;
 
-	xbuftmp.phi = phi ;
-	xbuftmp.u = u ;
-	xbuftmp.areacode = sOutside ;
-	xbuftmp.distance = kInfinity ;
-	xbuftmp.isvalid = false ;
-	
-	xbuf.push_back(xbuftmp) ;  // store it to xbuf
+        xbuftmp.phi = phi ;
+        xbuftmp.u = u ;
+        xbuftmp.areacode = sOutside ;
+        xbuftmp.distance = kInfinity ;
+        xbuftmp.isvalid = false ;
+        
+        xbuf.push_back(xbuftmp) ;  // store it to xbuf
       
 #ifdef G4SPECSDEBUG
-	G4cout << "solution " << i << " = " << phi << " , " << u  << G4endl ;
+        G4cout << "solution " << i << " = " << phi << " , " << u  << G4endl ;
 #endif
 
       }  // end if real solution
@@ -356,8 +356,8 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
 
 #ifdef G4SPECSDEBUG
     G4cout << "Solution " << k << " : " 
-	   << "reconstructed phiR = " << xbuf[k].phi
-	   << ", uR = " << xbuf[k].u << G4endl ; 
+           << "reconstructed phiR = " << xbuf[k].phi
+           << ", uR = " << xbuf[k].u << G4endl ; 
 #endif
     
     phi = xbuf[k].phi ;  // get the stored values for phi and u
@@ -373,11 +373,11 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
       deltaX = ( tmpxx - xxonsurface ).mag() ; 
       theta = std::fabs(std::acos(v*surfacenormal) - pihalf) ;
       if ( theta < 0.001 ) { 
-	factor = 50 ;
-	IsParallel = true ;
+        factor = 50 ;
+        IsParallel = true ;
       }
       else {
-	factor = 1 ;
+        factor = 1 ;
       }
 
 #ifdef G4SPECSDEBUG
@@ -411,19 +411,19 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
     if ( IsConverged ) {
       
       if (validate == kValidateWithTol) {
-	tmpareacode = GetAreaCode(tmpxx);
-	if (!IsOutside(tmpareacode)) {
-	  if (tmpdist >= 0) tmpisvalid = true;
-	}
+        tmpareacode = GetAreaCode(tmpxx);
+        if (!IsOutside(tmpareacode)) {
+          if (tmpdist >= 0) tmpisvalid = true;
+        }
       } else if (validate == kValidateWithoutTol) {
-	tmpareacode = GetAreaCode(tmpxx, false);
-	if (IsInside(tmpareacode)) {
-	  if (tmpdist >= 0) tmpisvalid = true;
-	}
+        tmpareacode = GetAreaCode(tmpxx, false);
+        if (IsInside(tmpareacode)) {
+          if (tmpdist >= 0) tmpisvalid = true;
+        }
       } else { // kDontValidate
-	G4Exception("G4TwistTrapParallelSide::DistanceToSurface()",
-		    "NotImplemented kDontValidate", FatalException,
-		    "Feature NOT implemented !");
+        G4Exception("G4TwistTrapParallelSide::DistanceToSurface()",
+                    "NotImplemented kDontValidate", FatalException,
+                    "Feature NOT implemented !");
       }
 
     } 
@@ -497,8 +497,8 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
 
 #ifdef G4SPECSDEBUG
       G4cout << "Solution " << k << " : " 
-	     << "reconstructed phiR = " << xbuf[k].phi
-	     << ", uR = " << xbuf[k].u << G4endl ; 
+             << "reconstructed phiR = " << xbuf[k].phi
+             << ", uR = " << xbuf[k].u << G4endl ; 
 #endif
       
       phi = xbuf[k].phi ;  // get the stored values for phi and u
@@ -507,31 +507,31 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
       IsConverged = false ;   // no convergence at the beginning
       
       for ( G4int i = 1 ; i<maxint ; i++ ) {
-	
-	xxonsurface = SurfacePoint(phi,u) ;
-	surfacenormal = NormAng(phi,u) ;
-	tmpdist = DistanceToPlaneWithV(p, v, xxonsurface, surfacenormal, tmpxx); 
-	deltaX = ( tmpxx - xxonsurface ).mag() ; 
-	theta = std::fabs(std::acos(v*surfacenormal) - pihalf) ;
-	if ( theta < 0.001 ) { 
-	  factor = 50 ;    
-	}
-	else {
-	  factor = 1 ;
-	}
-	
+        
+        xxonsurface = SurfacePoint(phi,u) ;
+        surfacenormal = NormAng(phi,u) ;
+        tmpdist = DistanceToPlaneWithV(p, v, xxonsurface, surfacenormal, tmpxx); 
+        deltaX = ( tmpxx - xxonsurface ).mag() ; 
+        theta = std::fabs(std::acos(v*surfacenormal) - pihalf) ;
+        if ( theta < 0.001 ) { 
+          factor = 50 ;    
+        }
+        else {
+          factor = 1 ;
+        }
+        
 #ifdef G4SPECSDEBUG
-	G4cout << "Step i = " << i << ", distance = " << tmpdist << ", " << deltaX << G4endl ;
-	G4cout << "X = " << tmpxx << G4endl ;
+        G4cout << "Step i = " << i << ", distance = " << tmpdist << ", " << deltaX << G4endl ;
+        G4cout << "X = " << tmpxx << G4endl ;
 #endif
 
-	GetPhiUAtX(tmpxx, phi, u) ; // the new point xx is accepted and phi/u replaced
+        GetPhiUAtX(tmpxx, phi, u) ; // the new point xx is accepted and phi/u replaced
       
 #ifdef G4SPECSDEBUG
-	G4cout << "approximated phi = " << phi << ", u = " << u << G4endl ; 
+        G4cout << "approximated phi = " << phi << ", u = " << u << G4endl ; 
 #endif
       
-	if ( deltaX <= factor*ctol ) { IsConverged = true ; break ; }
+        if ( deltaX <= factor*ctol ) { IsConverged = true ; break ; }
       
       }  // end iterative loop (i)
     
@@ -550,29 +550,29 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
 
       if ( IsConverged ) {
 
-	if (validate == kValidateWithTol) {
-	  tmpareacode = GetAreaCode(tmpxx);
-	  if (!IsOutside(tmpareacode)) {
-	    if (tmpdist >= 0) tmpisvalid = true;
-	  }
-	} else if (validate == kValidateWithoutTol) {
-	  tmpareacode = GetAreaCode(tmpxx, false);
-	  if (IsInside(tmpareacode)) {
-	    if (tmpdist >= 0) tmpisvalid = true;
-	  }
-	} else { // kDontValidate
-	  G4Exception("G4TwistedBoxSide::DistanceToSurface()",
-		      "NotImplemented kDontValidate", FatalException,
-		      "Feature NOT implemented !");
-	}
-	
+        if (validate == kValidateWithTol) {
+          tmpareacode = GetAreaCode(tmpxx);
+          if (!IsOutside(tmpareacode)) {
+            if (tmpdist >= 0) tmpisvalid = true;
+          }
+        } else if (validate == kValidateWithoutTol) {
+          tmpareacode = GetAreaCode(tmpxx, false);
+          if (IsInside(tmpareacode)) {
+            if (tmpdist >= 0) tmpisvalid = true;
+          }
+        } else { // kDontValidate
+          G4Exception("G4TwistedBoxSide::DistanceToSurface()",
+                      "NotImplemented kDontValidate", FatalException,
+                      "Feature NOT implemented !");
+        }
+        
       } 
       else {
-	tmpdist = kInfinity;     // no convergence after 10 steps 
-	tmpisvalid = false ;     // solution is not vaild
+        tmpdist = kInfinity;     // no convergence after 10 steps 
+        tmpisvalid = false ;     // solution is not vaild
       }  
-	
-	
+        
+        
       // store the found values 
       xbuf[k].xx = tmpxx ;
       xbuf[k].distance = tmpdist ;
@@ -607,16 +607,16 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
     isvalid[i]  = xbuf[i].isvalid ;
     
     fCurStatWithV.SetCurrentStatus(i, gxx[i], distance[i], areacode[i],
-				     isvalid[i], nxx, validate, &gp, &gv);
+                                     isvalid[i], nxx, validate, &gp, &gv);
 
 #ifdef G4SPECSDEBUG
     G4cout << "element Nr. " << i 
-	   << ", local Intersection = " << xbuf[i].xx 
-	   << ", distance = " << xbuf[i].distance 
-	   << ", u = " << xbuf[i].u 
-	   << ", phi = " << xbuf[i].phi 
-	   << ", isvalid = " << xbuf[i].isvalid 
-	   << G4endl ;
+           << ", local Intersection = " << xbuf[i].xx 
+           << ", distance = " << xbuf[i].distance 
+           << ", u = " << xbuf[i].u 
+           << ", phi = " << xbuf[i].phi 
+           << ", isvalid = " << xbuf[i].isvalid 
+           << G4endl ;
 #endif
 
   }  // end for( i ) loop
@@ -736,8 +736,6 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
    fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                             isvalid, 1, kDontValidate, &gp);
    return 1;
-   
-
 }
 
 
@@ -944,9 +942,11 @@ void G4TwistTrapParallelSide::SetBoundaries()
   
 }
 
+//=====================================================================
+//* GetPhiUAtX() ------------------------------------------------------
 
-
-void G4TwistTrapParallelSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u) 
+void
+G4TwistTrapParallelSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u) 
 {
   // find closest point XX on surface for a given point p
   // X0 is a point on the surface,  d is the direction ( both for a fixed z = pz)
@@ -959,6 +959,8 @@ void G4TwistTrapParallelSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4doub
 
 }
 
+//=====================================================================
+//* ProjectPoint() ----------------------------------------------------
 
 G4ThreeVector G4TwistTrapParallelSide::ProjectPoint(const G4ThreeVector &p, 
                                                     G4bool isglobal) 
@@ -985,8 +987,11 @@ G4ThreeVector G4TwistTrapParallelSide::ProjectPoint(const G4ThreeVector &p,
   }
 }
 
+//=====================================================================
+//* GetFacets() -------------------------------------------------------
 
-void G4TwistTrapParallelSide::GetFacets( G4int m, G4int n, G4double xyz[][3], G4int faces[][4], G4int iside ) 
+void G4TwistTrapParallelSide::GetFacets( G4int m, G4int n, G4double xyz[][3],
+                                         G4int faces[][4], G4int iside ) 
 {
 
   G4double phi ;
@@ -1020,17 +1025,13 @@ void G4TwistTrapParallelSide::GetFacets( G4int m, G4int n, G4double xyz[][3], G4
       xyz[nnode][2] = p.z() ;
 
       if ( i<n-1 && j<m-1 ) {   // conterclock wise filling
-	
-	nface = GetFace(i,j,m,n,iside) ;
-	faces[nface][0] = GetNode(i  ,j  ,m,n,iside)+1 ;  // fortran numbering
-	faces[nface][1] = GetNode(i  ,j+1,m,n,iside)+1 ;
-	faces[nface][2] = GetNode(i+1,j+1,m,n,iside)+1 ;
-	faces[nface][3] = GetNode(i+1,j  ,m,n,iside)+1 ;
-	
+        
+        nface = GetFace(i,j,m,n,iside) ;
+        faces[nface][0] = GetNode(i  ,j  ,m,n,iside)+1 ;  // fortran numbering
+        faces[nface][1] = GetNode(i  ,j+1,m,n,iside)+1 ;
+        faces[nface][2] = GetNode(i+1,j+1,m,n,iside)+1 ;
+        faces[nface][3] = GetNode(i+1,j  ,m,n,iside)+1 ;
       }
-      
     }
-
   }
-
 }

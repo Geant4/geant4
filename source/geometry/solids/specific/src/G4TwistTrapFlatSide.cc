@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTrapFlatSide.cc,v 1.2 2005-12-05 17:03:39 link Exp $
+// $Id: G4TwistTrapFlatSide.cc,v 1.3 2005-12-06 09:22:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,7 +32,7 @@
 // G4TwistTrapFlatSide.cc
 //
 // Author: 
-//   30-Aug-2002 - Oliver Link (Oliver.Link@cern.ch)
+//   30-Aug-2002 - O.Link (Oliver.Link@cern.ch)
 //
 // --------------------------------------------------------------------
 
@@ -65,8 +65,10 @@ G4TwistTrapFlatSide::G4TwistTrapFlatSide( const G4String        &name,
    fPhi  = pPhi ;
    fTheta = pTheta ;
 
-   fdeltaX = 2 * fDz * std::tan(fTheta) * std::cos(fPhi)  ;  // dx in surface equation
-   fdeltaY = 2 * fDz * std::tan(fTheta) * std::sin(fPhi)  ;  // dy in surface equation
+   fdeltaX = 2 * fDz * std::tan(fTheta) * std::cos(fPhi)  ;
+     // dx in surface equation
+   fdeltaY = 2 * fDz * std::tan(fTheta) * std::sin(fPhi)  ;
+     // dy in surface equation
 
    fPhiTwist = PhiTwist ;
 
@@ -77,9 +79,9 @@ G4TwistTrapFlatSide::G4TwistTrapFlatSide( const G4String        &name,
                  : -0.5 * fPhiTwist );
 
    fTrans.set(
-	      fHandedness > 0 ? 0.5*fdeltaX : -0.5*fdeltaX , 
-	      fHandedness > 0 ? 0.5*fdeltaY : -0.5*fdeltaY ,
-	      fHandedness > 0 ? fDz : -fDz ) ;
+              fHandedness > 0 ? 0.5*fdeltaX : -0.5*fdeltaX , 
+              fHandedness > 0 ? 0.5*fdeltaY : -0.5*fdeltaY ,
+              fHandedness > 0 ? fDz : -fDz ) ;
 
    fIsValidNorm = true;
 
@@ -272,7 +274,8 @@ G4int G4TwistTrapFlatSide::DistanceToSurface(const G4ThreeVector &gp,
 
    // The plane is placed on origin with making its normal 
    // parallel to z-axis. 
-   if (std::fabs(p.z()) <= 0.5 * kCarTolerance) {   // if p is on the plane, return 1
+   if (std::fabs(p.z()) <= 0.5 * kCarTolerance)
+   {   // if p is on the plane, return 1
       distance[0] = 0;
       xx = p;
    } else {
@@ -474,7 +477,11 @@ void G4TwistTrapFlatSide::SetBoundaries()
    }
 }
 
-void G4TwistTrapFlatSide::GetFacets( G4int m, G4int n, G4double xyz[][3], G4int faces[][4], G4int iside ) 
+//=====================================================================
+//* GetFacets() -------------------------------------------------------
+
+void G4TwistTrapFlatSide::GetFacets( G4int m, G4int n, G4double xyz[][3],
+                                     G4int faces[][4], G4int iside ) 
 {
 
   G4double x,y    ;     // the two parameters for the surface equation
@@ -507,26 +514,21 @@ void G4TwistTrapFlatSide::GetFacets( G4int m, G4int n, G4double xyz[][3], G4int 
       xyz[nnode][2] = p.z() ;
 
       if ( i<n-1 && j<m-1 ) {   // conterclock wise filling
-	
-	nface = GetFace(i,j,m,n,iside) ;
 
-	if (fHandedness < 0) {  // lower side
-	  faces[nface][0] = GetNode(i  ,j  ,m,n,iside)+1 ;  
-	  faces[nface][1] = GetNode(i+1,j  ,m,n,iside)+1 ;
-	  faces[nface][2] = GetNode(i+1,j+1,m,n,iside)+1 ;
-	  faces[nface][3] = GetNode(i  ,j+1,m,n,iside)+1 ;
-	} else {                // upper side
-	  faces[nface][0] = GetNode(i  ,j  ,m,n,iside)+1 ;  
-	  faces[nface][1] = GetNode(i  ,j+1,m,n,iside)+1 ;
-	  faces[nface][2] = GetNode(i+1,j+1,m,n,iside)+1 ;
-	  faces[nface][3] = GetNode(i+1,j  ,m,n,iside)+1 ;
-	}
+        nface = GetFace(i,j,m,n,iside) ;
 
-	
+        if (fHandedness < 0) {  // lower side
+          faces[nface][0] = GetNode(i  ,j  ,m,n,iside)+1 ;  
+          faces[nface][1] = GetNode(i+1,j  ,m,n,iside)+1 ;
+          faces[nface][2] = GetNode(i+1,j+1,m,n,iside)+1 ;
+          faces[nface][3] = GetNode(i  ,j+1,m,n,iside)+1 ;
+        } else {                // upper side
+          faces[nface][0] = GetNode(i  ,j  ,m,n,iside)+1 ;  
+          faces[nface][1] = GetNode(i  ,j+1,m,n,iside)+1 ;
+          faces[nface][2] = GetNode(i+1,j+1,m,n,iside)+1 ;
+          faces[nface][3] = GetNode(i+1,j  ,m,n,iside)+1 ;
+        }
       }
-      
     }
-
   }
-
 }

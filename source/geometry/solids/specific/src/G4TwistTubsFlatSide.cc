@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTubsFlatSide.cc,v 1.2 2005-12-05 17:03:41 link Exp $
+// $Id: G4TwistTubsFlatSide.cc,v 1.3 2005-12-06 09:22:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -102,7 +102,7 @@ G4TwistTubsFlatSide::G4TwistTubsFlatSide( const G4String        &name,
    SetBoundaries();
 
    fSurfaceArea =  0.5*DPhi * (EndOuterRadius[i]*EndOuterRadius[i]  
-			       - EndInnerRadius[i]*EndInnerRadius[i] ) ; 
+                               - EndInnerRadius[i]*EndInnerRadius[i] ) ; 
 
 }
 
@@ -495,7 +495,11 @@ void G4TwistTubsFlatSide::SetBoundaries()
    }
 }
 
-void G4TwistTubsFlatSide::GetFacets( G4int m, G4int n, G4double xyz[][3], G4int faces[][4], G4int iside ) 
+//=====================================================================
+//* GetFacets() -------------------------------------------------------
+
+void G4TwistTubsFlatSide::GetFacets( G4int m, G4int n, G4double xyz[][3],
+                                     G4int faces[][4], G4int iside ) 
 {
 
   G4ThreeVector p ;
@@ -517,37 +521,33 @@ void G4TwistTubsFlatSide::GetFacets( G4int m, G4int n, G4double xyz[][3], G4int 
     phimin = GetBoundaryMin(r) ; 
     phimax = GetBoundaryMax(r) ;
 
-    for ( j = 0 ; j<m ; j++ ) {
-
+    for ( j = 0 ; j<m ; j++ )
+    {
       phi = phimin + j*(phimax-phimin)/(m-1) ;
 
       nnode = GetNode(i,j,m,n,iside) ;
-      p = SurfacePoint(phi,r,true) ;  // surface point in global coordinate system
+      p = SurfacePoint(phi,r,true) ;  // surface point in global coord.system
 
       xyz[nnode][0] = p.x() ;
       xyz[nnode][1] = p.y() ;
       xyz[nnode][2] = p.z() ;
 
       if ( i<n-1 && j<m-1 ) {   // conterclock wise filling
-	
-	nface = GetFace(i,j,m,n,iside) ;
+        
+        nface = GetFace(i,j,m,n,iside) ;
 
-	if (fHandedness < 0) {  // lower side
-	  faces[nface][0] = GetNode(i  ,j  ,m,n,iside)+1 ;  
-	  faces[nface][1] = GetNode(i  ,j+1,m,n,iside)+1 ;
-	  faces[nface][2] = GetNode(i+1,j+1,m,n,iside)+1 ;
-	  faces[nface][3] = GetNode(i+1,j  ,m,n,iside)+1 ;
-	} else {                // upper side
-	  faces[nface][0] = GetNode(i  ,j  ,m,n,iside)+1 ;  
-	  faces[nface][1] = GetNode(i+1,j  ,m,n,iside)+1 ;
-	  faces[nface][2] = GetNode(i+1,j+1,m,n,iside)+1 ;
-	  faces[nface][3] = GetNode(i  ,j+1,m,n,iside)+1 ;
-	}
-	
+        if (fHandedness < 0) {  // lower side
+          faces[nface][0] = GetNode(i  ,j  ,m,n,iside)+1 ;  
+          faces[nface][1] = GetNode(i  ,j+1,m,n,iside)+1 ;
+          faces[nface][2] = GetNode(i+1,j+1,m,n,iside)+1 ;
+          faces[nface][3] = GetNode(i+1,j  ,m,n,iside)+1 ;
+        } else {                // upper side
+          faces[nface][0] = GetNode(i  ,j  ,m,n,iside)+1 ;  
+          faces[nface][1] = GetNode(i+1,j  ,m,n,iside)+1 ;
+          faces[nface][2] = GetNode(i+1,j+1,m,n,iside)+1 ;
+          faces[nface][3] = GetNode(i  ,j+1,m,n,iside)+1 ;
+        }
       }
-      
     }
-
   }
-
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrap.hh,v 1.8 2005-12-05 17:03:33 link Exp $
+// $Id: G4TwistedTrap.hh,v 1.9 2005-12-06 09:22:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,7 +58,7 @@
  
 // Author:
 //
-//   Oliver Link (Oliver.Link@cern.ch)
+//   27-Oct-2004 - O.Link (Oliver.Link@cern.ch)
 //
 // --------------------------------------------------------------------
 #ifndef __G4TWISTEDTRAP__

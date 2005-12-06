@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc,v 1.9 2005-12-05 17:03:49 link Exp $
+// $Id: G4VTwistedFaceted.cc,v 1.10 2005-12-06 09:22:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1078,7 +1078,7 @@ void G4VTwistedFaceted::CreateSurfaces()
     fSide0   = new G4TwistBoxSide("0deg",   fPhiTwist, fDz, fTheta, fPhi,
                                         fDy1, fDx1, fDx1, fDy2, fDx3, fDx3, fAlph, 0.*deg);
     fSide180 = new G4TwistBoxSide("180deg", fPhiTwist, fDz, fTheta, fPhi+pi,
-					fDy1, fDx1, fDx1, fDy2, fDx3, fDx3, fAlph, 180.*deg);
+                                        fDy1, fDx1, fDx1, fDy2, fDx3, fDx3, fAlph, 180.*deg);
   }
   else   // default general case
   {
@@ -1139,9 +1139,9 @@ G4Polyhedron* G4VTwistedFaceted::GetPolyhedron() const
   return fpPolyhedron;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// GetPointInSolid
+
+//=====================================================================
+//* GetPointInSolid ---------------------------------------------------
 
 G4ThreeVector G4VTwistedFaceted::GetPointInSolid(G4double z) const
 {
@@ -1155,18 +1155,12 @@ G4ThreeVector G4VTwistedFaceted::GetPointInSolid(G4double z) const
 
   G4double phi = z/(2*fDz)*fPhiTwist ;
 
-  return G4ThreeVector( 
-		       fdeltaX * phi/fPhiTwist ,
-		       fdeltaY * phi/fPhiTwist ,
-		       z ) ;
-
+  return G4ThreeVector(fdeltaX * phi/fPhiTwist, fdeltaY * phi/fPhiTwist, z ) ;
 }
 
 
-
-////////////////////////////////////////////////////////////////////////////
-//
-// GetPointOnSurface
+//=====================================================================
+//* GetPointOnSurface -------------------------------------------------
 
 G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
 {
@@ -1260,7 +1254,6 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
 
   }
 }
-
 
 
 //=====================================================================
