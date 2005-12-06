@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm9.cc,v 1.5 2005-05-31 15:57:03 vnivanch Exp $
+// $Id: TestEm9.cc,v 1.6 2005-12-06 13:34:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,7 +51,7 @@
 int main(int argc,char** argv) {
 
   //choose the Random engine
-  HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
 
   //Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
