@@ -14,6 +14,11 @@
 /control/verbose 1
 /run/verbose 1
 /event/verbose 0
+/run/initialize
+##############################
+# Geometrical configuration
+/configuration/choose vehicle
+/configuration/AddShielding On
 ################
 ## Visualisation
 /vis/scene/create
@@ -23,16 +28,12 @@
 #/vis/open VRML2FILE
 # --------
 /vis/drawVolume
+/vis/viewer/set/viewpointThetaPhi 90 180 deg
 /vis/viewer/zoom 2
 /tracking/storeTrajectory 1
-/vis/scene/endOfEventAction accumulate
-######################
-/run/initialize
-/vis/viewer/set/viewpointThetaPhi 90 180 deg
+################
+#Primary particles
 /control/execute gcrZ=1gps.mac
-/configuration/choose vehicle
-/configuration/AddShielding On
-#/tracking/verbose 1
 /run/beamOn 10
 
 
