@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics71.cc,v 1.6 2005-12-06 12:10:06 vnivanch Exp $
+// $Id: G4EmStandardPhysics71.cc,v 1.7 2005-12-06 12:32:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -138,7 +138,7 @@ void G4EmStandardPhysics71::ConstructProcess()
     } else if (particleName == "e-") {
 
       if(verbose > 1)
-        G4cout << "### EmStandard71 instantiates eIoni for " 
+        G4cout << "### EmStandard71 instantiates eIoni and msc71 for " 
                << particleName << G4endl;
       pmanager->AddProcess(new G4MultipleScattering71, -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,          -1, 2, 2);
@@ -147,7 +147,7 @@ void G4EmStandardPhysics71::ConstructProcess()
     } else if (particleName == "e+") {
 
       if(verbose > 1)
-        G4cout << "### EmStandard71 instantiates eIoni for " 
+        G4cout << "### EmStandard71 instantiates eIoni and msc71 for " 
                << particleName << G4endl;
       pmanager->AddProcess(new G4MultipleScattering71, -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,          -1, 2, 2);
@@ -158,7 +158,7 @@ void G4EmStandardPhysics71::ConstructProcess()
                particleName == "mu-"    ) {
 
       if(verbose > 1)
-        G4cout << "### EmStandard71 instantiates muIoni for " 
+        G4cout << "### EmStandard71 instantiates muIoni and msc71 for " 
                << particleName << G4endl;
       pmanager->AddProcess(new G4MultipleScattering71,-1, 1, 1);
       pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
@@ -170,7 +170,7 @@ void G4EmStandardPhysics71::ConstructProcess()
                particleName == "GenericIon") {
 
       if(verbose > 1)
-        G4cout << "### EmStandard71 instantiates ionIoni for " 
+        G4cout << "### EmStandard71 instantiates ionIoni and msc71 for " 
                << particleName << G4endl;
       pmanager->AddProcess(new G4MultipleScattering71, -1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,        -1, 2, 2);
@@ -196,7 +196,7 @@ void G4EmStandardPhysics71::ConstructProcess()
                particleName == "D+" ||
                particleName == "D-" ) {
       if(verbose > 1)
-        G4cout << "### EmStandard71 instantiates hIoni for " 
+        G4cout << "### EmStandard71 instantiates hIoni and msc71 for " 
                << particleName << G4endl;
       pmanager->AddProcess(new G4MultipleScattering71, -1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,          -1, 2, 2);
