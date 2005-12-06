@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics71.cc,v 1.3 2005-12-05 12:55:27 vnivanch Exp $
+// $Id: G4EmStandardPhysics71.cc,v 1.4 2005-12-06 11:46:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -160,14 +160,34 @@ void G4EmStandardPhysics71::ConstructProcess()
                particleName == "He3" ||
                particleName == "GenericIon") {
 
+      if(verbose > 1)
+        G4cout << "### EmStandard71 instantiates ionIoni for " 
+               << particleName << G4endl;
       pmanager->AddProcess(new G4MultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,      -1, 2, 2);
 
-    } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) &&
-	       (particle->GetParticleName() != "chargedgeantino")) {
+    } else if (particleName == "anti_omega-" ||
+               particleName == "anti_proton" ||
+               particleName == "anti_sigma+" ||
+               particleName == "anti_sigma-" ||
+               particleName == "anti_xi-" ||
+               particleName == "deuteron" ||
+               particleName == "kaon+" ||
+               particleName == "kaon-" ||
+               particleName == "omega-" ||
+               particleName == "pi+" ||
+               particleName == "pi-" ||
+               particleName == "proton" ||
+               particleName == "sigma+" ||
+               particleName == "sigma-" ||
+               particleName == "tau+" ||
+               particleName == "tau-" ||
+               particleName == "triton" ||
+               particleName == "xi-" ||
+               particleName == "D+" ||
+               particleName == "D-" ) {
       if(verbose > 1)
-        G4cout << "### EmStandard instantiates hIoni for " 
+        G4cout << "### EmStandard71 instantiates hIoni for " 
                << particleName << G4endl;
       pmanager->AddProcess(new G4MultipleScattering,-1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,       -1, 2, 2);
