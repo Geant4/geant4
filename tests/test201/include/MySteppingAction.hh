@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MySteppingAction.hh,v 1.4 2001-07-11 10:10:22 gunter Exp $
+// $Id: MySteppingAction.hh,v 1.5 2005-12-06 16:41:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,8 +37,8 @@
 class MySteppingAction: public G4UserSteppingAction {
   virtual void UserSteppingAction(const G4Step*);
   private:
-    HepJamesRandom theJamesEngine;
-    DRand48Engine theDRand48Engine;
+    CLHEP::HepJamesRandom theJamesEngine;
+    CLHEP::DRand48Engine theDRand48Engine;
 };
 
 #endif

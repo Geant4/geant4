@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test33.cc,v 1.5 2003-08-22 13:14:49 dressel Exp $
+// $Id: test33.cc,v 1.6 2005-12-06 16:30:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,7 +53,7 @@
 int main(int argc, char **argv)
 {  
 
-  HepRandom::setTheSeed(345354);
+  CLHEP::HepRandom::setTheSeed(345354);
 
   Tst33AppStarter *appstarter = new Tst33AppStarter;
 

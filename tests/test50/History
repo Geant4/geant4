@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2005-06-21 15:21:50 guatelli Exp $
+$Id: History,v 1.6 2005-12-06 16:38:59 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06-12-2005 Gabriele Cosmo
+           Trivial changes for support of CLHEP-2.0.X series.
+
 21-06-2005 Susanna Guatelli
 	   Step Limiter introduced.
-	
+
 08-12-2004 Gabriele Cosmo
            Implemented migration to <cmath>.
 

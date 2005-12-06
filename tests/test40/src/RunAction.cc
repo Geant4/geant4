@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.4 2004-12-08 12:22:25 gcosmo Exp $
+// $Id: RunAction.cc,v 1.5 2005-12-06 16:35:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -165,7 +165,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
   // save Rndm status
   // G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  HepRandom::showEngineStatus();
+  CLHEP::HepRandom::showEngineStatus();
 
   //initialize arrays of cumulative energy deposition
   //
@@ -384,7 +384,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout.precision(prec);
 
   // show Rndm status
-  HepRandom::showEngineStatus();
+  CLHEP::HepRandom::showEngineStatus();
 
   saveHisto();
 

@@ -12,4 +12,8 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-04 11 2003, G.Folger - created the test
+06.12.2005, G.Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
+
+04.11.2003, G.Folger
+- Created the test.

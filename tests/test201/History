@@ -1,7 +1,11 @@
-$Id: History,v 1.9 2005-11-12 16:19:03 allison Exp $
+$Id: History,v 1.10 2005-12-06 16:41:00 gcosmo Exp $
+-----------------------------------------------------------------------------
 
 History file for visualization/test subdirectory
 ------------------------------------------------
+
+6th December 2005  Gabriele Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
 
 12th November 2005  John Allison  (test201-V07-01-00)
 - Replaced MyVisManager by G4VisExecutive.

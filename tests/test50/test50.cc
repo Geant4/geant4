@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.30 2004-07-01 09:34:50 guatelli Exp $
+// $Id: test50.cc,v 1.31 2005-12-06 16:38:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,9 +46,9 @@
 
 int main(int argc,char** argv) {
  	
-  HepRandom::setTheEngine(new RanecuEngine);   
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);   
   G4int seed = time(0);
-  HepRandom ::setTheSeed(seed);
+  CLHEP::HepRandom ::setTheSeed(seed);
  
   G4RunManager * runManager = new G4RunManager;
 

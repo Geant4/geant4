@@ -12,6 +12,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06.12.2005, G.Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
+
 13.06.2005, G.Cosmo (test28-V07-00-00)
 - Cleared Valgrind run-time errors in DetectorConstruction.
 - Moved 'in' input macro to standard 'test28.in'.
