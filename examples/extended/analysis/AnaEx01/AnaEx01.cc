@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01.cc,v 1.12 2005-10-27 14:39:22 gbarrand Exp $
+// $Id: AnaEx01.cc,v 1.13 2005-12-06 11:07:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,7 +61,7 @@
 int main(int,char**) {
 
   // choose the Random engine
-  HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new AnaEx01SteppingVerbose);
