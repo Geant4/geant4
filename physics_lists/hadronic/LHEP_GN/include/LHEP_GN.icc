@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: LHEP_GN.icc,v 1.8 2005-12-05 18:25:06 vnivanch Exp $
+// $Id: LHEP_GN.icc,v 1.9 2005-12-06 19:11:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -69,8 +69,7 @@ template<class T> TLHEP_GN<T>::TLHEP_GN(G4int ver):  T()
   this->SetVerboseLevel(ver);
 
   // EM Physics - without multiple scattering limiting the step
-  this->RegisterPhysics( new G4EmStandardPhysics("EMstandard",ver,
-	G4bool msc=false));
+  this->RegisterPhysics( new G4EmStandardPhysics("EMstandard",ver,false));
 
   // Synchroton Radiation & GN Physics
   this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
