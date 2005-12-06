@@ -23,7 +23,7 @@
 // ====================================================================
 //
 //   G4HepMCAsciiReader.hh
-//   $Id: G4HepMCAsciiReader.hh,v 1.1 2005-11-18 21:55:26 asaim Exp $
+//   $Id: G4HepMCAsciiReader.hh,v 1.2 2005-12-06 13:44:22 gcosmo Exp $
 //
 // ====================================================================
 #ifndef G4_HEPMC_ASCII_READER_H
@@ -31,11 +31,12 @@
 
 #include <fstream>
 #include "G4HepMCInterface.hh"
-#include "CLHEP/HepMC/ReadHepMC.h"
+#include <CLHEP/HepMC/ReadHepMC.h>
 
 class G4HepMCAsciiReaderMessenger;
 
-class G4HepMCAsciiReader : public G4HepMCInterface {
+class G4HepMCAsciiReader : public G4HepMCInterface
+{
 protected:
   G4String filename;
   std::ifstream from;

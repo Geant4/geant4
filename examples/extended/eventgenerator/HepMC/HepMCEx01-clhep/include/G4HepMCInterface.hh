@@ -23,7 +23,7 @@
 // ====================================================================
 //
 //   G4HepMCInterface.hh
-//   $Id: G4HepMCInterface.hh,v 1.1 2005-11-18 21:55:26 asaim Exp $
+//   $Id: G4HepMCInterface.hh,v 1.2 2005-12-06 13:44:22 gcosmo Exp $
 //
 //   A base class for primary generation via HepMC object.
 //   This class is derived from G4VPrimaryGenerator.
@@ -33,9 +33,10 @@
 #define G4_HEPMC_INTERFACE_H
 
 #include "G4VPrimaryGenerator.hh"
-#include "CLHEP/HepMC/GenEvent.h"
+#include <CLHEP/HepMC/GenEvent.h>
 
-class G4HepMCInterface : public G4VPrimaryGenerator {
+class G4HepMCInterface : public G4VPrimaryGenerator
+{
 public:
   // static service method for conversion from HepMC::GenEvent to G4Event
   static void HepMC2G4(const HepMC::GenEvent* hepmcevt, G4Event* g4event);
