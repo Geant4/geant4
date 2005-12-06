@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmMuonBuilder71.cc,v 1.1 2005-10-03 01:40:34 vnivanch Exp $
+// $Id: G4EmMuonBuilder71.cc,v 1.2 2005-12-06 15:26:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -42,7 +42,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4MultipleScattering71.hh"
 
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
@@ -84,20 +84,20 @@ void G4EmMuonBuilder71::ConstructProcess()
   const G4ParticleDefinition* particle = G4MuonPlus::MuonPlus();
   G4ProcessManager* pmanager = particle->GetProcessManager();
 
-  pmanager->AddProcess(new G4MultipleScattering,-1, 1, 1);
-  pmanager->AddProcess(new G4MuIonisation,      -1, 2, 2);
-  pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1, 3);
-  pmanager->AddProcess(new G4MuPairProduction,  -1,-1, 4);
+  pmanager->AddProcess(new G4MultipleScattering71,-1, 1, 1);
+  pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
+  pmanager->AddProcess(new G4MuBremsstrahlung,    -1,-1, 3);
+  pmanager->AddProcess(new G4MuPairProduction,    -1,-1, 4);
 
 
   // Add standard EM Processes for mu-
   particle = G4MuonMinus::MuonMinus();
   pmanager = particle->GetProcessManager();
 
-  pmanager->AddProcess(new G4MultipleScattering,-1, 1, 1);
-  pmanager->AddProcess(new G4MuIonisation,      -1, 2, 2);
-  pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1, 3);
-  pmanager->AddProcess(new G4MuPairProduction,  -1,-1, 4);
+  pmanager->AddProcess(new G4MultipleScattering71,-1, 1, 1);
+  pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
+  pmanager->AddProcess(new G4MuBremsstrahlung,    -1,-1, 3);
+  pmanager->AddProcess(new G4MuPairProduction,    -1,-1, 4);
 
 }
 
