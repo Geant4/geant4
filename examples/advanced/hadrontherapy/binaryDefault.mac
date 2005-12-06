@@ -20,16 +20,15 @@
 /tracking/verbose 0
 /run/verbose 0
 /event/verbose 0
-
+/process/verbose 2
 # SETTING FOR THE PHYSICS MODELS
 /physics/addPhysics photon-epdl
 /physics/addPhysics electron-eedl
 /physics/addPhysics positron-standard
 /physics/addPhysics ion-LowE
+/physics/addPhysics proton-precompound-binary
 /physics/addPhysics muon-standard
 /physics/addPhysics decay
-/physics/addPhysics proton-precompound-binary
-
 /run/initialize
 
 # IF YOU WANT A RANGE SHIFTER PLEASE CHANGE

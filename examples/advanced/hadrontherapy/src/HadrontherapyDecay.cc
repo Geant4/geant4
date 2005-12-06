@@ -47,7 +47,9 @@ HadrontherapyDecay::~HadrontherapyDecay()
 { }
 
 void HadrontherapyDecay::ConstructProcess()
+ 
 {
+G4cout << "Decay! " << G4endl;
   // Add Decay Process
   G4Decay* theDecayProcess = new G4Decay();
   theParticleIterator -> reset();
@@ -55,13 +57,14 @@ void HadrontherapyDecay::ConstructProcess()
     {
       G4ParticleDefinition* particle = theParticleIterator -> value();
       G4ProcessManager* pmanager = particle -> GetProcessManager();
-      
-      if (theDecayProcess -> IsApplicable(*particle)) 
+      if (theDecayProcess -> IsApplicable(*particle) && !particle->IsShortLived()) 
 	{ 
+	  G4String name =  particle -> GetParticleName();
 	  pmanager -> AddProcess(theDecayProcess);
 	  // set ordering for PostStepDoIt and AtRestDoIt
 	  pmanager -> SetProcessOrdering(theDecayProcess, idxPostStep);
 	  pmanager -> SetProcessOrdering(theDecayProcess, idxAtRest);
 	}
+
     }
 }

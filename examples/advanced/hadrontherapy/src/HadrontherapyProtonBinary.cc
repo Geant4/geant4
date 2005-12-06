@@ -91,6 +91,7 @@ HadrontherapyProtonBinary::~HadrontherapyProtonBinary()
 
 void HadrontherapyProtonBinary::ConstructProcess()
 {
+
   // ELASTIC SCATTERING FOR PROTON, NEUTRON, IONS
   G4LElastic* elastic_Model = new G4LElastic();
   G4HadronElasticProcess* elastic = new G4HadronElasticProcess();
@@ -104,15 +105,15 @@ void HadrontherapyProtonBinary::ConstructProcess()
   /////////////////////////////////////////////////////////////////////////////
   // HADRONIC PHYSICS FOR PROTONS
   G4ParticleDefinition* particle = 0;
- G4ProcessManager* pmanager = 0;
+  G4ProcessManager* pmanager = 0;
   particle = G4Proton::Proton();
   pmanager = particle -> GetProcessManager();
 
-
-  // INELASTIC SCATTERING: BINARY - PRECOMPOUND + DEFAULT EVAPORATION NO FERMI BREAK-UP  
+  // INELASTIC SCATTERING: 
+  //BINARY - PRECOMPOUND + DEFAULT EVAPORATION NO FERMI BREAK-UP  
   G4BinaryCascade* thePBC = new G4BinaryCascade();
-  thePBC->SetMinEnergy(binaryLowLimit);
-  thePBC->SetMaxEnergy(binaryHighLimit); 
+  thePBC -> SetMinEnergy(binaryLowLimit);
+  thePBC -> SetMaxEnergy(binaryHighLimit); 
   theIPProton.RegisterMe(thePBC);
   theIPProton.RegisterMe(thePreEquilib);
   theIPProton.AddDataSet(&thePXSec);
@@ -120,8 +121,6 @@ void HadrontherapyProtonBinary::ConstructProcess()
 
   // ELASTIC SCATTERING
   pmanager -> AddDiscreteProcess(elastic); //ELASIC SCATTERING
-
-
 
   /////////////////////////////////////////////////////////////////////////////
   //////////  VERIFICARE LA POSSIBILITA' DEL BINARY PER PIONI
@@ -159,7 +158,36 @@ void HadrontherapyProtonBinary::ConstructProcess()
 
   pmanager -> AddDiscreteProcess(thePionMinusInelasticProcess);
 
+/////////////////////////////////////////////////////////////////////////////
+  // Neutron
+  particle = G4Neutron::Neutron();
+  pmanager = particle->GetProcessManager();
+  thePreEquilib -> SetMinEnergy(precompoundLowLimit);
+  thePreEquilib -> SetMaxEnergy(precompoundHighLimit); 
+  G4BinaryCascade* theNBC = new G4BinaryCascade();
+  theNBC->SetMinEnergy(binaryLowLimit);
+  theNBC->SetMaxEnergy(binaryHighLimit); 
+  theIPNeutron.RegisterMe(theNBC);
+  theIPNeutron.RegisterMe(thePreEquilib);
+  theIPNeutron.AddDataSet(&theNXSec);
+  pmanager -> AddDiscreteProcess(&theIPNeutron);
+  pmanager -> AddDiscreteProcess(elastic); // ELASTIC SCATTERING
 
+  //Hadron Capture 
+  G4HadronCaptureProcess* neutronCapture = new G4HadronCaptureProcess();
+  G4LCapture* capture_model = new G4LCapture();
+  capture_model -> SetMinEnergy(neutronLowLimit);
+  capture_model -> SetMaxEnergy(neutronHighLimit);
+  neutronCapture -> RegisterMe(capture_model);
+  pmanager -> AddDiscreteProcess(neutronCapture);
+
+  //Fission
+  G4HadronFissionProcess* fission = new G4HadronFissionProcess();
+  G4LFission* fission_model = new G4LFission();
+  fission_model -> SetMinEnergy(neutronLowLimit);
+  fission_model -> SetMaxEnergy(neutronHighLimit);
+  fission -> RegisterMe(fission_model); 
+  pmanager -> AddDiscreteProcess(fission);      
 
   /////////////////////////////////////////////////////////////////////////////
   // ION HADRONIC PHYSICS LIST
@@ -233,37 +261,7 @@ void HadrontherapyProtonBinary::ConstructProcess()
   pmanager -> AddDiscreteProcess(theIPHe3);
   pmanager -> AddDiscreteProcess(elastic); //ELASTIC SCATTERING
   
-  /////////////////////////////////////////////////////////////////////////////
-  // Neutron
-  particle = G4Neutron::Neutron();
-  pmanager = particle->GetProcessManager();
-  thePreEquilib -> SetMinEnergy(precompoundLowLimit);
-  thePreEquilib -> SetMaxEnergy(precompoundHighLimit); 
-  G4BinaryCascade* theNBC = new G4BinaryCascade();
-  theNBC->SetMinEnergy(binaryLowLimit);
-  theNBC->SetMaxEnergy(binaryHighLimit); 
-  theIPNeutron.RegisterMe(theNBC);
-  theIPNeutron.RegisterMe(thePreEquilib);
-  theIPNeutron.AddDataSet(&theNXSec);
-  pmanager -> AddDiscreteProcess(&theIPNeutron);
-  pmanager -> AddDiscreteProcess(elastic); // ELASTIC SCATTERING
-
-
-  //Hadron Capture 
-  G4HadronCaptureProcess* neutronCapture = new G4HadronCaptureProcess();
-  G4LCapture* capture_model = new G4LCapture();
-  capture_model -> SetMinEnergy(neutronLowLimit);
-  capture_model -> SetMaxEnergy(neutronHighLimit);
-  neutronCapture -> RegisterMe(capture_model);
-  pmanager -> AddDiscreteProcess(neutronCapture);
-
-  //Fission
-  G4HadronFissionProcess* fission = new G4HadronFissionProcess();
-  G4LFission* fission_model = new G4LFission();
-  fission_model -> SetMinEnergy(neutronLowLimit);
-  fission_model -> SetMaxEnergy(neutronHighLimit);
-  fission -> RegisterMe(fission_model); 
-  pmanager -> AddDiscreteProcess(fission);      
+  
 }
 
 
