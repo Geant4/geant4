@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTrapFlatSide.hh,v 1.3 2005-12-06 09:22:13 gcosmo Exp $
+// $Id: G4TwistTrapFlatSide.hh,v 1.4 2005-12-06 18:21:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,7 +82,7 @@ class G4TwistTrapFlatSide : public G4VTwistSurface
    virtual G4double GetBoundaryMin(G4double u);
    virtual G4double GetBoundaryMax(G4double u);
    virtual G4double GetSurfaceArea();
-   virtual void GetFacets( G4int m , G4int m , G4double xyz[][3],
+   virtual void GetFacets( G4int m, G4int n, G4double xyz[][3],
                            G4int faces[][4], G4int iside );
 
   public:  // without description
