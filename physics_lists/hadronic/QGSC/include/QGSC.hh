@@ -31,12 +31,12 @@ template<class T>
 class TQGSC: public T
 {
 public:
-  TQGSC();
+  TQGSC(G4int ver = 1);
   virtual ~TQGSC();
   
 public:
   // SetCuts() 
-  virtual void SetCuts(G4int ver = 1);
+  virtual void SetCuts();
 
 private:
   enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
