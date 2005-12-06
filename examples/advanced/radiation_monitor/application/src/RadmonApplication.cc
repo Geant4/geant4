@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplication.cc,v 1.11 2005-11-25 01:56:26 capra Exp $
+// Id:            $Id: RadmonApplication.cc,v 1.12 2005-12-06 19:38:34 capra Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -26,12 +26,15 @@
 #include "RadmonSubPhysicsListWithLabelFactory.hh"
 #include "RadmonPhysicsMessenger.hh"
 
-#include "RadmonAnalysisLayout.hh"
-#include "RadmonAnalysis.hh"
-#include "RadmonDataAnalysisWithLabelFactory.hh"
-#include "RadmonAnalysisMessenger.hh"
+#ifdef G4ANALYSIS_USE
+ #include "RadmonAnalysisLayout.hh"
+ #include "RadmonAnalysis.hh"
+ #include "RadmonDataAnalysisWithLabelFactory.hh"
+ #include "RadmonAnalysisMessenger.hh"
+#endif /* G4ANALYSIS_USE */
 
 #include "RadmonEventAction.hh"
+#include "RadmonSteppingAction.hh"
 #include "RadmonApplicationMessenger.hh"
 
 #include "G4RunManager.hh"
@@ -209,6 +212,22 @@
  #endif /* G4ANALYSIS_USE */
  
  
+ // Construct the physics list
+ RadmonPhysicsList * physicsList(new RadmonPhysicsList(physicsLayout, physicsFactory));
+ 
+ if (physicsList==0)
+ {
+  G4cerr << options.ApplicationName() << ": Physics list not allocated." << G4endl;
+  return;
+ }
+ 
+ 
+ // The subphysics list factory will be owned by the physicsList
+ physicsFactory=0;
+ 
+ runManager->SetUserInitialization(physicsList);
+ 
+            
  // Construct the detector construction
  RadmonDetectorConstruction * detectorConstruction(new RadmonDetectorConstruction(detectorLayout, detectorsFactory));
  
@@ -239,22 +258,6 @@
  generatorsFactory=0;
  
  runManager->SetUserAction(primaryGenerator);
- 
-            
- // Construct the physics list
- RadmonPhysicsList * physicsList(new RadmonPhysicsList(physicsLayout, physicsFactory));
- 
- if (physicsList==0)
- {
-  G4cerr << options.ApplicationName() << ": Physics list not allocated." << G4endl;
-  return;
- }
- 
- 
- // The subphysics list factory will be owned by the physicsList
- physicsFactory=0;
- 
- runManager->SetUserInitialization(physicsList);
  
             
  // Construct the analysis
@@ -463,7 +466,7 @@
  delete runManager;
  
  // Destruct the analysis layout
- #ifdef    G4VIS_USE
+ #ifdef    G4ANALYSIS_USE
   delete analysisLayout; 
  #endif /* G4ANALYSIS_USE */
 
