@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02RunMessenger.cc,v 1.4 2002-12-05 01:06:57 asaim Exp $
+// $Id: F02RunMessenger.cc,v 1.5 2005-12-06 13:58:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,8 +81,8 @@ void F02RunMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
   if (command == RndmReadCmd)
     { G4cout << "\n---> rndm status restored from file: "
              << newValues << G4endl;
-      HepRandom::restoreEngineStatus(newValues);
-      HepRandom::showEngineStatus();
+      CLHEP::HepRandom::restoreEngineStatus(newValues);
+      CLHEP::HepRandom::showEngineStatus();
     }   
 }
 
