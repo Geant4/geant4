@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.24 2005-12-03 19:51:31 allison Exp $
+// $Id: exampleN03.cc,v 1.25 2005-12-06 10:48:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -60,7 +60,7 @@
 int main(int argc,char** argv) {
 
   // choose the Random engine
-  HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new ExN03SteppingVerbose);

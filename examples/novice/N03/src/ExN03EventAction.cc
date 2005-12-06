@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventAction.cc,v 1.25 2005-07-22 15:27:33 maire Exp $
+// $Id: ExN03EventAction.cc,v 1.26 2005-12-06 10:48:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,7 +65,7 @@ void ExN03EventAction::BeginOfEventAction(const G4Event* evt)
  G4int evtNb = evt->GetEventID();
  if (evtNb%printModulo == 0) { 
    G4cout << "\n---> Begin of event: " << evtNb << G4endl;
-   HepRandom::showEngineStatus();
+   CLHEP::HepRandom::showEngineStatus();
  }
  
  // initialisation per event
