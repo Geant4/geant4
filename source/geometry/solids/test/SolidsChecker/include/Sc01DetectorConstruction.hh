@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Sc01DetectorConstruction.hh,v 1.2 2004-11-10 07:43:14 grichine Exp $
+// $Id: Sc01DetectorConstruction.hh,v 1.3 2005-12-07 10:27:25 grichine Exp $
 // ------------------------------------------------------------
 //  GEANT 4 class header file 
 //
@@ -53,6 +53,7 @@ class Sc01DetectorConstruction : public G4VUserDetectorConstruction
   public:
      G4VPhysicalVolume* Construct();
      G4VPhysicalVolume* SelectDetector (const G4String& val);
+  G4VPhysicalVolume* SelectTubeSector(); //  (const G4String& val);
      void               SwitchDetector();
      void               SetMaterial();
      G4double           GetHallSize(){return fHallSize;};

@@ -5,7 +5,7 @@
 /run/initialize
 #
 #/geometry/test/recursive_test
-#/geometry/navigator/check_mode true
+/geometry/navigator/check_mode true
 /particle/list
 /run/initialize
 #
@@ -29,7 +29,7 @@
 #
 #/mydet/SelectDetector TwistedTrap
 #
-/mydet/SelectDetector TwistedTrap2
+#/mydet/SelectDetector TwistedTrap2
 #
 /event/printModulo 1
 /run/beamOn 1

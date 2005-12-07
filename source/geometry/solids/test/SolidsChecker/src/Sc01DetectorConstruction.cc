@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Sc01DetectorConstruction.cc,v 1.9 2005-11-20 16:36:33 grichine Exp $
+// $Id: Sc01DetectorConstruction.cc,v 1.10 2005-12-07 10:27:25 grichine Exp $
 // 
 //  GEANT 4 class header file 
 //
@@ -409,6 +409,96 @@ BorderSurfaces[0] = new G4LogicalBorderSurface("VolumeSurface",
   return PhysicalVolume;
 }
 
+
+
+G4VPhysicalVolume* Sc01DetectorConstruction::SelectTubeSector()
+{
+  G4double a,z,density;
+
+  G4Material* Al =
+    new G4Material("Aluminum", z=13., a=26.98*g/mole, density=1.782*mg/cm3);
+
+  G4Material* Vacuum =
+    new G4Material("Galactic", z=1., a=1.01*g/mole,density= universe_mean_density,
+                   kStateGas, 3.e-18*pascal, 2.73*kelvin);
+
+
+
+
+  G4int i, sections_ = 12; // 12;
+
+  G4double cof, dPhi, sPhi;
+
+  sPhi = twopi/sections_;
+  cof = 1.;
+  dPhi = cof*sPhi;
+
+  G4cout<<"sections_ = "<<sections_<<G4endl;
+
+  G4double lab_x = 20.0*m;
+  G4double lab_y = 20.0*m;
+  G4double lab_z = 20.0*m;
+
+  fHallSize = lab_x;
+
+  G4double dangle = 0.001*degree;
+
+  G4cout<<"m = "<<m<<"; degree = "<<degree<<G4endl;
+
+  // world volume
+
+  G4Box* lab_S = new G4Box("lab",lab_x,lab_y,lab_z);
+
+  G4LogicalVolume*  lab_L = new G4LogicalVolume(lab_S,
+			      Vacuum, "lab", 0, 0, 0);
+
+  // tube section
+
+  G4Tubs* arcSection_S = new G4Tubs("arcSection",
+                              6.*m, 10.*m, 2.*m,
+                              0., dPhi            );
+
+  G4cout<<"dPhi = "<<dPhi<<G4endl;
+
+  G4LogicalVolume* arcSection_L = new G4LogicalVolume(arcSection_S,
+				     Al, "arcSection", 0, 0, 0);
+
+  for( i = 0; i < sections_; i++)
+  {
+    G4RotationMatrix rot;
+    rot.rotateZ( sPhi*i );
+
+    G4cout<<"i = "<<i<<";  i*sPhi = "<<i*sPhi<<G4endl;
+
+    G4cout<<"cos(i*sPhi)= "<<std::cos(i*sPhi)
+          <<";  sin(i*sPhi) = "<<std::sin(i*sPhi)<<G4endl<<G4endl;
+
+    G4cout<<rot.xx()<<"\t\t"<<rot.xy()<<"\t\t"<<rot.xz()<<G4endl;
+    G4cout<<rot.yx()<<"\t\t"<<rot.yy()<<"\t\t"<<rot.yz()<<G4endl;
+    G4cout<<rot.zx()<<"\t\t"<<rot.zy()<<"\t\t"<<rot.zz()<<G4endl<<G4endl;
+
+    G4Transform3D transf(rot, G4ThreeVector() );
+
+    G4VPhysicalVolume* arcSection_P = 
+    new G4PVPlacement(transf, arcSection_L,
+		      "section", lab_L, false, i, true);
+  } 
+  G4VPhysicalVolume* lab_P= new G4PVPlacement(0, G4ThreeVector(),
+                           lab_L, "lab", 0, false, 0);
+
+  G4VisAttributes* labVisAtt = new G4VisAttributes(G4Colour());
+  labVisAtt -> SetVisibility(1);
+  lab_L -> SetVisAttributes(labVisAtt);
+
+  G4VisAttributes* aSVisAtt =
+  new G4VisAttributes(G4Colour(1.0,0.0,0.0,1.0));
+  aSVisAtt -> SetForceWireframe(1);
+  arcSection_L -> SetVisAttributes(aSVisAtt);
+
+  return lab_P;
+
+}
+
 ///////////////////////////////////////////////////////////////////////
 //
 //
@@ -552,8 +642,8 @@ G4VPhysicalVolume* Sc01DetectorConstruction::Construct()
   SetMaterial();
 
   //-------------------Hall ----------------------------------
-  
-  return SelectDetector ("Sphere");
+  return SelectTubeSector();  
+  // return SelectDetector ("Sphere");
 }
 
 
