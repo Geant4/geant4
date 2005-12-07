@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.31 2005-12-06 16:38:59 gcosmo Exp $
+// $Id: test50.cc,v 1.32 2005-12-07 15:30:15 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@
 #include "Tst50SteppingVerbose.hh"
 #include "Tst50AnalysisManager.hh"
 #ifdef G4VIS_USE
-#include "Tst50VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 int main(int argc,char** argv) {
@@ -59,7 +59,7 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(tst50Physics);
 
 #ifdef G4VIS_USE 
-  G4VisManager* visManager = new Tst50VisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
 
@@ -79,7 +79,9 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(tst50SteppingAction);
 
   Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
-  analysis->book(argv[1]);
+ 
+   if (argc == 1) analysis->book("test50");
+    else    analysis->book(argv[1]);
   
   //get the pointer to the User Interface manager 
   G4UImanager * UI = G4UImanager::GetUIpointer();  
@@ -95,7 +97,6 @@ int main(int argc,char** argv) {
 #else
       session = new G4UIterminal();
 #endif    
-
       UI->ApplyCommand("/control/execute default.mac");
       session->SessionStart();
       delete session;

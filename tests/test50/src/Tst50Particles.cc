@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50Particles.cc,v 1.3 2004-06-02 09:46:54 guatelli Exp $
+// $Id: Tst50Particles.cc,v 1.4 2005-12-07 15:30:15 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -32,15 +32,16 @@
 // -------------------------------------------------------------------
 
 #include "Tst50Particles.hh"
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4Proton.hh"
-#include "G4Alpha.hh"
-#include "G4IonO.hh"
-#include "G4IonC12.hh"
-#include "G4IonSi28.hh"
-#include "G4IonFe52.hh"
+
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTypes.hh"
+#include "G4ParticleTable.hh"
+#include "G4LeptonConstructor.hh"
+#include "G4BosonConstructor.hh"
+#include "G4MesonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+#include "G4ShortLivedConstructor.hh"
+
 Tst50Particles::Tst50Particles(const G4String& name)
   :  G4VPhysicsConstructor(name)
 { }
@@ -49,14 +50,27 @@ Tst50Particles::~Tst50Particles()
 {}
 
 void Tst50Particles::ConstructParticle()
-{
-  G4Gamma::GammaDefinition();
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-  G4Proton :: ProtonDefinition(); 
-  G4Alpha:: AlphaDefinition(); 
-  G4IonO::IonODefinition();  
-  G4IonC12::IonC12Definition();
-  G4IonSi28::IonSi28Definition();
-  G4IonFe52::IonFe52Definition();
+{ G4LeptonConstructor lepton;
+  lepton.ConstructParticle();
+ 
+  G4BosonConstructor boson;
+  boson.ConstructParticle();
+
+  G4MesonConstructor meson;
+  meson.ConstructParticle();
+
+  G4BaryonConstructor baryon;
+  baryon.ConstructParticle();
+
+  G4ShortLivedConstructor shortLived;
+  shortLived.ConstructParticle();
+
+  // ******//
+  //  ions //
+  // ******//
+  G4Deuteron::DeuteronDefinition();
+  G4Triton::TritonDefinition();
+  G4He3::He3Definition();
+  G4Alpha::AlphaDefinition();
+  G4GenericIon::GenericIonDefinition();
 }

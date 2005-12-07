@@ -4,5 +4,6 @@
 /event/verbose 0
 /physics/addPhysics photon-standard
 /physics/addPhysics electron-standard
-/physics/addPhysics positron-standard-back
+/physics/addPhysics positron-standard
+/physics/addPhysics proton-standard
 /run/initialize
