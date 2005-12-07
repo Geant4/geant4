@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.40 2005-07-18 15:09:14 gcosmo Exp $
+# $Id: common.gmk,v 1.41 2005-12-07 09:41:54 gcosmo Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -15,8 +15,10 @@ objects := $(patsubst src/%.cc,$(G4TMPDIR)/%.o,$(sources))
 dependencies := $(patsubst src/%.cc,$(G4TMPDIR)/%.d,$(sources))
 
    g4libraries_to_build :=
+ifeq ($(G4LIB_NO_SHARED),)
 ifneq ($(G4LIB_BUILD_SHARED),)
    g4libraries_to_build += $(G4LIBDIR)/lib$(name).$(SHEXT)
+endif
 endif
 ifneq ($(G4LIB_BUILD_STATIC),)
    g4libraries_to_build += $(G4LIBDIR)/lib$(name).a
@@ -33,6 +35,7 @@ GPPFLAGS := "-M"
 
 lib: $(g4libraries_to_build)
 
+ifeq ($(G4LIB_NO_SHARED),)
 ifneq ($(G4LIB_BUILD_SHARED),)
 # Make shared library.
 $(G4LIBDIR)/lib$(name).$(SHEXT): $(G4TMPDIR)/obj.last
@@ -41,6 +44,7 @@ $(G4LIBDIR)/lib$(name).$(SHEXT): $(G4TMPDIR)/obj.last
 	@$(RM) $@
 #      use architecture specific macro defined in sys/$(G4SYSTEM).gmk
 	$(build-granular-shared-lib)
+endif
 endif
 
 ifneq ($(G4LIB_BUILD_STATIC),)
