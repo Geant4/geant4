@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B02ImportanceDetectorConstruction.hh,v 1.3 2003-06-16 16:47:15 gunter Exp $
+// $Id: B02ImportanceDetectorConstruction.hh,v 1.4 2005-12-07 18:05:55 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -51,7 +51,7 @@ public:
 
 private:
   void Construct();
-  B02PVolumeStore fPVolumeStore;;
+  B02PVolumeStore fPVolumeStore;
   G4VPhysicalVolume *fWorldVolume;
 };
 
