@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2005-12-06 15:13:40 vnivanch Exp $
+$Id: History,v 1.12 2005-12-07 09:57:46 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,9 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07.12.2005, G.Cosmo - hadr-lists-V07-01-05
+- Do not allow installation of shared libraries when Geant4 granular
+  libraries are installed and used. Coworks with tag "config-V07-01-06".
+
 06.12.2005, V.Ivanchenko - hadr-lists-V07-01-04
-- Define hIoni and msc to the same list of hadrons as in 7.1
-- Fix bug in EmPhysics71 
+- Defined hIoni and msc to the same list of hadrons as in version 7.1.
+- Fixed bug in EmPhysics71.
 
 05.12.2005, V.Ivanchenko - hadr-lists-V07-01-03
 - Add verbosity level as a parameter of Physics Lists
