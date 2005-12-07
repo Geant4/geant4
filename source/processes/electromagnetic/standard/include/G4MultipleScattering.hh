@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.22 2005-11-13 08:39:48 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.23 2005-12-07 15:06:31 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -58,10 +58,11 @@
 // 26-10-05 the above is put in the function MscStepLimitation() (mma)
 // 05-11-05 new data member rangecut (L.Urban)
 // 13-11-05 some code cleaning (L.Urban)
+// 07-12-05 GeomLimit is protected instead of public
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering.hh,v 1.22 2005-11-13 08:39:48 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.23 2005-12-07 15:06:31 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -99,8 +100,6 @@ public:    // with description
                                G4double& lambda,
                                G4double  currentMinimalStep);
 
-  G4double GeomLimit(const G4Track&  track);
-
   // Print few lines of informations about the process: validity range,
   void PrintInfo();
 
@@ -130,6 +129,8 @@ protected:
 
   // This function initialise models
   void InitialiseProcess(const G4ParticleDefinition*);
+
+  G4double GeomLimit(const G4Track&  track);
 
 private:        // data members
 

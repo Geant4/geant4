@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.42 2005-12-06 20:49:17 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.43 2005-12-07 15:06:31 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -84,7 +84,9 @@
 // 13-11-05 some code cleaning, slightly better timing (L.Urban)
 // 01-12-05 add control on verbosity in SetMscStepLimitation
 // 06-12-05 tlimitmin = facrange*rangecut(e-) for every particle
-//   
+// 07-12-05 volume name World removed, rangecut computed using index
+//          instead of particle name
+//
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -202,8 +204,8 @@ G4double G4MultipleScattering::TruePathLengthLimit(const G4Track&  track,
     {
       // get production threshold - cut in range for e-
       // lower limit for step depends on this cut in range 
-      rangecut = track.GetMaterialCutsCouple()->GetProductionCuts()
-                 ->GetProductionCut("e-");
+      rangecut = track.GetMaterialCutsCouple()->
+                 GetProductionCuts()->GetProductionCut(1);
       tlimitmin = facrange*rangecut;
 
       // not so strong step restriction above Tlimit
@@ -273,8 +275,7 @@ G4double G4MultipleScattering::GeomLimit(const G4Track&  track)
   G4double geomlimit = geombig;
 
   // do not call navigator for the World volume
-  if((track.GetVolume() != 0)
-           && (track.GetVolume()->GetName() != "World"))
+  if(track.GetVolume() != 0)
   {
     const G4double cstep = geombig;
     navigator->LocateGlobalPointWithinVolume(
