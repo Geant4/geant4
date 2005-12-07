@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: NTSTDetectorConstruction.cc,v 1.1 2003-11-28 18:04:05 japost Exp $
+// $Id: NTSTDetectorConstruction.cc,v 1.2 2005-12-07 18:17:36 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,8 +37,9 @@
 #include "G4HelixExplicitEuler.hh"
 
 #include "G4DELPHIMagField.hh"
-#include "G4PropagatorInField.hh"
 #include "G4ChordFinder.hh"
+#include "G4MagIntegratorDriver.hh"
+#include "G4PropagatorInField.hh"
 
 #define USE_ALTERNATIVE_FIELD_PARAMS 1
 
