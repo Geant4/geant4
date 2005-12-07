@@ -113,8 +113,8 @@ void LISARunAction::BeginOfRunAction(const G4Run* aRun) {
     seeds[0] = (long) systime;
     seeds[1] = (long) (systime*G4UniformRand());
     // G4cout << "seed1: " << seeds[0] << "; seed2: " << seeds[1] << G4endl;
-    HepRandom::setTheSeeds(seeds);
-    HepRandom::showEngineStatus();
+    CLHEP::HepRandom::setTheSeeds(seeds);
+    CLHEP::HepRandom::showEngineStatus();
 
     // form filename (eg run00_7324329387_3284798343.out)
     os << "run" << std::setw(2) << std::setfill('0') << run_id

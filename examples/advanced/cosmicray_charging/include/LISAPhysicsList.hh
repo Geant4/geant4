@@ -215,7 +215,7 @@ class LISAPhysicsList: public G4VUserPhysicsList {
   G4GammaNuclearReaction* theGammaReaction;      
   G4TheoFSGenerator* theHEModel_PN;
   G4StringChipsParticleLevelInterface* theCascade_PN;
-  G4QGSModel<G4GammaParticipants> theStringModel_PN;
+  G4QGSModel<G4GammaParticipants>* theStringModel_PN;
   G4QGSMFragmentation theFragmentation_PN;
   G4ExcitedStringDecay* theStringDecay_PN;
   // ElectronNuclear
