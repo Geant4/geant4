@@ -30,7 +30,7 @@
 //    ********************************
 //
 //
-// $Id: PurgMagPhysicsList.cc,v 1.2 2004-06-18 09:17:58 gunter Exp $
+// $Id: PurgMagPhysicsList.cc,v 1.3 2005-12-07 14:35:12 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -195,7 +195,7 @@ void PurgMagPhysicsList::SetCuts()
   SetCutValue(cutForProton, "proton");
   SetCutValue(cutForProton, "anti_proton");
   
-  SetCutValueForOthers(defaultCutValue);
+    //  SetCutValueForOthers(defaultCutValue);
   
   if (verboseLevel>0) DumpCutValuesTable();
 }

@@ -29,7 +29,7 @@
 //    *                   *
 //    *********************
 //
-// $Id: PurgMag.cc,v 1.3 2005-05-03 10:21:16 allison Exp $
+// $Id: PurgMag.cc,v 1.4 2005-12-07 14:35:12 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Comments: Main program for the Purgin Magnet example. 
@@ -56,7 +56,7 @@
 int main(int argc,char** argv) {
 
   //choose the Random engine
-  HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   
   //PurgMag Verbose output class
   G4VSteppingVerbose::SetInstance(new PurgMagSteppingVerbose);
