@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinacPrimaryGeneratorAction.cc,v 1.5 2005-07-03 23:27:37 mpiergen Exp $
+// $Id: MedLinacPrimaryGeneratorAction.cc,v 1.6 2005-12-07 14:18:41 guatelli Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -47,7 +47,7 @@ MedLinacPrimaryGeneratorAction::MedLinacPrimaryGeneratorAction()
 {
   G4int n_particle = 1;
   particleGun = new G4ParticleGun(n_particle);
-  //G4cout <<"l'energia di default delle particelle primarie e'(ImrtPrimaryGeneratorAction) "  << pEnergy <<" " <<"MeV"<< G4endl;
+
 //create a messenger for this class
   gunMessenger = new MedLinacPrimaryGeneratorMessenger(this);
 
@@ -91,7 +91,7 @@ void MedLinacPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   //
 
   //G4double cosTheta = -0.0001*G4UniformRand()-0.9999;
-  G4double cosTheta = RandGauss::shoot(-1.,0.00003);
+  G4double cosTheta = CLHEP::RandGauss::shoot(-1.,0.00003);
   G4double phi = twopi * G4UniformRand();
 
     G4double sinTheta = sqrt(1. - cosTheta*cosTheta);
@@ -102,7 +102,7 @@ void MedLinacPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
    particleGun->SetParticleMomentumDirection(G4ThreeVector(ux,uy,uz));
 
   energy=pEnergy;
-  energy = RandGauss::shoot(pEnergy,sigma);
+  energy = CLHEP::RandGauss::shoot(pEnergy,sigma);
   particleGun->SetParticleEnergy(energy);
 
   //G4cout <<"the energy of the primaries is  "  << energy <<" "<<"MeV"<< G4endl;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinac.cc,v 1.7 2005-11-25 22:02:03 mpiergen Exp $
+// $Id: MedLinac.cc,v 1.8 2005-12-07 14:18:41 guatelli Exp $
 //
 // --------------------------------------------------------------
 //      GEANT 4 -  medical_linac
@@ -61,9 +61,9 @@ int main(int argc ,char ** argv)
 {
 
 //choose the Random engine
-  HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   G4int seed = time(0);
-  HepRandom :: setTheSeed(seed);
+  CLHEP::HepRandom :: setTheSeed(seed);
 
  // Construct the default run manager
   G4RunManager* runManager = new G4RunManager;
