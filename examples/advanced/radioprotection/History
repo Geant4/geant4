@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.15 2005-12-02 10:24:09 guatelli Exp $
+$Id: History,v 1.16 2005-12-07 14:41:36 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.15 2005-12-02 10:24:09 guatelli Exp $
 
                       Category History file
                       ---------------------
+7th December 2005 Susanna Guatelli (radioprotection-V07-01-04)
+- Macros updated
+- Comment deleted from remsim.cc
+
 2nd December 2005 Susanna Guatelli (radioprotection-V07-01-03)
 - Ions updated
 - General Particle source introduced

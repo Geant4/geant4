@@ -27,7 +27,7 @@
 //    *                     *          
 //    ***********************
 //
-// $Id: RemSimDecay.cc,v 1.3 2005-12-06 07:47:35 guatelli Exp $
+// $Id: RemSimDecay.cc,v 1.4 2005-12-07 14:41:36 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
@@ -56,8 +56,9 @@ void RemSimDecay::ConstructProcess()
     {
       G4ParticleDefinition* particle = theParticleIterator -> value();
       G4ProcessManager* pmanager = particle -> GetProcessManager();
-      if (theDecayProcess -> IsApplicable(*particle)&& !particle->IsShortLived()) 
+      if (theDecayProcess -> IsApplicable(*particle) && !particle->IsShortLived()) 
 	{ 
+	  G4String name =  particle -> GetParticleName();
 	  pmanager -> AddProcess(theDecayProcess);
 	  // set ordering for PostStepDoIt and AtRestDoIt
 	  pmanager -> SetProcessOrdering(theDecayProcess, idxPostStep);

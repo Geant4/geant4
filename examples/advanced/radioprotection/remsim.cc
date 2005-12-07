@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: remsim.cc,v 1.11 2005-09-08 06:57:56 guatelli Exp $
+// $Id: remsim.cc,v 1.12 2005-12-07 14:41:36 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4RunManager.hh"
@@ -39,8 +39,6 @@
 #ifdef G4ANALYSIS_USE
 #include "RemSimAnalysisManager.hh"
 #endif 
-
-bool messaggi(false);
 
 int main(int argc,char** argv)
 {
@@ -119,105 +117,7 @@ int main(int argc,char** argv)
 
   // job termination
   delete runManager;
-  messaggi=1;
+ 
   return 0;
 }
 
-// // RICCARDO
-// #include <stdlib.h>
-
-// #define MARGINI 10
-// #define VALORE 0x3F
-// #define VALORE2 0xFA
-
-// void Dump(void *ptr, size_t size)
-// {
-//   char *ptrC=(char *)ptr;
-
-//   for (size_t i=0; i<size; i++)
-//     {
-//       if (i%32==0)
-// 	printf("%04x   ", i);
-
-//       printf("%02lx ", (((long)ptrC[i])&0xFF));
-
-//       if (i%32==31)
-// 	printf("\n");
-//     }
-
-//   printf("\n");
-// }
-
-// void *operator new(size_t size) throw(std::bad_alloc)
-// {
-//  size_t sizeFull;
-//  sizeFull=size+MARGINI*2+sizeof(size_t);
-
-//  void * ptr;
-
-//  ptr=malloc(sizeFull);
-
-//  size_t * ptrL=(size_t *)ptr;
-//  ptrL[0]=size;
-//  char * ptrC=(char *)(ptrL+1);
-
-//  int i(MARGINI);
-
-//  while (i>0)
-//    {
-//      i--;
-//      ptrC[i]=VALORE;
-//      ptrC[i+size+MARGINI]=VALORE;
-//    }
-
-//  i=size;
-//  while (i>0)
-//    {
-//      i--;
-//      ptrC[i+MARGINI]=VALORE2;
-//    }
-
-//  // -4- -100- ----------------------  -100-
-//  //           |
-
-//  if (messaggi)
-//    {
-//   printf("MALLOC: %p %p %p %ld\n", ptrL, ptrC, ptrC+MARGINI, size);
-
-//   Dump(ptr, sizeFull);
-//    }
-//  return (void*)(ptrC+MARGINI);
-// }
-
-// void operator delete(void *data) throw()
-// {
-//  char *ptrC=(char *)data;
-//  ptrC-=MARGINI;
-
-//  size_t size;
-//  size_t * ptrL=(size_t *)ptrC;
-//  ptrL--;
-
-//  size=ptrL[0];
-
-//  int i(MARGINI);
-
-//  if (messaggi)
-//    {
-//   printf("FREE: %p %p %p %ld\n", ptrL, ptrC, data, size);
-
-//   Dump((void *)ptrL, size+MARGINI*2+sizeof(size_t));
-//    }
-//  while (i>0)
-//    {
-//      i--;
-//      if (ptrC[i]!=VALORE)
-//        abort();
-//      if (ptrC[i+size+MARGINI]!=VALORE)
-//        abort();
-//    }
-
-
-//  free((void *) ptrL);
-// }
- 
