@@ -239,6 +239,9 @@ void DMXPhysicsList::AddTransportation() {
 //OTHERS:
 //#include "G4hIonisation.hh" // standard hadron ionisation
 
+//em process options to allow msc step-limitation to be switched off
+#include "G4EmProcessOptions.hh"
+
 void DMXPhysicsList::ConstructEM() {
 
 // processes:
@@ -351,6 +354,11 @@ void DMXPhysicsList::ConstructEM() {
       }
     
   }
+
+  // turn off msc step-limitation - especially as electron cut 1nm
+  G4EmProcessOptions opt;
+  opt.SetMscStepLimitation(false);
+
 }
 
 
