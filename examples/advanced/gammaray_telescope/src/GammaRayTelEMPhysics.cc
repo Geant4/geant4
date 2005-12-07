@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEMPhysics.cc,v 1.2 2003-06-16 16:46:24 gunter Exp $
+// $Id: GammaRayTelEMPhysics.cc,v 1.3 2005-12-07 10:50:31 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,27 +42,8 @@ GammaRayTelEMPhysics::~GammaRayTelEMPhysics()
 {
 }
 
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-
-#include "G4Gamma.hh"
-
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-
-#include "G4NeutrinoE.hh"
-#include "G4AntiNeutrinoE.hh"
-
 void GammaRayTelEMPhysics::ConstructParticle()
 {
-  // gamma
-  G4Gamma::GammaDefinition();
- 
-  // electron
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-  G4NeutrinoE::NeutrinoEDefinition();
-  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
 }
 
 

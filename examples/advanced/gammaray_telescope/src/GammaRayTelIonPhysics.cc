@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelIonPhysics.cc,v 1.2 2003-06-16 16:46:28 gunter Exp $
+// $Id: GammaRayTelIonPhysics.cc,v 1.3 2005-12-07 10:50:31 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,17 +42,9 @@ GammaRayTelIonPhysics::~GammaRayTelIonPhysics()
 {
 }
 
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-
-// Nuclei
-#include "G4IonConstructor.hh"
-
 void GammaRayTelIonPhysics::ConstructParticle()
 {
-  //  Construct light ions
-  G4IonConstructor pConstructor;
-  pConstructor.ConstructParticle();  
+
 }
 
 
