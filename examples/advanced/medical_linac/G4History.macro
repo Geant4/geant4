@@ -14,8 +14,14 @@
 /vis/viewer/flush
 /vis/viewer/refresh viewer-0
 /vis/viewer/update viewer-0
+/run/initialize
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
+/Phantom/dimension 15. cm
+/Phantom/Nvoxels 150
+/Phantom/maxStep 0.2 mm
+/PhantomSD/dimension 15. cm
+/PhantomSD/Nvoxels 150
 /MLC/leaf_selection  a1
 /MLC/position 0. cm
 /MLC/leaf_selection  a2
