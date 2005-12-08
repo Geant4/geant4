@@ -69,7 +69,7 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
 {
 
   // choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   CLHEP::HepRandom::setTheSeed(dir);
 
   //XrayFluo Verbose output class
