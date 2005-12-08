@@ -34,6 +34,7 @@
 //
 // HISTORY
 // 22/02/2004: migrated from LISA-V04
+// 08/12/2005: removed compilation warnings
 //
 // ********************************************************************
 
@@ -83,7 +84,8 @@
     0., 0.5*SensorHousing_dia, 0.5*SensorHousing_hei, 0., 360.*deg);
   G4LogicalVolume* SensorHousing_o_log = 
     new G4LogicalVolume(SensorHousing_o_sol, TiAlloy, "SensorHousing_o_log");
-  G4VPhysicalVolume* SensorHousing_o_phys = new G4PVPlacement(G4Transform3D
+  G4VPhysicalVolume* SensorHousing_o_phys;
+  SensorHousing_o_phys = new G4PVPlacement(G4Transform3D
     (IS_rot, G4ThreeVector(0,SensorHousing_yoff,OpticalBench_off)),
     "SensorHousing_o_phys", SensorHousing_o_log, TelBox_phys, false, 0);
   G4Tubs* SensorHousing_i_sol = new G4Tubs("SensorHousing_i_sol",
@@ -91,7 +93,8 @@
     - SensorHousing_thi, 0., 360.*deg);
   G4LogicalVolume* SensorHousing_i_log = 
     new G4LogicalVolume(SensorHousing_i_sol, vacuum, "SensorHousing_i_log");
-  G4VPhysicalVolume* SensorHousing_i_phys = new G4PVPlacement
+  G4VPhysicalVolume* SensorHousing_i_phys;
+  SensorHousing_i_phys = new G4PVPlacement
     (0, G4ThreeVector(0,0,0), "SensorHousing_i_phys", 
      SensorHousing_i_log, SensorHousing_o_phys, false, 0);
   SensorHousing_o_log->SetVisAttributes(blue_vat);
