@@ -50,8 +50,8 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 
-#include "fstream.h"
-#include "stdlib.h"
+#include <fstream>
+#include <cstdlib>
 
 FCALEMModule::FCALEMModule() {
   F1LArGapID   = new G4int[2400];
@@ -75,7 +75,7 @@ FCALEMModule::~FCALEMModule(){
 
 void FCALEMModule::InitializeGeometry() {
 #include "FCALEMModuleParameters.input"  
-  ifstream File
+  std::ifstream File
     ("geom_data/FCal1Electrodes.dat");
   
   if(!File)  G4cerr << "Failed to open file FCal1Electrodes data file  " << G4endl;

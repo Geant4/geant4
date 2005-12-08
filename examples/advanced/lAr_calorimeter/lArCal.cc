@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: lArCal.cc,v 1.9 2005-05-03 10:21:16 allison Exp $
+// $Id: lArCal.cc,v 1.10 2005-12-08 16:39:16 ribon Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,7 +69,7 @@
 int main(int argc,char** argv) {
 
   // choose the Random engine
-  HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new FCALSteppingVerbose);
