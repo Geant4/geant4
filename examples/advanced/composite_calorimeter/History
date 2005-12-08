@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.28 2005-11-15 15:13:31 gcosmo Exp $
+$Id: History,v 1.29 2005-12-08 16:07:43 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.28 2005-11-15 15:13:31 gcosmo Exp $
 
                       Example History file
                       ---------------------
+
+08.12.2005 - A.Ribon (ccal-V07-01-01)
+- Migration to CLHEP namespace.
 
 13.12.04 - G.Cosmo (ccal-V07-01-00)
 - Migration to <sstream> from deprecated <strstream>.

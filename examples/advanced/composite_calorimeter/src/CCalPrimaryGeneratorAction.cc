@@ -84,11 +84,11 @@ void CCalPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
   if (isInitialized == 0) initialize();
 
   if (generatorInput == singleRandom) {
-    particleEnergy = RandFlat::shoot(energyMin,energyMax);
+    particleEnergy = CLHEP::RandFlat::shoot(energyMin,energyMax);
     particleGun->SetParticleEnergy(particleEnergy);
 
-    G4double eta = RandFlat::shoot(etaMin,etaMax);
-    G4double phi = RandFlat::shoot(phiMin,phiMax);
+    G4double eta = CLHEP::RandFlat::shoot(etaMin,etaMax);
+    G4double phi = CLHEP::RandFlat::shoot(phiMin,phiMax);
     G4double theta = std::atan(std::exp(-eta))*2.;
     G4double randomX = std::sin(theta)*std::cos(phi);
     G4double randomY = std::sin(theta)*std::sin(phi);

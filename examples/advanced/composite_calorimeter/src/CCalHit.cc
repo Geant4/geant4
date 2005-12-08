@@ -59,8 +59,8 @@ const CCalHit& CCalHit::operator=(const CCalHit &right) {
 }
 
 
-Hep3Vector   CCalHit::getEntry() const          {return entry;}
-void         CCalHit::setEntry(Hep3Vector xyz)  { entry    = xyz; }
+CLHEP::Hep3Vector   CCalHit::getEntry() const          {return entry;}
+void         CCalHit::setEntry(CLHEP::Hep3Vector xyz)  { entry    = xyz; }
 
 double       CCalHit::getIncidentEnergy() const {return theIncidentEnergy; }
 void         CCalHit::setIncidentEnergy (double e){theIncidentEnergy  = e; }
