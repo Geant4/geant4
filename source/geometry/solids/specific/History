@@ -1,4 +1,4 @@
-$Id: History,v 1.76 2005-12-06 18:21:27 gcosmo Exp $
+$Id: History,v 1.77 2005-12-08 13:44:05 link Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08-Dec-2005, O.Link 
+- Fixed bug in G4VTwistSurface.icc (coordinate transformation 
+  ComputeLocalPoint() was wrong). The bug affected only G4TwistTrapFlatSide.hh
 
 06-Dec-2005, G.Cosmo (geom-specific-V07-01-13)
 - Fixed compilation errors on WIN32-VC for last tag changes.

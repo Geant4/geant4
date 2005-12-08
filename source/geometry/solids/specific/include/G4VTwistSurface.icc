@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistSurface.icc,v 1.1 2005-11-18 16:48:01 link Exp $
+// $Id: G4VTwistSurface.icc,v 1.2 2005-12-08 13:44:06 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -273,7 +273,7 @@ G4ThreeVector G4VTwistSurface::ComputeGlobalPoint(const G4ThreeVector &lp) const
 inline
 G4ThreeVector G4VTwistSurface::ComputeLocalPoint(const G4ThreeVector &gp) const
 {
-   return fRot.inverse() * G4ThreeVector(gp) - fTrans;
+   return fRot.inverse() * ( G4ThreeVector(gp) - fTrans ) ;
 }
 
 //=====================================================================
