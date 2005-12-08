@@ -80,6 +80,7 @@ SUBDIRS += test29
 # SUBDIRS += test31 ## Not in testing yet!
 SUBDIRS += test32
 SUBDIRS += test33
+SUBDIRS += test34
 SUBDIRS += test40
 
 SUBDIRS_AIDA += test50
@@ -353,13 +354,13 @@ examples_links_source:
 ################################################################
 # Some "truc" to use two input files at the same test directory
 ################################################################
-	@testdir=test34; \
+	@testdir=test33_1; \
 	exdir=$(G4INSTALL)/tests/test33; \
          ln -s $$exdir $$testdir; \
          ln -s MassGeo_TimedApp.mac  $$testdir/test33.in;  \
-         ln -s ParallelGeo_TimedApp.mac $$testdir/test35.in; \
+         ln -s ParallelGeo_TimedApp.mac $$testdir/test33_1.in; \
          ln -s MassGeo_TimedApp.out  $$testdir/test33.out;  \
-         ln -s ParallelGeo_TimedApp.out $$testdir/test35.out; :
+         ln -s ParallelGeo_TimedApp.out $$testdir/test33_1.out; :
 
 ################################################################
 
@@ -494,8 +495,8 @@ examples_links_binaries:
 # GDML
 #	ln -s gogdml    $(G4WORKDIR)/bin/$(G4SYSTEM)/test901; \
 
-# Truc for test33/test34
-	ln -s test33    $(G4WORKDIR)/bin/$(G4SYSTEM)/test34; \
+# Truc for test33/test33_1
+	ln -s test33    $(G4WORKDIR)/bin/$(G4SYSTEM)/test33_1; \
         true
 
 ###########################################################################
@@ -507,11 +508,11 @@ clean_examples_links_source:
 # OLAP
 	@rm -f test1001
 
-# Truc for test33/test34
+# Truc for test33/test33_1
 	@rm -f test33/test33.in
 	@rm -f test33/test33.out
-	@rm -f test33/test34.in
-	@rm -f test33/test34.out
+	@rm -f test33/test33_1.in
+	@rm -f test33/test33_1.out
 
 # Unstandard testname
 	@rm -f test104/test104.EMtest.in
@@ -631,8 +632,8 @@ clean_examples_links_binaries:
 # OLAP
 	@rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test1001;:
 
-# Truc for test33/test34
-	@rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test34;:
+# Truc for test33/test33_1
+	@rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test33_1;:
 
 # Hadronics Tests
 hadronics:
