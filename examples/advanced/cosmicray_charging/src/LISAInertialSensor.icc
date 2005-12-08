@@ -34,6 +34,7 @@
 //
 // HISTORY
 // 22/02/2004: migrated from LISA-V04
+// 08/12/2005: removed compilation warnings
 //
 // ********************************************************************
 
@@ -97,17 +98,19 @@
   G4Box* cage_o_sol = new G4Box("cage_o_sol", .5*cage_o, .5*cage_o, .5*cage_o);
   G4LogicalVolume* cage_o_log = 
     new G4LogicalVolume(cage_o_sol, molybdenum, "cage_o_log");
-  G4VPhysicalVolume* cage_o_phys = new G4PVPlacement(0, G4ThreeVector(),
+  G4VPhysicalVolume* cage_o_phys;
+  cage_o_phys = new G4PVPlacement(0, G4ThreeVector(),
     "cage_o_phys", cage_o_log, SensorHousing_i_phys, false, 0);
    cage_o_log->SetVisAttributes(lgreen_vat);
-//  cage_o_log->SetVisAttributes(G4VisAttributes::Invisible);
+  //  cage_o_log->SetVisAttributes(G4VisAttributes::Invisible);
 
   // 0.3 um gold plating
   G4Box* goldplating_sol = new G4Box("goldplating_sol", 
      0.5*cage_i_x+elec_thi, 0.5*cage_i_y+elec_thi, 0.5*cage_i_z+elec_thi);
   G4LogicalVolume* goldplating_log = 
     new G4LogicalVolume(goldplating_sol, gold, "goldplating_log");
-  G4VPhysicalVolume* goldplating_phys = new G4PVPlacement(0, G4ThreeVector(),
+  G4VPhysicalVolume* goldplating_phys;
+  goldplating_phys = new G4PVPlacement(0, G4ThreeVector(),
     "goldplating_phys", goldplating_log, cage_o_phys, false, 0);
   goldplating_log->SetVisAttributes(yellow_vat);
 
@@ -116,7 +119,8 @@
     new G4Box("cage_i_sol", .5*cage_i_x, .5*cage_i_y, .5*cage_i_z);
   G4LogicalVolume* cage_i_log = 
     new G4LogicalVolume(cage_i_sol, vacuum, "cage_i_log");
-  G4VPhysicalVolume* cage_i_phys = new G4PVPlacement(0, G4ThreeVector(),
+  G4VPhysicalVolume* cage_i_phys;
+  cage_i_phys = new G4PVPlacement(0, G4ThreeVector(),
     "cage_i_phys", cage_i_log, goldplating_phys, false, 0);
   cage_i_log->SetVisAttributes(white_vat);
 
@@ -238,7 +242,8 @@
     new G4Box("tmass_sol", 0.5*tmass_len, 0.5*tmass_len, 0.5*tmass_len);
   G4LogicalVolume* tmass_log = 
     new G4LogicalVolume(tmass_sol, AuPt, "tmass_log");
-  G4VPhysicalVolume* tmass_phys = new G4PVPlacement
+  G4VPhysicalVolume* tmass_phys;
+  tmass_phys = new G4PVPlacement
     (0,	G4ThreeVector(), "tmass_phys", tmass_log, cage_i_phys, false, 0);
   tmass_log->SetVisAttributes(sol_gold_vat);
 
