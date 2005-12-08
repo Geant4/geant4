@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.43 2005-12-07 15:06:31 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.44 2005-12-08 07:14:07 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -85,7 +85,8 @@
 // 01-12-05 add control on verbosity in SetMscStepLimitation
 // 06-12-05 tlimitmin = facrange*rangecut(e-) for every particle
 // 07-12-05 volume name World removed, rangecut computed using index
-//          instead of particle name
+//          instead of particle name L.Urban
+// 08-12-05 world is now: navigator->GetWorldVolume() L.Urban
 //
 // -----------------------------------------------------------------------------
 //
@@ -274,8 +275,9 @@ G4double G4MultipleScattering::GeomLimit(const G4Track&  track)
 {
   G4double geomlimit = geombig;
 
-  // do not call navigator for the World volume
-  if(track.GetVolume() != 0)
+  // no geomlimit for the World volume
+  if((track.GetVolume() != 0) &&
+     (track.GetVolume() != navigator->GetWorldVolume()))  
   {
     const G4double cstep = geombig;
     navigator->LocateGlobalPointWithinVolume(
