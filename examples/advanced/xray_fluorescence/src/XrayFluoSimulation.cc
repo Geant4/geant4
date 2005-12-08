@@ -55,6 +55,7 @@
 #include "XrayFluoSteppingVerbose.hh"
 #include "XrayFluoSimulation.hh"
 #include "XrayFluoAnalysisManager.hh"
+using namespace CLHEP;
 
 XrayFluoSimulation::XrayFluoSimulation(G4int seed):dir(seed)
 
@@ -68,8 +69,8 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
 {
 
   // choose the Random engine
-  HepRandom::setTheEngine(new RanecuEngine);
-  HepRandom::setTheSeed(dir);
+  CLHEP::HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheSeed(dir);
 
   //XrayFluo Verbose output class
   G4VSteppingVerbose::SetInstance(new XrayFluoSteppingVerbose);

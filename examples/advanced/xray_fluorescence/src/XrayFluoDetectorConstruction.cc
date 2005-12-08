@@ -128,14 +128,14 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
   G4String defaultDetectorType = "sili";
   ComputeApparateParameters();
 
+  G4String regName = "SampleRegion";
+  sampleRegion = new G4Region(regName);  
+
   if (!phaseSpaceFlag) SetDetectorType(defaultDetectorType);
   
   // create commands for interactive definition of the apparate
   
   detectorMessenger = new XrayFluoDetectorMessenger(this);
-
-  G4String regName = "SampleRegion";
-  sampleRegion = new G4Region(regName);
 
   G4cout << "XrayFluoDetectorConstruction created" << G4endl;
 }
@@ -201,7 +201,7 @@ void XrayFluoDetectorConstruction::DefineDefaultMaterials()
 
   //define materials of the apparate
 
-  sampleMaterial = materials->GetMaterial("MadaBasalt");
+  sampleMaterial = materials->GetMaterial("Mars1");
   Dia1Material = materials->GetMaterial("G4_Pb");
   Dia3Material = materials->GetMaterial("Galactic");
   pixelMaterial = materials->GetMaterial("G4_Si");
@@ -607,7 +607,6 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
   }
   // cut per region
   
-  
   logicSample->SetRegion(sampleRegion);
   sampleRegion->AddRootLogicalVolume(logicSample);
   
@@ -689,8 +688,6 @@ void XrayFluoDetectorConstruction::PrintApparateParameters()
 void XrayFluoDetectorConstruction::UpdateGeometry()
 {
 
-
-
   if (solidPixel) delete solidPixel;
   if (logicPixel) delete logicPixel;
   if (physiPixel) delete physiPixel;
@@ -703,9 +700,19 @@ void XrayFluoDetectorConstruction::UpdateGeometry()
   if (solidHPGe) delete solidHPGe;
   if (logicHPGe) delete logicHPGe;
   if (physiHPGe) delete physiHPGe;
+
+  //if (sampleRegion) sampleRegion->RemoveRootLogicalVolume(logicSample);
   if (solidSample) delete solidSample;
   if (logicSample) delete logicSample;
   if (physiSample) delete physiSample;
+
+  if (solidDia1) delete solidDia1;
+  if (logicDia1) delete logicDia1;
+  if (physiDia1) delete physiDia1;
+  if (solidDia3) delete solidDia3;
+  if (logicDia3) delete logicDia3;
+  if (physiDia3) delete physiDia3;
+
   if (solidWorld) delete solidWorld;
   if (logicWorld) delete logicWorld;
   if (physiWorld) delete physiWorld;

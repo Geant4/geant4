@@ -38,6 +38,14 @@
 #include "XrayFluoPlaneDetectorConstruction.hh"
 #include "XrayFluoMercuryDetectorConstruction.hh"
 
+/////////////////////////////////////////
+//#include "G4LeptonConstructor.hh"
+//#include "G4BosonConstructor.hh"
+//#include "G4MesonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+/////////////////////////////////////////
+
+
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
@@ -159,12 +167,14 @@ void XrayFluoPhysicsList::ConstructLeptons()
 
 void XrayFluoPhysicsList::ConstructBarions()
 {
-  G4Proton::ProtonDefinition();
+  G4BaryonConstructor baryon;
+  baryon.ConstructParticle();
+  //  G4Proton::ProtonDefinition();
 }
 void XrayFluoPhysicsList::ConstructIons()
 {
 //  Ions
- G4Alpha::AlphaDefinition();
+  G4Alpha::AlphaDefinition();
 }
 
 void XrayFluoPhysicsList::ConstructProcess()
