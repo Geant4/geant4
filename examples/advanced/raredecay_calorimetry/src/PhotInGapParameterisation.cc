@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInGapParameterisation.cc,v 1.3 2005-11-04 13:51:36 mkossov Exp $
+// $Id: PhotInGapParameterisation.cc,v 1.4 2005-12-09 16:44:21 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -48,10 +48,11 @@ void PhotInGapParameterisation::ComputeTransformation(const G4int copyNo,
   G4ThreeVector origin(0,Yposition,Zposition); // 3-vector for positioning of the slabs
   physVol->SetTranslation(origin);      // Positioning of the slab
   physVol->SetRotation(0);              // without rotation (which is possible!)
-  physVol->SetName(PhotInSlabName);             // Name of the positioned slab              
+  physVol->SetName(PhotInSlabName);     // Name of the positioned slab
 }
 
-G4Material* PhotInGapParameterisation::ComputeMaterial (const G4int, G4VPhysicalVolume*)
+G4Material* PhotInGapParameterisation::
+                      ComputeMaterial(const G4int, G4VPhysicalVolume*, const G4VTouchable*)
 {
   return gapMaterial;                   // Material can be different for different slabs
 }

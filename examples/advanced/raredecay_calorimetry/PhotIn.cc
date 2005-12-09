@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotIn.cc,v 1.5 2005-12-04 16:54:35 mkossov Exp $
+// $Id: PhotIn.cc,v 1.6 2005-12-09 16:44:21 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,7 +33,7 @@
 //
 // --------------------------------------------------------------
 
-#define debug
+//#define debug
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -117,9 +117,9 @@ int main(int argc,char** argv)
 
   //***LOOKHERE*** CHOOSE THE PHYSICS LIST.
   // ==== Initialization of old RPL ====
-  //runManager->SetUserInitialization(new LHEP);     // LHEP     
+  //runManager->SetUserInitialization(new LHEP);         // external (ext) LHEP     
   // ==== Initialization of new RPL ====
-  runManager->SetUserInitialization(new G4PL_LHEP_CASP);     // LHEP     
+  runManager->SetUserInitialization(new G4PL_LHEP_CASP); // int LHEP_CASP == ext LHEP
   // ==== Initialization of Modular Physics List ====
   //runManager->SetUserInitialization(new G4ModularPhysicsList);     // MPL     
   //***endLOOKHERE***
@@ -139,9 +139,9 @@ int main(int argc,char** argv)
 #ifdef debug
   //G4cout<<"PhotIn: Physics List is transfered to Run Manager"<<G4endl;
 #endif
- runManager->SetUserAction(new PhotInSteppingAction);
+  //runManager->SetUserAction(new PhotInSteppingAction);
 
- // set mandatory initialization classes
+  // set mandatory initialization classes
 		G4double hx=.5*m;
 		G4double hy=.5*m;
 		G4double hz= m;

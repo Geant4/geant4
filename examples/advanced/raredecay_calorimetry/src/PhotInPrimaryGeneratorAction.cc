@@ -21,23 +21,23 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInPrimaryGeneratorAction.cc,v 1.4 2005-11-04 16:47:30 mkossov Exp $
+// $Id: PhotInPrimaryGeneratorAction.cc,v 1.5 2005-12-09 16:44:21 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-//#define debug
+#define debug
 
 #include "PhotInPrimaryGeneratorAction.hh"
 
 PhotInPrimaryGeneratorAction::PhotInPrimaryGeneratorAction():
-  section(1),detector(0),part("gamma"),energy(100.)
+  section(1),detector(0),part("gamma"),energy(100.),oldPart("gamma"),oldEnergy(100.)
 {
 #ifdef debug
   G4cout<<"PhotInPrimaryGeneratorAction::Constructor: part="<<part<<", E="<<energy<<G4endl;
 #endif
   G4int n_particle = 1;
   particleGun  = new G4ParticleGun(n_particle); // Initialization of the pointer from BODY
-  
+
   // default particle kinematic
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
@@ -65,9 +65,12 @@ void PhotInPrimaryGeneratorAction::SetProjectileName(G4String partName)
 void PhotInPrimaryGeneratorAction::SetProjectileEnergy(G4double partEnergy)
 {
 #ifdef debug
-  G4cout<<"PhotInPrimaryGeneratorAction::SetProjectileEnergy: E="<<partEnergy<<G4endl;
+  G4cout<<"PhotInPrimaryGeneratorAction::SetProjectileEnergy: before E="<<energy<<G4endl;
 #endif
   energy=partEnergy;
+#ifdef debug
+  G4cout<<"PhotInPrimaryGeneratorAction::SetProjectileEnergy: before E="<<energy<<G4endl;
+#endif
 }
  
 void PhotInPrimaryGeneratorAction::SetDetector(PhotInDetectorConstruction* det)
@@ -80,7 +83,25 @@ void PhotInPrimaryGeneratorAction::SetDetector(PhotInDetectorConstruction* det)
 
 void PhotInPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  
+#ifdef debug
+  G4cout<<"PhotInPrimaryGeneratorAction::GeneratePrimaries: "<<part<<",E="<<energy<<G4endl;
+#endif
+  if(part!=oldPart || energy!=oldEnergy)
+  {
+#ifdef debug
+    G4cout<<"PhotInPrimaryGeneratorAction::GeneratePrimaries: part&E're redefined"<<G4endl;
+#endif
+    // new particle kinematic
+    G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+    G4String particleName;
+    G4ParticleDefinition* particle = particleTable->FindParticle(particleName=part);
+    particleGun->SetParticleDefinition(particle);
+    particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+    particleGun->SetParticleEnergy(energy*GeV);
+    oldPart=part;
+    oldEnergy=energy;
+  }
+
   G4double hY=detector->GetHalfYWidth();
   G4double hZ=detector->GetHalfZThickness();
   if(section==1) // The section #1 is always in the center (comment or change if #ofSec!=3)

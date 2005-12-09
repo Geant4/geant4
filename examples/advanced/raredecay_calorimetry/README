@@ -1,4 +1,4 @@
-$Id: README,v 1.3 2005-11-04 13:51:36 mkossov Exp $
+$Id: README,v 1.4 2005-12-09 16:44:21 mkossov Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -237,7 +237,7 @@ The dependency structure (general Constants.hh and PhotIn prefix is skipped).
     |         /          /         /                  /          |  |        |
     |   VisManager  PhysicsList   /           DetectorMessenger  | RunAction |
     |                            /           / /       \     \   |  |        |
-     \                 PrimaryGeneratorAction /         \     \  | Run   EventAction
+     \                 PrimaryGeneratorAction /         \     \  | Run*  EventAction
       \                         |            /           \     \ |  |   /   /
         -----------------DetectorConstruction             \ StackingAction /
                         /       |            \             \              /
@@ -246,6 +246,11 @@ The dependency structure (general Constants.hh and PhotIn prefix is skipped).
     (defined in the "CalorHit" as a type) CalorHitsCollection \        /
                                                              \ \      /
                                                               CalorHit
+
+
+* SteppingAction is a debuging tool which can be optionally attached to the RunManager
+=========================================================================================
+
 Description of classes:
 =======================
 

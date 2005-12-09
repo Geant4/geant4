@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInLayerParameterisation.cc,v 1.1 2005-11-04 13:51:36 mkossov Exp $
+// $Id: PhotInLayerParameterisation.cc,v 1.2 2005-12-09 16:44:21 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -46,10 +46,11 @@ void PhotInLayerParameterisation::ComputeTransformation(const G4int copyNo,
   G4ThreeVector origin(0,0,Zposition);   // 3-vector for positioning of the layers
   physVol->SetTranslation(origin);       // positioning of the layer
   physVol->SetRotation(0);               // without rotation (can be turned!)
-  physVol->SetName(PhotInAbsorberName);          // Name of the layer which is primarily absorber
+  physVol->SetName(PhotInAbsorberName);  // Name of the layer which is primarily absorber
 }
 
-G4Material* PhotInLayerParameterisation::ComputeMaterial(const G4int, G4VPhysicalVolume*)
+G4Material* PhotInLayerParameterisation::
+                     ComputeMaterial(const G4int, G4VPhysicalVolume*, const G4VTouchable*)
 {
   return absMaterial;                    // MaterialOfAbsorber in diff. layers can be diff.
 }

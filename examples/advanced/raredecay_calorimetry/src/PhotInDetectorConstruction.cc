@@ -21,12 +21,12 @@
 // **************************************************************************
 //
 //
-// $Id: PhotInDetectorConstruction.cc,v 1.2 2005-05-31 15:23:01 mkossov Exp $
+// $Id: PhotInDetectorConstruction.cc,v 1.3 2005-12-09 16:44:21 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ***************************************************************************
 
-#define debug
+//#define debug
 
 #include "PhotInDetectorConstruction.hh"
 

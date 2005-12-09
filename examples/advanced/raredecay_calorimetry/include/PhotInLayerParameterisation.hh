@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInLayerParameterisation.hh,v 1.1 2005-11-04 13:51:36 mkossov Exp $
+// $Id: PhotInLayerParameterisation.hh,v 1.2 2005-12-09 16:44:21 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //  A parameterisation that describes a series of boxes along Z
 //    The boxes have equal size.
 //
+//----------------------------------------------------------------------
 
 #ifndef PhotInLayerParameterisation_H
 #define PhotInLayerParameterisation_H 1
@@ -48,7 +49,8 @@ public:  // Constructors & Destructors
 
   // -v-v-v-v-v- Virtual functions (can be overloaded) -v-v-v-v-v-v-v
   virtual void ComputeTransformation(const G4int copyNo, G4VPhysicalVolume* physVol) const;
-  virtual G4Material* ComputeMaterial(const G4int copyNo, G4VPhysicalVolume* physVol);
+  virtual G4Material* ComputeMaterial(const G4int copyNo, G4VPhysicalVolume* physVol,
+                                      const G4VTouchable* parentTouch=0);
 
   void SetNumberOfLayers(G4int nl)          { numberOfLayers = nl; }
   void SetAbsorberMaterial(G4Material* mat) { absMaterial = mat; }

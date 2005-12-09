@@ -66,10 +66,13 @@ void PhotInSteppingAction::UserSteppingAction(const G4Step* theStep)
          << std::setw( 9) << theStep->GetStepLength() / mm << " "
          << std::setw( 9) << theTrack->GetTrackLength() / mm << " "
          << std::setw( 9) << theTrack->GetDefinition()->GetParticleName()<< "   ";
-  if(theStep->GetPostStepPoint()->GetProcessDefinedStep() != 0)
-            G4cout<<theStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
-  else G4cout<<"User Limit";
-  G4cout<<G4endl;
+         if(theStep->GetPostStepPoint()->GetProcessDefinedStep() != 0)
+           G4cout<<theStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
+         else G4cout<<"User Limit";
+  G4cout << G4endl;
+
+  // Dump processes for the particle
+  theTrack->GetDefinition()->GetProcessManager()->DumpInfo(); 
 
   // check if it is alive and quit if no secondaries
   if(theTrack->GetTrackStatus()==fAlive)

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInGapParameterisation.hh,v 1.2 2005-05-31 15:23:01 mkossov Exp $
+// $Id: PhotInGapParameterisation.hh,v 1.3 2005-12-09 16:44:21 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -48,7 +48,8 @@ public:  // Constructors & Destructors
 
   // -v-v-v-v-v- Virtual functions (can be overloaded) -v-v-v-v-v-v-v   
   virtual void ComputeTransformation(const G4int copyNo, G4VPhysicalVolume* physVol) const;
-  virtual G4Material* ComputeMaterial(const G4int copyNo, G4VPhysicalVolume* physVol);
+  virtual G4Material* ComputeMaterial(const G4int copyNo, G4VPhysicalVolume* physVol,
+                                      const G4VTouchable* parentTouch=0);
 
   void        SetNumberOfSlabs(G4int nl)               { numberOfSlabs = nl; }
   void        SetGapMaterial(G4Material* mat)          { gapMaterial = mat; }

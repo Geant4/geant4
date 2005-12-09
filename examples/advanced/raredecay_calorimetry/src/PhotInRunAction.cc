@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInRunAction.cc,v 1.3 2005-12-04 16:54:35 mkossov Exp $
+// $Id: PhotInRunAction.cc,v 1.4 2005-12-09 16:44:21 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#define debug
+//#define debug
 
 #include "PhotInRunAction.hh"
 

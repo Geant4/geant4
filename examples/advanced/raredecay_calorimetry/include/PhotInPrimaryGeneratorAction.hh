@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInPrimaryGeneratorAction.hh,v 1.3 2005-11-04 13:51:36 mkossov Exp $
+// $Id: PhotInPrimaryGeneratorAction.hh,v 1.4 2005-12-09 16:44:21 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -69,6 +69,8 @@ private: //--- BODY ---
   PhotInDetectorConstruction*   detector;
   G4String                      part;
   G4double                      energy;
+  G4String                      oldPart;
+  G4double                      oldEnergy;
 };
 
 #endif
