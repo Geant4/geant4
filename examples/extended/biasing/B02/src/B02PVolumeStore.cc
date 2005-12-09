@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B02PVolumeStore.cc,v 1.3 2005-11-15 14:10:56 gcosmo Exp $
+// $Id: B02PVolumeStore.cc,v 1.4 2005-12-09 17:17:05 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -79,7 +79,7 @@ G4String B02PVolumeStore::GetPNames() const {
     const G4VPhysicalVolume &vol = it->GetPhysicalVolume();
     std::ostringstream os;
     os << vol.GetName() << "_" << it->GetReplicaNumber() 
-       << "\n" << '\0';
+       << "\n";
     G4String cellname = os.str();
     
     //    G4String cellname(vol.GetName());

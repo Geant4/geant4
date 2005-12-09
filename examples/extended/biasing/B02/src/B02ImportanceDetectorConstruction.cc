@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B02ImportanceDetectorConstruction.cc,v 1.7 2005-11-15 14:10:56 gcosmo Exp $
+// $Id: B02ImportanceDetectorConstruction.cc,v 1.8 2005-12-09 17:17:10 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -192,8 +192,7 @@ G4String B02ImportanceDetectorConstruction::GetCellName(G4int i) {
   if (i<10) {
     os << "0";
   }
-  os << i 
-     << '\0';
+  os << i;
   G4String name = os.str();
   return name;
 }
