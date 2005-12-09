@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB02.cc,v 1.18 2005-12-06 11:17:27 gcosmo Exp $
+// $Id: exampleB02.cc,v 1.19 2005-12-09 16:38:18 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -163,11 +163,11 @@ int main(int , char **)
 
   G4CellStoreScorer scorer(b02store); 
 
-  G4ParallelGeometrySampler mgs(pdet->GetWorldVolume(),
+  G4ParallelGeometrySampler pgs(pdet->GetWorldVolume(),
 				"neutron");
-  mgs.PrepareScoring(&scorer);
-  mgs.PrepareImportanceSampling(&aIstore, 0);
-  mgs.Configure();
+  pgs.PrepareScoring(&scorer);
+  pgs.PrepareImportanceSampling(&aIstore, 0);
+  pgs.Configure();
 
   runManager->BeamOn(numberOfEvent);
 
@@ -183,6 +183,9 @@ int main(int , char **)
   delete tf;
   delete tree;
 
+  pgs.ClearSampling();
+
+  delete runManager;
  
   return 0;
 }
