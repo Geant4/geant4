@@ -1,4 +1,4 @@
-$Id: History,v 1.78 2005-12-08 15:02:28 gcosmo Exp $
+$Id: History,v 1.79 2005-12-09 13:38:05 link Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09-Dec-2005, O.Link
+- Fixed visibility of soft edges. Change for all twisted solids. 
 
 08-Dec-2005, O.Link (geom-specific-V07-01-14)
 - Fixed bug in G4VTwistSurface::ComputeLocalPoint(p) for point coordinate
