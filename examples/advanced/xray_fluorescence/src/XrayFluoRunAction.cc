@@ -43,8 +43,9 @@
 #include <fstream>
 #include <sstream>
 #include "XrayFluoNormalization.hh"
+#ifdef G4ANALYSIS_USE
 #include "XrayFluoAnalysisManager.hh"
-
+#endif
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifdef G4ANALYSIS_USE
@@ -144,9 +145,9 @@ void XrayFluoRunAction::BeginOfRunAction(const G4Run* aRun)
 
 void XrayFluoRunAction::EndOfRunAction(const G4Run*)
 {
-
+#ifdef G4ANALYSIS_USE
   XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
-
+#endif
   // Run ended, update the visualization
   if (G4VVisManager::GetConcreteInstance()) {
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");

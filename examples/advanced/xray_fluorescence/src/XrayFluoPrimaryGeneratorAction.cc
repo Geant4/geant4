@@ -44,8 +44,9 @@
 #include "Randomize.hh"
 #include "XrayFluoAnalysisManager.hh"
 #include "XrayFluoDataSet.hh"
+#ifdef G4ANALYSIS_USE  
 #include "AIDA/AIDA.h"
-
+#endif
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoPrimaryGeneratorAction::XrayFluoPrimaryGeneratorAction(XrayFluoDetectorConstruction* XrayFluoDC)

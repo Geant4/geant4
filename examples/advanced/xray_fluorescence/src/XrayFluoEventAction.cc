@@ -140,9 +140,10 @@ void XrayFluoEventAction::BeginOfEventAction(const G4Event* evt)
     if ( eventNumber % (G4int)5e6 != 0 ) G4cout << "#" << std::flush;
     else G4cout << "#"<< G4endl;
     //    if ( eventNumber % 5e6 == 0 ) G4cout << "#"<< G4endl;
-
+#ifdef G4ANALYSIS_USE
     XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
     analysis->PlotCurrentResults();
+#endif
   }
 
   if (HPGeCollID==-1)
@@ -188,10 +189,10 @@ void XrayFluoEventAction::EndOfEventAction(const G4Event* evt)
 	    energyD = detectorType->ResponseFunction(totEnergy);
 	    // energyD = totEnergy;
 	    // G4cout << "energy deposit: "<< totEnergy  << G4endl;
-	    
+#ifdef G4ANALYSIS_USE
 	    XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
 	    analysis->analyseEnergyDep(energyD);
-	    
+#endif	    
 	    totEnergyDetect += energyD;
 	    
 	    

@@ -35,6 +35,8 @@
 // 28 Nov 2001 Elena Guardincerri     Created
 //
 // -------------------------------------------------------------------
+#ifdef G4ANALYSIS_USE
+
 #include "G4VProcess.hh"
 #include <fstream>
 #include "G4ios.hh"
@@ -736,7 +738,7 @@ void XrayFluoAnalysisManager::SetOutputFileType(G4String newType)
   persistencyType = newType;
 }
 
-
+#endif
 
 
 
