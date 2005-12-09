@@ -1,4 +1,4 @@
-# $Id: TestEm5.in,v 1.16 2005-10-07 15:36:59 maire Exp $
+# $Id: TestEm5.in,v 1.17 2005-12-09 15:28:05 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -6,8 +6,8 @@
 /run/verbose 2
 #
 /testem/det/setAbsMat Silicon
-/testem/det/setAbsThick 20.5 mum
-/testem/det/setAbsYZ     1 mm
+/testem/det/setAbsThick 20 mum
+/testem/det/setAbsYZ    50 mum
 #
 /testem/phys/addPhysics  standard
 ### /testem/phys/addPhysics  g4v71
