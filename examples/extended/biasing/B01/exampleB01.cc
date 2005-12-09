@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB01.cc,v 1.21 2005-12-06 11:14:21 gcosmo Exp $
+// $Id: exampleB01.cc,v 1.22 2005-12-09 16:28:37 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -150,6 +150,10 @@ int main(int argc, char **argv)
   if (wwAlg) {
     delete wwAlg;
   }
+
+  mgs.ClearSampling();
+
+  delete runManager;
 
   return 0;
 }
