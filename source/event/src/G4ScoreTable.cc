@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreTable.cc,v 1.4 2005-11-18 21:46:24 asaim Exp $
+// $Id: G4ScoreTable.cc,v 1.5 2005-12-09 17:23:19 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -123,7 +123,6 @@ void G4ScoreTable::PrintTable(const G4MapGeometryCellCellScorer &mcs,
     G4String name((*it).first);
     PrintLine(name, (*it).second.GetStandardCellScoreValues(), out); 
   }
-  *out << '\0';
   out->flush();
 }
 
