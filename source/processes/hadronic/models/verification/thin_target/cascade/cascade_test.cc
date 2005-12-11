@@ -251,7 +251,16 @@ int main(int argc, char** argv)
   G4cout << "#eBound" << G4endl;
   G4cout << "#kBound" << G4endl;
 
-
+  const G4ParticleDefinition* proton = G4Proton::Proton();
+  const G4ParticleDefinition* neutron = G4Neutron::Neutron();
+  const G4ParticleDefinition* pin = G4PionMinus::PionMinus();
+  const G4ParticleDefinition* pip = G4PionPlus::PionPlus();
+  const G4ParticleDefinition* pi0 = G4PionZero::PionZero();
+  const G4ParticleDefinition* deu = G4Deuteron::DeuteronDefinition();
+  const G4ParticleDefinition* tri = G4Triton::TritonDefinition();
+  const G4ParticleDefinition* alp = G4Alpha::AlphaDefinition();
+  G4ParticleTable* partTable = G4ParticleTable::GetParticleTable();
+  partTable->SetReadiness();
 
   G4String line, line1;
   G4bool end = true;
@@ -382,20 +391,6 @@ int main(int argc, char** argv)
       theDeExcitation->SetEvaporation(evp);
     }
     G4double amass = phys->GetNucleusMass();
-    /*
-    if(nameGen == "binary") {
-      phys->setCutOnP(eBound);
-      phys->setCutOnPPP(kBound);
-    }
-    */
-    const G4ParticleDefinition* proton = G4Proton::Proton();
-    const G4ParticleDefinition* neutron = G4Neutron::Neutron();
-    const G4ParticleDefinition* pin = G4PionMinus::PionMinus();
-    const G4ParticleDefinition* pip = G4PionPlus::PionPlus();
-    const G4ParticleDefinition* pi0 = G4PionZero::PionZero();
-    const G4ParticleDefinition* deu = G4Deuteron::DeuteronDefinition();
-    const G4ParticleDefinition* tri = G4Triton::TritonDefinition();
-    const G4ParticleDefinition* alp = G4Alpha::AlphaDefinition();
 
     if(!proc) {
       G4cout << "For particle: " << part->GetParticleName()
@@ -764,6 +759,7 @@ int main(int argc, char** argv)
 		 << "   m(MeV)= " << m/MeV
 		 << "   Etot(MeV)= " << (e+m)/MeV
 		 << "   pt(MeV)= " << pt/MeV
+                 << " has tet = pi/2"
                  << G4endl;
         }
 

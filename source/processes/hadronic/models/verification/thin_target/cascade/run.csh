@@ -4,7 +4,7 @@ gmake
 rm $TARGET/res.out
 echo "Start of run"
 
-$G4MY/test30 $TARGET/run.mac  > /dev/null
+$G4MY/cascade_test $TARGET/run.mac  > /dev/null
 
 mv par.paw   $TARGET/
 mv kin.paw   $TARGET/
