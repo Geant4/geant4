@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.23 2005-12-07 15:06:31 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.24 2005-12-11 08:34:18 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -59,10 +59,11 @@
 // 05-11-05 new data member rangecut (L.Urban)
 // 13-11-05 some code cleaning (L.Urban)
 // 07-12-05 GeomLimit is protected instead of public
+// 11-12-05 data menber rangecut removed (L.Urban)
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering.hh,v 1.23 2005-12-07 15:06:31 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.24 2005-12-11 08:34:18 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -125,6 +126,9 @@ public:    // with description
   // connected with step size reduction due to geometry
   void SetFacgeom(G4double val) { facgeom=val;};
 
+  // minimum steplimit                                  
+  void SetTlimitmin(G4double val) { tlimitmin=val;};
+
 protected:
 
   // This function initialise models
@@ -142,7 +146,6 @@ private:        // data members
 
   G4double Tkinlimit,Tlimit;
   G4double facrange;
-  G4double rangecut;
   G4double tlimit,tlimitmin;
   G4double geombig,geommin,facgeom;
   G4double safety,facsafety;

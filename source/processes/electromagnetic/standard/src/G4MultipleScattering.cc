@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.44 2005-12-08 07:14:07 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.45 2005-12-11 08:34:18 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -87,6 +87,8 @@
 // 07-12-05 volume name World removed, rangecut computed using index
 //          instead of particle name L.Urban
 // 08-12-05 world is now: navigator->GetWorldVolume() L.Urban
+// 11-12-05 data member rangecut removed, steplimit does not depend
+//          on cut any more (L.Urban)
 //
 // -----------------------------------------------------------------------------
 //
@@ -111,9 +113,8 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
 
   Tkinlimit        = 2.*MeV;
   facrange         = 0.02;
-  rangecut         = 0.*mm;
   tlimit           = 1.e10*mm;
-  tlimitmin        = facrange*rangecut;
+  tlimitmin        = 1.e-3*mm;            
   geombig          = 1.e50*mm;
   geommin          = 5.e-6*mm;
   facgeom          = 4.;
@@ -203,12 +204,6 @@ G4double G4MultipleScattering::TruePathLengthLimit(const G4Track&  track,
                                                  fGeomBoundary)
        || (track.GetCurrentStepNumber() == 1))
     {
-      // get production threshold - cut in range for e-
-      // lower limit for step depends on this cut in range 
-      rangecut = track.GetMaterialCutsCouple()->
-                 GetProductionCuts()->GetProductionCut(1);
-      tlimitmin = facrange*rangecut;
-
       // not so strong step restriction above Tlimit
       G4double facr = facrange;
       if(track.GetKineticEnergy() > Tlimit)
