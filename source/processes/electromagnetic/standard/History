@@ -1,4 +1,4 @@
-$Id: History,v 1.195 2005-12-11 08:37:24 urban Exp $
+$Id: History,v 1.196 2005-12-11 12:21:11 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
- 12 December 05: L.Urban
+ 12 December 05: L.Urban (emstand-V07-01-30)
 - G4MultipleScattering: data member rangecut removed, step limit
                         does not depend on cut any more
      
