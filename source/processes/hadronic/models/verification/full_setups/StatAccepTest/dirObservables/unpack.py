@@ -11,8 +11,8 @@
 # in such tar-ball, and look if the jobs have started running but not
 # terminated normally.
 # At the end, it prints out the above information, both as overall
-# statistics and also by calorimeter, by beam particle type, and
-# by beam energy, and also produces the following files:
+# statistics and also by calorimeter, by beam particle type, by
+# beam energy, by observables, and also produces the following files:
 #   o  listDirFailed.txt : a list of the directories whose tar-ball
 #                          do not have the expected files.
 #   o  listDirRunCrashed.txt : a list of directories in which the
@@ -34,10 +34,13 @@ import sys
 import string
 
 # The following dictionaries keep track, calorimeter by calorimeter,
-# beam particle by beam particle, and beam energy by beam energy,
+# beam particle by beam particle, and beam energy by beam energy, 
 # of the number of jobs which succeeded (i.e. there is the file
 # "outputPvalues.log-..."), the corresponding fractions, the number
 # of .PS files which are produced, and their fractions.
+# For the .PS files only, the same is done for each observables
+# (but layers numbers >= 10 are kept together, and the same for
+#  radial bins >= 10 ).
 
 dictCalorimetersOK = { 'FeSci':0,
                        'CuSci':0,
@@ -119,6 +122,31 @@ dictBeamEnergiesPS = { '1GeV':0,
                        '250GeV':0,
                        '300GeV':0 }
 
+dictObservablesPS = { '1':0,
+                      '2':0,
+                      'L0':0,
+                      'L1':0,
+                      'L2':0,
+                      'L3':0,
+                      'L4':0,
+                      'L5':0,
+                      'L6':0,
+                      'L7':0,
+                      'L8':0,
+                      'L9':0,
+                      'L>9':0,
+                      'R0':0,
+                      'R1':0,
+                      'R2':0,
+                      'R3':0,
+                      'R4':0,
+                      'R5':0,
+                      'R6':0,
+                      'R7':0,
+                      'R8':0,
+                      'R9':0,
+                      'R>9':0 }
+
 listDirFailed = open( "listDirFailed.txt", "w" )
 listDirRunCrashed = open( "listDirRunCrashed.txt", "w" )
 listPS = open( "listPS.txt", "w" )
@@ -193,6 +221,20 @@ for dir in listDir :
             for iEnergy in dictBeamEnergiesPS.keys() :
                 if ( iFile.find( "-" + iEnergy + "-" ) > -1 ) :
                     dictBeamEnergiesPS[ iEnergy ] += 1
+            for iObservable in dictObservablesPS.keys() :
+                if ( iFile.find( "-" + iObservable + "-" ) > -1 ) :
+                    dictObservablesPS[ iObservable ] += 1
+                elif ( iObservable == "L>9" ) :
+                    for i in xrange(100) :
+                        if ( iFile.find( "-L" + str( i+10 ) + "-" ) > -1 ) :
+                            dictObservablesPS[ 'L>9' ] += 1
+                            break
+                elif ( iObservable == "R>9" ) :
+                    for i in xrange(100) :
+                        if ( iFile.find( "-R" + str( i+10 ) + "-" ) > -1 ) :
+                            dictObservablesPS[ 'R>9' ] += 1
+                            break
+
     if ( foundRunCrashed ) :
         countDirWithRunCrashes += 1
         listDirRunCrashed.write( currentDir + "\n" )        
@@ -217,7 +259,7 @@ print " Number of directories with p-values = ", countDirWithPvalues
 print " Number of directories with .PS = ", countDirWithPS
 print " Number of .PS = ", countPS
 print " "
-print " Number of OK jobs and PS files for calorimeter types:"
+print " Number of OK jobs and PS files for calorimeter type:"
 for iDetector in dictCalorimetersOK.keys() :
     print "  calorimeter=", iDetector, \
           "  #OK=", dictCalorimetersOK[ iDetector ], " (", \
@@ -227,7 +269,7 @@ for iDetector in dictCalorimetersOK.keys() :
           int( dictCalorimetersPS[ iDetector ]*100.0 /
                float( countPS ) ), "%)"
 print " "
-print " Number of OK jobs and PS files for beam particles:"
+print " Number of OK jobs and PS files for beam particle:"
 for iParticle in dictBeamParticlesOK.keys() :
     print "  particle=", iParticle, \
           "  #OK=", dictBeamParticlesOK[ iParticle ], " (", \
@@ -237,7 +279,7 @@ for iParticle in dictBeamParticlesOK.keys() :
           int( dictBeamParticlesPS[ iParticle ]*100.0 /
                float( countPS ) ), "%)"
 print " "
-print " Number of OK jobs and PS files for beam energies:"
+print " Number of OK jobs and PS files for beam energy:"
 for iEnergy in dictBeamEnergiesOK.keys() :
     print "  energy=", iEnergy, \
           "  #OK=", dictBeamEnergiesOK[ iEnergy ], " (", \
@@ -245,6 +287,13 @@ for iEnergy in dictBeamEnergiesOK.keys() :
                float( countDirWithPvalues ) ), "%)", \
           "  #PS=", dictBeamEnergiesPS[ iEnergy ], " (", \
           int( dictBeamEnergiesPS[ iEnergy ]*100.0 /
+               float( countPS ) ), "%)"
+print " "
+print " Number of PS files for observable:"
+for iObservable in dictObservablesPS.keys() :
+    print "  observable=", iObservable, \
+          "  #PS=", dictObservablesPS[ iObservable ], " (", \
+          int( dictObservablesPS[ iObservable ]*100.0 /
                float( countPS ) ), "%)"
 print " "
 
