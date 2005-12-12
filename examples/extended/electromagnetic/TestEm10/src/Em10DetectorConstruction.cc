@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.cc,v 1.14 2005-11-29 14:42:22 grichine Exp $
+// $Id: Em10DetectorConstruction.cc,v 1.15 2005-12-12 10:16:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,12 +65,12 @@ Em10DetectorConstruction::Em10DetectorConstruction()
    solidRadiator(0),  logicRadiator(0),   physiRadiator(0),
    fRadiatorMat(0),
    solidAbsorber(0),  logicAbsorber(0),   physiAbsorber(0),
-   magField(0),       calorimeterSD(0),   fRegGasDet(NULL)
+   magField(0),       calorimeterSD(0),   fRegGasDet(0), fRadRegion(0)
 {
   // default parameter values of the calorimeter
 
 
-  G4double inch = 2.54*cm ;
+  //  G4double inch = 2.54*cm ;
   // G4double  mil = inch/1000.0 ;
 
   WorldSizeZ = 400.*cm; // 200.*cm;
@@ -188,7 +188,7 @@ void Em10DetectorConstruction::DefineMaterials()
   
   a = 19.00*g/mole;
   G4Element* elF  = new G4Element(name="Fluorine", symbol="F", z=9., a);
-  
+
   /////////////////////////////////////////////////////////////////
   //
   // Detector windows, electrodes 
@@ -937,7 +937,7 @@ void Em10DetectorConstruction::SetAbsorberZpos(G4double val)
 //
 //
 
-void Em10DetectorConstruction::SetMagField(G4double fieldValue)
+void Em10DetectorConstruction::SetMagField(G4double)
 {
   //apply a global uniform magnetic field along X axis
 
