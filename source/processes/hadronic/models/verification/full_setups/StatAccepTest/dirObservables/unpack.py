@@ -141,7 +141,7 @@ for dir in listDir :
     currentDir = os.getcwd()
     #print " I am in directory: ", currentDir
 
-    #os.system( "tar xvfz *.tgz" )       #***LOOKHERE**
+    os.system( "tar xvfz *.tgz" )       #***LOOKHERE**
 
     os.system( "ls -1 > listFiles.txt" )
     listFiles = open( "listFiles.txt", "r" )
