@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33PVolumeStore.cc,v 1.7 2005-11-15 16:18:28 gcosmo Exp $
+// $Id: Tst33PVolumeStore.cc,v 1.8 2005-12-12 10:30:27 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -84,8 +84,7 @@ G4String Tst33PVolumeStore::GetCellName(G4int i) const {
   if (i<10) {
     os << "0";
   }
-  os << i 
-     << '\0';
+  os << i ;
   G4String name = os.str();
   return name;
 }
