@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.39 2005-11-15 08:39:03 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.40 2005-12-12 20:11:32 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -438,6 +438,20 @@ void G4OpenInventorSceneHandler::AddCircleSquare
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   if (polyhedron.GetNoFacets() == 0) return;
+
+  // If we got here *not* through G4PhysicalVolumeModel, we have to
+  // add colour, since it will not have been done in PreAddSolid().
+  // (The transformation has been added in BeginPrimitives().)
+  if (!fpCurrentLV || !fpCurrentPV) {
+    const G4Colour& c = GetColour (polyhedron);
+    SoMaterial* material = 
+      fStyleCache->getMaterial((float)c.GetRed(),
+			       (float)c.GetGreen(),
+			       (float)c.GetBlue(),
+			       (float)(1-c.GetAlpha()));
+    fCurrentSeparator->addChild(material);
+  }
+
   Geant4_SoPolyhedron* soPolyhedron = new Geant4_SoPolyhedron(polyhedron);
   SbName sbName(fpCurrentLV?fpCurrentLV->GetName().c_str():"");
   soPolyhedron->setName(sbName);
@@ -536,13 +550,13 @@ void G4OpenInventorSceneHandler::BeginPrimitives
   // in the Scene Database has been predetermined for it.
   // In that case this routinde does absolutely nothing.
 
-  // Or: an unplaced, transient, marker-type of object 
-  // which needs to be properly placed, and whose 
-  // destination (for now) is the root of the scene 
-  // database.  For these types of objects, execute the
-  // following code:
+  // Or: an unplaced, transient, marker-type of object which needs to
+  // be properly placed, and whose destination (for now) is the root
+  // of the scene database.  For these types of objects, or for scene
+  // (persistent) objects that have not come from a geometry tree (via
+  // G4PhysicalVolumeModel), execute the following code:
   //  
-  if (fReadyForTransients) {
+  if (fReadyForTransients || !fpCurrentLV || !fpCurrentPV) {
 
     // set the destination to "fTransientRoot"
     fCurrentSeparator = fTransientRoot;
@@ -650,14 +664,22 @@ void G4OpenInventorSceneHandler::PreAddSolid
   //printf("debug : PreAddSolid : %g %g %g : %d\n",
     //red,green,blue,pVisAttribs->IsVisible());
                
-  if(!fpCurrentLV || !fpCurrentPV) return; //GB 
+  if(!fpCurrentLV || !fpCurrentPV) {
+    SoMaterial* material = 
+      fStyleCache->getMaterial((float)red,
+			       (float)green,
+			       (float)blue,
+			       (float)transparency);
+    fCurrentSeparator->addChild(material);
+    // return; //GB // JA
+  }
 
   //printf("debug : OIV : LV : %lx %s : %g %g %g\n",
   // fpCurrentLV,
   // fpCurrentLV->GetName().c_str(),
   // red,green,blue);
 
-  if (fpCurrentLV->GetNoDaughters()!=0 ||
+  else if (fpCurrentLV->GetNoDaughters()!=0 ||
       fpCurrentPV->IsReplicated()) {
     // This block of code is executed for non-leaf parts:
 

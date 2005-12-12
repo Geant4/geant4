@@ -1,4 +1,4 @@
-$Id: History,v 1.73 2005-11-30 16:16:34 gcosmo Exp $
+$Id: History,v 1.74 2005-12-12 20:11:32 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,17 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+12th December 2005  John Allison
+- G4OpenInventorSceneHandler.cc: Pick up colour and transformation
+  correctly for non-physical-volume solids.
+  o G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron&):
+    Added code to pick up colour if LV and PV pointers are zero.
+  o G4OpenInventorSceneHandler::BeginPrimitives: Pick up
+    transformation if LV and PV pointers are zero.
+  o G4OpenInventorSceneHandler::PreAddSolid: Added code to pick up
+    colour if LV and PV pointers are zero and removed return statement
+    so that transformation is picked up too.
 
 30th November 2005  Gabriele Cosmo (openinventor-V07-01-04)
 - Trivial fix to SoPolyhedron for support of CLHEP-2.0.X series.
