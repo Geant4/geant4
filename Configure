@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.74 2005-10-25 22:28:19 stesting Exp $
+# $Id: Configure,v 1.75 2005-12-13 02:50:52 stesting Exp $
 #
-# Generated on Wed Oct 26 00:25:52 CEST 2005 [metaconfig 3.0 PL70]
+# Generated on Tue Dec 13 03:44:37 CET 2005 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -201,6 +201,7 @@ g4vis_build_openglwin32_driver=''
 g4vis_build_openglx_driver=''
 g4vis_build_openglxm_driver=''
 g4vis_build_raytracer_driver=''
+g4vis_build_raytracerx_driver=''
 g4vis_build_vrml_driver=''
 g4vis_build_vrmlfile_driver=''
 g4vis_oglhome=''
@@ -213,6 +214,7 @@ g4vis_use_openglwin32=''
 g4vis_use_openglx=''
 g4vis_use_openglxm=''
 g4vis_use_raytracer=''
+g4vis_use_raytracerx=''
 g4vis_use_vrml=''
 g4vis_use_vrmlfile=''
 g4wanalysis_build=''
@@ -2698,13 +2700,13 @@ esac
 
 case "$g4levelgammadata" in
 '')
-	g4levelgammadata=$g4data/PhotonEvaporation
+	g4levelgammadata=$g4data/PhotonEvaporation2.0
 	;;
 esac
 
 case "$g4radioactivedata" in
 '')
-	g4radioactivedata=$g4data/RadiativeDecay
+	g4radioactivedata=$g4data/RadiativeDecay3.0
 	;;
 esac
 
@@ -4006,6 +4008,18 @@ case "$g4vis_use_oix" in
 	;;
 esac
 
+case "$g4vis_build_raytracerx_driver" in
+'')
+	g4vis_build_raytracerx_driver=n
+	;;
+esac
+
+case "$g4vis_use_raytracerx" in
+'')
+	g4vis_use_raytracerx=n
+	;;
+esac
+
 # Set by default!
 case "$g4vis_build_raytracer_driver" in
 '')
@@ -4214,6 +4228,8 @@ gans=$ans
 		;;
 	esac
 
+
+#######################################
 g4message=`cat << EOM
 
   G4VIS_BUILD_OIX_DRIVER
@@ -4241,7 +4257,37 @@ gans=$ans
 		g4vis_use_oix=y
 		;;
 	esac
+###############################################
 
+g4message=`cat << EOM
+
+  G4VIS_BUILD_RAYTRACERXX_DRIVER
+  G4VIS_USE_RAYTRACERX
+
+The OpenInventor driver is based on OpenInventor technology 
+for scientific visualization.
+The X11 version of OpenInventor is required.
+
+EOM`
+
+dflt=$g4vis_use_raytracerx
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_raytracerx_driver=n
+		g4vis_use_raytracerx=n
+		;;
+	y*|Y*) 
+		g4vis_build_raytracerx_driver=y
+		g4vis_use_raytracerx=y
+		;;
+	esac
+
+########################################################
 fi # if !WIN
 
 if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
@@ -4775,6 +4821,7 @@ g4vis_build_openglwin32_driver='$g4vis_build_openglwin32_driver'
 g4vis_build_openglx_driver='$g4vis_build_openglx_driver'
 g4vis_build_openglxm_driver='$g4vis_build_openglxm_driver'
 g4vis_build_raytracer_driver='$g4vis_build_raytracer_driver'
+g4vis_build_raytracerx_driver='$g4vis_build_raytracerx_driver'
 g4vis_build_vrml_driver='$g4vis_build_vrml_driver'
 g4vis_build_vrmlfile_driver='$g4vis_build_vrmlfile_driver'
 g4vis_oglhome='$g4vis_oglhome'
@@ -4787,6 +4834,7 @@ g4vis_use_openglwin32='$g4vis_use_openglwin32'
 g4vis_use_openglx='$g4vis_use_openglx'
 g4vis_use_openglxm='$g4vis_use_openglxm'
 g4vis_use_raytracer='$g4vis_use_raytracer'
+g4vis_use_raytracerx='$g4vis_use_raytracerx'
 g4vis_use_vrml='$g4vis_use_vrml'
 g4vis_use_vrmlfile='$g4vis_use_vrmlfile'
 g4w_use_g3tog4='$g4w_use_g3tog4'
