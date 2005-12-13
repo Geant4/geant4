@@ -19,8 +19,8 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// 
-// $Id: EmGammaNucleusBuilder.cc,v 1.1 2004-12-03 13:01:34 vnivanch Exp $
+//
+// $Id: EmGammaNucleusBuilder.cc,v 1.2 2005-12-13 08:45:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "EmGammaNucleusBuilder.hh"

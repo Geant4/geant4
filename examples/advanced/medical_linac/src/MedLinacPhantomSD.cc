@@ -1,4 +1,3 @@
-
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -21,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//// $Id: MedLinacPhantomSD.cc,v 1.5 2005-07-04 11:56:33 mpiergen Exp $
+//// $Id: MedLinacPhantomSD.cc,v 1.6 2005-12-13 08:42:42 gunter Exp $
 //
 //
 // Code developed by: M. Piergentili

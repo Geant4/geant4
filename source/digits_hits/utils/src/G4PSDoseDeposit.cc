@@ -1,6 +1,6 @@
 //
 // ********************************************************************
-// * DISCAIMER                                                       *
+// * DISCLAIMER                                                       *
 // *                                                                  *
 // * The following disclaimer summarizes all the specific disclaimers *
 // * of contributors to this software. The specific disclaimers,which *
@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSDoseDeposit.cc,v 1.2 2005-11-17 22:53:38 asaim Exp $
+// $Id: G4PSDoseDeposit.cc,v 1.3 2005-12-13 08:43:39 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSDoseDeposit

@@ -1,6 +1,6 @@
 //
 // ********************************************************************
-// * DISCAIMER                                                       *
+// * DISCLAIMER                                                       *
 // *                                                                  *
 // * The following disclaimer summarizes all the specific disclaimers *
 // * of contributors to this software. The specific disclaimers,which *
@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSMinKinEAtGeneration.cc,v 1.3 2005-11-21 06:26:23 asaim Exp $
+// $Id: G4PSMinKinEAtGeneration.cc,v 1.4 2005-12-13 08:43:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSMinKinEAtGeneration

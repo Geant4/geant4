@@ -19,8 +19,8 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// 
-//// $Id: MedLinacPhysicsList.hh,v 1.5 2005-07-03 23:27:37 mpiergen Exp $
+//
+//// $Id: MedLinacPhysicsList.hh,v 1.6 2005-12-13 08:42:40 gunter Exp $
 //
 //
 // Code developed by: M. Piergentili

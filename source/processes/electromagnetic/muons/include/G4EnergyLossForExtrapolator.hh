@@ -1,6 +1,3 @@
-#ifndef G4EnergyLossForExtrapolator_h
-#define G4EnergyLossForExtrapolator_h 1
-
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -23,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.hh,v 1.1 2005-04-08 14:00:17 vnivanch Exp $
+// $Id: G4EnergyLossForExtrapolator.hh,v 1.2 2005-12-13 08:44:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -42,6 +39,10 @@
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#ifndef G4EnergyLossForExtrapolator_h
+#define G4EnergyLossForExtrapolator_h 1
+
 
 #include "globals.hh"
 #include <vector>

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonDecayChannel.cc,v 1.13 2005-06-23 11:02:26 gcosmo Exp $
+// $Id: G4MuonDecayChannel.cc,v 1.14 2005-12-13 08:44:02 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVolumeMaterialScanner.hh,v 1.1 2005-11-19 02:23:16 japost Exp $
+// $Id: G4VVolumeMaterialScanner.hh,v 1.2 2005-12-13 08:43:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VVolumeMaterialScanner

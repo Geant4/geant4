@@ -1,6 +1,6 @@
 //
 // ********************************************************************
-// * DISCAIMER                                                       *
+// * DISCLAIMER                                                       *
 // *                                                                  *
 // * The following disclaimer summarizes all the specific disclaimers *
 // * of contributors to this software. The specific disclaimers,which *
@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofSecondary.cc,v 1.1 2005-11-18 22:43:10 asaim Exp $
+// $Id: G4PSNofSecondary.cc,v 1.2 2005-12-13 08:43:49 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSNofSecondary
