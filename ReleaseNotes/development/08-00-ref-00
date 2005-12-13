@@ -1,0 +1,408 @@
+
+                       geant4-08-00-ref-00
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o 
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                                           config-V07-01-07
+------
+- binmake.gmk:
+  + Added workaround to allow for physics-lists to link with DLLs on Windows.
+  + Added 'digits_hits/utils' module to INCFLAGS.
+- Added G4LIB_NO_SHARED protection for cases where installation of
+  shared libs are not allowed.
+- Replaced -GX with -EHsc compilation option and -D_CRT_SECURE_NO_DEPRECATE
+  flag in WIN32-VC setup for porting on VC++8 compiler.
+- Configure script (Configure-V07-01-00):
+  + Added RayTracerX flags and missing version numbers to data sets.
+- source/GNUmakefile (source-gmk-V07-01-00): added 'banner' target.
+
+event                                            event-V07-01-06
+-----
+- Migration to <sstream> from deprecated <strstream>.
+- Removed dependency on CLHEP/HepMC:
+  moved G4HepMC classes to extended examples.
+- Issue G4Exception from constructors of G4UserEventAction and
+  G4UserStackingAction to protect against their instantiation before
+  G4VUserPhysicsList is instantiated and set to G4RunManager.
+- Added protection against null pointer to
+  G4ParticleGun::SetParticleDefinition().
+- Trivial fixes to G4SPSAngDistribution and G4SPSPosDistribution for
+  support of CLHEP-2.0.X series.
+
+digits_hits                                      digits_hits-V07-01-04
+-----------
+- Added new sub-directory "utils" including concrete primitive scorers
+  and concrete filters. Introducing G4THitsMap template class.
+- G4SDParticleFilter:  added protection against null pointer.
+
+g3tog4                                           g3tog4-V07-01-01
+------
+- Implemented migration to <sstream> from deprecated <strstream>.
+- GNUmakefile: moved call to 'cernlib' to 'bin' target.
+
+geometry/divisions                               geomdiv-V07-01-02
+------------------
+- Adapted to revision of G4VPhysicalVolume for identification of regular
+  structures; added two methods to G4PVDivision: IsRegularStructure()
+  and GetRegularStructureId().
+
+geometry/management                              geommng-V07-01-05
+-------------------
+- Revised G4VPVParameterisation:
+  + Changed signature to ComputeMaterial(), adding parent touchable pointer.
+    This refinement enables easy use of nested parameterisations.
+    Additional methods allow nested parameterisation to be identified:
+      G4bool IsNested() const;
+    and to provide their material via the new interface class
+    G4VVolumeMaterialScanner:
+      G4VVolumeMaterialScanner* GetMaterialScanner();
+    As a result of this change, the temporary class G4PhysicalTouchable
+    in volumes is not needed any longer in the implementation and has
+    been suppressed.
+- Added pure virtual methods used to identify regular structures in
+  G4VPhysicalVolume:
+     G4bool IsRegularStructure() const;
+  returning true if the underlying volume structure is regular.
+     G4int GetRegularStructureId() const;
+  returning non-zero code in case the underlying volume structure
+  is regular (voxel-like). The value 'id' is for structure type. If non-zero
+  the volume is a candidate for specialised navigation such as 'nearest
+  neighbour' directly on volumes.
+
+geometry/navigation                              geomnav-V07-01-02
+-------------------
+- Revised G4ParameterisedNavigation to use new interface for
+  ComputeMaterial(); it no longer needs the 'Physical Touchable'.
+
+geometry/solids/CSG                              geom-csg-V07-01-05
+-------------------
+- G4Torus: fixed bug in Inside(p) for phi sections.
+  Fixes problem report #810.
+
+geometry/solids/specific                         geom-specific-V07-01-14
+------------------------
+- Renamed classes for twisted solids and framework.
+- Fixed bug in G4VTwistSurface::ComputeLocalPoint(p) for point coordinate
+  transformation. The bug affected only G4TwistTrapFlatSide.
+- Added polyhedron definition for twisted solids (G4TwistedTrap,
+  G4TwistedTrd, G4TwistedBox, G4TwistedTubs) for visualization.
+- Trivial fixes for porting on CLHEP-2.0.X series.
+- G4VTwistedFaceted:
+  o corrected bug in DistanceToSurface() implementation;
+  o added GetPointOnSurface() method.
+- G4TwistedTubs: added GetPointOnSurface() method
+- G4Hype: corrected surface area calculation used in GetPointOnSurface().
+- More fixes required for direct object persistency to G4Polycone,
+  G4polyhedra and related utility classes.
+
+geometry/volumes                                 geomvol-V07-01-05
+----------------
+- Revised implementation of G4VNestedParameterisation, removing use
+  of G4PhysicalTouchable and removed G4PhysicalTouchable helper class.
+  Added implementations of virtual methods to identify materials
+  for nested parameterisations.
+- Added methods to identify regular structures in physical volume derived
+  classes (replicas, parameterised volumes and placements):
+  IsRegularStructure() and GetRegularStructureId().
+  Note that for G4PVPlacement always return 'false' and 0 respectively.
+
+global                                           global-V07-01-06
+------
+- Changed header file from version.hh to G4Version.hh.
+- Fix in G4strstreambuf destructor to avoid double flushing of buffer.
+- templates.hh: get rid of hard-coded numbers for DBL_MIN, FLT_MIN, DBL_DIG,
+  DBL_MAX, FLT_DIG, FLT_MAX/MAXFLOAT. Use numeric_limits from <limits> instead.
+
+graphics_reps                                    greps-V07-01-09
+-------------
+- G4Colour: Use public static member functions instead of public
+  static data members to avoid problems with dynamic libraries.
+- G4VVisManager and G4VGraphicsScene: Replaced default arguments
+  G4Transform3D::Identity by G4Transform3D(), to avoid initialisation
+  problems with static objects with dynamic libraries.
+  Fixed Dispatch method name to "DispatchToModel" in G4VVisManager.
+- Implemented migration to support CLHEP-2.0.X, adding explicit namespace
+  to CLHEP types. Affected files: HepPolyhedron[.h.cc], BooleanProcessor.src.
+- Moved G4VTrajectoryDrawer (an abstract base class for trajectory drawers)
+  to visualization/modeling and renamed G4VTrajectoryModel.
+
+interfaces                                       interfaces-V07-01-02
+----------
+- Completed migration to <sstream>.
+
+materials                                        materials-V07-01-03
+---------
+- Added default boolean argument (true) in GetMaterial(), GetElement(),
+  GetIsotope().
+- Additional minor changes needed for direct object persistency.
+
+parameterisations/gflash                         gflash-V07-01-02
+------------------------
+- Design iteration. Added concrete sampling shower parameterisation
+  and tuning classes.
+- Implemented migration to <sstream> from deprecated <strstream>.
+
+particles                                        particles-V07-01-04
+---------
+- Introduced new scheme for non-static particle definitions.
+- Implemented migration to <sstream> from deprecated <strstream>.
+
+persistency                                      persistency-V07-01-01
+-----------
+- Trivial fixes to G4MCTSimParticle and G4MCTSimVertex to support for
+  CLHEP-2.0.X series.
+
+processes/cuts                                   procuts-V07-01-01
+--------------
+- Implemented migration to <sstream> from deprecated <strstream>.
+
+processes/decays                                 decay-V07-01-00
+----------------
+- Added argument to StartTracking() (pointer to G4Track) for future
+  developments use.
+
+processes/electromagnetic/highenergy        emhighenergy-V07-01-04
+------------------------------------
+- Added G4hhIonisation, ionisation for heavy exotic particles.
+- Fixed initialisation problems in G4eeToHadrons and related classes.
+  and fixed verbosity level.
+- Removed magnetic change from G4BraggNoDeltaModel and
+  G4BetheBlochNoDeltaModel.
+
+processes/electromagnetic/lowenergy         emlowen-V07-01-14
+-----------------------------------
+- Fixes in atomic relaxation and G4hLowEnergyIonistation.
+- Implemented migration to <sstream> from deprecated <strstream>.
+
+processes/electromagnetic/standard               emstand-V07-01-30
+----------------------------------
+- G4MultipleScattering:
+  + Data member rangecut removed, step limit no longer depends on cut.
+  + Identify world volume for optimising step-limitation.
+  + tlimitmin = facrange*rangecut(e-) for every particle.
+  + Added control on verbosity inside SetStepLimitation and extended
+    PrintInfo() output.
+- Do not use G4Alpha inside G4BraggIonModel to avoid clashes with
+  new particle design.
+- Replace RandBit() by G4UniformRand() in G4GammaConversion52 and
+  G4BetheHeitlerModel to avoid cases of non-reproducibility.
+- G4PEEffectModel, G4BetheHeilterModel, G4eplusAnnihilation:
+  use particleChange.SetProposedKineticEnergy(0.) for killed particle.
+- Trivial fixes to G4PAIModel and G4PAIPhotonModel for support of
+  CLHEP 2.0.X series.
+- G4eBremsstrahlungModel: added electron deviation.
+
+processes/electromagnetic/utils                  emutils-V07-01-13
+-------------------------------
+- G4EmProcessOptions: fixed verbosity definition for energy loss processes
+  amd added SetMscStepLimitation() method.
+- G4EmModelManager: added protection for arithmetic operations with cut=DBL_MAX
+- G4EmCalculator: fixed problem in ComputeDEDX() for ions.
+- G4EmCorrection: fixed calculation of effective charge and Mott correction
+  for heavy ions.
+- Provide subcutoff regime inside G4VEnergyLossProcess.
+- Added virtual method MscStepLimitation() to G4VMultipleScattering.
+- Completed migration to <sstream>.
+
+processes/electromagnetic/xrays                  xrays-V07-01-03
+-------------------------------
+- G4XTRTransparentRegRadModel: change usage of abs() to std::abs().
+
+processes/hadronic                               hadr-V07-01-01
+------------------
+- Implemented migration to <sstream> from deprecated <strstream>.
+- Implemented changes to support CLHEP-2.0.X series.
+- models/coherent_elastic (hadr-cohe-V07-01-05):
+  + G4ElasticHadrNucleusHE: added high energy elastic scattering on protons.
+  + G4HadronValues: use PDG value instead of static particle pointers.
+  + Fixed memory leaks, fixed 4-momentum balance. Fixed compiler warnings.
+- models/cascade:
+  + Added G4ElasticCascadeInterface and modified G4CascadeInterface to allow
+    for elastic scattering p, n, pi+, pi-, gamma using the Bertini cascade
+    model.
+- models/chiral_invariant_phase_space:
+  + The Charged Currents (nu,mu) neutrino-nuclear reactions are now
+    implemented for all energies. The recommended energy is below 320 GeV,
+    where the model is compared with data. Above 320 GeV it is just a formal
+    extrapolation. Both Quasi Elastic and Inelastic interactions are
+    implemented. In future the developed non-perturbative CHIPS method can be
+    used for simulation of (nu,e) reactions.
+  + New capture process G4QCaptureAtRest valid for pi-, K-, anti-proton, mu-,
+    tau-, Xi-, Omega-, neutron, anti-neutron, anti-Sigma+.
+  + Muon neutrino and anti-neutrino scattering added to G4QCollision process.
+  + New cross section classes: G4QANuMuNuclearCrossSection and
+    G4QNuMuNuclearCrossSection.
+- models/low_energy (hadr-lep-V07-01-03):
+  + G4LElastic: correct relativistic kinematics is now used.
+    Addresses problem report #534.
+    Added protection for low momentum (< 10 MeV/c) particles where CM
+    sampling of cos(theta) is not valid.
+  + G4LCapture: fixed incorrect unit in momentum components.
+    Addresses preblem report #726.
+- models/neutron_hp:
+  + Added four new models: G4NeutronHPorLCapture, G4NeutronHPorLEInelastic,
+    G4NeutronHPorLElastic, G4NeutronHPorLFission.
+    These models should be used instead of the corresponding
+    G4NeutronHPCapture, G4NeutronHPInelastic, G4NeutronHPElastic or
+    G4NeutronHPFission models when a detector setup contains elements or
+    isotopes not found in the G4NDL data set. The new models use the existing
+    high precision models when data exist, but switch to the Low Energy
+    Parameterized models when data is absent, thus avoiding a crash.
+- models/parton_string:
+  + Fixed bug in G4ExcitedStringDecay for method EnergyAndMomentumCorrector():
+    removed comparisons of 4-ector quantities with integers, replaced with
+    comparisons of doubles.
+  + Corrected and simplified code for random number generation in
+    G4QGSMSplitableHadron, avoiding unnecessary crashes.
+
+processes/management                             procman-V07-01-01
+--------------------
+- G4VProcess::StartTracking() now takes G4Track* as an argument.
+  G4ProcessManager::StartTracking() now invokes this new method.
+  Functionality to be used for future developments.
+- Implemented migration to <sstream> from deprecated <strstream>.
+
+processes/parameterisation                       param-V07-01-04
+--------------------------
+- Make ghost functionality available with G4Region.
+- Fixed unnecessary warning messages.
+ 
+processes/transportation                         transport-V07-01-00
+------------------------
+- Implemented migration to <sstream> from deprecated <strstream>.
+- Fixed warning message in G4ParallelTransport.
+
+run                                              run-V07-01-08
+---
+- Issue G4Exception from constructors of G4VUserPrimaryGeneratorAction and
+  G4UserRunAction to protect against their instantiation before
+  G4VUserPhysicsList is instantiated and set to G4RunManager.
+- Removed redundant invokation of G4VUserPhysicsList::ConstructParticle()
+  from G4RunManagerKernel::InitializePhysics().
+- Invocation of G4ParticleTable::GetParticleTable()->SetReadiness();
+  has been moved from the constructor to G4RunManagerKernel::SetPhysics()
+  method. This change enforces that all particles must be instantiated in
+  ConstructParticle() method in the physics-list along with the introduction
+  of non-static particle definition classes.
+- In G4RunManagerKernel.cc, changed inclusion of version.hh to G4Version.hh.
+
+tracking                                         tracking-V07-01-05
+--------
+- Issue G4Exception from constructors of G4UsertrackingAction and
+  G4UserSteppingAction to protect against their instantiation before
+  G4VUserPhysicsList is instantiated and set to G4RunManager.
+- Implemented migration to <sstream> from deprecated <strstream>.
+- Modifications to G4VTrajectory::DrawTrajectory for enhanced
+  trajectory drawing. Updated comments in G4VTrajectory and
+  G4VTrajectoryPoint headers.
+- Added development classes G4RichTrajectory and G4RichTrajectoryPoint.
+
+visualization                                    vis-V07-01-10
+-------------
+- management:
+  + Added trajectory models and methods for managing them.
+  + Added XGeometryString and background opacity parameter.
+  + Added information message to G4VisManager::DispatchToModel()
+    when default trajectory model is used.
+  + Make G4VisManager::RegisterModelFactories() non-pure virtual for
+    backwards compatibility.
+- modeling:
+  + Implemented radial replicas for G4Tubs.
+  + Fixed compilation warnings.
+- OpenGL:
+  + Implemented window placing (XGeometryString) in OGL*X.
+  + Added G4OpenGLXmViewerMessenger. Corrected text position.
+- OpenInventor:
+  + Implemented Background, scaling and window positioning.
+  + Added read/write abilities from/to .iv files.
+- Tree:
+  + Refined guidance and printing.
+- XXX:
+  + Simplified guidance.
+
+physics_lists                                    phys-lists-V07-01-01
+-------------
+- electromagnetic (emphys-V07-01-02)
+  + Migrated lists to non-static particles scheme.
+  + Use the same list of hadrons for hadron-ionisation and
+    multiple-scattering as in the hadronic physics-lists.
+- hadronic (hadr-lists-V07-01-05)
+  + Migrated lists to non-static particles scheme. Package 3.0.
+  + Added control of verbosity as an optional argument to the physics-lists,
+    verbosity is ON by default.
+  + Synchronised EM physics setup as in EM physics-lists.
+  + Do not allow installation of shared libraries when Geant4 granular
+    libraries are installed and used.
+  + Updated README.
+
+examples                                         examples-V08-00-00
+--------
+- Updated reference outputs.
+- advanced
+  o air_shower (air_shower-V07-01-00)
+    + Implemented migration to <sstream>.
+  o composite_calorimeter (ccal-V07-01-00)
+    + Implemented migration to <sstream>.
+    + Updated hadronic physics list (commented QGSP_Model).
+  o cosmicray_charging (cosmicray_charging-V07-01-00)
+    + Implemented migration to <sstream>.
+  o Tiara (Tiara-V07-01-00)
+    + Implemented migration to <sstream>.
+  o underground_physics (DMX-V07-01-00)
+    + Implemented migration to <sstream>.
+  o xray_fluorescence (XrayFluo-V07-01-00)
+    + Implemented migration to <sstream>.
+    + Fixed compilation problem with UIXm.
+- extended
+  o biasing (exbiasing-V07-01-00)
+    + Implemented migration to <sstream>.
+  o electromagnetic/TestEm1 (testem1-V07-01-01)
+    + Implemented migration to <sstream> for HistoMessenger.
+  o electromagnetic/TestEm3 (testem3-V07-01-03)
+    + Implemented migration to <sstream>.
+  o electromagnetic/TestEm5 (testem5-V07-01-01)
+    + Implemented migration to <sstream> for HistoMessenger.
+  o electromagnetic/TestEm9 (testem9-V07-01-03)
+    + Implemented migration to <sstream>.
+  o electromagnetic/TestEm11 (testem11-V07-01-02)
+    + Implemented migration to <sstream> for HistoMessenger.
+  o electromagnetic/TestEm12 (testem12-V07-01-03)
+    + Implemented migration to <sstream> for HistoMessenger.
+  o eventgenerator/HepMC (exHepMC-V07-01-00)
+    + Implemented migration to <sstream>.
+  o geometry/olap (olapex-V07-01-00)
+    + Implemented migration to <sstream>.
+  o parallel (ParN02-V07-01-00, ParN04-V07-01-00)
+    + Implemented migration to <sstream>.
+  o parameterisations/gflash (exparam-V07-01-01)
+    + New example showing usage of gflash fast shower parameterisation.
+  o radioactivedecay/exrdm (exrdm-V07-01-01)
+    + Implemented migration to <sstream>.
+- novice:
+  o N05 (exampleN05-V07-01-01)
+    + Use RandGamma from CLHEP end removed custom RandomGamma function.
+    + Implemented migration to new scheme considering G4Region as envelope;
+      not yet completed for ghost volumes, though.
+    + Implemented migration to <sstream>.
+ 
+tests                                            tests-V08-00-00
+-----
+- Updated reference outputs.
+- test18 (test18-V07-01-00)
+  o Implemented migration to <sstream>.
+  o Fixed problem in EM PhysicsList.
+- test33 (test33-V07-01-00)
+  o Implemented migration to <sstream>.
+- test34 (test34-V07-01-01)
+  o Implemented migration to new scheme considering G4Region as envelope.
+- test201 (test201-V07-01-00)
+  o Implemented migration to <sstream>.
+  o Replaced MyVisManager by G4VisExecutive.
+  o Committed test201.g4m.
