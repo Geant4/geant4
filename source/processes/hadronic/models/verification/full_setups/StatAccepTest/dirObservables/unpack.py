@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------
-# Last update: 12-Dec-2005
+# Last update: 13-Dec-2005
 #
 # This script should be run in the directory which has, as immediate
 # subdirectories, the results of the Grid validation testing,
@@ -267,7 +267,9 @@ for iDetector in dictCalorimetersOK.keys() :
                float( countDirWithPvalues ) ), "%)", \
           "  #PS=", dictCalorimetersPS[ iDetector ], " (", \
           int( dictCalorimetersPS[ iDetector ]*100.0 /
-               float( countPS ) ), "%)"
+               float( countPS ) ), "%)", \
+          "  #PS-perJobs=", ( float( dictCalorimetersPS[ iDetector ] ) /
+                              float( dictCalorimetersOK[ iDetector ] ) )    
 print " "
 print " Number of OK jobs and PS files for beam particle:"
 for iParticle in dictBeamParticlesOK.keys() :
@@ -277,7 +279,9 @@ for iParticle in dictBeamParticlesOK.keys() :
                float( countDirWithPvalues ) ), "%)", \
           "  #PS=", dictBeamParticlesPS[ iParticle ], " (", \
           int( dictBeamParticlesPS[ iParticle ]*100.0 /
-               float( countPS ) ), "%)"
+               float( countPS ) ), "%)", \
+          "  #PS-perJobs=", ( float( dictBeamParticlesPS[ iParticle ] ) /
+                              float( dictBeamParticlesOK[ iParticle ] ) )    
 print " "
 print " Number of OK jobs and PS files for beam energy:"
 for iEnergy in dictBeamEnergiesOK.keys() :
@@ -287,7 +291,9 @@ for iEnergy in dictBeamEnergiesOK.keys() :
                float( countDirWithPvalues ) ), "%)", \
           "  #PS=", dictBeamEnergiesPS[ iEnergy ], " (", \
           int( dictBeamEnergiesPS[ iEnergy ]*100.0 /
-               float( countPS ) ), "%)"
+               float( countPS ) ), "%)", \
+          "  #PS-perJobs=", ( float( dictBeamEnergiesPS[ iEnergy ] ) /
+                              float( dictBeamEnergiesOK[ iEnergy ] ) )    
 print " "
 print " Number of PS files for observable:"
 for iObservable in dictObservablesPS.keys() :
