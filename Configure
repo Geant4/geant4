@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.75 2005-12-13 02:50:52 stesting Exp $
+# $Id: Configure,v 1.76 2005-12-13 10:02:37 stesting Exp $
 #
-# Generated on Tue Dec 13 03:44:37 CET 2005 [metaconfig 3.0 PL70]
+# Generated on Tue Dec 13 11:01:04 CET 2005 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -4264,9 +4264,8 @@ g4message=`cat << EOM
   G4VIS_BUILD_RAYTRACERXX_DRIVER
   G4VIS_USE_RAYTRACERX
 
-The OpenInventor driver is based on OpenInventor technology 
-for scientific visualization.
-The X11 version of OpenInventor is required.
+Allows for interactive ray-tracing graphics through X11.
+The X11 package is required.
 
 EOM`
 
