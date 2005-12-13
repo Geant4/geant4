@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ParallelGeometry.cc,v 1.10 2005-11-15 16:18:28 gcosmo Exp $
+// $Id: Tst33ParallelGeometry.cc,v 1.11 2005-12-13 07:14:49 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -57,8 +57,8 @@ void Tst33ParallelGeometry::Construct(){
   // parallel world solid larger than in the mass geometry
 
   G4double innerRadiusCylinder = 0*cm;
-  G4double outerRadiusCylinder = 110*cm;
-  G4double hightCylinder       = 110*cm;
+  G4double outerRadiusCylinder = 220*cm;
+  G4double hightCylinder       = 220*cm;
   G4double startAngleCylinder  = 0*deg;
   G4double spanningAngleCylinder    = 360*deg;
 
@@ -89,8 +89,8 @@ void Tst33ParallelGeometry::Construct(){
   // creating 18 slobs of 10 cm thicknes
 
   G4double innerRadiusShield = 0*cm;
-  G4double outerRadiusShield = 100*cm;
-  G4double hightShield       = 5*cm;
+  G4double outerRadiusShield = 200*cm;
+  G4double hightShield       = 10*cm;
   G4double startAngleShield  = 0*deg;
   G4double spanningAngleShield    = 360*deg;
 
@@ -118,7 +118,7 @@ void Tst33ParallelGeometry::Construct(){
   // physical parallel cells
 
   G4int i = 1;
-  G4double startz = -85*cm; 
+  G4double startz = -170*cm; 
   for (i=1; i<=18; ++i) {
    
     name = fPVolumeStore.GetCellName(i);
@@ -166,8 +166,8 @@ void Tst33ParallelGeometry::Construct(){
   // another slob which should get the same importance value as the 
   // last slob
   innerRadiusShield = 0*cm;
-  outerRadiusShield = 110*cm;
-  hightShield       = 10*cm;
+  outerRadiusShield = 220*cm;
+  hightShield       = 20*cm;
   startAngleShield  = 0*deg;
   spanningAngleShield    = 360*deg;
 
@@ -184,7 +184,7 @@ void Tst33ParallelGeometry::Construct(){
     
   G4double pos_x = 0*cm;
   G4double pos_y = 0*cm;
-  G4double pos_z = 100*cm;
+  G4double pos_z = 200*cm;
   G4VPhysicalVolume *pvol = 
     new G4PVPlacement(0, 
 		      G4ThreeVector(pos_x, pos_y, pos_z),

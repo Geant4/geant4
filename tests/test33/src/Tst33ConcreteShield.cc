@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ConcreteShield.cc,v 1.8 2003-09-16 13:01:11 dressel Exp $
+// $Id: Tst33ConcreteShield.cc,v 1.9 2005-12-13 07:14:53 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -58,8 +58,8 @@ void Tst33ConcreteShield::Construct(){
   // world solid
 
   G4double innerRadiusCylinder = 0*cm;
-  G4double outerRadiusCylinder = 101*cm; // for scoring!
-  G4double hightCylinder       = 105*cm;
+  G4double outerRadiusCylinder = 202*cm; // for scoring!
+  G4double hightCylinder       = 210*cm;
   G4double startAngleCylinder  = 0*deg;
   G4double spanningAngleCylinder    = 360*deg;
 
@@ -90,8 +90,8 @@ void Tst33ConcreteShield::Construct(){
   // creating 1 slobs of 180 cm thick concrete
 
   G4double innerRadiusShield = 0*cm;
-  G4double outerRadiusShield = 100*cm;
-  G4double hightShield       = 90*cm;
+  G4double outerRadiusShield = 200*cm;
+  G4double hightShield       = 180*cm;
   G4double startAngleShield  = 0*deg;
   G4double spanningAngleShield    = 360*deg;
 
