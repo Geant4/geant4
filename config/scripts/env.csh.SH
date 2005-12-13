@@ -212,6 +212,12 @@ echo "On this machine the G4VIS_BUILD_OIX_DRIVER=\$G4VIS_BUILD_OIX_DRIVER"
 endif
 
 #+
+if ( X$g4vis_build_raytracerx_driver == Xy ) then
+setenv G4VIS_BUILD_RAYTRACERX_DRIVER 1
+echo "On this machine the G4VIS_BUILD_RAYTRACERX_DRIVER=\$G4VIS_BUILD_RAYTRACERX_DRIVER"
+endif
+
+#+
 if ( X$g4vis_build_oiwin32_driver == Xy ) then
 setenv G4VIS_BUILD_OIWIN32_DRIVER 1
 echo "On this machine the G4VIS_BUILD_OIWIN32_DRIVER=\$G4VIS_BUILD_OIWIN32_DRIVER"
@@ -251,6 +257,12 @@ endif
 if ( X$g4vis_use_oix == Xy ) then
 setenv G4VIS_USE_OIX 1
 echo "On this machine the G4VIS_USE_OIX=\$G4VIS_USE_OIX"
+endif
+
+#+
+if ( X$g4vis_use_raytracerx == Xy ) then
+setenv G4VIS_USE_RAYTRACERX 1
+echo "On this machine the G4VIS_USE_RAYTRACERX=\$G4VIS_USE_RAYTRACERX"
 endif
 
 #+

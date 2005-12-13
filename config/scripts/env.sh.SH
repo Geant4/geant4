@@ -292,6 +292,15 @@ fi
 fi 
 
 #+
+if [ X$g4vis_build_raytracerx_driver = Xy ] ; then
+G4VIS_BUILD_RAYTRACERX_DRIVER=1
+export G4VIS_BUILD_RAYTRACERX_DRIVER
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the G4VIS_BUILD_RAYTRACERX_DRIVER=\$G4VIS_BUILD_RAYTRACERX_DRIVER"
+fi
+fi 
+
+#+
 if [ X$g4vis_build_oiwin32_driver = Xy ] ; then
 G4VIS_BUILD_OIWIN32_DRIVER=1
 export G4VIS_BUILD_OIWIN32_DRIVER
@@ -351,6 +360,15 @@ G4VIS_USE_OIX=1
 export G4VIS_USE_OIX
 if [ X\$g4non_display = X ] ; then
 echo "On this machine the G4VIS_USE_OIX=\$G4VIS_USE_OIX"
+fi
+fi 
+
+#+
+if [ X$g4vis_use_raytracerx = Xy ] ; then
+G4VIS_USE_RAYTRACERX=1
+export G4VIS_USE_RAYTRACERX
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the G4VIS_USE_RAYTRACERX=\$G4VIS_USE_RAYTRACERX"
 fi
 fi 
 
