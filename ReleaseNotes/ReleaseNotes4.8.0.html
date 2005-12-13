@@ -225,6 +225,26 @@ affect on the existing user's code:
 </OL>
 
 <P> </P>
+<B>Multiple Scattering electromagnetic process</B>
+<P> </P>
+In the electromagnetic standard package major changes have been introduced
+concerning the Multiple Scattering process. To improve the behaviour of low
+energy particles (electrons as well as hadrons), the Multiple Scattering now
+limits the step size for the particles; this happens in various manners, but
+systematically and in all media. In addition a model of correlation between
+lateral displacement and final direction has been implemented (see the
+Physics Reference Manual for further explanations).<BR>
+As a result, most of the observables become more stable (i.e. less cut
+dependent). However, the price may be a not negligible time penalty,
+depending on the user's setup.<BR>
+The mechanism of step limitation can be deactivated with the function :
+<TT>G4MultipleScattering::MscStepLimitation(bool)</TT>. In addition, in order
+to help the transition, the old frozen code is still available for a while
+under the class name <TT>G4MultipleScattering71</TT>.
+Most of examples (in extended/electromagnetic) provide samples of
+PhysicsList which use this old code.
+
+<P> </P>
 <B>New Installation flags</B>
 <P> </P>
 New installation flags have been introduced:
@@ -306,7 +326,7 @@ please refer to the related History files provided in most packages):
         <LI>Updated version: now taking into account <TT>theta-phi</TT>
             correlation in the final state.</LI>
         <LI>Nuclear size correction is removed; it is now included in the
-            tabulated cross section values for <TT>Tkin > 10 MeV</TT>.</LI>
+            tabulated cross section values for <TT>Tkin &gt; 10 MeV</TT>.</LI>
         </UL></LI>
     <LI><TT>G4MultipleScattering71, G4mscModel71</TT>: new classes
         corresponding to the old frozen version of the multiple-scattering
@@ -368,7 +388,7 @@ please refer to the related History files provided in most packages):
         <LI>New default parameters: <TT>Integral=true;
             SetStepFunction(0.2,1mm), lambdaFactor=0.8</TT>.
             Fixes also problem report #780 connected with d-electron
-            production tmax < cut.</LI>
+            production <TT>tmax &lt; cut</TT>.</LI>
         <LI>Updated subcutoff regime; <TT>G4VSubCutoffProcessor</TT> is not
             used any longer.</LI>
         </UL></LI>
