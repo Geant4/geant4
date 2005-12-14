@@ -395,6 +395,8 @@ examples                                         examples-V08-00-00
     + Introduced usage of general particle source and updated macros.
   o Rich (Rich-V07-01-00)
     + Migration to CLHEP namespace.
+  o Tiara (Tiara-V07-01-01)
+    + Removed obsolete G4VisManager reference.
   o underground_physics (DMX-V07-01-03)
     + Migrated to non-static particles and hadronic constructor
       required for G4Decay.
