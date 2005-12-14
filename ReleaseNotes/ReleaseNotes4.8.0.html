@@ -245,6 +245,58 @@ Most of examples (in extended/electromagnetic) provide samples of
 PhysicsList which use this old code.
 
 <P> </P>
+<B>Geometry modeler</B>
+<P> </P>
+For code including parameterised geometries by material, an interface change
+is introduced in <TT>G4VPVParameterisation</TT> base class for the
+<TT>ComputeMaterial()</TT> method, where an optional argument has been added
+(pointer to the parent touchable) to the interface. User code making use of
+this feature will have to be updated accordingly.
+A compilation warning should flag to take into account this interface change.
+<P></P>
+Internal classes implementing the framework for twisted solids have been
+renamed. User code depending on this framework will have to be modified
+accordingly.
+
+<P> </P>
+<B>Fast parameterisation</B>
+<P> </P>
+The concept of "envelope" for fast-parameterisation has been merged to
+<TT>G4Region</TT> in this release. Therefore, a logical-volume is not any
+longer acting as "envelope", being this attribute now assigned to
+<TT>G4Region</TT> (see the User Guide for Application Developers for the
+detailed information); the relevant modules have migrated accordingly.
+See <TT>exampleN05</TT> new setup as reference.
+<P></P>
+A design iteration has taken place for the GFlash fast shower parameterisation
+model and some classes have been renamed to follow the new implementation and
+design for envelopes. User code making use of the GFlash tool should migrate
+accordingly.
+<P></P>
+TRD models for cluster parameterisation have been retired. The functionality
+is now provided directly as physics processes and included in the
+<TT>electromagnetic</TT> packages.
+
+<P> </P>
+<B>Migration to <TT>&lt;sstream&gt;</TT> from deprecated
+   <TT>&lt;strstream&gt;<TT></B>
+<P> </P>
+<TT>&lt;strstream&gt;<TT> types are no longer in use by the Geant4 kernel in
+this release. Also any protection from compilation warnings by the compiler
+for deprecation of such header are no longer implicitely included. User code
+therefore will be exposed to implement such migration to
+<TT>&lt;sstream&gt;</TT>, if not already done.
+
+<P> </P>
+<B>System of Units and Physical Cosntants</B>
+<P> </P>
+Geant4 8.0 can be used either with version 1.9.2.2 of CLHEP or 2.0.2.2.
+Explicit usage of the <TT>CLHEP</TT> and <TT>HepGeom</TT> namespaces is
+made in the Geant4 code. However, for what concerns Units and Physical
+Constants, these are still kept available in the global namespace for
+convenience and backward-compatibility.
+
+<P> </P>
 <B>New Installation flags</B>
 <P> </P>
 New installation flags have been introduced:
@@ -883,15 +935,13 @@ please refer to the related History files provided in most packages):
 <LI>Updated reference outputs.</LI>
 <LI>Implemented migration to <TT>&lt;sstream&gt;</TT> from deprecated
     <TT>&lt;strstream&gt;</TT>.</LI>
+<LI>Implemented changes for support of CLHEP-2.0.X series.</LI>
 <LI><B>advanced</B>
     <UL>
-    <LI>air_shower
-        <UL>
-        <LI></LI>
-        </UL></LI>
     <LI>brachytherapy
         <UL>
-        <LI></LI>
+        <LI>Fixed bug in the RunAction. The results of the simulation
+            (energy deposit, position) are stored in a hit collection.</LI>
         </UL></LI>
     <LI>composite_calorimeter
         <UL>
@@ -899,50 +949,59 @@ please refer to the related History files provided in most packages):
         </UL></LI>
     <LI>cosmicray_charging
         <UL>
-        <LI></LI>
+        <LI>Updated hadronic physics setup.</LI>
         </UL></LI>
     <LI>gammaray_telescope
         <UL>
-        <LI></LI>
+        <LI>Introduced GammaRayParticles and updated hadronic
+            physics setup.</LI>
         </UL></LI>
     <LI>hadrontherapy
         <UL>
-        <LI></LI>
+        <LI>Updated initialisation of particles and input macros</LI>
         </UL></LI>
     <LI>medical_linac
         <UL>
-        <LI></LI>
+        <LI>Added new methods to messengers for the selection of
+            detector features.</LI>
+        <LI>Updated input macro for visualization and code cleanup.</LI>
         </UL></LI>
     <LI>radioprotection
         <UL>
-        <LI></LI>
+        <LI>Added Eta and EtaPrime particles and introduced ions.</LI>
+        <LI>Introduced usage of general particle source and updated macros.</LI>
         </UL></LI>
-    <LI>Rich
+    <LI>underground_physic
         <UL>
-        <LI></LI>
-        </UL></LI>
-    <LI>Tiara
-        <UL>
-        <LI></LI>
+        <LI>Migrated to non-static particles and hadronic constructor
+            required for <TT>G4Decay</TT>.</LI>
+        <LI>Removed step limitation from multiple-scattering.</LI>
         </UL></LI>
     <LI>xray_fluorescence
         <UL>
-        <LI>Fixed compilation problem with UIXm</LI>
+        <LI>Fixed compilation problem with <TT>UIXm</TT> and allow for
+            running in batch-mode.</LI>
+        </UL></LI>
+    <LI>xray_telescope
+        <UL>
+        <LI>Allow compilation without analysis and batch mode, abilitated
+            ASCII output also without usage of AIDA.</LI>
+        <LI>Updated obsolete GPS commands and code cleanup.</LI>
         </UL></LI>
     </UL></LI>
 <LI><B>extended</B>
     <UL>
-    <LI>analysis/A01
+    <LI>analysis/AnaEx01
         <UL>
-        <LI></LI>
+        <LI>Made .aida as the default file format.</LI>
+        <LI>Updated README, analyis/Lab/AnaEx01.py to work with
+            OpenScientist-v14r0.</LI>
+        <LI>Made application easily instrumentable with <TT>G4Lab::UIOnX</TT>.</LI>
         </UL></LI>
-    <LI>biasing/B02
+    <LI>biasing/B01 & B02
         <UL>
-        <LI></LI>
-        </UL></LI>
-    <LI>biasing/B03
-        <UL>
-        <LI></LI>
+        <LI>Tidied up code for correct deletion at the end of run in main().
+            Addresses problem report #802.</LI>
         </UL></LI>
     <LI>electromagnetic/TestEm1
         <UL>
@@ -955,30 +1014,40 @@ please refer to the related History files provided in most packages):
     <LI>electromagnetic/TestEm3
         <UL>
         <LI>Created PhysListEmG4v71 (g4v71) for <TT>G4MultipleScattering71</TT>.</LI>
-        </UL></LI>
-    <LI>electromagnetic/TestEm4
-        <UL>
-        <LI></LI>
+        <LI>Corrected bug in lateral leakage calculation (stepping action).</LI>
+        <LI>Introduced <TT>TrackingAction</TT> for energy flow initialization.</LI>
+        <LI>Modified energy flow calculation in geant3 exercise.</LI>
         </UL></LI>
     <LI>electromagnetic/TestEm5
         <UL>
         <LI>Created PhysListEmG4v71 (g4v71) for <TT>G4MultipleScattering71</TT>.</LI>
+        <LI>Fixed initialisation of non-static hadrons according to new
+            particle definition scheme.</LI>
         </UL></LI>
     <LI>electromagnetic/TestEm6
         <UL>
-        <LI></LI>
+        <LI>Added GenericIon to the PhysicsList.</LI>
+        <LI>Extended test to <TT>mu+mu-</TT> and <TT>pi+pi-</TT> pair creation
+            processes and <TT>G4hhIonisation</TT> in order to test all involved
+            processes.</LI>
         </UL></LI>
     <LI>electromagnetic/TestEm7
         <UL>
         <LI>Created PhysListEmG4v71 (g4v71) for <TT>G4MultipleScattering71</TT>.</LI>
-        </UL></LI>
-    <LI>electromagnetic/TestEm8
-        <UL>
-        <LI></LI>
+        <LI>Fixed initialisation of non-static hadrons according to new
+            particle definition scheme.</LI>
         </UL></LI>
     <LI>electromagnetic/TestEm9
         <UL>
-        <LI></LI>
+        <LI>Added new command <TT>/testem/phys/mscStepLimit</TT>.</LI>
+        <LI>Fixed initialisation of non-static hadrons according to new
+            particle definition scheme.</LI>
+        </UL></LI>
+    <LI>electromagnetic/TestEm10
+        <UL>
+        <LI>Production cuts are moved to Physics list providing
+            independent gamma, electron and positron cuts in radiator
+            and detector regions.</LI>
         </UL></LI>
     <LI>electromagnetic/TestEm11
         <UL>
@@ -990,14 +1059,6 @@ please refer to the related History files provided in most packages):
             order to implement a constraint on the step size of the particle
             trajectories.</LI>
         </UL></LI>
-    <LI>electromagnetic/MuonProcesses
-        <UL>
-        <LI></LI>
-        </UL></LI>
-    <LI>electromagnetic/PhotonProcesses
-        <UL>
-        <LI></LI>
-        </UL></LI>
     <LI>field/field02
         <UL>
         <LI>Removed cluster models from detector construction.</LI>
@@ -1008,32 +1069,19 @@ please refer to the related History files provided in most packages):
         </UL></LI>
     <LI>medical/DICOM
         <UL>
-        <LI></LI>
+        <LI>Updated interface to parameterisation and documentation.</LI>
         </UL></LI>
     <LI>medical/GammaTherapy
         <UL>
         <LI>Added g4v71 builder.</LI>
         </UL></LI>
-    <LI>optical/LXe
-        <UL>
-        <LI></LI>
-        </UL></LI>
     <LI>paralled
         <UL>
-        <LI></LI>
+        <LI>Synchronised examples according to evolution of kernel libaries.</LI>
         </UL></LI>
     <LI>parameterisations/gflash
         <UL>
-        <LI>New example showing usage of gflash fast shower
-            parameterisation.</LI>
-        </UL></LI>
-    <LI>persistency
-        <UL>
-        <LI></LI>
-        </UL></LI>
-    <LI>radioactivedecay/exrdm
-        <UL>
-        <LI></LI>
+        <LI>New example showing usage of gflash fast shower parameterisation.</LI>
         </UL></LI>
     <LI>runAndEvent/RE02
         <UL>
@@ -1046,13 +1094,10 @@ please refer to the related History files provided in most packages):
         </UL></LI>
 <LI><B>novice</B>
     <UL>
-    <LI>N02
-        <UL>
-        <LI></LI>
-        </UL></LI>
     <LI>N03
         <UL>
         <LI>Modified physics list.</LI>
+        <LI>Quietened vis manager in batch mode.</LI>
         </UL></LI>
     <LI>N05
         <UL>
@@ -1060,10 +1105,6 @@ please refer to the related History files provided in most packages):
             as envelope.</LI>
         <LI>Use <TT>RandGamma</TT> from CLHEP end removed custom RandomGamma
             function.</LI>
-        </UL></LI>
-    <LI>N06
-        <UL>
-        <LI></LI>
         </UL></LI>
     <LI>N07
         <UL>
