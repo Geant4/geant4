@@ -30,7 +30,7 @@
 //    ********************************
 //
 //
-// $Id: PurgMagPhysicsList.cc,v 1.3 2005-12-07 14:35:12 guatelli Exp $
+// $Id: PurgMagPhysicsList.cc,v 1.4 2005-12-14 16:06:49 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
