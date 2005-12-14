@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------
-# Last update: 13-Dec-2005
+# Last update: 14-Dec-2005
 #
 # This script should be run in the directory which has, as immediate
 # subdirectories, the results of the Grid validation testing,
@@ -262,45 +262,63 @@ print " "
 print " Number of OK jobs and PS files for calorimeter type:"
 for iDetector in dictCalorimetersOK.keys() :
     print "  calorimeter=", iDetector, \
-          "  #OK=", dictCalorimetersOK[ iDetector ], " (", \
-          int( dictCalorimetersOK[ iDetector ]*100.0 /
-               float( countDirWithPvalues ) ), "%)", \
-          "  #PS=", dictCalorimetersPS[ iDetector ], " (", \
-          int( dictCalorimetersPS[ iDetector ]*100.0 /
-               float( countPS ) ), "%)", \
-          "  #PS-perJobs=", ( float( dictCalorimetersPS[ iDetector ] ) /
-                              float( dictCalorimetersOK[ iDetector ] ) )    
+          "  #OK=", dictCalorimetersOK[ iDetector ],
+    if ( countDirWithPvalues > 0 ) :
+        print " (", int( dictCalorimetersOK[ iDetector ]*100.0 /
+                         float( countDirWithPvalues ) ), "%)",
+    print "  #PS=", dictCalorimetersPS[ iDetector ],
+    if ( countPS > 0 ) :
+        print " (", int( dictCalorimetersPS[ iDetector ]*100.0 /
+               float( countPS ) ), "%)",
+    if ( dictCalorimetersOK[ iDetector ] > 0 ) :
+        print "  #PS-perJobs=", ( float( dictCalorimetersPS[ iDetector ] ) /
+                                  float( dictCalorimetersOK[ iDetector ] ) )
+    else :
+        print " "
 print " "
 print " Number of OK jobs and PS files for beam particle:"
 for iParticle in dictBeamParticlesOK.keys() :
     print "  particle=", iParticle, \
-          "  #OK=", dictBeamParticlesOK[ iParticle ], " (", \
-          int( dictBeamParticlesOK[ iParticle ]*100.0 /
-               float( countDirWithPvalues ) ), "%)", \
-          "  #PS=", dictBeamParticlesPS[ iParticle ], " (", \
-          int( dictBeamParticlesPS[ iParticle ]*100.0 /
-               float( countPS ) ), "%)", \
-          "  #PS-perJobs=", ( float( dictBeamParticlesPS[ iParticle ] ) /
-                              float( dictBeamParticlesOK[ iParticle ] ) )    
+          "  #OK=", dictBeamParticlesOK[ iParticle ],
+    if ( countDirWithPvalues > 0 ) :
+        print " (", int( dictBeamParticlesOK[ iParticle ]*100.0 /
+                         float( countDirWithPvalues ) ), "%)",
+    print "  #PS=", dictBeamParticlesPS[ iParticle ],
+    if ( countPS > 0 ) :
+        print " (", int( dictBeamParticlesPS[ iParticle ]*100.0 /
+                         float( countPS ) ), "%)",
+    if ( dictBeamParticlesOK[ iParticle ] > 0 ) :
+        print "  #PS-perJobs=", ( float( dictBeamParticlesPS[ iParticle ] ) /
+                                  float( dictBeamParticlesOK[ iParticle ] ) )    
+    else :
+        print " "
 print " "
 print " Number of OK jobs and PS files for beam energy:"
 for iEnergy in dictBeamEnergiesOK.keys() :
     print "  energy=", iEnergy, \
-          "  #OK=", dictBeamEnergiesOK[ iEnergy ], " (", \
-          int( dictBeamEnergiesOK[ iEnergy ]*100.0 /
-               float( countDirWithPvalues ) ), "%)", \
-          "  #PS=", dictBeamEnergiesPS[ iEnergy ], " (", \
-          int( dictBeamEnergiesPS[ iEnergy ]*100.0 /
-               float( countPS ) ), "%)", \
-          "  #PS-perJobs=", ( float( dictBeamEnergiesPS[ iEnergy ] ) /
-                              float( dictBeamEnergiesOK[ iEnergy ] ) )    
+          "  #OK=", dictBeamEnergiesOK[ iEnergy ],
+    if ( countDirWithPvalues > 0 ) :
+        print " (", int( dictBeamEnergiesOK[ iEnergy ]*100.0 /
+                         float( countDirWithPvalues ) ), "%)",
+    print "  #PS=", dictBeamEnergiesPS[ iEnergy ],
+    if ( countPS > 0 ) :
+        print " (", int( dictBeamEnergiesPS[ iEnergy ]*100.0 /
+                         float( countPS ) ), "%)",
+    if ( dictBeamEnergiesOK[ iEnergy ] > 0 ) :
+        print "  #PS-perJobs=", ( float( dictBeamEnergiesPS[ iEnergy ] ) /
+                                  float( dictBeamEnergiesOK[ iEnergy ] ) )    
+    else :
+        print " "
 print " "
 print " Number of PS files for observable:"
 for iObservable in dictObservablesPS.keys() :
     print "  observable=", iObservable, \
-          "  #PS=", dictObservablesPS[ iObservable ], " (", \
-          int( dictObservablesPS[ iObservable ]*100.0 /
-               float( countPS ) ), "%)"
+          "  #PS=", dictObservablesPS[ iObservable ],
+    if ( countPS > 0 ) :
+        print " (", int( dictObservablesPS[ iObservable ]*100.0 /
+                         float( countPS ) ), "%)"
+    else :
+        print " "
 print " "
 
 listDir.close()
