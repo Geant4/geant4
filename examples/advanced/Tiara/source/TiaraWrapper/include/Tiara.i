@@ -1,4 +1,4 @@
-# $Id: Tiara.i,v 1.8 2004-12-08 15:37:14 daquinog Exp $
+# $Id: Tiara.i,v 1.9 2005-12-14 13:18:40 ahoward Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -29,7 +29,6 @@
 #include "TiaraVisEventAction.hh"
 #include "TiaraTimedEventAction.hh"
 #include "TiaraMeasure.hh"
-#include "TiaraVisManager.hh"
 #include "TiaraTally.hh"
 #include "TiaraRandom.hh"
 %}
@@ -82,8 +81,6 @@
 %include TiaraVisEventAction.hh
 
 %include TiaraTimedEventAction.hh
-
-%include TiaraVisManager.hh
 
 %include TiaraRandom.hh
 
