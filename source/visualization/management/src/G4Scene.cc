@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.cc,v 1.15 2005-09-16 01:26:19 allison Exp $
+// $Id: G4Scene.cc,v 1.16 2005-12-14 13:05:33 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -107,8 +107,8 @@ G4bool G4Scene::AddWorldIfEmpty (G4bool warn) {
       if (successful) {
 	if (warn) {
 	  G4cout <<
-	    "G4Scene::AddWorldIfEmpty: The scene was empty,"
-	    "\n   \"world\" has been added.";
+	    "G4Scene::AddWorldIfEmpty: The scene was empty."
+	    "  \"world\" has been added.";
 	  G4cout << G4endl;
 	}
       }
