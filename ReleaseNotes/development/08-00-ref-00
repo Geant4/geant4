@@ -4,7 +4,23 @@
 
 Some of the development/fixes included since the last reference tag are:
 
-  o 
+  o New scheme for non-static particle definitions: all particle definition
+    class objects are dynamically instantiated along the invocation of the
+    ConstructParticle() method of the user's G4VUserPhysicsList concrete
+    class. This new scheme allows the user to set alternative physics
+    quantities before particles are instantiated in Geant4.
+  o Design iteration for GFlash parameterisation: added concrete sampling
+    shower parameterisation and tuning classes.
+  o Added new utility methods to G4VPhysical volume for identification of
+    specific regular structures for the geoemtry setup.
+  o Added new filter and scoring classes to allow for scoring applications
+    in particular in medical and space fields, such as dose or
+    energy-deposition scoring. Added new extended example.
+  o Added high energy elastic scattering on protons (G4ElasticHadrNucleusHE)
+    in hadronic coherent-elastic model.
+  o New capture process G4QCaptureAtRest valid for pi-, K-, anti-proton, mu-,
+    tau-, Xi-, Omega-, neutron, anti-neutron, anti-Sigma+.
+  o Added required changes for support of CLHEP-2.0.X series.
 
 ---------- Reference-tag 'Release Notes' -----------
 
@@ -168,7 +184,7 @@ processes/decays                                 decay-V07-01-00
 - Added argument to StartTracking() (pointer to G4Track) for future
   developments use.
 
-processes/electromagnetic/highenergy        emhighenergy-V07-01-04
+processes/electromagnetic/highenergy             emhighenergy-V07-01-04
 ------------------------------------
 - Added G4hhIonisation, ionisation for heavy exotic particles.
 - Fixed initialisation problems in G4eeToHadrons and related classes.
@@ -176,7 +192,7 @@ processes/electromagnetic/highenergy        emhighenergy-V07-01-04
 - Removed magnetic change from G4BraggNoDeltaModel and
   G4BetheBlochNoDeltaModel.
 
-processes/electromagnetic/lowenergy         emlowen-V07-01-14
+processes/electromagnetic/lowenergy              emlowen-V07-01-14
 -----------------------------------
 - Fixes in atomic relaxation and G4hLowEnergyIonistation.
 - Implemented migration to <sstream> from deprecated <strstream>.
@@ -320,7 +336,7 @@ visualization                                    vis-V07-01-10
   + Implemented window placing (XGeometryString) in OGL*X.
   + Added G4OpenGLXmViewerMessenger. Corrected text position.
 - OpenInventor:
-  + Implemented Background, scaling and window positioning.
+  + Implemented background, scaling and window positioning.
   + Added read/write abilities from/to .iv files.
 - Tree:
   + Refined guidance and printing.
@@ -345,64 +361,137 @@ physics_lists                                    phys-lists-V07-01-01
 examples                                         examples-V08-00-00
 --------
 - Updated reference outputs.
+- Implemented changes for support of CLHEP-2.0.X series.
 - advanced
-  o air_shower (air_shower-V07-01-00)
-    + Implemented migration to <sstream>.
-  o composite_calorimeter (ccal-V07-01-00)
-    + Implemented migration to <sstream>.
-    + Updated hadronic physics list (commented QGSP_Model).
-  o cosmicray_charging (cosmicray_charging-V07-01-00)
-    + Implemented migration to <sstream>.
-  o Tiara (Tiara-V07-01-00)
-    + Implemented migration to <sstream>.
-  o underground_physics (DMX-V07-01-00)
-    + Implemented migration to <sstream>.
-  o xray_fluorescence (XrayFluo-V07-01-00)
-    + Implemented migration to <sstream>.
-    + Fixed compilation problem with UIXm.
+  o air_shower (air_shower-V07-01-02)
+    + Cleared compilation warnings.
+  o brachytherapy (brachy-V07-01-00)
+    + Fixed bug in the RunAction. The results of the simulation
+      (energy deposit, position) are stored in a hit collection.
+  o composite_calorimeter (ccal-V07-01-01)
+    + Updated initialisation of physics-list.
+  o cosmicray_charging (cosmicray_charging-V07-01-02)
+    + Updated hadronic physics setup.
+    + Cleared compilation warnings.
+  o gammaray_telescope (gammaraytel-V07-01-00)
+    + Introduced GammaRayParticles.
+    + Updated hadronic physics setup.
+  o hadrontherapy (hadrontherapy-V07-01-06)
+    + Updated initialisation of particles.
+    + Updated input macros.
+  o lAr_calorimenter (lAr_calorimeter-V07-01-00)
+    + Removed old header files.
+  o medical_linac (medical_linac-V07-01-05)
+    + Added new methods to messengers for the selection of detector features.
+    + Updated input macro for visualization and code cleanup.
+  o purging_magnet (purtag-V07-01-00)
+    + Get rid of obsolete method SetCutForOthers().
+  o radiation_monitor (radmon-V07-01-14)
+    + New example implementing an application for studying of the effects
+      of a chip carrier on silicon radiation monitoring devices used in the
+      LHC environment.
+  o radioprotection (radioprotection-V07-01-04)
+    + Added Eta and EtaPrime particles and introduced ions.
+    + Introduced usage of general particle source and updated macros.
+  o Rich (Rich-V07-01-00)
+    + Migration to CLHEP namespace.
+  o underground_physics (DMX-V07-01-03)
+    + Migrated to non-static particles and hadronic constructor
+      required for G4Decay.
+    + Removed step limitation from multiple-scattering.
+  o xray_fluorescence (XrayFluo-V07-01-03)
+    + Allow compilation without analysis and batch mode.
+    + Code cleanup.
+  o xray_telescope (xraytel-V07-01-03)
+    + Allow compilation without analysis and batch mode, abilitated
+      ASCII output also without usage of AIDA.
+    + Updated obsolete GPS commands and code cleanup.
 - extended
-  o biasing (exbiasing-V07-01-00)
-    + Implemented migration to <sstream>.
-  o electromagnetic/TestEm1 (testem1-V07-01-01)
-    + Implemented migration to <sstream> for HistoMessenger.
-  o electromagnetic/TestEm3 (testem3-V07-01-03)
-    + Implemented migration to <sstream>.
-  o electromagnetic/TestEm5 (testem5-V07-01-01)
-    + Implemented migration to <sstream> for HistoMessenger.
-  o electromagnetic/TestEm9 (testem9-V07-01-03)
-    + Implemented migration to <sstream>.
-  o electromagnetic/TestEm11 (testem11-V07-01-02)
-    + Implemented migration to <sstream> for HistoMessenger.
-  o electromagnetic/TestEm12 (testem12-V07-01-03)
-    + Implemented migration to <sstream> for HistoMessenger.
-  o eventgenerator/HepMC (exHepMC-V07-01-00)
-    + Implemented migration to <sstream>.
-  o geometry/olap (olapex-V07-01-00)
-    + Implemented migration to <sstream>.
-  o parallel (ParN02-V07-01-00, ParN04-V07-01-00)
-    + Implemented migration to <sstream>.
-  o parameterisations/gflash (exparam-V07-01-01)
-    + New example showing usage of gflash fast shower parameterisation.
-  o radioactivedecay/exrdm (exrdm-V07-01-01)
-    + Implemented migration to <sstream>.
+  o analysis/AnaEx01 (AnaEx01-V07-01-01)
+    + Made .aida as the default file format.
+    + Update README, analyis/Lab/AnaEx01.py to work with OpenScientist-v14r0.
+    + Added AIDA_createAnalysisFactory() in the main() in order
+      to instrument easily the application with G4Lab::UIOnX.
+  o biasing/B01 (exampleB01-V07-01-02)
+    + Tidied up code for correct deletion at the end of run in main().
+      Addresses problem report #802.
+    + Removed null escape character from ostringstream formatting in
+      detector-construction class.
+  o biasing/B02 (exampleB02-V07-01-03)
+    + Tidied up code for correct deletion at the end of run in main().
+      Addresses problem report #802.
+    + Fixed stringstream formatting.
+  o electromagnetic/MuonProcesses (muonprocesses-V07-01-01)
+  o electromagnetic/PhotonProcesses (photonprocesses-V07-01-01)
+  o electromagnetic/TestEm1 (testem1-V07-01-02)
+  o electromagnetic/TestEm2 (testem2-V07-01-01)
+    + Updated README.
+  o electromagnetic/TestEm3 (testem3-V07-01-04)
+    + Corrected bug in lateral leakage calculation (stepping action).
+    + Introduced TrackingAction for energy flow initialization.
+    + Modified energy flow calculation in geant3 exercise.
+    + Updated README.
+  o electromagnetic/TestEm4 (testem4-V07-01-00)
+    + Updated README.
+  o electromagnetic/TestEm5 (testem5-V07-01-03)
+    + Fixed initialisation of non-static hadrons according to new
+      particle definition scheme.
+    + Updated README.
+  o electromagnetic/TestEm6 (testem6-V07-01-02)
+    + Added GenericIon to the PhysicsList.
+    + Extended test to mu+mu- and pi+pi- pair creation processes and
+      G4hhIonisation in order to test all involved processes.
+    + Updated README.
+  o electromagnetic/TestEm7 (testem7-V07-01-02)
+    + Fixed initialisation of non-static hadrons according to new
+      particle definition scheme.
+  o electromagnetic/TestEm9 (testem9-V07-01-05)
+    + Added new command /testem/phys/mscStepLimit.
+    + Fixed initialisation of non-static hadrons according to new
+      particle definition scheme.
+  o electromagnetic/TestEm10 (testem10-V07-01-01)
+    + Production cuts are moved to Physics list providing
+      independent gamma, electron and positron cuts in radiator
+      and detector regions.
+  o electromagnetic/TestEm11 (testem11-V07-01-03)
+  o electromagnetic/TestEm12 (testem12-V07-01-04)
+    + Updated README.
+  o eventgenerator/HepMC (exHepMC-V07-01-01)
+    + Imported G4HepMC classes from source/event module.
+  o medical/DICOM (DICOM-V07-01-00)
+    + Updated interface to parameterisation.
+    + Updated documentation.
+  o parallel/ExDiane (ExDiane-V07-01-00)
+    + Updated documentation.
+  o runAndEvent (extended_exampleRE-V07-01-00)
+    + Added new example RE02 for demonstration of new scorer and
+      filter classes introduced in digits_hits module.
 - novice:
-  o N05 (exampleN05-V07-01-01)
-    + Use RandGamma from CLHEP end removed custom RandomGamma function.
-    + Implemented migration to new scheme considering G4Region as envelope;
-      not yet completed for ghost volumes, though.
-    + Implemented migration to <sstream>.
- 
+  o N03 (exampleN03-V07-01-04)
+    + Quietened vis manager in batch mode.
+    + Updated README.
+  o N07 (exampleN07-V07-01-00)
+    + Fully revised with usage of new G4VPrimitiveScorer and G4VSDFilter.
+
 tests                                            tests-V08-00-00
 -----
 - Updated reference outputs.
-- test18 (test18-V07-01-00)
-  o Implemented migration to <sstream>.
-  o Fixed problem in EM PhysicsList.
-- test33 (test33-V07-01-00)
-  o Implemented migration to <sstream>.
-- test34 (test34-V07-01-01)
-  o Implemented migration to new scheme considering G4Region as envelope.
-- test201 (test201-V07-01-00)
-  o Implemented migration to <sstream>.
-  o Replaced MyVisManager by G4VisExecutive.
-  o Committed test201.g4m.
+- Implemented changes for support of CLHEP-2.0.X series.
+- test01 (test01-V07-01-00)
+  o Fixed a bug in PrimaryGeneratorAction according to new particles
+    initialisation scheme.
+- test17 (test17-V07-01-00)
+  o Revised according to new particles initialisation scheme.
+    Removed obsolete ion classes.
+- test22 (test22-V07-01-01)
+  o Updated initialisation of particles.
+- test29 (test33-V07-01-02)
+  o Updated initialisation of particles in main().
+- test31 (test33-V07-01-02)
+  o Updated physics lists setup.
+- test33 (test33-V07-01-02)
+  o Doubled all detector dimensions to suppress warning on importance
+    value of world.
+- test50 (test50-V07-01-01)
+  o Updated initialisation of particles and deleted obsolete ions classes.
+  o Fixed bug in main().
