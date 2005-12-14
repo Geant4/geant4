@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.44 2005-11-22 17:14:44 allison Exp $
+// $Id: G4VisCommandsScene.cc,v 1.45 2005-12-14 13:03:12 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -450,8 +450,10 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
 	  fpVisManager -> SetCurrentViewer(aViewer);
 	  fpVisManager -> SetCurrentSceneHandler(aSceneHandler);
 	  fpVisManager -> SetCurrentScene(aScene);
+	  // Re-draw, forcing rebuild of graphics database, if any...
+	  aViewer -> SetNeedKernelVisit(true);
 	  aViewer -> SetView ();
-	  //??aViewer -> ClearView ();
+	  aViewer -> ClearView ();
 	  aViewer -> DrawView ();
 	  if (flush) aViewer -> ShowView ();
 	  if (verbosity >= G4VisManager::confirmations) {
