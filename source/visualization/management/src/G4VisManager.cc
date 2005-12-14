@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.78 2005-12-04 01:36:17 allison Exp $
+// $Id: G4VisManager.cc,v 1.79 2005-12-14 13:08:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1160,11 +1160,11 @@ G4bool G4VisManager::IsValidView () {
       isValid = false;
     }
     else {
-      G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/viewer/reset");
+      G4UImanager::GetUIpointer()->ApplyCommand ("/vis/scene/notifyHandlers");
       if (fVerbosity >= warnings) {
 	G4cout <<
 	  "WARNING: G4VisManager: the scene was empty, \"world\" has been"
-	  "\n  added and the view parameters have been reset.";
+	  "\n  added and the scene handlers notified.";
 	G4cout << G4endl;
       }
     }
