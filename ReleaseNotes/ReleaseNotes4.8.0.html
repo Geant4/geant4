@@ -698,11 +698,11 @@ please refer to the related History files provided in most packages):
     </UL></LI>
 <LI><B>models/low_energy</B>:
     <UL>
-    <LI><TT>G4LElastic</TT>:
+    <LI><TT>G4LElasticB</TT>:
         <UL>
-        <LI>Fixed kinematics: correct relativistic kinematics is now used.
-            Addresses problem report #534.</LI>
-        <LI>Added protection for low momentum (<TT>&lt;10 MeV/c</TT>)
+        <LI>Copy of G4LElesatic process with modified relativistic kinematics.
+            Addresses problem report #534.<BR>
+            Added protection for low momentum (<TT>&lt;10 MeV/c</TT>)
             particles where CM sampling of <TT>cos(theta)</TT> is not valid.</LI>
         </UL></LI>
     <LI><TT>G4LCapture</TT>: fixed incorrect unit in momentum components.

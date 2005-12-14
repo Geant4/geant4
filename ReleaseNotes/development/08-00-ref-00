@@ -255,9 +255,9 @@ processes/hadronic                               hadr-V07-01-01
   + Muon neutrino and anti-neutrino scattering added to G4QCollision process.
   + New cross section classes: G4QANuMuNuclearCrossSection and
     G4QNuMuNuclearCrossSection.
-- models/low_energy (hadr-lep-V07-01-03):
-  + G4LElastic: correct relativistic kinematics is now used.
-    Addresses problem report #534.
+- models/low_energy (hadr-lep-V07-01-04):
+  + G4LElasticB: original G4LElastic process with modified relativistic
+    kinematics. Addresses problem report #534.
     Added protection for low momentum (< 10 MeV/c) particles where CM
     sampling of cos(theta) is not valid.
   + G4LCapture: fixed incorrect unit in momentum components.
