@@ -261,9 +261,9 @@ accordingly.
 <P> </P>
 <B>Fast parameterisation</B>
 <P> </P>
-The concept of "envelope" for fast-parameterisation has been merged to
-<TT>G4Region</TT> in this release. Therefore, a logical-volume is not any
-longer acting as "envelope", being this attribute now assigned to
+The concept of "envelope" and "ghost-volume" for fast-parameterisation has
+been merged to <TT>G4Region</TT> in this release. Therefore, a logical-volume
+is not any longer acting as "envelope", being this attribute now assigned to
 <TT>G4Region</TT> (see the User Guide for Application Developers for the
 detailed information); the relevant modules have migrated accordingly.
 See <TT>exampleN05</TT> new setup as reference.
@@ -279,16 +279,16 @@ is now provided directly as physics processes and included in the
 
 <P> </P>
 <B>Migration to <TT>&lt;sstream&gt;</TT> from deprecated
-   <TT>&lt;strstream&gt;<TT></B>
+   <TT>&lt;strstream&gt;</TT></B>
 <P> </P>
-<TT>&lt;strstream&gt;<TT> types are no longer in use by the Geant4 kernel in
+<TT>&lt;strstream&gt;</TT> types are no longer in use by the Geant4 kernel in
 this release. Also any protection from compilation warnings by the compiler
 for deprecation of such header are no longer implicitely included. User code
 therefore will be exposed to implement such migration to
 <TT>&lt;sstream&gt;</TT>, if not already done.
 
 <P> </P>
-<B>System of Units and Physical Cosntants</B>
+<B>System of Units and Physical Constants</B>
 <P> </P>
 Geant4 8.0 can be used either with version 1.9.2.2 of CLHEP or 2.0.2.2.
 Explicit usage of the <TT>CLHEP</TT> and <TT>HepGeom</TT> namespaces is
@@ -476,15 +476,22 @@ please refer to the related History files provided in most packages):
     run-manager.</LI>
 <LI>Put protection against null pointer in
     <TT>G4ParticleGun::SetParticleDefinition()</TT>.</LI>
-<LI>Modified <TT>GNUmakefile</TT> to follow intercoms->graphics_reps migration
+<LI>Modified <TT>GNUmakefile</TT> to follow intercoms-&gt;graphics_reps migration
     for <TT>G4VGraphicsScene</TT> and <TT>G4VVisManager</TT> classes.</LI>
 </UL>
 
 <A NAME="gen-notes">
-<H3><I>General Processes: Cuts, Parameterisation</I></H3></A>
+<H3><I>General Processes: Management, Cuts, Parameterisation</I></H3></A>
 <UL>
 <LI>Implemented migration to <TT>&lt;sstream&gt;</TT> from deprecated
     <TT>&lt;strstream&gt;</TT>.</LI>
+<LI><B>Management</B>
+    <UL>
+    <LI><TT>G4VProcess::StartTracking()</TT> now takes <TT>G4Track*</TT>
+        as an argument. <TT>G4ProcessManager::StartTracking()</TT> now
+        invokes this new method. Functionality to be used for future
+        developments.</LI>
+    </UL></LI>
 <LI><B>Cuts</B>
     <UL>
     <LI>Implemented migration to new scheme considering <TT>G4Region</TT>
@@ -740,7 +747,8 @@ please refer to the related History files provided in most packages):
         and tuning classes.</LI>
     <LI>Corrected typo to name <TT>GFlashHomoShowerParamterisation</TT>,
         to become <TT>GFlashHomoShowerParameterisation</TT>. Replaced
-        affected files. Fixed usage of random numbers to allow for event
+        affected files.</LI>
+    <LI>Fixed usage of random numbers to allow for event
         reproducibility. Code cleanup for Software Reference Manual.</LI>
     <LI>Implemented migration to new scheme for considering <TT>G4Region</TT>
         as envelope for fast-parameterisation.</LI>
@@ -1092,6 +1100,7 @@ please refer to the related History files provided in most packages):
         <UL>
         <LI>New examples for UserVisAction and standalone demo.</LI>
         </UL></LI>
+    </UL></LI>
 <LI><B>novice</B>
     <UL>
     <LI>N03
