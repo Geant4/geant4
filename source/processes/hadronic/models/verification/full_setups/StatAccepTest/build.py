@@ -185,7 +185,7 @@ g4file.close()
 
 setupFile = open( "setup.sh", "w" )
 
-###setupFile.write( "export VO_GEANT4_SW_DIR=/users/ribon/dirGrid \n" )  #***LOOKHERE***
+setupFile.write( "export VO_GEANT4_SW_DIR=/users/ribon/dirGrid \n" )  #***LOOKHERE***
 setupFile.write( "export DIR_INSTALLATIONS=$VO_GEANT4_SW_DIR/dirInstallations \n" )
 
 setupFile.write( "export PATH=$DIR_INSTALLATIONS/dirGCC/bin:$PATH \n" )
@@ -193,9 +193,25 @@ setupFile.write( "export LD_LIBRARY_PATH=$DIR_INSTALLATIONS/dirGCC/lib:$LD_LIBRA
 
 setupFile.write( "export G4SYSTEM=Linux-g++ \n" )
 setupFile.write( "export G4_RELEASE=" + Release + " \n" )
-setupFile.write( "export G4INSTALL=$DIR_INSTALLATIONS/$G4_RELEASE \n" )
-setupFile.write( "export G4LIB=$DIR_INSTALLATIONS/$G4_RELEASE/lib \n" )
 
+# Look for the Geant4 release in the parent directory of the current
+# directory (i.e. StatAccepTest/.. ): if you find it there, use this,
+# otherwise point to the installation directory.
+isLocalGeant4 = 0
+parentDir = os.getcwd() + "/.."
+#print ' parentDir = ', parentDir
+for iFile in os.listdir( parentDir ) :
+    if ( iFile.find( Release ) > -1 ) :
+        isLocalGeant4 = 1
+        #print ' FOUND ', Release
+        break
+if isLocalGeant4 :
+    setupFile.write( "export G4INSTALL=" + parentDir + "/$G4_RELEASE \n" )
+    setupFile.write( "export G4LIB=" + parentDir + "/$G4_RELEASE/lib \n" )
+else :
+    setupFile.write( "export G4INSTALL=$DIR_INSTALLATIONS/$G4_RELEASE \n" )
+    setupFile.write( "export G4LIB=$DIR_INSTALLATIONS/$G4_RELEASE/lib \n" )
+    
 setupFile.write( "export G4LEVELGAMMADATA=$DIR_INSTALLATIONS/dirG4DATA/PhotonEvaporation \n" )
 setupFile.write( "export G4RADIOACTIVEDATA=$DIR_INSTALLATIONS/dirG4DATA/RadiativeDecay \n" )
 setupFile.write( "export G4LEDATA=$DIR_INSTALLATIONS/dirG4DATA/G4EMLOW \n" )
@@ -236,9 +252,9 @@ mainProgram.write( "#include \"G4UImanager.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestDetectorConstruction.hh\" \n" )
 mainProgram.write( "#include \"LHEP.hh\" \n" )
 mainProgram.write( "#include \"LHEP_GN.hh\" \n" )
-mainProgram.write( "#include \"LHEP_HP.hh\" \n" )
-mainProgram.write( "#include \"LHEP_BERT_HP.hh\" \n" )
-mainProgram.write( "#include \"LHEP_BIC_HP.hh\" \n" )
+#mainProgram.write( "#include \"LHEP_HP.hh\" \n" )
+#mainProgram.write( "#include \"LHEP_BERT_HP.hh\" \n" )
+#mainProgram.write( "#include \"LHEP_BIC_HP.hh\" \n" )
 mainProgram.write( "#include \"QGSP.hh\" \n" )
 mainProgram.write( "#include \"QGSP_GN.hh\" \n" )
 mainProgram.write( "#include \"QGSP_HP.hh\" \n" )
@@ -271,10 +287,6 @@ mainProgram.write( "         << \" Initial seed = \" << seed << G4endl \n" )
 mainProgram.write( "	 << \" ===================================================== \" << G4endl \n" ) 
 mainProgram.write( "	 << G4endl; \n" )
 mainProgram.write( "  G4RunManager* runManager = new G4RunManager; \n" )
-mainProgram.write( "#ifdef G4VIS_USE \n" )
-mainProgram.write( "  StatAccepTestVisManager *visManager = new StatAccepTestVisManager; \n" )
-mainProgram.write( "  visManager->Initialize(); \n" )
-mainProgram.write( "#endif \n" )        
 mainProgram.write( "  runManager->SetUserInitialization( new StatAccepTestDetectorConstruction ); \n" )
 mainProgram.write( "  " + PHYSICS + "  *thePL = new " + PHYSICS + "; \n" )
 mainProgram.write( "  //thePL->SetDefaultCutValue( 1.0*cm ); \n" ) #***LOOKHERE***
@@ -291,6 +303,10 @@ if ( float( EnergyValue.split()[0] ) < energyThresholdInGeVNoBiasBelow ) :
 else :
     mainProgram.write( "  runManager->SetUserAction( new StatAccepTestStackingAction ); \n" )
 
+mainProgram.write( "#ifdef G4VIS_USE \n" )
+mainProgram.write( "  StatAccepTestVisManager *visManager = new StatAccepTestVisManager; \n" )
+mainProgram.write( "  visManager->Initialize(); \n" )
+mainProgram.write( "#endif \n" )        
 mainProgram.write( "  runManager->Initialize(); \n" )
 mainProgram.write( "  G4UImanager* UI = G4UImanager::GetUIpointer(); \n" )   
 mainProgram.write( "  if ( argc==1 ) {   // Define UI session for interactive mode. \n" )

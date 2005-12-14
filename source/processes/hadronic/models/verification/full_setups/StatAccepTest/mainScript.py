@@ -30,19 +30,19 @@ print '========== START mainScript.py =========='
 #
 REF1        = "7.1.p01"
 SIM_REF1    = "Yes"
-REF2        = "7.1.ref05"
+REF2        = "8.0.cand02.elastic7.1"
 SIM_REF2    = "Yes"
 RUN_STAT    = "Yes"
-PHYSICS     = "LHEP_BERT_HP"
-EVENTS      = "100"
+PHYSICS     = "QGSP_GN"
+EVENTS      = "5000"
 #***endLOOKHERE***
 
 # ---------------------------------------------
 
 #***LOOKHERE***
-CALORIMETER = "CuLAr"
-PARTICLE    = "n"
-ENERGY      = "5GeV"
+CALORIMETER = "PbSci"
+PARTICLE    = "pi+"
+ENERGY      = "9GeV"
 #***endLOOKHERE***
 
 os.system( "./simuDriver.sh " +

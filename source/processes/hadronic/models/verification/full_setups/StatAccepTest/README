@@ -1,5 +1,5 @@
 
- Last update: 25-Oct-2005
+ Last update: 14-Dec-2005
  ========================
 
  This directory contains a configurable calorimeter setup to be used
@@ -11,8 +11,16 @@
  in the directory  $VO_GEANT4_SW_DIR/dirInstallations 
  (the environmental variable VO_GEANT4_SW_DIR is automatically
   defined when you run on the Grid).
+
+ To add flexibility to this tool, it is possible to send to a
+ Grid site, together with the job, also a Geant4 release and this 
+ application directory (StatAccepTest/). If such Geant4 release is 
+ found in the parent directory of the application directory 
+ (i.e. in ../StatAccepTest/), then this release is used; if not, 
+ then it will be taken from $VO_GEANT4_SW_DIR/dirInstallations .
+
  If you want to run on your computer, then you need to modify
- this setup script.
+ the setup script: look at  exerciseSetup.sh  and  build.py .
 
  In the main program  * mainStatAccepTest.cc *  you can select 
  the Physics List (LHEP, QGSP, QGSP_BERT, QGSP_BIC), in the macro
@@ -93,3 +101,9 @@
  parameters in the  observables.py  script, and then run it.
  Please read the comments at the top of the file  observables.py
  for more information.
+
+ Other two scripts, unpack.py and pvalues.py, have been added in
+ the same subdirectory  ( dirObservables/ ) . They are useful
+ immediately after you get the results from the Grid jobs.
+ Please read the comments at the top of these files for more
+ information.
