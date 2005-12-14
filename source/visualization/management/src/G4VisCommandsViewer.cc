@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.53 2005-11-22 17:00:15 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.54 2005-12-14 13:14:04 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -694,7 +694,10 @@ void G4VisCommandViewerRebuild::SetNewValue (G4UIcommand*, G4String newValue) {
   }
 
   viewer->SetNeedKernelVisit(true);
-  SetViewParameters(viewer, viewer->GetDefaultViewParameters());
+
+  // Check auto-refresh and print confirmations, but without changing
+  // view paramters...
+  SetViewParameters(viewer, viewer->GetViewParameters());
 }
 
 ////////////// /vis/viewer/refresh ///////////////////////////////////////
@@ -759,15 +762,18 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand*, G4String newValue) {
     }
     return;
   }
-  G4bool successful = scene -> AddWorldIfEmpty (warn);
-  if (!successful) {
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout <<
-	"WARNING: Scene is empty.  Perhaps no geometry exists."
-	"\n  Try /run/initialize."
- 	     << G4endl;
-   }
-    return;
+  if (scene->GetRunDurationModelList().empty()) {
+    G4bool successful = scene -> AddWorldIfEmpty (warn);
+    if (!successful) {
+      if (verbosity >= G4VisManager::warnings) {
+	G4cout <<
+	  "WARNING: Scene is empty.  Perhaps no geometry exists."
+	  "\n  Try /run/initialize."
+	       << G4endl;
+      }
+      return;
+    }
+    UpdateVisManagerScene(scene->GetName());
   }
 
   if (verbosity >= G4VisManager::confirmations) {
