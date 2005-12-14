@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2005-12-05 00:15:38 perl Exp $
+$Id: History,v 1.23 2005-12-14 13:15:56 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,17 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+14th December  John Allison
+- Improved /vis/scene/notifyHandlers so that it forces a rebuild of the
+  graphical database, if any.  Particularly relevant for Open Inventor.
+- G4Scene.cc, G4VSceneHandler.cc: Improved warning messages.
+- G4VisManager.cc: Apply "/vis/scene/notifyHandlers" if world has been added
+  to an empty scene.
+- G4VisCommandsViewer.cc: "/vis/viewer/refresh": if world is added to
+  an empty scene, invoke UpdateVisManagerScene, which applies
+  "/vis/scene/notifyHandlers", which now forces a rebuild.
+- G4VisCommandsViewer.cc: Fix bug in "/vis/viewer/rebuild".
 
 4th December  John Allison (visman-V07-01-10)
 - G4Vismanager.cc: Prevent ERROR messages at end of event and run when
