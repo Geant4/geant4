@@ -1,6 +1,12 @@
                  History file
                  ------------
 
+14-Dec-2005 - A.Ribon (statAccepTest-V07-01-07)
+- Last tag, as used for the December 2005 G4 release 
+  validation production, with everything pre-installed
+  in the $VO_GEANT4_SW_DIR/dirInstallations.
+
+
 28-Nov-2005 - A.Ribon (statAccepTest-V07-01-06)
 - Added in dirObservables two scripts, unpack.py and
   pvalues.py, and a kumac, pvalues.kumac . They are
