@@ -1,4 +1,4 @@
-# $Id: G4Kernel.i,v 1.6 2005-11-15 16:01:55 gcosmo Exp $
+# $Id: G4Kernel.i,v 1.7 2005-12-15 14:24:56 ahoward Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -202,7 +202,7 @@ class G4PVPlacement : public G4VPhysicalVolume
 {
 public:  
   G4PVPlacement(G4RotationMatrix *pRot,
-		const Hep3Vector &tlate,
+		const CLHEP::Hep3Vector &tlate,
 		G4LogicalVolume *pCurrentLogical,
 		const G4String &pName,
 		G4LogicalVolume *pMotherLogical = 0,
