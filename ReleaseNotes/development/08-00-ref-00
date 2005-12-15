@@ -395,8 +395,10 @@ examples                                         examples-V08-00-00
     + Introduced usage of general particle source and updated macros.
   o Rich (Rich-V07-01-00)
     + Migration to CLHEP namespace.
-  o Tiara (Tiara-V07-01-01)
+  o Tiara (Tiara-V07-01-05)
     + Removed obsolete G4VisManager reference.
+    + Migrated to non-static particles and to CLHEP namespace.
+    + Updated configuration scripts.
   o underground_physics (DMX-V07-01-03)
     + Migrated to non-static particles and hadronic constructor
       required for G4Decay.
@@ -487,11 +489,11 @@ tests                                            tests-V08-00-00
     Removed obsolete ion classes.
 - test22 (test22-V07-01-01)
   o Updated initialisation of particles.
-- test29 (test33-V07-01-02)
+- test29 (test29-V07-01-10)
   o Updated initialisation of particles in main().
-- test31 (test33-V07-01-02)
+- test31 (test31-V07-01-01)
   o Updated physics lists setup.
-- test33 (test33-V07-01-02)
+- test33 (test33-V07-01-03)
   o Doubled all detector dimensions to suppress warning on importance
     value of world.
 - test50 (test50-V07-01-01)
