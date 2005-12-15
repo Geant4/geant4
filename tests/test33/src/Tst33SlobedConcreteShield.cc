@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33SlobedConcreteShield.cc,v 1.10 2005-12-13 07:14:43 ahoward Exp $
+// $Id: Tst33SlobedConcreteShield.cc,v 1.11 2005-12-15 11:40:42 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -60,9 +60,10 @@ void Tst33SlobedConcreteShield::Construct(){
 
   // world solid
 
+  G4double scaling = 2.0;
   G4double innerRadiusCylinder = 0*cm;
-  G4double outerRadiusCylinder = 201*cm; // for scoring
-  G4double hightCylinder       = 205*cm;
+  G4double outerRadiusCylinder = scaling*101*cm; // for scoring
+  G4double hightCylinder       = scaling*105*cm;
   G4double startAngleCylinder  = 0*deg;
   G4double spanningAngleCylinder    = 360*deg;
 
@@ -93,8 +94,8 @@ void Tst33SlobedConcreteShield::Construct(){
   // creating 18 slobs of 10 cm thick concrete
 
   G4double innerRadiusShield = 0*cm;
-  G4double outerRadiusShield = 200*cm;
-  G4double hightShield       = 10*cm;
+  G4double outerRadiusShield = scaling*100*cm;
+  G4double hightShield       = scaling*5*cm;
   G4double startAngleShield  = 0*deg;
   G4double spanningAngleShield    = 360*deg;
 
@@ -107,8 +108,8 @@ void Tst33SlobedConcreteShield::Construct(){
 
   G4Tubs *aShieldI1 = new G4Tubs("aShieldI1",
 				 innerRadiusShield,
-				 100*cm,
-				 2*cm,
+				 scaling*50*cm,
+				 scaling*1*cm,
 				 startAngleShield,
 				 spanningAngleShield);
 
@@ -128,7 +129,7 @@ void Tst33SlobedConcreteShield::Construct(){
   // physical shields
 
   G4int i;
-  G4double startz = -170*cm; 
+  G4double startz = -(scaling*85*cm); 
   for (i=1; i<=18; i++) {
     name = fPVolumeStore.GetCellName(i);
     G4LogicalVolume *aShield_log = 
@@ -180,8 +181,8 @@ void Tst33SlobedConcreteShield::Construct(){
   // another slob which should get the same importance value as the 
   // last slob
   innerRadiusShield = 0*cm;
-  outerRadiusShield = 200*cm;
-  hightShield       = 15.0*cm;
+  outerRadiusShield = scaling*100*cm;
+  hightShield       = scaling*7.5*cm;
   startAngleShield  = 0*deg;
   spanningAngleShield    = 360*deg;
 
@@ -198,7 +199,7 @@ void Tst33SlobedConcreteShield::Construct(){
     
   G4double pos_x = 0*cm;
   G4double pos_y = 0*cm;
-  G4double pos_z = 195.0*cm;
+  G4double pos_z = scaling*97.5*cm;
   G4VPhysicalVolume *pvol = 
     new G4PVPlacement(0, 
 		      G4ThreeVector(pos_x, pos_y, pos_z),
