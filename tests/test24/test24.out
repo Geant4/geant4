@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V07-01-03    (16-December-2005)
+ Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,7 +13,6 @@ SimpleBox is now made of U
 userDetector->Construct() start.
 SLog is registered to the default region.
 physicsList->Construct() start.
-physicsList->ConstructParticle() start.
 physicsList->Construct() start.
 Thank you for using G4BinaryCascade. 
 physicsList->setCut() start.
@@ -51,7 +50,7 @@ phot:  Total cross sections from Sandia parametrisation.
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -83,7 +82,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -96,7 +95,7 @@ msc:  Model variant of multiple scattering for GenericIon
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -134,7 +133,7 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
@@ -160,7 +159,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=68s Real=69s Sys=0.09s
+  User=63s Real=63s Sys=0.16s
 #
 # neutron at 10 GeV in U
 #
@@ -189,7 +188,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=28s Real=28s Sys=0.07s
+  User=40s Real=41s Sys=0.05s
 #
 # pi+ at 10 GeV in U
 #
@@ -218,7 +217,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=45s Real=45s Sys=0.13s
+  User=51s Real=51s Sys=0.04s
 #
 # pi- at 10 GeV in U
 #
@@ -247,7 +246,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=66s Real=66s Sys=0.07s
+  User=59s Real=59s Sys=0.12s
 #
 # proton at 10 GeV in Cu
 #
@@ -274,7 +273,7 @@ phot:  Total cross sections from Sandia parametrisation.
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -306,7 +305,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -319,7 +318,7 @@ msc:  Model variant of multiple scattering for GenericIon
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -357,7 +356,7 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
@@ -383,7 +382,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=21s Real=22s Sys=0.26s
+  User=24s Real=26s Sys=0.25s
 #
 # neutron at 10 GeV in Cu
 #
@@ -417,7 +416,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=21s Real=21s Sys=0.1s
+  User=22s Real=23s Sys=0.1s
 #
 # pi+ at 10 GeV in Cu
 #
@@ -451,7 +450,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=22s Real=23s Sys=0.04s
+  User=21s Real=21s Sys=0.02s
 #
 # pi- at 10 GeV in Cu
 #
@@ -485,7 +484,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=21s Real=21s Sys=0.06s
+  User=18s Real=18s Sys=0.03s
 #
 # proton at 10 GeV in Si
 #
@@ -512,7 +511,7 @@ phot:  Total cross sections from Sandia parametrisation.
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -544,7 +543,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -557,7 +556,7 @@ msc:  Model variant of multiple scattering for GenericIon
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -595,7 +594,7 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
@@ -626,7 +625,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=8.28s Real=8.46s Sys=0.04s
+  User=9.45s Real=9.64s Sys=0.05s
 #
 # neutron at 10 GeV in Si
 #
@@ -665,7 +664,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=10.39s Real=10.41s Sys=0s
+  User=9.15s Real=9.16s Sys=0s
 #
 # pi+ at 10 GeV in Si
 #
@@ -704,7 +703,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=8.99s Real=9s Sys=0.01s
+  User=12.98s Real=12.99s Sys=0.01s
 #
 # pi- at 10 GeV in Si
 #
@@ -743,7 +742,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=9.33s Real=9.39s Sys=0.03s
+  User=12.88s Real=12.91s Sys=0s
 #
 # proton at 10 GeV in H
 #
@@ -767,7 +766,7 @@ phot:  Total cross sections from Sandia parametrisation.
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -799,7 +798,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -812,7 +811,7 @@ msc:  Model variant of multiple scattering for GenericIon
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -850,7 +849,7 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : H 
@@ -886,7 +885,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # neutron at 10 GeV in H
 #
@@ -974,7 +973,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.02s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # pi- at 10 GeV in H
 #
@@ -1028,5 +1027,4 @@ EventManager deleted.
 UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleting.
 RunManager is deleting.

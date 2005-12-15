@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V07-01-03    (16-December-2005)
+ Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -52,7 +52,6 @@ userDetector->Construct() start.
 
 World is registered to the default region.
 physicsList->Construct() start.
-physicsList->ConstructParticle() start.
 physicsList->Construct() start.
 physicsList->setCut() start.
 #
@@ -78,8 +77,8 @@ G4VUserPhysicsList::ResetCuts() is obsolete. This method gives no effect and you
 /process/list
      Transportation
 /particle/list
-         GenericIon,                 e+,                 e-,              gamma
-           geantino,
+                 e+,                 e-,              gamma,           geantino
+
 /run/particle/dumpCutValues
 #
 /gun/direction 0 0 1
@@ -138,7 +137,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.07000000000000001s Sys=0.01s
+  User=0s Real=0.04s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -209,7 +208,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -424,7 +423,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -525,7 +524,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.47s Real=0.47s Sys=0s
+  User=0.48s Real=0.48s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
@@ -667,7 +666,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.48s Real=0.48s Sys=0s
+  User=0.49s Real=0.49s Sys=0s
 #
 /calor/setAbsMat Lead      
 
@@ -805,7 +804,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -840,7 +839,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.46s Real=0.46s Sys=0s
+  User=0.47s Real=0.47s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
@@ -921,7 +920,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.47s Real=0.47s Sys=0s
+  User=0.47s Real=0.48s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
@@ -1002,7 +1001,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.46s Real=0.46s Sys=0s
+  User=0.47s Real=0.47s Sys=0s
 #
 /gun/particle e-
 #---------------
@@ -1050,7 +1049,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -1085,7 +1084,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.48s Real=0.48s Sys=0s
+  User=0.49s Real=0.49s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 2
@@ -1166,7 +1165,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.49s Real=0.49s Sys=0s
+  User=0.48s Real=0.48s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
@@ -1247,7 +1246,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.48s Real=0.48s Sys=0s
+  User=0.49s Real=0.49s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
@@ -1482,7 +1481,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -1613,7 +1612,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.47s Real=0.47s Sys=0s
+  User=0.46s Real=0.46s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
@@ -1704,7 +1703,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.46s Real=0.46s Sys=0s
+  User=0.47s Real=0.47s Sys=0s
 #
 /gun/particle e-
 #-----------------
@@ -1757,7 +1756,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -1797,7 +1796,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.47s Real=0.47s Sys=0s
+  User=0.48s Real=0.48s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 2
@@ -1888,7 +1887,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.47s Real=0.47s Sys=0s
+  User=0.48s Real=0.48s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
@@ -2070,7 +2069,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.48s Real=0.48s Sys=0s
+  User=0.49s Real=0.49s Sys=0s
 #
 /gun/particle gamma
 #------------------
@@ -2177,7 +2176,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.46s Real=0.46s Sys=0s
+  User=0.47s Real=0.47s Sys=0s
 /calor/setAbsMat Lead
 
  The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
@@ -2225,7 +2224,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.46s Real=0.46s Sys=0s
+  User=0.47s Real=0.47s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -2366,5 +2365,4 @@ EventManager deleted.
 UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleting.
 RunManager is deleting.

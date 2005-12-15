@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V07-01-03    (16-December-2005)
+ Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -49,7 +49,7 @@ eIoni:   tables are built for  e-
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -80,7 +80,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 msc:  Model variant of multiple scattering for GenericIon
 
@@ -103,7 +103,7 @@ muPairProd:   tables are built for  mu+
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -124,7 +124,7 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 Test23 event # 100
 Test23 event # 200
 Test23 event # 300
@@ -135,6 +135,5 @@ Test23 event # 700
 Test23 event # 800
 Test23 event # 900
 Test23 event # 1000
-Test23_Result: gam=2640(0.82902995), e-=14138(0.42202478), e+=56(3.8689492), p=441(5.0993473), n=1628(4.5717486), d=76(3.9537621), t=53(7.147995), He3=2(8.4422301), alph=362(6.1564927), nu=1000(70.435809), anu=113(32.578304), others=15328*0.1509865
-Test23 is done
+Test23_Result: gam=2563(0.90912992), e-=14081(0.47521782), e+=75(3.5154471), p=393(5.4609322), n=1728(4.3592839), d=93(4.2991736), t=47(7.0446938), He3=9(8.7284658), alph=355(5.8156731), nu=1000(68.880681), anu=132(34.184568), others=17642*0.13293757
 Test23 is done

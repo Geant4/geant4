@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V07-01-03    (16-December-2005)
+ Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -64,6 +64,8 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+
+Registering model factories...
 /tracking/verbose 0
 #
 /testem/phys/setGCut 2.20 mm
@@ -110,7 +112,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -142,7 +144,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -162,7 +164,7 @@ ionIoni:   tables are built for  GenericIon
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -200,7 +202,7 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 Region <DefaultRegionForTheWorld> -- appears in <Aluminium> world volume
  Materials : Aluminium 
@@ -231,13 +233,10 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Start Run processing.
 
 ---> Begin of Event: 0
-ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
-  Suppress instantiation of vis manager (G4VisExecutive) or
-  use "/vis/open" or "/vis/sceneHandler/create".
 Run terminated.
 Run Summary
   Number of events processed : 200
-  User=131.83s Real=153.33s Sys=19.6s
+  User=143.37s Real=168.97s Sys=23.87s
 
  ======================== run summary ======================
 
@@ -245,28 +244,28 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.784 MeV
+ total energy deposit: 99.809 MeV
 
- nb tracks/event   neutral:     27.560   charged:    693.775
- nb  steps/event   neutral:    140.580   charged:   3354.055
+ nb tracks/event   neutral:     27.575   charged:    693.310
+ nb  steps/event   neutral:    138.115   charged:   3828.275
 
  nb of process calls per event: 
-          eIoni        brem       compt        phot         msc        conv     annihilTransportation
-       3324.605      25.790     113.020      25.075       2.195       1.455       1.455       1.040
+          eIoni        brem         msc        phot       compt        conv     annihilTransportation
+       3144.490      25.910     656.495      25.180     110.540       1.380       1.380       1.015
 
 ---------------------------------------------------------
  Primary particle : 
- CSDA Range = 11.184 cm    rms = 3.618 cm 
- proj Range = 9.609 cm    rms = 3.306 cm 
- proj/CSDA  = 0.859
- transverse dispersion at end = 1.830 cm 
+ CSDA Range = 10.761 cm    rms = 3.879 cm 
+ proj Range = 9.255 cm    rms = 3.650 cm 
+ proj/CSDA  = 0.860
+ transverse dispersion at end = 1.741 cm 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1261365639, 1403033250
+ Current couple of seeds = 1674441358, 1865268964
 ----------------------------------------
 
- mass CSDA Range from simulation = 30.198 g/cm2
+ mass CSDA Range from simulation = 29.055 g/cm2
                from PhysicsTable = 85.395 g/cm2
 ---------------------------------------------------------
 #
@@ -288,7 +287,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -320,7 +319,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -340,7 +339,7 @@ ionIoni:   tables are built for  GenericIon
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -378,7 +377,7 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 Region <DefaultRegionForTheWorld> -- appears in <Aluminium> world volume
  Materials : Aluminium 
@@ -399,7 +398,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1261365639, 1403033250
+ Current couple of seeds = 1674441358, 1865268964
 ----------------------------------------
 Start Run processing.
 
@@ -407,7 +406,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 200
-  User=44.55s Real=57.3s Sys=10.93s
+  User=45.28s Real=58.43s Sys=11.47s
 
  ======================== run summary ======================
 
@@ -415,28 +414,28 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.844 MeV
+ total energy deposit: 99.789 MeV
 
- nb tracks/event   neutral:     28.345   charged:    151.845
- nb  steps/event   neutral:    144.820   charged:   1115.885
+ nb tracks/event   neutral:     27.115   charged:    143.160
+ nb  steps/event   neutral:    136.270   charged:   1161.905
 
  nb of process calls per event: 
-           brem       eIoni       compt        photTransportation        conv     annihil         msc
-         26.695    1086.775     116.475      25.955       0.960       1.430       1.430       0.985
+           brem       eIoni       compt        phot         msc        conv     annihilTransportation
+         25.585    1022.685     109.155      24.920     112.355       1.280       1.280       0.915
 
 ---------------------------------------------------------
  Primary particle : 
- CSDA Range = 11.016 cm    rms = 3.744 cm 
- proj Range = 9.594 cm    rms = 3.450 cm 
- proj/CSDA  = 0.871
- transverse dispersion at end = 1.716 cm 
+ CSDA Range = 11.292 cm    rms = 3.464 cm 
+ proj Range = 9.702 cm    rms = 3.120 cm 
+ proj/CSDA  = 0.859
+ transverse dispersion at end = 1.774 cm 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1920134127, 1513716869
+ Current couple of seeds = 1519444746, 431167489
 ----------------------------------------
 
- mass CSDA Range from simulation = 29.742 g/cm2
+ mass CSDA Range from simulation = 30.488 g/cm2
                from PhysicsTable = 67.818 g/cm2
 ---------------------------------------------------------
 Graphics systems deleted.
@@ -450,5 +449,4 @@ EventManager deleted.
 UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleting.
 RunManager is deleting.

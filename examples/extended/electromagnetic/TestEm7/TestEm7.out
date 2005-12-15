@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V07-01-03    (16-December-2005)
+ Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -35,6 +35,8 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+
+Registering model factories...
 /run/verbose 2
 #
 /testem/det/setMat Water
@@ -54,7 +56,6 @@ userDetector->Construct() start.
 ---------------------------------------------------------
 World is registered to the default region.
 physicsList->Construct() start.
-physicsList->ConstructParticle() start.
 physicsList->Construct() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
@@ -81,7 +82,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -113,7 +114,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -133,7 +134,7 @@ ionIoni:   tables are built for  GenericIon
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -171,7 +172,7 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Materials : Galactic Water 
@@ -209,9 +210,6 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Start Run processing.
 
 ---> Begin of Event: 0
-ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
-  Suppress instantiation of vis manager (G4VisExecutive) or
-  use "/vis/open" or "/vis/sceneHandler/create".
 
 ---> Begin of Event: 1000
 
@@ -233,15 +231,15 @@ ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=351.74s Real=501.11s Sys=57.88s
+  User=324.79s Real=460.28s Sys=54.19s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of Water (density: 1 g/cm3 )
 
- projected Range= 17.673 cm    rms= 2.1131 mm 
+ projected Range= 17.674 cm    rms= 2.3568 mm 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1481235904, 1361590698
+ Current couple of seeds = 2077348605, 481531672
 ----------------------------------------
 #
 /gun/particle ion
@@ -276,7 +274,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1481235904, 1361590698
+ Current couple of seeds = 2077348605, 481531672
 ----------------------------------------
 Start Run processing.
 
@@ -284,15 +282,15 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=97.49s Real=119.38s Sys=13.14s
+  User=92.65s Real=113.07s Sys=11.91s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of Water (density: 1 g/cm3 )
 
- projected Range= 16.371 cm    rms= 468.62 mum
+ projected Range= 16.371 cm    rms= 461.67 mum
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 332147975, 1004495563
+ Current couple of seeds = 14066575, 1986435179
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
@@ -305,5 +303,4 @@ EventManager deleted.
 UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleting.
 RunManager is deleting.

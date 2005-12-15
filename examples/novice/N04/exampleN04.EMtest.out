@@ -1,18 +1,14 @@
 
 *************************************************************
- Geant4 version Name: global-V07-01-03    (16-December-2005)
+ Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
 
-
-You are using the simulation engine reuse library: PACK 2.4
-
-
-You are using the simulation engine: QGSP 2.8
-
+<<< Geant4 Physics List engine packaging library: PACK 3.0
+<<< Geant4 Physics List simulation engine: QGSP 3.0
 
 Visualization Manager instantiating...
 Visualization Manager initialising...
@@ -29,6 +25,8 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
 
+Registering model factories...
+
 phot:  Total cross sections from Sandia parametrisation. 
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
@@ -41,11 +39,9 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
-eBrem:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -53,9 +49,17 @@ eIoni:   tables are built for  e-
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
-msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -67,15 +71,9 @@ annihil:       Heilter model of formula of annihilation into 2 photons
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
-annihil:       Heilter model of formula of annihilation into 2 photons
-      tables are built for  e+
+msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-
-eIoni:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -84,9 +82,7 @@ hIoni:   tables are built for  proton
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
-msc:  Model variant of multiple scattering for proton
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+msc:  Model variant of multiple scattering for GenericIon
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -95,7 +91,9 @@ ionIoni:   tables are built for  GenericIon
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
 
-msc:  Model variant of multiple scattering for GenericIon
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -113,10 +111,6 @@ muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
-
-msc:  Model variant of multiple scattering for mu+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
 
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -137,72 +131,24 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 700 mum    e- 700 mum    e+ 700 mum
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : ArgonGas
- Range cuts        :  gamma 700 mum    e- 700 mum    e+ 700 mum
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 700 mum    e- 700 mum    e+ 700 mum
- Energy thresholds :  gamma 5.84521 keV    e- 422.711 keV    e+ 407.385 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : Scintillator
- Range cuts        :  gamma 700 mum    e- 700 mum    e+ 700 mum
- Energy thresholds :  gamma 2.08499 keV    e- 281.588 keV    e+ 274.74 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 4     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 700 mum    e- 700 mum    e+ 700 mum
- Energy thresholds :  gamma 94.7155 keV    e- 1.00067 MeV    e+ 940.93 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 ### Run 0 start.
-WARNING: Scene "refresh" not found.
-  /vis/scene/list to see scenes.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 0 isolated muon found.
 ++++++++ event aborted
 >>> Event 0
-ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
-  Suppress instantiation of vis manager (G4VisExecutive) or
-  use "/vis/open" or "/vis/sceneHandler/create".
      25 hits are stored in ExN04TrackerHitsCollection.
      1 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.17356712 (GeV)
+     Total energy deposition in calorimeter : 0.17259913 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
-ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 ### Run 1 start.
-WARNING: Scene "refresh" not found.
-  /vis/scene/list to see scenes.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 0 isolated muon found.
 ++++++++ event aborted
 >>> Event 0
      21 hits are stored in ExN04TrackerHitsCollection.
      2 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.1730288 (GeV)
+     Total energy deposition in calorimeter : 0.17223004 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 0 isolated muon found.
@@ -210,9 +156,7 @@ Stage 1->2 : 0 isolated muon found.
 >>> Event 1
      20 hits are stored in ExN04TrackerHitsCollection.
      2 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.17373797 (GeV)
+     Total energy deposition in calorimeter : 0.17281713 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
-ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
-Visualization Manager deleting...
 Visualization Manager deleting...

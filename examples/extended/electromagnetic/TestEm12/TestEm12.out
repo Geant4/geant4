@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V07-01-03    (16-December-2005)
+ Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -52,6 +52,8 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+
+Registering model factories...
 /run/verbose 2
 #
 /testem/det/setMat G4_WATER
@@ -71,7 +73,6 @@ userDetector->Construct() start.
 ---------------------------------------------------------
 Absorber is registered to the default region.
 physicsList->Construct() start.
-physicsList->ConstructParticle() start.
 physicsList->Construct() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
@@ -116,7 +117,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -148,7 +149,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -168,7 +169,7 @@ ionIoni:   tables are built for  GenericIon
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -206,7 +207,7 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 Region <DefaultRegionForTheWorld> -- appears in <Absorber> world volume
  Materials : G4_WATER 
@@ -237,9 +238,6 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Start Run processing.
 
 ---> Begin of Event: 0
-ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
-  Suppress instantiation of vis manager (G4VisExecutive) or
-  use "/vis/open" or "/vis/sceneHandler/create".
 
 ---> Begin of Event: 1000
 
@@ -261,7 +259,7 @@ ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1360.93s Real=1597.35s Sys=131.46s
+  User=1335.25s Real=1555.5s Sys=132.61s
 
  ======================== run summary ======================
 
@@ -269,18 +267,18 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 3.937 MeV +- 217.499 keV
+ Total Energy deposited        = 3.937 MeV +- 227.298 keV
 
- Track length of primary track = 2.012 cm  +- 2.787 mm 
+ Track length of primary track = 2.014 cm  +- 2.801 mm 
  Range from EmCalculator       = 3.091 cm  (from restricted dE/dx)
 
- Projected range               = 1.216 cm  +- 4.344 mm 
+ Projected range               = 1.223 cm  +- 4.343 mm 
 
- Nb of steps of primary track  = 209.70 +- 26.56	 Step size= 95.982 mum +- 7.054 mum
+ Nb of steps of primary track  = 210.08 +- 26.80	 Step size= 95.908 mum +- 7.025 mum
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1829155586, 1596581913
+ Current couple of seeds = 451848601, 279672341
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
@@ -293,5 +291,4 @@ EventManager deleted.
 UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleting.
 RunManager is deleting.

@@ -1,12 +1,11 @@
 
 *************************************************************
- Geant4 version Name: global-V07-01-03    (16-December-2005)
+ Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
 Material available: Beryllium
 Material available: Aluminum
 Material available: Carbon
@@ -64,11 +63,16 @@ Material available: Graphite
  Material: Graphite Graphite   density:  2.265 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  18.834 cm 
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.00 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:      Air     density:  1.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 367.858 m  
+ Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
 
 
+G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
+/run/verbose 1
+/tracking/verbose 0
+#
+/run/initialize
 
  The  WORLD   is made of 21 cm  of Air. The transverse size (YZ) of the world is 12 cm 
  The ABSORBER is made of 1 items of 10 cm  of Water. The transverse size (YZ) is 10 cm 
@@ -76,7 +80,6 @@ Material available: Graphite
 G4VUserPhysicsList::Construct()
 Construct processes 
 Ionic processes for GenericIon
-Ionic processes for IonC12
 Ionic processes for alpha
 Hadronic processes for anti_proton
 Ionic processes for deuteron
@@ -87,16 +90,10 @@ Hadronic processes for pi-
 Hadronic processes for proton
 Test17PhysicsList::SetCuts:CutLength : 100 mum
 Set cuts for all particles! 
-/run/verbose 1
-/test17/cutG 10 micrometer
-/test17/cutE 10 micrometer
-/run/initialize
-#
-/run/initialize
-#
+# 
 /gun/particle proton
 /gun/energy 500 keV
-/tracking/verbose 0
+#
 /run/beamOn 1000
 
 phot:  Total cross sections from Sandia parametrisation. 
@@ -113,7 +110,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -145,7 +142,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 G4AugerData for Element no. 6 are loaded
 G4AugerData for Element no. 7 are loaded
 G4AugerData for Element no. 8 are loaded
@@ -177,11 +174,6 @@ Cuts are defined
 G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built 
 G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built 
 G4hLowEnergyIonisation::BuildPhysicsTable: end for GenericIon
-G4hLowEnergyIonisation::BuildPhysicsTable for IonC12 mass(MeV)= 11149.5 charge= 6 type= static_nucleus
-Cuts are defined 
-G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built 
-G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built 
-G4hLowEnergyIonisation::BuildPhysicsTable: end for IonC12
 G4hLowEnergyIonisation::BuildPhysicsTable for alpha mass(MeV)= 3727.42 charge= 2 type= nucleus
 Cuts are defined 
 G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built 
@@ -195,7 +187,7 @@ G4hLowEnergyIonisation::BuildPhysicsTable: end for deuteron
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -233,14 +225,14 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 1 eV     e- 4.01595 eV     e+ 4.01595 eV 
+ Energy thresholds :  gamma 1 eV     e- 6.14746 eV     e+ 6.14746 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -258,7 +250,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.57s Real=7.54s Sys=1.93s
+  User=5.88s Real=7.92s Sys=2s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -274,7 +266,7 @@ Run Summary
 Average Number electrons per event = 0
 Average Number photons per event   = 0
 
-#
+#/tracking/verbose 0
 /gun/particle anti_proton
 /run/beamOn 1000
 
@@ -283,7 +275,7 @@ Average Number photons per event   = 0
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 1 eV     e- 4.01595 eV     e+ 4.01595 eV 
+ Energy thresholds :  gamma 1 eV     e- 6.14746 eV     e+ 6.14746 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -301,7 +293,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.56s Real=7.3s Sys=1.74s
+  User=6.02s Real=7.69s Sys=1.67s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -313,8 +305,9 @@ Run Summary
 Average Number electrons per event = 0
 Average Number photons per event   = 0
 
-#scaled energy
-/gun/particle IonC12
+/gun/particle ion
+/gun/ion 6 12 6
+G4hLowEnergyIonisation::BuildPhysicsTable for C12[0.0] mass(MeV)= 11174.9 charge= 6 type= nucleus
 /gun/energy 6000 keV
 /run/beamOn 1000
 
@@ -323,7 +316,7 @@ Average Number photons per event   = 0
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 1 eV     e- 4.01595 eV     e+ 4.01595 eV 
+ Energy thresholds :  gamma 1 eV     e- 6.14746 eV     e+ 6.14746 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -341,12 +334,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=8.93s Real=11.23s Sys=2.3s
+  User=11.95s Real=14.42s Sys=2.45s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 1000 for IonC12 with Ekin = 6 MeV p= 365.827 MeV/c
-    Track Length in absorber = 8.56674 +- 0.00123272  microns 
-    CSDA  Range  in absorber = 6.9371 +- 0.0114614  microns 
+ end of Run TotNbofEvents = 1000 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
+    Track Length in absorber = 8.56868 +- 0.00120494  microns 
+    CSDA  Range  in absorber = 6.94861 +- 0.0119157  microns 
 
     Energy deposit in absorber = 6  MeV 
 
@@ -365,7 +358,7 @@ Average Number photons per event   = 0
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 1 eV     e- 4.01595 eV     e+ 4.01595 eV 
+ Energy thresholds :  gamma 1 eV     e- 6.14746 eV     e+ 6.14746 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -383,21 +376,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=47.27s Real=47.48s Sys=0.21s
+  User=46.59s Real=46.82s Sys=0.23s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.1994 +- 0.0166119  microns 
-    CSDA  Range  in absorber = 9.04248 +- 0.0195033  microns 
+    Track Length in absorber = 9.19275 +- 0.0176855  microns 
+    CSDA  Range  in absorber = 9.05448 +- 0.0176111  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.140396 +- 0.0166119 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.173479 +- 0.0195033 microns 
+    Track Length (G4 - ICRU49) = 0.133753 +- 0.0176855 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.18548 +- 0.0176111 microns 
 
-Average Number electrons per event = 22.63
-Average Number photons per event   = 22.57
+Average Number electrons per event = 22.28
+Average Number photons per event   = 22.2
 
 #
 /test17/cutAugerEnergy 250 eV
@@ -409,7 +402,7 @@ Average Number photons per event   = 22.57
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 1 eV     e- 4.01595 eV     e+ 4.01595 eV 
+ Energy thresholds :  gamma 1 eV     e- 6.14746 eV     e+ 6.14746 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -424,24 +417,24 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 4 start.
 Start Run processing.
+EvtNo= 57  length= 0.00913494  xend= 0.00445623
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=108.38s Real=108.67s Sys=0.29s
+  User=111.34s Real=111.59s Sys=0.25s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.14521 +- 0.0178346  microns 
-    CSDA  Range  in absorber = 9.00378 +- 0.0194423  microns 
+ end of Run TotNbofEvents = 99 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
+    Track Length in absorber = 9.1898 +- 0.0167595  microns 
+    CSDA  Range  in absorber = 9.02848 +- 0.0212186  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.08621 +- 0.0178346 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.134777 +- 0.0194423 microns 
+    Track Length (G4 - ICRU49) = 0.130797 +- 0.0167595 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.15948 +- 0.0212186 microns 
 
-Average Number electrons per event = 510.2
-Average Number photons per event   = 2.73
+Average Number electrons per event = 521.808
+Average Number photons per event   = 3.0404
 
-G4 kernel has come to Quit state.
 G4 kernel has come to Quit state.

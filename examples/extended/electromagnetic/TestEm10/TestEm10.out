@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V07-01-03    (16-December-2005)
+ Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -20,6 +20,8 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+
+Registering model factories...
 
 ***** Table : Nb of materials = 34 *****
 
@@ -242,19 +244,27 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.384
 9.283e+04	3.384
 
-total time for build X-ray TR energy loss tables = 0.84 s
+total time for build X-ray TR energy loss tables = 0.86 s
 
 phot:  Total cross sections from Sandia parametrisation. 
-Em10PhysicsList::SetCuts:CutLength : 1 mm 
-PAIModel DeltaCutInKineticEnergyNow = 61.9458 keV
-PAIModel DeltaCutInKineticEnergyNow = 61.9458 keV
-PAIModel DeltaCutInKineticEnergyNow = 61.9458 keV
-PAIModel DeltaCutInKineticEnergyNow = 61.9458 keV
-PAIModel DeltaCutInKineticEnergyNow = 61.9458 keV
-PAIModel DeltaCutInKineticEnergyNow = 61.9458 keV
-PAIModel DeltaCutInKineticEnergyNow = 61.9458 keV
-PAIModel DeltaCutInKineticEnergyNow = 61.9458 keV
-PAIModel DeltaCutInKineticEnergyNow = 61.9458 keV
+Em10PhysicsList::SetCuts:CutLength for e-, e+ and gamma is: 1 mm 
+Radiator gamma cut    = 1 mm
+Radiator electron cut = 1 mm
+Radiator positron cut = 1 mm
+Radiator cuts are set
+Detector gamma cut    = 1 mm
+Detector electron cut = 1 mm
+Detector positron cut = 1 mm
+Detector cuts are set
+PAIModel DeltaCutInKineticEnergyNow = 1.50609 keV
+PAIModel DeltaCutInKineticEnergyNow = 1.50609 keV
+PAIModel DeltaCutInKineticEnergyNow = 1.50609 keV
+PAIModel DeltaCutInKineticEnergyNow = 1.50609 keV
+PAIModel DeltaCutInKineticEnergyNow = 1.50609 keV
+PAIModel DeltaCutInKineticEnergyNow = 1.50609 keV
+PAIModel DeltaCutInKineticEnergyNow = 1.50609 keV
+PAIModel DeltaCutInKineticEnergyNow = 1.50609 keV
+PAIModel DeltaCutInKineticEnergyNow = 1.50609 keV
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -273,7 +283,7 @@ eIoni:   tables are built for  e-
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -299,7 +309,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -310,7 +320,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -348,42 +358,42 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 1 mm     e- 10 cm     e+ 10 cm 
- Energy thresholds :  gamma 990 eV     e- 89.6195 keV    e+ 88.523 keV
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : radiatorMat
- Range cuts        :  gamma 1 mm     e- 10 cm     e+ 10 cm 
- Energy thresholds :  gamma 1.05919 keV    e- 2.09445 MeV    e+ 1.96942 MeV
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 1.05919 keV    e- 83.2385 keV    e+ 81.2141 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 2.3 cm     e- 2.3 cm     e+ 2.3 cm 
- Energy thresholds :  gamma 990 eV     e- 38.3269 keV    e+ 38.3269 keV
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     XTRradiator
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Mylar
- Range cuts        :  gamma 2.3 cm     e- 2.3 cm     e+ 2.3 cm 
- Energy thresholds :  gamma 10.6962 keV    e- 6.34224 MeV    e+ 5.89067 MeV
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 2.97898 keV    e- 417.539 keV    e+ 402.4 keV
  Region(s) which use this couple : 
     XTRradiator
 
 Index : 4     used in the geometry : Yes     recalculation needed : No 
  Material : Xe15CO2
- Range cuts        :  gamma 2.3 cm     e- 2.3 cm     e+ 2.3 cm 
- Energy thresholds :  gamma 3.83995 keV    e- 61.9458 keV    e+ 61.1879 keV
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 1.50609 keV    e+ 1.48766 keV
  Region(s) which use this couple : 
     XTRdEdxDetector
 
@@ -400,9 +410,6 @@ WARNING: Scene "refresh" not found.
 Start Run processing.
 
 ---> Begin of Event: 0
-ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
-  Suppress instantiation of vis manager (G4VisExecutive) or
-  use "/vis/open" or "/vis/sceneHandler/create".
 Tkin of secondary e- <= 0.
 G4PAIModel::SampleSecondary::deltaTkin = 0
 Set G4PAIModel::SampleSecondary::deltaTkin = 1e-05
@@ -415,65 +422,65 @@ Set G4PAIModel::SampleSecondary::deltaTkin = 1e-05
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=28.88s Real=30.98s Sys=2.05s
+  User=188.81s Real=238.02s Sys=49.17s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=38.4042 +- 0.0471682  mm  
+    mean charged track length   in absorber=40.6977 +- 0.0916085  mm  
 
-            mean energy deposit in absorber=0.0555449 +- 0.000815944  MeV 
+            mean energy deposit in absorber=0.0536852 +- 0.000713399  MeV 
 
- mean number of steps in absorber (charged) =4.709 +- 0.0202563      
- mean number of steps in absorber (neutral) =3.555 +- 0.0592028      
+ mean number of steps in absorber (charged) =19.767 +- 0.458383      
+ mean number of steps in absorber (neutral) =3.622 +- 0.0603748      
 
-   mean number of charged secondaries = 0.023 +- 0.00474036
+   mean number of charged secondaries = 5.471 +- 0.0923859
 
-   mean number of neutral secondaries = 0.041 +- 0.00642799
+   mean number of neutral secondaries = 0.054 +- 0.00714731
 
-   mean number of e-s =0.023  and e+s =0
+   mean number of e-s =5.471  and e+s =0
 
-(number) transmission coeff=0.498  reflection coeff=0.005
+(number) transmission coeff=0.563  reflection coeff=0.055
 
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 523332873, 1291571922
+ Current couple of seeds = 1131156326, 996018461
 ----------------------------------------
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 1 mm     e- 10 cm     e+ 10 cm 
- Energy thresholds :  gamma 990 eV     e- 89.619506 keV    e+ 88.523013 keV
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : radiatorMat
- Range cuts        :  gamma 1 mm     e- 10 cm     e+ 10 cm 
- Energy thresholds :  gamma 1.0591879 keV    e- 2.094452 MeV    e+ 1.9694213 MeV
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 1.0591879 keV    e- 83.238528 keV    e+ 81.214144 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 2.3 cm     e- 2.3 cm     e+ 2.3 cm 
- Energy thresholds :  gamma 990 eV     e- 38.326908 keV    e+ 38.326908 keV
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     XTRradiator
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Mylar
- Range cuts        :  gamma 2.3 cm     e- 2.3 cm     e+ 2.3 cm 
- Energy thresholds :  gamma 10.696181 keV    e- 6.3422406 MeV    e+ 5.8906682 MeV
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 2.978977 keV    e- 417.53934 keV    e+ 402.40033 keV
  Region(s) which use this couple : 
     XTRradiator
 
 Index : 4     used in the geometry : Yes     recalculation needed : No 
  Material : Xe15CO2
- Range cuts        :  gamma 2.3 cm     e- 2.3 cm     e+ 2.3 cm 
- Energy thresholds :  gamma 3.8399514 keV    e- 61.945787 keV    e+ 61.187882 keV
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 1.5060904 keV    e+ 1.4876634 keV
  Region(s) which use this couple : 
     XTRdEdxDetector
 
@@ -481,5 +488,4 @@ Index : 4     used in the geometry : Yes     recalculation needed : No
 
 Graphics systems deleted.
 Visualization Manager deleting...
-G4 kernel has come to Quit state.
 G4 kernel has come to Quit state.

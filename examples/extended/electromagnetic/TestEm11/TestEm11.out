@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V07-01-03    (16-December-2005)
+ Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -52,6 +52,8 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+
+Registering model factories...
 /run/verbose 2
 #
 /testem/det/setMat G4_Si
@@ -71,7 +73,6 @@ userDetector->Construct() start.
 ---------------------------------------------------------
 Absorber is registered to the default region.
 physicsList->Construct() start.
-physicsList->ConstructParticle() start.
 physicsList->Construct() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
@@ -110,7 +111,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -142,7 +143,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -162,7 +163,7 @@ ionIoni:   tables are built for  GenericIon
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -200,7 +201,7 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.02
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 Region <DefaultRegionForTheWorld> -- appears in <Absorber> world volume
  Materials : G4_Si 
@@ -231,9 +232,6 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Start Run processing.
 
 ---> Begin of Event: 0
-ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
-  Suppress instantiation of vis manager (G4VisExecutive) or
-  use "/vis/open" or "/vis/sceneHandler/create".
 
 ---> Begin of Event: 10000
 
@@ -255,7 +253,7 @@ ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=721s Real=1887.52s Sys=324.49s
+  User=687.81s Real=1888.39s Sys=359.13s
 
  ======================== run summary ======================
 
@@ -263,20 +261,20 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 449.857 keV +- 102.264 keV
+ Total Energy deposited        = 449.614 keV +- 102.911 keV
 
- Track length of primary track = 871.435 mum +- 184.608 mum
+ Track length of primary track = 870.360 mum +- 185.843 mum
  Range from EmCalculator       = 941.718 mum (from restricted dE/dx)
 
- Projected range               = 322.060 mum +- 201.711 mum
+ Projected range               = 321.454 mum +- 201.939 mum
 
- Nb of steps of primary track  = 43.03 +- 9.54	 Step size= 20.375 mum +- 2.367 mum
+ Nb of steps of primary track  = 43.43 +- 9.84	 Step size= 20.185 mum +- 2.370 mum
 
- absorbed = 78.42 %   transmit = 4.99 %   reflected = 16.60 %
+ absorbed = 78.48 %   transmit = 4.99 %   reflected = 16.53 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1266904991, 1942953079
+ Current couple of seeds = 301553650, 509080554
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
@@ -289,5 +287,4 @@ EventManager deleted.
 UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleting.
 RunManager is deleting.
