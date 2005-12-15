@@ -159,37 +159,46 @@ We believe it does not give rise to incorrect behaviour.
 <H2>6. Items for migration of the user code</H2>
 
 Some migrations may be necessary for advanced uses of features in Geant4
-in order to upgrade from release 7.1 to release 8.0, a full recompilation
-and/or reinstallation of libraries and user applications is anyhow required.
+in order to upgrade from release 7.1 to release 8.0. Note that a full reinstallation
+of libraries (or a full recompilation) and a recompilation of user applications
+is required.
 
 <P> </P>
-<B>"Non-static" particle definition</B>
+<B>Creating and instantiating physics lists : impact of the revised, "non-static", particle
+definitions</B>
 <P> </P>
-In this release, all particle definition class objects are dynamically 
-instantiated along the invocation of the <TT>ConstructParticle()</TT> method
-of the user's <TT>G4VUserPhysicsList</TT>. This method is invoked at the
-moment the user's physics list is instantiated and set to the
-<TT>G4RunManager</TT> (not any longer at the time of
-<TT>G4RunManager::Initialize()</TT>). This new scheme allows the 
-user to set alternative physics quantities, (e.g. masses of elementary 
-particles) before particles are instantiated with the default quantities
-hard-coded in Geant4. This new scheme causes some restrictions which might 
-affect on the existing user's code:
+In this release, all particle-definition  objects are instantiated dynamically
+when the method <TT>ConstructParticle()</TT> of the user's <TT>G4VUserPhysicsList</TT> is
+ called.
+This method is invoked when the user's physics list is assigned to the
+<TT>G4RunManager</TT> (whereas previously it was called  at the
+time of
+<TT>G4RunManager::Initialize()</TT>). The new scheme allows the 
+user to set  a number physics quantities to alternative values (e.g. masses of
+elementary particles) before particles are instantiated with the values provided by Geant4.
+This new scheme creates some restrictions which can
+affect on the existing users's codes, in particular when user-defined
+physics lists are used:
 <OL>
 <LI>Physics processes and models must be instantiated in the
-    <TT>ConstructProcess()</TT> method of the user's physics list. In other
-    words, physics processes or models must not be data members of the physics
-    list. Some physics processes and models require that particles used in
-    these processes/models have already been instantiated. If a process is a
-    data member of the physics list, it is instantiated along with the
-    instantiation of the physics list itself, (i.e. before the invocation of
-    <TT>ConstructParticle()</TT>). Most of the "educated-guess" physics 
+    <TT>ConstructProcess()</TT> method of the user's physics list. 
+	<br>
+	In particular physics processes or models <em>must not</em> be data members of a physics
+	list. The reason is that some existing physics processes and models require
+	that particles have been instantiated
+    already. If a process is a data member of the physics list, it is instantiated
+    when the physics list's constructor is called, and thus before the invocation
+    of
+    <TT>ConstructParticle()</TT>. 
+	<br>
+	The "educated-guess" physics 
     lists distributed with previous Geant4 releases are affected by this
-    problem. Therefore, the new physics lists distributed with this new
-    release should be used. A user adopting his/her own physics list, should
-    fix it in case a <TT>G4Exception</tt> with the following message happens
-    at the instantiation of the physics list:<BR>
-    Error message:
+    change. The revised physics lists, which are distributed with this 
+    release, should be used in their place. 
+	A user adopting his/her own physics
+    list, will need to perform a similar revision in case an <TT>G4Exception</tt> with
+    the following message  occurs when  the physics list is instantiated:<BR>
+    <em>Error message</em>:
     <PRE>
       Access to G4ParticleTable for finding a particle or equivalent operation 
       occurs before G4VUserPhysicsList is instantiated and assigned to 
@@ -198,19 +207,21 @@ affect on the existing user's code:
       G4VUserPhysicsList and set it to G4RunManager before instantiating 
       other user classes such as G4VUserPrimaryParticleGeneratorAction.
     </PRE>
-    Fix:<BR>
+    <em>Fix:</em>
     All physics processes and models defined as data members of the physics 
     list must be moved to the <TT>ConstructProcess()</TT> method, and must be
-    explicitly instantiated by <TT>new</TT> operator.</LI>
+  explicitly instantiated by <TT>new</TT> operator. The revised physics lists
+  provide a reference for this revision.</LI>
 <LI>User action classes (derived from <TT>G4VUserPrimaryGeneratorAction, 
     G4UserRunAction, G4UserEventAction, G4UserStackingAction, 
     G4UserTrackingAction</TT> and <TT>G4UserSteppingAction</TT>) must be
-    instantiated after the physics list is instantiated and set to
+    instantiated after the physics list is instantiated and after it is set to
     <TT>G4RunManager</TT>. Please note that the user's detector construction
     class is a user initialization class and thus is not affected by this
-    restriction. The user should fix his code in the <TT>main()</TT> if this
-    <TT>G4Exception</TT> shows up:<BR>
-    Error message (for <TT>G4VUserPrimaryGeneratorAction</TT>):
+    restriction. 
+	<Br>The user should revise the <TT>main()</TT> function if the following
+    <TT>G4Exception</TT> occurs:<BR>
+    <em>Error message</em> (for <TT>G4VUserPrimaryGeneratorAction</TT>):
     <PRE>
       You are instantiating G4VUserPrimaryGeneratorAction BEFORE your 
       G4VUserPhysicsList is instantiated and assigned to G4RunManager. 
@@ -219,9 +230,8 @@ affect on the existing user's code:
       AND set it to G4RunManager before instantiating other user action classes 
       such as G4VUserPrimaryParticleGeneratorAction.
     </PRE>
-    Fix:<BR>
-    Edit <TT>main()</TT> to make sure all user action classes are instantiated
-    after the physics list is instantiated and set to <TT>G4RunManager</TT>.</LI>
+    <em>Fix:</em> Edit <TT>main()</TT> to make sure all user action classes are
+    instantiated after the physics list is set to <TT>G4RunManager</TT>.</LI>
 </OL>
 
 <P> </P>
@@ -238,29 +248,38 @@ method, will have to modify the signature accordingly.
 <P> </P>
 In the electromagnetic standard package major changes have been introduced
 concerning the Multiple Scattering process. To improve the behaviour of low
-energy particles (electrons as well as hadrons), the Multiple Scattering now
-limits the step size for the particles; this happens in various manners, but
-systematically and in all media. In addition a model of correlation between
+energy particles (electrons in particular, but affecting also hadrons),
+the Multiple Scattering now limits the step size for the particles. This restriction
+is undertaken using several criteria, and is applied
+systematically, in all volumes and materials. In addition a model of the correlation between
 lateral displacement and final direction has been implemented (see the
-Physics Reference Manual for further explanations).<BR>
-As a result, most of the observables become more stable (i.e. less cut
-dependent). However, the price may be a not negligible time penalty,
-depending on the user's setup.<BR>
-The mechanism of step limitation can be deactivated with the function :
-<TT>G4MultipleScattering::MscStepLimitation(bool)</TT>. In addition, in order
-to help the transition, the old frozen code is still available for a while
-under the class name <TT>G4MultipleScattering71</TT>.
-Most of examples (in extended/electromagnetic) provide samples of
-PhysicsList which use this old code.
+Physics Reference Manual for further information).<BR>
+As a result, most physical observables become more stable when varying production
+cuts (i.e. less &quot;cut dependent&quot;). There is a corresponding cost, a CPU-time
+penalty, when utilising the same value of the production thresholds. This penalty
+can be significant, depending on the user's setup and the cut values. For many
+use cases the increased stability will allow the choice of higher production thresholds, 
+recovering computing performance while maintaining physics performance.<BR>
+To enable the user to investigate its benefits, a mechanism is provided to deactivate
+this step limitation. The new
+method <TT> MscStepLimitation(bool)</TT> of <tt>G4MultipleScattering</tt> disables
+these new step limitations. In addition, in order
+to help the transition, the old version is available for this release 'frozen'
+in the class <TT>G4MultipleScattering71</TT>.
+Several examples (in extended/electromagnetic) provide sample 
+PhysicsList which use this older version.
 
 <P> </P>
 <B>Geometry modeler</B>
 <P> </P>
-For code including parameterised geometries by material, an interface change
+For setups including parameterised geometries by material, an interface extension
+
 is introduced in <TT>G4VPVParameterisation</TT> base class for the
-<TT>ComputeMaterial()</TT> method, where an optional argument has been added
-(pointer to the parent touchable) to the interface. User code making use of
-this feature will have to be updated accordingly.
+<TT>ComputeMaterial()</TT> method. An optional argument has been added, that
+provides a constant pointer to the touchable of the parent of the current volume,
+enabling access to its copy number and other properties, and those of all its
+ancestor volumes.
+User code making use of this feature will have to be updated accordingly.
 A compilation warning should flag to take into account this interface change.
 <P></P>
 Internal classes implementing the framework for twisted solids have been
@@ -271,14 +290,14 @@ accordingly.
 <B>Fast parameterisation</B>
 <P> </P>
 The concept of "envelope" and "ghost-volume" for fast-parameterisation has
-been merged to <TT>G4Region</TT> in this release. Therefore, a logical-volume
-is not any longer acting as "envelope", being this attribute now assigned to
-<TT>G4Region</TT> (see the User Guide for Application Developers for the
-detailed information); the relevant modules have migrated accordingly.
-See <TT>exampleN05</TT> new setup as reference.
+been merged with the <TT>G4Region</TT> in this release. Therefore, a logical-volume
+ no longer acts directly as an "envelope", since this attribute now assigned
+ to <TT>G4Region</TT>. Please refer to the User Guide for Application Developers
+for the detailed information. The relevant modules have migrated accordingly.
+See <TT>exampleN05</TT> which has been revised to demonstrate this new mechanism.
 <P></P>
 A design iteration has taken place for the GFlash fast shower parameterisation
-model and some classes have been renamed to follow the new implementation and
+model and some classes were renamed to follow the new implementation and
 design for envelopes. User code making use of the GFlash tool should migrate
 accordingly.
 <P></P>
@@ -1135,3 +1154,4 @@ please refer to the related History files provided in most packages):
 
 </BODY>
 </HTML>
+<!  $ Id $     !>
