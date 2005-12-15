@@ -225,6 +225,15 @@ affect on the existing user's code:
 </OL>
 
 <P> </P>
+<B><TT>G4VProcess</TT> base class</B>
+<P> </P>
+A signature change is implemented in the <TT>G4VProcess</TT> base class.<BR>
+The virtual method <TT>StartTracking()</TT> defined in <TT>G4VProcess</TT>
+now takes <TT>const G4Track*</TT> as argument in its signature. Users
+implementing their own physics process and making use of this virtual
+method, will have to modify the signature accordingly.
+
+<P> </P>
 <B>Multiple Scattering electromagnetic process</B>
 <P> </P>
 In the electromagnetic standard package major changes have been introduced
