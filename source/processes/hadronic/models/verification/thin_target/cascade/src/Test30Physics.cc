@@ -88,6 +88,7 @@
 #include "G4WilsonAbrasionModel.hh"
 #include "G4ElasticHadrNucleusHE.hh"
 #include "G4LElastic.hh"
+#include "G4LElasticB.hh"
 #include "G4CascadeElasticInterface.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -253,6 +254,12 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
 
   } else if(gen_name == "LElastic") {
     G4LElastic* els = new G4LElastic();
+    sg = new Test30VSecondaryGenerator(els, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
+  } else if(gen_name == "LElasticB") {
+    G4LElasticB* els = new G4LElasticB();
     sg = new Test30VSecondaryGenerator(els, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);

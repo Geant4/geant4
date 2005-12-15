@@ -56,6 +56,7 @@
 #include "G4ProtonInelasticCrossSection.hh"
 #include "G4NeutronInelasticCrossSection.hh"
 #include "G4HadronInelasticDataSet.hh"
+#include "G4HadronElasticDataSet.hh"
 
 #include "G4ParticleTable.hh"
 #include "G4ParticleChange.hh"
@@ -425,7 +426,7 @@ int main(int argc, char** argv)
     // Creating a tuple factory, whose tuples will be handled by the tree
     //   std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
 
-    const G4int nhisto = 56;
+    const G4int nhisto = 63;
     AIDA::IHistogram1D* h[nhisto];
     //    AIDA::IHistogram2D* h2;
     //AIDA::ITuple* ntuple1 = 0;
@@ -532,17 +533,25 @@ int main(int argc, char** argv)
       if(nanglpi>4)
        h[49]=hf->createHistogram1D("50","ds/dE for pi+ at theta = 4",nbinspi,0.,emaxpi);
 
-        h[50]=hf->createHistogram1D("51","E(MeV) neutrons",nbinlog,0.,logmax);
-        if(nangl>0)
-          h[51]=hf->createHistogram1D("52","ds/dE for neutrons at theta = 0",nbinlog,0.,logmax);
-        if(nangl>1)
-          h[52]=hf->createHistogram1D("53","ds/dE for neutrons at theta = 1",nbinlog,0.,logmax);
-        if(nangl>2)
-          h[53]=hf->createHistogram1D("54","ds/dE for neutrons at theta = 2",nbinlog,0.,logmax);
-        if(nangl>3)
-          h[54]=hf->createHistogram1D("55","ds/dE for neutrons at theta = 3",nbinlog,0.,logmax);
-        if(nangl>4)
-          h[55]=hf->createHistogram1D("56","ds/dE for neutrons at theta = 4",nbinlog,0.,logmax);
+      h[50]=hf->createHistogram1D("51","E(MeV) neutrons",nbinlog,0.,logmax);
+      if(nangl>0)
+	h[51]=hf->createHistogram1D("52","ds/dE for neutrons at theta = 0",nbinlog,0.,logmax);
+      if(nangl>1)
+	h[52]=hf->createHistogram1D("53","ds/dE for neutrons at theta = 1",nbinlog,0.,logmax);
+      if(nangl>2)
+	h[53]=hf->createHistogram1D("54","ds/dE for neutrons at theta = 2",nbinlog,0.,logmax);
+      if(nangl>3)
+	h[54]=hf->createHistogram1D("55","ds/dE for neutrons at theta = 3",nbinlog,0.,logmax);
+      if(nangl>4)
+	h[55]=hf->createHistogram1D("56","ds/dE for neutrons at theta = 4",nbinlog,0.,logmax);
+
+      h[56]=hf->createHistogram1D("57","Ekin (MeV) for 1st particle",120,0.,energy*1.2/MeV);
+      h[57]=hf->createHistogram1D("58","Ekin (MeV) for 2nd particle",120,0.,energy*1.2/MeV);
+      h[58]=hf->createHistogram1D("59","cos(Theta) for 1st particle in Lab.Sys.",nbinsa,-1.,1.);
+      h[59]=hf->createHistogram1D("60","cos(Theta) for 2nd particle in Lab.Sys.",nbinsa,-1.,1.);
+      h[60]=hf->createHistogram1D("61","cos(Theta) for 1st particle in CM.Sys.",nbinsa,-1.,1.);
+      h[61]=hf->createHistogram1D("62","cos(Theta) for 2nd particle in CM.Sys.",nbinsa,-1.,1.);
+      h[62]=hf->createHistogram1D("63","cos(Theta) for 1 & 2 particle in CM.Sys.",nbinsa,-1.,1.);
 
       G4cout << "Histograms is initialised nbins=" << nbins
              << G4endl;
@@ -553,7 +562,10 @@ int main(int argc, char** argv)
     G4VCrossSectionDataSet* cs = 0;
     G4double cross_sec = 0.0;
 
-    if(part == proton && material->GetElement(0)->GetZ() > 1.5) {
+    if(nameGen == "LElastic" || nameGen == "LElasticB" || 
+       nameGen == "HElastic" || nameGen == "BertiniElastic") {
+      cs = new G4HadronElasticDataSet();
+    } else if(part == proton && material->GetElement(0)->GetZ() > 1.5) {
       cs = new G4ProtonInelasticCrossSection();
     } else if(part == neutron && material->GetElement(0)->GetZ() > 1.5) {
       cs = new G4NeutronInelasticCrossSection();
@@ -655,7 +667,7 @@ int main(int argc, char** argv)
     G4cout << "### pin:" << G4endl;
     pin->DumpTable();
     */
-    G4RotationMatrix* rot  = new G4RotationMatrix();
+    G4RotationMatrix* rot = new G4RotationMatrix();
     G4double phi0 = aDirection.phi();
     G4double theta0 = aDirection.theta();
     rot->rotateZ(-phi0);
@@ -689,6 +701,8 @@ int main(int argc, char** argv)
       gTrack->SetKineticEnergy(energy);
 
       labv = G4LorentzVector(0.0, 0.0, pmax, energy + mass + amass);
+      G4ThreeVector bst = labv.boostVector();
+      
       aChange = proc->PostStepDoIt(*gTrack,*step);
 
       G4double de = aChange->GetLocalEnergyDeposit();
@@ -724,20 +738,33 @@ int main(int argc, char** argv)
         m = pd->GetPDGMass();
 	p = std::sqrt(e*(e + 2.0*m));
 	mom *= p;
-        m  = pd->GetPDGMass();
         fm = G4LorentzVector(mom, e + m);
         labv -= fm;
         mom = (*rot)*mom;
         px = mom.x();
         py = mom.y();
         pz = mom.z();
-        p  = std::sqrt(px*px +py*py + pz*pz);
         pt = std::sqrt(px*px +py*py);
 
         theta = mom.theta();
+        G4double cost  = std::cos(theta);
         G4double thetad = theta/degree;
 
+        fm.boost(-bst);
+        G4double costcm = std::cos(fm.theta());
+
 	if(usepaw) {
+	  if(i==0)  {
+	    h[56]->fill(e/MeV,1.0);
+	    h[58]->fill(cost,factora);
+	    h[60]->fill(costcm,factora);
+	    h[62]->fill(costcm,factora);
+	  } else if(i==1) {
+	    h[57]->fill(e/MeV,1.0);
+	    h[59]->fill(cost,factora);
+	    h[61]->fill(costcm,factora);
+	    h[62]->fill(costcm,factora);
+	  }
           h[2]->fill(mom.phi()/degree,1.0);
           if(pd == neutron) h[23]->fill(mom.phi()/degree,1.0);
 	}
@@ -759,11 +786,9 @@ int main(int argc, char** argv)
 		 << "   m(MeV)= " << m/MeV
 		 << "   Etot(MeV)= " << (e+m)/MeV
 		 << "   pt(MeV)= " << pt/MeV
-                 << " has tet = pi/2"
+                 << " has deg = " << mom.phi()/degree
                  << G4endl;
         }
-
-
 
 	if(usepaw) {
 
@@ -781,7 +806,7 @@ int main(int argc, char** argv)
             h[7]->fill(pt/MeV, 1.0);
             h[11]->fill(e/MeV, 1.0);
 	    h[21]->fill(e/MeV, factor);
-	    h[24]->fill(std::cos(theta), factora);
+	    h[24]->fill(cost, factora);
 
           } else if(pd == pin) {
 
@@ -831,7 +856,7 @@ int main(int argc, char** argv)
             e2 = std::pow(10., e2) - e1;
             G4double f  = factor*bine/e2;
 	    h[50]->fill(ee, f);
-	    if(e >= elim) h[25]->fill(std::cos(theta), factora);
+	    if(e >= elim) h[25]->fill(cost, factora);
             for(G4int kk=0; kk<nangl; kk++) {
               if(bng1[kk] <= thetad && thetad <= bng2[kk]) {
                 h[27+kk]->fill(e/MeV, cng[kk]);
