@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10StepCut.hh,v 1.3 2004-12-03 09:33:46 vnivanch Exp $
+// $Id: Em10StepCut.hh,v 1.4 2005-12-15 14:00:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,7 +85,7 @@ class Em10StepCut : public G4VDiscreteProcess
 
 inline G4double Em10StepCut::PostStepGetPhysicalInteractionLength(
                              const G4Track& aTrack,
-                             G4double   previousStepSize,
+                             G4double,
                              G4ForceCondition* condition
                             )
 {
