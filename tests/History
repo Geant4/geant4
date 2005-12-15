@@ -1,4 +1,4 @@
-$Id: History,v 1.66 2005-12-06 16:47:10 gcosmo Exp $
+$Id: History,v 1.67 2005-12-15 18:47:19 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+tests-V08-00-00 15th December 2005  Gabriele Cosmo
+- Updated reference outputs according to reference tag geant4-08-00-ref-00.
+- Includes tags: test01-V07-01-00, test17-V07-01-00, test22-V07-01-01,
+                 test29-V07-01-10, test31-V07-01-01, test33-V07-01-03,
+                 test50-V07-01-01.
 
 tests-V07-01-06 6th December 2005  Gabriele Cosmo
 - Fixes for support of CLHEP-2.0.X series.
