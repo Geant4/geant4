@@ -7,20 +7,20 @@ Some of the development/fixes included since the last reference tag are:
   o New scheme for non-static particle definitions: all particle definition
     class objects are dynamically instantiated along the invocation of the
     ConstructParticle() method of the user's G4VUserPhysicsList concrete
-    class. This new scheme allows the user to set alternative physics
+    class. This new scheme allows for the user to set alternative physics
     quantities before particles are instantiated in Geant4.
   o Design iteration for GFlash parameterisation: added concrete sampling
     shower parameterisation and tuning classes.
   o Added new utility methods to G4VPhysical volume for identification of
-    specific regular structures for the geoemtry setup.
-  o Added new filter and scoring classes to allow for scoring applications
-    in particular in medical and space fields, such as dose or
-    energy-deposition scoring. Added new extended example.
+    specific regular structures for the geometry setup.
+  o Added new filter and scoring classes to allow for scoring (such as dose
+    or energy-deposition) relevant in particular to medical and space
+    applications. Added new extended example.
   o Added high energy elastic scattering on protons (G4ElasticHadrNucleusHE)
     in hadronic coherent-elastic model.
   o New capture process G4QCaptureAtRest valid for pi-, K-, anti-proton, mu-,
     tau-, Xi-, Omega-, neutron, anti-neutron, anti-Sigma+.
-  o Added required changes for support of CLHEP-2.0.X series.
+  o Introduced required changes for support of CLHEP-2.0.X series.
 
 ---------- Reference-tag 'Release Notes' -----------
 
