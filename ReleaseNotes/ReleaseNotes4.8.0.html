@@ -181,23 +181,18 @@ affect on the existing users's codes, in particular when user-defined
 physics lists are used:
 <OL>
 <LI>Physics processes and models must be instantiated in the
-    <TT>ConstructProcess()</TT> method of the user's physics list. 
-	<br>
-	In particular physics processes or models <em>must not</em> be data members of a physics
-	list. The reason is that some existing physics processes and models require
-	that particles have been instantiated
-    already. If a process is a data member of the physics list, it is instantiated
-    when the physics list's constructor is called, and thus before the invocation
-    of
-    <TT>ConstructParticle()</TT>. 
-	<br>
-	The "educated-guess" physics 
-    lists distributed with previous Geant4 releases are affected by this
-    change. The revised physics lists, which are distributed with this 
-    release, should be used in their place. 
-	A user adopting his/her own physics
-    list, will need to perform a similar revision in case an <TT>G4Exception</tt> with
-    the following message  occurs when  the physics list is instantiated:<BR>
+    <TT>ConstructProcess()</TT> method of the user's physics list.<BR>
+    In particular physics processes or models <em>must not</em> be data members of a physics
+    list. The reason is that some existing physics processes and models require
+    that particles have been instantiated already. If a process is a data member
+    of the physics list, it is instantiated when the physics list's constructor
+    is called, and thus before the invocation of <TT>ConstructParticle()</TT>.<BR>
+    The "educated-guess" physics lists distributed with previous Geant4 releases
+    are affected by this change. The revised physics lists, which are distributed
+    with this release, should be used in their place. 
+    A user adopting his/her own physics list, will need to perform a similar
+    revision in case a <TT>G4Exception</tt> with the following message occurs
+    when  the physics list is instantiated:<BR>
     <em>Error message</em>:
     <PRE>
       Access to G4ParticleTable for finding a particle or equivalent operation 
@@ -210,16 +205,16 @@ physics lists are used:
     <em>Fix:</em>
     All physics processes and models defined as data members of the physics 
     list must be moved to the <TT>ConstructProcess()</TT> method, and must be
-  explicitly instantiated by <TT>new</TT> operator. The revised physics lists
-  provide a reference for this revision.</LI>
+    explicitly instantiated by <TT>new</TT> operator. The revised physics lists
+    provide a reference for this revision.</LI>
 <LI>User action classes (derived from <TT>G4VUserPrimaryGeneratorAction, 
     G4UserRunAction, G4UserEventAction, G4UserStackingAction, 
     G4UserTrackingAction</TT> and <TT>G4UserSteppingAction</TT>) must be
     instantiated after the physics list is instantiated and after it is set to
     <TT>G4RunManager</TT>. Please note that the user's detector construction
     class is a user initialization class and thus is not affected by this
-    restriction. 
-	<Br>The user should revise the <TT>main()</TT> function if the following
+    restriction.<BR>
+    The user should revise the <TT>main()</TT> function if the following
     <TT>G4Exception</TT> occurs:<BR>
     <em>Error message</em> (for <TT>G4VUserPrimaryGeneratorAction</TT>):
     <PRE>
@@ -230,7 +225,8 @@ physics lists are used:
       AND set it to G4RunManager before instantiating other user action classes 
       such as G4VUserPrimaryParticleGeneratorAction.
     </PRE>
-    <em>Fix:</em> Edit <TT>main()</TT> to make sure all user action classes are
+    <em>Fix:</em>
+    Edit <TT>main()</TT> to make sure all user action classes are
     instantiated after the physics list is set to <TT>G4RunManager</TT>.</LI>
 </OL>
 
@@ -249,36 +245,35 @@ method, will have to modify the signature accordingly.
 In the electromagnetic standard package major changes have been introduced
 concerning the Multiple Scattering process. To improve the behaviour of low
 energy particles (electrons in particular, but affecting also hadrons),
-the Multiple Scattering now limits the step size for the particles. This restriction
-is undertaken using several criteria, and is applied
-systematically, in all volumes and materials. In addition a model of the correlation between
+the Multiple Scattering now limits the step size for the particles. This
+restriction is undertaken using several criteria, and is applied systematically,
+in all volumes and materials. In addition a model of the correlation between
 lateral displacement and final direction has been implemented (see the
 Physics Reference Manual for further information).<BR>
-As a result, most physical observables become more stable when varying production
-cuts (i.e. less &quot;cut dependent&quot;). There is a corresponding cost, a CPU-time
-penalty, when utilising the same value of the production thresholds. This penalty
-can be significant, depending on the user's setup and the cut values. For many
-use cases the increased stability will allow the choice of higher production thresholds, 
-recovering computing performance while maintaining physics performance.<BR>
-To enable the user to investigate its benefits, a mechanism is provided to deactivate
-this step limitation. The new
-method <TT> MscStepLimitation(bool)</TT> of <tt>G4MultipleScattering</tt> disables
-these new step limitations. In addition, in order
-to help the transition, the old version is available for this release 'frozen'
-in the class <TT>G4MultipleScattering71</TT>.
-Several examples (in extended/electromagnetic) provide sample 
-PhysicsList which use this older version.
+As a result, most physical observables become more stable when varying
+production cuts (i.e. less &quot;cut dependent&quot;). There is a corresponding
+cost, a CPU-time penalty, when utilising the same value of the production
+thresholds. This penalty can be significant, depending on the user's setup and
+the cut values. For many use cases the increased stability will allow the choice
+of higher production thresholds, recovering computing performance while
+maintaining physics performance.<BR>
+To enable the user to investigate its benefits, a mechanism is provided to
+deactivate this step limitation. The new method <TT>MscStepLimitation(bool)</TT>
+of <tt>G4MultipleScattering</tt> disables these new step limitations.
+In addition, in order to help the transition, the old version is available for
+this release 'frozen' in the class <TT>G4MultipleScattering71</TT>.
+Several examples (in extended/electromagnetic) provide sample physics lists
+which use this older version.
 
 <P> </P>
 <B>Geometry modeler</B>
 <P> </P>
-For setups including parameterised geometries by material, an interface extension
-
-is introduced in <TT>G4VPVParameterisation</TT> base class for the
+For setups including parameterised geometries by material, an interface
+extension is introduced in <TT>G4VPVParameterisation</TT> base class for the
 <TT>ComputeMaterial()</TT> method. An optional argument has been added, that
-provides a constant pointer to the touchable of the parent of the current volume,
-enabling access to its copy number and other properties, and those of all its
-ancestor volumes.
+provides a constant pointer to the touchable of the parent of the current
+volume, enabling access to its copy number and other properties, and those of
+all its ancestor volumes.
 User code making use of this feature will have to be updated accordingly.
 A compilation warning should flag to take into account this interface change.
 <P></P>
@@ -290,11 +285,12 @@ accordingly.
 <B>Fast parameterisation</B>
 <P> </P>
 The concept of "envelope" and "ghost-volume" for fast-parameterisation has
-been merged with the <TT>G4Region</TT> in this release. Therefore, a logical-volume
- no longer acts directly as an "envelope", since this attribute now assigned
- to <TT>G4Region</TT>. Please refer to the User Guide for Application Developers
-for the detailed information. The relevant modules have migrated accordingly.
-See <TT>exampleN05</TT> which has been revised to demonstrate this new mechanism.
+been merged with the <TT>G4Region</TT> in this release. Therefore, a
+logical-volume no longer acts directly as an "envelope", since this attribute
+now assigned to <TT>G4Region</TT>. Please refer to the User Guide for
+Application Developers for the detailed information. The relevant modules have
+migrated accordingly. See <TT>exampleN05</TT> which has been revised to
+demonstrate this new mechanism.
 <P></P>
 A design iteration has taken place for the GFlash fast shower parameterisation
 model and some classes were renamed to follow the new implementation and
@@ -728,8 +724,8 @@ please refer to the related History files provided in most packages):
     <UL>
     <LI><TT>G4LElasticB</TT>:
         <UL>
-        <LI>Copy of G4LElesatic process with modified relativistic kinematics.
-            Addresses problem report #534.<BR>
+        <LI>Copy of <TT>G4LElastic</TT> process with modified relativistic
+            kinematics. Addresses problem report #534.<BR>
             Added protection for low momentum (<TT>&lt;10 MeV/c</TT>)
             particles where CM sampling of <TT>cos(theta)</TT> is not valid.</LI>
         </UL></LI>
@@ -1006,6 +1002,12 @@ please refer to the related History files provided in most packages):
         <UL>
         <LI>Added Eta and EtaPrime particles and introduced ions.</LI>
         <LI>Introduced usage of general particle source and updated macros.</LI>
+        </UL></LI>
+    <LI>Tiara
+        <UL>
+        <LI>Removed obsolete <TT>G4VisManager</TT> reference..</LI>
+        <LI>Migrated to non-static particles and to CLHEP namespace.</LI>
+        <LI>Updated configuration scripts.</LI>
         </UL></LI>
     <LI>underground_physic
         <UL>
