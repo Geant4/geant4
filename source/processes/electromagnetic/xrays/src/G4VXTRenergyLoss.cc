@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.21 2005-10-11 14:24:34 grichine Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.22 2005-12-15 10:42:31 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -253,6 +253,15 @@ G4double G4XTRenergyLoss::GetMeanFreePath(const G4Track& aTrack,
     }
   }  
   return lambda;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Interface for build table from physics list
+
+void G4XTRenergyLoss::BuildPhysicsTable()
+{
+  BuildTable();
 }
 
 
@@ -854,7 +863,7 @@ void G4XTRenergyLoss::ComputePlatePhotoAbsCof()
    
    fPlatePhotoAbsCof = new G4double*[fPlateIntervalNumber] ;
 
-   for(i=0;i<fPlateIntervalNumber;i++)
+   for(i=0;i<=fPlateIntervalNumber;i++)
    {
      fPlatePhotoAbsCof[i] = new G4double[5] ;
    }
@@ -971,7 +980,7 @@ void G4XTRenergyLoss::ComputeGasPhotoAbsCof()
    
    fGasPhotoAbsCof = new G4double*[fGasIntervalNumber] ;
 
-   for(i=0;i<fGasIntervalNumber;i++)
+   for(i=0;i<=fGasIntervalNumber;i++)
    {
      fGasPhotoAbsCof[i] = new G4double[5] ;
    } 
