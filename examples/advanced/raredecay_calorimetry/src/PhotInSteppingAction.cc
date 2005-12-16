@@ -72,7 +72,17 @@ void PhotInSteppingAction::UserSteppingAction(const G4Step* theStep)
   G4cout << G4endl;
 
   // Dump processes for the particle
-  theTrack->GetDefinition()->GetProcessManager()->DumpInfo(); 
+  G4ProcessManager* procMan=theTrack->GetDefinition()->GetProcessManager();
+  procMan->DumpInfo();
+  G4ProcessVector*  procVec = procMan->GetProcessList();
+  G4int nofProc=procMan->GetProcessListLength();
+  if(nofProc) for(G4int np=0; np<nofProc; np++)
+  {
+    G4VProcess* proc = (*procVec)[np];
+    G4cout<<"PhotInSteppingAction::UserSteppingAction: "<<np<<", ProcName="
+          <<proc->GetProcessName()<<", ProcType="<<proc->GetProcessType()<<G4endl;
+  }
+
 
   // check if it is alive and quit if no secondaries
   if(theTrack->GetTrackStatus()==fAlive)

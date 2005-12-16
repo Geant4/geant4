@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotIn.cc,v 1.6 2005-12-09 16:44:21 mkossov Exp $
+// $Id: PhotIn.cc,v 1.7 2005-12-16 14:59:42 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,51 +54,64 @@
 #include "PhotInSteppingAction.hh"
 
 // === Old Reference Physics Lists ===
-//#include "FTFC.hh"
-//#include "FTFP.hh"
-//#include "LBE.hh"
+#include "FTFC.hh"
+#include "FTFP.hh"
+#include "LBE.hh"
 #include "LHEP.hh"
-//#include "LHEP_BERT.hh"
-//#include "LHEP_BERT_HP.hh"
-//#include "LHEP_BIC.hh"
-//#include "LHEP_BIC_HP.hh"
-//#include "LHEP_GN.hh"
-//#include "LHEP_HP.hh"
-//#include "LHEP_LEAD.hh"
-//#include "LHEP_LEAD_HP.hh"
-//#include "LHEP_PRECO.hh"
-//#include "LHEP_PRECO_HP.hh"
-//#include "QGSC.hh"
-//#include "QGSC_LEAD.hh"
-//#include "QGSC_LEAD_HP.hh"
-//#include "QGSP.hh"
-//#include "QGSP_BERT.hh"
-//#include "QGSP_BIC.hh"
-//#include "QGSP_GN.hh"
-//#include "QGSP_HP.hh"
+#include "LHEP_BERT.hh"
+#include "LHEP_BERT_HP.hh"
+#include "LHEP_BIC.hh"
+#include "LHEP_BIC_HP.hh"
+#include "LHEP_GN.hh"
+#include "LHEP_HP.hh"
+#include "LHEP_LEAD.hh"
+#include "LHEP_LEAD_HP.hh"
+#include "LHEP_PRECO.hh"
+#include "LHEP_PRECO_HP.hh"
+#include "QGSC.hh"
+#include "QGSC_LEAD.hh"
+#include "QGSC_LEAD_HP.hh"
+#include "QGSP.hh"
+#include "QGSP_BERT.hh"
+#include "QGSP_BIC.hh"
+#include "QGSP_GN.hh"
+#include "QGSP_HP.hh"
 
 #include "G4ModularPhysicsList.hh"
 // === Corresponding New Reference Physics Lists ===
 #include "G4PL_FTFC_CASP.hh"
+#include "G4PL_FTFC_CASP_GN_HP.hh"
 #include "G4PL_FTFP_CASP.hh"
+#include "G4PL_FTFP_CASP_GN_HP.hh"
 #include "G4PL_UNDERGROUND.hh"
 #include "G4PL_LHEP_CASP.hh"
+#include "G4PL_LHEP_CASP_GN_HP.hh"
 #include "G4PL_LHEP_BERT.hh"
 #include "G4PL_LHEP_BERT_HP.hh"
+#include "G4PL_LHEP_BERT_GN_HP.hh"
 #include "G4PL_LHEP_BINC.hh"
 #include "G4PL_LHEP_BINC_HP.hh"
+#include "G4PL_LHEP_BINC_GN_HP.hh"
 #include "G4PL_LHEP_CASP_GN.hh"
 #include "G4PL_LHEP_CASP_HP.hh"
+#include "G4PL_LHEP_CASP_GN_HP.hh"
 #include "G4PL_LHEP_MARS.hh"
 #include "G4PL_LHEP_MARS_HP.hh"
+#include "G4PL_LHEP_MARS_GN_HP.hh"
 #include "G4PL_LHEP_PREC.hh"
 #include "G4PL_LHEP_PREC_HP.hh"
+#include "G4PL_LHEP_PREC_GN_HP.hh"
 #include "G4PL_QGSC_CASP.hh"
+#include "G4PL_QGSC_CASP_GN_HP.hh"
 #include "G4PL_QGSC_MARS.hh"
 #include "G4PL_QGSC_MARS_HP.hh"
+#include "G4PL_QGSC_MARS_GN_HP.hh"
 #include "G4PL_QGSP_CASP.hh"
+#include "G4PL_QGSP_CASP_GN_HP.hh"
 #include "G4PL_QGSP_BERT.hh"
+#include "G4PL_QGSP_BERT_GN_HP.hh"
 #include "G4PL_QGSP_BINC.hh"
+#include "G4PL_QGSP_BINC_GN_HP.hh"
 #include "G4PL_QGSP_CASP_GN.hh"
 #include "G4PL_QGSP_CASP_GN_HP.hh"
 
@@ -119,7 +132,9 @@ int main(int argc,char** argv)
   // ==== Initialization of old RPL ====
   //runManager->SetUserInitialization(new LHEP);         // external (ext) LHEP     
   // ==== Initialization of new RPL ====
-  runManager->SetUserInitialization(new G4PL_LHEP_CASP); // int LHEP_CASP == ext LHEP
+  runManager->SetUserInitialization(new G4PL_LHEP_BERT_GN_HP); // _GN_HP lists
+  //runManager->SetUserInitialization(new G4PL_LHEP_CASP); // int LHEP_CASP == ext LHEP
+  //runManager->SetUserInitialization(new G4PL_QGSC_CASP); // int LHEP_CASP == ext LHEP
   // ==== Initialization of Modular Physics List ====
   //runManager->SetUserInitialization(new G4ModularPhysicsList);     // MPL     
   //***endLOOKHERE***
@@ -139,6 +154,8 @@ int main(int argc,char** argv)
 #ifdef debug
   //G4cout<<"PhotIn: Physics List is transfered to Run Manager"<<G4endl;
 #endif
+
+  // ================= This is a debugging function =====================
   //runManager->SetUserAction(new PhotInSteppingAction);
 
   // set mandatory initialization classes

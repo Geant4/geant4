@@ -3,7 +3,7 @@
 ##/tracking/verbose 6
 /run/initialize
 /run/dumpRegion
-/PhotIn/projParticle gamma
+/PhotIn/projParticle pi+
 /PhotIn/projEnergy 100.
 /run/beamOn 1
 /run/dumpCouples

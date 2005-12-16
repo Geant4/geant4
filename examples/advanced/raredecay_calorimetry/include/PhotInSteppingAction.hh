@@ -47,4 +47,3 @@ class PhotInSteppingAction : public G4UserSteppingAction
 };
 
 #endif
-
