@@ -14,6 +14,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+15 Dec 2005 Dennis Wright
+-------------------------
+- G4HadronicProcess.cc: fixed bug # 611 - problems caused when hadronic interactions
+                        reset stopButAlive particle to Alive
+                        solution: In method FillTotalResult add lines
+
+                             } else if (aT.GetKineticEnergy() == 0) {
+                               theTotalResult->ProposeTrackStatus(fStopButAlive);
+                             }
+
+
 18 Nov 2005 Dennis Wright (hadr-man-V07-01-00)
 ----------------------------------------------
 
