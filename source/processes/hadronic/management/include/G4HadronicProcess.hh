@@ -154,17 +154,22 @@ class G4ParticleChange;
 
     inline G4HadronicInteraction *ChooseHadronicInteraction(
      G4double kineticEnergy, G4Material *aMaterial, G4Element *anElement )
-    { 
-      return GetManagerPointer()->
-        GetHadronicInteraction( kineticEnergy, aMaterial, anElement );
+    {
+      G4EnergyRangeManager* ERMan = GetManagerPointer();
+      if(!ERMan->GetHadronicInteractionCounter())
+        G4cout<<"*G4HadronicProcess::ChooseHadronicInteraction: process = "
+              <<GetProcessName()<<", nM="<<ERMan->GetHadronicInteractionCounter()<<G4endl;
+      return ERMan->GetHadronicInteraction(kineticEnergy, aMaterial, anElement);
     }
 
     inline G4HadronicInteraction *GetHadronicInteraction()
     { return theInteraction; }
     
+ public:
     inline G4EnergyRangeManager *GetManagerPointer()
     { return &theEnergyRangeManager; }
-    
+ protected:
+
     G4double GetCurrentZ()
     { return currentZ; }
     
