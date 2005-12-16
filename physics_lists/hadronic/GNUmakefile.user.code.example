@@ -33,8 +33,6 @@ endif
 # EXTRALIBS += -lFTFP
 # EXTRALIBS += -lLBE
 # EXTRALIBS += -lLHEP
-# EXTRALIBS += -lLHEP_GN
-# EXTRALIBS += -lLHEP_HP
 # EXTRALIBS += -lLHEP_LEAD
 # EXTRALIBS += -lLHEP_BERT_HP
 # EXTRALIBS += -lLHEP_BIC_HP
@@ -46,7 +44,6 @@ endif
 # EXTRALIBS += -lQGSC_LEAD
 # EXTRALIBS += -lQGSC_LEAD_HP
 # EXTRALIBS += -lQGSP
-# EXTRALIBS += -lQGSP_GN
 # EXTRALIBS += -lQGSP_HP
 # EXTRALIBS += -lLHEP_BERT
 # EXTRALIBS += -lLHEP_BIC
@@ -58,10 +55,8 @@ CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/FTFP/include
 CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LBE/include
 CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP/include
 CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_BERT/include
-CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_BIC/include
-CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_GN/include
-CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_HP/include
 CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_BERT_HP/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_BIC/include
 CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_BIC_HP/include
 CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_LEAD/include
 CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_LEAD_HP/include
@@ -74,7 +69,6 @@ CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSC_LEAD_HP/include
 CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP/include
 CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_BERT/include
 CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_BIC/include
-CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_GN/include
 CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_HP/include
 
 .PHONY: all
