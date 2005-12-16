@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2005-12-06 16:30:36 gcosmo Exp $
+$Id: History,v 1.32 2005-12-16 08:27:25 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 15th, 2005 A.Howard
+  - introduced scaling factor to increase physical volume and suppress 
+    warnings due to importance sampling from particles crossing world volume.
+    Currently set to x2
 
 Dec 6th, 2005  G.Cosmo
   - Trivial changes for support of CLHEP-2.0.X series.
