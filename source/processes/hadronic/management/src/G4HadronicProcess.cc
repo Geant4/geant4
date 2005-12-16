@@ -594,13 +594,6 @@ XBiasSecondaryWeight()
 
 void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
 {
-  //          G4cout << "############# Entry debug "
-  //	         <<GetProcessName()<<" "
-  //		 <<aT.GetDynamicParticle()->GetDefinition()->GetParticleName()<<" "
-  //		 <<aT.GetDynamicParticle()<<" "
-  //                <<aScaleFactor<<" "
-  //		 <<aT.GetWeight()<<" "
-  //		 <<G4endl;
   G4Nancheck go_wild;
   theTotalResult->Clear();
   theTotalResult->ProposeLocalEnergyDeposit(0.);
@@ -642,7 +635,10 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
         G4Exception("G4HadronicProcess", "007", FatalException,
         "Cannot cross-section bias a process that suspends tracks.");
       }
+    } else if (aT.GetKineticEnergy() == 0) {
+      theTotalResult->ProposeTrackStatus(fStopButAlive);
     }
+
     if(xBiasOn && G4UniformRand()<XBiasSurvivalProbability())
     {
       theTotalResult->ProposeParentWeight( XBiasSurvivalProbability()*aT.GetWeight() );
