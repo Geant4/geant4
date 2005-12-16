@@ -343,14 +343,14 @@ visualization                                    vis-V07-01-10
 - XXX:
   + Simplified guidance.
 
-physics_lists                                    phys-lists-V07-01-01
+physics_lists
 -------------
 - electromagnetic (emphys-V07-01-02)
   + Migrated lists to non-static particles scheme.
   + Use the same list of hadrons for hadron-ionisation and
     multiple-scattering as in the hadronic physics-lists.
-- hadronic (hadr-lists-V07-01-05)
-  + Migrated lists to non-static particles scheme. Package 3.0.
+- hadronic (hadr-lists-V07-01-06)
+  + Migrated lists to non-static particles scheme. Package 5.0.
   + Added control of verbosity as an optional argument to the physics-lists,
     verbosity is ON by default.
   + Synchronised EM physics setup as in EM physics-lists.
