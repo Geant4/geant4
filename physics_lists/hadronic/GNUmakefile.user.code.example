@@ -39,6 +39,7 @@ endif
 # EXTRALIBS += -lLHEP_LEAD_HP
 # EXTRALIBS += -lLHEP_PRECO
 # EXTRALIBS += -lQGSP_BERT
+# EXTRALIBS += -lQGSP_BERT_HP
 # EXTRALIBS += -lLHEP_PRECO_HP
 # EXTRALIBS += -lQGSC
 # EXTRALIBS += -lQGSC_LEAD
@@ -48,7 +49,8 @@ endif
 # EXTRALIBS += -lLHEP_BERT
 # EXTRALIBS += -lLHEP_BIC
 # EXTRALIBS += -lQGSP_BIC
-# EXTRALIBS += -lPackaging
+
+ EXTRALIBS += -lPackaging
 
 CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/FTFC/include
 CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/FTFP/include
@@ -68,6 +70,7 @@ CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSC_LEAD/include
 CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSC_LEAD_HP/include
 CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP/include
 CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_BERT/include
+CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_BERT_HP/include
 CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_BIC/include
 CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_HP/include
 
