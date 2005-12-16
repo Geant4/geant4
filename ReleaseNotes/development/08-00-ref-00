@@ -349,7 +349,7 @@ physics_lists
   + Migrated lists to non-static particles scheme.
   + Use the same list of hadrons for hadron-ionisation and
     multiple-scattering as in the hadronic physics-lists.
-- hadronic (hadr-lists-V07-01-06)
+- hadronic (hadr-lists-V07-01-08)
   + Migrated lists to non-static particles scheme. Package 5.0.
   + Added control of verbosity as an optional argument to the physics-lists,
     verbosity is ON by default.
