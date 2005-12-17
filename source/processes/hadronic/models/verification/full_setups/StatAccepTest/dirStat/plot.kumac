@@ -1,6 +1,7 @@
 *---------------------------------------------------------
-* This kumac requires 1 input parameter, which is the ID
-* of the histogram to plot.
+* This kumac requires 2 input parameters, which are:
+*   1) the ID of the histogram to plot;
+*   2) the LABEL for the plot.
 * This kumac plots in  red  the specified histogram from
 * the file  histo_a.hbook  and overlaps to it the same
 * histogram in  blue  from the file  histo_b.hbook,
@@ -21,10 +22,14 @@ meta 20 -111
 zone 1 2
 set dmod 1
 *
+opt utit
+title [2]
+*
 set hcol 2
 histo/plot //lun1/[1]
 set hcol 4
 histo/plot //lun2/[1] s
+atitle MeV  Events
 *
 opt logy
 *
@@ -32,6 +37,7 @@ set hcol 2
 histo/plot //lun1/[1]
 set hcol 4
 histo/plot //lun2/[1] s
+atitle MeV  Events
 *
 *wait
 *
@@ -105,6 +111,7 @@ IF ( [IMIN] < [IMAX] .AND. ( [IMIN] > 1 .OR. [IMAX] < [I100] ) ) THEN
   histo/plot 69690
   set hcol 4
   histo/plot 69691 s
+  atitle MeV  Events
 *
   opt logy
 *
@@ -112,6 +119,7 @@ IF ( [IMIN] < [IMAX] .AND. ( [IMIN] > 1 .OR. [IMAX] < [I100] ) ) THEN
   histo/plot 69690
   set hcol 4
   histo/plot 69691 s
+  atitle MeV  Events
 *
   vec/del xvec
   vec/del vv

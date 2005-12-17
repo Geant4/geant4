@@ -101,7 +101,7 @@ for line in pfile :
                 os.system("rm main.kumac")
                 
             mainKumac = open("main.kumac", 'w')
-            command = "exec plot.kumac " + id + "\n"
+            command = "exec plot.kumac " + id + " " + numObservable + label + "\n"
             mainKumac.write(command)
             mainKumac.close();
 
