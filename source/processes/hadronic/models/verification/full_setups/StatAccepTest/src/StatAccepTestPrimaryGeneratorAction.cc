@@ -14,7 +14,7 @@ StatAccepTestPrimaryGeneratorAction::StatAccepTestPrimaryGeneratorAction() {
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   particleGun->SetParticleDefinition( particleTable->FindParticle("geantino") );
   particleGun->SetParticleEnergy( 10.0*GeV );
-  particleGun->SetParticlePosition( G4ThreeVector(-2.0*m, 0.0, 0.0) );
+  particleGun->SetParticlePosition( G4ThreeVector( 0.0, 0.0, -2.0*m ) );
 }
 
 
@@ -24,7 +24,7 @@ StatAccepTestPrimaryGeneratorAction::~StatAccepTestPrimaryGeneratorAction() {
 
 
 void StatAccepTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
-  G4ThreeVector v(1.0, 0.0, 0.0);
+  G4ThreeVector v( 0.0, 0.0, 1.0 );
   particleGun->SetParticleMomentumDirection(v);
   particleGun->GeneratePrimaryVertex(anEvent);
 }

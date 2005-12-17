@@ -49,15 +49,15 @@ ProcessHits(G4Step* aStep, G4TouchableHistory* ) {
 
   G4int replica = aStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber(1);
 
-  G4double radius = sqrt( aStep->GetPreStepPoint()->GetPosition().y() *
-                          aStep->GetPreStepPoint()->GetPosition().y() +
-                          aStep->GetPreStepPoint()->GetPosition().z() *
-                          aStep->GetPreStepPoint()->GetPosition().z() );  
+  G4double radius = sqrt( aStep->GetPreStepPoint()->GetPosition().x() *
+                          aStep->GetPreStepPoint()->GetPosition().x() +
+                          aStep->GetPreStepPoint()->GetPosition().y() *
+                          aStep->GetPreStepPoint()->GetPosition().y() );  
 
-  // G4cout << " StatAccepTestSensitiveCalorimeter::ProcessHits : DEBUG Info" << G4endl
-  //        << "\t x = " << aStep->GetPreStepPoint()->GetPosition().x()/mm 
-  //        << " mm ;  replica = " << replica << " ;  radius = " << radius/mm 
-  //        << " mm" << G4endl; //***DEBUG***
+  G4cout << " StatAccepTestSensitiveCalorimeter::ProcessHits : DEBUG Info" << G4endl
+         << "\t z = " << aStep->GetPreStepPoint()->GetPosition().z()/mm 
+         << " mm ;  replica = " << replica << " ;  radius = " << radius/mm 
+         << " mm" << G4endl; //***DEBUG***
 
   if ( replica >= numberOfReplicas ) {
     G4cout << " StatAccepTestSensitiveCalorimeter::ProcessHits: ***ERROR*** "

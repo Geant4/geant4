@@ -290,7 +290,7 @@ G4VPhysicalVolume* StatAccepTestDetectorConstruction::ConstructCalorimeter() {
   }
 
   // --- experimental hall (world volume)
-  //     beam line along x axis
+  //     beam line along the Z-axis
   G4double expHall_x = 10.0*m;  // half dimension along x 
   G4double expHall_y = 10.0*m;  // half dimension along y
   G4double expHall_z = 10.0*m;  // half dimension along z
@@ -323,15 +323,15 @@ G4VPhysicalVolume* StatAccepTestDetectorConstruction::ConstructCalorimeter() {
   // active layer. 
 
   //            --- absorber layer : logical
-  G4double xAbsorber = absorberTotalLength / static_cast<double>( theActiveLayerNumber );
+  G4double xAbsorber = absorberTotalLength / 2.0;    // half dimension along x
+  G4double yAbsorber = absorberTotalLength / 2.0;    // half dimension along y
+  G4double zAbsorber = absorberTotalLength / static_cast<double>( theActiveLayerNumber );
   // In the case of homogenous calorimeter the "active" part must be
   // subtracted because it is made of the same material.
   if ( theIsCalHomogeneous ) { 
-    xAbsorber -= theActiveLayerSize; 
+    zAbsorber -= theActiveLayerSize; 
   }
-  xAbsorber /= 2.0;                                  // half dimension along x
-  G4double yAbsorber = absorberTotalLength / 2.0;    // half dimension along y
-  G4double zAbsorber = absorberTotalLength / 2.0;    // half dimension along z
+  zAbsorber /= 2.0;                                  // half dimension along z
 
   G4Box* solidAbsorber = new G4Box("solidAbsorber", xAbsorber, yAbsorber, zAbsorber);
 
@@ -343,9 +343,9 @@ G4VPhysicalVolume* StatAccepTestDetectorConstruction::ConstructCalorimeter() {
                                       0);                  // user limits
 
   //            --- active layer : logical
-  G4double xActive = theActiveLayerSize / 2.0;  // half dimension along x 
+  G4double xActive = xAbsorber;                 // half dimension along x 
   G4double yActive = yAbsorber;                 // half dimension along y 
-  G4double zActive = zAbsorber;                 // half dimension along z 
+  G4double zActive = theActiveLayerSize / 2.0;  // half dimension along z 
 
   G4Box* solidActive = new G4Box("solidActive", xActive, yActive, zActive);
 
@@ -357,9 +357,9 @@ G4VPhysicalVolume* StatAccepTestDetectorConstruction::ConstructCalorimeter() {
                                     0);                    // user limits
 
   //        --- module : logical
-  G4double xModule = (xAbsorber+xActive);  // half dimension along x 
+  G4double xModule = xAbsorber;            // half dimension along x
   G4double yModule = yAbsorber;            // half dimension along y
-  G4double zModule = zAbsorber;            // half dimension along z
+  G4double zModule = (zAbsorber+zActive);  // half dimension along z 
 
   G4Box* solidModule = new G4Box("solidModule", xModule, yModule, zModule);
 
@@ -372,9 +372,9 @@ G4VPhysicalVolume* StatAccepTestDetectorConstruction::ConstructCalorimeter() {
 
   //    --- calorimeter : logical
   G4int numberOfModules = theActiveLayerNumber;
-  G4double xCalo = numberOfModules*xModule;  // half dimension along x 
+  G4double xCalo = xModule;                  // half dimension along x
   G4double yCalo = yModule;                  // half dimension along y
-  G4double zCalo = zModule;                  // half dimension along z
+  G4double zCalo = numberOfModules*zModule;  // half dimension along z 
 
   G4Box* solidCalo = new G4Box("solidCalo", xCalo, yCalo, zCalo);
 
@@ -386,9 +386,9 @@ G4VPhysicalVolume* StatAccepTestDetectorConstruction::ConstructCalorimeter() {
                                   0);               // user limits
 
   //            --- absorber layer : physical
-  G4double xpos = - xActive;
+  G4double zpos = - zActive;
   physiAbsorber = new G4PVPlacement(0,                       // rotation
-                                    G4ThreeVector(xpos,0,0), // translation
+                                    G4ThreeVector(0,0,zpos), // translation
                                     logicAbsorber,           // logical volume
                                     "physiAbsorber",         // name
                                     logicModule,             // mother logical volume
@@ -396,9 +396,9 @@ G4VPhysicalVolume* StatAccepTestDetectorConstruction::ConstructCalorimeter() {
                                     1000);                   // copy number
 
   //            --- active layer : physical
-  xpos += xAbsorber + xActive;
+  zpos += zAbsorber + zActive;
   physiActive = new G4PVPlacement(0,                       // rotation
-                                  G4ThreeVector(xpos,0,0), // translation
+                                  G4ThreeVector(0,0,zpos), // translation
                                   logicActive,             // logical volume
                                   "physiActive",           // name
                                   logicModule,             // mother logical volume
@@ -409,9 +409,9 @@ G4VPhysicalVolume* StatAccepTestDetectorConstruction::ConstructCalorimeter() {
   physiModule = new G4PVReplica("Calo",                  // name
                                 logicModule,             // logical volume
                                 logicCalo,               // mother logical volume
-                                kXAxis,                  // axis of replication
+                                kZAxis,                  // axis of replication
                                 numberOfModules,         // number of replica
-                                2*(xAbsorber+xActive) ); // (full) width of replica
+                                2*(zAbsorber+zActive) ); // (full) width of replica
 
   //    --- calorimeter : physical
   physiCalo = new G4PVPlacement(0,                     // rotation
@@ -424,11 +424,11 @@ G4VPhysicalVolume* StatAccepTestDetectorConstruction::ConstructCalorimeter() {
 
   // G4cout << " StatAccepTestDetectorConstruction::ConstructCalorimeter() : DEBUG Info "
   //        << G4endl
-  //        << "\t xAbsorber      = " << xAbsorber / mm <<  " mm " << G4endl
-  //	    << "\t xActive        = " << xActive / mm <<  " mm " << G4endl
-  //	    << "\t xModule        = " << xModule / mm << " mm " << G4endl
-  //	    << "\t total Absorber = " << xAbsorber*numberOfModules / m << " m " << G4endl
-  //	    << "\t xCalo          = " << xCalo / m << " m " << G4endl; //***DEBUG***
+  //        << "\t zAbsorber      = " << zAbsorber / mm <<  " mm " << G4endl
+  //	    << "\t zActive        = " << zActive / mm <<  " mm " << G4endl
+  //	    << "\t zModule        = " << zModule / mm << " mm " << G4endl
+  //	    << "\t total Absorber = " << zAbsorber*numberOfModules / m << " m " << G4endl
+  //	    << "\t zCalo          = " << zCalo / m << " m " << G4endl; //***DEBUG***
 
   // --- Sensitive detectors
   if ( ! theSensitiveCalorimeter ) { 

@@ -1,6 +1,12 @@
                  History file
                  ------------
 
+17-Dec-2005 - A.Ribon (statAccepTest-V08-00-01)
+- Changed the direction of the beam from the X-axis 
+  to the Z-axis. 
+  Fixed also some obsolete visualization code.
+
+
 17-Dec-2005 - A.Ribon (statAccepTest-V08-00-00)
 - Migration to the new Physics Lists, and to 
   CLHEP namespace.
