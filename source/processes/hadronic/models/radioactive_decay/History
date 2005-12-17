@@ -14,7 +14,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-16 November 2005 Dennis Wright
+16 December 2005 Dennis Wright
 - G4NuclearDecayChannel::BetaDecayIt() : check for negative sqrt argument in
   daughtermomentum[1]. Response to Bug report #822.
 
