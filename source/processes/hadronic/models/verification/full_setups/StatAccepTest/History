@@ -1,6 +1,12 @@
                  History file
                  ------------
 
+17-Dec-2005 - A.Ribon (statAccepTest-V08-00-02)
+- Added a check of the total energy conservation.
+  Fixed also the small deviation in the beam energy
+  w.r.t. to the nominal value.
+
+
 17-Dec-2005 - A.Ribon (statAccepTest-V08-00-01)
 - Changed the direction of the beam from the X-axis 
   to the Z-axis. 

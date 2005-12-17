@@ -104,6 +104,7 @@ void StatAccepTestAnalysis::init() {
   sumEdepAct2 = 0.0;
   sumEdepTot  = 0.0;
   sumEdepTot2 = 0.0;
+  maxEdepTot  = 0.0;
   sumL.clear();
   sumL2.clear();
   for ( int layer = 0; layer < numberOfReplicas; layer++ ) {
@@ -176,7 +177,35 @@ void StatAccepTestAnalysis::finish() {
   // only for these two variables.
 
   // Print results. 
-  G4cout << " Beam energy [MeV] = " << beamEnergy << G4endl; 
+  G4cout << " Beam energy [MeV] = " << beamEnergy << G4endl;
+
+  // Check for the energy conservation by comparing the beam energy
+  // with the maximum total energy deposit.
+  // We write a message of energy-non-conservation in the case that
+  // the maximum total energy deposit is greater than the beam energy.
+  // However, in this case, one cannot always conclude that there is
+  // some violation of the energy conservation in some of the Geant4
+  // processes, because different physics effects could explain such
+  // "anomaly", for example:
+  //    - biasing techniques could produce big energy non conservation;
+  //    - decays of particles can transform part of their masses in
+  //      kinetic energy of the decay products: for example 
+  //      K+ -> mu+ nu_mu about half of the mass of the kaon (i.e.
+  //      about 250 MeV) goes to the muon, whose mass is only a part
+  //      of it (about 100 MeV), and so the remaining goes in kinetic
+  //      energy of the muon that can be deposited in a large calorimeter.
+  //    - fission of heavy elements, like Uranium, W, Pb, etc...
+  // Notice that, a part the first effect, the other two are usually
+  // small effects: you cannot obtain large energy violation!
+  // So, it is at the level of post-processing, that the user should
+  // decide if an eventual message of energy-non-conservation makes sense
+  // or not.
+  G4cout << " maxEdepTot  [MeV] = " << maxEdepTot;
+  if ( maxEdepTot - beamEnergy > 0.001*MeV ) {
+    G4cout << "\t ***ENERGY-NON-CONSERVATION*** ";
+  } 
+  G4cout << G4endl;
+
   G4double n = static_cast< G4double >( numberOfEvents );
   // G4cout << " n=" << n << G4endl;                             //***DEBUG***
   double sum, sum2, mu, sigma, mu_sigma;
@@ -280,6 +309,9 @@ void StatAccepTestAnalysis::fillNtuple( float incidentParticleId,
 					float totalEnergyDepositedInActiveLayers,
 					float totalEnergyDepositedInCalorimeter ) {
   beamEnergy = incidentParticleEnergy;
+  if ( totalEnergyDepositedInCalorimeter > maxEdepTot ) {
+    maxEdepTot = totalEnergyDepositedInCalorimeter;
+  }
   if (tuple) {
     // G4cout << " StatAccepTestAnalysis::fillNtuple : DEBUG Info " << G4endl
     //        << "\t incidentParticleId = " << incidentParticleId << G4endl
