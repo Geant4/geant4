@@ -79,10 +79,12 @@ void StatAccepTestEventAction::EndOfEventAction(const G4Event* evt){
 
   // Fill the histograms/ntuple.
   StatAccepTestAnalysis* analysis = StatAccepTestAnalysis::getInstance();
-  analysis->fillNtuple( static_cast< float >( incidentParticleId ),
-			incidentParticleEnergy / MeV,
-			energyDepositedInActiveCalorimeterLayer / MeV,
-			totalEdepAllParticles / MeV );
+  if ( analysis ) {
+    analysis->fillNtuple( static_cast< float >( incidentParticleId ),
+			  incidentParticleEnergy / MeV,
+			  energyDepositedInActiveCalorimeterLayer / MeV,
+			  totalEdepAllParticles / MeV );
+  }
 
   // Now print out the information.
   //***LOOKHERE*** if ( evt->GetEventID() % 50 == 0 ) {  // Print info every 50 events.

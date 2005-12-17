@@ -54,10 +54,10 @@ ProcessHits(G4Step* aStep, G4TouchableHistory* ) {
                           aStep->GetPreStepPoint()->GetPosition().y() *
                           aStep->GetPreStepPoint()->GetPosition().y() );  
 
-  G4cout << " StatAccepTestSensitiveCalorimeter::ProcessHits : DEBUG Info" << G4endl
-         << "\t z = " << aStep->GetPreStepPoint()->GetPosition().z()/mm 
-         << " mm ;  replica = " << replica << " ;  radius = " << radius/mm 
-         << " mm" << G4endl; //***DEBUG***
+  // G4cout << " StatAccepTestSensitiveCalorimeter::ProcessHits : DEBUG Info" << G4endl
+  //        << "\t z = " << aStep->GetPreStepPoint()->GetPosition().z()/mm 
+  //        << " mm ;  replica = " << replica << " ;  radius = " << radius/mm 
+  //        << " mm" << G4endl; //***DEBUG***
 
   if ( replica >= numberOfReplicas ) {
     G4cout << " StatAccepTestSensitiveCalorimeter::ProcessHits: ***ERROR*** "
@@ -82,8 +82,14 @@ ProcessHits(G4Step* aStep, G4TouchableHistory* ) {
     //        << " \t Added energy = " << edep / MeV << " MeV " << G4endl; //***DEBUG*** 
   }
 
+  // We need to fill the shower profile information at this point,
+  // because in the EventActiononly the hit collection is available
+  // and the hits do not have information about the radius of each
+  // energy deposition that contributed.
   StatAccepTestAnalysis* analysis = StatAccepTestAnalysis::getInstance();
-  if ( analysis ) analysis->fillShowerProfile( replica, radius, edep );
+  if ( analysis ) {
+    analysis->fillShowerProfile( replica, radius, edep );
+  }
 
   return true;
 }
