@@ -1,6 +1,13 @@
                  History file
                  ------------
 
+17-Dec-2005 - A.Ribon (statAccepTest-V08-00-04)
+- Added the possibility to steer the magnetic field
+  from the mainScript.py as a parameter. 
+  If this is null, then it works exactly as before 
+  (i.e. same filenames and their content).
+
+
 17-Dec-2005 - A.Ribon (statAccepTest-V08-00-03)
 - Replaced everywhere "python2.2" with "python".
 

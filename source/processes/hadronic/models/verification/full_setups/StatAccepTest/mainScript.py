@@ -27,14 +27,17 @@ print '========== START mainScript.py =========='
 #                  "LHEP", "QGSP", "QGSC", "QGSP_BERT", "QGSP_BIC", "QGSP_GN".
 #               -  the Number of Events:
 #                  e.g. : "5000", "5k", etc.
+#               -  the Bfield:
+#                  e.g. : "0", "4tesla", etc.
 #
 REF1        = "7.1.p01"
 SIM_REF1    = "Yes"
-REF2        = "8.0.cand02.elastic7.1"
+REF2        = "8.0.cand02"
 SIM_REF2    = "Yes"
 RUN_STAT    = "Yes"
-PHYSICS     = "QGSP_GN"
-EVENTS      = "5000"
+PHYSICS     = "QGSP"
+EVENTS      = "10"
+BFIELD      = "0"
 #***endLOOKHERE***
 
 # ---------------------------------------------
@@ -52,8 +55,8 @@ os.system( "./simuDriver.sh " +
            PHYSICS + " " +
            CALORIMETER + " " +
            PARTICLE + " " + ENERGY + " " +
-           EVENTS )
-
+           EVENTS + " " + BFIELD )
+    
 # ---------------------------------------------
 
 print '========== END mainScript.py =========='

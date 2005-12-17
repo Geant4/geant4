@@ -9,6 +9,7 @@
 #   4) the Particle type ;        example:  p
 #   5) the beam Energy ;          example:  20GeV
 #   6) the Number of Events ;     example:  5k
+#   7) the B field ;              example:  4T
 #
 # This script produces in output two files:
 #
@@ -43,6 +44,7 @@ CALORIMETER  = sys.argv[3]
 PARTICLE     = sys.argv[4]
 ENERGY       = sys.argv[5]
 EVENTS       = sys.argv[6]
+BFIELD       = sys.argv[7]
 
 print '  REFERENCE   = ', REFERENCE
 print '  PHYSICS     = ', PHYSICS
@@ -50,6 +52,7 @@ print '  CALORIMETER = ', CALORIMETER
 print '  PARTICLE    = ', PARTICLE
 print '  ENERGY      = ', ENERGY
 print '  EVENTS      = ', EVENTS
+print '  BFIELD      = ', BFIELD
 
 # ---------------- Release ---------------------
 Release = "dirGeant4-" + REFERENCE
@@ -93,7 +96,7 @@ EnergyValue = ""
 isNumericPart = 1
 for character in ENERGY :
     if ( isNumericPart ) :
-        if ( character.isdigit() ) :
+        if ( character.isdigit()  or  character == "." ) :
             EnergyValue = EnergyValue + character
         elif ( character.isalpha() ) :
             EnergyValue = EnergyValue + " " + character
@@ -150,6 +153,26 @@ for character in EVENTS :
         sys.exit(0)        
 print '  NumEvents = ', NumEvents
 
+# ---------------- B field -----------------
+BfieldValue = ""
+isNumericPart = 1
+for character in BFIELD :
+    if ( isNumericPart ) :
+        if ( character.isdigit()  or  character == "." ) :
+            BfieldValue = BfieldValue + character
+        elif ( character.isalpha() ) :
+            BfieldValue = BfieldValue + " " + character
+            isNumericPart = 0
+    else :
+        if ( character.isalpha() ) :
+            BfieldValue = BfieldValue + character
+        elif ( character.isdigit() ) :
+            print '  ***ERROR*** in build.py : WRONG BFIELD = ', BFIELD
+            sys.exit(0)
+if ( isNumericPart ) :   # If the unit is not specified, Tesla is assumed.
+    BfieldValue =  BfieldValue + " tesla" 
+print '  BfieldValue = ', BfieldValue
+
 # ==============================================================
 
 # ----------------- Write Geant4 command file -------------------
@@ -165,7 +188,11 @@ g4file.write( "/gun/particle " + ParticleType + " \n" )
 
 g4file.write( "/gun/energy " + EnergyValue + " \n" )			
 
-g4file.write( "#/mydet/setField 4.0 tesla \n" )  #***LOOKHERE****
+if ( BfieldValue != ""     and
+     BfieldValue != "0"    and  BfieldValue != "0 tesla"    and
+     BfieldValue != "0."   and  BfieldValue != "0. tesla"   and
+     BfieldValue != "0.0"  and  BfieldValue != "0.0 tesla"  ) :
+    g4file.write( "/mydet/setField " + BfieldValue + " \n" )    
 
 g4file.write( "/mydet/absorberMaterial " + Absorber + " \n" )		
 g4file.write( "/mydet/activeMaterial " + Active + " \n" )

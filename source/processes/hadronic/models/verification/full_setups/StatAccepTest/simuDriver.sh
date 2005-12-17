@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 #----------------------------------------------------------------------------
-# This Bash shell script has the following 10 parameters:
+# This Bash shell script has the following 11 parameters:
 #
 #   1)  Geant4 reference; e.g. 4.6.2.ref03 , or a local directory. 
 #   2)  Flag to know whether the first reference should be simulated or not.
@@ -13,12 +13,17 @@
 #   8)  Particle type; e.g. pi+
 #   9)  Beam Energy; e.g. 20GeV
 #   10) Number of Events; e.g. 5k
+#   10) Bfield; e.g. 4.0tesla
 #
 # This script invokes the Python  build.py  that writes the setup,
 # builds the executable, and writes the Geant4 command file.
 # After that, this script eventually (if the flag is on) builds the
 # executable  pvalue  and then calls the Python script  dirStat/driver.py  
 # that does the Statistical tests.
+#
+# Notice that the "LABEL" which specifies all the input parameters
+# does not contain the Bfield in the default case of zero magnetic field.
+#
 #----------------------------------------------------------------------------
 #
 echo ' ========== START simuDriver.sh ========== '
@@ -33,6 +38,7 @@ export CALORIMETER=$7
 export PARTICLE=$8
 export ENERGY=$9
 export EVENTS=${10}
+export BFIELD=${11}
 #
 echo ' REF1        =' $REF1
 echo ' SIM_REF1    =' $SIM_REF1
@@ -44,6 +50,7 @@ echo ' CALORIMETER =' $CALORIMETER
 echo ' PARTICLE    =' $PARTICLE
 echo ' ENERGY      =' $ENERGY
 echo ' EVENTS      =' $EVENTS
+echo ' BFIELD      =' $BFIELD
 #
 #--- Run the first reference ---
 #
@@ -51,7 +58,17 @@ echo ' EVENTS      =' $EVENTS
     ###echo " I AM HERE 1 " ;
     export REF=$REF1 ;
     export LABEL=$REF-$PHYSICS-$CALORIMETER-$PARTICLE-$ENERGY-$EVENTS ;
-    python build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS ;
+    if [ X$BFIELD != X ] ; then
+      if [ X$BFIELD != X0 ] ; then
+        if [ X$BFIELD != X0. ] ; then
+          if [ X$BFIELD != X0.0 ]; then
+	      export LABEL=$LABEL-B$BFIELD ;
+          fi
+        fi
+      fi
+    fi
+    ###echo " 1) LABEL=" $LABEL
+    python build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS $BFIELD ;
     mv run.g4 run.g4-$LABEL ;
     mv setup.sh setup.sh-$LABEL ;
     . setup.sh-$LABEL ;
@@ -70,7 +87,17 @@ echo ' EVENTS      =' $EVENTS
     ###echo " I AM HERE 2 " ;
     export REF=$REF2 ; 
     export LABEL=$REF-$PHYSICS-$CALORIMETER-$PARTICLE-$ENERGY-$EVENTS ;
-    python build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS ;
+    if [ X$BFIELD != X ] ; then
+      if [ X$BFIELD != X0 ] ; then
+        if [ X$BFIELD != X0. ] ; then
+          if [ X$BFIELD != X0.0 ]; then
+	      export LABEL=$LABEL-B$BFIELD ;
+          fi
+        fi
+      fi
+    fi
+    ###echo " 2) LABEL=" $LABEL
+    python build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS $BFIELD;
     mv run.g4 run.g4-$LABEL ;
     mv setup.sh setup.sh-$LABEL ;
     . setup.sh-$LABEL ;
@@ -88,6 +115,16 @@ echo ' EVENTS      =' $EVENTS
 ( if [ X$RUN_STAT == XYes ] ; then
     ###echo " I AM HERE 3 " ;
     export LABEL=$PHYSICS-$CALORIMETER-$PARTICLE-$ENERGY-$EVENTS ;
+    if [ X$BFIELD != X ] ; then
+      if [ X$BFIELD != X0 ] ; then
+        if [ X$BFIELD != X0. ] ; then
+          if [ X$BFIELD != X0.0 ]; then
+	      export LABEL=$LABEL-B$BFIELD ;
+          fi
+        fi
+      fi
+    fi
+    ###echo " 3) LABEL=" $LABEL
     . setup.sh-$REF1-$LABEL ;
     cd dirStat/ ;
     rm -f pvalue.o pvalue ;
