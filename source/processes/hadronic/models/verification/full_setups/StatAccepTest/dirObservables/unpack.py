@@ -1,5 +1,7 @@
+#!/usr/bin/python
+
 #-------------------------------------------------------------------
-# Last update: 14-Dec-2005
+# Last update: 17-Dec-2005
 #
 # This script should be run in the directory which has, as immediate
 # subdirectories, the results of the Grid validation testing,
@@ -149,6 +151,7 @@ dictObservablesPS = { '1':0,
 
 listDirFailed = open( "listDirFailed.txt", "w" )
 listDirRunCrashed = open( "listDirRunCrashed.txt", "w" )
+listDirEnergyNotConserved = open( "listDirEnergyNotConserved.txt", "w" )
 listPS = open( "listPS.txt", "w" )
 
 os.system( "ls -1F | grep / > listDir.txt" )
@@ -156,6 +159,7 @@ listDir = open( "listDir.txt", "r" )
 
 countDir = 0
 countDirWithRunCrashes = 0
+countDirWithEnergyNotConserved = 0
 countDirWithNtuples = 0
 countDirWithPvalues = 0
 countDirWithPS = 0
@@ -169,11 +173,12 @@ for dir in listDir :
     currentDir = os.getcwd()
     #print " I am in directory: ", currentDir
 
-    os.system( "tar xvfz *.tgz" )       #***LOOKHERE**
+    os.system( "tar xvfz *.tgz" )       #***LOOKHERE***
 
     os.system( "ls -1 > listFiles.txt" )
     listFiles = open( "listFiles.txt", "r" )
     foundRunCrashed = 0
+    foundEnergyNotConserved = 0
     foundNtuples = 0
     foundPvalues = 0
     foundPS = 0
@@ -181,6 +186,7 @@ for dir in listDir :
         #print " iFile=", iFile
         if ( iFile.find( "output.log-" ) > -1 ) :
             # Look for runs that started but did not terminate.
+            # Look also for total energy non conservation.
             #print " --- Look at the output file = ", iFile.strip(), " --- "
             fileOutput = open( iFile.strip(), "r" )
             runStarted = 0
@@ -188,11 +194,13 @@ for dir in listDir :
             for line in fileOutput :
                 #print " line=", line.strip()
                 if ( line.find( "Start Run processing." ) > -1 ) :
-                     runStarted = 1
-                     #print "  ***RUN STARTED*** : ", line.strip()
+                    runStarted = 1
+                    #print "  ***RUN STARTED*** : ", line.strip()
                 if ( line.find( "Run terminated." ) > -1 ) :
-                     runTerminated = 1
-                     #print "  ***RUN TERMINATED*** : ", line.strip()
+                    runTerminated = 1
+                    #print "  ***RUN TERMINATED*** : ", line.strip()
+                if ( line.find( "***ENERGY-NON-CONSERVATION***" ) > -1 ) :
+                    foundEnergyNotConserved = 1
             if ( runStarted  and  ( not runTerminated ) ) :
                 foundRunCrashed = 1
         if ( iFile.find( "ntuple.hbook" ) > -1 ) :
@@ -238,6 +246,9 @@ for dir in listDir :
     if ( foundRunCrashed ) :
         countDirWithRunCrashes += 1
         listDirRunCrashed.write( currentDir + "\n" )        
+    if ( foundEnergyNotConserved ) :
+        countDirWithEnergyNotConserved += 1
+        listDirEnergyNotConserved.write( currentDir + "\n" )        
     if ( foundNtuples ) :
         countDirWithNtuples += 1
     if ( foundPvalues ) :
@@ -254,6 +265,8 @@ for dir in listDir :
 print " Summary: "
 print " Number of directories = ", countDir
 print " Number of directories with Run crashes = ", countDirWithRunCrashes
+print " Number of directories with Energy NOT conserved = ", \
+      countDirWithEnergyNotConserved
 print " Number of directories with Ntuples = ", countDirWithNtuples
 print " Number of directories with p-values = ", countDirWithPvalues
 print " Number of directories with .PS = ", countDirWithPS
@@ -324,6 +337,7 @@ print " "
 listDir.close()
 listDirFailed.close()
 listDirRunCrashed.close()
+listDirEnergyNotConserved.close()
 listPS.close()
 
 
