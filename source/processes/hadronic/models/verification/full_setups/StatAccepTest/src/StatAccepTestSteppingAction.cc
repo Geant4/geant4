@@ -19,7 +19,7 @@ void StatAccepTestSteppingAction::UserSteppingAction(const G4Step * theStep) {
     if ( theStep->GetTrack()->GetParentID() == 0 ) {
       // PDG ID: e- = 11, mu- = 13, pion- = -211, pion+ = 211, p = 2212, n = 2112.
       primaryParticleId = theStep->GetTrack()->GetDefinition()->GetPDGEncoding();
-      primaryParticleEnergy = theStep->GetTrack()->GetKineticEnergy();
+      primaryParticleEnergy = theStep->GetPreStepPoint()->GetKineticEnergy();
     }
   }
 
