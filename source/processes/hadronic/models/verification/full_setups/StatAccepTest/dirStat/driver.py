@@ -22,6 +22,6 @@ caseA = sys.argv[1]
 caseB = sys.argv[2]
 generalCase = sys.argv[3]
 
-os.system( "python2.2 drivePlot.py " + caseA + " " + caseB + " " + generalCase )
+os.system( "python drivePlot.py " + caseA + " " + caseB + " " + generalCase )
 
 print '   ========== END driver.py ========== '

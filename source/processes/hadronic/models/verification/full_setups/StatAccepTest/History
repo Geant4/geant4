@@ -1,6 +1,10 @@
                  History file
                  ------------
 
+17-Dec-2005 - A.Ribon (statAccepTest-V08-00-03)
+- Replaced everywhere "python2.2" with "python".
+
+
 17-Dec-2005 - A.Ribon (statAccepTest-V08-00-02)
 - Added a check of the total energy conservation.
   Fixed also the small deviation in the beam energy

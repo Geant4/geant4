@@ -51,7 +51,7 @@ echo ' EVENTS      =' $EVENTS
     ###echo " I AM HERE 1 " ;
     export REF=$REF1 ;
     export LABEL=$REF-$PHYSICS-$CALORIMETER-$PARTICLE-$ENERGY-$EVENTS ;
-    python2.2 build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS ;
+    python build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS ;
     mv run.g4 run.g4-$LABEL ;
     mv setup.sh setup.sh-$LABEL ;
     . setup.sh-$LABEL ;
@@ -70,7 +70,7 @@ echo ' EVENTS      =' $EVENTS
     ###echo " I AM HERE 2 " ;
     export REF=$REF2 ; 
     export LABEL=$REF-$PHYSICS-$CALORIMETER-$PARTICLE-$ENERGY-$EVENTS ;
-    python2.2 build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS ;
+    python build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS ;
     mv run.g4 run.g4-$LABEL ;
     mv setup.sh setup.sh-$LABEL ;
     . setup.sh-$LABEL ;
@@ -92,7 +92,7 @@ echo ' EVENTS      =' $EVENTS
     cd dirStat/ ;
     rm -f pvalue.o pvalue ;
     gmake ;
-    python2.2 driver.py $REF1 $REF2 $LABEL ; 
+    python driver.py $REF1 $REF2 $LABEL ; 
   fi )
 #
 echo ' ========== END simuDriver.sh ========== '

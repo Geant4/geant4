@@ -49,7 +49,7 @@ os.system( "./pvalue > " + fileLog + " 2>&1 " )
 
 # Execute the Python scrip  plot.py  which uses the log file
 # of the previous executable.
-os.system( "python2.2 plot.py " + fileLog )
+os.system( "python plot.py " + fileLog )
 
 # Delete the symbolic links, and renamed the output files
 os.remove( "ntuple_a.hbook" )
