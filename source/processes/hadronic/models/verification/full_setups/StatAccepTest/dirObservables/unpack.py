@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-#-------------------------------------------------------------------
+#--------------------------------------------------------------------
 # Last update: 17-Dec-2005
 #
 # This script should be run in the directory which has, as immediate
@@ -29,7 +29,7 @@
 # This script has not input argument, and should be run as:
 #         $  python unpack
 #
-#-------------------------------------------------------------------
+#--------------------------------------------------------------------
 
 import os
 import sys
