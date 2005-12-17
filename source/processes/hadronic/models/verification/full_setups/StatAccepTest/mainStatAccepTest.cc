@@ -2,12 +2,7 @@
 #include "G4UImanager.hh" 
 #include "StatAccepTestDetectorConstruction.hh" 
 #include "LHEP.hh" 
-#include "LHEP_GN.hh" 
-#include "LHEP_HP.hh" 
-#include "LHEP_BERT_HP.hh" 
-#include "LHEP_BIC_HP.hh" 
 #include "QGSP.hh" 
-#include "QGSP_GN.hh" 
 #include "QGSP_HP.hh" 
 #include "QGSP_BERT.hh" 
 #include "QGSP_BIC.hh" 
@@ -28,28 +23,28 @@
 #endif 
 #include "CLHEP/Random/RanluxEngine.h" 
 int main(int argc,char** argv) { 
-  RanluxEngine defaultEngine( 1234567, 4 ); 
-  HepRandom::setTheEngine( &defaultEngine ); 
+  CLHEP::RanluxEngine defaultEngine( 1234567, 4 ); 
+  CLHEP::HepRandom::setTheEngine( &defaultEngine ); 
   G4int seed = time( NULL ); 
-  HepRandom::setTheSeed( seed ); 
+  CLHEP::HepRandom::setTheSeed( seed ); 
   G4cout << G4endl 
          << " ===================================================== " << G4endl 
          << " Initial seed = " << seed << G4endl 
 	 << " ===================================================== " << G4endl 
 	 << G4endl; 
   G4RunManager* runManager = new G4RunManager; 
-#ifdef G4VIS_USE 
-  StatAccepTestVisManager *visManager = new StatAccepTestVisManager; 
-  visManager->Initialize(); 
-#endif 
   runManager->SetUserInitialization( new StatAccepTestDetectorConstruction ); 
-  LHEP_BERT_HP  *thePL = new LHEP_BERT_HP; 
+  QGSP  *thePL = new QGSP; 
   //thePL->SetDefaultCutValue( 1.0*cm ); 
   runManager->SetUserInitialization( thePL ); 
   runManager->SetUserAction( new StatAccepTestPrimaryGeneratorAction ); 
   runManager->SetUserAction( new StatAccepTestRunAction ); 
   runManager->SetUserAction( new StatAccepTestEventAction ); 
   //runManager->SetUserAction( new StatAccepTestStackingAction ); 
+#ifdef G4VIS_USE 
+  StatAccepTestVisManager *visManager = new StatAccepTestVisManager; 
+  visManager->Initialize(); 
+#endif 
   runManager->Initialize(); 
   G4UImanager* UI = G4UImanager::GetUIpointer(); 
   if ( argc==1 ) {   // Define UI session for interactive mode. 
@@ -95,7 +90,7 @@ int main(int argc,char** argv) {
   } 
   G4cout << G4endl 
 	 << " ===================================================== " << G4endl 
-         << " Final random number = " << HepRandom::getTheEngine()->flat() << G4endl 
+         << " Final random number = "          << CLHEP::HepRandom::getTheEngine()->flat() << G4endl 
 	 << " ===================================================== " << G4endl 
          << G4endl; 
   // job termination 

@@ -1,6 +1,11 @@
                  History file
                  ------------
 
+17-Dec-2005 - A.Ribon (statAccepTest-V08-00-00)
+- Migration to the new Physics Lists, and to 
+  CLHEP namespace.
+
+
 14-Dec-2005 - A.Ribon (statAccepTest-V07-01-07)
 - Last tag, as used for the December 2005 G4 release 
   validation production, with everything pre-installed

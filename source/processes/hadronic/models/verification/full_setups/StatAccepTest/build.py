@@ -59,6 +59,8 @@ print '  Release = ', Release
 if ( PHYSICS != "LHEP"          and
      PHYSICS != "LHEP_GN"       and
      PHYSICS != "LHEP_HP"       and
+     PHYSICS != "LHEP_BERT"     and
+     PHYSICS != "LHEP_BIC"      and
      PHYSICS != "LHEP_BERT_HP"  and
      PHYSICS != "LHEP_BIC_HP"   and
      PHYSICS != "QGSP"          and
@@ -66,6 +68,7 @@ if ( PHYSICS != "LHEP"          and
      PHYSICS != "QGSP_HP"       and
      PHYSICS != "QGSP_BERT"     and
      PHYSICS != "QGSP_BIC"      and
+     PHYSICS != "QGSP_BERT_HP"  and
      PHYSICS != "QGSC" 
    ) :
     print '  ***ERROR*** in build.py : WRONG PHYSICS LIST = ', PHYSICS
@@ -185,7 +188,7 @@ g4file.close()
 
 setupFile = open( "setup.sh", "w" )
 
-setupFile.write( "export VO_GEANT4_SW_DIR=/users/ribon/dirGrid \n" )  #***LOOKHERE***
+###setupFile.write( "export VO_GEANT4_SW_DIR=/users/ribon/dirGrid \n" )  #***LOOKHERE***
 setupFile.write( "export DIR_INSTALLATIONS=$VO_GEANT4_SW_DIR/dirInstallations \n" )
 
 setupFile.write( "export PATH=$DIR_INSTALLATIONS/dirGCC/bin:$PATH \n" )
@@ -251,14 +254,10 @@ mainProgram.write( "#include \"G4RunManager.hh\" \n" )
 mainProgram.write( "#include \"G4UImanager.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestDetectorConstruction.hh\" \n" )
 mainProgram.write( "#include \"LHEP.hh\" \n" )
-mainProgram.write( "#include \"LHEP_GN.hh\" \n" )
-#mainProgram.write( "#include \"LHEP_HP.hh\" \n" )
-#mainProgram.write( "#include \"LHEP_BERT_HP.hh\" \n" )
-#mainProgram.write( "#include \"LHEP_BIC_HP.hh\" \n" )
 mainProgram.write( "#include \"QGSP.hh\" \n" )
-mainProgram.write( "#include \"QGSP_GN.hh\" \n" )
 mainProgram.write( "#include \"QGSP_HP.hh\" \n" )
 mainProgram.write( "#include \"QGSP_BERT.hh\" \n" )
+###mainProgram.write( "#include \"QGSP_BERT_HP.hh\" \n" )
 mainProgram.write( "#include \"QGSP_BIC.hh\" \n" )
 mainProgram.write( "#include \"QGSC.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestPrimaryGeneratorAction.hh\" \n" )
@@ -277,10 +276,10 @@ mainProgram.write( "#include \"G4UIXm.hh\" \n" )
 mainProgram.write( "#endif \n" )
 mainProgram.write( "#include \"CLHEP/Random/RanluxEngine.h\" \n" )
 mainProgram.write( "int main(int argc,char** argv) { \n" )
-mainProgram.write( "  RanluxEngine defaultEngine( 1234567, 4 ); \n" ) 
-mainProgram.write( "  HepRandom::setTheEngine( &defaultEngine ); \n" )
+mainProgram.write( "  CLHEP::RanluxEngine defaultEngine( 1234567, 4 ); \n" ) 
+mainProgram.write( "  CLHEP::HepRandom::setTheEngine( &defaultEngine ); \n" )
 mainProgram.write( "  G4int seed = time( NULL ); \n" )
-mainProgram.write( "  HepRandom::setTheSeed( seed ); \n" )
+mainProgram.write( "  CLHEP::HepRandom::setTheSeed( seed ); \n" )
 mainProgram.write( "  G4cout << G4endl \n" )
 mainProgram.write( "         << \" ===================================================== \" << G4endl \n" )
 mainProgram.write( "         << \" Initial seed = \" << seed << G4endl \n" )
@@ -352,7 +351,8 @@ mainProgram.write( "    UI->ApplyCommand(command+fileName); \n" )
 mainProgram.write( "  } \n" )
 mainProgram.write( "  G4cout << G4endl \n" ) 
 mainProgram.write( "	 << \" ===================================================== \" << G4endl \n" )
-mainProgram.write( "         << \" Final random number = \" << HepRandom::getTheEngine()->flat() << G4endl \n" )
+mainProgram.write( "         << \" Final random number = \" " )
+mainProgram.write( "         << CLHEP::HepRandom::getTheEngine()->flat() << G4endl \n" )
 mainProgram.write( "	 << \" ===================================================== \" << G4endl \n" ) 
 mainProgram.write( "         << G4endl; \n" )
 mainProgram.write( "  // job termination \n" )
