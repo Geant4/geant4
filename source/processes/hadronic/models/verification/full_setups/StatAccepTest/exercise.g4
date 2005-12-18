@@ -28,6 +28,8 @@
 #            of a homogeneous calorimeter, this number is relevant
 #            for the longitudinal shower analysis).
 #          - Size of the active layer, in [mm].
+#          - Number of readout layers (which must be a divisor
+#            of the number of active layers). 
 #          Then, for the transverse shower analysis:
 #          - Is the unit with which to express the radius bin
 #            size in lambdas (interaction lengths) of the absorber,
@@ -138,7 +140,8 @@
 #
 /mydet/isUnitInLambda 1
 /mydet/absorberTotalLength 10.0
-/mydet/activeLayerNumber 20
+/mydet/activeLayerNumber 100
+/mydet/readoutLayerNumber 20
 /mydet/activeLayerSize 4.0
 /mydet/isRadiusUnitInLambda 1
 /mydet/radiusBinSize 0.1

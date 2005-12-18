@@ -1,5 +1,5 @@
 
- Last update: 17-Dec-2005
+ Last update: 18-Dec-2005
  ========================
 
  This directory contains a configurable calorimeter setup to be used
@@ -37,6 +37,12 @@
  the absorber material, or in normal length in [mm]. 
  The user has to specified also the thickness (in [mm]) of a
  single layer of active material, and the number of layers.
+ Also the number of readout layers can be specified, in the
+ case it is different than the number of active layers: if the
+ number of readout layers is not explicitly set, then it is 
+ assumed to be the same as the number of active layers; if it 
+ is set explicitly, then it must be a divisor of the number of
+ active layers, otherwise it is forced to be equal to it.
  In the case of an homogeneous calorimeter, for instance PbWO4,
  the number of layers indicate essentially the number of sampling
  we can have for the longitudinal shower profile.

@@ -37,6 +37,7 @@ private:
   G4UIcmdWithADouble*        theAbsorberTotalLength;
   G4UIcmdWithAnInteger*      theActiveLayerNumber;
   G4UIcmdWithADouble*        theActiveLayerSize;
+  G4UIcmdWithAnInteger*      theReadoutLayerNumber;
   // For the specifications of the calorimeter.
 
   G4UIcmdWithABool*          theIsRadiusUnitInLambda;

@@ -54,6 +54,7 @@ StatAccepTestDetectorConstruction::StatAccepTestDetectorConstruction() :
   theAbsorberTotalLength( 2.0*m ), 
   theActiveLayerNumber( 50 ),
   theActiveLayerSize( 4.0*mm ),
+  theReadoutLayerNumber( 50 ),
   theIsRadiusUnitInLambda( false ), // Unit of length for the radius bin size.
   theRadiusBinSize( 10.0*cm ),
   theRadiusBinNumber( 11 )
@@ -473,8 +474,8 @@ G4VPhysicalVolume* StatAccepTestDetectorConstruction::ConstructCalorimeter() {
   if ( theIsRadiusUnitInLambda ) {
      radiusBinSize *= lambda; 
   }
-  StatAccepTestAnalysis::getInstance()->init( numberOfModules, 
-				   theRadiusBinNumber, radiusBinSize );
+  StatAccepTestAnalysis::getInstance()->init( numberOfModules, theReadoutLayerNumber,  
+					      theRadiusBinNumber, radiusBinSize );
 
   // G4cout << " END  StatAccepTestDetectorConstruction::ConstructCalorimeter()" 
   //        << G4endl; //***DEBUG***
@@ -505,6 +506,11 @@ G4bool StatAccepTestDetectorConstruction::areParametersOK() {
   if ( theActiveLayerSize <= 0.0 ) {
     isOk = false;
     G4cout << " StatAccepTestDetectorConstruction::areParametersOK() : theActiveLayerSize = " << theActiveLayerSize << G4endl;
+  }
+  if ( theReadoutLayerNumber <= 0  ||  
+       theActiveLayerNumber % theReadoutLayerNumber != 0 ) {
+    isOk = false;
+    G4cout << " StatAccepTestDetectorConstruction::areParametersOK() : theReadoutLayerNumber = " << theReadoutLayerNumber << G4endl;
   }
   if ( theRadiusBinSize <= 0.0 ) {
     isOk = false;
@@ -641,6 +647,7 @@ void StatAccepTestDetectorConstruction::PrintParameters() {
   }
   G4cout << G4endl << " Active Layer Number   = " << theActiveLayerNumber;
   G4cout << G4endl << " Active Layer Size     = " << theActiveLayerSize/mm << " mm";
+  G4cout << G4endl << " Readout Layer Number  = " << theReadoutLayerNumber;
   G4cout << G4endl << " Is the Radius Unit in Lambda ? " << theIsRadiusUnitInLambda;
   G4cout << G4endl << " Radius Bin Size       = ";
   if ( theIsRadiusUnitInLambda ) {

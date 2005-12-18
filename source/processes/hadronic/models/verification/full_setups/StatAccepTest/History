@@ -1,6 +1,16 @@
                  History file
                  ------------
 
+18-Dec-2005 - A.Ribon (statAccepTest-V08-00-05)
+- Added the possibility to have a different number
+  of readout layers with respect to the number of
+  active layers. Now by default, there are 100
+  active layers (i.e. of 0.1 lambda thickness), and
+  20 readout layers (corresponding to 0.5 lambda).
+  Notice that this spoils the possibility to compare
+  with older ntuples.
+
+
 17-Dec-2005 - A.Ribon (statAccepTest-V08-00-04)
 - Added the possibility to steer the magnetic field
   from the mainScript.py as a parameter. 

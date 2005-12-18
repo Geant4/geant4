@@ -15,8 +15,9 @@ StatAccepTestAnalysis* StatAccepTestAnalysis::instance = 0;
  
 StatAccepTestAnalysis::StatAccepTestAnalysis() : 
   analysisFactory( 0 ), tree( 0 ), tuple( 0 ), histoFactory( 0 ), 
-  numberOfReplicas( 0 ), numberOfRadiusBins( 0 ), numberOfEvents( 0 ),
-  radiusBin( 0.0 ), 
+  numberOfEvents( 0 ), numberOfReplicas( 0 ), 
+  numberOfReadoutLayers( 0 ), numberOfActiveLayersPerReadoutLayer( 1 ), 
+  numberOfRadiusBins( 0 ), radiusBin( 0.0 ), 
   longitudinalProfileHisto( 0 ), transverseProfileHisto( 0 ) {
 
   analysisFactory = AIDA_createAnalysisFactory();
@@ -83,7 +84,7 @@ StatAccepTestAnalysis* StatAccepTestAnalysis::getInstance() {
 
 
 void StatAccepTestAnalysis::init() {
-  G4cout << " StatAccepTestAnalysis::init() : Cleaning up..." << G4endl;
+  // G4cout << " StatAccepTestAnalysis::init() : Cleaning up..." << G4endl;
 
   // We need to reset the content of the tuple and the
   // profile containers at the beginning of a new Run,
@@ -107,7 +108,7 @@ void StatAccepTestAnalysis::init() {
   maxEdepTot  = 0.0;
   sumL.clear();
   sumL2.clear();
-  for ( int layer = 0; layer < numberOfReplicas; layer++ ) {
+  for ( int layer = 0; layer < numberOfReadoutLayers; layer++ ) {
     longitudinalProfile.push_back( 0.0 );
     sumL.push_back( 0.0 );
     sumL2.push_back( 0.0 );
@@ -126,15 +127,34 @@ void StatAccepTestAnalysis::init() {
 
 
 void StatAccepTestAnalysis::init( const G4int numberOfReplicasIn, 
+				  const G4int numberOfReadoutLayersIn,
 				  const G4int numberOfRadiusBinsIn,
 				  const G4double radiusBinIn ) {
-  if ( numberOfReplicasIn > 0 )    numberOfReplicas   = numberOfReplicasIn;
-  if ( numberOfRadiusBinsIn > 0 )  numberOfRadiusBins = numberOfRadiusBinsIn;
-  if ( radiusBinIn > 0 )           radiusBin = radiusBinIn;
+  if ( numberOfReplicasIn > 0 ) {
+    numberOfReplicas = numberOfReplicasIn;
+  }
+  if ( numberOfReadoutLayersIn > 0 ) {
+    if ( numberOfReplicasIn % numberOfReadoutLayersIn != 0 ) {
+      G4cout << " ***WARNING*** StatAccepTestAnalysis::init(...) " << G4endl
+             << " \t numberOfReplicas = " << numberOfReplicasIn
+	     << "  is NOT compatible with  numberOfReadoutLayers = " 
+	     << numberOfReadoutLayersIn << G4endl;
+    } else {
+      numberOfReadoutLayers = numberOfReadoutLayersIn;
+      numberOfActiveLayersPerReadoutLayer = numberOfReplicas / numberOfReadoutLayers;
+    }
+  }
+  if ( numberOfRadiusBinsIn > 0 ) {
+    numberOfRadiusBins = numberOfRadiusBinsIn;
+  }
+  if ( radiusBinIn > 0 ) {
+    radiusBin = radiusBinIn;
+  }
   //G4cout << " StatAccepTestAnalysis::init( , , , ) : DEBUG Info " << G4endl
-  //       << "\t numberOfReplicas   = " << numberOfReplicas << G4endl
-  //       << "\t numberOfRadiusBins = " << numberOfRadiusBins << G4endl
-  //       << "\t radiusBin          = " << radiusBin/mm << " mm" 
+  //       << "\t numberOfReplicas      = " << numberOfReplicas << G4endl
+  //       << "\t numberOfReadoutLayers = " << numberOfReadoutLayers << G4endl
+  //       << "\t numberOfRadiusBins    = " << numberOfRadiusBins << G4endl
+  //       << "\t radiusBin             = " << radiusBin/mm << " mm" 
   //       << G4endl;  //***DEBUG***
 
   // Create two histograms: one for the longitudinal shower profile,
@@ -144,7 +164,8 @@ void StatAccepTestAnalysis::init( const G4int numberOfReplicasIn,
       // // // if ( ! tree->find( "50" ) ) {
       longitudinalProfileHisto = 
 	histoFactory->createHistogram1D("50", "Longitudinal shower profile", 
-					numberOfReplicas, 0.0, 1.0*numberOfReplicas );
+					numberOfReadoutLayers, 0.0, 
+					1.0*numberOfReadoutLayers );
       assert( longitudinalProfileHisto );
       // G4cout << " Created longitudinalProfileHisto " << G4endl;
       // // // if ( ! tree->find( "60" ) ) {
@@ -225,7 +246,7 @@ void StatAccepTestAnalysis::finish() {
   G4cout << " Average <E> [MeV] deposited in the whole calorimeter = " 
          << mu << " +/- " << mu_sigma << G4endl;
   G4cout << " Average <E> [MeV] in each Layer " << G4endl; 
-  for ( int iLayer = 0; iLayer < numberOfReplicas; iLayer++ ) {
+  for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
     sum  = sumL[ iLayer ];
     sum2 = sumL2[ iLayer ];
     mu       = sum / n;
@@ -325,7 +346,7 @@ void StatAccepTestAnalysis::fillNtuple( float incidentParticleId,
     tuple->fill( tuple->findColumn( "E" ), incidentParticleEnergy );
     tuple->fill( tuple->findColumn( "EDEP_ACT" ), totalEnergyDepositedInActiveLayers );
     tuple->fill( tuple->findColumn( "EDEP_CAL" ), totalEnergyDepositedInCalorimeter );
-    tuple->fill( tuple->findColumn( "nLayers" ), numberOfReplicas );
+    tuple->fill( tuple->findColumn( "nLayers" ), numberOfReadoutLayers );
     tuple->fill( tuple->findColumn( "nBinR" ), numberOfRadiusBins );
     sumEdepAct  += totalEnergyDepositedInActiveLayers;
     sumEdepAct2 += 
@@ -335,7 +356,7 @@ void StatAccepTestAnalysis::fillNtuple( float incidentParticleId,
       totalEnergyDepositedInCalorimeter * totalEnergyDepositedInCalorimeter;
     AIDA::ITuple* tpL = tuple->getTuple( tuple->findColumn( "L" ) );
     AIDA::ITuple* tpR = tuple->getTuple( tuple->findColumn( "R" ) );
-    for ( int iLayer = 0; iLayer < numberOfReplicas; iLayer++ ) {
+    for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
       tpL->fill( 0, longitudinalProfile[ iLayer ] );
       tpL->addRow();
       sumL[ iLayer ]  += longitudinalProfile[ iLayer ];
@@ -351,7 +372,7 @@ void StatAccepTestAnalysis::fillNtuple( float incidentParticleId,
   }
 
   // Reset the longitudinal and transverse profiles, for the next event.
-  for ( int layer = 0; layer < numberOfReplicas; layer++ ) {
+  for ( int layer = 0; layer < numberOfReadoutLayers; layer++ ) {
     // G4cout << " StatAccepTestAnalysis::fillNtuple : DEBUG Info " << G4endl
     //        << "\t Longitudinal profile: layer = " << layer
     //        << "   energy = " << longitudinalProfile[ layer ] / MeV 
@@ -400,7 +421,9 @@ fillShowerProfile( G4int replica, G4double radius, G4double edep ) {
     replica = numberOfReplicas - 1;  // Just to avoid a crash
   }
 
-  longitudinalProfile[ replica ] += edep;
+  G4int readoutLayer = replica / numberOfActiveLayersPerReadoutLayer;
+
+  longitudinalProfile[ readoutLayer ] += edep;
 
   // The last bin of the transverse profile includes all the hits with 
   // remaining radius. 
@@ -419,8 +442,10 @@ fillShowerProfile( G4int replica, G4double radius, G4double edep ) {
   transverseProfile[ iBinRadius ] += edep;
 
   //G4cout << " StatAccepTestAnalysis::fillShowerProfile : DEBUG Info " << G4endl
-  //       << " \t replica = " << replica  << "   radius = " << radius / mm 
-  //       << " mm   iBinRadius = " << iBinRadius << "   edep = " << edep 
-  //       << G4endl;  //***DEBUG***
+  //       << " \t replica = " << replica 
+  //       << "  readoutLayer = " << readoutLayer << G4endl
+  //       << " \t radius = " << radius / mm 
+  //       << " mm   iBinRadius = " << iBinRadius << G4endl
+  //       << " \t edep = " << edep << " MeV "  << G4endl;  //***DEBUG***
 
 }

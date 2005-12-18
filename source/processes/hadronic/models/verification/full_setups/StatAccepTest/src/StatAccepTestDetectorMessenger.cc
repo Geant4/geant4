@@ -76,6 +76,13 @@ StatAccepTestDetectorMessenger(StatAccepTestDetectorConstruction* myDet)
   theActiveLayerSize->SetDefaultValue( 4.0 ); // default: 4 millimeters.
   theActiveLayerSize->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  theReadoutLayerNumber = new G4UIcmdWithAnInteger("/mydet/readoutLayerNumber",this);
+  theReadoutLayerNumber->SetParameterName("choiceReadoutLayerNumber",true);
+  theReadoutLayerNumber->SetGuidance("Number of readout layers: it must be a");
+  theReadoutLayerNumber->SetGuidance("divisor of the number of active layers.");
+  theReadoutLayerNumber->SetDefaultValue( 50 );
+  theReadoutLayerNumber->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   theIsRadiusUnitInLambda = new G4UIcmdWithABool("/mydet/isRadiusUnitInLambda",this);
   theIsRadiusUnitInLambda->SetParameterName("choiceIsRadiusUnitInLambda",true);
   theIsRadiusUnitInLambda->SetGuidance("Is unit of radius in lambda?");
@@ -121,6 +128,7 @@ StatAccepTestDetectorMessenger::~StatAccepTestDetectorMessenger() {
   delete theAbsorberTotalLength;
   delete theActiveLayerNumber;
   delete theActiveLayerSize;
+  delete theReadoutLayerNumber;
 
   delete theIsRadiusUnitInLambda;
   delete theRadiusBinSize;
@@ -166,6 +174,10 @@ SetNewValue(G4UIcommand* command, G4String newValue) {
   if ( command == theActiveLayerSize ) { 
     theDetector->
       SetActiveLayerSize( theActiveLayerSize->GetNewDoubleValue(newValue) );
+  }
+
+  if ( command == theReadoutLayerNumber ) { 
+    theDetector->SetReadoutLayerNumber( theReadoutLayerNumber->GetNewIntValue(newValue) );
   }
 
   if ( command == theIsRadiusUnitInLambda ) { 

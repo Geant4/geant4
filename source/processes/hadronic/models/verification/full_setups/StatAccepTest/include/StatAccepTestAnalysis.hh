@@ -25,6 +25,7 @@ public:
 public:
   
   void init( const G4int numberOfReplicasIn, 
+	     const G4int numberOfReadoutLayersIn,
 	     const G4int numberOfRadiusBinsIn,
 	     const G4double radiusBinIn );
   void init();
@@ -60,9 +61,12 @@ private:
   AIDA::ITuple* tuple;
   AIDA::IHistogramFactory* histoFactory;
 
-  G4int numberOfReplicas;
-  G4int numberOfRadiusBins;  // Number of bins in the transverse profile
   G4int numberOfEvents;
+
+  G4int numberOfReplicas;
+  G4int numberOfReadoutLayers;
+  G4int numberOfActiveLayersPerReadoutLayer;
+  G4int numberOfRadiusBins;  // Number of bins in the transverse profile
   G4double radiusBin;        // Size of the first bin in the transverse profile.
                              // The other bins have a bin size that is 
                              // as follows: second bin has a size that is twice
@@ -73,10 +77,9 @@ private:
   std::vector< G4double > transverseProfile; 
 
   // To print, at the end of the Run, the average energy deposits, <E>,
-  // and its error, in all active layers, in all calorimeter, in
-  // each active layer, and in each radius bin, we need to collect 
-  // the sum of the energy deposits and the sum of the square of 
-  // energy deposits.
+  // and its error, in the whole calorimeter, in each readout layer, 
+  // and in each radius bin, we need to collect the sum of the energy 
+  // deposits and the sum of the square of energy deposits.
   // We also consider the maximum total energy deposit in an event,
   // to check for energy non conservation.
   G4double beamEnergy;

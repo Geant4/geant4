@@ -36,6 +36,7 @@ public:
   inline void SetAbsorberTotalLength( const G4double value );
   inline void SetActiveLayerNumber( const G4int value );
   inline void SetActiveLayerSize( const G4double value );
+  inline void SetReadoutLayerNumber( const G4int value );
   // To define the calorimeter geometry.
 
   inline void SetIsRadiusUnitInLambda( const G4bool choice );
@@ -128,6 +129,7 @@ private:
 
   G4int theActiveLayerNumber;
   G4double theActiveLayerSize;
+  G4int theReadoutLayerNumber;
   // Number of active layers and length of each of them (in normal unit
   // of length, e.g. mm): in the case of sampling calorimeter
   // (i.e. theIsCalHomogeneous is false) the medium is theActiveMaterial;
@@ -135,6 +137,14 @@ private:
   // only a fictitious way to sample the longitudinal energy deposits,
   // but they are actually made of the same absorber material, and their
   // thickness is taken into account in theAbsorberTotalLength.
+  // Usually not all the active layers are read independently, but they
+  // are combined: the number of actual readout layers must be specified
+  // as well. If such value is not explicitly specified by the user, then
+  // the number of readout layers is assumed to be the same as the number
+  // of active layer. A warning is printed out if the specified number
+  // of readout layers is not a divisor of the number of active layers.
+  // and then the readout layer number is forced to be the same as the
+  // active layer number.
 
   G4bool theIsRadiusUnitInLambda;
   // If false then normal unit of length to express the radius bin size.
@@ -194,11 +204,27 @@ SetAbsorberTotalLength( const G4double value ) {
 inline void StatAccepTestDetectorConstruction::
 SetActiveLayerNumber( const G4int value ) {
   theActiveLayerNumber = value;
+  // By default, if the user does not set explicitly the number of
+  // readout layers, this is assumed to be the number of active layers.
+  theReadoutLayerNumber = theActiveLayerNumber; 
 }
 
 inline void StatAccepTestDetectorConstruction::
 SetActiveLayerSize( const G4double value ) {
   theActiveLayerSize = value;
+}
+
+inline void StatAccepTestDetectorConstruction::
+SetReadoutLayerNumber( const G4int value ) {
+  theReadoutLayerNumber = value;
+  if ( theActiveLayerNumber % theReadoutLayerNumber != 0 ) {
+    G4cout << "***WARNING*** StatAccepTestDetectorConstruction::SetReadoutLayerNumber"
+           << G4endl << "\t theReadoutLayerNumber = " << theReadoutLayerNumber
+           << " is NOT compatible with theActiveLayerNumber = " << theActiveLayerNumber 
+	   << G4endl
+           << "\t Forced theReadoutLayerNumber = theActiveLayerNumber" << G4endl;
+    theReadoutLayerNumber = theActiveLayerNumber;
+  }
 }
 
 
