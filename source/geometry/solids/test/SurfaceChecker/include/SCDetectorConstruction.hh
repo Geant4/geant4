@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SCDetectorConstruction.hh,v 1.4 2005-07-04 10:03:31 link Exp $
+// $Id: SCDetectorConstruction.hh,v 1.5 2005-12-19 14:00:43 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -84,6 +84,8 @@ class SCDetectorConstruction : public G4VUserDetectorConstruction
      G4double GetSemiAxisX() { return fSemiAxisX ; }
      G4double GetSemiAxisY() { return fSemiAxisY ; }
      G4double GetSemiAxisZ() { return fSemiAxisZ ; }
+
+     G4VSolid * GetSolid()  { return aVolume ; }
 
      void  SwitchDetector();
      G4VPhysicalVolume* SelectDetector (const G4String& val);

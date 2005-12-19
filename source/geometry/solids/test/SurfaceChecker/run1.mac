@@ -1,10 +1,10 @@
-# $Id: run1.mac,v 1.5 2005-07-25 08:15:58 link Exp $
+# $Id: run1.mac,v 1.6 2005-12-19 14:00:38 link Exp $
 #
 #
 
 /run/initialize
 
-/mydet/SelectDetector Ellipsoid
+#/mydet/SelectDetector Ellipsoid
 #/mydet/SelectDetector Torus
 #/mydet/SelectDetector Box
 #/mydet/SelectDetector Sphere
@@ -12,18 +12,16 @@
 #/mydet/SelectDetector Orb
 #/mydet/SelectDetector Cone
 #/mydet/SelectDetector TwistedTubs 
-#/mydet/SelectDetector  TwistedBox
+#/mydet/SelectDetector TwistedBox
 #/mydet/SelectDetector TwistedTrd
-#/mydet/SelectDetector  TwistedTrap
-#/mydet/SelectDetector TwistedTrap2
-#/mydet/SelectDetector TwistedTrap3
+#/mydet/SelectDetector TwistedTrap
 #/mydet/SelectDetector HalfSphere
 #/mydet/SelectDetector HollowSphere
 #/mydet/SelectDetector HalfHollowSphere
 #/mydet/SelectDetector Q1Shell
 #/mydet/SelectDetector Ring
 #/mydet/SelectDetector Shell
-
+/mydet/SelectDetector EllipticalCone
 
 /gun/particle geantino
-/run/beamOn 10000
+/run/beamOn 5

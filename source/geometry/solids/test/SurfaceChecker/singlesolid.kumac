@@ -30,7 +30,7 @@ MACRO SINGLESOLID   [FILE]
 
 ** fix the number of bins and analysis range
 nbins = 200
-xmin  = 1e-12
+xmin  = 1e-14
 xmax  = 1e5
 
 string = basename [file] .hbk
@@ -117,10 +117,10 @@ set xmgr 1.0
 
 title   = [base]           | or something else to describe your data
 psfile  = [base]-full.ps   
-exec plot [psfile] [title] [xmin] [xmax] 0 0.1
+exec plot [psfile] [title] [xmin] [xmax] 0 0.15
 
 psfile = [base]-zoom.ps
-exec plot [psfile] [title] 1e-12   1e-8  0 0.1
+exec plot [psfile] [title] [xmin]  1e-7  0 0.15
 
 return
 
@@ -208,10 +208,11 @@ do solidnum=1,[m]
      nt/proj [idc] 1.0.5 XLow([i])<delta<XHigh([i])
      entries = $hinfo([idc],'entries')
 
-* histogram df/dx = df(log10(x))/dlog10(x) * 1/x * 1/Log(x)
 *   factor = $rsigma(vlogdx([i])*x([i])*log(10)*[norm])
+*   factor =  $rsigma(vlogdx([i])*[norm])
 
-     factor =  $rsigma(vlogdx([i])*[norm])
+     factor =  $rsigma([norm])
+
      count = $rsigma([entries]/[factor])
      error = $rsigma(sqrt([entries])/[factor])
 

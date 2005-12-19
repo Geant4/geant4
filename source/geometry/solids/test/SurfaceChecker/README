@@ -5,6 +5,14 @@ README for SurfaceChecker
 History:
 ----------------------------------
 
+19.Dec 05
+- Code is now using GetPointOnSurface()
+- Added new elliptic solid EllipticalCone
+- Added Tet
+
+26.July 05 
+- Added support for segmented torus (fPhi,fPhiSegment)
+
 25.July 05
 - Sphere, Shell and other G4Sphere objects are now using the same 
   code of SurfacePoint generation.

@@ -44,7 +44,7 @@ SCDetectorMessenger::SCDetectorMessenger(SCDetectorConstruction * myDC)
   selDetCmd->SetParameterName("choice",true);
   selDetCmd->SetDefaultValue("Sphere");
 
- selDetCmd->SetCandidates("Sphere HalfSphere HollowSphere HalfHollowSphere Q1Shell Q2Shell Q3Shell Q4Shell Q5Shell Q6Shell Q7Shell Q8Shell Ring Shell Orb Box Cone manyCons Tube Hype Torus Para Trd b1Ib2 b1Ub2 b1Sb2 b1Ub1 b1Ib1 b1Sb1 TwistedTubs TwistedBox TwistedTrd TwistedTrap TwistedTrap2 TwistedTrap3 Ellipsoid");
+ selDetCmd->SetCandidates("Trap Trd Tet Sphere HalfSphere HollowSphere HalfHollowSphere Q1Shell Q2Shell Q3Shell Q4Shell Q5Shell Q6Shell Q7Shell Q8Shell Ring Shell Orb Box Cons manyCons Tubs Hype Torus Para Trd b1Ib2 b1Ub2 b1Sb2 b1Ub1 b1Ib1 b1Sb1 TwistedTubs TwistedBox TwistedTrd TwistedTrap Ellipsoid EllipticalCone EllipticalTube");
   selDetCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
     myDetector->SelectDetector(defParam="Sphere");

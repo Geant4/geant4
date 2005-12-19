@@ -25,7 +25,7 @@ MACRO SOLID
 
 ** fix the number of bins and analysis range
 nbins = 200
-xmin  = 1e-12
+xmin  = 1e-14
 xmax  = 1e5
 
 * goto plot     | if you want to go directly to the plot section 
@@ -105,8 +105,8 @@ set xmgl 3.0
 set xmgr 1.0
 
 *  usage: plot [psfile] [xmin] [xmax] [ymin] [ymax]
-exec plot 'solid-full.ps'   [xmin] [xmax] 0 0.1
-exec plot 'solid-zoom.ps'   1e-12   1e-8  0 0.1
+exec plot 'solid-full.ps'   [xmin] [xmax] 0 0.15
+exec plot 'solid-zoom.ps'   [xmin]  1e-7  0 0.15
 
 return
 
@@ -198,10 +198,10 @@ do solidnum=1,[m]
      nt/proj [idc] 1.0.5 XLow([i])<delta<XHigh([i])
      entries = $hinfo([idc],'entries')
 
-* histogram df/dx = df(log10(x))/dlog10(x) * 1/x * 1/Log(x)
 *   factor = $rsigma(vlogdx([i])*x([i])*log(10)*[norm])
+*   factor =  $rsigma(vlogdx([i])*[norm])
 
-     factor =  $rsigma(vlogdx([i])*[norm])
+    factor = $rsigma([norm])
      count = $rsigma([entries]/[factor])
      error = $rsigma(sqrt([entries])/[factor])
 

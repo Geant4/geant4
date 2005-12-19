@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SCDetectorConstruction.cc,v 1.5 2005-07-25 08:16:00 link Exp $
+// $Id: SCDetectorConstruction.cc,v 1.6 2005-12-19 14:00:44 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -44,6 +44,12 @@
 #include "G4Torus.hh"
 #include "G4Trd.hh"
 #include "G4Ellipsoid.hh"
+#include "G4EllipticalTube.hh"
+#include "G4EllipticalCone.hh"
+
+#include "G4Trap.hh"
+#include "G4Trd.hh"
+#include "G4Tet.hh"
 
 #include "G4Polycone.hh"
 
@@ -331,14 +337,14 @@ else if (val == "Q6Shell")
 
     aVolume = new G4Box ( "aBox", fTrackerpDx1, fTrackerpDy1, fTrackerpDz );
   }
-  else if (val == "Cone")
+  else if (val == "Cons")
   {        
 
     fTrackerpDz = 80*cm ;
     fTrackerR1 = 11*cm ;
     fTrackerR2 = 16*cm ;
 
-    aVolume = new G4Cons ( "aCone", 0 , fTrackerR1, 0, fTrackerR2, fTrackerpDz, 0, 360.*deg  ); 
+    aVolume = new G4Cons ( "aCons", 0.8*fTrackerR1 , fTrackerR1, 0.8*fTrackerR2, fTrackerR2, fTrackerpDz, 10*deg, 120.*deg  ); 
 
   }
   else if (val == "manyCons")
@@ -350,28 +356,29 @@ else if (val == "Q6Shell")
 
  
   }
-  else if (val == "Tube")
+  else if (val == "Tubs")
   {
 
     // only solid Tube is supported.
     fTrackerpDz = 80*cm ;
     fTrackerR = 11*cm ;
 
-    aVolume = new G4Tubs ( "aTube",0.,fTrackerR,fTrackerpDz,0.,360*deg) ;
+    aVolume = new G4Tubs ( "aTube",0.8*fTrackerR,fTrackerR,fTrackerpDz,40.,100*deg) ;
 
   }
   else if (val == "Hype")
   {
-    aVolume = new G4Hype ("aHype", 10*cm, 20*cm, 0*deg, 360*deg, 10*cm );
+    aVolume = new G4Hype ("aHype", 7*cm, 10*cm, 40*deg, 40*deg, 40*cm );
   }
   else if (val == "Torus")
   {
 
-    fPhi = 30*deg ;
-    fPhiSegment = 120*deg ;
+    fPhi = 40*deg ;
+    fPhiSegment = 100*deg ;
 
     fTrackerR1 = 5*cm ;
     fTrackerR2 = 6*cm ;
+    fTrackerR  = 20*cm ;
 
     aVolume = new G4Torus("aTorus", fTrackerR1, fTrackerR2 ,fTrackerR, fPhi, fPhiSegment) ;
 
@@ -459,51 +466,7 @@ else if (val == "Q6Shell")
     aVolume = new G4TwistedTrd("aTwistedTrd",fTrackerpDx1,fTrackerpDx2,fTrackerpDy1,fTrackerpDy2,fTrackerpDz,fTwistAngle);
 
   }
-  else if (val == "TwistedTrap")     // regular twisted trap
-  {
-
-    fTwistAngle = 20*deg ;
-    fTrackerpDz = 80*cm ;
-    fTrackerpDx1 = 5*cm ;
-    fTrackerpDx2 = 7*cm ;
-    fTrackerpDy1 = 8*cm ;
-
-    aVolume = new G4TwistedTrap("aTwistedTrap",fTwistAngle,fTrackerpDx1,fTrackerpDx2,fTrackerpDy1,fTrackerpDz);
-  }
-
-  else if ( val == "TwistedTrap2") 
-  {
-
-    // this is a general twisted trap with equal endcaps, but alph,phi,theta not zero
-    // Reason: the surface equation is a special case.
-
-    fTwistAngle = 20*deg ;
-    fTrackerpDz = 80*cm ;
-    fTheta = 10*deg ;
-    fPhi  =  40*deg ;
-    fTrackerpDy1 = 8*cm ;
-    fTrackerpDx1 = 11*cm ;
-    fTrackerpDx2 = 16*cm ;
-    fTrackerpDy2 = 8*cm ;
-    fTrackerpDx3 = 11*cm ;
-    fTrackerpDx4 = 16*cm ;
-    fAlph = 50*deg    ;
-
-    aVolume = new G4TwistedTrap("aTwistedTrap2",
-				fTwistAngle,         // twist angle
-				fTrackerpDz,         // half z length
-				fTheta,              // direction between end planes
-				fPhi,                // defined by polar and azimutal angles.
-				fTrackerpDy1,        // half y length at -pDz
-				fTrackerpDx1,        // half x length at -pDz,-pDy
-				fTrackerpDx2,        // half x length at -pDz,+pDy
-				fTrackerpDy2,        // half y length at +pDz
-				fTrackerpDx3,        // half x length at +pDz,-pDy
-				fTrackerpDx4,        // half x length at +pDz,+pDy
-				fAlph                // tilt angle at +pDz
-				) ;
-  }
-  else if ( val == "TwistedTrap3") 
+  else if ( val == "TwistedTrap") 
   {
     fTwistAngle = 60*deg ; 
     fTrackerpDz = 80*cm;
@@ -517,7 +480,7 @@ else if (val == "Q6Shell")
     fTrackerpDx4 = 11*cm ;
     fAlph = 50*deg    ;
 
-    aVolume = new G4TwistedTrap("aTwistedTrap3",
+    aVolume = new G4TwistedTrap("aTwistedTrap",
 				fTwistAngle,         // twist angle
 				fTrackerpDz,         // half z length
 				fTheta,              // direction between end planes
@@ -530,6 +493,58 @@ else if (val == "Q6Shell")
 				fTrackerpDx4,        // half x length at +pDz,+pDy
 				fAlph                // tilt angle at +pDz
 				) ;
+  }
+  else if ( val == "Tet" ) 
+  {
+
+      G4ThreeVector pzero(0,0,0);
+      G4ThreeVector pnt1(10.*cm,0.*cm,0.*cm),pnt2(5.0*cm,10.*cm,0.*cm), pnt3(5.*cm,5.*cm,10.*cm);
+      G4bool  goodTet;
+      G4Tet   t1( "aTet", pzero, pnt1, pnt2, pnt3, &goodTet);
+  }
+  else if ( val == "Trap") 
+  {
+    fTrackerpDz = 80*cm;
+    fTheta = 10*deg ;
+    fPhi  =  40*deg ;
+    fTrackerpDy1 = 16*cm ;
+    fTrackerpDx1 = 24*cm ;
+    fTrackerpDx2 = 14*cm ;
+    fTrackerpDy2 = 8*cm ;
+    fTrackerpDx3 = 16*cm ;
+    fTrackerpDx4 = 11*cm ;
+    fAlph = 50*deg    ;
+
+    aVolume = new G4Trap("aTrap",
+				fTrackerpDz,         // half z length
+				fTheta,              // direction between end planes
+				fPhi,                // defined by polar and azimutal angles.
+				fTrackerpDy1,        // half y length at -pDz
+				fTrackerpDx1,        // half x length at -pDz,-pDy
+				fTrackerpDx2,        // half x length at -pDz,+pDy
+				fAlph,                // tilt angle at +pDz
+				fTrackerpDy2,        // half y length at +pDz
+				fTrackerpDx3,        // half x length at +pDz,-pDy
+				fTrackerpDx4,        // half x length at +pDz,+pDy
+				fAlph                // tilt angle at +pDz
+				) ;
+  }
+  else if ( val == "EllipticalCone" ) 
+  {
+    aVolume = new G4EllipticalCone("aEllipticalCone",
+                        0.5*mm,       // xSemiAxis
+                        1*mm,       // ySemiAxis
+                        40*mm,      // zheight
+                        25*mm) ;    // zTopCut
+
+  }
+  else if ( val == "EllipticalTube" ) 
+  {
+    aVolume = new G4EllipticalTube("aEllipticalTube" ,
+				   2*cm,   // xSemiAxis
+				   5*cm,   // ySemiAxis
+				   35*cm) ;  // zheight
+
   }
   else
   {

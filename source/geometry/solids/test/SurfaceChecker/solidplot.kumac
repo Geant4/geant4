@@ -1,0 +1,41 @@
+
+MACRO SOLIDPLOT
+
+* Author: Oliver Link, Oliver.Link@cern.ch
+* Description:
+*    1. testall.pl generates hbook files in folder hbk
+*         (e.g: hbk/run_solidname_nevents.hbk)
+*    2. The user can specify the range to be analysed [xmin] [xmax]
+*        and change the number of bins [n] . See USER INPUT below
+*    3. solidplot.kumac is analysing only files respecting the
+*       naming scheme (1.), ommiting other hbk files in the folder!!!
+*       See Macro: checksolids
+*    4. Plotting data (stored in vectors).
+*       Macro: plot [psfile] [xmin] [xmax] [ymin] [ymax]
+*   ->  Prepares two postscript files
+*            - name-full.ps  : full range plotted
+*            - name-zoom.ps  : reduced range plotted
+*          ( this may be changed in future, e.g more plots, ranges.. )    
+
+m     =  $exec('NumberOfSolids')      |  number of solids
+
+do solidnum=1,[m]
+
+  file = $shell('ls hbk/run_*.hbk',[solidnum])
+  mess process [file]
+  exec singlesolid [file]
+
+enddo 
+
+return
+
+
+******************************************************************
+******************************************************************
+******* determine the number of hbook files in hbk ***************
+
+Macro NUMBEROFSOLIDS
+
+ m = $shell('ls -l hbk/run_*.hbk | wc -l')
+
+Return [m]
