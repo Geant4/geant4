@@ -113,7 +113,7 @@ examples/advanced            asai@slac.stanford.edu          Makoto Asai
   Rich                       Alberto.Ribon@cern.ch           Alberto Ribon
   Tiara                      Alexander.Howard@cern.ch        Alexander Howard
   underground_physics        Alexander.Howard@cern.ch        Alexander Howard 
-  xray_fluorescence          Susanna.Guatelli@ge.infn.it     Susanna Guatelli
+  xray_fluorescence          Alfonso.Mantero@ge.infn.it      Alfonso Mantero
   xray_telescope             Giovanni.Santin@esa.int         Giovanni Santin
 examples/extended/analysis   duns@slac.stanford.edu          Mark Donszelmann
 examples/extended/biasing    Alexander.Howard@cern.ch        Alexander Howard
@@ -189,6 +189,6 @@ tests                        Serguei.Sadilov@cern.ch         Serguei Sadilov
       test33                 Michael.Dressel@cern.ch         Michael Dressel
       test34                 Joanna.Weng@cern.ch             Joanna Weng
       test40                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
-      test50                 MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
+      test50                 Susanna.Guatelli@ge.infn.it     Susanna Guatelli
       test201                barrand@lal.in2p3.fr            Guy Barrand
 
