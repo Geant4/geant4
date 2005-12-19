@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.hh,v 1.12 2005-10-07 16:19:14 grichine Exp $
+// $Id: G4VXTRenergyLoss.hh,v 1.13 2005-12-19 15:08:41 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -103,7 +103,8 @@ public:
   G4double GetMeanFreePath(const G4Track& aTrack,
                            G4double previousStepSize,
                            G4ForceCondition* condition);
- 
+
+  void BuildPhysicsTable(const G4ParticleDefinition&);
   void BuildTable() ;
   void BuildEnergyTable() ;
   void BuildAngleTable() ;

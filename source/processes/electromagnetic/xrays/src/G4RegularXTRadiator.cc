@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularXTRadiator.cc,v 1.7 2005-08-06 13:59:35 grichine Exp $
+// $Id: G4RegularXTRadiator.cc,v 1.8 2005-12-19 15:08:41 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -53,7 +53,7 @@ G4RegularXTRadiator::G4RegularXTRadiator(G4LogicalVolume *anEnvelope,
   fAlphaGas   = 1000;
   G4cout<<"fAlphaPlate = "<<fAlphaPlate<<" ; fAlphaGas = "<<fAlphaGas<<G4endl ;
 
-  BuildTable() ;
+  // BuildTable() ;
 }
 
 ///////////////////////////////////////////////////////////////////////////

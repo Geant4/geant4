@@ -49,7 +49,7 @@ G4XTRTransparentRegRadModel::G4XTRTransparentRegRadModel(G4LogicalVolume *anEnve
   fAlphaPlate = 10000;
   fAlphaGas   = 1000;
 
-  BuildTable();
+  //  BuildTable();
 }
 
 ///////////////////////////////////////////////////////////////////////////

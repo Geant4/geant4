@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransparentRegXTRadiator.cc,v 1.7 2005-08-06 13:59:35 grichine Exp $
+// $Id: G4TransparentRegXTRadiator.cc,v 1.8 2005-12-19 15:08:41 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -52,7 +52,7 @@ G4TransparentRegXTRadiator::G4TransparentRegXTRadiator(G4LogicalVolume *anEnvelo
   fAlphaPlate = 10000;
   fAlphaGas   = 1000;
 
-  BuildTable();
+  // BuildTable();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -120,8 +120,10 @@ G4double G4TransparentRegXTRadiator::SpectralXTRdEdx(G4double energy)
     //  G4cout<<"k = "<<k<<";    sum = "<<sum<<G4endl;    
   }
   result = 4*( cof1 + cof2 )*( cof1 + cof2 )*sum/energy;
-  // result *= ( 1 - exp(-0.5*fPlateNumber*sigma) )/( 1 - exp(-0.5*sigma) );  // fPlateNumber;
-  result *= fPlateNumber; // *exp(-0.5*fPlateNumber*sigma); // +1-exp(-0.5*fPlateNumber*sigma); 
+  // result *= ( 1 - exp(-0.5*fPlateNumber*sigma) )/( 1 - exp(-0.5*sigma) );  
+  // fPlateNumber;
+  result *= fPlateNumber; // *exp(-0.5*fPlateNumber*sigma); 
+                             // +1-exp(-0.5*fPlateNumber*sigma); 
   /*  
   fEnergy = energy;
   //  G4Integrator<G4VXTRenergyLoss,G4double(G4VXTRenergyLoss::*)(G4double)> integral;

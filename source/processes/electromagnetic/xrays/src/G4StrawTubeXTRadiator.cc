@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StrawTubeXTRadiator.cc,v 1.2 2005-08-06 13:59:35 grichine Exp $
+// $Id: G4StrawTubeXTRadiator.cc,v 1.3 2005-12-19 15:08:41 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -84,7 +84,7 @@ G4StrawTubeXTRadiator::G4StrawTubeXTRadiator(G4LogicalVolume *anEnvelope,
   // Build energy and angular integral spectra of X-ray TR photons from
   // a radiator
 
-  BuildTable();
+  // BuildTable();
 }
 
 ///////////////////////////////////////////////////////////////////////////

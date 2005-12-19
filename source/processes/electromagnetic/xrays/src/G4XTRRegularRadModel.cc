@@ -47,7 +47,7 @@ G4XTRRegularRadModel::G4XTRRegularRadModel(G4LogicalVolume *anEnvelope,
   // Build energy and angular integral spectra of X-ray TR photons from
   // a radiator
 
-  BuildTable() ;
+  // BuildTable() ;
 }
 
 ///////////////////////////////////////////////////////////////////////////

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTRModel.hh,v 1.1 2004-03-01 11:49:49 vnivanch Exp $
+// $Id: G4VTRModel.hh,v 1.2 2005-12-19 15:08:41 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VTRModel  -- header file
@@ -29,6 +29,8 @@
 // The model of transition radiation
 //
 // History:
+//
+// 04.10.05, V.Grichine move from pure virtual and new class name 
 // 29.02.04, V.Ivanchenko created
 
 #ifndef G4VTRModel_h
@@ -42,34 +44,43 @@ class G4Material;
 class G4Track;
 class G4VParticleChange;
 
+
 class G4VTRModel
 {
 public:
 
 // Constructors
-  G4VTRModel( const G4String& modelName) {name = modelName;};
+
+  G4VTRModel( const G4String& modelName) {fName = modelName;};
 
 // Destructor
+
   virtual ~G4VTRModel() {};
 
-  const G4String& GetName() const {return name;};
+  const G4String& GetName() const {return fName;};
 
   virtual void GenerateSecondaries(G4VParticleChange& pChange,
                                    std::vector<const G4Material*>& materials,
                                    std::vector<G4double>& steps,
                                    std::vector<G4ThreeVector>& normals,
 		                   G4ThreeVector& startingPosition,
-		             const G4Track& track) = 0;
+		             const G4Track& track);
 
-  virtual void PrintInfo() const = 0;
+  virtual void PrintInfo() { return; };
 
 // private :
 
   // hide assignment operator
+
   G4VTRModel & operator=(const G4VTRModel &right);
   G4VTRModel(const G4VTRModel&);
 
-  G4String  name;
+protected:
+
+
+  G4String  fName;
+ 
+
 };
 
 #endif   // G4VTRModel_h

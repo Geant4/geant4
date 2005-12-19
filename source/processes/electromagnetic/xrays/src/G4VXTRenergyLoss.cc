@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.23 2005-12-15 12:17:58 grichine Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.24 2005-12-19 15:08:41 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -258,12 +258,17 @@ G4double G4XTRenergyLoss::GetMeanFreePath(const G4Track& aTrack,
 //////////////////////////////////////////////////////////////////////////
 //
 // Interface for build table from physics list
-/*
-void G4XTRenergyLoss::BuildPhysicsTable()
+
+void G4XTRenergyLoss::BuildPhysicsTable(const G4ParticleDefinition& pd)
 {
+  if(pd.GetPDGCharge()  == 0.) 
+  {
+    G4Exception("G4XTRenergyLoss::BuildPhysicsTable", "Notification", JustWarning,
+                 "XTR initialisation for neutral particle ?!" );   
+  }
   BuildTable();
 }
-*/
+
 
 //////////////////////////////////////////////////////////////////////////
 //
