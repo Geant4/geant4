@@ -42,6 +42,17 @@
 #include "G4AffineTransform.hh"
 #include "G4VoxelLimits.hh"
 
+const G4String OutputInside(const EInside a)
+{
+	switch(a) 
+        {
+		case kInside:  return "Inside"; 
+		case kOutside: return "Outside";
+		case kSurface: return "Surface";
+	}
+	return "????";
+}
+
 
 G4bool testG4EllipticalCone()
 {
@@ -131,8 +142,25 @@ int main()
   G4cout << "*********************************************************************" <<G4endl;
   G4cout << G4endl;
 
+  // temporary test
+  G4ThreeVector Spoint ;
+  G4double dist ;
 
+  G4EllipticalCone t1("Solid EllipticalCone #1",
+		      0.5*mm,       // xSemiAxis
+		      1*mm,       // ySemiAxis
+		      40*cm,      // zheight   
+		      25*cm) ;    // zTopCut
+  
 
+  EInside side ;  
+  for ( G4int i = 0 ; i < 3 ; i++ ) {
+    //    G4cout << "Event " << i << G4endl << G4endl ;
+    Spoint = t1.GetPointOnSurface() ;
+    side = t1.Inside(Spoint) ;
+    dist = t1.DistanceToIn(Spoint, -Spoint/Spoint.mag()) ;
+    G4cout << "Spoint " << Spoint << " " <<  dist  << " " << side  << G4endl ;
+  }
 
 #ifdef NDEBUG 
   G4Exception("FAIL: *** Assertions must be compiled in! ***");

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4TwistedTrap.cc,v 1.7 2005-12-05 17:03:50 link Exp $
+// $Id: testG4TwistedTrap.cc,v 1.8 2005-12-19 12:45:04 link Exp $
 // GEANT4 tag $Name: 
 //
 
@@ -129,7 +129,7 @@ G4bool testG4TwistedTrap()
       side = t3.Inside(Spoint) ;
       //      G4cout << "SInside = " << OutputInside(side) << G4endl ;
       dist = t3.DistanceToIn(Spoint,dir/dir.mag()) ;
-      G4cout << "Spoint " << Spoint << " " <<  dist << G4endl ;
+      G4cout << "Spoint " << Spoint << " " <<  dist << " " << side << G4endl ;
     }
 
     t3.CreatePolyhedron() ;
