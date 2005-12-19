@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm10.cc,v 1.5 2005-12-06 11:27:37 gcosmo Exp $
+// $Id: TestEm10.cc,v 1.6 2005-12-19 16:05:37 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -106,7 +106,7 @@ int main(int argc,char** argv)
   
   //Initialize G4 kernel, physics tables ...
 
-  runManager->Initialize();
+  //  runManager->Initialize();
     
   // get the pointer to the User Interface manager 
 

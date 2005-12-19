@@ -45,6 +45,19 @@
 #
 # these commands do not change energy cuts???
 #
+# Set XTR model (default: transpM). Name list consits:
+# gammaR, gammaM, regR, regM, strawR, transpR, transpM
+#
+# R - XTR dE/dx models, M - XTR flux after radiator models
+#
+#/emphyslist/setXTRModel  transpM
+#/emphyslist/setXTRModel  transpR
+/emphyslist/setXTRModel  gammaM
+#/emphyslist/setXTRModel  gammaR
+#/emphyslist/setXTRModel  strawR
+#/emphyslist/setXTRModel  regM
+#/emphyslist/setXTRModel  regR
+#
 #/emphyslist/eMinEnergy 100.  
 #/emphyslist/gMinEnergy 100.  
 #

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.cc,v 1.14 2005-11-29 14:42:22 grichine Exp $
+// $Id: Em10PhysicsList.cc,v 1.15 2005-12-19 16:05:38 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -70,13 +70,13 @@ Em10PhysicsList::Em10PhysicsList(Em10DetectorConstruction* p)
      theeplusAnnihilation(0),
      theeminusStepCut(0),            theeplusStepCut(0),
      fMinElectronEnergy(1.0*keV),fMinGammaEnergy(1.0*keV),
-     fRadiatorCuts(0),fDetectorCuts(0)
+     fRadiatorCuts(0),fDetectorCuts(0),fXTRModel("transpM")
 {
   pDet = p;
 
   // world cuts
 
-  defaultCutValue = 1.000*mm;
+  defaultCutValue = 1.*mm;
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
@@ -96,7 +96,7 @@ Em10PhysicsList::Em10PhysicsList(Em10DetectorConstruction* p)
 //
 /*
 Em10PhysicsList::Em10PhysicsList(ALICEDetectorConstruction* p)
-  :  G4VUserPhysicsList(),
+  :  G4VModularPhysicsList()  // G4VUserPhysicsList(),
      MaxChargedStep(DBL_MAX),
      thePhotoElectricEffect(0),      theComptonScattering(0),
      theGammaConversion(0),
@@ -230,6 +230,7 @@ void Em10PhysicsList::ConstructProcess()
 #include "G4hIonisation.hh"
 
 // #include "G4ForwardXrayTR.hh"
+#include "G4VXTRenergyLoss.hh"
 #include "G4RegularXTRadiator.hh"
 #include "G4TransparentRegXTRadiator.hh"
 #include "G4GammaXTRadiator.hh"
@@ -247,15 +248,18 @@ void Em10PhysicsList::ConstructEM()
   
   // G4cout<<"fMinElectronEnergy = "<<fMinElectronEnergy/keV<<" keV"<<G4endl;
   // G4cout<<"fMinGammaEnergy = "<<fMinGammaEnergy/keV<<" keV"<<G4endl;
+  G4cout<<"XTR model = "<<fXTRModel<<G4endl;
 
   const G4RegionStore* theRegionStore = G4RegionStore::GetInstance();
   G4Region* gas = theRegionStore->GetRegion("XTRdEdxDetector");
 
+  G4VXTRenergyLoss* processXTR;
+
       
-  /*          
-        
-  G4GammaXTRadiator* processXTR =
-                 new G4GammaXTRadiator(pDet->GetLogicalRadiator(),
+  if(fXTRModel == "gammaR" )          
+  {      
+    // G4GammaXTRadiator* 
+    processXTR = new G4GammaXTRadiator(pDet->GetLogicalRadiator(),
 				       1000.,
 				       100.,
 				       pDet->GetFoilMaterial(),
@@ -264,11 +268,11 @@ void Em10PhysicsList::ConstructEM()
 				       pDet->GetGasThick(),
 				       pDet->GetFoilNumber(),
 				       "GammaXTRadiator");
-
-  
-  
-  G4XTRGammaRadModel* processXTR =
-                 new G4XTRGammaRadModel(pDet->GetLogicalRadiator(),
+  }
+  else if(fXTRModel == "gammaM" ) 
+  {
+    // G4XTRGammaRadModel* 
+    processXTR = new G4XTRGammaRadModel(pDet->GetLogicalRadiator(),
 				       1000.,
 				       100.,
 				       pDet->GetFoilMaterial(),
@@ -277,10 +281,12 @@ void Em10PhysicsList::ConstructEM()
 				       pDet->GetGasThick(),
 				       pDet->GetFoilNumber(),
 				       "GammaXTRadiator");
-  
+  }
+  else if(fXTRModel == "strawR" ) 
+  {
 
-  G4StrawTubeXTRadiator* processXTR = 
-                 new G4StrawTubeXTRadiator(pDet->GetLogicalRadiator(),
+    // G4StrawTubeXTRadiator* 
+    processXTR = new G4StrawTubeXTRadiator(pDet->GetLogicalRadiator(),
 					 pDet->GetFoilMaterial(),
 					 pDet->GetGasMaterial(),
 				0.53,	   // pDet->GetFoilThick(),
@@ -288,43 +294,33 @@ void Em10PhysicsList::ConstructEM()
 					 pDet->GetAbsorberMaterial(),
                                          true,
 					 "strawXTRadiator");
-       
-  G4RegularXTRadiator* processXTR = 
-                 new G4RegularXTRadiator(pDet->GetLogicalRadiator(),
+  }
+  else if(fXTRModel == "regR" ) 
+  {      
+    // G4RegularXTRadiator* 
+    processXTR = new G4RegularXTRadiator(pDet->GetLogicalRadiator(),
+					 pDet->GetFoilMaterial(),
+					 pDet->GetGasMaterial(),
+					 pDet->GetFoilThick(),
+					 pDet->GetGasThick(),
+					 pDet->GetFoilNumber(),
+					 "RegularXTRadiator");	    
+  }
+  else if(fXTRModel == "transpR" ) 
+  {
+    // G4TransparentRegXTRadiator* 
+    processXTR = new G4TransparentRegXTRadiator(pDet->GetLogicalRadiator(),
 					 pDet->GetFoilMaterial(),
 					 pDet->GetGasMaterial(),
 					 pDet->GetFoilThick(),
 					 pDet->GetGasThick(),
 					 pDet->GetFoilNumber(),
 					 "RegularXTRadiator");
-  				    
-  
-    
-  G4TransparentRegXTRadiator* processXTR = 
-                 new G4TransparentRegXTRadiator(pDet->GetLogicalRadiator(),
-					 pDet->GetFoilMaterial(),
-					 pDet->GetGasMaterial(),
-					 pDet->GetFoilThick(),
-					 pDet->GetGasThick(),
-					 pDet->GetFoilNumber(),
-					 "RegularXTRadiator");
-  
-       
-  
-  
-  G4XTRRegularRadModel* processXTR = 
-                 new G4XTRRegularRadModel(pDet->GetLogicalRadiator(),
-					 pDet->GetFoilMaterial(),
-					 pDet->GetGasMaterial(),
-					 pDet->GetFoilThick(),
-					 pDet->GetGasThick(),
-					 pDet->GetFoilNumber(),
-					 "RegularXTRadiator");
-       
-  */  
-  
-  G4XTRTransparentRegRadModel* processXTR = 
-                 new G4XTRTransparentRegRadModel(pDet->GetLogicalRadiator(),
+  }
+  else if(fXTRModel == "regM" ) 
+  {
+    // G4XTRRegularRadModel* 
+    processXTR = new G4XTRRegularRadModel(pDet->GetLogicalRadiator(),
 					 pDet->GetFoilMaterial(),
 					 pDet->GetGasMaterial(),
 					 pDet->GetFoilThick(),
@@ -332,10 +328,23 @@ void Em10PhysicsList::ConstructEM()
 					 pDet->GetFoilNumber(),
 					 "RegularXTRadiator");
        
-    
-  
-  
-   
+  }
+  else if(fXTRModel == "transpM" ) 
+  { 
+    // G4XTRTransparentRegRadModel* 
+    processXTR = new G4XTRTransparentRegRadModel(pDet->GetLogicalRadiator(),
+					 pDet->GetFoilMaterial(),
+					 pDet->GetGasMaterial(),
+					 pDet->GetFoilThick(),
+					 pDet->GetGasThick(),
+					 pDet->GetFoilNumber(),
+					 "RegularXTRadiator");
+  }     
+  else
+  {
+    G4Exception("Invalid XTR model name", "InvalidSetup",
+                 FatalException, "XTR model name is out of the name list");
+  }     
   theParticleIterator->reset();
 
   while( (*theParticleIterator)() )

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.hh,v 1.8 2005-11-29 14:42:22 grichine Exp $
+// $Id: Em10PhysicsList.hh,v 1.9 2005-12-19 16:05:38 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,6 +29,7 @@
 #define Em10PhysicsList_h 1
 
 #include "G4VUserPhysicsList.hh"
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
 class G4PhotoElectricEffect;
@@ -57,7 +58,7 @@ class Em10PhysicsListMessenger;
 class G4ProductionCuts;
 
 
-class Em10PhysicsList: public G4VUserPhysicsList
+class Em10PhysicsList: public G4VModularPhysicsList  // G4VUserPhysicsList
 {
   public:
     Em10PhysicsList( Em10DetectorConstruction*);
@@ -101,6 +102,7 @@ class Em10PhysicsList: public G4VUserPhysicsList
     void SetMaxStep(G4double);
     void SetMinElectronEnergy(G4double E){fMinElectronEnergy=E;};     
     void SetMinGammaEnergy(G4double E)   {fMinGammaEnergy=E;};       
+  void SetXTRModel(G4String m)   {fXTRModel = m; G4cout<<fXTRModel<<G4endl;};       
 
   public:   
 
@@ -139,6 +141,7 @@ class Em10PhysicsList: public G4VUserPhysicsList
     G4ProductionCuts* fRadiatorCuts;
     G4ProductionCuts* fDetectorCuts;
     G4double fElectronCut, fGammaCut, fPositronCut;
+    G4String fXTRModel;
 };
 
 #endif
