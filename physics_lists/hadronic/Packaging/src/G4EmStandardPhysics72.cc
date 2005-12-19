@@ -20,22 +20,22 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics71.cc,v 1.9 2005-12-19 12:18:40 vnivanch Exp $
+// $Id: G4EmStandardPhysics72.cc,v 1.1 2005-12-19 12:18:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4EmStandardPhysics71
+// ClassName:   G4EmStandardPhysics72
 //
 // Author:      V.Ivanchenko 09.11.2005
 //
 // Modified:
-// 19.12.2005 V.Ivanchenko StepFunction for electrons (1.0, 1.0*mm)
+// 19.12.2005 V.Ivanchenko rename 71 -> 72
 //
 //----------------------------------------------------------------------------
 //
 
-#include "G4EmStandardPhysics71.hh"
+#include "G4EmStandardPhysics72.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 #include "G4LossTableManager.hh"
@@ -76,7 +76,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmStandardPhysics71::G4EmStandardPhysics71(const G4String& name, G4int ver,
+G4EmStandardPhysics72::G4EmStandardPhysics72(const G4String& name, G4int ver,
    G4bool msc): G4VPhysicsConstructor(name), verbose(ver), mscStepLimit(msc)
 {
   G4LossTableManager::Instance();
@@ -84,12 +84,12 @@ G4EmStandardPhysics71::G4EmStandardPhysics71(const G4String& name, G4int ver,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmStandardPhysics71::~G4EmStandardPhysics71()
+G4EmStandardPhysics72::~G4EmStandardPhysics72()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EmStandardPhysics71::ConstructParticle()
+void G4EmStandardPhysics72::ConstructParticle()
 {
 // gamma
   G4Gamma::Gamma();
@@ -120,7 +120,7 @@ void G4EmStandardPhysics71::ConstructParticle()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EmStandardPhysics71::ConstructProcess()
+void G4EmStandardPhysics72::ConstructProcess()
 {
   // Add standard EM Processes
 
@@ -139,23 +139,19 @@ void G4EmStandardPhysics71::ConstructProcess()
     } else if (particleName == "e-") {
 
       if(verbose > 1)
-        G4cout << "### EmStandard71 instantiates eIoni and msc71 for " 
+        G4cout << "### EmStandard72 instantiates eIoni and msc71 for " 
                << particleName << G4endl;
-      G4eIonisation* eioni = new G4eIonisation();
-      eioni->SetStepFunction(1.0, 1.0*mm);
       pmanager->AddProcess(new G4MultipleScattering71, -1, 1, 1);
-      pmanager->AddProcess(eioni,                      -1, 2, 2);
+      pmanager->AddProcess(new G4eIonisation,          -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung(),    -1, 3, 3);
 
     } else if (particleName == "e+") {
 
       if(verbose > 1)
-        G4cout << "### EmStandard71 instantiates eIoni and msc71 for " 
+        G4cout << "### EmStandard72 instantiates eIoni and msc71 for " 
                << particleName << G4endl;
-      G4eIonisation* eioni = new G4eIonisation();
-      eioni->SetStepFunction(1.0, 1.0*mm);
       pmanager->AddProcess(new G4MultipleScattering71, -1, 1, 1);
-      pmanager->AddProcess(eioni,                      -1, 2, 2);
+      pmanager->AddProcess(new G4eIonisation,          -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,      -1, 3, 3);
       pmanager->AddProcess(new G4eplusAnnihilation,     0,-1, 4);
 
@@ -163,7 +159,7 @@ void G4EmStandardPhysics71::ConstructProcess()
                particleName == "mu-"    ) {
 
       if(verbose > 1)
-        G4cout << "### EmStandard71 instantiates muIoni and msc71 for " 
+        G4cout << "### EmStandard72 instantiates muIoni and msc71 for " 
                << particleName << G4endl;
       pmanager->AddProcess(new G4MultipleScattering71,-1, 1, 1);
       pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
@@ -175,7 +171,7 @@ void G4EmStandardPhysics71::ConstructProcess()
                particleName == "GenericIon") {
 
       if(verbose > 1)
-        G4cout << "### EmStandard71 instantiates ionIoni and msc71 for " 
+        G4cout << "### EmStandard72 instantiates ionIoni and msc71 for " 
                << particleName << G4endl;
       pmanager->AddProcess(new G4MultipleScattering71, -1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,        -1, 2, 2);
@@ -199,7 +195,7 @@ void G4EmStandardPhysics71::ConstructProcess()
                particleName == "triton" ||
                particleName == "xi-" ) {
       if(verbose > 1)
-        G4cout << "### EmStandard71 instantiates hIoni and msc71 for " 
+        G4cout << "### EmStandard72 instantiates hIoni and msc71 for " 
                << particleName << G4endl;
       pmanager->AddProcess(new G4MultipleScattering71, -1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,          -1, 2, 2);
