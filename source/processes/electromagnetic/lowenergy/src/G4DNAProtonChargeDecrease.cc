@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProtonChargeDecrease.cc,v 1.1 2005-09-15 09:04:21 zfrancis Exp $
+// $Id: G4DNAProtonChargeDecrease.cc,v 1.2 2005-12-20 13:52:19 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4DNAProtonChargeDecrease.hh"
@@ -29,18 +29,32 @@
 
                                         G4DNAProtonChargeDecreaseEnergyLimitsPolicy :: G4DNAProtonChargeDecreaseEnergyLimitsPolicy()
 :
- lowEnergyLimit(100*eV),
+ lowEnergyLimit(1.*keV),
  zeroBelowLowEnergyLimit(true),
- highEnergyLimit(2*MeV),
+ highEnergyLimit(10.*MeV),
  zeroAboveHighEnergyLimit(true)
 {
 }
 
                                         G4DNAProtonChargeDecreaseIncomingParticlePolicy :: G4DNAProtonChargeDecreaseIncomingParticlePolicy()
-
-{}
+{
+ f0[0]=1.;
+ a0[0]=-0.180;
+ a1[0]=-3.600;
+ b0[0]=-18.22;
+ b1[0]=-1.997;
+ c0[0]=0.215;
+ d0[0]=3.550;
+ x0[0]=3.450;
+ x1[0]=5.251;
+}
 
 const G4ParticleDefinition *            G4DNAProtonChargeDecreaseIncomingParticlePolicy :: IncomingParticleDefinition(void) const
 {
  return G4Proton::Proton();
+}
+
+G4int                                	G4DNAProtonChargeDecreaseIncomingParticlePolicy :: NumberOfPartialCrossSections(void) const
+{
+ return 1;
 }

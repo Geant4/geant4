@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAAlphaPlusPlusExcitation.cc,v 1.1 2005-07-20 10:01:54 capra Exp $
+// $Id: G4DNAAlphaPlusPlusExcitation.cc,v 1.2 2005-12-20 13:52:19 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4DNAAlphaPlusPlusExcitation.hh"
@@ -31,7 +31,7 @@
 :
  lowEnergyLimit(1*keV),
  zeroBelowLowEnergyLimit(false),
- highEnergyLimit(15*MeV),
+ highEnergyLimit(10*MeV),
  zeroAboveHighEnergyLimit(true)
 {
 }
