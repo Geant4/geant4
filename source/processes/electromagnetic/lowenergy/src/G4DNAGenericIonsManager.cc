@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAGenericIonsManager.cc,v 1.1 2005-07-20 10:01:00 capra Exp $
+// $Id: G4DNAGenericIonsManager.cc,v 1.2 2005-12-20 13:46:32 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4DNAGenericIonsManager.hh"
 #include "G4Alpha.hh"
-#include "G4VIon.hh"
+#include "G4Ions.hh"
 
 G4DNAGenericIonsManager *                G4DNAGenericIonsManager :: Instance(void)
 {
@@ -57,23 +57,23 @@ G4ParticleDefinition *                   G4DNAGenericIonsManager :: GetIon(const
  //             stable         lifetime    decay table
 
 
- G4VIon *helium;
- G4VIon *hydrogen;
- G4VIon *alphaPlus;
+ G4Ions *helium;
+ G4Ions *hydrogen;
+ G4Ions *alphaPlus;
 
- helium=     new G4VIon("helium",    3.727417*GeV,       0.0*MeV,  +0.0*eplus,
+ helium=     new G4Ions("helium",    3.727417*GeV,       0.0*MeV,  +0.0*eplus,
                                0,              +1,             0,
                                0,               0,             0,
                        "nucleus",              +2,            +4,           0,
                             true,            -1.0,           NULL);
 
- alphaPlus=  new G4VIon("alpha+",    3.727417*GeV,       0.0*MeV,  +1.0*eplus,
+ alphaPlus=  new G4Ions("alpha+",    3.727417*GeV,       0.0*MeV,  +1.0*eplus,
                                1,              +1,             0,
                                0,               0,             0,
                        "nucleus",              +1,            +4,           0,
                             true,            -1.0,           NULL);
 
- hydrogen= new G4VIon("hydrogen",   0.9382723*GeV,       0.0*MeV,  +0.0*eplus,
+ hydrogen= new G4Ions("hydrogen",   0.9382723*GeV,       0.0*MeV,  +0.0*eplus,
                                0,              +1,             0,
                                0,               0,             0,
                        "nucleus",              +1,            +1,           0,

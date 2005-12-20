@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAGenericIonsManager.hh,v 1.1 2005-07-20 10:01:00 capra Exp $
+// $Id: G4DNAGenericIonsManager.hh,v 1.2 2005-12-20 13:46:32 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef   G4DNAGENERICIONSMANAGER_HH
@@ -31,7 +31,7 @@
  
  #include <map>
  
- class G4VIon;
+ class G4Ions;
  class G4ParticleDefinition;
  
  class G4DNAGenericIonsManager
@@ -49,7 +49,7 @@
 
    static G4DNAGenericIonsManager *      theInstance;
    
-   typedef std::map<G4String, G4VIon *> IonsMap;
+   typedef std::map<G4String, G4ParticleDefinition *> IonsMap;
 
    IonsMap                               map;
  };
