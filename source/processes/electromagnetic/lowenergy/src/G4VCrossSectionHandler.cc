@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.cc,v 1.15 2005-06-24 09:59:02 capra Exp $
+// $Id: G4VCrossSectionHandler.cc,v 1.16 2005-12-20 13:45:17 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -50,7 +50,7 @@
 #include <map>
 #include <vector>
 #include <fstream>
-#include <strstream>
+#include <sstream>
 
 
 G4VCrossSectionHandler::G4VCrossSectionHandler()
@@ -160,13 +160,6 @@ void G4VCrossSectionHandler::LoadData(const G4String& fileName)
 
       // Build the complete string identifying the file with the data set
       
-      char nameChar[100] = {""};
-      std::ostrstream ost(nameChar, 100, std::ios::out);
-      
-      ost << fileName << Z << ".dat";
-      
-      G4String name(nameChar);
-      
       char* path = getenv("G4LEDATA");
       if (!path)
 	{ 
@@ -174,14 +167,14 @@ void G4VCrossSectionHandler::LoadData(const G4String& fileName)
 	  G4Exception(excep);
 	}
       
-      G4String pathString(path);
-      G4String dirFile = pathString + "/" + name;
-      std::ifstream file(dirFile);
+      std::ostringstream ost;
+      ost << path << '/' << fileName << Z << ".dat";
+      std::ifstream file(ost.str().c_str());
       std::filebuf* lsdp = file.rdbuf();
       
       if (! (lsdp->is_open()) )
 	{
-	  G4String excep = "G4VCrossSectionHandler - data file: " + dirFile + " not found";
+	  G4String excep = "G4VCrossSectionHandler - data file: " + ost.str() + " not found";
 	  G4Exception(excep);
 	}
       G4double a = 0;
@@ -239,13 +232,6 @@ void G4VCrossSectionHandler::LoadShellData(const G4String& fileName)
 
       // Build the complete string identifying the file with the data set
       
-      char nameChar[100] = {""};
-      std::ostrstream ost(nameChar, 100, std::ios::out);
-
-      ost << fileName << Z << ".dat";
-      
-      G4String name(nameChar);
-      
       char* path = getenv("G4LEDATA");
       if (!path)
 	{ 
@@ -253,14 +239,16 @@ void G4VCrossSectionHandler::LoadShellData(const G4String& fileName)
 	  G4Exception(excep);
 	}
       
-      G4String pathString(path);
-      G4String dirFile = pathString + "/" + name;
-      std::ifstream file(dirFile);
+      std::ostringstream ost;
+
+      ost << path << '/' << fileName << Z << ".dat";
+      
+      std::ifstream file(ost.str().c_str());
       std::filebuf* lsdp = file.rdbuf();
       
       if (! (lsdp->is_open()) )
 	{
-	  G4String excep = "G4VCrossSectionHandler - data file: " + dirFile + " not found";
+	  G4String excep = "G4VCrossSectionHandler - data file: " + ost.str() + " not found";
 	  G4Exception(excep);
 	}
       G4double a = 0;

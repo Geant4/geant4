@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellEMDataSet.cc,v 1.12 2005-07-07 16:26:10 capra Exp $
+// $Id: G4ShellEMDataSet.cc,v 1.13 2005-12-20 13:45:17 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -37,7 +37,7 @@
 #include "G4EMDataSet.hh"
 #include "G4VDataSetAlgorithm.hh"
 #include <fstream>
-#include <strstream>
+#include <sstream>
 
 
                                                 G4ShellEMDataSet :: G4ShellEMDataSet(G4int argZ, G4VDataSetAlgorithm* argAlgorithm, G4double argUnitEnergies, G4double argUnitData)
