@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalCone.hh,v 1.6 2005-12-19 12:45:01 link Exp $
+// $Id: G4EllipticalCone.hh,v 1.7 2005-12-20 12:59:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,19 +56,6 @@
 // Author:
 //   Dionysios Anninos, 8.9.2005
 //
-// 19.12.2005 Oliver Link
-//  - changed GetPointOnSurface (not uniform in endcaps)
-//  - bug fixed in Inside (was wrong for elliptic mantel)
-//    The test is now similar to G4EllipticTube
-//  - Several changes in DistanceToIn/Out
-//     * looping events: shortest distance was taken (even if 0)
-//     * some other problems fixed (e.g: DistanceToIn/Out has to compare the 
-//       distance to the endcap and to the mantel and decide afterwards
-//       which distance is shortest.)
-//     * DistanceToIn/Out: added check n*v 
-//    The code is now "good" at 90%. Still 10% wrong reconstructed events ...
-//    e.g there is a problem is DistanceToOut: missed the intersection
-//    (reconstruction took the encap instead of the mantel) ??
 // --------------------------------------------------------------------
 #ifndef G4EllipticalCone_HH
 #define G4EllipticalCone_HH

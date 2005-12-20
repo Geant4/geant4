@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EllipticalCone.cc,v 1.8 2005-12-19 12:45:02 link Exp $
+// $Id: G4EllipticalCone.cc,v 1.9 2005-12-20 12:59:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of G4EllipticalCone class
@@ -427,8 +427,8 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
       //
 
       if ( sqr(p.x()/( xSemiAxis - halfTol ))
-	 + sqr(p.y()/( ySemiAxis - halfTol )) <= sqr( zheight+zTopCut ) )
-	return kInfinity;
+         + sqr(p.y()/( ySemiAxis - halfTol )) <= sqr( zheight+zTopCut ) )
+        return kInfinity;
 
     }
     else
@@ -461,7 +461,7 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
         // Else, if we are traveling outwards, we know
         // we must miss
         //
-	//        return kInfinity;
+        //        return kInfinity;
       }
     }
   }
@@ -484,8 +484,8 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
       if (sigz > 0) return kInfinity;
 
       if ( sqr(p.x()/( xSemiAxis - halfTol ))
-	 + sqr(p.y()/( ySemiAxis - halfTol )) <= sqr( zheight-zTopCut ) )
-	return kInfinity;
+         + sqr(p.y()/( ySemiAxis - halfTol )) <= sqr( zheight-zTopCut ) )
+        return kInfinity;
 
     }
     else {
@@ -500,7 +500,7 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
       }
       else if (xi/(xSemiAxis*xSemiAxis)*v.x() + yi/(ySemiAxis*ySemiAxis)*v.y() >= 0)
       {
-	//        return kInfinity;
+        //        return kInfinity;
       }
     }
   }
@@ -592,38 +592,38 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
   G4double lambda = 0;
 
   if ( minus > halfTol && minus < distMin ) 
-    {
-      lambda = minus ;
-      // check normal vector   n * v < 0
-      G4ThreeVector pin = p + lambda*v;
+  {
+    lambda = minus ;
+    // check normal vector   n * v < 0
+    G4ThreeVector pin = p + lambda*v;
 
-      G4ThreeVector truenorm(pin.x()/(xSemiAxis*xSemiAxis),
-			     pin.y()/(ySemiAxis*ySemiAxis),
-			     - ( pin.z() - zheight ));
-      if ( truenorm*v < 0)
-	{   // yes, going inside the solid
-	  distMin = lambda;
-	}
+    G4ThreeVector truenorm(pin.x()/(xSemiAxis*xSemiAxis),
+                           pin.y()/(ySemiAxis*ySemiAxis),
+                           - ( pin.z() - zheight ));
+    if ( truenorm*v < 0)
+    {   // yes, going inside the solid
+      distMin = lambda;
     }
+  }
     
   if ( plus > halfTol  && plus < distMin )
-    {
-      lambda = plus ;
-      // check normal vector   n * v < 0
-      G4ThreeVector pin = p + lambda*v;
+  {
+    lambda = plus ;
+    // check normal vector   n * v < 0
+    G4ThreeVector pin = p + lambda*v;
 
-      G4ThreeVector truenorm(pin.x()/(xSemiAxis*xSemiAxis),
-			     pin.y()/(ySemiAxis*ySemiAxis),
-			     - ( pin.z() - zheight ) );
-      if ( truenorm*v < 0)
-	{   // yes, going inside the solid
-	  distMin = lambda;
-
-	}
+    G4ThreeVector truenorm(pin.x()/(xSemiAxis*xSemiAxis),
+                           pin.y()/(ySemiAxis*ySemiAxis),
+                           - ( pin.z() - zheight ) );
+    if ( truenorm*v < 0)
+    {   // yes, going inside the solid
+      distMin = lambda;
     }
+  }
 
 #ifdef G4SPECSDEBUG    
-    G4cout << "DToIn: plus,minus, lambda = " << plus << ", " << minus << ", " << lambda << G4endl ;
+    G4cout << "DToIn: plus,minus, lambda = " << plus
+           << ", " << minus << ", " << lambda << G4endl ;
     G4cout << "DToIn: distMin = " << distMin << G4endl ;
 #endif
 
@@ -952,8 +952,8 @@ G4ThreeVector G4EllipticalCone::GetPointOnSurface() const
   }
   else if((chose>=aOne) && (chose<aOne+aTwo))
   {
-
-    do {
+    do
+    {
       rRand1 = RandFlat::shoot(0.,1.) ;
       rRand2 = RandFlat::shoot(0.,1.) ;
     } while ( rRand2 >= rRand1  ) ;
@@ -966,15 +966,14 @@ G4ThreeVector G4EllipticalCone::GetPointOnSurface() const
   // else
   //
 
-    do {
-      rRand1 = RandFlat::shoot(0.,1.) ;
-      rRand2 = RandFlat::shoot(0.,1.) ;
-    } while ( rRand2 >= rRand1  ) ;
+  do
+  {
+    rRand1 = RandFlat::shoot(0.,1.) ;
+    rRand2 = RandFlat::shoot(0.,1.) ;
+  } while ( rRand2 >= rRand1  ) ;
 
   return G4ThreeVector(rRand1*xSemiAxis*(zheight-zTopCut)*cosphi,
                        rRand1*ySemiAxis*(zheight-zTopCut)*sinphi, zTopCut);
-
-
 }
 
 //
