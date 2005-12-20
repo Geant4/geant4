@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAChargeDecreaseInWater.icc,v 1.1 2005-09-15 09:04:21 zfrancis Exp $
+// $Id: G4DNAChargeDecreaseInWater.icc,v 1.2 2005-12-20 13:50:31 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,7 +29,35 @@
  template<typename TotalCrossSectionPolicy, typename FinalStatesPolicy>
  G4VParticleChange *                      G4DNAChargeDecreaseInWater<TotalCrossSectionPolicy, FinalStatesPolicy> :: PostStepDoIt(const G4Track & aTrack, const G4Step & aStep)
  {
- aParticleChange.Initialize(aTrack);
+  aParticleChange.Initialize(aTrack);
+  aParticleChange.ProposeTrackStatus(fStopAndKill);
+
+  G4double inK(aTrack.GetDynamicParticle()->GetKineticEnergy());
+
+  const G4int z(10); // H2O number of electrons
+  G4int finalStateIndex(TotalCrossSectionPolicy::RandomizePartialCrossSection(inK, z));
+ 
+  G4int n(FinalStatesPolicy::NumberOfFinalStates(finalStateIndex));
+  G4double waterBindingEnergy(FinalStatesPolicy::WaterBindingEnergyConstant(finalStateIndex));
+  G4double outgoingParticleBindingEnergy(FinalStatesPolicy::OutgoingParticleBindingEnergyConstant(finalStateIndex));
+  
+  G4double outK(inK - n*(inK*electron_mass_c2/proton_mass_c2) - waterBindingEnergy + outgoingParticleBindingEnergy);
+
+  if (outK<0)
+  {
+   G4String message;
+   message="G4DNAChargeDecreaseInWater<>::PostStepDoIt - Final kinetic energy is below 0! Process ";
+   message+=GetProcessName();
+   
+   G4Exception(message);
+  }
+
+  aParticleChange.ProposeLocalEnergyDeposit(waterBindingEnergy);
+  aParticleChange.SetNumberOfSecondaries(1);
+  aParticleChange.AddSecondary(new G4DynamicParticle(FinalStatesPolicy::OutgoingParticleDefinition(finalStateIndex), aTrack.GetDynamicParticle()->GetMomentumDirection(), outK));
+             
+  return G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>::PostStepDoIt(aTrack, aStep);
+/* aParticleChange.Initialize(aTrack);
  G4double k=aTrack.GetDynamicParticle()->GetKineticEnergy();
  
  G4int    finalStateIndex(FinalStatesPolicy::NumberOfFinalStates()); 
@@ -49,6 +77,6 @@
   aParticleChange.ProposeTrackStatus(fStopAndKill);
   aParticleChange.AddSecondary(newParticle); 
  
- return G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>::PostStepDoIt(aTrack, aStep);
+ return G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>::PostStepDoIt(aTrack, aStep); */
  }
 #endif /* G4DNACHARGEDECREASEINWATER_HH */

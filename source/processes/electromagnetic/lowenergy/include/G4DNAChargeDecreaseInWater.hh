@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAChargeDecreaseInWater.hh,v 1.1 2005-09-15 09:04:21 zfrancis Exp $
+// $Id: G4DNAChargeDecreaseInWater.hh,v 1.2 2005-12-20 13:50:31 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -39,7 +39,7 @@
  // FinalStatesPolicy must provide:
  //  - [protected] G4bool KillIncomingParticle(G4double k)
  //  - [protected] void BuildFinalStatesData(void)
- //  - [protected] G4int NumberOfFinalStates(void)
+ //  - [protected] G4int NumberOfFinalStates(G4int finalStateIndex)
  //  - [protected] G4double OverallBindingEnergyConstant(G4int finalStateIndex)
 
  template<typename TotalCrossSectionPolicy, typename FinalStatesPolicy>
