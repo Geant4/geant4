@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForRadDecay.hh,v 1.5 2003-06-03 08:56:37 gcosmo Exp $
+// $Id: G4ParticleChangeForRadDecay.hh,v 1.6 2005-12-20 02:25:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,9 +41,9 @@
 #include "globals.hh"
 #include "G4ios.hh"
 class G4VTouchable;
-#include "G4ParticleChange.hh"
+#include "G4ParticleChangeForDecay.hh"
 
-class G4ParticleChangeForRadDecay: public G4ParticleChange
+class G4ParticleChangeForRadDecay: public G4ParticleChangeForDecay
 { 
   public:
     // default constructor
@@ -54,7 +54,7 @@ class G4ParticleChangeForRadDecay: public G4ParticleChange
 
   protected:
     // hide copy constructor and assignment operaor as protected
-    G4ParticleChangeForRadDecay(const G4ParticleChangeForRadDecay &) : G4ParticleChange() {}
+    G4ParticleChangeForRadDecay(const G4ParticleChangeForRadDecay &) : G4ParticleChangeForDecay() {}
     G4ParticleChangeForRadDecay & operator=(const G4ParticleChangeForRadDecay &){return *this;}
 
 
