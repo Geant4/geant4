@@ -20,6 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+#ifdef G4VIS_BUILD_OI_DRIVER
+
+
 // this :
 #include <HEPVis/actions/SoAlternateRepAction.h>
 
@@ -139,3 +142,5 @@ void SoAlternateRepAction::nodeAction(
   }
 
 }
+
+#endif
