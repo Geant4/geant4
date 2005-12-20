@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4DNATest.cc,v 1.12 2005-09-21 09:18:35 zfrancis Exp $
+// $Id: G4DNATest.cc,v 1.13 2005-12-20 13:53:56 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
@@ -91,10 +91,14 @@
 #include "G4DNAElectronExcitation.hh"
 #include "G4DNAProtonRuddIonization.hh"
 #include "G4DNAProtonChargeDecrease.hh"
-#include "G4DNAProtonChargeIncrease.hh"
+#include "G4DNAHydrogenChargeIncrease.hh"
 #include "G4DNAHydrogenRuddIonization.hh"
 #include "G4DNAProtonBornExcitation.hh"
 #include "G4DNAElectronBornExcitation.hh"
+#include "G4DNAAlphaPlusChargeDecrease.hh"
+#include "G4DNAAlphaPlusChargeIncrease.hh"
+#include "G4DNAAlphaPlusPlusChargeDecrease.hh"
+#include "G4DNAHeliumChargeIncrease.hh"
 
 //! \brief Options structure
 struct Options
@@ -423,7 +427,7 @@ G4VLowEnergyTestableDiscreteProcess * GetSelectedProcess(const struct Options & 
   G4DNAGenericIonsManager * genericIonsManager;
   genericIonsManager=G4DNAGenericIonsManager::Instance();
   
-  processes=new G4VLowEnergyTestableDiscreteProcess * [14];
+  processes=new G4VLowEnergyTestableDiscreteProcess * [18];
   processes[0]=new G4DNAElectronElasticBrenner;
   processes[1]=new G4DNAElectronElasticEmfietzoglou;
   processes[2]=new G4DNAProtonExcitation;
@@ -433,11 +437,15 @@ G4VLowEnergyTestableDiscreteProcess * GetSelectedProcess(const struct Options & 
   processes[6]=new G4DNAElectronExcitation;
   processes[7]=new G4DNAProtonRuddIonization;
   processes[8]=new G4DNAProtonChargeDecrease;
-  processes[9]=new G4DNAProtonChargeIncrease;
+  processes[9]=new G4DNAHydrogenChargeIncrease;
   processes[10]=new G4DNAHydrogenRuddIonization;
   processes[11]=new G4DNAProtonBornExcitation;
   processes[12]=new G4DNAElectronBornExcitation;
-  processes[13]=0;
+  processes[13]=new G4DNAAlphaPlusChargeDecrease;
+  processes[14]=new G4DNAAlphaPlusChargeIncrease;
+  processes[15]=new G4DNAAlphaPlusPlusChargeDecrease;
+  processes[16]=new G4DNAHeliumChargeIncrease;
+  processes[17]=0;
  }
  
  unsigned long i(0);
@@ -540,7 +548,7 @@ G4ParticleDefinition * GetSelectedParticle(const struct Options & options)
 
 //! \brief Setup processes
 //! \param options Options for the process choice
-void SetPhysics(const struct Options & options)
+void SetPhysics(const struct Options & options, G4VPhysicalVolume * world)
 {
  G4ProductionCutsTable * cutsTable(G4ProductionCutsTable::GetProductionCutsTable());
  G4ProductionCuts * cuts(cutsTable->GetDefaultProductionCuts());
@@ -552,7 +560,7 @@ void SetPhysics(const struct Options & options)
   particles++;
  }
 
- cutsTable->UpdateCoupleTable();
+ cutsTable->UpdateCoupleTable(world);
  G4cout << "[OK] Cuts are defined " << G4endl;
 
  G4ParticleDefinition * particle(GetSelectedParticle(options));
@@ -824,10 +832,11 @@ int main(int argc, char ** argv)
  
  G4RunManager* rm = new G4RunManager();
  rm->GeometryHasBeenModified();
- rm->DefineWorldVolume(CreateGeometry(options));
+ G4VPhysicalVolume * world(CreateGeometry(options));
+ rm->DefineWorldVolume(world);
  G4cout << "[OK] World is defined " << G4endl;
  
- SetPhysics(options);
+ SetPhysics(options, world);
  
  if (!(options.meanFreePathTest || options.postStepDoItTest))
  {
