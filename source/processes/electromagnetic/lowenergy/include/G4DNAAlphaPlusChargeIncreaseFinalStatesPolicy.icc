@@ -1,0 +1,69 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4DNAAlphaPlusChargeIncreaseFinalStatesPolicy.icc,v 2005/09/14 16:12:34 Francis
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+
+#ifdef   G4DNAALPHAPLUSCHARGEINCREASEFINALSTATESPOLICY_HH
+ #include "Randomize.hh"
+ #include "G4DNAGenericIonsManager.hh"
+
+ template <typename EnergyLimitsPolicy>
+ G4bool                                 G4DNAAlphaPlusChargeIncreaseFinalStatesPolicy<EnergyLimitsPolicy> :: KillIncomingParticle(G4double energy) const
+ {
+  if (energy<EnergyLimitsPolicy::lowEnergyLimit)
+   return true;
+  
+  return false;
+ }
+
+ template <typename EnergyLimitsPolicy>
+ void                                   G4DNAAlphaPlusChargeIncreaseFinalStatesPolicy<EnergyLimitsPolicy> :: BuildFinalStatesData(void) const
+ {
+ }
+ 
+ template <typename EnergyLimitsPolicy>
+ G4int                                  G4DNAAlphaPlusChargeIncreaseFinalStatesPolicy<EnergyLimitsPolicy> :: NumberOfFinalStates(G4int /* finalStateIndex */) const
+ 
+ {
+  return 1;
+ }
+
+ template <typename EnergyLimitsPolicy>
+ G4ParticleDefinition *                 G4DNAAlphaPlusChargeIncreaseFinalStatesPolicy<EnergyLimitsPolicy> :: OutgoingParticleDefinition(G4int /* finalStateIndex */) 
+ {
+  G4DNAGenericIonsManager * instance(G4DNAGenericIonsManager::Instance());
+  return instance->GetIon("alpha++"); 
+ }
+ 
+ template <typename EnergyLimitsPolicy>
+ G4double                               G4DNAAlphaPlusChargeIncreaseFinalStatesPolicy<EnergyLimitsPolicy> :: IncomingParticleBindingEnergyConstant(G4int /* finalStateIndex */) const
+ {
+  // Binding energy for    He+ -> He++ + e-    54.509 eV
+  // Binding energy for    He  -> He+  + e-    24.587 eV
+
+  return 54.509*eV;
+ }
+#endif /* G4DNAALPHAPLUSCHARGEINCREASEFINALSTATESPOLICY_HH */
+
