@@ -1,4 +1,4 @@
-$Id: History,v 1.244 2005-11-30 16:34:11 gcosmo Exp $
+$Id: History,v 1.245 2005-12-20 13:45:40 capra Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+20.12.2005   R.Capra, tag emlowen-V08-00-RC
+             * Internal tag with latest developments in the DNA processes
+               - Tested for build, run and plots verified
 
 30.11.2005   G.Cosmo, tag emlowen-V07-01-14
              * Fixes for migration to <sstream> from obsolete <strstream>.
