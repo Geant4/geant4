@@ -25,45 +25,52 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#ifdef   G4DNAProtonChargeDecreaseFinalStatesPolicy_HH
+#ifdef   G4DNAPROTONCHARGEDECREASEFINALSTATESPOLICY_HH
  #include "Randomize.hh"
  #include "G4DNAGenericIonsManager.hh"
 
  template <typename EnergyLimitsPolicy>
- G4bool                                 G4DNAProtonChargeDecreaseFinalStatesPolicy<EnergyLimitsPolicy>::KillIncomingParticle(G4double energy) const
+ G4bool                                 G4DNAProtonChargeDecreaseFinalStatesPolicy<EnergyLimitsPolicy> :: KillIncomingParticle(G4double energy) const
  {
- if(energy < EnergyLimitsPolicy::lowEnergyLimit) return(true);
- else return (false);
+  if (energy<EnergyLimitsPolicy::lowEnergyLimit)
+   return true;
+  
+  return false;
  }
 
  template <typename EnergyLimitsPolicy>
- G4int                               G4DNAProtonChargeDecreaseFinalStatesPolicy<EnergyLimitsPolicy>::NumberOfFinalStates(void) const
+ void                                   G4DNAProtonChargeDecreaseFinalStatesPolicy<EnergyLimitsPolicy> :: BuildFinalStatesData(void) const
+ {
+ }
+ 
+ template <typename EnergyLimitsPolicy>
+ G4int                                  G4DNAProtonChargeDecreaseFinalStatesPolicy<EnergyLimitsPolicy> :: NumberOfFinalStates(G4int /* finalStateIndex */) const
  
  {
- return(1);
+  return 1;
  }
 
  template <typename EnergyLimitsPolicy>
- void                               G4DNAProtonChargeDecreaseFinalStatesPolicy<EnergyLimitsPolicy>::BuildFinalStatesData(void) const
- {}
- 
- template <typename EnergyLimitsPolicy>
- G4ParticleDefinition*                               G4DNAProtonChargeDecreaseFinalStatesPolicy<EnergyLimitsPolicy>::OutgoingParticleDefinition(G4int finalStateIndex) 
+ G4ParticleDefinition*                  G4DNAProtonChargeDecreaseFinalStatesPolicy<EnergyLimitsPolicy> :: OutgoingParticleDefinition(G4int /* finalStateIndex */) 
  {
- G4int dummy;
- dummy=finalStateIndex*1; // Warning dummy
- G4DNAGenericIonsManager *instance;
- instance  =  G4DNAGenericIonsManager::Instance();
- return instance->GetIon("hydrogen"); 
+  G4DNAGenericIonsManager * instance(G4DNAGenericIonsManager::Instance());
+  return instance->GetIon("hydrogen"); 
  }
  
  template <typename EnergyLimitsPolicy>
- G4double                               G4DNAProtonChargeDecreaseFinalStatesPolicy<EnergyLimitsPolicy>::OverallBindingEnergyConstant(G4int finalStateIndex) const
+ G4double                               G4DNAProtonChargeDecreaseFinalStatesPolicy<EnergyLimitsPolicy> :: WaterBindingEnergyConstant(G4int /* finalStateIndex */) const
  {
- G4int dummy;
- dummy = finalStateIndex; // Unused parameter Warning dummy
- return(13.6*eV);
+  // Ionization energy of first water shell
+  // Rad. Phys. Chem. 59 p.267 by Dingf. et al.
+  // W + 10.79 eV -> W+ + e-
+  
+  return 10.79*eV;
  }
 
-#endif /* G4DNAProtonChargeDecreaseTotalCrossSectionPolicy_HH */
+ template <typename EnergyLimitsPolicy>
+ G4double                               G4DNAProtonChargeDecreaseFinalStatesPolicy<EnergyLimitsPolicy> :: OutgoingParticleBindingEnergyConstant(G4int /* finalStateIndex */) const
+ {
+  return 13.6*eV;
+ }
+#endif /* G4DNAPROTONCHARGEDECREASEFINALSTATESPOLICY_HH */
 

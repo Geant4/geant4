@@ -24,8 +24,8 @@
 // $Id: G4DNAProtonChargeDecreaseFinalStates, 2005/09/14 15:46:26 francis
 // GEANT4 tag $Name: emlowen-V07-01-07
 
-#ifndef  G4DNAProtonChargeDecreaseFinalStatesPolicy_HH
-#define  G4DNAProtonChargeDecreaseFinalStatesPolicy_HH 1
+#ifndef  G4DNAPROTONCHARGEDECREASEFINALSTATESPOLICY_HH
+#define  G4DNAPROTONCHARGEDECREASEFINALSTATESPOLICY_HH 1
 
  #include "G4DNACrossSectionDataSet.hh"
 
@@ -48,9 +48,10 @@
 
   G4bool                                KillIncomingParticle(G4double energy) const;
   void                                  BuildFinalStatesData(void) const;
-  G4int                                 NumberOfFinalStates(void) const;
+  G4int                                 NumberOfFinalStates(G4int finalStateIndex) const;
   G4ParticleDefinition*                 OutgoingParticleDefinition(G4int finalStateIndex);
-  G4double                              OverallBindingEnergyConstant(G4int finalStateIndex) const;
+  G4double                              WaterBindingEnergyConstant(G4int finalStateIndex) const;
+  G4double                              OutgoingParticleBindingEnergyConstant(G4int finalStateIndex) const;
   
   // Hides default constructor and assignment operator as private
                                         G4DNAProtonChargeDecreaseFinalStatesPolicy(const G4DNAProtonChargeDecreaseFinalStatesPolicy & copy);
@@ -58,6 +59,6 @@
  };
 
  #include "G4DNAProtonChargeDecreaseFinalStatesPolicy.icc"
-#endif /* G4DNAProtonChargeDecreaseFinalStatesPolicy_HH */
+#endif /* G4DNAPROTONCHARGEDECREASEFINALSTATESPOLICY_HH */
 
 

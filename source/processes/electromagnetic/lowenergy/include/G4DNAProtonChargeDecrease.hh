@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProtonChargeDecrease.hh,v 1.1 2005-09-15 09:04:21 zfrancis Exp $
+// $Id: G4DNAProtonChargeDecrease.hh,v 1.2 2005-12-20 13:53:34 capra Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef   G4DNAPROTONCHARGEDECREASE_HH
  #define  G4DNAPROTONCHARGEDECREASE_HH 1
 
  #include "G4DNAChargeDecreaseInWater.hh"
- #include "G4DNAProtonChargeDecreaseTotalCrossSectionPolicy.hh"
+ #include "G4DNADingfelderChargeChangeTotalCrossSectionPolicy.hh"
  #include "G4DNAProtonChargeDecreaseFinalStatesPolicy.hh"
  #include "G4DNAStopAndKillBelowEnergyLimitPolicy.hh"
 
@@ -48,12 +48,24 @@
   protected:
                                         G4DNAProtonChargeDecreaseIncomingParticlePolicy();
    const G4ParticleDefinition *         IncomingParticleDefinition(void) const;
+
+   G4int                                NumberOfPartialCrossSections(void) const;
+
+   G4double                             f0[1];
+   G4double                             a0[1];
+   G4double                             a1[1];
+   G4double                             b0[1];
+   G4double                             b1[1];
+   G4double                             c0[1];
+   G4double                             d0[1];
+   G4double                             x0[1];
+   G4double                             x1[1];
  };
 
- class G4DNAProtonChargeDecrease : public G4DNAChargeDecreaseInWater<G4DNAProtonChargeDecreaseTotalCrossSectionPolicy<G4DNAProtonChargeDecreaseIncomingParticlePolicy, G4DNAProtonChargeDecreaseEnergyLimitsPolicy>, G4DNAProtonChargeDecreaseFinalStatesPolicy<G4DNAProtonChargeDecreaseEnergyLimitsPolicy> >
+ class G4DNAProtonChargeDecrease : public G4DNAChargeDecreaseInWater<G4DNADingfelderChargeChangeTotalCrossSectionPolicy<G4DNAProtonChargeDecreaseIncomingParticlePolicy, G4DNAProtonChargeDecreaseEnergyLimitsPolicy>, G4DNAProtonChargeDecreaseFinalStatesPolicy<G4DNAProtonChargeDecreaseEnergyLimitsPolicy> >
  {
   public:
-                                         G4DNAProtonChargeDecrease(const G4String & name = "G4DNAProtonChargeDecrease") : G4DNAChargeDecreaseInWater<G4DNAProtonChargeDecreaseTotalCrossSectionPolicy<G4DNAProtonChargeDecreaseIncomingParticlePolicy, G4DNAProtonChargeDecreaseEnergyLimitsPolicy>, G4DNAProtonChargeDecreaseFinalStatesPolicy<G4DNAProtonChargeDecreaseEnergyLimitsPolicy> > (name) {}
+                                         G4DNAProtonChargeDecrease(const G4String & name = "G4DNAProtonChargeDecrease") : G4DNAChargeDecreaseInWater<G4DNADingfelderChargeChangeTotalCrossSectionPolicy<G4DNAProtonChargeDecreaseIncomingParticlePolicy, G4DNAProtonChargeDecreaseEnergyLimitsPolicy>, G4DNAProtonChargeDecreaseFinalStatesPolicy<G4DNAProtonChargeDecreaseEnergyLimitsPolicy> > (name) {}
    virtual                              ~G4DNAProtonChargeDecrease() {}
  };
 #endif /* G4DNAPROTONCHARGEDECREASE_HH */
