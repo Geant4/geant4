@@ -252,10 +252,10 @@ void StatAccepTestAnalysis::finish() {
     mu       = sum / n;
     sigma    = sqrt( ( sum2 - sum*sum/n ) / (n - 1.0) );
     mu_sigma = sigma / sqrt( n );
-    if ( mu > 1.0E-06 ) {
-      G4cout << "\t layer = " << iLayer << "\t <E> = " 
-	     << mu << " +/- " << mu_sigma << G4endl;
-    }
+    //if ( mu > 1.0E-06 ) {
+    G4cout << "\t layer = " << iLayer << "\t <E> = " 
+	   << mu << " +/- " << mu_sigma << G4endl;
+    //}
     if ( longitudinalProfileHisto ) {
       //***LOOKHERE*** :  mu_sigma  should be set as error.
       longitudinalProfileHisto->fill( 1.0*iLayer, mu );
@@ -269,10 +269,10 @@ void StatAccepTestAnalysis::finish() {
     mu       = sum / n;
     sigma    = sqrt( ( sum2 - sum*sum/n ) / (n - 1.0) );
     mu_sigma = sigma / sqrt( n );
-    if ( mu > 1.0E-06 ) {
-      G4cout << "\t iBinR = " << iBinR << "\t <E> = " 
-	     << mu << " +/- " << mu_sigma << G4endl;
-    }
+    //if ( mu > 1.0E-06 ) {
+    G4cout << "\t iBinR = " << iBinR << "\t <E> = " 
+	   << mu << " +/- " << mu_sigma << G4endl;
+    //}
     if ( transverseProfileHisto ) {
       //***LOOKHERE*** :  mu_sigma  should be set as error.
       transverseProfileHisto->fill( 1.0*iBinR, mu );
