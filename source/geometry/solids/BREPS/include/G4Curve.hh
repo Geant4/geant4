@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Curve.hh,v 1.8 2001-07-11 09:59:33 gunter Exp $
+// $Id: G4Curve.hh,v 1.9 2005-12-21 17:37:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -72,7 +72,8 @@ class G4Curve
   virtual G4String GetEntityType() const;
     // Returns shape identifier.
 
-  virtual G4Curve* Project(const G4Transform3D& tr=G4Transform3D::Identity)= 0;
+  virtual G4Curve* Project(const G4Transform3D& tr =
+                           HepGeom::Transform3D::Identity)= 0;
     // Projection onto the xy plane after the transformation tr.
     // The returned object is allocated dynamically; it's caller's
     // responsibility to delete it.

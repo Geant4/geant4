@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineCurve.hh,v 1.11 2003-06-16 16:52:31 gunter Exp $
+// $Id: G4BSplineCurve.hh,v 1.12 2005-12-21 17:37:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -62,7 +62,7 @@ public:  // with description
     // Copy constructor and assignment operator.
 
   virtual G4Curve* Project(const G4Transform3D& tr=
-			   G4Transform3D::Identity);
+			   HepGeom::Transform3D::Identity);
     // Transforms and projects all control points.
 
   virtual G4double  GetPMax() const;

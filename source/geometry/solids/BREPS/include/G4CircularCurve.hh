@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CircularCurve.hh,v 1.7 2001-07-11 09:59:32 gunter Exp $
+// $Id: G4CircularCurve.hh,v 1.8 2005-12-21 17:37:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -53,7 +53,7 @@ public: // with description
     // Copy-constructor and assignment operator.
 
   virtual G4Curve* Project(const G4Transform3D& tr=
-                           G4Transform3D::Identity);
+                           HepGeom::Transform3D::Identity);
     // Project along trasformation tr.
 
   virtual G4bool Tangent(G4CurvePoint& cp, G4Vector3D& v);
