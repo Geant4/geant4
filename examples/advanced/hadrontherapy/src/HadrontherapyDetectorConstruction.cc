@@ -180,7 +180,7 @@ void HadrontherapyDetectorConstruction::ConstructPhantom()
 					     0,0,0);
 
   // Fixing the max step allowd in the phantom
-  G4double maxStep = 0.02*cm;
+  G4double maxStep = 0.002*cm;
   phantomLogicalVolume -> SetUserLimits(new G4UserLimits(maxStep));
 
   G4double phantomXtranslation = -180.*mm;

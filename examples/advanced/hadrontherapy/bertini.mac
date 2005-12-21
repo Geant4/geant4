@@ -4,8 +4,10 @@
 #  - LOW ENERGY ELECTROMAGNETIC PHYSICS
 #  - ELASTIC SCATTERING FOR ALL THE HADRONS AND IONS
 #  - INELASTIC SCATTERING --->
-# 	
-#	* BINARY CASCADE MODEL WITH THE DEFAULT PRECOMPOUND
+# 	PRECOMPOUND PHYSICS LIST with THE DEFAULT EVAPORATION MODEL AND WITHOUT THE FERMI BREAK-UP
+#
+# 	* BERTINI MODEL FOR PROTONS,
+# 	  NEUTRONS AND PIONS
 # 
 # 	* LEP MODEL UP TO 100 MEV AND BINARY ION MODEL BETWEEN 80 MEV AND 40. GEV 
 #	  FOR  DEUTERON, TRITON, HE3, ALPHA
@@ -27,21 +29,22 @@
 /physics/addPhysics positron-standard
 /physics/addPhysics ion-LowE
 /physics/addPhysics muon-standard
-#/physics/addPhysics decay
-/physics/addPhysics proton-precompound-binary
+/physics/addPhysics decay
 
-/physics/addPhysics proton-precompoundFermi
+# SETTING FOR THE PARTICULAR HADRONIC MODEL
+/physics/addPhysics bertini
+
 /run/initialize
 
 # IF YOU WANT A RANGE SHIFTER PLEASE CHANGE
 # THE FOLLOWIG PARAMETERS
 # SETTING FOR THE RANGE SHIFTER
- 
-#/beamLine/RangeShifter/thickness 0 cm
+#/beamLine/RangeShifter/thickness 4 cm
 #/beamLine/RangeShifter/RSMat Water
 
+
 /vis/viewer/flush
-#/beam/energy/meanEnergy 25 MeV
-/run/beamOn 100
+/run/beamOn 10000
+
 
 

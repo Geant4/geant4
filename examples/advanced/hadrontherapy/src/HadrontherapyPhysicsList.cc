@@ -61,10 +61,9 @@
 #include "HadrontherapyProtonBinary.hh"
 #include "HadrontherapyMuonStandard.hh"
 #include "HadrontherapyDecay.hh"
-#include "HadrontherapyParticles.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
+#include "HadrontherapyProtonBertini.hh"
+
+
 HadrontherapyPhysicsList::HadrontherapyPhysicsList(): G4VModularPhysicsList(),
 						      electronIsRegistered(false), 
 						      positronIsRegistered(false), 
@@ -79,8 +78,6 @@ HadrontherapyPhysicsList::HadrontherapyPhysicsList(): G4VModularPhysicsList(),
   defaultCutValue = 10. * mm;
   messenger = new HadrontherapyPhysicsListMessenger(this);
   SetVerboseLevel(1);
-  RegisterPhysics( new HadrontherapyParticles("particles") );
-
 }
 
 HadrontherapyPhysicsList::~HadrontherapyPhysicsList()
@@ -494,7 +491,34 @@ if (name == "proton-precompound-binary")
 //--------------------------------------------------------------------------------------------
 // End Hadronic Binary models
 //--------------------------------------------------------------------------------------------
-  
+//--------------------------------------------------------------------------------------------
+//Begin Hadronic Bertini model
+//--------------------------------------------------------------------------------------------
+
+// Bertini is a model indipendent from precompound
+
+
+if (name == "bertini") 
+    {
+      if (protonHadronicIsRegistered) 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- decay List already existing" 
+                 << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics( new HadrontherapyProtonBertini(name) );
+	  protonHadronicIsRegistered = true;
+	}
+
+    }
+
+//--------------------------------------------------------------------------------------------
+// End Hadronic Bertini model
+//--------------------------------------------------------------------------------------------  
   if (electronIsRegistered && positronIsRegistered && photonIsRegistered &&
       ionIsRegistered) 
     {
@@ -508,6 +532,8 @@ if (name == "proton-precompound-binary")
       G4cout << " Hadronic physics is registered" << G4endl;
     }     
 }
+
+
 
 void HadrontherapyPhysicsList::SetCuts()
 {  
