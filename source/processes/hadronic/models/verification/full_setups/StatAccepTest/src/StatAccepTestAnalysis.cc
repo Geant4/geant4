@@ -312,7 +312,7 @@ void StatAccepTestAnalysis::finish() {
   G4double width_Evis = 0.0;
   for ( std::vector< G4double >::const_iterator cit = vecEvis.begin();
 	cit != vecEvis.end() ; ++cit ) {
-    width_Evis += fabs( *cit - mu_Evis );
+    width_Evis += std::abs( *cit - mu_Evis );
   }
   width_Evis *= sqrt( 3.141592654/2.0 ) / n ;
   G4cout << " Visible energy information [MeV] " << G4endl; 

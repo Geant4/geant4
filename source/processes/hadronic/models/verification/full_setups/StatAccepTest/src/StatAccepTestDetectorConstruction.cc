@@ -529,7 +529,7 @@ void StatAccepTestDetectorConstruction::SetMagField(G4double fieldValue) {
   if ( uniformMagField ) {
     delete uniformMagField;
   }
-  if ( fabs( fieldValue ) > 0.0 ) {
+  if ( std::abs( fieldValue ) > 0.0 ) {
     // Apply a global uniform magnetic field along the Y axis.
     // Notice that only if the magnetic field is not zero, the Geant4
     // transportion in field gets activated.
