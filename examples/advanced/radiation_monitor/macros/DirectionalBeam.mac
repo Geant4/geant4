@@ -5,7 +5,7 @@
 /radmon/generator/SetSourceAlgorithmAttribute Environment Particle  Particle       proton
 /radmon/generator/AppendSourceAlgorithm       Environment Energy  
 /radmon/generator/SetSourceAlgorithmType      Environment Energy    FixedEnergy
-/radmon/generator/SetSourceAlgorithmAttribute Environment Energy    Energy         '250 MeV'
+/radmon/generator/SetSourceAlgorithmAttribute Environment Energy    Energy         '254 MeV'
 /radmon/generator/AppendSourceAlgorithm       Environment Direction
 /radmon/generator/SetSourceAlgorithmType      Environment Direction FixedDirection
 /radmon/generator/SetSourceAlgorithmAttribute Environment Direction Direction      '0. 0. 0. deg'
