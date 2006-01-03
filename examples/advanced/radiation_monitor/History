@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2005-12-06 19:39:09 capra Exp $
+$Id: History,v 1.17 2006-01-03 17:12:47 capra Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03 Jan 2006 - radmon-V08-00-00-RC - R. Capra - Few macros added in order to
+                        reproduce first run results
 
 06 Dec 2005 - radmon-V07-01-14 - R. Capra - Documentation extended README
                         file now covers all the aspects of the application
