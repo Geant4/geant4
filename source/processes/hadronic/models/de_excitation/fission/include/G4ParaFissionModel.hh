@@ -35,7 +35,7 @@
 // To be used in your physics list in case you need this physics.
 // In this case you want to register an object of this class with 
 // the corresponding process.
-// Class Description - End
+
 
 class G4ParaFissionModel : public G4HadronicInteraction
 {
@@ -49,30 +49,30 @@ public:
   virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
                                               G4Nucleus& theNucleus)
   {
-    theParticleChange.Clear(aTrack);
+    theParticleChange.Clear();
     theParticleChange.SetStatusChange( stopAndKill );
     theParticleChange.SetEnergyChange( 0.0 );
     
     // prepare the fragment
+
     G4Fragment anInitialState;
-     G4int anA=theNucleus.GetN();
-     G4int aZ=theNucleus.GetZ();
-     G4double nucMass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(aZ ,anA);
+    G4double anA = theNucleus.GetN();
+    G4double aZ = theNucleus.GetZ();
+    G4double nucMass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(G4int(aZ) ,G4int(anA));
      
-     anA += aTrack.GetDefinition()->GetBaryonNumber();
-     aZ += aTrack.GetDefinition()->GetPDGCharge();
+    anA += aTrack.GetDefinition()->GetBaryonNumber();
+    aZ += aTrack.GetDefinition()->GetPDGCharge();
      
-     G4int numberOfEx = aTrack.GetDefinition()->GetBaryonNumber();
-     G4int numberOfCh = std::abs(aTrack.GetDefinition()->GetPDGCharge());
-     G4int numberOfHoles = 0;
-     G4double exEnergy = 0;
+    G4int numberOfEx = aTrack.GetDefinition()->GetBaryonNumber();
+    G4int numberOfCh = G4int(std::abs(aTrack.GetDefinition()->GetPDGCharge()));
+    G4int numberOfHoles = 0;
      
-     G4ThreeVector exciton3Momentum = aTrack.Get4Momentum()i.vect();
-     G4double compoundMass = aTrack.GetTotalEnergy();
-     compoundMass += nucMass;
-     compoundMass = std::sqrt(compoundMass*compoundMass - exciton3Momentum*exciton3Momentum);
-     G4LorentzVector fragment4Momentum(exciton3Momentum, 
-                                      std::sqrt(exciton3Momentum.mag2()+compoundMass*compoundMass));
+    G4ThreeVector exciton3Momentum = aTrack.Get4Momentum().vect();
+    G4double compoundMass = aTrack.GetTotalEnergy();
+    compoundMass += nucMass;
+    compoundMass = std::sqrt(compoundMass*compoundMass - exciton3Momentum*exciton3Momentum);
+    G4LorentzVector fragment4Momentum(exciton3Momentum, 
+                               std::sqrt(exciton3Momentum.mag2()+compoundMass*compoundMass));
     
     anInitialState.SetA(anA);
     anInitialState.SetZ(aZ);
@@ -89,14 +89,13 @@ public:
     G4int ll = theFissionResult->size();
     for(G4int i=0; i<ll; i++)
     {
-      G4ReactionProductVector * theExcitationResult = 0; 
-      if((*theFissionResult)[i]->GetExcitationEnergy()>1.*eV)
+      G4ReactionProductVector* theExcitationResult = 0; 
+      G4Fragment* aFragment = (*theFissionResult)[i];
+      if(aFragment->GetExcitationEnergy()>1.*eV)
       {
-        G4Fragment * aFragment = (*theFissionResult)[i];
-	G4double exenergy = aFragment->GetExcitationEnergy();
-	theExcitationResult = theHandler.BreakItUp(*(*theFissionResult)[i]);
+	theExcitationResult = theHandler.BreakItUp(*aFragment);
 	// add secondaries
-	for(G4int j=0; j<theExcitationResult->size(); j++)
+	for(G4int j = 0; j < G4int(theExcitationResult->size()); j++)
 	{
           G4DynamicParticle* p0 = new G4DynamicParticle;
           p0->SetDefinition( theExcitationResult->operator[](j)->GetDefinition() );
@@ -108,14 +107,14 @@ public:
       {
         // add secondary
 	G4DynamicParticle* p0 = new G4DynamicParticle;
-	p0->SetDefinition((*theFissionResult)[i]->GetParticleDefinition());
-	p0->SetMomentum((*theFissionResult)[i]->GetMomentum().vect());
+	p0->SetDefinition(aFragment->GetParticleDefinition());
+	p0->SetMomentum(aFragment->GetMomentum().vect());
         theResult.push_back(p0);
       }
     }
     
     // fill particle change
-    for(G4int k=0; k<theResult.size(); k++)
+    for(G4int k = 0; k < G4int(theResult.size()); k++)
     {
       theParticleChange.AddSecondary(theResult[k]);
     }
