@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.46 2005-12-14 13:05:33 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.47 2006-01-05 15:34:54 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,7 +75,7 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   fViewCount             (0),
   fpViewer               (0),
   fpScene                (0),
-  fMarkForClearingTransientStore (false),
+  fMarkForClearingTransientStore (true), // Always clear and refesh first time.
   fSecondPassRequested   (false),
   fSecondPass            (false),
   fReadyForTransients    (true),  // Only false while processing scene.
