@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Sphere2.cc,v 1.3 2005-06-06 11:06:51 gcosmo Exp $
+// $Id: testG4Sphere2.cc,v 1.4 2006-01-05 10:28:22 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -89,132 +89,140 @@ const G4String OutputInside(const EInside a)
 
 int main(void)
 {
-    G4ThreeVector pzero(0,0,0),px(30,0,0),py(0,30,0),pz(0,0,30);
-    G4ThreeVector Pmx(-30,0,0),pmy(0,-30,0),pmz(0,0,-30);
-    G4ThreeVector pbigx(100,0,0),pbigy(0,100,0),pbigz(0,0,100);
-    G4ThreeVector pbigmx(-100,0,0),pbigmy(0,-100,0),pbigmz(0,0,-100);
+  G4ThreeVector pzero(0,0,0),px(30,0,0),py(0,30,0),pz(0,0,30);
+  G4ThreeVector Pmx(-30,0,0),pmy(0,-30,0),pmz(0,0,-30);
+  G4ThreeVector pbigx(100,0,0),pbigy(0,100,0),pbigz(0,0,100);
+  G4ThreeVector pbigmx(-100,0,0),pbigmy(0,-100,0),pbigmz(0,0,-100);
 
-    G4ThreeVector ponrmin1(45,0,0),ponrmax1(50,0,0),ponzmax(0,0,50),
-	    ponrmin2(45/std::sqrt(2.),45/std::sqrt(2.),0),
-            ponrmin3(0,0,-45),ponrminJ(0,0,-300),ponrmaxJ(0,0,-500),
-	    ponrmax2(50/std::sqrt(2.),50/std::sqrt(2.),0);
-    G4ThreeVector ponphi1(48/std::sqrt(2.),-48/std::sqrt(2.),0),
-	          ponphi2(48/std::sqrt(2.),48/std::sqrt(2.),0),
-	          pInPhi(48*0.866,-24,0),
-	          pOverPhi(-48/std::sqrt(2.),48/std::sqrt(2.),0);
-    G4ThreeVector pontheta1(0,48*std::sin(pi/4),48*std::cos(pi/4)),
-	    pontheta2(0,48*std::sin(pi/4),-48*std::cos(pi/4));
+  G4ThreeVector ponrmin1(45,0,0),ponrmax1(50,0,0),ponzmax(0,0,50),
+	  ponrmin2(45/std::sqrt(2.),45/std::sqrt(2.),0),
+          ponrmin3(0,0,-45),ponrminJ(0,0,-300),ponrmaxJ(0,0,-500),
+	  ponrmax2(50/std::sqrt(2.),50/std::sqrt(2.),0);
+  G4ThreeVector ponphi1(48/std::sqrt(2.),-48/std::sqrt(2.),0),
+	        ponphi2(48/std::sqrt(2.),48/std::sqrt(2.),0),
+	        pInPhi(48*0.866,-24,0),
+	        pOverPhi(-48/std::sqrt(2.),48/std::sqrt(2.),0);
+  G4ThreeVector pontheta1(0,48*std::sin(pi/4),48*std::cos(pi/4)),
+	         pontheta2(0,48*std::sin(pi/4),-48*std::cos(pi/4));
 
-    G4ThreeVector ptestphi1(-100,-45/std::sqrt(2.),0),
-	    ptestphi2(-100,45/std::sqrt(2.),0);
+  G4ThreeVector ptestphi1(-100,-45/std::sqrt(2.),0),
+	        ptestphi2(-100,45/std::sqrt(2.),0);
+  G4ThreeVector ptesttheta1(0,48/std::sqrt(2.),100),
+	        ptesttheta2(0,48/std::sqrt(2.),-100);
 
-    G4ThreeVector ptesttheta1(0,48/std::sqrt(2.),100),
-	    ptesttheta2(0,48/std::sqrt(2.),-100);
+  G4ThreeVector vx(1,0,0),vy(0,1,0),vz(0,0,1);
+  G4ThreeVector vmx(-1,0,0),vmy(0,-1,0),vmz(0,0,-1);
+  G4ThreeVector vxy(1/std::sqrt(2.),1/std::sqrt(2.),0),
+                vmxmy(-1/std::sqrt(2.),-1/std::sqrt(2.),0);
+  G4ThreeVector vxmy(1/std::sqrt(2.),-1/std::sqrt(2.),0),
+                vmxy(-1/std::sqrt(2.),1/std::sqrt(2.),0);
+  G4ThreeVector v345exit1(-0.8,0.6,0),v345exit2(0.8,0.6,0),
+	        v345exit3(0.6,0.8,0);
+  G4ThreeVector norm,*pNorm;
+  G4bool *pgoodNorm,goodNorm;
 
-    G4ThreeVector vx(1,0,0),vy(0,1,0),vz(0,0,1);
-    G4ThreeVector vmx(-1,0,0),vmy(0,-1,0),vmz(0,0,-1);
-    G4ThreeVector vxy(1/std::sqrt(2.),1/std::sqrt(2.),0),vmxmy(-1/std::sqrt(2.),-1/std::sqrt(2.),0);
-    G4ThreeVector vxmy(1/std::sqrt(2.),-1/std::sqrt(2.),0),vmxy(-1/std::sqrt(2.),1/std::sqrt(2.),0);
-    G4ThreeVector v345exit1(-0.8,0.6,0),v345exit2(0.8,0.6,0),
-	          v345exit3(0.6,0.8,0);
-    G4ThreeVector norm,*pNorm;
-    G4bool *pgoodNorm,goodNorm;
-
-    pNorm=&norm;
-    pgoodNorm=&goodNorm;
+  pNorm=&norm;
+  pgoodNorm=&goodNorm;
 
 
-        G4bool checkPoint( const G4Sphere& pSph, G4ThreeVector origin,
+  G4bool checkPoint( const G4Sphere& pSph, G4ThreeVector origin,
                            G4double  d,    G4ThreeVector dir,    EInside  exp); 
 
-        G4Sphere SpAroundX("SpAroundX",  10.*mm, 1000.*mm, -1.0*degree, 2.0*degree, 0.*degree, 180.0*degree );
+  G4Sphere SpAroundX("SpAroundX",  10.*mm, 1000.*mm, 
+         -1.0*degree, 2.0*degree, 0.*degree, 180.0*degree );
 
-	G4double  sinOneDeg = std::sin( 1.0 * degree );
-	G4double  radOne = 100.0 * mm;
+  G4double  sinOneDeg = std::sin( 1.0 * degree );
+  G4double  radOne = 100.0 * mm;
 
-	G4ThreeVector  ptPhiSurfExct= G4ThreeVector( radOne * std::cos( -1.0 * degree ) , 
+  G4ThreeVector  ptPhiSurfExct= G4ThreeVector( radOne * std::cos( -1.0 * degree ) , 
 			             - radOne *  sinOneDeg, 
 				      0.0 );
-        G4cout << " Starting from point " << ptPhiSurfExct << G4endl;
-        G4cout << "   using direction   " << vy << G4endl; 
-        checkPoint( SpAroundX, ptPhiSurfExct, -radOne * kAngTolerance * 1.5, 
+  G4cout << " Starting from point " << ptPhiSurfExct << G4endl;
+  G4cout << "   using direction   " << vy << G4endl; 
+  checkPoint( SpAroundX, ptPhiSurfExct, -radOne * kAngTolerance * 1.5, 
                     vy,   kOutside); 
-        checkPoint( SpAroundX, ptPhiSurfExct, -radOne * kAngTolerance * 0.49, 
+  checkPoint( SpAroundX, ptPhiSurfExct, -radOne * kAngTolerance * 0.49, 
                     vy,   kSurface); 
-        checkPoint( SpAroundX, ptPhiSurfExct, -radOne * kAngTolerance * 0.25, 
+  checkPoint( SpAroundX, ptPhiSurfExct, -radOne * kAngTolerance * 0.25, 
                     vy,   kSurface); 
-        checkPoint( SpAroundX, ptPhiSurfExct,  0.0,
+  checkPoint( SpAroundX, ptPhiSurfExct,  0.0,
                     vy,   kSurface); 
-        checkPoint( SpAroundX, ptPhiSurfExct,  radOne * kAngTolerance * 0.25, 
+  checkPoint( SpAroundX, ptPhiSurfExct,  radOne * kAngTolerance * 0.25, 
                     vy,   kSurface); 
-        checkPoint( SpAroundX, ptPhiSurfExct,  radOne * kAngTolerance * 0.49, 
+  checkPoint( SpAroundX, ptPhiSurfExct,  radOne * kAngTolerance * 0.49, 
                     vy,   kSurface); 
-        checkPoint( SpAroundX, ptPhiSurfExct,  radOne * kAngTolerance * 1.5, 
+  checkPoint( SpAroundX, ptPhiSurfExct,  radOne * kAngTolerance * 1.5, 
                     vy,   kInside); 
 
-        // Try one that has a 'deep' negative phi section
-	//   --> Vlad. Grichine test case, 30 Oct 2003
-        // 
-        G4cout << G4endl << G4endl << "" << G4endl;
-	G4cout << "========================================================= " << G4endl; 
+  // Try one that has a 'deep' negative phi section
+  //   --> Vlad. Grichine test case, 30 Oct 2003
+  // 
+  G4cout << G4endl << G4endl << "" << G4endl;
+  G4cout << "========================================================= " << G4endl; 
 
-	G4Sphere SphDeepNeg("DeepNegPhiSphere",  10.*mm, 1000.*mm, 
+  G4Sphere SphDeepNeg("DeepNegPhiSphere",  10.*mm, 1000.*mm, 
 			   -270.0*degree, 280.0*degree,          //  start Phi,   delta Phi
 			    0.*degree, 180.0*degree );        //  start Theta, delta Theta
-        G4double phiPoint = 160.0 * degree; 
-        G4ThreeVector  StartPt( radOne * std::cos(phiPoint), radOne * std::sin(phiPoint), 0.0); 
-        G4cout << "For sphere " << SphDeepNeg.GetName() << G4endl;
-        G4cout << " Starting from point " << ptPhiSurfExct << G4endl;
+  G4double phiPoint = 160.0 * degree; 
+  G4ThreeVector  StartPt( radOne * std::cos(phiPoint), radOne * std::sin(phiPoint), 0.0); 
+  G4cout << "For sphere " << SphDeepNeg.GetName() << G4endl;
+  G4cout << " Starting from point " << ptPhiSurfExct << G4endl;
 
-        checkPoint( SphDeepNeg, StartPt,  0.0,  vy,   kInside); 
+  checkPoint( SphDeepNeg, StartPt,  0.0,  vy,   kInside); 
 
-        // Try the edges  
-        G4ThreeVector  NegEdgePt( radOne * std::cos(-270.0*degree), radOne * std::sin(-270.0*degree), 0.0); 
-        G4ThreeVector  PosEdgePt( radOne * std::cos(10.0*degree), radOne * std::sin(10.0*degree), 0.0); 
+  // Try the edges  
+  G4ThreeVector  NegEdgePt( radOne * std::cos(-270.0*degree), 
+                            radOne * std::sin(-270.0*degree), 0.0); 
+  G4ThreeVector  PosEdgePt( radOne * std::cos(10.0*degree), 
+                            radOne * std::sin(10.0*degree), 0.0); 
 
-        G4cout << "--------------------------------------------------------" << G4endl; 
-	G4cout << " New point " << NegEdgePt << " should be at Neg edge of -270.0 degrees " <<  G4endl;
-	checkPoint( SphDeepNeg, NegEdgePt,  0.0,  -vx,   kSurface); 
-	checkPoint( SphDeepNeg, NegEdgePt,  radOne*kAngTolerance * 0.25,  -vx,   kSurface); 
-	checkPoint( SphDeepNeg, NegEdgePt, -radOne*kAngTolerance * 0.25,  -vx,   kSurface); 
-	checkPoint( SphDeepNeg, NegEdgePt,  radOne*kAngTolerance * 1.25,  -vx,   kInside); 
-	checkPoint( SphDeepNeg, NegEdgePt, -radOne*kAngTolerance * 1.25,  -vx,   kOutside); 
+  G4cout << "--------------------------------------------------------" << G4endl; 
+  G4cout << " New point " << NegEdgePt << " should be at Neg edge of -270.0 degrees " <<  G4endl;
+  checkPoint( SphDeepNeg, NegEdgePt,  0.0,  -vx,   kSurface); 
+  checkPoint( SphDeepNeg, NegEdgePt,  radOne*kAngTolerance * 0.25,  -vx,   kSurface); 
+  checkPoint( SphDeepNeg, NegEdgePt, -radOne*kAngTolerance * 0.25,  -vx,   kSurface); 
+  checkPoint( SphDeepNeg, NegEdgePt,  radOne*kAngTolerance * 1.25,  -vx,   kInside); 
+  checkPoint( SphDeepNeg, NegEdgePt, -radOne*kAngTolerance * 1.25,  -vx,   kOutside); 
 
-	G4cout << "--------------------------------------------------------" << G4endl; 
-	G4cout << " New point " << PosEdgePt << " should be at Pos edge of +10.0 degrees " <<  G4endl;
-        checkPoint( SphDeepNeg, PosEdgePt,  0.0,  -vy,   kSurface); 
-	checkPoint( SphDeepNeg, PosEdgePt,  radOne*kAngTolerance * 0.25,  -vy,   kSurface); 
-	checkPoint( SphDeepNeg, PosEdgePt, -radOne*kAngTolerance * 0.25,  -vy,   kSurface); 
-	checkPoint( SphDeepNeg, PosEdgePt, -radOne*kAngTolerance * 1.25,  -vy,   kOutside); 
-	checkPoint( SphDeepNeg, PosEdgePt,  radOne*kAngTolerance * 1.25,  -vy,   kInside); 
+  G4cout << "--------------------------------------------------------" << G4endl; 
+  G4cout << " New point " << PosEdgePt << " should be at Pos edge of +10.0 degrees " <<  G4endl;
+  checkPoint( SphDeepNeg, PosEdgePt,  0.0,  -vy,   kSurface); 
+  checkPoint( SphDeepNeg, PosEdgePt,  radOne*kAngTolerance * 0.25,  -vy,   kSurface); 
+  checkPoint( SphDeepNeg, PosEdgePt, -radOne*kAngTolerance * 0.25,  -vy,   kSurface); 
+  checkPoint( SphDeepNeg, PosEdgePt, -radOne*kAngTolerance * 1.25,  -vy,   kOutside); 
+  checkPoint( SphDeepNeg, PosEdgePt,  radOne*kAngTolerance * 1.25,  -vy,   kInside); 
 
-        G4double radMax= 1000.0 * mm; 
-	NegEdgePt = G4ThreeVector( radMax * std::cos(-270.0*degree), radMax * std::sin(-270.0*degree), 0.0); 
-        G4cout << "--------------------------------------------------------" << G4endl; 
-	G4cout << " New point " << NegEdgePt << " should be at RadMax / Neg edge of -270.0 degrees " <<  G4endl;
-	checkPoint( SphDeepNeg, NegEdgePt,  0.0,  -vx,   kSurface); 
-	checkPoint( SphDeepNeg, NegEdgePt,  radMax*kAngTolerance * 0.25,  -vx,   kSurface); 
-	checkPoint( SphDeepNeg, NegEdgePt, -radMax*kAngTolerance * 0.25,  -vx,   kSurface); 
-	checkPoint( SphDeepNeg, NegEdgePt,  radMax*kAngTolerance * 1.25,  -vx,   kSurface); 
-	checkPoint( SphDeepNeg, NegEdgePt, -radMax*kAngTolerance * 1.25,  -vx,   kOutside); 
+  G4double radMax= 1000.0 * mm; 
+  NegEdgePt = G4ThreeVector( radMax * std::cos(-270.0*degree), 
+                             radMax * std::sin(-270.0*degree), 0.0); 
+  G4cout << "--------------------------------------------------------" << G4endl; 
+  G4cout << " New point " << NegEdgePt << " should be at RadMax / Neg edge of -270.0 degrees " <<  G4endl;
+  checkPoint( SphDeepNeg, NegEdgePt,  0.0,  -vx,   kSurface); 
+  checkPoint( SphDeepNeg, NegEdgePt,  radMax*kAngTolerance * 0.25,  -vx,   kSurface); 
+  checkPoint( SphDeepNeg, NegEdgePt, -radMax*kAngTolerance * 0.25,  -vx,   kSurface); 
+  checkPoint( SphDeepNeg, NegEdgePt,  radMax*kAngTolerance * 1.25,  -vx,   kSurface); 
+  checkPoint( SphDeepNeg, NegEdgePt, -radMax*kAngTolerance * 1.25,  -vx,   kOutside); 
 
-        PosEdgePt= G4ThreeVector( radMax * std::cos(10.0*degree), radMax * std::sin(10.0*degree), 0.0); 
-	G4cout << "--------------------------------------------------------" << G4endl; 
-	G4cout << " New point " << PosEdgePt << " should be at RadMax Pos edge of +10.0 degrees " <<  G4endl;
-        checkPoint( SphDeepNeg, PosEdgePt,  0.0,  -vy,   kSurface); 
-	checkPoint( SphDeepNeg, PosEdgePt,  radMax*kAngTolerance * 0.25,  -vy,   kSurface); 
-	checkPoint( SphDeepNeg, PosEdgePt, -radMax*kAngTolerance * 0.25,  -vy,   kSurface); 
-	checkPoint( SphDeepNeg, PosEdgePt, -radMax*kAngTolerance * 1.25,  -vy,   kOutside); 
-	checkPoint( SphDeepNeg, PosEdgePt,  radMax*kAngTolerance * 1.25,  -vy,   kSurface); 
+  PosEdgePt= G4ThreeVector( radMax * std::cos(10.0*degree), 
+                            radMax * std::sin(10.0*degree), 0.0);
+ 
+  G4cout << "--------------------------------------------------------" << G4endl; 
+  G4cout << " New point " << PosEdgePt << " should be at RadMax Pos edge of +10.0 degrees " <<  G4endl;
+  checkPoint( SphDeepNeg, PosEdgePt,  0.0,  -vy,   kSurface); 
+  checkPoint( SphDeepNeg, PosEdgePt,  radMax*kAngTolerance * 0.25,  -vy,   kSurface); 
+  checkPoint( SphDeepNeg, PosEdgePt, -radMax*kAngTolerance * 0.25,  -vy,   kSurface); 
+  checkPoint( SphDeepNeg, PosEdgePt, -radMax*kAngTolerance * 1.25,  -vy,   kOutside); 
+  checkPoint( SphDeepNeg, PosEdgePt,  radMax*kAngTolerance * 1.25,  -vy,   kSurface); 
 
-	G4ThreeVector NormInDir = - std::cos(10.0*degree) * vy + std::sin(10.0*degree) * vx; 
-        checkPoint( SphDeepNeg, PosEdgePt,  0.0,  -vy,   kSurface); 
-	checkPoint( SphDeepNeg, PosEdgePt,  radMax*kAngTolerance * 0.25, NormInDir, kSurface); 
-	checkPoint( SphDeepNeg, PosEdgePt, -radMax*kAngTolerance * 0.25, NormInDir, kSurface); 
-	checkPoint( SphDeepNeg, PosEdgePt, -radMax*kAngTolerance * 1.25, NormInDir, kOutside); 
-	checkPoint( SphDeepNeg, PosEdgePt,  radMax*kAngTolerance * 1.25, NormInDir, kSurface); 
+  G4ThreeVector NormInDir = - std::cos(10.0*degree) * vy + std::sin(10.0*degree) * vx; 
 
-	return 0;
+  checkPoint( SphDeepNeg, PosEdgePt,  0.0,  -vy,   kSurface); 
+  checkPoint( SphDeepNeg, PosEdgePt,  radMax*kAngTolerance * 0.25, NormInDir, kSurface); 
+  checkPoint( SphDeepNeg, PosEdgePt, -radMax*kAngTolerance * 0.25, NormInDir, kSurface); 
+  checkPoint( SphDeepNeg, PosEdgePt, -radMax*kAngTolerance * 1.25, NormInDir, kOutside); 
+  checkPoint( SphDeepNeg, PosEdgePt,  radMax*kAngTolerance * 1.25, NormInDir, kSurface); 
+
+  return 0;
 }
 
 // Given the sphere 'rSphere', a point 'origin'
@@ -233,55 +241,59 @@ checkPoint( const G4Sphere &rSphere,
             G4ThreeVector  direction, 
             EInside        expectedInResult)
 {
-    G4int verbose = 0, verboseErr= 2; 
-    G4bool  testAll = false ;   //  if false, do not call DistToIn if Outside etc.
+  G4int verbose = 0, verboseErr= 2; 
+  G4bool  testAll = false ;   //  if false, do not call DistToIn if Outside etc.
 
-    G4ThreeVector newPoint; 
-    G4double  distIn=-1.0, distOut=-1.0; 
+  G4ThreeVector newPoint; 
+  G4double  distIn = -1.0, distOut = -1.0; 
 
-    newPoint = origin + dist * direction; 
+  newPoint = origin + dist * direction; 
 
-    G4int oldPrecision= G4cout.precision(10); 
-    // G4cout << " --- Sphere " << rSphere.GetName() << "" << G4endl;
-    if( verbose > 0 ) {
-      G4cout << G4endl;
-      if (verbose > 2 ) G4cout << " Sphere " << rSphere.GetName();
-      G4cout.precision(10); 
-      if (verbose > 1 ) G4cout << " dir= " << direction;
-      G4cout << " dist= " << dist;
-    } 
+  G4int oldPrecision= G4cout.precision(10); 
+  // G4cout << " --- Sphere " << rSphere.GetName() << "" << G4endl;
 
-    EInside  inSphere=  rSphere.Inside( newPoint ) ; 
+  if( verbose > 0 ) 
+  {
+    G4cout << G4endl;
+    if (verbose > 2 ) G4cout << " Sphere " << rSphere.GetName();
+    G4cout.precision(10); 
+    if (verbose > 1 ) G4cout << " dir= " << direction;
+    G4cout << " dist= " << dist;
+  } 
+  EInside  inSphere=  rSphere.Inside( newPoint ) ; 
                               /*======*/
-    G4cout.precision(15); 
-    // G4cout << " NewPoint  " << newPoint << " is " 
-    G4bool goodIn= (inSphere == expectedInResult) ; 
-    if ( !goodIn ) {
-      G4cout << " ************ Unexpected Result for Inside *************** " << G4endl;
-    } 
-    if ( verbose || !goodIn ) {
-       G4cout << " New point " 
-	      << " is "  <<  OutputInside( inSphere ) 
-	      <<  " vs " <<  OutputInside( expectedInResult ) 
-	      <<  " expected." <<  G4endl ;
-    }
+  G4cout.precision(15); 
+  // G4cout << " NewPoint  " << newPoint << " is " 
+  G4bool goodIn= (inSphere == expectedInResult); 
 
-    G4bool goodDistIn = true; 
+  if ( !goodIn ) 
+  {
+    G4cout << " ************ Unexpected Result for Inside *************** " << G4endl;
+  } 
+  if ( verbose || !goodIn ) 
+  {
+    G4cout << " New point " 
+	   << " is "  <<  OutputInside( inSphere ) 
+	   <<  " vs " <<  OutputInside( expectedInResult ) 
+	   <<  " expected." <<  G4endl ;
+  }
+  G4bool goodDistIn = true; 
 
-    distIn = rSphere.DistanceToIn( newPoint, direction ); 
+  distIn = rSphere.DistanceToIn( newPoint, direction ); 
                     /*===========*/
-    if ( verbose )  G4cout << " DistToIn (p, dir) = " << distIn << G4endl;
-    if( (inSphere == kOutside) 
-        && (distIn < 0.0 ) // Cannot use 0.5*kCarTolerance for Angular tolerance!! 
-      ){
+  if ( verbose )  G4cout << " DistToIn (p, dir) = " << distIn << G4endl;
+
+  if( (inSphere == kOutside) && (distIn < 0.0 ) // Cannot use 0.5*kCarTolerance for Angular tolerance!! 
+    )
+  {
        G4cout << " ********** Unexpected Result for DistanceToIn from outside ********* " << G4endl;
        // G4cout << " It should be " << G4endl;
        goodDistIn = false;
-    }
-    if( (inSphere == kSurface ) 
-        && ( (distIn < 0.0) || (distIn >= kInfinity )) 
-      ){
-       G4cout << " ********** Unexpected Result for DistanceToIn on surface   ********* " << G4endl;
+  }
+  if( (inSphere == kSurface ) && 
+      ( (distIn < 0.0) || (distIn >= kInfinity )) )
+  {
+      G4cout << " ********** Unexpected Result for DistanceToIn on surface   ********* " << G4endl;
        // if ( (distIn != 0.0) ) 
        //  -  Can check that the return value must be 0.0
        //     But in general case the direction can be away from the solid, 
@@ -290,33 +302,35 @@ checkPoint( const G4Sphere &rSphere,
        //            in order to perform this check in general case.
 
        goodDistIn = false;
-    }
-    if ( verbose || !goodDistIn ) {
+  }
+  if ( verbose || !goodDistIn )
+  {
       G4cout << " DistToIn (p, dir) = " << distIn << G4endl;
-    }
-
-    G4bool good= (goodIn && goodDistIn);  
-    if ( !good ){ 
+  }
+  G4bool good= (goodIn && goodDistIn); 
+ 
+  if ( !good )
+  { 
        // There was an error -- document the use case!
-       G4cout << " --- Sphere " << rSphere.GetName() << "" << G4endl;
-       if ( verboseErr > 1 ) { 
-	 G4cout << "  dist= " << dist ; // << G4endl;
-	 G4cout << "  Direction= " << direction  ; // << G4endl; 
-	 G4cout << "  dist/kAngTolerance = " << dist / kAngTolerance << G4endl;
-  	 G4cout << "  Original pt=  " << origin << G4endl; 
-     }
-       G4cout <<   "  Actual-point= " << newPoint << G4endl;
-       G4cout <<   "  Rho= " << G4ThreeVector(newPoint.x(), newPoint.y(), 0.).mag() << G4endl;     
-    } 
+    G4cout << " --- Sphere " << rSphere.GetName() << "" << G4endl;
 
-    if( testAll || (inSphere!=kOutside) ) { 
-      
-       distOut = rSphere.DistanceToOut( newPoint, direction ); 
-                       /*=============*/
-       if ( verbose ) G4cout << " DistToOut (p, dir) = " << distOut << G4endl;
+    if ( verboseErr > 1 )
+    { 
+      G4cout << "  dist= " << dist ; // << G4endl;
+      G4cout << "  Direction= " << direction  ; // << G4endl; 
+      G4cout << "  dist/kAngTolerance = " << dist / kAngTolerance << G4endl;
+      G4cout << "  Original pt=  " << origin << G4endl; 
     }
+    G4cout <<   "  Actual-point= " << newPoint << G4endl;
+    G4cout <<   "  Rho= " << G4ThreeVector(newPoint.x(), newPoint.y(), 0.).mag() << G4endl;     
+  } 
+  if( testAll || (inSphere!=kOutside) ) 
+  { 
+    distOut = rSphere.DistanceToOut( newPoint, direction ); 
+                       /*=============*/
+    if ( verbose ) G4cout << " DistToOut (p, dir) = " << distOut << G4endl;
+  }
+  G4cout.precision(oldPrecision); 
 
-    G4cout.precision(oldPrecision); 
-
-    return good;
+  return good;
 }
