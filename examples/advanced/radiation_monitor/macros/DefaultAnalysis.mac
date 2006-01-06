@@ -1,5 +1,10 @@
+# Default output file name
 /radmon/analysis/SetOutputFileName                         analysis.hbook
+# Format of the file: hbook or xml
 /radmon/analysis/SetOutputFileFormat                       hbook
+#
+#
+#
 /radmon/analysis/CreateSensitiveDetectorType               sdt1
 /radmon/analysis/AppendDataAnalysisToSensitiveDetectorType sdt1 da1
 /radmon/analysis/SetDataAnalysisType                       sdt1 da1 DepositedEnergy
@@ -13,9 +18,10 @@
 #/radmon/detector/SetLayerAttribute MIL-STD-105D ly4 SensitiveDetector SD
 #/radmon/detector/SetLayerAttribute MIL-STD-105D ly5 SensitiveDetector SD
 
+# Set the sensitive volumes: ly1 and ly2 of REM-TOT-500 and of LAAS
+# Collect the energy deposit in the sensitive detector
 /radmon/detector/SetLayerAttribute REM-TOT-500 ly1 SensitiveDetector SD
 /radmon/detector/SetLayerAttribute REM-TOT-500 ly2 SensitiveDetector SD
-
 /radmon/detector/SetLayerAttribute LAAS ly1 SensitiveDetector SD
 /vis/enable
 /radmon/detector/SetLayerAttribute LAAS ly2 SensitiveDetector SD

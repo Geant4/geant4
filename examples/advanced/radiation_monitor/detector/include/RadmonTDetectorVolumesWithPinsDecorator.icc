@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonTDetectorVolumesWithPinsDecorator.icc,v 1.1 2005-09-27 13:55:51 capra Exp $
+// Id:            $Id: RadmonTDetectorVolumesWithPinsDecorator.icc,v 1.2 2006-01-06 12:52:32 guatelli Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -161,7 +161,7 @@
   }
   
   RadmonDetectorLayerVolumeItem * item;
-  RadmonDetectorLayerVolumeItem * motherItem;
+  RadmonDetectorLayerVolumeItem * motherItem(0);
   
   while (n>0)
   {

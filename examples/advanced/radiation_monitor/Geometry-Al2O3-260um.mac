@@ -1,0 +1,36 @@
+/vis/disable
+# Aggiungiamo il layer
+
+/radmon/detector/CreateMultilayer        Copertura
+/radmon/detector/SetMultilayerWidth      Copertura {Pkg-Width}
+/radmon/detector/SetMultilayerHeight     Copertura {Pkg-Height}
+
+/radmon/detector/AppendLayerToMultilayer Copertura ly1
+/radmon/detector/SetLayerType            Copertura ly1 FlatVolume
+/radmon/detector/SetLayerThickness       Copertura ly1 0.260 mm
+/radmon/detector/SetLayerAttribute       Copertura ly1 Material Alumina
+/radmon/detector/SetLayerAttribute       Copertura ly1 VisAttributes 'solid 1. 0. 0. 0.5'
+
+# Ci rifacciamo a mano i conti
+
+# +------------------------+
+# |                        | Alumina             = 0.260 mm         
+# +----+--------------+----+
+# +----+              +----+
+# |    |              |    |
+# +----+---+ +--+ +---+----+
+# +--------+ +--+ +--------+
+# |        | |##| |        |
+# +--------+-+--+-+--------+
+# +------------------------+
+# |                        |
+# +------------------------+
+# +------------------------+
+#
+# (H) Copertura center =  0.130 mm 
+# (D) Packaging Center (default) = (A)/2 =                           0.608  mm
+
+/radmon/detector/CreatePlacement              copertura Copertura
+/radmon/detector/SetRelativePlacementPosition copertura packaging 0. 0. 0.738 mm
+/radmon/detector/SetRelativePlacementRotation copertura packaging 0. 0. 0. deg
+/vis/enable

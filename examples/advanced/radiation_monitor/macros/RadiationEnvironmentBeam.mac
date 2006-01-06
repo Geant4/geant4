@@ -1,3 +1,5 @@
+# Generate protons from a sphere with radius 2 cm. The protons are monoenergetic and their direction is radial, towards
+#the center of the geometry that correspond to the center of the packaging. 
 /radmon/generator/InsertSource Environment
 /radmon/generator/SetRelativeSourceIntensity  Environment 1.
 /radmon/generator/AppendSourceAlgorithm       Environment Particle

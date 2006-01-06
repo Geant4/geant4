@@ -67,7 +67,7 @@
 /radmon/materials/SetMaterialStyle Air wireframe
 
 /radmon/materials/CreateMaterial Alumina 3.970 g/cm3 2
-/radmon/materials/AddComponentByAtoms Alumina Aluminum 1
+/radmon/materials/AddComponentByAtoms Alumina Aluminum 2
 /radmon/materials/AddComponentByAtoms Alumina Oxygen 3
 /radmon/materials/SetMaterialColor Alumina 1. .9 .7
 #/radmon/materials/SetMaterialTrasparency Alumina .6

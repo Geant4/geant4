@@ -1,0 +1,5 @@
+/radmon/application/DisableEventsDump
+/radmon/analysis/SetOutputFileName analysis-no-pkg.hbook
+/radmon/detector/RemovePlacement  packaging
+/run/beamOn 217440
+

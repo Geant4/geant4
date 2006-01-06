@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonLayoutEntityWithAttributes.hh,v 1.3 2005-11-10 08:11:26 capra Exp $
+// Id:            $Id: RadmonLayoutEntityWithAttributes.hh,v 1.4 2006-01-06 12:52:32 guatelli Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Provides attributes to other detector classes
@@ -55,6 +55,7 @@
    void                                         CopyFrom(const RadmonLayoutEntityWithAttributes & copy);
    
   // Private attributes
+  // AttributeItem is the pair: attribute name, value
    typedef std::pair<G4String, G4String>        AttributeItem;
    typedef std::vector<AttributeItem>           AttributesVector;
    AttributesVector                             attributesVector;

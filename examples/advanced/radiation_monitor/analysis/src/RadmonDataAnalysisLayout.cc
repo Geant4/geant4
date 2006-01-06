@@ -3,7 +3,7 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDataAnalysisLayout.cc,v 1.1 2005-11-24 02:33:32 capra Exp $
+// Id:            $Id: RadmonDataAnalysisLayout.cc,v 1.2 2006-01-06 12:52:31 guatelli Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -14,9 +14,7 @@
 
 #include <iomanip>
 
-
-
-void                                            RadmonDataAnalysisLayout :: DumpLayout(std::ostream & out, const G4String & indent) const
+void RadmonDataAnalysisLayout :: DumpLayout(std::ostream & out, const G4String & indent) const
 {
  G4int width(RADMONDUMP_INDENT_WIDTH-indent.length());
  if (width<0)

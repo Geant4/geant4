@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorLayerVolumeItem.cc,v 1.2 2005-11-25 01:53:30 capra Exp $
+// Id:            $Id: RadmonDetectorLayerVolumeItem.cc,v 1.3 2006-01-06 12:52:32 guatelli Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -15,7 +15,7 @@
 #include "G4Material.hh"
 #include "G4SDManager.hh"
 
-                                                RadmonDetectorLayerVolumeItem :: ~RadmonDetectorLayerVolumeItem()
+RadmonDetectorLayerVolumeItem :: ~RadmonDetectorLayerVolumeItem()
 {
  if (volumePhysical)
  {
@@ -38,11 +38,7 @@
  }
 }
 
-
-
-
-
-G4LogicalVolume *                               RadmonDetectorLayerVolumeItem :: GetLogicalVolume(void)
+G4LogicalVolume * RadmonDetectorLayerVolumeItem :: GetLogicalVolume(void)
 {
  if (! volumeLogical)
  {

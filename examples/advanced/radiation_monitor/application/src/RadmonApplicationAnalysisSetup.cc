@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplicationAnalysisSetup.cc,v 1.3 2005-12-06 19:38:34 capra Exp $
+// Id:            $Id: RadmonApplicationAnalysisSetup.cc,v 1.4 2006-01-06 12:52:31 guatelli Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -25,7 +25,7 @@
                                                 }                                                                                        \
                                                 factory->AppendDataAnalysisWithLabel(constructor)
 
- G4bool                                         RadmonApplicationAnalysisSetup :: CreateDataAnalysis(RadmonDataAnalysisWithLabelFactory * factory)
+ G4bool RadmonApplicationAnalysisSetup :: CreateDataAnalysis(RadmonDataAnalysisWithLabelFactory * factory)
  {
   RadmonVDataAnalysisWithLabel * constructor;
 
@@ -34,7 +34,7 @@
   return true;
  }
 #else  /* G4ANALYSIS_USE */
- G4bool                                         RadmonApplicationAnalysisSetup :: CreateDataAnalysis(RadmonDataAnalysisWithLabelFactory * /* factory */)
+ G4bool RadmonApplicationAnalysisSetup :: CreateDataAnalysis(RadmonDataAnalysisWithLabelFactory * /* factory */)
  {
   return false;
  }

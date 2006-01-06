@@ -1,9 +1,10 @@
+
 //
 // File name:     RadmonApplication.cc
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplication.cc,v 1.12 2005-12-06 19:38:34 capra Exp $
+// Id:            $Id: RadmonApplication.cc,v 1.13 2006-01-06 12:52:31 guatelli Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -47,9 +48,7 @@
  #include "G4VisExecutive.hh"
 #endif /* G4VIS_USE */
 
-
-
-                                                RadmonApplication :: RadmonApplication(const RadmonApplicationOptions & options)
+RadmonApplication :: RadmonApplication(const RadmonApplicationOptions & options)
 :
  RadmonApplicationDetectorSetup(options),
  RadmonApplicationGeneratorSetup(options),
@@ -95,8 +94,7 @@
   return;
  }
  
- 
- // Construct the detector layout
+  // Construct the detector layout
  detectorLayout=new RadmonDetectorLayout;
  
  if (detectorLayout==0)

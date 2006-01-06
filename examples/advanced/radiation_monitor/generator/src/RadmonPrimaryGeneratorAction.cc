@@ -3,7 +3,7 @@
 // Creation date: Oct 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonPrimaryGeneratorAction.cc,v 1.2 2005-11-10 08:11:26 capra Exp $
+// Id:            $Id: RadmonPrimaryGeneratorAction.cc,v 1.3 2006-01-06 12:52:32 guatelli Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -17,7 +17,7 @@
 
 #include "G4UnitsTable.hh"
 
-                                                RadmonPrimaryGeneratorAction :: RadmonPrimaryGeneratorAction(RadmonVGeneratorLayout * layout, RadmonVGeneratorsFactory * factory)
+RadmonPrimaryGeneratorAction :: RadmonPrimaryGeneratorAction(RadmonVGeneratorLayout * layout, RadmonVGeneratorsFactory * factory)
 :
  particlesGun(1),
  generatorLayout(layout),
@@ -32,10 +32,8 @@
 
  layout->AttachObserver(this);
 }
- 
- 
- 
-                                                RadmonPrimaryGeneratorAction :: ~RadmonPrimaryGeneratorAction()
+
+RadmonPrimaryGeneratorAction :: ~RadmonPrimaryGeneratorAction()
 {
  generatorLayout->DetachObserver(this);
   
@@ -44,11 +42,7 @@
  delete generatorsFactory;
 }
 
-
-
-
-
-void                                            RadmonPrimaryGeneratorAction :: GeneratePrimaries(G4Event * anEvent)
+void RadmonPrimaryGeneratorAction :: GeneratePrimaries(G4Event * anEvent)
 {
  if (needUpdate)
  {

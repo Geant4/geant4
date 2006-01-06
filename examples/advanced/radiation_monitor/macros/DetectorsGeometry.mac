@@ -13,8 +13,11 @@
 /radmon/detector/SetLayerType            REM-TOT-500  ly2 FlatVolumeWithPads
 /radmon/detector/SetLayerThickness       REM-TOT-500  ly2 {Det-Pads-Thickness}
 /radmon/detector/SetLayerAttribute       REM-TOT-500  ly2 Material {Det-Material}
+# Fix 4 Pads pf type 1 with the centers set in the positions '() () () ()'
 /radmon/detector/SetLayerAttribute       REM-TOT-500  ly2 PadsPosition_1 '(0.315 mm, 0.315 mm) (0.105 mm, 0.315 mm) (-0.105 mm, 0.315 mm) (-0.315 mm, 0.315 mm)'
+# Fix 4 Pads pf type 1 with the centers set in the positions '() () () ()'
 /radmon/detector/SetLayerAttribute       REM-TOT-500  ly2 PadsPosition_2 '(0.315 mm, 0.105 mm) (0.315 mm, -0.105 mm) (0.315 mm, -0.315 mm) (0.105 mm, -0.315 mm)'
+# Fix 4 Pads pf type 1 with the centers set in the positions '() () () ()'
 /radmon/detector/SetLayerAttribute       REM-TOT-500  ly2 PadsPosition_3 '(-0.105 mm, -0.315 mm) (-0.315 mm, -0.315 mm) (-0.315 mm, -0.105 mm) (-0.315 mm, 0.105 mm) (0 mm, 0.165 mm)'
 /radmon/detector/SetLayerAttribute       REM-TOT-500  ly2 PadsWidth_1    '{Det-Pads-Length}'
 /radmon/detector/SetLayerAttribute       REM-TOT-500  ly2 PadsHeight_1   '{Det-Pads-Length}'
@@ -39,6 +42,7 @@
 /radmon/detector/SetLayerType            LAAS         ly2 FlatVolumeWithPads
 /radmon/detector/SetLayerThickness       LAAS         ly2 {Det2-Pads-Thickness}
 /radmon/detector/SetLayerAttribute       LAAS         ly2 Material {Det2-Material}
+# 4 pads are set in position () () () ()
 /radmon/detector/SetLayerAttribute       LAAS         ly2 PadsPosition_1 '(0 mm, -0.8 mm) (0 mm, 0.8 mm) (0.24 mm, 0.78 mm) (-0.24 mm, 0.78 mm)'
 /radmon/detector/SetLayerAttribute       LAAS         ly2 PadsWidth_1    '{Det2-Pads-Length}'
 /radmon/detector/SetLayerAttribute       LAAS         ly2 PadsHeight_1   '{Det2-Pads-Length}'

@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorLayout.hh,v 1.4 2005-09-19 19:42:13 capra Exp $
+// Id:            $Id: RadmonDetectorLayout.hh,v 1.5 2006-01-06 12:52:32 guatelli Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Class to keep track of the configured detector layout
@@ -79,7 +79,7 @@
 
    virtual G4bool                               Load(std::istream & in);
    virtual G4bool                               Save(std::ostream & out) const;
-
+                    
 
   private:
    inline bool                                  IsPlaced(const G4String & multilayerLabel);

@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorMultilayerLayout.cc,v 1.6 2005-10-24 14:51:36 capra Exp $
+// Id:            $Id: RadmonDetectorMultilayerLayout.cc,v 1.7 2006-01-06 12:52:32 guatelli Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -16,7 +16,7 @@
 
 
 
-                                                RadmonDetectorMultilayerLayout :: RadmonDetectorMultilayerLayout(const RadmonDetectorMultilayerLayout & copy)
+RadmonDetectorMultilayerLayout :: RadmonDetectorMultilayerLayout(const RadmonDetectorMultilayerLayout & copy)
 :
  multilayerLabel(copy.multilayerLabel),
  multilayerWidth(copy.multilayerWidth),
@@ -25,11 +25,7 @@
 {
 }
 
-
-
-
-
-RadmonDetectorMultilayerLayout &                RadmonDetectorMultilayerLayout :: operator=(const RadmonDetectorMultilayerLayout & copy)
+RadmonDetectorMultilayerLayout & RadmonDetectorMultilayerLayout :: operator=(const RadmonDetectorMultilayerLayout & copy)
 {
  multilayerLabel=copy.multilayerLabel;
  multilayerWidth=copy.multilayerWidth;
@@ -39,11 +35,7 @@ RadmonDetectorMultilayerLayout &                RadmonDetectorMultilayerLayout :
  return (*this);
 }
 
-
-
-
-
-G4double                                        RadmonDetectorMultilayerLayout :: GetTotalThickness(void) const
+G4double RadmonDetectorMultilayerLayout :: GetTotalThickness(void) const
 {
  G4int i(multilayerLayersCollection.GetNItems());
  G4double thickness(0);
@@ -57,128 +49,84 @@ G4double                                        RadmonDetectorMultilayerLayout :
  return thickness;
 }
 
-
-
-
-
-G4int                                           RadmonDetectorMultilayerLayout :: GetNLayers(void) const
+G4int RadmonDetectorMultilayerLayout :: GetNLayers(void) const
 {
  return multilayerLayersCollection.GetNItems();
 }
 
-
-
-G4bool                                          RadmonDetectorMultilayerLayout :: Empty(void) const
+G4bool RadmonDetectorMultilayerLayout :: Empty(void) const
 {
  return multilayerLayersCollection.Empty();
 }
 
-
-
-
-
-const RadmonDetectorLayerLayout &               RadmonDetectorMultilayerLayout :: GetLayer(G4int index) const
+const RadmonDetectorLayerLayout & RadmonDetectorMultilayerLayout :: GetLayer(G4int index) const
 {
  return multilayerLayersCollection.GetItem(index);
 }
 
 
 
-RadmonDetectorLayerLayout &                     RadmonDetectorMultilayerLayout :: GetLayer(G4int index)
+RadmonDetectorLayerLayout & RadmonDetectorMultilayerLayout :: GetLayer(G4int index)
 {
  return multilayerLayersCollection.GetItem(index);
 }
 
-
-
-
-
-G4bool                                          RadmonDetectorMultilayerLayout :: ExistsLayerByLabel(const G4String & layerLabel) const
+G4bool RadmonDetectorMultilayerLayout :: ExistsLayerByLabel(const G4String & layerLabel) const
 {
  return multilayerLayersCollection.ExistsItemByLabel(layerLabel);
 }
 
-
-
-G4int                                           RadmonDetectorMultilayerLayout :: MultiplicityLayerByLabel(const G4String & layerLabel) const
+G4int RadmonDetectorMultilayerLayout :: MultiplicityLayerByLabel(const G4String & layerLabel) const
 {
  return multilayerLayersCollection.MultiplicityItemByLabel(layerLabel);
 }
 
-
-
-
-
-const RadmonDetectorLayerLayout &               RadmonDetectorMultilayerLayout :: FindLayerByLabel(const G4String & layerLabel, G4int count) const
+const RadmonDetectorLayerLayout & RadmonDetectorMultilayerLayout :: FindLayerByLabel(const G4String & layerLabel, G4int count) const
 {
  return multilayerLayersCollection.FindItemByLabel(layerLabel, count);
 }
 
-
-
-RadmonDetectorLayerLayout &                     RadmonDetectorMultilayerLayout :: FindLayerByLabel(const G4String & layerLabel, G4int count)
+RadmonDetectorLayerLayout & RadmonDetectorMultilayerLayout :: FindLayerByLabel(const G4String & layerLabel, G4int count)
 {
  return multilayerLayersCollection.FindItemByLabel(layerLabel, count);
 }
 
-
-
-
-
-RadmonDetectorLayerLayout &                     RadmonDetectorMultilayerLayout :: AppendLayer(void)
+RadmonDetectorLayerLayout & RadmonDetectorMultilayerLayout :: AppendLayer(void)
 {
  return multilayerLayersCollection.AppendItem();
 }
 
-
-
-RadmonDetectorLayerLayout &                     RadmonDetectorMultilayerLayout :: PrependLayer(void)
+RadmonDetectorLayerLayout & RadmonDetectorMultilayerLayout :: PrependLayer(void)
 {
  return multilayerLayersCollection.PrependItem();
 }
 
-
-
-
-
-void                                            RadmonDetectorMultilayerLayout :: RemoveLayerByLabel(const G4String & layerLabel, G4int count)
+void RadmonDetectorMultilayerLayout :: RemoveLayerByLabel(const G4String & layerLabel, G4int count)
 {
  multilayerLayersCollection.RemoveItemByLabel(layerLabel, count);
 }
 
-
-
-void                                            RadmonDetectorMultilayerLayout :: RemoveLayersByLabel(const G4String & layerLabel)
+void RadmonDetectorMultilayerLayout :: RemoveLayersByLabel(const G4String & layerLabel)
 {
  multilayerLayersCollection.RemoveItemsByLabel(layerLabel);
 }
 
-
-
-void                                            RadmonDetectorMultilayerLayout :: RemoveLayer(G4int index)
+void RadmonDetectorMultilayerLayout :: RemoveLayer(G4int index)
 {
  multilayerLayersCollection.RemoveItem(index);
 }
 
-
-
-void                                            RadmonDetectorMultilayerLayout :: RemoveLayersByRange(G4int first, G4int last)
+void RadmonDetectorMultilayerLayout :: RemoveLayersByRange(G4int first, G4int last)
 {
  multilayerLayersCollection.RemoveItemsByRange(first, last);
 }
 
-
-
-void                                            RadmonDetectorMultilayerLayout :: RemoveAllLayers(void)
+void  RadmonDetectorMultilayerLayout :: RemoveAllLayers(void)
 {
  multilayerLayersCollection.RemoveAllItems();
 }
 
-
-
-
-
-void                                            RadmonDetectorMultilayerLayout :: DumpLayout(std::ostream & out, const G4String & indent) const
+void RadmonDetectorMultilayerLayout :: DumpLayout(std::ostream & out, const G4String & indent) const
 {
  G4int width(RADMONDUMP_INDENT_WIDTH-indent.length());
  if (width<0)

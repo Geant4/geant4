@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorConstruction.hh,v 1.3 2005-10-24 14:51:36 capra Exp $
+// Id:            $Id: RadmonDetectorConstruction.hh,v 1.4 2006-01-06 12:52:32 guatelli Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Implementation of the G4VUserDetectorConstruction
@@ -53,6 +53,9 @@
 
   // Private data types
    typedef std::pair<RadmonVDetectorEntityConstructor *, G4VPhysicalVolume *> LayerItem;
+   
+  // List, it is not possible to access with an iterator to the elements of the list; it is possible to access to the last 
+  // inserted element
    typedef std::stack<LayerItem>                LayersStack;
 
   // Private attributes
@@ -61,6 +64,7 @@
     
    LayersStack                                  layersStack;
 
+   // MotherVolume
    RadmonVDetectorEntityConstructor *           environmentConstructor;
    G4VPhysicalVolume *                          environmentPhysicalVolume;
    G4LogicalVolume *                            environmentLogicalVolume;

@@ -20,5 +20,6 @@
 /control/alias Pkg-Holes-Separation   0.5 mm
 
 /control/alias Pkg-Pins-Length        1 mm
+# The pin with ID = 11 is marked. The pins is one of the 36.
 /control/alias Pkg-Pin-Marked         11
 /control/alias Pkg-Pin-Marked-Length  1.25 mm

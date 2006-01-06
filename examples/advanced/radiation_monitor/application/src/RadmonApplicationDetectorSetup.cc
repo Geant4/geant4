@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplicationDetectorSetup.cc,v 1.1 2005-10-25 16:39:12 capra Exp $
+// Id:            $Id: RadmonApplicationDetectorSetup.cc,v 1.2 2006-01-06 12:52:31 guatelli Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -41,7 +41,7 @@
                                                 }                                                                                        \
                                                 factory->AppendLabelledEntityConstructor(constructor)
 
-G4bool                                          RadmonApplicationDetectorSetup :: CreateDetectorEntityConstructors(RadmonDetectorLabelledEntitiesConstructorsFactory * factory)
+G4bool RadmonApplicationDetectorSetup :: CreateDetectorEntityConstructors(RadmonDetectorLabelledEntitiesConstructorsFactory * factory)
 {
  RadmonVDetectorLabelledEntityConstructor * constructor;
  

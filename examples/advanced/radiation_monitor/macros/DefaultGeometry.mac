@@ -10,10 +10,6 @@
 /radmon/detector/CreatePlacement              detector03 LAAS
 /radmon/detector/CreatePlacement              detector04 LAAS
 
-#/vis/scene/add/volume worldPV
-#/vis/sceneHandler/attach DefaultScene
-
-#/radmon/detector/SetPlacementRotation packaging 75 55 40 deg
 /control/execute macros/ApplyRelativePositioning.mac
 /radmon/detector/DisableEnvironment
 /vis/enable

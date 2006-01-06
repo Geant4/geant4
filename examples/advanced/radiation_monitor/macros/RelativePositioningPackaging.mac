@@ -1,6 +1,25 @@
-# Packaging thickness 1.208 mm
-# Packaging base 0.404 mm
-# Detector thickness 0.405 mm
+#
+#           Aluminum
+# +----+    0.005     +----+ Gold + metalization = 0.003+0.001 mm 
+# +----+      |       +----+
+# |    |      v       |    | Ceramics            = 0.400
+# +----+---+ +--+ +---+----+   ^
+# +--------+ +--+ +--------+   | (C) 0.405 mm
+# |        | |##| |        |   |
+# +--------+-+--+-+--------+ ^ v
+# +------------------------+ |
+# |                        | | (B) 0.408 mm
+# +------------------------+ |
+# +------------------------+ v
+#
+# (A) Packaging thickness 0.400 mm * 3 + (0.003 mm + 0.001 mm) * 4 = 1.216  mm
+# (B) Packaging base 0.400 mm + (0.003 mm + 0.001 mm) * 2 =          0.408  mm
+# (C) Detector thickness 0.400 mm + 0.005 mm =                       0.405  mm
+#
+# (D) Packaging Center (default) = (A)/2 =                           0.608  mm
+# (E) Detector Center            = (C)/2 =                           0.2025 mm
+# (E)+(B)                                                            0.6105 mm
+# (F) (B)+(E) - (D) =                                                0.0025 mm
 
-/control/alias Det-Height-Rel-Pkg     0.0065 mm
-/control/alias Det2-Height-Rel-Pkg    0.0065 mm
+/control/alias Det-Height-Rel-Pkg      0.0025 mm
+/control/alias Det2-Height-Rel-Pkg     0.0025 mm

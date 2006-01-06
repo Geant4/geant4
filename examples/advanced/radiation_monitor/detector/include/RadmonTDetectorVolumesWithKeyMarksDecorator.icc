@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonTDetectorVolumesWithKeyMarksDecorator.icc,v 1.1 2005-09-27 13:55:51 capra Exp $
+// Id:            $Id: RadmonTDetectorVolumesWithKeyMarksDecorator.icc,v 1.2 2006-01-06 12:52:32 guatelli Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -116,8 +116,8 @@
    return 0;
   }
   
-  G4double markedPinRadius;
-  G4double markedPinStep;
+  G4double markedPinRadius(0);
+  G4double markedPinStep(0);
   
   if (markedPin>0)
   {
@@ -196,7 +196,7 @@
   }
   
   RadmonDetectorLayerVolumeItem * item;
-  RadmonDetectorLayerVolumeItem * motherItem;
+  RadmonDetectorLayerVolumeItem * motherItem(0);
   
   while (n>0)
   {

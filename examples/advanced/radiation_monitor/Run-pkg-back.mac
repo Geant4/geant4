@@ -1,0 +1,6 @@
+# Back con packaging
+
+/radmon/application/DisableEventsDump
+/radmon/analysis/SetOutputFileName analysis-pkg-back.hbook
+/run/beamOn 217440
+

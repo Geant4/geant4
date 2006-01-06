@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonVLayoutSubject.hh,v 1.2 2005-11-24 02:36:09 capra Exp $
+// Id:            $Id: RadmonVLayoutSubject.hh,v 1.3 2006-01-06 12:52:32 guatelli Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Subject class of the observer-subjectmodel for the detector
@@ -37,6 +37,8 @@
    RadmonVLayoutSubject &                       operator=(const RadmonVLayoutSubject & copy);
 
   // Private attributes
+  // List of pointers to RadmonVLayoutObserver
+  // set does not care of the order of the elements inside the list
    typedef std::set<RadmonVLayoutObserver *>    ObserversSet;
    ObserversSet                                 observersSet;
  };

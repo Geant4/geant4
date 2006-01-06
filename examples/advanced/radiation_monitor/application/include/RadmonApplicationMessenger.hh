@@ -3,7 +3,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplicationMessenger.hh,v 1.1 2005-11-24 02:34:21 capra Exp $
+// Id:            $Id: RadmonApplicationMessenger.hh,v 1.2 2006-01-06 12:52:31 guatelli Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   UI commands for managing application level options
@@ -46,5 +46,6 @@
    RADMON_DECLARE_COMMAND(DisableEventsDump);
    RADMON_DECLARE_COMMAND(EnableTracksVisualisation);
    RADMON_DECLARE_COMMAND(DisableTracksVisualisation);
+   RADMON_DECLARE_COMMAND(SetSeed);
  };
 #endif /* RADMONAPPLICATIONMESSENGER_HH */

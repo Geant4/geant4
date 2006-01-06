@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2005-12-06 19:36:23 capra Exp $
+# $Id: GNUmakefile,v 1.6 2006-01-06 12:52:32 guatelli Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for exaple subpackage
 # R. Capra, 09 Sep 2005
@@ -22,6 +22,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/hadrons/barions/include \
             -I$(G4BASE)/particles/hadrons/ions/include \
             -I$(G4BASE)/particles/hadrons/mesons/include \
+            -I$(G4BASE)/particles/shortlived/include \
             -I$(G4BASE)/processes/decay/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
