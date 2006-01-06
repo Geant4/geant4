@@ -1,0 +1,38 @@
+# Default output file name
+/radmon/analysis/SetOutputFileName                         analysis.hbook
+# Format of the file: hbook or xml
+/radmon/analysis/SetOutputFileFormat                       hbook
+#
+#
+#
+# Register the energy deposit in all the sensitive detectors that have sdt1 label
+/radmon/analysis/CreateSensitiveDetectorType               sdt1
+/radmon/analysis/AppendDataAnalysisToSensitiveDetectorType sdt1 da1
+/radmon/analysis/SetDataAnalysisType                       sdt1 da1 DepositedEnergy
+
+# Dummy examples:
+# typology of sdt2: Store Deposit energy (label:da2) and FluxCounter (label:da3)
+/radmon/analysis/CreateSensitiveDetectorType               sdt2
+/radmon/analysis/AppendDataAnalysisToSensitiveDetectorType sdt2 da2
+/radmon/analysis/SetDataAnalysisType                       sdt2 da2 DepositedEnergy
+/radmon/analysis/AppendDataAnalysisToSensitiveDetectorType sdt2 da3
+/radmon/analysis/SetDataAnalysisType                       sdt2 da3 FluxCounter
+
+# register energy deposit and flux in the sensitive detector: RT500-1 amd LAAS-1
+# register energy deposit in LAAS-2  and RT500-2
+/radmon/analysis/CreateSensitiveDetector                   RT500-1 sdt2
+/radmon/analysis/CreateSensitiveDetector                   RT500-2 sdt1
+/radmon/analysis/CreateSensitiveDetector                   LAAS-1 sdt2
+/radmon/analysis/CreateSensitiveDetector                   LAAS-2 sdt1
+
+/vis/disable
+
+# Set the sensitive volumes: ly1 and ly2 of REM-TOT-500 and of LAAS
+# Collect the energy deposit in the sensitive detector
+# Here we define the sensitive deterctors of type RT500-1 and RT500-2, LAAS-1 and LAAS-2
+# This macro defines the sensitive detectors of the experimental setup
+/radmon/detector/SetLayerAttribute REM-TOT-500 ly1 SensitiveDetector RT500-1
+/radmon/detector/SetLayerAttribute REM-TOT-500 ly2 SensitiveDetector RT500-2
+/radmon/detector/SetLayerAttribute LAAS ly1 SensitiveDetector LAAS-1
+/vis/enable
+/radmon/detector/SetLayerAttribute LAAS ly2 SensitiveDetector LAAS-2
