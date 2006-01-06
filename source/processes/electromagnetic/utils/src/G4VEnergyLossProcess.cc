@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.69 2005-10-27 14:04:35 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.70 2006-01-06 09:31:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -88,6 +88,7 @@
 // 04-09-05 default lambdaFactor 0.8 (V.Ivanchenko)
 // 05-10-05 protection against 0 energy loss added (L.Urban)
 // 17-10-05 protection above has been removed (L.Urban)
+// 06-01-06 reset currentCouple when StepFunction is changed (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -1158,6 +1159,7 @@ void G4VEnergyLossProcess::SetStepLimits(G4double v1, G4double v2)
   dRoverRange = v1;
   finalRange = v2;
   if (dRoverRange > 1.0) dRoverRange = 1.0;
+  currentCouple = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
