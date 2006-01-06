@@ -1,0 +1,22 @@
+# $Id: allproceses.mac,v 1.1 2006-01-06 12:09:57 maire Exp $
+#
+# Macro file for "TestEm13.cc"
+# (can be run in batch, without graphic)
+#
+# photon 100 keV; all processes
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Water
+/testem/det/setSize 100 m
+#
+###/testem/phys/addPhysics g4v52
+#
+/run/initialize
+#
+/gun/energy 100 keV
+#
+/testem/event/printModulo 10000
+#
+/run/beamOn 100000
