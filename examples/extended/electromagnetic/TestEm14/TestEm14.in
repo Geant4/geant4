@@ -1,0 +1,22 @@
+# $Id: TestEm14.in,v 1.1 2006-01-06 13:39:00 maire Exp $
+#
+# Macro file for "TestEm14.cc"
+# (can be run in batch, without graphic)
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Iron
+/testem/det/setSize 1 m
+#
+/testem/phys/addPhysics standard
+/testem/phys/setCuts 1 mm
+#
+/run/initialize
+#
+/gun/particle mu+
+/gun/energy 10 TeV
+#
+/testem/event/printModulo 1000
+#
+/run/beamOn 10000
