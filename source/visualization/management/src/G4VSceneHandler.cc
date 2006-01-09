@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.47 2006-01-05 15:34:54 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.48 2006-01-09 17:40:08 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,7 +75,10 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   fViewCount             (0),
   fpViewer               (0),
   fpScene                (0),
-  fMarkForClearingTransientStore (true), // Always clear and refesh first time.
+  fMarkForClearingTransientStore (true),  // Ready for first
+					  // ClearTransientStoreIfMarked(),
+					  // e.g., at end of run (see
+					  // G4VisManager.cc).
   fSecondPassRequested   (false),
   fSecondPass            (false),
   fReadyForTransients    (true),  // Only false while processing scene.
@@ -500,11 +503,10 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
   } else {
     G4VisManager::Verbosity verbosity =
       G4VisManager::GetInstance()->GetVerbosity();
-    if (verbosity >= G4VisManager::warnings) {
+    if (verbosity >= G4VisManager::errors) {
       G4cout <<
-	"WARNING: G4VSceneHandler::ProcessScene: No run-duration models in"
-	"\n  scene.  \"World\" will be added if you attempt to draw a view"
-	     << G4endl;
+	"ERROR: G4VSceneHandler::ProcessScene:"
+	"\n  No run-duration models in scene data." << G4endl;
     }
   }
 
