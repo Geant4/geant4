@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.48 2006-01-09 17:40:08 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.49 2006-01-09 18:49:01 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -503,10 +503,11 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
   } else {
     G4VisManager::Verbosity verbosity =
       G4VisManager::GetInstance()->GetVerbosity();
-    if (verbosity >= G4VisManager::errors) {
+    if (verbosity >= G4VisManager::warnings) {
       G4cout <<
-	"ERROR: G4VSceneHandler::ProcessScene:"
-	"\n  No run-duration models in scene data." << G4endl;
+	"WARNING: G4VSceneHandler::ProcessScene: No run-duration models in"
+	"\n  scene.  \"World\" will be added if you attempt to draw a view"
+	     << G4endl;
     }
   }
 
