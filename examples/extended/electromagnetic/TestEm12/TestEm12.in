@@ -1,4 +1,4 @@
-# $Id: TestEm12.in,v 1.2 2005-07-22 11:48:23 maire Exp $
+# $Id: TestEm12.in,v 1.3 2006-01-09 14:35:21 maire Exp $
 #
 # no constraint on tracking step
 #
@@ -14,14 +14,13 @@
 #
 /run/initialize
 #
-/process/eLoss/integral 0
 /testem/phys/setCuts 1 mum
 #
 /gun/particle e-
 /gun/energy 4 MeV
 #
 /testem/histo/setFileType hbook
-/testem/histo/setFileName noint.v71
+/testem/histo/setFileName testem12
 /testem/histo/setHisto 1 120  0.   2.4 cm	#edep profile
 /testem/histo/setHisto 2 180  0.   4.5 MeV	#total Edep
 /testem/histo/setHisto 3 100  0.    3. cm	#true track length
@@ -30,6 +29,6 @@
 /testem/histo/setcsdaRange       2.037 cm
 /testem/histo/setHisto 8 120  0.   1.2 none	#normalized edep profile
 #
-/testem/event/printModulo 1000
+/testem/event/printModulo 2000
 #
-/run/beamOn 10000
+/run/beamOn 20000
