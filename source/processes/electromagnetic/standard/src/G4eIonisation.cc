@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisation.cc,v 1.48 2005-10-02 16:38:11 maire Exp $
+// $Id: G4eIonisation.cc,v 1.49 2006-01-10 16:06:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -61,6 +61,7 @@
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 12-08-05 SetStepLimits(0.2, 0.1*mm) (mma)
 // 02-09-05 Return SetStepLimits(1, 1*mm) (V.Ivantchenko)
+// 10-01-06 SetStepLimits -> SetStepFunction (V.Ivantchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -88,6 +89,9 @@ G4eIonisation::G4eIonisation(const G4String& name)
   SetLambdaBinning(120);
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*TeV);
+  SetStepFunction(0.2, 1*mm);
+  SetIntegral(true);
+  SetVerboseLevel(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -97,8 +101,9 @@ G4eIonisation::~G4eIonisation()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part,
-                                                const G4ParticleDefinition*)
+void G4eIonisation::InitialiseEnergyLossProcess(
+		    const G4ParticleDefinition* part,
+		    const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     if(part == G4Positron::Positron()) isElectron = false;
@@ -111,9 +116,6 @@ void G4eIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part
     em->SetLowEnergyLimit(100*eV);
     em->SetHighEnergyLimit(100*TeV);
     AddEmModel(1, em, flucModel);
-
-    SetStepLimits(0.2, 1*mm);
-    SetIntegral(true);
 
     isInitialised = true;
   }

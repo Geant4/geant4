@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.33 2005-04-08 12:39:58 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.34 2006-01-10 16:06:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -45,6 +45,7 @@
 // 27-05-04 Set integral to be a default regime (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 10-01-06 SetStepLimits -> SetStepFunction (V.Ivantchenko)
 //
 //
 // -------------------------------------------------------------------
@@ -78,7 +79,10 @@ G4ionIonisation::G4ionIonisation(const G4String& name)
   SetLambdaBinning(120);
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*TeV);
-  SetVerboseLevel(0);
+  SetLinearLossLimit(0.15);
+  SetStepFunction(0.1, 0.1*mm);
+  SetIntegral(true);
+  SetVerboseLevel(1);
   corr = G4LossTableManager::Instance()->EmCorrections();  
 }
 
@@ -89,8 +93,9 @@ G4ionIonisation::~G4ionIonisation()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4ionIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part,
-                                                  const G4ParticleDefinition* bpart)
+void G4ionIonisation::InitialiseEnergyLossProcess(
+		      const G4ParticleDefinition* part,
+		      const G4ParticleDefinition* bpart)
 {
   if(isInitialised) return;
 
@@ -118,10 +123,6 @@ void G4ionIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* pa
   em1->SetLowEnergyLimit(eth);
   em1->SetHighEnergyLimit(100.0*TeV);
   AddEmModel(2, em1, flucModel);
-
-  SetLinearLossLimit(0.15);
-  SetStepLimits(0.1, 0.1*mm);
-
   isInitialised = true;
 }
 

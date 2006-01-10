@@ -1,4 +1,4 @@
-$Id: History,v 1.196 2005-12-11 12:21:11 vnivanch Exp $
+$Id: History,v 1.197 2006-01-10 16:06:23 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
- 12 December 05: L.Urban (emstand-V07-01-30)
+10 January 05: V.Ivant (emstand-V08-00-00)
+- substitute the method SetStepLimits by SetStepFunction
+- move initialisation of default values to the constructor 
+
+12 December 05: L.Urban (emstand-V07-01-30)
 - G4MultipleScattering: data member rangecut removed, step limit
                         does not depend on cut any more
      

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hhIonisation.cc,v 1.2 2005-11-29 08:13:48 vnivanch Exp $
+// $Id: G4hhIonisation.cc,v 1.3 2006-01-10 16:04:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,6 +35,7 @@
 // Creation date: 30.09.2005
 //
 // Modifications:
+// 10-01-06 SetStepLimits -> SetStepFunction (V.Ivantchenko)
 //
 //
 // -------------------------------------------------------------------
@@ -63,7 +64,8 @@ G4hhIonisation::G4hhIonisation(const G4String& name)
   SetLambdaBinning(120);
   SetMinKinEnergy(minKinEnergy);
   SetMaxKinEnergy(100.0*TeV);
-  SetVerboseLevel(2);
+  SetStepFunction(0.1, 0.1*mm);
+  SetVerboseLevel(1);
   mass = 0.0;
   ratio = 0.0;
 }
@@ -107,9 +109,8 @@ void G4hhIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
   em1->SetHighEnergyLimit(100.0*TeV);
   AddEmModel(nm, em1, flucModel);
 
-  SetStepLimits(0.1, 0.1*mm);
-
-  G4cout << "G4hhIonisation is initialised: nm= " << nm << G4endl;
+  if(verboseLevel>0)
+    G4cout << "G4hhIonisation is initialised: Nmodels= " << nm << G4endl;
 
   isInitialised = true;
 }

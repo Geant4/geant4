@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.61 2005-10-02 16:38:11 maire Exp $
+// $Id: G4hIonisation.cc,v 1.62 2006-01-10 16:06:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -70,6 +70,7 @@
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 24-03-05 Optimize internal interfaces (V.Ivantchenko)
 // 12-08-05 SetStepLimits(0.2, 0.1*mm) (mma)
+// 10-01-06 SetStepLimits -> SetStepFunction (V.Ivantchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -100,7 +101,9 @@ G4hIonisation::G4hIonisation(const G4String& name)
   SetLambdaBinning(120);
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*TeV);
-  SetVerboseLevel(0);
+  SetStepFunction(0.2, 1*mm);
+  SetIntegral(true);
+  SetVerboseLevel(1);
   mass = 0.0;
   ratio = 0.0;
 }
@@ -110,10 +113,11 @@ G4hIonisation::G4hIonisation(const G4String& name)
 G4hIonisation::~G4hIonisation()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....  
 
-void G4hIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part,
-                                                const G4ParticleDefinition* bpart)
+void G4hIonisation::InitialiseEnergyLossProcess(
+		    const G4ParticleDefinition* part,
+		    const G4ParticleDefinition* bpart)
 {
   if(isInitialised) return;
 
@@ -140,9 +144,6 @@ void G4hIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part
   em1->SetLowEnergyLimit(eth);
   em1->SetHighEnergyLimit(100.0*TeV);
   AddEmModel(2, em1, flucModel);
-
-  SetStepLimits(0.2, 1*mm);
-  SetIntegral(true);
 
   isInitialised = true;
 }
