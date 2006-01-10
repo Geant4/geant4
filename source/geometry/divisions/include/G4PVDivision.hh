@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.hh,v 1.9 2005-11-16 19:26:36 japost Exp $
+// $Id: G4PVDivision.hh,v 1.10 2006-01-10 11:42:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PVDivision
@@ -130,10 +130,13 @@ class G4PVDivision : public G4VPhysicalVolume
                                      G4bool& consuming ) const;
     G4bool IsParameterised() const;
 
+  public:  // without description
+
     G4bool IsRegularStructure() const; 
     G4int  GetRegularStructureId() const; 
-     // Methods to identify volume that can have revised 'regular' navigation.
-     //  Currently divisions do not qualify
+      // Methods to identify volume that can have revised 'regular' navigation.
+      // Currently divisions do not qualify for this.
+
   private:
 
     void CheckAndSetParameters( const EAxis pAxis,

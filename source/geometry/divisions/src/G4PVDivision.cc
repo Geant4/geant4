@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.cc,v 1.13 2005-11-16 19:27:06 japost Exp $
+// $Id: G4PVDivision.cc,v 1.14 2006-01-10 11:42:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4PVDivision Implementation file
@@ -52,6 +52,20 @@ G4PVDivision::G4PVDivision(const G4String& pName,
   : G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0),
     fcopyNo(-1)
 {
+  if (!pMotherLogical)
+  {
+    G4cerr << "ERROR - NULL pointer specified as mother volume for "
+           << pName << "." << G4endl;
+    G4Exception("G4PVDivision::G4PVDivision()", "NullPointer", FatalException,
+                "Invalid setup. NULL pointer specified as mother !");
+  }
+  if (pLogical == pMotherLogical)
+  {
+    G4cerr << "ERROR - Placing volume inside itself it NOT allowed for "
+           << pName << "." << G4endl;
+    G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
+                FatalException, "Cannot place a volume inside itself!");
+  }
   if (pMotherLogical) pMotherLogical->AddDaughter(this);
   SetParameterisation( pMotherLogical, pAxis, nDivs,
                        width, offset, DivNDIVandWIDTH );
@@ -69,6 +83,20 @@ G4PVDivision::G4PVDivision(const G4String& pName,
   : G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0),
     fcopyNo(-1)
 {
+  if (!pMotherLogical)
+  {
+    G4cerr << "ERROR - NULL pointer specified as mother volume for "
+           << pName << "." << G4endl;
+    G4Exception("G4PVDivision::G4PVDivision()", "NullPointer", FatalException,
+                "Invalid setup. NULL pointer specified as mother !");
+  }
+  if (pLogical == pMotherLogical)
+  {
+    G4cerr << "ERROR - Placing volume inside itself it NOT allowed for "
+           << pName << "." << G4endl;
+    G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
+                FatalException, "Cannot place a volume inside itself!");
+  }
   if (pMotherLogical) pMotherLogical->AddDaughter(this);
   SetParameterisation( pMotherLogical, pAxis, nDivs, 0., offset, DivNDIV );
   CheckAndSetParameters (pAxis, nDivs, 0., offset, DivNDIV, pMotherLogical );
@@ -84,6 +112,20 @@ G4PVDivision::G4PVDivision(const G4String& pName,
   : G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0),
     fcopyNo(-1)
 {
+  if (!pMotherLogical)
+  {
+    G4cerr << "ERROR - NULL pointer specified as mother volume for "
+           << pName << "." << G4endl;
+    G4Exception("G4PVDivision::G4PVDivision()", "NullPointer", FatalException,
+                "Invalid setup. NULL pointer specified as mother !");
+  }
+  if (pLogical == pMotherLogical)
+  {
+    G4cerr << "ERROR - Placing volume inside itself it NOT allowed for "
+           << pName << "." << G4endl;
+    G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
+                FatalException, "Cannot place a volume inside itself!");
+  }
   if (pMotherLogical) pMotherLogical->AddDaughter(this);
   SetParameterisation( pMotherLogical, pAxis, 0, width, offset, DivWIDTH );
   CheckAndSetParameters (pAxis, 0, width, offset, DivWIDTH, pMotherLogical );
@@ -98,6 +140,7 @@ G4PVDivision::CheckAndSetParameters( const EAxis pAxis,
                                            DivisionType divType,
                                      const G4LogicalVolume* pMotherLogical )
 {
+  SetMotherLogical(pMotherLogical);
   if( divType == DivWIDTH )
   {
     fnReplicas = fparam->GetNoDiv();
