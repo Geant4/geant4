@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.43 2005-10-27 14:04:35 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.44 2006-01-10 16:19:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -446,8 +446,8 @@ inline void G4VEnergyLossProcess::DefineMaterial(const G4MaterialCutsCouple* cou
     currentCouple   = couple;
     currentMaterial = couple->GetMaterial();
     currentMaterialIndex = couple->GetIndex();
-    minStepLimit = std::min(finalRange,
-           currentCouple->GetProductionCuts()->GetProductionCut(idxG4ElectronCut));
+    //    minStepLimit = std::min(finalRange,
+    //       currentCouple->GetProductionCuts()->GetProductionCut(idxG4ElectronCut));
     if(!meanFreePath) ResetNumberOfInteractionLengthLeft();
   }
 }

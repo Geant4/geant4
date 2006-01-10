@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.71 2006-01-06 09:39:42 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.72 2006-01-10 16:19:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -269,6 +269,7 @@ void G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   preStepLambda = 0.0;
   mfpKinEnergy  = DBL_MAX;
   preStepMFP    = DBL_MAX;
+  minStepLimit  = finalRange;
 
   // Base particle and set of models can be defined here
   InitialiseEnergyLossProcess(particle, baseParticle);
@@ -1159,6 +1160,9 @@ void G4VEnergyLossProcess::SetStepLimits(G4double v1, G4double v2)
   dRoverRange = v1;
   finalRange = v2;
   if (dRoverRange > 1.0) dRoverRange = 1.0;
+  currentCouple = 0;
+  mfpKinEnergy  = DBL_MAX;
+  minStepLimit  = finalRange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1177,6 +1181,7 @@ void G4VEnergyLossProcess::SetStepFunction(G4double v1, G4double v2)
   if (dRoverRange > 0.999) dRoverRange = 1.0;
   currentCouple = 0;
   mfpKinEnergy  = DBL_MAX;
+  minStepLimit  = finalRange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
