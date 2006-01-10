@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.cc,v 1.14 2006-01-10 11:42:01 gcosmo Exp $
+// $Id: G4PVDivision.cc,v 1.15 2006-01-10 11:46:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4PVDivision Implementation file
@@ -66,11 +66,12 @@ G4PVDivision::G4PVDivision(const G4String& pName,
     G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
                 FatalException, "Cannot place a volume inside itself!");
   }
-  if (pMotherLogical) pMotherLogical->AddDaughter(this);
-  SetParameterisation( pMotherLogical, pAxis, nDivs,
-                       width, offset, DivNDIVandWIDTH );
+  pMotherLogical->AddDaughter(this);
+  SetMotherLogical(pMotherLogical);
+  SetParameterisation(pMotherLogical, pAxis, nDivs,
+                      width, offset, DivNDIVandWIDTH);
   CheckAndSetParameters (pAxis, nDivs, width, offset,
-                         DivNDIVandWIDTH, pMotherLogical );
+                         DivNDIVandWIDTH, pMotherLogical);
 }
 
 //--------------------------------------------------------------------------
@@ -97,9 +98,10 @@ G4PVDivision::G4PVDivision(const G4String& pName,
     G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
                 FatalException, "Cannot place a volume inside itself!");
   }
-  if (pMotherLogical) pMotherLogical->AddDaughter(this);
-  SetParameterisation( pMotherLogical, pAxis, nDivs, 0., offset, DivNDIV );
-  CheckAndSetParameters (pAxis, nDivs, 0., offset, DivNDIV, pMotherLogical );
+  pMotherLogical->AddDaughter(this);
+  SetMotherLogical(pMotherLogical);
+  SetParameterisation(pMotherLogical, pAxis, nDivs, 0., offset, DivNDIV);
+  CheckAndSetParameters (pAxis, nDivs, 0., offset, DivNDIV, pMotherLogical);
 }
 
 //--------------------------------------------------------------------------
@@ -126,9 +128,10 @@ G4PVDivision::G4PVDivision(const G4String& pName,
     G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
                 FatalException, "Cannot place a volume inside itself!");
   }
-  if (pMotherLogical) pMotherLogical->AddDaughter(this);
-  SetParameterisation( pMotherLogical, pAxis, 0, width, offset, DivWIDTH );
-  CheckAndSetParameters (pAxis, 0, width, offset, DivWIDTH, pMotherLogical );
+  pMotherLogical->AddDaughter(this);
+  SetMotherLogical(pMotherLogical);
+  SetParameterisation(pMotherLogical, pAxis, 0, width, offset, DivWIDTH);
+  CheckAndSetParameters (pAxis, 0, width, offset, DivWIDTH, pMotherLogical);
 }
 
 //--------------------------------------------------------------------------
@@ -140,7 +143,6 @@ G4PVDivision::CheckAndSetParameters( const EAxis pAxis,
                                            DivisionType divType,
                                      const G4LogicalVolume* pMotherLogical )
 {
-  SetMotherLogical(pMotherLogical);
   if( divType == DivWIDTH )
   {
     fnReplicas = fparam->GetNoDiv();
