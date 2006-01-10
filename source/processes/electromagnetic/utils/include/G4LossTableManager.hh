@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.29 2006-01-10 17:09:14 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.30 2006-01-10 18:10:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,6 +50,7 @@
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 14-01-04 Activate precise range calculation (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -132,13 +133,17 @@ public:
 
   void DeRegister(G4VEmProcess* p);
 
-  void EnergyLossProcessIsInitialised(const G4ParticleDefinition* aParticle, G4VEnergyLossProcess* p);
+  void EnergyLossProcessIsInitialised(const G4ParticleDefinition* aParticle, 
+				      G4VEnergyLossProcess* p);
   
-  void RegisterIon(const G4ParticleDefinition* aParticle, G4VEnergyLossProcess* p);
+  void RegisterIon(const G4ParticleDefinition* aParticle, 
+		   G4VEnergyLossProcess* p);
 
-  void RegisterExtraParticle(const G4ParticleDefinition* aParticle, G4VEnergyLossProcess* p);
+  void RegisterExtraParticle(const G4ParticleDefinition* aParticle, 
+			     G4VEnergyLossProcess* p);
 
-  void BuildPhysicsTable(const G4ParticleDefinition* aParticle, G4VEnergyLossProcess* p);
+  void BuildPhysicsTable(const G4ParticleDefinition* aParticle, 
+			 G4VEnergyLossProcess* p);
 
   void SetLossFluctuations(G4bool val);
 
@@ -154,25 +159,25 @@ public:
 
   void SetMaxEnergy(G4double val);
 
-  void SetMaxEnergyForPreciseRange(G4double val);
+  void SetMaxEnergyForCSDARange(G4double val);
 
   void SetMaxEnergyForMuons(G4double val);
 
   void SetDEDXBinning(G4int val);
 
-  void SetDEDXBinningForPreciseRange(G4int val);
+  void SetDEDXBinningForCSDARange(G4int val);
 
   void SetLambdaBinning(G4int val);
 
   void SetStepFunction(G4double v1, G4double v2);
 
-  void SetBuildPreciseRange(G4bool val);
+  void SetBuildCSDARange(G4bool val);
 
   void SetVerbose(G4int val);
 
   G4EnergyLossMessenger* GetMessenger();
 
-  G4bool BuildPreciseRange() const;
+  G4bool BuildCSDARange() const;
 
   const std::vector<G4VEnergyLossProcess*>& GetEnergyLossProcessVector();
 
@@ -188,7 +193,8 @@ private:
 
   G4VEnergyLossProcess* BuildTables(const G4ParticleDefinition* aParticle);
 
-  void CopyTables(const G4ParticleDefinition* aParticle, G4VEnergyLossProcess*);
+  void CopyTables(const G4ParticleDefinition* aParticle, 
+		  G4VEnergyLossProcess*);
 
   void ParticleHaveNoLoss(const G4ParticleDefinition* aParticle);
 
@@ -228,7 +234,7 @@ private:
   G4bool integral;
   G4bool integralActive;
   G4bool all_tables_are_stored;
-  G4bool buildPreciseRange;
+  G4bool buildCSDARange;
   G4bool minEnergyActive;
   G4bool maxEnergyActive;
   G4bool maxEnergyForMuonsActive;
@@ -269,7 +275,8 @@ inline G4double G4LossTableManager::GetDEDX(
   }
   G4double x;
   if(currentLoss) x = currentLoss->GetDEDX(kineticEnergy, couple);
-  else            x = G4EnergyLossTables::GetDEDX(currentParticle,kineticEnergy,couple,false);
+  else            x = G4EnergyLossTables::GetDEDX(
+                      currentParticle,kineticEnergy,couple,false);
   return x;
 }
 
@@ -344,8 +351,8 @@ inline G4double G4LossTableManager::GetEnergy(
   }
   G4double x;
   if(currentLoss) x = currentLoss->GetKineticEnergy(range, couple);
-  else            x = G4EnergyLossTables::GetPreciseEnergyFromRange(currentParticle,
-                                          range,couple,false);
+  else            x = G4EnergyLossTables::GetPreciseEnergyFromRange(
+                      currentParticle,range,couple,false);
   return x;
 }
 

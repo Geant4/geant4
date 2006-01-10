@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.45 2006-01-10 17:09:14 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.46 2006-01-10 18:10:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -52,7 +52,7 @@
 // 10-03-04 Fix problem of step limit calculation (V.Ivanchenko)
 // 30-06-04 make destructor virtual (V.Ivanchenko)
 // 05-07-04 fix problem of GenericIons seen at small cuts (V.Ivanchenko)
-// 03-08-04 Add DEDX table to all processes for control on integral range(V.Ivanchenko)
+// 03-08-04 Add DEDX table to all processes for control on integral range(VI)
 // 06-08-04 Clear up names of member functions (V.Ivanchenko)
 // 27-08-04 Add NeedBuildTables method (V.Ivanchneko)
 // 09-09-04 Bug fix for the integral mode with 2 peaks (V.Ivanchneko)
@@ -60,6 +60,7 @@
 // 08-04-05 Major optimisation of internal interfaces (V.Ivanchenko)
 // 11-04-05 Use MaxSecondaryEnergy from a model (V.Ivanchenko)
 // 10-01-05 Remove SetStepLimits (V.Ivanchenko)
+// 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -165,7 +166,7 @@ public:
   G4double SampleRange();
 
   G4PhysicsTable* BuildDEDXTable();
-  G4PhysicsTable* BuildDEDXTableForPreciseRange();
+  G4PhysicsTable* BuildDEDXTableForCSDARange();
   G4PhysicsTable* BuildLambdaTable();
   G4PhysicsTable* BuildLambdaSubTable();
 
@@ -179,7 +180,7 @@ public:
   void SetDEDXBinning(G4int nbins);
 
   // Binning for dEdx, range, and inverse range tables
-  void SetDEDXBinningForPreciseRange(G4int nbins);
+  void SetDEDXBinningForCSDARange(G4int nbins);
 
   // Binning for lambda table
   void SetLambdaBinning(G4int nbins);
@@ -193,7 +194,7 @@ public:
   G4double MaxKinEnergy() const;
 
   // Max kinetic energy for tables
-  void SetMaxKinEnergyForPreciseRange(G4double e);
+  void SetMaxKinEnergyForCSDARange(G4double e);
 
   // Store PhysicsTable in a file.
   // Return false in case of failure at I/O
@@ -229,8 +230,8 @@ public:
   void SetDEDXunRestrictedTable(G4PhysicsTable* p);
   G4PhysicsTable* DEDXunRestrictedTable() const;
 
-  void SetPreciseRangeTable(G4PhysicsTable* pRange);
-  G4PhysicsTable* PreciseRangeTable() const;
+  void SetCSDARangeTable(G4PhysicsTable* pRange);
+  G4PhysicsTable* CSDARangeTable() const;
 
   void SetRangeTableForLoss(G4PhysicsTable* p);
   G4PhysicsTable* RangeTableForLoss() const;
@@ -313,7 +314,7 @@ protected:
 
   G4PhysicsVector* DEDXPhysicsVector(const G4MaterialCutsCouple*);
 
-  G4PhysicsVector* DEDXPhysicsVectorForPreciseRange(const G4MaterialCutsCouple*);
+  G4PhysicsVector* DEDXPhysicsVectorForCSDARange(const G4MaterialCutsCouple*);
 
   G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
 
@@ -373,7 +374,7 @@ private:
   G4PhysicsTable*             theDEDXTable;
   G4PhysicsTable*             theRangeTableForLoss;
   G4PhysicsTable*             theDEDXunRestrictedTable;
-  G4PhysicsTable*             thePreciseRangeTable;
+  G4PhysicsTable*             theCSDARangeTable;
   G4PhysicsTable*             theSecondaryRangeTable;
   G4PhysicsTable*             theInverseRangeTable;
   G4PhysicsTable*             theLambdaTable;
@@ -439,7 +440,8 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VEnergyLossProcess::DefineMaterial(const G4MaterialCutsCouple* couple)
+inline void G4VEnergyLossProcess::DefineMaterial(
+            const G4MaterialCutsCouple* couple)
 {
   if(couple != currentCouple) {
     currentCouple   = couple;
@@ -476,7 +478,7 @@ inline G4double G4VEnergyLossProcess::GetRange(G4double& kineticEnergy,
 {
   DefineMaterial(couple);
   G4double x = DBL_MAX;
-  if(thePreciseRangeTable)
+  if(theCSDARangeTable)
     x = GetLimitScaledRangeForScaledEnergy(kineticEnergy*massRatio);
   else if(theRangeTableForLoss)
     x = GetScaledRangeForScaledEnergy(kineticEnergy*massRatio);
@@ -492,7 +494,7 @@ inline G4double G4VEnergyLossProcess::GetLimitScaledRangeForScaledEnergy(
   G4double x;
 
   if (e < maxKinEnergyForRange) {
-    x = ((*thePreciseRangeTable)[currentMaterialIndex])->GetValue(e, b);
+    x = ((*theCSDARangeTable)[currentMaterialIndex])->GetValue(e, b);
     if(e < minKinEnergy) x *= std::sqrt(e/minKinEnergy);
 
   } else {
@@ -630,7 +632,7 @@ inline G4double G4VEnergyLossProcess::GetMeanFreePath(
   DefineMaterial(track.GetMaterialCutsCouple());
   if (meanFreePath) {
     if (integral) ComputeLambdaForScaledEnergy(preStepScaledEnergy);
-    else          preStepLambda = GetLambdaForScaledEnergy(preStepScaledEnergy);
+    else  preStepLambda = GetLambdaForScaledEnergy(preStepScaledEnergy);
     if(0.0 < preStepLambda) preStepMFP = 1.0/preStepLambda;
     else                    preStepMFP = DBL_MAX;
   }
@@ -717,7 +719,8 @@ inline const G4ParticleDefinition* G4VEnergyLossProcess::BaseParticle() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline const G4ParticleDefinition* G4VEnergyLossProcess::SecondaryParticle() const
+inline const G4ParticleDefinition* 
+             G4VEnergyLossProcess::SecondaryParticle() const
 {
   return secondaryParticle;
 }
@@ -747,9 +750,9 @@ inline G4PhysicsTable* G4VEnergyLossProcess::DEDXunRestrictedTable() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4PhysicsTable* G4VEnergyLossProcess::PreciseRangeTable() const
+inline G4PhysicsTable* G4VEnergyLossProcess::CSDARangeTable() const
 {
-  return thePreciseRangeTable;
+  return theCSDARangeTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

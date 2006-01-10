@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.hh,v 1.14 2005-04-11 10:40:47 vnivanch Exp $
+// $Id: G4EmModelManager.hh,v 1.15 2006-01-10 18:10:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -46,6 +46,7 @@
 // 21-07-03 Add UpdateEmModel method (V.Ivanchenko)
 // 03-11-03 Substitute STL vector for G4RegionModels (V.Ivanchenko)
 // 11-04-05 Remove access to fluctuation models (V.Ivanchenko)
+// 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -136,7 +137,8 @@ public:
 
   void FillDEDXVector(G4PhysicsVector*, const G4MaterialCutsCouple*);
 
-  void FillDEDXVectorForPreciseRange(G4PhysicsVector*, const G4MaterialCutsCouple*);
+  void FillDEDXVectorForCSDARange(G4PhysicsVector*, 
+				  const G4MaterialCutsCouple*);
 
   void FillLambdaVector(G4PhysicsVector*, const G4MaterialCutsCouple*,
                         G4bool startFromNull = true);
@@ -192,9 +194,11 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VEmModel* G4EmModelManager::SelectModel(G4double& kinEnergy, size_t& index)
+inline G4VEmModel* G4EmModelManager::SelectModel(G4double& kinEnergy, 
+						 size_t& index)
 {
-  currentIdx = (setOfRegionModels[idxOfRegionModels[index]])->SelectIndex(kinEnergy);
+  currentIdx = 
+    (setOfRegionModels[idxOfRegionModels[index]])->SelectIndex(kinEnergy);
   return models[currentIdx];
 }
 

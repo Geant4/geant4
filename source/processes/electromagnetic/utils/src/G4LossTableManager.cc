@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.62 2006-01-10 17:09:14 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.63 2006-01-10 18:10:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -56,6 +56,7 @@
 // 13-01-04 Fix problem which takes place for inactivate eIoni (V.Ivanchenko)
 // 25-01-04 Fix initialisation problem for ions (V.Ivanchenko)
 // 11-03-05 Shift verbose level by 1 (V.Ivantchenko)
+// 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -136,7 +137,7 @@ G4LossTableManager::G4LossTableManager()
   emCorrections= new G4EmCorrections();
   integral = true;
   integralActive = false;
-  buildPreciseRange = false;
+  buildCSDARange = false;
   minEnergyActive = false;
   maxEnergyActive = false;
   maxEnergyForMuonsActive = false;
@@ -342,9 +343,9 @@ void G4LossTableManager::ParticleHaveNoLoss(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-G4bool G4LossTableManager::BuildPreciseRange() const
+G4bool G4LossTableManager::BuildCSDARange() const
 {
-  return buildPreciseRange;
+  return buildCSDARange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -405,7 +406,7 @@ void G4LossTableManager::CopyTables(const G4ParticleDefinition* part,
       tables_are_built[j] = true;
       proc->SetDEDXTable(base_proc->DEDXTable());
       proc->SetDEDXunRestrictedTable(base_proc->DEDXunRestrictedTable());
-      proc->SetPreciseRangeTable(base_proc->PreciseRangeTable());
+      proc->SetCSDARangeTable(base_proc->CSDARangeTable());
       proc->SetRangeTableForLoss(base_proc->RangeTableForLoss());
       proc->SetInverseRangeTable(base_proc->InverseRangeTable());
       proc->SetLambdaTable(base_proc->LambdaTable());
@@ -481,20 +482,20 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
   tableBuilder->BuildRangeTable(dedx, range);
   tableBuilder->BuildInverseRangeTable(range, invrange);
 
-  if(buildPreciseRange) {
+  if(buildCSDARange) {
     std::vector<G4PhysicsTable*> newlist;
     newlist.clear();
     G4PhysicsTable* dedxForRange = em->DEDXunRestrictedTable();
     for (G4int i=0; i<n_dedx; i++) {
-      newlist.push_back(loss_list[i]->BuildDEDXTableForPreciseRange());
+      newlist.push_back(loss_list[i]->BuildDEDXTableForCSDARange());
     }
     if (1 < n_dedx) tableBuilder->BuildDEDXTable(dedxForRange, newlist);
 
     em->SetDEDXunRestrictedTable(dedxForRange);
-    range = em->PreciseRangeTable();
+    range = em->CSDARangeTable();
     if(!range) range  = G4PhysicsTableHelper::PreparePhysicsTable(range);
     tableBuilder->BuildRangeTable(dedxForRange, range);
-    em->SetPreciseRangeTable(range);
+    em->SetCSDARangeTable(range);
   }
 
   loss_map[aParticle] = em;
@@ -605,10 +606,10 @@ void G4LossTableManager::SetMaxEnergy(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::SetMaxEnergyForPreciseRange(G4double val)
+void G4LossTableManager::SetMaxEnergyForCSDARange(G4double val)
 {
   for(G4int i=0; i<n_loss; i++) {
-    if(loss_vector[i]) loss_vector[i]->SetMaxKinEnergyForPreciseRange(val);
+    if(loss_vector[i]) loss_vector[i]->SetMaxKinEnergyForCSDARange(val);
   }
 }
 
@@ -632,10 +633,10 @@ void G4LossTableManager::SetDEDXBinning(G4int val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::SetDEDXBinningForPreciseRange(G4int val)
+void G4LossTableManager::SetDEDXBinningForCSDARange(G4int val)
 {
   for(G4int i=0; i<n_loss; i++) {
-    if(loss_vector[i]) loss_vector[i]->SetDEDXBinningForPreciseRange(val);
+    if(loss_vector[i]) loss_vector[i]->SetDEDXBinningForCSDARange(val);
   }
 }
 
@@ -688,9 +689,9 @@ void G4LossTableManager::SetStepFunction(G4double v1, G4double v2)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::SetBuildPreciseRange(G4bool val)
+void G4LossTableManager::SetBuildCSDARange(G4bool val)
 {
-  buildPreciseRange = val;
+  buildCSDARange = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

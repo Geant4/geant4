@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.31 2005-11-29 08:06:32 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.32 2006-01-10 18:10:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -181,7 +181,8 @@ void G4EmModelManager::AddEmModel(G4int num, G4VEmModel* p,
                                   G4VEmFluctuationModel* fm, const G4Region* r)
 {
   if(!p) {
-    G4cout << "G4EmModelManager::AddEmModel WARNING: no model defined." << G4endl;
+    G4cout << "G4EmModelManager::AddEmModel WARNING: no model defined." 
+	   << G4endl;
     return;
   }
   models.push_back(p);
@@ -209,7 +210,8 @@ void G4EmModelManager::AddEmModel(G4int num, G4VEmModel* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmModelManager::UpdateEmModel(const G4String& nam, G4double emin, G4double emax)
+void G4EmModelManager::UpdateEmModel(const G4String& nam, 
+				     G4double emin, G4double emax)
 {
   if (nEmModels) {
     for(G4int i=0; i<nEmModels; i++) {
@@ -248,7 +250,8 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 
   Clear();
   G4RegionStore* regionStore = G4RegionStore::GetInstance();
-  const G4Region* world = regionStore->GetRegion("DefaultRegionForTheWorld", false);
+  const G4Region* world = 
+    regionStore->GetRegion("DefaultRegionForTheWorld", false);
 
   // Identify the list of regions with different set of models
   nRegions = 1;
@@ -308,7 +311,8 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 	  if (n>0) tmin = std::max(tmin, eHigh[n-1]);
 
 	  if(1 < verboseLevel) {
-	    G4cout << "Model #" << ii << " <" << model->GetName() << "> for region <";
+	    G4cout << "Model #" << ii 
+		   << " <" << model->GetName() << "> for region <";
 	    if (region) G4cout << region->GetName();
 	    G4cout << ">  "
 	         << " tmin(MeV)= " << tmin/MeV
@@ -351,7 +355,8 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 
   for(G4int i=0; i<numOfCouples; i++) {
 
-    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
+    const G4MaterialCutsCouple* couple = 
+      theCoupleTable->GetMaterialCutsCouple(i);
     const G4Material* material = couple->GetMaterial();
     const G4ProductionCuts* pcuts = couple->GetProductionCuts();
  
@@ -374,7 +379,8 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
       if( secondaryParticle == G4Gamma::Gamma() ) idx = 0;
       cut = (*theCoupleTable->GetEnergyCutsVector(idx))[i];
       if( secondaryParticle == G4Positron::Positron() && cut < DBL_MAX )
-        cut += (*theCoupleTable->GetEnergyCutsVector(2))[i] + 2.0*electron_mass_c2;
+        cut += (*theCoupleTable->GetEnergyCutsVector(2))[i] + 
+	       2.0*electron_mass_c2;
       if( cut < DBL_MAX ) subcut = minSubRange*cut;
     }
 
@@ -470,9 +476,11 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
     for(j=1; j<nmod; j++) {
 
       e = upperEkin[regModels->ModelIndex(j-1)];
-      dedxLow[j] = models[regModels->ModelIndex(j)]->ComputeDEDX(couple,particle,e,cut);
+      dedxLow[j] = 
+	models[regModels->ModelIndex(j)]->ComputeDEDX(couple,particle,e,cut);
       e = upperEkin[regModels->ModelIndex(j)];
-      dedxHigh[j] = models[regModels->ModelIndex(j)]->ComputeDEDX(couple,particle,e,cut);
+      dedxHigh[j] = 
+	models[regModels->ModelIndex(j)]->ComputeDEDX(couple,particle,e,cut);
     }
 
     for(j=1; j<nmod; j++) {
@@ -519,7 +527,7 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmModelManager::FillDEDXVectorForPreciseRange(
+void G4EmModelManager::FillDEDXVectorForCSDARange(
                                       G4PhysicsVector* aVector,
                                 const G4MaterialCutsCouple* couple)
 {
@@ -534,7 +542,7 @@ void G4EmModelManager::FillDEDXVectorForPreciseRange(
   size_t i = couple->GetIndex();
 
   if(2 < verboseLevel) {
-    G4cout << "G4EmModelManager::FillDEDXVectorForPreciseRange() for "
+    G4cout << "G4EmModelManager::FillDEDXVectorForCSDARange() for "
            << couple->GetMaterial()->GetName()
            << G4endl;
   }
@@ -572,9 +580,11 @@ void G4EmModelManager::FillDEDXVectorForPreciseRange(
     for(j=1; j<nmod; j++) {
 
       e = upperEkin[regModels->ModelIndex(j-1)];
-      dedxLow[j] = models[regModels->ModelIndex(j)]->ComputeDEDX(couple,particle,e,e);
+      dedxLow[j] = 
+	models[regModels->ModelIndex(j)]->ComputeDEDX(couple,particle,e,e);
       e = upperEkin[regModels->ModelIndex(j)];
-      dedxHigh[j] = models[regModels->ModelIndex(j)]->ComputeDEDX(couple,particle,e,e);
+      dedxHigh[j] = 
+	models[regModels->ModelIndex(j)]->ComputeDEDX(couple,particle,e,e);
     }
 
     for(j=1; j<nmod; j++) {
@@ -675,7 +685,8 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
              << " Emax(MeV)= " << e/MeV
              << " nbins= "  << totBinsLambda
              << G4endl;
-      G4cout << " model #0   eUp= " << e << "  sigmaUp= " << sigmaHigh[0] << G4endl;
+      G4cout << " model #0   eUp= " << e 
+	     << "  sigmaUp= " << sigmaHigh[0] << G4endl;
   }
 
 
@@ -684,9 +695,11 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
     for(j=1; j<nmod; j++) {
 
       e  = upperEkin[regModels->ModelIndex(j-1)];
-      sigmaLow[j] = models[regModels->ModelIndex(j)]->CrossSection(couple,particle,e,cut,e);
+      sigmaLow[j] = 
+	models[regModels->ModelIndex(j)]->CrossSection(couple,particle,e,cut,e);
       e  = upperEkin[regModels->ModelIndex(j)];
-      sigmaHigh[j] = models[regModels->ModelIndex(j)]->CrossSection(couple,particle,e,cut,e);
+      sigmaHigh[j] = 
+	models[regModels->ModelIndex(j)]->CrossSection(couple,particle,e,cut,e);
       if(1 < verboseLevel) {
         G4cout << " model #" << j << "   eUp= " << e 
 	       << "  sigmaUp= " << sigmaHigh[j]
@@ -722,9 +735,10 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
 
     if(2 < verboseLevel) {
       G4cout << "FillLambdaVector: " << j << ".   e(MeV)= " << e/MeV
-               << "  cross(1/mm)= " << cross*mm
-               << " fac= " << fac << " k= " << k << " model= " << regModels->ModelIndex(k)
-               << G4endl;
+	     << "  cross(1/mm)= " << cross*mm
+	     << " fac= " << fac << " k= " << k 
+	     << " model= " << regModels->ModelIndex(k)
+	     << G4endl;
     }
     if(cross < 0.0) cross = 0.0;
 
@@ -795,9 +809,11 @@ void G4EmModelManager::FillSubLambdaVector(G4PhysicsVector* aVector,
     for(j=1; j<nmod; j++) {
 
       e  = upperEkin[regModels->ModelIndex(j-1)];
-      sigmaLow[j] = models[regModels->ModelIndex(j)]->CrossSection(couple,particle,e,subcut,cut);
+      sigmaLow[j] = models[regModels->ModelIndex(j)]->
+	            CrossSection(couple,particle,e,subcut,cut);
       e  = upperEkin[regModels->ModelIndex(j)];
-      sigmaHigh[j] = models[regModels->ModelIndex(j)]->CrossSection(couple,particle,e,subcut,cut);
+      sigmaHigh[j] = models[regModels->ModelIndex(j)]->
+                     CrossSection(couple,particle,e,subcut,cut);
     }
     for(j=1; j<nmod; j++) {
       if(sigmaLow[j] > 0.0) factor[j] = (sigmaHigh[j-1]/sigmaLow[j] - 1.0);

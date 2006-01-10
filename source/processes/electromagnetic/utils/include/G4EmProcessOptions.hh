@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.hh,v 1.5 2006-01-10 17:09:14 vnivanch Exp $
+// $Id: G4EmProcessOptions.hh,v 1.6 2006-01-10 18:10:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,6 +36,7 @@
 // Creation date: 27.02.2004
 //
 // Modifications:
+// 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
 //
 //
 // Class Description:
@@ -75,13 +76,13 @@ public:
 
   void SetMaxEnergy(G4double val);
 
-  void SetMaxEnergyForPreciseRange(G4double val);
+  void SetMaxEnergyForCSDARange(G4double val);
 
   void SetMaxEnergyForMuons(G4double val);
 
   void SetDEDXBinning(G4int val);
 
-  void SetDEDXBinningForPreciseRange(G4int val);
+  void SetDEDXBinningForCSDARange(G4int val);
 
   void SetLambdaBinning(G4int val);
 
@@ -91,7 +92,7 @@ public:
 
   void SetApplyCuts(G4bool val);
 
-  void SetBuildPreciseRange(G4bool val);
+  void SetBuildCSDARange(G4bool val);
 
   void SetVerbose(G4int val, const G4String& name = "all");
 

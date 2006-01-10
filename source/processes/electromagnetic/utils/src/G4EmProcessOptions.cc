@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.12 2006-01-10 17:09:14 vnivanch Exp $
+// $Id: G4EmProcessOptions.cc,v 1.13 2006-01-10 18:10:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,6 +37,7 @@
 // Modifications:
 // 30-06-04 G4EmProcess is pure discrete (V.Ivanchenko)
 // 24-03-05 Add ApplyCuts and RandomStep (V.Ivanchenko)
+// 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -173,14 +174,14 @@ void G4EmProcessOptions::SetMaxEnergy(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmProcessOptions::SetMaxEnergyForPreciseRange(G4double val)
+void G4EmProcessOptions::SetMaxEnergyForCSDARange(G4double val)
 {
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
   for(itr = v.begin(); itr != v.end(); itr++) {
     G4VEnergyLossProcess* p = *itr;
-    if(p) p->SetMaxKinEnergyForPreciseRange(val);
+    if(p) p->SetMaxKinEnergyForCSDARange(val);
   }
 }
 
@@ -238,14 +239,14 @@ void G4EmProcessOptions::SetDEDXBinning(G4int val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmProcessOptions::SetDEDXBinningForPreciseRange(G4int val)
+void G4EmProcessOptions::SetDEDXBinningForCSDARange(G4int val)
 {
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
   for(itr = v.begin(); itr != v.end(); itr++) {
     G4VEnergyLossProcess* p = *itr;
-    if(p) p->SetDEDXBinningForPreciseRange(val);
+    if(p) p->SetDEDXBinningForCSDARange(val);
   }
 }
 
@@ -317,9 +318,9 @@ void G4EmProcessOptions::SetApplyCuts(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmProcessOptions::SetBuildPreciseRange(G4bool val)
+void G4EmProcessOptions::SetBuildCSDARange(G4bool val)
 {
-  theManager->SetBuildPreciseRange(val);
+  theManager->SetBuildCSDARange(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -400,7 +401,8 @@ void G4EmProcessOptions::ActivateDeexcitation(G4bool val, const G4Region* r)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmProcessOptions::SetMscStepLimitation(G4bool algorithm, G4double factor)
+void G4EmProcessOptions::SetMscStepLimitation(G4bool algorithm, 
+					      G4double factor)
 {
   const std::vector<G4VMultipleScattering*>& u =
         theManager->GetMultipleScatteringVector();

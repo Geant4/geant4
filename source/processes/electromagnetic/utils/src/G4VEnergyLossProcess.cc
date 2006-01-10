@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.73 2006-01-10 17:09:14 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.74 2006-01-10 18:10:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -89,6 +89,7 @@
 // 05-10-05 protection against 0 energy loss added (L.Urban)
 // 17-10-05 protection above has been removed (L.Urban)
 // 06-01-06 reset currentCouple when StepFunction is changed (V.Ivanchenko)
+// 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -137,7 +138,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   theDEDXTable(0),
   theRangeTableForLoss(0),
   theDEDXunRestrictedTable(0),
-  thePreciseRangeTable(0),
+  theCSDARangeTable(0),
   theSecondaryRangeTable(0),
   theInverseRangeTable(0),
   theLambdaTable(0),
@@ -198,9 +199,9 @@ G4VEnergyLossProcess::~G4VEnergyLossProcess()
 
   if ( !baseParticle ) {
     if(theDEDXTable && theRangeTableForLoss) theDEDXTable->clearAndDestroy();
-    if(theDEDXunRestrictedTable && thePreciseRangeTable)
+    if(theDEDXunRestrictedTable && theCSDARangeTable)
        theDEDXunRestrictedTable->clearAndDestroy();
-    if(thePreciseRangeTable) thePreciseRangeTable->clearAndDestroy();
+    if(theCSDARangeTable) theCSDARangeTable->clearAndDestroy();
     if(theRangeTableForLoss) theRangeTableForLoss->clearAndDestroy();
     if(theInverseRangeTable) theInverseRangeTable->clearAndDestroy();
     if(theLambdaTable) theLambdaTable->clearAndDestroy();
@@ -279,12 +280,12 @@ void G4VEnergyLossProcess::PreparePhysicsTable(
   if (!baseParticle) {
     
     theDEDXTable = G4PhysicsTableHelper::PreparePhysicsTable(theDEDXTable);
-    if (lManager->BuildPreciseRange()) {
+    if (lManager->BuildCSDARange()) {
       theDEDXunRestrictedTable = 
 	G4PhysicsTableHelper::PreparePhysicsTable(theDEDXunRestrictedTable);
       if (isIonisation)
-        thePreciseRangeTable = 
-	  G4PhysicsTableHelper::PreparePhysicsTable(thePreciseRangeTable);
+        theCSDARangeTable = 
+	  G4PhysicsTableHelper::PreparePhysicsTable(theCSDARangeTable);
     }
 
     if (isIonisation) {
@@ -479,11 +480,11 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTableForPreciseRange()
+G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTableForCSDARange()
 {
 
   if(1 < verboseLevel) {
-    G4cout << "G4VEnergyLossProcess::BuildDEDXTableForPreciseRange() for "
+    G4cout << "G4VEnergyLossProcess::BuildDEDXTableForCSDARange() for "
            << GetProcessName()
            << " and particle " << particle->GetParticleName()
            << G4endl;
@@ -508,8 +509,8 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTableForPreciseRange()
       // create physics vector and fill it
       const G4MaterialCutsCouple* couple = 
 	theCoupleTable->GetMaterialCutsCouple(i);
-      G4PhysicsVector* aVector = DEDXPhysicsVectorForPreciseRange(couple);
-      modelManager->FillDEDXVectorForPreciseRange(aVector, couple);
+      G4PhysicsVector* aVector = DEDXPhysicsVectorForCSDARange(couple);
+      modelManager->FillDEDXVectorForCSDARange(aVector, couple);
 
       // Insert vector for this material into the table
       G4PhysicsTableHelper::SetPhysicsVector(theDEDXunRestrictedTable, 
@@ -518,7 +519,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTableForPreciseRange()
   }
 
   if(1 < verboseLevel) {
-    G4cout << "G4VEnergyLossProcess::BuildDEDXTableForPreciseRange(): "
+    G4cout << "G4VEnergyLossProcess::BuildDEDXTableForCSDARange(): "
            << "table is built for " << particle->GetParticleName()
            << G4endl;
     if(2 < verboseLevel) G4cout << (*theDEDXunRestrictedTable) << G4endl;
@@ -928,7 +929,7 @@ void G4VEnergyLossProcess::PrintInfoDefinition()
              << ", integral: " << integral
              << G4endl;
     
-    if(thePreciseRangeTable) 
+    if(theCSDARangeTable) 
       G4cout << "      Precise range table up"
              << " to " << G4BestUnit(maxKinEnergyForRange,"Energy")
              << " in " << nDEDXBinsForRange << " bins." << G4endl;
@@ -944,9 +945,9 @@ void G4VEnergyLossProcess::PrintInfoDefinition()
 	     << theDEDXunRestrictedTable << G4endl;
       if(theDEDXunRestrictedTable) G4cout << (*theDEDXunRestrictedTable) 
 					  << G4endl;
-      G4cout << "PreciseRangeTable address= " << thePreciseRangeTable 
+      G4cout << "CSDARangeTable address= " << theCSDARangeTable 
 	     << G4endl;
-      if(thePreciseRangeTable) G4cout << (*thePreciseRangeTable) << G4endl;
+      if(theCSDARangeTable) G4cout << (*theCSDARangeTable) << G4endl;
       G4cout << "RangeTableForLoss address= " << theRangeTableForLoss 
 	     << G4endl;
       if(theRangeTableForLoss) G4cout << (*theRangeTableForLoss) << G4endl;
@@ -992,9 +993,9 @@ void G4VEnergyLossProcess::SetDEDXunRestrictedTable(G4PhysicsTable* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossProcess::SetPreciseRangeTable(G4PhysicsTable* p)
+void G4VEnergyLossProcess::SetCSDARangeTable(G4PhysicsTable* p)
 {
-  if(thePreciseRangeTable != p) thePreciseRangeTable = p;
+  if(theCSDARangeTable != p) theCSDARangeTable = p;
 
   if(p) {
     size_t n = p->length();
@@ -1115,7 +1116,7 @@ G4PhysicsVector* G4VEnergyLossProcess::DEDXPhysicsVector(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PhysicsVector* G4VEnergyLossProcess::DEDXPhysicsVectorForPreciseRange(
+G4PhysicsVector* G4VEnergyLossProcess::DEDXPhysicsVectorForCSDARange(
                              const G4MaterialCutsCouple*)
 {
   G4int nbins = nDEDXBinsForRange;
@@ -1242,16 +1243,16 @@ G4bool G4VEnergyLossProcess::StorePhysicsTable(
     if( !theDEDXTable->StorePhysicsTable(name,ascii)) res = false;
   }
 
-  if ( theDEDXunRestrictedTable && thePreciseRangeTable ) {
+  if ( theDEDXunRestrictedTable && theCSDARangeTable ) {
     const G4String name = 
       GetPhysicsTableFileName(part,directory,"DEDXnr",ascii);
     if( !theDEDXTable->StorePhysicsTable(name,ascii)) res = false;
   }
 
-  if ( thePreciseRangeTable ) {
+  if ( theCSDARangeTable ) {
     const G4String name = 
-      GetPhysicsTableFileName(part,directory,"PreciseRange",ascii);
-    if( !thePreciseRangeTable->StorePhysicsTable(name,ascii)) res = false;
+      GetPhysicsTableFileName(part,directory,"CSDARange",ascii);
+    if( !theCSDARangeTable->StorePhysicsTable(name,ascii)) res = false;
   }
 
   if ( theRangeTableForLoss ) {
@@ -1377,10 +1378,10 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(
         }
       }
 
-      filename = GetPhysicsTableFileName(part,directory,"PreciseRange",ascii);
-      yes = thePreciseRangeTable->ExistPhysicsTable(filename);
+      filename = GetPhysicsTableFileName(part,directory,"CSDARange",ascii);
+      yes = theCSDARangeTable->ExistPhysicsTable(filename);
       if(yes) yes = G4PhysicsTableHelper::RetrievePhysicsTable(
-                    thePreciseRangeTable,filename,ascii);
+                    theCSDARangeTable,filename,ascii);
       if(yes) {
         if (0 < verboseLevel) {
           G4cout << "Precise Range table for " << particleName 
@@ -1513,7 +1514,7 @@ void G4VEnergyLossProcess::SetDEDXBinning(G4int nbins)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossProcess::SetDEDXBinningForPreciseRange(G4int nbins)
+void G4VEnergyLossProcess::SetDEDXBinningForCSDARange(G4int nbins)
 {
   nDEDXBinsForRange = nbins;
 }
@@ -1549,7 +1550,7 @@ void G4VEnergyLossProcess::SetMaxKinEnergy(G4double e)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossProcess::SetMaxKinEnergyForPreciseRange(G4double e)
+void G4VEnergyLossProcess::SetMaxKinEnergyForCSDARange(G4double e)
 {
   maxKinEnergyForRange = e;
 }
