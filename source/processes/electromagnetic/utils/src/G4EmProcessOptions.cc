@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.11 2005-12-05 12:13:07 vnivanch Exp $
+// $Id: G4EmProcessOptions.cc,v 1.12 2006-01-10 17:09:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -278,7 +278,7 @@ void G4EmProcessOptions::SetLambdaBinning(G4int val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmProcessOptions::SetStepLimits(G4double v1, G4double v2)
+void G4EmProcessOptions::SetStepFunction(G4double v1, G4double v2)
 {
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();

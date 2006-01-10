@@ -21,9 +21,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.12 2005-11-11 23:28:56 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.13 2006-01-10 17:09:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// -------------------------------------------------------------------
+//
+// GEANT4 Class file
+//
+// File name:     G4EnergyLossMessenger
+//
+// Author:        Michel Maire
+//
+// Creation date: 22-06-2000
+//
+// Modifications:
+// 10-01-06 SetStepLimits -> SetStepFunction (V.Ivantchenko)
+//
+// -------------------------------------------------------------------
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -91,7 +105,8 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   G4UIparameter* unitPrm = new G4UIparameter("unit",'s',true);
   unitPrm->SetGuidance("unit of finalRange");
   unitPrm->SetDefaultValue("mm");
-  G4String unitCandidates = G4UIcommand::UnitsList(G4UIcommand::CategoryOf("mm"));
+  G4String unitCandidates = 
+    G4UIcommand::UnitsList(G4UIcommand::CategoryOf("mm"));
   unitPrm->SetParameterCandidates(unitCandidates);
 
   StepFuncCmd->SetParameter(unitPrm);
@@ -166,7 +181,8 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    }
 
   if (command == MinSubSecCmd)
-   { G4VEnergyLoss::SetMinDeltaCutInRange(MinSubSecCmd->GetNewDoubleValue(newValue));
+   { G4VEnergyLoss::SetMinDeltaCutInRange(
+		    MinSubSecCmd->GetNewDoubleValue(newValue));
    }
 
   if (command == StepFuncCmd)
@@ -177,7 +193,7 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
      is >> v1 >> v2 >> unt;
      v2 *= G4UIcommand::ValueOf(unt);
      G4VEnergyLoss::SetStepFunction(v1,v2);
-     lossTables->SetStepLimits(v1,v2);
+     lossTables->SetStepFunction(v1,v2);
    }
 
   if (command == MinEnCmd) {

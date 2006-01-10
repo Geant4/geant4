@@ -21,9 +21,25 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.hh,v 1.8 2003-10-13 10:49:17 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.hh,v 1.9 2006-01-10 17:09:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// -------------------------------------------------------------------
+//
+// GEANT4 Class file
+//
+// File name:     G4EnergyLossMessenger
+//
+// Author:        Michel Maire
+//
+// Creation date: 22-06-2000
+//
+// Modifications:
+// 10-01-06 SetStepLimits -> SetStepFunction (V.Ivantchenko)
+//
+// -------------------------------------------------------------------
+//
+
 //
 // Class Description:
 //  This is a messenger class to interface to exchange information
@@ -59,26 +75,26 @@ class G4UIcmdWithADoubleAndUnit;
 
 class G4EnergyLossMessenger: public G4UImessenger
 {
-  public:   // with description
+public:   // with description
+  
+  G4EnergyLossMessenger();
+  ~G4EnergyLossMessenger();
 
-    G4EnergyLossMessenger();
-   ~G4EnergyLossMessenger();
+  void SetNewValue(G4UIcommand*, G4String);
 
-    void SetNewValue(G4UIcommand*, G4String);
+private:
 
-  private:
-
-    G4UIdirectory*             eLossDirectory;
-    G4UIcmdWithABool*          RndmStepCmd;
-    G4UIcmdWithABool*          EnlossFlucCmd;
-    G4UIcmdWithABool*          SubSecCmd;
-    G4UIcmdWithADoubleAndUnit* MinSubSecCmd;
-    G4UIcommand*               StepFuncCmd;
-    G4UIcmdWithADoubleAndUnit* MinEnCmd;
-    G4UIcmdWithADoubleAndUnit* MaxEnCmd;
-    G4UIcmdWithABool*          IntegCmd;
-    G4UIcmdWithABool*          rangeCmd;
-    G4UIcmdWithAnInteger*      verCmd;
+  G4UIdirectory*             eLossDirectory;
+  G4UIcmdWithABool*          RndmStepCmd;
+  G4UIcmdWithABool*          EnlossFlucCmd;
+  G4UIcmdWithABool*          SubSecCmd;
+  G4UIcmdWithADoubleAndUnit* MinSubSecCmd;
+  G4UIcommand*               StepFuncCmd;
+  G4UIcmdWithADoubleAndUnit* MinEnCmd;
+  G4UIcmdWithADoubleAndUnit* MaxEnCmd;
+  G4UIcmdWithABool*          IntegCmd;
+  G4UIcmdWithABool*          rangeCmd;
+  G4UIcmdWithAnInteger*      verCmd;
 };
 
 #endif

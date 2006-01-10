@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.hh,v 1.4 2005-10-27 14:04:35 vnivanch Exp $
+// $Id: G4EmProcessOptions.hh,v 1.5 2006-01-10 17:09:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -85,7 +85,7 @@ public:
 
   void SetLambdaBinning(G4int val);
 
-  void SetStepLimits(G4double v1, G4double v2);
+  void SetStepFunction(G4double v1, G4double v2);
 
   void SetRandomStep(G4bool val);
 
