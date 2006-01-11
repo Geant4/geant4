@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorConstruction.cc,v 1.29 2005-11-22 15:43:54 allison Exp $
+// $Id: MyDetectorConstruction.cc,v 1.30 2006-01-11 16:59:38 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,6 +45,10 @@
 #include "G4EllipticalTube.hh"
 #include "G4Polyhedra.hh"
 #include "G4Tet.hh"
+#include "G4TwistedTubs.hh"
+#include "G4TwistedBox.hh"
+#include "G4TwistedTrd.hh"
+#include "G4TwistedTrap.hh"
 #include "G4IntersectionSolid.hh"
 #include "G4SubtractionSolid.hh"
 #include "G4UnionSolid.hh"
@@ -204,10 +208,11 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
 
   //------------------------------ displaced box
   G4Box * undisplaced_box = new G4Box("undisplaced_box",30.*cm,50.*cm,70.*cm);
+  G4RotationMatrix rm_db;
+  rm_db.rotateZ(20.*deg);
   G4DisplacedSolid* displaced_box = new G4DisplacedSolid
     ("displaced_box",undisplaced_box,
-     G4Transform3D(G4RotationMatrix().rotateZ(20.*deg),
-		   G4ThreeVector(200.*cm,0.,0.)));
+     G4Transform3D(rm_db,G4ThreeVector(200.*cm,0.,0.)));
   G4cout << "Displaced box extent:\n" << displaced_box->GetExtent() << G4endl;
   G4LogicalVolume * displaced_box_log
     = new G4LogicalVolume(displaced_box,Ar,"displaced_box_L",0,0,0);
@@ -612,10 +617,89 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
      G4ThreeVector(100*cm,0.,0.));
   G4LogicalVolume* tet_log = new G4LogicalVolume
     (tet,Ar,"tet-log");
+  tet_log->SetVisAttributes(G4VisAttributes(G4Colour(0.,1.,0.)));
   new G4PVPlacement
     (G4Translate3D(G4ThreeVector(300.*cm,-400.*cm,0.)),
      "tet-phys", tet_log,
      experimentalHall_phys,false,0);
+
+  //----------- Twisted solids
+
+  G4VSolid* aVolume;
+  G4LogicalVolume* aLog;
+  G4double fTrackerR1 ;   // r1
+  G4double fTrackerR2 ;   // r2
+  G4double fTrackerpDz  ;  // Full length of Tracker (pDz)
+  G4double fTrackerpDx1 ;  // twisted Trapezoid
+  G4double fTrackerpDx2 ;
+  G4double fTrackerpDy1 ;
+  G4double fTrackerpDy2 ;
+  G4double fTwistAngle ;
+  G4double fPhi ;
+
+  G4double myScale = 5.;
+  fTwistAngle = 90*deg ;
+  fTrackerpDz = myScale*20*cm ;
+  fTrackerR1  = myScale*7*cm ;
+  fTrackerR2  = myScale*10*cm ;
+  fPhi        = 180*deg ;
+
+  aVolume = new G4TwistedTubs
+    ("aTwistedTubs", fTwistAngle, fTrackerR1, fTrackerR2, fTrackerpDz, fPhi ) ;
+  aLog = new G4LogicalVolume
+    (aVolume,Ar,"aTwistedTubs-log");
+  aLog->SetVisAttributes(G4VisAttributes(G4Colour(1.,1.,0.)));
+  new G4PVPlacement
+    (G4Translate3D(G4ThreeVector(200.*cm,-400.*cm,0.)),
+     "aTwistedTubs-phys", aLog, experimentalHall_phys,false,0);
+
+  fTwistAngle = 50*deg ;
+  fTrackerpDx1 = myScale*4*cm ;
+  fTrackerpDy1 = myScale*6*cm ;
+  fTrackerpDz  = myScale*15*cm ;
+
+  aVolume = new G4TwistedBox
+    ("aTwistedBox",fTwistAngle,fTrackerpDx1,fTrackerpDy1,fTrackerpDz) ;
+  aLog = new G4LogicalVolume
+    (aVolume,Ar,"aTwistedBox-log");
+  aLog->SetVisAttributes(G4VisAttributes(G4Colour(1.,1.,0.)));
+  new G4PVPlacement
+    (G4Translate3D(G4ThreeVector(100.*cm,-400.*cm,0.)),
+     "aTwistedBox-phys", aLog, experimentalHall_phys,false,0);
+
+  fTrackerpDx1 = myScale*4*cm ;
+  fTrackerpDx2 = myScale*7*cm ;
+  fTrackerpDy1 = myScale*2*cm ;
+  fTrackerpDy2 = myScale*4*cm ;
+  fTrackerpDz  = myScale*15*cm ;
+  fTwistAngle = 50*deg ;
+
+  aVolume = new G4TwistedTrd
+    ("aTwistedTrd",fTrackerpDx1,fTrackerpDx2,fTrackerpDy1,fTrackerpDy2,
+     fTrackerpDz,fTwistAngle);
+  aLog = new G4LogicalVolume
+    (aVolume,Ar,"aTwistedTrd-log");
+  aLog->SetVisAttributes(G4VisAttributes(G4Colour(1.,1.,0.)));
+  new G4PVPlacement
+    (G4Translate3D(G4ThreeVector(000.*cm,-400.*cm,0.)),
+     "aTwistedTrd-phys", aLog, experimentalHall_phys,false,0);
+
+  fTrackerpDx1 = myScale*4*cm ;
+  fTrackerpDx2 = myScale*7*cm ;
+  fTrackerpDy1 = myScale*2*cm ;
+  fTrackerpDy2 = myScale*4*cm ;
+  fTrackerpDz  = myScale*15*cm ;
+  fTwistAngle = 50*deg ;
+
+  aVolume = new G4TwistedTrd
+    ("aTwistedTrd",fTrackerpDx1,fTrackerpDx2,fTrackerpDy1,fTrackerpDy2,
+     fTrackerpDz,fTwistAngle);
+  aLog = new G4LogicalVolume
+    (aVolume,Ar,"aTwistedTrd-log");
+  aLog->SetVisAttributes(G4VisAttributes(G4Colour(1.,1.,0.)));
+  new G4PVPlacement
+    (G4Translate3D(G4ThreeVector(-100.*cm,-400.*cm,0.)),
+     "aTwistedTrd-phys", aLog, experimentalHall_phys,false,0);
 
   //-------------------------------------------- return
   return experimentalHall_phys;

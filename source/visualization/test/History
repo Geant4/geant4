@@ -1,9 +1,12 @@
-$Id: History,v 1.67 2006-01-09 17:23:22 allison Exp $
+$Id: History,v 1.68 2006-01-11 16:59:38 allison Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
 
 $Log: not supported by cvs2svn $
+Revision 1.67  2006/01/09 17:23:22  allison
+Added CLHEP:: scope name.
+
 Revision 1.66  2005/11/22 15:53:47  allison
 vistest-V07-01-04
 
