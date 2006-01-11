@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewerMessenger.hh,v 1.2 2005-11-24 10:23:43 allison Exp $
+// $Id: G4OpenGLXmViewerMessenger.hh,v 1.3 2006-01-11 18:42:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
@@ -40,14 +40,13 @@ class G4UIcmdWithADouble;
 
 class G4OpenGLXmViewerMessenger: public G4UImessenger {
 public:
-  G4OpenGLXmViewerMessenger
-  (G4OpenGLXmViewer* viewer, const G4String& viewerShortName);
+  static G4OpenGLXmViewerMessenger* GetInstance();  // Singleton constructor.
   ~G4OpenGLXmViewerMessenger();
   void SetNewValue (G4UIcommand*, G4String);
 
 private:
-  G4OpenGLXmViewer* fpViewer;
-  G4String fViewerShortName;
+  G4OpenGLXmViewerMessenger();  // Private constructor.
+  static G4OpenGLXmViewerMessenger* fpInstance;
   G4UIdirectory* fpDirectory;
   G4UIdirectory* fpDirectorySet;
   G4UIcmdWithADoubleAndUnit* fpCommandSetDollyHigh;
