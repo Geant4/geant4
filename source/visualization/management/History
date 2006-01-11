@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2006-01-09 18:49:01 allison Exp $
+$Id: History,v 1.27 2006-01-11 17:48:04 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,17 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+11th January 2006  John Allison  (visman-V08-00-02)
+- G4VisExecutive.icc: protected with G4VISEXECUTIVE_ICC.
+- G4VisManager.hh: prepared for RayTracer reorganisation (friend status).
+- G4VisCommandsScene.cc: /vis/scene/create: simplified registration of
+  scene to avoid recursive invocation of /vis/scene/notifyHandlers/.
+- G4VisCommandsSceneAdd.cc: Improved message when world not available.
+- G4VisCommandsViewer.cc: /vis/viewer/refresh: When world added, delegate
+  to /vis/scene/notifyHandlers.  Avoids double refresh.
+- G4VisManager.cc: Changed ERROR to WARNING when user calls Draw with
+  invalid view.
 
 9th January 2006  John Allison  (visman-V08-00-01)
 - This tag includes all the changes below.
