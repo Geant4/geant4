@@ -1,4 +1,4 @@
-$Id: History,v 1.46 2005-12-05 00:16:34 perl Exp $
+$Id: History,v 1.47 2006-01-11 18:54:59 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+11th January 2006  John Allison (modeling-V08-00-00)
+- G4NullModel.cc: Changed G4Transform3D::Identity to G4Transform3D().
 
 2nd December 2005  Joseph Perl (modeling-V07-01-07)
 - Change "G4String inline" to "inline G4String" to correct compiler

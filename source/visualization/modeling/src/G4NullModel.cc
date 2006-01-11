@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NullModel.cc,v 1.7 2003-05-30 13:01:32 johna Exp $
+// $Id: G4NullModel.cc,v 1.8 2006-01-11 18:54:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,7 +32,7 @@
 #include "G4NullModel.hh"
 
 G4NullModel::G4NullModel (const G4ModelingParameters* pMP):
-  G4VModel (G4Transform3D::Identity, pMP) {}
+  G4VModel (G4Transform3D(), pMP) {}
 
 G4NullModel::~G4NullModel () {}
 
