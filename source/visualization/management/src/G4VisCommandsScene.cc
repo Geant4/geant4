@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.45 2005-12-14 13:03:12 allison Exp $
+// $Id: G4VisCommandsScene.cc,v 1.46 2006-01-11 17:35:21 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -97,17 +97,17 @@ void G4VisCommandSceneCreate::SetNewValue (G4UIcommand*, G4String newValue) {
       G4cout << "WARNING: Scene \"" << newName << "\" already exists."
 	     << G4endl;
     }
-  }
-  else {
+  } else {
 
-    sceneList.push_back (new G4Scene (newName));
-    // Adds empty scene data object to list.
+    // Add empty scene data object to list...
+    G4Scene* pScene = new G4Scene (newName);
+    sceneList.push_back (pScene);
+    fpVisManager -> SetCurrentScene (pScene);
 
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "New empty scene \"" << newName << "\" created." << G4endl;
     }
   }
-  UpdateVisManagerScene (newName);
 }
 
 ////////////// /vis/scene/endOfEventAction ////////////////////////////
