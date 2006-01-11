@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.30 2006-01-10 18:10:09 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.31 2006-01-11 11:25:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -101,6 +101,11 @@ public:
     const G4MaterialCutsCouple *couple);
 
   G4double GetRange(
+    const G4ParticleDefinition *aParticle,
+    G4double kineticEnergy,
+    const G4MaterialCutsCouple *couple);
+
+  G4double GetCSDARange(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
     const G4MaterialCutsCouple *couple);
@@ -278,6 +283,16 @@ inline G4double G4LossTableManager::GetDEDX(
   else            x = G4EnergyLossTables::GetDEDX(
                       currentParticle,kineticEnergy,couple,false);
   return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+inline G4double G4LossTableManager::GetCSDARange(
+          const G4ParticleDefinition *aParticle,
+                G4double kineticEnergy,
+          const G4MaterialCutsCouple *couple)
+{
+  return GetRange(aParticle, kineticEnergy, couple);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

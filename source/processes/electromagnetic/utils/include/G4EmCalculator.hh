@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.hh,v 1.9 2005-02-26 22:01:20 vnivanch Exp $
+// $Id: G4EmCalculator.hh,v 1.10 2006-01-11 11:25:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,6 +37,7 @@
 //
 // Modifications:
 // 17.11.2004 Change signature of methods, add new methods (V.Ivanchenko)
+// 11.01.2006 Add GetCSDARange (V.Ivantchenko)
 //
 //
 // Class Description:
@@ -86,6 +87,13 @@ public:
                    const G4Region* r = 0);
   G4double GetRange(G4double kinEnergy, const G4String& part, const G4String& mat,
                    const G4String& s = "world");
+
+  G4double GetCSDARange(G4double kinEnergy, const G4ParticleDefinition*, 
+			const G4Material*,
+			const G4Region* r = 0);
+  G4double GetCSDARange(G4double kinEnergy, const G4String& part, 
+			const G4String& mat,
+			const G4String& s = "world");
 
   G4double GetKinEnergy(G4double range, const G4ParticleDefinition*, const G4Material*,
                    const G4Region* r = 0);

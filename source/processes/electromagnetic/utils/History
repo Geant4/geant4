@@ -1,4 +1,4 @@
-$Id: History,v 1.223 2006-01-11 11:04:31 vnivanch Exp $
+$Id: History,v 1.224 2006-01-11 11:25:36 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 January 06: V.Ivant (emutils-V08-00-00)
+- G4EmCalculator - add GetCSDARange (VI)
 - G4VEmProcess - remove dependence on G4NistManager (VI)
 - Substitute PreciseRange -> CSDARange (VI)
 - Substitute SetStepLimits -> SetStepFunction (VI)
