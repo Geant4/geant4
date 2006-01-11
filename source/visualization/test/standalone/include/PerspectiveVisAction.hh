@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PerspectiveVisAction.hh,v 1.1 2005-11-22 15:51:22 allison Exp $
+// $Id: PerspectiveVisAction.hh,v 1.2 2006-01-11 17:05:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef PERSPECTIVEVISACTION_HH
@@ -59,11 +59,14 @@ private:
   G4String fOptionString;
   G4String fScene;
   G4double fRoomX, fRoomY, fRoomZ,  // Half lengths.
-  fChairX,          // Half width.
-  fChairY,          // Half depth.
-  fChairZ,          // Half height.
-  fChairSeat,       // Half height of top of seat.
-  fChairThickness;  // Half thicknes of back, seat, legs.
+    fWindowX, fWindowY, fWindowZ, fWindowSillHeight, fWindowOffset,
+    fDoorFrameX, fDoorFrameY, fDoorFrameZ, fDoorFrameOffset,
+    fDoorX, fDoorY, fDoorZ,
+    fChairX,          // Half width.
+    fChairY,          // Half depth.
+    fChairZ,          // Half height.
+    fChairSeat,       // Half height of top of seat.
+    fChairThickness;  // Half thicknes of back, seat, legs.
 };
 
 #endif

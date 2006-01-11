@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: standalone.cc,v 1.2 2005-02-20 00:41:42 allison Exp $
+// $Id: standalone.cc,v 1.3 2006-01-11 17:04:29 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"

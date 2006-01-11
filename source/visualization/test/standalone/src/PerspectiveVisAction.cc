@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PerspectiveVisAction.cc,v 1.1 2005-11-22 15:51:22 allison Exp $
+// $Id: PerspectiveVisAction.cc,v 1.2 2006-01-11 17:05:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "PerspectiveVisAction.hh"
@@ -42,6 +42,18 @@ PerspectiveVisAction::PerspectiveVisAction():
   fRoomX(2.5*m),  // Half-lengths...
   fRoomY(2.5*m),
   fRoomZ(1.3*m),
+  fWindowX(10*cm),
+  fWindowY(75*cm),
+  fWindowZ(50*cm),
+  fWindowSillHeight(80*cm),
+  fWindowOffset(-50*cm),
+  fDoorFrameX(10*cm),
+  fDoorFrameY(50*cm),
+  fDoorFrameZ(1*m),
+  fDoorFrameOffset(1.5*m),
+  fDoorX(2*cm),
+  fDoorY(50*cm),
+  fDoorZ(1*m),
   fChairX(20*cm),          // Half overall width.
   fChairY(20*cm),          // Half overall depth.
   fChairZ(45*cm),          // Half overall height.
@@ -73,6 +85,36 @@ void PerspectiveVisAction::RoomAndChair()
   ExtendedDraw
     (G4Box("box",fRoomX,fRoomY,fRoomZ), room_visAtts, G4TranslateZ3D(fRoomZ));
 
+  // Windows...
+  G4Box ("window",fWindowX,fWindowY,fWindowZ);
+  ExtendedDraw
+    (G4Box("window-x",fWindowX,fWindowY,fWindowZ),
+     room_visAtts,
+     G4Translate3D(-fRoomX - fWindowX, fWindowOffset, fWindowY + fWindowSillHeight));
+  ExtendedDraw
+    (G4Box("window-y1",fWindowX,fWindowY,fWindowZ),
+     room_visAtts,
+     G4Translate3D(0., -fRoomY - fWindowX, fWindowY + fWindowSillHeight) *
+     G4RotateZ3D(90.*deg));
+  ExtendedDraw
+    (G4Box("window-y2",fWindowX,fWindowY,fWindowZ),
+     room_visAtts,
+     G4Translate3D(0., fRoomY + fWindowX, fWindowY + fWindowSillHeight) *
+     G4RotateZ3D(-90.*deg));
+
+  // Door...
+  ExtendedDraw
+    (G4Box("door-frame",fDoorFrameX,fDoorFrameY,fDoorFrameZ),
+     room_visAtts,
+     G4Translate3D(-fRoomX - fDoorFrameX, fDoorFrameOffset, fDoorFrameZ));
+  ExtendedDraw
+    (G4Box("door",fDoorX,fDoorY,fDoorZ),
+     room_visAtts,
+     G4Translate3D(-fRoomX - fDoorX, fDoorFrameOffset, fDoorZ) *
+     G4TranslateY3D(fDoorY) *
+     G4RotateZ3D(60.*deg) *
+     G4TranslateY3D(-fDoorY));  // Last transform operates first.
+
   // Chair...
   G4VisAttributes chair_visAtts(G4Colour::Cyan());
   G4Transform3D A = G4RotateZ3D(90.*deg);           // Turn through 90 deg.
@@ -80,7 +122,7 @@ void PerspectiveVisAction::RoomAndChair()
   G4Transform3D C = G4RotateZ3D(-20.*deg) ;         // Rotate a little.
   G4Transform3D D = G4TranslateZ3D(fChairY);        // Place on floor.
   G4Transform3D E = G4TranslateY3D(-0.5 * fRoomY);  // Move over to the left...
-  G4Transform3D chair_transform = (E*(D*(C*(B*A))));
+  G4Transform3D chair_transform = E*D*C*B*A;
   Chair(chair_visAtts, chair_transform);
 }
 

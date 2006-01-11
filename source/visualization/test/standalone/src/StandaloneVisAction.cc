@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: StandaloneVisAction.cc,v 1.4 2005-03-03 16:45:34 allison Exp $
+// $Id: StandaloneVisAction.cc,v 1.5 2006-01-11 17:05:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "StandaloneVisAction.hh"
@@ -54,7 +54,7 @@ void StandaloneVisAction::Draw() {
     G4Polyhedron* pB = G4Box("boxB",1*m,1*m,1*m).CreatePolyhedron();
     pB->Transform(G4Translate3D(3*m,3*m,3*m));
     G4Polyhedron* pSubtracted = new G4Polyhedron(pA->subtract(*pB));
-    G4VisAttributes subVisAtts(G4Colour(0,1,1));
+    G4VisAttributes subVisAtts(G4Colour(1,0,1));
     pSubtracted->SetVisAttributes(&subVisAtts);
     pVisManager->Draw(*pSubtracted,G4Translate3D(6*m,6*m,6*m));
     delete pA;

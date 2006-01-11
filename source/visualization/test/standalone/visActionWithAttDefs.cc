@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: visActionWithAttDefs.cc,v 1.1 2005-03-23 17:43:25 allison Exp $
+// $Id: visActionWithAttDefs.cc,v 1.2 2006-01-11 17:04:29 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: perspective.cc,v 1.1 2005-11-22 15:51:22 allison Exp $
+// $Id: perspective.cc,v 1.2 2006-01-11 17:04:29 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
