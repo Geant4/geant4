@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.32 2005-09-04 17:03:53 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.33 2006-01-11 11:04:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,12 +38,13 @@
 // 30-06-04 make it to be pure discrete process (V.Ivanchenko)
 // 30-09-08 optimise integral option (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivanchenko)
-// 11-03-05 Shift verbose level by 1, add applyCuts and killPrimary flags (V.Ivanchenko)
+// 11-03-05 Shift verbose level by 1, add applyCuts and killPrimary flags (VI)
 // 14-03-05 Update logic PostStepDoIt (V.Ivanchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivanchenko)
 // 18-04-05 Use G4ParticleChangeForGamma (V.Ivanchenko)
-// 25-07-05 Add protection: integral mode only for charged particles (V.Ivanchenko)
+// 25-07-05 Add protection: integral mode only for charged particles (VI)
 // 04-09-05 default lambdaFactor 0.8 (V.Ivanchenko)
+// 11-01-06 add A to parameters of ComputeCrossSectionPerAtom (VI)
 //
 //
 // Class Description:
@@ -71,7 +72,6 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4PhysicsTableHelper.hh"
-#include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -238,7 +238,8 @@ void G4VEmProcess::SetSecondaryParticle(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEmProcess::AddEmModel(G4int order, G4VEmModel* p, const G4Region* region)
+void G4VEmProcess::AddEmModel(G4int order, G4VEmModel* p, 
+			      const G4Region* region)
 {
   modelManager->AddEmModel(order, p, 0, region);
   if(p) p->SetParticleChange(pParticleChange);
@@ -246,7 +247,8 @@ void G4VEmProcess::AddEmModel(G4int order, G4VEmModel* p, const G4Region* region
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEmProcess::UpdateEmModel(const G4String& nam, G4double emin, G4double emax)
+void G4VEmProcess::UpdateEmModel(const G4String& nam, 
+				 G4double emin, G4double emax)
 {
   modelManager->UpdateEmModel(nam, emin, emax);
 }
@@ -386,7 +388,8 @@ G4double G4VEmProcess::MicroscopicCrossSection(G4double kineticEnergy,
     cross /= currentMaterial->GetTotNbOfAtomsPerVolume();
   } else {
     G4VEmModel* model = SelectModel(kineticEnergy);
-    cross = model->CrossSectionPerVolume(currentMaterial,particle,kineticEnergy);
+    cross = 
+      model->CrossSectionPerVolume(currentMaterial,particle,kineticEnergy);
   }
 
   return cross;
@@ -394,12 +397,11 @@ G4double G4VEmProcess::MicroscopicCrossSection(G4double kineticEnergy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4VEmProcess::ComputeCrossSectionPerAtom(G4double kineticEnergy, G4double Z)
+G4double G4VEmProcess::ComputeCrossSectionPerAtom(G4double kineticEnergy, 
+						  G4double Z, G4double A)
 {
   G4VEmModel* model = SelectModel(kineticEnergy);
-  G4double A = G4NistManager::Instance()->FindOrBuildElement(G4int(Z), false)->GetN();
-  G4double cross = model->ComputeCrossSectionPerAtom(particle,kineticEnergy,Z,A);
-  return cross;
+  return model->ComputeCrossSectionPerAtom(particle,kineticEnergy,Z,A);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -420,7 +422,8 @@ G4bool G4VEmProcess::StorePhysicsTable(const G4ParticleDefinition* part,
   G4bool yes = true;
 
   if ( theLambdaTable && part == particle) {
-    const G4String name = GetPhysicsTableFileName(part,directory,"Lambda",ascii);
+    const G4String name = 
+      GetPhysicsTableFileName(part,directory,"Lambda",ascii);
     yes = theLambdaTable->StorePhysicsTable(name,ascii);
 
     if ( yes ) {
@@ -429,7 +432,8 @@ G4bool G4VEmProcess::StorePhysicsTable(const G4ParticleDefinition* part,
 	     << " in the directory <" << directory
 	     << "> " << G4endl;
     } else {
-      G4cout << "Fail to store Physics Tables for " << particle->GetParticleName()
+      G4cout << "Fail to store Physics Tables for " 
+	     << particle->GetParticleName()
              << " and process " << GetProcessName()
 	     << " in the directory <" << directory
 	     << "> " << G4endl;
@@ -438,7 +442,7 @@ G4bool G4VEmProcess::StorePhysicsTable(const G4ParticleDefinition* part,
   return yes;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
 			  	          const G4String& directory,
@@ -457,7 +461,8 @@ G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
   G4String filename;
 
   filename = GetPhysicsTableFileName(part,directory,"Lambda",ascii);
-  yes = G4PhysicsTableHelper::RetrievePhysicsTable(theLambdaTable,filename,ascii);
+  yes = G4PhysicsTableHelper::RetrievePhysicsTable(theLambdaTable,
+						   filename,ascii);
   if ( yes ) {
     if (0 < verboseLevel) {
       G4cout << "Lambda table for " << particleName << " is Retrieved from <"
@@ -480,7 +485,8 @@ G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
 void G4VEmProcess::FindLambdaMax()
 {
   if(1 < verboseLevel) {
-    G4cout << "### G4VEmProcess::FindLambdaMax: " << particle->GetParticleName() 
+    G4cout << "### G4VEmProcess::FindLambdaMax: " 
+	   << particle->GetParticleName() 
            << " and process " << GetProcessName() << G4endl; 
   }
   size_t n = theLambdaTable->length();
@@ -590,7 +596,8 @@ G4bool G4VEmProcess::IsIntegral() const
 
 G4PhysicsVector* G4VEmProcess::LambdaPhysicsVector(const G4MaterialCutsCouple*)
 {
-  G4PhysicsVector* v = new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nLambdaBins);
+  G4PhysicsVector* v = 
+    new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nLambdaBins);
   return v;
 }
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.29 2005-10-25 11:38:15 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.30 2006-01-11 11:04:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -39,11 +39,12 @@
 // 09-08-04 optimise integral option (V.Ivanchenko)
 // 11-08-04 add protected methods to access cuts (V.Ivanchenko)
 // 09-09-04 Bug fix for the integral mode with 2 peaks (V.Ivanchneko)
-// 16-09-04 Add flag for LambdaTable and method RecalculateLambda (V.Ivanchneko)
+// 16-09-04 Add flag for LambdaTable and method RecalculateLambda (VI)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 18-04-05 Use G4ParticleChangeForGamma (V.Ivantchenko)
-// 09-05-05 Fix problem in logic when path boundary between materials (V.Ivantchenko)
+// 09-05-05 Fix problem in logic when path boundary between materials (VI)
+// 11-01-06 add A to parameters of ComputeCrossSectionPerAtom (VI)
 //
 // Class Description:
 //
@@ -167,7 +168,8 @@ public:
                              const G4MaterialCutsCouple* couple);
   // It returns the cross section of the process for energy/ material
 
-  G4double ComputeCrossSectionPerAtom(G4double kineticEnergy, G4double Z);
+  G4double ComputeCrossSectionPerAtom(G4double kineticEnergy, 
+				      G4double Z, G4double A);
   // It returns the cross section of the process per atom
 
   G4double MeanFreePath(     const G4Track& track,
@@ -179,7 +181,8 @@ public:
 
   void ActivateDeexcitation(G4bool, const G4Region* r = 0);
 
-  G4VEmModel* SelectModelForMaterial(G4double kinEnergy, size_t& idxRegion) const;
+  G4VEmModel* SelectModelForMaterial(G4double kinEnergy, 
+				     size_t& idxRegion) const;
 
   void SetIntegral(G4bool val);
   G4bool IsIntegral() const;
