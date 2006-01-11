@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.79 2005-12-14 13:08:06 allison Exp $
+// $Id: G4VisManager.cc,v 1.80 2006-01-11 17:47:08 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -914,7 +914,7 @@ void G4VisManager::BeginOfEvent () {
 void G4VisManager::EndOfEvent () {
   //G4cout << "G4VisManager::EndOfEvent" << G4endl;
   // Don't call IsValidView unless there is a scene handler.  This
-  // avoids ERROR messages at end of event and run when the user has
+  // avoids WARNING message at end of event and run when the user has
   // not instantiated a scene handler, e.g., in batch mode.
   if (GetConcreteInstance() && fpSceneHandler && IsValidView()) {
     const std::vector<G4VModel*>& EOEModelList =
@@ -942,7 +942,7 @@ void G4VisManager::EndOfEvent () {
 void G4VisManager::EndOfRun () {
   //G4cout << "G4VisManager::EndOfRun" << G4endl;
   // Don't call IsValidView unless there is a scene handler.  This
-  // avoids ERROR messages at end of event and run when the user has
+  // avoids WARNING message at end of event and run when the user has
   // not instantiated a scene handler, e.g., in batch mode.
   if (GetConcreteInstance() && fpSceneHandler && IsValidView()) {
     if (!fpSceneHandler->GetMarkForClearingTransientStore()) {
@@ -1076,11 +1076,14 @@ G4bool G4VisManager::IsValidView () {
     // not want to use graphics, e.g., in batch mode.
     if (noGSPrinting) {
       noGSPrinting = false;
-      if (fVerbosity >= errors) {
+      if (fVerbosity >= warnings) {
 	G4cout <<
-  "ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system."
-  "\n  Suppress instantiation of vis manager (G4VisExecutive) or"
-  "\n  use \"/vis/open\" or \"/vis/sceneHandler/create\"."
+  "WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system"
+  "\n  has been instantiated.  Use \"/vis/open\" or \"/vis/sceneHandler/create\"."
+  "\n  Alternatively, to avoid this message, suppress instantiation of vis"
+  "\n  manager (G4VisExecutive), possibly by setting G4VIS_NONE, and ensure"
+  "\n  drawing code is executed only if G4VVisManager::GetConcreteInstance()"
+  "\n  is non-zero."
 	       << G4endl;
       }
     }
