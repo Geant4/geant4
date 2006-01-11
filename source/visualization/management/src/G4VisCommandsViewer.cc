@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.54 2005-12-14 13:14:04 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.55 2006-01-11 17:44:29 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -773,19 +773,22 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand*, G4String newValue) {
       }
       return;
     }
+    // Scene has changed.  UpdateVisManagerScene issues
+    // /vis/scene/notifyHandlers, which does a refresh anyway, so the
+    // ordinary refresh becomes part of the else phrase...
     UpdateVisManagerScene(scene->GetName());
-  }
-
-  if (verbosity >= G4VisManager::confirmations) {
-    G4cout << "Refreshing viewer \"" << viewer -> GetName () << "\"..."
-	   << G4endl;
-  }
-  viewer -> SetView ();
-  viewer -> ClearView ();
-  viewer -> DrawView ();
-  if (verbosity >= G4VisManager::confirmations) {
-    G4cout << "Viewer \"" << viewer -> GetName () << "\"" << " refreshed."
-      "\n  (You might also need \"/vis/viewer/update\".)" << G4endl;
+  } else {
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Refreshing viewer \"" << viewer -> GetName () << "\"..."
+	     << G4endl;
+    }
+    viewer -> SetView ();
+    viewer -> ClearView ();
+    viewer -> DrawView ();
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Viewer \"" << viewer -> GetName () << "\"" << " refreshed."
+	"\n  (You might also need \"/vis/viewer/update\".)" << G4endl;
+    }
   }
 }
 
@@ -1039,6 +1042,8 @@ void G4VisCommandViewerUpdate::SetNewValue (G4UIcommand*, G4String newValue) {
       G4cout << " post-processing triggered." << G4endl;
     }
     viewer -> ShowView ();
+    // Assume future need to "refresh" transients...
+    sceneHandler -> SetMarkForClearingTransientStore(true);
   }
   else {
     if (verbosity >= G4VisManager::errors) {
