@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.22 2005-10-13 17:31:47 allison Exp $
+// $Id: G4OpenGLViewer.cc,v 1.23 2006-01-11 18:38:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,7 +32,6 @@
 
 #include "G4ios.hh"
 #include "G4OpenGLViewer.hh"
-#include "G4OpenGLViewerDataStore.hh"
 #include "G4OpenGLSceneHandler.hh"
 #include "G4OpenGLTransform3D.hh"
 
@@ -55,8 +54,6 @@ haloing_enabled (false)
   fVP.SetAutoRefresh(true);
   fDefaultVP.SetAutoRefresh(true);
 
-  G4OpenGLViewerDataStore::SetTransparencyEnabled(this, transparency_enabled);
-
   //  glClearColor (0.0, 0.0, 0.0, 0.0);
   //  glClearDepth (1.0);
   //  glDisable (GL_BLEND);
@@ -77,6 +74,11 @@ void G4OpenGLViewer::InitializeGLView ()
 }  
 
 void G4OpenGLViewer::ClearView () {
+  glClearColor (background.GetRed(),
+		background.GetGreen(),
+		background.GetBlue(),
+		1.);
+  glClearDepth (1.0);
   //Below line does not compile with Mesa includes. 
   //glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
   glClear (GL_COLOR_BUFFER_BIT);

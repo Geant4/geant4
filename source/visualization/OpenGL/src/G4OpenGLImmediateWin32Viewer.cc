@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.10 2005-11-17 07:36:04 gcosmo Exp $
+// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.11 2006-01-11 18:38:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,19 +77,21 @@ void G4OpenGLImmediateWin32Viewer::DrawView () {
     glDrawBuffer (GL_FRONT);
   }
 
-  glClearColor (background.GetRed(),
-                background.GetGreen(),
-                background.GetBlue(),
-                1.);
-  glClearDepth (1.0);
-
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
 
   //Make sure current viewer is attached and clean...
   //Win32 version needed
   //glXMakeCurrent (dpy, win, cx);
   glViewport (0, 0, WinSize_x, WinSize_y);
+
+  /*  Assume ClearView has already been called (JA Jan 06).
+  glClearColor (background.GetRed(),
+		background.GetGreen(),
+		background.GetBlue(),
+		1.);
+  glClearDepth (1.0);
   ClearView ();
+  */
 
   if(style!=G4ViewParameters::hlr &&
      haloing_enabled) {
@@ -104,6 +106,8 @@ void G4OpenGLImmediateWin32Viewer::DrawView () {
   }
 
   NeedKernelVisit ();  // Always need to visit G4 kernel.
+  fModified = false; // To avoid a SetView in G4VViewer::ProcessView
+		     // (assume SetView has already been called) (JA Jan 06).
   ProcessView ();
   FinishView ();
 
