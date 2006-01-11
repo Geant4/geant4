@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.hh,v 1.8 2005-11-22 16:03:23 allison Exp $
+// $Id: G4OpenGLXmViewer.hh,v 1.9 2006-01-11 18:45:53 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,6 @@ class G4OpenGLXmTextField;
 class G4OpenGLXmFramedBox;
 class G4OpenGLXmFourArrowButtons;
 class G4OpenGLXmSeparator;
-class G4OpenGLXmViewerMessenger;
 
 class G4OpenGLXmViewer: public G4OpenGLXViewer {
 
@@ -207,7 +206,6 @@ protected:
   G4OpenGLXmRadioButton*            fpprint_col_radio2;
   G4OpenGLXmRadioButton*            fpprint_style_radio1;
   G4OpenGLXmRadioButton*            fpprint_style_radio2;
-  G4OpenGLXmViewerMessenger*        fpMessenger;
 
 public:
 

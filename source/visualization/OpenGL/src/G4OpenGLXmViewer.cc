@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.21 2005-11-22 16:03:23 allison Exp $
+// $Id: G4OpenGLXmViewer.cc,v 1.22 2006-01-11 18:45:53 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,7 +34,6 @@
 #include "globals.hh"
 
 #include "G4OpenGLXmViewer.hh"
-#include "G4OpenGLXmViewerMessenger.hh"
 
 #include "G4VisExtent.hh"
 #include "G4LogicalVolume.hh"
@@ -625,18 +624,13 @@ fpzoom_slider (0),
 fpdolly_slider (0),
 fpsetting_top (0),
 fpmiscellany_top (0),
-fpprint_top (0),
-fpMessenger (0)
+fpprint_top (0)
 {
-
-  fpMessenger = new G4OpenGLXmViewerMessenger(this, fShortName);
-
   WinSize_x = 100;
   WinSize_y = 100;
   
   GetXmConnection ();
   if (fViewId < 0) return;
-
 }
 
 G4OpenGLXmViewer::~G4OpenGLXmViewer ()
@@ -664,7 +658,6 @@ G4OpenGLXmViewer::~G4OpenGLXmViewer ()
   }
 ******************************/
 
-  delete fpMessenger;
 }
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.12 2005-10-13 17:30:08 allison Exp $
+// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.13 2006-01-11 18:45:53 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,8 +34,6 @@
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
 #include "G4OpenGLXmViewer.hh"
-
-#include "G4OpenGLViewerDataStore.hh"
 
 void G4OpenGLXmViewer::drawing_style_callback (Widget w, 
 					     XtPointer clientData, 
@@ -162,12 +160,10 @@ void G4OpenGLXmViewer::transparency_callback (Widget w,
     
   case 0:
     pView->transparency_enabled = false;
-    G4OpenGLViewerDataStore::SetTransparencyEnabled(pView, false);
     break;
 
   case 1:
     pView->transparency_enabled = true;
-    G4OpenGLViewerDataStore::SetTransparencyEnabled(pView, true);
     break;
 
   default:

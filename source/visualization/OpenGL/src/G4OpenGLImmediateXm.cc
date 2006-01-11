@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXm.cc,v 1.10 2005-06-02 17:43:46 allison Exp $
+// $Id: G4OpenGLImmediateXm.cc,v 1.11 2006-01-11 18:45:53 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,12 +36,16 @@
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLImmediateXm.hh"
 #include "G4OpenGLImmediateXmViewer.hh"
+#include "G4OpenGLXmViewerMessenger.hh"
 
 G4OpenGLImmediateXm::G4OpenGLImmediateXm ():
   G4VGraphicsSystem ("OpenGLImmediateXm",
 		     "OGLIXm",
 		     G4VisFeaturesOfOpenGLIXm (),
-		     G4VGraphicsSystem::threeD) {}
+		     G4VGraphicsSystem::threeD)
+{
+  G4OpenGLXmViewerMessenger::GetInstance();
+}
 
 G4OpenGLImmediateXm::~G4OpenGLImmediateXm () {}
 

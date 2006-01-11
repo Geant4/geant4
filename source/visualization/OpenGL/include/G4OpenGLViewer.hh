@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.11 2005-10-13 17:30:08 allison Exp $
+// $Id: G4OpenGLViewer.hh,v 1.12 2006-01-11 18:45:53 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,6 +39,10 @@ class G4OpenGLSceneHandler;
 
 // Base class for various OpenGLView classes.
 class G4OpenGLViewer: virtual public G4VViewer {
+
+  friend class G4OpenGLSceneHandler;
+  friend class G4OpenGLImmediateSceneHandler;
+  friend class G4OpenGLStoredSceneHandler;
 
 public:
   void ClearView  ();

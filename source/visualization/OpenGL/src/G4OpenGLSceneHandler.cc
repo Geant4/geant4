@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.39 2005-11-22 16:11:06 allison Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.40 2006-01-11 18:45:53 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,7 +43,6 @@
 #include "G4OpenGLSceneHandler.hh"
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLFontBaseStore.hh"
-#include "G4OpenGLViewerDataStore.hh"
 #include "G4OpenGLTransform3D.hh"
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
@@ -382,9 +381,10 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   // attributes, thereby over-riding the current view parameter.
   G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (pVA);
 
-  //Get colour, etc..
-  G4bool transparency_enabled =
-    G4OpenGLViewerDataStore::GetTransparencyEnabled(fpViewer);
+  //Get colour, etc...
+  G4bool transparency_enabled = true;
+  G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+  if (pViewer) transparency_enabled = pViewer->transparency_enabled;
   const G4Colour& c = GetColour (polyhedron);
   GLfloat materialColour [4];
   materialColour [0] = c.GetRed ();

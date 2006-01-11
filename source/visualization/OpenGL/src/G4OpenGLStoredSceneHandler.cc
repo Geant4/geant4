@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.23 2005-09-29 14:27:03 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.24 2006-01-11 18:45:53 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,6 @@
 
 #include "G4OpenGLStoredSceneHandler.hh"
 
-#include "G4OpenGLViewerDataStore.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 
@@ -216,8 +215,9 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid) {
     const G4Colour& c = pVA -> GetColour ();
     G4double opacity = c.GetAlpha ();
     if (!fSecondPass) {
-      G4bool transparency_enabled =
-	G4OpenGLViewerDataStore::GetTransparencyEnabled(fpViewer);
+      G4bool transparency_enabled = true;
+      G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+      if (pViewer) transparency_enabled = pViewer->transparency_enabled;
       if (transparency_enabled && opacity < 1.) {
 	// On first pass, transparent objects are not drawn, but flag is set...
 	fSecondPassRequested = true;

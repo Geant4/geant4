@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXm.cc,v 1.8 2005-06-02 17:43:46 allison Exp $
+// $Id: G4OpenGLStoredXm.cc,v 1.9 2006-01-11 18:45:53 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,12 +36,16 @@
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLStoredXm.hh"
 #include "G4OpenGLStoredXmViewer.hh"
+#include "G4OpenGLXmViewerMessenger.hh"
 
 G4OpenGLStoredXm::G4OpenGLStoredXm ():
   G4VGraphicsSystem ("OpenGLStoredXm",
 		     "OGLSXm",
 		     G4VisFeaturesOfOpenGLSXm (),
-		     G4VGraphicsSystem::threeD) {}
+		     G4VGraphicsSystem::threeD)
+{
+  G4OpenGLXmViewerMessenger::GetInstance();
+}
 
 G4VSceneHandler* G4OpenGLStoredXm::CreateSceneHandler (const G4String& name) {
   G4VSceneHandler* pScene = new G4OpenGLStoredSceneHandler (*this, name);
