@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerX.hh,v 1.2 2005-07-20 20:39:02 allison Exp $
+// $Id: G4RayTracerX.hh,v 1.3 2006-01-11 18:01:33 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,28 +35,19 @@
 // class description:
 //
 // G4RayTracerX
-// X window version of RayTracer (also produces jpeg file - see class
-// description for G4RayTracer).
+// X window version of RayTracer - opens X window for viewing as well
+// as producing jpeg file just like G4RayTracer.
 
-#include "G4RayTracer.hh"
+#include "G4VGraphicsSystem.hh"
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-
-class G4RayTracerX : public G4RayTracer
+class G4RayTracerX : public G4VGraphicsSystem
 {
-public:
-  G4RayTracerX();
-  G4VSceneHandler* CreateSceneHandler (const G4String& );
-  G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& );
-
-  // X Window variables...
-  Display* display;
-  Window win;
-  GC gc;
-  XStandardColormap *scmap;
+  public: // with description
+    G4RayTracerX();
+    ~G4RayTracerX();
+    G4VSceneHandler* CreateSceneHandler (const G4String& );
+    G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& );
 };
 
 #endif
-
 #endif
