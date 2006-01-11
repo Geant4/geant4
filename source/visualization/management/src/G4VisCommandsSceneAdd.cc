@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.59 2005-11-22 17:17:37 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.60 2006-01-11 17:39:17 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -1419,9 +1419,11 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
     }
     else {
       if (verbosity >= G4VisManager::errors) {
-	G4cout << "ERROR: G4VisCommandSceneAddVolume::SetNewValue:"
-	       << "\n  No world - shouldn't happen if G4ApplicationState is"
-	       << " being properly noted!!" << G4endl;
+	G4cout <<
+	  "ERROR: G4VisCommandSceneAddVolume::SetNewValue:"
+	  "\n  No world.  Maybe the geometry has not yet been defined."
+	  "\n  Try \"/run/initialize\""
+	       << G4endl;
       }
       return;
     }
