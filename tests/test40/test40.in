@@ -1,4 +1,4 @@
-# $Id: test40.in,v 1.8 2005-06-23 17:40:52 vnivanch Exp $
+# $Id: test40.in,v 1.9 2006-01-11 19:16:06 vnivanch Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -7,13 +7,10 @@
 #
 /control/verbose 2
 #
-##/testem/phys/addPhysics  model
 /testem/phys/addPhysics  standard
 /testem/phys/setCuts 1 mm
 #
 /run/initialize
-#
-#/run/particle/applyCuts
 #
 /run/verbose 1
 /tracking/verbose 0
@@ -21,12 +18,12 @@
 /testem/event/printModulo 100
 #
 # Acceptance printout is activated
-/testem/det/acceptance  0.95045  0.0084 4.0
+/testem/det/acceptance  0.9494  0.0084 4.0
 #
 /gun/particle e-
 /gun/energy 5 GeV
 /run/beamOn  500
-
+#
 /testem/det/setField  10 gauss
 /run/beamOn  500
 

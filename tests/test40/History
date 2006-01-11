@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2005-12-06 16:35:04 gcosmo Exp $
+$Id: History,v 1.14 2006-01-11 19:16:06 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11-01-06 V.Ivanchenko (test40-V08-00-00)
+- Migrade to new particle design
 
 06-12-05 G.Cosmo
 - Trivial changes for support of CLHEP-2.0.X series.

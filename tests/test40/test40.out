@@ -1,78 +1,72 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (17-December-2004)
+ Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
 
 ***** Table : Nb of materials = 13 *****
 
- Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
-   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+ Material:      Air     density:  1.290 kg/m3   temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
 
  Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
 
  Material: liquidArgon     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
-   --->  Element: liquidArgon      Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: liquidArgon ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material: Aluminium     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
-   --->  Element: Aluminium      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:     Iron     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
-   --->  Element:     Iron      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Iron ( )   Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:   Nickel     density:  8.960 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.415 cm 
-   --->  Element:   Nickel      Z = 28.0   N =  58.7   A =  58.69 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Nickel ( )   Z = 28.0   N =  58.7   A =  58.69 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:   Copper     density:  8.960 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.435 cm 
-   --->  Element:   Copper      Z = 29.0   N =  63.5   A =  63.54 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Copper ( )   Z = 29.0   N =  63.5   A =  63.54 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:      BGO     density:  7.100 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.123 cm 
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  15.41 %  Abundance  63.16 %
-   --->  Element: Germanium Ge   Z = 32.0   N =  72.6   A =  72.59 g/mole  fractionMass:  17.48 %  Abundance  15.79 %
-   --->  Element:  Bismuth Bi   Z = 83.0   N = 209.0   A = 208.98 g/mole  fractionMass:  67.10 %  Abundance  21.05 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  15.41 %  Abundance  63.16 %
+   --->  Element: Germanium (Ge)   Z = 32.0   N =  72.6   A =  72.59 g/mole  fractionMass:  17.48 %  Abundance  15.79 %
+   --->  Element: Bismuth (Bi)   Z = 83.0   N = 209.0   A = 208.98 g/mole  fractionMass:  67.10 %  Abundance  21.05 %
 
  Material:    PbWO4     density:  8.280 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.924 mm 
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  14.07 %  Abundance  66.67 %
-   --->  Element:     Lead Pb   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass:  45.53 %  Abundance  16.67 %
-   --->  Element: Tungsten  W   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass:  40.40 %  Abundance  16.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  14.07 %  Abundance  66.67 %
+   --->  Element: Lead (Pb)   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass:  45.53 %  Abundance  16.67 %
+   --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass:  40.40 %  Abundance  16.67 %
 
  Material: Tungsten     density: 19.300 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.504 mm 
-   --->  Element: Tungsten  W   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material: FCal2Slugs     density: 18.600 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.689 mm 
-   --->  Element: Tungsten  W   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass:  97.00 %  Abundance  91.03 %
-   --->  Element:     Iron      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass:   1.00 %  Abundance   3.09 %
-   --->  Element:   Nickel      Z = 28.0   N =  58.7   A =  58.69 g/mole  fractionMass:   2.00 %  Abundance   5.88 %
+   --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass:  97.00 %  Abundance  91.03 %
+   --->  Element: Iron ( )   Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass:   1.00 %  Abundance   3.09 %
+   --->  Element: Nickel ( )   Z = 28.0   N =  58.7   A =  58.69 g/mole  fractionMass:   2.00 %  Abundance   5.88 %
 
  Material: FCal2Abs     density: 10.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   7.568 mm 
-   --->  Element:   Copper      Z = 29.0   N =  63.5   A =  63.54 g/mole  fractionMass:  20.00 %  Abundance  40.43 %
-   --->  Element: Tungsten  W   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass:  77.60 %  Abundance  54.22 %
-   --->  Element:     Iron      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass:   0.80 %  Abundance   1.84 %
-   --->  Element:   Nickel      Z = 28.0   N =  58.7   A =  58.69 g/mole  fractionMass:   1.60 %  Abundance   3.50 %
+   --->  Element: Copper ( )   Z = 29.0   N =  63.5   A =  63.54 g/mole  fractionMass:  20.00 %  Abundance  40.43 %
+   --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass:  77.60 %  Abundance  54.22 %
+   --->  Element: Iron ( )   Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass:   0.80 %  Abundance   1.84 %
+   --->  Element: Nickel ( )   Z = 28.0   N =  58.7   A =  58.69 g/mole  fractionMass:   1.60 %  Abundance   3.50 %
 
  Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
-   --->  Element:     Lead Pb   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Lead (Pb)   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
 
 #
-##/testem/phys/addPhysics  model
 /testem/phys/addPhysics  standard
 PhysicsList::AddPhysicsList <standard> fail - name is unknown 
 /testem/phys/setCuts 1 mm
 #
 /run/initialize
 Absorber is 17.848 cm  of PbWO4
-
-phot:  Total cross sections from Sandia parametrisation. 
-#
-#/run/particle/applyCuts
 #
 /run/verbose 1
 /tracking/verbose 0
@@ -80,30 +74,33 @@ phot:  Total cross sections from Sandia parametrisation.
 /testem/event/printModulo 100
 #
 # Acceptance printout is activated
-/testem/det/acceptance  0.95140202  0.0082 4.0
+/testem/det/acceptance  0.9494  0.0083 4.0
 #
 /gun/particle e-
 /gun/energy 5 GeV
 /run/beamOn  500
-G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
-compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-       Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+phot:  Total cross sections from Sandia parametrisation. 
 
-conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
-        e+e- energies according Bethe-Heitler
-        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according to the Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 90 bins.
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
       Lambda tables from threshold to 100 GeV in 90 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
@@ -114,8 +111,8 @@ eBrem:   tables are built for  e-
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
       Lambda tables from threshold to 100 GeV in 90 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
@@ -123,37 +120,40 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
       Lambda tables from threshold to 100 GeV in 90 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
+
+msc:  Model variant of multiple scattering for GenericIon
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
       Lambda tables from threshold to 100 GeV in 90 bins.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
       Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below.
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
       Lambda tables from threshold to 100 GeV in 90 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
@@ -168,9 +168,9 @@ muPairProd:   tables are built for  mu+
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
       Lambda tables from threshold to 100 GeV in 90 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
@@ -184,7 +184,7 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ========= Table of registered couples ==============================
 
@@ -224,31 +224,31 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 500
-  User=934.59s Real=1124.32s Sys=189.6s
+  User=352.81s Real=352.94s Sys=0s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 1.00 radl:    1.13%       0.65%             0-> 1.00 radl:    1.13%     0.65% 
-    1.00-> 2.00 radl:    2.65%       1.35%             0-> 2.00 radl:    3.78%     1.61% 
-    2.00-> 3.00 radl:    5.81%       2.40%             0-> 3.00 radl:    9.59%     3.63% 
-    3.00-> 4.00 radl:    8.85%       2.98%             0-> 4.00 radl:   18.44%     6.07% 
-    4.00-> 5.00 radl:   10.70%       3.06%             0-> 5.00 radl:   29.14%     8.32% 
-    5.00-> 6.00 radl:   11.16%       2.64%             0-> 6.00 radl:   40.30%     9.88% 
-    6.00-> 7.00 radl:   10.59%       2.24%             0-> 7.00 radl:   50.89%    10.55% 
-    7.00-> 8.00 radl:    9.47%       1.89%             0-> 8.00 radl:   60.36%    10.39% 
-    8.00-> 9.00 radl:    7.94%       1.97%             0-> 9.00 radl:   68.30%     9.75% 
-    9.00->10.00 radl:    6.51%       1.87%             0->10.00 radl:   74.80%     8.79% 
-   10.00->11.00 radl:    5.18%       1.73%             0->11.00 radl:   79.98%     7.72% 
-   11.00->12.00 radl:    4.00%       1.57%             0->12.00 radl:   83.98%     6.60% 
-   12.00->13.00 radl:    3.10%       1.51%             0->13.00 radl:   87.09%     5.41% 
-   13.00->14.00 radl:    2.36%       1.33%             0->14.00 radl:   89.45%     4.30% 
-   14.00->15.00 radl:    1.78%       1.15%             0->15.00 radl:   91.23%     3.33% 
-   15.00->16.00 radl:    1.33%       0.95%             0->16.00 radl:   92.55%     2.51% 
-   16.00->17.00 radl:    0.97%       0.76%             0->17.00 radl:   93.52%     1.88% 
-   17.00->18.00 radl:    0.69%       0.63%             0->18.00 radl:   94.21%     1.38% 
-   18.00->19.00 radl:    0.49%       0.46%             0->19.00 radl:   94.69%     1.07% 
-   19.00->20.00 radl:    0.33%       0.34%             0->20.00 radl:   95.03%     0.87% 
+    0.00-> 1.00 radl:    1.09%       0.60%             0-> 1.00 radl:    1.09%     0.60% 
+    1.00-> 2.00 radl:    2.49%       1.25%             0-> 2.00 radl:    3.58%     1.54% 
+    2.00-> 3.00 radl:    5.50%       2.25%             0-> 3.00 radl:    9.08%     3.42% 
+    3.00-> 4.00 radl:    8.72%       2.84%             0-> 4.00 radl:   17.80%     5.75% 
+    4.00-> 5.00 radl:   10.74%       3.04%             0-> 5.00 radl:   28.54%     7.94% 
+    5.00-> 6.00 radl:   11.31%       2.66%             0-> 6.00 radl:   39.85%     9.33% 
+    6.00-> 7.00 radl:   10.81%       2.19%             0-> 7.00 radl:   50.66%     9.94% 
+    7.00-> 8.00 radl:    9.58%       1.97%             0-> 8.00 radl:   60.25%     9.81% 
+    8.00-> 9.00 radl:    8.10%       1.87%             0-> 9.00 radl:   68.35%     9.05% 
+    9.00->10.00 radl:    6.59%       1.88%             0->10.00 radl:   74.94%     7.97% 
+   10.00->11.00 radl:    5.23%       1.64%             0->11.00 radl:   80.17%     6.90% 
+   11.00->12.00 radl:    3.99%       1.56%             0->12.00 radl:   84.16%     5.78% 
+   12.00->13.00 radl:    3.08%       1.41%             0->13.00 radl:   87.24%     4.68% 
+   13.00->14.00 radl:    2.34%       1.19%             0->14.00 radl:   89.59%     3.70% 
+   14.00->15.00 radl:    1.73%       1.01%             0->15.00 radl:   91.32%     2.87% 
+   15.00->16.00 radl:    1.30%       0.88%             0->16.00 radl:   92.62%     2.14% 
+   16.00->17.00 radl:    0.92%       0.64%             0->17.00 radl:   93.54%     1.64% 
+   17.00->18.00 radl:    0.65%       0.51%             0->18.00 radl:   94.19%     1.27% 
+   18.00->19.00 radl:    0.49%       0.46%             0->19.00 radl:   94.68%     0.97% 
+   19.00->20.00 radl:    0.35%       0.34%             0->20.00 radl:   95.02%     0.79% 
 
 
 
@@ -256,41 +256,42 @@ Run Summary
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 0.25 radl:   35.03%       2.58%             0-> 0.25 radl:   35.03%     2.58% 
-    0.25-> 0.50 radl:   17.98%       1.52%             0-> 0.50 radl:   53.01%     2.63% 
-    0.50-> 0.75 radl:   10.52%       1.17%             0-> 0.75 radl:   63.53%     2.28% 
-    0.75-> 1.00 radl:    6.82%       0.84%             0-> 1.00 radl:   70.35%     2.07% 
-    1.00-> 1.25 radl:    4.80%       0.75%             0-> 1.25 radl:   75.14%     1.84% 
-    1.25-> 1.50 radl:    3.57%       0.60%             0-> 1.50 radl:   78.72%     1.66% 
-    1.50-> 1.75 radl:    2.80%       0.48%             0-> 1.75 radl:   81.52%     1.53% 
-    1.75-> 2.00 radl:    2.29%       0.43%             0-> 2.00 radl:   83.81%     1.45% 
-    2.00-> 2.25 radl:    1.91%       0.36%             0-> 2.25 radl:   85.72%     1.32% 
-    2.25-> 2.50 radl:    1.60%       0.33%             0-> 2.50 radl:   87.31%     1.22% 
-    2.50-> 2.75 radl:    1.34%       0.29%             0-> 2.75 radl:   88.65%     1.15% 
-    2.75-> 3.00 radl:    1.15%       0.27%             0-> 3.00 radl:   89.80%     1.11% 
-    3.00-> 3.25 radl:    0.98%       0.25%             0-> 3.25 radl:   90.79%     1.07% 
-    3.25-> 3.50 radl:    0.88%       0.23%             0-> 3.50 radl:   91.67%     1.04% 
-    3.50-> 3.75 radl:    0.77%       0.21%             0-> 3.75 radl:   92.44%     1.00% 
-    3.75-> 4.00 radl:    0.66%       0.21%             0-> 4.00 radl:   93.10%     0.95% 
-    4.00-> 4.25 radl:    0.59%       0.18%             0-> 4.25 radl:   93.69%     0.91% 
-    4.25-> 4.50 radl:    0.52%       0.16%             0-> 4.50 radl:   94.21%     0.89% 
-    4.50-> 4.75 radl:    0.44%       0.15%             0-> 4.75 radl:   94.65%     0.88% 
-    4.75-> 5.00 radl:    0.38%       0.14%             0-> 5.00 radl:   95.03%     0.87% 
+    0.00-> 0.25 radl:   32.93%       2.23%             0-> 0.25 radl:   32.93%     2.23% 
+    0.25-> 0.50 radl:   18.63%       1.27%             0-> 0.50 radl:   51.56%     2.40% 
+    0.50-> 0.75 radl:   11.09%       1.00%             0-> 0.75 radl:   62.65%     2.23% 
+    0.75-> 1.00 radl:    7.21%       0.83%             0-> 1.00 radl:   69.86%     2.01% 
+    1.00-> 1.25 radl:    5.00%       0.72%             0-> 1.25 radl:   74.86%     1.78% 
+    1.25-> 1.50 radl:    3.71%       0.60%             0-> 1.50 radl:   78.57%     1.60% 
+    1.50-> 1.75 radl:    2.87%       0.48%             0-> 1.75 radl:   81.44%     1.50% 
+    1.75-> 2.00 radl:    2.33%       0.42%             0-> 2.00 radl:   83.77%     1.40% 
+    2.00-> 2.25 radl:    1.91%       0.36%             0-> 2.25 radl:   85.68%     1.32% 
+    2.25-> 2.50 radl:    1.59%       0.31%             0-> 2.50 radl:   87.27%     1.24% 
+    2.50-> 2.75 radl:    1.37%       0.28%             0-> 2.75 radl:   88.64%     1.19% 
+    2.75-> 3.00 radl:    1.16%       0.29%             0-> 3.00 radl:   89.80%     1.09% 
+    3.00-> 3.25 radl:    1.01%       0.24%             0-> 3.25 radl:   90.81%     1.03% 
+    3.25-> 3.50 radl:    0.88%       0.22%             0-> 3.50 radl:   91.68%     0.98% 
+    3.50-> 3.75 radl:    0.76%       0.20%             0-> 3.75 radl:   92.45%     0.95% 
+    3.75-> 4.00 radl:    0.66%       0.19%             0-> 4.00 radl:   93.11%     0.91% 
+    4.00-> 4.25 radl:    0.58%       0.17%             0-> 4.25 radl:   93.68%     0.87% 
+    4.25-> 4.50 radl:    0.51%       0.16%             0-> 4.50 radl:   94.20%     0.82% 
+    4.50-> 4.75 radl:    0.45%       0.15%             0-> 4.75 radl:   94.64%     0.81% 
+    4.75-> 5.00 radl:    0.38%       0.14%             0-> 5.00 radl:   95.02%     0.79% 
 
                               SUMMARY
-                         energy deposit :   95.03 % E0 +-    0.87 % E0
-                         charged traklen:  492.90 radl +-    5.91 radl
-                         neutral traklen: 4697.19 radl +-  131.73 radl
+                         energy deposit :   95.02 % E0 +-    0.79 % E0
+                         charged traklen:  493.92 radl +-    6.37 radl
+                         neutral traklen: 4684.94 radl +-  145.27 radl
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 908209470, 884018551
+ Current couple of seeds = 1460315758, 1290527826
 ----------------------------------------
 
 <<<<<ACCEPTANCE>>>>> 500 events for Total Energy in Absorber
-Edep: 0.95025515  delEdep= -0.001146866 nrms= 3.1274028
+Edep: 0.95022907  delEdep= 0.00082906853 nrms= 2.2335585
 <<<<<END>>>>>   IS ACCEPTED
 
+#
 /testem/det/setField  10 gauss
 /run/beamOn  500
 
@@ -316,7 +317,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 908209470, 884018551
+ Current couple of seeds = 1460315758, 1290527826
 ----------------------------------------
 Start Run processing.
 
@@ -332,31 +333,31 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 500
-  User=1078.41s Real=1268.77s Sys=190.26s
+  User=444.01s Real=444.32s Sys=0s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 1.00 radl:    1.08%       0.68%             0-> 1.00 radl:    1.08%     0.68% 
-    1.00-> 2.00 radl:    2.47%       1.22%             0-> 2.00 radl:    3.56%     1.47% 
-    2.00-> 3.00 radl:    5.50%       2.19%             0-> 3.00 radl:    9.06%     3.23% 
-    3.00-> 4.00 radl:    8.67%       2.96%             0-> 4.00 radl:   17.73%     5.72% 
-    4.00-> 5.00 radl:   10.69%       2.88%             0-> 5.00 radl:   28.41%     7.86% 
-    5.00-> 6.00 radl:   11.36%       2.52%             0-> 6.00 radl:   39.77%     9.32% 
-    6.00-> 7.00 radl:   10.92%       2.09%             0-> 7.00 radl:   50.69%     9.85% 
-    7.00-> 8.00 radl:    9.58%       1.84%             0-> 8.00 radl:   60.27%     9.50% 
-    8.00-> 9.00 radl:    8.13%       1.79%             0-> 9.00 radl:   68.40%     8.67% 
-    9.00->10.00 radl:    6.66%       1.80%             0->10.00 radl:   75.07%     7.58% 
-   10.00->11.00 radl:    5.23%       1.67%             0->11.00 radl:   80.29%     6.43% 
-   11.00->12.00 radl:    4.06%       1.51%             0->12.00 radl:   84.35%     5.30% 
-   12.00->13.00 radl:    3.04%       1.27%             0->13.00 radl:   87.39%     4.37% 
-   13.00->14.00 radl:    2.30%       1.16%             0->14.00 radl:   89.69%     3.48% 
-   14.00->15.00 radl:    1.70%       0.96%             0->15.00 radl:   91.39%     2.73% 
-   15.00->16.00 radl:    1.25%       0.78%             0->16.00 radl:   92.64%     2.14% 
-   16.00->17.00 radl:    0.96%       0.66%             0->17.00 radl:   93.60%     1.65% 
-   17.00->18.00 radl:    0.66%       0.53%             0->18.00 radl:   94.26%     1.25% 
-   18.00->19.00 radl:    0.47%       0.42%             0->19.00 radl:   94.73%     0.96% 
-   19.00->20.00 radl:    0.35%       0.33%             0->20.00 radl:   95.08%     0.79% 
+    0.00-> 1.00 radl:    1.11%       0.81%             0-> 1.00 radl:    1.11%     0.81% 
+    1.00-> 2.00 radl:    2.58%       1.30%             0-> 2.00 radl:    3.69%     1.63% 
+    2.00-> 3.00 radl:    5.76%       2.34%             0-> 3.00 radl:    9.45%     3.54% 
+    3.00-> 4.00 radl:    8.87%       2.85%             0-> 4.00 radl:   18.33%     5.89% 
+    4.00-> 5.00 radl:   10.92%       2.87%             0-> 5.00 radl:   29.25%     7.96% 
+    5.00-> 6.00 radl:   11.45%       2.45%             0-> 6.00 radl:   40.70%     9.21% 
+    6.00-> 7.00 radl:   10.80%       2.04%             0-> 7.00 radl:   51.50%     9.46% 
+    7.00-> 8.00 radl:    9.52%       2.00%             0-> 8.00 radl:   61.02%     9.24% 
+    8.00-> 9.00 radl:    7.93%       1.89%             0-> 9.00 radl:   68.96%     8.54% 
+    9.00->10.00 radl:    6.48%       1.82%             0->10.00 radl:   75.43%     7.56% 
+   10.00->11.00 radl:    5.06%       1.62%             0->11.00 radl:   80.49%     6.64% 
+   11.00->12.00 radl:    3.91%       1.44%             0->12.00 radl:   84.40%     5.72% 
+   12.00->13.00 radl:    2.96%       1.21%             0->13.00 radl:   87.35%     4.84% 
+   13.00->14.00 radl:    2.25%       1.14%             0->14.00 radl:   89.60%     3.99% 
+   14.00->15.00 radl:    1.68%       0.89%             0->15.00 radl:   91.28%     3.31% 
+   15.00->16.00 radl:    1.23%       0.81%             0->16.00 radl:   92.51%     2.68% 
+   16.00->17.00 radl:    0.87%       0.82%             0->17.00 radl:   93.38%     1.97% 
+   17.00->18.00 radl:    0.67%       0.64%             0->18.00 radl:   94.05%     1.46% 
+   18.00->19.00 radl:    0.47%       0.45%             0->19.00 radl:   94.52%     1.13% 
+   19.00->20.00 radl:    0.35%       0.39%             0->20.00 radl:   94.87%     0.93% 
 
 
 
@@ -364,39 +365,39 @@ Run Summary
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 0.25 radl:   35.12%       2.63%             0-> 0.25 radl:   35.12%     2.63% 
-    0.25-> 0.50 radl:   17.96%       1.49%             0-> 0.50 radl:   53.08%     2.68% 
-    0.50-> 0.75 radl:   10.51%       1.15%             0-> 0.75 radl:   63.58%     2.41% 
-    0.75-> 1.00 radl:    6.85%       0.92%             0-> 1.00 radl:   70.43%     2.08% 
-    1.00-> 1.25 radl:    4.81%       0.75%             0-> 1.25 radl:   75.24%     1.83% 
-    1.25-> 1.50 radl:    3.60%       0.62%             0-> 1.50 radl:   78.84%     1.64% 
-    1.50-> 1.75 radl:    2.83%       0.51%             0-> 1.75 radl:   81.67%     1.48% 
-    1.75-> 2.00 radl:    2.26%       0.42%             0-> 2.00 radl:   83.92%     1.34% 
-    2.00-> 2.25 radl:    1.88%       0.38%             0-> 2.25 radl:   85.80%     1.25% 
-    2.25-> 2.50 radl:    1.56%       0.32%             0-> 2.50 radl:   87.36%     1.19% 
-    2.50-> 2.75 radl:    1.34%       0.29%             0-> 2.75 radl:   88.71%     1.13% 
-    2.75-> 3.00 radl:    1.16%       0.27%             0-> 3.00 radl:   89.86%     1.07% 
-    3.00-> 3.25 radl:    0.99%       0.25%             0-> 3.25 radl:   90.85%     1.02% 
-    3.25-> 3.50 radl:    0.86%       0.23%             0-> 3.50 radl:   91.71%     0.97% 
-    3.50-> 3.75 radl:    0.76%       0.22%             0-> 3.75 radl:   92.48%     0.93% 
-    3.75-> 4.00 radl:    0.66%       0.20%             0-> 4.00 radl:   93.14%     0.89% 
-    4.00-> 4.25 radl:    0.57%       0.18%             0-> 4.25 radl:   93.71%     0.86% 
-    4.25-> 4.50 radl:    0.53%       0.17%             0-> 4.50 radl:   94.23%     0.84% 
-    4.50-> 4.75 radl:    0.45%       0.17%             0-> 4.75 radl:   94.69%     0.82% 
-    4.75-> 5.00 radl:    0.39%       0.14%             0-> 5.00 radl:   95.08%     0.79% 
+    0.00-> 0.25 radl:   32.59%       2.45%             0-> 0.25 radl:   32.59%     2.45% 
+    0.25-> 0.50 radl:   18.52%       1.45%             0-> 0.50 radl:   51.10%     2.77% 
+    0.50-> 0.75 radl:   11.12%       1.01%             0-> 0.75 radl:   62.23%     2.57% 
+    0.75-> 1.00 radl:    7.14%       0.86%             0-> 1.00 radl:   69.37%     2.31% 
+    1.00-> 1.25 radl:    5.00%       0.71%             0-> 1.25 radl:   74.37%     2.09% 
+    1.25-> 1.50 radl:    3.75%       0.56%             0-> 1.50 radl:   78.12%     1.92% 
+    1.50-> 1.75 radl:    2.89%       0.48%             0-> 1.75 radl:   81.01%     1.79% 
+    1.75-> 2.00 radl:    2.36%       0.43%             0-> 2.00 radl:   83.37%     1.63% 
+    2.00-> 2.25 radl:    1.98%       0.40%             0-> 2.25 radl:   85.35%     1.47% 
+    2.25-> 2.50 radl:    1.64%       0.35%             0-> 2.50 radl:   86.99%     1.35% 
+    2.50-> 2.75 radl:    1.39%       0.33%             0-> 2.75 radl:   88.38%     1.23% 
+    2.75-> 3.00 radl:    1.19%       0.27%             0-> 3.00 radl:   89.57%     1.18% 
+    3.00-> 3.25 radl:    1.02%       0.26%             0-> 3.25 radl:   90.59%     1.13% 
+    3.25-> 3.50 radl:    0.88%       0.23%             0-> 3.50 radl:   91.47%     1.07% 
+    3.50-> 3.75 radl:    0.75%       0.20%             0-> 3.75 radl:   92.23%     1.03% 
+    3.75-> 4.00 radl:    0.67%       0.20%             0-> 4.00 radl:   92.90%     1.01% 
+    4.00-> 4.25 radl:    0.60%       0.18%             0-> 4.25 radl:   93.50%     0.98% 
+    4.25-> 4.50 radl:    0.53%       0.16%             0-> 4.50 radl:   94.03%     0.96% 
+    4.50-> 4.75 radl:    0.46%       0.15%             0-> 4.75 radl:   94.49%     0.94% 
+    4.75-> 5.00 radl:    0.38%       0.14%             0-> 5.00 radl:   94.87%     0.93% 
 
                               SUMMARY
-                         energy deposit :   95.08 % E0 +-    0.79 % E0
-                         charged traklen:  493.01 radl +-    5.78 radl
-                         neutral traklen: 4698.29 radl +-  132.98 radl
+                         energy deposit :   94.87 % E0 +-    0.93 % E0
+                         charged traklen:  492.65 radl +-    7.12 radl
+                         neutral traklen: 4691.96 radl +-  131.91 radl
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1857286562, 171541138
+ Current couple of seeds = 293874174, 535748281
 ----------------------------------------
 
 <<<<<ACCEPTANCE>>>>> 500 events for Total Energy in Absorber
-Edep: 0.9507639  delEdep= -0.00063811859 nrms= 1.7400934
+Edep: 0.94868894  delEdep= -0.00071105877 nrms= 1.9156334
 <<<<<END>>>>>   IS ACCEPTED
 
 G4 kernel has come to Quit state.
