@@ -21,11 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.icc,v 1.7 2005-11-23 05:20:02 tinslay Exp $
+// $Id: G4VisExecutive.icc,v 1.8 2006-01-11 17:20:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison 24th January 1998.
+
+#ifndef G4VISEXECUTIVE_ICC
+#define G4VISEXECUTIVE_ICC
 
 // Supported drivers...
 
@@ -138,3 +141,5 @@ G4VisExecutive::RegisterModelFactories()
    RegisterModelFactory(new G4TrajectoryDrawByChargeFactory());
    RegisterModelFactory(new G4TrajectoryDrawByParticleIDFactory());
 }
+
+#endif
