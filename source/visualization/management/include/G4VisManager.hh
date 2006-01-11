@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.45 2005-11-29 22:23:01 tinslay Exp $
+// $Id: G4VisManager.hh,v 1.46 2006-01-11 17:33:16 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -116,9 +116,12 @@ class G4VisManager: public G4VVisManager {
   // G4VVisManager::GetConcreteInstance (), always testing for
   // non-zero.
 
-  // Odd friends that need access to various methods of the G4VisManager...
+  // Odd friends that need access to the G4VisManager...
   friend class G4RTSteppingAction;
   friend class G4RayTrajectory;
+  friend class G4RayTracerSceneHandler;
+  friend class G4RTMessenger;
+  friend class G4OpenGLXmViewerMessenger;
 
   // Management friends...
   friend class G4VSceneHandler;
