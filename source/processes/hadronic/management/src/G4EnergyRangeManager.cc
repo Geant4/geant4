@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyRangeManager.cc,v 1.13 2005-12-16 14:24:11 mkossov Exp $
+// $Id: G4EnergyRangeManager.cc,v 1.14 2006-01-12 16:23:52 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Energy Range Manager
@@ -125,8 +125,19 @@
        break;
      case 2:
        if( (emi2<=emi1 && ema2>=ema1) || (emi2>=emi1 && ema2<=ema1) )
-      throw G4HadronicException(__FILE__, __LINE__,
-          "GetHadronicInteraction: Energy ranges of two models fully overlapping");
+       {
+         G4cout<<"G4EnergyRangeManager:GetHadronicInteraction: counter="<<counter<<", Ek="
+               <<kineticEnergy<<", Material = "<<aMaterial->GetName()<<", Element = "
+               <<anElement->GetName()<<G4endl;
+         if(counter) for( G4int j=0; j<counter; j++ )
+         {
+           G4HadronicInteraction* HInt=theHadronicInteraction[j];
+           G4cout<<"*"<<j<<"* low=" <<HInt->GetMinEnergy(aMaterial,anElement)
+               <<", high="<<HInt->GetMaxEnergy(aMaterial,anElement)<<G4endl;
+         }
+         throw G4HadronicException(__FILE__, __LINE__,
+               "GetHadronicInteraction: Energy ranges of two models fully overlapping");
+       }
        rand = G4UniformRand();
        if( emi1 < emi2 )
        {
