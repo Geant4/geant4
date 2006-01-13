@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.7 2005-03-02 18:39:52 maire Exp $
+// $Id: RunAction.hh,v 1.8 2006-01-13 14:20:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,7 +69,8 @@ class RunAction : public G4UserRunAction
            void fillPerEvent();
     inline void fillPerTrack(G4double,G4double);
     inline void fillPerStep (G4double,G4int,G4int);
-    inline void particleFlux(G4ParticleDefinition*,G4int);
+    
+    void SetVerbose(G4int val)  {verbose = val;};
     
      // Acceptance parameters
      void     SetEdepAndRMS(G4ThreeVector);
@@ -110,10 +111,6 @@ class RunAction : public G4UserRunAction
     MyVector sumERadialCumul;
     MyVector sumE2RadialCumul;
 
-    MyVector gammaFlux;
-    MyVector electronFlux;
-    MyVector positronFlux;
-
     G4double ChargTrLength;
     G4double sumChargTrLength;
     G4double sum2ChargTrLength;
@@ -126,12 +123,14 @@ class RunAction : public G4UserRunAction
     G4double rmstrue;
     G4double limittrue;
     
+    G4int    verbose;
+    
     G4String histoName[2];
     G4String histoType;
     
     AIDA::IAnalysisFactory* af;
     AIDA::ITree*            tree;
-    AIDA::IHistogram1D*     histo[12];
+    AIDA::IHistogram1D*     histo[9];
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -165,20 +164,6 @@ inline
 void RunAction::fillPerStep(G4double dEstep, G4int Lbin, G4int Rbin)
 {
   dEdL[Lbin] += dEstep; dEdR[Rbin] += dEstep;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-
-inline
-void RunAction::particleFlux(G4ParticleDefinition* particle, G4int Lplan)
-{
-       if (particle == G4Gamma::Gamma())          gammaFlux[Lplan]++;
-  else if (particle == G4Electron::Electron()) electronFlux[Lplan]++;
-  else if (particle == G4Positron::Positron()) positronFlux[Lplan]++;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

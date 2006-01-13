@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.2 2004-09-17 10:51:38 maire Exp $
+// $Id: PrimaryGeneratorAction.hh,v 1.3 2006-01-13 14:20:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,8 +49,8 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4ParticleGun* GetParticleGun() {return particleGun;};
     
   private:
-    G4ParticleGun*              particleGun;
-    DetectorConstruction*    Detector; 
+    G4ParticleGun*           particleGun;
+    DetectorConstruction*    detector; 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

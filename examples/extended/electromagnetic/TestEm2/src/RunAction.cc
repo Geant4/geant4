@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.17 2005-12-06 11:37:08 gcosmo Exp $
+// $Id: RunAction.cc,v 1.18 2006-01-13 14:20:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,10 +59,6 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
   sumE2Longit.resize(nLbin, 0.0);
   sumE2LongitCumul.resize(nLbin, 0.0);
 
-  gammaFlux.resize(nLbin, 0.0);
-  electronFlux.resize(nLbin, 0.0);
-  positronFlux.resize(nLbin, 0.0);
-
   nRbin = Det->GetnRtot();
   dEdR.resize(nRbin, 0.0);
   sumERadial.resize(nRbin, 0.0);
@@ -73,6 +69,8 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
   edeptrue = 1.;
   rmstrue  = 1.;
   limittrue = DBL_MAX;
+  
+  verbose = 0;
   
 #ifdef G4ANALYSIS_USE
   // Creating the analysis factory
@@ -131,13 +129,13 @@ void RunAction::bookHisto()
   G4double dRradl = Det->GetdRradl();
 
   histo[0] = hf->createHistogram1D( "1","total energy deposit(percent of Einc)",
-                                    100,0.,100.);
+                                    110,0.,110.);
 
   histo[1] = hf->createHistogram1D( "2","total charged tracklength (radl)",
-                                    100,0.,100.*Ekin/GeV);
+                                    110,0.,110.*Ekin/GeV);
 
   histo[2] = hf->createHistogram1D( "3","total neutral tracklength (radl)",
-                                    100,0.,1000.*Ekin/GeV);
+                                    110,0.,1100.*Ekin/GeV);
 
   histo[3] = hf->createHistogram1D( "4","longit energy profile (% of E inc)",
                                     nLbin,0.,nLbin*dLradl);
@@ -149,27 +147,18 @@ void RunAction::bookHisto()
   histo[5] = hf->createHistogram1D( "6","rms on cumul longit Edep (% of E inc)",
                                     nLbin,Zmin,Zmax);
 
-  histo[6] = hf->createHistogram1D( "7","nb of gamma per plane",
-                                    nLbin,Zmin,Zmax);
-
-  histo[7] = hf->createHistogram1D( "8","nb of positron per plane",
-                                    nLbin,Zmin,Zmax);
-
-  histo[8] = hf->createHistogram1D( "9","nb of electron per plane",
-                                    nLbin,Zmin,Zmax);
-
-  histo[9] = hf->createHistogram1D("10","radial energy profile (% of E inc)",
+  histo[6] = hf->createHistogram1D("7","radial energy profile (% of E inc)",
                                     nRbin,0.,nRbin*dRradl);
 
   G4double Rmin=0.5*dRradl, Rmax=Rmin+nRbin*dRradl;
-  histo[10]= hf->createHistogram1D("11","cumul radial energy dep (% of E inc)",
+  histo[7]= hf->createHistogram1D("8","cumul radial energy dep (% of E inc)",
                                     nRbin,Rmin,Rmax);
 
-  histo[11]= hf->createHistogram1D("12","rms on cumul radial Edep (% of E inc)",
+  histo[8]= hf->createHistogram1D("9","rms on cumul radial Edep (% of E inc)",
                                     nRbin,Rmin,Rmax);
 				    
  delete hf;
- G4cout << "\n----> Histogram Tree is opened in " << histoName[1] << G4endl;				    
+ G4cout << "\n----> Histogram Tree is opened in " << histoName[1] << G4endl;
 #endif
 }
 
@@ -210,10 +199,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
      sumE2Longit.resize(nLbin);
      sumELongitCumul.resize(nLbin);
      sumE2LongitCumul.resize(nLbin);
-     gammaFlux.resize(nLbin);
-     electronFlux.resize(nLbin);
-     positronFlux.resize(nLbin);
-     rebin=true;
+     rebin = true;
     }
 
   G4int nRtot = Det->GetnRtot();
@@ -223,15 +209,14 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
      sumE2Radial.resize(nRbin);
      sumERadialCumul.resize(nRbin);
      sumE2RadialCumul.resize(nRbin);
-     rebin=true;
+     rebin = true;
     }
 
   //initialize arrays of cumulative energy deposition
   //
-  for (G4int i=0; i<nLbin; i++) {
+  for (G4int i=0; i<nLbin; i++) 
      sumELongit[i]=sumE2Longit[i]=sumELongitCumul[i]=sumE2LongitCumul[i]=0.;
-     gammaFlux[i]=electronFlux[i]=positronFlux[i]=0.;  
-  }
+  
   for (G4int j=0; j<nRbin; j++)
      sumERadial[j]=sumE2Radial[j]=sumERadialCumul[j]=sumE2RadialCumul[j]=0.;
 
@@ -321,9 +306,6 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
      rmsELongitCumul[i] = norme*std::sqrt(std::fabs(NbOfEvents*sumE2LongitCumul[i]
                                     - sumELongitCumul[i]*sumELongitCumul[i]));
 
-    gammaFlux   [i] /= NbOfEvents;
-    electronFlux[i] /= NbOfEvents;
-    positronFlux[i] /= NbOfEvents;
 
 #ifdef G4ANALYSIS_USE
     if(tree) {
@@ -332,10 +314,6 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
       bin = (i+1)*dLradl;
       histo[4]->fill(bin,MeanELongitCumul[i]);
       histo[5]->fill(bin, rmsELongitCumul[i]);
-
-      histo[6]->fill(bin, gammaFlux[i]);
-      histo[7]->fill(bin, positronFlux[i]);
-      histo[8]->fill(bin, electronFlux[i]);
     }
 #endif
    }
@@ -360,10 +338,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 #ifdef G4ANALYSIS_USE
     if(tree) {
       G4double bin = i*dRradl;
-      histo[ 9]->fill(bin,MeanERadial[i]/dRradl);
+      histo[6]->fill(bin,MeanERadial[i]/dRradl);
       bin = (i+1)*dRradl;
-      histo[10]->fill(bin,MeanERadialCumul[i]);
-      histo[11]->fill(bin, rmsERadialCumul[i]);
+      histo[7]->fill(bin,MeanERadialCumul[i]);
+      histo[8]->fill(bin, rmsERadialCumul[i]);
     }
 #endif
    }
@@ -387,49 +365,53 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   std::ios::fmtflags mode = G4cout.flags();
   G4cout.setf(std::ios::fixed,std::ios::floatfield);
   G4int  prec = G4cout.precision(2);
+  
+  if (verbose) {
 
-  G4cout << "                 LATERAL PROFILE                   "
-         << "      CUMULATIVE LATERAL PROFILE" << G4endl << G4endl;
+    G4cout << "                 LATERAL PROFILE                   "
+           << "      CUMULATIVE LATERAL PROFILE" << G4endl << G4endl;
 
-  G4cout << "        bin   " << "           Mean         rms         "
-         << "        bin "   << "           Mean      rms \n" << G4endl;
+    G4cout << "        bin   " << "           Mean         rms         "
+           << "        bin "   << "           Mean      rms \n" << G4endl;
 
-  for (i=0; i<nLbin; i++)
-   {
-     G4double inf=i*dLradl, sup=inf+dLradl;
+    for (i=0; i<nLbin; i++)
+     {
+       G4double inf=i*dLradl, sup=inf+dLradl;
 
-     G4cout << std::setw(8) << inf << "->"
-            << std::setw(5) << sup << " radl: "
-            << std::setw(7) << MeanELongit[i] << "%  "
-            << std::setw(9) << rmsELongit[i] << "%       "
-            << "      0->" << std::setw(5) << sup << " radl: "
-            << std::setw(7) << MeanELongitCumul[i] << "%  "
-            << std::setw(7) << rmsELongitCumul[i] << "% "
-            <<G4endl;
-   }
+       G4cout << std::setw(8) << inf << "->"
+              << std::setw(5) << sup << " radl: "
+              << std::setw(7) << MeanELongit[i] << "%  "
+              << std::setw(9) << rmsELongit[i] << "%       "
+              << "      0->" << std::setw(5) << sup << " radl: "
+              << std::setw(7) << MeanELongitCumul[i] << "%  "
+              << std::setw(7) << rmsELongitCumul[i] << "% "
+              <<G4endl;
+     }
 
-  G4cout << G4endl << G4endl << G4endl;
+    G4cout << G4endl << G4endl << G4endl;
 
-  G4cout << "                  RADIAL PROFILE                   "
-         << "      CUMULATIVE  RADIAL PROFILE" << G4endl << G4endl;
+    G4cout << "                  RADIAL PROFILE                   "
+           << "      CUMULATIVE  RADIAL PROFILE" << G4endl << G4endl;
 
-  G4cout << "        bin   " << "           Mean         rms         "
-         << "        bin "   << "           Mean      rms \n" << G4endl;
+    G4cout << "        bin   " << "           Mean         rms         "
+           << "        bin "   << "           Mean      rms \n" << G4endl;
 
-  for (i=0; i<nRbin; i++)
-   {
-     G4double inf=i*dRradl, sup=inf+dRradl;
+    for (i=0; i<nRbin; i++)
+     {
+       G4double inf=i*dRradl, sup=inf+dRradl;
 
-     G4cout << std::setw(8) << inf << "->"
-            << std::setw(5) << sup << " radl: "
-            << std::setw(7) << MeanERadial[i] << "%  "
-            << std::setw(9) << rmsERadial[i] << "%       "
-            << "      0->" << std::setw(5) << sup << " radl: "
-            << std::setw(7) << MeanERadialCumul[i] << "%  "
-            << std::setw(7) << rmsERadialCumul[i] << "% "
-            <<G4endl;
-   }
-  G4cout << G4endl;
+       G4cout << std::setw(8) << inf << "->"
+              << std::setw(5) << sup << " radl: "
+              << std::setw(7) << MeanERadial[i] << "%  "
+              << std::setw(9) << rmsERadial[i] << "%       "
+              << "      0->" << std::setw(5) << sup << " radl: "
+              << std::setw(7) << MeanERadialCumul[i] << "%  "
+              << std::setw(7) << rmsERadialCumul[i] << "% "
+              <<G4endl;
+     }
+  }
+  
+  G4cout << G4endl;    
   G4cout << std::setw(37) << "SUMMARY" << G4endl;
   G4cout << std::setw(42) << "energy deposit : "
          << std::setw(7)  << MeanELongitCumul[nLbin-1] << " % E0 +- "

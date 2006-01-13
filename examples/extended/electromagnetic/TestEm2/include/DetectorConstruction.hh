@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.6 2004-09-17 10:51:37 maire Exp $
+// $Id: DetectorConstruction.hh,v 1.7 2006-01-13 14:20:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,6 +69,8 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4int    GetnRtot()          {return nRtot;};
      G4double GetdLradl()         {return dLradl;};
      G4double GetdRradl()         {return dRradl;};
+     G4double GetdLlength()       {return dLlength;};
+     G4double GetdRlength()       {return dRlength;};     
      G4double GetfullLength()     {return EcalLength;};
      G4double GetfullRadius()     {return EcalRadius;};
 
@@ -77,8 +79,9 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      void DefineMaterials();
      G4VPhysicalVolume* ConstructVolumes();
 
-     G4int    nLtot,  nRtot;          // nb of bins: longitudinal and radial
-     G4double dLradl, dRradl;         // bin thickness (in radl unit)
+     G4int    nLtot,    nRtot;        // nb of bins: longitudinal and radial
+     G4double dLradl,   dRradl;       // bin thickness (in radl unit)
+     G4double dLlength, dRlength;     // bin thickness (in length unit)
 
      G4Material* myMaterial;          //pointer to the material
      G4UniformMagField* magField;     //pointer to the mag field
@@ -89,14 +92,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4Tubs*            solidEcal;    //pointer to the solid calorimeter
      G4LogicalVolume*   logicEcal;    //pointer to the logical calorimeter
      G4VPhysicalVolume* physiEcal;    //pointer to the physical calorimeter
-
-     G4Tubs*            solidSlice;   //pointer to the solid  L-slice
-     G4LogicalVolume*   logicSlice;   //pointer to the logical L-slide
-     G4VPhysicalVolume* physiSlice;   //pointer to the physical L-slide
-
-     G4Tubs*            solidRing;    //pointer to the solid  R-slice
-     G4LogicalVolume*   logicRing;    //pointer to the logical R-slide
-     G4VPhysicalVolume* physiRing;    //pointer to the physical R-slide
 
      DetectorMessenger* detectorMessenger;  //pointer to the Messenger
 

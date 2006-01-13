@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunActionMessenger.hh,v 1.2 2004-09-17 10:51:38 maire Exp $
+// $Id: RunActionMessenger.hh,v 1.3 2006-01-13 14:20:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,6 +36,7 @@ class RunAction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWith3Vector;
+class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -50,12 +51,13 @@ class RunActionMessenger: public G4UImessenger
   private:
     RunAction*          Run;
     
-    G4UIdirectory*      runDir;
-    G4UIcmdWith3Vector* accCmd;
+    G4UIdirectory*        runDir;
+    G4UIcmdWith3Vector*   accCmd;
+    G4UIcmdWithAnInteger* verbCmd;
             
-    G4UIdirectory*      histoDir;        
-    G4UIcmdWithAString* factoryCmd;
-    G4UIcmdWithAString* typeCmd;    
+    G4UIdirectory*        histoDir;        
+    G4UIcmdWithAString*   factoryCmd;
+    G4UIcmdWithAString*   typeCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

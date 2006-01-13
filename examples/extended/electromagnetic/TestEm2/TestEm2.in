@@ -1,4 +1,4 @@
-# $Id: TestEm2.in,v 1.18 2005-11-22 17:11:31 maire Exp $
+# $Id: TestEm2.in,v 1.19 2006-01-13 14:20:27 maire Exp $
 #
 # Macro file for "TestEm2.cc"
 # (can be run in batch, without graphic)
@@ -9,7 +9,7 @@
 #                        J&H Crannel - Phys. Rev. 184-2 - August69
 #
 /control/verbose 2
-/run/verbose 1
+/run/verbose 2
 #
 /testem/det/setMat Water
 /testem/det/setLbin 9 1.11

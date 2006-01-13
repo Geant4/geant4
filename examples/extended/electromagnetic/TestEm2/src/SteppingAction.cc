@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.3 2004-11-24 10:46:30 maire Exp $
+// $Id: SteppingAction.cc,v 1.4 2006-01-13 14:20:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -29,14 +29,13 @@
 #include "SteppingAction.hh"
 #include "DetectorConstruction.hh"
 #include "RunAction.hh"
+
 #include "G4SteppingManager.hh"
-#include "G4VTouchable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(DetectorConstruction* det,
-                                     RunAction* run)
-:Det(det),Run(run)
+SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* run)
+:detector(det),Run(run)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,41 +45,20 @@ SteppingAction::~SteppingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void SteppingAction::UserSteppingAction(const G4Step* aStep)
+void SteppingAction::UserSteppingAction(const G4Step* step)
 { 
- G4Track* aTrack = aStep->GetTrack();
- const G4VTouchable*  preStepTouchable= aStep->GetPreStepPoint()->GetTouchable();
- const G4VTouchable* postStepTouchable= aStep->GetPostStepPoint()->GetTouchable();
-
  // energy deposit
  //
- G4int SlideNb(0), RingNb(0);
- if (preStepTouchable->GetHistoryDepth()>0)
- {
-   if (Det->GetnRtot()>1)
-     RingNb  = preStepTouchable->GetReplicaNumber(1);   
-///     RingNb  = preStepTouchable->GetCopyNumber(1);
-   if (Det->GetnLtot()>1)
-     SlideNb = preStepTouchable->GetReplicaNumber();   
-///     SlideNb = preStepTouchable->GetCopyNumber();
- }
-         
- G4double dEStep = aStep->GetTotalEnergyDeposit();
- if (dEStep > 0.)
+ G4double dEStep = step->GetTotalEnergyDeposit();
+ if (dEStep > 0.) {
+   G4ThreeVector position = step->GetPostStepPoint()->GetPosition();
+   G4double x = position.x(), y = position.y(), z = position.z();
+   G4double radius = std::sqrt(x*x + y*y);
+   G4double offset = 0.5*detector->GetfullLength();
+   G4int SlideNb = int((z + offset)/detector->GetdLlength());
+   G4int RingNb  = int(radius/detector->GetdRlength());        
    Run->fillPerStep(dEStep,SlideNb,RingNb);
-
- // particle flux
- //  
- if ((Det->GetnLtot()>1)&&
-     (postStepTouchable->GetVolume()))
-   {
-     G4int next = postStepTouchable->GetReplicaNumber();   
-///     G4int next = postStepTouchable->GetCopyNumber();
-     if (next != SlideNb)
-        Run->particleFlux(aTrack->GetDefinition(), (SlideNb+next)/2);
-   }  
+ }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

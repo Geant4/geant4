@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunActionMessenger.cc,v 1.2 2004-09-17 10:51:40 maire Exp $
+// $Id: RunActionMessenger.cc,v 1.3 2006-01-13 14:20:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,6 +32,7 @@
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWith3Vector.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithAnInteger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -48,6 +49,10 @@ RunActionMessenger::RunActionMessenger(RunAction* run)
   accCmd->SetRange("edep>0 && edep<1 && rms>0");
   accCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
+  verbCmd = new G4UIcmdWithAnInteger("/testem/run/verbose",this);
+  verbCmd->SetGuidance("set verbose level for runAction");
+  verbCmd->SetParameterName("verbose",false);
+    
   histoDir = new G4UIdirectory("/testem/histo/");
   histoDir->SetGuidance("histograms control");
   
@@ -63,6 +68,7 @@ RunActionMessenger::RunActionMessenger(RunAction* run)
 
 RunActionMessenger::~RunActionMessenger()
 {
+  delete verbCmd;
   delete accCmd;
   delete runDir;
   delete factoryCmd;
@@ -77,6 +83,9 @@ void RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if (command == accCmd )
    { Run->SetEdepAndRMS(accCmd->GetNew3VectorValue(newValue));}
    
+  if (command == verbCmd )
+   { Run->SetVerbose(verbCmd->GetNewIntValue(newValue));}
+      
   if (command == factoryCmd)
    { Run->SetHistoName(newValue);}
 
