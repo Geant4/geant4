@@ -1,4 +1,4 @@
-$Id: History,v 1.82 2006-01-13 12:36:10 allison Exp $
+$Id: History,v 1.83 2006-01-13 12:37:23 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 13-Jan-2006, J.Allison
-- Moved G4PolyhedronArbitrary to graphics_reps.
+- Moved G4PolyhedronArbitrary to graphics_reps.  Needs greps-V08-00-00.
 
 12-Jan-2006, J.Allison
 - G4TwistedTubs and G4VTwistedFaceted::CreatePolyhedron: parametrised
