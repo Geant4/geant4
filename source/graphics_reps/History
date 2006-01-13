@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.91 2006-01-13 12:33:29 allison Exp $
+cvs log $Id: History,v 1.92 2006-01-13 12:39:53 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-10th November 2005  John Allison  (greps-V08-00-00)
+13th January 2006  John Allison  (greps-V08-00-00)
 - Added G4PolyhedronArbitrary:
   o Moved from geometry/solids/specific, where it was part of a
     development by Peter Truscott and Fan Lei of QinetiQ.
