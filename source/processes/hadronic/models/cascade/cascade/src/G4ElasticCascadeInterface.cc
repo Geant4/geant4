@@ -20,6 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+
+// This file is based on G4CascadeInterface.cc
+// Modifications by Pekka Kaitaniemi (kaitanie@cc.helsinki.fi)
+// Helsinki Institute of Physics
+
 #include "G4ElasticCascadeInterface.hh"
 #include "globals.hh"
 #include "G4DynamicParticleVector.hh"
@@ -60,7 +65,7 @@ G4ReactionProductVector* G4ElasticCascadeInterface::Propagate(G4KineticTrackVect
 // #define debug_G4ElasticCascadeInterface
 
 G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile& aTrack, 
-						     G4Nucleus& theNucleus) {
+							  G4Nucleus& theNucleus) {
 #ifdef debug_G4ElasticCascadeInterface
   static G4int counter(0);
   counter++;
@@ -163,66 +168,97 @@ G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile&
   G4Fissioner*                     fiss = new G4Fissioner;
   G4BigBanger*                     bigb = new G4BigBanger;
   G4InuclCollider*             collider = new G4InuclCollider(colep, inc, noneq, eqil, fiss, bigb);
+  
+  G4int  maxTries = 10; // maximum tries for elastic collision to avoid infinite loop
+  G4int  nTries   = 0;  // try counter
 
-      G4int  maxTries = 10; // maximum tries for inelastic collision to avoid infinite loop
-      G4int  nTries   = 0;  // try counter
+  if (G4int(theNucleusA) == 1) { // special treatment for target H(1,1) (proton)
 
-      if (G4int(theNucleusA) == 1) { // special treatment for target H(1,1) (proton)
+    targetH = new G4InuclElementaryParticle(targetMomentum, 1);
 
-	targetH = new G4InuclElementaryParticle(targetMomentum, 1);
+    G4float cutElastic[8];
+    cutElastic[proton   ] = 1.0; // GeV
+    cutElastic[neutron  ] = 1.0;
+    cutElastic[pionPlus ] = 0.6;
+    cutElastic[pionMinus] = 0.2;
+    cutElastic[pionZero ] = 0.2;
 
-	G4float cutElastic[8];
-	cutElastic[proton   ] = 1.0; // GeV
-	cutElastic[neutron  ] = 1.0;
-	cutElastic[pionPlus ] = 0.6;
-	cutElastic[pionMinus] = 0.2;
-	cutElastic[pionZero ] = 0.2;
+    //	Was >
+    if (momentumBullet[3] < cutElastic[bulletType]) { // elastic collision possible
 
-	//	Was >
-	if (momentumBullet[3] < cutElastic[bulletType]) { // elastic collision possible
-
-	  do {   // we try to create elastic interaction
-	    output = collider->collide(bullet, targetH);
-	    nTries++;
-	  } while(
-		  (nTries < maxTries)                                           &&
-		  (output.getOutgoingParticles().size() != 2                    && // elastic: bullet + p = H(1,1) coming out
-		   (output.getOutgoingParticles().begin()->type() != bulletType ||
-		    output.getOutgoingParticles().begin()->type() != proton) //changed all != -> ==
-		   )
-		  );
-
-	} else { // only elastic collision is energetically possible
-	  output = collider->collide(bullet, targetH);
-	}
-
-	sumBaryon += 1;
-
-	std::vector<G4double> bmom = bullet->getMomentum();
-	eInit = std::sqrt(bmom[0] * bmom[0]);
-	std::vector<G4double> tmom = targetH->getMomentum();
-	eInit += std::sqrt(tmom[0] * tmom[0]);
-
-	if (verboseLevel > 2) {
-	  G4cout << "Target:  " << G4endl;
-	  targetH->printParticle();
-	}
-
-      } else {  // treat all other targets excepet H(1,1)
-
-	do  // we try to create inelastic interaction ELASTIC COLLISION
-	  {
-	    output = collider->collide(bullet, target );
-	    nTries++;
-	  } while(
-		   (nTries < maxTries)                                                               &&
-		   //changed < to >
-		   //(output.getOutgoingParticles().size() + output.getNucleiFragments().size() < 2.5) &&
-		   (output.getOutgoingParticles().size() + output.getNucleiFragments().size() != 2) &&
-		   (output.getOutgoingParticles().size()==0) && // != -> ==
-                   (output.getOutgoingParticles().begin()->type() != bullet->type()) //changed == -> !=
-		  );
+      do {   // we try to create elastic collision
+	output = collider->collide(bullet, targetH);
+	nTries++;
+      } while(
+	      (nTries < maxTries)                                           &&
+	      (output.getOutgoingParticles().size() != 2                    && 
+	       (output.getOutgoingParticles().begin()->type() != bulletType ||
+		output.getOutgoingParticles().begin()->type() != proton)
+	       )
+	      );
+      // If there was no elastic collision we just return the original
+      // bullet and target proton. The returned bullet particle has
+      // the momentum of the original bullet particle.
+      if(output.getOutgoingParticles().size() != 2 && 
+	 (output.getOutgoingParticles().begin()->type() != bulletType || 
+	  output.getOutgoingParticles().begin()->type() != proton)) {
+	output = G4CollisionOutput();
+	output.addOutgoingParticle(G4InuclElementaryParticle(momentumBullet, bulletType));
+	output.addOutgoingParticle(G4InuclElementaryParticle(targetMomentum, proton));
       }
+
+    } else {
+      // If elastic collision can not happen above then we just output
+      //the original bullet particle and the target (in this case the
+      //target is proton) output = collider->collide(bullet, targetH);
+      output = G4CollisionOutput();
+      output.addOutgoingParticle(G4InuclElementaryParticle(momentumBullet, bulletType));
+      output.addOutgoingParticle(G4InuclElementaryParticle(targetMomentum, proton));
+    }
+
+    sumBaryon += 1;
+
+    std::vector<G4double> bmom = bullet->getMomentum();
+    eInit = std::sqrt(bmom[0] * bmom[0]);
+    std::vector<G4double> tmom = targetH->getMomentum();
+    eInit += std::sqrt(tmom[0] * tmom[0]);
+
+    if (verboseLevel > 2) {
+      G4cout << "Target:  " << G4endl;
+      targetH->printParticle();
+    }
+
+  } else {  // treat all other targets excepet H(1,1)
+
+    do  // we try to create elastic collision
+      {
+	//We try to create one particle (the bullet) and a nuclear
+	//fragment that has the same A and Z as the original target.
+	output = collider->collide(bullet, target );
+	nTries++;
+      } while(
+	      (nTries < maxTries)        &&
+	      (output.getOutgoingParticles().size() != 1 ||
+	       output.getOutgoingParticles().begin()->type() != bullet->type() ||
+	       output.getNucleiFragments().size() != 1 ||
+	       output.getNucleiFragments().begin()->getA() != target->getA() || 
+	       output.getNucleiFragments().begin()->getZ() != target->getZ()) 
+	      );
+
+      // If there was no elastic collision we just return the original
+      // bullet and target nucleus. The returned bullet particle has
+      // the momentum of the original bullet particle.
+    if((output.getOutgoingParticles().size() != 1 ||
+	output.getOutgoingParticles().begin()->type() != bullet->type() ||
+	output.getNucleiFragments().size() != 1 ||
+	output.getNucleiFragments().begin()->getA() != target->getA() || 
+	output.getNucleiFragments().begin()->getZ() != target->getZ())) { 
+	
+      output = G4CollisionOutput();
+      output.addOutgoingParticle(G4InuclElementaryParticle(momentumBullet, bulletType));
+      output.addTargetFragment(G4InuclNuclei(targetMomentum, target->getA(), target->getZ()));
+    }
+  }
 
   if (verboseLevel > 1) 
     {
@@ -389,8 +425,8 @@ G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile&
 
   if(target != NULL) delete target;
   if(targetH != NULL) delete targetH;
- // if(cascadeParticle != NULL) delete cascadeParticle;
- // if(aFragment != NULL) delete aFragment;
+  // if(cascadeParticle != NULL) delete cascadeParticle;
+  // if(aFragment != NULL) delete aFragment;
 
   return &theResult;
 }
