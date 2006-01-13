@@ -150,8 +150,10 @@
 /vis/viewer/reset
 /vis/viewer/set/viewpointThetaPhi 35 35
 /vis/scene/notifyHandlers
+/tracking/verbose 2
 /run/beamOn 1
 /vis/viewer/update
+/tracking/verbose 0
 #
 # Rotated tracker tube
 /vis/viewer/reset
@@ -362,21 +364,28 @@
 /vis/viewer/update
 #
 /vis/sceneHandler/create RayTracerX
-/vis/viewer/create
+#/vis/viewer/create
+/vis/viewer/create ! ! 200
 /vis/viewer/set/viewpointThetaPhi 30 30
 /vis/viewer/refresh
 /vis/viewer/update
 #
-/vis/rayTracer/column 400
-/vis/rayTracer/row 400
-/vis/rayTracer/backgroundColour 0 0 0
-/vis/viewer/create
+/vis/rayTracer/column 400  # These are overidden by /vis/viewer/create.
+/vis/rayTracer/row 400     # These are overidden by /vis/viewer/create.
+/vis/rayTracer/backgroundColour .3 .2 .1  #  And this...
+# ...but would/should work fine without /vis/viewer/... commands and
+# with /vis/rayTracer/trace (but don't necessarily match existing
+# RayTracerX window.
+/vis/rayTracer/trace
+#/vis/viewer/create
+/vis/viewer/create ! ! 200
 /vis/viewer/set/projection perspective  30
 /vis/viewer/set/viewpointThetaPhi 45 45
 /vis/viewer/refresh
 /vis/viewer/update
 #
 # Odd!!?  JPEG image seems upside down for default view direction...
-/vis/viewer/create
+#/vis/viewer/create
+/vis/viewer/create ! ! 200
 /vis/viewer/refresh
 /vis/viewer/update
