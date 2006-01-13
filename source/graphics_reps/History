@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.90 2005-11-23 22:10:34 tinslay Exp $
+cvs log $Id: History,v 1.91 2006-01-13 12:33:29 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10th November 2005  John Allison  (greps-V08-00-00)
+- Added G4PolyhedronArbitrary:
+  o Moved from geometry/solids/specific, where it was part of a
+    development by Peter Truscott and Fan Lei of QinetiQ.
+    G4PolyhedronArbitrary is a way of creating arbitrary G4Polyhedron
+    objects out of vertices and indices.
+  o Removed unnecessary operator= functions.
 
 23rd November 2005  Jane Tinslay 
 - Update documentation in G4Colour
