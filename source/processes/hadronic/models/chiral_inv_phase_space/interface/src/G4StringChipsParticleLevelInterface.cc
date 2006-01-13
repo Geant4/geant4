@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 
-//#define debug
-//#define pdebug
+#define debug
+#define pdebug
 
 #include "G4StringChipsParticleLevelInterface.hh"
 #include "globals.hh"
@@ -149,7 +149,12 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   
   G4double radius2 = theNucleus->GetNuclearRadius(theInnerCoreDensityCut*perCent);
   radius2 *= radius2;
-  G4double pathlength = 0;
+  G4double pathlength = 0.;
+#ifdef pdebug
+  G4cout<<"G4StringChipsParticleLevelInterface::Propagate: r="<<std::sqrt(radius2)/fermi
+        <<", b="<<std::sqrt(inpactPar2)/fermi<<", R="<<theNucleus->GetOuterRadius()/fermi
+        <<G4endl; 
+#endif
   if(radius2 - inpactPar2>0) pathlength = 2.*std::sqrt(radius2 - inpactPar2);
   G4double theEnergyLostInFragmentation = theEnergyLossPerFermi*pathlength/fermi;
   
@@ -214,12 +219,18 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   
   for(current = theSorted.begin(); current!=theSorted.end(); current++)
   {
+#ifdef pdebug
+				G4cout<<"G4StringChipsParticleLevelInterface::Propagate: nq="
+          <<(*current).second->GetDefinition()->GetQuarkContent(3)<<", naq="
+          <<(*current).second->GetDefinition()->GetAntiQuarkContent(3)<<", PDG="
+          <<(*current).second->GetDefinition()->GetPDGEncoding()<<G4endl; 
+#endif
     firstEscaping = current;
     if((*current).second->GetDefinition()->GetQuarkContent(3)!=0 ||
        (*current).second->GetDefinition()->GetAntiQuarkContent(3) !=0)
     {
       G4KineticTrack * aResult = (*current).second;
-      G4ParticleDefinition * pdef=aResult->GetDefinition();
+      G4ParticleDefinition* pdef=aResult->GetDefinition();
       secondaries = NULL;
       if ( pdef->GetPDGWidth() > 0 && pdef->GetPDGLifeTime() < 5E-17*s )
       {
@@ -255,9 +266,16 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       runningEnergy-=G4Proton::Proton()->GetPDGMass();
     if((*current).second->GetDefinition() == G4Neutron::Neutron())
       runningEnergy-=G4Neutron::Neutron()->GetPDGMass();
+    if((*current).second->GetDefinition() == G4Lambda::Lambda())
+      runningEnergy-=G4Lambda::Lambda()->GetPDGMass();
 
 #ifdef CHIPSdebug
     G4cout << "sorted rapidities "<<(*current).second->Get4Momentum().rapidity()<<G4endl;  
+#endif
+
+#ifdef pdebug
+				G4cout<<"G4StringChipsParticleLevelInterface::Propagate: E="<<runningEnergy<<", EL="
+          <<theEnergyLostInFragmentation<<G4endl; 
 #endif
 
     if(runningEnergy > theEnergyLostInFragmentation) break;
