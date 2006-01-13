@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.25 2005-09-21 09:49:15 tsasaki Exp $
+// $Id: G4SteppingManager2.cc,v 1.26 2006-01-13 12:52:34 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,6 +40,8 @@
 //
 //---------------------------------------------------------------
 
+//#define debug
+
 #include "G4UImanager.hh"
 #include "G4ForceCondition.hh"
 #include "G4GPILSelection.hh"
@@ -53,29 +55,52 @@
 void G4SteppingManager::GetProcessNumber()
 /////////////////////////////////////////////////
 {
+#ifdef debug
+  G4cout<<"G4SteppingManager::GetProcessNumber: is called track="<<fTrack<<G4endl;
+#endif
 
   G4ProcessManager* pm= fTrack->GetDefinition()->GetProcessManager();
+		if(!pm)
+  {
+    G4cout<<"G4SteppingManager::GetProcessNumber: ProcessManager=0 for particle="
+          <<fTrack->GetDefinition()->GetParticleName()<<", PDG_code="
+          <<fTrack->GetDefinition()->GetPDGEncoding()<<G4endl;
+				G4Exception("G4SteppingManager::GetProcessNumber: Process Manager is not found.");
+  }
 
 // AtRestDoits
    MAXofAtRestLoops =        pm->GetAtRestProcessVector()->entries();
    fAtRestDoItVector =       pm->GetAtRestProcessVector(typeDoIt);
    fAtRestGetPhysIntVector = pm->GetAtRestProcessVector(typeGPIL);
+#ifdef debug
+  G4cout<<"G4SteppingManager::GetProcessNumber: #ofAtRest="<<MAXofAtRestLoops<<G4endl;
+#endif
 
 // AlongStepDoits
    MAXofAlongStepLoops = pm->GetAlongStepProcessVector()->entries();
    fAlongStepDoItVector = pm->GetAlongStepProcessVector(typeDoIt);
    fAlongStepGetPhysIntVector = pm->GetAlongStepProcessVector(typeGPIL);
+#ifdef debug
+			G4cout<<"G4SteppingManager::GetProcessNumber:#ofAlongStp="<<MAXofAlongStepLoops<<G4endl;
+#endif
 
 // PostStepDoits
    MAXofPostStepLoops = pm->GetPostStepProcessVector()->entries();
    fPostStepDoItVector = pm->GetPostStepProcessVector(typeDoIt);
    fPostStepGetPhysIntVector = pm->GetPostStepProcessVector(typeGPIL);
+#ifdef debug
+			G4cout<<"G4SteppingManager::GetProcessNumber: #ofPostStep="<<MAXofPostStepLoops<<G4endl;
+#endif
 
-   if (SizeOfSelectedDoItVector<MAXofAtRestLoops ||
-       SizeOfSelectedDoItVector<MAXofAlongStepLoops  ||
-       SizeOfSelectedDoItVector<MAXofPostStepLoops  ) {
-     G4Exception("G4SteppingManager::GetProcessNumber : The array size is small than the actutal number of processes. Chnage G4SteppingManager.hh and recompile is needed. " );
-
+   if (SizeOfSelectedDoItVector<MAXofAtRestLoops    ||
+       SizeOfSelectedDoItVector<MAXofAlongStepLoops ||
+       SizeOfSelectedDoItVector<MAXofPostStepLoops  )
+			{
+			  G4cout<<"G4SteppingManager::GetProcessNumber: SizeOfSelectedDoItVector="
+           <<SizeOfSelectedDoItVector<<" is smaller then one of MAXofAtRestLoops="
+           <<MAXofAtRestLoops<<" or MAXofAlongStepLoops="<<MAXofAlongStepLoops
+           <<" or MAXofPostStepLoops="<<MAXofPostStepLoops<<G4endl;
+					G4Exception("G4SteppingManager::GetProcessNumber: The array size is smaller than the actutal number of processes. Chnage G4SteppingManager.hh and recompile is needed.");
    }
 }
 
