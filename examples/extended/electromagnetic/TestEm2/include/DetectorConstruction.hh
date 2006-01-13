@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.7 2006-01-13 14:20:27 maire Exp $
+// $Id: DetectorConstruction.hh,v 1.8 2006-01-13 17:43:59 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +39,8 @@ class G4Tubs;
 class G4LogicalVolume;
 class G4UniformMagField;
 class DetectorMessenger;
+
+      const G4int MaxBin = 500;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

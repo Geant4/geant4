@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // 
-// $Id: DetectorConstruction.cc,v 1.8 2006-01-13 14:20:27 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.9 2006-01-13 17:43:59 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -170,6 +170,11 @@ void DetectorConstruction::SetMaterial(const G4String& materialChoice)
 void DetectorConstruction::SetLBining(G4ThreeVector Value)
 {
   nLtot = (G4int)Value(0);
+  if (nLtot > MaxBin) {
+    G4cout << "\n ---> warning from SetLBining: "
+           << nLtot << " truncated to " << MaxBin << G4endl;
+    nLtot = MaxBin;
+  }  
   dLradl = Value(1);
 }
 
@@ -178,6 +183,11 @@ void DetectorConstruction::SetLBining(G4ThreeVector Value)
 void DetectorConstruction::SetRBining(G4ThreeVector Value)
 {
   nRtot = (G4int)Value(0);
+  if (nRtot > MaxBin) {
+    G4cout << "\n ---> warning from SetRBining: "
+           << nRtot << " truncated to " << MaxBin << G4endl;
+    nRtot = MaxBin;
+  }    
   dRradl = Value(1);
 }
 

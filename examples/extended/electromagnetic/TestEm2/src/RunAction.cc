@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.18 2006-01-13 14:20:27 maire Exp $
+// $Id: RunAction.cc,v 1.19 2006-01-13 17:43:59 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,14 +52,14 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
 {
   runMessenger = new RunActionMessenger(this);
   
-  nLbin = Det->GetnLtot();
+  nLbin = nRbin = MaxBin;
+    
   dEdL.resize(nLbin, 0.0);
   sumELongit.resize(nLbin, 0.0);
   sumELongitCumul.resize(nLbin, 0.0);
   sumE2Longit.resize(nLbin, 0.0);
   sumE2LongitCumul.resize(nLbin, 0.0);
 
-  nRbin = Det->GetnRtot();
   dEdR.resize(nRbin, 0.0);
   sumERadial.resize(nRbin, 0.0);
   sumERadialCumul.resize(nRbin, 0.0);
@@ -188,29 +188,8 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   CLHEP::HepRandom::showEngineStatus();
 
-  //reshape arrays if needed
-  //
-  G4bool rebin(false);
-
-  G4int nLtot = Det->GetnLtot();
-  if(nLbin != nLtot)
-    {dEdL.resize(nLbin=nLtot);
-     sumELongit.resize(nLbin);
-     sumE2Longit.resize(nLbin);
-     sumELongitCumul.resize(nLbin);
-     sumE2LongitCumul.resize(nLbin);
-     rebin = true;
-    }
-
-  G4int nRtot = Det->GetnRtot();
-  if(nRbin != nRtot)
-    {dEdR.resize(nRbin=nRtot);
-     sumERadial.resize(nRbin);
-     sumE2Radial.resize(nRbin);
-     sumERadialCumul.resize(nRbin);
-     sumE2RadialCumul.resize(nRbin);
-     rebin = true;
-    }
+  nLbin = Det->GetnLtot();
+  nRbin = Det->GetnRtot();
 
   //initialize arrays of cumulative energy deposition
   //
@@ -226,7 +205,6 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   //histograms
   //
   if (aRun->GetRunID() == 0) bookHisto();
-  else if (rebin) {cleanHisto(); bookHisto();}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
