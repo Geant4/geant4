@@ -7,3 +7,7 @@
 *  DLX0   = longitudinal bin length , in radiation length unit. (data card BINS)
 *  DRX0   = radial bin length       , in radiation length unit. (data card BINS)
 *                                                                               
+
+      COMMON/STEPMAX/stepmax
+*
+*  stepmax = max allowed step length                          (data card STEPMX)

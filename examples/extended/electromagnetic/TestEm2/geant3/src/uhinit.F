@@ -9,15 +9,15 @@
 * *** Histograms for showers development                                                                                                                                                                                                                  
 *                                                                                                                                         
       EDMIN=0.                                                              
-      EDMAX=100.                                                             
-      TRKMX=100.*PKINE(1)                                                                                                                         
+      EDMAX=110.                                                             
+      TRKMX=110.*PKINE(1)                                                                                                                         
 *                                                                               
       CALL HBOOK1(1,'total energy deposition (in percent of E inc)'             
-     *,100,EDMIN,EDMAX,0.0)                                                     
+     *,110,EDMIN,EDMAX,0.0)                                                     
       CALL HBOOK1(2,'total charged tracklengh (in radl)'                       
-     *,100, 0. , TRKMX, 0.0)
+     *,110, 0. , TRKMX, 0.0)
       CALL HBOOK1(3,'total neutral tracklengh (in radl)'                       
-     *,100, 0. , 10*TRKMX, 0.0)                                                                                        
+     *,110, 0. , 10*TRKMX, 0.0)                                                                                        
 *                                                                               
       CALL HIDOPT(0,'STAT')                                                     
 *
@@ -33,29 +33,20 @@
       CALL HBPROF(5,'cumul longit energy dep. (in percent of E inc)'          
      *, NLTOT, ZMIN,ZMAX, 0., 100.,' ')
       CALL HBOOK1(6,'resolution: cumul L energy dep. (% of E inc)'          
-     *, NLTOT, ZMIN,ZMAX, 0.0)
-                                                                         
-*                                                                               
-* *** Particle flux                                                   
-      CALL HBPROF(7,'nb of gamma per plane'                                    
-     *, NLTOT, ZMIN,ZMAX, 0., 1.E+6,' ')                                                   
-      CALL HBPROF(8,'nb of posit per plane'                                    
-     *, NLTOT, ZMIN,ZMAX, 0., 1.E+6,' ')                                                   
-      CALL HBPROF(9,'nb of elect per plane'                                    
-     *, NLTOT, ZMIN,ZMAX, 0., 1.E+6,' ')
+     *, NLTOT, ZMIN,ZMAX, 0.0)                                  
 *
 * *** Radial profile
       RMAX=NRTOT*DRX0
       
-      CALL HBPROF(10,'radial energy profile    (in percent of E inc)'          
+      CALL HBPROF(7,'radial energy profile    (in percent of E inc)'          
      *, NRTOT, 0.,RMAX, 0., 1000.,' ')
 *
       RMIN = 0.5*DRX0
       RMAX = RMIN + NRTOT*DRX0
       
-      CALL HBPROF(11,'cumul radial energy dep. (in percent of E inc)'          
+      CALL HBPROF(8,'cumul radial energy dep. (in percent of E inc)'          
      *, NRTOT, RMIN,RMAX, 0., 100.,' ')
-      CALL HBOOK1(12,'resolution: cumul R energy dep. (% of E inc)'          
+      CALL HBOOK1(9,'resolution: cumul R energy dep. (% of E inc)'          
      *, NRTOT, RMIN,RMAX, 0.0)
      
 *

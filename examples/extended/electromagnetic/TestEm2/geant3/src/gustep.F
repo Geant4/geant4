@@ -13,7 +13,6 @@
 #include "pvolum.inc"
 #include "celoss.inc"                                                             
 *
-      SAVE NLOLD                                                                               
 *                                                                               
 * *** Debug event and strore track for drawing
       IF (IDEBUG.NE.0) CALL GPCXYZ
@@ -25,8 +24,9 @@
 *                                                                               
 * *** Energy deposited                                                          
       IF (DESTEP.GT.0.)THEN                                                     
-         NR  = NUMBER(NLEVEL-1)                                                  
-         NL  = NUMBER(NLEVEL)
+         radius = sqrt(vect(1)**2 + vect(2)**2)
+	 NR = 1 + radius/(DRX0*X0)
+	 NL = 1 + (Z1 + vect(3))/(DLX0*X0)
          DEDR(NR) = DEDR(NR) + DESTEP                                                
          DEDL(NL) = DEDL(NL) + DESTEP                                                                                    
       ENDIF
@@ -38,16 +38,7 @@
       ELSE
          STRNE  = STRNE  + STEP
 	 EDEPNE = EDEPNE + DESTEP
-      ENDIF	 	                                                                                                     
-*                                                                               
-* ***  Particle's flux                                                          
-       NL  = NUMBER(NLEVEL)                                                     
-       IF(SLENG.LE.0.) NLOLD = NL                                               
-       IF(NL.NE.NLOLD) THEN                                                     
-         NPL = (NL + NLOLD)/2                                               
-	 IF (IPART.LE.3) FNPAT(NPL,IPART) = FNPAT(NPL,IPART) + 1.                                   
-         NLOLD = NL                                                             
-       ENDIF                                                                    
+      ENDIF	 	                                                                                                    
 *
 * *** energy of particles contributing to edep
       IF ((DESTEP).GT.0.)THEN
