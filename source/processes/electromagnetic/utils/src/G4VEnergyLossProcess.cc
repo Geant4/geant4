@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.74 2006-01-10 18:10:09 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.75 2006-01-13 12:47:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -90,6 +90,7 @@
 // 17-10-05 protection above has been removed (L.Urban)
 // 06-01-06 reset currentCouple when StepFunction is changed (V.Ivanchenko)
 // 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
+// 13-01-06 Clean up subcutoff (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -712,6 +713,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   */
   }
 
+  // Energy balanse
   G4double finalT = preStepKinEnergy - eloss;
   if (finalT <= lowestKinEnergy) {
     eloss += finalT;
@@ -734,8 +736,9 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
 	  if(nProcesses) {
 	    for(G4int i=0; i<nProcesses; i++) {
-	      (scProcesses[i])->AddSubCutoffSecondaries(
-				scTracks, step, eloss, preStepScaledEnergy);
+	      (scProcesses[i])->SampleSubCutSecondaries(scTracks, step, eloss, 
+				(scProcesses[i])->SelectModelForMaterial(
+				   preStepKinEnergy, currentMaterialIndex));
 	    }
 	  }    
 	  G4int n = scTracks.size();
@@ -751,7 +754,6 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     }
   }
 
-  // Energy balanse
   fParticleChange.SetProposedKineticEnergy(finalT);
   fParticleChange.ProposeLocalEnergyDeposit(eloss);
 
@@ -777,14 +779,18 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
      G4double& eloss, 
      G4VEmModel* model)
 {
+  // Fast check weather subcutoff can work
   G4double subcut = (*theSubCuts)[currentMaterialIndex];
   if(eloss < subcut) return;
+  G4double cut = (*theCuts)[currentMaterialIndex];
+  if(cut <= subcut) return;
   G4bool b;
   G4double cross = 
     chargeSqRatio*(((*theSubLambdaTable)[currentMaterialIndex])->
                    GetValue(preStepScaledEnergy, b));
   if(cross <= 0.0) return;
 
+  // Sample subcutoff secondaries
   G4StepPoint* preStepPoint = step.GetPreStepPoint();
   G4double length = step.GetStepLength();
 
@@ -797,7 +803,7 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
   const G4Track* track = step.GetTrack();
   const G4DynamicParticle* dp = track->GetDynamicParticle();
   const G4TouchableHandle& hand = track->GetTouchableHandle();
-  G4double cut = (*theCuts)[currentMaterialIndex];
+
   do {
     G4double del = -std::log(G4UniformRand())/cross;
     fragment += del/length;

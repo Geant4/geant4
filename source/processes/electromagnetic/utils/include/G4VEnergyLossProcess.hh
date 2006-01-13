@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.46 2006-01-10 18:10:09 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.47 2006-01-13 12:47:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -61,6 +61,7 @@
 // 11-04-05 Use MaxSecondaryEnergy from a model (V.Ivanchenko)
 // 10-01-05 Remove SetStepLimits (V.Ivanchenko)
 // 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
+// 13-01-06 Remove AddSubCutSecondaries (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -299,9 +300,6 @@ public:
   G4bool IsIonisationProcess() const;
 
   void AddCollaborativeProcess(G4VEnergyLossProcess*);
-
-  void AddSubCutoffSecondaries(std::vector<G4Track*>&, const G4Step&, 
-                               G4double& eloss, G4double& escaled); 
 
   void SampleSubCutSecondaries(std::vector<G4Track*>&, const G4Step&, 
                                G4double& eloss, G4VEmModel* model); 
@@ -840,16 +838,6 @@ inline void G4VEnergyLossProcess::AddCollaborativeProcess(
   scProcesses.push_back(p);
   useSubCutoff = true;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-inline void G4VEnergyLossProcess::AddSubCutoffSecondaries(
-            std::vector<G4Track*>& tracks, 
-            const G4Step& step, G4double& eloss, G4double& escaled)
-{
-  if(idxSCoffRegions[currentMaterialIndex]) 
-    SampleSubCutSecondaries(tracks, step, eloss, SelectModel(escaled));
-} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
