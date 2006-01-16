@@ -14,8 +14,8 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-15 Dec 2005 Dennis Wright
-----------------------------------------------
+15 Dec 2005 Dennis Wright (hadr-util-V08-00-01)
+-----------------------------------------------
 - G4ReactionDynamics.cc: add array bounds protection in TwoCluster
                          (cpar, gpar)
 
