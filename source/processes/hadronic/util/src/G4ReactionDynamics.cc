@@ -1713,8 +1713,8 @@
     const G4double gpar[] = { 2.6, 2.6, 1.8, 1.30, 1.20 };
     
     if (forwardCount <= 0) {
-      return false;           array bounds protection
-    } else if (forwardCount == 1)
+      return false;     //      array bounds protection
+    } else if (forwardCount == 1) {
       rmc = forwardMass;
     } else {
 //      G4int ntc = std::min(5,forwardCount); // check if offset by 1 @@
