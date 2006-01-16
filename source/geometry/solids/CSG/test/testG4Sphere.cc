@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Sphere.cc,v 1.18 2006-01-16 09:21:36 grichine Exp $
+// $Id: testG4Sphere.cc,v 1.19 2006-01-16 14:49:02 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -231,7 +231,10 @@ G4ThreeVector s9v(-0.6542770611918751,
                                            radOne*std::sin(angle),
                                            0.0 );
 
-    G4Sphere s13("Band (theta segment)",5,50,0,twopi,pi/6.,halfpi);
+  // spheres for theta cone intersections
+
+  G4Sphere s13("Band (theta segment)",5,50,0,twopi,pi/6.,halfpi);
+  G4Sphere s14("Band (theta segment)",5,50,0,twopi,pi/3.,halfpi);
 
 
 #ifdef NDEBUG
@@ -452,6 +455,18 @@ G4ThreeVector s9v(-0.6542770611918751,
     // G4cout<<"s13.DistanceToOut(G4ThreeVector(20.,0.,0.),vz... = "<<Dist<<G4endl;
     assert(ApproxEqual(Dist,34.641016151377549));
 
+    Dist=s13.DistanceToOut(G4ThreeVector(20.,0.,0.),vmz,calcNorm,pgoodNorm,pNorm);
+    // G4cout<<"s13.DistanceToOut(G4ThreeVector(20.,0.,0.),vmz... = "<<Dist<<G4endl;
+     assert(ApproxEqual(Dist,11.547005383792508));
+
+    Dist=s14.DistanceToOut(G4ThreeVector(20.,0.,0.),vz,calcNorm,pgoodNorm,pNorm);
+    // G4cout<<"s14.DistanceToOut(G4ThreeVector(20.,0.,0.),vz... = "<<Dist<<G4endl;
+     assert(ApproxEqual(Dist,11.547005383792508));
+
+    Dist=s14.DistanceToOut(G4ThreeVector(20.,0.,0.),vmz,calcNorm,pgoodNorm,pNorm);
+    // G4cout<<"s14.DistanceToOut(G4ThreeVector(20.,0.,0.),vmz... = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,34.641016151377549));
+
 
 
 
@@ -557,6 +572,15 @@ G4ThreeVector s9v(-0.6542770611918751,
     Dist=s13.DistanceToIn(G4ThreeVector(20.,0.,70.),vmz);
     // G4cout<<"s13.DistanceToIn(G4ThreeVector(20.,0.,70.),vmz... = "<<Dist<<G4endl;
     assert(ApproxEqual(Dist,35.358983848622451));
+
+
+    Dist=s14.DistanceToIn(G4ThreeVector(20.,0.,-70.),vz);
+    // G4cout<<"s14.DistanceToIn(G4ThreeVector(20.,0.,-70.),vz... = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,35.358983848622451));
+
+    Dist=s14.DistanceToIn(G4ThreeVector(20.,0.,70.),vmz);
+    // G4cout<<"s14.DistanceToIn(G4ThreeVector(20.,0.,70.),vmz... = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,58.452994616207498));
 
      ///////////////////////////////////////////////////////////////////////////
 
