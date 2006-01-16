@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.53 2005-11-09 15:03:09 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.54 2006-01-16 09:21:35 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -2280,8 +2280,11 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
             {
               s = kInfinity ;  // wrong cone
             }
-            stheta = s ;
-            sidetheta = kETheta ;
+            if (s < stheta)
+	    {
+              stheta = s ;
+              sidetheta = kETheta ;
+	    }
           }
         }
       }

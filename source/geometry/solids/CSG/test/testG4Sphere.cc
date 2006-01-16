@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Sphere.cc,v 1.17 2005-06-06 09:17:22 gcosmo Exp $
+// $Id: testG4Sphere.cc,v 1.18 2006-01-16 09:21:36 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -231,6 +231,7 @@ G4ThreeVector s9v(-0.6542770611918751,
                                            radOne*std::sin(angle),
                                            0.0 );
 
+    G4Sphere s13("Band (theta segment)",5,50,0,twopi,pi/6.,halfpi);
 
 
 #ifdef NDEBUG
@@ -447,9 +448,16 @@ G4ThreeVector s9v(-0.6542770611918751,
 
     // Dist=s9.DistanceToIn(s9p,s9v);
     // G4cout<<"s9.DistanceToIn(s9p,s9v,... = "<<Dist<<G4endl;
+    Dist=s13.DistanceToOut(G4ThreeVector(20.,0.,0.),vz,calcNorm,pgoodNorm,pNorm);
+    // G4cout<<"s13.DistanceToOut(G4ThreeVector(20.,0.,0.),vz... = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,34.641016151377549));
+
+
+
 
      
 // Checking G4Sphere::DistanceToIn(P)
+
     Dist=s2.DistanceToIn(pzero);
     assert(ApproxEqual(Dist,45));
     Dist=s1.DistanceToIn(ponrmax1);
@@ -539,6 +547,16 @@ G4ThreeVector s9v(-0.6542770611918751,
 
      Dist=b658.DistanceToIn(pzero,vz);
      G4cout<<"b658.DistanceToIn(pzero,vz) = "<<Dist<<G4endl;
+
+
+
+    Dist=s13.DistanceToIn(G4ThreeVector(20.,0.,-70.),vz);
+    // G4cout<<"s13.DistanceToIn(G4ThreeVector(20.,0.,-70.),vz... = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,58.452994616207498));
+
+    Dist=s13.DistanceToIn(G4ThreeVector(20.,0.,70.),vmz);
+    // G4cout<<"s13.DistanceToIn(G4ThreeVector(20.,0.,70.),vmz... = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,35.358983848622451));
 
      ///////////////////////////////////////////////////////////////////////////
 
