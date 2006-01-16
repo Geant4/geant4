@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc,v 1.19 2006-01-16 12:55:32 gcosmo Exp $
+// $Id: G4TwistedTubs.cc,v 1.20 2006-01-16 12:57:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -620,7 +620,7 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p,
        //
        G4ThreeVector normal = SurfaceNormal(p);
        if (normal*v < 0)
-       }
+       {
          *tmpdist = 0;
          return fLastDistanceToInWithV.value;
        } 

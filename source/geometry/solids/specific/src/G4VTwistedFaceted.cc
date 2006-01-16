@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc,v 1.11 2006-01-12 14:41:09 allison Exp $
+// $Id: G4VTwistedFaceted.cc,v 1.12 2006-01-16 12:55:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1285,6 +1285,4 @@ G4Polyhedron* G4VTwistedFaceted::CreatePolyhedron () const
   ph->createPolyhedron(nnodes,nfaces,xyz,faces);
 
   return ph;
-
 }
-
