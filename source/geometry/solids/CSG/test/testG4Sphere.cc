@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Sphere.cc,v 1.19 2006-01-16 14:49:02 grichine Exp $
+// $Id: testG4Sphere.cc,v 1.20 2006-01-17 08:47:59 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -236,6 +236,26 @@ G4ThreeVector s9v(-0.6542770611918751,
   G4Sphere s13("Band (theta segment)",5,50,0,twopi,pi/6.,halfpi);
   G4Sphere s14("Band (theta segment)",5,50,0,twopi,pi/3.,halfpi);
 
+
+  // b. 830
+
+  G4double mainInnerRadius =  21.45 * cm ;
+  G4double mainOuterRadius = 85.0 * cm ;
+  G4double minTheta = 18.0 * degree ;
+ 
+
+  
+ 
+   G4Sphere sb830( "mainSp",
+                    mainInnerRadius,
+                    mainOuterRadius,
+                    0.0, M_PI*2,
+                    minTheta,
+                    M_PI - 2*minTheta);
+
+   
+G4ThreeVector pb830(81.61117212,-27.77179755,196.4143423);
+   G4ThreeVector vb830(0.1644697995,0.18507236,0.9688642354);
 
 #ifdef NDEBUG
     G4Exception("FAIL: *** Assertions must be compiled in! ***");
@@ -467,7 +487,10 @@ G4ThreeVector s9v(-0.6542770611918751,
     // G4cout<<"s14.DistanceToOut(G4ThreeVector(20.,0.,0.),vmz... = "<<Dist<<G4endl;
     assert(ApproxEqual(Dist,34.641016151377549));
 
-
+    Dist=sb830.DistanceToOut(pb830,vb830,calcNorm,pgoodNorm,pNorm);
+    G4cout<<"sb830.DistanceToOut(pb830,vb830... = "<<Dist<<G4endl;
+    inside = sb830.Inside(pb830+Dist*vb830);
+    G4cout<<"sb830.Inside(pb830+Dist*vb830) = "<<OutputInside(inside)<<G4endl ;
 
 
      
