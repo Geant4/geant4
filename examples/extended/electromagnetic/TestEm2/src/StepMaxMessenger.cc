@@ -20,66 +20,42 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4StepLimiterBuilder.cc,v 1.1 2004-11-29 14:49:27 vnivanch Exp $
+// $Id: StepMaxMessenger.cc,v 1.1 2006-01-17 15:14:58 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//---------------------------------------------------------------------------
-//
-// ClassName:   G4StepLimiterBuilder
-//
-// Author:      V.Ivanchenko 24.11.2004
-//
-// Modified:
-//
-//----------------------------------------------------------------------------
-//
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4StepLimiterBuilder.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ProcessManager.hh"
-#include "G4StepLimiterPerRegion.hh"
+#include "StepMaxMessenger.hh"
+
+#include "StepMax.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4StepLimiterBuilder::G4StepLimiterBuilder(const G4String& name)
-   :  G4VPhysicsConstructor(name)
-{
-  stepMax = new G4StepLimiterPerRegion();
+StepMaxMessenger::StepMaxMessenger(StepMax* stepM)
+:stepMax(stepM)
+{ 
+  StepMaxCmd = new G4UIcmdWithADoubleAndUnit("/testem/stepMax",this);
+  StepMaxCmd->SetGuidance("Set max allowed step length");
+  StepMaxCmd->SetParameterName("mxStep",false);
+  StepMaxCmd->SetRange("mxStep>0.");
+  StepMaxCmd->SetUnitCategory("Length");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4StepLimiterBuilder::~G4StepLimiterBuilder()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4StepLimiterBuilder::ConstructParticle()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4StepLimiterBuilder::ConstructProcess()
+StepMaxMessenger::~StepMaxMessenger()
 {
-  // Add Decay Process
-
-
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-
-    if (stepMax->IsApplicable(*particle) && !particle->IsShortLived()) {
-
-      pmanager->AddProcess(stepMax, -1,-1,6);
-
-    }
-  }
+  delete StepMaxCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void StepMaxMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{ 
+  if (command == StepMaxCmd)
+    { stepMax->SetMaxStep(StepMaxCmd->GetNewDoubleValue(newValue));}
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

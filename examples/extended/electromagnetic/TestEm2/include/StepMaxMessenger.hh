@@ -20,46 +20,36 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: ParticlesBuilder.hh,v 1.3 2004-11-24 13:17:53 vnivanch Exp $
+// $Id: StepMaxMessenger.hh,v 1.1 2006-01-17 15:14:58 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ParticlesBuilder_h
-#define ParticlesBuilder_h 1
+#ifndef StepMaxMessenger_h
+#define StepMaxMessenger_h 1
 
-#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
+#include "G4UImessenger.hh"
+
+class StepMax;
+class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ParticlesBuilder : public G4VPhysicsConstructor
+class StepMaxMessenger: public G4UImessenger
 {
-public:
-  ParticlesBuilder(const G4String& name = "particles");
-  virtual ~ParticlesBuilder();
-
-public:
-  // This method will be invoked in the Construct() method.
-  // each particle type will be instantiated
-  virtual void ConstructParticle();
-
-  // This method is dummy.
-  virtual void ConstructProcess() {};
-
+  public:
+    StepMaxMessenger(StepMax*);
+   ~StepMaxMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
+    
+  private:
+    StepMax* stepMax;
+    G4UIcmdWithADoubleAndUnit* StepMaxCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
-
-
-
-
-
-

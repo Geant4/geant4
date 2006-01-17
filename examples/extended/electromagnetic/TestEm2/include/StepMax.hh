@@ -20,42 +20,51 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4EmHadronBuilder71.hh,v 1.1 2005-10-03 01:59:42 vnivanch Exp $
+// $Id: StepMax.hh,v 1.1 2006-01-17 15:14:58 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef G4EmHadronBuilder71_h
-#define G4EmHadronBuilder71_h 1
+#ifndef StepMax_h
+#define StepMax_h 1
 
-#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
+#include "G4VDiscreteProcess.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4Step.hh"
+
+class StepMaxMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4EmHadronBuilder71 : public G4VPhysicsConstructor
+class StepMax : public G4VDiscreteProcess
 {
-public:
-  G4EmHadronBuilder71(const G4String& name = "EM_stand_had");
-  virtual ~G4EmHadronBuilder71();
+  public:
 
-public:
-  // This method is dummy for physics
-  virtual void ConstructParticle();
+     StepMax(const G4String& processName = "UserMaxStep");
+    ~StepMax();
 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type
-  virtual void ConstructProcess();
+     G4bool IsApplicable(const G4ParticleDefinition&);
 
-private:
+     void SetMaxStep(G4double);
 
-   // hide assignment operator
-  G4EmHadronBuilder71 & operator=(const G4EmHadronBuilder71 &right);
-  G4EmHadronBuilder71(const G4EmHadronBuilder71&);
+     G4double GetMaxStep() {return MaxChargedStep;};
 
+     G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
+			                       G4double previousStepSize,
+			                       G4ForceCondition* condition);
+
+     G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+
+     G4double GetMeanFreePath(const G4Track&, G4double,G4ForceCondition*)
+     {return DBL_MAX;};    
+
+  private:
+
+     G4double MaxChargedStep;
+     
+     StepMaxMessenger* pMess;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

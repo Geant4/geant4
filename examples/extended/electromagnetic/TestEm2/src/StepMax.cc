@@ -20,55 +20,59 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4StepLimiterBuilder.hh,v 1.1 2004-11-29 14:49:26 vnivanch Exp $
+// $Id: StepMax.cc,v 1.1 2006-01-17 15:14:58 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef G4StepLimiterBuilder_h
-#define G4StepLimiterBuilder_h 1
-
-#include "G4VPhysicsConstructor.hh"
-#include "globals.hh"
+#include "StepMax.hh"
+#include "StepMaxMessenger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4StepLimiterPerRegion;
-
-class G4StepLimiterBuilder : public G4VPhysicsConstructor
+StepMax::StepMax(const G4String& processName)
+ : G4VDiscreteProcess(processName),MaxChargedStep(DBL_MAX)
 {
-public:
-  G4StepLimiterBuilder(const G4String& name = "stepLimiter");
-  virtual ~G4StepLimiterBuilder();
-
-public:
-  // This method is dummy for physics
-  virtual void ConstructParticle();
-
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type
-  virtual void ConstructProcess();
-
-private:
-
-   // hide assignment operator
-  G4StepLimiterBuilder & operator=(const G4StepLimiterBuilder &right);
-  G4StepLimiterBuilder(const G4StepLimiterBuilder&);
-
-  G4StepLimiterPerRegion* stepMax;
-};
+  pMess = new StepMaxMessenger(this);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+StepMax::~StepMax() { delete pMess; }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4bool StepMax::IsApplicable(const G4ParticleDefinition& particle)
+{
+  return (particle.GetPDGCharge() != 0. && !particle.IsShortLived());
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void StepMax::SetMaxStep(G4double step) {MaxChargedStep = step;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4double StepMax::PostStepGetPhysicalInteractionLength( const G4Track&,
+                                                   G4double,
+                                                   G4ForceCondition* condition )
+{
+  // condition is set to "Not Forced"
+  *condition = NotForced;
+
+  return MaxChargedStep;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4VParticleChange* StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
+{
+   // do nothing
+   aParticleChange.Initialize(aTrack);
+   return &aParticleChange;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
