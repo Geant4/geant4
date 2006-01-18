@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07DetectorMessenger.hh,v 1.4 2005-11-22 22:20:55 asaim Exp $
+// $Id: ExN07DetectorMessenger.hh,v 1.5 2006-01-18 06:03:00 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -47,6 +47,8 @@ class ExN07DetectorMessenger: public G4UImessenger
     virtual G4String GetCurrentValue(G4UIcommand * command);
     
   private:
+    void UpdateMaterialList();
+
     ExN07DetectorConstruction* ExN07Detector;
     
     G4UIdirectory*             N07Dir;
@@ -54,6 +56,8 @@ class ExN07DetectorMessenger: public G4UImessenger
     G4UIcmdWithAString*        GapMaterCmd;
     G4UIcmdWithAnInteger*      numLayerCmd;
     G4UIcmdWithABool*          SerialCmd;
+    G4UIcmdWithAnInteger*      verboseCmd;
+    G4UIcmdWithABool*          AddMatCmd;
 };
 
 

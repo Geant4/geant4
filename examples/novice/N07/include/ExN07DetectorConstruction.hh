@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07DetectorConstruction.hh,v 1.3 2005-11-22 22:20:55 asaim Exp $
+// $Id: ExN07DetectorConstruction.hh,v 1.4 2006-01-18 06:03:00 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,6 +60,12 @@ class ExN07DetectorConstruction : public G4VUserDetectorConstruction
     { return numberOfLayers; }
     inline G4bool IsSerial() const
     { return serial; }
+
+    void  AddMaterial();
+  
+    G4int GetVerboseLevel() const;
+    void SetVerboseLevel(G4int val);
+ 
      
   private:
     void DefineMaterials();
@@ -95,8 +101,22 @@ class ExN07DetectorConstruction : public G4VUserDetectorConstruction
     G4bool             serial;
 
     ExN07DetectorMessenger* detectorMessenger; 
+    
+    G4int              verboseLevel;
       
 };
+
+inline  G4int ExN07DetectorConstruction::GetVerboseLevel() const
+{
+  return  verboseLevel;
+}
+
+inline  void ExN07DetectorConstruction::SetVerboseLevel(G4int val)
+{
+  verboseLevel = val;
+}
+
+
 
 #endif
 

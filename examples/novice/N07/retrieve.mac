@@ -1,7 +1,7 @@
 /control/verbose 2
 
 ### Add material
-/N07/addMat Iron
+/N07/AddMaterial
 /run/initialize
 
 ### retrieve physics table
@@ -40,7 +40,8 @@
 /run/beamOn 10
 
 ###Modify Absorber material
-/N07/setAbsMat Iron
+/N07/setAbsMat Tungsten 
+/N07/setGapMat Water 
 
 ### 1 event 
 #/tracking/verbose 1

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07DetectorConstruction.cc,v 1.5 2005-11-22 22:20:55 asaim Exp $
+// $Id: ExN07DetectorConstruction.cc,v 1.6 2006-01-18 06:03:00 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,7 +56,8 @@
 
 ExN07DetectorConstruction::ExN07DetectorConstruction()
 :constructed(false),worldMaterial(0),absorberMaterial(0),gapMaterial(0),
- layerSolid(0),gapSolid(0),worldLogical(0),worldPhysical(0),serial(false)
+ layerSolid(0),gapSolid(0),worldLogical(0),worldPhysical(0),serial(false),
+ verboseLevel(1)
 {
   numberOfLayers = 40;
   totalThickness = 2.0*m;
@@ -90,6 +91,9 @@ G4VPhysicalVolume* ExN07DetectorConstruction::Construct()
     DefineMaterials();
     SetupGeometry();
     SetupDetectors();
+  }
+  if (GetVerboseLevel()>0) {
+    PrintCalorParameters();
   }
   return worldPhysical;
 }
@@ -183,7 +187,9 @@ void ExN07DetectorConstruction::DefineMaterials()
   G4Material* Vacuum = new G4Material(name="Galactic", z=1., a=1.01*g/mole,
                                     density,kStateGas,temperature,pressure);
 
-  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+  if (GetVerboseLevel()>1) {
+    G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+  }
 
   //default materials of the calorimeter
   worldMaterial    = Vacuum;
@@ -268,7 +274,6 @@ void ExN07DetectorConstruction::SetupGeometry()
     gapLogical[i]->SetVisAttributes(simpleBoxVisAtt);
   }
   
-  PrintCalorParameters();
 }
 
 void ExN07DetectorConstruction::SetupDetectors()
@@ -362,6 +367,10 @@ void ExN07DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
       calorLogical[i]->SetMaterial(absorberMaterial);
       layerLogical[i]->SetMaterial(absorberMaterial);
     }
+    G4RunManager::GetRunManager()->GeometryHasBeenModified();
+    if (GetVerboseLevel()>1) {
+      PrintCalorParameters();
+    }
   }
   else
   { G4cerr << materialChoice << " is not defined. - Command is ignored." << G4endl; }
@@ -378,8 +387,12 @@ void ExN07DetectorConstruction::SetGapMaterial(G4String materialChoice)
   {
     gapMaterial = pttoMaterial;
     if(constructed) for(size_t i=0;i<3;i++)
-    { gapLogical[i]->SetMaterial(absorberMaterial); }
-  }
+    { gapLogical[i]->SetMaterial(gapMaterial); }
+    G4RunManager::GetRunManager()->GeometryHasBeenModified();
+    if (GetVerboseLevel()>1) {
+      PrintCalorParameters();
+    }
+   }
   else
   { G4cerr << materialChoice << " is not defined. - Command is ignored." << G4endl; }
 }
@@ -424,3 +437,34 @@ void ExN07DetectorConstruction::SetNumberOfLayers(G4int nl)
   G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
+void   ExN07DetectorConstruction::AddMaterial()
+{
+  static G4bool isAdded = false;   
+
+  if( isAdded ) return;
+
+  G4String name, symbol;             //a=mass of a mole;
+  G4double a, z, density;            //z=mean number of protons;  
+
+  G4int ncomponents, natoms;
+
+  //
+  // define simple materials
+  //
+
+  new G4Material(name="Copper", z=29., a=63.546*g/mole, density=8.96*g/cm3);
+  new G4Material(name="Tungsten", z=74., a=183.84*g/mole, density=19.3*g/cm3);
+
+  G4Element* C = G4Element::GetElement("Carbon");
+  G4Element* O = G4Element::GetElement("Oxygen");
+  
+
+  G4Material* CO2 = 
+    new G4Material("CarbonicGas", density= 27.*mg/cm3, ncomponents=2,
+		   kStateGas, 325.*kelvin, 50.*atmosphere);
+  CO2->AddElement(C, natoms=1);
+  CO2->AddElement(O, natoms=2);
+
+  isAdded = true;
+
+}
