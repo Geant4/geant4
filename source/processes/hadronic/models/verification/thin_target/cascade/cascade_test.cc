@@ -280,6 +280,10 @@ int main(int argc, char** argv)
       G4cout << "Next line " << line << G4endl;
       if(line == "#particle") {
         (*fin) >> namePart;
+      } else if(line == "#ion") {
+        ionParticle= true;
+	namePart="GenericIon";
+        (*fin) >> ionA >> ionZ;
       } else if(line == "#energy(MeV)") {
         (*fin) >> energy;
         energy *= MeV;
@@ -339,12 +343,6 @@ int main(int argc, char** argv)
         (*fin) >> kBound;
       } else if(line == "#material") {
         (*fin) >> nameMat;
-      } else if(line == "#particle") {
-        (*fin) >> namePart;
-      } else if(line == "#ion") {
-        ionParticle= true;
-	namePart="GenericIon";
-        (*fin) >> ionA >> ionZ;
       } else if(line == "#generator") {
         (*fin) >> nameGen;
       } else if(line == "#paw") {
@@ -384,6 +382,9 @@ int main(int argc, char** argv)
 
     G4cout << "###### Start new run # " << run << "     #####" << G4endl;
 
+    if ( ionParticle ) {
+       energy*=ionA;
+    }
     material = mate->GetMaterial(nameMat);
     if(!material) {
       G4cout << "Material <" << nameMat
