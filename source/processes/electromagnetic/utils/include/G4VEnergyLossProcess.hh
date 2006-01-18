@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.47 2006-01-13 12:47:54 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.48 2006-01-18 17:22:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -61,7 +61,7 @@
 // 11-04-05 Use MaxSecondaryEnergy from a model (V.Ivanchenko)
 // 10-01-05 Remove SetStepLimits (V.Ivanchenko)
 // 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
-// 13-01-06 Remove AddSubCutSecondaries (V.Ivantchenko)
+// 13-01-06 Remove AddSubCutSecondaries and cleanup (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -302,7 +302,7 @@ public:
   void AddCollaborativeProcess(G4VEnergyLossProcess*);
 
   void SampleSubCutSecondaries(std::vector<G4Track*>&, const G4Step&, 
-                               G4double& eloss, G4VEmModel* model); 
+                               G4double& cut, G4VEmModel* model); 
 
 protected:
 

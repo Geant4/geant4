@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.75 2006-01-13 12:47:54 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.76 2006-01-18 17:22:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -90,7 +90,7 @@
 // 17-10-05 protection above has been removed (L.Urban)
 // 06-01-06 reset currentCouple when StepFunction is changed (V.Ivanchenko)
 // 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
-// 13-01-06 Clean up subcutoff (V.Ivantchenko)
+// 18-01-06 Clean up subcutoff including recalculation of presafety, (VI)
 //
 // Class Description:
 //
@@ -662,7 +662,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     eloss = (ScaledKinEnergyForLoss(r) - ScaledKinEnergyForLoss(x))/massRatio;
 
 /*
-    if(-1 < verboseLevel && eloss == 0.0) {
+    if(-1 < verboseLevel && eloss == 0.0) 
       G4cout << "Long STEP: rPre(mm)= " << r/mm
              << " rPost(mm)= " << x/mm
              << " ePre(MeV)= " << preStepScaledEnergy/MeV
@@ -670,7 +670,6 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
              << " eloss0(MeV)= "
              << GetDEDXForScaledEnergy(preStepScaledEnergy)*length/MeV
              << G4endl;
-    }
 */
 
   }
@@ -693,32 +692,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   // Corrections, which cannot be tabulated
   CorrectionsAlongStep(currentCouple, dynParticle, eloss, length);
 
-  // Sample fluctuations
-  if (lossFluctuationFlag && eloss + lowestKinEnergy < preStepKinEnergy) {
-
-    G4double tmax = std::min(currentModel->MaxSecondaryKinEnergy(dynParticle),
-			     (*theCuts)[currentMaterialIndex]);
-    eloss = currentModel->GetModelOfFluctuations()->
-      SampleFluctuations(currentMaterial,dynParticle,tmax,length,eloss);
-
-  /*
-    if(-1 < verboseLevel) {
-     G4cout << "After fluct: eloss(MeV)= " << eloss/MeV
-            << " fluc= " << (eloss-eloss0)/MeV
-            << " currentChargeSquare= " << chargeSquare
-            << " massRatio= " << massRatio
-            << " tmax= " << tmax
-            << G4endl;
-    }
-  */
-  }
-
-  // Energy balanse
-  G4double finalT = preStepKinEnergy - eloss;
-  if (finalT <= lowestKinEnergy) {
-    eloss += finalT;
-    finalT = 0.0;
-  }
+  G4double cut  = (*theCuts)[currentMaterialIndex];
+  G4double esec = 0.0;
 
   // SubCutOff 
   if(useSubCutoff) {
@@ -726,25 +701,37 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
       G4double preSafety = step.GetPreStepPoint()->GetSafety();
       G4double rcut = currentCouple->GetProductionCuts()->GetProductionCut(0);
+      if(preSafety < rcut) preSafety = 
+	  navigator->ComputeSafety(step.GetPreStepPoint()->GetPosition());
       if(preSafety - length < rcut) {
-
 	G4double postSafety = 
           navigator->ComputeSafety(step.GetPostStepPoint()->GetPosition());
-	if(std::min(preSafety, postSafety) < rcut) {
+	/*	
+	  if(-1 < verboseLevel) 
+	  G4cout << "Subcutoff: presafety(mm)= " << preSafety/mm
+	         << " postsafety(mm)= " << postSafety/mm
+	         << " rcut(mm)= " << rcut/mm 
+	         << G4endl;
+	*/
+	if(preSafety < rcut || postSafety < rcut) {
 
-	  SampleSubCutSecondaries(scTracks, step, eloss, currentModel);
+	  SampleSubCutSecondaries(scTracks, step, cut, currentModel);
 
 	  if(nProcesses) {
 	    for(G4int i=0; i<nProcesses; i++) {
-	      (scProcesses[i])->SampleSubCutSecondaries(scTracks, step, eloss, 
-				(scProcesses[i])->SelectModelForMaterial(
-				   preStepKinEnergy, currentMaterialIndex));
+	      (scProcesses[i])->SampleSubCutSecondaries(scTracks, step, rcut, 
+		                (scProcesses[i])->SelectModelForMaterial(
+				 preStepKinEnergy, currentMaterialIndex));
 	    }
 	  }    
 	  G4int n = scTracks.size();
 	  if(n) {
 	    fParticleChange.SetNumberOfSecondaries(n);
 	    for(G4int i=0; i<n; i++) {
+              G4Track* t = scTracks[i];
+	      G4double e = t->GetKineticEnergy();
+	      if (t->GetDefinition() == thePositron) e += electron_mass_c2;
+              esec += e;
 	      pParticleChange->AddSecondary(scTracks[i]);
 	    }      
 	    scTracks.clear();
@@ -752,6 +739,33 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 	}
       }
     }
+  }
+
+  // Sample fluctuations
+  if (lossFluctuationFlag && eloss + lowestKinEnergy < preStepKinEnergy) {
+
+    G4double tmax = 
+      std::min(currentModel->MaxSecondaryKinEnergy(dynParticle),cut);
+    eloss = currentModel->GetModelOfFluctuations()->
+      SampleFluctuations(currentMaterial,dynParticle,tmax,length,eloss);
+
+    /*
+      if(-1 < verboseLevel) 
+      G4cout << "After fluct: eloss(MeV)= " << eloss/MeV
+             << " fluc= " << (eloss-eloss0)/MeV
+             << " currentChargeSquare= " << chargeSquare
+             << " massRatio= " << massRatio
+             << " tmax= " << tmax
+             << G4endl;
+    */
+  }
+
+  // Energy balanse
+  eloss += esec;
+  G4double finalT = preStepKinEnergy - eloss;
+  if (finalT <= lowestKinEnergy) {
+    eloss += finalT;
+    finalT = 0.0;
   }
 
   fParticleChange.SetProposedKineticEnergy(finalT);
@@ -774,25 +788,31 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VEnergyLossProcess::SampleSubCutSecondaries(
-     std::vector<G4Track*>& tracks, 
-     const G4Step& step, 
-     G4double& eloss, 
-     G4VEmModel* model)
+       std::vector<G4Track*>& tracks, 
+       const G4Step& step, 
+       G4double& currentCut, 
+       G4VEmModel* model)
 {
   // Fast check weather subcutoff can work
   G4double subcut = (*theSubCuts)[currentMaterialIndex];
-  if(eloss < subcut) return;
   G4double cut = (*theCuts)[currentMaterialIndex];
   if(cut <= subcut) return;
   G4bool b;
   G4double cross = 
     chargeSqRatio*(((*theSubLambdaTable)[currentMaterialIndex])->
                    GetValue(preStepScaledEnergy, b));
-  if(cross <= 0.0) return;
+  G4double length = step.GetStepLength();
+  if(length*cross < 1.e-6) return;
+  /*  
+  if(-1 < verboseLevel) 
+    G4cout << "<<< Subcutoff for " << GetProcessName()
+	   << " cross(1/mm)= " << cross*mm << ">>>"
+    << G4endl;
+  */
+  currentCut = subcut;
 
   // Sample subcutoff secondaries
   G4StepPoint* preStepPoint = step.GetPreStepPoint();
-  G4double length = step.GetStepLength();
 
   G4ThreeVector prepoint = preStepPoint->GetPosition();
   G4ThreeVector dr = step.GetPostStepPoint()->GetPosition() - prepoint;
@@ -817,24 +837,21 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
       for (G4int i=0; i<nNew; i++) {
 
         p = (*newp)[i];
-        G4double e = p->GetKineticEnergy();
-        if (p->GetDefinition() == thePositron) e += electron_mass_c2;
-
-        if (e <= eloss) {
-          eloss  -= e;
-          G4ThreeVector r = prepoint + fragment*dr;
-          G4Track* t = new G4Track(p, pretime + fragment*dt, r);
-          t->SetTouchableHandle(hand);
-          tracks.push_back(t);
-
-        } else {
-
-          delete p;
-        }
+	G4ThreeVector r = prepoint + fragment*dr;
+	G4Track* t = new G4Track(p, pretime + fragment*dt, r);
+	t->SetTouchableHandle(hand);
+	tracks.push_back(t);
+	/*	  
+	if(-1 < verboseLevel) 
+	  G4cout << "New track " << p->GetDefinition()->GetParticleName()
+		 << " e(keV)= " << p->GetKineticEnergy()/keV
+		 << " fragment= " << fragment
+		 << G4endl;
+	*/
       }
       delete newp;
     }
-  } while (fragment < 1.0);
+  } while (fragment <= 1.0);
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
