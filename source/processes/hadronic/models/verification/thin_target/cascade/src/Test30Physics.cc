@@ -181,6 +181,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
   else if(part_name == "neutron") man = new G4ProcessManager(G4Neutron::Neutron());
   else if(part_name == "deuteron") man = new G4ProcessManager(G4Deuteron::Deuteron());
   else if(part_name == "alpha") man = new G4ProcessManager(G4Alpha::Alpha());
+  else if(part_name == "GenericIon") man = new G4ProcessManager(G4GenericIon::GenericIon());
 
   if(!man) return 0;
 

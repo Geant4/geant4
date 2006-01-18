@@ -57,6 +57,8 @@
 #include "G4NeutronInelasticCrossSection.hh"
 #include "G4HadronInelasticDataSet.hh"
 #include "G4HadronElasticDataSet.hh"
+#include "G4IonsShenCrossSection.hh"
+#include "G4TripathiCrossSection.hh"
 
 #include "G4ParticleTable.hh"
 #include "G4ParticleChange.hh"
@@ -73,6 +75,7 @@
 #include "G4Alpha.hh"
 #include "G4Deuteron.hh"
 #include "G4Triton.hh"
+#include "G4IonTable.hh"
 #include "G4ForceCondition.hh"
 #include "G4Box.hh"
 #include "G4PVPlacement.hh"
@@ -98,6 +101,9 @@ int main(int argc, char** argv)
   G4cout << "========================================================" << G4endl;
 
   G4String  namePart = "proton";
+  G4bool    ionParticle = false;
+  G4bool    Shen = false;
+  G4int     ionZ(0), ionA(0);
   G4String  nameMat  = "Si";
   G4String  nameGen  = "stringCHIPS";
   G4bool    logx     = false;
@@ -229,6 +235,8 @@ int main(int argc, char** argv)
   G4cout << "#angles" << G4endl;
   G4cout << "#dangle" << G4endl;
   G4cout << "#particle" << G4endl;
+  G4cout << "#ion Z A" << G4endl;
+  G4cout << "#Shen (use Shen cross-section)" << G4endl;
   G4cout << "#energy(MeV)" << G4endl;
   G4cout << "#sigmae(MeV)" << G4endl;
   G4cout << "#emax(MeV)" << G4endl;
@@ -260,6 +268,7 @@ int main(int argc, char** argv)
   const G4ParticleDefinition* deu = G4Deuteron::DeuteronDefinition();
   const G4ParticleDefinition* tri = G4Triton::TritonDefinition();
   const G4ParticleDefinition* alp = G4Alpha::AlphaDefinition();
+  const G4ParticleDefinition* ion = G4GenericIon::GenericIon();
   G4ParticleTable* partTable = G4ParticleTable::GetParticleTable();
   partTable->SetReadiness();
 
@@ -332,6 +341,10 @@ int main(int argc, char** argv)
         (*fin) >> nameMat;
       } else if(line == "#particle") {
         (*fin) >> namePart;
+      } else if(line == "#ion") {
+        ionParticle= true;
+	namePart="GenericIon";
+        (*fin) >> ionA >> ionZ;
       } else if(line == "#generator") {
         (*fin) >> nameGen;
       } else if(line == "#paw") {
@@ -378,9 +391,20 @@ int main(int argc, char** argv)
 	     << G4endl;
 	     exit(1);
     }
-
-    G4ParticleDefinition* part = (G4ParticleTable::GetParticleTable())->FindParticle(namePart);
-
+    G4ParticleDefinition* part(0);
+    if (namePart != "GenericIon") {
+       part = (G4ParticleTable::GetParticleTable())->FindParticle(namePart);
+    } else {
+        G4StateManager* g4State=G4StateManager::GetStateManager();
+	if (! g4State->SetNewState(G4State_Init)) G4cout << "error changing G4state"<< G4endl;;   
+       G4IonTable ions;
+       part = ions.GetIon(ionZ, ionA);
+    }
+   if (! part ) {
+       G4cout << " Sorry, No definition for particle" <<namePart << " found" << G4endl;
+       G4Exception(" "); 
+       
+    }
     G4VProcess* proc = phys->GetProcess(nameGen, namePart, material);
     G4ExcitationHandler* theDeExcitation = phys->GetDeExcitation();
     G4PreCompoundModel* thePreCompound = phys->GetPreCompound();
@@ -569,6 +593,15 @@ int main(int argc, char** argv)
       cs = new G4ProtonInelasticCrossSection();
     } else if(part == neutron && material->GetElement(0)->GetZ() > 1.5) {
       cs = new G4NeutronInelasticCrossSection();
+    } else if( ionParticle ) {
+      if ( Shen ) {
+        cs = new G4IonsShenCrossSection();
+	G4cout << "Using Shen Cross section for Ions" << G4endl;
+      }
+      if ( ! cs ) {
+      cs = new G4TripathiCrossSection();
+      G4cout << "Using Tripathi Cross section for Ions" << G4endl;
+      }
     } else {
       cs = new G4HadronInelasticDataSet();
     }
