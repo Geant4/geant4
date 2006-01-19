@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.9 2005-10-04 08:42:51 vnivanch Exp $
+// $Id: G4MscModel.cc,v 1.10 2006-01-19 15:06:54 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -73,6 +73,7 @@
 // 11-08-05 computation of lateral correlation added (L.Urban)
 // 02-10-05 nuclear size correction computation removed, the correction
 //          included in the (theoretical) tabulated values (L.Urban)
+// 17-01-06 computation of tail changed in SampleCosineTheta (l.Urban)
 //
 
 // Class Description:
@@ -722,12 +723,12 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength,
           eaa = 1.-ea ;
           xmean1 = 1.-x1fac2/a ;
 
-          const G4double fctail = factail*1.0 ;
-          c = 2.+fctail*tau ;
+          G4double tailpar = c_highland/betacp ;
+          c = xsi-factail*currentRadLength/(lambda0*tailpar*tailpar) ;
+          if(c <= 0.) c  = taulim ;
+          if(c == 2.) c += taulim ;
           G4double c1 = c-1. ;
           G4double c2 = c-2. ;
-          if(c2 == 0.) c2 = fctail*tausmall ;            
-
           b = 1.+(c-xsi)/a ;
 
           b1 = b+1. ;

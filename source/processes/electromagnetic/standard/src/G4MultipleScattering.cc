@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.45 2005-12-11 08:34:18 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.46 2006-01-19 15:06:53 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -89,6 +89,10 @@
 // 08-12-05 world is now: navigator->GetWorldVolume() L.Urban
 // 11-12-05 data member rangecut removed, steplimit does not depend
 //          on cut any more (L.Urban)
+// 17-01-06 value of data member factail changed (1. --> 0.75),
+//          value of facgeom is 3.5 instead of 4 (L.Urban)
+// 19-01-07 tlimitmin = facrange*50*micrometer, i.e. it depends on the
+//          value of facrange (L.Urban) 
 //
 // -----------------------------------------------------------------------------
 //
@@ -114,14 +118,14 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
   Tkinlimit        = 2.*MeV;
   facrange         = 0.02;
   tlimit           = 1.e10*mm;
-  tlimitmin        = 1.e-3*mm;            
+  tlimitmin        = facrange*50.e-3*mm;            
   geombig          = 1.e50*mm;
   geommin          = 5.e-6*mm;
-  facgeom          = 4.;
+  facgeom          = 3.5;
   safety           = 0.*mm;
   facsafety        = 0.20;
   dtrl             = 0.05;
-  factail          = 1.0;
+  factail          = 0.75;
   
   steppingAlgorithm = true;
   samplez           = false;  

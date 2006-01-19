@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.24 2005-12-11 08:34:18 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.25 2006-01-19 15:06:53 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -60,10 +60,12 @@
 // 13-11-05 some code cleaning (L.Urban)
 // 07-12-05 GeomLimit is protected instead of public
 // 11-12-05 data menber rangecut removed (L.Urban)
+// 19-01-07 tlimitmin = facrange*50*micrometer, i.e. it depends on the
+//          value of facrange (L.Urban)
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering.hh,v 1.24 2005-12-11 08:34:18 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.25 2006-01-19 15:06:53 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -121,13 +123,11 @@ public:    // with description
   void SetTkinlimit(G4double value) { Tkinlimit = value;};
 
   // Steplimit = facrange*max(range,lambda)
-  void SetFacrange(G4double val) { facrange=val;};
+  void SetFacrange(G4double val) { facrange=val;
+                                   tlimitmin=facrange*50.e-3*mm;};
 
   // connected with step size reduction due to geometry
   void SetFacgeom(G4double val) { facgeom=val;};
-
-  // minimum steplimit                                  
-  void SetTlimitmin(G4double val) { tlimitmin=val;};
 
 protected:
 
