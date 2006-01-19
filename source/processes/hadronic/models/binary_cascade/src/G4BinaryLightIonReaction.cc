@@ -127,7 +127,7 @@
  
 
       G4V3DNucleus * fancyNucleus = NULL;
-      G4V3DNucleus * projectile = NULL;
+      G4Fancy3DNucleus * projectile = NULL;
       G4double m1(0) ,m2(0);    
       G4LorentzVector it;
 
@@ -137,6 +137,7 @@
       {
 	projectile = new G4Fancy3DNucleus;
 	projectile->Init(a1, z1);
+	projectile->CenterNucleons();
 	m1=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(
 			  projectile->GetCharge(),projectile->GetMassNumber());
 	it=toBreit * G4LorentzVector(m1,G4ThreeVector(0,0,0));
@@ -148,6 +149,7 @@
 //	  G4cout << " mass table, nucleus, delta : " << m2 <<" "<< fancyNucleus->GetMass()
 //               <<" "<<m2-fancyNucleus->GetMass() << G4endl;
 	G4double impactMax = fancyNucleus->GetOuterRadius()+projectile->GetOuterRadius();
+//        G4cout << "out radius - nucleus - projectile " << fancyNucleus->GetOuterRadius()/fermi << " - " << projectile->GetOuterRadius()/fermi << G4endl;
 	G4double aX=(2.*G4UniformRand()-1.)*impactMax;
 	G4double aY=(2.*G4UniformRand()-1.)*impactMax;
 	G4ThreeVector pos(aX, aY, -2.*impactMax-5.*fermi);
@@ -184,6 +186,7 @@
           it->SetProjectilePotential(-Efermi);
 	  initalState->push_back(it);
 	}
+	debug.push_back(" Sum of proj. nucleon momentum");
 	debug.push_back(tmpV);
 	debug.dump();
 
@@ -199,7 +202,7 @@
           delete result; result=0;
           delete fancyNucleus;
           delete projectile;
-	  if (++tryCount > 100)
+	  if (++tryCount > 200)
 	  {
 	      // abort!!
 	      
@@ -227,6 +230,9 @@
           break;
 	}     
       }
+	debug.push_back(" Attempts to create final state");
+	debug.push_back(tryCount);
+	debug.dump();
       debug.push_back("################# Through the loop ? "); debug.dump();
       //inverse transformation in case we swapped.
       G4int resA(0), resZ(0); 
