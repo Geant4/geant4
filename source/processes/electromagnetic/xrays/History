@@ -1,4 +1,4 @@
-$Id: History,v 1.44 2005-11-25 09:42:23 vnivanch Exp $
+$Id: History,v 1.45 2006-01-20 16:07:44 grichine Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 Jan 06: V. Grichine
+- New algorithm for XTR angular distribution based on the transparent regular radiator
+  was developed. The method can help for more precise estimation of XTR angular 
+  distribution needed in tracking applications of XTR detectors (ATLAS). The algorithm is 
+  under futher testing. 
 
 25 Aug 05: V.Ivant (xrays-V07-01-03)
 - G4XTRTransparentRegRadModel: abs -> std::abs 
