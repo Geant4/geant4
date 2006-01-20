@@ -1,4 +1,4 @@
-$Id: History,v 1.198 2006-01-19 15:12:30 urban Exp $
+$Id: History,v 1.199 2006-01-20 11:21:39 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 January 05: V.Ivant (emstand-V08-00-01)
 19 January 06: L.Urban
 - G4MultipleScattering: value of facgeom changed (4 -> 3.5)
                         tlimitmin = facrange*50*micrometer
