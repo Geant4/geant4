@@ -66,7 +66,8 @@ class G4MuonMinusCaptureAtRest : public G4VRestProcess
    
   public:
  
-     G4MuonMinusCaptureAtRest(const G4String& processName ="MuonMinusCaptureAtRest");
+     G4MuonMinusCaptureAtRest(const G4String& processName ="MuonMinusCaptureAtRest", 
+                       G4ProcessType   aType = fHadronic );
     ~G4MuonMinusCaptureAtRest();
 
      G4bool IsApplicable(const G4ParticleDefinition&);

@@ -63,8 +63,9 @@
 
 // Constructor
 
-G4PiMinusAbsorptionAtRest::G4PiMinusAbsorptionAtRest(const G4String& processName)
-  : G4VRestProcess (processName)
+G4PiMinusAbsorptionAtRest::G4PiMinusAbsorptionAtRest(const G4String& processName,
+                                      G4ProcessType   aType ) :
+  G4VRestProcess (processName, aType)
 {
   //  _stopAbsorption = 0;
   //  _stopDeexcitation = 0;

@@ -59,7 +59,8 @@ class G4PionMinusAbsorptionAtRest : public G4VRestProcess
    
   public:
  
-     G4PionMinusAbsorptionAtRest(const G4String& processName ="PionMinusAbsorptionAtRest");
+     G4PionMinusAbsorptionAtRest(const G4String& processName ="PionMinusAbsorptionAtRest",
+     				 G4ProcessType   aType = fHadronic);
  
     ~G4PionMinusAbsorptionAtRest();
 

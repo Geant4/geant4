@@ -59,7 +59,8 @@ class G4AntiProtonAnnihilationAtRest : public G4VRestProcess
    
   public:
  
-     G4AntiProtonAnnihilationAtRest(const G4String& processName ="AntiProtonAnnihilationAtRest");
+     G4AntiProtonAnnihilationAtRest(const G4String& processName ="AntiProtonAnnihilationAtRest", 
+                       G4ProcessType   aType = fHadronic );
  
     ~G4AntiProtonAnnihilationAtRest();
 

@@ -68,7 +68,8 @@ private:
 public:
 
   // Constructor
-  G4PiMinusAbsorptionAtRest(const G4String& processName ="PiMinusAbsorptionAtRest");
+  G4PiMinusAbsorptionAtRest(const G4String& processName ="PiMinusAbsorptionAtRest", 
+                       G4ProcessType   aType = fHadronic );
 
   // Destructor
   ~G4PiMinusAbsorptionAtRest();

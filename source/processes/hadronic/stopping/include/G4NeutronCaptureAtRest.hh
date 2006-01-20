@@ -59,7 +59,8 @@ class G4NeutronCaptureAtRest : public G4VRestProcess
    
   public:
  
-     G4NeutronCaptureAtRest(const G4String& processName ="NeutronCaptureAtRest");
+     G4NeutronCaptureAtRest(const G4String& processName ="NeutronCaptureAtRest", 
+                       G4ProcessType   aType = fHadronic );
  
     ~G4NeutronCaptureAtRest();
 

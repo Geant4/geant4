@@ -59,7 +59,8 @@ class G4KaonMinusAbsorption : public G4VRestProcess
    
   public:
  
-     G4KaonMinusAbsorption(const G4String& processName ="KaonMinusAbsorption");
+     G4KaonMinusAbsorption(const G4String& processName ="KaonMinusAbsorption", 
+                       G4ProcessType   aType = fHadronic );
  
     ~G4KaonMinusAbsorption();
 
