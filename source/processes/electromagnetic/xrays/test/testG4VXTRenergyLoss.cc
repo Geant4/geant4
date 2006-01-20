@@ -618,6 +618,7 @@ int main()
     G4Exception("Invalid XTR model name", "InvalidSetup",
                  FatalException, "XTR model name is out of the name list");
   }
+  // processXTR->SetAngleRadDistr(true);
   // processXTR->BuildPhysicsTable(proton);
 
   static G4int totBin = processXTR->GetTotBin();

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.hh,v 1.13 2005-12-19 15:08:41 grichine Exp $
+// $Id: G4VXTRenergyLoss.hh,v 1.14 2006-01-20 15:05:27 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -167,6 +167,7 @@ public:
   void SetGamma(G4double gamma)      {fGamma    = gamma;}; 
   void SetEnergy(G4double energy)    {fEnergy   = energy;};                
   void SetVarAngle(G4double varAngle){fVarAngle = varAngle;};               
+  void SetAngleRadDistr(G4bool pAngleRadDistr){fAngleRadDistr=pAngleRadDistr;};               
 
 
   static G4PhysicsLogVector* GetProtonVector(){ return fProtonEnergyVector;};
@@ -207,6 +208,7 @@ protected:
 
 
   G4bool fExitFlux;
+  G4bool fAngleRadDistr;
   G4double fSigma1, fSigma2 ;               // plasma energy Sq of matter1/2
 
   G4int fMatIndex1, fMatIndex2 ;

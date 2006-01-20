@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.26 2006-01-20 09:43:40 grichine Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.27 2006-01-20 15:05:27 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -98,6 +98,7 @@ G4XTRenergyLoss::G4XTRenergyLoss(G4LogicalVolume *anEnvelope,
     G4Exception("No plates in X-ray TR radiator") ;
   }
   // default is XTR dEdx, not flux after radiator
+  fAngleRadDistr = false;
   fExitFlux = false;
   fLambda = DBL_MAX;
   // Mean thicknesses of plates and gas gaps
@@ -267,7 +268,11 @@ void G4XTRenergyLoss::BuildPhysicsTable(const G4ParticleDefinition& pd)
                  "XTR initialisation for neutral particle ?!" );   
   }
   BuildTable();
-  BuildAngleTable();
+  if (fAngleRadDistr) 
+  {
+    G4cout<<"Build angle distribution according the transparent regular radiator"<<G4endl;
+    BuildAngleTable();
+  }
 }
 
 
