@@ -1,4 +1,4 @@
-$Id: README,v 1.21 2006-01-13 17:43:59 maire Exp $
+$Id: README,v 1.22 2006-01-20 12:10:28 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -80,6 +80,9 @@ $Id: README,v 1.21 2006-01-13 17:43:59 maire Exp $
      The threshold for producing secondaries can be changed.
      eg: /testem/phys/setCuts 100 microm
          /run/initialize
+	 
+     The shower profiles are histogramed, if histograming is activated.
+     They can be also printed with the command /testem/run/verbose 1	 
 
  6- HOW TO START ?
 
