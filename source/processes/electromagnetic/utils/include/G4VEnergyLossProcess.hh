@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.48 2006-01-18 17:22:37 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.49 2006-01-20 09:51:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -62,6 +62,7 @@
 // 10-01-05 Remove SetStepLimits (V.Ivanchenko)
 // 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
 // 13-01-06 Remove AddSubCutSecondaries and cleanup (V.Ivantchenko)
+// 20-01-06 Introduce G4EmTableType and reducing number of methods (VI)
 //
 // Class Description:
 //
@@ -85,6 +86,7 @@
 #include "G4EmModelManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4ParticleChangeForLoss.hh"
+#include "G4EmTableType.hh"
 
 class G4Step;
 class G4ParticleDefinition;
@@ -166,10 +168,9 @@ public:
 
   G4double SampleRange();
 
-  G4PhysicsTable* BuildDEDXTable();
-  G4PhysicsTable* BuildDEDXTableForCSDARange();
-  G4PhysicsTable* BuildLambdaTable();
-  G4PhysicsTable* BuildLambdaSubTable();
+  G4PhysicsTable* BuildDEDXTable(G4EmTableType tType = fRestricted);
+
+  G4PhysicsTable* BuildLambdaTable(G4EmTableType tType = fRestricted);
 
   void SetBaseParticle(const G4ParticleDefinition* p);
 
@@ -179,12 +180,10 @@ public:
 
   // Binning for dEdx, range, and inverse range tables
   void SetDEDXBinning(G4int nbins);
+  void SetLambdaBinning(G4int nbins);
 
   // Binning for dEdx, range, and inverse range tables
   void SetDEDXBinningForCSDARange(G4int nbins);
-
-  // Binning for lambda table
-  void SetLambdaBinning(G4int nbins);
 
   // Min kinetic energy for tables
   void SetMinKinEnergy(G4double e);
@@ -228,6 +227,9 @@ public:
   void SetDEDXTable(G4PhysicsTable* p);
   G4PhysicsTable* DEDXTable() const;
 
+  void SetDEDXTableForSubsec(G4PhysicsTable* p);
+  G4PhysicsTable* DEDXTableForSubsec() const;
+
   void SetDEDXunRestrictedTable(G4PhysicsTable* p);
   G4PhysicsTable* DEDXunRestrictedTable() const;
 
@@ -248,8 +250,9 @@ public:
   void SetSubLambdaTable(G4PhysicsTable* p);
   G4PhysicsTable* SubLambdaTable();
 
-  // Return values for particle
+  // Return values for given G4MaterialCutsCouple
   G4double GetDEDX(G4double& kineticEnergy, const G4MaterialCutsCouple*);
+  G4double GetDEDXForSubsec(G4double& kineticEnergy, const G4MaterialCutsCouple*);
   G4double GetRange(G4double& kineticEnergy, const G4MaterialCutsCouple*);
   G4double GetRangeForLoss(G4double& kineticEnergy, const G4MaterialCutsCouple*);
   G4double GetKineticEnergy(G4double& range, const G4MaterialCutsCouple*);
@@ -310,14 +313,6 @@ protected:
 
   void SetSecondaryParticle(const G4ParticleDefinition* p);
 
-  G4PhysicsVector* DEDXPhysicsVector(const G4MaterialCutsCouple*);
-
-  G4PhysicsVector* DEDXPhysicsVectorForCSDARange(const G4MaterialCutsCouple*);
-
-  G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
-
-  G4PhysicsVector* SubLambdaPhysicsVector(const G4MaterialCutsCouple*);
-
   G4VEmModel* SelectModel(G4double kinEnergy);
 
   size_t CurrentMaterialCutsCoupleIndex() const;
@@ -337,10 +332,12 @@ private:
   void Clear();
 
   void DefineMaterial(const G4MaterialCutsCouple* couple);
+  G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*, G4double cut);
 
   // Returnd values for scaled energy and base particles mass
   //
   G4double GetDEDXForScaledEnergy(G4double scaledKinEnergy);
+  G4double GetSubDEDXForScaledEnergy(G4double scaledKinEnergy);
   G4double GetScaledRangeForScaledEnergy(G4double scaledKinEnergy);
   G4double GetLimitScaledRangeForScaledEnergy(G4double scaledKinEnergy);
   G4double GetLambdaForScaledEnergy(G4double scaledKinEnergy);
@@ -370,8 +367,9 @@ private:
 
   // tables and vectors
   G4PhysicsTable*             theDEDXTable;
-  G4PhysicsTable*             theRangeTableForLoss;
+  G4PhysicsTable*             theDEDXSubTable;
   G4PhysicsTable*             theDEDXunRestrictedTable;
+  G4PhysicsTable*             theRangeTableForLoss;
   G4PhysicsTable*             theCSDARangeTable;
   G4PhysicsTable*             theSecondaryRangeTable;
   G4PhysicsTable*             theInverseRangeTable;
@@ -397,15 +395,14 @@ private:
   const G4MaterialCutsCouple* currentCouple;
   size_t                      currentMaterialIndex;
 
-  G4int    nDEDXBins;
-  G4int    nDEDXBinsForRange;
-  G4int    nLambdaBins;
+  G4int    nBins;
+  G4int    nBinsCSDA;
   G4int    nWarnings;
 
   G4double lowestKinEnergy;
   G4double minKinEnergy;
   G4double maxKinEnergy;
-  G4double maxKinEnergyForRange;
+  G4double maxKinEnergyCSDA;
 
   G4double massRatio;
   G4double reduceFactor;
@@ -460,11 +457,31 @@ inline G4double G4VEnergyLossProcess::GetDEDX(G4double& kineticEnergy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+inline G4double G4VEnergyLossProcess::GetDEDXForSubsec(G4double& kineticEnergy,
+                                        const G4MaterialCutsCouple* couple)
+{
+  DefineMaterial(couple);
+  return GetSubDEDXForScaledEnergy(kineticEnergy*massRatio);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline G4double G4VEnergyLossProcess::GetDEDXForScaledEnergy(G4double e)
 {
   G4bool b;
   G4double x = 
     ((*theDEDXTable)[currentMaterialIndex]->GetValue(e, b))*chargeSqRatio;
+  if(e < minKinEnergy) x *= std::sqrt(e/minKinEnergy);
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEnergyLossProcess::GetSubDEDXForScaledEnergy(G4double e)
+{
+  G4bool b;
+  G4double x = 
+    ((*theDEDXSubTable)[currentMaterialIndex]->GetValue(e, b))*chargeSqRatio;
   if(e < minKinEnergy) x *= std::sqrt(e/minKinEnergy);
   return x;
 }
@@ -477,10 +494,11 @@ inline G4double G4VEnergyLossProcess::GetRange(G4double& kineticEnergy,
   DefineMaterial(couple);
   G4double x = DBL_MAX;
   if(theCSDARangeTable)
-    x = GetLimitScaledRangeForScaledEnergy(kineticEnergy*massRatio);
+    x = GetLimitScaledRangeForScaledEnergy(kineticEnergy*massRatio)
+      * reduceFactor;
   else if(theRangeTableForLoss)
-    x = GetScaledRangeForScaledEnergy(kineticEnergy*massRatio);
-  return x*reduceFactor;
+    x = GetScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
+  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -491,13 +509,12 @@ inline G4double G4VEnergyLossProcess::GetLimitScaledRangeForScaledEnergy(
   G4bool b;
   G4double x;
 
-  if (e < maxKinEnergyForRange) {
+  if (e < maxKinEnergyCSDA) {
     x = ((*theCSDARangeTable)[currentMaterialIndex])->GetValue(e, b);
     if(e < minKinEnergy) x *= std::sqrt(e/minKinEnergy);
-
   } else {
     x = theRangeAtMaxEnergy[currentMaterialIndex] +
-         (e - maxKinEnergyForRange)/theDEDXAtMaxEnergy[currentMaterialIndex];
+         (e - maxKinEnergyCSDA)/theDEDXAtMaxEnergy[currentMaterialIndex];
   }
   return x;
 }
@@ -511,8 +528,8 @@ inline G4double G4VEnergyLossProcess::GetRangeForLoss(
   DefineMaterial(couple);
   G4double x = DBL_MAX;
   if(theRangeTableForLoss) 
-    x = GetScaledRangeForScaledEnergy(kineticEnergy*massRatio);
-  return x*reduceFactor;
+    x = GetScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
+  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -741,6 +758,13 @@ inline G4PhysicsTable* G4VEnergyLossProcess::DEDXTable() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+inline G4PhysicsTable* G4VEnergyLossProcess::DEDXTableForSubsec() const
+{
+  return theDEDXSubTable;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline G4PhysicsTable* G4VEnergyLossProcess::DEDXunRestrictedTable() const
 {
   return theDEDXunRestrictedTable;
@@ -836,7 +860,6 @@ inline void G4VEnergyLossProcess::AddCollaborativeProcess(
             G4VEnergyLossProcess* p)
 {
   scProcesses.push_back(p);
-  useSubCutoff = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

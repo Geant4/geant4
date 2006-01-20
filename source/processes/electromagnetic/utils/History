@@ -1,4 +1,4 @@
-$Id: History,v 1.226 2006-01-18 17:22:37 vnivanch Exp $
+$Id: History,v 1.227 2006-01-20 09:51:56 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-- G4VEnergyLossProcess - add recalculation of presafety for subcutoff (VI)
+- Add G4EmTableType.hh enumerator (VI)
+- Use G4EmTableType to reduce methods with practically identical code (VI)
+- G4VEnergyLossProcess - recalculation of presafety for subcutoff 
+                         update energy constrain for subcutoff
+                         add energy correction to subcutoff (VI)
 
 11 January 06: V.Ivant (emutils-V08-00-00)
 - G4VEnergyLossProcess - simplify subcutoff calculation (VI)

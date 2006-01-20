@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.31 2006-01-11 11:25:36 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.32 2006-01-20 09:51:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,6 +51,7 @@
 // 14-01-04 Activate precise range calculation (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
+// 20-01-06 Introduce GetSubDEDX method (VI)
 //
 // Class Description:
 //
@@ -96,6 +97,11 @@ public:
 
   // get the DEDX or the range for a given particle/energy/material
   G4double GetDEDX(
+    const G4ParticleDefinition *aParticle,
+    G4double kineticEnergy,
+    const G4MaterialCutsCouple *couple);
+
+  G4double GetSubDEDX(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
     const G4MaterialCutsCouple *couple);
@@ -282,6 +288,28 @@ inline G4double G4LossTableManager::GetDEDX(
   if(currentLoss) x = currentLoss->GetDEDX(kineticEnergy, couple);
   else            x = G4EnergyLossTables::GetDEDX(
                       currentParticle,kineticEnergy,couple,false);
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+inline G4double G4LossTableManager::GetSubDEDX(
+          const G4ParticleDefinition *aParticle,
+                G4double kineticEnergy,
+          const G4MaterialCutsCouple *couple)
+{
+  if(aParticle != currentParticle) {
+    currentParticle = aParticle;
+    std::map<PD, G4VEnergyLossProcess*,std::less<PD> >::const_iterator pos;
+    if ((pos = loss_map.find(aParticle)) != loss_map.end()) {
+      currentLoss = (*pos).second;
+    } else {
+      currentLoss = 0;
+    //  ParticleHaveNoLoss(aParticle);
+    }
+  }
+  G4double x = 0.0;
+  if(currentLoss) x = currentLoss->GetDEDXForSubsec(kineticEnergy, couple);
   return x;
 }
 

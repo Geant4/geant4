@@ -20,13 +20,12 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.hh,v 1.15 2006-01-10 18:10:09 vnivanch Exp $
+// $Id: G4EmModelManager.hh,v 1.16 2006-01-20 09:51:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
-//
 //
 // File name:     G4EmModelManager
 //
@@ -47,6 +46,7 @@
 // 03-11-03 Substitute STL vector for G4RegionModels (V.Ivanchenko)
 // 11-04-05 Remove access to fluctuation models (V.Ivanchenko)
 // 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
+// 20-01-06 Introduce G4EmTableType and reducing number of methods (VI)
 //
 // Class Description:
 //
@@ -67,6 +67,7 @@
 
 #include "globals.hh"
 #include "G4DataVector.hh"
+#include "G4EmTableType.hh"
 
 class G4RegionModels
 {
@@ -135,16 +136,11 @@ public:
 
   const G4DataVector* SubCutoff() const;
 
-  void FillDEDXVector(G4PhysicsVector*, const G4MaterialCutsCouple*);
+  void FillDEDXVector(G4PhysicsVector*, const G4MaterialCutsCouple*, 
+		      G4EmTableType t = fRestricted);
 
-  void FillDEDXVectorForCSDARange(G4PhysicsVector*, 
-				  const G4MaterialCutsCouple*);
-
-  void FillLambdaVector(G4PhysicsVector*, const G4MaterialCutsCouple*,
-                        G4bool startFromNull = true);
-
-  void FillSubLambdaVector(G4PhysicsVector*, const G4MaterialCutsCouple*,
-                           G4bool startFromNull = true);
+  void FillLambdaVector(G4PhysicsVector*, const G4MaterialCutsCouple*, 
+                        G4bool startFromNull = true, G4EmTableType t = fRestricted);
 
   G4VEmModel* SelectModel(G4double& energy, size_t& index);
 

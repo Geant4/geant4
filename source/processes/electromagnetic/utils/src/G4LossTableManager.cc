@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.63 2006-01-10 18:10:09 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.64 2006-01-20 09:51:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -57,6 +57,7 @@
 // 25-01-04 Fix initialisation problem for ions (V.Ivanchenko)
 // 11-03-05 Shift verbose level by 1 (V.Ivantchenko)
 // 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
+// 20-01-06 Introduce G4EmTableType to remove repeating code (VI)
 //
 // Class Description:
 //
@@ -78,6 +79,7 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4PhysicsTableHelper.hh"
 #include "G4EmCorrections.hh"
+#include "G4EmTableType.hh"
 
 G4LossTableManager* G4LossTableManager::theInstance = 0;
 
@@ -405,6 +407,7 @@ void G4LossTableManager::CopyTables(const G4ParticleDefinition* part,
     if (!tables_are_built[j] && part == base_part_vector[j]) {
       tables_are_built[j] = true;
       proc->SetDEDXTable(base_proc->DEDXTable());
+      proc->SetDEDXTableForSubsec(base_proc->DEDXTableForSubsec());
       proc->SetDEDXunRestrictedTable(base_proc->DEDXunRestrictedTable());
       proc->SetCSDARangeTable(base_proc->CSDARangeTable());
       proc->SetRangeTableForLoss(base_proc->RangeTableForLoss());
@@ -436,22 +439,26 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
            << aParticle->GetParticleName() << G4endl;
   }
 
-  std::vector<G4PhysicsTable*> list;
-  list.clear();
+  std::vector<G4PhysicsTable*> list;  
   std::vector<G4VEnergyLossProcess*> loss_list;
   loss_list.clear();
   G4VEnergyLossProcess* em = 0;
+  G4VEnergyLossProcess* p = 0;
   G4int iem = 0;
+  G4PhysicsTable* dedx = 0;;
+  G4int i;
 
-  for (G4int i=0; i<n_loss; i++) {
-    if (aParticle == part_vector[i] && !tables_are_built[i] && 
-	loss_vector[i]) {
-      if (loss_vector[i]->IsIonisationProcess() || !em) {
-        em = loss_vector[i];
+  for (i=0; i<n_loss; i++) {
+    p = loss_vector[i];
+    if (p && aParticle == part_vector[i] && !tables_are_built[i]) {
+      if (p->IsIonisationProcess() || !em) {
+        em = p;
         iem= i;
       }
-      list.push_back(loss_vector[i]->BuildDEDXTable());
-      loss_list.push_back(loss_vector[i]);
+      dedx = p->BuildDEDXTable(fRestricted);
+      p->SetDEDXTable(dedx); 
+      list.push_back(dedx);
+      loss_list.push_back(p);
       tables_are_built[i] = true;
     }
   }
@@ -459,16 +466,19 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
   G4int n_dedx = list.size();
   if (!n_dedx) return 0;
 
+  G4int nSubRegions = em->NumberOfSubCutoffRegions();
+
   if (1 < verbose) {
     G4cout << "G4LossTableManager::BuildTables() start to build range tables"
            << " and the sum of " << n_dedx << " processes"
-           << " iem= " << iem << " em= " << em
+           << " iem= " << iem << " em= " << em->GetProcessName()
+           << " buildCSDARange= " << buildCSDARange
+	   << " nSubRegions= " << nSubRegions
 	   << G4endl;
   }
 
-  G4PhysicsTable* dedx = em->DEDXTable();
+  dedx = em->DEDXTable();
   if (1 < n_dedx) tableBuilder->BuildDEDXTable(dedx, list);
-
   dedx_vector[iem] = dedx;
 
   G4PhysicsTable* range = em->RangeTableForLoss();
@@ -482,31 +492,41 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
   tableBuilder->BuildRangeTable(dedx, range);
   tableBuilder->BuildInverseRangeTable(range, invrange);
 
-  if(buildCSDARange) {
-    std::vector<G4PhysicsTable*> newlist;
-    newlist.clear();
-    G4PhysicsTable* dedxForRange = em->DEDXunRestrictedTable();
-    for (G4int i=0; i<n_dedx; i++) {
-      newlist.push_back(loss_list[i]->BuildDEDXTableForCSDARange());
-    }
-    if (1 < n_dedx) tableBuilder->BuildDEDXTable(dedxForRange, newlist);
+  std::vector<G4PhysicsTable*> listSub;
+  std::vector<G4PhysicsTable*> listCSDA;
 
-    em->SetDEDXunRestrictedTable(dedxForRange);
-    range = em->CSDARangeTable();
-    if(!range) range  = G4PhysicsTableHelper::PreparePhysicsTable(range);
-    tableBuilder->BuildRangeTable(dedxForRange, range);
-    em->SetCSDARangeTable(range);
+  for (i=0; i<n_dedx; i++) {
+    p = loss_list[i];
+    p->SetLambdaTable(p->BuildLambdaTable(fRestricted));
+    if (0 < p->NumberOfSubCutoffRegions()) {
+      dedx = p->BuildDEDXTable(fSubRestricted);
+      p->SetDEDXTableForSubsec(dedx);
+      listSub.push_back(dedx);
+      p->SetSubLambdaTable(p->BuildLambdaTable(fSubRestricted));
+    }
+    if(buildCSDARange) { 
+      dedx = p->BuildDEDXTable(fTotal);
+      p->SetDEDXunRestrictedTable(dedx);
+      listCSDA.push_back(dedx); 
+    }     
+  }
+
+  if (0 < nSubRegions) {
+    G4PhysicsTable* dedxSub = em->DEDXTableForSubsec();
+    if (1 < listSub.size()) tableBuilder->BuildDEDXTable(dedxSub, listSub);
+    em->SetDEDXTableForSubsec(dedxSub);
+  }
+  if(buildCSDARange) {
+    G4PhysicsTable* dedxCSDA = em->DEDXunRestrictedTable();
+    if (1 < n_dedx) tableBuilder->BuildDEDXTable(dedxCSDA, listCSDA);
+    em->SetDEDXunRestrictedTable(dedxCSDA);
+    G4PhysicsTable* rCSDA = em->CSDARangeTable();
+    if(!rCSDA) range  = G4PhysicsTableHelper::PreparePhysicsTable(rCSDA);
+    tableBuilder->BuildRangeTable(dedxCSDA, rCSDA);
+    em->SetCSDARangeTable(rCSDA);
   }
 
   loss_map[aParticle] = em;
-  for (G4int j=0; j<n_dedx; j++) {
-    G4VEnergyLossProcess* p = loss_list[j];
-    p->SetLambdaTable(p->BuildLambdaTable());
-    if (0 < p->NumberOfSubCutoffRegions()) {
-      p->SetSubLambdaTable(p->BuildLambdaSubTable());
-      if( p != em) em->AddCollaborativeProcess(p);
-    }
-  }
   if (1 < verbose) {
     G4cout << "G4LossTableManager::BuildTables: Tables are built for "
            << aParticle->GetParticleName()
