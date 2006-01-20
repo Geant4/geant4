@@ -1,6 +1,11 @@
                  History file
                  ------------
 
+20-Jan-2006 - A.Ribon (statAccepTest-V08-00-06)
+- Added the subdirectory  dirPower/  to study
+  the statistical power of the Acceptance Suite.
+
+
 18-Dec-2005 - A.Ribon (statAccepTest-V08-00-05)
 - Added the possibility to have a different number
   of readout layers with respect to the number of

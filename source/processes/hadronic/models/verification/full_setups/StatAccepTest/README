@@ -1,5 +1,5 @@
 
- Last update: 18-Dec-2005
+ Last update: 20-Jan-2006
  ========================
 
  This directory contains a configurable calorimeter setup to be used
@@ -113,3 +113,7 @@
  immediately after you get the results from the Grid jobs.
  Please read the comments at the top of these files for more
  information.
+
+ The subdirectory  dirPower/  is dedicated to the study of the
+ statistical power of the Acceptance Suite. You can find more
+ information in the README file in that subdirectory.
