@@ -1,4 +1,4 @@
-# $Id: range.mac,v 1.5 2006-01-19 12:14:24 maire Exp $
+# $Id: range.mac,v 1.6 2006-01-20 11:15:49 maire Exp $
 #
 # Macro file for "TestEm1.cc"
 # 
@@ -15,6 +15,7 @@
 #
 /run/initialize
 #
+# eliminate straggling
 /process/inactivate msc
 /process/eLoss/fluct false
 #
@@ -24,8 +25,8 @@
 #
 /testem/histo/setFileName range
 /testem/histo/setFileType hbook
-/testem/histo/setHisto 1 150 70 85 mm
+/testem/histo/setHisto 1 150 70 85 mm	# particle range
 #	 
-/testem/event/printModulo 1000
+/testem/event/printModulo 2000
 #
-/run/beamOn 10000
+/run/beamOn 20000
