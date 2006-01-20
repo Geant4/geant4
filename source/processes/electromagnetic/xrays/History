@@ -1,4 +1,4 @@
-$Id: History,v 1.46 2006-01-20 16:33:56 vnivanch Exp $
+$Id: History,v 1.47 2006-01-20 16:38:38 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-25 Aug 05: V.Ivant (xrays-V08-00-00)
+25 Jan 06: V.Ivant (xrays-V08-00-00)
 20 Jan 06: V. Grichine
 - New algorithm for XTR angular distribution based on the transparent regular radiator
   was developed. The method can help for more precise estimation of XTR angular 
