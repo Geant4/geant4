@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.27 2006-01-20 15:05:27 grichine Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.28 2006-01-20 15:19:55 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -536,7 +536,11 @@ G4VParticleChange* G4XTRenergyLoss::PostStepDoIt( const G4Track& aTrack,
       {
             G4cout<<"energyTR = "<<energyTR/keV<<" keV"<<G4endl;
       }
-      theta = fabs(G4RandGauss::shoot(0.0,pi/gamma));
+      if (fAngleRadDistr)
+      {
+        theta = fabs(G4RandGauss::shoot(0.0,pi/gamma));
+      }
+      else theta = fabs(G4RandGauss::shoot(0.0,pi/gamma));
 
       if( theta >= 0.1 ) theta = 0.1;
 
