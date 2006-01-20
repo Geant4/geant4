@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.25 2006-01-13 15:50:49 grichine Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.26 2006-01-20 09:43:40 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -267,6 +267,7 @@ void G4XTRenergyLoss::BuildPhysicsTable(const G4ParticleDefinition& pd)
                  "XTR initialisation for neutral particle ?!" );   
   }
   BuildTable();
+  BuildAngleTable();
 }
 
 
@@ -381,7 +382,7 @@ void G4XTRenergyLoss::BuildAngleTable()
   G4int iTkin, iTR, iPlace;
   G4double radiatorCof = 1.0;           // for tuning of XTR yield
   G4double angleSum;
-  fEnergyDistrTable = new G4PhysicsTable(fTotBin);
+  fAngleDistrTable = new G4PhysicsTable(fTotBin);
 
   fGammaTkinCut = 0.0;
   
@@ -869,26 +870,28 @@ G4double G4XTRenergyLoss::AngleSpectralXTRdEdx(G4double energy)
 
 G4double G4XTRenergyLoss::AngleXTRdEdx(G4double varAngle) 
 {
+  // G4cout<<"angle2 = "<<varAngle<<"; fGamma = "<<fGamma<<G4endl;
+ 
   G4double result;
-  G4double sum = 0., tmp1, tmp2, tmp, cof1, cof2, cofMin, cofPHC, energy1, energy2;
+  G4double sum = 0., tmp1, tmp2, tmp=0., cof1, cof2, cofMin, cofPHC, energy1, energy2;
   G4int k, kMax, kMin, i;
-
-
 
   cofPHC  = twopi*hbarc;
 
   cof1    = (fPlateThick + fGasThick)*(1./fGamma/fGamma + varAngle);
   cof2    = fPlateThick*fSigma1 + fGasThick*fSigma2;
 
+  // G4cout<<"cof1 = "<<cof1<<"; cof2 = "<<cof2<<"; cofPHC = "<<cofPHC<<G4endl; 
+
   cofMin  =  sqrt(cof1*cof2); 
   cofMin /= cofPHC;
-
 
   kMin = G4int(cofMin);
   if (cofMin > kMin) kMin++;
 
+  kMax = kMin + 9; //  9; // kMin + G4int(tmp);
 
-  kMax = kMin + 19; //  9; // kMin + G4int(tmp);
+  // G4cout<<"cofMin = "<<cofMin<<"; kMin = "<<kMin<<"; kMax = "<<kMax<<G4endl;
 
   for( k = kMin; k <= kMax; k++ )
   {
@@ -901,31 +904,36 @@ G4double G4XTRenergyLoss::AngleXTRdEdx(G4double varAngle)
     {
       if( i == 0 )
       {
+        if (energy1 > fTheMaxEnergyTR || energy1 < fTheMinEnergyTR) continue;
         tmp1 = ( energy1*energy1*(1./fGamma/fGamma + varAngle) + fSigma1 )*fPlateThick/(4*hbarc*energy1);
         tmp2 = sin(tmp1);
         tmp  = energy1*tmp2*tmp2;
         tmp2 = fPlateThick/(4*tmp1);
         tmp1 = hbarc*energy1/( energy1*energy1*(1./fGamma/fGamma + varAngle) + fSigma2 );
 	tmp *= (tmp1-tmp2)*(tmp1-tmp2);
-	tmp1 = cof1*energy1/(4*hbarc) - cof2/(4*hbarc*energy1*energy1);
+	tmp1 = cof1/(4*hbarc) - cof2/(4*hbarc*energy1*energy1);
 	tmp2 = abs(tmp1);
 	if(tmp2 > 0.) tmp /= tmp2;
+        else continue;
       }
       else
       {
+        if (energy2 > fTheMaxEnergyTR || energy2 < fTheMinEnergyTR) continue;
         tmp1 = ( energy2*energy2*(1./fGamma/fGamma + varAngle) + fSigma1 )*fPlateThick/(4*hbarc*energy2);
         tmp2 = sin(tmp1);
         tmp  = energy2*tmp2*tmp2;
         tmp2 = fPlateThick/(4*tmp1);
         tmp1 = hbarc*energy2/( energy2*energy2*(1./fGamma/fGamma + varAngle) + fSigma2 );
 	tmp *= (tmp1-tmp2)*(tmp1-tmp2);
-	tmp1 = cof1*energy2/(4*hbarc) - cof2/(4*hbarc*energy2*energy2);
+	tmp1 = cof1/(4*hbarc) - cof2/(4*hbarc*energy2*energy2);
 	tmp2 = abs(tmp1);
 	if(tmp2 > 0.) tmp /= tmp2;
+        else continue;
       }
+      sum += tmp;
     }
-    sum += tmp;
-    //  G4cout<<"k = "<<k<<";    sum = "<<sum<<G4endl;
+    // G4cout<<"k = "<<k<<"; energy1 = "<<energy1/keV<<" keV; energy2 = "<<energy2/keV
+    //  <<" keV; tmp = "<<tmp<<"; sum = "<<sum<<G4endl;
   }
   result = 4.*pi*fPlateNumber*sum*varAngle;
   result /= hbarc*hbarc;

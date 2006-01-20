@@ -53,9 +53,18 @@
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 
+#include "G4VXTRenergyLoss.hh"
 #include "G4RegularXTRadiator.hh"
+#include "G4TransparentRegXTRadiator.hh"
 #include "G4GammaXTRadiator.hh"
+#include "G4StrawTubeXTRadiator.hh"
 
+#include "G4XTRGammaRadModel.hh"
+#include "G4XTRRegularRadModel.hh"
+#include "G4XTRTransparentRegRadModel.hh"
+
+#include "G4ParticleDefinition.hh"
+#include "G4Proton.hh"
 
 
 
@@ -436,6 +445,7 @@ int main()
   G4Material* fRadiatorMat = radiatorMat ; // CH2 Mylar ; 
   G4Material* foilMat     = Mylar ; // Li ; // CH2 ;  
   G4Material* gasMat      = Air ; // He ;// CO2 ; 
+  G4Material* absMat      = Xe20CO2 ; // He ;// CO2 ; 
   
   // fWindowMat = Mylar ;
   // fElectrodeMat = Al ;
@@ -503,62 +513,152 @@ int main()
 
   // const G4RegionStore* theRegionStore = G4RegionStore::GetInstance();
   // G4Region* gas = theRegionStore->GetRegion("XTRdEdxDetector");
-  /*    
-  G4RegularXTRadiator* regXTRprocess = 
-                 new G4RegularXTRadiator(pDet->GetLogicalRadiator(),
-                                         pDet->GetFoilMaterial(),
-                                         pDet->GetGasMaterial(),
-                                         pDet->GetFoilThick(),
-                                         pDet->GetGasThick(),
-                                         pDet->GetFoilNumber(),
-                                         "RegularXTRadiator");
-       
-    
-  G4GammaXTRadiator* gammaXTRprocess =
-                 new G4GammaXTRadiator(pDet->GetLogicalRadiator(),
-                                       2.,
-                                       10.,
-                                       pDet->GetFoilMaterial(),
-                                       pDet->GetGasMaterial(),
-                                       pDet->GetFoilThick(),
-                                       pDet->GetGasThick(),
-                                       pDet->GetFoilNumber(),
-                                       "GammaXTRadiator");
+  G4VXTRenergyLoss* processXTR;
 
+  const G4ParticleDefinition proton(
+                 name,   0.9382723*GeV,       0.0*MeV,       eplus,
+                    1,              +1,             0,
+                    1,              +1,             0,
+             "baryon",               0,            +1,        2212,
+                 true,            -1.0,          NULL,
+             false,           "neucleon"
+              );
 
-  */ 
+  G4ParticleDefinition* theProton = G4Proton::ProtonDefinition();
+  // *proton = theProton;  
 
-  G4GammaXTRadiator* gammaXTRprocess =
-                 new G4GammaXTRadiator(logicRadiator,
-                                       alphaPlate,
-                                       alphaGas,
+  G4String fXTRModel = "transpR";
+
+  if(fXTRModel == "gammaR" )
+  {
+    // G4GammaXTRadiator*
+    processXTR = new G4GammaXTRadiator(logicRadiator,
+                                       1000.,
+                                       100.,
                                        foilMat,
                                        gasMat,
                                        radThickness,
                                        gasGap,
                                        foilNumber,
                                        "GammaXTRadiator");
+  }
+  else if(fXTRModel == "gammaM" )
+  {
+    // G4XTRGammaRadModel*
+    processXTR = new G4XTRGammaRadModel(logicRadiator,
+                                       1000.,
+                                       100.,
+                                       foilMat,
+                                       gasMat,
+                                       radThickness,
+                                       gasGap,
+                                       foilNumber,
+                                       "GammaXTRmodel");
+  }
+  else if(fXTRModel == "strawR" )
+  {
 
-  static G4int totBin = gammaXTRprocess->GetTotBin();
+    // G4StrawTubeXTRadiator*
+    processXTR = new G4StrawTubeXTRadiator(logicRadiator,
+                                           foilMat,
+                                           gasMat,
+                                0.53,      // radThickness,
+                                3.14159,   // gasGap,
+                                         absMat,
+                                         true,
+                                         "strawXTRadiator");
+  }
+  else if(fXTRModel == "regR" )
+  {
+    // G4RegularXTRadiator*
+    processXTR = new G4RegularXTRadiator(logicRadiator,
+                                         foilMat,
+                                         gasMat,
+                                         radThickness,
+                                         gasGap,
+                                         foilNumber,
+                                         "RegularXTRadiator");
+  }
+  else if(fXTRModel == "transpR" )
+  {
+    // G4TransparentRegXTRadiator*
+    processXTR = new G4TransparentRegXTRadiator(logicRadiator,
+                                                foilMat,
+                                                gasMat,
+                                                radThickness,
+                                                gasGap,
+                                                foilNumber,
+                                                "TranspRegXTRadiator");
+  }
+  else if(fXTRModel == "regM" )
+  {
+    // G4XTRRegularRadModel*
+    processXTR = new G4XTRRegularRadModel(logicRadiator,
+                                          foilMat,
+                                          gasMat,
+                                          radThickness,
+                                          gasGap,
+                                          foilNumber,
+                                         "RegularXTRmodel");
+
+  }
+  else if(fXTRModel == "transpM" )
+  {
+    // G4XTRTransparentRegRadModel*
+    processXTR = new G4XTRTransparentRegRadModel(logicRadiator,
+                                                 foilMat,
+                                                 gasMat,
+                                                 radThickness,
+                                                 gasGap,
+                                                 foilNumber,
+                                         "TranspRegXTRmodel");
+  }
+  else
+  {
+    G4Exception("Invalid XTR model name", "InvalidSetup",
+                 FatalException, "XTR model name is out of the name list");
+  }
+  // processXTR->BuildPhysicsTable(proton);
+
+  static G4int totBin = processXTR->GetTotBin();
 
   G4cout<<"totBin = "<<totBin<<G4endl;
 
   // test of XTR table step do-it
 
 
-  G4double energyTR;
+  G4double energyTR, cofAngle = 5.1;
   G4double charge = 1.0;
   G4double chargeSq  = charge*charge ;
-  G4double gamma     = 900.0;
-  G4int iTkin;
+  G4double gamma     = 1.3e3; 
   G4cout<<"gamma = "<<gamma<<G4endl ;
+  
+  processXTR->SetGamma(gamma);
+
+  G4double angle2 = cofAngle*cofAngle/gamma/gamma;
+
+  G4double dNdAngle = processXTR-> AngleXTRdEdx(angle2);
+
+  for(i = 0; i < 40; i++ )
+  {
+     cofAngle = 0.5*i;
+     G4double angle2 = cofAngle*cofAngle/gamma/gamma;
+     G4double dNdAngle = processXTR-> AngleXTRdEdx(angle2);
+     dNdAngle *=fine_structure_const/pi;
+     G4cout<<"cofAngle = "<<cofAngle<<"; angle = "<<cofAngle/gamma<<"; dNdAngle = "<<dNdAngle<<G4endl;
+  }
+
+
+
+  G4int iTkin;
+  G4cout<<"gamma = "<<gamma<<G4endl;
 
   G4double TkinScaled = (gamma - 1.)*proton_mass_c2;
 
-
+  /*
   for(iTkin=0;iTkin<totBin;iTkin++)
   {
-    if(TkinScaled < gammaXTRprocess->GetProtonVector()->
+    if(TkinScaled < processXTR->GetProtonVector()->
                                         GetLowEdgeEnergy(iTkin)) break;    
   }
 
@@ -571,11 +671,11 @@ int main()
     xtrEnergy[k] = (1.0+ 1.0*k)*keV;
     spectrum[k]  = 0;
   }
-
+  
 
   for(i = 0; i < 1000000; i++ )
   {
-    energyTR = gammaXTRprocess->GetXTRrandomEnergy(TkinScaled,iTkin);
+    energyTR = processXTR->GetXTRrandomEnergy(TkinScaled,iTkin);
 
     for( k = 0; k < 100; k++ )
     {
@@ -590,7 +690,7 @@ int main()
   {    
     G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;
   }
-
+  */
 
 
 
