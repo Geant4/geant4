@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1FileSceneHandler.hh,v 1.15 2005-06-02 17:43:47 allison Exp $
+// $Id: G4VRML1FileSceneHandler.hh,v 1.16 2006-01-23 20:14:29 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1FileSceneHandler.hh
@@ -42,6 +42,7 @@ class G4VisAttributes;
 
 class G4VRML1FileSceneHandler: public G4VSceneHandler {
 
+  friend class G4VRML1FileViewer;
 
 // methods (public) 
 public:
