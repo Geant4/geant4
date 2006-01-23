@@ -1,4 +1,4 @@
-$Id: History,v 1.320 2006-01-11 18:57:40 allison Exp $
+$Id: History,v 1.321 2006-01-23 20:24:37 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,11 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+23rd January 2006  John Allison
+- DAWN-V08-00-00: Rewind output file in ClearView.  Avoids duplicate
+  geometries in output file.
+- VRML-V08-00-00: As above.
 
 11th January 2006  John Allison
 - vistest-V08-00-00: Added twisted solids and improved Perspective example.
