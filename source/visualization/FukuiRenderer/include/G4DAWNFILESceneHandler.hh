@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.hh,v 1.14 2005-06-02 17:43:46 allison Exp $
+// $Id: G4DAWNFILESceneHandler.hh,v 1.15 2006-01-23 20:11:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -43,6 +43,8 @@ class G4DAWNFILE;
 
 	//-----
 class G4DAWNFILESceneHandler: public G4VSceneHandler {
+
+  friend class G4DAWNFILEViewer;
 
 public:
 

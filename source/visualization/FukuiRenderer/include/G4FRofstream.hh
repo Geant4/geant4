@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRofstream.hh,v 1.6 2003-06-16 17:13:28 gunter Exp $
+// $Id: G4FRofstream.hh,v 1.7 2006-01-23 20:11:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include <fstream>
@@ -57,6 +57,9 @@ class G4FRofstream {
 	void Close() ;
 	G4bool IsOpen() { return flag_file_open ;}
 
+        // rewind (clear out anything already written)
+        void Rewind();
+
 	// utilities
 	void SendLine( const char* string ) ; // save string with new line
 
@@ -83,6 +86,13 @@ inline  void G4FRofstream::Close ()
 	if( IsOpen() ) {
 		fout.close();
 		flag_file_open = false ;
+	}
+}
+
+inline  void G4FRofstream::Rewind ()
+{ 
+	if( IsOpen() ) {
+		fout.seekp(0, std::ios::beg);
 	}
 }
 
