@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.77 2006-01-20 09:51:56 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.78 2006-01-24 11:52:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -901,7 +901,7 @@ void G4VEnergyLossProcess::PrintInfoDefinition()
              << G4endl;
     
     if(theCSDARangeTable) 
-      G4cout << "      Precise range table up"
+      G4cout << "      CSDA range table up"
              << " to " << G4BestUnit(maxKinEnergyCSDA,"Energy")
              << " in " << nBinsCSDA << " bins." << G4endl;
     
