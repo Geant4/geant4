@@ -1,8 +1,9 @@
-# $Id: range.mac,v 1.6 2006-01-20 11:15:49 maire Exp $
+# $Id: range.mac,v 1.7 2006-01-24 18:29:07 maire Exp $
 #
 # Macro file for "TestEm1.cc"
 # 
-# compute the csda range of primary particle
+# compute the csda range of the primary particle
+# with or without fluctuations
 #
 /control/verbose 2
 /run/verbose 2
@@ -11,6 +12,8 @@
 /testem/det/setSize 10 cm
 #
 /testem/phys/addPhysics  standard
+#
+# prevent any secondary production
 /testem/phys/setCuts 1 km
 #
 /run/initialize
@@ -25,7 +28,7 @@
 #
 /testem/histo/setFileName range
 /testem/histo/setFileType hbook
-/testem/histo/setHisto 1 150 70 85 mm	# particle range
+/testem/histo/setHisto 1 150 70 85 mm	# csda range
 #	 
 /testem/event/printModulo 2000
 #

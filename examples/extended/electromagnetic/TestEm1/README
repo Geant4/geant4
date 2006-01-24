@@ -1,4 +1,4 @@
-$Id: README,v 1.18 2006-01-24 13:53:31 maire Exp $
+$Id: README,v 1.19 2006-01-24 18:29:07 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -89,7 +89,7 @@ $Id: README,v 1.18 2006-01-24 13:53:31 maire Exp $
   Content of these histo:  
       1 : track length of primary particle
       2 : number of steps primary particle
-      3 : step length of primary particle
+      3 : step size of primary particle
 
   Note that, by default, histograms are disabled. To activate them, uncomment
   the flag G4ANALYSIS_USE in GNUmakefile.

@@ -40,7 +40,7 @@
         ENDDO
       ENDIF
 *
-* *** step length of primary particle
+* *** step size of primary particle
       IF ((ITRA.EQ.1).AND.(ISTAK.EQ.0)) CALL HFILL (3,STEP*10,0.,1.)
 *                
       END                                                                       

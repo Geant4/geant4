@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.7 2006-01-24 13:53:31 maire Exp $
+// $Id: HistoManager.cc,v 1.8 2006-01-24 18:29:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -164,7 +164,7 @@ void HistoManager::SetHisto(G4int ih,
                 { "dummy",					//0
                   "total track length of primary particle",	//1
                   "nb steps of primary particle",		//2
-                  "step length of primary particle"		//3
+                  "step size of primary particle"		//3
                  };
 
 
