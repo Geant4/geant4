@@ -110,6 +110,8 @@ public:
                                           G4double position,
 					  G4int iTransfer );
 
+  void SetVerboseLevel(G4int verbose){fVerbose=verbose;};
+
 
 
 protected:
@@ -126,7 +128,7 @@ private:
   G4PAIModel(const  G4PAIModel&);
 
   // The vector over proton kinetic energies: the range of gammas
-
+  G4int                fVerbose; 
   G4double             fLowestKineticEnergy;
   G4double             fHighestKineticEnergy;
   G4int                fTotBin;

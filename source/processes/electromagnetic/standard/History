@@ -1,4 +1,4 @@
-$Id: History,v 1.199 2006-01-20 11:21:39 vnivanch Exp $
+$Id: History,v 1.200 2006-01-24 10:22:56 grichine Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+24 January 06: V. Grichine 
+- fVerbose for G4PAIModel providing hiding of some technical messages
+
+
 20 January 05: V.Ivant (emstand-V08-00-01)
 19 January 06: L.Urban
 - G4MultipleScattering: value of facgeom changed (4 -> 3.5)
@@ -28,6 +33,7 @@ committal in the CVS repository !
 - move initialisation of default values to the constructor 
 
 12 December 05: L.Urban (emstand-V07-01-30)
+
 - G4MultipleScattering: data member rangecut removed, step limit
                         does not depend on cut any more
      

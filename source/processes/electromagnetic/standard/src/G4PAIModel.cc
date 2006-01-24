@@ -59,6 +59,7 @@ using namespace std;
 
 G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
   : G4VEmModel(nam),G4VEmFluctuationModel(nam),
+    fVerbose(0),
   fTotBin(200),
   fMeanNumber(20),
   fParticle(0),
@@ -357,10 +358,11 @@ G4PAIModel::BuildLambdaVector(const G4MaterialCutsCouple* matCutsCouple)
 					  fHighestKineticEnergy,
 					  fTotBin                ) ;
   G4double deltaCutInKineticEnergyNow = (*deltaCutInKineticEnergy)[jMatCC] ;
-
+  if(fVerbose)
+  {
   G4cout<<"PAIModel DeltaCutInKineticEnergyNow = "
         <<deltaCutInKineticEnergyNow/keV<<" keV"<<G4endl;
-
+  }
   for ( i = 0 ; i < fTotBin ; i++ )
   {
     dNdxCut = GetdNdxCut(i,deltaCutInKineticEnergyNow) ;
@@ -560,7 +562,7 @@ G4PAIModel::SampleSecondaries( const G4MaterialCutsCouple* matCC,
   fdNdxCutVector    = fdNdxCutTable[jMat];
 
   G4double tmax = min(MaxSecondaryKinEnergy(dp), maxEnergy);
-  if( tmin >= tmax )
+  if( tmin >= tmax && fVerbose)
   {
     G4cout<<"G4PAIModel::SampleSecondary: tmin >= tmax "<<G4endl;
   }
@@ -577,7 +579,7 @@ G4PAIModel::SampleSecondaries( const G4MaterialCutsCouple* matCC,
 
   // G4cout<<"G4PAIModel::SampleSecondaries; deltaKIn = "<<deltaTkin/keV<<" keV "<<G4endl;
 
-  if( deltaTkin <= 0. ) 
+  if( deltaTkin <= 0. && fVerbose ) 
   {
     G4cout<<"Tkin of secondary e- <= 0."<<G4endl;
     G4cout<<"G4PAIModel::SampleSecondary::deltaTkin = "<<deltaTkin<<G4endl;
@@ -701,6 +703,8 @@ G4PAIModel::GetPostStepTransfer( G4double scaledTkin )
   } 
   // G4cout<<"PAImodel PostStepTransfer = "<<transfer/keV<<" keV"<<G4endl ; 
   if(transfer < 0.0 ) transfer = 0.0 ;
+  // if(transfer < DBL_MIN ) transfer = DBL_MIN;
+
   return transfer ;
 }
 
@@ -917,6 +921,7 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
   } 
   // G4cout<<"PAIModel AlongStepLoss = "<<loss/keV<<" keV, on step = "<<step/mm<<" mm"<<G4endl ; 
   if(loss > Tkin) loss=Tkin;
+  if(loss < 0.  ) loss = 0.;
   return loss ;
 
 }
