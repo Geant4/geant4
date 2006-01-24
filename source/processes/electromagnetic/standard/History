@@ -1,4 +1,4 @@
-$Id: History,v 1.200 2006-01-24 10:22:56 grichine Exp $
+$Id: History,v 1.201 2006-01-24 11:11:20 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,9 +18,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 
+24 January 05: V.Ivant (emstand-V08-00-02)
 24 January 06: V. Grichine 
 - fVerbose for G4PAIModel providing hiding of some technical messages
-
 
 20 January 05: V.Ivant (emstand-V08-00-01)
 19 January 06: L.Urban
