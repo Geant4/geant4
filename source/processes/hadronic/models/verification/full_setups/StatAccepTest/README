@@ -1,5 +1,5 @@
 
- Last update: 20-Jan-2006
+ Last update: 24-Jan-2006
  ========================
 
  This directory contains a configurable calorimeter setup to be used
@@ -117,3 +117,7 @@
  The subdirectory  dirPower/  is dedicated to the study of the
  statistical power of the Acceptance Suite. You can find more
  information in the README file in that subdirectory.
+
+ The subdirectory  dirUseCases/  contains a set of Geant4 macro
+ files to configure the calorimeter as closely as possible to
+ the LHC electromagnetic and hadronic calorimeters.
