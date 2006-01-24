@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.6 2005-06-01 10:20:12 maire Exp $
+// $Id: HistoManager.cc,v 1.7 2006-01-24 13:53:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -162,9 +162,9 @@ void HistoManager::SetHisto(G4int ih,
   const G4String id[] = { "0", "1", "2", "3" };
   const G4String title[] = 
                 { "dummy",					//0
-                  "total track length of a charged particle",	//1
-                  "nb steps per track (charged particles)",	//2
-                  "step length of charged particles"		//3
+                  "total track length of primary particle",	//1
+                  "nb steps of primary particle",		//2
+                  "step length of primary particle"		//3
                  };
 
 

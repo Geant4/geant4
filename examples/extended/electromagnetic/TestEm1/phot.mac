@@ -1,9 +1,9 @@
-# $Id: phot.mac,v 1.4 2004-08-03 11:31:40 maire Exp $
+# $Id: phot.mac,v 1.5 2006-01-24 13:53:31 maire Exp $
 #
 # Macro file for "TestEm1.cc"
-# (can be run in batch, without graphic)
 #
-#  PhotoElectricEffect; Gamma 1 Mev
+#  Photon beam; 300 keV
+#  For interactive visualisation
 #
 /control/verbose 2
 /run/verbose 2
@@ -13,13 +13,14 @@
 #
 /run/initialize
 #
+/control/execute vis.mac
+#
 /testem/gun/setDefault 
 /gun/particle gamma
-/gun/energy 1 MeV
-/testem/gun/rndm  0.8
+/gun/energy 300 keV
+# spread beam spot
+/testem/gun/rndm 0.8
 #
 /tracking/verbose 1
 #
-#/run/particle/applyCuts
-#
-#/run/beamOn 100000
+/run/beamOn 20

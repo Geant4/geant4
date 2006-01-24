@@ -1,4 +1,4 @@
-$Id: README,v 1.17 2005-11-22 17:14:07 maire Exp $
+$Id: README,v 1.18 2006-01-24 13:53:31 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -87,9 +87,9 @@ $Id: README,v 1.17 2005-11-22 17:14:07 maire Exp $
  
   Testem1 produces several histo which are saved as testem1.hbook by default.
   Content of these histo:  
-      1 : track length of a charged particle
-      2 : number of steps per track (charged particle)
-      3 : step length (charged particle)
+      1 : track length of primary particle
+      2 : number of steps primary particle
+      3 : step length of primary particle
 
   Note that, by default, histograms are disabled. To activate them, uncomment
   the flag G4ANALYSIS_USE in GNUmakefile.

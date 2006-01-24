@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.6 2004-07-23 15:39:39 maire Exp $
+// $Id: SteppingAction.cc,v 1.7 2006-01-24 13:53:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,9 +51,10 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   const G4VProcess* process = aStep->GetPostStepPoint()->GetProcessDefinedStep();
   if (process) runAction->CountProcesses(process->GetProcessName());
 
-  G4double charge  = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
+  // step length of primary particle
+  G4int ID         = aStep->GetTrack()->GetTrackID();
   G4double steplen = aStep->GetStepLength();
-  if (charge != 0.) histoManager->FillHisto(3,steplen);
+  if (ID == 1) histoManager->FillHisto(3,steplen);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

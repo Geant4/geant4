@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.6 2004-08-03 11:31:43 maire Exp $
+// $Id: RunAction.hh,v 1.7 2006-01-24 13:53:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,7 +59,7 @@ class RunAction : public G4UserRunAction
     void CountProcesses(G4String);
     
     void AddEdep(G4double val)     { edep += val;}
-    void AddCsdaRange (G4double l) { csdaRange += l; csdaRange2 += l*l;};
+    void AddTrueRange (G4double l) { trueRange += l; trueRange2 += l*l;};
     void AddProjRange (G4double x) { projRange += x; projRange2 += x*x;};
     void AddTransvDev (G4double y) { transvDev += y; transvDev2 += y*y;};    
                                   
@@ -67,7 +67,7 @@ class RunAction : public G4UserRunAction
     G4int           NbOfTraks0, NbOfTraks1;
     G4int           NbOfSteps0, NbOfSteps1;
     G4double        edep;
-    G4double        csdaRange, csdaRange2;             
+    G4double        trueRange, trueRange2;             
     G4double        projRange, projRange2;
     G4double        transvDev, transvDev2;
                      

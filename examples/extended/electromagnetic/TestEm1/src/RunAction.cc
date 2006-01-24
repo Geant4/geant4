@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.13 2005-12-06 11:25:21 gcosmo Exp $
+// $Id: RunAction.cc,v 1.14 2006-01-24 13:53:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,7 +63,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
   NbOfTraks0 = NbOfTraks1 = NbOfSteps0 = NbOfSteps1 = 0;
   edep = 0.;
-  csdaRange = csdaRange2 = 0.;
+  trueRange = trueRange2 = 0.;
   projRange = projRange2 = 0.;
   transvDev = transvDev2 = 0.;    
   ProcCounter = new ProcessesCount;
@@ -143,11 +143,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
  G4cout << std::setw(12) << ((*ProcCounter)[j]->GetCounter())/dNbOfEvents;
  G4cout << G4endl;
       
- //compute csda and projected ranges, and transverse dispersion
+ //compute true and projected ranges, and transverse dispersion
  //
- csdaRange /= NbOfEvents; csdaRange2 /= NbOfEvents;
- G4double csdaRms = csdaRange2 - csdaRange*csdaRange;        
- if (csdaRms>0.) csdaRms = std::sqrt(csdaRms); else csdaRms = 0.;
+ trueRange /= NbOfEvents; trueRange2 /= NbOfEvents;
+ G4double trueRms = trueRange2 - trueRange*trueRange;        
+ if (trueRms>0.) trueRms = std::sqrt(trueRms); else trueRms = 0.;
       
  projRange /= NbOfEvents; projRange2 /= NbOfEvents;
  G4double projRms = projRange2 - projRange*projRange;        
@@ -157,7 +157,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
  G4double trvsRms = transvDev2 - transvDev*transvDev;        
  if (trvsRms>0.) trvsRms = std::sqrt(trvsRms); else trvsRms = 0.;
  
- //compare csda range with PhysicsTables
+ //compare true range with csda range from PhysicsTables
  //
  G4EmCalculator emCalculator;
  G4double rangeTable = 0.;
@@ -166,22 +166,23 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
       
  G4cout << "\n---------------------------------------------------------\n";
  G4cout << " Primary particle : " ;
- G4cout << "\n CSDA Range = " << G4BestUnit(csdaRange,"Length")
-        << "   rms = "        << G4BestUnit(csdaRms,  "Length");
+ G4cout << "\n true Range = " << G4BestUnit(trueRange,"Length")
+        << "   rms = "        << G4BestUnit(trueRms,  "Length");
 
  G4cout << "\n proj Range = " << G4BestUnit(projRange,"Length")
         << "   rms = "        << G4BestUnit(projRms,  "Length");
 	     
- G4cout << "\n proj/CSDA  = " << projRange/csdaRange;
+ G4cout << "\n proj/true  = " << projRange/trueRange;
       	     
  G4cout << "\n transverse dispersion at end = " 
-        << G4BestUnit(trvsRms,"Length") << G4endl;
+        << G4BestUnit(trvsRms,"Length");
 	
- G4cout << "\n mass CSDA Range from simulation = " 
-        << csdaRange*density/(g/cm2) << " g/cm2"
-	<< "\n               from PhysicsTable = " 
+ G4cout << "\n      mass true Range from simulation = " 
+        << trueRange*density/(g/cm2) << " g/cm2"
+	<< "\n from PhysicsTable (restricted dE/dx) = " 
         << rangeTable*density/(g/cm2) << " g/cm2";	
  G4cout << "\n---------------------------------------------------------\n";
+ G4cout << G4endl;
                                     
   // delete and remove all contents in ProcCounter 
   while (ProcCounter->size()>0){

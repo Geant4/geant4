@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TrackingAction.cc,v 1.8 2004-07-23 15:39:40 maire Exp $
+// $Id: TrackingAction.cc,v 1.9 2006-01-24 13:53:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,24 +60,25 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   G4double Trleng = aTrack->GetTrackLength();
     
   if (aTrack->GetDefinition()->GetPDGCharge() == 0.) {
-     runAction->CountTraks0(1); 
-     runAction->CountSteps0(nbSteps);
+    runAction->CountTraks0(1); 
+    runAction->CountSteps0(nbSteps);
   
   } else {
-     runAction->CountTraks1(1); 
-     runAction->CountSteps1(nbSteps);
-     histoManager->FillHisto(1,Trleng);
-     histoManager->FillHisto(2,(float)nbSteps);
+    runAction->CountTraks1(1); 
+    runAction->CountSteps1(nbSteps);
   }
   
-  //csda and projected ranges for primary particle
+  //true and projected ranges for primary particle
   if (aTrack->GetTrackID() == 1) {
-    runAction->AddCsdaRange(Trleng);
+    runAction->AddTrueRange(Trleng);
     G4ThreeVector vertex = primary->GetParticleGun()->GetParticlePosition();    
     G4ThreeVector position = aTrack->GetPosition() - vertex;      
     runAction->AddProjRange(position.x());
     runAction->AddTransvDev(position.y());
     runAction->AddTransvDev(position.z());
+    
+    histoManager->FillHisto(1,Trleng);
+    histoManager->FillHisto(2,(float)nbSteps);    
   }        
 }
 
