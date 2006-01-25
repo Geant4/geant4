@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.14 2006-01-24 13:53:31 maire Exp $
+// $Id: RunAction.cc,v 1.15 2006-01-25 15:28:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -162,7 +162,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
  G4EmCalculator emCalculator;
  G4double rangeTable = 0.;
  if (particle->GetPDGCharge() != 0.)
-   rangeTable = emCalculator.GetRange(energy,particle,material);
+   rangeTable = emCalculator.GetCSDARange(energy,particle,material);
       
  G4cout << "\n---------------------------------------------------------\n";
  G4cout << " Primary particle : " ;
@@ -179,7 +179,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	
  G4cout << "\n      mass true Range from simulation = " 
         << trueRange*density/(g/cm2) << " g/cm2"
-	<< "\n from PhysicsTable (restricted dE/dx) = " 
+	<< "\n       from PhysicsTable (csda range) = " 
         << rangeTable*density/(g/cm2) << " g/cm2";	
  G4cout << "\n---------------------------------------------------------\n";
  G4cout << G4endl;

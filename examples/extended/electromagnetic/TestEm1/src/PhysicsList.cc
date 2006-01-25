@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // 
-// $Id: PhysicsList.cc,v 1.6 2006-01-19 17:55:02 maire Exp $
+// $Id: PhysicsList.cc,v 1.7 2006-01-25 15:28:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -170,8 +170,9 @@ void PhysicsList::ConstructParticle()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4ProcessManager.hh"
+#include "G4EmProcessOptions.hh"
 #include "G4Decay.hh"
+#include "G4ProcessManager.hh"
 
 void PhysicsList::ConstructProcess()
 {
@@ -182,6 +183,11 @@ void PhysicsList::ConstructProcess()
   // Electromagnetic physics list
   //
   emPhysicsList->ConstructProcess();
+  
+  // Em options
+  //
+  G4EmProcessOptions emOptions;
+  emOptions.SetBuildCSDARange(true);
   
   // Decay Process
   //
