@@ -1,4 +1,4 @@
-$Id: History,v 1.201 2006-01-24 11:11:20 vnivanch Exp $
+$Id: History,v 1.202 2006-01-25 16:10:35 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+22 January 05: mma (emstand-V08-00-03)
+- G4eplusAnnihilation::AtRestDoIt() : remove cut dependance 
 
 24 January 05: V.Ivant (emstand-V08-00-02)
 24 January 06: V. Grichine 
