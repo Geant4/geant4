@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
+ Geant4 version Name: geant4-08-00-ref-00    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -9,11 +9,11 @@
 
 ***** Table : Nb of materials = 12 *****
 
- Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
+ Material:      Air     density:  1.290 kg/m3   temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
 
- Material: H2liquid     density: 70.800 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.923 m  
+ Material: H2liquid     density: 70.800 kg/m3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.923 m  
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
@@ -64,39 +64,46 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+  FukuiRenderer (DAWN)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  VRML1 (VRML1)
+  VRML2 (VRML2)
 
 Registering model factories...
-/tracking/verbose 0
-#
-/testem/phys/setGCut 2.20 mm
-/testem/phys/setECut 6.05 mum
-/testem/phys/setPCut 6.05 mum
-#
-/run/initialize
-
- The Box is 10 m   of Aluminium
-PhysicsList::SetCuts:CutLength : 1 mm 
-#
-/process/eLoss/StepFunction 0.183 1.70 micrometer
-#
 /run/verbose 2
 #
+/testem/det/setMat Aluminium 
+/testem/det/setSize 10 m
+#
+/run/initialize
+userDetector->Construct() start.
+
+ The Box is 10 m   of Aluminium
+Aluminium is registered to the default region.
+physicsList->Construct() start.
+physicsList->Construct() start.
+physicsList->setCut() start.
+PhysicsList::SetCuts:CutLength : 1 mm 
+#
+/testem/gun/setDefault 
 /gun/particle e-
 /gun/energy 100 MeV
 #
-/testem/histo/setHisto 1 100 0 50 cm
-----> SetHisto 1: total track length of a charged particle (cm);  100 bins from 0 cm to 50 cm
-/testem/histo/setHisto 2 100 0 100
-----> SetHisto 2: nb steps per track (charged particles);  100 bins from 0 none to 100 none
-/testem/histo/setHisto 3 100 0 10 mm
-----> SetHisto 3: step length of charged particles (mm);  100 bins from 0 mm to 10 mm
+/testem/histo/setHisto 1 100 0   50 cm		#track length of primary
+----> SetHisto 1: total track length of primary particle (cm);  100 bins from 0 cm to 50 cm
+/testem/histo/setHisto 2 100 0  300 none	#nb steps of primary
+----> SetHisto 2: nb steps of primary particle;  100 bins from 0 none to 300 none
+/testem/histo/setHisto 3 200 0   20 mm		#step size of primary
+----> SetHisto 3: step size of primary particle (mm);  200 bins from 0 mm to 20 mm
 #
 /testem/histo/setFileType hbook	
 ###/testem/histo/setFileType root
 ###/testem/histo/setFileType XML
 #
+/testem/phys/setCuts 1 mm
 /testem/histo/setFileName run0 
-/run/beamOn 200
+/run/beamOn 2000
 
 phot:  Total cross sections from Sandia parametrisation. 
 
@@ -113,12 +120,25 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+1 materials minKinEnergy= 0.0001 maxKinEnergy= 1e+08
+1 materials minKinEnergy= 0.0001 maxKinEnergy= 1e+08
+1 materials minKinEnergy= 0.0001 maxKinEnergy= 1e+08
+1 materials minKinEnergy= 0.0001 maxKinEnergy= 1e+08
+1 materials minKinEnergy= 0.0001 maxKinEnergy= 1e+08
+1 materials minKinEnergy= 0.0001 maxKinEnergy= 1e+08
+1 materials minKinEnergy= 0.0001 maxKinEnergy= 1e+08
+1 materials minKinEnergy= 0.0001 maxKinEnergy= 1e+08
+1 materials minKinEnergy= 0.0001 maxKinEnergy= 1e+08
+1 materials minKinEnergy= 0.0001 maxKinEnergy= 1e+08
+1 materials minKinEnergy= 0.0001 maxKinEnergy= 1e+08
+1 materials minKinEnergy= 0.0001 maxKinEnergy= 1e+08
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Precise range table up to 1 GeV in 70 bins.
 
 brem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -130,7 +150,8 @@ eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Precise range table up to 1 GeV in 70 bins.
 
 brem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -151,7 +172,8 @@ hIoni:   tables are built for  proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Precise range table up to 1 GeV in 70 bins.
 
 msc:  Model variant of multiple scattering for GenericIon
 
@@ -160,7 +182,8 @@ ionIoni:   tables are built for  GenericIon
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
-      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
+      Precise range table up to 1 GeV in 70 bins.
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -171,7 +194,8 @@ muIoni:   tables are built for  mu+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Precise range table up to 1 GeV in 70 bins.
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -188,182 +212,8 @@ muIoni:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
-
-muBrems:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
-
-muPairProd:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
-
-msc:  Model variant of multiple scattering for pi-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
-
-Region <DefaultRegionForTheWorld> -- appears in <Aluminium> world volume
- Materials : Aluminium 
- Production cuts :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
- Energy thresholds :  gamma 9.98636 keV    e- 9.96618 keV    e+ 9.96618 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start closing geometry.
-G4GeometryManager::ReportVoxelStats -- Voxel Statistics
-
-    Total memory consumed for geometry optimisation:   0 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
-### Run 0 start.
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 9876, 54321
-----------------------------------------
-Start Run processing.
-
----> Begin of Event: 0
-Run terminated.
-Run Summary
-  Number of events processed : 200
-  User=143.37s Real=168.97s Sys=23.87s
-
- ======================== run summary ======================
-
- The run was: 200 e- of 100.00 MeV through 10.00 m   of Aluminium (density: 2.70 g/cm3 )
-
- ============================================================
-
- total energy deposit: 99.809 MeV
-
- nb tracks/event   neutral:     27.575   charged:    693.310
- nb  steps/event   neutral:    138.115   charged:   3828.275
-
- nb of process calls per event: 
-          eIoni        brem         msc        phot       compt        conv     annihilTransportation
-       3144.490      25.910     656.495      25.180     110.540       1.380       1.380       1.015
-
----------------------------------------------------------
- Primary particle : 
- CSDA Range = 10.761 cm    rms = 3.879 cm 
- proj Range = 9.255 cm    rms = 3.650 cm 
- proj/CSDA  = 0.860
- transverse dispersion at end = 1.741 cm 
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 1674441358, 1865268964
-----------------------------------------
-
- mass CSDA Range from simulation = 29.055 g/cm2
-               from PhysicsTable = 85.395 g/cm2
----------------------------------------------------------
-#
-/testem/phys/setCuts 1 mm
-/testem/histo/setFileName run1
-/run/beamOn 200
-
-phot:  Total cross sections from Sandia parametrisation. 
-
-compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
-      Sampling according Klein-Nishina model
-      tables are built for  gamma
-      Lambda tables from 100 eV  to 100 GeV in 90 bins.
-
-conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according to the Bethe-Heitler model
-      tables are built for  gamma
-      Lambda tables from 1.0219981 MeV to 100 GeV in 100 bins.
-
-msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
-
-eIoni:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
-
-brem:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
-
-eIoni:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
-
-brem:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
-
-annihil:       Heilter model of formula of annihilation into 2 photons
-      tables are built for  e+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-
-msc:  Model variant of multiple scattering for proton
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
-
-hIoni:   tables are built for  proton
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
-
-msc:  Model variant of multiple scattering for GenericIon
-
-ionIoni:   tables are built for  GenericIon
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
-      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
-
-msc:  Model variant of multiple scattering for mu+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
-
-muIoni:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
-      radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
-
-muBrems:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
-
-muPairProd:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
-
-muIoni:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
-      radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Precise range table up to 1 GeV in 70 bins.
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -388,7 +238,78 @@ Region <DefaultRegionForTheWorld> -- appears in <Aluminium> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.8873065 keV    e- 596.68045 keV    e+ 568.01052 keV
+ Energy thresholds :  gamma 6.88731 keV    e- 596.68 keV    e+ 568.011 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   0 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+### Run 0 start.
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 9876, 54321
+----------------------------------------
+Start Run processing.
+
+---> Begin of Event: 0
+Run terminated.
+Run Summary
+  Number of events processed : 2000
+  User=13.45s Real=24.19s Sys=10.39s
+
+ ======================== run summary ======================
+
+ The run was: 2000 e- of 100.00 MeV through 10.00 m   of Aluminium (density: 2.70 g/cm3 )
+
+ ============================================================
+
+ total energy deposit: 99.810 MeV
+
+ nb tracks/event   neutral:     27.977   charged:    148.300
+ nb  steps/event   neutral:    141.333   charged:    330.616
+
+ nb of process calls per event: 
+           brem       eIoni         msc       compt        phot        conv     annihilTransportation
+         26.289     187.535     115.376     113.355      25.609       1.413       1.413       0.958
+
+---------------------------------------------------------
+ Primary particle : 
+ true Range = 11.167 cm    rms = 3.819 cm 
+ proj Range = 9.734 cm    rms = 3.555 cm 
+ proj/true  = 0.872
+ transverse dispersion at end = 1.694 cm 
+      mass true Range from simulation = 30.151 g/cm2
+       from PhysicsTable (csda range) = 31.739 g/cm2
+---------------------------------------------------------
+
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 2127916904, 2057285353
+----------------------------------------
+#
+/process/eLoss/verbose 0
+#
+/testem/phys/setCuts 10 mum
+/testem/histo/setFileName run1
+/run/beamOn 2000
+
+Region <DefaultRegionForTheWorld> -- appears in <Aluminium> world volume
+ Materials : Aluminium 
+ Production cuts :  gamma 10 mum    e- 10 mum    e+ 10 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 10 mum    e- 10 mum    e+ 10 mum
+ Energy thresholds :  gamma 990 eV     e- 33.887552 keV    e+ 33.472938 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -398,46 +319,46 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1674441358, 1865268964
+ Current couple of seeds = 2127916904, 2057285353
 ----------------------------------------
 Start Run processing.
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
-  Number of events processed : 200
-  User=45.28s Real=58.43s Sys=11.47s
+  Number of events processed : 2000
+  User=29.78s Real=40.22s Sys=9.95s
 
  ======================== run summary ======================
 
- The run was: 200 e- of 100.00 MeV through 10.00 m   of Aluminium (density: 2.70 g/cm3 )
+ The run was: 2000 e- of 100.00 MeV through 10.00 m   of Aluminium (density: 2.70 g/cm3 )
 
  ============================================================
 
- total energy deposit: 99.789 MeV
+ total energy deposit: 99.819 MeV
 
- nb tracks/event   neutral:     27.115   charged:    143.160
- nb  steps/event   neutral:    136.270   charged:   1161.905
+ nb tracks/event   neutral:     36.599   charged:    291.808
+ nb  steps/event   neutral:    147.085   charged:    737.784
 
  nb of process calls per event: 
-           brem       eIoni       compt        phot         msc        conv     annihilTransportation
-         25.585    1022.685     109.155      24.920     112.355       1.280       1.280       0.915
+          eIoni        brem         msc       compt        phot        conv     annihilTransportation
+        450.983      34.864     250.541     110.486      34.295       1.389       1.389       0.922
 
 ---------------------------------------------------------
  Primary particle : 
- CSDA Range = 11.292 cm    rms = 3.464 cm 
- proj Range = 9.702 cm    rms = 3.120 cm 
- proj/CSDA  = 0.859
- transverse dispersion at end = 1.774 cm 
+ true Range = 11.198 cm    rms = 3.854 cm 
+ proj Range = 9.717 cm    rms = 3.557 cm 
+ proj/true  = 0.868
+ transverse dispersion at end = 1.799 cm 
+      mass true Range from simulation = 30.235 g/cm2
+       from PhysicsTable (csda range) = 31.739 g/cm2
+---------------------------------------------------------
+
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1519444746, 431167489
+ Current couple of seeds = 2041734004, 1234488907
 ----------------------------------------
-
- mass CSDA Range from simulation = 30.488 g/cm2
-               from PhysicsTable = 67.818 g/cm2
----------------------------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
 UserDetectorConstruction deleted.
