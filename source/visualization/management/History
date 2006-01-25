@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2006-01-11 17:48:04 allison Exp $
+$Id: History,v 1.28 2006-01-25 18:36:26 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,9 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+25th January 2006  John Allison  (visman-V08-00-03)
+- Retro tag: visman-V08-00-00 + friend status for Ray Tracer.
 
 11th January 2006  John Allison  (visman-V08-00-02)
 - G4VisExecutive.icc: protected with G4VISEXECUTIVE_ICC.
