@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.cc,v 1.20 2005-11-13 15:31:51 allison Exp $
+// $Id: G4VViewer.cc,v 1.21 2006-01-26 12:15:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@ G4VViewer::G4VViewer (G4VSceneHandler& sceneHandler,
 		      G4int id, const G4String& name):
 fSceneHandler (sceneHandler),
 fViewId (id),
-fModified (true),
+//fModified (true),
 fNeedKernelVisit (true)
 {
   if (name == "") {
@@ -114,16 +114,10 @@ void G4VViewer::FinishView () {}
 
 void G4VViewer::ShowView () {}
 
-void G4VViewer::ProcessView () {
-
-  // If view parameters have been modified, SetView works out consequences...
-  if (fModified) {
-    fModified = false;
-    SetView ();
-  }
-
+void G4VViewer::ProcessView ()
+{
   // If ClearStore has been requested, e.g., if the scene has changed,
-  // of if the concrete viewer has decided that it necessary to visit
+  // or if the concrete viewer has decided that it necessary to visit
   // the kernel, perhaps because the view parameters have changed
   // drastically (this should be done in the concrete viewer's
   // DrawView)...
@@ -135,7 +129,6 @@ void G4VViewer::ProcessView () {
 
 void G4VViewer::SetViewParameters (const G4ViewParameters& vp) {
   fVP = vp;
-  fModified = true;
 }
 
 std::ostream& operator << (std::ostream& os, const G4VViewer& v) {

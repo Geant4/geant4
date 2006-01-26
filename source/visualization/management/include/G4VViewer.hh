@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.hh,v 1.16 2005-06-02 17:43:47 allison Exp $
+// $Id: G4VViewer.hh,v 1.17 2006-01-26 12:15:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -126,7 +126,6 @@ protected:
 
   //////////////////////////////////////////////////////////////
   // Other parameters.
-  G4bool           fModified;         // If View Parameters have been modified.
   G4bool           fNeedKernelVisit;  // See DrawView() for comments.
 };
 
@@ -135,7 +134,7 @@ protected:
 /*********************************************
 
 Here is a minimal DrawView () as it might be implemented in the
-concrete view.
+concrete viewer.
 
 void G4VViewer::DrawView () {  // Default - concrete view usually overrides.
 
