@@ -1,9 +1,12 @@
-$Id: History,v 1.74 2006-01-26 11:28:52 allison Exp $
+$Id: History,v 1.75 2006-01-26 11:30:29 allison Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
 
 $Log: not supported by cvs2svn $
+Revision 1.74  2006/01/26 11:28:52  allison
+Restored MyDetectorConstruction.cc but added comments about voxelisation crash.
+
 Revision 1.73  2006/01/26 11:27:41  allison
 Changed OGLSX to OGLSXm for logical volume to allow inspection of voxels.
 Augmented RayTracer test.
