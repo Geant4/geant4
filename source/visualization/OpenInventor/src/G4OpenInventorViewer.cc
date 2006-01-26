@@ -591,8 +591,6 @@ void G4OpenInventorViewer::SetSolid() {
     break;
   }
   SetViewParameters(vp);
-  fModified = false; // To avoid a SetView in G4VViewer::ProcessView 
-                     // that will change the camera.
   DrawDetector();
 }
 void G4OpenInventorViewer::SetWireFrame() {
@@ -611,8 +609,6 @@ void G4OpenInventorViewer::SetWireFrame() {
     break;
   }
   SetViewParameters(vp);
-  fModified = false; // To avoid a SetView in G4VViewer::ProcessView 
-                     // that will change the camera.
   DrawDetector();
 }
 
@@ -638,8 +634,6 @@ void G4OpenInventorViewer::SetReducedWireFrame(bool aValue) {
     break;
   }
   SetViewParameters(vp);
-  fModified = false; // To avoid a SetView in G4VViewer::ProcessView 
-                     // that will change the camera.
   NeedKernelVisit(); // Just in case it was alread in wire framw.
   DrawDetector();
 }

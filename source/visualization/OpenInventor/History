@@ -1,4 +1,4 @@
-$Id: History,v 1.75 2005-12-20 12:12:36 gbarrand Exp $
+$Id: History,v 1.76 2006-01-26 12:04:02 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+26th January 2006  John Allison  (openinventor-V08-00-01)
+- Coworks with visman-V08-00-04 (removed fModified).
+- Removed references to fModified.
 
 20th December 2005  Guy Barrand
 - SoAlternateRepAction.cc : add the #ifdef G4VIS_BUILD_OI_DRIVER.
