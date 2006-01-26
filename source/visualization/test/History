@@ -1,11 +1,15 @@
-$Id: History,v 1.71 2006-01-13 12:19:19 allison Exp $
+$Id: History,v 1.72 2006-01-26 10:45:59 allison Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
 
 $Log: not supported by cvs2svn $
+Revision 1.71  2006/01/13 12:19:19  allison
+test19.g4m: Added /tracking/verbose 2 for problem trajectory.  Reduced
+size of ray tracer windows for speed and added /vis/rayTracer/trace.
+
 Revision 1.70  2006/01/11 17:07:08  allison
-vistest-V08-00-00
+vistest-V08-00-00 - needs the head of geometry/solids/specific.
 
 Revision 1.69  2006/01/11 17:04:29  allison
 Improved Perspective example.

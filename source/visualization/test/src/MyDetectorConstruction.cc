@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorConstruction.cc,v 1.30 2006-01-11 16:59:38 allison Exp $
+// $Id: MyDetectorConstruction.cc,v 1.31 2006-01-26 10:45:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -477,9 +477,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   orb_att->SetForceAuxEdgeVisible(true);
   orb_log->SetVisAttributes(orb_att);
 
-  G4RotationMatrix orb_rm;
-
-  new G4PVPlacement(G4Transform3D(orb_rm,G4ThreeVector(-200.*cm,200.*cm,0)),
+  new G4PVPlacement(G4Translate3D(-300.*cm,200.*cm,0),
 		    "Test orb", orb_log, 
 		    experimentalHall_phys,false,0);
 
@@ -638,6 +636,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   G4double fPhi ;
 
   G4double myScale = 5.;
+
   fTwistAngle = 90*deg ;
   fTrackerpDz = myScale*20*cm ;
   fTrackerR1  = myScale*7*cm ;
@@ -649,9 +648,11 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   aLog = new G4LogicalVolume
     (aVolume,Ar,"aTwistedTubs-log");
   aLog->SetVisAttributes(G4VisAttributes(G4Colour(1.,1.,0.)));
+  /*
   new G4PVPlacement
     (G4Translate3D(G4ThreeVector(200.*cm,-400.*cm,0.)),
      "aTwistedTubs-phys", aLog, experimentalHall_phys,false,0);
+  */
 
   fTwistAngle = 50*deg ;
   fTrackerpDx1 = myScale*4*cm ;
@@ -663,9 +664,11 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   aLog = new G4LogicalVolume
     (aVolume,Ar,"aTwistedBox-log");
   aLog->SetVisAttributes(G4VisAttributes(G4Colour(1.,1.,0.)));
+  /*
   new G4PVPlacement
     (G4Translate3D(G4ThreeVector(100.*cm,-400.*cm,0.)),
      "aTwistedBox-phys", aLog, experimentalHall_phys,false,0);
+  */
 
   fTrackerpDx1 = myScale*4*cm ;
   fTrackerpDx2 = myScale*7*cm ;
@@ -680,9 +683,11 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   aLog = new G4LogicalVolume
     (aVolume,Ar,"aTwistedTrd-log");
   aLog->SetVisAttributes(G4VisAttributes(G4Colour(1.,1.,0.)));
+  /*
   new G4PVPlacement
     (G4Translate3D(G4ThreeVector(000.*cm,-400.*cm,0.)),
      "aTwistedTrd-phys", aLog, experimentalHall_phys,false,0);
+  */
 
   fTrackerpDx1 = myScale*4*cm ;
   fTrackerpDx2 = myScale*7*cm ;
