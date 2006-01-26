@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.49 2006-01-20 09:51:56 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.50 2006-01-26 08:57:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -63,6 +63,7 @@
 // 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
 // 13-01-06 Remove AddSubCutSecondaries and cleanup (V.Ivantchenko)
 // 20-01-06 Introduce G4EmTableType and reducing number of methods (VI)
+// 26-01-06 Add public method GetCSDARange (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -254,6 +255,7 @@ public:
   G4double GetDEDX(G4double& kineticEnergy, const G4MaterialCutsCouple*);
   G4double GetDEDXForSubsec(G4double& kineticEnergy, const G4MaterialCutsCouple*);
   G4double GetRange(G4double& kineticEnergy, const G4MaterialCutsCouple*);
+  G4double GetCSDARange(G4double& kineticEnergy, const G4MaterialCutsCouple*);
   G4double GetRangeForLoss(G4double& kineticEnergy, const G4MaterialCutsCouple*);
   G4double GetKineticEnergy(G4double& range, const G4MaterialCutsCouple*);
   G4double GetLambda(G4double& kineticEnergy, const G4MaterialCutsCouple*);
@@ -498,6 +500,19 @@ inline G4double G4VEnergyLossProcess::GetRange(G4double& kineticEnergy,
       * reduceFactor;
   else if(theRangeTableForLoss)
     x = GetScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEnergyLossProcess::GetCSDARange(
+       G4double& kineticEnergy, const G4MaterialCutsCouple* couple)
+{
+  DefineMaterial(couple);
+  G4double x = DBL_MAX;
+  if(theCSDARangeTable)
+    x = GetLimitScaledRangeForScaledEnergy(kineticEnergy*massRatio)
+      * reduceFactor;
   return x;
 }
 

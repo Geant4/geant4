@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.32 2006-01-20 09:51:56 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.33 2006-01-26 08:57:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,6 +52,7 @@
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
 // 20-01-06 Introduce GetSubDEDX method (VI)
+// 26-01-06 Rename GetRange -> GetRangeFromRestricteDEDX (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -116,7 +117,7 @@ public:
     G4double kineticEnergy,
     const G4MaterialCutsCouple *couple);
 
-  G4double GetTrancatedRange(
+  G4double GetRangeFromRestricteDEDX(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
     const G4MaterialCutsCouple *couple);
@@ -320,12 +321,23 @@ inline G4double G4LossTableManager::GetCSDARange(
                 G4double kineticEnergy,
           const G4MaterialCutsCouple *couple)
 {
-  return GetRange(aParticle, kineticEnergy, couple);
+  if(aParticle != currentParticle) {
+    currentParticle = aParticle;
+    std::map<PD, G4VEnergyLossProcess*, std::less<PD> >::const_iterator pos;
+    if ((pos = loss_map.find(currentParticle)) != loss_map.end()) {
+      currentLoss = (*pos).second;
+    } else {
+      currentLoss = 0;
+    }
+  }
+  G4double x = DBL_MAX;
+  if(currentLoss) x = currentLoss->GetCSDARange(kineticEnergy, couple);
+  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-inline G4double G4LossTableManager::GetTrancatedRange(
+inline G4double G4LossTableManager::GetRangeFromRestricteDEDX(
           const G4ParticleDefinition *aParticle,
                 G4double kineticEnergy,
           const G4MaterialCutsCouple *couple)

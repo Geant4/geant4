@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.hh,v 1.10 2006-01-11 11:25:36 vnivanch Exp $
+// $Id: G4EmCalculator.hh,v 1.11 2006-01-26 08:57:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,8 +37,8 @@
 //
 // Modifications:
 // 17.11.2004 Change signature of methods, add new methods (V.Ivanchenko)
-// 11.01.2006 Add GetCSDARange (V.Ivantchenko)
-//
+// 11.01.2006 Add GetCSDARange (V.Ivanchenko)
+// 26.01.2006 Rename GetRange -> GetRangeFromRestricteDEDX (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -83,10 +83,12 @@ public:
   G4double GetDEDX(G4double kinEnergy, const G4String& part, const G4String& mat,
                    const G4String& s = "world");
 
-  G4double GetRange(G4double kinEnergy, const G4ParticleDefinition*, const G4Material*,
-                   const G4Region* r = 0);
-  G4double GetRange(G4double kinEnergy, const G4String& part, const G4String& mat,
-                   const G4String& s = "world");
+  G4double GetRangeFromRestricteDEDX(G4double kinEnergy, const G4ParticleDefinition*, 
+				     const G4Material*,
+				     const G4Region* r = 0);
+  G4double GetRangeFromRestricteDEDX(G4double kinEnergy, const G4String& part, 
+				     const G4String& mat,
+				     const G4String& s = "world");
 
   G4double GetCSDARange(G4double kinEnergy, const G4ParticleDefinition*, 
 			const G4Material*,

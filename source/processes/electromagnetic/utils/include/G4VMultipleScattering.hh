@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.29 2005-10-27 11:33:26 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.30 2006-01-26 08:57:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -53,6 +53,7 @@
 // 15-04-05 remove boundary flag (V.Ivanchenko)
 // 07-10-05 error in a protection in GetContinuousStepLimit corrected (L.Urban)
 // 27-10-05 introduce virtual function MscStepLimitation() (V.Ivanchenko)
+// 26-01-06 Rename GetRange -> GetRangeFromRestricteDEDX (V.Ivanchenko)
 
 // -------------------------------------------------------------------
 //
@@ -307,10 +308,8 @@ inline G4double G4VMultipleScattering::GetContinuousStepLimit(
   SelectModel(e);
   const G4ParticleDefinition* p = track.GetDefinition();
   lambda0 = GetLambda(p, e);
-  currentRange = G4LossTableManager::Instance()->GetTrancatedRange(p,e,currentCouple);
-  // the next line was in error 
-  // if(currentRange < currentMinimalStep) currentRange = currentMinimalStep;
-  //  the condition/protection correctly should be
+  currentRange = 
+    G4LossTableManager::Instance()->GetRangeFromRestricteDEDX(p,e,currentCouple);
   if(currentRange < currentMinimalStep) currentMinimalStep = currentRange;
   truePathLength = TruePathLengthLimit(track,lambda0,currentMinimalStep);
   //G4cout << "StepLimit: tpl= " << truePathLength << " lambda0= "

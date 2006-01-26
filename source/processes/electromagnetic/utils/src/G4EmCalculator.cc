@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.25 2006-01-11 11:25:36 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.26 2006-01-26 08:57:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,7 @@
 // 08.05.2005 Use updated interfaces (V.Ivantchenko)
 // 23.10.2005 Fix computations for ions (V.Ivantchenko)
 // 11.01.2006 Add GetCSDARange (V.Ivantchenko)
+// 26.01.2006 Rename GetRange -> GetRangeFromRestricteDEDX (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -132,15 +133,15 @@ G4double G4EmCalculator::GetDEDX(G4double kinEnergy, const G4String& particle,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmCalculator::GetRange(G4double kinEnergy, 
-				  const G4ParticleDefinition* p,
-                                  const G4Material* mat, 
-				  const G4Region* region)
+G4double G4EmCalculator::GetRangeFromRestricteDEDX(G4double kinEnergy, 
+						   const G4ParticleDefinition* p,
+						   const G4Material* mat, 
+						   const G4Region* region)
 {
   G4double res = 0.0;
   const G4MaterialCutsCouple* couple = FindCouple(mat,region);
   if(couple && UpdateParticle(p, kinEnergy)) {
-    res = manager->GetRange(p, kinEnergy, couple);
+    res = manager->GetRangeFromRestricteDEDX(p, kinEnergy, couple);
     if(verbose>0) {
       G4cout << "G4EmCalculator::GetRange: E(MeV)= " << kinEnergy/MeV
 	     << " range(mm)= " << res/mm
@@ -162,7 +163,7 @@ G4double G4EmCalculator::GetCSDARange(G4double kinEnergy,
   G4double res = 0.0;
   const G4MaterialCutsCouple* couple = FindCouple(mat,region);
   if(couple && UpdateParticle(p, kinEnergy)) {
-    res = manager->GetRange(p, kinEnergy, couple);
+    res = manager->GetCSDARange(p, kinEnergy, couple);
     if(verbose>0) {
       G4cout << "G4EmCalculator::GetRange: E(MeV)= " << kinEnergy/MeV
 	     << " range(mm)= " << res/mm
@@ -176,11 +177,13 @@ G4double G4EmCalculator::GetCSDARange(G4double kinEnergy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmCalculator::GetRange(G4double kinEnergy, const G4String& particle,
-                                  const G4String& material, const G4String& reg)
+G4double G4EmCalculator::GetRangeFromRestricteDEDX(G4double kinEnergy, 
+						   const G4String& particle,
+						   const G4String& material, 
+						   const G4String& reg)
 {
-  return GetRange(kinEnergy,FindParticle(particle),
-		  FindMaterial(material),FindRegion(reg));
+  return GetRangeFromRestricteDEDX(kinEnergy,FindParticle(particle),
+				   FindMaterial(material),FindRegion(reg));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
