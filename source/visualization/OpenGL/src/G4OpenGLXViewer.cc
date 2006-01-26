@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.28 2005-11-22 16:10:12 allison Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.29 2006-01-26 11:58:03 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,7 @@
 
 #include "G4OpenGLFontBaseStore.hh"
 
-#include "G4ios.hh"
+#include <sstream>
 
 #include "G4VisExtent.hh"
 #include "G4LogicalVolume.hh"
@@ -804,8 +804,12 @@ G4float* G4OpenGLXViewer::spewPrimitiveEPS (FILE* file, GLfloat* loc) {
     break;
   default:
     /* XXX Left as an excersie to the reader. */
-    printf("Incomplete implementation.  Unexpected token (%d).\n", token);
-    exit(1);
+    std::ostringstream oss;
+    oss << "Incomplete implementation.  Unexpected token (" << token << ").";
+    G4Exception("G4OpenGLXViewer::spewPrimitiveEPS",
+		"Writing_eps_file_01",
+		FatalException,
+		oss.str().c_str());
   }
   return loc;
 }
@@ -868,9 +872,12 @@ void G4OpenGLXViewer::spewSortedFeedback(FILE * file, GLint size, GLfloat * buff
       break;
     default:
       /* XXX Left as an excersie to the reader. */
-      printf("Incomplete implementation.  Unexpected token (%d).\n",
-        token);
-      exit(1);
+      std::ostringstream oss;
+      oss << "Incomplete implementation.  Unexpected token (" << token << ").";
+      G4Exception("G4OpenGLXViewer::spewPrimitiveEPS",
+		  "Writing_eps_file_02",
+		  FatalException,
+		  oss.str().c_str());
     }
   }
 
