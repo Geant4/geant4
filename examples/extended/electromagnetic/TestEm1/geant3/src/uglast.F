@@ -31,7 +31,7 @@
 *                                                                               
 * *** Save selected histograms                                                  
       IF (ISWIT(2).EQ.1) THEN                                                   
-         CALL HRPUT(0,'testem1.paw','N')                                                                        
+         CALL HRPUT(0,'testem1.hbook','N')                                                                        
       ENDIF                                                                     
 *
 * *** formats            
