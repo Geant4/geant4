@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.hh,v 1.16 2005-06-07 16:46:33 allison Exp $
+// $Id: G4XXXSceneHandler.hh,v 1.17 2006-01-26 11:46:33 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,9 +31,13 @@
 #ifndef G4XXXSCENEHANDLER_HH
 #define G4XXXSCENEHANDLER_HH
 
-#define G4XXXDEBUG  // Comment this out to suppress debug code.
+//#define G4XXXDEBUG  // Comment this out to suppress debug code.
 
 #include "G4VSceneHandler.hh"
+
+#include "G4PhysicalVolumeModel.hh"
+#include <vector>
+#include <set>
 
 class G4XXXSceneHandler: public G4VSceneHandler {
 
@@ -97,6 +101,14 @@ public:
   // void BeginModeling();
   // void EndModeling();
 
+  ///////////////////////////////////////////////////////////////
+  // Other inherited functions.
+
+  void EstablishSpecials (G4PhysicalVolumeModel&);
+  // Used to establish any special relationships between scene and this
+  // particular type of model - non-pure, i.e., no requirement to
+  // implement.  See G4PhysicalVolumeModel.hh for details.
+
   //////////////////////////////////////////////////////////////
   // Administration functions.
 
@@ -105,6 +117,10 @@ public:
 
 protected:
   static G4int         fSceneIdCount;  // Counter for XXX scene handlers.
+
+  typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
+  std::vector<PVNodeID> fDrawnPVPath;  // Path of drawn (non-culled) PVs.
+  std::set<PVNodeID> fPVNodeStore;     // Stores encountered PVs.
 
 private:
 #ifdef G4XXXDEBUG

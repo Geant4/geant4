@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.25 2005-11-22 16:25:07 allison Exp $
+// $Id: G4XXXSceneHandler.cc,v 1.26 2006-01-26 11:46:33 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,6 +54,7 @@
 #include "G4VTrajectory.hh"
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
+#include "G4VisManager.hh"
 
 G4int G4XXXSceneHandler::fSceneIdCount = 0;
 // Counter for XXX scene handlers.
@@ -86,89 +87,95 @@ void G4XXXSceneHandler::PrintThings() {
 }
 #endif
 
-#include <vector>
-std::vector<std::pair<G4VPhysicalVolume*, G4int> > fPVPath;
-typedef
-std::vector<std::pair<G4VPhysicalVolume*, G4int> >::const_iterator
-PVPath_const_iterator;
+void G4XXXSceneHandler::EstablishSpecials (G4PhysicalVolumeModel& pvModel) {
+  pvModel.DefinePointersToWorkingSpace (&fCurrentDepth,
+                                        &fpCurrentPV,
+                                        &fpCurrentLV,
+                                        &fpCurrentMaterial,
+					&fDrawnPVPath);
+}
 
 void G4XXXSceneHandler::PreAddSolid
-(const G4Transform3D&, const G4VisAttributes&) {
-  using namespace std;
-  G4cout <<
-    "Current PV/LV/depth: "
-	 << fpCurrentPV->GetName() <<
-    "/"
-	 << fpCurrentLV->GetName() <<
-    "/"
+(const G4Transform3D&, const G4VisAttributes&)
+{
+  // fDrawnPVPath is the path of the current drawn (non-culled) volume
+  // in terms of drawn (non-culled) ancesters.  Each node is
+  // identified by a PVNodeID object, which is a physical volume and
+  // copy number.  It is a vector of PVNodeIDs corresponding to the
+  // geometry hierarchy actually selected, i.e., not culled.
+  typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
+  typedef std::vector<PVNodeID>::iterator PVPath_iterator;
+  typedef std::vector<PVNodeID>::reverse_iterator PVPath_reverse_iterator;
+
+#ifdef G4XXXDEBUG
+  // Current PV:copyNo/LV/depth...
+  G4cout << "\nPV:copyNo/LV/depth: "
+	 << fpCurrentPV->GetName() << ':' << fpCurrentPV->GetCopyNo() << '/'
+	 << fpCurrentLV->GetName() << '/'
 	 << fCurrentDepth
 	 << G4endl;
-  // How to establish a tree (even when some volumes have been
-  // culled)...
-  static G4int lastDepth = 0;
-  static G4LogicalVolume* lastMotherLV = 0;
-  G4int copyNo = fpCurrentPV->GetCopyNo();
-  if (fCurrentDepth > lastDepth) {
-    while (fCurrentDepth > lastDepth++) {
-      fPVPath.push_back(make_pair((G4VPhysicalVolume*)0,0));
-    }
-    fPVPath.back() = make_pair(fpCurrentPV,copyNo);
-  } else if (fCurrentDepth == lastDepth) {
-    fPVPath.back() = make_pair(fpCurrentPV,copyNo);
-  } else {
-    while (fCurrentDepth < lastDepth--) {
-      fPVPath.pop_back();
-    }
-    fPVPath.back() = make_pair(fpCurrentPV,copyNo);
-  }
-  lastDepth = fCurrentDepth;
-  lastMotherLV = fpCurrentPV->GetMotherLogical();
-
-  // Debug printing...
-  for (PVPath_const_iterator i = fPVPath.begin(); i != fPVPath.end(); ++i) {
-    if ((*i).first) {
-    G4cout << '/' << (*i).first->GetName();
-    } else {
-      G4cout << 0;
-    }
-    G4cout << ':' << (*i).second;
+  G4cout << "Path of drawn PVs: ";
+  for (PVPath_iterator i = fDrawnPVPath.begin();
+       i != fDrawnPVPath.end(); ++i) {
+    G4cout << '/' << i->GetPhysicalVolume()->GetName()
+	   << ':' << i->GetCopyNo();
   }
   G4cout << G4endl;
-
-  /***********************************************
-  fLVSet.insert(fpCurrentLV);
-  G4LogicalVolume* motherLV = fpCurrentPV->GetMotherLogical();
-  if (motherLV) {
-    if (fLVSet.find(motherLV) == fLVSet.end()) {
-      // Mother not previously encountered - must have been culled.
-      G4cout << "Mother LV \"" << motherLV->GetName()
-	     << "\" not found." << G4endl;
-      // Search back up hierarchy...
-      do {
-	G4LogicalVolume* possibleMotherLV = 0;
-	G4LogicalVolumeStore* Store = G4LogicalVolumeStore::GetInstance();
-	for ( size_t LV=0; LV < Store->size(); LV++ ) {
-	  G4LogicalVolume* aLogVol = (*Store)[LV];
-	  if(aLogVol != this) {  // Don't look for it inside itself!
-	    for (G4int daughter=0; daughter < aLogVol->GetNoDaughters(); daughter++ ) {
-		  if( aLogVol->GetDaughter(daughter)->GetLogicalVolume()==this )
-		    { 
-		      // aLogVol is the mother !!!
-		      //
-		      motherLogVol = aLogVol;
-		      break;
-		    }
-		}
-	    }
-	}
-	motherLV = motherLV->GetPhysicalVolume()->GetMotherLogical(); 	
-      } while (motherLV && fLVSet.find(motherLV) == fLVSet.end());
-      G4cout << "Mother LV \"" << motherLV->GetName()
-	     << "\" found." << G4endl;
+  // Find mother.  ri points to mother, if any.
+  PVPath_reverse_iterator ri = ++fDrawnPVPath.rbegin();
+  if (ri != fDrawnPVPath.rend()) {
+    // This volume has a mother.
+    G4cout << "Mother "
+	   << ri->GetPhysicalVolume()->GetName()
+	   << ':' << ri->GetCopyNo();
+    if (fPVNodeStore.find(*ri) != fPVNodeStore.end()) {
+      // Mother previously encountered.  Add this volume to
+      // appropriate node in scene graph tree.
+      G4cout << " previously encountered";
+    } else {
+      // Mother not previously encountered.  Shouldn't happen!
+      G4cout << " not previously encountered.  Shouldn't happen!";
     }
+  } else {
+    // This volume has no mother.  Must be a top level un-culled
+    // volume.  Add to root of scene graph tree
+    G4cout << "No mother.";
   }
-  ****************************************/
+  G4cout << G4endl;
+#endif
 
+  // Store ID of current physical volume...
+  fPVNodeStore.insert(fDrawnPVPath.back());
+
+  // Find mother.  ri points to mother, if any.
+  PVPath_reverse_iterator ri = ++fDrawnPVPath.rbegin();
+  if (ri != fDrawnPVPath.rend()) {
+    // This volume has a mother.
+    if (fPVNodeStore.find(*ri) != fPVNodeStore.end()) {
+      // Mother previously encountered.  Add this volume to
+      // appropriate node in scene graph tree.
+      // ...
+    } else {
+      // Mother not previously encountered.  Shouldn't happen, since
+      // G4PhysicalVolumeModel sends volumes as it encounters them,
+      // i.e., mothers before daughters, in its descent of the
+      // geometry tree.  Error!
+      if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors){
+	G4cout << "ERROR: G4XXXSceneHandler::PreAddSolid: Mother "
+	       << ri->GetPhysicalVolume()->GetName()
+	       << ':' << ri->GetCopyNo()
+	       << " not previously encountered."
+	  "\nShouldn't happen!  Please report to visualization coordinator."
+	       << G4endl;
+      }
+      // Continue anyway.  Add to root of scene graph tree.
+      // ...
+    }
+  } else {
+    // This volume has no mother.  Must be a top level un-culled
+    // volume.  Add to root of scene graph tree.
+    // ...
+  }
 }
 
 void G4XXXSceneHandler::AddSolid(const G4Box& box) {
