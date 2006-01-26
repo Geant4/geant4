@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXmViewer.cc,v 1.14 2006-01-11 18:38:41 allison Exp $
+// $Id: G4OpenGLStoredXmViewer.cc,v 1.15 2006-01-26 11:59:09 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,21 +81,10 @@ void G4OpenGLStoredXmViewer::DrawView () {
   glXMakeCurrent (dpy, win, cx);
   glViewport (0, 0, WinSize_x, WinSize_y);
 
-  /*  Assume ClearView has already been called (JA Jan 06).
-  glClearColor (background.GetRed(),
-		background.GetGreen(),
-		background.GetBlue(),
-		1.);
-  glClearDepth (1.0);
-  ClearView ();
-  */
-
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
 
   //See if things have changed from last time and remake if necessary...
   KernelVisitDecision ();
-  fModified = false; // To avoid a SetView in G4VViewer::ProcessView
-		     // (assume SetView has already been called) (JA Jan 06).
   ProcessView ();
 
   if(style!=G4ViewParameters::hlr &&
