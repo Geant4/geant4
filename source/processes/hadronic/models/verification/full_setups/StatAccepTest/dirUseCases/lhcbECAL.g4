@@ -35,7 +35,7 @@
 /mydet/isCalHomogeneous 0
 #
 /mydet/isUnitInLambda 0
-/mydet/absorberTotalLength 140
+/mydet/absorberTotalLength 140.0
 /mydet/activeLayerNumber 70
 /mydet/readoutLayerNumber 14
 /mydet/activeLayerSize 4.0

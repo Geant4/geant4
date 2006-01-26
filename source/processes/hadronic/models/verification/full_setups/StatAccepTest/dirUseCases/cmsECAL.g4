@@ -1,5 +1,5 @@
 #----------------------------------------------------------------
-# Last update: 24-Jan-2006
+# Last update: 26-Jan-2006
 #
 # CMS ECAL : made of  2 cm x 2 cm x 23 cm  PbWO4 crystals.
 #  
@@ -43,7 +43,7 @@
 /mydet/absorberMaterial PbWO4
 #
 /mydet/isUnitInLambda 0
-/mydet/absorberTotalLength 230
+/mydet/absorberTotalLength 230.0
 /mydet/activeLayerNumber 1
 /mydet/readoutLayerNumber 1
 #
