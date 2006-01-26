@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.hh,v 1.14 2006-01-20 15:05:27 grichine Exp $
+// $Id: G4VXTRenergyLoss.hh,v 1.15 2006-01-26 12:00:55 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,7 +68,7 @@
 
 
 class G4VParticleChange;
-
+class G4PhysicsFreeVector;
 
 class G4XTRenergyLoss : public G4VDiscreteProcess  // G4VContinuousProcess
 {
@@ -108,6 +108,7 @@ public:
   void BuildTable() ;
   void BuildEnergyTable() ;
   void BuildAngleTable() ;
+  void BuildGlobalAngleTable() ;
 
   G4complex OneInterfaceXTRdEdx( G4double energy, 
                                 G4double gamma,
@@ -168,11 +169,12 @@ public:
   void SetEnergy(G4double energy)    {fEnergy   = energy;};                
   void SetVarAngle(G4double varAngle){fVarAngle = varAngle;};               
   void SetAngleRadDistr(G4bool pAngleRadDistr){fAngleRadDistr=pAngleRadDistr;};               
+  void SetVerboseLevel(G4int verbose){fVerbose=verbose;};
 
 
   static G4PhysicsLogVector* GetProtonVector(){ return fProtonEnergyVector;};
   static G4int GetTotBin(){return fTotBin;};           
-
+  G4PhysicsFreeVector* GetAngleVector(G4double energy, G4int n);
 protected:
 
   G4ParticleDefinition* fPtrGamma ;  // pointer to TR photon
@@ -225,6 +227,10 @@ protected:
   G4double fAlphaPlate, fAlphaGas ;
 
   G4ParticleChange fParticleChange;
+
+  G4PhysicsTable*                    fAngleForEnergyTable;
+  std::vector<G4PhysicsTable*>       fAngleBank;
+  G4int fVerbose;
 };
 
 typedef G4XTRenergyLoss G4VXTRenergyLoss;

@@ -461,7 +461,7 @@ int main()
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-  G4int i, j, k, numOfMaterials, iSan, nbOfElements, sanIndex, row ;
+  G4int i, j, k, nBin, numOfMaterials, iSan, nbOfElements, sanIndex, row ;
 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
 
@@ -620,26 +620,31 @@ int main()
   }
   // processXTR->SetAngleRadDistr(true);
   // processXTR->BuildPhysicsTable(proton);
-
+  processXTR->SetVerboseLevel(1);
   static G4int totBin = processXTR->GetTotBin();
-
+  nBin = totBin;
   G4cout<<"totBin = "<<totBin<<G4endl;
 
   // test of XTR table step do-it
 
 
-  G4double energyTR, cofAngle = 5.1;
+  G4double energyTR=10*keV, cofAngle = 5.1;
   G4double charge = 1.0;
   G4double chargeSq  = charge*charge ;
   G4double gamma     = 1.3e3; 
-  G4cout<<"gamma = "<<gamma<<G4endl ;
+  G4cout<<"gamma = "<<gamma<<G4endl;
+  G4cout<<"energyTR = "<<energyTR/keV<<" keV"<<G4endl;
   
   processXTR->SetGamma(gamma);
 
-  G4double angle2 = cofAngle*cofAngle/gamma/gamma;
+  processXTR->GetAngleVector(energyTR,nBin);
 
-  G4double dNdAngle = processXTR-> AngleXTRdEdx(angle2);
+  // G4double dNdA = processXTR->SpectralXTRdEdx(energyTR);
 
+  // G4double angle2 = cofAngle*cofAngle/gamma/gamma;
+
+  // G4double dNdAngle = processXTR-> AngleXTRdEdx(angle2);
+  /*
   for(i = 0; i < 40; i++ )
   {
      cofAngle = 0.5*i;
@@ -648,7 +653,7 @@ int main()
      dNdAngle *=fine_structure_const/pi;
      G4cout<<"cofAngle = "<<cofAngle<<"; angle = "<<cofAngle/gamma<<"; dNdAngle = "<<dNdAngle<<G4endl;
   }
-
+  */
 
 
   G4int iTkin;
