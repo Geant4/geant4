@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.36 2005-11-24 11:15:21 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.37 2006-01-26 11:40:26 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,14 @@
 
 #include <sstream>
 
+G4bool G4PhysicalVolumeModel::G4PhysicalVolumeNodeID::operator<
+  (const G4PhysicalVolumeModel::G4PhysicalVolumeNodeID& right) const
+{
+  if (fpPV < right.fpPV) return true;
+  if (fpPV == right.fpPV) return fCopyNo < right.fCopyNo;
+  return false;
+}
+
 G4PhysicalVolumeModel::G4PhysicalVolumeModel
 (G4VPhysicalVolume*          pVPV,
  G4int                       requestedDepth,
@@ -60,13 +68,13 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   fUseFullExtent  (useFullExtent),
   fCurrentDepth   (0),
   fpCurrentPV     (0),
-  fpCurrentLV     (0),
   fCurtailDescent (false),
   fpClippingPolyhedron (0),
-  fpCurrentDepth  (0),
-  fppCurrentPV    (0),
-  fppCurrentLV    (0),
-  fppCurrentMaterial (0)
+  fpCurrentDepth     (0),
+  fppCurrentPV       (0),
+  fppCurrentLV       (0),
+  fppCurrentMaterial (0),
+  fpDrawnPVPath      (0)
 {
   std::ostringstream o;
   o << fpTopPV -> GetCopyNo ();
@@ -78,7 +86,8 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
 
 G4PhysicalVolumeModel::~G4PhysicalVolumeModel () {}
 
-void G4PhysicalVolumeModel::CalculateExtent () {
+void G4PhysicalVolumeModel::CalculateExtent ()
+{
   if (fUseFullExtent) {
     fExtent = fpTopPV -> GetLogicalVolume () -> GetSolid () -> GetExtent ();
   }
@@ -120,43 +129,49 @@ void G4PhysicalVolumeModel::CalculateExtent () {
 }
 
 void G4PhysicalVolumeModel::DescribeYourselfTo
-(G4VGraphicsScene& sceneHandler) {
-
+(G4VGraphicsScene& sceneHandler)
+{
   if (fpMP && fpMP -> IsViewGeom ()) {
 
     sceneHandler.EstablishSpecials (*this);
     // See .hh file for explanation of this mechanism.
 
+    // For safety...
     fCurrentDepth = 0;
-    // Store in working space (via pointer to working space).
-    if (fpCurrentDepth) *fpCurrentDepth = fCurrentDepth;
+    // ...and in working space in scene handler, if required...
+    if (fpCurrentDepth) *fpCurrentDepth = 0;
 
     G4Transform3D startingTransformation = fTransform;
 
-    VisitGeometryAndGetVisReps (fpTopPV,
-				fRequestedDepth,
-				startingTransformation,
-				sceneHandler);
+    VisitGeometryAndGetVisReps
+      (fpTopPV,
+       fRequestedDepth,
+       startingTransformation,
+       sceneHandler);
 
-    // Clear current data and working space (via pointers to working space).
+    // Clear data...
     fCurrentDepth = 0;
     fpCurrentPV   = 0;
-    fpCurrentLV   = 0;
-    if (fpCurrentDepth) *fpCurrentDepth = fCurrentDepth;
-    if (fppCurrentPV)   *fppCurrentPV   = fpCurrentPV;
-    if (fppCurrentLV)   *fppCurrentLV   = fpCurrentLV;
-    if (fppCurrentMaterial) *fppCurrentMaterial = fpCurrentMaterial;
+    // ...and in working space in scene handler, if required...
+    if (fpCurrentDepth)     *fpCurrentDepth     = 0;
+    if (fppCurrentPV)       *fppCurrentPV       = 0;
+    if (fppCurrentLV)       *fppCurrentLV       = 0;
+    if (fppCurrentMaterial) *fppCurrentMaterial = 0;
+    if (fpDrawnPVPath)      fpDrawnPVPath->clear();
+
     sceneHandler.DecommissionSpecials (*this);
 
     // Clear pointers to working space.
-    fpCurrentDepth = 0;
-    fppCurrentPV   = 0;
-    fppCurrentLV   = 0;
+    fpCurrentDepth     = 0;
+    fppCurrentPV       = 0;
+    fppCurrentLV       = 0;
     fppCurrentMaterial = 0;
+    fpDrawnPVPath      = 0;
   }
 }
 
-G4String G4PhysicalVolumeModel::GetCurrentTag () const {
+G4String G4PhysicalVolumeModel::GetCurrentTag () const
+{
   if (fpCurrentPV) {
     std::ostringstream o;
     o << fpCurrentPV -> GetCopyNo ();
@@ -167,7 +182,8 @@ G4String G4PhysicalVolumeModel::GetCurrentTag () const {
   }
 }
 
-G4String G4PhysicalVolumeModel::GetCurrentDescription () const {
+G4String G4PhysicalVolumeModel::GetCurrentDescription () const
+{
   return "G4PhysicalVolumeModel " + GetCurrentTag ();
 }
 
@@ -175,19 +191,22 @@ void G4PhysicalVolumeModel::DefinePointersToWorkingSpace
 (G4int*              pCurrentDepth,
  G4VPhysicalVolume** ppCurrentPV,
  G4LogicalVolume**   ppCurrentLV,
- G4Material**        ppCurrentMaterial) {
-  fpCurrentDepth = pCurrentDepth;
-  fppCurrentPV   = ppCurrentPV;
-  fppCurrentLV   = ppCurrentLV;
+ G4Material**        ppCurrentMaterial,
+ std::vector<G4PhysicalVolumeNodeID>* pDrawnPVPath)
+{
+  fpCurrentDepth     = pCurrentDepth;
+  fppCurrentPV       = ppCurrentPV;
+  fppCurrentLV       = ppCurrentLV;
   fppCurrentMaterial = ppCurrentMaterial;
+  fpDrawnPVPath      = pDrawnPVPath;
 }
 
 void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 (G4VPhysicalVolume* pVPV,
  G4int requestedDepth,
  const G4Transform3D& theAT,
- G4VGraphicsScene& sceneHandler) {
-
+ G4VGraphicsScene& sceneHandler)
+{
   // Visits geometry structure to a given depth (requestedDepth), starting
   //   at given physical volume with given starting transformation and
   //   describes volumes to the scene handler.
@@ -326,17 +345,15 @@ void G4PhysicalVolumeModel::DescribeAndDescend
  G4VSolid* pSol,
  G4Material* pMaterial,
  const G4Transform3D& theAT,
- G4VGraphicsScene& sceneHandler) {
-
-  // Maintain data members and store in working space (via pointers to
-  // working space).
-  if (fpCurrentDepth) *fpCurrentDepth = fCurrentDepth;
+ G4VGraphicsScene& sceneHandler)
+{
+  // Maintain useful data members...
   fpCurrentPV = pVPV;
-  fpCurrentLV = pLV;
-  fpCurrentMaterial = pMaterial;
-  if (fppCurrentPV) *fppCurrentPV = fpCurrentPV;
-  if (fppCurrentLV) *fppCurrentLV = fpCurrentLV;
-  if (fppCurrentMaterial) *fppCurrentMaterial = fpCurrentMaterial;
+  // ...and store in scene handler's working space, if required...
+  if (fpCurrentDepth)     *fpCurrentDepth     = fCurrentDepth;
+  if (fppCurrentPV)       *fppCurrentPV       = pVPV;
+  if (fppCurrentLV)       *fppCurrentLV       = pLV;
+  if (fppCurrentMaterial) *fppCurrentMaterial = pMaterial;
 
   const G4RotationMatrix objectRotation = pVPV -> GetObjectRotationValue ();
   const G4ThreeVector&  translation     = pVPV -> GetTranslation ();
@@ -381,14 +398,27 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   // Make decision to Draw.
   G4bool thisToBeDrawn = !IsThisCulled (pLV, pMaterial);
   if (thisToBeDrawn) {
+
+    // Update path of physical volumes, if required...
+    if (fpDrawnPVPath) {
+      G4int copyNo = fpCurrentPV->GetCopyNo();
+      fpDrawnPVPath->push_back(G4PhysicalVolumeNodeID(fpCurrentPV,copyNo));
+    }
+
     const G4VisAttributes* pVisAttribs = pLV -> GetVisAttributes ();
     if (!pVisAttribs) pVisAttribs = fpMP -> GetDefaultVisAttributes ();
     DescribeSolid (theNewAT, pSol, pVisAttribs, sceneHandler);
   }
 
   if (fCurtailDescent) {
+    // Reset for normal descending of next volume at this level...
     fCurtailDescent = false;
-    // Reset for normal descending of next volume at this level.
+
+    // Pop item from path of physical volumes, if required...
+    if (thisToBeDrawn && fpDrawnPVPath) {
+      fpDrawnPVPath->pop_back();
+    }
+
     return;
   }
 
@@ -414,14 +444,19 @@ void G4PhysicalVolumeModel::DescribeAndDescend
       }
     }
   }
+
+  // Pop item from path of physical volumes, if required...
+  if (thisToBeDrawn && fpDrawnPVPath) {
+    fpDrawnPVPath->pop_back();
+  }
 }
 
 void G4PhysicalVolumeModel::DescribeSolid
 (const G4Transform3D& theAT,
  G4VSolid* pSol,
  const G4VisAttributes* pVisAttribs,
- G4VGraphicsScene& sceneHandler) {
-
+ G4VGraphicsScene& sceneHandler)
+{
   sceneHandler.PreAddSolid (theAT, *pVisAttribs);
   if (fpClippingPolyhedron)  // Clip and force polyhedral representation...
     {
@@ -458,7 +493,8 @@ void G4PhysicalVolumeModel::DescribeSolid
 }
 
 G4bool G4PhysicalVolumeModel::IsThisCulled (const G4LogicalVolume* pLV,
-					    const G4Material* pMaterial) {
+					    const G4Material* pMaterial)
+{
   // If true, cull, i.e., do not Draw.
   G4double density = 0.;
   if (pMaterial) density = pMaterial -> GetDensity ();
@@ -484,7 +520,8 @@ G4bool G4PhysicalVolumeModel::IsThisCulled (const G4LogicalVolume* pLV,
 }
 
 G4bool G4PhysicalVolumeModel::IsDaughterCulled
-(const G4LogicalVolume* pMotherLV) {
+(const G4LogicalVolume* pMotherLV)
+{
   // If true, cull, i.e., do not Draw.
   const G4VisAttributes* pVisAttribs = pMotherLV -> GetVisAttributes ();
   if (!pVisAttribs) pVisAttribs = fpMP -> GetDefaultVisAttributes ();
@@ -516,7 +553,8 @@ G4bool G4PhysicalVolumeModel::IsDaughterCulled
   }
 }
 
-G4bool G4PhysicalVolumeModel::Validate (G4bool warn) {
+G4bool G4PhysicalVolumeModel::Validate (G4bool warn)
+{
   G4VPhysicalVolume* world =
     G4TransportationManager::GetTransportationManager ()
     -> GetNavigatorForTracking () -> GetWorldVolume ();

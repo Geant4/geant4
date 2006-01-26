@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.21 2005-11-22 16:29:40 allison Exp $
+// $Id: G4PhysicalVolumeModel.hh,v 1.22 2006-01-26 11:40:26 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,6 +43,7 @@
 #include "G4VModel.hh"
 
 #include "G4Transform3D.hh"
+#include <vector>
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
@@ -56,6 +57,19 @@ class G4PhysicalVolumeModel: public G4VModel {
 public: // With description
 
   enum {UNLIMITED = -1};
+
+  class G4PhysicalVolumeNodeID {
+  public:
+    G4PhysicalVolumeNodeID(G4VPhysicalVolume* pPV = 0, G4int iCopyNo = 0):
+      fpPV(pPV), fCopyNo(iCopyNo) {}
+    G4VPhysicalVolume* GetPhysicalVolume() const {return fpPV;}
+    G4int GetCopyNo() const {return fCopyNo;}
+    G4bool operator< (const G4PhysicalVolumeNodeID& right) const;
+  private:
+    G4VPhysicalVolume* fpPV;
+    G4int fCopyNo;
+  };
+  // Nested class for identifying physical volume nodes.
 
   G4PhysicalVolumeModel
   (G4VPhysicalVolume*,
@@ -113,13 +127,16 @@ public: // With description
   G4bool Validate (G4bool warn);
   // Validate, but allow internal changes (hence non-const function).
 
-  void DefinePointersToWorkingSpace (G4int*              pCurrentDepth,
-				     G4VPhysicalVolume** ppCurrentPV,
-				     G4LogicalVolume**   ppCurrentLV,
-				     G4Material**        ppCurrentMaterial);
+  void DefinePointersToWorkingSpace
+  (G4int*              pCurrentDepth = 0,
+   G4VPhysicalVolume** ppCurrentPV = 0,
+   G4LogicalVolume**   ppCurrentLV = 0,
+   G4Material**        ppCurrentMaterial = 0,
+   std::vector<G4PhysicalVolumeNodeID>* pDrawnPVPath = 0);
   // For use (optional) by the scene handler if it needs to know about
-  // the current information maintained through these pointers.
-
+  // the current information maintained through these pointers.  For
+  // description of pointers, see below.
+  
   void CurtailDescent() {fCurtailDescent = true;}
 
 protected:
@@ -160,18 +177,27 @@ protected:
   G4bool             fUseFullExtent; // ...if requested.
   G4int              fCurrentDepth;  // Current depth of geom. hierarchy.
   G4VPhysicalVolume* fpCurrentPV;    // Current physical volume.
-  G4LogicalVolume*   fpCurrentLV;    // Current logical volume.
-  G4Material*    fpCurrentMaterial;  // Current material.
-  G4bool             fCurtailDescent;// Can be set to curtail descent.
+  G4bool             fCurtailDescent;  // Can be set to curtail descent.
   const G4Polyhedron*fpClippingPolyhedron;
 
   ////////////////////////////////////////////////////////////
-  // Pointers to working space in scene, if required.
+  // Pointers to working space in scene handler, if required.
 
   G4int*              fpCurrentDepth;  // Current depth of geom. hierarchy.
   G4VPhysicalVolume** fppCurrentPV;    // Current physical volume.
   G4LogicalVolume**   fppCurrentLV;    // Current logical volume.
   G4Material**    fppCurrentMaterial;  // Current material.
+  std::vector<G4PhysicalVolumeNodeID>* fpDrawnPVPath;
+  // Path of the current drawn (non-culled) volume in terms of drawn
+  // (non-culled) ancesters.  It is a vector of physical volume node
+  // identifiers corresponding to the geometry hierarchy actually
+  // selected, i.e., not culled.  It is guaranteed that volumes are
+  // presented to the scene handlers in top-down hierarchy order,
+  // i.e., ancesters first, mothers before daughters, so the scene
+  // handler can be assured that, if it is building its own scene
+  // graph tree, a mother, if any, will have already been encountered
+  // and there will already be a node in place on which to hang the
+  // current volume.
 
 private:
 

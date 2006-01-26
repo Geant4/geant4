@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeSearchScene.hh,v 1.13 2005-01-27 20:06:37 johna Exp $
+// $Id: G4PhysicalVolumeSearchScene.hh,v 1.14 2006-01-26 11:40:26 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -94,7 +94,6 @@ private:
   G4int                fCurrentDepth;  // Current depth of geom. hierarchy.
   G4VPhysicalVolume*   fpCurrentPV;    // Current physical volume.
   G4LogicalVolume*     fpCurrentLV;    // Current logical volume.
-  G4Material*      fpCurrentMaterial;  // Current material.
   const G4Transform3D* fpCurrentObjectTransformation;
   G4int                fFoundDepth;                  // Found depth.
   G4VPhysicalVolume*   fpFoundPV;                    // Found physical volume.
