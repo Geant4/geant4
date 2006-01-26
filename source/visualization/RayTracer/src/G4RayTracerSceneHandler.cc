@@ -21,15 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerSceneHandler.cc,v 1.4 2006-01-11 18:01:33 allison Exp $
+// $Id: G4RayTracerSceneHandler.cc,v 1.5 2006-01-26 10:31:32 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4RayTracerSceneHandler.hh"
 #include "G4VisManager.hh"
 #include "G4NullModel.hh"
-
-G4Scene G4RayTracerSceneHandler::fDummyRayTracerScene
-("G4RayTracerSceneHandler::fDummyRayTracerScene");
 
 G4RayTracerSceneHandler::G4RayTracerSceneHandler(G4VGraphicsSystem& system,
 						 const G4String& name):
@@ -40,13 +37,17 @@ G4RayTracerSceneHandler::G4RayTracerSceneHandler(G4VGraphicsSystem& system,
   // RayTracer" but uses the ray tracer with "/vis/rayTracer" commands
   // before creating any scenes, for example, instead of using
   // "/vis/drawVolume"...
-  fpScene = &fDummyRayTracerScene;
-  if (fpScene->IsEmpty())
-    fpScene->SetRunDurationModelList().push_back(new G4NullModel);
   G4VisManager* visManager = G4VisManager::GetInstance();
   if(visManager) {
     G4Scene* pScene = visManager->GetCurrentScene();
     if (!pScene) {
+      // Create new scene like /vis/scene/create...
+      fpScene = new G4Scene("dummy-ray-tracer-scene");
+      // ...with a model so that it does not trigger empty scene warnings...
+      fpScene->SetRunDurationModelList().push_back(new G4NullModel);
+      // Add to vis manager list; ownership thereby passes to vis manager...
+      visManager->SetSceneList().push_back(fpScene);
+      // ...and make current...
       visManager->SetCurrentScene(fpScene);
     }
   }

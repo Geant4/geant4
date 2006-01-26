@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerSceneHandler.hh,v 1.9 2006-01-11 18:01:33 allison Exp $
+// $Id: G4RayTracerSceneHandler.hh,v 1.10 2006-01-26 10:31:32 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // John Allison  17th March 2000
@@ -64,7 +64,6 @@ public:
 
 private:
   static G4int    fSceneIdCount;  // Counter for RayTracer scene handlers.
-  static G4Scene  fDummyRayTracerScene;
 };
 
 #endif
