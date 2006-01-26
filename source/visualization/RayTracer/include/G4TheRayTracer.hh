@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TheRayTracer.hh,v 1.1 2006-01-11 18:01:33 allison Exp $
+// $Id: G4TheRayTracer.hh,v 1.2 2006-01-26 10:38:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -95,8 +95,8 @@ class G4TheRayTracer
     // Event loop
     void CreateFigureFile(G4String fileName);
     // Create figure file after an event loop
-    G4bool GenerateColour(G4Event* anEvent, G4int iCoord);
-    // Calcurate RGB for one trajectory stored at location iCoord
+    G4bool GenerateColour(G4Event* anEvent);
+    // Calcurate RGB for one trajectory
     void StoreUserActions();
     void RestoreUserActions();
     // Store and restore user action classes if defined
@@ -152,7 +152,9 @@ class G4TheRayTracer
     G4double attenuationLength;
 
     G4bool distortionOn;
+    G4bool antialiasingOn;
 
+    G4Colour rayColour;
     G4Colour backgroundColour;
 
   public:

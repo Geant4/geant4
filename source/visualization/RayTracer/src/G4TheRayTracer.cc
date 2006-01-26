@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TheRayTracer.cc,v 1.1 2006-01-11 18:01:33 allison Exp $
+// $Id: G4TheRayTracer.cc,v 1.2 2006-01-26 10:38:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -77,6 +77,7 @@ G4TheRayTracer::G4TheRayTracer(G4VFigureFileMaker* figMaker,
   attenuationLength = 1.0*m;
 
   distortionOn = false;
+  antialiasingOn = false;
 
   backgroundColour = G4Colour(1.,1.,1.);
 }
@@ -212,9 +213,10 @@ G4bool G4TheRayTracer::CreateBitMap()
   G4int iRow, iColumn;
   while (theScanner->Coords(iRow,iColumn)) {
       G4int iCoord = iRow * nColumn + iColumn;
+      G4double dRow = 0, dColumn = 0;  // Antialiasing increments.
       G4Event* anEvent = new G4Event(iEvent++);
-      G4double angleX = -(viewSpanX/2. - iColumn*stepAngle);
-      G4double angleY = viewSpanY/2. - iRow*stepAngle;
+      G4double angleX = -(viewSpanX/2. - (iColumn+dColumn)*stepAngle);
+      G4double angleY = viewSpanY/2. - (iRow+dRow)*stepAngle;
       G4ThreeVector rayDirection;
       if(distortionOn)
       {
@@ -237,9 +239,9 @@ G4bool G4TheRayTracer::CreateBitMap()
 	  pWorld->GetLogicalVolume()->GetSolid()->
 	  DistanceToIn(rayPosition,rayDirection);  
 	if (outsideDistance != kInfinity) {
-	  // Borrowing form geometry, where 1e-8 < epsilon < 1e-3, in
+	  // Borrowing from geometry, where 1e-8 < epsilon < 1e-3, in
 	  // absolute/internal length units, is used for ensuring good
-	  // nehaviour, choose to add 0.001 to ensure rayPosition is
+	  // behaviour, choose to add 0.001 to ensure rayPosition is
 	  // definitely inside the world volume (JA 16/9/2005)...
 	  rayPosition = rayPosition+(outsideDistance+0.001)*rayDirection;
 	}
@@ -250,16 +252,19 @@ G4bool G4TheRayTracer::CreateBitMap()
       if (interceptable) {
 	theRayShooter->Shoot(anEvent,rayPosition,rayDirection);
 	theEventManager->ProcessOneEvent(anEvent);
-	succeeded = GenerateColour(anEvent,iCoord);
-      }
-      else {  // Ray does not intercept world at all.
+	succeeded = GenerateColour(anEvent);
+	colorR[iCoord] = (unsigned char)(int(255*rayColour.GetRed()));
+	colorG[iCoord] = (unsigned char)(int(255*rayColour.GetGreen()));
+	colorB[iCoord] = (unsigned char)(int(255*rayColour.GetBlue()));
+      } else {  // Ray does not intercept world at all.
 	// Store background colour...
 	colorR[iCoord] = (unsigned char)(int(255*backgroundColour.GetRed()));
 	colorG[iCoord] = (unsigned char)(int(255*backgroundColour.GetGreen()));
 	colorB[iCoord] = (unsigned char)(int(255*backgroundColour.GetBlue()));
-	theScanner->Draw(colorR[iCoord],colorG[iCoord],colorB[iCoord]);
 	succeeded = true;
       }
+
+      theScanner->Draw(colorR[iCoord],colorG[iCoord],colorB[iCoord]);
 
       delete anEvent;
       if(!succeeded) return false;
@@ -275,7 +280,7 @@ void G4TheRayTracer::CreateFigureFile(G4String fileName)
   theFigMaker->CreateFigureFile(fileName,nColumn,nRow,colorR,colorG,colorB);
 }
 
-G4bool G4TheRayTracer::GenerateColour(G4Event* anEvent, G4int iCoord)
+G4bool G4TheRayTracer::GenerateColour(G4Event* anEvent)
 {
   G4TrajectoryContainer * trajectoryContainer = anEvent->GetTrajectoryContainer();
   
@@ -285,7 +290,6 @@ G4bool G4TheRayTracer::GenerateColour(G4Event* anEvent, G4int iCoord)
   G4int nPoint = trajectory->GetPointEntries();
   if(nPoint==0) return false;
 
-  G4Colour rayColour;
   G4Colour initialColour(backgroundColour);
   if( trajectory->GetPointC(nPoint-1)->GetPostStepAtt() )
   { initialColour = GetSurfaceColour(trajectory->GetPointC(nPoint-1)); }
@@ -299,10 +303,6 @@ G4bool G4TheRayTracer::GenerateColour(G4Event* anEvent, G4int iCoord)
     rayColour = Attenuate(trajectory->GetPointC(i),mixedColour);
   }
     
-  colorR[iCoord] = (unsigned char)(int(255*rayColour.GetRed()));
-  colorG[iCoord] = (unsigned char)(int(255*rayColour.GetGreen()));
-  colorB[iCoord] = (unsigned char)(int(255*rayColour.GetBlue()));
-  theScanner->Draw(colorR[iCoord],colorG[iCoord],colorB[iCoord]);
   return true;
 }
 
