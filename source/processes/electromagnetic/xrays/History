@@ -1,4 +1,4 @@
-$Id: History,v 1.48 2006-01-20 16:39:07 vnivanch Exp $
+$Id: History,v 1.49 2006-01-26 12:16:59 grichine Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+26 Jan 06: V. Grichine
+- Algorithm for XTR angular distribution based on the transparent regular radiator
+  was updated. The method takes into account the angular distribution for given
+  energy
 
 20 Jan 06: V.Ivant (xrays-V08-00-00)
 20 Jan 06: V. Grichine
