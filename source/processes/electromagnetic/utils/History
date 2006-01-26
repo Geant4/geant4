@@ -1,4 +1,4 @@
-$Id: History,v 1.230 2006-01-26 08:57:35 vnivanch Exp $
+$Id: History,v 1.231 2006-01-26 11:12:45 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 26 January 06: V.Ivant (emutils-V08-00-02)
-- Rename GetRange -> GetRangeFromRestricteDEDX (VI)
+- add method GetRangeFromRestricteDEDX for later replacement of GetRange(VI)
 - G4VEnergyLossProcess - improve cout (VI) 
 
 20 January 06: V.Ivant (emutils-V08-00-01)
