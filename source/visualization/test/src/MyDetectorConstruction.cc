@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorConstruction.cc,v 1.31 2006-01-26 10:45:59 allison Exp $
+// $Id: MyDetectorConstruction.cc,v 1.32 2006-01-26 11:28:52 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -648,11 +648,10 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   aLog = new G4LogicalVolume
     (aVolume,Ar,"aTwistedTubs-log");
   aLog->SetVisAttributes(G4VisAttributes(G4Colour(1.,1.,0.)));
-  /*
+  //  Comment out this G4PVPlacement to get voxelisation crash...
   new G4PVPlacement
     (G4Translate3D(G4ThreeVector(200.*cm,-400.*cm,0.)),
      "aTwistedTubs-phys", aLog, experimentalHall_phys,false,0);
-  */
 
   fTwistAngle = 50*deg ;
   fTrackerpDx1 = myScale*4*cm ;
@@ -664,11 +663,10 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   aLog = new G4LogicalVolume
     (aVolume,Ar,"aTwistedBox-log");
   aLog->SetVisAttributes(G4VisAttributes(G4Colour(1.,1.,0.)));
-  /*
+  //  Comment out this G4PVPlacement to get voxelisation crash...
   new G4PVPlacement
     (G4Translate3D(G4ThreeVector(100.*cm,-400.*cm,0.)),
      "aTwistedBox-phys", aLog, experimentalHall_phys,false,0);
-  */
 
   fTrackerpDx1 = myScale*4*cm ;
   fTrackerpDx2 = myScale*7*cm ;
@@ -683,11 +681,9 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   aLog = new G4LogicalVolume
     (aVolume,Ar,"aTwistedTrd-log");
   aLog->SetVisAttributes(G4VisAttributes(G4Colour(1.,1.,0.)));
-  /*
   new G4PVPlacement
     (G4Translate3D(G4ThreeVector(000.*cm,-400.*cm,0.)),
      "aTwistedTrd-phys", aLog, experimentalHall_phys,false,0);
-  */
 
   fTrackerpDx1 = myScale*4*cm ;
   fTrackerpDx2 = myScale*7*cm ;
