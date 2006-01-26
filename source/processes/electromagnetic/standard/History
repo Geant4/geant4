@@ -1,4 +1,4 @@
-$Id: History,v 1.202 2006-01-25 16:10:35 maire Exp $
+$Id: History,v 1.203 2006-01-26 11:11:42 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26 January 05: V.Ivant (emstand-V08-00-04)
+26 January 06: V. Grichine 
+- fix nan value for delta direction for the case of zero cut 
      
-22 January 05: mma (emstand-V08-00-03)
+25 January 05: mma (emstand-V08-00-03)
 - G4eplusAnnihilation::AtRestDoIt() : remove cut dependance 
 
 24 January 05: V.Ivant (emstand-V08-00-02)
