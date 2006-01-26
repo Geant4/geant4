@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.cc,v 1.39 2005-06-04 13:08:23 jwellisc Exp $
+// $Id: G4QContent.cc,v 1.40 2006-01-26 14:44:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QContent ----------------
@@ -721,6 +721,7 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
     //#endif
     return r;
   }
+  return r;
 }// End of G4QContent::SplitChipolino
 
 // Return one-quark QC using index (a kind of iterator)
