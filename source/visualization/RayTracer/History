@@ -1,4 +1,4 @@
-$Id: History,v 1.41 2006-01-11 18:03:11 allison Exp $
+$Id: History,v 1.42 2006-01-26 10:39:27 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,11 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+26th January 2006  John Allison  (raytracer-V08-00-01)
+- G4RayTracerSceneHandler: Improved handling of dummy scene.
+- G4TheRayTracer: Advance work for possible inclusion of
+  anti-aliasing.  Currently no change of functionality.
 
 11th January 2006  John Allison  (raytracer-V08-00-00)
 - Reorganisation (needs visman-V08-00-02):
