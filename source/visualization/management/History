@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2006-01-26 12:25:17 allison Exp $
+$Id: History,v 1.30 2006-01-26 12:28:11 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -31,12 +31,12 @@ History file for visualization management sub-category
   its effect of invoking SetView.  So it has been removed and the
   responsibility for calling SetView after a change of view parameters
   rests with the user (e.g., the vis commands).  Only used by OpenGL
-  and OpenInvntor; now works with opengl-V08-00-01 and
+  and OpenInventor; now works with opengl-V08-00-01 and
   openinventor-V08-00-00.
 - G4VSceneHandler.hh: Improved comments.
 - G4VisListManager.hh: Prevent crash on attempt to Print when nothing
   registered.
-- G4VisManager.hh: friend class G4XXXSceneHandler.
+- G4VisManager.hh: Extended friendship to G4XXXSceneHandler.
 
 25th January 2006  John Allison  (visman-V08-00-03)
 - Retro tag: visman-V08-00-00 + friend status for Ray Tracer.
