@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.15 2006-01-25 15:28:27 maire Exp $
+// $Id: RunAction.cc,v 1.16 2006-01-26 14:34:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -177,6 +177,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
  G4cout << "\n transverse dispersion at end = " 
         << G4BestUnit(trvsRms,"Length");
 	
+  // reset default formats
+  G4cout.setf(mode,std::ios::floatfield);
+  G4cout.precision(prec);
+	
  G4cout << "\n      mass true Range from simulation = " 
         << trueRange*density/(g/cm2) << " g/cm2"
 	<< "\n       from PhysicsTable (csda range) = " 
@@ -192,10 +196,6 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   }
   delete ProcCounter;
   
-  // reset default formats
-  G4cout.setf(mode,std::ios::floatfield);
-  G4cout.precision(prec);
- 
   //save histograms      
   histoManager->save();
   
