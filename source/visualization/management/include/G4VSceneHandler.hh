@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.25 2005-09-02 12:58:18 allison Exp $
+// $Id: G4VSceneHandler.hh,v 1.26 2006-01-26 12:18:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -125,14 +125,6 @@ public: // With description
   virtual void AddCompound (const G4VTrajectory&);
   virtual void AddCompound (const G4VHit&);
 
-  ///////////////////////////////////////////////////////////////
-  // Other inherited functions.
-
-  virtual void EstablishSpecials (G4PhysicalVolumeModel&);
-  // Used to establish any special relationships between scene and this
-  // particular type of model - non-pure, i.e., no requirement to
-  // implement.  See G4PhysicalVolumeModel.hh for details.
-
   //////////////////////////////////////////////////////////////
   // Functions for adding primitives.
 
@@ -176,6 +168,14 @@ public: // With description
   // Default implementation in this class but can be over-ridden.
   virtual void AddPrimitive (const G4Polyhedron&) = 0;  
   virtual void AddPrimitive (const G4NURBS&)      = 0;       
+
+  ///////////////////////////////////////////////////////////////
+  // Other inherited functions.
+
+  virtual void EstablishSpecials (G4PhysicalVolumeModel&);
+  // Used to establish any special relationships between scene and this
+  // particular type of model - non-pure, i.e., no requirement to
+  // implement.  See G4PhysicalVolumeModel.hh for details.
 
   //////////////////////////////////////////////////////////////
   // Access functions.
