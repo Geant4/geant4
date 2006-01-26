@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.40 2006-01-11 18:45:53 allison Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.41 2006-01-26 11:55:58 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -88,7 +88,48 @@ const GLubyte G4OpenGLSceneHandler::fStippleMaskHashed [128] = {
   0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55
 };
 
-//Method for handling G4Polyline objects (from tracking or wireframe).
+/***********************
+// Add polyline in 2D screen coordinates (-1 <x < +1, -1 < y < +1, z = 0).
+void G4OpenGLSceneHandler::AddPrimitive2D (const G4Polyline& line)
+{
+  size_t nPoints = line.size ();
+  if (nPoints <= 0) return;
+
+  const G4Colour& c = GetColour (line);
+  glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+
+  if (fpViewer -> GetViewParameters ().IsMarkerNotHidden ())
+    glDisable (GL_DEPTH_TEST);
+  else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LESS);}
+
+  glDisable (GL_LIGHTING);
+
+  // Push matrices defining screen coordinates...
+  glMatrixMode (GL_PROJECTION);
+  glPushMatrix();
+  glLoadIdentity();
+  glMatrixMode (GL_MODELVIEW);
+  glPushMatrix();
+  glLoadIdentity();
+
+  glBegin (GL_LINE_STRIP);
+  for (size_t iPoint = 0; iPoint < nPoints; iPoint++) {
+  G4double x, y, z;
+    x = line[iPoint].x(); 
+    y = line[iPoint].y();
+    z = line[iPoint].z();
+    glVertex3d (x, y, z);
+  }
+  glEnd ();
+
+  // Pop matrices defining current world...
+  glMatrixMode (GL_PROJECTION);
+  glPopMatrix();
+  glMatrixMode (GL_MODELVIEW);
+  glPopMatrix();
+}
+*******************************/
+
 void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
 {
   G4int nPoints = line.size ();
@@ -102,8 +143,8 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
   else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LESS);}
 
   glDisable (GL_LIGHTING);
-  glBegin (GL_LINE_STRIP);
 
+  glBegin (GL_LINE_STRIP);
   for (G4int iPoint = 0; iPoint < nPoints; iPoint++) {
   G4double x, y, z;
     x = line[iPoint].x(); 
