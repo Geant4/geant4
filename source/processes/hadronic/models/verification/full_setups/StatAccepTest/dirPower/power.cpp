@@ -1,5 +1,5 @@
 //===================================================================
-// Last update: 20-Jan-2006                 
+// Last update: 26-Jan-2006                 
 //
 //                   Program  power.cpp
 //                   ------------------
@@ -63,6 +63,14 @@
 // the sample size (which is the same for the two samples),
 // and the shifting parameter (alpha) for the visible energy.
 // 
+// Notice that, by default, the maximum number of entries which
+// is assumed in the ICloud1D (used for the unbinned tests) is
+// 10,000 , which is enough for most applications. However, if
+// you need to explore higher data samples, then you have to 
+// increase this size accordingly when you create the cloud.
+// This is shown in  ***TRICK*** , where the max sample size
+// has been risen to 99,999 .
+//
 // The output of the program consists of the printing on the 
 // screen.
 //
@@ -144,7 +152,7 @@ private:
 };
 
 //***LOOKHERE***
-const double DistributionGenerator::alpha = 0.5;  //***MAIN-PARAMETER***
+const double DistributionGenerator::alpha = 0.5;   //***MAIN-PARAMETER*** 
 
 
 // Constants for the visible energy distributions.
@@ -488,15 +496,17 @@ private:
 
 
 //***LOOKHERE***
-const bool PowerCalculator::isOnVisibleEnergyParent  = true;
-const bool PowerCalculator::isOnVisibleEnergyShiftedParent  = true;
+const bool PowerCalculator::isOnVisibleEnergyParent = true;
+const bool PowerCalculator::isOnVisibleEnergyShiftedParent = true;
 
 const double PowerCalculator::confidenceLevel1 = 0.90; 
 const double PowerCalculator::confidenceLevel2 = 0.95; 
 const double PowerCalculator::confidenceLevel3 = 0.99; 
 const double PowerCalculator::confidenceLevel4 = 0.999; 
 
-const int PowerCalculator::sampleSize       = 3000;   //***MAIN-PARAMETER***
+const int PowerCalculator::sampleSize = 3000;   //***MAIN-PARAMETER*** 
+// See ***TRICK*** if the sample size is > 99,999 .
+
 const int PowerCalculator::numberPseudoExps = 1000;
 
 const int PowerCalculator::numberBinsHisto = 100;
@@ -818,8 +828,17 @@ void calculatePower() {
   
   // Creating the two 1D clouds once, and then reset/fill
   // them for each pair of distributions which must be compared.
-  AIDA::ICloud1D& firstDistribution  = *( hf->createCloud1D( "firstCloud" ) );
-  AIDA::ICloud1D& secondDistribution = *( hf->createCloud1D( "secondCloud" ) );
+  //
+  // ***TRICK*** By the default, the maximum number of entries after 
+  //             which the ICloud1D will convert to an IHistogram1D is  
+  //             10,000 . This is enough for most applications, but in 
+  //             if you need to explore higher data samples, you have
+  //             to increase it when you create the cloud, as shown
+  //             below, in which the max is set to 99,999 . 
+  AIDA::ICloud1D& firstDistribution  = 
+    *( hf->createCloud1D( "firstCloud", "first", 99999 ) );
+  AIDA::ICloud1D& secondDistribution = 
+    *( hf->createCloud1D( "secondCloud", "second", 99999 ) );
 
   // --- Now the real code test ---
 
