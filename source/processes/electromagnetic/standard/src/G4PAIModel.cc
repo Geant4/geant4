@@ -583,9 +583,11 @@ G4PAIModel::SampleSecondaries( const G4MaterialCutsCouple* matCC,
   {
     G4cout<<"Tkin of secondary e- <= 0."<<G4endl;
     G4cout<<"G4PAIModel::SampleSecondary::deltaTkin = "<<deltaTkin<<G4endl;
-    deltaTkin = 10*eV;
+    // deltaTkin = 10*eV;
     G4cout<<"Set G4PAIModel::SampleSecondary::deltaTkin = "<<deltaTkin<<G4endl;
   }
+  if( deltaTkin <= 0.) return 0;
+
   if(deltaTkin > kineticEnergy && 
      particleMass != electron_mass_c2) deltaTkin = kineticEnergy;
   if (deltaTkin > 0.5*kineticEnergy && 
@@ -595,6 +597,7 @@ G4PAIModel::SampleSecondaries( const G4MaterialCutsCouple* matCC,
   G4double totalMomentum      = sqrt(pSquare);
   G4double costheta           = deltaTkin*(totalEnergy + electron_mass_c2)
                                 /(deltaTotalMomentum * totalMomentum);
+
   if( costheta >= 0.99999 ) costheta = 0.99999;
   G4double sintheta, sin2 = 1. - costheta*costheta;
 
