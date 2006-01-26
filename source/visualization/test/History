@@ -1,9 +1,12 @@
-$Id: History,v 1.72 2006-01-26 10:45:59 allison Exp $
+$Id: History,v 1.73 2006-01-26 11:27:41 allison Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
 
 $Log: not supported by cvs2svn $
+Revision 1.72  2006/01/26 10:45:59  allison
+Moved orb to avoid overlap.
+
 Revision 1.71  2006/01/13 12:19:19  allison
 test19.g4m: Added /tracking/verbose 2 for problem trajectory.  Reduced
 size of ray tracer windows for speed and added /vis/rayTracer/trace.
