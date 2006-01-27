@@ -20,69 +20,52 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50PhysicsList.hh,v 1.13 2006-01-27 11:18:37 chauvie Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// Author: Original author unknown (contact: Maria.Grazia.Pia@cern.ch)
+// Author: Stephane Chauvie (chauvie@to.infn.it)
 //
 // History:
 // -----------
-// 22 Feb 2003 MGP          Redesigned for modular PhysicsList
-// 22 Feb 2005 SC           Added antiproton processes
+// 22 Feb 2006         SC      Created
 //
 // -------------------------------------------------------------------
+                                                                                                            
+#include "Tst50AntiProtonICRU49.hh"
+#include "G4ProcessManager.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4MultipleScattering.hh"
+#include "G4AntiProton.hh"
+#include "G4hLowEnergyIonisation.hh"
+#include "G4hLowEnergyLoss.hh"
+#include "G4StepLimiter.hh"
 
-// Class description:
-// System test for e/gamma, standard photon processes for PhysicsList
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
+Tst50AntiProtonICRU49::Tst50AntiProtonICRU49(const G4String& name): G4VPhysicsConstructor(name)
+{ }
 
-// -------------------------------------------------------------------
+Tst50AntiProtonICRU49::~Tst50AntiProtonICRU49()
+{ }
 
-#ifndef TST50PHYSICSLIST_HH
-#define TST50PHYSICSLIST_HH 1
+void Tst50AntiProtonICRU49::ConstructProcess()
+{
 
-#include "G4VModularPhysicsList.hh"
-#include "globals.hh"
+theParticleIterator->reset();
 
-class Tst50PhysicsListMessenger;
+  while( (*theParticleIterator)() )
+    {
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* manager = particle->GetProcessManager();
+      G4String particleName = particle->GetParticleName();
+     
+      if (particleName == "anti_proton" )
+	{
+	  G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();
+          // G4VProcess*  multipleScattering= new G4MultipleScattering(); 
+	  ionisation -> SetEnlossFluc(false); 
 
-class Tst50PhysicsList: public G4VModularPhysicsList {
-public:
-  
-  Tst50PhysicsList();
+          ionisation -> SetNuclearStoppingOn() ;
+          ionisation -> SetBarkasOn();
 
-  virtual ~Tst50PhysicsList();
-
-  virtual void SetCuts();
-  
-  // Register PhysicsList chunks
-  void AddPhysicsList(const G4String& name);
-
-  // Production thresholds, expressed in range
-  void SetGammaCut(G4double cut);
-  void SetElectronCut(G4double cut);
-  void SetParticleCut(G4double value);
-  // Production thresholds, expressed in energy, for photons, electrons and both
-private:
-
-  G4bool electronIsRegistered;
-  G4bool positronIsRegistered;
-  G4bool photonIsRegistered;
-  G4bool protonIsRegistered;
-  G4bool anti_protonIsRegistered;
-  G4bool alphaIsRegistered;
-  G4double cutForGamma;
-  G4double cutForElectron;
-
-  Tst50PhysicsListMessenger* messenger;
-
-};
-
-#endif
-
-
-
-
-
-
-
+          manager -> AddProcess(new G4StepLimiter(),-1,-1,3);
+	  manager -> AddProcess(ionisation,-1,2,2);
+          //  manager->AddProcess(multipleScattering,-1,1,1);  	
+	}	
+    }
+}

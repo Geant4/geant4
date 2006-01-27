@@ -1,0 +1,103 @@
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 0
+/event/verbose 0
+/physics/addPhysics photon-epdl
+/physics/addPhysics electron-eedl
+/physics/addPhysics positron-standard
+####################################
+# Alternative approaches
+###################################
+#/physics/addPhysics anti_proton-ICRU49
+/physics/addPhysics anti_proton-standard
+#/physics/addPhysics proton-standard
+#/physics/addPhysics anti_proton-ziegler85
+#/physics/addPhysics anti_proton-ziegler2000
+####################################
+/target/setUserLimits true
+/physics/cutE 1000000. m
+/run/initialize
+/target/setTargetMat Aluminium
+/target/setTargetThick 15000000. cm
+/target/setTargetX 15000000. cm
+/target/setTargetY 15000000. cm
+/target/update
+/process/inactivate msc
+/process/eLoss/fluct false
+/gun/particle anti_proton
+/gun/position 0. 0. 0.
+/gun/randomDirection on 
+/target/setMaxStep 0.001 micrometer
+/gun/energy 0.001 MeV
+/run/beamOn 1
+/target/setMaxStep 0.01 micrometer
+/gun/energy    0.01 MeV
+/run/beamOn 1
+/gun/energy    0.02 MeV
+/run/beamOn 1
+/gun/energy    0.03 MeV
+/run/beamOn 1
+/gun/energy    0.04 MeV
+/run/beamOn 1
+/gun/energy    0.05 MeV
+/run/beamOn 1
+/gun/energy    0.06 MeV
+/run/beamOn 1 
+/target/setMaxStep 0.01 micrometer
+/gun/energy    0.07 MeV
+/run/beamOn 1
+/gun/energy    0.08 MeV
+/run/beamOn 1
+/gun/energy    0.09 MeV
+/run/beamOn 1
+/gun/energy    0.10 MeV
+/run/beamOn 1
+/gun/energy    0.20 MeV
+/run/beamOn 1
+/gun/energy    0.30 MeV
+/run/beamOn 1
+/gun/energy    0.40 MeV
+/run/beamOn 1
+/gun/energy    0.50 MeV
+/run/beamOn 1
+/gun/energy 1. MeV
+/run/beamOn 1
+/gun/energy 1.5 MeV
+/run/beamOn 1
+/target/setMaxStep 0.1 micrometer
+/gun/energy 2. MeV
+/run/beamOn 1
+/gun/energy 3. MeV
+/run/beamOn 1
+/gun/energy 4. MeV
+/run/beamOn 1
+/gun/energy 5. MeV 
+/run/beamOn 1
+/gun/energy 6. MeV 
+/run/beamOn 1
+/gun/energy 7. MeV 
+/run/beamOn 1
+/gun/energy 8. MeV 
+/run/beamOn 1
+/target/setMaxStep 1. micrometer
+/gun/energy 9. MeV 
+/run/beamOn 1
+/gun/energy 10. MeV 
+/run/beamOn 1
+/target/setMaxStep 10. micrometer
+/gun/energy 50. MeV 
+/run/beamOn 1
+/gun/energy 100. MeV 
+/run/beamOn 1
+/target/setMaxStep 100. micrometer
+/gun/energy 500. MeV 
+/run/beamOn 1
+/gun/energy 1. GeV 
+/run/beamOn 1
+
+
+
+
+
+
+

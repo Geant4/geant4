@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50PhysicsList.cc,v 1.24 2004-11-25 09:47:32 guatelli Exp $
+// $Id: Tst50PhysicsList.cc,v 1.25 2006-01-27 11:18:49 chauvie Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Unknown (contact: Maria.Grazia.Pia@cern.ch)
@@ -28,6 +28,7 @@
 // History:
 // -----------
 // 22 Feb 2003 MGP          Re-designed for modular Physics List
+// 22 Feb 2005 SC           Added Antiproton Processes
 //
 // -------------------------------------------------------------------
 
@@ -53,6 +54,8 @@
 #include "Tst50ProtonStandard.hh"
 #include "Tst50ProtonICRU49.hh"
 #include "Tst50ProtonZiegler85.hh"
+#include "Tst50AntiProtonICRU49.hh"
+#include "Tst50AntiProtonZiegler85.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -64,12 +67,14 @@
 #include "G4LowEnergyIonisation.hh"
 #include "G4LowEnergyBremsstrahlung.hh"
 #include "Tst50ProtonZiegler2000.hh"
+#include "Tst50AntiProtonZiegler2000.hh"
 
 Tst50PhysicsList::Tst50PhysicsList(): G4VModularPhysicsList(),
 				      electronIsRegistered(false), 
 				      positronIsRegistered(false),
 				      photonIsRegistered(false), 
                                       protonIsRegistered(false),
+                                      anti_protonIsRegistered(false),
                                       alphaIsRegistered(false)
 {
   defaultCutValue = 0.1 * mm;
@@ -378,6 +383,51 @@ if (name == "proton-standard")
 	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
 	  RegisterPhysics( new Tst50ProtonStandard(name) );
 	  protonIsRegistered = true;
+	}
+    }
+// Anti Proton
+
+ if (name == "anti_proton-ICRU49") 
+    {
+      if (anti_protonIsRegistered) 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- antiproton e.m. List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new Tst50AntiProtonICRU49(name) );
+	  anti_protonIsRegistered = true;
+	}
+    }
+ if (name == "anti_proton-ziegler2000") 
+    {
+      if (anti_protonIsRegistered) 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- anti proton e.m. List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new Tst50AntiProtonZiegler2000(name) );
+	  anti_protonIsRegistered = true;
+	}
+    }
+
+if (name == "anti_proton-ziegler85") 
+    {
+      if (anti_protonIsRegistered) 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- anti proton e.m. List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new Tst50AntiProtonZiegler85(name) );
+	  anti_protonIsRegistered = true;
 	}
     }
 
