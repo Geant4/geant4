@@ -128,6 +128,9 @@ muPairProd:   tables are built for  mu-
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+ G4NuclearLevelManager: nuclide (75,191) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (79,201) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (79,202) does not have a gamma levels file
 #
 # neutron at 100 GeV in Pb
 #
@@ -136,6 +139,7 @@ msc:  Model variant of multiple scattering for pi-
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 200
+ G4NuclearLevelManager: nuclide (78,201) does not have a gamma levels file
 #
 # pi+ at 100 GeV in Pb
 #
@@ -152,6 +156,8 @@ SimpleBox is now made of Pb
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 200
+ G4NuclearLevelManager: nuclide (77,198) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (79,203) does not have a gamma levels file
 #
 # kaon+ at 100 GeV in Pb
 #
@@ -465,6 +471,7 @@ msc:  Model variant of multiple scattering for pi-
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 200
+ G4NuclearLevelManager: nuclide (2,4) does not have a gamma levels file
 #
 # pi+ at 100 GeV in Air
 #

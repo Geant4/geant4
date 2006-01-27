@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-00-ref-00    (16-December-2005)
+ Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -9,11 +9,11 @@
 
 ***** Table : Nb of materials = 12 *****
 
- Material:      Air     density:  1.290 kg/m3   temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
+ Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
 
- Material: H2liquid     density: 70.800 kg/m3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.923 m  
+ Material: H2liquid     density: 70.800 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.923 m  
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
@@ -64,11 +64,6 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
-  FukuiRenderer (DAWN)
-  OpenGLImmediateX (OGLIX)
-  OpenGLStoredX (OGLSX)
-  VRML1 (VRML1)
-  VRML2 (VRML2)
 
 Registering model factories...
 /run/verbose 2
@@ -120,18 +115,6 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
-1 materials minKinEnergy= 0.0001 maxKinEnergy= 1e+08
-1 materials minKinEnergy= 0.0001 maxKinEnergy= 1e+08
-1 materials minKinEnergy= 0.0001 maxKinEnergy= 1e+08
-1 materials minKinEnergy= 0.0001 maxKinEnergy= 1e+08
-1 materials minKinEnergy= 0.0001 maxKinEnergy= 1e+08
-1 materials minKinEnergy= 0.0001 maxKinEnergy= 1e+08
-1 materials minKinEnergy= 0.0001 maxKinEnergy= 1e+08
-1 materials minKinEnergy= 0.0001 maxKinEnergy= 1e+08
-1 materials minKinEnergy= 0.0001 maxKinEnergy= 1e+08
-1 materials minKinEnergy= 0.0001 maxKinEnergy= 1e+08
-1 materials minKinEnergy= 0.0001 maxKinEnergy= 1e+08
-1 materials minKinEnergy= 0.0001 maxKinEnergy= 1e+08
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -261,7 +244,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=13.45s Real=24.19s Sys=10.39s
+  User=172.86s Real=220.23s Sys=21.56s
 
  ======================== run summary ======================
 
@@ -269,29 +252,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.810 MeV
+ total energy deposit: 99.814 MeV
 
- nb tracks/event   neutral:     27.977   charged:    148.300
- nb  steps/event   neutral:    141.333   charged:    330.616
+ nb tracks/event   neutral:     27.950   charged:    148.315
+ nb  steps/event   neutral:    141.143   charged:    331.517
 
  nb of process calls per event: 
            brem       eIoni         msc       compt        phot        conv     annihilTransportation
-         26.289     187.535     115.376     113.355      25.609       1.413       1.413       0.958
+         26.275     187.963     115.867     113.193      25.590       1.411       1.412       0.951
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.167 cm    rms = 3.819 cm 
- proj Range = 9.734 cm    rms = 3.555 cm 
- proj/true  = 0.872
- transverse dispersion at end = 1.694 cm 
-      mass true Range from simulation = 30.151 g/cm2
+ true Range = 11.062 cm    rms = 3.743 cm 
+ proj Range = 9.604 cm    rms = 3.450 cm 
+ proj/true  = 0.868
+ transverse dispersion at end = 1.750 cm 
+      mass true Range from simulation = 29.869 g/cm2
        from PhysicsTable (csda range) = 31.739 g/cm2
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2127916904, 2057285353
+ Current couple of seeds = 217922287, 163735052
 ----------------------------------------
 #
 /process/eLoss/verbose 0
@@ -319,7 +302,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2127916904, 2057285353
+ Current couple of seeds = 217922287, 163735052
 ----------------------------------------
 Start Run processing.
 
@@ -327,7 +310,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=29.78s Real=40.22s Sys=9.95s
+  User=343.39s Real=438.68s Sys=42.51s
 
  ======================== run summary ======================
 
@@ -335,29 +318,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.819 MeV
+ total energy deposit: 99.774 MeV
 
- nb tracks/event   neutral:     36.599   charged:    291.808
- nb  steps/event   neutral:    147.085   charged:    737.784
+ nb tracks/event   neutral:     36.329   charged:    290.728
+ nb  steps/event   neutral:    146.361   charged:    735.487
 
  nb of process calls per event: 
-          eIoni        brem         msc       compt        phot        conv     annihilTransportation
-        450.983      34.864     250.541     110.486      34.295       1.389       1.389       0.922
+           brem       eIoni         msc        phot       compt        conv     annihilTransportation
+         34.633     449.505     249.970      34.010     110.032       1.373       1.373       0.954
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.198 cm    rms = 3.854 cm 
- proj Range = 9.717 cm    rms = 3.557 cm 
- proj/true  = 0.868
- transverse dispersion at end = 1.799 cm 
-      mass true Range from simulation = 30.235 g/cm2
+ true Range = 11.297 cm    rms = 3.862 cm 
+ proj Range = 9.823 cm    rms = 3.576 cm 
+ proj/true  = 0.870
+ transverse dispersion at end = 1.764 cm 
+      mass true Range from simulation = 30.501 g/cm2
        from PhysicsTable (csda range) = 31.739 g/cm2
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2041734004, 1234488907
+ Current couple of seeds = 1860423910, 1288711685
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

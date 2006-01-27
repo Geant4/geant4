@@ -7,7 +7,7 @@
 *************************************************************
 
 
-<<< Geant4 Physics List engine packaging library: PACK 3.0
+<<< Geant4 Physics List engine packaging library: PACK 5.0
 <<< Geant4 Physics List simulation engine: QGSP 3.0
 
 Visualization Manager instantiating...
@@ -137,26 +137,26 @@ Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 0 isolated muon found.
 ++++++++ event aborted
 >>> Event 0
-     25 hits are stored in ExN04TrackerHitsCollection.
-     1 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.17259913 (GeV)
+     20 hits are stored in ExN04TrackerHitsCollection.
+     2 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.17231072 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 ### Run 1 start.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 0 isolated muon found.
 ++++++++ event aborted
 >>> Event 0
-     21 hits are stored in ExN04TrackerHitsCollection.
+     20 hits are stored in ExN04TrackerHitsCollection.
      2 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.17223004 (GeV)
+     Total energy deposition in calorimeter : 0.17344108 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 0 isolated muon found.
 ++++++++ event aborted
 >>> Event 1
-     20 hits are stored in ExN04TrackerHitsCollection.
+     21 hits are stored in ExN04TrackerHitsCollection.
      2 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.17281713 (GeV)
+     Total energy deposition in calorimeter : 0.17261608 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Graphics systems deleted.
 Visualization Manager deleting...

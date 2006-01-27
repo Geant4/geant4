@@ -317,6 +317,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 10
+ G4NuclearLevelManager: nuclide (2,4) does not have a gamma levels file
 #
 # proton at 1 GeV in Air
 #

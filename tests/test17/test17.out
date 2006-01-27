@@ -247,21 +247,22 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 0 start.
 Start Run processing.
+EvtNo= 901  length= 0.0396456  xend= -0.0263593
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.88s Real=7.92s Sys=2s
+  User=5.61s Real=7.49s Sys=1.84s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.18416 +- 0.00531784  microns 
-    CSDA  Range  in absorber = 9.03523 +- 0.00655171  microns 
+ end of Run TotNbofEvents = 999 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
+    Track Length in absorber = 9.18278 +- 0.00523467  microns 
+    CSDA  Range  in absorber = 9.0506 +- 0.00588475  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.125163 +- 0.00531784 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.166232 +- 0.00655171 microns 
+    Track Length (G4 - ICRU49) = 0.12378 +- 0.00523467 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.181601 +- 0.00588475 microns 
 
 Average Number electrons per event = 0
 Average Number photons per event   = 0
@@ -293,12 +294,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=6.02s Real=7.69s Sys=1.67s
+  User=5.6s Real=7.34s Sys=1.73s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.18181 +- 0.00583326  microns 
-    CSDA  Range  in absorber = 9.02246 +- 0.00671245  microns 
+    Track Length in absorber = 9.18252 +- 0.0055787  microns 
+    CSDA  Range  in absorber = 9.04955 +- 0.00538678  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
@@ -331,17 +332,1017 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 2 start.
 Start Run processing.
+EvtNo= 0  length= 0.00857242  xend= 0.00206761
+EvtNo= 1  length= 0.00855958  xend= 0.000839747
+EvtNo= 2  length= 0.00860205  xend= 0.0025119
+EvtNo= 3  length= 0.0085673  xend= 0.00129851
+EvtNo= 4  length= 0.00855429  xend= 0.00202699
+EvtNo= 5  length= 0.00850562  xend= 0.00123035
+EvtNo= 6  length= 0.00856739  xend= 0.000647543
+EvtNo= 7  length= 0.00856021  xend= 0.000777665
+EvtNo= 8  length= 0.00854496  xend= 0.00355148
+EvtNo= 9  length= 0.00857862  xend= 0.00266545
+EvtNo= 10  length= 0.0067453  xend= -1.80734e-15
+EvtNo= 11  length= 0.00850242  xend= 0.00155417
+EvtNo= 12  length= 0.00860679  xend= 0.00119275
+EvtNo= 13  length= 0.00852976  xend= 0.000602051
+EvtNo= 14  length= 0.00860536  xend= 0.000453859
+EvtNo= 15  length= 0.00849346  xend= 0.000432863
+EvtNo= 16  length= 0.00863106  xend= 0.00098465
+EvtNo= 17  length= 0.00860419  xend= 0.00230699
+EvtNo= 18  length= 0.00853456  xend= 0.00155114
+EvtNo= 19  length= 0.00856056  xend= 0.0010575
+EvtNo= 20  length= 0.131066  xend= -0.0875836
+EvtNo= 21  length= 0.00859668  xend= 0.00156616
+EvtNo= 22  length= 0.00854454  xend= 0.000790659
+EvtNo= 23  length= 0.00852124  xend= 0.00147293
+EvtNo= 24  length= 0.00853192  xend= 0.00146241
+EvtNo= 25  length= 0.00860321  xend= 0.000962461
+EvtNo= 26  length= 0.00858229  xend= 0.00251891
+EvtNo= 27  length= 0.00846002  xend= 0.00120091
+EvtNo= 28  length= 0.00855264  xend= 0.0004322
+EvtNo= 29  length= 0.00862727  xend= 0.000282588
+EvtNo= 30  length= 0.00852761  xend= 0.0010661
+EvtNo= 31  length= 0.00858686  xend= 0.000295735
+EvtNo= 32  length= 0.00854602  xend= 0.00206135
+EvtNo= 33  length= 0.0085726  xend= 0.000794121
+EvtNo= 34  length= 0.00858141  xend= 0.0019344
+EvtNo= 35  length= 0.0085774  xend= 0.00176903
+EvtNo= 36  length= 0.00855406  xend= 0.00111294
+EvtNo= 37  length= 0.0085274  xend= 0.00170106
+EvtNo= 38  length= 0.00853863  xend= 0.00241862
+EvtNo= 39  length= 0.00862266  xend= 0.000329819
+EvtNo= 40  length= 0.00854545  xend= 0.00080344
+EvtNo= 41  length= 0.00858408  xend= 0.00077191
+EvtNo= 42  length= 0.00866622  xend= 0.00169419
+EvtNo= 43  length= 0.167138  xend= -0.0364381
+EvtNo= 44  length= 0.00855493  xend= 0.000935239
+EvtNo= 45  length= 0.00860065  xend= 0.00145879
+EvtNo= 46  length= 0.00852819  xend= 0.000640341
+EvtNo= 47  length= 0.00864562  xend= 0.000773103
+EvtNo= 48  length= 0.00852428  xend= 0.000715674
+EvtNo= 49  length= 0.00855644  xend= 0.00108135
+EvtNo= 50  length= 0.00858362  xend= 0.00115735
+EvtNo= 51  length= 0.00853457  xend= 0.000888066
+EvtNo= 52  length= 0.00860459  xend= 0.00191395
+EvtNo= 53  length= 0.00854371  xend= 0.00270907
+EvtNo= 54  length= 0.00861383  xend= 0.00103972
+EvtNo= 55  length= 0.00852684  xend= 0.00154716
+EvtNo= 56  length= 0.00854603  xend= 0.00163028
+EvtNo= 57  length= 0.00848806  xend= 0.00214867
+EvtNo= 58  length= 0.00853139  xend= 0.00116666
+EvtNo= 59  length= 0.00856975  xend= 0.000814324
+EvtNo= 60  length= 0.00857036  xend= 0.000331002
+EvtNo= 61  length= 0.00856308  xend= 0.00242489
+EvtNo= 62  length= 0.00856817  xend= 0.00128305
+EvtNo= 63  length= 0.00850429  xend= 0.00226925
+EvtNo= 64  length= 0.0086641  xend= 0.00159506
+EvtNo= 65  length= 0.00861612  xend= 0.00158742
+EvtNo= 66  length= 0.0085854  xend= 0.00161383
+EvtNo= 67  length= 0.00853263  xend= 0.00142987
+EvtNo= 68  length= 0.00845137  xend= 0.00206552
+EvtNo= 69  length= 0.00852455  xend= 0.00123475
+EvtNo= 70  length= 0.00860668  xend= 0.000965323
+EvtNo= 71  length= 0.00854655  xend= 0.00270821
+EvtNo= 72  length= 0.00856133  xend= 0.000962053
+EvtNo= 73  length= 0.00848985  xend= 0.00122802
+EvtNo= 74  length= 0.00856139  xend= 0.00143203
+EvtNo= 75  length= 0.00858756  xend= 0.00119084
+EvtNo= 76  length= 0.00858205  xend= 0.000876325
+EvtNo= 77  length= 0.00851138  xend= 0.00424924
+EvtNo= 78  length= 0.00858482  xend= 0.00111146
+EvtNo= 79  length= 0.00861638  xend= 0.00058797
+EvtNo= 80  length= 0.00853185  xend= 0.00027733
+EvtNo= 81  length= 0.00850225  xend= 0.000913904
+EvtNo= 82  length= 0.00864846  xend= 0.00177374
+EvtNo= 83  length= 0.00864862  xend= 0.00137823
+EvtNo= 84  length= 0.00851489  xend= 0.000240548
+EvtNo= 85  length= 0.00550186  xend= -5.04886e-16
+EvtNo= 86  length= 0.00859591  xend= 0.00241364
+EvtNo= 87  length= 0.00506406  xend= -0.000360256
+EvtNo= 88  length= 0.0085705  xend= 0.00129797
+EvtNo= 89  length= 0.0085994  xend= 0.00199787
+EvtNo= 90  length= 0.00851452  xend= 0.00124735
+EvtNo= 91  length= 0.00859328  xend= 0.00184349
+EvtNo= 92  length= 0.00811289  xend= -2.12631e-15
+EvtNo= 93  length= 0.00856585  xend= 0.00148976
+EvtNo= 94  length= 0.00852309  xend= 0.00131588
+EvtNo= 95  length= 0.00861932  xend= 0.00063863
+EvtNo= 96  length= 0.00854789  xend= 0.00155562
+EvtNo= 97  length= 0.00866062  xend= 0.0011122
+EvtNo= 98  length= 0.00855676  xend= 0.00138493
+EvtNo= 99  length= 0.00862248  xend= 0.00227474
+EvtNo= 100  length= 0.00858131  xend= 0.00074077
+EvtNo= 101  length= 0.00855508  xend= 0.000678156
+EvtNo= 102  length= 0.00853423  xend= 0.000416734
+EvtNo= 103  length= 0.00855429  xend= 0.000681965
+EvtNo= 104  length= 0.00857011  xend= 0.000480597
+EvtNo= 105  length= 0.00854201  xend= 0.000987304
+EvtNo= 106  length= 0.00856996  xend= 0.00124484
+EvtNo= 107  length= 0.0085697  xend= 0.00319372
+EvtNo= 108  length= 0.00860018  xend= 0.00256375
+EvtNo= 109  length= 0.00735061  xend= -2.92827e-15
+EvtNo= 110  length= 0.00854131  xend= 0.00223318
+EvtNo= 111  length= 0.00859543  xend= 0.00125255
+EvtNo= 112  length= 0.00865796  xend= 0.0017976
+EvtNo= 113  length= 0.00866775  xend= 0.00115403
+EvtNo= 114  length= 0.00861527  xend= 0.00206667
+EvtNo= 115  length= 0.00854157  xend= 0.00044698
+EvtNo= 116  length= 0.00849655  xend= 0.00155912
+EvtNo= 117  length= 0.00525564  xend= -3.05978e-15
+EvtNo= 118  length= 0.00860081  xend= 0.00147076
+EvtNo= 119  length= 0.00855529  xend= 0.00194923
+EvtNo= 120  length= 0.0086612  xend= 0.00215437
+EvtNo= 121  length= 0.00517966  xend= -2.10316e-15
+EvtNo= 122  length= 0.00851612  xend= 0.00194475
+EvtNo= 123  length= 0.00852679  xend= 0.00146133
+EvtNo= 124  length= 0.00864355  xend= 0.00324037
+EvtNo= 125  length= 0.00863459  xend= 0.000668198
+EvtNo= 126  length= 0.00856524  xend= 0.00101385
+EvtNo= 127  length= 0.00677892  xend= -7.09231e-16
+EvtNo= 128  length= 0.00855086  xend= 0.000719793
+EvtNo= 129  length= 0.00861894  xend= 0.000717181
+EvtNo= 130  length= 0.00859088  xend= 0.00292476
+EvtNo= 131  length= 0.00858599  xend= 0.0013533
+EvtNo= 132  length= 0.00854945  xend= 0.000958864
+EvtNo= 133  length= 0.008556  xend= 0.00302371
+EvtNo= 134  length= 0.00854338  xend= 0.00164474
+EvtNo= 135  length= 0.008605  xend= 0.000538502
+EvtNo= 136  length= 0.00861669  xend= 0.00171586
+EvtNo= 137  length= 0.00862956  xend= 0.00258541
+EvtNo= 138  length= 0.00854017  xend= 0.000906872
+EvtNo= 139  length= 0.00855963  xend= 0.00152625
+EvtNo= 140  length= 0.00854454  xend= 0.00124205
+EvtNo= 141  length= 0.0085401  xend= 0.00111033
+EvtNo= 142  length= 0.00857826  xend= 0.00249881
+EvtNo= 143  length= 0.00850946  xend= 0.00161824
+EvtNo= 144  length= 0.00854254  xend= 0.000110436
+EvtNo= 145  length= 0.00616814  xend= -0.00040387
+EvtNo= 146  length= 0.0085741  xend= 0.000870509
+EvtNo= 147  length= 0.00849886  xend= 0.00192554
+EvtNo= 148  length= 0.00856508  xend= 0.00192449
+EvtNo= 149  length= 0.00859549  xend= 0.00114261
+EvtNo= 150  length= 0.00857514  xend= 0.00156634
+EvtNo= 151  length= 0.00854225  xend= 0.000660904
+EvtNo= 152  length= 0.133657  xend= -0.0614032
+EvtNo= 153  length= 0.00857312  xend= 0.0015879
+EvtNo= 154  length= 0.00853328  xend= 0.00127429
+EvtNo= 155  length= 0.00688288  xend= -0.000392475
+EvtNo= 156  length= 0.00862749  xend= 0.00048867
+EvtNo= 157  length= 0.00860428  xend= 0.0017614
+EvtNo= 158  length= 0.00852452  xend= 0.00158045
+EvtNo= 159  length= 0.00860453  xend= 8.08346e-05
+EvtNo= 160  length= 0.00857598  xend= 0.00191716
+EvtNo= 161  length= 0.00861185  xend= 0.00227055
+EvtNo= 162  length= 0.00853117  xend= 0.00056156
+EvtNo= 163  length= 0.0086008  xend= 0.00278838
+EvtNo= 164  length= 0.00855069  xend= 0.002184
+EvtNo= 165  length= 0.00860515  xend= 0.00138671
+EvtNo= 166  length= 0.00857574  xend= 0.000740969
+EvtNo= 167  length= 0.00853102  xend= 0.00267569
+EvtNo= 168  length= 0.00858762  xend= 0.00334429
+EvtNo= 169  length= 0.00855319  xend= 0.00232249
+EvtNo= 170  length= 0.00855257  xend= 0.000739298
+EvtNo= 171  length= 0.00857146  xend= 0.00212605
+EvtNo= 172  length= 0.00855976  xend= 0.00143873
+EvtNo= 173  length= 0.00857078  xend= 0.000201992
+EvtNo= 174  length= 0.00846927  xend= 0.00229772
+EvtNo= 175  length= 0.00860928  xend= 0.000738427
+EvtNo= 176  length= 0.0086037  xend= 0.000789192
+EvtNo= 177  length= 0.00862159  xend= 0.00207505
+EvtNo= 178  length= 0.00854323  xend= 0.00227013
+EvtNo= 179  length= 0.00862703  xend= 0.00320789
+EvtNo= 180  length= 0.00860042  xend= 0.0014935
+EvtNo= 181  length= 0.00854448  xend= 0.00148532
+EvtNo= 182  length= 0.00857998  xend= 0.00192185
+EvtNo= 183  length= 0.00859045  xend= 0.000705339
+EvtNo= 184  length= 0.00858441  xend= 0.000282004
+EvtNo= 185  length= 0.0085836  xend= 0.00100872
+EvtNo= 186  length= 0.00855513  xend= 0.000522147
+EvtNo= 187  length= 0.00857998  xend= 0.00257967
+EvtNo= 188  length= 0.00847512  xend= 0.00187904
+EvtNo= 189  length= 0.00860435  xend= 0.0014263
+EvtNo= 190  length= 0.00854885  xend= 0.0010312
+EvtNo= 191  length= 0.0086088  xend= 0.00202411
+EvtNo= 192  length= 0.00865375  xend= 0.000637106
+EvtNo= 193  length= 0.00855231  xend= 0.000695734
+EvtNo= 194  length= 0.00854968  xend= 0.00179194
+EvtNo= 195  length= 0.00856647  xend= 0.00202776
+EvtNo= 196  length= 0.0085777  xend= 0.00259739
+EvtNo= 197  length= 0.00854679  xend= 0.0017675
+EvtNo= 198  length= 0.00854551  xend= 0.0010769
+EvtNo= 199  length= 0.00854676  xend= 0.00184876
+EvtNo= 200  length= 0.00862692  xend= 0.000356131
+EvtNo= 201  length= 0.00854856  xend= 0.00168719
+EvtNo= 202  length= 0.00858502  xend= 0.000668473
+EvtNo= 203  length= 0.00853186  xend= 0.0024585
+EvtNo= 204  length= 0.00853006  xend= 0.000521432
+EvtNo= 205  length= 0.00856247  xend= 0.0017367
+EvtNo= 206  length= 0.00847816  xend= 0.00377332
+EvtNo= 207  length= 0.00863121  xend= 0.00111604
+EvtNo= 208  length= 0.00853083  xend= 0.00179181
+EvtNo= 209  length= 0.00846198  xend= 0.000728014
+EvtNo= 210  length= 0.00865084  xend= 0.000956745
+EvtNo= 211  length= 0.00855165  xend= 0.00304178
+EvtNo= 212  length= 0.0085969  xend= 0.000393044
+EvtNo= 213  length= 0.00700018  xend= -2.33142e-15
+EvtNo= 214  length= 0.00854069  xend= 0.00270179
+EvtNo= 215  length= 0.00850961  xend= 0.000573152
+EvtNo= 216  length= 0.00858005  xend= 0.00114373
+EvtNo= 217  length= 0.00857857  xend= 0.00143174
+EvtNo= 218  length= 0.00855993  xend= 0.000874458
+EvtNo= 219  length= 0.00862795  xend= 0.0023561
+EvtNo= 220  length= 0.00856798  xend= 0.00169626
+EvtNo= 221  length= 0.00853966  xend= 0.000597121
+EvtNo= 222  length= 0.00866623  xend= 0.00155435
+EvtNo= 223  length= 0.00719189  xend= -0.000300551
+EvtNo= 224  length= 0.00859356  xend= 0.00313312
+EvtNo= 225  length= 0.00856224  xend= 0.000731775
+EvtNo= 226  length= 0.00858584  xend= 0.00149597
+EvtNo= 227  length= 0.00859862  xend= 0.00235221
+EvtNo= 228  length= 0.00406746  xend= -0.0002807
+EvtNo= 229  length= 0.00851709  xend= 0.00231818
+EvtNo= 230  length= 0.00862478  xend= 0.00243066
+EvtNo= 231  length= 0.00395103  xend= -3.02566e-15
+EvtNo= 232  length= 0.00855816  xend= 0.00166471
+EvtNo= 233  length= 0.00862228  xend= 0.00266227
+EvtNo= 234  length= 0.00862671  xend= 0.00170368
+EvtNo= 235  length= 0.00856168  xend= 0.00187083
+EvtNo= 236  length= 0.00862491  xend= 0.00108815
+EvtNo= 237  length= 0.00857758  xend= 0.00103253
+EvtNo= 238  length= 0.00859934  xend= 0.00152003
+EvtNo= 239  length= 0.00858867  xend= 0.00136561
+EvtNo= 240  length= 0.00859625  xend= 0.00113591
+EvtNo= 241  length= 0.00852977  xend= 0.000435966
+EvtNo= 242  length= 0.008526  xend= 0.00102123
+EvtNo= 243  length= 0.00856368  xend= 0.00221152
+EvtNo= 244  length= 0.00853909  xend= 0.00117582
+EvtNo= 245  length= 0.00857127  xend= 0.000742059
+EvtNo= 246  length= 0.00861214  xend= 0.00192148
+EvtNo= 247  length= 0.00844399  xend= -2.94136e-15
+EvtNo= 248  length= 0.00856625  xend= 0.0028663
+EvtNo= 249  length= 0.00858724  xend= 0.00141806
+EvtNo= 250  length= 0.0085682  xend= 0.00135805
+EvtNo= 251  length= 0.00856282  xend= 0.00112047
+EvtNo= 252  length= 0.00855612  xend= 0.00171318
+EvtNo= 253  length= 0.00861384  xend= 0.00106714
+EvtNo= 254  length= 0.00855591  xend= 0.00181096
+EvtNo= 255  length= 0.00861937  xend= 0.00258251
+EvtNo= 256  length= 0.00860209  xend= 0.00104061
+EvtNo= 257  length= 0.00856374  xend= 0.00263125
+EvtNo= 258  length= 0.0085383  xend= 0.000821949
+EvtNo= 259  length= 0.00857732  xend= 0.00174409
+EvtNo= 260  length= 0.00844971  xend= 0.000178082
+EvtNo= 261  length= 0.00859258  xend= 0.00146249
+EvtNo= 262  length= 0.00850451  xend= 0.00184655
+EvtNo= 263  length= 0.00856008  xend= 0.00145016
+EvtNo= 264  length= 0.00852443  xend= 0.00116387
+EvtNo= 265  length= 0.00859246  xend= 0.000784388
+EvtNo= 266  length= 0.00852768  xend= 0.00125358
+EvtNo= 267  length= 0.00855834  xend= 0.00171093
+EvtNo= 268  length= 0.00855106  xend= 0.00131274
+EvtNo= 269  length= 0.00860286  xend= 0.00124441
+EvtNo= 270  length= 0.00858349  xend= 0.00206313
+EvtNo= 271  length= 0.00860451  xend= 0.00202982
+EvtNo= 272  length= 0.00857941  xend= 0.000877142
+EvtNo= 273  length= 0.00858707  xend= 0.00084836
+EvtNo= 274  length= 0.00856712  xend= 0.00248904
+EvtNo= 275  length= 0.00857484  xend= 0.000716866
+EvtNo= 276  length= 0.00859292  xend= 0.000405674
+EvtNo= 277  length= 0.0085312  xend= 0.00175013
+EvtNo= 278  length= 0.00865306  xend= 0.00235264
+EvtNo= 279  length= 0.00856138  xend= 0.00119484
+EvtNo= 280  length= 0.0085488  xend= 0.00177849
+EvtNo= 281  length= 0.00855764  xend= 0.000940199
+EvtNo= 282  length= 0.00848005  xend= -3.43571e-15
+EvtNo= 283  length= 0.00816439  xend= -8.84316e-16
+EvtNo= 284  length= 0.00855487  xend= 0.00179341
+EvtNo= 285  length= 0.00853986  xend= 0.00167256
+EvtNo= 286  length= 0.00858567  xend= 0.00216903
+EvtNo= 287  length= 0.00854119  xend= 0.00247733
+EvtNo= 288  length= 0.00856727  xend= 0.00115387
+EvtNo= 289  length= 0.00858513  xend= 0.00263876
+EvtNo= 290  length= 0.00854309  xend= 0.00179501
+EvtNo= 291  length= 0.00792181  xend= -1.83749e-15
+EvtNo= 292  length= 0.00853701  xend= 0.000267851
+EvtNo= 293  length= 0.00850545  xend= 0.000318663
+EvtNo= 294  length= 0.151363  xend= -0.0342026
+EvtNo= 295  length= 0.00856615  xend= 0.00211688
+EvtNo= 296  length= 0.00850184  xend= 0.000415651
+EvtNo= 297  length= 0.00854326  xend= 0.0023805
+EvtNo= 298  length= 0.00855577  xend= 0.00116767
+EvtNo= 299  length= 0.00852675  xend= 0.00193268
+EvtNo= 300  length= 0.00854686  xend= 0.00179418
+EvtNo= 301  length= 0.00850542  xend= 0.000533702
+EvtNo= 302  length= 0.00858343  xend= 0.00265933
+EvtNo= 303  length= 0.00858785  xend= 0.000736635
+EvtNo= 304  length= 0.00859353  xend= 0.00226437
+EvtNo= 305  length= 0.00857178  xend= 0.00222098
+EvtNo= 306  length= 0.00847768  xend= 0.00127363
+EvtNo= 307  length= 0.00853911  xend= 0.00150629
+EvtNo= 308  length= 0.0086091  xend= 0.00183939
+EvtNo= 309  length= 0.00866585  xend= 0.000990894
+EvtNo= 310  length= 0.00861137  xend= 0.0012243
+EvtNo= 311  length= 0.00857257  xend= 0.00122837
+EvtNo= 312  length= 0.00853456  xend= 0.00149002
+EvtNo= 313  length= 0.00852675  xend= 0.000511175
+EvtNo= 314  length= 0.00539944  xend= -1.96468e-15
+EvtNo= 315  length= 0.00414232  xend= -5.85448e-05
+EvtNo= 316  length= 0.0086104  xend= 0.00377767
+EvtNo= 317  length= 0.00823727  xend= -1.24432e-15
+EvtNo= 318  length= 0.0085564  xend= 0.00194021
+EvtNo= 319  length= 0.0086106  xend= 0.00190096
+EvtNo= 320  length= 0.0086037  xend= 0.00119295
+EvtNo= 321  length= 0.00852808  xend= 0.00145541
+EvtNo= 322  length= 0.00860768  xend= 0.00133618
+EvtNo= 323  length= 0.00861208  xend= 0.00108077
+EvtNo= 324  length= 0.00852449  xend= 0.0022828
+EvtNo= 325  length= 0.00854064  xend= 0.00294709
+EvtNo= 326  length= 0.0085699  xend= 0.00148795
+EvtNo= 327  length= 0.00855568  xend= 0.00153961
+EvtNo= 328  length= 0.00850278  xend= 0.00124707
+EvtNo= 329  length= 0.00856006  xend= 0.00189623
+EvtNo= 330  length= 0.00860444  xend= 0.00270155
+EvtNo= 331  length= 0.00852635  xend= 0.00194032
+EvtNo= 332  length= 0.00861534  xend= 0.00183696
+EvtNo= 333  length= 0.00852982  xend= 0.00252731
+EvtNo= 334  length= 0.00856582  xend= 0.00134937
+EvtNo= 335  length= 0.00857336  xend= 0.000254012
+EvtNo= 336  length= 0.00854669  xend= 0.00148827
+EvtNo= 337  length= 0.00859418  xend= 0.00124562
+EvtNo= 338  length= 0.00861622  xend= 0.000397121
+EvtNo= 339  length= 0.00858899  xend= 0.0023313
+EvtNo= 340  length= 0.0085708  xend= 0.00181988
+EvtNo= 341  length= 0.00852051  xend= 0.000940634
+EvtNo= 342  length= 0.00857025  xend= 0.0020816
+EvtNo= 343  length= 0.00856687  xend= 0.0019805
+EvtNo= 344  length= 0.0085748  xend= 0.00135216
+EvtNo= 345  length= 0.00861943  xend= 0.00253543
+EvtNo= 346  length= 0.00860089  xend= 0.0022235
+EvtNo= 347  length= 0.00861378  xend= 0.00155673
+EvtNo= 348  length= 0.00850061  xend= 0.00364119
+EvtNo= 349  length= 0.008593  xend= 0.00093972
+EvtNo= 350  length= 0.00858345  xend= 0.00190968
+EvtNo= 351  length= 0.00867286  xend= 0.00189953
+EvtNo= 352  length= 0.00861678  xend= 0.00185681
+EvtNo= 353  length= 0.00861477  xend= 0.000754088
+EvtNo= 354  length= 0.00857888  xend= 0.00181207
+EvtNo= 355  length= 0.00856972  xend= 0.000401398
+EvtNo= 356  length= 0.00857832  xend= 0.00100007
+EvtNo= 357  length= 0.008555  xend= 0.00201042
+EvtNo= 358  length= 0.0975418  xend= -0.0706805
+EvtNo= 359  length= 0.008574  xend= 0.00197476
+EvtNo= 360  length= 0.00855572  xend= 0.000780014
+EvtNo= 361  length= 0.00858214  xend= 0.00154391
+EvtNo= 362  length= 0.00854435  xend= 0.0010291
+EvtNo= 363  length= 0.00858554  xend= 0.00226013
+EvtNo= 364  length= 0.00856948  xend= 0.00174215
+EvtNo= 365  length= 0.00854263  xend= 0.00106735
+EvtNo= 366  length= 0.00741905  xend= -1.96953e-15
+EvtNo= 367  length= 0.00860052  xend= 0.0015633
+EvtNo= 368  length= 0.00549805  xend= -5.09507e-05
+EvtNo= 369  length= 0.00849447  xend= 0.000156108
+EvtNo= 370  length= 0.0085145  xend= 0.00153113
+EvtNo= 371  length= 0.00864036  xend= 0.00142824
+EvtNo= 372  length= 0.00848549  xend= 0.00173431
+EvtNo= 373  length= 0.00857396  xend= 0.00251631
+EvtNo= 374  length= 0.00855083  xend= 0.00185864
+EvtNo= 375  length= 0.00852555  xend= 0.0010955
+EvtNo= 376  length= 0.00664777  xend= -1.33769e-15
+EvtNo= 377  length= 0.00855  xend= 0.00195221
+EvtNo= 378  length= 0.00752872  xend= -6.36677e-16
+EvtNo= 379  length= 0.00857808  xend= 0.000323978
+EvtNo= 380  length= 0.00858308  xend= 0.0012074
+EvtNo= 381  length= 0.0085328  xend= 0.00109677
+EvtNo= 382  length= 0.00851329  xend= 0.00170086
+EvtNo= 383  length= 0.0085783  xend= 0.000986129
+EvtNo= 384  length= 0.00853826  xend= 0.000837072
+EvtNo= 385  length= 0.00863349  xend= 0.00158011
+EvtNo= 386  length= 0.00852525  xend= 0.000884462
+EvtNo= 387  length= 0.0085749  xend= 0.00146918
+EvtNo= 388  length= 0.00855108  xend= 0.00182283
+EvtNo= 389  length= 0.00862788  xend= 0.00198997
+EvtNo= 390  length= 0.00857662  xend= 0.00140741
+EvtNo= 391  length= 0.00860326  xend= 0.000754865
+EvtNo= 392  length= 0.00858719  xend= 0.00158736
+EvtNo= 393  length= 0.00860913  xend= 0.00138415
+EvtNo= 394  length= 0.00775536  xend= -2.70366e-15
+EvtNo= 395  length= 0.00852894  xend= 0.000359118
+EvtNo= 396  length= 0.00863082  xend= 0.00163821
+EvtNo= 397  length= 0.00853474  xend= 0.00104766
+EvtNo= 398  length= 0.00856663  xend= 0.00127076
+EvtNo= 399  length= 0.00860168  xend= 0.00215827
+EvtNo= 400  length= 0.00855449  xend= 0.00136766
+EvtNo= 401  length= 0.00857724  xend= 0.000626929
+EvtNo= 402  length= 0.0085547  xend= 0.00328371
+EvtNo= 403  length= 0.00857347  xend= 0.000551885
+EvtNo= 404  length= 0.00857347  xend= 0.0016706
+EvtNo= 405  length= 0.00851256  xend= 0.00302188
+EvtNo= 406  length= 0.00856586  xend= 0.00144983
+EvtNo= 407  length= 0.00863841  xend= 0.00222393
+EvtNo= 408  length= 0.00859669  xend= 0.00150699
+EvtNo= 409  length= 0.00850608  xend= 0.00285743
+EvtNo= 410  length= 0.00857782  xend= 0.0010851
+EvtNo= 411  length= 0.00857681  xend= 0.00129245
+EvtNo= 412  length= 0.0086525  xend= 0.00280423
+EvtNo= 413  length= 0.00856921  xend= 0.00117189
+EvtNo= 414  length= 0.00858104  xend= 0.00129199
+EvtNo= 415  length= 0.00862478  xend= 0.000823213
+EvtNo= 416  length= 0.00849377  xend= 0.00154758
+EvtNo= 417  length= 0.00856734  xend= 0.0013104
+EvtNo= 418  length= 0.00857107  xend= 0.00131493
+EvtNo= 419  length= 0.273312  xend= -0.141783
+EvtNo= 420  length= 0.00856093  xend= 0.00124282
+EvtNo= 421  length= 0.00790944  xend= -2.10859e-15
+EvtNo= 422  length= 0.00853794  xend= 0.000181048
+EvtNo= 423  length= 0.0085829  xend= 0.00121266
+EvtNo= 424  length= 0.00854163  xend= 0.000407208
+EvtNo= 425  length= 0.00852603  xend= 0.00069394
+EvtNo= 426  length= 0.00860432  xend= 0.00146184
+EvtNo= 427  length= 0.00852687  xend= 0.000759288
+EvtNo= 428  length= 0.00856291  xend= 0.00135554
+EvtNo= 429  length= 0.00856358  xend= 0.00173408
+EvtNo= 430  length= 0.00851085  xend= 0.00197422
+EvtNo= 431  length= 0.00851208  xend= 0.000910753
+EvtNo= 432  length= 0.00858276  xend= 0.0020853
+EvtNo= 433  length= 0.00854913  xend= 0.000550672
+EvtNo= 434  length= 0.00859565  xend= 0.00172619
+EvtNo= 435  length= 0.00857404  xend= 0.000476657
+EvtNo= 436  length= 0.00851448  xend= 0.0023533
+EvtNo= 437  length= 0.00853689  xend= 0.00112743
+EvtNo= 438  length= 0.00859195  xend= 0.00201092
+EvtNo= 439  length= 0.00862699  xend= 0.00222162
+EvtNo= 440  length= 0.0086319  xend= 0.00117146
+EvtNo= 441  length= 0.00864359  xend= 0.00187308
+EvtNo= 442  length= 0.00852299  xend= 0.00290628
+EvtNo= 443  length= 0.00855386  xend= 0.00207532
+EvtNo= 444  length= 0.00852694  xend= 0.00225486
+EvtNo= 445  length= 0.00853312  xend= 0.000705515
+EvtNo= 446  length= 0.00853357  xend= 0.00130322
+EvtNo= 447  length= 0.00857812  xend= 0.000443841
+EvtNo= 448  length= 0.00853448  xend= 0.00124301
+EvtNo= 449  length= 0.00852966  xend= 0.000519034
+EvtNo= 450  length= 0.00852577  xend= 0.00138869
+EvtNo= 451  length= 0.00529169  xend= -1.91183e-15
+EvtNo= 452  length= 0.00858438  xend= 0.00219222
+EvtNo= 453  length= 0.00858636  xend= 0.0023451
+EvtNo= 454  length= 0.00857322  xend= 0.00090952
+EvtNo= 455  length= 0.0085902  xend= 0.00166252
+EvtNo= 456  length= 0.00849439  xend= 0.00111677
+EvtNo= 457  length= 0.00866553  xend= 0.00236312
+EvtNo= 458  length= 0.00851482  xend= 0.00245664
+EvtNo= 459  length= 0.00858544  xend= 0.00174831
+EvtNo= 460  length= 0.00853706  xend= 0.00181776
+EvtNo= 461  length= 0.00853842  xend= 0.000606781
+EvtNo= 462  length= 0.00861927  xend= 0.00251116
+EvtNo= 463  length= 0.00856884  xend= 0.00200056
+EvtNo= 464  length= 0.00858875  xend= 0.000505056
+EvtNo= 465  length= 0.00857908  xend= 0.00140767
+EvtNo= 466  length= 0.00855793  xend= 0.00310444
+EvtNo= 467  length= 0.00860529  xend= 0.00133069
+EvtNo= 468  length= 0.00862465  xend= 0.000514038
+EvtNo= 469  length= 0.00853573  xend= 0.00139035
+EvtNo= 470  length= 0.00850754  xend= 0.00121863
+EvtNo= 471  length= 0.00858825  xend= 0.00145009
+EvtNo= 472  length= 0.00813647  xend= -5.14996e-16
+EvtNo= 473  length= 0.00852688  xend= 0.00137014
+EvtNo= 474  length= 0.0086124  xend= 0.00197102
+EvtNo= 475  length= 0.00864359  xend= 4.44869e-05
+EvtNo= 476  length= 0.0085543  xend= 0.00174218
+EvtNo= 477  length= 0.00866335  xend= 0.00246559
+EvtNo= 478  length= 0.00851184  xend= 0.000561494
+EvtNo= 479  length= 0.00859812  xend= 0.00170336
+EvtNo= 480  length= 0.00857999  xend= 0.00107488
+EvtNo= 481  length= 0.00499652  xend= -3.40315e-15
+EvtNo= 482  length= 0.00858537  xend= 0.0010601
+EvtNo= 483  length= 0.00855773  xend= 0.0013361
+EvtNo= 484  length= 0.00862598  xend= 0.00149056
+EvtNo= 485  length= 0.089583  xend= -0.0337537
+EvtNo= 486  length= 0.00851281  xend= 0.00231656
+EvtNo= 487  length= 0.00860126  xend= 0.000353482
+EvtNo= 488  length= 0.00863062  xend= 0.00238893
+EvtNo= 489  length= 0.0085625  xend= 0.000371095
+EvtNo= 490  length= 0.00863189  xend= 0.00238505
+EvtNo= 491  length= 0.00846691  xend= 0.00109946
+EvtNo= 492  length= 0.0085865  xend= 0.00248777
+EvtNo= 493  length= 0.00596623  xend= -4.2128e-05
+EvtNo= 494  length= 0.00862845  xend= 0.00181616
+EvtNo= 495  length= 0.236451  xend= -0.188893
+EvtNo= 496  length= 0.00855495  xend= 0.000573216
+EvtNo= 497  length= 0.00855339  xend= 0.00137167
+EvtNo= 498  length= 0.00861532  xend= 0.00181719
+EvtNo= 499  length= 0.00856466  xend= 0.00147897
+EvtNo= 500  length= 0.00861348  xend= 0.00134889
+EvtNo= 501  length= 0.00859043  xend= 0.00247755
+EvtNo= 502  length= 0.0085502  xend= 0.000443008
+EvtNo= 503  length= 0.00856746  xend= 0.00160881
+EvtNo= 504  length= 0.00855117  xend= 0.00223318
+EvtNo= 505  length= 0.00855921  xend= 0.000187975
+EvtNo= 506  length= 0.008546  xend= 0.00223668
+EvtNo= 507  length= 0.00851208  xend= 0.00244328
+EvtNo= 508  length= 0.00857314  xend= 0.0010424
+EvtNo= 509  length= 0.0085724  xend= 0.0026746
+EvtNo= 510  length= 0.0085821  xend= 0.00152099
+EvtNo= 511  length= 0.00863399  xend= 0.00315273
+EvtNo= 512  length= 0.00860666  xend= 0.00252783
+EvtNo= 513  length= 0.00855682  xend= 0.00193391
+EvtNo= 514  length= 0.00846373  xend= 0.0017954
+EvtNo= 515  length= 0.00859979  xend= 0.00171895
+EvtNo= 516  length= 0.00864327  xend= 0.000937765
+EvtNo= 517  length= 0.00854206  xend= 0.00113771
+EvtNo= 518  length= 0.00860799  xend= 0.000540318
+EvtNo= 519  length= 0.00864835  xend= 0.0014741
+EvtNo= 520  length= 0.00858341  xend= 0.000834671
+EvtNo= 521  length= 0.00864925  xend= 0.00114382
+EvtNo= 522  length= 0.00856935  xend= 0.00185796
+EvtNo= 523  length= 0.0085887  xend= 0.000668285
+EvtNo= 524  length= 0.00856447  xend= 0.00310031
+EvtNo= 525  length= 0.00855973  xend= 0.000745885
+EvtNo= 526  length= 0.0085515  xend= 0.000777509
+EvtNo= 527  length= 0.0086011  xend= 0.000917496
+EvtNo= 528  length= 0.00857661  xend= 0.000802853
+EvtNo= 529  length= 0.00857213  xend= 0.000612591
+EvtNo= 530  length= 0.00851747  xend= 0.000346779
+EvtNo= 531  length= 0.00863055  xend= 0.000203579
+EvtNo= 532  length= 0.00855688  xend= 0.00156147
+EvtNo= 533  length= 0.00858031  xend= 0.00283566
+EvtNo= 534  length= 0.00860346  xend= 0.00127886
+EvtNo= 535  length= 0.00564054  xend= -3.13784e-15
+EvtNo= 536  length= 0.00687376  xend= -8.10333e-16
+EvtNo= 537  length= 0.00860558  xend= 0.000770999
+EvtNo= 538  length= 0.00674471  xend= -2.51735e-15
+EvtNo= 539  length= 0.00856052  xend= 0.00194993
+EvtNo= 540  length= 0.00854959  xend= 0.0015813
+EvtNo= 541  length= 0.00853402  xend= 0.000911244
+EvtNo= 542  length= 0.00856765  xend= 0.00107408
+EvtNo= 543  length= 0.00852413  xend= 0.00276608
+EvtNo= 544  length= 0.00853628  xend= 0.00139596
+EvtNo= 545  length= 0.00852083  xend= 0.00124357
+EvtNo= 546  length= 0.00859789  xend= 0.00134929
+EvtNo= 547  length= 0.00853988  xend= 0.00118885
+EvtNo= 548  length= 0.00853624  xend= 0.00239258
+EvtNo= 549  length= 0.00853214  xend= 0.0024429
+EvtNo= 550  length= 0.00855175  xend= 0.00214842
+EvtNo= 551  length= 0.0085282  xend= 0.00197898
+EvtNo= 552  length= 0.00862077  xend= 0.00112839
+EvtNo= 553  length= 0.00857441  xend= 0.00069247
+EvtNo= 554  length= 0.00670775  xend= -2.35798e-15
+EvtNo= 555  length= 0.00862276  xend= 0.00110841
+EvtNo= 556  length= 0.00851288  xend= 0.00153885
+EvtNo= 557  length= 0.00857871  xend= 0.000887345
+EvtNo= 558  length= 0.00858764  xend= 0.00140584
+EvtNo= 559  length= 0.0086508  xend= 0.00131053
+EvtNo= 560  length= 0.00854149  xend= 0.00178964
+EvtNo= 561  length= 0.00858289  xend= 0.000684705
+EvtNo= 562  length= 0.00855799  xend= 0.0023552
+EvtNo= 563  length= 0.00467832  xend= -1.25425e-15
+EvtNo= 564  length= 0.00856666  xend= 0.00168298
+EvtNo= 565  length= 0.00853727  xend= 0.00211452
+EvtNo= 566  length= 0.00857563  xend= 0.00138191
+EvtNo= 567  length= 0.00847202  xend= 0.00123179
+EvtNo= 568  length= 0.00855687  xend= 0.00227712
+EvtNo= 569  length= 0.0086194  xend= 0.00205871
+EvtNo= 570  length= 0.00857302  xend= 0.00184418
+EvtNo= 571  length= 0.00856352  xend= 0.000641456
+EvtNo= 572  length= 0.00862558  xend= 0.00207917
+EvtNo= 573  length= 0.00817759  xend= -1.82618e-15
+EvtNo= 574  length= 0.00858976  xend= 0.000901163
+EvtNo= 575  length= 0.00856681  xend= 0.000304986
+EvtNo= 576  length= 0.00860167  xend= 0.000710716
+EvtNo= 577  length= 0.00858235  xend= 0.00113275
+EvtNo= 578  length= 0.00855705  xend= 0.000692741
+EvtNo= 579  length= 0.00855021  xend= 0.000148617
+EvtNo= 580  length= 0.00856627  xend= 0.00155111
+EvtNo= 581  length= 0.00857667  xend= 0.0025251
+EvtNo= 582  length= 0.00853343  xend= 0.000773014
+EvtNo= 583  length= 0.00862373  xend= 0.0022417
+EvtNo= 584  length= 0.00856656  xend= 0.00228506
+EvtNo= 585  length= 0.00864  xend= 0.00282895
+EvtNo= 586  length= 0.00851753  xend= 0.00149322
+EvtNo= 587  length= 0.00859509  xend= 0.00123258
+EvtNo= 588  length= 0.00854896  xend= 0.00128389
+EvtNo= 589  length= 0.00858757  xend= 0.00185264
+EvtNo= 590  length= 0.00864701  xend= 0.00104738
+EvtNo= 591  length= 0.00856216  xend= 0.0022552
+EvtNo= 592  length= 0.0085396  xend= 0.00181351
+EvtNo= 593  length= 0.00854307  xend= 0.00153595
+EvtNo= 594  length= 0.00854371  xend= 0.00271752
+EvtNo= 595  length= 0.00853902  xend= 0.000807573
+EvtNo= 596  length= 0.00855171  xend= 0.00151572
+EvtNo= 597  length= 0.00855407  xend= 0.000539308
+EvtNo= 598  length= 0.00854089  xend= 0.000987177
+EvtNo= 599  length= 0.00856858  xend= 0.00172645
+EvtNo= 600  length= 0.00674309  xend= -4.37993e-05
+EvtNo= 601  length= 0.00857022  xend= 0.00140323
+EvtNo= 602  length= 0.00856218  xend= 0.00169737
+EvtNo= 603  length= 0.00858114  xend= 0.000915523
+EvtNo= 604  length= 0.198636  xend= -0.0899473
+EvtNo= 605  length= 0.00855653  xend= 0.00149925
+EvtNo= 606  length= 0.00861561  xend= 0.00175738
+EvtNo= 607  length= 0.00854083  xend= 0.00124297
+EvtNo= 608  length= 0.00854014  xend= 0.00258746
+EvtNo= 609  length= 0.00503769  xend= -3.37729e-17
+EvtNo= 610  length= 0.00852487  xend= 0.00271307
+EvtNo= 611  length= 0.00859436  xend= 0.000769783
+EvtNo= 612  length= 0.00858069  xend= 0.0026314
+EvtNo= 613  length= 0.00855141  xend= 0.00105597
+EvtNo= 614  length= 0.00817729  xend= -1.81834e-16
+EvtNo= 615  length= 0.00861784  xend= 0.000879709
+EvtNo= 616  length= 0.00866227  xend= 0.000883867
+EvtNo= 617  length= 0.00852886  xend= 0.000471126
+EvtNo= 618  length= 0.00861515  xend= 0.00156141
+EvtNo= 619  length= 0.00860939  xend= 0.000742651
+EvtNo= 620  length= 0.00862842  xend= 0.00152256
+EvtNo= 621  length= 0.00861483  xend= 0.0015538
+EvtNo= 622  length= 0.00859397  xend= 0.00110461
+EvtNo= 623  length= 0.00859288  xend= 0.000284073
+EvtNo= 624  length= 0.00851865  xend= 0.00148297
+EvtNo= 625  length= 0.00857331  xend= 0.00116907
+EvtNo= 626  length= 0.00858825  xend= 0.00129295
+EvtNo= 627  length= 0.00856489  xend= 0.0012987
+EvtNo= 628  length= 0.00862558  xend= 0.00180966
+EvtNo= 629  length= 0.00853735  xend= 0.00288984
+EvtNo= 630  length= 0.0085299  xend= 0.00121773
+EvtNo= 631  length= 0.00853252  xend= 0.00139187
+EvtNo= 632  length= 0.00858653  xend= 0.0012864
+EvtNo= 633  length= 0.0084715  xend= 0.00124882
+EvtNo= 634  length= 0.00859884  xend= 0.00236927
+EvtNo= 635  length= 0.00854139  xend= 0.000823802
+EvtNo= 636  length= 0.00854554  xend= 0.00138888
+EvtNo= 637  length= 0.00854428  xend= 0.00110687
+EvtNo= 638  length= 0.00851929  xend= 1.98197e-05
+EvtNo= 639  length= 0.00853417  xend= 0.00183578
+EvtNo= 640  length= 0.00855947  xend= 0.00231817
+EvtNo= 641  length= 0.288555  xend= -0.0617263
+EvtNo= 642  length= 0.00852661  xend= 0.00201336
+EvtNo= 643  length= 0.00791845  xend= -6.18659e-16
+EvtNo= 644  length= 0.254801  xend= -0.0756604
+EvtNo= 645  length= 0.0085426  xend= 0.00185824
+EvtNo= 646  length= 0.00858213  xend= 0.000965477
+EvtNo= 647  length= 0.00858975  xend= 0.00153737
+EvtNo= 648  length= 0.00856546  xend= 0.000817967
+EvtNo= 649  length= 0.00854465  xend= 0.00214627
+EvtNo= 650  length= 0.00864469  xend= 0.00251674
+EvtNo= 651  length= 0.00857382  xend= 0.00184339
+EvtNo= 652  length= 0.00860553  xend= 0.00147948
+EvtNo= 653  length= 0.00856688  xend= 0.000269601
+EvtNo= 654  length= 0.00854475  xend= 0.00311554
+EvtNo= 655  length= 0.00553882  xend= -1.50059e-15
+EvtNo= 656  length= 0.00858279  xend= 0.000788888
+EvtNo= 657  length= 0.00863747  xend= 0.00161711
+EvtNo= 658  length= 0.00860246  xend= 0.00115433
+EvtNo= 659  length= 0.00853453  xend= 0.000902474
+EvtNo= 660  length= 0.00848565  xend= 0.00186599
+EvtNo= 661  length= 0.00851297  xend= 0.00126181
+EvtNo= 662  length= 0.00857778  xend= 0.00261719
+EvtNo= 663  length= 0.00859218  xend= 0.000143796
+EvtNo= 664  length= 0.00858231  xend= 0.000915008
+EvtNo= 665  length= 0.00852377  xend= 0.00228541
+EvtNo= 666  length= 0.00860746  xend= 0.00272161
+EvtNo= 667  length= 0.00852807  xend= 0.00137183
+EvtNo= 668  length= 0.00861547  xend= 0.000679278
+EvtNo= 669  length= 0.00853952  xend= 0.000571995
+EvtNo= 670  length= 0.00862564  xend= 0.00142454
+EvtNo= 671  length= 0.00858892  xend= 0.00177172
+EvtNo= 672  length= 0.00856199  xend= 0.00199122
+EvtNo= 673  length= 0.00860797  xend= 0.00170442
+EvtNo= 674  length= 0.00858623  xend= 0.00176484
+EvtNo= 675  length= 0.00762635  xend= -1.28757e-15
+EvtNo= 676  length= 0.00856446  xend= 0.00144169
+EvtNo= 677  length= 0.00850797  xend= 0.00060708
+EvtNo= 678  length= 0.00857312  xend= 0.00151078
+EvtNo= 679  length= 0.0086154  xend= 0.00128769
+EvtNo= 680  length= 0.00866478  xend= 0.00145098
+EvtNo= 681  length= 0.00852932  xend= 0.00195721
+EvtNo= 682  length= 0.00850188  xend= 0.0016372
+EvtNo= 683  length= 0.0085282  xend= 0.000734839
+EvtNo= 684  length= 0.00859188  xend= 0.00141151
+EvtNo= 685  length= 0.00855313  xend= 0.00061466
+EvtNo= 686  length= 0.00863165  xend= 0.00234022
+EvtNo= 687  length= 0.00859116  xend= 0.00158941
+EvtNo= 688  length= 0.00866054  xend= 0.00184292
+EvtNo= 689  length= 0.00856691  xend= 0.00181349
+EvtNo= 690  length= 0.181658  xend= -0.0738947
+EvtNo= 691  length= 0.00855715  xend= 0.000953381
+EvtNo= 692  length= 0.147315  xend= -0.0404357
+EvtNo= 693  length= 0.00856426  xend= 0.000584923
+EvtNo= 694  length= 0.0085615  xend= 0.00102214
+EvtNo= 695  length= 0.00858964  xend= 0.00187946
+EvtNo= 696  length= 0.00859034  xend= 0.00210881
+EvtNo= 697  length= 0.00855975  xend= 0.00185617
+EvtNo= 698  length= 0.00854335  xend= 0.000784843
+EvtNo= 699  length= 0.00856306  xend= 0.000725234
+EvtNo= 700  length= 0.00860761  xend= 0.000364575
+EvtNo= 701  length= 0.00854558  xend= 0.0020924
+EvtNo= 702  length= 0.00858976  xend= 0.00152574
+EvtNo= 703  length= 0.00858136  xend= 0.00201208
+EvtNo= 704  length= 0.00854479  xend= 0.00142237
+EvtNo= 705  length= 0.00855581  xend= 0.00185173
+EvtNo= 706  length= 0.00849725  xend= 0.00160252
+EvtNo= 707  length= 0.00860122  xend= 0.000332403
+EvtNo= 708  length= 0.00856025  xend= 0.00162464
+EvtNo= 709  length= 0.0085051  xend= 0.00164847
+EvtNo= 710  length= 0.00853681  xend= 0.00254714
+EvtNo= 711  length= 0.00858381  xend= 0.000352308
+EvtNo= 712  length= 0.0085817  xend= 0.00185353
+EvtNo= 713  length= 0.00857496  xend= 0.00036603
+EvtNo= 714  length= 0.00649428  xend= -5.97212e-05
+EvtNo= 715  length= 0.00857703  xend= 0.00218282
+EvtNo= 716  length= 0.00855317  xend= 0.00145586
+EvtNo= 717  length= 0.0085833  xend= 0.00143143
+EvtNo= 718  length= 0.00861789  xend= 0.00102324
+EvtNo= 719  length= 0.00858001  xend= 0.000764218
+EvtNo= 720  length= 0.0085537  xend= 0.000988688
+EvtNo= 721  length= 0.00858274  xend= 0.000965139
+EvtNo= 722  length= 0.00857682  xend= 0.0021242
+EvtNo= 723  length= 0.00853654  xend= 0.00174383
+EvtNo= 724  length= 0.118184  xend= -0.0980277
+EvtNo= 725  length= 0.00868391  xend= 0.00377322
+EvtNo= 726  length= 0.00856349  xend= 0.0018637
+EvtNo= 727  length= 0.00859224  xend= 0.0019478
+EvtNo= 728  length= 0.00855736  xend= 0.000857785
+EvtNo= 729  length= 0.00854933  xend= 0.00294266
+EvtNo= 730  length= 0.00855836  xend= 0.00263167
+EvtNo= 731  length= 0.00860338  xend= 0.00221507
+EvtNo= 732  length= 0.00856579  xend= 0.0019884
+EvtNo= 733  length= 0.00853246  xend= 0.00043336
+EvtNo= 734  length= 0.0085497  xend= 0.00034557
+EvtNo= 735  length= 0.00854264  xend= 0.00179401
+EvtNo= 736  length= 0.00852954  xend= 0.0022141
+EvtNo= 737  length= 0.00859103  xend= 0.000250745
+EvtNo= 738  length= 0.00854251  xend= 0.000976939
+EvtNo= 739  length= 0.00859164  xend= 0.00154593
+EvtNo= 740  length= 0.00864334  xend= 0.00225738
+EvtNo= 741  length= 0.00857602  xend= 0.00167767
+EvtNo= 742  length= 0.00851942  xend= 0.00176519
+EvtNo= 743  length= 0.00849566  xend= 0.00112386
+EvtNo= 744  length= 0.00857958  xend= 0.00108781
+EvtNo= 745  length= 0.00852183  xend= 0.00174888
+EvtNo= 746  length= 0.00857788  xend= 0.00166748
+EvtNo= 747  length= 0.00860102  xend= 0.00210687
+EvtNo= 748  length= 0.00860718  xend= 0.00286657
+EvtNo= 749  length= 0.00863817  xend= 0.00162157
+EvtNo= 750  length= 0.00859145  xend= 0.00171987
+EvtNo= 751  length= 0.00858305  xend= 0.00124234
+EvtNo= 752  length= 0.0085667  xend= 0.00169508
+EvtNo= 753  length= 0.00856978  xend= 0.00153317
+EvtNo= 754  length= 0.00480435  xend= -2.40668e-15
+EvtNo= 755  length= 0.00860982  xend= 0.00184521
+EvtNo= 756  length= 0.00859061  xend= 0.000889598
+EvtNo= 757  length= 0.00859884  xend= 0.0010487
+EvtNo= 758  length= 0.00857601  xend= 0.00257021
+EvtNo= 759  length= 0.00858362  xend= 0.00190975
+EvtNo= 760  length= 0.00856607  xend= 0.00248568
+EvtNo= 761  length= 0.00851954  xend= 0.00275728
+EvtNo= 762  length= 0.0085999  xend= 0.00117896
+EvtNo= 763  length= 0.00854591  xend= 0.00100086
+EvtNo= 764  length= 0.00855947  xend= 0.00185731
+EvtNo= 765  length= 0.00855132  xend= 0.00202565
+EvtNo= 766  length= 0.0085918  xend= 0.00112358
+EvtNo= 767  length= 0.00849823  xend= 0.00140129
+EvtNo= 768  length= 0.00859186  xend= 0.00140925
+EvtNo= 769  length= 0.00865655  xend= 0.0011512
+EvtNo= 770  length= 0.0084981  xend= 0.000933977
+EvtNo= 771  length= 0.00854469  xend= 0.00219231
+EvtNo= 772  length= 0.00624568  xend= -3.33631e-15
+EvtNo= 773  length= 0.00853783  xend= 0.00173398
+EvtNo= 774  length= 0.0085819  xend= 0.00152778
+EvtNo= 775  length= 0.00854349  xend= 0.00140246
+EvtNo= 776  length= 0.0085637  xend= 0.00133491
+EvtNo= 777  length= 0.00850145  xend= 0.000464434
+EvtNo= 778  length= 0.00858305  xend= 0.00166486
+EvtNo= 779  length= 0.00863354  xend= 0.00155402
+EvtNo= 780  length= 0.00852312  xend= 0.00119943
+EvtNo= 781  length= 0.0073723  xend= -1.88529e-15
+EvtNo= 782  length= 0.00862925  xend= 0.0010792
+EvtNo= 783  length= 0.157206  xend= -0.0761906
+EvtNo= 784  length= 0.00852932  xend= 0.00376524
+EvtNo= 785  length= 0.00855594  xend= 0.000604299
+EvtNo= 786  length= 0.00855207  xend= 0.000820699
+EvtNo= 787  length= 0.00854492  xend= 0.00105077
+EvtNo= 788  length= 0.00858465  xend= 0.00158489
+EvtNo= 789  length= 0.00861097  xend= 0.0019723
+EvtNo= 790  length= 0.0085476  xend= 0.00120747
+EvtNo= 791  length= 0.00861984  xend= 0.000513203
+EvtNo= 792  length= 0.00856757  xend= 0.0015193
+EvtNo= 793  length= 0.00678593  xend= -7.79465e-05
+EvtNo= 794  length= 0.00857901  xend= 0.00271325
+EvtNo= 795  length= 0.0085197  xend= 0.000952551
+EvtNo= 796  length= 0.00860699  xend= 0.00093675
+EvtNo= 797  length= 0.00697435  xend= -0.00056761
+EvtNo= 798  length= 0.00856358  xend= 0.00139546
+EvtNo= 799  length= 0.00854649  xend= 0.00171768
+EvtNo= 800  length= 0.00854239  xend= 0.00130635
+EvtNo= 801  length= 0.00861251  xend= 0.000217239
+EvtNo= 802  length= 0.00856963  xend= 0.00344606
+EvtNo= 803  length= 0.00849493  xend= 0.00101301
+EvtNo= 804  length= 0.00861675  xend= 0.00100358
+EvtNo= 805  length= 0.00855245  xend= 0.00236216
+EvtNo= 806  length= 0.00743934  xend= -2.7143e-15
+EvtNo= 807  length= 0.00858012  xend= 0.000859911
+EvtNo= 808  length= 0.00856604  xend= 0.0022972
+EvtNo= 809  length= 0.00862384  xend= 0.00215883
+EvtNo= 810  length= 0.0085226  xend= 0.0010156
+EvtNo= 811  length= 0.00857513  xend= 0.00139773
+EvtNo= 812  length= 0.0085433  xend= 0.000472111
+EvtNo= 813  length= 0.00854973  xend= 0.00235392
+EvtNo= 814  length= 0.00856872  xend= 0.00251902
+EvtNo= 815  length= 0.00860889  xend= 0.000942472
+EvtNo= 816  length= 0.00820809  xend= -2.68064e-15
+EvtNo= 817  length= 0.0085708  xend= 0.00209766
+EvtNo= 818  length= 0.00857845  xend= 0.000726259
+EvtNo= 819  length= 0.00854797  xend= 0.00183059
+EvtNo= 820  length= 0.00858048  xend= 0.00133878
+EvtNo= 821  length= 0.00856817  xend= 0.00152633
+EvtNo= 822  length= 0.00849846  xend= 0.000905227
+EvtNo= 823  length= 0.0086253  xend= 0.000913466
+EvtNo= 824  length= 0.00858557  xend= 0.000944181
+EvtNo= 825  length= 0.00850395  xend= 0.00178185
+EvtNo= 826  length= 0.0085854  xend= 0.00249465
+EvtNo= 827  length= 0.00863957  xend= 0.000597092
+EvtNo= 828  length= 0.00857979  xend= 0.00168752
+EvtNo= 829  length= 0.00851945  xend= 0.000918044
+EvtNo= 830  length= 0.00854326  xend= 0.000792858
+EvtNo= 831  length= 0.00858222  xend= 0.00321067
+EvtNo= 832  length= 0.00859311  xend= 0.00236677
+EvtNo= 833  length= 0.00856607  xend= 0.00167561
+EvtNo= 834  length= 0.00851497  xend= 0.00133916
+EvtNo= 835  length= 0.0084885  xend= 0.00064193
+EvtNo= 836  length= 0.00853068  xend= 0.00102138
+EvtNo= 837  length= 0.00528568  xend= -7.75557e-16
+EvtNo= 838  length= 0.00859048  xend= 0.00147257
+EvtNo= 839  length= 0.145486  xend= -0.0625571
+EvtNo= 840  length= 0.00857264  xend= 0.00305808
+EvtNo= 841  length= 0.00867814  xend= 0.00090839
+EvtNo= 842  length= 0.00852796  xend= 0.00056408
+EvtNo= 843  length= 0.00856576  xend= 0.000182986
+EvtNo= 844  length= 0.00556693  xend= -1.54987e-15
+EvtNo= 845  length= 0.0085388  xend= 0.000983963
+EvtNo= 846  length= 0.00861187  xend= 0.00109818
+EvtNo= 847  length= 0.00860808  xend= 0.001016
+EvtNo= 848  length= 0.00858231  xend= 0.000927282
+EvtNo= 849  length= 0.00859186  xend= 0.0014888
+EvtNo= 850  length= 0.0085291  xend= 0.000950514
+EvtNo= 851  length= 0.00864446  xend= 0.00116437
+EvtNo= 852  length= 0.00858103  xend= 0.00217765
+EvtNo= 853  length= 0.00858341  xend= 0.00147894
+EvtNo= 854  length= 0.00856501  xend= 0.00159156
+EvtNo= 855  length= 0.00860457  xend= 0.00184808
+EvtNo= 856  length= 0.00853199  xend= 0.00252305
+EvtNo= 857  length= 0.00859463  xend= 0.000229628
+EvtNo= 858  length= 0.00855015  xend= 0.00104594
+EvtNo= 859  length= 0.00856141  xend= 0.00215958
+EvtNo= 860  length= 0.00857746  xend= 0.00290173
+EvtNo= 861  length= 0.00858883  xend= 0.000313983
+EvtNo= 862  length= 0.00854418  xend= 0.00160161
+EvtNo= 863  length= 0.00856011  xend= 0.00124121
+EvtNo= 864  length= 0.00857968  xend= 0.000971594
+EvtNo= 865  length= 0.00853375  xend= 0.00126841
+EvtNo= 866  length= 0.00853769  xend= 0.00155001
+EvtNo= 867  length= 0.00856512  xend= 0.00258783
+EvtNo= 868  length= 0.00857774  xend= 0.00208255
+EvtNo= 869  length= 0.00856641  xend= 0.000789935
+EvtNo= 870  length= 0.00858272  xend= 0.00170678
+EvtNo= 871  length= 0.00856349  xend= 0.00266028
+EvtNo= 872  length= 0.00859556  xend= 0.000865398
+EvtNo= 873  length= 0.00861347  xend= 0.000633003
+EvtNo= 874  length= 0.00628131  xend= -3.32403e-15
+EvtNo= 875  length= 0.00851774  xend= 0.000980374
+EvtNo= 876  length= 0.00858635  xend= 0.000847476
+EvtNo= 877  length= 0.00861221  xend= 0.000972822
+EvtNo= 878  length= 0.00857395  xend= 0.000721724
+EvtNo= 879  length= 0.00855667  xend= 0.00289826
+EvtNo= 880  length= 0.00862597  xend= 0.000734638
+EvtNo= 881  length= 0.00854756  xend= 0.00180325
+EvtNo= 882  length= 0.00848139  xend= 0.0010752
+EvtNo= 883  length= 0.0086129  xend= 0.00162567
+EvtNo= 884  length= 0.00613755  xend= -2.37226e-15
+EvtNo= 885  length= 0.00853408  xend= 0.00165357
+EvtNo= 886  length= 0.00850225  xend= 0.000689714
+EvtNo= 887  length= 0.00851239  xend= 0.00171311
+EvtNo= 888  length= 0.00859736  xend= 0.00209821
+EvtNo= 889  length= 0.00858771  xend= 0.0037936
+EvtNo= 890  length= 0.00850479  xend= 0.000920015
+EvtNo= 891  length= 0.00861144  xend= 0.00211213
+EvtNo= 892  length= 0.00471304  xend= -1.51458e-15
+EvtNo= 893  length= 0.00858574  xend= 0.00047605
+EvtNo= 894  length= 0.00696355  xend= -2.1729e-15
+EvtNo= 895  length= 0.00857382  xend= 0.00147665
+EvtNo= 896  length= 0.00857909  xend= 0.00214516
+EvtNo= 897  length= 0.00865402  xend= 0.000698476
+EvtNo= 898  length= 0.00864747  xend= 0.000636507
+EvtNo= 899  length= 0.00858414  xend= 0.00151914
+EvtNo= 900  length= 0.00857416  xend= 0.00133181
+EvtNo= 901  length= 0.00861643  xend= 0.00048516
+EvtNo= 902  length= 0.00856838  xend= 0.00145336
+EvtNo= 903  length= 0.00859633  xend= 0.00226495
+EvtNo= 904  length= 0.00861211  xend= 0.00143382
+EvtNo= 905  length= 0.0085633  xend= 0.00156836
+EvtNo= 906  length= 0.00851501  xend= 0.000674812
+EvtNo= 907  length= 0.00859889  xend= 0.00117787
+EvtNo= 908  length= 0.00849582  xend= 0.00231214
+EvtNo= 909  length= 0.0086039  xend= 0.000339084
+EvtNo= 910  length= 0.00852392  xend= 0.00205271
+EvtNo= 911  length= 0.00851143  xend= 0.000960363
+EvtNo= 912  length= 0.00856577  xend= 0.00177323
+EvtNo= 913  length= 0.00853723  xend= 0.00181851
+EvtNo= 914  length= 0.00862861  xend= 0.00189025
+EvtNo= 915  length= 0.00861644  xend= 0.00142504
+EvtNo= 916  length= 0.00860258  xend= 0.00154817
+EvtNo= 917  length= 0.00848949  xend= 0.000580387
+EvtNo= 918  length= 0.00855121  xend= 0.000424758
+EvtNo= 919  length= 0.00856297  xend= 0.000984805
+EvtNo= 920  length= 0.00858842  xend= 0.000948829
+EvtNo= 921  length= 0.00851046  xend= 0.00158068
+EvtNo= 922  length= 0.00857923  xend= 0.000501377
+EvtNo= 923  length= 0.00853338  xend= 0.00199471
+EvtNo= 924  length= 0.00857445  xend= 0.00232081
+EvtNo= 925  length= 0.00855442  xend= 0.00132904
+EvtNo= 926  length= 0.0084812  xend= 0.00162848
+EvtNo= 927  length= 0.00862148  xend= 0.00168011
+EvtNo= 928  length= 0.00857221  xend= 0.00303488
+EvtNo= 929  length= 0.00856626  xend= 0.00179262
+EvtNo= 930  length= 0.00850953  xend= 0.0021778
+EvtNo= 931  length= 0.00852857  xend= 0.00202986
+EvtNo= 932  length= 0.00860882  xend= 0.00252097
+EvtNo= 933  length= 0.00855208  xend= 0.00182508
+EvtNo= 934  length= 0.00859514  xend= 0.00069472
+EvtNo= 935  length= 0.00851919  xend= 0.00250574
+EvtNo= 936  length= 0.00858864  xend= 0.000617173
+EvtNo= 937  length= 0.00859491  xend= 0.00154653
+EvtNo= 938  length= 0.0085695  xend= 0.00262078
+EvtNo= 939  length= 0.00851588  xend= 0.00104568
+EvtNo= 940  length= 0.00861667  xend= 0.00216385
+EvtNo= 941  length= 0.00858737  xend= 0.00143652
+EvtNo= 942  length= 0.0085651  xend= 0.000776942
+EvtNo= 943  length= 0.00853125  xend= 0.00206664
+EvtNo= 944  length= 0.00857104  xend= 0.00100832
+EvtNo= 945  length= 0.00858981  xend= 0.00137142
+EvtNo= 946  length= 0.00860726  xend= 0.00115403
+EvtNo= 947  length= 0.00852677  xend= 0.00187448
+EvtNo= 948  length= 0.00863983  xend= 0.00188602
+EvtNo= 949  length= 0.00856776  xend= 0.000282074
+EvtNo= 950  length= 0.00859798  xend= 0.00203418
+EvtNo= 951  length= 0.00862507  xend= 0.000862469
+EvtNo= 952  length= 0.00857779  xend= 0.00250766
+EvtNo= 953  length= 0.00852746  xend= 0.00206275
+EvtNo= 954  length= 0.00859313  xend= 0.00226813
+EvtNo= 955  length= 0.00864591  xend= 0.000643825
+EvtNo= 956  length= 0.00857494  xend= 0.00260371
+EvtNo= 957  length= 0.00855937  xend= 0.000611027
+EvtNo= 958  length= 0.00863654  xend= 0.000477378
+EvtNo= 959  length= 0.00864492  xend= 0.00169413
+EvtNo= 960  length= 0.00857058  xend= 0.00180815
+EvtNo= 961  length= 0.00855844  xend= 0.00155248
+EvtNo= 962  length= 0.00859375  xend= 0.00119089
+EvtNo= 963  length= 0.00855378  xend= 0.00256875
+EvtNo= 964  length= 0.00852356  xend= 0.00134749
+EvtNo= 965  length= 0.00855437  xend= 0.00101981
+EvtNo= 966  length= 0.00858462  xend= 0.000179866
+EvtNo= 967  length= 0.0085562  xend= 0.00149961
+EvtNo= 968  length= 0.00854377  xend= 0.00196295
+EvtNo= 969  length= 0.102963  xend= -0.0356463
+EvtNo= 970  length= 0.00855724  xend= 0.00194141
+EvtNo= 971  length= 0.00829727  xend= -4.637e-16
+EvtNo= 972  length= 0.00854515  xend= 0.000942912
+EvtNo= 973  length= 0.00855654  xend= 0.000821677
+EvtNo= 974  length= 0.00857552  xend= 0.00171525
+EvtNo= 975  length= 0.00854141  xend= 0.00147572
+EvtNo= 976  length= 0.00856235  xend= 0.00142535
+EvtNo= 977  length= 0.00862078  xend= 0.00197432
+EvtNo= 978  length= 0.00860487  xend= 0.00157803
+EvtNo= 979  length= 0.00863042  xend= 0.00153796
+EvtNo= 980  length= 0.0085738  xend= 0.00150485
+EvtNo= 981  length= 0.00855476  xend= 0.00165876
+EvtNo= 982  length= 0.00855322  xend= 0.00190733
+EvtNo= 983  length= 0.00858505  xend= 0.00117481
+EvtNo= 984  length= 0.00854981  xend= 0.00229304
+EvtNo= 985  length= 0.00854656  xend= 0.00190546
+EvtNo= 986  length= 0.00854439  xend= 0.00142719
+EvtNo= 987  length= 0.0085477  xend= 0.000631064
+EvtNo= 988  length= 0.00832542  xend= -1.6599e-15
+EvtNo= 989  length= 0.00859619  xend= 0.00205614
+EvtNo= 990  length= 0.0085277  xend= 0.000179543
+EvtNo= 991  length= 0.008633  xend= 0.00139766
+EvtNo= 992  length= 0.00850466  xend= 0.00162152
+EvtNo= 993  length= 0.00722235  xend= -2.70807e-15
+EvtNo= 994  length= 0.00859966  xend= 0.00183749
+EvtNo= 995  length= 0.00855316  xend= 0.0018054
+EvtNo= 996  length= 0.00851465  xend= 0.0029993
+EvtNo= 997  length= 0.00855286  xend= 0.000603376
+EvtNo= 998  length= 0.00852026  xend= 0.00214687
+EvtNo= 999  length= 0.00863642  xend= 0.00294557
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=11.95s Real=14.42s Sys=2.45s
+  User=14.7s Real=18.63s Sys=3.93s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 1000 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
-    Track Length in absorber = 8.56868 +- 0.00120494  microns 
-    CSDA  Range  in absorber = 6.94861 +- 0.0119157  microns 
+ end of Run TotNbofEvents = 0 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
+    Track Length in absorber = 0 +- 0  microns 
+    CSDA  Range  in absorber = 0 +- 0  microns 
 
-    Energy deposit in absorber = 6  MeV 
+    Energy deposit in absorber = 0  MeV 
 
 Average Number electrons per event = 0
 Average Number photons per event   = 0
@@ -376,21 +1377,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=46.59s Real=46.82s Sys=0.23s
+  User=46.4s Real=46.72s Sys=0.31s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.19275 +- 0.0176855  microns 
-    CSDA  Range  in absorber = 9.05448 +- 0.0176111  microns 
+    Track Length in absorber = 9.17068 +- 0.0142857  microns 
+    CSDA  Range  in absorber = 9.042 +- 0.0149561  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.133753 +- 0.0176855 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.18548 +- 0.0176111 microns 
+    Track Length (G4 - ICRU49) = 0.111685 +- 0.0142857 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.172999 +- 0.0149561 microns 
 
-Average Number electrons per event = 22.28
-Average Number photons per event   = 22.2
+Average Number electrons per event = 22.66
+Average Number photons per event   = 22.46
 
 #
 /test17/cutAugerEnergy 250 eV
@@ -417,24 +1418,23 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 4 start.
 Start Run processing.
-EvtNo= 57  length= 0.00913494  xend= 0.00445623
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=111.34s Real=111.59s Sys=0.25s
+  User=109.73s Real=109.98s Sys=0.25s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 99 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.1898 +- 0.0167595  microns 
-    CSDA  Range  in absorber = 9.02848 +- 0.0212186  microns 
+ end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
+    Track Length in absorber = 9.16863 +- 0.0177432  microns 
+    CSDA  Range  in absorber = 9.03584 +- 0.0169196  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.130797 +- 0.0167595 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.15948 +- 0.0212186 microns 
+    Track Length (G4 - ICRU49) = 0.109634 +- 0.0177432 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.16684 +- 0.0169196 microns 
 
-Average Number electrons per event = 521.808
-Average Number photons per event   = 3.0404
+Average Number electrons per event = 520.35
+Average Number photons per event   = 2.89
 
 G4 kernel has come to Quit state.

@@ -1167,7 +1167,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     1  -4.38 m      -5 m   -97.2 cm   2.77 eV      0 eV   6.72 m    6.72 m          Tank  Transportation
     2    -10 m   -7.72 m   -2.22 m    2.77 eV      0 eV   6.36 m    13.1 m    OutOfWorld  Transportation
 Number of optical photons produces in this event : 66
-number of event = 1 User=0.23s Real=0.3s Sys=0.01s
+number of event = 1 User=0.21s Real=0.29s Sys=0.03s
 #
 /process/inactivate Scintillation
 /N06/phys/verbose 0
@@ -1512,6 +1512,6 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     1     -5 m   -28.8 cm  -78.1 cm    511 keV     0 eV   5.07 m    5.07 m          Tank  Transportation
     2    -10 m   -57.5 cm  -1.56 m     511 keV     0 eV   5.07 m    10.1 m    OutOfWorld  Transportation
 Number of optical photons produces in this event : 34
-number of event = 1 User=0.11s Real=0.12s Sys=0s
+number of event = 1 User=0.08s Real=0.11s Sys=0.02s
 Graphics systems deleted.
 Visualization Manager deleting...
