@@ -618,9 +618,9 @@ int main()
     G4Exception("Invalid XTR model name", "InvalidSetup",
                  FatalException, "XTR model name is out of the name list");
   }
-  // processXTR->SetAngleRadDistr(true);
-  // processXTR->BuildPhysicsTable(proton);
-  processXTR->SetVerboseLevel(1);
+  processXTR->SetAngleRadDistr(true);
+  processXTR->BuildPhysicsTable(proton);
+  // processXTR->SetVerboseLevel(1);
   static G4int totBin = processXTR->GetTotBin();
   nBin = totBin;
   G4cout<<"totBin = "<<totBin<<G4endl;
@@ -628,7 +628,7 @@ int main()
   // test of XTR table step do-it
 
 
-  G4double energyTR=10*keV, cofAngle = 5.1;
+  G4double energyTR=2*keV, cofAngle = 5.1,  angle2, dNdA;
   G4double charge = 1.0;
   G4double chargeSq  = charge*charge ;
   G4double gamma     = 1.3e3; 
@@ -644,6 +644,13 @@ int main()
   // G4double angle2 = cofAngle*cofAngle/gamma/gamma;
 
   // G4double dNdAngle = processXTR-> AngleXTRdEdx(angle2);
+  for(i = 0; i < 40; i++ )
+  {
+    angle2 = processXTR->GetRandomAngle(energyTR,40);
+    G4cout<<"random theta*gamma = "<<std::sqrt(angle2)*gamma<<G4endl;
+  }
+
+
   /*
   for(i = 0; i < 40; i++ )
   {

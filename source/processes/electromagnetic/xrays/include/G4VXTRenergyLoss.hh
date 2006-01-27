@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.hh,v 1.15 2006-01-26 12:00:55 grichine Exp $
+// $Id: G4VXTRenergyLoss.hh,v 1.16 2006-01-27 15:30:22 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -153,13 +153,16 @@ public:
 
   G4double  GetGasFormationZone(G4double,G4double,G4double) ;
   G4complex GetGasComplexFZ(G4double,G4double,G4double) ;
-  void      ComputeGasPhotoAbsCof() ;
-  G4double  GetGasLinearPhotoAbs(G4double) ;
-  void      GetGasZmuProduct() ;
-  G4double  GetGasZmuProduct(G4double,G4double,G4double) ;
+  void      ComputeGasPhotoAbsCof();
+  G4double  GetGasLinearPhotoAbs(G4double);
+  void      GetGasZmuProduct();
+  G4double  GetGasZmuProduct(G4double,G4double,G4double);
 
-  G4double GetXTRrandomEnergy( G4double scaledTkin, G4int iTkin ) ;
+  G4double GetXTRrandomEnergy( G4double scaledTkin, G4int iTkin );
   G4double GetXTRenergy( G4int iPlace, G4double position, G4int iTransfer  );
+
+  G4double GetRandomAngle( G4double energyXTR, G4int iTkin );
+  G4double GetAngleXTR(G4int iTR,G4double position,G4int iAngle);
 
   G4double GetGamma()   {return fGamma;}; 
   G4double GetEnergy()  {return fEnergy;};                
@@ -186,6 +189,7 @@ protected:
   G4PhysicsTable* fEnergyDistrTable ;
 
   static G4PhysicsLogVector* fProtonEnergyVector ;
+  static G4PhysicsLogVector* fXTREnergyVector ;
 
 
   static G4double fTheMinEnergyTR;            //  static min TR energy

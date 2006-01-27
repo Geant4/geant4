@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransparentRegXTRadiator.cc,v 1.8 2005-12-19 15:08:41 grichine Exp $
+// $Id: G4TransparentRegXTRadiator.cc,v 1.9 2006-01-27 15:30:22 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -108,7 +108,7 @@ G4double G4TransparentRegXTRadiator::SpectralXTRdEdx(G4double energy)
   {
     tmp    = pi*fPlateThick*(k + cof2)/(fPlateThick + fGasThick);
     result = (k - cof1)*(k - cof1)*(k + cof2)*(k + cof2);
-
+    // tmp = sin(tmp)*sin(tmp)*abs(k-cofMin)/result;
     if( k == kMin && kMin == G4int(cofMin) )
     {
       sum   += 0.5*sin(tmp)*sin(tmp)*abs(k-cofMin)/result;
@@ -117,7 +117,11 @@ G4double G4TransparentRegXTRadiator::SpectralXTRdEdx(G4double energy)
     {
       sum   += sin(tmp)*sin(tmp)*abs(k-cofMin)/result;
     }
-    //  G4cout<<"k = "<<k<<";    sum = "<<sum<<G4endl;    
+    if(fVerbose > 2)
+    {    
+      G4cout<<"k = "<<k<<"; tmp = "<<sin(tmp)*sin(tmp)*abs(k-cofMin)/result
+              <<";    sum = "<<sum<<G4endl;  
+    }  
   }
   result = 4*( cof1 + cof2 )*( cof1 + cof2 )*sum/energy;
   // result *= ( 1 - exp(-0.5*fPlateNumber*sigma) )/( 1 - exp(-0.5*sigma) );  

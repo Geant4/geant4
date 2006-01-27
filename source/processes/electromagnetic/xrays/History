@@ -1,4 +1,4 @@
-$Id: History,v 1.49 2006-01-26 12:16:59 grichine Exp $
+$Id: History,v 1.50 2006-01-27 15:30:22 grichine Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+27 Jan 06: V. Grichine
+- Algorithm for XTR angular distribution based on the transparent regular radiator
+  was tested. The mode activated by SetAngleRadDistr(true) method just after the
+  construction of XTR object
+
 26 Jan 06: V. Grichine
 - Algorithm for XTR angular distribution based on the transparent regular radiator
   was updated. The method takes into account the angular distribution for given
