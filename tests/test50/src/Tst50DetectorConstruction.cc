@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.cc,v 1.30 2004-07-01 09:34:51 guatelli Exp $
+// $Id: Tst50DetectorConstruction.cc,v 1.31 2006-01-27 15:29:58 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -50,6 +50,9 @@
 #include "G4Colour.hh"
 #include "G4UserLimits.hh"
 #include "G4ios.hh"
+
+#include "G4Material.hh"
+#include "G4NistManager.hh"
 
 Tst50DetectorConstruction::Tst50DetectorConstruction()
   :isRegisteredUserLimits(false), hydrogen(0),beryllium(0),graphite(0), 
@@ -299,11 +302,12 @@ void Tst50DetectorConstruction::DefineMaterials()
   // define a material from elements.   case 1: chemical molecule
   //
  
-  density = 1.000*g/cm3;
-  water = new G4Material(name="Water", density, ncomponents=2);
-  water->AddElement(H, natoms=2);
-  water->AddElement(O, natoms=1);
-  water->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+  // density = 1.000*g/cm3;
+//   water = new G4Material(name="Water", density, ncomponents=2);
+//   water->SetChemicalFormula("H_2O");
+//   water->AddElement(H, natoms=2);
+//   water->AddElement(O, natoms=1);
+//   water->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
 
   density = 2.200*g/cm3;
   quartz = new G4Material(name="Quartz", density, ncomponents=2);
@@ -331,8 +335,14 @@ void Tst50DetectorConstruction::DefineMaterials()
   nytrogen = new G4Material(name="Nytrogen", z=7., a, density);
   nytrogen->GetIonisation()->SetMeanExcitationEnergy(82.0*eV);
 
-  targetMaterial = liquidArgon;
+ 
+  nistMan = G4NistManager::Instance();
+  nistMan->SetVerbose(2);
+  water_nist = nistMan -> FindOrBuildMaterial("G4_WATER");
+  
+  targetMaterial = water_nist;
   defaultMaterial  = vacuum;
+
 }
   
 G4VPhysicalVolume* Tst50DetectorConstruction::ConstructWorld()

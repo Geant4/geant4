@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.hh,v 1.16 2004-06-02 09:46:53 guatelli Exp $
+// $Id: Tst50DetectorConstruction.hh,v 1.17 2006-01-27 15:29:58 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,7 +38,7 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
-
+#include "G4NistManager.hh"
 class G4Box;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
@@ -46,6 +46,7 @@ class G4Material;
 class G4UserLimits;
 class Tst50TrackerSD;
 class Tst50DetectorMessenger;
+class G4NistManager;
 
 class Tst50DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -73,10 +74,10 @@ public:
   void SetUserLimits(G4bool);
   G4Material* GetTargetMaterial()  {return targetMaterial;}; 
   //returns the absorber material
-
+ 
 private: 
   G4bool  isRegisteredUserLimits;
-  
+  G4Material* water_nist;
   // available materials ...
   G4Material* hydrogen;
   G4Material* beryllium;
@@ -130,7 +131,8 @@ private:
   G4UserLimits*    theUserLimitsForTarget;    
   G4bool           fUseUserLimits;
   G4double         theMaxStepInTarget;
-  Tst50DetectorMessenger* messenger;
+  Tst50DetectorMessenger* messenger; 
+  G4NistManager*     nistMan;
 };
 #endif
 

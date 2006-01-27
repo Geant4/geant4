@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.41 2004-11-24 17:05:07 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.42 2006-01-27 15:29:58 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -153,7 +153,7 @@ void Tst50SteppingAction::UserSteppingAction(const G4Step* aStep)
                   // calculation of CSDA range 
                   // reference http://physics.nist.gov/PhysRefData/Star/Text/contents.html
 		  G4double range = (std::sqrt(xend*xend + yend*yend + zend*zend)); 
-                  G4double nistRange = range*(detector->GetDensity());
+		  G4double nistRange = range*(detector->GetDensity());
 		  analysis -> CSDARange(runID,
                                         primaryParticleEnergy/MeV,
                                         nistRange/(g/cm2));

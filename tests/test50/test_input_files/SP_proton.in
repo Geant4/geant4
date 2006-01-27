@@ -8,15 +8,15 @@
 ####################################
 # Alternative approaches
 ###################################
-#/physics/addPhysics proton-ICRU49
+/physics/addPhysics proton-ICRU49
 #/physics/addPhysics proton-standard
 #/physics/addPhysics proton-ziegler85
-/physics/addPhysics proton-ziegler2000
+#/physics/addPhysics proton-ziegler2000
 ####################################
 /target/setUserLimits true
-/physics/cutE 1000000. m
+/physics/cutE 10000000. m
 /run/initialize
-/target/setTargetMat Aluminium
+#/target/setTargetMat Water
 /target/setTargetThick 15000000. cm
 /target/setTargetX 15000000. cm
 /target/setTargetY 15000000. cm
@@ -26,10 +26,10 @@
 /gun/particle proton
 /gun/position 0. 0. 0.
 /gun/randomDirection on 
-/target/setMaxStep 0.001 micrometer
+/target/setMaxStep 0.000001 micrometer
 /gun/energy 0.001 MeV
 /run/beamOn 1
-/target/setMaxStep 0.01 micrometer
+/target/setMaxStep 0.0001 micrometer
 /gun/energy    0.01 MeV
 /run/beamOn 1
 /gun/energy    0.02 MeV
@@ -42,7 +42,7 @@
 /run/beamOn 1
 /gun/energy    0.06 MeV
 /run/beamOn 1 
-/target/setMaxStep 0.01 micrometer
+/target/setMaxStep 0.001 micrometer
 /gun/energy    0.07 MeV
 /run/beamOn 1
 /gun/energy    0.08 MeV
@@ -61,9 +61,6 @@
 /run/beamOn 1
 /gun/energy 1. MeV
 /run/beamOn 1
-/gun/energy 1.5 MeV
-/run/beamOn 1
-/target/setMaxStep 0.1 micrometer
 /gun/energy 2. MeV
 /run/beamOn 1
 /gun/energy 3. MeV
@@ -78,17 +75,17 @@
 /run/beamOn 1
 /gun/energy 8. MeV 
 /run/beamOn 1
-/target/setMaxStep 1. micrometer
+/target/setMaxStep 0.01 micrometer
 /gun/energy 9. MeV 
 /run/beamOn 1
 /gun/energy 10. MeV 
 /run/beamOn 1
-/target/setMaxStep 10. micrometer
+/target/setMaxStep 5. micrometer
 /gun/energy 50. MeV 
 /run/beamOn 1
 /gun/energy 100. MeV 
 /run/beamOn 1
-/target/setMaxStep 100. micrometer
+/target/setMaxStep 10. micrometer
 /gun/energy 500. MeV 
 /run/beamOn 1
 /gun/energy 1. GeV 
