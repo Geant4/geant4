@@ -1,4 +1,4 @@
-$Id: History,v 1.105 2005-12-15 19:07:53 gcosmo Exp $
+$Id: History,v 1.106 2006-01-27 14:49:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27th January 2006  Gabriele Cosmo (examples-V08-00-01)
+- Updated reference outputs according to reference tag geant4-08-00-ref-01.
+- Includes tags: testem1-V08-00-00, testem2-V08-00-02, testem7-V08-00-00,
+                 gtherapy-V08-00-00.
 
 15th December 2005  Gabriele Cosmo (examples-V08-00-00)
 - Updated reference outputs according to reference tag geant4-08-00-ref-00.
