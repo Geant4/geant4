@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.16 2006-01-26 14:34:27 maire Exp $
+// $Id: RunAction.cc,v 1.17 2006-01-27 12:00:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -89,10 +89,7 @@ void RunAction::CountProcesses(G4String procName)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run* aRun)
-{
-  std::ios::fmtflags mode = G4cout.flags();
-  G4cout.setf(std::ios::fixed,std::ios::floatfield);
-  
+{ 
   G4int NbOfEvents = aRun->GetNumberOfEvent();
   if (NbOfEvents == 0) return;
   G4double dNbOfEvents = double(NbOfEvents);
@@ -108,7 +105,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
    
   G4cout << "\n ======================== run summary ======================\n";
   
-  G4int prec = G4cout.precision(2);
+  G4int prec = G4cout.precision(5);
   
   G4cout << "\n The run was: " << NbOfEvents << " " << partName << " of "
          << G4BestUnit(energy,"Energy") << " through " 
@@ -117,8 +114,6 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
 	 
  G4cout << "\n ============================================================\n";
-      
- G4cout.precision(3);
  
  G4cout << "\n total energy deposit: " 
         << G4BestUnit(edep/dNbOfEvents, "Energy") << G4endl;
@@ -177,16 +172,15 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
  G4cout << "\n transverse dispersion at end = " 
         << G4BestUnit(trvsRms,"Length");
 	
-  // reset default formats
-  G4cout.setf(mode,std::ios::floatfield);
-  G4cout.precision(prec);
-	
  G4cout << "\n      mass true Range from simulation = " 
         << trueRange*density/(g/cm2) << " g/cm2"
 	<< "\n       from PhysicsTable (csda range) = " 
         << rangeTable*density/(g/cm2) << " g/cm2";	
  G4cout << "\n---------------------------------------------------------\n";
  G4cout << G4endl;
+ 
+ // reset default precision
+ G4cout.precision(prec);
                                     
   // delete and remove all contents in ProcCounter 
   while (ProcCounter->size()>0){
