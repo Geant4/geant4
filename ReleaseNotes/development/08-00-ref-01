@@ -1,0 +1,267 @@
+
+                       geant4-08-00-ref-01
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Fixes in initialisation of divided volumes.
+  o Fixes in G4EllipticalCone and improved visualization for twisted solids.
+  o Bug fix for G4ParticleDefinition, was causing improper behavior of
+    GetAtomicNumber() method for ions.
+  o New algorithm for more precise estimation of XTR angular distribution
+    needed in tracking applications of XTR detectors (ATLAS).
+  o Fix to G4HadronicProcess for problems caused when hadronic interactions
+    reset 'stopButAlive' particle to 'Alive'.
+  o Reorganisation of RayTracer to allowed multiple tracers and various
+    improvements to visualization drivers.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+digits_hits                                      digits_hits-V08-00-00
+-----------
+- Added missing methods in G4VDigiCollection and G4TDigiCollection.
+
+geometry/divisions                               geomdiv-V08-00-00
+------------------
+- Added missing setting of mother-logical pointer in constructors of
+  G4PVDivision. Fixes problem report #829.
+- Added checks for illegal constructs of G4PVDivision (NULL pointer to
+  mother logical and self-placement).
+- Fixed check for generic construct in G4ParameterisationPolycone and
+  G4ParameterisationPolyhedra: allow it for the automatic replicated instance.
+
+geometry/solids/BREPS                            breps-V08-00-00
+---------------------
+- Use explicit 'HepGeom' namespace for 'Identity', to allow for porting
+  on Windows/VC++ when using CLHEP-2.0.X.
+
+geometry/solids/CSG                              geom-csg-V08-00-00
+-------------------
+- G4Sphere: fixed bug in DistanceToOut() for theta intersections.
+  Fixes bug report #830.
+
+geometry/solids/specific                         geom-specific-V08-00-01
+------------------------
+- Fixes in G4EllipticalCone:
+  o Changed GetPointOnSurface(), which was not uniform in endcaps.
+  o Bug fix in Inside(), which was not correct for the elliptic mantel.
+    Made test similar as in G4EllipticTube.
+  o Several fixes in DistanceToIn/Out(): for looping events (shortest
+    distance was taken, even if 0); now comparing the distance to the endcap
+    and to the mantel and decide afterwards which distance is shortest;
+    added check n*v.
+  o The code is now "good" at 90%. Still 10% wrong reconstructed events.
+    e.g there is a problem is DistanceToOut(): missed the intersection
+    (reconstruction took the encap instead of the mantel).
+- Fixed visibility of soft edges on the twisted solids.
+- G4TwistedTubs and G4VTwistedFaceted::CreatePolyhedron():
+  parameterised polyhedron mesh approximation in terms of
+  G4Polyhedron::GetNumberOfRotationSteps().
+  This is (a) more economical and (b) amenable to user control.
+
+geometry/volumes                                 geomvol-V08-00-00
+----------------
+- G4AssemblyVolume: fixed initialisation of names for placed volumes
+  which was corrupted after migration to <sstream> as side effect.
+
+graphics_reps                                    greps-V08-00-00
+-------------
+- Added new G4PolyhedronArbitrary class (contribution by P.Truscott and
+  F.Lei, QinetiQ): class for creating arbitrary G4Polyhedron objects out
+  of vertices and indices.
+- Updated documentation in G4Colour.
+
+particles                                        particles-V08-00-00
+---------
+- Bug fix for G4ParticleDefinition, was causing improper behavior of
+  GetAtomicNumber() method for ions. Fixes problem report #827.
+
+processes/cuts                                   procuts-V08-00-00
+--------------
+- Fix in G4VRangeToEnergyConverter::Convert() to recalculate the energy
+  loss table if new elements are added. Fixes problem report #831.
+
+processes/electromagnetic/highenergy             emhighenergy-V08-00-00
+------------------------------------
+- Substituted method SetStepLimits() by SetStepFunction().
+- Moved initialisation of default values to constructors.
+
+processes/electromagnetic/muons                  emmuons-V08-00-00
+-------------------------------
+- Substituted method SetStepLimits() by SetStepFunction().
+- Moved initialisation of default values to constructors.
+
+processes/electromagnetic/standard               emstand-V08-00-01
+----------------------------------
+- G4MultipleScattering: changed value of 'facgeom' (4 -> 3.5)
+  tlimitmin = facrange*50*micrometer.
+- G4MscModel: changed tail of angular distribution.
+- Substituted method SetStepLimits() by SetStepFunction().
+- Moved initialisation of default values to constructors.
+
+processes/electromagnetic/utils                  emutils-V08-00-01
+-------------------------------
+- G4VEnergyLossProcess:
+  o Simplified subcutoff calculation.
+  o Remove 'minStepLimit' member and use 'finalRange'.
+  o Reset 'currentCouple' when StepFunction is changed.
+  o Recalculation of 'presafety' for subcutoff.
+  o Update energy constraint for subcutoff.
+  o Added energy correction to subcutoff.
+- G4EmCalculator: added GetCSDARange() method.
+- Added G4EmTableType enumerator and use it to reduce code duplication.
+- G4VEmProcess: removed dependence on G4NistManager.
+- Substituted PreciseRange with CSDARange.
+- Substituted method SetStepLimits() by SetStepFunction().
+
+processes/electromagnetic/xrays                  xrays-V08-00-00
+-------------------------------
+- New algorithm for XTR angular distribution based on the transparent regular
+  radiator. The method can help for more precise estimation of XTR angular
+  distribution needed in tracking applications of XTR detectors (ATLAS).
+
+processes/hadronic/management                    hadr-man-V08-00-02
+-----------------------------
+- G4HadronicProcess: fixed problem report #611. Problems caused when
+  hadronic interactions reset stopButAlive particle to Alive.
+- Added diagnostics when hadronic exceptions occur in G4HadronicProcess
+  and G4EnergyRangeManager.
+
+processes/hadronic/models/binary_cascade         hadr-binary-V08-00-00
+----------------------------------------
+- Fixed problem report #794. Projectile nucleus needs to be centered.
+
+processes/hadronic/models/de_excitation          hadr-deex-V08-00-01
+---------------------------------------
+- G4NuclearLevelManager: print a warning if no data file is present.
+  Addressed problem report #814.
+- G4ParaFissionModel: fix for compilation error, following problem
+  report #817.
+
+processes/hadronic/models/neutron_hp             hadr-hpn-V08-00-01
+------------------------------------
+- Fixes core dump observed when neutron energy is close to 20 MeV.
+
+processes/hadronic/models/radioactive_decay      radioactive_decay-V08-00-01
+-------------------------------------------
+- G4NuclearDecayChannel::BetaDecayIt(): check for negative sqrt()
+  argument in 'daughtermomentum[1]'. Fixes problem report #822.
+
+processes/hadronic/stopping                      hadr-stopping-V08-00-00
+---------------------------
+- Set process type to be 'fHadronic'. Was not set previously.
+
+processes/hadronic/util                          hadr-util-V08-00-01
+-----------------------
+- G4ReactionDynamics: added array bounds protection in TwoCluster().
+
+processes/management                             procman-V07-01-01
+--------------------
+- G4VProcess::StartTracking() now takes G4Track* as an argument.
+  G4ProcessManager::StartTracking() now invokes this new method.
+  Functionality to be used for future developments.
+- Implemented migration to <sstream> from deprecated <strstream>.
+
+track                                            track-V08-00-00
+-----
+- G4ParticleChangeForRadDecay is now derived from G4ParticleChangeForDecay.
+
+visualization/DAWN                               DAWN-V08-00-00
+------------------
+- Prevented possibility of having duplicate instances of the geometry
+  in the graphics file.
+
+visualization/management                         visman-V08-00-02
+------------------------
+- Improved /vis/scene/notifyHandlers so that it forces a rebuild of the
+  graphical database, if any. Particularly relevant for Open Inventor.
+- G4VisManager:
+  o Apply "/vis/scene/notifyHandlers" if world has been added to an empty
+    scene.
+  o Prepared for RayTracer reorganisation (friend status).
+  o Changed ERROR to WARNING when user calls Draw with invalid view.
+- G4VisCommandsViewer:
+  o "/vis/viewer/refresh": if world is added to
+    an empty scene, invoke UpdateVisManagerScene(), which applies
+    "/vis/scene/notifyHandlers", which now forces a rebuild.
+  o Fixed bug in "/vis/viewer/rebuild".
+- G4VSceneHandler:
+  o At end of event or run, the view is refreshed and the scene
+    (detector geometry, etc.) is drawn or written to file.
+  o Improved warning messages.
+- G4VisExecutive: added protection.
+- G4Scene: improved warning messages.
+- G4VisCommandsScene: simplified registration in '/vis/scene/create' of
+  scene to avoid recursive invocation of '/vis/scene/notifyHandlers'.
+- G4VisCommandsSceneAdd: improved message when world not available.
+- G4VisCommandsViewer: in '/vis/viewer/refresh', when world added, delegate
+  to '/vis/scene/notifyHandlers'. Avoids double refresh.
+
+visualization/modeling                           modeling-V08-00-00
+----------------------
+- Changed last remaining G4Transform3D::Identity to G4Transform3D().
+
+visualization/OpenGL                             opengl-V08-00-00
+--------------------
+- Improved efficiency; made G4OpenGLXmViewerMessenger smart.
+
+visualization/RayTracer                          raytracer-V08-00-00
+-----------------------
+- Reorganisation:
+  o Allowed multiple ray tracers.
+  o Separated out the original ray tracer into G4TheRayTracer, to be
+    used by viewers.
+  o Made G4RTMessenger a smart singleton that queries the vis manager
+    for tracers.
+  o Caused G4RayTracer to instantiate a default ray tracer if the user
+    wants to use /vis/rayTracer commands without the benefit of the
+    vis system (scene handlers and viewers).
+
+visualization/test                               vistest-V08-00-00
+------------------
+- Added twisted solids and improved Perspective example.
+
+visualization/VRML                               VRML-V08-00-00
+------------------
+- Prevented possibility of having duplicate instances of the geometry
+  in the graphics file.
+
+physics_lists
+-------------
+- electromagnetic (emphys-V08-00-00)
+  o Substituted PreciseRange with CSDARange.
+- hadronic (hadr-lists-V08-00-00)
+  o Renamed G4EmStandardPhysics71 to G4EmStandardPhysics72.
+  o Define StepFunction of e+ and e- (1.0, 1.0*mm) for G4EmStandardPhysics71
+    in order to have backward compatibility with the previous release.
+
+examples                                         examples-V08-00-01
+--------
+- Updated reference outputs.
+- extended/electromagnetic/TestEm1 (testem1-V08-00-00)
+  o Added PhysListEmLivermore and PhysListEmPenelope.
+  o Renamed csdaRange to trueRange.
+  o Create histograms for primary particle only.
+  o Refreshed all macros. Change names.
+  o Call GetCSDARange() in EndOfRun.
+- extended/electromagnetic/TestEm2 (testem2-V08-00-02)
+  o Suppress the geometrical replica. The energy profiles are produced
+    without geometrical step limitation.
+  o In geant3: suppress the geometrical disivions.
+  o Removed histograms of particle flux. Histograms 10-12 become 7-9.
+  o DetectorConstruction, RunAction: MaxBin=500.
+  o Simplified PhysicsList and Builders.
+- extended/electromagnetic/TestEm7 (testem7-V08-00-00)
+  o Trivial fix of memory leak
+- extended/medical/GammaTherapy (gtherapy-V08-00-00)
+  o Substituted PreciseRange with CSDARange.
+
+tests                                            tests-V08-00-01
+-----
+- Updated reference outputs.
+- test31 (test31-V08-00-00)
+  o Substituted PreciseRange with CSDARange.
+- test40 (test40-V08-00-00)
+  o Completed missing migration to new particles design.
