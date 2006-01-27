@@ -1,4 +1,4 @@
-# $Id: allproceses.mac,v 1.1 2006-01-06 12:09:57 maire Exp $
+# $Id: allproceses.mac,v 1.2 2006-01-27 09:55:51 maire Exp $
 #
 # Macro file for "TestEm13.cc"
 # (can be run in batch, without graphic)
@@ -11,7 +11,7 @@
 /testem/det/setMat Water
 /testem/det/setSize 100 m
 #
-###/testem/phys/addPhysics g4v52
+#### /testem/phys/addPhysics g4v52
 #
 /run/initialize
 #

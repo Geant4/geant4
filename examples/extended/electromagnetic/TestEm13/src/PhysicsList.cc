@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.1 2006-01-06 12:09:57 maire Exp $
+// $Id: PhysicsList.cc,v 1.2 2006-01-27 09:55:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,6 +31,9 @@
  
 #include "PhysListEmStandard.hh"
 #include "PhysListEmG4v52.hh"
+
+#include "PhysListEmLivermore.hh"
+#include "PhysListEmPenelope.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -100,6 +103,16 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmG4v52(name);
     
+  } else if (name == "livermore") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmLivermore(name);
+    
+  } else if (name == "penelope") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmPenelope(name);
+            
   } else {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
            << " is not defined"

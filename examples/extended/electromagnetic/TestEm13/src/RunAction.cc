@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.1 2006-01-06 12:09:57 maire Exp $
+// $Id: RunAction.cc,v 1.2 2006-01-27 09:55:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -89,9 +89,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4int NbOfEvents = aRun->GetNumberOfEvent();
   if (NbOfEvents == 0) return;
   
-  std::ios::fmtflags mode = G4cout.flags();
-  G4cout.setf(std::ios::fixed,std::ios::floatfield);
-  G4int  prec = G4cout.precision(2);
+  G4int  prec = G4cout.precision(5);
     
   G4Material* material = detector->GetMaterial();
   G4double density = material->GetDensity();
@@ -131,7 +129,6 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double massicMFP = MeanFreePath*density;
   G4double massicAC  = 1./massicMFP;
    
-  G4cout.precision(5);       
   G4cout << "\n\n MeanFreePath:   \t"<< G4BestUnit(MeanFreePath,"Length")
          << " +- "                   << G4BestUnit( rms,"Length")
          << "\tmassic: "             << massicMFP*cm2/g << " g/cm2 "
@@ -141,6 +138,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   //check cross section from G4EmCalculator
   //
+  G4cout << "\n Verification : "
+         << "mass_AttenuationCoef computed from processes (G4EmCalculator):";
+  
   G4EmCalculator emCalculator;
   G4double sumc = 0.0;  
   for (size_t i=0; i< ProcCounter->size();i++) {
@@ -149,15 +149,13 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     emCalculator.ComputeCrossSectionPerVolume(energy,particle,
                                               procName,material)/density;
     sumc += massSigma;
-    G4cout << "\n Mass AttenuationCoef for " << procName
-           << " from G4EmCalculator: \t"
+    G4cout << "\n \t" << std::setw( 8) << procName << " : " 
            << massSigma*g/cm2 << " cm2/g";
   }  	   
-  G4cout << "\n\n Sum of mass AttenuationCoef "
-	 << " from G4EmCalculator: \t"
-	 << sumc*g/cm2 << " cm2/g" << G4endl;
+  G4cout << "\n\n \t" << std::setw(11) << "Total : " 
+         << sumc*g/cm2 << " cm2/g" << G4endl;
 	 
-  G4cout.setf(mode,std::ios::floatfield);
+  //restore default format	 
   G4cout.precision(prec);         
 
   // delete and remove all contents in ProcCounter 
