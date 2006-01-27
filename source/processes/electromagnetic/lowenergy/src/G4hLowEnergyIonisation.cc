@@ -95,6 +95,7 @@
 // 30 Aug   2004 V.Ivanchenko use energy limit for parameterisation from model
 // 03 Oct   2005 V.Ivanchenko change logic of definition of high energy limit for
 //               parametrised proton model: min(user value, model limit)
+// 26 Jan   2005 S. Chauvie added PrintInfoDefinition() for antiproton
 
 
 // -----------------------------------------------------------------------
@@ -383,7 +384,7 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
     G4cout << (*theDEDXpTable) << G4endl;
   }
 
-  if((&aParticleType == theProton) ) PrintInfoDefinition() ;
+  if((&aParticleType == theProton) ||  (&aParticleType == theAntiProton)) PrintInfoDefinition() ;
 
   if(verboseLevel > 0) {
     G4cout << "G4hLowEnergyIonisation::BuildPhysicsTable: end for "
