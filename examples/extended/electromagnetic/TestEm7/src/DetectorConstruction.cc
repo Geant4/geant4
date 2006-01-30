@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.4 2003-11-25 15:19:05 gcosmo Exp $
+// $Id: DetectorConstruction.cc,v 1.5 2006-01-30 10:35:33 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -215,7 +215,8 @@ void DetectorConstruction::PrintParameters()
   if (tallyNumber > 0) {
     G4cout << "---> There are " << tallyNumber << " tallies : "
            << G4BestUnit(tallySize,"Length")
-	   << " of " << tallyMaterial->GetName() << G4endl;
+	   << " of " << tallyMaterial->GetName()
+	   << "  (mass : " << G4BestUnit(tallyMass,"Mass") << ")" << G4endl;
 	   
     for (G4int j=0; j<tallyNumber; j++)
      G4cout << "tally " << j << ": "

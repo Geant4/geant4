@@ -1,7 +1,8 @@
-# $Id: ionC12.mac,v 1.14 2006-01-30 10:35:33 maire Exp $
+# $Id: tallies.mac,v 1.1 2006-01-30 10:35:33 maire Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
+# It shows how to introduce simple tallies
 #
 #
 /control/verbose 2
@@ -18,21 +19,17 @@
 /testem/det/tallyPosition  0.  0. 0. cm
 /testem/det/tallyPosition  5.  0. 0. cm
 #
-/testem/phys/addPhysics  standard		#em physics
-#
-/testem/phys/addPhysics  binary 		#hadronic physics
-/testem/phys/addPhysics  binary_ion		#hadronic physics
-/testem/phys/addPhysics  elastic		#hadronic physics
+/testem/phys/addPhysics  standard	# em physics  
 #
 /run/initialize
 #
-/gun/particle ion
-/gun/ion 6 12 6
-/gun/energy 3.5 GeV
-# beam size
-/testem/gun/rndm 2 mm
+/gun/particle proton
+/gun/energy 160 MeV
 #
-# step linit
+# beam size
+/testem/gun/rndm 3 mm
+#
+# limit the step size
 /testem/stepMax 1 mm
 #
 /testem/event/printModulo 1000

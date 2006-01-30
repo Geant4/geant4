@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.16 2006-01-25 16:03:58 vnivanch Exp $
+// $Id: RunAction.cc,v 1.17 2006-01-30 10:35:33 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -184,7 +184,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double rms = projRange2 - projRange*projRange;        
   if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
 
-  G4cout.precision(5);       
+  G4cout.precision(6);       
   G4cout << "\n projected Range= "<< G4BestUnit(projRange,"Length")
          << "   rms= "            << G4BestUnit( rms,"Length")
          << G4endl;
@@ -200,12 +200,13 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     for (G4int j=0; j<tallyNumber; j++) {
       G4double Edep = tallyEdep[j], ratio = 100*Edep/Ebeam;
       G4double Dose = Edep/tallyMass;
-      G4cout << "tally " << j << ": \t \t"
+      G4cout << " tally " << j << ": \t \t"
              << G4BestUnit(Edep,"Energy") << "\t"
 	     << ratio << " % \t"
 	     << G4BestUnit(Dose,"Dose")   << G4endl;
     }
-    G4cout << "\n---------------------------------------------------------\n"; 
+    G4cout << "\n---------------------------------------------------------\n";
+    G4cout << G4endl; 
   }
 
 #ifdef G4ANALYSIS_USE
