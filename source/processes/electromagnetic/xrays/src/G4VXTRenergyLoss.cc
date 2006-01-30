@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.30 2006-01-27 15:30:22 grichine Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.31 2006-01-30 11:31:15 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -526,7 +526,7 @@ void G4XTRenergyLoss::BuildAngleTable()
 
 G4PhysicsFreeVector* G4XTRenergyLoss::GetAngleVector(G4double energy, G4int n)
 {
-  G4double theta, result, tmp=0., cof1, cof2, cofMin, cofPHC, angleSum  = 0.0;;
+  G4double theta=0., result, tmp=0., cof1, cof2, cofMin, cofPHC, angleSum  = 0.;
   G4int iTheta, k, kMax, kMin;
 
   G4PhysicsFreeVector* angleVector = new G4PhysicsFreeVector(n);
