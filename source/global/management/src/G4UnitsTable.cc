@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc,v 1.28 2005-08-12 13:36:47 maire Exp $
+// $Id: G4UnitsTable.cc,v 1.29 2006-01-30 11:10:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
@@ -33,6 +33,7 @@
 // 06-03-01: migration to STL vectors, G.Cosmo
 // 06-05-02: BestUnit operator<<  flux instead of G4cout (mma)
 // 12-08-05: cm2/g ("Surface/Mass")  (mma)
+// 30-06-05: um for micrometer (mma)
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -185,7 +186,7 @@ void G4UnitDefinition::BuildUnitsTable()
  new G4UnitDefinition(     "meter","m"       ,"Length",meter);
  new G4UnitDefinition("centimeter","cm"      ,"Length",centimeter); 
  new G4UnitDefinition("millimeter","mm"      ,"Length",millimeter);
- //new G4UnitDefinition("micrometer","um"      ,"Length",micrometer);
+ new G4UnitDefinition("micrometer","um"      ,"Length",micrometer);
  new G4UnitDefinition("micrometer","mum"     ,"Length",micrometer);
  new G4UnitDefinition( "nanometer","nm"      ,"Length",nanometer);
  new G4UnitDefinition(  "angstrom","Ang"     ,"Length",angstrom);    
