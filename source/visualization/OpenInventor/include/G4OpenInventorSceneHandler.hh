@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.26 2005-06-02 17:43:46 allison Exp $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.27 2006-01-30 13:55:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,7 +37,10 @@
 // Inheritance :
 #include "G4VSceneHandler.hh"
 
+#include "G4PhysicalVolumeModel.hh"
+
 #include <map>
+#include <vector>
 
 class G4OpenInventor;
 class SoSeparator;
@@ -65,6 +68,13 @@ public:
   void AddPrimitive (const G4Scale& scale) {
     G4VSceneHandler::AddPrimitive (scale);
   }
+  ///////////////////////////////////////////////////////////////
+  // Other inherited functions.
+  void EstablishSpecials (G4PhysicalVolumeModel&);
+  // Used to establish any special relationships between scene and this
+  // particular type of model - non-pure, i.e., no requirement to
+  // implement.  See G4PhysicalVolumeModel.hh for details.
+
   void 		ClearStore ();
   void 		ClearTransientStore ();
   
@@ -92,6 +102,10 @@ private:
   //
   std::map <const G4LogicalVolume*, SoSeparator*,
     std::less <const G4LogicalVolume*> > fSeparatorMap;
+
+  typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
+  std::vector<PVNodeID> fDrawnPVPath;  // Path of drawn (non-culled) PVs.
+
   SoSeparator* fRoot;
   SoSeparator* fDetectorRoot;
   SoSeparator* fTransientRoot;

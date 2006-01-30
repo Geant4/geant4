@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.40 2005-12-12 20:11:32 allison Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.41 2006-01-30 13:55:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -602,6 +602,15 @@ void G4OpenInventorSceneHandler::ClearTransientStore () {
   fTransientRoot->removeAllChildren();
 }
 
+void G4OpenInventorSceneHandler::EstablishSpecials
+(G4PhysicalVolumeModel& pvModel) {
+  pvModel.DefinePointersToWorkingSpace (&fCurrentDepth,
+                                        &fpCurrentPV,
+                                        &fpCurrentLV,
+                                        &fpCurrentMaterial,
+                                        &fDrawnPVPath);
+}
+
 void G4OpenInventorSceneHandler::PreAddSolid
 (const G4Transform3D& objectTransformation,
  const G4VisAttributes& visAttribs) {
@@ -664,6 +673,23 @@ void G4OpenInventorSceneHandler::PreAddSolid
   //printf("debug : PreAddSolid : %g %g %g : %d\n",
     //red,green,blue,pVisAttribs->IsVisible());
                
+  // fDrawnPVPath is the path of the current drawn (non-culled) volume
+  // in terms of drawn (non-culled) ancesters.  Each node is
+  // identified by a PVNodeID object, which is a physical volume and
+  // copy number.  It is a vector of PVNodeIDs corresponding to the
+  // geometry hierarchy actually selected, i.e., not culled.
+  typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
+  typedef std::vector<PVNodeID>::iterator PVPath_iterator;
+  typedef std::vector<PVNodeID>::reverse_iterator PVPath_reverse_iterator;
+  PVPath_reverse_iterator ri;
+  // Find mother.  ri points to mother, if any.
+  G4LogicalVolume* MotherVolume = 0;
+  ri = ++fDrawnPVPath.rbegin();
+  if (ri != fDrawnPVPath.rend()) {
+    // This volume has a mother.
+    MotherVolume = ri->GetPhysicalVolume()->GetLogicalVolume();
+  }
+
   if(!fpCurrentLV || !fpCurrentPV) {
     SoMaterial* material = 
       fStyleCache->getMaterial((float)red,
@@ -711,21 +737,29 @@ void G4OpenInventorSceneHandler::PreAddSolid
 
     // Add the full separator to the dictionary; it is indexed by the 
     // address of the logical volume!
-    // NOTE: the map is no longer built iteratively from the whole hierarchy
-    //       of volumes since it is no longer possible to retrieve the mother
-    //       physical volume. The algorithm requires review !   - GC
-    //
     fSeparatorMap[fpCurrentPV->GetLogicalVolume()] = fullSeparator;
 
-    // Find out where to add this volume.  This means locating its mother.  
+    // Find out where to add this volume.
     // If no mother can be found, it goes under root.
-    G4LogicalVolume* MotherVolume = fpCurrentPV->GetMotherLogical();
     if (MotherVolume) {
       if (fSeparatorMap.find(MotherVolume) != fSeparatorMap.end()) {
-        //printf("debug : PreAddSolid : mother found in map\n");
+        //printf("debug : PreAddSolid : mother %s found in map\n",
+	//     MotherVolume->GetName().c_str());
         fSeparatorMap[MotherVolume]->addChild(detectorTreeKit);
       } else {
-        //printf("debug : PreAddSolid : mother not found in map !!!\n");
+	// Mother not previously encountered.  Shouldn't happen, since
+	// G4PhysicalVolumeModel sends volumes as it encounters them,
+	// i.e., mothers before daughters, in its descent of the
+	// geometry tree.  Error!
+	G4cout << "ERROR: G4OpenInventorSceneHandler::PreAddSolid: Mother "
+	       << ri->GetPhysicalVolume()->GetName()
+	       << ':' << ri->GetCopyNo()
+	       << " not previously encountered."
+	  "\nShouldn't happen!  Please report to visualization coordinator."
+	       << G4endl;
+	// Continue anyway.  Add to root of scene graph tree...
+	//printf("debug : PreAddSolid : mother %s not found in map !!!\n",
+	//     MotherVolume->GetName().c_str());
         fDetectorRoot->addChild(detectorTreeKit);
       }
     } else {
@@ -737,12 +771,21 @@ void G4OpenInventorSceneHandler::PreAddSolid
   } else {
     // This block of code is executed for leaf parts.
 
-    // Locate the mother volume and find it's corresponding full separator
-    G4LogicalVolume* MotherVolume = fpCurrentPV->GetMotherLogical();
     if (MotherVolume) {
       if (fSeparatorMap.find(MotherVolume) != fSeparatorMap.end()) {
         fCurrentSeparator = fSeparatorMap[MotherVolume];
       } else {
+	// Mother not previously encountered.  Shouldn't happen, since
+	// G4PhysicalVolumeModel sends volumes as it encounters them,
+	// i.e., mothers before daughters, in its descent of the
+	// geometry tree.  Error!
+	G4cout << "ERROR: G4OpenInventorSceneHandler::PreAddSolid: Mother "
+	       << ri->GetPhysicalVolume()->GetName()
+	       << ':' << ri->GetCopyNo()
+	       << " not previously encountered."
+	  "\nShouldn't happen!  Please report to visualization coordinator."
+	       << G4endl;
+	// Continue anyway.  Add to root of scene graph tree...
         fCurrentSeparator = fDetectorRoot;
       }
     } else {

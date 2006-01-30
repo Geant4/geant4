@@ -1,4 +1,4 @@
-$Id: History,v 1.77 2006-01-26 12:05:16 allison Exp $
+$Id: History,v 1.78 2006-01-30 13:55:22 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,12 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+30th January 2006  John Allison  (openinventor-V08-00-01)
+- Implemented drawn volume path.  Needs modeling-V08-00-01.  Scene
+  graph now corresponds to drawn, i.e., non-culled geometry.
+  Inability to find (drawn) mothers shouldn't happen now, and it
+  triggers an error message.
 
 26th January 2006  John Allison  (openinventor-V08-00-00)
 - Coworks with visman-V08-00-04 (removed fModified).
