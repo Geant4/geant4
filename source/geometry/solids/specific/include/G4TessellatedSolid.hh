@@ -1,15 +1,38 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration and of QinetiQ Ltd,  subject DEFCON 705 IPR *
+// * conditions.                                                      *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+// $Id: G4TessellatedSolid.hh,v 1.2 2006-01-30 14:39:53 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
-// MODULE:		G4TessellatedSolid.hh
+// MODULE:              G4TessellatedSolid.hh
 //
-// Date:		15/06/2005
-// Author:		P R Truscott
-// Organisation:	QinetiQ Ltd, UK
-// Customer:		UK Ministry of Defence : RAO CRP TD Electronic Systems
-// Contract:		C/MAT/N03517
-//
-// This software is the intelectual property of QinetiQ Ltd, subject
-// DEFCON 705 IPR conditions.
+// Date:                15/06/2005
+// Author:              P R Truscott
+// Organisation:        QinetiQ Ltd, UK
+// Customer:            UK Ministry of Defence : RAO CRP TD Electronic Systems
+// Contract:            C/MAT/N03517
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -19,73 +42,67 @@
 //  - Added GetPolyhedron()
 //
 // 31 October 2004, P R Truscott, QinetiQ Ltd, UK
-// Created.
+//  - Created.
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
-// DISCLAIMER
-// ----------
+// Class description:
 //
-//
-//
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//
-// DESCRIPTION
-// -----------
-//    G4TessellatedSolid is a special Geant4 Solid defined by a number of 
-//    G4VFacet.It is important that the supplied facets shall form a fully 
-//    enclose space which is the solid. 
+//    G4TessellatedSolid is a special Geant4 solid defined by a number of 
+//    facets (G4VFacet). It is important that the supplied facets shall form a
+//    fully enclose space which is the solid. 
 //    At the moment only two types of facet can be used for the construction of 
 //    a G4TessellatedSolid, i.e. the G4TriangularFacet and G4QuadrangularFacet.
 //
-//    How to contruct a G4TessellatedSolid
+//    How to contruct a G4TessellatedSolid:
 //  
-//       .....
-////      First declare a tessellated solid 
-//           G4TessellatedSolid solidTarget = new G4TessellatedSolid("Solid_name");
-////      Define the facets which form the solid
-// 
-//           G4double targetSiz = 10*cm ;
-//           G4TriangularFacet *facet1 = new
-//           G4TriangularFacet (G4ThreeVector(-targetSize,-targetSize,        0.0),
-//                     G4ThreeVector(+targetSize,-targetSize,        0.0),
-//                     G4ThreeVector(        0.0,        0.0,+targetSize),
-//                     ABSOLUTE);
-//           G4TriangularFacet *facet2 = new
-//           G4TriangularFacet (G4ThreeVector(+targetSize,-targetSize,        0.0),
-//                                G4ThreeVector(+targetSize,+targetSize,        0.0),
-//                                G4ThreeVector(        0.0,        0.0,+targetSize),
-//                                ABSOLUTE);
-//           G4TriangularFacet *facet3 = new
-//           G4TriangularFacet (G4ThreeVector(+targetSize,+targetSize,        0.0),
-//                                G4ThreeVector(-targetSize,+targetSize,        0.0),
-//                                G4ThreeVector(        0.0,        0.0,+targetSize),
-//                                ABSOLUTE);
-//           G4TriangularFacet *facet4 = new
-//           G4TriangularFacet (G4ThreeVector(-targetSize,+targetSize,        0.0),
-//                                G4ThreeVector(-targetSize,-targetSize,        0.0),
-//                                G4ThreeVector(        0.0,        0.0,+targetSize),
-//                                ABSOLUTE);
-//           G4QuadrangularFacet *facet5 = new
-//           G4QuadrangularFacet (G4ThreeVector(-targetSize,-targetSize,        0.0),
-//                                G4ThreeVector(-targetSize,+targetSize,        0.0),
-//                                G4ThreeVector(+targetSize,+targetSize,        0.0),
-//                                G4ThreeVector(+targetSize,-targetSize,        0.0),
-//                                ABSOLUTE);
-////      Noew add the facets to the solid     
-//             solidTarget->AddFacet((G4VFacet*) facet1);
-//             solidTarget->AddFacet((G4VFacet*) facet2);
-//             solidTarget->AddFacet((G4VFacet*) facet3);
-//             solidTarget->AddFacet((G4VFacet*) facet4);
-//             solidTarget->AddFacet((G4VFacet*) facet5);
-////      Finally declare the solid is complete  
-//             solidTarget->SetSolidClosed(true);
+//    First declare a tessellated solid:
 //
-//  ...............
+//      G4TessellatedSolid* solidTarget = new G4TessellatedSolid("Solid_name");
+//
+//    Define the facets which form the solid
+// 
+//      G4double targetSiz = 10*cm ;
+//      G4TriangularFacet *facet1 = new
+//      G4TriangularFacet (G4ThreeVector(-targetSize,-targetSize,        0.0),
+//                         G4ThreeVector(+targetSize,-targetSize,        0.0),
+//                         G4ThreeVector(        0.0,        0.0,+targetSize),
+//                         ABSOLUTE);
+//      G4TriangularFacet *facet2 = new
+//      G4TriangularFacet (G4ThreeVector(+targetSize,-targetSize,        0.0),
+//                         G4ThreeVector(+targetSize,+targetSize,        0.0),
+//                         G4ThreeVector(        0.0,        0.0,+targetSize),
+//                         ABSOLUTE);
+//      G4TriangularFacet *facet3 = new
+//      G4TriangularFacet (G4ThreeVector(+targetSize,+targetSize,        0.0),
+//                         G4ThreeVector(-targetSize,+targetSize,        0.0),
+//                         G4ThreeVector(        0.0,        0.0,+targetSize),
+//                         ABSOLUTE);
+//      G4TriangularFacet *facet4 = new
+//      G4TriangularFacet (G4ThreeVector(-targetSize,+targetSize,        0.0),
+//                         G4ThreeVector(-targetSize,-targetSize,        0.0),
+//                         G4ThreeVector(        0.0,        0.0,+targetSize),
+//                         ABSOLUTE);
+//      G4QuadrangularFacet *facet5 = new
+//      G4QuadrangularFacet (G4ThreeVector(-targetSize,-targetSize,      0.0),
+//                           G4ThreeVector(-targetSize,+targetSize,      0.0),
+//                           G4ThreeVector(+targetSize,+targetSize,      0.0),
+//                           G4ThreeVector(+targetSize,-targetSize,      0.0),
+//                           ABSOLUTE);
+//
+//    Then add the facets to the solid:    
+//
+//      solidTarget->AddFacet((G4VFacet*) facet1);
+//      solidTarget->AddFacet((G4VFacet*) facet2);
+//      solidTarget->AddFacet((G4VFacet*) facet3);
+//      solidTarget->AddFacet((G4VFacet*) facet4);
+//      solidTarget->AddFacet((G4VFacet*) facet5);
+//
+//    Finally declare the solid is complete:
+//
+//      solidTarget->SetSolidClosed(true);
 //
 ///////////////////////////////////////////////////////////////////////////////
-//
-//
 #ifndef G4TessellatedSolid_hh
 #define G4TessellatedSolid_hh 1
 
@@ -103,11 +120,10 @@
 #include <vector>
 #include <map>
 
-using namespace std;
-
 class G4TessellatedSolid : public G4VSolid
 {
-  public:
+  public:  // with description
+
     G4TessellatedSolid ();
     G4TessellatedSolid (const G4String &name);
     ~G4TessellatedSolid ();
@@ -120,18 +136,18 @@ class G4TessellatedSolid : public G4VSolid
     G4VFacet *GetFacet (size_t i) const;
     size_t GetNumberOfFacets () const;
     
-//    G4double GetCubicVolume ();
-    
-//    void ComputeDimensions (G4VPVParameterisation* p, const G4int n,
-//      const G4VPhysicalVolume* pRep) const;
+//  G4double GetCubicVolume ();
+//
+//  void ComputeDimensions (G4VPVParameterisation* p, const G4int n,
+//                          const G4VPhysicalVolume* pRep) const;
     
     EInside Inside (const G4ThreeVector &p) const;
     G4ThreeVector SurfaceNormal (const G4ThreeVector &p) const;
-    G4double DistanceToIn (const G4ThreeVector &p, const G4ThreeVector &v)
-      const;
-    G4double DistanceToIn (const G4ThreeVector &p) const;
-    G4double DistanceToOut (const G4ThreeVector &p, const G4ThreeVector &v,
-      const G4bool calcNorm=false, G4bool *validNorm=0,G4ThreeVector *n=0) const;
+    G4double DistanceToIn(const G4ThreeVector &p, const G4ThreeVector &v) const;
+    G4double DistanceToIn(const G4ThreeVector &p) const;
+    G4double DistanceToOut(const G4ThreeVector &p, const G4ThreeVector &v,
+                           const G4bool calcNorm=false,
+                           G4bool *validNorm=0, G4ThreeVector *n=0) const;
     G4double DistanceToOut (const G4ThreeVector &p) const;
     G4GeometryType GetEntityType () const;
     
@@ -139,10 +155,11 @@ class G4TessellatedSolid : public G4VSolid
     G4bool GetSolidClosed () const;
         
     G4bool CalculateExtent(const EAxis pAxis, const G4VoxelLimits& pVoxelLimit,
-      const G4AffineTransform& pTransform, G4double& pMin,
-      G4double& pMax) const;
+                           const G4AffineTransform& pTransform, G4double& pMin,
+                           G4double& pMax) const;
 
     std::ostream &StreamInfo(std::ostream &os) const;
+
   // Functions for visualization
  
     void          DescribeYourselfTo (G4VGraphicsScene& scene) const;
@@ -183,10 +200,6 @@ class G4TessellatedSolid : public G4VSolid
     G4bool                   solidClosed;
     
     G4double                 dirTolerance;
-    
 };
+
 #endif
-///////////////////////////////////////////////////////////////////////////////
-//
-
-

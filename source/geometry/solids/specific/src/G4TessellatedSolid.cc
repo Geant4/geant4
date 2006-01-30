@@ -1,15 +1,38 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration and of QinetiQ Ltd,  subject DEFCON 705 IPR *
+// * conditions.                                                      *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+// $Id: G4TessellatedSolid.cc,v 1.3 2006-01-30 14:39:53 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
-// MODULE:		G4TessellatedSolid.cc
+// MODULE:              G4TessellatedSolid.cc
 //
-// Date:		15/06/2005
-// Author:		P R Truscott
-// Organisation:	QinetiQ Ltd, UK
-// Customer:		UK Ministry of Defence : RAO CRP TD Electronic Systems
-// Contract:		C/MAT/N03517
-//
-// This software is the intelectual property of QinetiQ Ltd, subject
-// DEFCON 705 IPR conditions.
+// Date:                15/06/2005
+// Author:              P R Truscott
+// Organisation:        QinetiQ Ltd, UK
+// Customer:            UK Ministry of Defence : RAO CRP TD Electronic Systems
+// Contract:            C/MAT/N03517
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -21,37 +44,22 @@
 //  - added GetPolyHedron()
 // 
 // 31 October 2004, P R Truscott, QinetiQ Ltd, UK
-// Created.
+//  - Created.
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//
-// DISCLAIMER
-// ----------
-//
-//
-//
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//
-// DESCRIPTION
-// -----------
-//
-//
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-//
+
 #include "G4TessellatedSolid.hh"
 #include "G4PolyhedronArbitrary.hh"
 #include "globals.hh"
 
 #include <iostream>
-using namespace std;
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Standard contructor has blank name and defines no facets.
 //
-G4TessellatedSolid::G4TessellatedSolid () : G4VSolid("dummy"),
-					    fpPolyhedron(0), cubicVolume(0.)
+G4TessellatedSolid::G4TessellatedSolid ()
+  : G4VSolid("dummy"), fpPolyhedron(0), cubicVolume(0.)
 {
   dirTolerance = 1.0E-14;
   
@@ -66,13 +74,14 @@ G4TessellatedSolid::G4TessellatedSolid () : G4VSolid("dummy"),
   zMinExtent =  kInfinity;
   zMaxExtent = -kInfinity;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Alternative constructor. Simple define name and geometry type - no facets
 // to detine.
 //
-G4TessellatedSolid::G4TessellatedSolid (const G4String &name) :
-  G4VSolid(name), fpPolyhedron(0), cubicVolume(0.)
+G4TessellatedSolid::G4TessellatedSolid (const G4String &name)
+  : G4VSolid(name), fpPolyhedron(0), cubicVolume(0.)
 {
   dirTolerance = 1.0E-14;
   
@@ -87,6 +96,7 @@ G4TessellatedSolid::G4TessellatedSolid (const G4String &name) :
   zMinExtent =  kInfinity;
   zMaxExtent = -kInfinity;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Destructor.
@@ -95,6 +105,7 @@ G4TessellatedSolid::~G4TessellatedSolid ()
 {
   DeleteObjects ();
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Define assignment operator.
@@ -109,6 +120,7 @@ const G4TessellatedSolid &G4TessellatedSolid::operator=
   
   return *this;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 void G4TessellatedSolid::DeleteObjects ()
@@ -117,6 +129,7 @@ void G4TessellatedSolid::DeleteObjects ()
        f!=facets.end(); f++) delete *f;
   facets.clear();
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 void G4TessellatedSolid::CopyObjects (const G4TessellatedSolid &s)
@@ -131,6 +144,7 @@ void G4TessellatedSolid::CopyObjects (const G4TessellatedSolid &s)
 
 //  cubicVolume = s.GetCubicVolume();  
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Add a facet to the facet list.  Note that you can add, but you cannot
@@ -138,17 +152,12 @@ void G4TessellatedSolid::CopyObjects (const G4TessellatedSolid &s)
 //
 G4bool G4TessellatedSolid::AddFacet (G4VFacet *aFacet)
 {
-//
-//
-// Add the facet to the vector.
-//
+  // Add the facet to the vector.
+
   if (solidClosed)
   {
-    G4cerr <<G4endl;
-    G4cerr <<"ERROR IN G4TessellatedSolid::AddFacet" <<G4endl;
-    G4cerr <<"ATTEMPTED TO ADD FACET WHEN TESSELLATED SOLID CLOSED" <<G4endl;
-    G4cerr <<G4endl;
-    
+    G4Exception("G4TessellatedSolid::AddFacet()", "InvalidSetup",
+                JustWarning, "Attempt to add facets when solid is closed.");
     return false;
   }
   else if (aFacet->IsDefined())
@@ -181,16 +190,16 @@ G4bool G4TessellatedSolid::AddFacet (G4VFacet *aFacet)
   }
   else
   {
-    G4cerr <<G4endl;
-    G4cerr <<"ERROR IN G4TessellatedSolid::AddFacet" <<G4endl;
-    G4cerr <<"ATTEMPTED TO ADD FACET WHICH WASN'T PROPERLY DEFINED" <<G4endl;
-    G4cerr <<"FACET ATTRIBUTES:" <<G4endl;
+    G4Exception("G4TessellatedSolid::AddFacet()", "InvalidSetup",
+                JustWarning, "Attempt to add facet not properly defined.");
+    G4cerr << "Facet attributes:" << G4endl;
     aFacet->StreamInfo(G4cerr);
-    G4cerr <<G4endl;
+    G4cerr << G4endl;
     
     return false;
   }
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 void G4TessellatedSolid::SetSolidClosed (const G4bool t)
@@ -225,10 +234,9 @@ void G4TessellatedSolid::SetSolidClosed (const G4bool t)
         }
       }
     }
-//
-//
-// Now update the maximum x, y and z limits of the volume.
-//
+    //
+    // Now update the maximum x, y and z limits of the volume.
+    //
     for (size_t i=0; i<vertexList.size(); i++)
     {
       G4ThreeVector p = vertexList[i];
@@ -262,10 +270,12 @@ void G4TessellatedSolid::SetSolidClosed (const G4bool t)
     solidClosed = false;
   }
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4bool G4TessellatedSolid::GetSolidClosed () const
   {return solidClosed;}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 const G4TessellatedSolid &G4TessellatedSolid::operator+=
@@ -275,18 +285,21 @@ const G4TessellatedSolid &G4TessellatedSolid::operator+=
     AddFacet(right.GetFacet(i)->GetClone());
   return *this;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4VFacet *G4TessellatedSolid::GetFacet (size_t i) const
 {
   return facets[i];
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 size_t G4TessellatedSolid::GetNumberOfFacets () const
 {
   return facets.size();
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 EInside G4TessellatedSolid::Inside (const G4ThreeVector &p) const
@@ -334,6 +347,7 @@ EInside G4TessellatedSolid::Inside (const G4ThreeVector &p) const
 
   return inside;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4ThreeVector G4TessellatedSolid::SurfaceNormal (const G4ThreeVector &p) const
@@ -354,6 +368,7 @@ G4ThreeVector G4TessellatedSolid::SurfaceNormal (const G4ThreeVector &p) const
   
   return (*minFacet)->GetSurfaceNormal();
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4double G4TessellatedSolid::DistanceToIn (const G4ThreeVector &p,
@@ -374,6 +389,7 @@ G4double G4TessellatedSolid::DistanceToIn (const G4ThreeVector &p,
 
   return minDist;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4double G4TessellatedSolid::DistanceToIn (const G4ThreeVector &p) const
@@ -389,11 +405,12 @@ G4double G4TessellatedSolid::DistanceToIn (const G4ThreeVector &p) const
   
   return minDist;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4double G4TessellatedSolid::DistanceToOut (const G4ThreeVector &p,
-  const G4ThreeVector &v, const G4bool calcNorm, G4bool *validNorm,
-  G4ThreeVector *n) const
+                    const G4ThreeVector &v, const G4bool calcNorm,
+                          G4bool *validNorm, G4ThreeVector *n) const
 {
   G4double minDist1        = kInfinity;
   G4double minDist2        = kInfinity;
@@ -442,6 +459,7 @@ G4double G4TessellatedSolid::DistanceToOut (const G4ThreeVector &p,
     return minDist2;
   }
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4double G4TessellatedSolid::DistanceToOut (const G4ThreeVector &p) const
@@ -457,19 +475,21 @@ G4double G4TessellatedSolid::DistanceToOut (const G4ThreeVector &p) const
   
   return minDist;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4GeometryType G4TessellatedSolid::GetEntityType () const
 {
   return geometryType;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 void G4TessellatedSolid::DescribeYourselfTo (G4VGraphicsScene& scene) const
 {
-  //  scene.AddThis (*this);
   scene.AddSolid (*this);
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Dispatch to parameterisation for replication mechanism dimension
@@ -478,27 +498,29 @@ void G4TessellatedSolid::DescribeYourselfTo (G4VGraphicsScene& scene) const
 //void G4TessellatedSolid::ComputeDimensions (G4VPVParameterisation* p,
 //  const G4int n, const G4VPhysicalVolume* pRep) const
 //{
-//  G4VSolid *ptr = NULL;
+//  G4VSolid *ptr = 0;
 //  ptr           = *this;
 //  p->ComputeDimensions(ptr,n,pRep);
 //}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 std::ostream &G4TessellatedSolid::StreamInfo(std::ostream &os) const
 {
-  os <<G4endl;
-  os <<"GEOMETRY TYPE    = " <<geometryType <<G4endl;
-  os <<"NUMBER OF FACETS = " <<facets.size() <<G4endl;
+  os << G4endl;
+  os << "Geometry Type    = " << geometryType  << G4endl;
+  os << "Number of facets = " << facets.size() << G4endl;
   
   for (FacetCI f = facets.begin(); f != facets.end(); f++)
   {
-    os <<"FACET #          = " <<f-facets.begin()+1 <<G4endl;
+    os << "FACET #          = " << f-facets.begin()+1 << G4endl;
     (*f)->StreamInfo(os);
   }
   os <<G4endl;
   
   return os;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4Polyhedron *G4TessellatedSolid::CreatePolyhedron () const
@@ -530,17 +552,18 @@ G4Polyhedron *G4TessellatedSolid::CreatePolyhedron () const
   
   return (G4Polyhedron*) polyhedron;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4NURBS *G4TessellatedSolid::CreateNURBS () const
 {
-  return NULL;
+  return 0;
 }
 
-////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
 // GetPolyhedron
-
+//
 G4Polyhedron* G4TessellatedSolid::GetPolyhedron () const
 {
   if (!fpPolyhedron ||
@@ -556,8 +579,8 @@ G4Polyhedron* G4TessellatedSolid::GetPolyhedron () const
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4bool G4TessellatedSolid::CalculateExtent(const EAxis pAxis,
-  const G4VoxelLimits& pVoxelLimit, const G4AffineTransform& pTransform,
-  G4double& pMin, G4double& pMax) const
+         const G4VoxelLimits& pVoxelLimit, const G4AffineTransform& pTransform,
+               G4double& pMin, G4double& pMax) const
 {
   if (!pTransform.IsRotated())
   {
@@ -652,36 +675,40 @@ G4bool G4TessellatedSolid::CalculateExtent(const EAxis pAxis,
   }
   else
   {
-  
-  
-  
   }
   return false;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4double G4TessellatedSolid::GetMinXExtent () const
   {return xMinExtent;}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4double G4TessellatedSolid::GetMaxXExtent () const
   {return xMaxExtent;}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4double G4TessellatedSolid::GetMinYExtent () const
   {return yMinExtent;}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4double G4TessellatedSolid::GetMaxYExtent () const
   {return yMaxExtent;}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4double G4TessellatedSolid::GetMinZExtent () const
   {return zMinExtent;}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4double G4TessellatedSolid::GetMaxZExtent () const
   {return zMaxExtent;}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4VisExtent G4TessellatedSolid::GetExtent () const
@@ -689,10 +716,9 @@ G4VisExtent G4TessellatedSolid::GetExtent () const
   return G4VisExtent (xMinExtent, xMaxExtent, yMinExtent, yMaxExtent,
     zMinExtent, zMaxExtent);
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 //G4double G4TessellatedSolid::GetCubicVolume ()
 //  {return cubicVolume;}
-///////////////////////////////////////////////////////////////////////////////
-//
   

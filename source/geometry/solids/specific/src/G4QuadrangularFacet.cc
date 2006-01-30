@@ -1,53 +1,60 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration and of QinetiQ Ltd,  subject DEFCON 705 IPR *
+// * conditions.                                                      *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+// $Id: G4QuadrangularFacet.cc,v 1.2 2006-01-30 14:39:53 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
-// MODULE:		G4QuadrangularFacet.cc
+// MODULE:              G4QuadrangularFacet.cc
 //
-// Date:		15/06/2005
-// Author:		P R Truscott
-// Organisation:	QinetiQ Ltd, UK
-// Customer:		UK Ministry of Defence : RAO CRP TD Electronic Systems
-// Contract:		C/MAT/N03517
-//
-// This software is the intelectual property of QinetiQ Ltd, subject
-// DEFCON 705 IPR conditions.
+// Date:                15/06/2005
+// Author:              P R Truscott
+// Organisation:        QinetiQ Ltd, UK
+// Customer:            UK Ministry of Defence : RAO CRP TD Electronic Systems
+// Contract:            C/MAT/N03517
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // CHANGE HISTORY
 // --------------
 //
-// 31 October 2004, P R Truscott, QinetiQ Ltd, UK
-// Created.
+// 31 October 2004, P R Truscott, QinetiQ Ltd, UK - Created.
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//
-// DISCLAIMER
-// ----------
-//
-//
-//
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//
-// DESCRIPTION
-// -----------
-//
-//
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-//
+
 #include "G4QuadrangularFacet.hh"
 #include "globals.hh"
 
-using namespace std;
 ///////////////////////////////////////////////////////////////////////////////
 //
-// !!!THIS IS A FUDGE!!!  IT'S TWO ADJACENT G4TRIANGULARFACETS --- NOT EFFICIENT
-// BUT PRACTICAL.
+// !!!THIS IS A FUDGE!!!  IT'S TWO ADJACENT G4TRIANGULARFACETS
+// --- NOT EFFICIENT BUT PRACTICAL.
 //
 G4QuadrangularFacet::G4QuadrangularFacet (const G4ThreeVector Pt0,
-  const G4ThreeVector vt1, const G4ThreeVector vt2, const G4ThreeVector vt3,
-  G4FacetVertexType vertexType) : G4VFacet()
+                 const G4ThreeVector vt1, const G4ThreeVector vt2,
+                 const G4ThreeVector vt3, G4FacetVertexType vertexType)
+  : G4VFacet()
 {
   P0        = Pt0;
   nVertices = 4;
@@ -84,19 +91,19 @@ G4QuadrangularFacet::G4QuadrangularFacet (const G4ThreeVector Pt0,
       length3 <= kCarTolerance || length4 <= kCarTolerance ||
       normal1.dot(normal2) < 0.9999999999)
   {
-    G4cerr <<G4endl;
-    G4cerr <<"ERROR IN G4QuadrangularFacet CONSTRUCTOR" <<G4endl;
-    G4cerr <<"LENGTH OF SIDES OF FACET ARE TOO SMALL" <<G4endl;
-    G4cerr <<"OR DO NOT REPRESENT PLANE." <<G4endl;
-    G4cerr <<"P0 = " <<P0 <<G4endl;
-    G4cerr <<"P1 = " <<P[0] <<G4endl;
-    G4cerr <<"P2 = " <<P[1] <<G4endl;
-    G4cerr <<"P3 = " <<P[2] <<G4endl;
-    G4cerr <<"Side lengths = P0->P1" <<length1 <<G4endl;    
-    G4cerr <<"Side lengths = P1->P2" <<length2 <<G4endl;    
-    G4cerr <<"Side lengths = P2->P3" <<length3 <<G4endl;    
-    G4cerr <<"Side lengths = P3->P0" <<length4 <<G4endl;    
-    G4cerr <<G4endl;
+    G4Exception("G4QuadrangularFacet::G4QuadrangularFacet()",
+                "InvalidSetup", JustWarning,
+                "Length of sides of facet are too small or sides not planar.");
+    G4cerr << G4endl;
+    G4cerr << "P0 = " << P0   << G4endl;
+    G4cerr << "P1 = " << P[0] << G4endl;
+    G4cerr << "P2 = " << P[1] << G4endl;
+    G4cerr << "P3 = " << P[2] << G4endl;
+    G4cerr << "Side lengths = P0->P1" << length1 << G4endl;    
+    G4cerr << "Side lengths = P1->P2" << length2 << G4endl;    
+    G4cerr << "Side lengths = P2->P3" << length3 << G4endl;    
+    G4cerr << "Side lengths = P3->P0" << length4 << G4endl;    
+    G4cerr << G4endl;
     
     isDefined     = false;
     geometryType  = "G4QuadragularFacet";
@@ -114,32 +121,35 @@ G4QuadrangularFacet::G4QuadrangularFacet (const G4ThreeVector Pt0,
     G4ThreeVector vtmp = 0.5 * (E[0] + E[1]);
     centroid           = P0 + vtmp;
     radiusSqr          = vtmp.mag2();
-    radius             = sqrt(radiusSqr);
+    radius             = std::sqrt(radiusSqr);
   
     for (size_t i=0; i<4; i++) I.push_back(0);
   }
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4QuadrangularFacet::~G4QuadrangularFacet ()
 {
-  if (facet1 != NULL) delete facet1;
-  if (facet2 != NULL) delete facet2;
+  if (facet1 != 0) delete facet1;
+  if (facet2 != 0) delete facet2;
   
   P.clear();
   E.clear();
   I.clear();
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4VFacet *G4QuadrangularFacet::GetClone ()
 {
   G4QuadrangularFacet *c =
     new G4QuadrangularFacet (P0, P[0], P[1], P[2], ABSOLUTE);
-  G4VFacet *cc         = NULL;
+  G4VFacet *cc         = 0;
   cc                   = c;
   return cc;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4ThreeVector G4QuadrangularFacet::Distance (const G4ThreeVector &p)
@@ -150,6 +160,7 @@ G4ThreeVector G4QuadrangularFacet::Distance (const G4ThreeVector &p)
   if (v1.mag2() < v2.mag2()) return v1;
   else return v2;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4double G4QuadrangularFacet::Distance (const G4ThreeVector &p,
@@ -179,10 +190,12 @@ G4double G4QuadrangularFacet::Distance (const G4ThreeVector &p,
   dist = Distance(p).mag();
   
   return dist;
-}///////////////////////////////////////////////////////////////////////////////
+}
+
+///////////////////////////////////////////////////////////////////////////////
 //
 G4double G4QuadrangularFacet::Distance (const G4ThreeVector &p,
-  const G4double, const G4bool outgoing)
+                                        const G4double, const G4bool outgoing)
 {
   /*G4ThreeVector D  = P0 - p;
   G4double d       = E[0].dot(D);
@@ -215,6 +228,7 @@ G4double G4QuadrangularFacet::Distance (const G4ThreeVector &p,
   
   return dist;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4double G4QuadrangularFacet::Extent (const G4ThreeVector axis)
@@ -228,15 +242,18 @@ G4double G4QuadrangularFacet::Extent (const G4ThreeVector axis)
 
   return s;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4bool G4QuadrangularFacet::Intersect (const G4ThreeVector &p,
   const G4ThreeVector &v, G4bool outgoing, G4double &distance,
   G4double &distFromSurface, G4ThreeVector &normal)
 {
-  G4bool intersect = facet1->Intersect(p,v,outgoing,distance,distFromSurface,normal);
+  G4bool intersect =
+    facet1->Intersect(p,v,outgoing,distance,distFromSurface,normal);
   if (!intersect)
-    intersect = facet2->Intersect(p,v,outgoing,distance,distFromSurface,normal);
+    intersect =
+    facet2->Intersect(p,v,outgoing,distance,distFromSurface,normal);
   
   if (!intersect)
   {
@@ -247,6 +264,3 @@ G4bool G4QuadrangularFacet::Intersect (const G4ThreeVector &p,
   
   return intersect;
 }
-///////////////////////////////////////////////////////////////////////////////
-//
-

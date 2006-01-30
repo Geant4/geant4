@@ -1,67 +1,80 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration and of QinetiQ Ltd,  subject DEFCON 705 IPR *
+// * conditions.                                                      *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+// $Id: G4TriangularFacet.hh,v 1.2 2006-01-30 14:39:53 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
-// MODULE:		G4TriangularFacet.hh
+// MODULE:              G4TriangularFacet.hh
 //
-// Date:		15/06/2005
-// Author:		P R Truscott
-// Organisation:	QinetiQ Ltd, UK
-// Customer:		UK Ministry of Defence : RAO CRP TD Electronic Systems
-// Contract:		C/MAT/N03517
-//
-// This software is the intelectual property of QinetiQ Ltd, subject
-// DEFCON 705 IPR conditions.
+// Date:                15/06/2005
+// Author:              P R Truscott
+// Organisation:        QinetiQ Ltd, UK
+// Customer:            UK Ministry of Defence : RAO CRP TD Electronic Systems
+// Contract:            C/MAT/N03517
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // CHANGE HISTORY
 // --------------
 //
-// 31 October 2004, P R Truscott, QinetiQ Ltd, UK
-// Created.
+// 31 October 2004, P R Truscott, QinetiQ Ltd, UK - Created.
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
-// DISCLAIMER
-// ----------
+// Class description:
 //
-//
-//
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//
-// DESCRIPTION
-// -----------
-//
-//    The G4TriangularFacet class is used for the contruction of G4TessellatedSolid.
-//    It is defined by three vertices, which shall be supplied 
-//    in anti-clockwise order looking from the outsider of the solid where 
-//    it belongs.Its constructor
+//   The G4TriangularFacet class is used for the contruction of
+//   G4TessellatedSolid.
+//   It is defined by three vertices, which shall be supplied in anti-clockwise
+//   order looking from the outsider of the solid where it belongs.
+//   Its constructor:
 //   
 //      G4TriangularFacet (const G4ThreeVector Pt0, const G4ThreeVector vt1,
-//          const G4ThreeVector vt2, G4FacetVertexType);
+//                         const G4ThreeVector vt2, G4FacetVertexType);
 //
-//    takes 4 parameters to define the three vertices:
-//          1) G4FacetvertexType = "ABSOLUTE": in this case Pt0, vt1 and vt2 are 
-//             the three vertices in anti-clockwise order looking from the outsider.
-//          2) G4FacetvertexType = "RELATIVE": in this case the first vertex is Pt0,
-//             the second vertex is Pt0+vt1 and the third vertex is Pt0+vt2, all  
-//             in anti-clockwise order when looking from the outsider.
-//
+//   takes 4 parameters to define the three vertices:
+//      1) G4FacetvertexType = "ABSOLUTE": in this case Pt0, vt1 and vt2 are 
+//         the 3 vertices in anti-clockwise order looking from the outsider.
+//      2) G4FacetvertexType = "RELATIVE": in this case the first vertex is Pt0,
+//         the second vertex is Pt0+vt1 and the third vertex is Pt0+vt2, all  
+//         in anti-clockwise order when looking from the outsider.
+
 ///////////////////////////////////////////////////////////////////////////////
-//
-//
 #ifndef G4TriangularFacet_hh
 #define G4TriangularFacet_hh 1
 
 #include "G4VFacet.hh"
 #include "G4ThreeVector.hh"
 #include "globals.hh"
-using namespace std;
 
 class G4TriangularFacet : public G4VFacet
 {
-  public: 
+  public:  // with description
+
     G4TriangularFacet (const G4ThreeVector Pt0, const G4ThreeVector vt1,
-      const G4ThreeVector vt2, G4FacetVertexType);
+                       const G4ThreeVector vt2, G4FacetVertexType);
     ~G4TriangularFacet ();
     
     G4TriangularFacet (const G4TriangularFacet &right);
@@ -71,17 +84,17 @@ class G4TriangularFacet : public G4VFacet
     G4TriangularFacet *GetFlippedFacet ();
     
     G4ThreeVector Distance (const G4ThreeVector &p);
-//    G4double Distance (const G4ThreeVector &p, const G4bool outgoing);
     G4double Distance (const G4ThreeVector &p, const G4double minDist);
     G4double Distance (const G4ThreeVector &p, const G4double minDist,
-      const G4bool outgoing);
-    G4double Extent (const G4ThreeVector axis);
-    G4bool Intersect (const G4ThreeVector &p, const G4ThreeVector &v,
-      const G4bool outgoing, G4double &distance, G4double &distFromSurface,
-      G4ThreeVector &normal);
+                       const G4bool outgoing);
+    G4double Extent   (const G4ThreeVector axis);
+    G4bool Intersect  (const G4ThreeVector &p, const G4ThreeVector &v,
+                       const G4bool outgoing, G4double &distance,
+                             G4double &distFromSurface, G4ThreeVector &normal);
     G4bool IsInside(const G4ThreeVector &p) const;
       
   private:
+
     G4double a;
     G4double b;
     G4double c;
@@ -90,7 +103,5 @@ class G4TriangularFacet : public G4VFacet
     G4double sMin, sMax;
     G4double tMin;
 };
-#endif
-///////////////////////////////////////////////////////////////////////////////
-//
 
+#endif

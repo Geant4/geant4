@@ -1,41 +1,55 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration and of QinetiQ Ltd,  subject DEFCON 705 IPR *
+// * conditions.                                                      *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+// $Id: G4VFacet.hh,v 1.2 2006-01-30 14:39:53 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
-// MODULE:		G4VFacet.hh
+// MODULE:              G4VFacet.hh
 //
-// Date:		15/06/2005
-// Author:		P R Truscott
-// Organisation:	QinetiQ Ltd, UK
-// Customer:		UK Ministry of Defence : RAO CRP TD Electronic Systems
-// Contract:		C/MAT/N03517
-//
-// This software is the intelectual property of QinetiQ Ltd, subject
-// DEFCON 705 IPR conditions.
+// Date:                15/06/2005
+// Author:              P R Truscott
+// Organisation:        QinetiQ Ltd, UK
+// Customer:            UK Ministry of Defence : RAO CRP TD Electronic Systems
+// Contract:            C/MAT/N03517
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // CHANGE HISTORY
 // --------------
 //
-// 31 October 2004, P R Truscott, QinetiQ Ltd, UK
-// Created.
+// 31 October 2004, P R Truscott, QinetiQ Ltd, UK - Created.
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
-// DISCLAIMER
-// ----------
+// Class description:
 //
+//   Base class defining the facets which are components of a
+//   G4TessellatedSolid shape.
 //
-//
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//
-// DESCRIPTION
-// -----------
-//
-//
-//
+
 ///////////////////////////////////////////////////////////////////////////////
-//
-//
 #ifndef G4VFacet_hh
 #define G4VFacet_hh 1
 
@@ -45,12 +59,13 @@
 
 #include <iostream>
 #include <vector>
-using namespace std;
+
 enum G4FacetVertexType {ABSOLUTE, RELATIVE};
 
 class G4VFacet
 {
-  public:
+  public:  // with description
+
     G4VFacet ();
     virtual ~G4VFacet ();
 
@@ -58,8 +73,7 @@ class G4VFacet
     const G4VFacet &operator=(G4VFacet &right);
     
     G4bool operator== (const G4VFacet &right) const;
-                                                                                    
-  public:
+
     size_t GetNumberOfVertices () const;
     G4ThreeVector GetVertex (size_t i) const;
     
@@ -77,25 +91,16 @@ class G4VFacet
     
     std::ostream &StreamInfo(std::ostream &os) const;
 
-    virtual G4VFacet *GetClone () {return NULL;};
-//    virtual G4double Distance (const G4ThreeVector &p, const G4double minDist) {return kInfinity;};
-    virtual G4double Distance (const G4ThreeVector&, const G4double) {return kInfinity;};
-//    virtual G4double Distance (const G4ThreeVector &p, const G4bool outgoing) {return kInfinity;};
-//    virtual G4double Distance (const G4ThreeVector &p, const G4double minDist,
-//      const G4bool outgoing) {return kInfinity;};
+    virtual G4VFacet *GetClone ();
+    virtual G4double Distance (const G4ThreeVector&, const G4double);
     virtual G4double Distance (const G4ThreeVector&, const G4double,
-      const G4bool) {return kInfinity;};
-//    virtual G4double Extent (const G4ThreeVector axis) {return 0.0;};
-    virtual G4double Extent (const G4ThreeVector) {return 0.0;};
-//    virtual G4bool Intersect (const G4ThreeVector &p, const G4ThreeVector &v,
-//      const G4bool outgoing, G4double &distance, G4double &distFromSurface,
-//      G4ThreeVector &normal) {return false;};
-    virtual G4bool Intersect (const G4ThreeVector&, const G4ThreeVector &,
-      const G4bool , G4double &, G4double &,
-      G4ThreeVector &) {return false;};
-  
-//  public:
+                               const G4bool);
+    virtual G4double Extent   (const G4ThreeVector);
+    virtual G4bool Intersect  (const G4ThreeVector&, const G4ThreeVector &,
+                               const G4bool , G4double &, G4double &,
+                                     G4ThreeVector &);
   protected:
+
     G4GeometryType       geometryType;
     G4bool               isDefined;
     size_t               nVertices;
@@ -107,7 +112,7 @@ class G4VFacet
     G4ThreeVector        centroid;
     G4double             radius;
     G4double             radiusSqr;
-    
+
     G4double             dirTolerance;
 };
 
@@ -117,6 +122,3 @@ typedef std::vector<G4VFacet*>::const_iterator FacetCI;
 #include "G4VFacet.icc"
 
 #endif
-///////////////////////////////////////////////////////////////////////////////
-//
-

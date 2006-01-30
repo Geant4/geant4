@@ -1,45 +1,51 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration and of QinetiQ Ltd,  subject DEFCON 705 IPR *
+// * conditions.                                                      *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+// $Id: G4TriangularFacet.cc,v 1.2 2006-01-30 14:39:53 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
-// MODULE:		G4TriangularFacet.cc
+// MODULE:              G4TriangularFacet.cc
 //
-// Date:		15/06/2005
-// Author:		P R Truscott
-// Organisation:	QinetiQ Ltd, UK
-// Customer:		UK Ministry of Defence : RAO CRP TD Electronic Systems
-// Contract:		C/MAT/N03517
-//
-// This software is the intelectual property of QinetiQ Ltd, subject
-// DEFCON 705 IPR conditions.
+// Date:                15/06/2005
+// Author:              P R Truscott
+// Organisation:        QinetiQ Ltd, UK
+// Customer:            UK Ministry of Defence : RAO CRP TD Electronic Systems
+// Contract:            C/MAT/N03517
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // CHANGE HISTORY
 // --------------
 //
-// 31 October 2004, P R Truscott, QinetiQ Ltd, UK
-// Created.
+// 31 October 2004, P R Truscott, QinetiQ Ltd, UK - Created.
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//
-// DISCLAIMER
-// ----------
-//
-//
-//
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//
-// DESCRIPTION
-// -----------
-//
-//
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-//
+
 #include "G4TriangularFacet.hh"
 #include "globals.hh"
 
-using namespace std;
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Definition of triangular facet using absolute vectors to vertices.
@@ -48,8 +54,9 @@ using namespace std;
 // the outward surface normal.
 //
 G4TriangularFacet::G4TriangularFacet (const G4ThreeVector Pt0,
-  const G4ThreeVector vt1, const G4ThreeVector vt2,
-  G4FacetVertexType vertexType) : G4VFacet()
+             const G4ThreeVector vt1, const G4ThreeVector vt2,
+                   G4FacetVertexType vertexType)
+  : G4VFacet()
 {
   P0        = Pt0;
   nVertices = 3;
@@ -77,16 +84,16 @@ G4TriangularFacet::G4TriangularFacet (const G4ThreeVector Pt0,
   if (Emag1 <= kCarTolerance || Emag2 <= kCarTolerance ||
       Emag3 <= kCarTolerance)
   {
-    G4cerr <<G4endl;
-    G4cerr <<"ERROR IN G4TriangularFacet CONSTRUCTOR" <<G4endl;
-    G4cerr <<"LENGTH OF SIDES OF FACET ARE TOO SMALL" <<G4endl;
-    G4cerr <<"P0 = " <<P0 <<G4endl;
-    G4cerr <<"P1 = " <<P[0] <<G4endl;
-    G4cerr <<"P2 = " <<P[1] <<G4endl;
-    G4cerr <<"Side lengths = P0->P1" <<Emag1 <<G4endl;    
-    G4cerr <<"Side lengths = P0->P2" <<Emag2 <<G4endl;    
-    G4cerr <<"Side lengths = P1->P2" <<Emag3 <<G4endl;    
-    G4cerr <<G4endl;
+    G4Exception("G4TriangularFacet::G4TriangularFacet()", "InvalidSetup",
+                JustWarning, "Length of sides of facet are too small.");
+    G4cerr << G4endl;
+    G4cerr << "P0 = " << P0   << G4endl;
+    G4cerr << "P1 = " << P[0] << G4endl;
+    G4cerr << "P2 = " << P[1] << G4endl;
+    G4cerr << "Side lengths = P0->P1" << Emag1 << G4endl;    
+    G4cerr << "Side lengths = P0->P2" << Emag2 << G4endl;    
+    G4cerr << "Side lengths = P1->P2" << Emag3 << G4endl;    
+    G4cerr << G4endl;
     
     isDefined     = false;
     geometryType  = "G4TriangularFacet";
@@ -104,20 +111,21 @@ G4TriangularFacet::G4TriangularFacet (const G4ThreeVector Pt0,
     a   = E[0].mag2();
     b   = E[0].dot(E[1]);
     c   = E[1].mag2();
-    det = abs(a*c - b*b);
+    det = std::abs(a*c - b*b);
     
-    sMin = -0.5*kCarTolerance/sqrt(a);
+    sMin = -0.5*kCarTolerance/std::sqrt(a);
     sMax = 1.0 - sMin;
-    tMin = -0.5*kCarTolerance/sqrt(c);
+    tMin = -0.5*kCarTolerance/std::sqrt(c);
     
     G4ThreeVector vtmp = 0.25 * (E[0] + E[1]);
     centroid           = P0 + vtmp;
     radiusSqr          = vtmp.mag2();
-    radius             = sqrt(radiusSqr);
+    radius             = std::sqrt(radiusSqr);
   
     for (size_t i=0; i<3; i++) I.push_back(0);
   }
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4TriangularFacet::~G4TriangularFacet ()
@@ -126,15 +134,17 @@ G4TriangularFacet::~G4TriangularFacet ()
   E.clear();
   I.clear();
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4VFacet *G4TriangularFacet::GetClone ()
 {
   G4TriangularFacet *c = new G4TriangularFacet (P0, P[0], P[1], ABSOLUTE);
-  G4VFacet *cc         = NULL;
+  G4VFacet *cc         = 0;
   cc                   = c;
   return cc;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4TriangularFacet *G4TriangularFacet::GetFlippedFacet ()
@@ -142,6 +152,7 @@ G4TriangularFacet *G4TriangularFacet::GetFlippedFacet ()
   G4TriangularFacet *flipped = new G4TriangularFacet (P0, P[1], P[0], ABSOLUTE);
   return flipped;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Determine the closest distance from the facet to the point p.  If the
@@ -165,10 +176,9 @@ G4ThreeVector G4TriangularFacet::Distance (const G4ThreeVector &p)
     {
       if (t < 0.0)
       {
-//
-//
-// We are in region 4.
-//
+  //
+  // We are in region 4.
+  //
         if (d < 0.0)
         {
           t = 0.0;
@@ -185,10 +195,9 @@ G4ThreeVector G4TriangularFacet::Distance (const G4ThreeVector &p)
       }
       else
       {
-//
-//
-// We are in region 3.
-//
+   //
+   // We are in region 3.
+   //
         s = 0.0;
         if      (e >= 0.0) {t = 0.0; sqrDist = f;}
         else if (-e >= c)  {t = 0.0; sqrDist = c + 2.0*e + f;}
@@ -197,10 +206,9 @@ G4ThreeVector G4TriangularFacet::Distance (const G4ThreeVector &p)
     }
     else if (t < 0.0)
     {
-//
-//
-// We are in region 5.
-//
+   //
+   // We are in region 5.
+   //
       t = 0.0;
       if      (d >= 0.0) {s = 0.0; sqrDist = f;}
       else if (-d >= a)  {s = 1.0; sqrDist = a + 2.0*d + f;}
@@ -208,10 +216,9 @@ G4ThreeVector G4TriangularFacet::Distance (const G4ThreeVector &p)
     }
     else
     {
-//
-//
-// We are in region 0.
-//
+   //
+   // We are in region 0.
+   //
       G4double invDet = 1.0 / det;
       s              *= invDet;
       t              *= invDet;
@@ -226,10 +233,9 @@ G4ThreeVector G4TriangularFacet::Distance (const G4ThreeVector &p)
     G4double denom = 0.0;
     if (s < 0.0)
     {
-//
-//
-// We are in region 2.
-//
+   //
+   // We are in region 2.
+   //
       tmp0 = b + d;
       tmp1 = c + e;
       if (tmp1 > tmp0)
@@ -254,10 +260,9 @@ G4ThreeVector G4TriangularFacet::Distance (const G4ThreeVector &p)
     }
     else if (t < 0.0)
     {
-//
-//
-// We are in region 6.
-//
+   //
+   // We are in region 6.
+   //
       tmp0 = b + e;
       tmp1 = a + d;
       if (tmp1 > tmp0)
@@ -281,10 +286,9 @@ G4ThreeVector G4TriangularFacet::Distance (const G4ThreeVector &p)
       }
     }
     else
-//
-//
-// We are in region 1.
-//
+   //
+   // We are in region 1.
+   //
     {
       numer = c + f - b - d;
       if (numer <= 0.0)
@@ -306,11 +310,9 @@ G4ThreeVector G4TriangularFacet::Distance (const G4ThreeVector &p)
       }
     }
   }
-  
-  //G4double dist   = sqrt(sqrDist);
-
   return D + s*E[0] + t*E[1];
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4double G4TriangularFacet::Distance (const G4ThreeVector &p,
@@ -342,6 +344,7 @@ G4double G4TriangularFacet::Distance (const G4ThreeVector &p,
   
   return dist;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Determine the distance to point p bearing in mind that if the distance is
@@ -349,8 +352,7 @@ G4double G4TriangularFacet::Distance (const G4ThreeVector &p,
 // return kInfinity.
 //
 G4double G4TriangularFacet::Distance (const G4ThreeVector &p,
-				      //  const G4double minDist, const G4bool outgoing)
-  const G4double, const G4bool outgoing)
+                      const G4double, const G4bool outgoing)
 {
   /*G4ThreeVector D  = P0 - p;
   G4double d       = E[0].dot(D);
@@ -383,6 +385,7 @@ G4double G4TriangularFacet::Distance (const G4ThreeVector &p,
   
   return dist;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4double G4TriangularFacet::Extent (const G4ThreeVector axis)
@@ -395,11 +398,12 @@ G4double G4TriangularFacet::Extent (const G4ThreeVector axis)
 
   return s;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
-  const G4ThreeVector &v, G4bool outgoing, G4double &distance,
-  G4double &distFromSurface, G4ThreeVector &normal)
+                   const G4ThreeVector &v, G4bool outgoing, G4double &distance,
+                         G4double &distFromSurface, G4ThreeVector &normal)
 {
   G4ThreeVector D = P0 - p;
   G4double d      = E[0].dot(D);
@@ -429,12 +433,12 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
     if (s >= sMin and s <= sMax)
     {
       t = (A00*B1 - A01*B0)/det2;
-      if (t >= tMin and t < 1.0 - s + fabs(sMin)) //THIS IS A FUDGE FOR THE MOMENT
-      {
+      if (t >= tMin and t < 1.0 - s + std::fabs(sMin))
+      {                                //THIS IS A FUDGE FOR THE MOMENT
         dist       = q + g*s + h*t;
         normalComp = v.dot(surfaceNormal);
-//        intersect  = (dist >= 0.0 &&
-//          ((outgoing && normalComp > 0.0) || (!outgoing && normalComp < 0.0)));
+//      intersect  = (dist >= 0.0 &&
+//        ((outgoing && normalComp > 0.0) || (!outgoing && normalComp < 0.0)));
         intersect  = (dist >= -kCarTolerance*0.5 &&
           ((outgoing && normalComp > dirTolerance) ||
           (!outgoing && normalComp <-dirTolerance))); //FUDGE FOR THE MOMENT
@@ -458,5 +462,3 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
   
   return intersect;
 }
-///////////////////////////////////////////////////////////////////////////////
-//
