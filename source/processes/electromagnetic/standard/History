@@ -1,4 +1,4 @@
-$Id: History,v 1.204 2006-01-30 17:23:18 maire Exp $
+$Id: History,v 1.205 2006-01-31 14:09:52 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+31 January 06 : mma (emstand-V08-00-05)
+- emstand-V08-00-04 + emstand_p01-V08-00-00     
+     
 30 January 06 : mma (emstand_p01-V08-00-00)
 - build on top of geant4-08-00-ref-00
 - G4PolarizedComptonScattering : return G4ComptonScattering52::PostStepDoIt()
