@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.hh,v 1.8 2005-11-29 14:42:22 grichine Exp $
+// $Id: Em10DetectorConstruction.hh,v 1.9 2006-01-31 10:06:25 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,6 +43,7 @@ class G4UniformMagField;
 class Em10DetectorMessenger;
 class Em10CalorimeterSD;
 class G4Region;
+class Em10Materials;
 
 
 class Em10DetectorConstruction : public G4VUserDetectorConstruction
@@ -111,13 +112,21 @@ class Em10DetectorConstruction : public G4VUserDetectorConstruction
      G4int            GetFoilNumber()         {return fFoilNumber;};      
      G4Material* GetFoilMaterial()  {return fFoilMat;};
      G4Material* GetGasMaterial()  {return fGasMat;};
+      
+private:
+    
+  void ComputeCalorParameters();
+  G4VPhysicalVolume* ConstructDetectorXTR(); 
+
+    
+  G4VPhysicalVolume* SimpleSetUpALICE();     
                 
-  private:
+private:
      
-     G4bool             worldchanged;
-     G4Material*        AbsorberMaterial;
-     G4double           AbsorberThickness;
-     G4double           AbsorberRadius;
+  G4bool             worldchanged;
+  G4Material*        AbsorberMaterial;
+  G4double           AbsorberThickness;
+  G4double           AbsorberRadius;
 
   G4Material*        fWindowMat ;
   G4double           fWindowThick ;
@@ -189,15 +198,7 @@ class Em10DetectorConstruction : public G4VUserDetectorConstruction
   Em10CalorimeterSD*     calorimeterSD;  //pointer to the sensitive detector
   G4Region*             fRegGasDet;
   G4Region*             fRadRegion;
-  
-
-
-      
-private:
-    
-  void DefineMaterials();
-  void ComputeCalorParameters();
-  G4VPhysicalVolume* ConstructCalorimeter();     
+  Em10Materials*        fMat;  
 
 };
 
