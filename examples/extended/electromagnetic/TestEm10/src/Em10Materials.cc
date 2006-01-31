@@ -21,16 +21,16 @@
 // ********************************************************************
 //
 //
-// -------------------------------------------------------------
+// 
 //      GEANT 4 class 
 //
 //      History: based on object model of
-//      ---------- Em10Materials -------
+//       Em10Materials
 //     Originally Created in Test30 by Vladimir Ivanchenko, 12 March 2002 
 // 
-//    Modified:  converted to Test29 by Mikhail Kossov, 29 Jan 2004
-//
-//=================================================================
+//    Modified for TestEm10 by V. Grichine, 29 Jan 2006
+//    is filled with XTR related materials, plastics, gas mixtures, etc
+
 
 #include "Em10Materials.hh"
 
