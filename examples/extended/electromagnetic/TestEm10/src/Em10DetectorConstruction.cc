@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.cc,v 1.17 2006-01-31 14:33:55 grichine Exp $
+// $Id: Em10DetectorConstruction.cc,v 1.18 2006-01-31 14:39:11 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,7 +60,7 @@
 //
 
 Em10DetectorConstruction::Em10DetectorConstruction()
-  :worldchanged(false), AbsorberMaterial(0),  fGapMat(0),
+  :worldchanged(false), AbsorberMaterial(0),  fGapMat(0),fSetUp("simpleALICE"),
    WorldMaterial(0),  solidWorld(0),      logicWorld(0),      physiWorld(0),
    fSolidRadSlice(0), fLogicRadSlice(0),  fPhysicRadSlice(0),
    solidRadiator(0),  logicRadiator(0),   physiRadiator(0),
