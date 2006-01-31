@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.hh,v 1.9 2006-01-31 10:06:25 grichine Exp $
+// $Id: Em10DetectorConstruction.hh,v 1.10 2006-01-31 14:33:55 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,6 +78,7 @@ class Em10DetectorConstruction : public G4VUserDetectorConstruction
   // void SetElectronCut(G4double cut){fElectronCut = cut;};
   //  void SetPositronCut(G4double cut){fPositronCut = cut;};
 
+     void SetDetectorSetUp(G4String s) {fSetUp = s;};
 
 
      void SetMagField(G4double);
@@ -142,7 +143,8 @@ private:
 
  
   G4double           zAbsorber ;
-  G4double           zstartAbs , zendAbs ;
+  G4double           zstartAbs , zendAbs;
+  G4String           fSetUp;
      
   G4Material*        WorldMaterial;
   G4double           WorldSizeR;

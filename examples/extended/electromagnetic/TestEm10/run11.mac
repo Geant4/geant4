@@ -43,6 +43,13 @@
 /plots/setEnlow 0.0 MeV
 /plots/setEnhigh 0.07  MeV
 #
+#
+# Change and choice of experimental setups. Can be
+# simpleALICE., 
+#
+#
+/XTRdetector/setup simpleALICE
+#
 # these commands do not change energy cuts???
 #
 # Set XTR model (default: transpM). Name list consits:

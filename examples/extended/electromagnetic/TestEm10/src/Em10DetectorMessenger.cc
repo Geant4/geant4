@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorMessenger.cc,v 1.9 2005-11-29 14:42:22 grichine Exp $
+// $Id: Em10DetectorMessenger.cc,v 1.10 2006-01-31 14:33:55 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,6 +54,12 @@ Em10DetectorMessenger::Em10DetectorMessenger(Em10DetectorConstruction * Em10Det)
   RadiatorMaterCmd->SetParameterName("choice",true);
   RadiatorMaterCmd->SetDefaultValue("CH2");
   RadiatorMaterCmd->AvailableForStates(G4State_Idle);
+
+  DetectorSetUpCmd = new G4UIcmdWithAString("/XTRdetector/setup",this);
+  DetectorSetUpCmd->SetGuidance("Select setup for comparison with experiment");
+  DetectorSetUpCmd->SetParameterName("choice",true);
+  DetectorSetUpCmd->SetDefaultValue("simpleALICE");
+  DetectorSetUpCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   ModelCmd = new G4UIcmdWithAnInteger("/XTRdetector/setModel",this);
   ModelCmd->SetGuidance("Select Model for XTR");
@@ -209,6 +215,9 @@ void Em10DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   }
   if( command == AbsMaterCmd )
    { Em10Detector->SetAbsorberMaterial(newValue);}
+
+  if( command == DetectorSetUpCmd )
+   { Em10Detector->SetDetectorSetUp(newValue);}
 
   if( command == RadiatorMaterCmd )
    { Em10Detector->SetRadiatorMaterial(newValue);}

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorMessenger.hh,v 1.5 2005-11-29 14:42:22 grichine Exp $
+// $Id: Em10DetectorMessenger.hh,v 1.6 2006-01-31 14:33:55 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,6 +61,7 @@ class Em10DetectorMessenger: public G4UImessenger
     G4UIcmdWithAnInteger*       FoilNumCmd;
 
     G4UIcmdWithAString*        AbsMaterCmd;
+    G4UIcmdWithAString*        DetectorSetUpCmd;
     G4UIcmdWithADoubleAndUnit* AbsThickCmd;
     G4UIcmdWithADoubleAndUnit* AbsRadCmd;
 

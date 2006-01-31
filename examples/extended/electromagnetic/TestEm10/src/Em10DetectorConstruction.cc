@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.cc,v 1.16 2006-01-31 10:06:25 grichine Exp $
+// $Id: Em10DetectorConstruction.cc,v 1.17 2006-01-31 14:33:55 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -107,8 +107,15 @@ G4VPhysicalVolume* Em10DetectorConstruction::ConstructDetectorXTR()
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
 
-  return SimpleSetUpALICE();
-
+  if( fSetUp == "simpleALICE" )
+  {
+    return SimpleSetUpALICE();
+  }
+  else
+  {
+    G4cout<<"Experimental setup is unsupported. Check /XTRdetector/setup "<<G4endl;
+    return 0;
+  }
 }
 
 
