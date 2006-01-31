@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.4 2003-10-24 12:14:34 maire Exp $
+// $Id: PhysicsList.cc,v 1.5 2006-01-31 17:02:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -31,7 +31,6 @@
 #include "PhysicsList.hh"
 
 #include "G4ParticleDefinition.hh"
-#include "G4ProductionCutsTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
@@ -141,12 +140,7 @@ void PhysicsList::SetCuts()
     G4cout << "PhysicsList::SetCuts:";
     G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << G4endl;
   }
-  
-  //special for low energy physics
-  //
-  G4ProductionCutsTable::GetProductionCutsTable()
-                                   ->SetEnergyRange(250*eV, 100*GeV);
-   
+     
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma 
   SetCutValue(defaultCutValue, "gamma");

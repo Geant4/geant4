@@ -1,4 +1,4 @@
-$Id: README,v 1.17 2005-11-22 17:04:49 maire Exp $
+$Id: README,v 1.18 2006-01-31 17:02:43 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -49,7 +49,7 @@ $Id: README,v 1.17 2005-11-22 17:04:49 maire Exp $
  		% gmake
  		
  	- execute TestEm4 in 'batch' mode from macro files
- 		% TestEm4   run01.mac
+ 		% TestEm4   TestEm4.in
  		
  	- execute TestEm4 in 'interactive mode' with visualization
  		% TestEm4
