@@ -291,6 +291,7 @@ mainProgram.write( "#include \"QGSC.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestPrimaryGeneratorAction.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestEventAction.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestRunAction.hh\" \n" )
+mainProgram.write( "#include \"StatAccepTestTrackingAction.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestStackingAction.hh\" \n" )
 mainProgram.write( "#include \"G4UIterminal.hh\" \n" )
 mainProgram.write( "#ifdef G4UI_USE_TCSH \n" )
@@ -322,6 +323,7 @@ mainProgram.write( "  runManager->SetUserInitialization( thePL ); \n" )
 mainProgram.write( "  runManager->SetUserAction( new StatAccepTestPrimaryGeneratorAction ); \n" )
 mainProgram.write( "  runManager->SetUserAction( new StatAccepTestRunAction ); \n" )  
 mainProgram.write( "  runManager->SetUserAction( new StatAccepTestEventAction ); \n" )
+mainProgram.write( "  runManager->SetUserAction( new StatAccepTestTrackingAction ); \n" )
 
 # If the beam energy is below a given threshold (in GeV) then
 # no biasing is used (i.e. the StackingAction is not used).

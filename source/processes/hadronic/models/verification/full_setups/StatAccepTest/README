@@ -1,5 +1,5 @@
 
- Last update: 24-Jan-2006
+ Last update: 01-Feb-2006
  ========================
 
  This directory contains a configurable calorimeter setup to be used
@@ -78,6 +78,17 @@
  However, it is worth to take a look by eye to those distributions
  to see if there are really so different as could be in the
  presence of a bug.
+
+ The program is also printing, at the end, some useful information
+ (with statistical errors):
+   o  max total energy deposited in the whole calorimeter; 
+   o  average energy deposited in all active layers;
+   o  average energy deposited in the whole calorimeter;
+   o  average energy deposited in each layer (longitudinal profile);
+   o  average energy deposited in each ring (transverse profile);
+   o  energy resolution;
+   o  sampling fraction;
+   o  average number of steps and tracks per event.
  
  Some scripts and one kumac has been provided to allow a full
  automatization of this Statistical Acceptance suite.

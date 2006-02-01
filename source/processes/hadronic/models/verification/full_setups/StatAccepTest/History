@@ -1,6 +1,16 @@
                  History file
                  ------------
 
+01-Feb-2006 - A.Ribon (statAccepTest-V08-00-07)
+- Added the monitoring of the average number of steps
+  and tracks per event, subdivided for different types
+  of particles.
+  Added also the subdirectory  dirUseCases/  
+  that collects a set of Geant4 macro files to 
+  configure the calorimeter as closely as possible to
+  the LHC electromagnetic and hadronic calorimeters.
+
+
 20-Jan-2006 - A.Ribon (statAccepTest-V08-00-06)
 - Added the subdirectory  dirPower/  to study
   the statistical power of the Acceptance Suite.

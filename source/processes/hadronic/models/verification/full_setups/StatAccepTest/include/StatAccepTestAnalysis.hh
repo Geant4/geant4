@@ -15,10 +15,16 @@ namespace AIDA {
   class IPlotter;
 }
 
+class G4Step;
+class G4Track;
+class G4ParticleDefinition;
+
 
 class StatAccepTestAnalysis {
 
 public:
+
+  static StatAccepTestAnalysis* getInstance();
 
   ~StatAccepTestAnalysis();
   
@@ -48,11 +54,18 @@ public:
   // This method is called by StatAccepTestSensitiveCalorimeter at each step
   // in the active layer of the calorimeter.
 
-  static StatAccepTestAnalysis* getInstance();
+  void infoStep( const G4Step* aStep );
+  // This method is called by StatAccepTestSteppingAction at each step.
+
+  void infoTrack( const G4Track* aTrack );
+  // This method is called by StatAccepTestTrackingAction when each track
+  // is created.
 
 private:
   
   StatAccepTestAnalysis();
+
+  void classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef );
   
   static StatAccepTestAnalysis* instance;
   
@@ -101,6 +114,49 @@ private:
   // Summary histograms for the longitudinal and transverse shower profiles. 
   AIDA::IHistogram1D* longitudinalProfileHisto;
   AIDA::IHistogram1D* transverseProfileHisto;
+
+  // Keep the count of the number of steps and tracks.
+  G4int numStep;
+  G4int numStepPositive, numStepNeutral, numStepNegative;
+  G4int numStepPDGCodeZero, numStepPDGCodeUnrecognized;
+  G4int numStepEM;             // e- , e+ , gamma
+  G4int numStepEWK;            // mu- , mu+ , tau+, tau-, neutrinos
+  G4int numStepHAD;            // mesons + baryons
+  G4int numStepMeson, numStepBaryon;     
+  G4int numStepMesonLight, numStepBaryonLight;            // u/d-hadrons    
+  G4int numStepMesonStrange, numStepBaryonStrange;        // s-hadrons
+  G4int numStepMesonHeavy, numStepBaryonHeavy;            // c-hadrons, and b-hadrons
+  G4int numStepElectron, numStepGamma, numStepPositron;
+  G4int numStepMuMinus, numStepMuPlus;
+  G4int numStepTauMinus, numStepTauPlus;
+  G4int numStepNeutrino;
+  G4int numStepPiPlus, numStepPi0, numStepPiMinus;
+  G4int numStepKPlus;
+  G4int numStepKNeutral;       // K0/K0bar or K0_S/KO_L
+  G4int numStepKMinus;
+  G4int numStepProton, numStepAntiProton;
+  G4int numStepNeutron, numStepAntiNeutron;
+
+  G4int numTrack;
+  G4int numTrackPositive, numTrackNeutral, numTrackNegative;
+  G4int numTrackPDGCodeZero, numTrackPDGCodeUnrecognized;
+  G4int numTrackEM;             // e- , e+ , gamma
+  G4int numTrackEWK;            // mu- , mu+ , tau+, tau-, neutrinos
+  G4int numTrackHAD;            // mesons + baryons
+  G4int numTrackMeson, numTrackBaryon;     
+  G4int numTrackMesonLight, numTrackBaryonLight;            // u/d-hadrons
+  G4int numTrackMesonStrange, numTrackBaryonStrange;        // s-hadrons
+  G4int numTrackMesonHeavy, numTrackBaryonHeavy;            // c-hadrons, and b-hadrons
+  G4int numTrackElectron, numTrackGamma, numTrackPositron;
+  G4int numTrackMuMinus, numTrackMuPlus;
+  G4int numTrackTauMinus, numTrackTauPlus;
+  G4int numTrackNeutrino;
+  G4int numTrackPiPlus, numTrackPi0, numTrackPiMinus;
+  G4int numTrackKPlus;
+  G4int numTrackKNeutral;       // K0/K0bar or K0_S/KO_L
+  G4int numTrackKMinus;
+  G4int numTrackProton, numTrackAntiProton;
+  G4int numTrackNeutron, numTrackAntiNeutron;
 
 };
 

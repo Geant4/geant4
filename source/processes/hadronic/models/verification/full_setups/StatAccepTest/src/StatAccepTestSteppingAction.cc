@@ -3,6 +3,7 @@
 #include "G4Step.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
+#include "StatAccepTestAnalysis.hh"
 
 
 StatAccepTestSteppingAction::StatAccepTestSteppingAction() : 
@@ -15,6 +16,8 @@ StatAccepTestSteppingAction::~StatAccepTestSteppingAction() {}
 
 void StatAccepTestSteppingAction::UserSteppingAction(const G4Step * theStep) {
 
+  StatAccepTestAnalysis::getInstance()->infoStep( theStep );
+ 
   if ( primaryParticleId == 0 ) {
     if ( theStep->GetTrack()->GetParentID() == 0 ) {
       // PDG ID: e- = 11, mu- = 13, pion- = -211, pion+ = 211, p = 2212, n = 2112.
