@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.hh,v 1.10 2006-01-31 14:33:55 grichine Exp $
+// $Id: Em10DetectorConstruction.hh,v 1.11 2006-02-02 15:42:21 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -91,17 +91,17 @@ class Em10DetectorConstruction : public G4VUserDetectorConstruction
   
      void PrintCalorParameters(); 
                     
-     G4Material* GetWorldMaterial()    {return WorldMaterial;};
-     G4double GetWorldSizeZ()          {return WorldSizeZ;}; 
-     G4double GetWorldSizeR()          {return WorldSizeR;};
+     G4Material* GetWorldMaterial()    {return fWorldMaterial;};
+     G4double GetWorldSizeZ()          {return fWorldSizeZ;}; 
+     G4double GetWorldSizeR()          {return fWorldSizeR;};
      
      G4double GetAbsorberZpos()        {return zAbsorber;}; 
      G4double GetzstartAbs()           {return zstartAbs;};
      G4double GetzendAbs()             {return zendAbs;};
 
-     G4Material* GetAbsorberMaterial()  {return AbsorberMaterial;};
-     G4double    GetAbsorberThickness() {return AbsorberThickness;};      
-     G4double GetAbsorberRadius()       {return AbsorberRadius;};
+     G4Material* GetAbsorberMaterial()  {return fAbsorberMaterial;};
+     G4double    GetAbsorberThickness() {return fAbsorberThickness;};      
+     G4double GetAbsorberRadius()       {return fAbsorberRadius;};
      
      const G4VPhysicalVolume* GetphysiWorld() {return physiWorld;};           
      const G4VPhysicalVolume* GetAbsorber()   {return physiAbsorber;};
@@ -121,13 +121,18 @@ private:
 
     
   G4VPhysicalVolume* SimpleSetUpALICE();     
+  // G4VPhysicalVolume* SetUpHarris73(); 
+
+
+
+  void TestOld();    
                 
 private:
      
   G4bool             worldchanged;
-  G4Material*        AbsorberMaterial;
-  G4double           AbsorberThickness;
-  G4double           AbsorberRadius;
+  G4Material*        fAbsorberMaterial;
+  G4double           fAbsorberThickness;
+  G4double           fAbsorberRadius;
 
   G4Material*        fWindowMat ;
   G4double           fWindowThick ;
@@ -146,9 +151,9 @@ private:
   G4double           zstartAbs , zendAbs;
   G4String           fSetUp;
      
-  G4Material*        WorldMaterial;
-  G4double           WorldSizeR;
-  G4double           WorldSizeZ;
+  G4Material*        fWorldMaterial;
+  G4double           fWorldSizeR;
+  G4double           fWorldSizeZ;
             
   G4Box*             solidWorld;    //pointer to the solid World 
   G4LogicalVolume*   logicWorld;    //pointer to the logical World
@@ -208,16 +213,8 @@ private:
 
 inline void Em10DetectorConstruction::ComputeCalorParameters()
 {
-  // Compute derived parameters of the calorimeter
-     if(!worldchanged)
-     {
-       //  WorldSizeR=2.*AbsorberRadius ;
-       //  WorldSizeZ=2.*AbsorberThickness ;
-     }
-     
-     zstartAbs = zAbsorber-0.5*AbsorberThickness; 
-     zendAbs   = zAbsorber+0.5*AbsorberThickness; 
-
+     zstartAbs = zAbsorber-0.5*fAbsorberThickness; 
+     zendAbs   = zAbsorber+0.5*fAbsorberThickness; 
 }
 
 #endif
