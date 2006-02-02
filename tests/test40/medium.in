@@ -1,4 +1,4 @@
-# $Id: test40.in,v 1.10 2006-02-02 10:08:08 vnivanch Exp $
+# $Id: medium.in,v 1.1 2006-02-02 10:08:08 vnivanch Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -25,8 +25,8 @@
 #
 /gun/particle e-
 /gun/energy 5 GeV
-/run/beamOn  100
+/run/beamOn  500
 
 /testem/det/setField  10 gauss
-/run/beamOn  100
+/run/beamOn  500
 
