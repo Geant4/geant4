@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.60 2006-01-11 17:39:17 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.61 2006-02-03 16:59:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -370,7 +370,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
   if (iLV == nLV) {
     if (verbosity >= G4VisManager::errors) {
       G4cout << "ERROR: Logical volume " << name
-	     << " not found in logical volume Store." << G4endl;
+	     << " not found in logical volume store." << G4endl;
     }
     return;
   }

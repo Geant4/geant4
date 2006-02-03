@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.80 2006-01-11 17:47:08 allison Exp $
+// $Id: G4VisManager.cc,v 1.81 2006-02-03 16:59:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,6 +30,8 @@
 
 #include "G4VisCommands.hh"
 #include "G4VisCommandsCompound.hh"
+#include "G4VisCommandsGeometry.hh"
+#include "G4VisCommandsGeometrySet.hh"
 #include "G4VisCommandsScene.hh"
 #include "G4VisCommandsSceneAdd.hh"
 #include "G4VisCommandsSceneHandler.hh"
@@ -782,15 +784,41 @@ void G4VisManager::SetCurrentViewer (G4VViewer* pViewer) {
 
 void G4VisManager::RegisterMessengers () {
 
-  // Instantiate individual messengers/commands (often one command per
-  // messenger).
+  // Instantiate individual messengers/commands (often - but not
+  // always - one command per messenger).
 
   G4VVisCommand::SetVisManager (this);  // Sets shared pointer to vis manager.
 
   G4UIcommand* directory;
 
+  // Top level commands...
   RegisterMessenger(new G4VisCommandEnable);
   RegisterMessenger(new G4VisCommandVerbose);
+
+  // Compound commands...
+  RegisterMessenger(new G4VisCommandDrawTree);
+  RegisterMessenger(new G4VisCommandDrawView);
+  RegisterMessenger(new G4VisCommandDrawVolume);
+  RegisterMessenger(new G4VisCommandOpen);
+  RegisterMessenger(new G4VisCommandSpecify);
+
+  directory = new G4UIdirectory ("/vis/geometry/");
+  directory -> SetGuidance("Operations on vis attributes of Geant4 geometry.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandGeometryList);
+  RegisterMessenger(new G4VisCommandGeometryRestore);
+
+  directory = new G4UIdirectory ("/vis/geometry/set");
+  directory -> SetGuidance("Set vis attributes of Geant4 geometry.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandGeometrySetColour);
+  RegisterMessenger(new G4VisCommandGeometrySetDaughtersInvisible);
+  RegisterMessenger(new G4VisCommandGeometrySetLineStyle);
+  RegisterMessenger(new G4VisCommandGeometrySetLineWidth);
+  RegisterMessenger(new G4VisCommandGeometrySetForceAuxEdgeVisible);
+  RegisterMessenger(new G4VisCommandGeometrySetForceSolid);
+  RegisterMessenger(new G4VisCommandGeometrySetForceWireframe);
+  RegisterMessenger(new G4VisCommandGeometrySetVisibility);
 
   directory = new G4UIdirectory ("/vis/scene/");
   directory -> SetGuidance ("Operations on Geant4 scenes.");
@@ -845,13 +873,6 @@ void G4VisManager::RegisterMessengers () {
   directory -> SetGuidance ("Set view parameters of current viewer.");
   fDirectoryList.push_back (directory);
   RegisterMessenger(new G4VisCommandsViewerSet);
-
-  // Compound commands...
-  RegisterMessenger(new G4VisCommandDrawTree);
-  RegisterMessenger(new G4VisCommandDrawView);
-  RegisterMessenger(new G4VisCommandDrawVolume);
-  RegisterMessenger(new G4VisCommandOpen);
-  RegisterMessenger(new G4VisCommandSpecify);
 
   // List manager commands
   RegisterMessenger(new G4VisCommandListManagerList<G4TrajectoryModelManager>
