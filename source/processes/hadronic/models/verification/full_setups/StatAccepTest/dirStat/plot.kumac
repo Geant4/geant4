@@ -10,6 +10,21 @@
 * right tail, and eventually 1% in the left tail in the
 * case of a long left tail.
 * The two plots are then saved in the file  plot.ps  
+*
+* The title of the histogram is the ID of the histogram.
+* The correspondence is the following:
+*           11  ->  total visible energy 
+*                   (sum energy deposit in each active layers)
+*           12  ->  total energy in the whole calorimeter 
+*                   (sum energy deposite in the active and 
+*                    passive layers)
+*          100  ->  L0  (energy deposit in the first layer)
+*          101  ->  L1  (energy deposit in the second layer)
+*          ...
+*          200  ->  R0  (energy deposit in the first ring)
+*          201  ->  R1  (energy deposit in the second ring)
+*          ... 
+*
 *---------------------------------------------------------
 *
 message "   ========== BEGIN plot.kumac ========== " 
@@ -31,7 +46,8 @@ set hcol 2
 histo/plot //lun1/[1]
 set hcol 4
 histo/plot //lun2/[1] s
-atitle MeV  Events
+atitle [1] ' ' ! 210
+atitle MeV Events s
 *
 opt logy
 *
@@ -39,7 +55,8 @@ set hcol 2
 histo/plot //lun1/[1]
 set hcol 4
 histo/plot //lun2/[1] s
-atitle MeV  Events
+atitle [1] ' ' ! 210
+atitle MeV Events s
 *
 *wait
 *
@@ -113,7 +130,8 @@ IF ( [IMIN] < [IMAX] .AND. ( [IMIN] > 1 .OR. [IMAX] < [I100] ) ) THEN
   histo/plot 69690
   set hcol 4
   histo/plot 69691 s
-  atitle MeV  Events
+  atitle [1] ' ' ! 210
+  atitle MeV Events s
 *
   opt logy
 *
@@ -121,7 +139,8 @@ IF ( [IMIN] < [IMAX] .AND. ( [IMIN] > 1 .OR. [IMAX] < [I100] ) ) THEN
   histo/plot 69690
   set hcol 4
   histo/plot 69691 s
-  atitle MeV  Events
+  atitle [1] ' ' ! 210
+  atitle MeV Events s
 *
   vec/del xvec
   vec/del vv
