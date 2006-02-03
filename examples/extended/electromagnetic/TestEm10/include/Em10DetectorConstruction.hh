@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.hh,v 1.12 2006-02-03 12:08:35 grichine Exp $
+// $Id: Em10DetectorConstruction.hh,v 1.13 2006-02-03 17:15:23 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,17 +67,10 @@ class Em10DetectorConstruction : public G4VUserDetectorConstruction
      void SetGasGapThickness(G4double);     
    
      void SetFoilNumber (G4int    i)  {fFoilNumber = i;  };     
-     void SetAlphaPlate (G4double val){fAlphaPlate = val;};     
-     void SetAlphaGas   (G4double val){fAlphaGas   = val;};     
 
      void SetWorldMaterial(G4String);
      void SetWorldSizeZ(G4double);
      void SetWorldSizeR(G4double);
-
-  //  void SetGammaCut(G4double    cut){fGammaCut    = cut;};
-  // void SetElectronCut(G4double cut){fElectronCut = cut;};
-  //  void SetPositronCut(G4double cut){fPositronCut = cut;};
-
      void SetDetectorSetUp(G4String s) {fSetUp = s;};
 
 
@@ -95,9 +88,7 @@ class Em10DetectorConstruction : public G4VUserDetectorConstruction
      G4double GetWorldSizeZ()          {return fWorldSizeZ;}; 
      G4double GetWorldSizeR()          {return fWorldSizeR;};
      
-     G4double GetAbsorberZpos()        {return zAbsorber;}; 
-     G4double GetzstartAbs()           {return zstartAbs;};
-     G4double GetzendAbs()             {return zendAbs;};
+     G4double GetAbsorberZpos()        {return fAbsorberZ;}; 
 
      G4Material* GetAbsorberMaterial()  {return fAbsorberMaterial;};
      G4double    GetAbsorberThickness() {return fAbsorberThickness;};      
@@ -116,7 +107,6 @@ class Em10DetectorConstruction : public G4VUserDetectorConstruction
       
 private:
     
-  void ComputeCalorParameters();
   G4VPhysicalVolume* ConstructDetectorXTR(); 
 
     
@@ -142,13 +132,9 @@ private:
 
   G4Material*        fGapMat ;
   G4double           fGapThick ;
-
-  G4double           fAlphaPlate ;
-  G4double           fAlphaGas ;
-
  
-  G4double           zAbsorber ;
-  G4double           zstartAbs , zendAbs;
+  G4double           fAbsorberZ ;
+  //  G4double           zstartAbs , zendAbs;
   G4String           fSetUp;
      
   G4Material*        fWorldMaterial;
@@ -182,7 +168,6 @@ private:
   G4double foilGasRatio  ;
 
   G4int fFoilNumber ;
-  G4int fModelNumber ; // selection of parametrisation model1-10
 
   G4double fDetThickness ;
   G4double fDetLength    ;
@@ -192,6 +177,12 @@ private:
   G4double fStartZ       ;
 
   G4int fModuleNumber ;   // the number of Rad-Det modules
+
+  G4double fRadThick;
+  G4double fRadZ;
+  G4double fWindowZ;
+  G4double fGapZ;
+  G4double fElectrodeZ;
 
   G4Box*             fSolidAbsorber; //pointer to the solid Absorber
   G4LogicalVolume*   fLogicAbsorber; //pointer to the logical Absorber
@@ -208,14 +199,6 @@ private:
   Em10Materials*        fMat;  
 
 };
-
-////////////////////////////////////////////////////////////////////////
-
-inline void Em10DetectorConstruction::ComputeCalorParameters()
-{
-     zstartAbs = zAbsorber-0.5*fAbsorberThickness; 
-     zendAbs   = zAbsorber+0.5*fAbsorberThickness; 
-}
 
 #endif
 
