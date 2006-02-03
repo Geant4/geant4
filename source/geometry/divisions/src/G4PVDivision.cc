@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.cc,v 1.15 2006-01-10 11:46:45 gcosmo Exp $
+// $Id: G4PVDivision.cc,v 1.16 2006-02-03 13:05:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4PVDivision Implementation file
@@ -171,18 +171,8 @@ G4PVDivision::CheckAndSetParameters( const EAxis pAxis,
                 FatalException, "Width must be positive!");
   }
   
-  foffset=offset;
-  
-  //!!!!! axis has to be x/y/z in G4VoxelLimits::GetMinExtent
-  //
-  if( pAxis == kRho || pAxis == kRadial3D || pAxis == kPhi )
-  {
-    faxis = kZAxis;
-  }
-  else
-  {
-    faxis = pAxis;
-  }
+  foffset = offset;
+  faxis   = pAxis;
   
   // Create rotation matrix: for phi axis it will be changed
   // in G4VPVParameterisation::ComputeTransformation, for others
