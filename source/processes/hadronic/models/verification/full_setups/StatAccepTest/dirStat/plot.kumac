@@ -20,7 +20,9 @@ histo/file 2 histo_b.hbook
 for/file 20 plot.ps
 meta 20 -111
 zone 1 2
-set dmod 1
+*
+SET DMOD 1
+SET HWID 7
 *
 opt utit
 title [2]
