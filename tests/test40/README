@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2002-12-18 11:47:56 vnivanch Exp $
+$Id: README,v 1.3 2006-02-03 12:44:18 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -29,16 +29,11 @@ $Id: README,v 1.2 2002-12-18 11:47:56 vnivanch Exp $
      the commands defined in the DetectorMessenger class.
   
      Material can be choosen: Air Water lAr Al Fe BGO PbWO4 Pb.
-     eg: /testem/det/setMat PbWO4
       
      The size of the slices and rings are expressed in radiation length units
      and can be changed.
-     eg: /testem/det/setLbin 20   1.    ---> 20 slices of 1. radl
-         /testem/det/setRbin  5   0.25  --->  5 rings of 0.25 radl
-         /testem/det/update             ---> rebuild the geometry
       
      An uniform magnetic field along the cylinder axis can be set.
-     eg: /testem/det/setField 5 tesla 
      
  2- PHYSICS LISTS
 
@@ -57,52 +52,26 @@ $Id: README,v 1.2 2002-12-18 11:47:56 vnivanch Exp $
      the macros provided with this example).
  	
      A RUN is a set of events.
- 				
- 4- VISUALIZATION
- 
-     The Visualization Manager is set in the main().
-     The initialisation of the drawing is done via the commands
-     /vis/.. in the macro vis.mac. In interactive session:
-     PreInit or Idle > /control/execute vis.mac
- 	
-     The detector has a default view which is a longitudinal view of the 
-     cylinder.
- 	
-     The tracks are drawn at the end of event, and erased at the end of run.
-     Optionaly one can choose to draw all particles, only the charged one,
-     or none. This command is defined in EventActionMessenger class.
- 	
- 5- PHYSICS DEMO
- 
-     The particle's type and the physic processes which will be available
-     in this example are set in PhysicsList class.
- 	
-     In addition a build-in interactive command (/process/inactivate proname)
-     allows to activate/inactivate the processes one by one.
-     
-     The threshold for producing secondaries can be changed.
-     eg: /testem/phys/setCuts 100 microm
-         /run/initialize
-	  	
- 6- HOW TO START ?
+ 					  	
+ 4- HOW TO START ?
  
      - compile and link to generate an executable
- 		% cd TestEm2
+ 		% cd test40
  		% gmake
  		
-     - execute TestEm2 in 'batch' mode from macro files
- 		% TestEm2   run01.mac
+     - execute test40 in 'batch' mode from macro files
+ 		% test40 test40.in
  		
-     - execute TestEm2 in 'interactive mode' with visualization
- 		% TestEm2
+     - execute test40 in 'interactive mode' with visualization
+ 		% test40
  		....
  		Idle> type your commands
   		....
  		Idle> exit
  	
- 7- HISTOGRAMS
+ 5- HISTOGRAMS
  
-     TestEm2 produces several histo which are saved as testem2.paw
+     test40 can produce several histo which are saved as test40.paw
      
      Content of these histo:
   
@@ -123,20 +92,3 @@ $Id: README,v 1.2 2002-12-18 11:47:56 vnivanch Exp $
      12 : rms of cumulated radial energy profile
 
  Note that histograms are disabled via the flag G4NOHIST in the GNUmakefile.
- 
-
- 8- Using the Anaphe implementation of the AIDA 3.0 histograms:
- --------------------------------------------------------------
-
- In order to use the Anaphe implementation of the AIDA 3.0 interfaces, 
- the 'aida-config' command (which is used in the GNUmakefile) is 
- available at:
- /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/aida-config 
-
- In order to run the executable, you need to source the following
- script (once):
- $HOME/bin/setupAnaphe.csh  (or $HOME/bin/setupAnaphe)
-
- At cern 'setupAnaphe' is available at: 
- /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe.csh
- (or /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe)
