@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.cc,v 1.19 2006-02-02 15:42:21 grichine Exp $
+// $Id: Em10DetectorConstruction.cc,v 1.20 2006-02-03 12:08:35 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,16 +60,16 @@
 //
 
 Em10DetectorConstruction::Em10DetectorConstruction()
-  :worldchanged(false), fAbsorberMaterial(0),  fGapMat(0),fSetUp("simpleALICE"),
-   fWorldMaterial(0),  solidWorld(0),      logicWorld(0),      physiWorld(0),
+  :fWorldChanged(false), fAbsorberMaterial(0),  fGapMat(0),fSetUp("simpleALICE"),
+   fWorldMaterial(0),  fSolidWorld(0),      fLogicWorld(0),      fPhysicsWorld(0),
    fSolidRadSlice(0), fLogicRadSlice(0),  fPhysicRadSlice(0),
-   solidRadiator(0),  logicRadiator(0),   physiRadiator(0),
+   fSolidRadiator(0),  fLogicRadiator(0),   fPhysicsRadiator(0),
    fRadiatorMat(0),
-   solidAbsorber(0),  logicAbsorber(0),   physiAbsorber(0),
-   magField(0),       calorimeterSD(0),   fRegGasDet(0), fRadRegion(0), fMat(0)
+   fSolidAbsorber(0),  fLogicAbsorber(0),   fPhysicsAbsorber(0),
+   fMagField(0),       fCalorimeterSD(0),   fRegGasDet(0), fRadRegion(0), fMat(0)
 {
-  detectorMessenger = new Em10DetectorMessenger(this);
-  fMat = new Em10Materials();
+  fDetectorMessenger = new Em10DetectorMessenger(this);
+  fMat               = new Em10Materials();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -78,7 +78,7 @@ Em10DetectorConstruction::Em10DetectorConstruction()
 
 Em10DetectorConstruction::~Em10DetectorConstruction()
 { 
-  delete detectorMessenger;
+  delete fDetectorMessenger;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -191,12 +191,12 @@ G4VPhysicalVolume* Em10DetectorConstruction::SimpleSetUpALICE()
 
   G4double zModule; 
 
-  solidWorld = new G4Box("World", fWorldSizeR,fWorldSizeR,fWorldSizeZ/2.);
+  fSolidWorld = new G4Box("World", fWorldSizeR,fWorldSizeR,fWorldSizeZ/2.);
                          
-  logicWorld = new G4LogicalVolume(solidWorld,  fWorldMaterial,  "World");	
+  fLogicWorld = new G4LogicalVolume(fSolidWorld,  fWorldMaterial,  "World");	
                                    
-  physiWorld = new G4PVPlacement(0, G4ThreeVector(), "World",		
-                                 logicWorld,		
+  fPhysicsWorld = new G4PVPlacement(0, G4ThreeVector(), "World",		
+                                 fLogicWorld,		
                                  0,			
                                  false,			
                                  0);			
@@ -213,17 +213,18 @@ G4VPhysicalVolume* Em10DetectorConstruction::SimpleSetUpALICE()
   G4cout<<"fRadiatorMat = "<<fRadiatorMat->GetName()<<G4endl ;
   G4cout<<"WorldMaterial = "<<fWorldMaterial->GetName()<<G4endl ;
 
-  solidRadiator = new G4Box("Radiator",1.1*fAbsorberRadius , 
+  fSolidRadiator = new G4Box("Radiator",1.1*fAbsorberRadius , 
                                               1.1*fAbsorberRadius, 
                                               0.5*radThick             ) ; 
                          
-  logicRadiator = new G4LogicalVolume(solidRadiator, fRadiatorMat,      
+  fLogicRadiator = new G4LogicalVolume(fSolidRadiator, fRadiatorMat,      
                                        "Radiator");	       
                                    
-  physiRadiator = new G4PVPlacement(0,
+  fPhysicsRadiator = new G4PVPlacement(0,
                                      G4ThreeVector(0,0,zRad),	        
-                                     "Radiator", logicRadiator,		
-                                     physiWorld, false,	0       );  	
+                                     "Radiator", fLogicRadiator,		
+                                     fPhysicsWorld, false,	0       ); 
+ 	
   fSolidRadSlice = new G4Box("RadSlice",fAbsorberRadius,
                                 fAbsorberRadius,0.5*fRadThickness ) ;
 
@@ -245,7 +246,7 @@ G4VPhysicalVolume* Em10DetectorConstruction::SimpleSetUpALICE()
  
   G4VPhysicalVolume*    physiWindowR = new G4PVPlacement(0,		   
                         G4ThreeVector(0.,0.,zWindow),        
-                              "Window",logicWindowR,physiWorld,false,0);
+                              "Window",logicWindowR,fPhysicsWorld,false,0);
   // window 
       			                  
   G4Box* solidWindow = new G4Box("Window",fAbsorberRadius,
@@ -288,33 +289,33 @@ G4VPhysicalVolume* Em10DetectorConstruction::SimpleSetUpALICE()
 
   if (fAbsorberThickness > 0.) 
   { 
-    solidAbsorber = new G4Box("Absorber", fAbsorberRadius,		
+    fSolidAbsorber = new G4Box("Absorber", fAbsorberRadius,		
                                  fAbsorberRadius, fAbsorberThickness/2.); 
                           
-    logicAbsorber = new G4LogicalVolume(solidAbsorber, fAbsorberMaterial, 
+    fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber, fAbsorberMaterial, 
       			                  "Absorber");     
       			                  
-    physiAbsorber = new G4PVPlacement(0, G4ThreeVector(0.,0.,zAbsorber),        
-                                       "Absorber", logicAbsorber,     
-                                        physiWorld,  false,  0);                
+    fPhysicsAbsorber = new G4PVPlacement(0, G4ThreeVector(0.,0.,zAbsorber),        
+                                       "Absorber", fLogicAbsorber,     
+                                        fPhysicsWorld,  false,  0);                
                                         
   }
   if( fRegGasDet != 0 ) delete fRegGasDet;
   if( fRegGasDet == 0 )        fRegGasDet = new G4Region("XTRdEdxDetector");  
-                               fRegGasDet->AddRootLogicalVolume(logicAbsorber);              
+                               fRegGasDet->AddRootLogicalVolume(fLogicAbsorber);              
                                  
   // Sensitive Detectors: Absorber 
   
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
 
-  if(!calorimeterSD)
+  if(!fCalorimeterSD)
   {
-    calorimeterSD = new Em10CalorimeterSD("CalorSD",this);
-    SDman->AddNewDetector( calorimeterSD );
+    fCalorimeterSD = new Em10CalorimeterSD("CalorSD",this);
+    SDman->AddNewDetector( fCalorimeterSD );
   }
-  if (logicAbsorber)  logicAbsorber->SetSensitiveDetector(calorimeterSD);
+  if (fLogicAbsorber)  fLogicAbsorber->SetSensitiveDetector(fCalorimeterSD);
 
-  return physiWorld;
+  return fPhysicsWorld;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -342,7 +343,7 @@ void Em10DetectorConstruction::TestOld()
   // complete the Calor parameters definition and Print 
 
   ComputeCalorParameters();
-  PrintCalorParameters();
+  PrintGeometryParameters();
 
   // zRadiator ;
       
@@ -426,7 +427,7 @@ void Em10DetectorConstruction::TestOld()
 //
 //
 
-void Em10DetectorConstruction::PrintCalorParameters()
+void Em10DetectorConstruction::PrintGeometryParameters()
 {
   G4cout << "\n The  WORLD   is made of " 
        << fWorldSizeZ/mm << "mm of " << fWorldMaterial->GetName() ;
@@ -457,7 +458,7 @@ void Em10DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
     if(pttoMaterial->GetName() == materialChoice)
     {
       fAbsorberMaterial = pttoMaterial;
-      logicAbsorber->SetMaterial(pttoMaterial); 
+      fLogicAbsorber->SetMaterial(pttoMaterial); 
         // PrintCalorParameters();
     }             
   }
@@ -507,7 +508,7 @@ void Em10DetectorConstruction::SetWorldMaterial(G4String materialChoice)
     if(pttoMaterial->GetName() == materialChoice)
     {
       fWorldMaterial = pttoMaterial;
-      logicWorld->SetMaterial(pttoMaterial); 
+      fLogicWorld->SetMaterial(pttoMaterial); 
        //  PrintCalorParameters();
     }             
   }
@@ -563,7 +564,7 @@ void Em10DetectorConstruction::SetAbsorberRadius(G4double val)
 
 void Em10DetectorConstruction::SetWorldSizeZ(G4double val)
 {
-  worldchanged=true;
+  fWorldChanged=true;
   fWorldSizeZ = val;
   ComputeCalorParameters();
 }  
@@ -574,7 +575,7 @@ void Em10DetectorConstruction::SetWorldSizeZ(G4double val)
 
 void Em10DetectorConstruction::SetWorldSizeR(G4double val)
 {
-  worldchanged=true;
+  fWorldChanged=true;
   fWorldSizeR = val;
   ComputeCalorParameters();
 }  
