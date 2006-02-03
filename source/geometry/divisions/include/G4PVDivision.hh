@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.hh,v 1.10 2006-01-10 11:42:01 gcosmo Exp $
+// $Id: G4PVDivision.hh,v 1.11 2006-02-03 14:37:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PVDivision
@@ -128,6 +128,7 @@ class G4PVDivision : public G4VPhysicalVolume
                                      G4double& width,
                                      G4double& offset,
                                      G4bool& consuming ) const;
+    EAxis  GetDivisionAxis() const;
     G4bool IsParameterised() const;
 
   public:  // without description
@@ -159,7 +160,8 @@ class G4PVDivision : public G4VPhysicalVolume
 
   protected:
 
-    EAxis faxis;
+    EAxis faxis;             // axis of optimisation
+    EAxis fdivAxis;          // axis of division
     G4int fnReplicas;
     G4double fwidth,foffset;
     G4int    fcopyNo;
