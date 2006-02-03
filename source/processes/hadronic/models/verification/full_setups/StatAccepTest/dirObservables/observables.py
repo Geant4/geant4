@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #----------------------------------------------------------------
-# Last update: 14-Dec-2005.  
+# Last update: 3-Feb-2006.  
 #
 # This Python script is used for post-processing analysis, i.e.
 # to produce plots (in PostScript format) of calorimeter
@@ -117,14 +117,13 @@ import math
 #***LOOKHERE***
 # Look for the files in this directory and recursively in all
 # its subdirectories.
-#directory = "/afs/cern.ch/sw/geant4/stat_testing/june05"
-directory = "/users/ribon/dirGrid/dirDec05/Dec07/QGSP/WHOLE/outputs"                 
+directory = "/afs/cern.ch/sw/geant4/stat_testing/december05"
 
 # Prepare all the cases.
 tupleG4Versions   = ("7.1.p01", "8.0.cand02")
 
 ###tuplePhysicsLists = ("LHEP", "QGSP", "QGSC", "QGSP_BIC", "QGSP_BERT")
-tuplePhysicsLists = ("QGSP_GN",)
+tuplePhysicsLists = ("QGSC",)
 
 tupleCaloTypes    = ("FeSci", "CuSci", "PbSci", "CuLAr", "PbLAr", "WLAr", "PbWO4")
 ###tupleCaloTypes    = ("CuLAr",)
@@ -135,9 +134,9 @@ tupleParticles    = ("e-", "pi+", "pi-", "k+", "k-", "k0L", "p", "n")
 tupleEnergies     = ("1GeV", "2GeV", "3GeV", "4GeV", "5GeV", "6GeV", "7GeV",
                      "8GeV", "9GeV", "10GeV", "20GeV", "30GeV", "40GeV",
                      "50GeV", "60GeV", "80GeV", "100GeV", "120GeV", "150GeV",
-                     "180GeV", "200GeV", "250GeV", "300GeV")
 ###                     "180GeV", "200GeV", "250GeV", "300GeV", "1000GeV")
-###tupleEnergies     = ("20GeV",)
+                     "180GeV", "200GeV", "250GeV", "300GeV")
+#tupleEnergies     = ("20GeV",)
 
 tupleEvents       = ("5000",)
 
@@ -601,12 +600,12 @@ def makeRatioPlots( label , strNumEvents , g4version_a , g4version_b ) :
             for i in xrange( len( tupleE_a ) ) :
                 numerator = float( tupleE_a[i].split()[0] )
                 sigma_numerator = 0.0
-                if ( len( tupleE_a[i].split() ) > 1 ) :
-                    sigma_numerator = float( tupleE_a[i].split()[1] )
+                if ( len( tupleE_a[i].split() ) >= 2 ) :
+                     sigma_numerator = float( tupleE_a[i].split()[1] )
                 denominator = float( tuplePi_a[i].split()[0] )
                 sigma_denominator = 0.0
-                if ( len( tuplePi_a[i].split() ) > 1 ) :
-                     sigma_denominator = float( tuplePi_a[i].split()[1] )
+                if ( len( tuplePi_a[i].split() ) >= 2 ) :
+                    sigma_denominator = float( tuplePi_a[i].split()[1] )
                 #print '  numerator=', numerator, ' sigma_numerator=', sigma_numerator
                 #print '  denominator=', denominator, ' sigma_denominator=', sigma_denominator
                 ratio = 0.0
@@ -640,11 +639,11 @@ def makeRatioPlots( label , strNumEvents , g4version_a , g4version_b ) :
             for i in xrange( len( tupleE_b ) ) :
                 numerator = float( tupleE_b[i].split()[0] )
                 sigma_numerator = 0.0
-                if ( len( tupleE_b[i].split() ) > 1 ) :
+                if ( len( tupleE_b[i].split() ) >= 2 ) :
                     sigma_numerator = float( tupleE_b[i].split()[1] )                
                 denominator = float( tuplePi_b[i].split()[0] )
                 sigma_denominator = 0.0
-                if ( len( tuplePi_b[i].split() ) > 1 ) :
+                if ( len( tuplePi_b[i].split() ) >= 2 ) :
                     sigma_denominator = float( tuplePi_b[i].split()[1] )                
                 #print '  numerator=', numerator, ' sigma_numerator=', sigma_numerator
                 #print '  denominator=', denominator, ' sigma_denominator=', sigma_denominator
