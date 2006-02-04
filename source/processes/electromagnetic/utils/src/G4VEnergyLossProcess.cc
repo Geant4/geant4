@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.78 2006-01-24 11:52:59 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.79 2006-02-04 19:21:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -674,15 +674,19 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 	  }    
 	  G4int n = scTracks.size();
 	  if(n) {
+            G4ThreeVector mom = dynParticle->GetMomentum();
 	    fParticleChange.SetNumberOfSecondaries(n);
 	    for(G4int i=0; i<n; i++) {
               G4Track* t = scTracks[i];
 	      G4double e = t->GetKineticEnergy();
 	      if (t->GetDefinition() == thePositron) e += electron_mass_c2;
               esec += e;
-	      pParticleChange->AddSecondary(scTracks[i]);
+	      pParticleChange->AddSecondary(t);
+              mom -= t->GetMomentum();
 	    }      
 	    scTracks.clear();
+            mom = mom.unit();
+	    fParticleChange.SetProposedMomentumDirection(mom);            
 	  }
 	}
       }
@@ -709,8 +713,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   }
 
   // Energy balanse
-  eloss += esec;
-  G4double finalT = preStepKinEnergy - eloss;
+  G4double finalT = preStepKinEnergy - eloss - esec;
   if (finalT <= lowestKinEnergy) {
     eloss += finalT;
     finalT = 0.0;
@@ -750,7 +753,7 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
     chargeSqRatio*(((*theSubLambdaTable)[currentMaterialIndex])->
                    GetValue(preStepScaledEnergy, b));
   G4double length = step.GetStepLength();
-  if(length*cross < 1.e-6) return;
+  if(length*cross < 1.e-9) return;
   /*  
   if(-1 < verboseLevel) 
     G4cout << "<<< Subcutoff for " << GetProcessName()
