@@ -59,7 +59,7 @@ G4VQCrossSection* G4QPhotonNuclearCrossSection::GetPointer()
 // *** (nu,l) reactions the mass value of the final state lepton must be added ***
 // ***@@ IT IS REASONABLE TO MAKE ADDITIONAL VIRTUAL CLASS FOR LEPTO-NUCLEAR @@***
 // *******************************************************************************
-G4double G4QPhotonNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
+G4double G4QPhotonNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N, G4int)
 {
   // CHIPS - Direct GEANT
   //static const G4double mNeut = G4QPDGCode(2112).GetMass();
@@ -105,8 +105,8 @@ G4double G4QPhotonNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
 }
 
 // The main member function giving the gamma-A cross section (E in GeV, CS in mb)
-G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G4int targZ,
-                                                             G4int targN, G4double Energy)
+G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4int I,
+                                          G4int, G4int targZ, G4int targN, G4double Energy)
 {
   static const G4double THmin=2.;  // minimum Energy Threshold
   static const G4double dE=1.;     // step for the GDR table
@@ -208,7 +208,7 @@ G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G
     G4cout<<"G4QPhotoNucCS::GetCS: A="<<A<<", E="<<Energy<<",CS="<<sigma<<G4endl;
 #endif
   if(sigma<0.) return 0.;
-  return sigma*millibarn;
+  return sigma;
 }
 
 // Linear fit for YN[N] tabulated (from X0 with fixed step DX) function to X point

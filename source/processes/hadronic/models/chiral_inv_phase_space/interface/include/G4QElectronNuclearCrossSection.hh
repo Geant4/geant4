@@ -56,9 +56,10 @@ public:
 
   static G4VQCrossSection* GetPointer(); // Gives a pointer to this singletone
 
-  G4double ThresholdEnergy(G4int Z, G4int N);
+  G4double ThresholdEnergy(G4int Z, G4int N, G4int PDG=11);
 
-  G4double CalculateCrossSection(G4int F, G4int I, G4int Z, G4int N, G4double Momentum);
+  G4double CalculateCrossSection(G4bool CS, G4int F, G4int I, G4int PDG, G4int Z, G4int N,
+                                                                        G4double Momentum);
 
   G4int    GetExchangePDGCode();
 
@@ -79,6 +80,7 @@ private:
 
 // Body
 private:
+  static G4bool    onlyCS;   // flag to calculate only CS
   static G4double  lastSig;  // Last calculated cross section
   static G4int     lastL;    // Last used in the cross section TheLastBin
   static G4double  lastE;    // Last used in the cross section Energy

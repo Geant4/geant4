@@ -53,15 +53,9 @@ G4VQCrossSection* G4QProtonNuclearCrossSection::GetPointer()
   return &theCrossSection;
 }
 
-// Gives the threshold energy for different nuclei (min of p- and n-threshold)
-G4double G4QProtonNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
-{
-  return 0.*Z*N; // @@ One can avoid this function because it is the same in the interfacee
-}
-
 // The main member function giving the gamma-A cross section (E in GeV, CS in mb)
-G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G4int targZ,
-                                                            G4int targN, G4double Momentum)
+G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4int I,
+                                        G4int, G4int targZ, G4int targN, G4double Momentum)
 {
   static const G4double THmin=0.;  // minimum Energy Threshold
   //static const G4double dP=1.;     // step for the LEN table
@@ -168,7 +162,7 @@ G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G
   G4cout<<"G4ProtonNuclearCrossSection::CalcCS: sigma="<<sigma<<G4endl;
 #endif
   if(sigma<0.) return 0.;
-  return sigma*millibarn;
+  return sigma;
 }
 
 // Linear fit for YN[N] tabulated (from X0 with fixed step DX) function to X point

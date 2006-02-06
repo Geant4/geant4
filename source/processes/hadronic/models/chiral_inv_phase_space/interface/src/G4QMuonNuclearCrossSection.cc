@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QMuonNuclearCrossSection.cc,v 1.2 2005-11-25 21:34:17 mkossov Exp $
+// $Id: G4QMuonNuclearCrossSection.cc,v 1.3 2006-02-06 09:35:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,6 +45,7 @@
 #include "G4QMuonNuclearCrossSection.hh"
 
 // Initialization of the
+G4bool    G4QMuonNuclearCrossSection::onlyCS=true;// Flag to calculate only CS
 G4double  G4QMuonNuclearCrossSection::lastSig=0.;// Last calculated cross section
 G4int     G4QMuonNuclearCrossSection::lastL=0;   // Last used in cross section TheLastBin
 G4double  G4QMuonNuclearCrossSection::lastE=0.;  // Last used in cross section TheEnergy
@@ -68,7 +69,7 @@ G4VQCrossSection* G4QMuonNuclearCrossSection::GetPointer()
 // *** (nu,l) reactions the mass value of the final state lepton must be added ***
 // ***@@ IT IS REASONABLE TO MAKE ADDITIONAL VIRTUAL CLASS FOR LEPTO-NUCLEAR @@***
 // *******************************************************************************
-G4double G4QMuonNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
+G4double G4QMuonNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N, G4int)
 {
   // CHIPS - Direct GEANT
   //static const G4double mNeut = G4QPDGCode(2112).GetMass();
@@ -110,8 +111,8 @@ G4double G4QMuonNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
 }
 
 // The main member function giving the gamma-A cross section (E_kin in MeV, CS in mb)
-G4double G4QMuonNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G4int targZ,
-                                                           G4int targN, G4double Momentum)
+G4double G4QMuonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F, G4int I,
+                                        G4int, G4int targZ, G4int targN, G4double Momentum)
 {
   static const G4int nE=336;    // !! If change this, change it in GetFunctions() (*.hh) !!
   static const G4int mL=nE-1;
@@ -132,6 +133,7 @@ G4double G4QMuonNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G4i
   static std::vector <G4double*> J3;   // Vector of pointers to the J3 tabulated functions
   // *** End of Static Definitions (Associative Memory) ***
   //const G4double Energy = aPart->GetKineticEnergy()/MeV; // Energy of the Muon
+  onlyCS=CS;                           // Flag to calculate only CS (not Si/Bi)
   G4double TotEnergy2=Momentum*Momentum+mmu2;
   G4double TotEnergy=std::sqrt(TotEnergy2); // Total energy of the muon
   lastE=TotEnergy-mmu;               // Kinetic energy of the muon

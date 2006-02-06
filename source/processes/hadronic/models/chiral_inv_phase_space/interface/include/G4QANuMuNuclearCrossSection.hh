@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QANuMuNuclearCrossSection.hh,v 1.3 2005-11-30 16:26:42 mkossov Exp $
+// $Id: G4QANuMuNuclearCrossSection.hh,v 1.4 2006-02-06 09:35:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,9 +57,10 @@ public:
 
   static G4VQCrossSection* GetPointer(); // Gives a pointer to this singletone
 
-  G4double ThresholdEnergy(G4int Z, G4int N);
+  G4double ThresholdEnergy(G4int Z, G4int N, G4int PDG=-14);
 
-  G4double CalculateCrossSection(G4int F, G4int I, G4int Z, G4int N, G4double Momentum);
+  G4double CalculateCrossSection(G4bool CS, G4int F, G4int I, G4int PDG, G4int Z,
+                                                               G4int N, G4double Momentum);
 
   G4int    GetExchangePDGCode();
 
@@ -82,6 +83,7 @@ private:
 
 // Body
 private:
+  static G4bool    onlyCS;   // flag to calculate only CS (not QE)
   static G4double  lastSig;  // Last calculated total cross section
   static G4double  lastQEL;  // Last calculated quasi-elastic cross section
   static G4int     lastL;    // Last bin used in the cross section TheLastBin

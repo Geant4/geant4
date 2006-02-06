@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VQCrossSection.cc,v 1.3 2005-11-30 16:26:42 mkossov Exp $
+// $Id: G4VQCrossSection.cc,v 1.4 2006-02-06 09:35:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,7 +35,7 @@
 // ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
 // ****************************************************************************************
 
-///#define debug
+//#define debug
 //#define edebug
 //#define pdebug
 //#define ppdebug
@@ -45,6 +45,7 @@
 #include "G4VQCrossSection.hh"
 
 // Initialization of the
+G4int     G4VQCrossSection::lastPDG=0; // The last PDG code of the projectile
 G4int     G4VQCrossSection::lastN=0;   // The last N of calculated nucleus
 G4int     G4VQCrossSection::lastZ=0;   // The last Z of calculated nucleus
 G4double  G4VQCrossSection::lastTH=0.; // Last threshold momentum
@@ -70,57 +71,77 @@ void G4VQCrossSection::setTolerance(G4double tol)
 }
 
 // Gives the threshold energy for different isotopes (can be improved in the derived class)
-G4double G4VQCrossSection::ThresholdEnergy(G4int Z, G4int N) {return Z*0.*N;}
+G4double G4VQCrossSection::ThresholdEnergy(G4int , G4int, G4int) {return 0.;} // Fake use
 
-// The main member function giving the collision cross section (P is in MeV/c, CS is in mb)
-G4double G4VQCrossSection::GetCrossSection(G4double Momentum, G4int targZ, G4int targN )
+// The main member function giving the collision cross section (P is in IU, CS is in mb)
+// Make pMom in independent units !
+G4double G4VQCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int tgZ, G4int tgN,
+                                                                                G4int pPDG)
 {
+  static std::vector <G4int>    colPDG;// Vector of the projectile PDG code
   static std::vector <G4int>    colN;  // Vector of N for calculated nuclei (isotops)
   static std::vector <G4int>    colZ;  // Vector of Z for calculated nuclei (isotops)
   static std::vector <G4double> colP;  // Vector of last momenta for the reaction
   static std::vector <G4double> colTH; // Vector of energy thresholds for the reaction
   static std::vector <G4double> colCS; // Vector of last cross sections for the reaction
   // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
-  G4bool in=false;                     // By default the isotope is found in the DAMDB
-  if(targN!=lastN || targZ!=lastZ)     // This nucleus was not the last used isotop
+  G4bool in=false;                     // By default the isotope must be found in the AMDB
+  if(tgN!=lastN || tgZ!=lastZ || pPDG!=lastPDG)// The nucleus was not the last used isotope
   {
-    in = false;                        // Now by default the isotope isn't found in DAMDB  
+    in = false;                        // By default the isotope haven't be found in AMDB  
     lastP    = 0.;                     // New momentum history (nothing to compare with)
-    lastN    = targN;                  // The last N of the calculated nucleus
-    lastZ    = targZ;                  // The last Z of the calculated nucleus
+    lastPDG  = pPDG;                   // The last PDG of the projectile
+    lastN    = tgN;                    // The last N of the calculated nucleus
+    lastZ    = tgZ;                    // The last Z of the calculated nucleus
     lastI    = colN.size();            // Size of the Associative Memory DB in the heap
-    if(lastI) for(G4int i=0; i<lastI; i++) if(colN[i]==targN && colZ[i]==targZ)
-	   { // The nucleus is found in DAMDB
+    if(lastI) for(G4int i=0; i<lastI; i++) if(colN[i]==tgN&& colZ[i]==tgZ&& colPDG[i]==pPDG)
+	   {                                  // The nucleus is found in AMDB
       in = true;                       // This is the case when the isotop is found in DB
       lastP  =colP [i];                // Last Momentum  (A-dependent)
       lastTH =colTH[i];                // Last THreshold (A-dependent)
       lastCS =colCS[i];                // Last CrossSect (A-dependent)
-      if(Momentum<=lastTH) return 0.;  // Momentum is below the Threshold value
-      else if(std::fabs(lastP/Momentum-1.)<tolerance) return lastCS*millibarn;// Use lastCS
+      if(pMom<=lastTH) return 0.;      // Momentum is below the Threshold value
+      else if(std::fabs(lastP/pMom-1.)<tolerance) return lastCS*millibarn;// Use lastCS
       lastI  = i;                      // Make the found isotope to be current isotope
-      lastCS=CalculateCrossSection(-1,lastI,lastN,lastZ,Momentum);//read&update DB, calc.CS
+      // Momentum pMom is in IU ! @@ Units (?)
+#ifdef pdebug
+      G4cout<<"G4VQCS::GetCrosSec: (-1) P="<<pMom<<",fCS="<<fCS<<",lastI="<<lastI<<G4endl;
+#endif
+      lastCS=CalculateCrossSection(fCS,-1,lastI,lastPDG, lastN,lastZ,pMom);//read & update
       break;                           // Go out of the LOOP
 	   }
 	   if(!in)                            // This nucleus has not been calculated previously
 	   {
-      lastTH = ThresholdEnergy(targZ, targN); // The last Threshold Energy
+      lastTH = ThresholdEnergy(tgZ, tgN); // The last Threshold Energy
       // lastI==colN.size() frome above
-      lastCS = CalculateCrossSection(0,lastI,lastN,lastZ,Momentum);// calcCS + createDAMDB
 #ifdef pdebug
-      G4cout<<"G4VQCS::GetCrossSection: P="<<Momentum<<", Z="<<targZ<<",N="<<targN<<G4endl;
+      G4cout<<"G4VQCS::GetCrosSec: (0) P="<<pMom<<",fCS="<<fCS<<",lastI="<<lastI<<G4endl;
 #endif
-      colN.push_back(targN);
-      colZ.push_back(targZ);
-      colP.push_back(Momentum);
+      //!!The slave functions must provide cross-sections in millibarns (mb) !! (not in IU)
+      lastCS = CalculateCrossSection(fCS,0,lastI,lastPDG,lastZ,lastN,pMom);//calcul&create
+#ifdef pdebug
+      G4cout<<"G4VQCS::GetCrosSec:CS(IU)="<<lastCS<<",lZ="<<lastN<<",lN="<<lastZ<<G4endl;
+#endif
+      colN.push_back(tgN);
+      colZ.push_back(tgZ);
+      colPDG.push_back(pPDG);
+      colP.push_back(pMom);
       colTH.push_back(lastTH);
       colCS.push_back(lastCS);
       return lastCS*millibarn;
 	   } // End of creation of the new set of parameters
   } // End of parameters udate
-  else if(Momentum<=lastTH) return 0.; // Momentum is below the Threshold value
-  else if(std::fabs(lastP/Momentum-1.)<tolerance) return lastCS*millibarn; // Use theLastCS
-  else lastCS=CalculateCrossSection(1,lastI,lastN,lastZ,Momentum); // Update DB, calc. CS
-  colP[lastI]=Momentum;
+  else if(pMom<=lastTH) return 0.; // Momentum is below the Threshold value
+  else if(std::fabs(lastP/pMom-1.)<tolerance) return lastCS*millibarn;     // Use theLastCS
+  else
+  {
+#ifdef pdebug
+    G4cout<<"G4VQCS::GetCrosSec: (1) P="<<pMom<<",fCS="<<fCS<<",lastI="<<lastI<<G4endl;
+#endif
+    lastCS=CalculateCrossSection(fCS,1,lastI,lastPDG,lastZ,lastN,pMom); // Only UpdateDB
+  }
+  colP[lastI]=pMom;
+  colPDG[lastI]=pPDG;
   colCS[lastI]=lastCS;
   return lastCS*millibarn;
 }
@@ -136,6 +157,8 @@ G4double G4VQCrossSection::GetLastQELCS() {return 0.;} // Get the last quasi-ela
 G4double G4VQCrossSection::GetExchangeEnergy() {return 0.;}
 
 G4double G4VQCrossSection::GetExchangeQ2(G4double) {return 0.;}
+
+G4double G4VQCrossSection::GetExchangeT(G4int,G4int,G4int) {return 0.;}
 
 G4double G4VQCrossSection::GetQEL_ExchangeQ2() {return 0.;}
 

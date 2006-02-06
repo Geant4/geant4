@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.6 2005-12-01 17:28:18 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.7 2006-02-06 09:35:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -140,37 +140,49 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
 #endif
   G4bool leptoNuc=false;       // By default the reaction is not lepto-nuclear
   G4VQCrossSection* CSmanager=0;
+  G4int pPDG=0;
   if(incidentParticleDefinition == G4Proton::Proton())
-                                      CSmanager=G4QProtonNuclearCrossSection::GetPointer();
+  {
+    CSmanager=G4QProtonNuclearCrossSection::GetPointer();
+    pPDG=2212;
+  }
   else if(incidentParticleDefinition == G4Gamma::Gamma())
-                                      CSmanager=G4QPhotonNuclearCrossSection::GetPointer();
+  {
+    CSmanager=G4QPhotonNuclearCrossSection::GetPointer();
+    pPDG=22;
+  }
   else if(incidentParticleDefinition == G4Electron::Electron() ||
           incidentParticleDefinition == G4Positron::Positron())
   {
     CSmanager=G4QElectronNuclearCrossSection::GetPointer();
     leptoNuc=true;
+    pPDG=11;
   }
   else if(incidentParticleDefinition == G4MuonPlus::MuonPlus() ||
           incidentParticleDefinition == G4MuonMinus::MuonMinus())
   {
     CSmanager=G4QMuonNuclearCrossSection::GetPointer();
     leptoNuc=true;
+    pPDG=13;
   }
   else if(incidentParticleDefinition == G4TauPlus::TauPlus() ||
           incidentParticleDefinition == G4TauMinus::TauMinus())
   {
     CSmanager=G4QTauNuclearCrossSection::GetPointer();
     leptoNuc=true;
+    pPDG=15;
   }
   else if(incidentParticleDefinition == G4NeutrinoMu::NeutrinoMu() )
   {
     CSmanager=G4QNuMuNuclearCrossSection::GetPointer();
     leptoNuc=true;
+    pPDG=14;
   }
   else if(incidentParticleDefinition == G4AntiNeutrinoMu::AntiNeutrinoMu() )
   {
     CSmanager=G4QANuMuNuclearCrossSection::GetPointer();
     leptoNuc=true;
+    pPDG=-14;
   }
   else G4cout<<"G4QCollision::GetMeanFreePath:Particle isn't implemented in CHIPS"<<G4endl;
   
@@ -242,7 +254,7 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
       std::pair<G4int,G4double>* curIs=(*cs)[j]; // A pointer, which is used twice
       G4int N=curIs->first;                 // #of Neuterons in the isotope j of El i
       IsN->push_back(N);                    // Remember Min N for the Element
-      G4double CSI=CSmanager->GetCrossSection(Momentum,Z,N); // CrossS(j,i) for the isotope
+      G4double CSI=CSmanager->GetCrossSection(true,Momentum,Z,N,pPDG);//CS(j,i) for isotope
       curIs->second = CSI;
       susi+=CSI;                            // Make a sum per isotopes
       SPI->push_back(susi);                 // Remember summed cross-section
@@ -419,16 +431,19 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef debug
 		G4cout<<"G4QCollis::PostStDoIt: m="<<EPIM<<",n="<<nE<<",T="<<ElProbInMat[EPIM-1]<<G4endl;
 #endif
-  G4double rnd = ElProbInMat[EPIM-1]*G4UniformRand();
   G4int i=0;
-  for(i=0; i<nE; ++i)
-		{
+  if(EPIM>1)
+  {
+    G4double rnd = ElProbInMat[EPIM-1]*G4UniformRand();
+    for(i=0; i<nE; ++i)
+		  {
 #ifdef debug
-				G4cout<<"G4QCollision::PostStepDoIt:EPM["<<i<<"]="<<ElProbInMat[i]<<",r="<<rnd<<G4endl;
+				  G4cout<<"G4QCollision::PostStepDoIt:E["<<i<<"]="<<ElProbInMat[i]<<",r="<<rnd<<G4endl;
 #endif
-    if (rnd<ElProbInMat[i]) break;
+      if (rnd<ElProbInMat[i]) break;
+    }
+    if(i>=nE) i=nE-1;                        // Top limit for the Element
   }
-  if(i>=nE) i=nE-1;                        // Top limit for the Element
   G4Element* pElement=(*theElementVector)[i];
   Z=static_cast<G4int>(pElement->GetZ());
 #ifdef debug
@@ -445,19 +460,22 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef debug
 		G4cout<<"G4QCollis::PosStDoIt:n="<<nofIsot<<",T="<<(*SPI)[nofIsot-1]<<",r="<<rnd<<G4endl;
 #endif
-  rnd = (*SPI)[nofIsot-1]*G4UniformRand(); // Randomize the isotop of the Element
   G4int j=0;
-  for(j=0; j<nofIsot; ++j)
+  if(nofIsot>1)
   {
+    G4double rndI=(*SPI)[nofIsot-1]*G4UniformRand(); // Randomize the isotop of the Element
+    for(j=0; j<nofIsot; ++j)
+    {
 #ifdef debug
-				G4cout<<"G4QCollision::PostStepDoIt: SP["<<j<<"]="<<(*SPI)[j]<<", r="<<rnd<<G4endl;
+				  G4cout<<"G4QCollision::PostStepDoIt: SP["<<j<<"]="<<(*SPI)[j]<<", r="<<rndI<<G4endl;
 #endif
-    if(rnd < (*SPI)[j]) break;
+      if(rndI < (*SPI)[j]) break;
+    }
+    if(j>=nofIsot) j=nofIsot-1;            // Top limit for the isotope
   }
-  if(j>=nofIsot) j=nofIsot-1;              // Top limit for the isotope
   G4int N =(*IsN)[j]; ;                    // Randomized number of neutrons
 #ifdef debug
-		G4cout<<"G4QCollision::PostStepDoIt: j="<<i<<", N(isotope)="<<Z<<G4endl;
+		G4cout<<"G4QCollision::PostStepDoIt: j="<<i<<", N(isotope)="<<N<<G4endl;
 #endif
   if(N<0)
   {
@@ -490,11 +508,9 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     G4ParticleMomentum dir = projHadron->GetMomentumDirection();
     G4VQCrossSection* CSmanager=G4QElectronNuclearCrossSection::GetPointer();
     if(aProjPDG== 13) CSmanager=G4QMuonNuclearCrossSection::GetPointer();
-    if(projPDG==  14) CSmanager=G4QNuMuNuclearCrossSection::GetPointer();
-    if(projPDG== -14) CSmanager=G4QANuMuNuclearCrossSection::GetPointer();
     if(aProjPDG== 15) CSmanager=G4QTauNuclearCrossSection::GetPointer();
     // @@ Probably this is not necessary any more
-    G4double xSec=CSmanager->GetCrossSection(Momentum, Z, N);// Recalculate Cross Section!
+    G4double xSec=CSmanager->GetCrossSection(false,Momentum,Z,N);//Recalculate CrossSection
     // @@ check a possibility to separate p, n, or alpha (!)
     G4double photonEnergy = CSmanager->GetExchangeEnergy(); // Energy of EqivExchangePart
     if(xSec <= 0.) // The cross-section iz 0 -> Do Nothing
@@ -528,8 +544,8 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     }
     // Update G4VParticleChange for the scattered muon
     G4VQCrossSection* thePhotonData=G4QPhotonNuclearCrossSection::GetPointer();
-    G4double sigNu=thePhotonData->GetCrossSection(photonEnergy, Z, N);// IntegratedCrossSec
-    G4double sigK =thePhotonData->GetCrossSection(W, Z, N);           // Real CrossSec
+    G4double sigNu=thePhotonData->GetCrossSection(true,photonEnergy,Z,N);// IntegratedCrSec
+    G4double sigK =thePhotonData->GetCrossSection(true, W, Z, N);        // Real CrossSect.
     G4double rndFraction = CSmanager->GetVirtualFactor(photonEnergy, photonQ2);
     if(sigNu*G4UniformRand()>sigK*rndFraction) 
     {
@@ -575,7 +591,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     projPDG=22;
     proj4M=G4LorentzVector(photon3M,photon3M.mag()); //@@ photon is real?
   }
-		if(aProjPDG==14) // *** neutrino nuclear interactions (only nu_mu/anu_mu & only CC) ***
+		else if(aProjPDG==14)// ** neutrino nuclear interactions (only nu_mu/anu_mu & only CC) **
 		{
     G4double kinEnergy= projHadron->GetKineticEnergy();// For neutrino this is total energy
     G4double dKinE=kinEnergy+kinEnergy;  // doubled energy for s calculation
@@ -591,7 +607,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       scatPDG=-13;                       // secondary scattered mu+
     }
     // @@ Probably this is not necessary any more
-    G4double xSec=CSmanager->GetCrossSection(Momentum, Z, N);// Recalculate Cross Section
+    G4double xSec=CSmanager->GetCrossSection(false,Momentum,Z,N);//Recalculate CrossSection
     // @@ check a possibility to separate p, n, or alpha (!)
     if(xSec <= 0.) // The cross-section = 0 -> Do Nothing
     {
@@ -670,7 +686,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       if(!G4QHadron(c4M).RelDecayIn2(scat4M, t4M, c4M, cost, cost))
       {
         G4cerr<<"G4QCol::PSD:c4M="<<c4M<<sqs<<",mM="<<mu<<",tM="<<mOT<<",c="<<cost<<G4endl;
-        throw G4QException("G4Quasmon::HadronizeQuasm: Can't dec QE nu,mu Compound");
+        throw G4QException("G4QCollision::HadronizeQuasm: Can't dec QE nu,mu Compound");
       }
       proj4M=t4M;                               // 4mom of the new projectile nucleon
     }

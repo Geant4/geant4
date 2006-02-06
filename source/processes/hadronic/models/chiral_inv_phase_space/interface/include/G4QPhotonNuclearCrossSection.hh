@@ -54,9 +54,10 @@ public:
 
   static G4VQCrossSection* GetPointer(); // Gives a pointer to this singletone
 
-  G4double CalculateCrossSection(G4int F, G4int I, G4int Z, G4int N, G4double Momentum);
+  G4double CalculateCrossSection(G4bool CS, G4int F, G4int I, G4int PDG, G4int Z,
+                                 G4int N, G4double Momentum);
 
-  G4double ThresholdEnergy(G4int Z, G4int N);
+  G4double ThresholdEnergy(G4int Z, G4int N, G4int PDG=22);
 
 private:
   G4int    GetFunctions(G4double A, G4double* y, G4double* z);// y&z are pointers to arrays
