@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.cc,v 1.21 2006-02-03 17:15:23 grichine Exp $
+// $Id: Em10DetectorConstruction.cc,v 1.22 2006-02-06 16:21:43 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -108,6 +108,10 @@ G4VPhysicalVolume* Em10DetectorConstruction::ConstructDetectorXTR()
   {
     return SimpleSetUpALICE();
   }
+  else if( fSetUp == "harris73" )
+  {
+    return SetUpHarris73();
+  }
   else
   {
     G4cout<<"Experimental setup is unsupported. Check /XTRdetector/setup "<<G4endl;
@@ -115,7 +119,10 @@ G4VPhysicalVolume* Em10DetectorConstruction::ConstructDetectorXTR()
   }
 }
 
-
+/////////////////////////////////////////////////////////////////////////////////
+//
+// Simplified setup for ALICE XTR test beam (~2004). 
+// Runs by : TestEm10 salice.mac
 
 G4VPhysicalVolume* Em10DetectorConstruction::SimpleSetUpALICE()
 {
@@ -132,7 +139,7 @@ G4VPhysicalVolume* Em10DetectorConstruction::SimpleSetUpALICE()
 
   fAbsorberThickness = 38.3*mm; 
 
-  fAbsorberRadius   = 1.*mm;
+  fAbsorberRadius   = 100.*mm;
   fAbsorberZ        = 136.*cm;
 
   fWindowThick    = 51.0*micrometer ;
@@ -179,6 +186,173 @@ G4VPhysicalVolume* Em10DetectorConstruction::SimpleSetUpALICE()
   fElectrodeMat = Al ;
 
   fAbsorberMaterial = fMat->GetMaterial("Xe15CO2");
+ 
+
+  fGapMat          = fAbsorberMaterial;
+
+  fWorldMaterial    = Air; // CO2 ;  
+
+  fSolidWorld = new G4Box("World", fWorldSizeR,fWorldSizeR,fWorldSizeZ/2.);
+                         
+  fLogicWorld = new G4LogicalVolume(fSolidWorld,  fWorldMaterial,  "World");	
+                                   
+  fPhysicsWorld = new G4PVPlacement(0, G4ThreeVector(), "World",		
+                                 fLogicWorld, 0,  false, 0);			
+
+  // TR radiator envelope
+
+  fRadThick = fFoilNumber*(fRadThickness + fGasGap) - fGasGap + fDetGap;
+
+  fRadZ = fStartZ + 0.5*fRadThick ;
+
+  fSolidRadiator = new G4Box("Radiator",1.1*fAbsorberRadius , 
+                              1.1*fAbsorberRadius,  0.5*fRadThick ); 
+                         
+  fLogicRadiator = new G4LogicalVolume(fSolidRadiator, fRadiatorMat,      
+                                       "Radiator");	       
+                                   
+  fPhysicsRadiator = new G4PVPlacement(0,
+                                     G4ThreeVector(0,0,fRadZ),	        
+                                     "Radiator", fLogicRadiator,		
+                                     fPhysicsWorld, false,	0 ); 
+
+  // create region for window inside windowR for
+
+  if( fRadRegion != 0 ) delete fRadRegion; 
+  if( fRadRegion == 0 )        fRadRegion = new G4Region("XTRradiator");
+                               fRadRegion->AddRootLogicalVolume(fLogicRadiator);                   
+ 	
+
+   
+  fWindowZ = fStartZ + fRadThick + fWindowThick/2. + 15.0*mm ;    
+      			                  
+  G4Box* solidWindowR = new G4Box("WindowR",fAbsorberRadius+0.001,
+                                          fAbsorberRadius+0.001,
+                                          fWindowThick/2.+0.001  ); 
+                          
+  G4LogicalVolume* logicWindowR = new G4LogicalVolume(solidWindowR,
+                                     fWorldMaterial, "WindowR");
+ 
+  G4VPhysicalVolume*    physiWindowR = new G4PVPlacement(0,		   
+                        G4ThreeVector(0.,0.,fWindowZ),        
+                              "WindowR",logicWindowR,fPhysicsWorld,false,0);
+  // window 
+      			                  
+  G4Box* solidWindow = new G4Box("Window",fAbsorberRadius,
+                                   fAbsorberRadius, fWindowThick/2.); 
+                          
+  G4LogicalVolume* logicWindow = new G4LogicalVolume(solidWindow,
+                                     fWindowMat, "Window"); 
+
+  G4VPhysicalVolume*    physiWindow = new G4PVPlacement(0, G4ThreeVector(0.,0.,0.),        
+                              "Window", logicWindow, physiWindowR, false, 0); 
+
+
+  fGapZ = fWindowZ + fWindowThick/2. + fGapThick/2. + 0.01*mm ;    
+
+  fElectrodeZ = fGapZ + fGapThick/2. + fElectrodeThick/2. + 0.01*mm;    
+
+  // Absorber
+
+  fAbsorberZ = fElectrodeZ + fElectrodeThick/2. + fAbsorberThickness/2. + 0.01*mm; 
+
+  fSolidAbsorber = new G4Box("Absorber", fAbsorberRadius,		
+                                 fAbsorberRadius, fAbsorberThickness/2.); 
+                          
+  fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber, fAbsorberMaterial, 
+      			                  "Absorber");     
+      			                  
+  fPhysicsAbsorber = new G4PVPlacement(0, G4ThreeVector(0.,0.,fAbsorberZ),        
+                                       "Absorber", fLogicAbsorber,     
+                                        fPhysicsWorld,  false,  0);                
+                                        
+  if( fRegGasDet != 0 ) delete fRegGasDet;
+  if( fRegGasDet == 0 )        fRegGasDet = new G4Region("XTRdEdxDetector");  
+                               fRegGasDet->AddRootLogicalVolume(fLogicAbsorber);              
+                                 
+  // Sensitive Detectors: Absorber 
+  
+  G4SDManager* SDman = G4SDManager::GetSDMpointer();
+
+  if(!fCalorimeterSD)
+  {
+    fCalorimeterSD = new Em10CalorimeterSD("CalorSD",this);
+    SDman->AddNewDetector( fCalorimeterSD );
+  }
+  if (fLogicAbsorber)  fLogicAbsorber->SetSensitiveDetector(fCalorimeterSD);
+
+  PrintGeometryParameters();
+
+  return fPhysicsWorld;
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+//
+// Setuo from F. Harris et al NIM 107 (1973) 413-422 (fig.5b)
+
+G4VPhysicalVolume* Em10DetectorConstruction::SetUpHarris73()
+{
+  fWorldSizeZ = 400.*cm; 
+  fWorldSizeR = 20.*cm;
+
+  // Radiator and detector parameters
+
+  fRadThickness = 0.0127*mm; 
+  fGasGap       = 0.762*mm;  
+  foilGasRatio  = fRadThickness/(fRadThickness+fGasGap);
+
+  fFoilNumber   = 100; 
+
+  fAbsorberThickness = 15.0*mm; 
+
+  fAbsorberRadius   = 100.*mm;
+  fAbsorberZ        = 136.*cm;
+
+  fWindowThick    = 51.0*micrometer ;
+  fElectrodeThick = 10.0*micrometer ;
+  fGapThick       =  10.0*cm ;
+
+
+  fDetThickness =  40.0*mm ;
+  fDetLength    = 200.0*cm  ;
+  fDetGap       =   0.01*mm ;
+
+
+  fStartR       = 40*cm  ;
+  fStartZ       = 100.0*mm  ;
+
+  fModuleNumber = 1      ;  
+
+  // Preparation of mixed radiator material
+
+
+  G4Material* Mylar = fMat->GetMaterial("Mylar");
+  G4Material* Air   = fMat->GetMaterial("Air");
+  G4Material* Al   = fMat->GetMaterial("Al");
+
+  G4double foilDensity =  1.39*g/cm3; // Mylar // 0.91*g/cm3;  // CH2 0.534*g/cm3; //Li     
+  G4double gasDensity  =  1.2928*mg/cm3; // Air // 1.977*mg/cm3; // CO2 0.178*mg/cm3; // He 
+ 
+  G4double totDensity  = foilDensity*foilGasRatio + gasDensity*(1.0-foilGasRatio) ;
+
+  G4double fractionFoil =  foilDensity*foilGasRatio/totDensity ; 
+  G4double fractionGas  =  gasDensity*(1.0-foilGasRatio)/totDensity ;  
+    
+  G4Material* radiatorMat = new G4Material("radiatorMat"  , totDensity, 
+                                                  2);
+  radiatorMat->AddMaterial( Mylar, fractionFoil ) ;
+  radiatorMat->AddMaterial( Air, fractionGas  ) ;
+  
+  // default materials of the detector and TR radiator
+
+  fRadiatorMat =  radiatorMat; 
+  fFoilMat     = Mylar;  
+  fGasMat      = Air;  
+  
+  fWindowMat    = Mylar ;
+  fElectrodeMat = Al ;
+
+  fAbsorberMaterial = fMat->GetMaterial("Kr7CH4");
  
 
   fGapMat          = fAbsorberMaterial;
