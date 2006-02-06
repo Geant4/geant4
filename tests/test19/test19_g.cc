@@ -83,7 +83,6 @@
 #include "G4PionMinusInelasticProcess.hh"
 #include "G4KaonPlusInelasticProcess.hh"
 #include "G4KaonMinusInelasticProcess.hh"
-#include "G4ForceCondition.hh"
 //#include "G4QuasmonString.hh"
 
 #include "G4ApplicationState.hh"

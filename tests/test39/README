@@ -1,0 +1,56 @@
+====================================================================== 
+test39
+======================================================================
+
+Test for the elastic & lA scattering of the process level simulation
+
+Authors: Mikhail Kosov
+
+======================================================================
+
+---- Status: Beta version
+
+---- Input file: chipstest.in
+
+---- Output: screan or chip_{name}.log in the subdirectory made by kumac
+---- Output ntuples: tuple3pi.out, tuplevta.out, tuplevtq.out, tuplincl.out
+
+---- Location of the reference output: any name defined after >
+
+---- Macros: no macros
+
+---- Other files required: no additional files
+
+---- How to run it?
+     > cd test39
+     [ edit the test39.cc file. If "#define nout" is uncommented, then the ]
+     [ resulting executable is not providing the output files for PAW.  ]  
+     > make  (compile the cc files and make the executable)
+     > ln -s ../../bin/Linux-g++/test39 test39 (ore another path)
+     > test39 (uses internally chipstest.in file, switch of the output)
+     {> test39 test39.in >& result.out (not implemented yet)}
+     {> test39 test39.large_N.in >& result.large_N.out (not yet)}
+     ==>>: Before the simulation of pictures, comment "#define nout" in
+     ==>>: the test39.cc file and recompile test39 (> make)
+     > cd {subdirectory}
+     > ls *.kumac
+     name1.kumac ... nemeI.kumac (not all kumac's are working, see below)
+     > paw
+     paw >> exe nameI {param1 {param2...} usually param1=f, nEv=f*2000
+     ----- test39 start working using chipstest_nucleus.in files --------
+     ----- the last picture (usually the only picture) is on the screan -
+     paw >> pict/list
+     PICT1
+     ...
+     PICTI
+     paw >> pict/plot PICTI (just to look on the picture I)
+     paw >> meta 10 -113 (after that all pictures are stored to paw.metafile)
+     paw >> pict/plot PICTI (put picture I in the paw.metafile as eps)
+     paw >> exit (quit does not save the paw.metafile correctly!)
+     > mv paw.metafile nucleus.eps
+
+Directories:
+
+---- Contactperson: Mikhail.Kossov@cern.ch
+
+======================================================================
