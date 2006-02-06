@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.hh,v 1.10 2004-11-23 17:45:43 japost Exp $
+// $Id: G4Transportation.hh,v 1.11 2006-02-06 16:14:59 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -128,6 +128,9 @@ class G4Transportation : public G4VProcess
                              const G4Step&
                             ) {return 0;};
        // No operation in  AtRestDoIt.
+
+  void StartTracking(G4Track* aTrack);
+       // Reset state for new (potentially resumed) track 
 
   protected:
 
