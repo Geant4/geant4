@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.hh,v 1.14 2006-02-06 16:21:43 grichine Exp $
+// $Id: Em10DetectorConstruction.hh,v 1.15 2006-02-07 10:15:46 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -112,6 +112,8 @@ private:
     
   G4VPhysicalVolume* SimpleSetUpALICE();     
   G4VPhysicalVolume* SetUpHarris73(); 
+  G4VPhysicalVolume* SetUpWatase86(); 
+  G4VPhysicalVolume* SetUpBarr90(); 
 
 
 
