@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc,v 1.29 2006-01-30 11:10:24 maire Exp $
+// $Id: G4UnitsTable.cc,v 1.30 2006-02-07 16:25:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
@@ -34,6 +34,7 @@
 // 06-05-02: BestUnit operator<<  flux instead of G4cout (mma)
 // 12-08-05: cm2/g ("Surface/Mass")  (mma)
 // 30-06-05: um for micrometer (mma)
+// 07-02-06: GeV/cm MeV/cm keV/cm eV/cm ("Energy/Length")  (mma)
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -240,6 +241,12 @@ void G4UnitDefinition::BuildUnitsTable()
  new G4UnitDefinition("petaelectronvolt","PeV","Energy",petaelectronvolt);
  new G4UnitDefinition(           "joule","J"  ,"Energy",joule);
  
+ //Energy/Length
+ new G4UnitDefinition( "GeV/cm", "GeV/cm","Energy/Length", GeV/cm);
+ new G4UnitDefinition( "MeV/cm", "MeV/cm","Energy/Length", MeV/cm);
+ new G4UnitDefinition( "keV/cm", "keV/cm","Energy/Length", keV/cm);
+ new G4UnitDefinition(  "eV/cm",  "eV/cm","Energy/Length",  eV/cm); 
+  
  //Mass
  new G4UnitDefinition("milligram","mg","Mass",milligram);
  new G4UnitDefinition(     "gram","g" ,"Mass",gram);
