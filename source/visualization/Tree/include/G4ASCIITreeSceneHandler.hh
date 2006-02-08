@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.hh,v 1.12 2004-09-13 20:57:10 johna Exp $
+// $Id: G4ASCIITreeSceneHandler.hh,v 1.13 2006-02-08 15:31:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,6 +36,7 @@
 #include "G4VTreeSceneHandler.hh"
 
 #include <set>
+#include <vector>
 #include <iostream>
 #include <fstream>
 
@@ -58,15 +59,14 @@ protected:
   G4VPhysicalVolume* fpLastPV;  // Records last physical volume.
   G4int fPVPCount;              // Counts parameterisations.
   std::ostream* fpOutFile;      // Pointer to output file.
-  std::ofstream fOutFile;       // Actual output file (if not G4cout)..
-  std::set<G4LogicalVolume*,std::less<G4LogicalVolume*> > fLVSet;
-  typedef
-  std::set<G4LogicalVolume*,std::less<G4LogicalVolume*> >::iterator
-  LVSetIterator;
-  std::set<G4VPhysicalVolume*,std::less<G4VPhysicalVolume*> > fReplicaSet;
-  typedef
-  std::set<G4VPhysicalVolume*,std::less<G4VPhysicalVolume*> >::iterator
-  ReplicaSetIterator;
+  std::ofstream fOutFile;       // Actual output file (if not G4cout).
+
+  std::set<G4LogicalVolume*> fLVSet;
+  typedef std::set<G4LogicalVolume*>::iterator LVSetIterator;
+  typedef std::vector<PVNodeID> PVNodeIDPath;
+  std::set<PVNodeIDPath> fReplicaSet;
+  typedef std::set<PVNodeIDPath>::iterator ReplicaSetIterator;
+  typedef std::set<PVNodeIDPath>::reverse_iterator ReplicaSetReverseIterator;
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.22 2005-11-22 16:21:26 allison Exp $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.23 2006-02-08 15:31:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -175,22 +175,38 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
     fPVPCount = 0;
   }
 
-  if (verbosity < 10 && fReplicaSet.find(fpCurrentPV) != fReplicaSet.end()) {
-    // Ignore if an already treated replica.
-    G4PhysicalVolumeModel* pPVM = fpModel->GetG4PhysicalVolumeModel();
-    if (pPVM) {
-      pPVM->CurtailDescent();
+  if (verbosity < 10 && fpCurrentPV->IsReplicated()) {
+    // See if this has been a replica found before with same mother LV...
+    PVNodeIDPath::reverse_iterator thisID = fDrawnPVPath.rbegin();
+    PVNodeIDPath::reverse_iterator motherID = ++fDrawnPVPath.rbegin();
+    G4bool ignore = false;
+    ReplicaSetIterator i;
+    for (i = fReplicaSet.begin(); i != fReplicaSet.end(); ++i) {
+      if (i->back().GetPhysicalVolume()->GetLogicalVolume() ==
+	  thisID->GetPhysicalVolume()->GetLogicalVolume()) {
+	// For each one previously found (if more than one, they must
+	// have different mothers)...
+	PVNodeIDPath::const_reverse_iterator
+	  previousMotherID = ++(i->rbegin());
+	if (motherID == fDrawnPVPath.rend() &&
+	    previousMotherID == i->rend())
+	  ignore = true;  // Both have no mother.
+	if (motherID != fDrawnPVPath.rend() &&
+	    previousMotherID != i->rend() &&
+	    motherID->GetPhysicalVolume()->GetLogicalVolume() ==
+	    previousMotherID->GetPhysicalVolume()->GetLogicalVolume())
+	  ignore = true;  // Same mother LV...
+      }
+    }
+    if (ignore) {
+      fpModel->GetG4PhysicalVolumeModel()->CurtailDescent();
       return;
-    } else {
-      G4Exception
-	("G4ASCIITreeSceneHandler::RequestPrimitives:"
-	 "not a physical volume model");  // Shouldn't happen.
     }
   }
 
   // Print indented text...
   if (fpCurrentPV) {
-    for (G4int i = 0; i < fCurrentDepth; i++ ) *fpOutFile << "  ";
+    for (size_t i = 0; i < fDrawnPVPath.size(); i++ ) *fpOutFile << "  ";
 
     *fpOutFile << "\"" << fpCurrentPV->GetName()
 	       << "\":" << fpCurrentPV->GetCopyNo();
@@ -207,12 +223,12 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
 	G4VPVParameterisation* pP = fpCurrentPV->GetParameterisation();
 	if (pP) {
 	  if (detail < 3) {
-	    fReplicaSet.insert(fpCurrentPV);
+	    fReplicaSet.insert(fDrawnPVPath);
 	    *fpOutFile << " (" << nReplicas << " parametrised volumes)";
 	  }
 	}
 	else {
-	  fReplicaSet.insert(fpCurrentPV);
+	  fReplicaSet.insert(fDrawnPVPath);
 	  *fpOutFile << " (" << nReplicas << " replicas)";
 	}
       }
@@ -220,10 +236,10 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
     else {
       if (fLVSet.find(fpCurrentLV) != fLVSet.end()) {
 	if (verbosity <  10) {
-	  // Add printing for repeated placement...
-	  *fpOutFile << " (repeated placement)";
+	  // Add printing for repeated LV...
+	  *fpOutFile << " (repeated LV)";
 	  // ...and curtail descent.
-	  ((G4PhysicalVolumeModel*)fpModel)->CurtailDescent();
+	  fpModel->GetG4PhysicalVolumeModel()->CurtailDescent();
 	}
       }
     }
