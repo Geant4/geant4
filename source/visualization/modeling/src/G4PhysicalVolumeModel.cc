@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.38 2006-02-08 15:14:48 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.39 2006-02-08 17:52:54 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -468,15 +468,6 @@ void G4PhysicalVolumeModel::DescribeAndDescend
       }
     }
     G4bool opaque = pVisAttribs->GetColour().GetAlpha() >= 1.;
-
-    if (pLV->GetName() == "divided_tube_L") {
-      G4cout << pLV->GetName()
-	     << ", nDaughters: " << nDaughters
-	     << ", requestedDepth: " << requestedDepth
-	     << ", fCurtailDescent: " << fCurtailDescent
-	     << ", cullingCovered: " << cullingCovered
-	     << G4endl;
-    }
 
     // 1) There are no daughters...
     if (!nDaughters) daughtersToBeDrawn = false;
