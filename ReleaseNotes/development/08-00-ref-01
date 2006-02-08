@@ -157,13 +157,6 @@ processes/hadronic/util                          hadr-util-V08-00-01
 -----------------------
 - G4ReactionDynamics: added array bounds protection in TwoCluster().
 
-processes/management                             procman-V07-01-01
---------------------
-- G4VProcess::StartTracking() now takes G4Track* as an argument.
-  G4ProcessManager::StartTracking() now invokes this new method.
-  Functionality to be used for future developments.
-- Implemented migration to <sstream> from deprecated <strstream>.
-
 track                                            track-V08-00-00
 -----
 - G4ParticleChangeForRadDecay is now derived from G4ParticleChangeForDecay.
