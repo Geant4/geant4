@@ -1,4 +1,4 @@
-$Id: History,v 1.328 2006-02-03 17:00:55 allison Exp $
+$Id: History,v 1.329 2006-02-08 15:44:51 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,14 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+8th February 2006  John Allison
+- modeling-V08-00-02: Added DrawingStyle to G4ModelingParameters and fixed
+  bug in culling of covered daughters
+- visman-V08-00-06 (needs modeling-V08-00-02): Made use of
+  G4ModelingParameters::DrawingStyle.
+- vistree-V08-00-00: Fixed bug in treatment of repeated replicas.
+- visXXX-V08-00-01: Improved handling of DrawnPVPath.
 
 3rd February 2006  John Allison
 - visman-V08-00-05: Introduced /vis/geometry/...
