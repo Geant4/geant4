@@ -1,4 +1,4 @@
-$Id: History,v 1.48 2006-01-26 11:40:26 allison Exp $
+$Id: History,v 1.49 2006-02-08 15:15:13 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+8th February 2006  John Allison (modeling-V08-00-02)
+- Added DrawingStyle to G4ModelingParameters.
+- Fixed bug in culling of covered daughters and improved readability
+  of culling algorithm.
 
 26th January 2006  John Allison (modeling-V08-00-01)
 - G4PhysicalVolumeModel: Added capability of maintaining path of the
