@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.26 2006-01-26 11:46:33 allison Exp $
+// $Id: G4XXXSceneHandler.cc,v 1.27 2006-02-08 15:42:58 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,9 +95,21 @@ void G4XXXSceneHandler::EstablishSpecials (G4PhysicalVolumeModel& pvModel) {
 					&fDrawnPVPath);
 }
 
+void G4XXXSceneHandler::BeginModeling() {
+  G4VSceneHandler::BeginModeling();  // Required: see G4VSceneHandler.hh.
+}
+
+void G4XXXSceneHandler::EndModeling() {
+  fPVNodeStore.clear();
+  fDrawnLVStore.clear();
+  G4VSceneHandler::EndModeling();  // Required: see G4VSceneHandler.hh.
+}
+
 void G4XXXSceneHandler::PreAddSolid
-(const G4Transform3D&, const G4VisAttributes&)
+(const G4Transform3D& objectTransformation, const G4VisAttributes& visAttribs)
 {
+  G4VSceneHandler::PreAddSolid (objectTransformation, visAttribs);
+
   // fDrawnPVPath is the path of the current drawn (non-culled) volume
   // in terms of drawn (non-culled) ancesters.  Each node is
   // identified by a PVNodeID object, which is a physical volume and
@@ -106,6 +118,7 @@ void G4XXXSceneHandler::PreAddSolid
   typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
   typedef std::vector<PVNodeID>::iterator PVPath_iterator;
   typedef std::vector<PVNodeID>::reverse_iterator PVPath_reverse_iterator;
+  PVPath_reverse_iterator ri;
 
 #ifdef G4XXXDEBUG
   // Current PV:copyNo/LV/depth...
@@ -122,13 +135,16 @@ void G4XXXSceneHandler::PreAddSolid
   }
   G4cout << G4endl;
   // Find mother.  ri points to mother, if any.
-  PVPath_reverse_iterator ri = ++fDrawnPVPath.rbegin();
+  ri = ++fDrawnPVPath.rbegin();
   if (ri != fDrawnPVPath.rend()) {
     // This volume has a mother.
+    G4LogicalVolume* drawnMotherLV =
+      ri->GetPhysicalVolume()->GetLogicalVolume();
     G4cout << "Mother "
 	   << ri->GetPhysicalVolume()->GetName()
-	   << ':' << ri->GetCopyNo();
-    if (fPVNodeStore.find(*ri) != fPVNodeStore.end()) {
+	   << ':' << ri->GetCopyNo()
+	   << '/' << drawnMotherLV->GetName();
+    if (fDrawnLVStore.find(drawnMotherLV) != fDrawnLVStore.end()) {
       // Mother previously encountered.  Add this volume to
       // appropriate node in scene graph tree.
       G4cout << " previously encountered";
@@ -144,14 +160,21 @@ void G4XXXSceneHandler::PreAddSolid
   G4cout << G4endl;
 #endif
 
-  // Store ID of current physical volume...
+  // Store ID of current physical volume (not actually used)...
   fPVNodeStore.insert(fDrawnPVPath.back());
 
-  // Find mother.  ri points to mother, if any.
-  PVPath_reverse_iterator ri = ++fDrawnPVPath.rbegin();
+  // Actually, it is enough to store the logical volume of current
+  // physical volume...
+  fDrawnLVStore.insert
+    (fDrawnPVPath.back().GetPhysicalVolume()->GetLogicalVolume());
+
+  // Find mother.  ri points to drawn mother, if any.
+  ri = ++fDrawnPVPath.rbegin();
   if (ri != fDrawnPVPath.rend()) {
     // This volume has a mother.
-    if (fPVNodeStore.find(*ri) != fPVNodeStore.end()) {
+    G4LogicalVolume* drawnMotherLV =
+      ri->GetPhysicalVolume()->GetLogicalVolume();
+    if (fDrawnLVStore.find(drawnMotherLV) != fDrawnLVStore.end()) {
       // Mother previously encountered.  Add this volume to
       // appropriate node in scene graph tree.
       // ...

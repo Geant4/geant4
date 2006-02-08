@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.hh,v 1.17 2006-01-26 11:46:33 allison Exp $
+// $Id: G4XXXSceneHandler.hh,v 1.18 2006-02-08 15:42:58 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -98,8 +98,8 @@ public:
   // void BeginPrimitives(const G4Transform3D& objectTransformation);
   // void EndPrimitives();
 
-  // void BeginModeling();
-  // void EndModeling();
+  void BeginModeling();
+  void EndModeling();
 
   ///////////////////////////////////////////////////////////////
   // Other inherited functions.
@@ -120,7 +120,8 @@ protected:
 
   typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
   std::vector<PVNodeID> fDrawnPVPath;  // Path of drawn (non-culled) PVs.
-  std::set<PVNodeID> fPVNodeStore;     // Stores encountered PVs.
+  std::set<PVNodeID> fPVNodeStore;     // Stores encountered PVNodeIDs.
+  std::set<G4LogicalVolume*> fDrawnLVStore;  // Stores encountered LVs.
 
 private:
 #ifdef G4XXXDEBUG
