@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2006-02-03 16:59:27 allison Exp $
+$Id: History,v 1.32 2006-02-08 15:25:01 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,11 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+8th February 2006  John Allison  (visman-V08-00-06)
+- Needs modeling-V08-00-02.
+- G4VSceneHandler.cc: Made use of G4ModelingParameters::DrawingStyle.
+- G4VisCommandsSceneAdd.cc: Removed unnecessary #include.
 
 3rd February 2006  John Allison  (visman-V08-00-05)
 - Introduced /vis/geometry/... for editing vis attributes of geometry volumes.
