@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.icc,v 1.4 2001-07-11 10:09:21 gunter Exp $
+// $Id: G4ModelingParameters.icc,v 1.5 2006-02-08 15:12:21 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,6 +31,11 @@
 inline const G4VisAttributes*
 G4ModelingParameters::GetDefaultVisAttributes () const {
   return fpDefaultVisAttributes;
+}
+
+inline G4ModelingParameters::DrawingStyle
+G4ModelingParameters::GetDrawingStyle () const {
+  return fDrawingStyle;
 }
 
 inline G4ModelingParameters::RepStyle
@@ -77,6 +82,12 @@ inline G4bool G4ModelingParameters::IsViewDigis () const {
 inline void G4ModelingParameters::SetDefaultVisAttributes
 (const G4VisAttributes* pDefaultVisAttributes) {
   fpDefaultVisAttributes = pDefaultVisAttributes;
+}
+
+inline void
+G4ModelingParameters::SetDrawingStyle
+(G4ModelingParameters::DrawingStyle style) {
+  fDrawingStyle = style;
 }
 
 inline void

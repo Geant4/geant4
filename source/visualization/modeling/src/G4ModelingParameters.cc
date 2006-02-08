@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.cc,v 1.7 2005-03-15 12:56:29 allison Exp $
+// $Id: G4ModelingParameters.cc,v 1.8 2006-02-08 15:12:21 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,9 +32,11 @@
 
 #include "G4ios.hh"
 #include "G4VisAttributes.hh"
+#include "G4ExceptionSeverity.hh"
 
 G4ModelingParameters::G4ModelingParameters ():
   fpDefaultVisAttributes (0),
+  fDrawingStyle          (wf),
   fRepStyle              (polyhedron),
   fCulling               (false),
   fCullInvisible         (false),
@@ -58,6 +60,7 @@ G4ModelingParameters::G4ModelingParameters
  G4int noOfSides
  ):
   fpDefaultVisAttributes (pDefaultVisAttributes),
+  fDrawingStyle   (wf),
   fRepStyle       (repStyle),
   fCulling        (isCulling),
   fCullInvisible  (isCullingInvisible),
@@ -84,6 +87,60 @@ G4ModelingParameters::G4ModelingParameters
  G4bool isViewDigis
  ):
   fpDefaultVisAttributes (pDefaultVisAttributes),
+  fDrawingStyle   (wf),
+  fRepStyle       (repStyle),
+  fCulling        (isCulling),
+  fCullInvisible  (isCullingInvisible),
+  fDensityCulling (isDensityCulling),
+  fVisibleDensity (visibleDensity),
+  fCullCovered    (isCullingCovered),
+  fNoOfSides      (noOfSides),
+  fViewGeom       (isViewGeom),
+  fViewHits       (isViewHits),
+  fViewDigis      (isViewDigis)
+{}
+
+G4ModelingParameters::G4ModelingParameters
+(const G4VisAttributes* pDefaultVisAttributes,
+ G4ModelingParameters::DrawingStyle drawingStyle,
+ G4ModelingParameters::RepStyle repStyle,
+ G4bool isCulling,
+ G4bool isCullingInvisible,
+ G4bool isDensityCulling,
+ G4double visibleDensity,
+ G4bool isCullingCovered,
+ G4int noOfSides
+ ):
+  fpDefaultVisAttributes (pDefaultVisAttributes),
+  fDrawingStyle   (drawingStyle),
+  fRepStyle       (repStyle),
+  fCulling        (isCulling),
+  fCullInvisible  (isCullingInvisible),
+  fDensityCulling (isDensityCulling),
+  fVisibleDensity (visibleDensity),
+  fCullCovered    (isCullingCovered),
+  fNoOfSides      (noOfSides),
+  fViewGeom       (true),
+  fViewHits       (true),
+  fViewDigis      (true)
+{}
+
+G4ModelingParameters::G4ModelingParameters
+(const G4VisAttributes* pDefaultVisAttributes,
+ G4ModelingParameters::DrawingStyle drawingStyle,
+ G4ModelingParameters::RepStyle repStyle,
+ G4bool isCulling,
+ G4bool isCullingInvisible,
+ G4bool isDensityCulling,
+ G4double visibleDensity,
+ G4bool isCullingCovered,
+ G4int noOfSides,
+ G4bool isViewGeom,
+ G4bool isViewHits,
+ G4bool isViewDigis
+ ):
+  fpDefaultVisAttributes (pDefaultVisAttributes),
+  fDrawingStyle   (drawingStyle),
   fRepStyle       (repStyle),
   fCulling        (isCulling),
   fCullInvisible  (isCullingInvisible),
@@ -132,6 +189,7 @@ void G4ModelingParameters::PrintDifferences
 
   if (
       (fpDefaultVisAttributes != that.fpDefaultVisAttributes) ||
+      (fDrawingStyle          != that.fDrawingStyle)          ||
       (fRepStyle              != that.fRepStyle)              ||
       (fCulling               != that.fCulling)               ||
       (fCullInvisible         != that.fCullInvisible)         ||
@@ -149,6 +207,19 @@ std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp) {
   os << "Modeling parameters and options:";
 
   os << "\n  Default vis. attributes: " << *mp.fpDefaultVisAttributes;
+
+  os << "\n  Current requested drawing style: ";
+  switch (mp.fDrawingStyle) {
+  case G4ModelingParameters::wf:
+    os << "wireframe"; break;
+  case G4ModelingParameters::hlr:
+    os << "hidden line removal (hlr)"; break;
+  case G4ModelingParameters::hsr:
+    os << "surface (hsr)"; break;
+  case G4ModelingParameters::hlhsr:
+    os << "surface and edges (hlhsr)"; break;
+  default: os << "unrecognised"; break;
+  }
 
   os << "\n  Representation style for graphics reps, if needed: ";
   switch (mp.fRepStyle) {
@@ -203,6 +274,7 @@ G4bool G4ModelingParameters::operator !=
 
   if (
       (*fpDefaultVisAttributes != *mp.fpDefaultVisAttributes) ||
+      (fDrawingStyle           != mp.fDrawingStyle)           ||
       (fRepStyle               != mp.fRepStyle)               ||
       (fCulling                != mp.fCulling)                ||
       (fCullInvisible          != mp.fCullInvisible)          ||

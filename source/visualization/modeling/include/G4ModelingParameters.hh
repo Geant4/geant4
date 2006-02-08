@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.hh,v 1.10 2005-03-15 12:56:29 allison Exp $
+// $Id: G4ModelingParameters.hh,v 1.11 2006-02-08 15:12:21 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,14 @@ public: // With description
 
   friend std::ostream& operator << (std::ostream& os, const G4ModelingParameters&);
 
+  enum DrawingStyle {
+    wf,         // Draw edges    - no hidden line removal (wireframe).
+    hlr,        // Draw edges    - hidden lines removed.
+    hsr,        // Draw surfaces - hidden surfaces removed.
+    hlhsr       // Draw surfaces and edges - hidden removed.
+  };
+  // Currently requested drawing style.
+
   enum RepStyle {
     wireframe,  // Use G4Wireframe.
     polyhedron, // Use G4Polyhedron.
@@ -56,6 +64,33 @@ public: // With description
   // if required.
 
   G4ModelingParameters ();
+
+  G4ModelingParameters (const G4VisAttributes* pDefaultVisAttributes,
+			DrawingStyle drawingStyle,
+			RepStyle repStyle,
+			G4bool isCulling,
+			G4bool isCullingInvisible,
+			G4bool isDensityCulling,
+			G4double visibleDensity,
+			G4bool isCullingCovered,
+			G4int noOfSides);
+  // noOfSides is suggested no. of sides per circle in case a
+  // polygonal representation is produced.
+
+  G4ModelingParameters (const G4VisAttributes* pDefaultVisAttributes,
+			DrawingStyle drawingStyle,
+			RepStyle repStyle,
+			G4bool isCulling,
+			G4bool isCullingInvisible,
+			G4bool isDensityCulling,
+			G4double visibleDensity,
+			G4bool isCullingCovered,
+			G4int noOfSides,
+			G4bool isViewGeom,
+			G4bool isViewHits,
+			G4bool isViewDigis);
+  // noOfSides is suggested no. of sides per circle in case a
+  // polygonal representation is produced.
 
   G4ModelingParameters (const G4VisAttributes* pDefaultVisAttributes,
 			RepStyle repStyle,
@@ -90,6 +125,7 @@ public: // With description
 
   // Get and Is functions...
   const G4VisAttributes* GetDefaultVisAttributes () const;
+  DrawingStyle     GetDrawingStyle               () const;
   RepStyle         GetRepStyle                   () const;
   G4bool           IsCulling                     () const;
   G4bool           IsCullingInvisible            () const;
@@ -103,6 +139,7 @@ public: // With description
 
   // Set functions...
   void SetDefaultVisAttributes (const G4VisAttributes* pDefaultVisAttributes);
+  void SetDrawingStyle         (DrawingStyle);
   void SetRepStyle             (RepStyle);
   void SetCulling              (G4bool);
   void SetCullingInvisible     (G4bool);
@@ -124,16 +161,17 @@ private:
 
   // Data members...
   const G4VisAttributes* fpDefaultVisAttributes;
-  RepStyle    fRepStyle;        // Representation style.
-  G4bool      fCulling;         // Culling requested.
-  G4bool      fCullInvisible;   // Cull (don't Draw) invisible objects.
-  G4bool      fDensityCulling;  // Density culling requested.  If so...
-  G4double    fVisibleDensity;  // ...density lower than this not drawn.
-  G4bool      fCullCovered;     // Cull daughters covered by opaque mothers.
-  G4int       fNoOfSides;       // ...if polygon approximates circle.
-  G4bool      fViewGeom;        // View geometry objects.
-  G4bool      fViewHits;        // View hits, if any.
-  G4bool      fViewDigis;       // View digis, if any.
+  DrawingStyle fDrawingStyle;    // Drawing style.
+  RepStyle     fRepStyle;        // Representation style.
+  G4bool       fCulling;         // Culling requested.
+  G4bool       fCullInvisible;   // Cull (don't Draw) invisible objects.
+  G4bool       fDensityCulling;  // Density culling requested.  If so...
+  G4double     fVisibleDensity;  // ...density lower than this not drawn.
+  G4bool       fCullCovered;     // Cull daughters covered by opaque mothers.
+  G4int        fNoOfSides;       // ...if polygon approximates circle.
+  G4bool       fViewGeom;        // View geometry objects.
+  G4bool       fViewHits;        // View hits, if any.
+  G4bool       fViewDigis;       // View digis, if any.
 
 };
 
