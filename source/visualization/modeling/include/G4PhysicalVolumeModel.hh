@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.22 2006-01-26 11:40:26 allison Exp $
+// $Id: G4PhysicalVolumeModel.hh,v 1.23 2006-02-08 15:14:48 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,6 +65,7 @@ public: // With description
     G4VPhysicalVolume* GetPhysicalVolume() const {return fpPV;}
     G4int GetCopyNo() const {return fCopyNo;}
     G4bool operator< (const G4PhysicalVolumeNodeID& right) const;
+    G4bool operator== (const G4PhysicalVolumeNodeID& right) const;
   private:
     G4VPhysicalVolume* fpPV;
     G4int fCopyNo;
@@ -158,11 +159,6 @@ protected:
 			      G4VSolid* pSol,
 			      const G4VisAttributes* pVisAttribs,
 			      G4VGraphicsScene& sceneHandler);
-
-  G4bool IsThisCulled (const G4LogicalVolume*,
-		       const G4Material*);
-
-  G4bool IsDaughterCulled (const G4LogicalVolume* pMotherLV);
 
   void CalculateExtent ();
 

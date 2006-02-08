@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.37 2006-01-26 11:40:26 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.38 2006-02-08 15:14:48 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,6 +52,12 @@ G4bool G4PhysicalVolumeModel::G4PhysicalVolumeNodeID::operator<
   if (fpPV < right.fpPV) return true;
   if (fpPV == right.fpPV) return fCopyNo < right.fCopyNo;
   return false;
+}
+
+G4bool G4PhysicalVolumeModel::G4PhysicalVolumeNodeID::operator==
+  (const G4PhysicalVolumeModel::G4PhysicalVolumeNodeID& right) const
+{
+  return fpPV == right.fpPV && fCopyNo == right.fCopyNo;
 }
 
 G4PhysicalVolumeModel::G4PhysicalVolumeModel
@@ -395,8 +401,38 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   G4cout << G4endl;
   **********************************************************/
 
-  // Make decision to Draw.
-  G4bool thisToBeDrawn = !IsThisCulled (pLV, pMaterial);
+  // Make decision to draw...
+  G4bool culling;
+  G4bool cullingInvisible;
+  const G4VisAttributes* pVisAttribs = pLV->GetVisAttributes();
+  if (!pVisAttribs) pVisAttribs = fpMP->GetDefaultVisAttributes();
+  G4bool thisToBeDrawn = true;
+  if (fpMP && pVisAttribs) { // If not, all bets are off.  Draw anyway...
+
+    // There are various reasons why this volume
+    // might not be drawn...
+    culling = fpMP->IsCulling();
+    cullingInvisible = fpMP->IsCullingInvisible();
+    G4bool markedVisible = pVisAttribs->IsVisible();
+    G4bool cullingLowDensity = fpMP->IsDensityCulling();
+    G4double density = pMaterial->GetDensity();
+    G4double densityCut = fpMP -> GetVisibleDensity ();
+
+    // 1) Global culling is on....
+    if (culling) {
+      // 2) Culling of invisible volumes is on...
+      if (cullingInvisible) {
+	// 3) ...and the volume is marked not visible...
+	if (!markedVisible) thisToBeDrawn = false;
+      }
+      // 4) Or culling of low density volumes is on...
+      if (cullingLowDensity) {
+	// 5) ...and density is less than cut value...
+	if (density < densityCut) thisToBeDrawn = false;
+      }
+    }
+  }
+
   if (thisToBeDrawn) {
 
     // Update path of physical volumes, if required...
@@ -410,40 +446,78 @@ void G4PhysicalVolumeModel::DescribeAndDescend
     DescribeSolid (theNewAT, pSol, pVisAttribs, sceneHandler);
   }
 
-  if (fCurtailDescent) {
-    // Reset for normal descending of next volume at this level...
-    fCurtailDescent = false;
+  // Make decision to draw daughters, if any.
+  G4int nDaughters = pLV->GetNoDaughters();
+  G4bool daughtersToBeDrawn = true;
+  if (fpMP && pVisAttribs) { // If not, all bets are off.  Draw anyway...
 
-    // Pop item from path of physical volumes, if required...
-    if (thisToBeDrawn && fpDrawnPVPath) {
-      fpDrawnPVPath->pop_back();
+    // There are various reasons why daughters might not be drawn...
+    G4bool daughtersInvisible = pVisAttribs->IsDaughtersInvisible();
+    // Culling of covered daughters request.  This is computed in
+    // G4VSceneHandler::CreateModelingParameters() depending on view
+    // parameters...
+    G4bool cullingCovered = fpMP->IsCullingCovered();
+    G4bool surfaceDrawing =
+      fpMP->GetDrawingStyle() == G4ModelingParameters::hsr ||
+      fpMP->GetDrawingStyle() == G4ModelingParameters::hlhsr;    
+    if (pVisAttribs->IsForceDrawingStyle()) {
+      switch (pVisAttribs->GetForcedDrawingStyle()) {
+      default:
+      case G4VisAttributes::wireframe: surfaceDrawing = false; break;
+      case G4VisAttributes::solid: surfaceDrawing = true; break;
+      }
+    }
+    G4bool opaque = pVisAttribs->GetColour().GetAlpha() >= 1.;
+
+    if (pLV->GetName() == "divided_tube_L") {
+      G4cout << pLV->GetName()
+	     << ", nDaughters: " << nDaughters
+	     << ", requestedDepth: " << requestedDepth
+	     << ", fCurtailDescent: " << fCurtailDescent
+	     << ", cullingCovered: " << cullingCovered
+	     << G4endl;
     }
 
-    return;
-  }
-
-  // First check if mother covers...
-
-  // This is only effective in surface drawing style, and then only if
-  // the volumes are visible and opaque, and then only if no sections
-  // or cutways are in operation.
-  G4bool cullDaughter = thisToBeDrawn && IsDaughterCulled (pLV);
-  if (!cullDaughter) {
-    // OK, now let's check for daughters...
-    if (requestedDepth != 0) {
-      int nDaughters = pLV -> GetNoDaughters ();
-      if (nDaughters) {
-	for (int iDaughter = 0; iDaughter < nDaughters; iDaughter++) {
-	  G4VPhysicalVolume* pVPV = pLV -> GetDaughter (iDaughter);
-	  // Descend the geometry structure recursively...
-	  fCurrentDepth++;
-	  VisitGeometryAndGetVisReps
-	    (pVPV, requestedDepth - 1, theNewAT, sceneHandler);
-	  fCurrentDepth--;
+    // 1) There are no daughters...
+    if (!nDaughters) daughtersToBeDrawn = false;
+    // 2) We are at the limit if requested depth...
+    else if (requestedDepth == 0) daughtersToBeDrawn = false;
+    // 3) The user has asked that the descent be curtailed...
+    else if (fCurtailDescent) daughtersToBeDrawn = false;
+    // 4) Or the global culling is on....
+    else if (culling) {
+      // 5) ..and culling of invisible volumes is on...
+      if (cullingInvisible) {
+	// 6) ...and the mother requests daughters invisible
+	if (daughtersInvisible) daughtersToBeDrawn = false;
+      }
+      // 7) Or culling of covered daughters is requested...
+      if (cullingCovered) {
+	// 8) ...and surface drawing is operating...
+	if (surfaceDrawing) {
+	  // 9) ...but only if mother is visible...
+	  if (thisToBeDrawn) {
+	    // 10) ...and opaque...
+	      if (opaque) daughtersToBeDrawn = false;
+	  }
 	}
       }
     }
   }
+
+  if (daughtersToBeDrawn) {
+    for (G4int iDaughter = 0; iDaughter < nDaughters; iDaughter++) {
+      G4VPhysicalVolume* pVPV = pLV -> GetDaughter (iDaughter);
+      // Descend the geometry structure recursively...
+      fCurrentDepth++;
+      VisitGeometryAndGetVisReps
+	(pVPV, requestedDepth - 1, theNewAT, sceneHandler);
+      fCurrentDepth--;
+    }
+  }
+
+  // Reset for normal descending of next volume at this level...
+  fCurtailDescent = false;
 
   // Pop item from path of physical volumes, if required...
   if (thisToBeDrawn && fpDrawnPVPath) {
@@ -490,67 +564,6 @@ void G4PhysicalVolumeModel::DescribeSolid
       
     }
   sceneHandler.PostAddSolid ();
-}
-
-G4bool G4PhysicalVolumeModel::IsThisCulled (const G4LogicalVolume* pLV,
-					    const G4Material* pMaterial)
-{
-  // If true, cull, i.e., do not Draw.
-  G4double density = 0.;
-  if (pMaterial) density = pMaterial -> GetDensity ();
-  const G4VisAttributes* pVisAttribs = pLV -> GetVisAttributes ();
-  if (!pVisAttribs) pVisAttribs = fpMP -> GetDefaultVisAttributes ();
-  if (fpMP) {
-    return
-      fpMP -> IsCulling () &&       // Global culling flag.
-      (   
-       // Invisible volumes...
-       (fpMP -> IsCullingInvisible () &&
-	!(pVisAttribs ? pVisAttribs -> IsVisible () : true)) ||
-
-       // Low density volumes...
-       (fpMP -> IsDensityCulling () &&
-	(density < fpMP -> GetVisibleDensity ()))
-       )
-      ;
-  }
-  else {
-    return false;
-  }
-}
-
-G4bool G4PhysicalVolumeModel::IsDaughterCulled
-(const G4LogicalVolume* pMotherLV)
-{
-  // If true, cull, i.e., do not Draw.
-  const G4VisAttributes* pVisAttribs = pMotherLV -> GetVisAttributes ();
-  if (!pVisAttribs) pVisAttribs = fpMP -> GetDefaultVisAttributes ();
-  if (fpMP) {
-    return
-      fpMP -> IsCulling ()           // Global culling flag.
-      &&
-      (
-       // Does mother request daughters not to be drawn?
-       (pVisAttribs ? pVisAttribs -> IsDaughtersInvisible () : false)
-       ||
-       (
-	// Global covered daughter flag.  This is affected by drawing
-	// style, etc.  The enforcing of this is done in
-	// G4VScene::CreateModelingParameters ()
-	fpMP -> IsCullingCovered ()
-	&&
-	// Cull only if mother is visible...
-	(pVisAttribs ? pVisAttribs -> IsVisible () : true)
-	&&
-	// ...and opaque...
-	(pVisAttribs ? (pVisAttribs -> GetColour ().GetAlpha() >= 1.) : true)
-	)
-       )
-      ;
-  }
-  else {
-    return false;
-  }
 }
 
 G4bool G4PhysicalVolumeModel::Validate (G4bool warn)
