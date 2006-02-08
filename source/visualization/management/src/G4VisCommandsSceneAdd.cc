@@ -21,13 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.61 2006-02-03 16:59:27 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.62 2006-02-08 15:24:25 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
 #include "G4VisCommandsSceneAdd.hh"
 
-#include "G4VisManager.hh"
 #include "G4TransportationManager.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4PhysicalVolumeModel.hh"
