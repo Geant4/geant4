@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.hh,v 1.15 2005-04-15 06:44:25 vnivanch Exp $
+// $Id: G4ParticleChangeForLoss.hh,v 1.16 2006-02-08 11:24:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,6 +35,8 @@
 //   Modified:
 //   16.01.04 V.Ivanchenko update for model variant of energy loss
 //   15.04.05 V.Ivanchenko inline update methods
+//   30.01.06 V.Ivanchenko add ProposedMomentumDirection for AlongStep
+//                         and ProposeWeight for PostStep
 //
 // ------------------------------------------------------------
 //
@@ -86,10 +88,6 @@ public:
   G4double GetProposedKineticEnergy() const;
   void SetProposedKineticEnergy(G4double proposedKinEnergy);
   // Get/Set the final kinetic energy of the current particle.
-
-  //  G4double GetEnergy() const;
-  //  void ProposeEnergy(G4double finalEnergy);
-  // Get/Propose the final kinetic energy of the current particle.
 
   const G4ThreeVector& GetProposedMomentumDirection() const;
   void SetProposedMomentumDirection(const G4ThreeVector& dir);
@@ -194,6 +192,7 @@ inline void G4ParticleChangeForLoss::InitializeForAlongStep(const G4Track& track
   InitializeSecondaries(track);
   theParentWeight = track.GetWeight();
   proposedKinEnergy = track.GetKineticEnergy();
+  proposedMomentumDirection = track.GetMomentumDirection();
   currentCharge = track.GetDynamicParticle()->GetCharge();
 }
 
@@ -227,13 +226,14 @@ inline G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
     kinEnergy = 0.0;
   } else {
     pPostStepPoint->SetCharge( currentCharge );
+    pPostStepPoint->SetMomentumDirection( proposedMomentumDirection );
   }
   pPostStepPoint->SetKineticEnergy( kinEnergy );
 
   // update weight 
   // this feature is commented out, it should be overwritten in case
   // if energy loss processes will use biasing
-  // G4double newWeight = theProposedWeight/(pPreStepPoint->GetWeight())*(pPostStepPoint->GetWeight());
+  // G4double newWeight = theParentWeight/(pPreStepPoint->GetWeight())*(pPostStepPoint->GetWeight());
   // pPostStepPoint->SetWeight( newWeight );
   pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
   return pStep;
@@ -248,7 +248,7 @@ inline G4Step* G4ParticleChangeForLoss::UpdateStepForPostStep(G4Step* pStep)
   // update weight
   // this feature is commented out, it should be overwritten in case
   // if energy loss processes will use biasing
-  // pPostStepPoint->SetWeight( theProposedWeight );
+  pPostStepPoint->SetWeight( theParentWeight );
   pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
   return pStep;
 }
