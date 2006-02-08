@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorConstruction.cc,v 1.32 2006-01-26 11:28:52 allison Exp $
+// $Id: MyDetectorConstruction.cc,v 1.33 2006-02-08 21:51:10 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -167,12 +167,13 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
       = new G4VisAttributes(G4Colour(0.,0.,1.));
   //  calorimeterVisAtt->SetForceWireframe(true);
   calorimeter_log->SetVisAttributes(calorimeterVisAtt);
+  G4VPhysicalVolume* calo_phys;
   for(G4int i=0;i<3;i++)
   {
     G4RotationMatrix rm;
     rm.rotateZ(i*rotAngle);
     rm.print(G4cout);
-    G4VPhysicalVolume* calo_phys =
+    calo_phys =
     new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(0.*cm,i*calPos,0.*cm)),
                       "calo_phys",calorimeter_log,experimentalHall_phys,
                       false,i);
@@ -390,6 +391,16 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   new G4PVPlacement(0,G4ThreeVector(40*cm,0.,0.),
                     daughter_box_log,"daughter_box_phys",
 		    sub_divided_tube_log,false,0);
+
+  //------------------------------------------------ Extra placements
+  // For good measure, as a test of drawn volume path, place in one of
+  // the earlier volumes...
+  new G4PVPlacement(0,G4ThreeVector(),
+                    "divided_tube_inset_phys",divided_tube_inset_log,
+		    calo_phys,false,0);  // Place in PV.
+  new G4PVPlacement(0,G4ThreeVector(),
+                    grand_daughter_box2_log,"grand_daughter_box2_phys",
+		    calorimeter_log,false,0);  // Place in LV.  Same effect.
 
   //------------------------------------------------ sensitive detectors
   /****************
@@ -693,14 +704,14 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   fTwistAngle = 50*deg ;
 
   aVolume = new G4TwistedTrd
-    ("aTwistedTrd",fTrackerpDx1,fTrackerpDx2,fTrackerpDy1,fTrackerpDy2,
+    ("anotherTwistedTrd",fTrackerpDx1,fTrackerpDx2,fTrackerpDy1,fTrackerpDy2,
      fTrackerpDz,fTwistAngle);
   aLog = new G4LogicalVolume
-    (aVolume,Ar,"aTwistedTrd-log");
+    (aVolume,Ar,"anotherTwistedTrd-log");
   aLog->SetVisAttributes(G4VisAttributes(G4Colour(1.,1.,0.)));
   new G4PVPlacement
     (G4Translate3D(G4ThreeVector(-100.*cm,-400.*cm,0.)),
-     "aTwistedTrd-phys", aLog, experimentalHall_phys,false,0);
+     "anotherTwistedTrd-phys", aLog, experimentalHall_phys,false,0);
 
   //-------------------------------------------- return
   return experimentalHall_phys;
