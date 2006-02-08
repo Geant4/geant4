@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.hh,v 1.15 2006-02-07 10:15:46 grichine Exp $
+// $Id: Em10DetectorConstruction.hh,v 1.16 2006-02-08 12:03:54 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -111,6 +111,7 @@ private:
 
     
   G4VPhysicalVolume* SimpleSetUpALICE();     
+  G4VPhysicalVolume* SetUpALICE06();     
   G4VPhysicalVolume* SetUpHarris73(); 
   G4VPhysicalVolume* SetUpWatase86(); 
   G4VPhysicalVolume* SetUpBarr90(); 
@@ -126,16 +127,18 @@ private:
   G4double           fAbsorberThickness;
   G4double           fAbsorberRadius;
 
-  G4Material*        fWindowMat ;
-  G4double           fWindowThick ;
+  G4Material*        fPipeMat;
 
-  G4Material*        fElectrodeMat ;
-  G4double           fElectrodeThick ;
+  G4Material*        fWindowMat;
+  G4double           fWindowThick;
 
-  G4Material*        fGapMat ;
-  G4double           fGapThick ;
+  G4Material*        fElectrodeMat;
+  G4double           fElectrodeThick;
+
+  G4Material*        fGapMat;
+  G4double           fGapThick;
  
-  G4double           fAbsorberZ ;
+  G4double           fAbsorberZ;
   //  G4double           zstartAbs , zendAbs;
   G4String           fSetUp;
      
@@ -165,22 +168,24 @@ private:
   G4Material* fFoilMat;            // pointer to the TR foil radiator material
   G4Material* fGasMat;             // pointer to the TR gas radiator material
 
-  G4double fRadThickness ;
-  G4double fGasGap       ;
-  G4double foilGasRatio  ;
+  G4double fRadThickness;
+  G4double fGasGap;
+  G4double foilGasRatio;
 
-  G4int fFoilNumber ;
+  G4int fFoilNumber;
 
-  G4double fDetThickness ;
-  G4double fDetLength    ;
-  G4double fDetGap       ;
+  G4double fDetThickness;
+  G4double fDetLength;
+  G4double fDetGap;
 
-  G4double fStartR       ;
-  G4double fStartZ       ;
+  G4double fStartR;
+  G4double fStartZ;
 
-  G4int fModuleNumber ;   // the number of Rad-Det modules
+  G4int fModuleNumber;   // the number of Rad-Det modules
 
   G4double fRadThick;
+  G4double fMylarThick;
+  G4double fPipeLength;
   G4double fRadZ;
   G4double fWindowZ;
   G4double fGapZ;
