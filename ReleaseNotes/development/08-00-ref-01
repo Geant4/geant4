@@ -17,13 +17,15 @@ Some of the development/fixes included since the last reference tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+Tags marked with (*) are also included in patch-01.
+
 Summarised, the list of changes is the following:
 
-digits_hits                                      digits_hits-V08-00-00
+digits_hits                                      digits_hits-V08-00-00 (*)
 -----------
 - Added missing methods in G4VDigiCollection and G4TDigiCollection.
 
-geometry/divisions                               geomdiv-V08-00-00
+geometry/divisions                               geomdiv-V08-00-00 (*)
 ------------------
 - Added missing setting of mother-logical pointer in constructors of
   G4PVDivision. Fixes problem report #829.
@@ -32,17 +34,17 @@ geometry/divisions                               geomdiv-V08-00-00
 - Fixed check for generic construct in G4ParameterisationPolycone and
   G4ParameterisationPolyhedra: allow it for the automatic replicated instance.
 
-geometry/solids/BREPS                            breps-V08-00-00
+geometry/solids/BREPS                            breps-V08-00-00 (*)
 ---------------------
 - Use explicit 'HepGeom' namespace for 'Identity', to allow for porting
   on Windows/VC++ when using CLHEP-2.0.X.
 
-geometry/solids/CSG                              geom-csg-V08-00-00
+geometry/solids/CSG                              geom-csg-V08-00-00 (*)
 -------------------
 - G4Sphere: fixed bug in DistanceToOut() for theta intersections.
   Fixes bug report #830.
 
-geometry/solids/specific                         geom-specific-V08-00-01
+geometry/solids/specific                         geom-specific-V08-00-01 (*)
 ------------------------
 - Fixes in G4EllipticalCone:
   o Changed GetPointOnSurface(), which was not uniform in endcaps.
@@ -61,7 +63,7 @@ geometry/solids/specific                         geom-specific-V08-00-01
   G4Polyhedron::GetNumberOfRotationSteps().
   This is (a) more economical and (b) amenable to user control.
 
-geometry/volumes                                 geomvol-V08-00-00
+geometry/volumes                                 geomvol-V08-00-00 (*)
 ----------------
 - G4AssemblyVolume: fixed initialisation of names for placed volumes
   which was corrupted after migration to <sstream> as side effect.
@@ -73,12 +75,12 @@ graphics_reps                                    greps-V08-00-00
   of vertices and indices.
 - Updated documentation in G4Colour.
 
-particles                                        particles-V08-00-00
+particles                                        particles-V08-00-00 (*)
 ---------
 - Bug fix for G4ParticleDefinition, was causing improper behavior of
   GetAtomicNumber() method for ions. Fixes problem report #827.
 
-processes/cuts                                   procuts-V08-00-00
+processes/cuts                                   procuts-V08-00-00 (*)
 --------------
 - Fix in G4VRangeToEnergyConverter::Convert() to recalculate the energy
   loss table if new elements are added. Fixes problem report #831.
@@ -122,42 +124,42 @@ processes/electromagnetic/xrays                  xrays-V08-00-00
   radiator. The method can help for more precise estimation of XTR angular
   distribution needed in tracking applications of XTR detectors (ATLAS).
 
-processes/hadronic/management                    hadr-man-V08-00-02
+processes/hadronic/management                    hadr-man-V08-00-02 (*)
 -----------------------------
 - G4HadronicProcess: fixed problem report #611. Problems caused when
   hadronic interactions reset stopButAlive particle to Alive.
 - Added diagnostics when hadronic exceptions occur in G4HadronicProcess
   and G4EnergyRangeManager.
 
-processes/hadronic/models/binary_cascade         hadr-binary-V08-00-00
+processes/hadronic/models/binary_cascade         hadr-binary-V08-00-00 (*)
 ----------------------------------------
 - Fixed problem report #794. Projectile nucleus needs to be centered.
 
-processes/hadronic/models/de_excitation          hadr-deex-V08-00-01
+processes/hadronic/models/de_excitation          hadr-deex-V08-00-01 (*)
 ---------------------------------------
 - G4NuclearLevelManager: print a warning if no data file is present.
   Addressed problem report #814.
 - G4ParaFissionModel: fix for compilation error, following problem
   report #817.
 
-processes/hadronic/models/neutron_hp             hadr-hpn-V08-00-01
+processes/hadronic/models/neutron_hp             hadr-hpn-V08-00-01 (*)
 ------------------------------------
 - Fixes core dump observed when neutron energy is close to 20 MeV.
 
-processes/hadronic/models/radioactive_decay      radioactive_decay-V08-00-01
+processes/hadronic/models/radioactive_decay      radioactive_decay-V08-00-01 (*)
 -------------------------------------------
 - G4NuclearDecayChannel::BetaDecayIt(): check for negative sqrt()
   argument in 'daughtermomentum[1]'. Fixes problem report #822.
 
-processes/hadronic/stopping                      hadr-stopping-V08-00-00
+processes/hadronic/stopping                      hadr-stopping-V08-00-00 (*)
 ---------------------------
 - Set process type to be 'fHadronic'. Was not set previously.
 
-processes/hadronic/util                          hadr-util-V08-00-01
+processes/hadronic/util                          hadr-util-V08-00-01 (*)
 -----------------------
 - G4ReactionDynamics: added array bounds protection in TwoCluster().
 
-track                                            track-V08-00-00
+track                                            track-V08-00-00 (*)
 -----
 - G4ParticleChangeForRadDecay is now derived from G4ParticleChangeForDecay.
 
@@ -200,7 +202,7 @@ visualization/OpenGL                             opengl-V08-00-00
 --------------------
 - Improved efficiency; made G4OpenGLXmViewerMessenger smart.
 
-visualization/RayTracer                          raytracer-V08-00-00
+visualization/RayTracer                          raytracer-V08-00-00 (*)
 -----------------------
 - Reorganisation:
   o Allowed multiple ray tracers.
@@ -246,9 +248,9 @@ examples                                         examples-V08-00-01
   o Removed histograms of particle flux. Histograms 10-12 become 7-9.
   o DetectorConstruction, RunAction: MaxBin=500.
   o Simplified PhysicsList and Builders.
-- extended/electromagnetic/TestEm7 (testem7-V08-00-00)
+- extended/electromagnetic/TestEm7 (testem7-V08-00-00) (*)
   o Trivial fix of memory leak
-- extended/medical/GammaTherapy (gtherapy-V08-00-00)
+- extended/medical/GammaTherapy (gtherapy-V08-00-00) (*)
   o Substituted PreciseRange with CSDARange.
 
 tests                                            tests-V08-00-01
@@ -256,5 +258,5 @@ tests                                            tests-V08-00-01
 - Updated reference outputs.
 - test31 (test31-V08-00-00)
   o Substituted PreciseRange with CSDARange.
-- test40 (test40-V08-00-00)
+- test40 (test40-V08-00-00) (*)
   o Completed missing migration to new particles design.
