@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.49 2006-01-09 18:49:01 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.50 2006-02-08 15:21:44 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -517,6 +517,26 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 G4ModelingParameters* G4VSceneHandler::CreateModelingParameters () {
   // Create modeling parameters from View Parameters...
   const G4ViewParameters& vp = fpViewer -> GetViewParameters ();
+
+  // Convert drawing styles...
+  G4ModelingParameters::DrawingStyle modelDrawingStyle =
+    G4ModelingParameters::wf;
+  switch (vp.GetDrawingStyle ()) {
+  default:
+  case G4ViewParameters::wireframe:
+    modelDrawingStyle = G4ModelingParameters::wf;
+    break;
+  case G4ViewParameters::hlr:
+    modelDrawingStyle = G4ModelingParameters::hlr;
+    break;
+  case G4ViewParameters::hsr:
+    modelDrawingStyle = G4ModelingParameters::hsr;
+    break;
+  case G4ViewParameters::hlhsr:
+    modelDrawingStyle = G4ModelingParameters::hlhsr;
+    break;
+  }
+
   // Convert rep styles...
   G4ModelingParameters::RepStyle modelRepStyle =
     G4ModelingParameters::wireframe;
@@ -537,13 +557,11 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters () {
     vp.IsCullingCovered()   // Culling daughters depends also on...
     && !vp.IsSection ()     // Sections (DCUT) not requested.
     && !vp.IsCutaway ()     // Cutaways not requested.
-    && (                    // Surface drawing in operation.
-	vp.GetDrawingStyle () == G4ViewParameters::hsr ||
-	vp.GetDrawingStyle () == G4ViewParameters::hlhsr
-	);
+    ;
 
   G4ModelingParameters* pModelingParams = new G4ModelingParameters
     (vp.GetDefaultVisAttributes (),
+     modelDrawingStyle,
      modelRepStyle,
      vp.IsCulling (),
      vp.IsCullingInvisible (),
