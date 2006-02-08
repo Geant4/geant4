@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.21 2006-02-08 16:03:51 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.22 2006-02-08 18:21:02 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -466,8 +466,8 @@ G4PropagatorInField::LocateIntersectionPoint(
   G4int       substep_no = 0;
 
   // Limits for substep number
-  const G4int max_substeps=  2500; 
-  const G4int warn_substeps=  500; 
+  const G4int max_substeps=   10000;  // Test 120  (old value 100 )
+  const G4int warn_substeps=   1000;  //      100  
   // Statistics for substeps 
   static G4int max_no_seen= -1; 
   static G4int trigger_substepno_print= warn_substeps - 20 ;  
@@ -690,31 +690,39 @@ G4PropagatorInField::LocateIntersectionPoint(
     } 
   }
 
-  if(  ( substep_no >= max_substeps) ) {  
-                   // && there_is_no_intersection &&  ) {
+  if(  ( substep_no >= max_substeps) && !there_is_no_intersection && !found_approximate_intersection ) {
 
     G4cerr << "Problem in G4PropagatorInField::LocateIntersectionPoint:"
 	   << " Convergence is requiring too many substeps: " << substep_no;
-    G4cerr << " Will abandon effort to intersect. " << G4endl;
+    G4cerr << " Abandoning effort to intersect. " << G4endl;
     G4cerr << " Information on start & current step follows in cout: " << G4endl;
     G4cout << "Problem in G4PropagatorInField::LocateIntersectionPoint:"
 	   << " Convergence is requiring too many substeps: " << substep_no << G4endl;
     G4cout << "   found intersection= " << found_approximate_intersection
 	   << "   intersection exists = " <<  ! there_is_no_intersection << G4endl;
 
-#ifdef G4DEBUG_LOCATE_INTERSECTION  
-// #ifdef G4VERBOSE
+    G4cout << G4endl;
+    G4cout << " Start and Endpoint of Requested Step " << G4endl;
     printStatus( CurveStartPointVelocity,  CurveEndPointVelocity,
 		 -1.0, NewSafety,  0,          0);
+
+    G4cout << G4endl;
+    G4cout << " 'Bracketing' starting and endpoint of current Sub-Step " << G4endl;
     printStatus( CurrentA_PointVelocity,  CurrentA_PointVelocity,
 		 -1.0, NewSafety,  substep_no-1, 0);
     printStatus( CurrentA_PointVelocity,  CurrentB_PointVelocity,
 		 -1.0, NewSafety,  substep_no, 0);
-#endif
+
+    G4cout << G4endl;
+ 
+// #ifdef G4DEBUG_LOCATE_INTERSECTION  
+// #ifdef G4VERBOSE
+// #endif
 
     // G4Exception("G4PropagatorInField::LocateIntersectionPoint()", "UnableToLocateIntersection",
     //   	FatalException, "Too many substeps while trying to locate intersection.");
 
+#ifdef FUTURE_CORRECTION
     // Attempt to correct the results of the method // FIX - TODO
     if ( ! found_approximate_intersection ){ 
       recalculatedEndPoint= true;
@@ -727,13 +735,19 @@ G4PropagatorInField::LocateIntersectionPoint(
 	     << CurrentA_PointVelocity
 	     << G4endl;
     }
+#endif
 
     G4cout.precision( 10 ); 
-    G4cout << " G4PropagatorInField::LocateIntersectionPoint(): Undertaken only length "  
-	   << CurrentB_PointVelocity.GetCurveLength() 
-	   << "  out of " << CurveEndPointVelocity.GetCurveLength() << " required." << G4endl;
+    G4double done_len=     CurrentA_PointVelocity.GetCurveLength(); 
+    G4double full_len= CurveEndPointVelocity.GetCurveLength();
+    G4cout << " G4PropagatorInField::LocateIntersectionPoint(): " << G4endl
+	   << " Undertaken only length " << done_len
+	   << "  out of " << full_len << " required." << G4endl;
+    G4cout << "  Remaining length = " << full_len - done_len << " " << G4endl; 
+
     G4Exception("G4PropagatorInField::LocateIntersectionPoint()", "UnableToLocateIntersection",
 		FatalException, "Too many substeps while trying to locate intersection.");
+
   }
   else if( substep_no >= warn_substeps ) {  
     int oldprc= G4cout.precision( 10 ); 
@@ -810,7 +824,7 @@ G4PropagatorInField::printStatus( const G4FieldTrack&        StartFT,
      else
        G4cout << std::setw( 5) << "Start" ;
      G4cout.precision(8);
-     G4cout << std::setw(10) << CurrentFT.GetCurveLength(); 
+     G4cout << std::setw(10) << CurrentFT.GetCurveLength() << " "; 
      G4cout.precision(8);
      G4cout << std::setw(10) << CurrentPosition.x() << " "
             << std::setw(10) << CurrentPosition.y() << " "
