@@ -83,7 +83,8 @@ dictParticle = { 'mu-':'mu-'   , 'mu+':'mu+'  ,
                  'e-':'e-'     , 'e+':'e+'    , 'gamma':'gamma' ,
                  'pi+':'pi+'   , 'pi-':'pi-'  ,
                  'k+':'kaon+'  , 'k-':'kaon-' , 'k0L':'kaon0L' ,
-                 'n':'neutron' , 'p':'proton' }
+                 'n':'neutron' , 'p':'proton' ,
+                 'nbar':'anti_neutron' , 'pbar':'anti_proton' }
 if ( dictParticle.has_key( PARTICLE ) ) :
     ParticleType = dictParticle[ PARTICLE ]
 else :

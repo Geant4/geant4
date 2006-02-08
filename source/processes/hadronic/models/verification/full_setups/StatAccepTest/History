@@ -1,6 +1,13 @@
                  History file
                  ------------
 
+08-Feb-2006 - A.Ribon (statAccepTest-V08-00-08)
+- Added  anti_proton  and  anti_neutron  as possible 
+  primary beam particles. They do not need to be used
+  for all the beam energy values: it is enough the
+  range 1-10 GeV.
+
+
 01-Feb-2006 - A.Ribon (statAccepTest-V08-00-07)
 - Added the monitoring of the average number of steps
   and tracks per event, subdivided for different types
