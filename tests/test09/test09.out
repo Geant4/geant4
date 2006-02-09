@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
+ Geant4 version Name: global-V07-01-05    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -133,7 +133,7 @@ polarCompt:  Total cross sections from a parametrisation. Good description from 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according to the Bethe-Heitler model
       tables are built for  gamma
-      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
+      Lambda tables from 1.0219981 MeV to 100 GeV in 100 bins.
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.

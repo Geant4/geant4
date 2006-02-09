@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
+ Geant4 version Name: global-V07-01-05    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -10,7 +10,7 @@ SimpleBox is now made of Pb
 # /run/verbose 2
 /run/particle/setCut 1 m
 /run/initialize
-/afs/cern.ch/sw/geant4/dev/data/G4NDL3.7
+/afs/cern.ch/sw/geant4/dev/data/G4NDL3.8
 Tst11PhysicsList::SetCuts:CutLength : 1000 (mm)
 /gun/direction 0 0 1
 #
