@@ -111,17 +111,21 @@ List of fixes included in this public patch since the public release 8.0:
   o Visualization:
     -------------
     + management:
-      o G4VSceneHandler: at end of event or run, the view is refreshed and
-        the scene (detector geometry, etc.) is drawn or written to file.
+      o Fixed bug that omits geometry volumes from file-based visualization
+        drivers for first /run/beamOn.
       o Added friend status for ray-tracer.
     + RayTracer:
+      o Fix behavior of messengers when RayTracerX is used.
       o Allow for multiple ray tracers.
       o Separated out the original ray tracer to be used by viewers.
-      o Made G4RTMessenger a smart singleton that queries the vis manager
-        for tracers.
-      o Caused G4RayTracer to instantiate a default ray tracer if the user
-        wants to use /vis/rayTracer commands without the benefit of the
-        vis system (scene handlers and viewers).
+
+  o Data:
+    ----
+    + New data set for high-precision neutron processes G4NDL-3.8
+      o Added Gadorinium data (source ENDF/B-VI).
+      o Replaced: Inelastic/CrossSection/17_nat_Chlorine and
+        Inelastic/F10/28_62_Nickel (source ENDF/B-VI).
+      o Removed: Inelastic/CrossSection/32_70|72|73|74|76_Germanium
 
   o Examples:
     --------
