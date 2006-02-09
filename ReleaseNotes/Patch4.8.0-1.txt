@@ -23,6 +23,14 @@ List of fixes included in this public patch since the public release 8.0:
         instance.
       o Cache information about axis of division and provided accessor method
         GetDivisionAxis() in G4PVDivision.
+    + navigation
+      o Addressing problem with convergence in LocateIntersectionPoint()
+        of G4PropagatorInField. The problem, identified by Atlas, was
+        observed when requesting high precision, i.e. small values of
+        eps_min/max, delta_one_step, due to need for small delta_intersection.
+        Increased maximum iterations (from 100 to 10000) until correct
+        information can be return an Exception is thrown in case of too many
+        iterations; a warning is thrown in case over 1000 iterations.
     + solids/BREPS
       o Use explicit 'HepGeom' namespace for 'Identity', to allow for
         porting on Windows/VC++ when using CLHEP-2.0.X.
