@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.51 2006-02-09 16:32:42 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.52 2006-02-09 19:02:14 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -516,10 +516,11 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
   fReadyForTransients = true;
 
   // Now (re-)do trajectories and hits, if requested...
-  const std::vector<G4VModel*>& endOfEventModelList =
-    fpScene -> GetEndOfEventModelList ();
-  if (endOfEventModelList.size() > 0) {
-    G4VisManager* visManager = G4VisManager::GetInstance();
+  //??const std::vector<G4VModel*>& endOfEventModelList =
+  //??  fpScene -> GetEndOfEventModelList ();
+  //??if (endOfEventModelList.size() > 0) {
+  G4VisManager* visManager = G4VisManager::GetInstance();
+  if (visManager->fEventCount) {  //  Must have some prior event(s)...
     G4UImanager* UImanager = G4UImanager::GetUIpointer();
     if (fpScene->GetRefreshAtEndOfEvent()) {
       std::istringstream iss(visManager->fBeginOfLastEventRandomStatus);
