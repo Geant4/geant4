@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.82 2006-02-09 16:32:42 allison Exp $
+// $Id: G4VisManager.cc,v 1.83 2006-02-09 19:00:44 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -80,6 +80,7 @@ G4VisManager::G4VisManager ():
   fVerbosity       (warnings),
   fVerbose         (1),
   fpStateDependent (0),
+  fEventCount      (0),
   fTrajectoryPlacement("/vis/modeling/trajectories"),
   fpTrajectoryModelMgr(new G4TrajectoryModelManager())
   // All other objects use default constructors.
