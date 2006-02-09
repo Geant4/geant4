@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung52.hh,v 1.2 2004-11-10 08:53:18 vnivanch Exp $
+// $Id: G4eBremsstrahlung52.hh,v 1.3 2006-02-09 13:06:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,6 +39,7 @@
 // 16-01-03 Migrade to cut per region (V.Ivanchenko)
 // 08-08-03 This class is frozen at the release 5.2 (V.Ivanchenko)
 // 09-11-04 Remove Store/Retrieve tables (V.Ivantchenko)
+// 07-02-06 ComputeCrossSectionPerAtom()  made public (mma)
 //
 // ------------------------------------------------------------
 
@@ -99,7 +100,7 @@ class G4eBremsstrahlung52 : public G4VeEnergyLoss
 
      G4double GetLambda(G4double KineticEnergy, const G4MaterialCutsCouple* couple);
 
-  protected:
+  public:
 
      G4double ComputeMeanFreePath( const G4ParticleDefinition* ParticleType,
                                          G4double KineticEnergy,

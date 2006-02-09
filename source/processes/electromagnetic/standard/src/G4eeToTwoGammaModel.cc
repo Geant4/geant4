@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToTwoGammaModel.cc,v 1.8 2005-04-29 18:02:35 vnivanch Exp $
+// $Id: G4eeToTwoGammaModel.cc,v 1.9 2006-02-09 13:06:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,6 +37,7 @@
 // Modifications:
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 18-04-05 Compute CrossSectionPerVolume (V.Ivantchenko)
+// 06-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
 //
 //
 // Class Description:
@@ -90,31 +91,56 @@ G4eeToTwoGammaModel::~G4eeToTwoGammaModel()
 void G4eeToTwoGammaModel::Initialise(const G4ParticleDefinition*,
                                      const G4DataVector&)
 {}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4eeToTwoGammaModel::CrossSectionPerVolume(const G4Material* material,
-						    const G4ParticleDefinition*,
-						    G4double kineticEnergy,
-						    G4double,
-						    G4double)
+G4double G4eeToTwoGammaModel::ComputeCrossSectionPerElectron(
+                                       const G4ParticleDefinition*,
+                                       G4double kineticEnergy,
+				       G4double, G4double)
 {
-  // Calculates the cross section per atom of annihilation into two photons
+  // Calculates the cross section per electron of annihilation into two photons
   // from the Heilter formula.
-  G4double eDensity = material->GetElectronDensity();
-
+  
   G4double tau   = kineticEnergy/electron_mass_c2;
   G4double gam   = tau + 1.0;
   G4double gamma2= gam*gam;
   G4double bg2   = tau * (tau+2.0);
   G4double bg    = sqrt(bg2);
 
-  G4double cross = pi_rcl2*eDensity*((gamma2+4*gam+1.)*log(gam+bg) - (gam+3.)*bg)
+  G4double cross = pi_rcl2*((gamma2+4*gam+1.)*log(gam+bg) - (gam+3.)*bg)
                  / (bg2*(gam+1.));
+  return cross;  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4eeToTwoGammaModel::ComputeCrossSectionPerAtom(
+                                    const G4ParticleDefinition* p,
+                                    G4double kineticEnergy, G4double Z,
+				    G4double, G4double, G4double)
+{
+  // Calculates the cross section per atom of annihilation into two photons
+  
+  G4double cross = Z*ComputeCrossSectionPerElectron(p,kineticEnergy);
+  return cross;  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4eeToTwoGammaModel::CrossSectionPerVolume(
+					const G4Material* material,
+					const G4ParticleDefinition* p,
+					      G4double kineticEnergy,
+					      G4double, G4double)
+{
+  // Calculates the cross section per volume of annihilation into two photons
+  
+  G4double eDensity = material->GetElectronDensity();
+  G4double cross = eDensity*ComputeCrossSectionPerElectron(p,kineticEnergy);
   return cross;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 vector<G4DynamicParticle*>* G4eeToTwoGammaModel::SampleSecondaries(
                              const G4MaterialCutsCouple*,

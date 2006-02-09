@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.hh,v 1.16 2005-05-12 11:06:43 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.hh,v 1.17 2006-02-09 13:06:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -40,6 +40,7 @@
 // 24-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 07-02-06  public function ComputeCrossSectionPerAtom() (mma)
 //
 //
 // Class Description:
@@ -77,7 +78,13 @@ public:
 					const G4ParticleDefinition*,
 					G4double kineticEnergy,
 					G4double cutEnergy);
-
+					
+  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+                                                  G4double tkin, 
+                                                  G4double Z,   G4double,
+                                                  G4double cut,
+						  G4double maxE = DBL_MAX);
+  
   virtual G4double CrossSectionPerVolume(const G4Material*,
 					 const G4ParticleDefinition*,
 					 G4double kineticEnergy,
@@ -107,8 +114,6 @@ private:
   G4double PositronCorrFactorLoss(G4double Z, G4double tkin, G4double cut);
 
   G4double PositronCorrFactorSigma(G4double Z, G4double tkin, G4double cut);
-
-  G4double CrossSectionPerAtom(G4double tkin, G4double Z, G4double cut);
 
   G4DataVector* ComputePartialSumSigma(const G4Material* material,
                                              G4double tkin, G4double cut);

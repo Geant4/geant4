@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.hh,v 1.3 2005-05-12 11:06:42 vnivanch Exp $
+// $Id: G4BetheHeitlerModel.hh,v 1.4 2006-02-09 13:06:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,6 +35,7 @@
 // Creation date: 19.04.2005
 //
 // Modifications:
+// 02-02-06 Remove InitialiseCrossSectionPerAtom();
 //
 // Class Description:
 //
@@ -68,9 +69,9 @@ public:
                                 const G4ParticleDefinition*,
                                       G4double kinEnergy, 
                                       G4double Z, 
-                                      G4double A, 
-                                      G4double cut,
-                                      G4double emax);
+                                      G4double A=0., 
+                                      G4double cut=0.,
+                                      G4double emax=DBL_MAX);
 
   virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
@@ -79,8 +80,6 @@ public:
                                       G4double maxEnergy);
 
 private:
-
-  G4double InitializeCrossSectionPerAtom(G4double energy, G4double Z);
 
   G4double ScreenFunction1(G4double ScreenVariable);
 
@@ -103,20 +102,6 @@ private:
   size_t                    indexZ[120];
   
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double G4BetheHeitlerModel::ComputeCrossSectionPerAtom(
-                                       const G4ParticleDefinition*,
-                                             G4double energy,
-                                             G4double Z, G4double,
-                                             G4double, G4double)
-{
-  G4bool b;
-  size_t iz = indexZ[G4int(Z)];
-  G4double x = (((*theCrossSectionTable)[iz]))->GetValue(energy, b);
-  return x;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

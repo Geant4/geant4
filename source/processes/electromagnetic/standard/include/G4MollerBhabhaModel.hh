@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.hh,v 1.13 2005-05-12 11:06:42 vnivanch Exp $
+// $Id: G4MollerBhabhaModel.hh,v 1.14 2006-02-09 13:06:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -39,6 +39,7 @@
 // 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
 // 24-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
+// 06-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
 
 //
 // Class Description:
@@ -70,17 +71,30 @@ public:
 
   G4double MinEnergyCut(const G4ParticleDefinition*,
 			const G4MaterialCutsCouple*);
-
-  virtual G4double ComputeDEDXPerVolume(const G4Material*,
-				const G4ParticleDefinition*,
-				G4double kineticEnergy,
-				G4double cutEnergy);
-
+				
+  virtual G4double ComputeCrossSectionPerElectron(
+				 const G4ParticleDefinition*,
+				 G4double kineticEnergy,
+				 G4double cutEnergy,
+				 G4double maxEnergy);
+				 
+  virtual G4double ComputeCrossSectionPerAtom(
+				 const G4ParticleDefinition*,
+				 G4double kineticEnergy,
+				 G4double Z, G4double A,
+				 G4double cutEnergy,
+				 G4double maxEnergy);
+				 				 
   virtual G4double CrossSectionPerVolume(const G4Material*,
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,
 				 G4double cutEnergy,
 				 G4double maxEnergy);
+				 
+  virtual G4double ComputeDEDXPerVolume(const G4Material*,
+				const G4ParticleDefinition*,
+				G4double kineticEnergy,
+				G4double cutEnergy);				 
 
   virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.hh,v 1.18 2005-05-04 16:16:12 vnivanch Exp $
+// $Id: G4PhotoElectricEffect.hh,v 1.19 2006-02-09 13:06:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

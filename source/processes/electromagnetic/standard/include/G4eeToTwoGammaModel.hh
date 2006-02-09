@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToTwoGammaModel.hh,v 1.9 2005-05-12 11:06:43 vnivanch Exp $
+// $Id: G4eeToTwoGammaModel.hh,v 1.10 2006-02-09 13:06:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,6 +37,7 @@
 // Modifications:
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 18-04-05 Compute CrossSectionPerVolume (V.Ivantchenko)
+// 06-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
 //
 
 //
@@ -57,11 +58,26 @@ class G4eeToTwoGammaModel : public G4VEmModel
 
 public:
 
-  G4eeToTwoGammaModel(const G4ParticleDefinition* p = 0, const G4String& nam = "eplus2gg");
+  G4eeToTwoGammaModel(const G4ParticleDefinition* p = 0,
+                      const G4String& nam = "eplus2gg");
 
   virtual ~G4eeToTwoGammaModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  
+  virtual G4double ComputeCrossSectionPerElectron(
+                                const G4ParticleDefinition*,
+                                      G4double kinEnergy, 
+                                      G4double cutEnergy = 0.,
+                                      G4double maxEnergy = DBL_MAX);
+  
+  virtual G4double ComputeCrossSectionPerAtom(
+                                const G4ParticleDefinition*,
+                                      G4double kinEnergy, 
+                                      G4double Z, 
+                                      G4double A = 0., 
+                                      G4double cutEnergy = 0.,
+                                      G4double maxEnergy = DBL_MAX);
 
   virtual G4double CrossSectionPerVolume(const G4Material*,
 					 const G4ParticleDefinition*,
@@ -84,6 +100,6 @@ private:
   G4double pi_rcl2;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

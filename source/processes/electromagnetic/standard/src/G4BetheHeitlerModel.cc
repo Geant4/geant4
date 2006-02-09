@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.cc,v 1.7 2005-12-05 16:44:43 maire Exp $
+// $Id: G4BetheHeitlerModel.cc,v 1.8 2006-02-09 13:06:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -113,7 +113,7 @@ void G4BetheHeitlerModel::Initialise(const G4ParticleDefinition*,
  
     for(G4int i=0; i<nbins; i++) {
       e = ptrVector->GetLowEdgeEnergy( i ) ;
-      value = InitializeCrossSectionPerAtom(e, Z);  
+      value = ComputeCrossSectionPerAtom(theGamma, e, Z);  
       ptrVector->PutValue( i, value );
     }
 
@@ -123,8 +123,10 @@ void G4BetheHeitlerModel::Initialise(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4BetheHeitlerModel::InitializeCrossSectionPerAtom(G4double GammaEnergy, 
-							    G4double Z)
+G4double G4BetheHeitlerModel::ComputeCrossSectionPerAtom(
+                                                   const G4ParticleDefinition*,
+                                              G4double GammaEnergy, G4double Z,
+					      G4double, G4double, G4double)
 // Calculates the microscopic cross section in GEANT4 internal units.
 // A parametrized formula from L. Urban is used to estimate
 // the total cross section.
