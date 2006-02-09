@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.47 2006-01-26 12:22:55 allison Exp $
+// $Id: G4VisManager.hh,v 1.48 2006-02-09 16:32:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -397,6 +397,12 @@ protected:
   G4NullModel fVisManagerNullModel;         // As a default.
   G4TrajectoriesModel dummyTrajectoriesModel;  // For passing drawing mode.
   G4ModelingParameters fVisManagerModelingParameters;  // Useful memory.
+
+public:  // For now (write access functions sometime).
+  G4int fEventCount;
+  G4String fBeginOfFirstRunRandomStatus;
+  G4String fBeginOfLastRunRandomStatus;
+  G4String fBeginOfLastEventRandomStatus;
 
 private:
 

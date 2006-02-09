@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.81 2006-02-03 16:59:27 allison Exp $
+// $Id: G4VisManager.cc,v 1.82 2006-02-09 16:32:42 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,6 +65,7 @@
 #include "G4VModelFactory.hh"
 #include "G4VTrajectoryModel.hh"
 #include "G4TrajectoryDrawByCharge.hh"
+#include "Randomize.hh"
 #include <sstream>
 
 G4VisManager* G4VisManager::fpInstance = 0;
@@ -924,16 +925,33 @@ void G4VisManager::PrintInvalidPointers () const {
   }
 }
 
-void G4VisManager::BeginOfRun () {
+void G4VisManager::BeginOfRun ()
+{
   //G4cout << "G4VisManager::BeginOfRun" << G4endl;
+  fEventCount = 0;
+  if (fBeginOfFirstRunRandomStatus.empty()) {
+    std::ostringstream oss;
+    CLHEP::HepRandom::saveFullState(oss);
+    fBeginOfFirstRunRandomStatus = oss.str();
+  }
+  std::ostringstream oss;
+  CLHEP::HepRandom::saveFullState(oss);
+  fBeginOfLastRunRandomStatus = oss.str();
 }
 
-void G4VisManager::BeginOfEvent () {
+void G4VisManager::BeginOfEvent ()
+{
   //G4cout << "G4VisManager::BeginOfEvent" << G4endl;
+  std::ostringstream oss;
+  CLHEP::HepRandom::saveFullState(oss);
+  fBeginOfLastEventRandomStatus = oss.str();
 }
 
-void G4VisManager::EndOfEvent () {
+void G4VisManager::EndOfEvent ()
+{
   //G4cout << "G4VisManager::EndOfEvent" << G4endl;
+  ++fEventCount;
+
   // Don't call IsValidView unless there is a scene handler.  This
   // avoids WARNING message at end of event and run when the user has
   // not instantiated a scene handler, e.g., in batch mode.
@@ -960,7 +978,8 @@ void G4VisManager::EndOfEvent () {
   }
 }
 
-void G4VisManager::EndOfRun () {
+void G4VisManager::EndOfRun ()
+{
   //G4cout << "G4VisManager::EndOfRun" << G4endl;
   // Don't call IsValidView unless there is a scene handler.  This
   // avoids WARNING message at end of event and run when the user has

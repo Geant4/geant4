@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.50 2006-02-08 15:21:44 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.51 2006-02-09 16:32:42 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,6 +68,8 @@
 #include "G4ModelingParameters.hh"
 #include "G4VTrajectory.hh"
 #include "G4VHit.hh"
+#include "G4UImanager.hh"
+#include "Randomize.hh"
 
 G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4String& name):
   fSystem                (system),
@@ -512,6 +514,32 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
   }
 
   fReadyForTransients = true;
+
+  // Now (re-)do trajectories and hits, if requested...
+  const std::vector<G4VModel*>& endOfEventModelList =
+    fpScene -> GetEndOfEventModelList ();
+  if (endOfEventModelList.size() > 0) {
+    G4VisManager* visManager = G4VisManager::GetInstance();
+    G4UImanager* UImanager = G4UImanager::GetUIpointer();
+    if (fpScene->GetRefreshAtEndOfEvent()) {
+      std::istringstream iss(visManager->fBeginOfLastEventRandomStatus);
+      CLHEP::HepRandom::restoreFullState(iss);
+      UImanager->ApplyCommand("/run/beamOn");
+    } else {
+      if (!fpScene->GetRefreshAtEndOfRun()) {
+	G4cout <<
+	  "WARNING: Cannot refresh trajectories, etc., accumulated over runs."
+	  "\n  Refreshing just the last run..."
+	       << G4endl;
+      }
+      std::istringstream iss(visManager->fBeginOfLastRunRandomStatus);
+      CLHEP::HepRandom::restoreFullState(iss);
+      std::ostringstream oss;
+      oss << visManager->fEventCount;
+      UImanager->ApplyCommand(G4String("/run/beamOn " + oss.str()));
+    }
+  }
+
 }
 
 G4ModelingParameters* G4VSceneHandler::CreateModelingParameters () {
