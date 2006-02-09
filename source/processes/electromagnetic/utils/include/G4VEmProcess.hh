@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.30 2006-01-11 11:04:31 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.31 2006-02-09 12:52:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -45,6 +45,7 @@
 // 18-04-05 Use G4ParticleChangeForGamma (V.Ivantchenko)
 // 09-05-05 Fix problem in logic when path boundary between materials (VI)
 // 11-01-06 add A to parameters of ComputeCrossSectionPerAtom (VI)
+// 01-02-06 put default value A=0. to keep compatibility with v5.2 (mma)
 //
 // Class Description:
 //
@@ -169,7 +170,7 @@ public:
   // It returns the cross section of the process for energy/ material
 
   G4double ComputeCrossSectionPerAtom(G4double kineticEnergy, 
-				      G4double Z, G4double A);
+				      G4double Z, G4double A=0.);
   // It returns the cross section of the process per atom
 
   G4double MeanFreePath(     const G4Track& track,

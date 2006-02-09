@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.3 2005-10-25 18:28:58 vnivanch Exp $
+// $Id: G4VEmModel.cc,v 1.4 2006-02-09 12:52:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,6 +36,7 @@
 //
 // Modifications:
 // 25.10.2005 Set default highLimit=100.TeV (V.Ivanchenko)
+// 06.02.2006 add method ComputeMeanFreePath() (mma)
 //
 //
 // Class Description:
@@ -47,36 +48,53 @@
 
 #include "G4VEmModel.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VEmModel::G4VEmModel(const G4String& nam):
-  lowLimit(0.1*keV), highLimit(100.0*TeV), fluc(0), name(nam), pParticleChange(0)
+ lowLimit(0.1*keV), highLimit(100.0*TeV), fluc(0), name(nam), pParticleChange(0)
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VEmModel::~G4VEmModel()
 {}
 
-G4double G4VEmModel::CrossSectionPerVolume(
-                                        const G4Material* material,
-					const G4ParticleDefinition* p,
-					      G4double ekin,
-					      G4double emin,
-                                              G4double emax)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4VEmModel::CrossSectionPerVolume(const G4Material* material,
+					   const G4ParticleDefinition* p,
+					         G4double ekin,
+					         G4double emin,
+                                                 G4double emax)
 {
-  G4double cross = 0.0;
-  const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
-  size_t nelm = material->GetNumberOfElements();
-  for (size_t i=0; i<nelm; i++) {
-    const G4Element* elm = (*theElementVector)[i];
-    cross += theAtomNumDensityVector[i]*
-             ComputeCrossSectionPerAtom(p,ekin,elm->GetZ(),elm->GetN(),emin,emax);
-    xsec[i] = cross;
-  }
+ G4double cross = 0.0;
+ const G4ElementVector* theElementVector = material->GetElementVector();
+ const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
+ size_t nelm = material->GetNumberOfElements();
+ for (size_t i=0; i<nelm; i++) {
+   const G4Element* elm = (*theElementVector)[i];
+   cross += theAtomNumDensityVector[i]*
+          ComputeCrossSectionPerAtom(p,ekin,elm->GetZ(),elm->GetN(),emin,emax);
+   xsec[i] = cross;
+ }
   return cross;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4VEmModel::ComputeMeanFreePath(const G4ParticleDefinition* p,
+					       G4double ekin,
+					 const G4Material* material,     
+					       G4double emin,
+                                               G4double emax)
+{
+ G4double mfp = DBL_MAX;
+ G4double cross = CrossSectionPerVolume(material,p,ekin,emin,emax);
+ if (cross >0.) mfp = 1./cross;
+ return mfp;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
