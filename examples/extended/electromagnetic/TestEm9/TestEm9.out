@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
+ Geant4 version Name: global-V07-01-05    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -280,28 +280,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=102.94s Real=110.39s Sys=7.38s
+  User=114.01s Real=123.61s Sys=9.56s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Number of events             100
 Average number of e-         1325
-Average number of gamma      702.6
-Average number of e+         48.67
-Average number of steps      4653
-Edep 1x1 =                   0.8266 +- 0.002703  res=  3.27 %
-Edep 3x3 =                   0.9587 +- 0.001066  res=  1.112 %
-Edep 5x5 =                   0.9806 +- 0.0007801  res=  0.7955 %
+Average number of gamma      701.4
+Average number of e+         48.36
+Average number of steps      5267
+Edep 1x1 =                   0.8256 +- 0.003038  res=  3.679 %
+Edep 3x3 =                   0.9565 +- 0.001559  res=  1.63 %
+Edep 5x5 =                   0.9782 +- 0.001325  res=  1.354 %
 ========================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8266  delEdep1x1= 0.0005596 nrms= 0.1594
-Erms1x1: 0.02703  delErms1x1= -0.008072 nrms= -2.3
-Edep3x3: 0.9587  delEdep3x3= 0.00231 nrms= 1.444
-Erms3x3: 0.01066  delErms3x3= -0.005338 nrms= -3.336
-Edep5x5: 0.9806  delEdep5x5= 0.001602 nrms= 1.346
-Erms5x5: 0.007801  delErms5x5= -0.004099 nrms= -3.445
+Edep1x1: 0.8256  delEdep1x1= -0.0004101 nrms= -0.1168
+Erms1x1: 0.03038  delErms1x1= -0.004723 nrms= -1.346
+Edep3x3: 0.9565  delEdep3x3= 8.504e-05 nrms= 0.05315
+Erms3x3: 0.01559  delErms3x3= -0.0004063 nrms= -0.2539
+Edep5x5: 0.9782  delEdep5x5= -0.0008222 nrms= -0.6909
+Erms5x5: 0.01325  delErms5x5= 0.001349 nrms= 1.134
 <<<<<END>>>>>   IS ACCEPTED
 
 /vis/viewer/update
