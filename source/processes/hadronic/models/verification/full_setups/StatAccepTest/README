@@ -119,12 +119,15 @@
  Please read the comments at the top of the file  observables.py
  for more information.
 
- Other three scripts: unpack.py, pvalues.py, compare2.py
+ Other four scripts: unpack.py, pvalues.py, compare2.py, compareAll.py
  have been added in the same subdirectory  ( dirObservables/ ) . 
  The first two are useful immediately after you get the results 
  from the Grid jobs.
  The third one (compare2.py) is useful to have detailed information
  on the difference between two cases.
+ The fourth one (compareAll.py) is useful to have the detailed
+ information of all cases, and the averages (overall, by calorimeter
+ type, by beam particle, and by beam energy).
  Please read the comments at the top of these files for more
  information.
 
