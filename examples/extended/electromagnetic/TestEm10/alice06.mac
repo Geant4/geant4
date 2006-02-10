@@ -11,8 +11,8 @@
 #
 /plots/sethistName g4.p11
 /plots/setnbinEn 60
-/plots/setEnlow 0.0 MeV
-/plots/setEnhigh 0.06  MeV
+/plots/setEnlow 0.001 MeV
+/plots/setEnhigh 0.061  MeV
 #
 #
 # Change and choice of experimental setups. Can be
@@ -74,7 +74,7 @@
 # Inactivate gamma processes
 #
 #/process/inactivate phot
-#/process/inactivate compt
+/process/inactivate compt
 #/process/inactivate conv
 #
 #/process/inactivate RegularXTRadiator
@@ -92,10 +92,10 @@
 /gun/energy 2000.0 MeV
 #
 
-/tracking/verbose 1
+#/tracking/verbose 1
 #
 /event/printModulo 1000
-/run/beamOn 10
+/run/beamOn 10000
 #
 
 
