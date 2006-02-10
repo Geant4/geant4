@@ -1,5 +1,5 @@
 
- Last update: 01-Feb-2006
+ Last update: 10-Feb-2006
  ========================
 
  This directory contains a configurable calorimeter setup to be used
@@ -119,9 +119,12 @@
  Please read the comments at the top of the file  observables.py
  for more information.
 
- Other two scripts, unpack.py and pvalues.py, have been added in
- the same subdirectory  ( dirObservables/ ) . They are useful
- immediately after you get the results from the Grid jobs.
+ Other three scripts: unpack.py, pvalues.py, compare2.py
+ have been added in the same subdirectory  ( dirObservables/ ) . 
+ The first two are useful immediately after you get the results 
+ from the Grid jobs.
+ The third one (compare2.py) is useful to have detailed information
+ on the difference between two cases.
  Please read the comments at the top of these files for more
  information.
 
