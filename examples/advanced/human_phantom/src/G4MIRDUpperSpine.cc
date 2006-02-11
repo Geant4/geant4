@@ -74,6 +74,23 @@ G4VPhysicalVolume* G4MIRDUpperSpine::ConstructUpperSpine(G4VPhysicalVolume* moth
   logicUpperSpine->SetVisAttributes(UpperSpineVisAtt);
 
   G4cout << "UpperSpine created !!!!!!" << G4endl;
+ 
+  // Testing UpperSpine Volume
+  G4double UpperSpineVol = logicUpperSpine->GetSolid()->GetCubicVolume();
+  G4cout << "Volume of UpperSpine = " << UpperSpineVol/cm3 << " cm^3" << G4endl;
   
+  // Testing UpperSpine Material
+  G4String UpperSpineMat = logicUpperSpine->GetMaterial()->GetName();
+  G4cout << "Material of UpperSpine = " << UpperSpineMat << G4endl;
+  
+  // Testing Density
+  G4double UpperSpineDensity = logicUpperSpine->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << UpperSpineDensity*cm3/g << " g/cm^3" << G4endl;
+
+  // Testing Mass
+  G4double UpperSpineMass = (UpperSpineVol)*UpperSpineDensity;
+  G4cout << "Mass of UpperSpine = " << UpperSpineMass/gram << " g" << G4endl;
+
+ 
   return physUpperSpine;
 }

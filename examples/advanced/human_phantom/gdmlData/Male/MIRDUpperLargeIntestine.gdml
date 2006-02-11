@@ -5,9 +5,9 @@
   <constant name="TWOPI" value="2.*pi"/>
   <constant name="HALFPI" value="0.5*pi"/>
 
-  <position name="AscendingTransverseUpperLargeIntestineRelativePos" unit="cm" x="10.50" y="0.0" z="5.8" />
+  <position name="AscendingTransverseUpperLargeIntestineRelativePos" unit="cm" x="7.2" y="0.0" z="5.65" />
   <rotation name="AscendingTransverseUpperLargeIntestineRelativeRot" unit="degree" x="90" y="0" z="90" />
-  <position name="UpperLargeIntestinePos" unit="cm" x="-8.50" y="-2.36" z="-15.3" />
+  <position name="UpperLargeIntestinePos" unit="cm" x="-7.33" y="-2.31" z="-14.22" />
   <rotation name="UpperLargeIntestineRot" unit="degree" x="0" y="0" z="0" />
  </define> 
 
@@ -53,9 +53,8 @@
  </materials>
 
  <solids>
-  <eltube aunit="cm" lunit="cm" name="AscendingColonUpperLargeIntestine" dx="2.50" dy="2.50" dz="4.3" />
-  <eltube aunit="cm" lunit="cm" name="TransverseColonUpperLargeIntestine" dx="2.50" dy="1.50" dz="10.50" />
-
+  <eltube aunit="cm" lunit="cm" name="AscendingColonUpperLargeIntestine" dx="2.16" dy="2.45" dz="4.3" />
+  <eltube aunit="cm" lunit="cm" name="TransverseColonUpperLargeIntestine" dx="2.45" dy="1.35" dz="9.06" />
   <union name="UpperLargeIntestine">
    <first ref="AscendingColonUpperLargeIntestine" />
    <second ref="TransverseColonUpperLargeIntestine" />

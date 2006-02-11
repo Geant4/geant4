@@ -74,6 +74,23 @@ G4VPhysicalVolume* G4MIRDLowerLargeIntestine::ConstructLowerLargeIntestine(G4VPh
   logicLowerLargeIntestine->SetVisAttributes(LowerLargeIntestineVisAtt);
 
   G4cout << "LowerLargeIntestine created !!!!!!" << G4endl;
+
+  // Testing LowerLargeIntestine Volume
+  G4double LowerLargeIntestineVol = logicLowerLargeIntestine->GetSolid()->GetCubicVolume();
+  G4cout << "Volume of LowerLargeIntestine = " << LowerLargeIntestineVol/cm3 << " cm^3" << G4endl;
+  
+  // Testing LowerLargeIntestine Material
+  G4String LowerLargeIntestineMat = logicLowerLargeIntestine->GetMaterial()->GetName();
+  G4cout << "Material of LowerLargeIntestine = " << LowerLargeIntestineMat << G4endl;
+  
+  // Testing Density
+  G4double LowerLargeIntestineDensity = logicLowerLargeIntestine->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << LowerLargeIntestineDensity*cm3/g << " g/cm^3" << G4endl;
+
+  // Testing Mass
+  G4double LowerLargeIntestineMass = (LowerLargeIntestineVol)*LowerLargeIntestineDensity;
+  G4cout << "Mass of LowerLargeIntestine = " << LowerLargeIntestineMass/gram << " g" << G4endl;
+
   
   return physLowerLargeIntestine;
 }

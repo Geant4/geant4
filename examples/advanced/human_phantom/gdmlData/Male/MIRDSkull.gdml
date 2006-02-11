@@ -4,7 +4,11 @@
   <constant name="PI" value="1.*pi" />
   <constant name="TWOPI" value="2.*pi"/>
   <constant name="HALFPI" value="0.5*pi"/>
-  <position name="SkullPos" unit="cm" x="0.0" y="0.0" z="12.00" />
+  <position name="CraniumRelativePos" unit="cm" x="0" y="0" z="-0.6" />
+   <position name="FirstSubtrFacialSkeletonRelativePos" unit="cm" x="0.0" y="0.0" z="0.0" />
+  <position name="SecondSubtrFacialSkeletonRelativePos" unit="cm" x="0.0" y="8.91" z="0.0" />
+  <position name="SkullRelativePos" unit="cm" x="0" y="0.0" z="5.13" />
+  <position name="SkullPos" unit="cm" x="0.0" y="0.0" z="2.875" />
   <rotation name="SkullRot" unit="degree" x="0" y="0" z="0" />
  </define> 
 
@@ -54,14 +58,31 @@
  </materials>
 
  <solids>
-  <ellipsoid aunit="cm" lunit="cm" name="CraniumOut" ax="6.8" by="9.8" cz="8.3" />
-  <ellipsoid aunit="cm" lunit="cm" name="CraniumIn" ax="6.0" by="9.0" cz="6.5" />
-
-  <subtraction name="Skull">
+  <ellipsoid aunit="cm" lunit="cm" name="CraniumOut" ax="7.68" by="9.67" cz="6.83" zcut1="-6.83" zcut2="6.83" />
+  <ellipsoid aunit="cm" lunit="cm" name="CraniumIn" ax="7.18" by="9.17" cz="6.33" zcut1="-6.33" zcut2="6.33" />
+  <eltube aunit="cm" lunit="cm" name="FacialSkeletonOut" dx="6.92" dy="8.91" dz="5.13" />
+  <eltube aunit="cm" lunit="cm" name="FacialSkeletonIn" dx="5.82" dy="7.81" dz="6.13" />
+  <box aunit="cm" lunit="cm" name="SubtrFacialSkeleton" x="14.84" y="18.82" z="11.26" /> 
+  <subtraction name="FirstFacialSkeleton">
+   <first ref="FacialSkeletonOut" />
+   <second ref="FacialSkeletonIn" />
+   <positionref ref="FirstSubtrFacialSkeletonRelativePos" />
+  </subtraction>
+  <subtraction name="FacialSkeleton">
+   <first ref="FirstFacialSkeleton" />
+   <second ref="SubtrFacialSkeleton" />
+   <positionref ref="SecondSubtrFacialSkeletonRelativePos" />
+  </subtraction>
+  <subtraction name="Cranium">
    <first ref="CraniumOut" />
    <second ref="CraniumIn" />
    <positionref ref="CraniumRelativePos" />
   </subtraction>
+  <union name="Skull">
+   <first ref="FacialSkeleton" />
+   <second ref="Cranium" />
+   <positionref ref="SkullRelativePos" />
+  </union>
  </solids>
 
  <structure>

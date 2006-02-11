@@ -110,7 +110,7 @@
  </materials>
 
  <solids>
-  <eltube aunit="cm" lunit="cm" name="OneLegBone" dx="2.1" dy="1.4" dz="40.00" />
+  <eltube aunit="cm" lunit="cm" name="OneLegBone" dx="2.0" dy="1.0" dz="39.00" />
   <union name="LegBone">
    <first ref="OneLegBone" />
    <second ref="OneLegBone" />

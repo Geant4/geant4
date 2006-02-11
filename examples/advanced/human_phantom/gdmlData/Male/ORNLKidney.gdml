@@ -4,10 +4,9 @@
   <constant name="PI" value="1.*pi" />
   <constant name="TWOPI" value="2.*pi"/>
   <constant name="HALFPI" value="0.5*pi"/>
-
-  <position name="KidneyRelativePos" unit="cm" x="12." y="0.0" z="0.0" />
-  <position name="SubtrKidneyRelativePos" unit="cm" x="6." y="0.0" z="0.0" />
-  <position name="KidneyPos" unit="cm" x="-6." y="6." z="-2.5" />
+  <position name="KidneyRelativePos" unit="cm" x="10.36" y="0.0" z="0.0" />
+  <position name="SubtrKidneyRelativePos" unit="cm" x="5.18" y="0.0" z="0.0" />
+  <position name="KidneyPos" unit="cm" x="-5.18" y="5.88" z="-2.25" />
   <rotation name="KidneyRot" unit="degree" x="0" y="0" z="0" />
  </define> 
 
@@ -113,8 +112,8 @@
 
  <solids>
 
-  <ellipsoid aunit="cm" lunit="cm" name="OneKidney" ax="4.5" by="1.5" cz="5.5" />
-  <box aunit="cm" lunit="cm" name="SubtrKidney" x="5.5" y="20.00" z="20.00" />
+  <ellipsoid aunit="cm" lunit="cm" name="OneKidney" ax="4.05" by="1.53" cz="4.96" zcut1="-4.96" zcut2="4.96" />
+  <box aunit="cm" lunit="cm" name="SubtrKidney" x="4.96" y="20.00" z="20.00" />
 
   <union name="UnionKidney">
    <first ref="OneKidney" />

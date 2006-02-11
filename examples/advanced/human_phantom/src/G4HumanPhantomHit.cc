@@ -83,7 +83,7 @@ void G4HumanPhantomHit::Draw()
 void G4HumanPhantomHit::Print()
 {
   G4cout << " TrackID: " << trackID 
-    //   << "\n BodyPartID: " << bodypartID 
+         << "\n BodyPartID: " << bodypartID 
 	 << " \t-> " << bodypartName
 	 << " \t\t-> Energy deposit: " << G4BestUnit(edep,"Energy")
     //   << "\n Position: " << G4BestUnit(pos,"Length") 

@@ -74,6 +74,23 @@ G4VPhysicalVolume* G4MIRDThyroid::ConstructThyroid(G4VPhysicalVolume* mother, G4
   logicThyroid->SetVisAttributes(ThyroidVisAtt);
 
   G4cout << "Thyroid created !!!!!!" << G4endl;
+
+  // Testing Thyroid Volume
+  G4double ThyroidVol = logicThyroid->GetSolid()->GetCubicVolume();
+  G4cout << "Volume of Thyroid = " << ThyroidVol/cm3 << " cm^3" << G4endl;
+  
+  // Testing Thyroid Material
+  G4String ThyroidMat = logicThyroid->GetMaterial()->GetName();
+  G4cout << "Material of Thyroid = " << ThyroidMat << G4endl;
+  
+  // Testing Density
+  G4double ThyroidDensity = logicThyroid->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << ThyroidDensity*cm3/g << " g/cm^3" << G4endl;
+
+  // Testing Mass
+  G4double ThyroidMass = (ThyroidVol)*ThyroidDensity;
+  G4cout << "Mass of Thyroid = " << ThyroidMass/gram << " g" << G4endl;
+
   
   return physThyroid;
 }

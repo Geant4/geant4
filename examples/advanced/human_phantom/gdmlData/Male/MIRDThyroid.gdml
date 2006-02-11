@@ -5,11 +5,11 @@
   <constant name="TWOPI" value="2.*pi"/>
   <constant name="HALFPI" value="0.5*pi"/>
 
-  <position name="FirstSubtrThyroidRelativePos" unit="cm" x="0.0" y="0.0" z="5." />
-  <position name="SecondSubtrThyroidRelativePos" unit="cm" x="0.0" y="0.0" z="-6.4" />
+  <position name="FirstSubtrThyroidRelativePos" unit="cm" x="0.0" y="0.0" z="4.20" />
+  <position name="SecondSubtrThyroidRelativePos" unit="cm" x="0.0" y="0.0" z="-5.4" />
   <rotation name="FirstSubtrThyroidRelativeRot" unit="degree" x="50" y="0" z="0" />
   <rotation name="SecondSubtrThyroidRelativeRot" unit="degree" x="-50" y="0" z="0" />
-  <position name="ThyroidPos" unit="cm" x="0.0" y="-6." z="-9.5" />
+  <position name="ThyroidPos" unit="cm" x="0.0" y="-3.91" z="-5.925" />
   <rotation name="ThyroidRot" unit="degree" x="0" y="0" z="180" />
  </define> 
 
@@ -55,9 +55,9 @@
  </materials>
 
  <solids>
-  <tube aunit="degree" lunit="cm" name="LobOfThyroidOut" z="5" rmax="2.2" deltaphi="180" />
-  <tube aunit="degree" lunit="cm" name="LobOfThyroidIn" z="5.50" rmax="1." deltaphi="360"/>
-  <box aunit="cm" lunit="cm" name="SubtrThyroid" x="4.42" y="4.42" z="20.00" /> 
+  <tube aunit="degree" lunit="cm" name="LobOfThyroidOut" z="4.20" rmax="1.85" deltaphi="180" />
+  <tube aunit="degree" lunit="cm" name="LobOfThyroidIn" z="4.50" rmax="0.83" deltaphi="360"/>
+  <box aunit="cm" lunit="cm" name="SubtrThyroid" x="3.72" y="3.72" z="20.00" /> 
 
   <subtraction name="FirstThyroid">
    <first ref="LobOfThyroidOut" />

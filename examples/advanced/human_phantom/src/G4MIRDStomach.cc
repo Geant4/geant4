@@ -74,6 +74,22 @@ G4VPhysicalVolume* G4MIRDStomach::ConstructStomach(G4VPhysicalVolume* mother, G4
   logicStomach->SetVisAttributes(StomachVisAtt);
 
   G4cout << "Stomach created !!!!!!" << G4endl;
+
+  // Testing Stomach Volume
+  G4double StomachVol = logicStomach->GetSolid()->GetCubicVolume();
+  G4cout << "Volume of Stomach = " << StomachVol/cm3 << " cm^3" << G4endl;
+  
+  // Testing Stomach Material
+  G4String StomachMat = logicStomach->GetMaterial()->GetName();
+  G4cout << "Material of Stomach = " << StomachMat << G4endl;
+  
+  // Testing Density
+  G4double StomachDensity = logicStomach->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << StomachDensity*cm3/g << " g/cm^3" << G4endl;
+
+  // Testing Mass
+  G4double StomachMass = (StomachVol)*StomachDensity;
+  G4cout << "Mass of Stomach = " << StomachMass/gram << " g" << G4endl;
   
   return physStomach;
 }

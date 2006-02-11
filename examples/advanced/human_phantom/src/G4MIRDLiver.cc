@@ -79,11 +79,19 @@ G4VPhysicalVolume* G4MIRDLiver::ConstructLiver(G4VPhysicalVolume* mother, G4Stri
 
   // Testing Liver Volume
   G4double LiverVol = logicLiver->GetSolid()->GetCubicVolume();
-  G4cout << "Volume of Liver = " << LiverVol/1000. << " cm^3" << G4endl;
+  G4cout << "Volume of Liver = " << LiverVol/cm3 << " cm^3" << G4endl;
   
   // Testing Liver Material
   G4String LiverMat = logicLiver->GetMaterial()->GetName();
   G4cout << "Material of Liver = " << LiverMat << G4endl;
   
+  // Testing Density
+  G4double LiverDensity = logicLiver->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << LiverDensity*cm3/g << " g/cm^3" << G4endl;
+
+  // Testing Mass
+  G4double LiverMass = (LiverVol)*LiverDensity;
+  G4cout << "Mass of Liver = " << LiverMass/gram << " g" << G4endl;
+
   return physLiver;
 }

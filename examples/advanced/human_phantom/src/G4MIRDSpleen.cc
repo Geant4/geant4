@@ -74,6 +74,24 @@ G4VPhysicalVolume* G4MIRDSpleen::ConstructSpleen(G4VPhysicalVolume* mother, G4St
   logicSpleen->SetVisAttributes(SpleenVisAtt);
 
   G4cout << "Spleen created !!!!!!" << G4endl;
+
+  // Testing Spleen Volume
+  G4double SpleenVol = logicSpleen->GetSolid()->GetCubicVolume();
+  G4cout << "Volume of Spleen = " << SpleenVol/cm3 << " cm^3" << G4endl;
+  
+  // Testing Spleen Material
+  G4String SpleenMat = logicSpleen->GetMaterial()->GetName();
+  G4cout << "Material of Spleen = " << SpleenMat << G4endl;
+  
+  // Testing Density
+  G4double SpleenDensity = logicSpleen->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << SpleenDensity*cm3/g << " g/cm^3" << G4endl;
+
+  // Testing Mass
+  G4double SpleenMass = (SpleenVol)*SpleenDensity;
+  G4cout << "Mass of Spleen = " << SpleenMass/gram << " g" << G4endl;
+
+
   
   return physSpleen;
 }

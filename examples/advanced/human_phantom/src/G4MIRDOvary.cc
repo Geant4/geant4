@@ -74,6 +74,22 @@ G4VPhysicalVolume* G4MIRDOvary::ConstructOvary(G4VPhysicalVolume* mother, G4Stri
   logicOvary->SetVisAttributes(OvaryVisAtt);
 
   G4cout << "Ovary created !!!!!!" << G4endl;
+
+  // Testing Ovary Volume
+  G4double OvaryVol = logicOvary->GetSolid()->GetCubicVolume();
+  G4cout << "Volume of Ovary = " << OvaryVol/cm3 << " cm^3" << G4endl;
+  
+  // Testing Ovary Material
+  G4String OvaryMat = logicOvary->GetMaterial()->GetName();
+  G4cout << "Material of Ovary = " << OvaryMat << G4endl;
+  
+  // Testing Density
+  G4double OvaryDensity = logicOvary->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << OvaryDensity*cm3/g << " g/cm^3" << G4endl;
+
+  // Testing Mass
+  G4double OvaryMass = (OvaryVol)*OvaryDensity;
+  G4cout << "Mass of Ovary = " << OvaryMass/gram << " g" << G4endl;
   
   return physOvary;
 }

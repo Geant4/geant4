@@ -19,36 +19,27 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-//
-//
+// ----------------------------------------------------------------------------
 
-#ifndef G4HumanPhantomEventAction_h
-#define G4HumanPhantomEventAction_h 1
+#ifndef G4HumanPhantomEnergyDeposit_H
+#define G4HumanPhantomEnergyDeposit_H 1
 
-#include "G4UserEventAction.hh"
 #include "globals.hh"
+#include <map>
 
-class G4Event;
-
-class G4HumanPhantomEnergyDeposit;
-
-class G4HumanPhantomEventAction : public G4UserEventAction
+class G4HumanPhantomEnergyDeposit 
 {
-  public:
-    G4HumanPhantomEventAction(G4HumanPhantomEnergyDeposit*);
-   ~G4HumanPhantomEventAction();
+public:
+  G4HumanPhantomEnergyDeposit();
+  ~G4HumanPhantomEnergyDeposit();
+ 
+  std::map<std::string,G4double> energyTotal;
 
-  public:
-    void BeginOfEventAction(const G4Event*);
-    void EndOfEventAction(const G4Event*);
-    G4int GetEvent() const {return eventNumber;};
-    void SetPath(G4double);
+  void Fill(G4String bodypartName, G4double energyDeposit);
+  void TotalEnergyDeposit();
 
-  private:
-    G4int eventNumber;
-    G4double path;
-    G4HumanPhantomEnergyDeposit* energyTotal;
+private:
+  G4String bodypartName;
+  G4double totalBody;
 };
 #endif
-
-    

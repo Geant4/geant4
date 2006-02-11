@@ -41,6 +41,7 @@
 #include "G4HumanPhantomSteppingAction.hh"
 #include "G4HumanPhantomEventAction.hh"
 #include "G4HumanPhantomRunAction.hh"
+#include "G4HumanPhantomEnergyDeposit.hh"
 
 int main(int argc,char** argv)
 {
@@ -74,7 +75,9 @@ int main(int argc,char** argv)
   runManager->SetUserAction(new G4HumanPhantomPrimaryGeneratorAction);
   runManager->SetUserAction(new G4HumanPhantomRunAction);
 
-  G4HumanPhantomEventAction *eventAction = new G4HumanPhantomEventAction();
+  G4HumanPhantomEnergyDeposit* energyTotal = new G4HumanPhantomEnergyDeposit();
+
+  G4HumanPhantomEventAction *eventAction = new G4HumanPhantomEventAction(energyTotal);
   runManager->SetUserAction(eventAction);
 
   runManager->SetUserAction(new G4HumanPhantomSteppingAction(eventAction)); 
@@ -107,6 +110,8 @@ int main(int argc,char** argv)
       G4String fileName = argv[1];
       UI->ApplyCommand(command+fileName);
     }
+
+   energyTotal->TotalEnergyDeposit();
 
   // job termination
 #ifdef G4VIS_USE

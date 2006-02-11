@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2005-08-25 14:54:04 gguerrie Exp $
+$Id: History,v 1.3 2006-02-11 09:18:16 gguerrie Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 23, 2005, G. Guerrieri
+- Adult Male phantom GDML file added.
+
 August 15, 2005, G. Guerrieri
 - Modified approximated legs and leg bones.
 - Commit the example
@@ -27,7 +30,7 @@ July 26, 2005, G. Guerrieri
 
 June 30, 2005 G.Guerrieri
 - Add other body part (now there's 26 body part on the Female MIRD/ORNL model)
-- UI operates in PreInit writing GDML file and then Initialize() construction.
+- UI operates in PreInit reading GDML file and then Initialize() construction.
 
 June 20, 2005 G.Guerrieri
 - UI with command defining

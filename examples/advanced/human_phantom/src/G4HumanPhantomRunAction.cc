@@ -58,10 +58,10 @@ void G4HumanPhantomRunAction::EndOfRunAction(const G4Run* aRun)
 {
   G4cout << "Number of events = " << aRun->GetNumberOfEvent() << G4endl;
 
-#ifdef G4ANALYSIS_USE
-  G4HumanPhantomAnalysisManager* analysis = G4HumanPhantomAnalysisManager::getInstance();
-  analysis->finish();
-#endif
+// #ifdef G4ANALYSIS_USE
+//   G4HumanPhantomAnalysisManager* analysis = G4HumanPhantomAnalysisManager::getInstance();
+//   analysis->finish();
+// #endif
  }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

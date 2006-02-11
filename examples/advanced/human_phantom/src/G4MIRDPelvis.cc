@@ -74,6 +74,23 @@ G4VPhysicalVolume* G4MIRDPelvis::ConstructPelvis(G4VPhysicalVolume* mother, G4St
   logicPelvis->SetVisAttributes(PelvisVisAtt);
 
   G4cout << "Pelvis created !!!!!!" << G4endl;
+
+  // Testing Pelvis Volume
+  G4double PelvisVol = logicPelvis->GetSolid()->GetCubicVolume();
+  G4cout << "Volume of Pelvis = " << PelvisVol/cm3 << " cm^3" << G4endl;
+  
+  // Testing Pelvis Material
+  G4String PelvisMat = logicPelvis->GetMaterial()->GetName();
+  G4cout << "Material of Pelvis = " << PelvisMat << G4endl;
+  
+  // Testing Density
+  G4double PelvisDensity = logicPelvis->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << PelvisDensity*cm3/g << " g/cm^3" << G4endl;
+
+  // Testing Mass
+  G4double PelvisMass = (PelvisVol)*PelvisDensity;
+  G4cout << "Mass of Pelvis = " << PelvisMass/gram << " g" << G4endl;
+
   
   return physPelvis;
 }

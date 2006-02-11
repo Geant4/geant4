@@ -74,6 +74,24 @@ G4VPhysicalVolume* G4MIRDSkull::ConstructSkull(G4VPhysicalVolume* mother, G4Stri
   logicSkull->SetVisAttributes(SkullVisAtt);
 
   G4cout << "Skull created !!!!!!" << G4endl;
+
+
+  // Testing Skull Volume
+  G4double SkullVol = logicSkull->GetSolid()->GetCubicVolume();
+  G4cout << "Volume of Skull = " << SkullVol/cm3 << " cm^3" << G4endl;
+  
+  // Testing Skull Material
+  G4String SkullMat = logicSkull->GetMaterial()->GetName();
+  G4cout << "Material of Skull = " << SkullMat << G4endl;
+  
+  // Testing Density
+  G4double SkullDensity = logicSkull->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << SkullDensity*cm3/g << " g/cm^3" << G4endl;
+
+  // Testing Mass
+  G4double SkullMass = (SkullVol)*SkullDensity;
+  G4cout << "Mass of Skull = " << SkullMass/gram << " g" << G4endl;
+
   
   return physSkull;
 }

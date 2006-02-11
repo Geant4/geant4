@@ -74,6 +74,23 @@ G4VPhysicalVolume* G4MIRDLegBone::ConstructLegBone(G4VPhysicalVolume* mother, G4
   logicLegBone->SetVisAttributes(LegBoneVisAtt);
 
   G4cout << "LegBone created !!!!!!" << G4endl;
+
+  // Testing LegBone Volume
+  G4double LegBoneVol = logicLegBone->GetSolid()->GetCubicVolume();
+  G4cout << "Volume of LegBone = " << LegBoneVol/cm3 << " cm^3" << G4endl;
+  
+  // Testing LegBone Material
+  G4String LegBoneMat = logicLegBone->GetMaterial()->GetName();
+  G4cout << "Material of LegBone = " << LegBoneMat << G4endl;
+  
+  // Testing Density
+  G4double LegBoneDensity = logicLegBone->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << LegBoneDensity*cm3/g << " g/cm^3" << G4endl;
+
+  // Testing Mass
+  G4double LegBoneMass = (LegBoneVol)*LegBoneDensity;
+  G4cout << "Mass of LegBone = " << LegBoneMass/gram << " g" << G4endl;
+
   
   return physLegBone;
 }

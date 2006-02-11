@@ -5,8 +5,8 @@
   <constant name="TWOPI" value="2.*pi"/>
   <constant name="HALFPI" value="0.5*pi"/>
 
-  <position name="ArmBoneRelativePos" unit="cm" x="36.80" y="0.0" z="0" />
-  <position name="ArmBonePos" unit="cm" x="-18.40" y="0.0" z="0.0" />
+  <position name="ArmBoneRelativePos" unit="cm" x="31.74" y="0.0" z="0" />
+  <position name="ArmBonePos" unit="cm" x="-15.87" y="0.0" z="0.0" />
   <rotation name="ArmBoneRot" unit="degree" x="0" y="0" z="0" />
  </define> 
 
@@ -57,7 +57,7 @@
 
  <solids>
 
-  <eltube aunit="cm" lunit="cm" name="OneArmBone" dx="1.40" dy="2.70" dz="34.50" />
+  <eltube aunit="cm" lunit="cm" name="OneArmBone" dx="1.21" dy="2.65" dz="31.10" />
 
   <union name="ArmBone">
    <first ref="OneArmBone" />

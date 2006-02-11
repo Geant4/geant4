@@ -4,9 +4,10 @@
   <constant name="PI" value="1.*pi" />
   <constant name="TWOPI" value="2.*pi"/>
   <constant name="HALFPI" value="0.5*pi"/>
-  <position name="LegBoneRelativePos" unit="cm" x="14.0" y="0.0" z="0" />
-  <position name="LegBonePos" unit="cm" x="0.0" y="0.0" z="0.0" />
-  <rotation name="LegBoneRot" unit="degree" x="0" y="0" z="0" />
+  <position name="LegBoneRelativePos" unit="cm" x="10." y="0.0" z="-0.95" />
+  <rotation name="LegBoneRelativeRot" unit="degree" x="0" y="12.5" z="0" />
+  <position name="LegBonePos" unit="cm" x="-5.0" y="0.0" z="0.0" />
+  <rotation name="LegBoneRot" unit="degree" x="0" y="6.25" z="0" />
  </define> 
 
  <materials>
@@ -110,11 +111,13 @@
  </materials>
 
  <solids>
-  <eltube aunit="cm" lunit="cm" name="OneLegBone" dx="2.1" dy="1.4" dz="40.00" />
+  <cone aunit="radian" lunit="cm" name="OneLegBone" z="76." rmax1="1.0" rmax2="2.0" deltaphi="TWOPI" /> 
+
   <union name="LegBone">
    <first ref="OneLegBone" />
    <second ref="OneLegBone" />
    <positionref ref="LegBoneRelativePos" />
+   <rotationref ref="LegBoneRelativeRot" />
   </union>
  </solids>
 

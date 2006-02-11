@@ -74,6 +74,22 @@ G4VPhysicalVolume* G4MIRDUterus::ConstructUterus(G4VPhysicalVolume* mother, G4St
   logicUterus->SetVisAttributes(UterusVisAtt);
 
   G4cout << "Uterus created !!!!!!" << G4endl;
+
+  // Testing Uterus Volume
+  G4double UterusVol = logicUterus->GetSolid()->GetCubicVolume();
+  G4cout << "Volume of Uterus = " << UterusVol/cm3 << " cm^3" << G4endl;
+  
+  // Testing Uterus Material
+  G4String UterusMat = logicUterus->GetMaterial()->GetName();
+  G4cout << "Material of Uterus = " << UterusMat << G4endl;
+  
+  // Testing Density
+  G4double UterusDensity = logicUterus->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << UterusDensity*cm3/g << " g/cm^3" << G4endl;
+
+  // Testing Mass
+  G4double UterusMass = (UterusVol)*UterusDensity;
+  G4cout << "Mass of Uterus = " << UterusMass/gram << " g" << G4endl;
   
   return physUterus;
 }

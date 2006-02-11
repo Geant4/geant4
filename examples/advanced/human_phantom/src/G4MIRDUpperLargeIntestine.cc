@@ -74,6 +74,23 @@ G4VPhysicalVolume* G4MIRDUpperLargeIntestine::ConstructUpperLargeIntestine(G4VPh
   logicUpperLargeIntestine->SetVisAttributes(UpperLargeIntestineVisAtt);
 
   G4cout << "UpperLargeIntestine created !!!!!!" << G4endl;
+
+  // Testing UpperLargeIntestine Volume
+  G4double UpperLargeIntestineVol = logicUpperLargeIntestine->GetSolid()->GetCubicVolume();
+  G4cout << "Volume of UpperLargeIntestine = " << UpperLargeIntestineVol/cm3 << " cm^3" << G4endl;
+  
+  // Testing UpperLargeIntestine Material
+  G4String UpperLargeIntestineMat = logicUpperLargeIntestine->GetMaterial()->GetName();
+  G4cout << "Material of UpperLargeIntestine = " << UpperLargeIntestineMat << G4endl;
+  
+  // Testing Density
+  G4double UpperLargeIntestineDensity = logicUpperLargeIntestine->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << UpperLargeIntestineDensity*cm3/g << " g/cm^3" << G4endl;
+
+  // Testing Mass
+  G4double UpperLargeIntestineMass = (UpperLargeIntestineVol)*UpperLargeIntestineDensity;
+  G4cout << "Mass of UpperLargeIntestine = " << UpperLargeIntestineMass/gram << " g" << G4endl;
+
   
   return physUpperLargeIntestine;
 }

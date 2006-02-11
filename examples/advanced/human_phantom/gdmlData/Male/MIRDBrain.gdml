@@ -4,7 +4,7 @@
   <constant name="PI" value="1.*pi" />
   <constant name="TWOPI" value="2.*pi"/>
   <constant name="HALFPI" value="0.5*pi"/>
-  <position name="BrainPos" unit="cm" x="0.0" y="0.0" z="12.00" />
+  <position name="BrainPos" unit="cm" x="0.0" y="0.0" z="8.25" />
   <rotation name="BrainRot" unit="degree" x="0" y="0" z="0" />
  </define> 
 
@@ -110,7 +110,7 @@
 
  <solids>
 
-  <ellipsoid aunit="cm" lunit="cm" name="Brain" ax="6.0" by="9.0" cz="6.5" />
+  <ellipsoid aunit="cm" lunit="cm" name="Brain" ax="6.58" by="8.57" cz="5.73" />
  
  </solids>
 

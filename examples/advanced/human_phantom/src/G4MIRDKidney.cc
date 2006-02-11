@@ -74,6 +74,23 @@ G4VPhysicalVolume* G4MIRDKidney::ConstructKidney(G4VPhysicalVolume* mother, G4St
   logicKidney->SetVisAttributes(KidneyVisAtt);
 
   G4cout << "Kidney created !!!!!!" << G4endl;
+
+  // Testing Kidney Volume
+  G4double KidneyVol = logicKidney->GetSolid()->GetCubicVolume();
+  G4cout << "Volume of Kidney = " << KidneyVol/cm3 << " cm^3" << G4endl;
+  
+  // Testing Kidney Material
+  G4String KidneyMat = logicKidney->GetMaterial()->GetName();
+  G4cout << "Material of Kidney = " << KidneyMat << G4endl;
+  
+  // Testing Density
+  G4double KidneyDensity = logicKidney->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << KidneyDensity*cm3/g << " g/cm^3" << G4endl;
+
+  // Testing Mass
+  G4double KidneyMass = (KidneyVol)*KidneyDensity;
+  G4cout << "Mass of Kidney = " << KidneyMass/gram << " g" << G4endl;
+
   
   return physKidney;
 }

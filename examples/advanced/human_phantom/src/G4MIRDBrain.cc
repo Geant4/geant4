@@ -74,6 +74,23 @@ G4VPhysicalVolume* G4MIRDBrain::ConstructBrain(G4VPhysicalVolume* mother, G4Stri
   logicBrain->SetVisAttributes(BrainVisAtt);
 
   G4cout << "Brain created !!!!!!" << G4endl;
+
+  // Testing Brain Volume
+  G4double BrainVol = logicBrain->GetSolid()->GetCubicVolume();
+  G4cout << "Volume of Brain = " << BrainVol/cm3 << " cm^3" << G4endl;
+  
+  // Testing Brain Material
+  G4String BrainMat = logicBrain->GetMaterial()->GetName();
+  G4cout << "Material of Brain = " << BrainMat << G4endl;
+  
+  // Testing Density
+  G4double BrainDensity = logicBrain->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << BrainDensity*cm3/g << " g/cm^3" << G4endl;
+
+  // Testing Mass
+  G4double BrainMass = (BrainVol)*BrainDensity;
+  G4cout << "Mass of Brain = " << BrainMass/gram << " g" << G4endl;
+
   
   return physBrain;
 }

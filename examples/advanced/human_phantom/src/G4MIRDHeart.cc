@@ -74,6 +74,23 @@ G4VPhysicalVolume* G4MIRDHeart::ConstructHeart(G4VPhysicalVolume* mother, G4Stri
   logicHeart->SetVisAttributes(HeartVisAtt);
 
   G4cout << "Heart created !!!!!!" << G4endl;
+
+  // Testing Heart Volume
+  G4double HeartVol = logicHeart->GetSolid()->GetCubicVolume();
+  G4cout << "Volume of Heart = " << HeartVol/cm3 << " cm^3" << G4endl;
+  
+  // Testing Heart Material
+  G4String HeartMat = logicHeart->GetMaterial()->GetName();
+  G4cout << "Material of Heart = " << HeartMat << G4endl;
+  
+  // Testing Density
+  G4double HeartDensity = logicHeart->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << HeartDensity*cm3/g << " g/cm^3" << G4endl;
+
+  // Testing Mass
+  G4double HeartMass = (HeartVol)*HeartDensity;
+  G4cout << "Mass of Heart = " << HeartMass/gram << " g" << G4endl;
+
   
   return physHeart;
 }

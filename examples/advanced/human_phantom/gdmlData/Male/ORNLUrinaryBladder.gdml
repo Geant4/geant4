@@ -5,7 +5,7 @@
   <constant name="TWOPI" value="2.*pi"/>
   <constant name="HALFPI" value="0.5*pi"/>
 
-  <position name="UrinaryBladderPos" unit="cm" x="0" y="-4.5" z="-27.0" />
+  <position name="UrinaryBladderPos" unit="cm" x="0" y="-4.41" z="-24.34" />
   <rotation name="UrinaryBladderRot" unit="degree" x="0" y="0" z="0" />
  </define> 
 
@@ -110,7 +110,7 @@
  </materials>
 
  <solids>
-  <ellipsoid aunit="cm" lunit="cm" name="UrinaryBladder" ax="6" by="4.5" cz="4.5" />
+  <ellipsoid aunit="cm" lunit="cm" name="UrinaryBladder" ax="4.27" by="3.38" cz="3.11" zcut1="-3.11" zcut2="3.11" />
  </solids>
  <structure>
   <volume name="UrinaryBladderVolume" >

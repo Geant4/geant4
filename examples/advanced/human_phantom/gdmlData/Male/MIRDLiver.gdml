@@ -4,7 +4,7 @@
   <constant name="PI" value="1.*pi" />
   <constant name="TWOPI" value="2.*pi"/>
   <constant name="HALFPI" value="0.5*pi"/>
-  <position name="LiverRelativePos" unit="cm" x="12.0" y="0.0" z="0.0" />
+  <position name="LiverRelativePos" unit="cm" x="10.0" y="0.0" z="0.0" />
   <rotation name="LiverRelativeRot" unit="degree" x="0" y="32" z="40.9" />
   <position name="LiverPos" unit="cm" x="0.0" y="0.0" z="0.0" />
   <rotation name="LiverRot" unit="degree" x="0" y="0" z="0" />
@@ -31,7 +31,7 @@
   <material name="sZr" formula=" " Z="40."><D value="0.00649" /><atom value="91.22"/></material>
   <material name="sPb" formula=" " Z="82."><D value="0.01140" /><atom value="207.19"/></material>
   <material formula=" " name="SoftTissue">
-   <D value="1.04" />
+   <D value="1.04" unit="g/cm3" />
    <fraction n="0.10454" ref="sH" />
    <fraction n="0.22663" ref="sC" />
    <fraction n="0.02490" ref="sN" />
@@ -53,8 +53,8 @@
 
  <solids>
 
-  <eltube aunit="cm" lunit="cm" name="FirstLiver" dx="16.50" dy="8." dz="8." />
-  <box aunit="cm" lunit="cm" name="SubtrLiver" x="35.00" y="50.00" z="50.00" /> 
+  <eltube aunit="cm" lunit="cm" name="FirstLiver" dx="14.19" dy="7.84" dz="7.21" />
+  <box aunit="cm" lunit="cm" name="SubtrLiver" x="20.00" y="50.00" z="50.00" /> 
 
   <subtraction name="Liver">
    <first ref="FirstLiver" />

@@ -4,7 +4,7 @@
   <constant name="PI" value="1.*pi" />
   <constant name="TWOPI" value="2.*pi"/>
   <constant name="HALFPI" value="0.5*pi"/>
-  <position name="TrunkPos" unit="cm" x="0" y="35.00" z="0" />
+  <position name="TrunkPos" unit="cm" x="0" y="31.55" z="0" />
   <rotation name="TrunkRot" unit="degree" x="90" y="0" z="0" />
  </define> 
 
@@ -107,7 +107,7 @@
  </materials>
 
  <solids>
-  <eltube aunit="cm" lunit="cm" name="Trunk" dx="20.00" dy="10.00" dz="35.00"/>
+  <eltube aunit="cm" lunit="cm" name="Trunk" dx="17.25" dy="9.80" dz="31.55"/>
  </solids>
 
  <structure>

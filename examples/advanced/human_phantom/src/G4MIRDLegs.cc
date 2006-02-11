@@ -76,6 +76,23 @@ G4VPhysicalVolume* G4MIRDLegs::ConstructLegs(G4VPhysicalVolume* mother, G4String
   logicLegs->SetVisAttributes(LegsVisAtt);
 
   G4cout << "Legs created !!!!!!" << G4endl;
+
+  // Testing Legs Volume
+  G4double LegsVol = logicLegs->GetSolid()->GetCubicVolume();
+  G4cout << "Volume of Legs = " << LegsVol/cm3 << " cm^3" << G4endl;
+  
+  // Testing Legs Material
+  G4String LegsMat = logicLegs->GetMaterial()->GetName();
+  G4cout << "Material of Legs = " << LegsMat << G4endl;
+  
+  // Testing Density
+  G4double LegsDensity = logicLegs->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << LegsDensity*cm3/g << " g/cm^3" << G4endl;
+
+  // Testing Mass
+  G4double LegsMass = (LegsVol)*LegsDensity;
+  G4cout << "Mass of Legs = " << LegsMass/gram << " g" << G4endl;
+
   
   return physLegs;
 }

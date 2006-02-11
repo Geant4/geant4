@@ -5,7 +5,7 @@
   <constant name="TWOPI" value="2.*pi"/>
   <constant name="HALFPI" value="0.5*pi"/>
 
-  <position name="UpperSpinePos" unit="cm" x="0.0" y="5.39" z="-3.26" />
+  <position name="UpperSpinePos" unit="cm" x="0.0" y="5.39" z="-3.25" />
   <rotation name="UpperSpineRot" unit="degree" x="0" y="0" z="0" />
 
  </define> 
@@ -55,7 +55,7 @@
  </materials>
 
  <solids>
-  <eltube aunit="cm" lunit="cm" name="UpperSpine" dx="1.73" dy="2.45" dz="6.865" />
+  <eltube aunit="cm" lunit="cm" name="UpperSpine" dx="1.73" dy="2.45" dz="5." />
  </solids>
 
  <structure>

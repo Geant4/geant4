@@ -4,8 +4,7 @@
   <constant name="PI" value="1.*pi" />
   <constant name="TWOPI" value="2.*pi"/>
   <constant name="HALFPI" value="0.5*pi"/>
-  <position name="LegsRelativePos" unit="cm" x="14.0" y="0.0" z="0.0" />
-  <position name="LegsPos" unit="cm" x="-7.0" y="-40.0" z="0" />
+  <position name="LegsPos" unit="cm" x="0.0" y="-39.0" z="0" />
   <rotation name="LegsRot" unit="degree" x="90" y="0" z="0" />
  </define> 
 
@@ -108,12 +107,12 @@
  </materials>
 
  <solids>
-  <tube aunit="radian" lunit="cm" name="OneLeg" z="40.0" rmax="7.0" deltaphi="TWOPI"/>
-  <union name="Legs">
-   <first ref="OneLeg" />
-   <second ref="OneLeg" />
-   <positionref ref="LegsRelativePos" />
-  </union>
+  <cone aunit="radian" lunit="cm" name="Leg1" z="78.0" rmax1="4.0" rmax2="17.25" startphi="0." deltaphi="TWOPI"/>
+  <eltube aunit="cm" lunit="cm" name="Trunk" dx="17.25" dy="9.80" dz="78."/>
+  <intersection name="Legs">
+   <first ref="Leg1"/> 
+   <second ref="Trunk"/>
+  </intersection>
  </solids>
 
  <structure>

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="/home2/gguerrie/devel/GDML_2_1_0/GDMLSchema/gdml.xsd" >
  <define> 
-  <position name="HeadPos" unit="cm" x="0" y="82.00" z="0" />
+  <position name="HeadRelativePos" unit="cm" x="0" y="0" z="8.15" />
+  <position name="HeadPos" unit="cm" x="0" y="71.25" z="0" />
   <rotation name="HeadRot" unit="degree" x="90." y="0." z="0." />
  </define> 
 
@@ -105,7 +106,14 @@
  </materials>
 
  <solids>
-  <eltube aunit="cm" lunit="cm" name="Head" dx="7.00" dy="10.00" dz="12.00" />
+  <ellipsoid aunit="cm" lunit="cm" name="Head1" ax="7.77" by="9.76" cz="6.92" zcut1="0.0" zcut2="6.92" />
+  <eltube aunit="cm" lunit="cm" name="Head2" dx="7.77" dy="9.76" dz="8.25" />
+  <union name="Head">
+   <first ref="Head2" />
+   <second ref="Head1" />
+   <positionref ref="HeadRelativePos" />
+  </union>
+ </solids>
  <structure>
   <volume name="HeadVolume" >
    <materialref ref="SoftTissue" />

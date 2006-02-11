@@ -74,6 +74,22 @@ G4VPhysicalVolume* G4MIRDLung::ConstructLung(G4VPhysicalVolume* mother, G4String
   logicLung->SetVisAttributes(LungVisAtt);
 
   G4cout << "Lung created !!!!!!" << G4endl;
+
+  // Testing Lung Volume
+  G4double LungVol = logicLung->GetSolid()->GetCubicVolume();
+  G4cout << "Volume of Lung = " << LungVol/cm3 << " cm^3" << G4endl;
+  
+  // Testing Lung Material
+  G4String LungMat = logicLung->GetMaterial()->GetName();
+  G4cout << "Material of Lung = " << LungMat << G4endl;
+  
+  // Testing Density
+  G4double LungDensity = logicLung->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << LungDensity*cm3/g << " g/cm^3" << G4endl;
+
+  // Testing Mass
+  G4double LungMass = (LungVol)*LungDensity;
+  G4cout << "Mass of Lung = " << LungMass/gram << " g" << G4endl;
   
   return physLung;
 }

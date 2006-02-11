@@ -73,6 +73,23 @@ G4VPhysicalVolume* G4MIRDPancreas::ConstructPancreas(G4VPhysicalVolume* mother, 
   logicPancreas->SetVisAttributes(PancreasVisAtt);
 
   G4cout << "Pancreas created !!!!!!" << G4endl;
+
+  // Testing Pancreas Volume
+  G4double PancreasVol = logicPancreas->GetSolid()->GetCubicVolume();
+  G4cout << "Volume of Pancreas = " << PancreasVol/cm3 << " cm^3" << G4endl;
+  
+  // Testing Pancreas Material
+  G4String PancreasMat = logicPancreas->GetMaterial()->GetName();
+  G4cout << "Material of Pancreas = " << PancreasMat << G4endl;
+  
+  // Testing Density
+  G4double PancreasDensity = logicPancreas->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << PancreasDensity*cm3/g << " g/cm^3" << G4endl;
+
+  // Testing Mass
+  G4double PancreasMass = (PancreasVol)*PancreasDensity;
+  G4cout << "Mass of Pancreas = " << PancreasMass/gram << " g" << G4endl;
+
   
   return physPancreas;
 }

@@ -6,9 +6,9 @@
   <constant name="HALFPI" value="0.5*pi"/>
 
   <position name="PelvisRelativePos" unit="cm" x="0.0" y="0.0" z="0.0" />
-  <position name="FirstSubtrPelvisRelativePos" unit="cm" x="0.0" y="15.00" z="-9.00" />
-  <position name="SecondSubtrPelvisRelativePos" unit="cm" x="0.0" y="-12.00" z="0.0" />
-  <position name="PelvisPos" unit="cm" x="0.0" y="-3.00" z="-24.00" />
+  <position name="FirstSubtrPelvisRelativePos" unit="cm" x="0.0" y="14.70" z="-8.21" />
+  <position name="SecondSubtrPelvisRelativePos" unit="cm" x="0.0" y="-11.76" z="0.0" />
+  <position name="PelvisPos" unit="cm" x="0.0" y="-2.94" z="-21.635" />
   <rotation name="PelvisRot" unit="degree" x="0" y="0" z="0" />
  </define> 
 
@@ -56,9 +56,9 @@
  </materials>
 
  <solids>
-  <eltube aunit="cm" lunit="cm" name="PelvisOut" dx="12.00" dy="12.00" dz="11.00" />
-  <eltube aunit="cm" lunit="cm" name="PelvisIn" dx="11.30" dy="11.30" dz="10.0" />
-  <box aunit="cm" lunit="cm" name="SubtrPelvis" x="23.42" y="23.52" z="22.02" /> 
+  <eltube aunit="cm" lunit="cm" name="PelvisOut" dx="10.35" dy="11.76" dz="9.915" />
+  <eltube aunit="cm" lunit="cm" name="PelvisIn" dx="9.75" dy="11.07" dz="10.0" />
+  <box aunit="cm" lunit="cm" name="SubtrPelvis" x="20.71" y="23.52" z="19.84" /> 
 
   <subtraction name="FirstPelvis">
    <first ref="PelvisOut" />

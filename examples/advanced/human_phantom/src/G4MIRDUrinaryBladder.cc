@@ -74,6 +74,23 @@ G4VPhysicalVolume* G4MIRDUrinaryBladder::ConstructUrinaryBladder(G4VPhysicalVolu
   logicUrinaryBladder->SetVisAttributes(UrinaryBladderVisAtt);
 
   G4cout << "UrinaryBladder created !!!!!!" << G4endl;
+
+  // Testing UrinaryBladder Volume
+  G4double UrinaryBladderVol = logicUrinaryBladder->GetSolid()->GetCubicVolume();
+  G4cout << "Volume of UrinaryBladder = " << UrinaryBladderVol/cm3 << " cm^3" << G4endl;
+  
+  // Testing UrinaryBladder Material
+  G4String UrinaryBladderMat = logicUrinaryBladder->GetMaterial()->GetName();
+  G4cout << "Material of UrinaryBladder = " << UrinaryBladderMat << G4endl;
+  
+  // Testing Density
+  G4double UrinaryBladderDensity = logicUrinaryBladder->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << UrinaryBladderDensity*cm3/g << " g/cm^3" << G4endl;
+
+  // Testing Mass
+  G4double UrinaryBladderMass = (UrinaryBladderVol)*UrinaryBladderDensity;
+  G4cout << "Mass of UrinaryBladder = " << UrinaryBladderMass/gram << " g" << G4endl;
+
   
   return physUrinaryBladder;
 }

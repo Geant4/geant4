@@ -34,10 +34,12 @@ G4MaleBuilder::~G4MaleBuilder()
 {
 } 
 
-void G4MaleBuilder::BuildMaleGenitalia(G4bool)
+void G4MaleBuilder::BuildMaleGenitalia(G4bool /*sensitivity*/)
 {
+  //  G4PhantomBuilder::BuildMaleGenitalia(sensitivity);
 }
 
-void G4MaleBuilder::BuildTestes(G4bool)
+void G4MaleBuilder::BuildTestes(G4bool /*sensitivity*/)
 { 
+  //  G4PhantomBuilder::BuildTestes(sensitivity);
 }

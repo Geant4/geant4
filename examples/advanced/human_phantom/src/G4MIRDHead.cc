@@ -76,6 +76,24 @@ G4VPhysicalVolume* G4MIRDHead::ConstructHead(G4VPhysicalVolume* mother, G4String
   logicHead->SetVisAttributes(HeadVisAtt);
 
   G4cout << "Head created !!!!!!" << G4endl;
+
+  // Testing Head Volume
+  G4double HeadVol = logicHead->GetSolid()->GetCubicVolume();
+  G4cout << "Volume of Head = " << HeadVol/cm3 << " cm^3" << G4endl;
+  
+  // Testing Head Material
+  G4String HeadMat = logicHead->GetMaterial()->GetName();
+  G4cout << "Material of Head = " << HeadMat << G4endl;
+  
+  // Testing Density
+  G4double HeadDensity = logicHead->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << HeadDensity*cm3/g << " g/cm^3" << G4endl;
+
+  // Testing Mass
+  G4double HeadMass = (HeadVol)*HeadDensity;
+  G4cout << "Mass of Head = " << HeadMass/gram << " g" << G4endl;
+
+
   
   return physHead;
 }

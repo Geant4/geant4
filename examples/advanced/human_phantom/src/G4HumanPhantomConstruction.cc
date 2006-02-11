@@ -20,6 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// This is the Director of the Builder: 
+//  define sex at line 62!
+//  default is Female.
+//
+//*********************************************************************
 #include "globals.hh"
 #include <map>
 
@@ -57,6 +62,7 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
   G4HumanPhantomSD* userPhantomSD = new G4HumanPhantomSD( bodypartSD );
   SDman->AddNewDetector( userPhantomSD );
 
+  // Define sex of phantom
   G4FemaleBuilder builder; 
   //G4MaleBuilder builder; 
 
@@ -69,8 +75,6 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
   builder.BuildHead(sensitivities["Head"]);
   builder.BuildTrunk(sensitivities["Trunk"]);
   builder.BuildLegs(sensitivities["Legs"]);
-
-  builder.BuildBreast(sensitivities["Breast"]);
 
   builder.BuildBrain(sensitivities["Brain"]);
 
@@ -97,8 +101,16 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
 
   builder.BuildThyroid(sensitivities["Thyroid"]);
 
-  builder.BuildOvary(sensitivities["Ovary"]);
-  builder.BuildUterus(sensitivities["Uterus"]);
+  if(sex=="Female"){
+    builder.BuildOvary(sensitivities["Ovary"]);
+    builder.BuildUterus(sensitivities["Uterus"]);
+    builder.BuildBreast(sensitivities["Breast"]);
+  }
+
+  if(sex=="Male"){
+    // builder.BuildMaleGenitalia(sensitivities["MaleGenitalia"]);
+    // builder.BuildTestes(sensitivities["Testes"]);
+  }
 
   return builder.GetPhantom(); 
 }

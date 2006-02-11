@@ -75,5 +75,22 @@ G4VPhysicalVolume* G4MIRDBreast::ConstructBreast(G4VPhysicalVolume* mother, G4St
 
   G4cout << "Breast created !!!!!!" << G4endl;
   
+  // Testing Breast Volume
+  G4double BreastVol = logicBreast->GetSolid()->GetCubicVolume();
+  G4cout << "Volume of Breast = " << BreastVol/cm3 << " cm^3" << G4endl;
+  
+  // Testing Breast Material
+  G4String BreastMat = logicBreast->GetMaterial()->GetName();
+  G4cout << "Material of Breast = " << BreastMat << G4endl;
+  
+  // Testing Density
+  G4double BreastDensity = logicBreast->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << BreastDensity*cm3/g << " g/cm^3" << G4endl;
+
+  // Testing Mass
+  G4double BreastMass = (BreastVol)*BreastDensity;
+  G4cout << "Mass of Breast = " << BreastMass/gram << " g" << G4endl;
+
+
   return physBreast;
 }

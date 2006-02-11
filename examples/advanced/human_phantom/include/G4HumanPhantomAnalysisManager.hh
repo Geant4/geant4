@@ -49,6 +49,7 @@ public:
   void particleProjectionXY(G4double, G4double);
   void particleProjectionYZ(G4double, G4double);
   void particleProjectionZX(G4double, G4double);
+  void bodypartEnergyDep(G4double,G4double);
   void finish();
 
 private:
@@ -64,7 +65,7 @@ private:
   AIDA::IHistogram2D*      projectionXY;
   AIDA::IHistogram2D*      projectionYZ;
   AIDA::IHistogram2D*      projectionZX;
-
+  AIDA::IHistogram2D*      energy;
 
 };
 #endif

@@ -31,7 +31,7 @@
   <material name="sZr" formula=" " Z="40."><D value="0.00649" /><atom value="91.22"/></material>
   <material name="sPb" formula=" " Z="82."><D value="0.01140" /><atom value="207.19"/></material>
   <material formula=" " name="SoftTissue">
-   <D value="1.04" />
+   <D value="1.04" unit="g/cm3" />
    <fraction n="0.10454" ref="sH" />
    <fraction n="0.22663" ref="sC" />
    <fraction n="0.02490" ref="sN" />

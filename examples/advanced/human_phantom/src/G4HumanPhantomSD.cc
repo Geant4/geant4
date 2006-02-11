@@ -33,7 +33,7 @@ G4HumanPhantomSD::G4HumanPhantomSD(G4String name)
 :G4VSensitiveDetector(name)
 {
   G4String HCname;
-  collectionName.insert(HCname="G4HumanPhantomSDCollection");
+  collectionName.insert(HCname="G4HumanPhantomHitsCollection");
 }
 
 
@@ -69,7 +69,7 @@ G4bool G4HumanPhantomSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 
   trackerCollection->insert( newHit );
   
-//  newHit->Print();
+  //  newHit->Print();
   //  newHit->Draw();
 
   return true;

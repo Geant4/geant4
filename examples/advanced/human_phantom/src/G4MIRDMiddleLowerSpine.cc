@@ -74,6 +74,23 @@ G4VPhysicalVolume* G4MIRDMiddleLowerSpine::ConstructMiddleLowerSpine(G4VPhysical
   logicMiddleLowerSpine->SetVisAttributes(MiddleLowerSpineVisAtt);
 
   G4cout << "MiddleLowerSpine created !!!!!!" << G4endl;
+
+  // Testing MiddleLowerSpine Volume
+  G4double MiddleLowerSpineVol = logicMiddleLowerSpine->GetSolid()->GetCubicVolume();
+  G4cout << "Volume of MiddleLowerSpine = " << MiddleLowerSpineVol/cm3 << " cm^3" << G4endl;
+  
+  // Testing MiddleLowerSpine Material
+  G4String MiddleLowerSpineMat = logicMiddleLowerSpine->GetMaterial()->GetName();
+  G4cout << "Material of MiddleLowerSpine = " << MiddleLowerSpineMat << G4endl;
+  
+  // Testing Density
+  G4double MiddleLowerSpineDensity = logicMiddleLowerSpine->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << MiddleLowerSpineDensity*cm3/g << " g/cm^3" << G4endl;
+
+  // Testing Mass
+  G4double MiddleLowerSpineMass = (MiddleLowerSpineVol)*MiddleLowerSpineDensity;
+  G4cout << "Mass of MiddleLowerSpine = " << MiddleLowerSpineMass/gram << " g" << G4endl;
+
   
   return physMiddleLowerSpine;
 }

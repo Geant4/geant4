@@ -4,7 +4,7 @@
   <constant name="PI" value="1.*pi" />
   <constant name="TWOPI" value="2.*pi"/>
   <constant name="HALFPI" value="0.5*pi"/>
-  <position name="SpleenPos" unit="cm" x="11." y="3." z="2." />
+  <position name="SpleenPos" unit="cm" x="9.49" y="2.94" z="1.8" />
   <rotation name="SpleenRot" unit="degree" x="0" y="0" z="0" />
  </define> 
 
@@ -50,7 +50,7 @@
  </materials>
 
  <solids>
-  <ellipsoid aunit="cm" lunit="cm" name="Spleen" ax="3.5" by="2." cz="6." />
+  <ellipsoid aunit="cm" lunit="cm" name="Spleen" ax="2.90" by="1.88" cz="5.19" />
  </solids>
 
  <structure>

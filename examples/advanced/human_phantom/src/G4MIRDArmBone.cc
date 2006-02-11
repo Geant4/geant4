@@ -75,6 +75,23 @@ G4VPhysicalVolume* G4MIRDArmBone::ConstructArmBone(G4VPhysicalVolume* mother, G4
   logicArmBone->SetVisAttributes(ArmBoneVisAtt);
 
   G4cout << "ArmBone created !!!!!!" << G4endl;
+ 
+  // Testing ArmBone Volume
+  G4double ArmBoneVol = logicArmBone->GetSolid()->GetCubicVolume();
+  G4cout << "Volume of ArmBone = " << ArmBoneVol/cm3 << " cm^3" << G4endl;
+  
+  // Testing ArmBone Material
+  G4String ArmBoneMat = logicArmBone->GetMaterial()->GetName();
+  G4cout << "Material of ArmBone = " << ArmBoneMat << G4endl;
+  
+  // Testing Density
+  G4double ArmBoneDensity = logicArmBone->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << ArmBoneDensity*cm3/g << " g/cm^3" << G4endl;
+
+  // Testing Mass
+  G4double ArmBoneMass = (ArmBoneVol)*ArmBoneDensity;
+  G4cout << "Mass of ArmBone = " << ArmBoneMass/gram << " g" << G4endl;
+
   
   return physArmBone;
 }

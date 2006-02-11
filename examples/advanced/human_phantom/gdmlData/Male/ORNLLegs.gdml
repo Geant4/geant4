@@ -5,7 +5,7 @@
   <constant name="TWOPI" value="2.*pi"/>
   <constant name="HALFPI" value="0.5*pi"/>
   <position name="LegsRelativePos" unit="cm" x="14.0" y="0.0" z="0.0" />
-  <position name="LegsPos" unit="cm" x="-7.0" y="-40.0" z="0" />
+  <position name="LegsPos" unit="cm" x="-7.0" y="-39.0" z="0" />
   <rotation name="LegsRot" unit="degree" x="90" y="0" z="0" />
  </define> 
 
@@ -108,7 +108,7 @@
  </materials>
 
  <solids>
-  <tube aunit="radian" lunit="cm" name="OneLeg" z="80.0" rmax="7.0" deltaphi="TWOPI"/>
+  <tube aunit="radian" lunit="cm" name="OneLeg" z="78.0" rmax="7.0" deltaphi="TWOPI"/>
   <union name="Legs">
    <first ref="OneLeg" />
    <second ref="OneLeg" />

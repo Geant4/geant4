@@ -77,6 +77,23 @@ G4VPhysicalVolume* G4MIRDTrunk::ConstructTrunk(G4VPhysicalVolume* mother, G4Stri
   logicTrunk->SetVisAttributes(TrunkVisAtt);
 
   G4cout << "Trunk created !!!!!!" << G4endl;
+
+  // Testing Trunk Volume
+  G4double TrunkVol = logicTrunk->GetSolid()->GetCubicVolume();
+  G4cout << "Volume of Trunk = " << TrunkVol/cm3 << " cm^3" << G4endl;
+  
+  // Testing Trunk Material
+  G4String TrunkMat = logicTrunk->GetMaterial()->GetName();
+  G4cout << "Material of Trunk = " << TrunkMat << G4endl;
+  
+  // Testing Density
+  G4double TrunkDensity = logicTrunk->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << TrunkDensity*cm3/g << " g/cm^3" << G4endl;
+
+  // Testing Mass
+  G4double TrunkMass = (TrunkVol)*TrunkDensity;
+  G4cout << "Mass of Trunk = " << TrunkMass/gram << " g" << G4endl;
+
   
   return physTrunk;
 }

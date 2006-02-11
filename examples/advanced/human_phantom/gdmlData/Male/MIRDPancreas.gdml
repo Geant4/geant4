@@ -5,8 +5,8 @@
   <constant name="TWOPI" value="2.*pi"/>
   <constant name="HALFPI" value="0.5*pi"/>
  
-  <position name="FirstSubtrPancreasRelativePos" unit="cm" x="-3." y="0.0" z="-9." />
-  <position name="PancreasPos" unit="cm" x="0." y="0.0" z="2." />
+  <position name="FirstSubtrPancreasRelativePos" unit="cm" x="-2.87" y="0.0" z="-8.685" />
+  <position name="PancreasPos" unit="cm" x="-0.72" y="0.0" z="1.8" />
   <rotation name="PancreasRot" unit="degree" x="0" y="90" z="0" />
  </define> 
 
@@ -52,8 +52,8 @@
  </materials>
 
  <solids>
-  <ellipsoid aunit="cm" lunit="cm" name="PancreasFirst" ax="3." by="1." cz="15." zcut1="-15." zcut2="0.0" />
-  <box aunit="cm" lunit="cm" name="SubtrPancreas" x="6." y="2.02" z="12." /> 
+   <ellipsoid aunit="cm" lunit="cm" name="PancreasFirst" ax="2.87" by="1.14" cz="13.32" zcut1="-13.32" zcut2="0.0" />
+  <box aunit="cm" lunit="cm" name="SubtrPancreas" x="5.74" y="2.30" z="10.71" /> 
   <subtraction name="Pancreas">
    <first ref="PancreasFirst" />
    <second ref="SubtrPancreas" />

@@ -8,6 +8,8 @@
 /event/verbose 0
 /tracking/verbose 0
 #
+# Create Scene and SceneHandler
+#
 # Run Particles
 #
 # for drawing the tracks
@@ -22,9 +24,10 @@
 /gun/energy 100. MeV
 #
 # Set Direction of Beam
+#
 #/gun/setBeam beamAlongX
 #/gun/setBeam beamAlongY
 /gun/setBeam beamAlongZ
 #/gun/setBeam isotropicFlux
 #
-/run/beamOn 20
+/run/beamOn 1000

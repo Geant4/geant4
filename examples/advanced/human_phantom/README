@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2005-08-25 14:54:04 gguerrie Exp $
+$Id: README,v 1.3 2006-02-11 09:18:16 gguerrie Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -30,7 +30,7 @@ HOW TO BUILD THE PHANTOM ?
   You can also edit the GNUmakefile provided with the example and
   customise it for your specific setup.
 
-- Customise the '*.gdml' schema file, specifying in the top line the
+- Customize the '*.gdml' schema file, specifying in the top line the
   right path where to retrieve the main GDML schema file (step that will
   become automatic in future).
 
@@ -40,6 +40,9 @@ HOW TO BUILD THE PHANTOM ?
 - Execute the application:
  	      % phantom
 	(default choice: adultFemale.mac 
-	 visualisators: vrmlVis.mac, dawnVis.mac, openGLVis.mac, noVis.mac
+	 other: adultMale.mac
+	 visualizators: vrmlVis.mac, dawnVis.mac, openGLVis.mac, noVis.mac
 	 run particle: run.mac)
 
+- For the Adult Male phantom: modify G4HumanPhantomBuilder.cc at lines 60/61 (for the sex definition) 
+  and lines 69 and ss. for the Body part construction.

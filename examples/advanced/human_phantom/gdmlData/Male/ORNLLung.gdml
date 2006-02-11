@@ -4,10 +4,10 @@
   <constant name="PI" value="1.*pi" />
   <constant name="TWOPI" value="2.*pi"/>
   <constant name="HALFPI" value="0.5*pi"/>
-  <position name="LungRelativePos" unit="cm" x="17." y="0.0" z="0.0" />
-  <position name="SubtrLungRelativePos" unit="cm" x="8.50" y="-5.0" z="0.0" />
+  <position name="LungRelativePos" unit="cm" x="14.66" y="0.0" z="0.0" />
+  <position name="SubtrLungRelativePos" unit="cm" x="7.50" y="-4.0" z="0.0" />
   <rotation name="SubtrLungRelativeRot" unit="degree" x="0" y="0" z="0" />
-  <position name="LungPos" unit="cm" x="-8.50" y="0.0" z="8.5" />
+  <position name="LungPos" unit="cm" x="-7.33" y="0.0" z="7.66" />
   <rotation name="LungRot" unit="degree" x="0" y="0" z="0" />
  </define> 
 
@@ -110,8 +110,8 @@
 
  <solids>
 
-  <ellipsoid aunit="cm" lunit="cm" name="OneLung" ax="5." by="7.5" cz="24.0" zcut1="0.0" zcut2="24.0" />
-  <ellipsoid aunit="cm" lunit="cm" name="SubtrLung" ax="6." by="8.5" cz="24.0" />
+  <ellipsoid aunit="cm" lunit="cm" name="OneLung" ax="4.09" by="6.98" cz="20.55" zcut1="0.0" zcut2="20.55" />
+  <ellipsoid aunit="cm" lunit="cm" name="SubtrLung" ax="5.0" by="7.0" cz="20.55" />
 
   <union name="Lung1">
    <first ref="OneLung" />

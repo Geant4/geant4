@@ -6,7 +6,7 @@
   <constant name="HALFPI" value="0.5*pi"/>
 
   <position name="HeartRelativePos" unit="cm" x="0.0" y="0.0" z="0.0" />
-  <position name="HeartPos" unit="cm" x="0.0" y="-3.0" z="16." />
+  <position name="HeartPos" unit="cm" x="0.0" y="-3.0" z="15.32" />
   <rotation name="HeartRot" unit="degree" x="0" y="25" z="0" />
  </define> 
 
@@ -53,8 +53,8 @@
  </materials>
 
  <solids>
-  <ellipsoid aunit="cm" lunit="cm" name="Heart1" ax="5.00" by="5.00" cz="8.00" zcut1="-8.00" zcut2="0.0" />
-  <sphere aunit="cm" lunit="cm" name="Heart2" rmax="5." deltaphi="TWOPI" deltatheta="HALFPI" />
+  <ellipsoid aunit="cm" lunit="cm" name="Heart1" ax="4.00" by="4.00" cz="7.00" zcut1="-7.00" zcut2="0.0" />
+  <sphere aunit="cm" lunit="cm" name="Heart2" rmax="3.99" deltaphi="TWOPI" deltatheta="HALFPI" />
   <union name="Heart">
    <first ref="Heart1" />
    <second ref="Heart2" />
