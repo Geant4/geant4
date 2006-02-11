@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.7 2005-08-18 15:05:13 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.8 2006-02-11 11:26:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,13 +42,14 @@
 // 13-02-03 Add name (V.Ivanchenko)
 // 24-03-05 Add G4EmCorrections (V.Ivanchenko)
 // 11-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 11-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
 //
 // -------------------------------------------------------------------
 //
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4BetheBlochModel.hh"
 #include "Randomize.hh"
@@ -57,11 +58,12 @@
 #include "G4EmCorrections.hh"
 #include "G4ParticleChangeForLoss.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 using namespace std;
 
-G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p, const G4String& nam)
+G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p, 
+                                     const G4String& nam)
   : G4VEmModel(nam),
   particle(0),
   twoln10(2.0*log(10.0)),
@@ -73,12 +75,12 @@ G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p, const G4Stri
   theElectron = G4Electron::Electron();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4BetheBlochModel::~G4BetheBlochModel()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4BetheBlochModel::MinEnergyCut(const G4ParticleDefinition*,
                                          const G4MaterialCutsCouple* couple)
@@ -86,25 +88,87 @@ G4double G4BetheBlochModel::MinEnergyCut(const G4ParticleDefinition*,
   return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4BetheBlochModel::Initialise(const G4ParticleDefinition* p,
                                    const G4DataVector&)
 {
-  if(!particle) SetParticle(p);
+  if (!particle) SetParticle(p);
   G4String pname = particle->GetParticleName();
-  if(particle->GetParticleType() == "nucleus" &&
+  if (particle->GetParticleType() == "nucleus" &&
      pname != "deuteron" && pname != "triton") isIon = true;
 
-  if(pParticleChange) 
-    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
+  if (pParticleChange) 
+    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>
+                                                              (pParticleChange);
   else 
     fParticleChange = new G4ParticleChangeForLoss();
 
   corr = G4LossTableManager::Instance()->EmCorrections();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4BetheBlochModel::ComputeCrossSectionPerElectron(
+                                           const G4ParticleDefinition* p,
+                                                 G4double kineticEnergy,
+                                                 G4double cutEnergy,
+                                                 G4double maxKinEnergy)						  
+{
+  G4double cross = 0.0;
+  G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
+  G4double maxEnergy = min(tmax,maxKinEnergy);
+  if(cutEnergy < maxEnergy) {
+
+    G4double totEnergy = kineticEnergy + mass;
+    G4double energy2   = totEnergy*totEnergy;
+    G4double beta2     = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
+
+    cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*log(maxEnergy/cutEnergy)/tmax;
+
+    // +term for spin=1/2 particle
+    if( 0.5 == spin ) cross += 0.5*(maxEnergy - cutEnergy)/energy2;
+
+    cross *= twopi_mc2_rcl2*chargeSquare/beta2;
+  }
+  
+   // G4cout << "BB: e= " << kineticEnergy << " tmin= " << cutEnergy 
+   //        << " tmax= " << tmax << " cross= " << cross << G4endl;
+  
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4BetheBlochModel::ComputeCrossSectionPerAtom(
+                                           const G4ParticleDefinition* p,
+                                                 G4double kineticEnergy,
+						 G4double Z, G4double,
+                                                 G4double cutEnergy,
+                                                 G4double maxEnergy)
+{
+  G4double cross = Z*ComputeCrossSectionPerElectron
+                                         (p,kineticEnergy,cutEnergy,maxEnergy);
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4BetheBlochModel::CrossSectionPerVolume(
+					   const G4Material* material,
+                                           const G4ParticleDefinition* p,
+                                                 G4double kineticEnergy,
+                                                 G4double cutEnergy,
+                                                 G4double maxEnergy)
+{
+  G4double eDensity = material->GetElectronDensity();
+  G4double cross = eDensity*ComputeCrossSectionPerElectron
+                                         (p,kineticEnergy,cutEnergy,maxEnergy);
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
 						 const G4ParticleDefinition* p,
@@ -159,36 +223,7 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
   return dedx;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4BetheBlochModel::CrossSectionPerVolume(const G4Material* material,
-						  const G4ParticleDefinition* p,
-						  G4double kineticEnergy,
-						  G4double cutEnergy,
-						  G4double maxKinEnergy)
-{
-  G4double cross = 0.0;
-  G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
-  G4double maxEnergy = min(tmax,maxKinEnergy);
-  if(cutEnergy < maxEnergy) {
-
-    G4double totEnergy = kineticEnergy + mass;
-    G4double energy2   = totEnergy*totEnergy;
-    G4double beta2     = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
-
-    cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*log(maxEnergy/cutEnergy)/tmax;
-
-    // +term for spin=1/2 particle
-    if( 0.5 == spin ) cross += 0.5*(maxEnergy - cutEnergy)/energy2;
-
-    cross *= twopi_mc2_rcl2*chargeSquare*material->GetElectronDensity()/beta2;
-  }
-  //  G4cout << "BB: e= " << kineticEnergy << " tmin= " << cutEnergy << " tmax= " << tmax
-  //       << " cross= " << cross << G4endl;
-  return cross;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 vector<G4DynamicParticle*>* G4BetheBlochModel::SampleSecondaries(
                              const G4MaterialCutsCouple*,
@@ -211,8 +246,8 @@ vector<G4DynamicParticle*>* G4BetheBlochModel::SampleSecondaries(
   // sampling follows ...
   do {
     G4double q = G4UniformRand();
-    deltaKinEnergy = minKinEnergy*maxKinEnergy/(minKinEnergy*(1.0 - q) + maxKinEnergy*q);
-
+    deltaKinEnergy = minKinEnergy*maxKinEnergy
+                    /(minKinEnergy*(1.0 - q) + maxKinEnergy*q);
 
     f = 1.0 - beta2*deltaKinEnergy/tmax;
     if( 0.5 == spin ) f += 0.5*deltaKinEnergy*deltaKinEnergy/etot2;
@@ -236,13 +271,13 @@ vector<G4DynamicParticle*>* G4BetheBlochModel::SampleSecondaries(
   G4double phi = twopi * G4UniformRand() ;
 
 
-  G4ThreeVector deltaDirection(sint*cos(phi),sint*sin(phi), cost) ;
+  G4ThreeVector deltaDirection(sint*cos(phi),sint*sin(phi), cost);
   G4ThreeVector direction = dp->GetMomentumDirection();
   deltaDirection.rotateUz(direction);
 
   // create G4DynamicParticle object for delta ray
   G4DynamicParticle* delta = new G4DynamicParticle(theElectron,
-                                                   deltaDirection,deltaKinEnergy);
+                                                 deltaDirection,deltaKinEnergy);
 
   vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
   vdp->push_back(delta);
@@ -258,4 +293,4 @@ vector<G4DynamicParticle*>* G4BetheBlochModel::SampleSecondaries(
   return vdp;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

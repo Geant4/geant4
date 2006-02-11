@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.hh,v 1.5 2005-05-12 11:06:42 vnivanch Exp $
+// $Id: G4BetheBlochModel.hh,v 1.6 2006-02-11 11:26:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -43,6 +43,8 @@
 // 24-03-05 Add G4EmCorrections (V.Ivanchenko)
 // 11-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 11-04-04 Move MaxSecondaryEnergy to models (V.Ivanchenko)
+// 11-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
+
 //
 // Class Description:
 //
@@ -65,7 +67,8 @@ class G4BetheBlochModel : public G4VEmModel
 
 public:
 
-  G4BetheBlochModel(const G4ParticleDefinition* p = 0, const G4String& nam = "BetheBloch");
+  G4BetheBlochModel(const G4ParticleDefinition* p = 0,
+                    const G4String& nam = "BetheBloch");
 
   virtual ~G4BetheBlochModel();
 
@@ -73,17 +76,30 @@ public:
 
   G4double MinEnergyCut(const G4ParticleDefinition*,
 			const G4MaterialCutsCouple*);
-
+			
+  virtual G4double ComputeCrossSectionPerElectron(
+				 const G4ParticleDefinition*,
+				 G4double kineticEnergy,
+				 G4double cutEnergy,
+				 G4double maxEnergy);
+				 
+  virtual G4double ComputeCrossSectionPerAtom(
+				 const G4ParticleDefinition*,
+				 G4double kineticEnergy,
+				 G4double Z, G4double A,
+				 G4double cutEnergy,
+				 G4double maxEnergy);
+				 				 
+  virtual G4double CrossSectionPerVolume(const G4Material*,
+				 const G4ParticleDefinition*,
+				 G4double kineticEnergy,
+				 G4double cutEnergy,
+				 G4double maxEnergy);
+				 
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
 					const G4ParticleDefinition*,
 					G4double kineticEnergy,
 					G4double cutEnergy);
-
-  virtual G4double CrossSectionPerVolume(const G4Material*,
-					 const G4ParticleDefinition*,
-					 G4double kineticEnergy,
-					 G4double cutEnergy,
-					 G4double maxEnergy);
 
   virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,

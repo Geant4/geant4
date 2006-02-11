@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc,v 1.23 2006-02-09 13:06:12 maire Exp $
+// $Id: G4MollerBhabhaModel.cc,v 1.24 2006-02-11 11:26:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -106,7 +106,8 @@ void G4MollerBhabhaModel::Initialise(const G4ParticleDefinition* p,
 {
   if(!particle) SetParticle(p);
   if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
+    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>
+                                                     (pParticleChange);
   else
     fParticleChange = new G4ParticleChangeForLoss();
 }
@@ -192,6 +193,7 @@ G4double G4MollerBhabhaModel::CrossSectionPerVolume(
                                          (p,kineticEnergy,cutEnergy,maxEnergy);
   return cross;
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
