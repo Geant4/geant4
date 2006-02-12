@@ -68,13 +68,17 @@ G4double G4XTRTransparentRegRadModel::SpectralXTRdEdx(G4double energy)
   G4double result, sum = 0., tmp, cof1, cof2, cofMin, cofPHC,aMa, bMb, sigma;
   G4int k, kMax, kMin;
 
-  aMa = fPlateThick*GetPlateLinearPhotoAbs(energy);
-  bMb = fGasThick*GetGasLinearPhotoAbs(energy);
+  aMa = GetPlateLinearPhotoAbs(energy);
+  bMb = GetGasLinearPhotoAbs(energy);
+
   if(fCompton)
   {
     aMa += GetPlateCompton(energy);
     bMb += GetGasCompton(energy);
   }
+  aMa *= fPlateThick;
+  bMb *= fGasThick;
+
   sigma = aMa + bMb;
    
   cofPHC  = 4*pi*hbarc;
