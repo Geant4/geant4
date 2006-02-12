@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.hh,v 1.16 2006-01-27 15:30:22 grichine Exp $
+// $Id: G4VXTRenergyLoss.hh,v 1.17 2006-02-12 17:22:02 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -144,19 +144,23 @@ public:
 
   // Auxiliary functions for plate/gas material parameters
 
-  G4double  GetPlateFormationZone(G4double,G4double,G4double) ;
-  G4complex GetPlateComplexFZ(G4double,G4double,G4double) ;
-  void      ComputePlatePhotoAbsCof() ;
-  G4double  GetPlateLinearPhotoAbs(G4double) ;
+  G4double  GetPlateFormationZone(G4double,G4double,G4double);
+  G4complex GetPlateComplexFZ(G4double,G4double,G4double);
+  void      ComputePlatePhotoAbsCof();
+  G4double  GetPlateLinearPhotoAbs(G4double);
   void      GetPlateZmuProduct() ;
-  G4double  GetPlateZmuProduct(G4double,G4double,G4double) ;
+  G4double  GetPlateZmuProduct(G4double,G4double,G4double);
 
-  G4double  GetGasFormationZone(G4double,G4double,G4double) ;
-  G4complex GetGasComplexFZ(G4double,G4double,G4double) ;
+  G4double  GetGasFormationZone(G4double,G4double,G4double);
+  G4complex GetGasComplexFZ(G4double,G4double,G4double);
   void      ComputeGasPhotoAbsCof();
   G4double  GetGasLinearPhotoAbs(G4double);
   void      GetGasZmuProduct();
   G4double  GetGasZmuProduct(G4double,G4double,G4double);
+
+  G4double GetPlateCompton(G4double);
+  G4double GetGasCompton(G4double);
+  G4double GetComptonPerAtom(G4double,G4double);
 
   G4double GetXTRrandomEnergy( G4double scaledTkin, G4int iTkin );
   G4double GetXTRenergy( G4int iPlace, G4double position, G4int iTransfer  );
@@ -172,6 +176,7 @@ public:
   void SetEnergy(G4double energy)    {fEnergy   = energy;};                
   void SetVarAngle(G4double varAngle){fVarAngle = varAngle;};               
   void SetAngleRadDistr(G4bool pAngleRadDistr){fAngleRadDistr=pAngleRadDistr;};               
+  void SetCompton(G4bool pC){fCompton=pC;};               
   void SetVerboseLevel(G4int verbose){fVerbose=verbose;};
 
 
@@ -215,6 +220,7 @@ protected:
 
   G4bool fExitFlux;
   G4bool fAngleRadDistr;
+  G4bool fCompton;
   G4double fSigma1, fSigma2 ;               // plasma energy Sq of matter1/2
 
   G4int fMatIndex1, fMatIndex2 ;

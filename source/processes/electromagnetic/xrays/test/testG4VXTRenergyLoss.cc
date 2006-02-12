@@ -628,7 +628,7 @@ int main()
   // test of XTR table step do-it
 
 
-  G4double energyTR=2*keV, cofAngle = 5.1,  angle2, dNdA;
+  G4double energyTR=10*keV, cofAngle = 5.1,  angle2, dNdA, xCompton, lambdaC;
   G4double charge = 1.0;
   G4double chargeSq  = charge*charge ;
   G4double gamma     = 1.3e3; 
@@ -639,17 +639,24 @@ int main()
 
   processXTR->GetAngleVector(energyTR,nBin);
 
+  xCompton = processXTR->GetGasCompton(energyTR);
+
+  lambdaC = 1./xCompton;
+
+  G4cout<<"lambdaC = "<<lambdaC/m <<" m; for energy = "<<energyTR/keV<<" keV"<<G4endl;
+
   // G4double dNdA = processXTR->SpectralXTRdEdx(energyTR);
 
   // G4double angle2 = cofAngle*cofAngle/gamma/gamma;
 
   // G4double dNdAngle = processXTR-> AngleXTRdEdx(angle2);
+  /*
   for(i = 0; i < 40; i++ )
   {
     angle2 = processXTR->GetRandomAngle(energyTR,40);
     G4cout<<"random theta*gamma = "<<std::sqrt(angle2)*gamma<<G4endl;
   }
-
+  */
 
   /*
   for(i = 0; i < 40; i++ )

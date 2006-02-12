@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.31 2006-01-30 11:31:15 grichine Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.32 2006-02-12 17:22:02 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -112,8 +112,11 @@ G4XTRenergyLoss::G4XTRenergyLoss(G4LogicalVolume *anEnvelope,
     G4Exception("No plates in X-ray TR radiator") ;
   }
   // default is XTR dEdx, not flux after radiator
+
+  fExitFlux      = false;
   fAngleRadDistr = false;
-  fExitFlux = false;
+  fCompton       = false;
+
   fLambda = DBL_MAX;
   // Mean thicknesses of plates and gas gaps
 
@@ -1481,6 +1484,103 @@ void G4XTRenergyLoss::GetGasZmuProduct()
   }
   return  ;
 }
+
+////////////////////////////////////////////////////////////////////////
+//
+// Computes Compton cross section for plate material in 1/mm
+
+G4double G4XTRenergyLoss::GetPlateCompton(G4double omega) 
+{
+  G4int i, numberOfElements;
+  G4double xSection = 0., nowZ, sumZ = 0.;
+
+  static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  numberOfElements = (*theMaterialTable)[fMatIndex1]->GetNumberOfElements() ;
+
+  for( i = 0; i < numberOfElements; i++ )
+  {
+     nowZ      = (*theMaterialTable)[fMatIndex1]->GetElement(i)->GetZ();
+     sumZ     += nowZ;
+     xSection += GetComptonPerAtom(omega,nowZ); // *nowZ;
+  }
+  xSection /= sumZ;
+  xSection *= (*theMaterialTable)[fMatIndex1]->GetElectronDensity();
+   return xSection;
+}
+
+
+////////////////////////////////////////////////////////////////////////
+//
+// Computes Compton cross section for gas material in 1/mm
+
+G4double G4XTRenergyLoss::GetGasCompton(G4double omega) 
+{
+  G4int i, numberOfElements;
+  G4double xSection = 0., nowZ, sumZ = 0.;
+
+  static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  numberOfElements = (*theMaterialTable)[fMatIndex2]->GetNumberOfElements() ;
+
+  for( i = 0; i < numberOfElements; i++ )
+  {
+     nowZ      = (*theMaterialTable)[fMatIndex2]->GetElement(i)->GetZ();
+     sumZ     += nowZ;
+     xSection += GetComptonPerAtom(omega,nowZ); // *nowZ;
+  }
+  xSection /= sumZ;
+  xSection *= (*theMaterialTable)[fMatIndex2]->GetElectronDensity();
+   return xSection;
+}
+
+
+
+////////////////////////////////////////////////////////////////////////
+//
+// Computes Compton cross section per atom with Z electrons for gamma with
+// the energy GammaEnergy
+
+G4double G4XTRenergyLoss::GetComptonPerAtom(G4double GammaEnergy, G4double Z) 
+{
+  G4double CrossSection = 0.0 ;
+  if ( Z < 0.9999 )                 return CrossSection;
+  if ( GammaEnergy < 0.1*keV      ) return CrossSection;
+  if ( GammaEnergy > (100.*GeV/Z) ) return CrossSection;
+
+  static const G4double a = 20.0 , b = 230.0 , c = 440.0;
+
+  static const G4double
+  d1= 2.7965e-1*barn, d2=-1.8300e-1*barn, d3= 6.7527   *barn, d4=-1.9798e+1*barn,
+  e1= 1.9756e-5*barn, e2=-1.0205e-2*barn, e3=-7.3913e-2*barn, e4= 2.7079e-2*barn,
+  f1=-3.9178e-7*barn, f2= 6.8241e-5*barn, f3= 6.0480e-5*barn, f4= 3.0274e-4*barn;
+
+  G4double p1Z = Z*(d1 + e1*Z + f1*Z*Z), p2Z = Z*(d2 + e2*Z + f2*Z*Z),
+           p3Z = Z*(d3 + e3*Z + f3*Z*Z), p4Z = Z*(d4 + e4*Z + f4*Z*Z);
+
+  G4double T0  = 15.0*keV;
+  if (Z < 1.5) T0 = 40.0*keV;
+
+  G4double X   = max(GammaEnergy, T0) / electron_mass_c2;
+  CrossSection = p1Z*std::log(1.+2.*X)/X
+               + (p2Z + p3Z*X + p4Z*X*X)/(1. + a*X + b*X*X + c*X*X*X);
+
+  //  modification for low energy. (special case for Hydrogen)
+
+  if (GammaEnergy < T0) 
+  {
+    G4double dT0 = 1.*keV;
+    X = (T0+dT0) / electron_mass_c2 ;
+    G4double sigma = p1Z*log(1.+2*X)/X
+                    + (p2Z + p3Z*X + p4Z*X*X)/(1. + a*X + b*X*X + c*X*X*X);
+    G4double   c1 = -T0*(sigma-CrossSection)/(CrossSection*dT0);
+    G4double   c2 = 0.150;
+    if (Z > 1.5) c2 = 0.375-0.0556*log(Z);
+    G4double    y = log(GammaEnergy/T0);
+    CrossSection *= exp(-y*(c1+c2*y));
+  }
+  //  G4cout << "e= " << GammaEnergy << " Z= " << Z << " cross= " << CrossSection << G4endl;
+  return CrossSection;  
+}
+
 
 ///////////////////////////////////////////////////////////////////////
 //
