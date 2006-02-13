@@ -372,6 +372,11 @@ void Em10Materials::Initialise()
   XeArCH4->AddMaterial( Xe5CH4,       fractionmass = 0.766 );
   XeArCH4->AddMaterial( Ar7CH4,   fractionmass = 0.234 );
 
+  // Silicon as detector material
+
+  density = 2.330*g/cm3;
+  a = 28.09*g/mole;
+  G4Material* Si = new G4Material(name="Si", z=14., a, density);
 
 
 
