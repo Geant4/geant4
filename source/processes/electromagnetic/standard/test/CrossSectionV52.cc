@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: CrossSectionV52.cc,v 1.2 2006-02-13 10:14:22 maire Exp $
+// $Id: CrossSectionV52.cc,v 1.3 2006-02-13 16:52:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
 //
-//  To print the cross sections and mean free path
+//  To print cross sections per atom and mean free path for simple material
 //
 #include "G4Material.hh"
 
@@ -73,7 +73,7 @@ int main() {
   //
   G4double Emin = 1.01*MeV, Emax = 2.01*MeV, dE = 100*keV;
 
-  G4cout << "\n #### Gamma CrossSection and MeanFreePath for " 
+  G4cout << "\n #### Gamma CrossSectionPerAtom and MeanFreePath for " 
          << material->GetName() << G4endl;
   G4cout << "\n Energy \t PhotoElec \t Compton \t Conversion \t";
   G4cout <<           "\t PhotoElec \t Compton \t Conversion" << G4endl;
@@ -106,7 +106,7 @@ int main() {
   //
   Emin = 1.01*MeV; Emax = 2.01*MeV; dE = 100*keV;
 
-  G4cout << "\n #### e+ annihilation CrossSection and MeanFreePath for " 
+  G4cout << "\n #### e+ annihilation CrossSectionPerAtom and MeanFreePath for " 
          << material->GetName() << G4endl;
   G4cout << "\n Energy \t e+ annihil \t";
   G4cout <<           "\t e+ annihil" << G4endl;
@@ -135,7 +135,7 @@ int main() {
   Emin = 1.01*MeV; Emax = 101.01*MeV; dE = 10*MeV;
   G4double Ecut = 100*keV;
 
-  G4cout << "\n ####electron: CrossSection and StoppingPower for "
+  G4cout << "\n ####electron: CrossSectionPerAtom and StoppingPower for "
          << material->GetName() 
 	 << ";\tEnergy cut = " << G4BestUnit (Ecut, "Energy") << G4endl;
 	 
@@ -170,7 +170,7 @@ int main() {
   Emin = 1.01*MeV; Emax = 101.01*MeV; dE = 10*MeV;
   Ecut = 100*keV;
 
-  G4cout << "\n ####proton: CrossSection and StoppingPower for "
+  G4cout << "\n ####proton: CrossSectionPerAtom and StoppingPower for "
          << material->GetName() 
 	 << ";\tEnergy cut = " << G4BestUnit (Ecut, "Energy") << G4endl;
 	 
@@ -202,9 +202,9 @@ int main() {
   // compute CrossSection per atom and restricted dE/dx
   //
   Emin = 1.01*GeV; Emax = 101.01*GeV; dE = 10*GeV;
-  Ecut = 100*keV;
+  Ecut = 10*MeV;
 
-  G4cout << "\n ####muon: CrossSection and StoppingPower for "
+  G4cout << "\n ####muon: CrossSectionPerAtom and StoppingPower for "
          << material->GetName() 
 	 << ";\tEnergy cut = " << G4BestUnit (Ecut, "Energy") << G4endl;
 	 

@@ -1,4 +1,4 @@
-$Id: History,v 1.208 2006-02-13 10:14:21 maire Exp $
+$Id: History,v 1.209 2006-02-13 16:52:24 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
    
-11 February 06 : mma
+11 February 06 : mma (emstand-V08-00-07)
 - added functions G4BetheBlochModel::ComputeCrossSectionPerElectron/Atom()
 - move G4LossTableManager::Instance()->EmCorrections() in constructor
      

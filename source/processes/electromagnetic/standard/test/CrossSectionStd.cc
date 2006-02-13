@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: CrossSectionStd.cc,v 1.2 2006-02-13 10:14:22 maire Exp $
+// $Id: CrossSectionStd.cc,v 1.3 2006-02-13 16:52:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
 //
-//  To print the cross sections and mean free path
+//  To print cross sections per atom and mean free path for simple material
 //
 #include "G4Material.hh"
 
@@ -81,7 +81,7 @@ int main() {
   //
   G4double Emin = 1.01*MeV, Emax = 2.01*MeV, dE = 100*keV;
 
-  G4cout << "\n #### Gamma : CrossSection and MeanFreePath for " 
+  G4cout << "\n #### Gamma : CrossSectionPerAtom and MeanFreePath for " 
          << material->GetName() << G4endl;
   G4cout << "\n Energy \t PhotoElec \t Compton \t Conversion \t";
   G4cout <<           "\t PhotoElec \t Compton \t Conversion" << G4endl;
@@ -116,7 +116,7 @@ int main() {
   //
   Emin = 1.01*MeV; Emax = 2.01*MeV; dE = 100*keV;
 
-  G4cout << "\n #### e+ annihilation : CrossSection and MeanFreePath for " 
+  G4cout << "\n #### e+ annihilation : CrossSectionPerAtom and MeanFreePath for " 
          << material->GetName() << G4endl;
   G4cout << "\n Energy \t e+ annihil \t";
   G4cout <<           "\t e+ annihil" << G4endl;
@@ -216,7 +216,7 @@ int main() {
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
-  // initialise electron processes (models)
+  // initialise muon processes (models)
   // 
   G4ParticleDefinition* muon = G4MuonPlus::MuonPlus();
    
@@ -227,15 +227,14 @@ int main() {
   // compute CrossSection per atom and MeanFreePath
   //
   Emin = 1.01*GeV; Emax = 101.01*GeV; dE = 10*GeV;
-  Ecut = 100*keV;
+  Ecut = 10*MeV;
 
-  G4cout << "\n ####muon: CrossSection, MeanFreePath and StoppingPower for "
+  G4cout << "\n ####muon: CrossSection and MeanFreePath for "
          << material->GetName() 
 	 << ";\tEnergy cut = " << G4BestUnit (Ecut, "Energy") << G4endl;
 	 
-  G4cout << "\n Energy \t ionization \t bremsstra \t";
-  G4cout <<           "\t ionization \t bremsstra \t";
-  G4cout <<           "\t ionization \t bremsstra" << G4endl;
+  G4cout << "\n Energy \t ionization \t bremsstra \t pair_prod \t";
+  G4cout <<           "\t ionization \t bremsstra \t pair_prod" << G4endl;
   
   for (G4double Energy = Emin; Energy <= Emax; Energy += dE) {
     G4cout << "\n " << G4BestUnit (Energy, "Energy")
@@ -244,23 +243,44 @@ int main() {
                    "Surface")
      << "\t" 
      << G4BestUnit (brem->ComputeCrossSectionPerAtom(muon,Energy,Z,A,Ecut),
-                   "Surface")		   
+                   "Surface")
+     << "\t" 		   
+     << G4BestUnit (pair->ComputeCrossSectionPerAtom(muon,Energy,Z,A,Ecut),
+                   "Surface")		   		   
      << "\t \t"	 
      << G4BestUnit (ioni->ComputeMeanFreePath(muon,Energy,material,Ecut),
                    "Length")
      << "\t"	 
      << G4BestUnit (brem->ComputeMeanFreePath(muon,Energy,material,Ecut),
-                   "Length")		   
-     << "\t \t"	 
-     << G4BestUnit (ioni->ComputeDEDXPerVolume(material,muon,Energy,Ecut),
-                   "Energy/Length")
+                   "Length")
      << "\t"	 
-     << G4BestUnit (brem->ComputeDEDXPerVolume(material,muon,Energy,Ecut),
-                   "Energy/Length");		   		   
+     << G4BestUnit (pair->ComputeMeanFreePath(muon,Energy,material,Ecut),
+                   "Length");		   		      		   		   
   }
   
   G4cout << G4endl;
   
+  G4cout << "\n ####muon: StoppingPower for "
+         << material->GetName() 
+	 << ";\tEnergy cut = " << G4BestUnit (Ecut, "Energy") << G4endl;
+	 
+  G4cout << "\n Energy \t ionization \t bremsstra \t pair_prod \t" << G4endl;
+  
+  for (G4double Energy = Emin; Energy <= Emax; Energy += dE) {
+    G4cout << "\n " << G4BestUnit (Energy, "Energy")
+     << "\t"	 
+     << G4BestUnit (ioni->ComputeDEDXPerVolume(material,muon,Energy,Ecut),
+                   "Energy/Length")
+     << "\t"	 
+     << G4BestUnit (brem->ComputeDEDXPerVolume(material,muon,Energy,Ecut),
+                   "Energy/Length")
+     << "\t"	 
+     << G4BestUnit (pair->ComputeDEDXPerVolume(material,muon,Energy,Ecut),
+                   "Energy/Length");		   		   		   
+  }
+  
+  G4cout << G4endl;
+    
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
                                  
 return EXIT_SUCCESS;
