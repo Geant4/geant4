@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.hh,v 1.13 2005-08-04 08:19:04 vnivanch Exp $
+// $Id: G4MuBremsstrahlungModel.hh,v 1.14 2006-02-13 16:46:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,7 @@
 // 13-02-03 Add name (V.Ivanchenko)
 // 10-02-04 Add lowestKinEnergy (V.Ivanchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 13-02-06 add ComputeCrossSectionPerAtom (mma)
 //
 
 //
@@ -64,7 +65,8 @@ class G4MuBremsstrahlungModel : public G4VEmModel
 
 public:
 
-  G4MuBremsstrahlungModel(const G4ParticleDefinition* p = 0, const G4String& nam = "MuBrem");
+  G4MuBremsstrahlungModel(const G4ParticleDefinition* p = 0,
+                          const G4String& nam = "MuBrem");
 
   virtual ~G4MuBremsstrahlungModel();
 
@@ -76,20 +78,25 @@ public:
 
   G4double MinEnergyCut(const G4ParticleDefinition*,
                         const G4MaterialCutsCouple*);
-
-  G4double ComputeDEDXPerVolume(
-                        const G4Material*,
-                        const G4ParticleDefinition*,
-                              G4double kineticEnergy,
-                              G4double cutEnergy);
-
-  G4double CrossSectionPerVolume(
-			const G4Material*,
-                        const G4ParticleDefinition*,
-                              G4double kineticEnergy,
-                              G4double cutEnergy,
-                              G4double maxEnergy);
-
+			      
+  virtual G4double ComputeCrossSectionPerAtom(
+				 const G4ParticleDefinition*,
+				 G4double kineticEnergy,
+				 G4double Z, G4double A,
+				 G4double cutEnergy,
+				 G4double maxEnergy);
+				 
+  virtual G4double CrossSectionPerVolume(const G4Material*,
+                         const G4ParticleDefinition*,
+                               G4double kineticEnergy,
+                               G4double cutEnergy,
+                               G4double maxEnergy);
+			       
+  virtual G4double ComputeDEDXPerVolume(const G4Material*,
+                                const G4ParticleDefinition*,
+                                G4double kineticEnergy,
+                                G4double cutEnergy);
+			      
   std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
@@ -103,26 +110,26 @@ protected:
 
 public:
 
-  G4double ComputMuBremLoss(G4double Z, G4double A, G4double tkin, G4double cut);
+ G4double ComputMuBremLoss(G4double Z, G4double A, G4double tkin, G4double cut);
 
-  G4double ComputeMicroscopicCrossSection(G4double tkin,
+ G4double ComputeMicroscopicCrossSection(G4double tkin,
                                            G4double Z,
                                            G4double A,
                                            G4double cut);
 
-  G4double ComputeDMicroscopicCrossSection(G4double tkin,
-                                           G4double Z,
-                                           G4double A,
-                                           G4double gammaEnergy);
+ G4double ComputeDMicroscopicCrossSection(G4double tkin,
+                                          G4double Z,
+                                          G4double A,
+                                          G4double gammaEnergy);
 
 private:
 
-  G4DataVector* ComputePartialSumSigma(const G4Material* material,
+ G4DataVector* ComputePartialSumSigma(const G4Material* material,
                                              G4double tkin, G4double cut);
 
-  const G4Element* SelectRandomAtom(const G4MaterialCutsCouple* couple) const;
+ const G4Element* SelectRandomAtom(const G4MaterialCutsCouple* couple) const;
 
-  void MakeSamplingTables();
+ void MakeSamplingTables();
 
 
   // hide assignment operator
@@ -150,7 +157,7 @@ private:
 
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4MuBremsstrahlungModel::MaxSecondaryEnergy(
                                  const G4ParticleDefinition*,
@@ -159,6 +166,6 @@ inline G4double G4MuBremsstrahlungModel::MaxSecondaryEnergy(
   return kineticEnergy;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

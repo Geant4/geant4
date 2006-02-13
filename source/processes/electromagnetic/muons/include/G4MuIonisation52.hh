@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuIonisation52.hh,v 1.2 2004-11-10 08:49:09 vnivanch Exp $
+// $Id: G4MuIonisation52.hh,v 1.3 2006-02-13 16:46:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------- G4MuIonisation52 physics process ------------------------------
@@ -36,6 +36,7 @@
 // 16-01-03 Migrade to cut per region (V.Ivanchenko)
 // 08-08-03 This class is frozen at the release 5.2 (V.Ivanchenko)
 // 08-11-04 Remove interface of Store/Retrieve tables (V.Ivantchenko)
+// 10-02-06 ComputeCrossSectionPerAtom() and dEdx() made public (mma)
 //
 // -----------------------------------------------------------------------------
 
@@ -104,7 +105,7 @@ class G4MuIonisation52 : public G4VMuEnergyLoss
       // It is invoked by the ProcessManager of the Particle.
 
 
-  protected:   // with description
+  public:   // with description
 
     virtual G4double ComputeRestrictedMeandEdx(
                             const G4ParticleDefinition& aParticleType,
