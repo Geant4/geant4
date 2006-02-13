@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: CrossSectionV52.cc,v 1.1 2006-02-09 13:06:12 maire Exp $
+// $Id: CrossSectionV52.cc,v 1.2 2006-02-13 10:14:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -40,6 +40,10 @@
 #include "G4eBremsstrahlung52.hh"
 
 #include "G4hIonisation52.hh"
+
+#include "G4MuIonisation52.hh"
+#include "G4MuBremsstrahlung52.hh"
+#include "G4MuPairProduction52.hh"
 
 #include "globals.hh"
 #include "G4UnitsTable.hh"
@@ -183,6 +187,50 @@ int main() {
                    "Energy/Length");   		   
   }
   
-  G4cout << G4endl;                             
+  G4cout << G4endl;
+  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+  // initialise muon processes
+  // 
+  G4ParticleDefinition* muon = G4MuonPlus::MuonPlus();
+   
+  G4MuIonisation52* muioni = new G4MuIonisation52();
+  G4MuBremsstrahlung52* mubrem = new G4MuBremsstrahlung52();
+  G4MuPairProduction52* mupair = new G4MuPairProduction52();
+      
+  // compute CrossSection per atom and restricted dE/dx
+  //
+  Emin = 1.01*GeV; Emax = 101.01*GeV; dE = 10*GeV;
+  Ecut = 100*keV;
+
+  G4cout << "\n ####muon: CrossSection and StoppingPower for "
+         << material->GetName() 
+	 << ";\tEnergy cut = " << G4BestUnit (Ecut, "Energy") << G4endl;
+	 
+  G4cout << "\n Energy \t ionization \t bremsstra \t pair_prod  \t";
+  G4cout <<           "\t ionization" << G4endl;
+  
+  for (G4double Energy = Emin; Energy <= Emax; Energy += dE) {
+    G4cout << "\n " << G4BestUnit (Energy, "Energy")
+     << "\t" 
+     << G4BestUnit (muioni->ComputeCrossSectionPerAtom(*muon,Energy,Z,Ecut),
+                   "Surface")
+     << "\t" 		   
+     << G4BestUnit (mubrem->ComputeMicroscopicCrossSection(muon,Energy,Z,A,Ecut),
+                   "Surface")
+     << "\t" 		   
+     << G4BestUnit (mupair->ComputeMicroscopicCrossSection(muon,Energy,Z,Ecut,
+                                                                         Ecut),
+                   "Surface")		   		   	   	   
+     << "\t \t"	 
+     << G4BestUnit (muioni->ComputeRestrictedMeandEdx(*muon,Energy,material,Ecut),
+                   "Energy/Length");   		   
+  }
+  
+  G4cout << G4endl;
+  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+                               
 return EXIT_SUCCESS;
 }

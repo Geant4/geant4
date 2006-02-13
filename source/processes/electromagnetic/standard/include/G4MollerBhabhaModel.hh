@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.hh,v 1.14 2006-02-09 13:06:12 maire Exp $
+// $Id: G4MollerBhabhaModel.hh,v 1.15 2006-02-13 10:14:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -94,7 +94,7 @@ public:
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
 				const G4ParticleDefinition*,
 				G4double kineticEnergy,
-				G4double cutEnergy);				 
+				G4double cutEnergy);
 
   virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
@@ -123,17 +123,17 @@ private:
   G4bool   isElectron;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4MollerBhabhaModel::MaxSecondaryEnergy(
-          const G4ParticleDefinition*,
-                G4double kinEnergy) 
+                                                   const G4ParticleDefinition*,
+                                                         G4double kinEnergy) 
 {
   G4double tmax = kinEnergy;
   if(isElectron) tmax *= 0.5;
   return tmax;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.8 2006-02-11 11:26:27 maire Exp $
+// $Id: G4BetheBlochModel.cc,v 1.9 2006-02-13 10:14:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -43,6 +43,8 @@
 // 24-03-05 Add G4EmCorrections (V.Ivanchenko)
 // 11-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 11-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
+// 12-02-06 move G4LossTableManager::Instance()->EmCorrections() 
+//          in constructor (mma)
 //
 // -------------------------------------------------------------------
 //
@@ -73,6 +75,7 @@ G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p,
 {
   if(p) SetParticle(p);
   theElectron = G4Electron::Electron();
+  corr = G4LossTableManager::Instance()->EmCorrections();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -103,10 +106,7 @@ void G4BetheBlochModel::Initialise(const G4ParticleDefinition* p,
                                                               (pParticleChange);
   else 
     fParticleChange = new G4ParticleChangeForLoss();
-
-  corr = G4LossTableManager::Instance()->EmCorrections();
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

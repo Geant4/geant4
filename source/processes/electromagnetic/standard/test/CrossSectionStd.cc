@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: CrossSectionStd.cc,v 1.1 2006-02-09 13:06:12 maire Exp $
+// $Id: CrossSectionStd.cc,v 1.2 2006-02-13 10:14:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -41,12 +41,18 @@
 
 #include "G4BetheBlochModel.hh"
 
+#include "G4MuBetheBlochModel.hh"
+#include "G4MuBremsstrahlungModel.hh"
+#include "G4MuPairProductionModel.hh"
+
 #include "globals.hh"
 #include "G4UnitsTable.hh"
+
 #include "G4Gamma.hh"
 #include "G4Positron.hh"
 #include "G4Electron.hh"
 #include "G4Proton.hh"
+#include "G4MuonPlus.hh"
 
 int main() {
 
@@ -174,11 +180,11 @@ int main() {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
-  // initialise hadron processes (models)
+  // initialise proton processes (models)
   // 
   G4ParticleDefinition* prot = G4Proton::Proton();
    
-  ioni = new G4BetheBlochModel();
+  ioni = new G4BetheBlochModel(prot);
   
   // compute CrossSection per atom and MeanFreePath
   //
@@ -200,13 +206,62 @@ int main() {
                    "Surface")
      << "\t \t"	 
      << G4BestUnit (ioni->ComputeMeanFreePath(prot,Energy,material,Ecut),
-                   "Length");	   
-     //<< "\t \t"	 
-     //<< G4BestUnit (ioni->ComputeDEDXPerVolume(material,prot,Energy,Ecut),
-     //              "Energy/Length");
+                   "Length")	   
+     << "\t \t"	 
+     << G4BestUnit (ioni->ComputeDEDXPerVolume(material,prot,Energy,Ecut),
+                   "Energy/Length");
   }
   
   G4cout << G4endl;
+  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+  
+  // initialise electron processes (models)
+  // 
+  G4ParticleDefinition* muon = G4MuonPlus::MuonPlus();
+   
+              ioni = new G4MuBetheBlochModel(muon);
+              brem = new G4MuBremsstrahlungModel(muon);
+  G4VEmModel* pair = new G4MuPairProductionModel(muon);
+   
+  // compute CrossSection per atom and MeanFreePath
+  //
+  Emin = 1.01*GeV; Emax = 101.01*GeV; dE = 10*GeV;
+  Ecut = 100*keV;
+
+  G4cout << "\n ####muon: CrossSection, MeanFreePath and StoppingPower for "
+         << material->GetName() 
+	 << ";\tEnergy cut = " << G4BestUnit (Ecut, "Energy") << G4endl;
+	 
+  G4cout << "\n Energy \t ionization \t bremsstra \t";
+  G4cout <<           "\t ionization \t bremsstra \t";
+  G4cout <<           "\t ionization \t bremsstra" << G4endl;
+  
+  for (G4double Energy = Emin; Energy <= Emax; Energy += dE) {
+    G4cout << "\n " << G4BestUnit (Energy, "Energy")
+     << "\t" 
+     << G4BestUnit (ioni->ComputeCrossSectionPerAtom(muon,Energy,Z,A,Ecut),
+                   "Surface")
+     << "\t" 
+     << G4BestUnit (brem->ComputeCrossSectionPerAtom(muon,Energy,Z,A,Ecut),
+                   "Surface")		   
+     << "\t \t"	 
+     << G4BestUnit (ioni->ComputeMeanFreePath(muon,Energy,material,Ecut),
+                   "Length")
+     << "\t"	 
+     << G4BestUnit (brem->ComputeMeanFreePath(muon,Energy,material,Ecut),
+                   "Length")		   
+     << "\t \t"	 
+     << G4BestUnit (ioni->ComputeDEDXPerVolume(material,muon,Energy,Ecut),
+                   "Energy/Length")
+     << "\t"	 
+     << G4BestUnit (brem->ComputeDEDXPerVolume(material,muon,Energy,Ecut),
+                   "Energy/Length");		   		   
+  }
+  
+  G4cout << G4endl;
+  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
                                  
 return EXIT_SUCCESS;
 }
