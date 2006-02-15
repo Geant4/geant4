@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2005-12-19 12:18:40 vnivanch Exp $
+$Id: History,v 1.17 2006-02-15 14:25:43 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15.02.2006, V.Ivanchenko - hadr-lists-V08-00-01
+- fix minor typo in G4EmMessenger
 
 19.12.2005, V.Ivanchenko - hadr-lists-V08-00-00
 - rename G4EmStandardPhysics71 ->G4EmStandardPhysics72;

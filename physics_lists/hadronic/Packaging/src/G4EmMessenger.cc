@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmMessenger.cc,v 1.2 2005-11-30 18:28:52 vnivanch Exp $
+// $Id: G4EmMessenger.cc,v 1.3 2006-02-15 14:24:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -61,7 +61,7 @@ G4EmMessenger::G4EmMessenger(G4EmExtraPhysics* ab)
   theGN->SetGuidance("Switching on gamma nuclear physics.");
   theGN->SetParameterName("status","off");
   theGN->SetCandidates("on off");
-  theGN->SetDefaultValue("off");
+  theGN->SetDefaultValue("on");
   theGN->AvailableForStates(G4State_PreInit);
 }
 
