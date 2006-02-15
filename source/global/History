@@ -1,4 +1,4 @@
-$Id: History,v 1.156 2006-02-07 16:25:16 maire Exp $
+$Id: History,v 1.157 2006-02-15 15:33:29 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
-Feb 07, 2006  M.Maire
+Feb 15, 2006  M.Maire
 - G4UnitsTable.cc: added GeV/cm MeV/cm keV/cm eV/cm (Energy/Length)
+                         g/cm2 ("Mass/Surface")
+			 MeV*cm2/g ..etc.. ("Energy*Surface/Mass")      
 
 Jan 30, 2006  M.Maire (global-V08-00-00)
 - G4UnitsTable.cc: added Symbol um for micrometer.
