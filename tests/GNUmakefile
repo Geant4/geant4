@@ -20,6 +20,7 @@ ELECTROMAGNETIC += 6 7 ## G4GammaConversionToMuons process.
 ELECTROMAGNETIC += 8 9 10 ## Transistion radiation and PAI (photoabsorption
                         ## ionisation) model.
 ELECTROMAGNETIC += 11 12 ## Energy deposited by particles which cross a material
+ELECTROMAGNETIC += 13 14 ## Photon processes (13) and muon interactions (14)
 
 # Symbolic links to extended g3tog4 examples using test601, etc...
 G3TOG4 += 01 02   ## 01 - clGeometry  02 cltog4 (actually hand coded for now)
@@ -115,10 +116,10 @@ all:
 	done;:
 
 # ELECTRO
-	@$(ECHO) Making Photon/Muon Tests...
-	@for nn in $(ELECTRO); do \
-	  (cd test30$$nn && $(MAKE)); \
-	done;:
+#	@$(ECHO) Making Photon/Muon Tests...
+#	@for nn in $(ELECTRO); do \
+#	  (cd test30$$nn && $(MAKE)); \
+#	done;:
 
 # MEDICAL
 	@$(ECHO) Making Medical Tests...
@@ -298,17 +299,17 @@ examples_links_source:
           ln -s shoot.out $$testdir/test1008.out; :
 
 # Photon/Muon
-	  @testdir=test3001; \
-	  exdir=$(G4INSTALL)/examples/extended/electromagnetic/MuonProcesses/; \
-	  ln -s $$exdir $$testdir; \
-	  ln -s MuonProcesses.in  $$testdir/test3001.in;  \
-          ln -s MuonProcesses.out $$testdir/test3001.out; :
-
-	  @testdir=test3002; \
-	  exdir=$(G4INSTALL)/examples/extended/electromagnetic/PhotonProcesses/; \
-	  ln -s $$exdir $$testdir; \
-	  ln -s PhotonProcesses.in  $$testdir/test3002.in;  \
-          ln -s PhotonProcesses.out $$testdir/test3002.out; :
+#	  @testdir=test3001; \
+#	  exdir=$(G4INSTALL)/examples/extended/electromagnetic/MuonProcesses/; \
+#	  ln -s $$exdir $$testdir; \
+#	  ln -s MuonProcesses.in  $$testdir/test3001.in;  \
+#         ln -s MuonProcesses.out $$testdir/test3001.out; :
+#
+#	  @testdir=test3002; \
+#	  exdir=$(G4INSTALL)/examples/extended/electromagnetic/PhotonProcesses/; \
+#	  ln -s $$exdir $$testdir; \
+#	  ln -s PhotonProcesses.in  $$testdir/test3002.in;  \
+#         ln -s PhotonProcesses.out $$testdir/test3002.out; :
 
 
 # Persistency
