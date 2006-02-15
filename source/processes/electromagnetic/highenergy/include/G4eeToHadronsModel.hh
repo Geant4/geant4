@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsModel.hh,v 1.3 2005-05-18 10:12:32 vnivanch Exp $
+// $Id: G4eeToHadronsModel.hh,v 1.4 2006-02-15 16:38:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -69,6 +69,19 @@ public:
   G4double PeakEnergy() const;
 
   virtual G4double CrossSectionPerVolume(const G4Material*,
+					 const G4ParticleDefinition*,
+					 G4double kineticEnergy,
+					 G4double cutEnergy,
+					 G4double maxEnergy);
+
+  virtual G4double ComputeCrossSectionPerAtom(
+                                         const G4ParticleDefinition*,
+                                         G4double kineticEnergy,
+                                         G4double Z, G4double A,
+                                         G4double cutEnergy = 0.0,
+                                         G4double maxEnergy = DBL_MAX);
+
+  virtual G4double ComputeCrossSectionPerElectron(
                                          const G4ParticleDefinition*,
                                          G4double kineticEnergy,
                                          G4double cutEnergy = 0.0,
@@ -112,6 +125,29 @@ private:
 inline G4double G4eeToHadronsModel::PeakEnergy() const
 {
   return peakKinEnergy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4eeToHadronsModel::CrossSectionPerVolume(
+				      const G4Material* mat,
+				      const G4ParticleDefinition* p,
+				      G4double kineticEnergy,
+				      G4double, G4double)
+{
+  return mat->GetElectronDensity()*
+    ComputeCrossSectionPerElectron(p, kineticEnergy);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4eeToHadronsModel::ComputeCrossSectionPerAtom(
+                                      const G4ParticleDefinition* p,
+				      G4double kineticEnergy,
+				      G4double Z, G4double,
+				      G4double, G4double)
+{
+  return Z*ComputeCrossSectionPerElectron(p, kineticEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

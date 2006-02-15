@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsModel.cc,v 1.5 2005-11-23 19:17:26 vnivanch Exp $
+// $Id: G4eeToHadronsModel.cc,v 1.6 2006-02-15 16:38:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -148,19 +148,17 @@ void G4eeToHadronsModel::Initialise(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4eeToHadronsModel::CrossSectionPerVolume(
-                                          const G4Material* material,
+G4double G4eeToHadronsModel::ComputeCrossSectionPerElectron(
                                           const G4ParticleDefinition*,
                                                 G4double kineticEnergy,
-                                                G4double,
-                                                G4double)
+                                                G4double, G4double)
 {
   G4double cross = 0.0;
   if(crossPerElectron) {
     G4bool b;
     G4double e = 2.0*electron_mass_c2*
                  sqrt(1.0 + 0.5*kineticEnergy/electron_mass_c2);
-    cross = material->GetElectronDensity()*(crossPerElectron->GetValue(e, b));
+    cross = crossPerElectron->GetValue(e, b);
   }
   //  G4cout << "e= " << kineticEnergy << " cross= " << cross << G4endl;
   return cross;

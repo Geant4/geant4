@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggNoDeltaModel.hh,v 1.4 2005-10-29 20:09:35 vnivanch Exp $
+// $Id: G4BraggNoDeltaModel.hh,v 1.5 2006-02-15 16:38:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,7 +64,7 @@ public:
 					G4double kineticEnergy,
 					G4double cutEnergy);
 
-  virtual G4double CrossSectionPerVolume(const G4Material*,
+  virtual G4double ComputeCrossSectionPerElectron(
 					 const G4ParticleDefinition*,
 					 G4double kineticEnergy,
 					 G4double cutEnergy,
@@ -89,8 +89,7 @@ inline G4double G4BraggNoDeltaModel::ComputeDEDXPerVolume(
   return dedx;
 }
 
-inline G4double G4BraggNoDeltaModel::CrossSectionPerVolume(
-                            const G4Material*,
+inline G4double G4BraggNoDeltaModel::ComputeCrossSectionPerElectron(
 			    const G4ParticleDefinition*,
 			    G4double, G4double, G4double)
 {

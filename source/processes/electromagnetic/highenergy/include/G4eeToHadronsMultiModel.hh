@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsMultiModel.hh,v 1.1 2005-05-18 10:12:32 vnivanch Exp $
+// $Id: G4eeToHadronsMultiModel.hh,v 1.2 2006-02-15 16:38:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -66,6 +66,19 @@ public:
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
   virtual G4double CrossSectionPerVolume(const G4Material*,
+					 const G4ParticleDefinition*,
+					 G4double kineticEnergy,
+					 G4double cutEnergy,
+					 G4double maxEnergy);
+
+  virtual G4double ComputeCrossSectionPerAtom(
+                                         const G4ParticleDefinition*,
+                                         G4double kineticEnergy,
+                                         G4double Z, G4double A,
+                                         G4double cutEnergy = 0.0,
+                                         G4double maxEnergy = DBL_MAX);
+
+  virtual G4double ComputeCrossSectionPerElectron(
                                          const G4ParticleDefinition*,
                                          G4double kineticEnergy,
                                          G4double cutEnergy = 0.0,
@@ -109,16 +122,38 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4eeToHadronsMultiModel::CrossSectionPerVolume(
-                                 const G4Material* material,
-                                 const G4ParticleDefinition*,
-                                 G4double kineticEnergy,
-                                 G4double, G4double)
+				      const G4Material* mat,
+				      const G4ParticleDefinition* p,
+				      G4double kineticEnergy,
+				      G4double, G4double)
+{
+  return mat->GetElectronDensity()*
+    ComputeCrossSectionPerElectron(p, kineticEnergy);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4eeToHadronsMultiModel::ComputeCrossSectionPerAtom(
+                                      const G4ParticleDefinition* p,
+				      G4double kineticEnergy,
+				      G4double Z, G4double,
+				      G4double, G4double)
+{
+  return Z*ComputeCrossSectionPerElectron(p, kineticEnergy);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4eeToHadronsMultiModel::ComputeCrossSectionPerElectron(
+                                      const G4ParticleDefinition*,
+				      G4double kineticEnergy,
+				      G4double, G4double)
 {
   G4double res = 0.0;
   if (kineticEnergy > thKineticEnergy) {
     for(G4int i=0; i<nModels; i++) {
       if(kineticEnergy >= ekinMin[i] && kineticEnergy <= ekinMax[i])
-        res += (models[i])->CrossSectionPerVolume(material,0,kineticEnergy);
+        res += (models[i])->ComputeCrossSectionPerElectron(0,kineticEnergy);
       cumSum[i] = res;
     }
   }
@@ -128,9 +163,9 @@ inline G4double G4eeToHadronsMultiModel::CrossSectionPerVolume(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline std::vector<G4DynamicParticle*>* G4eeToHadronsMultiModel::SampleSecondaries(
-                                const G4MaterialCutsCouple* couple,
-                                const G4DynamicParticle* dp,
-                                G4double, G4double)
+                                      const G4MaterialCutsCouple* couple,
+                                      const G4DynamicParticle* dp,
+                                      G4double, G4double)
 {
   std::vector<G4DynamicParticle*>* newp = 0;
   G4double kinEnergy = dp->GetKineticEnergy();
