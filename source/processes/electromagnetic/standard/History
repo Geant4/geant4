@@ -1,4 +1,4 @@
-$Id: History,v 1.210 2006-02-15 11:17:37 vnivanch Exp $
+$Id: History,v 1.211 2006-02-15 14:19:18 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+15 February 06 : mma (emstand-V08-00-08)     
+- added functions G4BraggModel::ComputeCrossSectionPerElectron/Atom()
+- added functions G4BraggIonModel::ComputeCrossSectionPerElectron/Atom()
 - remove obsolete G4SCProcessorStand (V.Ivanchenko)
    
 11 February 06 : mma (emstand-V08-00-07)

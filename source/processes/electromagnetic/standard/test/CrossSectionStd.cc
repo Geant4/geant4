@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: CrossSectionStd.cc,v 1.3 2006-02-13 16:52:24 maire Exp $
+// $Id: CrossSectionStd.cc,v 1.4 2006-02-15 14:19:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -40,6 +40,7 @@
 #include "G4eBremsstrahlungModel.hh"
 
 #include "G4BetheBlochModel.hh"
+#include "G4BraggModel.hh"
 
 #include "G4MuBetheBlochModel.hh"
 #include "G4MuBremsstrahlungModel.hh"
@@ -214,6 +215,37 @@ int main() {
   
   G4cout << G4endl;
   
+  // low energy : Bragg Model
+  
+  ioni = new G4BraggModel(prot);
+  
+  // compute CrossSection per atom and MeanFreePath
+  //
+  Emin = 1.1*keV; Emax = 2.01*MeV; dE = 300*keV;
+  Ecut = 10*keV;
+  
+  G4cout << "\n #### proton : low energy model (Bragg) "
+	 << ";\tEnergy cut = " << G4BestUnit (Ecut, "Energy") << G4endl;
+	 	 	 
+  G4cout << "\n Energy \t ionization \t";
+  G4cout <<           "\t ionization \t";
+  G4cout <<           "\t ionization" << G4endl;
+  
+  for (G4double Energy = Emin; Energy <= Emax; Energy += dE) {
+    G4cout << "\n " << G4BestUnit (Energy, "Energy")
+     << "\t" 
+     << G4BestUnit (ioni->ComputeCrossSectionPerAtom(prot,Energy,Z,A,Ecut),
+                   "Surface")
+     << "\t \t"	 
+     << G4BestUnit (ioni->ComputeMeanFreePath(prot,Energy,material,Ecut),
+                   "Length")	   
+     << "\t \t"	 
+     << G4BestUnit (ioni->ComputeDEDXPerVolume(material,prot,Energy,Ecut),
+                   "Energy/Length");
+  }
+  
+  G4cout << G4endl;
+    
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
   // initialise muon processes (models)
