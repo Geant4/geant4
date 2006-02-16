@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.23 2006-02-08 15:14:48 allison Exp $
+// $Id: G4PhysicalVolumeModel.hh,v 1.24 2006-02-16 16:16:25 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -101,21 +101,43 @@ public: // With description
   G4String GetCurrentTag () const;
   // A tag which depends on the current state of the model.
 
-  const G4PhysicalVolumeModel* GetG4PhysicalVolumeModel () const {
-    return this;
-  }
+  const G4PhysicalVolumeModel* GetG4PhysicalVolumeModel () const
+  {return this;}
 
-  G4PhysicalVolumeModel* GetG4PhysicalVolumeModel () {
-    return this;
-  }
+  G4PhysicalVolumeModel* GetG4PhysicalVolumeModel ()
+  {return this;}
 
   const G4VPhysicalVolume* GetTopPhysicalVolume () const {return fpTopPV;}
 
   G4int GetRequestedDepth () const {return fRequestedDepth;}
 
-  const G4Polyhedron* GetClippingVolume () const {
-    return fpClippingPolyhedron;
-  }
+  const G4Polyhedron* GetClippingVolume () const
+  {return fpClippingPolyhedron;}
+
+  G4int GetCurrentDepth() const {return fCurrentDepth;}
+  // Current depth of geom. hierarchy.
+
+  const G4VPhysicalVolume* GetCurrentPV() const {return fpCurrentPV;}
+  // Current physical volume.
+
+  const G4LogicalVolume* GetCurrentLV() const {return fpCurrentLV;}
+  // Current logical volume.
+
+  const G4Material* GetCurrentMaterial() const {return fpCurrentMaterial;}
+  // Current material.
+
+  const std::vector<G4PhysicalVolumeNodeID>& GetDrawnPVPath() const
+  {return fDrawnPVPath;}
+  // Path of the current drawn (non-culled) volume in terms of drawn
+  // (non-culled) ancesters.  It is a vector of physical volume node
+  // identifiers corresponding to the geometry hierarchy actually
+  // selected, i.e., not culled.  It is guaranteed that volumes are
+  // presented to the scene handlers in top-down hierarchy order,
+  // i.e., ancesters first, mothers before daughters, so the scene
+  // handler can be assured that, if it is building its own scene
+  // graph tree, a mother, if any, will have already been encountered
+  // and there will already be a node in place on which to hang the
+  // current volume.
 
   void SetRequestedDepth (G4int requestedDepth) {
     fRequestedDepth = requestedDepth;
@@ -173,6 +195,9 @@ protected:
   G4bool             fUseFullExtent; // ...if requested.
   G4int              fCurrentDepth;  // Current depth of geom. hierarchy.
   G4VPhysicalVolume* fpCurrentPV;    // Current physical volume.
+  G4LogicalVolume*   fpCurrentLV;    // Current logical volume.
+  G4Material*    fpCurrentMaterial;  // Current material.
+  std::vector<G4PhysicalVolumeNodeID> fDrawnPVPath;
   G4bool             fCurtailDescent;  // Can be set to curtail descent.
   const G4Polyhedron*fpClippingPolyhedron;
 
@@ -184,16 +209,6 @@ protected:
   G4LogicalVolume**   fppCurrentLV;    // Current logical volume.
   G4Material**    fppCurrentMaterial;  // Current material.
   std::vector<G4PhysicalVolumeNodeID>* fpDrawnPVPath;
-  // Path of the current drawn (non-culled) volume in terms of drawn
-  // (non-culled) ancesters.  It is a vector of physical volume node
-  // identifiers corresponding to the geometry hierarchy actually
-  // selected, i.e., not culled.  It is guaranteed that volumes are
-  // presented to the scene handlers in top-down hierarchy order,
-  // i.e., ancesters first, mothers before daughters, so the scene
-  // handler can be assured that, if it is building its own scene
-  // graph tree, a mother, if any, will have already been encountered
-  // and there will already be a node in place on which to hang the
-  // current volume.
 
 private:
 

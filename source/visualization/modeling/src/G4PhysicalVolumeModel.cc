@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.39 2006-02-08 17:52:54 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.40 2006-02-16 16:16:25 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,6 @@
 #include "G4BoundingSphereScene.hh"
 #include "G4PhysicalVolumeSearchScene.hh"
 #include "G4TransportationManager.hh"
-#include "G4VVisManager.hh"
 #include "G4Polyhedron.hh"
 
 #include <sstream>
@@ -74,6 +73,8 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   fUseFullExtent  (useFullExtent),
   fCurrentDepth   (0),
   fpCurrentPV     (0),
+  fpCurrentLV     (0),
+  fpCurrentMaterial (0),
   fCurtailDescent (false),
   fpClippingPolyhedron (0),
   fpCurrentDepth     (0),
@@ -156,8 +157,11 @@ void G4PhysicalVolumeModel::DescribeYourselfTo
        sceneHandler);
 
     // Clear data...
-    fCurrentDepth = 0;
-    fpCurrentPV   = 0;
+    fCurrentDepth     = 0;
+    fpCurrentPV       = 0;
+    fpCurrentLV       = 0;
+    fpCurrentMaterial = 0;
+    fDrawnPVPath.clear();
     // ...and in working space in scene handler, if required...
     if (fpCurrentDepth)     *fpCurrentDepth     = 0;
     if (fppCurrentPV)       *fppCurrentPV       = 0;
@@ -355,6 +359,8 @@ void G4PhysicalVolumeModel::DescribeAndDescend
 {
   // Maintain useful data members...
   fpCurrentPV = pVPV;
+  fpCurrentLV = pLV;
+  fpCurrentMaterial = pMaterial;
   // ...and store in scene handler's working space, if required...
   if (fpCurrentDepth)     *fpCurrentDepth     = fCurrentDepth;
   if (fppCurrentPV)       *fppCurrentPV       = pVPV;
@@ -436,8 +442,9 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   if (thisToBeDrawn) {
 
     // Update path of physical volumes, if required...
+    G4int copyNo = fpCurrentPV->GetCopyNo();
+    fDrawnPVPath.push_back(G4PhysicalVolumeNodeID(fpCurrentPV,copyNo));
     if (fpDrawnPVPath) {
-      G4int copyNo = fpCurrentPV->GetCopyNo();
       fpDrawnPVPath->push_back(G4PhysicalVolumeNodeID(fpCurrentPV,copyNo));
     }
 
@@ -510,9 +517,12 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   // Reset for normal descending of next volume at this level...
   fCurtailDescent = false;
 
-  // Pop item from path of physical volumes, if required...
-  if (thisToBeDrawn && fpDrawnPVPath) {
-    fpDrawnPVPath->pop_back();
+  // Pop item from path of physical volumes...
+  if (thisToBeDrawn) {
+    fDrawnPVPath.pop_back();
+    if (fpDrawnPVPath) {
+      fpDrawnPVPath->pop_back();
+    }
   }
 }
 
@@ -545,7 +555,9 @@ void G4PhysicalVolumeModel::DescribeSolid
 	  else
 	    {
 	      clipped.SetVisAttributes(pVisAttribs);
-	      G4VVisManager::GetConcreteInstance()->Draw(clipped,theAT);
+	      sceneHandler.BeginPrimitives(theAT);
+	      sceneHandler.AddPrimitive(clipped);
+	      sceneHandler.EndPrimitives();
 	    }
 	}
     }

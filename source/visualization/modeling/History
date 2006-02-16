@@ -1,4 +1,4 @@
-$Id: History,v 1.50 2006-02-08 15:17:29 allison Exp $
+$Id: History,v 1.51 2006-02-16 16:16:25 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+16th February 2006  John Allison (modeling-V08-00-03)
+- G4PhysicalVolumeModel: Minor enhancements to facilitate future
+  removal of Establish/DecommisionSpecials.
 
 8th February 2006  John Allison (modeling-V08-00-02)
 - Added DrawingStyle to G4ModelingParameters.
