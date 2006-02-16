@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.17 2006-01-27 12:00:38 maire Exp $
+// $Id: RunAction.cc,v 1.18 2006-02-16 14:20:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -173,9 +173,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
         << G4BestUnit(trvsRms,"Length");
 	
  G4cout << "\n      mass true Range from simulation = " 
-        << trueRange*density/(g/cm2) << " g/cm2"
+        << G4BestUnit(trueRange*density, "Mass/Surface")
 	<< "\n       from PhysicsTable (csda range) = " 
-        << rangeTable*density/(g/cm2) << " g/cm2";	
+        << G4BestUnit(rangeTable*density, "Mass/Surface");	
  G4cout << "\n---------------------------------------------------------\n";
  G4cout << G4endl;
  

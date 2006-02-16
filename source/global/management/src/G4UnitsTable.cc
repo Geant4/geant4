@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc,v 1.31 2006-02-15 15:33:29 maire Exp $
+// $Id: G4UnitsTable.cc,v 1.32 2006-02-16 14:23:50 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -261,8 +261,10 @@ void G4UnitDefinition::BuildUnitsTable()
  new G4UnitDefinition("kg/m3", "kg/m3", "Volumic Mass",kg/m3);
  
  // Mass/Surface
- new G4UnitDefinition( "g/cm2", "g/cm2","Mass/Surface", g/cm2);
-  
+ new G4UnitDefinition(  "g/cm2",  "g/cm2","Mass/Surface",  g/cm2);
+ new G4UnitDefinition( "mg/cm2", "mg/cm2","Mass/Surface", mg/cm2);
+ new G4UnitDefinition( "kg/cm2", "kg/cm2","Mass/Surface", kg/cm2);
+   
  // Surface/Mass
  new G4UnitDefinition( "cm2/g", "cm2/g","Surface/Mass", cm2/g);
  
