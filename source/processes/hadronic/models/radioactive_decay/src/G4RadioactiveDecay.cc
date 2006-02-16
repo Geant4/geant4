@@ -44,6 +44,8 @@
 //
 // CHANGE HISTORY
 // --------------
+// 16 February 2006, V.Ivanchenko fix problem in IsApplicable connected with
+//            8.0 particle design
 // 18 October 2002, F. Lei
 //            in the case of beta decay, added a check of the end-energy 
 //            to ensure it is > 0.
@@ -194,11 +196,9 @@ G4bool G4RadioactiveDecay::IsApplicable( const G4ParticleDefinition &
   //
   // All particles, other than G4Ions, are rejected by default.
   //
-  if (!(aParticle.GetParticleType() == "nucleus")) {return false;}
-  else if (aParticle.GetPDGLifeTime() < 0. &&
-	   aParticle.GetParticleName() != "GenericIon") {
-    return false;
-  }
+  if (aParticle.GetParticleName() == "GenericIon")      {return true;}
+  else if (!(aParticle.GetParticleType() == "nucleus")) {return false;}
+
   //
   //
   // Determine whether the nuclide falls into the correct A and Z range.
