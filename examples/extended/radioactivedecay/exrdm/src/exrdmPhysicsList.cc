@@ -104,12 +104,12 @@ void exrdmPhysicsList::ConstructParticle()
 void exrdmPhysicsList::ConstructProcess()
 {
   AddTransportation();
-  //general
-   generalPhysicsList->ConstructProcess();
   // em
-   emPhysicsList->ConstructProcess();
+  emPhysicsList->ConstructProcess();
+  //general
+  generalPhysicsList->ConstructProcess();
   // had
-   if (hadPhysicsList) hadPhysicsList->ConstructProcess();
+  if (hadPhysicsList) hadPhysicsList->ConstructProcess();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

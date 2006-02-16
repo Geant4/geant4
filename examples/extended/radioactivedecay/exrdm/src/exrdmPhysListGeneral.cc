@@ -50,13 +50,18 @@ void exrdmPhysListGeneral::ConstructProcess()
   // Add Decay Process
 
   G4Decay* fDecayProcess = new G4Decay();
+  G4RadioactiveDecay*  theRadioactiveDecay = new G4RadioactiveDecay();
+  G4GenericIon* ion = G4GenericIon::GenericIon();
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (fDecayProcess->IsApplicable(*particle)) { 
+    if (particle == ion) {
+      pmanager->AddProcess(theRadioactiveDecay, 0, -1, 3);
+
+    } else if (fDecayProcess->IsApplicable(*particle)) { 
 
       pmanager ->AddProcess(fDecayProcess);
 
@@ -66,17 +71,6 @@ void exrdmPhysListGeneral::ConstructProcess()
 
     }
   }
-  // Declare radioactive decay to the GenericIon in the IonTable.
-  //
-
-  G4RadioactiveDecay*  theRadioactiveDecay = new G4RadioactiveDecay();
-  G4GenericIon* ion = G4GenericIon::GenericIon();
-  G4ProcessManager* pmanager = ion->GetProcessManager();
-  pmanager->SetVerboseLevel(0);
-  pmanager ->AddProcess(theRadioactiveDecay);
-  pmanager ->SetProcessOrdering(theRadioactiveDecay, idxPostStep);
-  pmanager ->SetProcessOrdering(theRadioactiveDecay, idxAtRest);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

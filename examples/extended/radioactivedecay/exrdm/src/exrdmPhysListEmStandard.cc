@@ -93,17 +93,17 @@ void exrdmPhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3,3);
       pmanager->AddProcess(new G4MuPairProduction,  -1, 4,4);       
 
-    } else if (particleName == "GenericIon") {
+    } else if (particleName == "GenericIon" ||
+               particleName == "alpha" ||
+               particleName == "He3") {
       pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
-      pmanager->AddProcess(new G4hIonisation,       -1,2,2);
+      pmanager->AddProcess(new G4ionIonisation,     -1,2,2);
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
       // don't need these if standard hadron is used: std-h-em)
-      if (name != "std-h-em") {
-	pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
-	pmanager->AddProcess(new G4hIonisation,       -1,2,2);
-      }
+      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
+      pmanager->AddProcess(new G4hIonisation,       -1,2,2);
     }
   }
 }
