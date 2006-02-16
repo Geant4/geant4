@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.hh,v 1.3 2004-09-27 09:35:33 maire Exp $
+// $Id: PhysicsListMessenger.hh,v 1.4 2006-02-16 16:52:33 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,6 +54,7 @@ class PhysicsListMessenger: public G4UImessenger
     G4UIdirectory*      physDir;    
     G4UIcmdWithADouble* GammaToMuPairFac;
     G4UIcmdWithADouble* AnnihiToMuPairFac;
+    G4UIcmdWithADouble* AnnihiToHadronFac;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

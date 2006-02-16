@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2005-12-06 11:50:01 gcosmo Exp $
+$Id: History,v 1.28 2006-02-16 16:52:33 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+16-02-06 mma (testem6-V08-00-00)
+- add command /testem/phys/SetAnnihiToHadronFac
 
 06-12-05 Gabriele Cosmo
 - Trivial changes for support of CLHEP-2.0.X series.

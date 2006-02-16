@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.cc,v 1.6 2004-09-27 09:35:38 maire Exp $
+// $Id: PhysicsListMessenger.cc,v 1.7 2006-02-16 16:52:33 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,12 +49,20 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* physL)
   GammaToMuPairFac->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   AnnihiToMuPairFac=new G4UIcmdWithADouble
-                                      ("/testem/phys/SetAnnihiToMuPairFac",this);
+                                     ("/testem/phys/SetAnnihiToMuPairFac",this);
   AnnihiToMuPairFac->SetGuidance(
-         "Set factor to artificially increase the AnnihiToMuPair cross section");
+        "Set factor to artificially increase the AnnihiToMuPair cross section");
   AnnihiToMuPairFac->SetParameterName("AnnihiToMuPairFac",false);
   AnnihiToMuPairFac->SetRange("AnnihiToMuPairFac>0.0");
   AnnihiToMuPairFac->AvailableForStates(G4State_PreInit,G4State_Idle);
+  
+  AnnihiToHadronFac=new G4UIcmdWithADouble
+                                      ("/testem/phys/SetAnnihiToHadronFac",this);
+  AnnihiToHadronFac->SetGuidance(
+       "Set factor to artificially increase the AnnihiToHadrons cross section");
+  AnnihiToHadronFac->SetParameterName("AnnihiToHadFac",false);
+  AnnihiToHadronFac->SetRange("AnnihiToHadFac>0.0");
+  AnnihiToHadronFac->AvailableForStates(G4State_PreInit,G4State_Idle);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,6 +71,7 @@ PhysicsListMessenger::~PhysicsListMessenger()
 {
   delete GammaToMuPairFac;
   delete AnnihiToMuPairFac;
+  delete AnnihiToHadronFac;  
   delete physDir;  
 }
 
@@ -77,7 +86,11 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
 
   if( command == AnnihiToMuPairFac)
    { physList->SetAnnihiToMuPairFac(
-                          AnnihiToMuPairFac->GetNewDoubleValue(newValue));}   
+                          AnnihiToMuPairFac->GetNewDoubleValue(newValue));}
+			  
+  if( command == AnnihiToHadronFac)
+   { physList->SetAnnihiToHadronFac(
+                          AnnihiToHadronFac->GetNewDoubleValue(newValue));}			     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

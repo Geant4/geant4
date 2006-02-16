@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.5 2005-11-23 19:23:36 vnivanch Exp $
+// $Id: PhysicsList.hh,v 1.6 2006-02-16 16:52:33 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,6 +35,7 @@
 class PhysicsListMessenger;
 class G4GammaConversionToMuons;
 class G4AnnihiToMuPair;
+class G4eeToHadrons;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,11 +60,13 @@ class PhysicsList: public G4VUserPhysicsList
 
     void SetGammaToMuPairFac(G4double);
     void SetAnnihiToMuPairFac(G4double);
+    void SetAnnihiToHadronFac(G4double);
 
   private:
      PhysicsListMessenger*  pMes;
      G4GammaConversionToMuons* theGammaToMuPairProcess;
      G4AnnihiToMuPair*         theAnnihiToMuPairProcess;
+     G4eeToHadrons*            eehadProcess;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
