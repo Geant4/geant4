@@ -284,11 +284,12 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 #endif
  
 // if the particle is already outside nucleus go to next  @@GF should never happen? check!
-    if(t_leave < 0)
-    {  
-       throw G4HadronicException(__FILE__, __LINE__, "G4RKPropagation:: Attempt to track particle past a  nucleus");
-       continue;
-    }  
+//  does happen for particles added as late....
+//     if(t_leave < 0 )
+//     {  
+//        throw G4HadronicException(__FILE__, __LINE__, "G4RKPropagation:: Attempt to track particle past a  nucleus");
+//        continue;
+//     }  
 
 // Apply a straight line propagation for particle types
 // not included in the model
