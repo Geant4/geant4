@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.46 2006-01-19 15:06:53 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.47 2006-02-16 19:24:18 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -93,6 +93,7 @@
 //          value of facgeom is 3.5 instead of 4 (L.Urban)
 // 19-01-07 tlimitmin = facrange*50*micrometer, i.e. it depends on the
 //          value of facrange (L.Urban) 
+// 16-02-06 value of factail changed, samplez = true (L.Urban)
 //
 // -----------------------------------------------------------------------------
 //
@@ -125,10 +126,10 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
   safety           = 0.*mm;
   facsafety        = 0.20;
   dtrl             = 0.05;
-  factail          = 0.75;
+  factail          = 0.75; 
   
   steppingAlgorithm = true;
-  samplez           = false;  
+  samplez           = true ;  
   boundary          = true;
   isInitialized     = false;  
 

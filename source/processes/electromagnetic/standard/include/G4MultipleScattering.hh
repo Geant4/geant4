@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.25 2006-01-19 15:06:53 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.26 2006-02-16 19:24:18 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -62,10 +62,11 @@
 // 11-12-05 data menber rangecut removed (L.Urban)
 // 19-01-07 tlimitmin = facrange*50*micrometer, i.e. it depends on the
 //          value of facrange (L.Urban)
+// 16-02-06 set function for data member factail (L.Urban)
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering.hh,v 1.25 2006-01-19 15:06:53 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.26 2006-02-16 19:24:18 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -128,6 +129,9 @@ public:    // with description
 
   // connected with step size reduction due to geometry
   void SetFacgeom(G4double val) { facgeom=val;};
+
+  // parameter governs the tail of the angular distribution
+  void SetFactail(G4double val) { factail=val;};
 
 protected:
 

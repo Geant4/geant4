@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.hh,v 1.7 2005-10-04 08:42:51 vnivanch Exp $
+// $Id: G4MscModel.hh,v 1.8 2006-02-16 19:24:18 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -52,6 +52,7 @@
 // 11-08-05 computation of lateral correlation added (L.Urban)
 // 02-10-05 nuclear size correction computation removed, the correction
 //          included in the (theoretical) tabulated values (L.Urban)
+// 16-02-06 data members b and xsi have been removed (L.Urban)
 //
 // Class Description:
 //
@@ -140,9 +141,6 @@ private:
   G4double dtrl;
   G4double factail ;
 
-  G4double b;
-  G4double xsi;
-
   G4double lambda0;
   G4double lambdaeff;
   G4double tPathLength;
@@ -158,6 +156,7 @@ private:
   G4bool   samplez;
   G4bool   latDisplasment;
   G4bool   isInitialized;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
