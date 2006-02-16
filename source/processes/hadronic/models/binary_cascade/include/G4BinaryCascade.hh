@@ -49,6 +49,7 @@
 #include "G4LorentzRotation.hh"
 
 #include "G4BCDecay.hh"
+#include "G4BCLateParticle.hh"
 #include "G4BCAction.hh"
 
 class G4CollisionManager;
@@ -91,6 +92,7 @@ private:
   void BuildTargetList();
   void FindCollisions(G4KineticTrackVector * secondaries);
   void FindDecayCollision(G4KineticTrack * secondary);
+  void FindLateParticleCollision(G4KineticTrack * secondary);
   G4bool ApplyCollision(G4CollisionInitialState * collision);
   G4bool Capture(G4bool verbose=false);
   G4bool Absorb();
@@ -119,7 +121,9 @@ private:
 
 // for debugging purpose
   void PrintKTVector(G4KineticTrackVector * ktv, std::string comment=std::string(""));
-
+  void PrintKTVector(G4KineticTrack* kt, std::string comment=std::string(""));
+  void DebugApplyCollision(G4CollisionInitialState * collision, 
+                           G4KineticTrackVector *products);
 private:
   G4KineticTrackVector theProjectileList;
   G4KineticTrackVector theTargetList;
@@ -132,6 +136,7 @@ private:
 
   std::vector<G4BCAction *> theImR;
   G4BCDecay * theDecay;
+  G4BCLateParticle * theLateParticle;
   G4VFieldPropagation * thePropagator;
   G4double theCurrentTime;
   G4double theCutOnP;
