@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.30 2006-01-26 08:57:36 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.31 2006-02-17 19:36:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,6 +54,8 @@
 // 07-10-05 error in a protection in GetContinuousStepLimit corrected (L.Urban)
 // 27-10-05 introduce virtual function MscStepLimitation() (V.Ivanchenko)
 // 26-01-06 Rename GetRange -> GetRangeFromRestricteDEDX (V.Ivanchenko)
+// 17-02-06 Save table of transport cross sections not mfp (V.Ivanchenko)
+//
 
 // -------------------------------------------------------------------
 //
@@ -343,10 +345,11 @@ inline G4double G4VMultipleScattering::GetLambda(const G4ParticleDefinition* p, 
   if(theLambdaTable) {
     G4bool b;
     x = ((*theLambdaTable)[currentMaterialIndex])->GetValue(e, b);
-
   } else {
     x = currentModel->CrossSection(currentCouple,p,e);
   }
+  if(x > DBL_MIN) x = 1./x;
+  else            x = DBL_MAX; 
   return x;
 }
 

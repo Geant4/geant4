@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.hh,v 1.8 2006-02-16 19:24:18 urban Exp $
+// $Id: G4MscModel.hh,v 1.9 2006-02-17 19:36:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -53,6 +53,9 @@
 // 02-10-05 nuclear size correction computation removed, the correction
 //          included in the (theoretical) tabulated values (L.Urban)
 // 16-02-06 data members b and xsi have been removed (L.Urban)
+// 17-02-06 Save table of transport cross sections not mfp (V.Ivanchenko)
+//
+
 //
 // Class Description:
 //
@@ -82,25 +85,19 @@ public:
   G4MscModel(G4double dtrl,G4double factail, G4bool samplez, 
 	       const G4String& nam = "MscUni");
 
-  ~G4MscModel();
+  virtual ~G4MscModel();
 
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  G4double ComputeCrossSectionPerAtom( 
+  virtual G4double ComputeCrossSectionPerAtom( 
                              const G4ParticleDefinition* particle,
                                    G4double KineticEnergy,
                                    G4double AtomicNumber,
                                    G4double AtomicWeight=0., 
 				   G4double cut =0.,
-				   G4double emax=0.);
+				   G4double emax=DBL_MAX);
 
-  G4double CrossSectionPerVolume(const G4Material*,
-					 const G4ParticleDefinition*,
-					 G4double kineticEnergy,
-					 G4double cutEnergy = 0.0,
-					 G4double maxEnergy = DBL_MAX);
-
-  std::vector<G4DynamicParticle*>* SampleSecondaries(
+  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double length,

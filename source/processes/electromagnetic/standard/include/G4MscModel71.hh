@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel71.hh,v 1.1 2005-10-03 01:09:57 vnivanch Exp $
+// $Id: G4MscModel71.hh,v 1.2 2006-02-17 19:36:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -50,6 +50,8 @@
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 15-04-05 optimize internal interface - add SampleSecondaries method (V.Ivanchenko)
 // 03-10-05 Model is freezed with the name McsModel71 (V.Ivanchenko)
+// 17-02-06 Save table of transport cross sections not mfp (V.Ivanchenko)
+//
 
 //
 // Class Description:
@@ -80,11 +82,13 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  virtual G4double CrossSectionPerVolume(const G4Material*,
-					 const G4ParticleDefinition*,
-					 G4double kineticEnergy,
-					 G4double cutEnergy = 0.0,
-					 G4double maxEnergy = DBL_MAX);
+  virtual G4double ComputeCrossSectionPerAtom(
+                             const G4ParticleDefinition* particle,
+                                   G4double KineticEnergy,
+                                   G4double AtomicNumber,
+                                   G4double AtomicWeight=0., 
+				   G4double cut =0.,
+				   G4double emax=DBL_MAX);
 
   virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
@@ -109,12 +113,6 @@ public:
   void SetLateralDisplasmentFlag(G4bool val);
 
 private:
-
-  G4double ComputeTransportCrossSection(
-                             const G4ParticleDefinition* particle,
-                                   G4double KineticEnergy,
-                                   G4double AtomicNumber,
-                                   G4double AtomicWeight);
 
   // hide assignment operator
   G4MscModel71 & operator=(const  G4MscModel71 &right);

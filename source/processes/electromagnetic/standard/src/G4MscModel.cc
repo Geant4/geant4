@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.11 2006-02-16 19:24:18 urban Exp $
+// $Id: G4MscModel.cc,v 1.12 2006-02-17 19:36:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -75,6 +75,7 @@
 //          included in the (theoretical) tabulated values (L.Urban)
 // 17-01-06 computation of tail changed in SampleCosineTheta (l.Urban)
 // 16-02-06 code cleaning + revised 'z' sampling (L.Urban)
+// 17-02-06 Save table of transport cross sections not mfp (V.Ivanchenko)
 //
 
 // Class Description:
@@ -144,45 +145,16 @@ void G4MscModel::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4MscModel::CrossSectionPerVolume(const G4Material* material,
-					   const G4ParticleDefinition* p,
-					   G4double kineticEnergy,
-					   G4double,
-					   G4double)
-{
-  const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* NbOfAtomsPerVolume = material->GetVecNbOfAtomsPerVolume();
-  G4int NumberOfElements = material->GetNumberOfElements();
-
-  // loop for element in the material
-  G4double sigma = 0.0;
-
-  for (G4int iel=0; iel<NumberOfElements; iel++)
-  {
-    G4double atomicNumber = (*theElementVector)[iel]->GetZ();
-    G4double atomicWeight = (*theElementVector)[iel]->GetA();
-    sigma += NbOfAtomsPerVolume[iel]*ComputeCrossSectionPerAtom(p,
-             kineticEnergy,atomicNumber,atomicWeight);
-  }
-  // Calculate lambda
-  if ( sigma > 0.0) sigma = 1.0/sigma;
-  else              sigma = DBL_MAX;
-
-  return sigma;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4double G4MscModel::ComputeCrossSectionPerAtom( 
                              const G4ParticleDefinition* part,
                                    G4double KineticEnergy,
                                    G4double AtomicNumber,G4double,
 				   G4double, G4double)
 {
- const G4double sigmafactor = twopi*classic_electr_radius*classic_electr_radius;
- const G4double epsfactor = 2.*electron_mass_c2*electron_mass_c2*
+  const G4double sigmafactor = twopi*classic_electr_radius*classic_electr_radius;
+  const G4double epsfactor = 2.*electron_mass_c2*electron_mass_c2*
                             Bohr_radius*Bohr_radius/(hbarc*hbarc);
- const G4double epsmin = 1.e-4 , epsmax = 1.e10;
+  const G4double epsmin = 1.e-4 , epsmax = 1.e10;
 
   const G4double Zdat[15] = { 4.,  6., 13., 20., 26., 29., 32., 38., 47.,
                              50., 56., 64., 74., 79., 82. };
@@ -478,6 +450,8 @@ G4double G4MscModel::GeomPathLength(
     } else {
       lambda1 = CrossSection(couple,particle,T1,0.0,1.0);
     }
+    lambda1 = 1.0/lambda1;
+
     par1 = (lambda0-lambda1)/(lambda0*tPathLength) ;
     par2 = 1./(par1*lambda0) ;
     par3 = 1.+par2 ;

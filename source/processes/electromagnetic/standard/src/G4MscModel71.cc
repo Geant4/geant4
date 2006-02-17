@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel71.cc,v 1.1 2005-10-03 01:09:57 vnivanch Exp $
+// $Id: G4MscModel71.cc,v 1.2 2006-02-17 19:36:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -70,6 +70,7 @@
 //          solved in SampleCosineTheta (L.Urban).
 // 15-04-05 optimize internal interface - add SampleSecondaries method (V.Ivanchenko)
 // 03-10-05 Model is freezed with the name McsModel71 (V.Ivanchenko)
+// 17-02-06 Save table of transport cross sections not mfp (V.Ivanchenko)
 //
 
 // Class Description:
@@ -98,7 +99,7 @@
 using namespace std;
 
 G4MscModel71::G4MscModel71(G4double& m_dtrl, G4double& m_NuclCorrPar,
-		       G4double& m_FactPar, G4double& m_factail,
+			   G4double& m_FactPar, G4double& m_factail,
 		       G4bool& m_samplez, const G4String& nam)
   : G4VEmModel(nam),
   taubig(8.0),
@@ -123,7 +124,7 @@ G4MscModel71::~G4MscModel71()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4MscModel71::Initialise(const G4ParticleDefinition* p,
-			    const G4DataVector&)
+			      const G4DataVector&)
 {
   if(isInitialized) return;
   // set values of some data members
@@ -145,41 +146,13 @@ void G4MscModel71::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MscModel71::CrossSectionPerVolume(const G4Material* material,
-					   const G4ParticleDefinition* p,
-					   G4double kineticEnergy,
-					   G4double,
-					   G4double)
-{
-  const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* NbOfAtomsPerVolume = material->GetVecNbOfAtomsPerVolume();
-  G4int NumberOfElements = material->GetNumberOfElements();
-
-  // loop for element in the material
-  G4double sigma = 0.0;
-
-  for (G4int iel=0; iel<NumberOfElements; iel++)
-  {
-    G4double atomicNumber = (*theElementVector)[iel]->GetZ();
-    G4double atomicWeight = (*theElementVector)[iel]->GetA();
-    sigma += NbOfAtomsPerVolume[iel]*ComputeTransportCrossSection(p,
-             kineticEnergy,atomicNumber,atomicWeight);
-  }
-  sigma *= sigmafactor;
-  // Calculate lambda
-  if ( sigma > 0.0) sigma = 1.0/sigma;
-  else              sigma = DBL_MAX;
-
-  return sigma;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4MscModel71::ComputeTransportCrossSection(
+G4double G4MscModel71::ComputeCrossSectionPerAtom(
                              const G4ParticleDefinition* part,
                                    G4double KineticEnergy,
                                    G4double AtomicNumber,
-                                   G4double AtomicWeight)
+                                   G4double AtomicWeight, 
+				   G4double,
+				   G4double)
 {
   const G4double epsfactor = 2.*electron_mass_c2*electron_mass_c2*
                              Bohr_radius*Bohr_radius/(hbarc*hbarc);
@@ -412,7 +385,6 @@ G4double G4MscModel71::ComputeTransportCrossSection(
      sigma /= corrnuclsize;
 
   return sigma;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -470,6 +442,7 @@ G4double G4MscModel71::GeomPathLength(
     } else {
       lambda1 = CrossSection(couple,particle,T1,0.0,1.0);
     }
+    lambda1 = 1.0/lambda1;
     par1 = (lambda0-lambda1)/(lambda0*tPathLength) ;
     par2 = 1./(par1*lambda0) ;
     par3 = 1.+par2 ;

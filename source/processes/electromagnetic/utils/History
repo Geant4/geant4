@@ -1,4 +1,4 @@
-$Id: History,v 1.233 2006-02-09 12:52:05 maire Exp $
+$Id: History,v 1.234 2006-02-17 19:36:23 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,16 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17 February 06: V.Ivant (emutils-V08-00-04)
+- G4VmultipleScattering - Lambda table keep cross section not mfp
+- remove obsolete interface G4VSCProcessor.hh
      
 06 February 06 mma  (emutils-V08-00-03)
 - Added function G4VEmModel::ComputeMeanFreePath() (mma)
      
 01 February 06
--  G4VEmProcess::ComputeCrossSectionPerAtom(): put default value A=0,
-   G4VEmModel::ComputeCrossSectionPerAtom(): put default value A=0,
-   to keep compatibility with v5.2 (mma)
+- G4VEmProcess::ComputeCrossSectionPerAtom(): put default value A=0,
+  G4VEmModel::ComputeCrossSectionPerAtom(): put default value A=0,
+  to keep compatibility with v5.2 (mma)
    
-
 26 January 06: V.Ivant (emutils-V08-00-02)
 - add method GetRangeFromRestricteDEDX for later replacement of GetRange(VI)
 - G4VEnergyLossProcess - improve cout (VI) 
