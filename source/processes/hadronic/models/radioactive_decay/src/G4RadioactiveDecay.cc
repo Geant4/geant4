@@ -197,7 +197,7 @@ G4bool G4RadioactiveDecay::IsApplicable( const G4ParticleDefinition &
   // All particles, other than G4Ions, are rejected by default.
   //
   if (aParticle.GetParticleName() == "GenericIon")      {return true;}
-  else if (!(aParticle.GetParticleType() == "nucleus")) {return false;}
+  else if (!(aParticle.GetParticleType() == "nucleus") || aParticle.GetPDGLifeTime() < 0. ) {return false;}
 
   //
   //
