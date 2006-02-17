@@ -1,35 +1,53 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (23-February-2005)
+ Geant4 version Name: geant4-08-00-ref-00    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
+
+---> warning from G4Element::GetElement(). The element:  H does not exist in the table. Return NULL pointer.
  Material:Vacuum with formula: H added! 
      Nb of Material = 1
      Nb of Isotope =  0
      Nb of Element =  1
+
+---> warning from G4Element::GetElement(). The element:  N does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  O does not exist in the table. Return NULL pointer.
  Material:Air with formula: N0.78-O0.22 added! 
      Nb of Material = 2
      Nb of Isotope =  0
      Nb of Element =  3
+
+---> warning from G4Element::GetElement(). The element: Al does not exist in the table. Return NULL pointer.
  Material:Aluminium with formula: Al added! 
      Nb of Material = 3
      Nb of Isotope =  0
      Nb of Element =  4
+
+---> warning from G4Element::GetElement(). The element: Si does not exist in the table. Return NULL pointer.
  Material:Silicon with formula: Si added! 
      Nb of Material = 4
      Nb of Isotope =  0
      Nb of Element =  5
+
+---> warning from G4Element::GetElement(). The element: Pb does not exist in the table. Return NULL pointer.
  Material:Lead with formula: Pb added! 
      Nb of Material = 5
      Nb of Isotope =  0
      Nb of Element =  6
+
+---> warning from G4Element::GetElement(). The element: Ge does not exist in the table. Return NULL pointer.
  Material:Germanium with formula: Ge added! 
      Nb of Material = 6
      Nb of Isotope =  0
      Nb of Element =  7
+
+---> warning from G4Element::GetElement(). The element: Cs does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  I does not exist in the table. Return NULL pointer.
  Material:CsI with formula: Cs-I added! 
      Nb of Material = 7
      Nb of Isotope =  0
@@ -38,135 +56,225 @@ G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
-***** COMMAND NOT FOUND </histo/setHisto 0 50 0 5 MeV> *****
-***** Command ignored *****
-Graphics systems deleted.
-Visualization Manager deleting...
 
-*************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (23-February-2005)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  FukuiRenderer (DAWN)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  RayTracerX (RayTracerX)
+  VRML1 (VRML1)
+  VRML2 (VRML2)
 
- Material:Vacuum with formula: H added! 
-     Nb of Material = 1
-     Nb of Isotope =  0
-     Nb of Element =  1
- Material:Air with formula: N0.78-O0.22 added! 
-     Nb of Material = 2
-     Nb of Isotope =  0
-     Nb of Element =  3
- Material:Aluminium with formula: Al added! 
-     Nb of Material = 3
-     Nb of Isotope =  0
-     Nb of Element =  4
- Material:Silicon with formula: Si added! 
-     Nb of Material = 4
-     Nb of Isotope =  0
-     Nb of Element =  5
- Material:Lead with formula: Pb added! 
-     Nb of Material = 5
-     Nb of Isotope =  0
-     Nb of Element =  6
- Material:Germanium with formula: Ge added! 
-     Nb of Material = 6
-     Nb of Isotope =  0
-     Nb of Element =  7
- Material:CsI with formula: Cs-I added! 
-     Nb of Material = 7
-     Nb of Isotope =  0
-     Nb of Element =  9
-G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
-Visualization Manager instantiating...
-Visualization Manager initialising...
-Registering graphics systems...
-***** COMMAND NOT FOUND </histo/setHisto 0 50 0 1 MeV> *****
-***** Command ignored *****
-Graphics systems deleted.
-Visualization Manager deleting...
-
-*************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (23-February-2005)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
-
- Material:Vacuum with formula: H added! 
-     Nb of Material = 1
-     Nb of Isotope =  0
-     Nb of Element =  1
- Material:Air with formula: N0.78-O0.22 added! 
-     Nb of Material = 2
-     Nb of Isotope =  0
-     Nb of Element =  3
- Material:Aluminium with formula: Al added! 
-     Nb of Material = 3
-     Nb of Isotope =  0
-     Nb of Element =  4
- Material:Silicon with formula: Si added! 
-     Nb of Material = 4
-     Nb of Isotope =  0
-     Nb of Element =  5
- Material:Lead with formula: Pb added! 
-     Nb of Material = 5
-     Nb of Isotope =  0
-     Nb of Element =  6
- Material:Germanium with formula: Ge added! 
-     Nb of Material = 6
-     Nb of Isotope =  0
-     Nb of Element =  7
- Material:CsI with formula: Cs-I added! 
-     Nb of Material = 7
-     Nb of Isotope =  0
-     Nb of Element =  9
-G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
-Visualization Manager instantiating...
-Visualization Manager initialising...
-Registering graphics systems...
+Registering model factories...
 G4VUserPhysicsList::Construct()
 Construct processes 
 world cuts are set
 Target cuts are set
 Detector cuts are set
-***** COMMAND NOT FOUND </histo/setHisto 0 50 0 5 MeV> *****
-***** Command ignored *****
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [500 (mm)]   is too big   for material  idx=5
+The cut in energy is set1.79769e+305GeV 
+
+phot:  Total cross sections from Sandia parametrisation. 
+
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according to the Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+msc:  Model variant of multiple scattering for As74[0.0]
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 550.166 keV    e- 90.585 MeV    e+ 84.1353 MeV
+ Region(s) which use this couple : 
+    Target
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Germanium
+ Range cuts        :  gamma 50 cm     e- 50 cm     e+ 50 cm 
+ Energy thresholds :  gamma 2.88022e+295 J      e- 1.91846 GeV    e+ 1.73853 GeV
+ Region(s) which use this couple : 
+    Detector
+
+====================================================================
+
+### exrdmHisto books 7 histograms 
+Tree store  : as74.aida
+Creating Ntuple: Emitted Particles
+Creating Ntuple: RadioIsotopes
+Creating Ntuple: Energy Depositions
+### Run : 0
+Closing the tree...
+exrdmHistograms and Ntuples are saved
+### exrdmHisto books 7 histograms 
+Tree store  : as74-b.aida
+Creating Ntuple: Emitted Particles
+Creating Ntuple: RadioIsotopes
+Creating Ntuple: Energy Depositions
+Closing the tree...
+exrdmHistograms and Ntuples are saved
 Graphics systems deleted.
 Visualization Manager deleting...
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (23-February-2005)
+ Geant4 version Name: geant4-08-00-ref-00    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
+
+---> warning from G4Element::GetElement(). The element:  H does not exist in the table. Return NULL pointer.
  Material:Vacuum with formula: H added! 
      Nb of Material = 1
      Nb of Isotope =  0
      Nb of Element =  1
+
+---> warning from G4Element::GetElement(). The element:  N does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  O does not exist in the table. Return NULL pointer.
  Material:Air with formula: N0.78-O0.22 added! 
      Nb of Material = 2
      Nb of Isotope =  0
      Nb of Element =  3
+
+---> warning from G4Element::GetElement(). The element: Al does not exist in the table. Return NULL pointer.
  Material:Aluminium with formula: Al added! 
      Nb of Material = 3
      Nb of Isotope =  0
      Nb of Element =  4
+
+---> warning from G4Element::GetElement(). The element: Si does not exist in the table. Return NULL pointer.
  Material:Silicon with formula: Si added! 
      Nb of Material = 4
      Nb of Isotope =  0
      Nb of Element =  5
+
+---> warning from G4Element::GetElement(). The element: Pb does not exist in the table. Return NULL pointer.
  Material:Lead with formula: Pb added! 
      Nb of Material = 5
      Nb of Isotope =  0
      Nb of Element =  6
+
+---> warning from G4Element::GetElement(). The element: Ge does not exist in the table. Return NULL pointer.
  Material:Germanium with formula: Ge added! 
      Nb of Material = 6
      Nb of Isotope =  0
      Nb of Element =  7
+
+---> warning from G4Element::GetElement(). The element: Cs does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  I does not exist in the table. Return NULL pointer.
  Material:CsI with formula: Cs-I added! 
      Nb of Material = 7
      Nb of Isotope =  0
@@ -175,6 +283,528 @@ G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  FukuiRenderer (DAWN)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  RayTracerX (RayTracerX)
+  VRML1 (VRML1)
+  VRML2 (VRML2)
+
+Registering model factories...
+G4VUserPhysicsList::Construct()
+Construct processes 
+world cuts are set
+Target cuts are set
+Detector cuts are set
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [500 (mm)]   is too big   for material  idx=5
+The cut in energy is set1.79769e+305GeV 
+
+phot:  Total cross sections from Sandia parametrisation. 
+
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according to the Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+msc:  Model variant of multiple scattering for F24[0.0]
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 550.166 keV    e- 90.585 MeV    e+ 84.1353 MeV
+ Region(s) which use this couple : 
+    Target
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Germanium
+ Range cuts        :  gamma 50 cm     e- 50 cm     e+ 50 cm 
+ Energy thresholds :  gamma 2.88022e+295 J      e- 1.91846 GeV    e+ 1.73853 GeV
+ Region(s) which use this couple : 
+    Detector
+
+====================================================================
+
+### exrdmHisto books 7 histograms 
+Tree store  : f24c.aida
+Creating Ntuple: Emitted Particles
+Creating Ntuple: RadioIsotopes
+Creating Ntuple: Energy Depositions
+### Run : 0
+Closing the tree...
+exrdmHistograms and Ntuples are saved
+### exrdmHisto books 7 histograms 
+Tree store  : f24c-b.aida
+Creating Ntuple: Emitted Particles
+Creating Ntuple: RadioIsotopes
+Creating Ntuple: Energy Depositions
+Closing the tree...
+exrdmHistograms and Ntuples are saved
+### exrdmHisto books 7 histograms 
+Tree store  : f24.aida
+Creating Ntuple: Emitted Particles
+Creating Ntuple: RadioIsotopes
+Creating Ntuple: Energy Depositions
+Closing the tree...
+exrdmHistograms and Ntuples are saved
+### exrdmHisto books 7 histograms 
+Tree store  : f24-b.aida
+Creating Ntuple: Emitted Particles
+Creating Ntuple: RadioIsotopes
+Creating Ntuple: Energy Depositions
+Closing the tree...
+exrdmHistograms and Ntuples are saved
+Graphics systems deleted.
+Visualization Manager deleting...
+
+*************************************************************
+ Geant4 version Name: geant4-08-00-ref-00    (16-December-2005)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+
+---> warning from G4Element::GetElement(). The element:  H does not exist in the table. Return NULL pointer.
+ Material:Vacuum with formula: H added! 
+     Nb of Material = 1
+     Nb of Isotope =  0
+     Nb of Element =  1
+
+---> warning from G4Element::GetElement(). The element:  N does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  O does not exist in the table. Return NULL pointer.
+ Material:Air with formula: N0.78-O0.22 added! 
+     Nb of Material = 2
+     Nb of Isotope =  0
+     Nb of Element =  3
+
+---> warning from G4Element::GetElement(). The element: Al does not exist in the table. Return NULL pointer.
+ Material:Aluminium with formula: Al added! 
+     Nb of Material = 3
+     Nb of Isotope =  0
+     Nb of Element =  4
+
+---> warning from G4Element::GetElement(). The element: Si does not exist in the table. Return NULL pointer.
+ Material:Silicon with formula: Si added! 
+     Nb of Material = 4
+     Nb of Isotope =  0
+     Nb of Element =  5
+
+---> warning from G4Element::GetElement(). The element: Pb does not exist in the table. Return NULL pointer.
+ Material:Lead with formula: Pb added! 
+     Nb of Material = 5
+     Nb of Isotope =  0
+     Nb of Element =  6
+
+---> warning from G4Element::GetElement(). The element: Ge does not exist in the table. Return NULL pointer.
+ Material:Germanium with formula: Ge added! 
+     Nb of Material = 6
+     Nb of Isotope =  0
+     Nb of Element =  7
+
+---> warning from G4Element::GetElement(). The element: Cs does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  I does not exist in the table. Return NULL pointer.
+ Material:CsI with formula: Cs-I added! 
+     Nb of Material = 7
+     Nb of Isotope =  0
+     Nb of Element =  9
+G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  FukuiRenderer (DAWN)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  RayTracerX (RayTracerX)
+  VRML1 (VRML1)
+  VRML2 (VRML2)
+
+Registering model factories...
+G4VUserPhysicsList::Construct()
+Construct processes 
+world cuts are set
+Target cuts are set
+Detector cuts are set
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [500 (mm)]   is too big   for material  idx=5
+The cut in energy is set1.79769e+305GeV 
+
+phot:  Total cross sections from Sandia parametrisation. 
+
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according to the Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+msc:  Model variant of multiple scattering for Na24[0.0]
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 550.166 keV    e- 90.585 MeV    e+ 84.1353 MeV
+ Region(s) which use this couple : 
+    Target
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Germanium
+ Range cuts        :  gamma 50 cm     e- 50 cm     e+ 50 cm 
+ Energy thresholds :  gamma 2.88022e+295 J      e- 1.91846 GeV    e+ 1.73853 GeV
+ Region(s) which use this couple : 
+    Detector
+
+====================================================================
+
+### exrdmHisto books 7 histograms 
+Tree store  : na24.aida
+Creating Ntuple: Emitted Particles
+Creating Ntuple: RadioIsotopes
+Creating Ntuple: Energy Depositions
+### Run : 0
+Closing the tree...
+exrdmHistograms and Ntuples are saved
+### exrdmHisto books 7 histograms 
+Tree store  : na24m.aida
+Creating Ntuple: Emitted Particles
+Creating Ntuple: RadioIsotopes
+Creating Ntuple: Energy Depositions
+Closing the tree...
+exrdmHistograms and Ntuples are saved
+### exrdmHisto books 7 histograms 
+Tree store  : ne24.aida
+Creating Ntuple: Emitted Particles
+Creating Ntuple: RadioIsotopes
+Creating Ntuple: Energy Depositions
+Closing the tree...
+exrdmHistograms and Ntuples are saved
+### exrdmHisto books 7 histograms 
+Tree store  : al24.aida
+Creating Ntuple: Emitted Particles
+Creating Ntuple: RadioIsotopes
+Creating Ntuple: Energy Depositions
+Closing the tree...
+exrdmHistograms and Ntuples are saved
+### exrdmHisto books 7 histograms 
+Tree store  : cr46.aida
+Creating Ntuple: Emitted Particles
+Creating Ntuple: RadioIsotopes
+Creating Ntuple: Energy Depositions
+Closing the tree...
+exrdmHistograms and Ntuples are saved
+### exrdmHisto books 7 histograms 
+Tree store  : po215.aida
+Creating Ntuple: Emitted Particles
+Creating Ntuple: RadioIsotopes
+Creating Ntuple: Energy Depositions
+Closing the tree...
+exrdmHistograms and Ntuples are saved
+### exrdmHisto books 7 histograms 
+Tree store  : po215.aida
+Creating Ntuple: Emitted Particles
+Creating Ntuple: RadioIsotopes
+Creating Ntuple: Energy Depositions
+Closing the tree...
+exrdmHistograms and Ntuples are saved
+Graphics systems deleted.
+Visualization Manager deleting...
+
+*************************************************************
+ Geant4 version Name: geant4-08-00-ref-00    (16-December-2005)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+
+---> warning from G4Element::GetElement(). The element:  H does not exist in the table. Return NULL pointer.
+ Material:Vacuum with formula: H added! 
+     Nb of Material = 1
+     Nb of Isotope =  0
+     Nb of Element =  1
+
+---> warning from G4Element::GetElement(). The element:  N does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  O does not exist in the table. Return NULL pointer.
+ Material:Air with formula: N0.78-O0.22 added! 
+     Nb of Material = 2
+     Nb of Isotope =  0
+     Nb of Element =  3
+
+---> warning from G4Element::GetElement(). The element: Al does not exist in the table. Return NULL pointer.
+ Material:Aluminium with formula: Al added! 
+     Nb of Material = 3
+     Nb of Isotope =  0
+     Nb of Element =  4
+
+---> warning from G4Element::GetElement(). The element: Si does not exist in the table. Return NULL pointer.
+ Material:Silicon with formula: Si added! 
+     Nb of Material = 4
+     Nb of Isotope =  0
+     Nb of Element =  5
+
+---> warning from G4Element::GetElement(). The element: Pb does not exist in the table. Return NULL pointer.
+ Material:Lead with formula: Pb added! 
+     Nb of Material = 5
+     Nb of Isotope =  0
+     Nb of Element =  6
+
+---> warning from G4Element::GetElement(). The element: Ge does not exist in the table. Return NULL pointer.
+ Material:Germanium with formula: Ge added! 
+     Nb of Material = 6
+     Nb of Isotope =  0
+     Nb of Element =  7
+
+---> warning from G4Element::GetElement(). The element: Cs does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  I does not exist in the table. Return NULL pointer.
+ Material:CsI with formula: Cs-I added! 
+     Nb of Material = 7
+     Nb of Isotope =  0
+     Nb of Element =  9
+G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  FukuiRenderer (DAWN)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  RayTracerX (RayTracerX)
+  VRML1 (VRML1)
+  VRML2 (VRML2)
+
+Registering model factories...
 G4VUserPhysicsList::Construct()
 Construct processes 
 world cuts are set
@@ -204,13 +834,13 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -222,7 +852,7 @@ eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -236,7 +866,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -249,7 +879,7 @@ msc:  Model variant of multiple scattering for Cf240[0.0]
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -287,7 +917,7 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ========= Table of registered couples ==============================
 
@@ -315,62 +945,65 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 ### exrdmHisto books 7 histograms 
-Loaded linked in JVM.
-Looking for already loaded JVMs...
-None found.
-Using CLASSPATH.
-classpathOption: -Djava.class.path=/fred/flei/AIDAJNI-3.2.3/lib/freehep-aidajni.jar:/fred/flei/JAIDA-3.2.3/lib/optimizers.jar:/fred/flei/JAIDA-3.2.3/lib/openide-lookup.jar:/fred/flei/JAIDA-3.2.3/lib/jel.jar:/fred/flei/JAIDA-3.2.3/lib/jas-plotter.jar:/fred/flei/JAIDA-3.2.3/lib/freehep-hep.jar:/fred/flei/JAIDA-3.2.3/lib/freehep-base.jar:/fred/flei/JAIDA-3.2.3/lib/bcel.jar:/fred/flei/JAIDA-3.2.3/lib/aida-dev.jar:/fred/flei/JAIDA-3.2.3/lib/aida.jar:
-Starting JVM...JVM Created.
 Tree store  : multiple-source.aida
 Creating Ntuple: Emitted Particles
 Creating Ntuple: RadioIsotopes
 Creating Ntuple: Energy Depositions
 ### Run : 0
-G4AugerData for Element no. 7 are loaded
-G4AugerData for Element no. 8 are loaded
-G4AugerData for Element no. 13 are loaded
-G4AugerData for Element no. 14 are loaded
-G4AugerData for Element no. 32 are loaded
-G4AugerData for Element no. 53 are loaded
-G4AugerData for Element no. 55 are loaded
-G4AugerData for Element no. 82 are loaded
-AugerTransitionTable complete
 Closing the tree...
 exrdmHistograms and Ntuples are saved
 Graphics systems deleted.
 Visualization Manager deleting...
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (23-February-2005)
+ Geant4 version Name: geant4-08-00-ref-00    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
+
+---> warning from G4Element::GetElement(). The element:  H does not exist in the table. Return NULL pointer.
  Material:Vacuum with formula: H added! 
      Nb of Material = 1
      Nb of Isotope =  0
      Nb of Element =  1
+
+---> warning from G4Element::GetElement(). The element:  N does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  O does not exist in the table. Return NULL pointer.
  Material:Air with formula: N0.78-O0.22 added! 
      Nb of Material = 2
      Nb of Isotope =  0
      Nb of Element =  3
+
+---> warning from G4Element::GetElement(). The element: Al does not exist in the table. Return NULL pointer.
  Material:Aluminium with formula: Al added! 
      Nb of Material = 3
      Nb of Isotope =  0
      Nb of Element =  4
+
+---> warning from G4Element::GetElement(). The element: Si does not exist in the table. Return NULL pointer.
  Material:Silicon with formula: Si added! 
      Nb of Material = 4
      Nb of Isotope =  0
      Nb of Element =  5
+
+---> warning from G4Element::GetElement(). The element: Pb does not exist in the table. Return NULL pointer.
  Material:Lead with formula: Pb added! 
      Nb of Material = 5
      Nb of Isotope =  0
      Nb of Element =  6
+
+---> warning from G4Element::GetElement(). The element: Ge does not exist in the table. Return NULL pointer.
  Material:Germanium with formula: Ge added! 
      Nb of Material = 6
      Nb of Isotope =  0
      Nb of Element =  7
+
+---> warning from G4Element::GetElement(). The element: Cs does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  I does not exist in the table. Return NULL pointer.
  Material:CsI with formula: Cs-I added! 
      Nb of Material = 7
      Nb of Isotope =  0
@@ -379,63 +1012,27 @@ G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
-***** COMMAND NOT FOUND </histo/setHisto 0 50 0 5 MeV> *****
-***** Command ignored *****
-Graphics systems deleted.
-Visualization Manager deleting...
 
-*************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (23-February-2005)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  FukuiRenderer (DAWN)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  RayTracerX (RayTracerX)
+  VRML1 (VRML1)
+  VRML2 (VRML2)
 
- Material:Vacuum with formula: H added! 
-     Nb of Material = 1
-     Nb of Isotope =  0
-     Nb of Element =  1
- Material:Air with formula: N0.78-O0.22 added! 
-     Nb of Material = 2
-     Nb of Isotope =  0
-     Nb of Element =  3
- Material:Aluminium with formula: Al added! 
-     Nb of Material = 3
-     Nb of Isotope =  0
-     Nb of Element =  4
- Material:Silicon with formula: Si added! 
-     Nb of Material = 4
-     Nb of Isotope =  0
-     Nb of Element =  5
- Material:Lead with formula: Pb added! 
-     Nb of Material = 5
-     Nb of Isotope =  0
-     Nb of Element =  6
- Material:Germanium with formula: Ge added! 
-     Nb of Material = 6
-     Nb of Isotope =  0
-     Nb of Element =  7
- Material:CsI with formula: Cs-I added! 
-     Nb of Material = 7
-     Nb of Isotope =  0
-     Nb of Element =  9
-G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
-Visualization Manager instantiating...
-Visualization Manager initialising...
-Registering graphics systems...
-exrdmPhysicsList::SelectPhysicsList: <Hadron>
- Material:NaI with formula: Na-I added! 
-     Nb of Material = 8
-     Nb of Isotope =  0
-     Nb of Element =  10
-
-----> The target has been changed to 1 cm of NaI
+Registering model factories...
 G4VUserPhysicsList::Construct()
 Construct processes 
-Thank you for using G4BinaryCascade. 
-/fred/geant4/g4/data/G4NDL
-Thank you for using G4BinaryCascade. 
-Thank you for using G4BinaryCascade. 
 world cuts are set
 Target cuts are set
 Detector cuts are set
@@ -457,13 +1054,13 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -475,7 +1072,7 @@ eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -489,7 +1086,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -498,11 +1095,11 @@ hIoni:   tables are built for  proton
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
-msc:  Model variant of multiple scattering for GenericIon
+msc:  Model variant of multiple scattering for Ne24[0.0]
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -540,7 +1137,247 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 550.166 keV    e- 90.585 MeV    e+ 84.1353 MeV
+ Region(s) which use this couple : 
+    Target
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Germanium
+ Range cuts        :  gamma 50 cm     e- 50 cm     e+ 50 cm 
+ Energy thresholds :  gamma 2.88022e+295 J      e- 1.91846 GeV    e+ 1.73853 GeV
+ Region(s) which use this couple : 
+    Detector
+
+====================================================================
+
+### exrdmHisto books 7 histograms 
+Tree store  : ne24-br-on.aida
+Creating Ntuple: Emitted Particles
+Creating Ntuple: RadioIsotopes
+Creating Ntuple: Energy Depositions
+### Run : 0
+Closing the tree...
+exrdmHistograms and Ntuples are saved
+### exrdmHisto books 7 histograms 
+Tree store  : ne24-br-off.aida
+Creating Ntuple: Emitted Particles
+Creating Ntuple: RadioIsotopes
+Creating Ntuple: Energy Depositions
+Closing the tree...
+exrdmHistograms and Ntuples are saved
+Graphics systems deleted.
+Visualization Manager deleting...
+
+*************************************************************
+ Geant4 version Name: geant4-08-00-ref-00    (16-December-2005)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+
+---> warning from G4Element::GetElement(). The element:  H does not exist in the table. Return NULL pointer.
+ Material:Vacuum with formula: H added! 
+     Nb of Material = 1
+     Nb of Isotope =  0
+     Nb of Element =  1
+
+---> warning from G4Element::GetElement(). The element:  N does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  O does not exist in the table. Return NULL pointer.
+ Material:Air with formula: N0.78-O0.22 added! 
+     Nb of Material = 2
+     Nb of Isotope =  0
+     Nb of Element =  3
+
+---> warning from G4Element::GetElement(). The element: Al does not exist in the table. Return NULL pointer.
+ Material:Aluminium with formula: Al added! 
+     Nb of Material = 3
+     Nb of Isotope =  0
+     Nb of Element =  4
+
+---> warning from G4Element::GetElement(). The element: Si does not exist in the table. Return NULL pointer.
+ Material:Silicon with formula: Si added! 
+     Nb of Material = 4
+     Nb of Isotope =  0
+     Nb of Element =  5
+
+---> warning from G4Element::GetElement(). The element: Pb does not exist in the table. Return NULL pointer.
+ Material:Lead with formula: Pb added! 
+     Nb of Material = 5
+     Nb of Isotope =  0
+     Nb of Element =  6
+
+---> warning from G4Element::GetElement(). The element: Ge does not exist in the table. Return NULL pointer.
+ Material:Germanium with formula: Ge added! 
+     Nb of Material = 6
+     Nb of Isotope =  0
+     Nb of Element =  7
+
+---> warning from G4Element::GetElement(). The element: Cs does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  I does not exist in the table. Return NULL pointer.
+ Material:CsI with formula: Cs-I added! 
+     Nb of Material = 7
+     Nb of Isotope =  0
+     Nb of Element =  9
+G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  FukuiRenderer (DAWN)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  RayTracerX (RayTracerX)
+  VRML1 (VRML1)
+  VRML2 (VRML2)
+
+Registering model factories...
+exrdmPhysicsList::SelectPhysicsList: <Hadron>
+
+---> warning from G4Element::GetElement(). The element: Na does not exist in the table. Return NULL pointer.
+ Material:NaI with formula: Na-I added! 
+     Nb of Material = 8
+     Nb of Isotope =  0
+     Nb of Element =  10
+
+----> The target has been changed to 1 cm of NaI
+G4VUserPhysicsList::Construct()
+Construct processes 
+Thank you for using G4BinaryCascade. 
+/home/qinetiq/g4/geant4/data/G4NDL3.7
+Thank you for using G4BinaryCascade. 
+Thank you for using G4BinaryCascade. 
+world cuts are set
+Target cuts are set
+Detector cuts are set
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [500 (mm)]   is too big   for material  idx=5
+The cut in energy is set1.79769e+305GeV 
+
+phot:  Total cross sections from Sandia parametrisation. 
+
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according to the Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+msc:  Model variant of multiple scattering for GenericIon
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ========= Table of registered couples ==============================
 
@@ -568,12 +1405,6 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 ### exrdmHisto books 7 histograms 
-Loaded linked in JVM.
-Looking for already loaded JVMs...
-None found.
-Using CLASSPATH.
-classpathOption: -Djava.class.path=/fred/flei/AIDAJNI-3.2.3/lib/freehep-aidajni.jar:/fred/flei/JAIDA-3.2.3/lib/optimizers.jar:/fred/flei/JAIDA-3.2.3/lib/openide-lookup.jar:/fred/flei/JAIDA-3.2.3/lib/jel.jar:/fred/flei/JAIDA-3.2.3/lib/jas-plotter.jar:/fred/flei/JAIDA-3.2.3/lib/freehep-hep.jar:/fred/flei/JAIDA-3.2.3/lib/freehep-base.jar:/fred/flei/JAIDA-3.2.3/lib/bcel.jar:/fred/flei/JAIDA-3.2.3/lib/aida-dev.jar:/fred/flei/JAIDA-3.2.3/lib/aida.jar:
-Starting JVM...JVM Created.
 Tree store  : neutron-10ev.aida
 Creating Ntuple: Emitted Particles
 Creating Ntuple: RadioIsotopes
@@ -585,36 +1416,54 @@ Graphics systems deleted.
 Visualization Manager deleting...
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (23-February-2005)
+ Geant4 version Name: geant4-08-00-ref-00    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
+
+---> warning from G4Element::GetElement(). The element:  H does not exist in the table. Return NULL pointer.
  Material:Vacuum with formula: H added! 
      Nb of Material = 1
      Nb of Isotope =  0
      Nb of Element =  1
+
+---> warning from G4Element::GetElement(). The element:  N does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  O does not exist in the table. Return NULL pointer.
  Material:Air with formula: N0.78-O0.22 added! 
      Nb of Material = 2
      Nb of Isotope =  0
      Nb of Element =  3
+
+---> warning from G4Element::GetElement(). The element: Al does not exist in the table. Return NULL pointer.
  Material:Aluminium with formula: Al added! 
      Nb of Material = 3
      Nb of Isotope =  0
      Nb of Element =  4
+
+---> warning from G4Element::GetElement(). The element: Si does not exist in the table. Return NULL pointer.
  Material:Silicon with formula: Si added! 
      Nb of Material = 4
      Nb of Isotope =  0
      Nb of Element =  5
+
+---> warning from G4Element::GetElement(). The element: Pb does not exist in the table. Return NULL pointer.
  Material:Lead with formula: Pb added! 
      Nb of Material = 5
      Nb of Isotope =  0
      Nb of Element =  6
+
+---> warning from G4Element::GetElement(). The element: Ge does not exist in the table. Return NULL pointer.
  Material:Germanium with formula: Ge added! 
      Nb of Material = 6
      Nb of Isotope =  0
      Nb of Element =  7
+
+---> warning from G4Element::GetElement(). The element: Cs does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  I does not exist in the table. Return NULL pointer.
  Material:CsI with formula: Cs-I added! 
      Nb of Material = 7
      Nb of Isotope =  0
@@ -623,6 +1472,25 @@ G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  FukuiRenderer (DAWN)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  RayTracerX (RayTracerX)
+  VRML1 (VRML1)
+  VRML2 (VRML2)
+
+Registering model factories...
 G4VUserPhysicsList::Construct()
 Construct processes 
 world cuts are set
@@ -643,13 +1511,13 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -661,7 +1529,7 @@ eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -675,7 +1543,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -689,7 +1557,7 @@ msc:  Model variant of multiple scattering for GenericIon
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -727,7 +1595,7 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ========= Table of registered couples ==============================
 
@@ -755,12 +1623,6 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 ### exrdmHisto books 7 histograms 
-Loaded linked in JVM.
-Looking for already loaded JVMs...
-None found.
-Using CLASSPATH.
-classpathOption: -Djava.class.path=/fred/flei/AIDAJNI-3.2.3/lib/freehep-aidajni.jar:/fred/flei/JAIDA-3.2.3/lib/optimizers.jar:/fred/flei/JAIDA-3.2.3/lib/openide-lookup.jar:/fred/flei/JAIDA-3.2.3/lib/jel.jar:/fred/flei/JAIDA-3.2.3/lib/jas-plotter.jar:/fred/flei/JAIDA-3.2.3/lib/freehep-hep.jar:/fred/flei/JAIDA-3.2.3/lib/freehep-base.jar:/fred/flei/JAIDA-3.2.3/lib/bcel.jar:/fred/flei/JAIDA-3.2.3/lib/aida-dev.jar:/fred/flei/JAIDA-3.2.3/lib/aida.jar:
-Starting JVM...JVM Created.
 Tree store  : one-iso.aida
 Creating Ntuple: Emitted Particles
 Creating Ntuple: RadioIsotopes
@@ -780,36 +1642,54 @@ Graphics systems deleted.
 Visualization Manager deleting...
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (23-February-2005)
+ Geant4 version Name: geant4-08-00-ref-00    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
+
+---> warning from G4Element::GetElement(). The element:  H does not exist in the table. Return NULL pointer.
  Material:Vacuum with formula: H added! 
      Nb of Material = 1
      Nb of Isotope =  0
      Nb of Element =  1
+
+---> warning from G4Element::GetElement(). The element:  N does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  O does not exist in the table. Return NULL pointer.
  Material:Air with formula: N0.78-O0.22 added! 
      Nb of Material = 2
      Nb of Isotope =  0
      Nb of Element =  3
+
+---> warning from G4Element::GetElement(). The element: Al does not exist in the table. Return NULL pointer.
  Material:Aluminium with formula: Al added! 
      Nb of Material = 3
      Nb of Isotope =  0
      Nb of Element =  4
+
+---> warning from G4Element::GetElement(). The element: Si does not exist in the table. Return NULL pointer.
  Material:Silicon with formula: Si added! 
      Nb of Material = 4
      Nb of Isotope =  0
      Nb of Element =  5
+
+---> warning from G4Element::GetElement(). The element: Pb does not exist in the table. Return NULL pointer.
  Material:Lead with formula: Pb added! 
      Nb of Material = 5
      Nb of Isotope =  0
      Nb of Element =  6
+
+---> warning from G4Element::GetElement(). The element: Ge does not exist in the table. Return NULL pointer.
  Material:Germanium with formula: Ge added! 
      Nb of Material = 6
      Nb of Isotope =  0
      Nb of Element =  7
+
+---> warning from G4Element::GetElement(). The element: Cs does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  I does not exist in the table. Return NULL pointer.
  Material:CsI with formula: Cs-I added! 
      Nb of Material = 7
      Nb of Isotope =  0
@@ -818,13 +1698,32 @@ G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  FukuiRenderer (DAWN)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  RayTracerX (RayTracerX)
+  VRML1 (VRML1)
+  VRML2 (VRML2)
+
+Registering model factories...
 exrdmPhysicsList::SelectPhysicsList: <Hadron>
 
 ----> The target has been changed to 1 cm of Lead
 G4VUserPhysicsList::Construct()
 Construct processes 
 Thank you for using G4BinaryCascade. 
-/fred/geant4/g4/data/G4NDL
+/home/qinetiq/g4/geant4/data/G4NDL3.7
 Thank you for using G4BinaryCascade. 
 Thank you for using G4BinaryCascade. 
 world cuts are set
@@ -848,13 +1747,13 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -866,7 +1765,7 @@ eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -880,7 +1779,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -893,7 +1792,7 @@ msc:  Model variant of multiple scattering for GenericIon
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -931,7 +1830,7 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ========= Table of registered couples ==============================
 
@@ -959,62 +1858,65 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 ### exrdmHisto books 7 histograms 
-Loaded linked in JVM.
-Looking for already loaded JVMs...
-None found.
-Using CLASSPATH.
-classpathOption: -Djava.class.path=/fred/flei/AIDAJNI-3.2.3/lib/freehep-aidajni.jar:/fred/flei/JAIDA-3.2.3/lib/optimizers.jar:/fred/flei/JAIDA-3.2.3/lib/openide-lookup.jar:/fred/flei/JAIDA-3.2.3/lib/jel.jar:/fred/flei/JAIDA-3.2.3/lib/jas-plotter.jar:/fred/flei/JAIDA-3.2.3/lib/freehep-hep.jar:/fred/flei/JAIDA-3.2.3/lib/freehep-base.jar:/fred/flei/JAIDA-3.2.3/lib/bcel.jar:/fred/flei/JAIDA-3.2.3/lib/aida-dev.jar:/fred/flei/JAIDA-3.2.3/lib/aida.jar:
-Starting JVM...JVM Created.
 Tree store  : proton-1gev.aida
 Creating Ntuple: Emitted Particles
 Creating Ntuple: RadioIsotopes
 Creating Ntuple: Energy Depositions
 ### Run : 0
-G4AugerData for Element no. 7 are loaded
-G4AugerData for Element no. 8 are loaded
-G4AugerData for Element no. 13 are loaded
-G4AugerData for Element no. 14 are loaded
-G4AugerData for Element no. 32 are loaded
-G4AugerData for Element no. 53 are loaded
-G4AugerData for Element no. 55 are loaded
-G4AugerData for Element no. 82 are loaded
-AugerTransitionTable complete
 Closing the tree...
 exrdmHistograms and Ntuples are saved
 Graphics systems deleted.
 Visualization Manager deleting...
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (23-February-2005)
+ Geant4 version Name: geant4-08-00-ref-00    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
+
+---> warning from G4Element::GetElement(). The element:  H does not exist in the table. Return NULL pointer.
  Material:Vacuum with formula: H added! 
      Nb of Material = 1
      Nb of Isotope =  0
      Nb of Element =  1
+
+---> warning from G4Element::GetElement(). The element:  N does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  O does not exist in the table. Return NULL pointer.
  Material:Air with formula: N0.78-O0.22 added! 
      Nb of Material = 2
      Nb of Isotope =  0
      Nb of Element =  3
+
+---> warning from G4Element::GetElement(). The element: Al does not exist in the table. Return NULL pointer.
  Material:Aluminium with formula: Al added! 
      Nb of Material = 3
      Nb of Isotope =  0
      Nb of Element =  4
+
+---> warning from G4Element::GetElement(). The element: Si does not exist in the table. Return NULL pointer.
  Material:Silicon with formula: Si added! 
      Nb of Material = 4
      Nb of Isotope =  0
      Nb of Element =  5
+
+---> warning from G4Element::GetElement(). The element: Pb does not exist in the table. Return NULL pointer.
  Material:Lead with formula: Pb added! 
      Nb of Material = 5
      Nb of Isotope =  0
      Nb of Element =  6
+
+---> warning from G4Element::GetElement(). The element: Ge does not exist in the table. Return NULL pointer.
  Material:Germanium with formula: Ge added! 
      Nb of Material = 6
      Nb of Isotope =  0
      Nb of Element =  7
+
+---> warning from G4Element::GetElement(). The element: Cs does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  I does not exist in the table. Return NULL pointer.
  Material:CsI with formula: Cs-I added! 
      Nb of Material = 7
      Nb of Isotope =  0
@@ -1023,13 +1925,32 @@ G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  FukuiRenderer (DAWN)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  RayTracerX (RayTracerX)
+  VRML1 (VRML1)
+  VRML2 (VRML2)
+
+Registering model factories...
 exrdmPhysicsList::SelectPhysicsList: <Hadron>
 
 ----> The target has been changed to 1 cm of Lead
 G4VUserPhysicsList::Construct()
 Construct processes 
 Thank you for using G4BinaryCascade. 
-/fred/geant4/g4/data/G4NDL
+/home/qinetiq/g4/geant4/data/G4NDL3.7
 Thank you for using G4BinaryCascade. 
 Thank you for using G4BinaryCascade. 
 world cuts are set
@@ -1058,13 +1979,13 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1076,7 +1997,7 @@ eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1090,7 +2011,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1103,7 +2024,7 @@ msc:  Model variant of multiple scattering for GenericIon
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1141,7 +2062,7 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ========= Table of registered couples ==============================
 
@@ -1169,62 +2090,65 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 ### exrdmHisto books 7 histograms 
-Loaded linked in JVM.
-Looking for already loaded JVMs...
-None found.
-Using CLASSPATH.
-classpathOption: -Djava.class.path=/fred/flei/AIDAJNI-3.2.3/lib/freehep-aidajni.jar:/fred/flei/JAIDA-3.2.3/lib/optimizers.jar:/fred/flei/JAIDA-3.2.3/lib/openide-lookup.jar:/fred/flei/JAIDA-3.2.3/lib/jel.jar:/fred/flei/JAIDA-3.2.3/lib/jas-plotter.jar:/fred/flei/JAIDA-3.2.3/lib/freehep-hep.jar:/fred/flei/JAIDA-3.2.3/lib/freehep-base.jar:/fred/flei/JAIDA-3.2.3/lib/bcel.jar:/fred/flei/JAIDA-3.2.3/lib/aida-dev.jar:/fred/flei/JAIDA-3.2.3/lib/aida.jar:
-Starting JVM...JVM Created.
 Tree store  : proton-b.aida
 Creating Ntuple: Emitted Particles
 Creating Ntuple: RadioIsotopes
 Creating Ntuple: Energy Depositions
 ### Run : 0
-G4AugerData for Element no. 7 are loaded
-G4AugerData for Element no. 8 are loaded
-G4AugerData for Element no. 13 are loaded
-G4AugerData for Element no. 14 are loaded
-G4AugerData for Element no. 32 are loaded
-G4AugerData for Element no. 53 are loaded
-G4AugerData for Element no. 55 are loaded
-G4AugerData for Element no. 82 are loaded
-AugerTransitionTable complete
 Closing the tree...
 exrdmHistograms and Ntuples are saved
 Graphics systems deleted.
 Visualization Manager deleting...
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (23-February-2005)
+ Geant4 version Name: geant4-08-00-ref-00    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
+
+---> warning from G4Element::GetElement(). The element:  H does not exist in the table. Return NULL pointer.
  Material:Vacuum with formula: H added! 
      Nb of Material = 1
      Nb of Isotope =  0
      Nb of Element =  1
+
+---> warning from G4Element::GetElement(). The element:  N does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  O does not exist in the table. Return NULL pointer.
  Material:Air with formula: N0.78-O0.22 added! 
      Nb of Material = 2
      Nb of Isotope =  0
      Nb of Element =  3
+
+---> warning from G4Element::GetElement(). The element: Al does not exist in the table. Return NULL pointer.
  Material:Aluminium with formula: Al added! 
      Nb of Material = 3
      Nb of Isotope =  0
      Nb of Element =  4
+
+---> warning from G4Element::GetElement(). The element: Si does not exist in the table. Return NULL pointer.
  Material:Silicon with formula: Si added! 
      Nb of Material = 4
      Nb of Isotope =  0
      Nb of Element =  5
+
+---> warning from G4Element::GetElement(). The element: Pb does not exist in the table. Return NULL pointer.
  Material:Lead with formula: Pb added! 
      Nb of Material = 5
      Nb of Isotope =  0
      Nb of Element =  6
+
+---> warning from G4Element::GetElement(). The element: Ge does not exist in the table. Return NULL pointer.
  Material:Germanium with formula: Ge added! 
      Nb of Material = 6
      Nb of Isotope =  0
      Nb of Element =  7
+
+---> warning from G4Element::GetElement(). The element: Cs does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  I does not exist in the table. Return NULL pointer.
  Material:CsI with formula: Cs-I added! 
      Nb of Material = 7
      Nb of Isotope =  0
@@ -1233,13 +2157,32 @@ G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  FukuiRenderer (DAWN)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  RayTracerX (RayTracerX)
+  VRML1 (VRML1)
+  VRML2 (VRML2)
+
+Registering model factories...
 exrdmPhysicsList::SelectPhysicsList: <Hadron>
 
 ----> The target has been changed to 3 cm of Lead
 G4VUserPhysicsList::Construct()
 Construct processes 
 Thank you for using G4BinaryCascade. 
-/fred/geant4/g4/data/G4NDL
+/home/qinetiq/g4/geant4/data/G4NDL3.7
 Thank you for using G4BinaryCascade. 
 Thank you for using G4BinaryCascade. 
 world cuts are set
@@ -1263,13 +2206,13 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1281,7 +2224,7 @@ eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1295,7 +2238,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1308,7 +2251,7 @@ msc:  Model variant of multiple scattering for Co57[0.0]
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1346,7 +2289,7 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ========= Table of registered couples ==============================
 
@@ -1374,26 +2317,11 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 ### exrdmHisto books 7 histograms 
-Loaded linked in JVM.
-Looking for already loaded JVMs...
-None found.
-Using CLASSPATH.
-classpathOption: -Djava.class.path=/fred/flei/AIDAJNI-3.2.3/lib/freehep-aidajni.jar:/fred/flei/JAIDA-3.2.3/lib/optimizers.jar:/fred/flei/JAIDA-3.2.3/lib/openide-lookup.jar:/fred/flei/JAIDA-3.2.3/lib/jel.jar:/fred/flei/JAIDA-3.2.3/lib/jas-plotter.jar:/fred/flei/JAIDA-3.2.3/lib/freehep-hep.jar:/fred/flei/JAIDA-3.2.3/lib/freehep-base.jar:/fred/flei/JAIDA-3.2.3/lib/bcel.jar:/fred/flei/JAIDA-3.2.3/lib/aida-dev.jar:/fred/flei/JAIDA-3.2.3/lib/aida.jar:
-Starting JVM...JVM Created.
 Tree store  : test.aida
 Creating Ntuple: Emitted Particles
 Creating Ntuple: RadioIsotopes
 Creating Ntuple: Energy Depositions
 ### Run : 0
-G4AugerData for Element no. 7 are loaded
-G4AugerData for Element no. 8 are loaded
-G4AugerData for Element no. 13 are loaded
-G4AugerData for Element no. 14 are loaded
-G4AugerData for Element no. 32 are loaded
-G4AugerData for Element no. 53 are loaded
-G4AugerData for Element no. 55 are loaded
-G4AugerData for Element no. 82 are loaded
-AugerTransitionTable complete
 Closing the tree...
 exrdmHistograms and Ntuples are saved
 G4ProcessManager:particle[proton]
@@ -1415,13 +2343,13 @@ G4ProcessManager:particle[proton]
   Ordering::      
   index                 -1:      -1:       0:       2:       2:       2:
   parameter             -1:      -1:       2:       2:       2:       2:
-[3]=== process[LElastic :NotDefined] Active 
+[3]=== process[LElastic :Hadronic] Active 
   Ordering::             AtRest             AlongStep          PostStep   
                     GetPIL/    DoIt    GetPIL/    DoIt    GetPIL/    DoIt 
   Ordering::      
   index                 -1:      -1:      -1:      -1:       1:       3:
   parameter             -1:      -1:      -1:      -1:    1000:    1000:
-[4]=== process[ProtonInelastic :NotDefined] Active 
+[4]=== process[ProtonInelastic :Hadronic] Active 
   Ordering::             AtRest             AlongStep          PostStep   
                     GetPIL/    DoIt    GetPIL/    DoIt    GetPIL/    DoIt 
   Ordering::      
@@ -1432,7 +2360,7 @@ G4ProcessManager:particle[GenericIon]
 [1]=== process[RadioactiveDecay :Decay] Active 
 [2]=== process[msc :Electromagnetic] Active 
 [3]=== process[hIoni :Electromagnetic] Active 
-[4]=== process[IonInelastic :NotDefined] Active 
+[4]=== process[IonInelastic :Hadronic] Active 
 G4ProcessManager:particle[pi+]
 [0]=== process[Transportation :Transportation] Active 
   Ordering::             AtRest             AlongStep          PostStep   
@@ -1458,7 +2386,7 @@ G4ProcessManager:particle[pi+]
   Ordering::      
   index                 -1:      -1:       0:       2:       2:       2:
   parameter             -1:      -1:       2:       2:       2:       2:
-[4]=== process[LElastic :NotDefined] Active 
+[4]=== process[LElastic :Hadronic] Active 
   Ordering::             AtRest             AlongStep          PostStep   
                     GetPIL/    DoIt    GetPIL/    DoIt    GetPIL/    DoIt 
   Ordering::      
@@ -1468,36 +2396,54 @@ Graphics systems deleted.
 Visualization Manager deleting...
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (23-February-2005)
+ Geant4 version Name: geant4-08-00-ref-00    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
+
+---> warning from G4Element::GetElement(). The element:  H does not exist in the table. Return NULL pointer.
  Material:Vacuum with formula: H added! 
      Nb of Material = 1
      Nb of Isotope =  0
      Nb of Element =  1
+
+---> warning from G4Element::GetElement(). The element:  N does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  O does not exist in the table. Return NULL pointer.
  Material:Air with formula: N0.78-O0.22 added! 
      Nb of Material = 2
      Nb of Isotope =  0
      Nb of Element =  3
+
+---> warning from G4Element::GetElement(). The element: Al does not exist in the table. Return NULL pointer.
  Material:Aluminium with formula: Al added! 
      Nb of Material = 3
      Nb of Isotope =  0
      Nb of Element =  4
+
+---> warning from G4Element::GetElement(). The element: Si does not exist in the table. Return NULL pointer.
  Material:Silicon with formula: Si added! 
      Nb of Material = 4
      Nb of Isotope =  0
      Nb of Element =  5
+
+---> warning from G4Element::GetElement(). The element: Pb does not exist in the table. Return NULL pointer.
  Material:Lead with formula: Pb added! 
      Nb of Material = 5
      Nb of Isotope =  0
      Nb of Element =  6
+
+---> warning from G4Element::GetElement(). The element: Ge does not exist in the table. Return NULL pointer.
  Material:Germanium with formula: Ge added! 
      Nb of Material = 6
      Nb of Isotope =  0
      Nb of Element =  7
+
+---> warning from G4Element::GetElement(). The element: Cs does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  I does not exist in the table. Return NULL pointer.
  Material:CsI with formula: Cs-I added! 
      Nb of Material = 7
      Nb of Isotope =  0
@@ -1506,107 +2452,30 @@ G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
-***** COMMAND NOT FOUND </histo/setHisto 0 50 0 15 MeV> *****
-***** Command ignored *****
-Graphics systems deleted.
-Visualization Manager deleting...
 
-*************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (23-February-2005)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  FukuiRenderer (DAWN)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  RayTracerX (RayTracerX)
+  VRML1 (VRML1)
+  VRML2 (VRML2)
 
- Material:Vacuum with formula: H added! 
-     Nb of Material = 1
-     Nb of Isotope =  0
-     Nb of Element =  1
- Material:Air with formula: N0.78-O0.22 added! 
-     Nb of Material = 2
-     Nb of Isotope =  0
-     Nb of Element =  3
- Material:Aluminium with formula: Al added! 
-     Nb of Material = 3
-     Nb of Isotope =  0
-     Nb of Element =  4
- Material:Silicon with formula: Si added! 
-     Nb of Material = 4
-     Nb of Isotope =  0
-     Nb of Element =  5
- Material:Lead with formula: Pb added! 
-     Nb of Material = 5
-     Nb of Isotope =  0
-     Nb of Element =  6
- Material:Germanium with formula: Ge added! 
-     Nb of Material = 6
-     Nb of Isotope =  0
-     Nb of Element =  7
- Material:CsI with formula: Cs-I added! 
-     Nb of Material = 7
-     Nb of Isotope =  0
-     Nb of Element =  9
-G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
-Visualization Manager instantiating...
-Visualization Manager initialising...
-Registering graphics systems...
-***** COMMAND NOT FOUND </histo/setHisto 0 50 0 5 MeV> *****
-***** Command ignored *****
-Graphics systems deleted.
-Visualization Manager deleting...
-
-*************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (23-February-2005)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
-
- Material:Vacuum with formula: H added! 
-     Nb of Material = 1
-     Nb of Isotope =  0
-     Nb of Element =  1
- Material:Air with formula: N0.78-O0.22 added! 
-     Nb of Material = 2
-     Nb of Isotope =  0
-     Nb of Element =  3
- Material:Aluminium with formula: Al added! 
-     Nb of Material = 3
-     Nb of Isotope =  0
-     Nb of Element =  4
- Material:Silicon with formula: Si added! 
-     Nb of Material = 4
-     Nb of Isotope =  0
-     Nb of Element =  5
- Material:Lead with formula: Pb added! 
-     Nb of Material = 5
-     Nb of Isotope =  0
-     Nb of Element =  6
- Material:Germanium with formula: Ge added! 
-     Nb of Material = 6
-     Nb of Isotope =  0
-     Nb of Element =  7
- Material:CsI with formula: Cs-I added! 
-     Nb of Material = 7
-     Nb of Isotope =  0
-     Nb of Element =  9
-G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
-Visualization Manager instantiating...
-Visualization Manager initialising...
-Registering graphics systems...
+Registering model factories...
 G4VUserPhysicsList::Construct()
 Construct processes 
 world cuts are set
 Target cuts are set
 Detector cuts are set
-G4VUserPhysicsList::SetDefaultCutValue:default cut value is changed to   :10000[mm]
-G4VUserPhysicsList::SetCutsWithDefault:CutLength : 10000 (mm)
-1 VRML2FILE scene handlers extanct.
-WARNING: objects with visibility flag set to "false" will not be drawn!
-  "/vis/viewer/set/culling global false" to Draw such objects.
-  Also see other "/vis/viewer/set" commands.
-WARNING: For systems which are not "auto-refresh" you will need to
-  issue "/vis/viewer/refresh" or "/vis/viewer/flush".
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [500 (mm)]   is too big   for material  idx=5
 The cut in energy is set1.79769e+305GeV 
@@ -1625,13 +2494,13 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1643,7 +2512,7 @@ eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1657,7 +2526,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1666,11 +2535,11 @@ hIoni:   tables are built for  proton
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
-msc:  Model variant of multiple scattering for GenericIon
+msc:  Model variant of multiple scattering for Th234[0.0]
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1708,7 +2577,454 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 550.166 keV    e- 90.585 MeV    e+ 84.1353 MeV
+ Region(s) which use this couple : 
+    Target
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Germanium
+ Range cuts        :  gamma 50 cm     e- 50 cm     e+ 50 cm 
+ Energy thresholds :  gamma 2.88022e+295 J      e- 1.91846 GeV    e+ 1.73853 GeV
+ Region(s) which use this couple : 
+    Detector
+
+====================================================================
+
+### exrdmHisto books 7 histograms 
+Tree store  : th234c-b.aida
+Creating Ntuple: Emitted Particles
+Creating Ntuple: RadioIsotopes
+Creating Ntuple: Energy Depositions
+### Run : 0
+Closing the tree...
+exrdmHistograms and Ntuples are saved
+Graphics systems deleted.
+Visualization Manager deleting...
+
+*************************************************************
+ Geant4 version Name: geant4-08-00-ref-00    (16-December-2005)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+
+---> warning from G4Element::GetElement(). The element:  H does not exist in the table. Return NULL pointer.
+ Material:Vacuum with formula: H added! 
+     Nb of Material = 1
+     Nb of Isotope =  0
+     Nb of Element =  1
+
+---> warning from G4Element::GetElement(). The element:  N does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  O does not exist in the table. Return NULL pointer.
+ Material:Air with formula: N0.78-O0.22 added! 
+     Nb of Material = 2
+     Nb of Isotope =  0
+     Nb of Element =  3
+
+---> warning from G4Element::GetElement(). The element: Al does not exist in the table. Return NULL pointer.
+ Material:Aluminium with formula: Al added! 
+     Nb of Material = 3
+     Nb of Isotope =  0
+     Nb of Element =  4
+
+---> warning from G4Element::GetElement(). The element: Si does not exist in the table. Return NULL pointer.
+ Material:Silicon with formula: Si added! 
+     Nb of Material = 4
+     Nb of Isotope =  0
+     Nb of Element =  5
+
+---> warning from G4Element::GetElement(). The element: Pb does not exist in the table. Return NULL pointer.
+ Material:Lead with formula: Pb added! 
+     Nb of Material = 5
+     Nb of Isotope =  0
+     Nb of Element =  6
+
+---> warning from G4Element::GetElement(). The element: Ge does not exist in the table. Return NULL pointer.
+ Material:Germanium with formula: Ge added! 
+     Nb of Material = 6
+     Nb of Isotope =  0
+     Nb of Element =  7
+
+---> warning from G4Element::GetElement(). The element: Cs does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  I does not exist in the table. Return NULL pointer.
+ Material:CsI with formula: Cs-I added! 
+     Nb of Material = 7
+     Nb of Isotope =  0
+     Nb of Element =  9
+G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  FukuiRenderer (DAWN)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  RayTracerX (RayTracerX)
+  VRML1 (VRML1)
+  VRML2 (VRML2)
+
+Registering model factories...
+G4VUserPhysicsList::Construct()
+Construct processes 
+world cuts are set
+Target cuts are set
+Detector cuts are set
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [500 (mm)]   is too big   for material  idx=5
+The cut in energy is set1.79769e+305GeV 
+
+phot:  Total cross sections from Sandia parametrisation. 
+
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according to the Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+msc:  Model variant of multiple scattering for U238[0.0]
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 550.166 keV    e- 90.585 MeV    e+ 84.1353 MeV
+ Region(s) which use this couple : 
+    Target
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Germanium
+ Range cuts        :  gamma 50 cm     e- 50 cm     e+ 50 cm 
+ Energy thresholds :  gamma 2.88022e+295 J      e- 1.91846 GeV    e+ 1.73853 GeV
+ Region(s) which use this couple : 
+    Detector
+
+====================================================================
+
+### exrdmHisto books 7 histograms 
+Tree store  : u238c.aida
+Creating Ntuple: Emitted Particles
+Creating Ntuple: RadioIsotopes
+Creating Ntuple: Energy Depositions
+### Run : 0
+Closing the tree...
+exrdmHistograms and Ntuples are saved
+Graphics systems deleted.
+Visualization Manager deleting...
+
+*************************************************************
+ Geant4 version Name: geant4-08-00-ref-00    (16-December-2005)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+
+---> warning from G4Element::GetElement(). The element:  H does not exist in the table. Return NULL pointer.
+ Material:Vacuum with formula: H added! 
+     Nb of Material = 1
+     Nb of Isotope =  0
+     Nb of Element =  1
+
+---> warning from G4Element::GetElement(). The element:  N does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  O does not exist in the table. Return NULL pointer.
+ Material:Air with formula: N0.78-O0.22 added! 
+     Nb of Material = 2
+     Nb of Isotope =  0
+     Nb of Element =  3
+
+---> warning from G4Element::GetElement(). The element: Al does not exist in the table. Return NULL pointer.
+ Material:Aluminium with formula: Al added! 
+     Nb of Material = 3
+     Nb of Isotope =  0
+     Nb of Element =  4
+
+---> warning from G4Element::GetElement(). The element: Si does not exist in the table. Return NULL pointer.
+ Material:Silicon with formula: Si added! 
+     Nb of Material = 4
+     Nb of Isotope =  0
+     Nb of Element =  5
+
+---> warning from G4Element::GetElement(). The element: Pb does not exist in the table. Return NULL pointer.
+ Material:Lead with formula: Pb added! 
+     Nb of Material = 5
+     Nb of Isotope =  0
+     Nb of Element =  6
+
+---> warning from G4Element::GetElement(). The element: Ge does not exist in the table. Return NULL pointer.
+ Material:Germanium with formula: Ge added! 
+     Nb of Material = 6
+     Nb of Isotope =  0
+     Nb of Element =  7
+
+---> warning from G4Element::GetElement(). The element: Cs does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  I does not exist in the table. Return NULL pointer.
+ Material:CsI with formula: Cs-I added! 
+     Nb of Material = 7
+     Nb of Isotope =  0
+     Nb of Element =  9
+G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  FukuiRenderer (DAWN)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  RayTracerX (RayTracerX)
+  VRML1 (VRML1)
+  VRML2 (VRML2)
+
+Registering model factories...
+G4VUserPhysicsList::Construct()
+Construct processes 
+world cuts are set
+Target cuts are set
+Detector cuts are set
+G4VUserPhysicsList::SetDefaultCutValue:default cut value is changed to   :10000[mm]
+G4VUserPhysicsList::SetCutsWithDefault:CutLength : 10000 (mm)
+WARNING: objects with visibility flag set to "false" will not be drawn!
+  "/vis/viewer/set/culling global false" to Draw such objects.
+  Also see other "/vis/viewer/set" commands.
+WARNING: For systems which are not "auto-refresh" you will need to
+  issue "/vis/viewer/refresh" or "/vis/viewer/flush".
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [500 (mm)]   is too big   for material  idx=5
+The cut in energy is set1.79769e+305GeV 
+
+phot:  Total cross sections from Sandia parametrisation. 
+
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according to the Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+msc:  Model variant of multiple scattering for GenericIon
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ========= Table of registered couples ==============================
 
@@ -1736,12 +3052,6 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 ### exrdmHisto books 7 histograms 
-Loaded linked in JVM.
-Looking for already loaded JVMs...
-None found.
-Using CLASSPATH.
-classpathOption: -Djava.class.path=/fred/flei/AIDAJNI-3.2.3/lib/freehep-aidajni.jar:/fred/flei/JAIDA-3.2.3/lib/optimizers.jar:/fred/flei/JAIDA-3.2.3/lib/openide-lookup.jar:/fred/flei/JAIDA-3.2.3/lib/jel.jar:/fred/flei/JAIDA-3.2.3/lib/jas-plotter.jar:/fred/flei/JAIDA-3.2.3/lib/freehep-hep.jar:/fred/flei/JAIDA-3.2.3/lib/freehep-base.jar:/fred/flei/JAIDA-3.2.3/lib/bcel.jar:/fred/flei/JAIDA-3.2.3/lib/aida-dev.jar:/fred/flei/JAIDA-3.2.3/lib/aida.jar:
-Starting JVM...JVM Created.
 Tree store  : histo.aida
 Creating Ntuple: Emitted Particles
 Creating Ntuple: RadioIsotopes
@@ -1753,13 +3063,18 @@ Creating Ntuple: Energy Depositions
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -25       100        0        0         0       World initStep
-    1        0        0       -5       100   0.0112       20        20      Target Transportation
-    2   -0.353   -0.177     2.86      84.7     15.3     7.87      27.9      Target hIoni
-    3   -0.338   -0.124        5      80.5     4.14     2.14        30       World Transportation
-    4   0.0549     -0.2       25      80.5   0.0188       20        50  OutOfWorld Transportation
+    0        0        0     -250       100        0        0         0       World initStep
+    1        0        0       -5      99.8    0.191      245       245      Target Transportation
+    2   0.0484   0.0226     -2.5      95.3     4.51      2.5       248      Target msc
+    3  0.00594     0.17 -0.00621      90.2     5.08      2.5       250      Target msc
+    4  -0.0956    0.134     2.49        85     5.23      2.5       253      Target msc
+    5   -0.256   0.0404     4.98      79.6     5.42      2.5       255      Target msc
+    6   -0.257   0.0394        5      79.5   0.0375   0.0174       255       World Transportation
+    7    -1.46    -1.11       25      79.5   0.0126     20.1       275  OutOfWorld Transportation
+G4VisManager: Using G4TrajectoryDrawByCharge as default trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
 ===========================================
-Output VRML 2.0 file: g4_01.wrl
+Output VRML 2.0 file: g4_00.wrl
 Maximum number of files in the destination directory: 100
   (Customizable with the environment variable: G4VRMLFILE_MAX_FILE_NUM) 
 ===========================================
@@ -1769,105 +3084,351 @@ Maximum number of files in the destination directory: 100
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -25       100        0        0         0       World initStep
-    1        0        0       -5       100   0.0112       20        20      Target Transportation
-    2    0.208    0.338     2.86      85.5     14.5     7.87      27.9      Target hIoni
-    3    0.259    0.312        5      81.4     4.13     2.14        30       World Transportation
-    4    0.858   0.0759       25      81.3   0.0196       20        50  OutOfWorld Transportation
+    0        0        0     -250       100        0        0         0       World initStep
+    1        0        0       -5      99.8    0.194      245       245      Target Transportation
+    2   0.0507  -0.0196     -2.5      95.1     4.66      2.5       248      Target msc
+    3    0.115   0.0688 -0.00393      90.1     5.09      2.5       250      Target msc
+    4    0.185   0.0899     2.49      85.4     4.63      2.5       253      Target msc
+    5    0.272    0.119     4.99      79.9      5.5      2.5       255      Target msc
+    6    0.272    0.119        5      79.9   0.0376   0.0086       255       World Transportation
+    7     1.61     1.02       25      79.9   0.0172     20.1       275  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = proton,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -25       100        0        0         0       World initStep
-    1        0        0       -5       100   0.0139       20        20      Target Transportation
-    2    0.378   -0.132     2.86      84.8     15.2     7.87      27.9      Target hIoni
-    3    0.284   -0.137        5      79.8        5     2.15        30       World Transportation
-    4     -0.9   -0.353       25      79.7   0.0688       20      50.1  OutOfWorld Transportation
+    0        0        0     -250       100        0        0         0       World initStep
+    1        0        0       -5      99.8    0.161      245       245      Target Transportation
+    2     0.02  -0.0443     -2.5      95.1     4.73      2.5       248      Target msc
+    3   0.0465  -0.0197 -0.00166      90.3     4.77      2.5       250      Target msc
+    4 -0.00897   0.0382      2.5      85.2     5.18      2.5       253      Target msc
+    5   -0.114   0.0583     4.99      79.4     5.71      2.5       255      Target msc
+    6   -0.114   0.0586        5      79.4   0.0149  0.00716       255       World Transportation
+    7   -0.675    0.806       25      79.4   0.0151       20       275  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = proton,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -25       100        0        0         0       World initStep
-    1        0        0       -5       100   0.0151       20        20      Target Transportation
-    2    0.152   -0.367     2.86      83.8     16.1     7.87      27.9      Target hIoni
-    3   0.0711   -0.464        5        79      4.8     2.15        30       World Transportation
-    4   -0.226    -1.53       25        79   0.0142       20        50  OutOfWorld Transportation
+    0        0        0     -250       100        0        0         0       World initStep
+    1        0        0       -5      99.7     0.33      245       245      Target Transportation
+    2   0.0241  -0.0439     -2.5        95     4.66      2.5       248      Target msc
+    3    0.106   -0.031 -0.00281      90.1     4.95      2.5       250      Target msc
+    4     0.25   -0.117     2.49      85.1     4.94      2.5       253      Target msc
+    5    0.493    -0.15     4.98      79.9     5.22      2.5       255      Target msc
+    6    0.495    -0.15        5      79.9   0.0456   0.0224       255       World Transportation
+    7     2.19    0.261       25      79.8   0.0123     20.1       275  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = proton,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -25       100        0        0         0       World initStep
-    1        0        0       -5       100    0.025       20        20      Target Transportation
-    2    0.387  -0.0868     2.86      84.2     15.8     7.87      27.9      Target hIoni
-    3     0.44   -0.114        5      79.6     4.59     2.15        30       World Transportation
-    4     1.01   -0.302       25      79.6   0.0172       20        50  OutOfWorld Transportation
+    0        0        0     -250       100        0        0         0       World initStep
+    1        0        0       -5      99.8    0.199      245       245      Target Transportation
+    2 -0.00579   0.0548     -2.5      95.1     4.67      2.5       248      Target msc
+    3  -0.0419     0.16 -0.00403      90.3     4.86      2.5       250      Target msc
+    4   -0.119    0.335     2.49      85.2     5.04      2.5       253      Target msc
+    5   -0.277    0.467     4.98      80.8     4.47      2.5       255      Target msc
+    6   -0.279    0.469        5      80.7   0.0342   0.0218       255       World Transportation
+    7    -1.73     1.99       25      80.7   0.0249     20.1       275  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = proton,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -25       100        0        0         0       World initStep
-    1        0        0       -5       100   0.0129       20        20      Target Transportation
-    2   -0.394   0.0103     2.86      84.8     15.2     7.87      27.9      Target hIoni
-    3   -0.322    0.104        5      80.3     4.45     2.15        30       World Transportation
-    4    0.616     1.32       25      80.3    0.015     20.1      50.1  OutOfWorld Transportation
+    0        0        0     -250       100        0        0         0       World initStep
+    1        0        0       -5      99.8    0.172      245       245      Target Transportation
+    2   0.0142  -0.0507     -2.5      95.5     4.37      2.5       248      Target msc
+    3  -0.0852  0.00414 -0.00407      90.4     5.02      2.5       250      Target msc
+    4   -0.171   0.0373     2.49      85.4     5.01      2.5       253      Target msc
+    5   -0.186    0.188     4.99      80.2     5.25      2.5       255      Target msc
+    6   -0.186    0.189        5      80.1   0.0481   0.0123       255       World Transportation
+    7    0.261     1.25       25      80.1   0.0142       20       275  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = proton,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -25       100        0        0         0       World initStep
-    1        0        0       -5       100   0.0127       20        20      Target Transportation
-    2    0.389   0.0834     2.86      84.2     15.8     7.87      27.9      Target hIoni
-    3    0.798    0.259        5      79.2     4.97     2.19      30.1       World Transportation
-    4     4.61     1.93     24.2      79.2   0.0148     19.6      49.7    Detector Transportation
-    5     4.78        2       25      76.5     2.71    0.866      50.5  OutOfWorld Transportation
+    0        0        0     -250       100        0        0         0       World initStep
+    1        0        0       -5      99.8    0.163      245       245      Target Transportation
+    2   0.0296   0.0398     -2.5      95.5     4.32      2.5       248      Target msc
+    3  -0.0671    0.036 -0.00329      90.8     4.76      2.5       250      Target msc
+    4   -0.107   0.0426      2.5        86     4.76      2.5       253      Target msc
+    5   -0.228   0.0969     4.99      80.5     5.46      2.5       255      Target msc
+    6   -0.228   0.0971        5      80.5   0.0171  0.00903       255       World Transportation
+    7    0.586    0.402       25      80.5   0.0226       20       275  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = proton,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -25       100        0        0         0       World initStep
-    1        0        0       -5       100   0.0102       20        20      Target Transportation
-    2   0.0385   -0.395     2.86      84.8     15.2     7.87      27.9      Target hIoni
-    3     0.16   -0.369        5      80.4     4.41     2.15        30       World Transportation
-    4     1.31   -0.768       25      80.4   0.0155       20      50.1  OutOfWorld Transportation
+    0        0        0     -250       100        0        0         0       World initStep
+    1        0        0       -5      99.8     0.19      245       245      Target Transportation
+    2   0.0409  -0.0363     -2.5      95.4     4.46      2.5       248      Target msc
+    3  -0.0355  -0.0516 -0.00275      90.8     4.54      2.5       250      Target msc
+    4 -0.00603   -0.162     2.49      85.6     5.26      2.5       253      Target msc
+    5     0.52   -0.163     4.94      79.8     5.72      2.5       255      Target msc
+    6    0.535   -0.163        5      79.7    0.127   0.0643       255       World Transportation
+    7     4.99   -0.383     23.5      79.7   0.0134       19       274    Detector Transportation
+    8     5.07   -0.389     23.8      78.5     1.17    0.398       274    Detector msc
+    9     5.17   -0.395     24.2      77.4     1.08    0.398       275    Detector msc
+   10     5.27   -0.406     24.6      76.5    0.982    0.398       275    Detector msc
+   11     5.37   -0.418       25      75.2     1.25    0.398       276    Detector msc
+   12     5.37   -0.418       25      75.2   0.0066  0.00248       276  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = proton,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -25       100        0        0         0       World initStep
-    1        0        0       -5       100   0.0105       20        20      Target Transportation
-    2    0.257   -0.295     2.86      84.7     15.3     7.87      27.9      Target hIoni
-    3    0.505   -0.316        5      79.9     4.78     2.16        30       World Transportation
-    4     3.12   -0.196       25      79.9   0.0221     20.2      50.2  OutOfWorld Transportation
+    0        0        0     -250       100        0        0         0       World initStep
+    1        0        0       -5      99.8    0.191      245       245      Target Transportation
+    2   0.0555  -0.0102     -2.5      95.2     4.61      2.5       248      Target msc
+    3   0.0491  -0.0985 -0.00314      90.2     4.98      2.5       250      Target msc
+    4  0.00679   -0.241     2.49      84.7     5.49      2.5       253      Target msc
+    5  -0.0244   -0.315     4.99      79.6     5.15      2.5       255      Target msc
+    6  -0.0248   -0.316        5      79.6   0.0173   0.0108       255       World Transportation
+    7   -0.668    -1.02       25      79.5   0.0156       20       275  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = proton,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -25       100        0        0         0       World initStep
-    1        0        0       -5       100   0.0159       20        20      Target Transportation
-    2  -0.0631    -0.39     2.86      85.8     14.2     7.87      27.9      Target hIoni
-    3    -0.22   -0.316        5      81.4     4.36     2.15        30       World Transportation
-    4    -1.85    0.882       25      81.4    0.011     20.1      50.1  OutOfWorld Transportation
+    0        0        0     -250       100        0        0         0       World initStep
+    1        0        0       -5      99.8    0.172      245       245      Target Transportation
+    2   0.0461  -0.0194     -2.5      95.3      4.5      2.5       248      Target msc
+    3 -0.000549 -0.00904 -0.00188      90.3     4.98      2.5       250      Target msc
+    4   0.0971   -0.108     2.49      85.4     4.96      2.5       253      Target msc
+    5   0.0733   -0.177     4.99      80.2     5.22      2.5       255      Target msc
+    6   0.0729   -0.178        5      80.2    0.015  0.00878       255       World Transportation
+    7   -0.829    -2.74       25      80.1   0.0139     20.2       275  OutOfWorld Transportation
 Closing the tree...
 exrdmHistograms and Ntuples are saved
-*** VRML 2.0 File  g4_01.wrl  is generated.
-Xlib: connection to ":0.0" refused by server
-Xlib: No protocol specified
+*** VRML 2.0 File  g4_00.wrl  is generated.
+sh: vrmlview: command not found
+Graphics systems deleted.
+Visualization Manager deleting...
 
+*************************************************************
+ Geant4 version Name: geant4-08-00-ref-00    (16-December-2005)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+
+---> warning from G4Element::GetElement(). The element:  H does not exist in the table. Return NULL pointer.
+ Material:Vacuum with formula: H added! 
+     Nb of Material = 1
+     Nb of Isotope =  0
+     Nb of Element =  1
+
+---> warning from G4Element::GetElement(). The element:  N does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  O does not exist in the table. Return NULL pointer.
+ Material:Air with formula: N0.78-O0.22 added! 
+     Nb of Material = 2
+     Nb of Isotope =  0
+     Nb of Element =  3
+
+---> warning from G4Element::GetElement(). The element: Al does not exist in the table. Return NULL pointer.
+ Material:Aluminium with formula: Al added! 
+     Nb of Material = 3
+     Nb of Isotope =  0
+     Nb of Element =  4
+
+---> warning from G4Element::GetElement(). The element: Si does not exist in the table. Return NULL pointer.
+ Material:Silicon with formula: Si added! 
+     Nb of Material = 4
+     Nb of Isotope =  0
+     Nb of Element =  5
+
+---> warning from G4Element::GetElement(). The element: Pb does not exist in the table. Return NULL pointer.
+ Material:Lead with formula: Pb added! 
+     Nb of Material = 5
+     Nb of Isotope =  0
+     Nb of Element =  6
+
+---> warning from G4Element::GetElement(). The element: Ge does not exist in the table. Return NULL pointer.
+ Material:Germanium with formula: Ge added! 
+     Nb of Material = 6
+     Nb of Isotope =  0
+     Nb of Element =  7
+
+---> warning from G4Element::GetElement(). The element: Cs does not exist in the table. Return NULL pointer.
+
+---> warning from G4Element::GetElement(). The element:  I does not exist in the table. Return NULL pointer.
+ Material:CsI with formula: Cs-I added! 
+     Nb of Material = 7
+     Nb of Isotope =  0
+     Nb of Element =  9
+G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  FukuiRenderer (DAWN)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  RayTracerX (RayTracerX)
+  VRML1 (VRML1)
+  VRML2 (VRML2)
+
+Registering model factories...
+G4VUserPhysicsList::Construct()
+Construct processes 
+world cuts are set
+Target cuts are set
+Detector cuts are set
+
+phot:  Total cross sections from Sandia parametrisation. 
+
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according to the Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+msc:  Model variant of multiple scattering for Y99[0.0]
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 550.166 keV    e- 90.585 MeV    e+ 84.1353 MeV
+ Region(s) which use this couple : 
+    Target
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Germanium
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 396.666 keV    e- 115.873 MeV    e+ 110.306 MeV
+ Region(s) which use this couple : 
+    Detector
+
+====================================================================
+
+### exrdmHisto books 7 histograms 
+Tree store  : y99.hbook
+Creating Ntuple: Emitted Particles
+Creating Ntuple: RadioIsotopes
+Creating Ntuple: Energy Depositions
+### Run : 0
+Closing the tree...
+exrdmHistograms and Ntuples are saved
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -222,13 +222,38 @@ void exrdmHisto::fillTuple(G4int i, const G4String& parname, G4double x)
 	   <<" with  parameter <" << parname << "> = " << x << G4endl; 
   }
 #ifdef G4ANALYSIS_USE  
-  if(ntup[i]) ntup[i]->fill(ntup[i]->findColumn(parname), (float)x);
+  if(ntup[i]) ntup[i]->fill(ntup[i]->findColumn(parname), x);
 #endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void exrdmHisto::fillTuple(G4int i, const G4String& parname, G4String x)
+void exrdmHisto::fillTuple(G4int i, const G4String& parname, G4int x)
+{
+  if(verbose > 1) {
+    G4cout << "fill tuple # " << i 
+	   <<" with  parameter <" << parname << "> = " << x << G4endl; 
+  }
+#ifdef G4ANALYSIS_USE  
+  if(ntup[i]) ntup[i]->fill(ntup[i]->findColumn(parname), x);
+#endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void exrdmHisto::fillTuple(G4int i, const G4String& parname, const G4String& x)
+{
+  if(verbose > 1) {
+    G4cout << "fill tuple # " << i 
+	   <<" with  parameter <" << parname << "> = " << x << G4endl; 
+  }
+#ifdef G4ANALYSIS_USE  
+  if(ntup[i]) ntup[i]->fill(ntup[i]->findColumn(parname), x);
+#endif
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void exrdmHisto::fillTuple(G4int i, const G4String& parname, G4bool x)
 {
   if(verbose > 1) {
     G4cout << "fill tuple # " << i 

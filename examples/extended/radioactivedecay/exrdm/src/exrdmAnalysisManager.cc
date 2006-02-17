@@ -90,9 +90,11 @@ void exrdmAnalysisManager::bookHisto()
 	       "Decay emission spectrum (MeV)",histNBin,histEMin,histEMax,MeV);
   // in aida these histos are indiced from 0-6
   //
-  histo->addTuple( "100", "Emitted Particles","string Name, float Energy, Time, Weight" );
-  histo->addTuple( "200", "RadioIsotopes","string Name, float Time, Weight" );
-  histo->addTuple( "300", "Energy Depositions","float Energy, Time, Weight" );
+  //  histo->addTuple( "100", "Emitted Particles","std::string Name; std::double Energy; std::double Time; std::double Weight" );
+  histo->addTuple( "100", "Emitted Particles","string PName; double Energy; double Time; double Weight" );
+  //  histo->addTuple( "200", "RadioIsotopes","std::string Name; std::double Time, Weight" );
+  histo->addTuple( "200", "RadioIsotopes","string IName; double Time, Weight" );
+  histo->addTuple( "300", "Energy Depositions","double Energy, Time, Weight" );
 
   // at the moment anaphe can only handle float ntuple
   //histo->addTuple( "100", "Emitted Particles"," float Name, Energy, Time, Weight" );
@@ -232,7 +234,10 @@ void exrdmAnalysisManager::AddParticle(G4String particleName, G4double energy, G
     G4cout << "exrdmAnalysisManager::AddParticle: " << particleName
            << G4endl;
   }
-  histo->fillTuple(0,"Name", particleName);
+  G4int par = 0;
+  if (particleName == "e-") par = 10;
+  //  histo->fillTuple(0,"Name", std::string(particleName));
+  histo->fillTuple(0,"PName", std::string(particleName));
   histo->fillTuple(0,"Energy",energy/MeV);
   histo->fillTuple(0,"Weight",weight);
   histo->fillTuple(0,"Time",time/second);
@@ -248,7 +253,7 @@ void exrdmAnalysisManager::AddIsotope(G4String particleName,G4double weight, G4d
     G4cout << "exrdmAnalysisManager::AddIsotope: " << particleName
            << G4endl;
   }
-  histo->fillTuple(1,"Name",particleName);
+  histo->fillTuple(1,"IName",particleName);
   histo->fillTuple(1,"Weight",weight);
   histo->fillTuple(1,"Time",time/second);
   histo->addRow(1);

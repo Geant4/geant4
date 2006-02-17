@@ -77,8 +77,14 @@ public:
   void fillTuple(G4int, const G4String&, G4double);
   // Fill nTuple parameter with a double
 
-  void fillTuple(G4int, const G4String&, G4String);
+  void fillTuple(G4int, const G4String&, G4int);
+  // Fill nTuple parameter with an integer
+
+  void fillTuple(G4int, const G4String&, const G4String&);
   // Fill nTuple parameter with a string
+
+  void fillTuple(G4int, const G4String&, G4bool);
+  // Fill nTuple parameter with a bool
 
   void addRow(G4int);
   // Save tuple event 

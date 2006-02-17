@@ -72,14 +72,15 @@ exrdmPhysicsList::exrdmPhysicsList() : G4VModularPhysicsList()
    // Particles
   particleList = new exrdmPhysListParticles("particles");
 
-  // General exrdmPhysics
-  generalPhysicsList = new exrdmPhysListGeneral("general");
-
   // EM physics
   emPhysicsList = new exrdmPhysListEmStandard("em-standard");
   
   // Had physics (no hadron as default)
   hadPhysicsList =  0;
+
+  // General exrdmPhysics
+  generalPhysicsList = new exrdmPhysListGeneral("general");
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
