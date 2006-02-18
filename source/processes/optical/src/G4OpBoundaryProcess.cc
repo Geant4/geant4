@@ -505,8 +505,7 @@ void G4OpBoundaryProcess::DielectricMetal()
            }
            else {
 
-             if ( theModel == glisur || theFinish == polished || 
-                                        prob_ss+prob_sl+prob_bs == 0.0 ) {
+             if ( theModel == glisur || theFinish == polished ) {
 
                 DoReflection();
 
