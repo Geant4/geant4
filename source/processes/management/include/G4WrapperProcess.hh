@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WrapperProcess.hh,v 1.4 2005-11-21 18:07:56 asaim Exp $
+// $Id: G4WrapperProcess.hh,v 1.5 2006-02-23 02:52:40 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -278,9 +278,9 @@ inline
 }  
 
 inline
- void G4WrapperProcess::StartTracking()
+ void G4WrapperProcess::StartTracking(G4Track* track)
 {
-  pRegProcess->StartTracking();
+  pRegProcess->StartTracking(track);
 }
 
 inline
