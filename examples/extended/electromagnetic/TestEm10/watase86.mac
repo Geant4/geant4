@@ -97,7 +97,7 @@
 #/tracking/verbose 1
 #
 /event/printModulo 1000
-/run/beamOn 20000
+/run/beamOn 10000
 #
 
 

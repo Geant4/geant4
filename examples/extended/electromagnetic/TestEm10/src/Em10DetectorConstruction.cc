@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.cc,v 1.25 2006-02-13 17:03:26 grichine Exp $
+// $Id: Em10DetectorConstruction.cc,v 1.26 2006-02-24 08:02:31 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -334,12 +334,12 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpALICE06()
   foilGasRatio  = fRadThickness/(fRadThickness+fGasGap);
 
 
-  fAbsorberThickness = 38.3*mm; 
+  fAbsorberThickness = 37.*mm; // 38.3*mm; 
 
   fAbsorberRadius   = 100.*mm;
   fAbsorberZ        = 136.*cm;
   
-  fPipeLength = 160.0*cm;
+  fPipeLength     = 160.0*cm;
   fMylarThick     = 20.0*micrometer;
 
   fWindowThick    = 51.0*micrometer ;
@@ -600,8 +600,8 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpALICE06()
 
 
   fSolidAbsorber = new G4Box("Absorber", 
-			     // fAbsorberRadius, fAbsorberRadius, 
-			     10.*mm,10.*mm,
+			     fAbsorberRadius, fAbsorberRadius, 
+			     // 10.*mm,10.*mm,
                               fAbsorberThickness/2.); 
                           
   fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber, fAbsorberMaterial, 
@@ -1370,7 +1370,7 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBarr90()
 
   fGapMat          = fAbsorberMaterial;
 
-  fWorldMaterial    = CO2; // Air; //  
+  fWorldMaterial    =  Air; // CO2; //  
 
   fSolidWorld = new G4Box("World", fWorldSizeR,fWorldSizeR,fWorldSizeZ/2.);
                          

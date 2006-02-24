@@ -10,9 +10,9 @@
 #  PLOT: energy deposit distribution in absorber (g4.11)
 #
 /plots/sethistName g4.p11
-/plots/setnbinEn 60
-/plots/setEnlow 0.001 MeV
-/plots/setEnhigh 0.061  MeV
+/plots/setnbinEn 41
+/plots/setEnlow 0.00 MeV
+/plots/setEnhigh 0.041  MeV
 #
 #
 # Change and choice of experimental setups. Can be
@@ -51,8 +51,8 @@
 #
 # set cuts in XTR detector
 #
-/emphyslist/setGammaCut 100.
-/emphyslist/setElectronCut 100.
+/emphyslist/setGammaCut 1.
+/emphyslist/setElectronCut 1.
 /emphyslist/setPositronCut 1.
 #
 /emphyslist/setDetectorCuts 1.
@@ -69,9 +69,9 @@
 #
 # (switch off dEdx and msc always together!)
 #
-/process/inactivate msc
-/process/inactivate eIoni
-/process/inactivate hIoni
+#/process/inactivate msc
+#/process/inactivate eIoni
+#/process/inactivate hIoni
 #
 #/process/inactivate eBrem
 #

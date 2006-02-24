@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.cc,v 1.16 2006-02-13 17:03:26 grichine Exp $
+// $Id: Em10PhysicsList.cc,v 1.17 2006-02-24 08:02:31 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -240,6 +240,8 @@ void Em10PhysicsList::ConstructProcess()
 #include "G4XTRRegularRadModel.hh"
 #include "G4XTRTransparentRegRadModel.hh"
 
+#include "G4StepLimiterPerRegion.hh"
+
 #include "Em10StepCut.hh"
 
 
@@ -345,7 +347,7 @@ void Em10PhysicsList::ConstructEM()
     G4Exception("Invalid XTR model name", "InvalidSetup",
                  FatalException, "XTR model name is out of the name list");
   }     
-  processXTR->SetCompton(true);
+  //  processXTR->SetCompton(true);
 
 
 
@@ -428,6 +430,8 @@ void Em10PhysicsList::ConstructEM()
       // pmanager->AddProcess(new G4ForwardXrayTR("Air","Mylar","fXTR"),-1,-1,1);
 
       pmanager->AddDiscreteProcess(processXTR);
+
+      pmanager->AddDiscreteProcess( new G4StepLimiterPerRegion() );
 
       pmanager->AddProcess(theeminusStepCut,-1,-1,4);
       theeminusStepCut->SetMaxStep(MaxChargedStep) ;

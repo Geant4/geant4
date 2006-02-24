@@ -28,8 +28,8 @@
 #
 # R - XTR dE/dx models, M - XTR flux after radiator models
 #
-/emphyslist/setXTRModel  transpM
-#/emphyslist/setXTRModel  transpR
+#/emphyslist/setXTRModel  transpM
+/emphyslist/setXTRModel  transpR
 #
 #/emphyslist/setXTRModel  gammaM
 #/emphyslist/setXTRModel  gammaR
@@ -97,7 +97,7 @@
 #/tracking/verbose 1
 #
 /event/printModulo 1000
-/run/beamOn 20000
+/run/beamOn 10000
 #
 
 
