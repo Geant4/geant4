@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericIon.cc,v 1.10 2005-01-14 03:49:13 asaim Exp $
+// $Id: G4GenericIon.cc,v 1.11 2006-02-24 10:49:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,6 +73,9 @@ G4GenericIon* G4GenericIon::Definition()
              false,           "generic"
               );
   }
+   anInstance->SetAtomicNumber(1);
+   anInstance->SetAtomicMass(1);
+
   theInstance = reinterpret_cast<G4GenericIon*>(anInstance);
   return theInstance;
 }
