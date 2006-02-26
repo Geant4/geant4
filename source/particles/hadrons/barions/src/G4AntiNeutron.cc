@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutron.cc,v 1.16 2005-01-14 03:49:09 asaim Exp $
+// $Id: G4AntiNeutron.cc,v 1.17 2006-02-26 14:55:04 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,7 @@ G4AntiNeutron* G4AntiNeutron::Definition()
 		    1,              +1,             0,             
 	     "baryon",               0,            -1,       -2112,
 		 true,            -1.0,          NULL,
-             false,           "neucleon"
+                false,        "nucleon"
               );
   }
   theInstance = reinterpret_cast<G4AntiNeutron*>(anInstance);

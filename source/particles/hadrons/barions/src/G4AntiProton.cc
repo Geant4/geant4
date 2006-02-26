@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiProton.cc,v 1.10 2005-01-14 03:49:10 asaim Exp $
+// $Id: G4AntiProton.cc,v 1.11 2006-02-26 14:55:04 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,7 +68,7 @@ G4AntiProton* G4AntiProton::Definition()
 		    1,              -1,             0,             
 	     "baryon",               0,            -1,       -2212,
 		 true,            -1.0,          NULL,
-             false,           "neucleon"
+                false,       "nucleon"
               );
   }
   theInstance = reinterpret_cast<G4AntiProton*>(anInstance);

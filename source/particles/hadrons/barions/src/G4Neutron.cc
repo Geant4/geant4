@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Neutron.cc,v 1.18 2005-01-14 03:49:11 asaim Exp $
+// $Id: G4Neutron.cc,v 1.19 2006-02-26 14:55:04 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,7 +53,7 @@ G4Neutron* G4Neutron::Definition()
   const G4String name = "neutron";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  G4Ions* anInstance =  reinterpret_cast<G4Ions*>(pTable->FindParticle(name));
   if (anInstance ==0)
   {
   // create particle
@@ -65,23 +65,22 @@ G4Neutron* G4Neutron::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
-   anInstance = new G4ParticleDefinition(
+    anInstance = new G4Ions(
                  name,  0.93956563*GeV, 7.432e-28*GeV,         0.0, 
 		    1,              +1,             0,          
 		    1,              -1,             0,             
 	     "baryon",               0,            +1,        2112,
 		false,    886.7*second,          NULL,
-             false,           "neucleon"
+		false,       "nucleon",             0,
+                  0.0 
               );
-  //create Decay Table 
-  G4DecayTable* table = new G4DecayTable();
-  // create a decay channel
-  G4VDecayChannel* mode = new G4NeutronBetaDecayChannel("neutron",1.00);
-  table->Insert(mode);
-   anInstance->SetDecayTable(table);
-
-   anInstance->SetAtomicNumber(0);
-   anInstance->SetAtomicMass(1);
+    //create Decay Table 
+    G4DecayTable* table = new G4DecayTable();
+    // create a decay channel
+    G4VDecayChannel* mode = new G4NeutronBetaDecayChannel("neutron",1.00);
+    table->Insert(mode);
+    anInstance->SetDecayTable(table);
+    
   }
   theInstance = reinterpret_cast<G4Neutron*>(anInstance);
   return theInstance;

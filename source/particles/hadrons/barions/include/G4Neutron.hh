@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Neutron.hh,v 1.14 2005-01-14 03:49:07 asaim Exp $
+// $Id: G4Neutron.hh,v 1.15 2006-02-26 14:55:04 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,12 +40,13 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4Ions.hh"
 
 // ######################################################################
 // ###                         NEUTRON                                ###
 // ######################################################################
 
-class G4Neutron : public G4ParticleDefinition
+class G4Neutron : public G4Ions
 {
  private:
    static G4Neutron* theInstance;
