@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedXiConstructor.cc,v 1.5 2001-07-11 10:02:09 gunter Exp $
+// $Id: G4ExcitedXiConstructor.cc,v 1.6 2006-02-26 14:56:30 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -286,11 +286,11 @@ const char* G4ExcitedXiConstructor::name[] = {
 };
 
 const G4double G4ExcitedXiConstructor::mass[] = {
-  1.532*GeV, 1.700*GeV, 1.823*GeV, 1.950*GeV,  2.025*GeV 
+ 1.5318*GeV, 1.690*GeV, 1.823*GeV, 1.950*GeV,  2.025*GeV 
 };
 
 const G4double G4ExcitedXiConstructor::width[] = {
-    9.0*MeV,  50.0*MeV,  24.0*MeV,  60.0*MeV,  20.0*MeV
+    9.1*MeV,  50.0*MeV,  24.0*MeV,  60.0*MeV,  20.0*MeV
 };
 
 const G4int G4ExcitedXiConstructor::iSpin[] = {

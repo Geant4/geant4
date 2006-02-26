@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedSigmaConstructor.cc,v 1.8 2003-06-20 00:40:04 kurasige Exp $
+// $Id: G4ExcitedSigmaConstructor.cc,v 1.9 2006-02-26 14:56:30 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -571,7 +571,7 @@ const char* G4ExcitedSigmaConstructor::name[] = {
 };
 
 const G4double G4ExcitedSigmaConstructor::mass[] = {
-  1.384*GeV, 1.660*GeV, 1.670*GeV, 1.750*GeV,  1.775*GeV, 
+ 1.3828*GeV, 1.660*GeV, 1.670*GeV, 1.750*GeV,  1.775*GeV, 
   1.915*GeV, 1.940*GeV, 2.030*GeV
 };
 

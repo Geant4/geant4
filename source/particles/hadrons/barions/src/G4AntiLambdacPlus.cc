@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiLambdacPlus.cc,v 1.11 2005-01-14 03:49:09 asaim Exp $
+// $Id: G4AntiLambdacPlus.cc,v 1.12 2006-02-26 14:55:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,11 +66,11 @@ G4AntiLambdacPlus* G4AntiLambdacPlus::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,    2.2849*GeV,   3.30e-9*MeV,   -1.*eplus,
+                 name,      2.2849*GeV,   3.30e-9*MeV,   -1.*eplus,
                     1,              +1,             0,
                     0,               0,             0,
              "baryon",               0,            +1,       -4122,
-                false,     0.206e-3*ns,          NULL,
+                false,     0.200e-3*ns,          NULL,
                 false,       "lambda_c");
   
   // decay mode is not defined here, with expectation of pre-assigned.

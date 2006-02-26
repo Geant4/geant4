@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XicPlus.cc,v 1.11 2005-01-14 03:49:11 asaim Exp $
+// $Id: G4XicPlus.cc,v 1.12 2006-02-26 14:55:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,11 +66,11 @@ G4XicPlus* G4XicPlus::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,    2.4663*GeV,   1.49e-9*MeV,   +1.*eplus,
+                 name,      2.4680*GeV,   1.49e-9*MeV,   +1.*eplus,
                     1,              +1,             0,
                     1,              +1,             0,
              "baryon",               0,            +1,        4232,
-                false,       0.35e-3*ns,          NULL,
+                false,     0.442e-3*ns,          NULL,
                 false,       "xi_c");
   }
   theInstance = reinterpret_cast<G4XicPlus*>(anInstance);

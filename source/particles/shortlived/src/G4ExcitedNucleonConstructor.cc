@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedNucleonConstructor.cc,v 1.7 2004-02-13 05:54:07 kurasige Exp $
+// $Id: G4ExcitedNucleonConstructor.cc,v 1.8 2006-02-26 14:56:30 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -536,24 +536,26 @@ G4DecayTable*  G4ExcitedNucleonConstructor::AddLambdaKMode(
   return decayTable;
 }
 
+// PDG2005
+//  N(2090) is renamed to N(2080) 
 
 
 const char* G4ExcitedNucleonConstructor::name[] = {
    "N(1440)", "N(1520)", "N(1535)", "N(1650)", "N(1675)",
    "N(1680)", "N(1700)", "N(1710)", "N(1720)", "N(1900)", 
-   "N(1990)", "N(2090)", "N(2190)", "N(2220)", "N(2250)"
+   "N(1990)", "N(2080)", "N(2190)", "N(2220)", "N(2250)"
 };
 
 const G4double G4ExcitedNucleonConstructor::mass[] = {
-  1.440*GeV, 1.520*GeV, 1.535*GeV, 1.650*GeV,  1.675*GeV, 
-  1.680*GeV, 1.700*GeV, 1.710*GeV, 1.720*GeV,  1.850*GeV, 
-  1.950*GeV, 2.000*GeV, 2.190*GeV, 2.220*GeV,  2.250*GeV
+  1.440*GeV, 1.520*GeV, 1.535*GeV, 1.655*GeV,  1.675*GeV, 
+  1.685*GeV, 1.700*GeV, 1.710*GeV, 1.720*GeV,  1.900*GeV, 
+  1.950*GeV, 2.080*GeV, 2.190*GeV, 2.250*GeV,  2.275*GeV
 };
 
 const G4double G4ExcitedNucleonConstructor::width[] = {
-  350.0*MeV, 120.0*MeV, 150.0*MeV, 150.0*MeV, 150.0*MeV,
-  130.0*MeV, 100.0*MeV, 100.0*MeV, 150.0*MeV, 500.0*MeV,
-  550.0*MeV, 350.0*MeV, 450.0*MeV, 550.0*MeV, 470.0*MeV
+  300.0*MeV, 115.0*MeV, 150.0*MeV, 165.0*MeV, 150.0*MeV,
+  130.0*MeV, 100.0*MeV, 100.0*MeV, 200.0*MeV, 500.0*MeV,
+  555.0*MeV, 450.0*MeV, 500.0*MeV, 400.0*MeV, 450.0*MeV
 };
 
 const G4int G4ExcitedNucleonConstructor::iSpin[] = {

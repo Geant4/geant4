@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4JPsi.cc,v 1.14 2005-01-14 03:49:16 asaim Exp $
+// $Id: G4JPsi.cc,v 1.15 2006-02-26 14:50:53 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,7 +62,7 @@ G4JPsi* G4JPsi::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,    3.09688*GeV,     0.087*MeV,          0.,
+                 name,    3.096916*GeV,    0.0910*MeV,          0.,
                     2,              -1,            -1,
                     0,               0,            -1,
               "meson",               0,             0,         443,

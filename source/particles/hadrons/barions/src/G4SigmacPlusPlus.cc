@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmacPlusPlus.cc,v 1.10 2005-01-14 03:49:11 asaim Exp $
+// $Id: G4SigmacPlusPlus.cc,v 1.11 2006-02-26 14:55:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,7 +66,7 @@ G4SigmacPlusPlus* G4SigmacPlusPlus::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,    2.4526*GeV,       2.0*MeV,  +2.0*eplus,
+                 name,      2.4525*GeV,      2.23*MeV,  +2.0*eplus,
                     1,              +1,             0,
                     2,              +2,             0,
              "baryon",               0,            +1,        4222,

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiBsMesonZero.cc,v 1.15 2005-01-14 03:49:15 asaim Exp $
+// $Id: G4AntiBsMesonZero.cc,v 1.16 2006-02-26 14:50:53 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,11 +62,11 @@ G4AntiBsMesonZero* G4AntiBsMesonZero::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,    5.3692*GeV,   4.51e-10*MeV,          0.,
+                 name,     5.3696*GeV,   4.51e-10*MeV,          0.,
                     0,              -1,             0,
                     0,               0,             0,
               "meson",               0,             0,        -531,
-                false,      1.61e-3*ns,          NULL,
+                false,     1.466e-3*ns,          NULL,
                 false,       "Bs");
   }
   theInstance = reinterpret_cast<G4AntiBsMesonZero*>(anInstance);

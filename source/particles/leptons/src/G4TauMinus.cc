@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TauMinus.cc,v 1.12 2005-01-14 03:49:18 asaim Exp $
+// $Id: G4TauMinus.cc,v 1.13 2006-02-26 14:56:09 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,11 +66,11 @@ G4TauMinus* G4TauMinus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
    anInstance = new G4ParticleDefinition(
-                 name,     1.77705*GeV,  2.265e-9*MeV,    -1.*eplus, 
+                 name,     1.77699*GeV,  2.265e-9*MeV,    -1.*eplus, 
 		    1,               0,             0,          
 		    0,               0,             0,             
 	     "lepton",               1,             0,          15,
-		false,     295.6e-6*ns,          NULL,
+		false,     290.6e-6*ns,          NULL,
              false,           "tau"
               );
 
@@ -80,21 +80,21 @@ G4TauMinus* G4TauMinus::Definition()
   // create decay channels
   G4VDecayChannel* mode;
   // tau- -> mu- + anti_nu_mu + nu_tau
-  mode = new G4TauLeptonicDecayChannel("tau-",0.174,"mu-");
+  mode = new G4TauLeptonicDecayChannel("tau-",0.1736,"mu-");
   table->Insert(mode);
   // tau- -> e- + anti_nu_e + nu_tau
-  mode = new G4TauLeptonicDecayChannel("tau-",0.178,"e-");
+  mode = new G4TauLeptonicDecayChannel("tau-",0.1784,"e-");
   table->Insert(mode);
   // tau- -> pi- + nu_tau
-  mode = new G4PhaseSpaceDecayChannel("tau-",0.113,2,"pi-","nu_tau");
+  mode = new G4PhaseSpaceDecayChannel("tau-",0.1106,2,"pi-","nu_tau");
   table->Insert(mode);
-  // tau- -> pi0 + pi0 + pi- + nu_tau
-  mode = new G4PhaseSpaceDecayChannel("tau-",0.252,3,"pi0","pi-","nu_tau");
+  // tau- -> pi0 + pi- + nu_tau
+  mode = new G4PhaseSpaceDecayChannel("tau-",0.2541,3,"pi0","pi-","nu_tau");
   table->Insert(mode);
   // tau- -> pi0 + pi0 + pi- + nu_tau
   mode = new G4PhaseSpaceDecayChannel();
   mode->SetParent("tau-");
-  mode->SetBR(0.093);
+  mode->SetBR(0.0917);
   mode->SetNumberOfDaughters(4);
   mode->SetDaughter(0,"pi0");
   mode->SetDaughter(1,"pi0");
@@ -104,7 +104,7 @@ G4TauMinus* G4TauMinus::Definition()
   // tau- -> pi- + pi- + pi+ + nu_tau
   mode = new G4PhaseSpaceDecayChannel();
   mode->SetParent("tau-");
-  mode->SetBR(0.098);
+  mode->SetBR(0.0946);
   mode->SetNumberOfDaughters(4);
   mode->SetDaughter(0,"pi-");
   mode->SetDaughter(1,"pi-");

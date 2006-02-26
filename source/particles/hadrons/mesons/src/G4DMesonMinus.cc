@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DMesonMinus.cc,v 1.10 2005-01-14 03:49:15 asaim Exp $
+// $Id: G4DMesonMinus.cc,v 1.11 2006-02-26 14:50:53 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,7 @@ G4DMesonMinus* G4DMesonMinus::Definition()
                     0,              -1,             0,
                     1,              -1,             0,
               "meson",               0,             0,        -411,
-                false,     1.057e-3*ns,          NULL,
+                false,     1.040e-3*ns,          NULL,
                 false,       "D");
   }
   theInstance = reinterpret_cast<G4DMesonMinus*>(anInstance);
