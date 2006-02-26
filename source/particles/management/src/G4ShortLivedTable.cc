@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedTable.cc,v 1.12 2005-11-18 21:07:35 asaim Exp $
+// $Id: G4ShortLivedTable.cc,v 1.13 2006-02-26 14:56:55 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,11 +47,15 @@ G4ShortLivedTable::G4ShortLivedTable()
 G4ShortLivedTable::~G4ShortLivedTable()
 {
   if (fShortLivedList ==0) return;
+
+  //  No need to delete here because all particles are dynamic objects
+  //   
   // remove all contents in the short lived List and delete all particles  
-  G4ShortLivedList::iterator i;
-  for (i = fShortLivedList->begin(); i!= fShortLivedList->end(); ++i) {
-    delete (*i);
-  }
+  //G4ShortLivedList::iterator i;
+  //for (i = fShortLivedList->begin(); i!= fShortLivedList->end(); ++i) {
+  //  delete (*i);
+  //}
+
   fShortLivedList->clear();
   delete fShortLivedList;
   fShortLivedList =0;
@@ -108,4 +112,15 @@ void G4ShortLivedTable::DumpTable(const G4String &particle_name) const
     }
   }
 }
+
+
+
+
+
+
+
+
+
+
+
 

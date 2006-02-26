@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ions.hh,v 1.11 2006-01-02 20:32:37 asaim Exp $
+// $Id: G4Ions.hh,v 1.12 2006-02-26 14:56:55 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,9 +49,15 @@
 class G4Ions : public G4ParticleDefinition
 {
  // Class Description
+ //  This is the base class for all nuclei including pre-defined 
+ //  light nuclei such as deuteron, alpha, and proton (Hydrogen) 
  //  All nuclei/ions created on the fly are objects of this class
- //  This class has Excitation Energy in addition to the normal particle
- //
+ //  Atomic number and atomic mass are vaild only for particles derived
+ //  from this class.  This class has Excitation Energy in addition to
+ //  the normal particle properties.
+
+ protected:
+   G4Ions(){};
 
 
  public: //With Description
@@ -64,7 +70,10 @@ class G4Ions : public G4ParticleDefinition
        const G4String&     pType,        G4int               lepton,      
        G4int               baryon,       G4int               encoding,
        G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable
+       G4DecayTable        *decaytable,  G4bool              shortlived,
+       const G4String&     subType ="",
+       G4int               anti_encoding =0,
+       G4double            excitation = 0.0
    );
 
  public:
@@ -73,11 +82,8 @@ class G4Ions : public G4ParticleDefinition
    G4Ions*    			Ions();
 
  public:  //With Description
-   virtual G4int    GetAtomicNumber() const;
-   virtual G4int    GetAtomicMass() const;
-
+   // Get excitation energy of nucleus
    G4double GetExcitationEnergy() const ; 
-   void     SetExcitationEnergy(G4double value);
   
   private:
    G4double theExcitationEnergy; 
@@ -96,10 +102,12 @@ inline
   return theExcitationEnergy;
 }
 
-inline
- void G4Ions::SetExcitationEnergy(G4double value) 
-{
-  theExcitationEnergy = value;
-}
-
 #endif
+
+
+
+
+
+
+
+

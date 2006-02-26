@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ions.cc,v 1.9 2003-06-16 16:58:27 gunter Exp $
+// $Id: G4Ions.cc,v 1.10 2006-02-26 14:56:55 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,14 +50,20 @@ G4Ions::G4Ions(
        const G4String&     pType,        G4int               lepton,      
        G4int               baryon,       G4int               encoding,
        G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable )
+       G4DecayTable        *decaytable , G4bool              shortlived,
+       const G4String&     subType,
+       G4int               anti_encoding,
+       G4double            excitation      )
   : G4ParticleDefinition( aName,mass,width,charge,iSpin,iParity,
            iConjugation,iIsospin,iIsospin3,gParity,pType,
-           lepton,baryon,encoding,stable,lifetime,decaytable )
+           lepton,baryon,encoding,stable,lifetime,decaytable,
+           shortlived, subType, anti_encoding)
 {
-  SetParticleSubType("generic");
   // initialize excitation energy/level
-   theExcitationEnergy = 0.0;
+   theExcitationEnergy = excitation;
+
+   SetAtomicNumber( G4int(GetPDGCharge()/eplus) );
+   SetAtomicMass( GetBaryonNumber() );
 }
 
 G4Ions* G4Ions::IonsDefinition()
@@ -65,12 +71,5 @@ G4Ions* G4Ions::IonsDefinition()
   return this;
 }
 
-G4int G4Ions::GetAtomicNumber() const 
-{
-  return G4int(GetPDGCharge()/eplus); 
-}
 
-G4int G4Ions::GetAtomicMass() const 
-{
-  return GetBaryonNumber();
-}
+

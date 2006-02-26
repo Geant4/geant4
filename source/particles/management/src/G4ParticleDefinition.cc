@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.25 2005-08-26 03:40:43 kurasige Exp $
+// $Id: G4ParticleDefinition.cc,v 1.26 2006-02-26 14:56:55 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -274,6 +274,9 @@ void G4ParticleDefinition::SetApplyCutsFlag(G4bool flg)
      << "gamma, e- and e+." << G4endl;
   }
 }
+
+
+
 
 
 

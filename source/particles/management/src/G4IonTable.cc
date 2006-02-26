@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.39 2005-11-18 21:07:35 asaim Exp $
+// $Id: G4IonTable.cc,v 1.40 2006-02-26 14:56:55 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,25 +75,26 @@ G4IonTable::~G4IonTable()
 
   if (fIonList ==0) return;
 
+  //  No need to delete here because all particles are dynamic objects
+  //   
   // delete ion objects
-  G4ParticleDefinition* particle;
-  G4IonList::reverse_iterator i;
-  for (i = fIonList->rbegin(); i!= fIonList->rend(); ++i) {
-    particle = *i;
-
-    if ( !IsLightIon(particle) ) {
-      // delete if not static objects
+  //G4ParticleDefinition* particle;
+  //G4IonList::reverse_iterator i;
+  //for (i = fIonList->rbegin(); i!= fIonList->rend(); ++i) {
+  //  particle = *i;
+  //
+  //if ( !IsLightIon(particle) ) {
+  //    delete if not static objects
 #ifdef G4VERBOSE
-      G4String name;
-      if (GetVerboseLevel()>1) {
-        G4cout << "G4IonTable:~IonTable() : delete ion of  " ;
-        G4cout << particle->GetParticleName() << G4endl;
-      }
+  //    G4String name;
+  //    if (GetVerboseLevel()>1) {
+  //      G4cout << "G4IonTable:~IonTable() : delete ion of  " ;
+  //      G4cout << particle->GetParticleName() << G4endl;
+  //    }
 #endif
-      delete particle;
-    }
-
-  }
+  //    delete particle;
+  //  }
+  //}
 
   // remove all contents in the Ion List 
   fIonList->clear();
@@ -160,10 +161,9 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E, G4int 
 			 J,              +1,             0,          
 			 0,               0,             0,             
 		 "nucleus",               0,             A,           0,
-		    stable,            life,    decayTable);
-
-  // Set Excitation Energy
-  ((G4Ions*)(ion))->SetExcitationEnergy(E);
+		    stable,            life,    decayTable,       false,
+		  "generic",              0,
+		      E                       );
 
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
@@ -247,22 +247,11 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E, G4int J)
     ion = *idx;
 
     // Z = Atomic Number 
-    G4int anAtomicNumber = 0;
-    // A = baryon number
-    G4int anAtomicMass = 0;
-    // excitation level
-    G4double anExcitaionEnergy =0.0;
-
-    if ( IsLightIon(ion) ) {
-      anAtomicNumber = G4int(ion->GetPDGCharge()/eplus);
-      anAtomicMass = ion->GetBaryonNumber();
-      anExcitaionEnergy = 0.0;
-
-    } else  {
-      anAtomicNumber   = ((const G4Ions*)(ion))->GetAtomicNumber();
-      anAtomicMass    =  ((const G4Ions*)(ion))->GetAtomicMass();
-      anExcitaionEnergy = ((const G4Ions*)(ion))->GetExcitationEnergy();
-    }
+    G4int     anAtomicNumber   = ion->GetAtomicNumber();
+     // A = baryon number
+    G4int  anAtomicMass    =  ion->GetAtomicMass();
+     // excitation level
+    G4double anExcitaionEnergy = ((const G4Ions*)(ion))->GetExcitationEnergy();
 
     if ( (A == anAtomicMass) && 
          (Z == anAtomicNumber ) && 

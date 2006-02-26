@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.24 2005-11-15 23:18:40 asaim Exp $
+// $Id: G4ParticleTable.cc,v 1.25 2006-02-26 14:56:55 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParticleTable
@@ -41,8 +41,8 @@
 //      modified destructor for STL interface 18 May 1999
 //      fixed  some improper codings     08 Apr., 99 H.Kurashige
 //      modified FindIon/GetIon methods  17 AUg., 99 H.Kurashige
-//      implement new version for using STL map instaed of RW PtrHashedDictionary
-//                                       28 ct., 99  H.Kurashige
+//      implement new version for using STL map instaed of 
+//      RW PtrHashedDictionary           28 ct., 99  H.Kurashige
 
 
 #include "G4ios.hh"
@@ -55,8 +55,10 @@
 
 
 ////////////////////
-G4ParticleTable::G4ParticleTable():verboseLevel(0),fParticleMessenger(0),noName(" "),
-readyToUse(false)
+G4ParticleTable::G4ParticleTable()
+     :verboseLevel(0),fParticleMessenger(0),
+      noName(" "),
+      readyToUse(false)
 {
   fDictionary = new G4PTblDictionary();
   fIterator   = new G4PTblDicIterator( *fDictionary );
@@ -73,12 +75,13 @@ readyToUse(false)
 ////////////////////
 G4ParticleTable::~G4ParticleTable()
 {
-  // delete Short Lived table and contents
+ 
+  // delete Short Lived table 
   if (fShortLivedTable!=0) delete fShortLivedTable;
   fShortLivedTable =0;
 
 
-  //delete Ion Table and contents
+  //delete Ion Table 
   if (fIonTable!=0) delete fIonTable;
   fIonTable =0;
 
@@ -159,6 +162,12 @@ void G4ParticleTable::RemoveAllParticles()
     G4cout << "G4ParticleTable::RemoveAllParticles() " << G4endl;
   }
 #endif
+  // delete all particles 
+  G4PTblDicIterator *piter = fIterator; 
+  piter -> reset();
+  while( (*piter)() ){
+    delete (piter->value());
+  }
 
   //delete Ion Table and contents
   if (fIonTable!=0) {

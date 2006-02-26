@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericIon.cc,v 1.11 2006-02-24 10:49:57 kurasige Exp $
+// $Id: G4GenericIon.cc,v 1.12 2006-02-26 14:55:54 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,7 +48,7 @@ G4GenericIon* G4GenericIon::Definition()
   const G4String name = "GenericIon";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  G4Ions* anInstance = reinterpret_cast<G4Ions*>(pTable->FindParticle(name));
   if (anInstance ==0)
   {
   // create particle
@@ -60,21 +60,21 @@ G4GenericIon* G4GenericIon::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
+  //             excitation   
 //!!!!
 //!!!! this particle should not be used for tracking
 //!!!! all properties except name and type are meaningless
 //!!!!
-   anInstance = new G4ParticleDefinition(
+   anInstance = new G4Ions(
                  name,   0.9382723*GeV,       0.0*MeV,       eplus,
                     1,              +1,             0,          
                     1,              +1,             0,             
 	    "nucleus",               0,            +1,           0,
 		 true,            -1.0,          NULL,
-             false,           "generic"
+		 false,      "generic",             0,
+		 0.0 
               );
   }
-   anInstance->SetAtomicNumber(1);
-   anInstance->SetAtomicMass(1);
 
   theInstance = reinterpret_cast<G4GenericIon*>(anInstance);
   return theInstance;

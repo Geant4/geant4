@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericIon.hh,v 1.9 2005-01-14 03:49:13 asaim Exp $
+// $Id: G4GenericIon.hh,v 1.10 2006-02-26 14:55:54 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,12 +46,13 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4Ions.hh"
 
 // ######################################################################
 // ###                          GenericIon                            ###
 // ######################################################################
 
-class G4GenericIon : public G4ParticleDefinition
+class G4GenericIon : public G4Ions
 {
  private:
    static G4GenericIon* theInstance;

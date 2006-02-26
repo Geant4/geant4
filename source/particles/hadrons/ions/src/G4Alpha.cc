@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Alpha.cc,v 1.10 2005-01-14 03:49:13 asaim Exp $
+// $Id: G4Alpha.cc,v 1.11 2006-02-26 14:55:54 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,7 @@ G4Alpha* G4Alpha::Definition()
   const G4String name = "alpha";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  G4Ions* anInstance = reinterpret_cast<G4Ions*>(pTable->FindParticle(name));
   if (anInstance ==0)
   {
   // create particle
@@ -61,17 +61,16 @@ G4Alpha* G4Alpha::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
-   anInstance = new G4ParticleDefinition(
+  //             excitation
+   anInstance = new G4Ions(
                  name,   3.727417*GeV,       0.0*MeV,  +2.0*eplus,
                     0,              +1,             0,
                     0,               0,             0,
             "nucleus",               0,            +4,           0,
                  true,            -1.0,          NULL,
-             false,           "static"
-              );
-
-   anInstance->SetAtomicNumber(2);
-   anInstance->SetAtomicMass(4);
+		 false,       "static",          0,
+                 0.0
+               );
   }
   theInstance = reinterpret_cast<G4Alpha*>(anInstance);
   return theInstance;

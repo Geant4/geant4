@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.hh,v 1.28 2006-01-02 20:32:37 asaim Exp $
+// $Id: G4ParticleDefinition.hh,v 1.29 2006-02-26 14:56:55 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -175,11 +175,15 @@ class G4ParticleDefinition
 
       void   SetParticleSubType(const G4String& subtype);
 
-  public:
-    void SetAtomicNumber(G4int);
-    virtual G4int GetAtomicNumber() const;
-    void SetAtomicMass(G4int);
-    virtual G4int GetAtomicMass() const;
+  public: // With Description
+      // Get AtomicNumber and AtomicMass
+      // These properties are defined for nucleus
+      G4int GetAtomicNumber() const;
+      G4int GetAtomicMass() const;
+
+  protected:
+      void SetAtomicNumber(G4int );
+      void SetAtomicMass(G4int );
 
  public:
       void  SetVerboseLevel(G4int value);
