@@ -54,9 +54,7 @@ exrdmAnalysisManager::exrdmAnalysisManager()
   detectorThresE = 10*keV;
   pulseWidth = 1.*microsecond;
   histo   = new exrdmHisto();
-#ifdef G4ANALYSIS_USE
-   bookHisto();
-#endif
+  bookHisto();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -88,19 +86,6 @@ void exrdmAnalysisManager::bookHisto()
     "Anti-coincidence spectrum (MeV) in the detector",histNBin,histEMin,histEMax,MeV);
   histo->add1D("16",
 	       "Decay emission spectrum (MeV)",histNBin,histEMin,histEMax,MeV);
-  // in aida these histos are indiced from 0-6
-  //
-  //  histo->addTuple( "100", "Emitted Particles","std::string Name; std::double Energy; std::double Time; std::double Weight" );
-  histo->addTuple( "100", "Emitted Particles","string PName; double Energy; double Time; double Weight" );
-  //  histo->addTuple( "200", "RadioIsotopes","std::string Name; std::double Time, Weight" );
-  histo->addTuple( "200", "RadioIsotopes","string IName; double Time, Weight" );
-  histo->addTuple( "300", "Energy Depositions","double Energy, Time, Weight" );
-
-  // at the moment anaphe can only handle float ntuple
-  //histo->addTuple( "100", "Emitted Particles"," float Name, Energy, Time, Weight" );
-  //histo->addTuple( "200", "RadioIsotopes"," float Name, Energy, Time, Weight" );
-  //histo->addTuple( "300", "Energy Depositions"," float Energy, Time, Weight" );
-  //    the ntuples are indeced from 0-2 in aida
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -108,6 +93,15 @@ void exrdmAnalysisManager::bookHisto()
 void exrdmAnalysisManager::BeginOfRun()
 {
 #ifdef G4ANALYSIS_USE
+  if(histo->FileType() == "hbook") {
+    histo->addTuple( "1", "Emitted Particles", "float PName,  Energy,  Time,  Weight" );
+    histo->addTuple( "2", "RadioIsotopes", "float IName, Time, Weight" );
+    histo->addTuple( "3", "Energy Depositions", "float Energy, Time, Weight" );
+  } else {
+    histo->addTuple( "1", "Emitted Particles", "string PName; float Energy; Time; Weight" );
+    histo->addTuple( "2", "RadioIsotopes", "string IName; float Time, Weight" );
+    histo->addTuple( "3", "Energy Depositions", "float Energy, Time, Weight" );
+  }
   histo->book();
 #endif
   if(verbose > 0) {
@@ -243,7 +237,7 @@ void exrdmAnalysisManager::AddParticle(G4String particleName, G4double energy, G
   histo->fillTuple(0,"Time",time/second);
   histo->addRow(0);
   // now fill th emission spectrum
-  if (energy) histo->fillHisto(6,energy/MeV,weight);
+  if (energy>0.0) histo->fillHisto(6,energy/MeV,weight);
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

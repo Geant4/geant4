@@ -23,6 +23,7 @@
 
 #include "exrdmHisto.hh"
 #include "exrdmHistoMessenger.hh"
+#include "G4ParticleTable.hh"
 
 #ifdef G4ANALYSIS_USE
 //#include <memory> // for the auto_ptr(T>
@@ -86,7 +87,7 @@ void exrdmHisto::book()
   AIDA::ITreeFactory* tf = af->createTreeFactory(); 
   // Creating a tree mapped to a new hbook file.
 
-  tree = tf->create(histName,histType,false,true,"uncompress");
+  tree = tf->create(histName,histType,false,true,"--noErrors uncompress");
   if(tree) 
     G4cout << "Tree store  : " << tree->storeName() << G4endl;
   else
@@ -217,12 +218,12 @@ void exrdmHisto::addTuple(const G4String& w1, const G4String& w2, const G4String
 
 void exrdmHisto::fillTuple(G4int i, const G4String& parname, G4double x)
 {
-  if(verbose > 1) {
+  if(verbose > 1) 
     G4cout << "fill tuple # " << i 
 	   <<" with  parameter <" << parname << "> = " << x << G4endl; 
-  }
+
 #ifdef G4ANALYSIS_USE  
-  if(ntup[i]) ntup[i]->fill(ntup[i]->findColumn(parname), x);
+  if(ntup[i]) ntup[i]->fill(ntup[i]->findColumn(parname), (float)x);
 #endif
 }
 
@@ -230,10 +231,9 @@ void exrdmHisto::fillTuple(G4int i, const G4String& parname, G4double x)
 
 void exrdmHisto::fillTuple(G4int i, const G4String& parname, G4int x)
 {
-  if(verbose > 1) {
+  if(verbose > 1) 
     G4cout << "fill tuple # " << i 
 	   <<" with  parameter <" << parname << "> = " << x << G4endl; 
-  }
 #ifdef G4ANALYSIS_USE  
   if(ntup[i]) ntup[i]->fill(ntup[i]->findColumn(parname), x);
 #endif
@@ -248,17 +248,24 @@ void exrdmHisto::fillTuple(G4int i, const G4String& parname, const G4String& x)
 	   <<" with  parameter <" << parname << "> = " << x << G4endl; 
   }
 #ifdef G4ANALYSIS_USE  
-  if(ntup[i]) ntup[i]->fill(ntup[i]->findColumn(parname), x);
+  if(histType == "hbook") {
+    G4ParticleDefinition* pd = G4ParticleTable::GetParticleTable()->FindParticle(x);
+    float y = 0;
+    if(pd) y = float(pd->GetPDGEncoding());
+    if(ntup[i]) ntup[i]->fill(ntup[i]->findColumn(parname), y);
+  } else {
+    if(ntup[i]) ntup[i]->fill(ntup[i]->findColumn(parname), x);
+  }
 #endif
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void exrdmHisto::fillTuple(G4int i, const G4String& parname, G4bool x)
 {
-  if(verbose > 1) {
+  if(verbose > 1) 
     G4cout << "fill tuple # " << i 
 	   <<" with  parameter <" << parname << "> = " << x << G4endl; 
-  }
+  
 #ifdef G4ANALYSIS_USE  
   if(ntup[i]) ntup[i]->fill(ntup[i]->findColumn(parname), x);
 #endif
@@ -268,6 +275,9 @@ void exrdmHisto::fillTuple(G4int i, const G4String& parname, G4bool x)
 
 void exrdmHisto::addRow(G4int i)
 {
+  if(verbose > 1) 
+    G4cout << "fill row of the tuple # " << i << G4endl; 
+ 
 #ifdef G4ANALYSIS_USE
   if(ntup[i]) ntup[i]->addRow();
 #endif
@@ -285,6 +295,13 @@ void exrdmHisto::setFileName(const G4String& nam)
 void exrdmHisto::setFileType(const G4String& nam) 
 {
   histType = nam;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+const G4String& exrdmHisto::FileType() const
+{
+  return histType;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

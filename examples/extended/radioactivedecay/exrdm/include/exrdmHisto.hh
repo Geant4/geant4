@@ -92,6 +92,7 @@ public:
   void setFileName(const G4String&);
 
   void setFileType(const G4String&);
+  const G4String& FileType() const;
 
 private:
 
