@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: reportParticles.cc,v 1.8 2003-09-21 19:38:03 kurasige Exp $
+// $Id: reportParticles.cc,v 1.9 2006-02-27 12:19:01 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,6 +29,7 @@
 #include "G4ios.hh"
 #include "globals.hh"
 #include "tst2ParticleConstructor.hh"
+#include "G4ParticleTable.hh"
 #include "G4ParticlePropertyTable.hh"
 #include "G4SimplePPReporter.hh"
 #include "G4HtmlPPReporter.hh"
@@ -38,9 +39,13 @@
 #define USE_HTML_REPORTER 1
 
 int main(int argc,char** argv) {
+
+  G4ParticleTable::GetParticleTable()->SetReadiness();
+
   // create all particles
   tst2ParticleConstructor pConstructor;
   pConstructor.ConstructParticle();
+
 
   // particleContainer 
   G4VParticlePropertyReporter* aPPR;
