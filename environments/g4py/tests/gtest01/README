@@ -1,0 +1,38 @@
+$Id: README,v 1.1 2006-02-27 10:05:24 kmura Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+              Geant4Py - A Geant4-Python Bridge
+     =========================================================
+
+                           gtest01
+                           -------
+
+This test shows some basic tests for Geant4 Python interface;
+
+ - An example of how to connect an existing Geant4 users' code to Python
+ - Python overriding of UserAction-s
+ - Setting magnetic fields in Python
+ - Visualization
+ - Thread testing
+
+
+* How to build
+
+Environment variables, such as G4SYSTEM, G4INSTALL, G4LIB, CLHEP_BASE_DIR, 
+CLHEP_LIB etc, which are required for building Geant4 applications,
+are required.
+
+After setting those environment variables, try
+
+  # make all
+
+
+* Notes
+
+Under "g4app" directory, there is a Geant4 user application, which can be 
+a standalone application. This application should be build with shared 
+library to make a dynamic binding with Python. You can find an statement 
+"G4LIB_BUILD_SHARED := 1" in GNUmakefile, which set your building application 
+in a shared library mode.
+
