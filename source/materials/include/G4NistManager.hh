@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh,v 1.3 2005-05-12 17:29:08 vnivanch Exp $
+// $Id: G4NistManager.hh,v 1.4 2006-02-27 17:29:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,7 +35,7 @@
 // Creation date: 23.12.2004
 //
 // Modifications:
-//
+// 27.02.06 V.Ivanchneko add GetAtomicMassAmu and ConstructNewGasMaterial
 //
 // Class Description:
 //
@@ -89,6 +89,7 @@ public:
 
   size_t   GetNumberOfElements() {return nElements;};
   G4int    GetZ (const G4String& symb);
+  G4double GetAtomicMassAmu (G4int Z);
   G4double GetIsotopeMass (G4int Z, G4int N);
 
   void PrintElement (const G4String&);
@@ -111,16 +112,23 @@ public:
   // construct a G4Material from scratch by atome count
   // 
   G4Material* ConstructNewMaterial(const G4String& name,
-                                      const std::vector<G4String>& elm,
-                                      const std::vector<G4int>& nbAtoms,
-				      G4double dens, G4bool isotopes=true);
+				   const std::vector<G4String>& elm,
+				   const std::vector<G4int>& nbAtoms,
+				   G4double dens, G4bool isotopes=true);
 				      
   // construct a G4Material from scratch by fraction mass
   // 
   G4Material* ConstructNewMaterial(const G4String& name,
-                                      const std::vector<G4String>& elm,
-                                      const std::vector<G4double>& weight,
-				      G4double dens, G4bool isotopes=true);
+				   const std::vector<G4String>& elm,
+				   const std::vector<G4double>& weight,
+				   G4double dens, G4bool isotopes=true);
+
+  // construct a gas G4Material from scratch by atome count
+  // 
+  G4Material* ConstructNewGasMaterial(const G4String& name,
+                                      const G4String& nameNist,
+				      G4double temp, G4double pres, 
+				      G4bool isotopes=true);
 
   size_t GetNumberOfMaterials() {return nMaterials;};
   
@@ -182,6 +190,14 @@ inline
 G4int G4NistManager::GetZ(const G4String& symb)
 {
   return elmBuilder->GetZ(symb);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
+G4double G4NistManager::GetAtomicMassAmu(G4int Z)
+{
+  return elmBuilder->GetA(Z);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

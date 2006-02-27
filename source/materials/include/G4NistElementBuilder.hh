@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.hh,v 1.6 2005-10-31 11:35:25 vnivanch Exp $
+// $Id: G4NistElementBuilder.hh,v 1.7 2006-02-27 17:29:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4NistElementBuilder_h
@@ -33,9 +33,11 @@
 // Description: Utility class to hold and manipulate G4Elements defined from
 //              Nist data base
 //
-// Author:      V.Ivanchenko 21-11-2004
+// Author:      V.Ivanchenko 21.11.2004
 //
 // Modifications:
+// 27.02.06 V.Ivanchenko Return m=0 if Z&N combination is out of NIST  
+// 27.02.06 V.Ivanchneko add GetAtomicMassAmu 
 //
 //----------------------------------------------------------------------------
 //
@@ -129,11 +131,10 @@ inline G4double G4NistElementBuilder::GetA(G4int Z)
 
 inline G4double G4NistElementBuilder::GetIsotopeMass(G4int Z, G4int N)
 {
+  G4double m = 0.0;
   G4int i = N - nFirstIsotope[Z];
-  if(i < 0) i = 0;
-  else if(i >= nIsotopes[Z]) i = nIsotopes[Z] -1;
-  i += idxIsotopes[Z];
-  return massIsotopes[i];
+  if(i >= 0 && i <nIsotopes[Z]) m = massIsotopes[i + idxIsotopes[Z]]; 
+  return m;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.hh,v 1.4 2005-10-31 11:35:25 vnivanch Exp $
+// $Id: G4NistMaterialBuilder.hh,v 1.5 2006-02-27 17:29:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4NistMaterialBuilder_h
@@ -32,11 +32,11 @@
 //
 // Description: Utility class to hold and manipulate G4Materials
 //
-// Author:      V.Ivanchenko 21-11-2004
+// Author:      V.Ivanchenko 21.11.2004
 //
 // Modifications:
-// 31-10-2005 Add chemical effect and gas properties (V.Ivanchenko)
-//
+// 31.10.05 Add chemical effect and gas properties (V.Ivanchenko)
+// 27.02.06 V.Ivanchneko add ConstructNewGasMaterial
 //
 //----------------------------------------------------------------------------
 //
@@ -73,16 +73,23 @@ public:
   // construct a G4Material from scratch by atome count
   // 
   G4Material* ConstructNewMaterial (const G4String& name,
-                                      const std::vector<G4String>& elm,
-                                      const std::vector<G4int>& nbAtoms,
-				      G4double dens, G4bool isotopes=true);
+				    const std::vector<G4String>& elm,
+				    const std::vector<G4int>& nbAtoms,
+				    G4double dens, G4bool isotopes=true);
 				      
   // construct a G4Material from scratch by fraction mass
   //
   G4Material* ConstructNewMaterial (const G4String& name,
-                                      const std::vector<G4String>& elm,
-                                      const std::vector<G4double>& weight,
-				      G4double dens, G4bool isotopes=true);
+				    const std::vector<G4String>& elm,
+				    const std::vector<G4double>& weight,
+				    G4double dens, G4bool isotopes=true);
+
+  // construct a gas G4Material from scratch by atome count
+  // 
+  G4Material* ConstructNewGasMaterial(const G4String& name, 
+				      const G4String& nameNist,
+				      G4double temp, G4double pres, 
+				      G4bool isotopes=true);
 
   void SetVerbose(G4int val);
   void ListMaterials(const G4String&);
@@ -99,7 +106,9 @@ private:
 
   void AddMaterial(const G4String& nameMat, G4double dens, G4int Z=0,
                          G4double pot=0.0, G4int ncomp=1,
-                         G4State=kStateSolid);
+                         G4State=kStateSolid,
+                         G4double temp=STP_Temperature,
+                         G4double pres=STP_Pressure);
 
   void AddChemicalFormula(const G4String& nameMat, const G4String& ch);
   void AddGas(const G4String& nameMat, G4double t=STP_Temperature,

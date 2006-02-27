@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistManager.cc,v 1.2 2005-05-12 17:29:08 vnivanch Exp $
+// $Id: G4NistManager.cc,v 1.3 2006-02-27 17:29:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,7 +35,7 @@
 // Creation date: 23.12.2004
 //
 // Modifications:
-//
+// 27.02.06 V.Ivanchneko add ConstructNewGasMaterial
 //
 // -------------------------------------------------------------------
 //
@@ -202,6 +202,18 @@ G4Material* G4NistManager::ConstructNewMaterial(
 				      G4double dens, G4bool isotopes)
 {
   return matBuilder->ConstructNewMaterial(name,elm,w,dens,isotopes);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4Material* G4NistManager::ConstructNewGasMaterial(
+				      const G4String& name,
+                                      const G4String& nameNist,
+				      G4double temp, G4double pres, 
+				      G4bool isotopes)
+{
+  return matBuilder->ConstructNewGasMaterial(name,nameNist,
+					     temp,pres,isotopes);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

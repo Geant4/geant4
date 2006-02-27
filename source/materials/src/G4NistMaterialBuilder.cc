@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.7 2005-10-31 11:35:25 vnivanch Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.8 2006-02-27 17:29:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,8 +35,8 @@
 // Creation date: 23.12.2004
 //
 // Modifications:
-// 31-10-2005 Add chemical effect and gas properties (V.Ivanchenko)
-//
+// 31-10-05 Add chemical effect and gas properties (V.Ivanchenko)
+// 27.02.06 V.Ivanchneko add ConstructNewGasMaterial
 //
 // -------------------------------------------------------------------
 //
@@ -199,11 +199,17 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
 {
   G4int Z;
   G4int nm = elm.size();
+  if(nm == 0) { 
+    G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
+           << "  WARNING: empty list of elements"
+	   << G4endl;
+    return 0;
+  } 
   if (nm == 1) {
     Z = G4int((elmBuilder->FindOrBuildElement(elm[0]))->GetZ());
     AddMaterial(name,dens,Z);
-  }
-  else if (nm > 1) {
+
+  } else {
     AddMaterial(name,dens,0,0.0,nm);
     for (G4int i=0; i<nm; i++) {
       Z = G4int((elmBuilder->FindOrBuildElement(elm[i]))->GetZ());
@@ -213,6 +219,73 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
   
   return BuildMaterial(name, isotopes);    
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4Material* G4NistMaterialBuilder::ConstructNewGasMaterial(
+				      const G4String& name,
+				      const G4String& nameNist,
+				      G4double temp, G4double pres, 
+				      G4bool isotopes=true)
+{
+  G4int idx = -1;
+  for (G4int i=0; i<nMaterials; i++) {
+    if (name == names[i]) {
+      G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
+	     << "  WARNING: the Name <" << name 
+	     << "> is already in the DB idx= " << i
+	     << " no new gas will be constructed"
+	     << G4endl;
+      return 0;
+    } else {
+      if (nameNist == names[i]) {
+        if(states[i] != kStateGas) {
+	  G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
+		 << "  WARNING:  <" << nameNist 
+		 << "> is not gas -  no new gas will be constructed"
+		 << G4endl;
+          return 0;
+	}
+	idx = i;
+      }
+    }
+  } 
+
+  if(idx == -1) { 
+    G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
+           << "  WARNING: no material in the DB with the name <" << nameNist
+	   << "> - new gas is not constructed"
+	   << G4endl;
+    return 0;
+  } 
+
+  G4int nc = components[idx];
+  G4double dens = densities[idx]*pres*STP_Temperature/(temp*STP_Pressure);
+  G4Material* mat = new G4Material(name,dens,nc,kStateGas,temp, pres);
+
+  if (verbose>1) G4cout << "New material <" << name << ">   nComponents= " << nc << G4endl;
+  if (nc > 0) {
+    G4int id = indexes[i];
+    for (G4int j=0; j<nc; j++) {
+      G4int Z = elements[id+j];
+      G4Element* elm = elmBuilder->FindOrBuildElement(Z, isotopes);
+      mat->AddElement(elm,fractions[idx+j]);
+    }
+  }
+
+  if (chFormulas[idx] != "") {
+    mat->SetChemicalFormula(chFormulas[i]);
+    G4double exc = mat->GetIonisation()->FindMeanExcitationEnergy(chFormulas[idx]);
+    mat->GetIonisation()->SetMeanExcitationEnergy(exc);
+  }
+
+  if (ionPotentials[idx] != 0.0)
+    mat->GetIonisation()->SetMeanExcitationEnergy(ionPotentials[i]);
+
+  if (matManager) matManager->RegisterMaterial(mat);
+  return mat;
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4NistMaterialBuilder::SetVerbose(G4int val)
@@ -304,7 +377,9 @@ void G4NistMaterialBuilder::DumpMix(G4int i)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4NistMaterialBuilder::AddMaterial(const G4String& nameMat, G4double dens,
-                             G4int Z, G4double pot, G4int ncomp, G4State state)
+					G4int Z, G4double pot, 
+					G4int ncomp, G4State state, 
+					G4double temp, G4double pres)
 {
   if (nCurrent != 0) {
     G4cout
@@ -322,8 +397,8 @@ void G4NistMaterialBuilder::AddMaterial(const G4String& nameMat, G4double dens,
   states.push_back(state);
   components.push_back(ncomp);
   indexes.push_back(nComponents);
-  temperatures.push_back(STP_Temperature);
-  presures.push_back(STP_Pressure);
+  temperatures.push_back(temp);
+  presures.push_back(pres);
 
   if (ncomp == 1) {
     elements.push_back(Z);
@@ -398,8 +473,8 @@ void G4NistMaterialBuilder::AddGas(const G4String& nameMat, G4double t, G4double
     }
   }
   G4cout << "WARNING: G4NistMaterialBuilder::AddGas problem: there is no "
-    << nameMat << " in the list of materials;"
-    << G4endl;
+	 << nameMat << " in the list of materials;"
+	 << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
