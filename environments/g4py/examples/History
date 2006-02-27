@@ -1,0 +1,19 @@
+$Id: History,v 1.1 2006-02-27 09:45:14 kmura Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+
+A set of examples for Geant4Py.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+June 24, 2005 K.Murakami
+- just created.
+
