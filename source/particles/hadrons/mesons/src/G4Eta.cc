@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Eta.cc,v 1.15 2005-01-14 03:49:15 asaim Exp $
+// $Id: G4Eta.cc,v 1.16 2006-02-28 10:26:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,7 @@ G4Eta* G4Eta::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,    0.54730*GeV,      1.18*keV,         0.0,
+                 name,     0.54775*GeV,      1.29*keV,         0.0,
                     0,              -1,            +1,
                     0,               0,            +1,
               "meson",               0,             0,         221,
@@ -79,13 +79,13 @@ G4Eta* G4Eta::Definition()
  // create decay channels
   G4VDecayChannel** mode = new G4VDecayChannel*[4];
   // eta -> gamma + gamma
-  mode[0] = new G4PhaseSpaceDecayChannel("eta",0.393,2,"gamma","gamma");
+  mode[0] = new G4PhaseSpaceDecayChannel("eta",0.3942,2,"gamma","gamma");
   // eta -> pi0 + pi0 + pi0
-  mode[1] = new G4PhaseSpaceDecayChannel("eta",0.321,3,"pi0","pi0","pi0");
+  mode[1] = new G4PhaseSpaceDecayChannel("eta",0.3256,3,"pi0","pi0","pi0");
   // eta -> pi0 + pi+ + pi-
-  mode[2] = new G4PhaseSpaceDecayChannel("eta",0.232,3,"pi0","pi+","pi-");
+  mode[2] = new G4PhaseSpaceDecayChannel("eta",0.226,3,"pi0","pi+","pi-");
   // eta -> gamma + pi+ + pi-
-  mode[3] = new G4PhaseSpaceDecayChannel("eta",0.048,3,"gamma","pi+","pi-");
+  mode[3] = new G4PhaseSpaceDecayChannel("eta",0.0468,3,"gamma","pi+","pi-");
 
   for (G4int index=0; index <4; index++ ) table->Insert(mode[index]);
   delete [] mode;

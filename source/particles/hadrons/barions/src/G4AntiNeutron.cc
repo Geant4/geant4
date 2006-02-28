@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutron.cc,v 1.17 2006-02-26 14:55:04 kurasige Exp $
+// $Id: G4AntiNeutron.cc,v 1.18 2006-02-28 10:26:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,7 +62,7 @@ G4AntiNeutron* G4AntiNeutron::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
    anInstance = new G4ParticleDefinition(
-                 name,  0.93956563*GeV, 7.432e-28*GeV,         0.0, 
+                 name,  0.93956563*GeV, 7.431e-28*GeV,         0.0, 
 		    1,              +1,             0,          
 		    1,              +1,             0,             
 	     "baryon",               0,            -1,       -2112,

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonZeroLong.cc,v 1.15 2005-01-14 03:49:16 asaim Exp $
+// $Id: G4KaonZeroLong.cc,v 1.16 2006-02-28 10:26:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,7 +72,7 @@ G4KaonZeroLong* G4KaonZeroLong::Definition()
                     0,              -1,             0,
                     1,               0,             0,
               "meson",               0,             0,         130,
-                false,         51.7*ns,          NULL,
+                false,         51.6*ns,          NULL,
                 false,          "kaon",           130);
 
  //create Decay Table
@@ -81,17 +81,17 @@ G4KaonZeroLong* G4KaonZeroLong::Definition()
  // create decay channels
   G4VDecayChannel** mode = new G4VDecayChannel*[6];
   // kaon0L -> pi0 + pi0 + pi0
-  mode[0] = new G4PhaseSpaceDecayChannel("kaon0L",0.211,3,"pi0","pi0","pi0");
+  mode[0] = new G4PhaseSpaceDecayChannel("kaon0L",0.1983,3,"pi0","pi0","pi0");
   // kaon0L -> pi0 + pi+ + pi-
-  mode[1] = new G4PhaseSpaceDecayChannel("kaon0L",0.126,3,"pi0","pi+","pi-");
+  mode[1] = new G4PhaseSpaceDecayChannel("kaon0L",0.1247,3,"pi0","pi+","pi-");
   // kaon0L -> pi- + e+ + nu_e (Ke3)
-  mode[2] = new G4KL3DecayChannel("kaon0L",0.194,"pi-","e+","nu_e");
+  mode[2] = new G4KL3DecayChannel("kaon0L",0.2020,"pi-","e+","nu_e");
   // kaon0L -> pi+ + e- + anti_nu_e (Ke3)
-  mode[3] = new G4KL3DecayChannel("kaon0L",0.194,"pi+","e-","anti_nu_e");
+  mode[3] = new G4KL3DecayChannel("kaon0L",0.2020,"pi+","e-","anti_nu_e");
   // kaon0L -> pi- + mu+ + nu_mu (Kmu3)
-  mode[4] = new G4KL3DecayChannel("kaon0L",0.136,"pi-","mu+","nu_mu");
+  mode[4] = new G4KL3DecayChannel("kaon0L",0.1348,"pi-","mu+","nu_mu");
   // kaon0L -> pi+ + mu- + anti_nu_mu (Kmu3)
-  mode[5] = new G4KL3DecayChannel("kaon0L",0.136,"pi+","mu-","anti_nu_mu");
+  mode[5] = new G4KL3DecayChannel("kaon0L",0.1348,"pi+","mu-","anti_nu_mu");
 
   for (G4int index=0; index <6; index++ ) table->Insert(mode[index]);
   delete [] mode;

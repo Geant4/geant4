@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonPlus.cc,v 1.11 2005-01-14 03:49:16 asaim Exp $
+// $Id: G4KaonPlus.cc,v 1.12 2006-02-28 10:26:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,7 +72,7 @@ G4KaonPlus* G4KaonPlus::Definition()
                     0,              -1,             0,
                     1,              +1,             0,
               "meson",               0,             0,         321,
-                false,       12.371*ns,          NULL,
+                false,       12.385*ns,          NULL,
                 false,       "kaon");
 
  //create Decay Table
@@ -81,17 +81,17 @@ G4KaonPlus* G4KaonPlus::Definition()
  // create decay channels
   G4VDecayChannel** mode = new G4VDecayChannel*[6];
   // kaon+ -> mu+ + nu_mu
-  mode[0] = new G4PhaseSpaceDecayChannel("kaon+",0.635,2,"mu+","nu_mu");
+  mode[0] = new G4PhaseSpaceDecayChannel("kaon+",0.6339,2,"mu+","nu_mu");
   // kaon+ -> pi+ + pi0
-  mode[1] = new G4PhaseSpaceDecayChannel("kaon+",0.212,2,"pi+","pi0");
+  mode[1] = new G4PhaseSpaceDecayChannel("kaon+",0.2103,2,"pi+","pi0");
   // kaon+ -> pi+ + pi+ + pi-
-  mode[2] = new G4PhaseSpaceDecayChannel("kaon+",0.056,3,"pi+","pi+","pi-");
+  mode[2] = new G4PhaseSpaceDecayChannel("kaon+",0.0559,3,"pi+","pi+","pi-");
   // kaon+ -> pi+ + pi0 + pi0
-  mode[3] = new G4PhaseSpaceDecayChannel("kaon+",0.017,3,"pi+","pi0","pi0");
+  mode[3] = new G4PhaseSpaceDecayChannel("kaon+",0.01757,3,"pi+","pi0","pi0");
   // kaon+ -> pi0 + e+ + nu_e (Ke3)
-  mode[4] = new G4KL3DecayChannel("kaon+",0.048,"pi0","e+","nu_e");
+  mode[4] = new G4KL3DecayChannel("kaon+",0.0493,"pi0","e+","nu_e");
   // kaon+ -> pi0 + mu+ + nu_mu (Kmu3)
-  mode[5] = new G4KL3DecayChannel("kaon+",0.032,"pi0","mu+","nu_mu");
+  mode[5] = new G4KL3DecayChannel("kaon+",0.0330,"pi0","mu+","nu_mu");
 
   for (G4int index=0; index <6; index++ ) table->Insert(mode[index]);
   delete [] mode;

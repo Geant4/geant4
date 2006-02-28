@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiBMesonZero.cc,v 1.16 2006-02-26 14:50:53 kurasige Exp $
+// $Id: G4AntiBMesonZero.cc,v 1.17 2006-02-28 10:26:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,7 +62,7 @@ G4AntiBMesonZero* G4AntiBMesonZero::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,      5.2794*GeV,   4.27e-10*MeV,          0.,
+                 name,      5.2794*GeV,   4.29e-10*MeV,          0.,
                     0,              -1,             0,
                     1,              +1,             0,
               "meson",               0,             0,        -511,

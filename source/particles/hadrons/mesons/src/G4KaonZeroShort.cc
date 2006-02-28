@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonZeroShort.cc,v 1.15 2005-01-14 03:49:16 asaim Exp $
+// $Id: G4KaonZeroShort.cc,v 1.16 2006-02-28 10:26:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,11 +67,11 @@ G4KaonZeroShort* G4KaonZeroShort::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,    0.497672*GeV,  7.373e-12*MeV,         0.0,
+                 name,    0.497672*GeV,  7.352e-12*MeV,         0.0,
                     0,              -1,             0,
                     1,               0,             0,
               "meson",               0,             0,         310,
-                false,      0.08926*ns,          NULL,
+                false,      0.08953*ns,          NULL,
                 false,          "kaon",           310);
 
  //create Decay Table
@@ -80,9 +80,9 @@ G4KaonZeroShort* G4KaonZeroShort::Definition()
   // create decay channels
   G4VDecayChannel** mode = new G4VDecayChannel*[2];
   // kaon0s -> pi+ + pi-
-  mode[0] = new G4PhaseSpaceDecayChannel("kaon0S",0.686,2,"pi+","pi-");
+  mode[0] = new G4PhaseSpaceDecayChannel("kaon0S",0.6895,2,"pi+","pi-");
   // kaon0s -> pi0 + pi0
-  mode[1] = new G4PhaseSpaceDecayChannel("kaon0S",0.313,2,"pi0","pi0");
+  mode[1] = new G4PhaseSpaceDecayChannel("kaon0S",0.3105,2,"pi0","pi0");
 
   for (G4int index=0; index <2; index++ ) table->Insert(mode[index]);
   delete [] mode;
