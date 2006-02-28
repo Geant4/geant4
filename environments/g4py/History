@@ -1,0 +1,24 @@
+$Id: History,v 1.1 2006-02-28 01:16:18 kmura Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                       Geant4Py History file
+                       ---------------------
+
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+at this level and keep track of all relavant tags.
+It DOES NOT substitute the CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+27 February 2006 K.Murakami
+ - commit the first version (local tag: g4py-27-feb-06)
+
+
