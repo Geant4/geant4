@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.hh,v 1.5 2006-02-27 17:29:08 vnivanch Exp $
+// $Id: G4NistMaterialBuilder.hh,v 1.6 2006-02-28 09:43:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4NistMaterialBuilder_h
@@ -64,7 +64,7 @@ public:
   G4NistMaterialBuilder(G4NistManager* mm=0, G4NistElementBuilder* eb=0,
                         G4int verb=0);
 			
- ~G4NistMaterialBuilder();
+  ~G4NistMaterialBuilder();
  
   // Find or build a G4Material by name, from dataBase
   //
