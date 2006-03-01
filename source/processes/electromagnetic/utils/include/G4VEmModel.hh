@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.36 2006-02-09 12:52:05 maire Exp $
+// $Id: G4VEmModel.hh,v 1.37 2006-03-01 11:54:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -79,6 +79,7 @@
 class G4PhysicsTable;
 class G4Region;
 class G4VParticleChange;
+class G4Track;
 
 class G4VEmModel
 {
@@ -159,6 +160,13 @@ public:
 			          G4double  lambda,
 			          G4double  range,
     			          G4double  truePathLength);
+
+  virtual G4double ComputeTruePathLengthLimit(G4Track& track, 
+                                              G4PhysicsTable* theLambdaTable, 
+                                              G4double currentMinimalStep, 
+                                              G4double currentSafety);
+
+  virtual G4double ComputeGeomPathLength(G4double truePathLength);
 
   virtual G4double TrueStepLength(G4double geomStepLength);
 
@@ -372,6 +380,24 @@ inline G4double G4VEmModel::GeomPathLength(G4PhysicsTable*,
 {
   return truePathLength;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4VEmModel::ComputeTruePathLengthLimit(G4Track&, 
+						       G4PhysicsTable*, 
+						       G4double, 
+						       G4double)
+{
+  return DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4VEmModel::ComputeGeomPathLength(G4double truePathLength)
+{
+  return truePathLength;
+}
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

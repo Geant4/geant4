@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.31 2006-02-17 19:36:23 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.32 2006-03-01 11:54:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -204,7 +204,7 @@ protected:
   G4double GetLambda(const G4ParticleDefinition* p, G4double& kineticEnergy);
 
   // This method is used for tracking, it returns step limit
-  G4double GetContinuousStepLimit(const G4Track& track,
+  virtual G4double GetContinuousStepLimit(const G4Track& track,
                                         G4double previousStepSize,
                                         G4double currentMinimalStep,
                                         G4double& currentSafety);
@@ -217,10 +217,10 @@ protected:
 
   G4double CurrentRange() const {return currentRange;};
 
-private:
-
   void DefineMaterial(const G4MaterialCutsCouple* couple);
   // define current material
+
+private:
 
   // hide  assignment operator
 
@@ -229,7 +229,12 @@ private:
 
   // =====================================================================
 
+protected:
+
   G4ParticleChangeForMSC      fParticleChange;
+
+private:
+
   G4EmModelManager*           modelManager;
   G4VEmModel*                 currentModel;
 
