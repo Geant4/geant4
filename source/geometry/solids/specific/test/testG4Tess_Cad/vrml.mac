@@ -1,0 +1,18 @@
+#
+# Macro file for the initialization phase of "exampleN02.cc"
+# when runing in interactive mode
+#
+# Sets some default verbose
+#
+/control/verbose 2
+/run/verbose 2
+#
+# create empty scene
+#
+/vis/open VRML2FILE
+/vis/scene/create
+/vis/drawVolume
+#
+/vis/viewer/flush
+#
+

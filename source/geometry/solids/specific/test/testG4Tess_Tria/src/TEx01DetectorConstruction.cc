@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TEx01DetectorConstruction.cc,v 1.1 2005-11-24 10:45:01 flei Exp $
+// $Id: TEx01DetectorConstruction.cc,v 1.2 2006-03-01 16:57:10 flei Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -41,10 +41,15 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 
+#include "G4Tokenizer.hh"
+
 #include "G4ios.hh"
 
 #include "G4TriangularFacet.hh"
 #include "G4VFacet.hh"
+
+#include <fstream>
+#include <sstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
@@ -62,6 +67,7 @@ TEx01DetectorConstruction::~TEx01DetectorConstruction()
  
 G4VPhysicalVolume* TEx01DetectorConstruction::Construct()
 {
+//
 //--------- Material definition ---------
 
   G4double a, z;
@@ -85,24 +91,99 @@ G4VPhysicalVolume* TEx01DetectorConstruction::Construct()
   G4cout << G4endl << "The materials defined are : " << G4endl << G4endl;
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
+  //------------------------------ 
+  // Tesselated Solid
+  //------------------------------
+  
+  G4String solidName, logicName, physiName;
+  std::vector <G4TessellatedSolid*> solidStore;
+    
+  //
+  //  G4String geomFile ;
+  
+  //  char val[100];
+  //  std::ostrstream os(val,100);
+  //  os <<dirName <<"/z" <<Z <<".a" <<A <<'\0';
+  //  G4String file(val);
+  std::ifstream GeomFile("./test.geom");
+  //solidTarget = new G4Box("target",targetSize,targetSize,targetSize);
+
+  if (!GeomFile){
+    G4cerr << "Geometry file not opened !!!" << G4endl;
+  }else {
+    G4cout << " Tessellated Geometry opened "<<G4endl;
+    char inputChars[150]={' '};
+    G4String inputLine;
+    G4String recordType("");
+    G4double a1,a2,a3,a4,a5,a6,a7,a8,a9;
+    G4TriangularFacet *facet;
+    G4bool firstSolid (true);
+    //
+    while (!GeomFile.getline(inputChars,150).eof()) {
+      inputLine = inputChars;
+      inputLine = inputLine.strip(1);
+      //      G4cout << inputLine << G4endl;
+      if (inputChars[0] == 'f') {
+	if (firstSolid) {
+	  firstSolid = false;
+	}else {
+	  solidTarget->SetSolidClosed(true);
+	  solidStore.push_back(solidTarget);
+	  G4cout << solidName <<" has been created " <<G4endl;
+	}
+        std::istringstream tmpstream(inputLine);
+        tmpstream >>recordType >>solidName ;	
+	solidTarget = new G4TessellatedSolid(solidName);		      
+      } else if (inputChars[0] == 'p' ) {
+        std::istringstream tmpstream(inputLine);
+        tmpstream >>recordType >>a1 >> a1 >> a2 >> a3 >> a4 >> a5 >> a6
+		  >> a7 >> a8  >> a9  ;
+	facet = new
+	  G4TriangularFacet (G4ThreeVector(a1,a2,a3),
+			     G4ThreeVector(a4,a5,a6),
+			     G4ThreeVector(a7,a8,a9),
+			     ABSOLUTE);
+	solidTarget->AddFacet((G4VFacet*) facet);
+      }
+    }
+    // need to close and store the last solid 
+    solidTarget->SetSolidClosed(true);
+    solidStore.push_back(solidTarget);
+    G4cout << solidName <<" has been created " <<G4endl;
+    GeomFile.close();
+    G4cout << " Tessellated Geometry file completed "<<G4endl;
+
+  }
+
 //--------- Sizes of the principal geometrical components (solids)  ---------
-  
-  fTargetLength  = 10.0 * cm;                        // Full length of Target
-  
-  fWorldLength= 1.2 *(fTargetLength*2.0);
+  G4double fWorld_XMin, fWorld_YMin, fWorld_ZMin;
+  fWorld_XMin=fWorld_YMin=fWorld_ZMin = 0.;
+  G4double fWorld_XMax, fWorld_YMax, fWorld_ZMax;
+  fWorld_XMax=fWorld_YMax=fWorld_ZMax = 0.;
+  std::vector<G4TessellatedSolid*>::iterator itr;
+  for (itr = solidStore.begin(); itr != solidStore.end(); itr++) {
+    if ((*itr)->GetMinXExtent() < fWorld_XMin ) fWorld_XMin = (*itr)->GetMinXExtent();
+    if ((*itr)->GetMinYExtent() < fWorld_YMin ) fWorld_YMin = (*itr)->GetMinYExtent();
+    if ((*itr)->GetMinZExtent() < fWorld_ZMin ) fWorld_ZMin = (*itr)->GetMinZExtent();
+    if ((*itr)->GetMaxXExtent() > fWorld_XMax ) fWorld_XMax = (*itr)->GetMaxXExtent();
+    if ((*itr)->GetMaxYExtent() > fWorld_YMax ) fWorld_YMax = (*itr)->GetMaxYExtent();
+    if ((*itr)->GetMaxZExtent() > fWorld_ZMin ) fWorld_ZMax = (*itr)->GetMaxZExtent();
+  }
+  G4ThreeVector Total_Translate = G4ThreeVector( (fWorld_XMin+fWorld_XMax)/2.,
+						 (fWorld_YMin+fWorld_YMax)/2.,
+						 (fWorld_ZMin+fWorld_ZMax)/2.);
+  G4double fWorldHX = (-fWorld_XMin+fWorld_XMax)/2.;
+  G4double fWorldHY = (-fWorld_YMin+fWorld_YMax)/2.;
+  G4double fWorldHZ = (-fWorld_ZMin+fWorld_ZMax)/2.;
    
-  G4double targetSize  = 0.5*fTargetLength;    // Half length of the Target  
-      
 //--------- Definitions of Solids, Logical Volumes, Physical Volumes ---------
   
   //------------------------------ 
   // World
   //------------------------------ 
-
-  G4double HalfWorldLength = 0.5*fWorldLength;
   
- solidWorld= new G4Box("world",HalfWorldLength,HalfWorldLength,HalfWorldLength);
- logicWorld= new G4LogicalVolume( solidWorld, Air, "World", 0, 0, 0);
+  solidWorld= new G4Box("world",fWorldHX,fWorldHY,fWorldHZ);
+  logicWorld= new G4LogicalVolume( solidWorld, Air, "World", 0, 0, 0);
   
   //  Must place the World Physical volume unrotated at (0,0,0).
   // 
@@ -113,85 +194,95 @@ G4VPhysicalVolume* TEx01DetectorConstruction::Construct()
                                  0,               // its mother  volume
                                  false,           // no boolean operations
                                  0);              // no field specific to volume
-				 
-  //------------------------------ 
-  // Target
-  //------------------------------
-  
-  G4ThreeVector positionTarget = G4ThreeVector(0.0,0.0,0.0);
-   
-  //solidTarget = new G4Box("target",targetSize,targetSize,targetSize);
+  //
+  //
+  // now the logical and physical volumes
+  //
+  std::ifstream TreeFile("./test.tree");
+  if (!TreeFile){
+    G4cerr << "Geometry tree file not opened !!!" << G4endl;
+  }else {
+    G4cout << " Tessellated Geometry tree file opened "<<G4endl;
+    G4String inputLine;
+    G4String lsName, copy;
+    G4String recordType("");
+    G4int level;
+    char *sname, *tokenPtr;
+    G4double a[17];
+    G4RotationMatrix rM;
+    //
+    while (!std::getline(TreeFile,inputLine).eof()) {
+      //      G4cout << inputLine <<G4endl;
+      if (inputLine.substr(0,1) == "g") {
+	std::istringstream tmpstream(inputLine);
+        tmpstream >>recordType >> level >> lsName >>a[0] >>a[1] >> a[2] >>a[3] >>a[4] >>
+	  a[5] >>a[6] >>a[7] >>a[8] >>a[9] >>a[10] >>a[11] >>a[12] >>a[13] >>a[14] >>
+	  a[15] >> a[16];
+	G4cout << inputLine <<G4endl;
+	sname       = new char[strlen(lsName)+1];
+	strcpy(sname,lsName);
+	tokenPtr = strtok(sname,"_");
+	lsName = G4String(tokenPtr);
+	tokenPtr = strtok( NULL, "_");
+	copy = G4String(tokenPtr);
+	tokenPtr = strtok( NULL, "_");
+	while (tokenPtr != NULL) {
+	  lsName += "_";
+	  lsName += copy;
+	  copy = G4String(tokenPtr);
+	  tokenPtr = strtok( NULL, "_");
+	}
+	// the name
+	logicName = "L_"+lsName;
+	physiName = "P_"+lsName;    
+	// the copy number
+	std::istringstream is2(copy);
+	is2 >> level;
+	//	G4cout << logicName << " " << physiName << " " << level << G4endl;
+	//
+	std::vector<G4TessellatedSolid*>::iterator itr=solidStore.begin();
+	while ((*itr)->GetName() != lsName && itr != solidStore.end()) 
+	  itr++ ;
+	if (itr != solidStore.end()) {
+	  solidTarget = (*itr);
+	} else {
+	  G4cerr << " the .geom and .tree files don't match!" << G4endl;
+	} 
+	logicTarget = new G4LogicalVolume(solidTarget,Pb,logicName,0,0,0);
 
-  solidTarget = new G4TessellatedSolid("target");
-  G4TriangularFacet *facet1 = new
-  G4TriangularFacet (G4ThreeVector(-targetSize,-targetSize,        0.0),
-                     G4ThreeVector(+targetSize,-targetSize,        0.0),
-                     G4ThreeVector(        0.0,        0.0,+targetSize),
-                     ABSOLUTE);
-  G4TriangularFacet *facet2 = new
-  G4TriangularFacet (G4ThreeVector(+targetSize,-targetSize,        0.0),
-                     G4ThreeVector(+targetSize,+targetSize,        0.0),
-                     G4ThreeVector(        0.0,        0.0,+targetSize),
-                     ABSOLUTE);
-  G4TriangularFacet *facet3 = new
-  G4TriangularFacet (G4ThreeVector(+targetSize,+targetSize,        0.0),
-                     G4ThreeVector(-targetSize,+targetSize,        0.0),
-                     G4ThreeVector(        0.0,        0.0,+targetSize),
-                     ABSOLUTE);
-  G4TriangularFacet *facet4 = new
-  G4TriangularFacet (G4ThreeVector(-targetSize,+targetSize,        0.0),
-                     G4ThreeVector(-targetSize,-targetSize,        0.0),
-                     G4ThreeVector(        0.0,        0.0,+targetSize),
-                     ABSOLUTE);
-  G4TriangularFacet *facet5 = new
-  G4TriangularFacet (G4ThreeVector(-targetSize,-targetSize,        0.0),
-                     G4ThreeVector(        0.0,        0.0,-targetSize/2.),
-                     G4ThreeVector(+targetSize,-targetSize,        0.0),
-                     ABSOLUTE);
-  G4TriangularFacet *facet6 = new
-  G4TriangularFacet (G4ThreeVector(+targetSize,-targetSize,        0.0),
-                     G4ThreeVector(        0.0,        0.0,-targetSize/2.),
-                     G4ThreeVector(+targetSize,+targetSize,        0.0),
-                     ABSOLUTE);
-  G4TriangularFacet *facet7 = new
-  G4TriangularFacet (G4ThreeVector(+targetSize,+targetSize,        0.0),
-                     G4ThreeVector(        0.0,        0.0,-targetSize/2.),
-                     G4ThreeVector(-targetSize,+targetSize,        0.0),
-                     ABSOLUTE);
-  G4TriangularFacet *facet8 = new
-  G4TriangularFacet (G4ThreeVector(-targetSize,+targetSize,        0.0),
-                     G4ThreeVector(        0.0,        0.0,-targetSize/2.),
-                     G4ThreeVector(-targetSize,-targetSize,        0.0),
-                     ABSOLUTE);
-  solidTarget->AddFacet((G4VFacet*) facet1);
-  solidTarget->AddFacet((G4VFacet*) facet2);
-  solidTarget->AddFacet((G4VFacet*) facet3);
-  solidTarget->AddFacet((G4VFacet*) facet4);
-  solidTarget->AddFacet((G4VFacet*) facet5);
-  solidTarget->AddFacet((G4VFacet*) facet6);
-  solidTarget->AddFacet((G4VFacet*) facet7);
-  solidTarget->AddFacet((G4VFacet*) facet8);
-  
-  solidTarget->SetSolidClosed(true);
-  logicTarget = new G4LogicalVolume(solidTarget,Pb,"Target",0,0,0);
-  physiTarget = new G4PVPlacement(0,               // no rotation
-				  positionTarget,  // at (x,y,z)
-				  logicTarget,     // its logical volume				  
-				  "Target",        // its name
-				  logicWorld,      // its mother  volume
-				  false,           // no boolean operations
-				  0);              // no particular field 
-  
+	rM = G4RotationMatrix (G4ThreeVector(a[0],a[1],a[2]),
+			       G4ThreeVector(a[4],a[5],a[6]),
+			       G4ThreeVector(a[8],a[9],a[10]));
+	physiTarget = new G4PVPlacement( G4Transform3D(rM,   //rotation 
+			      (G4ThreeVector(a[12], a[13], a[14]) - Total_Translate)),// position
+					 logicTarget,     // its logical volume				  
+					 physiName,        // its name
+					 logicWorld,      // its mother  volume
+					 false,           // no boolean operations
+					 level-1);        // copy no. 
+      }
+    }
+    TreeFile.close();
+    G4cout << " Tessellated Geometry tree file completed "<<G4endl;
+  }
 //--------- Visualization attributes -------------------------------
-
+  
   G4VisAttributes* BoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   BoxVisAtt->SetVisibility(false);
   G4VisAttributes* FacetVisAtt= new G4VisAttributes(G4Colour(1.0,0.0,0.0));
   FacetVisAtt->SetVisibility(true);
   
   logicWorld  ->SetVisAttributes(BoxVisAtt);  
-  logicTarget ->SetVisAttributes(FacetVisAtt);
-  
+  G4int i = 1;
+  G4double r, g, b;
+  for (itr = solidStore.begin(); itr != solidStore.end(); itr++) {
+    r = (256-i)/256;
+    g= 1.- r;
+    b = 1- r*r;
+    FacetVisAtt= new G4VisAttributes(G4Colour(r, g, b));
+    // works only on logic volume
+    //    (*itr) ->SetVisAttributes(FacetVisAtt);
+  }  
 //--------- example of User Limits -------------------------------
 
   // below is an example of how to set tracking constraints in a given
