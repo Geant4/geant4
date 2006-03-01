@@ -10,9 +10,9 @@
 #  PLOT: energy deposit distribution in absorber (g4.11)
 #
 /plots/sethistName g4.p11
-/plots/setnbinEn 60
-/plots/setEnlow 0.001 MeV
-/plots/setEnhigh 0.061  MeV
+/plots/setnbinEn 26
+/plots/setEnlow 0.000 MeV
+/plots/setEnhigh 0.052  MeV
 #
 #
 # Change and choice of experimental setups. Can be
@@ -28,10 +28,10 @@
 #
 # R - XTR dE/dx models, M - XTR flux after radiator models
 #
-/emphyslist/setXTRModel  transpM
+#/emphyslist/setXTRModel  transpM
 #/emphyslist/setXTRModel  transpR
 #/emphyslist/setXTRModel  gammaM
-#/emphyslist/setXTRModel  gammaR
+/emphyslist/setXTRModel  gammaR
 #/emphyslist/setXTRModel  strawR
 #/emphyslist/setXTRModel  regM
 #/emphyslist/setXTRModel  regR
@@ -69,9 +69,9 @@
 #
 # (switch off dEdx and msc always together!)
 #
-/process/inactivate msc
-/process/inactivate eIoni
-/process/inactivate hIoni
+#/process/inactivate msc
+#/process/inactivate eIoni
+#/process/inactivate hIoni
 #
 #/process/inactivate eBrem
 #
@@ -80,6 +80,8 @@
 #/process/inactivate phot
 #/process/inactivate compt
 #/process/inactivate conv
+#
+#/process/inactivate UserMaxStep
 #
 #/process/inactivate RegularXTRadiator
 #

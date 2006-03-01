@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.cc,v 1.26 2006-02-24 08:02:31 grichine Exp $
+// $Id: Em10DetectorConstruction.cc,v 1.27 2006-03-01 13:52:01 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,7 +64,7 @@ Em10DetectorConstruction::Em10DetectorConstruction()
    fWorldMaterial(0),  fSolidWorld(0),      fLogicWorld(0),      fPhysicsWorld(0),
    fSolidRadSlice(0), fLogicRadSlice(0),  fPhysicRadSlice(0),
    fSolidRadiator(0),  fLogicRadiator(0),   fPhysicsRadiator(0),
-   fRadiatorMat(0),
+   fRadiatorMat(0), fPipe(false), fPipeField(false),
    fSolidAbsorber(0),  fLogicAbsorber(0),   fPhysicsAbsorber(0),
    fMagField(0),       fCalorimeterSD(0),   fRegGasDet(0), fRadRegion(0), fMat(0)
 {
@@ -310,7 +310,7 @@ G4VPhysicalVolume* Em10DetectorConstruction::SimpleSetUpALICE()
 G4VPhysicalVolume* Em10DetectorConstruction::SetUpALICE06()
 {
   fWorldSizeZ = 600.*cm; 
-  fWorldSizeR = 12.*cm;
+  fWorldSizeR = 22.*cm;
 
   // Radiator and detector parameters
 
@@ -366,12 +366,12 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpALICE06()
   G4Material* CH2   = fMat->GetMaterial("CH2");
   G4Material* He   = fMat->GetMaterial("He");
 
-  G4double foilDensity =  0.91*g/cm3;  // CH2 1.39*g/cm3; // Mylar //  0.534*g/cm3; //Li     
-  G4double gasDensity  =  1.2928*mg/cm3; // Air // 1.977*mg/cm3; // CO2 0.178*mg/cm3; // He  
+  G4double foilDensity = CH2->GetDensity();      
+  G4double gasDensity  = Air->GetDensity();  
   G4double totDensity  = foilDensity*foilGasRatio + gasDensity*(1.0-foilGasRatio) ;
 
   G4double fractionFoil =  foilDensity*foilGasRatio/totDensity ; 
-  G4double fractionGas  =  gasDensity*(1.0-foilGasRatio)/totDensity ;  
+  G4double fractionGas  =  1.0 - fractionFoil; // gasDensity*(1.0-foilGasRatio)/totDensity ;  
     
   G4Material* radiatorMat = new G4Material("radiatorMat"  , totDensity, 
                                                   2);
@@ -390,37 +390,27 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpALICE06()
   fAbsorberMaterial = fMat->GetMaterial("Xe15CO2");
 
   // pipe material is assumed to be He + small admixture of air
-
+  /* 
   foilGasRatio = 0.000001;
-  foilDensity  = 1.2928*mg/cm3; // Air      
-  gasDensity   = 0.178*mg/cm3; // He  
-  totDensity   = foilDensity*foilGasRatio + gasDensity*(1.0-foilGasRatio);
+  foilDensity  = Air->GetDensity();      
+  gasDensity   = He->GetDensity();  
+  totDensity   = foilDensity*foilGasRatio + gasDensity*( 1.0 - foilGasRatio );
 
   fractionFoil =  foilDensity*foilGasRatio/totDensity; 
-  fractionGas  =  gasDensity*(1.0-foilGasRatio)/totDensity;  
+  fractionGas  =  1.0 - fractionFoil; // gasDensity*(1.0 - foilGasRatio)/totDensity;  
     
   fPipeMat = new G4Material("pipeMat"  , totDensity,  2);
   fPipeMat->AddMaterial( Air, fractionFoil );
   fPipeMat->AddMaterial( He,  fractionGas  );
-
-  // fPipeMat = He;
+  */
+  fPipeMat = He;
 
   fGapMat           = fAbsorberMaterial;
 
   fWorldMaterial    = Air; 
 
 
-
-  G4double pipe          = 1.0;   // use helium pipe is setup
-
-  // G4double field         = 1.0;   // field in helium pipe used?
-  // G4double fieldStrength = 1.0*tesla;  // field strength in pipe
-
-  G4double pipeDist = 1.*cm;  //Distance between pipe and radiator / absorber
-
- 
-
-  fSolidWorld = new G4Box("World", fWorldSizeR,fWorldSizeR,fWorldSizeZ/2.);
+  fSolidWorld = new G4Box("World", fWorldSizeR, fWorldSizeR, fWorldSizeZ/2.);
                          
   fLogicWorld = new G4LogicalVolume(fSolidWorld,  fWorldMaterial,  "World");	
                                    
@@ -431,7 +421,8 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpALICE06()
 
   fRadThick = fFoilNumber*(fRadThickness + fGasGap) - fGasGap + fDetGap;
 
-  fRadZ = fStartZ + 0.5*fRadThick ;
+  fRadZ = fStartZ + 0.5*fRadThick;
+
   // fRadZ = -fRadThick/2. - fElectrodeThick;
   // if ( fabs(pipe) > 1.e-15 ) fRadZ -= ( fPipeLength/2. + pipeDist );
 
@@ -455,6 +446,9 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpALICE06()
  	
   // Drift Electrode on both sides of Radiator:
 
+  G4double zElectrode1 = fRadZ - fRadThick/2. - fElectrodeThick/2.; 
+  G4double zElectrode2 = fRadZ + fRadThick/2. + fElectrodeThick/2.;
+  /*
   G4Box* solidElectrode = new G4Box("Electrode",fAbsorberRadius*1.1,
                                                 fAbsorberRadius*1.1,
                                                 fElectrodeThick/2.);
@@ -462,9 +456,6 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpALICE06()
   G4LogicalVolume* logicElectrode = new G4LogicalVolume(solidElectrode,
                                                         fElectrodeMat,
                                                         "Electrode");
-
-  G4double zElectrode1 = fRadZ - fRadThick/2. - fElectrodeThick/2.;
-  G4double zElectrode2 = fRadZ + fRadThick/2. + fElectrodeThick/2.;
 
   G4VPhysicalVolume*    physiElectrode1 = new G4PVPlacement(0,
                                        G4ThreeVector(0.,0.,zElectrode1),
@@ -475,17 +466,24 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpALICE06()
                                        G4ThreeVector(0.,0.,zElectrode2),
                                       "Electrode1",logicElectrode,
                                        fPhysicsWorld,false,0);
-
-
+  */
   G4cout<<"zElectrode1 = "<<zElectrode1/mm<<" mm"<<G4endl;
   G4cout<<"zElectrode2 = "<<zElectrode2/mm<<" mm"<<G4endl;
   G4cout<<"fElectrodeThick = "<<fElectrodeThick/mm<<" mm"<<G4endl<<G4endl;
 
   // Helium Pipe:
 
-  G4double zPipe = zElectrode2 + fElectrodeThick/2. + fPipeLength/2. + pipeDist/2.;
+  G4double pipeDist      = 1.*cm;  //Distance between pipe and radiator / absorber
+  G4double fieldStrength = 1.0*tesla;  // 0.01*tesla; // field strength in pipe
 
-  if ( fabs(pipe) > 1.e-15 ) 
+  fPipe     =  true;   // 0.;  //  use helium pipe is setup
+
+  fPipeField     =  true;   // field in helium pipe used?
+
+  G4double zPipe = zElectrode2 + fElectrodeThick/2. + 
+                   pipeDist/2. + fPipeLength/2.;
+
+  if ( fPipe ) 
   {
 
     G4Box* solidPipe = new G4Box("Pipe",fAbsorberRadius*0.5,
@@ -493,42 +491,47 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpALICE06()
                                  fPipeLength/2. );
 
     G4LogicalVolume* logicPipe = new G4LogicalVolume(solidPipe,
-                                                     fPipeMat,
+                                                     fPipeMat, // fWorldMaterial, // 
                                                      "Pipe");
 
-    // magnetic field in Pipe:
-    // if( fMagField ) delete fMagField; //delete the existing mag field
-    // fMagField = new G4UniformMagField(G4ThreeVector(fieldStrength,0.,0.));
-    // G4FieldManager* fieldMgr= new G4FieldManager(fMagField);
-    // fieldMgr->SetDetectorField(fMagField);
-    // fieldMgr->CreateChordFinder(fMagField);
-    // if ( fabs(field) > 1.e-15 ) logicPipe->SetFieldManager(fieldMgr, true);
-
     G4VPhysicalVolume*    physiPipe = new G4PVPlacement(0,
-                                       G4ThreeVector(0.,0.,zPipe),
+                                       G4ThreeVector(0., 0., zPipe),
                                       "Pipe1",logicPipe,
                                        fPhysicsWorld,false,0);
 
     G4cout<<"zPipe = "<<zPipe/mm<<" mm"<<G4endl;
     G4cout<<"fPipeLength = "<<fPipeLength/mm<<" mm"<<G4endl<<G4endl;
 
+    // magnetic field in Pipe:
+
+    if ( fPipeField ) 
+    {
+      if( fMagField ) delete fMagField; //delete the existing mag field
+
+      fMagField                = new G4UniformMagField(G4ThreeVector(fieldStrength, 0., 0.));
+      G4FieldManager* fieldMgr = new G4FieldManager(fMagField);
+      fieldMgr->SetDetectorField(fMagField);
+      fieldMgr->CreateChordFinder(fMagField);
+      logicPipe->SetFieldManager(fieldMgr, true);
+    }
+
   } 
   else   G4cout<<"No Helium pipe is used"<<G4endl<<G4endl;
   
   // Mylar Foil on both sides of helium pipe:
 
-  G4Box* solidMylar = new G4Box("Mylar",fAbsorberRadius*0.6,
+  G4double zMylar1 = zPipe - fPipeLength/2. - fMylarThick/2. - 0.001*mm;
+  G4double zMylar2 = zPipe + fPipeLength/2. + fMylarThick/2. + 0.001*mm;
+
+  G4Box* solidMylar = new G4Box("MylarB",fAbsorberRadius*0.6,
                                 fAbsorberRadius*0.6,
                                 fMylarThick/2.);
 
   G4LogicalVolume* logicMylar = new G4LogicalVolume(solidMylar,
                                                     fWindowMat,
-                                                    "Mylar");
-
-  G4double zMylar1 = zPipe - fPipeLength/2. - 0.01*mm;
-  G4double zMylar2 = zPipe + fPipeLength/2. + 0.01*mm;
-
-  if ( fabs(pipe) > 1.e-15 ) 
+                                                    "MylarL");
+  
+  if ( fPipe ) 
   {
 
     G4VPhysicalVolume* physiMylar1 = new G4PVPlacement(0,
@@ -537,66 +540,35 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpALICE06()
                                            false, 0);
 
     G4VPhysicalVolume* physiMylar2 = new G4PVPlacement(0,
-                                G4ThreeVector(0.,0.,zMylar2),
+                                G4ThreeVector(0., 0., zMylar2),
                                 "Mylar2", logicMylar, fPhysicsWorld,
                                    false, 0);
 
       G4cout<<"zMylar1 = "<<zMylar1/mm<<" mm"<<G4endl;
       G4cout<<"zMylar2 = "<<zMylar2/mm<<" mm"<<G4endl;
       G4cout<<"fMylarThick = "<<fMylarThick/mm<<" mm"<<G4endl<<G4endl;
-
   }
-
+  
   // Mylar Foil on Chamber:
 
   G4double zMylar = zElectrode2 + fElectrodeThick/2. + fMylarThick/2. + 1.0*mm;
 
-  if ( fabs(pipe) > 1.e-15 ) zMylar += ( fPipeLength + pipeDist );
-
+  // if ( fPipe ) 
+  {
+    zMylar += ( fPipeLength + pipeDist );
+  }
   G4VPhysicalVolume*    physiMylar = new G4PVPlacement(0,
-                        G4ThreeVector(0.,0.,zMylar),
+                        G4ThreeVector(0., 0., zMylar),
                         "Mylar",logicMylar,fPhysicsWorld,false,0);
 
 
   G4cout<<"zMylar = "<<zMylar/mm<<" mm"<<G4endl;
   G4cout<<"fMylarThick = "<<fMylarThick/mm<<" mm"<<G4endl<<G4endl;
 
-  /*
-  // window 
-     
-  fWindowZ = fStartZ + fRadThick + fWindowThick/2. + 15.0*mm ;    
-      			                  
-  G4Box* solidWindowR = new G4Box("WindowR",fAbsorberRadius+0.001,
-                                          fAbsorberRadius+0.001,
-                                          fWindowThick/2.+0.001  ); 
-                          
-  G4LogicalVolume* logicWindowR = new G4LogicalVolume(solidWindowR,
-                                     fWorldMaterial, "WindowR");
- 
-  G4VPhysicalVolume*    physiWindowR = new G4PVPlacement(0,		   
-                        G4ThreeVector(0.,0.,fWindowZ),        
-                              "WindowR",logicWindowR,fPhysicsWorld,false,0);
-      			                  
-  G4Box* solidWindow = new G4Box("Window",fAbsorberRadius,
-                                   fAbsorberRadius, fWindowThick/2.); 
-                          
-  G4LogicalVolume* logicWindow = new G4LogicalVolume(solidWindow,
-                                     fWindowMat, "Window"); 
-
-  G4VPhysicalVolume*    physiWindow = new G4PVPlacement(0, G4ThreeVector(0.,0.,0.),        
-                              "Window", logicWindow, physiWindowR, false, 0); 
-
-
-  fGapZ = fWindowZ + fWindowThick/2. + fGapThick/2. + 0.01*mm ;    
-
-  fElectrodeZ = fGapZ + fGapThick/2. + fElectrodeThick/2. + 0.01*mm;    
-
-  fAbsorberZ = fElectrodeZ + fElectrodeThick/2. + fAbsorberThickness/2. + 0.01*mm; 
-  */
 
   // Absorber
 
-  fAbsorberZ = zMylar + fMylarThick/2. + fAbsorberThickness/2.;
+  fAbsorberZ = zMylar + fMylarThick + fAbsorberThickness/2.;
 
 
   fSolidAbsorber = new G4Box("Absorber", 
@@ -607,7 +579,8 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpALICE06()
   fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber, fAbsorberMaterial, 
       			                  "Absorber");     
       			                  
-  fPhysicsAbsorber = new G4PVPlacement(0, G4ThreeVector(0.,0.,fAbsorberZ),        
+  fPhysicsAbsorber = new G4PVPlacement(0, 
+                         G4ThreeVector(0., 0., fAbsorberZ),        
                                        "Absorber", fLogicAbsorber,     
                                         fPhysicsWorld,  false,  0);                
                                         
@@ -640,7 +613,7 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpALICE06()
 G4VPhysicalVolume* Em10DetectorConstruction::SetUpBari05()
 {
   fWorldSizeZ = 600.*cm; 
-  fWorldSizeR = 12.*cm;
+  fWorldSizeR = 22.*cm;
 
   // Radiator and detector parameters
 
@@ -653,13 +626,13 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBari05()
   //fFoilNumber   = 120;       // Reg1
 
   //fRadThickness = 0.013*mm;  // Anton
-  //fGasGap       = 0.060*mm;  // Anton
+  //fGasGap       = 0.230*mm;  // Anton
   //fFoilNumber   = 550;       // Anton
 
 
-  fRadThickness = 0.025*mm; // Reg2
-  fGasGap       = 0.575*mm; // Reg2 
-  fFoilNumber   = 250;      // Reg2
+  fRadThickness = 0.0055*mm; // Reg2
+  fGasGap       = 0.23*mm; // Reg2 
+  fFoilNumber   = 191;      // Reg2
 
   foilGasRatio  = fRadThickness/(fRadThickness+fGasGap);
 
@@ -740,13 +713,6 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBari05()
   fWorldMaterial    = Air; 
 
 
-
-  G4double pipe          = 1.0;   // use helium pipe is setup
-
-  G4double pipeDist = 1.*cm;  //Distance between pipe and radiator / absorber
-
- 
-
   fSolidWorld = new G4Box("World", fWorldSizeR,fWorldSizeR,fWorldSizeZ/2.);
                          
   fLogicWorld = new G4LogicalVolume(fSolidWorld,  fWorldMaterial,  "World");	
@@ -810,6 +776,13 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBari05()
 
   // Helium Pipe:
 
+
+  G4double pipe     = 1.0;   // use helium pipe is setup
+
+  G4double pipeDist = 1.*cm;  //Distance between pipe and radiator / absorber
+
+ 
+
   G4double zPipe = zElectrode2 + fElectrodeThick/2. + fPipeLength/2. + pipeDist/2.;
 
   // G4double field         = 1.0;   // field in helium pipe used?
@@ -847,6 +820,9 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBari05()
   
   // Mylar Foil on both sides of helium pipe:
 
+  G4double zMylar1 = zPipe - fPipeLength/2. - fMylarThick/2 - 0.01*mm;
+  G4double zMylar2 = zPipe + fPipeLength/2. + fMylarThick/2 + 0.01*mm;
+
   G4Box* solidMylar = new G4Box("Mylar",fAbsorberRadius*0.6,
                                 fAbsorberRadius*0.6,
                                 fMylarThick/2.);
@@ -854,9 +830,6 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBari05()
   G4LogicalVolume* logicMylar = new G4LogicalVolume(solidMylar,
                                                     fWindowMat,
                                                     "Mylar");
-
-  G4double zMylar1 = zPipe - fPipeLength/2. - 0.01*mm;
-  G4double zMylar2 = zPipe + fPipeLength/2. + 0.01*mm;
 
   if ( fabs(pipe) > 1.e-15 ) 
   {
@@ -891,38 +864,6 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBari05()
   G4cout<<"zMylar = "<<zMylar/mm<<" mm"<<G4endl;
   G4cout<<"fMylarThick = "<<fMylarThick/mm<<" mm"<<G4endl<<G4endl;
 
-  /*
-  // window 
-     
-  fWindowZ = fStartZ + fRadThick + fWindowThick/2. + 15.0*mm ;    
-      			                  
-  G4Box* solidWindowR = new G4Box("WindowR",fAbsorberRadius+0.001,
-                                          fAbsorberRadius+0.001,
-                                          fWindowThick/2.+0.001  ); 
-                          
-  G4LogicalVolume* logicWindowR = new G4LogicalVolume(solidWindowR,
-                                     fWorldMaterial, "WindowR");
- 
-  G4VPhysicalVolume*    physiWindowR = new G4PVPlacement(0,		   
-                        G4ThreeVector(0.,0.,fWindowZ),        
-                              "WindowR",logicWindowR,fPhysicsWorld,false,0);
-      			                  
-  G4Box* solidWindow = new G4Box("Window",fAbsorberRadius,
-                                   fAbsorberRadius, fWindowThick/2.); 
-                          
-  G4LogicalVolume* logicWindow = new G4LogicalVolume(solidWindow,
-                                     fWindowMat, "Window"); 
-
-  G4VPhysicalVolume*    physiWindow = new G4PVPlacement(0, G4ThreeVector(0.,0.,0.),        
-                              "Window", logicWindow, physiWindowR, false, 0); 
-
-
-  fGapZ = fWindowZ + fWindowThick/2. + fGapThick/2. + 0.01*mm ;    
-
-  fElectrodeZ = fGapZ + fGapThick/2. + fElectrodeThick/2. + 0.01*mm;    
-
-  fAbsorberZ = fElectrodeZ + fElectrodeThick/2. + fAbsorberThickness/2. + 0.01*mm; 
-  */
 
   // Absorber
 

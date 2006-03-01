@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.cc,v 1.17 2006-02-24 08:02:31 grichine Exp $
+// $Id: Em10PhysicsList.cc,v 1.18 2006-03-01 13:52:01 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -262,7 +262,7 @@ void Em10PhysicsList::ConstructEM()
   {      
     // G4GammaXTRadiator* 
     processXTR = new G4GammaXTRadiator(pDet->GetLogicalRadiator(),
-				       1000.,
+				       100.,
 				       100.,
 				       pDet->GetFoilMaterial(),
 				       pDet->GetGasMaterial(),
@@ -275,7 +275,7 @@ void Em10PhysicsList::ConstructEM()
   {
     // G4XTRGammaRadModel* 
     processXTR = new G4XTRGammaRadModel(pDet->GetLogicalRadiator(),
-				       1000.,
+				       100.,
 				       100.,
 				       pDet->GetFoilMaterial(),
 				       pDet->GetGasMaterial(),
@@ -401,33 +401,6 @@ void Em10PhysicsList::ConstructEM()
       
       pmanager->AddProcess(theeminusMultipleScattering,-1,1,1);
       pmanager->AddProcess(theeminusBremsstrahlung,-1,-1,3);
-      /*
-      pmanager->AddContinuousProcess(
-                 new G4RegularXTRadiator(pDet->GetLogicalRadiator(),
-					 pDet->GetFoilMaterial(),
-					 pDet->GetGasMaterial(),
-					 pDet->GetFoilThick(),
-					 pDet->GetGasThick(),
-					 pDet->GetFoilNumber(),
-					 "RegularXTRadiator"));
-       // ,-1,1,-1);
-       
-      pmanager->AddContinuousProcess(
-                 new G4GammaXTRadiator(pDet->GetLogicalRadiator(),
-				       2.,
-				       10.,
-				       pDet->GetFoilMaterial(),
-				       pDet->GetGasMaterial(),
-				       pDet->GetFoilThick(),
-				       pDet->GetGasThick(),
-				       pDet->GetFoilNumber(),
-				       "GammaXTRadiator"));
-       // ,-1,1,-1);
-       */
-      // pmanager->AddContinuousProcess(processXTR);
-   
-      // pmanager->AddContinuousProcess(strawXTRprocess);
-      // pmanager->AddProcess(new G4ForwardXrayTR("Air","Mylar","fXTR"),-1,-1,1);
 
       pmanager->AddDiscreteProcess(processXTR);
 

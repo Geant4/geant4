@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4StepLimiterPerRegion.cc,v 1.1 2006-02-24 08:02:31 grichine Exp $
+// $Id: G4StepLimiterPerRegion.cc,v 1.2 2006-03-01 13:52:01 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,13 +65,14 @@ void G4StepLimiterPerRegion::SetMaxStep(G4double step)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4StepLimiterPerRegion::PostStepGetPhysicalInteractionLength(
-                                              const G4Track&,
+                                              const G4Track& aTrack,
                                                     G4double,
                                                     G4ForceCondition* condition )
 {
   // condition is set to "Not Forced"
   *condition = NotForced;
-  ProposedStep = MaxChargedStep;
+  if(aTrack.GetVolume()->GetName() == "Mylar" ) ProposedStep = 1.e-7*mm;
+  else                                          ProposedStep = MaxChargedStep;
 
   return ProposedStep;
 }
@@ -82,7 +83,7 @@ G4VParticleChange* G4StepLimiterPerRegion::PostStepDoIt(const G4Track& aTrack, c
 {
   aParticleChange.Initialize(aTrack);
 
-  if(aTrack.GetVolume()->GetName() == "Pipe1") 
+  if(aTrack.GetVolume()->GetName() == "Mylar" ) // "Pipe1" ) 
   {
     aParticleChange.ProposeTrackStatus(fStopAndKill);
   }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.hh,v 1.17 2006-02-13 17:03:26 grichine Exp $
+// $Id: Em10DetectorConstruction.hh,v 1.18 2006-03-01 13:52:01 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -187,6 +187,8 @@ private:
   G4double fRadThick;
   G4double fMylarThick;
   G4double fPipeLength;
+  G4bool   fPipe;
+  G4bool   fPipeField;
   G4double fRadZ;
   G4double fWindowZ;
   G4double fGapZ;

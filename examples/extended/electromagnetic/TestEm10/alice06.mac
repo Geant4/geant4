@@ -28,34 +28,34 @@
 #
 # R - XTR dE/dx models, M - XTR flux after radiator models
 #
-/emphyslist/setXTRModel  transpM
+#/emphyslist/setXTRModel  transpM
 #/emphyslist/setXTRModel  transpR
 #/emphyslist/setXTRModel  gammaM
 #/emphyslist/setXTRModel  gammaR
 #/emphyslist/setXTRModel  strawR
-#/emphyslist/setXTRModel  regM
+/emphyslist/setXTRModel  regM
 #/emphyslist/setXTRModel  regR
 #
 #/emphyslist/eMinEnergy 100.  
 #/emphyslist/gMinEnergy 100.  
 #
 #
-#/run/particle/applyCuts
+/run/particle/applyCuts
 #
 # set cuts in XTR radiator
 #
-/emphyslist/setGammaCut 1.0
-/emphyslist/setElectronCut 1.0
-/emphyslist/setPositronCut 1.
-/emphyslist/setRadiatorCuts 1.
+/emphyslist/setGammaCut 0.001
+/emphyslist/setElectronCut 0.001
+/emphyslist/setPositronCut 0.001
+/emphyslist/setRadiatorCuts 0.001
 #
 # set cuts in XTR detector
 #
-/emphyslist/setGammaCut 1.
-/emphyslist/setElectronCut 1.
-/emphyslist/setPositronCut 1.
+/emphyslist/setGammaCut 1.01
+/emphyslist/setElectronCut 1.01
+/emphyslist/setPositronCut 1.01
 #
-/emphyslist/setDetectorCuts 1.
+/emphyslist/setDetectorCuts 1.01
 #
 /run/initialize
 #
@@ -80,6 +80,8 @@
 #/process/inactivate phot
 #/process/inactivate compt
 #/process/inactivate conv
+#
+/process/inactivate UserMaxStep
 #
 #/process/inactivate RegularXTRadiator
 #
