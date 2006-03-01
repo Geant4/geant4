@@ -1,4 +1,4 @@
-$Id: History,v 1.84 2006-01-16 12:55:56 gcosmo Exp $
+$Id: History,v 1.85 2006-03-01 14:07:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01-Mar-2006, G.Cosmo (geom-specific-V08-00-02)
+- Introducing first implementation of a tessellated solid, contribution
+  of P.R.Truscott (QinetiQ Ltd, UK).
+  New classes: G4QuadrangularFacet, G4TessellatedSolid, G4TriangularFacet
+  and G4VFacet.
 
 12-Jan-2006, J.Allison (geom-specific-V08-00-01)
 - G4TwistedTubs and G4VTwistedFaceted::CreatePolyhedron():
