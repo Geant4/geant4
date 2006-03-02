@@ -1,0 +1,171 @@
+
+                       geant4-08-00-ref-02
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o First implementation of a tessellated solid for interface to CAD systems.
+  o New Python interface module in environments.
+  o Corrected problem with suspended tracks, addressed in problem report #802.
+  o Fixed problem concerning registration of G4RadioactiveDecay to
+    G4GenericIon, addressed in problem report #846 .
+  o Fix in G4VEnergyLossProcess for subcutoff simulation.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Tags marked with (*) are also included in patch-01.
+
+Summarised, the list of changes is the following:
+
+geometry/divisions                               geomdiv-V08-00-01 (*)
+------------------
+- Cache information about axis of division and provided accessor method
+  GetDivisionAxis() in G4PVDivision.
+
+geometry/navigation                              geomnav-V08-00-00 (*)
+-------------------
+- Addressing problem with convergence in LocateIntersectionPoint()
+  of G4PropagatorInField. The problem, identified by Atlas, was observed
+  when requesting high precision, i.e. small values of eps_min/max,
+  delta_one_step, due to need for small delta_intersection.
+  Increased maximum iterations (from 100 to 10000) until correct information
+  can be return an Exception is thrown in case of too many iterations; a
+  warning is thrown in case over 1000 iterations.
+
+geometry/solids/specific                         geom-specific-V08-00-02
+------------------------
+- Introducing first implementation of a tessellated solid, contribution
+  of P.R.Truscott (QinetiQ Ltd, UK). New classes: G4QuadrangularFacet,
+  G4TessellatedSolid, G4TriangularFacet and G4VFacet.
+
+global                                           global-V08-00-01
+------
+- G4UnitsTable: added GeV/cm, MeV/cm, keV/cm, eV/cm (Energy/Length)
+  g/cm2 ("Mass/Surface") and MeV*cm2/g ..etc.. ("Energy*Surface/Mass").
+
+particles                                        particles-V08-00-01
+---------
+- AtomicNumber and AtomicMass are defined for G4GenericIon.
+  Fixes problem report #846 about registration of G4RadioactiveDecay
+  to G4GenericIon.
+
+processes/electromagnetic/highenergy             emhighenergy-V08-00-01
+------------------------------------
+- Added functions ComputeCrossSectionPerElectron/Atom() in G4BraggModel
+  and G4BraggIonModel.
+
+processes/electromagnetic/muons                  emmuons-V08-00-01
+-------------------------------
+- Added functions ComputeCrossSectionPerElectron/Atom() in G4MuBetheBlochModel.
+- Added function ComputeCrossSectionPerAtom() in G4MuBremsstrahlungModel
+  and G4MuPairProductionModel.
+- G4MuIonisation52, G4MuBremsstrahlung52, G4MuPairProduction52: function
+  ComputeMicroscopicCrossSection() is now public.
+
+processes/electromagnetic/standard               emstand-V08-00-10
+----------------------------------
+- Fixed cases of NaN value for delta direction when zero cut.
+- G4MscModel:
+  o Removed some data members and code cleaning; revised 'z' sampling.
+  o Now computing transport cross section.
+- G4MscModel71: Now computing transport cross section.
+- G4MultipleScattering:
+  o Added set function for data member 'factail'; z sampling by default.
+- G4eplusAnnihilation: removed cut dependance in AtRestDoIt().
+- G4PAIModel: providing hiding of some technical verbose messages.
+- G4PolarizedComptonScattering: return G4ComptonScattering52::PostStepDoIt().
+- G4hIonisation52, G4eIonisation52, G4eBremsstrahlung52: functions
+  ComputeCrossSectionPerAtom() and ComputeRestrictedMeandEdx() now public.
+- Moved G4LossTableManager::Instance()->EmCorrections() in constructor.
+- Added functions:
+  o ComputeCrossSectionPerElectron/Atom() for G4BraggModel, G4BraggIonModel,
+    G4eeToTwoGammaModel, G4MollerBhabhaModel and G4BetheBlochModel.
+  o G4PEEffectModel::ComputeMeanFreePath().
+  o G4eBremsstrahlungModel::ComputeCrossSectionPerAtom().
+- Removed obsolete G4SCProcessorStand class.
+- Removed function InitialiseCrossSectionPerAtom() in G4BetheHeitlerModel.
+
+processes/electromagnetic/utils                  emutils-V08-00-04
+-------------------------------
+- G4VEnergyLossProcess:
+  o Fix for subcutoff simulation.
+  o Improved printout.
+- G4VmultipleScattering: Lambda table keeps now cross section.
+- G4VEmProcess::ComputeCrossSectionPerAtom(): put default value A=0,
+  G4VEmModel::ComputeCrossSectionPerAtom(): put default value A=0,
+  to keep compatibility with version 5.2.
+  Added method G4VEmModel::ComputeMeanFreePath().
+- Removed obsolete interface class G4VSCProcessor.
+
+processes/electromagnetic/xrays                  xrays-V08-00-01
+-------------------------------
+- Updated tested algorithm for XTR angular distribution based on the
+  transparent regular radiator. The method takes into account the angular
+  distribution for given energy and gets activated by SetAngleRadDistr(true)
+  method just after the construction of XTR object.
+
+processes/hadronic/models/chiral.../body         hadr-chips-body-V08-00-01 (*)
+----------------------------------------
+- Fixed trivial compilation warning.
+
+processes/management                             procman-V08-00-00
+--------------------
+- Fix G4WrapperProcess::StartTracking() implementation to take G4Track*
+  as argument.
+
+processes/optical                                op-V08-00-00
+-----------------
+- Fix default behaviour for unified model of dielectric_metal.
+  Addresses problem report #842.
+
+processes/transportation                         transport-V08-00-01 (*)
+------------------------
+- G4Transportation: the particle's charge is now taken from the dynamic
+  particle, so that it can take into account changes from the interaction
+  of an ion with matter (eg stripping e-).
+- Corrected problem with suspended tracks, addressing problem report #802.
+  Added StartTracking() method which takes over responsibility to clear
+  the state for a new track, and to message other relevant component to
+  clear their state.
+
+track                                            track-V08-00-01
+-----
+- Added 'ProposeMomentumDirection' AlongStep and 'ProposeWeight' PostStep
+  in G4ParticleChangeForLoss.
+
+environments                                     envs-V08-00-00
+------------
+- Added new Python interface module:
+  o g4py/source : Python wrappers for Geant4 source.
+  o g4py/site-modules : some application modules using the wrappers.
+  o examples, tests and associated configuration files.
+
+physics_lists
+-------------
+- hadronic (hadr-lists-V08-00-01)
+  o Fixed minor typo in G4EmMessenger.
+
+examples                                         examples-V08-00-02
+--------
+- Updated reference outputs.
+- extended/electromagnetic/TestEm1 (testem1-V08-00-01)
+  o Refreshed all geant3 macros.
+  o Changed printing format in EndOfRun.
+- extended/electromagnetic/TestEm4 (testem4-V08-00-00)
+  o Updated input macros.
+- extended/electromagnetic/TestEm6 (testem6-V08-00-00)
+  o Added command /testem/phys/SetAnnihiToHadronFac.
+- extended/electromagnetic/TestEm7 (testem7-V08-00-01)
+  o New macro: tallies.mac; completed default input macro.
+- extended/electromagnetic/TestEm13 (testem13-V08-00-01)
+  o Replaces (renamed) PhotonProcesses example.
+- extended/electromagnetic/TestEm14 (testem14-V08-00-01)
+  o Replaces (renamed) MuonProcesses example.
+
+tests                                            tests-V08-00-02
+-----
+- Updated reference outputs.
+- GNUmakefile (tests-gmk-V08-00-01)
+  o Updated to latest configuration.
+- test40 (test40-V08-00-01)
+  o Add input macros medium.in and test40.large_N.in.
