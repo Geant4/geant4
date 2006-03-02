@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V07-01-05    (16-December-2005)
+ Geant4 version Name: global-V08-00-01    (10-February-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -94,7 +94,7 @@ class. See G4VisExecutive for an example.
 /run/initialize
 Ecal is 20 cm  of PbWO4
 Absorber is 2 mm  of Al
-Vertex is 10 cm  of 3 layers of Si of 100 mum npads= 2001
+Vertex is 10 cm  of 3 layers of Si of 100 um  npads= 2001
 Tst26PhysicsList::SetCuts
 #
 /gun/particle e-
@@ -232,21 +232,21 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 10 mum    e- 10 mum    e+ 10 mum
+ Range cuts        :  gamma 10 um     e- 10 um     e+ 10 um 
  Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     VertexDetector
 
 Index : 4     used in the geometry : Yes     recalculation needed : No 
  Material : Al
- Range cuts        :  gamma 10 mum    e- 10 mum    e+ 10 mum
+ Range cuts        :  gamma 10 um     e- 10 um     e+ 10 um 
  Energy thresholds :  gamma 990 eV     e- 33.8876 keV    e+ 33.4729 keV
  Region(s) which use this couple : 
     VertexDetector
 
 Index : 5     used in the geometry : Yes     recalculation needed : No 
  Material : Si
- Range cuts        :  gamma 10 mum    e- 10 mum    e+ 10 mum
+ Range cuts        :  gamma 10 um     e- 10 um     e+ 10 um 
  Energy thresholds :  gamma 990 eV     e- 31.4747 keV    e+ 31.0896 keV
  Region(s) which use this couple : 
     VertexDetector
@@ -279,7 +279,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=62.36s Real=69.13s Sys=5.85s
+  User=63.14s Real=69.5s Sys=5.1s
 
 ============   SUMMARY   ============
 
@@ -290,30 +290,30 @@ Run Summary
 
              World         Vertex Detector       Muon Detector
 
-  Gammas:    481.08000        0.37000        0.59000
-  Electrons: 840.25000        3.31000        6.66000
-  Positrons:  55.35000        0.01000        6.66000
+  Gammas:    478.57000        0.52000        0.98000
+  Electrons: 830.47000        3.38000        9.05000
+  Positrons:  53.97000        0.00000        9.05000
 
     Normalised energy deposition in the calorimeter
 
-  E1 = 0.86694 +- 0.00298 RMS(E1) = 0.02984 +- 0.00298
-  E9 = 0.97456 +- 0.00082 RMS(E9) = 0.00820 +- 0.00082
-  E25= 0.98844 +- 0.00052 RMS(E25)= 0.00518 +- 0.00052
+  E1 = 0.86611 +- 0.00275 RMS(E1) = 0.02749 +- 0.00275
+  E9 = 0.96943 +- 0.00153 RMS(E9) = 0.01525 +- 0.00153
+  E25= 0.98249 +- 0.00111 RMS(E25)= 0.01106 +- 0.00111
 
     Energy deposition in the absorbers
 
-  Eabs1(MeV)= 0.93139 +- 0.03561 RMS(Eabs1)= 0.35611 +- 0.03561
-  Eabs2(MeV)= 0.98896 +- 0.04104 RMS(Eabs2)= 0.41043 +- 0.04104
-  Eabs3(MeV)= 0.04224 +- 0.01733 RMS(Eabs3)= 0.17326 +- 0.01733
-  Eabs4(MeV)= 0.01060 +- 0.00973 RMS(Eabs4)= 0.09732 +- 0.00973
+  Eabs1(MeV)= 1.00458 +- 0.05219 RMS(Eabs1)= 0.52192 +- 0.05219
+  Eabs2(MeV)= 1.16251 +- 0.06052 RMS(Eabs2)= 0.60522 +- 0.06052
+  Eabs3(MeV)= 0.04574 +- 0.01779 RMS(Eabs3)= 0.17789 +- 0.01779
+  Eabs4(MeV)= 0.00919 +- 0.00880 RMS(Eabs4)= 0.08801 +- 0.00880
 
     Average number of hits in the vertex detector
 
-  Nhit= 3.21000 +- 0.07113
+  Nhit= 3.10000 +- 0.04796
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 681173989, 1716208036
+ Current couple of seeds = 1107494882, 990473502
 ----------------------------------------
 #
 /gun/particle mu-
@@ -345,21 +345,21 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
+ Range cuts        :  gamma 10.00000 um     e- 10.00000 um     e+ 10.00000 um 
  Energy thresholds :  gamma 990.00000 eV     e- 990.00000 eV     e+ 990.00000 eV 
  Region(s) which use this couple : 
     VertexDetector
 
 Index : 4     used in the geometry : Yes     recalculation needed : No 
  Material : Al
- Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
+ Range cuts        :  gamma 10.00000 um     e- 10.00000 um     e+ 10.00000 um 
  Energy thresholds :  gamma 990.00000 eV     e- 33.88755 keV    e+ 33.47294 keV
  Region(s) which use this couple : 
     VertexDetector
 
 Index : 5     used in the geometry : Yes     recalculation needed : No 
  Material : Si
- Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
+ Range cuts        :  gamma 10.00000 um     e- 10.00000 um     e+ 10.00000 um 
  Energy thresholds :  gamma 990.00000 eV     e- 31.47473 keV    e+ 31.08964 keV
  Region(s) which use this couple : 
     VertexDetector
@@ -384,7 +384,7 @@ Index : 7     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 681173989, 1716208036
+ Current couple of seeds = 1107494882, 990473502
 ----------------------------------------
 Start Run processing.
 
@@ -392,7 +392,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=5.42000000s Real=7.36000000s Sys=1.14000000s
+  User=5.55000000s Real=8.50000000s Sys=1.01000000s
 
 ============   SUMMARY   ============
 
@@ -403,30 +403,30 @@ Run Summary
 
              World         Vertex Detector       Muon Detector
 
-  Gammas:    7.22000        0.04000        1.83000
-  Electrons: 13.81000        4.35000        6.65000
-  Positrons:  0.35000        0.00000        6.65000
+  Gammas:    7.85000        0.05000        0.99000
+  Electrons: 15.30000        4.51000        3.78000
+  Positrons:  0.42000        0.00000        3.78000
 
     Normalised energy deposition in the calorimeter
 
-  E1 = 0.21991 +- 0.00217 RMS(E1) = 0.02172 +- 0.00217
-  E9 = 0.22413 +- 0.00193 RMS(E9) = 0.01925 +- 0.00193
-  E25= 0.22433 +- 0.00195 RMS(E25)= 0.01949 +- 0.00195
+  E1 = 0.22079 +- 0.00188 RMS(E1) = 0.01876 +- 0.00188
+  E9 = 0.22420 +- 0.00173 RMS(E9) = 0.01734 +- 0.00173
+  E25= 0.22453 +- 0.00177 RMS(E25)= 0.01767 +- 0.00177
 
     Energy deposition in the absorbers
 
-  Eabs1(MeV)= 0.78329 +- 0.02093 RMS(Eabs1)= 0.20926 +- 0.02093
-  Eabs2(MeV)= 0.90257 +- 0.05274 RMS(Eabs2)= 0.52736 +- 0.05274
-  Eabs3(MeV)= 0.81264 +- 0.02496 RMS(Eabs3)= 0.24963 +- 0.02496
-  Eabs4(MeV)= 0.80099 +- 0.02635 RMS(Eabs4)= 0.26355 +- 0.02635
+  Eabs1(MeV)= 0.84447 +- 0.03102 RMS(Eabs1)= 0.31024 +- 0.03102
+  Eabs2(MeV)= 0.95626 +- 0.04899 RMS(Eabs2)= 0.48991 +- 0.04899
+  Eabs3(MeV)= 0.84502 +- 0.03389 RMS(Eabs3)= 0.33891 +- 0.03389
+  Eabs4(MeV)= 0.82247 +- 0.02842 RMS(Eabs4)= 0.28416 +- 0.02842
 
     Average number of hits in the vertex detector
 
-  Nhit= 3.22000 +- 0.11098
+  Nhit= 3.19000 +- 0.06587
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1126590379, 937446286
+ Current couple of seeds = 2137367746, 891479181
 ----------------------------------------
 #
 /testem/phys/VertexCuts 1 mm
@@ -457,21 +457,21 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
+ Range cuts        :  gamma 10.00000 um     e- 10.00000 um     e+ 10.00000 um 
  Energy thresholds :  gamma 990.00000 eV     e- 990.00000 eV     e+ 990.00000 eV 
  Region(s) which use this couple : 
     VertexDetector
 
 Index : 4     used in the geometry : Yes     recalculation needed : No 
  Material : Al
- Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
+ Range cuts        :  gamma 10.00000 um     e- 10.00000 um     e+ 10.00000 um 
  Energy thresholds :  gamma 990.00000 eV     e- 33.88755 keV    e+ 33.47294 keV
  Region(s) which use this couple : 
     VertexDetector
 
 Index : 5     used in the geometry : Yes     recalculation needed : No 
  Material : Si
- Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
+ Range cuts        :  gamma 10.00000 um     e- 10.00000 um     e+ 10.00000 um 
  Energy thresholds :  gamma 990.00000 eV     e- 31.47473 keV    e+ 31.08964 keV
  Region(s) which use this couple : 
     VertexDetector
@@ -496,7 +496,7 @@ Index : 7     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1126590379, 937446286
+ Current couple of seeds = 2137367746, 891479181
 ----------------------------------------
 Start Run processing.
 
@@ -504,7 +504,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=5.47000000s Real=7.46000000s Sys=1.09000000s
+  User=5.70000000s Real=7.79000000s Sys=1.14000000s
 
 ============   SUMMARY   ============
 
@@ -515,30 +515,30 @@ Run Summary
 
              World         Vertex Detector       Muon Detector
 
-  Gammas:    7.94000        0.09000        1.39000
-  Electrons: 15.39000        4.39000        5.54000
-  Positrons:  0.47000        0.00000        5.54000
+  Gammas:    9.83000        0.05000        1.63000
+  Electrons: 18.66000        4.70000        6.56000
+  Positrons:  0.49000        0.00000        6.56000
 
     Normalised energy deposition in the calorimeter
 
-  E1 = 0.22246 +- 0.00178 RMS(E1) = 0.01781 +- 0.00178
-  E9 = 0.22391 +- 0.00191 RMS(E9) = 0.01910 +- 0.00191
-  E25= 0.22431 +- 0.00195 RMS(E25)= 0.01954 +- 0.00195
+  E1 = 0.22469 +- 0.00223 RMS(E1) = 0.02231 +- 0.00223
+  E9 = 0.22821 +- 0.00232 RMS(E9) = 0.02316 +- 0.00232
+  E25= 0.22848 +- 0.00232 RMS(E25)= 0.02321 +- 0.00232
 
     Energy deposition in the absorbers
 
-  Eabs1(MeV)= 0.81089 +- 0.02558 RMS(Eabs1)= 0.25577 +- 0.02558
-  Eabs2(MeV)= 0.83011 +- 0.03722 RMS(Eabs2)= 0.37219 +- 0.03722
-  Eabs3(MeV)= 0.90103 +- 0.04992 RMS(Eabs3)= 0.49922 +- 0.04992
-  Eabs4(MeV)= 0.89274 +- 0.04523 RMS(Eabs4)= 0.45226 +- 0.04523
+  Eabs1(MeV)= 0.81046 +- 0.02374 RMS(Eabs1)= 0.23736 +- 0.02374
+  Eabs2(MeV)= 0.85510 +- 0.04378 RMS(Eabs2)= 0.43780 +- 0.04378
+  Eabs3(MeV)= 0.87203 +- 0.03724 RMS(Eabs3)= 0.37240 +- 0.03724
+  Eabs4(MeV)= 0.90251 +- 0.05711 RMS(Eabs4)= 0.57106 +- 0.05711
 
     Average number of hits in the vertex detector
 
-  Nhit= 3.27000 +- 0.11389
+  Nhit= 3.41000 +- 0.14973
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 711574789, 1281679251
+ Current couple of seeds = 1525957723, 132532804
 ----------------------------------------
 #
 /gun/particle e-
@@ -569,21 +569,21 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
+ Range cuts        :  gamma 10.00000 um     e- 10.00000 um     e+ 10.00000 um 
  Energy thresholds :  gamma 990.00000 eV     e- 990.00000 eV     e+ 990.00000 eV 
  Region(s) which use this couple : 
     VertexDetector
 
 Index : 4     used in the geometry : Yes     recalculation needed : No 
  Material : Al
- Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
+ Range cuts        :  gamma 10.00000 um     e- 10.00000 um     e+ 10.00000 um 
  Energy thresholds :  gamma 990.00000 eV     e- 33.88755 keV    e+ 33.47294 keV
  Region(s) which use this couple : 
     VertexDetector
 
 Index : 5     used in the geometry : Yes     recalculation needed : No 
  Material : Si
- Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
+ Range cuts        :  gamma 10.00000 um     e- 10.00000 um     e+ 10.00000 um 
  Energy thresholds :  gamma 990.00000 eV     e- 31.47473 keV    e+ 31.08964 keV
  Region(s) which use this couple : 
     VertexDetector
@@ -608,7 +608,7 @@ Index : 7     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 711574789, 1281679251
+ Current couple of seeds = 1525957723, 132532804
 ----------------------------------------
 Start Run processing.
 
@@ -616,7 +616,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=62.60000000s Real=69.13000000s Sys=5.63000000s
+  User=63.78000000s Real=70.31000000s Sys=5.05000000s
 
 ============   SUMMARY   ============
 
@@ -627,30 +627,30 @@ Run Summary
 
              World         Vertex Detector       Muon Detector
 
-  Gammas:    480.14000        0.45000        0.53000
-  Electrons: 839.64000        3.54000        6.05000
-  Positrons:  55.04000        0.00000        6.05000
+  Gammas:    481.35000        0.54000        0.48000
+  Electrons: 841.76000        3.47000        6.87000
+  Positrons:  53.52000        0.00000        6.87000
 
     Normalised energy deposition in the calorimeter
 
-  E1 = 0.86886 +- 0.00275 RMS(E1) = 0.02748 +- 0.00275
-  E9 = 0.97318 +- 0.00088 RMS(E9) = 0.00879 +- 0.00088
-  E25= 0.98786 +- 0.00058 RMS(E25)= 0.00584 +- 0.00058
+  E1 = 0.87120 +- 0.00280 RMS(E1) = 0.02803 +- 0.00280
+  E9 = 0.97467 +- 0.00106 RMS(E9) = 0.01057 +- 0.00106
+  E25= 0.98696 +- 0.00079 RMS(E25)= 0.00789 +- 0.00079
 
     Energy deposition in the absorbers
 
-  Eabs1(MeV)= 0.96768 +- 0.04058 RMS(Eabs1)= 0.40580 +- 0.04058
-  Eabs2(MeV)= 1.04522 +- 0.04479 RMS(Eabs2)= 0.44790 +- 0.04479
-  Eabs3(MeV)= 0.03747 +- 0.02452 RMS(Eabs3)= 0.24519 +- 0.02452
-  Eabs4(MeV)= 0.00098 +- 0.00097 RMS(Eabs4)= 0.00974 +- 0.00097
+  Eabs1(MeV)= 0.99170 +- 0.04329 RMS(Eabs1)= 0.43292 +- 0.04329
+  Eabs2(MeV)= 1.05824 +- 0.05305 RMS(Eabs2)= 0.53052 +- 0.05305
+  Eabs3(MeV)= 0.01076 +- 0.00787 RMS(Eabs3)= 0.07871 +- 0.00787
+  Eabs4(MeV)= 0.00000 +- 0.00000 RMS(Eabs4)= 0.00000 +- 0.00000
 
     Average number of hits in the vertex detector
 
-  Nhit= 3.32000 +- 0.11303
+  Nhit= 3.45000 +- 0.10897
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1966267318, 824101121
+ Current couple of seeds = 1869751079, 1967427907
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

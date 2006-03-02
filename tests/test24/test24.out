@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V07-01-05    (16-December-2005)
+ Geant4 version Name: global-V08-00-01    (10-February-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -158,18 +158,18 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Start Run processing.
  G4NuclearLevelManager: nuclide (91,227) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (88,229) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (86,223) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (91,232) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (87,222) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (93,229) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (91,237) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (90,236) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (91,228) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (85,218) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,225) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (82,220) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (82,215) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (88,233) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,232) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (84,219) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (84,220) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=62s Real=64s Sys=0.29s
+  User=58s Real=59s Sys=0.29s
 #
 # neutron at 10 GeV in U
 #
@@ -195,14 +195,11 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
- G4NuclearLevelManager: nuclide (79,213) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (83,225) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (91,225) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (85,223) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (93,231) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=40s Real=41s Sys=0.09s
+  User=33s Real=34s Sys=0.06s
 #
 # pi+ at 10 GeV in U
 #
@@ -228,14 +225,14 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
- G4NuclearLevelManager: nuclide (91,230) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (87,231) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (91,238) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (86,224) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,223) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (86,227) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (89,229) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (89,222) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=51s Real=51s Sys=0.06s
+  User=67s Real=68s Sys=0.14s
 #
 # pi- at 10 GeV in U
 #
@@ -261,14 +258,17 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
- G4NuclearLevelManager: nuclide (89,235) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (87,230) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (87,224) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (85,226) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (82,213) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (86,223) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (90,235) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (94,234) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (90,225) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (88,234) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (87,226) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=59s Real=59s Sys=0.11s
+  User=63s Real=63s Sys=0.04s
 #
 # proton at 10 GeV in Cu
 #
@@ -404,7 +404,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=24s Real=25s Sys=0.25s
+  User=21s Real=22s Sys=0.37s
 #
 # neutron at 10 GeV in Cu
 #
@@ -438,7 +438,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=22s Real=23s Sys=0.1s
+  User=23s Real=27s Sys=0.09s
 #
 # pi+ at 10 GeV in Cu
 #
@@ -472,7 +472,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=21s Real=21s Sys=0.01s
+  User=23s Real=23s Sys=0.05s
 #
 # pi- at 10 GeV in Cu
 #
@@ -503,12 +503,10 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
- G4NuclearLevelManager: nuclide (24,58) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (2,4) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=18s Real=18s Sys=0.02s
+  User=24s Real=24s Sys=0.03s
 #
 # proton at 10 GeV in Si
 #
@@ -646,11 +644,11 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
- G4NuclearLevelManager: nuclide (15,27) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (2,4) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=9.5s Real=9.65s Sys=0.03s
+  User=11.52s Real=12s Sys=0.1s
 #
 # neutron at 10 GeV in Si
 #
@@ -686,11 +684,12 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
+ G4NuclearLevelManager: nuclide (14,24) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (14,25) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=9.19s Real=9.2s Sys=0s
+  User=10.28s Real=10.42s Sys=0.03s
 #
 # pi+ at 10 GeV in Si
 #
@@ -726,12 +725,10 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
- G4NuclearLevelManager: nuclide (12,21) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (12,20) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=13s Real=13s Sys=0s
+  User=12.98s Real=12.99s Sys=0s
 #
 # pi- at 10 GeV in Si
 #
@@ -767,10 +764,11 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
+ G4NuclearLevelManager: nuclide (15,27) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=12.88s Real=12.92s Sys=0.02s
+  User=14.77s Real=15.01s Sys=0.01s
 #
 # proton at 10 GeV in H
 #

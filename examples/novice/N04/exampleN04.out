@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V07-01-05    (16-December-2005)
+ Geant4 version Name: global-V08-00-01    (10-February-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -140,35 +140,35 @@ msc:  Model variant of multiple scattering for pi-
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 700 mum    e- 700 mum    e+ 700 mum
+ Range cuts        :  gamma 700 um     e- 700 um     e+ 700 um 
  Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : ArgonGas
- Range cuts        :  gamma 700 mum    e- 700 mum    e+ 700 mum
+ Range cuts        :  gamma 700 um     e- 700 um     e+ 700 um 
  Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Silicon
- Range cuts        :  gamma 700 mum    e- 700 mum    e+ 700 mum
+ Range cuts        :  gamma 700 um     e- 700 um     e+ 700 um 
  Energy thresholds :  gamma 5.84521 keV    e- 422.711 keV    e+ 407.385 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Scintillator
- Range cuts        :  gamma 700 mum    e- 700 mum    e+ 700 mum
+ Range cuts        :  gamma 700 um     e- 700 um     e+ 700 um 
  Energy thresholds :  gamma 2.08499 keV    e- 281.588 keV    e+ 274.74 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 4     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 700 mum    e- 700 mum    e+ 700 mum
+ Range cuts        :  gamma 700 um     e- 700 um     e+ 700 um 
  Energy thresholds :  gamma 94.7155 keV    e- 1.00067 MeV    e+ 940.93 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -181,9 +181,9 @@ Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 0 isolated muon found.
 ++++++++ event aborted
 >>> Event 0
-     253 hits are stored in ExN04TrackerHitsCollection.
+     249 hits are stored in ExN04TrackerHitsCollection.
      9 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.21372898 (GeV)
+     Total energy deposition in calorimeter : 0.21463286 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 0 hits found in the muon chamber.
 ++++++++ event aborted
@@ -196,14 +196,14 @@ Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 0 isolated muon found.
 ++++++++ event aborted
 >>> Event 2
-     141 hits are stored in ExN04TrackerHitsCollection.
+     131 hits are stored in ExN04TrackerHitsCollection.
      13 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.33186402 (GeV)
+     Total energy deposition in calorimeter : 0.32791824 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=2.29s Real=2.55s Sys=0.07s
+  User=2.22s Real=2.35s Sys=0.04s
 G4 kernel has come to Quit state.
 Graphics systems deleted.
 Visualization Manager deleting...
