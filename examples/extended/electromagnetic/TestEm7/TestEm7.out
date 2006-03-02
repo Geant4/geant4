@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V07-01-05    (16-December-2005)
+ Geant4 version Name: global-V08-00-01    (10-February-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -43,6 +43,13 @@ Registering model factories...
 /testem/det/setSizeX  20 cm
 /testem/det/setSizeYZ 20 cm
 #
+/testem/det/tallyMat Water
+/testem/det/tallySize 2. 2. 2. mm
+/testem/det/tallyPosition -9.9 0. 0. cm
+/testem/det/tallyPosition -5.  0. 0. cm
+/testem/det/tallyPosition  0.  0. 0. cm
+/testem/det/tallyPosition  5.  0. 0. cm
+#
 /testem/phys/addPhysics  standard	# em physics  
 PhysicsList::AddPhysicsList: <standard>
 ###/testem/phys/addPhysics  binary	# hadronic physics
@@ -54,6 +61,13 @@ userDetector->Construct() start.
 ---> The Absorber is 20 cm  of Water
 
 ---------------------------------------------------------
+---> There are 4 tallies : 2 2 2 mm  of Water  (mass : 8 mg)
+tally 0: position = -9.9 0 0 cm 
+tally 1: position = -5 0 0 cm 
+tally 2: position = 0 0 0 fm 
+tally 3: position = 5 0 0 cm 
+
+---------------------------------------------------------
 World is registered to the default region.
 physicsList->Construct() start.
 physicsList->Construct() start.
@@ -62,6 +76,8 @@ PhysicsList::SetCuts:CutLength : 1 mm
 #
 /gun/particle proton
 /gun/energy 160 MeV
+# beam size
+/testem/gun/rndm 3 mm
 #
 /testem/event/printModulo 1000
 /testem/stepMax 1 mm
@@ -201,6 +217,16 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
+
+    Voxelisation: top CPU users:
+    Percent   Total CPU    System CPU       Memory  Volume
+    -------   ----------   ----------     --------  ----------
+       0.00         0.00         0.00            0k Absorber
+
+    Voxelisation: top memory users:
+    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
+    -------   --------     ------   ------   --------   ----------    ----------
+     100.00          0k         1        5          8         0.00    Absorber
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -231,15 +257,25 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=326.31s Real=477.43s Sys=60.25s
+  User=357.64s Real=521.4s Sys=58.89s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of Water (density: 1 g/cm3 )
 
- projected Range= 17.674 cm    rms= 2.3568 mm 
+ projected Range= 17.6824 cm    rms= 2.26246 mm 
+
+---------------------------------------------------------
+ Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
+ tally 0: 	 	4.60455 GeV	0.287785 % 	9.22164e-05 Gy
+ tally 1: 	 	4.94714 GeV	0.309196 % 	9.90775e-05 Gy
+ tally 2: 	 	3.16948 GeV	0.198092 % 	6.34758e-05 Gy
+ tally 3: 	 	1.79191 GeV	0.111995 % 	3.5887e-05 Gy
+
+---------------------------------------------------------
+
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2077348605, 481531672
+ Current couple of seeds = 1503758427, 2105229118
 ----------------------------------------
 #
 /gun/particle ion
@@ -264,7 +300,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.9019 keV    e- 347.14 keV    e+ 338.7 keV
+ Energy thresholds :  gamma 2.90186 keV    e- 347.138 keV    e+ 338.695 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -274,7 +310,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2077348605, 481531672
+ Current couple of seeds = 1503758427, 2105229118
 ----------------------------------------
 Start Run processing.
 
@@ -282,15 +318,25 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=93.81s Real=114.48s Sys=12.01s
+  User=146.08s Real=182.31s Sys=26.19s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of Water (density: 1 g/cm3 )
 
- projected Range= 16.371 cm    rms= 461.67 mum
+ projected Range= 16.3707 cm    rms= 448.842 um 
+
+---------------------------------------------------------
+ Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
+ tally 0: 	 	11.4041 GeV	0.325831 % 	0.000228392 Gy
+ tally 1: 	 	13.1536 GeV	0.375818 % 	0.000263431 Gy
+ tally 2: 	 	15.5911 GeV	0.445461 % 	0.000312247 Gy
+ tally 3: 	 	23.9431 GeV	0.684089 % 	0.000479514 Gy
+
+---------------------------------------------------------
+
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 14066575, 1986435179
+ Current couple of seeds = 360429408, 1408169117
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

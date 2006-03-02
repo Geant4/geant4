@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V07-01-05    (16-December-2005)
+ Geant4 version Name: global-V08-00-01    (10-February-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -16,11 +16,11 @@ Test29:-->Material(92,146):Uranium,238U
 Test19: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test19:NewRun:Targ=90001000,Proj=22, 1 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 2.500000e-03 s
+Test19:CalculationTimePerEvent= 2.200000e-03 s
 Test19: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test19:NewRun:Targ=90002002,Proj=22, 2 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 7.480000e-02 s
+Test19:CalculationTimePerEvent= 7.495000e-02 s
 Test19: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test19:NewRun:Targ=90007007,Proj=22, 3 of 15
 ***=>TEST19: 100 events are simulated
@@ -28,48 +28,48 @@ Test19:CalculationTimePerEvent= 1.092000e-01 s
 Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test19:NewRun:Targ=90027032,Proj=22, 4 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 1.238500e-01 s
+Test19:CalculationTimePerEvent= 1.235000e-01 s
 Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test19:NewRun:Targ=90092146,Proj=22, 5 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 1.524000e-01 s
+Test19:CalculationTimePerEvent= 1.513500e-01 s
 Test19: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test19:NewRun:Targ=90001000,Proj=22, 6 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 8.100000e-03 s
+Test19:CalculationTimePerEvent= 8.000000e-03 s
 Test19: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test19:NewRun:Targ=90002002,Proj=22, 7 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 5.830000e-02 s
+Test19:CalculationTimePerEvent= 5.860000e-02 s
 Test19: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test19:NewRun:Targ=90007007,Proj=22, 8 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 2.376500e-01 s
+Test19:CalculationTimePerEvent= 2.370000e-01 s
 Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test19:NewRun:Targ=90027032,Proj=22, 9 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 3.350500e-01 s
+Test19:CalculationTimePerEvent= 3.350000e-01 s
 Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test19:NewRun:Targ=90092146,Proj=22, 10 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 4.076000e-01 s
+Test19:CalculationTimePerEvent= 4.061000e-01 s
 Test19: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test19:NewRun:Targ=90001000,Proj=22, 11 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 8.050000e-03 s
+Test19:CalculationTimePerEvent= 7.900000e-03 s
 Test19: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test19:NewRun:Targ=90002002,Proj=22, 12 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 6.110000e-02 s
+Test19:CalculationTimePerEvent= 6.145000e-02 s
 Test19: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test19:NewRun:Targ=90007007,Proj=22, 13 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 5.417500e-01 s
+Test19:CalculationTimePerEvent= 5.412500e-01 s
 Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test19:NewRun:Targ=90027032,Proj=22, 14 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 9.491500e-01 s
+Test19:CalculationTimePerEvent= 9.478000e-01 s
 Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test19:NewRun:Targ=90092146,Proj=22, 15 of 15
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 8.463500e-01 s
+Test19:CalculationTimePerEvent= 8.430500e-01 s

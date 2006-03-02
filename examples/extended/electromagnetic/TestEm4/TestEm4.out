@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V07-01-05    (16-December-2005)
+ Geant4 version Name: global-V08-00-01    (10-February-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -26,6 +26,9 @@ Registering model factories...
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  38.74 %  Abundance  50.00 %
    --->  Element: Fluorine (N)   Z =  9.0   N =  19.0   A =  18.99 g/mole  fractionMass:  61.26 %  Abundance  50.00 %
 PhysicsList::SetCuts:CutLength : 1 (mm)
+/run/verbose 2
+#
+/run/beamOn 100000
 
 phot:  Total cross sections from Sandia parametrisation. 
 
@@ -71,17 +74,26 @@ annihil:       Heilter model of formula of annihilation into 2 photons
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
+Region <DefaultRegionForTheWorld> -- appears in <C6F6> world volume
+ Materials : FluorCarbonate 
+ Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : FluorCarbonate
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 3.61165 keV    e- 429.199 keV    e+ 416.986 keV
+ Energy thresholds :  gamma 3.62751 keV    e- 427.947 keV    e+ 412.431 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ====================================================================
 
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   0 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -99,15 +111,34 @@ Start Run processing.
 ---> Begin of Event: 30000
 
 ---> Begin of Event: 40000
+
+---> Begin of Event: 50000
+
+---> Begin of Event: 60000
+
+---> Begin of Event: 70000
+
+---> Begin of Event: 80000
+
+---> Begin of Event: 90000
 Run terminated.
 Run Summary
-  Number of events processed : 50000
-  User=46.42s Real=460.91s Sys=34.03s
+  Number of events processed : 100000
+  User=94.29s Real=913.89s Sys=74.34s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 510209146, 254172231
+ Current couple of seeds = 291465285, 1941170730
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
 G4 kernel has come to Quit state.
+EventManager deleted.
+UImanager deleted.
+StateManager deleted.
+RunManagerKernel is deleted.
+RunManager is deleting.

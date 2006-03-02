@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V07-01-05    (16-December-2005)
+ Geant4 version Name: global-V08-00-01    (10-February-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -196,13 +196,49 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      500 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    1.01183 m     21.9895 m           0 8.95106e-13          1      500 MeV0.00387483 eV    1.58938 m     1.58938 m       World  Transportation
-    2          0 fm    1.01183 m     21.9905 m           0 -0.00197661   0.999998      500 MeV2.43795e-06 eV          1 mm    1.59038 m    Absorber  Transportation
-    3          0 fm    1.01172 m          22 m           0 -0.0207544   0.999785      500 MeV2.31623e-05 eV    9.50075 mm    1.59988 m  OutOfWorld  Transportation
+    1          0 fm    1.01183 m     21.9895 m           0          0         -1      500 MeV0.00387483 eV    1.58938 m     1.58938 m       World  Transportation
+    2          0 fm    1.01183 m     21.9895 m           0          0         -1      500 MeV     0 eV          0 fm    1.58938 m    Absorber  Transportation
+    3          0 fm    2.02367 m     21.9895 m           0          0         -1      500 MeV0.00387483 eV    1.58938 m     3.17877 m       World  Transportation
+    4          0 fm    2.02367 m     21.9895 m           0          0         -1      500 MeV     0 eV          0 fm    3.17877 m    Absorber  Transportation
+    5          0 fm     3.0355 m     21.9895 m           0          0         -1      500 MeV0.00387483 eV    1.58938 m     4.76815 m       World  Transportation
+    6          0 fm     3.0355 m     21.9895 m           0          0         -1      500 MeV     0 eV          0 fm    4.76815 m    Absorber  Transportation
+    7          0 fm    4.04733 m     21.9895 m           0          0         -1      500 MeV0.00387483 eV    1.58938 m     6.35753 m       World  Transportation
+    8          0 fm    4.04733 m     21.9895 m           0          0         -1      500 MeV     0 eV          0 fm    6.35753 m    Absorber  Transportation
+    9          0 fm    5.05916 m     21.9895 m           0          0         -1      500 MeV0.00387483 eV    1.58938 m     7.94692 m       World  Transportation
+   10          0 fm    5.05916 m     21.9895 m           0          0         -1      500 MeV     0 eV          0 fm    7.94692 m    Absorber  Transportation
+   11          0 fm      6.071 m     21.9895 m           0          0         -1      500 MeV0.00387483 eV    1.58938 m      9.5363 m       World  Transportation
+   12          0 fm      6.071 m     21.9895 m           0          0         -1      500 MeV     0 eV          0 fm     9.5363 m    Absorber  Transportation
+   13          0 fm    7.08283 m     21.9895 m           0          0         -1      500 MeV0.00387483 eV    1.58938 m     11.1257 m       World  Transportation
+   14          0 fm    7.08283 m     21.9895 m           0          0         -1      500 MeV     0 eV          0 fm    11.1257 m    Absorber  Transportation
+   15          0 fm    8.09466 m     21.9895 m           0          0         -1      500 MeV0.00387483 eV    1.58938 m     12.7151 m       World  Transportation
+   16          0 fm    8.09466 m     21.9895 m           0          0         -1      500 MeV     0 eV          0 fm    12.7151 m    Absorber  Transportation
+   17          0 fm     9.1065 m     21.9895 m           0          0         -1      500 MeV0.00387483 eV    1.58938 m     14.3044 m       World  Transportation
+   18          0 fm     9.1065 m     21.9895 m           0          0         -1      500 MeV     0 eV          0 fm    14.3044 m    Absorber  Transportation
+   19          0 fm    10.1183 m     21.9895 m           0          0         -1      500 MeV0.00387483 eV    1.58938 m     15.8938 m       World  Transportation
+   20          0 fm    10.1183 m     21.9895 m           0          0         -1      500 MeV     0 eV          0 fm    15.8938 m    Absorber  Transportation
+   21          0 fm    11.1302 m     21.9895 m           0          0         -1      500 MeV0.00387483 eV    1.58938 m     17.4832 m       World  Transportation
+   22          0 fm    11.1302 m     21.9895 m           0          0         -1      500 MeV     0 eV          0 fm    17.4832 m    Absorber  Transportation
+   23          0 fm     12.142 m     21.9895 m           0          0         -1      500 MeV0.00387483 eV    1.58938 m     19.0726 m       World  Transportation
+   24          0 fm     12.142 m     21.9895 m           0          0         -1      500 MeV     0 eV          0 fm    19.0726 m    Absorber  Transportation
+   25          0 fm    13.1538 m     21.9895 m           0          0         -1      500 MeV0.00387483 eV    1.58938 m      20.662 m       World  Transportation
+   26          0 fm    13.1538 m     21.9895 m           0          0         -1      500 MeV     0 eV          0 fm     20.662 m    Absorber  Transportation
+   27          0 fm    14.1657 m     21.9895 m           0          0         -1      500 MeV0.00387483 eV    1.58938 m     22.2514 m       World  Transportation
+   28          0 fm    14.1657 m     21.9895 m           0          0         -1      500 MeV     0 eV          0 fm    22.2514 m    Absorber  Transportation
+   29          0 fm    15.1775 m     21.9895 m           0          0         -1      500 MeV0.00387483 eV    1.58938 m     23.8407 m       World  Transportation
+   30          0 fm    15.1775 m     21.9895 m           0          0         -1      500 MeV     0 eV          0 fm    23.8407 m    Absorber  Transportation
+   31          0 fm    16.1893 m     21.9895 m           0          0         -1      500 MeV0.00387483 eV    1.58938 m     25.4301 m       World  Transportation
+   32          0 fm    16.1893 m     21.9895 m           0          0         -1      500 MeV     0 eV          0 fm    25.4301 m    Absorber  Transportation
+   33          0 fm    17.2012 m     21.9895 m           0          0         -1      500 MeV0.00387483 eV    1.58938 m     27.0195 m       World  Transportation
+   34          0 fm    17.2012 m     21.9895 m           0          0         -1      500 MeV     0 eV          0 fm    27.0195 m    Absorber  Transportation
+   35          0 fm     18.213 m     21.9895 m           0          0         -1      500 MeV0.00387483 eV    1.58938 m     28.6089 m       World  Transportation
+   36          0 fm     18.213 m     21.9895 m           0          0         -1      500 MeV     0 eV          0 fm    28.6089 m    Absorber  Transportation
+   37          0 fm    19.2248 m     21.9895 m           0          0         -1      500 MeV0.00387483 eV    1.58938 m     30.1983 m       World  Transportation
+   38          0 fm    19.2248 m     21.9895 m           0          0         -1      500 MeV     0 eV          0 fm    30.1983 m    Absorber  Transportation
+   39          0 fm    20.2365 m          22 m           0          0         -1      500 MeV0.00390043 eV    1.59988 m     31.7982 m  OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.04s Sys=0s
+  User=0.09s Real=0.11s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 ========= Table of registered couples ==============================
@@ -229,13 +265,89 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      250 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    50.6432 cm    21.9895 m           0 1.17461e-09          1      250 MeV0.00183026 eV    79.5502 cm    79.5502 cm      World  Transportation
-    2          0 fm     50.643 cm    21.9905 m           0 -0.0039492   0.999992      250 MeV2.30077e-06 eV          1 mm    79.6502 cm   Absorber  Transportation
-    3          0 fm    50.6214 cm         22 m           0 -0.0414666    0.99914      250 MeV2.18642e-05 eV    9.50301 mm    80.6005 cm OutOfWorld  Transportation
+    1          0 fm    50.6432 cm    21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    79.5502 cm      World  Transportation
+    2          0 fm    50.6432 cm    21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    79.5502 cm   Absorber  Transportation
+    3          0 fm    1.01286 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm      1.591 m       World  Transportation
+    4          0 fm    1.01286 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm      1.591 m    Absorber  Transportation
+    5          0 fm     1.5193 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    2.38651 m       World  Transportation
+    6          0 fm     1.5193 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    2.38651 m    Absorber  Transportation
+    7          0 fm    2.02573 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    3.18201 m       World  Transportation
+    8          0 fm    2.02573 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    3.18201 m    Absorber  Transportation
+    9          0 fm    2.53216 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    3.97751 m       World  Transportation
+   10          0 fm    2.53216 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    3.97751 m    Absorber  Transportation
+   11          0 fm    3.03859 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    4.77301 m       World  Transportation
+   12          0 fm    3.03859 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    4.77301 m    Absorber  Transportation
+   13          0 fm    3.54502 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    5.56851 m       World  Transportation
+   14          0 fm    3.54502 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    5.56851 m    Absorber  Transportation
+   15          0 fm    4.05146 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    6.36401 m       World  Transportation
+   16          0 fm    4.05146 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    6.36401 m    Absorber  Transportation
+   17          0 fm    4.55789 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    7.15952 m       World  Transportation
+   18          0 fm    4.55789 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    7.15952 m    Absorber  Transportation
+   19          0 fm    5.06432 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    7.95502 m       World  Transportation
+   20          0 fm    5.06432 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    7.95502 m    Absorber  Transportation
+   21          0 fm    5.57075 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    8.75052 m       World  Transportation
+   22          0 fm    5.57075 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    8.75052 m    Absorber  Transportation
+   23          0 fm    6.07719 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    9.54602 m       World  Transportation
+   24          0 fm    6.07719 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    9.54602 m    Absorber  Transportation
+   25          0 fm    6.58362 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    10.3415 m       World  Transportation
+   26          0 fm    6.58362 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    10.3415 m    Absorber  Transportation
+   27          0 fm    7.09005 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm     11.137 m       World  Transportation
+   28          0 fm    7.09005 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm     11.137 m    Absorber  Transportation
+   29          0 fm    7.59648 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    11.9325 m       World  Transportation
+   30          0 fm    7.59648 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    11.9325 m    Absorber  Transportation
+   31          0 fm    8.10291 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm     12.728 m       World  Transportation
+   32          0 fm    8.10291 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm     12.728 m    Absorber  Transportation
+   33          0 fm    8.60935 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    13.5235 m       World  Transportation
+   34          0 fm    8.60935 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    13.5235 m    Absorber  Transportation
+   35          0 fm    9.11578 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm     14.319 m       World  Transportation
+   36          0 fm    9.11578 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm     14.319 m    Absorber  Transportation
+   37          0 fm    9.62221 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    15.1145 m       World  Transportation
+   38          0 fm    9.62221 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    15.1145 m    Absorber  Transportation
+   39          0 fm    10.1286 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm      15.91 m       World  Transportation
+   40          0 fm    10.1286 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm      15.91 m    Absorber  Transportation
+   41          0 fm    10.6351 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    16.7055 m       World  Transportation
+   42          0 fm    10.6351 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    16.7055 m    Absorber  Transportation
+   43          0 fm    11.1415 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm     17.501 m       World  Transportation
+   44          0 fm    11.1415 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm     17.501 m    Absorber  Transportation
+   45          0 fm    11.6479 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    18.2965 m       World  Transportation
+   46          0 fm    11.6479 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    18.2965 m    Absorber  Transportation
+   47          0 fm    12.1544 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm     19.092 m       World  Transportation
+   48          0 fm    12.1544 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm     19.092 m    Absorber  Transportation
+   49          0 fm    12.6608 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    19.8875 m       World  Transportation
+   50          0 fm    12.6608 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    19.8875 m    Absorber  Transportation
+   51          0 fm    13.1672 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm     20.683 m       World  Transportation
+   52          0 fm    13.1672 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm     20.683 m    Absorber  Transportation
+   53          0 fm    13.6737 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    21.4785 m       World  Transportation
+   54          0 fm    13.6737 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    21.4785 m    Absorber  Transportation
+   55          0 fm    14.1801 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm     22.274 m       World  Transportation
+   56          0 fm    14.1801 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm     22.274 m    Absorber  Transportation
+   57          0 fm    14.6865 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    23.0696 m       World  Transportation
+   58          0 fm    14.6865 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    23.0696 m    Absorber  Transportation
+   59          0 fm     15.193 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    23.8651 m       World  Transportation
+   60          0 fm     15.193 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    23.8651 m    Absorber  Transportation
+   61          0 fm    15.6994 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    24.6606 m       World  Transportation
+   62          0 fm    15.6994 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    24.6606 m    Absorber  Transportation
+   63          0 fm    16.2058 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    25.4561 m       World  Transportation
+   64          0 fm    16.2058 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    25.4561 m    Absorber  Transportation
+   65          0 fm    16.7123 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    26.2516 m       World  Transportation
+   66          0 fm    16.7123 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    26.2516 m    Absorber  Transportation
+   67          0 fm    17.2187 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    27.0471 m       World  Transportation
+   68          0 fm    17.2187 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    27.0471 m    Absorber  Transportation
+   69          0 fm    17.7251 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    27.8426 m       World  Transportation
+   70          0 fm    17.7251 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    27.8426 m    Absorber  Transportation
+   71          0 fm    18.2316 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    28.6381 m       World  Transportation
+   72          0 fm    18.2316 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    28.6381 m    Absorber  Transportation
+   73          0 fm     18.738 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    29.4336 m       World  Transportation
+   74          0 fm     18.738 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    29.4336 m    Absorber  Transportation
+   75          0 fm    19.2444 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    30.2291 m       World  Transportation
+   76          0 fm    19.2444 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    30.2291 m    Absorber  Transportation
+   77          0 fm    19.7509 m     21.9895 m           0          0         -1      250 MeV0.00183026 eV    79.5502 cm    31.0246 m       World  Transportation
+   78          0 fm    19.7509 m     21.9895 m           0          0         -1      250 MeV     0 eV          0 fm    31.0246 m    Absorber  Transportation
+   79          0 fm    20.2571 m          22 m           0          0         -1      250 MeV0.00185443 eV    80.6005 cm    31.8306 m  OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.13s Real=0.14s Sys=0.01s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 ========= Table of registered couples ==============================
@@ -262,13 +374,109 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      200 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    40.5352 cm    21.9895 m           0 -2.18037e-09          1      200 MeV0.00143691 eV    63.6725 cm    63.6725 cm      World  Transportation
-    2          0 fm    40.5349 cm    21.9905 m           0 -0.00493399   0.999988      200 MeV2.25672e-06 eV          1 mm    63.7725 cm   Absorber  Transportation
-    3          0 fm    40.5079 cm         22 m           0 -0.0518069   0.998657      200 MeV2.14494e-05 eV    9.50471 mm     64.723 cm OutOfWorld  Transportation
+    1          0 fm    40.5352 cm    21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    63.6725 cm      World  Transportation
+    2          0 fm    40.5352 cm    21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    63.6725 cm   Absorber  Transportation
+    3          0 fm    81.0704 cm    21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    1.27345 m       World  Transportation
+    4          0 fm    81.0704 cm    21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    1.27345 m    Absorber  Transportation
+    5          0 fm    1.21606 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    1.91018 m       World  Transportation
+    6          0 fm    1.21606 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    1.91018 m    Absorber  Transportation
+    7          0 fm    1.62141 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm     2.5469 m       World  Transportation
+    8          0 fm    1.62141 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm     2.5469 m    Absorber  Transportation
+    9          0 fm    2.02676 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    3.18363 m       World  Transportation
+   10          0 fm    2.02676 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    3.18363 m    Absorber  Transportation
+   11          0 fm    2.43211 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    3.82035 m       World  Transportation
+   12          0 fm    2.43211 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    3.82035 m    Absorber  Transportation
+   13          0 fm    2.83746 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    4.45708 m       World  Transportation
+   14          0 fm    2.83746 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    4.45708 m    Absorber  Transportation
+   15          0 fm    3.24281 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm     5.0938 m       World  Transportation
+   16          0 fm    3.24281 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm     5.0938 m    Absorber  Transportation
+   17          0 fm    3.64817 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    5.73053 m       World  Transportation
+   18          0 fm    3.64817 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    5.73053 m    Absorber  Transportation
+   19          0 fm    4.05352 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    6.36725 m       World  Transportation
+   20          0 fm    4.05352 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    6.36725 m    Absorber  Transportation
+   21          0 fm    4.45887 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    7.00398 m       World  Transportation
+   22          0 fm    4.45887 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    7.00398 m    Absorber  Transportation
+   23          0 fm    4.86422 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm     7.6407 m       World  Transportation
+   24          0 fm    4.86422 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm     7.6407 m    Absorber  Transportation
+   25          0 fm    5.26957 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    8.27743 m       World  Transportation
+   26          0 fm    5.26957 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    8.27743 m    Absorber  Transportation
+   27          0 fm    5.67493 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    8.91415 m       World  Transportation
+   28          0 fm    5.67493 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    8.91415 m    Absorber  Transportation
+   29          0 fm    6.08028 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    9.55088 m       World  Transportation
+   30          0 fm    6.08028 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    9.55088 m    Absorber  Transportation
+   31          0 fm    6.48563 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    10.1876 m       World  Transportation
+   32          0 fm    6.48563 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    10.1876 m    Absorber  Transportation
+   33          0 fm    6.89098 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    10.8243 m       World  Transportation
+   34          0 fm    6.89098 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    10.8243 m    Absorber  Transportation
+   35          0 fm    7.29633 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    11.4611 m       World  Transportation
+   36          0 fm    7.29633 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    11.4611 m    Absorber  Transportation
+   37          0 fm    7.70168 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    12.0978 m       World  Transportation
+   38          0 fm    7.70168 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    12.0978 m    Absorber  Transportation
+   39          0 fm    8.10704 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    12.7345 m       World  Transportation
+   40          0 fm    8.10704 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    12.7345 m    Absorber  Transportation
+   41          0 fm    8.51239 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    13.3712 m       World  Transportation
+   42          0 fm    8.51239 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    13.3712 m    Absorber  Transportation
+   43          0 fm    8.91774 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm     14.008 m       World  Transportation
+   44          0 fm    8.91774 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm     14.008 m    Absorber  Transportation
+   45          0 fm    9.32309 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    14.6447 m       World  Transportation
+   46          0 fm    9.32309 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    14.6447 m    Absorber  Transportation
+   47          0 fm    9.72844 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    15.2814 m       World  Transportation
+   48          0 fm    9.72844 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    15.2814 m    Absorber  Transportation
+   49          0 fm    10.1338 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    15.9181 m       World  Transportation
+   50          0 fm    10.1338 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    15.9181 m    Absorber  Transportation
+   51          0 fm    10.5391 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    16.5549 m       World  Transportation
+   52          0 fm    10.5391 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    16.5549 m    Absorber  Transportation
+   53          0 fm    10.9445 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    17.1916 m       World  Transportation
+   54          0 fm    10.9445 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    17.1916 m    Absorber  Transportation
+   55          0 fm    11.3499 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    17.8283 m       World  Transportation
+   56          0 fm    11.3499 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    17.8283 m    Absorber  Transportation
+   57          0 fm    11.7552 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm     18.465 m       World  Transportation
+   58          0 fm    11.7552 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm     18.465 m    Absorber  Transportation
+   59          0 fm    12.1606 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    19.1018 m       World  Transportation
+   60          0 fm    12.1606 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    19.1018 m    Absorber  Transportation
+   61          0 fm    12.5659 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    19.7385 m       World  Transportation
+   62          0 fm    12.5659 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    19.7385 m    Absorber  Transportation
+   63          0 fm    12.9713 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    20.3752 m       World  Transportation
+   64          0 fm    12.9713 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    20.3752 m    Absorber  Transportation
+   65          0 fm    13.3766 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    21.0119 m       World  Transportation
+   66          0 fm    13.3766 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    21.0119 m    Absorber  Transportation
+   67          0 fm     13.782 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    21.6487 m       World  Transportation
+   68          0 fm     13.782 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    21.6487 m    Absorber  Transportation
+   69          0 fm    14.1873 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    22.2854 m       World  Transportation
+   70          0 fm    14.1873 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    22.2854 m    Absorber  Transportation
+   71          0 fm    14.5927 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    22.9221 m       World  Transportation
+   72          0 fm    14.5927 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    22.9221 m    Absorber  Transportation
+   73          0 fm     14.998 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    23.5588 m       World  Transportation
+   74          0 fm     14.998 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    23.5588 m    Absorber  Transportation
+   75          0 fm    15.4034 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    24.1956 m       World  Transportation
+   76          0 fm    15.4034 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    24.1956 m    Absorber  Transportation
+   77          0 fm    15.8087 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    24.8323 m       World  Transportation
+   78          0 fm    15.8087 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    24.8323 m    Absorber  Transportation
+   79          0 fm    16.2141 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm     25.469 m       World  Transportation
+   80          0 fm    16.2141 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm     25.469 m    Absorber  Transportation
+   81          0 fm    16.6194 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    26.1057 m       World  Transportation
+   82          0 fm    16.6194 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    26.1057 m    Absorber  Transportation
+   83          0 fm    17.0248 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    26.7425 m       World  Transportation
+   84          0 fm    17.0248 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    26.7425 m    Absorber  Transportation
+   85          0 fm    17.4301 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    27.3792 m       World  Transportation
+   86          0 fm    17.4301 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    27.3792 m    Absorber  Transportation
+   87          0 fm    17.8355 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    28.0159 m       World  Transportation
+   88          0 fm    17.8355 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    28.0159 m    Absorber  Transportation
+   89          0 fm    18.2408 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    28.6526 m       World  Transportation
+   90          0 fm    18.2408 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    28.6526 m    Absorber  Transportation
+   91          0 fm    18.6462 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    29.2894 m       World  Transportation
+   92          0 fm    18.6462 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    29.2894 m    Absorber  Transportation
+   93          0 fm    19.0515 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    29.9261 m       World  Transportation
+   94          0 fm    19.0515 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    29.9261 m    Absorber  Transportation
+   95          0 fm    19.4569 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    30.5628 m       World  Transportation
+   96          0 fm    19.4569 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    30.5628 m    Absorber  Transportation
+   97          0 fm    19.8622 m     21.9895 m           0          0         -1      200 MeV0.00143691 eV    63.6725 cm    31.1995 m       World  Transportation
+   98          0 fm    19.8622 m     21.9895 m           0          0         -1      200 MeV     0 eV          0 fm    31.1995 m    Absorber  Transportation
+   99          0 fm    20.2673 m          22 m           0          0         -1      200 MeV0.00146061 eV     64.723 cm    31.8468 m  OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.16s Real=0.17s Sys=0.01s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 ========= Table of registered couples ==============================
@@ -295,13 +503,207 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      100 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm     20.319 cm    21.9895 m           0 9.91398e-09          1      100 MeV0.000676634 eV    31.9171 cm    31.9171 cm      World  Transportation
-    2          0 fm    20.3185 cm    21.9905 m           0 -0.00984297   0.999952      100 MeV2.12001e-06 eV    1.00002 mm    32.0171 cm   Absorber  Transportation
-    3          0 fm    20.2645 cm         22 m           0  -0.103352   0.994645      100 MeV2.01797e-05 eV    9.51883 mm     32.969 cm OutOfWorld  Transportation
+    1          0 fm     20.319 cm    21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    31.9171 cm      World  Transportation
+    2          0 fm     20.319 cm    21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    31.9171 cm   Absorber  Transportation
+    3          0 fm    40.6381 cm    21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    63.8342 cm      World  Transportation
+    4          0 fm    40.6381 cm    21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    63.8342 cm   Absorber  Transportation
+    5          0 fm    60.9571 cm    21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    95.7513 cm      World  Transportation
+    6          0 fm    60.9571 cm    21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    95.7513 cm   Absorber  Transportation
+    7          0 fm    81.2762 cm    21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    1.27668 m       World  Transportation
+    8          0 fm    81.2762 cm    21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    1.27668 m    Absorber  Transportation
+    9          0 fm    1.01595 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    1.59585 m       World  Transportation
+   10          0 fm    1.01595 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    1.59585 m    Absorber  Transportation
+   11          0 fm    1.21914 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    1.91503 m       World  Transportation
+   12          0 fm    1.21914 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    1.91503 m    Absorber  Transportation
+   13          0 fm    1.42233 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm     2.2342 m       World  Transportation
+   14          0 fm    1.42233 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm     2.2342 m    Absorber  Transportation
+   15          0 fm    1.62552 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    2.55337 m       World  Transportation
+   16          0 fm    1.62552 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    2.55337 m    Absorber  Transportation
+   17          0 fm    1.82871 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    2.87254 m       World  Transportation
+   18          0 fm    1.82871 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    2.87254 m    Absorber  Transportation
+   19          0 fm     2.0319 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    3.19171 m       World  Transportation
+   20          0 fm     2.0319 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    3.19171 m    Absorber  Transportation
+   21          0 fm    2.23509 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    3.51088 m       World  Transportation
+   22          0 fm    2.23509 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    3.51088 m    Absorber  Transportation
+   23          0 fm    2.43828 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    3.83005 m       World  Transportation
+   24          0 fm    2.43828 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    3.83005 m    Absorber  Transportation
+   25          0 fm    2.64148 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    4.14922 m       World  Transportation
+   26          0 fm    2.64148 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    4.14922 m    Absorber  Transportation
+   27          0 fm    2.84467 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    4.46839 m       World  Transportation
+   28          0 fm    2.84467 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    4.46839 m    Absorber  Transportation
+   29          0 fm    3.04786 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    4.78756 m       World  Transportation
+   30          0 fm    3.04786 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    4.78756 m    Absorber  Transportation
+   31          0 fm    3.25105 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    5.10673 m       World  Transportation
+   32          0 fm    3.25105 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    5.10673 m    Absorber  Transportation
+   33          0 fm    3.45424 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm     5.4259 m       World  Transportation
+   34          0 fm    3.45424 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm     5.4259 m    Absorber  Transportation
+   35          0 fm    3.65743 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    5.74508 m       World  Transportation
+   36          0 fm    3.65743 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    5.74508 m    Absorber  Transportation
+   37          0 fm    3.86062 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    6.06425 m       World  Transportation
+   38          0 fm    3.86062 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    6.06425 m    Absorber  Transportation
+   39          0 fm    4.06381 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    6.38342 m       World  Transportation
+   40          0 fm    4.06381 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    6.38342 m    Absorber  Transportation
+   41          0 fm      4.267 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    6.70259 m       World  Transportation
+   42          0 fm      4.267 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    6.70259 m    Absorber  Transportation
+   43          0 fm    4.47019 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    7.02176 m       World  Transportation
+   44          0 fm    4.47019 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    7.02176 m    Absorber  Transportation
+   45          0 fm    4.67338 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    7.34093 m       World  Transportation
+   46          0 fm    4.67338 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    7.34093 m    Absorber  Transportation
+   47          0 fm    4.87657 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm     7.6601 m       World  Transportation
+   48          0 fm    4.87657 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm     7.6601 m    Absorber  Transportation
+   49          0 fm    5.07976 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    7.97927 m       World  Transportation
+   50          0 fm    5.07976 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    7.97927 m    Absorber  Transportation
+   51          0 fm    5.28295 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    8.29844 m       World  Transportation
+   52          0 fm    5.28295 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    8.29844 m    Absorber  Transportation
+   53          0 fm    5.48614 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    8.61761 m       World  Transportation
+   54          0 fm    5.48614 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    8.61761 m    Absorber  Transportation
+   55          0 fm    5.68933 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    8.93678 m       World  Transportation
+   56          0 fm    5.68933 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    8.93678 m    Absorber  Transportation
+   57          0 fm    5.89252 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    9.25595 m       World  Transportation
+   58          0 fm    5.89252 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    9.25595 m    Absorber  Transportation
+   59          0 fm    6.09571 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    9.57513 m       World  Transportation
+   60          0 fm    6.09571 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    9.57513 m    Absorber  Transportation
+   61          0 fm     6.2989 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm     9.8943 m       World  Transportation
+   62          0 fm     6.2989 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm     9.8943 m    Absorber  Transportation
+   63          0 fm    6.50209 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    10.2135 m       World  Transportation
+   64          0 fm    6.50209 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    10.2135 m    Absorber  Transportation
+   65          0 fm    6.70528 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    10.5326 m       World  Transportation
+   66          0 fm    6.70528 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    10.5326 m    Absorber  Transportation
+   67          0 fm    6.90847 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    10.8518 m       World  Transportation
+   68          0 fm    6.90847 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    10.8518 m    Absorber  Transportation
+   69          0 fm    7.11166 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm     11.171 m       World  Transportation
+   70          0 fm    7.11166 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm     11.171 m    Absorber  Transportation
+   71          0 fm    7.31485 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    11.4902 m       World  Transportation
+   72          0 fm    7.31485 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    11.4902 m    Absorber  Transportation
+   73          0 fm    7.51805 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    11.8093 m       World  Transportation
+   74          0 fm    7.51805 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    11.8093 m    Absorber  Transportation
+   75          0 fm    7.72124 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    12.1285 m       World  Transportation
+   76          0 fm    7.72124 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    12.1285 m    Absorber  Transportation
+   77          0 fm    7.92443 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    12.4477 m       World  Transportation
+   78          0 fm    7.92443 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    12.4477 m    Absorber  Transportation
+   79          0 fm    8.12762 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    12.7668 m       World  Transportation
+   80          0 fm    8.12762 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    12.7668 m    Absorber  Transportation
+   81          0 fm    8.33081 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm     13.086 m       World  Transportation
+   82          0 fm    8.33081 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm     13.086 m    Absorber  Transportation
+   83          0 fm      8.534 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    13.4052 m       World  Transportation
+   84          0 fm      8.534 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    13.4052 m    Absorber  Transportation
+   85          0 fm    8.73719 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    13.7243 m       World  Transportation
+   86          0 fm    8.73719 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    13.7243 m    Absorber  Transportation
+   87          0 fm    8.94038 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    14.0435 m       World  Transportation
+   88          0 fm    8.94038 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    14.0435 m    Absorber  Transportation
+   89          0 fm    9.14357 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    14.3627 m       World  Transportation
+   90          0 fm    9.14357 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    14.3627 m    Absorber  Transportation
+   91          0 fm    9.34676 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    14.6819 m       World  Transportation
+   92          0 fm    9.34676 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    14.6819 m    Absorber  Transportation
+   93          0 fm    9.54995 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm     15.001 m       World  Transportation
+   94          0 fm    9.54995 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm     15.001 m    Absorber  Transportation
+   95          0 fm    9.75314 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    15.3202 m       World  Transportation
+   96          0 fm    9.75314 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    15.3202 m    Absorber  Transportation
+   97          0 fm    9.95633 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    15.6394 m       World  Transportation
+   98          0 fm    9.95633 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    15.6394 m    Absorber  Transportation
+   99          0 fm    10.1595 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    15.9585 m       World  Transportation
+  100          0 fm    10.1595 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    15.9585 m    Absorber  Transportation
+  101          0 fm    10.3627 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    16.2777 m       World  Transportation
+  102          0 fm    10.3627 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    16.2777 m    Absorber  Transportation
+  103          0 fm    10.5659 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    16.5969 m       World  Transportation
+  104          0 fm    10.5659 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    16.5969 m    Absorber  Transportation
+  105          0 fm    10.7691 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    16.9161 m       World  Transportation
+  106          0 fm    10.7691 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    16.9161 m    Absorber  Transportation
+  107          0 fm    10.9723 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    17.2352 m       World  Transportation
+  108          0 fm    10.9723 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    17.2352 m    Absorber  Transportation
+  109          0 fm    11.1755 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    17.5544 m       World  Transportation
+  110          0 fm    11.1755 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    17.5544 m    Absorber  Transportation
+  111          0 fm    11.3787 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    17.8736 m       World  Transportation
+  112          0 fm    11.3787 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    17.8736 m    Absorber  Transportation
+  113          0 fm    11.5819 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    18.1927 m       World  Transportation
+  114          0 fm    11.5819 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    18.1927 m    Absorber  Transportation
+  115          0 fm     11.785 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    18.5119 m       World  Transportation
+  116          0 fm     11.785 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    18.5119 m    Absorber  Transportation
+  117          0 fm    11.9882 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    18.8311 m       World  Transportation
+  118          0 fm    11.9882 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    18.8311 m    Absorber  Transportation
+  119          0 fm    12.1914 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    19.1503 m       World  Transportation
+  120          0 fm    12.1914 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    19.1503 m    Absorber  Transportation
+  121          0 fm    12.3946 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    19.4694 m       World  Transportation
+  122          0 fm    12.3946 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    19.4694 m    Absorber  Transportation
+  123          0 fm    12.5978 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    19.7886 m       World  Transportation
+  124          0 fm    12.5978 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    19.7886 m    Absorber  Transportation
+  125          0 fm     12.801 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    20.1078 m       World  Transportation
+  126          0 fm     12.801 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    20.1078 m    Absorber  Transportation
+  127          0 fm    13.0042 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    20.4269 m       World  Transportation
+  128          0 fm    13.0042 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    20.4269 m    Absorber  Transportation
+  129          0 fm    13.2074 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    20.7461 m       World  Transportation
+  130          0 fm    13.2074 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    20.7461 m    Absorber  Transportation
+  131          0 fm    13.4106 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    21.0653 m       World  Transportation
+  132          0 fm    13.4106 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    21.0653 m    Absorber  Transportation
+  133          0 fm    13.6138 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    21.3844 m       World  Transportation
+  134          0 fm    13.6138 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    21.3844 m    Absorber  Transportation
+  135          0 fm    13.8169 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    21.7036 m       World  Transportation
+  136          0 fm    13.8169 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    21.7036 m    Absorber  Transportation
+  137          0 fm    14.0201 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    22.0228 m       World  Transportation
+  138          0 fm    14.0201 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    22.0228 m    Absorber  Transportation
+  139          0 fm    14.2233 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm     22.342 m       World  Transportation
+  140          0 fm    14.2233 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm     22.342 m    Absorber  Transportation
+  141          0 fm    14.4265 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    22.6611 m       World  Transportation
+  142          0 fm    14.4265 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    22.6611 m    Absorber  Transportation
+  143          0 fm    14.6297 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    22.9803 m       World  Transportation
+  144          0 fm    14.6297 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    22.9803 m    Absorber  Transportation
+  145          0 fm    14.8329 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    23.2995 m       World  Transportation
+  146          0 fm    14.8329 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    23.2995 m    Absorber  Transportation
+  147          0 fm    15.0361 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    23.6186 m       World  Transportation
+  148          0 fm    15.0361 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    23.6186 m    Absorber  Transportation
+  149          0 fm    15.2393 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    23.9378 m       World  Transportation
+  150          0 fm    15.2393 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    23.9378 m    Absorber  Transportation
+  151          0 fm    15.4425 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm     24.257 m       World  Transportation
+  152          0 fm    15.4425 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm     24.257 m    Absorber  Transportation
+  153          0 fm    15.6457 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    24.5762 m       World  Transportation
+  154          0 fm    15.6457 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    24.5762 m    Absorber  Transportation
+  155          0 fm    15.8489 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    24.8953 m       World  Transportation
+  156          0 fm    15.8489 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    24.8953 m    Absorber  Transportation
+  157          0 fm     16.052 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    25.2145 m       World  Transportation
+  158          0 fm     16.052 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    25.2145 m    Absorber  Transportation
+  159          0 fm    16.2552 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    25.5337 m       World  Transportation
+  160          0 fm    16.2552 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    25.5337 m    Absorber  Transportation
+  161          0 fm    16.4584 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    25.8528 m       World  Transportation
+  162          0 fm    16.4584 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    25.8528 m    Absorber  Transportation
+  163          0 fm    16.6616 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm     26.172 m       World  Transportation
+  164          0 fm    16.6616 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm     26.172 m    Absorber  Transportation
+  165          0 fm    16.8648 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    26.4912 m       World  Transportation
+  166          0 fm    16.8648 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    26.4912 m    Absorber  Transportation
+  167          0 fm     17.068 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    26.8104 m       World  Transportation
+  168          0 fm     17.068 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    26.8104 m    Absorber  Transportation
+  169          0 fm    17.2712 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    27.1295 m       World  Transportation
+  170          0 fm    17.2712 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    27.1295 m    Absorber  Transportation
+  171          0 fm    17.4744 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    27.4487 m       World  Transportation
+  172          0 fm    17.4744 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    27.4487 m    Absorber  Transportation
+  173          0 fm    17.6776 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    27.7679 m       World  Transportation
+  174          0 fm    17.6776 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    27.7679 m    Absorber  Transportation
+  175          0 fm    17.8808 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm     28.087 m       World  Transportation
+  176          0 fm    17.8808 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm     28.087 m    Absorber  Transportation
+  177          0 fm    18.0839 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    28.4062 m       World  Transportation
+  178          0 fm    18.0839 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    28.4062 m    Absorber  Transportation
+  179          0 fm    18.2871 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    28.7254 m       World  Transportation
+  180          0 fm    18.2871 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    28.7254 m    Absorber  Transportation
+  181          0 fm    18.4903 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    29.0445 m       World  Transportation
+  182          0 fm    18.4903 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    29.0445 m    Absorber  Transportation
+  183          0 fm    18.6935 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    29.3637 m       World  Transportation
+  184          0 fm    18.6935 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    29.3637 m    Absorber  Transportation
+  185          0 fm    18.8967 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    29.6829 m       World  Transportation
+  186          0 fm    18.8967 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    29.6829 m    Absorber  Transportation
+  187          0 fm    19.0999 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    30.0021 m       World  Transportation
+  188          0 fm    19.0999 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    30.0021 m    Absorber  Transportation
+  189          0 fm    19.3031 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    30.3212 m       World  Transportation
+  190          0 fm    19.3031 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    30.3212 m    Absorber  Transportation
+  191          0 fm    19.5063 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    30.6404 m       World  Transportation
+  192          0 fm    19.5063 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    30.6404 m    Absorber  Transportation
+  193          0 fm    19.7095 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    30.9596 m       World  Transportation
+  194          0 fm    19.7095 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    30.9596 m    Absorber  Transportation
+  195          0 fm    19.9127 m     21.9895 m           0          0         -1      100 MeV0.000676634 eV    31.9171 cm    31.2787 m       World  Transportation
+  196          0 fm    19.9127 m     21.9895 m           0          0         -1      100 MeV     0 eV          0 fm    31.2787 m    Absorber  Transportation
+  197          0 fm    20.1153 m          22 m           0          0         -1      100 MeV0.000698933 eV     32.969 cm    31.6084 m  OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0.29s Real=0.29s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 ========= Table of registered couples ==============================
@@ -328,13 +730,401 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1       50 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    10.2108 cm    21.9895 m           0 -7.69218e-09          1       50 MeV0.000318172 eV    16.0391 cm    16.0391 cm      World  Transportation
-    2          0 fm    10.2098 cm    21.9905 m           0 -0.0195872   0.999808       50 MeV1.98386e-06 eV    1.00006 mm    16.1391 cm   Absorber  Transportation
-    3          0 fm    10.1016 cm         22 m           0  -0.205667   0.978622       50 MeV1.89952e-05 eV     9.5755 mm    17.0966 cm OutOfWorld  Transportation
+    1          0 fm    10.2108 cm    21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    16.0391 cm      World  Transportation
+    2          0 fm    10.2108 cm    21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    16.0391 cm   Absorber  Transportation
+    3          0 fm    20.4216 cm    21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    32.0781 cm      World  Transportation
+    4          0 fm    20.4216 cm    21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    32.0781 cm   Absorber  Transportation
+    5          0 fm    30.6323 cm    21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    48.1172 cm      World  Transportation
+    6          0 fm    30.6323 cm    21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    48.1172 cm   Absorber  Transportation
+    7          0 fm    40.8431 cm    21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    64.1563 cm      World  Transportation
+    8          0 fm    40.8431 cm    21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    64.1563 cm   Absorber  Transportation
+    9          0 fm    51.0539 cm    21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    80.1953 cm      World  Transportation
+   10          0 fm    51.0539 cm    21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    80.1953 cm   Absorber  Transportation
+   11          0 fm    61.2647 cm    21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    96.2344 cm      World  Transportation
+   12          0 fm    61.2647 cm    21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    96.2344 cm   Absorber  Transportation
+   13          0 fm    71.4755 cm    21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    1.12273 m       World  Transportation
+   14          0 fm    71.4755 cm    21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    1.12273 m    Absorber  Transportation
+   15          0 fm    81.6862 cm    21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    1.28313 m       World  Transportation
+   16          0 fm    81.6862 cm    21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    1.28313 m    Absorber  Transportation
+   17          0 fm     91.897 cm    21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    1.44352 m       World  Transportation
+   18          0 fm     91.897 cm    21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    1.44352 m    Absorber  Transportation
+   19          0 fm    1.02108 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    1.60391 m       World  Transportation
+   20          0 fm    1.02108 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    1.60391 m    Absorber  Transportation
+   21          0 fm    1.12319 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm     1.7643 m       World  Transportation
+   22          0 fm    1.12319 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm     1.7643 m    Absorber  Transportation
+   23          0 fm    1.22529 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    1.92469 m       World  Transportation
+   24          0 fm    1.22529 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    1.92469 m    Absorber  Transportation
+   25          0 fm     1.3274 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    2.08508 m       World  Transportation
+   26          0 fm     1.3274 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    2.08508 m    Absorber  Transportation
+   27          0 fm    1.42951 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    2.24547 m       World  Transportation
+   28          0 fm    1.42951 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    2.24547 m    Absorber  Transportation
+   29          0 fm    1.53162 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    2.40586 m       World  Transportation
+   30          0 fm    1.53162 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    2.40586 m    Absorber  Transportation
+   31          0 fm    1.63372 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    2.56625 m       World  Transportation
+   32          0 fm    1.63372 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    2.56625 m    Absorber  Transportation
+   33          0 fm    1.73583 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    2.72664 m       World  Transportation
+   34          0 fm    1.73583 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    2.72664 m    Absorber  Transportation
+   35          0 fm    1.83794 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    2.88703 m       World  Transportation
+   36          0 fm    1.83794 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    2.88703 m    Absorber  Transportation
+   37          0 fm    1.94005 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    3.04742 m       World  Transportation
+   38          0 fm    1.94005 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    3.04742 m    Absorber  Transportation
+   39          0 fm    2.04216 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    3.20781 m       World  Transportation
+   40          0 fm    2.04216 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    3.20781 m    Absorber  Transportation
+   41          0 fm    2.14426 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm     3.3682 m       World  Transportation
+   42          0 fm    2.14426 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm     3.3682 m    Absorber  Transportation
+   43          0 fm    2.24637 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    3.52859 m       World  Transportation
+   44          0 fm    2.24637 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    3.52859 m    Absorber  Transportation
+   45          0 fm    2.34848 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    3.68898 m       World  Transportation
+   46          0 fm    2.34848 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    3.68898 m    Absorber  Transportation
+   47          0 fm    2.45059 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    3.84938 m       World  Transportation
+   48          0 fm    2.45059 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    3.84938 m    Absorber  Transportation
+   49          0 fm    2.55269 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    4.00977 m       World  Transportation
+   50          0 fm    2.55269 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    4.00977 m    Absorber  Transportation
+   51          0 fm     2.6548 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    4.17016 m       World  Transportation
+   52          0 fm     2.6548 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    4.17016 m    Absorber  Transportation
+   53          0 fm    2.75691 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    4.33055 m       World  Transportation
+   54          0 fm    2.75691 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    4.33055 m    Absorber  Transportation
+   55          0 fm    2.85902 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    4.49094 m       World  Transportation
+   56          0 fm    2.85902 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    4.49094 m    Absorber  Transportation
+   57          0 fm    2.96113 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    4.65133 m       World  Transportation
+   58          0 fm    2.96113 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    4.65133 m    Absorber  Transportation
+   59          0 fm    3.06323 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    4.81172 m       World  Transportation
+   60          0 fm    3.06323 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    4.81172 m    Absorber  Transportation
+   61          0 fm    3.16534 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    4.97211 m       World  Transportation
+   62          0 fm    3.16534 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    4.97211 m    Absorber  Transportation
+   63          0 fm    3.26745 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm     5.1325 m       World  Transportation
+   64          0 fm    3.26745 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm     5.1325 m    Absorber  Transportation
+   65          0 fm    3.36956 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    5.29289 m       World  Transportation
+   66          0 fm    3.36956 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    5.29289 m    Absorber  Transportation
+   67          0 fm    3.47166 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    5.45328 m       World  Transportation
+   68          0 fm    3.47166 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    5.45328 m    Absorber  Transportation
+   69          0 fm    3.57377 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    5.61367 m       World  Transportation
+   70          0 fm    3.57377 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    5.61367 m    Absorber  Transportation
+   71          0 fm    3.67588 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    5.77406 m       World  Transportation
+   72          0 fm    3.67588 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    5.77406 m    Absorber  Transportation
+   73          0 fm    3.77799 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    5.93445 m       World  Transportation
+   74          0 fm    3.77799 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    5.93445 m    Absorber  Transportation
+   75          0 fm     3.8801 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    6.09484 m       World  Transportation
+   76          0 fm     3.8801 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    6.09484 m    Absorber  Transportation
+   77          0 fm     3.9822 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    6.25523 m       World  Transportation
+   78          0 fm     3.9822 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    6.25523 m    Absorber  Transportation
+   79          0 fm    4.08431 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    6.41563 m       World  Transportation
+   80          0 fm    4.08431 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    6.41563 m    Absorber  Transportation
+   81          0 fm    4.18642 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    6.57602 m       World  Transportation
+   82          0 fm    4.18642 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    6.57602 m    Absorber  Transportation
+   83          0 fm    4.28853 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    6.73641 m       World  Transportation
+   84          0 fm    4.28853 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    6.73641 m    Absorber  Transportation
+   85          0 fm    4.39063 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm     6.8968 m       World  Transportation
+   86          0 fm    4.39063 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm     6.8968 m    Absorber  Transportation
+   87          0 fm    4.49274 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    7.05719 m       World  Transportation
+   88          0 fm    4.49274 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    7.05719 m    Absorber  Transportation
+   89          0 fm    4.59485 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    7.21758 m       World  Transportation
+   90          0 fm    4.59485 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    7.21758 m    Absorber  Transportation
+   91          0 fm    4.69696 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    7.37797 m       World  Transportation
+   92          0 fm    4.69696 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    7.37797 m    Absorber  Transportation
+   93          0 fm    4.79907 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    7.53836 m       World  Transportation
+   94          0 fm    4.79907 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    7.53836 m    Absorber  Transportation
+   95          0 fm    4.90117 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    7.69875 m       World  Transportation
+   96          0 fm    4.90117 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    7.69875 m    Absorber  Transportation
+   97          0 fm    5.00328 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    7.85914 m       World  Transportation
+   98          0 fm    5.00328 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    7.85914 m    Absorber  Transportation
+   99          0 fm    5.10539 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    8.01953 m       World  Transportation
+  100          0 fm    5.10539 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    8.01953 m    Absorber  Transportation
+  101          0 fm     5.2075 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    8.17992 m       World  Transportation
+  102          0 fm     5.2075 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    8.17992 m    Absorber  Transportation
+  103          0 fm     5.3096 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    8.34031 m       World  Transportation
+  104          0 fm     5.3096 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    8.34031 m    Absorber  Transportation
+  105          0 fm    5.41171 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm     8.5007 m       World  Transportation
+  106          0 fm    5.41171 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm     8.5007 m    Absorber  Transportation
+  107          0 fm    5.51382 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    8.66109 m       World  Transportation
+  108          0 fm    5.51382 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    8.66109 m    Absorber  Transportation
+  109          0 fm    5.61593 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    8.82148 m       World  Transportation
+  110          0 fm    5.61593 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    8.82148 m    Absorber  Transportation
+  111          0 fm    5.71804 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    8.98188 m       World  Transportation
+  112          0 fm    5.71804 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    8.98188 m    Absorber  Transportation
+  113          0 fm    5.82014 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    9.14227 m       World  Transportation
+  114          0 fm    5.82014 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    9.14227 m    Absorber  Transportation
+  115          0 fm    5.92225 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    9.30266 m       World  Transportation
+  116          0 fm    5.92225 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    9.30266 m    Absorber  Transportation
+  117          0 fm    6.02436 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    9.46305 m       World  Transportation
+  118          0 fm    6.02436 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    9.46305 m    Absorber  Transportation
+  119          0 fm    6.12647 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    9.62344 m       World  Transportation
+  120          0 fm    6.12647 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    9.62344 m    Absorber  Transportation
+  121          0 fm    6.22857 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    9.78383 m       World  Transportation
+  122          0 fm    6.22857 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    9.78383 m    Absorber  Transportation
+  123          0 fm    6.33068 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    9.94422 m       World  Transportation
+  124          0 fm    6.33068 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    9.94422 m    Absorber  Transportation
+  125          0 fm    6.43279 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    10.1046 m       World  Transportation
+  126          0 fm    6.43279 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    10.1046 m    Absorber  Transportation
+  127          0 fm     6.5349 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm     10.265 m       World  Transportation
+  128          0 fm     6.5349 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm     10.265 m    Absorber  Transportation
+  129          0 fm    6.63701 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    10.4254 m       World  Transportation
+  130          0 fm    6.63701 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    10.4254 m    Absorber  Transportation
+  131          0 fm    6.73911 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    10.5858 m       World  Transportation
+  132          0 fm    6.73911 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    10.5858 m    Absorber  Transportation
+  133          0 fm    6.84122 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    10.7462 m       World  Transportation
+  134          0 fm    6.84122 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    10.7462 m    Absorber  Transportation
+  135          0 fm    6.94333 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    10.9066 m       World  Transportation
+  136          0 fm    6.94333 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    10.9066 m    Absorber  Transportation
+  137          0 fm    7.04544 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm     11.067 m       World  Transportation
+  138          0 fm    7.04544 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm     11.067 m    Absorber  Transportation
+  139          0 fm    7.14754 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    11.2273 m       World  Transportation
+  140          0 fm    7.14754 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    11.2273 m    Absorber  Transportation
+  141          0 fm    7.24965 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    11.3877 m       World  Transportation
+  142          0 fm    7.24965 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    11.3877 m    Absorber  Transportation
+  143          0 fm    7.35176 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    11.5481 m       World  Transportation
+  144          0 fm    7.35176 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    11.5481 m    Absorber  Transportation
+  145          0 fm    7.45387 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    11.7085 m       World  Transportation
+  146          0 fm    7.45387 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    11.7085 m    Absorber  Transportation
+  147          0 fm    7.55598 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    11.8689 m       World  Transportation
+  148          0 fm    7.55598 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    11.8689 m    Absorber  Transportation
+  149          0 fm    7.65808 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    12.0293 m       World  Transportation
+  150          0 fm    7.65808 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    12.0293 m    Absorber  Transportation
+  151          0 fm    7.76019 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    12.1897 m       World  Transportation
+  152          0 fm    7.76019 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    12.1897 m    Absorber  Transportation
+  153          0 fm     7.8623 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    12.3501 m       World  Transportation
+  154          0 fm     7.8623 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    12.3501 m    Absorber  Transportation
+  155          0 fm    7.96441 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    12.5105 m       World  Transportation
+  156          0 fm    7.96441 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    12.5105 m    Absorber  Transportation
+  157          0 fm    8.06652 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    12.6709 m       World  Transportation
+  158          0 fm    8.06652 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    12.6709 m    Absorber  Transportation
+  159          0 fm    8.16862 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    12.8313 m       World  Transportation
+  160          0 fm    8.16862 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    12.8313 m    Absorber  Transportation
+  161          0 fm    8.27073 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    12.9916 m       World  Transportation
+  162          0 fm    8.27073 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    12.9916 m    Absorber  Transportation
+  163          0 fm    8.37284 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm     13.152 m       World  Transportation
+  164          0 fm    8.37284 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm     13.152 m    Absorber  Transportation
+  165          0 fm    8.47495 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    13.3124 m       World  Transportation
+  166          0 fm    8.47495 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    13.3124 m    Absorber  Transportation
+  167          0 fm    8.57705 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    13.4728 m       World  Transportation
+  168          0 fm    8.57705 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    13.4728 m    Absorber  Transportation
+  169          0 fm    8.67916 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    13.6332 m       World  Transportation
+  170          0 fm    8.67916 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    13.6332 m    Absorber  Transportation
+  171          0 fm    8.78127 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    13.7936 m       World  Transportation
+  172          0 fm    8.78127 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    13.7936 m    Absorber  Transportation
+  173          0 fm    8.88338 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm     13.954 m       World  Transportation
+  174          0 fm    8.88338 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm     13.954 m    Absorber  Transportation
+  175          0 fm    8.98549 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    14.1144 m       World  Transportation
+  176          0 fm    8.98549 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    14.1144 m    Absorber  Transportation
+  177          0 fm    9.08759 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    14.2748 m       World  Transportation
+  178          0 fm    9.08759 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    14.2748 m    Absorber  Transportation
+  179          0 fm     9.1897 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    14.4352 m       World  Transportation
+  180          0 fm     9.1897 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    14.4352 m    Absorber  Transportation
+  181          0 fm    9.29181 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    14.5955 m       World  Transportation
+  182          0 fm    9.29181 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    14.5955 m    Absorber  Transportation
+  183          0 fm    9.39392 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    14.7559 m       World  Transportation
+  184          0 fm    9.39392 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    14.7559 m    Absorber  Transportation
+  185          0 fm    9.49602 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    14.9163 m       World  Transportation
+  186          0 fm    9.49602 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    14.9163 m    Absorber  Transportation
+  187          0 fm    9.59813 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    15.0767 m       World  Transportation
+  188          0 fm    9.59813 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    15.0767 m    Absorber  Transportation
+  189          0 fm    9.70024 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    15.2371 m       World  Transportation
+  190          0 fm    9.70024 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    15.2371 m    Absorber  Transportation
+  191          0 fm    9.80235 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    15.3975 m       World  Transportation
+  192          0 fm    9.80235 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    15.3975 m    Absorber  Transportation
+  193          0 fm    9.90446 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    15.5579 m       World  Transportation
+  194          0 fm    9.90446 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    15.5579 m    Absorber  Transportation
+  195          0 fm    10.0066 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    15.7183 m       World  Transportation
+  196          0 fm    10.0066 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    15.7183 m    Absorber  Transportation
+  197          0 fm    10.1087 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    15.8787 m       World  Transportation
+  198          0 fm    10.1087 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    15.8787 m    Absorber  Transportation
+  199          0 fm    10.2108 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    16.0391 m       World  Transportation
+  200          0 fm    10.2108 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    16.0391 m    Absorber  Transportation
+  201          0 fm    10.3129 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    16.1995 m       World  Transportation
+  202          0 fm    10.3129 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    16.1995 m    Absorber  Transportation
+  203          0 fm     10.415 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    16.3598 m       World  Transportation
+  204          0 fm     10.415 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    16.3598 m    Absorber  Transportation
+  205          0 fm    10.5171 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    16.5202 m       World  Transportation
+  206          0 fm    10.5171 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    16.5202 m    Absorber  Transportation
+  207          0 fm    10.6192 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    16.6806 m       World  Transportation
+  208          0 fm    10.6192 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    16.6806 m    Absorber  Transportation
+  209          0 fm    10.7213 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm     16.841 m       World  Transportation
+  210          0 fm    10.7213 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm     16.841 m    Absorber  Transportation
+  211          0 fm    10.8234 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    17.0014 m       World  Transportation
+  212          0 fm    10.8234 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    17.0014 m    Absorber  Transportation
+  213          0 fm    10.9255 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    17.1618 m       World  Transportation
+  214          0 fm    10.9255 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    17.1618 m    Absorber  Transportation
+  215          0 fm    11.0276 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    17.3222 m       World  Transportation
+  216          0 fm    11.0276 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    17.3222 m    Absorber  Transportation
+  217          0 fm    11.1297 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    17.4826 m       World  Transportation
+  218          0 fm    11.1297 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    17.4826 m    Absorber  Transportation
+  219          0 fm    11.2319 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm     17.643 m       World  Transportation
+  220          0 fm    11.2319 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm     17.643 m    Absorber  Transportation
+  221          0 fm     11.334 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    17.8034 m       World  Transportation
+  222          0 fm     11.334 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    17.8034 m    Absorber  Transportation
+  223          0 fm    11.4361 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    17.9638 m       World  Transportation
+  224          0 fm    11.4361 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    17.9638 m    Absorber  Transportation
+  225          0 fm    11.5382 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    18.1241 m       World  Transportation
+  226          0 fm    11.5382 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    18.1241 m    Absorber  Transportation
+  227          0 fm    11.6403 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    18.2845 m       World  Transportation
+  228          0 fm    11.6403 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    18.2845 m    Absorber  Transportation
+  229          0 fm    11.7424 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    18.4449 m       World  Transportation
+  230          0 fm    11.7424 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    18.4449 m    Absorber  Transportation
+  231          0 fm    11.8445 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    18.6053 m       World  Transportation
+  232          0 fm    11.8445 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    18.6053 m    Absorber  Transportation
+  233          0 fm    11.9466 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    18.7657 m       World  Transportation
+  234          0 fm    11.9466 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    18.7657 m    Absorber  Transportation
+  235          0 fm    12.0487 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    18.9261 m       World  Transportation
+  236          0 fm    12.0487 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    18.9261 m    Absorber  Transportation
+  237          0 fm    12.1508 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    19.0865 m       World  Transportation
+  238          0 fm    12.1508 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    19.0865 m    Absorber  Transportation
+  239          0 fm    12.2529 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    19.2469 m       World  Transportation
+  240          0 fm    12.2529 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    19.2469 m    Absorber  Transportation
+  241          0 fm     12.355 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    19.4073 m       World  Transportation
+  242          0 fm     12.355 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    19.4073 m    Absorber  Transportation
+  243          0 fm    12.4571 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    19.5677 m       World  Transportation
+  244          0 fm    12.4571 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    19.5677 m    Absorber  Transportation
+  245          0 fm    12.5593 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm     19.728 m       World  Transportation
+  246          0 fm    12.5593 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm     19.728 m    Absorber  Transportation
+  247          0 fm    12.6614 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    19.8884 m       World  Transportation
+  248          0 fm    12.6614 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    19.8884 m    Absorber  Transportation
+  249          0 fm    12.7635 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    20.0488 m       World  Transportation
+  250          0 fm    12.7635 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    20.0488 m    Absorber  Transportation
+  251          0 fm    12.8656 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    20.2092 m       World  Transportation
+  252          0 fm    12.8656 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    20.2092 m    Absorber  Transportation
+  253          0 fm    12.9677 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    20.3696 m       World  Transportation
+  254          0 fm    12.9677 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    20.3696 m    Absorber  Transportation
+  255          0 fm    13.0698 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm      20.53 m       World  Transportation
+  256          0 fm    13.0698 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm      20.53 m    Absorber  Transportation
+  257          0 fm    13.1719 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    20.6904 m       World  Transportation
+  258          0 fm    13.1719 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    20.6904 m    Absorber  Transportation
+  259          0 fm     13.274 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    20.8508 m       World  Transportation
+  260          0 fm     13.274 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    20.8508 m    Absorber  Transportation
+  261          0 fm    13.3761 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    21.0112 m       World  Transportation
+  262          0 fm    13.3761 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    21.0112 m    Absorber  Transportation
+  263          0 fm    13.4782 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    21.1716 m       World  Transportation
+  264          0 fm    13.4782 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    21.1716 m    Absorber  Transportation
+  265          0 fm    13.5803 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm     21.332 m       World  Transportation
+  266          0 fm    13.5803 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm     21.332 m    Absorber  Transportation
+  267          0 fm    13.6824 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    21.4923 m       World  Transportation
+  268          0 fm    13.6824 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    21.4923 m    Absorber  Transportation
+  269          0 fm    13.7846 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    21.6527 m       World  Transportation
+  270          0 fm    13.7846 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    21.6527 m    Absorber  Transportation
+  271          0 fm    13.8867 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    21.8131 m       World  Transportation
+  272          0 fm    13.8867 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    21.8131 m    Absorber  Transportation
+  273          0 fm    13.9888 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    21.9735 m       World  Transportation
+  274          0 fm    13.9888 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    21.9735 m    Absorber  Transportation
+  275          0 fm    14.0909 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    22.1339 m       World  Transportation
+  276          0 fm    14.0909 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    22.1339 m    Absorber  Transportation
+  277          0 fm     14.193 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    22.2943 m       World  Transportation
+  278          0 fm     14.193 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    22.2943 m    Absorber  Transportation
+  279          0 fm    14.2951 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    22.4547 m       World  Transportation
+  280          0 fm    14.2951 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    22.4547 m    Absorber  Transportation
+  281          0 fm    14.3972 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    22.6151 m       World  Transportation
+  282          0 fm    14.3972 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    22.6151 m    Absorber  Transportation
+  283          0 fm    14.4993 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    22.7755 m       World  Transportation
+  284          0 fm    14.4993 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    22.7755 m    Absorber  Transportation
+  285          0 fm    14.6014 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    22.9359 m       World  Transportation
+  286          0 fm    14.6014 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    22.9359 m    Absorber  Transportation
+  287          0 fm    14.7035 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    23.0963 m       World  Transportation
+  288          0 fm    14.7035 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    23.0963 m    Absorber  Transportation
+  289          0 fm    14.8056 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    23.2566 m       World  Transportation
+  290          0 fm    14.8056 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    23.2566 m    Absorber  Transportation
+  291          0 fm    14.9077 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm     23.417 m       World  Transportation
+  292          0 fm    14.9077 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm     23.417 m    Absorber  Transportation
+  293          0 fm    15.0098 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    23.5774 m       World  Transportation
+  294          0 fm    15.0098 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    23.5774 m    Absorber  Transportation
+  295          0 fm     15.112 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    23.7378 m       World  Transportation
+  296          0 fm     15.112 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    23.7378 m    Absorber  Transportation
+  297          0 fm    15.2141 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    23.8982 m       World  Transportation
+  298          0 fm    15.2141 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    23.8982 m    Absorber  Transportation
+  299          0 fm    15.3162 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    24.0586 m       World  Transportation
+  300          0 fm    15.3162 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    24.0586 m    Absorber  Transportation
+  301          0 fm    15.4183 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm     24.219 m       World  Transportation
+  302          0 fm    15.4183 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm     24.219 m    Absorber  Transportation
+  303          0 fm    15.5204 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    24.3794 m       World  Transportation
+  304          0 fm    15.5204 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    24.3794 m    Absorber  Transportation
+  305          0 fm    15.6225 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    24.5398 m       World  Transportation
+  306          0 fm    15.6225 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    24.5398 m    Absorber  Transportation
+  307          0 fm    15.7246 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    24.7002 m       World  Transportation
+  308          0 fm    15.7246 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    24.7002 m    Absorber  Transportation
+  309          0 fm    15.8267 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    24.8605 m       World  Transportation
+  310          0 fm    15.8267 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    24.8605 m    Absorber  Transportation
+  311          0 fm    15.9288 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    25.0209 m       World  Transportation
+  312          0 fm    15.9288 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    25.0209 m    Absorber  Transportation
+  313          0 fm    16.0309 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    25.1813 m       World  Transportation
+  314          0 fm    16.0309 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    25.1813 m    Absorber  Transportation
+  315          0 fm     16.133 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    25.3417 m       World  Transportation
+  316          0 fm     16.133 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    25.3417 m    Absorber  Transportation
+  317          0 fm    16.2351 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    25.5021 m       World  Transportation
+  318          0 fm    16.2351 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    25.5021 m    Absorber  Transportation
+  319          0 fm    16.3372 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    25.6625 m       World  Transportation
+  320          0 fm    16.3372 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    25.6625 m    Absorber  Transportation
+  321          0 fm    16.4394 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    25.8229 m       World  Transportation
+  322          0 fm    16.4394 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    25.8229 m    Absorber  Transportation
+  323          0 fm    16.5415 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    25.9833 m       World  Transportation
+  324          0 fm    16.5415 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    25.9833 m    Absorber  Transportation
+  325          0 fm    16.6436 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    26.1437 m       World  Transportation
+  326          0 fm    16.6436 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    26.1437 m    Absorber  Transportation
+  327          0 fm    16.7457 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    26.3041 m       World  Transportation
+  328          0 fm    16.7457 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    26.3041 m    Absorber  Transportation
+  329          0 fm    16.8478 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    26.4645 m       World  Transportation
+  330          0 fm    16.8478 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    26.4645 m    Absorber  Transportation
+  331          0 fm    16.9499 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    26.6248 m       World  Transportation
+  332          0 fm    16.9499 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    26.6248 m    Absorber  Transportation
+  333          0 fm     17.052 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    26.7852 m       World  Transportation
+  334          0 fm     17.052 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    26.7852 m    Absorber  Transportation
+  335          0 fm    17.1541 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    26.9456 m       World  Transportation
+  336          0 fm    17.1541 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    26.9456 m    Absorber  Transportation
+  337          0 fm    17.2562 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm     27.106 m       World  Transportation
+  338          0 fm    17.2562 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm     27.106 m    Absorber  Transportation
+  339          0 fm    17.3583 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    27.2664 m       World  Transportation
+  340          0 fm    17.3583 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    27.2664 m    Absorber  Transportation
+  341          0 fm    17.4604 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    27.4268 m       World  Transportation
+  342          0 fm    17.4604 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    27.4268 m    Absorber  Transportation
+  343          0 fm    17.5625 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    27.5872 m       World  Transportation
+  344          0 fm    17.5625 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    27.5872 m    Absorber  Transportation
+  345          0 fm    17.6646 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    27.7476 m       World  Transportation
+  346          0 fm    17.6646 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    27.7476 m    Absorber  Transportation
+  347          0 fm    17.7668 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm     27.908 m       World  Transportation
+  348          0 fm    17.7668 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm     27.908 m    Absorber  Transportation
+  349          0 fm    17.8689 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    28.0684 m       World  Transportation
+  350          0 fm    17.8689 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    28.0684 m    Absorber  Transportation
+  351          0 fm     17.971 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    28.2288 m       World  Transportation
+  352          0 fm     17.971 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    28.2288 m    Absorber  Transportation
+  353          0 fm    18.0731 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    28.3891 m       World  Transportation
+  354          0 fm    18.0731 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    28.3891 m    Absorber  Transportation
+  355          0 fm    18.1752 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    28.5495 m       World  Transportation
+  356          0 fm    18.1752 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    28.5495 m    Absorber  Transportation
+  357          0 fm    18.2773 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    28.7099 m       World  Transportation
+  358          0 fm    18.2773 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    28.7099 m    Absorber  Transportation
+  359          0 fm    18.3794 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    28.8703 m       World  Transportation
+  360          0 fm    18.3794 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    28.8703 m    Absorber  Transportation
+  361          0 fm    18.4815 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    29.0307 m       World  Transportation
+  362          0 fm    18.4815 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    29.0307 m    Absorber  Transportation
+  363          0 fm    18.5836 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    29.1911 m       World  Transportation
+  364          0 fm    18.5836 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    29.1911 m    Absorber  Transportation
+  365          0 fm    18.6857 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    29.3515 m       World  Transportation
+  366          0 fm    18.6857 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    29.3515 m    Absorber  Transportation
+  367          0 fm    18.7878 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    29.5119 m       World  Transportation
+  368          0 fm    18.7878 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    29.5119 m    Absorber  Transportation
+  369          0 fm    18.8899 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    29.6723 m       World  Transportation
+  370          0 fm    18.8899 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    29.6723 m    Absorber  Transportation
+  371          0 fm     18.992 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    29.8327 m       World  Transportation
+  372          0 fm     18.992 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    29.8327 m    Absorber  Transportation
+  373          0 fm    19.0942 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm     29.993 m       World  Transportation
+  374          0 fm    19.0942 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm     29.993 m    Absorber  Transportation
+  375          0 fm    19.1963 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    30.1534 m       World  Transportation
+  376          0 fm    19.1963 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    30.1534 m    Absorber  Transportation
+  377          0 fm    19.2984 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    30.3138 m       World  Transportation
+  378          0 fm    19.2984 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    30.3138 m    Absorber  Transportation
+  379          0 fm    19.4005 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    30.4742 m       World  Transportation
+  380          0 fm    19.4005 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    30.4742 m    Absorber  Transportation
+  381          0 fm    19.5026 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    30.6346 m       World  Transportation
+  382          0 fm    19.5026 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    30.6346 m    Absorber  Transportation
+  383          0 fm    19.6047 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm     30.795 m       World  Transportation
+  384          0 fm    19.6047 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm     30.795 m    Absorber  Transportation
+  385          0 fm    19.7068 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    30.9554 m       World  Transportation
+  386          0 fm    19.7068 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    30.9554 m    Absorber  Transportation
+  387          0 fm    19.8089 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    31.1158 m       World  Transportation
+  388          0 fm    19.8089 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    31.1158 m    Absorber  Transportation
+  389          0 fm     19.911 m     21.9895 m           0          0         -1       50 MeV0.000318172 eV    16.0391 cm    31.2762 m       World  Transportation
+  390          0 fm     19.911 m     21.9895 m           0          0         -1       50 MeV     0 eV          0 fm    31.2762 m    Absorber  Transportation
+  391          0 fm     20.012 m          22 m           0          0         -1       50 MeV0.000339151 eV    17.0966 cm    31.4471 m  OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.47s Real=0.51s Sys=0.03s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 G4ClassicalRK4 (default) is called
 The minimal step is equal to 0.1 mm

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V07-01-05    (16-December-2005)
+ Geant4 version Name: global-V08-00-01    (10-February-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -211,13 +211,13 @@ msc:  Model variant of multiple scattering for pi-
 
 Region <DefaultRegionForTheWorld> -- appears in <Absorber> world volume
  Materials : G4_WATER 
- Production cuts :  gamma 1 mum    e- 1 mum    e+ 1 mum
+ Production cuts :  gamma 1 um     e- 1 um     e+ 1 um 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_WATER
- Range cuts        :  gamma 1 mum    e- 1 mum    e+ 1 mum
+ Range cuts        :  gamma 1 um     e- 1 um     e+ 1 um 
  Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -259,7 +259,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1361.35s Real=1789.59s Sys=134.53s
+  User=1136.5s Real=1331.61s Sys=95.12s
 
  ======================== run summary ======================
 
@@ -267,18 +267,18 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 3.937 MeV +- 227.298 keV
+ Total Energy deposited        = 3.940 MeV +- 218.403 keV
 
- Track length of primary track = 2.014 cm  +- 2.801 mm 
+ Track length of primary track = 2.021 cm  +- 2.749 mm 
  Range from EmCalculator       = 3.091 cm  (from restricted dE/dx)
 
- Projected range               = 1.223 cm  +- 4.343 mm 
+ Projected range               = 1.310 cm  +- 4.106 mm 
 
- Nb of steps of primary track  = 210.08 +- 26.80	 Step size= 95.908 mum +- 7.025 mum
+ Nb of steps of primary track  = 198.75 +- 26.29	 Step size= 101.882 um  +- 7.730 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 451848601, 279672341
+ Current couple of seeds = 714114012, 642340890
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

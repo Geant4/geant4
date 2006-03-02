@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V07-01-05    (16-December-2005)
+ Geant4 version Name: global-V08-00-01    (10-February-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -191,61 +191,6 @@ plate plasma energy = 24.5068 eV
 gas plasma energy = 0.731967 eV
 Regular transparent X-ray TR  radiator EM process is called
 
-Lorentz Factor	XTR photon number
-
-107.6	0.0007452
-123.4	0.001275
-141.5	0.001982
-162.3	0.003046
-186.2	0.005026
-213.7	0.007482
-245.2	0.01052
-281.3	0.0164
-322.9	0.02706
-370.5	0.04102
-425.3	0.05536
-488.2	0.06845
-560.3	0.08596
-643.2	0.1142
-738.3	0.162
-847.6	0.2389
-973	0.3585
-1117	0.5073
-1282	0.6604
-1472	0.8048
-1690	1.179
-1940	1.606
-2228	1.988
-2558	2.304
-2936	2.557
-3371	2.755
-3871	2.907
-4444	3.022
-5102	3.11
-5858	3.176
-6726	3.227
-7722	3.265
-8866	3.294
-1.018e+04	3.316
-1.169e+04	3.333
-1.342e+04	3.345
-1.541e+04	3.355
-1.769e+04	3.362
-2.031e+04	3.368
-2.332e+04	3.372
-2.677e+04	3.375
-3.074e+04	3.378
-3.529e+04	3.379
-4.052e+04	3.381
-4.652e+04	3.382
-5.342e+04	3.383
-6.133e+04	3.383
-7.042e+04	3.384
-8.085e+04	3.384
-9.283e+04	3.384
-
-total time for build X-ray TR energy loss tables = 0.85 s
-
 phot:  Total cross sections from Sandia parametrisation. 
 Em10PhysicsList::SetCuts:CutLength for e-, e+ and gamma is: 1 mm 
 Radiator gamma cut    = 1 mm
@@ -256,15 +201,6 @@ Detector gamma cut    = 1 mm
 Detector electron cut = 1 mm
 Detector positron cut = 1 mm
 Detector cuts are set
-PAIModel DeltaCutInKineticEnergyNow = 1.50609 keV
-PAIModel DeltaCutInKineticEnergyNow = 1.50609 keV
-PAIModel DeltaCutInKineticEnergyNow = 1.50609 keV
-PAIModel DeltaCutInKineticEnergyNow = 1.50609 keV
-PAIModel DeltaCutInKineticEnergyNow = 1.50609 keV
-PAIModel DeltaCutInKineticEnergyNow = 1.50609 keV
-PAIModel DeltaCutInKineticEnergyNow = 1.50609 keV
-PAIModel DeltaCutInKineticEnergyNow = 1.50609 keV
-PAIModel DeltaCutInKineticEnergyNow = 1.50609 keV
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -290,6 +226,10 @@ eBrem:   tables are built for  e-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+
+
+total time for build X-ray TR energy loss tables = 0.84 s
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -410,41 +350,32 @@ WARNING: Scene "refresh" not found.
 Start Run processing.
 
 ---> Begin of Event: 0
-Tkin of secondary e- <= 0.
-G4PAIModel::SampleSecondary::deltaTkin = 0
-Set G4PAIModel::SampleSecondary::deltaTkin = 1e-05
-Tkin of secondary e- <= 0.
-G4PAIModel::SampleSecondary::deltaTkin = 0
-Set G4PAIModel::SampleSecondary::deltaTkin = 1e-05
-Tkin of secondary e- <= 0.
-G4PAIModel::SampleSecondary::deltaTkin = 0
-Set G4PAIModel::SampleSecondary::deltaTkin = 1e-05
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=188.68s Real=240.28s Sys=51.55s
+  User=193.74s Real=244.78s Sys=50.83s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=40.6977 +- 0.0916085  mm  
+    mean charged track length   in absorber=40.6357 +- 0.113934  mm  
 
-            mean energy deposit in absorber=0.0536852 +- 0.000713399  MeV 
+            mean energy deposit in absorber=0.0538843 +- 0.000733693  MeV 
 
- mean number of steps in absorber (charged) =19.767 +- 0.458383      
- mean number of steps in absorber (neutral) =3.622 +- 0.0603748      
+ mean number of steps in absorber (charged) =18.692 +- 0.437      
+ mean number of steps in absorber (neutral) =3.571 +- 0.0592871      
 
-   mean number of charged secondaries = 5.471 +- 0.0923859
+   mean number of charged secondaries = 5.502 +- 0.0916515
 
-   mean number of neutral secondaries = 0.054 +- 0.00714731
+   mean number of neutral secondaries = 0.06 +- 0.00777174
 
-   mean number of e-s =5.471  and e+s =0
+   mean number of e-s =5.502  and e+s =0
 
-(number) transmission coeff=0.563  reflection coeff=0.055
+(number) transmission coeff=0.543  reflection coeff=0.062
 
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1131156326, 996018461
+ Current couple of seeds = 879812446, 1108008900
 ----------------------------------------
 
 ========= Table of registered couples ==============================
