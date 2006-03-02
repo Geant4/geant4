@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V07-01-05    (16-December-2005)
+ Geant4 version Name: global-V08-00-01    (10-February-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -460,4 +460,4 @@ muPairProd:   tables are built for  mu-
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
- G4NuclearLevelManager: nuclide (91,227) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (89,222) does not have a gamma levels file

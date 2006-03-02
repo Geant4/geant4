@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V07-01-05    (16-December-2005)
+ Geant4 version Name: global-V08-00-01    (10-February-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -128,7 +128,6 @@ muPairProd:   tables are built for  mu-
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
- G4NuclearLevelManager: nuclide (77,197) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (79,201) does not have a gamma levels file
 #
 # proton at 400 GeV in Pb
@@ -139,7 +138,6 @@ msc:  Model variant of multiple scattering for pi-
 SimpleBox is now made of Pb
 /run/beamOn 100
  G4NuclearLevelManager: nuclide (79,202) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (70,178) does not have a gamma levels file
 #
 # proton at 1 TeV in Pb
 #
@@ -148,7 +146,6 @@ SimpleBox is now made of Pb
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
- G4NuclearLevelManager: nuclide (76,196) does not have a gamma levels file
 #
 # proton at 100 GeV in Al
 #
@@ -259,6 +256,7 @@ muPairProd:   tables are built for  mu-
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+ G4NuclearLevelManager: nuclide (8,14) does not have a gamma levels file
 #
 # proton at 400 GeV in Al
 #
@@ -275,7 +273,6 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
- G4NuclearLevelManager: nuclide (2,4) does not have a gamma levels file
 #
 # proton at 100 GeV in Air
 #
