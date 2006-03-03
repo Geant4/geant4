@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.9 2006-02-28 09:43:38 vnivanch Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.10 2006-03-03 16:12:47 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -135,7 +135,8 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(const G4String& name,
   for (G4int i=0; i<nMaterials; i++) {
     if (name == names[i]) {
       G4int nc = components[i];
-      mat = new G4Material(names[i],densities[i],nc,states[i],temperatures[i], presures[i]);
+      mat = new G4Material(names[i],densities[i],nc,
+                                    states[i],temperatures[i], presures[i]);
 
       if (verbose>1) G4cout << "New material nComponents= " << nc << G4endl;
       if (nc > 0) {
@@ -263,7 +264,9 @@ G4Material* G4NistMaterialBuilder::ConstructNewGasMaterial(
   G4double dens = densities[idx]*pres*STP_Temperature/(temp*STP_Pressure);
   G4Material* mat = new G4Material(name,dens,nc,kStateGas,temp, pres);
 
-  if (verbose>1) G4cout << "New material <" << name << ">   nComponents= " << nc << G4endl;
+  if (verbose>1) G4cout << "New material <" << name 
+                        << ">   nComponents= " << nc << G4endl;
+			
   if (nc > 0) {
     G4int k = indexes[idx];
     for (G4int j=0; j<nc; j++) {
@@ -275,7 +278,8 @@ G4Material* G4NistMaterialBuilder::ConstructNewGasMaterial(
 
   if (chFormulas[idx] != "") {
     mat->SetChemicalFormula(chFormulas[idx]);
-    G4double exc = mat->GetIonisation()->FindMeanExcitationEnergy(chFormulas[idx]);
+    G4double exc = mat->GetIonisation()
+                                   ->FindMeanExcitationEnergy(chFormulas[idx]);
     mat->GetIonisation()->SetMeanExcitationEnergy(exc);
   }
 
@@ -313,38 +317,38 @@ void G4NistMaterialBuilder::ListMaterials(const G4String& list)
 
 void G4NistMaterialBuilder::ListNistSimpleMaterials()
 {
-  G4cout << "========================================================" << G4endl;
+  G4cout << "=======================================================" << G4endl;
   G4cout << "###   Simple Materials from the NIST Data Base   ###" << G4endl;
-  G4cout << "========================================================" << G4endl;
-  G4cout << " Z Name  ChFormula        density(g/cm^3)  I(eV)        " << G4endl;
-  G4cout << "========================================================" << G4endl;
+  G4cout << "=======================================================" << G4endl;
+  G4cout << " Z Name  ChFormula        density(g/cm^3)  I(eV)       " << G4endl;
+  G4cout << "=======================================================" << G4endl;
   for (G4int i=0; i<nElementary; i++) {DumpElm(i);}
-  G4cout << "========================================================" << G4endl;
+  G4cout << "=======================================================" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4NistMaterialBuilder::ListNistCompoundMaterials()
 {
-  G4cout << "###    Compound Materials from the NIST Data Base    ###" << G4endl;
-  G4cout << "========================================================" << G4endl;
-  G4cout << " Ncomp Name  ChFormula        density(g/cm^3)  I(eV)    " << G4endl;
-  G4cout << "========================================================" << G4endl;
+  G4cout << "###    Compound Materials from the NIST Data Base    ##" << G4endl;
+  G4cout << "=======================================================" << G4endl;
+  G4cout << " Ncomp Name  ChFormula        density(g/cm^3)  I(eV)   " << G4endl;
+  G4cout << "=======================================================" << G4endl;
   for (G4int i=nElementary; i<nNIST; i++) {DumpMix(i);}
-  G4cout << "========================================================" << G4endl;
+  G4cout << "=======================================================" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4NistMaterialBuilder::ListHepMaterials()
 {
-  G4cout << "========================================================" << G4endl;
-  G4cout << "###           HEP & Nuclear Materials                ###" << G4endl;
-  G4cout << "========================================================" << G4endl;
-  G4cout << " Ncomp Name  ChFormula        density(g/cm^3)  I(eV)    " << G4endl;
-  G4cout << "========================================================" << G4endl;
+  G4cout << "=======================================================" << G4endl;
+  G4cout << "###           HEP & Nuclear Materials                ##" << G4endl;
+  G4cout << "=======================================================" << G4endl;
+  G4cout << " Ncomp Name  ChFormula        density(g/cm^3)  I(eV)   " << G4endl;
+  G4cout << "=======================================================" << G4endl;
   for (G4int i=nNIST; i<nMaterials; i++) {DumpMix(i);}
-  G4cout << "========================================================" << G4endl;
+  G4cout << "=======================================================" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -427,7 +431,7 @@ void G4NistMaterialBuilder::AddChemicalFormula(const G4String& nameMat,
 {
   if (nCurrent != 0) {
     G4cout
-    << "WARNING: G4NistMaterialBuilder::AddChemicalFormula problem: previous mixture "
+    << "WARNING: G4NistMaterialBuilder::AddChemicalFormula : previous mixture "
     << nMaterials << " " << names[nMaterials] << " is not yet complete!"
     << G4endl;
   }
@@ -443,14 +447,15 @@ void G4NistMaterialBuilder::AddChemicalFormula(const G4String& nameMat,
       }
     }
   }
-  G4cout << "WARNING: G4NistMaterialBuilder::AddChemicalFormula problem: there is no "
+  G4cout << "WARNING: G4NistMaterialBuilder::AddChemicalFormula : there is no "
     << nameMat << " in the list of materials; ch=" << ch
     << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistMaterialBuilder::AddGas(const G4String& nameMat, G4double t, G4double p)
+void G4NistMaterialBuilder::AddGas(const G4String& nameMat, G4double t,
+                                                            G4double p)
 {
   if (nCurrent != 0) {
     G4cout
