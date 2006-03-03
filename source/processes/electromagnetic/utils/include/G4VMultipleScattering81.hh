@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering81.hh,v 1.1 2006-03-01 11:54:59 vnivanch Exp $
+// $Id: G4VMultipleScattering81.hh,v 1.2 2006-03-03 14:11:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -56,6 +56,7 @@
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4VEmModel.hh"
+#include "G4VParticleChange.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -65,7 +66,8 @@ class G4VMultipleScattering81 : public G4VMultipleScattering
 public:
 
   G4VMultipleScattering81(const G4String& name = "msc81",
-			  G4ProcessType type = fElectromagnetic) {};
+			  G4ProcessType type = fElectromagnetic):
+    G4VMultipleScattering(name) {};
 
   virtual ~G4VMultipleScattering81() {};
 
@@ -80,12 +82,12 @@ public:
   //------------------------------------------------------------------------
 
   // This method is used for tracking, it returns step limit
-  G4double GetContinuousStepLimit(const G4Track& track,
+  virtual G4double GetContinuousStepLimit(const G4Track& track,
                                         G4double previousStepSize,
                                         G4double currentMinimalStep,
                                         G4double& currentSafety);
 
-  G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
+  virtual G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
 
 };
 
@@ -109,7 +111,7 @@ inline G4double G4VMultipleScattering81::GetContinuousStepLimit(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VParticleChange* G4VMultipleScattering::AlongStepDoIt(
+inline G4VParticleChange* G4VMultipleScattering81::AlongStepDoIt(
                                                         const G4Track&,
                                                         const G4Step& step)
 {

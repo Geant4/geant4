@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.32 2006-03-01 11:54:43 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.33 2006-03-03 14:11:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -126,7 +126,7 @@ public:
   // Generic methods common to all models
   //------------------------------------------------------------------------
 
-  G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
+  virtual G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
 
   G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
@@ -175,7 +175,7 @@ public:
   void AddEmModel(G4int, G4VEmModel*, const G4Region* region = 0);
 
   // This method does not used for tracking, it is intended only for tests
-  G4double ContinuousStepLimit(const G4Track& track,
+  virtual G4double ContinuousStepLimit(const G4Track& track,
                                      G4double previousStepSize,
                                      G4double currentMinimalStep,
                                      G4double& currentSafety);
@@ -209,7 +209,7 @@ protected:
                                         G4double currentMinimalStep,
                                         G4double& currentSafety);
 
-  void SelectModel(G4double& kinEnergy);
+  G4VEmModel* SelectModel(G4double kinEnergy);
   // Select concrete model
 
   size_t CurrentMaterialCutsCoupleIndex() const {return currentMaterialIndex;};
@@ -231,15 +231,19 @@ private:
 
 protected:
 
+  G4GPILSelection             valueGPILSelectionMSC;
   G4ParticleChangeForMSC      fParticleChange;
+  G4PhysicsTable*             theLambdaTable;
+  G4VEmModel*                 currentModel;
+  G4double                    truePathLength;
+  G4double                    geomPathLength;
+  G4double                    trueStepLength;
 
 private:
 
   G4EmModelManager*           modelManager;
-  G4VEmModel*                 currentModel;
 
   // tables and vectors
-  G4PhysicsTable*             theLambdaTable;
 
   // cash
   const G4ParticleDefinition* firstParticle;
@@ -252,13 +256,9 @@ private:
   G4double                    minKinEnergy;
   G4double                    maxKinEnergy;
 
-  G4double                    trueStepLength;
-  G4double                    truePathLength;
-  G4double                    geomPathLength;
   G4double                    lambda0;
   G4double                    currentRange;
 
-  G4GPILSelection             valueGPILSelectionMSC;
   G4bool                      latDisplasment;
   G4bool                      buildLambdaTable;
 };
@@ -312,7 +312,7 @@ inline G4double G4VMultipleScattering::GetContinuousStepLimit(
 {
   DefineMaterial(track.GetMaterialCutsCouple());
   G4double e = track.GetKineticEnergy();
-  SelectModel(e);
+  currentModel = SelectModel(e);
   const G4ParticleDefinition* p = track.GetDefinition();
   lambda0 = GetLambda(p, e);
   currentRange = 
@@ -386,9 +386,9 @@ inline G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& tra
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VMultipleScattering::SelectModel(G4double& kinEnergy)
+inline G4VEmModel* G4VMultipleScattering::SelectModel(G4double kinEnergy)
 {
-  currentModel = modelManager->SelectModel(kinEnergy, currentMaterialIndex);
+  return modelManager->SelectModel(kinEnergy, currentMaterialIndex);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

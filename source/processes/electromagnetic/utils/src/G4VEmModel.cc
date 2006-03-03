@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.4 2006-02-09 12:52:06 maire Exp $
+// $Id: G4VEmModel.cc,v 1.5 2006-03-03 14:11:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,16 +68,16 @@ G4double G4VEmModel::CrossSectionPerVolume(const G4Material* material,
 					         G4double emin,
                                                  G4double emax)
 {
- G4double cross = 0.0;
- const G4ElementVector* theElementVector = material->GetElementVector();
- const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
- size_t nelm = material->GetNumberOfElements();
- for (size_t i=0; i<nelm; i++) {
-   const G4Element* elm = (*theElementVector)[i];
-   cross += theAtomNumDensityVector[i]*
-          ComputeCrossSectionPerAtom(p,ekin,elm->GetZ(),elm->GetN(),emin,emax);
-   xsec[i] = cross;
- }
+  G4double cross = 0.0;
+  const G4ElementVector* theElementVector = material->GetElementVector();
+  const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
+  size_t nelm = material->GetNumberOfElements();
+  for (size_t i=0; i<nelm; i++) {
+    const G4Element* elm = (*theElementVector)[i];
+    cross += theAtomNumDensityVector[i]*
+      ComputeCrossSectionPerAtom(p,ekin,elm->GetZ(),elm->GetN(),emin,emax);
+    xsec[i] = cross;
+  }
   return cross;
 }
 
@@ -89,10 +89,10 @@ G4double G4VEmModel::ComputeMeanFreePath(const G4ParticleDefinition* p,
 					       G4double emin,
                                                G4double emax)
 {
- G4double mfp = DBL_MAX;
- G4double cross = CrossSectionPerVolume(material,p,ekin,emin,emax);
- if (cross >0.) mfp = 1./cross;
- return mfp;
+  G4double mfp = DBL_MAX;
+  G4double cross = CrossSectionPerVolume(material,p,ekin,emin,emax);
+  if (cross >0.) mfp = 1./cross;
+  return mfp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

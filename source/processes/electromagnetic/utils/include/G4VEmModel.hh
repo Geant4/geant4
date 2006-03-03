@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.37 2006-03-01 11:54:43 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.38 2006-03-03 14:11:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -122,10 +122,10 @@ public:
 				G4double maxEnergy = DBL_MAX);
 
   virtual G4double ComputeDEDXPerVolume(
-                               const G4Material*,
-			       const G4ParticleDefinition*,
-                                     G4double kineticEnergy,
-                                     G4double cutEnergy = DBL_MAX);
+                                const G4Material*,
+			        const G4ParticleDefinition*,
+			              G4double kineticEnergy,
+			              G4double cutEnergy = DBL_MAX);
 
 
   virtual G4double ComputeCrossSectionPerAtom(
@@ -144,27 +144,28 @@ public:
                                       G4double maxEnergy = DBL_MAX);
 				     
   virtual G4double CrossSectionPerVolume(
-                               const G4Material*,
-			       const G4ParticleDefinition*,
-                                     G4double kineticEnergy,
-			             G4double cutEnergy = 0.0,
-                                     G4double maxEnergy = DBL_MAX);
+                                const G4Material*,
+			        const G4ParticleDefinition*,
+                                      G4double kineticEnergy,
+			              G4double cutEnergy = 0.0,
+                                      G4double maxEnergy = DBL_MAX);
 				     
 
 				      
   // Methods for msc simulation
   virtual G4double GeomPathLength(G4PhysicsTable* theLambdaTable,
-                            const G4MaterialCutsCouple*,
-		            const G4ParticleDefinition*,
-		                  G4double& kinEnergy,
-			          G4double  lambda,
-			          G4double  range,
-    			          G4double  truePathLength);
+                                const G4MaterialCutsCouple*,
+		                const G4ParticleDefinition*,
+		                      G4double& kinEnergy,
+			              G4double  lambda,
+			              G4double  range,
+    			              G4double  truePathLength);
 
-  virtual G4double ComputeTruePathLengthLimit(G4Track& track, 
-                                              G4PhysicsTable* theLambdaTable, 
-                                              G4double currentMinimalStep, 
-                                              G4double currentSafety);
+  virtual G4double ComputeTruePathLengthLimit(
+                                const G4Track& track, 
+                                      G4PhysicsTable* theLambdaTable, 
+                                      G4double currentMinimalStep, 
+                                      G4double currentSafety);
 
   virtual G4double ComputeGeomPathLength(G4double truePathLength);
 
@@ -175,7 +176,7 @@ public:
 protected:
 
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-				      G4double kineticEnergy);
+				            G4double kineticEnergy);
 
   //------------------------------------------------------------------------
   // Generic methods common to all models
@@ -313,9 +314,9 @@ inline G4double G4VEmModel::CrossSection(const G4MaterialCutsCouple* c,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4VEmModel::ComputeCrossSectionPerAtom(
-                                     const G4ParticleDefinition*,
-                                    G4double, G4double, G4double,
-				    G4double, G4double)
+                                         const G4ParticleDefinition*,
+                                               G4double, G4double, G4double,
+		           		       G4double, G4double)
 {
   return 0.0;
 }
@@ -323,11 +324,11 @@ inline G4double G4VEmModel::ComputeCrossSectionPerAtom(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline const G4Element* G4VEmModel::SelectRandomAtom(
-				    const G4Material* material,
-				    const G4ParticleDefinition* pd,
-				    G4double kinEnergy,
-				    G4double tcut,
-				    G4double tmax)
+				         const G4Material* material,
+				         const G4ParticleDefinition* pd,
+				               G4double kinEnergy,
+				               G4double tcut,
+				               G4double tmax)
 {
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4Element* elm = (*theElementVector)[0];
@@ -345,7 +346,7 @@ inline const G4Element* G4VEmModel::SelectRandomAtom(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4VEmModel::MaxSecondaryKinEnergy(
-                                           const G4DynamicParticle* dynParticle)
+                                          const G4DynamicParticle* dynParticle)
 {
   return MaxSecondaryEnergy(dynParticle->GetDefinition(),
                             dynParticle->GetKineticEnergy());
@@ -383,10 +384,11 @@ inline G4double G4VEmModel::GeomPathLength(G4PhysicsTable*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4VEmModel::ComputeTruePathLengthLimit(G4Track&, 
-						       G4PhysicsTable*, 
-						       G4double, 
-						       G4double)
+inline G4double G4VEmModel::ComputeTruePathLengthLimit(
+                                const G4Track&, 
+				      G4PhysicsTable*, 
+				      G4double, 
+				      G4double)
 {
   return DBL_MAX;
 }
