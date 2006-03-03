@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.hh,v 1.1 2006-03-03 14:13:14 vnivanch Exp $
+// $Id: G4UrbanMscModel.hh,v 1.2 2006-03-03 19:40:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -213,6 +213,7 @@ G4double G4UrbanMscModel::GetLambda(G4double e)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+inline
 void G4UrbanMscModel::SetParticle(const G4ParticleDefinition* p)
 {
   if (p != particle) {

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.1 2006-03-03 14:13:14 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.2 2006-03-03 19:40:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -129,6 +129,8 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
   geommin       = 5.e-6*mm;
   safety        = 0.*mm;
   facsafety     = 0.20;
+  particle      = 0;
+  theManager    = G4LossTableManager::Instance(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering81.hh,v 1.2 2006-03-03 14:11:45 vnivanch Exp $
+// $Id: G4VMultipleScattering81.hh,v 1.3 2006-03-03 19:41:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -101,7 +101,7 @@ inline G4double G4VMultipleScattering81::GetContinuousStepLimit(
                                                 G4double& currentSafety)
 {
   DefineMaterial(track.GetMaterialCutsCouple());
-  SelectModel(track.GetKineticEnergy());
+  currentModel = SelectModel(track.GetKineticEnergy());
   truePathLength = currentModel->ComputeTruePathLengthLimit(
 		   track, theLambdaTable, currentMinimalStep, currentSafety);
   if (truePathLength < currentMinimalStep) valueGPILSelectionMSC = CandidateForSelection;

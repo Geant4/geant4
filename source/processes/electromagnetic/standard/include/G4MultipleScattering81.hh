@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering81.hh,v 1.1 2006-03-03 14:13:14 vnivanch Exp $
+// $Id: G4MultipleScattering81.hh,v 1.2 2006-03-03 19:40:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -66,7 +66,7 @@
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering81.hh,v 1.1 2006-03-03 14:13:14 vnivanch Exp $
+// $Id: G4MultipleScattering81.hh,v 1.2 2006-03-03 19:40:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -99,6 +99,10 @@ public:    // with description
 
   // returns true for charged particles, false otherwise
   G4bool IsApplicable (const G4ParticleDefinition& p);
+
+  G4double TruePathLengthLimit(const G4Track&,
+                               G4double&,
+                               G4double) {return DBL_MAX;};
 
   // Print few lines of informations about the process: validity range,
   void PrintInfo();
