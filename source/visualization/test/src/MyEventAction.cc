@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyEventAction.cc,v 1.8 2005-05-27 13:43:57 allison Exp $
+// $Id: MyEventAction.cc,v 1.9 2006-03-03 17:39:44 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -46,6 +46,7 @@
 #include "G4VisAttributes.hh"
 #include "G4Scale.hh"
 #include "G4Text.hh"
+#include "G4Box.hh"
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
@@ -138,6 +139,12 @@ void MyEventAction::EndOfEventAction(const G4Event* anEvent)
     G4VisAttributes textAtts(G4Colour(0.,1.,1));
     text.SetVisAttributes(textAtts);
     pVVisManager->Draw(text);
+
+    G4Box transientBox("transientBox",100*cm,100*cm,100*cm);
+    G4VisAttributes transientAtts(G4Colour(1.,0.,1));
+    transientAtts.SetForceWireframe(true);
+    pVVisManager->Draw(transientBox, transientAtts,
+		       G4Translate3D(500.*cm, 500.*cm, -500.*cm));
 
   }
   ++iEvent;

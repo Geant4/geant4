@@ -1,9 +1,12 @@
-$Id: History,v 1.76 2006-02-08 21:51:10 allison Exp $
+$Id: History,v 1.77 2006-03-03 17:39:44 allison Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
 
 $Log: not supported by cvs2svn $
+Revision 1.76  2006/02/08 21:51:10  allison
+Added extra placements as a test of drawn volume path and corected duplicate naming of aTwistedTrd.
+
 Revision 1.75  2006/01/26 11:30:29  allison
 vistest-V08-00-01 - needs the head of geometry/solids/specific.
 
