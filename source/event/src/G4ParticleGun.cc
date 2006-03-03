@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGun.cc,v 1.10 2005-11-22 21:06:29 asaim Exp $
+// $Id: G4ParticleGun.cc,v 1.11 2006-03-03 17:12:43 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -48,7 +48,7 @@ G4ParticleGun::G4ParticleGun
 {
   SetInitialValues();
   NumberOfParticlesToBeGenerated = numberofparticles;
-  particle_definition = particleDef;
+  SetParticleDefinition( particleDef );
 }
 
 void G4ParticleGun::SetInitialValues()
