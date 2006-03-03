@@ -21,7 +21,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TriangularFacet.cc,v 1.2 2006-01-30 14:39:53 gcosmo Exp $
+// $Id: G4TriangularFacet.cc,v 1.3 2006-03-03 10:15:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -430,10 +430,10 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
     G4double B0 = q*g - d;
     G4double B1 = q*h - e;
     s           = (A11*B0 - A01*B1)/det2;
-    if (s >= sMin and s <= sMax)
+    if ((s >= sMin) && (s <= sMax))
     {
       t = (A00*B1 - A01*B0)/det2;
-      if (t >= tMin and t < 1.0 - s + std::fabs(sMin))
+      if ((t >= tMin) && (t < 1.0 - s + std::fabs(sMin)))
       {                                //THIS IS A FUDGE FOR THE MOMENT
         dist       = q + g*s + h*t;
         normalComp = v.dot(surfaceNormal);
