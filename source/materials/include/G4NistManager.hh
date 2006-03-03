@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh,v 1.4 2006-02-27 17:29:08 vnivanch Exp $
+// $Id: G4NistManager.hh,v 1.5 2006-03-03 14:13:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -71,7 +71,7 @@ class G4NistManager
 
 public:
 
-   static G4NistManager* Instance();
+  static G4NistManager* Instance();
   ~G4NistManager();
 
  // Elements
@@ -87,15 +87,15 @@ public:
   // Find or build G4Element by symbol
   G4Element* FindOrBuildElement(const G4String& symb, G4bool isotopes=true);
 
-  size_t   GetNumberOfElements() {return nElements;};
-  G4int    GetZ (const G4String& symb);
-  G4double GetAtomicMassAmu (G4int Z);
-  G4double GetIsotopeMass (G4int Z, G4int N);
+  size_t   GetNumberOfElements() const;
+  G4int    GetZ(const G4String& symb) const;
+  G4double GetAtomicMassAmu(G4int Z) const;
+  G4double GetIsotopeMass(G4int Z, G4int N) const;
 
-  void PrintElement (const G4String&);
-  void PrintElement (G4int Z);
+  void PrintElement(const G4String&);
+  void PrintElement(G4int Z);
     
-  void PrintG4Element (const G4String&);  
+  void PrintG4Element(const G4String&);  
   
 
  // Materials
@@ -186,8 +186,16 @@ G4Element* G4NistManager::FindOrBuildElement(const G4String& symb,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+inline
+size_t G4NistManager::GetNumberOfElements() const
+{ 
+  return nElements;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline 
-G4int G4NistManager::GetZ(const G4String& symb)
+G4int G4NistManager::GetZ(const G4String& symb) const
 {
   return elmBuilder->GetZ(symb);
 }
@@ -195,7 +203,7 @@ G4int G4NistManager::GetZ(const G4String& symb)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline 
-G4double G4NistManager::GetAtomicMassAmu(G4int Z)
+G4double G4NistManager::GetAtomicMassAmu(G4int Z) const
 {
   return elmBuilder->GetA(Z);
 }
@@ -203,7 +211,7 @@ G4double G4NistManager::GetAtomicMassAmu(G4int Z)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline 
-G4double G4NistManager::GetIsotopeMass(G4int Z, G4int N)
+G4double G4NistManager::GetIsotopeMass(G4int Z, G4int N) const
 {
   return elmBuilder->GetIsotopeMass(Z, N);
 }
