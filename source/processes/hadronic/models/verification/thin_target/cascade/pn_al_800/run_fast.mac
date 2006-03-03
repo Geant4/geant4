@@ -19,11 +19,11 @@ Al
 #sigmae(MeV)
 1.5
 #emax(MeV)
-800.
+900.
 #nbinse
-160
+90
 #nbinsd
-80
+90
 #elim(MeV)
 0.5
 #nangle

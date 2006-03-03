@@ -5,9 +5,9 @@
 //      Created: 13.03.2002 V.Ivanchenko
 //---------------------------------------
 #verbose
-0
+1
 #events
-10000
+10
 //--------Proton_processes
 #particle
 proton
@@ -19,7 +19,7 @@ proton
 #material
 H
 #energy(MeV)
-750.
+1750.
 #emax(MeV)
 1000.
 #nbinse
@@ -40,22 +40,35 @@ H
 #generator
 LElastic
 #paw
+<<<<<<< run_fast.mac
+#le1000.paw
+=======
 pH_le_750mev_8.0.paw
 #run
 #generator
 LElasticB
 #paw
 pH_lb_750mev_8.0.paw
+>>>>>>> 1.4
 #run
 #generator
 HElastic
 #paw
+<<<<<<< run_fast.mac
+#he1000.paw
+#run
+=======
 pH_he_1gev_8.0.paw
 //#run
+>>>>>>> 1.4
 #generator
 BertiniElastic
 #paw
+<<<<<<< run_fast.mac
+#be1000.paw
+=======
 pH_be_750mev_8.0.paw
+>>>>>>> 1.4
 #run
 //--------Exit
 #exit

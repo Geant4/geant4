@@ -15,15 +15,15 @@ proton
 #material
 Be
 #energy(MeV)
-800.
+900.
 #sigmae(MeV)
 1.5
 #emax(MeV)
-800.
+900.
 #nbinse
-200
+90
 #nbinsd
-200
+90
 #elim(MeV)
 0.5
 #nangle
@@ -31,7 +31,7 @@ Be
 #angles
 7.5 30. 60. 120. 150.
 #dangle
-10.
+5.
 //--------
 #generator
 binary

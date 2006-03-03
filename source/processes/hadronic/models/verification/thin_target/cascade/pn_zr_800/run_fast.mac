@@ -7,7 +7,7 @@
 #verbose
 0
 #events
-50000
+100000
 //--------Proton_processes
 #particle
 proton
@@ -18,12 +18,14 @@ Zr
 800.
 #sigmae(MeV)
 1.5
+#emax(MeV)
+900.
 #elim(MeV)
 30.
 #nbinse
-160
+90
 #nbinsd
-80
+90
 #nangle
 5
 #angles

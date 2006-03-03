@@ -1,16 +1,13 @@
-# $Id: GNUmakefile,v 1.4 2004-07-02 11:37:38 vnivanch Exp $
+# $Id: GNUmakefile,v 1.5 2006-03-03 14:26:47 vnivanch Exp $
 # --------------------------------------------------------------
 
-name := cascade_test
 G4TARGET := cascade_test
+name := G4TARGET
 G4EXLIB  := true
-
 
 .PHONY: all tools
 
-
 all: lib bin
-
 
 ifdef G4ANALYSIS_USE
   CPPFLAGS += -DG4ANALYSIS_USE
@@ -22,7 +19,6 @@ ifdef G4ANALYSIS_USE
   CPPFLAGS += `aida-config --include`
   LDFLAGS  += `aida-config --lib`
 endif
-
 
 include $(G4INSTALL)/config/binmake.gmk
 
