@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.hh,v 1.12 2004-11-10 08:53:18 vnivanch Exp $
+// $Id: G4SynchrotronRadiation.hh,v 1.13 2006-03-04 17:03:18 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -47,6 +47,7 @@
 #include "G4FieldManager.hh"
 #include "G4Field.hh"
 #include "G4ThreeVector.hh"
+#include "G4PropagatorInField.hh"
 
 #include "G4Track.hh"
 #include "G4Step.hh"
@@ -59,6 +60,7 @@
 
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
+
 
 class G4SynchrotronRadiation : public G4VDiscreteProcess
 {
@@ -94,41 +96,46 @@ class G4SynchrotronRadiation : public G4VDiscreteProcess
      static G4double GetLambdaConst();
      static G4double GetEnergyConst();
 
+  void SetVerboseLevel(G4int v){ fVerboseLevel = v; };
+
   protected:
 
   private:
 
-     static const G4double fLambdaConst ;
+  static const G4double fLambdaConst ;
 
-     static const G4double fEnergyConst ;
+  static const G4double fEnergyConst ;
 
-     static const G4double fIntegralProbabilityOfSR[200] ;
-
-
-     const G4double
-     LowestKineticEnergy;   // low  energy limit of the cross-section formula
-
-     const G4double
-     HighestKineticEnergy;  // high energy limit of the cross-section formula
-
-     G4int TotBin;          // number of bins in the tables
-
-     G4double CutInRange;
-
-     const G4ParticleDefinition* theGamma; 
-     const G4ParticleDefinition* theElectron;
-     const G4ParticleDefinition* thePositron;
-
-     const G4double* GammaCutInKineticEnergy;
-     const G4double* ElectronCutInKineticEnergy;
-     const G4double* PositronCutInKineticEnergy;
-     const G4double* ParticleCutInKineticEnergy;
+  static const G4double fIntegralProbabilityOfSR[200] ;
 
 
-     G4double GammaCutInKineticEnergyNow;
-     G4double ElectronCutInKineticEnergyNow;
-     G4double PositronCutInKineticEnergyNow;
-     G4double ParticleCutInKineticEnergyNow;
+  const G4double
+  LowestKineticEnergy;   // low  energy limit of the cross-section formula
+
+  const G4double
+  HighestKineticEnergy;  // high energy limit of the cross-section formula
+
+  G4int TotBin;          // number of bins in the tables
+
+  G4double CutInRange;
+
+  const G4ParticleDefinition* theGamma; 
+  const G4ParticleDefinition* theElectron;
+  const G4ParticleDefinition* thePositron;
+
+  const G4double* GammaCutInKineticEnergy;
+  const G4double* ElectronCutInKineticEnergy;
+  const G4double* PositronCutInKineticEnergy;
+  const G4double* ParticleCutInKineticEnergy;
+
+
+  G4double GammaCutInKineticEnergyNow;
+  G4double ElectronCutInKineticEnergyNow;
+  G4double PositronCutInKineticEnergyNow;
+  G4double ParticleCutInKineticEnergyNow;
+
+  G4int    fVerboseLevel;
+  G4PropagatorInField* fFieldPropagator;
 };
 
 //////////////////////////  INLINE METHODS  /////////////////////////////
@@ -136,9 +143,11 @@ class G4SynchrotronRadiation : public G4VDiscreteProcess
 inline G4bool 
 G4SynchrotronRadiation::IsApplicable( const G4ParticleDefinition& particle )
 {
-   return(   (&particle == (const G4ParticleDefinition *)theElectron)
-           ||(&particle == (const G4ParticleDefinition *)thePositron)
-         ) ;
+  
+  return ( ( &particle == (const G4ParticleDefinition *)theElectron ) || 
+            ( &particle == (const G4ParticleDefinition *)thePositron )    );
+  
+  // return ( particle.GetPDGCharge() != 0.0 );
 }
   
 #endif  // end of G4SynchrotronRadiation.hh
