@@ -3,7 +3,7 @@
 // Creation date: Oct 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonGeneratorLayout.cc,v 1.1 2005-10-25 16:36:41 capra Exp $
+// Id:            $Id: RadmonGeneratorLayout.cc,v 1.2 2006-03-06 14:00:34 sfonseca Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -326,6 +326,9 @@ const G4String &                                 RadmonGeneratorLayout :: GetSou
  const RadmonGeneratorSourceAlgorithmLayout & algorithm(source.FindAlgorithmByLabel(algorithmLabel));
  return algorithm.GetAttributeName(index);
 }
+
+
+// Generation according to a spectrum(Look here!!!!!!!!!!!!!!!!)
 
 
 
