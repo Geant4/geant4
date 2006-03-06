@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.38 2006-03-03 14:11:45 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.39 2006-03-06 09:16:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -164,8 +164,7 @@ public:
   virtual G4double ComputeTruePathLengthLimit(
                                 const G4Track& track, 
                                       G4PhysicsTable* theLambdaTable, 
-                                      G4double currentMinimalStep, 
-                                      G4double currentSafety);
+                                      G4double currentMinimalStep);
 
   virtual G4double ComputeGeomPathLength(G4double truePathLength);
 
@@ -387,7 +386,6 @@ inline G4double G4VEmModel::GeomPathLength(G4PhysicsTable*,
 inline G4double G4VEmModel::ComputeTruePathLengthLimit(
                                 const G4Track&, 
 				      G4PhysicsTable*, 
-				      G4double, 
 				      G4double)
 {
   return DBL_MAX;

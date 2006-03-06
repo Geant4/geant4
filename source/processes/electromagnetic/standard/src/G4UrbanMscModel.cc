@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.2 2006-03-03 19:40:36 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.3 2006-03-06 09:17:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -406,9 +406,8 @@ G4double G4UrbanMscModel::ComputeCrossSectionPerAtom(
 
 G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
                              const G4Track& track,
-			           G4PhysicsTable* theTable,
-			           G4double currentMinimalStep,
-                                   G4double currentSafety)
+			     G4PhysicsTable* theTable,
+			     G4double currentMinimalStep)
 {
   theLambdaTable = theTable;
   const G4DynamicParticle* dp = track.GetDynamicParticle();
@@ -417,16 +416,16 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   couple = track.GetMaterialCutsCouple();
   currentMaterialIndex = couple->GetIndex();
   currentKinEnergy = dp->GetKineticEnergy();
-
-  currentRange = theManager->GetRangeFromRestricteDEDX(particle,currentKinEnergy,couple);
+  currentRange = 
+    theManager->GetRangeFromRestricteDEDX(particle,currentKinEnergy,couple);
   currentRadLength = couple->GetMaterial()->GetRadlen();
   lambda0 = GetLambda(currentKinEnergy);
 
   tPathLength = currentMinimalStep;
-  safety = currentSafety;
-  G4StepStatus stepStatus = track.GetStep()->GetPreStepPoint()->GetStepStatus();
+  G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
+  safety = sp->GetSafety();
+  G4StepStatus stepStatus = sp->GetStepStatus();
   G4int stepNumber = track.GetCurrentStepNumber();
-
 
   // standard  version
   //
@@ -550,14 +549,7 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
     zmean = (1.-exp(par3*log(1.-tPathLength/currentRange)))/(par1*par3) ;
   } else {
     G4double T1 = theManager->GetEnergy(particle,currentRange-tPathLength,couple);
-    G4double lambda1 ;
-    if (theLambdaTable) {
-      G4bool bb;
-      lambda1 = ((*theLambdaTable)[couple->GetIndex()])->GetValue(T1,bb);
-    } else {
-      lambda1 = CrossSection(couple,particle,T1);
-    }
-    lambda1 = 1.0/lambda1;
+    G4double lambda1 = GetLambda(T1);
 
     par1 = (lambda0-lambda1)/(lambda0*tPathLength) ;
     par2 = 1./(par1*lambda0) ;
@@ -568,6 +560,7 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
   //  sample z
   zPathLength = zmean ;
   G4double zt = zmean/tPathLength ;
+
   if (samplez && tPathLength >= stepmin && zt < ztmax)              
   {
     G4double u,cz1;
@@ -589,8 +582,11 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
     }
     zPathLength = tPathLength*u ;
   }
+  //  G4cout << zPathLength << G4endl;
+  G4double z = zPathLength;
+  if(z > lambda0) z = lambda0;
 
-  return zPathLength ;
+  return z;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -710,7 +706,7 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
-                                         G4double KineticEnergy)
+					    G4double KineticEnergy)
 {
   G4double cth = 1. ;
   G4double tau = trueStepLength/lambda0 ;
@@ -840,10 +836,10 @@ G4double G4UrbanMscModel::SampleDisplacement()
     if (rmean>0.) rmean = 2.*lambdaeff*sqrt(rmean/3.0);
     else          rmean = 0.;
 
-   // check: z*z+r*r <= t*t should be satisfied
-   if(rmean*rmean > (tPathLength-zPathLength)*(tPathLength+zPathLength))
-     rmean = sqrt((tPathLength-zPathLength)*(tPathLength+zPathLength));
- }
+    // check: z*z+r*r <= t*t should be satisfied
+    if(rmean*rmean > (tPathLength-zPathLength)*(tPathLength+zPathLength))
+      rmean = sqrt((tPathLength-zPathLength)*(tPathLength+zPathLength));
+  }
   return rmean;
 }
 

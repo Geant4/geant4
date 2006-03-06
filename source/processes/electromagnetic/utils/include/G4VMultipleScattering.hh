@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.33 2006-03-03 14:11:45 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.34 2006-03-06 09:16:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -297,6 +297,7 @@ inline G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
   valueGPILSelectionMSC = NotCandidateForSelection;
   G4double steplength = GetContinuousStepLimit(track,previousStepSize,
                                               currentMinimalStep,currentSafety);
+  //  G4cout << "StepLimit= " << steplength << G4endl;
   // set return value for G4GPILSelection
   *selection = valueGPILSelectionMSC;
   return  steplength;
@@ -319,7 +320,7 @@ inline G4double G4VMultipleScattering::GetContinuousStepLimit(
     G4LossTableManager::Instance()->GetRangeFromRestricteDEDX(p,e,currentCouple);
   if(currentRange < currentMinimalStep) currentMinimalStep = currentRange;
   truePathLength = TruePathLengthLimit(track,lambda0,currentMinimalStep);
-  //G4cout << "StepLimit: tpl= " << truePathLength << " lambda0= "
+  //  G4cout << "StepLimit: tpl= " << truePathLength << " lambda0= "
   //       << lambda0 << " range= " << currentRange
   //       << " currentMinStep= " << currentMinimalStep << G4endl;
   if (truePathLength < currentMinimalStep) valueGPILSelectionMSC = CandidateForSelection;
