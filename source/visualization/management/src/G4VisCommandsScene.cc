@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.46 2006-01-11 17:35:21 allison Exp $
+// $Id: G4VisCommandsScene.cc,v 1.47 2006-03-06 14:30:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -546,4 +546,73 @@ void G4VisCommandSceneSelect::SetNewValue (G4UIcommand*, G4String newValue) {
   }
   UpdateVisManagerScene (selectName);
 
+}
+
+////////////// /vis/scene/transientsAction ////////////////////////////
+
+G4VisCommandSceneTransientsAction::G4VisCommandSceneTransientsAction () {
+  G4bool omitable;
+  fpCommand = new G4UIcmdWithAString ("/vis/scene/transientsAction", this);
+  fpCommand -> SetGuidance
+    ("Rerun events to get transienst (trajectories, etc.), when needed.");
+  fpCommand -> SetParameterName ("action", omitable = true);
+  fpCommand -> SetCandidates ("rerun none");
+  fpCommand -> SetDefaultValue ("rerun");
+
+}
+
+G4VisCommandSceneTransientsAction::~G4VisCommandSceneTransientsAction () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneTransientsAction::GetCurrentValue(G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneTransientsAction::SetNewValue (G4UIcommand*,
+						     G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4String action;
+  std::istringstream is (newValue);
+  is >> action;
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4VSceneHandler* pSceneHandler = fpVisManager->GetCurrentSceneHandler();
+  if (!pSceneHandler) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current sceneHandler.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  if (action == "rerun") {
+    pScene->SetRecomputeTransients(true);
+  }
+  else if (action == "none") {
+    pScene->SetRecomputeTransients(false);
+  }
+  else {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+	"ERROR: unrecognised parameter \"" << action << "\"."
+             << G4endl;
+    }
+    return;
+  }
+
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "Transients action set to \"";
+    if (pScene->GetRecomputeTransients()) G4cout << "rerun";
+    else G4cout << "none";
+    G4cout << "\"" << G4endl;
+  }
 }

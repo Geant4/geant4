@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.hh,v 1.14 2003-11-27 11:48:03 johna Exp $
+// $Id: G4Scene.hh,v 1.15 2006-03-06 14:30:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -92,6 +92,11 @@ public: // With description
   // "transient" objects, such as hits, at end of run.  Otherwise
   // they will be accumulated.
 
+  G4bool GetRecomputeTransients () const;
+  // If true, the visualization manager will attempt to re-run events
+  // in order to reconstruct trajectories, etc., when the viewer
+  // requests a scene traversal.
+
   //////////////////////////////////////////////
   // Add, Set, Clear functions...
 
@@ -133,6 +138,11 @@ public: // With description
   // refresh "transient" objects, such as hits, at end of run.
   // Otherwise they will be accumulated.
 
+  void SetRecomputeTransients(G4bool);
+  // If set true, the visualization manager will attempt to re-run
+  // events in order to reconstruct trajectories, etc., when the
+  // viewer requests a scene traversal.
+
   void CalculateExtent();
   // (Re-)calculates the extent from the extents of its models.
 
@@ -144,6 +154,7 @@ private:
   G4Point3D   fStandardTargetPoint;
   G4bool      fRefreshAtEndOfEvent;
   G4bool      fRefreshAtEndOfRun;
+  G4bool      fRecomputeTransients;
 };
 
 #include "G4Scene.icc"

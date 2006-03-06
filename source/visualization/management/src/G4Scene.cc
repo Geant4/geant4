@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.cc,v 1.16 2005-12-14 13:05:33 allison Exp $
+// $Id: G4Scene.cc,v 1.17 2006-03-06 14:30:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,7 +38,8 @@
 G4Scene::G4Scene (const G4String& name):
   fName (name),
   fRefreshAtEndOfEvent(true),
-  fRefreshAtEndOfRun(true)
+  fRefreshAtEndOfRun(true),
+  fRecomputeTransients(true)
 {} // Note all other data members have default initial values.
 
 G4Scene::~G4Scene () {}
