@@ -60,7 +60,7 @@ G4PhotoElectricAngularGenerator462::~G4PhotoElectricAngularGenerator462()
 
 //
 
-G4ThreeVector G4PhotoElectricAngularGenerator462::GetPhotoElectronDirection(G4ThreeVector direction, G4double)
+G4ThreeVector G4PhotoElectricAngularGenerator462::GetPhotoElectronDirection(G4ThreeVector direction, G4double, G4ThreeVector, G4int)
 {
   return direction;
 }

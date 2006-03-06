@@ -60,7 +60,7 @@ public:
 
   ~G4PhotoElectricAngularGeneratorStandard();
 
-  G4ThreeVector GetPhotoElectronDirection(G4ThreeVector direction, G4double kineticEnergy);
+  G4ThreeVector GetPhotoElectronDirection(G4ThreeVector direction, G4double kineticEnergy, G4ThreeVector polarization, G4int shellId);
 
   void PrintGeneratorInformation() const;
 

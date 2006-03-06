@@ -60,7 +60,7 @@ G4PhotoElectricAngularGeneratorStandard::~G4PhotoElectricAngularGeneratorStandar
 
 //
 
-G4ThreeVector G4PhotoElectricAngularGeneratorStandard::GetPhotoElectronDirection(G4ThreeVector direction, G4double eKineticEnergy)
+G4ThreeVector G4PhotoElectricAngularGeneratorStandard::GetPhotoElectronDirection(G4ThreeVector direction, G4double eKineticEnergy, G4ThreeVector, G4int)
 {
 
   // Compute Theta distribution of the emitted electron, with respect to the

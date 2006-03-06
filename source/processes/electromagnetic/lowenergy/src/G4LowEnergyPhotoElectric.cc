@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.53 2004-11-18 12:08:52 pia Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.54 2006-03-06 16:41:11 silvarod Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -57,6 +57,7 @@
 // 14.06.2002 V.Ivanchenko     By default do not cheak range of e-
 // 21.01.2003 V.Ivanchenko     Cut per region
 // 10.05.2004 P.Rodrigues      Changes to accommodate new angular generators
+// 20.01.2006 A.Trindade       Changes to accommodate polarized angular generator
 //
 // --------------------------------------------------------------
 
@@ -65,6 +66,7 @@
 #include "G4VPhotoElectricAngularDistribution.hh"
 #include "G4PhotoElectricAngularGenerator462.hh"
 #include "G4PhotoElectricAngularGeneratorStandard.hh"
+#include "G4PhotoElectricAngularGeneratorPolarized.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4Track.hh"
@@ -162,7 +164,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
       return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
     }
  
-  G4ParticleMomentum photonDirection = incidentPhoton->GetMomentumDirection();
+  G4ThreeVector photonDirection = incidentPhoton->GetMomentumDirection(); // Returns the normalized direction of the momentum
 
   // Select randomly one element in the current material
   const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
@@ -198,7 +200,8 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 	{
 
 	  // Calculate direction of the photoelectron
-	  G4ThreeVector electronDirection = ElectronAngularGenerator->GetPhotoElectronDirection(photonDirection,eKineticEnergy);
+	  G4ThreeVector gammaPolarization = incidentPhoton->GetPolarization();
+	  G4ThreeVector electronDirection = ElectronAngularGenerator->GetPhotoElectronDirection(photonDirection,eKineticEnergy,gammaPolarization,shellId);
 
 	  // The electron is created ...
 	  G4DynamicParticle* electron = new G4DynamicParticle (G4Electron::Electron(),
@@ -362,13 +365,19 @@ void G4LowEnergyPhotoElectric::SetAngularGenerator(const G4String& name)
   if (name == "default") 
     {
       delete ElectronAngularGenerator;
-      ElectronAngularGenerator = new G4PhotoElectricAngularGenerator462("GEANT462Generator");
+      ElectronAngularGenerator = new G4PhotoElectricAngularGenerator462("GEANT4LowEnergy62Generator");
       generatorName = name;
     }
   else if (name == "standard")
     {
       delete ElectronAngularGenerator;
-      ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorStandard("GEANT4StandardEMPhysics");
+      ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorStandard("GEANT4StandardEMPhysicsGenerator");
+      generatorName = name;
+    }
+  else if (name == "polarized")
+    {
+      delete ElectronAngularGenerator;
+      ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorPolarized("GEANT4LowEnergyPolarizedGenerator");
       generatorName = name;
     }
   else

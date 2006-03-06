@@ -60,7 +60,7 @@ public:
 
   virtual ~G4VPhotoElectricAngularDistribution();
 
-  virtual G4ThreeVector GetPhotoElectronDirection(G4ThreeVector direction, G4double kineticEnergy) = 0;
+  virtual G4ThreeVector GetPhotoElectronDirection(G4ThreeVector direction, G4double kineticEnergy, G4ThreeVector polarization, G4int shellID) = 0;
 
   virtual void PrintGeneratorInformation() const = 0;
 

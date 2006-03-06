@@ -26,7 +26,7 @@
 // GEANT4 Class file
 //
 //
-// File name:  G4PhotoElectricAngularGenerator462
+// File name:  G4PhotoElectricAngularGeneratorPolarized
 //
 // Author:        Andreia Trindade (andreia@lip.pt)
 // 
@@ -43,34 +43,50 @@
 // -------------------------------------------------------------------
 //
 
-#ifndef G4PhotoElectricAngularGenerator462_h
-#define G4PhotoElectricAngularGenerator462_h 1
+#ifndef G4PhotoElectricAngularGeneratorPolarized_h
+#define G4PhotoElectricAngularGeneratorPolarized_h 1
 
 #include "G4VPhotoElectricAngularDistribution.hh"
 #include "G4ios.hh"
 #include "globals.hh"
+#include "G4RotationMatrix.hh"
 
-class G4PhotoElectricAngularGenerator462 : public G4VPhotoElectricAngularDistribution
+class G4PhotoElectricAngularGeneratorPolarized : public G4VPhotoElectricAngularDistribution
 {
 
 public:
 
-  G4PhotoElectricAngularGenerator462(const G4String& name);
+  G4PhotoElectricAngularGeneratorPolarized(const G4String& name);
 
-  ~G4PhotoElectricAngularGenerator462();
+  ~G4PhotoElectricAngularGeneratorPolarized();
 
   G4ThreeVector GetPhotoElectronDirection(G4ThreeVector direction, G4double kineticEnergy, G4ThreeVector polarization, G4int shellId);
 
   void PrintGeneratorInformation() const;
 
 protected:
+  G4ThreeVector SetPerpendicularVector(G4ThreeVector& a);
 
 private:
 
   // hide assignment operator 
-     G4PhotoElectricAngularGenerator462 & operator=(const  G4PhotoElectricAngularGenerator462 &right);
-     G4PhotoElectricAngularGenerator462(const  G4PhotoElectricAngularGenerator462&);
+  G4PhotoElectricAngularGeneratorPolarized & operator=(const  G4PhotoElectricAngularGeneratorPolarized &right);
+  G4PhotoElectricAngularGeneratorPolarized(const  G4PhotoElectricAngularGeneratorPolarized&);
 
+  void PhotoElectronGetac(G4int level, G4double beta, G4double *pa, G4double *pc);
+  void PhotoElectronGenPhiTheta(G4int level,G4double beta, G4double a_beta, 
+				G4double c_beta, G4double *pphi, G4double *ptheta);
+  G4ThreeVector PhotoElectronGetPlab(G4RotationMatrix rotation, G4double theta, G4double phi);
+  G4RotationMatrix PhotoElectronRotationMatrix(G4ThreeVector direction, G4ThreeVector polarization);
+
+  G4double getMax(G4double arg1, G4double arg2);
+
+  G4double G2Function(G4double theta, G4double c_beta);
+  G4double dsigma_k_shellGavrila1959(G4double beta, G4double theta, G4double phi);
+  G4double dsigma_L1_shellGavrila(G4double beta, G4double theta, G4double phi);
+
+  G4double betarray[3];
+  G4double a[980][2],c[980][2];
 };
 
 #endif
