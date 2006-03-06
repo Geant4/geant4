@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.48 2006-02-09 16:32:41 allison Exp $
+// $Id: G4VisManager.hh,v 1.49 2006-03-06 14:44:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -311,6 +311,9 @@ public: // With description
   // it contains more information.  (The size information in
   // GetXGeometryString and GetWindowSizeHint is guaranteed to be
   // identical.)
+  G4int                        GetEventCount() const;
+  const G4String&              GetBeginOfLastRunRandomStatus() const;
+  const G4String&              GetBeginOfLastEventRandomStatus() const;
 
   void SetUserAction (G4VUserVisAction* pVisAction,
 		      const G4VisExtent& = G4VisExtent::NullExtent);
@@ -397,10 +400,7 @@ protected:
   G4NullModel fVisManagerNullModel;         // As a default.
   G4TrajectoriesModel dummyTrajectoriesModel;  // For passing drawing mode.
   G4ModelingParameters fVisManagerModelingParameters;  // Useful memory.
-
-public:  // For now (write access functions sometime).
   G4int fEventCount;
-  G4String fBeginOfFirstRunRandomStatus;
   G4String fBeginOfLastRunRandomStatus;
   G4String fBeginOfLastEventRandomStatus;
 

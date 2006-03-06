@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.icc,v 1.12 2001-08-09 20:13:40 johna Exp $
+// $Id: G4VSceneHandler.icc,v 1.13 2006-03-06 14:44:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -94,6 +94,10 @@ inline G4ViewerList& G4VSceneHandler::SetViewerList () {
 inline void
 G4VSceneHandler::SetModel (G4VModel* pModel) {
   fpModel = pModel;
+}
+
+inline void G4VSceneHandler::SetTransientsDrawn (G4bool drawn) {
+  fTransientsDrawn = drawn;
 }
 
 inline void G4VSceneHandler::SetMarkForClearingTransientStore (G4bool mark) {

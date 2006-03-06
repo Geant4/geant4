@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.83 2006-02-09 19:00:44 allison Exp $
+// $Id: G4VisManager.cc,v 1.84 2006-03-06 14:44:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -810,7 +810,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandGeometryList);
   RegisterMessenger(new G4VisCommandGeometryRestore);
 
-  directory = new G4UIdirectory ("/vis/geometry/set");
+  directory = new G4UIdirectory ("/vis/geometry/set/");
   directory -> SetGuidance("Set vis attributes of Geant4 geometry.");
   fDirectoryList.push_back (directory);
   RegisterMessenger(new G4VisCommandGeometrySetColour);
@@ -831,6 +831,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandSceneList);
   RegisterMessenger(new G4VisCommandSceneNotifyHandlers);
   RegisterMessenger(new G4VisCommandSceneSelect);
+  RegisterMessenger(new G4VisCommandSceneTransientsAction);
 
   directory = new G4UIdirectory ("/vis/scene/add/");
   directory -> SetGuidance ("Add model to current scene.");
@@ -930,14 +931,10 @@ void G4VisManager::BeginOfRun ()
 {
   //G4cout << "G4VisManager::BeginOfRun" << G4endl;
   fEventCount = 0;
-  if (fBeginOfFirstRunRandomStatus.empty()) {
-    std::ostringstream oss;
-    CLHEP::HepRandom::saveFullState(oss);
-    fBeginOfFirstRunRandomStatus = oss.str();
-  }
   std::ostringstream oss;
   CLHEP::HepRandom::saveFullState(oss);
   fBeginOfLastRunRandomStatus = oss.str();
+  fpSceneHandler->SetTransientsDrawn(false);
 }
 
 void G4VisManager::BeginOfEvent ()
@@ -999,6 +996,7 @@ void G4VisManager::ClearTransientStoreIfMarked(){
   // Assumes valid view.
   if (fpSceneHandler->GetMarkForClearingTransientStore()) {
     fpSceneHandler->SetMarkForClearingTransientStore(false);
+    fpSceneHandler->SetTransientsDrawn(true);
     fpSceneHandler->ClearTransientStore();
   }
 }

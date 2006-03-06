@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.52 2006-02-09 19:02:14 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.53 2006-03-06 14:44:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,13 +77,14 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   fViewCount             (0),
   fpViewer               (0),
   fpScene                (0),
+  fTransientsDrawn       (false),
   fMarkForClearingTransientStore (true),  // Ready for first
 					  // ClearTransientStoreIfMarked(),
 					  // e.g., at end of run (see
 					  // G4VisManager.cc).
+  fReadyForTransients    (true),  // Only false while processing scene.
   fSecondPassRequested   (false),
   fSecondPass            (false),
-  fReadyForTransients    (true),  // Only false while processing scene.
   fpModel                (0),
   fpObjectTransformation (0),
   fNestingDepth          (0),
@@ -441,14 +442,15 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
   // Clear stored scene, if any, i.e., display lists, scene graphs.
   ClearStore ();
 
+  G4VisManager::Verbosity verbosity =
+    G4VisManager::GetInstance()->GetVerbosity();
+
   // Traverse geometry tree and send drawing primitives to window(s).
 
   const std::vector<G4VModel*>& runDurationModelList =
     fpScene -> GetRunDurationModelList ();
 
   if (runDurationModelList.size ()) {
-    G4VisManager::Verbosity verbosity =
-      G4VisManager::GetInstance()->GetVerbosity();
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Traversing scene data..." << G4endl;
     }
@@ -515,29 +517,39 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 
   fReadyForTransients = true;
 
-  // Now (re-)do trajectories and hits, if requested...
-  //??const std::vector<G4VModel*>& endOfEventModelList =
-  //??  fpScene -> GetEndOfEventModelList ();
-  //??if (endOfEventModelList.size() > 0) {
+  // Now (re-)do transients (trajectories, hits, user drawing, etc.)...
   G4VisManager* visManager = G4VisManager::GetInstance();
-  if (visManager->fEventCount) {  //  Must have some prior event(s)...
-    G4UImanager* UImanager = G4UImanager::GetUIpointer();
-    if (fpScene->GetRefreshAtEndOfEvent()) {
-      std::istringstream iss(visManager->fBeginOfLastEventRandomStatus);
-      CLHEP::HepRandom::restoreFullState(iss);
-      UImanager->ApplyCommand("/run/beamOn");
-    } else {
-      if (!fpScene->GetRefreshAtEndOfRun()) {
-	G4cout <<
-	  "WARNING: Cannot refresh trajectories, etc., accumulated over runs."
-	  "\n  Refreshing just the last run..."
-	       << G4endl;
+  if (visManager->GetEventCount()) {  // Must have had some prior event(s)...
+    if (fTransientsDrawn) {       // Must have had some transients...
+      if (fpScene->GetRecomputeTransients()) {  // If requested...
+	// Change "warnings" to "confirmations" if this settles!!!!!!!!!!
+	if (verbosity >= G4VisManager::warnings) {
+	  G4cout << 
+	    "Recomputing transients..."
+	    "\n  \"/vis/scene/transientsAction none\" to suppress."
+		 << G4endl;
+	}
+	G4UImanager* UImanager = G4UImanager::GetUIpointer();
+	if (fpScene->GetRefreshAtEndOfEvent()) {
+	  std::istringstream iss(visManager->GetBeginOfLastEventRandomStatus());
+	  CLHEP::HepRandom::restoreFullState(iss);
+	  UImanager->ApplyCommand("/run/beamOn");
+	} else {
+	  if (!fpScene->GetRefreshAtEndOfRun()) {
+	    if (verbosity >= G4VisManager::warnings) {
+	      G4cout <<
+     "WARNING: Cannot refresh trajectories, etc., accumulated over runs."
+     "\n  Refreshing just the last run..."
+		     << G4endl;
+	    }
+	  }
+	  std::istringstream iss(visManager->GetBeginOfLastRunRandomStatus());
+	  CLHEP::HepRandom::restoreFullState(iss);
+	  std::ostringstream oss;
+	  oss << visManager->GetEventCount();
+	  UImanager->ApplyCommand(G4String("/run/beamOn " + oss.str()));
+	}
       }
-      std::istringstream iss(visManager->fBeginOfLastRunRandomStatus);
-      CLHEP::HepRandom::restoreFullState(iss);
-      std::ostringstream oss;
-      oss << visManager->fEventCount;
-      UImanager->ApplyCommand(G4String("/run/beamOn " + oss.str()));
     }
   }
 

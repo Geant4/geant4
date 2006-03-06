@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.icc,v 1.11 2005-11-21 05:45:42 tinslay Exp $
+// $Id: G4VisManager.icc,v 1.12 2006-03-06 14:44:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,6 +76,18 @@ inline void G4VisManager::GetWindowSizeHint
 
 inline const G4String& G4VisManager::GetXGeometryString () const {
   return fXGeometryString;
+}
+
+inline G4int G4VisManager::GetEventCount() const {
+  return fEventCount;
+}
+
+inline const G4String& G4VisManager::GetBeginOfLastRunRandomStatus() const {
+  return fBeginOfLastRunRandomStatus;
+}
+
+inline const G4String& G4VisManager::GetBeginOfLastEventRandomStatus() const {
+  return fBeginOfLastEventRandomStatus;
 }
 
 inline void G4VisManager::SetUserActionExtent (const G4VisExtent& extent) {

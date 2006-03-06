@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.26 2006-01-26 12:18:11 allison Exp $
+// $Id: G4VSceneHandler.hh,v 1.27 2006-03-06 14:44:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -130,14 +130,14 @@ public: // With description
 
   virtual void BeginModeling ();
   // IMPORTANT: invoke this from your polymorphic versions, e.g.:
-  // void MyXXXScene::BeginModeling () {
+  // void MyXXXSceneHandler::BeginModeling () {
   //   G4VSceneHandler::BeginModeling ();
   //   ...
   // }
 
   virtual void EndModeling ();
   // IMPORTANT: invoke this from your polymorphic versions, e.g.:
-  // void MyXXXScene::EndModeling () {
+  // void MyXXXSceneHandler::EndModeling () {
   //   ...
   //   G4VSceneHandler::EndModeling ();
   // }
@@ -173,14 +173,13 @@ public: // With description
   // Other inherited functions.
 
   virtual void EstablishSpecials (G4PhysicalVolumeModel&);
-  // Used to establish any special relationships between scene and this
+  // Used to establish any special relationships between scene handler and this
   // particular type of model - non-pure, i.e., no requirement to
   // implement.  See G4PhysicalVolumeModel.hh for details.
 
   //////////////////////////////////////////////////////////////
   // Access functions.
   const G4String&     GetName           () const;
-  void                SetName           (const G4String&);
   G4int               GetSceneHandlerId () const;
   G4int               GetViewCount      () const;
   G4VGraphicsSystem*  GetGraphicsSystem () const;
@@ -189,10 +188,12 @@ public: // With description
   G4VModel*           GetModel          () const;
   G4VViewer*          GetCurrentViewer  () const;
   G4bool              GetMarkForClearingTransientStore () const;
+  void          SetName          (const G4String&);
   void          SetCurrentViewer (G4VViewer*);
   void          SetScene         (G4Scene*);
   G4ViewerList& SetViewerList    ();  // Non-const so you can change.
   void          SetModel         (G4VModel*);
+  void          SetTransientsDrawn (G4bool);
   void          SetMarkForClearingTransientStore (G4bool);
   // Sets flag which will cause transient store to be cleared at the
   // next call to BeginPrimitives().
@@ -230,7 +231,7 @@ public: // With description
   // GetMarkerSize / 2.
 
   G4ModelingParameters* CreateModelingParameters ();
-  // Only the scene and view know what the Modeling Parameters should
+  // Only the scene handler and view know what the Modeling Parameters should
   // be.  For historical reasons, the GEANT4 Visualization Environment
   // maintains its own Scene Data and View Parameters, which must be
   // converted, when needed, to Modeling Parameters.
@@ -271,30 +272,29 @@ protected:
   //////////////////////////////////////////////////////////////
   // Data members
 
-  G4VGraphicsSystem&     fSystem;          // Graphics system.
-  const G4int            fSceneHandlerId;  // Id of this instance.
-  G4String               fName;
-  G4int                  fViewCount;       // To determine view ids.
-  G4ViewerList           fViewerList;      // Viewers.
-  G4VViewer*             fpViewer;         // Current viewer.
-  G4Scene*               fpScene;          // Scene for this scene handler.
-  G4bool                 fMarkForClearingTransientStore;
-  G4bool                 fSecondPassRequested;
-  G4bool                 fSecondPass;      // ...in process.
-
-  //////////////////////////////////////////////////////////////
-  // Workspace...
-
-  G4bool fReadyForTransients;           // I.e., not processing scene.
-  G4VModel*              fpModel;       // Current model.
-  const G4Transform3D*   fpObjectTransformation;  // Current
-					// accumulated object transformation.
-  G4int                  fNestingDepth; // For Begin/EndPrimitives.
+  G4VGraphicsSystem& fSystem;          // Graphics system.
+  const G4int        fSceneHandlerId;  // Id of this instance.
+  G4String           fName;
+  G4int              fViewCount;       // To determine view ids.
+  G4ViewerList       fViewerList;      // Viewers.
+  G4VViewer*         fpViewer;         // Current viewer.
+  G4Scene*           fpScene;          // Scene for this scene handler.
+  G4bool             fTransientsDrawn; // Transients actually drawn by
+				       // user.  Set by vis manager.
+  G4bool             fMarkForClearingTransientStore;
+  G4bool             fReadyForTransients;  // I.e., not processing the
+			                   // run-duration part of scene.
+  G4bool             fSecondPassRequested;
+  G4bool             fSecondPass;    // ...in process.
+  G4VModel*          fpModel;        // Current model.
+  const G4Transform3D* fpObjectTransformation; // Current accumulated
+					       // object transformation.
+  G4int              fNestingDepth; // For Begin/EndPrimitives.
   const G4VisAttributes* fpVisAttribs;  // Working vis attributes.
-  G4int                  fCurrentDepth; // Current depth of geom. hierarchy.
-  G4VPhysicalVolume*     fpCurrentPV;   // Current physical volume.
-  G4LogicalVolume*       fpCurrentLV;   // Current logical volume.
-  G4Material*       fpCurrentMaterial;  // Current material.
+  G4int              fCurrentDepth; // Current depth of geom. hierarchy.
+  G4VPhysicalVolume* fpCurrentPV;   // Current physical volume.
+  G4LogicalVolume*   fpCurrentLV;   // Current logical volume.
+  G4Material*        fpCurrentMaterial; // Current material.
 
 private:
 
