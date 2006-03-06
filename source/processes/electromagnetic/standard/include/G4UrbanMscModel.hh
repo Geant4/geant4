@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.hh,v 1.2 2006-03-03 19:40:36 vnivanch Exp $
+// $Id: G4UrbanMscModel.hh,v 1.3 2006-03-06 19:16:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -110,8 +110,7 @@ public:
   virtual G4double ComputeTruePathLengthLimit(
                              const G4Track& track,
 			           G4PhysicsTable* theLambdaTable,
-			           G4double currentMinimalStep,
-                                   G4double currentSafety);
+			           G4double currentMinimalStep);
 
   virtual G4double ComputeGeomPathLength(G4double truePathLength);
 
@@ -169,6 +168,7 @@ private:
   G4double lambdaeff;
   G4double tPathLength;
   G4double zPathLength;
+  G4double geomLength;
   G4double par1,par2,par3 ;
 
   G4double stepmin ;

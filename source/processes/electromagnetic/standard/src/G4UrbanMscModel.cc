@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.3 2006-03-06 09:17:47 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.4 2006-03-06 19:16:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -583,16 +583,21 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
     zPathLength = tPathLength*u ;
   }
   //  G4cout << zPathLength << G4endl;
-  G4double z = zPathLength;
-  if(z > lambda0) z = lambda0;
+  geomLength = zPathLength;
+  if(geomLength > lambda0) geomLength = lambda0;
 
-  return z;
+  return geomLength;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4UrbanMscModel::TrueStepLength(G4double geomStepLength)
 {
+  // msc stop the step
+  if(geomStepLength == geomLength && tPathLength <= currentRange)
+    return tPathLength;
+
+  // recalculation
   G4double trueLength = geomStepLength;
   zPathLength = geomStepLength;
   if((geomStepLength > lambda0*tausmall) && (geomStepLength >= stepmin))

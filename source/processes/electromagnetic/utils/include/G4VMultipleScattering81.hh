@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering81.hh,v 1.4 2006-03-06 09:16:54 vnivanch Exp $
+// $Id: G4VMultipleScattering81.hh,v 1.5 2006-03-06 19:16:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -115,10 +115,8 @@ inline G4VParticleChange* G4VMultipleScattering81::AlongStepDoIt(
                                                         const G4Track&,
                                                         const G4Step& step)
 {
-  G4double geomStepLength = step.GetStepLength();
-  if(geomStepLength == geomPathLength) trueStepLength = truePathLength;
-  else   trueStepLength = currentModel->TrueStepLength(geomStepLength);
-  fParticleChange.ProposeTrueStepLength(trueStepLength);
+  fParticleChange.ProposeTrueStepLength(
+    currentModel->TrueStepLength(step.GetStepLength()));
   return &fParticleChange;
 }
 
