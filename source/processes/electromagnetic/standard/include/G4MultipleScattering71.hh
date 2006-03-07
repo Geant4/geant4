@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering71.hh,v 1.2 2006-03-07 15:56:41 vnivanch Exp $
+// $Id: G4MultipleScattering71.hh,v 1.3 2006-03-07 16:57:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,11 +50,11 @@
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 15-04-05 optimize internal interfaces (V.Ivanchenko)
 // 03-10-05 Process is freezed with the name 71 (V.Ivanchenko)
-// 07-03-06 Move step limit calculation to model for new models (V.Ivanchenko)
+// 07-03-06 Create G4UrbanMscModel and move there step limit calculation (V.Ivanchenko)
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering71.hh,v 1.2 2006-03-07 15:56:41 vnivanch Exp $
+// $Id: G4MultipleScattering71.hh,v 1.3 2006-03-07 16:57:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description

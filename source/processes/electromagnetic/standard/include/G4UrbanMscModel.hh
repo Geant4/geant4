@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.hh,v 1.4 2006-03-07 15:56:41 vnivanch Exp $
+// $Id: G4UrbanMscModel.hh,v 1.5 2006-03-07 16:57:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,6 +54,7 @@
 //          included in the (theoretical) tabulated values (L.Urban)
 // 16-02-06 data members b and xsi have been removed (L.Urban)
 // 17-02-06 Save table of transport cross sections not mfp (V.Ivanchenko)
+// 07-03-06 Create G4UrbanMscModel and move there step limit calculation (V.Ivanchenko)
 //
 
 //

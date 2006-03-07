@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel71.hh,v 1.2 2006-02-17 19:36:44 vnivanch Exp $
+// $Id: G4MscModel71.hh,v 1.3 2006-03-07 16:57:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -51,6 +51,7 @@
 // 15-04-05 optimize internal interface - add SampleSecondaries method (V.Ivanchenko)
 // 03-10-05 Model is freezed with the name McsModel71 (V.Ivanchenko)
 // 17-02-06 Save table of transport cross sections not mfp (V.Ivanchenko)
+// 07-03-06 Create G4UrbanMscModel and move there step limit calculation (V.Ivanchenko)
 //
 
 //

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.48 2006-03-07 15:56:41 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.49 2006-03-07 16:57:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -94,6 +94,7 @@
 // 19-01-07 tlimitmin = facrange*50*micrometer, i.e. it depends on the
 //          value of facrange (L.Urban) 
 // 16-02-06 value of factail changed, samplez = true (L.Urban)
+// 07-03-06 Create G4UrbanMscModel and move there step limit calculation (V.Ivanchenko)
 //
 // -----------------------------------------------------------------------------
 //
