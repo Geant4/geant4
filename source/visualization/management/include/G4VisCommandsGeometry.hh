@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsGeometry.hh,v 1.1 2006-02-06 12:13:52 allison Exp $
+// $Id: G4VisCommandsGeometry.hh,v 1.2 2006-03-07 12:12:16 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/geometry commands - John Allison  31st January 2006
@@ -41,10 +41,9 @@ class G4VVisCommandGeometry: public G4VVisCommand {
 public:
   virtual ~G4VVisCommandGeometry();
 protected:
-  static std::map<const G4LogicalVolume*, const G4VisAttributes*>
+  static std::map<G4LogicalVolume*, const G4VisAttributes*>
   fVisAttsMap;
-  typedef
-  std::map<const G4LogicalVolume*, const G4VisAttributes*>::const_iterator
+  typedef std::map<G4LogicalVolume*, const G4VisAttributes*>::const_iterator
   VisAttsMapIterator;
 };
 

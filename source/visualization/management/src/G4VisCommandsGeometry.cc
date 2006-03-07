@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsGeometry.cc,v 1.1 2006-02-06 12:13:52 allison Exp $
+// $Id: G4VisCommandsGeometry.cc,v 1.2 2006-03-07 12:12:16 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/geometry commands - John Allison  31st January 2006
@@ -33,7 +33,7 @@
 #include "G4LogicalVolumeStore.hh"
 #include "G4UImanager.hh"
 
-std::map<const G4LogicalVolume*, const G4VisAttributes*>
+std::map<G4LogicalVolume*, const G4VisAttributes*>
 G4VVisCommandGeometry::fVisAttsMap;
 
 G4VVisCommandGeometry::~G4VVisCommandGeometry()

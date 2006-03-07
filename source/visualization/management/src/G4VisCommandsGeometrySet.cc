@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsGeometrySet.cc,v 1.1 2006-02-06 12:13:52 allison Exp $
+// $Id: G4VisCommandsGeometrySet.cc,v 1.2 2006-03-07 12:12:16 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/geometry commands - John Allison  31st January 2006
@@ -32,6 +32,8 @@
 #include "G4VisManager.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4UImanager.hh"
+
+#include <sstream>
 
 void G4VVisCommandGeometrySet::Set
 (G4String requestedName,
@@ -66,8 +68,8 @@ void G4VVisCommandGeometrySet::SetLVVisAtts
 {
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   const G4VisAttributes* oldVisAtts = pLV->GetVisAttributes();
-  fVisAttsMap.insert(std::make_pair(pLV,oldVisAtts));// Store old vis atts.
-  G4VisAttributes* newVisAtts = new G4VisAttributes; // Memory leak!
+  fVisAttsMap.insert(std::make_pair(pLV,oldVisAtts));  // Store old vis atts.
+  G4VisAttributes* newVisAtts = new G4VisAttributes;   // Memory leak!
   if (oldVisAtts) {
     *newVisAtts = *oldVisAtts;
   }
