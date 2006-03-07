@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.4 2006-03-06 19:16:50 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.5 2006-03-07 11:33:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -397,7 +397,7 @@ G4double G4UrbanMscModel::ComputeCrossSectionPerAtom(
     else if(AtomicNumber > Z2)
       sigma = AtomicNumber*AtomicNumber*c2/(Z2*Z2);
   }
-
+  //  G4cout << "e= " << KineticEnergy << " sigma= " << sigma << G4endl;
   return sigma;
 
 }

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel71.cc,v 1.2 2006-02-17 19:36:44 vnivanch Exp $
+// $Id: G4MscModel71.cc,v 1.3 2006-03-07 11:33:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -379,10 +379,13 @@ G4double G4MscModel71::ComputeCrossSectionPerAtom(
        sigma /= corr;
     }
 
+  sigma *= sigmafactor;
+
   //  nucl. size correction for particles other than e+/e- only at present !!!!
   if((particle->GetParticleName() != "e-") &&
      (particle->GetParticleName() != "e+")   )
      sigma /= corrnuclsize;
+  //  G4cout << "e= " << KineticEnergy << " sigma= " << sigma << G4endl;
 
   return sigma;
 }
