@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.hh,v 1.3 2006-03-06 19:16:50 vnivanch Exp $
+// $Id: G4UrbanMscModel.hh,v 1.4 2006-03-07 15:56:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -114,7 +114,7 @@ public:
 
   virtual G4double ComputeGeomPathLength(G4double truePathLength);
 
-  virtual G4double TrueStepLength(G4double geomStepLength);
+  virtual G4double ComputeTrueStepLength(G4double geomStepLength);
 
   void SetLateralDisplasmentFlag(G4bool val);
 

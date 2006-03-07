@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.39 2006-03-06 09:16:54 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.40 2006-03-07 15:56:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -153,29 +153,22 @@ public:
 
 				      
   // Methods for msc simulation
-  virtual G4double GeomPathLength(G4PhysicsTable* theLambdaTable,
-                                const G4MaterialCutsCouple*,
-		                const G4ParticleDefinition*,
-		                      G4double& kinEnergy,
-			              G4double  lambda,
-			              G4double  range,
-    			              G4double  truePathLength);
 
   virtual G4double ComputeTruePathLengthLimit(
                                 const G4Track& track, 
-                                      G4PhysicsTable* theLambdaTable, 
-                                      G4double currentMinimalStep);
+                                G4PhysicsTable* theLambdaTable, 
+				G4double currentMinimalStep);
 
   virtual G4double ComputeGeomPathLength(G4double truePathLength);
 
-  virtual G4double TrueStepLength(G4double geomStepLength);
+  virtual G4double ComputeTrueStepLength(G4double geomPathLength);
 
   virtual void DefineForRegion(const G4Region*);
 
 protected:
 
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-				            G4double kineticEnergy);
+				      G4double kineticEnergy);
 
   //------------------------------------------------------------------------
   // Generic methods common to all models
@@ -367,26 +360,13 @@ inline const G4String& G4VEmModel::GetName() const
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 // Methods for msc simulation
-
-inline G4double G4VEmModel::GeomPathLength(G4PhysicsTable*,
-                                const G4MaterialCutsCouple*,
-	  	                const G4ParticleDefinition*,
-		                      G4double&,
-			              G4double,
-			              G4double,
-    			              G4double truePathLength) 
-{
-  return truePathLength;
-}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4VEmModel::ComputeTruePathLengthLimit(
                                 const G4Track&, 
-				      G4PhysicsTable*, 
-				      G4double)
+				G4PhysicsTable*, 
+				G4double)
 {
   return DBL_MAX;
 }
@@ -398,12 +378,11 @@ inline G4double G4VEmModel::ComputeGeomPathLength(G4double truePathLength)
   return truePathLength;
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4VEmModel::TrueStepLength(G4double geomStepLength) 
+inline G4double G4VEmModel::ComputeTrueStepLength(G4double geomPathLength)
 {
-  return geomStepLength;
+  return geomPathLength;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

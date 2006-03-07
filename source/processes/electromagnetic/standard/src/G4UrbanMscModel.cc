@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.5 2006-03-07 11:33:41 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.6 2006-03-07 15:56:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -591,7 +591,7 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4UrbanMscModel::TrueStepLength(G4double geomStepLength)
+G4double G4UrbanMscModel::ComputeTrueStepLength(G4double geomStepLength)
 {
   // msc stop the step
   if(geomStepLength == geomLength && tPathLength <= currentRange)

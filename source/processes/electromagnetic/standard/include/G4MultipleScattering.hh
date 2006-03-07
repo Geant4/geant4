@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.26 2006-02-16 19:24:18 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.27 2006-03-07 15:56:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -66,7 +66,7 @@
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering.hh,v 1.26 2006-02-16 19:24:18 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.27 2006-03-07 15:56:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -84,8 +84,6 @@
 
 #include "G4VMultipleScattering.hh"
 
-class G4Navigator;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4MultipleScattering : public G4VMultipleScattering
@@ -95,14 +93,10 @@ public:    // with description
 
   G4MultipleScattering(const G4String& processName="msc");
 
- ~G4MultipleScattering();
+  virtual ~G4MultipleScattering();
 
   // returns true for charged particles, false otherwise
   G4bool IsApplicable (const G4ParticleDefinition& p);
-
-  G4double TruePathLengthLimit(const G4Track&  track,
-                               G4double& lambda,
-                               G4double  currentMinimalStep);
 
   // Print few lines of informations about the process: validity range,
   void PrintInfo();
@@ -114,18 +108,14 @@ public:    // with description
   // geom. step length distribution should be sampled or not
   void Setsamplez(G4bool value) { samplez = value;};
 
-  // activate boundary algorithm (in fact stepping algorithm)
-  void SetBoundary(G4bool value) { boundary = value;};
-
   // to reduce the energy/step dependence
   void Setdtrl(G4double value) { dtrl = value;};
 
   // 'soften' step limitation above Tkinlimit
-  void SetTkinlimit(G4double value) { Tkinlimit = value;};
+  void SetTkinlimit(G4double value) { tkinlimit = value;};
 
   // Steplimit = facrange*max(range,lambda)
-  void SetFacrange(G4double val) { facrange=val;
-                                   tlimitmin=facrange*50.e-3*mm;};
+  void SetFacrange(G4double val) { facrange=val;};
 
   // connected with step size reduction due to geometry
   void SetFacgeom(G4double val) { facgeom=val;};
@@ -138,27 +128,20 @@ protected:
   // This function initialise models
   void InitialiseProcess(const G4ParticleDefinition*);
 
-  G4double GeomLimit(const G4Track&  track);
-
 private:        // data members
-
-  G4Navigator* navigator;
 
   G4double lowKineticEnergy;
   G4double highKineticEnergy;
   G4int    totBins;
 
-  G4double Tkinlimit,Tlimit;
+  G4double tkinlimit;
   G4double facrange;
-  G4double tlimit,tlimitmin;
-  G4double geombig,geommin,facgeom;
-  G4double safety,facsafety;
+  G4double facgeom;
   G4double dtrl;
   G4double factail;
-  G4bool   steppingAlgorithm;
 
+  G4bool   steppingAlgorithm;
   G4bool   samplez;
-  G4bool   boundary;
   G4bool   isInitialized;
 
 };

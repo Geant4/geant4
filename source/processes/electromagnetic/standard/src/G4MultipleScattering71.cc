@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering71.cc,v 1.1 2005-10-03 01:09:57 vnivanch Exp $
+// $Id: G4MultipleScattering71.cc,v 1.2 2006-03-07 15:56:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -155,7 +155,6 @@ G4double G4MultipleScattering71::TruePathLengthLimit(const G4Track&  track,
 
         stepnolastmsc = stepno;
         //  if : diff.treatment for small/not small Z
-	G4double range = CurrentRange();
         if (range > lambda) tlimit = facrange*range;
         else                tlimit = facrange*lambda;
 

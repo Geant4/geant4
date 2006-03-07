@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.34 2006-03-06 09:16:54 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.35 2006-03-07 15:56:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,6 +55,7 @@
 // 27-10-05 introduce virtual function MscStepLimitation() (V.Ivanchenko)
 // 26-01-06 Rename GetRange -> GetRangeFromRestricteDEDX (V.Ivanchenko)
 // 17-02-06 Save table of transport cross sections not mfp (V.Ivanchenko)
+// 07-03-06 Move step limit calculation to model (V.Ivanchenko)
 //
 
 // -------------------------------------------------------------------
@@ -97,10 +98,6 @@ public:
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
     // True for all charged particles
 
-  virtual G4double TruePathLengthLimit(const G4Track& track,
-                                             G4double& lambda,
-                                             G4double currentMinimalStep) = 0;
-
   virtual void PrintInfo() = 0;
 
 protected:
@@ -128,7 +125,7 @@ public:
 
   virtual G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
 
-  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
   // The function overloads the corresponding function of the base
   // class.It limits the step near to boundaries only
@@ -186,7 +183,7 @@ public:
 
   void SetBuildLambdaTable(G4bool val);
 
-  const G4PhysicsTable* LambdaTable() const;
+  G4PhysicsTable* LambdaTable() const;
 
   G4VEmModel* SelectModelForMaterial(G4double kinEnergy, size_t& idxRegion) const;
 
@@ -212,10 +209,9 @@ protected:
   G4VEmModel* SelectModel(G4double kinEnergy);
   // Select concrete model
 
-  size_t CurrentMaterialCutsCoupleIndex() const {return currentMaterialIndex;};
+  const G4MaterialCutsCouple* CurrentMaterialCutsCouple() const; 
+  //  size_t CurrentMaterialCutsCoupleIndex() const {return currentMaterialIndex;};
   // Return current index
-
-  G4double CurrentRange() const {return currentRange;};
 
   void DefineMaterial(const G4MaterialCutsCouple* couple);
   // define current material
@@ -233,19 +229,14 @@ protected:
 
   G4GPILSelection             valueGPILSelectionMSC;
   G4ParticleChangeForMSC      fParticleChange;
-  G4PhysicsTable*             theLambdaTable;
-  G4VEmModel*                 currentModel;
-  G4double                    truePathLength;
-  G4double                    geomPathLength;
-  G4double                    trueStepLength;
 
 private:
 
   G4EmModelManager*           modelManager;
+  G4VEmModel*                 currentModel;
+  G4PhysicsTable*             theLambdaTable;
 
-  // tables and vectors
-
-  // cash
+  // cache
   const G4ParticleDefinition* firstParticle;
   const G4ParticleDefinition* currentParticle;
   const G4MaterialCutsCouple* currentCouple;
@@ -255,9 +246,6 @@ private:
 
   G4double                    minKinEnergy;
   G4double                    maxKinEnergy;
-
-  G4double                    lambda0;
-  G4double                    currentRange;
 
   G4bool                      latDisplasment;
   G4bool                      buildLambdaTable;
@@ -312,24 +300,12 @@ inline G4double G4VMultipleScattering::GetContinuousStepLimit(
                                                 G4double&)
 {
   DefineMaterial(track.GetMaterialCutsCouple());
-  G4double e = track.GetKineticEnergy();
-  currentModel = SelectModel(e);
-  const G4ParticleDefinition* p = track.GetDefinition();
-  lambda0 = GetLambda(p, e);
-  currentRange = 
-    G4LossTableManager::Instance()->GetRangeFromRestricteDEDX(p,e,currentCouple);
-  if(currentRange < currentMinimalStep) currentMinimalStep = currentRange;
-  truePathLength = TruePathLengthLimit(track,lambda0,currentMinimalStep);
-  //  G4cout << "StepLimit: tpl= " << truePathLength << " lambda0= "
-  //       << lambda0 << " range= " << currentRange
-  //       << " currentMinStep= " << currentMinimalStep << G4endl;
-  if (truePathLength < currentMinimalStep) valueGPILSelectionMSC = CandidateForSelection;
-  geomPathLength = currentModel->GeomPathLength(theLambdaTable,currentCouple,
-           p,e,lambda0,currentRange,truePathLength);
-  if(geomPathLength > lambda0) geomPathLength = lambda0;
-  return geomPathLength;
+  currentModel = SelectModel(track.GetKineticEnergy());
+  G4double tPathLength = 
+    currentModel->ComputeTruePathLengthLimit(track, theLambdaTable, currentMinimalStep);
+  if (tPathLength < currentMinimalStep) valueGPILSelectionMSC = CandidateForSelection;
+  return currentModel->ComputeGeomPathLength(tPathLength);
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -365,12 +341,8 @@ inline G4VParticleChange* G4VMultipleScattering::AlongStepDoIt(
                                                         const G4Track&,
                                                         const G4Step& step)
 {
-  G4double geomStepLength = step.GetStepLength();
-  if((geomStepLength == geomPathLength) && (truePathLength <= currentRange))
-     trueStepLength = truePathLength;
-  else
-     trueStepLength = currentModel->TrueStepLength(geomStepLength);
-  fParticleChange.ProposeTrueStepLength(trueStepLength);
+  fParticleChange.ProposeTrueStepLength(
+    currentModel->ComputeTrueStepLength(step.GetStepLength()));
   return &fParticleChange;
 }
 
@@ -472,10 +444,16 @@ inline  const G4ParticleDefinition* G4VMultipleScattering::Particle() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline const G4PhysicsTable* G4VMultipleScattering::LambdaTable() const
+inline G4PhysicsTable* G4VMultipleScattering::LambdaTable() const
 {
   return theLambdaTable;
 }
+
+inline 
+const G4MaterialCutsCouple* G4VMultipleScattering::CurrentMaterialCutsCouple() const
+{
+  return currentCouple;
+} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
