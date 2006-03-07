@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTrd.cc,v 1.11 2004-12-02 09:31:22 gcosmo Exp $
+// $Id: G4ParameterisationTrd.cc,v 1.12 2006-03-07 17:06:23 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationTrd Implementation file
@@ -136,12 +136,9 @@ ComputeTransformation( const G4int copyNo,
   }
   else
   { 
-    G4cerr << "ERROR - G4ParameterisationTrdX::ComputeTransformation()"
-           << G4endl
-           << "        Axis is along " << faxis << " !" << G4endl;
     G4Exception("G4ParameterisationTrdX::ComputeTransformation()",
                 "IllegalConstruct", FatalException,
-                "Only axes along X are allowed !");
+                "Only axes along X are allowed, axis is"+faxis);
   }
 
 #ifdef G4DIVDEBUG

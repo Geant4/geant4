@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.cc,v 1.17 2006-02-03 14:37:02 gcosmo Exp $
+// $Id: G4PVDivision.cc,v 1.18 2006-03-07 17:06:23 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4PVDivision Implementation file
@@ -54,17 +54,13 @@ G4PVDivision::G4PVDivision(const G4String& pName,
 {
   if (!pMotherLogical)
   {
-    G4cerr << "ERROR - NULL pointer specified as mother volume for "
-           << pName << "." << G4endl;
     G4Exception("G4PVDivision::G4PVDivision()", "NullPointer", FatalException,
-                "Invalid setup. NULL pointer specified as mother !");
+                G4String("Invalid setup. NULL pointer specified as mother!, for volume"+pName).c_str());
   }
   if (pLogical == pMotherLogical)
   {
-    G4cerr << "ERROR - Placing volume inside itself it NOT allowed for "
-           << pName << "." << G4endl;
     G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
-                FatalException, "Cannot place a volume inside itself!");
+                FatalException, G4String("Cannot place a volume inside itself!, volume "+pName).c_str());
   }
   pMotherLogical->AddDaughter(this);
   SetMotherLogical(pMotherLogical);
@@ -86,17 +82,14 @@ G4PVDivision::G4PVDivision(const G4String& pName,
 {
   if (!pMotherLogical)
   {
-    G4cerr << "ERROR - NULL pointer specified as mother volume for "
-           << pName << "." << G4endl;
+
     G4Exception("G4PVDivision::G4PVDivision()", "NullPointer", FatalException,
-                "Invalid setup. NULL pointer specified as mother !");
+                G4String("Invalid setup. NULL pointer specified as mother !, volume "+pName).c_str());
   }
   if (pLogical == pMotherLogical)
   {
-    G4cerr << "ERROR - Placing volume inside itself it NOT allowed for "
-           << pName << "." << G4endl;
     G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
-                FatalException, "Cannot place a volume inside itself!");
+                FatalException, G4String("Cannot place a volume inside itself!, volume "+pName).c_str());
   }
   pMotherLogical->AddDaughter(this);
   SetMotherLogical(pMotherLogical);
@@ -116,17 +109,13 @@ G4PVDivision::G4PVDivision(const G4String& pName,
 {
   if (!pMotherLogical)
   {
-    G4cerr << "ERROR - NULL pointer specified as mother volume for "
-           << pName << "." << G4endl;
     G4Exception("G4PVDivision::G4PVDivision()", "NullPointer", FatalException,
-                "Invalid setup. NULL pointer specified as mother !");
+                G4String("Invalid setup. NULL pointer specified as mother !, volume "+pName).c_str());
   }
   if (pLogical == pMotherLogical)
   {
-    G4cerr << "ERROR - Placing volume inside itself it NOT allowed for "
-           << pName << "." << G4endl;
     G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
-                FatalException, "Cannot place a volume inside itself!");
+                FatalException, G4String("Cannot place a volume inside itself!, volume "+pName).c_str());
   }
   pMotherLogical->AddDaughter(this);
   SetMotherLogical(pMotherLogical);
@@ -216,15 +205,11 @@ G4PVDivision::CheckAndSetParameters( const EAxis pAxis,
   G4String dsolType = GetLogicalVolume()->GetSolid()->GetEntityType();
   if( msolType != dsolType )
   {
-    G4cerr << "ERROR - G4PVDivision::CheckAndSetParameters()"
-           << G4endl
-           << "        Incorrect solid type in call to G4PVDivision of volume "
-           << GetName() << G4endl
-           << "        It is: " << msolType
-           << ", while it should be: " << dsolType << "." << G4endl;
     G4Exception("G4VDivisionParameterisation::CheckAndSetParameters()",
                 "IllegalConstruct", FatalException,
-                "Incorrect solid type for division !");
+                G4String("Incorrect solid type for division  of volume " 
+		+ GetName() + "    It is: " +  msolType
+		+ ", while it should be: " +  dsolType).c_str() );
   }
 }
 
@@ -475,7 +460,7 @@ void G4PVDivision::SetParameterisation( G4LogicalVolume* motherLogical,
            << "        Divisions for " << mSolidType
            << " not implemented." << G4endl;
     G4Exception("G4PVDivision::SetParameterisation()", "IllegalConstruct",
-                FatalException, "Solid type not supported.");
+                FatalException, G4String("Solid type not supported: "+mSolidType).c_str());
   }
 }
 

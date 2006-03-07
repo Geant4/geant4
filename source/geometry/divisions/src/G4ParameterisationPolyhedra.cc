@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolyhedra.cc,v 1.12 2006-01-10 13:01:54 gcosmo Exp $
+// $Id: G4ParameterisationPolyhedra.cc,v 1.13 2006-03-07 17:06:23 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationPolyhedra Implementation file
@@ -50,12 +50,9 @@ G4VParameterisationPolyhedra( EAxis axis, G4int nDiv, G4double width,
   G4Polyhedra* msol = (G4Polyhedra*)(msolid);
   if ((msolid->GetEntityType() != "G4ReflectedSolid") && (msol->IsGeneric()))
   {
-    G4cerr << G4endl
-           << "ERROR - Generic construct for G4Polyhedra NOT supported ("
-           << msol->GetName() << ")." << G4endl;
     G4Exception("G4VParameterisationPolyhedra::G4VParameterisationPolyhedra()",
                 "NotSupported", FatalException,
-                "Sorry, generic construct for G4Polyhedra NOT supported.");
+                G4String("Sorry, generic construct for G4Polyhedra NOT supported, solid "+msolid->GetName()).c_str());
   }
   if (msolid->GetEntityType() == "G4ReflectedSolid")
   {

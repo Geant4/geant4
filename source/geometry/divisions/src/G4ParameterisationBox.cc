@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationBox.cc,v 1.7 2004-05-17 07:20:40 gcosmo Exp $
+// $Id: G4ParameterisationBox.cc,v 1.8 2006-03-07 17:06:23 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationBox Implementation file
@@ -124,9 +124,6 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
   }
   else
   { 
-    G4cerr << "ERROR - G4ParameterisationBoxX::ComputeTransformation()"
-           << G4endl
-           << "        Axis is along " << faxis << " !" << G4endl;
     G4Exception("G4ParameterisationBoxX::ComputeTransformation()",
                 "IllegalConstruct", FatalException,
                 "Only axes along X are allowed !");
@@ -228,9 +225,6 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
   }
   else
   {
-    G4cerr << "ERROR - G4ParameterisationBoxY::ComputeTransformation()"
-           << G4endl
-           << "        Axis is along " << faxis << " !" << G4endl;
     G4Exception("G4ParameterisationBoxY::ComputeTransformation()",
                 "IllegalConstruct", FatalException,
                 "Only axes along Y are allowed !");
@@ -332,8 +326,6 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
   }
   else
   { 
-    G4cerr << "ERROR - G4ParameterisationBoxZ::ComputeTransformation()"
-           << G4endl;
     G4Exception("G4ParameterisationBoxZ::ComputeTransformation()",
                 "IllegalConstruct", FatalException,
                 "Only axes along Z are allowed !");
