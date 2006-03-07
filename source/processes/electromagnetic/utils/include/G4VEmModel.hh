@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.40 2006-03-07 15:56:51 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.41 2006-03-07 16:47:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,6 +54,7 @@
 // 25-07-05 Move constructor and destructor to the body (V.Ivanchenko)
 // 02-02-06 ComputeCrossSectionPerAtom: default value A=0. (mma)
 // 06-02-06 add method ComputeMeanFreePath() (mma)
+// 07-03-06 Optimize msc methods (V.Ivanchenko)
 //
 // Class Description:
 //

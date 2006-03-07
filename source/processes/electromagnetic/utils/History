@@ -1,4 +1,4 @@
-$Id: History,v 1.235 2006-03-07 11:35:35 vnivanch Exp $
+$Id: History,v 1.236 2006-03-07 16:47:18 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07 March 06: V.Ivant (emutils-V08-00-06)
+- Complete design iteration for msc (V.Ivanchenko)
+- Add G4DummyModel (V.Ivanchenko)
 
 07 March 06: V.Ivant (emutils-V08-00-05)
 - Optimize interfaces to Msc model (G4VEmModel and G4VMultipleScattering)

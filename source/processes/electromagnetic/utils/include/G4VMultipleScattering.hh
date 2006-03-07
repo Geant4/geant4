@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.35 2006-03-07 15:56:51 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.36 2006-03-07 16:47:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -210,8 +210,7 @@ protected:
   // Select concrete model
 
   const G4MaterialCutsCouple* CurrentMaterialCutsCouple() const; 
-  //  size_t CurrentMaterialCutsCoupleIndex() const {return currentMaterialIndex;};
-  // Return current index
+  // Return current G4MaterialCutsCouple
 
   void DefineMaterial(const G4MaterialCutsCouple* couple);
   // define current material
