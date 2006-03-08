@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.cc,v 1.13 2006-03-04 17:03:18 grichine Exp $
+// $Id: G4SynchrotronRadiation.cc,v 1.14 2006-03-08 17:27:38 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -39,6 +39,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "G4SynchrotronRadiation.hh"
+#include "G4Integrator.hh"
 
 ////////////////////////////////////////////////////////////////////
 //
@@ -124,7 +125,7 @@ G4SynchrotronRadiation::G4SynchrotronRadiation(const G4String& processName,
   TotBin(200),
   theGamma (G4Gamma::Gamma() ),
   theElectron ( G4Electron::Electron() ),
-  thePositron ( G4Positron::Positron() ),
+  thePositron ( G4Positron::Positron() ), fAlpha(0.0), fRootNumber(80),
   fVerboseLevel( verboseLevel )
 {
   G4TransportationManager* transportMgr = G4TransportationManager::GetTransportationManager();
@@ -150,17 +151,6 @@ G4SynchrotronRadiation::~G4SynchrotronRadiation()
 // Production of synchrotron X-ray photon
 // GEANT4 internal units.
 // 
-
-G4double G4SynchrotronRadiation::GetLambdaConst()
-{
-  return fLambdaConst;
-}
-
-
-G4double G4SynchrotronRadiation::GetEnergyConst()
-{
-  return fEnergyConst;
-}
 
 
 G4double 
@@ -252,7 +242,6 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
                                      const G4Step&  stepData      )
 
 {
-  G4int i ;
   aParticleChange.Initialize(trackData);
 
   const G4DynamicParticle* aDynamicParticle=trackData.GetDynamicParticle();
@@ -303,12 +292,7 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
     {
       // M-C of synchrotron photon energy
 
-      G4double random = G4UniformRand();
-      for(i=0;i<200;i++)
-      {
-        if(random >= fIntegralProbabilityOfSR[i]) break;
-      }
-      G4double energyOfSR = 0.0001*i*i*fEnergyConst*gamma*gamma*perpB;
+      G4double energyOfSR = GetRandomEnergySR(gamma,perpB);
 
       if(fVerboseLevel > 0)
       {
@@ -470,6 +454,74 @@ G4SynchrotronRadiation::GetPhotonEnergy( const G4Track& trackData,
   return energyOfSR ;
 }
 
+/////////////////////////////////////////////////////////////////////////////////
+//
+//
+
+G4double G4SynchrotronRadiation::GetRandomEnergySR(G4double gamma, G4double perpB)
+{
+  G4int i, iMax;
+  G4double energySR, random, position;
+
+  iMax = 200;
+  random = G4UniformRand();
+
+  for( i = 0; i < iMax; i++ )
+  {
+    if( random >= fIntegralProbabilityOfSR[i] ) break;
+  }
+  if(i <= 0 )        position = G4UniformRand(); // 0.
+  else if( i>= iMax) position = G4double(iMax);
+  else position = i + G4UniformRand(); // -1
+  // 
+  // it was in initial implementation:
+  //       energyOfSR = 0.0001*i*i*fEnergyConst*gamma*gamma*perpB ;
+
+  energySR = 0.0001*position*position*fEnergyConst*gamma*gamma*perpB;
+
+  if( energySR  < 0. ) energySR = 0.;
+
+  return energySR;
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
+// return
+
+G4double G4SynchrotronRadiation::GetProbSpectrumSRforInt( G4double t)
+{
+  G4double result, hypCos2, hypCos=std::cosh(t);
+
+  hypCos2 = hypCos*hypCos;  
+  result = std::cosh(5.*t/3.)*std::exp(t-fKsi*hypCos); // fKsi > 0. !
+  result /= hypCos2;
+  return result;
+}
+
+///////////////////////////////////////////////////////////////////////////
+//
+// return the probability to emit SR photon with relative energy
+// energy/energy_c >= ksi
+// for ksi = 0. P=1., however the method works for ksi > 0 only!
+
+G4double G4SynchrotronRadiation::GetIntProbSR( G4double ksi)
+{
+  fKsi = ksi; // should be > 0. !
+  G4int n;
+  G4double result, a;
+
+  a = fAlpha;        // always = 0.
+  n = fRootNumber;   // around default = 80
+
+  G4Integrator<G4SynchrotronRadiation, G4double(G4SynchrotronRadiation::*)(G4double)> integral;
+
+  result = integral.Laguerre(this, 
+           &G4SynchrotronRadiation::GetProbSpectrumSRforInt, a, n);
+
+  result *= 3./5./pi;
+
+  return result;
+}
 
 
 // end of G4SynchrotronRadiation.cc

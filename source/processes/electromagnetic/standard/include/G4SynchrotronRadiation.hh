@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.hh,v 1.13 2006-03-04 17:03:18 grichine Exp $
+// $Id: G4SynchrotronRadiation.hh,v 1.14 2006-03-08 17:27:38 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -80,21 +80,28 @@ class G4SynchrotronRadiation : public G4VDiscreteProcess
 
   public:  /////////////////    Post Step functions  //////////////////////////
 
-     G4double GetMeanFreePath( const G4Track& track,
+  G4double GetMeanFreePath( const G4Track& track,
                                      G4double previousStepSize,
-                                     G4ForceCondition* condition ) ;
+                                     G4ForceCondition* condition );
 
-     G4VParticleChange *PostStepDoIt( const G4Track& track,
-                                      const G4Step& Step    ) ;
+  G4VParticleChange *PostStepDoIt( const G4Track& track,
+                                      const G4Step& Step    );
 
-     G4double GetPhotonEnergy( const G4Track& trackData,
-                               const G4Step&  stepData      ) ;
+  G4double GetPhotonEnergy( const G4Track& trackData,
+                               const G4Step&  stepData      );
+
+  G4double GetRandomEnergySR( G4double, G4double );
+
+  G4double GetProbSpectrumSRforInt( G4double );
+  G4double GetIntProbSR( G4double );
+
+  void SetRootNumber(G4int rn){fRootNumber=rn;};
 
 
      G4bool IsApplicable(const G4ParticleDefinition&);
 
-     static G4double GetLambdaConst();
-     static G4double GetEnergyConst();
+     static G4double GetLambdaConst(){ return fLambdaConst; };
+     static G4double GetEnergyConst(){ return fEnergyConst; };
 
   void SetVerboseLevel(G4int v){ fVerboseLevel = v; };
 
@@ -102,11 +109,11 @@ class G4SynchrotronRadiation : public G4VDiscreteProcess
 
   private:
 
-  static const G4double fLambdaConst ;
+  static const G4double fLambdaConst;
 
-  static const G4double fEnergyConst ;
+  static const G4double fEnergyConst;
 
-  static const G4double fIntegralProbabilityOfSR[200] ;
+  static const G4double fIntegralProbabilityOfSR[200];
 
 
   const G4double
@@ -134,8 +141,14 @@ class G4SynchrotronRadiation : public G4VDiscreteProcess
   G4double PositronCutInKineticEnergyNow;
   G4double ParticleCutInKineticEnergyNow;
 
+  G4double fKsi;
+  G4double fAlpha;
+  G4int    fRootNumber;
+
+
   G4int    fVerboseLevel;
   G4PropagatorInField* fFieldPropagator;
+
 };
 
 //////////////////////////  INLINE METHODS  /////////////////////////////
