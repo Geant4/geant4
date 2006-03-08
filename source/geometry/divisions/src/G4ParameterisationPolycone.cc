@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolycone.cc,v 1.13 2006-03-07 17:06:23 arce Exp $
+// $Id: G4ParameterisationPolycone.cc,v 1.14 2006-03-08 11:27:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationPolycone Implementation file
@@ -49,9 +49,11 @@ G4VParameterisationPolycone( EAxis axis, G4int nDiv, G4double width,
   G4Polycone* msol = (G4Polycone*)(msolid);
   if ((msolid->GetEntityType() != "G4ReflectedSolid") && (msol->IsGeneric()))
   {
+    G4String message =
+        "Sorry, generic construct for G4Polycone NOT supported.\n Solid: "
+      + msol->GetName();
     G4Exception("G4VParameterisationPolycone::G4VParameterisationPolycone()",
-                "NotSupported", FatalException,
-                G4String("Sorry, generic construct for G4Polycone NOT supported, solid"+msolid->GetName()).c_str());
+                "NotSupported", FatalException, message);
   }
   if (msolid->GetEntityType() == "G4ReflectedSolid")
   {
