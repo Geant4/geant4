@@ -1,4 +1,4 @@
-$Id: History,v 1.332 2006-03-03 17:44:44 allison Exp $
+$Id: History,v 1.333 2006-03-08 20:47:50 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,29 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-3rd March February 2006  John Allison
+---------------------------------------------
+8th March 2006  John Allison  (vis-V08-00-01)
+- visman-V08-00-09: Small bug fix to vis-V08-00-00.
+
+6th March 2006  John Allison  (vis-V08-00-00)
+- Collected tags below.  Main features since Release 8.0:
+  o Added /vis/scene/transientsAction.  The default is "rerun", i.e.,
+    when the viewer requests, the previous event or run will be
+    processed again with the original random number seed so that
+    transients (trajectories, hits, user drawing, etc.) are
+    reconstructed.  Thus, transients are "remembered" and may be
+    copied between graphics systems.  Turn off with
+    "/vis/scene/transientsAction none".
+  o Introduced /vis/geometry/... for editing vis attributes of
+    geometry volumes.
+  o For developers:
+    * Migration from use of Establish/DecommisionSpecials.
+    * Drawn path available.
+
+6th March 2006  John Allison
+- visman-V08-00-08: Added /vis/scene/transientsAction.
+
+3rd March 2006  John Allison
 - vistest-V08-00-02: Added test of transient handling.
 
 16th February 2006  John Allison
