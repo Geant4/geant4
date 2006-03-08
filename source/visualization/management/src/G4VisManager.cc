@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.84 2006-03-06 14:44:55 allison Exp $
+// $Id: G4VisManager.cc,v 1.85 2006-03-08 20:44:24 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -934,7 +934,7 @@ void G4VisManager::BeginOfRun ()
   std::ostringstream oss;
   CLHEP::HepRandom::saveFullState(oss);
   fBeginOfLastRunRandomStatus = oss.str();
-  fpSceneHandler->SetTransientsDrawn(false);
+  if (fpSceneHandler) fpSceneHandler->SetTransientsDrawn(false);
 }
 
 void G4VisManager::BeginOfEvent ()
