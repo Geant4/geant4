@@ -1,4 +1,4 @@
-$Id: History,v 1.98 2005-11-27 17:54:39 perl Exp $
+$Id: History,v 1.99 2006-03-08 22:08:59 tsasaki Exp $
 $Name: not supported by cvs2svn $ 
 -------------------------------------------------------------------
 
@@ -17,7 +17,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-Last checked in at $Date: 2005-11-27 17:54:39 $ by $Author: perl $ 
+Last checked in at $Date: 2006-03-08 22:08:59 $ by $Author: tsasaki $ 
+
+09 March 2006 T. Sasaki
+- Added Silent and SilentStepInfo member to G4VStepverbose
 
 24 November 2005 J. Allison (tracking-V07-01-05)
 - Added G4RichTrajectory and G4RichTrajectoryPoint.

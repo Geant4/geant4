@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingVerbose.cc,v 1.16 2004-07-08 03:46:43 amako Exp $
+// $Id: G4SteppingVerbose.cc,v 1.17 2006-03-08 22:08:59 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -77,8 +77,9 @@ void G4SteppingVerbose::NewStep()
 void G4SteppingVerbose::AtRestDoItInvoked()
 //////////////////////////////////////////////////
  {
-   G4VProcess* ptProcManager;
+   if(Silent==1){ return; }
 
+   G4VProcess* ptProcManager;
    CopyState();
 
    if(verboseLevel >= 3 ){     
@@ -131,6 +132,8 @@ void G4SteppingVerbose::AtRestDoItInvoked()
 void G4SteppingVerbose::AlongStepDoItAllDone()
 /////////////////////////////////////////////////////
 {
+   if(Silent==1){ return; }
+
    G4VProcess* ptProcManager;
 
    CopyState();
@@ -178,6 +181,8 @@ void G4SteppingVerbose::AlongStepDoItAllDone()
 void G4SteppingVerbose::PostStepDoItAllDone()
 ////////////////////////////////////////////////////
 {
+   if(Silent==1){ return; }
+
    G4VProcess* ptProcManager;
 
    CopyState();
@@ -242,6 +247,9 @@ void G4SteppingVerbose::PostStepDoItAllDone()
 void G4SteppingVerbose::StepInfo()
 /////////////////////////////////////////
 {
+   if(Silent==1){ return; }
+   if(SilentStepInfo==1){ return; }
+
   CopyState();
   G4cout.precision(16); 
   G4int prec = G4cout.precision(3);
@@ -327,6 +335,7 @@ void G4SteppingVerbose::StepInfo()
 void G4SteppingVerbose::DPSLStarted()
 ////////////////////////////////////////////
 {
+   if(Silent==1){ return; }
   CopyState();
 
   if( verboseLevel > 5 ){
@@ -337,6 +346,7 @@ void G4SteppingVerbose::DPSLStarted()
 void G4SteppingVerbose::DPSLUserLimit()
 //////////////////////////////////////////////
 {
+   if(Silent==1){ return; }
   CopyState();
 
   if( verboseLevel > 5 ){
@@ -373,6 +383,7 @@ void G4SteppingVerbose::DPSLPostStep()
 void G4SteppingVerbose::DPSLAlongStep()
 /////////////////////////////////////////////
 {
+   if(Silent==1){ return; }
   CopyState();
 
   if( verboseLevel > 5 ){
@@ -398,6 +409,8 @@ void G4SteppingVerbose::DPSLAlongStep()
 void G4SteppingVerbose::TrackingStarted()
 ////////////////////////////////////////////////
 {
+  if(Silent==1){ return; }
+
   CopyState();
 
   G4int prec = G4cout.precision(3);
@@ -449,6 +462,8 @@ void G4SteppingVerbose::TrackingStarted()
 void G4SteppingVerbose::AlongStepDoItOneByOne()
 //////////////////////////////////////////////////////
 { 
+  if(Silent==1){ return; }
+
   CopyState();
 
   if(verboseLevel >= 4){ 
@@ -494,6 +509,8 @@ void G4SteppingVerbose::AlongStepDoItOneByOne()
 void G4SteppingVerbose::PostStepDoItOneByOne()
 //////////////////////////////////////////////////////
 {
+  if(Silent==1){ return; }
+
   CopyState();
 
   if(verboseLevel >= 4){ 
@@ -537,6 +554,8 @@ void G4SteppingVerbose::PostStepDoItOneByOne()
 void G4SteppingVerbose::VerboseTrack()
 //////////////////////////////////////
 {
+  if(Silent==1){ return; }
+
   CopyState();
 // Show header
   G4cout << G4endl;
@@ -701,7 +720,7 @@ void G4SteppingVerbose::VerboseTrack()
 void G4SteppingVerbose::VerboseParticleChange()
 ///////////////////////////////////////////////
 {
-
+  if(Silent==1){ return; }
 // Show header
   G4cout << G4endl;
   G4cout << "    ++G4ParticleChange Information " << G4endl;
@@ -711,6 +730,7 @@ void G4SteppingVerbose::VerboseParticleChange()
 void G4SteppingVerbose::ShowStep() const
 ////////////////////////////////////////
 {
+  if(Silent==1){ return; }
    G4String volName;
 
 // Show header

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.33 2004-08-12 00:50:11 asaim Exp $
+// $Id: G4SteppingManager.cc,v 1.34 2006-03-08 22:08:59 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -281,7 +281,7 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
   if ( ! fTrack->GetTouchableHandle() ) {
      G4ThreeVector direction= fTrack->GetMomentumDirection();
      fNavigator->LocateGlobalPointAndSetup( fTrack->GetPosition(),
-                                            &direction, true, false );
+                                            &direction, false, false );
      fTouchableHandle = fNavigator->CreateTouchableHistory();
 
      fTrack->SetTouchableHandle( fTouchableHandle );
