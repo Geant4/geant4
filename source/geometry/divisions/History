@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2006-02-03 14:36:28 gcosmo Exp $
+$Id: History,v 1.23 2006-03-08 11:27:22 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 7th, 2006         P.Arce  (geomdiv-V08-00-02)
+- Revised text in G4Exceptions thrown by various classes.
 
 February 3rd, 2006      G.Cosmo  (geomdiv-V08-00-01)
 - Cache information about axis of division and provided accessor method
