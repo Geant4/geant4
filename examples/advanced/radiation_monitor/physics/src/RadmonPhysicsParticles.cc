@@ -3,7 +3,7 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonPhysicsParticles.cc,v 1.1 2006-01-06 12:52:32 guatelli Exp $
+// Id:            $Id: RadmonPhysicsParticles.cc,v 1.2 2006-03-08 17:55:37 sfonseca Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -50,6 +50,9 @@ void                                            RadmonPhysicsParticles :: Constr
   G4He3::He3Definition();
   G4Alpha::AlphaDefinition();
   G4GenericIon::GenericIonDefinition();
+
+ 
+
 }
 
 

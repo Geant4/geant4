@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2006-01-06 12:52:32 guatelli Exp $
+# $Id: GNUmakefile,v 1.7 2006-03-08 17:55:37 sfonseca Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for exaple subpackage
 # R. Capra, 09 Sep 2005
@@ -41,6 +41,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include \
             -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
             -I$(G4BASE)/processes/hadronic/models/low_energy/include \
+            -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
             -I$(G4BASE)/processes/hadronic/models/management/include \
             -I$(G4BASE)/processes/hadronic/models/parton_string/hadronization/include \
             -I$(G4BASE)/processes/hadronic/models/parton_string/qgsm/include \

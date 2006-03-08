@@ -3,7 +3,7 @@
 // Creation date: Oct 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonPrimaryGeneratorAction.cc,v 1.3 2006-01-06 12:52:32 guatelli Exp $
+// Id:            $Id: RadmonPrimaryGeneratorAction.cc,v 1.4 2006-03-08 17:55:37 sfonseca Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -16,6 +16,9 @@
 #include "G4Geantino.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4Event.hh"
+#include "G4GeneralParticleSource.hh"
+
 
 RadmonPrimaryGeneratorAction :: RadmonPrimaryGeneratorAction(RadmonVGeneratorLayout * layout, RadmonVGeneratorsFactory * factory)
 :
@@ -24,6 +27,9 @@ RadmonPrimaryGeneratorAction :: RadmonPrimaryGeneratorAction(RadmonVGeneratorLay
  generatorsFactory(factory),
  needUpdate(true)
 {
+ 
+  ParticleGunSource = new G4GeneralParticleSource();
+
  if (layout==0)
   G4Exception("RadmonPrimaryGeneratorAction::RadmonPrimaryGeneratorAction: layout==0.");
 
@@ -40,6 +46,8 @@ RadmonPrimaryGeneratorAction :: ~RadmonPrimaryGeneratorAction()
  CleanUp();
 
  delete generatorsFactory;
+ delete ParticleGunSource;
+
 }
 
 void RadmonPrimaryGeneratorAction :: GeneratePrimaries(G4Event * anEvent)
@@ -115,6 +123,10 @@ void RadmonPrimaryGeneratorAction :: GeneratePrimaries(G4Event * anEvent)
 // G4cout << G4BestUnit(particlesGun.GetParticlePosition(), "Length") << ", " << particlesGun.GetParticleDefinition()->GetParticleName() << ", " << G4BestUnit(particlesGun.GetParticleMomentumDirection()*particlesGun.GetParticleEnergy(), "Energy") << G4endl;
 
  particlesGun.GeneratePrimaryVertex(anEvent);
+ 
+ ParticleGunSource->GeneratePrimaryVertex(anEvent);
+
+
 }
 
 

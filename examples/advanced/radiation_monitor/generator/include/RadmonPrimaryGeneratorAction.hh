@@ -3,7 +3,7 @@
 // Creation date: Oct 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonPrimaryGeneratorAction.hh,v 1.1 2005-10-25 16:36:41 capra Exp $
+// Id:            $Id: RadmonPrimaryGeneratorAction.hh,v 1.2 2006-03-08 17:55:37 sfonseca Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 // Description:   Primary particles generator user action
@@ -19,7 +19,13 @@
  #include "G4String.hh"
  #include "globals.hh"
  #include <map>
- 
+ #include "G4Event.hh"
+ #include "G4GeneralParticleSource.hh"
+
+//**
+class G4GeneralParticleSource;
+class G4Event;
+
  // Forward declarations
  class RadmonVGeneratorsFactory;
  class RadmonVGeneratorLayout;
@@ -49,6 +55,9 @@
    typedef std::map<G4String, RadmonVGenerator *> GeneratorsMap;
 
   // Private attributes
+
+   G4GeneralParticleSource * ParticleGunSource;
+
    G4ParticleGun                                particlesGun;
    RadmonVGeneratorLayout *                     generatorLayout;
    RadmonVGeneratorsFactory *                   generatorsFactory;

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2005-11-24 02:34:48 capra Exp $
+# $Id: GNUmakefile,v 1.7 2006-03-08 17:55:37 sfonseca Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples with internal subpackages
 # R. Capra, 09 Sep 2005
@@ -41,7 +41,7 @@ makesub:
 		cd $$dir; \
 		$(MAKE) obj );\
 	done
-        
+
 clean:: cleansub
 
 cleansub:
