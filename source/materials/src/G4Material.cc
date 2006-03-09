@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.31 2005-11-22 17:24:25 gcosmo Exp $
+// $Id: G4Material.cc,v 1.32 2006-03-09 16:50:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -559,9 +559,9 @@ std::ostream& operator<<(std::ostream& flux, G4Material* material)
   for (size_t i=0; i<material->fNumberOfElements; i++)
   flux 
     << "\n   ---> " << (*(material->theElementVector))[i] 
-    << "  fractionMass: " << std::setw(6)<< std::setprecision(2) 
+    << "  ElmMassFraction: " << std::setw(6)<< std::setprecision(2) 
                           << (material->fMassFractionVector[i])/perCent << " %" 
-    << "  Abundance "     << std::setw(6)<< std::setprecision(2) 
+    << "  ElmAbundance "     << std::setw(6)<< std::setprecision(2) 
                           << 100*(material->VecNbOfAtomsPerVolume[i])/
                                  (material->TotNbOfAtomsPerVolume)
                           << " %";
