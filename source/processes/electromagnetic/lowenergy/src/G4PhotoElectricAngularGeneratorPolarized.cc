@@ -28,12 +28,12 @@
 //
 // File name:     G4PhotoElectricAngularGeneratorPolarized
 //
-// Author:       
+// Author: A. C. Farinha, L. Peralta, P. Rodrigues and A. Trindade
 // 
 // Creation date:
 //
 // Modifications: 
-// 20 January 2006       
+// 10 January 2006       
 //
 // Class Description: 
 //
