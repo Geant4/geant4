@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.49 2006-03-07 16:57:46 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.50 2006-03-09 11:55:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -166,7 +166,7 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
   if(isInitialized) return;
 
   if (p->GetParticleType() == "nucleus") {
-    steppingAlgorithm = false;
+    //    steppingAlgorithm = false;
     SetLateralDisplasmentFlag(false);
     SetBuildLambdaTable(false);
   } else {
