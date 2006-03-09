@@ -34,7 +34,7 @@
 </div>
 
 Report on Errors and Warnings arising from system testing on the
-<blink><b>geant4-08-00-ref-01</b></blink> development tag.
+<blink><b>geant4-08-00-ref-02</b></blink> development tag.
 
 <p>
 NOTE: the complete set of tests has not been run, with Large_N(umbers of events),
@@ -61,25 +61,27 @@ test09     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test10     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 -----------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
 test11     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
-test12     |	     |         |   WL4    |          |         |  WL2	 |	    |	       |	 |	   |
-test13     |         |         |   WL1WL2 |  WL1WL2  |  WL1    |  WL1WL2 |	    |	       |   WL1   |  WL1    |
+test12     |	     |         |   WL4    |          |         |  WL2WL4 |	    |	       |	 |	   |
+test13     |  WL1    |  WL1    |   WL1    |  WL1     |  WL1    |         |	    |	       |   WL1   |  WL1    |
 test14     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test15     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 -----------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
-test16     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
+test16     |	     |         |	  |	     |  WL2    |	 |	    |	       |	 |	   |
 test17     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test18     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test20     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
-test21     |  EL1    |         |	  |	     |  WL2    |  WL2	 |	    |	       |	 | EL2     |
+test21     |  EL1    |   EL3   |   WL2	  |   WL2    |  WL2    |    	 |	    |	       |	 | EL2     |
 test22     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test24     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test25     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
-test33	   |  WN1    |   WN1   |  WN1	  |  WN1     |  WN1    |   	 |	    |	       |   WN1   | WN1     |
+test29	   |  WN3    |   WN3   |   WN3	  |  WN3     |         |   	 |	    |	       |         |         |
+test33	   |         |         |   WN1	  |  WN1     |  WN1    |   	 |	    |	       |   WN1   | WN1     |
+test34	   |  WN2    |   WN2   |   WN2	  |  WN2     |  WN2    |  WN2 	 |	    |	       |         |         |
 -----------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
 test103    |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test104    |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test104.Em |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
-test105    |  WL3    |   WL3   |  WL3	  |  WL3     |  WL3    |  WL3	 |	    |	       |   WL3   | WL3     |
+test105    |  WL3    |   WL3   |   WL3	  |  WL3     |  WL3    |  WL3	 |	    |	       |   WL3   | WL3     |
 test502    |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test505    |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test506    |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
@@ -119,15 +121,6 @@ bailing out
 			   			      
 			   			      
 			   
-WN1			   
-------------		   
-*** G4Exception : Notification
-issued by : G4ImportanceAlgorithm::Warning()
-~G4ImportanceAlgorithm: ipre_over_ipost ! in [0.25, 4] seen
-*** This is just a warning message.
-			   
-
-
 WL3			   
 ------------
 Warning : Region <EM_calo_region> does not have specific production cuts,
@@ -139,6 +132,33 @@ Warning : Region <EM_calo_region> does not have specific production cuts,
 WL4			   
 ------------
 RandGeneral constructed nothing in bins - will use flat distribution
+
+
+
+WN1			   
+------------		   
+*** G4Exception : Notification
+issued by : G4ImportanceAlgorithm::Warning()
+~G4ImportanceAlgorithm: ipre_over_ipost ! in [0.25, 4] seen
+*** This is just a warning message.
+
+
+
+WN2			   
+------------
+Warning : Region <crystals> does not have specific production cuts,
+           even though it appears in the current tracking world.
+           Default cuts are used for this region.
+	   
+	   
+
+WN3			   
+------------	   
+---Warning---G4QEnv::FSI:Correction error LeaveAsItIs h4m=(0,0,0;4666.98)
+            **Test29:#0:n=1,4M=(0,0,0;-0.853281),Charge=0,BaryN=0, R=(0,0,0;0),D2=0.853281,nN=2
+            Test29:#0,PDG=90002003,m=4667.84(4667.84),4M=(0,0,0;4667.84),T=0,r4M=(0,0,0;-0.853281)
+            **Test29:#1:n=1,4M=(0,0,0;-0.853281),Charge=0,BaryN=0, R=(0,0,0;0),D2=0.853281,nN=2
+             Test29:#0,PDG=90002003,m=4667.84(4667.84),4M=(0,0,0;4667.84),T=0,r4M=(0,0,0;-0.853281)
 
 
 
@@ -191,8 +211,27 @@ Event number 0
 --------------------------------------------------------------------------------
 
 
+EL3
+--------------
+# proton at 400 GeV in Pb
+#
+/gun/particle proton
+/gun/energy 400 GeV
+/mydet/SelectMaterial Pb
+SimpleBox is now made of Pb
+/run/beamOn 2000
+Event number 2000
+Event number 2001
+-
+-
+Event number 3043
 
-
+Program received signal SIGSEGV, Segmentation fault.
+0x00196450 in __1cOG4QdDEnvironmentREvaporateResidual6MpnJG4QdDHadron_b_v_ ()
+(gdb) where
+#0  0x00196450 in __1cOG4QdDEnvironmentREvaporateResidual6MpnJG4QdDHadron_b_v_
+    ()
+Cannot access memory at address 0xff3ef184
 
 </pre>
 
