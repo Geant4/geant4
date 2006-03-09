@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.cc,v 1.14 2006-03-08 17:27:38 grichine Exp $
+// $Id: G4SynchrotronRadiation.cc,v 1.15 2006-03-09 12:09:39 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -502,10 +502,11 @@ G4double G4SynchrotronRadiation::GetProbSpectrumSRforInt( G4double t)
 //
 // return the probability to emit SR photon with relative energy
 // energy/energy_c >= ksi
-// for ksi = 0. P=1., however the method works for ksi > 0 only!
+// for ksi <= 0. P = 1., however the method works for ksi > 0 only!
 
 G4double G4SynchrotronRadiation::GetIntProbSR( G4double ksi)
 {
+  if (ksi <= 0.) return 1.0;
   fKsi = ksi; // should be > 0. !
   G4int n;
   G4double result, a;
