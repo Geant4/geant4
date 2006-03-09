@@ -148,17 +148,17 @@ void G4PhotoElectricAngularGeneratorPolarized::PhotoElectronGenPhiTheta(G4int le
       xi2 = G4UniformRand();
       u = G4UniformRand();
 	
-	phi=2*M_PI*xi1;
+	phi=2*pi*xi1;
 
 	if(level == 0){
 
-	    theta=std::sqrt(((exp(xi2*std::log(1+c_beta*M_PI*M_PI)))-1)/c_beta);
+	    theta=std::sqrt(((exp(xi2*std::log(1+c_beta*pi*pi)))-1)/c_beta);
 	    g = G2Function(theta,c_beta);
 	    xs = dsigma_k_shellGavrila1959(beta,theta,phi);
 
 	} else {
 
-	    theta = std::sqrt(((exp(xi2*std::log(1+c_beta*M_PI*M_PI)))-1)/c_beta);
+	    theta = std::sqrt(((exp(xi2*std::log(1+c_beta*pi*pi)))-1)/c_beta);
 	    g = G2Function(theta,c_beta);
 	    xs = dsigma_L1_shellGavrila(beta,theta,phi);
 
@@ -216,7 +216,7 @@ G4double G4PhotoElectricAngularGeneratorPolarized::dsigma_k_shellGavrila1959(G4d
         (1-sqrt_one_beta2)/one_beta2_to_3_2 * costhe
 	 - beta * (1-sqrt_one_beta2)/one_beta2_to_3_2);
 
-    dsigma = ( F*(1-M_PI*fine_structure_const*Z/beta) + M_PI*fine_structure_const*Z*G);
+    dsigma = ( F*(1-pi*fine_structure_const*Z/beta) + pi*fine_structure_const*Z*G);
 
     return dsigma;
 }
@@ -256,7 +256,7 @@ G4double G4PhotoElectricAngularGeneratorPolarized::dsigma_L1_shellGavrila(G4doub
      (1-sqrt_one_beta2)/one_beta2_to_3_2 * costhe
       - beta * (1-sqrt_one_beta2)/one_beta2_to_3_2);
 
-  dsigma = ( F*(1-M_PI*fine_structure_const*Z/beta) + M_PI*fine_structure_const*Z*G);
+  dsigma = ( F*(1-pi*fine_structure_const*Z/beta) + pi*fine_structure_const*Z*G);
 
  return dsigma;
 
