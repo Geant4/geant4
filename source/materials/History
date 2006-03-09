@@ -1,4 +1,4 @@
-$Id: History,v 1.70 2006-03-09 16:50:07 vnivanch Exp $
+$Id: History,v 1.71 2006-03-09 16:51:46 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,7 +19,7 @@ committal in the CVS repository !
 
 09-03-06 V.Ivanchenko (materials-V08-00-00)
 - G4NistMaterialBuilder - Add method  ConstructNewGasMaterial
-- G4Element - minor change of printout
+- G4Material - minor change of printout
 - G4NistManager - add method GetAtomicMassAmu(Z)
      
 22-11-05 G.Cosmo (materials-V07-01-03)

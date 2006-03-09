@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.32 2006-03-09 16:50:07 vnivanch Exp $
+// $Id: G4Material.cc,v 1.33 2006-03-09 16:51:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,6 +58,7 @@
 // 06-08-02, remove constructors with chemical formula (mma)
 // 22-01-04, proper STL handling of theElementVector (Hisaya)
 // 30-03-05, warning in GetMaterial(materialName) 
+// 09-03-06, minor change of printout (V.Ivanchenko) 
 
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

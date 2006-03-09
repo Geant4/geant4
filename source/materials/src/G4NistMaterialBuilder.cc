@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.10 2006-03-03 16:12:47 maire Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.11 2006-03-09 16:50:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -265,6 +265,9 @@ G4Material* G4NistMaterialBuilder::ConstructNewGasMaterial(
   G4Material* mat = new G4Material(name,dens,nc,kStateGas,temp, pres);
 
   if (verbose>1) G4cout << "New material <" << name 
+			<< " density(g/cm3)= " << dens*cm3/g
+			<< " T(K)= " << temp/kelvin
+			<< " P(atm)= " << pres/atmosphere
                         << ">   nComponents= " << nc << G4endl;
 			
   if (nc > 0) {
