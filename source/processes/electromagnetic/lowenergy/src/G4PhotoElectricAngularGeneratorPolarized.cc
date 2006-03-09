@@ -71,8 +71,7 @@ G4PhotoElectricAngularGeneratorPolarized::G4PhotoElectricAngularGeneratorPolariz
     if(level == 0) filename = nameChar0;
     if(level == 1) filename = nameChar1;
 
-//    char* path = getenv("G4LEDATA");
-    char path[100] = {""};
+    char* path = getenv("G4LEDATA");
     if (!path)
       {
         G4String excep = "G4EMDataSet - G4LEDATA environment variable not set";
@@ -80,8 +79,7 @@ G4PhotoElectricAngularGeneratorPolarized::G4PhotoElectricAngularGeneratorPolariz
       }
 
     G4String pathString(path);
-//    G4String dirFile = pathString + "/phot/" + filename;
-    G4String dirFile = pathString + filename;
+    G4String dirFile = pathString + "/photoelectric_angular/" + filename;
     FILE *infile;
     infile = fopen(dirFile,"r"); // K-shell
     if (infile == NULL)
