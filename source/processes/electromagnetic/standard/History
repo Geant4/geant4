@@ -1,4 +1,4 @@
-$Id: History,v 1.218 2006-03-09 12:14:37 grichine Exp $
+$Id: History,v 1.219 2006-03-09 14:57:16 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09 March 06 : V.Ivanchenko (emstand-V08-00-13)
+- G4MultipleScattering - Make steppling alg be active for ions by default
 09 March 06 : V. Grichine
 - update of G4SynchrotronRadiation methods for calculation of
   integral number spectrum
