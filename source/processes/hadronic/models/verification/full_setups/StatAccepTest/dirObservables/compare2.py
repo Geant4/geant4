@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #-------------------------------------------------------------------
-# Last update: 10-Feb-2006
+# Last update: 10-Mar-2006
 #
 # This script has 2 input arguments, and should be run as:
 #
@@ -11,8 +11,9 @@
 # the StatAccepTest simulations.
 # This script compares the following observables between the
 # two files, and print them in case that they diffear by more
-# than  5 sigma  and  by more than  5%
-# ( NB) See  ***LOOKHERE***  for the choice of the thresholds )
+# than  5 sigma  and/or  by more than  5%
+# ( NB) See  ***LOOKHERE***  for the choice of the thresholds
+#       and whether the condition is based on "and" or "or".)
 #
 #   o  CPU times (in second, without error)
 #   o  total visible energy (in MeV, with error)
@@ -34,6 +35,7 @@ import math
 #***LOOKHERE***
 thresholdSigmaDifference = 5.0
 thresholdRelativeDifference = 0.05
+isConditionAND = 0    # 1 = AND  ; 0 = OR
 
 
 #===============================================
@@ -123,7 +125,7 @@ def doStatisticalComparison( valuesA, valuesB ) :
                       # (nameObservable, valueA, valueB, resultComparison)
                       # where  resultComparison  is, in turn, a tuple:
                       #   ( sigmaDiff, relativeDiff )
-                      
+
     for i in range(7) :
         if ( i == 0 ) :
             name = " CPU times"
@@ -192,9 +194,28 @@ def doStatisticalComparison( valuesA, valuesB ) :
         else :
             print "CASE THAT SHOULD NOT HAPPEN : i = ", i
 
+    count = 0
+    isOnSteps = 0
+    isOnTracks = 0
     for result in listResults :
-        if ( math.fabs( result[3][0] ) > thresholdSigmaDifference  and
-             math.fabs( result[3][1] ) > thresholdRelativeDifference ) :
+        count += 1
+        if ( count == 4 + len( listLA ) + len( listRA ) ) :
+            isOnSteps = 1
+        if ( count == 3 + len( listLA ) + len( listRA ) + len( listStepsA ) ) :
+            isOnTracks = 1
+        if ( ( isConditionAND  and
+               ( math.fabs( result[3][0] ) > thresholdSigmaDifference  and
+                 math.fabs( result[3][1] ) > thresholdRelativeDifference ) )
+             or
+             ( not isConditionAND  and
+               ( math.fabs( result[3][0] ) > thresholdSigmaDifference  or
+                 math.fabs( result[3][1] ) > thresholdRelativeDifference ) ) ) :
+            if ( isOnSteps ) :
+                print " STEPS "
+                isOnSteps = 0
+            elif ( isOnTracks ) :
+                print " TRACKS "
+                isOnTracks = 0
             print result[0], result[1], result[2], " diff:", \
                   result[3][0], "sigma , ", result[3][1]*100.0, "%"
 

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #--------------------------------------------------------------------
-# Last update: 10-Feb-2006
+# Last update: 10-Mar-2006
 #
 # This script should be run in the directory which has, as immediate
 # subdirectories, the results of the Grid validation testing,
@@ -23,8 +23,9 @@
 #      per event (adimensional number, with error)
 # 
 # The script prints out those observables that diffear by more
-# than  5 sigma  and  by more than  5%
-# ( NB) See  ***LOOKHERE***  for the choice of the thresholds )
+# than  5 sigma  and/or  by more than  5%
+# ( NB) See  ***LOOKHERE***  for the choice of the thresholds and
+#       and whether the condition is based on "and" or "or".)
 #
 # At the end, the script prints out also a summary results of the
 # average discrepancies (if larger than the above thresholds),
@@ -44,6 +45,7 @@ import math
 #***LOOKHERE***
 thresholdSigmaDifference = 5.0
 thresholdRelativeDifference = 0.05
+isConditionAND = 0    # 1 = AND  ; 0 = OR
 
 
 #===============================================
@@ -202,9 +204,28 @@ def doStatisticalComparison( valuesA, valuesB ) :
         else :
             print "CASE THAT SHOULD NOT HAPPEN : i = ", i
 
+    count = 0
+    isOnSteps = 0
+    isOnTracks = 0
     for result in listResults :
-        if ( math.fabs( result[3][0] ) > thresholdSigmaDifference  and
-             math.fabs( result[3][1] ) > thresholdRelativeDifference ) :
+        count += 1
+        if ( count == 4 + len( listLA ) + len( listRA ) ) :
+            isOnSteps = 1
+        if ( count == 3 + len( listLA ) + len( listRA ) + len( listStepsA ) ) :
+            isOnTracks = 1
+        if ( ( isConditionAND  and
+               ( math.fabs( result[3][0] ) > thresholdSigmaDifference  and
+                 math.fabs( result[3][1] ) > thresholdRelativeDifference ) )
+             or
+             ( not isConditionAND  and
+               ( math.fabs( result[3][0] ) > thresholdSigmaDifference  or
+                 math.fabs( result[3][1] ) > thresholdRelativeDifference ) ) ) :
+            if ( isOnSteps ) :
+                print " STEPS "
+                isOnSteps = 0
+            elif ( isOnTracks ) :
+                print " TRACKS "
+                isOnTracks = 0
             print result[0], result[1], result[2], " diff:", \
                   result[3][0], "sigma , ", result[3][1]*100.0, "%"
 
