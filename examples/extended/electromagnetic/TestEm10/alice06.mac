@@ -28,12 +28,12 @@
 #
 # R - XTR dE/dx models, M - XTR flux after radiator models
 #
-#/emphyslist/setXTRModel  transpM
+/emphyslist/setXTRModel  transpM
 #/emphyslist/setXTRModel  transpR
 #/emphyslist/setXTRModel  gammaM
 #/emphyslist/setXTRModel  gammaR
 #/emphyslist/setXTRModel  strawR
-/emphyslist/setXTRModel  regM
+#/emphyslist/setXTRModel  regM
 #/emphyslist/setXTRModel  regR
 #
 #/emphyslist/eMinEnergy 100.  
@@ -83,7 +83,9 @@
 #
 /process/inactivate UserMaxStep
 #
-#/process/inactivate RegularXTRadiator
+#/process/inactivate SynchrotronRadiation
+#
+/process/inactivate RegularXTRadiator
 #
 #/process/inactivate GammaXTRadiator
 #
@@ -95,7 +97,7 @@
 # Particle and its energy
 #
 /gun/particle e-
-/gun/energy 2000.0 MeV
+/gun/energy 6000.0 MeV
 #
 
 #/tracking/verbose 1

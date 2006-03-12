@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.cc,v 1.27 2006-03-01 13:52:01 grichine Exp $
+// $Id: Em10DetectorConstruction.cc,v 1.28 2006-03-12 14:17:52 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -318,18 +318,18 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpALICE06()
   //fGasGap       = 0.19*mm;    // Gamma XTR (malz: 0.09)
   //fFoilNumber   = 240;        // Gamma XTR (malz: 480)
 
-  //fRadThickness = 0.020*mm;  // Reg1
-  //fGasGap       = 0.500*mm;  // Reg1
-  //fFoilNumber   = 120;       // Reg1
+  fRadThickness = 0.020*mm;  // Reg1
+  fGasGap       = 0.500*mm;  // Reg1
+  fFoilNumber   = 120;       // Reg1
 
   //fRadThickness = 0.013*mm;  // Anton
   //fGasGap       = 0.060*mm;  // Anton
   //fFoilNumber   = 550;       // Anton
 
 
-  fRadThickness = 0.020*mm; // Reg2
-  fGasGap       = 0.250*mm; // Reg2 
-  fFoilNumber   = 220;      // Reg2
+  // fRadThickness = 0.020*mm; // Reg2
+  // fGasGap       = 0.250*mm; // Reg2 
+  // fFoilNumber   = 220;      // Reg2
 
   foilGasRatio  = fRadThickness/(fRadThickness+fGasGap);
 
@@ -475,7 +475,7 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpALICE06()
 
   G4double pipeDist      = 1.*cm;  //Distance between pipe and radiator / absorber
   G4double fieldStrength = 1.0*tesla;  // 0.01*tesla; // field strength in pipe
-
+  G4double alphaB        = 90.*degree;
   fPipe     =  true;   // 0.;  //  use helium pipe is setup
 
   fPipeField     =  true;   // field in helium pipe used?
@@ -508,7 +508,10 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpALICE06()
     {
       if( fMagField ) delete fMagField; //delete the existing mag field
 
-      fMagField                = new G4UniformMagField(G4ThreeVector(fieldStrength, 0., 0.));
+       fMagField = new G4UniformMagField(G4ThreeVector(fieldStrength*std::sin(alphaB), 
+                                               0., fieldStrength*std::cos(alphaB)));
+      // fMagField = new G4UniformMagField(G4ThreeVector(fieldStrength, 0., 0.));
+      // fMagField = new G4UniformMagField(G4ThreeVector(0., 0., fieldStrength));
       G4FieldManager* fieldMgr = new G4FieldManager(fMagField);
       fieldMgr->SetDetectorField(fMagField);
       fieldMgr->CreateChordFinder(fMagField);
@@ -572,9 +575,11 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpALICE06()
 
 
   fSolidAbsorber = new G4Box("Absorber", 
-			     fAbsorberRadius, fAbsorberRadius, 
-			     // 10.*mm,10.*mm,
-                              fAbsorberThickness/2.); 
+			     fAbsorberRadius, 
+                             // fAbsorberRadius, 
+			     // 10.*mm,
+                             10.*mm,
+                             fAbsorberThickness/2.); 
                           
   fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber, fAbsorberMaterial, 
       			                  "Absorber");     

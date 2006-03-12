@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.cc,v 1.18 2006-03-01 13:52:01 grichine Exp $
+// $Id: Em10PhysicsList.cc,v 1.19 2006-03-12 14:17:52 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -223,6 +223,8 @@ void Em10PhysicsList::ConstructProcess()
 #include "G4PAIPhotonModel.hh"
 // #include "G4PAIwithPhotons.hh"
 
+#include "G4SynchrotronRadiation.hh"
+
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
@@ -348,7 +350,7 @@ void Em10PhysicsList::ConstructEM()
                  FatalException, "XTR model name is out of the name list");
   }     
   //  processXTR->SetCompton(true);
-
+  processXTR->SetVerboseLevel(1);
 
 
   theParticleIterator->reset();
@@ -404,6 +406,11 @@ void Em10PhysicsList::ConstructEM()
 
       pmanager->AddDiscreteProcess(processXTR);
 
+      G4SynchrotronRadiation* sr = new G4SynchrotronRadiation();
+      // sr->SetVerboseLevel(1);
+
+      pmanager->AddDiscreteProcess( sr );
+      
       pmanager->AddDiscreteProcess( new G4StepLimiterPerRegion() );
 
       pmanager->AddProcess(theeminusStepCut,-1,-1,4);
