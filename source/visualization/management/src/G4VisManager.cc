@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.85 2006-03-08 20:44:24 allison Exp $
+// $Id: G4VisManager.cc,v 1.86 2006-03-13 14:30:03 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,6 +81,8 @@ G4VisManager::G4VisManager ():
   fVerbose         (1),
   fpStateDependent (0),
   fEventCount      (0),
+  fTransientsDrawnThisEvent(false),
+  fTransientsDrawnThisRun(false),
   fTrajectoryPlacement("/vis/modeling/trajectories"),
   fpTrajectoryModelMgr(new G4TrajectoryModelManager())
   // All other objects use default constructors.
@@ -934,7 +936,7 @@ void G4VisManager::BeginOfRun ()
   std::ostringstream oss;
   CLHEP::HepRandom::saveFullState(oss);
   fBeginOfLastRunRandomStatus = oss.str();
-  if (fpSceneHandler) fpSceneHandler->SetTransientsDrawn(false);
+  fTransientsDrawnThisRun = false;
 }
 
 void G4VisManager::BeginOfEvent ()
@@ -943,6 +945,7 @@ void G4VisManager::BeginOfEvent ()
   std::ostringstream oss;
   CLHEP::HepRandom::saveFullState(oss);
   fBeginOfLastEventRandomStatus = oss.str();
+  fTransientsDrawnThisEvent = false;
 }
 
 void G4VisManager::EndOfEvent ()
@@ -996,7 +999,8 @@ void G4VisManager::ClearTransientStoreIfMarked(){
   // Assumes valid view.
   if (fpSceneHandler->GetMarkForClearingTransientStore()) {
     fpSceneHandler->SetMarkForClearingTransientStore(false);
-    fpSceneHandler->SetTransientsDrawn(true);
+    fTransientsDrawnThisEvent = true;
+    fTransientsDrawnThisRun = true;
     fpSceneHandler->ClearTransientStore();
   }
 }

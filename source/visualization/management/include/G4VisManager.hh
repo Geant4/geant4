@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.49 2006-03-06 14:44:55 allison Exp $
+// $Id: G4VisManager.hh,v 1.50 2006-03-13 14:30:03 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -314,6 +314,8 @@ public: // With description
   G4int                        GetEventCount() const;
   const G4String&              GetBeginOfLastRunRandomStatus() const;
   const G4String&              GetBeginOfLastEventRandomStatus() const;
+  G4bool                       GetTransientsDrawnThisEvent() const;
+  G4bool                       GetTransientsDrawnThisRun() const;
 
   void SetUserAction (G4VUserVisAction* pVisAction,
 		      const G4VisExtent& = G4VisExtent::NullExtent);
@@ -403,6 +405,8 @@ protected:
   G4int fEventCount;
   G4String fBeginOfLastRunRandomStatus;
   G4String fBeginOfLastEventRandomStatus;
+  G4bool fTransientsDrawnThisEvent;
+  G4bool fTransientsDrawnThisRun;
 
 private:
 
