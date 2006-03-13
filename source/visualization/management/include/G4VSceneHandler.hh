@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.27 2006-03-06 14:44:55 allison Exp $
+// $Id: G4VSceneHandler.hh,v 1.28 2006-03-13 14:21:57 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,7 +97,7 @@ public: // With description
   // IMPORTANT: invoke this from your polymorphic versions, e.g.:
   // void MyXXXSceneHandler::PostAddSolid () {
   //   ...
-  //   G4VSceneHandler::PostAddSolid (objectTransformation, visAttribs);
+  //   G4VSceneHandler::PostAddSolid ();
   // }
 
   virtual void AddSolid (const G4Box&);
@@ -193,7 +193,6 @@ public: // With description
   void          SetScene         (G4Scene*);
   G4ViewerList& SetViewerList    ();  // Non-const so you can change.
   void          SetModel         (G4VModel*);
-  void          SetTransientsDrawn (G4bool);
   void          SetMarkForClearingTransientStore (G4bool);
   // Sets flag which will cause transient store to be cleared at the
   // next call to BeginPrimitives().
@@ -279,11 +278,10 @@ protected:
   G4ViewerList       fViewerList;      // Viewers.
   G4VViewer*         fpViewer;         // Current viewer.
   G4Scene*           fpScene;          // Scene for this scene handler.
-  G4bool             fTransientsDrawn; // Transients actually drawn by
-				       // user.  Set by vis manager.
   G4bool             fMarkForClearingTransientStore;
   G4bool             fReadyForTransients;  // I.e., not processing the
 			                   // run-duration part of scene.
+  G4bool             fProcessingSolid; // True if within Pre/PostAddSolid.
   G4bool             fSecondPassRequested;
   G4bool             fSecondPass;    // ...in process.
   G4VModel*          fpModel;        // Current model.
