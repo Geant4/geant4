@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.7 2006-03-07 16:57:46 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.8 2006-03-13 17:41:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -537,7 +537,11 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
 
   G4double tau   = tPathLength/lambda0 ;
 
-  if ((tau <= tausmall) || (tPathLength < stepmin)) return tPathLength;
+  if ((tau <= tausmall) || (tPathLength < stepmin)) {
+    geomLength  = tPathLength;
+    if(geomLength > lambda0) geomLength = lambda0;
+    return geomLength;
+  }
 
   G4double zmean = tPathLength;
   if (tPathLength < currentRange*dtrl) {
