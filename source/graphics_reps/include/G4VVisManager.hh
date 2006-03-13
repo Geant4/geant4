@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.hh,v 1.8 2005-11-10 21:30:13 tinslay Exp $
+// $Id: G4VVisManager.hh,v 1.9 2006-03-13 12:44:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // John Allison 19/Oct/1996.
 // 
@@ -141,7 +141,9 @@ public: // With description
 
   virtual void Draw (const G4VTrajectory&, G4int i_mode = 0) = 0;
   // i_mode is a parameter that can be used to control the drawing of
-  // the trajectory.  See, e.g., G4VTrajectory::DrawTrajectory.
+  // the trajectory.  See, e.g., G4TrajectoryDrawByCharge::Draw in the
+  // modeling sub-category.  Its use is deprecated; use trajectory
+  // model commands instead.
 
   virtual void Draw (const G4LogicalVolume&, const G4VisAttributes&,
     const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
