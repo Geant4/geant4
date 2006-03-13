@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.92 2006-01-13 12:39:53 allison Exp $
+cvs log $Id: History,v 1.93 2006-03-13 12:46:23 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13th March 2006  John Allison  (greps-V08-00-01)
+- Added operator<< for G4Text, G4Circle, G4Square, G4Polyhedron.
+- Improved/tidied operator<< for G4Polyline, G4VMarker, G4VisAttributes.
+- Improved comments in G4VVisManager.
 
 13th January 2006  John Allison  (greps-V08-00-00)
 - Added G4PolyhedronArbitrary:

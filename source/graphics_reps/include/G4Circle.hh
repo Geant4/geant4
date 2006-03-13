@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Circle.hh,v 1.7 2005-07-05 14:04:02 allison Exp $
+// $Id: G4Circle.hh,v 1.8 2006-03-13 12:46:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,5 +48,7 @@ public: // With description
   virtual ~G4Circle ();
 
  };
+
+std::ostream& operator<< (std::ostream& os, const G4Circle&);
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyline.cc,v 1.9 2005-07-05 14:04:02 allison Exp $
+// $Id: G4Polyline.cc,v 1.10 2006-03-13 12:46:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,7 @@ G4Polyline& G4Polyline::transform (const G4Transform3D& transformation) {
 
 std::ostream& operator << (std::ostream& os, const G4Polyline& line) {
   os << "G4Polyline: ";
-  os << '\n' << (G4Visible) line;
-  os << '\n' << (G4Point3DList) line;
+  os << '\n' << (const G4Visible&) line;
+  os << '\n' << (const G4Point3DList&) line;
   return os;
 }

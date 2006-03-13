@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedron.cc,v 1.18 2005-08-10 08:20:02 gcosmo Exp $
+// $Id: G4Polyhedron.cc,v 1.19 2006-03-13 12:46:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4Polyhedron.hh"
@@ -141,3 +141,10 @@ G4PolyhedronEllipticalCone::G4PolyhedronEllipticalCone (G4double ax, G4double ay
   G4Polyhedron (HepPolyhedronEllipticalCone (ax, ay, h, zCut1)) {}
 
 G4PolyhedronEllipticalCone::~G4PolyhedronEllipticalCone () {}
+
+std::ostream& operator<<(std::ostream& os, const G4Polyhedron& polyhedron) {
+  os << "G4Polyhedron: "
+     << (const G4Visible&)polyhedron << '\n'
+     << (const HepPolyhedron&)polyhedron;
+  return os;
+}

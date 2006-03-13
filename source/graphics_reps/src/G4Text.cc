@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Text.cc,v 1.7 2005-07-05 14:04:02 allison Exp $
+// $Id: G4Text.cc,v 1.8 2006-03-13 12:46:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,3 +50,12 @@ fXOffset(0.) , fYOffset(0.)
 {}
 
 G4Text::~G4Text () {}
+
+std::ostream& operator<< (std::ostream& os, const G4Text& text)
+{
+  os << "G4Text: \"" << text.GetText()
+     << "\"\n  layout " << text.GetLayout()
+     << ", offset (" << text.GetXOffset() << ',' << text.GetYOffset() << ")\n"
+     << (const G4VMarker&)text;
+  return os;
+}

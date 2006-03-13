@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedron.hh,v 1.16 2005-08-10 08:20:02 gcosmo Exp $
+// $Id: G4Polyhedron.hh,v 1.17 2006-03-13 12:46:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4POLYHEDRON_HH
@@ -103,6 +103,8 @@
 //   /vis/viewer/set/lineSegmentsPerCircle.)
 // 20.06.05 G.Cosmo
 // - Added G4PolyhedronEllipsoid.
+// 09.03.06 J.Allison
+// - Added operator<<.
 
 #include "globals.hh"
 #include "HepPolyhedron.h"
@@ -234,5 +236,7 @@ class G4PolyhedronEllipticalCone : public G4Polyhedron {
                              G4double zcut1);
   virtual ~G4PolyhedronEllipticalCone ();
 };
+
+std::ostream& operator<<(std::ostream& os, const G4Polyhedron&);
 
 #endif /* G4POLYHEDRON_HH */

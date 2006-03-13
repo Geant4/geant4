@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.cc,v 1.10 2004-07-28 15:44:32 johna Exp $
+// $Id: G4VisAttributes.cc,v 1.11 2006-03-13 12:46:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -101,7 +101,7 @@ std::ostream& operator << (std::ostream& os, const G4VisAttributes& a) {
     default: os << "unrecognised"; break;
     }
     os << ", line width: " << a.fLineWidth;
-    os << "\n  drawing style ";
+    os << "\n  drawing style: ";
     if (a.fForceDrawingStyle) {
       os << "forced to: ";
       switch (a.fForcedStyle) {
@@ -113,19 +113,19 @@ std::ostream& operator << (std::ostream& os, const G4VisAttributes& a) {
       }
     }
     else {
-      os << "unforced";
+      os << "not forced";
     }
-    os << "\n  auxiliary edge visibility";
+    os << ", auxiliary edge visibility: ";
     if (!a.fForceAuxEdgeVisible) {
-      os << " not";
+      os << "not ";
     }
-    os << " forced";
-    os << "\n  vector<G4AttValue> pointer is ";
+    os << "forced";
+    os << "\n  G4AttValue pointer is ";
     if (a.fAttValues) {
       os << "non-";
     }
     os << "zero";      
-    os << "\n  vector<G4AttDef> pointer is ";
+    os << ", G4AttDef pointer is ";
     if (a.fAttDefs) {
       os << "non-";
     }

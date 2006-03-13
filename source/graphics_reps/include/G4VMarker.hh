@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMarker.hh,v 1.10 2005-07-05 14:04:02 allison Exp $
+// $Id: G4VMarker.hh,v 1.11 2006-03-13 12:46:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -88,7 +88,7 @@
 
 class G4VMarker: public G4Visible {
 
-  friend std::ostream& operator << (std::ostream& os, const G4VMarker& marker);
+  friend std::ostream& operator << (std::ostream& os, const G4VMarker&);
 
 public: // With description
 

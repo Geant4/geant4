@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Square.cc,v 1.4 2005-07-05 14:04:02 allison Exp $
+// $Id: G4Square.cc,v 1.5 2006-03-13 12:46:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,3 +31,9 @@
 #include "G4VisAttributes.hh"
 
 G4Square::~G4Square () {}
+
+std::ostream& operator<< (std::ostream& os, const G4Square& square)
+{
+  os << "G4Square: " << (const G4VMarker&)square;
+  return os;
+}

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsScene.hh,v 1.5 2005-11-10 15:39:16 allison Exp $
+// $Id: G4VGraphicsScene.hh,v 1.6 2006-03-13 12:46:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // John Allison  19th July 1996
 //
@@ -112,7 +112,7 @@ public: // With description
   // Methods for adding graphics primitives to the scene handler.  A
   // sequence of calls to AddPrimitive must be sandwiched between
   // calls to BeginPrimitives and EndPrimitives.  A sequence is any
-  // number of calls the have the same transformation.
+  // number of calls that have the same transformation.
 
   virtual void BeginPrimitives
   (const G4Transform3D& objectTransformation = G4Transform3D()) = 0;

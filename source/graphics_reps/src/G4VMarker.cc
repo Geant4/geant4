@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMarker.cc,v 1.9 2005-07-05 14:04:02 allison Exp $
+// $Id: G4VMarker.cc,v 1.10 2006-03-13 12:46:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,7 +78,7 @@ std::ostream& operator << (std::ostream& os, const G4VMarker& marker) {
   default:
     os << "unrecognised"; break;
   }
-  os << "\n           " << (G4Visible) marker;
+  os << "\n           " << (const G4Visible&) marker;
   return os;
 }
 

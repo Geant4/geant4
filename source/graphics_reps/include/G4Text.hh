@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Text.hh,v 1.8 2005-07-05 14:04:02 allison Exp $
+// $Id: G4Text.hh,v 1.9 2006-03-13 12:46:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,5 +96,7 @@ private:
 };
 
 #include "G4Text.icc"
+
+std::ostream& operator<< (std::ostream& os, const G4Text&);
 
 #endif
