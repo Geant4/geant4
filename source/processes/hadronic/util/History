@@ -14,6 +14,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+13 Mar 2006 Dennis Wright (hadr-util-V08-00-02)
+-----------------------------------------------
+- G4Nucleus::GetFermiMomentum(),
+  G4ReactionKinematics::TwoBodyScattering() :
+
+    fix bug #838: momentum is now isotropic.  Previously theta was
+    incorrectly sampled by pi*G4UniformRand().
+
 15 Dec 2005 Dennis Wright (hadr-util-V08-00-01)
 -----------------------------------------------
 - G4ReactionDynamics.cc: add array bounds protection in TwoCluster
