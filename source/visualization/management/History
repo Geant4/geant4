@@ -1,4 +1,4 @@
-$Id: History,v 1.35 2006-03-08 20:44:59 allison Exp $
+$Id: History,v 1.36 2006-03-13 14:31:29 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,14 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+13th March 2006  John Allison  (visman-V08-00-10)
+- Fixes recomputation of transients when changing drivers.
+- G4VisManager: Added fTransientsDrawnThisEvent/Run.
+- G4VSceneHandler:
+  o Removed fTransientsDrawn (now in G4VisManager).
+  o Added fProcessingSolid.
+  o Fixed recomputation of transients.
 
 8th March 2006  John Allison  (visman-V08-00-09)
 - G4VisManager.cc: Fix bug that causes crash when no current scene handler.
