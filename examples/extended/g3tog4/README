@@ -5,6 +5,8 @@
 This directory includes two applications to demonstrate the usage of the
 g3tog4 tool for converting Geant 3.21 simple geometries to Geant4 ones.
 
+The environment variable G4LIB_USE_G3TOG4 should be defined.
+
 clGeometry
 ----------
 Contains the code to build a detector geometry using the call list
