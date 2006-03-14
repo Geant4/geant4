@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.24 2006-01-11 18:45:53 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.25 2006-03-14 11:50:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -106,6 +106,10 @@ void G4OpenGLStoredSceneHandler::EndPrimitives () {
 void G4OpenGLStoredSceneHandler::BeginModeling () {
   G4VSceneHandler::BeginModeling();
   ClearStore();  // ...and all that goes with it.
+  /* Debug...
+  fDisplayListId = glGenLists (1);
+  G4cout << "OGL::fDisplayListId (start): " << fDisplayListId << G4endl;
+  */
 }
 
 void G4OpenGLStoredSceneHandler::EndModeling () {
@@ -118,7 +122,7 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
 	   << G4endl;
   }
   else {
-    glNewList (fTopPODL, GL_COMPILE); {
+    glNewList (fTopPODL, GL_COMPILE_AND_EXECUTE); {
       for (size_t i = 0; i < fPODLList.size (); i++) {
 	glPushMatrix();
 	G4OpenGLTransform3D oglt (fPODLTransformList [i]);
@@ -131,6 +135,11 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
   }
 
   G4VSceneHandler::EndModeling ();
+
+  /* Debug...
+  fDisplayListId = glGenLists (1);
+  G4cout << "OGL::fDisplayListId (end): " << fDisplayListId << G4endl;
+  */
 }
 
 void G4OpenGLStoredSceneHandler::ClearStore () {
@@ -229,13 +238,24 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid) {
 
     // If a display list already exists for this solid, re-use it if
     // possible.  We could be smarter, and recognise repeated branches
-    // of the geometry hierarchy, for example.  But this a;gorithm
+    // of the geometry hierarchy, for example.  But this algorithm
     // should be secure, I think...
     const G4VSolid* pSolid = &solid;
+    EAxis axis = kRho;
+    if (fpCurrentPV && fpCurrentPV -> IsReplicated ()) {
+      G4int nReplicas;
+      G4double width;
+      G4double offset;
+      G4bool consuming;
+      fpCurrentPV->GetReplicationData(axis,nReplicas,width,offset,consuming);
+    }
     if (fpCurrentPV &&
-	// Provided it is not replicated (because if so, the solid's
-	// parameters might have been changed)...
-	!(fpCurrentPV -> IsReplicated ()) &&
+	// Provided it is not parametrised (because if so, the
+	// solid's parameters might have been changed)...
+	!(fpCurrentPV -> IsParameterised ()) &&
+	// Provided it is not replicated radially (because if so, the
+	// solid's parameters will have been changed)...
+	!(fpCurrentPV -> IsReplicated () && axis == kRho) &&
 	// ...and if the solid has already been rendered...
 	(fSolidMap.find (pSolid) != fSolidMap.end ())) {
       fDisplayListId = fSolidMap [pSolid];
