@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXViewer.cc,v 1.15 2006-01-26 11:59:09 allison Exp $
+// $Id: G4OpenGLStoredXViewer.cc,v 1.16 2006-03-14 11:49:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -80,8 +80,12 @@ void G4OpenGLStoredXViewer::DrawView () {
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
 
   //See if things have changed from last time and remake if necessary...
-  KernelVisitDecision ();
+  // The fNeedKernelVisit flag might have been set by the user in
+  // /vis/viewer/rebuild, but if not, make decision and set flag only
+  // if necessary...
+  if (!fNeedKernelVisit) KernelVisitDecision ();
   ProcessView ();
+  G4bool needed = fNeedKernelVisit;  // Keep.  ProcessView resets.
 
   if(style!=G4ViewParameters::hlr &&
      haloing_enabled) {
@@ -92,9 +96,14 @@ void G4OpenGLStoredXViewer::DrawView () {
 
     HaloingSecondPass ();
 
-  }
+    DrawDisplayLists ();
 
-  DrawDisplayLists ();
+  } else {
+
+    // If kernel visit was needed, it will already have been drawn, so...
+    if (!needed) DrawDisplayLists ();
+
+  }
 
   FinishView ();
   
