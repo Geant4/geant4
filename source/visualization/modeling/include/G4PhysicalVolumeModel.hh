@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.24 2006-02-16 16:16:25 allison Exp $
+// $Id: G4PhysicalVolumeModel.hh,v 1.25 2006-03-14 15:32:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,6 +43,7 @@
 #include "G4VModel.hh"
 
 #include "G4Transform3D.hh"
+#include <iostream>
 #include <vector>
 
 class G4VPhysicalVolume;
@@ -217,5 +218,8 @@ private:
   G4PhysicalVolumeModel (const G4PhysicalVolumeModel&);
   G4PhysicalVolumeModel& operator = (const G4PhysicalVolumeModel&);
 };
+
+std::ostream& operator<<
+  (std::ostream& os, const G4PhysicalVolumeModel::G4PhysicalVolumeNodeID);
 
 #endif

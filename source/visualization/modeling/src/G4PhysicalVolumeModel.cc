@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.40 2006-02-16 16:16:25 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.41 2006-03-14 15:32:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,6 +57,19 @@ G4bool G4PhysicalVolumeModel::G4PhysicalVolumeNodeID::operator==
   (const G4PhysicalVolumeModel::G4PhysicalVolumeNodeID& right) const
 {
   return fpPV == right.fpPV && fCopyNo == right.fCopyNo;
+}
+
+std::ostream& operator<<
+  (std::ostream& os, const G4PhysicalVolumeModel::G4PhysicalVolumeNodeID node)
+{
+  G4VPhysicalVolume* pPV = node.GetPhysicalVolume();
+  if (pPV) {
+    os << pPV->GetName() << ':'
+       << node.GetCopyNo();
+  } else {
+    os << "Null node";
+  }
+  return os;
 }
 
 G4PhysicalVolumeModel::G4PhysicalVolumeModel
