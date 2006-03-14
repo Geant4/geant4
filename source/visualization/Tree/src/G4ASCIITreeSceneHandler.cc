@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.23 2006-02-08 15:31:15 allison Exp $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.24 2006-03-14 12:37:40 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -165,20 +165,38 @@ void G4ASCIITreeSceneHandler::EndModeling () {
 
 void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
   
+  G4PhysicalVolumeModel* pPVModel =
+    dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+  if (!pPVModel) return;  // Not from a G4PhysicalVolumeModel.
+
+  // This call comes from a G4PhysicalVolumeModel.  drawnPVPath is
+  // the path of the current drawn (non-culled) volume in terms of
+  // drawn (non-culled) ancesters.  Each node is identified by a
+  // PVNodeID object, which is a physical volume and copy number.  It
+  // is a vector of PVNodeIDs corresponding to the geometry hierarchy
+  // actually selected, i.e., not culled.
+  typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
+  typedef std::vector<PVNodeID> PVPath;
+  const PVPath& drawnPVPath = pPVModel->GetDrawnPVPath();
+  G4int currentDepth = pPVModel->GetCurrentDepth();
+  const G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
+  const G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
+  const G4Material* pCurrentMaterial = pPVModel->GetCurrentMaterial();
+
   const G4ASCIITree* pSystem = (G4ASCIITree*)GetGraphicsSystem();
   const G4int verbosity = pSystem->GetVerbosity();
   const G4int detail = verbosity % 10;
   const G4String& outFileName = pSystem -> GetOutFileName();
 
-  if (fpCurrentPV != fpLastPV) {
-    fpLastPV = fpCurrentPV;
+  if (pCurrentPV != fpLastPV) {
+    fpLastPV = pCurrentPV;
     fPVPCount = 0;
   }
 
-  if (verbosity < 10 && fpCurrentPV->IsReplicated()) {
+  if (verbosity < 10 && pCurrentPV->IsReplicated()) {
     // See if this has been a replica found before with same mother LV...
-    PVNodeIDPath::reverse_iterator thisID = fDrawnPVPath.rbegin();
-    PVNodeIDPath::reverse_iterator motherID = ++fDrawnPVPath.rbegin();
+    PVPath::const_reverse_iterator thisID = drawnPVPath.rbegin();
+    PVPath::const_reverse_iterator motherID = ++drawnPVPath.rbegin();
     G4bool ignore = false;
     ReplicaSetIterator i;
     for (i = fReplicaSet.begin(); i != fReplicaSet.end(); ++i) {
@@ -186,12 +204,12 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
 	  thisID->GetPhysicalVolume()->GetLogicalVolume()) {
 	// For each one previously found (if more than one, they must
 	// have different mothers)...
-	PVNodeIDPath::const_reverse_iterator
+	PVPath::const_reverse_iterator
 	  previousMotherID = ++(i->rbegin());
-	if (motherID == fDrawnPVPath.rend() &&
+	if (motherID == drawnPVPath.rend() &&
 	    previousMotherID == i->rend())
 	  ignore = true;  // Both have no mother.
-	if (motherID != fDrawnPVPath.rend() &&
+	if (motherID != drawnPVPath.rend() &&
 	    previousMotherID != i->rend() &&
 	    motherID->GetPhysicalVolume()->GetLogicalVolume() ==
 	    previousMotherID->GetPhysicalVolume()->GetLogicalVolume())
@@ -205,13 +223,13 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
   }
 
   // Print indented text...
-  if (fpCurrentPV) {
-    for (size_t i = 0; i < fDrawnPVPath.size(); i++ ) *fpOutFile << "  ";
+  if (pCurrentPV) {
+    for (G4int i = 0; i < currentDepth; i++ ) *fpOutFile << "  ";
 
-    *fpOutFile << "\"" << fpCurrentPV->GetName()
-	       << "\":" << fpCurrentPV->GetCopyNo();
+    *fpOutFile << "\"" << pCurrentPV->GetName()
+	       << "\":" << pCurrentPV->GetCopyNo();
 
-    if (fpCurrentPV->IsReplicated()) {
+    if (pCurrentPV->IsReplicated()) {
       if (verbosity < 10) {
 	// Add printing for replicas (when replicas are ignored)...
 	EAxis axis;
@@ -219,22 +237,22 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
 	G4double width;
 	G4double offset;
 	G4bool consuming;
-	fpCurrentPV->GetReplicationData(axis,nReplicas,width,offset,consuming);
-	G4VPVParameterisation* pP = fpCurrentPV->GetParameterisation();
+	pCurrentPV->GetReplicationData(axis,nReplicas,width,offset,consuming);
+	G4VPVParameterisation* pP = pCurrentPV->GetParameterisation();
 	if (pP) {
 	  if (detail < 3) {
-	    fReplicaSet.insert(fDrawnPVPath);
+	    fReplicaSet.insert(drawnPVPath);
 	    *fpOutFile << " (" << nReplicas << " parametrised volumes)";
 	  }
 	}
 	else {
-	  fReplicaSet.insert(fDrawnPVPath);
+	  fReplicaSet.insert(drawnPVPath);
 	  *fpOutFile << " (" << nReplicas << " replicas)";
 	}
       }
     }
     else {
-      if (fLVSet.find(fpCurrentLV) != fLVSet.end()) {
+      if (fLVSet.find(pCurrentLV) != fLVSet.end()) {
 	if (verbosity <  10) {
 	  // Add printing for repeated LV...
 	  *fpOutFile << " (repeated LV)";
@@ -246,8 +264,8 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
 
     if (detail >= 1) {
       *fpOutFile << " / \""
-		 << fpCurrentLV->GetName() << "\"";
-      G4VSensitiveDetector* sd = fpCurrentLV->GetSensitiveDetector();
+		 << pCurrentLV->GetName() << "\"";
+      G4VSensitiveDetector* sd = pCurrentLV->GetSensitiveDetector();
       if (sd) {
 	*fpOutFile << " (SD=\"" << sd->GetName() << "\"";
 	G4VReadOutGeometry* roGeom = sd->GetROgeometry();
@@ -257,7 +275,7 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
 	*fpOutFile << ")";
       }
     }
-  }  // if (fpCurrentPV)
+  }  // if (pCurrentPV)
 
   if (detail >= 2) {
     *fpOutFile << " / \""
@@ -266,32 +284,36 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
 	       << solid.GetEntityType() << ")";
   }
 
-  if (fpCurrentPV) {
+  if (pCurrentPV) {
     if (detail >= 3) {
       *fpOutFile << ", "
 		 << G4BestUnit(((G4VSolid&)solid).GetCubicVolume(),"Volume")
 		 << ", "
-		 << G4BestUnit(fpCurrentMaterial->GetDensity(), "Volumic Mass");
+		 << G4BestUnit(pCurrentMaterial->GetDensity(), "Volumic Mass");
     }
 
     if (detail >= 5) {
-      G4double daughter_subtracted_mass = fpCurrentLV->GetMass
-	(fpCurrentPV->IsParameterised(),  // Force if parametrised.
+      // Cast const (someone has not been very careful about it)...
+      G4LogicalVolume* pLV = const_cast<G4LogicalVolume*>(pCurrentLV);
+      G4Material* pMaterial = const_cast<G4Material*>(pCurrentMaterial);
+      // ...and find daughter-subtracted mass...
+      G4double daughter_subtracted_mass = pLV->GetMass
+	(pCurrentPV->IsParameterised(),  // Force if parametrised.
 	 false,  // Do not propagate - calculate for this volume minus
         	 // volume of daughters.
-	 fpCurrentMaterial);
+	 pMaterial);
       G4double daughter_subtracted_volume =
-	daughter_subtracted_mass / fpCurrentMaterial->GetDensity();
+	daughter_subtracted_mass / pCurrentMaterial->GetDensity();
       *fpOutFile << ", "
 		 << G4BestUnit(daughter_subtracted_volume,"Volume")
 		 << ", "
 		 << G4BestUnit(daughter_subtracted_mass,"Mass");
     }
 
-    if (fLVSet.find(fpCurrentLV) == fLVSet.end()) {
-      fLVSet.insert(fpCurrentLV);  // Record new logical volume.
+    if (fLVSet.find(pCurrentLV) == fLVSet.end()) {
+      fLVSet.insert(pCurrentLV);  // Record new logical volume.
     }
-  }  // if (fpCurrentPV)
+  }  // if (pCurrentPV)
 
   if (outFileName == "G4cout") {
     G4cout << G4endl;

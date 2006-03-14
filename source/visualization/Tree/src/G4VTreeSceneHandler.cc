@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTreeSceneHandler.cc,v 1.10 2006-02-08 15:31:15 allison Exp $
+// $Id: G4VTreeSceneHandler.cc,v 1.11 2006-03-14 12:37:40 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,27 +71,31 @@ void G4VTreeSceneHandler::PreAddSolid
 {
   G4VSceneHandler::PreAddSolid (objectTransformation, visAttribs);
 
-  // fDrawnPVPath is the path of the current drawn (non-culled) volume
-  // in terms of drawn (non-culled) ancesters.  Each node is
-  // identified by a PVNodeID object, which is a physical volume and
-  // copy number.  It is a vector of PVNodeIDs corresponding to the
-  // geometry hierarchy actually selected, i.e., not culled.
+  G4PhysicalVolumeModel* pPVModel =
+    dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+  if (!pPVModel) return;  // Not from a G4PhysicalVolumeModel.
+
+  // This call comes from a G4PhysicalVolumeModel, drawnPVPath is
+  // the path of the current drawn (non-culled) volume in terms of
+  // drawn (non-culled) ancesters.  Each node is identified by a
+  // PVNodeID object, which is a physical volume and copy number.  It
+  // is a vector of PVNodeIDs corresponding to the geometry hierarchy
+  // actually selected, i.e., not culled.
   typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
-  typedef std::vector<PVNodeID>::iterator PVPath_iterator;
-  typedef std::vector<PVNodeID>::reverse_iterator PVPath_reverse_iterator;
-  PVPath_reverse_iterator ri;
+  typedef std::vector<PVNodeID> PVPath;
+  const PVPath& drawnPVPath = pPVModel->GetDrawnPVPath();
 
   // Store ID of current physical volume (not actually used)...
-  fPVNodeStore.insert(fDrawnPVPath.back());
+  fPVNodeStore.insert(drawnPVPath.back());
 
   // Actually, it is enough to store the logical volume of current
   // physical volume...
   fDrawnLVStore.insert
-    (fDrawnPVPath.back().GetPhysicalVolume()->GetLogicalVolume());
+    (drawnPVPath.back().GetPhysicalVolume()->GetLogicalVolume());
 
   // Find mother.  ri points to drawn mother, if any.
-  ri = ++fDrawnPVPath.rbegin();
-  if (ri != fDrawnPVPath.rend()) {
+  PVPath::const_reverse_iterator ri = ++drawnPVPath.rbegin();
+  if (ri != drawnPVPath.rend()) {
     // This volume has a mother.
     G4LogicalVolume* drawnMotherLV =
       ri->GetPhysicalVolume()->GetLogicalVolume();

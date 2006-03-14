@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTreeSceneHandler.hh,v 1.15 2006-02-08 15:31:15 allison Exp $
+// $Id: G4VTreeSceneHandler.hh,v 1.16 2006-03-14 12:37:40 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,7 +85,8 @@ protected:
   const G4Transform3D* fpCurrentObjectTransformation;
 
   typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
-  std::vector<PVNodeID> fDrawnPVPath;  // Path of drawn (non-culled) PVs.
+  typedef std::vector<PVNodeID> PVPath;
+  PVPath fDrawnPVPath;                 // Path of drawn (non-culled) PVs.
   std::set<PVNodeID> fPVNodeStore;     // Stores encountered PVNodeIDs.
   std::set<G4LogicalVolume*> fDrawnLVStore;  // Stores encountered LVs.
 };
