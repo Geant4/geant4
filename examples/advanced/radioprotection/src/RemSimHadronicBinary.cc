@@ -26,7 +26,7 @@
 //    *                                    *
 //    **************************************
 //
-// $Id: RemSimHadronicBinary.cc,v 1.3 2005-09-08 06:56:18 guatelli Exp $
+// $Id: RemSimHadronicBinary.cc,v 1.4 2006-03-15 09:54:15 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author : Susanna Guatelli, guatelli@ge.infn.it
@@ -62,6 +62,7 @@
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4BinaryCascade.hh"
+#include "G4PiMinusAbsorptionAtRest.hh"
 
 RemSimHadronicBinary::RemSimHadronicBinary(const G4String& name): 
 G4VPhysicsConstructor(name)
@@ -218,11 +219,12 @@ void RemSimHadronicBinary::ConstructProcess()
   pipMan -> AddDiscreteProcess(pipelProc);
 
   // Inelastic process
-
+    
   G4PionPlusInelasticProcess* pipinelProc = new G4PionPlusInelasticProcess();
   pipinelProc -> AddDataSet(pion_XC);
   pipinelProc -> RegisterMe(LEP_pip_model);
-  pipinelProc -> RegisterMe(QGSP_model);
+  pipinelProc -> RegisterMe(QGSP_model);                                                
+  pimMan -> AddRestProcess(new G4PiMinusAbsorptionAtRest, ordDefault);
   pipMan -> AddDiscreteProcess(pipinelProc);
 
   // ******************************************

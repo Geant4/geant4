@@ -21,47 +21,45 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimPrimaryGeneratorAction.hh,v 1.13 2006-03-15 09:54:15 guatelli Exp $// GEANT4 tag $Name: not supported by cvs2svn $
+// Code developed by:  S.Guatelli, guatelli@ge.infn.it
 //
-// Author: Susanna Guatelli, guatelli@ge.infn.it
+//    *****************************************
+//    *                                       *
+//    *    RemSimPrimaryGeneratorMessenger.cc *
+//    *                                       *
+//    *****************************************
 //
-#ifndef RemSimPrimaryGeneratorAction_h
-#define RemSimPrimaryGeneratorAction_h 1
+//
+// $Id: RemSimPrimaryGeneratorMessenger.cc,v 1.10 2006-03-15 09:54:15 guatelli Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
 
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include "globals.hh"
+#include "RemSimPrimaryGeneratorMessenger.hh"
+#include "RemSimPrimaryGeneratorAction.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithoutParameter.hh"
 
-class G4ParticleGun;
-class G4Event;
-class G4DataVector;
-class RemSimPrimaryGeneratorMessenger;
+RemSimPrimaryGeneratorMessenger::RemSimPrimaryGeneratorMessenger( RemSimPrimaryGeneratorAction* prim): primary(prim)
+{  
+  gunDir = new G4UIdirectory("/gun/");
+  gunDir->SetGuidance("Select the generation configuration of primary particles.");
+ 
+  dataCmd = new G4UIcmdWithAString("/gun/data",this);
+  dataCmd -> SetGuidance("Primary particle spectrum"); 
+  dataCmd -> SetParameterName("choice",true);
+  dataCmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
+ }
 
-class RemSimPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+RemSimPrimaryGeneratorMessenger::~RemSimPrimaryGeneratorMessenger()
 {
-public:
-  RemSimPrimaryGeneratorAction();
-  ~RemSimPrimaryGeneratorAction();
-
-public:
-  G4double GetInitialEnergy();
-  void GeneratePrimaries(G4Event* anEvent);
-  void ReadProbability(G4String);
-
-private:  
-  G4ParticleGun* particleGun;
-  RemSimPrimaryGeneratorMessenger* messenger;
-  G4bool readFile;
-
-  G4double* cumulate;
-  G4double* energy;
-
- //stores the probability given in input
-  G4DataVector* data;
- //stores the energy data 
-  G4DataVector* energies;
-
-  G4int size;
-};
-#endif
-
+  delete dataCmd;
+  delete gunDir;
+} 
+ 
+void RemSimPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+{ 
+ if (command == dataCmd) primary -> ReadProbability(newValue);
+}
 

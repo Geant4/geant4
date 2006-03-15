@@ -21,47 +21,40 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimPrimaryGeneratorAction.hh,v 1.13 2006-03-15 09:54:15 guatelli Exp $// GEANT4 tag $Name: not supported by cvs2svn $
+//    ************************************************
+//    *                                              *
+//    *      RemSimPrimaryGeneratorMessenger.hh      *
+//    *                                              *
+//    ************************************************
 //
-// Author: Susanna Guatelli, guatelli@ge.infn.it
+// $Id: RemSimPrimaryGeneratorMessenger.hh,v 1.9 2006-03-15 09:54:15 guatelli Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-#ifndef RemSimPrimaryGeneratorAction_h
-#define RemSimPrimaryGeneratorAction_h 1
+//Code developed by:  S.Guatelli, guatelli@ge.infn.it
+//
+ 
+#ifndef RemSimPrimaryGeneratorMessenger_h
+#define RemSimPrimaryGeneratorMessenger_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
+#include "G4UImessenger.hh"
 
-class G4ParticleGun;
-class G4Event;
-class G4DataVector;
-class RemSimPrimaryGeneratorMessenger;
+class RemSimPrimaryGeneratorAction;
+class G4UIdirectory;
+class G4UIcmdWithAString;
 
-class RemSimPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+class RemSimPrimaryGeneratorMessenger: public G4UImessenger
 {
 public:
-  RemSimPrimaryGeneratorAction();
-  ~RemSimPrimaryGeneratorAction();
-
-public:
-  G4double GetInitialEnergy();
-  void GeneratePrimaries(G4Event* anEvent);
-  void ReadProbability(G4String);
-
-private:  
-  G4ParticleGun* particleGun;
-  RemSimPrimaryGeneratorMessenger* messenger;
-  G4bool readFile;
-
-  G4double* cumulate;
-  G4double* energy;
-
- //stores the probability given in input
-  G4DataVector* data;
- //stores the energy data 
-  G4DataVector* energies;
-
-  G4int size;
+  RemSimPrimaryGeneratorMessenger(RemSimPrimaryGeneratorAction* );
+  ~RemSimPrimaryGeneratorMessenger();
+    
+  void SetNewValue(G4UIcommand*, G4String);
+  
+private:
+  RemSimPrimaryGeneratorAction* primary;
+  G4UIdirectory*                gunDir; 
+  G4UIcmdWithAString*           dataCmd;
 };
 #endif
-
 

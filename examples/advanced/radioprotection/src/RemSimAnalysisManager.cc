@@ -26,7 +26,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: RemSimAnalysisManager.cc,v 1.9 2005-09-08 06:56:18 guatelli Exp $
+// $Id: RemSimAnalysisManager.cc,v 1.10 2006-03-15 09:54:15 guatelli Exp $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 //
@@ -34,30 +34,81 @@
 #include <stdlib.h>
 #include <fstream>
 #include "RemSimAnalysisManager.hh"
-//#include "RemSimAnalysisMessenger.hh"
 #include "G4ios.hh"
 #include <AIDA/AIDA.h>
 #include "G4RunManager.hh"
-
+#include <vector>
 
 RemSimAnalysisManager* RemSimAnalysisManager::instance = 0;
 
 RemSimAnalysisManager::RemSimAnalysisManager() 
   :  aFact(0), treeFact(0), theTree(0), dataPointFactory(0),
      histogramFactory(0), dataPoint(0), energyDeposit(0),
-     primary(0), secondaryDeposit(0), primaryInitialE(0), 
+     primary(0), secondaryDeposit(0),secondaryProtonEnergyDeposit(0),
+     secondaryPionEnergyDeposit(0),
+     primaryInitialE(0), 
      primaryInitialEout(0), initialE(0), 
-     initialEout(0), shape(0), energyShape(0)
+     initialEout(0), shape(0), energyShape(0) , histo_secondary_phantom(0),
+     histo_proton(0), histo_neutron(0), histo_pion(0), histo_alpha(0), 
+     histo_positron(0), histo_electron(0), histo_gamma(0), histo_muon(0), histo_other(0), histo_neutrino(),
+     histo_proton_slice(0), histo_neutron_slice(0), 
+     histo_pion_slice(0), histo_alpha_slice(0), 
+     histo_positron_slice(0),
+     histo_electron_slice(0), histo_gamma_slice(0), 
+     histo_muon_slice(0), histo_other_slice(0),histo_secondary(0),
+     histo_proton_reaching(0), histo_neutron_reaching(0), histo_pion_reaching(0), histo_alpha_reaching(0), 
+     histo_positron_reaching(0), histo_electron_reaching(0),
+     histo_gamma_reaching(0), histo_muon_reaching(0), histo_other_reaching(0), histo_vehicle(0),
+     proton_secondslice(0), pion_secondslice(0), proton_15slice(0),pion_15slice(0), 
+     proton_16slice(0),pion_16slice(0)
+
 { 
-  
   aFact = AIDA_createAnalysisFactory();
-  // messenger = new  RemSimAnalysisMessenger(this); 
   fileFormat = "hbook";
 }
 
 RemSimAnalysisManager::~RemSimAnalysisManager() 
-{ 
-  //delete messenger;
+{
+  delete proton_16slice; proton_16slice=0;
+  delete proton_15slice; proton_15slice=0;
+  delete proton_secondslice;  proton_secondslice =0;
+  delete pion_secondslice;  pion_secondslice =0;
+  delete histo_vehicle; histo_vehicle =0;
+  delete histo_proton_reaching; histo_proton_reaching =0;
+  delete histo_neutron_reaching; histo_neutron_reaching =0;
+  delete histo_pion_reaching; histo_pion_reaching =0; 
+  delete histo_alpha_reaching; histo_alpha_reaching =0;
+  delete histo_positron_reaching; histo_positron_reaching =0;
+  delete histo_electron_reaching; histo_electron_reaching =0;
+  delete histo_gamma_reaching; histo_gamma_reaching =0;
+  delete histo_muon_reaching; histo_muon_reaching =0;
+  delete histo_other_reaching; histo_other_reaching =0;
+
+  delete histo_proton_slice; histo_proton_slice =0;
+  delete histo_neutron_slice; histo_neutron_slice =0;
+  delete histo_pion_slice; histo_pion_slice =0; 
+  delete histo_alpha_slice; histo_alpha_slice =0;
+  delete histo_positron_slice; histo_positron_slice =0;
+  delete histo_electron_slice; histo_electron_slice =0;
+  delete histo_gamma_slice; histo_gamma_slice =0;
+  delete histo_muon_slice; histo_muon_slice =0;
+  delete histo_other_slice; histo_other_slice =0;
+
+  delete histo_proton; histo_proton =0;
+  delete histo_neutron; histo_neutron =0;
+  delete histo_pion; histo_pion =0; 
+  delete histo_alpha; histo_alpha =0;
+  delete histo_positron; histo_positron =0;
+  delete histo_electron; histo_electron =0;
+  delete histo_gamma; histo_gamma =0;
+  delete histo_muon; histo_muon =0;
+  delete histo_other; histo_other =0;
+  delete histo_neutrino; histo_neutrino =0;
+  delete histo_secondary;
+  histo_secondary = 0;
+
+  delete histo_secondary_phantom;
+  histo_secondary_phantom = 0;
 
   delete energyShape;
   energyShape = 0;
@@ -76,7 +127,14 @@ RemSimAnalysisManager::~RemSimAnalysisManager()
  
   delete primaryInitialE;
   primaryInitialE = 0;
- 
+
+
+  delete secondaryProtonEnergyDeposit;
+  secondaryProtonEnergyDeposit = 0;
+
+  delete secondaryPionEnergyDeposit;
+  secondaryPionEnergyDeposit = 0;
+
   delete secondaryDeposit;
   secondaryDeposit = 0;
 
@@ -114,19 +172,10 @@ RemSimAnalysisManager* RemSimAnalysisManager::getInstance()
 void RemSimAnalysisManager::book() 
 { 
  treeFact = aFact -> createTreeFactory();
-  
-  if (fileFormat == "hbook")
-    { 
-     theTree = treeFact -> create("remsim.hbk", "hbook", false, true);
-     G4cout << "The format of the output file is hbook" << G4endl;
-    }
+   
 
-  else if (fileFormat == "xml")
-    {
-     theTree = treeFact -> create("remsim.xml","xml",false, true,
-                                  "uncompress");
-     G4cout<< "The format of the output file is xml" << G4endl;
-    }
+  theTree = treeFact -> create("remsim.hbk", "hbook", false, true);
+  G4cout << "The format of the output file is hbook" << G4endl;
 
   histogramFactory = aFact -> createHistogramFactory(*theTree);
   energyDeposit = histogramFactory -> createHistogram1D("10",
@@ -134,42 +183,191 @@ void RemSimAnalysisManager::book()
                                                         30,// number of bins
 					                0.,//xmin
                                                         30.);//xmax 
+  G4int size  = 1901;
 
-  primary = histogramFactory -> createHistogram1D("20",
-				                "Initial energy of primary particles", 
-                                                100000,0.,100000.);
+  std::vector<double> vector_bin; 
+
+  G4double x_value = 0.;
+  for (G4int ptn = 0; ptn < size; ptn++ ) 
+    {
+   G4int binNb = 1000;
+   if (ptn < binNb)
+       {
+	 vector_bin.push_back(x_value);
+         x_value += 10; 
+      } //0-10 GeV bin da 10 MeV
+      else
+	{ vector_bin.push_back(x_value); x_value += 100.;} // E > 10 GeV, bin = 100 MeV
+   
+   // G4cout << " bin "<< ptn << " "<<vector_bin[ptn] << G4endl;     
+    }
+	  /*
+	  binNb = binNb + 900; 
+	  if (ptn < binNb) 
+	    {
+              vector_bin.push_back (x_value); // 10-100 MeV 
+              x_value +=1.;
+	    } 
+	  else
+	    { 
+	      binNb= binNb + 490;
+	      if (ptn <binNb) {vector_bin.push_back (x_value); x_value += 10.;}  // 100 MeV - 5 GeV
+	      else 
+		{
+		  binNb = binNb + 450;
+		  if (ptn <binNb) 
+                     {vector_bin.push_back (x_value); x_value += 100.;} // 5 GeV - 50 GeV
+		  else {  binNb= binNb + 50; vector_bin.push_back(x_value); x_value += 1000.; }// 50 GeV - 100GeV } 
+		}
+	    }
+	}
+   //G4cout << "bin "<< ptn << " "<< vector_bin[ptn] << G4endl; 
+    }
+	  */
+
+ primary = histogramFactory -> createHistogram1D("20",
+ 				                "Initial energy of primary particles", 
+                                                 vector_bin);
  
   secondaryDeposit = histogramFactory -> createHistogram1D("30",
 					 "EnergyDeposit given by secondaries", 
 					 30,0.,30.);
 
+ secondaryProtonEnergyDeposit = histogramFactory -> createHistogram1D("600",
+					 "EnergyDeposit given by secondary protons in the phantom", 
+					 30,0.,30.);
+
+ secondaryPionEnergyDeposit  = histogramFactory -> createHistogram1D("700",
+					 "EnergyDeposit given by secondaries pions in the phantom", 
+					 30,0.,30.);
+
  primaryInitialE = histogramFactory -> createHistogram1D("40",
-			   "Initial energy of primaries reaching the phantom", 
-                           100000,0.,100000.);
+			   "Initial energy of primaries reaching the phantom", vector_bin);
 
 
  primaryInitialEout = histogramFactory -> createHistogram1D("50",
 					       "Initial energy of primaries ougoing the phantom", 
-                                                100000,0.,100000.);
+                                                vector_bin);
+
 
  initialE = histogramFactory -> createHistogram1D("60",
 					       "Energy of primaries reaching the phantom", 
-                                                100000,0.,100000.);
+                                                vector_bin);
 
 
  initialEout = histogramFactory -> createHistogram1D("70",
 					       "Energy of primaries outgoing the phantom", 
-                                                100000,0.,100000.);
+                                                vector_bin);
 
  shape =  histogramFactory -> createHistogram2D("80",
 					       "Shape", 
-                                                300,-150.,150.,
-                                                300, -150.,150.);
+                                                320,-160.,160.,
+                                                320, -160.,160.);
 
  energyShape = histogramFactory -> createHistogram2D("90", 
                                                         "energyDepShape",
-                                                        300, -150.,150.,
-                                                        300, -150.,150.);
+                                                        320, -160.,160.,
+                                                        320, -160.,160.);
+
+histo_secondary_phantom = histogramFactory -> createHistogram1D("100", 
+                                                        "secondary particles produced in the phantom",
+                                                        10, 0., 10.);
+
+histo_secondary = histogramFactory -> createHistogram1D("300", 
+                                                        "secondary particles reaching the phantom",
+                                                        10, 0., 10.);
+
+histo_vehicle = histogramFactory -> createHistogram1D("500", 
+                                                        "secondary particles in the vehicle",
+                                                        10, 0., 10.);
+
+histo_proton = histogramFactory -> createHistogram1D("110","Energy of secondary p produced in the phantom", 
+						     100, 0., 1000.); // up to 1 GeV, 10 MeV bin
+
+histo_neutron= histogramFactory -> createHistogram1D("120","Energy of secondary n produced in the phantom", 
+						     100, 0., 1000.); // up to 1 GeV, 10 MeV bin
+
+histo_pion = histogramFactory-> createHistogram1D("130","Energy of secondary pions produced in the phantom",
+						  200, 0., 2000.);// up to 2 GeV, 10 MeV bin
+
+histo_alpha = histogramFactory-> createHistogram1D("140","Energy of secondary alpha produced in the phantom", 
+						   100, 0.,100.); // up to 100 MeV, 1 MeV bin
+
+histo_positron = histogramFactory-> createHistogram1D("150","Energy of secondary e+ produced in the phantom", 
+						      100, 0., 1000.); // up to 1 GeV, 10 MeV bin
+
+histo_electron = histogramFactory-> createHistogram1D("160","Energy of secondary e- produced in the phantom", 
+						      100, 0., 10.); // up to 10 MeV, 1 MeV bin
+
+histo_gamma = histogramFactory-> createHistogram1D("170","Energy of secondary gamma produced in the phantom",
+						   100, 0., 10.); // up to 10 MeV, 1 MeV bin
+
+histo_muon = histogramFactory-> createHistogram1D("180","Energy of secondary mu produced in the phantom", 
+         						 100, 0., 1000.); // up to 1 GeV, 10 MeV bin
+
+histo_other= histogramFactory -> createHistogram1D("190","Energy of secondary other particles produced in the phantom", 
+						   200,0., 200.); // up to 200 MeV, 1 MeV bin
+
+histo_neutrino = histogramFactory -> createHistogram1D("400", "Energy of secondary neutrinos produced in the phantom", 1000, 0., 10000.);
+
+histo_proton_slice = histogramFactory-> createHistogram1D("200"," Phantom Slice where  secondary protons are produced", 30, 0., 30.);
+histo_neutron_slice = histogramFactory-> createHistogram1D("210","Phantom Slice where  secondary neutrons are produced", 30, 0., 30.);
+histo_pion_slice= histogramFactory -> createHistogram1D("220","Phantom Slice where  secondary pions are produced", 30, 0., 30.);
+histo_alpha_slice = histogramFactory-> createHistogram1D("230","Phantom Slice where  secondary alpha are produced", 30, 0., 30.);
+histo_positron_slice  = histogramFactory -> createHistogram1D("240","Phantom Slice where  secondary positrons are produced ", 30, 0.,30.);
+histo_electron_slice  = histogramFactory-> createHistogram1D("250","Phantom Slice where  secondary electrons are produced", 30, 0., 30.);
+histo_gamma_slice  = histogramFactory-> createHistogram1D("260","Phantom Slice where  secondary gamma are produced", 30, 0., 30.);
+histo_muon_slice  = histogramFactory-> createHistogram1D("270","Phantom Slice where  secondary muons are produced", 30, 0., 30.);
+histo_other_slice  = histogramFactory-> createHistogram1D("280"," Phantom Slice where  secondary other particles are produced",30,0.,30.);
+
+histo_proton_reaching = histogramFactory -> createHistogram1D("310","Energy of secondary p reaching the phantom", 
+							       1000, 0., 10000.); // up to 10 GeV, 10 MeV bin
+
+histo_neutron_reaching= histogramFactory -> createHistogram1D("320","Energy of secondary n reaching the phantom", 
+							      1000, 0., 10000.); // up to 10 GeV, 10 MeV bin
+
+histo_pion_reaching = histogramFactory-> createHistogram1D("330","Energy of secondary pions reaching in the phantom", 
+							   1000, 0., 10000.); // up to 10 GeV, 10 MeV bin
+
+histo_alpha_reaching = histogramFactory-> createHistogram1D("340","Energy of secondary alpha reaching the phantom", 
+							    100, 0., 100.); // up to 100 MeV, 1 MeV bin
+
+histo_positron_reaching = histogramFactory-> createHistogram1D("350","Energy of secondary e+ reaching the phantom", 
+							       500, 0., 5000.); // up to 5 GeV, 10 MeV bin
+
+histo_electron_reaching = histogramFactory-> createHistogram1D("360","Energy of secondary e- reaching the phantom",
+							       200, 0., 2000.); //up to 2 GeV, 10 MeV bin 
+
+histo_gamma_reaching = histogramFactory-> createHistogram1D("370","Energy of secondary gamma reaching  the phantom",
+							    200, 0., 2000.);//up to 2 GeV, 10 MeV bin
+
+histo_muon_reaching = histogramFactory-> createHistogram1D("380","Energy of secondary mu reaching the phantom", 
+							   200, 0., 2000.); // up to 2 GeV, 10 MeV bin
+
+histo_other_reaching= histogramFactory -> createHistogram1D("390","Energy of secondary other particles reaching the phantom", 
+							    100, 0., 1000.); // up to 1 GeV, 10 MeV bin
+
+
+
+proton_secondslice = histogramFactory ->createHistogram1D("510","Energy of secondary p reaching the second slice", 
+							       1000, 0., 10000.); // up to 10 GeV, 10 MeV bin
+
+pion_secondslice =  histogramFactory ->createHistogram1D("520","Energy of secondary pions reaching the second slice", 
+							       1000, 0., 10000.); // up to 10 GeV, 10 MeV bin
+
+proton_15slice = histogramFactory ->createHistogram1D("530","Energy of secondary p reaching the 15th slice", 
+							       1000, 0., 10000.); // up to 10 GeV, 10 MeV bin
+
+pion_15slice =  histogramFactory ->createHistogram1D("540","Energy of secondary pions reaching the 15th slice", 
+							       1000, 0., 10000.); // up to 10 GeV, 10 MeV bin
+
+proton_16slice = histogramFactory ->createHistogram1D("550","Energy of secondary p reaching the 16th slice", 
+							       1000, 0., 10000.); // up to 10 GeV, 10 MeV bin
+
+pion_16slice =  histogramFactory ->createHistogram1D("560","Energy of secondary pions reaching the 16th slice", 
+							       1000, 0., 10000.); // up to 10 GeV, 10 MeV bin
+
+
 
 }
 
@@ -225,7 +423,237 @@ void RemSimAnalysisManager:: SetFormat(G4String format)
   if (fileFormat != "hbook" && fileFormat != "xml")
   G4cout << fileFormat << "is not available" << G4endl; 
 }
+void RemSimAnalysisManager:: SecondaryInPhantom(G4int i)
+{
+ histo_secondary_phantom -> fill(i);
+ //G4cout << "Riempio con i: in fantoccio " << i << G4endl;
+ // the weight is one;
+ // if i =0  secondary proton, i =1 neutron, i=2 pion, i=3 alpha, 
+ // i =4 other, i=5 electron, i = 6 gamma, i=7 positrons, 
+ // i=8 muons, i=9 neutrinos
+}
+ 
+void  RemSimAnalysisManager::SecondaryProtonInPhantom(G4double energy)
+{
+ histo_proton -> fill(energy);
+ //G4cout<< "proton energy : "<< energy << G4endl;
+}
 
+void  RemSimAnalysisManager::SecondaryNeutronInPhantom(G4double energy)
+{ histo_neutron -> fill(energy);
+//G4cout<< "neutron energy : "<< energy << G4endl;
+}
+
+void  RemSimAnalysisManager::SecondaryPionInPhantom(G4double energy)
+{
+histo_pion-> fill(energy);
+//G4cout<< "pion energy : "<< energy << G4endl;
+}
+
+void  RemSimAnalysisManager::SecondaryAlphaInPhantom(G4double energy)
+{
+histo_alpha-> fill(energy);
+
+//G4cout<< "alpha energy : "<< energy << G4endl;
+}
+
+void  RemSimAnalysisManager::SecondaryPositronInPhantom(G4double energy)
+{
+histo_positron-> fill(energy);
+//G4cout<< "positron energy : "<< energy << G4endl;
+
+}
+void  RemSimAnalysisManager::SecondaryElectronInPhantom(G4double energy)
+{
+histo_electron-> fill(energy);
+//G4cout<< "electron energy : "<< energy << G4endl;
+}
+
+void  RemSimAnalysisManager::SecondaryGammaInPhantom(G4double energy)
+{ histo_gamma -> fill(energy);
+//G4cout<< "gamma energy : "<< energy << G4endl;
+}
+
+void  RemSimAnalysisManager::SecondaryMuonInPhantom(G4double energy)
+{ histo_muon -> fill(energy);
+//G4cout<< "muon energy : "<< energy << G4endl;
+}
+
+void  RemSimAnalysisManager::SecondaryOtherInPhantom(G4double energy)
+{ histo_other -> fill(energy);
+//G4cout<< "other energy : "<< energy << G4endl;
+}
+void RemSimAnalysisManager::SecondaryNeutrinoInPhantom (G4double energy)
+{
+  histo_neutrino -> fill(energy);
+  // G4cout<< "neutrino energy:" << energy << G4endl;
+}
+
+void  RemSimAnalysisManager::SecondaryProtonInPhantomSlice(G4double slice)
+{
+ histo_proton_slice -> fill(slice);
+ //G4cout<< "proton slice : "<< slice << G4endl;
+}
+
+void  RemSimAnalysisManager::SecondaryNeutronInPhantomSlice(G4double slice)
+{ histo_neutron_slice -> fill(slice);
+//G4cout<< "neutron slice : "<< slice << G4endl;
+}
+
+void  RemSimAnalysisManager::SecondaryPionInPhantomSlice(G4double slice)
+{
+histo_pion_slice-> fill(slice);
+//G4cout<< "pion slice : "<< slice << G4endl;
+}
+
+void  RemSimAnalysisManager::SecondaryAlphaInPhantomSlice(G4double slice)
+{
+histo_alpha_slice-> fill(slice);
+//G4cout<< "alpha slice : "<< slice << G4endl;
+}
+
+void  RemSimAnalysisManager::SecondaryPositronInPhantomSlice(G4double slice)
+{
+histo_positron_slice-> fill(slice);
+//G4cout<< "positron slice : "<< slice << G4endl;
+}
+void  RemSimAnalysisManager::SecondaryElectronInPhantomSlice(G4double slice)
+{
+histo_electron_slice-> fill(slice);
+//G4cout<< "electron slice : "<< slice << G4endl;
+}
+
+void  RemSimAnalysisManager::SecondaryGammaInPhantomSlice(G4double slice)
+{ 
+histo_gamma_slice -> fill(slice);
+//G4cout<< "gamma slice : "<< slice << G4endl;
+}
+
+void  RemSimAnalysisManager::SecondaryMuonInPhantomSlice(G4double slice)
+{ 
+histo_muon_slice -> fill(slice);
+//G4cout<< "muon slice : "<< slice << G4endl;
+}
+
+void  RemSimAnalysisManager::SecondaryOtherInPhantomSlice(G4double slice)
+{ 
+histo_other_slice -> fill(slice);
+//G4cout<< "other slice : "<< slice << G4endl;
+}
+
+void RemSimAnalysisManager::SecondaryReachingThePhantom(G4int i)
+{
+ histo_secondary -> fill(i); 
+  // if i =0  secondary proton, i =1 neutron, i=2 pion, i=3 alpha, 
+ // i =4 other, i=5 electron, i = 6 gamma, i=7 positrons, 
+ // i=8 muons, i=9 neutrinos
+}
+
+void  RemSimAnalysisManager::SecondaryProtonReachingThePhantom(G4double energy)
+{
+ histo_proton_reaching -> fill(energy);
+ //G4cout<< "proton energy reaching the phantom: "<< energy << G4endl;
+}
+
+void  RemSimAnalysisManager::SecondaryNeutronReachingThePhantom(G4double energy)
+{ histo_neutron_reaching -> fill(energy);
+//G4cout<< "neutron energy reaching the phantom: "<< energy << G4endl;
+}
+
+void  RemSimAnalysisManager::SecondaryPionReachingThePhantom(G4double energy)
+{
+histo_pion_reaching -> fill(energy);
+//G4cout<< "pion energy reaching the phantom: "<< energy << G4endl;
+}
+
+void  RemSimAnalysisManager::SecondaryAlphaReachingThePhantom(G4double energy)
+{
+histo_alpha_reaching -> fill(energy);
+//G4cout<< "alpha energy reaching the phantom: "<< energy << G4endl;
+}
+
+void  RemSimAnalysisManager::SecondaryPositronReachingThePhantom(G4double energy)
+{
+histo_positron_reaching -> fill(energy);
+//G4cout<< "positron energy reaching the phantom: "<< energy << G4endl;
+}
+void  RemSimAnalysisManager::SecondaryElectronReachingThePhantom(G4double energy)
+{
+histo_electron_reaching -> fill(energy);
+//G4cout<< "electron energy reaching the phantom: "<< energy << G4endl;
+}
+
+void  RemSimAnalysisManager::SecondaryGammaReachingThePhantom(G4double energy)
+{ 
+histo_gamma_reaching -> fill(energy);
+//G4cout<< "gamma energy reaching the phantom: "<< energy << G4endl;
+}
+
+void  RemSimAnalysisManager::SecondaryMuonReachingThePhantom(G4double energy)
+{ 
+histo_muon_reaching -> fill(energy);
+//G4cout<< "muon energy reaching the phantom: "<< energy << G4endl;
+}
+
+void  RemSimAnalysisManager::SecondaryOtherReachingThePhantom(G4double energy)
+{ 
+histo_other_reaching -> fill(energy);
+ //G4cout<< "other energy reaching the phantom: "<< energy << G4endl;
+}
+
+void RemSimAnalysisManager::SecondaryInVehicle(G4int i)
+{
+  histo_vehicle -> fill(i);
+  //G4cout << "particle originated in vehicle "<< i << G4endl;
+}
+
+
+void  RemSimAnalysisManager::SecondaryProtonEnergyDeposit(G4int slice, G4double energyDeposit)
+{secondaryProtonEnergyDeposit -> fill(slice, energyDeposit);}
+
+void  RemSimAnalysisManager::SecondaryPionEnergyDeposit(G4int slice, G4double energyDeposit)
+{secondaryPionEnergyDeposit -> fill(slice, energyDeposit);}
+
+
+void RemSimAnalysisManager::ProtonSecondSlice(G4double energy)
+{
+  proton_secondslice -> fill (energy);
+  //G4cout<< "proton second slice: " << energy << G4endl;
+
+}
+ 
+void RemSimAnalysisManager::PionSecondSlice(G4double energy)
+{
+  pion_secondslice -> fill (energy);
+  //G4cout<< "pion second slice: " << energy << G4endl;
+}
+
+void RemSimAnalysisManager::Proton15Slice(G4double energy)
+{
+  proton_15slice -> fill (energy);
+  //G4cout<< "proton 15th slice: " << energy << G4endl;
+}
+ 
+void RemSimAnalysisManager::Pion15Slice(G4double energy)
+{
+  pion_15slice -> fill (energy);
+  //G4cout<< "pion 15th slice: " << energy << G4endl;
+}
+  
+void RemSimAnalysisManager::Proton16Slice(G4double energy)
+{
+  proton_16slice -> fill (energy);
+  //G4cout<< "proton 16th slice: " << energy << G4endl;
+
+}
+ 
+void RemSimAnalysisManager::Pion16Slice(G4double energy)
+{
+  pion_16slice -> fill (energy);
+  //G4cout<< "pion 16th slice: " << energy << G4endl;
+
+}
+  
 void RemSimAnalysisManager::finish() 
 {  
   theTree -> commit();

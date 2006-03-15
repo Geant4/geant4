@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimSensitiveDetector.cc,v 1.11 2005-11-23 09:22:11 guatelli Exp $
+// $Id: RemSimSensitiveDetector.cc,v 1.12 2006-03-15 09:54:15 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
@@ -58,20 +58,37 @@ G4bool RemSimSensitiveDetector::ProcessHits(G4Step* aStep,
   G4int i = ROhist -> GetReplicaNumber();
   // Energy deposit in the phantom
   analysis -> energyDepositStore(i,edep/MeV);
+//  analysis -> energyDepositProfile(i,edep/MeV);
   G4double xx = aStep -> GetPreStepPoint() -> GetPosition().x();
   G4double yy = aStep -> GetPreStepPoint() -> GetPosition().y();
+ G4double zz = aStep -> GetPreStepPoint() -> GetPosition().z();
 
   // Project the hits of primary and secondary particles
   // in the phantom in the plane x, y
-  analysis -> particleShape(xx/cm, yy/cm);
+  G4String volume = aStep -> GetPreStepPoint()-> GetPhysicalVolume() -> GetName();
  
+  if ( (xx < 150. *cm && xx > -150. * cm) && (yy < 150. *cm && yy > -150. * cm)  )
+  { 
+  analysis -> particleShape(xx/cm, yy/cm);
+  // 
   // Project the energy deposit of primary and secondary particles 
   // in the phantom in the plane x,y
   analysis -> energyDepShape(xx/cm,yy/cm, edep/MeV);
+  }
 
   // Energy deposit of secondary particles in the phantom
   if(aStep -> GetTrack() -> GetTrackID()!= 1)
+    {
     analysis -> SecondaryEnergyDeposit(i,edep/MeV);
+
+    G4String particleName = aStep -> GetTrack() -> GetDynamicParticle()
+			     -> GetDefinition() -> GetParticleName(); 
+
+    if (particleName == "proton") analysis -> SecondaryProtonEnergyDeposit(i, edep/MeV);
+    if (particleName == "pi+" || particleName == "pi-" || particleName == "pi0" )  
+      analysis -> SecondaryPionEnergyDeposit(i, edep/MeV);
+    }
+			     
 #endif
   return true;
 }
