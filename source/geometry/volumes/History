@@ -1,4 +1,4 @@
-$Id: History,v 1.135 2005-12-20 13:35:52 gcosmo Exp $
+$Id: History,v 1.136 2006-03-15 16:40:59 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 15th, 2006      G.Cosmo - geomvol-V08-00-01
+- G4AssemblyVolume: added default boolean argument to MakeImprint()
+  methods to allow for optional check for overlaps of constituent volumes.
 
 Dec 20th, 2005      G.Cosmo - geomvol-V08-00-00
 - G4AssemblyVolume: fixed initialisation of names for placed volumes
