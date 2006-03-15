@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.cc,v 1.5 2005-12-20 13:35:39 gcosmo Exp $
+// $Id: G4AssemblyVolume.cc,v 1.6 2006-03-15 16:38:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -157,7 +157,8 @@ void G4AssemblyVolume::AddPlacedVolume( G4LogicalVolume*  pVolume,
 void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
                                     G4ThreeVector&    translationInMother,
                                     G4RotationMatrix* pRotationInMother,
-                                    G4int copyNumBase )
+                                    G4int copyNumBase,
+                                    G4bool pSurfChk )
 {
   // If needed user can specify explicitly the base count from which to start off for the generation
   // of phys. vol. copy numbers
@@ -229,6 +230,7 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
                                 ,pMotherLV
                                 ,false
                                 ,numberOfDaughters + i
+                                ,pSurfChk
                               );
     
     // Register the physical volume created by us so we can delete it later
@@ -238,7 +240,8 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
 
 void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
                                     G4Transform3D&    transformation,
-                                    G4int copyNumBase )
+                                    G4int copyNumBase,
+                                    G4bool pSurfChk )
 {
   // If needed user can specify explicitly the base count from which to start off for the generation
   // of phys. vol. copy numbers
@@ -296,7 +299,8 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
                                                     pvName.str().c_str(),
                                                     pMotherLV,
                                                     false,
-                                                    numberOfDaughters + i );
+                                                    numberOfDaughters + i,
+                                                    pSurfChk );
 
     // Register the physical volume created by us so we can delete it later
     fPVStore.push_back( pPlaced );

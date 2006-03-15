@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.hh,v 1.2 2003-11-02 16:06:04 gcosmo Exp $
+// $Id: G4AssemblyVolume.hh,v 1.3 2006-03-15 16:38:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -120,13 +120,15 @@ class G4AssemblyVolume
   void MakeImprint( G4LogicalVolume* pMotherLV,
                     G4ThreeVector& translationInMother,
                     G4RotationMatrix* pRotationInMother,
-                    G4int copyNumBase = 0 );
+                    G4int copyNumBase = 0,
+                    G4bool pSurfChk = false );
     //
     // Creates instance of an assembly volume inside the given mother volume.
 
   void MakeImprint( G4LogicalVolume* pMotherLV,
                     G4Transform3D&   transformation,
-                    G4int copyNumBase = 0 );
+                    G4int copyNumBase = 0,
+                    G4bool pSurfChk = false );
     //
     // The same as previous but takes complete 3D transformation in space
     // as its argument.
