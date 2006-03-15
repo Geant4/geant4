@@ -154,7 +154,7 @@ void LXeDetectorConstruction::DefineMaterials(){
     
   G4double RIndexPstyrene[WLS_NUMENTRIES]={ 1.5, 1.5, 1.5, 1.5};
   G4double Absorption1[WLS_NUMENTRIES]={2.*cm, 2.*cm, 2.*cm, 2.*cm};
-  G4double ScintilFast[WLS_NUMENTRIES]={1.00, 1.00, 0.00, 0.00}; 
+  G4double ScintilFast[WLS_NUMENTRIES]={0.00, 0.00, 1.00, 1.00};
   MPTPStyrene = new G4MaterialPropertiesTable();
   MPTPStyrene->AddProperty("RINDEX",WLS_Energy,RIndexPstyrene,WLS_NUMENTRIES);
   MPTPStyrene->AddProperty("ABSLENGTH",WLS_Energy,Absorption1,WLS_NUMENTRIES);
@@ -167,7 +167,7 @@ void LXeDetectorConstruction::DefineMaterials(){
 
   G4double RefractiveIndexFiber[WLS_NUMENTRIES]={ 1.60, 1.60, 1.60, 1.60};
   G4double AbsFiber[WLS_NUMENTRIES]={9.00*m,9.00*m,0.1*mm,0.1*mm};
-  G4double EmissionFib[WLS_NUMENTRIES]={0.0, 0.0,1.0, 1.0};
+  G4double EmissionFib[WLS_NUMENTRIES]={1.0, 1.0, 0.0, 0.0};
   G4MaterialPropertiesTable* MPTFiber = new G4MaterialPropertiesTable();
   MPTFiber->AddProperty("RINDEX",WLS_Energy,RefractiveIndexFiber,
 			WLS_NUMENTRIES);
