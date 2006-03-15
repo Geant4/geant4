@@ -355,7 +355,6 @@ int main()
   G4int tgN=tPDG-90000000-tgZ*1000;
   // ---------- Define material for the simulation ------------------
   G4int tgA        = tgZ+tgN; // Mass number - fake
-  G4double tgR     = 2.7;   // @@ Not important for the thin target example. Can be any
   // The material can be copied from the commented cMaterial Factory above
   G4Isotope* isotope=0;
   G4Element* element=0;
@@ -374,7 +373,7 @@ int main()
       tgN = tPDG-90000000-tgZ*1000;
       tgA = tgZ+tgN; // Baryon number
       // The material can be copied from the commented cMaterial Factory above
-      isotope = new G4Isotope(tsy[tgi], tgZ, tgA, tgR*g/mole);
+      isotope = new G4Isotope(tsy[tgi], tgZ, tgA);
       element = new G4Element(tnm[tgi], tsy[tgi], 1);
       element->AddIsotope(isotope, 100.*perCent);
       material = new G4Material(tnm[tgi], 1.*g/cm3, 1);
@@ -385,7 +384,7 @@ int main()
   }
   else
   {
-    isotope = new G4Isotope("Isotop", tgZ, tgA, tgR*g/mole);
+    isotope = new G4Isotope("Isotop", tgZ, tgA);
     element = new G4Element("ZA_Isotop", "ZA", 1);
     element->AddIsotope(isotope, 100.*perCent);
     material = new G4Material("ZA_Isomer", 1.*g/cm3, 1);
