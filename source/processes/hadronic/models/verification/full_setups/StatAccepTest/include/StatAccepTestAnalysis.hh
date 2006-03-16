@@ -98,6 +98,7 @@ private:
   G4double beamEnergy;
   G4double sumEdepAct, sumEdepAct2;
   G4double sumEdepTot, sumEdepTot2, maxEdepTot;
+  G4int countEnergyNonConservation;
   std::vector< G4double > sumL;
   std::vector< G4double > sumL2;
   std::vector< G4double > sumR;

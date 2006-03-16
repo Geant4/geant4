@@ -110,6 +110,7 @@ void StatAccepTestAnalysis::init() {
   sumEdepTot  = 0.0;
   sumEdepTot2 = 0.0;
   maxEdepTot  = 0.0;
+  countEnergyNonConservation = 0;
   sumL.clear();
   sumL2.clear();
   for ( int layer = 0; layer < numberOfReadoutLayers; layer++ ) {
@@ -227,6 +228,11 @@ void StatAccepTestAnalysis::fillNtuple( float incidentParticleId,
 					float totalEnergyDepositedInActiveLayers,
 					float totalEnergyDepositedInCalorimeter ) {
   beamEnergy = incidentParticleEnergy;
+  if ( totalEnergyDepositedInCalorimeter - beamEnergy > 0.001*MeV ) {
+    G4cout << "\t ***ENERGY-NON-CONSERVATION*** " 
+	   << totalEnergyDepositedInCalorimeter << " MeV" << G4endl;
+    countEnergyNonConservation++;
+  }
   if ( totalEnergyDepositedInCalorimeter > maxEdepTot ) {
     maxEdepTot = totalEnergyDepositedInCalorimeter;
   }
@@ -1060,11 +1066,14 @@ void StatAccepTestAnalysis::finish() {
   // So, it is at the level of post-processing, that the user should
   // decide if an eventual message of energy-non-conservation makes sense
   // or not.
-  G4cout << " maxEdepTot  [MeV] = " << maxEdepTot;
   if ( maxEdepTot - beamEnergy > 0.001*MeV ) {
-    G4cout << "\t ***ENERGY-NON-CONSERVATION*** ";
-  } 
-  G4cout << G4endl;
+    G4cout << " maxEdepTot  [MeV] = " << maxEdepTot 
+           << "\t ***ENERGY-NON-CONSERVATION*** " << G4endl;
+    G4cout << "\t number of event with energy non conservation = " 
+	   << countEnergyNonConservation << G4endl;
+  } else {
+    G4cout << " maxEdepTot  [MeV] = " << maxEdepTot << G4endl;
+  }
 
   G4double n = static_cast< G4double >( numberOfEvents );
   if ( n <= 1.0 ) {
