@@ -14,6 +14,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+13 Mar 2006 Dennis Wright (hadr-man-V08-00-03)
+----------------------------------------------
+- G4HadronicProcess::ChooseAandZ() : throw fatal exception if
+       Z > 92 is chosen
+
+- G4HadronicProcess::GeneralPostStepDoIt() : for suspended tracks, allow 
+       PostStep action to occur at end of step, but maintain suspended 
+       track status.  Remove warning for suspended tracks.
+
+
 17 Jan 2006 Dennis Wright (hadr-man-V08-00-02)
 ----------------------------------------------
 - G4HadronicProcess.cc: add comments
