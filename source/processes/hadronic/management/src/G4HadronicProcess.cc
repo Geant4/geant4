@@ -232,6 +232,9 @@ const G4DynamicParticle *aParticle, const G4Material *aMaterial )
       }
       delete [] running;
     }
+    // Check for Z > 92)
+    if (currentZ > 92) G4Exception("G4HadronicProcess", "008", FatalException, "Z > 92 not allowed");
+
     targetNucleus.SetParameters(currentN, currentZ);
     return (*theElementVector)[0];
   }
@@ -324,7 +327,7 @@ const G4Track &aTrack, const G4Step &)
   G4HadSignalHandler aHandler(G4HadronicProcess_local::G4HadronicProcessHandler_1);
   #endif
 
-  if(aTrack.GetTrackStatus() != fAlive) 
+  if(aTrack.GetTrackStatus() != fAlive && aTrack.GetTrackStatus() != fSuspend) 
   {
     G4cerr << "G4HadronicProcess: track in unusable state - "
     <<aTrack.GetTrackStatus()<<G4endl;
