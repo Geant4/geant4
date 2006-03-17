@@ -19,14 +19,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryModelFactories.cc,v 1.2 2005-11-23 05:19:23 tinslay Exp $
+// $Id: G4TrajectoryModelFactories.cc,v 1.3 2006-03-17 03:24:02 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
 
-#include "G4ModelCommandsDrawByCharge.hh"
-#include "G4ModelCommandsDrawByParticleID.hh"
+#include "G4ModelCommandsT.hh"
 #include "G4TrajectoryDrawByCharge.hh"
+#include "G4TrajectoryDrawByOriginVolume.hh"
 #include "G4TrajectoryDrawByParticleID.hh"
 #include "G4TrajectoryModelFactories.hh"
 
@@ -45,8 +45,7 @@ G4TrajectoryDrawByChargeFactory::Create(const G4String& placement, const G4Strin
   // Create associated messengers
   Messengers messengers;
 
-  messengers.push_back(new G4ModelCommandDrawByChargeSet(model, placement));
-  messengers.push_back(new G4ModelCommandDrawByChargeSetRGBA(model, placement));
+  messengers.push_back(new G4ModelCommandSet<G4TrajectoryDrawByCharge>(model, placement));
   
   return ModelAndMessengers(model, messengers);
 }
@@ -67,10 +66,30 @@ G4TrajectoryDrawByParticleIDFactory::Create(const G4String& placement, const G4S
   // Create associated messengers
   Messengers messengers;
 
-  messengers.push_back(new G4ModelCommandDrawByParticleIDSet(model, placement));
-  messengers.push_back(new G4ModelCommandDrawByParticleIDSetRGBA(model, placement));
-  messengers.push_back(new G4ModelCommandDrawByParticleIDSetDefault(model, placement));
-  messengers.push_back(new G4ModelCommandDrawByParticleIDSetDefaultRGBA(model, placement));
+  messengers.push_back(new G4ModelCommandSet<G4TrajectoryDrawByParticleID>(model, placement));
+  messengers.push_back(new G4ModelCommandSetDefault<G4TrajectoryDrawByParticleID>(model, placement));
+  
+  return ModelAndMessengers(model, messengers);
+}
+
+//Draw by origin volume
+G4TrajectoryDrawByOriginVolumeFactory::G4TrajectoryDrawByOriginVolumeFactory()
+  :G4VModelFactory<G4VTrajectoryModel>("drawByOriginVolume") 
+{}
+
+G4TrajectoryDrawByOriginVolumeFactory::~G4TrajectoryDrawByOriginVolumeFactory() {}
+
+ModelAndMessengers
+G4TrajectoryDrawByOriginVolumeFactory::Create(const G4String& placement, const G4String& name)
+{
+  // Create model
+  G4TrajectoryDrawByOriginVolume* model = new G4TrajectoryDrawByOriginVolume(name);
+  
+  // Create associated messengers
+  Messengers messengers;
+
+  messengers.push_back(new G4ModelCommandSet<G4TrajectoryDrawByOriginVolume>(model, placement));
+  messengers.push_back(new G4ModelCommandSetDefault<G4TrajectoryDrawByOriginVolume>(model, placement));
   
   return ModelAndMessengers(model, messengers);
 }

@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByParticleID.hh,v 1.3 2005-11-23 05:19:23 tinslay Exp $
+// $Id: G4TrajectoryDrawByParticleID.hh,v 1.4 2006-03-17 03:24:02 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -34,6 +34,7 @@
 
 #include "G4VTrajectoryModel.hh"
 #include "G4Colour.hh"
+#include "G4ModelColourMap.hh"
 #include "G4String.hh"
 #include <map>
 
@@ -61,7 +62,7 @@ public: // With description
 private:
 
   // Data members
-  std::map<G4String, G4Colour> fMap;
+  G4ModelColourMap<G4String> fMap;
   G4Colour fDefault;
 
 };

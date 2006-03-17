@@ -19,55 +19,50 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ModelCommandsDrawByCharge.hh,v 1.2 2005-11-23 05:19:23 tinslay Exp $
+// $Id: G4TrajectoryDrawByOriginVolume.hh,v 1.1 2006-03-17 03:24:02 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-// 
-// Jane Tinslay, John Allison, Joseph Perl November 2005
 //
-// Class Description
-// Trajectory model commands.
+// Class Description:
+// Trajectory model which colours a trajectory according to
+// the origin volume
 // Class Description - End:
+// Jane Tinslay March 2006
 
-#ifndef G4MODELCOMMANDDRAWBYCHARGE_HH
-#define G4MODELCOMMANDDRAWBYCHARGE_HH
+#ifndef G4TRAJECTORYDRAWBYORIGINVOLUME
+#define G4TRAJECTORYDRAWBYORIGINVOLUME
 
+#include "G4VTrajectoryModel.hh"
+#include "G4Colour.hh"
+#include "G4ModelColourMap.hh"
 #include "G4String.hh"
-#include "G4VModelCommand.hh"
+#include <map>
 
-class G4TrajectoryDrawByCharge;
-class G4UIcmdWithAString;
-class G4UIcommand;
-
-// Command to set positive/negative/neutral trajectory colouring through a string
-class G4ModelCommandDrawByChargeSet : public G4VModelCommand<G4TrajectoryDrawByCharge> {
+class G4TrajectoryDrawByOriginVolume : public G4VTrajectoryModel {
 
 public: // With description
+ 
+  G4TrajectoryDrawByOriginVolume(const G4String& name = "Unspecified");
+  
+  virtual ~G4TrajectoryDrawByOriginVolume();
 
-  G4ModelCommandDrawByChargeSet(G4TrajectoryDrawByCharge* model, const G4String& placement);
+  virtual void Draw(const G4VTrajectory&, G4int) const;
+  // Draw the trajectory with optional i_mode parameter
 
-  virtual ~G4ModelCommandDrawByChargeSet();
+  virtual void Print(std::ostream& ostr) const;
+  // Print configuration
 
-  void SetNewValue(G4UIcommand* command, G4String newValue);
+  void SetDefault(const G4String&);
+  void SetDefault(const G4Colour&);
 
-private:
-
-  G4UIcmdWithAString* fpCommand;
-
-};
-
-// Command to set positive/negative/neutral trajectory colouring through G4Colour components
-class G4ModelCommandDrawByChargeSetRGBA : public G4VModelCommand<G4TrajectoryDrawByCharge> {
-
-public:
-
-  G4ModelCommandDrawByChargeSetRGBA(G4TrajectoryDrawByCharge* model, const G4String& placement) ;
-  virtual ~G4ModelCommandDrawByChargeSetRGBA();
-
-  void SetNewValue(G4UIcommand* command, G4String newValue);
+  void Set(const G4String& particle, const G4String& colour);
+  void Set(const G4String& particle, const G4Colour& colour);
+  // Configuration functions
 
 private:
 
-  G4UIcmdWithAString* fpCommand;
+  // Data members
+  G4ModelColourMap<G4String> fMap;
+  G4Colour fDefault;
 
 };
 

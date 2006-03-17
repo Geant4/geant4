@@ -19,25 +19,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByCharge.cc,v 1.3 2005-11-23 20:24:15 tinslay Exp $
+// $Id: G4TrajectoryDrawByCharge.cc,v 1.4 2006-03-17 03:24:02 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
-
 #include "G4TrajectoryDrawByCharge.hh"
-#include "G4Polyline.hh"
-#include "G4Polymarker.hh"
 #include "G4TrajectoryDrawerUtils.hh"
-#include "G4VisAttributes.hh"
 #include "G4VTrajectory.hh"
-#include "G4VVisManager.hh"
 #include <sstream>
 
 G4TrajectoryDrawByCharge::G4TrajectoryDrawByCharge(const G4String& name)
   :G4VTrajectoryModel(name)
 {
   // Default configuration
-  fMap[Positive] = G4Color::Blue();
+  fMap[Positive] = G4Colour::Blue();
   fMap[Negative] = G4Colour::Red();
   fMap[Neutral] = G4Colour::Green();
 }
@@ -58,91 +53,88 @@ G4TrajectoryDrawByCharge::~G4TrajectoryDrawByCharge() {}
 void
 G4TrajectoryDrawByCharge::Draw(const G4VTrajectory& traj, G4int i_mode) const
 {
-  // If i_mode>=0, draws a trajectory as a polyline (default is blue for
-  // positive, red for negative, green for neutral) and, if i_mode!=0,
-  // adds markers - yellow circles for step points and magenta squares
-  // for auxiliary points, if any - whose screen size in pixels is     
-  // given by std::abs(i_mode)/1000.  E.g: i_mode = 5000 gives easily 
-  // visible markers.
+  G4Colour colour;
 
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if (0 == pVVisManager) return;
+  const G4double charge = traj.GetCharge();
 
-  const G4double markerSize = std::abs(i_mode)/1000;
-  G4bool lineRequired (i_mode >= 0);
-  G4bool markersRequired (markerSize > 0.);   
+  if(charge>0.)      fMap.GetColour(Positive, colour); 
+  else if(charge<0.) fMap.GetColour(Negative, colour); 
+  else               fMap.GetColour(Neutral, colour); 
 
-  // Return if don't need to do anything
-  if (!lineRequired && !markersRequired) return;
-
-  // Get points to draw
-  G4Polyline trajectoryLine;
-  G4Polymarker stepPoints;
-  G4Polymarker auxiliaryPoints;
-  
-  G4TrajectoryDrawerUtils::GetPoints(traj, trajectoryLine, 
-				     auxiliaryPoints, stepPoints);
-  
-  if (lineRequired) {
-    G4Colour colour;
-    const G4double charge = traj.GetCharge();
-    if(charge>0.)      colour = fMap.find(Positive)->second; 
-    else if(charge<0.) colour = fMap.find(Negative)->second; 
-    else               colour = fMap.find(Neutral)->second; 
-    
-    G4VisAttributes trajectoryLineAttribs(colour);
-    trajectoryLine.SetVisAttributes(&trajectoryLineAttribs);
-    pVVisManager->Draw(trajectoryLine);
-  }
-
-  if (markersRequired) {
-    auxiliaryPoints.SetMarkerType(G4Polymarker::squares);
-    auxiliaryPoints.SetScreenSize(markerSize);
-    auxiliaryPoints.SetFillStyle(G4VMarker::filled);
-    G4VisAttributes auxiliaryPointsAttribs(G4Colour(0.,1.,1.));  // Magenta
-    auxiliaryPoints.SetVisAttributes(&auxiliaryPointsAttribs);
-    pVVisManager->Draw(auxiliaryPoints);
-    
-    stepPoints.SetMarkerType(G4Polymarker::circles);
-    stepPoints.SetScreenSize(markerSize);
-    stepPoints.SetFillStyle(G4VMarker::filled);  
-    G4VisAttributes stepPointsAttribs(G4Colour(1.,1.,0.));  // Yellow.
-    stepPoints.SetVisAttributes(&stepPointsAttribs);
-    pVVisManager->Draw(stepPoints);
-  }
+  G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, i_mode, colour);
 }
 
 void
 G4TrajectoryDrawByCharge::Print(std::ostream& ostr) const
 {
   ostr<<"G4TrajectoryDrawByCharge model "<< Name() <<" colour scheme: "<<std::endl;
-  std::map<Charge, G4Colour>::const_iterator iter = fMap.begin();
-
-  while (iter != fMap.end()) {
-    ostr<< iter->first <<" : "<< iter->second <<G4endl;
-    iter++;
-  }
+  fMap.Print(ostr);
 }
 
 void
-G4TrajectoryDrawByCharge::Set(Charge charge, const G4String& colour)
+G4TrajectoryDrawByCharge::Set(const Charge& charge, const G4String& colour)
 {
-  G4Colour myColour(G4Colour::White());
-
-  // Will not modify myColour if colour key does not exist
-  if (!G4Colour::GetColour(colour, myColour)) {
-    std::ostringstream o;
-    o << "G4Colour with key "<<colour<<" does not exist ";
-    G4Exception
-      ("G4TrajectoryDrawByCharge::Set(Charge charge, const G4String& colour)",
-       "NonExistentColour", JustWarning, o.str().c_str());
-  }
-
-  Set(charge, myColour);
+  fMap.Set(charge, colour);
 }
 
 void
-G4TrajectoryDrawByCharge::Set(Charge charge, const G4Colour& colour)
+G4TrajectoryDrawByCharge::Set(const Charge& charge, const G4Colour& colour)
 {
   fMap[charge] = colour;
+}
+
+void
+G4TrajectoryDrawByCharge::Set(const G4String& charge, const G4String& colour)
+{  
+  Charge myCharge;
+  
+  if (!ConvertToCharge(charge, myCharge)) {
+    std::ostringstream o;
+    o << "Invalid charge "<<charge;
+    G4Exception   
+      ("G4TrajectoryDrawByCharge::Set(const G4int& charge, const G4String& colour)", "InvalidCharge", JustWarning, o.str().c_str());
+  }
+
+  return Set(myCharge, colour);
+}
+
+void
+G4TrajectoryDrawByCharge::Set(const G4String& charge, const G4Colour& colour)
+{  
+  Charge myCharge;
+  
+  if (!ConvertToCharge(charge, myCharge)) {
+    std::ostringstream o;
+    o << "Invalid charge "<<charge;
+    G4Exception   
+      ("G4TrajectoryDrawByCharge::Set(const G4int& charge, const G4Colour& colour)", "InvalidCharge", JustWarning, o.str().c_str());
+  }
+
+  return Set(myCharge, colour);
+}
+
+bool
+G4TrajectoryDrawByCharge::ConvertToCharge(const G4String& string, Charge& myCharge)
+{
+  bool result(true);
+ 
+  G4int charge;
+  std::istringstream is(string.c_str());
+  is >> charge;
+
+  switch (charge) {
+  case 1:
+    myCharge = G4TrajectoryDrawByCharge::Positive;
+    break;
+  case 0:
+    myCharge = G4TrajectoryDrawByCharge::Neutral;  
+    break;
+  case -1:
+    myCharge = G4TrajectoryDrawByCharge::Negative;   
+    break;
+  default:
+    result = false;
+  }
+  
+  return result;
 }

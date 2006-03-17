@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByCharge.hh,v 1.3 2005-11-23 05:19:23 tinslay Exp $
+// $Id: G4TrajectoryDrawByCharge.hh,v 1.4 2006-03-17 03:24:02 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -33,6 +33,7 @@
 #define G4TRAJECTORYDRAWBYCHARGE_HH
 
 #include "G4Colour.hh"
+#include "G4ModelColourMap.hh"
 #include "G4VTrajectoryModel.hh"
 #include <map>
 
@@ -57,14 +58,19 @@ public: // With description
   virtual void Print(std::ostream& ostr) const;
   // Print configuration
 
-  void Set(Charge charge, const G4String& colour);
-  void Set(Charge charge, const G4Colour& colour);
+  void Set(const Charge& charge, const G4Colour& colour);
+  void Set(const Charge& charge, const G4String& colour);
+
+  void Set(const G4String& charge, const G4Colour& colour);
+  void Set(const G4String& charge, const G4String& colour);
   // Configuration functions 
 
 private:
   
+  bool ConvertToCharge(const G4String&, Charge&);
+
   // Data member
-  std::map<Charge, G4Colour> fMap;
+  G4ModelColourMap<Charge> fMap;
   
 };
 

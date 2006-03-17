@@ -19,75 +19,92 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByParticleID.cc,v 1.5 2006-03-17 03:24:02 tinslay Exp $
+// $Id: G4TrajectoryDrawByOriginVolume.cc,v 1.1 2006-03-17 03:24:02 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Jane Tinslay, John Allison, Joseph Perl November 2005
+// Jane Tinslay March 2006
 
-#include "G4TrajectoryDrawByParticleID.hh"
+#include "G4TrajectoryDrawByOriginVolume.hh"
 #include "G4TrajectoryDrawerUtils.hh"
 #include "G4VTrajectory.hh"
+#include "G4TransportationManager.hh"
+#include "G4VTrajectoryPoint.hh"
 #include <sstream>
 
-G4TrajectoryDrawByParticleID::G4TrajectoryDrawByParticleID(const G4String& name)
+G4TrajectoryDrawByOriginVolume::G4TrajectoryDrawByOriginVolume(const G4String& name)
   :G4VTrajectoryModel(name)
   ,fDefault(G4Colour::Grey())
 {}
 
-G4TrajectoryDrawByParticleID::~G4TrajectoryDrawByParticleID() {}
+G4TrajectoryDrawByOriginVolume::~G4TrajectoryDrawByOriginVolume() {}
 
 void
-G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& traj, G4int i_mode) const
+G4TrajectoryDrawByOriginVolume::Draw(const G4VTrajectory& traj, G4int i_mode) const
 {
   G4Colour colour(fDefault);
-  G4String particle = traj.GetParticleName();
+  
+  G4Navigator* navigator = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
+  
+  G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(0);
+  assert (0 != aTrajectoryPoint);
+  
+  G4VPhysicalVolume* volume = navigator->LocateGlobalPointAndSetup(aTrajectoryPoint->GetPosition());
 
-  fMap.GetColour(particle, colour);
+  // Logical volumes form basis.
+  G4LogicalVolume* logicalVolume = volume->GetLogicalVolume();
+  assert (0 != logicalVolume);
 
+  G4String logicalName = logicalVolume->GetName();
+  fMap.GetColour(logicalName, colour);
+
+  // Override with physical volume colouring if it exists
+  G4String physicalName = volume->GetName();
+  fMap.GetColour(physicalName, colour);
+   
   G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, i_mode, colour);
 }
 
 void
-G4TrajectoryDrawByParticleID::SetDefault(const G4String& colour)
+G4TrajectoryDrawByOriginVolume::SetDefault(const G4String& colour)
 {
-  G4Colour myColour(G4Colour::White());      
+  G4Colour myColour;      
 
-  // Will not modify myColour if colour key does not exist  
+  // Will not modify default colour if colour key does not exist  
   if (!G4Colour::GetColour(colour, myColour)) {
     std::ostringstream o;
     o << "G4Colour with key "<<colour<<" does not exist ";
     G4Exception
-      ("G4TrajectoryDrawByParticleID::SetDefault(const G4String& colour)",
+      ("G4TrajectoryDrawByOriginParticleID::SetDefault(const G4String& colour)",
        "NonExistentColour", JustWarning, o.str().c_str());
+    return;
   }
 
   SetDefault(myColour);
 }
 
 void
-G4TrajectoryDrawByParticleID::SetDefault(const G4Colour& colour)
+G4TrajectoryDrawByOriginVolume::SetDefault(const G4Colour& colour)
 {
   fDefault = colour;
 }
 
 void
-G4TrajectoryDrawByParticleID::Set(const G4String& particle, const G4String& colour)
+G4TrajectoryDrawByOriginVolume::Set(const G4String& particle, const G4String& colour)
 {
   fMap.Set(particle, colour);
 }
 
 void
-G4TrajectoryDrawByParticleID::Set(const G4String& particle, const G4Colour& colour)
+G4TrajectoryDrawByOriginVolume::Set(const G4String& particle, const G4Colour& colour)
 {
   fMap[particle] = colour;
 }
 
 void
-G4TrajectoryDrawByParticleID::Print(std::ostream& ostr) const
+G4TrajectoryDrawByOriginVolume::Print(std::ostream& ostr) const
 {
-  ostr<<"G4TrajectoryDrawByParticleID model "<< Name() <<" colour scheme: "<<std::endl;
-  
-  ostr<<"Default colour: "<<fDefault<<G4endl;
+  ostr<<"G4TrajectoryDrawByOriginVolume model "<< Name() <<" colour scheme: "<<std::endl;
+  ostr<<"Default : "<<fDefault<<G4endl;
 
   fMap.Print(ostr);
 }

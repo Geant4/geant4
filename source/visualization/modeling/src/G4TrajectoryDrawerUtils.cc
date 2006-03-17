@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawerUtils.cc,v 1.2 2005-11-21 05:44:44 tinslay Exp $
+// $Id: G4TrajectoryDrawerUtils.cc,v 1.3 2006-03-17 03:24:02 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -29,6 +29,9 @@
 #include "G4Polymarker.hh"
 #include "G4VTrajectory.hh"
 #include "G4VTrajectoryPoint.hh"
+#include "G4VVisManager.hh"
+#include "G4Colour.hh"
+#include "G4VisAttributes.hh"
 
 namespace G4TrajectoryDrawerUtils {
 
@@ -52,5 +55,54 @@ namespace G4TrajectoryDrawerUtils {
       trajectoryLine.push_back(pos);
       stepPoints.push_back(pos);
     }    
+  }
+
+  void DrawLineAndPoints(const G4VTrajectory& traj, const G4int& i_mode, const G4Colour& colour) {
+    // If i_mode>=0, draws a trajectory as a polyline (default is blue for
+    // positive, red for negative, green for neutral) and, if i_mode!=0,
+    // adds markers - yellow circles for step points and magenta squares
+    // for auxiliary points, if any - whose screen size in pixels is     
+    // given by std::abs(i_mode)/1000.  E.g: i_mode = 5000 gives easily 
+    // visible markers.
+    
+    G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+    if (0 == pVVisManager) return;
+    
+    const G4double markerSize = std::abs(i_mode)/1000;
+    G4bool lineRequired (i_mode >= 0);
+    G4bool markersRequired (markerSize > 0.);   
+    
+    // Return if don't need to do anything
+    if (!lineRequired && !markersRequired) return;
+    
+    // Get points to draw
+    G4Polyline trajectoryLine;
+    G4Polymarker stepPoints;
+    G4Polymarker auxiliaryPoints;
+    
+    GetPoints(traj, trajectoryLine, auxiliaryPoints, stepPoints);
+    
+    if (lineRequired) {
+      G4VisAttributes trajectoryLineAttribs(colour);
+      trajectoryLine.SetVisAttributes(&trajectoryLineAttribs);
+      pVVisManager->Draw(trajectoryLine);
+    }
+    
+    if (markersRequired) {
+      auxiliaryPoints.SetMarkerType(G4Polymarker::squares);
+      auxiliaryPoints.SetScreenSize(markerSize);
+      auxiliaryPoints.SetFillStyle(G4VMarker::filled);
+      G4VisAttributes auxiliaryPointsAttribs(G4Colour(0.,1.,1.));  // Magenta
+      auxiliaryPoints.SetVisAttributes(&auxiliaryPointsAttribs);
+      pVVisManager->Draw(auxiliaryPoints);
+      
+      stepPoints.SetMarkerType(G4Polymarker::circles);
+      stepPoints.SetScreenSize(markerSize);
+      stepPoints.SetFillStyle(G4VMarker::filled);  
+      G4VisAttributes stepPointsAttribs(G4Colour(1.,1.,0.));  // Yellow.
+      stepPoints.SetVisAttributes(&stepPointsAttribs);
+      pVVisManager->Draw(stepPoints);
+    }
+    
   }
 }
