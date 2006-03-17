@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.icc,v 1.8 2006-01-11 17:20:02 allison Exp $
+// $Id: G4VisExecutive.icc,v 1.9 2006-03-17 03:25:56 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -140,6 +140,7 @@ G4VisExecutive::RegisterModelFactories()
 {
    RegisterModelFactory(new G4TrajectoryDrawByChargeFactory());
    RegisterModelFactory(new G4TrajectoryDrawByParticleIDFactory());
+   RegisterModelFactory(new G4TrajectoryDrawByOriginVolumeFactory());  
 }
 
 #endif

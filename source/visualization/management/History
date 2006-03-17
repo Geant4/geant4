@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2006-03-13 14:31:29 allison Exp $
+$Id: History,v 1.37 2006-03-17 03:25:56 tinslay Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,8 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+16th March 2006 Jane Tinslay (jst16032006)
+- Add G4TrajectoryDrawByOriginVolumeFactory to G4VisExecutive
 
 13th March 2006  John Allison  (visman-V08-00-10)
 - Fixes recomputation of transients when changing drivers.
