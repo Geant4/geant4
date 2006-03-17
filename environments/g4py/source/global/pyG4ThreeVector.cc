@@ -1,4 +1,4 @@
-// $Id: pyG4ThreeVector.cc,v 1.1 2006-02-27 09:56:05 kmura Exp $
+// $Id: pyG4ThreeVector.cc,v 1.2 2006-03-17 09:52:59 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4ThreeVector.cc
@@ -83,8 +83,8 @@ void export_G4ThreeVector()
     
     // property
     .add_property("x", &XXX::x, &XXX::setX)
-    .add_property("y", &XXX::x, &XXX::setY)
-    .add_property("z", &XXX::x, &XXX::setZ)
+    .add_property("y", &XXX::y, &XXX::setY)
+    .add_property("z", &XXX::z, &XXX::setZ)
   
     // methods
     .def("set",      &XXX::set)
