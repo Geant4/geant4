@@ -11,7 +11,7 @@
   gmake
   cd ../examples/extended/electromagnetic
 
-  set ncurr  = 1
+  set ncurr  = 0
     while ($ncurr <= 14)
       cd TestEm$ncurr
       gmake
@@ -20,7 +20,7 @@
       @ ncurr++
     end
 
-  set ncurr  = 1
+  set ncurr  = 0
     while ($ncurr <= 14)
       tkdiff TestEm$ncurr/$2  TestEm$ncurr/$1
       @ ncurr++
