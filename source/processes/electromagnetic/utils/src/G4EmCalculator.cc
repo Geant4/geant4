@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.27 2006-01-26 11:12:45 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.28 2006-03-18 10:45:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,6 +42,9 @@
 // 23.10.2005 Fix computations for ions (V.Ivantchenko)
 // 11.01.2006 Add GetCSDARange (V.Ivantchenko)
 // 26.01.2006 Rename GetRange -> GetRangeFromRestricteDEDX (V.Ivanchenko)
+// 14.03.2006 correction in GetCrossSectionPerVolume (mma)
+//            suppress GetCrossSectionPerAtom
+//            elm->GetA() in ComputeCrossSectionPerAtom
 //
 // Class Description:
 //
@@ -279,10 +282,9 @@ G4double G4EmCalculator::GetCrossSectionPerVolume(G4double kinEnergy,
       G4bool b;
       G4double e = kinEnergy*massRatio;
       res = (((*currentLambda)[idx])->GetValue(e,b))*chargeSquare;
-      res /= mat->GetTotNbOfAtomsPerVolume();
       if(verbose>0) {
 	G4cout << "E(MeV)= " << kinEnergy/MeV
-	       << " cross(cm^2/g)= " << res*gram/cm2
+	       << " cross(cm-1)= " << res*cm
 	       << "  " <<  p->GetParticleName()
 	       << " in " <<  mat->GetName()
 	       << G4endl;
@@ -302,31 +304,6 @@ G4double G4EmCalculator::GetCrossSectionPerVolume(G4double kinEnergy,
 {
   return GetCrossSectionPerVolume(kinEnergy,FindParticle(particle),processName,
                                   FindMaterial(material),FindRegion(reg));
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4EmCalculator::GetCrossSectionPerAtom(G4double kinEnergy,
-                                          const G4ParticleDefinition* p,
-                                          const G4String& processName,
-					  const G4Material* mat,
-					  const G4Region* region)
-{
-  G4double res = GetCrossSectionPerVolume(kinEnergy,p,processName,mat,region);
-  if(mat) res /= mat->GetTotNbOfAtomsPerVolume();
-  return res;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4EmCalculator::GetCrossSectionPerAtom(  G4double kinEnergy,
-                                            const G4String& particle,
-					    const G4String& processName,
-                                            const G4String& material,
-					    const G4String& reg)
-{
-  return GetCrossSectionPerAtom(kinEnergy,FindParticle(particle),processName,
-                                FindMaterial(material),FindRegion(reg));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -542,7 +519,7 @@ G4double G4EmCalculator::ComputeCrossSectionPerVolume(
     }
     if(verbose>0) {
       G4cout << "E(MeV)= " << kinEnergy/MeV
-	     << " cross(cm^2/g)= " << res*gram/cm2
+	     << " cross(cm-1)= " << res*cm
 	     << "  " <<  p->GetParticleName()
 	     << " in " <<  mat->GetName()
 	     << G4endl;
@@ -589,7 +566,7 @@ G4double G4EmCalculator::ComputeCrossSectionPerAtom(
       G4cout << "E(MeV)= " << kinEnergy/MeV
 	     << " cross(barn)= " << res/barn
 	     << "  " <<  p->GetParticleName()
-	     << " Z= " <<  Z << " A= " << A
+	     << " Z= " <<  Z << " A= " << A/(g/mole) << " g/mole"
 	     << G4endl;
     }
   }
@@ -606,7 +583,7 @@ G4double G4EmCalculator::ComputeCrossSectionPerAtom(G4double kinEnergy,
 {
   return ComputeCrossSectionPerAtom(kinEnergy,FindParticle(particle),
 				    processName,
-                                    elm->GetZ(),elm->GetN(),cut);
+                                    elm->GetZ(),elm->GetA(),cut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

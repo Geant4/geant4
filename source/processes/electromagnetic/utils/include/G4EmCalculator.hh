@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.hh,v 1.12 2006-01-26 11:12:45 vnivanch Exp $
+// $Id: G4EmCalculator.hh,v 1.13 2006-03-18 10:45:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -114,13 +114,6 @@ public:
                    const G4String& processName,  const G4Material*,
 		   const G4Region* r = 0);
   G4double GetCrossSectionPerVolume(
-                   G4double kinEnergy, const G4String& part, const G4String& proc,
-                   const G4String& mat, const G4String& s = "world");
-  G4double GetCrossSectionPerAtom(
-                   G4double kinEnergy, const G4ParticleDefinition*,
-                   const G4String& processName,  const G4Material*,
-		   const G4Region* r = 0);
-  G4double GetCrossSectionPerAtom(
                    G4double kinEnergy, const G4String& part, const G4String& proc,
                    const G4String& mat, const G4String& s = "world");
 
