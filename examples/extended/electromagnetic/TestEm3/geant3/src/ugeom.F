@@ -77,7 +77,7 @@
       FIELDM = 10*Field
       TMAXFD = 10.0                                                             
       STEMAX = 1000.
-      IF (stepmax.gt.0.) STEMAX = stepmax                                                            
+      IF (stepmax.gt.0.) STEMAX = stepmax
       DEEMAX = 0.20                                                            
       EPSIL  = 0.001                                                           
       STMIN  = 0.010                                                           
