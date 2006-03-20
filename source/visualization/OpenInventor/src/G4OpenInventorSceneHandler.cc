@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.41 2006-01-30 13:55:22 allison Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.42 2006-03-20 14:59:17 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -207,7 +207,21 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
   SoCoordinate3* coordinate3 = new SoCoordinate3;
   coordinate3->point.setValues(0,pointn,points);
   fCurrentSeparator->addChild(coordinate3);
+
+  MarkerSizeType sizeType;
+  G4double screenSize = GetMarkerSize (polymarker, sizeType);
+  switch (sizeType) {
+  default:
+  case screen:
+    // Draw in screen coordinates.  OK.
+    break;
+  case world:
+    // Draw in world coordinates.   Not implemented.  Use screenSize = 10.
+    screenSize = 10.;
+    break;
+  }
   
+  /* Reaplced code.  Take out next time.
   const G4VMarker& marker = polymarker;
   G4bool userSpecified = (marker.GetWorldSize() || marker.GetScreenSize());
   const G4VMarker& def = fpViewer->GetViewParameters().GetDefaultMarker();
@@ -224,11 +238,12 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
     screenSize = scale *
       userSpecified ? marker.GetScreenSize() : def.GetScreenSize();
   }
+  */
 
   SoMarkerSet* markerSet = new SoMarkerSet;
   markerSet->numPoints = pointn;
 
-  G4VMarker::FillStyle style = marker.GetFillStyle();
+  G4VMarker::FillStyle style = polymarker.GetFillStyle();
   switch (polymarker.GetMarkerType()) {
   default:
     // Are available 5_5, 7_7 and 9_9
@@ -293,6 +308,9 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
 //  This method (Text) has not been tested, as it is 
 //  innaccessible from the menu in the current configuration
 //
+//  Currently draws at the origin!  How do I get it to draw at
+//  text.GetPosition()?  JA
+//
 // ********* NOTE ********* NOTE ********* NOTE ********* NOTE *********
 //
 // Method for handling G4Text objects
@@ -309,21 +327,42 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Text& text) {
                              (float)(1-c.GetAlpha()));
   fCurrentSeparator->addChild(material);
 
+  MarkerSizeType sizeType;
+  G4double size = GetMarkerSize (text, sizeType);
+  switch (sizeType) {
+  default:
+  case screen:
+    // Draw in screen coordinates.  OK.
+    break;
+  case world:
+    // Draw in world coordinates.   Not implemented.  Use size = 20.
+    size = 20.;
+    break;
+  }
+
   //
   // Font
   // 
 
   SoFont *g4Font = new SoFont();
-  g4Font->size = 20.0;
+  g4Font->size = size;
   fCurrentSeparator->addChild(g4Font);
 
   //
   // Text
   // 
   SoText2 *g4String = new SoText2();
-  g4String->string.setValue("This is Text");
+  g4String->string.setValue(text.GetText());
   g4String->spacing = 2.0;
-  g4String->justification = SoText2::LEFT;
+  switch (text.GetLayout()) {
+  default:
+  case G4Text::left:
+    g4String->justification = SoText2::LEFT; break;
+  case G4Text::centre:
+    g4String->justification = SoText2::CENTER; break;
+  case G4Text::right:
+    g4String->justification = SoText2::RIGHT; break;
+  }
   fCurrentSeparator->addChild(g4String);
 }
 
@@ -673,23 +712,6 @@ void G4OpenInventorSceneHandler::PreAddSolid
   //printf("debug : PreAddSolid : %g %g %g : %d\n",
     //red,green,blue,pVisAttribs->IsVisible());
                
-  // fDrawnPVPath is the path of the current drawn (non-culled) volume
-  // in terms of drawn (non-culled) ancesters.  Each node is
-  // identified by a PVNodeID object, which is a physical volume and
-  // copy number.  It is a vector of PVNodeIDs corresponding to the
-  // geometry hierarchy actually selected, i.e., not culled.
-  typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
-  typedef std::vector<PVNodeID>::iterator PVPath_iterator;
-  typedef std::vector<PVNodeID>::reverse_iterator PVPath_reverse_iterator;
-  PVPath_reverse_iterator ri;
-  // Find mother.  ri points to mother, if any.
-  G4LogicalVolume* MotherVolume = 0;
-  ri = ++fDrawnPVPath.rbegin();
-  if (ri != fDrawnPVPath.rend()) {
-    // This volume has a mother.
-    MotherVolume = ri->GetPhysicalVolume()->GetLogicalVolume();
-  }
-
   if(!fpCurrentLV || !fpCurrentPV) {
     SoMaterial* material = 
       fStyleCache->getMaterial((float)red,
@@ -700,96 +722,117 @@ void G4OpenInventorSceneHandler::PreAddSolid
     // return; //GB // JA
   }
 
-  //printf("debug : OIV : LV : %lx %s : %g %g %g\n",
-  // fpCurrentLV,
-  // fpCurrentLV->GetName().c_str(),
-  // red,green,blue);
+  else {
+    
+    //printf("debug : OIV : LV : %lx %s : %g %g %g\n",
+    // fpCurrentLV,
+    // fpCurrentLV->GetName().c_str(),
+    // red,green,blue);
 
-  else if (fpCurrentLV->GetNoDaughters()!=0 ||
-      fpCurrentPV->IsReplicated()) {
-    // This block of code is executed for non-leaf parts:
-
-    // Make the detector tree kit:
-    SoDetectorTreeKit* detectorTreeKit = new SoDetectorTreeKit();  
-
-    SoSeparator* previewSeparator   =  
-      (SoSeparator*) detectorTreeKit->getPart("previewSeparator",TRUE);
-    previewSeparator->renderCaching = SoSeparator::OFF;
-
-    SoSeparator* fullSeparator =  
-      (SoSeparator*) detectorTreeKit->getPart("fullSeparator",   TRUE);
-    fullSeparator->renderCaching = SoSeparator::OFF;
-
-    if(fPreviewAndFull) detectorTreeKit->setPreviewAndFull();
-    else detectorTreeKit->setPreview(TRUE);
-
-    SoMaterial* material = 
-      fStyleCache->getMaterial((float)red,
-                               (float)green,
-                               (float)blue,
-                               (float)transparency);
-    detectorTreeKit->setPart("appearance.material",material);
-
-    SoLightModel* lightModel = 
-      fModelingSolid ? fStyleCache->getLightModelPhong() : 
-                       fStyleCache->getLightModelBaseColor();
-    detectorTreeKit->setPart("appearance.lightModel",lightModel);
-
-    // Add the full separator to the dictionary; it is indexed by the 
-    // address of the logical volume!
-    fSeparatorMap[fpCurrentPV->GetLogicalVolume()] = fullSeparator;
-
-    // Find out where to add this volume.
-    // If no mother can be found, it goes under root.
-    if (MotherVolume) {
-      if (fSeparatorMap.find(MotherVolume) != fSeparatorMap.end()) {
-        //printf("debug : PreAddSolid : mother %s found in map\n",
-	//     MotherVolume->GetName().c_str());
-        fSeparatorMap[MotherVolume]->addChild(detectorTreeKit);
-      } else {
-	// Mother not previously encountered.  Shouldn't happen, since
-	// G4PhysicalVolumeModel sends volumes as it encounters them,
-	// i.e., mothers before daughters, in its descent of the
-	// geometry tree.  Error!
-	G4cout << "ERROR: G4OpenInventorSceneHandler::PreAddSolid: Mother "
-	       << ri->GetPhysicalVolume()->GetName()
-	       << ':' << ri->GetCopyNo()
-	       << " not previously encountered."
-	  "\nShouldn't happen!  Please report to visualization coordinator."
-	       << G4endl;
-	// Continue anyway.  Add to root of scene graph tree...
-	//printf("debug : PreAddSolid : mother %s not found in map !!!\n",
-	//     MotherVolume->GetName().c_str());
-        fDetectorRoot->addChild(detectorTreeKit);
-      }
-    } else {
-      //printf("debug : PreAddSolid : has no mother\n");
-      fDetectorRoot->addChild(detectorTreeKit);
+    // fDrawnPVPath is the path of the current drawn (non-culled) volume
+    // in terms of drawn (non-culled) ancesters.  Each node is
+    // identified by a PVNodeID object, which is a physical volume and
+    // copy number.  It is a vector of PVNodeIDs corresponding to the
+    // geometry hierarchy actually selected, i.e., not culled.
+    typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
+    typedef std::vector<PVNodeID>::iterator PVPath_iterator;
+    typedef std::vector<PVNodeID>::reverse_iterator PVPath_reverse_iterator;
+    PVPath_reverse_iterator ri;
+    // Find mother.  ri points to mother, if any.
+    G4LogicalVolume* MotherVolume = 0;
+    ri = ++fDrawnPVPath.rbegin();
+    if (ri != fDrawnPVPath.rend()) {
+      // This volume has a mother.
+      MotherVolume = ri->GetPhysicalVolume()->GetLogicalVolume();
     }
 
-    fCurrentSeparator = previewSeparator;
-  } else {
-    // This block of code is executed for leaf parts.
+    if (fpCurrentLV->GetNoDaughters()!=0 ||
+	fpCurrentPV->IsReplicated()) {
+      // This block of code is executed for non-leaf parts:
 
-    if (MotherVolume) {
-      if (fSeparatorMap.find(MotherVolume) != fSeparatorMap.end()) {
-        fCurrentSeparator = fSeparatorMap[MotherVolume];
+      // Make the detector tree kit:
+      SoDetectorTreeKit* detectorTreeKit = new SoDetectorTreeKit();  
+
+      SoSeparator* previewSeparator   =  
+	(SoSeparator*) detectorTreeKit->getPart("previewSeparator",TRUE);
+      previewSeparator->renderCaching = SoSeparator::OFF;
+
+      SoSeparator* fullSeparator =  
+	(SoSeparator*) detectorTreeKit->getPart("fullSeparator",   TRUE);
+      fullSeparator->renderCaching = SoSeparator::OFF;
+
+      if(fPreviewAndFull) detectorTreeKit->setPreviewAndFull();
+      else detectorTreeKit->setPreview(TRUE);
+
+      SoMaterial* material = 
+	fStyleCache->getMaterial((float)red,
+				 (float)green,
+				 (float)blue,
+				 (float)transparency);
+      detectorTreeKit->setPart("appearance.material",material);
+
+      SoLightModel* lightModel = 
+	fModelingSolid ? fStyleCache->getLightModelPhong() : 
+	fStyleCache->getLightModelBaseColor();
+      detectorTreeKit->setPart("appearance.lightModel",lightModel);
+
+      // Add the full separator to the dictionary; it is indexed by the 
+      // address of the logical volume!
+      fSeparatorMap[fpCurrentPV->GetLogicalVolume()] = fullSeparator;
+
+      // Find out where to add this volume.
+      // If no mother can be found, it goes under root.
+      if (MotherVolume) {
+	if (fSeparatorMap.find(MotherVolume) != fSeparatorMap.end()) {
+	  //printf("debug : PreAddSolid : mother %s found in map\n",
+	  //     MotherVolume->GetName().c_str());
+	  fSeparatorMap[MotherVolume]->addChild(detectorTreeKit);
+	} else {
+	  // Mother not previously encountered.  Shouldn't happen, since
+	  // G4PhysicalVolumeModel sends volumes as it encounters them,
+	  // i.e., mothers before daughters, in its descent of the
+	  // geometry tree.  Error!
+	  G4cout << "ERROR: G4OpenInventorSceneHandler::PreAddSolid: Mother "
+		 << ri->GetPhysicalVolume()->GetName()
+		 << ':' << ri->GetCopyNo()
+		 << " not previously encountered."
+	    "\nShouldn't happen!  Please report to visualization coordinator."
+		 << G4endl;
+	  // Continue anyway.  Add to root of scene graph tree...
+	  //printf("debug : PreAddSolid : mother %s not found in map !!!\n",
+	  //     MotherVolume->GetName().c_str());
+	  fDetectorRoot->addChild(detectorTreeKit);
+	}
       } else {
-	// Mother not previously encountered.  Shouldn't happen, since
-	// G4PhysicalVolumeModel sends volumes as it encounters them,
-	// i.e., mothers before daughters, in its descent of the
-	// geometry tree.  Error!
-	G4cout << "ERROR: G4OpenInventorSceneHandler::PreAddSolid: Mother "
-	       << ri->GetPhysicalVolume()->GetName()
-	       << ':' << ri->GetCopyNo()
-	       << " not previously encountered."
-	  "\nShouldn't happen!  Please report to visualization coordinator."
-	       << G4endl;
-	// Continue anyway.  Add to root of scene graph tree...
-        fCurrentSeparator = fDetectorRoot;
+	//printf("debug : PreAddSolid : has no mother\n");
+	fDetectorRoot->addChild(detectorTreeKit);
       }
+
+      fCurrentSeparator = previewSeparator;
+
     } else {
-      fCurrentSeparator = fDetectorRoot;
+      // This block of code is executed for leaf parts.
+
+      if (MotherVolume) {
+	if (fSeparatorMap.find(MotherVolume) != fSeparatorMap.end()) {
+	  fCurrentSeparator = fSeparatorMap[MotherVolume];
+	} else {
+	  // Mother not previously encountered.  Shouldn't happen, since
+	  // G4PhysicalVolumeModel sends volumes as it encounters them,
+	  // i.e., mothers before daughters, in its descent of the
+	  // geometry tree.  Error!
+	  G4cout << "ERROR: G4OpenInventorSceneHandler::PreAddSolid: Mother "
+		 << ri->GetPhysicalVolume()->GetName()
+		 << ':' << ri->GetCopyNo()
+		 << " not previously encountered."
+	    "\nShouldn't happen!  Please report to visualization coordinator."
+		 << G4endl;
+	  // Continue anyway.  Add to root of scene graph tree...
+	  fCurrentSeparator = fDetectorRoot;
+	}
+      } else {
+	fCurrentSeparator = fDetectorRoot;
+      }
     }
 
     SoMaterial* material = 
