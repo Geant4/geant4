@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2006-03-18 11:02:14 maire Exp $
+$Id: README,v 1.2 2006-03-20 11:54:02 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,7 +9,7 @@ $Id: README,v 1.1 2006-03-18 11:02:14 maire Exp $
                             -------
 
   This program is not a simulation. It prints the cross sections and stopping
-  power used by the standard electromagntic package, via the G4EmCalculator
+  power used by the standard electromagnetic package, via G4EmCalculator
   which extracts these data from the PhysicsTables.
 	
   The program can be used in batch or interactively.	
@@ -37,6 +37,6 @@ $Id: README,v 1.1 2006-03-18 11:02:14 maire Exp $
                             ------------
 			    
   DirectAccess is a small batch program which shows how to compute the same
-  basic data directly from the processes (in fact the models).
+  basic data directly from the processes (indeed the models).
   
-  To run it, change name in the first line on GNUmakefile before to compile.			      
+  To run it, change name in the first line on GNUmakefile before to compile.
