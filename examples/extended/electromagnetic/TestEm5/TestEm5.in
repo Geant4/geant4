@@ -1,4 +1,4 @@
-# $Id: TestEm5.in,v 1.17 2005-12-09 15:28:05 maire Exp $
+# $Id: TestEm5.in,v 1.18 2006-03-20 11:41:46 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -6,15 +6,15 @@
 /run/verbose 2
 #
 /testem/det/setAbsMat Silicon
-/testem/det/setAbsThick 20 mum
-/testem/det/setAbsYZ    50 mum
+/testem/det/setAbsThick 20 um
+/testem/det/setAbsYZ    50 um
 #
 /testem/phys/addPhysics  standard
 ### /testem/phys/addPhysics  g4v71
 #
 /testem/phys/setGCut 2.13 mm
-/testem/phys/setECut 7.0  mum
-/testem/phys/setPCut 7.0  mum
+/testem/phys/setECut 7.0  um
+/testem/phys/setPCut 7.0  um
 #
 /run/initialize
 #

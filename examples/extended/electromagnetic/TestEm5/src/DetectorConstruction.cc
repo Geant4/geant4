@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.9 2005-11-22 17:01:56 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.10 2006-03-20 11:41:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -120,6 +120,7 @@ lAr->AddElement(Ar, natoms=1);
 
 new G4Material("Iron",     z=26, a= 55.85*g/mole, density= 7.870*g/cm3);
 new G4Material("Copper",   z=29, a= 63.55*g/mole, density= 8.960*g/cm3);
+new G4Material("Silver",   z=47, a=107.87*g/mole, density= 10.50*g/cm3);
 new G4Material("Tungsten", z=74, a=183.85*g/mole, density= 19.30*g/cm3);
 new G4Material("Gold",     z=79, a=196.97*g/mole, density= 19.32*g/cm3);
 new G4Material("Lead",     z=82, a=207.19*g/mole, density= 11.35*g/cm3);
