@@ -24,7 +24,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.84 2005-12-14 13:57:13 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.85 2006-03-20 16:25:50 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -833,7 +833,8 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
       G4double cQM=sqrt(cQM2);             // Mass of the coloured residual Quasmom
       k4Mom=zeroLV;
       cr4Mom=G4LorentzVector(0.,0.,0.,cQM);
-	     if(!G4QHadron(q4Mom).RelDecayIn2(k4Mom,cr4Mom,q4Mom,cost,cost)) //Q->ColResQ+k_parton
+      G4LorentzVector dir4M=q4Mom-G4LorentzVector(0.,0.,0.,q4Mom.e()*.01);
+	     if(!G4QHadron(q4Mom).RelDecayIn2(k4Mom,cr4Mom,dir4M,cost,cost)) //Q->ColResQ+k_parton
       {
 #ifdef debug
         G4cerr<<"*G4Q::HQ:PB,M="<<quasM<<",cM="<<cQM<<",c="<<cost<<",F="<<gintFlag<<G4endl;
@@ -2904,6 +2905,28 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
               G4cerr<<"***G4Q::HQ: LamPiM Cor M="<<tmM<<"=>rPDG="<<rPDG<<"(rM="<<reMass
                     <<")+sPDG="<<sPDG<<"(sM="<<sMass<<")="<<sum<<G4endl;
               throw G4QException("***G4Quasmon::HadronizeQuasmon: (L->n)+Pi- DecayIn2");
+            }
+          }
+          else if(nreM<tmM)                                           // ----> N+gamma case
+          {
+            sMass=0.;
+            sPDG=22;
+            curQ+=tmpSQC+K0QC;                     // LToN correction for curQC
+            s4Mom=G4LorentzVector(0.,0.,0.,sMass); // Switch to new hadron mass
+            reMass=nreZ;
+            rPDG=nucZ.GetPDG();
+            r4Mom=G4LorentzVector(0.,0.,0.,reMass);// Switch to other isotope mass
+            sum=reMass+sMass;
+            if(fabs(tmM-sum)<eps)
+            {
+              r4Mom=q4Mom*(reMass/sum);
+              s4Mom=q4Mom*(sMass/sum);
+            }
+            else if(tmM<sum || !G4QHadron(q4Mom).DecayIn2(r4Mom, s4Mom))
+            {
+              G4cerr<<"***G4Q::HQ: LamNGam Cor M="<<tmM<<"=>rPDG="<<rPDG<<"(rM="<<reMass
+                    <<")+sPDG="<<sPDG<<"(sM="<<sMass<<")="<<sum<<G4endl;
+              throw G4QException("***G4Quasmon::HadronizeQuasmon: (L->n)+Gamma DecayIn2");
             }
           }
           else
