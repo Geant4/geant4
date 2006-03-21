@@ -47,6 +47,7 @@
 #include "G4NistManager.hh"
 #include "G4BraggModel.hh"
 #include "G4BetheBlochModel.hh"
+#include "G4EnergyLossForExtrapolator.hh"
 #include <iomanip>
 #include <fstream>
 
@@ -71,16 +72,18 @@ test31Histo::test31Histo()
   verbose = 0;
   nHisto  = 0;
   maxEnergy = 0.0;
-  nTuple = false;
-  histo = Histo::GetInstance();
+  nTuple  = false;
+  histo   = Histo::GetInstance();
   //  ema = new EmAnalysis();
-  histoID.resize(5);
+  histoID.resize(7);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 test31Histo::~test31Histo()
-{}
+{
+  delete extra;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -156,7 +159,8 @@ void test31Histo::EndOfHisto()
   G4double xmu = x*(G4double)n_mumu;
   G4double xpi = x*(G4double)n_pipi;
   G4cout                         << "Number of events               " << n_evt <<G4endl;
-  G4cout << std::setprecision(4) << "Average energy deposit         " << etot/MeV << " MeV" << G4endl;
+  G4cout << std::setprecision(4) << "Average energy deposit         " << etot/MeV 
+	 << " MeV" << G4endl;
   G4cout << std::setprecision(4) << "Average number of e-           " << xe << G4endl;
   G4cout << std::setprecision(4) << "Average number of gamma        " << xg << G4endl;
   G4cout << std::setprecision(4) << "Average number of e+           " << xp << G4endl;
@@ -210,7 +214,7 @@ void test31Histo::SaveToTuple(const G4String& parname,G4double val, G4double)
 
 void test31Histo::bookHisto()
 {
-  G4double zmax = (AbsorberThickness + gap) * NumberOfAbsorbers / mm;
+  zmax = (AbsorberThickness + gap) * NumberOfAbsorbers / mm;
   G4cout << "test31Histo: "
          << " AbsThick(mm)= " << AbsorberThickness/mm
          << " Nabs= " << NumberOfAbsorbers
@@ -218,26 +222,35 @@ void test31Histo::bookHisto()
          << " nHisto= " << nHisto
          << G4endl;
 
+  extra = new G4EnergyLossForExtrapolator(1);
 
   // Creating an 1-dimensional histograms in the root directory of the tree
   
-  histoID[0] = histo->add1D("10",
-    "Energy deposit (MeV) in absorber (mm)",NumberOfAbsorbers,0.0,zmax/mm,mm);
+  if(nHisto >= 0) {
+    G4double em = maxEnergy/MeV;
+    histoID[0] = 
+      histo->add1D("10","Energy deposit (MeV) in absorber (mm)",
+		   NumberOfAbsorbers,0.0,zmax/mm,mm);
 
-  histoID[1] =  histo->add1D("11",
-    "Energy (MeV) of secondary electrons",50,0.0,maxEnergy/MeV,MeV);
+    histoID[1] =  histo->add1D("11",
+      "Energy (MeV) of secondary electrons",50,0.0,em,MeV);
 
-  histoID[2] =  histo->add1D("12",
-    "Theta (degrees) of delta-electrons",36,0.0,180.,degree);
+    histoID[2] =  histo->add1D("12",
+      "Theta (degrees) of delta-electrons",36,0.0,180.,degree);
 
-  histoID[3] =  histo->add1D("13",
-    "Energy (MeV) of secondary gamma",50,0.0,maxEnergy/MeV,MeV);
+    histoID[3] =  histo->add1D("13",
+      "Energy (MeV) of secondary gamma",50,0.0,em,MeV);
 
-  histoID[4] =  histo->add1D("14",
-    "Theta (degrees) of secondary gamma",36,0.0,180.,degree);
+    histoID[4] =  histo->add1D("14",
+      "Theta (degrees) of secondary gamma",36,0.0,180.,degree);
 
-  if(nHisto < 5) {
-    for(G4int i=nHisto; i<5; i++) {histo->activate(histoID[i], false);}
+    histoID[5] =  histo->add1D("15",
+      "Theta (degrees) of primary",50,0.0,10.,degree);
+
+    histoID[6] =  histo->add1D("16",
+      "Delta Energy (MeV) of Reconstruction",100,-em,em,MeV);
+
+    for(G4int i=0; i<nHisto; i++) {histo->activate(histoID[i], true);}
   }
 
   if(nTuple) 
@@ -283,22 +296,33 @@ void test31Histo::AddPhoton(const G4DynamicParticle* ph)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void test31Histo::AddParticleLeak(const G4DynamicParticle* dp)
+void test31Histo::AddParticleLeak(const G4Track* track)
 {
+  const G4DynamicParticle* dp = track->GetDynamicParticle();
   if(dp->GetDefinition() == G4Gamma::Gamma()) {
     n_gam_leak++;
   } else if (dp->GetCharge() != 0.0) {
     n_charged_leak++;
+    if(track->GetTrackID() == 1) {
+      G4double tet = (dp->GetMomentumDirection()).theta();
+      if(5 < nHisto) histo->fill(histoID[5],tet,1.0);
+      G4double e0 = track->GetVertexKineticEnergy();
+      G4double e1 = dp->GetKineticEnergy();
+      G4double e2 = 
+        extra->EnergyBeforeStep(e1,zmax,absMaterial,dp->GetDefinition());
+      //      G4cout << "e0= " << e0 << " e1= " << e1 << " e2= " << e2 << G4endl;
+      if(6 < nHisto) histo->fill(histoID[6],e2 - e0,1.0);      
+    }
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void test31Histo::AddParticleBack(const G4DynamicParticle* dp)
+void test31Histo::AddParticleBack(const G4Track* track)
 {
-  if(dp->GetDefinition() == G4Gamma::Gamma()) {
+  if(track->GetDynamicParticle()->GetDefinition() == G4Gamma::Gamma()) {
     n_gam_back++;
-  } else if (dp->GetCharge() != 0.0) {
+  } else if (track->GetDynamicParticle()->GetCharge() != 0.0) {
     n_charged_back++;
   }
 }

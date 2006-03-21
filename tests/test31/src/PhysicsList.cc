@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.17 2006-01-17 10:02:24 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.18 2006-03-21 15:45:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -76,8 +76,8 @@ PhysicsList::PhysicsList()
   bicIsRegisted = false;
   ionIsRegisted = false;
   gnucIsRegisted = false;
-  verbose = 0;
-  //  G4LossTableManager::Instance()->SetVerbose(0);
+  verbose = 1;
+  G4LossTableManager::Instance()->SetVerbose(1);
   defaultCutValue = 1.*mm;
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
@@ -99,7 +99,7 @@ PhysicsList::~PhysicsList()
 void PhysicsList::ConstructParticle()
 {
   if(verbose > 0) 
-    G4cout << "Construte Particles" << G4endl;
+    G4cout << "### PhysicsList Construte Particles" << G4endl;
   G4VModularPhysicsList::ConstructParticle();
 }
 
@@ -108,7 +108,7 @@ void PhysicsList::ConstructParticle()
 void PhysicsList::ConstructProcess()
 {
   if(verbose > 0) 
-    G4cout << "Construte Processes" << G4endl;
+    G4cout << "### PhysicsList Construte Processes" << G4endl;
   if(!emBuilderIsRegisted) AddPhysicsList("standard");
   G4VModularPhysicsList::ConstructProcess();
 
@@ -128,7 +128,7 @@ void PhysicsList::ConstructProcess()
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
   if(verbose > 0) {
-    G4cout << "Add Physics <" << name 
+    G4cout << "### PhysicsList Add Physics <" << name 
            << "> emBuilderIsRegisted= " << emBuilderIsRegisted
            << G4endl;
   }

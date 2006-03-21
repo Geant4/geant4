@@ -77,7 +77,6 @@ test31DetectorConstruction::test31DetectorConstruction():
   magField(0),
   theEvent(0),
   myVerbose(0),
-  nEvents(0),
   detIsConstructed(false),
   nAbsSaved(0),
   nFirstEvtToDebug(-1),
@@ -91,10 +90,12 @@ test31DetectorConstruction::test31DetectorConstruction():
   gap               = 0.0;
   NumberOfAbsorbers = 300;
   nameMatWorld      = G4String("G4_Galactic");
+  nameMatGap        = G4String("G4_Galactic");
   WorldSizeZ        = 400.0*mm;
   maxDelta          = 10.0*MeV;
 
   DefineMaterials();
+  test31Histo::GetPointer();
 
   // create commands for interactive definition of the calorimeter  
   detectorMessenger = new test31DetectorMessenger(this);
@@ -122,30 +123,17 @@ void test31DetectorConstruction::DefineMaterials()
     G4cout << "test31DetectorConstruction: DefineMaterials starts" << G4endl;  
   } 
 
-  G4String name, symbol;             //a=mass of a mole;
-  G4double a, z, density;            //z=mean number of protons;  
-
   G4int    ncomponents, natoms;
-  G4double temperature, pressure;
-
   G4Material* ma = 0;
   
   G4NistManager* man = G4NistManager::Instance();
-  man->SetVerbose(1);
 
-  density = 1.39*g/cm3;
+  G4double density = 1.39*g/cm3;
   ma = new G4Material("Mylar"  , density, ncomponents=3);
   ma->AddElement(man->FindOrBuildElement("C"), natoms=10);
   ma->AddElement(man->FindOrBuildElement("H"), natoms=18);
   ma->AddElement(man->FindOrBuildElement("O"), natoms=5);
-  
-  density     = universe_mean_density;    //from PhysicalConstants.h
-  pressure    = 3.e-18*pascal;
-  temperature = 2.73*kelvin;
-  a = 1.01*g/mole;
-  z = 1.0;
-  ma = new G4Material("Vacuum", z, a, density,
-                                      kStateGas,temperature,pressure);  
+  if(ma) man->SetVerbose(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -162,34 +150,38 @@ G4VPhysicalVolume* test31DetectorConstruction::ConstructGeometry()
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
 
-  ComputeGeomParameters();
   WorldMaterial = GetMaterial(nameMatWorld);
   AbsorberMaterial = GetMaterial(nameMatAbsorber);
+  GapMaterial = GetMaterial(nameMatGap);
+  ComputeGeomParameters();
 
   //     
   // World
   //
   solidWorld = new G4Box("World",SizeXY+1.0*mm,SizeXY+1.0*mm,WorldSizeZ);   
-                         
   logicWorld = new G4LogicalVolume(solidWorld,WorldMaterial,"World");
-                                   
-  physWorld = new G4PVPlacement(0,G4ThreeVector(),"World",logicWorld,
-                                0,false,0);
-  
+  physWorld  = new G4PVPlacement(0,G4ThreeVector(),"World",logicWorld,
+                                 0,false,0);
+  //                               
+  // Absorber container
+  // 
+  G4double dz = 0.5*(AbsorberThickness + gap)*NumberOfAbsorbers;  
+  G4Box* solid = new G4Box("Container",SizeXY,SizeXY,dz);
+  G4LogicalVolume* lv = new G4LogicalVolume(solid,GapMaterial,"Container");
+  G4VPhysicalVolume* pv = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, dz),"Container",
+					    lv,physWorld,false,0);
   //                               
   // Absorber
   // 
   solidAbs = new G4Box("Absorber",SizeXY,SizeXY,AbsorberThickness*0.5);
-                          
   logicAbs = new G4LogicalVolume(solidAbs,AbsorberMaterial,"Absorber");
-      			                  
-  G4double z = AbsorberThickness * 0.5;
+  G4double z = 0.5*AbsorberThickness + gap - dz;
 
   for (G4int j=0; j<NumberOfAbsorbers; j++) {
   
     physAbs = new G4PVPlacement(0,G4ThreeVector(0.0,0.0,z),
-                                "Absorber",logicAbs,physWorld,false,j);
-    z += AbsorberThickness + gap; 
+                                "Absorber",logicAbs,pv,false,j);
+    z += (AbsorberThickness + gap); 
   }
   
   //                               
@@ -335,10 +327,12 @@ void test31DetectorConstruction::ComputeGeomParameters()
   if(WorldSizeZ < (AbsorberThickness + gap)*NumberOfAbsorbers)
      WorldSizeZ = (AbsorberThickness + gap)*NumberOfAbsorbers + 1.0*mm;
 
-  (test31Histo::GetPointer())->SetNumberOfAbsorbers(NumberOfAbsorbers);
-  (test31Histo::GetPointer())->SetAbsorberThickness(AbsorberThickness);
-  (test31Histo::GetPointer())->SetNumAbsorbersSaved(nAbsSaved);
-  (test31Histo::GetPointer())->SetGap(gap);
+  test31Histo* h = test31Histo::GetPointer(); 
+  h->SetNumberOfAbsorbers(NumberOfAbsorbers);
+  h->SetAbsorberThickness(AbsorberThickness);
+  h->SetNumAbsorbersSaved(nAbsSaved);
+  h->SetGap(gap);
+  h->SetAbsorberMaterial(AbsorberMaterial);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

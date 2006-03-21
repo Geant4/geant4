@@ -44,6 +44,7 @@
 #include "globals.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4Material.hh"
 #include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -51,6 +52,8 @@
 
 class Histo;
 class EmAnalysis;
+class G4Track;
+class G4EnergyLossForExtrapolator;
 
 class test31Histo
 {
@@ -86,8 +89,8 @@ public: // Without description
   void AddEnergy(G4double, G4double);
   void AddDeltaElectron(const G4DynamicParticle* dp);
   void AddPhoton(const G4DynamicParticle* dp);
-  void AddParticleLeak(const G4DynamicParticle* dp);
-  void AddParticleBack(const G4DynamicParticle* dp);
+  void AddParticleLeak(const G4Track*);
+  void AddParticleBack(const G4Track*);
   void AddPositron(const G4DynamicParticle*) {n_posit++;};
   void SetVerbose(G4int val) {verbose = val;};
   G4int GetVerbose() const {return verbose;};
@@ -109,7 +112,8 @@ public: // Without description
   void AddEvent() {n_evt++;};     
   G4int Event() {return n_evt;};     
   void AddStep() {n_step++;};     
-
+  void SetAbsorberMaterial(const G4Material* mat) {absMaterial = mat;};
+ 
   void CountProcess(const G4String&);
 
 private:
@@ -125,6 +129,8 @@ private:
   static test31Histo* fManager;
 
   EmAnalysis* ema;
+  G4EnergyLossForExtrapolator* extra;
+  const G4Material* absMaterial;
 
   G4String histName;
   G4String theName;
@@ -132,6 +138,7 @@ private:
   G4int nHisto;
   std::vector<G4int> histoID;
   G4int verbose; 
+  G4double zmax;
   G4double zend;
   G4double zend2;
   G4double etot;

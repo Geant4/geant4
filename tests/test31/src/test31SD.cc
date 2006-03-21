@@ -164,14 +164,12 @@ G4bool test31SD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     if(track->GetDefinition() == G4Positron::Positron()) 
       e += 2.*electron_mass_c2;
 
-    const G4DynamicParticle* dp = track->GetDynamicParticle();
-
     if(zend > zmax-delta)    {
        leakEnergy += e;
-       theHisto->AddParticleLeak(dp);       
+       theHisto->AddParticleLeak(track);       
     } else if(zend < delta)  {
        backEnergy += e;
-       theHisto->AddParticleBack(dp);       
+       theHisto->AddParticleBack(track);       
     }
     part_is_out = false;
   }

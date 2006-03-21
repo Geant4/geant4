@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ParticlesBuilder.cc,v 1.2 2004-12-03 13:01:35 vnivanch Exp $
+// $Id: ParticlesBuilder.cc,v 1.3 2006-03-21 15:45:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 
 //
 //---------------------------------------------------------------------------
@@ -101,7 +101,7 @@ ParticlesBuilder::~ParticlesBuilder()
 
 void ParticlesBuilder::ConstructParticle()
 {
-
+  G4cout << "ParticlesBuilder::ConstructParticle" << G4endl;
 // pseudo-particles
   G4Geantino::GeantinoDefinition();
   G4ChargedGeantino::ChargedGeantinoDefinition();
