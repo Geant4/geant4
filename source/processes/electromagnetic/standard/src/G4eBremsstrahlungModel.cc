@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.29 2006-02-09 13:06:12 maire Exp $
+// $Id: G4eBremsstrahlungModel.cc,v 1.30 2006-03-21 15:40:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -47,6 +47,7 @@
 // 08-04-05  Major optimisation of internal interfaces (V.Ivantchenko)
 // 03-08-05  Add extra protection at initialisation (V.Ivantchenko)
 // 07-02-06  public function ComputeCrossSectionPerAtom() (mma)
+// 21-03-06  Fix problem of initialisation in case when cuts are not defined (VI)
 //
 // Class Description:
 //
@@ -132,18 +133,23 @@ void G4eBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
   if(theCoupleTable) {
     G4int numOfCouples = theCoupleTable->GetTableSize();
 
-    for (size_t ii=0; ii<partialSumSigma.size(); ii++){
-      G4DataVector* a=partialSumSigma[ii];
-      if ( a )  delete a;
+    G4int nn = partialSumSigma.size();
+    G4int nc = cuts.size();
+    if(nn > 0) {
+      for (G4int ii=0; ii<nn; ii++){
+	G4DataVector* a=partialSumSigma[ii];
+	if ( a )  delete a;
+      }
+      partialSumSigma.clear();
     }
-    partialSumSigma.clear();
-    
     if(numOfCouples>0) {
       for (G4int i=0; i<numOfCouples; i++) {
+        G4double cute   = DBL_MAX;
+        if(i < nc) cute = cuts[i];
 	const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
 	const G4Material* material = couple->GetMaterial();
 	G4DataVector* dv = ComputePartialSumSigma(material, 0.5*highKinEnergy,
-                             min(cuts[i], 0.25*highKinEnergy));
+                             std::min(cute, 0.25*highKinEnergy));
 	partialSumSigma.push_back(dv);
       }
     }
@@ -168,7 +174,7 @@ G4double G4eBremsstrahlungModel::ComputeDEDXPerVolume(
 
   const G4double thigh = 100.*GeV;
 
-  G4double cut = min(cutEnergy, kineticEnergy);
+  G4double cut = std::min(cutEnergy, kineticEnergy);
 
   G4double rate, loss;
   const G4double factorHigh = 36./(1450.*GeV);

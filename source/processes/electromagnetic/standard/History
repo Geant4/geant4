@@ -1,4 +1,4 @@
-$Id: History,v 1.220 2006-03-13 17:41:16 vnivanch Exp $
+$Id: History,v 1.221 2006-03-21 15:40:54 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21 March 06 : V.Ivanchenko (emstand-V08-00-15)
+- G4eBremsstrahlungModel - fix problem of initialisation in the case when 
+  cuts are not defined (needed for Extrapolator and for unit tests)
+- add prototypes of elastic Coulomb scattering - only for testing
 
 13 March 06 : V.Ivanchenko (emstand-V08-00-14)
 - G4UrbanMscModel - fix problem of non-initialised variable
