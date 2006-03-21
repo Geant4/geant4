@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.10 2004-11-24 08:27:19 gcosmo Exp $
+// $Id: G4Navigator.hh,v 1.11 2006-03-21 14:08:03 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,55 +35,12 @@
 // reference system. The navigator maintains a transformation history and
 // other information to optimise the tracking time performance.
 //
-// NOTES:
-//
-// The following methods provide detailed information when a Step has
-// arrived at a geometrical boundary.  They distinguish between the different
-// causes that can result in the track leaving its current volume.
-//
-// Four cases are possible:
-//
-// 1) The particle has reached a boundary of a daughter of the current volume:
-//     (this could cause the relocation to enter the daughter itself
-//     or a potential granddaughter or further descendant)
-//     
-// 2) The particle has reached a boundary of the current
-//     volume, exiting into a mother (regardless the level
-//     at which it is located in the tree):
-//
-// 3) The particle has reached a boundary of the current
-//     volume, exiting into a volume which is not in its
-//     parental hierarchy:
-//
-// 4) The particle is not on a boundary between volumes:
-//     the function returns an exception, and the caller is
-//     reccomended to compare the G4touchables associated
-//     to the preStepPoint and postStepPoint to handle this case.
-//
-//   G4bool        EnteredDaughterVolume()
-//   G4bool        IsExitNormalValid()
-//   G4ThreeVector GetLocalExitNormal()
-//
-// The expected usefulness of these methods is to allow the caller to
-// determine how to compute the surface normal at the volume boundary. The two
-// possibilities are to obtain the normal from:
-//
-//   i) the solid associated with the volume of the initial point of the Step.
-//      This is valid for cases 2 and 3.  
-//      (Note that the initial point is generally the PreStepPoint of a Step).
-//   or
-// 
-//  ii) the solid of the final point, ie of the volume after the relocation.
-//      This is valid for case 1.
-//      (Note that the final point is generally the PreStepPoint of a Step).
-//
-// This way the caller can always get a valid normal, pointing outside
-// the solid for which it is computed, that can be used at his own
-// discretion.
-
 // History:
-// - Created. Paul Kent,         July 95/96
-// ********************************************************************
+// - Created.                                  Paul Kent,     Jul 95/96
+// - Zero step protections                     J.A. / G.C.,   Nov  2004
+// - Added check mode                          G. Cosmo,      Mar  2004
+// - Made Navigator Abstract                   G. Cosmo,      Nov  2003
+// *********************************************************************
 
 #ifndef G4NAVIGATOR_HH
 #define G4NAVIGATOR_HH
@@ -430,3 +387,50 @@ class G4Navigator
 #include "G4Navigator.icc"
 
 #endif
+
+
+// NOTES:
+//
+// The following methods provide detailed information when a Step has
+// arrived at a geometrical boundary.  They distinguish between the different
+// causes that can result in the track leaving its current volume.
+//
+// Four cases are possible:
+//
+// 1) The particle has reached a boundary of a daughter of the current volume:
+//     (this could cause the relocation to enter the daughter itself
+//     or a potential granddaughter or further descendant)
+//     
+// 2) The particle has reached a boundary of the current
+//     volume, exiting into a mother (regardless the level
+//     at which it is located in the tree):
+//
+// 3) The particle has reached a boundary of the current
+//     volume, exiting into a volume which is not in its
+//     parental hierarchy:
+//
+// 4) The particle is not on a boundary between volumes:
+//     the function returns an exception, and the caller is
+//     reccomended to compare the G4touchables associated
+//     to the preStepPoint and postStepPoint to handle this case.
+//
+//   G4bool        EnteredDaughterVolume()
+//   G4bool        IsExitNormalValid()
+//   G4ThreeVector GetLocalExitNormal()
+//
+// The expected usefulness of these methods is to allow the caller to
+// determine how to compute the surface normal at the volume boundary. The two
+// possibilities are to obtain the normal from:
+//
+//   i) the solid associated with the volume of the initial point of the Step.
+//      This is valid for cases 2 and 3.  
+//      (Note that the initial point is generally the PreStepPoint of a Step).
+//   or
+// 
+//  ii) the solid of the final point, ie of the volume after the relocation.
+//      This is valid for case 1.
+//      (Note that the final point is generally the PreStepPoint of a Step).
+//
+// This way the caller can always get a valid normal, pointing outside
+// the solid for which it is computed, that can be used at his own
+// discretion.
