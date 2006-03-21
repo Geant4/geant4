@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.42 2006-03-20 14:59:17 allison Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.43 2006-03-21 15:30:54 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,7 +97,7 @@ typedef HEPVis_SoMarkerSet SoMarkerSet;
 #include "G4Material.hh"
 #include "G4VisAttributes.hh"
 
-G4Point3D translation;
+//G4Point3D translation;
 
 G4int G4OpenInventorSceneHandler::fSceneIdCount = 0;
 
@@ -150,6 +150,8 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line) {
                              (float)line[iPoint].z());
   }
 
+  // Don't understand why I have to do this again (done in
+  // GeneratePrerequisites).
   //
   // Color
   //
@@ -196,6 +198,8 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
                             (float)polymarker[iPoint].z());
   }
 
+  // Don't understand why I have to do this again (done in
+  // GeneratePrerequisites).
   const G4Colour& c = GetColour (polymarker);
   SoMaterial* material = 
     fStyleCache->getMaterial((float)c.GetRed(),
@@ -221,25 +225,6 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
     break;
   }
   
-  /* Reaplced code.  Take out next time.
-  const G4VMarker& marker = polymarker;
-  G4bool userSpecified = (marker.GetWorldSize() || marker.GetScreenSize());
-  const G4VMarker& def = fpViewer->GetViewParameters().GetDefaultMarker();
-  //const G4Vector3D& viewpointDirection =
-  //  fpViewer->GetViewParameters().GetViewpointDirection();
-  //const G4Vector3D& up = fpViewer->GetViewParameters().GetUpVector();
-  G4double scale = fpViewer->GetViewParameters().GetGlobalMarkerScale();
-  G4double size = scale *
-    userSpecified ? marker.GetWorldSize() : def.GetWorldSize();
-  G4double screenSize = 0;  // Calculate marker in screen size...
-  if (size) {  // Size specified in world coordinates.
-    screenSize = 10.;  // This needs to be much more sophisticated!
-  } else { // Size specified in screen coordinates (pixels).
-    screenSize = scale *
-      userSpecified ? marker.GetScreenSize() : def.GetScreenSize();
-  }
-  */
-
   SoMarkerSet* markerSet = new SoMarkerSet;
   markerSet->numPoints = pointn;
 
@@ -317,7 +302,8 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Text& text) {
   //
-  // Color
+  // Color.  Note: text colour is worked out differently.  This
+  // over-rides the colour added in GeneratePrerequisites...
   //
   const G4Colour& c = GetTextColour (text);
   SoMaterial* material = 
@@ -382,6 +368,9 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Square& square) {
 
 void G4OpenInventorSceneHandler::AddCircleSquare
 (G4OIMarker markerType, const G4VMarker& marker) {
+
+  // Don't understand why I have to do this again (done in
+  // GeneratePrerequisites).
   //
   // Color
   //
@@ -393,8 +382,22 @@ void G4OpenInventorSceneHandler::AddCircleSquare
                              (float)(1-c.GetAlpha()));
   fCurrentSeparator->addChild(material);
 
-  // A few useful quantities...
+  MarkerSizeType sizeType;
+  G4double screenSize = GetMarkerSize (marker, sizeType);
+  switch (sizeType) {
+  default:
+  case screen:
+    // Draw in screen coordinates.  OK.
+    break;
+  case world:
+    // Draw in world coordinates.   Not implemented.  Use size = 10.
+    screenSize = 10.;
+    break;
+  }
+
   G4Point3D centre = marker.GetPosition();
+
+  /*
   G4bool userSpecified = (marker.GetWorldSize() || marker.GetScreenSize());
   const G4VMarker& def = fpViewer->GetViewParameters().GetDefaultMarker();
   //const G4Vector3D& viewpointDirection =
@@ -410,6 +413,7 @@ void G4OpenInventorSceneHandler::AddCircleSquare
     screenSize = scale *
       userSpecified ? marker.GetScreenSize() : def.GetScreenSize();
   }
+  */
 
   // Borrowed from AddPrimitive(G4Polymarker) - inefficient?
   SbVec3f* points = new SbVec3f[1];
@@ -478,6 +482,7 @@ void G4OpenInventorSceneHandler::AddCircleSquare
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   if (polyhedron.GetNoFacets() == 0) return;
 
+  /* Already done in GeneratePrerequisites...
   // If we got here *not* through G4PhysicalVolumeModel, we have to
   // add colour, since it will not have been done in PreAddSolid().
   // (The transformation has been added in BeginPrimitives().)
@@ -490,9 +495,14 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 			       (float)(1-c.GetAlpha()));
     fCurrentSeparator->addChild(material);
   }
+  */
 
   Geant4_SoPolyhedron* soPolyhedron = new Geant4_SoPolyhedron(polyhedron);
-  SbName sbName(fpCurrentLV?fpCurrentLV->GetName().c_str():"");
+  SbString name = "Non-geometry";
+  G4PhysicalVolumeModel* pPVModel =
+    dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+  if (pPVModel) name = pPVModel->GetCurrentLV()->GetName().c_str();
+  SbName sbName(name);
   soPolyhedron->setName(sbName);
   soPolyhedron->solid.setValue(fModelingSolid);
   soPolyhedron->reducedWireFrame.setValue(fReducedWireFrame?TRUE:FALSE);
@@ -571,6 +581,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4NURBS& nurb) {
   delete [] ctrl_pnt_array;
   delete [] points;
 }
+
 //
 // Generates prerequisites for primitives
 //  
@@ -578,6 +589,15 @@ void G4OpenInventorSceneHandler::BeginPrimitives
 (const G4Transform3D& objectTransformation) {
 
   G4VSceneHandler::BeginPrimitives (objectTransformation);
+
+  // If thread of control has already passed through PreAddSolid,
+  // avoid opening a graphical data base component again.
+  if (!fProcessingSolid) {
+    GeneratePrerequisites();
+  }
+}
+
+/*
 
   // Store away for future use, e.g.,
   // AddPrimitive (const G4Polyhedron& polyhedron).
@@ -618,6 +638,7 @@ void G4OpenInventorSceneHandler::BeginPrimitives
     fCurrentSeparator->addChild(matrixTransform);
   }
 }
+*/
 
 void G4OpenInventorSceneHandler::EndPrimitives () {
   G4VSceneHandler::EndPrimitives ();
@@ -652,8 +673,15 @@ void G4OpenInventorSceneHandler::EstablishSpecials
 
 void G4OpenInventorSceneHandler::PreAddSolid
 (const G4Transform3D& objectTransformation,
- const G4VisAttributes& visAttribs) {
+ const G4VisAttributes& visAttribs)
+{
+  G4VSceneHandler::PreAddSolid (objectTransformation, visAttribs);
+  // Stores arguments away for future use, e.g., AddPrimitives.
 
+  GeneratePrerequisites();
+}
+
+/*
   // This assumes that it is a "Pre" to the "Add" of a
   // G4VPhysicalVolume.  This is true at present, but beware!  We
   // might have to think about the cast in the following code.
@@ -865,7 +893,7 @@ void G4OpenInventorSceneHandler::PreAddSolid
   delete sbMatrix;
   fCurrentSeparator->addChild(matrixTransform);
 }
-
+*/
 
 //void G4OpenInventorSceneHandler::AddSolid(const G4VTrajectory& traj) {
 //  G4VSceneHandler::AddSolid(traj);  // For now.
@@ -874,5 +902,219 @@ void G4OpenInventorSceneHandler::PreAddSolid
 //void G4OpenInventorSceneHandler::AddSolid(const G4VHit& hit) {
 //  G4VSceneHandler::AddSolid(hit);  // For now.
 //}
+
+void G4OpenInventorSceneHandler::GeneratePrerequisites()
+{
+  // Utility for PreAddSolid and BeginPrimitives.
+
+  // This routines prepares for adding items to the scene database.  We
+  // are expecting two kinds of solids: leaf parts and non-leaf parts.
+  // For non-leaf parts, we create a detector tree kit.  This has two
+  // separators.  The solid itself goes in the preview separator, the
+  // full separator is forseen for daughters.  This separator is not
+  // only created--it is also put in a dictionary for future use by
+  // the leaf part.
+
+  // For leaf parts, we first locate the mother volume and find its
+  // separator through the dictionary.
+
+  // The private member fCurrentSeparator is set to the proper
+  // location on in the scene database so that when the solid is
+  // actually added (in addthis), it is put in the right place.
+
+  // Use the applicable vis attributes...
+  const G4VisAttributes* pApplicableVisAttribs =
+    fpViewer->GetApplicableVisAttributes (fpVisAttribs);
+
+  // First find the color attributes...
+  const G4Colour& g4Col =  pApplicableVisAttribs->GetColour ();
+  const double red = g4Col.GetRed ();
+  const double green = g4Col.GetGreen ();
+  const double blue = g4Col.GetBlue ();
+  double transparency = 1 - g4Col.GetAlpha();
+
+  // Drawing style...
+  G4ViewParameters::DrawingStyle drawing_style =
+    GetDrawingStyle(pApplicableVisAttribs);
+  switch (drawing_style) {
+  case (G4ViewParameters::wireframe):    
+    fModelingSolid = false;
+    break;
+  case (G4ViewParameters::hlr):
+  case (G4ViewParameters::hsr):
+  case (G4ViewParameters::hlhsr):
+    fModelingSolid = true;
+    break;
+  }	
+
+  // Edge visibility...
+  G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pApplicableVisAttribs);
+  fReducedWireFrame = !isAuxEdgeVisible;
+
+  G4PhysicalVolumeModel* pPVModel =
+    dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+  
+  if (pPVModel) {
+
+    // This call comes from a G4PhysicalVolumeModel.  drawnPVPath is
+    // the path of the current drawn (non-culled) volume in terms of
+    // drawn (non-culled) ancesters.  Each node is identified by a
+    // PVNodeID object, which is a physical volume and copy number.  It
+    // is a vector of PVNodeIDs corresponding to the geometry hierarchy
+    // actually selected, i.e., not culled.
+    typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
+    typedef std::vector<PVNodeID> PVPath;
+    const PVPath& drawnPVPath = pPVModel->GetDrawnPVPath();
+    const G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
+    const G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
+    //const G4Material* pCurrentMaterial = pPVModel->GetCurrentMaterial();
+
+    // The simplest algorithm, used by the Open Inventor Driver
+    // developers, is to rely on the fact the G4PhysicalVolumeModel
+    // traverses the geometry hierarchy in an orderly manner.  The last
+    // mother, if any, will be the node to which the volume should be
+    // added.  So it is enough to keep a map of scene graph nodes keyed
+    // on the volume path ID.  Actually, it is enough to use the logical
+    // volume as the key.  (An alternative would be to keep the PVNodeID
+    // in the tree and match the PVPath from the root down.)
+
+    // Find mother.  ri points to mother, if any...
+    PVPath::const_reverse_iterator ri;
+    G4LogicalVolume* MotherVolume = 0;
+    ri = ++drawnPVPath.rbegin();
+    if (ri != drawnPVPath.rend()) {
+      // This volume has a mother.
+      MotherVolume = ri->GetPhysicalVolume()->GetLogicalVolume();
+    }
+
+    if (pCurrentLV->GetNoDaughters()!=0 ||
+	pCurrentPV->IsReplicated()) {  //????Don't understand this???? JA
+      // This block of code is executed for non-leaf parts:
+
+      // Make the detector tree kit:
+      SoDetectorTreeKit* detectorTreeKit = new SoDetectorTreeKit();  
+
+      SoSeparator* previewSeparator   =  
+	(SoSeparator*) detectorTreeKit->getPart("previewSeparator",TRUE);
+      previewSeparator->renderCaching = SoSeparator::OFF;
+
+      SoSeparator* fullSeparator =  
+	(SoSeparator*) detectorTreeKit->getPart("fullSeparator",   TRUE);
+      fullSeparator->renderCaching = SoSeparator::OFF;
+
+      if(fPreviewAndFull) detectorTreeKit->setPreviewAndFull();
+      else detectorTreeKit->setPreview(TRUE);
+
+      SoMaterial* material = 
+	fStyleCache->getMaterial((float)red,
+				 (float)green,
+				 (float)blue,
+				 (float)transparency);
+      detectorTreeKit->setPart("appearance.material",material);
+
+      SoLightModel* lightModel = 
+	fModelingSolid ? fStyleCache->getLightModelPhong() : 
+	fStyleCache->getLightModelBaseColor();
+      detectorTreeKit->setPart("appearance.lightModel",lightModel);
+
+      // Add the full separator to the dictionary; it is indexed by the 
+      // address of the logical volume!
+      fSeparatorMap[pCurrentLV] = fullSeparator;
+
+      // Find out where to add this volume.
+      // If no mother can be found, it goes under root.
+      if (MotherVolume) {
+	if (fSeparatorMap.find(MotherVolume) != fSeparatorMap.end()) {
+	  //printf("debug : PreAddSolid : mother %s found in map\n",
+	  //     MotherVolume->GetName().c_str());
+	  fSeparatorMap[MotherVolume]->addChild(detectorTreeKit);
+	} else {
+	  // Mother not previously encountered.  Shouldn't happen, since
+	  // G4PhysicalVolumeModel sends volumes as it encounters them,
+	  // i.e., mothers before daughters, in its descent of the
+	  // geometry tree.  Error!
+	  G4cout <<
+	    "ERROR: G4OpenInventorSceneHandler::GeneratePrerequisites: Mother "
+		 << ri->GetPhysicalVolume()->GetName()
+		 << ':' << ri->GetCopyNo()
+		 << " not previously encountered."
+	    "\nShouldn't happen!  Please report to visualization coordinator."
+		 << G4endl;
+	  // Continue anyway.  Add to root of scene graph tree...
+	  //printf("debug : PreAddSolid : mother %s not found in map !!!\n",
+	  //     MotherVolume->GetName().c_str());
+	  fDetectorRoot->addChild(detectorTreeKit);
+	}
+      } else {
+	//printf("debug : PreAddSolid : has no mother\n");
+	fDetectorRoot->addChild(detectorTreeKit);
+      }
+
+      fCurrentSeparator = previewSeparator;
+
+    } else {
+      // This block of code is executed for leaf parts.
+
+      if (MotherVolume) {
+	if (fSeparatorMap.find(MotherVolume) != fSeparatorMap.end()) {
+	  fCurrentSeparator = fSeparatorMap[MotherVolume];
+	} else {
+	  // Mother not previously encountered.  Shouldn't happen, since
+	  // G4PhysicalVolumeModel sends volumes as it encounters them,
+	  // i.e., mothers before daughters, in its descent of the
+	  // geometry tree.  Error!
+	  G4cout << "ERROR: G4OpenInventorSceneHandler::PreAddSolid: Mother "
+		 << ri->GetPhysicalVolume()->GetName()
+		 << ':' << ri->GetCopyNo()
+		 << " not previously encountered."
+	    "\nShouldn't happen!  Please report to visualization coordinator."
+		 << G4endl;
+	  // Continue anyway.  Add to root of scene graph tree...
+	  fCurrentSeparator = fDetectorRoot;
+	}
+      } else {
+	fCurrentSeparator = fDetectorRoot;
+      }
+    }
+
+  } else {
+    // Not from G4PhysicalVolumeModel, so add to root as leaf part...
+
+    if (fReadyForTransients) {
+      fCurrentSeparator = fTransientRoot;
+    } else {
+      fCurrentSeparator = fDetectorRoot;
+    }
+  }
+
+  SoMaterial* material = 
+    fStyleCache->getMaterial((float)red,
+			     (float)green,
+			     (float)blue,
+			     (float)transparency);
+  fCurrentSeparator->addChild(material);
+
+  SoLightModel* lightModel = 
+    fModelingSolid ? fStyleCache->getLightModelPhong() : 
+    fStyleCache->getLightModelBaseColor();
+  fCurrentSeparator->addChild(lightModel);
+
+  // Set up the geometrical transformation for the coming 
+  fCurrentSeparator->addChild(fStyleCache->getResetTransform());
+
+  SoMatrixTransform* matrixTransform = new SoMatrixTransform;
+  G4OpenInventorTransform3D oiTran(*fpObjectTransformation);
+  SbMatrix* sbMatrix = oiTran.GetSbMatrix();
+
+  const G4Vector3D scale = fpViewer->GetViewParameters().GetScaleFactor();
+  SbMatrix sbScale;
+  sbScale.setScale
+    (SbVec3f((float)scale.x(),(float)scale.y(),(float)scale.z()));
+  sbMatrix->multRight(sbScale);
+
+  matrixTransform->matrix.setValue(*sbMatrix);
+  delete sbMatrix;
+  fCurrentSeparator->addChild(matrixTransform);
+}
 
 #endif
