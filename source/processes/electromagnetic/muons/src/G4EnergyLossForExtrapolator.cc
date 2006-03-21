@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.cc,v 1.6 2006-03-16 23:05:39 vnivanch Exp $
+// $Id: G4EnergyLossForExtrapolator.cc,v 1.7 2006-03-21 15:44:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -33,8 +33,10 @@
 // Author:       09.12.04 V.Ivanchenko 
 //
 // Modification: 
-// 08-04-05 Rename Propogator -> Extrapolator
-// 16-03-06 Add muon tables and fix bug in units
+// 08-04-05 Rename Propogator -> Extrapolator (V.Ivanchenko)
+// 16-03-06 Add muon tables and fix bug in units (V.Ivanchenko)
+// 21-03-06 Add verbosity defined in the constructor and Initialisation
+//          start only when first public method is called (V.Ivanchenko)
 //
 //----------------------------------------------------------------------------
 //
@@ -62,10 +64,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4EnergyLossForExtrapolator::G4EnergyLossForExtrapolator()
-{
-  Initialisation();
-}
+G4EnergyLossForExtrapolator::G4EnergyLossForExtrapolator(G4int verb)
+  :verbose(verb),isInitialised(false)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -91,6 +92,7 @@ G4double G4EnergyLossForExtrapolator::EnergyAfterStep(G4double kinEnergy,
 						      const G4Material* mat, 
 						      const G4ParticleDefinition* part)
 {
+  if(!isInitialised) Initialisation();
   G4double kinEnergyFinal = kinEnergy;
   if(mat && part) {
     G4double step = ComputeTrueStep(mat,part,kinEnergy,stepLength);
@@ -114,10 +116,13 @@ G4double G4EnergyLossForExtrapolator::EnergyBeforeStep(G4double kinEnergy,
 						       const G4Material* mat, 
 						       const G4ParticleDefinition* part)
 {
+  if(!isInitialised) Initialisation();
   G4double kinEnergyFinal = kinEnergy;
+
   if(mat && part) {
     G4double step = ComputeTrueStep(mat,part,kinEnergy,stepLength);
     G4double r  = ComputeRange(kinEnergy,mat,part);
+
     if(step < linLossLimit*r) {
       kinEnergyFinal += step*ComputeDEDX(kinEnergy,mat,part);
     } else {  
@@ -134,6 +139,7 @@ G4double G4EnergyLossForExtrapolator::ComputeTrueStep(const G4Material* mat,
 						      const G4ParticleDefinition* part,
 						      G4double kinEnergy, G4double stepLength)
 {
+  if(!isInitialised) Initialisation();
   G4bool flag = false;
   if(part != currentParticle) {
     flag = true;
@@ -177,6 +183,9 @@ G4double G4EnergyLossForExtrapolator::ComputeTrueStep(const G4Material* mat,
 
 void G4EnergyLossForExtrapolator::Initialisation()
 {
+  isInitialised = true;
+  if(verbose>1) 
+    G4cout << "### G4EnergyLossForExtrapolator::Initialisation" << G4endl;
   currentParticle = 0;
   currentMaterial = 0;
   kineticEnergy   = 0.0;
@@ -192,7 +201,6 @@ void G4EnergyLossForExtrapolator::Initialisation()
   emin         = 1.*MeV;
   emax         = 100.*GeV;
   nbins        = 50;
-  verbose      = 1;
 
   nmat = G4Material::GetNumberOfMaterials();
   const G4MaterialTable* mtable = G4Material::GetMaterialTable();
@@ -219,17 +227,29 @@ void G4EnergyLossForExtrapolator::Initialisation()
 
   G4LossTableBuilder builder; 
 
+  if(verbose>1) 
+    G4cout << "### G4EnergyLossForExtrapolator Builds electron tables" << G4endl;
+
   ComputeElectronDEDX(electron, dedxElectron);
   builder.BuildRangeTable(dedxElectron,rangeElectron);  
   builder.BuildInverseRangeTable(rangeElectron, invRangeElectron);  
+
+  if(verbose>1) 
+    G4cout << "### G4EnergyLossForExtrapolator Builds positron tables" << G4endl;
 
   ComputeElectronDEDX(positron, dedxPositron);
   builder.BuildRangeTable(dedxPositron, rangePositron);  
   builder.BuildInverseRangeTable(rangePositron, invRangePositron);  
 
-  ComputeMuonDEDX(proton, dedxMuon);
+  if(verbose>1) 
+    G4cout << "### G4EnergyLossForExtrapolator Builds muon tables" << G4endl;
+
+  ComputeMuonDEDX(muonPlus, dedxMuon);
   builder.BuildRangeTable(dedxMuon, rangeMuon);  
   builder.BuildInverseRangeTable(rangeMuon, invRangeMuon);  
+
+  if(verbose>1) 
+    G4cout << "### G4EnergyLossForExtrapolator Builds proton tables" << G4endl;
 
   ComputeProtonDEDX(proton, dedxProton);
   builder.BuildRangeTable(dedxProton, rangeProton);  
@@ -277,9 +297,9 @@ G4double G4EnergyLossForExtrapolator::ComputeDEDX(G4double kinEnergy,
   G4double x = 0.0;
   if(part == electron)      x = ComputeValue(kinEnergy, mat, dedxElectron);
   else if(part == positron) x = ComputeValue(kinEnergy, mat, dedxPositron);
-  else if(part == muonPlus || part == muonMinus) 
+  else if(part == muonPlus || part == muonMinus) {
     x = ComputeValue(kinEnergy, mat, dedxMuon);
-  else {
+  } else {
     G4double e = kinEnergy*proton_mass_c2/mass;
     x = ComputeValue(e, mat, dedxProton)*charge2;
   }
@@ -335,6 +355,10 @@ void G4EnergyLossForExtrapolator::ComputeElectronDEDX(const G4ParticleDefinition
   ioni->Initialise(part, v);
   brem->Initialise(part, v);
 
+  mass    = electron_mass_c2;
+  charge2 = 1.0;
+  currentParticle = part;
+
   const G4MaterialTable* mtable = G4Material::GetMaterialTable();
   if(0<verbose) {
     G4cout << "G4EnergyLossForExtrapolator::ComputeElectronDEDX for " 
@@ -379,10 +403,14 @@ void G4EnergyLossForExtrapolator::ComputeMuonDEDX(const G4ParticleDefinition* pa
   pair->Initialise(part, v);
   brem->Initialise(part, v);
 
+  mass    = part->GetPDGMass();
+  charge2 = 1.0;
+  currentParticle = part;
+
   const G4MaterialTable* mtable = G4Material::GetMaterialTable();
 
   if(0<verbose) {
-    G4cout << "G4EnergyLossForExtrapolator::ComputeProtonDEDX for " << part->GetParticleName() 
+    G4cout << "G4EnergyLossForExtrapolator::ComputeMuonDEDX for " << part->GetParticleName() 
            << G4endl;
   }
  
@@ -419,6 +447,10 @@ void G4EnergyLossForExtrapolator::ComputeProtonDEDX(const G4ParticleDefinition* 
   G4DataVector v;
   G4BetheBlochModel* ioni = new G4BetheBlochModel();
   ioni->Initialise(part, v);
+
+  mass    = part->GetPDGMass();
+  charge2 = 1.0;
+  currentParticle = part;
 
   const G4MaterialTable* mtable = G4Material::GetMaterialTable();
 

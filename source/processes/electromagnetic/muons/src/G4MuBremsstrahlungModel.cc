@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.cc,v 1.19 2006-02-13 16:46:15 maire Exp $
+// $Id: G4MuBremsstrahlungModel.cc,v 1.20 2006-03-21 15:44:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -45,6 +45,7 @@
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 03-08-05 Angular correlations according to PRM (V.Ivantchenko)
 // 13-02-06 add ComputeCrossSectionPerAtom (mma)
+// 21-03-06 Fix problem of initialisation in case when cuts are not defined (VI)
 //
 
 //
@@ -143,18 +144,24 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
         G4ProductionCutsTable::GetProductionCutsTable();
   if(theCoupleTable) {
     G4int numOfCouples = theCoupleTable->GetTableSize();
-
-    for (size_t ii=0; ii<partialSumSigma.size(); ii++){
-      G4DataVector* a=partialSumSigma[ii];
-      if ( a )  delete a;    
-    } 
-    partialSumSigma.clear();
+    
+    G4int nn = partialSumSigma.size();
+    G4int nc = cuts.size();
+    if(nn > 0) {
+      for (G4int ii=0; ii<nn; ii++){
+	G4DataVector* a=partialSumSigma[ii];
+	if ( a )  delete a;    
+      } 
+      partialSumSigma.clear();
+    }
     if (numOfCouples>0) {
       for (G4int i=0; i<numOfCouples; i++) {
+        G4double cute = DBL_MAX;
+        if(i < nc) cute = cuts[i];
         const G4MaterialCutsCouple* couple = 
 	                               theCoupleTable->GetMaterialCutsCouple(i);
 	const G4Material* material = couple->GetMaterial();
-	G4DataVector* dv = ComputePartialSumSigma(material,fixedEnergy,cuts[i]);
+	G4DataVector* dv = ComputePartialSumSigma(material,fixedEnergy,cute);
 	partialSumSigma.push_back(dv);
       }
     }

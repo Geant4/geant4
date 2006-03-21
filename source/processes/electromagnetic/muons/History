@@ -1,4 +1,4 @@
-$Id: History,v 1.89 2006-02-13 16:46:14 maire Exp $
+$Id: History,v 1.90 2006-03-21 15:44:45 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21 March 06: V.Ivant (emmuons-V08-00-02)
+- G4MuBremsstrahlungModel - fix problem of initialisation in the case when 
+  cuts are not defined (needed for Extrapolator and for unit tests)
+- G4EnergyLossForExtrapolator - fix bug in units, add muon tables, move
+  initialisation from the constructor to the first public call, add verbose
+  variable into constructor
      
 13 February 06 : mma (emmuons-V08-00-01)
 - added functions G4MuBetheBlochModel::ComputeCrossSectionPerElectron/Atom()

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.hh,v 1.3 2006-03-16 23:05:39 vnivanch Exp $
+// $Id: G4EnergyLossForExtrapolator.hh,v 1.4 2006-03-21 15:44:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -35,6 +35,8 @@
 // Modification: 
 // 08-04-05 Rename Propogator -> Extrapolator
 // 16-03-06 Add muon tables
+// 21-03-06 Add verbosity defined in the constructor and Initialisation
+//          start only when first public method is called (V.Ivanchenko)
 //
 //----------------------------------------------------------------------------
 //
@@ -59,7 +61,7 @@ class G4ProductionCuts;
 class G4EnergyLossForExtrapolator 
 {
 public:
-  G4EnergyLossForExtrapolator();
+  G4EnergyLossForExtrapolator(G4int verb = 1);
 
   ~G4EnergyLossForExtrapolator();
 
@@ -159,6 +161,7 @@ private:
   G4int       nbins;
   G4int       nmat;
   G4int       verbose;
+  G4bool      isInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -208,6 +211,7 @@ inline G4double G4EnergyLossForExtrapolator::AverageScatteringAngle(G4double kin
 							     const G4Material* mat, 
 							     const G4ParticleDefinition* part)
 {
+  if(!isInitialised) Initialisation();
   G4double theta = 0.0;
   if(mat && part && kinEnergy > 0.0) {
     G4double step = ComputeTrueStep(mat,part,kinEnergy,stepLength);
@@ -231,6 +235,7 @@ inline G4double G4EnergyLossForExtrapolator::EnergyDispersion(G4double kinEnergy
 						       const G4Material* mat, 
 						       const G4ParticleDefinition* part)
 {
+  if(!isInitialised) Initialisation();
   G4double sig2 = 0.0;
   if(mat && part ) {
     G4double step = ComputeTrueStep(mat,part,kinEnergy,stepLength);
