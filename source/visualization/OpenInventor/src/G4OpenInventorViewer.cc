@@ -411,6 +411,7 @@ void G4OpenInventorViewer::DeselectionCB(
 */
 
 void G4OpenInventorViewer::DrawDetector() {
+  /* Replace this... - JA
   // DrawView does a ClearStore. Do not clear the transient store :
   SoSeparator* tmp = fG4OpenInventorSceneHandler.fTransientRoot;
   fG4OpenInventorSceneHandler.fTransientRoot = new SoSeparator;
@@ -418,6 +419,9 @@ void G4OpenInventorViewer::DrawDetector() {
   ProcessView();
   fG4OpenInventorSceneHandler.fTransientRoot->unref();
   fG4OpenInventorSceneHandler.fTransientRoot = tmp;
+  */
+  // ...by this... - JA
+  DrawView();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -639,11 +643,16 @@ void G4OpenInventorViewer::SetReducedWireFrame(bool aValue) {
 }
 
 void G4OpenInventorViewer::UpdateScene() {
+  /* Replace this... - JA
   fG4OpenInventorSceneHandler.ClearStore();
   ClearView();
   KernelVisitDecision();
   ProcessView();
   ShowView();
+  */
+  // ...by this - JA
+  NeedKernelVisit();
+  DrawView();
 }
 G4String G4OpenInventorViewer::Help(const G4String& aTopic) {
   if(aTopic=="controls") {
