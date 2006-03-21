@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.43 2006-03-21 15:30:54 allison Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.44 2006-03-21 16:23:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,8 +97,6 @@ typedef HEPVis_SoMarkerSet SoMarkerSet;
 #include "G4Material.hh"
 #include "G4VisAttributes.hh"
 
-//G4Point3D translation;
-
 G4int G4OpenInventorSceneHandler::fSceneIdCount = 0;
 
 G4OpenInventorSceneHandler::G4OpenInventorSceneHandler (G4OpenInventor& system,
@@ -137,6 +135,49 @@ G4OpenInventorSceneHandler::~G4OpenInventorSceneHandler ()
   fStyleCache->unref();
 }
 
+void G4OpenInventorSceneHandler::ClearStore () {
+  G4VSceneHandler::ClearStore();
+
+  fDetectorRoot->removeAllChildren();
+  fSeparatorMap.clear();
+
+  fTransientRoot->removeAllChildren();
+}
+
+void G4OpenInventorSceneHandler::ClearTransientStore () {
+  G4VSceneHandler::ClearTransientStore ();
+
+  fTransientRoot->removeAllChildren();
+}
+
+//
+// Generates prerequisites for solids
+//  
+void G4OpenInventorSceneHandler::PreAddSolid
+(const G4Transform3D& objectTransformation,
+ const G4VisAttributes& visAttribs)
+{
+  G4VSceneHandler::PreAddSolid (objectTransformation, visAttribs);
+  // Stores arguments away for future use, e.g., AddPrimitives.
+
+  GeneratePrerequisites();
+}
+
+//
+// Generates prerequisites for primitives
+//  
+void G4OpenInventorSceneHandler::BeginPrimitives
+(const G4Transform3D& objectTransformation) {
+
+  G4VSceneHandler::BeginPrimitives (objectTransformation);
+
+  // If thread of control has already passed through PreAddSolid,
+  // avoid opening a graphical data base component again.
+  if (!fProcessingSolid) {
+    GeneratePrerequisites();
+  }
+}
+
 //
 // Method for handling G4Polyline objects (from tracking).
 //
@@ -151,7 +192,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line) {
   }
 
   // Don't understand why I have to do this again (done in
-  // GeneratePrerequisites).
+  // GeneratePrerequisites) - JA.
   //
   // Color
   //
@@ -199,7 +240,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
   }
 
   // Don't understand why I have to do this again (done in
-  // GeneratePrerequisites).
+  // GeneratePrerequisites) - JA.
   const G4Colour& c = GetColour (polymarker);
   SoMaterial* material = 
     fStyleCache->getMaterial((float)c.GetRed(),
@@ -329,7 +370,6 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Text& text) {
   //
   // Font
   // 
-
   SoFont *g4Font = new SoFont();
   g4Font->size = size;
   fCurrentSeparator->addChild(g4Font);
@@ -370,7 +410,7 @@ void G4OpenInventorSceneHandler::AddCircleSquare
 (G4OIMarker markerType, const G4VMarker& marker) {
 
   // Don't understand why I have to do this again (done in
-  // GeneratePrerequisites).
+  // GeneratePrerequisites) - JA.
   //
   // Color
   //
@@ -397,25 +437,7 @@ void G4OpenInventorSceneHandler::AddCircleSquare
 
   G4Point3D centre = marker.GetPosition();
 
-  /*
-  G4bool userSpecified = (marker.GetWorldSize() || marker.GetScreenSize());
-  const G4VMarker& def = fpViewer->GetViewParameters().GetDefaultMarker();
-  //const G4Vector3D& viewpointDirection =
-  //  fpViewer->GetViewParameters().GetViewpointDirection();
-  //const G4Vector3D& up = fpViewer->GetViewParameters().GetUpVector();
-  G4double scale = fpViewer->GetViewParameters().GetGlobalMarkerScale();
-  G4double size = scale *
-    userSpecified ? marker.GetWorldSize() : def.GetWorldSize();
-  G4double screenSize = 0;  // Calculate marker in screen size...
-  if (size) {  // Size specified in world coordinates.
-    screenSize = 10.;  // This needs to be much more sophisticated!
-  } else { // Size specified in screen coordinates (pixels).
-    screenSize = scale *
-      userSpecified ? marker.GetScreenSize() : def.GetScreenSize();
-  }
-  */
-
-  // Borrowed from AddPrimitive(G4Polymarker) - inefficient?
+  // Borrowed from AddPrimitive(G4Polymarker) - inefficient? JA
   SbVec3f* points = new SbVec3f[1];
   points[0].setValue((float)centre.x(),
 		     (float)centre.y(),
@@ -481,21 +503,6 @@ void G4OpenInventorSceneHandler::AddCircleSquare
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   if (polyhedron.GetNoFacets() == 0) return;
-
-  /* Already done in GeneratePrerequisites...
-  // If we got here *not* through G4PhysicalVolumeModel, we have to
-  // add colour, since it will not have been done in PreAddSolid().
-  // (The transformation has been added in BeginPrimitives().)
-  if (!fpCurrentLV || !fpCurrentPV) {
-    const G4Colour& c = GetColour (polyhedron);
-    SoMaterial* material = 
-      fStyleCache->getMaterial((float)c.GetRed(),
-			       (float)c.GetGreen(),
-			       (float)c.GetBlue(),
-			       (float)(1-c.GetAlpha()));
-    fCurrentSeparator->addChild(material);
-  }
-  */
 
   Geant4_SoPolyhedron* soPolyhedron = new Geant4_SoPolyhedron(polyhedron);
   SbString name = "Non-geometry";
@@ -581,327 +588,6 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4NURBS& nurb) {
   delete [] ctrl_pnt_array;
   delete [] points;
 }
-
-//
-// Generates prerequisites for primitives
-//  
-void G4OpenInventorSceneHandler::BeginPrimitives
-(const G4Transform3D& objectTransformation) {
-
-  G4VSceneHandler::BeginPrimitives (objectTransformation);
-
-  // If thread of control has already passed through PreAddSolid,
-  // avoid opening a graphical data base component again.
-  if (!fProcessingSolid) {
-    GeneratePrerequisites();
-  }
-}
-
-/*
-
-  // Store away for future use, e.g.,
-  // AddPrimitive (const G4Polyhedron& polyhedron).
-  //  
-  fpObjectTransformation = &objectTransformation;
-
-  // The coming primitive is either:
-  // a placed detector-type element whose destination
-  // in the Scene Database has been predetermined for it.
-  // In that case this routinde does absolutely nothing.
-
-  // Or: an unplaced, transient, marker-type of object which needs to
-  // be properly placed, and whose destination (for now) is the root
-  // of the scene database.  For these types of objects, or for scene
-  // (persistent) objects that have not come from a geometry tree (via
-  // G4PhysicalVolumeModel), execute the following code:
-  //  
-  if (fReadyForTransients || !fpCurrentLV || !fpCurrentPV) {
-
-    // set the destination to "fTransientRoot"
-    fCurrentSeparator = fTransientRoot;
-
-    // place the transient object:
-    fCurrentSeparator->addChild(fStyleCache->getResetTransform());
-
-    SoMatrixTransform* matrixTransform = new SoMatrixTransform;
-    G4OpenInventorTransform3D oiTran(objectTransformation);
-    SbMatrix* sbMatrix = oiTran.GetSbMatrix();
-
-    const G4Vector3D scale = fpViewer->GetViewParameters().GetScaleFactor();
-    SbMatrix sbScale;
-    sbScale.setScale
-      (SbVec3f((float)scale.x(),(float)scale.y(),(float)scale.z()));
-    sbMatrix->multRight(sbScale);
-
-    matrixTransform->matrix.setValue(*sbMatrix);
-    delete sbMatrix;
-    fCurrentSeparator->addChild(matrixTransform);
-  }
-}
-*/
-
-void G4OpenInventorSceneHandler::EndPrimitives () {
-  G4VSceneHandler::EndPrimitives ();
-}
-
-void G4OpenInventorSceneHandler::EndModeling () {
-}
-
-void G4OpenInventorSceneHandler::ClearStore () {
-  G4VSceneHandler::ClearStore();
-
-  fDetectorRoot->removeAllChildren();
-  fSeparatorMap.clear();
-
-  fTransientRoot->removeAllChildren();
-}
-
-void G4OpenInventorSceneHandler::ClearTransientStore () {
-  G4VSceneHandler::ClearTransientStore ();
-
-  fTransientRoot->removeAllChildren();
-}
-
-void G4OpenInventorSceneHandler::EstablishSpecials
-(G4PhysicalVolumeModel& pvModel) {
-  pvModel.DefinePointersToWorkingSpace (&fCurrentDepth,
-                                        &fpCurrentPV,
-                                        &fpCurrentLV,
-                                        &fpCurrentMaterial,
-                                        &fDrawnPVPath);
-}
-
-void G4OpenInventorSceneHandler::PreAddSolid
-(const G4Transform3D& objectTransformation,
- const G4VisAttributes& visAttribs)
-{
-  G4VSceneHandler::PreAddSolid (objectTransformation, visAttribs);
-  // Stores arguments away for future use, e.g., AddPrimitives.
-
-  GeneratePrerequisites();
-}
-
-/*
-  // This assumes that it is a "Pre" to the "Add" of a
-  // G4VPhysicalVolume.  This is true at present, but beware!  We
-  // might have to think about the cast in the following code.
-
-  G4VSceneHandler::PreAddSolid (objectTransformation, visAttribs);
-  // Stores arguments away for future use, e.g., AddPrimitives.
-
-  // This routines prepares to add solids to the scene database.  
-  // We are expecting two
-  // kinds of solids: leaf parts and non-leaf parts.  For non-leaf parts,
-  // we create a detector tree kit.  This has two separators.  
-  // The solid itself
-  // goes in the preview separator, the full separator is 
-  // forseen for daughters.
-  // This separator is not only created--it is also put in a dictionary for 
-  // future use by the leaf part.
-
-  // For leaf parts, we first locate the mother volume and find its separator 
-  // through the dictionary.
-
-  // The private member fCurrentSeparator is set to the proper 
-  // location on in the
-  // scene database so that when the solid is actually 
-  // added (in addthis), it is
-  //  put in the right place.
-
-  //G4PhysicalVolumeModel* pModel = fpModel->GetG4PhysicalVolumeModel();
-  //G4bool thisToBeDrawn = pModel->IsThisCulled(fpCurrentLV,fpCurrentMaterial);
-  //G4bool visible = !pModel->IsThisCulled(fpCurrentLV,0);
-
-  // First find the color attributes.
-  //
-  const G4VisAttributes* pVisAttribs =
-    fpViewer->GetApplicableVisAttributes (&visAttribs);
-  const G4Colour& g4Col =  pVisAttribs->GetColour ();
-  const double red = g4Col.GetRed ();
-  const double green = g4Col.GetGreen ();
-  const double blue = g4Col.GetBlue ();
-  double transparency = 1 - g4Col.GetAlpha();
-
-  G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle(pVisAttribs);
-  switch (drawing_style) {
-  case (G4ViewParameters::wireframe):    
-    fModelingSolid = false;
-    break;
-  case (G4ViewParameters::hlr):
-  case (G4ViewParameters::hsr):
-  case (G4ViewParameters::hlhsr):
-    fModelingSolid = true;
-    break;
-  }	
-
-  G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVisAttribs);
-  fReducedWireFrame = !isAuxEdgeVisible;
-
-  //printf("debug : PreAddSolid : %g %g %g : %d\n",
-    //red,green,blue,pVisAttribs->IsVisible());
-               
-  if(!fpCurrentLV || !fpCurrentPV) {
-    SoMaterial* material = 
-      fStyleCache->getMaterial((float)red,
-			       (float)green,
-			       (float)blue,
-			       (float)transparency);
-    fCurrentSeparator->addChild(material);
-    // return; //GB // JA
-  }
-
-  else {
-    
-    //printf("debug : OIV : LV : %lx %s : %g %g %g\n",
-    // fpCurrentLV,
-    // fpCurrentLV->GetName().c_str(),
-    // red,green,blue);
-
-    // fDrawnPVPath is the path of the current drawn (non-culled) volume
-    // in terms of drawn (non-culled) ancesters.  Each node is
-    // identified by a PVNodeID object, which is a physical volume and
-    // copy number.  It is a vector of PVNodeIDs corresponding to the
-    // geometry hierarchy actually selected, i.e., not culled.
-    typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
-    typedef std::vector<PVNodeID>::iterator PVPath_iterator;
-    typedef std::vector<PVNodeID>::reverse_iterator PVPath_reverse_iterator;
-    PVPath_reverse_iterator ri;
-    // Find mother.  ri points to mother, if any.
-    G4LogicalVolume* MotherVolume = 0;
-    ri = ++fDrawnPVPath.rbegin();
-    if (ri != fDrawnPVPath.rend()) {
-      // This volume has a mother.
-      MotherVolume = ri->GetPhysicalVolume()->GetLogicalVolume();
-    }
-
-    if (fpCurrentLV->GetNoDaughters()!=0 ||
-	fpCurrentPV->IsReplicated()) {
-      // This block of code is executed for non-leaf parts:
-
-      // Make the detector tree kit:
-      SoDetectorTreeKit* detectorTreeKit = new SoDetectorTreeKit();  
-
-      SoSeparator* previewSeparator   =  
-	(SoSeparator*) detectorTreeKit->getPart("previewSeparator",TRUE);
-      previewSeparator->renderCaching = SoSeparator::OFF;
-
-      SoSeparator* fullSeparator =  
-	(SoSeparator*) detectorTreeKit->getPart("fullSeparator",   TRUE);
-      fullSeparator->renderCaching = SoSeparator::OFF;
-
-      if(fPreviewAndFull) detectorTreeKit->setPreviewAndFull();
-      else detectorTreeKit->setPreview(TRUE);
-
-      SoMaterial* material = 
-	fStyleCache->getMaterial((float)red,
-				 (float)green,
-				 (float)blue,
-				 (float)transparency);
-      detectorTreeKit->setPart("appearance.material",material);
-
-      SoLightModel* lightModel = 
-	fModelingSolid ? fStyleCache->getLightModelPhong() : 
-	fStyleCache->getLightModelBaseColor();
-      detectorTreeKit->setPart("appearance.lightModel",lightModel);
-
-      // Add the full separator to the dictionary; it is indexed by the 
-      // address of the logical volume!
-      fSeparatorMap[fpCurrentPV->GetLogicalVolume()] = fullSeparator;
-
-      // Find out where to add this volume.
-      // If no mother can be found, it goes under root.
-      if (MotherVolume) {
-	if (fSeparatorMap.find(MotherVolume) != fSeparatorMap.end()) {
-	  //printf("debug : PreAddSolid : mother %s found in map\n",
-	  //     MotherVolume->GetName().c_str());
-	  fSeparatorMap[MotherVolume]->addChild(detectorTreeKit);
-	} else {
-	  // Mother not previously encountered.  Shouldn't happen, since
-	  // G4PhysicalVolumeModel sends volumes as it encounters them,
-	  // i.e., mothers before daughters, in its descent of the
-	  // geometry tree.  Error!
-	  G4cout << "ERROR: G4OpenInventorSceneHandler::PreAddSolid: Mother "
-		 << ri->GetPhysicalVolume()->GetName()
-		 << ':' << ri->GetCopyNo()
-		 << " not previously encountered."
-	    "\nShouldn't happen!  Please report to visualization coordinator."
-		 << G4endl;
-	  // Continue anyway.  Add to root of scene graph tree...
-	  //printf("debug : PreAddSolid : mother %s not found in map !!!\n",
-	  //     MotherVolume->GetName().c_str());
-	  fDetectorRoot->addChild(detectorTreeKit);
-	}
-      } else {
-	//printf("debug : PreAddSolid : has no mother\n");
-	fDetectorRoot->addChild(detectorTreeKit);
-      }
-
-      fCurrentSeparator = previewSeparator;
-
-    } else {
-      // This block of code is executed for leaf parts.
-
-      if (MotherVolume) {
-	if (fSeparatorMap.find(MotherVolume) != fSeparatorMap.end()) {
-	  fCurrentSeparator = fSeparatorMap[MotherVolume];
-	} else {
-	  // Mother not previously encountered.  Shouldn't happen, since
-	  // G4PhysicalVolumeModel sends volumes as it encounters them,
-	  // i.e., mothers before daughters, in its descent of the
-	  // geometry tree.  Error!
-	  G4cout << "ERROR: G4OpenInventorSceneHandler::PreAddSolid: Mother "
-		 << ri->GetPhysicalVolume()->GetName()
-		 << ':' << ri->GetCopyNo()
-		 << " not previously encountered."
-	    "\nShouldn't happen!  Please report to visualization coordinator."
-		 << G4endl;
-	  // Continue anyway.  Add to root of scene graph tree...
-	  fCurrentSeparator = fDetectorRoot;
-	}
-      } else {
-	fCurrentSeparator = fDetectorRoot;
-      }
-    }
-
-    SoMaterial* material = 
-      fStyleCache->getMaterial((float)red,
-                               (float)green,
-                               (float)blue,
-                               (float)transparency);
-    fCurrentSeparator->addChild(material);    
-
-    SoLightModel* lightModel = 
-      fModelingSolid ? fStyleCache->getLightModelPhong() : 
-                       fStyleCache->getLightModelBaseColor();
-    fCurrentSeparator->addChild(lightModel);
-  }
-
-  // Set up the geometrical transformation for the coming 
-  fCurrentSeparator->addChild(fStyleCache->getResetTransform());
-
-  SoMatrixTransform* matrixTransform = new SoMatrixTransform;
-  G4OpenInventorTransform3D oiTran(objectTransformation);
-  SbMatrix* sbMatrix = oiTran.GetSbMatrix();
-
-  const G4Vector3D scale = fpViewer->GetViewParameters().GetScaleFactor();
-  SbMatrix sbScale;
-  sbScale.setScale
-    (SbVec3f((float)scale.x(),(float)scale.y(),(float)scale.z()));
-  sbMatrix->multRight(sbScale);
-
-  matrixTransform->matrix.setValue(*sbMatrix);
-  delete sbMatrix;
-  fCurrentSeparator->addChild(matrixTransform);
-}
-*/
-
-//void G4OpenInventorSceneHandler::AddSolid(const G4VTrajectory& traj) {
-//  G4VSceneHandler::AddSolid(traj);  // For now.
-//}
-
-//void G4OpenInventorSceneHandler::AddSolid(const G4VHit& hit) {
-//  G4VSceneHandler::AddSolid(hit);  // For now.
-//}
 
 void G4OpenInventorSceneHandler::GeneratePrerequisites()
 {

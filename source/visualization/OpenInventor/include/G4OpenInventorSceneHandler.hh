@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.27 2006-01-30 13:55:22 allison Exp $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.28 2006-03-21 16:23:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,6 @@
 #include "G4PhysicalVolumeModel.hh"
 
 #include <map>
-#include <vector>
 
 class G4OpenInventor;
 class SoSeparator;
@@ -70,42 +69,24 @@ public:
   }
   ///////////////////////////////////////////////////////////////
   // Other inherited functions.
-  void EstablishSpecials (G4PhysicalVolumeModel&);
-  // Used to establish any special relationships between scene and this
-  // particular type of model - non-pure, i.e., no requirement to
-  // implement.  See G4PhysicalVolumeModel.hh for details.
-
   void 		ClearStore ();
   void 		ClearTransientStore ();
   
   //
   // Primitives for use of HEPVis
   //
-  void BeginPrimitives (const G4Transform3D& objectTransformation);
-  void EndPrimitives ();
-  void EndModeling ();
   void PreAddSolid (const G4Transform3D& objectTransformation,
-		   const G4VisAttributes& visAttribs);
+		    const G4VisAttributes& visAttribs);
+  void BeginPrimitives (const G4Transform3D& objectTransformation);
 
 private:
-  //void 		RequestPrimitives (const G4VSolid& solid);
-  //G4double  	GetMarkerSize    ( const G4VMarker&  mark ) ;
+
+  static G4int fSceneIdCount;   // static counter for OpenInventor scenes.
   enum G4OIMarker {G4OICircle, G4OISquare};
   void AddCircleSquare (G4OIMarker markerType, const G4VMarker&);
-
-private:
-  static G4int fSceneIdCount;   // static counter for OpenInventor scenes.
-private:
-  //
-  // Stop-gap solution of structure re-use.
-  // A proper implementation would use geometry hierarchy.
-  //
+  void GeneratePrerequisites();
   std::map <const G4LogicalVolume*, SoSeparator*,
     std::less <const G4LogicalVolume*> > fSeparatorMap;
-
-  typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
-  std::vector<PVNodeID> fDrawnPVPath;  // Path of drawn (non-culled) PVs.
-
   SoSeparator* fRoot;
   SoSeparator* fDetectorRoot;
   SoSeparator* fTransientRoot;
