@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.1 2006-02-06 09:35:57 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.2 2006-03-22 13:54:39 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -33,6 +33,7 @@
 
 //#define debug
 //#define pdebug
+//#define tdebug
 
 #include "G4QElastic.hh"
 
@@ -237,7 +238,8 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   G4double Momentum = proj4M.rho();                   // Just for the test purposes
   if(std::fabs(Momentum-momentum)>.000001)
            G4cerr<<"*War*G4QElastic::PostStepDoIt:P(IU)="<<Momentum<<"="<<momentum<<G4endl;
-  G4double pM=proj4M.m();
+  G4double pM2=proj4M.m2();        // in MeV^2
+  G4double pM=std::sqrt(pM2);      // in MeV
 #ifdef debug
   G4cout<<"G4QElastic::PostStepDoIt: pP(IU)="<<Momentum<<"="<<momentum<<",pM="<<pM<<G4endl;
 #endif
@@ -393,22 +395,34 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   }
   G4double mint=CSmanager->GetExchangeT(Z,N,projPDG); // -t in MeV^2
   // @@ only for pp: M_1=M_2=M_p, (1-cost)=(-t)/T/M
-  G4double cost=1.-mint/kinEnergy/tM;      // cos(theta) in CMS
-#ifdef debug
+  // G4double cost=1.-mint/kinEnergy/tM;      // cos(theta) in CMS
+  // In general
+  G4double tM2=tM*tM;
+  G4double pEn=pM+kinEnergy;                  // tot projectile Energy in MeV
+  G4double sM=(tM+tM)*pEn+tM2+pM2;            // Mondelstam s
+  G4double twop2cm=(tM2+tM2)*(pEn*pEn-pM2)/sM;// Doubled squared momentum in CM system
+  G4double cost=1.-mint/twop2cm;              // cos(theta) in CMS
+  // 
+#ifdef tdebug
   G4cout<<"G4QElastic::PoStDoI:t="<<mint<<",T="<<kinEnergy<<",M="<<tM<<",c="<<cost<<G4endl;
 #endif
-  if(cost>1. || cost<-1.) G4cout<<"*Warning*G4QElastic::PostStepDoIt: cos="<<cost<<", t="
-                      <<mint<<",T="<<kinEnergy<<", M="<<tM<<",tm="<<2*kinEnergy*tM<<G4endl;
+  if(cost>1. || cost<-1.)
+  {
+    if(cost>1.000001 || cost<-1.000001) G4cout<<"*Warning*G4QElastic::PostStepDoIt: cos="
+        <<cost<<", t="<<mint<<",T="<<kinEnergy<<", M="<<tM<<",tm="<<2*kinEnergy*tM<<G4endl;
+    if     (cost>1.)  cost=1.;
+    else if(cost<-1.) cost=-1.;
+  }
   G4LorentzVector reco4M=G4LorentzVector(0.,0.,0.,tM);      // 4mom of the recoil target
-  if(!G4QHadron(tot4M).RelDecayIn2(scat4M, reco4M, tot4M, cost, cost))
+  G4LorentzVector dir4M=tot4M-G4LorentzVector(0.,0.,0.,(tot4M.e()-tM-pM)*.01);
+  if(!G4QHadron(tot4M).RelDecayIn2(scat4M, reco4M, dir4M, cost, cost))
   {
     G4cerr<<"G4QElastic::PSD:t4M="<<tot4M<<",pM="<<pM<<",tM="<<tM<<",cost="<<cost<<G4endl;
     throw G4QException("G4QElastic::PostStepDoIt: Can't decay Elastic Compound");
   }
-#ifdef debug
+#ifdef tdebug
   G4cout<<"G4QElastic::PoStDoIt:s4M="<<scat4M<<"+r4M="<<reco4M<<"="<<scat4M+reco4M<<G4endl;
 #endif
-  G4int PDGCode=2212;                      // PDG for the recoil proton
   // Update G4VParticleChange for the scattered muon
   G4double finE=scat4M.e()-pM;             // Final kinetic energy of the scattered proton
   if(finE>0) aParticleChange.ProposeEnergy(finE);
@@ -423,41 +437,15 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   EnMomConservation-=scat4M;                        // It must be initialized by (pE+tM,pP)
   // This is how in general the secondary should be identified
 		G4DynamicParticle* theSec = new G4DynamicParticle; // A secondary for the recoil hadron 
-  G4ParticleDefinition* theDefinition=G4Proton::Proton();
-  //if (PDGCode==90000001) theDefinition = G4Neutron::Neutron();
-  //else if(PDGCode==90001000) theDefinition = G4Proton::Proton();//While it can be in ions
-  //else if(PDGCode==91000000) theDefinition = G4Lambda::Lambda();
-  //else if(PDGCode==311 || PDGCode==-311)
-  //{
-  //  if(G4UniformRand()>.5) theDefinition = G4KaonZeroLong::KaonZeroLong();   // K_L
-		//		else                   theDefinition = G4KaonZeroShort::KaonZeroShort(); // K_S
-  //}
-  //else if(PDGCode==91000999) theDefinition = G4SigmaPlus::SigmaPlus();
-  //else if(PDGCode==90999001) theDefinition = G4SigmaMinus::SigmaMinus();
-  //else if(PDGCode==91999000) theDefinition = G4XiMinus::XiMinus();
-  //else if(PDGCode==91999999) theDefinition = G4XiZero::XiZero();
-  //else if(PDGCode==92998999) theDefinition = G4OmegaMinus::OmegaMinus();
-	 //else if(PDGCode >80000000) // Defines hypernuclei as normal nuclei (N=N+S Correction!)
-  //{
-  //  G4int aZ = hadr->GetCharge();
-  //  G4int aA = hadr->GetBaryonNumber();
+  //G4int targPDG=2212;                      // PDG for the recoil proton @@only for p targ
+  //G4ParticleDefinition* theDefinition=G4Proton::Proton(); // @@ only for p target
+  G4int aA = Z+N;
 #ifdef pdebug
-		//		G4cout<<"G4QElastic::AtRestDoIt:Ion Z="<<aZ<<", A="<<aA<<G4endl;
+		G4cout<<"G4QElastic::PostStepDoIt: Ion Z="<<Z<<", A="<<aA<<G4endl;
 #endif
-  //  theDefinition = G4ParticleTable::GetParticleTable()->FindIon(aZ,aA,0,aZ);
-  //}
-  //else theDefinition = G4ParticleTable::GetParticleTable()->FindParticle(PDGCode);
-  //else
-  //{
-#ifdef pdebug
-		//		G4cout<<"G4QElastic::PostStepDoIt:Define particle with PDG="<<PDGCode<<G4endl;
-#endif
-  //  theDefinition = G4QPDGToG4Particle::Get()->GetParticleDefinition(PDGCode);
-#ifdef pdebug
-		//		G4cout<<"G4QElastic::PostStepDoIt:AfterParticleDefinition PDG="<<PDGCode<<G4endl;
-#endif
-  //}
-  if(!theDefinition)G4cout<<"*Warning*G4QElastic::PostStepDoIt:drop PDG="<<PDGCode<<G4endl;
+  G4ParticleDefinition* theDefinition=G4ParticleTable::GetParticleTable()
+                                                                       ->FindIon(Z,aA,0,Z);
+  if(!theDefinition)G4cout<<"*Warning*G4QElastic::PostStepDoIt:drop PDG="<<targPDG<<G4endl;
 #ifdef pdebug
   G4cout<<"G4QElastic::PostStepDoIt:Name="<<theDefinition->GetParticleName()<<G4endl;
 #endif
@@ -465,7 +453,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
 
   EnMomConservation-=reco4M;
 #ifdef tdebug
-  G4cout<<"G4QElastic::PostSDoIt:"<<PDGCode<<reco4M<<reco4M.m()<<EnMomConservation<<G4endl;
+  G4cout<<"G4QElastic::PostSDoIt:"<<targPDG<<reco4M<<reco4M.m()<<EnMomConservation<<G4endl;
 #endif
   theSec->Set4Momentum(reco4M);
 #ifdef debug

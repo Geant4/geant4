@@ -81,6 +81,7 @@ private:
   static G4double  lastSIG;  // Last calculated cross section
   static G4double  lastLP;   // Last log(mom_of_the_incident_hadron)
   static G4double  lastTM;   // Last t_maximum                       
+  static G4double  theSS;    // The Last squared slope of first difruction 
   static G4double  theS1;    // The Last mantissa of first difruction 
   static G4double  theB1;    // The Last slope of first difruction    
   static G4double  theS2;    // The Last mantissa of second difruction
@@ -94,6 +95,7 @@ private:
   static G4double  lastPIN;  // Last initialized max momentum
   static G4double* lastCST;  // Last cross-section table
   static G4double* lastPAR;  // Last parameters for functional calculation
+  static G4double* lastSST;  // E-dep of squared slope of the first difruction	
   static G4double* lastS1T;  // E-dep of mantissa of the first difruction	
   static G4double* lastB1T;  // E-dep of the slope of the first difruction
   static G4double* lastS2T;  // E-dep of mantissa of the second difruction

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.7 2006-02-06 09:35:57 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.8 2006-03-22 13:54:39 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -683,7 +683,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       G4LorentzVector c4M=t4M+proj4M;           // 4mom of the compound system
       t4M.setT(mOT);                            // now it is 4mom of the outgoing nucleon
       scat4M=G4LorentzVector(0.,0.,0.,mu);      // 4mom of the scattered muon
-      if(!G4QHadron(c4M).RelDecayIn2(scat4M, t4M, c4M, cost, cost))
+      if(!G4QHadron(c4M).RelDecayIn2(scat4M, t4M, proj4M, cost, cost))
       {
         G4cerr<<"G4QCol::PSD:c4M="<<c4M<<sqs<<",mM="<<mu<<",tM="<<mOT<<",c="<<cost<<G4endl;
         throw G4QException("G4QCollision::HadronizeQuasm: Can't dec QE nu,mu Compound");
@@ -716,7 +716,8 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       }
       scat4M=G4LorentzVector(0.,0.,0.,mu);      // 4mom of the scattered muon
       G4LorentzVector t4M(0.,0.,0.,-Q2);        // 4mom of the virtual W
-      if(!G4QHadron(proj4M).RelDecayIn2(scat4M, t4M, proj4M, cost, cost))
+      G4LorentzVector dir4M=proj4M-G4LorentzVector(0.,0.,0.,proj4M.e()*.1);// projDirection
+      if(!G4QHadron(proj4M).RelDecayIn2(scat4M, t4M, dir4M, cost, cost))
       {
         G4cerr<<"G4QCol::PSD:4M="<<proj4M<<",mM="<<mu<<",Q2="<<Q2<<",c="<<cost<<G4endl;
         throw G4QException("G4Quasmon::HadronizeQuasm: Can't dec nu->mu+W");

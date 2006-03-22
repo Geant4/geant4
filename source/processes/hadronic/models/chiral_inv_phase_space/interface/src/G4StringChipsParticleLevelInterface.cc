@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 
-#define debug
-#define pdebug
+//#define debug
+//#define pdebug
 
 #include "G4StringChipsParticleLevelInterface.hh"
 #include "globals.hh"
@@ -43,8 +43,8 @@ G4StringChipsParticleLevelInterface::G4StringChipsParticleLevelInterface()
 #ifdef debug
   G4cout<<"G4StringChipsParticleLevelInterface::Constructor is called"<<G4endl;
 #endif
-  theEnergyLossPerFermi = 0.7*GeV;
-  nop = 122; // clusters up to Alpha cluster
+  theEnergyLossPerFermi = 1.*GeV;
+  nop = 152;                               // clusters (A<6)
   fractionOfSingleQuasiFreeNucleons = 0.5; // It is A-dependent (C=.85, U=.40)
   fractionOfPairedQuasiFreeNucleons = 0.05;
   clusteringCoefficient = 5.;
@@ -92,6 +92,9 @@ ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& theNucleus)
 G4ReactionProductVector* G4StringChipsParticleLevelInterface::
 Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 {
+  static const G4double mProt=G4Proton::Proton()->GetPDGMass();
+  static const G4double mNeut=G4Neutron::Neutron()->GetPDGMass();
+  static const G4double mLamb=G4Lambda::Lambda()->GetPDGMass();
 #ifdef debug
   G4cout<<"G4StringChipsParticleLevelInterface::Propagate is called"<<G4endl;
 #endif
@@ -171,6 +174,12 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
           << theSecondaries->operator[](secondary)->GetDefinition()->GetPDGEncoding()<<" "
        	  << a4Mom <<G4endl; 
 #endif
+#ifdef pdebug
+    G4cout<<"G4StringChipsParticleLevelInterface::Propagate: in C="
+          <<theSecondaries->operator[](secondary)->GetDefinition()->GetPDGCharge()<<",PDG="
+          <<theSecondaries->operator[](secondary)->GetDefinition()->GetPDGEncoding()
+          <<",4M="<<a4Mom<<", current nS="<<theSorted.size()<<G4endl; 
+#endif
     G4double toSort = a4Mom.rapidity();          // Rapidity is used for the ordering (?!)
     std::pair<G4double, G4KineticTrack *> it;
     it.first = toSort;
@@ -178,7 +187,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     G4bool inserted = false;
     for(current = theSorted.begin(); current!=theSorted.end(); current++)
     {
-      if((*current).first > toSort)
+      if((*current).first > toSort)        // The current is smaller then existing
       {
 	       theSorted.insert(current, it);     // It shifts the others up
 	       inserted = true;
@@ -205,15 +214,21 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4cout<<"G4StringChipsParticleLevelInterface::Propagate: CHIPS ENERGY LOST "
         <<theEnergyLostInFragmentation<<". Sorted rapidities event start"<<G4endl;
 #endif
+#ifdef pdebug
+  G4cout<<"G4StringChipsParticleLevelInterface::Propagate: total CHIPS energy = "
+        <<theEnergyLostInFragmentation<<". Start rapidity sorting nS="<<theSorted.size()
+        <<G4endl;
+#endif
 
   G4QHadronVector projHV;
   std::vector<G4QContent> theContents;
-  std::vector<G4LorentzVector *> theMomenta;
-  G4ReactionProductVector * theResult = new G4ReactionProductVector;
-  G4ReactionProduct * theSec;
-  G4KineticTrackVector * secondaries;
+  std::vector<G4LorentzVector*> theMomenta;
+  G4ReactionProductVector* theResult = new G4ReactionProductVector;
+  G4ReactionProduct* theSec;
+  G4KineticTrackVector* secondaries;
 #ifdef pdebug
-  G4cout<<"G4StringChipsParticleLevelInterface::Propagate: Absorption"<<G4endl; 
+  G4cout<<"G4StringChipsParticleLevelInterface::Propagate: Absorption nS="
+        <<theSorted.size()<<G4endl; 
 #endif
   
   for(current = theSorted.begin(); current!=theSorted.end(); current++)
@@ -222,62 +237,73 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 				G4cout<<"G4StringChipsParticleLevelInterface::Propagate: nq="
           <<(*current).second->GetDefinition()->GetQuarkContent(3)<<", naq="
           <<(*current).second->GetDefinition()->GetAntiQuarkContent(3)<<", PDG="
-          <<(*current).second->GetDefinition()->GetPDGEncoding()<<G4endl; 
+          <<(*current).second->GetDefinition()->GetPDGEncoding()<<",4M="
+          <<(*current).second->Get4Momentum()<<G4endl; 
 #endif
     firstEscape = current;              // Remember to make decays for the rest
+    G4KineticTrack* aResult = (*current).second;
+    // This is an old (H.P.) solution, which makes an error in En/Mom conservation
+    //
     // @@ Now it does not include strange particle for the absorption in nuclei (?!) M.K.
-    if((*current).second->GetDefinition()->GetQuarkContent(3)!=0 || 
-       (*current).second->GetDefinition()->GetAntiQuarkContent(3) !=0) // Strange quarks
-    {
-      G4KineticTrack* aResult = (*current).second;
-      G4ParticleDefinition* pdef = aResult->GetDefinition();
-      secondaries = NULL;
-      if ( pdef->GetPDGWidth() > 0 && pdef->GetPDGLifeTime() < 5E-17*s )
-      {
-        secondaries = aResult->Decay(); // @@ Decay of only strange resonances (?!) M.K.
-      }
-      if ( secondaries == NULL )        // No decay
-      {
-        theSec = new G4ReactionProduct(aResult->GetDefinition());
-        G4LorentzVector current4Mom = aResult->Get4Momentum();
-        current4Mom.boost(targ4Mom.boostVector()); // boost from the targetAtRes system
-        theSec->SetTotalEnergy(current4Mom.t());
-        theSec->SetMomentum(current4Mom.vect());
-        theResult->push_back(theSec);
-      } 
-      else                               // The decay happened
-      {
-        for (unsigned int aSecondary=0; aSecondary<secondaries->size(); aSecondary++)
-        {
-          theSec = 
-               new G4ReactionProduct(secondaries->operator[](aSecondary)->GetDefinition());
-          G4LorentzVector current4Mom =secondaries->operator[](aSecondary)->Get4Momentum();
-          current4Mom.boost(targ4Mom.boostVector());
-          theSec->SetTotalEnergy(current4Mom.t());
-          theSec->SetMomentum(current4Mom.vect());
-          theResult->push_back(theSec);
-        }
-        std::for_each(secondaries->begin(), secondaries->end(), DeleteKineticTrack());
-        delete secondaries;
-      }
-    }
-
-    runningEnergy += (*current).second->Get4Momentum().t();
-    if((*current).second->GetDefinition() == G4Proton::Proton())
-      runningEnergy-=G4Proton::Proton()->GetPDGMass();
-    if((*current).second->GetDefinition() == G4Neutron::Neutron())
-      runningEnergy-=G4Neutron::Neutron()->GetPDGMass();
-    if((*current).second->GetDefinition() == G4Lambda::Lambda())
-      runningEnergy-=G4Lambda::Lambda()->GetPDGMass();
-
+    //if((*current).second->GetDefinition()->GetQuarkContent(3)!=0 || 
+    //   (*current).second->GetDefinition()->GetAntiQuarkContent(3) !=0) // Strange quarks
+    //{
+    //  G4ParticleDefinition* pdef = aResult->GetDefinition();
+    //  secondaries = NULL;
+    //  if ( pdef->GetPDGWidth() > 0 && pdef->GetPDGLifeTime() < 5E-17*s )
+    //     secondaries = aResult->Decay(); // @@ Decay of only strange resonances (?!) M.K.
+    //  if ( secondaries == NULL )           // No decay
+    //  {
+    //    theSec = new G4ReactionProduct(aResult->GetDefinition());
+    //    G4LorentzVector current4Mom = aResult->Get4Momentum();
+    //    current4Mom.boost(targ4Mom.boostVector()); // boost from the targetAtRes system
+    //    theSec->SetTotalEnergy(current4Mom.t());
+    //    theSec->SetMomentum(current4Mom.vect());
+    //    theResult->push_back(theSec);
+    //  } 
+    //  else                                 // The decay happened
+    //  {
+    //    for (unsigned int aSecondary=0; aSecondary<secondaries->size(); aSecondary++)
+    //    {
+    //      theSec = 
+    //           new G4ReactionProduct(secondaries->operator[](aSecondary)->GetDefinition());
+    //      G4LorentzVector current4Mom =secondaries->operator[](aSecondary)->Get4Momentum();
+    //      current4Mom.boost(targ4Mom.boostVector());
+    //      theSec->SetTotalEnergy(current4Mom.t());
+    //      theSec->SetMomentum(current4Mom.vect());
+    //      theResult->push_back(theSec);
+    //    }
+    //    std::for_each(secondaries->begin(), secondaries->end(), DeleteKineticTrack());
+    //    delete secondaries;
+    //  }
+    //}
+    //
+    //runningEnergy += (*current).second->Get4Momentum().t();
+    //if((*current).second->GetDefinition() == G4Proton::Proton())
+    //                                   runningEnergy-=G4Proton::Proton()->GetPDGMass();
+    //if((*current).second->GetDefinition() == G4Neutron::Neutron())
+    //                                   runningEnergy-=G4Neutron::Neutron()->GetPDGMass();
+    //if((*current).second->GetDefinition() == G4Lambda::Lambda())
+    //                                   runningEnergy-=G4Lambda::Lambda()->GetPDGMass();
+    //
+    // New solution starts from here (M.Kossov March 2006) [Strange particles included]
+    runningEnergy += aResult->Get4Momentum().t();
+    G4double charge=aResult->GetDefinition()->GetPDGCharge(); // Charge of the particle
+    G4int strang=aResult->GetDefinition()->GetQuarkContent(3);// Its strangeness
+    G4int baryn=aResult->GetDefinition()->GetBaryonNumber();  // Its baryon number
+    if     (baryn>0 && charge>0 && strang<1) runningEnergy-=mProt;  // For positive baryons
+    else if(baryn>0 && strang<1) runningEnergy-=mNeut;              // For neut/neg baryons
+    else if(baryn>0) runningEnergy-=mLamb;                          // For strange baryons
+    else if(baryn<0) runningEnergy+=mProt;                          // For anti-particles
+    // ------------ End of the new solution
 #ifdef CHIPSdebug
     G4cout<<"G4StringChipsParticleLevelInterface::Propagate: sorted rapidities "
-          <<(*current).second->Get4Momentum().rapidity()<<G4endl;  
+                                    <<(*current).second->Get4Momentum().rapidity()<<G4endl;
 #endif
 
 #ifdef pdebug
 				G4cout<<"G4StringChipsParticleLevelInterface::Propagate: E="<<runningEnergy<<", EL="
-          <<theEnergyLostInFragmentation<<G4endl; 
+                                                    <<theEnergyLostInFragmentation<<G4endl;
 #endif
 
     if(runningEnergy > theEnergyLostInFragmentation) break;
@@ -291,8 +317,8 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 #ifdef pdebug
     G4cout<<"G4StringChipsParticleLevelInterface::Propagate:C="
           <<current->second->GetDefinition()->GetPDGCharge()<<", PDG="
-          << current->second->GetDefinition()->GetPDGEncoding()<<", 4M="
-	         << current->second->Get4Momentum() <<G4endl; 
+          <<current->second->GetDefinition()->GetPDGEncoding()<<", 4M="
+	         <<current->second->Get4Momentum()<<G4endl; 
 #endif
 
     // projectile 4-momentum in target rest frame needed in constructor of QHadron
@@ -316,7 +342,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 #endif
 
     theContents.push_back(aProjectile);
-    G4LorentzVector* aVec = new G4LorentzVector(1./MeV*proj4Mom);
+    G4LorentzVector* aVec = new G4LorentzVector((1./MeV)*proj4Mom); // @@ MeV is basic
 
 #ifdef CHIPSdebug_1
     G4cout<<"G4StringChipsParticleLevelInterface::Propagate: projectile momentum = "
@@ -336,7 +362,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       projHV.push_back(aHadron);
     }
   }
-  else                                 // Never come here (?)
+  else                                 // Never come here (!?)
   {
     unsigned int hp;
     for(hp=0; hp<hitCount; hp++)       // Initialize the arrays
@@ -374,9 +400,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
                             fractionOfPairedQuasiFreeNucleons,
 			                         clusteringCoefficient, 
 					                       fusionToExchange);
-  G4Quasmon::SetParameters(temperature,
-                           halfTheStrangenessOfSee,
-			                        etaToEtaPrime);
+  G4Quasmon::SetParameters(temperature, halfTheStrangenessOfSee, etaToEtaPrime);
 
 #ifdef CHIPSdebug
   G4cout<<"G4StringChipsParticleLevelInterface::Propagate: G4QNucleus parameters "
@@ -419,10 +443,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     projHV.clear();
     delete pan;
   }
-  else 
-  {
-    output = new G4QHadronVector;
-  }
+  else output = new G4QHadronVector;
    
   // Fill the result.
 #ifdef CHIPSdebug
@@ -446,6 +467,10 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       current4Mom.boost(targ4Mom.boostVector());
       theSec->SetTotalEnergy(current4Mom.t());
       theSec->SetMomentum(current4Mom.vect());
+#ifdef pdebug
+				  G4cout<<"G4StringChipsParticleLevelInterface::Propagate: *OUT* QGS stable PDG="
+            <<aResult->GetDefinition()->GetPDGEncoding()<<",4M="<<current4Mom<<G4endl; 
+#endif
       theResult->push_back(theSec);
     } 
     else
@@ -457,6 +482,11 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
         current4Mom.boost(targ4Mom.boostVector());
         theSec->SetTotalEnergy(current4Mom.t());
         theSec->SetMomentum(current4Mom.vect());
+#ifdef pdebug
+				    G4cout<<"G4StringChipsParticleLevelInterface::Propagate: *OUT* QGS decay PDG="
+              <<secondaries->operator[](aSecondary)->GetDefinition()->GetPDGEncoding()
+              <<",4M="<<current4Mom<<G4endl; 
+#endif
         theResult->push_back(theSec);
       }
       std::for_each(secondaries->begin(), secondaries->end(), DeleteKineticTrack());
@@ -471,6 +501,10 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 #ifdef CHIPSdebug
   G4cout << "Number of particles from string"<<theResult->size()<<G4endl;
   G4cout << "Number of particles from chips"<<maxParticle<<G4endl;
+#endif
+#ifdef pdebug
+  G4cout << "Number of particles from QGS="<<theResult->size()<<G4endl;
+  G4cout << "Number of particles from CHIPS="<<maxParticle<<G4endl;
 #endif
   if(maxParticle) for(G4int particle = 0; particle < maxParticle; particle++)
   {
@@ -517,12 +551,16 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 
     if(theDefinition)
     {
-    theSec = new G4ReactionProduct(theDefinition);
-    G4LorentzVector current4Mom = output->operator[](particle)->Get4Momentum();
-    current4Mom.boost(targ4Mom.boostVector());
-    theSec->SetTotalEnergy(current4Mom.t());
-    theSec->SetMomentum(current4Mom.vect());
-    theResult->push_back(theSec);
+      theSec = new G4ReactionProduct(theDefinition);
+      G4LorentzVector current4Mom = output->operator[](particle)->Get4Momentum();
+      current4Mom.boost(targ4Mom.boostVector());
+      theSec->SetTotalEnergy(current4Mom.t());
+      theSec->SetMomentum(current4Mom.vect());
+#ifdef pdebug
+				  G4cout<<"G4StringChipsParticleLevelInterface::Propagate: *OUT* CHIPS PDG="
+              <<theDefinition->GetPDGEncoding()<<",4M="<<current4Mom<<G4endl; 
+#endif
+      theResult->push_back(theSec);
     }
     else
     {
