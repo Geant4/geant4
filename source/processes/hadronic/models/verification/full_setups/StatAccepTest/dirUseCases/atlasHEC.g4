@@ -1,5 +1,5 @@
 #--------------------------------------------------------------------
-# Last update: 24-Jan-2006
+# Last update: 22-Mar-2006
 #
 # ATLAS HEC : HEC1 : Cu (25 mm) LAr (8.5 mm)  0.82 m length
 #             HEC2 : Cu (50 mm) LAr (8.5 mm)  0.96 m length
@@ -26,6 +26,16 @@
 #   o  HEC1 II : 13-24 active layers, so  5-8 readout ones;
 #   o  HEC2  I : 25-42 active layers, so half of  9-15 readout ones; 
 #   o  HEC2 II : 43-60 active layers, so half of 16-20 readout ones.
+#
+# NB) If one wants to use this configuration to get also some 
+#     rough information regarding HEC when there is the EMEC 
+#     in front of it, the easiest way is the following.
+#     The EMEC has about 26 X0, which corresponds roughly to 
+#     1 lambda. This corresponds to the first 6 active layers
+#     of the HEC, i.e. the first 2 readout layers.
+#     Therefore, by looking at the totat energy deposit excluding
+#     the first 2 readout layers, one can get a rough estimate of
+#     the signal in the HEC in the EMEC+HEC configuration.
 #
 #--------------------------------------------------------------------
 #
