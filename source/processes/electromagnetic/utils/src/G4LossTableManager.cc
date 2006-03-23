@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.64 2006-01-20 09:51:56 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.65 2006-03-23 14:47:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -58,6 +58,7 @@
 // 11-03-05 Shift verbose level by 1 (V.Ivantchenko)
 // 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
 // 20-01-06 Introduce G4EmTableType to remove repeating code (VI)
+// 23-03-06 Set flag isIonisation (VI)
 //
 // Class Description:
 //
@@ -279,21 +280,18 @@ void G4LossTableManager::EnergyLossProcessIsInitialised(
       G4VEnergyLossProcess* el = loss_vector[i];
 
       if(el) {
-
 	const G4ProcessManager* pm = el->GetProcessManager();
         if (pm->GetProcessActivation(el)) tables_are_built[i] = false;
-        else                              tables_are_built[i] = true;
-
+        else {
+          tables_are_built[i] = true;
+	  el->SetIonisation(false);
+	}
 	if (!tables_are_built[i]) all_tables_are_built = false;
-
       } else {
         tables_are_built[i] = true;
         part_vector[i] = 0;
-
       }
-
     }
-
     if (first_entry) {
       first_entry = false;
       firstParticle = particle;
@@ -356,7 +354,6 @@ void G4LossTableManager::BuildPhysicsTable(
      const G4ParticleDefinition* aParticle,
      G4VEnergyLossProcess* p)
 {
-
   if(1 < verbose) {
     G4cout << "### G4LossTableManager::BuildDEDXTable() is requested for "
            << aParticle->GetParticleName()
@@ -367,9 +364,7 @@ void G4LossTableManager::BuildPhysicsTable(
   all_tables_are_built = true;
 
   for(G4int i=0; i<n_loss; i++) {
-
     if(!tables_are_built[i] && !base_part_vector[i]) {
-
       const G4ParticleDefinition* curr_part = part_vector[i];
       G4VEnergyLossProcess* curr_proc = BuildTables(curr_part);
       CopyTables(curr_part, curr_proc);
@@ -414,6 +409,7 @@ void G4LossTableManager::CopyTables(const G4ParticleDefinition* part,
       proc->SetInverseRangeTable(base_proc->InverseRangeTable());
       proc->SetLambdaTable(base_proc->LambdaTable());
       proc->SetSubLambdaTable(base_proc->SubLambdaTable());
+      proc->SetIonisation(base_proc->IsIonisationProcess());
       loss_map[part_vector[j]] = proc;
       if (1 < verbose) {
          G4cout << "For " << proc->GetProcessName()
@@ -497,6 +493,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
 
   for (i=0; i<n_dedx; i++) {
     p = loss_list[i];
+    p->SetIonisation(false);
     p->SetLambdaTable(p->BuildLambdaTable(fRestricted));
     if (0 < p->NumberOfSubCutoffRegions()) {
       dedx = p->BuildDEDXTable(fSubRestricted);
@@ -526,6 +523,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
     em->SetCSDARangeTable(rCSDA);
   }
 
+  em->SetIonisation(true);
   loss_map[aParticle] = em;
   if (1 < verbose) {
     G4cout << "G4LossTableManager::BuildTables: Tables are built for "

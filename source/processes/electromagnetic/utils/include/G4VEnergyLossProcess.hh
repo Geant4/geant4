@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.51 2006-03-23 11:54:24 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.52 2006-03-23 14:47:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,6 +65,7 @@
 // 20-01-06 Introduce G4EmTableType and reducing number of methods (VI)
 // 26-01-06 Add public method GetCSDARange (V.Ivanchenko)
 // 22-03-06 Add SetDynamicMassCharge (V.Ivanchenko)
+// 23-03-06 Use isIonisation flag (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -301,8 +302,8 @@ public:
 
   G4VEmModel* SelectModelForMaterial(G4double kinEnergy, size_t& idx) const;
 
+  // Set/Get flag "isIonisation"
   void SetIonisation(G4bool val);
-
   G4bool IsIonisationProcess() const;
 
   void AddCollaborativeProcess(G4VEnergyLossProcess*);
@@ -311,7 +312,6 @@ public:
                                G4double& cut, G4VEmModel* model); 
 
   // Set scaling parameters
-  //
   void SetDynamicMassCharge(G4double massratio, G4double charge2ratio);
 
 protected:
@@ -682,7 +682,7 @@ inline G4double G4VEnergyLossProcess::GetContinuousStepLimit(const G4Track&,
                 G4double, G4double currentMinStep, G4double&)
 {
   G4double x = DBL_MAX;
-  if(theRangeTableForLoss) {
+  if(isIonisation) {
     fRange = GetScaledRangeForScaledEnergy(preStepScaledEnergy)*reduceFactor;
 
     x = fRange;

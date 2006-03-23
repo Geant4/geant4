@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.80 2006-03-23 11:54:24 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.81 2006-03-23 14:47:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -93,6 +93,7 @@
 // 18-01-06 Clean up subcutoff including recalculation of presafety (VI)
 // 20-01-06 Introduce G4EmTableType and reducing number of methods (VI)
 // 22-03-06 Add control on warning printout AlongStep (VI)
+// 23-03-06 Use isIonisation flag (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -289,17 +290,15 @@ void G4VEnergyLossProcess::PreparePhysicsTable(
     if (lManager->BuildCSDARange()) {
       theDEDXunRestrictedTable = 
 	G4PhysicsTableHelper::PreparePhysicsTable(theDEDXunRestrictedTable);
-      if (isIonisation)
-        theCSDARangeTable = 
-	  G4PhysicsTableHelper::PreparePhysicsTable(theCSDARangeTable);
+      theCSDARangeTable = 
+	G4PhysicsTableHelper::PreparePhysicsTable(theCSDARangeTable);
     }
 
-    if (isIonisation) {
-      theRangeTableForLoss = 
-	G4PhysicsTableHelper::PreparePhysicsTable(theRangeTableForLoss);
-      theInverseRangeTable = 
-	G4PhysicsTableHelper::PreparePhysicsTable(theInverseRangeTable);
-    }
+    theRangeTableForLoss = 
+      G4PhysicsTableHelper::PreparePhysicsTable(theRangeTableForLoss);
+    theInverseRangeTable = 
+      G4PhysicsTableHelper::PreparePhysicsTable(theInverseRangeTable);
+  
     theLambdaTable = G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
     if (nSCoffRegions) {
       theDEDXSubTable = 
@@ -564,7 +563,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 {
   fParticleChange.InitializeForAlongStep(track);
   // The process has range table - calculate energy loss
-  if(!theRangeTableForLoss) return &fParticleChange;
+  if(!isIonisation) return &fParticleChange;
 
   // Get the actual (true) Step length
   G4double length = step.GetStepLength();
@@ -1186,36 +1185,36 @@ G4bool G4VEnergyLossProcess::StorePhysicsTable(
   G4bool res = true;
   if ( baseParticle || part != particle ) return res;
 
-  if ( theDEDXTable && theRangeTableForLoss ) {
+  if ( theDEDXTable && isIonisation ) {
     const G4String name = GetPhysicsTableFileName(part,directory,"DEDX",ascii);
     if( !theDEDXTable->StorePhysicsTable(name,ascii)) res = false;
   }
 
-  if ( theDEDXunRestrictedTable && theCSDARangeTable ) {
+  if ( theDEDXunRestrictedTable && isIonisation ) {
     const G4String name = 
       GetPhysicsTableFileName(part,directory,"DEDXnr",ascii);
     if( !theDEDXTable->StorePhysicsTable(name,ascii)) res = false;
   }
 
-  if ( theDEDXSubTable ) {
+  if ( theDEDXSubTable && isIonisation) {
     const G4String name = 
       GetPhysicsTableFileName(part,directory,"SubDEDX",ascii);
     if( !theDEDXSubTable->StorePhysicsTable(name,ascii)) res = false;
   }
 
-  if ( theCSDARangeTable ) {
+  if ( theCSDARangeTable && isIonisation ) {
     const G4String name = 
       GetPhysicsTableFileName(part,directory,"CSDARange",ascii);
     if( !theCSDARangeTable->StorePhysicsTable(name,ascii)) res = false;
   }
 
-  if ( theRangeTableForLoss ) {
+  if ( theRangeTableForLoss && isIonisation ) {
     const G4String name = 
       GetPhysicsTableFileName(part,directory,"Range",ascii);
     if( !theRangeTableForLoss->StorePhysicsTable(name,ascii)) res = false;
   }
 
-  if ( theInverseRangeTable ) {
+  if ( theInverseRangeTable && isIonisation ) {
     const G4String name = 
       GetPhysicsTableFileName(part,directory,"InverseRange",ascii);
     if( !theInverseRangeTable->StorePhysicsTable(name,ascii)) res = false;
@@ -1276,6 +1275,7 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(
       if(yes) yes = G4PhysicsTableHelper::RetrievePhysicsTable(
 		    theDEDXTable,filename,ascii);
       if(yes) {
+        isIonisation = true;
         if (0 < verboseLevel) {
           G4cout << "DEDX table for " << particleName 
 		 << " is Retrieved from <"
