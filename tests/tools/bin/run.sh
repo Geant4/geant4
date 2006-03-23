@@ -118,8 +118,8 @@ if [ $1 = "all" ] ; then
 # Please use G4NDL3.4 for test11, and G4NDL0.2 for the other tests.
 # set default to G4NDL0.2 in setup scripts
 
-  NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.7;export NeutronHPCrossSections
-  echo "STT:NeutronHPCrossSections G4NDL3.7";
+  NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.8;export NeutronHPCrossSections
+  echo "STT:NeutronHPCrossSections G4NDL3.8";
 
   ${G4STTDIR}/bin/geant4-unix.pl --start-test test11 8
   $G4STTDIR/bin/run.sh test11
@@ -228,41 +228,63 @@ if [ $1 = "all" ] ; then
     $G4STTDIR/bin/run.sh test506
   ${G4STTDIR}/bin/geant4-unix.pl --end-test test506 33
 
-#
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test508 34
-#
-    $G4STTDIR/bin/run.sh test508
-#
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test508 34
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test507 34
+    $G4STTDIR/bin/run.sh test507
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test507 34  
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test5010 35
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test508 35
+    $G4STTDIR/bin/run.sh test508
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test508 35
+  
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test509 36
+    $G4STTDIR/bin/run.sh test509
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test509 36
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test5010 37
     $G4STTDIR/bin/run.sh test5010
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test5010 35
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test5010 37  
+  
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test5011 38
+    $G4STTDIR/bin/run.sh test5011
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test5011 38
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test5012 39
+    $G4STTDIR/bin/run.sh test5012
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test5012 39 
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test5013 40
+    $G4STTDIR/bin/run.sh test5013
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test5013 40
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test5014 41
+    $G4STTDIR/bin/run.sh test5014
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test5014 41  
+
 
 #  if [ $G4USE_HEPODBMS ] ; then
 #   $G4STTDIR/bin/run.sh test401
 #   $G4STTDIR/bin/run.sh test402
 #  fi
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test601 36
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test601 42
     $G4STTDIR/bin/run.sh test601
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test601 36
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test601 42
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test602 37
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test602 43
     $G4STTDIR/bin/run.sh test602
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test602 37
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test602 43
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test701 38
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test701 44
     $G4STTDIR/bin/run.sh test701
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test701 38
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test701 44
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test702 39
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test702 45
     $G4STTDIR/bin/run.sh test702
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test702 39
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test702 45
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test703 40
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test703 46
     $G4STTDIR/bin/run.sh test703
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test703 40
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test703 46
 
 ###
 
@@ -299,157 +321,70 @@ if [ $1 = "all" ] ; then
 #    $G4STTDIR/bin/run.sh test1001
 #  ${G4STTDIR}/bin/geant4-unix.pl --end-test test1001 48
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test33 41
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test33 47
     $G4STTDIR/bin/run.sh test33
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test33 41
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test33 47
+  
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test33_1 48
+    $G4STTDIR/bin/run.sh test33_1
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test33_1 48
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test34 42
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test34 49
     $G4STTDIR/bin/run.sh test34
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test34 42
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test34 49
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test24 43
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test24 50
     $G4STTDIR/bin/run.sh test24
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test24 43
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test24 50
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test25 44
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test25 51
     $G4STTDIR/bin/run.sh test25
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test25 44
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test25 51
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test26 45
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test26 52
     $G4STTDIR/bin/run.sh test26
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test26 45
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test26 52
 
 
 ### Advanced examples
 
-if [ $DEBOPT = "debug_7.3_2.95.2" -o $DEBOPT = "optim_7.3_2.95.2" ] ; then 
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test1101 46
-    $G4STTDIR/bin/run.sh test1101
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test1101 46
-
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test1102 47
-    $G4STTDIR/bin/run.sh test1102
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test1102 47
-
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test1103 48
-    $G4STTDIR/bin/run.sh test1103
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test1103 48
-
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test1104 49
-    $G4STTDIR/bin/run.sh test1104
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test1104 49
-
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test1105 50
-    $G4STTDIR/bin/run.sh test1105
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test1105 50
-
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test1106 51
-    $G4STTDIR/bin/run.sh test1106
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test1106 51
-
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test1107 52
-    $G4STTDIR/bin/run.sh test1107
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test1107 52
-
-fi
-
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test1001 53
-    $G4STTDIR/bin/run.sh test1001
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test1001 53
-
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test901 54
-    $G4STTDIR/bin/run.sh test1001
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test901 54
-
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test107 54
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test107 53
     $G4STTDIR/bin/run.sh test107
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test107 54
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test107 53
 
-if [ $G4SYSTEM = "Linux-egcs" ] ; then 
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test05 55
-    $G4STTDIR/bin/run.sh test05
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test05 55
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test27 54
+    $G4STTDIR/bin/run.sh test27
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test27 54
 
-fi
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test507 56
-    $G4STTDIR/bin/run.sh test507
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test507 56
+#############
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test19 55
+    $G4STTDIR/bin/run.sh test19
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test19 55
 
-if [ $DEBOPT = "debug_7.3_2.95.2" -o $DEBOPT = "optim_7.3_2.95.2" ] ; then 
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test29 56
+    $G4STTDIR/bin/run.sh test29
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test29 56
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test50 57
-    $G4STTDIR/bin/run.sh test50
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test50 57
+  
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test40 57
+    $G4STTDIR/bin/run.sh test40
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test40 57
+    
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test28 58
+    $G4STTDIR/bin/run.sh test28
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test28 58
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test1108 58
-    $G4STTDIR/bin/run.sh test1108
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test1108 58
-
-fi
 
   ${G4STTDIR}/bin/geant4-unix.pl --start-test test801 59
     $G4STTDIR/bin/run.sh test801
   ${G4STTDIR}/bin/geant4-unix.pl --end-test test801 59
-
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test802 60
-    $G4STTDIR/bin/run.sh test802
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test802 60
-
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test509 61
-    $G4STTDIR/bin/run.sh test509
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test509 61
-
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test27 62
-    $G4STTDIR/bin/run.sh test27
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test27 62
-
-#
-#
-#
-
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test2001 63
-    $G4STTDIR/bin/run.sh test2001
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test2001 63
-
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test1008 64
-    $G4STTDIR/bin/run.sh test1008
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test1008 64
-
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test3001 65
-    $G4STTDIR/bin/run.sh test3001
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test3001 65
-
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test3002 66
-    $G4STTDIR/bin/run.sh test3002
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test3002 66
-
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test4001 67
-    $G4STTDIR/bin/run.sh test4001
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test4001 67
-
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test33_1 68
-    $G4STTDIR/bin/run.sh test33_1
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test33_1 68
-
-#############
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test19 69
-    $G4STTDIR/bin/run.sh test19
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test19 69
-
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test29 70
-    $G4STTDIR/bin/run.sh test29
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test29 70
-
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test5011 71
-    $G4STTDIR/bin/run.sh test5011
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test5011 71
-
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test5012 72
-    $G4STTDIR/bin/run.sh test5012
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test5012 72
+  
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test500 60
+    $G4STTDIR/bin/run.sh test500
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test500 60    
 
 #  ${G4STTDIR}/bin/geant4-unix.pl --start-test test803 61
 #    $G4STTDIR/bin/run.sh test803
@@ -503,9 +438,9 @@ else
         -o $1 = test15 -o $1 = test16 -o $1 = test21 ]
       then
         if [ $1 = test11 ]; then
-          NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.7
+          NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.8
           export NeutronHPCrossSections
-          echo "STT:hadrons! NeutronHPCrossSections G4NDL3.7";
+          echo "STT:hadrons! NeutronHPCrossSections G4NDL3.8";
         fi
         rm -f $dir/$1.exerciser$dot_G4LARGE_N.in
         $G4WORKDIR/bin/$G4SYSTEM/$shortname.hadronic.exerciser $G4LARGE_N \
