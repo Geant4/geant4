@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.hh,v 1.13 2006-03-18 10:45:51 maire Exp $
+// $Id: G4EmCalculator.hh,v 1.14 2006-03-23 11:54:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,6 +39,7 @@
 // 17.11.2004 Change signature of methods, add new methods (V.Ivanchenko)
 // 11.01.2006 Add GetCSDARange (V.Ivanchenko)
 // 26.01.2006 Rename GetRange -> GetRangeFromRestricteDEDX (V.Ivanchenko)
+// 22.03.2006 Add ComputeElectronicDEDX and ComputeTotalDEDX (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -138,8 +139,18 @@ public:
   G4double ComputeDEDX(G4double kinEnergy, const G4String& part, const G4String& proc,
                        const G4String& mat, G4double cut = DBL_MAX);
 
+  G4double ComputeElectronicDEDX(G4double kinEnergy, const G4ParticleDefinition*,
+				 const G4Material* mat, G4double cut = DBL_MAX);
+  G4double ComputeElectronicDEDX(G4double kinEnergy, const G4String& part,
+				 const G4String& mat, G4double cut = DBL_MAX);
+
   G4double ComputeNuclearDEDX(G4double kinEnergy, const G4ParticleDefinition*, const G4Material*);
   G4double ComputeNuclearDEDX(G4double kinEnergy, const G4String& part, const G4String& mat);
+
+  G4double ComputeTotalDEDX(G4double kinEnergy, const G4ParticleDefinition*, 
+			    const G4Material*, G4double cut = DBL_MAX);
+  G4double ComputeTotalDEDX(G4double kinEnergy, const G4String& part, 
+			    const G4String& mat, G4double cut = DBL_MAX);
 
   G4double ComputeCrossSectionPerVolume(
                        G4double kinEnergy, const G4ParticleDefinition*,
@@ -188,7 +199,7 @@ private:
                      const G4String& processName,
                            G4double kinEnergy);
 
-  const G4VEnergyLossProcess* FindEnergyLossProcess(const G4ParticleDefinition*);
+  G4VEnergyLossProcess* FindEnergyLossProcess(const G4ParticleDefinition*);
 
   G4EmCalculator & operator=(const  G4EmCalculator &right);
   G4EmCalculator(const  G4EmCalculator&);
@@ -211,13 +222,16 @@ private:
   const G4ParticleDefinition*  baseParticle;
   const G4PhysicsTable*        currentLambda;
         G4VEmModel*            currentModel;
+        G4VEnergyLossProcess*  currentProcess;
 
+  const G4ParticleDefinition*  theGenericIon;
   G4ionEffectiveCharge*        ionEffCharge;
 
   G4String                     currentName;
   G4double                     currentCut;
   G4double                     chargeSquare;
   G4double                     massRatio;
+  G4double                     mass;
   G4bool                       isIon;
   G4bool                       isApplicable;
 

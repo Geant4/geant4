@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.79 2006-02-04 19:21:51 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.80 2006-03-23 11:54:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -92,6 +92,7 @@
 // 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
 // 18-01-06 Clean up subcutoff including recalculation of presafety (VI)
 // 20-01-06 Introduce G4EmTableType and reducing number of methods (VI)
+// 22-03-06 Add control on warning printout AlongStep (VI)
 //
 // Class Description:
 //
@@ -598,11 +599,14 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     G4double r = GetScaledRangeForScaledEnergy(preStepScaledEnergy);
     G4double x = r - length/reduceFactor;
     if(x < 0.0) {
-      G4cout << "WARNING! G4VEnergyLossProcess::AlongStepDoIt: x= " << x
-             << " for eScaled(MeV)= " << preStepScaledEnergy/MeV
-             << " step(mm)= " << length/mm
-             << " for " << track.GetDefinition()->GetParticleName()
-             << G4endl;
+      if(0 < verboseLevel && nWarnings<20) {
+	G4cout << "WARNING! G4VEnergyLossProcess::AlongStepDoIt: x= " << x
+	       << " for eScaled(MeV)= " << preStepScaledEnergy/MeV
+	       << " step(mm)= " << length/mm
+	       << " for " << track.GetDefinition()->GetParticleName()
+	       << G4endl;
+	nWarnings++;
+      }
       x = 0.0;
     }
     eloss = (ScaledKinEnergyForLoss(r) - ScaledKinEnergyForLoss(x))/massRatio;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.50 2006-01-26 08:57:36 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.51 2006-03-23 11:54:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,6 +64,7 @@
 // 13-01-06 Remove AddSubCutSecondaries and cleanup (V.Ivantchenko)
 // 20-01-06 Introduce G4EmTableType and reducing number of methods (VI)
 // 26-01-06 Add public method GetCSDARange (V.Ivanchenko)
+// 22-03-06 Add SetDynamicMassCharge (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -308,6 +309,10 @@ public:
 
   void SampleSubCutSecondaries(std::vector<G4Track*>&, const G4Step&, 
                                G4double& cut, G4VEmModel* model); 
+
+  // Set scaling parameters
+  //
+  void SetDynamicMassCharge(G4double massratio, G4double charge2ratio);
 
 protected:
 
@@ -860,6 +865,17 @@ inline void G4VEnergyLossProcess::SetChargeSquare(G4double val)
 inline void G4VEnergyLossProcess::SetChargeSquareRatio(G4double val) 
 {
   chargeSqRatio = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEnergyLossProcess::SetDynamicMassCharge(G4double massratio, 
+						       G4double charge2ratio)
+{
+  massRatio     = massratio;
+  chargeSqRatio = charge2ratio;
+  chargeSquare  = charge2ratio*eplus*eplus;
+  reduceFactor  = 1.0/(chargeSqRatio*massRatio);
 }
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
