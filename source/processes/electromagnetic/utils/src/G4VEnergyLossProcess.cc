@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.81 2006-03-23 14:47:25 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.82 2006-03-23 16:22:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -649,7 +649,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     if(idxSCoffRegions[currentMaterialIndex]) {
 
       G4double preSafety = step.GetPreStepPoint()->GetSafety();
-      G4double rcut = currentCouple->GetProductionCuts()->GetProductionCut(0);
+      G4double rcut = currentCouple->GetProductionCuts()->GetProductionCut(1);
       if(preSafety < rcut) preSafety = 
 	  navigator->ComputeSafety(step.GetPreStepPoint()->GetPosition());
       if(preSafety - length < rcut) {
@@ -682,7 +682,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 	    for(G4int i=0; i<n; i++) {
               G4Track* t = scTracks[i];
 	      G4double e = t->GetKineticEnergy();
-	      if (t->GetDefinition() == thePositron) e += electron_mass_c2;
+	      if (t->GetDefinition() == thePositron) e += 2.0*electron_mass_c2;
               esec += e;
 	      pParticleChange->AddSecondary(t);
               mom -= t->GetMomentum();
@@ -697,7 +697,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   }
 
   // Sample fluctuations
-  if (lossFluctuationFlag && eloss + lowestKinEnergy < preStepKinEnergy) {
+  if (lossFluctuationFlag && eloss + esec + lowestKinEnergy < preStepKinEnergy) {
 
     G4double tmax = 
       std::min(currentModel->MaxSecondaryKinEnergy(dynParticle),cut);
@@ -756,6 +756,7 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
     chargeSqRatio*(((*theSubLambdaTable)[currentMaterialIndex])->
                    GetValue(preStepScaledEnergy, b));
   G4double length = step.GetStepLength();
+  currentCut = subcut;
   if(length*cross < 1.e-9) return;
   /*  
   if(-1 < verboseLevel) 
@@ -900,13 +901,13 @@ void G4VEnergyLossProcess::PrintInfoDefinition()
            << " in " << nBins << " bins."
            << G4endl;
     PrintInfo();
-    if(theRangeTableForLoss) 
+    if(theRangeTableForLoss && isIonisation) 
       G4cout << "      Step function: finalRange(mm)= " << finalRange/mm
              << ", dRoverRange= " << dRoverRange
              << ", integral: " << integral
              << G4endl;
     
-    if(theCSDARangeTable) 
+    if(theCSDARangeTable && isIonisation) 
       G4cout << "      CSDA range table up"
              << " to " << G4BestUnit(maxKinEnergyCSDA,"Energy")
              << " in " << nBinsCSDA << " bins." << G4endl;
@@ -917,26 +918,26 @@ void G4VEnergyLossProcess::PrintInfoDefinition()
 
     if(2 < verboseLevel) {
       G4cout << "DEDXTable address= " << theDEDXTable << G4endl;
-      if(theDEDXTable) G4cout << (*theDEDXTable) << G4endl;
+      if(theDEDXTable && isIonisation) G4cout << (*theDEDXTable) << G4endl;
       G4cout << "non restricted DEDXTable address= " 
 	     << theDEDXunRestrictedTable << G4endl;
-      if(theDEDXunRestrictedTable) G4cout << (*theDEDXunRestrictedTable) 
-					  << G4endl;
-      if(theDEDXSubTable) G4cout << (*theDEDXSubTable) 
-				 << G4endl;
+      if(theDEDXunRestrictedTable && isIonisation) G4cout << (*theDEDXunRestrictedTable) 
+							  << G4endl;
+      if(theDEDXSubTable && isIonisation) G4cout << (*theDEDXSubTable) 
+						 << G4endl;
       G4cout << "CSDARangeTable address= " << theCSDARangeTable 
 	     << G4endl;
-      if(theCSDARangeTable) G4cout << (*theCSDARangeTable) << G4endl;
+      if(theCSDARangeTable && isIonisation) G4cout << (*theCSDARangeTable) << G4endl;
       G4cout << "RangeTableForLoss address= " << theRangeTableForLoss 
 	     << G4endl;
-      if(theRangeTableForLoss) G4cout << (*theRangeTableForLoss) << G4endl;
+      if(theRangeTableForLoss && isIonisation) G4cout << (*theRangeTableForLoss) << G4endl;
       G4cout << "InverseRangeTable address= " << theInverseRangeTable 
 	     << G4endl;
-      if(theInverseRangeTable) G4cout << (*theInverseRangeTable) << G4endl;
+      if(theInverseRangeTable && isIonisation) G4cout << (*theInverseRangeTable) << G4endl;
       G4cout << "LambdaTable address= " << theLambdaTable << G4endl;
-      if(theLambdaTable) G4cout << (*theLambdaTable) << G4endl;
+      if(theLambdaTable && isIonisation) G4cout << (*theLambdaTable) << G4endl;
       G4cout << "SubLambdaTable address= " << theSubLambdaTable << G4endl;
-      if(theSubLambdaTable) G4cout << (*theSubLambdaTable) << G4endl;
+      if(theSubLambdaTable && isIonisation) G4cout << (*theSubLambdaTable) << G4endl;
     }
   }
 }
@@ -1220,13 +1221,13 @@ G4bool G4VEnergyLossProcess::StorePhysicsTable(
     if( !theInverseRangeTable->StorePhysicsTable(name,ascii)) res = false;
   }
 
-  if ( theLambdaTable ) {
+  if ( theLambdaTable  && isIonisation) {
     const G4String name = 
       GetPhysicsTableFileName(part,directory,"Lambda",ascii);
     if( !theLambdaTable->StorePhysicsTable(name,ascii)) res = false;
   }
 
-  if ( theSubLambdaTable ) {
+  if ( theSubLambdaTable  && isIonisation) {
     const G4String name = 
       GetPhysicsTableFileName(part,directory,"SubLambda",ascii);
     if( !theSubLambdaTable->StorePhysicsTable(name,ascii)) res = false;
