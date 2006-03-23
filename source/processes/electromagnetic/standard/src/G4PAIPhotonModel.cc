@@ -286,7 +286,7 @@ G4PAIPhotonModel::BuildPAIonisationTable()
 					 fHighestKineticEnergy,
 					 fTotBin               ) ;
   Tmin     = fSandiaPhotoAbsCof[0][0] ;      // low energy Sandia interval
-  deltaLow = 0.5*eV ;
+  deltaLow = 100.*eV; // 0.5*eV ;
 
   for (G4int i = 0 ; i < fTotBin ; i++)  //The loop for the kinetic energy
   {
