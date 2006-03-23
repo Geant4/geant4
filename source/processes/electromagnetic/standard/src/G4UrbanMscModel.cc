@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.8 2006-03-13 17:41:16 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.9 2006-03-23 09:48:41 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -77,6 +77,7 @@
 // 16-02-06 code cleaning + revised 'z' sampling (L.Urban)
 // 17-02-06 Save table of transport cross sections not mfp (V.Ivanchenko)
 // 07-03-06 Create G4UrbanMscModel and move there step limit calculation (V.Ivanchenko)
+// 23-03-06 Bugfix in SampleCosineTheta method (L.Urban)
 //
 
 // Class Description:
@@ -737,23 +738,16 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
     if (tau >= taubig) cth = -1.+2.*G4UniformRand();
     else if (tau >= tausmall)
     {
-      const G4double xsi = 3., c_highland = 13.6*MeV ;
-      G4double betacp = sqrt(currentKinEnergy*(currentKinEnergy+2.*mass)*
-                             KineticEnergy*(KineticEnergy+2.*mass)/
-                            ((currentKinEnergy+mass)*(KineticEnergy+mass)));
-      G4double tailpar = c_highland/betacp ;
       G4double b,bx,b1,ebx,eb1;
 
       // parameter c determines the tail 
-      G4double c = xsi-factail*currentRadLength/(lambda0*tailpar*tailpar) ;
-      if(c <= 0.) c  = taulim ;
-      if(c == 2.) c += taulim ;
+      G4double c = 3. ;
       G4double c1 = c-1.;
       G4double prob = 0., qprob = 1. ;
       G4double a = 1., ea = 0., eaa = 1.;
 
       // 1 model function for tau > tau0 (low energy particles)........
-      const G4double tau0 = 0.10 ;
+      const G4double tau0 = 0.05 ;
       if(tau > tau0)
       {
         // 1 model function
@@ -770,6 +764,11 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
         //  from a  parametrization similar to the Highland formula
         // ( Highland formula: Particle Physics Booklet, July 2002, eq. 26.10)
         // here : theta0 = 13.6*MeV*Q*(t/X0)**0.555/(beta*cp) 
+        const G4double xsi = 3., c_highland = 13.6*MeV ;
+        G4double betacp = sqrt(currentKinEnergy*(currentKinEnergy+2.*mass)*
+                               KineticEnergy*(KineticEnergy+2.*mass)/
+                            ((currentKinEnergy+mass)*(KineticEnergy+mass)));
+        G4double tailpar = c_highland/betacp ;
         const G4double corr_highland=0.555 ;
         G4double theta0 = tailpar*charge*exp(corr_highland*
                           log(trueStepLength/currentRadLength)) ;
@@ -781,6 +780,10 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
         if(a <= xsi/2.) a = xsi/2.+taulim ;
 
         G4double xmeanth = exp(-tau);
+
+        c = xsi-factail*currentRadLength/(lambda0*tailpar*tailpar) ;
+        if(c <= 2.) c = 2.+taulim ;
+        c1 = c-1.;
 
         G4double x0 = 1.-xsi/a ;
         ea = exp(-xsi) ;
