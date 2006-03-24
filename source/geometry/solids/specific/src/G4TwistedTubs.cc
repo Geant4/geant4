@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc,v 1.20 2006-01-16 12:57:14 gcosmo Exp $
+// $Id: G4TwistedTubs.cc,v 1.21 2006-03-24 09:24:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1128,8 +1128,9 @@ G4GeometryType G4TwistedTubs::GetEntityType() const
 
 G4double G4TwistedTubs::GetCubicVolume()
 {
-  if(fCubicVolume != 0.) ;
-    else fCubicVolume = G4VSolid::GetCubicVolume(); 
+  if(fCubicVolume != 0.) {;}
+  else   { fCubicVolume = fDPhi*fZHalfLength*(fOuterRadius*fOuterRadius
+                                             -fInnerRadius*fInnerRadius); }
   return fCubicVolume;
 }
 
