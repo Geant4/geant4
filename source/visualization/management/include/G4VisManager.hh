@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.50 2006-03-13 14:30:03 allison Exp $
+// $Id: G4VisManager.hh,v 1.51 2006-03-24 22:03:02 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -98,13 +98,12 @@ class G4UImessenger;
 class G4VisStateDependent;
 class G4VTrajectoryModel;
 class G4VUserVisAction;
-template <typename T> class G4VisListManager;
+template <typename T> class G4VisModelManager;
 template <typename T> class G4VModelFactory;
 
 namespace {
-  // Typedef's for trajectory drawing
-  typedef G4VModelFactory<G4VTrajectoryModel> G4TrajectoryModelFactory;
-  typedef G4VisListManager<G4VTrajectoryModel> G4TrajectoryModelManager;
+  // Useful typedef's
+  typedef G4VModelFactory<G4VTrajectoryModel> G4TrajDrawModelFactory;
 }
 
 class G4VisManager: public G4VVisManager {
@@ -183,8 +182,8 @@ public: // With description
   // a sub-class implementation of the protected virtual function,
   // RegisterGraphicsSystems.  See, e.g., G4VisExecutive.icc.
 
-  void RegisterModelFactory(G4TrajectoryModelFactory* factory);
-  // Register trajectory model factory. Assumes ownership of factory.
+  void RegisterModelFactory(G4TrajDrawModelFactory* factory);
+  // Register trajectory draw model factory. Assumes ownership of factory.
 
   void RegisterModel(G4VTrajectoryModel* model);
   // Register trajectory model. Assumes ownership of model.
@@ -410,10 +409,8 @@ protected:
 
 private:
 
-  // Trajectory model related data members
-  G4String fTrajectoryPlacement; // Placement for trajectory model commands
-  G4TrajectoryModelManager* fpTrajectoryModelMgr; // Trajectory model manager
-  std::vector<G4TrajectoryModelFactory*> fTrajectoryModelFactoryList; // Trajectory model factories
+  // Trajectory draw model manager
+  G4VisModelManager<G4VTrajectoryModel>* fpTrajDrawModelMgr;
   
 };
 

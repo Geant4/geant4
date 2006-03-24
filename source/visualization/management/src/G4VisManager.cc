@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.86 2006-03-13 14:30:03 allison Exp $
+// $Id: G4VisManager.cc,v 1.87 2006-03-24 22:03:02 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,9 +59,9 @@
 #include "G4NullModel.hh"
 #include "G4ModelingParameters.hh"
 #include "G4TransportationManager.hh"
-#include "G4VisListManager.hh"
 #include "G4VisCommandModelCreate.hh"
 #include "G4VisCommandsListManager.hh"
+#include "G4VisModelManager.hh"
 #include "G4VModelFactory.hh"
 #include "G4VTrajectoryModel.hh"
 #include "G4TrajectoryDrawByCharge.hh"
@@ -82,11 +82,10 @@ G4VisManager::G4VisManager ():
   fpStateDependent (0),
   fEventCount      (0),
   fTransientsDrawnThisEvent(false),
-  fTransientsDrawnThisRun(false),
-  fTrajectoryPlacement("/vis/modeling/trajectories"),
-  fpTrajectoryModelMgr(new G4TrajectoryModelManager())
-  // All other objects use default constructors.
+  fTransientsDrawnThisRun(false)
 {
+  fpTrajDrawModelMgr = new G4VisModelManager<G4VTrajectoryModel>("/vis/modeling/trajectories");
+
   VerbosityGuidanceStrings.push_back
     ("Simple graded message scheme - digit or string (1st character defines):");
   VerbosityGuidanceStrings.push_back
@@ -170,11 +169,7 @@ G4VisManager::~G4VisManager () {
     delete fDirectoryList[i];
   }
 
-  for (i = 0; i < fTrajectoryModelFactoryList.size(); ++i) {
-    delete fTrajectoryModelFactoryList[i];
-  }
-
-  delete fpTrajectoryModelMgr;
+  delete fpTrajDrawModelMgr;
 }
 
 G4VisManager* G4VisManager::GetInstance () {
@@ -327,22 +322,18 @@ G4bool G4VisManager::RegisterGraphicsSystem (G4VGraphicsSystem* pSystem) {
 
 void G4VisManager::RegisterModel(G4VTrajectoryModel* model) 
 {
-  fpTrajectoryModelMgr->Register(model);
+  fpTrajDrawModelMgr->Register(model);
 }
 
 void
-G4VisManager::RegisterModelFactory(G4TrajectoryModelFactory* factory) 
+G4VisManager::RegisterModelFactory(G4TrajDrawModelFactory* factory) 
 {
-  // vis manager takes ownership
-  fTrajectoryModelFactoryList.push_back(factory);
-
-  // Create messenger for this factory
-  RegisterMessenger(new G4VisCommandModelCreate<G4TrajectoryModelFactory>(factory, fTrajectoryPlacement));
+  fpTrajDrawModelMgr->Register(factory);
 }
 
 void G4VisManager::SelectTrajectoryModel(const G4String& model) 
 {
-   fpTrajectoryModelMgr->SetCurrent(model);
+   fpTrajDrawModelMgr->SetCurrent(model);
 }
 
 void G4VisManager::Draw (const G4Circle& circle,
@@ -643,14 +634,14 @@ void G4VisManager::GeometryHasChanged () {
 
 void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory, G4int i_mode)
 {
-  assert (0 != fpTrajectoryModelMgr);
+  assert (0 != fpTrajDrawModelMgr);
 
-  const G4VTrajectoryModel* model = fpTrajectoryModelMgr->Current();
+  const G4VTrajectoryModel* model = fpTrajDrawModelMgr->Current();
 
   if (0 == model) {
     // No model was registered with the trajectory model manager. 
     // Use G4TrajectoryDrawByCharge as a default.
-    fpTrajectoryModelMgr->Register(new G4TrajectoryDrawByCharge());
+    fpTrajDrawModelMgr->Register(new G4TrajectoryDrawByCharge());
 
     if (fVerbosity >= warnings) {
       G4cout<<"G4VisManager: Using G4TrajectoryDrawByCharge as default trajectory model."<<G4endl;
@@ -658,7 +649,7 @@ void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory, G4int i_mode
     }
   }
   
-  model = fpTrajectoryModelMgr->Current();
+  model = fpTrajDrawModelMgr->Current();
   assert (0 != model); // Should definitely exist now
 
   model->Draw(trajectory, i_mode);
@@ -880,10 +871,10 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandsViewerSet);
 
   // List manager commands
-  RegisterMessenger(new G4VisCommandListManagerList<G4TrajectoryModelManager>
-		    (fpTrajectoryModelMgr, fTrajectoryPlacement));
-  RegisterMessenger(new G4VisCommandListManagerSelect<G4TrajectoryModelManager>
-		    (fpTrajectoryModelMgr, fTrajectoryPlacement));  
+  RegisterMessenger(new G4VisCommandListManagerList< G4VisModelManager<G4VTrajectoryModel> >
+		    (fpTrajDrawModelMgr, fpTrajDrawModelMgr->Placement()));
+  RegisterMessenger(new G4VisCommandListManagerSelect< G4VisModelManager<G4VTrajectoryModel> >
+		    (fpTrajDrawModelMgr, fpTrajDrawModelMgr->Placement()));  
 }
 
 void G4VisManager::PrintAvailableGraphicsSystems () const {
