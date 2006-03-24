@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.37 2005-06-02 17:43:46 allison Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.38 2006-03-24 20:06:13 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -995,18 +995,23 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 
   hepRepXMLWriter->addAttValue("DrawAs",primName);
 
-  // Handle color attribute.
+  // Handle color and visibility attributes.
   float redness;
   float greenness;
   float blueness;
+  G4bool isVisible; 
 
   if (fpVisAttribs || haveVisible) {
     G4Colour colour;
 
-    if (fpVisAttribs)
+    if (fpVisAttribs) {
       colour = fpVisAttribs->GetColour();
-    else
+	  isVisible = fpVisAttribs->IsVisible();
+    } else {
       colour = GetColour(visible);
+	  isVisible = fpViewer->
+				  GetApplicableVisAttributes(visible.GetVisAttributes())->IsVisible();
+	}
 
     redness = colour.GetRed();
     greenness = colour.GetGreen();
@@ -1027,6 +1032,7 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
     redness = 1.;
     greenness = 1.;
     blueness = 1.;
+	isVisible = true;
   }
 
   if (strcmp(primName,"Point")==0)
@@ -1034,11 +1040,7 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
   else
     hepRepXMLWriter->addAttValue("LineColor",redness,greenness,blueness);
 
-  // Handle visibility attribute.
-  if (fpVisAttribs && (fpVisAttribs->IsVisible()==0))
-    hepRepXMLWriter->addAttValue("Visibility",false);
-  else
-    hepRepXMLWriter->addAttValue("Visibility",true);
+    hepRepXMLWriter->addAttValue("Visibility",isVisible);
 }
 
 
