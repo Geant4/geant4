@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Sc01DetectorConstruction.cc,v 1.10 2005-12-07 10:27:25 grichine Exp $
+// $Id: Sc01DetectorConstruction.cc,v 1.11 2006-03-24 09:37:33 grichine Exp $
 // 
 //  GEANT 4 class header file 
 //
@@ -170,6 +170,12 @@ Sc01DetectorConstruction::SelectDetector( const G4String& val )
   {
     // aVolume = new G4Torus ("aTorus", 10*cm, 15*cm, 20*cm, 0*deg, 60*deg);
     aVolume = new G4Torus ("aTorus", 25*cm, 26*cm, 290*cm, 0*deg, 90*deg);
+    G4LogicalVolume* aVolume_log  = new G4LogicalVolume(aVolume, Water1, "aVolume_L", 0,0,0);
+    G4RotationMatrix* rot = new G4RotationMatrix();
+    rot->rotateX(-90*degree);
+    G4VPhysicalVolume * aVolume_phys1
+    = new G4PVPlacement(rot,G4ThreeVector(0*cm, 0*cm, 0*cm),val, 
+                        aVolume_log, PhysicalVolume, false, 0);
   }
   else if (val == "Para")
   {
@@ -642,8 +648,8 @@ G4VPhysicalVolume* Sc01DetectorConstruction::Construct()
   SetMaterial();
 
   //-------------------Hall ----------------------------------
-  return SelectTubeSector();  
-  // return SelectDetector ("Sphere");
+  // return SelectTubeSector();  
+  return SelectDetector ("Torus");
 }
 
 
