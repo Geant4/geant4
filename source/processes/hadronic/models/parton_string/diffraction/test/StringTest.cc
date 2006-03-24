@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: StringTest.cc,v 1.1 2005-10-19 10:28:13 gunter Exp $
+// $Id: StringTest.cc,v 1.2 2006-03-24 11:43:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,8 +41,8 @@
 # undef USE_FTFmodel
 #endif
 
-#define debout if(false) G4cout
-//#define debout if(debprint) G4cout
+//#define debout if(false) G4cout
+#define debout if(debprint) G4cout
 
 //#include <strstream> 
   #include <sstream>
@@ -104,6 +104,8 @@ int main()
 // ----------- now get all particles of interest ---------
 //	ConstructParticle();
    
+        G4ParticleTable::GetParticleTable()->SetReadiness();
+
 	G4BosonConstructor Bosons;
 	Bosons.ConstructParticle();
 
@@ -118,7 +120,7 @@ int main()
 
 	G4ShortLivedConstructor ShortLived;
 	ShortLived.ConstructParticle();
-
+	
 	G4Nucleus H(1.,1.);		// Hydrogen (Proton)
 	G4Material* m_H = new G4Material("H",     1.,  1.0*g/mole, 1.*g/cm3);
 
@@ -223,7 +225,7 @@ int main()
 	std::ostringstream hbfilename;
 	hbfilename << "str_";
 	
-	G4VPartonStringModel * model;
+	G4VPartonStringModel * model=0;
 
         if ( model_name == "QGSM" )
 	{
@@ -585,7 +587,7 @@ int main()
 
 		secondaries=NULL;
 		G4String pname=pdef->GetParticleName();
- 		debout << " Primary momentumn  : " << Result1[aResult]->Get4Momentum() << G4endl;
+ 		debout << " Primary momentum : " << Result1[aResult]->Get4Momentum() << G4endl;
 		if ( pname == "pi-" || pname == "pi+" || pname == "pi0"
 		  || pname == "proton" || pname == "neutron"
 		  || pname == "anti_proton" || pname == "anti_neutron"
@@ -700,7 +702,7 @@ int main()
 
 		secondaries=NULL;
 		G4String pname=pdef->GetParticleName();
- 		debout << " Primary momentumn  : " << (*result)[astring]->Get4Momentum() << G4endl;
+ 		debout << " Primary momentumn  : " << (*result1)[bResult]->Get4Momentum() << G4endl;
 		if ( pname == "pi-" || pname == "pi+" || pname == "pi0"
 		  || pname == "proton" || pname == "neutron"
 		  || pname == "anti_proton" || pname == "anti_neutron"
@@ -821,6 +823,11 @@ int main()
 		hptSq->fill(ptSquare);
 		hpt->fill(pt);
 		
+		if ( pt < perCent ) 
+		{
+		   G4cout << " low pt " << pt << " " <<
+		        (*result)[astring]->Get4Momentum() << G4endl;
+		}
 #ifdef USE_FTFmodel
 		if ( pname == "string" ) 
 		{

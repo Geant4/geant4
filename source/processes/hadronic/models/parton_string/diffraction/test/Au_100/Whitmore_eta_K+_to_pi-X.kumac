@@ -1,0 +1,37 @@
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'WHITMORE 94   ZP C62, 199'
+ opt liny
+ve/cr q(010)
+ve/cr q0(010)
+ve/cr v(7,010)
+ve/in v(1:7,001)     -1.0000E-01     0.0000E+00     2.8400E-01     7.8000E-02     7.8000E-02     0.0000E+00     0.0000E+00
+ve/in v(1:7,002)      7.0000E-01     0.0000E+00     1.3600E+00     1.7400E-01     1.7400E-01     0.0000E+00     0.0000E+00
+ve/in v(1:7,003)      1.5000E+00     0.0000E+00     1.3240E+00     1.9100E-01     1.9100E-01     0.0000E+00     0.0000E+00
+ve/in v(1:7,004)      2.3000E+00     0.0000E+00     1.4100E+00     1.9000E-01     1.9000E-01     0.0000E+00     0.0000E+00
+ve/in v(1:7,005)      3.1000E+00     0.0000E+00     1.0460E+00     1.6100E-01     1.6100E-01     0.0000E+00     0.0000E+00
+ve/in v(1:7,006)      3.9000E+00     0.0000E+00     6.8200E-01     1.2800E-01     1.2800E-01     0.0000E+00     0.0000E+00
+ve/in v(1:7,007)      4.7000E+00     0.0000E+00     2.1800E-01     9.2000E-02     9.2000E-02     0.0000E+00     0.0000E+00
+ve/in v(1:7,008)      6.3000E+00     0.0000E+00     7.1000E-02     7.3000E-02     7.3000E-02     0.0000E+00     0.0000E+00
+ve/copy v(1,1:008) x
+ve/copy v(2,1:008) q
+ve/copy v(3,1:008) y
+ve/copy v(4,1:008) eup
+ve/copy v(5,1:008) edo
+ve/copy v(6,1:008) sys1
+ve/copy v(7,1:008) sys2
+ null  -0.740000    6.94000  -0.162200    1.76020
+ sigma etot1=sqrt(eup*eup+sys1*sys1)
+ sigma etot2=sqrt(edo*edo+sys2*sys2)
+/GRAPHICS/HPLOT/AERRORS x y q q etot2 etot1 008 20 0.2
+/GRAPHICS/HPLOT/AERRORS x y q0 q0 edo eup 008 20 0.2 '1'
+ atitle 'YRAP(RF=LAB)'  '(1/N(C=TOT))D(N)/DYRAP'
+ text     3.10000     1.66408 _
+ 'RE   K+ AU --&gt; PI- X' 0.3
+ text     3.10000     1.56796 _
+ 'PLAB IN GEV   100' 0.3
+* option *
+ ve/de *

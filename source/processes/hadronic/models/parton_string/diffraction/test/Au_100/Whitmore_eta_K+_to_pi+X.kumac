@@ -1,0 +1,38 @@
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'WHITMORE 94   ZP C62, 199'
+ opt liny
+ve/cr q(010)
+ve/cr q0(010)
+ve/cr v(7,010)
+ve/in v(1:7,001)     -9.0000E-01     0.0000E+00     6.0000E-02     3.5000E-02     3.5000E-02     0.0000E+00     0.0000E+00
+ve/in v(1:7,002)     -1.0000E-01     0.0000E+00     2.3200E-01     6.9000E-02     6.9000E-02     0.0000E+00     0.0000E+00
+ve/in v(1:7,003)      7.0000E-01     0.0000E+00     1.0570E+00     1.5200E-01     1.5200E-01     0.0000E+00     0.0000E+00
+ve/in v(1:7,004)      1.5000E+00     0.0000E+00     1.6330E+00     2.1100E-01     2.1100E-01     0.0000E+00     0.0000E+00
+ve/in v(1:7,005)      2.3000E+00     0.0000E+00     1.2930E+00     2.1500E-01     2.1500E-01     0.0000E+00     0.0000E+00
+ve/in v(1:7,006)      3.1000E+00     0.0000E+00     1.2220E+00     1.9500E-01     1.9500E-01     0.0000E+00     0.0000E+00
+ve/in v(1:7,007)      3.9000E+00     0.0000E+00     1.1130E+00     1.6200E-01     1.6200E-01     0.0000E+00     0.0000E+00
+ve/in v(1:7,008)      4.7000E+00     0.0000E+00     2.4400E-01     9.0000E-02     9.0000E-02     0.0000E+00     0.0000E+00
+ve/in v(1:7,009)      6.3000E+00     0.0000E+00     2.3000E-02     2.5000E-02     2.5000E-02     0.0000E+00     0.0000E+00
+ve/copy v(1,1:009) x
+ve/copy v(2,1:009) q
+ve/copy v(3,1:009) y
+ve/copy v(4,1:009) eup
+ve/copy v(5,1:009) edo
+ve/copy v(6,1:009) sys1
+ve/copy v(7,1:009) sys2
+ null   -1.62000    7.02000  -0.186600    2.02860
+ sigma etot1=sqrt(eup*eup+sys1*sys1)
+ sigma etot2=sqrt(edo*edo+sys2*sys2)
+/GRAPHICS/HPLOT/AERRORS x y q q etot2 etot1 009 20 0.2
+/GRAPHICS/HPLOT/AERRORS x y q0 q0 edo eup 009 20 0.2 '1'
+ atitle 'YRAP(RF=LAB)'  '(1/N(C=TOT))D(N)/DYRAP'
+ text     2.70000     1.91784 _
+ 'RE   K+ AU --&gt; PI+ X' 0.3
+ text     2.70000     1.80708 _
+ 'PLAB IN GEV   100' 0.3
+* option *
+ ve/de *
