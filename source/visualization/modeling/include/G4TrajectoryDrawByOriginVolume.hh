@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByOriginVolume.hh,v 1.1 2006-03-17 03:24:02 tinslay Exp $
+// $Id: G4TrajectoryDrawByOriginVolume.hh,v 1.2 2006-03-24 20:22:43 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class Description:
@@ -45,7 +45,8 @@ public: // With description
   
   virtual ~G4TrajectoryDrawByOriginVolume();
 
-  virtual void Draw(const G4VTrajectory&, G4int) const;
+  virtual void Draw(const G4VTrajectory&, const G4int& i_mode = 0, 
+		    const G4bool& visible = true) const;
   // Draw the trajectory with optional i_mode parameter
 
   virtual void Print(std::ostream& ostr) const;

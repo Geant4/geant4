@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByParticleID.cc,v 1.5 2006-03-17 03:24:02 tinslay Exp $
+// $Id: G4TrajectoryDrawByParticleID.cc,v 1.6 2006-03-24 20:22:43 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -37,14 +37,14 @@ G4TrajectoryDrawByParticleID::G4TrajectoryDrawByParticleID(const G4String& name)
 G4TrajectoryDrawByParticleID::~G4TrajectoryDrawByParticleID() {}
 
 void
-G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& traj, G4int i_mode) const
+G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& traj, const G4int& i_mode, const G4bool& visible) const
 {
   G4Colour colour(fDefault);
   G4String particle = traj.GetParticleName();
 
   fMap.GetColour(particle, colour);
 
-  G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, i_mode, colour);
+  G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, i_mode, colour, visible);
 }
 
 void

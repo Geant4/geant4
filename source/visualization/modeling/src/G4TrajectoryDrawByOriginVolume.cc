@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByOriginVolume.cc,v 1.1 2006-03-17 03:24:02 tinslay Exp $
+// $Id: G4TrajectoryDrawByOriginVolume.cc,v 1.2 2006-03-24 20:22:43 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay March 2006
@@ -39,7 +39,7 @@ G4TrajectoryDrawByOriginVolume::G4TrajectoryDrawByOriginVolume(const G4String& n
 G4TrajectoryDrawByOriginVolume::~G4TrajectoryDrawByOriginVolume() {}
 
 void
-G4TrajectoryDrawByOriginVolume::Draw(const G4VTrajectory& traj, G4int i_mode) const
+G4TrajectoryDrawByOriginVolume::Draw(const G4VTrajectory& traj, const G4int& i_mode, const G4bool& visible) const
 {
   G4Colour colour(fDefault);
   
@@ -61,7 +61,7 @@ G4TrajectoryDrawByOriginVolume::Draw(const G4VTrajectory& traj, G4int i_mode) co
   G4String physicalName = volume->GetName();
   fMap.GetColour(physicalName, colour);
    
-  G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, i_mode, colour);
+  G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, i_mode, colour, visible);
 }
 
 void

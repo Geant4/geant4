@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawerUtils.cc,v 1.3 2006-03-17 03:24:02 tinslay Exp $
+// $Id: G4TrajectoryDrawerUtils.cc,v 1.4 2006-03-24 20:22:43 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -57,7 +57,7 @@ namespace G4TrajectoryDrawerUtils {
     }    
   }
 
-  void DrawLineAndPoints(const G4VTrajectory& traj, const G4int& i_mode, const G4Colour& colour) {
+  void DrawLineAndPoints(const G4VTrajectory& traj, const G4int& i_mode, const G4Colour& colour, const G4bool& visible) {
     // If i_mode>=0, draws a trajectory as a polyline (default is blue for
     // positive, red for negative, green for neutral) and, if i_mode!=0,
     // adds markers - yellow circles for step points and magenta squares
@@ -84,6 +84,7 @@ namespace G4TrajectoryDrawerUtils {
     
     if (lineRequired) {
       G4VisAttributes trajectoryLineAttribs(colour);
+      trajectoryLineAttribs.SetVisibility(visible);
       trajectoryLine.SetVisAttributes(&trajectoryLineAttribs);
       pVVisManager->Draw(trajectoryLine);
     }
@@ -93,6 +94,7 @@ namespace G4TrajectoryDrawerUtils {
       auxiliaryPoints.SetScreenSize(markerSize);
       auxiliaryPoints.SetFillStyle(G4VMarker::filled);
       G4VisAttributes auxiliaryPointsAttribs(G4Colour(0.,1.,1.));  // Magenta
+      auxiliaryPointsAttribs.SetVisibility(visible);
       auxiliaryPoints.SetVisAttributes(&auxiliaryPointsAttribs);
       pVVisManager->Draw(auxiliaryPoints);
       

@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawerUtils.hh,v 1.3 2006-03-17 03:24:02 tinslay Exp $
+// $Id: G4TrajectoryDrawerUtils.hh,v 1.4 2006-03-24 20:22:43 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -43,7 +43,8 @@ namespace G4TrajectoryDrawerUtils {
   void GetPoints(const G4VTrajectory& traj, G4Polyline& trajectoryLine,
 		 G4Polymarker& auxiliaryPoints, G4Polymarker& stepPoints);
 
-  void DrawLineAndPoints(const G4VTrajectory& traj, const G4int& i_mode, const G4Colour& colour);
+  void DrawLineAndPoints(const G4VTrajectory& traj, const G4int& i_mode, 
+			 const G4Colour& colour, const G4bool& visible);
 }
 
 #endif

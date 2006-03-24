@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByCharge.hh,v 1.4 2006-03-17 03:24:02 tinslay Exp $
+// $Id: G4TrajectoryDrawByCharge.hh,v 1.5 2006-03-24 20:22:43 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -52,7 +52,8 @@ public: // With description
   
   virtual ~G4TrajectoryDrawByCharge();
 
-  virtual void Draw(const G4VTrajectory& trajectory, G4int i_mode = 0) const;
+  virtual void Draw(const G4VTrajectory& trajectory, const G4int& i_mode = 0, 
+		    const G4bool& visible = true) const;
   // Draw the trajectory with optional i_mode parameter
 
   virtual void Print(std::ostream& ostr) const;
@@ -67,7 +68,7 @@ public: // With description
 
 private:
   
-  bool ConvertToCharge(const G4String&, Charge&);
+  G4bool ConvertToCharge(const G4String&, Charge&);
 
   // Data member
   G4ModelColourMap<Charge> fMap;

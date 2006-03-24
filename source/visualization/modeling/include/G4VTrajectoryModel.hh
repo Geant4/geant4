@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VTrajectoryModel.hh,v 1.3 2005-12-02 19:16:15 perl Exp $
+// $Id: G4VTrajectoryModel.hh,v 1.4 2006-03-24 20:22:43 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
@@ -45,7 +45,8 @@ public: // With description
 
   virtual ~G4VTrajectoryModel() {}
 
-  virtual void Draw(const G4VTrajectory& trajectory, G4int i_mode = 0) const = 0;
+  virtual void Draw(const G4VTrajectory& trajectory, const G4int& i_mode = 0, 
+		    const G4bool& visible = true) const = 0;
   // Draw the trajectory with optional i_mode parameter
 
   virtual void Print(std::ostream& ostr) const = 0;
