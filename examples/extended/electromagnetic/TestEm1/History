@@ -1,4 +1,4 @@
-$Id: History,v 1.72 2006-02-16 13:54:26 maire Exp $
+$Id: History,v 1.73 2006-03-25 10:51:53 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,7 @@ track of all tags.
      
 16-02-06 mma
 - TestEm1.in : migration mum -> um
+- name brem -> eBrem
       
 26-01-06 mma (testem1-V08-00-01)
 - refresh all geant3 macros
