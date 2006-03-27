@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.hh,v 1.14 2006-03-08 17:27:38 grichine Exp $
+// $Id: G4SynchrotronRadiation.hh,v 1.15 2006-03-27 09:21:15 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -95,15 +95,26 @@ class G4SynchrotronRadiation : public G4VDiscreteProcess
   G4double GetProbSpectrumSRforInt( G4double );
   G4double GetIntProbSR( G4double );
 
-  void SetRootNumber(G4int rn){fRootNumber=rn;};
+  G4double GetProbSpectrumSRforEnergy( G4double );
+  G4double GetEnergyProbSR( G4double );
+
+  G4double GetIntegrandForAngleK( G4double );
+  G4double GetAngleK( G4double );
+  G4double GetAngleNumberAtGammaKsi( G4double );
 
 
-     G4bool IsApplicable(const G4ParticleDefinition&);
 
-     static G4double GetLambdaConst(){ return fLambdaConst; };
-     static G4double GetEnergyConst(){ return fEnergyConst; };
+  G4bool IsApplicable(const G4ParticleDefinition&);
 
+  static G4double GetLambdaConst(){ return fLambdaConst; };
+  static G4double GetEnergyConst(){ return fEnergyConst; };
+
+  void SetRootNumber(G4int rn){ fRootNumber = rn; };
   void SetVerboseLevel(G4int v){ fVerboseLevel = v; };
+  void SetKsi(G4double ksi){ fKsi = ksi; };
+  void SetEta(G4double eta){ fEta = eta; };
+  void SetPsiGamma(G4double psg){ fPsiGamma = psg; };
+  void SetOrderAngleK(G4double ord){ fOrderAngleK = ord; }; // should be 1/3 or 2/3
 
   protected:
 
@@ -141,9 +152,12 @@ class G4SynchrotronRadiation : public G4VDiscreteProcess
   G4double PositronCutInKineticEnergyNow;
   G4double ParticleCutInKineticEnergyNow;
 
-  G4double fKsi;
   G4double fAlpha;
   G4int    fRootNumber;
+  G4double fKsi;             // omega/omega_c
+  G4double fPsiGamma;        // Psi-angle*gamma
+  G4double fEta;             //
+  G4double fOrderAngleK;     // 1/3 or 2/3
 
 
   G4int    fVerboseLevel;

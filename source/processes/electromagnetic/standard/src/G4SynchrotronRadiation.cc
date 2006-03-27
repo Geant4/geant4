@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.cc,v 1.15 2006-03-09 12:09:39 grichine Exp $
+// $Id: G4SynchrotronRadiation.cc,v 1.16 2006-03-27 09:21:15 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -321,11 +321,27 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
       G4ThreeVector gammaDirection ( dirx, diry, dirz);
       gammaDirection.rotateUz(particleDirection);   
  
+      // polarization of new gamma
+
+      // G4double sx =  cos(Teta)*cos(Phi);
+      // G4double sy =  cos(Teta)*sin(Phi);
+      // G4double sz = -sin(Teta);
+
+      G4ThreeVector gammaPolarization = FieldValue.cross(gammaDirection);
+      gammaPolarization.unit();
+
+      // (sx, sy, sz);
+      // gammaPolarization.rotateUz(particleDirection);
+
       // create G4DynamicParticle object for the SR photon
  
       G4DynamicParticle* aGamma= new G4DynamicParticle ( G4Gamma::Gamma(),
                                                          gammaDirection, 
                                                          energyOfSR      );
+      aGamma->SetPolarization( gammaPolarization.x(),
+                               gammaPolarization.y(),
+                               gammaPolarization.z() );
+
 
       aParticleChange.SetNumberOfSecondaries(1);
       aParticleChange.AddSecondary(aGamma); 
@@ -524,8 +540,108 @@ G4double G4SynchrotronRadiation::GetIntProbSR( G4double ksi)
   return result;
 }
 
+/////////////////////////////////////////////////////////////////////////
+//
+// return an auxiliary function for K_5/3 integral representation
 
-// end of G4SynchrotronRadiation.cc
+G4double G4SynchrotronRadiation::GetProbSpectrumSRforEnergy( G4double t)
+{
+  G4double result, hypCos=std::cosh(t);
+  
+  result = std::cosh(5.*t/3.)*std::exp(t - fKsi*hypCos); // fKsi > 0. !
+  result /= hypCos;
+  return result;
+}
+
+///////////////////////////////////////////////////////////////////////////
+//
+// return the probability to emit SR photon energy with relative energy
+// energy/energy_c >= ksi
+// for ksi <= 0. P = 1., however the method works for ksi > 0 only!
+
+G4double G4SynchrotronRadiation::GetEnergyProbSR( G4double ksi)
+{
+  if (ksi <= 0.) return 1.0;
+  fKsi = ksi; // should be > 0. !
+  G4int n;
+  G4double result, a;
+
+  a = fAlpha;        // always = 0.
+  n = fRootNumber;   // around default = 80
+
+  G4Integrator<G4SynchrotronRadiation, G4double(G4SynchrotronRadiation::*)(G4double)> integral;
+
+  result = integral.Laguerre(this, 
+           &G4SynchrotronRadiation::GetProbSpectrumSRforEnergy, a, n);
+
+  result *= 9.*std::sqrt(3.)*ksi/8./pi;
+
+  return result;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// 
+
+G4double G4SynchrotronRadiation::GetIntegrandForAngleK( G4double t)
+{
+  G4double result, hypCos=std::cosh(t);
+  
+  result  = std::cosh(fOrderAngleK*t)*std::exp(t - fEta*hypCos); // fEta > 0. !
+  result /= hypCos;
+  return result;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Return K 1/3 or 2/3 for angular distribution
+
+G4double G4SynchrotronRadiation::GetAngleK( G4double eta)
+{
+  fEta = eta; // should be > 0. !
+  G4int n;
+  G4double result, a;
+
+  a = fAlpha;        // always = 0.
+  n = fRootNumber;   // around default = 80
+
+  G4Integrator<G4SynchrotronRadiation, G4double(G4SynchrotronRadiation::*)(G4double)> integral;
+
+  result = integral.Laguerre(this, 
+           &G4SynchrotronRadiation::GetIntegrandForAngleK, a, n);
+
+  return result;
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
+// Relative angle diff distribution for given fKsi, which is set externally
+
+G4double G4SynchrotronRadiation::GetAngleNumberAtGammaKsi( G4double gpsi)
+{
+  G4double result, funK, funK2, gpsi2 = gpsi*gpsi;
+
+  fPsiGamma    = gpsi;
+  fEta         = 0.5*fKsi*(1 + gpsi2)*std::sqrt(1 + gpsi2);
+ 
+  fOrderAngleK = 1./3.;
+  funK         = GetAngleK(fEta); 
+  funK2        = funK*funK;
+
+  result       = gpsi2*funK2/(1 + gpsi2);
+
+  fOrderAngleK = 2./3.;
+  funK         = GetAngleK(fEta); 
+  funK2        = funK*funK;
+
+  result      += funK2;
+  result      *= (1 + gpsi2)*fKsi;
+     
+  return result;
+}
+
+
+///////////////////// end of G4SynchrotronRadiation.cc
 
 
 
