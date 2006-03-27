@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaCompton.cc,v 1.6 2005-08-11 10:03:33 maire Exp $
+// $Id: G4KleinNishinaCompton.cc,v 1.7 2006-03-27 17:04:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,6 +36,7 @@
 //
 // Modifications:
 // 18-04-05 Use G4ParticleChangeForGamma (V.Ivantchenko)
+// 27-03-06 Remove upper limit of cross section (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -91,7 +92,7 @@ G4double G4KleinNishinaCompton::ComputeCrossSectionPerAtom(
   G4double CrossSection = 0.0 ;
   if ( Z < 0.9999 )                 return CrossSection;
   if ( GammaEnergy < 0.1*keV      ) return CrossSection;
-  if ( GammaEnergy > (100.*GeV/Z) ) return CrossSection;
+  //  if ( GammaEnergy > (100.*GeV/Z) ) return CrossSection;
 
   static const G4double a = 20.0 , b = 230.0 , c = 440.0;
   
