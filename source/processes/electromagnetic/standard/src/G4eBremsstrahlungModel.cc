@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.30 2006-03-21 15:40:54 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.cc,v 1.31 2006-03-27 17:04:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -48,6 +48,7 @@
 // 03-08-05  Add extra protection at initialisation (V.Ivantchenko)
 // 07-02-06  public function ComputeCrossSectionPerAtom() (mma)
 // 21-03-06  Fix problem of initialisation in case when cuts are not defined (VI)
+// 27-03-06  Fix calculation of fl parameter at low energy (energy loss) (VI)
 //
 // Class Description:
 //
@@ -350,8 +351,12 @@ G4double G4eBremsstrahlungModel::ComputeBremLoss(G4double Z, G4double T,
 
   if (xx <= xlim)
     {
-      fl = coefloss[iz][Nloss-1];
-      for (G4int j=Nloss-2; j>=0; j--) fl = fl*xx+coefloss[iz][j];
+      G4double yy = 1.0;
+      fl = 0.0;
+      for (G4int j=0; j<Nloss; j++) {
+	fl += + yy+coefloss[iz][j];
+        yy *= xx;
+      }
       if (fl < 0.) fl = 0.;
     }
 
@@ -361,7 +366,6 @@ G4double G4eBremsstrahlungModel::ComputeBremLoss(G4double Z, G4double T,
   loss = Z*(Z+ksi)*E*E/(T+E)*exp(beta*log(Cut/T))*(2.-clossh*exp(log(Z)/4.));
   if (T <= Tlim) loss /= exp(closslow*log(Tlim/T));
   if( T <= Cut)  loss *= exp(alosslow*log(T/Cut));
-
   //  correction
   loss *= (aaa+bbb*T/Tlim)/(1.+ccc*T/Tlim);
   loss *= fl;
