@@ -14,8 +14,8 @@ EXAMPLES = 01 02 03 04 05 06 07
 # Symbolic links to extended persistency examples using test401, etc...
 #temp PERSISTENCY += 01 02
 
-# Symbolic links to extended electromagnetic examples using test501, etc...
-ELECTROMAGNETIC += 1 2 3 4 5 ## Awaiting description.
+# Symbolic links to extended electromagnetic examples using test500, etc...
+ELECTROMAGNETIC += 0 1 2 3 4 5 ## Awaiting description.
 ELECTROMAGNETIC += 6 7 ## G4GammaConversionToMuons process.
 ELECTROMAGNETIC += 8 9 10 ## Transistion radiation and PAI (photoabsorption
                         ## ionisation) model.
