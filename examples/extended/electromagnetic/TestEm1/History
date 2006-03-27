@@ -1,4 +1,4 @@
-$Id: History,v 1.74 2006-03-27 14:27:37 maire Exp $
+$Id: History,v 1.75 2006-03-27 16:01:03 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+27-03-06 mma (testem1-V08-00-03)
+- PhysicsList: new functions AddDecay(), AddStepMax()
      
 27-03-06 mma (testem1-V08-00-02)
 - TestEm1.in : migration mum -> um
