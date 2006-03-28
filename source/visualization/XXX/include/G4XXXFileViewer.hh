@@ -21,55 +21,52 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.hh,v 1.19 2006-03-28 17:16:41 allison Exp $
+// $Id: G4XXXFileViewer.hh,v 1.1 2006-03-28 17:16:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// John Allison  5th April 2001
-// A template for a simplest possible graphics driver.
-//?? Lines or sections marked like this require specialisation for your driver.
+// John Allison  7th March 2006
+// A template for a file-writing graphics driver.
+//?? Lines beginning like this require specialisation for your driver.
 
-#ifndef G4XXXSCENEHANDLER_HH
-#define G4XXXSCENEHANDLER_HH
+#ifndef G4XXXFileVIEWER_HH
+#define G4XXXFileVIEWER_HH
 
-//#define G4XXXDEBUG  // Comment this out to suppress debug code.
+#include "G4VViewer.hh"
 
-#include "G4VSceneHandler.hh"
+#include <fstream>
 
-class G4XXXSceneHandler: public G4VSceneHandler {
-
-  friend class G4XXXViewer;
-
+class G4XXXFileViewer: public G4VViewer {
 public:
-  G4XXXSceneHandler(G4VGraphicsSystem& system,
-		      const G4String& name);
-  virtual ~G4XXXSceneHandler();
-
-  ////////////////////////////////////////////////////////////////
-  // Required implementation of pure virtual functions...
-
-  void AddPrimitive(const G4Polyline&);
-  void AddPrimitive(const G4Text&);
-  void AddPrimitive(const G4Circle&);
-  void AddPrimitive(const G4Square&);
-  void AddPrimitive(const G4Polyhedron&);
-  void AddPrimitive(const G4NURBS&);
-  // Further optional AddPrimitive methods.  Explicitly invoke base
-  // class methods if not otherwise defined to avoid warnings about
-  // hiding of base class methods.
-  void AddPrimitive(const G4Polymarker& polymarker)
-  {G4VSceneHandler::AddPrimitive (polymarker);}
-  void AddPrimitive(const G4Scale& scale)
-  {G4VSceneHandler::AddPrimitive (scale);}
-
-protected:
-
-  static G4int         fSceneIdCount;  // Counter for XXX scene handlers.
-
+  G4XXXFileViewer(G4VSceneHandler&,const G4String& name);
+  virtual ~G4XXXFileViewer();
+  void SetView();
+  void ClearView();
+  void DrawView();
+  void ShowView();
+  // A simple class to handle delayed opening, etc.  There are various
+  // degrees of sophistication in, for example, the allocation of
+  // filenames -- see FukuiRenderer or HepRepFile.
+  class FileWriter {
+  public:
+    FileWriter(const G4String& fileName): fFileName(fileName), fOpen(false) {}
+    G4bool IsOpen() {return fOpen;}
+    void WriteItem(const G4String& item)
+    {
+      if (!fOpen) {fFile.open(fFileName); fOpen = true;}
+      if (fFile.good()) fFile << item << std::endl;
+      else G4cout << "G4XXXFileViewer::FileWriter::WriteItem: ERROR" << G4endl;
+    }
+    void Close() {if (fOpen) {fFile.close(); fOpen = false;}}
+    void Rewind() {if (fOpen) fFile.seekp(0, std::ios::beg);}
+  private:
+    G4String fFileName;
+    G4bool fOpen;
+    std::ofstream fFile;
+  };
+  FileWriter& GetFileWriter() {return fFileWriter;}
 private:
-#ifdef G4XXXDEBUG
-  void PrintThings();
-#endif
+  FileWriter fFileWriter;
 };
 
 #endif

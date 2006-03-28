@@ -1,0 +1,172 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4XXXSGViewer.cc,v 1.1 2006-03-28 17:16:41 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// John Allison  10th March 2006
+// A template for a sophisticated graphics driver with a scene graph.
+//?? Lines beginning like this require specialisation for your driver.
+
+#ifdef G4VIS_BUILD_XXXSG_DRIVER
+
+#include "G4XXXSGViewer.hh"
+
+#include "G4VSceneHandler.hh"
+#include "G4XXXSGSceneHandler.hh"
+
+#include <fstream>
+
+G4XXXSGViewer::G4XXXSGViewer
+(G4VSceneHandler& sceneHandler, const G4String& name):
+  G4VViewer(sceneHandler, sceneHandler.IncrementViewCount(), name)
+{}
+
+G4XXXSGViewer::~G4XXXSGViewer() {}
+
+void G4XXXSGViewer::SetView() {
+  //#ifdef G4XXXSGDEBUG
+  G4cout << "G4XXXSGViewer::SetView() called." << G4endl;
+  //#endif
+}
+
+void G4XXXSGViewer::ClearView() {
+  //#ifdef G4XXXSGDEBUG
+  G4cout << "G4XXXSGViewer::ClearView() called." << G4endl;
+  //#endif
+}
+
+void G4XXXSGViewer::DrawView() {
+  //#ifdef G4XXXSGDEBUG
+  G4cout << "G4XXXSGViewer::DrawView() called." << G4endl;
+  //#endif
+
+  // First, a view should decide when to re-visit the G4 kernel.
+  // Sometimes it might not be necessary, e.g., if the scene is stored
+  // in a graphical database (e.g., OpenGL's display lists) and only
+  // the viewing angle has changed.  But graphics systems without a
+  // graphical database will always need to visit the G4 kernel.
+
+  // The fNeedKernelVisit flag might have been set by the user in
+  // /vis/viewer/rebuild, but if not, make decision and set flag only
+  // if necessary...
+  if (!fNeedKernelVisit) KernelVisitDecision();
+  G4bool needed = fNeedKernelVisit;  // Keep.  ProcessView resets.
+
+  ProcessView ();  // Clears store and processes scene only if necessary.
+
+  if (needed) {
+    // Some systems, notably OpenGL, can draw while re-building, so
+    // there might not be a need to draw from store again here.  But
+    // in this case...
+    DrawFromStore("G4XXXSGViewer::DrawView");
+  } else {
+    DrawFromStore("G4XXXSGViewer::DrawView");
+  }
+
+  // ...before finally...
+  FinishView ();       // Flush streams and/or swap buffers.
+}
+
+void G4XXXSGViewer::ShowView() {
+  //#ifdef G4XXXSGDEBUG
+  G4cout << "G4XXXSGViewer::ShowView() called." << G4endl;
+  //#endif
+  // This is what you should see...
+  DrawFromStore("G4XXXSGViewer::ShowView");
+}
+
+void G4XXXSGViewer::KernelVisitDecision () {
+  
+  // If there's a significant difference with the last view parameters
+  // of either the scene handler or this viewer, trigger a rebuild.
+
+  typedef taj::tree<G4String> SceneGraph;
+  typedef taj::tree<G4String>::iterator SceneGraphIterator;
+  SceneGraph& sceneGraph =
+    static_cast<G4XXXSGSceneHandler&>(fSceneHandler).fSceneGraph;
+  if (sceneGraph.size() == 3  // I.e., only the root nodes.
+      || CompareForKernelVisit(fLastVP)) {
+    NeedKernelVisit ();  // Sets fNeedKernelVisit.
+  }      
+  fLastVP = fVP;
+}
+
+G4bool G4XXXSGViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
+{
+  // Typical comparison.  Taken from OpenGL.
+  if (
+      (lastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
+      (lastVP.GetRepStyle ()        != fVP.GetRepStyle ())        ||
+      (lastVP.IsCulling ()          != fVP.IsCulling ())          ||
+      (lastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
+      (lastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
+      (lastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
+      (lastVP.IsSection ()          != fVP.IsSection ())          ||
+      // No need to visit kernel if section plane changes.
+      (lastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
+      (lastVP.GetCutawayPlanes ().size () !=
+                                 fVP.GetCutawayPlanes ().size ()) ||
+      // No need to visit kernel if cutaway planes change.
+      (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
+      (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
+      (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())
+      ) {
+    return true;
+  }
+
+  if (lastVP.IsDensityCulling () &&
+      (lastVP.GetVisibleDensity () != fVP.GetVisibleDensity ()))
+    return true;
+
+  if (lastVP.IsExplode () &&
+      (lastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))
+    return true;
+
+  return false;
+}
+
+void G4XXXSGViewer::DrawFromStore(const G4String& source) {
+  typedef taj::tree<G4String> SceneGraph;
+  typedef taj::tree<G4String>::preorder_iterator SceneGraphPreIterator;
+  SceneGraph& sceneGraph =
+    static_cast<G4XXXSGSceneHandler&>(fSceneHandler).fSceneGraph;
+  // Write to a file for testing...
+  static G4int iCount = 0;
+  std::ostringstream oss;
+  oss << source << '.' << fName << '.' << iCount++ << ".out";
+  G4cout << "Writing " << oss.str() << G4endl;
+  std::ofstream ofs(oss.str().c_str());
+  for (SceneGraphPreIterator i = sceneGraph.beginPre();
+       i != sceneGraph.endPre(); ++i) {
+    G4int depth = 0;
+    SceneGraphPreIterator j = i;
+    while (j != sceneGraph.getRoot()) {j = j.parent(); ++depth;}
+    ofs << "\nDepth: " << depth;
+    ofs << *i;
+  }
+  ofs.close();
+}
+
+#endif

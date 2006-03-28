@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXX.hh,v 1.3 2001-08-25 00:22:06 johna Exp $
+// $Id: G4XXX.hh,v 1.4 2006-03-28 17:16:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  5th April 2001
-// A graphics system to dump geometry hierarchy.
+// A template for a simplest possible graphics driver.
+//?? Lines beginning like this require specialisation for your driver.
 
 #ifndef G4XXX_HH
 #define G4XXX_HH

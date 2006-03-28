@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXViewer.hh,v 1.6 2006-01-26 11:46:33 allison Exp $
+// $Id: G4XXXViewer.hh,v 1.7 2006-03-28 17:16:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  5th April 2001
-// A base class for a dummy viewer to dump geometry hierarchy.
+// A template for a simplest possible graphics driver.
+//?? Lines or sections marked like this require specialisation for your driver.
 
 #ifndef G4XXXVIEWER_HH
 #define G4XXXVIEWER_HH
@@ -42,6 +43,7 @@ public:
   void SetView();
   void ClearView();
   void DrawView();
+  void ShowView();
 };
 
 #endif

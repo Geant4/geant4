@@ -21,40 +21,43 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXViewer.cc,v 1.8 2006-03-28 17:16:41 allison Exp $
+// $Id: G4XXXFileViewer.cc,v 1.1 2006-03-28 17:16:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// John Allison  5th April 2001
-// A template for a simplest possible graphics driver.
-//?? Lines or sections marked like this require specialisation for your driver.
+// John Allison  7th March 2006
+// A template for a file-writing graphics driver.
+//?? Lines beginning like this require specialisation for your driver.
 
-#include "G4XXXViewer.hh"
+#include "G4XXXFileViewer.hh"
 
 #include "G4VSceneHandler.hh"
-#include "G4XXXSceneHandler.hh"
+#include "G4XXXFileSceneHandler.hh"
 
-G4XXXViewer::G4XXXViewer
+G4XXXFileViewer::G4XXXFileViewer
 (G4VSceneHandler& sceneHandler, const G4String& name):
-  G4VViewer(sceneHandler, sceneHandler.IncrementViewCount(), name) {}
+  G4VViewer(sceneHandler, sceneHandler.IncrementViewCount(), name),
+  fFileWriter(name + ".out")
+{}
 
-G4XXXViewer::~G4XXXViewer() {}
+G4XXXFileViewer::~G4XXXFileViewer() {}
 
-void G4XXXViewer::SetView() {
-#ifdef G4XXXDEBUG
-  G4cout << "G4XXXViewer::SetView() called." << G4endl;
+void G4XXXFileViewer::SetView() {
+#ifdef G4XXXFileDEBUG
+  G4cout << "G4XXXFileViewer::SetView() called." << G4endl;
 #endif
 }
 
-void G4XXXViewer::ClearView() {
-#ifdef G4XXXDEBUG
-  G4cout << "G4XXXViewer::ClearView() called." << G4endl;
+void G4XXXFileViewer::ClearView() {
+#ifdef G4XXXFileDEBUG
+  G4cout << "G4XXXFileViewer::ClearView() called." << G4endl;
 #endif
+  fFileWriter.Rewind();
 }
 
-void G4XXXViewer::DrawView() {
-#ifdef G4XXXDEBUG
-  G4cout << "G4XXXViewer::DrawView() called." << G4endl;
+void G4XXXFileViewer::DrawView() {
+#ifdef G4XXXFileDEBUG
+  G4cout << "G4XXXFileViewer::DrawView() called." << G4endl;
 #endif
 
   // First, a view should decide when to re-visit the G4 kernel.
@@ -76,9 +79,9 @@ void G4XXXViewer::DrawView() {
   FinishView ();       // Flush streams and/or swap buffers.
 }
 
-void G4XXXViewer::ShowView() {
-#ifdef G4XXXDEBUG
-  G4cout << "G4XXXViewer::ShowView() called." << G4endl;
-  static_cast<G4XXXSceneHandler&>(fSceneHandler).PrintStores();
+void G4XXXFileViewer::ShowView() {
+#ifdef G4XXXFileDEBUG
+  G4cout << "G4XXXFileViewer::ShowView() called." << G4endl;
 #endif
+  fFileWriter.Close();
 }

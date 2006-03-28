@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXX.cc,v 1.4 2005-06-02 17:00:11 allison Exp $
+// $Id: G4XXX.cc,v 1.5 2006-03-28 17:16:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  5th April 2001
-// A graphics system to dump geometry hierarchy.
+// A template for a simplest possible graphics driver.
+//?? Lines or sections marked like this require specialisation for your driver.
 
 #include "G4XXX.hh"
 #include "G4XXXSceneHandler.hh"
@@ -35,8 +36,10 @@
 G4XXX::G4XXX():
   G4VGraphicsSystem("G4XXX",
 		    "XXX",
-		    "A template graphics driver",
-		    G4VGraphicsSystem::noFunctionality) {}
+		    "Simplest possible graphics driver",
+		    G4VGraphicsSystem::noFunctionality  //?? Your functionality
+		    )
+{}
 
 G4XXX::~G4XXX() {}
 

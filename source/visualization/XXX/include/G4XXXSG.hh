@@ -21,55 +21,29 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.hh,v 1.19 2006-03-28 17:16:41 allison Exp $
+// $Id: G4XXXSG.hh,v 1.1 2006-03-28 17:16:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// John Allison  5th April 2001
-// A template for a simplest possible graphics driver.
+// John Allison  10th March 2005
+// A template for a sophisticated graphics driver with a scene graph.
 //?? Lines or sections marked like this require specialisation for your driver.
 
-#ifndef G4XXXSCENEHANDLER_HH
-#define G4XXXSCENEHANDLER_HH
+#if defined (G4VIS_BUILD_XXXSG_DRIVER) || (G4VIS_USE_XXXSG)
 
-//#define G4XXXDEBUG  // Comment this out to suppress debug code.
+#ifndef G4XXXSG_HH
+#define G4XXXSG_HH
 
-#include "G4VSceneHandler.hh"
+#include "G4VGraphicsSystem.hh"
 
-class G4XXXSceneHandler: public G4VSceneHandler {
-
-  friend class G4XXXViewer;
-
+class G4XXXSG: public G4VGraphicsSystem {
 public:
-  G4XXXSceneHandler(G4VGraphicsSystem& system,
-		      const G4String& name);
-  virtual ~G4XXXSceneHandler();
-
-  ////////////////////////////////////////////////////////////////
-  // Required implementation of pure virtual functions...
-
-  void AddPrimitive(const G4Polyline&);
-  void AddPrimitive(const G4Text&);
-  void AddPrimitive(const G4Circle&);
-  void AddPrimitive(const G4Square&);
-  void AddPrimitive(const G4Polyhedron&);
-  void AddPrimitive(const G4NURBS&);
-  // Further optional AddPrimitive methods.  Explicitly invoke base
-  // class methods if not otherwise defined to avoid warnings about
-  // hiding of base class methods.
-  void AddPrimitive(const G4Polymarker& polymarker)
-  {G4VSceneHandler::AddPrimitive (polymarker);}
-  void AddPrimitive(const G4Scale& scale)
-  {G4VSceneHandler::AddPrimitive (scale);}
-
-protected:
-
-  static G4int         fSceneIdCount;  // Counter for XXX scene handlers.
-
-private:
-#ifdef G4XXXDEBUG
-  void PrintThings();
-#endif
+  G4XXXSG();
+  virtual ~G4XXXSG();
+  G4VSceneHandler* CreateSceneHandler(const G4String& name = "");
+  G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& name = "");
 };
+
+#endif
 
 #endif

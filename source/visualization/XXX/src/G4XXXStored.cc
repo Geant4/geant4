@@ -21,55 +21,52 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.hh,v 1.19 2006-03-28 17:16:41 allison Exp $
+// $Id: G4XXXStored.cc,v 1.1 2006-03-28 17:16:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// John Allison  5th April 2001
-// A template for a simplest possible graphics driver.
-//?? Lines or sections marked like this require specialisation for your driver.
+// John Allison  7th March 2006
+// A template for a graphics driver with a store/database.
+//?? Lines beginning like this require specialisation for your driver.
 
-#ifndef G4XXXSCENEHANDLER_HH
-#define G4XXXSCENEHANDLER_HH
+#include "G4XXXStored.hh"
+#include "G4XXXStoredSceneHandler.hh"
+#include "G4XXXStoredViewer.hh"
 
-//#define G4XXXDEBUG  // Comment this out to suppress debug code.
+G4XXXStored::G4XXXStored():
+  G4VGraphicsSystem("G4XXXStored",
+		    "XXXStored",
+		    "Graphics driver with a store/database",
+		    G4VGraphicsSystem::threeD  //?? Your functionality
+		    )
+{}
 
-#include "G4VSceneHandler.hh"
+G4XXXStored::~G4XXXStored() {}
 
-class G4XXXSceneHandler: public G4VSceneHandler {
+G4VSceneHandler* G4XXXStored::CreateSceneHandler(const G4String& name) {
+  G4VSceneHandler* pScene = new G4XXXStoredSceneHandler(*this, name);
+  return pScene;
+}
 
-  friend class G4XXXViewer;
-
-public:
-  G4XXXSceneHandler(G4VGraphicsSystem& system,
-		      const G4String& name);
-  virtual ~G4XXXSceneHandler();
-
-  ////////////////////////////////////////////////////////////////
-  // Required implementation of pure virtual functions...
-
-  void AddPrimitive(const G4Polyline&);
-  void AddPrimitive(const G4Text&);
-  void AddPrimitive(const G4Circle&);
-  void AddPrimitive(const G4Square&);
-  void AddPrimitive(const G4Polyhedron&);
-  void AddPrimitive(const G4NURBS&);
-  // Further optional AddPrimitive methods.  Explicitly invoke base
-  // class methods if not otherwise defined to avoid warnings about
-  // hiding of base class methods.
-  void AddPrimitive(const G4Polymarker& polymarker)
-  {G4VSceneHandler::AddPrimitive (polymarker);}
-  void AddPrimitive(const G4Scale& scale)
-  {G4VSceneHandler::AddPrimitive (scale);}
-
-protected:
-
-  static G4int         fSceneIdCount;  // Counter for XXX scene handlers.
-
-private:
-#ifdef G4XXXDEBUG
-  void PrintThings();
-#endif
-};
-
-#endif
+G4VViewer* G4XXXStored::CreateViewer(G4VSceneHandler& scene,
+			       const G4String& name) {
+  G4VViewer* pView =
+    new G4XXXStoredViewer((G4XXXStoredSceneHandler&) scene, name);
+  if (pView) {
+    if (pView->GetViewId() < 0) {
+      G4cout <<
+	"G4XXXStored::CreateViewer: ERROR flagged by negative"
+        " view id in G4XXXStoredViewer creation."
+        "\n Destroying view and returning null pointer."
+	     << G4endl;
+      delete pView;
+      pView = 0;
+    }
+  }
+  else {
+    G4cout <<
+      "G4XXXStored::CreateViewer: ERROR: null pointer on new G4XXXStoredViewer."
+	   << G4endl;
+  }
+  return pView;
+}

@@ -21,45 +21,48 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.28 2006-03-28 17:16:41 allison Exp $
+// $Id: G4XXXFileSceneHandler.cc,v 1.1 2006-03-28 17:16:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// John Allison  5th April 2001
-// A template for a simplest possible graphics driver.
-//?? Lines or sections marked like this require specialisation for your driver.
+// John Allison  7th March 2006
+// A template for a file-writing graphics driver.
+//?? Lines beginning like this require specialisation for your driver.
 
-#include "G4XXXSceneHandler.hh"
+#include "G4XXXFileSceneHandler.hh"
 
+#include "G4XXXFileViewer.hh"
 #include "G4PhysicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4ModelingParameters.hh"
+#include "G4Box.hh"
 #include "G4Polyline.hh"
 #include "G4Text.hh"
 #include "G4Circle.hh"
 #include "G4Square.hh"
 #include "G4Polyhedron.hh"
-/*
 #include "G4NURBS.hh"
 #include "G4VTrajectory.hh"
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
-*/
 #include "G4UnitsTable.hh"
 
-G4int G4XXXSceneHandler::fSceneIdCount = 0;
+#include <sstream>
+
+G4int G4XXXFileSceneHandler::fSceneIdCount = 0;
 // Counter for XXX scene handlers.
 
-G4XXXSceneHandler::G4XXXSceneHandler(G4VGraphicsSystem& system,
-					 const G4String& name):
+G4XXXFileSceneHandler::G4XXXFileSceneHandler(G4VGraphicsSystem& system,
+					     const G4String& name):
   G4VSceneHandler(system, fSceneIdCount++, name)
 {}
 
-G4XXXSceneHandler::~G4XXXSceneHandler() {}
+G4XXXFileSceneHandler::~G4XXXFileSceneHandler() {}
 
-#ifdef G4XXXDEBUG
-void G4XXXSceneHandler::PrintThings() {
+#ifdef G4XXXFileDEBUG
+// Useful function...
+static void G4XXXFileSceneHandlerPrintThings() {
   G4cout <<
     "  with transformation "
          << (void*)fpObjectTransformation
@@ -81,27 +84,56 @@ void G4XXXSceneHandler::PrintThings() {
 }
 #endif
 
-void G4XXXSceneHandler::AddPrimitive(const G4Polyline& polyline) {
-#ifdef G4XXXDEBUG
+// Note: This function overrides G4VSceneHandler::AddSolid(const
+// G4Box&).  You may not want to do this, but this is how it's done if
+// you do.  Certain other specific solids may be treated this way -
+// see G4VSceneHandler.hh.  The simplest possible driver would *not*
+// implement these polymorphic functions, with the effect that the
+// default versions in G4VSceneHandler are used, which simply call
+// G4VSceneHandler::RequestPrimitives to turn the solid into a
+// G4Polyhedron usually.
+void G4XXXFileSceneHandler::AddSolid(const G4Box& box) {
+#ifdef G4XXXFileDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddPrimitive(const G4Polyline& polyline) called.\n"
+    "G4XXXFileSceneHandler::AddSolid(const G4Box& box) called for "
+	 << box.GetName()
+	 << G4endl;
+#endif
+  //?? Process your box...
+  std::ostringstream oss;
+  oss << "G4Box(" <<
+    G4String
+    (G4BestUnit
+     (G4ThreeVector
+      (box.GetXHalfLength(), box.GetYHalfLength(), box.GetZHalfLength()),
+      "Length")).strip() << ')';
+  dynamic_cast<G4XXXFileViewer*>(fpViewer)->
+    GetFileWriter().WriteItem(oss.str());
+}
+
+void G4XXXFileSceneHandler::AddPrimitive(const G4Polyline& polyline) {
+#ifdef G4XXXFileDEBUG
+  G4cout <<
+    "G4XXXFileSceneHandler::AddPrimitive(const G4Polyline& polyline) called.\n"
 	 << polyline
 	 << G4endl;
-  PrintThings();
 #endif
   // Get vis attributes - pick up defaults if none.
   //const G4VisAttributes* pVA =
   //  fpViewer -> GetApplicableVisAttributes (polyline.GetVisAttributes ());
   //?? Process polyline.
+  std::ostringstream oss;
+  oss << polyline;
+  dynamic_cast<G4XXXFileViewer*>(fpViewer)->
+    GetFileWriter().WriteItem(oss.str());
 }
 
-void G4XXXSceneHandler::AddPrimitive(const G4Text& text) {
-#ifdef G4XXXDEBUG
+void G4XXXFileSceneHandler::AddPrimitive(const G4Text& text) {
+#ifdef G4XXXFileDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddPrimitive(const G4Text& text) called.\n"
+    "G4XXXFileSceneHandler::AddPrimitive(const G4Text& text) called.\n"
 	 << text
 	 << G4endl;
-  PrintThings();
 #endif
   // Get text colour - special method since default text colour is
   // determined by the default text vis attributes, which may be
@@ -109,12 +141,16 @@ void G4XXXSceneHandler::AddPrimitive(const G4Text& text) {
   // visible objects.
   //const G4Colour& c = GetTextColour (text);  // Picks up default if none.
   //?? Process text.
+  std::ostringstream oss;
+  oss << text;
+  dynamic_cast<G4XXXFileViewer*>(fpViewer)->
+    GetFileWriter().WriteItem(oss.str());
 }
 
-void G4XXXSceneHandler::AddPrimitive(const G4Circle& circle) {
-#ifdef G4XXXDEBUG
+void G4XXXFileSceneHandler::AddPrimitive(const G4Circle& circle) {
+#ifdef G4XXXFileDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddPrimitive(const G4Circle& circle) called.\n"
+    "G4XXXFileSceneHandler::AddPrimitive(const G4Circle& circle) called.\n  "
 	 << circle
 	 << G4endl;
   MarkerSizeType sizeType;
@@ -131,22 +167,25 @@ void G4XXXSceneHandler::AddPrimitive(const G4Circle& circle) {
     break;
   }
   G4cout << " size: " << size << G4endl;
-  PrintThings();
 #endif
   // Get vis attributes - pick up defaults if none.
   //const G4VisAttributes* pVA =
   //  fpViewer -> GetApplicableVisAttributes (circle.GetVisAttributes ());
   //?? Process circle.
+  std::ostringstream oss;
+  oss << circle;
+  dynamic_cast<G4XXXFileViewer*>(fpViewer)->
+    GetFileWriter().WriteItem(oss.str());
 }
 
-void G4XXXSceneHandler::AddPrimitive(const G4Square& square) {
-#ifdef G4XXXDEBUG
+void G4XXXFileSceneHandler::AddPrimitive(const G4Square& square) {
+#ifdef G4XXXFileDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddPrimitive(const G4Square& square) called.\n"
+    "G4XXXFileSceneHandler::AddPrimitive(const G4Square& square) called.\n"
 	 << square
 	 << G4endl;
   MarkerSizeType sizeType;
-  G4double size = GetMarkerSize (circle, sizeType);
+  G4double size = GetMarkerSize (square, sizeType);
   switch (sizeType) {
   default:
   case screen:
@@ -159,23 +198,31 @@ void G4XXXSceneHandler::AddPrimitive(const G4Square& square) {
     break;
   }
   G4cout << " size: " << size << G4endl;
-  PrintThings();
 #endif
   // Get vis attributes - pick up defaults if none.
   //const G4VisAttributes* pVA =
   //  fpViewer -> GetApplicableVisAttributes (square.GetVisAttributes ());
   //?? Process square.
+  std::ostringstream oss;
+  oss << square;
+  dynamic_cast<G4XXXFileViewer*>(fpViewer)->
+    GetFileWriter().WriteItem(oss.str());
 }
 
-void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
-#ifdef G4XXXDEBUG
+void G4XXXFileSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
+#ifdef G4XXXFileDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) called.\n"
+"G4XXXFileSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) called.\n"
 	 << polyhedron
 	 << G4endl;
-  PrintThings();
 #endif
-  //?? Process polyhedron.  Here are some ideas...
+  //?? Process polyhedron.
+  std::ostringstream oss;
+  oss << polyhedron;
+  dynamic_cast<G4XXXFileViewer*>(fpViewer)->
+    GetFileWriter().WriteItem(oss.str());
+
+  //?? Or... here are some ideas for decomposing into polygons...
   //Assume all facets are convex quadrilaterals.
   //Draw each G4Facet individually
   
@@ -221,12 +268,11 @@ void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
   // including how to cope with triangles if that's a problem.
 }
 
-void G4XXXSceneHandler::AddPrimitive(const G4NURBS& nurbs) {
-#ifdef G4XXXDEBUG
+void G4XXXFileSceneHandler::AddPrimitive(const G4NURBS& nurbs) {
+#ifdef G4XXXFileDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddPrimitive(const G4NURBS& nurbs) called."
+    "G4XXXFileSceneHandler::AddPrimitive(const G4NURBS& nurbs) called."
 	 << G4endl;
-  PrintThings();
 #endif
   //?? Don't bother implementing this.  NURBS are not functional.
 }
