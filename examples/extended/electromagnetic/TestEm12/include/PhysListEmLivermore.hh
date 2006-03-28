@@ -21,60 +21,44 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.2 2006-03-28 13:18:29 maire Exp $
+// $Id: PhysListEmLivermore.hh,v 1.1 2006-03-28 13:18:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//
-// 14.10.02 (V.Ivanchenko) provide modular list on base of old PhysicsList
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsList_h
-#define PhysicsList_h 1
+#ifndef PhysListEmLivermore_h
+#define PhysListEmLivermore_h 1
 
-#include "G4VModularPhysicsList.hh"
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class StepMax;
-class PhysicsListMessenger;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+class PhysListEmLivermore : public G4VPhysicsConstructor
 {
-  public:
-    PhysicsList();
-   ~PhysicsList();
+  public: 
+    PhysListEmLivermore(const G4String& name = "Livermore");
+   ~PhysListEmLivermore();
 
-    void ConstructParticle();
-    
-    void SetCuts();
-    void SetCutForGamma(G4double);
-    void SetCutForElectron(G4double);
-    void SetCutForPositron(G4double);        
-        
-    void AddPhysicsList(const G4String& name);
+  public: 
+    // This method is dummy for physics
+    void ConstructParticle() {};
+ 
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type 
     void ConstructProcess();
-
-    void AddDecay();    
-    void AddStepMax();       
-    StepMax* GetStepMaxProcess() {return stepMaxProcess;};
-
-  private:
-    G4double cutForGamma;
-    G4double cutForElectron;
-    G4double cutForPositron;
-       
-    G4String                             emName;
-    G4VPhysicsConstructor*               emPhysicsList;    
-    StepMax* stepMaxProcess;
-    
-    PhysicsListMessenger* pMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
+
+
+
+
 
