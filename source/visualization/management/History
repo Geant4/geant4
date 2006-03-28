@@ -1,4 +1,4 @@
-$Id: History,v 1.38 2006-03-24 22:03:02 tinslay Exp $
+$Id: History,v 1.39 2006-03-28 16:36:45 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,14 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+28th March 2006  John Allison  (visman-V08-00-11)
+- Corrects logic of transients re-computation:
+  o G4VisManager and G4VSceneHandler: Improved logic of TransientsDrawn flags.
+  o G4VSceneHandler: Improved logic of transients re-computation.
+  o G4VViewer: Improved logic of fNeedKernelVisit.
+- Unified treatment of bools in commands.
+
 24th March 2006 Jane Tinslay (jst24032006)
 - Introduce trajectory drawing manager which is used by
   G4VisManager. No change in overall functionality.
