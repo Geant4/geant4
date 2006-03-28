@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsGeometrySet.cc,v 1.2 2006-03-07 12:12:16 allison Exp $
+// $Id: G4VisCommandsGeometrySet.cc,v 1.3 2006-03-28 16:26:56 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/geometry commands - John Allison  31st January 2006
@@ -58,7 +58,9 @@ void G4VVisCommandGeometrySet::Set
     }
     return;
   }
-  G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/rebuild");
+  if (fpVisManager->GetCurrentViewer()) {
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/rebuild");
+  }
 }
 
 void G4VVisCommandGeometrySet::SetLVVisAtts
@@ -198,9 +200,11 @@ void G4VisCommandGeometrySetDaughtersInvisible::SetNewValue
 {
   G4String name;
   G4int requestedDepth;
-  G4bool daughtersInvisible;
+  G4String daughtersInvisibleString;
   std::istringstream iss(newValue);
-  iss >> name >> requestedDepth >> daughtersInvisible;
+  iss >> name >> requestedDepth >> daughtersInvisibleString;
+  G4bool daughtersInvisible =
+    G4UIcommand::ConvertToBool(daughtersInvisibleString);
 
   if (requestedDepth !=0) {
     requestedDepth = 0;
@@ -214,13 +218,15 @@ void G4VisCommandGeometrySetDaughtersInvisible::SetNewValue
     setDaughtersInvisible(daughtersInvisible);
   Set(name, setDaughtersInvisible, requestedDepth);
 
-  const G4ViewParameters& viewParams =
-    fpVisManager->GetCurrentViewer()->GetViewParameters();
-  if (fpVisManager->GetVerbosity() >= G4VisManager::warnings) {
-    if (!viewParams.IsCulling()) {
-      G4cout <<
-	"Culling must be on - \"/vis/viewer/set/culling global true\" - to see effect."
-	     << G4endl;
+  G4VViewer* pViewer = fpVisManager->GetCurrentViewer();
+  if (pViewer) {
+    const G4ViewParameters& viewParams = pViewer->GetViewParameters();
+    if (fpVisManager->GetVerbosity() >= G4VisManager::warnings) {
+      if (!viewParams.IsCulling()) {
+	G4cout <<
+	  "Culling must be on - \"/vis/viewer/set/culling global true\" - to see effect."
+	       << G4endl;
+      }
     }
   }
 }
@@ -266,9 +272,11 @@ void G4VisCommandGeometrySetForceAuxEdgeVisible::SetNewValue
 {
   G4String name;
   G4int requestedDepth;
-  G4bool forceAuxEdgeVisible;
+  G4String forceAuxEdgeVisibleString;
   std::istringstream iss(newValue);
-  iss >> name >> requestedDepth >> forceAuxEdgeVisible;
+  iss >> name >> requestedDepth >> forceAuxEdgeVisibleString;
+  G4bool forceAuxEdgeVisible =
+    G4UIcommand::ConvertToBool(forceAuxEdgeVisibleString);;
 
   G4VisCommandGeometrySetForceAuxEdgeVisibleFunction
     setForceAuxEdgeVisible(forceAuxEdgeVisible);
@@ -316,9 +324,10 @@ void G4VisCommandGeometrySetForceSolid::SetNewValue
 {
   G4String name;
   G4int requestedDepth;
-  G4bool forceSolid;
+  G4String forceSolidString;
   std::istringstream iss(newValue);
-  iss >> name >> requestedDepth >> forceSolid;
+  iss >> name >> requestedDepth >> forceSolidString;
+  G4bool forceSolid = G4UIcommand::ConvertToBool(forceSolidString);
 
   G4VisCommandGeometrySetForceSolidFunction setForceSolid(forceSolid);
   Set(name, setForceSolid, requestedDepth);
@@ -365,9 +374,10 @@ void G4VisCommandGeometrySetForceWireframe::SetNewValue
 {
   G4String name;
   G4int requestedDepth;
-  G4bool forceWireframe;
+  G4String forceWireframeString;
   std::istringstream iss(newValue);
-  iss >> name >> requestedDepth >> forceWireframe;
+  iss >> name >> requestedDepth >> forceWireframeString;
+  G4bool forceWireframe = G4UIcommand::ConvertToBool(forceWireframeString);
 
   G4VisCommandGeometrySetForceWireframeFunction
     setForceWireframe(forceWireframe);
@@ -513,22 +523,25 @@ void G4VisCommandGeometrySetVisibility::SetNewValue
 {
   G4String name;
   G4int requestedDepth;
-  G4bool visibility;
+  G4String visibilityString;
   std::istringstream iss(newValue);
-  iss >> name >> requestedDepth >> visibility;
+  iss >> name >> requestedDepth >> visibilityString;
+  G4bool visibility = G4UIcommand::ConvertToBool(visibilityString);
 
   G4VisCommandGeometrySetVisibilityFunction setVisibility(visibility);
   Set(name, setVisibility, requestedDepth);
 
-  const G4ViewParameters& viewParams =
-    fpVisManager->GetCurrentViewer()->GetViewParameters();
-  if (fpVisManager->GetVerbosity() >= G4VisManager::warnings) {
-    if (!viewParams.IsCulling() ||
-	!viewParams.IsCullingInvisible()) {
-      G4cout <<
-	"Culling must be on - \"/vis/viewer/set/culling global true\" and"
-	"\n  \"/vis/viewer/set/culling invisible true\" - to see effect."
-	     << G4endl;
+  G4VViewer* pViewer = fpVisManager->GetCurrentViewer();
+  if (pViewer) {
+    const G4ViewParameters& viewParams = pViewer->GetViewParameters();
+    if (fpVisManager->GetVerbosity() >= G4VisManager::warnings) {
+      if (!viewParams.IsCulling() ||
+	  !viewParams.IsCullingInvisible()) {
+	G4cout <<
+	  "Culling must be on - \"/vis/viewer/set/culling global true\" and"
+	  "\n  \"/vis/viewer/set/culling invisible true\" - to see effect."
+	       << G4endl;
+      }
     }
   }
 }
