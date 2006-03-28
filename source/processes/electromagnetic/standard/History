@@ -1,4 +1,4 @@
-$Id: History,v 1.226 2006-03-28 10:11:42 vnivanch Exp $
+$Id: History,v 1.227 2006-03-28 12:16:53 grichine Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,7 +20,7 @@ committal in the CVS repository !
 28 March 06: V.Ivanchenko (emstand-V08-00-17)
 - G4eBremsstrahlungModel - fix problem of energy loss calculation below 10 MeV
 - G4KleinNishinaModel - remove upper energy limit to have a smooth cross section 
-23 March 06 : V.Grichine, G4SynchrotronRadiation updated to set polarisation and 
+27 March 06 : V.Grichine, G4SynchrotronRadiation updated to set polarisation and 
               new methods for angular distribution  
 - G4PAImodel and G4PAIPhotonMOdel fixes important for very low energy hadrons (VG)    
 
