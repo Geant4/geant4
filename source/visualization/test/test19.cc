@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test19.cc,v 1.24 2005-09-13 16:54:48 allison Exp $
+// $Id: test19.cc,v 1.25 2006-03-28 15:37:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,7 +65,13 @@
 // G4VisExecutive is a G4VisManager that implements graphics system
 // registration in the user domain.
 #include "G4XXX.hh"
+#include "G4XXXFile.hh"
+#include "G4XXXStored.hh"
+#ifdef G4VIS_USE_XXXSG
+#include "G4XXXSG.hh"
 #endif
+#endif
+
 
 #ifdef G4UI_USE_WIN32
 #include <windows.h>
@@ -131,6 +137,11 @@ int main (int argc, char** argv) {
   G4VisManager* visManager = new G4VisExecutive;
   visManager -> SetVerboseLevel (verbosityString);
   visManager -> RegisterGraphicsSystem(new G4XXX);
+  visManager -> RegisterGraphicsSystem(new G4XXXFile);
+  visManager -> RegisterGraphicsSystem(new G4XXXStored);
+#ifdef G4VIS_USE_XXXSG
+  visManager -> RegisterGraphicsSystem(new G4XXXSG);
+#endif
   visManager -> Initialize ();
 #endif
 
