@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeSearchScene.hh,v 1.14 2006-01-26 11:40:26 allison Exp $
+// $Id: G4PhysicalVolumeSearchScene.hh,v 1.15 2006-03-28 16:45:21 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,7 +50,9 @@ class G4PhysicalVolumeSearchScene: public G4VGraphicsScene {
 
 public:
   G4PhysicalVolumeSearchScene
-  (const G4String& requiredPhysicalVolumeName, G4int requiredCopyNo);
+  (G4PhysicalVolumeModel*,
+   const G4String& requiredPhysicalVolumeName,
+   G4int requiredCopyNo);
   virtual ~G4PhysicalVolumeSearchScene ();
   void PreAddSolid (const G4Transform3D& objectTransformation,
 		    const G4VisAttributes&);
@@ -68,7 +70,6 @@ public:
   void AddSolid (const G4VSolid& s) {FindVolume (s);}
   void AddCompound (const G4VTrajectory&) {}
   void AddCompound (const G4VHit&) {}
-  void EstablishSpecials (G4PhysicalVolumeModel&);
   G4int                GetFoundDepth          () const;
   G4VPhysicalVolume*   GetFoundVolume         () const;
   const G4Transform3D& GetFoundTransformation () const;
@@ -89,11 +90,9 @@ public:
 
 private:
   void FindVolume (const G4VSolid&);
+  const G4PhysicalVolumeModel* fpPVModel;
   G4String             fRequiredPhysicalVolumeName;
   G4int                fRequiredCopyNo;
-  G4int                fCurrentDepth;  // Current depth of geom. hierarchy.
-  G4VPhysicalVolume*   fpCurrentPV;    // Current physical volume.
-  G4LogicalVolume*     fpCurrentLV;    // Current logical volume.
   const G4Transform3D* fpCurrentObjectTransformation;
   G4int                fFoundDepth;                  // Found depth.
   G4VPhysicalVolume*   fpFoundPV;                    // Found physical volume.

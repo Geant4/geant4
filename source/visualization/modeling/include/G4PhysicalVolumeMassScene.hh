@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeMassScene.hh,v 1.4 2005-01-27 20:06:35 johna Exp $
+// $Id: G4PhysicalVolumeMassScene.hh,v 1.5 2006-03-28 16:45:21 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,8 +38,7 @@
 // then adding the mass of the daughter, and so on down the heirarchy.
 //
 // Usage for a given G4PhysicalVolumeModel* pvModel:
-//   G4PhysicalVolumeMassScene massScene;
-//   massScene.EstablishSpecials (*pvModel);
+//   G4PhysicalVolumeMassScene massScene(pvModel);
 //   pvModel->DescribeYourselfTo (massScene);
 //   G4double volume = massScene.GetVolume();
 //   G4double mass = massScene.GetMass();
@@ -71,7 +70,7 @@ class G4Material;
 class G4PhysicalVolumeMassScene: public G4VGraphicsScene {
 
 public:
-  G4PhysicalVolumeMassScene ();
+  G4PhysicalVolumeMassScene (G4PhysicalVolumeModel*);
   virtual ~G4PhysicalVolumeMassScene ();
 
 public: // With description
@@ -103,7 +102,6 @@ public:
   void AddSolid (const G4VSolid& s) {AccrueMass (s);}
   void AddCompound (const G4VTrajectory&) {}
   void AddCompound (const G4VHit&) {}
-  void EstablishSpecials (G4PhysicalVolumeModel&);
 
   ////////////////////////////////////////////////////////////////
   // Functions not used but required by the abstract interface.
@@ -121,6 +119,7 @@ public:
 
 private:
   void AccrueMass (const G4VSolid&);
+  G4PhysicalVolumeModel* fpPVModel;
   G4double fVolume;
   G4double fMass;
   G4VPhysicalVolume* fpLastPV;
@@ -128,10 +127,6 @@ private:
   G4int fLastDepth;
   G4double fLastDensity;
   std::deque<G4double> fDensityStack;
-  G4int                fCurrentDepth;  // Current depth of geom. hierarchy.
-  G4VPhysicalVolume*   fpCurrentPV;    // Current physical volume.
-  G4LogicalVolume*     fpCurrentLV;    // Current logical volume.
-  G4Material*      fpCurrentMaterial;  // Current material.
 };
 
 #endif
