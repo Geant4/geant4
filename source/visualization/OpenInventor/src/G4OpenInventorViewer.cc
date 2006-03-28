@@ -326,7 +326,7 @@ G4OpenInventorViewer::lookedAt(SoCamera* camera,SbVec3f & dir, SbVec3f & up)
 
 void G4OpenInventorViewer::DrawView () {
   //G4cout << "debug Iv::DrawViewer " <<G4endl;
-  KernelVisitDecision();
+  if (!fNeedKernelVisit) KernelVisitDecision();
   ProcessView();
   FinishView();
 }
@@ -415,7 +415,7 @@ void G4OpenInventorViewer::DrawDetector() {
   // DrawView does a ClearStore. Do not clear the transient store :
   SoSeparator* tmp = fG4OpenInventorSceneHandler.fTransientRoot;
   fG4OpenInventorSceneHandler.fTransientRoot = new SoSeparator;
-  KernelVisitDecision();
+  if (!fNeedKernelVisit) KernelVisitDecision();
   ProcessView();
   fG4OpenInventorSceneHandler.fTransientRoot->unref();
   fG4OpenInventorSceneHandler.fTransientRoot = tmp;
@@ -646,7 +646,7 @@ void G4OpenInventorViewer::UpdateScene() {
   /* Replace this... - JA
   fG4OpenInventorSceneHandler.ClearStore();
   ClearView();
-  KernelVisitDecision();
+  if (!fNeedKernelVisit) KernelVisitDecision();
   ProcessView();
   ShowView();
   */

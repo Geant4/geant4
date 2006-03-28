@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.28 2006-03-21 16:23:06 allison Exp $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.29 2006-03-28 17:29:48 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,8 +85,8 @@ private:
   enum G4OIMarker {G4OICircle, G4OISquare};
   void AddCircleSquare (G4OIMarker markerType, const G4VMarker&);
   void GeneratePrerequisites();
-  std::map <const G4LogicalVolume*, SoSeparator*,
-    std::less <const G4LogicalVolume*> > fSeparatorMap;
+  std::map <G4LogicalVolume*, SoSeparator*,
+    std::less <G4LogicalVolume*> > fSeparatorMap;
   SoSeparator* fRoot;
   SoSeparator* fDetectorRoot;
   SoSeparator* fTransientRoot;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.44 2006-03-21 16:23:06 allison Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.45 2006-03-28 17:29:48 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -651,9 +651,10 @@ void G4OpenInventorSceneHandler::GeneratePrerequisites()
     typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
     typedef std::vector<PVNodeID> PVPath;
     const PVPath& drawnPVPath = pPVModel->GetDrawnPVPath();
-    const G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
-    const G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
-    //const G4Material* pCurrentMaterial = pPVModel->GetCurrentMaterial();
+    //G4int currentDepth = pPVModel->GetCurrentDepth();
+    G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
+    G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
+    //G4Material* pCurrentMaterial = pPVModel->GetCurrentMaterial();
 
     // The simplest algorithm, used by the Open Inventor Driver
     // developers, is to rely on the fact the G4PhysicalVolumeModel
