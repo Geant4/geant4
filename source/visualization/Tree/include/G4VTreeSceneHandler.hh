@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTreeSceneHandler.hh,v 1.16 2006-03-14 12:37:40 allison Exp $
+// $Id: G4VTreeSceneHandler.hh,v 1.17 2006-03-28 17:22:30 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,24 +70,12 @@ public:
   virtual void BeginModeling();
   virtual void EndModeling();
 
-  ///////////////////////////////////////////////////////////////
-  // Other inherited functions.
-
-  void EstablishSpecials (G4PhysicalVolumeModel&);
-  // Used to establish any special relationships between scene and this
-  // particular type of model - non-pure, i.e., no requirement to
-  // implement.  See G4PhysicalVolumeModel.hh for details.
-
 protected:
+
   // In the derived class, override G4VScenehandler::RequestPrimitives
   // to implement dump of the geometry hierarchy.
   static G4int         fSceneIdCount;  // Counter for Tree scene handlers.
   const G4Transform3D* fpCurrentObjectTransformation;
-
-  typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
-  typedef std::vector<PVNodeID> PVPath;
-  PVPath fDrawnPVPath;                 // Path of drawn (non-culled) PVs.
-  std::set<PVNodeID> fPVNodeStore;     // Stores encountered PVNodeIDs.
   std::set<G4LogicalVolume*> fDrawnLVStore;  // Stores encountered LVs.
 };
 

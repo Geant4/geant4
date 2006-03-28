@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTreeSceneHandler.cc,v 1.11 2006-03-14 12:37:40 allison Exp $
+// $Id: G4VTreeSceneHandler.cc,v 1.12 2006-03-28 17:22:30 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,14 +46,6 @@ G4VTreeSceneHandler::G4VTreeSceneHandler(G4VGraphicsSystem& system,
   fpCurrentObjectTransformation (0)
 {}
 
-void G4VTreeSceneHandler::EstablishSpecials (G4PhysicalVolumeModel& pvModel) {
-  pvModel.DefinePointersToWorkingSpace (&fCurrentDepth,
-                                        &fpCurrentPV,
-                                        &fpCurrentLV,
-                                        &fpCurrentMaterial,
-                                        &fDrawnPVPath);
-}
-
 G4VTreeSceneHandler::~G4VTreeSceneHandler () {}
 
 void G4VTreeSceneHandler::BeginModeling() {
@@ -61,7 +53,6 @@ void G4VTreeSceneHandler::BeginModeling() {
 }
 
 void G4VTreeSceneHandler::EndModeling() {
-  fPVNodeStore.clear();
   fDrawnLVStore.clear();
   G4VSceneHandler::EndModeling();  // Required: see G4VSceneHandler.hh.
 }
@@ -84,9 +75,10 @@ void G4VTreeSceneHandler::PreAddSolid
   typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
   typedef std::vector<PVNodeID> PVPath;
   const PVPath& drawnPVPath = pPVModel->GetDrawnPVPath();
-
-  // Store ID of current physical volume (not actually used)...
-  fPVNodeStore.insert(drawnPVPath.back());
+  //G4int currentDepth = pPVModel->GetCurrentDepth();
+  //G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
+  //G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
+  //G4Material* pCurrentMaterial = pPVModel->GetCurrentMaterial();
 
   // Actually, it is enough to store the logical volume of current
   // physical volume...
