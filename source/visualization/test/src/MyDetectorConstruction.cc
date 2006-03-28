@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorConstruction.cc,v 1.33 2006-02-08 21:51:10 allison Exp $
+// $Id: MyDetectorConstruction.cc,v 1.34 2006-03-28 15:39:20 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -656,6 +656,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
 
   aVolume = new G4TwistedTubs
     ("aTwistedTubs", fTwistAngle, fTrackerR1, fTrackerR2, fTrackerpDz, fPhi ) ;
+  //G4cout << "aTwistedTubs: volume: " << aVolume->GetCubicVolume() << G4endl;
   aLog = new G4LogicalVolume
     (aVolume,Ar,"aTwistedTubs-log");
   aLog->SetVisAttributes(G4VisAttributes(G4Colour(1.,1.,0.)));
