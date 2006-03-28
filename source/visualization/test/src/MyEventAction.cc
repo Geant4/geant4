@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyEventAction.cc,v 1.9 2006-03-03 17:39:44 allison Exp $
+// $Id: MyEventAction.cc,v 1.10 2006-03-28 15:41:01 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -38,6 +38,8 @@
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
+#include "G4Run.hh"
+#include "G4RunManager.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4VHitsCollection.hh"
 #include "G4TrajectoryContainer.hh"
@@ -47,6 +49,7 @@
 #include "G4Scale.hh"
 #include "G4Text.hh"
 #include "G4Box.hh"
+#include "G4Tubs.hh"
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
@@ -64,7 +67,6 @@ void MyEventAction::BeginOfEventAction(const G4Event*)
 
 void MyEventAction::EndOfEventAction(const G4Event* anEvent)
 {
-  static int iEvent = 0;
   static int coutCount = 0;
   if (coutCount < 10) {
     coutCount++;
@@ -83,7 +85,9 @@ void MyEventAction::EndOfEventAction(const G4Event* anEvent)
 #endif
 
   if (coutCount < 10) {
-    G4cout << ">>> Event " << evt->GetEventID() << G4endl;
+    G4cout << ">>> Run "
+	<< G4RunManager::GetRunManager()->GetCurrentRun()->GetRunID()
+	<< " Event " << anEvent->GetEventID() << G4endl;
   }
 
 #ifdef DRAWTRAJHIT
@@ -133,7 +137,9 @@ void MyEventAction::EndOfEventAction(const G4Event* anEvent)
     pVVisManager->Draw(scale);
 
     std::ostringstream oss;
-    oss << "Event " << iEvent << std::endl;
+    oss << "Run "
+	<< G4RunManager::GetRunManager()->GetCurrentRun()->GetRunID()
+	<< " Event " << anEvent->GetEventID();
     G4Text text(oss.str(), G4Point3D(400.*cm, 400.*cm, -400.*cm));
     text.SetScreenSize(18);
     G4VisAttributes textAtts(G4Colour(0.,1.,1));
@@ -141,11 +147,16 @@ void MyEventAction::EndOfEventAction(const G4Event* anEvent)
     pVVisManager->Draw(text);
 
     G4Box transientBox("transientBox",100*cm,100*cm,100*cm);
-    G4VisAttributes transientAtts(G4Colour(1.,0.,1));
-    transientAtts.SetForceWireframe(true);
-    pVVisManager->Draw(transientBox, transientAtts,
+    G4VisAttributes transientBoxAtts(G4Colour(1.,0.,1));
+    transientBoxAtts.SetForceWireframe(true);
+    pVVisManager->Draw(transientBox, transientBoxAtts,
 		       G4Translate3D(500.*cm, 500.*cm, -500.*cm));
 
+    G4Tubs transientTube("transientTube",0.,100*cm,100*cm,0.,360.*deg);
+    G4VisAttributes transientTubeAtts(G4Colour(1.,1.,0));
+    transientTubeAtts.SetForceWireframe(true);
+    pVVisManager->Draw(transientTube, transientTubeAtts,
+		       G4Translate3D(500.*cm, 300.*cm, -500.*cm));
+
   }
-  ++iEvent;
 }
