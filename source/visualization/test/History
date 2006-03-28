@@ -1,9 +1,12 @@
-$Id: History,v 1.80 2006-03-28 15:37:36 allison Exp $
+$Id: History,v 1.81 2006-03-28 15:38:10 allison Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
 
 $Log: not supported by cvs2svn $
+Revision 1.80  2006/03/28 15:37:36  allison
+test19.cc: Added G4XXXFile, G4XXXStored and G4XXXSG.
+
 Revision 1.79  2006/03/28 15:36:27  allison
 Added CPPFLAGS += -DG4VIS_USE_XXXSG.
 

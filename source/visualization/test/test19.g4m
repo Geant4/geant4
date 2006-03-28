@@ -43,13 +43,11 @@
 /vis/sceneHandler/create OGLSX
 #/vis/sceneHandler/create VRML1
 #/vis/sceneHandler/create VRML1FILE
-#/vis/sceneHandler/create Xo
-#/vis/sceneHandler/create Wo
 #
 # Add world volume.
 /vis/scene/add/volume
 /vis/scene/add/axes 0 0 0 2 m
-/vis/scene/add/text 0 0 0 mm 50 -120 -200   exampleN03
+/vis/scene/add/text 0 0 0 mm 50 -120 -200 test19 example text
 #
 # Add logo
 /vis/scene/add/logo
@@ -65,8 +63,9 @@
 /vis/viewer/set/hiddenMarker true
 #
 /vis/viewer/set/lineSegmentsPerCircle 100
-/vis/viewer/refresh
-/vis/viewer/update
+# flush not necessary for auto-refresh drivers like OGL abd OI, but leave
+# (all that happens is an extra refresh).
+/vis/viewer/flush
 #
 # Create another viewer.
 /vis/viewer/create
@@ -75,8 +74,7 @@
 /vis/viewer/set/style surface
 /vis/viewer/set/projection perspective 30
 #
-/vis/viewer/refresh
-/vis/viewer/update
+/vis/viewer/flush
 #
 # Now hidden line removal.
 /vis/viewer/create
@@ -86,8 +84,7 @@
 /vis/viewer/set/hiddenEdge
 /vis/viewer/set/projection perspective 30
 #
-/vis/viewer/refresh
-/vis/viewer/update
+/vis/viewer/flush
 #
 # Now hidden line *and* hidden surface removal.
 /vis/viewer/create
@@ -97,10 +94,9 @@
 /vis/viewer/set/hiddenEdge
 /vis/viewer/set/projection perspective 30
 #
-/vis/viewer/refresh
-/vis/viewer/update
+/vis/viewer/flush
 #
-# Start a run to initialise/optimise geometry.
+# Start a run to initialise/optimise geometry and draw user-drawn transients.
 /run/beamOn
 #
 # Test logical volume model...
@@ -110,7 +106,7 @@
 /vis/viewer/create
 /vis/viewer/set/viewpointThetaPhi 35 35
 /vis/scene/notifyHandlers
-/vis/viewer/update
+/vis/viewer/flush
 #
 # Logical volume of Boolean solids...
 /vis/scene/create
@@ -120,23 +116,21 @@
 /vis/viewer/reset
 /vis/viewer/set/viewpointThetaPhi 35 35
 /vis/scene/notifyHandlers
-/vis/viewer/update
+/vis/viewer/flush
 #
 /vis/scene/create
 /vis/scene/add/logicalVolume subtraction_L
 /vis/sceneHandler/attach
 /vis/viewer/reset
 /vis/viewer/set/viewpointThetaPhi 35 35
-/vis/viewer/refresh
-/vis/viewer/update
+/vis/viewer/flush
 #
 /vis/scene/create
 /vis/scene/add/logicalVolume union_L
 /vis/sceneHandler/attach
 /vis/viewer/reset
 /vis/viewer/set/viewpointThetaPhi 35 35
-/vis/viewer/refresh
-/vis/viewer/update
+/vis/viewer/flush
 #
 # Send geantino through...
 /vis/scene/create
@@ -153,7 +147,7 @@
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/vis/viewer/update
+/vis/viewer/flush
 #
 # Rotated tracker tube
 /vis/viewer/reset
@@ -172,7 +166,7 @@
 /run/beamOn
 /gun/position -200 -200 300 cm
 /run/beamOn
-/vis/viewer/update
+/vis/viewer/flush
 #
 # G4Trap1
 /vis/viewer/reset
@@ -215,7 +209,7 @@
 /run/beamOn
 /gun/position -20 280 -200 cm
 /run/beamOn
-/vis/viewer/update
+/vis/viewer/flush
 #
 # G4Trap2
 /vis/viewer/reset
@@ -241,7 +235,7 @@
 /run/beamOn
 /gun/position -200 460 -20 cm
 /run/beamOn
-/vis/viewer/update
+/vis/viewer/flush
 #
 # Displaced solid.
 /vis/viewer/reset
@@ -252,7 +246,7 @@
 /gun/position 100 -180 0 cm
 /gun/direction 1 0 0
 /run/beamOn
-/vis/viewer/update
+/vis/viewer/flush
 #
 # Boolean solid.
 /vis/viewer/reset
@@ -313,7 +307,7 @@
 /run/beamOn
 /gun/position 50 20 0 cm
 /run/beamOn
-/vis/viewer/update
+/vis/viewer/flush
 #
 # To view replicas...
 # Investigating BaBar problem...
@@ -355,20 +349,18 @@
 /run/beamOn
 /gun/direction 1 -1 0
 /run/beamOn
-/vis/viewer/update
+/vis/viewer/flush
 #...end
 #
 /vis/viewer/set/viewpointThetaPhi 30 30
 /vis/viewer/set/projection perspective 30
-/vis/viewer/refresh
-/vis/viewer/update
+/vis/viewer/flush
 #
 /vis/sceneHandler/create RayTracerX
 #/vis/viewer/create
 /vis/viewer/create ! ! 200
 /vis/viewer/set/viewpointThetaPhi 30 30
-/vis/viewer/refresh
-/vis/viewer/update
+/vis/viewer/flush
 #
 # You can use /vis/rayTracer/... commands
 /vis/rayTracer/column 150
@@ -379,10 +371,8 @@
 /vis/viewer/create ! ! 200x300
 /vis/viewer/set/projection perspective  30
 /vis/viewer/set/viewpointThetaPhi 45 45
-/vis/viewer/refresh
-/vis/viewer/update
+/vis/viewer/flush
 #
 # Odd!!?  JPEG image seems upside down for default view direction...
 /vis/viewer/create ! ! 200
-/vis/viewer/refresh
-/vis/viewer/update
+/vis/viewer/flush
