@@ -1,4 +1,4 @@
-$Id: History,v 1.337 2006-03-14 15:59:52 allison Exp $
+$Id: History,v 1.338 2006-03-28 17:41:52 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,23 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+----------------------------------------------
+28th March 2006  John Allison  (vis-V08-00-03)
+- visman-V08-00-11:
+  o Introduces trajectory drawing manager.
+  o G4VisExecutive: Adds G4TrajectoryDrawByOriginVolumeFactory.
+  o Corrects logic of transients re-computation:
+  o Unifies treatment of bools in commands.
+- modeling-V08-00-05:
+  o Introduces G4TrajectoryDrawByOriginVolume.
+  o Part migration away from EstablishSpecials mechanism.
+- vistree-V08-00-02 (needs modeling-V08-00-05):
+  o Made compatible with modeling-V08-00-05. 
+  o Migration away from EstablishSpecials mechanism.
+- openinventor-V08-00-03: Much improvement in logic.
+- visXXX-V08-00-02: Added G4XXXFile, G4XXXStored, G4XXXSG.
+- vistest-V08-00-03: Modernised and improved.
 
 ----------------------------------------------
 14th March 2006  John Allison  (vis-V08-00-02)
