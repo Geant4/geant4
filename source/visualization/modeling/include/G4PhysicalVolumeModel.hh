@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.25 2006-03-14 15:32:11 allison Exp $
+// $Id: G4PhysicalVolumeModel.hh,v 1.26 2006-03-28 16:50:00 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -108,7 +108,7 @@ public: // With description
   G4PhysicalVolumeModel* GetG4PhysicalVolumeModel ()
   {return this;}
 
-  const G4VPhysicalVolume* GetTopPhysicalVolume () const {return fpTopPV;}
+  G4VPhysicalVolume* GetTopPhysicalVolume () const {return fpTopPV;}
 
   G4int GetRequestedDepth () const {return fRequestedDepth;}
 
@@ -118,13 +118,13 @@ public: // With description
   G4int GetCurrentDepth() const {return fCurrentDepth;}
   // Current depth of geom. hierarchy.
 
-  const G4VPhysicalVolume* GetCurrentPV() const {return fpCurrentPV;}
+  G4VPhysicalVolume* GetCurrentPV() const {return fpCurrentPV;}
   // Current physical volume.
 
-  const G4LogicalVolume* GetCurrentLV() const {return fpCurrentLV;}
+  G4LogicalVolume* GetCurrentLV() const {return fpCurrentLV;}
   // Current logical volume.
 
-  const G4Material* GetCurrentMaterial() const {return fpCurrentMaterial;}
+  G4Material* GetCurrentMaterial() const {return fpCurrentMaterial;}
   // Current material.
 
   const std::vector<G4PhysicalVolumeNodeID>& GetDrawnPVPath() const
