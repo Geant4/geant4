@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.31 2006-03-27 17:04:01 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.cc,v 1.32 2006-03-28 10:11:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -351,13 +351,15 @@ G4double G4eBremsstrahlungModel::ComputeBremLoss(G4double Z, G4double T,
 
   if (xx <= xlim)
     {
+      xx /= xlim;
       G4double yy = 1.0;
       fl = 0.0;
       for (G4int j=0; j<Nloss; j++) {
-	fl += + yy+coefloss[iz][j];
+	fl += yy+coefloss[iz][j];
         yy *= xx;
       }
-      if (fl < 0.) fl = 0.;
+      if (fl < 0.00001) fl = 0.00001;
+      else if (fl > 1.0) fl = 1.0;
     }
 
   G4double loss;
