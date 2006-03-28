@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.hh,v 1.15 2005-10-13 18:10:29 allison Exp $
+// $Id: G4VisCommandsViewerSet.hh,v 1.16 2006-03-28 16:22:16 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -51,6 +51,7 @@ private:
   G4UIcmdWithAString*   fpCommandAll;
   G4UIcmdWithABool*     fpCommandAutoRefresh;
   G4UIcmdWithABool*     fpCommandAuxEdge;
+  G4UIcommand*          fpCommandBackground;
   G4UIcommand*          fpCommandCulling;
   G4UIcmdWithABool*     fpCommandEdge;
   G4UIcmdWithADouble*   fpCommandGlobalMarkerScale;
@@ -70,7 +71,6 @@ private:
   G4UIcommand*          fpCommandViewpointThetaPhi;
   G4UIcommand*          fpCommandViewpointVector;
   G4ThreeVector         fViewpointVector;
-  G4UIcommand*          fpCommandBackground;
 };
 
 #endif
