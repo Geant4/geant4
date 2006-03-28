@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXStoredViewer.cc,v 1.1 2006-03-28 17:16:41 allison Exp $
+// $Id: G4XXXStoredViewer.cc,v 1.2 2006-03-28 18:25:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,6 +35,7 @@
 #include "G4XXXStoredSceneHandler.hh"
 
 #include <fstream>
+#include <sstream>
 
 G4XXXStoredViewer::G4XXXStoredViewer
 (G4VSceneHandler& sceneHandler, const G4String& name):

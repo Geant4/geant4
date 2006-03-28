@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ModelCommandsT.hh,v 1.2 2006-03-28 18:01:18 tinslay Exp $
+// $Id: G4ModelCommandsT.hh,v 1.3 2006-03-28 18:25:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Generic model messenges. 
@@ -34,6 +34,8 @@
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcommand.hh"
 #include "G4VModelCommand.hh"
+
+#include <sstream>
 
 //Set variable colour
 template <typename M>
