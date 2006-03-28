@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.12 2005-12-02 17:23:26 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.13 2006-03-28 15:03:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,6 +32,7 @@
 #include "PhysListEmStandard.hh"
 #include "PhysListEmG4v52.hh"
 #include "PhysListEmG4v71.hh"
+#include "PhysListEmLivermore.hh"
 #include "PhysListEmPenelope.hh"
 #include "PhysListHadronElastic.hh"
 #include "PhysListBinaryCascade.hh"
@@ -226,12 +227,18 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmG4v71(name);
         
+  } else if (name == "livermore") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmLivermore(name);
+    
   } else if (name == "penelope") {
 
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmPenelope(name);
-    
+        
   } else if (name == "elastic") {
 
     hadronPhys.push_back( new PhysListHadronElastic(name));
