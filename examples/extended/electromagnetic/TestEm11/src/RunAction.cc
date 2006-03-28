@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.3 2005-12-06 11:32:03 gcosmo Exp $
+// $Id: RunAction.cc,v 1.4 2006-03-28 11:00:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -130,7 +130,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout.precision(3);       
   G4cout 
     << "\n Total Energy deposited        = " << G4BestUnit(Edeposit,"Energy")
-    << " +- "                               << G4BestUnit( rms,"Energy")
+    << " +- "                                << G4BestUnit( rms,"Energy")
     << G4endl;
      	 
   //compute track length of primary track
@@ -142,17 +142,17 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout.precision(3);       
   G4cout 
     << "\n Track length of primary track = " << G4BestUnit(trackLen,"Length")
-    << " +- "                               << G4BestUnit( rms,"Length");
+    << " +- "                                << G4BestUnit( rms,"Length");
     
   //compare with csda range
   //
   G4EmCalculator emCalculator;
   G4double csdaRange = 0.;
   if (particle->GetPDGCharge() != 0.)
-    csdaRange = emCalculator.GetRange(energy,particle,material);
+    csdaRange = emCalculator.GetCSDARange(energy,particle,material);
   G4cout 
     << "\n Range from EmCalculator       = " << G4BestUnit(csdaRange,"Length")
-    << " (from restricted dE/dx)" << G4endl;
+    << " (from full dE/dx)" << G4endl;
    	 	 
   //compute projected range of primary track
   //

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.1 2005-06-03 15:20:32 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.2 2006-03-28 11:00:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -92,7 +92,7 @@ void DetectorConstruction::DefineMaterials()
   
   man->FindOrBuildMaterial("G4_AIR"  , isotopes);
   man->FindOrBuildMaterial("G4_WATER", isotopes);
-
+ 
  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.2 2005-10-05 11:57:57 maire Exp $
+// $Id: PhysicsList.cc,v 1.3 2006-03-28 11:00:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,6 +32,9 @@
 #include "PhysListEmStandard.hh"
 #include "PhysListEmG4v52.hh"
 #include "PhysListEmG4v71.hh"
+
+#include "PhysListEmLivermore.hh"
+#include "PhysListEmPenelope.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
@@ -166,7 +169,7 @@ void PhysicsList::ConstructParticle()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ProcessManager.hh"
-#include "G4Decay.hh"
+#include "G4EmProcessOptions.hh"
 
 void PhysicsList::ConstructProcess()
 {
@@ -177,27 +180,16 @@ void PhysicsList::ConstructProcess()
   // electromagnetic physics list
   //
   emPhysicsList->ConstructProcess();
-
+  
+  // Em options
+  //
+  G4EmProcessOptions emOptions;
+  emOptions.SetBuildCSDARange(true);
+  
   // decay process
   //
-  G4Decay* fDecayProcess = new G4Decay();
+  AddDecay();
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-
-    if (fDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) { 
-
-      pmanager ->AddProcess(fDecayProcess);
-
-      // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
-
-    }
-  }
-  
   // step limitation (as a full process)
   //  
   AddStepMax();
@@ -231,11 +223,50 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmG4v71(name);
     
+  } else if (name == "livermore") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmLivermore(name);
+    
+  } else if (name == "penelope") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmPenelope(name);
+        
   } else {
 
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
            << " is not defined"
            << G4endl;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4Decay.hh"
+
+void PhysicsList::AddDecay()
+{
+  // decay process
+  //
+  G4Decay* fDecayProcess = new G4Decay();
+
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() ){
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
+
+    if (fDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) { 
+
+      pmanager ->AddProcess(fDecayProcess);
+
+      // set ordering for PostStepDoIt and AtRestDoIt
+      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
+      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
+
+    }
   }
 }
 
