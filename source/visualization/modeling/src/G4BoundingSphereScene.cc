@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingSphereScene.cc,v 1.9 2005-01-27 20:06:49 johna Exp $
+// $Id: G4BoundingSphereScene.cc,v 1.10 2006-03-28 16:57:19 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,7 +63,7 @@ void G4BoundingSphereScene::Accrue (const G4VSolid& solid) {
   AccrueBoundingSphere (newCentre, newRadius);
 
   // Curtail descent - can assume daughters are contained within mother...
-  G4PhysicalVolumeModel* pPVM = fpModel->GetG4PhysicalVolumeModel();
+  G4PhysicalVolumeModel* pPVM = dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
   if (pPVM) pPVM->CurtailDescent();
 }
 
