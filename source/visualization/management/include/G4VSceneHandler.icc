@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.icc,v 1.15 2006-03-13 14:25:43 allison Exp $
+// $Id: G4VSceneHandler.icc,v 1.16 2006-03-28 16:21:14 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,6 +83,18 @@ inline G4bool G4VSceneHandler::GetMarkForClearingTransientStore () const {
   return fMarkForClearingTransientStore;
 }
 
+inline G4bool G4VSceneHandler::IsReadyForTransients () const {
+  return fReadyForTransients;
+}
+
+inline G4bool G4VSceneHandler::GetTransientsDrawnThisEvent () const {
+  return fTransientsDrawnThisEvent;
+}
+
+inline G4bool G4VSceneHandler::GetTransientsDrawnThisRun () const {
+  return fTransientsDrawnThisRun;
+}
+
 inline void G4VSceneHandler::SetCurrentViewer (G4VViewer* pViewer) {
   fpViewer = pViewer;
 }
@@ -98,6 +110,14 @@ G4VSceneHandler::SetModel (G4VModel* pModel) {
 
 inline void G4VSceneHandler::SetMarkForClearingTransientStore (G4bool mark) {
   fMarkForClearingTransientStore = mark;
+}
+
+inline void G4VSceneHandler::SetTransientsDrawnThisEvent (G4bool drawn) {
+  fTransientsDrawnThisEvent = drawn;
+}
+
+inline void G4VSceneHandler::SetTransientsDrawnThisRun (G4bool drawn) {
+  fTransientsDrawnThisRun = drawn;
 }
 
 inline const G4Colour& G4VSceneHandler::GetColor (const G4Visible& visible) {

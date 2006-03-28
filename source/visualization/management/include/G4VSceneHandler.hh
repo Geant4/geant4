@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.29 2006-03-13 14:25:43 allison Exp $
+// $Id: G4VSceneHandler.hh,v 1.30 2006-03-28 16:21:14 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -188,6 +188,9 @@ public: // With description
   G4VModel*           GetModel          () const;
   G4VViewer*          GetCurrentViewer  () const;
   G4bool              GetMarkForClearingTransientStore () const;
+  G4bool              IsReadyForTransients () const;
+  G4bool              GetTransientsDrawnThisEvent () const;
+  G4bool              GetTransientsDrawnThisRun   () const;
   void          SetName          (const G4String&);
   void          SetCurrentViewer (G4VViewer*);
   void          SetScene         (G4Scene*);
@@ -195,7 +198,10 @@ public: // With description
   void          SetModel         (G4VModel*);
   void          SetMarkForClearingTransientStore (G4bool);
   // Sets flag which will cause transient store to be cleared at the
-  // next call to BeginPrimitives().
+  // next call to BeginPrimitives().  Maintained by vis manager.
+  void          SetTransientsDrawnThisEvent      (G4bool);
+  void          SetTransientsDrawnThisRun        (G4bool);
+  // Maintained by vis manager.
 
   //////////////////////////////////////////////////////////////
   // Public utility functions.
@@ -281,6 +287,8 @@ protected:
   G4bool             fMarkForClearingTransientStore;
   G4bool             fReadyForTransients;  // I.e., not processing the
 			                   // run-duration part of scene.
+  G4bool             fTransientsDrawnThisEvent;  // Maintained by vis
+  G4bool             fTransientsDrawnThisRun;    // manager.
   G4bool             fProcessingSolid; // True if within Pre/PostAddSolid.
   G4bool             fSecondPassRequested;
   G4bool             fSecondPass;    // ...in process.
