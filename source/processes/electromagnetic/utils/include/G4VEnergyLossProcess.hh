@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.52 2006-03-23 14:47:25 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.53 2006-03-28 14:23:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -549,6 +549,7 @@ inline G4double G4VEnergyLossProcess::GetRangeForLoss(
   G4double x = DBL_MAX;
   if(theRangeTableForLoss) 
     x = GetScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
+  //  G4cout << "Range from " << GetProcessName() << "  e= " << kineticEnergy << " r= " << x << G4endl;
   return x;
 }
 

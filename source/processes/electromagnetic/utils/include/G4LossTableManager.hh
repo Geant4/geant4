@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.34 2006-03-28 10:12:35 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.35 2006-03-28 14:23:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -232,9 +232,9 @@ private:
   std::vector<G4VEmProcess*> emp_vector;
 
   // cash
-  G4VEnergyLossProcess*    currentLoss;
-  PD                   currentParticle;
-  PD                   theElectron;
+  G4VEnergyLossProcess* currentLoss;
+  PD                    currentParticle;
+  PD                    theElectron;
 
   G4int n_loss;
 

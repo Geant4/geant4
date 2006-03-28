@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.83 2006-03-28 10:12:35 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.84 2006-03-28 14:23:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -611,8 +611,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     }
     eloss = (ScaledKinEnergyForLoss(r) - ScaledKinEnergyForLoss(x))/massRatio;
 
-/*
-    if(-1 < verboseLevel && eloss == 0.0) 
+    /*
+    if(-1 < verboseLevel) 
       G4cout << "Long STEP: rPre(mm)= " << r/mm
              << " rPost(mm)= " << x/mm
              << " ePre(MeV)= " << preStepScaledEnergy/MeV
@@ -620,16 +620,14 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
              << " eloss0(MeV)= "
              << GetDEDXForScaledEnergy(preStepScaledEnergy)*length/MeV
              << G4endl;
-*/
-
+    */
   }
 
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
   G4VEmModel* currentModel = SelectModel(preStepScaledEnergy);
-
-/*
-  //  G4double eloss0 = eloss;
-  if(-1 < verboseLevel && eloss == 0.0) {
+  /*
+  G4double eloss0 = eloss;
+  if(-1 < verboseLevel ) {
     G4cout << "Before fluct: eloss(MeV)= " << eloss/MeV
            << " e-eloss= " << preStepKinEnergy-eloss
            << " step(mm)= " << length/mm
@@ -637,7 +635,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
            << " fluct= " << lossFluctuationFlag
            << G4endl;
   }
-*/
+  */
 
   // Corrections, which cannot be tabulated
   CorrectionsAlongStep(currentCouple, dynParticle, eloss, length);
@@ -705,7 +703,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     eloss = currentModel->GetModelOfFluctuations()->
       SampleFluctuations(currentMaterial,dynParticle,tmax,length,eloss);
 
-    /*
+    /*    
       if(-1 < verboseLevel) 
       G4cout << "After fluct: eloss(MeV)= " << eloss/MeV
              << " fluc= " << (eloss-eloss0)/MeV
@@ -726,8 +724,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   fParticleChange.SetProposedKineticEnergy(finalT);
   fParticleChange.ProposeLocalEnergyDeposit(eloss);
 
-/*
-  if(-1 < verboseLevel && eloss == 0.0) {
+  /*
+  if(-1 < verboseLevel) {
     G4cout << "Final value eloss(MeV)= " << eloss/MeV
            << " preStepKinEnergy= " << preStepKinEnergy
            << " postStepKinEnergy= " << finalT
@@ -735,7 +733,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
            << "  status= " << track.GetTrackStatus()
            << G4endl;
   }
-*/
+  */
 
   return &fParticleChange;
 }
@@ -1277,7 +1275,6 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(
       if(yes) yes = G4PhysicsTableHelper::RetrievePhysicsTable(
 		    theDEDXTable,filename,ascii);
       if(yes) {
-        isIonisation = true;
         if (0 < verboseLevel) {
           G4cout << "DEDX table for " << particleName 
 		 << " is Retrieved from <"
