@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.41 2006-03-14 15:32:11 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.42 2006-03-28 16:55:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -592,8 +592,9 @@ G4bool G4PhysicalVolumeModel::Validate (G4bool warn)
   if (warn) {
     G4cout << "G4PhysicalVolumeModel::Validate() called." << G4endl;
   }
-  G4PhysicalVolumeSearchScene searchScene (fTopPVName, fTopPVCopyNo);
   G4PhysicalVolumeModel searchModel (world);
+  G4PhysicalVolumeSearchScene searchScene
+    (&searchModel, fTopPVName, fTopPVCopyNo);
   G4ModelingParameters mp;  // Default modeling parameters for this search.
   searchModel.SetModelingParameters (&mp);
   searchModel.DescribeYourselfTo (searchScene);
