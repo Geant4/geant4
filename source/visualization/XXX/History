@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2006-02-08 15:42:58 allison Exp $
+$Id: History,v 1.18 2006-03-28 17:17:17 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
+
+8th March 2006  John Allison (visXXX-V08-00-02)
+- Added G4XXXFile, G4XXXStored, G4XXXSG.
 
 8th February 2006  John Allison (visXXX-V08-00-01)
 - Improved handling of DrawnPVPath:
