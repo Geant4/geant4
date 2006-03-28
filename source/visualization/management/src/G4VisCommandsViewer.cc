@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.55 2006-01-11 17:44:29 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.56 2006-03-28 16:31:33 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -693,7 +693,7 @@ void G4VisCommandViewerRebuild::SetNewValue (G4UIcommand*, G4String newValue) {
     return;
   }
 
-  viewer->SetNeedKernelVisit(true);
+  viewer->NeedKernelVisit();
 
   // Check auto-refresh and print confirmations, but without changing
   // view paramters...

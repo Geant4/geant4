@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.47 2006-03-06 14:30:59 allison Exp $
+// $Id: G4VisCommandsScene.cc,v 1.48 2006-03-28 16:31:33 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -376,7 +376,7 @@ G4VisCommandSceneNotifyHandlers::G4VisCommandSceneNotifyHandlers () {
   parameter = new G4UIparameter ("refresh-flush", 's',
 				 omitable = true);
   parameter -> SetDefaultValue("refresh");
-  parameter -> SetParameterCandidates("refresh flush");
+  parameter -> SetParameterCandidates("r refresh f flush");
   fpCommand -> SetParameter (parameter);
 }
 
@@ -396,7 +396,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
   G4String sceneName, refresh_flush;
   std::istringstream is (newValue);
   is >> sceneName >> refresh_flush;
-  G4bool flush(false);
+  G4bool flush = false;
   if (refresh_flush(0) == 'f') flush = true;
 
   const G4SceneList& sceneList = fpVisManager -> GetSceneList ();
@@ -440,7 +440,8 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
       const G4String& aSceneName = aScene -> GetName ();
       if (sceneName == aSceneName) {
 	// Clear store and force a rebuild of graphical database...
-	aSceneHandler -> ClearStore ();
+	//aSceneHandler -> ClearStore (); // Not nec??  Done below
+	//with NeedKernelVisit and DrawView.  JA.
 	G4ViewerList& viewerList = aSceneHandler -> SetViewerList ();
 	const G4int nViewers = viewerList.size ();
 	for (G4int iV = 0; iV < nViewers; iV++) {
@@ -451,7 +452,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
 	  fpVisManager -> SetCurrentSceneHandler(aSceneHandler);
 	  fpVisManager -> SetCurrentScene(aScene);
 	  // Re-draw, forcing rebuild of graphics database, if any...
-	  aViewer -> SetNeedKernelVisit(true);
+	  aViewer -> NeedKernelVisit();
 	  aViewer -> SetView ();
 	  aViewer -> ClearView ();
 	  aViewer -> DrawView ();
