@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.icc,v 1.13 2006-03-13 14:30:03 allison Exp $
+// $Id: G4VisManager.icc,v 1.14 2006-03-28 16:14:26 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,10 +100,6 @@ inline G4bool G4VisManager::GetTransientsDrawnThisRun() const {
 
 inline void G4VisManager::SetUserActionExtent (const G4VisExtent& extent) {
   fUserVisActionExtent = extent;
-}
-
-inline void G4VisManager::SetCurrentScene (G4Scene* pScene) {
-  fpScene = pScene;
 }
 
 inline G4SceneList& G4VisManager::SetSceneList () {

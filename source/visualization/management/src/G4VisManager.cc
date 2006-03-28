@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.87 2006-03-24 22:03:02 tinslay Exp $
+// $Id: G4VisManager.cc,v 1.88 2006-03-28 16:14:26 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,8 +81,9 @@ G4VisManager::G4VisManager ():
   fVerbose         (1),
   fpStateDependent (0),
   fEventCount      (0),
-  fTransientsDrawnThisEvent(false),
-  fTransientsDrawnThisRun(false)
+  fTransientsDrawnThisEvent (false),
+  fTransientsDrawnThisRun   (false)
+  // All other objects use default constructors.
 {
   fpTrajDrawModelMgr = new G4VisModelManager<G4VTrajectoryModel>("/vis/modeling/trajectories");
 
@@ -670,6 +671,18 @@ void G4VisManager::SetUserAction
   }
 }
 
+void G4VisManager::SetCurrentScene (G4Scene* pScene) {
+  if (pScene != fpScene) {
+    // A change of scene.  Therefore reset transients drawn flags.  All
+    // memory of previous transient proceessing thereby erased...
+    fTransientsDrawnThisRun = false;
+    if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisRun(false);
+    fTransientsDrawnThisEvent = false;
+    if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisEvent(false);
+  }
+  fpScene = pScene;
+}
+
 void G4VisManager::SetCurrentGraphicsSystem (G4VGraphicsSystem* pSystem) {
   fpGraphicsSystem = pSystem;
   if (fVerbosity >= confirmations) {
@@ -928,6 +941,7 @@ void G4VisManager::BeginOfRun ()
   CLHEP::HepRandom::saveFullState(oss);
   fBeginOfLastRunRandomStatus = oss.str();
   fTransientsDrawnThisRun = false;
+  if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisRun(false);
 }
 
 void G4VisManager::BeginOfEvent ()
@@ -937,6 +951,7 @@ void G4VisManager::BeginOfEvent ()
   CLHEP::HepRandom::saveFullState(oss);
   fBeginOfLastEventRandomStatus = oss.str();
   fTransientsDrawnThisEvent = false;
+  if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisEvent(false);
 }
 
 void G4VisManager::EndOfEvent ()
@@ -964,7 +979,7 @@ void G4VisManager::EndOfEvent ()
       fpSceneHandler -> SetModel (0);  // Flags invalid model.
     }
     if (fpScene->GetRefreshAtEndOfEvent()) {
-      fpViewer->ShowView();  // ...for systems needing post processing.
+      fpViewer->ShowView();
       fpSceneHandler->SetMarkForClearingTransientStore(true);
     }
   }
@@ -979,7 +994,7 @@ void G4VisManager::EndOfRun ()
   if (GetConcreteInstance() && fpSceneHandler && IsValidView()) {
     if (!fpSceneHandler->GetMarkForClearingTransientStore()) {
       if (fpScene->GetRefreshAtEndOfRun()) {
-	fpViewer->ShowView();  // ...for systems needing post processing.
+	fpViewer->ShowView();
 	fpSceneHandler->SetMarkForClearingTransientStore(true);
       }
     }
@@ -990,10 +1005,14 @@ void G4VisManager::ClearTransientStoreIfMarked(){
   // Assumes valid view.
   if (fpSceneHandler->GetMarkForClearingTransientStore()) {
     fpSceneHandler->SetMarkForClearingTransientStore(false);
-    fTransientsDrawnThisEvent = true;
-    fTransientsDrawnThisRun = true;
     fpSceneHandler->ClearTransientStore();
   }
+  // Record if transients drawn.  These local flags are only set
+  // *after* ClearTransientStore.  In the code in G4VSceneHandler
+  // triggered by ClearTransientStore, use these flags so that
+  // transient reprocessing is not done too early.
+  fTransientsDrawnThisEvent = fpSceneHandler->GetTransientsDrawnThisEvent();
+  fTransientsDrawnThisRun = fpSceneHandler->GetTransientsDrawnThisRun();
 }
 
 void G4VisManager::CheckModel () {
