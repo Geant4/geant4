@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.hh,v 1.4 2004-11-10 08:54:59 vnivanch Exp $
+// $Id: G4LossTableBuilder.hh,v 1.5 2006-03-28 10:12:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -59,16 +59,18 @@ class G4LossTableBuilder
 
 public:
 
-  G4LossTableBuilder() {};
+  G4LossTableBuilder();
 
-  ~G4LossTableBuilder() {};
+  ~G4LossTableBuilder();
 
   void BuildDEDXTable(G4PhysicsTable* dedxTable, const std::vector<G4PhysicsTable*>&);
 
-  void BuildRangeTable(const G4PhysicsTable* dedxTable, G4PhysicsTable* rangeTable);
+  void BuildRangeTable(const G4PhysicsTable* dedxTable, G4PhysicsTable* rangeTable,
+		       G4bool isIonisation = false);
 
   void BuildInverseRangeTable(const G4PhysicsTable* rangeTable,
-			            G4PhysicsTable* invRangeTable);
+			      G4PhysicsTable* invRangeTable,
+			      G4bool isIonisation = false);
  
 private:
 

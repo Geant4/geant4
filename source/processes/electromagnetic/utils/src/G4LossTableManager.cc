@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.65 2006-03-23 14:47:25 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.66 2006-03-28 10:12:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -81,6 +81,7 @@
 #include "G4PhysicsTableHelper.hh"
 #include "G4EmCorrections.hh"
 #include "G4EmTableType.hh"
+#include "G4LossTableBuilder.hh"
 
 G4LossTableManager* G4LossTableManager::theInstance = 0;
 
@@ -275,7 +276,10 @@ void G4LossTableManager::EnergyLossProcessIsInitialised(
 {
   if (first_entry || (particle == firstParticle && all_tables_are_built) ) {
     all_tables_are_built = true;
-    
+
+    if(1 < verbose) 
+      G4cout << "### G4LossTableManager start initilisation of tables" 
+	     << G4endl;
     for (G4int i=0; i<n_loss; i++) {
       G4VEnergyLossProcess* el = loss_vector[i];
 
@@ -285,6 +289,14 @@ void G4LossTableManager::EnergyLossProcessIsInitialised(
         else {
           tables_are_built[i] = true;
 	  el->SetIonisation(false);
+	}
+	if(1 < verbose) { 
+	  G4cout << i <<".   "<< el->GetProcessName() 
+		 << "  for "  << pm->GetParticleType()->GetParticleName()
+		 << "  active= " << pm->GetProcessActivation(el)
+                 << "  table= " << tables_are_built[i]
+		 << "  isIonisation= " << el->IsIonisationProcess()
+		 << G4endl;
 	}
 	if (!tables_are_built[i]) all_tables_are_built = false;
       } else {
@@ -367,7 +379,7 @@ void G4LossTableManager::BuildPhysicsTable(
     if(!tables_are_built[i] && !base_part_vector[i]) {
       const G4ParticleDefinition* curr_part = part_vector[i];
       G4VEnergyLossProcess* curr_proc = BuildTables(curr_part);
-      CopyTables(curr_part, curr_proc);
+      if(curr_proc) CopyTables(curr_part, curr_proc);
     }
   }
 
@@ -441,7 +453,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
   G4VEnergyLossProcess* em = 0;
   G4VEnergyLossProcess* p = 0;
   G4int iem = 0;
-  G4PhysicsTable* dedx = 0;;
+  G4PhysicsTable* dedx = 0;
   G4int i;
 
   for (i=0; i<n_loss; i++) {
@@ -460,8 +472,11 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
   }
 
   G4int n_dedx = list.size();
-  if (!n_dedx) return 0;
-
+  if (!n_dedx) {
+    G4cout << "G4LossTableManager WARNING: no DEDX processes for " 
+	   << aParticle->GetParticleName() << G4endl;
+    return 0;
+  }
   G4int nSubRegions = em->NumberOfSubCutoffRegions();
 
   if (1 < verbose) {
@@ -485,8 +500,16 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
   if(!invrange) invrange = G4PhysicsTableHelper::PreparePhysicsTable(invrange);
   inv_range_vector[iem]  = invrange;
 
-  tableBuilder->BuildRangeTable(dedx, range);
-  tableBuilder->BuildInverseRangeTable(range, invrange);
+  G4bool flag = em->IsIonisationProcess();
+  tableBuilder->BuildRangeTable(dedx, range, flag);
+  tableBuilder->BuildInverseRangeTable(range, invrange, flag);
+
+  //  if(1<verbose) G4cout << *dedx << G4endl;
+
+  em->SetRangeTableForLoss(range);
+  em->SetInverseRangeTable(invrange);
+
+  if(1<verbose) G4cout << *range << G4endl;
 
   std::vector<G4PhysicsTable*> listSub;
   std::vector<G4PhysicsTable*> listCSDA;
@@ -519,7 +542,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
     em->SetDEDXunRestrictedTable(dedxCSDA);
     G4PhysicsTable* rCSDA = em->CSDARangeTable();
     if(!rCSDA) range  = G4PhysicsTableHelper::PreparePhysicsTable(rCSDA);
-    tableBuilder->BuildRangeTable(dedxCSDA, rCSDA);
+    tableBuilder->BuildRangeTable(dedxCSDA, rCSDA, flag);
     em->SetCSDARangeTable(rCSDA);
   }
 

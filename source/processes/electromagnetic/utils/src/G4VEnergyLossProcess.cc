@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.82 2006-03-23 16:22:08 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.83 2006-03-28 10:12:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -386,8 +386,9 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
   if(1 < verboseLevel) {
     G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() done for "
            << GetProcessName()
-           << " and particle " << part.GetParticleName()
-           << G4endl;
+           << " and particle " << part.GetParticleName();
+    if(isIonisation) G4cout << "  isIonisation  flag = 1";
+    G4cout << G4endl;
   }
 }
 
@@ -1186,18 +1187,18 @@ G4bool G4VEnergyLossProcess::StorePhysicsTable(
   G4bool res = true;
   if ( baseParticle || part != particle ) return res;
 
-  if ( theDEDXTable && isIonisation ) {
+  if ( theDEDXTable ) {
     const G4String name = GetPhysicsTableFileName(part,directory,"DEDX",ascii);
     if( !theDEDXTable->StorePhysicsTable(name,ascii)) res = false;
   }
 
-  if ( theDEDXunRestrictedTable && isIonisation ) {
+  if ( theDEDXunRestrictedTable ) {
     const G4String name = 
       GetPhysicsTableFileName(part,directory,"DEDXnr",ascii);
     if( !theDEDXTable->StorePhysicsTable(name,ascii)) res = false;
   }
 
-  if ( theDEDXSubTable && isIonisation) {
+  if ( theDEDXSubTable ) {
     const G4String name = 
       GetPhysicsTableFileName(part,directory,"SubDEDX",ascii);
     if( !theDEDXSubTable->StorePhysicsTable(name,ascii)) res = false;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.cc,v 1.17 2005-04-12 18:13:04 vnivanch Exp $
+// $Id: G4LossTableBuilder.cc,v 1.18 2006-03-28 10:12:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -40,6 +40,7 @@
 // 21-07-04 V.Ivanchenko Fix problem of range for dedx=0
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 07-12-04 Fix of BuildDEDX table (V.Ivantchenko)
+// 27-03-06 Add bool options isIonisation (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -52,6 +53,14 @@
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsTableHelper.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4LossTableBuilder::G4LossTableBuilder() {};
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4LossTableBuilder::~G4LossTableBuilder() {};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -86,7 +95,8 @@ void G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
-                                               G4PhysicsTable* rangeTable)
+					 G4PhysicsTable* rangeTable,
+					 G4bool isIonisation)
 // Build range table from the energy loss table
 {
   size_t n_vectors = dedxTable->length();
@@ -98,7 +108,7 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
 
   for (size_t i=0; i<n_vectors; i++) {
 
-    if (rangeTable->GetFlag(i)) {
+    if (rangeTable->GetFlag(i) || !isIonisation) {
       G4PhysicsVector* pv = (*dedxTable)[i];
       size_t nbins = pv->GetVectorLength();
       size_t bin0  = 0;
@@ -156,7 +166,8 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4LossTableBuilder::BuildInverseRangeTable(const G4PhysicsTable* rangeTable,
-                                                      G4PhysicsTable* invRangeTable)
+						G4PhysicsTable* invRangeTable,
+						G4bool isIonisation)
 // Build inverse range table from the energy loss table
 {
   size_t n_vectors = rangeTable->length();
@@ -165,7 +176,7 @@ void G4LossTableBuilder::BuildInverseRangeTable(const G4PhysicsTable* rangeTable
 
   for (size_t i=0; i<n_vectors; i++) {
 
-    if (invRangeTable->GetFlag(i)) {
+    if (invRangeTable->GetFlag(i) || !isIonisation) {
       G4PhysicsVector* pv = (*rangeTable)[i];
       size_t nbins   = pv->GetVectorLength();
       G4double elow  = pv->GetLowEdgeEnergy(0);

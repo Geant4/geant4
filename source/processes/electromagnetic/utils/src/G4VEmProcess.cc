@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.33 2006-01-11 11:04:31 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.34 2006-03-28 10:12:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -190,7 +190,7 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 void G4VEmProcess::BuildLambdaTable()
 {
   if(1 < verboseLevel) {
-    G4cout << "G4VEnergyLossSTD::BuildLambdaTable() for process "
+    G4cout << "G4EmProcess::BuildLambdaTable() for process "
            << GetProcessName() << " and particle "
            << particle->GetParticleName()
            << G4endl;

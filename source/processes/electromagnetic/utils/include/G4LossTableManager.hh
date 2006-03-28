@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.33 2006-01-26 08:57:36 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.34 2006-03-28 10:12:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -73,7 +73,6 @@
 #include <map>
 #include <vector>
 #include "globals.hh"
-#include "G4LossTableBuilder.hh"
 #include "G4VEnergyLossProcess.hh"
 #include "G4EnergyLossTables.hh"
 
@@ -84,6 +83,7 @@ class G4ParticleDefinition;
 class G4VMultipleScattering;
 class G4VEmProcess;
 class G4EmCorrections;
+class G4LossTableBuilder;
 
 class G4LossTableManager
 {

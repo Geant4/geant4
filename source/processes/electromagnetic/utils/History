@@ -1,4 +1,4 @@
-$Id: History,v 1.238 2006-03-23 17:04:48 vnivanch Exp $
+$Id: History,v 1.239 2006-03-28 10:15:44 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28 March 06: V.Ivant (emutils-V08-00-09)
+- G4VEnergyLossProcess - add store energy loss tables for bremsstrahlung
+- G4LossTableBuilder & G4LossTableManager - fix logic to ensure rebuild PhysicsTable 
+	in the regime activate/desactivate processes
+- G4VEmProcess - fix printout
 
 23 March 06: V.Ivant (emutils-V08-00-08)
 - G4VEnergyLossProcess add SetDynamicMassCharge (used by ionIonisation)
