@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisCommandsListManager.hh,v 1.1 2005-11-21 05:45:42 tinslay Exp $
+// $Id: G4VisCommandsListManager.hh,v 1.2 2006-03-28 21:06:12 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
@@ -158,6 +158,60 @@ void G4VisCommandListManagerSelect<Manager>::SetNewValue(G4UIcommand*, G4String 
 {
   assert (0 != fpManager);
   fpManager->SetCurrent(name);
+}    
+
+// Mode command
+template <typename Manager>
+class G4VisCommandManagerMode : public G4UImessenger {
+
+public: // With description
+
+  G4VisCommandManagerMode(Manager*, const G4String& placement);
+
+  virtual ~G4VisCommandManagerMode();
+
+  G4String GetCurrentValue(G4UIcommand*);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+
+private:
+
+  Manager* fpManager;
+  G4String fPlacement;
+
+  G4UIcmdWithAString* fpCommand;
+
+};
+template <typename Manager>
+G4VisCommandManagerMode<Manager>::G4VisCommandManagerMode(Manager* manager, const G4String& placement)
+  :fpManager(manager)
+  ,fPlacement(placement)
+{  
+  G4String command = fPlacement+"/mode";
+  
+  fpCommand = new G4UIcmdWithAString(command, this);      
+  fpCommand->SetGuidance("Set mode of operation");
+  fpCommand->SetParameterName("mode", false);       
+  fpCommand->SetCandidates("soft hard");       
+}
+
+template <typename Manager>
+G4VisCommandManagerMode<Manager>::~G4VisCommandManagerMode()
+{
+  delete fpCommand;
+}
+
+template <typename Manager>
+G4String 
+G4VisCommandManagerMode<Manager>::GetCurrentValue(G4UIcommand*) 
+{
+  return "";
+}
+
+template <typename Manager>
+void G4VisCommandManagerMode<Manager>::SetNewValue(G4UIcommand*, G4String name) 
+{
+  assert (0 != fpManager);
+  fpManager->SetMode(name);
 }    
 
 #endif

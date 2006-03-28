@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.88 2006-03-28 16:14:26 allison Exp $
+// $Id: G4VisManager.cc,v 1.89 2006-03-28 21:06:12 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,6 +63,7 @@
 #include "G4VisCommandsListManager.hh"
 #include "G4VisModelManager.hh"
 #include "G4VModelFactory.hh"
+#include "G4VisFilterManager.hh"
 #include "G4VTrajectoryModel.hh"
 #include "G4TrajectoryDrawByCharge.hh"
 #include "Randomize.hh"
@@ -86,6 +87,7 @@ G4VisManager::G4VisManager ():
   // All other objects use default constructors.
 {
   fpTrajDrawModelMgr = new G4VisModelManager<G4VTrajectoryModel>("/vis/modeling/trajectories");
+  fpTrajFilterMgr = new G4VisFilterManager<G4VTrajectory>("/vis/filtering/trajectories");
 
   VerbosityGuidanceStrings.push_back
     ("Simple graded message scheme - digit or string (1st character defines):");
@@ -171,6 +173,7 @@ G4VisManager::~G4VisManager () {
   }
 
   delete fpTrajDrawModelMgr;
+  delete fpTrajFilterMgr;
 }
 
 G4VisManager* G4VisManager::GetInstance () {
@@ -237,6 +240,17 @@ void G4VisManager::Initialise () {
   fDirectoryList.push_back (directory);
   directory = new G4UIdirectory ("/vis/modeling/trajectories/create/");
   directory -> SetGuidance ("Create trajectory models and messengers.");
+  fDirectoryList.push_back (directory);
+
+  // Filtering command directory
+  directory = new G4UIdirectory ("/vis/filtering/");
+  directory -> SetGuidance ("Filtering commands.");
+  fDirectoryList.push_back (directory);
+  directory = new G4UIdirectory ("/vis/filtering/trajectories");
+  directory -> SetGuidance ("Trajectory filtering commands.");
+  fDirectoryList.push_back (directory);
+  directory = new G4UIdirectory ("/vis/filtering/trajectories/create");
+  directory -> SetGuidance ("Create trajectory filters and messengers.");
   fDirectoryList.push_back (directory);
 
   RegisterMessengers ();
@@ -330,6 +344,17 @@ void
 G4VisManager::RegisterModelFactory(G4TrajDrawModelFactory* factory) 
 {
   fpTrajDrawModelMgr->Register(factory);
+}
+
+void G4VisManager::RegisterModel(G4VFilter<G4VTrajectory>* model)
+{
+  fpTrajFilterMgr->Register(model);
+}
+
+void
+G4VisManager::RegisterModelFactory(G4TrajFilterFactory* factory)
+{
+  fpTrajFilterMgr->Register(factory);
 }
 
 void G4VisManager::SelectTrajectoryModel(const G4String& model) 
@@ -635,6 +660,19 @@ void G4VisManager::GeometryHasChanged () {
 
 void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory, G4int i_mode)
 {
+  G4bool visible(true);
+
+  // See if trajectory passes filter
+  G4bool passed = fpTrajFilterMgr->Accept(trajectory);
+
+  if (!passed) {
+    // Draw invisible trajectory if trajectory failed filter and 
+    // are filtering in soft mode
+    if (fpTrajFilterMgr->GetMode() == FilterMode::Soft) visible = false;
+    else {return;}
+  }
+
+  // Go on to draw trajectory
   assert (0 != fpTrajDrawModelMgr);
 
   const G4VTrajectoryModel* model = fpTrajDrawModelMgr->Current();
@@ -653,7 +691,7 @@ void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory, G4int i_mode
   model = fpTrajDrawModelMgr->Current();
   assert (0 != model); // Should definitely exist now
 
-  model->Draw(trajectory, i_mode);
+  model->Draw(trajectory, i_mode, visible);
 }
 
 void G4VisManager::SetUserAction
@@ -888,6 +926,12 @@ void G4VisManager::RegisterMessengers () {
 		    (fpTrajDrawModelMgr, fpTrajDrawModelMgr->Placement()));
   RegisterMessenger(new G4VisCommandListManagerSelect< G4VisModelManager<G4VTrajectoryModel> >
 		    (fpTrajDrawModelMgr, fpTrajDrawModelMgr->Placement()));  
+
+  // Filter manager commands
+  RegisterMessenger(new G4VisCommandListManagerList< G4VisFilterManager<G4VTrajectory> >
+                    (fpTrajFilterMgr, fpTrajFilterMgr->Placement()));
+  RegisterMessenger(new G4VisCommandManagerMode< G4VisFilterManager<G4VTrajectory> >
+                    (fpTrajFilterMgr, fpTrajFilterMgr->Placement()));
 }
 
 void G4VisManager::PrintAvailableGraphicsSystems () const {

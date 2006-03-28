@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.icc,v 1.9 2006-03-17 03:25:56 tinslay Exp $
+// $Id: G4VisExecutive.icc,v 1.10 2006-03-28 21:06:12 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,6 +39,7 @@
 #include "G4HepRep.hh"
 #include "G4HepRepFile.hh"
 #include "G4RayTracer.hh"
+#include "G4TrajectoryFilterFactories.hh"
 #include "G4TrajectoryModelFactories.hh"
 #include "G4VRML1File.hh"
 #include "G4VRML2File.hh"
@@ -138,9 +139,13 @@ void G4VisExecutive::RegisterGraphicsSystems () {
 void 
 G4VisExecutive::RegisterModelFactories()
 {
+   // Trajectory draw models
    RegisterModelFactory(new G4TrajectoryDrawByChargeFactory());
    RegisterModelFactory(new G4TrajectoryDrawByParticleIDFactory());
    RegisterModelFactory(new G4TrajectoryDrawByOriginVolumeFactory());  
+
+   // Trajectory filter models
+   RegisterModelFactory(new G4TrajectoryParticleFilterFactory());
 }
 
 #endif
