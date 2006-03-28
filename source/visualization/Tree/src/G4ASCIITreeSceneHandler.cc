@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.24 2006-03-14 12:37:40 allison Exp $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.25 2006-03-28 17:24:44 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -116,14 +116,14 @@ void G4ASCIITreeSceneHandler::EndModeling () {
     G4cout << "Calculating mass(es)..." << G4endl;
     const std::vector<G4VModel*>& models = fpScene->GetRunDurationModelList();
     std::vector<G4VModel*>::const_iterator i;
-    G4PhysicalVolumeModel* pvModel;
     for (i = models.begin(); i != models.end(); ++i) {
-      if ((pvModel = (*i)->GetG4PhysicalVolumeModel())) {
+      G4PhysicalVolumeModel* pvModel =
+	dynamic_cast<G4PhysicalVolumeModel*>(*i);
+      if (pvModel) {
 	const G4ModelingParameters* tempMP = pvModel->GetModelingParameters();
 	G4ModelingParameters mp;  // Default - no culling.
 	pvModel->SetModelingParameters (&mp);
-	G4PhysicalVolumeMassScene massScene;
-	massScene.EstablishSpecials (*pvModel);
+	G4PhysicalVolumeMassScene massScene(pvModel);
 	pvModel->DescribeYourselfTo (massScene);
 	G4double volume = massScene.GetVolume();
 	G4double mass = massScene.GetMass();
@@ -179,13 +179,13 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
   typedef std::vector<PVNodeID> PVPath;
   const PVPath& drawnPVPath = pPVModel->GetDrawnPVPath();
   G4int currentDepth = pPVModel->GetCurrentDepth();
-  const G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
-  const G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
-  const G4Material* pCurrentMaterial = pPVModel->GetCurrentMaterial();
+  G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
+  G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
+  G4Material* pCurrentMaterial = pPVModel->GetCurrentMaterial();
 
-  const G4ASCIITree* pSystem = (G4ASCIITree*)GetGraphicsSystem();
-  const G4int verbosity = pSystem->GetVerbosity();
-  const G4int detail = verbosity % 10;
+  G4ASCIITree* pSystem = (G4ASCIITree*)GetGraphicsSystem();
+  G4int verbosity = pSystem->GetVerbosity();
+  G4int detail = verbosity % 10;
   const G4String& outFileName = pSystem -> GetOutFileName();
 
   if (pCurrentPV != fpLastPV) {
@@ -293,11 +293,9 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
     }
 
     if (detail >= 5) {
-      // Cast const (someone has not been very careful about it)...
-      G4LogicalVolume* pLV = const_cast<G4LogicalVolume*>(pCurrentLV);
       G4Material* pMaterial = const_cast<G4Material*>(pCurrentMaterial);
       // ...and find daughter-subtracted mass...
-      G4double daughter_subtracted_mass = pLV->GetMass
+      G4double daughter_subtracted_mass = pCurrentLV->GetMass
 	(pCurrentPV->IsParameterised(),  // Force if parametrised.
 	 false,  // Do not propagate - calculate for this volume minus
         	 // volume of daughters.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.hh,v 1.14 2006-03-14 12:37:40 allison Exp $
+// $Id: G4ASCIITreeSceneHandler.hh,v 1.15 2006-03-28 17:24:44 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,8 +61,8 @@ protected:
   std::ostream* fpOutFile;      // Pointer to output file.
   std::ofstream fOutFile;       // Actual output file (if not G4cout).
 
-  std::set<const G4LogicalVolume*> fLVSet;
-  typedef std::set<const G4LogicalVolume*>::iterator LVSetIterator;
+  std::set<G4LogicalVolume*> fLVSet;
+  typedef std::set<G4LogicalVolume*>::iterator LVSetIterator;
   typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
   typedef std::vector<PVNodeID> PVPath;
   std::set<PVPath> fReplicaSet;
