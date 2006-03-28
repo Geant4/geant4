@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.93 2006-03-13 12:46:23 allison Exp $
+cvs log $Id: History,v 1.94 2006-03-28 17:42:17 tinslay Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+28th March 2006 Jane Tinslay (jst28032006)
+- Add G4VFilter and G4SmartFilter
 
 13th March 2006  John Allison  (greps-V08-00-01)
 - Added operator<< for G4Text, G4Circle, G4Square, G4Polyhedron.
