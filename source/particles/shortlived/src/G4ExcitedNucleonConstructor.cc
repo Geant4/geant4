@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedNucleonConstructor.cc,v 1.8 2006-02-26 14:56:30 kurasige Exp $
+// $Id: G4ExcitedNucleonConstructor.cc,v 1.9 2006-03-29 00:34:35 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -538,12 +538,12 @@ G4DecayTable*  G4ExcitedNucleonConstructor::AddLambdaKMode(
 
 // PDG2005
 //  N(2090) is renamed to N(2080) 
-
+//   but keep unchanged temporalily Apr 06
 
 const char* G4ExcitedNucleonConstructor::name[] = {
    "N(1440)", "N(1520)", "N(1535)", "N(1650)", "N(1675)",
    "N(1680)", "N(1700)", "N(1710)", "N(1720)", "N(1900)", 
-   "N(1990)", "N(2080)", "N(2190)", "N(2220)", "N(2250)"
+   "N(1990)", "N(2090)", "N(2190)", "N(2220)", "N(2250)"
 };
 
 const G4double G4ExcitedNucleonConstructor::mass[] = {
