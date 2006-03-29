@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.cc,v 1.18 2006-03-28 10:12:35 vnivanch Exp $
+// $Id: G4LossTableBuilder.cc,v 1.19 2006-03-29 10:07:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -56,11 +56,13 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4LossTableBuilder::G4LossTableBuilder() {};
+G4LossTableBuilder::G4LossTableBuilder() 
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4LossTableBuilder::~G4LossTableBuilder() {};
+G4LossTableBuilder::~G4LossTableBuilder() 
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

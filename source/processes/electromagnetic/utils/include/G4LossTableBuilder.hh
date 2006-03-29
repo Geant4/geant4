@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.hh,v 1.5 2006-03-28 10:12:35 vnivanch Exp $
+// $Id: G4LossTableBuilder.hh,v 1.6 2006-03-29 10:07:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -61,7 +61,7 @@ public:
 
   G4LossTableBuilder();
 
-  ~G4LossTableBuilder();
+  virtual ~G4LossTableBuilder();
 
   void BuildDEDXTable(G4PhysicsTable* dedxTable, const std::vector<G4PhysicsTable*>&);
 
