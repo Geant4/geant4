@@ -1,4 +1,4 @@
-$Id: History,v 1.84 2006-02-08 12:53:46 kurasige Exp $
+$Id: History,v 1.85 2006-03-29 03:51:18 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-Feb. 08, 06 .Kurashige (track-V08-00-01)
+Mar. 29, 06 H.Kurashige (track-V08-00-02)
+-  Improve G4Track::GetVelocity for optical photon 
+
+Feb. 08, 06 H.Kurashige (track-V08-00-01)
 -  add ProposeMomentumDirection AlongStep and ProposeWeight PostStep in 
     G4ParticleChangeForLoss (V.Ivantchenko)
 

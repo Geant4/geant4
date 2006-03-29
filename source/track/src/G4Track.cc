@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.cc,v 1.26 2005-11-24 16:54:53 japost Exp $
+// $Id: G4Track.cc,v 1.27 2006-03-29 03:51:18 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -149,6 +149,12 @@ G4double G4Track::GetVelocity() const
 { 
   static G4bool isFirstTime = true;
   static G4ParticleDefinition* fOpticalPhoton =0;
+  
+  static G4Material*               prev_mat =0;
+  static G4MaterialPropertyVector* groupvel =0;
+  static G4double                  prev_velocity =0;
+  static G4double                  prev_momentum =0;
+  
 
   if ( isFirstTime ) {
     isFirstTime = false;
@@ -169,22 +175,38 @@ G4double G4Track::GetVelocity() const
 	 (fpDynamicParticle->GetDefinition()==fOpticalPhoton) ){
 
        G4Material* mat=0; 
+       G4bool update_groupvel = false;
        if ( this->GetStep() ){
 	  mat= this->GetMaterial();         //   Fix for repeated volumes
        }else{
           mat=fpTouchable->GetVolume()->GetLogicalVolume()->GetMaterial();
        }
-
-       if(mat->GetMaterialPropertiesTable() != 0){
-         // light velocity = c/(rindex+d(rindex)/d(log(E_phot)))
-         // values stored in GROUPVEL material properties vector
-         G4MaterialPropertyVector *groupvel =
-            mat->GetMaterialPropertiesTable()->GetProperty("GROUPVEL");
-         if(groupvel != 0 )
-           velocity =
-             groupvel->GetProperty(fpDynamicParticle->GetTotalMomentum());
+       // check if previous step is in the same volume
+       //  and get new GROUPVELOVITY table if necessary 
+       if ((mat != prev_mat)||(groupvel==0)) {
+	 groupvel = 0;
+	 if(mat->GetMaterialPropertiesTable() != 0)
+	   groupvel = mat->GetMaterialPropertiesTable()->GetProperty("GROUPVEL");
+	 update_groupvel = true;
        }
-    }
+       prev_mat = mat;
+       
+       if  (groupvel != 0 ) {
+	 // light velocity = c/(rindex+d(rindex)/d(log(E_phot)))
+	 // values stored in GROUPVEL material properties vector
+	 velocity =  prev_velocity;
+ 	 
+	 // check if momentum is same as in the previous step
+         //  and calculate group velocity if necessary 
+ 	 if( update_groupvel || (fpDynamicParticle->GetTotalMomentum() != prev_momentum) ) {
+	   velocity =
+	     groupvel->GetProperty(fpDynamicParticle->GetTotalMomentum());
+	   prev_velocity = velocity;
+	   prev_momentum = fpDynamicParticle->GetTotalMomentum();
+	 }
+       }
+     }
+
   } else {
     G4double T = fpDynamicParticle->GetKineticEnergy();
     velocity = c_light*std::sqrt(T*(T+2.*mass))/(T+mass);
