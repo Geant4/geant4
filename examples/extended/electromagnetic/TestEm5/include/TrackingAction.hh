@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TrackingAction.hh,v 1.2 2004-06-21 10:57:12 maire Exp $
+// $Id: TrackingAction.hh,v 1.3 2006-03-29 13:07:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,7 +54,7 @@ class TrackingAction : public G4UserTrackingAction {
     EventAction*          eventaction;
     HistoManager*         histoManager;
     
-    G4double worldLimit;
+    G4double xstartAbs, xendAbs;
     G4double primaryCharge;
 };
 
