@@ -1,0 +1,182 @@
+
+                       geant4-08-00-ref-03
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Optimised interfaces for multiple-scattering EM process; introduced
+    G4UrbanMscModel class for G4MultipleScattering.
+  o Introduced new methods for angular distribution in G4SynchrotronRadiation,
+    now supporting also local fields attached to volumes.
+  o Important fixes for very low energy hadrons in G4PAImodel and
+    G4PAIPhotonMOdel.
+  o Added gamma decay for forced hypernucleus decay in CHIPS and important
+    fix for energy/momentum conservation in QGSC.
+  o Visualization: new commands for handling 'caching' of transients
+    (trajectories, hits, user drawing, ...) for copying between graphics
+    systems.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+event                                            event-V08-00-00
+-----
+- Minor fix in alternative G4ParticleGun constructor.
+
+geometry/divisions                               geomdiv-V08-00-02
+------------------
+- Revised text in G4Exceptions thrown by various classes.
+
+geometry/solids/specific                         geom-specific-V08-00-04
+------------------------
+- G4TwistedTubs: defined exact estimation for GetCubicVolume().
+- Corrected boolean condition in G4TriangularFacet::Intersect().
+  Use '&&' operator in condition. Allows for porting on WIN32-VC.
+
+geometry/volumes                                 geomvol-V08-00-01
+----------------
+- G4AssemblyVolume: added default boolean argument to MakeImprint()
+  methods to allow for optional check of overlaps of constituent volumes.
+
+grahics_reps                                     greps-V08-00-01
+------------
+- Added operator<<() for G4Text, G4Circle, G4Square, G4Polyhedron.
+  Improved/tidied operator<<() for G4Polyline, G4VMarker, G4VisAttributes.
+- Improved comments in G4VVisManager.
+
+materials                                        materials-V08-00-00
+---------
+- G4NistMaterialBuilder: added method ConstructNewGasMaterial().
+- G4Material: minor change of printout.
+- G4NistManager: added method GetAtomicMassAmu(Z).
+
+processes/electromagnetic/muons                  emmuons-V08-00-02
+-------------------------------
+- G4MuBremsstrahlungModel: fixed problem of initialisation in the case
+  when cuts are not defined (needed for extrapolator and for unit tests)
+- G4EnergyLossForExtrapolator: fixed bug in units, added muon tables, moved
+  initialisation from the constructor to the first public call, added verbose
+  variable into constructor.
+
+processes/electromagnetic/standard               emstand-V08-00-17
+----------------------------------
+- Reorganisation of classes: archived G4MscModel class, optimised
+  interfaces and introduced G4UrbanMscModel class for G4MultipleScattering:
+  o Bug fix in the SampleCosineTheta() method and fixed a problem of
+    non-initialised variable.
+  o Make stepping algorithm be active for ions by default.
+  o Fixed bug in cross section in G4MscModel71 class introduced in ref-02.
+- G4eBremsstrahlungModel:
+  o Fixed problem of initialisation in the case when cuts are not defined
+    (needed for extrapolator and for unit tests)
+  o Fixed problem of energy loss calculation below 10 MeV.
+- G4KleinNishinaModel:
+  o Removed upper energy limit to have a smooth cross section.
+- G4SynchrotronRadiation:
+  o Introduced new methods for angular distribution.
+  o Updated methods for calculation of integral number spectrum.
+  o Updated to set polarisation and work with local magnetic-fields
+    attached to single volumes.
+- G4PAImodel and G4PAIPhotonMOdel:
+  o Important fixes for very low energy hadrons
+- Added first test-prototype of elastic Coulomb scattering.
+
+
+processes/electromagnetic/utils                  emutils-V08-00-04
+-------------------------------
+- Optimised interfaces to multiple-scattering model, modified classes
+  G4VEmModel and G4VMultipleScattering
+- G4EmCalculator:
+  o Corrections in GetCrossSectionPerVolume(), GetCrossSectionPerAtom(),
+    ComputeCrossSectionPerAtom().
+  o Added public methods ComputeTotalDEDX(), ComputeElectronicDEDX();
+    updated GetDEDX() for ions.
+- Energy loss:
+  o G4LossTableBuilder & G4LossTableManager: fixed logic to ensure rebuild
+    of PhysicsTable in the regime activate/desactivate processes.
+    Set flag 'isIonisation' for processes in G4LossTableManager.
+    Fixed compilation warnings on gcc-3.4.4 in G4LossTableBuilder.
+  o G4VEnergyLossProcess: added store energy loss tables for bremsstrahlung.
+    Added SetDynamicMassCharge(), used by ionIonisation; make use of flag
+    'isIonisation' in AlongStep, PrintInfo, and StoreTables.
+- Added dummy class G4DummyModel.
+
+processes/hadronic/models/chiral.../body         hadr-chips-body-V08-00-02
+----------------------------------------
+- Added gamma decay for forced hypernucleus decay.
+
+processes/hadronic/models/chiral.../interface    hadr-chips-inter-V08-00-01
+---------------------------------------------
+- Important fix in G4StringChipsParticleLevelInterface for energy/momentum
+  conservation in QGSC.
+- New prototype class G4QElastic for precise elastic scattering simulation
+  in CHIPS.
+
+visualization                                    vis-V08-00-02
+-------------
+- management
+  o Added /vis/scene/transientsAction.  The default is "rerun", i.e.,
+    when the viewer requests, the previous event or run will be processed
+    again with the original random number seed so that transients
+    (trajectories, hits, user drawing, etc.) are reconstructed.  Thus,
+    transients are "remembered" and may be copied between graphics systems.
+    Can be turned off with "/vis/scene/transientsAction none".
+  o Introduced /vis/geometry/* commands for editing vis attributes of
+    geometry volumes.
+  o First implementation of refresh end-of-event.
+  o Fixes for recomputation of transients when changing drivers.
+  o Removed fModified plus minor improvements.
+- modeling
+  o Added DrawingStyle to G4ModelingParameters and fixed bug in culling
+    of covered daughters.
+  o G4PhysicalVolumeModel: added drawn volume path capability.
+  o Added output operator<<() for PVNodeID.
+- OpenGL
+  o Refinement of display list handling.
+  o Removed fModified plus tidying.
+- OpenInventor
+  o Implemented drawn volume path.
+  o Removed fModified plus tidying.
+- RayTracer
+  o Minor improvements.
+- Tree
+  o Fixed bug in treatment of repeated replicas.
+  o Minor improvements to readability of code in G4VTree and G4ASCIITree
+- XXX:
+  o Improved handling of DrawnPVPath. Using drawn volume path.
+
+examples                                         examples-V08-00-03
+--------
+- Updated reference outputs.
+- extended/electromagnetic/TestEm0 (testem0-V08-00-00)
+  o New example to print the cross sections and stopping power used by the
+    standard electromagnetic package via G4EmCalculator, which extracts these
+    data from the PhysicsTables.
+    The program can be used in batch or interactively.
+- extended/electromagnetic/TestEm1 (testem1-V08-00-03)
+  o PhysicsList: new functions AddDecay(), AddStepMax()
+  o Changed unit mum to um in input macro.
+  o Changed name 'brem' to 'eBrem'.
+- extended/electromagnetic/TestEm5 (testem5-V08-00-01)
+  o TrackingAction: more precise definition of transmit and reflect.
+  o Added livermore physicsList.
+  o Changed unit mum to um in input macros.
+  o Completed penelope physicsList.
+- extended/electromagnetic/TestEm11 (testem11-V08-00-00)
+- extended/electromagnetic/TestEm12 (testem12-V08-00-00)
+  o Changed unit mum to um in input macros.
+  o Added PhysListEmLivermore and PhysListEmPenelope physics-lists.
+  o RunAction: added GetCSDARange().
+
+tests                                            tests-V08-00-03
+-----
+- Updated reference outputs.
+- GNUmakefile (tests-gmk-V08-00-02)
+  o Add new test testem0 (test500)
+- test19 (test19-V08-00-00)
+- test29 (test29-V08-00-00)
+  o Modified G4Isotope definition (skip atomic mass)
+- test31 (test31-V08-00-01)
+  o Added test of the extrapolator.
