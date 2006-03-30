@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.cc,v 1.16 2006-03-27 09:21:15 grichine Exp $
+// $Id: G4SynchrotronRadiation.cc,v 1.17 2006-03-30 09:09:01 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -328,7 +328,7 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
       // G4double sz = -sin(Teta);
 
       G4ThreeVector gammaPolarization = FieldValue.cross(gammaDirection);
-      gammaPolarization.unit();
+      gammaPolarization = gammaPolarization.unit();
 
       // (sx, sy, sz);
       // gammaPolarization.rotateUz(particleDirection);
