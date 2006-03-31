@@ -63,6 +63,8 @@
 #include "G4XTRRegularRadModel.hh"
 #include "G4XTRTransparentRegRadModel.hh"
 
+#include "G4SynchrotronRadiation.hh"
+
 #include "G4ParticleDefinition.hh"
 #include "G4Proton.hh"
 
@@ -70,6 +72,8 @@
 
 int main()
 {
+
+  /*
   std::ofstream outdEdx("XTRdEdx.out", std::ios::out ) ;
   outdEdx.setf( std::ios::scientific, std::ios::floatfield );
 
@@ -82,34 +86,9 @@ int main()
   //  std::ifstream fileRead("exp.dat", std::ios::out ) ;
   //  fileRead.setf( std::ios::scientific, std::ios::floatfield );
 
-  std::ofstream fileWrite("expXTR.dat", std::ios::out ) ;
-  fileWrite.setf( std::ios::scientific, std::ios::floatfield );
-
   std::ofstream fileWrite1("mpXTR.dat", std::ios::out ) ;
   fileWrite1.setf( std::ios::scientific, std::ios::floatfield );
-
-
-  // Geometry 
-
-
-  G4double radThickness = 0.0127*mm ; // 25*micrometer ;     
-  G4double gasGap       = 0.762*mm ;          //  1500*micrometer  ;   
-  G4double foilGasRatio = radThickness/(radThickness+gasGap) ;
-  G4int    foilNumber   = 100 ;             //  188 ;
-  G4double detGap       =   0.01*mm ;
-
-
-  G4double alphaPlate   = 2.0 ;
-  G4double alphaGas     = 10.0 ;
-  G4int    modelNumber  = 0 ;
-
-// TR radiator envelope
-
-  G4double radThick = foilNumber*(radThickness + gasGap) - gasGap + detGap;
-
-  G4double absorberRadius   = 10.*cm;
-
-  G4double absorberThickness = 15.0*mm ;   // 40.0*mm ;
+  */
  
 
   /////////////////////////////////////////////////////////////////
@@ -138,13 +117,13 @@ int main()
   G4Element* elH  = new G4Element(name="Hydrogen",symbol="H" , z= 1., a);
   
   a = 6.94*g/mole;
-  G4Element* elLi  = new G4Element(name="Lithium",symbol="Li" , z= 3., a);
+  G4Element* elLi = new G4Element(name="Lithium",symbol="Li" , z= 3., a);
   
   a = 9.01*g/mole;
-  G4Element* elBe  = new G4Element(name="Berillium",symbol="Be" , z= 4., a);
+  G4Element* elBe = new G4Element(name="Berillium",symbol="Be" , z= 4., a);
   
   a = 12.01*g/mole;
-  G4Element* elC = new G4Element(name="Carbon", symbol="C", z=6., a);
+  G4Element* elC  = new G4Element(name="Carbon", symbol="C", z=6., a);
   
   a = 14.01*g/mole;
   G4Element* elN  = new G4Element(name="Nitrogen",symbol="N" , z= 7., a);
@@ -348,6 +327,7 @@ int main()
   Air->AddMaterial( Nitrogen, fractionmass = 0.7557 ) ;
   Air->AddMaterial( Oxygen,   fractionmass = 0.2315 ) ;
   Air->AddMaterial( Argon,    fractionmass = 0.0128 ) ;
+
    ////////////////////////////////////////////////////////////////////////////
   //
   // MWPC mixtures
@@ -375,6 +355,7 @@ int main()
   Xe55He15CH4->AddMaterial(Xe, 0.895);
   Xe55He15CH4->AddMaterial(He, 0.050);
   Xe55He15CH4->AddMaterial(metane,0.055);
+
   // 90% Xe + 10% CH4, STP ; NIM A248 (1986) 379-388
   
   density = 5.344*mg/cm3 ;      
@@ -424,9 +405,33 @@ int main()
   XeArCH4->AddMaterial( Ar7CH4,   fractionmass = 0.234 ) ;
 
 
+  ////////////////////////////////////////////////////////////
+  //
+  // Geometry 
+
+
+  G4double foilThick = 0.02*mm ; // 25*micrometer ;     
+  G4double gasGap       = 0.50*mm ;          //  1500*micrometer  ;   
+  G4double foilGasRatio = foilThick/(foilThick+gasGap) ;
+  G4int    foilNumber   = 120 ;             //  188 ;
+  G4double detGap       = 0.01*mm ;
+
+
+  G4double alphaPlate   = 2.0 ;
+  G4double alphaGas     = 10.0 ;
+  G4int    modelNumber  = 0 ;
+
+// TR radiator envelope
+
+  G4double radThick = foilNumber*(foilThick + gasGap) - gasGap + detGap;
+
+  G4double absorberRadius    = 10.*cm;
+
+  G4double absorberThickness = 15.0*mm ;   // 40.0*mm ;
+
   // Preparation of mixed radiator material
 
-  foilDensity = 1.39*g/cm3; // Mylar 0.534*g/cm3; //Li  0.91*g/cm3 ;// CH2      
+  foilDensity = 0.91*g/cm3 ;// CH2 1.39*g/cm3; // Mylar 0.534*g/cm3; //Li        
   gasDensity  = 1.2928*mg/cm3 ; // Air 0.178*mg/cm3 ; // He 1.977*mg/cm3; // CO2
  
   totDensity  = foilDensity*foilGasRatio + gasDensity*(1.0-foilGasRatio) ;
@@ -436,15 +441,15 @@ int main()
     
   G4Material* radiatorMat = new G4Material(name="radiatorMat"  , totDensity, 
                                                   ncomponents=2);
-  radiatorMat->AddMaterial( Mylar, fractionFoil ) ;
+  radiatorMat->AddMaterial( CH2, fractionFoil ) ;
   radiatorMat->AddMaterial( Air, fractionGas  ) ;
 
   //  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
   // default materials of the calorimeter and TR radiator
 
   G4Material* fRadiatorMat = radiatorMat ; // CH2 Mylar ; 
-  G4Material* foilMat     = Mylar ; // Li ; // CH2 ;  
-  G4Material* gasMat      = Air ; // He ;// CO2 ; 
+  G4Material* foilMat     = CH2 ; // Li ; // CH2 ;  
+  G4Material* gasMat      = Air ; // He;  //  CO2 ; 
   G4Material* absMat      = Xe20CO2 ; // He ;// CO2 ; 
   
   // fWindowMat = Mylar ;
@@ -459,7 +464,7 @@ int main()
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////
 
   G4int i, j, k, nBin, numOfMaterials, iSan, nbOfElements, sanIndex, row ;
 
@@ -474,7 +479,7 @@ int main()
     //    if((*theMaterialTable)[k]->GetName() != testName) continue ;
 
     // outFile << "Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
-    G4cout <<k<<"\t"<< "Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
+    // G4cout <<k<<"\t"<< "Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
   }
 
   //  G4cout<<"Enter material name for test : "<<std::flush ;
@@ -492,7 +497,6 @@ int main()
    // regGasDet->SetProductionCuts(cuts);
    
   G4cout.precision(4);
-
 
   //  G4MaterialCutsCouple* matCC = new G4MaterialCutsCouple( 
   //                                  (*theMaterialTable)[k], cuts);
@@ -513,6 +517,7 @@ int main()
 
   // const G4RegionStore* theRegionStore = G4RegionStore::GetInstance();
   // G4Region* gas = theRegionStore->GetRegion("XTRdEdxDetector");
+
   G4VXTRenergyLoss* processXTR;
 
   const G4ParticleDefinition proton(
@@ -527,7 +532,16 @@ int main()
   G4ParticleDefinition* theProton = G4Proton::ProtonDefinition();
   // *proton = theProton;  
 
-  G4String fXTRModel = "transpR";
+  // G4String fXTRModel = "transpR";
+  G4String fXTRModel = "transpM";
+
+  // G4String fXTRModel = "regR";
+  // G4String fXTRModel = "regM";
+
+  // G4String fXTRModel = "gammaR";
+  // G4String fXTRModel = "gammaM";
+
+  // G4String fXTRModel = "strawR";
 
   if(fXTRModel == "gammaR" )
   {
@@ -537,7 +551,7 @@ int main()
                                        100.,
                                        foilMat,
                                        gasMat,
-                                       radThickness,
+                                       foilThick,
                                        gasGap,
                                        foilNumber,
                                        "GammaXTRadiator");
@@ -550,7 +564,7 @@ int main()
                                        100.,
                                        foilMat,
                                        gasMat,
-                                       radThickness,
+                                       foilThick,
                                        gasGap,
                                        foilNumber,
                                        "GammaXTRmodel");
@@ -562,7 +576,7 @@ int main()
     processXTR = new G4StrawTubeXTRadiator(logicRadiator,
                                            foilMat,
                                            gasMat,
-                                0.53,      // radThickness,
+                                0.53,      // foilThick,
                                 3.14159,   // gasGap,
                                          absMat,
                                          true,
@@ -574,7 +588,7 @@ int main()
     processXTR = new G4RegularXTRadiator(logicRadiator,
                                          foilMat,
                                          gasMat,
-                                         radThickness,
+                                         foilThick,
                                          gasGap,
                                          foilNumber,
                                          "RegularXTRadiator");
@@ -585,7 +599,7 @@ int main()
     processXTR = new G4TransparentRegXTRadiator(logicRadiator,
                                                 foilMat,
                                                 gasMat,
-                                                radThickness,
+                                                foilThick,
                                                 gasGap,
                                                 foilNumber,
                                                 "TranspRegXTRadiator");
@@ -596,7 +610,7 @@ int main()
     processXTR = new G4XTRRegularRadModel(logicRadiator,
                                           foilMat,
                                           gasMat,
-                                          radThickness,
+                                          foilThick,
                                           gasGap,
                                           foilNumber,
                                          "RegularXTRmodel");
@@ -608,7 +622,7 @@ int main()
     processXTR = new G4XTRTransparentRegRadModel(logicRadiator,
                                                  foilMat,
                                                  gasMat,
-                                                 radThickness,
+                                                 foilThick,
                                                  gasGap,
                                                  foilNumber,
                                          "TranspRegXTRmodel");
@@ -618,9 +632,13 @@ int main()
     G4Exception("Invalid XTR model name", "InvalidSetup",
                  FatalException, "XTR model name is out of the name list");
   }
-  processXTR->SetAngleRadDistr(true);
-  processXTR->BuildPhysicsTable(proton);
+  processXTR->SetVerboseLevel(1);
+  // processXTR->SetAngleRadDistr(true);
+
+  // processXTR->BuildPhysicsTable(proton);
+
   // processXTR->SetVerboseLevel(1);
+
   static G4int totBin = processXTR->GetTotBin();
   nBin = totBin;
   G4cout<<"totBin = "<<totBin<<G4endl;
@@ -628,22 +646,22 @@ int main()
   // test of XTR table step do-it
 
 
-  G4double energyTR=10*keV, cofAngle = 5.1,  angle2, dNdA, xCompton, lambdaC;
+  G4double energyTR = 10*keV, cofAngle = 5.1,  angle2, dNdA, xCompton, lambdaC;
   G4double charge = 1.0;
   G4double chargeSq  = charge*charge ;
-  G4double gamma     = 1.3e3; 
+  G4double gamma     = 4.e4; 
   G4cout<<"gamma = "<<gamma<<G4endl;
   G4cout<<"energyTR = "<<energyTR/keV<<" keV"<<G4endl;
   
   processXTR->SetGamma(gamma);
 
-  processXTR->GetAngleVector(energyTR,nBin);
+  // processXTR->GetAngleVector(energyTR,nBin);
 
-  xCompton = processXTR->GetGasCompton(energyTR);
+  // xCompton = processXTR->GetGasCompton(energyTR);
 
-  lambdaC = 1./xCompton;
+  // lambdaC = 1./xCompton;
 
-  G4cout<<"lambdaC = "<<lambdaC/m <<" m; for energy = "<<energyTR/keV<<" keV"<<G4endl;
+  // G4cout<<"lambdaC = "<<lambdaC/m <<" m; for energy = "<<energyTR/keV<<" keV"<<G4endl;
 
   // G4double dNdA = processXTR->SpectralXTRdEdx(energyTR);
 
@@ -665,7 +683,8 @@ int main()
      G4double angle2 = cofAngle*cofAngle/gamma/gamma;
      G4double dNdAngle = processXTR-> AngleXTRdEdx(angle2);
      dNdAngle *=fine_structure_const/pi;
-     G4cout<<"cofAngle = "<<cofAngle<<"; angle = "<<cofAngle/gamma<<"; dNdAngle = "<<dNdAngle<<G4endl;
+     G4cout<<"cofAngle = "<<cofAngle<<"; angle = "<<cofAngle/gamma
+           <<"; dNdAngle = "<<dNdAngle<<G4endl;
   }
   */
 
@@ -675,8 +694,8 @@ int main()
 
   G4double TkinScaled = (gamma - 1.)*proton_mass_c2;
 
-  /*
-  for(iTkin=0;iTkin<totBin;iTkin++)
+  /*  
+  for( iTkin = 0; iTkin < totBin; iTkin++ )
   {
     if(TkinScaled < processXTR->GetProtonVector()->
                                         GetLowEdgeEnergy(iTkin)) break;    
@@ -693,7 +712,7 @@ int main()
   }
   
 
-  for(i = 0; i < 1000000; i++ )
+  for( i = 0; i < 10000; i++ )
   {
     energyTR = processXTR->GetXTRrandomEnergy(TkinScaled,iTkin);
 
@@ -704,26 +723,103 @@ int main()
     spectrum[k] += 1;
   }
 
-  // output 
+  // output to file
 
-  for( k = 0; k < 100; k++ )
-  {    
-    G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;
+
+  if(fXTRModel == "gammaR" )
+  {
+    std::ofstream fileWrite("gammaR.dat", std::ios::out ) ;
+    fileWrite.setf( std::ios::scientific, std::ios::floatfield );
+
+    for( k = 0; k < 41; k++ )
+    {    
+      G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;
+      fileWrite<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;  
+    }
   }
-  */
+  else if(fXTRModel == "gammaM" )
+  {
+    std::ofstream fileWrite("gammaM.dat", std::ios::out ) ;
+    fileWrite.setf( std::ios::scientific, std::ios::floatfield );
+
+    for( k = 0; k < 41; k++ )
+    {    
+      G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;
+      fileWrite<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;  
+    }
+  }
+  else if(fXTRModel == "strawR" )
+  {
+    std::ofstream fileWrite("strawR.dat", std::ios::out ) ;
+    fileWrite.setf( std::ios::scientific, std::ios::floatfield );
+
+    for( k = 0; k < 41; k++ )
+    {    
+      G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;
+      fileWrite<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;  
+    }
+  }
+  else if(fXTRModel == "regR" )
+  {
+    std::ofstream fileWrite("regR.dat", std::ios::out ) ;
+    fileWrite.setf( std::ios::scientific, std::ios::floatfield );
+
+    for( k = 0; k < 41; k++ )
+    {    
+      G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;
+      fileWrite<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;  
+    }
+  }
+  else if(fXTRModel == "transpR" )
+  {
+    std::ofstream fileWrite("transpR.dat", std::ios::out ) ;
+    fileWrite.setf( std::ios::scientific, std::ios::floatfield );
+
+    for( k = 0; k < 41; k++ )
+    {    
+      G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;
+      fileWrite<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;  
+    }
+  }
+  else if(fXTRModel == "regM" )
+  {
+    std::ofstream fileWrite("regM.dat", std::ios::out ) ;
+    fileWrite.setf( std::ios::scientific, std::ios::floatfield );
+
+    for( k = 0; k < 41; k++ )
+    {    
+      G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;
+      fileWrite<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;  
+    }
+  }
+  else if(fXTRModel == "transpM" )
+  {
+    std::ofstream fileWrite("transpM.dat", std::ios::out ) ;
+    fileWrite.setf( std::ios::scientific, std::ios::floatfield );
+
+    for( k = 0; k < 41; k++ )
+    {    
+      G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;
+      fileWrite<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;  
+    }
+  }
+  else
+  {
+    G4Exception("Invalid XTR model name, no output file", "InvalidSetup",
+                 FatalException, "XTR model name is out of the name list");
+  }
+*/
 
 
 
-
+  G4cout.precision(12);
+  G4double ksi, prob;
+  G4SynchrotronRadiation* sr = new G4SynchrotronRadiation();
+  // sr->SetRootNumber(100);
+  // ksi = 1.e-8;
+  // ksi = 0.;
+  prob = sr->GetIntProbSR( ksi);
+  G4cout<<"ksi = "<<ksi<<"; SR probability = "<<prob<<G4endl;
   return 1 ;
 }
-
-
-
-
-
-
-
-
-
 

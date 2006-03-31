@@ -401,20 +401,6 @@ int main()
   // Geometry 
 
 
-  G4double foilThick = 0.02*mm ; // 25*micrometer ;     
-  G4double gasGap       = 0.50*mm ;          //  1500*micrometer  ;   
-  G4double foilGasRatio = foilThick/(foilThick+gasGap) ;
-  G4int    foilNumber   = 120 ;             //  188 ;
-  G4double detGap       = 0.01*mm ;
-
-
-  G4double alphaPlate   = 2.0 ;
-  G4double alphaGas     = 10.0 ;
-  G4int    modelNumber  = 0 ;
-
-
-
-
   ///////////////////////
 
   G4int i, j, k, nBin, numOfMaterials, iSan, nbOfElements, sanIndex, row ;
@@ -490,8 +476,11 @@ int main()
 
 
   G4cout.precision(12);
-  G4double ksi, prob;
+  G4double ksi, gpsi, prob;
+
   G4SynchrotronRadiation* sr = new G4SynchrotronRadiation();
+
+  /*
   // sr->SetRootNumber(100);
   // ksi = 1.e-8;
   ksi = 0.;
@@ -504,6 +493,18 @@ int main()
     prob = sr->GetEnergyProbSR( ksi);
     G4cout<<"x = "<<ksi<<"; SR F(x) = "<<prob<<G4endl;
     fileWrite<<ksi<<"\t"<<prob<<G4endl;
+  }
+  */
+
+  ksi = 5.;
+  sr->SetKsi(ksi);
+
+  for( i = 0; i < 30; i++ )
+  {
+    gpsi = std::pow(10.,-2. + i/10.);
+    prob = sr->GetAngleNumberAtGammaKsi( gpsi);
+    G4cout<<"x = "<<gpsi<<"; AngleDistr(x) = "<<prob<<G4endl;
+    fileWrite<<gpsi<<"\t"<<prob<<G4endl;
   }
 
 
