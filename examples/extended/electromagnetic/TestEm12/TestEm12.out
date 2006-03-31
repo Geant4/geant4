@@ -10,32 +10,32 @@
 ***** Table : Nb of materials = 8 *****
 
  Material:    G4_Al     density:  2.699 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.896 cm 
-   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    G4_Si     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.366 cm 
-   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    G4_Fe     density:  7.874 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.757 cm 
-   --->  Element: Fe (Fe)   Z = 26.0   N =  55.8   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Fe (Fe)   Z = 26.0   N =  55.8   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    G4_Ge     density:  5.323 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   2.301 cm 
-   --->  Element: Ge (Ge)   Z = 32.0   N =  72.6   A =  72.61 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Ge (Ge)   Z = 32.0   N =  72.6   A =  72.61 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:     G4_W     density: 19.300 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.504 mm 
-   --->  Element: W (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: W (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    G4_Pb     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.613 mm 
-   --->  Element: Pb (Pb)   Z = 82.0   N = 207.2   A = 207.22 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Pb (Pb)   Z = 82.0   N = 207.2   A = 207.22 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:   G4_AIR     density:  1.205 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 303.921 m  
-   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   0.01 %  Abundance   0.02 %
-   --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  75.53 %  Abundance  78.44 %
-   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  23.18 %  Abundance  21.07 %
-   --->  Element: Ar (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:   1.28 %  Abundance   0.47 %
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   0.01 %  ElmAbundance   0.02 %
+   --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  75.53 %  ElmAbundance  78.44 %
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  23.18 %  ElmAbundance  21.07 %
+   --->  Element: Ar (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  ElmMassFraction:   1.28 %  ElmAbundance   0.47 %
 
  Material: G4_WATER H_2O   density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.083 cm 
-   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.19 %  Abundance  66.67 %
-   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.81 %  Abundance  33.33 %
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
 
 Visualization Manager instantiating...
@@ -77,31 +77,30 @@ physicsList->Construct() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
 #
-/process/eLoss/integral 0
-/testem/phys/setCuts 1 mum
+/testem/phys/setCuts 1 um
 #
 /gun/particle e-
 /gun/energy 4 MeV
 #
 /testem/histo/setFileType hbook
-/testem/histo/setFileName noint.v71
+/testem/histo/setFileName testem12
 /testem/histo/setHisto 1 120  0.   2.4 cm	#edep profile
 ----> SetHisto 1: dE/dr (MeV/mm) along radius (cm);  120 bins from 0 cm to 2.4 cm
 /testem/histo/setHisto 2 180  0.   4.5 MeV	#total Edep
 ----> SetHisto 2: total Energy deposited in absorber (MeV);  180 bins from 0 MeV to 4.5 MeV
 /testem/histo/setHisto 3 100  0.    3. cm	#true track length
 ----> SetHisto 3: true track length of the primary particle (cm);  100 bins from 0 cm to 3 cm
-/testem/histo/setHisto 4 100  0.  500. mum	#true step length
-----> SetHisto 4: true step size of the primary particle (mum);  100 bins from 0 mum to 500 mum
+/testem/histo/setHisto 4 100  0.  500. um	#true step length
+----> SetHisto 4: true step size of the primary particle (um);  100 bins from 0 um to 500 um
 /testem/histo/setHisto 5 200 -3.    3. cm	#proj range
 ----> SetHisto 5: projected range of the primary particle (cm);  200 bins from -3 cm to 3 cm
 /testem/histo/setcsdaRange       2.037 cm
 /testem/histo/setHisto 8 120  0.   1.2 none	#normalized edep profile
 ----> SetHisto 8: d(E/E0)/d(r/r0) along r/r0;  120 bins from 0 none to 1.2 none
 #
-/testem/event/printModulo 1000
+/testem/event/printModulo 2000
 #
-/run/beamOn 10000
+/run/beamOn 20000
 
 phot:  Total cross sections from Sandia parametrisation. 
 
@@ -123,7 +122,8 @@ eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      CSDA range table up to 1 GeV in 70 bins.
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -135,7 +135,8 @@ eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      CSDA range table up to 1 GeV in 70 bins.
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -156,16 +157,19 @@ hIoni:   tables are built for  proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      CSDA range table up to 1 GeV in 70 bins.
 
 msc:  Model variant of multiple scattering for GenericIon
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 0
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
+      CSDA range table up to 1 GeV in 70 bins.
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -176,7 +180,8 @@ muIoni:   tables are built for  mu+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      CSDA range table up to 1 GeV in 70 bins.
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -193,7 +198,8 @@ muIoni:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      CSDA range table up to 1 GeV in 70 bins.
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -239,46 +245,46 @@ Start Run processing.
 
 ---> Begin of Event: 0
 
----> Begin of Event: 1000
-
 ---> Begin of Event: 2000
-
----> Begin of Event: 3000
 
 ---> Begin of Event: 4000
 
----> Begin of Event: 5000
-
 ---> Begin of Event: 6000
-
----> Begin of Event: 7000
 
 ---> Begin of Event: 8000
 
----> Begin of Event: 9000
+---> Begin of Event: 10000
+
+---> Begin of Event: 12000
+
+---> Begin of Event: 14000
+
+---> Begin of Event: 16000
+
+---> Begin of Event: 18000
 Run terminated.
 Run Summary
-  Number of events processed : 10000
-  User=1136.5s Real=1331.61s Sys=95.12s
+  Number of events processed : 20000
+  User=2471.81s Real=2886s Sys=203.56s
 
  ======================== run summary ======================
 
- The run consists of 10000 e- of 4.00 MeV through 3.00 cm  of G4_WATER (density: 1.00 g/cm3 )
+ The run consists of 20000 e- of 4.00 MeV through 3.00 cm  of G4_WATER (density: 1.00 g/cm3 )
 
  ============================================================
 
- Total Energy deposited        = 3.940 MeV +- 218.403 keV
+ Total Energy deposited        = 3.939 MeV +- 223.904 keV
 
- Track length of primary track = 2.021 cm  +- 2.749 mm 
- Range from EmCalculator       = 3.091 cm  (from restricted dE/dx)
+ Track length of primary track = 2.018 cm  +- 2.770 mm 
+ Range from EmCalculator       = 2.021 cm  (from full dE/dx)
 
- Projected range               = 1.310 cm  +- 4.106 mm 
+ Projected range               = 1.307 cm  +- 4.172 mm 
 
- Nb of steps of primary track  = 198.75 +- 26.29	 Step size= 101.882 um  +- 7.730 um 
+ Nb of steps of primary track  = 206.16 +- 26.92	 Step size= 98.000 um  +- 7.370 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 714114012, 642340890
+ Current couple of seeds = 670221287, 594924249
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

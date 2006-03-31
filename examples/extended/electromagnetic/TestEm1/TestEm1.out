@@ -10,44 +10,44 @@
 ***** Table : Nb of materials = 12 *****
 
  Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: H2liquid     density: 70.800 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.923 m  
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
  Material: liquidArgon     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
-   --->  Element: liquidArgon ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: liquidArgon ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material: Aluminium     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
-   --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:  Silicon     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368 cm 
-   --->  Element: Silicon ( )   Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Silicon ( )   Z = 14.0   N =  28.1   A =  28.09 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material: Germanium     density:  5.323 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   2.301 cm 
-   --->  Element: Germanium ( )   Z = 32.0   N =  72.6   A =  72.61 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Germanium ( )   Z = 32.0   N =  72.6   A =  72.61 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:      BGO     density:  7.100 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.123 cm 
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  15.41 %  Abundance  63.16 %
-   --->  Element: Germanium (Ge)   Z = 32.0   N =  72.6   A =  72.59 g/mole  fractionMass:  17.48 %  Abundance  15.79 %
-   --->  Element: Bismuth (Bi)   Z = 83.0   N = 209.0   A = 208.98 g/mole  fractionMass:  67.10 %  Abundance  21.05 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  15.41 %  ElmAbundance  63.16 %
+   --->  Element: Germanium (Ge)   Z = 32.0   N =  72.6   A =  72.59 g/mole  ElmMassFraction:  17.48 %  ElmAbundance  15.79 %
+   --->  Element: Bismuth (Bi)   Z = 83.0   N = 209.0   A = 208.98 g/mole  ElmMassFraction:  67.10 %  ElmAbundance  21.05 %
 
  Material:     Iron     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
-   --->  Element: Iron ( )   Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Iron ( )   Z = 26.0   N =  55.9   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material: Tungsten     density: 19.300 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.504 mm 
-   --->  Element: Tungsten ( )   Z = 74.0   N = 183.8   A = 183.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Tungsten ( )   Z = 74.0   N = 183.8   A = 183.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
-   --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:  Uranium     density: 18.950 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.166 mm 
-   --->  Element: Uranium ( )   Z = 92.0   N = 238.0   A = 238.03 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Uranium ( )   Z = 92.0   N = 238.0   A = 238.03 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
 Visualization Manager instantiating...
@@ -123,7 +123,7 @@ eIoni:   tables are built for  e-
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       CSDA range table up to 1 GeV in 70 bins.
 
-brem:   tables are built for  e-
+eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
@@ -136,7 +136,7 @@ eIoni:   tables are built for  e+
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       CSDA range table up to 1 GeV in 70 bins.
 
-brem:   tables are built for  e+
+eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
@@ -159,6 +159,7 @@ hIoni:   tables are built for  proton
       CSDA range table up to 1 GeV in 70 bins.
 
 msc:  Model variant of multiple scattering for GenericIon
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -244,7 +245,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=176.1s Real=215.59s Sys=20.98s
+  User=174.48s Real=211.78s Sys=20.21s
 
  ======================== run summary ======================
 
@@ -252,34 +253,34 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.813 MeV
+ total energy deposit: 99.798 MeV
 
- nb tracks/event   neutral:     27.984   charged:     148.75
- nb  steps/event   neutral:     141.62   charged:     332.48
+ nb tracks/event   neutral:     27.813   charged:     148.24
+ nb  steps/event   neutral:     141.11   charged:     330.81
 
  nb of process calls per event: 
-           brem       eIoni       compt        phot         msc        conv     annihilTransportation
-         26.352      188.24      113.64       25.66      116.49      1.3965      1.3975      0.9285
+          eBrem       eIoni       compt        phot         msc        conv     annihilTransportation
+         26.104      187.82       113.3      25.455      115.47       1.422       1.423        0.94
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.117 cm    rms = 3.8279 cm 
- proj Range = 9.5651 cm    rms = 3.5202 cm 
- proj/true  = 0.86038
- transverse dispersion at end = 1.6772 cm 
-      mass true Range from simulation = 30.017 g/cm2
-       from PhysicsTable (csda range) = 31.739 g/cm2
+ true Range = 11.18 cm    rms = 3.8208 cm 
+ proj Range = 9.7062 cm    rms = 3.5337 cm 
+ proj/true  = 0.8682
+ transverse dispersion at end = 1.7363 cm 
+      mass true Range from simulation = 30.185 g/cm2 
+       from PhysicsTable (csda range) = 31.791 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 102691147, 2094628806
+ Current couple of seeds = 1254525812, 14370761
 ----------------------------------------
 #
 /process/eLoss/verbose 0
 #
-/testem/phys/setCuts 10 mum
+/testem/phys/setCuts 10 um
 /testem/histo/setFileName run1
 /run/beamOn 2000
 
@@ -302,7 +303,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 102691147, 2094628806
+ Current couple of seeds = 1254525812, 14370761
 ----------------------------------------
 Start Run processing.
 
@@ -310,7 +311,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=344.17s Real=402.36s Sys=41.06s
+  User=342.53s Real=400.81s Sys=40.93s
 
  ======================== run summary ======================
 
@@ -318,29 +319,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.79 MeV
+ total energy deposit: 99.767 MeV
 
- nb tracks/event   neutral:     36.531   charged:     291.25
- nb  steps/event   neutral:     146.79   charged:     736.49
+ nb tracks/event   neutral:     36.489   charged:     291.33
+ nb  steps/event   neutral:     146.97   charged:     736.56
 
  nb of process calls per event: 
-          eIoni        brem         msc       compt        phot        conv     annihilTransportation
-         450.15      34.724      250.21      110.26       34.17       1.403       1.403       0.965
+          eIoni       eBrem         msc        phot       compt        conv     annihilTransportation
+         450.12      34.626      250.36      34.106      110.48      1.4515      1.4515      0.9385
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.208 cm    rms = 3.9072 cm 
- proj Range = 9.6837 cm    rms = 3.6276 cm 
- proj/true  = 0.86396
- transverse dispersion at end = 1.7353 cm 
-      mass true Range from simulation = 30.263 g/cm2
-       from PhysicsTable (csda range) = 31.739 g/cm2
+ true Range = 11.12 cm    rms = 3.9055 cm 
+ proj Range = 9.6381 cm    rms = 3.6155 cm 
+ proj/true  = 0.86675
+ transverse dispersion at end = 1.7861 cm 
+      mass true Range from simulation = 30.024 g/cm2 
+       from PhysicsTable (csda range) = 31.791 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 372587886, 935318708
+ Current couple of seeds = 258357454, 105833891
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

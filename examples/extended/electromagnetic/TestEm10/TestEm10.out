@@ -26,149 +26,149 @@ Registering model factories...
 ***** Table : Nb of materials = 34 *****
 
  Material: Aluminium     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
-   --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:  TRT_CH2     density: 935.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  47.898 cm 
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  85.60 %  Abundance  33.33 %
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  14.40 %  Abundance  66.67 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  85.60 %  ElmAbundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  14.40 %  ElmAbundance  66.67 %
 
  Material: Radiator     density: 59.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   7.591 m  
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  85.60 %  Abundance  33.33 %
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  14.40 %  Abundance  66.67 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  85.60 %  ElmAbundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  14.40 %  ElmAbundance  66.67 %
 
  Material: CarbonFiber     density: 145.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   2.944 m  
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:       Li     density: 534.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.550 m  
-   --->  Element: Lithium (Li)   Z =  3.0   N =   6.9   A =   6.94 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Lithium (Li)   Z =  3.0   N =   6.9   A =   6.94 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:       Be     density:  1.848 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  35.267 cm 
-   --->  Element: Berillium (Be)   Z =  4.0   N =   9.0   A =   9.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Berillium (Be)   Z =  4.0   N =   9.0   A =   9.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    Mylar     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  28.743 cm 
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  33.30 %  Abundance  18.18 %
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  62.49 %  Abundance  45.45 %
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   4.20 %  Abundance  36.36 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  33.30 %  ElmAbundance  18.18 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  62.49 %  ElmAbundance  45.45 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   4.20 %  ElmAbundance  36.36 %
 
  Material:   Kapton     density:  1.413 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  28.717 cm 
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  20.92 %  Abundance  12.82 %
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  69.11 %  Abundance  56.41 %
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:   7.33 %  Abundance   5.13 %
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   2.64 %  Abundance  25.64 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  20.92 %  ElmAbundance  12.82 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  69.11 %  ElmAbundance  56.41 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:   7.33 %  ElmAbundance   5.13 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   2.64 %  ElmAbundance  25.64 %
 
  Material:      CH2     density: 910.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  49.214 cm 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  14.40 %  Abundance  66.67 %
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  85.60 %  Abundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  14.40 %  ElmAbundance  66.67 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  85.60 %  ElmAbundance  33.33 %
 
  Material:       He     density:  0.178 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.299 km 
-   --->  Element: He ( )   Z =  2.0   N =   4.0   A =   4.00 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: He ( )   Z =  2.0   N =   4.0   A =   4.00 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:       Ne     density:  0.900 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 321.456 m  
-   --->  Element: Ne ( )   Z = 10.0   N =  20.2   A =  20.18 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Ne ( )   Z = 10.0   N =  20.2   A =  20.18 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    Argon     density:  1.784 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 109.604 m  
-   --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:       Kr     density:  3.700 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  30.736 m  
-   --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    Xenon     density:  5.858 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.478 m  
-   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:      CH4     density:  0.717 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 648.001 m  
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  74.83 %  Abundance  20.00 %
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  25.17 %  Abundance  80.00 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  74.83 %  ElmAbundance  20.00 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  25.17 %  ElmAbundance  80.00 %
 
  Material:     C3H8     density:  2.005 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 226.382 m  
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  81.68 %  Abundance  27.27 %
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  18.32 %  Abundance  72.73 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  81.68 %  ElmAbundance  27.27 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  18.32 %  ElmAbundance  72.73 %
 
  Material: isoC4H10     density:  2.670 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 169.446 m  
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  82.63 %  Abundance  28.57 %
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  17.37 %  Abundance  71.43 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  82.63 %  ElmAbundance  28.57 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  17.37 %  ElmAbundance  71.43 %
 
  Material:      CO2     density:  1.977 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 183.083 m  
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  27.29 %  Abundance  33.33 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  72.71 %  Abundance  66.67 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  27.29 %  ElmAbundance  33.33 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  72.71 %  ElmAbundance  66.67 %
 
  Material:      CO2     density:  1.842 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 196.496 m  
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  27.29 %  Abundance  33.33 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  72.71 %  Abundance  66.67 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  27.29 %  ElmAbundance  33.33 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  72.71 %  ElmAbundance  66.67 %
 
  Material:       N2     density:  1.251 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 303.846 m  
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:       O2     density:  1.429 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 239.621 m  
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:      Air     density:  1.293 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 283.293 m  
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  75.57 %  Abundance  78.48 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  23.15 %  Abundance  21.05 %
-   --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:   1.28 %  Abundance   0.47 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  75.57 %  ElmAbundance  78.48 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  23.15 %  ElmAbundance  21.05 %
+   --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  ElmMassFraction:   1.28 %  ElmAbundance   0.47 %
 
  Material:  Xe15CO2     density:  4.900 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  17.592 m  
-   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  97.90 %  Abundance  83.89 %
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   0.57 %  Abundance   5.37 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   1.53 %  Abundance  10.74 %
+   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  ElmMassFraction:  97.90 %  ElmAbundance  83.89 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   0.57 %  ElmAbundance   5.37 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:   1.53 %  ElmAbundance  10.74 %
 
  Material:  Xe20CO2     density:  5.082 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  17.750 m  
-   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  92.20 %  Abundance  56.91 %
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   2.13 %  Abundance  14.36 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   5.67 %  Abundance  28.73 %
+   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  ElmMassFraction:  92.20 %  ElmAbundance  56.91 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   2.13 %  ElmAbundance  14.36 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:   5.67 %  ElmAbundance  28.73 %
 
  Material: Xe27CO23O2     density:  4.358 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  21.487 m  
-   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  87.67 %  Abundance  44.43 %
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   3.11 %  Abundance  17.25 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   9.21 %  Abundance  38.32 %
+   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  ElmMassFraction:  87.67 %  ElmAbundance  44.43 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   3.11 %  ElmAbundance  17.25 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:   9.21 %  ElmAbundance  38.32 %
 
  Material:  Kr20CO2     density:  3.601 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  34.158 m  
-   --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass:  89.00 %  Abundance  58.62 %
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   3.00 %  Abundance  13.79 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   8.00 %  Abundance  27.59 %
+   --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole  ElmMassFraction:  89.00 %  ElmAbundance  58.62 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   3.00 %  ElmAbundance  13.79 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:   8.00 %  ElmAbundance  27.59 %
 
  Material: Xe55He15CH4     density:  1.829 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  50.984 m  
-   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  89.50 %  Abundance  18.71 %
-   --->  Element: He ( )   Z =  2.0   N =   4.0   A =   4.00 g/mole  fractionMass:   5.00 %  Abundance  34.28 %
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   4.12 %  Abundance   9.40 %
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   1.38 %  Abundance  37.61 %
+   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  ElmMassFraction:  89.50 %  ElmAbundance  18.71 %
+   --->  Element: He ( )   Z =  2.0   N =   4.0   A =   4.00 g/mole  ElmMassFraction:   5.00 %  ElmAbundance  34.28 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   4.12 %  ElmAbundance   9.40 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   1.38 %  ElmAbundance  37.61 %
 
  Material:  Xe10CH4     density:  5.344 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  16.041 m  
-   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  98.70 %  Abundance  64.99 %
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   0.97 %  Abundance   7.00 %
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.33 %  Abundance  28.01 %
+   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  ElmMassFraction:  98.70 %  ElmAbundance  64.99 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   0.97 %  ElmAbundance   7.00 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   0.33 %  ElmAbundance  28.01 %
 
  Material:   Xe5CH4     density:  5.601 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  15.217 m  
-   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  99.40 %  Abundance  80.20 %
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   0.45 %  Abundance   3.96 %
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.15 %  Abundance  15.84 %
+   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  ElmMassFraction:  99.40 %  ElmAbundance  80.20 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   0.45 %  ElmAbundance   3.96 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   0.15 %  ElmAbundance  15.84 %
 
  Material:  Xe20CH4     density:  4.830 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  18.001 m  
-   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  97.00 %  Abundance  44.15 %
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   2.24 %  Abundance  11.17 %
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.76 %  Abundance  44.68 %
+   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  ElmMassFraction:  97.00 %  ElmAbundance  44.15 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   2.24 %  ElmAbundance  11.17 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   0.76 %  ElmAbundance  44.68 %
 
  Material:   Ar7CH4     density:  1.709 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 116.343 m  
-   --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:  97.10 %  Abundance  72.90 %
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   2.17 %  Abundance   5.42 %
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.73 %  Abundance  21.68 %
+   --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  ElmMassFraction:  97.10 %  ElmAbundance  72.90 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   2.17 %  ElmAbundance   5.42 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   0.73 %  ElmAbundance  21.68 %
 
  Material:   Kr7CH4     density:  3.491 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  32.924 m  
-   --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass:  98.60 %  Abundance  72.96 %
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   1.05 %  Abundance   5.41 %
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.35 %  Abundance  21.63 %
+   --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole  ElmMassFraction:  98.60 %  ElmAbundance  72.96 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   1.05 %  ElmAbundance   5.41 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   0.35 %  ElmAbundance  21.63 %
 
  Material:  XeArCH4     density:  3.655 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  26.918 m  
-   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  76.14 %  Abundance  38.58 %
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   0.85 %  Abundance   4.72 %
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.29 %  Abundance  18.87 %
-   --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:  22.72 %  Abundance  37.84 %
+   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  ElmMassFraction:  76.14 %  ElmAbundance  38.58 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   0.85 %  ElmAbundance   4.72 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   0.29 %  ElmAbundance  18.87 %
+   --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  ElmMassFraction:  22.72 %  ElmAbundance  37.84 %
 
  Material: radiatorMat     density: 104.160 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.832 m  
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  33.19 %  Abundance  18.20 %
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  61.78 %  Abundance  45.14 %
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   4.16 %  Abundance  36.11 %
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:   0.87 %  Abundance   0.54 %
-   --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:   0.01 %  Abundance   0.00 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  33.19 %  ElmAbundance  18.20 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  61.78 %  ElmAbundance  45.14 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   4.16 %  ElmAbundance  36.11 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:   0.87 %  ElmAbundance   0.54 %
+   --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  ElmMassFraction:   0.01 %  ElmAbundance   0.00 %
 
 
 
@@ -343,7 +343,7 @@ Index : 4     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 805317675, 1677695139
+ Current couple of seeds = 9876, 54321
 ----------------------------------------
 WARNING: Scene "refresh" not found.
   /vis/scene/list to see scenes.
@@ -353,29 +353,29 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=193.74s Real=244.78s Sys=50.83s
+  User=190.52s Real=240.23s Sys=49.67s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=40.6357 +- 0.113934  mm  
+    mean charged track length   in absorber=40.5268 +- 0.08591  mm  
 
-            mean energy deposit in absorber=0.0538843 +- 0.000733693  MeV 
+            mean energy deposit in absorber=0.0520303 +- 0.000702874  MeV 
 
- mean number of steps in absorber (charged) =18.692 +- 0.437      
- mean number of steps in absorber (neutral) =3.571 +- 0.0592871      
+ mean number of steps in absorber (charged) =18.199 +- 0.388244      
+ mean number of steps in absorber (neutral) =3.38 +- 0.0568472      
 
-   mean number of charged secondaries = 5.502 +- 0.0916515
+   mean number of charged secondaries = 5.272 +- 0.0905871
 
-   mean number of neutral secondaries = 0.06 +- 0.00777174
+   mean number of neutral secondaries = 0.046 +- 0.00677377
 
-   mean number of e-s =5.502  and e+s =0
+   mean number of e-s =5.272  and e+s =0
 
-(number) transmission coeff=0.543  reflection coeff=0.062
+(number) transmission coeff=0.566  reflection coeff=0.064
 
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 879812446, 1108008900
+ Current couple of seeds = 1447326229, 79952388
 ----------------------------------------
 
 ========= Table of registered couples ==============================

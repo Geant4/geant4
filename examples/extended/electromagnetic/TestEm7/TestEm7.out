@@ -10,15 +10,15 @@
 ***** Table : Nb of materials = 3 *****
 
  Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.084 cm 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.19 %  Abundance  66.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.81 %  Abundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
  Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: Galactic     density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204322175.595 pc 
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
 Visualization Manager instantiating...
@@ -140,6 +140,7 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for GenericIon
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -257,25 +258,25 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=357.64s Real=521.4s Sys=58.89s
+  User=387.25s Real=520.87s Sys=56.2s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of Water (density: 1 g/cm3 )
 
- projected Range= 17.6824 cm    rms= 2.26246 mm 
+ projected Range= 17.6823 cm    rms= 2.14415 mm 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	4.60455 GeV	0.287785 % 	9.22164e-05 Gy
- tally 1: 	 	4.94714 GeV	0.309196 % 	9.90775e-05 Gy
- tally 2: 	 	3.16948 GeV	0.198092 % 	6.34758e-05 Gy
- tally 3: 	 	1.79191 GeV	0.111995 % 	3.5887e-05 Gy
+ tally 0: 	 	4.61907 GeV	0.288692 % 	9.25072e-05 Gy
+ tally 1: 	 	4.97649 GeV	0.311031 % 	9.96652e-05 Gy
+ tally 2: 	 	3.11895 GeV	0.194934 % 	6.24638e-05 Gy
+ tally 3: 	 	1.76005 GeV	0.110003 % 	3.52489e-05 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1503758427, 2105229118
+ Current couple of seeds = 116307179, 1596138633
 ----------------------------------------
 #
 /gun/particle ion
@@ -310,7 +311,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1503758427, 2105229118
+ Current couple of seeds = 116307179, 1596138633
 ----------------------------------------
 Start Run processing.
 
@@ -318,25 +319,25 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=146.08s Real=182.31s Sys=26.19s
+  User=161.02s Real=196.31s Sys=26.69s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of Water (density: 1 g/cm3 )
 
- projected Range= 16.3707 cm    rms= 448.842 um 
+ projected Range= 16.3698 cm    rms= 462.716 um 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	11.4041 GeV	0.325831 % 	0.000228392 Gy
- tally 1: 	 	13.1536 GeV	0.375818 % 	0.000263431 Gy
- tally 2: 	 	15.5911 GeV	0.445461 % 	0.000312247 Gy
- tally 3: 	 	23.9431 GeV	0.684089 % 	0.000479514 Gy
+ tally 0: 	 	11.4221 GeV	0.326347 % 	0.000228754 Gy
+ tally 1: 	 	12.8057 GeV	0.365876 % 	0.000256462 Gy
+ tally 2: 	 	14.989 GeV	0.428258 % 	0.000300188 Gy
+ tally 3: 	 	22.4362 GeV	0.641034 % 	0.000449334 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 360429408, 1408169117
+ Current couple of seeds = 859652216, 1986071251
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

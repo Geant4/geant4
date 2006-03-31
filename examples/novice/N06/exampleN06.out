@@ -1068,7 +1068,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     1  -1.98 m   -10.1 cm     -5 m     511 keV     0 eV   5.38 m    5.38 m          Tank  Transportation
     2  -3.96 m   -20.3 cm    -10 m     511 keV     0 eV   5.38 m    10.8 m    OutOfWorld  Transportation
 Number of optical photons produces in this event : 62
-number of event = 1 User=0.17s Real=0.25s Sys=0.04s
+number of event = 1 User=0.18s Real=0.27s Sys=0.03s
 #
 /process/inactivate Scintillation
 /N06/phys/verbose 0
@@ -1082,7 +1082,7 @@ number of event = 1 User=0.17s Real=0.25s Sys=0.04s
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0      0 fm      0 fm      0 fm    500 keV     0 eV      0 fm      0 fm         Tank    initStep
-    1   1.02 mm   69.3 um   -779 um    159 keV   341 keV  1.49 mm   1.49 mm         Tank       eIoni
+    1   1.02 mm   71.7 um   -779 um    159 keV   341 keV  1.49 mm   1.49 mm         Tank       eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 34,   Parent ID = 1
@@ -1387,17 +1387,17 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    1   1.02 mm   69.3 um   -779 um    159 keV     0 eV      0 fm   1.49 mm         Tank    initStep
-    2   1.02 mm    102 um   -809 um    146 keV  13.5 keV  45.4 um   1.54 mm         Tank         msc
-    3   1.03 mm    216 um   -846 um      0 eV    146 keV   257 um   1.79 mm         Tank       eIoni
-    4   1.03 mm    216 um   -846 um      0 eV      0 eV      0 fm   1.79 mm         Tank     annihil
+    1   1.02 mm   71.7 um   -779 um    159 keV     0 eV      0 fm   1.49 mm         Tank    initStep
+    2   1.02 mm    104 um   -809 um    146 keV  13.5 keV  45.4 um   1.54 mm         Tank         msc
+    3   1.03 mm    218 um   -847 um      0 eV    146 keV   257 um   1.79 mm         Tank       eIoni
+    4   1.03 mm    218 um   -847 um      0 eV      0 eV      0 fm   1.79 mm         Tank     annihil
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 36,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.03 mm    216 um   -846 um    511 keV     0 eV      0 fm      0 fm         Tank    initStep
+    0   1.03 mm    218 um   -847 um    511 keV     0 eV      0 fm      0 fm         Tank    initStep
     1   3.06 m      -5 m   -1.19 m     511 keV     0 eV   5.98 m    5.98 m          Tank  Transportation
     2   6.11 m     -10 m   -2.38 m     511 keV     0 eV   5.98 m      12 m    OutOfWorld  Transportation
 
@@ -1406,10 +1406,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.03 mm    216 um   -846 um    511 keV     0 eV      0 fm      0 fm         Tank    initStep
+    0   1.03 mm    218 um   -847 um    511 keV     0 eV      0 fm      0 fm         Tank    initStep
     1  -3.05 m       5 m    1.19 m     511 keV     0 eV   5.98 m    5.98 m          Tank  Transportation
     2  -6.11 m      10 m    2.38 m     511 keV     0 eV   5.98 m      12 m    OutOfWorld  Transportation
 Number of optical photons produces in this event : 33
-number of event = 1 User=0.07s Real=0.09s Sys=0.02s
+number of event = 1 User=0.09s Real=0.1s Sys=0.01s
 Graphics systems deleted.
 Visualization Manager deleting...

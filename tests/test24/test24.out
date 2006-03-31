@@ -92,6 +92,7 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for GenericIon
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -169,7 +170,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=58s Real=59s Sys=0.29s
+  User=59s Real=60s Sys=0.47s
 #
 # neutron at 10 GeV in U
 #
@@ -199,7 +200,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=33s Real=34s Sys=0.06s
+  User=33s Real=34s Sys=0.33s
 #
 # pi+ at 10 GeV in U
 #
@@ -232,7 +233,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=67s Real=68s Sys=0.14s
+  User=68s Real=69s Sys=0.37s
 #
 # pi- at 10 GeV in U
 #
@@ -268,7 +269,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=63s Real=63s Sys=0.04s
+  User=63s Real=64s Sys=0.13s
 #
 # proton at 10 GeV in Cu
 #
@@ -337,6 +338,7 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for GenericIon
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -404,7 +406,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=21s Real=22s Sys=0.37s
+  User=21s Real=22s Sys=0.47s
 #
 # neutron at 10 GeV in Cu
 #
@@ -438,7 +440,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=23s Real=27s Sys=0.09s
+  User=23s Real=24s Sys=0.25s
 #
 # pi+ at 10 GeV in Cu
 #
@@ -472,7 +474,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=23s Real=23s Sys=0.05s
+  User=23s Real=23s Sys=0.04s
 #
 # pi- at 10 GeV in Cu
 #
@@ -506,7 +508,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=24s Real=24s Sys=0.03s
+  User=24s Real=24s Sys=0.01s
 #
 # proton at 10 GeV in Si
 #
@@ -575,6 +577,7 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for GenericIon
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -648,7 +651,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=11.52s Real=12s Sys=0.1s
+  User=11.38s Real=11.85s Sys=0.06s
 #
 # neutron at 10 GeV in Si
 #
@@ -689,7 +692,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=10.28s Real=10.42s Sys=0.03s
+  User=10.21s Real=10.39s Sys=0.06s
 #
 # pi+ at 10 GeV in Si
 #
@@ -728,7 +731,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=12.98s Real=12.99s Sys=0s
+  User=12.88s Real=12.9s Sys=0s
 #
 # pi- at 10 GeV in Si
 #
@@ -768,7 +771,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=14.77s Real=15.01s Sys=0.01s
+  User=14.71s Real=14.86s Sys=0.03s
 #
 # proton at 10 GeV in H
 #
@@ -834,6 +837,7 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for GenericIon
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -999,7 +1003,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # pi- at 10 GeV in H
 #

@@ -132,6 +132,7 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for GenericIon
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -217,7 +218,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 752908830, 1734568202
+ Current couple of seeds = 9876, 54321
 ----------------------------------------
 /vis/scene/notifyHandlers
 WARNING: Scene "refresh" not found.
@@ -246,56 +247,56 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=10.44s Real=10.53s Sys=0.05s
+  User=10.47s Real=10.64s Sys=0.11s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=23.3706 +- 0.150151  mm  
+    mean charged track length   in absorber=23.311 +- 0.102079  mm  
 
-            mean energy deposit in absorber=0.015677 +- 0.000334022  MeV 
+            mean energy deposit in absorber=0.0155456 +- 0.000274359  MeV 
 
- mean number of steps in absorber (charged) =0.212 +- 0.117188      
- mean number of steps in absorber (neutral) =0.001 +- 0.0009995      
+ mean number of steps in absorber (charged) =0.151 +- 0.0555356      
+ mean number of steps in absorber (neutral) =0.002 +- 0.0014128      
 
-   mean number of charged secondaries = 0.011 +- 0.00329833
+   mean number of charged secondaries = 0.012 +- 0.00344325
 
    mean number of neutral secondaries = 0.001 +- 0.0009995
 
-   mean number of e-s =0.011  and e+s =0
+   mean number of e-s =0.012  and e+s =0
 
-(number) transmission coeff=0.499  reflection coeff=0
+(number) transmission coeff=0.513  reflection coeff=0
 
  energy deposit distribution 
 #entries=1000    #underflows=0    #overflows=8
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3           4       0.004
-    2         6         114       0.114
-    3         9         257       0.257
-    4        12         250        0.25
-    5        15         166       0.166
-    6        18          63       0.063
-    7        21          55       0.055
-    8        24          20        0.02
-    9        27          18       0.018
+    1         3           3       0.003
+    2         6         107       0.107
+    3         9         243       0.243
+    4        12         267       0.267
+    5        15         178       0.178
+    6        18          60        0.06
+    7        21          52       0.052
+    8        24          22       0.022
+    9        27          17       0.017
    10        30          12       0.012
    11        33          14       0.014
-   12        36           3       0.003
+   12        36           2       0.002
    13        39           4       0.004
    14        42           2       0.002
-   15        45           2       0.002
-   16        48           2       0.002
+   15        45           0           0
+   16        48           3       0.003
    17        51           2       0.002
    18        54           2       0.002
    19        57           2       0.002
 
- Emp =           0.009   width=          0.006  MeV 
+ Emp =           0.012   width=          0.006  MeV 
 
 /vis/viewer/update
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2045788629, 1164496063
+ Current couple of seeds = 666410963, 1350698245
 ----------------------------------------
 #
 Graphics systems deleted.

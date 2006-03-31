@@ -83,6 +83,7 @@ msc:  Model variant of multiple scattering for proton
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 msc:  Model variant of multiple scattering for GenericIon
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -135,5 +136,5 @@ Test23 event # 700
 Test23 event # 800
 Test23 event # 900
 Test23 event # 1000
-Test23_Result: gam=2666(0.86635725), e-=15138(0.47426214), e+=67(3.2873709), p=418(4.9080881), n=1700(4.2917558), d=69(4.9478076), t=57(7.8096095), He3=4(12.634582), alph=353(5.7353995), nu=1000(68.249842), anu=144(32.304089), others=17314*0.14270609
+Test23_Result: gam=2722(0.86553931), e-=15010(0.43804417), e+=73(2.7168497), p=382(4.854759), n=1670(4.3689687), d=89(4.1294302), t=54(6.7535501), He3=8(8.7787924), alph=387(5.8900925), nu=1000(69.210895), anu=131(33.179477), others=16559*0.14154637
 Test23 is done

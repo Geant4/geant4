@@ -10,44 +10,44 @@
 ***** Table : Nb of materials = 11 *****
 
  Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
  Material:      lAr     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
-   --->  Element: lAr ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: lAr ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:       Al     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
-   --->  Element: Al ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Al ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:       Si     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368 cm 
-   --->  Element: Si ( )   Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Si ( )   Z = 14.0   N =  28.1   A =  28.09 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:       Fe     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
-   --->  Element: Fe ( )   Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Fe ( )   Z = 26.0   N =  55.9   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:      CsI CsI   density:  4.510 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.860 cm 
-   --->  Element: Cesium (Cs)   Z = 55.0   N = 132.9   A = 132.91 g/mole  fractionMass:  51.15 %  Abundance  50.00 %
-   --->  Element: Iodide (I)   Z = 53.0   N = 126.9   A = 126.90 g/mole  fractionMass:  48.85 %  Abundance  50.00 %
+   --->  Element: Cesium (Cs)   Z = 55.0   N = 132.9   A = 132.91 g/mole  ElmMassFraction:  51.15 %  ElmAbundance  50.00 %
+   --->  Element: Iodide (I)   Z = 53.0   N = 126.9   A = 126.90 g/mole  ElmMassFraction:  48.85 %  ElmAbundance  50.00 %
 
  Material:      BGO     density:  7.100 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.123 cm 
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  15.41 %  Abundance  63.16 %
-   --->  Element: Germanium (Ge)   Z = 32.0   N =  72.6   A =  72.59 g/mole  fractionMass:  17.48 %  Abundance  15.79 %
-   --->  Element: Bismuth (Bi)   Z = 83.0   N = 209.0   A = 208.98 g/mole  fractionMass:  67.10 %  Abundance  21.05 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  15.41 %  ElmAbundance  63.16 %
+   --->  Element: Germanium (Ge)   Z = 32.0   N =  72.6   A =  72.59 g/mole  ElmMassFraction:  17.48 %  ElmAbundance  15.79 %
+   --->  Element: Bismuth (Bi)   Z = 83.0   N = 209.0   A = 208.98 g/mole  ElmMassFraction:  67.10 %  ElmAbundance  21.05 %
 
  Material:    PbWO4     density:  8.280 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.924 mm 
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  14.07 %  Abundance  66.67 %
-   --->  Element: Lead (Pb)   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass:  45.53 %  Abundance  16.67 %
-   --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass:  40.40 %  Abundance  16.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  14.07 %  ElmAbundance  66.67 %
+   --->  Element: Lead (Pb)   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction:  45.53 %  ElmAbundance  16.67 %
+   --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  ElmMassFraction:  40.40 %  ElmAbundance  16.67 %
 
  Material: Tungsten     density: 19.300 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.504 mm 
-   --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
-   --->  Element: Lead (Pb)   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Lead (Pb)   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
 Visualization Manager instantiating...
@@ -157,6 +157,7 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for GenericIon
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -279,7 +280,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=63.14s Real=69.5s Sys=5.1s
+  User=64.79s Real=71.36s Sys=5.62s
 
 ============   SUMMARY   ============
 
@@ -290,30 +291,30 @@ Run Summary
 
              World         Vertex Detector       Muon Detector
 
-  Gammas:    478.57000        0.52000        0.98000
-  Electrons: 830.47000        3.38000        9.05000
-  Positrons:  53.97000        0.00000        9.05000
+  Gammas:    489.57000        0.43000        0.80000
+  Electrons: 853.66000        3.10000        8.70000
+  Positrons:  56.01000        0.00000        8.70000
 
     Normalised energy deposition in the calorimeter
 
-  E1 = 0.86611 +- 0.00275 RMS(E1) = 0.02749 +- 0.00275
-  E9 = 0.96943 +- 0.00153 RMS(E9) = 0.01525 +- 0.00153
-  E25= 0.98249 +- 0.00111 RMS(E25)= 0.01106 +- 0.00111
+  E1 = 0.86971 +- 0.00261 RMS(E1) = 0.02610 +- 0.00261
+  E9 = 0.97398 +- 0.00108 RMS(E9) = 0.01080 +- 0.00108
+  E25= 0.98751 +- 0.00070 RMS(E25)= 0.00701 +- 0.00070
 
     Energy deposition in the absorbers
 
-  Eabs1(MeV)= 1.00458 +- 0.05219 RMS(Eabs1)= 0.52192 +- 0.05219
-  Eabs2(MeV)= 1.16251 +- 0.06052 RMS(Eabs2)= 0.60522 +- 0.06052
-  Eabs3(MeV)= 0.04574 +- 0.01779 RMS(Eabs3)= 0.17789 +- 0.01779
-  Eabs4(MeV)= 0.00919 +- 0.00880 RMS(Eabs4)= 0.08801 +- 0.00880
+  Eabs1(MeV)= 0.91281 +- 0.03699 RMS(Eabs1)= 0.36986 +- 0.03699
+  Eabs2(MeV)= 0.99629 +- 0.04864 RMS(Eabs2)= 0.48640 +- 0.04864
+  Eabs3(MeV)= 0.08110 +- 0.03587 RMS(Eabs3)= 0.35869 +- 0.03587
+  Eabs4(MeV)= 0.00159 +- 0.00159 RMS(Eabs4)= 0.01587 +- 0.00159
 
     Average number of hits in the vertex detector
 
-  Nhit= 3.10000 +- 0.04796
+  Nhit= 3.27000 +- 0.09985
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1107494882, 990473502
+ Current couple of seeds = 1452301684, 178086790
 ----------------------------------------
 #
 /gun/particle mu-
@@ -384,7 +385,7 @@ Index : 7     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1107494882, 990473502
+ Current couple of seeds = 1452301684, 178086790
 ----------------------------------------
 Start Run processing.
 
@@ -392,7 +393,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=5.55000000s Real=8.50000000s Sys=1.01000000s
+  User=5.29000000s Real=7.13000000s Sys=0.93000000s
 
 ============   SUMMARY   ============
 
@@ -403,30 +404,30 @@ Run Summary
 
              World         Vertex Detector       Muon Detector
 
-  Gammas:    7.85000        0.05000        0.99000
-  Electrons: 15.30000        4.51000        3.78000
-  Positrons:  0.42000        0.00000        3.78000
+  Gammas:    7.10000        0.11000        1.60000
+  Electrons: 13.40000        4.56000        6.42000
+  Positrons:  0.37000        0.00000        6.42000
 
     Normalised energy deposition in the calorimeter
 
-  E1 = 0.22079 +- 0.00188 RMS(E1) = 0.01876 +- 0.00188
-  E9 = 0.22420 +- 0.00173 RMS(E9) = 0.01734 +- 0.00173
-  E25= 0.22453 +- 0.00177 RMS(E25)= 0.01767 +- 0.00177
+  E1 = 0.21795 +- 0.00221 RMS(E1) = 0.02206 +- 0.00221
+  E9 = 0.22201 +- 0.00200 RMS(E9) = 0.02004 +- 0.00200
+  E25= 0.22220 +- 0.00201 RMS(E25)= 0.02011 +- 0.00201
 
     Energy deposition in the absorbers
 
-  Eabs1(MeV)= 0.84447 +- 0.03102 RMS(Eabs1)= 0.31024 +- 0.03102
-  Eabs2(MeV)= 0.95626 +- 0.04899 RMS(Eabs2)= 0.48991 +- 0.04899
-  Eabs3(MeV)= 0.84502 +- 0.03389 RMS(Eabs3)= 0.33891 +- 0.03389
-  Eabs4(MeV)= 0.82247 +- 0.02842 RMS(Eabs4)= 0.28416 +- 0.02842
+  Eabs1(MeV)= 0.83148 +- 0.02591 RMS(Eabs1)= 0.25912 +- 0.02591
+  Eabs2(MeV)= 0.86054 +- 0.04046 RMS(Eabs2)= 0.40461 +- 0.04046
+  Eabs3(MeV)= 0.90588 +- 0.06457 RMS(Eabs3)= 0.64566 +- 0.06457
+  Eabs4(MeV)= 0.89571 +- 0.04234 RMS(Eabs4)= 0.42342 +- 0.04234
 
     Average number of hits in the vertex detector
 
-  Nhit= 3.19000 +- 0.06587
+  Nhit= 3.20000 +- 0.06633
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2137367746, 891479181
+ Current couple of seeds = 1081504393, 1510310658
 ----------------------------------------
 #
 /testem/phys/VertexCuts 1 mm
@@ -496,7 +497,7 @@ Index : 7     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2137367746, 891479181
+ Current couple of seeds = 1081504393, 1510310658
 ----------------------------------------
 Start Run processing.
 
@@ -504,7 +505,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=5.70000000s Real=7.79000000s Sys=1.14000000s
+  User=5.50000000s Real=7.28000000s Sys=0.90000000s
 
 ============   SUMMARY   ============
 
@@ -515,30 +516,30 @@ Run Summary
 
              World         Vertex Detector       Muon Detector
 
-  Gammas:    9.83000        0.05000        1.63000
-  Electrons: 18.66000        4.70000        6.56000
-  Positrons:  0.49000        0.00000        6.56000
+  Gammas:    8.92000        0.12000        1.47000
+  Electrons: 17.05000        4.25000        7.06000
+  Positrons:  0.42000        0.00000        7.06000
 
     Normalised energy deposition in the calorimeter
 
-  E1 = 0.22469 +- 0.00223 RMS(E1) = 0.02231 +- 0.00223
-  E9 = 0.22821 +- 0.00232 RMS(E9) = 0.02316 +- 0.00232
-  E25= 0.22848 +- 0.00232 RMS(E25)= 0.02321 +- 0.00232
+  E1 = 0.22103 +- 0.00199 RMS(E1) = 0.01988 +- 0.00199
+  E9 = 0.22637 +- 0.00192 RMS(E9) = 0.01923 +- 0.00192
+  E25= 0.22665 +- 0.00195 RMS(E25)= 0.01947 +- 0.00195
 
     Energy deposition in the absorbers
 
-  Eabs1(MeV)= 0.81046 +- 0.02374 RMS(Eabs1)= 0.23736 +- 0.02374
-  Eabs2(MeV)= 0.85510 +- 0.04378 RMS(Eabs2)= 0.43780 +- 0.04378
-  Eabs3(MeV)= 0.87203 +- 0.03724 RMS(Eabs3)= 0.37240 +- 0.03724
-  Eabs4(MeV)= 0.90251 +- 0.05711 RMS(Eabs4)= 0.57106 +- 0.05711
+  Eabs1(MeV)= 0.86371 +- 0.03414 RMS(Eabs1)= 0.34136 +- 0.03414
+  Eabs2(MeV)= 0.94250 +- 0.05165 RMS(Eabs2)= 0.51654 +- 0.05165
+  Eabs3(MeV)= 0.89180 +- 0.04900 RMS(Eabs3)= 0.49002 +- 0.04900
+  Eabs4(MeV)= 0.90578 +- 0.05304 RMS(Eabs4)= 0.53039 +- 0.05304
 
     Average number of hits in the vertex detector
 
-  Nhit= 3.41000 +- 0.14973
+  Nhit= 3.16000 +- 0.06741
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1525957723, 132532804
+ Current couple of seeds = 580655491, 795878948
 ----------------------------------------
 #
 /gun/particle e-
@@ -608,7 +609,7 @@ Index : 7     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1525957723, 132532804
+ Current couple of seeds = 580655491, 795878948
 ----------------------------------------
 Start Run processing.
 
@@ -616,7 +617,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=63.78000000s Real=70.31000000s Sys=5.05000000s
+  User=64.11000000s Real=70.76000000s Sys=5.85000000s
 
 ============   SUMMARY   ============
 
@@ -627,30 +628,30 @@ Run Summary
 
              World         Vertex Detector       Muon Detector
 
-  Gammas:    481.35000        0.54000        0.48000
-  Electrons: 841.76000        3.47000        6.87000
-  Positrons:  53.52000        0.00000        6.87000
+  Gammas:    484.68000        0.40000        0.63000
+  Electrons: 843.82000        3.37000        7.06000
+  Positrons:  55.51000        0.01000        7.06000
 
     Normalised energy deposition in the calorimeter
 
-  E1 = 0.87120 +- 0.00280 RMS(E1) = 0.02803 +- 0.00280
-  E9 = 0.97467 +- 0.00106 RMS(E9) = 0.01057 +- 0.00106
-  E25= 0.98696 +- 0.00079 RMS(E25)= 0.00789 +- 0.00079
+  E1 = 0.86990 +- 0.00263 RMS(E1) = 0.02627 +- 0.00263
+  E9 = 0.97557 +- 0.00083 RMS(E9) = 0.00828 +- 0.00083
+  E25= 0.98768 +- 0.00056 RMS(E25)= 0.00564 +- 0.00056
 
     Energy deposition in the absorbers
 
-  Eabs1(MeV)= 0.99170 +- 0.04329 RMS(Eabs1)= 0.43292 +- 0.04329
-  Eabs2(MeV)= 1.05824 +- 0.05305 RMS(Eabs2)= 0.53052 +- 0.05305
-  Eabs3(MeV)= 0.01076 +- 0.00787 RMS(Eabs3)= 0.07871 +- 0.00787
+  Eabs1(MeV)= 0.93350 +- 0.03134 RMS(Eabs1)= 0.31338 +- 0.03134
+  Eabs2(MeV)= 0.94272 +- 0.03531 RMS(Eabs2)= 0.35313 +- 0.03531
+  Eabs3(MeV)= 0.04502 +- 0.03223 RMS(Eabs3)= 0.32227 +- 0.03223
   Eabs4(MeV)= 0.00000 +- 0.00000 RMS(Eabs4)= 0.00000 +- 0.00000
 
     Average number of hits in the vertex detector
 
-  Nhit= 3.45000 +- 0.10897
+  Nhit= 3.27000 +- 0.11212
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1869751079, 1967427907
+ Current couple of seeds = 335754121, 74953655
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

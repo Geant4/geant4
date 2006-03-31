@@ -23,8 +23,8 @@ Current available graphics systems are:
 
 Registering model factories...
  Material: FluorCarbonate     density:  1.610 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  22.435 cm 
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  38.74 %  Abundance  50.00 %
-   --->  Element: Fluorine (N)   Z =  9.0   N =  19.0   A =  18.99 g/mole  fractionMass:  61.26 %  Abundance  50.00 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  38.74 %  ElmAbundance  50.00 %
+   --->  Element: Fluorine (N)   Z =  9.0   N =  19.0   A =  18.99 g/mole  ElmMassFraction:  61.26 %  ElmAbundance  50.00 %
 PhysicsList::SetCuts:CutLength : 1 (mm)
 /run/verbose 2
 #
@@ -124,11 +124,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=94.29s Real=913.89s Sys=74.34s
+  User=98.46s Real=1476.03s Sys=190.48s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 291465285, 1941170730
+ Current couple of seeds = 926540076, 1388652356
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

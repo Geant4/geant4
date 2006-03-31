@@ -86,6 +86,7 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for GenericIon
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -203,7 +204,7 @@ Stage 1->2 : 0 isolated muon found.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=2.22s Real=2.35s Sys=0.04s
+  User=2.23s Real=2.32s Sys=0.04s
 G4 kernel has come to Quit state.
 Graphics systems deleted.
 Visualization Manager deleting...

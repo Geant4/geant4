@@ -106,6 +106,7 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for GenericIon
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -177,7 +178,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=28s Real=28s Sys=0.18s
+  User=28s Real=28s Sys=0.14s
 #
 # deuteron at 1 GeV/nucleon on H 
 #
@@ -243,6 +244,7 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for GenericIon
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -384,6 +386,7 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for GenericIon
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -461,7 +464,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=6.33s Real=6.44s Sys=0.09s
+  User=6.36s Real=6.43s Sys=0.05s
 #
 #
 # deuteron at 200 MeV in U
@@ -594,7 +597,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.54s Real=0.54s Sys=0s
+  User=0.53s Real=0.53s Sys=0s
 #
 #  .....end deuteron.............
 #
@@ -642,7 +645,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=9.7s Real=9.8s Sys=0.03s
+  User=9.6s Real=9.7s Sys=0.05s
 #
 # alpha at 1 GeV/nucleon on H 
 #
@@ -733,7 +736,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=4.1s Real=4.3s Sys=0.14s
+  User=4.1s Real=4.2s Sys=0.14s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -777,7 +780,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.02s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 #
 # alpha at 200 MeV/nucleon on H 
 #
@@ -821,7 +824,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 # alpha at 200 MeV/nucleon on Silicon 
 #
@@ -865,7 +868,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.04s Sys=0.01s
+  User=0.04s Real=0.04s Sys=0s
 #
 #  .....end alpha............
 #
@@ -911,23 +914,27 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Start Run processing.
  G4NuclearLevelManager: nuclide (91,237) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (87,218) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (88,229) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (91,225) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (3,4) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (93,236) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (22,55) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (91,238) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (10,27) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (8,24) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (15,41) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (7,19) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (2,6) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (89,221) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (89,229) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (3,9) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (86,228) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (11,30) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (20,53) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (6,17) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (3,4) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (13,34) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (20,56) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (8,21) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (2,7) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (1,4) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (87,230) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (88,233) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (93,231) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (19,48) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (5,17) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=62s Real=63s Sys=0.38s
+  User=64s Real=66s Sys=0.78s
 #
 # C(12,6)++ at 1 GeV/nucleon on H 
 #
@@ -1014,13 +1021,15 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (5,9) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (1,4) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (7,12) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (5,16) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (5,7) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (4,6) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (7,11) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (1,1) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=18.58s Real=20.05s Sys=1.44s
+  User=20.66s Real=21.73s Sys=0.99s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water 
 #
@@ -1087,6 +1096,7 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for GenericIon
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -1166,11 +1176,12 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (4,6) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (8,14) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (4,5) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=8.99s Real=9.72s Sys=0.7s
+  User=10.36s Real=11.13s Sys=0.76s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1221,7 +1232,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=9.9s Real=10s Sys=0.13s
+  User=4.3s Real=4.5s Sys=0.07s
 #
 # C(12,6)++ at 200 MeV/nucleon on H 
 #
@@ -1318,11 +1329,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (5,7) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (9,16) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=6.45s Real=7.05s Sys=0.59s
+  User=8.03s Real=8.63s Sys=0.6s
 #
 #  .....end C(12,6)++............
 #
@@ -1401,6 +1412,7 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for GenericIon
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -1488,7 +1500,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.1s Real=2.1s Sys=0.02s
+  User=4.6s Real=4.8s Sys=0.12s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
