@@ -1,4 +1,4 @@
-$Id: README,v 1.7 2005-05-17 10:37:31 gcosmo Exp $
+$Id: README,v 1.8 2006-03-31 13:21:57 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -78,6 +78,9 @@ Extended level examples
  parallel
    - Examples of event-level parallelism in Geant4 using the
      TOP-C distribution, and distributed runs through DIANE
+ parameterisations
+   - Examples for fast shower parameterisations according to specific
+     models
  persistency
    - Persistency of simulation outputs through generic interface
  radioactivedecay
@@ -86,6 +89,8 @@ Extended level examples
  runAndEvent
    - Examples to demonstrate how to connect the information between
      primary particles and hits and utilize user-information classes
+ visualization
+   - Specific visualization features and graphical customisations
 
 Advanced level examples
  air_shower
@@ -112,6 +117,9 @@ Advanced level examples
  purging_magnet
    - Simulation of electrons traveling through a 3D magnetic field of a
      strong purging magnet used for treatment head in a medical environment
+ radiation_monitor
+   - Application to study the effects of a chip carrier on silicon radiation
+     monitoring devices used in the LHC environment
  radioprotection
    - Application for the evaluation of dose in astronauts, vehicle concepts
      and Moon surface habitat configurations, in a space radiation environment
