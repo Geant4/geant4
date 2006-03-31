@@ -84,7 +84,7 @@ processes/electromagnetic/standard               emstand-V08-00-17
 - Added first test-prototype of elastic Coulomb scattering.
 
 
-processes/electromagnetic/utils                  emutils-V08-00-04
+processes/electromagnetic/utils                  emutils-V08-00-10
 -------------------------------
 - Optimised interfaces to multiple-scattering model, modified classes
   G4VEmModel and G4VMultipleScattering
