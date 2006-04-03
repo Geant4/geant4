@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedNucleonConstructor.cc,v 1.9 2006-03-29 00:34:35 kurasige Exp $
+// $Id: G4ExcitedNucleonConstructor.cc,v 1.10 2006-04-03 08:20:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -555,7 +555,7 @@ const G4double G4ExcitedNucleonConstructor::mass[] = {
 const G4double G4ExcitedNucleonConstructor::width[] = {
   300.0*MeV, 115.0*MeV, 150.0*MeV, 165.0*MeV, 150.0*MeV,
   130.0*MeV, 100.0*MeV, 100.0*MeV, 200.0*MeV, 500.0*MeV,
-  555.0*MeV, 450.0*MeV, 500.0*MeV, 400.0*MeV, 450.0*MeV
+  555.0*MeV, 350.0*MeV, 500.0*MeV, 400.0*MeV, 500.0*MeV
 };
 
 const G4int G4ExcitedNucleonConstructor::iSpin[] = {

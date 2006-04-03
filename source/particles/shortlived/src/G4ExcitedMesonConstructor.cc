@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedMesonConstructor.cc,v 1.15 2006-02-26 14:56:30 kurasige Exp $
+// $Id: G4ExcitedMesonConstructor.cc,v 1.16 2006-04-03 08:20:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1427,7 +1427,7 @@ const G4double G4ExcitedMesonConstructor::width[G4ExcitedMesonConstructor::NMult
   {  259.0*MeV, 181.0*MeV, 225.0*MeV, 186.0*MeV, 186.0*MeV },
   {  250.0*MeV, 315.0*MeV,       0.0, 322.0*MeV, 322.0*MeV },
   {  161.0*MeV, 168.0*MeV,  87.0*MeV, 159.0*MeV, 159.0*MeV },
-  {  450.0*MeV,  55.0*MeV,  87.0*MeV, 260.0*MeV, 260.0*MeV },
+  {  220.0*MeV,  55.0*MeV,  87.0*MeV, 260.0*MeV, 260.0*MeV },
   {  400.0*MeV, 210.0*MeV, 150.0*MeV, 232.0*MeV, 232.0*MeV },
   {        0.0, 197.0*MeV, 202.0*MeV, 373.0*MeV, 373.0*MeV }
 };
