@@ -1,4 +1,4 @@
-$Id: History,v 1.95 2005-11-24 18:16:54 japost Exp $
+$Id: History,v 1.96 2006-04-03 13:01:52 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-November 19, 2005  J. Apostolakis          geommng-V07-01-05
+April 3, 2006  G.Cosmo                     geommng-V08-00-00
+- Fix in G4SmartVoxelHeader::BuildNodes() to avoid rare cases of negative
+  extent returned by volumes due to malformed geometries or inaccurate
+  extent calculation.
+
+November 19, 2005  J.Apostolakis           geommng-V07-01-05
 - Revised G4VPVParameterisation
    Changed signature of ComputeMaterial, adding parent touchable pointer
    -> this refinement enables easy use of nested parameterisations
@@ -28,7 +33,7 @@ November 19, 2005  J. Apostolakis          geommng-V07-01-05
    [ As a result is that G4PhysicalTouchable in volumes is not needed 
      in the implementation (and is supressed.)
 
-November 11, 2005  J. Apostolakis          geommng-V07-01-04
+November 11, 2005  J.Apostolakis           geommng-V07-01-04
 - Added methods to identify  Regular Structures in  Physical volume 
   New pure virtual methods:
     - IsRegularStructure()     ,  returns boolean 

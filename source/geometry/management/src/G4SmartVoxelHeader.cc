@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.26 2005-04-13 15:53:09 gcosmo Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.27 2006-04-03 13:01:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -908,7 +908,11 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
   G4double currentWidth;
   for (nVol=0; nVol<nCandidates; nVol++)
   {
-    currentWidth = maxExtents[nVol]-minExtents[nVol];
+    // currentWidth should -always- be a positive value. Inaccurate computed extent
+    // from the solid or situations of malformed geometries (overlaps) may lead to
+    // negative values and therefore unpredictable crashes !
+    //
+    currentWidth = std::abs(maxExtents[nVol]-minExtents[nVol]);
     if ( (currentWidth<minWidth)
       && (maxExtents[nVol]>=pLimits.GetMinExtent(pAxis))
       && (minExtents[nVol]<=pLimits.GetMaxExtent(pAxis)) )
@@ -936,6 +940,9 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
   if( noNodes == 0 ) { noNodes=1; }
 
 #ifdef G4GEOMETRY_VOXELDEBUG
+  G4cout << "     Smartless computed = " << smartlessComputed << G4endl
+         << "     Smartless volume = " << smartlessUser
+         << " => # Smartless = " << smartless << G4endl;
   G4cout << "     Min width = " << minWidth
          << " => # Nodes = " << noNodes << G4endl;
 #endif
