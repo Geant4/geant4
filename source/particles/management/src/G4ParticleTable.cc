@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.25 2006-02-26 14:56:55 kurasige Exp $
+// $Id: G4ParticleTable.cc,v 1.26 2006-04-03 09:28:34 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParticleTable
@@ -75,7 +75,10 @@ G4ParticleTable::G4ParticleTable()
 ////////////////////
 G4ParticleTable::~G4ParticleTable()
 {
- 
+  
+   // remove all items from G4ParticleTable
+   RemoveAllParticles();
+
   // delete Short Lived table 
   if (fShortLivedTable!=0) delete fShortLivedTable;
   fShortLivedTable =0;
@@ -104,6 +107,7 @@ G4ParticleTable::~G4ParticleTable()
   fParticleMessenger =0;
 
   fgParticleTable =0;
+
 }
 
 ////////////////////
@@ -149,7 +153,8 @@ void G4ParticleTable::DeleteMessenger()
     delete fParticleMessenger;
     fParticleMessenger= 0;
     // remove all items from G4ParticleTable
-    RemoveAllParticles();
+    // temporaly comment out 
+    // RemoveAllParticles();
   }
 }
 
