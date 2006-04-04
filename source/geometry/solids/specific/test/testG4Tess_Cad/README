@@ -1,0 +1,5 @@
+Before excution you need to create a couple of soft links, e.g.
+
+ln -s mbb.geom test.geom
+ln -s mbb.tree test.tree
+
