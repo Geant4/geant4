@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.hh,v 1.14 2003-12-09 14:44:59 japost Exp $
+// $Id: G4FieldManager.hh,v 1.15 2006-04-04 12:52:46 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -35,7 +35,14 @@
 //
 // The G4FieldManager class exists to allow the user program to specify 
 // the electric, magnetic and/or other field(s) of the detector.
-// (OR, in the future, of a part of it - planned to be a logical volume).
+// 
+// A field manager can be set to a logical volume (or to more than one), 
+// in order to vary its field from that of the world.  In this manner
+// a zero or constant field can override a global field,  a more or 
+// less exact version can override the external approximation, lower
+// or higher precision for tracking can be specified, a different 
+// stepper can be chosen for different volumes, ...
+//
 // It also stores a pointer to the ChordFinder object that can do the
 // propagation in this field. All geometrical track "advancement" 
 // in the field is handled by this ChordFinder object.
@@ -56,6 +63,8 @@
 // valid for each region detector.
 
 // History:
+// - 05.11.03 John Apostolakis, Added Min/MaximumEpsilonStep
+// - 20.06.03 John Apostolakis, Abstract & ability to ConfigureForTrack
 // - 10.03.97 John Apostolakis, design and implementation.
 // -------------------------------------------------------------------
 
