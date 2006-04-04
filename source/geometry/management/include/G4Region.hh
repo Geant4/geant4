@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.hh,v 1.14 2005-11-09 14:54:03 gcosmo Exp $
+// $Id: G4Region.hh,v 1.15 2006-04-04 15:16:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Region
@@ -152,10 +152,12 @@ class G4Region
 
     G4bool BelongsTo(G4VPhysicalVolume* thePhys) const;
       // Returns whether this region belongs to the given physical volume
-      // (recursively scanned to the bottom of the hierarchy)
+      // (recursively scanned to the bottom of the hierarchy).
 
-    G4Region* GetParentRegion() const;
+    G4Region* GetParentRegion(G4bool& unique) const;
       // Returns a region that contains this region. Otherwise null returned.
+      // Flag 'unique' is true if there is only one parent region containing
+      // the current region.
 
   public:  // without description
 
@@ -169,6 +171,10 @@ class G4Region
     G4Region(const G4Region&);
     G4Region& operator=(const G4Region&);
       // Private copy constructor and assignment operator.
+
+    inline void AddMaterial (G4Material* aMaterial);
+      // Searchs the specified material in the material table and
+      // if not present adds it.
 
   private:
 
