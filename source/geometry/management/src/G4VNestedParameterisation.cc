@@ -21,28 +21,31 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNestedParameterisation.cc,v 1.6 2005-11-24 18:19:53 japost Exp $
+// $Id: G4VNestedParameterisation.cc,v 1.5 2006-04-04 15:09:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VNestedParameterisation implementation
 //
 // --------------------------------------------------------------------
 
+#include "G4VNestedParameterisation.hh" 
+
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VTouchable.hh"
 
-#include "G4VNestedParameterisation.hh" 
-
-G4VNestedParameterisation::G4VNestedParameterisation() :
-  G4VPVParameterisation(), G4VVolumeMaterialScanner()
+G4VNestedParameterisation::G4VNestedParameterisation()
+  : G4VPVParameterisation(),
+    G4VVolumeMaterialScanner()
 {
 }
 
-G4VNestedParameterisation::~G4VNestedParameterisation() {}
+G4VNestedParameterisation::~G4VNestedParameterisation()
+{
+}
 
 G4VSolid* G4VNestedParameterisation::ComputeSolid(const G4int, 
-                                     G4VPhysicalVolume  *pvol)
+                                                  G4VPhysicalVolume* pvol)
 { 
   return pvol->GetLogicalVolume()->GetSolid(); 
 }
@@ -59,8 +62,8 @@ G4VVolumeMaterialScanner* G4VNestedParameterisation::GetMaterialScanner()
 
 G4Material* 
 G4VNestedParameterisation::ComputeMaterial(const G4int repNo, 
-					   G4VPhysicalVolume *currentVol,
-					   const G4VTouchable *parentTouch)
+                                                 G4VPhysicalVolume* currentVol,
+                                           const G4VTouchable* parentTouch)
 {
-    return ComputeMaterial( currentVol, repNo, parentTouch );
+  return ComputeMaterial( currentVol, repNo, parentTouch );
 }
