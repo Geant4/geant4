@@ -1,4 +1,4 @@
-$Id: History,v 1.136 2006-03-15 16:40:59 gcosmo Exp $
+$Id: History,v 1.137 2006-04-04 15:10:36 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 4th, 2006       G.Cosmo - geomvol-V08-00-02
+- Moved G4VNestedParameterisation and G4VVolumeMaterialScanner classes to
+  'management' module, to support material scanning in G4Region.
+- Requires tag "geommng-V08-00-01".
 
 Mar 15th, 2006      G.Cosmo - geomvol-V08-00-01
 - G4AssemblyVolume: added default boolean argument to MakeImprint()
