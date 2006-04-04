@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVolumeMaterialScanner.hh,v 1.2 2005-12-13 08:43:56 gunter Exp $
+// $Id: G4VVolumeMaterialScanner.hh,v 1.3 2006-04-04 15:15:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VVolumeMaterialScanner
@@ -32,22 +32,21 @@
 //  tabulate their materials.
 
 // History:
-//  18.11.05  J.Apostolakis  First version
-
+//  18.11.05 J.Apostolakis Initial version
+// --------------------------------------------------------------------
 #ifndef G4VVOLUMEMATERIALSCANNER_HH
 #define G4VVOLUMEMATERIALSCANNER_HH
+
 class G4Material;
-// #include "G4Material.hh"
 
 class G4VVolumeMaterialScanner
 {
   public:
-    G4VVolumeMaterialScanner() {}
-    virtual ~G4VVolumeMaterialScanner() {}
+    G4VVolumeMaterialScanner() {;}
+    virtual ~G4VVolumeMaterialScanner() {;}
 
-    virtual G4int       GetNumberOfMaterials() const =0;
-    virtual G4Material* GetMaterial(G4int idx) const =0;
+    virtual G4int       GetNumberOfMaterials() const = 0;
+    virtual G4Material* GetMaterial(G4int idx) const = 0;
 };
    
 #endif
- 
