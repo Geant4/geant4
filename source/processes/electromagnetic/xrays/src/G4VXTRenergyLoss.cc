@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.32 2006-02-12 17:22:02 grichine Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.33 2006-04-05 12:42:58 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -1074,18 +1074,40 @@ G4double G4XTRenergyLoss::SpectralAngleXTRdEdx(G4double varAngle)
  
 G4double G4XTRenergyLoss::SpectralXTRdEdx(G4double energy)
 {
-  fEnergy = energy ;
-G4Integrator<G4XTRenergyLoss,G4double(G4XTRenergyLoss::*)(G4double)> integral ;
-  return integral.Legendre96(this,&G4XTRenergyLoss::SpectralAngleXTRdEdx,
+  G4int i, iMax = 8;
+  G4double result = 0.0;
+
+  G4double lim[8] = { 0.0, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1.0 };
+
+  for( i = 0; i < iMax; i++ ) lim[i] *= fMaxThetaTR;
+
+  G4Integrator<G4XTRenergyLoss,G4double(G4XTRenergyLoss::*)(G4double)> integral;
+
+  fEnergy = energy;
+
+  for( i = 0; i < iMax-1; i++ )
+  {
+    result += integral.Legendre96(this,&G4XTRenergyLoss::SpectralAngleXTRdEdx,
+    			   lim[i],lim[i+1]);
+    // result += integral.Legendre10(this,&G4XTRenergyLoss::SpectralAngleXTRdEdx,
+    //			   lim[i],lim[i+1]);
+  }
+
+  /*
+  result = integral.Legendre96(this,&G4XTRenergyLoss::SpectralAngleXTRdEdx,
                              0.0,0.1*fMaxThetaTR) +
-         integral.Legendre96(this,&G4XTRenergyLoss::SpectralAngleXTRdEdx,
+           integral.Legendre96(this,&G4XTRenergyLoss::SpectralAngleXTRdEdx,
                              0.1*fMaxThetaTR,0.2*fMaxThetaTR) +         
-         integral.Legendre96(this,&G4XTRenergyLoss::SpectralAngleXTRdEdx,
+           integral.Legendre96(this,&G4XTRenergyLoss::SpectralAngleXTRdEdx,
                              0.2*fMaxThetaTR,0.4*fMaxThetaTR) +         
-         integral.Legendre96(this,&G4XTRenergyLoss::SpectralAngleXTRdEdx,
+           integral.Legendre96(this,&G4XTRenergyLoss::SpectralAngleXTRdEdx,
                              0.4*fMaxThetaTR,0.7*fMaxThetaTR) +         
-         integral.Legendre96(this,&G4XTRenergyLoss::SpectralAngleXTRdEdx,
-	                     0.7*fMaxThetaTR,fMaxThetaTR) ;
+           integral.Legendre96(this,&G4XTRenergyLoss::SpectralAngleXTRdEdx,
+	                     0.7*fMaxThetaTR,fMaxThetaTR);
+
+  */
+
+  return result;
 } 
  
 //////////////////////////////////////////////////////////////////////////

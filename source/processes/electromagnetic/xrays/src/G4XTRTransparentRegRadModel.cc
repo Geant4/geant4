@@ -104,7 +104,7 @@ G4double G4XTRTransparentRegRadModel::SpectralXTRdEdx(G4double energy)
   // kMax += kMin;
   
 
-  kMax = kMin + 19; //  9; // kMin + G4int(tmp);
+  kMax = kMin + 19; // 5; // 9; //   kMin + G4int(tmp);
 
   // tmp /= fGamma;
   // if( G4int(tmp) < kMin ) kMin = G4int(tmp);
