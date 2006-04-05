@@ -34,7 +34,7 @@
 </div>
 
 Report on Errors and Warnings arising from system testing on the
-<blink><b>geant4-08-00-ref-02</b></blink> development tag.
+<blink><b>geant4-08-00-ref-03</b></blink> development tag.
 
 <p>
 NOTE: the complete set of tests has not been run, with Large_N(umbers of events),
@@ -61,21 +61,21 @@ test09     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test10     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 -----------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
 test11     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
-test12     |	     |         |   WL4    |          |         |  WL2WL4 |	    |	       |	 |	   |
-test13     |  WL1    |  WL1    |   WL1    |  WL1     |  WL1    |         |	    |	       |   WL1   |  WL1    |
+test12     |	     |         |   WL2    |          |         |  WL2    |	    |	       |	 |	   |
+test13     |  WL1WL2 |  WL1WL2 |   WL1    |  WL1     |  WL1    |  WL1    |	    |	       |   WL1   |  WL1    |
 test14     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test15     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 -----------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
-test16     |	     |         |	  |	     |  WL2    |	 |	    |	       |	 |	   |
+test16     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test17     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test18     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test20     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
-test21     |  EL1    |   EL3   |   WL2	  |   WL2    |  WL2    |    	 |	    |	       |	 | EL2     |
+test21     |  EL1    |   EL3   |   WL2WL5 |   WL2    |         |    	 |	    |	       |	 | EL2     |
 test22     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test24     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test25     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
-test29	   |  WN3    |   WN3   |   WN3	  |  WN3     |         |   	 |	    |	       |         |         |
-test33	   |         |         |   WN1	  |  WN1     |  WN1    |   	 |	    |	       |   WN1   | WN1     |
+test29	   |         |         |      	  |          |         |   	 |	    |	       |         |         |
+test33	   |         |   WN1   |   WN1	  |  WN1     |  WN1    |  WN1 	 |	    |	       |   WN1   | WN1     |
 test34	   |  WN2    |   WN2   |   WN2	  |  WN2     |  WN2    |  WN2 	 |	    |	       |         |         |
 -----------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
 test103    |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
@@ -134,6 +134,18 @@ WL4
 RandGeneral constructed nothing in bins - will use flat distribution
 
 
+
+WL5			   
+------------
+ZMxpvTachyonic:
+ZMxpvTachyonic: boostVector computed for a non-timelike LorentzVector 
+at line 185 in file /scratch/ap/gcc344/2.0.2.2/build/../CLHEP/Vector/src/LorentzVector.cc
+ZMxpvTachyonic:
+ZMxpvTachyonic: boostVector computed for a non-timelike LorentzVector 
+at line 185 in file /scratch/ap/gcc344/2.0.2.2/build/../CLHEP/Vector/src/LorentzVector.cc
+ZMxpvTachyonic:
+ZMxpvTachyonic: boostVector computed for a non-timelike LorentzVector 
+at line 185 in file /scratch/ap/gcc344/2.0.2.2/build/../CLHEP/Vector/src/LorentzVector.cc
 
 WN1			   
 ------------		   
