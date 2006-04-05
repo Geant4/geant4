@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.1 2006-03-18 11:02:15 maire Exp $
+// $Id: RunAction.cc,v 1.2 2006-04-05 13:13:56 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -173,7 +173,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
   }
   
   //mean free path (g/cm2)
-  G4cout << "\n  mean free path (g/cm2)   : ";  
+  G4cout << "\n        (g/cm2)            : ";  
   for (size_t j=0; j<sigma2.size();j++) {
     lambda =  DBL_MAX;
     if (sigma2[j] > 0.) lambda = 1/sigma2[j];   	            
@@ -202,12 +202,12 @@ void RunAction::BeginOfRunAction(const G4Run*)
   dedx2.push_back(dedxtot/density);	  
     
   //print stopping power
-  G4cout << "\n \n  restricted dEdx          : ";
+  G4cout << "\n \n  restricted dE/dx         : ";
   for (size_t j=0; j<sigma1.size();j++) {	     
     G4cout << "\t" << std::setw(13) << G4BestUnit(dedx1[j],"Energy/Length");
   }
   
-  G4cout << "\n  restrict dEdx (MeV/g/cm2): ";
+  G4cout << "\n      (MeV/g/cm2)          : ";
   for (size_t j=0; j<sigma2.size();j++) {
   G4cout << "\t" << std::setw(13) << G4BestUnit(dedx2[j],"Energy*Surface/Mass");
   }
@@ -221,13 +221,22 @@ void RunAction::BeginOfRunAction(const G4Run*)
   G4double Range2 = Range1*density;
   
   //print range
-  G4cout << "\n \n  range from restrict dEdx : " 
+  G4cout << "\n \n  range from restrict dE/dx: " 
          << "\t" << std::setw(8) << G4BestUnit(range1,"Length")
          << " (" << std::setw(8) << G4BestUnit(range2,"Mass/Surface") << ")";
 	 
-  G4cout << "\n  range from full dEdx     : " 
+  G4cout << "\n  range from full dE/dx    : " 
          << "\t" << std::setw(8) << G4BestUnit(Range1,"Length")
          << " (" << std::setw(8) << G4BestUnit(Range2,"Mass/Surface") << ")";
+	 
+  //get transport mean free path (for multiple scattering)
+  G4double MSmfp1 = emCal.GetMeanFreePath(energy,particle,"msc",material);
+  G4double MSmfp2 = MSmfp1*density;
+  
+  //print transport mean free path
+  G4cout << "\n \n  transport mean free path : " 
+         << "\t" << std::setw(8) << G4BestUnit(MSmfp1,"Length")
+         << " (" << std::setw(8) << G4BestUnit(MSmfp2,"Mass/Surface") << ")";
 	 
   G4cout << "\n-------------------------------------------------------------\n";
   G4cout << G4endl;
