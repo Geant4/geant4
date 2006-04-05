@@ -1,6 +1,6 @@
 //===================================================================
-// Last update: 26-Jan-2006                 
-//
+// Last update: 05-Apr-2006                 
+// 
 //                   Program  power.cpp
 //                   ------------------
 // 
@@ -42,13 +42,14 @@
 // from the parent distributions  parent1  and  parent2 , 
 // respectively.
 // Given then the confidence_level, the power of a given 
-// statistics test is defined as the fraction of pseudoexperiments
+// statistics test is defined as the fraction of pseudoexperiments.
+// considering only those for which the p-value is defined,
 // in which the p-value for the pair of samples (S1, S2) is
 // less than  1 - confidence_level , i.e. :
 // 
-//              # pseudoexperiments with p-value < 1 - confidence_level 
-//  power =  -----------------------------------------------------------
-//                  # pseudoexperiments
+//              # pseudoexperiments with defined p-value < 1 - confidence_level 
+//  power =  --------------------------------------------------------------------
+//                  # pseudoexperiments with defined p-value
  // 
 // The power is computed here using only the analytical p-value 
 // of the statistics test, usually based on some asympthotic 
@@ -71,8 +72,8 @@
 // This is shown in  ***TRICK*** , where the max sample size
 // has been risen to 99,999 .
 //
-// The output of the program consists of the printing on the 
-// screen.
+// The output of the program consists of self-explaining 
+// printing on the screen.
 //
 // NB) This program is a modified (simplified) version of the
 //     power.cpp  program distributed with the  StatisticalToolkit.
@@ -99,7 +100,7 @@
 #include "CramerVonMisesUnbinnedComparisonAlgorithm.h"
 #include "CramerVonMisesBinnedComparisonAlgorithm.h"
 #include "ComparisonResult.h"
-#include "StatisticsTesting/StatisticsComparator.h"
+#include "UserLayer-aida/StatisticsComparator.h"
 
 #include "CLHEP/Random/RanluxEngine.h"
 #include "CLHEP/Random/RandGaussT.h"
@@ -152,7 +153,7 @@ private:
 };
 
 //***LOOKHERE***
-const double DistributionGenerator::alpha = 0.5;   //***MAIN-PARAMETER*** 
+const double DistributionGenerator::alpha = 0.0;   //***MAIN-PARAMETER*** 
 
 
 // Constants for the visible energy distributions.
@@ -406,6 +407,7 @@ struct TestResultPseudoExpStruct {
   int pseudoExpNum;
   int idParents;
   int idStatTest;
+  bool isDefined;
   double distance;
   double pValue;
   double ndf;
@@ -504,7 +506,7 @@ const double PowerCalculator::confidenceLevel2 = 0.95;
 const double PowerCalculator::confidenceLevel3 = 0.99; 
 const double PowerCalculator::confidenceLevel4 = 0.999; 
 
-const int PowerCalculator::sampleSize = 3000;   //***MAIN-PARAMETER*** 
+const int PowerCalculator::sampleSize       = 100;   //***MAIN-PARAMETER*** 
 // See ***TRICK*** if the sample size is > 99,999 .
 
 const int PowerCalculator::numberPseudoExps = 1000;
@@ -701,13 +703,15 @@ printResults( const std::vector< StatisticsComparatorStruct > & comparatorVec ) 
         // Loop over the collection of results, and fill the vector
         // theDistanceAndPValueCollection  only for those cases with
         // the current parent distributions for the two samples, and
-        // with the current statistic test.
+        // with the current statistic test,  and in which the result of
+	// the statistical test is defined.
         std::vector< std::pair< double, double > > theDistanceAndPValueCollection;
 	for ( std::vector< TestResultPseudoExpStruct >::const_iterator itResults =
 		collecResults.begin(); itResults != collecResults.end(); ++itResults ) { 
 
 	  if ( ( itResults->idParents == (parentDist1 + 100*parentDist2) ) &&
-               ( itResults->idStatTest == itStatTest->id ) ) { 
+               ( itResults->idStatTest == itStatTest->id ) &&
+	       ( itResults->isDefined ) ) {
 	    double distance = itResults->distance;
 	    double pValue   = itResults->pValue;
 	    double ndf      = itResults->ndf;
@@ -722,10 +726,10 @@ printResults( const std::vector< StatisticsComparatorStruct > & comparatorVec ) 
 	int numBelowConfidenceLevel4P = 0;
 
 	// Loop over the collection of pairs of distances and p-values.
-	std::vector< std::pair< double, double > >::const_iterator iterCollection = 
-	  theDistanceAndPValueCollection.begin();
-	for ( int iPseudoExp = 0; 
-	      iPseudoExp < PowerCalculator::numberPseudoExps; iPseudoExp++ ) {
+	for ( std::vector< std::pair< double, double > >::const_iterator 
+		iterCollection = theDistanceAndPValueCollection.begin();
+	      iterCollection != theDistanceAndPValueCollection.end();
+	      ++iterCollection ) {
 	  
 	  double p = iterCollection->second;
 	  if ( p < -1.0E-9  ||  p - 1.0 > 1.0E-9 ) {
@@ -748,31 +752,43 @@ printResults( const std::vector< StatisticsComparatorStruct > & comparatorVec ) 
 	    numBelowConfidenceLevel4P++;
 	  }
 
-	  ++iterCollection;
-	} // End loop over pseudoexperiments 
+	} // End loop over collection of pairs of distances and p-values
 	
-        double Nd = 1.0 * PowerCalculator::numberPseudoExps;
-        // Calculate finally the power of the test for the four
-        // confidence levels considered.
-        for ( int level = 1; level <= 4; level++ ) { 
-	  float cd, nd;
-	  if ( level == 1 ) {
-	    cd = PowerCalculator::confidenceLevel1;
-	    nd = 1.0 * numBelowConfidenceLevel1P;
-	  } else if ( level == 2 ) {
-	    cd = PowerCalculator::confidenceLevel2;
-	    nd = 1.0 * numBelowConfidenceLevel2P;
-	  } else if ( level == 3 ) {
-	    cd = PowerCalculator::confidenceLevel3;
-	    nd = 1.0 * numBelowConfidenceLevel3P;
-	  } else {
-	    cd = PowerCalculator::confidenceLevel4;
-	    nd = 1.0 * numBelowConfidenceLevel4P;
+	std::cout << "\t number of pseudoexperiments with defined p-values = "
+		  << theDistanceAndPValueCollection.size() << std::endl
+	          << "\t number of pseudoexperiments with undefined p-values = "
+		  << ( PowerCalculator::numberPseudoExps - 
+		       theDistanceAndPValueCollection.size() ) << std::endl;
+	if ( theDistanceAndPValueCollection.size() <= 0 ) {
+	  std::cout << "\t NO DEFINED p-values!" << std::endl;
+	} else {
+	  // Notice that the denominator that defines the power
+          // is not the number of pseudoexperiments, but the
+          // number of pseudoexperiments in which the p-value
+	  // is defined.
+	  double Nd = 1.0 * theDistanceAndPValueCollection.size();
+	  // Calculate finally the power of the test for the four
+	  // confidence levels considered.
+	  for ( int level = 1; level <= 4; level++ ) { 
+	    float cd, nd;
+	    if ( level == 1 ) {
+	      cd = PowerCalculator::confidenceLevel1;
+	      nd = 1.0 * numBelowConfidenceLevel1P;
+	    } else if ( level == 2 ) {
+	      cd = PowerCalculator::confidenceLevel2;
+	      nd = 1.0 * numBelowConfidenceLevel2P;
+	    } else if ( level == 3 ) {
+	      cd = PowerCalculator::confidenceLevel3;
+	      nd = 1.0 * numBelowConfidenceLevel3P;
+	    } else {
+	      cd = PowerCalculator::confidenceLevel4;
+	      nd = 1.0 * numBelowConfidenceLevel4P;
+	    }
+	    std::cout << "\t Confidence level=" << 100*cd << " % " << std::endl
+		      << "\t \t \t powerP   = "  << 100*nd/Nd 
+		      << "  +/-  " << 100 * sqrt( nd*(Nd-nd) / (Nd*Nd*Nd) ) 
+		      << " % " << std::endl;
 	  }
-	  std::cout << "\t Confidence level=" << 100*cd << " % " << std::endl
-                    << "\t \t \t powerP   = "  << 100*nd/Nd 
-		    << "  +/-  " << 100 * sqrt( nd*(Nd-nd) / (Nd*Nd*Nd) ) 
-                    << " % " << std::endl;
 	}	
       } // End loop over the statistical tests that have been switched on
     } // End loop over the second parent distribution
@@ -1085,6 +1101,7 @@ void calculatePower() {
 	}
 	case 1 : {
 	  result = comparatorC2.compare( *ptrHisto1, *ptrHisto2 );
+	  //std::cout << "\t C2-pvalue=" << result.quality() << std::endl; //***DEBUG***
 	  break;
 	}
 	case 2 : {
@@ -1116,27 +1133,53 @@ void calculatePower() {
 	    comparatorCM.compare( firstDistribution, secondDistribution );
 	  StatisticsTesting::ComparisonResult resultAD = 
 	    comparatorAD.compare( firstDistribution, secondDistribution );
-	  int winningCase = 0;
-          result = resultKS;
-	  if ( resultC2.quality() < result.quality() ) {
-	    result = resultC2;
+	  int winningCase = -1;
+          if ( resultKS.isDefined() ) {
+	    winningCase = 0;
+            result = resultKS;
+          } else if ( resultC2.isDefined() ) {
 	    winningCase = 1;
-	  }
-	  if ( resultCM.quality() < result.quality() ) {
-	    result = resultCM;
+            result = resultC2;
+          } else if ( resultCM.isDefined() ) {
 	    winningCase = 2;
-	  }
-	  if ( resultAD.quality() < result.quality() ) {
-	    result = resultAD;
+            result = resultCM;
+          } else if ( resultAD.isDefined() ) {
 	    winningCase = 4;
-	  }
-	  switch ( winningCase ) {
+            result = resultAD;
+          }
+          if ( winningCase >= 0 ) {
+	    if ( resultC2.isDefined() && 
+		 resultC2.quality() < result.quality() ) {
+	      result = resultC2;
+	      winningCase = 1;
+	    }
+	    if ( resultCM.isDefined() &&
+		 resultCM.quality() < result.quality() ) {
+	      result = resultCM;
+	      winningCase = 2;
+	    }
+	    if ( resultAD.isDefined() &&
+		 resultAD.quality() < result.quality() ) {
+	      result = resultAD;
+	      winningCase = 4;
+	    }
+	    switch ( winningCase ) {
 	    case 0 : countNumberOfTestsWonByKS++; break;
 	    case 1 : countNumberOfTestsWonByC2++; break;
 	    case 2 : countNumberOfTestsWonByCM++; break;
 	    case 4 : countNumberOfTestsWonByAD++; break;
-          }
-	  countTotalNumberOfTests++;
+	    }
+	    //***DEBUG***
+	    //if ( winningCase == 1 ) {
+	    //  std::cout << " C2=" << resultC2
+	    //            << " KS=" << resultKS
+	    //	        << " CM=" << resultCM
+	    //	        << " AD=" << resultAD
+	    //	        << std::endl;
+	    //}
+	    //***endDEBUG***
+	    countTotalNumberOfTests++;
+	  }
 	  break;
 	}
 	default : std::cout << " ***WRONG*** it should never happen! " << std::endl;     
@@ -1146,6 +1189,7 @@ void calculatePower() {
         theResultStruct.pseudoExpNum = iPseudoExp;
         theResultStruct.idParents    = itGen->idParents;
         theResultStruct.idStatTest   = jtStat->id;
+        theResultStruct.isDefined    = result.isDefined();
         theResultStruct.distance     = result.distance();
         theResultStruct.pValue       = result.quality();
         theResultStruct.ndf          = result.ndf();
@@ -1155,6 +1199,7 @@ void calculatePower() {
 	//std::cout << "\t PseudoExp=" << theResultStruct.pseudoExpNum
 	//	    << "  parents="    << theResultStruct.idParents
 	// 	    << "  statTest="   << theResultStruct.idStatTest
+	// 	    << "  isDefined="  << theResultStruct.isDefined 
 	// 	    << "  d="          << theResultStruct.distance 
 	// 	    << "  p="          << theResultStruct.pValue 
 	// 	    << "  ndf="        << theResultStruct.ndf
