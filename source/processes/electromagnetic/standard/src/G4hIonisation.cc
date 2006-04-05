@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.62 2006-01-10 16:06:23 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.63 2006-04-05 08:25:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -86,6 +86,11 @@
 #include "G4UniversalFluctuation.hh"
 #include "G4BohrFluctuations.hh"
 #include "G4UnitsTable.hh"
+#include "G4PionPlus.hh"
+#include "G4PionMinus.hh"
+#include "G4KaonPlus.hh"
+#include "G4KaonMinus.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -106,6 +111,7 @@ G4hIonisation::G4hIonisation(const G4String& name)
   SetVerboseLevel(1);
   mass = 0.0;
   ratio = 0.0;
+  corr = G4LossTableManager::Instance()->EmCorrections();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -123,7 +129,14 @@ void G4hIonisation::InitialiseEnergyLossProcess(
 
   theParticle = part;
 
-  if(part == bpart || part == G4Proton::Proton()) theBaseParticle = 0;
+  if(part == bpart || 
+     part == G4Proton::Proton() ||
+     part == G4AntiProton::AntiProton() ||
+     part == G4PionPlus::PionPlus() ||
+     part == G4PionMinus::PionMinus() ||
+     part == G4KaonPlus::KaonPlus() ||
+     part == G4KaonMinus::KaonMinus() 
+     ) theBaseParticle = 0;
   else if(bpart == 0) theBaseParticle = G4Proton::Proton();
   else                theBaseParticle = bpart;
 
@@ -131,6 +144,8 @@ void G4hIonisation::InitialiseEnergyLossProcess(
   SetSecondaryParticle(G4Electron::Electron());
   mass  = theParticle->GetPDGMass();
   ratio = electron_mass_c2/mass;
+  massratio = 1.0;
+  if(theBaseParticle) massratio = theBaseParticle->GetPDGMass()/mass; 
 
   G4VEmModel* em = new G4BraggModel();
   em->SetLowEnergyLimit(0.1*keV);

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisation.hh,v 1.32 2005-05-12 11:06:43 vnivanch Exp $
+// $Id: G4hIonisation.hh,v 1.33 2006-04-05 08:25:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -77,6 +77,7 @@
 #include "G4Positron.hh"
 #include "globals.hh"
 #include "G4VEmModel.hh"
+#include "G4EmCorrections.hh"
 
 class G4Material;
 class G4VEmFluctuationModel;
@@ -100,6 +101,12 @@ public:
 
 protected:
 
+  void CorrectionsAlongStep(
+                           const G4MaterialCutsCouple*,
+	             	   const G4DynamicParticle*,
+			         G4double& eloss,
+			         G4double& length);
+
   std::vector<G4DynamicParticle*>*  SecondariesPostStep(
                                    G4VEmModel*,
                              const G4MaterialCutsCouple*,
@@ -121,10 +128,12 @@ private:
   const G4ParticleDefinition* theParticle;
   const G4ParticleDefinition* theBaseParticle;
   G4VEmFluctuationModel*      flucModel;
+  G4EmCorrections*            corr;
 
   G4bool                      isInitialised;
 
   G4double                    eth;
+  G4double                    massratio;
 
 };
 
@@ -147,6 +156,20 @@ inline G4double G4hIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
   G4double y = electron_mass_c2/mass;
   G4double g = x*y + std::sqrt((1. + x)*(1. + x*y*y));
   return mass*(g - 1.0);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4hIonisation::CorrectionsAlongStep(
+                           const G4MaterialCutsCouple* couple,
+	             	   const G4DynamicParticle* dp,
+			         G4double& eloss,
+                                 G4double& s)
+{
+  G4double kinEnergy = dp->GetKineticEnergy();
+  if(eloss < kinEnergy && kinEnergy*massratio < eth) 
+    eloss += s*corr->NuclearDEDX(theParticle,couple->GetMaterial(),
+				 kinEnergy - eloss*0.5);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
