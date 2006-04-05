@@ -1,4 +1,4 @@
-$Id: History,v 1.52 2006-04-05 12:44:48 grichine Exp $
+$Id: History,v 1.53 2006-04-05 13:32:03 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05 April 06: V.Ivant (xrays-V08-00-02)
+          Move G4SynchrotronRadiation from standard
 04.04.06  V. Grichine - angular distribution of XTR according to transparent regular
                         approximation
+
 20 Jan 06: V.Ivant (xrays-V08-00-01)
 27 Jan 06: V. Grichine
 - Algorithm for XTR angular distribution based on the transparent regular radiator
