@@ -45,7 +45,48 @@ ProcessHits(G4Step* aStep, G4TouchableHistory* ) {
   // Multiply the energy deposit with the weight of the track,
   // to allow the use of biasing.
 
-  if( edep < 0.001*eV ) return false;
+  if ( edep < 0.001*eV ) return false;
+
+  // -----------------------------------------------------------------
+  // 6-Apr-2006 : In the case of Scintillator as active medium,
+  //              implement by hand Birks' law, using the expression
+  //              and the coefficients taken from the paper 
+  //              NIM 80 (1970) 239-244 for the organic scintillator
+  //              NE-102:
+  //                                     S*dE/dr 
+  //                    dL/dr = -----------------------------------
+  //                               1 + C1*(dE/dr) + C2*(dE/dr)^2 
+  //              with:
+  //                    C1 = 1.31 x 10^-2  g*cm^-2*MeV^-1 
+  //                    C2 = 9.59 x 10^-6  g^2*cm^-4*MeV^-2 
+  //              These are the same values used by ATLAS TileCal 
+  //              and CMS HCAL (and also the default in Geant3).
+  //              To get the "dE/dr" that appears in the formula,
+  //              which has the dimensions
+  //                   [ dE/dr ] = MeV * cm^2 / g
+  //              we have to divide the energy deposit in MeV by the
+  //              product of the step length (in cm) and the density
+  //              of the scintillator, which is 1.032*g/cm3 .
+  //              Of course, in our case we use only the denominator
+  //              of the Birks' formula above, because we do not have
+  //              digitization, i.e. we only have energy deposit but
+  //              not conversion to photons.
+  //              If you do not want to apply Birks' law, simply set
+  //              isBirksOn = false.
+  bool isBirksOn = false;  //***LOOKHERE***
+  if ( isBirksOn ) {
+    double C1 = 1.31e-2;                                  // [g*cm^-2*MeV^-1]  
+    double C2 = 9.59e-6;                                  // [g^2*cm^-4*MeV^-2] 
+    double rho = 1.032;                                   // [g/cm^3]
+    double stepLength_cm = aStep->GetStepLength() / cm ;  // [cm] 
+    if ( stepLength_cm > 1.0e-8 ) {
+      double dedx = edep / ( rho * stepLength_cm );       // [MeV*cm^2/g]
+      double birksFactor = 1.0 / ( 1.0 + C1*dedx + C2*dedx*dedx );
+      //std::cout << " birksFactor=" << birksFactor << std::endl; //***DEBUG***
+      edep = edep * birksFactor;
+    }
+  }
+  // -----------------------------------------------------------------
 
   G4int replica = aStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber(1);
 

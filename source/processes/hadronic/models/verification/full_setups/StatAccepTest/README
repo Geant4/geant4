@@ -1,5 +1,5 @@
 
- Last update: 10-Feb-2006
+ Last update: 06-Apr-2006
  ========================
 
  This directory contains a configurable calorimeter setup to be used
@@ -54,6 +54,12 @@
  Notice that, due to HBOOK limitations, there should be not
  more than 100 layers for the longitudinal shower profile, 
  and not more than 30 layers for the lateral shower profile.
+ 
+ In the case of Scintillator as active material, it is possible
+ to switch on the quenching effect as described by the Birks' law.
+ By the default it is not active; to switch it on, and to have 
+ more details, look at the string "***LOOKHERE***" in the file: 
+ StatAccepTestSensitiveCalorimeter.cc .
 
  The output of the program is an HBOOK ntuple  * ntuple.hbook *
  which contains some physics variables, like the total energy 
