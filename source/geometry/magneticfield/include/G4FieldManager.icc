@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.icc,v 1.10 2004-12-02 09:55:18 gcosmo Exp $
+// $Id: G4FieldManager.icc,v 1.11 2006-04-06 13:27:49 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,6 +50,12 @@ void G4FieldManager::SetChordFinder(G4ChordFinder *aChordFinder)
 
 inline  
 G4ChordFinder*  G4FieldManager::GetChordFinder()
+{  
+     return fChordFinder;
+}
+
+inline  
+const G4ChordFinder*  G4FieldManager::GetChordFinder() const
 {
      return fChordFinder;
 }
