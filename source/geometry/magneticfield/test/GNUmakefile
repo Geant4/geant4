@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2003-10-24 13:37:52 gcosmo Exp $
+# $Id: GNUmakefile,v 1.6 2006-04-06 13:34:30 japost Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable TESTTARGET.
 # ----------------------------------------------------------------
@@ -34,6 +34,7 @@ OLD_LDLIBS := -lG4geometry  \
 LDLIBS   := -lG4csg -lG4navigation -lG4volumes -lG4magneticfield -lG4geometrymng \
             -lG4graphics_reps \
             -lG4intercoms \
+	    -lG4hepnumerics \
             -lG4globman 
 
 include $(G4INSTALL)/config/binmake.gmk
