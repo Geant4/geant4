@@ -30,6 +30,8 @@
 //
 // History:
 //
+// 28.03.06 V.Grichine  orb modifications for accuracy 2nd algorithms
+//
 // 16.07.05 V.Grichine creation for box, tubs, cons, sphere, orb, torus
 //                     based on testSurfaceInOut.cc
 
@@ -130,7 +132,7 @@ G4ThreeVector GetRandomUnitVector()
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Random  vector on box surface 
+// Random  vector around box surface 
 
 G4ThreeVector GetVectorAroundBox( G4Box& box )
 {
@@ -152,11 +154,38 @@ G4ThreeVector GetVectorAroundBox( G4Box& box )
 //
 // Random vector on orb surface
 
+G4ThreeVector GetVectorOnOrb(G4Orb& orb, G4ThreeVector& norm)
+{
+  G4double cosTheta, sinTheta, phi, radius, px, py, pz;
+
+  radius = orb.GetRadius();
+  // radius += -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand();
+
+  cosTheta = -1. + 2.*G4UniformRand();
+  if( cosTheta > 1.)  cosTheta = 1.;
+  if( cosTheta < -1.) cosTheta = -1.;
+  sinTheta = std::sqrt( 1. - cosTheta*cosTheta );
+
+  phi = 2*pi*G4UniformRand();
+
+  px = radius*sinTheta*std::cos(phi);
+  py = radius*sinTheta*std::sin(phi);
+  pz = radius*cosTheta;
+
+  norm = G4ThreeVector( sinTheta*std::cos(phi), sinTheta*std::sin(phi), cosTheta);
+
+  return G4ThreeVector(px,py,pz);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Random vector around orb surface
+
 G4ThreeVector GetVectorAroundOrb(G4Orb& orb)
 {
   G4double cosTheta, sinTheta, phi, radius, px, py, pz;
 
-  radius = 1.26*orb.GetRadius();
+  radius = 4.*orb.GetRadius(); // 1.26
   radius *= G4UniformRand(); 
 
   cosTheta = -1. + 2.*G4UniformRand();
@@ -166,9 +195,9 @@ G4ThreeVector GetVectorAroundOrb(G4Orb& orb)
   
   phi = 2*pi*G4UniformRand();
 
-  px = radius*sinTheta*std::cos(phi);
-  py = radius*sinTheta*std::sin(phi);
-  pz = radius*cosTheta;
+  px   = radius*sinTheta*std::cos(phi);
+  py   = radius*sinTheta*std::sin(phi);
+  pz   = radius*cosTheta;
 
   return G4ThreeVector(px,py,pz);
 }
@@ -176,6 +205,107 @@ G4ThreeVector GetVectorAroundOrb(G4Orb& orb)
 /////////////////////////////////////////////////////////////////////////////
 //
 // Random vector on sphere surface
+
+G4ThreeVector GetVectorOnSphere(G4Sphere& sphere)
+{
+  G4double cosTheta, sinTheta, phi, radius, px, py, pz;
+  G4double part = 1./6.;
+  G4double rand = G4UniformRand();
+
+  G4double pRmin  = sphere.GetInsideRadius();
+  G4double pRmax  = sphere.GetOuterRadius();
+  G4double phi1   = sphere.GetStartPhiAngle();
+  G4double phi2   = phi1 + sphere.GetDeltaPhiAngle();
+  G4double theta1 = sphere.GetStartThetaAngle();
+  G4double theta2 = theta1 + sphere.GetDeltaThetaAngle();
+
+  if      ( rand < part ) // Rmax
+  {
+    radius   = pRmax -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand();
+
+    cosTheta = std::cos(theta2+0.5*kAngTolerance) +
+              (std::cos(theta1-0.5*kAngTolerance)-std::cos(theta2+0.5*kAngTolerance))*G4UniformRand();
+    if( cosTheta > 1.)  cosTheta = 1.;
+    if( cosTheta < -1.) cosTheta = -1.;
+    sinTheta = std::sqrt( 1. - cosTheta*cosTheta );
+
+    phi      = phi1 - 0.5*kAngTolerance + (phi2 - phi1 + kAngTolerance)*G4UniformRand();
+  }
+  else if ( rand < 2*part )  // Rmin
+  {
+    radius   = pRmin -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand();
+
+    cosTheta = std::cos(theta2+0.5*kAngTolerance) +
+              (std::cos(theta1-0.5*kAngTolerance)-std::cos(theta2+0.5*kAngTolerance))*G4UniformRand();
+    if( cosTheta > 1.)  cosTheta = 1.;
+    if( cosTheta < -1.) cosTheta = -1.;
+    sinTheta = std::sqrt( 1. - cosTheta*cosTheta );
+
+    phi      = phi1 - 0.5*kAngTolerance + (phi2 - phi1 + kAngTolerance)*G4UniformRand();
+  }
+  else if ( rand < 3*part )  // phi1
+ {
+    radius   = pRmin - 0.5*kCarTolerance + (pRmax-pRmin+kCarTolerance)*G4UniformRand();
+
+
+    cosTheta = std::cos(theta2+0.5*kAngTolerance) +
+              (std::cos(theta1-0.5*kAngTolerance)-std::cos(theta2+0.5*kAngTolerance))*G4UniformRand();
+    if( cosTheta > 1.)  cosTheta = 1.;
+    if( cosTheta < -1.) cosTheta = -1.;
+    sinTheta = std::sqrt( 1. - cosTheta*cosTheta );
+
+    phi      = phi1 -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand();
+  }
+  else if ( rand < 4*part )  // phi2
+  {
+    radius   = pRmin - 0.5*kCarTolerance + (pRmax-pRmin+kCarTolerance)*G4UniformRand();
+
+
+    cosTheta = std::cos(theta2+0.5*kAngTolerance) +
+              (std::cos(theta1-0.5*kAngTolerance)-std::cos(theta2+0.5*kAngTolerance))*G4UniformRand();
+    if( cosTheta > 1.)  cosTheta = 1.;
+    if( cosTheta < -1.) cosTheta = -1.;
+    sinTheta = std::sqrt( 1. - cosTheta*cosTheta );
+
+    phi      = phi2 -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand();
+  }
+  else if ( rand < 5*part )  // theta1
+ {
+    radius   = pRmin - 0.5*kCarTolerance + (pRmax-pRmin+kCarTolerance)*G4UniformRand();
+
+
+    cosTheta = std::cos(theta1+0.5*kAngTolerance) +
+              (std::cos(theta1-0.5*kAngTolerance)-std::cos(theta1+0.5*kAngTolerance))*G4UniformRand();
+    if( cosTheta > 1.)  cosTheta = 1.;
+    if( cosTheta < -1.) cosTheta = -1.;
+    sinTheta = std::sqrt( 1. - cosTheta*cosTheta );
+
+    phi      = phi1 - 0.5*kAngTolerance + (phi2 - phi1 + kAngTolerance)*G4UniformRand();
+  }
+  else // theta2
+  {
+    radius   = pRmin - 0.5*kCarTolerance + (pRmax-pRmin+kCarTolerance)*G4UniformRand();
+
+
+    cosTheta = std::cos(theta2+0.5*kAngTolerance) +
+              (std::cos(theta2-0.5*kAngTolerance)-std::cos(theta2+0.5*kAngTolerance))*G4UniformRand();
+    if( cosTheta > 1.)  cosTheta = 1.;
+    if( cosTheta < -1.) cosTheta = -1.;
+    sinTheta = std::sqrt( 1. - cosTheta*cosTheta );
+
+    phi      = phi1 - 0.5*kAngTolerance + (phi2 - phi1 + kAngTolerance)*G4UniformRand();
+  }
+  px = radius*sinTheta*std::cos(phi);
+  py = radius*sinTheta*std::sin(phi);
+  pz = radius*cosTheta;
+
+  return G4ThreeVector(px,py,pz);
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Random vector around sphere surface
 
 G4ThreeVector GetVectorAroundSphere(G4Sphere& sphere)
 {
@@ -208,14 +338,81 @@ G4ThreeVector GetVectorAroundSphere(G4Sphere& sphere)
 //
 // Random vector on tubs surface
 
+G4ThreeVector GetVectorOnTubs(G4Tubs& tubs)
+{
+  G4double phi, radius, px, py, pz;
+  G4double part = 1.;
+  G4double rand = G4UniformRand();
+
+  G4double pRmin = tubs.GetInnerRadius   ();
+  G4double pRmax = tubs.GetOuterRadius   ();
+  G4double tubsZ = tubs.GetZHalfLength   ();
+  G4double phi1  = tubs.GetStartPhiAngle ();
+  G4double phi2  = phi1 + tubs.GetDeltaPhiAngle ();
+
+  if      ( rand < part ) // Rmax
+  {
+    radius = pRmax; //  -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand();
+    //  pz     = -tubsZ - 0.5*kCarTolerance + (2*tubsZ + kCarTolerance)*G4UniformRand();
+    pz     = -tubsZ + 2*tubsZ*G4UniformRand();
+    // phi    = phi1 - 0.5*kAngTolerance + (phi2 - phi1 + kAngTolerance)*G4UniformRand();
+    phi = 2*pi*G4UniformRand();
+  }
+  /*
+  else if ( rand < 2*part )  // Rmin
+  {
+    radius = pRmin -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand();
+    pz     = -tubsZ - 0.5*kCarTolerance + (2*tubsZ + kCarTolerance)*G4UniformRand();
+    phi    = phi1 - 0.5*kAngTolerance + (phi2 - phi1 + kAngTolerance)*G4UniformRand();
+  }
+  else if ( rand < 3*part )  // phi1
+  {
+    radius = pRmin - 0.5*kCarTolerance + (pRmax-pRmin+kCarTolerance)*G4UniformRand();
+    pz     = -tubsZ - 0.5*kCarTolerance + (2*tubsZ + kCarTolerance)*G4UniformRand();
+    phi    = phi1 -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand();
+  }
+  else if ( rand < 4*part )  // phi2
+  {
+    radius = pRmin - 0.5*kCarTolerance + (pRmax-pRmin+kCarTolerance)*G4UniformRand();
+    pz     = -tubsZ - 0.5*kCarTolerance + (2*tubsZ + kCarTolerance)*G4UniformRand();
+    phi    = phi2 -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand();
+  }
+  else if ( rand < 5*part )  // -fZ
+  {
+    radius = pRmin - 0.5*kCarTolerance + (pRmax-pRmin+kCarTolerance)*G4UniformRand();
+
+    pz     = -tubsZ - 0.5*kCarTolerance + (kCarTolerance)*G4UniformRand();
+
+    phi    = phi1 - 0.5*kAngTolerance + (phi2 - phi1 + kAngTolerance)*G4UniformRand();
+  }
+  else // fZ
+  {
+    radius = pRmin - 0.5*kCarTolerance + (pRmax-pRmin+kCarTolerance)*G4UniformRand();
+    pz     = tubsZ - 0.5*kCarTolerance + (kCarTolerance)*G4UniformRand();
+    phi    = phi1 - 0.5*kAngTolerance + (phi2 - phi1 + kAngTolerance)*G4UniformRand();
+  }
+  */
+  px = radius*std::cos(phi);
+  py = radius*std::sin(phi);
+
+  return G4ThreeVector(px,py,pz);
+}
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Random vector around tubs surface
+
 G4ThreeVector GetVectorAroundTubs(G4Tubs& tubs)
 {
   G4double phi, radius, px, py, pz;
-  G4double part = 1.26;
+  G4double partR = 3.; // 1.26;
+  G4double partZ = 1.; // 1.26;
 
 
-  G4double pRmax = part*tubs.GetOuterRadius   ();
-  G4double tubsZ = part*tubs.GetZHalfLength   ();
+  G4double pRmax = partR*tubs.GetOuterRadius   ();
+  G4double tubsZ = partZ*tubs.GetZHalfLength   ();
 
   // G4double pRmin = tubs.GetInnerRadius   ();
   // G4double phi1  = tubs.GetStartPhiAngle ();
@@ -223,7 +420,7 @@ G4ThreeVector GetVectorAroundTubs(G4Tubs& tubs)
 
 
   radius = pRmax*G4UniformRand(); 
-  pz     = -tubsZ - 0.5*kCarTolerance + (2*tubsZ + kCarTolerance)*G4UniformRand(); 
+  pz     = -tubsZ + 2*tubsZ*G4UniformRand(); 
   phi    = 2*pi*G4UniformRand();
 
   px = radius*std::cos(phi);
@@ -391,8 +588,8 @@ int main(int argc, char** argv)
   test_one_solid( useCase= kTubs,  no_points, dirs_per_point ); 
   */
   
-  G4cout<< "To test Sphere." << G4endl;
-  test_one_solid( useCase= kSphere,  no_points, dirs_per_point ); 
+  G4cout<< "To test Orb." << G4endl;
+  test_one_solid( useCase= kOrb,  no_points, dirs_per_point ); 
   /*
   G4cout<< "To test Orb." << G4endl;
   test_one_solid( useCase= kOrb,  no_points, dirs_per_point ); 
@@ -421,17 +618,24 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
   G4int iMax =  num_points, jMax = directions_per_point;
   G4int iCheck=iMax/10;
 
+  jMax = 50;
+
   G4int iInNoSurf = 0, iOutNoSurf = 0, iIn = 0, iOut = 0; 
 
   G4cout << "  Reporting every  " << iCheck <<  " points. " << G4endl; 
 
-  G4double distIn, distOut;
+  G4double distIn, distOut, distCheck, dDist, position, dIn[50], dOut[50];
 
+  for(j=0;j<jMax;j++)
+  {
+    dIn[j]  = 0.;
+    dOut[j] = 0.;
+  }
   G4double Rtor = 100 ;
   G4double Rmax = Rtor*0.9 ;
   G4double Rmin = Rtor*0.1 ;
 
-  EInside surfaceP;
+  EInside surfaceP, surfaceA;
   G4ThreeVector norm,*pNorm;
   G4bool *pgoodNorm, goodNorm, calcNorm=true;
 
@@ -439,6 +643,8 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
   pgoodNorm=&goodNorm;
 
   G4cout.precision(20);
+
+  G4ThreeVector normP( 0., 0., 1.);
 
   // Boxes for test
 
@@ -520,7 +726,7 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
 
   // Check of some use cases shown zero-zero problems
 
-  G4ThreeVector pCheck, vCheck;
+  G4ThreeVector pCheck, vCheck, v;
 
   // pCheck = G4ThreeVector( 41.418613476008794, -16.893662525384702, 4.9094423552800466 );
   // vCheck = G4ThreeVector( 0.34553222148699703, 0.91172822040596313, 0.22216916084289551 );
@@ -549,6 +755,12 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
 #ifdef NDEBUG
     G4Exception("FAIL: *** Assertions must be compiled in! ***");
 #endif
+
+    std::ofstream foutDistIn("DistIn.dat", std::ios::out ) ;
+    foutDistIn.setf( std::ios::scientific, std::ios::floatfield );
+
+    std::ofstream foutDistOut("DistOut.dat", std::ios::out ) ;
+    foutDistOut.setf( std::ios::scientific, std::ios::floatfield );
 
   
   // Check box tracking function 
@@ -640,67 +852,107 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
     {
       if(i%iCheck == 0) G4cout<<"i = "<<i<<G4endl;
 
-      G4ThreeVector p = GetVectorAroundOrb(o1);    
-      surfaceP = o1.Inside(p);
+      G4ThreeVector pA = GetVectorAroundOrb(o1);    
+      G4ThreeVector pS = GetVectorOnOrb(o1, normP);
 
-      if(surfaceP != kSurface)
+      G4ThreeVector dP = pS - pA;
+
+      if ( dP.mag2() > 0.) 
       {
-        if(surfaceP == kOutside)
+        distCheck = dP.mag();
+        vCheck = dP.unit();
+        // G4cout<<"distCheck ="<< distCheck<<"; dP.unit() mag = "<<dP.mag()<<G4endl;
+      }
+      else continue;
+
+      surfaceP = o1.Inside(pS);
+
+      if( surfaceP == kSurface )
+      {
+        surfaceA = o1.Inside(pA);
+        
+        if( surfaceA == kOutside )
         {
-          for( j = 0; j < jMax; j++ )
-          {
-            G4ThreeVector v = GetRandomUnitVector();
+          if ( dP.dot(pS) <= 0. )
+	  {
+            iIn++;
 
-            distIn   = o1.DistanceToIn(p,v);
+            distIn   = o1.DistanceToIn(pA,vCheck);
 
-	    if(distIn != kInfinity)
-	    {
-              iIn++;
-              
-              surfaceP = o1.Inside(p + distIn*v);
+            dDist = distIn - distCheck;
 
-              if(surfaceP != kSurface )
+	    // G4cout<<" distIn = "<<distIn<<"; distCheck = "<<distCheck<<"; dDist = "<<dDist<<G4endl;
+
+            dDist *= 10./kRadTolerance;
+
+            for( j = 0; j < jMax; j++ )
+            {
+              position = -25. + j; 
+              if ( dDist < position ) 
 	      {
-                iInNoSurf++;
-	      // G4cout<<" distIn < kCarTolerance && distOut < kCarTolerance"<<G4endl;
-              // G4cout<<"distIn = "<<distIn<<";  distOut = "<<distOut<<G4endl;
-              // G4cout<<"location p: "; // << G4endl;
-              // G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
-              // G4cout<<" direction v: "; // << G4endl; 
-              // G4cout<<"( "<<v.x()<<", "<<v.y()<<", "<<v.z()<<" ); "<<G4endl<<G4endl;
+                dIn[j] += 1.;
+                break;
 	      }
-            }
+              else continue;
+	    }
+            if ( j == jMax ) dIn[jMax-1] += 1.;
+            if ( j == jMax ||  j == 0 )
+	    {
+	      // G4cout<<"distIn    = "<<distIn<<"; dDist = "<<dDist<<G4endl;
+	      // G4cout<<"distCheck = "<<distCheck<<"; vCheck.dot( pS.unit() )  = "
+              //       <<vCheck.dot( pS.unit() )<<G4endl;
+	    }
 	  }
+          else continue;
         }
         else
         {
+          iOut++;
+          
+          distOut  = o1.DistanceToOut(pA,vCheck,calcNorm,pgoodNorm,pNorm); 
+         
+          dDist = distOut - distCheck;
+
+	  // G4cout<<" distOut = "<<distOut<<"; distCheck = "<<distCheck<<"; dDist = "<<dDist<<G4endl;
+
+          dDist *= 10./kRadTolerance;
+
           for( j = 0; j < jMax; j++ )
           {
-            iOut++;
-
-            G4ThreeVector v = GetRandomUnitVector();
-          
-            distOut  = o1.DistanceToOut(p,v,calcNorm,pgoodNorm,pNorm); 
-            surfaceP = o1.Inside(p + distOut*v);
-
-            if(surfaceP != kSurface )
+            position = -25. + j; 
+            if ( dDist < position ) 
 	    {
-              iOutNoSurf++;
-	      // G4cout<<" distIn < kCarTolerance && distOut < kCarTolerance"<<G4endl;
-              // G4cout<<"distIn = "<<distIn<<";  distOut = "<<distOut<<G4endl;
-              // G4cout<<"location p: "; // << G4endl;
-              // G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
-              // G4cout<<" direction v: "; // << G4endl; 
-              // G4cout<<"( "<<v.x()<<", "<<v.y()<<", "<<v.z()<<" ); "<<G4endl<<G4endl;
+              dOut[j] += 1.;
+              break;
 	    }
-          }
+            else continue;
+	  }	
+          if ( j == jMax) dOut[jMax-1] += 1.;
         }
       }
-
+      else
+      {
+        G4cout<<"pS is out of surface: "<<pS.x()<<"\t"<<pS.y()<<"\t"<<pS.z()<<G4endl;
+      }
     }
     G4cout<<"iIn = "<<iIn<<";     iOut = "<<iOut<<G4endl;
-    G4cout<<"iInNoSurf = "<<iInNoSurf<<";    iOutNoSurf = "<<iOutNoSurf<<G4endl;
+    G4cout<<"iInNoSurf = "<<iInNoSurf<<";    iOutNoSurf = "<<iOutNoSurf<<G4endl<<G4endl;
 
+    G4cout<<"iIn = "<<iIn<<G4endl<<G4endl;
+    for( j = 0; j < jMax; j++ )
+    {
+      position = -25. + j; 
+      G4cout<<position<<"\t"<<dIn[j]<<G4endl;      
+      foutDistIn<<position<<"\t"<<dIn[j]<<G4endl;      
+    } 
+    G4cout<<G4endl;
+    G4cout<<"iOut = "<<iOut<<G4endl<<G4endl;
+    for( j = 0; j < jMax; j++ )
+    {
+      position = -25. + j; 
+      G4cout<<position<<"\t"<<dOut[j]<<G4endl;      
+      foutDistOut<<position<<"\t"<<dIn[j]<<G4endl;      
+    }
 
     break;
 
