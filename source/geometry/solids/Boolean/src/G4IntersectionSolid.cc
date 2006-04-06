@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.cc,v 1.25 2005-11-09 15:00:24 gcosmo Exp $
+// $Id: G4IntersectionSolid.cc,v 1.26 2006-04-06 14:14:40 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -113,22 +113,27 @@ G4IntersectionSolid::CalculateExtent(const EAxis pAxis,
                                            G4double& pMin,
                                            G4double& pMax) const 
 {
-  G4bool   retA, retB, out ;
-  G4double minA, minB, maxA, maxB ; 
+  G4bool   retA, retB, out;
+  G4double minA, minB, maxA, maxB; 
 
-  retA= fPtrSolidA
+  retA = fPtrSolidA
           ->CalculateExtent( pAxis, pVoxelLimit, pTransform, minA, maxA);
-  retB= fPtrSolidB
+  retB = fPtrSolidB
           ->CalculateExtent( pAxis, pVoxelLimit, pTransform, minB, maxB);
-  if(retA && retB)
-  {
-    pMin = std::max( minA, minB ) ; 
-    pMax = std::min( maxA, maxB ) ;
-    out  = true ;
-  }
-  else out = false ;
 
-  return out ; // It exists in this slice only if both exist in it.
+  if( retA && retB )
+  {
+    pMin = std::max( minA, minB ); 
+    pMax = std::min( maxA, maxB );
+    out  = (pMax > pMin); // true;
+#ifdef G4BOOLDEBUG
+    // G4cout.precision(16);
+    // G4cout<<"pMin = "<<pMin<<"; pMax = "<<pMax<<G4endl;
+#endif
+  }
+  else out = false;
+
+  return out; // It exists in this slice only if both exist in it.
 }
  
 /////////////////////////////////////////////////////
