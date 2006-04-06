@@ -1,4 +1,4 @@
-$Id: History,v 1.275 2005-12-12 09:15:17 gcosmo Exp $
+$Id: History,v 1.276 2006-04-06 14:28:29 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+6th April 2006  Gabriele Cosmo (config-V08-00-00)
+- Darwin-g++: corrected linker options for generation of dynamic libraries.
+  Now dynamic libraries on MacOSX finally work. Tested on MacOS 10.4.5 with
+  gcc-4.0.1.
 
 12th December 2005  Gabriele Cosmo (config-V07-01-07)
 - binmake.gmk: added workaround to allow for physics-lists to link
