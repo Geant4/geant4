@@ -1,4 +1,4 @@
-$Id: History,v 1.100 2006-04-06 14:14:51 japost Exp $
+$Id: History,v 1.101 2006-04-06 14:16:02 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-G4FieldManager
- * Added missing  const GetChordFinder() method -- Problem report #847 
- * Corrected description (at top of include file hh):
+Apr 6th, 2006  J.Apostolakis - field-V08-00-00
+----------------------------
+- In G4FieldManager
+ Added missing  const GetChordFinder() method -- Problem report #847 
+ Corrected description (at top of include file hh):
   - It is possible to set the field manager of a logical volume (since long)
 
 
