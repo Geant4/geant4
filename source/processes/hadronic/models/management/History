@@ -1,0 +1,24 @@
+-------------------------------------------------------------------
+
+       ==========================================================
+       Geant4 - an Object-Oriented Toolkit for Physics Simulation
+       ==========================================================
+
+              History file for Model Management directory
+              -------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+07 Apr 2006 - D.H. Wright (hadr-modman-V08-00-00)
+-------------------------------------------------
+  G4InelasticInteraction: in method CalculateMomenta, correct excess
+     energy problem by doing two calculations of nuclear evaporation, 
+     one for the annihilation case and one for non-annihilation. 
+     Previously one value was applied to both cases.
+
+ 
