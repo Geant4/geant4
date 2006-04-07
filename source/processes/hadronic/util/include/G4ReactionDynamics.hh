@@ -157,11 +157,18 @@ enum{ GHADLISTSIZE=256};
      const G4double kineticMinimum,
      const G4double kineticFactor,
      const G4ReactionProduct &modifiedOriginal,
-     G4double spall,
+     G4int PinNucleus,
+     G4int NinNucleus,
      const G4Nucleus &aNucleus,
      G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
      G4int &vecLen );
     
+    std::pair<G4int, G4int> GetFinalStateNucleons(
+     const G4ReactionProduct& currentParticle,
+     const G4ReactionProduct& targetParticle,
+     const G4FastVector<G4ReactionProduct,GHADLISTSIZE>& vec,
+     const G4int& vecLen );
+
     void MomentumCheck(
      const G4ReactionProduct &modifiedOriginal,
      G4ReactionProduct &currentParticle,
@@ -172,7 +179,7 @@ enum{ GHADLISTSIZE=256};
     G4double normal();
     
     G4int Poisson( G4double x );
-   
+
  };
  
 #endif
