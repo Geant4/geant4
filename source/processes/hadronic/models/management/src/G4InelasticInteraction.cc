@@ -182,10 +182,13 @@
   {
     cache = 0;
     what = originalIncident->Get4Momentum().vect();
+
+
     theReactionDynamics.ProduceStrangeParticlePairs( vec, vecLen,
                                                      modifiedOriginal, originalTarget,
                                                      currentParticle, targetParticle,
                                                      incidentHasChanged, targetHasChanged );
+
     if( quasiElastic )
     {
       theReactionDynamics.TwoBody( vec, vecLen,
@@ -216,17 +219,15 @@
       if( ek > 1.0*GeV )ekcor = 1./(ek/GeV);
       const G4double atomicWeight = targetNucleus.GetN();
       ek = 2*tarmas + ek*(1.+ekcor/atomicWeight);
-      
-      G4double tkin = targetNucleus.Cinema( ek );
+      G4double tkin = targetNucleus.Cinema(ek);
       ek += tkin;
       ekOrg += tkin;
-      modifiedOriginal.SetKineticEnergy( ekOrg );
-      
+      //      modifiedOriginal.SetKineticEnergy( ekOrg );
       //
       // evaporation --  re-calculate black track energies
       //                 this was Done already just before the cascade
       //
-      tkin = targetNucleus.EvaporationEffects( ek );
+      tkin = targetNucleus.AnnihilationEvaporationEffects(ek, ekOrg);
       ekOrg -= tkin;
       ekOrg = std::max( 0.0001*GeV, ekOrg );
       modifiedOriginal.SetKineticEnergy( ekOrg );
@@ -248,6 +249,7 @@
     const G4double twsup[] = { 1.0, 0.7, 0.5, 0.3, 0.2, 0.1 };
     G4double rand1 = G4UniformRand();
     G4double rand2 = G4UniformRand();
+
     if( annihilation || (vecLen >= 6) ||
         (modifiedOriginal.GetKineticEnergy()/GeV >= 1.0) &&
         (((originalIncident->GetDefinition() == G4KaonPlus::KaonPlus() ||
@@ -267,6 +269,7 @@
       Rotate(vec, vecLen);
       return;
     }
+
     G4bool finishedTwoClu = false;
     if( modifiedOriginal.GetTotalMomentum()/MeV < 1.0 )
     {
@@ -299,31 +302,13 @@
       Rotate(vec, vecLen);
       return;
     }
-    //
-    // PNBlackTrackEnergy is the kinetic energy available for
-    //   proton/neutron black track particles [was enp(1) in fortran code]
-    // DTABlackTrackEnergy is the kinetic energy available for
-    //   deuteron/triton/alpha particles      [was enp(3) in fortran code]
-    //const G4double pnCutOff = 0.1;
-    //const G4double dtaCutOff = 0.1;
-    //if( (targetNucleus.GetN() >= 1.5)
-    //    && !(incidentHasChanged || targetHasChanged)
-    //    && (targetNucleus.GetPNBlackTrackEnergy()/MeV <= pnCutOff)
-    //    && (targetNucleus.GetDTABlackTrackEnergy()/MeV <= dtaCutOff) )
-    //{
-    // the atomic weight of the target nucleus is >= 1.5            AND
-    //   neither the incident nor the target particles have changed  AND
-    //     there is no kinetic energy available for either proton/neutron
-    //     or for deuteron/triton/alpha black track particles
-    // For diffraction scattering on heavy nuclei use elastic routines instead
-    //G4cerr << "*** Error in G4InelasticInteraction::CalculateMomenta" << G4endl;
-    //G4cerr << "*** the elastic scattering would be better here ***" <<G4endl;
-    //}
+
     theReactionDynamics.TwoBody( vec, vecLen,
                                  modifiedOriginal, originalTarget,
                                  currentParticle, targetParticle,
                                  targetNucleus, targetHasChanged );
   }
+
  
  void G4InelasticInteraction::
  Rotate(G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec, G4int &vecLen)
