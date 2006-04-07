@@ -105,12 +105,20 @@
     G4double Cinema( G4double kineticEnergy );
     
     G4double EvaporationEffects( G4double kineticEnergy );
+
+    G4double AnnihilationEvaporationEffects(G4double kineticEnergy, G4double ekOrg);
     
     inline G4double GetPNBlackTrackEnergy() const
     { return pnBlackTrackEnergy; }
     
     inline G4double GetDTABlackTrackEnergy() const
     { return dtaBlackTrackEnergy; }
+    
+    inline G4double GetAnnihilationPNBlackTrackEnergy() const
+    { return pnBlackTrackEnergyfromAnnihilation; }
+    
+    inline G4double GetAnnihilationDTABlackTrackEnergy() const
+    { return dtaBlackTrackEnergyfromAnnihilation; }
     
 // ******************  methods introduced by ChV ***********************    
    // return fermi momentum
@@ -147,9 +155,15 @@
     G4double zEff;  // effective atomic number
     
     G4double pnBlackTrackEnergy;  // the kinetic energy available for
-    //                               proton/neutron black track particles
+                                  // proton/neutron black track particles
     G4double dtaBlackTrackEnergy; // the kinetic energy available for
-    //                               deuteron/triton/alpha particles
+                                  // deuteron/triton/alpha particles
+    G4double pnBlackTrackEnergyfromAnnihilation;
+                     // kinetic energy available for proton/neutron black 
+                     // track particles based on baryon annihilation 
+    G4double dtaBlackTrackEnergyfromAnnihilation;
+                     // kinetic energy available for deuteron/triton/alpha 
+                     // black track particles based on baryon annihilation 
 
 
 // ************************** member variables by ChV *******************
