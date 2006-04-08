@@ -57,7 +57,7 @@ ProcessHits(G4Step* aStep, G4TouchableHistory* ) {
   //                    dL/dr = -----------------------------------
   //                               1 + C1*(dE/dr) + C2*(dE/dr)^2 
   //              with:
-  //                    C1 = 1.31 x 10^-2  g*cm^-2*MeV^-1 
+  //                    C1 = 1.29 x 10^-2  g*cm^-2*MeV^-1 
   //                    C2 = 9.59 x 10^-6  g^2*cm^-4*MeV^-2 
   //              These are the same values used by ATLAS TileCal 
   //              and CMS HCAL (and also the default in Geant3).
@@ -75,7 +75,7 @@ ProcessHits(G4Step* aStep, G4TouchableHistory* ) {
   //              isBirksOn = false.
   bool isBirksOn = false;  //***LOOKHERE***
   if ( isBirksOn ) {
-    double C1 = 1.31e-2;                                  // [g*cm^-2*MeV^-1]  
+    double C1 = 1.29e-2;                                  // [g*cm^-2*MeV^-1]  
     double C2 = 9.59e-6;                                  // [g^2*cm^-4*MeV^-2] 
     double rho = 1.032;                                   // [g/cm^3]
     double stepLength_cm = aStep->GetStepLength() / cm ;  // [cm] 
