@@ -235,6 +235,9 @@ G4FragmentVector* G4PhotonEvaporation::BreakItUp(const G4Fragment& nucleus)
 	    aFragment->SetCreationTime(aParticle->GetProperTime());
 	    products->push_back(aFragment);
 	  }
+
+        for (size_t i = 0;  i < armProducts->size(); i++)
+           delete (*armProducts)[i];
 	delete armProducts;
 	delete atomDeex;
       }
