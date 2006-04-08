@@ -1096,6 +1096,10 @@ void StatAccepTestAnalysis::finish() {
   mu_sigma = sigma / sqrt( n );
   G4cout << " Average <E> [MeV] deposited in the whole calorimeter = " 
          << mu << " +/- " << mu_sigma << G4endl;
+  G4double fractionLongitudinal1stQuarter = 0.0;
+  G4double fractionLongitudinal2ndQuarter = 0.0;
+  G4double fractionLongitudinal3rdQuarter = 0.0;
+  G4double fractionLongitudinal4thQuarter = 0.0;
   G4cout << " Average <E> [MeV] in each Layer " << G4endl; 
   for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
     sum  = sumL[ iLayer ];
@@ -1111,7 +1115,33 @@ void StatAccepTestAnalysis::finish() {
       //***LOOKHERE*** :  mu_sigma  should be set as error.
       longitudinalProfileHisto->fill( 1.0*iLayer, mu );
     }
+    if ( iLayer < numberOfReadoutLayers/4 ) {
+      fractionLongitudinal1stQuarter += mu;
+    } else if ( iLayer < 2*numberOfReadoutLayers/4 ) {
+      fractionLongitudinal2ndQuarter += mu;
+    } else if ( iLayer < 3*numberOfReadoutLayers/4 ) {
+      fractionLongitudinal3rdQuarter += mu;
+    } else {
+      fractionLongitudinal4thQuarter += mu;
+    }
   }
+  if ( mu_Evis > 1.0E-06 ) {
+    fractionLongitudinal1stQuarter /= mu_Evis;
+    fractionLongitudinal2ndQuarter /= mu_Evis;
+    fractionLongitudinal3rdQuarter /= mu_Evis;
+    fractionLongitudinal4thQuarter /= mu_Evis;
+  }
+  G4cout << " longitudinal fraction in the 1st quarter = "
+         << fractionLongitudinal1stQuarter*100.0 << " %" << std::endl
+	 << "                              2nd         = "
+         << fractionLongitudinal2ndQuarter*100.0 << " %" << std::endl
+	 << "                              3rd         = "
+         << fractionLongitudinal3rdQuarter*100.0 << " %" << std::endl
+	 << "                              4th         = "
+         << fractionLongitudinal4thQuarter*100.0 << " %" << std::endl;
+  G4double fractionTransverse1stThird = 0.0;
+  G4double fractionTransverse2ndThird = 0.0;
+  G4double fractionTransverse3rdThird = 0.0;
   // // // std::vector< G4double > rmsTransverseProfile;   //***TEMPORARY WORK-AROUND***
   G4cout << " Average <E> [MeV] in each Radius bin " << G4endl; 
   for ( int iBinR = 0; iBinR < numberOfRadiusBins; iBinR++ ) {
@@ -1129,8 +1159,25 @@ void StatAccepTestAnalysis::finish() {
       transverseProfileHisto->fill( 1.0*iBinR, mu );
     }
     // // // rmsTransverseProfile.push_back( mu_sigma );   //***TEMPORARY WORK-AROUND***
+    if ( iBinR < numberOfRadiusBins/3 ) {
+      fractionTransverse1stThird += mu;
+    } else if ( iBinR < 2*numberOfRadiusBins/3 ) {
+      fractionTransverse2ndThird += mu;
+    } else {
+      fractionTransverse3rdThird += mu;
+    }
   }  
-
+  if ( mu_Evis > 1.0E-06 ) {
+    fractionTransverse1stThird /= mu_Evis;
+    fractionTransverse2ndThird /= mu_Evis;
+    fractionTransverse3rdThird /= mu_Evis;
+  }
+  G4cout << " transverse fraction in the 1st third = "
+         << fractionTransverse1stThird*100.0 << " %" << std::endl
+	 << "                            2nd       = "
+         << fractionTransverse2ndThird*100.0 << " %" << std::endl
+	 << "                            3rd       = "
+         << fractionTransverse3rdThird*100.0 << " %" << std::endl;
   // ***TEMPORARY WORK-AROUND*** in order to set properly the error bars
   // of a weighted histogram, until this possibility will be added 
   // in AIDA::IHistogram1D . But it does not work!
