@@ -1,5 +1,5 @@
 #----------------------------------------------------------------
-# Last update: 26-Jan-2006
+# Last update: 09-Apr-2006
 #
 # There are three proposals for the ILC electromagnetic 
 # calorimeter, and five for the ILC hadronic calorimeter.
@@ -45,6 +45,7 @@
 #
 /mydet/isUnitInLambda 0
 /mydet/absorberTotalLength 672.0
+/mydet/calorimeterRadius 336.0
 /mydet/activeLayerNumber 168
 /mydet/readoutLayerNumber 24
 /mydet/activeLayerSize 1.0

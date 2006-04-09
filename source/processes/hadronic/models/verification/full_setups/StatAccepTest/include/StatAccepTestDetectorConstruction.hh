@@ -34,6 +34,7 @@ public:
   inline void SetIsCalHomogeneous( const G4bool choice );
   inline void SetIsUnitInLambda( const G4bool choice );
   inline void SetAbsorberTotalLength( const G4double value );
+  inline void SetCalorimeterRadius( const G4double value );
   inline void SetActiveLayerNumber( const G4int value );
   inline void SetActiveLayerSize( const G4double value );
   inline void SetReadoutLayerNumber( const G4int value );
@@ -127,6 +128,11 @@ private:
   // in the case of an homogenous calorimeter, this length account
   // for the overall dimension of the calorimeter.
 
+  G4double theCalorimeterRadius;
+  // This is the radius of the calorimeter which is a cylinder, expressed 
+  // in unit of length (e.g. m, cm, mm) if theIsUnitInLambda is false, 
+  // otherwise in number of lambdas (interaction lengths) of the absorber.
+
   G4int theActiveLayerNumber;
   G4double theActiveLayerSize;
   G4int theReadoutLayerNumber;
@@ -199,6 +205,11 @@ SetIsUnitInLambda( const G4bool choice ) {
 inline void StatAccepTestDetectorConstruction::
 SetAbsorberTotalLength( const G4double value ) {
   theAbsorberTotalLength = value;
+}
+
+inline void StatAccepTestDetectorConstruction::
+SetCalorimeterRadius( const G4double value ) {
+  theCalorimeterRadius = value;
 }
 
 inline void StatAccepTestDetectorConstruction::

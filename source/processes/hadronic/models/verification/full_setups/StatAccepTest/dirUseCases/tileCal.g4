@@ -1,5 +1,5 @@
 #--------------------------------------------------------------------
-# Last update: 24-Jan-2006
+# Last update: 09-Apr-2006
 #
 # Both ATLAS TileCal and LHCb hadronic calorimeters are sampling 
 # calorimeter  Fe-Sci , but with the scintillator tiles running 
@@ -35,6 +35,7 @@
 #
 /mydet/isUnitInLambda 1
 /mydet/absorberTotalLength 10.0
+/mydet/calorimeterRadius 5.0
 /mydet/activeLayerNumber 100
 /mydet/readoutLayerNumber 20
 /mydet/activeLayerSize 4.0

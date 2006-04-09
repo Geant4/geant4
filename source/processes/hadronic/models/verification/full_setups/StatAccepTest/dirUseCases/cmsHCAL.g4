@@ -1,5 +1,5 @@
 #----------------------------------------------------------------
-# Last update: 24-Jan-2006
+# Last update: 09-Apr-2006
 #
 # CMS hadronic barrel : 4 mm Sci.
 #                       For the absorber thickness, I have found
@@ -48,6 +48,7 @@
 #
 /mydet/isUnitInLambda 1
 /mydet/absorberTotalLength 9.9625
+/mydet/calorimeterRadius 4.98125
 /mydet/activeLayerNumber 25
 /mydet/activeLayerSize 4.0
 /mydet/isRadiusUnitInLambda 1

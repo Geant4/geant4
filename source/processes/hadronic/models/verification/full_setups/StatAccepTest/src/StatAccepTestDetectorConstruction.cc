@@ -2,6 +2,7 @@
 
 #include "G4Material.hh"
 #include "G4Box.hh"
+#include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
@@ -52,6 +53,7 @@ StatAccepTestDetectorConstruction::StatAccepTestDetectorConstruction() :
   theIsCalHomogeneous( false ),    // Sampling calorimeter.
   theIsUnitInLambda( false ),      // Unit of length for the absorber total length.
   theAbsorberTotalLength( 2.0*m ), 
+  theCalorimeterRadius( 1.0*m ), 
   theActiveLayerNumber( 50 ),
   theActiveLayerSize( 4.0*mm ),
   theReadoutLayerNumber( 50 ),
@@ -286,8 +288,10 @@ G4VPhysicalVolume* StatAccepTestDetectorConstruction::ConstructCalorimeter() {
   //------------------- volumes --------------------------
 
   double absorberTotalLength = theAbsorberTotalLength;
+  double calorimeterRadius = theCalorimeterRadius;
   if ( theIsUnitInLambda ) {
-     absorberTotalLength *= lambda; 
+    absorberTotalLength *= lambda; 
+    calorimeterRadius *= lambda; 
   }
 
   // --- experimental hall (world volume)
@@ -324,8 +328,6 @@ G4VPhysicalVolume* StatAccepTestDetectorConstruction::ConstructCalorimeter() {
   // active layer. 
 
   //            --- absorber layer : logical
-  G4double xAbsorber = absorberTotalLength / 2.0;    // half dimension along x
-  G4double yAbsorber = absorberTotalLength / 2.0;    // half dimension along y
   G4double zAbsorber = absorberTotalLength / static_cast<double>( theActiveLayerNumber );
   // In the case of homogenous calorimeter the "active" part must be
   // subtracted because it is made of the same material.
@@ -334,7 +336,12 @@ G4VPhysicalVolume* StatAccepTestDetectorConstruction::ConstructCalorimeter() {
   }
   zAbsorber /= 2.0;                                  // half dimension along z
 
-  G4Box* solidAbsorber = new G4Box("solidAbsorber", xAbsorber, yAbsorber, zAbsorber);
+  G4Tubs* solidAbsorber = new G4Tubs("solidAbsorber", 
+				     0.0,                // inner radius
+				     calorimeterRadius,  // outer radius
+				     zAbsorber,          // half cylinder length in z
+                                     0.0,                // starting phi angle in rad
+                                     2.0*pi );           // final phi angle in rad
 
   logicAbsorber = new G4LogicalVolume(solidAbsorber,       // solid 
                                       theAbsorberMaterial, // material
@@ -344,11 +351,14 @@ G4VPhysicalVolume* StatAccepTestDetectorConstruction::ConstructCalorimeter() {
                                       0);                  // user limits
 
   //            --- active layer : logical
-  G4double xActive = xAbsorber;                 // half dimension along x 
-  G4double yActive = yAbsorber;                 // half dimension along y 
   G4double zActive = theActiveLayerSize / 2.0;  // half dimension along z 
 
-  G4Box* solidActive = new G4Box("solidActive", xActive, yActive, zActive);
+  G4Tubs* solidActive = new G4Tubs("solidActive", 
+				   0.0,                // inner radius
+				   calorimeterRadius,  // outer radius
+				   zActive,            // half cylinder length in z
+				   0.0,                // starting phi angle in rad
+				   2.0*pi );           // final phi angle in rad
 
   logicActive = new G4LogicalVolume(solidActive,           // solid 
                                     theActiveMaterial,     // material
@@ -358,11 +368,14 @@ G4VPhysicalVolume* StatAccepTestDetectorConstruction::ConstructCalorimeter() {
                                     0);                    // user limits
 
   //        --- module : logical
-  G4double xModule = xAbsorber;            // half dimension along x
-  G4double yModule = yAbsorber;            // half dimension along y
   G4double zModule = (zAbsorber+zActive);  // half dimension along z 
 
-  G4Box* solidModule = new G4Box("solidModule", xModule, yModule, zModule);
+  G4Tubs* solidModule = new G4Tubs("solidModule", 
+				   0.0,                // inner radius
+				   calorimeterRadius,  // outer radius
+				   zModule,            // half cylinder length in z
+				   0.0,                // starting phi angle in rad
+				   2.0*pi );           // final phi angle in rad
 
   logicModule = new G4LogicalVolume(solidModule,    // solid 
                                     Lead,           // material, it does NOT matter
@@ -373,11 +386,14 @@ G4VPhysicalVolume* StatAccepTestDetectorConstruction::ConstructCalorimeter() {
 
   //    --- calorimeter : logical
   G4int numberOfModules = theActiveLayerNumber;
-  G4double xCalo = xModule;                  // half dimension along x
-  G4double yCalo = yModule;                  // half dimension along y
   G4double zCalo = numberOfModules*zModule;  // half dimension along z 
 
-  G4Box* solidCalo = new G4Box("solidCalo", xCalo, yCalo, zCalo);
+  G4Tubs* solidCalo = new G4Tubs("solidCalo", 
+				 0.0,                // inner radius
+				 calorimeterRadius,  // outer radius
+				 zCalo,              // half cylinder length in z
+				 0.0,                // starting phi angle in rad
+				 2.0*pi );           // final phi angle in rad
 
   logicCalo = new G4LogicalVolume(solidCalo,        // solid 
                                   Lead,             // material, it does NOT matter
@@ -498,6 +514,10 @@ G4bool StatAccepTestDetectorConstruction::areParametersOK() {
   if ( theAbsorberTotalLength <= 0.0 ) {
     isOk = false;
     G4cout << " StatAccepTestDetectorConstruction::areParametersOK() : theAbsorberTotalLength = " << theAbsorberTotalLength << G4endl;
+  }
+  if ( theCalorimeterRadius <= 0.0 ) {
+    isOk = false;
+    G4cout << " StatAccepTestDetectorConstruction::areParametersOK() : theCalorimeterRadius = " << theCalorimeterRadius << G4endl;
   }
   if ( theActiveLayerNumber <= 0 ) {
     isOk = false;
@@ -644,6 +664,12 @@ void StatAccepTestDetectorConstruction::PrintParameters() {
     G4cout << theAbsorberTotalLength << "  lambdas";
   } else {
     G4cout << theAbsorberTotalLength / m << " m";
+  }
+  G4cout << G4endl << " Calorimeter Radius = ";
+  if ( theIsUnitInLambda ) {
+    G4cout << theCalorimeterRadius << "  lambdas";
+  } else {
+    G4cout << theCalorimeterRadius / m << " m";
   }
   G4cout << G4endl << " Active Layer Number   = " << theActiveLayerNumber;
   G4cout << G4endl << " Active Layer Size     = " << theActiveLayerSize/mm << " mm";

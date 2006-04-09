@@ -1,5 +1,5 @@
 #----------------------------------------------------------------
-# Last update: 24-Mar-2006
+# Last update: 09-Apr-2006
 #
 # First of the two Wigmans' proposed challenges for Geant4, 
 # based on the paper: NIM A262 (1987) 229.
@@ -60,6 +60,7 @@
 #
 /mydet/isUnitInLambda 1
 /mydet/absorberTotalLength 10.0035
+/mydet/calorimeterRadius 5.00175
 /mydet/activeLayerNumber 171
 /mydet/readoutLayerNumber 19
 /mydet/activeLayerSize 2.5

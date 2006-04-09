@@ -201,6 +201,7 @@ g4file.write( "/mydet/isCalHomogeneous " + isHomogeneous + " \n" )
 
 g4file.write( "/mydet/isUnitInLambda 1 \n" )		
 g4file.write( "/mydet/absorberTotalLength 10.0 \n" )	
+g4file.write( "/mydet/calorimeterRadius 5.0 \n" )	
 g4file.write( "/mydet/activeLayerNumber 100 \n" )		
 g4file.write( "/mydet/readoutLayerNumber 20 \n" )		
 g4file.write( "/mydet/activeLayerSize 4.0 \n" )		

@@ -1,6 +1,12 @@
                  History file
                  ------------
 
+09-Apr-2006 - A.Ribon (statAccepTest-V08-00-10)
+- Transition from a cubic box to a cylinder, with radius
+  which can be set by the user independently from
+  the length of the calorimeter.
+
+
 09-Apr-2006 - A.Ribon (statAccepTest-V08-00-09)
 - Fixed the problem of the counting of neutrons due
   to the suspended feature of _HP Physics Lists.

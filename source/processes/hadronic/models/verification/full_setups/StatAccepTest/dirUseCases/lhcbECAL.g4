@@ -1,5 +1,5 @@
 #----------------------------------------------------------------
-# Last update: 24-Jan-2006
+# Last update: 09-Apr-2006
 #
 # LHCb electromagnetic calorimeter:  Pb (2.0 mm) - Sci (4 mm)
 #
@@ -36,6 +36,7 @@
 #
 /mydet/isUnitInLambda 0
 /mydet/absorberTotalLength 140.0
+/mydet/calorimeterRadius 70.0
 /mydet/activeLayerNumber 70
 /mydet/readoutLayerNumber 14
 /mydet/activeLayerSize 4.0

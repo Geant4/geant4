@@ -35,6 +35,7 @@ private:
   G4UIcmdWithABool*          theIsCalHomogeneous; 
   G4UIcmdWithABool*          theIsUnitInLambda;
   G4UIcmdWithADouble*        theAbsorberTotalLength;
+  G4UIcmdWithADouble*        theCalorimeterRadius;
   G4UIcmdWithAnInteger*      theActiveLayerNumber;
   G4UIcmdWithADouble*        theActiveLayerSize;
   G4UIcmdWithAnInteger*      theReadoutLayerNumber;

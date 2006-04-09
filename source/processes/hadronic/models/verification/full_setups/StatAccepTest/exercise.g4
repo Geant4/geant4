@@ -25,6 +25,7 @@
 #            the absorber in lambdas (interaction lengths), or
 #            in [mm]?
 #          - Size of the absorber in the given unit.
+#          - Radius of the (cylindrical) calorimeter in the given unit.
 #          - Number of active layers (in the case of PbWO4, i.e.
 #            of a homogeneous calorimeter, this number is relevant
 #            for the longitudinal shower analysis).
@@ -143,6 +144,7 @@
 #
 /mydet/isUnitInLambda 1
 /mydet/absorberTotalLength 10.0
+/mydet/calorimeterRadius 5.0
 /mydet/activeLayerNumber 100
 /mydet/readoutLayerNumber 20
 /mydet/activeLayerSize 4.0

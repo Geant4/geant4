@@ -1,5 +1,5 @@
 #--------------------------------------------------------------------
-# Last update: 22-Mar-2006
+# Last update: 09-Apr-2006
 #
 # ATLAS HEC : HEC1 : Cu (25 mm) LAr (8.5 mm)  0.82 m length
 #             HEC2 : Cu (50 mm) LAr (8.5 mm)  0.96 m length
@@ -56,6 +56,7 @@
 #
 /mydet/isUnitInLambda 1
 /mydet/absorberTotalLength 9.96
+/mydet/calorimeterRadius 4.98
 /mydet/activeLayerNumber 60
 /mydet/readoutLayerNumber 20
 /mydet/activeLayerSize 8.5

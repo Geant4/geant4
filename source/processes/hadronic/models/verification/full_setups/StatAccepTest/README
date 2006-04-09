@@ -29,12 +29,11 @@
  you are interested in, and also, eventually, a transverse magnetic 
  field (see that command file to look at the various options available).
 
- The calorimeter is a box, with the beam along the Z-axis, and
- whose dimensions are the same along x, y (i.e. transverse dimensions
- with respect the beam), and also equal to the total absorber
- thickness along the beam (Z-) axis. This size (total thickness
- of the absorber) can be specified either in unit of lambdas of
- the absorber material, or in normal length in [mm]. 
+ The calorimeter is a cylinder, with the axis (length of the 
+ cylinder) along the beam direction, which is along the Z-axis.
+ This radius of the calorimeter, and the total thickness
+ of the absorber, can be specified either in unit of lambdas 
+ of the absorber material, or in normal length in [mm]. 
  The user has to specified also the thickness (in [mm]) of a
  single layer of active material, and the number of layers.
  Also the number of readout layers can be specified, in the
@@ -43,6 +42,9 @@
  assumed to be the same as the number of active layers; if it 
  is set explicitly, then it must be a divisor of the number of
  active layers, otherwise it is forced to be equal to it.
+ (Notice that the concept of "readout layer" appears only at
+  the level of analysis, not at the level of detector 
+  construction.)
  In the case of an homogeneous calorimeter, for instance PbWO4,
  the number of layers indicate essentially the number of sampling
  we can have for the longitudinal shower profile.

@@ -1,5 +1,5 @@
 #----------------------------------------------------------------
-# Last update: 24-Jan-2006
+# Last update: 09-Apr-2006
 #
 # ATLAS Barrel LAr electromagnetic calorimeter:
 #                Pb (1.53 mm) - LAr (4.2 mm)
@@ -54,6 +54,7 @@
 #
 /mydet/isUnitInLambda 0
 /mydet/absorberTotalLength 140.76
+/mydet/calorimeterRadius 70.38
 /mydet/activeLayerNumber 92
 /mydet/readoutLayerNumber 23
 /mydet/activeLayerSize 4.2

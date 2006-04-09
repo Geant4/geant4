@@ -64,6 +64,14 @@ StatAccepTestDetectorMessenger(StatAccepTestDetectorConstruction* myDet)
   theAbsorberTotalLength->SetDefaultValue( 2000.0 ); // default: 2 meters.
   theAbsorberTotalLength->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  theCalorimeterRadius = new G4UIcmdWithADouble("/mydet/calorimeterRadius",this);
+  theCalorimeterRadius->SetParameterName("choiceCalorimeterRadius",true);
+  theCalorimeterRadius->SetGuidance("Calorimeter Radius");
+  theCalorimeterRadius->SetGuidance(" -> in unit of lambda or [mm]");
+  theCalorimeterRadius->SetGuidance(" -> depending on value of choiceIsUnitInLambda");
+  theCalorimeterRadius->SetDefaultValue( 1000.0 ); // default: 1 meter.
+  theCalorimeterRadius->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   theActiveLayerNumber = new G4UIcmdWithAnInteger("/mydet/activeLayerNumber",this);
   theActiveLayerNumber->SetParameterName("choiceActiveLayerNumber",true);
   theActiveLayerNumber->SetGuidance("Number of active layers");
@@ -126,6 +134,7 @@ StatAccepTestDetectorMessenger::~StatAccepTestDetectorMessenger() {
   delete theIsCalHomogeneous;
   delete theIsUnitInLambda;
   delete theAbsorberTotalLength;
+  delete theCalorimeterRadius;
   delete theActiveLayerNumber;
   delete theActiveLayerSize;
   delete theReadoutLayerNumber;
@@ -165,6 +174,11 @@ SetNewValue(G4UIcommand* command, G4String newValue) {
   if ( command == theAbsorberTotalLength ) { 
     theDetector->
       SetAbsorberTotalLength( theAbsorberTotalLength->GetNewDoubleValue(newValue) );
+  }
+
+  if ( command == theCalorimeterRadius ) { 
+    theDetector->
+      SetCalorimeterRadius( theCalorimeterRadius->GetNewDoubleValue(newValue) );
   }
 
   if ( command == theActiveLayerNumber ) { 
