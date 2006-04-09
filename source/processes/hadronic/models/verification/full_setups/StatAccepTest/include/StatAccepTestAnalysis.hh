@@ -159,6 +159,26 @@ private:
   G4int numTrackProton, numTrackAntiProton;
   G4int numTrackNeutron, numTrackAntiNeutron;
 
+  // Count the track length of some particles.
+  G4double electronTrackLength;      // e- or e+
+  G4double muonTrackLength;          // mu- or mu+
+  G4double pionChargedTrackLength;   // pi- or pi+
+  G4double protonTrackLength;        // proton (not anti_proton)
+  G4double gammaTrackLength;         // gamma
+  G4double pion0TrackLength;         // pi0       
+  G4double neutronTrackLength;       // neutron (not anti_neutron)
+
+  // Monitor the kinetic energy of particles exiting the calorimeter.
+  G4double kinEnergyExiting;          // total
+  G4double kinEnergyExitingGammas;    // due only to gammas
+  G4double kinEnergyExitingNeutrons;  // due only to neutrons
+  G4double kinEnergyExitingNeutrinos; // due only to neutrinos
+  G4double kinEnergyExitingMuons;     // due only to muons
+  G4int    numExitingGammas;          // number of exiting gammas
+  G4int    numExitingNeutrons;        // number of exiting neutrons
+  G4int    numExitingNeutrinos;       // number of exiting neutrons
+  G4int    numExitingMuons;           // number of exiting neutrons
+
 };
 
 #endif

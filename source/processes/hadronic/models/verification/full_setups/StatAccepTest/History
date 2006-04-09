@@ -1,6 +1,16 @@
                  History file
                  ------------
 
+09-Apr-2006 - A.Ribon (statAccepTest-V08-00-09)
+- Fixed the problem of the counting of neutrons due
+  to the suspended feature of _HP Physics Lists.
+  Added the monitoring of: fraction of visible energies
+  in four quarters of the calorimeter; fraction of 
+  visible energies in three thirds of rings; 
+  track and step lengths; kinetic energy of exiting
+  particles.
+
+
 08-Feb-2006 - A.Ribon (statAccepTest-V08-00-08)
 - Added  anti_proton  and  anti_neutron  as possible 
   primary beam particles. They do not need to be used

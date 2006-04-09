@@ -167,6 +167,24 @@ void StatAccepTestAnalysis::init() {
   numTrackProton = numTrackAntiProton = 0;
   numTrackNeutron = numTrackAntiNeutron = 0;
 
+  electronTrackLength = 0.0;
+  muonTrackLength = 0.0;
+  pionChargedTrackLength = 0.0;
+  protonTrackLength = 0.0;
+  gammaTrackLength = 0.0;
+  pion0TrackLength = 0.0;
+  neutronTrackLength = 0.0;
+
+  kinEnergyExiting = 0.0;
+  kinEnergyExitingGammas = 0.0; 
+  kinEnergyExitingNeutrons = 0.0;
+  kinEnergyExitingNeutrinos = 0.0;
+  kinEnergyExitingMuons = 0.0;
+  numExitingGammas = 0;
+  numExitingNeutrons = 0;
+  numExitingNeutrinos = 0;
+  numExitingMuons = 0;
+
 }                       
 
 
@@ -360,7 +378,66 @@ void StatAccepTestAnalysis::infoStep( const G4Step* aStep ) {
 
 
 void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
-  classifyParticle( true , aTrack->GetDefinition() );
+
+  if ( aTrack->GetTrackStatus() == fStopAndKill ) {
+    //G4cout << "\t --- Info Track when fStopAndKill --- " << G4endl
+    //	     << "\t TrackID = " << aTrack->GetTrackID() 
+    //       << "\t Name = " << aTrack->GetDefinition()->GetParticleName() << G4endl
+    //       << "\t Volume = " << aTrack->GetVolume()->GetName() 
+    //       << "\t Material = " << aTrack->GetMaterial()->GetName() << G4endl
+    //       << "\t Ekin = " << aTrack->GetKineticEnergy() << " MeV "
+    //       << "\t Length track = " << aTrack->GetTrackLength() 
+    //       << G4endl;  //***DEBUG*** 
+    //if ( ! ( aTrack->GetVolume()->GetName() == "expHall" ||
+    //	     aTrack->GetVolume()->GetName() == "physiAbsorber" ||
+    //	     aTrack->GetVolume()->GetName() == "physiActive" ) ) {
+    //  G4cout << " ***STRANGE VOLUME *** : " << aTrack->GetVolume()->GetName() << G4endl;
+    //}
+     
+    G4double trackLength = aTrack->GetTrackLength();
+    if ( aTrack->GetDefinition() == G4Electron::ElectronDefinition() || 
+         aTrack->GetDefinition() == G4Positron::PositronDefinition() ) {
+      electronTrackLength += trackLength;
+    } else if ( aTrack->GetDefinition() == G4Gamma::GammaDefinition() ) {
+      gammaTrackLength += trackLength;
+    } else if ( aTrack->GetDefinition() == G4MuonMinus::MuonMinusDefinition() ||  
+		aTrack->GetDefinition() == G4MuonPlus::MuonPlusDefinition() ) {
+      muonTrackLength += trackLength;
+    } else if ( aTrack->GetDefinition() == G4PionPlus::PionPlusDefinition() ||
+		aTrack->GetDefinition() == G4PionMinus::PionMinusDefinition() ) {
+      pionChargedTrackLength += trackLength;
+    } else if ( aTrack->GetDefinition() == G4PionZero::PionZeroDefinition() ) {
+      pion0TrackLength += trackLength;
+    } else if ( aTrack->GetDefinition() == G4Proton::ProtonDefinition() ) {
+      protonTrackLength += trackLength;
+    } else if ( aTrack->GetDefinition() == G4Neutron::NeutronDefinition() ) {
+      neutronTrackLength += trackLength;
+    }
+    if ( aTrack->GetVolume()->GetName() == "expHall" ) {
+      kinEnergyExiting += aTrack->GetKineticEnergy();
+      if ( aTrack->GetDefinition() == G4Gamma::GammaDefinition() ) {
+	kinEnergyExitingGammas += aTrack->GetKineticEnergy();
+        numExitingGammas++;
+      } else if ( aTrack->GetDefinition() == G4Neutron::NeutronDefinition() ) {
+	kinEnergyExitingNeutrons += aTrack->GetKineticEnergy();
+        numExitingNeutrons++;
+      } else if ( aTrack->GetDefinition() == G4NeutrinoE::NeutrinoEDefinition()  ||
+		  aTrack->GetDefinition() == G4NeutrinoMu::NeutrinoMuDefinition()  ||
+		  aTrack->GetDefinition() == G4NeutrinoTau::NeutrinoTauDefinition()  ||
+		  aTrack->GetDefinition() == G4AntiNeutrinoE::AntiNeutrinoEDefinition()  ||
+		  aTrack->GetDefinition() == G4AntiNeutrinoMu::AntiNeutrinoMuDefinition()  ||
+		  aTrack->GetDefinition() == G4AntiNeutrinoTau::AntiNeutrinoTauDefinition() ) {
+	kinEnergyExitingNeutrinos += aTrack->GetKineticEnergy();
+        numExitingNeutrinos++;
+      } else if ( aTrack->GetDefinition() == G4MuonMinus::MuonMinusDefinition() ||  
+		  aTrack->GetDefinition() == G4MuonPlus::MuonPlusDefinition() ) {
+	kinEnergyExitingMuons += aTrack->GetKineticEnergy();
+        numExitingMuons++;        
+      }
+    }
+  } else {
+    classifyParticle( true , aTrack->GetDefinition() );
+  }
 }
 
 
@@ -1561,5 +1638,108 @@ void StatAccepTestAnalysis::finish() {
 	     << " +/- " << mu_sigma << G4endl;
     }
   }
+
+  // Print information about track length:
+  if ( numTrackElectron + numTrackPositron > 0 ) {
+    electronTrackLength /= static_cast< G4double >( numTrackElectron + numTrackPositron );
+  }
+  if ( numTrackMuMinus + numTrackMuPlus > 0 ) {
+    muonTrackLength /= static_cast< G4double >( numTrackMuMinus + numTrackMuPlus );
+  }
+  if ( numTrackPiPlus + numTrackPiMinus > 0 ) {
+    pionChargedTrackLength /= static_cast< G4double >( numTrackPiPlus + numTrackPiMinus );
+  }
+  if ( numTrackProton > 0 ) {
+    protonTrackLength /= static_cast< G4double >( numTrackProton );
+  }
+  if ( numTrackGamma > 0 ) {
+    gammaTrackLength /= static_cast< G4double >( numTrackGamma );
+  }
+  if ( numTrackPi0 > 0 ) {
+    pion0TrackLength /= static_cast< G4double >( numTrackPi0 );
+  }
+  if ( numTrackNeutron > 0 ) {
+    neutronTrackLength /= static_cast< G4double >( numTrackNeutron );
+  }
+  G4cout << G4endl << " Average track LENGTH [mm] " << G4endl
+         << "\t electron/positron  : " << electronTrackLength << std::endl
+         << "\t muon-/muon+        : " << muonTrackLength << std::endl
+         << "\t pion-/pion+        : " << pionChargedTrackLength << std::endl
+         << "\t proton             : " << protonTrackLength << std::endl
+         << "\t gamma              : " << gammaTrackLength << std::endl
+         << "\t pion0              : " << pion0TrackLength << std::endl
+	 << "\t neutron            : " << neutronTrackLength << std::endl;
+
+  // Print information about step length and number of steps
+  G4cout << G4endl << " Average step LENGTH [mm] and number of steps " << G4endl;
+  G4double averageNumberOfSteps = 1.0;
+  if ( numTrackElectron + numTrackPositron > 0 ) {
+    averageNumberOfSteps = ( numStepElectron + numStepPositron ) /
+                           ( numTrackElectron + numTrackPositron );
+    G4cout << "\t electron/positron  : " 
+	   << electronTrackLength / averageNumberOfSteps 
+	   << "\t numSteps = " << averageNumberOfSteps << G4endl;
+  }
+  if ( numTrackMuMinus + numTrackMuPlus > 0 ) {
+    averageNumberOfSteps = ( numStepMuMinus + numStepMuPlus ) /
+                           ( numTrackMuMinus + numTrackMuPlus );
+    G4cout << "\t muon-/muon+        : " 
+	   << muonTrackLength / averageNumberOfSteps 
+	   << "\t numSteps = " << averageNumberOfSteps << G4endl;
+  }
+  if ( numTrackPiPlus + numTrackPiMinus > 0 ) {
+    averageNumberOfSteps = ( numStepPiPlus + numStepPiMinus ) /
+                           ( numTrackPiPlus + numTrackPiMinus );
+    G4cout << "\t pion-/pion+        : " 
+	   << pionChargedTrackLength / averageNumberOfSteps 
+	   << "\t numSteps = " << averageNumberOfSteps << G4endl;
+  }
+  if ( numTrackProton > 0 ) {
+    averageNumberOfSteps = numStepProton / numTrackProton;
+    G4cout << "\t proton             : "
+	   << protonTrackLength / averageNumberOfSteps 
+	   << "\t numSteps = " << averageNumberOfSteps << G4endl;
+  }
+  if ( numTrackGamma > 0 ) {
+    averageNumberOfSteps = numStepGamma / numTrackGamma;
+    G4cout << "\t gamma              : " 
+	   << gammaTrackLength / averageNumberOfSteps 
+	   << "\t numSteps = " << averageNumberOfSteps << G4endl;
+  }
+  if ( numTrackPi0 > 0 ) {
+    averageNumberOfSteps = numStepPi0 / numTrackPi0;
+    G4cout << "\t pion0              : " 
+	   << pion0TrackLength / averageNumberOfSteps 
+	   << "\t numSteps = " << averageNumberOfSteps << G4endl;
+  }
+  if ( numTrackNeutron > 0 ) {
+    averageNumberOfSteps = numStepNeutron / numTrackNeutron;
+    G4cout << "\t neutron            : " 
+	   << neutronTrackLength / averageNumberOfSteps 
+	   << "\t numSteps = " << averageNumberOfSteps << G4endl;
+  } 
+
+  // Print information about exiting kinetic energy.
+  G4cout << G4endl << " Average exiting Kinetic Energy = " 
+         << kinEnergyExiting / n << " MeV " << G4endl;
+  if ( kinEnergyExiting > 1.0E-06 ) {
+    G4cout << "\t fraction due to Gammas      = " 
+	   << kinEnergyExitingGammas / kinEnergyExiting << G4endl
+	   << "\t fraction due to Neutrons    = " 
+	   << kinEnergyExitingNeutrons / kinEnergyExiting << G4endl
+	   << "\t fraction due to Neutrinos   = " 
+	   << kinEnergyExitingNeutrinos / kinEnergyExiting << G4endl
+	   << "\t fraction due to Muons       = " 
+	   << kinEnergyExitingMuons / kinEnergyExiting << G4endl
+           << "\t number of exiting Gammas    = " 
+           << numExitingGammas / n << G4endl
+           << "\t number of exiting Neutrons  = " 
+           << numExitingNeutrons / n << G4endl
+           << "\t number of exiting Neutrinos = " 
+           << numExitingNeutrinos / n << G4endl
+           << "\t number of exiting Muons     = " 
+           << numExitingMuons / n << G4endl;
+  }
+
 }
 

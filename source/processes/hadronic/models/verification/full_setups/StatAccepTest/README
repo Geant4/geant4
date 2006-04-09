@@ -1,5 +1,5 @@
 
- Last update: 06-Apr-2006
+ Last update: 09-Apr-2006
  ========================
 
  This directory contains a configurable calorimeter setup to be used
@@ -91,11 +91,17 @@
    o  average energy deposited in all active layers;
    o  average energy deposited in the whole calorimeter;
    o  average energy deposited in each layer (longitudinal profile);
+   o  fractions of visible energy deposited in the four quarters;
    o  average energy deposited in each ring (transverse profile);
+   o  fractions of visible energy deposited in the three thirds of
+      the rings;
    o  energy resolution;
    o  sampling fraction;
-   o  average number of steps and tracks per event.
- 
+   o  average number of steps and tracks per event;
+   o  average track length for some particles;
+   o  average step length and number of steps for some particles;
+   o  information about the kinetic energy of exiting particles.
+
  Some scripts and one kumac has been provided to allow a full
  automatization of this Statistical Acceptance suite.
  Here the structure of these scripts/kumac:
