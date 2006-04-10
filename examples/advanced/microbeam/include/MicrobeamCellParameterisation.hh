@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id: MicrobeamCellParameterisation.hh,v 1.1 2006-04-06 15:32:43 sincerti Exp $
+// $Id: MicrobeamCellParameterisation.hh,v 1.2 2006-04-10 14:47:31 sincerti Exp $
 // -------------------------------------------------------------------
 
 #ifndef MicrobeamCellParameterisation_H
@@ -32,7 +32,10 @@ class MicrobeamCellParameterisation : public G4VPVParameterisation
   
     MicrobeamCellParameterisation
     (G4int NoBoxes, G4float DimBoxX, G4float DimBoxY, G4float DimBoxZ,
-     G4Material* nucleus, G4Material* cytoplasm);
+     G4Material* nucleus1, G4Material* cytoplasm1,
+     G4Material* nucleus2, G4Material* cytoplasm2,
+     G4Material* nucleus3, G4Material* cytoplasm3
+     );
 
     virtual				 
    ~MicrobeamCellParameterisation();
@@ -100,15 +103,25 @@ class MicrobeamCellParameterisation : public G4VPVParameterisation
     G4float DimCellBoxY;
     G4float DimCellBoxZ;
 
-    G4Material * nucleusMaterial;
-    G4Material * cytoplasmMaterial ;
+    G4Material * nucleusMaterial1;
+    G4Material * cytoplasmMaterial1;
+    G4Material * nucleusMaterial2;
+    G4Material * cytoplasmMaterial2;
+    G4Material * nucleusMaterial3;
+    G4Material * cytoplasmMaterial3;
     
-    G4VisAttributes * nucleusAttributes;
-    G4VisAttributes * cytoplasmAttributes;
+    G4VisAttributes * nucleusAttributes1;
+    G4VisAttributes * cytoplasmAttributes1;
+    G4VisAttributes * nucleusAttributes2;
+    G4VisAttributes * cytoplasmAttributes2;
+    G4VisAttributes * nucleusAttributes3;
+    G4VisAttributes * cytoplasmAttributes3;
     
     // PHANTOM SIZE IN VOXELS
     G4ThreeVector *mapCell ; // VOXEL COORDINATES
-    G4float *material      ; // MATERIAL   
+    G4float *material      ; // MATERIAL 
+    G4float *mass          ; // DENSITY REGION
+      
 };
 
 #endif

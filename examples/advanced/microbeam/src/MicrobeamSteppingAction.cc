@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id: MicrobeamSteppingAction.cc,v 1.1 2006-04-06 15:32:44 sincerti Exp $
+// $Id: MicrobeamSteppingAction.cc,v 1.2 2006-04-10 14:47:32 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "G4SteppingManager.hh"

@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id: plot.C,v 1.2 2006-04-06 15:22:36 sincerti Exp $
+// $Id: plot.C,v 1.3 2006-04-10 14:47:31 sincerti Exp $
 // -------------------------------------------------------------------
 //
 // *********************************************************************
@@ -8,9 +8,10 @@
 //   2 - type '.X plot.C' at the ROOT session prompt
 // This macro needs five files : dose.txt, stoppingPower.txt, range.txt,
 // 3DDose.txt and beamPosition.txt
-// written by S. Incerti, 01/04/2006
+// written by S. Incerti and O. Boissonnade, 10/04/2006
 // *********************************************************************
 {
+
 gROOT->Reset();
 
 //****************
@@ -23,15 +24,16 @@ gStyle->SetPalette(1);
 gROOT->SetStyle("Plain");
 Double_t scale;
 	
-c1 = new TCanvas ("c1","",200,20,1200,600);
-c1.Divide(4,2);
+c1 = new TCanvas ("c1","",20,20,1200,900);
+c1.Divide(4,3);
 
 FILE * fp = fopen("dose.txt","r");
 Float_t nD,cD;
-Int_t ncols;
+Int_t ncols=0;
 Int_t nlines = 0;
-TH1F *h1  = new TH1F("Dose distribution in Nucleus","Dose distribution in Nucleus",100,0.001,0.5);
-TH1F *h10 = new TH1F("Dose distribution in Cytoplasm","Dose distribution in Cytoplasm",100,0.001,0.5);
+
+TH1F *h1  = new TH1F("Absorbed dose distribution in Nucleus","Dose distribution in Nucleus",100,0.001,0.5);
+TH1F *h10 = new TH1F("Absorbed dose distribution in Cytoplasm","Dose distribution in Cytoplasm",100,0.001,0.2);
 
 while (1) 
    {
@@ -43,7 +45,7 @@ while (1)
    }
 fclose(fp);
 
-c1.cd(1);
+c1.cd(2);
         scale = 1/h1->Integral();
 	h1->Scale(scale);
 	h1->Draw();
@@ -59,10 +61,10 @@ c1.cd(1);
 	h1->SetFillColor(3);
 
 //*****************
-// DOSE IN CTOPLASM
+// DOSE IN CYTOPLASM
 //*****************
 
-c1.cd(5);
+c1.cd(6);
         scale = 1/h10->Integral();
 	h10->Scale(scale);
 	h10->Draw();
@@ -96,10 +98,10 @@ while (1)
       if (ncols < 0) break;
       h2->Fill(d);
       nlines++;
-    }
+   }
 fclose(fp);
     
-c1.cd(2);
+c1.cd(9);
         scale = 1/h2->Integral();
 	h2->Scale(scale);
 	h2->Draw();
@@ -153,8 +155,8 @@ while (1)
    }
 fclose(fp);
       
-c1.cd(6);
-  ntuple->Draw("X2:Z2","abs(X2)<50","colz");
+c1.cd(10);
+  ntuple->Draw("X2:Z2","abs(X2)<50","surf3");
   gPad->SetLogz();
   htemp->GetXaxis()->SetLabelSize(0.025);
   htemp->GetYaxis()->SetLabelSize(0.025);
@@ -165,103 +167,207 @@ c1.cd(6);
   htemp->GetYaxis()->SetTitleOffset(1.4);
   htemp->GetXaxis()->SetTitle("Z (µm)");
   htemp->GetYaxis()->SetTitle("X (µm)");
-  htemp->SetTitle("Range in cell phantom");
+  htemp->SetTitle("Range in cell");
 
-//*****************************
-// ENERGY DEPOSITS - HORIZONTAL
-//*****************************
+//*********************
+// INTENSITY HISTOGRAMS 
+//*********************
 
-Float_t xVox, yVox, zVox, dose, tmp;
-
-Float_t voxelSizeX, voxelSizeY, voxelSizeZ;
 FILE * fp = fopen("phantom.dat","r");
-ncols = fscanf(fp,"%f %f %f",&tmp,&tmp,&tmp);
-ncols = fscanf(fp,"%f %f %f",&voxelSizeX,&voxelSizeY,&voxelSizeZ);
-fclose(fp);
+Float_t xVox, yVox, zVox, tmp, den, dose;
 
-FILE * fp = fopen("3DDose.txt","r");
+Float_t X,Y,Z;
+Float_t vox = 0,  mat = 0;
+Float_t voxelSizeX, voxelSizeY, voxelSizeZ;
 
-TNtuple *ntupleDose = new TNtuple("Dose","ntuple","xVox:yVox:zVox:dose");
+TH1F *h1  = new TH1F("h1","Nucleus marker intensity",100,1,300);
+TH1F *h11 = new TH1F("h11 ","",100,1,300);
 
-TH2F *hxy = new TH2F("xy","xy",128,-64,63,128,-64,63);  
-TH2F *hxz = new TH2F("xz","xz",128,-64,63,59,-29,28);  
-TH2F *hyz = new TH2F("yz","yz",128,-64,63,59,-29,28);  
+TH1F *h2  = new TH1F("h2","Cytoplasm marker intensity",100,1,300);
+TH1F *h20 = new TH1F("h20 ","",100,1,300);
+
+TNtuple *ntupleYXN = new TNtuple("NUCLEUS","ntuple","Y:X:vox");
+TNtuple *ntupleZX = new TNtuple("CYTOPASM","ntuple","Z:X:vox");
+TNtuple *ntupleYX = new TNtuple("CYTOPASM","ntuple","Y:X:vox");
+
+nlines=0;
+ncols=0;
 
 while (1) 
    {
-      ncols = fscanf(fp,"%f %f %f %f",&xVox,&yVox,&zVox,&dose);
+      if ( nlines == 0 ) ncols = fscanf(fp,"%f %f %f",&tmp,&tmp,&tmp);
+      if ( nlines == 1 ) ncols = fscanf(fp,"%f %f %f",&voxelSizeX,&voxelSizeY,&voxelSizeZ);
+      if ( nlines == 2 ) ncols = fscanf(fp,"%f %f %f",&tmp,&tmp,&tmp);
+      if ( nlines >= 3 ) ncols = fscanf(fp,"%f %f %f %f %f %f", &X, &Y, &Z, &mat, &den, &vox);
       if (ncols < 0) break;
 
-      voxelSizeX=1;
-      voxelSizeY=1;
-      voxelSizeZ=1;
-
-      xVox = xVox * voxelSizeX;
-      yVox = yVox * voxelSizeY;
-      zVox = zVox * voxelSizeZ;
-
-      ntupleDose->Fill(xVox,yVox,zVox,dose);
-      hxy->Fill(xVox,yVox);
-      
+      X= X*voxelSizeX;
+      Y= Y*voxelSizeY;
+      Z= Z*voxelSizeZ;
+  
+      if ( mat == 2 )  // noyau
+         {
+	  if (den==1) h1->Fill( vox );
+	  if (den==2) h11->Fill( vox );
+	  ntupleYXN->Fill(Y,X,vox);
+	 }
+      if ( mat == 1 ) // cytoplasm
+         {
+	  if (den==1) h2->Fill( vox );
+	  if (den==2) h20->Fill( vox );
+	  ntupleZX->Fill(Z,X,vox);
+	  ntupleYX->Fill(Y,X,vox);
+	 }
       nlines++;
+      
    }
 fclose(fp);
-     
-c1.cd(7);
-  hxy->Draw("colz");
+
+// HISTO NUCLEUS
+
+c1.cd(1);
+	h1->Draw();
+	h1->GetXaxis()->SetLabelSize(0.025);
+	h1->GetYaxis()->SetLabelSize(0.025);
+	h1->GetXaxis()->SetTitleSize(0.035);
+	h1->GetYaxis()->SetTitleSize(0.035);
+	h1->GetXaxis()->SetTitleOffset(1.4);
+	h1->GetYaxis()->SetTitleOffset(1.4);
+	h1->GetXaxis()->SetTitle("Voxel intensity (0-255)");
+	h1->GetYaxis()->SetTitle("Number of events");  
+	h1->SetLineColor(3);
+	h1->SetFillColor(3);   // green
+
+	h11->SetLineColor(8);
+	h11->SetFillColor(8);  // dark green
+	h11->Draw("same");
+
+// HISTO CYTOPLASM
+
+c1.cd(5);
+	h2->Draw();
+	h2->GetXaxis()->SetLabelSize(0.025);
+	h2->GetYaxis()->SetLabelSize(0.025);
+	h2->GetXaxis()->SetTitleSize(0.035);
+	h2->GetYaxis()->SetTitleSize(0.035);
+	h2->GetXaxis()->SetTitleOffset(1.4);
+	h2->GetYaxis()->SetTitleOffset(1.4);
+	h2->GetXaxis()->SetTitle("Voxel intensity (0-255)");
+	h2->GetYaxis()->SetTitle("Number of events");  
+	h2->SetLineColor(2);
+	h2->SetFillColor(2);   // red
+	
+	h20->SetLineColor(5);
+	h20->SetFillColor(5);  // yellow (nucleoli)
+	h20->Draw("same");
+
+//*************************
+// CUMULATED CELL INTENSITY 
+//*************************
+
+gStyle->SetOptStat(0000);
+gStyle->SetOptFit();
+gStyle->SetPalette(1);
+gROOT->SetStyle("Plain");
+
+//CYTOPLASM
+
+c1.cd(7);  // axe YX
+  TH2F *hist = new TH2F("hist","hist",50,-20,20,50,-20,20);
+  ntupleYX->Draw("Y:X>>hist","vox","colz");
   gPad->SetLogz();
+  hist->Draw("colz");
+  hist->GetXaxis()->SetLabelSize(0.025);
+  hist->GetYaxis()->SetLabelSize(0.025);
+  hist->GetZaxis()->SetLabelSize(0.025);
+  hist->GetXaxis()->SetTitleSize(0.035);
+  hist->GetYaxis()->SetTitleSize(0.035);
+  hist->GetXaxis()->SetTitleOffset(1.4);
+  hist->GetYaxis()->SetTitleOffset(1.4);
+  hist->GetXaxis()->SetTitle("Y (µm)");
+  hist->GetYaxis()->SetTitle("X (µm)");
+  hist->SetTitle("Cytoplasm intensity on transverse section");
 
-  hxy->GetXaxis()->SetLabelSize(0.025);
-  hxy->GetYaxis()->SetLabelSize(0.025);
-  hxy->GetZaxis()->SetLabelSize(0.025);
-  hxy->GetXaxis()->SetTitleSize(0.035);
-  hxy->GetYaxis()->SetTitleSize(0.035);
-  hxy->GetXaxis()->SetTitleOffset(1.4);
-  hxy->GetYaxis()->SetTitleOffset(1.4);
-  hxy->GetXaxis()->SetTitle("Y (voxels)");
-  hxy->GetYaxis()->SetTitle("X (voxels)");
-  hxy->SetTitle("Cell density cumulated on transverse section");
+//NUCLEUS
 
-
-c1.cd(3);
-
-  gStyle->SetPalette(1);
-  ntupleDose->Draw("dose:xVox:yVox","dose>0","iso");
-  htemp->GetXaxis()->SetLabelSize(0.025);
-  htemp->GetYaxis()->SetLabelSize(0.025);
-  htemp->GetZaxis()->SetLabelSize(0.025);
-  htemp->GetXaxis()->SetTitleSize(0.035);
-  htemp->GetYaxis()->SetTitleSize(0.035);
-  htemp->GetZaxis()->SetTitleSize(0.035);
-  htemp->GetXaxis()->SetTitleOffset(1.4);
-  htemp->GetYaxis()->SetTitleOffset(1.4);
-  htemp->GetZaxis()->SetTitleOffset(1.4);
-  htemp->GetXaxis()->SetTitle("Y (voxels)");
-  htemp->GetYaxis()->SetTitle("X (voxels)");
-  htemp->GetZaxis()->SetTitle("Energy deposit (eV)");
-  htemp->SetTitle("Average energy deposit per voxel cumulated on cell transverse section");
-
-/*
-  ntupleDose->Draw("dose>>htemp","dose>0","");
+c1.cd(3);  // axe YX
+  TH2F *hist = new TH2F("hist","hist",50,-20,20,50,-20,20);
+  ntupleYXN->Draw("Y:X>>hist","vox","colz");
   gPad->SetLogz();
-  scale = 1/htemp->Integral();
-  htemp->Scale(scale);
-  htemp->Draw();
-  htemp->GetXaxis()->SetLabelSize(0.025);
-  htemp->GetYaxis()->SetLabelSize(0.025);
-  htemp->GetZaxis()->SetLabelSize(0.025);
-  htemp->GetXaxis()->SetTitleSize(0.035);
-  htemp->GetYaxis()->SetTitleSize(0.035);
-  htemp->GetXaxis()->SetTitleOffset(1.4);
-  htemp->GetYaxis()->SetTitleOffset(1.4);
-  htemp->GetXaxis()->SetTitle("Energy deposit (eV)");
-  htemp->GetYaxis()->SetTitle("Fraction of events");
-  htemp->SetTitle("Average energy deposit in voxels");
-  htemp->SetFillColor(6);
-  htemp->SetLineColor(6);
-  gPad->SetLogy();
-  */
+  hist->Draw("colz");
+  hist->GetXaxis()->SetLabelSize(0.025);
+  hist->GetYaxis()->SetLabelSize(0.025);
+  hist->GetZaxis()->SetLabelSize(0.025);
+  hist->GetXaxis()->SetTitleSize(0.035);
+  hist->GetYaxis()->SetTitleSize(0.035);
+  hist->GetXaxis()->SetTitleOffset(1.4);
+  hist->GetYaxis()->SetTitleOffset(1.4);
+  hist->GetXaxis()->SetTitle("Y (µm)");
+  hist->GetYaxis()->SetTitle("X (µm)");
+  hist->SetTitle("Nucleus intensity on transverse section");
+
+//****************
+// ENERGY DEPOSITS 
+//****************
+
+gStyle->SetOptStat(0000);
+gStyle->SetOptFit();
+gStyle->SetPalette(1);
+gROOT->SetStyle("Plain");
+
+FILE * fp = fopen("3DDose.txt","r");
+
+TNtuple *ntuple2 = new TNtuple("CELL","ntuple","yVox:xVox:dose");
+TNtuple *ntuple3 = new TNtuple("CELL","ntuple","xVox:zVox:dose");
+TNtuple *ntuplezyx = new TNtuple("DOSE","ntuple","zVox:yVox:xVox:dose");
+
+while (1) 
+   {
+      ncols = fscanf(fp,"%f %f %f %f",&xVox, &yVox, &zVox, &dose);
+      if (ncols < 0) break;
+      
+      xVox= xVox*voxelSizeX;
+      yVox= yVox*voxelSizeY;
+      zVox= zVox*voxelSizeZ;
+      
+      ntuple2->Fill(yVox,xVox,dose);
+      ntuple3->Fill(xVox,zVox,dose);
+      ntuplezyx->Fill(zVox,yVox,xVox,dose);
+   }
+fclose(fp);
+
+c1.cd(11);
+  TH2F *hist = new TH2F("hist","hist",50,-20,20,50,-20,20);
+  ntuple2->Draw("yVox:xVox>>hist","dose","contz");
+  gPad->SetLogz();
+  hist->Draw("contz");
+  hist->GetXaxis()->SetLabelSize(0.025);
+  hist->GetYaxis()->SetLabelSize(0.025);
+  hist->GetZaxis()->SetLabelSize(0.025);
+  hist->GetXaxis()->SetTitleSize(0.035);
+  hist->GetYaxis()->SetTitleSize(0.035);
+  hist->GetXaxis()->SetTitleOffset(1.4);
+  hist->GetYaxis()->SetTitleOffset(1.4);
+  hist->GetXaxis()->SetTitle("Y (µm)");
+  hist->GetYaxis()->SetTitle("X (µm)");
+  hist->SetTitle("Mean energy deposit -transverse- (z axis in eV)");
   
+c1.cd(12);
+  TH2F *hist = new TH2F("hist","hist",50,-20,20,50,-20,20);
+  ntuple3->Draw("xVox:zVox>>hist","dose","contz");
+  gPad->SetLogz();
+  hist->Draw("contz");
+  hist->GetXaxis()->SetLabelSize(0.025);
+  hist->GetYaxis()->SetLabelSize(0.025);
+  hist->GetZaxis()->SetLabelSize(0.025);
+  hist->GetXaxis()->SetTitleSize(0.035);
+  hist->GetYaxis()->SetTitleSize(0.035);
+  hist->GetXaxis()->SetTitleOffset(1.4);
+  hist->GetYaxis()->SetTitleOffset(1.4);
+  hist->GetXaxis()->SetTitle("Z (µm)");
+  hist->GetYaxis()->SetTitle("X (µm)");
+  hist->SetTitle("Mean energy deposit -longitudinal- (z axis in eV)");
+
 //*******************************
 // BEAM POSITION AT CELL ENTRANCE
 //*******************************
@@ -321,7 +427,5 @@ c1.cd(8);
 	h88->SetLineColor(4);
 	gaus->SetLineColor(6);
 	h88->Fit("gaus");
-
-
 
 }

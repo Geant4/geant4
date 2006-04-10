@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id: MicrobeamRunAction.hh,v 1.1 2006-04-06 15:32:44 sincerti Exp $
+// $Id: MicrobeamRunAction.hh,v 1.2 2006-04-10 14:47:31 sincerti Exp $
 // -------------------------------------------------------------------
 
 #ifndef MicrobeamRunAction_h

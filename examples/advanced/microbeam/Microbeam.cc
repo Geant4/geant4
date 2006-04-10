@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id: Microbeam.cc,v 1.2 2006-04-06 15:22:35 sincerti Exp $
+// $Id: Microbeam.cc,v 1.3 2006-04-10 14:47:31 sincerti Exp $
 // -------------------------------------------------------------------
 //  GEANT4 - Microbeam example
 //  Developed by S. Incerti et al.

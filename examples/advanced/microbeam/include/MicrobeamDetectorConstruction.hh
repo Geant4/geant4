@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id: MicrobeamDetectorConstruction.hh,v 1.1 2006-04-06 15:32:43 sincerti Exp $
+// $Id: MicrobeamDetectorConstruction.hh,v 1.2 2006-04-10 14:47:31 sincerti Exp $
 // -------------------------------------------------------------------
 
 #ifndef MicrobeamDetectorConstruction_h
@@ -81,8 +81,12 @@ private:
   G4Material*   KgmMaterial;
   G4Material*   Boite2Material;
   G4Material*   Boite3Material;
-  G4Material*   nucleusMaterial;
-  G4Material*   cytoplasmMaterial;
+  G4Material*   nucleusMaterial1;
+  G4Material*   cytoplasmMaterial1;
+  G4Material*   nucleusMaterial2;
+  G4Material*   cytoplasmMaterial2;
+  G4Material*   nucleusMaterial3;
+  G4Material*   cytoplasmMaterial3;
 
 // Volumes
 
