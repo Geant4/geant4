@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.14 2006-01-10 18:10:09 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.15 2006-04-10 11:03:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -137,6 +137,12 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   rangeCmd->SetDefaultValue(true);
   rangeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  lpmCmd = new G4UIcmdWithABool("/process/eLoss/LPM",this);
+  lpmCmd->SetGuidance("Switch true/false the LPM effect calculation.");
+  lpmCmd->SetParameterName("lpm",true);
+  lpmCmd->SetDefaultValue(true);
+  lpmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   verCmd = new G4UIcmdWithAnInteger("/process/eLoss/verbose",this);
   verCmd->SetGuidance("Set verbose level for EM physics.");
   verCmd->SetParameterName("verb",true);
@@ -158,6 +164,7 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete MaxEnCmd;
   delete IntegCmd;
   delete rangeCmd;
+  delete lpmCmd;
   delete verCmd;
 }
 
@@ -209,6 +216,9 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   }
   if (command == rangeCmd) {
     lossTables->SetBuildCSDARange(rangeCmd->GetNewBoolValue(newValue));
+  }
+  if (command == lpmCmd) {
+    lossTables->SetLPMFlag(lpmCmd->GetNewBoolValue(newValue));
   }
   if (command == verCmd) {
     lossTables->SetVerbose(verCmd->GetNewIntValue(newValue));

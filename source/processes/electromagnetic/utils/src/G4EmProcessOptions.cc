@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.13 2006-01-10 18:10:09 vnivanch Exp $
+// $Id: G4EmProcessOptions.cc,v 1.14 2006-04-10 11:03:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -411,6 +411,13 @@ void G4EmProcessOptions::SetMscStepLimitation(G4bool algorithm,
     G4VMultipleScattering* s = *itm;
     if(s) s->MscStepLimitation(algorithm, factor);
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetLPMFlag(G4bool val)
+{
+  theManager->SetLPMFlag(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

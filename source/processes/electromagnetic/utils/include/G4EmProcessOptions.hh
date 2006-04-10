@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.hh,v 1.6 2006-01-10 18:10:09 vnivanch Exp $
+// $Id: G4EmProcessOptions.hh,v 1.7 2006-04-10 11:03:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -101,6 +101,8 @@ public:
   void ActivateDeexcitation(G4bool val, const G4Region* r = 0);
 
   void SetMscStepLimitation(G4bool algorithm, G4double factor = -1.);
+
+  void SetLPMFlag(G4bool val);
 
 private:
 

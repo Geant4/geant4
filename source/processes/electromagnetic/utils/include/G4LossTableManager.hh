@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.35 2006-03-28 14:23:23 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.36 2006-04-10 11:03:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -185,11 +185,15 @@ public:
 
   void SetBuildCSDARange(G4bool val);
 
+  void SetLPMFlag(G4bool val);
+
   void SetVerbose(G4int val);
 
   G4EnergyLossMessenger* GetMessenger();
 
   G4bool BuildCSDARange() const;
+
+  G4bool LPMFlag() const;
 
   const std::vector<G4VEnergyLossProcess*>& GetEnergyLossProcessVector();
 
@@ -225,6 +229,7 @@ private:
   std::vector<PD> part_vector;
   std::vector<PD> base_part_vector;
   std::vector<G4bool> tables_are_built;
+  std::vector<G4bool> isActive;
   std::vector<G4PhysicsTable*> dedx_vector;
   std::vector<G4PhysicsTable*> range_vector;
   std::vector<G4PhysicsTable*> inv_range_vector;
@@ -251,6 +256,7 @@ private:
   G4bool maxEnergyActive;
   G4bool maxEnergyForMuonsActive;
   G4bool stepFunctionActive;
+  G4bool flagLPM;
 
   G4double minSubRange;
   G4double maxRangeVariation;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.67 2006-03-28 14:23:23 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.68 2006-04-10 11:03:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -146,6 +146,7 @@ G4LossTableManager::G4LossTableManager()
   maxEnergyActive = false;
   maxEnergyForMuonsActive = false;
   stepFunctionActive = false;
+  flagLPM = true;
   verbose = 1;
 }
 
@@ -166,6 +167,7 @@ void G4LossTableManager::Clear()
       part_vector.clear();
       base_part_vector.clear();
       tables_are_built.clear();
+      isActive.clear();
       n_loss = 0;
     }
 }
@@ -182,6 +184,7 @@ void G4LossTableManager::Register(G4VEnergyLossProcess* p)
   range_vector.push_back(0);
   inv_range_vector.push_back(0);
   tables_are_built.push_back(false);
+  isActive.push_back(true);
   all_tables_are_built = false;
   if(!lossFluctuationFlag) p->SetLossFluctuations(false);
   if(subCutoffFlag)        p->ActivateSubCutoff(true);
@@ -285,11 +288,9 @@ void G4LossTableManager::EnergyLossProcessIsInitialised(
 
       if(el) {
 	const G4ProcessManager* pm = el->GetProcessManager();
-        if (pm->GetProcessActivation(el)) tables_are_built[i] = false;
-        else {
-          tables_are_built[i] = true;
-	  el->SetIonisation(false);
-	}
+        isActive[i] = pm->GetProcessActivation(el);
+        tables_are_built[i] = false;
+	all_tables_are_built = false;
 	if(1 < verbose) { 
 	  G4cout << i <<".   "<< el->GetProcessName() 
 		 << "  for "  << pm->GetParticleType()->GetParticleName()
@@ -298,7 +299,6 @@ void G4LossTableManager::EnergyLossProcessIsInitialised(
 		 << "  isIonisation= " << el->IsIonisationProcess()
 		 << G4endl;
 	}
-	if (!tables_are_built[i]) all_tables_are_built = false;
       } else {
         tables_are_built[i] = true;
         part_vector[i] = 0;
@@ -462,7 +462,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
   for (i=0; i<n_loss; i++) {
     p = loss_vector[i];
     if (p && aParticle == part_vector[i] && !tables_are_built[i]) {
-      if (p->IsIonisationProcess() || !em) {
+      if (p->IsIonisationProcess() && isActive[i] || !em || em && !isActive[iem] ) {
         em = p;
         iem= i;
       }
@@ -770,6 +770,20 @@ const std::vector<G4VMultipleScattering*>&
       G4LossTableManager::GetMultipleScatteringVector()
 {
   return msc_vector;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4LossTableManager::SetLPMFlag(G4bool val)
+{
+  flagLPM = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4bool G4LossTableManager::LPMFlag() const
+{
+  return flagLPM;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
