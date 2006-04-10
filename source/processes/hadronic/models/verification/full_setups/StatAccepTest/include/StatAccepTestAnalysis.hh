@@ -61,6 +61,14 @@ public:
   // This method is called by StatAccepTestTrackingAction when each track
   // is created.
 
+  void fillSpectrum( const G4ParticleDefinition* particleDef, 
+		     const G4int layerNumber, const G4double kinEnergy );
+  // These methods fill histograms with the kinetic energy of some 
+  // particles (electron or positron; pion+ or pion- or pion0; 
+  // proton; neutron; gamma) when entering an active layer. 
+  // Notice that the kinetic energy is defined negative when the particle 
+  // is going backward with respect to the beam direction.
+
 private:
   
   StatAccepTestAnalysis();
@@ -115,6 +123,49 @@ private:
   // Summary histograms for the longitudinal and transverse shower profiles. 
   AIDA::IHistogram1D* longitudinalProfileHisto;
   AIDA::IHistogram1D* transverseProfileHisto;
+
+  // Step Energy vs. Step Length information.
+  AIDA::IHistogram2D* h2stepEvsL_active;
+  AIDA::IHistogram2D* h2stepEvsL_electron_active;
+  AIDA::IHistogram2D* h2stepEvsL_muon_active;
+  AIDA::IHistogram2D* h2stepEvsL_pionCharged_active;
+  AIDA::IHistogram2D* h2stepEvsL_proton_active;
+  AIDA::IHistogram2D* h2stepEvsL_gamma_active;
+  AIDA::IHistogram2D* h2stepEvsL_neutron_active;
+  AIDA::IHistogram2D* h2stepEvsL_absorber;
+  AIDA::IHistogram2D* h2stepEvsL_electron_absorber;
+  AIDA::IHistogram2D* h2stepEvsL_muon_absorber;
+  AIDA::IHistogram2D* h2stepEvsL_pionCharged_absorber;
+  AIDA::IHistogram2D* h2stepEvsL_proton_absorber;
+  AIDA::IHistogram2D* h2stepEvsL_gamma_absorber;
+  AIDA::IHistogram2D* h2stepEvsL_neutron_absorber;
+
+  // Kinetic spectra of some particles when entering an active layer.
+  AIDA::IHistogram1D* emSpectrum1[10];
+  AIDA::IHistogram1D* emSpectrum2[10];
+  AIDA::IHistogram1D* emSpectrum3[10];
+  AIDA::IHistogram1D* emSpectrum4[10];
+  AIDA::IHistogram1D* emSpectrum5[10];
+  AIDA::IHistogram1D* pionSpectrum1[10];
+  AIDA::IHistogram1D* pionSpectrum2[10];
+  AIDA::IHistogram1D* pionSpectrum3[10];
+  AIDA::IHistogram1D* pionSpectrum4[10];
+  AIDA::IHistogram1D* pionSpectrum5[10];
+  AIDA::IHistogram1D* protonSpectrum1[10];
+  AIDA::IHistogram1D* protonSpectrum2[10];
+  AIDA::IHistogram1D* protonSpectrum3[10];
+  AIDA::IHistogram1D* protonSpectrum4[10];
+  AIDA::IHistogram1D* protonSpectrum5[10];
+  AIDA::IHistogram1D* neutronSpectrum1[10];
+  AIDA::IHistogram1D* neutronSpectrum2[10];
+  AIDA::IHistogram1D* neutronSpectrum3[10];
+  AIDA::IHistogram1D* neutronSpectrum4[10];
+  AIDA::IHistogram1D* neutronSpectrum5[10];
+  AIDA::IHistogram1D* gammaSpectrum1[10];
+  AIDA::IHistogram1D* gammaSpectrum2[10];
+  AIDA::IHistogram1D* gammaSpectrum3[10];
+  AIDA::IHistogram1D* gammaSpectrum4[10];
+  AIDA::IHistogram1D* gammaSpectrum5[10];
 
   // Keep the count of the number of steps and tracks.
   G4int numStep;
