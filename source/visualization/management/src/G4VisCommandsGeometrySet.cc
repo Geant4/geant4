@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsGeometrySet.cc,v 1.3 2006-03-28 16:26:56 allison Exp $
+// $Id: G4VisCommandsGeometrySet.cc,v 1.4 2006-04-10 10:47:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/geometry commands - John Allison  31st January 2006
@@ -34,6 +34,7 @@
 #include "G4UImanager.hh"
 
 #include <sstream>
+#include <cctype>
 
 void G4VVisCommandGeometrySet::Set
 (G4String requestedName,
