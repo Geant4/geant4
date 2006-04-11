@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.1 2005-06-03 15:20:32 maire Exp $
+// $Id: SteppingAction.cc,v 1.2 2006-04-11 14:59:45 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,8 +33,7 @@
 #include "HistoManager.hh"
 
 #include "G4SteppingManager.hh"
-#include "G4VProcess.hh"
-#include "G4ParticleTypes.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -60,12 +59,11 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  eventAction->AddEdep(edep);     
  
  //longitudinal profile of deposited energy
- //	
- const G4StepPoint* prePoint  = aStep->GetPreStepPoint();
- const G4StepPoint* postPoint = aStep->GetPostStepPoint();
-   
- G4double x = (prePoint->GetPosition().x() + postPoint->GetPosition().x())/2;
- x += 0.5*detector->GetAbsorSizeX();
+ //
+ G4ThreeVector prePoint  = aStep->GetPreStepPoint() ->GetPosition();
+ G4ThreeVector postPoint = aStep->GetPostStepPoint()->GetPosition();
+ G4ThreeVector point = prePoint + G4UniformRand()*(postPoint - prePoint);	
+ G4double x = point.x() + 0.5*detector->GetAbsorSizeX();  
  histoManager->FillHisto(1, x, edep);
  
  //step size of primary particle or charged secondaries

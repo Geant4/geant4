@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.1 2005-06-03 15:19:49 maire Exp $
+// $Id: HistoManager.hh,v 1.2 2006-04-11 14:59:45 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,7 +65,9 @@ class HistoManager
     G4bool    HistoExist  (G4int id) {return exist[id];}
     G4double  GetHistoUnit(G4int id) {return Unit[id];}
     G4double  GetBinWidth (G4int id) {return Width[id];}
-
+    
+    G4double  GetStepMax()           {return stepMax;};
+    
   private:
 
     G4String                 fileName[2];
@@ -84,6 +86,8 @@ class HistoManager
     G4double                 Width[MaxHisto];
     G4bool                   factoryOn;
     HistoMessenger*          histoMessenger;
+    
+    G4double                 stepMax;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
