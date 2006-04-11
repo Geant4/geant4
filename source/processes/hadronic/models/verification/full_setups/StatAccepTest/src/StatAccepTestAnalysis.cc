@@ -180,6 +180,7 @@ void StatAccepTestAnalysis::init() {
   kinEnergyExitingNeutrons = 0.0;
   kinEnergyExitingNeutrinos = 0.0;
   kinEnergyExitingMuons = 0.0;
+  numExiting = 0;
   numExitingGammas = 0;
   numExitingNeutrons = 0;
   numExitingNeutrinos = 0;
@@ -737,6 +738,17 @@ void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
     }
     if ( aTrack->GetVolume()->GetName() == "expHall" ) {
       kinEnergyExiting += aTrack->GetKineticEnergy();
+      numExiting++;
+      //G4cout << " Exiting particle: " 
+      //       << aTrack->GetDefinition()->GetParticleName() 
+      //       << "\t" << kinEnergyExiting << " MeV" << G4endl
+      //       << "\t Production: " 
+      //       << aTrack->GetCreatorProcess()->GetProcessName() << G4endl
+      //       << "\t" << aTrack->GetVertexPosition() << " mm"
+      //       << "\t" << aTrack->GetLogicalVolumeAtVertex()->GetName() << G4endl
+      //       << "\t" << aTrack->GetVertexKineticEnergy() << " MeV"
+      //       << "\t vertex Ekin = " << aTrack->GetVertexKineticEnergy() 
+      //       << " MeV" << G4endl;  //***DEBUG***
       if ( aTrack->GetDefinition() == G4Gamma::GammaDefinition() ) {
 	kinEnergyExitingGammas += aTrack->GetKineticEnergy();
         numExitingGammas++;
@@ -2042,21 +2054,27 @@ void StatAccepTestAnalysis::finish() {
          << kinEnergyExiting / n << " MeV " << G4endl;
   if ( kinEnergyExiting > 1.0E-06 ) {
     G4cout << "\t fraction due to Gammas      = " 
-	   << kinEnergyExitingGammas / kinEnergyExiting << G4endl
+	   << 100.0 * kinEnergyExitingGammas / kinEnergyExiting << " %" << G4endl
 	   << "\t fraction due to Neutrons    = " 
-	   << kinEnergyExitingNeutrons / kinEnergyExiting << G4endl
+	   << 100.0 * kinEnergyExitingNeutrons / kinEnergyExiting << " %" << G4endl
 	   << "\t fraction due to Neutrinos   = " 
-	   << kinEnergyExitingNeutrinos / kinEnergyExiting << G4endl
+	   << 100.0 * kinEnergyExitingNeutrinos / kinEnergyExiting << " %" << G4endl
 	   << "\t fraction due to Muons       = " 
-	   << kinEnergyExitingMuons / kinEnergyExiting << G4endl
+	   << 100.0 * kinEnergyExitingMuons / kinEnergyExiting << " %" << G4endl
+           << "\t number of exiting particles = " 
+           << numExiting / n << G4endl
            << "\t number of exiting Gammas    = " 
-           << numExitingGammas / n << G4endl
+           << numExitingGammas / n 
+           << " (" << 100.0 * numExitingGammas / numExiting << " %)" << G4endl
            << "\t number of exiting Neutrons  = " 
-           << numExitingNeutrons / n << G4endl
+           << numExitingNeutrons / n 
+           << " (" << 100.0 * numExitingNeutrons / numExiting << " %)" << G4endl
            << "\t number of exiting Neutrinos = " 
-           << numExitingNeutrinos / n << G4endl
+           << numExitingNeutrinos / n
+           << " (" << 100.0 * numExitingNeutrinos / numExiting << " %)" << G4endl
            << "\t number of exiting Muons     = " 
-           << numExitingMuons / n << G4endl;
+           << numExitingMuons / n 
+           << " (" << 100.0 * numExitingMuons / numExiting << " %)" << G4endl;
   }
 
 }

@@ -225,6 +225,7 @@ private:
   G4double kinEnergyExitingNeutrons;  // due only to neutrons
   G4double kinEnergyExitingNeutrinos; // due only to neutrinos
   G4double kinEnergyExitingMuons;     // due only to muons
+  G4int    numExiting;                // number of exiting particles
   G4int    numExitingGammas;          // number of exiting gammas
   G4int    numExitingNeutrons;        // number of exiting neutrons
   G4int    numExitingNeutrinos;       // number of exiting neutrons
