@@ -1,6 +1,6 @@
-# $Id: TestEm12.in,v 1.4 2006-02-16 17:39:52 maire Exp $
+# $Id: TestEm12.in,v 1.5 2006-04-11 13:20:37 maire Exp $
 #
-# no constraint on tracking step
+# limit the step size from histos 1 and 8
 #
 /control/verbose 2
 /run/verbose 2
