@@ -61,6 +61,9 @@ ProcessHits(G4Step* aStep, G4TouchableHistory* ) {
   //                    C2 = 9.59 x 10^-6  g^2*cm^-4*MeV^-2 
   //              These are the same values used by ATLAS TileCal 
   //              and CMS HCAL (and also the default in Geant3).
+  //              You can try different values for these parameters,
+  //              to have an idea on the uncertainties due to them,
+  //              by uncommenting one of the lines below.
   //              To get the "dE/dr" that appears in the formula,
   //              which has the dimensions
   //                   [ dE/dr ] = MeV * cm^2 / g
@@ -77,6 +80,11 @@ ProcessHits(G4Step* aStep, G4TouchableHistory* ) {
   if ( isBirksOn ) {
     double C1 = 1.29e-2;                                  // [g*cm^-2*MeV^-1]  
     double C2 = 9.59e-6;                                  // [g^2*cm^-4*MeV^-2] 
+    // Uncomment one line below if you want to try different
+    // values for the Birks' coefficient C1, with C2 = 0.
+    //C1 = 1.31e-2; C2 = 0.0;  // Standard Birks law.
+    //C1 = 8.5e-3;  C2 = 0.0;  // Zeus SCSN38, lower limit (-35%)
+    //C1 = 1.59e-2; C2 = 0.0;  // Pilot B (same paper), upper limit (+21%)
     double rho = 1.032;                                   // [g/cm^3]
     double stepLength_cm = aStep->GetStepLength() / cm ;  // [cm] 
     if ( stepLength_cm > 1.0e-8 ) {
