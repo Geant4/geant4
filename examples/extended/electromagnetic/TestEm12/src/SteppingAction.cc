@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.1 2005-07-22 11:08:48 maire Exp $
+// $Id: SteppingAction.cc,v 1.2 2006-04-11 12:02:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,8 +33,7 @@
 #include "HistoManager.hh"
 
 #include "G4SteppingManager.hh"
-#include "G4VProcess.hh"
-#include "G4ParticleTypes.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,10 +60,9 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  
  //longitudinal profile of deposited energy
  //	
- const G4StepPoint* prePoint  = aStep->GetPreStepPoint();
- const G4StepPoint* postPoint = aStep->GetPostStepPoint();
-   
- G4ThreeVector point = (prePoint->GetPosition() + postPoint->GetPosition())/2;
+ G4ThreeVector prePoint  = aStep->GetPreStepPoint() ->GetPosition();
+ G4ThreeVector postPoint = aStep->GetPostStepPoint()->GetPosition();
+ G4ThreeVector point = prePoint + G4UniformRand()*(postPoint - prePoint);
  G4double r = point.mag();
  histoManager->FillHisto(1, r, edep);
  

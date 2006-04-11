@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.1 2005-07-22 11:08:48 maire Exp $
+// $Id: HistoManager.cc,v 1.2 2006-04-11 12:02:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,6 +63,7 @@ HistoManager::HistoManager()
   histoMessenger = new HistoMessenger(this);
   
   csdaRange = 1*mm;
+  stepMax   = DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -196,7 +197,19 @@ void HistoManager::SetHisto(G4int ih,
   G4cout << "----> SetHisto " << ih << ": " << titl << ";  "
          << nbins << " bins from "
          << vmin << " " << unit << " to " << vmax << " " << unit << G4endl;
-
+	 
+  // compute constraint of stepMax from histos 1 and 8
+  //
+  G4double frac = 1.;
+  if (ih == 1) {
+    stepMax = std::min(stepMax,frac*Width[ih]);
+    G4cout << "      stepMax = " << G4BestUnit(stepMax,"Length") << G4endl;
+  }
+     	 
+  if (ih == 8) {
+    stepMax = std::min(stepMax,frac*Width[ih]*csdaRange);
+    G4cout << "      stepMax = " << G4BestUnit(stepMax,"Length") << G4endl;
+  }   	 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

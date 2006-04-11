@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.1 2005-07-22 11:08:48 maire Exp $
+// $Id: HistoManager.hh,v 1.2 2006-04-11 12:02:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,6 +68,7 @@ class HistoManager
     
     void     SetcsdaRange(G4double val) {csdaRange = val;};
     G4double GetcsdaRange()             {return csdaRange;};
+    G4double GetStepMax()               {return stepMax;};
     
   private:
 
@@ -89,6 +90,7 @@ class HistoManager
     HistoMessenger*          histoMessenger;
     
     G4double                 csdaRange;
+    G4double                 stepMax; 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMaxMessenger.hh,v 1.1 2005-07-22 11:08:48 maire Exp $
+// $Id: StepMaxMessenger.hh,v 1.2 2006-04-11 12:02:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,7 +33,7 @@
 #include "G4UImessenger.hh"
 
 class StepMax;
-class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithABool;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -47,7 +47,7 @@ class StepMaxMessenger: public G4UImessenger
     
   private:
     StepMax* stepMax;
-    G4UIcmdWithADoubleAndUnit* StepMaxCmd;
+    G4UIcmdWithABool* StepMaxCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

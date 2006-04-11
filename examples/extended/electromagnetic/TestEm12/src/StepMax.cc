@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMax.cc,v 1.1 2005-07-22 11:08:48 maire Exp $
+// $Id: StepMax.cc,v 1.2 2006-04-11 12:02:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,8 +31,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StepMax::StepMax(const G4String& processName)
- : G4VDiscreteProcess(processName),MaxChargedStep(DBL_MAX)
+StepMax::StepMax(const G4String& processName, G4ProcessType type)
+ : G4VDiscreteProcess(processName,type), MaxChargedStep(DBL_MAX), apply(true)
 {
   pMess = new StepMaxMessenger(this);
 }
@@ -54,6 +54,10 @@ void StepMax::SetMaxStep(G4double step) {MaxChargedStep = step;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void StepMax::ApplyMaxStep(G4bool value) {apply = value;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double StepMax::PostStepGetPhysicalInteractionLength( const G4Track&,
                                                    G4double,
                                                    G4ForceCondition* condition )
@@ -61,7 +65,8 @@ G4double StepMax::PostStepGetPhysicalInteractionLength( const G4Track&,
   // condition is set to "Not Forced"
   *condition = NotForced;
 
-  return MaxChargedStep;
+  if (apply) return MaxChargedStep;
+  else       return DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

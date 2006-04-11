@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMaxMessenger.cc,v 1.1 2005-07-22 11:08:48 maire Exp $
+// $Id: StepMaxMessenger.cc,v 1.2 2006-04-11 12:02:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -29,18 +29,17 @@
 #include "StepMaxMessenger.hh"
 
 #include "StepMax.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithABool.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMaxMessenger::StepMaxMessenger(StepMax* stepM)
 :stepMax(stepM)
 { 
-  StepMaxCmd = new G4UIcmdWithADoubleAndUnit("/testem/stepMax",this);
-  StepMaxCmd->SetGuidance("Set max allowed step length");
-  StepMaxCmd->SetParameterName("mxStep",false);
-  StepMaxCmd->SetRange("mxStep>0.");
-  StepMaxCmd->SetUnitCategory("Length");
+  StepMaxCmd = new G4UIcmdWithABool("/testem/applyStepMax",this);
+  StepMaxCmd->SetGuidance("apply StepMax computed from histograms");
+  StepMaxCmd->SetParameterName("mxStep",true);
+  StepMaxCmd->SetDefaultValue(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,7 +54,7 @@ StepMaxMessenger::~StepMaxMessenger()
 void StepMaxMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 { 
   if (command == StepMaxCmd)
-    { stepMax->SetMaxStep(StepMaxCmd->GetNewDoubleValue(newValue));}
+    { stepMax->ApplyMaxStep(StepMaxCmd->GetNewBoolValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

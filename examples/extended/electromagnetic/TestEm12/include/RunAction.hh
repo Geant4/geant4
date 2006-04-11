@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.1 2005-07-22 11:08:48 maire Exp $
+// $Id: RunAction.hh,v 1.2 2006-04-11 12:02:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,7 +56,7 @@ class RunAction : public G4UserRunAction
     void AddProjRange   (G4double x) { projRange += x; projRange2 += x*x;};
     void AddStepSize    (G4int nb, G4double s)
                                      { nbOfSteps += nb; nbOfSteps2 += nb*nb;
-                                       stepSize  += s ; stepSize2  += s*s;  };	           
+                                       stepSize  += s ; stepSize2  += s*s;  };			       	           
     
   private:
     DetectorConstruction*   detector;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.4 2006-03-28 13:18:29 maire Exp $
+// $Id: RunAction.cc,v 1.5 2006-04-11 12:02:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,7 +81,12 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
     
   //histograms
   //
-  histoManager->book();      
+  histoManager->book();
+  
+  //set StepMax from histos
+  //
+  G4double stepMax = histoManager->GetStepMax();
+  physics->GetStepMaxProcess()->SetMaxStep(stepMax);          
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
