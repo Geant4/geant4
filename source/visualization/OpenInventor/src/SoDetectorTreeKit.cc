@@ -22,7 +22,7 @@
 //
 //
 //
-// $Id: SoDetectorTreeKit.cc,v 1.11 2005-10-17 07:21:03 gbarrand Exp $
+// $Id: SoDetectorTreeKit.cc,v 1.12 2006-04-12 15:52:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*-----------------------------HEPVis----------------------------------------*/
@@ -58,10 +58,10 @@
 
 #include <HEPVis/actions/SoAlternateRepAction.h>
 
-#include <math.h>
+#include <cmath>
 
 // This statement is required
-SO_KIT_SOURCE(SoDetectorTreeKit) 
+SO_KIT_SOURCE(SoDetectorTreeKit)
  
 // initClass
 void SoDetectorTreeKit::initClass(){
