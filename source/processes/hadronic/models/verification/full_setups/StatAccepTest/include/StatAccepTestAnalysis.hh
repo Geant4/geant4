@@ -167,6 +167,33 @@ private:
   AIDA::IHistogram1D* gammaSpectrum4[10];
   AIDA::IHistogram1D* gammaSpectrum5[10];
 
+  // Now the same histograms, but weighted with 1/momentum
+  AIDA::IHistogram1D* emSpectrumWeighted1[10];
+  AIDA::IHistogram1D* emSpectrumWeighted2[10];
+  AIDA::IHistogram1D* emSpectrumWeighted3[10];
+  AIDA::IHistogram1D* emSpectrumWeighted4[10];
+  AIDA::IHistogram1D* emSpectrumWeighted5[10];
+  AIDA::IHistogram1D* pionSpectrumWeighted1[10];
+  AIDA::IHistogram1D* pionSpectrumWeighted2[10];
+  AIDA::IHistogram1D* pionSpectrumWeighted3[10];
+  AIDA::IHistogram1D* pionSpectrumWeighted4[10];
+  AIDA::IHistogram1D* pionSpectrumWeighted5[10];
+  AIDA::IHistogram1D* protonSpectrumWeighted1[10];
+  AIDA::IHistogram1D* protonSpectrumWeighted2[10];
+  AIDA::IHistogram1D* protonSpectrumWeighted3[10];
+  AIDA::IHistogram1D* protonSpectrumWeighted4[10];
+  AIDA::IHistogram1D* protonSpectrumWeighted5[10];
+  AIDA::IHistogram1D* neutronSpectrumWeighted1[10];
+  AIDA::IHistogram1D* neutronSpectrumWeighted2[10];
+  AIDA::IHistogram1D* neutronSpectrumWeighted3[10];
+  AIDA::IHistogram1D* neutronSpectrumWeighted4[10];
+  AIDA::IHistogram1D* neutronSpectrumWeighted5[10];
+  AIDA::IHistogram1D* gammaSpectrumWeighted1[10];
+  AIDA::IHistogram1D* gammaSpectrumWeighted2[10];
+  AIDA::IHistogram1D* gammaSpectrumWeighted3[10];
+  AIDA::IHistogram1D* gammaSpectrumWeighted4[10];
+  AIDA::IHistogram1D* gammaSpectrumWeighted5[10];
+
   // Keep the count of the number of steps and tracks.
   G4int numStep;
   G4int numStepPositive, numStepNeutral, numStepNegative;

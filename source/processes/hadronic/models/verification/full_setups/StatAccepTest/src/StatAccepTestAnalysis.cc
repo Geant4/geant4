@@ -242,47 +242,33 @@ void StatAccepTestAnalysis::init( const G4int numberOfReplicasIn,
 
       // Step Energy versus step Length.
       h2stepEvsL_active = 
-	histoFactory->createHistogram2D( "80", "Step Energy (MeV) vs. Step Length (mm)", 
-					 100, 0.0, 10.0, 100, 0.0, 10.0 );
+	histoFactory->createHistogram2D( "80", "Step: Energy(MeV) vs. Length(mm), active", 100, 0.0, 10.0, 100, 0.0, 10.0 );
       h2stepEvsL_electron_active = 
-	histoFactory->createHistogram2D( "81", "Step Energy (MeV) vs. Step Length (mm) ELECTRON", 
-					 100, 0.0, 10.0, 100, 0.0, 10.0 );
+	histoFactory->createHistogram2D( "81", "Step: Energy(MeV) vs. Length(mm), active, ELECTRON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
       h2stepEvsL_muon_active = 
-	histoFactory->createHistogram2D( "82", "Step Energy (MeV) vs. Step Length (mm) MUON", 
-					 100, 0.0, 10.0, 100, 0.0, 10.0 );
+	histoFactory->createHistogram2D( "82", "Step: Energy(MeV) vs. Length(mm), active,  MUON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
       h2stepEvsL_pionCharged_active = 
-	histoFactory->createHistogram2D( "83", "Step Energy (MeV) vs. Step Length (mm) PION CHARGED", 
-					 100, 0.0, 10.0, 100, 0.0, 10.0 );
+	histoFactory->createHistogram2D( "83", "Step: Energy(MeV) vs. Length(mm), active, PION charged", 100, 0.0, 10.0, 100, 0.0, 10.0 );
       h2stepEvsL_proton_active = 
-	histoFactory->createHistogram2D( "84", "Step Energy (MeV) vs. Step Length (mm) PROTON", 
-					 100, 0.0, 10.0, 100, 0.0, 10.0 );
+	histoFactory->createHistogram2D( "84", "Step: Energy(MeV) vs. Length(mm), active, PROTON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
       h2stepEvsL_gamma_active = 
-	histoFactory->createHistogram2D( "85", "Step Energy (MeV) vs. Step Length (mm) GAMMA", 
-					 100, 0.0, 10.0, 100, 0.0, 10.0 );
+	histoFactory->createHistogram2D( "85", "Step: Energy(MeV) vs. Length(mm), active, GAMMA", 100, 0.0, 10.0, 100, 0.0, 10.0 );
       h2stepEvsL_neutron_active = 
-	histoFactory->createHistogram2D( "86", "Step Energy (MeV) vs. Step Length (mm) NEUTRON", 
-					 100, 0.0, 10.0, 100, 0.0, 10.0 );
+	histoFactory->createHistogram2D( "86", "Step: Energy(MeV) vs. Length(mm), active, NEUTRON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
       h2stepEvsL_absorber = 
-	histoFactory->createHistogram2D( "90", "Step Energy (MeV) vs. Step Length (mm)", 
-					 100, 0.0, 10.0, 100, 0.0, 10.0 );
+	histoFactory->createHistogram2D( "90", "Step: Energy(MeV) vs. Length(mm), absorber", 100, 0.0, 10.0, 100, 0.0, 10.0 );
       h2stepEvsL_electron_absorber = 
-	histoFactory->createHistogram2D( "91", "Step Energy (MeV) vs. Step Length (mm) ELECTRON", 
-					 100, 0.0, 10.0, 100, 0.0, 10.0 );
+	histoFactory->createHistogram2D( "91", "Step: Energy(MeV) vs. Length(mm), absorber, ELECTRON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
       h2stepEvsL_muon_absorber = 
-	histoFactory->createHistogram2D( "92", "Step Energy (MeV) vs. Step Length (mm) MUON", 
-					 100, 0.0, 10.0, 100, 0.0, 10.0 );
+	histoFactory->createHistogram2D( "92", "Step: Energy(MeV) vs. Length(mm), absorber, MUON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
       h2stepEvsL_pionCharged_absorber = 
-	histoFactory->createHistogram2D( "93", "Step Energy (MeV) vs. Step Length (mm) PION CHARGED", 
-					 100, 0.0, 10.0, 100, 0.0, 10.0 );
+	histoFactory->createHistogram2D( "93", "Step: Energy(MeV) vs. Length(mm), absorber, PION charged", 100, 0.0, 10.0, 100, 0.0, 10.0 );
       h2stepEvsL_proton_absorber = 
-	histoFactory->createHistogram2D( "94", "Step Energy (MeV) vs. Step Length (mm) PROTON", 
-					 100, 0.0, 10.0, 100, 0.0, 10.0 );
+	histoFactory->createHistogram2D( "94", "Step: Energy(MeV) vs. Length(mm), absorber, PROTON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
       h2stepEvsL_gamma_absorber = 
-	histoFactory->createHistogram2D( "95", "Step Energy (MeV) vs. Step Length (mm) GAMMA", 
-					 100, 0.0, 10.0, 100, 0.0, 10.0 );
+	histoFactory->createHistogram2D( "95", "Step: Energy(MeV) vs. Length(mm), absorber, GAMMA", 100, 0.0, 10.0, 100, 0.0, 10.0 );
       h2stepEvsL_neutron_absorber = 
-	histoFactory->createHistogram2D( "96", "Step Energy (MeV) vs. Step Length (mm) NEUTRON", 
-					 100, 0.0, 10.0, 100, 0.0, 10.0 );
+	histoFactory->createHistogram2D( "96", "Step: Energy(MeV) vs. Length(mm), absorber, NEUTRON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
 
       // Kinetic spectra of some particles.
       // We evaluate the kinetic spectra in 10 active layers,
@@ -311,133 +297,237 @@ void StatAccepTestAnalysis::init( const G4int numberOfReplicasIn,
       // Example:
       //   5201 is the histogram of energy of gammas passing into the 
       //   second layer (index #1) binned linearly between -10 and 10 GeV.
+      // We put a "9" in front of the above ID, for the corresponding
+      // weighted histograms, for example:
+      //   95201 is the histogram of energy of gammas passing into the
+      //   second layer (index #1) binned linearly between -10 and 10 GeV,
+      //   and weighted with 1/momentum of the gamma.
       char id[5], histotag[60];
       for ( int iLayer = 0; iLayer < 10; iLayer++ ) {
 	sprintf( id, "%d", iLayer+1100 );
 	sprintf( histotag, "Elec./Pos. Lin. Energy Spectrum in Active Layer %d in GeV",
 		 iLayer );
-	emSpectrum1[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 2000, 
-								 -100.0, 100.0 );
+	emSpectrum1[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	sprintf( id, "%d", iLayer+91100 );
+	emSpectrumWeighted1[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+
 	sprintf( id, "%d", iLayer+1200 );
 	sprintf( histotag, "Elec./Pos. Lin. Energy Spectrum in Active Layer %d in GeV",
 		 iLayer );
-	emSpectrum2[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 2000, 
-								 -10.0, 10.0 );
+	emSpectrum2[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	sprintf( id, "%d", iLayer+91200 );
+	emSpectrumWeighted2[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+
 	sprintf( id, "%d", iLayer+1300 );
 	sprintf( histotag, "Elec./Pos. Lin. Energy Spectrum in Active Layer %d in GeV",
 		 iLayer );
-	emSpectrum3[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 2000, 
-								 -1.0, 1.0 );
+	emSpectrum3[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	sprintf( id, "%d", iLayer+91300 );
+	emSpectrumWeighted3[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+
 	sprintf( id, "%d", iLayer+1400 );
 	sprintf( histotag, "Elec./Pos. Lin. Energy Spectrum in Active Layer %d in GeV",
 		 iLayer );
-	emSpectrum4[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 2000, 
-								 -0.1, 0.1 );
+	emSpectrum4[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	sprintf( id, "%d", iLayer+91400 );
+	emSpectrumWeighted4[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+
 	sprintf( id, "%d", iLayer+1500 );
 	sprintf( histotag, "Elec./Pos. Log10 Energy Spectrum in Active Layer %d in MeV",
 		 iLayer );
-	emSpectrum5[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 1000, 
-								 -4.0, 5.0 );
+	emSpectrum5[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 5.0 );
+	sprintf( id, "%d", iLayer+91500 );
+	emSpectrumWeighted5[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 5.0 );
+
 	sprintf( id, "%d", iLayer+2100 );
 	sprintf( histotag, "Pion Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer) ;
-	pionSpectrum1[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 2000, 
-								   -100.0, 100.0 );
+	pionSpectrum1[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	sprintf( id, "%d", iLayer+92100 );
+	pionSpectrumWeighted1[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+
 	sprintf( id, "%d", iLayer+2200 );
 	sprintf( histotag, "Pion Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	pionSpectrum2[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 2000, 
-								   -10.0, 10.0 );
+	pionSpectrum2[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	sprintf( id, "%d", iLayer+92200 );
+	pionSpectrumWeighted2[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+
 	sprintf( id, "%d", iLayer+2300 );
 	sprintf( histotag, "Pion Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	pionSpectrum3[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 2000, 
-								   -1.0, 1.0 );
+	pionSpectrum3[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	sprintf( id, "%d", iLayer+92300 );
+	pionSpectrumWeighted3[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+
 	sprintf( id, "%d", iLayer+2400 );
 	sprintf( histotag, "Pion Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	pionSpectrum4[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 2000, 
-								   -0.1, 0.1 );
+	pionSpectrum4[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	sprintf( id, "%d", iLayer+92400 );
+	pionSpectrumWeighted4[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+
 	sprintf( id, "%d", iLayer+2500 );
 	sprintf( histotag, "Pion Log10 Energy Spectrum in Active Layer %d in MeV", 
 		 iLayer );
-	pionSpectrum5[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 1000, 
-								   -4.0, 5.0 );
+	pionSpectrum5[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 5.0 );
+	sprintf( id, "%d", iLayer+92500 );
+	pionSpectrumWeighted5[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 5.0 );
+
 	sprintf( id, "%d", iLayer+3100 );
 	sprintf( histotag, "Proton Lin. Energy Spectrum in Active Layer %d in GeV",
 		 iLayer );
-	protonSpectrum1[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 2000, 
-								     -100.0, 100.0);
+	protonSpectrum1[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	sprintf( id, "%d", iLayer+93100 );
+	protonSpectrumWeighted1[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+
 	sprintf( id, "%d", iLayer+3200 );
 	sprintf( histotag, "Proton Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	protonSpectrum2[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 2000, 
-								     -10.0, 10.0 );
+	protonSpectrum2[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	sprintf( id, "%d", iLayer+93200 );
+	protonSpectrumWeighted2[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+
 	sprintf( id, "%d", iLayer+3300 );
 	sprintf( histotag, "Proton Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	protonSpectrum3[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 2000, 
-								     -1.0, 1.0 );
+	protonSpectrum3[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	sprintf( id, "%d", iLayer+93300 );
+	protonSpectrumWeighted3[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+
 	sprintf( id, "%d", iLayer+3400 );
 	sprintf( histotag, "Proton Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	protonSpectrum4[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 2000, 
-								     -0.1, 0.1 );
+	protonSpectrum4[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	sprintf( id, "%d", iLayer+93400 );
+	protonSpectrumWeighted4[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+
 	sprintf( id, "%d", iLayer+3500 );
 	sprintf( histotag, "Proton Log10 Energy Spectrum in Active Layer %d in MeV",
 		 iLayer );
-	protonSpectrum5[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 1000, 
-								     -4.0, 5.0 );
+	protonSpectrum5[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 5.0 );
+	sprintf( id, "%d", iLayer+93500 );
+	protonSpectrumWeighted5[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 5.0 );
+
 	sprintf( id, "%d", iLayer+4100 );
 	sprintf( histotag, "Neutron Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	neutronSpectrum1[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 2000,
-								      -100.0, 100.0 );
+	neutronSpectrum1[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	sprintf( id, "%d", iLayer+94100 );
+	neutronSpectrumWeighted1[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+
 	sprintf( id, "%d", iLayer+4200 );
 	sprintf( histotag, "Neutron Lin. Energy Spectrum in Active Layer%d   in GeV",
 		 iLayer );
-	neutronSpectrum2[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 2000,
-								      -10.0, 10.0 );
+	neutronSpectrum2[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	sprintf( id, "%d", iLayer+94200 );
+	neutronSpectrumWeighted2[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+
 	sprintf( id, "%d", iLayer+4300 );
 	sprintf( histotag, "Neutron Lin. Energy Spectrum in Active Layer%d   in GeV",
 		 iLayer );
-	neutronSpectrum3[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 2000,
-								      -1.0, 1.0 );
+	neutronSpectrum3[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	sprintf( id, "%d", iLayer+94300 );
+	neutronSpectrumWeighted3[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+
 	sprintf( id, "%d", iLayer+4400 );
 	sprintf( histotag, "Neutron Lin. Energy Spectrum in Active Layer%d   in GeV",
 		 iLayer );
-	neutronSpectrum4[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 2000,
-								      -0.1, 0.1 );
+	neutronSpectrum4[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	sprintf( id, "%d", iLayer+94400 );
+	neutronSpectrumWeighted4[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+
 	sprintf( id, "%d", iLayer+4500 );
 	sprintf( histotag, "Neutron Log10 Energy Spectrum in Active Layer %d in MeV",
 		 iLayer );
-	neutronSpectrum5[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 1000,
-								      -4.0, 5.0 );
+	neutronSpectrum5[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 5.0 );
+	sprintf( id, "%d", iLayer+94500 );
+	neutronSpectrumWeighted5[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 5.0 );
+
 	sprintf( id, "%d", iLayer+5100 );
 	sprintf( histotag, "Gamma Lin. Energy Spectrum in Active Layer%d   in GeV", 
 		 iLayer );
-	gammaSpectrum1[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 2000, 
-								    -100.0, 100.0 );
+	gammaSpectrum1[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	sprintf( id, "%d", iLayer+95100 );
+	gammaSpectrumWeighted1[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+
 	sprintf( id, "%d", iLayer+5200 );
 	sprintf( histotag, "Gamma Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	gammaSpectrum2[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 2000, 
-								    -10.0, 10.0 );
+	gammaSpectrum2[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	sprintf( id, "%d", iLayer+95200 );
+	gammaSpectrumWeighted2[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+
 	sprintf( id, "%d", iLayer+5300 );
 	sprintf( histotag, "Gamma Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	gammaSpectrum3[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 2000, 
-								    -1.0, 1.0 );
+	gammaSpectrum3[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	sprintf( id, "%d", iLayer+95300 );
+	gammaSpectrumWeighted3[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+
 	sprintf( id, "%d", iLayer+5400 );
 	sprintf( histotag, "Gamma Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	gammaSpectrum4[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 2000, 
-								    -0.1, 0.1 );
+	gammaSpectrum4[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	sprintf( id, "%d", iLayer+95400 );
+	gammaSpectrumWeighted4[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+
 	sprintf( id, "%d", iLayer+5500 );
 	sprintf( histotag, "Gamma Log10 Energy Spectrum in Active Layer %d in MeV",
 		 iLayer );
-	gammaSpectrum5[ iLayer ] = histoFactory->createHistogram1D( id, histotag, 1000, 
-								    -4.0, 5.0 );
+	gammaSpectrum5[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 5.0 );
+	sprintf( id, "%d", iLayer+95500 );
+	gammaSpectrumWeighted5[ iLayer ] = 
+	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 5.0 );
       }
   }
 }                       
@@ -456,6 +546,14 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
        layerNumber % (numberOfReplicas/10) != 0  ||
        layerNumber / (numberOfReplicas/10) >= 10 ) return;
   G4int sampleLayer = layerNumber / (numberOfReplicas/10); 
+  G4double p = std::abs( kinEnergy ); // Momentum for the weighting...
+  if ( particleDef->GetPDGMass()/MeV > 1.0e-06 ) {
+    p = std::sqrt( std::abs( kinEnergy ) * 
+		   ( std::abs( kinEnergy ) + 2.0 * particleDef->GetPDGMass()/MeV ) );
+    //G4cout << "  m=" << particleDef->GetPDGMass()/MeV
+    //       << "  Ekin=" << std::abs( kinEnergy ) 
+    //	     <<  "  p=" << p << " MeV" << G4endl;       //***DEBUG***
+  }
   if ( particleDef == G4Electron::ElectronDefinition() || 
        particleDef == G4Positron::PositronDefinition() ) {
     emSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
@@ -465,6 +563,15 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
     if ( kinEnergy > 0.0 ) {
       emSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );
     }
+    if ( p > 0.0 ) {
+      emSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+      emSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+      emSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+      emSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+      if ( kinEnergy > 0.0 ) {
+	emSpectrumWeighted5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ), 1.0/p );
+      }
+    }
   } else if ( particleDef == G4Gamma::GammaDefinition() ) {
     gammaSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
     gammaSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
@@ -472,6 +579,15 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
     gammaSpectrum4[ sampleLayer ]->fill( kinEnergy/GeV );
     if ( kinEnergy > 0.0 ) {
       gammaSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );  
+    }
+    if ( p > 0.0 ) {
+      gammaSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+      gammaSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+      gammaSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+      gammaSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+      if ( kinEnergy > 0.0 ) {
+	gammaSpectrumWeighted5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ), 1.0/p );
+      }
     }
   } else if ( particleDef == G4PionPlus::PionPlusDefinition() ||
 	      particleDef == G4PionMinus::PionMinusDefinition() ||
@@ -483,6 +599,15 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
     if ( kinEnergy > 0.0 ) {
       pionSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );
     }
+    if ( p > 0.0 ) {
+      pionSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+      pionSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+      pionSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+      pionSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+      if ( kinEnergy > 0.0 ) {
+	pionSpectrumWeighted5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ), 1.0/p );
+      }
+    }
   } else if ( particleDef == G4Proton::ProtonDefinition() ) {
     protonSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
     protonSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
@@ -491,6 +616,15 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
     if ( kinEnergy > 0.0 ) {
       protonSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );  
     }
+    if ( p > 0.0 ) {
+      protonSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+      protonSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+      protonSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+      protonSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+      if ( kinEnergy > 0.0 ) {
+	protonSpectrumWeighted5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ), 1.0/p );
+      }
+    }
   } else if ( particleDef == G4Neutron::NeutronDefinition() ) {
     neutronSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
     neutronSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
@@ -498,6 +632,15 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
     neutronSpectrum4[ sampleLayer ]->fill( kinEnergy/GeV );
     if ( kinEnergy > 0.0 ) {
       neutronSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );
+    }
+    if ( p > 0.0 ) {
+      neutronSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+      neutronSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+      neutronSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+      neutronSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+      if ( kinEnergy > 0.0 ) {
+	neutronSpectrumWeighted5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ), 1.0/p );
+      }
     }
   }
 }
@@ -2087,23 +2230,28 @@ void StatAccepTestAnalysis::finish() {
            << numExiting / n << G4endl
            << "\t number of exiting Gammas    = " 
            << numExitingGammas / n 
-           << " (" << 100.0 * numExitingGammas / numExiting << " %)" << G4endl
+           << " (" << 100.0*( static_cast< G4double >( numExitingGammas ) / 
+			      static_cast< G4double >( numExiting ) ) << " %)" << G4endl
            << "\t number of exiting Neutrons  = " 
            << numExitingNeutrons / n 
-           << " (" << 100.0 * numExitingNeutrons / numExiting << " %)" << G4endl
+           << " (" << 100.0*( static_cast< G4double >( numExitingNeutrons ) / 
+			      static_cast< G4double >( numExiting ) ) << " %)" << G4endl
            << "\t number of exiting Neutrinos = " 
            << numExitingNeutrinos / n
-           << " (" << 100.0 * numExitingNeutrinos / numExiting << " %)" << G4endl
+           << " (" << 100.0*( static_cast< G4double >( numExitingNeutrinos ) / 
+			      static_cast< G4double >( numExiting ) ) << " %)" << G4endl
            << "\t number of exiting Muons     = " 
            << numExitingMuons / n 
-           << " (" << 100.0 * numExitingMuons / numExiting << " %)" << G4endl
+           << " (" << 100.0*( static_cast< G4double >( numExitingMuons ) / 
+			      static_cast< G4double >( numExiting ) ) << " %)" << G4endl
            << "\t number of exiting e- and e+ = " 
            << numExitingElectrons / n 
-           << " (" << 100.0 * numExitingElectrons / numExiting << " %)" << G4endl
+           << " (" << 100.0*( static_cast< G4double >( numExitingElectrons ) / 
+			      static_cast< G4double >( numExiting ) ) << " %)" << G4endl
            << "\t number of exiting Others    = " 
            << numExitingOthers / n 
-           << " (" << 100.0 * numExitingOthers / numExiting << " %)" << G4endl;
-
+           << " (" << 100.0*( static_cast< G4double >( numExitingOthers ) / 
+			      static_cast< G4double >( numExiting ) ) << " %)" << G4endl;
   }
 
 }
