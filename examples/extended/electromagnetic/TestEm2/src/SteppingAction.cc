@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.4 2006-01-13 14:20:27 maire Exp $
+// $Id: SteppingAction.cc,v 1.5 2006-04-12 15:25:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,6 +31,7 @@
 #include "RunAction.hh"
 
 #include "G4SteppingManager.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -51,7 +52,9 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  //
  G4double dEStep = step->GetTotalEnergyDeposit();
  if (dEStep > 0.) {
-   G4ThreeVector position = step->GetPostStepPoint()->GetPosition();
+   G4ThreeVector prePoint  = step->GetPreStepPoint()->GetPosition();
+   G4ThreeVector postPoint = step->GetPostStepPoint()->GetPosition();
+   G4ThreeVector position  = prePoint + G4UniformRand()*(postPoint - prePoint);
    G4double x = position.x(), y = position.y(), z = position.z();
    G4double radius = std::sqrt(x*x + y*y);
    G4double offset = 0.5*detector->GetfullLength();
