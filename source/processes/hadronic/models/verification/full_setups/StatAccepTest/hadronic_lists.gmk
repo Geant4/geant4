@@ -1,4 +1,4 @@
-# $Id: hadronic_lists.gmk,v 1.4 2005-12-17 10:44:07 ribon Exp $
+# $Id: hadronic_lists.gmk,v 1.5 2006-04-13 13:15:06 ribon Exp $
 # --------------------------------------------------------------
 # hadronic physics-lists setup
 # --------------------------------------------------------------
@@ -17,7 +17,7 @@ endif
 # Select your physics lists to link against.
 #
 # EXTRALIBS += -lFTFC
-# EXTRALIBS += -lFTFP
+EXTRALIBS += -lFTFP
 # EXTRALIBS += -lLBE
 EXTRALIBS += -lLHEP
 # EXTRALIBS += -lLHEP_LEAD
@@ -27,7 +27,7 @@ EXTRALIBS += -lLHEP
 # EXTRALIBS += -lLHEP_PRECO
 # EXTRALIBS += -lLHEP_EMV
 EXTRALIBS += -lQGSP_BERT
-#EXTRALIBS += -lQGSP_BERT_HP
+EXTRALIBS += -lQGSP_BERT_HP
 # EXTRALIBS += -lLHEP_PRECO_HP
 EXTRALIBS += -lQGSC
 # EXTRALIBS += -lQGSC_LEAD
