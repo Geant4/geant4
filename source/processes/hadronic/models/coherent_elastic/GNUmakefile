@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2003-10-08 16:42:19 hpw Exp $
+# $Id: GNUmakefile,v 1.4 2006-04-13 10:23:50 vnivanch Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -21,6 +21,8 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/hadronic/management/include/ \
             -I$(G4BASE)/processes/hadronic/models/management/include/ \
+            -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/interface/include/ \
+            -I$(G4BASE)/processes/hadronic/models/neutron_hp/include/ \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include/ \
             -I$(G4BASE)/particles/management/include \
@@ -30,8 +32,5 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/hadrons/barions/include \
             -I$(G4BASE)/particles/hadrons/ions/include \
             -I$(G4BASE)/materials/include \
-            -I$(G4BASE)/myexample/include
-           
-   CPPFLAGS+=-I$(G4INSTALL)/tests/tools/include -DMAKEHBOOK -DMAKEBOOK
 
 include $(G4INSTALL)/config/common.gmk
