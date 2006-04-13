@@ -1,0 +1,13 @@
+** usage: exec h_rebin [histogram number] [number of bins after rebinning]
+macro h_rebin histo nbins
+v/create histo_cont($HINFO([histo],'XBINS'))
+h/get/cont [histo] histo_cont
+1d 9999 ' rebinned copy of [histo] ' [nbins] $HINFO([histo],'XMIN') $HINFO([histo],'XMAX')
+
+v/create xd($HINFO([histo],'XBINS')) r
+v/create yd($HINFO([histo],'XBINS')) r
+v/create exd($HINFO([histo],'XBINS')) r
+v/create eyd($HINFO([histo],'XBINS')) r
+rebin [histo] xd yd exd eyd [nbins] $HINFO([histo],'XMIN') $HINFO([histo],'XMAX') N
+h/put/con 9999 yd
+h/pl 9999
