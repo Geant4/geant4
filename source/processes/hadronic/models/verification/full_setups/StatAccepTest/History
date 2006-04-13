@@ -1,6 +1,12 @@
                  History file
                  ------------
 
+13-Apr-2006 - A.Ribon (statAccepTest-V08-00-11)
+- Added kinetic spectra in some active layers, and
+  counting of the exiting energies.
+  This tag has been used for the April 2006 mini-production.
+
+
 09-Apr-2006 - A.Ribon (statAccepTest-V08-00-10)
 - Transition from a cubic box to a cylinder, with radius
   which can be set by the user independently from
