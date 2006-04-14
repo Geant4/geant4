@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2006-01-27 09:57:48 maire Exp $
+$Id: History,v 1.4 2006-04-14 16:26:43 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+14-04-06 mma
+- extended to charged particles: PhysicsList, RunAction, SteppingAction.
+- new macros provided.
+- remove multipleScattering from PhysicsList 
+- plot final state only if destep is small enough.
      
 27-01-06 mma (testem13-V08-00-01)
 - add LowEnergy PhysicsList : livermore and penelope
