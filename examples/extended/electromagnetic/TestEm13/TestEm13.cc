@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TestEm13.cc,v 1.1 2006-01-06 12:09:57 maire Exp $
+// $Id: TestEm13.cc,v 1.2 2006-04-14 16:26:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,7 +78,7 @@ int main(int argc,char** argv) {
   RunAction* run;  
   runManager->SetUserAction(run = new RunAction(det,prim,histo)); 
   runManager->SetUserAction(new EventAction);
-  runManager->SetUserAction(new SteppingAction(run,histo));
+  runManager->SetUserAction(new SteppingAction(prim,run,histo));
    
   // get the pointer to the User Interface manager 
     G4UImanager* UI = G4UImanager::GetUIpointer();  

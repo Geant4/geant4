@@ -20,48 +20,47 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.hh,v 1.2 2006-04-14 16:26:43 maire Exp $
+// $Id: SteppingMessenger.cc,v 1.1 2006-04-14 16:26:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
+// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsListMessenger_h
-#define PhysicsListMessenger_h 1
+#include "SteppingMessenger.hh"
 
-#include "G4UImessenger.hh"
-#include "globals.hh"
+#include "SteppingAction.hh"
 
-class PhysicsList;
-class G4UIdirectory;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithAString;
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithADouble.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsListMessenger: public G4UImessenger
+SteppingMessenger::SteppingMessenger(SteppingAction* StpAct)
+:stepAction(StpAct)
+{ 
+  stepDir = new G4UIdirectory("/testem/step/");
+  stepDir ->SetGuidance("stepping action control");
+      
+  destepCmd = new G4UIcmdWithADouble("/testem/step/maxEdepForPlot",this);
+  destepCmd->SetGuidance("Set max fraction of edep for plotting final state");
+  destepCmd->SetParameterName("fract",false);
+  destepCmd->SetRange("fract>0.&&fract<=1.");  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+SteppingMessenger::~SteppingMessenger()
 {
-  public:
-  
-    PhysicsListMessenger(PhysicsList* );
-   ~PhysicsListMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-  
-    PhysicsList*               pPhysicsList;
-    
-    G4UIdirectory*             physDir;
-    G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-    G4UIcmdWithADoubleAndUnit* electCutCmd;
-    G4UIcmdWithADoubleAndUnit* protoCutCmd;    
-    G4UIcmdWithADoubleAndUnit* allCutCmd;
-    G4UIcmdWithAString*        pListCmd;
-    
-};
+  delete destepCmd;
+  delete stepDir;   
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void SteppingMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{ 
+  if (command == destepCmd)
+    {stepAction->SetMaxEdepForPlot(destepCmd->GetNewDoubleValue(newValue));}
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.2 2006-01-27 09:55:52 maire Exp $
+// $Id: RunAction.cc,v 1.3 2006-04-14 16:26:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,6 +36,7 @@
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4EmCalculator.hh"
+#include "G4Gamma.hh"
 
 #include "Randomize.hh"
 #include <iomanip>
@@ -106,11 +107,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
   
   //frequency of processes
-  G4cout << "\n Frequency of process calls --->";
+  G4cout << "\n Process calls frequency --->";
   for (size_t i=0; i< ProcCounter->size();i++) {
      G4String procName = (*ProcCounter)[i]->GetName();
      G4int    count    = (*ProcCounter)[i]->GetCounter(); 
-     G4cout << "\t" << procName << " : " << count;
+     G4cout << "\t" << procName << " = " << count;
      if (procName == "Transportation") survive = count;
   }
   
@@ -120,41 +121,47 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	   << material->GetName() << " : " << survive << G4endl;
   }
   
+  if (totalCount == 0) totalCount = 1;   //force printing anyway
+  
   //compute mean free path and related quantities
   //
   G4double MeanFreePath = sumTrack /totalCount;     
   G4double MeanTrack2   = sumTrack2/totalCount;     
   G4double rms = std::sqrt(std::fabs(MeanTrack2 - MeanFreePath*MeanFreePath));
-  G4double AttenuationCoef = 1./MeanFreePath;     
+  G4double CrossSection = 1./MeanFreePath;     
   G4double massicMFP = MeanFreePath*density;
-  G4double massicAC  = 1./massicMFP;
+  G4double massicCS  = 1./massicMFP;
    
-  G4cout << "\n\n MeanFreePath:   \t"<< G4BestUnit(MeanFreePath,"Length")
+  G4cout << "\n\n MeanFreePath:\t"   << G4BestUnit(MeanFreePath,"Length")
          << " +- "                   << G4BestUnit( rms,"Length")
-         << "\tmassic: "             << massicMFP*cm2/g << " g/cm2 "
-         << "\n AttenuationCoef:\t"  << AttenuationCoef*cm << " cm^-1 "
-	 << "\t\t\tmassic: "         << massicAC*g/cm2 << " cm2/g"
+         << "\tmassic: "             << G4BestUnit(massicMFP, "Mass/Surface")
+         << "\n CrossSection:\t"     << CrossSection*cm << " cm^-1 "
+	 << "\t\t\tmassic: "         << G4BestUnit(massicCS, "Surface/Mass")
          << G4endl;
 
   //check cross section from G4EmCalculator
   //
   G4cout << "\n Verification : "
-         << "mass_AttenuationCoef computed from processes (G4EmCalculator):";
+         << "crossSections from G4EmCalculator. \n";
   
   G4EmCalculator emCalculator;
   G4double sumc = 0.0;  
   for (size_t i=0; i< ProcCounter->size();i++) {
     G4String procName = (*ProcCounter)[i]->GetName();
     G4double massSigma = 
-    emCalculator.ComputeCrossSectionPerVolume(energy,particle,
+    emCalculator.GetCrossSectionPerVolume(energy,particle,
                                               procName,material)/density;
+    if (particle == G4Gamma::Gamma())
+       massSigma = 
+       emCalculator.ComputeCrossSectionPerVolume(energy,particle,
+                                              procName,material)/density;					      
     sumc += massSigma;
-    G4cout << "\n \t" << std::setw( 8) << procName << " : " 
-           << massSigma*g/cm2 << " cm2/g";
+    G4cout << "\t" << procName << "= " 
+           << G4BestUnit(massSigma, "Surface/Mass");
   }  	   
-  G4cout << "\n\n \t" << std::setw(11) << "Total : " 
-         << sumc*g/cm2 << " cm2/g" << G4endl;
-	 
+  G4cout << "\ttotal= " 
+         << G4BestUnit(sumc, "Surface/Mass") << G4endl;
+	 	 
   //restore default format	 
   G4cout.precision(prec);         
 

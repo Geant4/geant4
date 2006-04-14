@@ -20,48 +20,39 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.hh,v 1.2 2006-04-14 16:26:43 maire Exp $
+// $Id: SteppingMessenger.hh,v 1.1 2006-04-14 16:26:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
+// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsListMessenger_h
-#define PhysicsListMessenger_h 1
+#ifndef SteppingMessenger_h
+#define SteppingMessenger_h 1
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
-class PhysicsList;
+class SteppingAction;
 class G4UIdirectory;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithAString;
+class G4UIcmdWithADouble;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsListMessenger: public G4UImessenger
+class SteppingMessenger: public G4UImessenger
 {
   public:
-  
-    PhysicsListMessenger(PhysicsList* );
-   ~PhysicsListMessenger();
+    SteppingMessenger(SteppingAction*);
+   ~SteppingMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-  
-    PhysicsList*               pPhysicsList;
+    SteppingAction*     stepAction;
     
-    G4UIdirectory*             physDir;
-    G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-    G4UIcmdWithADoubleAndUnit* electCutCmd;
-    G4UIcmdWithADoubleAndUnit* protoCutCmd;    
-    G4UIcmdWithADoubleAndUnit* allCutCmd;
-    G4UIcmdWithAString*        pListCmd;
-    
+    G4UIdirectory*      stepDir;   
+    G4UIcmdWithADouble* destepCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

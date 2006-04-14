@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2006-01-06 12:09:57 maire Exp $
+$Id: README,v 1.2 2006-04-14 16:26:43 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,9 +8,9 @@ $Id: README,v 1.1 2006-01-06 12:09:57 maire Exp $
                             TestEm13
                             --------
 
-	This test is devoted to the photon processes: gamma conversion, coherent
-	and incoherent scattering, photoelectric effect. It allows to compute
-	absorption coefficients and to plot final state. 
+	This test allows to compute the total cross section of one or several
+	processes and to plot the final state at interaction point.
+	The method is exposed below : see item Physics. 
 	
  1- GEOMETRY DEFINITION
  
@@ -25,8 +25,10 @@ $Id: README,v 1.1 2006-01-06 12:09:57 maire Exp $
  	
  2- PHYSICS LIST
  
- 	The particle list contains only gamma, e+, e-, mu+, mu-.
- 	The physics list contains the 'standard' electromagnetic processes. 
+ 	The physics list contains the standard electromagnetic processes.
+	In order not to introduce 'articicial' constraints on the step size, the
+	multiple scattering is not instanciated, and there is no limitation from
+	the maximum energy lost per step.  
  	 
  3- AN EVENT : THE PRIMARY GENERATOR
  
@@ -38,12 +40,18 @@ $Id: README,v 1.1 2006-01-06 12:09:57 maire Exp $
  	
  4- PHYSICS
  
-	The incident particle is a photon. The event is killed at the first
-	interaction of the photon.
-	The absorption length is computed as the mean value of the track length
-	of the photon.
-	The energy spectrum and the angular distribution of the scattered photon
-	(if any) and of the secondaries are plotted (see SteppingAction).
+	An event is killed at the first interaction of the incident paticle.
+	The absorption length, also called mean free path, is computed as 
+	the mean value of the track length of the incident particle.
+	This is why the medium must be 'infinite' : to be sure that interaction
+	occurs at any events.
+	
+	The result is compared with the 'input' data, i.e. with the cross
+	sections stored in the PhysicsTables and used by Geant4.
+	
+	The energy spectrum and the angular distribution of the scattered
+	particle (if any) and of the created secondaries are plotted (see
+	SteppingAction).
  	
  	A set of macros defining various run conditions are provided.
  	The processes are actived/inactived in order to survey the processes 

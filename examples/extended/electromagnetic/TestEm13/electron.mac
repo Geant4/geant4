@@ -1,0 +1,24 @@
+# $Id: electron.mac,v 1.1 2006-04-14 16:26:43 maire Exp $
+#
+# Macro file for "TestEm13.cc"
+# (can be run in batch, without graphic)
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Aluminium
+#
+/run/initialize
+#
+/testem/phys/setCuts 1 mm
+
+### /process/inactivate eIoni
+### /process/inactivate eBrem
+#
+/gun/particle e-
+/gun/energy 100 MeV
+#
+##/tracking/verbose 2
+##/run/beamOn 1
+#
+/run/beamOn 100000
