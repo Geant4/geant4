@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LElasticB.hh,v 1.1 2006-04-13 10:23:50 vnivanch Exp $
+// $Id: G4LElasticB.hh,v 1.2 2006-04-16 15:40:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -66,7 +66,7 @@ class G4LElasticB : public G4HadronicInteraction
 {
 public:
 
-  G4LElasticB();
+  G4LElasticB(G4double elim = 0.0, G4double plim = 200.*MeV);
 
   virtual ~G4LElasticB();
  

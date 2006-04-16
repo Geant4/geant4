@@ -48,13 +48,13 @@
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 
-G4LElasticB::G4LElasticB() : G4HadronicInteraction()
+G4LElasticB::G4LElasticB(G4double elim, G4double plim) : G4HadronicInteraction()
 {
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( DBL_MAX );
   verboseLevel = 0;
-  plablim = 0.2;
-  ekinlim = 0.0;
+  plablim = plim;
+  ekinlim = elim;
 }
 
 G4LElasticB::~G4LElasticB()
@@ -73,9 +73,9 @@ G4LElasticB::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucle
   // Elastic scattering off Hydrogen
 
 
-  G4double plab = aParticle->GetTotalMomentum()/GeV;
+  G4double plab = aParticle->GetTotalMomentum();
   if (verboseLevel > 1) 
-    G4cout << "G4LElasticB::DoIt: Incident particle plab=" << plab << " GeV/c " 
+    G4cout << "G4LElasticB::DoIt: Incident particle plab=" << plab/GeV << " GeV/c " 
 	   << aParticle->GetDefinition()->GetParticleName() << G4endl;
 
   // Scattered particle referred to axis of incident particle
@@ -126,9 +126,13 @@ G4LElasticB::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucle
   G4LorentzVector nlv01 = lv0 + lv1 - nlv11;
   nlv01.boost(bst);
   nlv11.boost(bst); 
-  //G4cout << " P0= "<< nlv01 << "   P1= "<< nlv11<<" m= " << m1 <<G4endl;
 
   G4double ekin = nlv11.e() - m1;
+  if (verboseLevel > 1) 
+    G4cout << " P0= "<< nlv01 << "   P1= "
+	   << nlv11<<" m= " << m1 << " ekin0= " << ekin 
+	   << " ekin1= " << nlv01.e() - m2 
+	   <<G4endl;
   if(ekin < 0.0) {
     G4cout << "G4LElasticB WARNING ekin= " << ekin 
 	   << " after scattering of " 
@@ -146,6 +150,8 @@ G4LElasticB::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucle
   if(ekin > ekinlim) {
     G4DynamicParticle * aSec = new G4DynamicParticle(theDef, nlv01);
     theParticleChange.AddSecondary(aSec);
+  } else {
+    theParticleChange.SetLocalEnergyDeposit(ekin);
   }
   //   G4cout << " ion info "<<atno2 << " "<<A<<" "<<Z<<" "<<zTarget<<G4endl;
   return &theParticleChange;
