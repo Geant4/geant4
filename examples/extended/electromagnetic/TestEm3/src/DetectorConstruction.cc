@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.14 2005-10-07 16:26:07 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.15 2006-04-16 16:34:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -29,6 +29,7 @@
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
 
+#include "G4NistManager.hh"
 #include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
@@ -88,22 +89,24 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 void DetectorConstruction::DefineMaterials()
 {
- //This function illustrates the possible ways to define materials
-
+  // This function illustrates the possible ways to define materials using 
+  // G4 database on G4Elements
+  G4NistManager* manager = G4NistManager::Instance();
   //
   // define Elements
   //
   G4double z,a;
 
-  G4Element* H  = new G4Element("Hydrogen",  "H" , z= 1.,  a= 1.008*g/mole);
-  G4Element* C  = new G4Element("Carbon",    "C" , z= 6.,  a= 12.01*g/mole);
-  G4Element* N  = new G4Element("Nitrogen",  "N" , z= 7.,  a= 14.01*g/mole);
-  G4Element* O  = new G4Element("Oxygen",    "O" , z= 8.,  a= 16.00*g/mole);
-  G4Element* Si = new G4Element("Silicon",   "Si", z= 14., a= 28.09*g/mole);
-  G4Element* Ge = new G4Element("Germanium", "Ge", z= 32., a= 72.59*g/mole);
-  G4Element* I  = new G4Element("Iodine",    "I" , z= 53., a= 126.90*g/mole);
-  G4Element* Cs = new G4Element("Cesium",    "Cs", z= 55., a= 132.90*g/mole);
-  G4Element* Bi = new G4Element("Bismuth",   "Bi", z= 83., a= 208.98*g/mole);
+  G4Element* H  = manager->FindOrBuildElement(1);
+  G4Element* C  = manager->FindOrBuildElement(6);
+  G4Element* O  = manager->FindOrBuildElement(8);
+  G4Element* Si = manager->FindOrBuildElement(14);
+  G4Element* Ge = manager->FindOrBuildElement(32);
+  G4Element* Sb = manager->FindOrBuildElement(51);
+  G4Element* I  = manager->FindOrBuildElement(53);
+  G4Element* Cs = manager->FindOrBuildElement(55);
+  G4Element* Pb = manager->FindOrBuildElement(82);
+  G4Element* Bi = manager->FindOrBuildElement(83);
 
   //
   // define an Element from isotopes, by relative abundance
@@ -167,6 +170,10 @@ void DetectorConstruction::DefineMaterials()
   SiO2->AddElement(Si, natoms=1);
   SiO2->AddElement(O , natoms=2);
 
+  //
+  // define a material from elements.   case 2: compounds
+  //
+
   G4Material* G10 = 
   new G4Material("NemaG10", density= 1.700*g/cm3, ncomponents=4);
   G10->AddElement(Si, natoms=1);
@@ -187,24 +194,21 @@ void DetectorConstruction::DefineMaterials()
   BGO->AddElement(Bi, natoms= 4);
 
   //
-  // define a material from elements.   case 2: mixture by fractional mass
+  // define gaseous materials using G4 NIST database 
   //
   G4double fractionmass;
   
-  G4Material* Air = 
-  new G4Material("Air", density= 1.290*mg/cm3, ncomponents=2);
-  Air->AddElement(N, fractionmass=0.7);
-  Air->AddElement(O, fractionmass=0.3);
-
-  G4Material* Air20 = 
-  new G4Material("Air20", density= 1.205*mg/cm3, ncomponents=2,
-                          kStateGas, 293.*kelvin, 1.*atmosphere);
-  Air20->AddElement(N, fractionmass=0.7);
-  Air20->AddElement(O, fractionmass=0.3);
+  G4Material* Air = manager->FindOrBuildMaterial("G4_AIR");
+  manager->ConstructNewGasMaterial("Air20","G4_AIR",293.*kelvin, 1.*atmosphere);
 
   //
   // define a material from elements and others materials (mixture of mixtures)
   //
+
+  G4Material* LeadSb = 
+  new G4Material("LeadSb", density= 11.35*g/cm3, ncomponents=2);
+  LeadSb->AddElement(Sb, fractionmass=4.*perCent);
+  LeadSb->AddElement(Pb, fractionmass=96.*perCent);
 
   G4Material* Aerog = 
   new G4Material("Aerogel", density= 0.200*g/cm3, ncomponents=3);
@@ -252,12 +256,12 @@ void DetectorConstruction::DefineMaterials()
 void DetectorConstruction::ComputeCalorParameters()
 {
   // Compute derived parameters of the calorimeter
-     LayerThickness = 0.;
-     for (G4int iAbs=1; iAbs<=NbOfAbsor; iAbs++)
-     LayerThickness += AbsorThickness[iAbs];
-     CalorThickness = NbOfLayers*LayerThickness;
-     
-     WorldSizeX = 1.2*CalorThickness; WorldSizeYZ = 1.2*CalorSizeYZ;
+  LayerThickness = 0.;
+  for (G4int iAbs=1; iAbs<=NbOfAbsor; iAbs++)
+    LayerThickness += AbsorThickness[iAbs];
+
+  CalorThickness = NbOfLayers*LayerThickness;     
+  WorldSizeX = 1.2*CalorThickness; WorldSizeYZ = 1.2*CalorSizeYZ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -393,7 +397,8 @@ void DetectorConstruction::PrintCalorParameters()
 void DetectorConstruction::SetWorldMaterial(G4String material)
 {
   // search the material by its name
-  G4Material* pttoMaterial = G4Material::GetMaterial(material);
+  G4Material* pttoMaterial = 
+    G4NistManager::Instance()->FindOrBuildMaterial(material);
   if (pttoMaterial) defaultMaterial = pttoMaterial;
 }
 
@@ -438,7 +443,8 @@ void DetectorConstruction::SetAbsorMaterial(G4int ival,G4String material)
       return;
     }
 
-  G4Material* pttoMaterial = G4Material::GetMaterial(material);
+  G4Material* pttoMaterial = 
+    G4NistManager::Instance()->FindOrBuildMaterial(material);
   if (pttoMaterial) AbsorMaterial[ival] = pttoMaterial;
 }
 
