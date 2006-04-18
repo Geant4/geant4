@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: DetectorConstruction.cc,v 1.1 2006-03-18 11:02:15 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.2 2006-04-18 08:46:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,7 +52,7 @@ DetectorConstruction::DetectorConstruction()
 {
   BoxSize = 1*mm;
   DefineMaterials();
-  SetMaterial("Aluminium");  
+  SetMaterial("Germanium");  
   detectorMessenger = new DetectorMessenger(this);
 }
 

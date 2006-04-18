@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.2 2006-04-05 13:13:56 maire Exp $
+// $Id: RunAction.cc,v 1.3 2006-04-18 08:46:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -91,7 +91,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
   G4double cut;
   std::vector<G4String> emName;
   std::vector<G4double> enerCut;
-  for (size_t j=0; j<(*plist).size();j++) {
+  size_t length = plist->size();
+  for (size_t j=0; j<length; j++) {
      procName = (*plist)[j]->GetProcessName();
      cut = energyCut[1];
      if ((procName == "eBrem")||(procName == "muBrems")) cut = energyCut[0];
@@ -110,6 +111,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
       
   //instanciate EmCalculator
   G4EmCalculator emCal;
+  //  emCal.SetVerbose(2);
   
   //compute cross section per atom (only for single material)
   if (material->GetNumberOfElements() == 1) {
@@ -131,6 +133,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
     for (size_t j=0; j<sigma0.size();j++) {	     
       G4cout << "\t" << std::setw(13) << G4BestUnit(sigma0[j], "Surface");
     }
+    G4cout << G4endl;
   }
     
   //get cross section per volume 
@@ -139,10 +142,9 @@ void RunAction::BeginOfRunAction(const G4Run*)
   G4double Sig, Sigtot = 0.;
 
   for (size_t j=0; j<emName.size();j++) {
-    Sig = 
-       emCal.GetCrossSectionPerVolume(energy,particle,emName[j],material);
+    Sig = emCal.GetCrossSectionPerVolume(energy,particle,emName[j],material);
     if (Sig == 0.) Sig = emCal.ComputeCrossSectionPerVolume
-                            (energy,particle,emName[j],material,enerCut[j]);
+		     (energy,particle,emName[j],material,enerCut[j]);
     Sigtot += Sig; 			     
     sigma1.push_back(Sig);
     sigma2.push_back(Sig/density);		        
@@ -183,7 +185,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
   
   if (charge == 0.) {
     G4cout.precision(prec);
-  G4cout << "\n-------------------------------------------------------------\n";
+    G4cout << "\n-------------------------------------------------------------\n";
     return;
   }
   
