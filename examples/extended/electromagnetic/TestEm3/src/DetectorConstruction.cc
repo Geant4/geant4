@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.15 2006-04-16 16:34:15 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.16 2006-04-18 08:00:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -92,6 +92,7 @@ void DetectorConstruction::DefineMaterials()
   // This function illustrates the possible ways to define materials using 
   // G4 database on G4Elements
   G4NistManager* manager = G4NistManager::Instance();
+  manager->SetVerbose(0);
   //
   // define Elements
   //
@@ -130,13 +131,11 @@ void DetectorConstruction::DefineMaterials()
 
   new G4Material("liquidH2",    z=1.,  a= 1.008*g/mole,  density= 70.8*mg/cm3);
   new G4Material("Aluminium",   z=13., a= 26.98*g/mole,  density= 2.700*g/cm3);
-  new G4Material("liquidArgon", z=18., a= 39.95*g/mole,  density= 1.390*g/cm3);
   new G4Material("Titanium",    z=22., a= 47.867*g/mole, density= 4.54*g/cm3);
   new G4Material("Iron",        z=26., a= 55.85*g/mole,  density= 7.870*g/cm3);
   new G4Material("Copper",      z=29., a= 63.55*g/mole,  density= 8.960*g/cm3);
   new G4Material("Tungsten",    z=74., a= 183.85*g/mole, density= 19.30*g/cm3);
   new G4Material("Gold",        z=79., a= 196.97*g/mole, density= 19.32*g/cm3);
-  new G4Material("Lead",        z=82., a= 207.19*g/mole, density= 11.35*g/cm3);
   new G4Material("Uranium",     z=92., a= 238.03*g/mole, density= 18.95*g/cm3);
 
   //
@@ -201,17 +200,22 @@ void DetectorConstruction::DefineMaterials()
   G4Material* Air = manager->FindOrBuildMaterial("G4_AIR");
   manager->ConstructNewGasMaterial("Air20","G4_AIR",293.*kelvin, 1.*atmosphere);
 
+  G4Material* lAr = manager->FindOrBuildMaterial("G4_lAr");
+  G4Material* lArEm3 = new G4Material("liquidArgon", density= 1.390*g/cm3, ncomponents=1);
+  lArEm3->AddMaterial(lAr, fractionmass=1.0);
+
   //
   // define a material from elements and others materials (mixture of mixtures)
   //
 
-  G4Material* LeadSb = 
-  new G4Material("LeadSb", density= 11.35*g/cm3, ncomponents=2);
+  G4Material* Lead = new G4Material("Lead", density= 11.35*g/cm3, ncomponents=1);
+  Lead->AddElement(Pb, fractionmass=1.0);
+
+  G4Material* LeadSb = new G4Material("LeadSb", density= 11.35*g/cm3, ncomponents=2);
   LeadSb->AddElement(Sb, fractionmass=4.*perCent);
   LeadSb->AddElement(Pb, fractionmass=96.*perCent);
 
-  G4Material* Aerog = 
-  new G4Material("Aerogel", density= 0.200*g/cm3, ncomponents=3);
+  G4Material* Aerog = new G4Material("Aerogel", density= 0.200*g/cm3, ncomponents=3);
   Aerog->AddMaterial(SiO2, fractionmass=62.5*perCent);
   Aerog->AddMaterial(H2O , fractionmass=37.4*perCent);
   Aerog->AddElement (C   , fractionmass= 0.1*perCent);
@@ -249,6 +253,8 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Beam", density, ncomponents=1,
                          kStateGas,temperature,pressure);
   beam->AddMaterial(Air, fractionmass=1.);
+
+  //  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -257,9 +263,9 @@ void DetectorConstruction::ComputeCalorParameters()
 {
   // Compute derived parameters of the calorimeter
   LayerThickness = 0.;
-  for (G4int iAbs=1; iAbs<=NbOfAbsor; iAbs++)
+  for (G4int iAbs=1; iAbs<=NbOfAbsor; iAbs++) {
     LayerThickness += AbsorThickness[iAbs];
-
+  }
   CalorThickness = NbOfLayers*LayerThickness;     
   WorldSizeX = 1.2*CalorThickness; WorldSizeYZ = 1.2*CalorSizeYZ;
 }
@@ -345,17 +351,17 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   //
 
   G4double xfront = -0.5*LayerThickness;
-  for (G4int k=1; k<=NbOfAbsor; k++)
-     { solidAbsor[k] = new G4Box("Absorber",		//its name
-                          AbsorThickness[k]/2,CalorSizeYZ/2,CalorSizeYZ/2);
+  for (G4int k=1; k<=NbOfAbsor; k++) {
+    solidAbsor[k] = new G4Box("Absorber",		//its name
+			      AbsorThickness[k]/2,CalorSizeYZ/2,CalorSizeYZ/2);
 
-      logicAbsor[k] = new G4LogicalVolume(solidAbsor[k],    //its solid
-      			                  AbsorMaterial[k], //its material
-      			                  AbsorMaterial[k]->GetName());
+    logicAbsor[k] = new G4LogicalVolume(solidAbsor[k],    //its solid
+					AbsorMaterial[k], //its material
+					AbsorMaterial[k]->GetName());
 
-      G4double xcenter = xfront+0.5*AbsorThickness[k];
-      xfront += AbsorThickness[k];
-      physiAbsor[k] = new G4PVPlacement(0,		   //no rotation
+    G4double xcenter = xfront+0.5*AbsorThickness[k];
+    xfront += AbsorThickness[k];
+    physiAbsor[k] = new G4PVPlacement(0,		   //no rotation
       		    	G4ThreeVector(xcenter,0.,0.),      //its position
                         logicAbsor[k],     		   //its logical volume	
                     	AbsorMaterial[k]->GetName(),	   //its name
@@ -363,8 +369,9 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
                         false,             		   //no boulean operat
                         k);               		   //copy number
 
-     }
-     
+  }
+
+
   PrintCalorParameters();
 
   //always return the physical World
@@ -394,7 +401,7 @@ void DetectorConstruction::PrintCalorParameters()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetWorldMaterial(G4String material)
+void DetectorConstruction::SetWorldMaterial(const G4String& material)
 {
   // search the material by its name
   G4Material* pttoMaterial = 
@@ -433,11 +440,11 @@ void DetectorConstruction::SetNbOfAbsor(G4int ival)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetAbsorMaterial(G4int ival,G4String material)
+void DetectorConstruction::SetAbsorMaterial(G4int ival, const G4String& material)
 {
   // search the material by its name
   //
-  if (ival > NbOfAbsor)
+  if (ival > NbOfAbsor || ival <= 0)
     { G4cout << "\n --->warning from SetAbsorMaterial: absor number "
              << ival << " out of range. Command refused" << G4endl;
       return;
@@ -454,7 +461,7 @@ void DetectorConstruction::SetAbsorThickness(G4int ival,G4double val)
 {
   // change Absorber thickness
   //
-  if (ival > NbOfAbsor)
+  if (ival > NbOfAbsor || ival <= 0)
     { G4cout << "\n --->warning from SetAbsorThickness: absor number "
              << ival << " out of range. Command refused" << G4endl;
       return;
