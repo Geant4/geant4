@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2006-04-14 16:30:00 maire Exp $
+$Id: History,v 1.6 2006-04-18 10:16:02 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+18-04-06 mma (testem13-V08-00-03)
+- macros renamed : allprocess -> gamma  phot -> photoelec
      
 14-04-06 mma (testem13-V08-00-02)
 - extended to charged particles: PhysicsList, RunAction, SteppingAction.
