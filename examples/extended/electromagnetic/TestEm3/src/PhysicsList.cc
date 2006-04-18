@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.12 2006-04-16 16:34:15 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.13 2006-04-18 08:07:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,6 +32,8 @@
 #include "PhysListEmStandard.hh"
 #include "PhysListEmG4v52.hh"
 #include "PhysListEmG4v71.hh"
+#include "PhysListEmLivermore.hh"
+#include "PhysListEmPenelope.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
@@ -166,6 +168,10 @@ void PhysicsList::ConstructProcess()
 {
   AddTransportation();
 
+  // electromagnetic Physics List
+  //
+  emPhysicsList->ConstructProcess();
+
   // Add Decay Process
   //
   G4Decay* fDecayProcess = new G4Decay();
@@ -185,11 +191,7 @@ void PhysicsList::ConstructProcess()
 
     }
   }
-  
-  // electromagnetic Physics List
-  //
-  emPhysicsList->ConstructProcess();
-  
+    
   // stepLimitation (as a full process)
   //
   AddStepMax();  
@@ -222,6 +224,18 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmG4v71(name);
+
+  } else if (name == "Livermore") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmLivermore(name);
+
+  } else if (name == "Penelope") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmPenelope(name);
 
   } else {
 
