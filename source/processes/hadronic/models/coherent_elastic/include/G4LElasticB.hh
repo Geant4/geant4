@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LElasticB.hh,v 1.2 2006-04-16 15:40:37 vnivanch Exp $
+// $Id: G4LElasticB.hh,v 1.3 2006-04-18 16:53:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -48,19 +48,13 @@
 // Class Description - End
 
 #include "globals.hh"
-#include "Randomize.hh"
-#include "G4Element.hh"
-#include "G4ElementVector.hh"
-#include "G4ElementTable.hh"
-#include "G4PhysicsTable.hh"
-#include "G4PhysicsVector.hh"
-#include "G4LPhysicsFreeVector.hh"
-//#include "G4HadronicCrossSections.hh"
-#include "G4LightMedia.hh"
-#include "G4Step.hh"
-#include "G4TrackStatus.hh"
 #include "G4HadronicInteraction.hh"
+#include "G4HadProjectile.hh"
+#include "G4Nucleus.hh"
 
+class G4ParticleDefinition;
+class G4VQCrossSection;
+class G4QElastic;
 
 class G4LElasticB : public G4HadronicInteraction
 {
@@ -74,8 +68,6 @@ public:
 				  G4Nucleus & targetNucleus);
 
 private:
-
-  //   G4LightMedia LightMedia;
 
   G4double SampleT(G4double p, G4double m1, G4double m2, G4double A);
 
@@ -92,7 +84,14 @@ private:
 	     G4double pxinc, G4double pyinc, G4double pzinc, 
 	     G4double* pxnew, G4double* pynew, G4double* pznew);
 
-  G4double plablim;  // in GeV
+  G4VQCrossSection*           qCManager;
+  G4QElastic*                 qElastic;
+  const G4ParticleDefinition* theProton;
+  const G4ParticleDefinition* theNeutron;
+  const G4ParticleDefinition* theDeuteron;
+  const G4ParticleDefinition* theAlpha;
+
+  G4double plablim;  // in MeV/c
   G4double ekinlim;  // in MeV
 };
 

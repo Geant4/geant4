@@ -46,19 +46,44 @@
 
 #include "G4LElasticB.hh"
 #include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4IonTable.hh"
+#include "G4QElasticCrossSection.hh"
+#include "G4VQCrossSection.hh"
+#include "G4QElastic.hh"
+#include "Randomize.hh"
+#include "G4Proton.hh"
+#include "G4Neutron.hh"
+#include "G4Deuteron.hh"
+#include "G4Alpha.hh"
+
+enum G4ElasticGenerator
+{
+  fLElastic = 0,
+  fHElastic,
+  fQElastic,
+  fSWave
+};
 
 G4LElasticB::G4LElasticB(G4double elim, G4double plim) : G4HadronicInteraction()
 {
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( DBL_MAX );
-  verboseLevel = 0;
-  plablim = plim;
-  ekinlim = elim;
+  verboseLevel= 0;
+  plablim     = plim;
+  ekinlim     = elim;
+  qElastic    = new G4QElastic();
+  qCManager   = G4QElasticCrossSection::GetPointer();
+  theProton   = G4Proton::Proton();
+  theNeutron  = G4Neutron::Neutron();
+  theDeuteron = G4Deuteron::Deuteron();
+  theAlpha    = G4Alpha::Alpha();
 }
 
 G4LElasticB::~G4LElasticB()
-{}
+{
+  delete qElastic;
+}
 
 G4HadFinalState*
 G4LElasticB::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
@@ -79,13 +104,22 @@ G4LElasticB::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucle
 	   << aParticle->GetDefinition()->GetParticleName() << G4endl;
 
   // Scattered particle referred to axis of incident particle
-  G4double m1 = aParticle->GetDefinition()->GetPDGMass();
+  const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
+  G4double m1 = theParticle->GetPDGMass();
 
-  G4int Z=static_cast<G4int>(zTarget);
-  G4int A=static_cast<G4int>(atno2);
-  if (verboseLevel > 1) G4cout << "Z= " << Z << " A= " << A << G4endl;
+  G4int Z = static_cast<G4int>(zTarget);
+  G4int A = static_cast<G4int>(atno2);
+  G4int N = A - Z;
+  G4int projPDG = theParticle->GetPDGEncoding();
+  if (verboseLevel > 1) 
+    G4cout << "G4LElasticB for " << theParticle->GetParticleName()
+	   << " PDGcode= " << projPDG << " on nucleus Z= " << Z 
+	   << " A= " << A << " N= " << N 
+	   << G4endl;
+
   G4ParticleDefinition * theDef = 0;
-  if(Z == 1 && A == 1)       theDef = G4Proton::Proton();
+
+  if(Z == 1 && A == 1) theDef = G4Proton::Proton();
   else if (Z == 1 && A == 2) theDef = G4Deuteron::Deuteron();
   else if (Z == 1 && A == 3) theDef = G4Triton::Triton();
   else if (Z == 2 && A == 3) theDef = G4He3::He3();
@@ -104,10 +138,19 @@ G4LElasticB::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucle
   G4double ptot = p1.mag();
   G4double ptotgev = ptot/GeV;
   G4double tmax = 4.0*ptotgev*ptotgev;
-  G4double t;
+  G4double t = 0.0;
 
-  if(plab < plablim) t = G4UniformRand()*tmax;
-  else               t = SampleT(ptotgev,m1,m2,atno2);
+  // Choose generator
+  G4ElasticGenerator gtype = fLElastic;
+  if((theParticle == theProton) &&
+     (theDef == theProton || theDef == theDeuteron || theDef == theAlpha) &&
+     qCManager->GetCrossSection(false,plab,Z,N,projPDG) > 0.0) 
+    gtype = fQElastic;
+  else if(plab < plablim) gtype = fSWave;
+
+  if(gtype == fSWave)         t = G4UniformRand()*tmax;
+  else if(gtype == fLElastic) t = SampleT(ptotgev,m1,m2,atno2);
+  else if(gtype == fQElastic) t = GeV*qCManager->GetExchangeT(Z,N,projPDG);
 
   // Sampling in CM system
   G4double phi  = G4UniformRand()*twopi;
