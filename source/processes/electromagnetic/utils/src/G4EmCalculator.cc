@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.29 2006-03-23 11:54:24 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.30 2006-04-18 08:48:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -288,8 +288,11 @@ G4double G4EmCalculator::GetCrossSectionPerVolume(G4double kinEnergy,
 	G4cout << "E(MeV)= " << kinEnergy/MeV
 	       << " cross(cm-1)= " << res*cm
 	       << "  " <<  p->GetParticleName()
-	       << " in " <<  mat->GetName()
-	       << G4endl;
+	       << " in " <<  mat->GetName();
+	if(verbose>1) 
+	  G4cout << "  idx= " << idx << "  e(MeV)= " << e 
+		 << "  q2= " << chargeSquare; 
+	G4cout << G4endl;
       }
     }
   }
@@ -687,9 +690,8 @@ G4bool G4EmCalculator::UpdateParticle(const G4ParticleDefinition* p,
     baseParticle    = 0;
     currentParticleName = p->GetParticleName();
     massRatio       = 1.0;
-    G4double q      = p->GetPDGCharge()/eplus;
     mass            = p->GetPDGMass();
-    chargeSquare    = q*q;
+    chargeSquare    = 1.0;
     currentProcess  = FindEnergyLossProcess(p);
   
     if(p->GetParticleType() == "nucleus" &&
@@ -712,7 +714,7 @@ G4bool G4EmCalculator::UpdateParticle(const G4ParticleDefinition* p,
           massRatio = baseParticle->GetPDGMass()/p->GetPDGMass();
           G4double q = baseParticle->GetPDGCharge()/eplus;
 	  chargeSquare /= (q*q);
-        }
+	}
       }
     }
   }
