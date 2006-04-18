@@ -1,4 +1,4 @@
-$Id: History,v 1.71 2006-03-09 16:51:46 vnivanch Exp $
+$Id: History,v 1.72 2006-04-18 07:52:44 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18-03-06 V.Ivanchenko (materials-V08-00-01)
+- G4NistMaterialManager - fix bug in regime of combine material definition:
+                          partially via NIST DB, partially by user 
 
 09-03-06 V.Ivanchenko (materials-V08-00-00)
 - G4NistMaterialBuilder - Add method  ConstructNewGasMaterial
