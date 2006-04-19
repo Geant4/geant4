@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.89 2006-03-28 21:06:12 tinslay Exp $
+// $Id: G4VisManager.cc,v 1.90 2006-04-19 13:55:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -218,7 +218,7 @@ void G4VisManager::Initialise () {
 
   if (fVerbosity >= startup) {
     G4cout <<
-      "\nYou have successfully chosen to use the following graphics systems."
+      "\nYou have successfully registered the following graphics systems."
 	 << G4endl;
     PrintAvailableGraphicsSystems ();
     G4cout << G4endl;
@@ -246,10 +246,10 @@ void G4VisManager::Initialise () {
   directory = new G4UIdirectory ("/vis/filtering/");
   directory -> SetGuidance ("Filtering commands.");
   fDirectoryList.push_back (directory);
-  directory = new G4UIdirectory ("/vis/filtering/trajectories");
+  directory = new G4UIdirectory ("/vis/filtering/trajectories/");
   directory -> SetGuidance ("Trajectory filtering commands.");
   fDirectoryList.push_back (directory);
-  directory = new G4UIdirectory ("/vis/filtering/trajectories/create");
+  directory = new G4UIdirectory ("/vis/filtering/trajectories/create/");
   directory -> SetGuidance ("Create trajectory filters and messengers.");
   fDirectoryList.push_back (directory);
 
@@ -260,6 +260,16 @@ void G4VisManager::Initialise () {
   }
 
   RegisterModelFactories();
+
+  /* Awaiting access to registered model factories...
+  if (fVerbosity >= startup) {
+    G4cout <<
+      "\nYou have successfully registered the following model factories."
+	 << G4endl;
+    PrintAvailableModels ();
+    G4cout << G4endl;
+  }
+  */
 
   fInitialised = true;
 }
@@ -447,6 +457,17 @@ void G4VisManager::Draw (const G4Text& text,
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (text);
     fpSceneHandler -> EndPrimitives ();
+  }
+}
+
+void G4VisManager::Draw2D (const G4Text& text)
+{
+  if (IsValidView()) {
+    ClearTransientStoreIfMarked();
+    CheckModel();
+    fpSceneHandler -> BeginPrimitives2D();
+    fpSceneHandler -> AddPrimitive(text);
+    fpSceneHandler -> EndPrimitives2D();
   }
 }
 
@@ -950,6 +971,19 @@ void G4VisManager::PrintAvailableGraphicsSystems () const {
     G4cout << "\n  NONE!!!  None registered - yet!  Mmmmm!";
   }
   G4cout << G4endl;
+}
+
+void G4VisManager::PrintAvailableModels () const
+{
+  /*
+  G4cout << "Current available trajectory draw model factories are:"
+	 << G4endl;
+  fpTrajDrawModelMgr->PrintFactories(G4cout);
+  
+  G4cout << "Current available trajectory filter factories are:"
+	 << G4endl;
+  fpTrajFilterMgr->PrintFactories(G4cout);
+  */
 }
 
 void G4VisManager::PrintInvalidPointers () const {
