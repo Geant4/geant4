@@ -1,4 +1,4 @@
-.$Id: History,v 1.103 2005-10-31 18:52:59 duns Exp $
+.$Id: History,v 1.104 2006-04-19 11:43:58 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+
+19 April 2006 John Allison (vis-HepRep-V08-00-00)
+- G4HepRepSceneHandler and G4HepRepFileSceneHandler: Migrated to direct
+  access to G4PhysicalVolumeModel.
+
 31 October 2005 Mark Donszelmann (vis-HepRep-V07-01-04)
 - Further fix for GEANT-61.
 

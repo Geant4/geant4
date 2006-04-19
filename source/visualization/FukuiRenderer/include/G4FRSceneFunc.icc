@@ -21,10 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRSceneFunc.icc,v 1.10 2005-06-02 17:43:46 allison Exp $
+// $Id: G4FRSceneFunc.icc,v 1.11 2006-04-19 11:46:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
+#include "G4PhysicalVolumeModel.hh"
 #include "G4LogicalVolume.hh"
 
 //========== AddPrimitive() functions ==========//
@@ -307,10 +308,12 @@ void G4FRSCENEHANDLER::AddPrimitive ( const G4Polyhedron& polyhedron )
 		default:
 			G4cerr <<
 	"ERROR G4FRSCENEHANDLER::AddPrimitive(G4Polyhedron)\n";
-       if (fpCurrentPV) G4cerr <<
-	"Volume " << fpCurrentPV->GetName() <<
-	", Solid " << fpCurrentLV->GetSolid()->GetName() <<
-	" (" << fpCurrentLV->GetSolid()->GetEntityType();
+      G4PhysicalVolumeModel* pPVModel =
+        dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+      if (pPVModel) G4cerr <<
+	"Volume " << pPVModel->GetCurrentPV()->GetName() <<
+	", Solid " << pPVModel->GetCurrentLV()->GetSolid()->GetName() <<
+	" (" << pPVModel->GetCurrentLV()->GetSolid()->GetEntityType();
                         G4cerr <<
 	"\nG4Polyhedron facet with " << i << " edges" << G4endl;	
 		}
@@ -994,11 +997,15 @@ void  G4FRSCENEHANDLER::SendPhysVolName ( void )
 	const G4VModel* pv_model  = GetModel();
 	if (!pv_model) { return ; } 
 
+        G4PhysicalVolumeModel* pPVModel =
+          dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+        if (!pPVModel) { return ; }
+
 	// Current Physical volume name 
-	G4String  pv_name  = pv_model->GetCurrentTag() ;
+	G4String  pv_name  = pPVModel->GetCurrentTag() ;
 
 	// Current depth of volume
-	G4int& cur_depth = fCurrentDepth;
+	G4int cur_depth = pPVModel->GetCurrentDepth() ;
 
 	// Make a string to be sent
 	// e.g. experimental_Hall.1, where "1" is the copy number

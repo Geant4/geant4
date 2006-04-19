@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.38 2006-03-24 20:06:13 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.39 2006-04-19 11:43:58 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -110,14 +110,19 @@ void G4HepRepFileSceneHandler::PrintThings() {
   G4cout <<
     "  with transformation "
 	 << (void*)fpObjectTransformation;
-  if (fpCurrentPV) {
+  G4PhysicalVolumeModel* pPVModel =
+    dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+  if (pPVModel) {
+    G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
+    G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
+    G4int currentDepth = pPVModel->GetCurrentDepth();
     G4cout <<
       "\n  current physical volume: "
-	   << fpCurrentPV->GetName() <<
+	   << pCurrentPV->GetName() <<
       "\n  current logical volume: "
-	   << fpCurrentLV->GetName() <<
+	   << pCurrentLV->GetName() <<
       "\n  current depth of geometry tree: "
-	   << fCurrentDepth;
+	   << currentDepth;
   }
   G4cout << G4endl;
 }
@@ -900,15 +905,26 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
   // Open the HepRep output file if it is not already open.
   CheckFileOpen();
 
+  G4VPhysicalVolume* pCurrentPV = 0;
+  G4LogicalVolume* pCurrentLV = 0;
+  G4int currentDepth = 0;
+  G4PhysicalVolumeModel* pPVModel =
+    dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+  if (pPVModel) {
+    pCurrentPV = pPVModel->GetCurrentPV();
+    pCurrentLV = pPVModel->GetCurrentLV();
+    currentDepth = pPVModel->GetCurrentDepth();
+  }
+
   // Should be able to just test on fReadyForTransients, but this seems to
   // be falsely false if no geometry has yet been drawn.
-  // So I test on both !fpCurrentPV (means no geometry has yet been drawn)
+  // So I test on both !pCurrentPV (means no geometry has yet been drawn)
   // and fReadyForTransients.
   if (drawingTraj || drawingHit) {
     // In this case, HepRep type, layer and instance were already created
     // in the AddCompound method.
   }
-  else if (!fpCurrentPV || fReadyForTransients) {
+  else if (!pCurrentPV || fReadyForTransients) {
     if (strcmp("Event Data",hepRepXMLWriter->prevTypeName[0])!=0) {
       hepRepXMLWriter->addType("Event Data",0);
       hepRepXMLWriter->addInstance();
@@ -966,14 +982,14 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
     }
 
     // Re-insert any layers of the hierarchy that were removed by G4's culling process.
-    while (hepRepXMLWriter->typeDepth < (fCurrentDepth-1)) {
+    while (hepRepXMLWriter->typeDepth < (currentDepth-1)) {
       hepRepXMLWriter->addType("G4 Culled Layer", hepRepXMLWriter->typeDepth + 1);
       hepRepXMLWriter->addInstance();
     }
 
-    if (fCurrentDepth!=0) {
+    if (currentDepth!=0) {
     // Add the HepRepType for the current volume.
-      hepRepXMLWriter->addType(fpCurrentPV->GetName(),fCurrentDepth);
+      hepRepXMLWriter->addType(pCurrentPV->GetName(),currentDepth);
       hepRepXMLWriter->addInstance();
     }
 
@@ -982,15 +998,15 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 
     // Additional attributes.
     hepRepXMLWriter->addAttValue("Layer",hepRepXMLWriter->typeDepth);
-    hepRepXMLWriter->addAttValue("LVol", fpCurrentLV->GetName());
-    hepRepXMLWriter->addAttValue("Region", fpCurrentLV->GetRegion()->GetName());
-    hepRepXMLWriter->addAttValue("RootRegion", fpCurrentLV->IsRootRegion());
-    hepRepXMLWriter->addAttValue("Solid", fpCurrentLV->GetSolid()->GetName());
-    hepRepXMLWriter->addAttValue("EType", fpCurrentLV->GetSolid()->GetEntityType());
-    hepRepXMLWriter->addAttValue("Material", fpCurrentLV->GetMaterial()->GetName());
-    hepRepXMLWriter->addAttValue("Density", fpCurrentLV->GetMaterial()->GetDensity());
-    hepRepXMLWriter->addAttValue("State", fpCurrentLV->GetMaterial()->GetState());
-    hepRepXMLWriter->addAttValue("Radlen", fpCurrentLV->GetMaterial()->GetRadlen());
+    hepRepXMLWriter->addAttValue("LVol", pCurrentLV->GetName());
+    hepRepXMLWriter->addAttValue("Region", pCurrentLV->GetRegion()->GetName());
+    hepRepXMLWriter->addAttValue("RootRegion", pCurrentLV->IsRootRegion());
+    hepRepXMLWriter->addAttValue("Solid", pCurrentLV->GetSolid()->GetName());
+    hepRepXMLWriter->addAttValue("EType", pCurrentLV->GetSolid()->GetEntityType());
+    hepRepXMLWriter->addAttValue("Material", pCurrentLV->GetMaterial()->GetName());
+    hepRepXMLWriter->addAttValue("Density", pCurrentLV->GetMaterial()->GetDensity());
+    hepRepXMLWriter->addAttValue("State", pCurrentLV->GetMaterial()->GetState());
+    hepRepXMLWriter->addAttValue("Radlen", pCurrentLV->GetMaterial()->GetRadlen());
   }
 
   hepRepXMLWriter->addAttValue("DrawAs",primName);

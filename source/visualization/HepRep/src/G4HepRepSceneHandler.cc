@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.94 2005-10-29 21:07:46 duns Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.95 2006-04-19 11:43:58 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -549,20 +549,30 @@ void G4HepRepSceneHandler::AddSolid(const G4Cons& cons) {
         return;
     }
 
+    G4PhysicalVolumeModel* pPVModel =
+      dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+    if (!pPVModel) {
+      G4VSceneHandler::AddSolid(cons);
+        return;
+    }
+
+    G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
+    G4int currentDepth = pPVModel->GetCurrentDepth();
+
     G4Point3D vertex1(G4Point3D( 0., 0., cons.GetZHalfLength()));
     G4Point3D vertex2(G4Point3D( 0., 0.,-cons.GetZHalfLength()));
 
     vertex1 = (transform) * vertex1;
     vertex2 = (transform) * vertex2;
 
-    HepRepInstance* instance = getGeometryInstance(fpCurrentLV, fCurrentDepth);
+    HepRepInstance* instance = getGeometryInstance(pCurrentLV, currentDepth);
     setAttribute(instance, "DrawAs", G4String("Cylinder"));
         
     setVisibility(instance, cons);
     setLine(instance, cons);
     setColor(instance, getColorFor(cons));
 
-    HepRepType* type = getGeometryType(fpCurrentLV->GetName(), fCurrentDepth);
+    HepRepType* type = getGeometryType(pCurrentLV->GetName(), currentDepth);
 
     // Outer cylinder.
     HepRepInstance* outer = factory->createHepRepInstance(instance, type);
@@ -600,20 +610,30 @@ void G4HepRepSceneHandler::AddSolid(const G4Tubs& tubs) {
         return;
     }
     
+    G4PhysicalVolumeModel* pPVModel =
+      dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+    if (!pPVModel) {
+      G4VSceneHandler::AddSolid(tubs);
+        return;
+    }
+
+    G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
+    G4int currentDepth = pPVModel->GetCurrentDepth();
+
     G4Point3D vertex1(G4Point3D( 0., 0., tubs.GetZHalfLength()));
     G4Point3D vertex2(G4Point3D( 0., 0.,-tubs.GetZHalfLength()));
 
     vertex1 = (transform) * vertex1;
     vertex2 = (transform) * vertex2;
 
-    HepRepInstance* instance = getGeometryInstance(fpCurrentLV, fCurrentDepth);
+    HepRepInstance* instance = getGeometryInstance(pCurrentLV, currentDepth);
     setAttribute(instance, "DrawAs", G4String("Cylinder"));
         
     setVisibility(instance, tubs);
     setLine(instance, tubs);
     setColor(instance, getColorFor(tubs));
 
-    HepRepType* type = getGeometryType(fpCurrentLV->GetName(), fCurrentDepth);
+    HepRepType* type = getGeometryType(pCurrentLV->GetName(), currentDepth);
 
     // Outer cylinder.
     HepRepInstance* outer = factory->createHepRepInstance(instance, type);
@@ -829,13 +849,18 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 
     setVisibility(instance, polyhedron);
 	
+    G4int currentDepth = 0;
+    G4PhysicalVolumeModel* pPVModel =
+      dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+    if (pPVModel) currentDepth = pPVModel->GetCurrentDepth();
+
     G4bool notLastFace;
     do {
         HepRepInstance* face;
         if (isEventData()) {
             face = factory->createHepRepInstance(instance, getCalHitFaceType());
         } else {
-            face = getGeometryInstance("*Face", fCurrentDepth+1);
+            face = getGeometryInstance("*Face", currentDepth+1);
             setAttribute(face, "PickParent", true);
             setAttribute(face, "DrawAs", G4String("Polygon"));
         }
@@ -1299,7 +1324,9 @@ void G4HepRepSceneHandler::addAttVals(HepRepAttribute* attribute, const map<G4St
 
 
 bool G4HepRepSceneHandler::isEventData () {
-    return !fpCurrentPV || fReadyForTransients || currentHit || currentTrack;
+    G4PhysicalVolumeModel* pPVModel =
+      dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+    return !pPVModel || fReadyForTransients || currentHit || currentTrack;
 }
 
 void G4HepRepSceneHandler::addTopLevelAttributes(HepRepType* type) {
@@ -1344,8 +1371,15 @@ void G4HepRepSceneHandler::addTopLevelAttributes(HepRepType* type) {
 
 
 HepRepInstance* G4HepRepSceneHandler::getGeometryOrEventInstance(HepRepType* type) {
-    return isEventData() ? factory->createHepRepInstance(getEventInstance(), type)
-                         : getGeometryInstance(fpCurrentLV, fCurrentDepth);
+    if (isEventData()) {
+      return factory->createHepRepInstance(getEventInstance(), type);
+    } else {
+      G4PhysicalVolumeModel* pPVModel =
+	dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+      G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
+      G4int currentDepth = pPVModel->GetCurrentDepth();
+      return getGeometryInstance(pCurrentLV, currentDepth);
+    }
 }
 
 HepRep* G4HepRepSceneHandler::getHepRep() {
