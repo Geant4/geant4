@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2006-03-28 17:25:50 allison Exp $
+$Id: History,v 1.22 2006-04-19 14:32:54 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization/Tree sub-category
 ------------------------------------------------
+
+19th April March 2006  John Allison (vistree-V08-00-03)
+- G4GAGTreeSceneHandler.cc: Migration away from EstablishSpecials mechanism
+  to direct access to G4PhysicalVolumeModel.
 
 28th March 2006  John Allison (vistree-V08-00-02)
 - Made compatible with modeling-V08-00-05. 
