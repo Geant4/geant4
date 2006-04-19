@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.28 2006-03-28 17:16:41 allison Exp $
+// $Id: G4XXXSceneHandler.cc,v 1.29 2006-04-19 15:40:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,7 +81,11 @@ void G4XXXSceneHandler::PrintThings() {
 }
 #endif
 
-void G4XXXSceneHandler::AddPrimitive(const G4Polyline& polyline) {
+void G4XXXSceneHandler::AddPrimitive(const G4Polyline&
+#ifdef G4XXXDEBUG
+ polyline
+#endif
+) {
 #ifdef G4XXXDEBUG
   G4cout <<
     "G4XXXSceneHandler::AddPrimitive(const G4Polyline& polyline) called.\n"
@@ -95,7 +99,11 @@ void G4XXXSceneHandler::AddPrimitive(const G4Polyline& polyline) {
   //?? Process polyline.
 }
 
-void G4XXXSceneHandler::AddPrimitive(const G4Text& text) {
+void G4XXXSceneHandler::AddPrimitive(const G4Text&
+#ifdef G4XXXDEBUG
+ text
+#endif
+) {
 #ifdef G4XXXDEBUG
   G4cout <<
     "G4XXXSceneHandler::AddPrimitive(const G4Text& text) called.\n"
@@ -111,7 +119,11 @@ void G4XXXSceneHandler::AddPrimitive(const G4Text& text) {
   //?? Process text.
 }
 
-void G4XXXSceneHandler::AddPrimitive(const G4Circle& circle) {
+void G4XXXSceneHandler::AddPrimitive(const G4Circle&
+#ifdef G4XXXDEBUG
+ circle
+#endif
+) {
 #ifdef G4XXXDEBUG
   G4cout <<
     "G4XXXSceneHandler::AddPrimitive(const G4Circle& circle) called.\n"
@@ -139,14 +151,18 @@ void G4XXXSceneHandler::AddPrimitive(const G4Circle& circle) {
   //?? Process circle.
 }
 
-void G4XXXSceneHandler::AddPrimitive(const G4Square& square) {
+void G4XXXSceneHandler::AddPrimitive(const G4Square&
+#ifdef G4XXXDEBUG
+ square
+#endif
+) {
 #ifdef G4XXXDEBUG
   G4cout <<
     "G4XXXSceneHandler::AddPrimitive(const G4Square& square) called.\n"
 	 << square
 	 << G4endl;
   MarkerSizeType sizeType;
-  G4double size = GetMarkerSize (circle, sizeType);
+  G4double size = GetMarkerSize (square, sizeType);
   switch (sizeType) {
   default:
   case screen:
@@ -221,7 +237,7 @@ void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
   // including how to cope with triangles if that's a problem.
 }
 
-void G4XXXSceneHandler::AddPrimitive(const G4NURBS& nurbs) {
+void G4XXXSceneHandler::AddPrimitive(const G4NURBS&) {
 #ifdef G4XXXDEBUG
   G4cout <<
     "G4XXXSceneHandler::AddPrimitive(const G4NURBS& nurbs) called."

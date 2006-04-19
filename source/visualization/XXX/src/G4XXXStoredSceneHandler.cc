@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXStoredSceneHandler.cc,v 1.1 2006-03-28 17:16:41 allison Exp $
+// $Id: G4XXXStoredSceneHandler.cc,v 1.2 2006-04-19 15:40:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -311,7 +311,7 @@ void G4XXXStoredSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
   // including how to cope with triangles if that's a problem.
 }
 
-void G4XXXStoredSceneHandler::AddPrimitive(const G4NURBS& nurbs) {
+void G4XXXStoredSceneHandler::AddPrimitive(const G4NURBS&) {
 #ifdef G4XXXStoredDEBUG
   G4cout <<
     "G4XXXStoredSceneHandler::AddPrimitive(const G4NURBS& nurbs) called."
