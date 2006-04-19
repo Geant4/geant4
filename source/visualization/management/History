@@ -1,4 +1,4 @@
-$Id: History,v 1.40 2006-03-28 21:06:12 tinslay Exp $
+$Id: History,v 1.41 2006-04-19 13:58:14 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,16 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+19th April 2005  John Allison (visman-V08-00-12)
+- G4VisManager:
+  o Implemented Draw2D(const G4Text&).
+  o Added PrintAvailableModels (but awaiting implementation).
+  o Fixed directory names (trailing '/').
+- G4VSceneHandler:
+  o Implemented Begin/EndPrimitives2D (needs greps-V08-00-02).
+  o Migrated to direct access to G4PhysicalVolumeModel.
+
 28th March 2006 Jane Tinslay (jst28032006)
 - Introduce G4VisFilterManager.hh to manager filtering
 - Additions to G4VisCommandsListManager, G4VisExecutive, G4VisManager
