@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.hh,v 1.9 2006-03-13 12:44:41 allison Exp $
+// $Id: G4VVisManager.hh,v 1.10 2006-04-19 14:07:09 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // John Allison 19/Oct/1996.
 // 
@@ -129,6 +129,12 @@ public: // With description
 
   virtual void Draw (const G4Text&,
     const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
+
+  ///////////////////////////////////////////////////////////////////////
+  // For 2D methods, the x,y coordinates are intrepreted as screen
+  // coordinates, -1 < x,y < 1.  The z-coordinate is ignored.
+
+  virtual void Draw2D (const G4Text&) = 0;
 
   ///////////////////////////////////////////////////////////////////////
   // Draw methods for Geant4 Objects as if they were Visualization
