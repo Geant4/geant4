@@ -104,9 +104,13 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
 		    i =  n* numberVoxelZ * numberVoxelY + j;
 		    if(matrix[i] != 0)
 		      {	
+<<<<<<< HadrontherapyMatrix.cc
+			
+=======
 			ofs << n <<'\t'<< m <<'\t'<<
 			  k<<'\t'<<matrix[i]<<G4endl;
 			
+>>>>>>> 1.8
 #ifdef G4ANALYSIS_USE 	
 			HadrontherapyAnalysisManager* analysis = 
 			  HadrontherapyAnalysisManager::getInstance();
@@ -117,8 +121,13 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
 		  }       
 	      }
 	  }
+<<<<<<< HadrontherapyMatrix.cc
+	
+      }
+=======
 	
       	ofs.close();  
       }
+>>>>>>> 1.8
     }
 }

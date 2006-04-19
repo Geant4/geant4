@@ -66,13 +66,13 @@ void HadrontherapyPrimaryGeneratorAction::SetDefaultPrimaryParticle()
   particleGun->SetParticleDefinition(particle); 
   particleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
 
-  G4double defaultMeanKineticEnergy = 63.450 *MeV;
+  G4double defaultMeanKineticEnergy = 63.550 *MeV;
   meanKineticEnergy = defaultMeanKineticEnergy;
 
-  G4double defaultsigmaEnergy = 400.0 *keV;
+  G4double defaultsigmaEnergy = 350.0 *keV;
   sigmaEnergy = defaultsigmaEnergy;
 
-  G4double defaultX0 = -3248.59 *mm;  
+  G4double defaultX0 = -3195.58 *mm;  
   X0 = defaultX0;
 
   G4double defaultY0 = 0.0 *mm;  
@@ -81,17 +81,13 @@ void HadrontherapyPrimaryGeneratorAction::SetDefaultPrimaryParticle()
   G4double defaultZ0 = 0.0 *mm;  
   Z0 = defaultZ0;
 
-  G4double defaultsigmaY = 1 *mm;  
+  G4double defaultsigmaY = 4 *mm;  
   sigmaY = defaultsigmaY;
 
-  G4double defaultsigmaZ = 1 *mm;  
+  G4double defaultsigmaZ = 4 *mm;  
   sigmaZ = defaultsigmaZ;
 
-  G4double defaultsigmaMomentumY = 0.0001;  
-  sigmaMomentumY = defaultsigmaMomentumY;
 
-  G4double defaultsigmaMomentumZ = 0.0001;  
-  sigmaMomentumZ = defaultsigmaMomentumZ;
 }
 
 void HadrontherapyPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
@@ -126,22 +122,27 @@ void HadrontherapyPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double kineticEnergy = G4RandGauss::shoot( meanKineticEnergy, sigmaEnergy );
   particleGun -> SetParticleEnergy ( kineticEnergy );
 
-  // Set the direction of the primary particles
-  G4double momentumY = 0.0;
-  G4double momentumZ = 0.0;
+   // Set the direction of the primary particles
+  G4double momentumY;
+  G4double momentumZ, angMomentumZ;
+  G4double angMomentumX, momentumX;
+  G4double sigmaMomentum = 0.00000001; 
+  
+      angMomentumZ = G4RandGauss::shoot( 1.5708, sigmaMomentum);
+  
+      angMomentumX = G4RandGauss::shoot( 0., sigmaMomentum);
+      
+      momentumX = cos(angMomentumX);
+      
+      momentumY = sin(angMomentumX);
 
-  if ( sigmaMomentumY  > 0.0 )
-    {
-      momentumY += G4RandGauss::shoot( 0., sigmaMomentumY );
-    }
-  if ( sigmaMomentumZ  > 0.0 )
-    {
-      momentumZ += G4RandGauss::shoot( 0., sigmaMomentumZ );
-    }
- 
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(1,momentumY,momentumZ));
+      momentumZ = cos(angMomentumZ);
+  
+
+  particleGun->SetParticleMomentumDirection(G4ThreeVector(momentumX,momentumY,momentumZ));
   // Generate a primary particle
   particleGun -> GeneratePrimaryVertex( anEvent ); 
+
 } 
 
 
