@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronBuilder.cc,v 1.4 2005-06-04 13:47:01 jwellisc Exp $
+// $Id: G4HadronBuilder.cc,v 1.5 2006-04-19 08:41:26 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -98,8 +98,8 @@ G4ParticleDefinition * G4HadronBuilder::Meson(G4ParticleDefinition * black,
    
    G4double charge =  black->GetPDGCharge() 
                     + white->GetPDGCharge();	 
-   if (std::abs(charge) > 2 || std::abs(3.*charge - 3*G4int(charge)) > perCent )
-   	{
+   if (std::abs(charge) > 2 || std::abs(3.*charge - 3*G4int(charge*1.001)) > perCent )   // 1.001 to avoid int(.9999) -> 0
+       	{
 	    G4cerr << " G4HadronBuilder::Build()" << G4endl;
 	    G4cerr << "    Invalid total charge found for on input: " 
 			<< charge<< G4endl;
@@ -177,7 +177,7 @@ G4ParticleDefinition * G4HadronBuilder::Barion(G4ParticleDefinition * black,
 //  Verify Input Charge
    G4double charge =  black->GetPDGCharge() 
                     + white->GetPDGCharge();	 
-   if (std::abs(charge) > 2 || std::abs(3.*charge - 3*G4int(charge)) > perCent )
+   if (std::abs(charge) > 2 || std::abs(3.*charge - 3*G4int(charge*1.001)) > perCent )
    	{
 	    G4cerr << " G4HadronBuilder::Build()" << G4endl;
 	    G4cerr << "    Invalid total charge found for on input: " 
