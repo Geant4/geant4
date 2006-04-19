@@ -1,4 +1,4 @@
-$Id: History,v 1.41 2006-04-19 13:58:14 allison Exp $
+$Id: History,v 1.42 2006-04-19 14:02:06 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -25,13 +25,13 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
-19th April 2005  John Allison (visman-V08-00-12)
+19th April 2005  John Allison (visman-V08-00-12 - needs greps-V08-00-02)
 - G4VisManager:
   o Implemented Draw2D(const G4Text&).
   o Added PrintAvailableModels (but awaiting implementation).
   o Fixed directory names (trailing '/').
 - G4VSceneHandler:
-  o Implemented Begin/EndPrimitives2D (needs greps-V08-00-02).
+  o Implemented Begin/EndPrimitives2D.
   o Migrated to direct access to G4PhysicalVolumeModel.
 
 28th March 2006 Jane Tinslay (jst28032006)
