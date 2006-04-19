@@ -1,4 +1,4 @@
-$Id: History,v 1.339 2006-04-19 14:48:23 allison Exp $
+$Id: History,v 1.340 2006-04-19 14:59:46 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -26,6 +26,11 @@ History file for visualization category
 
 ---------------------------------------------------------------------
 19th April 2006  John Allison (vis-V08-00-04 - needs greps-V08-00-02).
+- Main features:
+  o Implementation of 2D text in base classes and concrete implementation
+    of same in OpenGL.
+  o Continued migration to direct access to G4PhysicalVolumeModel.
+  o Addition of Trajectory Filter Models (Jane Tinsley).
 - visman-V08-00-12 (needs greps-V08-00-02):
   o Implemented Draw2D(const G4Text&).
   o Implemented Begin/EndPrimitives2D.
