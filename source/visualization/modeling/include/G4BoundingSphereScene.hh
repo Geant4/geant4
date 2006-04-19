@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingSphereScene.hh,v 1.15 2005-06-07 16:54:33 allison Exp $
+// $Id: G4BoundingSphereScene.hh,v 1.16 2006-04-19 14:19:05 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -87,6 +87,8 @@ public:
 
   virtual void BeginPrimitives (const G4Transform3D&) {}
   virtual void EndPrimitives () {}
+  virtual void BeginPrimitives2D () {}
+  virtual void EndPrimitives2D () {}
   virtual void AddPrimitive (const G4Polyline&)   {}
   virtual void AddPrimitive (const G4Scale&)      {}
   virtual void AddPrimitive (const G4Text&)       {}
