@@ -38,7 +38,7 @@
       FIELDM = 0.                                                               
       TMAXFD = 10.0                                                             
       STEMAX = 1000.                                                            
-      DEEMAX = 0.20                                                            
+      DEEMAX = 1.                                                            
       EPSIL  = 0.001                                                           
       STMIN  = 0.010                                                           
 *                                                                               

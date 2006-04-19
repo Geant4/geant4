@@ -27,9 +27,8 @@
       PRINT 761,(NBCALL(I),I=1,12)
 *
 * *** compute mean free path and related quantities
-      nbProc = nbcall(6) + nbcall(7) + nbcall(8)
-      avTrak  = sumTrak /nbProc
-      avTrak2 = sumTrak2/nbProc
+      avTrak  = sumTrak /nbTot
+      avTrak2 = sumTrak2/nbTot
       rms = sqrt(abs(avTrak2 - avTrak*avTrak))
       AtteCoef = 1./avTrak
 *
@@ -55,9 +54,9 @@
      +       /,1X,12A8)
   761 FORMAT(  1X,12I8,/)
   
-  770 FORMAT(/,1X,'MeanFreePath:    ',F12.5,' cm +- ',F12.5,' cm',
-     +          5X,'massic: ',F12.5,' g/cm2',
-     +        /,1X,'AttenuationCoef: ',F12.5,' cm^-1 ',15X,
-     +          5X,'massic: ',F12.5,' cm2/g',/)  
+  770 FORMAT(/,1X,'MeanFreePath:',F12.5,' cm +- ',F12.5,' cm',
+     +          5X,'massic:',F12.5,' g/cm2', 
+     +        /,1X,'CrossSection:',F12.5,' cm^-1 ',15X,
+     +          5X,'massic:',F12.5,' cm2/g',/)  
 *
       END

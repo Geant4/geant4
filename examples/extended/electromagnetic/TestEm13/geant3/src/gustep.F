@@ -29,8 +29,9 @@
         IF (IPROC.LE.12) NBCALL(IPROC) = NBCALL(IPROC)+1
       ENDDO
 *
-* *** sum track length for photon processes
-      if ((iproc.eq.6).or.(iproc.eq.7).or.(iproc.eq.8)) then
+* *** sum track length for discrete processes
+      if ((iproc.gt.5)) then
+        nbTot    = nbTot + 1
         sumTrak  = sumTrak  + sleng
         sumTrak2 = sumTrak2 + sleng*sleng
       endif

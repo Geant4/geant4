@@ -9,7 +9,7 @@
 *
 #ifndef batch
         IF (ISWIT(1).NE.0) THEN
-         CALL GDHEAD (110110,'PhotonProcesses',0.)
+         CALL GDHEAD (110110,'TestEm13',0.)
          CALL GDSHOW (3)
          CALL GDXYZ  (0)
       END IF

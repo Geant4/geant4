@@ -60,6 +60,7 @@
 * *** initialisation of /process/
 
       CALL VZERO (nbCall,12)
+      nbTot    = 0
       sumTrak  = 0.
       sumTrak2 = 0.                                                               
 *                                                                               

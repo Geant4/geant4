@@ -1,2 +1,2 @@
 
-      COMMON/PROCESS/nbCall(12),sumTrak,sumTrak2
+      COMMON/PROCESS/nbCall(12),nbTot,sumTrak,sumTrak2
