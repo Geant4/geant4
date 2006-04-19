@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.42 2006-03-28 16:55:27 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.43 2006-04-19 14:20:03 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -421,8 +421,6 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   **********************************************************/
 
   // Make decision to draw...
-  G4bool culling;
-  G4bool cullingInvisible;
   const G4VisAttributes* pVisAttribs = pLV->GetVisAttributes();
   if (!pVisAttribs) pVisAttribs = fpMP->GetDefaultVisAttributes();
   G4bool thisToBeDrawn = true;
@@ -430,8 +428,8 @@ void G4PhysicalVolumeModel::DescribeAndDescend
 
     // There are various reasons why this volume
     // might not be drawn...
-    culling = fpMP->IsCulling();
-    cullingInvisible = fpMP->IsCullingInvisible();
+    G4bool culling = fpMP->IsCulling();
+    G4bool cullingInvisible = fpMP->IsCullingInvisible();
     G4bool markedVisible = pVisAttribs->IsVisible();
     G4bool cullingLowDensity = fpMP->IsDensityCulling();
     G4double density = pMaterial->GetDensity();
@@ -466,12 +464,23 @@ void G4PhysicalVolumeModel::DescribeAndDescend
     DescribeSolid (theNewAT, pSol, pVisAttribs, sceneHandler);
   }
 
-  // Make decision to draw daughters, if any.
+  // Make decision to draw daughters, if any.  There are various
+  // reasons why daughters might not be drawn...
+
+  // First, reasons that do not depend on culling policy...
   G4int nDaughters = pLV->GetNoDaughters();
   G4bool daughtersToBeDrawn = true;
-  if (fpMP && pVisAttribs) { // If not, all bets are off.  Draw anyway...
+  // 1) There are no daughters...
+  if (!nDaughters) daughtersToBeDrawn = false;
+  // 2) We are at the limit if requested depth...
+  else if (requestedDepth == 0) daughtersToBeDrawn = false;
+  // 3) The user has asked that the descent be curtailed...
+  else if (fCurtailDescent) daughtersToBeDrawn = false;
 
-    // There are various reasons why daughters might not be drawn...
+  // Now, reasons that depend on culling policy...
+  else if (fpMP && pVisAttribs) { // If not, culling is indeterminate.
+    G4bool culling = fpMP->IsCulling();
+    G4bool cullingInvisible = fpMP->IsCullingInvisible();
     G4bool daughtersInvisible = pVisAttribs->IsDaughtersInvisible();
     // Culling of covered daughters request.  This is computed in
     // G4VSceneHandler::CreateModelingParameters() depending on view
@@ -488,15 +497,8 @@ void G4PhysicalVolumeModel::DescribeAndDescend
       }
     }
     G4bool opaque = pVisAttribs->GetColour().GetAlpha() >= 1.;
-
-    // 1) There are no daughters...
-    if (!nDaughters) daughtersToBeDrawn = false;
-    // 2) We are at the limit if requested depth...
-    else if (requestedDepth == 0) daughtersToBeDrawn = false;
-    // 3) The user has asked that the descent be curtailed...
-    else if (fCurtailDescent) daughtersToBeDrawn = false;
-    // 4) Or the global culling is on....
-    else if (culling) {
+    // 4) Global culling is on....
+    if (culling) {
       // 5) ..and culling of invisible volumes is on...
       if (cullingInvisible) {
 	// 6) ...and the mother requests daughters invisible
