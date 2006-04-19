@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.25 2006-03-28 17:24:44 allison Exp $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.26 2006-04-19 14:28:53 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -198,8 +198,8 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
     PVPath::const_reverse_iterator thisID = drawnPVPath.rbegin();
     PVPath::const_reverse_iterator motherID = ++drawnPVPath.rbegin();
     G4bool ignore = false;
-    ReplicaSetIterator i;
-    for (i = fReplicaSet.begin(); i != fReplicaSet.end(); ++i) {
+    for (ReplicaSetIterator i = fReplicaSet.begin(); i != fReplicaSet.end();
+	 ++i) {
       if (i->back().GetPhysicalVolume()->GetLogicalVolume() ==
 	  thisID->GetPhysicalVolume()->GetLogicalVolume()) {
 	// For each one previously found (if more than one, they must
