@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2006-04-18 10:16:02 maire Exp $
+$Id: History,v 1.7 2006-04-19 15:20:13 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+19-04-06 mma (testem13-V08-00-04)
+- geant3 : extension to charged particles.
      
 18-04-06 mma (testem13-V08-00-03)
 - macros renamed : allprocess -> gamma  phot -> photoelec
