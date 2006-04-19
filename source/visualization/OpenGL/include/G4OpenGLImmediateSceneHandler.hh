@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.8 2005-09-05 11:02:38 allison Exp $
+// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.9 2006-04-19 11:53:24 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,6 +49,8 @@ public:
   virtual ~G4OpenGLImmediateSceneHandler ();
   void BeginPrimitives (const G4Transform3D& objectTransformation);
   void EndPrimitives ();
+  void BeginPrimitives2D ();
+  void EndPrimitives2D ();
   void BeginModeling ();
   void EndModeling ();
   void ClearTransientStore ();

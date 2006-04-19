@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.16 2005-06-02 17:43:46 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.17 2006-04-19 11:53:24 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,6 +51,8 @@ public:
   virtual ~G4OpenGLStoredSceneHandler ();
   void BeginPrimitives (const G4Transform3D& objectTransformation);
   void EndPrimitives ();
+  void BeginPrimitives2D ();
+  void EndPrimitives2D ();
   void BeginModeling ();
   void EndModeling ();
 private:
