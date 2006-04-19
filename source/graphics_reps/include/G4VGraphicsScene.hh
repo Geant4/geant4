@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsScene.hh,v 1.6 2006-03-13 12:46:23 allison Exp $
+// $Id: G4VGraphicsScene.hh,v 1.7 2006-04-19 14:06:28 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // John Allison  19th July 1996
 //
@@ -120,6 +120,12 @@ public: // With description
   // coordinate system of the object about to be added.
 
   virtual void EndPrimitives () = 0;
+
+  virtual void BeginPrimitives2D () = 0;
+  virtual void EndPrimitives2D () = 0;
+  // The x,y coordinates of the primitives passed to AddPrimitive are
+  // intrepreted as screen coordinates, -1 < x,y < 1.  The
+  // z-coordinate is ignored.
 
   virtual void AddPrimitive (const G4Polyline&)   = 0;
   virtual void AddPrimitive (const G4Scale&)      = 0;
