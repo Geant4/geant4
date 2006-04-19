@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.95 2006-04-19 14:07:55 allison Exp $
+cvs log $Id: History,v 1.96 2006-04-19 14:25:27 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-19th April 2006  John Allison  (greps-V08-00-02)
+19th April 2006  John Allison  (greps-V08-00-02 - needs vis-V08-00-04)
 - G4VGraphicsScene: Added Begin/EndPrimitives2D.
 - G4VVisManager: Added Draw2d(const G4Text&).
 
