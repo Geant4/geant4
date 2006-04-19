@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.94 2006-03-28 17:42:17 tinslay Exp $
+cvs log $Id: History,v 1.95 2006-04-19 14:07:55 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19th April 2006  John Allison  (greps-V08-00-02)
+- G4VGraphicsScene: Added Begin/EndPrimitives2D.
+- G4VVisManager: Added Draw2d(const G4Text&).
+
 28th March 2006 Jane Tinslay (jst28032006)
 - Add G4VFilter and G4SmartFilter
 
