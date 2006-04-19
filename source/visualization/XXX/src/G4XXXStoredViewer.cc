@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXStoredViewer.cc,v 1.2 2006-03-28 18:25:41 allison Exp $
+// $Id: G4XXXStoredViewer.cc,v 1.3 2006-04-19 14:35:26 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,11 +71,11 @@ void G4XXXStoredViewer::DrawView() {
   // /vis/viewer/rebuild, but if not, make decision and set flag only
   // if necessary...
   if (!fNeedKernelVisit) KernelVisitDecision();
-  G4bool needed = fNeedKernelVisit;  // Keep.  ProcessView resets.
+  G4bool kernelVisitWasNeeded = fNeedKernelVisit; // Keep (ProcessView resets).
 
   ProcessView ();  // Clears store and processes scene only if necessary.
 
-  if (needed) {
+  if (kernelVisitWasNeeded) {
     // Some systems, notably OpenGL, can draw while re-building, so
     // there might not be a need to draw from store again here.  But
     // in this case...
