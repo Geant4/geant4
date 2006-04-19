@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.30 2006-03-28 16:21:14 allison Exp $
+// $Id: G4VSceneHandler.hh,v 1.31 2006-04-19 13:45:03 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -156,6 +156,24 @@ public: // With description
   // void MyXXXSceneHandler::EndPrimitives () {
   //   ...
   //   G4VSceneHandler::EndPrimitives ();
+  // }
+
+  virtual void BeginPrimitives2D ();
+  // The x,y coordinates of the primitives passed to AddPrimitive are
+  // intrepreted as screen coordinates, -1 < x,y < 1.  The
+  // z-coordinate is ignored.
+  // IMPORTANT: invoke this from your polymorphic versions, e.g.:
+  // void MyXXXSceneHandler::BeginPrimitives2D
+  // (const G4Transform3D& objectTransformation) {
+  //   G4VSceneHandler::BeginPrimitives2D ();
+  //   ...
+  // }
+
+  virtual void EndPrimitives2D ();
+  // IMPORTANT: invoke this from your polymorphic versions, e.g.:
+  // void MyXXXSceneHandler::EndPrimitives2D () {
+  //   ...
+  //   G4VSceneHandler::EndPrimitives2D ();
   // }
 
   virtual void AddPrimitive (const G4Polyline&)   = 0;

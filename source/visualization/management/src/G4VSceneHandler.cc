@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.56 2006-03-28 16:21:14 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.57 2006-04-19 13:48:16 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -146,6 +146,25 @@ void G4VSceneHandler::EndPrimitives () {
     G4Exception("G4VSceneHandler::EndPrimitives: Nesting error");
   fNestingDepth--;
   fpObjectTransformation = 0;
+  if (fReadyForTransients) {
+    fTransientsDrawnThisEvent = true;
+    fTransientsDrawnThisRun = true;
+  }
+}
+
+void G4VSceneHandler::BeginPrimitives2D () {
+  if (!fpModel)
+    G4Exception ("G4VSceneHandler::BeginPrimitives2D: NO MODEL!!!");
+  fNestingDepth++;
+  if (fNestingDepth > 1)
+    G4Exception("G4VSceneHandler::BeginPrimitives2D: Nesting detected."
+		"\n  It is illegal to nest Begin/EndPrimitives.");
+}
+
+void G4VSceneHandler::EndPrimitives2D () {
+  if (fNestingDepth <= 0)
+    G4Exception("G4VSceneHandler::EndPrimitives2D: Nesting error");
+  fNestingDepth--;
   if (fReadyForTransients) {
     fTransientsDrawnThisEvent = true;
     fTransientsDrawnThisRun = true;
