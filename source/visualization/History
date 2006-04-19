@@ -1,4 +1,4 @@
-$Id: History,v 1.338 2006-03-28 17:41:52 allison Exp $
+$Id: History,v 1.339 2006-04-19 14:48:23 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,27 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+---------------------------------------------------------------------
+19th April 2006  John Allison (vis-V08-00-04 - needs greps-V08-00-02).
+- visman-V08-00-12 (needs greps-V08-00-02):
+  o Implemented Draw2D(const G4Text&).
+  o Implemented Begin/EndPrimitives2D.
+  o Migrated to direct access to G4PhysicalVolumeModel.
+  o Introduced G4VisFilterManager.hh to manager filtering
+- modeling-V08-00-06:
+  o Upgrade to greps-V08-00-02 and minor improvements.
+  o Added G4TrajectoryFilterFactories and G4TrajectoryParticleFilter
+- DAWN-V08-00-01: Migrated to direct access to G4PhysicalVolumeModel.
+- vis-HepRep-V08-00-00: Migrated to direct access to G4PhysicalVolumeModel.
+- opengl-V08-00-03:
+  o Implemented Begin/EndPrimitives2D.
+  o Migrated to direct access to G4PhysicalVolumeModel.
+- vistree-V08-00-03:
+  o G4GAGTreeSceneHandler: Migration to direct access to G4PhysicalVolumeModel.
+- visXXX-V08-00-03: Improvement of legibility.
+- openinventor-V08-00-04: Use cmath instead of math.h.
+- vistest-V08-00-04: Added drawing of 2D text.
 
 ----------------------------------------------
 28th March 2006  John Allison  (vis-V08-00-03)
