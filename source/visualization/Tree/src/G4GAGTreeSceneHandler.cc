@@ -133,25 +133,27 @@ void G4GAGTreeSceneHandler::EndModeling ()
 void G4GAGTreeSceneHandler::RequestPrimitives (const G4VSolid&) 
 {
   // Protection if solid drawn not from physical volume tree...(JA)
-  if (!fpCurrentPV) return;
+  G4PhysicalVolumeModel* pPVModel =
+    dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+  if (!pPVModel) return;
+  G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
+  G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
+  G4int currentDepth = pPVModel->GetCurrentDepth();
 
 //////////////////////////////
   G4String        cur_abs_pv_name ;
   G4String        pv_name_tmp ;
-  G4String        cur_pv_name ( fpCurrentPV->GetName() ) ; 
+  G4String        cur_pv_name ( pCurrentPV->GetName() ) ; 
 //////////////////////////////
 
   const G4GAGTree* pSystem = (G4GAGTree*)GetGraphicsSystem();
   const G4int verbosity = pSystem->GetVerbosity();
   const G4int detail = verbosity % 10;
 
-  if (verbosity < 10 && fReplicaSet.find(fpCurrentPV) != fReplicaSet.end()) {
+  if (verbosity < 10 && fReplicaSet.find(pCurrentPV) != fReplicaSet.end()) {
     // Ignore if an already treated replica.
-    G4PhysicalVolumeModel* pPVM = fpModel->GetG4PhysicalVolumeModel();
-    if (pPVM) {
-      pPVM->CurtailDescent();
-      return;
-    }
+    pPVModel->CurtailDescent();
+    return;
   }
 
 
@@ -163,15 +165,15 @@ void G4GAGTreeSceneHandler::RequestPrimitives (const G4VSolid&)
 
     // Step 2: Generate the extension
       // copy number 
-  ost << "." << fpCurrentPV->GetCopyNo() ;
+  ost << "." << pCurrentPV->GetCopyNo() ;
   if (detail >= 1) {
       // LV name
-    ost << "." << fpCurrentLV->GetName() ; 
+    ost << "." << pCurrentLV->GetName() ; 
   }
   if (detail >= 2) {
       // Solid info
-    ost << "." << fpCurrentLV->GetSolid()->GetName();
-    ost	<< "." << fpCurrentLV->GetSolid()->GetEntityType() ;
+    ost << "." << pCurrentLV->GetSolid()->GetName();
+    ost	<< "." << pCurrentLV->GetSolid()->GetEntityType() ;
   }
       // Tree index (0 for the world) 
   ost << "." << fPVCounter; 
@@ -185,7 +187,7 @@ void G4GAGTreeSceneHandler::RequestPrimitives (const G4VSolid&)
   // Search a mother PV node for the current PV
   //  in the direction to the root node.
   //  depth_mother = depth_current - 1 
-  if( fCurrentDepth >  fPrevDepth )
+  if( currentDepth >  fPrevDepth )
   {
     // Do nothing (The mother is the previous PV node)
 
@@ -202,7 +204,7 @@ void G4GAGTreeSceneHandler::RequestPrimitives (const G4VSolid&)
       //        and so the list becomes empty with the popping above.
 
       G4int trial_mother_depth = fPVNameList.GetHeadIndex() ;
-      if ( fCurrentDepth > trial_mother_depth ) break ;
+      if ( currentDepth > trial_mother_depth ) break ;
     } 
 
   } // if-else
@@ -223,7 +225,7 @@ void G4GAGTreeSceneHandler::RequestPrimitives (const G4VSolid&)
   if( fPrevAbsPVName != "" ) 
   { 
     // Add "/"
-    if( fCurrentDepth > fPrevDepth ) {fPrevAbsPVName += "/" ;}
+    if( currentDepth > fPrevDepth ) {fPrevAbsPVName += "/" ;}
   } 
 
   // Print the PREVIOUS node after node/leaf distiction 
@@ -232,8 +234,8 @@ void G4GAGTreeSceneHandler::RequestPrimitives (const G4VSolid&)
 ///////////////////////////////////////////////////////////
 
 
-  if (fpCurrentPV->IsReplicated()) {
-    fReplicaSet.insert(fpCurrentPV);  // Record new replica volume.
+  if (pCurrentPV->IsReplicated()) {
+    fReplicaSet.insert(pCurrentPV);  // Record new replica volume.
     if (verbosity < 10) {
       // Add printing for replicas (when replicas are ignored)...
       EAxis axis;
@@ -241,8 +243,8 @@ void G4GAGTreeSceneHandler::RequestPrimitives (const G4VSolid&)
       G4double width;
       G4double offset;
       G4bool consuming;
-      fpCurrentPV->GetReplicationData(axis,nReplicas,width,offset,consuming);
-      G4VPVParameterisation* pP = fpCurrentPV->GetParameterisation();
+      pCurrentPV->GetReplicationData(axis,nReplicas,width,offset,consuming);
+      G4VPVParameterisation* pP = pCurrentPV->GetParameterisation();
 #if defined DEBUG_GAG_TREE
       G4cout << "_(" << nReplicas;
 #endif
@@ -259,24 +261,22 @@ void G4GAGTreeSceneHandler::RequestPrimitives (const G4VSolid&)
     }
   }
   else {
-    if (fLVSet.find(fpCurrentLV) != fLVSet.end()) {
+    if (fLVSet.find(pCurrentLV) != fLVSet.end()) {
       if (verbosity <  10) {
 	// Add printing for repeated placement...
 #if defined DEBUG_GAG_TREE
 	G4cout << " (repeated placement)";
 #endif
 	// Ignore if an already treated logical volume.
-	if (fpCurrentPV) {
-	  ((G4PhysicalVolumeModel*)fpModel)->CurtailDescent();
-	  G4cout << G4endl;
-	  return;
-	}
+	pPVModel->CurtailDescent();
+	G4cout << G4endl;
+	return;
       }
     }
   }
 
-  if (fLVSet.find(fpCurrentLV) == fLVSet.end()) {
-    fLVSet.insert(fpCurrentLV);  // Record new logical volume.
+  if (fLVSet.find(pCurrentLV) == fLVSet.end()) {
+    fLVSet.insert(pCurrentLV);  // Record new logical volume.
   }
 
 
@@ -285,7 +285,7 @@ void G4GAGTreeSceneHandler::RequestPrimitives (const G4VSolid&)
   if( fPrevAbsPVName != "" ) { G4cout << G4endl;}
 
   // Prepare for the next call, i.e. the next PV.
-  fPrevDepth     = fCurrentDepth ;
+  fPrevDepth     = currentDepth ;
   fPrevAbsPVName = cur_abs_pv_name ;
   fPVCounter++ ;
 ////////////////////////
