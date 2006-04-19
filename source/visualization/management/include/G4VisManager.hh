@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.52 2006-03-28 21:06:12 tinslay Exp $
+// $Id: G4VisManager.hh,v 1.53 2006-04-19 13:47:24 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -232,6 +232,8 @@ public: // With description
   void Draw (const G4Text&,
     const G4Transform3D& objectTransformation = G4Transform3D());
 
+  void Draw2D (const G4Text&);
+
   ////////////////////////////////////////////////////////////////////
   // Now functions that implement the pure virtual functions of
   // G4VVisManager for drawing a GEANT4 object.  Note that the
@@ -376,6 +378,7 @@ protected:
 
   void RegisterMessengers              ();   // Command messengers.
   void PrintAvailableGraphicsSystems   () const;
+  void PrintAvailableModels            () const;
   void PrintInvalidPointers            () const;
   G4bool IsValidView ();
   // True if view is valid.  Prints messages and sanitises various data.
