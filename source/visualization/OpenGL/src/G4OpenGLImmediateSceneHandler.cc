@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.18 2006-01-11 18:45:53 allison Exp $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.19 2006-04-19 11:59:13 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,6 +84,38 @@ void G4OpenGLImmediateSceneHandler::EndPrimitives () {
   G4VSceneHandler::EndPrimitives ();
 }
 
+void G4OpenGLImmediateSceneHandler::BeginPrimitives2D()
+{
+  G4VSceneHandler::BeginPrimitives2D();
+
+  // Push current 3D world matrices and load identity to define screen
+  // coordinates...
+  glMatrixMode (GL_PROJECTION);
+  glPushMatrix();
+  glLoadIdentity();
+  glOrtho (-1., 1., -1., 1.,
+	   -std::numeric_limits<GLdouble>::max(),
+	   std::numeric_limits<GLdouble>::max());
+  glMatrixMode (GL_MODELVIEW);
+  glPushMatrix();
+  glLoadIdentity();
+}
+
+void G4OpenGLImmediateSceneHandler::EndPrimitives2D()
+{
+  // Pop current 3D world matrices back again...
+  glMatrixMode (GL_PROJECTION);
+  glPopMatrix();
+  glMatrixMode (GL_MODELVIEW);
+  glPopMatrix();
+
+  if (fReadyForTransients) {
+    glFlush ();
+  }
+
+  G4VSceneHandler::EndPrimitives2D ();
+}
+
 void G4OpenGLImmediateSceneHandler::BeginModeling () {
   G4VSceneHandler::BeginModeling();
 }
@@ -104,39 +136,43 @@ void G4OpenGLImmediateSceneHandler::ClearTransientStore () {
   }
 }
 
-void G4OpenGLImmediateSceneHandler::RequestPrimitives (const G4VSolid& solid) {
+void G4OpenGLImmediateSceneHandler::RequestPrimitives (const G4VSolid& solid)
+{
   if (fReadyForTransients) {
     // Always draw transient solids, e.g., hits represented as solids.
     // (As we have no control over the order of drawing of transient
     // objects, we cannot do anything about transparent ones, as
     // below, so always draw them.)
     G4VSceneHandler::RequestPrimitives (solid);
+    return;
   }
-  else {
-    // For non-transient (run-duration) objects, ensure transparent
-    // objects are drawn last.  The problem of
-    // blending/transparency/alpha is quite a tricky one - see History
-    // of opengl-V07-01-01/2/3.
-    // Get vis attributes - pick up defaults if none.
-    const G4VisAttributes* pVA =
-      fpViewer -> GetApplicableVisAttributes(fpVisAttribs);
-    const G4Colour& c = pVA -> GetColour ();
-    G4double opacity = c.GetAlpha ();
-    if (!fSecondPass) {
-      G4bool transparency_enabled = true;
-      G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-      if (pViewer) transparency_enabled = pViewer->transparency_enabled;
-      if (transparency_enabled && opacity < 1.) {
-	// On first pass, transparent objects are not drawn, but flag is set...
-	fSecondPassRequested = true;
-	return;
-      }
+
+  // For non-transient (run-duration) objects, ensure transparent
+  // objects are drawn last.  The problem of
+  // blending/transparency/alpha is quite a tricky one - see History
+  // of opengl-V07-01-01/2/3.
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+    fpViewer -> GetApplicableVisAttributes(fpVisAttribs);
+  const G4Colour& c = pVA -> GetColour ();
+  G4double opacity = c.GetAlpha ();
+
+  if (!fSecondPass) {
+    G4bool transparency_enabled = true;
+    G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+    if (pViewer) transparency_enabled = pViewer->transparency_enabled;
+    if (transparency_enabled && opacity < 1.) {
+      // On first pass, transparent objects are not drawn, but flag is set...
+      fSecondPassRequested = true;
+      return;
     }
-    // On second pass, opaque objects are not drwan...
-    if (fSecondPass && opacity >= 1.) return;
-    // Else invoke base class method...
-    G4VSceneHandler::RequestPrimitives (solid);
   }
+
+  // On second pass, opaque objects are not drwan...
+  if (fSecondPass && opacity >= 1.) return;
+
+  // Else invoke base class method...
+  G4VSceneHandler::RequestPrimitives (solid);
 }
 
 G4int G4OpenGLImmediateSceneHandler::fSceneIdCount = 0;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.41 2006-01-26 11:55:58 allison Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.42 2006-04-19 11:59:13 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,6 +54,7 @@
 #include "G4VMarker.hh"
 #include "G4Polyhedron.hh"
 #include "G4VisAttributes.hh"
+#include "G4PhysicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
@@ -87,48 +88,6 @@ const GLubyte G4OpenGLSceneHandler::fStippleMaskHashed [128] = {
   0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55,
   0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55
 };
-
-/***********************
-// Add polyline in 2D screen coordinates (-1 <x < +1, -1 < y < +1, z = 0).
-void G4OpenGLSceneHandler::AddPrimitive2D (const G4Polyline& line)
-{
-  size_t nPoints = line.size ();
-  if (nPoints <= 0) return;
-
-  const G4Colour& c = GetColour (line);
-  glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
-
-  if (fpViewer -> GetViewParameters ().IsMarkerNotHidden ())
-    glDisable (GL_DEPTH_TEST);
-  else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LESS);}
-
-  glDisable (GL_LIGHTING);
-
-  // Push matrices defining screen coordinates...
-  glMatrixMode (GL_PROJECTION);
-  glPushMatrix();
-  glLoadIdentity();
-  glMatrixMode (GL_MODELVIEW);
-  glPushMatrix();
-  glLoadIdentity();
-
-  glBegin (GL_LINE_STRIP);
-  for (size_t iPoint = 0; iPoint < nPoints; iPoint++) {
-  G4double x, y, z;
-    x = line[iPoint].x(); 
-    y = line[iPoint].y();
-    z = line[iPoint].z();
-    glVertex3d (x, y, z);
-  }
-  glEnd ();
-
-  // Pop matrices defining current world...
-  glMatrixMode (GL_PROJECTION);
-  glPopMatrix();
-  glMatrixMode (GL_MODELVIEW);
-  glPopMatrix();
-}
-*******************************/
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
 {
@@ -546,11 +505,15 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     if (n > 4) {
       G4cerr <<
 	"G4OpenGLSceneHandler::AddPrimitive(G4Polyhedron): WARNING";
-      if (fpCurrentPV) {
+      G4PhysicalVolumeModel* pPVModel =
+	dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+      if (pPVModel) {
+	G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
+	G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
 	G4cerr <<
-	"\n  Volume " << fpCurrentPV->GetName() <<
-	", Solid " << fpCurrentLV->GetSolid()->GetName() <<
-	  " (" << fpCurrentLV->GetSolid()->GetEntityType();
+	"\n  Volume " << pCurrentPV->GetName() <<
+	", Solid " << pCurrentLV->GetSolid()->GetName() <<
+	  " (" << pCurrentLV->GetSolid()->GetEntityType();
       }
       G4cerr<<
 	"\n   G4Polyhedron facet with " << n << " edges" << G4endl;
