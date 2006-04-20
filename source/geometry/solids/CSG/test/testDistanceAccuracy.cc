@@ -346,7 +346,7 @@ G4ThreeVector GetVectorOnTubs(G4Tubs& tubs)
 
   G4double pRmin = tubs.GetInnerRadius   ();
   G4double pRmax = tubs.GetOuterRadius   ();
-  G4double tubsZ = tubs.GetZHalfLength   ();
+  G4double tubsZ = 0.999*tubs.GetZHalfLength   ();
   G4double phi1  = tubs.GetStartPhiAngle ();
   G4double phi2  = phi1 + tubs.GetDeltaPhiAngle ();
 
@@ -412,7 +412,7 @@ G4ThreeVector GetVectorAroundTubs(G4Tubs& tubs)
 
 
   G4double pRmax = partR*tubs.GetOuterRadius   ();
-  G4double tubsZ = partZ*tubs.GetZHalfLength   ();
+  G4double tubsZ = 0.999*partZ*tubs.GetZHalfLength   ();
 
   // G4double pRmin = tubs.GetInnerRadius   ();
   // G4double phi1  = tubs.GetStartPhiAngle ();
@@ -582,15 +582,15 @@ int main(int argc, char** argv)
   /*
   G4cout<< "To test Box." << G4endl;
   test_one_solid( useCase= kBox,  no_points, dirs_per_point ); 
-  
+  */  
 
   G4cout<< "To test Tubs." << G4endl;
   test_one_solid( useCase= kTubs,  no_points, dirs_per_point ); 
-  */
   
+  /*  
   G4cout<< "To test Orb." << G4endl;
   test_one_solid( useCase= kOrb,  no_points, dirs_per_point ); 
-  /*
+
   G4cout<< "To test Orb." << G4endl;
   test_one_solid( useCase= kOrb,  no_points, dirs_per_point ); 
   
@@ -713,10 +713,19 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
 
 
   // G4Tubs t4("Hole Sector #4",45*mm,50*mm,50*mm,halfpi,halfpi);
+  G4Tubs t1("Solid tubs",0.*mm,50*mm,50*mm,0.,twopi);
+
   G4Tubs t4("Hole Sector #4",45*mm,50*mm,50*mm,-halfpi,halfpi);
+
+
+
+
 
   G4Cons c4("Hollow Cut Cone",50,100,50,200,50,-pi/6,pi/3);
   G4Cons c5("Hollow Cut Cone",25,50,75,150,50,0,3*halfpi);
+
+
+
     
   G4Torus torus1("torus1",10.,15.,20.,0.,3*halfpi);
   G4Torus tor2("Hole cutted Torus #2",Rmin,Rmax,Rtor,pi/4,halfpi);
@@ -1032,7 +1041,7 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
 
     case kTubs:
 
-    G4cout<<"Testing all cutted G4Tubs:"<<G4endl<<G4endl;
+    G4cout<<"Testing G4Tubs:"<<G4endl<<G4endl;
 
     iInNoSurf = 0, iOutNoSurf = 0, iIn = 0, iOut = 0;     
 
@@ -1040,67 +1049,107 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
     {
       if(i%iCheck == 0) G4cout<<"i = "<<i<<G4endl;
 
-      G4ThreeVector p = GetVectorAroundTubs(t4);    
-      surfaceP = t4.Inside(p);
+      G4ThreeVector pA = GetVectorAroundTubs(t1);    
+      G4ThreeVector pS = GetVectorOnTubs(t1); // , normP);
 
-      if(surfaceP != kSurface)
+      G4ThreeVector dP = pS - pA;
+
+      if ( dP.mag2() > 0.) 
       {
-        if(surfaceP == kOutside)
+        distCheck = dP.mag();
+        vCheck = dP.unit();
+        // G4cout<<"distCheck ="<< distCheck<<"; dP.unit() mag = "<<dP.mag()<<G4endl;
+      }
+      else continue;
+
+      surfaceP = t1.Inside(pS);
+
+      if( surfaceP == kSurface )
+      {
+        surfaceA = t1.Inside(pA);
+        
+        if( surfaceA == kOutside )
         {
-          for( j = 0; j < jMax; j++ )
-          {
-            G4ThreeVector v = GetRandomUnitVector();
+          if ( dP.dot(pS) < 0. )  // may be < strictly?
+	  {
+            iIn++;
 
-            distIn   = t4.DistanceToIn(p,v);
+            distIn   = t1.DistanceToIn(pA,vCheck);
 
-	    if(distIn != kInfinity)
-	    {
-              iIn++;
-              
-              surfaceP = t4.Inside(p + distIn*v);
+            dDist = distIn - distCheck;
 
-              if(surfaceP != kSurface )
+	    // G4cout<<" distIn = "<<distIn<<"; distCheck = "<<distCheck<<"; dDist = "<<dDist<<G4endl;
+
+            dDist *= 10./kRadTolerance;
+
+            for( j = 0; j < jMax; j++ )
+            {
+              position = -25. + j; 
+              if ( dDist < position ) 
 	      {
-                iInNoSurf++;
-	      // G4cout<<" distIn < kCarTolerance && distOut < kCarTolerance"<<G4endl;
-              // G4cout<<"distIn = "<<distIn<<";  distOut = "<<distOut<<G4endl;
-              // G4cout<<"location p: "; // << G4endl;
-              // G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
-              // G4cout<<" direction v: "; // << G4endl; 
-              // G4cout<<"( "<<v.x()<<", "<<v.y()<<", "<<v.z()<<" ); "<<G4endl<<G4endl;
+                dIn[j] += 1.;
+                break;
 	      }
-            }
+              else continue;
+	    }
+            if ( j == jMax ) dIn[jMax-1] += 1.;
+            if ( j == jMax ||  j == 0 )
+	    {
+	      // G4cout<<"distIn    = "<<distIn<<"; dDist = "<<dDist<<G4endl;
+	      // G4cout<<"distCheck = "<<distCheck<<"; vCheck.dot( pS.unit() )  = "
+              //       <<vCheck.dot( pS.unit() )<<G4endl;
+	    }
 	  }
+          else continue;
         }
         else
         {
+          iOut++;
+          
+          distOut  = t1.DistanceToOut(pA,vCheck,calcNorm,pgoodNorm,pNorm); 
+         
+          dDist = distOut - distCheck;
+
+	  // G4cout<<" distOut = "<<distOut<<"; distCheck = "<<distCheck<<"; dDist = "<<dDist<<G4endl;
+
+          dDist *= 10./kRadTolerance;
+
           for( j = 0; j < jMax; j++ )
           {
-            iOut++;
-
-            G4ThreeVector v = GetRandomUnitVector();
-          
-            distOut  = t4.DistanceToOut(p,v,calcNorm,pgoodNorm,pNorm); 
-            surfaceP = t4.Inside(p + distOut*v);
-
-            if(surfaceP != kSurface )
+            position = -25. + j; 
+            if ( dDist < position ) 
 	    {
-              iOutNoSurf++;
-	      // G4cout<<" distIn < kCarTolerance && distOut < kCarTolerance"<<G4endl;
-              // G4cout<<"distIn = "<<distIn<<";  distOut = "<<distOut<<G4endl;
-              // G4cout<<"location p: "; // << G4endl;
-              // G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
-              // G4cout<<" direction v: "; // << G4endl; 
-              // G4cout<<"( "<<v.x()<<", "<<v.y()<<", "<<v.z()<<" ); "<<G4endl<<G4endl;
+              dOut[j] += 1.;
+              break;
 	    }
-          }
+            else continue;
+	  }	
+          if ( j == jMax) dOut[jMax-1] += 1.;
         }
       }
-
+      else
+      {
+        G4cout<<"pS is out of surface: "<<pS.x()<<"\t"<<pS.y()<<"\t"<<pS.z()<<G4endl;
+      }
     }
     G4cout<<"iIn = "<<iIn<<";     iOut = "<<iOut<<G4endl;
-    G4cout<<"iInNoSurf = "<<iInNoSurf<<";    iOutNoSurf = "<<iOutNoSurf<<G4endl;
+    G4cout<<"iInNoSurf = "<<iInNoSurf<<";    iOutNoSurf = "<<iOutNoSurf<<G4endl<<G4endl;
 
+    G4cout<<"iIn = "<<iIn<<G4endl<<G4endl;
+    for( j = 0; j < jMax; j++ )
+    {
+      position = -25. + j; 
+      G4cout<<position<<"\t"<<dIn[j]<<G4endl;      
+      foutDistIn<<position<<"\t"<<dIn[j]<<G4endl;      
+    } 
+    G4cout<<G4endl;
+    G4cout<<"iOut = "<<iOut<<G4endl<<G4endl;
+    for( j = 0; j < jMax; j++ )
+    {
+      position = -25. + j; 
+      G4cout<<position<<"\t"<<dOut[j]<<G4endl;      
+      foutDistOut<<position<<"\t"<<dIn[j]<<G4endl;      
+    }
 
     break;
 
