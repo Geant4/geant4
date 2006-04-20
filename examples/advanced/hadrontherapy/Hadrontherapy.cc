@@ -62,22 +62,10 @@
 
 int main(int argc ,char ** argv)
 {
-<<<<<<< Hadrontherapy.cc
   HepRandom::setTheEngine(new RanecuEngine);
   G4int seed=time(NULL);
   HepRandom ::setTheSeed(seed);
 
-=======
-
-  //***************************
-  // choose the Random engine
-  //***************************
-
-  HepRandom::setTheEngine(new RanecuEngine);
-  G4int seed=time(NULL);
-  HepRandom ::setTheSeed(seed);
-
->>>>>>> 1.18
   G4RunManager* runManager = new G4RunManager;
 
   // Initialize the geometry

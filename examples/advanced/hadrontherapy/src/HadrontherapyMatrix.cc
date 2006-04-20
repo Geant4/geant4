@@ -43,8 +43,8 @@ HadrontherapyMatrix::HadrontherapyMatrix()
 {  
   // Number of the voxels of the phantom
   numberVoxelX = 200;
-  numberVoxelY = 200;
-  numberVoxelZ = 200; 
+  numberVoxelY = 1;
+  numberVoxelZ = 1; 
  
   // Create the matrix
   matrix = new G4double[numberVoxelX*numberVoxelY*numberVoxelZ];
@@ -73,7 +73,7 @@ void HadrontherapyMatrix::Fill(G4int i, G4int j, G4int k,
 			       G4double energyDeposit)
 {
   if (matrix)
-    matrix[(i*numberVoxelY+j)*numberVoxelZ+k] += energyDeposit;
+    matrix[(i*numberVoxelY+j)*numberVoxelZ+k] += energyDeposit; // sono MeV
   
   // Store the energy deposit in the matrix elemnt corresponding 
   // to the phantom voxel  
@@ -89,12 +89,11 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
   G4int i;
   
   if (matrix)
-    {  
-      {
-	for(G4int l = 0; l < numberVoxelZ; l++) 
-	  {
-	    k = l;
-	    
+    {   
+      for(G4int l = 0; l < numberVoxelZ; l++) 
+	{
+	  k = l;
+	  
 	    for(G4int m = 0; m < numberVoxelY; m++) 
 	      { 
 		j = m * numberVoxelZ + k; 
@@ -104,13 +103,7 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
 		    i =  n* numberVoxelZ * numberVoxelY + j;
 		    if(matrix[i] != 0)
 		      {	
-<<<<<<< HadrontherapyMatrix.cc
-			
-=======
-			ofs << n <<'\t'<< m <<'\t'<<
-			  k<<'\t'<<matrix[i]<<G4endl;
-			
->>>>>>> 1.8
+					
 #ifdef G4ANALYSIS_USE 	
 			HadrontherapyAnalysisManager* analysis = 
 			  HadrontherapyAnalysisManager::getInstance();
@@ -121,13 +114,5 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
 		  }       
 	      }
 	  }
-<<<<<<< HadrontherapyMatrix.cc
-	
-      }
-=======
-	
-      	ofs.close();  
-      }
->>>>>>> 1.8
     }
 }
