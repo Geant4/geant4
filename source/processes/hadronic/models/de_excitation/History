@@ -14,14 +14,20 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-8 Apr 2006 Dennis Wright (hadr-deex-V08-00-02)
+20 Apr 2006 Dennis Wright (hadr-deex-V08-00-03)
+-----------------------------------------------
+- photon_evaporation
+   G4NuclearLevelManager.cc : in method MakeLevels(), restrict the missing
+       file warning to Z > 10
+
+08 Apr 2006 Dennis Wright (hadr-deex-V08-00-02)
 ----------------------------------------------
 - photon_evaporation
   G4PhotonEvaporation.cc : in method BreakItUp(), fix memory leak -
        delete entries to armProducts vector.  This is in response to
        bug report 851. 
 
-5 Jan 2006 Dennis Wright (hadr-deex-V08-00-01)
+05 Jan 2006 Dennis Wright (hadr-deex-V08-00-01)
 ----------------------------------------------
 
 - photon_evaporation
