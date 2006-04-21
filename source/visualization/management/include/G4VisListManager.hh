@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisListManager.hh,v 1.4 2006-01-26 12:20:53 allison Exp $
+// $Id: G4VisListManager.hh,v 1.5 2006-04-21 17:40:41 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
@@ -53,7 +53,8 @@ public: // With description
   void SetCurrent(const G4String& name);
   const T* Current() const {return fpCurrent;}
   
-  void Print(std::ostream& ostr, const G4String& name) const;
+  // Print configuration
+  void Print(std::ostream& ostr, const G4String& name="") const;
 
 private:
 
@@ -120,12 +121,11 @@ template <typename T>
 void
 G4VisListManager<T>::Print(std::ostream& ostr, const G4String& name) const
 {
-  if (!fMap.size()) {
-    ostr << "Nothing registered.  Try \"/vis/modeling/.../create\"."
-	 << std::endl;
+  if (0 == fMap.size()) {
+    G4cout<<"None"<<G4endl;
     return;
   }
-
+    
   ostr<<"Current: "<<fpCurrent->Name()<<std::endl;
 
   if (!name.isNull()) {

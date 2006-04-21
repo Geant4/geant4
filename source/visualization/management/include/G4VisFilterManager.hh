@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisFilterManager.hh,v 1.1 2006-03-28 21:06:12 tinslay Exp $
+// $Id: G4VisFilterManager.hh,v 1.2 2006-04-21 17:40:41 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Filter manager. Manages filter models, factories, messengers, 
@@ -52,7 +52,7 @@ public:
   virtual ~G4VisFilterManager();
 
   // Useful typedef's
-  typedef G4VFilter<G4VTrajectory> Filter;
+  typedef G4VFilter<T> Filter;
   typedef G4VModelFactory<Filter> Factory;
 
   // Registration methods
@@ -71,7 +71,11 @@ public:
   FilterMode::Mode GetMode() const;
 
   // Print configuration
-  void Print(std::ostream& ostr, const G4String& name) const;
+  void Print(std::ostream& ostr, const G4String& name="") const;
+
+  // Accessors
+  const std::vector<Filter*>& FilterList() const;
+  const std::vector<Factory*>& FactoryList() const;
 
 private:
 
@@ -193,17 +197,46 @@ template <typename T>
 void
 G4VisFilterManager<T>::Print(std::ostream& ostr, const G4String& name) const
 { 
-  typename std::vector<Filter*>::const_iterator iter = fFilterList.begin();
+  ostr<<"Registered filter factories:"<<G4endl;
+  typename std::vector<Factory*>::const_iterator iterFactory = fFactoryList.begin();
 
-  while (iter != fFilterList.end()) {
+  while (iterFactory != fFactoryList.end()) {
+    (*iterFactory)->Print(ostr);
+    iterFactory++;
+  }
+
+  if (0 == fFactoryList.size()) ostr<<"None"<<G4endl;
+
+  ostr<<G4endl;
+  ostr<<"Registered Filters:"<<G4endl;
+
+  typename std::vector<Filter*>::const_iterator iterFilter = fFilterList.begin();
+
+  while (iterFilter != fFilterList.end()) {
     if (!name.isNull()) {
-      if ((*iter)->Name() == name) (*iter)->PrintAll(ostr);
+      if ((*iterFilter)->Name() == name) (*iterFilter)->PrintAll(ostr);
     }
     else {
-      (*iter)->PrintAll(ostr);
+      (*iterFilter)->PrintAll(ostr);
     }
-    iter++;
+    iterFilter++;
   }
+
+  if (0 == fFilterList.size()) ostr<<"None"<<G4endl;
+}
+
+template <typename T>
+const std::vector< G4VFilter<T>* >&
+G4VisFilterManager<T>::FilterList() const
+{ 
+  return fFilterList;
+}
+
+template <typename T>
+const std::vector< G4VModelFactory< G4VFilter<T> >* >&
+G4VisFilterManager<T>::FactoryList() const
+{ 
+  return fFactoryList;
 }
 
 #endif

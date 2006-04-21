@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisModelManager.hh,v 1.1 2006-03-24 22:03:02 tinslay Exp $
+// $Id: G4VisModelManager.hh,v 1.2 2006-04-21 17:40:41 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Generic model manager. Manages models, associated
@@ -59,7 +59,12 @@ public: // With description
   // Command placement
   G4String Placement() const;
 
-  void Print(std::ostream& ostr, const G4String& name) const;
+  // Print factory and model data
+  void Print(std::ostream& ostr, const G4String& name="") const;
+
+  // Accessors
+  const List* ListManager() const;
+  const std::vector<Factory*>& FactoryList() const;
 
 private:
 
@@ -141,7 +146,35 @@ template <typename Model>
 void
 G4VisModelManager<Model>::Print(std::ostream& ostr, const G4String& name) const
 {
+  ostr<<"Registered model factories:"<<G4endl;
+
+  typename std::vector<Factory*>::const_iterator iter = fFactoryList.begin();
+
+  while (iter != fFactoryList.end()) {
+    (*iter)->Print(ostr);
+    iter++;
+  }
+
+  if (0 == fFactoryList.size()) ostr<<"None"<<G4endl;
+
+  ostr<<G4endl;
+  ostr<<"Registered models: "<<G4endl;
+
   fpModelList->Print(ostr, name);
+}
+
+template <typename Model>
+const G4VisListManager<Model>*
+G4VisModelManager<Model>::ListManager() const
+{
+  return fpModelList;
+}
+
+template <typename Model>
+const std::vector<G4VModelFactory<Model>*>&
+G4VisModelManager<Model>::FactoryList() const
+{
+  return fFactoryList;
 }
 
 #endif
