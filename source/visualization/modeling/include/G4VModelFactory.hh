@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VModelFactory.hh,v 1.1 2005-11-21 05:44:44 tinslay Exp $
+// $Id: G4VModelFactory.hh,v 1.2 2006-04-21 17:32:14 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
@@ -34,6 +34,7 @@
 #define G4VMODELFACTORY
 
 #include "G4String.hh"
+#include <iostream>
 #include <utility>
 #include <vector>
 
@@ -55,6 +56,8 @@ public: // With description
 
   virtual ModelAndMessengers Create(const G4String& placement, const G4String& modelName) = 0;
 
+  void Print(std::ostream& ostr) const;
+
 private:
 
   G4String fName;
@@ -75,6 +78,13 @@ G4VModelFactory<T>::Name()
 {
   return fName;
 }
+
+template <typename T>
+void 
+G4VModelFactory<T>::Print(std::ostream& ostr) const
+{
+  ostr<<fName<<G4endl; 
+} 
 
 #endif
 
