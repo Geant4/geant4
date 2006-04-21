@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ModelCommandsT.hh,v 1.3 2006-03-28 18:25:41 allison Exp $
+// $Id: G4ModelCommandsT.hh,v 1.4 2006-04-21 02:50:47 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Generic model messenges. 
@@ -254,7 +254,7 @@ G4ModelCommandAdd<M>::~G4ModelCommandAdd()
 }
 
 template <typename M>
-void G4ModelCommandAdd<M>::SetNewValue(G4UIcommand* cmd, G4String newValue)
+void G4ModelCommandAdd<M>::SetNewValue(G4UIcommand*, G4String newValue)
 {
   G4VModelCommand<M>::Model()->Add(newValue);
 }
@@ -299,7 +299,7 @@ G4ModelCommandInvert<M>::~G4ModelCommandInvert()
 }
 
 template <typename M>
-void G4ModelCommandInvert<M>::SetNewValue(G4UIcommand* cmd, G4String newValue)
+void G4ModelCommandInvert<M>::SetNewValue(G4UIcommand*, G4String newValue)
 {
   G4VModelCommand<M>::Model()->SetInvert(fpCmd->GetNewBoolValue(newValue));
 }
@@ -342,7 +342,7 @@ G4ModelCommandActive<M>::~G4ModelCommandActive()
 }
 
 template <typename M>
-void G4ModelCommandActive<M>::SetNewValue(G4UIcommand* cmd, G4String newValue)
+void G4ModelCommandActive<M>::SetNewValue(G4UIcommand*, G4String newValue)
 {
   G4VModelCommand<M>::Model()->SetActive(fpCmd->GetNewBoolValue(newValue));
 }
@@ -384,7 +384,7 @@ G4ModelCommandReset<M>::~G4ModelCommandReset()
 }
 
 template <typename M>
-void G4ModelCommandReset<M>::SetNewValue(G4UIcommand* cmd, G4String string)
+void G4ModelCommandReset<M>::SetNewValue(G4UIcommand*, G4String)
 {
   G4VModelCommand<M>::Model()->Reset();
 }

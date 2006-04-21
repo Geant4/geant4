@@ -1,4 +1,4 @@
-$Id: History,v 1.57 2006-04-19 14:20:48 allison Exp $
+$Id: History,v 1.58 2006-04-21 02:50:47 tinslay Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+20th April 2006 Jane Tinslay
+- Get rid of some warning messages from G4ModelCommandsT 
+  when compiling on Linux
 
 19th April 2006  John Allison  (modeling-V08-00-06 - needs greps-V08-00-02)
 - G4BoundingSphereScene.hh, G4PhysicalVolumeMassScene.hh and
