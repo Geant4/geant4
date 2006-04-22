@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.90 2006-04-19 13:55:11 allison Exp $
+// $Id: G4VisManager.cc,v 1.91 2006-04-22 10:12:32 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -261,7 +261,6 @@ void G4VisManager::Initialise () {
 
   RegisterModelFactories();
 
-  /* Awaiting access to registered model factories...
   if (fVerbosity >= startup) {
     G4cout <<
       "\nYou have successfully registered the following model factories."
@@ -269,7 +268,6 @@ void G4VisManager::Initialise () {
     PrintAvailableModels ();
     G4cout << G4endl;
   }
-  */
 
   fInitialised = true;
 }
@@ -975,15 +973,9 @@ void G4VisManager::PrintAvailableGraphicsSystems () const {
 
 void G4VisManager::PrintAvailableModels () const
 {
-  /*
-  G4cout << "Current available trajectory draw model factories are:"
-	 << G4endl;
-  fpTrajDrawModelMgr->PrintFactories(G4cout);
-  
-  G4cout << "Current available trajectory filter factories are:"
-	 << G4endl;
-  fpTrajFilterMgr->PrintFactories(G4cout);
-  */
+  fpTrajDrawModelMgr->Print(G4cout);
+  G4cout << G4endl;
+  fpTrajFilterMgr->Print(G4cout);
 }
 
 void G4VisManager::PrintInvalidPointers () const {
@@ -1046,8 +1038,9 @@ void G4VisManager::EndOfEvent ()
     size_t nModels = EOEModelList.size();
     if (nModels) {
       ClearTransientStoreIfMarked();
-      fVisManagerModelingParameters
-	= *(fpSceneHandler -> CreateModelingParameters ());
+      G4ModelingParameters* pMP = fpSceneHandler->CreateModelingParameters();
+      fVisManagerModelingParameters = *pMP;
+      delete pMP;
       for (size_t i = 0; i < nModels; i++) {
 	G4VModel* pModel = EOEModelList [i];
 	pModel -> SetModelingParameters (&fVisManagerModelingParameters);
@@ -1100,8 +1093,9 @@ void G4VisManager::CheckModel () {
     fpSceneHandler -> SetModel (pModel);
   }
   // Ensure modeling parameters are right for this view...
-  fVisManagerModelingParameters
-    = *(fpSceneHandler -> CreateModelingParameters ());
+  G4ModelingParameters* pMP = fpSceneHandler->CreateModelingParameters();
+  fVisManagerModelingParameters = *pMP;
+  delete pMP;
   pModel->SetModelingParameters (&fVisManagerModelingParameters);
 }
 
