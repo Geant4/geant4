@@ -1,0 +1,98 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+// $Id: QBBC.icc,v 1.1 2006-04-24 11:29:09 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:QBBC
+//
+// Author: 11 April 2006 V. Ivanchenko
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
+
+#include "globals.hh"
+#include "G4ParticleDefinition.hh"
+//#include "G4ParticleWithCuts.hh"
+//#include "G4ProcessManager.hh"
+//#include "G4ProcessVector.hh"
+//#include "G4ParticleTypes.hh"
+//#include "G4ParticleTable.hh"
+
+//#include "G4Material.hh"
+//#include "G4MaterialTable.hh"
+//#include "G4ios.hh"
+//#include <iomanip>   
+
+#include "G4DecayPhysics.hh"
+#include "G4EmStandardPhysics.hh"
+#include "G4EmExtraPhysics.hh"
+#include "G4QStoppingPhysics.hh"
+
+#include "G4DataQuestionaire.hh"
+#include "G4HadronInelasticQBBC.hh"
+#include "G4HadronElasticBPhysics.hh"
+#include "G4IonBinaryCascadePhysics.hh"
+
+template<class T> TQBBC<T>::TQBBC(G4int ver, G4bool flagFTF, 
+	G4bool flagCHIPS, G4bool flagHP): T()
+{
+  G4DataQuestionaire it(photon, neutron);
+  G4cout << "<<< Geant4 Physics List simulation engine: QBBC 3.0"<<G4endl;
+  G4cout <<G4endl;
+  this->defaultCutValue = 0.7*mm;  
+  this->SetVerboseLevel(ver);
+
+  // EM Physics
+  this->RegisterPhysics( new G4EmStandardPhysics("standard EM",ver));
+
+  // Synchroton Radiation & GN Physics
+  this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
+
+  // Decays
+  this->RegisterPhysics( new G4DecayPhysics("decay",ver) );
+
+   // Hadron Physics
+  this->RegisterPhysics( new G4HadronElasticPhysics("elasticB",ver,flagHP));
+  this->RegisterPhysics( new G4HadronInelasticQBBC("inelastic", ver, 
+	flagFTF, flagCHIPS, flagHP));
+  this->RegisterPhysics( new G4QStoppingPhysics("stopping",ver));
+
+  // Ion Physics
+  this->RegisterPhysics( new G4IonBinaryCascadePhysics("ionBIC"));
+
+}
+
+template<class T> TQBBC<T>::~TQBBC()
+{}
+
+template<class T> void TQBBC<T>::SetCuts()
+{
+  if (this->verboseLevel >1) G4cout << "### QBBC::SetCuts:"; 
+  this->SetCutsWithDefault();   
+}
+
+
