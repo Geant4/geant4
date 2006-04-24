@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.2 2006-03-22 13:54:39 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.3 2006-04-24 14:41:19 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -89,12 +89,12 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCondi
     CSmanager=G4QElasticCrossSection::GetPointer();
     pPDG=2212;
   }
-  //else if(incidentParticleDefinition == G4Neutron::Neutron())
-  //{
-  //  CSmanager=G4QElasticCrossSection::GetPointer();
-  //  pPDG=2112;
-  //}
-  else G4cout<<"G4QElastic::GetMeanFreePath:Only pp's implemented in CHIPSElastic"<<G4endl;
+  else if(incidentParticleDefinition == G4Neutron::Neutron())
+  {
+    CSmanager=G4QElasticCrossSection::GetPointer();
+    pPDG=2112;
+  }
+  else G4cout<<"G4QElastic::GetMeanFreePath: np,pp,pd,pHe implemented in CHIPS"<<G4endl;
   
   G4QIsotope* Isotopes = G4QIsotope::Get(); // Pointer to the G4QIsotopes singleton
   G4double sigma=0.;                        // Sums over elements for the material
@@ -185,6 +185,7 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCondi
 G4bool G4QElastic::IsApplicable(const G4ParticleDefinition& particle) 
 {
   if      (particle == *(        G4Proton::Proton()        )) return true;
+  else if (particle == *(       G4Neutron::Neutron()       )) return true;
   //else if (particle == *(     G4MuonMinus::MuonMinus()     )) return true; 
   //else if (particle == *(       G4TauPlus::TauPlus()       )) return true;
   //else if (particle == *(      G4TauMinus::TauMinus()      )) return true;
@@ -194,7 +195,6 @@ G4bool G4QElastic::IsApplicable(const G4ParticleDefinition& particle)
   //else if (particle == *(      G4MuonPlus::MuonPlus()      )) return true;
   //else if (particle == *(G4AntiNeutrinoMu::AntiNeutrinoMu())) return true;
   //else if (particle == *(   G4NeutrinoMu::NeutrinoMu()   )) return true;
-  //else if (particle == *(       G4Neutron::Neutron()       )) return true;
   //else if (particle == *(     G4PionMinus::PionMinus()     )) return true;
   //else if (particle == *(      G4PionPlus::PionPlus()      )) return true;
   //else if (particle == *(      G4KaonPlus::KaonPlus()      )) return true;
@@ -258,7 +258,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   G4int projPDG=0;                           // PDG Code prototype for the captured hadron
   // Not all these particles are implemented yet (see Is Applicable)
   if      (particle ==          G4Proton::Proton()         ) projPDG= 2212;
-  //else if (particle ==         G4Neutron::Neutron()        ) projPDG= 2112;
+  else if (particle ==         G4Neutron::Neutron()        ) projPDG= 2112;
   //else if (particle ==       G4PionMinus::PionMinus()      ) projPDG= -211;
   //else if (particle ==        G4PionPlus::PionPlus()       ) projPDG=  211;
   //else if (particle ==        G4KaonPlus::KaonPlus()       ) projPDG= 2112;

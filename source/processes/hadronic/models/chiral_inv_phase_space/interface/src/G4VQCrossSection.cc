@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VQCrossSection.cc,v 1.4 2006-02-06 09:35:57 mkossov Exp $
+// $Id: G4VQCrossSection.cc,v 1.5 2006-04-24 14:41:19 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -107,7 +107,7 @@ G4double G4VQCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int tgZ,
 #ifdef pdebug
       G4cout<<"G4VQCS::GetCrosSec: (-1) P="<<pMom<<",fCS="<<fCS<<",lastI="<<lastI<<G4endl;
 #endif
-      lastCS=CalculateCrossSection(fCS,-1,lastI,lastPDG, lastN,lastZ,pMom);//read & update
+      lastCS=CalculateCrossSection(fCS,-1,lastI,lastPDG, lastZ,lastN,pMom);//read & update
       break;                           // Go out of the LOOP
 	   }
 	   if(!in)                            // This nucleus has not been calculated previously
