@@ -1,0 +1,23 @@
+FILE  anni.hbook
+LIST 
+C
+C  positron 100 MeV
+C 
+DETECTOR   5 (Aluminium) 10000. (cm)
+KINE       2 (positron)  0.100 (GeV)
+C
+*HISTO  5 (id) 210 (nbins)  0.  (Emin)  105. (Emax) 1.e-3 (MeV)
+*HISTO  6 (id) 200 (nbins) -1. (cost1)  +1. (cost2)
+C
+MULS  0
+LOSS  0
+DRAY  0
+BREM  0
+ANNI  1
+C
+CUTS    10.e-6 (cutgam)    10.e-6 (cutele)
+C
+SWIT    0 (draw)
+DEBUG   10 5 10000
+C
+TRIG    100000

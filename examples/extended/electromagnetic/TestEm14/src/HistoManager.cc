@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.2 2006-04-24 15:42:53 maire Exp $
+// $Id: HistoManager.cc,v 1.3 2006-04-24 15:56:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,7 +49,7 @@ HistoManager::HistoManager()
   }  
 #endif
  
-  fileName[0] = "testem13";
+  fileName[0] = "testem14";
   fileType    = "hbook";
   fileOption  = "--noErrors uncompress";  
   // histograms
