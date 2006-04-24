@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.20 2006-04-24 07:28:38 allison Exp $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.21 2006-04-24 09:07:58 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,8 +46,6 @@
 #include "G4OpenGLImmediateSceneHandler.hh"
 
 #include "G4LogicalVolume.hh"
-
-#include <limits>
 
 G4OpenGLImmediateSceneHandler::G4OpenGLImmediateSceneHandler (G4VGraphicsSystem& system,
 						const G4String& name):
@@ -95,9 +93,7 @@ void G4OpenGLImmediateSceneHandler::BeginPrimitives2D()
   glMatrixMode (GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity();
-  glOrtho (-1., 1., -1., 1.,
-	   -std::numeric_limits<GLdouble>::max(),
-	   std::numeric_limits<GLdouble>::max());
+  glOrtho (-1., 1., -1., 1., -DBL_MAX, DBL_MAX);
   glMatrixMode (GL_MODELVIEW);
   glPushMatrix();
   glLoadIdentity();

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.26 2006-04-19 11:59:13 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.27 2006-04-24 09:07:58 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,8 +43,6 @@
 #include "G4PhysicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
-
-#include <limits>
 
 G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler (G4VGraphicsSystem& system,
 					  const G4String& name):
@@ -140,9 +138,7 @@ void G4OpenGLStoredSceneHandler::BeginPrimitives2D()
   glMatrixMode (GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity();
-  glOrtho (-1., 1., -1., 1.,
-	   -std::numeric_limits<GLdouble>::max(),
-	   std::numeric_limits<GLdouble>::max());
+  glOrtho (-1., 1., -1., 1., -DBL_MAX, DBL_MAX);
   glMatrixMode (GL_MODELVIEW);
   glPushMatrix();
   glLoadIdentity();
