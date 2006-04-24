@@ -20,10 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: DetectorConstruction.cc,v 1.1 2006-01-06 13:39:00 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.2 2006-04-24 15:42:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -47,9 +46,9 @@
 DetectorConstruction::DetectorConstruction()
 :pBox(0), lBox(0), aMaterial(0)
 {
-  BoxSize = 1*m;
+  BoxSize = 100*m;
   DefineMaterials();
-  SetMaterial("Iron");  
+  SetMaterial("Water");  
   detectorMessenger = new DetectorMessenger(this);
 }
 
@@ -74,35 +73,70 @@ void DetectorConstruction::DefineMaterials()
   //
   G4double z,a;
   
-  G4Element* C  = new G4Element("Carbon"   ,"C" , z= 6., a=  12.01*g/mole);
+  G4Element* H  = new G4Element("Hydrogen" ,"H" , z= 1., a=   1.01*g/mole);
   G4Element* N  = new G4Element("Nitrogen" ,"N" , z= 7., a=  14.01*g/mole);
   G4Element* O  = new G4Element("Oxygen"   ,"O" , z= 8., a=  16.00*g/mole);
-  G4Element* Ca = new G4Element("Calcium"  ,"Ca", z=20., a=  40.08*g/mole);
+  G4Element* Na = new G4Element("Sodium"   ,"Na", z=11., a=  22.99*g/mole);
+  G4Element* Ge = new G4Element("Germanium","Ge", z=32., a=  72.59*g/mole);
+  G4Element* I  = new G4Element("Iodine"   ,"I" , z=53., a= 126.90*g/mole);
+  G4Element* Bi = new G4Element("Bismuth"  ,"Bi", z=83., a= 208.98*g/mole);
   
   //
   // define materials
   //
   G4double density;
   G4int ncomponents, natoms;
-  G4double fractionmass;
-    
-  new G4Material("galactic", z=1., a= 1.01*g/mole, universe_mean_density,
-                  kStateGas, 2.73*kelvin, 3.e-18*pascal);
-    
+  G4double fractionmass;  
+  
   G4Material* Air = 
   new G4Material("Air", density= 1.290*mg/cm3, ncomponents=2);
   Air->AddElement(N, fractionmass=70.*perCent);
   Air->AddElement(O, fractionmass=30.*perCent);
 
-  G4Material* CaCO3 = 
-  new G4Material("CaCO3", density= 2.80*g/cm3, ncomponents=3);
-  CaCO3->AddElement(Ca, natoms= 1);
-  CaCO3->AddElement(C , natoms= 1);
-  CaCO3->AddElement(O , natoms= 3);
-   
-  new G4Material("Carbon", z= 6., a= 12.01*g/mole, density= 2.265*g/cm3);   
-  new G4Material("Iron"  , z=26., a= 55.85*g/mole, density= 7.870*g/cm3);
-  new G4Material("Tin"   , z=50., a= 118.7*g/mole, density= 7.310*g/cm3);
+  G4Material* H2l = 
+  new G4Material("H2liquid", density= 70.8*mg/cm3, ncomponents=1);
+  H2l->AddElement(H, fractionmass=1.);
+
+  G4Material* H2O = 
+  new G4Material("Water", density= 1.000*g/cm3, ncomponents=2);
+  H2O->AddElement(H, natoms=2);
+  H2O->AddElement(O, natoms=1);
+  H2O->SetChemicalFormula("H_2O");
+  H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+
+  new G4Material("liquidArgon", z=18., a= 39.95*g/mole, density= 1.390*g/cm3);
+  
+  new G4Material("Carbon"     , z=6.,  a= 12.01*g/mole, density= 2.267*g/cm3);
+
+  new G4Material("Aluminium"  , z=13., a= 26.98*g/mole, density= 2.700*g/cm3);
+
+  new G4Material("Silicon"    , z=14., a= 28.09*g/mole, density= 2.330*g/cm3);
+
+  new G4Material("Germanium"  , z=32., a= 72.61*g/mole, density= 5.323*g/cm3);
+  
+  G4Material* NaI = 
+  new G4Material("NaI", density= 3.67*g/cm3, ncomponents=2);
+  NaI->AddElement(Na, natoms=1);
+  NaI->AddElement(I , natoms=1);
+  NaI->GetIonisation()->SetMeanExcitationEnergy(452*eV);
+  
+  G4Material* Iod = 
+  new G4Material("Iodine", density= 4.93*g/cm3, ncomponents=1);
+  Iod->AddElement(I , natoms=1);
+  
+  G4Material* BGO = 
+  new G4Material("BGO", density= 7.10*g/cm3, ncomponents=3);
+  BGO->AddElement(O , natoms=12);
+  BGO->AddElement(Ge, natoms= 3);
+  BGO->AddElement(Bi, natoms= 4);  
+
+  new G4Material("Iron"       , z=26., a= 55.85*g/mole, density= 7.870*g/cm3);
+
+  new G4Material("Tungsten"   , z=74., a=183.85*g/mole, density= 19.30*g/cm3);
+
+  new G4Material("Lead"       , z=82., a=207.19*g/mole, density= 11.35*g/cm3);
+
+  new G4Material("Uranium"    , z=92., a=238.03*g/mole, density= 18.95*g/cm3);
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }

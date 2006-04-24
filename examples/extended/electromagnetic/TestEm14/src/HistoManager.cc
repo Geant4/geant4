@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.1 2006-01-06 13:39:00 maire Exp $
+// $Id: HistoManager.cc,v 1.2 2006-04-24 15:42:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,7 +37,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::HistoManager()
-:af(0),tree(0),hf(0),factoryOn(false)
+:af(0),tree(0),factoryOn(false)
 {
 #ifdef G4ANALYSIS_USE
   // Creating the analysis factory
@@ -46,12 +46,12 @@ HistoManager::HistoManager()
     G4cout << " HistoManager::HistoManager() :" 
            << " problem creating the AIDA analysis factory."
            << G4endl;
-  }    
-#endif 
+  }  
+#endif
  
-  fileName[0] = "testem14";
+  fileName[0] = "testem13";
   fileType    = "hbook";
-  fileOption  = "--noErrors uncompress";    
+  fileOption  = "--noErrors uncompress";  
   // histograms
   for (G4int k=0; k<MaxHisto; k++) {
     histo[k] = 0;
@@ -71,7 +71,7 @@ HistoManager::~HistoManager()
   
 #ifdef G4ANALYSIS_USE  
   delete af;
-#endif    
+#endif   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -80,9 +80,9 @@ void HistoManager::book()
 {
 #ifdef G4ANALYSIS_USE
   if(!af) return;
-    
+
   // Creating a tree mapped to an hbook file.
-  fileName[1] = fileName[0] + "." + fileType;    
+  fileName[1] = fileName[0] + "." + fileType;  
   G4bool readOnly  = false;
   G4bool createNew = true;
   AIDA::ITreeFactory* tf  = af->createTreeFactory();
@@ -99,9 +99,9 @@ void HistoManager::book()
            << G4endl;
     return;
   }
-
+  
   // Creating a histogram factory, whose histograms will be handled by the tree
-  hf = af->createHistogramFactory(*tree);
+  AIDA::IHistogramFactory*  hf = af->createHistogramFactory(*tree);
 
   // create selected histograms
   for (G4int k=0; k<MaxHisto; k++) {
@@ -111,9 +111,9 @@ void HistoManager::book()
       factoryOn = true;
     }
   }
+  delete hf;  
   if(factoryOn) 
-      G4cout << "\n----> Histogram Tree is opened in " << fileName[1]  << G4endl;
-
+      G4cout << "\n----> Histogram Tree is opened " << fileName[1] << G4endl;
 #endif
 }
 
@@ -127,7 +127,6 @@ void HistoManager::save()
     tree->close();        // and closing the tree (and the file)
     G4cout << "\n----> Histogram Tree is saved in " << fileName[1] << G4endl;
 
-    delete hf;
     delete tree;
     tree = 0;
     factoryOn = false;
@@ -160,14 +159,17 @@ void HistoManager::SetHisto(G4int ih,
     return;
   }
   
-  const G4String id[] = { "0", "1", "2", "3", "4"};
+  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6"};
   const G4String title[] = 
                 { "dummy",						//0
-                  "log10(Etransfert/Emu) Ionization",			//1
-                  "log10(Etransfert/Emu) Pair",				//2
-                  "log10(Etransfert/Emu) Brems",			//3
-                  "log10(Etransfert/Emu) Nuclear"			//4
+                  "scattered primary particle: energy spectrum",	//1
+                  "scattered primary particle: costheta distribution",	//2
+                  "charged secondaries: energy spectrum",		//3
+                  "charged secondaries: costheta distribution",		//4
+                  "neutral secondaries: energy spectrum",		//5
+                  "neutral secondaries: costheta distribution"		//6
                  };
+
 
   G4String titl = title[ih];
   G4double vmin = valmin, vmax = valmax;

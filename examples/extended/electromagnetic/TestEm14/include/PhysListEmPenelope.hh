@@ -20,37 +20,45 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StackingAction.cc,v 1.1 2006-01-06 13:39:00 maire Exp $
+//
+// $Id: PhysListEmPenelope.hh,v 1.1 2006-04-24 15:44:50 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "StackingAction.hh"
-#include "G4Track.hh"
-#include "G4TrackStatus.hh"
+#ifndef PhysListEmPenelope_h
+#define PhysListEmPenelope_h 1
+
+#include "G4VPhysicsConstructor.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::StackingAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-StackingAction::~StackingAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4ClassificationOfNewTrack 
-StackingAction::ClassifyNewTrack(const G4Track* aTrack)
+class PhysListEmPenelope : public G4VPhysicsConstructor
 {
-  G4ClassificationOfNewTrack     classification = fUrgent;
-  
-  // kill all secondaries
-  if(aTrack->GetParentID() != 0) classification = fKill;
-  
-  return classification;
-}
+  public: 
+    PhysListEmPenelope(const G4String& name = "Penelope");
+   ~PhysListEmPenelope();
+
+  public: 
+    // This method is dummy for physics
+    void ConstructParticle() {};
+ 
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type 
+    void ConstructProcess();
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
+
+
+
+
+
+
+
+

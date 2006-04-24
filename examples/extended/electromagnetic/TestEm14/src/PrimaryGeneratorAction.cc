@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2006-01-06 13:39:00 maire Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.2 2006-04-24 15:42:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,9 +42,9 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
 {
   particleGun  = new G4ParticleGun(1);
   G4ParticleDefinition* particle
-           = G4ParticleTable::GetParticleTable()->FindParticle("mu+");
+           = G4ParticleTable::GetParticleTable()->FindParticle("gamma");
   particleGun->SetParticleDefinition(particle);
-  particleGun->SetParticleEnergy(10*TeV);    
+  particleGun->SetParticleEnergy(1*MeV);    
   particleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
 }
 

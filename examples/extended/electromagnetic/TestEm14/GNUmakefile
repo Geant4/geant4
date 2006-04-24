@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2006-01-06 13:39:00 maire Exp $
+# $Id: GNUmakefile,v 1.2 2006-04-24 15:42:26 maire Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -33,7 +33,6 @@ include $(G4INSTALL)/config/binmake.gmk
 visclean:
 	rm -f g4*.prim g4*.eps g4*.wrl
 	rm -f .DAWN_*
-
+	
 histclean:
 	rm ${G4WORKDIR}/tmp/${G4SYSTEM}/${G4TARGET}/HistoManager.o
-	rm ${G4WORKDIR}/tmp/${G4SYSTEM}/${G4TARGET}/RunAction.o

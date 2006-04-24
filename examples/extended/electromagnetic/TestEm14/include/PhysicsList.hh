@@ -20,8 +20,13 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.1 2006-01-06 13:39:00 maire Exp $
+//
+// $Id: PhysicsList.hh,v 1.2 2006-04-24 15:42:50 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// 14.10.02 (V.Ivanchenko) provide modular list on base of old PhysicsList
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,7 +56,7 @@ class PhysicsList: public G4VModularPhysicsList
     void SetCutForGamma(G4double);
     void SetCutForElectron(G4double);
     void SetCutForPositron(G4double);
-
+      
   private:
     G4double cutForGamma;
     G4double cutForElectron;
@@ -59,10 +64,9 @@ class PhysicsList: public G4VModularPhysicsList
     G4double currentDefaultCut;
     
     G4VPhysicsConstructor*  emPhysicsList;
-    G4VPhysicsConstructor*  muNuclPhysicsList;
     G4String emName;
-
-    PhysicsListMessenger* pMessenger;
+    
+    PhysicsListMessenger* pMessenger;         
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

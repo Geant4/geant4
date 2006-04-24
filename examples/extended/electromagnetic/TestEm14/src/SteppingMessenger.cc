@@ -20,51 +20,47 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoMessenger.hh,v 1.2 2006-04-24 15:42:50 maire Exp $
+// $Id: SteppingMessenger.cc,v 1.1 2006-04-24 15:44:50 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
+// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef HistoMessenger_h
-#define HistoMessenger_h 1
+#include "SteppingMessenger.hh"
 
-#include "G4UImessenger.hh"
-#include "globals.hh"
+#include "SteppingAction.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class HistoManager;
-class G4UIdirectory;
-class G4UIcommand;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithADouble.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class HistoMessenger: public G4UImessenger
+SteppingMessenger::SteppingMessenger(SteppingAction* StpAct)
+:stepAction(StpAct)
+{ 
+  stepDir = new G4UIdirectory("/testem/step/");
+  stepDir ->SetGuidance("stepping action control");
+      
+  destepCmd = new G4UIcmdWithADouble("/testem/step/maxEdepForPlot",this);
+  destepCmd->SetGuidance("Set max fraction of edep for plotting final state");
+  destepCmd->SetParameterName("fract",false);
+  destepCmd->SetRange("fract>0.&&fract<=1.");  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+SteppingMessenger::~SteppingMessenger()
 {
-  public:
-
-   HistoMessenger(HistoManager* );
-  ~HistoMessenger();
-
-   void SetNewValue(G4UIcommand* ,G4String );
-
-  private:
-
-   HistoManager*           histoManager;
-   
-   G4UIdirectory*          histoDir;   
-   G4UIcmdWithAString*     factoryCmd;
-   G4UIcmdWithAString*     typeCmd;
-   G4UIcmdWithAString*     optionCmd;   
-   G4UIcommand*            histoCmd;
-   G4UIcmdWithAnInteger*   rmhistoCmd;
-
-};
+  delete destepCmd;
+  delete stepDir;   
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void SteppingMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{ 
+  if (command == destepCmd)
+    {stepAction->SetMaxEdepForPlot(destepCmd->GetNewDoubleValue(newValue));}
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

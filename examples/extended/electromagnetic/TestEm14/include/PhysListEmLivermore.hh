@@ -20,31 +20,45 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StackingAction.hh,v 1.1 2006-01-06 13:39:00 maire Exp $
+//
+// $Id: PhysListEmLivermore.hh,v 1.1 2006-04-24 15:44:50 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef StackingAction_h
-#define StackingAction_h 1
+#ifndef PhysListEmLivermore_h
+#define PhysListEmLivermore_h 1
 
-#include "G4UserStackingAction.hh"
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class G4Track;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class PhysListEmLivermore : public G4VPhysicsConstructor
+{
+  public: 
+    PhysListEmLivermore(const G4String& name = "Livermore");
+   ~PhysListEmLivermore();
+
+  public: 
+    // This method is dummy for physics
+    void ConstructParticle() {};
+ 
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type 
+    void ConstructProcess();
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class StackingAction : public G4UserStackingAction
-{
-  public:
-
-    StackingAction();
-   ~StackingAction();
-
-    G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* );
-    
-};
-
 #endif
+
+
+
+
+
+
+
+

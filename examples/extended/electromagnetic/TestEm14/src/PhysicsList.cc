@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: PhysicsList.cc,v 1.1 2006-01-06 13:39:00 maire Exp $
+// 
+// $Id: PhysicsList.cc,v 1.2 2006-04-24 15:42:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -29,34 +29,36 @@
 
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
-
+ 
 #include "PhysListEmStandard.hh"
 #include "PhysListEmG4v52.hh"
-#include "MuNuclearBuilder.hh"
+
+#include "PhysListEmLivermore.hh"
+#include "PhysListEmPenelope.hh"
 
 #include "G4LossTableManager.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() : G4VModularPhysicsList()
+PhysicsList::PhysicsList() 
+: G4VModularPhysicsList()
 {
-  SetVerboseLevel(1);
-  pMessenger = new PhysicsListMessenger(this);
-
-  // cuts
+  G4LossTableManager::Instance();
+  
   currentDefaultCut   = 1.0*mm;
   cutForGamma         = currentDefaultCut;
   cutForElectron      = currentDefaultCut;
   cutForPositron      = currentDefaultCut;
-  
+
+  pMessenger = new PhysicsListMessenger(this);
+
+  SetVerboseLevel(1);
+
   // EM physics
   emName = G4String("standard");
   emPhysicsList = new PhysListEmStandard(emName);
 
-  muNuclPhysicsList = 0;
-  
-  // instanciate EnergyLossTable
-  G4LossTableManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,8 +71,10 @@ PhysicsList::~PhysicsList()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // Bosons
+#include "G4ChargedGeantino.hh"
 #include "G4Geantino.hh"
 #include "G4Gamma.hh"
+#include "G4OpticalPhoton.hh"
 
 // leptons
 #include "G4MuonPlus.hh"
@@ -115,9 +119,13 @@ void PhysicsList::ConstructParticle()
 {
 // pseudo-particles
   G4Geantino::GeantinoDefinition();
+  G4ChargedGeantino::ChargedGeantinoDefinition();
   
 // gamma
   G4Gamma::GammaDefinition();
+  
+// optical photon
+  G4OpticalPhoton::OpticalPhotonDefinition();
 
 // leptons
   G4Electron::ElectronDefinition();
@@ -158,45 +166,58 @@ void PhysicsList::ConstructParticle()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4EmProcessOptions.hh"
+
 void PhysicsList::ConstructProcess()
 {
-  // transportation
+  // Transportation
   //
   AddTransportation();
-  
-  // electromagnetic Physics List
+
+  // Electromagnetic physics list
   //
   emPhysicsList->ConstructProcess();
-  if(muNuclPhysicsList) muNuclPhysicsList->ConstructProcess();
+  
+  // Em options
+  //
+  G4EmProcessOptions emOptions;
+  emOptions.SetStepFunction(1., 1*mm);  
+  emOptions.SetIntegral(false);
+  emOptions.SetLossFluctuations(false);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel>1) {
+  if (verboseLevel>0) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
-
+  
   if (name == emName) return;
 
-  if (name == "standard" && name != emName) {
+  if (name == "standard") {
 
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
-
+    
   } else if (name == "g4v52") {
-
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmG4v52(name);
-
-  } else if (name == "muNucl") {
-    muNuclPhysicsList = new MuNuclearBuilder(name);
-
+    
+  } else if (name == "livermore") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmLivermore(name);
+    
+  } else if (name == "penelope") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmPenelope(name);
+            
   } else {
-
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
            << " is not defined"
            << G4endl;
@@ -205,28 +226,20 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::SetCuts()
-{
-     
-  if (verboseLevel >0){
-    G4cout << "PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }  
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 
+void PhysicsList::SetCuts()
+{    
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");   
-    
-  if (verboseLevel>0) DumpCutValuesTable();
+  SetCutValue(cutForPositron, "e+");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
 
 void PhysicsList::SetCutForGamma(G4double cut)
 {
@@ -251,4 +264,3 @@ void PhysicsList::SetCutForPositron(G4double cut)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

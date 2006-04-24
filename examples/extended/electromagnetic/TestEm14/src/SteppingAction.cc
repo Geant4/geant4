@@ -20,57 +20,93 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.1 2006-01-06 13:39:00 maire Exp $
+// $Id: SteppingAction.cc,v 1.2 2006-04-24 15:42:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
+#include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "HistoManager.hh"
+#include "SteppingMessenger.hh"
 
 #include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(RunAction* RuAct, HistoManager* Hist)
-  :runAction(RuAct), histoManager(Hist)
-{ }
+SteppingAction::SteppingAction(PrimaryGeneratorAction* prim,
+                               RunAction* RuAct, HistoManager* Hist)
+:primary(prim),runAction(RuAct), histoManager(Hist)
+{
+  stepMessenger = new SteppingMessenger(this);
+  fract = 0.1;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::~SteppingAction()
-{ }
+{
+  delete stepMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
-{  
+{
   G4StepPoint* endPoint = aStep->GetPostStepPoint();
   G4String procName = endPoint->GetProcessDefinedStep()->GetProcessName();
+  G4double stepLength = aStep->GetStepLength();
 
-  //count processes 
-  //    
-  runAction->CountProcesses(procName);
-  
-  //plot energy transfered
+  //count real processes (at least 1 secondary) and sum track length
   //
-  G4StepPoint* startPoint = aStep->GetPreStepPoint();
-  G4double E0 = startPoint->GetKineticEnergy();
+  G4TrackVector* secondary = fpSteppingManager->GetSecondary();
+  G4bool transmit = (endPoint->GetStepStatus() <= fGeomBoundary);  
+  if ((*secondary).size() > 0) { 
+    runAction->CountProcesses(procName);  
+    runAction->SumTrack(stepLength);
+  }
+  else if (transmit) runAction->CountProcesses(procName);
+  
+  //plot final state (only if continuous energy loss is small enough)
+  //
   G4double edep = aStep->GetTotalEnergyDeposit();
-  G4double E1 = E0 - edep;
-  G4double E2 = endPoint->GetKineticEnergy();
-  G4double etrans = E1 - E2;
-  G4double lgepsE = 0.;
-  if (etrans > 0.) lgepsE = std::log10(etrans/E1);
+  G4double E0 = primary->GetParticleGun()->GetParticleEnergy();
+  if (edep < fract*E0) {
+   
+    //scattered primary particle
+    //
+    G4int id = 1;
+    if (aStep->GetTrack()->GetTrackStatus() == fAlive) {
+      G4double energy = endPoint->GetKineticEnergy();      
+      histoManager->FillHisto(id,energy);
 
-  G4int id = 0;
-  if (procName == "muIoni")     id = 1; 
-  if (procName == "muPairProd") id = 2;
-  if (procName == "muBrems")    id = 3;
-  if (procName == "muNucl")     id = 4;    
-  histoManager->FillHisto(id,lgepsE);		       
+      id = 2;
+      G4ThreeVector direction = endPoint->GetMomentumDirection();
+      G4double costeta = direction.x();
+      histoManager->FillHisto(id,costeta);     
+    }  
+  
+    //secondaries
+    //
+    //G4TrackVector* secondary = fpSteppingManager->GetSecondary();
+    for (size_t lp=0; lp<(*secondary).size(); lp++) {
+      G4double charge = (*secondary)[lp]->GetDefinition()->GetPDGCharge();
+      if (charge != 0.) id = 3; else id = 5;
+      G4double energy = (*secondary)[lp]->GetKineticEnergy();
+      histoManager->FillHisto(id,energy);
+
+      id++;
+      G4ThreeVector direction = (*secondary)[lp]->GetMomentumDirection();      
+      G4double costeta = direction.x();
+      histoManager->FillHisto(id,costeta);         
+    }
+  }
+         
+  // kill event after first interaction
+  //
+  G4RunManager::GetRunManager()->AbortEvent();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

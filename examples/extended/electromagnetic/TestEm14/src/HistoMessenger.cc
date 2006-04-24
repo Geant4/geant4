@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoMessenger.cc,v 1.1 2006-01-06 13:39:00 maire Exp $
+// $Id: HistoMessenger.cc,v 1.2 2006-04-24 15:42:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -94,7 +94,7 @@ HistoMessenger::~HistoMessenger()
 {
   delete rmhistoCmd;
   delete histoCmd;
-  delete optionCmd;   
+  delete optionCmd; 
   delete typeCmd;  
   delete factoryCmd;
   delete histoDir;

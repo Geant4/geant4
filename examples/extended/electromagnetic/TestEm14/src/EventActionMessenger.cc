@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: EventActionMessenger.cc,v 1.1 2006-01-06 13:39:00 maire Exp $
+// $Id: EventActionMessenger.cc,v 1.2 2006-04-24 15:42:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,7 +39,7 @@ EventActionMessenger::EventActionMessenger(EventAction* EvAct)
 :eventAction(EvAct)
 { 
   eventDir = new G4UIdirectory("/testem/event/");
-  eventDir ->SetGuidance("physics list");
+  eventDir ->SetGuidance("event control");
       
   PrintCmd = new G4UIcmdWithAnInteger("/testem/event/printModulo",this);
   PrintCmd->SetGuidance("Print events modulo n");

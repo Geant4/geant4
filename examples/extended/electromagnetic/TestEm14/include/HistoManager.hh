@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.1 2006-01-06 13:39:00 maire Exp $
+// $Id: HistoManager.hh,v 1.2 2006-04-24 15:42:50 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,13 +36,12 @@
 namespace AIDA {
  class IAnalysisFactory;
  class ITree;
- class IHistogramFactory;
  class IHistogram1D;
 }
 
 class HistoMessenger;
 
-const G4int MaxHisto = 5;
+const G4int MaxHisto = 7;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,15 +60,8 @@ class HistoManager
     void SetHisto (G4int,G4int,G4double,G4double,const G4String& unit="none");  
     void FillHisto(G4int id, G4double e, G4double weight = 1.0);
     void RemoveHisto (G4int);
-    
-    AIDA::IHistogramFactory* GetHistogramFactory()  {return hf;}
-    AIDA::IHistogram1D*      GetHisto(G4int id)     {return histo[id];}
-                   
-    G4bool    HistoExist  (G4int id) {return exist[id];} 
-    G4String  GetTitle    (G4int id) {return Title[id];}
-    G4int     GetNbins    (G4int id) {return Nbins[id];}
-    G4double  GetVmin     (G4int id) {return Vmin[id];}
-    G4double  GetVmax     (G4int id) {return Vmax[id];}
+
+    G4bool    HistoExist  (G4int id) {return exist[id];}
     G4double  GetHistoUnit(G4int id) {return Unit[id];}
     G4double  GetBinWidth (G4int id) {return Width[id];}
 
@@ -80,7 +72,6 @@ class HistoManager
     G4String                 fileOption;    
     AIDA::IAnalysisFactory*  af;    
     AIDA::ITree*             tree;
-    AIDA::IHistogramFactory* hf;
     AIDA::IHistogram1D*      histo[MaxHisto];
     G4bool                   exist[MaxHisto];
     G4String                 Label[MaxHisto];

@@ -20,8 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: TestEm14.cc,v 1.1 2006-01-06 13:39:00 maire Exp $
+// $Id: TestEm14.cc,v 1.2 2006-04-24 15:42:45 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,12 +35,11 @@
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
+#include "SteppingVerbose.hh"
 
 #include "RunAction.hh"
 #include "EventAction.hh"
 #include "SteppingAction.hh"
-#include "SteppingVerbose.hh"
-#include "StackingAction.hh"
 #include "HistoManager.hh"
 
 #ifdef G4VIS_USE
@@ -74,36 +72,36 @@ int main(int argc,char** argv) {
    visManager->Initialize();
   #endif
   
-  HistoManager* histo = new HistoManager();
+  HistoManager*  histo = new HistoManager();
       
   // set user action classes
   RunAction* run;  
   runManager->SetUserAction(run = new RunAction(det,prim,histo)); 
   runManager->SetUserAction(new EventAction);
-  runManager->SetUserAction(new SteppingAction(run,histo));
-  runManager->SetUserAction(new StackingAction);
-  
-  // Start execution
-  //      
-  if (argc > 1) {	// execute an argument macro file if exist
-    G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    G4UImanager::GetUIpointer()->ApplyCommand(command+fileName);
-    
-  } else {		// start interactive session
-    G4UIsession* session = 0;
+  runManager->SetUserAction(new SteppingAction(prim,run,histo));
+   
+  // get the pointer to the User Interface manager 
+    G4UImanager* UI = G4UImanager::GetUIpointer();  
+
+  if (argc==1)   // Define UI terminal for interactive mode  
+    { 
+     G4UIsession * session = 0;
 #ifdef G4UI_USE_TCSH
       session = new G4UIterminal(new G4UItcsh);      
 #else
       session = new G4UIterminal();
-#endif         
-    session->SessionStart();
-    delete session;
-  }
+#endif     
+     session->SessionStart();
+     delete session;
+    }
+  else           // Batch mode
+    { 
+     G4String command = "/control/execute ";
+     G4String fileName = argv[1];
+     UI->ApplyCommand(command+fileName);
+    }
 
-  // job termination
-  //
- 
+  // job termination     
 #ifdef G4VIS_USE
  delete visManager;
 #endif
