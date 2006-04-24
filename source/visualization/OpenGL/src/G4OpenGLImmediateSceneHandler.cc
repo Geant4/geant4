@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.19 2006-04-19 11:59:13 allison Exp $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.20 2006-04-24 07:28:38 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,8 @@
 #include "G4OpenGLImmediateSceneHandler.hh"
 
 #include "G4LogicalVolume.hh"
+
+#include <limits>
 
 G4OpenGLImmediateSceneHandler::G4OpenGLImmediateSceneHandler (G4VGraphicsSystem& system,
 						const G4String& name):
