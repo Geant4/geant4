@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.109 2005-12-12 09:08:21 gcosmo Exp $
+# $Id: binmake.gmk,v 1.110 2006-04-24 10:22:58 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -292,9 +292,18 @@ ifdef transform-RPath
 # Invoke system specific transformation of 
 include $(G4INSTALL)/config/sys/$(G4SYSTEM)-runpath.gmk
 endif
+
+# Define target object extension
+ifeq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+  # Unix
+  G4TARGOBJEXT := o
+else
+  # Windows
+  G4TARGOBJEXT := OBJ   
+endif
 	
 sources := $(wildcard $(G4TARGET).cc)
-objects := $(patsubst %.cc,$(G4TMPDIR)/exe/%.o,$(sources))
+objects := $(patsubst %.cc,$(G4TMPDIR)/exe/%.$(G4TARGOBJEXT),$(sources))
 dependencies := $(patsubst %.cc,$(G4TMPDIR)/exe/%.d,$(sources))
 
 LINK_DEPENDENCIES := $(G4TMPDIR)/exe/obj.last $(EXTRA_LINK_DEPENDENCIES)
@@ -344,15 +353,15 @@ $(G4TMPDIR)/exe/obj.last: $(objects)
 endif
 	@touch $@
 
-# Make the $(G4TARGET).o file.
-$(G4TMPDIR)/exe/$(G4TARGET).o : $(G4TARGET).cc
+# Make the $(G4TARGET).$(G4TARGOBJEXT) file.
+$(G4TMPDIR)/exe/$(G4TARGET).$(G4TARGOBJEXT) : $(G4TARGET).cc
 ifdef CPPVERBOSE
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(APPFLAGS) \
-	 -c $(OUT_OBJ)$(G4TMPDIR)/exe/$(G4TARGET).o $(G4TARGET).cc
+	 -c $(OUT_OBJ)$(G4TMPDIR)/exe/$(G4TARGET).$(G4TARGOBJEXT) $(G4TARGET).cc
 else
 	@echo Compiling $(G4TARGET).cc ...
 	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(APPFLAGS) \
-	 -c $(OUT_OBJ)$(G4TMPDIR)/exe/$(G4TARGET).o $(G4TARGET).cc
+	 -c $(OUT_OBJ)$(G4TMPDIR)/exe/$(G4TARGET).$(G4TARGOBJEXT) $(G4TARGET).cc
 endif
 
 GPPFLAGS := "-M"
@@ -384,7 +393,7 @@ $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
 	@echo Making dependency for file $< ...
 	@set -e;\
 	g++ $(GPPFLAGS) $(CPPFLAGS) -w $< |\
-	sed 's!$(G4TARGET)\.o!$(G4TMPDIR)/exe/& $@!' >$@;\
+	sed 's!$(G4TARGET)\.$(G4TARGOBJEXT)!$(G4TMPDIR)/exe/& $@!' >$@;\
 	[ -s $@ ] || rm -f $@
 ifneq ($(dependencies),)
 -include $(dependencies)
