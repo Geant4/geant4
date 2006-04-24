@@ -70,7 +70,7 @@ G4LElasticB::G4LElasticB(G4double elim, G4double plim) : G4HadronicInteraction()
 {
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( DBL_MAX );
-  verboseLevel= 0;
+  verboseLevel= 1;
   plablim     = plim;
   ekinlim     = elim;
   qElastic    = new G4QElastic();
@@ -102,6 +102,7 @@ G4LElasticB::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucle
   G4double plab = aParticle->GetTotalMomentum();
   if (verboseLevel > 1) 
     G4cout << "G4LElasticB::DoIt: Incident particle plab=" << plab/GeV << " GeV/c " 
+	   << " ekin(MeV) = " << aParticle->GetKineticEnergy()/MeV << "  " 
 	   << aParticle->GetDefinition()->GetParticleName() << G4endl;
 
   // Scattered particle referred to axis of incident particle

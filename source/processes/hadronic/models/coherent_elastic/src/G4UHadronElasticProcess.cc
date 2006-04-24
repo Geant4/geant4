@@ -46,11 +46,12 @@
 G4UHadronElasticProcess::G4UHadronElasticProcess(const G4String& processName, G4bool fl)
   : G4HadronicProcess(processName), flagHP(fl)
 {
-  AddDataSet(new G4HadronElasticDataSet);
   store = G4HadronicProcess::GetCrossSectionDataStore();
+  AddDataSet(new G4HadronElasticDataSet);
   qCManager   = G4QElasticCrossSection::GetPointer();
   theProton = G4Proton::Proton();
   theNeutron = G4Neutron::Neutron();
+  thEnergy = 1.*keV;
   verboseLevel= 1;
 }
 
@@ -64,18 +65,17 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
   theParticle = &aParticleType;
   pPDG = theParticle->GetPDGEncoding();
 
+  if(verboseLevel>1) 
+    G4cout << "G4UHadronElasticProcess for " << theParticle->GetParticleName() 
+	   << G4endl; 
+
   // Create CHIPS World with 234 particles
   // G4QCHIPSWorld::Get()->GetParticles(234); 
 
   if(theParticle == theNeutron && flagHP) 
     AddDataSet(new G4NeutronHPElasticData());
 
-  G4HadronicProcess::GetCrossSectionDataStore()
-    ->BuildPhysicsTable(aParticleType);
-
-  if(verboseLevel>1) 
-    G4cout << "G4UHadronElasticProcess for " << theParticle->GetParticleName() 
-	   << G4endl; 
+  store->BuildPhysicsTable(aParticleType);
 }
 
 G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track, 
@@ -85,7 +85,12 @@ G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track,
   const G4DynamicParticle* dp = track.GetDynamicParticle();
   const G4Material* material = track.GetMaterial();
   cross = 0.0;
-  G4double x;
+  G4double x = DBL_MAX;
+
+  // The process is effective only above the threshold
+  if(dp->GetKineticEnergy() < thEnergy) return x;
+
+  // Compute cross sesctions
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
   G4double temp = material->GetTemperature();
@@ -103,7 +108,8 @@ G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track,
     G4int iz = G4int(elm->GetZ());
 
     // CHIPS cross sections
-    if(iz <= 2 && theParticle == theProton || iz == 1 && theParticle == theNeutron) {
+    if((iz <= 2 && theParticle == theProton) || 
+       (iz == 1 && theParticle == theNeutron)) {
       G4double momentum = dp->GetTotalMomentum();
       if(iz == 1) {
 	G4IsotopeVector* isv = elm->GetIsotopeVector(); 
@@ -120,7 +126,7 @@ G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track,
 		G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 1, N= " 
 		       << N << G4endl; 
 	      G4double y = ab[j]*
-		qCManager->GetCrossSection(true,momentum,1,N,pPDG);
+		qCManager->GetCrossSection(false,momentum,1,N,pPDG);
 	      xsecH[N] += y;
 	      x += y;
 	    }
@@ -129,14 +135,14 @@ G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track,
 	  if(verboseLevel>1) 
 	    G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 1, N=0 " 
 		   << G4endl; 
-	  x = qCManager->GetCrossSection(true,momentum,1,0,pPDG);
+	  x = qCManager->GetCrossSection(false,momentum,1,0,pPDG);
 	  xsecH[0] += x;
 	}
       } else {
 	if(verboseLevel>1) 
 	  G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 2, N=2 " 
 		 << G4endl; 
-	x = qCManager->GetCrossSection(true,momentum,2,2,pPDG);
+	x = qCManager->GetCrossSection(false,momentum,2,2,pPDG);
       }
     } else {
       if(verboseLevel>1) 
@@ -169,7 +175,11 @@ G4VParticleChange* G4UHadronElasticProcess::PostStepDoIt(
 				  const G4Track& track, 
 				  const G4Step& step)
 {
+  SetDispatch(this);
+
   aParticleChange.Initialize(track);
+  if(cross < DBL_MIN) return G4VDiscreteProcess::PostStepDoIt(track,step);
+
   G4double kineticEnergy = track.GetKineticEnergy();
   G4Material* material = track.GetMaterial();
 
@@ -209,9 +219,8 @@ G4VParticleChange* G4UHadronElasticProcess::PostStepDoIt(
       A = G4double(elm->GetIsotope(j)->GetN());
     }
   }
-
   G4HadronicInteraction* hadi = 
-		ChooseHadronicInteraction( kineticEnergy, material, elm );
+    ChooseHadronicInteraction( kineticEnergy, material, elm);
 
   // Initialize the hadronic projectile from the track
   G4HadProjectile thePro(track);
@@ -275,6 +284,5 @@ IsApplicable(const G4ParticleDefinition& aParticleType)
 void G4UHadronElasticProcess::
 DumpPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
-  G4HadronicProcess::GetCrossSectionDataStore()
-    ->DumpPhysicsTable(aParticleType);
+  store->DumpPhysicsTable(aParticleType);
 }

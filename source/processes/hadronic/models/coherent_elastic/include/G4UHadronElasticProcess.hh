@@ -81,6 +81,7 @@ private:
   G4double        xsec[40];
   G4double        xsecH[2];
   G4double        cross;
+  G4double        thEnergy;
 
   G4int    pPDG;
   G4bool   flagHP;
