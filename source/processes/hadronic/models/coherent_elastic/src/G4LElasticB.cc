@@ -42,6 +42,7 @@
 // 13-Apr-06 V.Ivanchenko move to coherent_elastic subdirectory; remove
 //           charge exchange; remove limitation on incident momentum;
 //           add s-wave regim below some momentum        
+// 24-Apr-06 V.Ivanchenko add neutron scattering on hydrogen from CHIPS
 //
 
 #include "G4LElasticB.hh"
@@ -69,7 +70,7 @@ G4LElasticB::G4LElasticB(G4double elim, G4double plim) : G4HadronicInteraction()
 {
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( DBL_MAX );
-  verboseLevel= 0;
+  verboseLevel= 2;
   plablim     = plim;
   ekinlim     = elim;
   qElastic    = new G4QElastic();
@@ -142,12 +143,18 @@ G4LElasticB::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucle
 
   // Choose generator
   G4ElasticGenerator gtype = fLElastic;
-  if((theParticle == theProton) &&
-     (theDef == theProton || theDef == theDeuteron || theDef == theAlpha) &&
-     qCManager->GetCrossSection(false,plab,Z,N,projPDG) > 0.0) 
+  if (theParticle == theProton && Z <= 2) {
     gtype = fQElastic;
-  else if(plab < plablim) gtype = fSWave;
+    if(Z == 1 && N == 2) N = 1;
+    else if (Z == 2 && N == 1) N = 2;
+  } else if(theParticle == theNeutron && Z == 1) {
+    gtype = fQElastic;
+    N = 0;
+  } else if(plab < plablim) {
+    gtype = fSWave;
+  }
 
+  // Sample t
   if(gtype == fSWave)         t = G4UniformRand()*tmax;
   else if(gtype == fLElastic) t = SampleT(ptotgev,m1,m2,atno2);
   else if(gtype == fQElastic) t = GeV*qCManager->GetExchangeT(Z,N,projPDG);

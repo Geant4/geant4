@@ -26,6 +26,7 @@
 // Created 21 April 2006 V.Ivanchenko
 //  
 // Modified:
+// 24-Apr-06 V.Ivanchenko add neutron scattering on hydrogen from CHIPS
 //
 //
 
@@ -34,6 +35,7 @@
 #include "G4HadronElasticDataSet.hh"
 #include "G4VQCrossSection.hh"
 #include "G4QElasticCrossSection.hh"
+#include "G4QCHIPSWorld.hh"
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
 #include "G4IsotopeVector.hh"
@@ -49,6 +51,7 @@ G4UHadronElasticProcess::G4UHadronElasticProcess(const G4String& processName, G4
   qCManager   = G4QElasticCrossSection::GetPointer();
   theProton = G4Proton::Proton();
   theNeutron = G4Neutron::Neutron();
+  verboseLevel= 2;
 }
 
 G4UHadronElasticProcess::~G4UHadronElasticProcess()
@@ -61,11 +64,18 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
   theParticle = &aParticleType;
   pPDG = theParticle->GetPDGEncoding();
 
+  // Create CHIPS World with 234 particles
+  // G4QCHIPSWorld::Get()->GetParticles(234); 
+
   if(theParticle == theNeutron && flagHP) 
     AddDataSet(new G4NeutronHPElasticData());
 
   G4HadronicProcess::GetCrossSectionDataStore()
     ->BuildPhysicsTable(aParticleType);
+
+  if(verboseLevel>1) 
+    G4cout << "G4UHadronElasticProcess for " << theParticle->GetParticleName() 
+	   << G4endl; 
 }
 
 G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track, 
@@ -82,12 +92,18 @@ G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track,
   G4int nelm   = material->GetNumberOfElements();
   xsecH[0] = 0.0;
   xsecH[1] = 0.0;
+  if(verboseLevel>1) 
+    G4cout << "G4UHadronElasticProcess get mfp for " 
+	   << theParticle->GetParticleName() 
+	   << "  p(GeV)= " << dp->GetTotalMomentum()/GeV
+	   << " in " << material->GetName()
+	   << G4endl; 
   for (G4int i=0; i<nelm; i++) {
     const G4Element* elm = (*theElementVector)[i];
     G4int iz = G4int(elm->GetZ());
 
     // CHIPS cross sections
-    if(iz <= 2 && theParticle == theProton) {
+    if(iz <= 2 && theParticle == theProton || iz == 1 && theParticle == theNeutron) {
       G4double momentum = dp->GetTotalMomentum();
       if(iz == 1) {
 	G4IsotopeVector* isv = elm->GetIsotopeVector(); 
@@ -98,7 +114,11 @@ G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track,
 	  x = 0.0;
 	  for(G4int j=0; j<ni; j++) {
             G4int N = elm->GetIsotope(j)->GetN() - 1;
+	    if(theParticle == theNeutron) N = 0;
             if(N == 0 || N == 1) {
+	      if(verboseLevel>1) 
+		G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 1, N= " 
+		       << N << G4endl; 
 	      G4double y = ab[j]*
 		qCManager->GetCrossSection(true,momentum,1,N,pPDG);
 	      xsecH[N] += y;
@@ -106,18 +126,30 @@ G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track,
 	    }
 	  }
 	} else {
+	  if(verboseLevel>1) 
+	    G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 1, N=0 " 
+		   << G4endl; 
 	  x = qCManager->GetCrossSection(true,momentum,1,0,pPDG);
 	  xsecH[0] += x;
 	}
       } else {
+	if(verboseLevel>1) 
+	  G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 2, N=2 " 
+		 << G4endl; 
 	x = qCManager->GetCrossSection(true,momentum,2,2,pPDG);
       }
     } else {
+      if(verboseLevel>1) 
+	G4cout << "G4UHadronElasticProcess compute GHAD CS for element " 
+	       << elm->GetName() 
+	       << G4endl; 
       x = GetMicroscopicCrossSection(dp, elm, temp);
     }
     cross += theAtomNumDensityVector[i]*x;
     xsec[i] = cross;
   }
+  if(verboseLevel>1) 
+    G4cout << "G4UHadronElasticProcess cross(mb)= " << cross/millibarn << G4endl;
   if(cross > DBL_MIN) x = 1./cross;
   else x = DBL_MAX;
 
@@ -184,6 +216,10 @@ G4VParticleChange* G4UHadronElasticProcess::PostStepDoIt(
   // Initialize the hadronic projectile from the track
   G4HadProjectile thePro(track);
   targetNucleus.SetParameters(A, Z);
+  if(verboseLevel>1) 
+    G4cout << "G4UHadronElasticProcess for " << theParticle->GetParticleName() 
+	   << " Target Z= " << Z 
+	   << " A= " << A << G4endl; 
 
   aParticleChange.Initialize(track);
   G4HadFinalState* result = hadi->ApplyYourself(thePro, targetNucleus);
