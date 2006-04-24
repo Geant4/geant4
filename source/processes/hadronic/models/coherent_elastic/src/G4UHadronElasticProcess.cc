@@ -35,7 +35,7 @@
 #include "G4HadronElasticDataSet.hh"
 #include "G4VQCrossSection.hh"
 #include "G4QElasticCrossSection.hh"
-#include "G4QCHIPSWorld.hh"
+//#include "G4QCHIPSWorld.hh"
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
 #include "G4IsotopeVector.hh"
@@ -51,7 +51,7 @@ G4UHadronElasticProcess::G4UHadronElasticProcess(const G4String& processName, G4
   qCManager   = G4QElasticCrossSection::GetPointer();
   theProton = G4Proton::Proton();
   theNeutron = G4Neutron::Neutron();
-  verboseLevel= 2;
+  verboseLevel= 1;
 }
 
 G4UHadronElasticProcess::~G4UHadronElasticProcess()
