@@ -1,4 +1,4 @@
-$Id: History,v 1.44 2006-04-22 10:13:52 allison Exp $
+$Id: History,v 1.45 2006-04-24 07:37:31 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -25,9 +25,9 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
-22nd April 2006  John Allison
+22nd April 2006  John Allison (visman-V08-00-13)
 - Bug fix (workaround) for memory leak in CheckModel (bug #861).
-- Use printout for trajectory drawing and filtering
+- Implement PrintAvailableModels using improvement below.
 
 21st April 2006 Jane Tinslay
 - Improve printout for trajectory drawing and filtering
