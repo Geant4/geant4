@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.111 2006-04-24 10:31:16 gcosmo Exp $
+# $Id: binmake.gmk,v 1.112 2006-04-24 10:54:18 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -337,6 +337,8 @@ else
 	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) \
 	  -o $(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) \
 	  $(LDLIBS)
+	@if [ \( -f $(G4BINDIR)/$(G4TARGET) \) ]; then \
+	  echo "... Done!"; fi
 endif
 
 # Touch the versioning file
