@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.26 2006-04-19 14:28:53 allison Exp $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.27 2006-04-24 08:29:58 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -204,15 +204,27 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
 	  thisID->GetPhysicalVolume()->GetLogicalVolume()) {
 	// For each one previously found (if more than one, they must
 	// have different mothers)...
-	PVPath::const_reverse_iterator
-	  previousMotherID = ++(i->rbegin());
+	// Previously:
+	//   PVNodeID previousMotherID = ++(i->rbegin());
+	// Replace
+	//   previousMotherID == i->rend()
+	// by
+	//   i->size() <= 1
+	// Replace
+	//   previousMotherID != i->rend()
+	// by
+	//   i->size() > 1
+	// Replace
+	//   previousMotherID->
+	// by
+	//   (*i)[i->size() - 2].
 	if (motherID == drawnPVPath.rend() &&
-	    previousMotherID == i->rend())
+	    i->size() <= 1)
 	  ignore = true;  // Both have no mother.
 	if (motherID != drawnPVPath.rend() &&
-	    previousMotherID != i->rend() &&
+	    i->size() > 1 &&
 	    motherID->GetPhysicalVolume()->GetLogicalVolume() ==
-	    previousMotherID->GetPhysicalVolume()->GetLogicalVolume())
+	    (*i)[i->size() - 2].GetPhysicalVolume()->GetLogicalVolume())
 	  ignore = true;  // Same mother LV...
       }
     }
