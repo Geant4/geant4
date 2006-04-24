@@ -1,19 +1,19 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-01    (10-February-2006)
+ Geant4 version Name: geant4-08-00-ref-02    (10-February-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
 
-***** Table : Nb of materials = 14 *****
+***** Table : Nb of materials = 15 *****
 
- Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
+ Material:      Air     density:  1.290 kg/m3   temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
- Material: H2liquid     density: 70.800 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.923 m  
+ Material: H2liquid     density: 70.800 kg/m3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.923 m  
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    Water H_2O   density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
@@ -22,6 +22,9 @@
 
  Material: liquidArgon     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
    --->  Element: liquidArgon ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:   Carbon     density:  2.267 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  18.833 cm 
+   --->  Element: Carbon ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material: Aluminium     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
    --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
@@ -71,12 +74,17 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+  FukuiRenderer (DAWN)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  VRML1 (VRML1)
+  VRML2 (VRML2)
 
 Registering model factories...
 /run/verbose 2
 #
 /testem/det/setMat Water
-/testem/det/setSize 100 m
+/testem/det/setSize 1 cm
 #
 #### /testem/phys/addPhysics livermore
 #### /testem/phys/addPhysics penelope
@@ -84,15 +92,14 @@ Registering model factories...
 /run/initialize
 userDetector->Construct() start.
 
- The Box is 100 m   of Water
+ The Box is 1 cm  of Water
 Water is registered to the default region.
 physicsList->Construct() start.
 physicsList->Construct() start.
 physicsList->setCut() start.
 #
+/gun/particle gamma
 /gun/energy 100 keV
-#
-/testem/event/printModulo 10000
 #
 /run/beamOn 100000
 
@@ -108,18 +115,11 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
-GammaToMuPair:  gamma->mu+mu- Bethe Heitler process.
-        good cross section parametrization from 422.634 MeV to 1e+12 GeV for all Z.
-
-msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -131,7 +131,7 @@ eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -142,6 +142,89 @@ eBrem:   tables are built for  e+
 annihil:       Heilter model of formula of annihilation into 2 photons
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
+
+ionIoni:   tables are built for  GenericIon
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
+
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
+
+hIoni:   tables are built for  kaon+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
+
+hIoni:   tables are built for  kaon-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
 
 Region <DefaultRegionForTheWorld> -- appears in <Water> world volume
  Materials : Water 
@@ -193,24 +276,90 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=54s Real=8.4e+02s Sys=65s
+  User=8.06s Real=8.58s Sys=0.1s
 
- The run consists of 100000 gamma of 100 keV through 100 m   of Water (density: 1 g/cm3 )
+ The run consists of 100000 gamma of 100 keV through 1 cm  of Water (density: 1 g/cm3 )
 
- Frequency of process calls --->	compt : 98355	phot : 1645
+ Process calls frequency --->	Transportation = 84832	compt = 14926	phot = 242
 
- MeanFreePath:   	6.0844 cm  +- 6.0718 cm 	massic: 6.0844 g/cm2 
- AttenuationCoef:	0.16436 cm^-1 			massic: 0.16436 cm2/g
+ Nb of incident particles unaltered after 1 cm  of Water : 84832 over 100000 incident particles.  Ratio = 84.832 %
+ ---> CrossSection per volume:	0.1645 cm^-1 	CrossSection per mass: 0.1645 cm2/g
 
- Verification : mass_AttenuationCoef computed from processes (G4EmCalculator):
- 	   compt : 0.1623 cm2/g
- 	    phot : 0.0026853 cm2/g
-
- 	   Total : 0.16498 cm2/g
+ Verification from G4EmCalculator: 
+	compt= 0.1623 cm2/g	phot= 0.0026853 cm2/g	total= 0.16498 cm2/g
+	Expected ratio of transmitted particles= 84.791 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1388766644, 882092427
+ Current couple of seeds = 75158696, 405309931
+----------------------------------------
+#
+/gun/particle e-
+/gun/energy 100 MeV
+#
+/run/beamOn 100000
+
+Region <DefaultRegionForTheWorld> -- appears in <Water> world volume
+ Materials : Water 
+ Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 2.9018564 keV    e- 347.13789 keV    e+ 338.6954 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 1 start.
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 75158696, 405309931
+----------------------------------------
+Start Run processing.
+
+---> Begin of Event: 0
+
+---> Begin of Event: 10000
+
+---> Begin of Event: 20000
+
+---> Begin of Event: 30000
+
+---> Begin of Event: 40000
+
+---> Begin of Event: 50000
+
+---> Begin of Event: 60000
+
+---> Begin of Event: 70000
+
+---> Begin of Event: 80000
+
+---> Begin of Event: 90000
+Run terminated.
+Run Summary
+  Number of events processed : 100000
+  User=6.99s Real=7.21s Sys=0.08s
+
+ The run consists of 100000 e- of 100 MeV through 1 cm  of Water (density: 1 g/cm3 )
+
+ Process calls frequency --->	Transportation = 52908	eIoni = 18035	eBrem = 29057
+
+ Nb of incident particles unaltered after 1 cm  of Water : 52908 over 100000 incident particles.  Ratio = 52.908 %
+ ---> CrossSection per volume:	0.63662 cm^-1 	CrossSection per mass: 0.63662 cm2/g
+
+ Verification from G4EmCalculator: 
+	eIoni= 0.24497 cm2/g	eBrem= 0.39397 cm2/g	total= 0.63894 cm2/g
+	Expected ratio of transmitted particles= 52.785 %
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 765263512, 415249894
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // 
-// $Id: PhysicsList.cc,v 1.3 2006-04-14 16:26:43 maire Exp $
+// $Id: PhysicsList.cc,v 1.4 2006-04-24 16:48:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,8 +31,6 @@
 #include "PhysicsListMessenger.hh"
  
 #include "PhysListEmStandard.hh"
-#include "PhysListEmG4v52.hh"
-
 #include "PhysListEmLivermore.hh"
 #include "PhysListEmPenelope.hh"
 
@@ -201,12 +199,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
-    
-  } else if (name == "g4v52") {
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmG4v52(name);
-    
+      
   } else if (name == "livermore") {
     emName = name;
     delete emPhysicsList;

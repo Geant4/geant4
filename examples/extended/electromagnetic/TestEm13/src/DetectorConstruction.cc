@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.2 2006-04-14 16:26:43 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.3 2006-04-24 16:48:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,7 +46,7 @@
 DetectorConstruction::DetectorConstruction()
 :pBox(0), lBox(0), aMaterial(0)
 {
-  BoxSize = 100*m;
+  BoxSize = 1*cm;
   DefineMaterials();
   SetMaterial("Water");  
   detectorMessenger = new DetectorMessenger(this);

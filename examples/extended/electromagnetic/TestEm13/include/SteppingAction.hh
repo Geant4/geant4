@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.hh,v 1.2 2006-04-14 16:26:43 maire Exp $
+// $Id: SteppingAction.hh,v 1.3 2006-04-24 16:48:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,30 +32,20 @@
 #include "G4UserSteppingAction.hh"
 #include "globals.hh"
 
-class PrimaryGeneratorAction;
 class RunAction;
-class HistoManager;
-class SteppingMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-    SteppingAction(PrimaryGeneratorAction*, RunAction*, HistoManager*);
+    SteppingAction(RunAction*);
    ~SteppingAction();
 
     void UserSteppingAction(const G4Step*);
     
-    void SetMaxEdepForPlot(G4double value)  {fract = value;};
-    
   private:
-    PrimaryGeneratorAction* primary;
-    RunAction*              runAction;
-    HistoManager*           histoManager;
-    SteppingMessenger*      stepMessenger;
-    
-    G4double                fract;   //max edep for plotting hinal state
+    RunAction*  runAction;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

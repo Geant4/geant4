@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.1 2006-01-06 12:09:57 maire Exp $
+// $Id: RunAction.hh,v 1.2 2006-04-24 16:48:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,7 +37,6 @@
 
 class DetectorConstruction;
 class PrimaryGeneratorAction;
-class HistoManager;
 class G4Run;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,7 +44,7 @@ class G4Run;
 class RunAction : public G4UserRunAction
 {
   public:
-    RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
+    RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
    ~RunAction();
 
   public:
@@ -53,18 +52,11 @@ class RunAction : public G4UserRunAction
     void   EndOfRunAction(const G4Run*);
 
     void CountProcesses(G4String);
-    void SumTrack (G4double track) 
-         {totalCount++; sumTrack += track; sumTrack2 += track*track;};
                     
   private:
     DetectorConstruction*   detector;
     PrimaryGeneratorAction* primary;
     ProcessesCount*         ProcCounter;
-    HistoManager*           histoManager;
-        
-    G4int totalCount;      //all processes counter
-    G4double sumTrack;     //sum of trackLength
-    G4double sumTrack2;    //sum of trackLength*trackLength
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

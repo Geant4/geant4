@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2006-01-06 12:09:57 maire Exp $
+# $Id: GNUmakefile,v 1.2 2006-04-24 16:48:54 maire Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -14,12 +14,6 @@ endif
 .PHONY: all
 all: lib bin
 
-#### G4ANALYSIS_USE := true
-
-ifdef G4ANALYSIS_USE
-  CPPFLAGS += -DG4ANALYSIS_USE
-endif
-
 include $(G4INSTALL)/config/architecture.gmk
 
 ifdef G4ANALYSIS_USE
@@ -33,6 +27,3 @@ include $(G4INSTALL)/config/binmake.gmk
 visclean:
 	rm -f g4*.prim g4*.eps g4*.wrl
 	rm -f .DAWN_*
-	
-histclean:
-	rm ${G4WORKDIR}/tmp/${G4SYSTEM}/${G4TARGET}/HistoManager.o

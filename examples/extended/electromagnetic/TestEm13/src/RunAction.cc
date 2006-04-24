@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.4 2006-04-24 14:33:35 maire Exp $
+// $Id: RunAction.cc,v 1.5 2006-04-24 16:48:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -30,7 +30,6 @@
 
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "HistoManager.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
@@ -43,9 +42,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim,
-                     HistoManager* histo)
-  : detector(det), primary(prim), ProcCounter(0), histoManager(histo)
+RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
+  : detector(det), primary(prim), ProcCounter(0)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,12 +60,8 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   // save Rndm status
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
   CLHEP::HepRandom::showEngineStatus();
-
-  ProcCounter = new ProcessesCount;
-  totalCount = 0;
-  sumTrack = sumTrack2 = 0.;
   
-  histoManager->book();
+  ProcCounter = new ProcessesCount;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -93,8 +87,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4int  prec = G4cout.precision(5);
     
   G4Material* material = detector->GetMaterial();
-  G4double density = material->GetDensity();
-  G4int survive = 0;
+  G4double density  = material->GetDensity();
+  G4double tickness = detector->GetSize();
    
   G4ParticleDefinition* particle = 
                             primary->GetParticleGun()->GetParticleDefinition();
@@ -102,48 +96,46 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double energy = primary->GetParticleGun()->GetParticleEnergy();
   G4cout << "\n The run consists of " << NbOfEvents << " "<< Particle << " of "
          << G4BestUnit(energy,"Energy") << " through " 
-	 << G4BestUnit(detector->GetSize(),"Length") << " of "
+	 << G4BestUnit(tickness,"Length") << " of "
 	 << material->GetName() << " (density: " 
 	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
   
   //frequency of processes
+  G4int totalCount = 0;
+  G4int survive = 0;  
   G4cout << "\n Process calls frequency --->";
   for (size_t i=0; i< ProcCounter->size();i++) {
      G4String procName = (*ProcCounter)[i]->GetName();
-     G4int    count    = (*ProcCounter)[i]->GetCounter(); 
+     G4int    count    = (*ProcCounter)[i]->GetCounter();
+     totalCount += count; 
      G4cout << "\t" << procName << " = " << count;
      if (procName == "Transportation") survive = count;
   }
+  G4cout << G4endl;
+  if (totalCount == 0) return;
   
-  if (survive > 0) {
-    G4cout << "\n\n Nb of incident particles surviving after "
-           << G4BestUnit(detector->GetSize(),"Length") << " of "
-	   << material->GetName() << " : " << survive << G4endl;
-  }
+  G4double ratio = double(survive)/totalCount;
   
-  if (totalCount == 0) totalCount = 1;   //force printing anyway
+  G4cout << "\n Nb of incident particles unaltered after "
+         << G4BestUnit(tickness,"Length") << " of "
+	 << material->GetName() << " : " << survive 
+	 << " over " << totalCount << " incident particles."
+	 << "  Ratio = " << 100*ratio << " %" << G4endl;
   
-  //compute mean free path and related quantities
+  if (ratio == 0.) return;
+  
+  //compute cross section and related quantities
   //
-  G4double MeanFreePath = sumTrack /totalCount;     
-  G4double MeanTrack2   = sumTrack2/totalCount;     
-  G4double rms = std::sqrt(std::fabs(MeanTrack2 - MeanFreePath*MeanFreePath));
-  G4double CrossSection = 1./MeanFreePath;     
-  G4double massicMFP = MeanFreePath*density;
-  G4double massicCS  = 1./massicMFP;
+  G4double CrossSection = std::log(1./ratio)/tickness;     
+  G4double massicCS  = CrossSection/density;
    
-  G4cout << "\n\n MeanFreePath:\t"   << G4BestUnit(MeanFreePath,"Length")
-         << " +- "                   << G4BestUnit( rms,"Length")
-         << "\tmassic: "             << G4BestUnit(massicMFP, "Mass/Surface")
-         << "\n CrossSection:\t"     << CrossSection*cm << " cm^-1 "
-	 << "\t\t\tmassic: "         << G4BestUnit(massicCS, "Surface/Mass")
+  G4cout << " ---> CrossSection per volume:\t" << CrossSection*cm << " cm^-1 "
+	 << "\tCrossSection per mass: " << G4BestUnit(massicCS, "Surface/Mass")
          << G4endl;
 
   //check cross section from G4EmCalculator
   //
-  G4cout << "\n Verification : "
-         << "crossSections from G4EmCalculator. \n";
-  
+  G4cout << "\n Verification from G4EmCalculator: \n"; 
   G4EmCalculator emCalculator;
   G4double sumc = 0.0;  
   for (size_t i=0; i< ProcCounter->size();i++) {
@@ -154,13 +146,19 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     if (particle == G4Gamma::Gamma())
        massSigma = 
        emCalculator.ComputeCrossSectionPerVolume(energy,particle,
-                                              procName,material)/density;					      
+                                              procName,material)/density;
     sumc += massSigma;
-    G4cout << "\t" << procName << "= " 
-           << G4BestUnit(massSigma, "Surface/Mass");
+    if (procName != "Transportation")
+      G4cout << "\t" << procName << "= " 
+             << G4BestUnit(massSigma, "Surface/Mass");
   }  	   
   G4cout << "\ttotal= " 
          << G4BestUnit(sumc, "Surface/Mass") << G4endl;
+	 
+  //expected ratio of transmitted particles
+  G4double Ratio = std::exp(-sumc*density*tickness);
+  G4cout << "\tExpected ratio of transmitted particles= " 
+         << 100*Ratio << " %" << G4endl;	 
 	 	 
   //restore default format	 
   G4cout.precision(prec);         
@@ -172,8 +170,6 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     delete aProcCount;
   }
   delete ProcCounter;
-  
-  histoManager->save();
 
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();
