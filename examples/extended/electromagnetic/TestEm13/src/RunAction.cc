@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.3 2006-04-14 16:26:43 maire Exp $
+// $Id: RunAction.cc,v 1.4 2006-04-24 14:33:35 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,7 +60,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   // save Rndm status
-  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
   CLHEP::HepRandom::showEngineStatus();
 
   ProcCounter = new ProcessesCount;

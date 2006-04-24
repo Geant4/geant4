@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2006-04-19 15:20:13 maire Exp $
+$Id: History,v 1.8 2006-04-24 14:33:35 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+26-04-06 mma (testem13-V08-00-05)
+- save time in SteppingAction: procname==Transportation
+- do not save rndm seed per event
      
 19-04-06 mma (testem13-V08-00-04)
 - geant3 : extension to charged particles.

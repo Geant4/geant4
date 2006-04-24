@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.2 2006-04-14 16:26:43 maire Exp $
+// $Id: SteppingAction.cc,v 1.3 2006-04-24 14:33:35 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,11 +62,12 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   //count real processes (at least 1 secondary) and sum track length
   //
   G4TrackVector* secondary = fpSteppingManager->GetSecondary();
+  G4bool transmit = (endPoint->GetStepStatus() <= fGeomBoundary);  
   if ((*secondary).size() > 0) { 
     runAction->CountProcesses(procName);  
     runAction->SumTrack(stepLength);
   }
-  else if (procName == "Transportation") runAction->CountProcesses(procName);
+  else if (transmit) runAction->CountProcesses(procName);
   
   //plot final state (only if continuous energy loss is small enough)
   //
