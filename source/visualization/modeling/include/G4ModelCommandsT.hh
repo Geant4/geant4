@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ModelCommandsT.hh,v 1.4 2006-04-21 02:50:47 tinslay Exp $
+// $Id: G4ModelCommandsT.hh,v 1.5 2006-04-24 07:49:29 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Generic model messenges. 
@@ -426,7 +426,7 @@ G4ModelCommandVerbose<M>::~G4ModelCommandVerbose()
 }
 
 template <typename M>
-void G4ModelCommandVerbose<M>::SetNewValue(G4UIcommand* cmd, G4String newValue)
+void G4ModelCommandVerbose<M>::SetNewValue(G4UIcommand*, G4String newValue)
 {
   G4VModelCommand<M>::Model()->SetVerbose(fpCmd->GetNewBoolValue(newValue));
 }
