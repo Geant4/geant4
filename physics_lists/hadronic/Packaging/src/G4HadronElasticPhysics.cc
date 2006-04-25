@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.1 2006-04-24 11:25:57 vnivanch Exp $
+// $Id: G4HadronElasticPhysics.cc,v 1.2 2006-04-25 09:38:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -87,9 +87,6 @@ void G4HadronElasticPhysics::ConstructProcess()
   if(verbose > 1) G4cout << "### HadronElasticPhysics Construct Process" << G4endl;
 
   model = new G4LElasticB(edepLimit, pLimit);
-  model->SetMinEnergy(0.0);
-  model->SetMaxEnergy(10.0*TeV);
-
   G4double mThreshold = 130.*MeV;
 
   theParticleIterator->reset();

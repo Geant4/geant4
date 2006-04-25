@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4DecayPhysics.cc,v 1.4 2005-12-05 12:55:27 vnivanch Exp $
+// $Id: G4DecayPhysics.cc,v 1.5 2006-04-25 09:38:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -32,6 +32,7 @@
 // Modified:
 // 10.11.2005 V.Ivanchenko edit to provide a standard
 // 05.12.2005 V.Ivanchenko add controlled verbosity
+// 25.04.2006 V.Ivanchenko fix problem of destructor 
 //
 //----------------------------------------------------------------------------
 //
@@ -84,6 +85,7 @@ void G4DecayPhysics::ConstructParticle()
 
 void G4DecayPhysics::ConstructProcess()
 {
+  if(wasActivated) return;
   wasActivated = true;
 
   // Add Decay Process

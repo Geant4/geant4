@@ -20,6 +20,21 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4ElectroNuclearBuilder.cc,v 1.3 2006-04-25 09:38:08 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4ElectroNuclearBuilder
+//
+// Author: 2002 H.P. Wellisch
+//
+// Modified: 
+// 25.04.2006 V.Ivanchenko fix destructor 
+//
+//----------------------------------------------------------------------------
+//
+
 #include "G4ElectroNuclearBuilder.hh"
 
 #include "globals.hh"
@@ -38,30 +53,23 @@ G4ElectroNuclearBuilder::G4ElectroNuclearBuilder() : wasActivated(false)
 
 G4ElectroNuclearBuilder::~G4ElectroNuclearBuilder() 
 {
-  delete theFragmentation;
-  delete theStringDecay;
-  delete theStringModel;
-  delete thePhotoNuclearProcess; 
-  delete theElectronNuclearProcess;
-  delete thePositronNuclearProcess;
-  delete theElectroReaction;
-  delete theGammaReaction;
-  delete theModel;
-  delete theCascade;
-  if(wasActivated)
-  {
-    G4ProcessManager * pManager = 0;
-    pManager = G4Gamma::Gamma()->GetProcessManager();
-    if(pManager) pManager->RemoveProcess(thePhotoNuclearProcess);
-    pManager = G4Electron::Electron()->GetProcessManager();
-    if(pManager) pManager->RemoveProcess(theElectronNuclearProcess);
-    pManager = G4Positron::Positron()->GetProcessManager();
-    if(pManager) pManager->RemoveProcess(thePositronNuclearProcess);
+  if(wasActivated) {
+    delete theFragmentation;
+    delete theStringDecay;
+    delete theStringModel;
+    delete thePhotoNuclearProcess; 
+    delete theElectronNuclearProcess;
+    delete thePositronNuclearProcess;
+    delete theElectroReaction;
+    delete theGammaReaction;
+    delete theModel;
+    delete theCascade;
   }
 }
 
 void G4ElectroNuclearBuilder::Build()
 {
+  if(wasActivated) return;
   wasActivated=true;
   
   thePhotoNuclearProcess = new G4PhotoNuclearProcess;
@@ -100,6 +108,3 @@ void G4ElectroNuclearBuilder::Build()
   aProcMan->AddDiscreteProcess(thePositronNuclearProcess);
 }
 
-
-
-// 2002 by J.P. Wellisch
