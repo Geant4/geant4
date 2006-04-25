@@ -1,4 +1,4 @@
-// $Id: G4EzWorld.hh,v 1.1 2006-02-27 09:46:31 kmura Exp $
+// $Id: G4EzWorld.hh,v 1.1 2006-04-25 09:00:01 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   G4EzWorld.hh
