@@ -1,14 +1,14 @@
-// $Id: pyG4NistManager.cc,v 1.1 2006-02-27 09:56:05 kmura Exp $
+// $Id: pyG4NistManager.cc,v 1.2 2006-04-25 08:09:45 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4NistManager.cc
 //
 //                                         2005 Q
-// ====================================================================
+// ===================================================================
+#include <boost/python.hpp>
 #include "pyG4Version.hh"
 
 #if G4VERSION_NUMBER >= 710
-#include <boost/python.hpp>
 #include "G4NistManager.hh"
 
 using namespace boost::python;

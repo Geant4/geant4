@@ -1,4 +1,4 @@
-// $Id: pyG4ParticleTable.cc,v 1.1 2006-02-27 09:56:05 kmura Exp $
+// $Id: pyG4ParticleTable.cc,v 1.2 2006-04-25 08:09:45 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4ParticleTable.cc
@@ -52,6 +52,24 @@ G4int, G4int, G4int, G4int)= &G4ParticleTable::FindIon;
 // DumpTable
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_DumpTable, DumpTable, 0, 1);
 
+
+// --------------------------------------------------------------------
+// GetParticleList (returning python list)
+
+list GetParticleList(G4ParticleTable* particleTable)
+{
+  list particleList;
+  G4ParticleTable::G4PTblDicIterator* 
+    theParticleIterator= particleTable-> GetIterator();
+  theParticleIterator-> reset();
+  while( (*theParticleIterator)() ){
+    G4ParticleDefinition* particle= theParticleIterator-> value();
+    particleList.append(&particle);
+  }
+  
+  return particleList;
+}
+
 };
 
 using namespace pyG4ParticleTable;
@@ -103,5 +121,8 @@ void export_G4ParticleTable()
     .def("GetVerboseLevel",   &G4ParticleTable::GetVerboseLevel)
     .def("SetReadiness",      &G4ParticleTable::SetReadiness)
     .def("GetReadiness",      &G4ParticleTable::GetReadiness)
+    // --- 
+    // additionals
+    .def("GetParticleList",   GetParticleList)
     ;
 }

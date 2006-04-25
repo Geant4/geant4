@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.1 2006-02-27 09:56:05 kmura Exp $
+# $Id: __init__.py,v 1.2 2006-04-25 08:09:45 kmura Exp $
 """
 # ==================================================================
 #  [Geant4] module package
@@ -13,19 +13,22 @@
 # ==================================================================
 # docs
 # ==================================================================
-__version__ = '0.3.1'
-__date__    = '19/Jan/2006'
+__version__ = '0.5.1'
+__date__    = '10/Mar/2006'
 __author__  = 'K.Murakami (Koichi.Murakami@kek.jp)'
+__url__     = 'http://www-geant4.kek.jp/projects/Geant4Py/'
 
-print """
-=============================================================
-  Welcome to Geant4Py (Geant4 Python Interface)
+def PrintVersion():
+  print """=============================================================
+  Welcome to Geant4Py (A Geant4-Python Bridge)
   
   Version : %s
   Date    : %s
-  Author  : %s
+  Contact : %s
+  WWW     : %s
 =============================================================
-""" % ( __version__, __date__, __author__ )
+""" % ( __version__, __date__, __author__, __url__)
+  
 
 # ==================================================================
 # import submodules
@@ -47,64 +50,69 @@ from HEPUnit          import *
 from colortable       import *
 from g4viscp          import *
 
+
 # ==================================================================
 # globals, which start with "g"
 # ==================================================================
 # ------------------------------------------------------------------
 # gRunManager
 # ------------------------------------------------------------------
-global gRunManager
+#global gRunManager, gRunManagerKernel
 if(G4RunManager.GetRunManager() == None):
   gRunManager= G4RunManager()
 else:
   gRunManager= G4RunManager.GetRunManager()
+gRunManagerKernel= G4RunManagerKernel.GetRunManagerKernel()
 
 # ------------------------------------------------------------------
 # gEventManager
 # ------------------------------------------------------------------
-global gEventManager
+#global gEventManager
 gEventManager= G4EventManager.GetEventManager()
 
 # ------------------------------------------------------------------
 # gStackManager
 # ------------------------------------------------------------------
-global gStackManager
+#global gStackManager
 gStackManager= gEventManager.GetStackManager()
 
 # ------------------------------------------------------------------
 # gTrackingManager
 # ------------------------------------------------------------------
-global gTrackingManager
+#global gTrackingManager
 gTrackingManager= gEventManager.GetTrackingManager()
 
 # ------------------------------------------------------------------
 # gStateManager
 # ------------------------------------------------------------------
-global gStateManager
+#global gStateManager
 gStateManager= G4StateManager.GetStateManager()
 
 # ------------------------------------------------------------------
 # gTransportationManager
 # ------------------------------------------------------------------
-global gTransportationManager
+#global gTransportationManager
 gTransportationManager= G4TransportationManager.GetTransportationManager()
 
 # ------------------------------------------------------------------
 # gParticleTable
 # ------------------------------------------------------------------
-global gParticleTable
+#global gParticleTable
 gParticleTable= G4ParticleTable.GetParticleTable()
+
+#global gParticleIterator
+gParticleIterator= PyG4ParticleList()
 
 # ------------------------------------------------------------------
 # gProcessTable
 # ------------------------------------------------------------------
-global gProcessTable
+#global gProcessTable
 gProcessTable= G4ProcessTable.GetProcessTable()
 
 # ------------------------------------------------------------------
 # gNistManager (since 7.1)
 # ------------------------------------------------------------------
-global gNistManager
+#global gNistManager
 
 material_class_list= dir(G4materials)
 qfind= (material_class_list.count("G4NistManager") >0)
@@ -115,9 +123,9 @@ if(qfind) :
 # ------------------------------------------------------------------
 # gVisManager
 # ------------------------------------------------------------------
-global gVisManager
-global opengl_ix, opengl_sx, opengl_ixm, opengl_sxm, vrml1, vrml2, dawn, \
-       heprep_xml, heprep_file, atree, raytracer, raytracer_x
+#global gVisManager
+#global opengl_ix, opengl_sx, opengl_ixm, opengl_sxm, vrml1, vrml2, dawn, \
+#       heprep_xml, heprep_file, atree, raytracer, raytracer_x
 
 visdriver_list = dir(G4visualization)
 q_opengl_ix   = (visdriver_list.count("G4OpenGLImmediateX") > 0)
@@ -171,13 +179,13 @@ if(G4VisManager.GetConcreteInstance() == None):
 # ------------------------------------------------------------------
 # functions
 # ------------------------------------------------------------------
-global gApplyUICommand
+#global gApplyUICommand
 gApplyUICommand= G4interface.ApplyUICommand
 
-global gGetCurrentValues
+#global gGetCurrentValues
 gGetCurrentValues= G4interface.GetCurrentValues
 
-global gStartUISession
+#global gStartUISession
 gStartUISession= G4interface.StartUISession
 
 # ==================================================================
@@ -196,7 +204,7 @@ G4RunManager.OneEvent = OneEvent
 # ------------------------------------------------------------------
 # list material information
 # ------------------------------------------------------------------
-global gMaterialTable
+#global gMaterialTable
 gMaterialTable= G4Material.GetMaterialTable()
 
 global gElementTable

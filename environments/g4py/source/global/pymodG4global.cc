@@ -1,4 +1,4 @@
-// $Id: pymodG4global.cc,v 1.1 2006-02-27 09:56:05 kmura Exp $
+// $Id: pymodG4global.cc,v 1.2 2006-04-25 08:09:45 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pymodG4global.cc [Geant4Py module]
@@ -26,6 +26,7 @@ void export_Randomize();
 void export_RandomEngines();
 void export_G4RandomDirection();
 void export_G4UserLimits();
+void export_G4Timer();
 
 BOOST_PYTHON_MODULE(G4global) 
 {
@@ -42,5 +43,6 @@ BOOST_PYTHON_MODULE(G4global)
   export_RandomEngines();
   export_G4RandomDirection();
   export_G4UserLimits();
+  export_G4Timer();
 }
 

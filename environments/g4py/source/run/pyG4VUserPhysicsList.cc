@@ -1,4 +1,4 @@
-// $Id: pyG4VUserPhysicsList.cc,v 1.1 2006-02-27 09:56:05 kmura Exp $
+// $Id: pyG4VUserPhysicsList.cc,v 1.2 2006-04-25 08:09:45 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4VUserPhysicsList.cc
@@ -14,6 +14,22 @@ using namespace boost::python;
 // thin wrappers
 // ====================================================================
 namespace pyG4VUserPhysicsList {
+
+struct CB_G4VUserPhysicsList :
+  G4VUserPhysicsList, wrapper<G4VUserPhysicsList> {
+
+  void ConstructParticle() {
+    get_override("ConstructParticle")();
+  }
+
+  void ConstructProcess() {
+    get_override("ConstructProcess")();
+  }
+
+  void SetCuts() {
+    get_override("SetCuts")();
+  }
+};
 
 // SetCutValue
 void (G4VUserPhysicsList::*f1_SetCutValue)(G4double, const G4String&)
@@ -38,10 +54,16 @@ using namespace pyG4VUserPhysicsList;
 // ====================================================================
 void export_G4VUserPhysicsList()
 {
-  class_<G4VUserPhysicsList, G4VUserPhysicsList*, boost::noncopyable>
-    ("G4VUserPhysicsList", "base class of user physics list", no_init)
+  class_<CB_G4VUserPhysicsList, boost::noncopyable>
+    ("G4VUserPhysicsList", "base class of user physics list")
     // ---
-    .def("SetCuts",               &G4VUserPhysicsList::SetCuts)
+    .def("ConstructParticle",
+	 pure_virtual(&G4VUserPhysicsList::ConstructParticle))
+    .def("ConstructProcess",
+	 pure_virtual(&G4VUserPhysicsList::ConstructProcess))
+    .def("SetCuts",
+	 pure_virtual(&G4VUserPhysicsList::SetCuts))
+    // ---
     .def("SetDefaultCutValue",    &G4VUserPhysicsList::SetDefaultCutValue)
     .def("GetDefaultCutValue",    &G4VUserPhysicsList::GetDefaultCutValue)
     // ---
@@ -75,6 +97,7 @@ void export_G4VUserPhysicsList()
 
   // Note that exposed items are limited,
   // because this class object is mainly for internal uses or obsolete.
+  // Construct
   // BuildPhysicsTable
   // PreparePhysicsTable
   // SetPhysicsTableRetrieved
