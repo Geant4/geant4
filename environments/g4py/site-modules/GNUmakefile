@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2006-02-27 09:53:26 kmura Exp $
+# $Id: GNUmakefile,v 1.2 2006-04-25 10:18:58 kmura Exp $
 # $Name: not supported by cvs2svn $
 # ===========================================================
 #   Makefile for building Geant4Py site-modules
@@ -21,5 +21,6 @@ clean:
 
 uninstall:
 	@-\rm -f -r $(Q_LIBDIR)/site-modules
+	@-\rm -f $(Q_LIBDIR)/lib*.so
 
 
