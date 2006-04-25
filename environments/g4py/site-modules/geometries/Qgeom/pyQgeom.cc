@@ -1,4 +1,4 @@
-// $Id: pyQgeom.cc,v 1.1 2006-02-27 09:47:41 kmura Exp $
+// $Id: pyQgeom.cc,v 1.2 2006-04-25 10:25:12 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyQgeom.cc

@@ -1,4 +1,4 @@
-// $Id: pyEMSTDpl.cc,v 1.1 2006-02-27 09:50:13 kmura Exp $
+// $Id: pyEMSTDpl.cc,v 1.2 2006-04-25 10:31:40 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyEMSTDpl.cc
@@ -6,13 +6,13 @@
 //   [Qgeom]
 //   a site-module of Geant4Py
 //
-//   EM-std physics list
+//   Electron/Gamma EM-standard physics list
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
 #include "G4RunManager.hh"
-#include "QPhysicsList.hh"
+#include "PhysicsListEMstd.hh"
 
 using namespace boost::python;
 
@@ -21,10 +21,14 @@ using namespace boost::python;
 // ====================================================================
 namespace pyEMSTDpl {
 
-void Construct()
+PhysicsListEMstd* Construct()
 {
+  PhysicsListEMstd* pl= new PhysicsListEMstd;
+  
   G4RunManager* runMgr= G4RunManager::GetRunManager();
-  runMgr-> SetUserInitialization(new QPhysicsList);
+  runMgr-> SetUserInitialization(pl);
+
+  return pl;
 }
 
 };
@@ -37,12 +41,12 @@ using namespace pyEMSTDpl;
 
 BOOST_PYTHON_MODULE(EMSTDpl) {
 
-  class_<QPhysicsList, QPhysicsList*,
-    bases<G4VUserPhysicsList> >
-    ("Qem_stdPhysicsList", "EM-std physics list")
+  class_<PhysicsListEMstd, PhysicsListEMstd*, bases<G4VUserPhysicsList> >
+    ("PhysicsListEMstd", "Electron/Gamma EM-standard physics list")
     ;
 
   // ---
-  def("Construct",  Construct);
-}
+  def("Construct", Construct, 
+      return_value_policy<reference_existing_object>());
 
+}

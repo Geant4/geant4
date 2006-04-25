@@ -1,13 +1,17 @@
-// $Id: PhysicsListEMstd.hh,v 1.1 2006-02-27 09:50:13 kmura Exp $
+// $Id: PhysicsListEMstd.hh,v 1.2 2006-04-25 10:31:40 kmura Exp $
+// $Name: not supported by cvs2svn $
 // ====================================================================
 //   PhysicsListEMstd.hh
 //
-//                                         2004 Q
+//   Physics list for electron/positron/gamma
+//   EM-standard package
+//
+//                                         2006 Q
 // ====================================================================
-#ifndef PHYSICS_LIST_EM_STD_H
-#define PHYSICS_LIST_EM_STD_H
+#ifndef PHYSICS_LIST_EMSTD_H
+#define PHYSICS_LIST_EMSTD_H
 
-#include "G4VPhysicsConstructor.hh"
+#include "G4VUserPhysicsList.hh"
 
 // ====================================================================
 //
@@ -15,15 +19,15 @@
 //
 // ====================================================================
 
-class PhysicsListEMstd : public G4VPhysicsConstructor {
-
+class PhysicsListEMstd: public G4VUserPhysicsList {
 public:
   PhysicsListEMstd();
   ~PhysicsListEMstd();
 
   virtual void ConstructParticle();
   virtual void ConstructProcess();
+  virtual void SetCuts();
+
 };
 
 #endif
-

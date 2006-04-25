@@ -1,4 +1,4 @@
-// $Id: ParticleGunAction.cc,v 1.1 2006-02-27 09:52:54 kmura Exp $
+// $Id: ParticleGunAction.cc,v 1.2 2006-04-25 10:29:52 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   ParticleGunAction.cc

@@ -1,4 +1,4 @@
-// $Id: pyExN01pl.cc,v 1.1 2006-02-27 09:50:13 kmura Exp $
+// $Id: pyExN01pl.cc,v 1.2 2006-04-25 10:31:40 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyExN01pl.cc
@@ -21,10 +21,14 @@ using namespace boost::python;
 // ====================================================================
 namespace pyExN01pl {
 
-void Construct()
+ExN01PhysicsList* Construct()
 {
+  ExN01PhysicsList* pl= new ExN01PhysicsList;
+
   G4RunManager* runMgr= G4RunManager::GetRunManager();
-  runMgr-> SetUserInitialization(new ExN01PhysicsList);
+  runMgr-> SetUserInitialization(pl);
+
+  return pl;
 }
 
 };
@@ -37,12 +41,12 @@ using namespace pyExN01pl;
 
 BOOST_PYTHON_MODULE(ExN01pl) {
 
-  class_<ExN01PhysicsList, ExN01PhysicsList*,
-    bases<G4VUserPhysicsList> >
+  class_<ExN01PhysicsList, ExN01PhysicsList*, bases<G4VUserPhysicsList> >
     ("ExN01PhysicsList", "ExN01 physics list")
     ;
 
   // ---
-  def("Construct",  Construct);
+  def("Construct", Construct,
+      return_value_policy<reference_existing_object>());
+  
 }
-

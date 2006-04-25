@@ -1,11 +1,9 @@
-// $Id: PhysicsListEMstd.cc,v 1.1 2006-02-27 09:50:13 kmura Exp $
+// $Id: PhysicsListEMstd.cc,v 1.2 2006-04-25 10:31:40 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   PhysicsListEMstd.cc
 //
-//   Physics list for electron/positron/gamma
-//   EM-standard package w/ default parameters
-//
+//                                         2006 Q
 // ====================================================================
 #include "PhysicsListEMstd.hh"
 
@@ -26,6 +24,7 @@
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
 
+
 // ====================================================================
 //
 // class description
@@ -34,9 +33,10 @@
 
 ////////////////////////////////////
 PhysicsListEMstd::PhysicsListEMstd()
-  : G4VPhysicsConstructor("EM-std")
 ////////////////////////////////////
 {
+  SetVerboseLevel(1);
+  defaultCutValue = 1.*mm;   // default cut value  (1.0mm)
 }
 
 
@@ -54,8 +54,6 @@ void PhysicsListEMstd::ConstructParticle()
   G4Gamma::GammaDefinition();
   G4Electron::ElectronDefinition();
   G4Positron::PositronDefinition();
-  G4NeutrinoE::NeutrinoEDefinition();
-  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
 }
 
 
@@ -63,9 +61,11 @@ void PhysicsListEMstd::ConstructParticle()
 void PhysicsListEMstd::ConstructProcess()
 /////////////////////////////////////////
 {
+  AddTransportation();
+
   G4ProcessManager* pm;
 
-  // ---------------------------------------------------------- 
+  // ----------------------------------------------------------
   // gamma physics
   // ----------------------------------------------------------
   pm= G4Gamma::Gamma()-> GetProcessManager();
@@ -99,5 +99,13 @@ void PhysicsListEMstd::ConstructProcess()
   pm-> AddProcess(ebrems,       ordInActive, ordInActive, 3);
   pm-> AddProcess(annihilation, 0,           ordInActive, 4);
 
+}
+
+
+////////////////////////////////
+void PhysicsListEMstd::SetCuts()
+////////////////////////////////
+{
+  SetCutsWithDefault();
 }
 
