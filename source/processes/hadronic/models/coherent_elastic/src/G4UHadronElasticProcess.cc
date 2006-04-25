@@ -35,7 +35,7 @@
 #include "G4HadronElasticDataSet.hh"
 #include "G4VQCrossSection.hh"
 #include "G4QElasticCrossSection.hh"
-//#include "G4QCHIPSWorld.hh"
+#include "G4QCHIPSWorld.hh"
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
 #include "G4IsotopeVector.hh"
@@ -46,8 +46,8 @@
 G4UHadronElasticProcess::G4UHadronElasticProcess(const G4String& processName, G4bool fl)
   : G4HadronicProcess(processName), flagHP(fl)
 {
-  store = G4HadronicProcess::GetCrossSectionDataStore();
   AddDataSet(new G4HadronElasticDataSet);
+  store = G4HadronicProcess::GetCrossSectionDataStore();
   qCManager   = G4QElasticCrossSection::GetPointer();
   theProton = G4Proton::Proton();
   theNeutron = G4Neutron::Neutron();
@@ -68,9 +68,6 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
   if(verboseLevel>1) 
     G4cout << "G4UHadronElasticProcess for " << theParticle->GetParticleName() 
 	   << G4endl; 
-
-  // Create CHIPS World with 234 particles
-  // G4QCHIPSWorld::Get()->GetParticles(234); 
 
   if(theParticle == theNeutron && flagHP) 
     AddDataSet(new G4NeutronHPElasticData());

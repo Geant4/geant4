@@ -70,11 +70,12 @@ G4LElasticB::G4LElasticB(G4double elim, G4double plim) : G4HadronicInteraction()
 {
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( DBL_MAX );
-  verboseLevel= 1;
+  verboseLevel= 0;
   plablim     = plim;
   ekinlim     = elim;
   qElastic    = new G4QElastic();
   qCManager   = G4QElasticCrossSection::GetPointer();
+
   theProton   = G4Proton::Proton();
   theNeutron  = G4Neutron::Neutron();
   theDeuteron = G4Deuteron::Deuteron();
