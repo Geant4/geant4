@@ -1,4 +1,4 @@
-# $Id: linuxx8664gcc.gmk,v 1.1 2006-02-27 09:35:39 kmura Exp $
+# $Id: linuxx8664gcc.gmk,v 1.2 2006-04-25 05:50:05 kmura Exp $
 # $Name: not supported by cvs2svn $
 # ===========================================================
 #   System specific terms
@@ -54,19 +54,38 @@ ifdef G4PY_EXLIB_LIBDIR
 endif
 
 ifdef COMPILE_G4PY
-  rpath2 := $(Q_G4_LIBDIR):$(Q_CLHEP_LIBDIR)
+  #rpath2 := $(Q_G4_LIBDIR):$(Q_CLHEP_LIBDIR)
+  ifneq ($(Q_G4_LIBDIR), $(BOOST_LIBDIR))
+    rpath2 := $(Q_G4_LIBDIR)
+  endif
+  ifneq ($(Q_CLHEP_LIBDIR), $(Q_G4_LIBDIR))
+   rpath3 := :$(Q_CLHEP_LIBDIR)
+  endif
 endif
 
-rpathflag := -Wl,-rpath,$(rpath0):$(rpath1):$(rpath2)
+rpathflag := -Wl,-rpath,$(rpath0):$(rpath1):$(rpath2):$(rpath3)
+
+ifdef CPPVERBOSE
+  define build-library
+    $(CXX) $(rpathflag) -Wl,-soname,$@ -shared -o $@ \
+      $(foreach dir,$(SUBLIBS),$(dir)/*.o)
+  endef
+else
+  define build-library
+    @echo Building a library $@ ...
+    @$(CXX) $(rpathflag) -Wl,-soname,$@ -shared -o $@ \
+      $(foreach dir,$(SUBLIBS),$(dir)/*.o)
+  endef
+endif
 
 ifdef CPPVERBOSE
   define build-module
-    $(CXX) $(rpathflag) -Wl,-soname,$@ -shared  -o $@ $(objects) $(LOPT)
+    $(CXX) $(rpathflag) -Wl,-soname,$@ -shared -o $@ $(objects) $(LOPT)
   endef
 else
   define build-module
     @echo Building a module $@ ...
-    @$(CXX) $(rpathflag) -Wl,-soname,$@ -shared  -o $@ $(objects) $(LOPT)
+    @$(CXX) $(rpathflag) -Wl,-soname,$@ -shared -o $@ $(objects) $(LOPT)
   endef
 endif
 

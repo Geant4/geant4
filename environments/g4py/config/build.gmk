@@ -1,6 +1,6 @@
-# $Id: build.gmk,v 1.1 2006-02-27 09:35:39 kmura Exp $
+# $Id: build.gmk,v 1.2 2006-04-25 05:53:05 kmura Exp $
 # ===========================================================
-#   Script for building a library
+#   Script for building a module
 # ===========================================================
 headers := $(wildcard *.hh)
 sources := $(wildcard *.cc)

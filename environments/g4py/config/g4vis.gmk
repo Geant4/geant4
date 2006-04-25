@@ -1,4 +1,4 @@
-# $Id: g4vis.gmk,v 1.1 2006-02-27 09:35:39 kmura Exp $
+# $Id: g4vis.gmk,v 1.2 2006-04-25 05:53:05 kmura Exp $
 # ===========================================================
 #   Makefile for building Python module with Boost.Python
 #      

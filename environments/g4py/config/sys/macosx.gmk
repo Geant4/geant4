@@ -1,4 +1,4 @@
-# $Id: macosx.gmk,v 1.1 2006-02-27 09:35:39 kmura Exp $
+# $Id: macosx.gmk,v 1.2 2006-04-25 05:50:05 kmura Exp $
 # $Name: not supported by cvs2svn $
 # ===========================================================
 #   System specific terms
@@ -63,15 +63,28 @@ endif
 rpathflag := 
 
 ifdef CPPVERBOSE
+  define build-library
+    $(CXX) $(rpathflag) -bundle -flat_namespace -undefined define_a_way \
+      -o $@ $(foreach dir,$(SUBLIBS),$(dir)/*.o)
+  endef
+else
+  define build-library
+    @echo Building a module $@ ...
+    @$(CXX) $(rpathflag) -bundle -flat_namespace -undefined define_a_way \
+      -o $@ $(foreach dir,$(SUBLIBS),$(dir)/*.o)
+  endef
+endif
+
+ifdef CPPVERBOSE
   define build-module
     $(CXX) $(rpathflag) -bundle -flat_namespace -undefined define_a_way \
-    -o $@ $(objects) $(LOPT)
+      -o $@ $(objects) $(LOPT)
   endef
 else
   define build-module
     @echo Building a module $@ ...
     @$(CXX) $(rpathflag) -bundle -flat_namespace -undefined define_a_way \
-    -o $@ $(objects) $(LOPT)
+      -o $@ $(objects) $(LOPT)
   endef
 endif
 
