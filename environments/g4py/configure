@@ -1,5 +1,5 @@
 #!/bin/csh -f
-#$Id: configure,v 1.1 2006-02-27 09:29:42 kmura Exp $
+#$Id: configure,v 1.2 2006-04-25 05:42:14 kmura Exp $
 # ======================================================================
 #  A configure script for Geant4Py
 # ======================================================================
@@ -60,6 +60,7 @@ set options = `cat` <<EOF
 -l prefix: 
 -l libdir: 
 -l incdir:
+-l with-package-dir:
 -l with-g4-incdir:
 -l with-g4-libdir:
 -l with-g4-version:
@@ -101,6 +102,13 @@ while ( "$opt[1]" != "--" )
     case --libdir:
       shift opt
       set libdir = "$opt[1]"
+      breaksw
+    case --with-package-dir:
+      shift opt
+      set g4_incdir    = "$opt[1]/include/Geant4"
+      set g4_libdir    = "$opt[1]/lib"
+      set clhep_incdir = "$opt[1]/include"
+      set clhep_libdir = "$opt[1]/lib"
       breaksw
     case --with-g4-incdir:
       shift opt
@@ -462,6 +470,8 @@ Fine tuning of the library path:
                             (location of boost/)
   --with-boost-libdir=DIR   BOOST-C++ library dir [/usr/lib]
   --with-boost-python-lib=LIB library name of libboost_python.so [boost_python]
+
+  --with-package-dir=DIR    Geant4 Package dir
 
 Enable/disable options: prefix with either --enable- or --disable-
   openglx      OpenGLX support    [auto]
