@@ -1,0 +1,59 @@
+// $Id: pyG4RunManagerKernel.cc,v 1.1 2006-04-25 08:13:51 kmura Exp $
+// $Name: not supported by cvs2svn $
+// ====================================================================
+//   pyG4RunManagerKernel.cc
+//
+//                                         2006 Q
+// ====================================================================
+#include <boost/python.hpp>
+#include "G4RunManagerKernel.hh"
+
+using namespace boost::python;
+
+// ====================================================================
+// thin wrappers
+// ====================================================================
+namespace pyG4RunManagerKernel {
+
+};
+
+using namespace pyG4RunManagerKernel;
+
+// ====================================================================
+// module definition
+// ====================================================================
+void export_G4RunManagerKernel()
+{
+  class_<G4RunManagerKernel>("G4RunManagerKernel", "run manager kernel")
+    .def("GetRunManagerKernel", &G4RunManagerKernel::GetRunManagerKernel,
+         "Get an instance of G4RunManagerKernel",
+         return_value_policy<reference_existing_object>())
+    .staticmethod("GetRunManagerKernel")
+    // ---
+    //.def("DefineWorldVolume", &G4RunManagerKernel::DefineWorldVolume)
+    //.def("SetPhysics", &G4RunManagerKernel::SetPhysics)
+    //.def("InitializePhysics", &G4RunManagerKernel::InitializePhysics)
+    .def("RunInitialization",  &G4RunManagerKernel::RunInitialization)
+    //.def("RunTermination", &G4RunManagerKernel::RunTermination)
+    //.def("UpdateRegion", &G4RunManagerKernel::UpdateRegion)
+    //.def("DumpRegion", &G4RunManagerKernel::DumpRegion)
+    //.def("DumpRegion", &G4RunManagerKernel::DumpRegion)
+    //.def("GeometryHasBeenModified", 
+    //&G4RunManagerKernel::GeometryHasBeenModified)
+    //.def("PhysicsHasBeenModified", 
+    //&G4RunManagerKernel::PhysicsHasBeenModified)
+    //.def("GetEventManager", &G4RunManagerKernel::GetEventManager,
+    //...)
+    //.def("GetStackManager", &G4RunManagerKernel::GetStackManager,
+    //...)
+    //.def("GetTrackingManager", &G4RunManagerKernel::GetTrackingManager,
+    //...)
+    //.def("SetPrimaryTransformer", &G4RunManagerKernel::SetPrimaryTransformer)
+    //.def("GetPrimaryTransformer", &G4RunManagerKernel::GetPrimaryTransformer,
+    //...)
+    //.def("GetVersionString", &G4RunManagerKernel::GetVersionString)
+    //.def("SetVerboseLevel", &G4RunManagerKernel::SetVerboseLevel)
+    //.def("SetGeometryToBeOptimized", 
+    //&G4RunManagerKernel::SetGeometryToBeOptimized)
+    ;
+}
