@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2006-02-27 10:05:25 kmura Exp $
+# $Id: GNUmakefile,v 1.2 2006-04-25 07:54:29 kmura Exp $
 # ===========================================================
 #   Makefile for building local library
 #
