@@ -14,9 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-24 April 2006 - V.Ivanchenko (ghad-cohe-V08-00-02)
+25 April 2006 - V.Ivanchenko (ghad-cohe-V08-00-02)
 -------------------------------------------------
-  G4UHadronElasticProcess and G4LElasticB use np scattering from CHIPS
+  G4UHadronElasticProcess and G4LElasticB: use np scattering from CHIPS,
+                fix run time warnings 	
+  
 
 24 April 2006 - V.Ivanchenko (ghad-cohe-V08-00-01)
 -------------------------------------------------
