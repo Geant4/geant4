@@ -548,21 +548,22 @@ G4ThreeVector GetVectorAroundCons(G4Cons& cons)
 G4ThreeVector GetVectorOnTorus(G4Torus& torus)
 {
   G4double phi, alpha, radius, px, py, pz;
-  G4double part = 1./4.;
-  G4double rand = G4UniformRand();
+  // G4double part = 1./4.;
+  // G4double rand = G4UniformRand();
 
-  G4double pRmin = torus.GetRmin();
+  // G4double pRmin = torus.GetRmin();
   G4double pRmax = torus.GetRmax();
   G4double pRtor = torus.GetRtor();
-  G4double phi1  = torus.GetSPhi();
-  G4double phi2  = phi1 + torus.GetDPhi ();
+  // G4double phi1  = torus.GetSPhi();
+  // G4double phi2  = phi1 + torus.GetDPhi ();
 
- if      ( rand < part ) // Rmax
+  // if      ( rand < part ) // Rmax
   {
-    radius = pRmax -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand();
+    radius = pRmax; //  -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand();
     alpha = twopi*G4UniformRand(); 
-    phi    = phi1 - 0.5*kAngTolerance + (phi2 - phi1 + kAngTolerance)*G4UniformRand();
+    phi    = twopi*G4UniformRand();
   }
+ /*
   else if ( rand < 2*part )  // Rmin
   {
     radius = pRmin -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand(); 
@@ -582,6 +583,33 @@ G4ThreeVector GetVectorOnTorus(G4Torus& torus)
     alpha = twopi*G4UniformRand(); 
     phi    = phi2 -0.5*kAngTolerance + (kAngTolerance)*G4UniformRand();
   }
+ */
+  px = (pRtor+radius*std::cos(alpha))*std::cos(phi);
+  py = (pRtor+radius*std::cos(alpha))*std::sin(phi);
+  pz = radius*std::sin(alpha);
+
+  
+  return G4ThreeVector(px,py,pz);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Random vector around torus surface
+
+G4ThreeVector GetVectorAroundTorus(G4Torus& torus)
+{
+  G4double phi, alpha, radius, px, py, pz;
+
+  G4double pRmax = torus.GetRmax();
+  G4double pRtor = torus.GetRtor();
+
+
+  radius = 3*pRmax*G4UniformRand(); 
+  alpha = twopi*G4UniformRand(); 
+  phi    = twopi*G4UniformRand();
+
+  pRtor *= 3*G4UniformRand();
+  
   px = (pRtor+radius*std::cos(alpha))*std::cos(phi);
   py = (pRtor+radius*std::cos(alpha))*std::sin(phi);
   pz = radius*std::sin(alpha);
@@ -629,14 +657,11 @@ int main(int argc, char** argv)
 
   G4cout<< "To test Tubs." << G4endl;
   test_one_solid( useCase= kTubs,  no_points, dirs_per_point ); 
-  */
+  
   
   G4cout<< "To test Cons." << G4endl;
   test_one_solid( useCase= kCons,  no_points, dirs_per_point ); 
   
-  /*  
-  G4cout<< "To test Orb." << G4endl;
-  test_one_solid( useCase= kOrb,  no_points, dirs_per_point ); 
 
   G4cout<< "To test Orb." << G4endl;
   test_one_solid( useCase= kOrb,  no_points, dirs_per_point ); 
@@ -650,6 +675,8 @@ int main(int argc, char** argv)
   G4cout<< "To test Trd." << G4endl;
   test_one_solid( useCase= kTrd,  no_points, dirs_per_point ); 
   */
+  G4cout<< "To test Torus" << G4endl;
+  test_one_solid( useCase= kTorus,  no_points, dirs_per_point ); 
 
   return 0; 
 }
@@ -675,9 +702,6 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
     dIn[j]  = 0.;
     dOut[j] = 0.;
   }
-  G4double Rtor = 100 ;
-  G4double Rmax = Rtor*0.9 ;
-  G4double Rmin = Rtor*0.1 ;
 
   EInside surfaceP, surfaceA;
   G4ThreeVector norm,*pNorm;
@@ -773,7 +797,11 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
   G4Cons c5("Hollow Cut Cone",25,50,75,150,50,0,3*halfpi);
 
 
+  G4double Rtor = 100. ;
+  G4double Rmax = Rtor*0.9 ;
+  G4double Rmin = Rtor*0.1 ;
 
+  G4Torus tor1("Soild Torus ",0.,Rmax,Rtor,0.,twopi);
     
   G4Torus torus1("torus1",10.,15.,20.,0.,3*halfpi);
   G4Torus tor2("Hole cutted Torus #2",Rmin,Rmax,Rtor,pi/4,halfpi);
@@ -1321,50 +1349,115 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
     G4cout<<"Testing all cutted G4Torus:"<<G4endl<<G4endl;
 
 
-    for(i=0;i<iMax;i++)
+
+    iInNoSurf = 0, iOutNoSurf = 0, iIn = 0, iOut = 0;     
+
+    for( i = 0; i < iMax; i++)
     {
       if(i%iCheck == 0) G4cout<<"i = "<<i<<G4endl;
-      G4ThreeVector p = GetVectorOnTorus(torus1);      
-      surfaceP = torus1.Inside(p);
-      if(surfaceP != kSurface)
-      {
-        G4cout<<"p is out of surface: "<<G4endl;
-        G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl<<G4endl;
 
+      G4ThreeVector pA = GetVectorAroundTorus(tor1);    
+      G4ThreeVector pS = GetVectorOnTorus(tor1); // , normP);
+
+      G4ThreeVector dP = pS - pA;
+
+      if ( dP.mag2() > 0.) 
+      {
+        distCheck = dP.mag();
+        vCheck = dP.unit();
+        // G4cout<<"distCheck ="<< distCheck<<"; dP.unit() mag = "<<dP.mag()<<G4endl;
+      }
+      else continue;
+
+      surfaceP = tor1.Inside(pS);
+
+      if( surfaceP == kSurface )
+      {
+        surfaceA = tor1.Inside(pA);
+        
+        if( surfaceA == kOutside )
+        {
+          if ( dP.dot(pS) < 0. )  // may be < strictly?
+	  {
+            iIn++;
+
+            distIn   = tor1.DistanceToIn(pA,vCheck);
+
+            dDist = distIn - distCheck;
+
+	    // G4cout<<" distIn = "<<distIn<<"; distCheck = "<<distCheck<<"; dDist = "<<dDist<<G4endl;
+
+            dDist *= 10./kRadTolerance;
+
+            for( j = 0; j < jMax; j++ )
+            {
+              position = -25. + j; 
+              if ( dDist < position ) 
+	      {
+                dIn[j] += 1.;
+                break;
+	      }
+              else continue;
+	    }
+            if ( j == jMax ) dIn[jMax-1] += 1.;
+            if ( j == jMax ||  j == 0 )
+	    {
+	      // G4cout<<"distIn    = "<<distIn<<"; dDist = "<<dDist<<G4endl;
+	      // G4cout<<"distCheck = "<<distCheck<<"; vCheck.dot( pS.unit() )  = "
+              //       <<vCheck.dot( pS.unit() )<<G4endl;
+	    }
+	  }
+          else continue;
+        }
+        else
+        {
+          iOut++;
+          
+          distOut  = tor1.DistanceToOut(pA,vCheck,calcNorm,pgoodNorm,pNorm); 
+         
+          dDist = distOut - distCheck;
+
+	  // G4cout<<" distOut = "<<distOut<<"; distCheck = "<<distCheck<<"; dDist = "<<dDist<<G4endl;
+
+          dDist *= 10./kRadTolerance;
+
+          for( j = 0; j < jMax; j++ )
+          {
+            position = -25. + j; 
+            if ( dDist < position ) 
+	    {
+              dOut[j] += 1.;
+              break;
+	    }
+            else continue;
+	  }	
+          if ( j == jMax) dOut[jMax-1] += 1.;
+        }
       }
       else
       {
-        for(j=0;j<jMax;j++)
-        {
-          G4ThreeVector v = GetRandomUnitVector();
-
-          distIn  = torus1.DistanceToIn(p,v);
-          distOut = torus1.DistanceToOut(p,v,calcNorm,pgoodNorm,pNorm); 
-
-	  //  if( distIn < kCarTolerance && distOut < kCarTolerance )
-          if( distIn == 0. && distOut == 0. )
-	  {
-	    G4cout<<" distIn < kCarTolerance && distOut < kCarTolerance"<<G4endl;
-            G4cout<<"distIn = "<<distIn<<";  distOut = "<<distOut<<G4endl;
-            G4cout<<"location p: "<<G4endl;
-            G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
-            G4cout<<" direction v: "<<G4endl;
-            G4cout<<"( "<<v.x()<<", "<<v.y()<<", "<<v.z()<<" ); "<<G4endl<<G4endl;
-	  }
-          else if(distIn > 100000*kCarTolerance && distOut > 100*kCarTolerance)
-	  {
-	    /*
-	    G4cout<<" distIn > 100000*kCarTolerance && distOut > 100*kCarTolerance"<<G4endl;
-            G4cout<<"distIn = "<<distIn<<";  distOut = "<<distOut<<G4endl;
-            G4cout<<"location p: "<<G4endl;
-            G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
-            G4cout<<" direction v: "<<G4endl;
-            G4cout<<"( "<<v.x()<<", "<<v.y()<<", "<<v.z()<<" ); "<<G4endl<<G4endl;
-	    */
-	  }     
-        }
+        // G4cout<<"pS is out of cons surface: "<<pS.x()<<"\t"<<pS.y()<<"\t"<<pS.z()<<G4endl;
       }
     }
+    G4cout<<"iIn = "<<iIn<<";     iOut = "<<iOut<<G4endl;
+    G4cout<<"iInNoSurf = "<<iInNoSurf<<";    iOutNoSurf = "<<iOutNoSurf<<G4endl<<G4endl;
+
+    G4cout<<"iIn = "<<iIn<<G4endl<<G4endl;
+    for( j = 0; j < jMax; j++ )
+    {
+      position = -25. + j; 
+      G4cout<<position<<"\t"<<dIn[j]<<G4endl;      
+      foutDistIn<<position<<"\t"<<dIn[j]<<G4endl;      
+    } 
+    G4cout<<G4endl;
+    G4cout<<"iOut = "<<iOut<<G4endl<<G4endl;
+    for( j = 0; j < jMax; j++ )
+    {
+      position = -25. + j; 
+      G4cout<<position<<"\t"<<dOut[j]<<G4endl;      
+      foutDistOut<<position<<"\t"<<dIn[j]<<G4endl;      
+    }
+
     break;
 
     default:
