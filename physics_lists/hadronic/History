@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2006-04-24 11:33:34 vnivanch Exp $
+$Id: History,v 1.19 2006-04-25 09:46:25 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25.04.2006, V.Ivanchenko - hadr-lists-V08-00-03
+- Fix problem in destructors of G4DecayPhysics and G4ElectroNuclearBuilder
 
 24.04.2006, V.Ivanchenko - hadr-lists-V08-00-02
 - add QBBC Physics List - version of physics free of LHEP models but
