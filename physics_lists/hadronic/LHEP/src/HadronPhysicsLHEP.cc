@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadronPhysicsLHEP.cc,v 1.2 2005-11-29 17:01:20 gunter Exp $
+// $Id: HadronPhysicsLHEP.cc,v 1.3 2006-04-25 11:01:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -60,6 +60,9 @@ void HadronPhysicsLHEP::CreateModels()
 
   thePiK=new G4PiKBuilder;
   thePiK->RegisterMe(theLHEPPiK=new G4LHEPPiKBuilder);
+
+  theMiscLHEP=new G4MiscLHEPBuilder;
+  theStoppingHadron=new G4StoppingHadronBuilder;  
 }
 
 HadronPhysicsLHEP::~HadronPhysicsLHEP()
@@ -82,9 +85,6 @@ void HadronPhysicsLHEP::ConstructParticle()
 
   G4ShortLivedConstructor pShortLivedConstructor;
   pShortLivedConstructor.ConstructParticle();  
-  
-  theMiscLHEP=new G4MiscLHEPBuilder;
-  theStoppingHadron=new G4StoppingHadronBuilder;
 }
 
 #include "G4ProcessManager.hh"
