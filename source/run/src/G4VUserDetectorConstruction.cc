@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserDetectorConstruction.cc,v 1.4 2006-04-26 15:24:24 asaim Exp $
+// $Id: G4VUserDetectorConstruction.cc,v 1.5 2006-04-26 15:32:06 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4VUserDetectorConstruction.hh"
 #include "G4VPhysicalVolume.hh"
-#include "G4VUserPhysicalVolume.hh"
+#include "G4VUserParallelWorld.hh"
 
 G4VUserDetectorConstruction::G4VUserDetectorConstruction()
 {;}
@@ -38,7 +38,7 @@ G4VUserDetectorConstruction::~G4VUserDetectorConstruction()
 void G4VUserDetectorConstruction::RegisterParallelWorld(G4VUserParallelWorld* aPW)
 {
   std::vector<G4VUserParallelWorld*>::iterator pwItr;
-  for(pwIte=parallelWorld.begin();pwItr!=parallelWorld.end();pwItr++)
+  for(pwItr=parallelWorld.begin();pwItr!=parallelWorld.end();pwItr++)
   {
     if((*pwItr)->GetName()==aPW->GetName())
     {
@@ -55,9 +55,9 @@ void G4VUserDetectorConstruction::RegisterParallelWorld(G4VUserParallelWorld* aP
 void G4VUserDetectorConstruction::ConstructParallelGeometries()
 {
   std::vector<G4VUserParallelWorld*>::iterator pwItr;
-  for(pwIte=parallelWorld.begin();pwItr!=parallelWorld.end();pwItr++)
+  for(pwItr=parallelWorld.begin();pwItr!=parallelWorld.end();pwItr++)
   {
-    pwItr->Construct();
+    (*pwItr)->Construct();
   }
 }
 
