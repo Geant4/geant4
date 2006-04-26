@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.hh,v 1.2 2003-11-03 17:15:21 gcosmo Exp $
+// $Id: G4TransportationManager.hh,v 1.3 2006-04-26 16:15:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4TransportationManager
@@ -36,12 +36,16 @@
 // in turn creates the navigator and the rest.
 
 // Created:  10 March 1997, J. Apostolakis
+// Reviewed: 26 April 2006, G. Cosmo
 // --------------------------------------------------------------------
 
 #ifndef  G4TransportationManager_hh
 #define  G4TransportationManager_hh
 
 #include "G4Navigator.hh"
+
+#include <utility>
+#include <vector>
 
 class G4PropagatorInField;
 class G4GeometryMessenger;
@@ -52,24 +56,47 @@ class G4TransportationManager
   public:  // with description
 
      static G4TransportationManager* GetTransportationManager();
+       // Retrieve the static instance
 
-     inline G4Navigator*          GetNavigatorForTracking() const;
      inline G4PropagatorInField*  GetPropagatorInField() const;
      inline G4FieldManager*       GetFieldManager() const;
-
-     inline void SetNavigatorForTracking( G4Navigator* newNavigator );
      inline void SetPropagatorInField( G4PropagatorInField* newFieldPropagator );
      void SetFieldManager( G4FieldManager* newFieldManager );
+       // Accessors for field handling
 
-     ~G4TransportationManager(); 
+     inline G4Navigator* GetNavigatorForTracking() const;
+     inline void SetNavigatorForTracking( G4Navigator* newNavigator );
+       // Accessors for the navigator for tracking
+
+     inline std::vector<G4Navigator*>::iterator GetActiveNavigatorsIterator();
+       // Return an iterator to the list of active navigators
+
+     G4bool RegisterNavigator( G4Navigator* aNavigator );
+     void DeRegisterNavigator( G4Navigator* aNavigator );
+     G4int  ActivateNavigator( G4Navigator* aNavigator );
+     void DeActivateNavigator( G4Navigator* aNavigator );
+       // Methods for handling navigators. Navigator for tracking is always the
+       // first, i.e. position 0 in the collection and cannot be deregistered
 
   protected:
 
-     G4TransportationManager(); 
-    
+     G4TransportationManager();
+     ~G4TransportationManager(); 
+       // Singleton. Protected constructor and destructor
+
   private:
 
-     G4Navigator*            fNavigatorForTracking ;
+     void ClearNavigators();
+       // Clear collection of navigators and delete allocated objects
+
+  private:
+
+     std::vector<std::pair<G4bool, G4Navigator*> > fNavigators;
+       // The collection of pairs, where the associated boolean flag
+       // identifies if a navigator is 'active' or not
+     std::vector<G4Navigator*> fActiveNavigators;
+       // The list of active navigators
+
      G4PropagatorInField*    fPropagatorInField;
      G4FieldManager*         fFieldManager;
      G4GeometryMessenger*    fGeomMessenger;

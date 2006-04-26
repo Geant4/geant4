@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.icc,v 1.2 2003-11-03 17:15:21 gcosmo Exp $
+// $Id: G4TransportationManager.icc,v 1.3 2006-04-26 16:15:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //  GEANT 4  inlined function members implementation
@@ -34,7 +34,7 @@
 inline
 G4Navigator* G4TransportationManager::GetNavigatorForTracking() const
 {
-   return fNavigatorForTracking;
+   return fNavigators[0].second;
 }
 
 inline
@@ -52,13 +52,26 @@ G4FieldManager* G4TransportationManager::GetFieldManager() const
 inline
 void G4TransportationManager::SetNavigatorForTracking(G4Navigator* newNavigator)
 {
-   fNavigatorForTracking = newNavigator;
+   fNavigators[0] = std::make_pair(true, newNavigator);
 }
 
 inline
-void G4TransportationManager::SetPropagatorInField( 
-           G4PropagatorInField* newFieldPropagator )
+void G4TransportationManager::
+SetPropagatorInField( G4PropagatorInField* newFieldPropagator )
 {
    fPropagatorInField = newFieldPropagator;
 }
 
+// ----------------------------------------------------------------------------
+// GetActiveNavigatorsIterator()
+//
+// Return an iterator to the list of active navigators.
+//
+inline
+std::vector<G4Navigator*>::iterator
+G4TransportationManager::GetActiveNavigatorsIterator()
+{
+   std::vector<G4Navigator*>::iterator iterator
+     = std::vector<G4Navigator*>::iterator(fActiveNavigators.begin());
+   return iterator;
+}
