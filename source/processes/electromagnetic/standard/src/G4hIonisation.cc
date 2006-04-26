@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.63 2006-04-05 08:25:34 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.64 2006-04-26 16:57:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -70,7 +70,8 @@
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 24-03-05 Optimize internal interfaces (V.Ivantchenko)
 // 12-08-05 SetStepLimits(0.2, 0.1*mm) (mma)
-// 10-01-06 SetStepLimits -> SetStepFunction (V.Ivantchenko)
+// 10-01-06 SetStepLimits -> SetStepFunction (V.Ivanchenko)
+// 26-05-06 scale negative particles from pi- and pbar, positive from pi+ and p (VI)
 //
 // -------------------------------------------------------------------
 //
@@ -133,12 +134,18 @@ void G4hIonisation::InitialiseEnergyLossProcess(
      part == G4Proton::Proton() ||
      part == G4AntiProton::AntiProton() ||
      part == G4PionPlus::PionPlus() ||
-     part == G4PionMinus::PionMinus() ||
-     part == G4KaonPlus::KaonPlus() ||
-     part == G4KaonMinus::KaonMinus() 
-     ) theBaseParticle = 0;
-  else if(bpart == 0) theBaseParticle = G4Proton::Proton();
-  else                theBaseParticle = bpart;
+     part == G4PionMinus::PionMinus() ) theBaseParticle = 0;
+
+  else if(bpart == 0) {
+    if(part == G4KaonPlus::KaonPlus()) 
+      theBaseParticle = G4PionPlus::PionPlus();
+    else if(part == G4KaonMinus::KaonMinus()) 
+      theBaseParticle = G4PionMinus::PionMinus();
+    else if(part->GetPDGCharge() > 0.0)
+      theBaseParticle = G4Proton::Proton();
+    else theBaseParticle = G4AntiProton::AntiProton();
+
+  } else theBaseParticle = bpart;
 
   SetBaseParticle(theBaseParticle);
   SetSecondaryParticle(G4Electron::Electron());

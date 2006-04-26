@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggModel.hh,v 1.7 2006-02-15 14:19:18 maire Exp $
+// $Id: G4BraggModel.hh,v 1.8 2006-04-26 16:57:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,7 @@
 // 12-11-03 Fix for GenericIons (V.Ivanchenko)
 // 11-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 15-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
+// 25-04-06 Add stopping data from PSTAR (V.Ivanchenko)
 
 //
 // Class Description:
@@ -55,6 +56,7 @@
 #define G4BraggModel_h 1
 
 #include "G4VEmModel.hh"
+#include "G4PSTARStopping.hh"
 
 class G4ParticleChangeForLoss;
 
@@ -137,6 +139,7 @@ private:
   const G4ParticleDefinition* particle;
   G4ParticleDefinition*       theElectron;
   G4ParticleChangeForLoss*    fParticleChange;
+  G4PSTARStopping             pstar;
 
   G4double mass;
   G4double spin;

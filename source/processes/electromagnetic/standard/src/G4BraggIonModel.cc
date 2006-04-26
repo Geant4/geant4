@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc,v 1.11 2006-02-15 14:19:18 maire Exp $
+// $Id: G4BraggIonModel.cc,v 1.12 2006-04-26 16:57:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,6 +38,7 @@
 // 11-05-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 29-11-05 Do not use G4Alpha class (V.Ivantchenko)
 // 15-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
+// 25-04-06 Add stopping data from ASTAR (V.Ivanchenko)
 //
 
 // Class Description:
@@ -530,7 +531,14 @@ G4double G4BraggIonModel::DEDX(const G4Material* material,
                                  material->GetAtomicNumDensityVector();
 
   // compaund material with parametrisation
-  if( HasMaterial(material) ) {
+  G4int iNist = astar.GetIndex(material);
+
+  if( iNist >= 0 ) {
+    G4double T = kineticEnergy*rateMassHe2p;
+    return astar.GetElectronicDEDX(iNist, T)*material->GetDensity()/
+      HeEffChargeSquare(astar.GetEffectiveZ(iNist), T/MeV);
+
+  } else if( HasMaterial(material) ) {
 
     eloss = StoppingPower(material, kineticEnergy)*
       material->GetDensity()/amu;

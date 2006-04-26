@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.12 2006-02-15 14:19:18 maire Exp $
+// $Id: G4BraggModel.cc,v 1.13 2006-04-26 16:57:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -45,6 +45,7 @@
 // 11-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 16-06-05 Fix problem of chemical formula (V.Ivantchenko)
 // 15-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
+// 25-04-06 Add stopping data from PSTAR (V.Ivanchenko)
 
 // Class Description:
 //
@@ -519,7 +520,12 @@ G4double G4BraggModel::DEDX(const G4Material* material,
                                  material->GetAtomicNumDensityVector();
   
   // compaund material with parametrisation
-  if( HasMaterial(material) ) {
+  G4int iNist = pstar.GetIndex(material);
+
+  if( iNist >= 0 ) {
+    return pstar.GetElectronicDEDX(iNist, kineticEnergy)*material->GetDensity();
+
+  } else if( HasMaterial(material) ) {
 
     eloss = StoppingPower(material, kineticEnergy)*
                           material->GetDensity()/amu;
