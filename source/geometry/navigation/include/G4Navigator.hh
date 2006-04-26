@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.11 2006-03-21 14:08:03 japost Exp $
+// $Id: G4Navigator.hh,v 1.12 2006-04-26 16:14:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -73,7 +73,7 @@ class G4Navigator
 
   friend std::ostream& operator << (std::ostream &os, const G4Navigator &n);
 
-  G4Navigator();
+  G4Navigator(const G4String& name = "GenericNavigator");
     // Constructor - initialisers and setup.
 
   virtual ~G4Navigator();
@@ -207,6 +207,10 @@ class G4Navigator
     // Get/Set Verbose(ness) level.
     // [if level>0 && G4VERBOSE, printout can occur]
 
+  inline const G4String& GetName() const;
+  inline void  SetName(const G4String& name);
+    // Get/Set the name of the navigator.
+
   inline void  CheckMode(G4bool mode);
     // Run navigation in "check-mode", therefore using additional
     // verifications and more strict correctness conditions.
@@ -282,6 +286,9 @@ class G4Navigator
   //
   // BEGIN State information
   //
+
+  G4String fName;
+    // Name identifies associated to the navigator.
 
   G4ThreeVector fLastLocatedPointLocal;
     // Position of the last located point relative to its containing volume.
