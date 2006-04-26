@@ -21,16 +21,43 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserDetectorConstruction.cc,v 1.3 2001-07-11 10:08:34 gunter Exp $
+// $Id: G4VUserDetectorConstruction.cc,v 1.4 2006-04-26 15:24:24 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4VUserDetectorConstruction.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4VUserPhysicalVolume.hh"
 
 G4VUserDetectorConstruction::G4VUserDetectorConstruction()
 {;}
 
 G4VUserDetectorConstruction::~G4VUserDetectorConstruction()
 {;}
+
+void G4VUserDetectorConstruction::RegisterParallelWorld(G4VUserParallelWorld* aPW)
+{
+  std::vector<G4VUserParallelWorld*>::iterator pwItr;
+  for(pwIte=parallelWorld.begin();pwItr!=parallelWorld.end();pwItr++)
+  {
+    if((*pwItr)->GetName()==aPW->GetName())
+    {
+      G4String eM = "A parallel world <";
+      eM += aPW->GetName();
+      eM += "> is already registered to the user detector construction.";
+      G4Exception("G4VUserDetectorConstruction::RegisterParallelWorld",
+                  "RunUDet000",FatalErrorInArgument,eM);
+    }
+  }
+  parallelWorld.push_back(aPW);
+}
+
+void G4VUserDetectorConstruction::ConstructParallelGeometries()
+{
+  std::vector<G4VUserParallelWorld*>::iterator pwItr;
+  for(pwIte=parallelWorld.begin();pwItr!=parallelWorld.end();pwItr++)
+  {
+    pwItr->Construct();
+  }
+}
 

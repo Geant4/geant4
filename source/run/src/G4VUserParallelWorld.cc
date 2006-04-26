@@ -21,43 +21,28 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserDetectorConstruction.hh,v 1.6 2006-04-26 15:24:24 asaim Exp $
+// $Id: G4VUserParallelWorld.cc,v 1.1 2006-04-26 15:24:24 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#ifndef G4VUserDetectorConstruction_h
-#define G4VUserDetectorConstruction_h 1
+#include "G4VUserParallelWorld.hh"
 
-class G4VPhysicalVolume;
-class G4VUserParallelWorld;
+#include "G4TransportationManager.hh"
+#include "G4VPhysicalVolume.hh"
 
-#include <vector>
+G4VUserParallelWorld::G4VUserParallelWorld(G4String worldName)
+{ fWorldName = worldName; }
 
-// class description:
-//
-//  This is the abstract base class of the user's mandatory initialization class
-// for detector setup. It has only one pure virtual method Construct() which is
-// invoked by G4RunManager when it's Initialize() method is invoked.
-//  The Construct() method must return the G4VPhysicalVolume pointer which represents
-// the world volume.
-//
+G4VUserParallelWorld::~G4VUserParallelWorld()
+{ ; }
 
-class G4VUserDetectorConstruction
+G4VPhysicalVolume* G4VUserParallelWorld::GetWorld()
 {
-  public:
-    G4VUserDetectorConstruction();
-    virtual ~G4VUserDetectorConstruction();
+  G4VPhysicalVolume* pWorld
+       = G4TransportationManager::GetTransportationManager()
+         ->GetParallelWorld(fWorldName);
+  pWorld->SetName(fWorldName);
+  return pWorld;
+}
 
-  public:
-    virtual G4VPhysicalVolume* Construct() = 0;
-
-  public:
-    void RegisterParallelWorld(G4VUserParallelWorld*);
-    void ConstructParallelGeometries();
-
-  private:
-    std::vector<G4VUserParallelWorld*> parallelWorld;
-};
-
-#endif
 
