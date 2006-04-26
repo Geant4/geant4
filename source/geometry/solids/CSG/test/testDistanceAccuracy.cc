@@ -560,8 +560,8 @@ G4ThreeVector GetVectorOnTorus(G4Torus& torus)
   // if      ( rand < part ) // Rmax
   {
     radius = pRmax; //  -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand();
-    alpha = twopi*G4UniformRand(); 
-    phi    = twopi*G4UniformRand();
+    alpha = -halfpi + pi*G4UniformRand(); 
+    phi    = pi*G4UniformRand();
   }
  /*
   else if ( rand < 2*part )  // Rmin
@@ -605,8 +605,8 @@ G4ThreeVector GetVectorAroundTorus(G4Torus& torus)
 
 
   radius = 3*pRmax*G4UniformRand(); 
-  alpha = twopi*G4UniformRand(); 
-  phi    = twopi*G4UniformRand();
+  alpha  = -halfpi + pi*G4UniformRand(); 
+  phi    = pi*G4UniformRand();
 
   pRtor *= 3*G4UniformRand();
   
@@ -653,19 +653,7 @@ int main(int argc, char** argv)
   /*
   G4cout<< "To test Box." << G4endl;
   test_one_solid( useCase= kBox,  no_points, dirs_per_point ); 
-   
-
-  G4cout<< "To test Tubs." << G4endl;
-  test_one_solid( useCase= kTubs,  no_points, dirs_per_point ); 
-  
-  
-  G4cout<< "To test Cons." << G4endl;
-  test_one_solid( useCase= kCons,  no_points, dirs_per_point ); 
-  
-
-  G4cout<< "To test Orb." << G4endl;
-  test_one_solid( useCase= kOrb,  no_points, dirs_per_point ); 
-
+     
   G4cout<< "To test Para." << G4endl;
   test_one_solid( useCase= kPara,  no_points, dirs_per_point ); 
  
@@ -674,10 +662,21 @@ int main(int argc, char** argv)
 
   G4cout<< "To test Trd." << G4endl;
   test_one_solid( useCase= kTrd,  no_points, dirs_per_point ); 
-  */
+
+  G4cout<< "To test Orb." << G4endl;
+  test_one_solid( useCase= kOrb,  no_points, dirs_per_point ); 
+  
+
+  G4cout<< "To test Tubs." << G4endl;
+  test_one_solid( useCase= kTubs,  no_points, dirs_per_point ); 
+   
+      
+  G4cout<< "To test Cons." << G4endl;
+  test_one_solid( useCase= kCons,  no_points, dirs_per_point ); 
+  */   
   G4cout<< "To test Torus" << G4endl;
   test_one_solid( useCase= kTorus,  no_points, dirs_per_point ); 
-
+ 
   return 0; 
 }
 
@@ -1036,7 +1035,7 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
     {
       position = -25. + j; 
       G4cout<<position<<"\t"<<dOut[j]<<G4endl;      
-      foutDistOut<<position<<"\t"<<dIn[j]<<G4endl;      
+      foutDistOut<<position<<"\t"<<dOut[j]<<G4endl;      
     }
 
     break;
@@ -1146,7 +1145,9 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
         
         if( surfaceA == kOutside )
         {
-          if ( dP.dot(pS) < 0. )  // may be < strictly?
+          norm = t1.SurfaceNormal(pS);
+
+          if ( dP.dot(norm) < 0. )  // may be < strictly?
 	  {
             iIn++;
 
@@ -1224,7 +1225,7 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
     {
       position = -25. + j; 
       G4cout<<position<<"\t"<<dOut[j]<<G4endl;      
-      foutDistOut<<position<<"\t"<<dIn[j]<<G4endl;      
+      foutDistOut<<position<<"\t"<<dOut[j]<<G4endl;      
     }
 
     break;
@@ -1261,7 +1262,9 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
         
         if( surfaceA == kOutside )
         {
-          if ( dP.dot(pS) < 0. )  // may be < strictly?
+          norm = c1.SurfaceNormal(pS);
+
+          if ( dP.dot(norm) < 0. )  // may be < strictly?
 	  {
             iIn++;
 
@@ -1339,7 +1342,7 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
     {
       position = -25. + j; 
       G4cout<<position<<"\t"<<dOut[j]<<G4endl;      
-      foutDistOut<<position<<"\t"<<dIn[j]<<G4endl;      
+      foutDistOut<<position<<"\t"<<dOut[j]<<G4endl;      
     }
 
     break;
@@ -1377,7 +1380,9 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
         
         if( surfaceA == kOutside )
         {
-          if ( dP.dot(pS) < 0. )  // may be < strictly?
+          norm = tor1.SurfaceNormal(pS);
+
+          if ( dP.dot(norm) < 0. )  // may be < strictly?
 	  {
             iIn++;
 
@@ -1455,7 +1460,7 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
     {
       position = -25. + j; 
       G4cout<<position<<"\t"<<dOut[j]<<G4endl;      
-      foutDistOut<<position<<"\t"<<dIn[j]<<G4endl;      
+      foutDistOut<<position<<"\t"<<dOut[j]<<G4endl;      
     }
 
     break;
