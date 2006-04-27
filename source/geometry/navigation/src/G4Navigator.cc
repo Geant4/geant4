@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.19 2006-04-26 16:14:16 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.20 2006-04-27 16:29:25 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -40,8 +40,8 @@
 // Constructor
 // ********************************************************************
 //
-G4Navigator::G4Navigator(const G4String& name)
-  : fName(name), fWasLimitedByGeometry(false), fTopPhysical(0),
+G4Navigator::G4Navigator()
+  : fActive(false), fWasLimitedByGeometry(false), fTopPhysical(0),
     fCheck(false), fPushed(false), fVerbose(0)
 {
   ResetStackAndState();

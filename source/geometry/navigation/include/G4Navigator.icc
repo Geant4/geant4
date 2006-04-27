@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.icc,v 1.8 2006-04-26 16:14:15 gcosmo Exp $
+// $Id: G4Navigator.icc,v 1.9 2006-04-27 16:29:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -353,23 +353,23 @@ void  G4Navigator::SetVerboseLevel(G4int level)
 }
 
 // ********************************************************************
-// GetName
+// IsActive
 // ********************************************************************
 //
 inline
-const G4String& G4Navigator::GetName() const
+G4bool G4Navigator::IsActive() const
 {
-  return fName;
+  return fActive;
 }
 
 // ********************************************************************
-// SetName
+// Activate
 // ********************************************************************
 //
 inline
-void  G4Navigator::SetName(const G4String& name)
+void  G4Navigator::Activate(G4bool flag)
 {
-  fName = name;
+  fActive = flag;
 }
 
 // ********************************************************************
