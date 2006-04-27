@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.hh,v 1.1 2006-04-26 13:21:43 japost Exp $
+// $Id: G4PathFinder.hh,v 1.2 2006-04-27 14:58:28 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -131,18 +131,20 @@ class G4PathFinder
    G4int   fNoActiveNavigators; 
    G4int   fNoTotalNavigators; 
 
-    
-   G4double fLimitedStep[MaxNav]; 
-   G4double fCurrentStepSize[MaxNav]; 
+   static const G4int MaxNav = 8;   // rename to kMaxNoNav ??
+   // enum EMaximumNavs { MaxNav = 8; }
+   enum     ELimitedStep { kNot, kUnique, kTransport, kShared } ; 
+   ELimitedStep  fLimitedStep[MaxNav]; 
+   G4double      fCurrentStepSize[MaxNav]; 
+   G4double      fNewSafety[ MaxNav ]; 
 
-   G4FieldTrack    End_PointAndTangent;
+   G4FieldTrack    EndState;
      // End point storage
    G4bool      fParticleIsLooping;
    G4int  fVerboseLevel;
      // For debuging purposes
    G4int  fMax_loop_count;
     // Limit for the number of sub-steps taken in one call to ComputeStep
-
 
 };
 
@@ -152,28 +154,6 @@ class G4PathFinder
 #include "G4PathFinder.icc"
 
 #endif 
-
-
-#if 0
-
-// Methods moved to G4NavigatorDispatcher (or similar class)
-
-  // Initialisation, activation, de-activation methods
-  // --------------------------
-   G4int   RegisterNavigator( G4Navigator *pNavigator ); 
-   G4int   DeregisterNavigator( G4Navigator *pNavigator ); 
-     // Registers the navigator and returns its ID
-     //   -> registering a new navigator will clear all Active flags 
-     //       so it can only be done before tracking starts.
-   G4bool  ActivateNavigator( G4int navId );
-   G4bool  DeactivateNavigator( G4int navId ); 
-     // Activate (de-activate) the relevant navigator (return true=ok) 
-     //  First one to be activated will be 'lead' navigator (its call will initiative step)
-   ClearActiveNavigators(); 
-     // Clears active flag for all navigators - must be called at the end of a track
-
-#endif
-
 
 #if 0
   // Proposal 2 or internal method ??
