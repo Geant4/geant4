@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.cc,v 1.5 2006-04-26 16:15:21 gcosmo Exp $
+// $Id: G4TransportationManager.cc,v 1.6 2006-04-27 16:30:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,16 +37,25 @@
 #include "G4PropagatorInField.hh"
 #include "G4FieldManager.hh"
 
+// Initialise the static instance of the singleton
+//
 G4TransportationManager* G4TransportationManager::fTransportationManager=0;
 
+// ----------------------------------------------------------------------------
+// Constructor
+//
 G4TransportationManager::G4TransportationManager() 
 { 
   if (!fTransportationManager)
   {
-    G4Navigator* trackingNavigator = new G4Navigator("Tracking-Navigator");
-    fGeomMessenger     = new G4GeometryMessenger(this);
-    fNavigators.push_back(std::make_pair(true, trackingNavigator));
+    // Create the navigator for tracking and activate it; add to collections
+    //
+    G4Navigator* trackingNavigator = new G4Navigator();
+    trackingNavigator->Activate(true);
+    fNavigators.push_back(trackingNavigator);
     fActiveNavigators.push_back(trackingNavigator);
+
+    fGeomMessenger     = new G4GeometryMessenger(this);
     fFieldManager      = new G4FieldManager();
     fPropagatorInField = new G4PropagatorInField(trackingNavigator,
                                                  fFieldManager);
@@ -61,6 +70,9 @@ G4TransportationManager::G4TransportationManager()
   }
 } 
 
+// ----------------------------------------------------------------------------
+// Destructor
+//
 G4TransportationManager::~G4TransportationManager()
 {
   delete fFieldManager; 
@@ -69,6 +81,11 @@ G4TransportationManager::~G4TransportationManager()
   delete fGeomMessenger;
 }
 
+// ----------------------------------------------------------------------------
+// GetTransportationManager
+//
+// Retrieve the static instance of the singleton
+//
 G4TransportationManager* G4TransportationManager::GetTransportationManager()
 {
    static G4TransportationManager theInstance;
@@ -78,14 +95,22 @@ G4TransportationManager* G4TransportationManager::GetTransportationManager()
    return fTransportationManager;
 }
 
+// ----------------------------------------------------------------------------
+// SetFieldManager()
+//
+// Set the associated field manager.
+//
 void G4TransportationManager::SetFieldManager(G4FieldManager* newFieldManager)
 {
    fFieldManager = newFieldManager; 
 
    // Message the PropagatorInField, 
-   //     which also maintains this information (to be reviewed)
+   // which also maintains this information (to be reviewed)
+   //
    if( fPropagatorInField )
+   {
       fPropagatorInField -> SetDetectorFieldManager( newFieldManager );
+   }
 }
 
 // ----------------------------------------------------------------------------
@@ -96,10 +121,10 @@ void G4TransportationManager::SetFieldManager(G4FieldManager* newFieldManager)
 //
 void G4TransportationManager::ClearNavigators()
 {
-   std::vector<std::pair<G4bool, G4Navigator*> >::iterator pNav;
+   std::vector<G4Navigator*>::iterator pNav;
    for (pNav=fNavigators.begin(); pNav!=fNavigators.end(); pNav++)
    {
-     delete pNav->second;
+     delete *pNav;
    }
    fNavigators.clear();
    fActiveNavigators.clear();
@@ -116,14 +141,11 @@ void G4TransportationManager::ClearNavigators()
 G4bool G4TransportationManager::RegisterNavigator( G4Navigator* aNavigator )
 {
    G4bool done = false;
-   std::vector<std::pair<G4bool, G4Navigator*> >::iterator pNav;
-   for (pNav=fNavigators.begin(); pNav!=fNavigators.end(); pNav++)
-   {
-     if (pNav->second == aNavigator) { break; }
-   }
+   std::vector<G4Navigator*>::iterator pNav =
+        find(fNavigators.begin(), fNavigators.end(), aNavigator);
    if (pNav == fNavigators.end())
    {
-      fNavigators.push_back(std::make_pair(false, aNavigator));
+      fNavigators.push_back(aNavigator);
       done = true;
    }
    return done;
@@ -139,17 +161,14 @@ G4bool G4TransportationManager::RegisterNavigator( G4Navigator* aNavigator )
 //
 void G4TransportationManager::DeRegisterNavigator( G4Navigator* aNavigator )
 {
-   if (aNavigator == fNavigators[0].second)
+   if (aNavigator == fNavigators[0])
    {
       G4Exception("G4TransportationManager::DeRegisterNavigator()",
                   "InvalidCall", FatalException,
                   "The navigator for tracking CANNOT be deregistered!");
    }
-   std::vector<std::pair<G4bool, G4Navigator*> >::iterator pNav;
-   for (pNav=fNavigators.begin(); pNav!=fNavigators.end(); pNav++)
-   {
-     if (pNav->second == aNavigator) { break; }
-   }
+   std::vector<G4Navigator*>::iterator pNav =
+        find(fNavigators.begin(), fNavigators.end(), aNavigator);
    if (pNav != fNavigators.end())
    {
       fNavigators.erase(pNav);
@@ -157,7 +176,8 @@ void G4TransportationManager::DeRegisterNavigator( G4Navigator* aNavigator )
    else
    {
       G4String message
-         = "Navigator -" + aNavigator->GetName() + "- not found in memory!";      
+         = "Navigator for volume -" + aNavigator->GetWorldVolume()->GetName()
+         + "- not found in memory!";      
       G4Exception("G4TransportationManager::DeRegisterNavigator()",
                   "NoEffect", JustWarning, message);
    }
@@ -167,23 +187,25 @@ void G4TransportationManager::DeRegisterNavigator( G4Navigator* aNavigator )
 // ActivateNavigator()
 //
 // Provided a pointer to an already allocated navigator object, set to 'true'
-// the associated activation flag in the navigators collection.
+// the associated activation flag for the navigator in the collection.
 // If the provided navigator is not already registered, issue a warning
 // Return the number of navigators currently activated including the new one.
 //
 G4int G4TransportationManager::ActivateNavigator( G4Navigator* aNavigator )
 {
-   std::vector<std::pair<G4bool, G4Navigator*> >::iterator pNav;
-   for (pNav=fNavigators.begin(); pNav!=fNavigators.end(); pNav++)
-   {
-     if (pNav->second == aNavigator) { pNav->first = true; break; }
-   }
+   std::vector<G4Navigator*>::iterator pNav =
+        find(fNavigators.begin(), fNavigators.end(), aNavigator);
    if (pNav == fNavigators.end())
    {
       G4String message
-         = "Navigator -" + aNavigator->GetName() + "- not found in memory!";      
+         = "Navigator for volume -" + aNavigator->GetWorldVolume()->GetName()
+         + "- not found in memory!";      
       G4Exception("G4TransportationManager::ActivateNavigator()",
                   "NoEffect", JustWarning, message);
+   }
+   else
+   {
+      (*pNav)->Activate(true);
    }
    std::vector<G4Navigator*>::iterator pActiveNav =
         find(fActiveNavigators.begin(), fActiveNavigators.end(), aNavigator);
@@ -204,17 +226,19 @@ G4int G4TransportationManager::ActivateNavigator( G4Navigator* aNavigator )
 //
 void G4TransportationManager::DeActivateNavigator( G4Navigator* aNavigator )
 {
-   std::vector<std::pair<G4bool, G4Navigator*> >::iterator pNav;
-   for (pNav=fNavigators.begin(); pNav!=fNavigators.end(); pNav++)
-   {
-     if (pNav->second == aNavigator) { pNav->first = false; break; }
-   }
+   std::vector<G4Navigator*>::iterator pNav =
+        find(fNavigators.begin(), fNavigators.end(), aNavigator);
    if (pNav == fNavigators.end())
    {
       G4String message
-         = "Navigator -" + aNavigator->GetName() + "- not found in memory!";
+         = "Navigator for volume -" + aNavigator->GetWorldVolume()->GetName()
+         + "- not found in memory!";
       G4Exception("G4TransportationManager::DeActivateNavigator()",
                   "NoEffect", JustWarning, message);
+   }
+   else
+   {
+      (*pNav)->Activate(false);
    }
    std::vector<G4Navigator*>::iterator pActiveNav =
         find(fActiveNavigators.begin(), fActiveNavigators.end(), aNavigator);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.hh,v 1.3 2006-04-26 16:15:21 gcosmo Exp $
+// $Id: G4TransportationManager.hh,v 1.4 2006-04-27 16:30:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4TransportationManager
@@ -44,7 +44,6 @@
 
 #include "G4Navigator.hh"
 
-#include <utility>
 #include <vector>
 
 class G4PropagatorInField;
@@ -58,9 +57,9 @@ class G4TransportationManager
      static G4TransportationManager* GetTransportationManager();
        // Retrieve the static instance
 
-     inline G4PropagatorInField*  GetPropagatorInField() const;
-     inline G4FieldManager*       GetFieldManager() const;
+     inline G4PropagatorInField* GetPropagatorInField() const;
      inline void SetPropagatorInField( G4PropagatorInField* newFieldPropagator );
+     inline G4FieldManager* GetFieldManager() const;
      void SetFieldManager( G4FieldManager* newFieldManager );
        // Accessors for field handling
 
@@ -91,11 +90,10 @@ class G4TransportationManager
 
   private:
 
-     std::vector<std::pair<G4bool, G4Navigator*> > fNavigators;
-       // The collection of pairs, where the associated boolean flag
-       // identifies if a navigator is 'active' or not
+     std::vector<G4Navigator*> fNavigators;
+       // The collection of all navigators registered
      std::vector<G4Navigator*> fActiveNavigators;
-       // The list of active navigators
+       // The collection of only active navigators
 
      G4PropagatorInField*    fPropagatorInField;
      G4FieldManager*         fFieldManager;

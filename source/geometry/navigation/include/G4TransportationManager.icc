@@ -21,45 +21,73 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.icc,v 1.3 2006-04-26 16:15:21 gcosmo Exp $
+// $Id: G4TransportationManager.icc,v 1.4 2006-04-27 16:30:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //  GEANT 4  inlined function members implementation
 // ------------------------------------------------------------
 //
-// Created:  10 March 1997, J. Apostolakis
+// Created :  10 March 1997, J. Apostolakis
+// Reviewed:  26 April 2006, G. Cosmo
 //  
-// --------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
+// ----------------------------------------------------------------------------
+// GetNavigatorForTracking()
+//
+// Utility method to return the active navigator for tracking, always
+// the first in the collection of registered navigators.
+//
 inline
 G4Navigator* G4TransportationManager::GetNavigatorForTracking() const
 {
-   return fNavigators[0].second;
+   return fNavigators[0];
 }
 
+// ----------------------------------------------------------------------------
+// SetNavigatorForTracking()
+//
+// Set the active navigator for tracking, always
+// the first in the collection of registered navigators.
+//
+inline
+void G4TransportationManager::SetNavigatorForTracking(G4Navigator* newNavigator)
+{
+   fNavigators[0] = newNavigator;
+}
+
+// ----------------------------------------------------------------------------
+// GetPropagatorInField()
+//
+// Return the associated propagator in field.
+//
 inline
 G4PropagatorInField* G4TransportationManager::GetPropagatorInField() const
 {
    return fPropagatorInField;
 }
 
-inline
-G4FieldManager* G4TransportationManager::GetFieldManager() const
-{
-   return fFieldManager;
-}
-
-inline
-void G4TransportationManager::SetNavigatorForTracking(G4Navigator* newNavigator)
-{
-   fNavigators[0] = std::make_pair(true, newNavigator);
-}
-
+// ----------------------------------------------------------------------------
+// SetPropagatorInField()
+//
+// Set the associated propagator in field.
+//
 inline
 void G4TransportationManager::
 SetPropagatorInField( G4PropagatorInField* newFieldPropagator )
 {
    fPropagatorInField = newFieldPropagator;
+}
+
+// ----------------------------------------------------------------------------
+// GetFieldManager()
+//
+// Return the associated field manager.
+//
+inline
+G4FieldManager* G4TransportationManager::GetFieldManager() const
+{
+   return fFieldManager;
 }
 
 // ----------------------------------------------------------------------------
