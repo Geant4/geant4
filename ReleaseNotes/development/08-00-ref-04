@@ -1,0 +1,219 @@
+
+                       geant4-08-00-ref-04
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Updated particle definitions to match with PDG2005.
+  o G4Ions is defined as the base class of all nuclei.
+  o Provide support for material scanning in G4Region in the case of nested
+    parameterisations in the geometry setup.
+  o Added mass and spin effects in G4hIonisation, especially important for
+    pion ionisation.
+  o Implemented exact proton and neutron accounting in G4ReactionDynamics
+    to improve baryon number conservation.
+  o Implementation of 2D text for visualization and addition of Trajectory
+    Filter Models.
+  o Corrected setup for MacOSX to support dynamic libraries.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+config                                           config-V08-00-01
+------
+- Darwin-g++: corrected linker options for generation of dynamic libraries.
+  Now dynamic libraries on MacOSX finally work. Tested on MacOS 10.4.5 with
+  gcc-4.0.1.
+- binmake.gmk: fixed old-standing warning on WIN32-VC for file extension of
+  target object file. Defined TARGOBJEXT internal variable defining the
+  actual extension: .o for UNIX, .OBJ for Windows platforms.
+
+geometry/magneticfield                           field-V08-00-00
+----------------------
+- G4FieldManager: added missing 'const GetChordFinder()' method.
+  Addresses problem report #847.
+  Corrected description at top of header file.
+
+geometry/management                              geommng-V08-00-01
+-------------------
+- G4Region:
+  + Support material scanning for nested parameterisations. Moved classes
+    G4VNestedParameterisation and G4VVolumeMaterialScanner from 'volumes'
+    module.
+  + Fixed implementation of utility method GetParentRegion() to return a
+    boolean flag as argument, to identify if parent region is unique or not.
+  + Simplified implementation of method BelongsTo(PV*).
+- Workaround in G4SmartVoxelHeader::BuildNodes() to avoid rare cases of
+  negative extent returned by volumes due to malformed geometries or
+  inaccurate extent calculation.
+
+geometry/volumes                                 geomvol-V08-00-02
+----------------
+- Moved G4VNestedParameterisation and G4VVolumeMaterialScanner classes to
+  'management' module, to support material scanning in G4Region.
+
+graphics_reps                                    greps-V08-00-02
+-------------
+- Added classes G4VFilter and G4SmartFilter.
+- G4VGraphicsScene: added Begin/EndPrimitives2D() methods.
+- G4VVisManager: added Draw2d(const G4Text&) method.
+
+materials                                        materials-V08-00-01
+---------
+- G4NistMaterialManager: fixed bug in regime of combined material
+  definition (partially via NIST DB and partially by user).
+
+particles                                        particles-V08-00-04
+---------
+- Updated particles to match with PDG2005:
+  o Updated name and PDG code for some resonaces.
+  o Updated mass/width for resonance particle.
+  o Updated mass/width/life for heavy flavor particle.
+  o Updated mass/life/decay modes for tau+-.
+- G4Ions is defined as the base class of all nuclei:
+  o G4GenericIon and all light ion classes (including proton and neutron)
+    are derived from G4Ions.
+  o GetAtomicMass() and GetAtomicNumber() of G4ParticleDefinition
+    are changed to be non-virtual.
+  o AtomicMass and AtomicNumber are set in the G4Ions constructor.
+- All particles are deleted when calling G4ParticleTable::RemoveAllParticles()
+  and is invoked in the destructor of G4ParticleTable.
+- Named back N(2090) to N(2080) to avoid inconsistency with usage in the
+  hadronic 'im_r_matrix' model.
+
+processes/electromagnetic/standard               emstand-V08-00-18
+----------------------------------
+- G4hIonisation: added mass and spin effects (important for pion ionisation).
+- Moved G4SynchrotronRadiation to 'xrays' module and fixed bug for unit
+  polarisation in PostStepDoIt().
+
+processes/electromagnetic/utils                  emutils-V08-00-12
+-------------------------------
+- G4EmCalculator: fixed problem for gammas concerning
+  GetCrossSectionPerVolume().
+- Added flag of LPM effect to G4LossTableMessenger, G4LossTableManager and
+  G4EmProcessOptions.
+- Fixed problem of activation/deactivation in G4LossTableManager.
+
+processes/electromagnetic/xrays                  xrays-V08-00-02
+-------------------------------
+- Moved G4SynchrotronRadiation from 'standard' module
+- Tuned angular distribution of XTR according to transparent regular
+  approximation.
+
+processes/hadronic/management                    hadr-man-V08-00-03
+-----------------------------
+- G4HadronicProcess::ChooseAandZ(): throw fatal exception if Z>92 is chosen.
+- G4HadronicProcess::GeneralPostStepDoIt(): for suspended tracks, allow
+  PostStep action to occur at end of step, but maintain suspended track status.
+  Removed warning for suspended tracks.
+
+processes/hadronic/models/de_excitation          hadr-deex-V08-00-02
+---------------------------------------
+- photon_evaporation:
+  o Fixed memory leak in method G4PhotonEvaporation::BreakItUp().
+    Addresses problem report #851.
+
+processes/hadronic/models/management             hadr-modman-V08-00-00
+------------------------------------
+- G4InelasticInteraction: in method CalculateMomenta(), corrected excess
+  energy problem by doing two calculations of nuclear evaporation, one for
+  the annihilation case and one for non-annihilation.
+  Previously one value was applied to both cases.
+
+processes/hadronic/util                          hadr-util-V08-00-03
+-----------------------
+- Fixed bug in methods G4Nucleus::GetFermiMomentum() and
+  G4ReactionKinematics::TwoBodyScattering(): momentum is now isotropic;
+  previously theta was incorrectly sampled by pi*G4UniformRand().
+  Addresses problem report #838.
+- G4ReactionDynamics:
+  o Implemented exact proton and neutron accounting to improve baryon number
+    conservation
+  o Added new method GetFinalStateNucleons() which returns the number of
+    protons and neutrons generated by the initial projectile-nucleon collision.
+  o Replaced spall argument in AddBlackTrackParticles() with PinNucleus and
+    NinNucleus.
+- G4Nucleus:
+  o Added new method AnnihilationEvaporationEffects() which calculates energy
+    to be given to evaporated nucleons after annihilation.
+  o Added new methods GetAnnihilationPNBlackTrackEnergy() and
+    GetAnnihilationDTABlackTrackEnergy() to retrieve the values calculated
+    above.
+
+track                                            track-V08-00-02
+-----
+- Improved G4Track::GetVelocity() for optical photon.
+
+visualization                                    vis-V08-00-05
+-------------
+- Main features:
+  o Implementation of 2D text in base classes and concrete implementation.
+  o Migration to direct access to G4PhysicalVolumeModel for DAWN, HepRep,
+    OpenGL, Tree and management.
+  o Addition of Trajectory Filter Models.
+- management:
+  o Fixed memory leak in CheckModel(). Addresses problem report #861.
+  o Print available models on initialisation.
+  o Implemented method Draw2D(const G4Text&).
+  o Implemented methods Begin/EndPrimitives2D().
+  o Introduced G4VisFilterManager to manage filtering.
+  o Introduces trajectory drawing manager.
+  o G4VisExecutive: added class G4TrajectoryDrawByOriginVolumeFactory.
+  o Corrected logic of transients re-computation.
+  o Unified treatment of bools in commands.
+- modeling:
+  o Added Print() method to G4VModelFactory.
+  o Fixed compilation warnings on Linux.
+  o Added classes G4TrajectoryFilterFactories and G4TrajectoryParticleFilter.
+  o Introduced class G4TrajectoryDrawByOriginVolume.
+  o Partial migration away from EstablishSpecials mechanism.
+- OpenGL:
+  o Fixed compilation problem on Windows happening in previous
+    reference tag.
+  o Implemented methods Begin/EndPrimitives2D().
+- OpenInventor:
+  o General improvements in logic.
+  o Corrected use <cmath> instead of <math.h> where necessary.
+- Tree:
+  o Migration away from EstablishSpecials mechanism.
+- XXX:
+  o Added classes G4XXXFile, G4XXXStored, G4XXXSG.
+  o Improvement of legibility.
+
+examples                                         examples-V08-00-04
+--------
+- Updated reference outputs.
+- extended/electromagnetic/TestEm0 (testem0-V08-00-02)
+  o Added transport mean free path for multiple scattering.
+  o Fixed compilation warnings and improved cout.
+- extended/electromagnetic/TestEm2 (testem2-V08-00-03)
+  o SteppingAction: edep randomly distribued along step.
+- extended/electromagnetic/TestEm3 (testem3-V08-00-01)
+  o Migration mum -> um in many macros.
+  o Added extra material and use G4 NIST element DB.
+  o Added Livermore and Penelope PhysicsLists.
+  o Fixed compilation warnings in HistoManager.
+- extended/electromagnetic/TestEm7 (testem7-V08-00-02)
+  o SteppingAction: edep randomly distribued along step.
+- extended/electromagnetic/TestEm11 (testem11-V08-00-01)
+- extended/electromagnetic/TestEm12 (testem12-V08-00-01)
+  o HistoManager: compute stepMax from histo 1 (stepMax <= binWidth).
+  o RunAction: pass stepMax from HistoManager to StepMax process.
+  o StepMax: added boolean flag 'apply'.
+  o SteppingAction: edep randomly distribued along step.
+- extended/electromagnetic/TestEm13 (testem13-V08-00-06)
+  o Creation from previous TestEm13 which is now renamed to TestEm14.
+    Allows to compute the total cross section of one or several processes.
+- extended/electromagnetic/TestEm14 (testem14-V08-00-02)
+  o Moved from TestEm13. 
+  o Allows to compute the total cross section of one or several
+    processes and to plot the final state at interaction point.
+- novice/N02 (exampleN02-V08-00-00)
+  o Added a sentence in README for G4UserLimits and G4StepLimiter.
+
+tests                                            tests-V08-00-04
+-----
+- Updated reference outputs.
