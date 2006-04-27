@@ -64,6 +64,7 @@ private:
 
 // Body
 private:
+  static G4bool    onlyCS;  // flag to calculate only CrossSection
   static G4double  lastSig; // Last value of the Cross Section
   static G4double* lastGDR; // Pointer to the last array of GDR cross sections
   static G4double* lastHEN; // Pointer to the last array of HEn cross sections

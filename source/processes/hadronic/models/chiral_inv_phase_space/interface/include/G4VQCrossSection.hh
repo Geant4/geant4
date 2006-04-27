@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VQCrossSection.hh,v 1.4 2006-02-06 09:35:57 mkossov Exp $
+// $Id: G4VQCrossSection.hh,v 1.5 2006-04-27 16:39:58 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -171,10 +171,10 @@ protected:
   static G4double  lastP;    // Last used in the cross section Momentum
   static G4double  lastTH;   // Last value of the Momentum Threshold
   static G4double  lastCS;   // Last value of the Cross Section
+  static G4int     lastI;    // The last position in the DAMDB
 
 private:
-  static G4int     lastI;      // The last position in the DAMDB
-  static G4double  tolerance;  // relative tolerance in momentum to get old CroSec
+  static G4double  tolerance;// relative tolerance in momentum to get old CroSec
 };
 
 #endif

@@ -80,7 +80,7 @@ private:
 
 // Body
 private:
-  static G4bool    onlyCS;   // flag to calculate only CS
+  static G4bool    onlyCS;   // flag to calculate only CrossSection
   static G4double  lastSig;  // Last calculated cross section
   static G4int     lastL;    // Last used in the cross section TheLastBin
   static G4double  lastE;    // Last used in the cross section Energy

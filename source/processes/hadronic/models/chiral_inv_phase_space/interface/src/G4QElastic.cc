@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.3 2006-04-24 14:41:19 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.4 2006-04-27 16:39:58 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -66,7 +66,7 @@ G4int G4QElastic::GetNumberOfNeutronsInTarget() {return nOfNeutrons;}
 // output of the function must be in units of length! L=1/sig_V,sig_V=SUM(n(j,i)*sig(j,i)),
 // where n(i,j) is a number of nuclei of the isotop j of the element i in V=1(lengtUnit^3)
 // ********** All CHIPS cross sections are calculated in the surface units ************
-G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCondition* Fc)
+G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCondition* Fc)
 {
   *Fc = NotForced;
   const G4DynamicParticle* incidentParticle = aTrack.GetDynamicParticle();
@@ -140,12 +140,12 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCondi
           G4double abund=abuVector[j];
 								  std::pair<G4int,G4double>* pr= new std::pair<G4int,G4double>(N,abund);
 #ifdef debug
-          G4cout<<"G4QElastic::PostStepDoIt:pair#="<<j<<", N="<<N<<",ab="<<abund<<G4endl;
+          G4cout<<"G4QElastic::GetMeanFreePath:pair#="<<j<<", N="<<N<<",ab="<<abund<<G4endl;
 #endif
           newAbund->push_back(pr);
 						  }
 #ifdef debug
-        G4cout<<"G4QElastic::PostStepDoIt: pairVectorLength="<<newAbund->size()<<G4endl;
+        G4cout<<"G4QElastic::GetMeanFreePath: pairVectorLength="<<newAbund->size()<<G4endl;
 #endif
         indEl=G4QIsotope::Get()->InitElement(Z,indEl,newAbund); // definition of the newInd
         for(G4int k=0; k<isoSize; k++) delete (*newAbund)[k];   // Cleaning temporary
@@ -165,9 +165,11 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCondi
       G4int N=curIs->first;                 // #of Neuterons in the isotope j of El i
       IsN->push_back(N);                    // Remember Min N for the Element
 #ifdef debug
-  G4cout<<"G4QElast::PSDI:*true*, P="<<Momentum<<",Z="<<Z<<",N="<<N<<",PDG="<<pPDG<<G4endl;
+  G4cout<<"G4QElast::GMFP:*true*, P="<<Momentum<<",Z="<<Z<<",N="<<N<<",PDG="<<pPDG<<G4endl;
 #endif
-      G4double CSI=CSmanager->GetCrossSection(true,Momentum,Z,N,pPDG);//CS(j,i) for isotope
+		    G4bool ccsf=true;
+      if(Q==-27.) ccsf=false;
+      G4double CSI=CSmanager->GetCrossSection(ccsf,Momentum,Z,N,pPDG);//CS(j,i) for isotope
       curIs->second = CSI;
       susi+=CSI;                            // Make a sum per isotopes
       SPI->push_back(susi);                 // Remember summed cross-section
@@ -228,7 +230,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   G4cout<<"G4QElastic::PostStepDoIt: Before the GetMeanFreePath is called"<<G4endl;
 #endif
   G4ForceCondition cond=NotForced;
-  GetMeanFreePath(track, 1., &cond);                  // @@ ?? jus to update parameters?
+  GetMeanFreePath(track, -27., &cond);                  // @@ ?? jus to update parameters?
 #ifdef debug
   G4cout<<"G4QElastic::PostStepDoIt: After the GetMeanFreePath is called"<<G4endl;
 #endif
