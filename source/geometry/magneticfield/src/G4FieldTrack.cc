@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.cc,v 1.9 2006-04-28 13:24:44 japost Exp $
+// $Id: G4FieldTrack.cc,v 1.10 2006-04-28 15:46:36 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -94,6 +94,15 @@ G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition,
   InitialiseSpin( Spin ); 
 
   fpChargeState = new G4ChargeState( DBL_MAX );     //  charge not yet set !!
+}
+
+G4FieldTrack::G4FieldTrack( char )                  //  Nothing is set !!
+  : fRestMass_c2(0.0), fLabTimeOfFlight(0.0)
+{
+  G4ThreeVector Zero(0.0, 0.0, 0.0);
+  SetCurvePnt( Zero, Zero, 0.0 );
+  InitialiseSpin( Zero ); 
+  fpChargeState = new G4ChargeState( DBL_MAX );   
 }
 
 void G4FieldTrack::
