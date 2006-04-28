@@ -48,6 +48,7 @@
 #include "G4BraggModel.hh"
 #include "G4BetheBlochModel.hh"
 #include "G4EnergyLossForExtrapolator.hh"
+#include "G4NucleiProperties.hh"
 #include <iomanip>
 #include <fstream>
 
@@ -173,7 +174,7 @@ void test31Histo::EndOfHisto()
   G4cout << std::setprecision(4) << "Average number of pi+pi-       " << xpi << G4endl;
   G4cout<<"===================================================================="<<G4endl;
 
-  //  TableControl();
+  if(1 < verbose) TableControl();
   //  MuonTest();
   //  ElectronTest();
   if(0 < nHisto) {
@@ -184,6 +185,15 @@ void test31Histo::EndOfHisto()
     }
     histo->save();
   }
+  G4cout<<"=========   End of tets31Histo  ============================"<<G4endl;  
+
+  G4double r1 = G4NucleiProperties::GetNuclearMass(12., 6.);
+  G4double r2 = G4NucleiProperties::GetNuclearMass(8., 4.);
+  G4double r3 = G4NucleiProperties::GetNuclearMass(11., 6.);
+  G4double r4 = G4NucleiProperties::GetNuclearMass(11., 5.);
+
+  G4cout << "<<< (12,6)= " <<r1 << "  (8,4)= " <<r2<<"  (11,6)= " <<r3<<"  (11,5)= "<<r4<<G4endl;
+
 
   //if(nHisto == 0) TableControl();
   //  CrossSections();
@@ -337,131 +347,141 @@ void test31Histo::TableControl()
   cal.SetVerbose(0);
 
   // parameters
-  G4double tmin = 1.*keV;
-  G4double tmax = 1.*GeV;
-  G4int    nbin = 60;
+  // G4double tmin = 1.*keV;
+  // G4double tmax = 1.*GeV;
+  // G4int    nbin = 60;
+  G4String ion_name  = "ionIoni";
+  G4String h_name    = "hIoni";
+  G4String mu_name   = "muIoni";
+  G4String proc_name = "eIoni";
   G4String part_name = "proton";
-  G4String proc_name = "ionIoni";
-  G4String mat_name  = "G4_WATER";
-
-  //  G4int   index = 1;
-  //  G4double cut  = 100.*GeV; 
-  // part = G4Proton::Proton();
-  // part = G4Electron::Electron();
-  // part = G4Alpha::Alpha();
-  // cal.PrintDEDXTable(part);
-  // cal.PrintRangeTable(part);
-  // cal.PrintInverseRangeTable(part);
- 
-  //  part_name = "alpha";
-  part_name = "C12[0.0]";
-  //  part_name = "Pb208[0.0]";
-  //   mat_name  = "G4_W";
-  // mat_name  = "G4_Al";
-  //    mat_name  = "G4_Si";
-  //  mat_name  = "G4_AU"; 
-  //  mat_name  = "G4_Fe";
-  // mat_name  = "G4_Be";
-  // proc_name = "hLowEIoni";
-  //  proc_name = "hIoni";
  
   const G4ParticleDefinition* part = cal.FindParticle(part_name);
   if(!part) return;
+  // cal.PrintDEDXTable(part);
+  // cal.PrintRangeTable(part);
+  // cal.PrintInverseRangeTable(part);
+
+  G4String mat_name  = "G4_WATER";
   G4Material* mat = mman->FindOrBuildMaterial(mat_name);
   //mat->SetChemicalFormula("H_2O");
   G4double fact = 0.001*gram/(MeV*cm2*mat->GetDensity());
 
-  G4double xmin = std::log10(tmin);
-  G4double xmax = std::log10(tmax);
-  G4double step = (xmax - xmin)/(G4double)nbin;
-  G4double x    = xmin;
-  G4cout << "====================================================================" << G4endl;
-  G4cout << "   Tables control for  " << part_name << G4endl;
-  G4cout << "   Material            " << mat_name << G4endl;
-  G4cout << "====================================================================" << G4endl;
+  //  G4double xmin = std::log10(tmin);
+  // G4double xmax = std::log10(tmax);
+  // G4double step = (xmax - xmin)/(G4double)nbin;
+  // G4double x    = xmin;
 
-  const G4int ne = 12;
-  G4double e0[ne]={0.025, 0.1, 0.2, 0.3, 1.0, 2.0, 5.0, 10., 15.0, 20.0, 100., 1000.};
+  const G4int ne = 31;
+  G4double e0[ne]={0.001, 0.002, 0.03, 0.05, 0.1, 0.2, 0.3, 
+		   0.5,   1.0,   2.0,  3.0,  5.0, 10., 
+		   15.0, 20.0,   30.,  50.,  100., 200., 300., 
+		   500., 1000., 2000., 3000., 5000., 10000.,
+                  30000., 100000., 300000., 1000000., 10000000.,};
+  const G4int np = 8;
+  G4String namep[np] = {"e-","mu+","pi-","proton","alpha", "C12[0.0]", 
+			"Ar40[0.0]", "Pb208[0.0]"};
 
-  for(G4int i=0; i<ne; i++) {
+  for(G4int ii=0; ii<np; ii++) {
+
+    mat_name  = "G4_WATER";
+    mat = mman->FindOrBuildMaterial(mat_name);
+    fact = 0.001*gram/(MeV*cm2*mat->GetDensity());
+
+    const G4ParticleDefinition* part = cal.FindParticle(namep[ii]);
+    if(!part) break;
+      
+    if(ii == 1) proc_name = mu_name;
+    else if(ii == 2) proc_name = h_name;
+    else if(ii == 4) proc_name = ion_name;
+    G4cout << "================================================================" << G4endl;
+    G4cout << "   Tables control for  " << namep[ii] << G4endl;
+    G4cout << "   Material            " << mat_name << G4endl;
+    G4cout << "================================================================" << G4endl;
+
+    for(G4int ij=0; ij<ne; ij++) {
     
-    G4double e = e0[i]*12.0;
-    //e = e0[i]*208.0;
-    G4double dedx0 = cal.GetDEDX(e,part,mat);
-    G4double dedx  = cal.ComputeDEDX(e,part,proc_name,mat,e);
-    G4cout << i << ".   e(MeV)= " << e/MeV 
-	   << "  e0= " << e0[i]
-           << ";  Computed  dedx(MeV*cm^2/mg)= " << dedx*fact
-           << ";  Tabled  dedx(MeV*cm^2/mg)= " << dedx0*fact
-           << G4endl;
-    // G4cout << G4endl;    
-  }
-
-  G4bool icorr = false;
-  if(icorr) {
-    G4cout << "====================================================================" << G4endl;
-    G4cout << "             Ionisation Corrections" << G4endl;
-    G4cout << "====================================================================" << G4endl;
-
-    G4String nm[7] = {"G4_H", "G4_C", "G4_Al", "G4_Cu", "G4_Ag", "G4_Au", "G4_Pb"};
-    G4double ek[17] = {1.0, 1.25, 1.5,1.75, 2.0, 2.5, 3.0, 3.5,  4.0, 4.5, 5.0, 6.5, 8.0,  12.5, 20.0, 100., 1000.};
-
-    part = cal.FindParticle("proton");
-    G4double mass = part->GetPDGMass();
+      G4double e = e0[ij];
+      G4double dedx0 = cal.ComputeTotalDEDX(e,part,mat,e);
+      G4double dedx  = cal.ComputeElectronicDEDX(e,part,mat,e);
+      G4cout << ij << ".   e(MeV)= " << e/MeV 
+	     << "  e0= " << e
+	     << ";  Computed  dedx(MeV*cm^2/mg)= " << dedx*fact
+	     << ";  Total  dedx(MeV*cm^2/mg)= " << dedx0*fact
+	     << G4endl;
+      // G4cout << G4endl;    
+    }
   
-    G4double L, L0, L1, L2, Spin, KS, LS, S, S0, del, mk, dedx, fac, fact, dc, nuc;
-    for(G4int i=0; i<7; i++) {
-      dc = 0.0;
-      mat = mman->FindOrBuildMaterial(nm[i]);
-      fact = gram/(MeV*cm2*mat->GetDensity());
-      fac = 2.0*twopi_mc2_rcl2*(mat->GetElectronDensity())*fact;
-      G4cout << "   New Material  " << mat->GetName() << G4endl;
-      for(G4int j=0; j<17; j++) {
-        G4double e = ek[j]*MeV;
-        G4double tau = e/mass;
-        G4double gamma = 1.0 + tau;
-        G4double beta2 = tau*(tau + 2.0)/(gamma*gamma);
-	//        G4double dedx0 = cal.ComputeDEDX(e,part,"hIoni",mat)*fact;
+    G4bool icorr = true;
+    if(icorr) {
+      G4cout << "================================================================" << G4endl;
+      G4cout << "             Ionisation Corrections" << G4endl;
+      G4cout << "================================================================" << G4endl;
+
+      const G4int nm = 7;
+      G4String nmat[nm] = {"G4_H", "G4_C", "G4_Al", "G4_Cu", "G4_Ag", "G4_Au", "G4_Pb"};
+      const G4int kkk = 25;
+      G4double ek[kkk] = {0.3, 1.0, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0, 3.5,  
+		          4.0, 4.5, 5.0, 6.5, 8.0,  12.5, 20.0, 30., 100., 
+			  300., 1000., 3000., 10000., 100000., 1000000., 10000000.};
+
+      G4double mass = part->GetPDGMass();
+  
+      G4double L, L0, L1, L2, Spin, KS, LS, S, S0, del, mk, dedx, fac, fact, dc, fs, nuc;
+      for(G4int i=0; i<nm; i++) {
+	dc = 0.0;
+	mat = mman->FindOrBuildMaterial(nmat[i]);
+	fact = gram/(MeV*cm2*mat->GetDensity());
+	fac = 2.0*twopi_mc2_rcl2*(mat->GetElectronDensity())*fact;
+	G4cout << "   New Material  " << mat->GetName() << G4endl;
+	for(G4int j=0; j<kkk; j++) {
+	  G4double e = ek[j]*MeV;
+	  G4double tau = e/mass;
+	  G4double gamma = 1.0 + tau;
+	  G4double beta2 = tau*(tau + 2.0)/(gamma*gamma);
+	  //        G4double dedx0 = cal.ComputeDEDX(e,part,"hIoni",mat)*fact;
     
-	L0   = emc->Bethe(part,mat,e);
-	Spin = emc->SpinCorrection(part,mat,e);
-	KS   = emc->KShellCorrection(part,mat,e);
-	LS   = emc->LShellCorrection(part,mat,e);
-	S    = emc->ShellCorrection(part,mat,e);
-	S0   = emc->ShellCorrectionSTD(part,mat,e);
-	L1   = emc->BarkasCorrection(part,mat,e);
-	L2   = emc->BlochCorrection(part,mat,e);
-        del  = 0.5*emc->DensityCorrection(part,mat,e);
-        mk   = 0.5*emc->MottCorrection(part,mat,e);
-        nuc  = fact*emc->NuclearDEDX(part,mat,e);
-        L = L0 + L1 + L2 + mk - del -S;
-        dedx = L*fac/beta2;
-	// if(0 == j) dc = (dedx0 - dedx)*MeV*MeV;
-	//	dedx += dc/(e*e);
-        x = S + del - L1 - L2;
-	G4cout << j+1 << ". " << ek[j] << " MeV "
-	  // << " L0= " << L0
-	  //     << " Spin= " << Spin
-	       << " KShell= " << KS
-	       << " LShell= " << LS
-	       << " Sh= " << S 
-	       << " Sh0= " << S0 
-	       << " L1= " << L1
-	       << " L2= " << L2
-	       << " del= " << del
-	       << " mott= " << mk
-	       << " x= " << x
-	       << " L= " << L
-	       << " dedx= " << dedx
-	  //     << " dedx0= " << dedx0
-	       << " nuc= " << nuc
-	       << G4endl;
+	  L0   = emc->Bethe(part,mat,e);
+	  Spin = emc->SpinCorrection(part,mat,e);
+	  KS   = emc->KShellCorrection(part,mat,e);
+	  LS   = emc->LShellCorrection(part,mat,e);
+	  S    = emc->ShellCorrection(part,mat,e);
+	  S0   = emc->ShellCorrectionSTD(part,mat,e);
+	  L1   = emc->BarkasCorrection(part,mat,e);
+	  L2   = emc->BlochCorrection(part,mat,e);
+	  del  = -0.5*emc->DensityCorrection(part,mat,e);
+	  mk   = 0.5*emc->MottCorrection(part,mat,e);
+	  fs   = 0.5*emc->FiniteSizeCorrection(part,mat,e);
+	  nuc  = fact*emc->NuclearDEDX(part,mat,e,false);
+	  L = L0 + L1 + L2 +fs + del -S;
+	  dedx = L*fac/beta2;
+	  // if(0 == j) dc = (dedx0 - dedx)*MeV*MeV;
+	  //	dedx += dc/(e*e);
+	  //	  G4double x = S + del - L1 - L2;
+	  G4cout << j+1 << ". " << ek[j] << " MeV "
+		 << " L0= " << L0
+	    //		 << " Spin= " << Spin
+		 << " KSh= " << KS
+		 << " LSh= " << LS
+		 << " Sh= " << S 
+	    //		 << " Sh0= " << S0 
+		 << " L1= " << L1
+		 << " L2= " << L2
+		 << " dn= " << del
+		 << " mott= " << mk
+	    	 << " fs= " << fs
+		 << " L= " << L
+		 << " dedx= " << dedx
+	    //     << " dedx0= " << dedx0
+		 << " nuc= " << nuc
+		 << G4endl;
+	}
+	G4cout << "==============================================================" << G4endl;
       }
-      G4cout << "====================================================================" << G4endl;
     }
   }
 
-  G4cout << "====================================================================" << G4endl;
+  G4cout << "==============  End of Table Control ===============================" << G4endl;
 
   G4bool ish = false;
   if (ish) {
@@ -526,9 +546,9 @@ void test31Histo::TableControl()
 
   G4bool ihist = false;
   if (ihist) {
-    G4cout << "====================================================================" << G4endl;
+    G4cout << "=================================================================" << G4endl;
     G4cout << "             Stopping Powers" << G4endl;
-    G4cout << "====================================================================" << G4endl;
+    G4cout << "=================================================================" << G4endl;
 
     G4String nm[7] = {"G4_Be", "G4_Al", "G4_Si", "G4_Ge", "G4_Fe", "G4_Ag", "G4_Au"};
     const G4String partc[2] = {"proton", "alpha"};
@@ -543,7 +563,8 @@ void test31Histo::TableControl()
 
       for(G4int i=0; i<7; i++) {
 	mat = mman->FindOrBuildMaterial(nm[i]);
-        G4cout << "  Particle  " << partc[ii] << " in  Material  " << mat->GetName() << G4endl;
+        G4cout << "  Particle  " << partc[ii] << " in  Material  " 
+	       << mat->GetName() << G4endl;
 	G4double fact = gram/(MeV*cm2*mat->GetDensity());
         std::ifstream* fin = new std::ifstream();
         std::string fname = "stopping/" + partc[ii] + "_" + nm[i];
@@ -581,7 +602,9 @@ void test31Histo::TableControl()
               
         } while ( std::fabs(e - 1000.) > MeV);
 	  G4cout << G4endl;
-	  G4cout << "========= n= " << i2 << " ===========================================================" << G4endl;
+	  G4cout << "========= n= " << i2 
+		 << " ===========================================================" 
+		 << G4endl;
         fin->close();
       }
     }

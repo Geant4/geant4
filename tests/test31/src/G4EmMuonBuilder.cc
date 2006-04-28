@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmMuonBuilder.cc,v 1.2 2004-12-03 13:01:35 vnivanch Exp $
+// $Id: G4EmMuonBuilder.cc,v 1.3 2006-04-28 18:05:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -100,6 +100,11 @@ void G4EmMuonBuilder::ConstructProcess()
   // Add standard EM Processes for mu-
   particle = G4MuonMinus::MuonMinus();
   pmanager = particle->GetProcessManager();
+
+  mumsc  = new G4MultipleScattering();
+  muion  = new G4MuIonisation();
+  mubrem = new G4MuBremsstrahlung();
+  mupair = new G4MuPairProduction();
 
   pmanager->AddProcess(mumsc,     -1, 1,1);
   pmanager->AddProcess(muion,     -1, 2,2);
