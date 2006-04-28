@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.hh,v 1.12 2004-01-13 12:27:05 japost Exp $
+// $Id: G4FieldTrack.hh,v 1.13 2006-04-28 10:48:11 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,10 +47,41 @@
 
 #include "G4ThreeVector.hh"
 
+class  G4ChargeState;
+
 class  G4FieldTrack
 {
    public:  // with description
 
+     G4FieldTrack( const G4ThreeVector& pPosition, 
+                         G4double       LaboratoryTimeOfFlight,
+                   const G4ThreeVector& pMomentumDirection,
+                         G4double       kineticEnergy,
+                         G4double       restMass_c2,
+		         G4double       charge, 
+		   const G4ThreeVector* pSpin=0,
+ 		         G4double       magnetic_dipole_moment= 0.0,
+		         G4double       curve_length= 0.0
+		 );
+     G4FieldTrack( const G4FieldTrack&   pFieldTrack );
+
+     ~G4FieldTrack();
+       // End of preferred Constructors / Destructor 
+
+     void
+     UpdateState( const G4ThreeVector& pPosition, 
+                        G4double       LaboratoryTimeOfFlight,
+		  const G4ThreeVector& pMomentumDirection,
+		        G4double       kineticEnergy); 
+        //  Update four-vectors for space/time and momentum/energy
+        //    Also resets curve length.
+
+     void SetChargeAndMoments(G4double charge, 
+			      G4double magnetic_dipole_moment= DBL_MAX, // default: do not change
+			      G4double electric_dipole_moment= DBL_MAX, 
+			      G4double magnetic_charge=DBL_MAX );             
+
+     // Older constructor
      G4FieldTrack( const G4ThreeVector& pPosition, 
                    const G4ThreeVector& pMomentumDirection,
                          G4double       curve_length,
@@ -60,11 +91,7 @@ class  G4FieldTrack
                          G4double       LaboratoryTimeOfFlight=0.0,
                          G4double       ProperTimeOfFlight=0.0, 
                    const G4ThreeVector* pSpin=0);
-
-     G4FieldTrack( const G4FieldTrack&   pFieldTrack );
-
-     ~G4FieldTrack();
-       // Destructor 
+            //  Misses charge !!!
 
      inline G4FieldTrack& operator = ( const G4FieldTrack & rStVec );
        // Assignment operator
@@ -104,16 +131,12 @@ class  G4FieldTrack
      inline G4FieldTrack& SetCurvePnt(const G4ThreeVector& pPosition, 
                                       const G4ThreeVector& pMomentum,
                                             G4double       s_curve );
-       // Old multi-set method
+     inline void          InitialiseSpin( const G4ThreeVector* pSpin );
+       //  Used to update / initialise the state
 
-     G4double       GetKineticEnergy() const;  // Check it --> FIXME
+     inline G4double  GetKineticEnergy() const;
 
-     // G4double*      PosVelVec();       // [6]  Needed(?) for RK integrator
-       // This old method completely broke encapsulation ?  
-  
-     // static const G4int ncompSVEC=15;
-       // Needed and should be used only for RK integration driver
-     enum { ncompSVEC = 12 };
+     enum { ncompSVEC = 12 };     // Needed and should be used only for RK integration driver
      inline void DumpToArray(G4double valArr[ncompSVEC]) const; 
      inline void LoadFromArray(const G4double valArr[ncompSVEC], G4int noVarsIntegrated); 
      
@@ -131,6 +154,8 @@ class  G4FieldTrack
      // G4double  fMomentumModulus;  // Unused
      G4ThreeVector fSpin;
      G4ThreeVector fMomentumDir;
+
+     G4ChargeState* fpChargeState;   // Charge & moments
 }; 
 
 #include "G4FieldTrack.icc"
