@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.9 2006-02-13 10:14:22 maire Exp $
+// $Id: G4BetheBlochModel.cc,v 1.10 2006-04-28 17:27:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,6 +68,7 @@ G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p,
                                      const G4String& nam)
   : G4VEmModel(nam),
   particle(0),
+  tlimit(DBL_MAX),
   twoln10(2.0*log(10.0)),
   bg2lim(0.0169),
   taulim(8.4146e-3),

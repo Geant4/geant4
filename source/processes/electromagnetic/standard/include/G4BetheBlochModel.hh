@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.hh,v 1.6 2006-02-11 11:26:27 maire Exp $
+// $Id: G4BetheBlochModel.hh,v 1.7 2006-04-28 17:27:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -160,7 +160,7 @@ inline void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
     G4double q = particle->GetPDGCharge()/eplus;
     chargeSquare = q*q;
     ratio = electron_mass_c2/mass;
-    tlimit = 51.2*GeV*std::pow(proton_mass_c2/mass,0.66667);
+    if(mass > 120.*MeV) tlimit = 51.2*GeV*std::pow(proton_mass_c2/mass,0.66667);
   }
 }
 
