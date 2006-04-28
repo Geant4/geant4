@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.hh,v 1.13 2006-04-28 10:48:11 japost Exp $
+// $Id: G4FieldTrack.hh,v 1.14 2006-04-28 13:25:30 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -59,7 +59,7 @@ class  G4FieldTrack
                          G4double       kineticEnergy,
                          G4double       restMass_c2,
 		         G4double       charge, 
-		   const G4ThreeVector* pSpin=0,
+		   const G4ThreeVector& pSpin,
  		         G4double       magnetic_dipole_moment= 0.0,
 		         G4double       curve_length= 0.0
 		 );
@@ -68,14 +68,17 @@ class  G4FieldTrack
      ~G4FieldTrack();
        // End of preferred Constructors / Destructor 
 
-     void
+     inline void
      UpdateState( const G4ThreeVector& pPosition, 
                         G4double       LaboratoryTimeOfFlight,
 		  const G4ThreeVector& pMomentumDirection,
 		        G4double       kineticEnergy); 
         //  Update four-vectors for space/time and momentum/energy
         //    Also resets curve length.
-
+     inline
+     void  UpdateFourMomentum( G4double             kineticEnergy, 
+			       const G4ThreeVector& momentumDirection ); 
+        //  Update momentum (and direction), and kinetic energy 
      void SetChargeAndMoments(G4double charge, 
 			      G4double magnetic_dipole_moment= DBL_MAX, // default: do not change
 			      G4double electric_dipole_moment= DBL_MAX, 
@@ -131,7 +134,7 @@ class  G4FieldTrack
      inline G4FieldTrack& SetCurvePnt(const G4ThreeVector& pPosition, 
                                       const G4ThreeVector& pMomentum,
                                             G4double       s_curve );
-     inline void          InitialiseSpin( const G4ThreeVector* pSpin );
+     inline void          InitialiseSpin( const G4ThreeVector& Spin );
        //  Used to update / initialise the state
 
      inline G4double  GetKineticEnergy() const;
