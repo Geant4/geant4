@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.hh,v 1.5 2006-04-28 11:02:05 gcosmo Exp $
+// $Id: G4TransportationManager.hh,v 1.6 2006-04-28 13:29:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4TransportationManager
@@ -68,6 +68,7 @@ class G4TransportationManager
      inline void SetNavigatorForTracking( G4Navigator* newNavigator );
        // Accessors for the navigator for tracking
 
+     inline size_t GetNoActiveNavigators() const;
      inline std::vector<G4Navigator*>::iterator GetActiveNavigatorsIterator();
        // Return an iterator to the list of active navigators
 

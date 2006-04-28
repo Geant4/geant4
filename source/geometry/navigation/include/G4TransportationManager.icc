@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.icc,v 1.4 2006-04-27 16:30:05 gcosmo Exp $
+// $Id: G4TransportationManager.icc,v 1.5 2006-04-28 13:29:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //  GEANT 4  inlined function members implementation
@@ -88,6 +88,17 @@ inline
 G4FieldManager* G4TransportationManager::GetFieldManager() const
 {
    return fFieldManager;
+}
+
+// ----------------------------------------------------------------------------
+// GetNoActiveNavigators()
+//
+// Return an iterator to the list of active navigators.
+//
+inline
+size_t G4TransportationManager::GetNoActiveNavigators() const
+{
+   return fActiveNavigators.size();
 }
 
 // ----------------------------------------------------------------------------
