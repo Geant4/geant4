@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.hh,v 1.2 2006-04-27 14:58:28 japost Exp $
+// $Id: G4PathFinder.hh,v 1.3 2006-04-28 08:23:43 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -35,11 +35,10 @@
 // 
 // For the movement in field, it relies on the class G4PropagatorInField
 //
-// Key Method:
-//              ComputeStep(..)
 // History:
 // -------
-//  7.10.05 John Apostolakis,  design and implementation 
+//  7.10.05 John Apostolakis,  Draft design 
+// 26.04.06 John Apostolakis,  Revised design and first implementation 
 // ---------------------------------------------------------------------------
 
 #ifndef G4PATHFINDER_HH 
@@ -53,13 +52,17 @@
 // class G4Navigator;
 // class G4VPhysicalVolume;
 // class G4VCurvedTrajectoryFilter;
+class G4TransportationManager; 
+class G4Navigator;
+#include "G4TouchableHistoryHandle.hh"
+#include "G4FieldTrack.hh"
 
 class G4PathFinder
 {
 
  public:  // with description
 
-   GetInstance();  //  Singleton
+   static G4PathFinder* GetInstance();  //  Singleton
   ~G4PathFinder();
 
   //  Attempt next step
@@ -73,10 +76,13 @@ class G4PathFinder
 			       G4FieldTrack      &EndState );
      // Compute the next geometric Step  -- Curved or linear
 
+   void Locate( const G4ThreeVector& position, const G4ThreeVector& direction); 
+     // Relocate global point in all navigators, and update them.
+
    void PrepareNewTrack( G4ThreeVector position, G4ThreeVector direction); 
      // Check and cache set of active navigators
 
-   G4TouchableHistoryHandle CreateTouchableHandle( navId ) const;
+   G4TouchableHistoryHandle CreateTouchableHandle( G4int navId ) const;
    // Also? G4TouchableCreator& GetTouchableCreator( navId ) const; 
 
   // -----------------------------------------------------------------
@@ -104,10 +110,15 @@ class G4PathFinder
      // A maximum for the number of steps that a (looping) particle can take.
 
  protected:  // without description
+  G4double  DoNextCurvedStep(  const G4FieldTrack  &FieldTrack,
+			       G4double            proposedStepLength); 
+
+  G4double  DoNextLinearStep(  const G4FieldTrack  &FieldTrack,
+			       G4double            proposedStepLength); 
   // 
-  void SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter);
-  // Set the filter that examines & stores 'intermediate' 
-  //  curved trajectory points.  Currently only position is stored.
+  // void SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter);
+  //   Set the filter that examines & stores 'intermediate' 
+  //   curved trajectory points.  Currently only position is stored.
 
   void ClearState();
   // Clear all the State of this class and its current associates
@@ -115,8 +126,6 @@ class G4PathFinder
   inline G4bool UseSafetyForOptimization( G4bool );
       //  Whether to safety to discard 
       //   unneccesary calls to navigator (thus 'optimising' performance)
-
- protected:  // with description
 
  private:
    G4PathFinder();  //  Singleton 
@@ -126,19 +135,25 @@ class G4PathFinder
   // ----------------------------------------------------------------------
   //  DATA Members
   // ----------------------------------------------------------------------
-   std::vec<G4Navigator> fActiveNavigators; 
+   // std::vector<G4Navigator*> fActiveNavigators; 
      // 
    G4int   fNoActiveNavigators; 
-   G4int   fNoTotalNavigators; 
+   // G4int   fNoNavigators; 
+   G4bool  fNewTrack;               // Flag a new track (ensure first step)
 
    static const G4int MaxNav = 8;   // rename to kMaxNoNav ??
    // enum EMaximumNavs { MaxNav = 8; }
-   enum     ELimitedStep { kNot, kUnique, kTransport, kShared } ; 
-   ELimitedStep  fLimitedStep[MaxNav]; 
+   enum     ELimited { kDoNot, kUnique, kSharedTransport, kSharedOther } ; 
+   ELimited      fLimitedStep[MaxNav];
+   G4Navigator*  fpNavigator[MaxNav];
    G4double      fCurrentStepSize[MaxNav]; 
    G4double      fNewSafety[ MaxNav ]; 
 
-   G4FieldTrack    EndState;
+   G4double      fMinSafety, fMinStep; 
+
+   // G4TransportationManager* fpTransportManager; 
+
+   G4FieldTrack    fEndState;
      // End point storage
    G4bool      fParticleIsLooping;
    G4int  fVerboseLevel;
@@ -151,21 +166,6 @@ class G4PathFinder
 // ********************************************************************
 // Inline methods.
 // ********************************************************************
-#include "G4PathFinder.icc"
+// #include "G4PathFinder.icc"
 
 #endif 
-
-#if 0
-  // Proposal 2 or internal method ??
-  G4double  DoNextCurvedStep(  G4FieldTrack  &pFieldTrack,
-			       G4double       pCurrentProposedStepLength,
-                               G4double      &pOverallNewSafety, 
-			       G4double       stepNo ); 
-     // Initiates the curved step for all geometries
-
-  G4double  CheckCurvedStep(   G4int         navId 
-			       G4double      &pNewSafety, 
-                               G4bool        &limitedStep );
-     // Retrieves the step information for navigator 'navId'
-
-endif
