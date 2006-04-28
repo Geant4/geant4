@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXmViewer.cc,v 1.17 2006-04-19 12:02:37 allison Exp $
+// $Id: G4OpenGLStoredXmViewer.cc,v 1.18 2006-04-28 10:11:01 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,16 +100,17 @@ void G4OpenGLStoredXmViewer::DrawView () {
     HaloingSecondPass ();
 
     DrawDisplayLists ();
+    FinishView ();
 
   } else {
 
-    // If kernel visit was needed, it will already have been drawn, so...
-    if (!kernelVisitWasNeeded) DrawDisplayLists ();
-
+    // If kernel visit was needed, drawing and FinishView will already
+    // have been done, so...
+    if (!kernelVisitWasNeeded) {
+      DrawDisplayLists ();
+      FinishView ();
+    }
   }
-
-  FinishView ();
-  
 }
 
 #endif
