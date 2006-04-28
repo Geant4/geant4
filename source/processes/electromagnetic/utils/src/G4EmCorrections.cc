@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.13 2005-11-26 16:59:26 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.14 2006-04-28 17:30:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,6 +36,7 @@
 // Modifications:
 // 05.05.2005 V.Ivanchenko Fix misprint in Mott term
 // 26.11.2005 V.Ivanchenko Fix effective charge for heavy ions using original paper
+// 28.04.2006 V.Ivanchenko General cleanup, add finite size corrections 
 //
 //
 // Class Description:
@@ -47,8 +48,6 @@
 //
 
 #include "G4EmCorrections.hh"
-#include "G4Material.hh"
-#include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -66,8 +65,8 @@ G4EmCorrections::~G4EmCorrections()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
-                                               const G4Material* material,
-                                                     G4double kineticEnergy)
+                                               const G4Material* mat, 
+					       G4double e)
 {
 // . Z^3 Barkas effect in the stopping power of matter for charged particles
 //   J.C Ashley and R.H.Ritchie
@@ -76,131 +75,26 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
 //   valid for kineticEnergy < 0.5 MeV
 //   Other corrections from S.P.Ahlen Rev. Mod. Phys., Vol 52, No1, 1980
 
-  G4double tau   = kineticEnergy / p->GetPDGMass();
+  SetupKinematics(p, mat, e);
   if(tau <= 0.0) return 0.0;
 
-  G4double gamma = 1.0 + tau;
-  G4double bg2   = tau * (tau+2.0);
-  G4double beta2 = bg2/(gamma*gamma);
-  G4double beta  = std::sqrt(beta2);
+  G4double Barkas = BarkasCorrection (p, mat, e);
+  G4double Bloch  = BlochCorrection (p, mat, e);
+  G4double Mott   = MottCorrection (p, mat, e);
+  G4double FSize  = FiniteSizeCorrection (p, mat, e);
 
-  G4double q  = p->GetPDGCharge()/eplus;
-  if(q > 2.5)      q *= (1.0 - std::exp(-130.0*beta/std::pow(q,0.66666667)));
-  else if(q > 1.5) q  = effCharge.EffectiveCharge(p,material,kineticEnergy)/eplus;
-
-  G4double q2 = q*q;
-  G4double ba = beta2/alpha2;
-  G4double BarkasTerm = 0.0;
-  const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* atomDensity  = material->GetAtomicNumDensityVector();
-  G4int numberOfElements = material->GetNumberOfElements();
-
-  G4double Zeff = 0.0;
-  G4double norm = 0.0;
-
-  for (G4int i = 0; i<numberOfElements; i++) {
-
-    G4double Z = (*theElementVector)[i]->GetZ();
-    G4int   iz = G4int(Z);
-    G4double X = ba / Z;
-
-    // Variables to compute L_1
-    //    G4double Eta0Chi = 0.8;
-    //    G4double EtaChi = Eta0Chi * ( 1.0 + 6.02*std::pow( Z,-1.19 ) );
-    //    G4double W = ( EtaChi * std::pow( Z,0.16666667 ) ) / std::sqrt(X);
-
-    G4double b = 1.3;
-    if(1 == iz) {
-      if(material->GetName() == "G4_lH2") b = 0.6;
-      else                                b = 1.8;
-    }
-    else if(2 == iz)  b = 0.6;
-    else if(10 >= iz) b = 1.8;
-    else if(17 >= iz) b = 1.4;
-    else if(18 == iz) b = 1.8;
-    else if(25 >= iz) b = 1.4;
-    else if(50 >= iz) b = 1.35;
-
-    G4double W = b/std::sqrt(X);
-
-    G4double val;
-
-    if(W <= engBarkas[0])       val =  corBarkas[0];
-    else if(W >= engBarkas[46]) val =  corBarkas[46]*engBarkas[46]/W;
-    else {
-      G4int iw = Index(W, engBarkas, 47);
-      val = Value(W, engBarkas[iw], engBarkas[iw+1], corBarkas[iw], corBarkas[iw+1]);
-    }
-    BarkasTerm += 1.29*val*atomDensity[i] * std::sqrt(Z /X)/ X;
-    Zeff += Z*atomDensity[i];
-    norm += atomDensity[i];
-  }
-  Zeff /= norm; 
-
-
-  BarkasTerm *= 2.0*q;
-
-  // L2 correction
-  G4double y2 = q2 / ba ;
-  G4double BlochTerm = 1.202;
-
-  if(y2 > 0.05) {
-    BlochTerm = 1.0 / (1.0 + y2) ;
-    G4double de = BlochTerm;
-    G4double i = 1.0;
-    do {
-      i += 1.0;
-      de = 1.0/( i * (i*i + y2));
-      BlochTerm += de;
-    } while (de > BlochTerm*0.01);
-
-  }
-  BlochTerm *= -2.0*y2;
-
-  // Estimation of mean square root of the ionisation potential 
-  G4double ze  = 2.0*Zeff;
-  G4double ze1 = std::log(ze);
-  G4double eexc= material->GetIonisation()->GetMeanExcitationEnergy()*ze1*ze1/ze;
-
-  G4double invbeta = 1.0/beta;
-  G4double invbeta2= invbeta*invbeta;
-  G4double za  = q*fine_structure_const;
-  G4double za2 = za*za;
-  G4double za3 = za2*za;
-  G4double x   = za*invbeta;
-  G4double cosx;
-  if(x < COSEB[13]) {
-    G4int i = Index(x,COSEB,14);
-    cosx    = Value(x,COSEB[i], COSEB[i+1],COSXI[i],COSXI[i+1]);
-  } else {
-    cosx = COSXI[13]*COSEB[13]/x;
-  }
-
-  G4double mterm =
-        za*beta*(1.725 + pi*cosx*(0.52 - 2.0*std::sqrt(eexc/(2.0*electron_mass_c2*bg2))))
-      + za2*(3.246 - 0.451*beta2)
-      + za3*(1.522*beta + 0.987*invbeta)
-      + za2*za2*(4.569 - 0.494*beta2 - 2.696*invbeta2)
-      + za3*za2*(1.254*beta + 0.222*invbeta - 1.17*invbeta*invbeta2);
-
-  G4double eloss = (BarkasTerm + (BlochTerm + mterm)*material->GetElectronDensity()) * 
-    q2 *  twopi_mc2_rcl2 *invbeta2;
+  G4double eloss = (2.0*(Barkas + Bloch) + FSize + Mott)*
+    material->GetElectronDensity() * q2 *  twopi_mc2_rcl2 /beta2;
   return eloss;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections::Bethe(const G4ParticleDefinition* p,
-                                const G4Material* material,
-                                      G4double kineticEnergy)
+				const G4Material* mat, 
+				G4double e)
 {
-  G4double mass  = p->GetPDGMass();
-  G4double ratio = electron_mass_c2/mass;
-  G4double tau   = kineticEnergy / mass;
-  G4double gamma = 1.0 + tau;
-  G4double bg2   = tau * (tau+2.0);
-  G4double beta2 = bg2/(gamma*gamma);
-  G4double tmax  = 2.0*electron_mass_c2*bg2 /(1. + 2.0*gamma*ratio + ratio*ratio);
+  SetupKinematics(p, mat, e);
   G4double eexc  = material->GetIonisation()->GetMeanExcitationEnergy();
   G4double eexc2 = eexc*eexc;
   G4double dedx = 0.5*std::log(2.0*electron_mass_c2*bg2*tmax/eexc2)-beta2;
@@ -210,35 +104,22 @@ G4double G4EmCorrections::Bethe(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections::SpinCorrection(const G4ParticleDefinition* p,
-                                         const G4Material*,
-                                               G4double kineticEnergy)
+					 const G4Material* mat, 
+					 G4double e)
 {
-  G4double mass  = p->GetPDGMass();
-  G4double ratio = electron_mass_c2/mass;
-  G4double tau   = kineticEnergy / mass;
-  G4double gamma = 1.0 + tau;
-  G4double bg2   = tau * (tau+2.0);
-  G4double tmax  = 2.0*electron_mass_c2*bg2 /(1. + 2.0*gamma*ratio + ratio*ratio);
-  G4double dedx  = 0.5*tmax/(kineticEnergy + mass);
+  SetupKinematics(p, mat, e);
+  G4double dedx  = 0.5*tmax/(kinEnergy + mass);
   return 0.5*dedx*dedx;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections:: KShellCorrection(const G4ParticleDefinition* p,
-                                            const G4Material* material,
-                                                  G4double kineticEnergy)
+					    const G4Material* mat, 
+					    G4double e)
 {
-  G4double tau   = kineticEnergy / p->GetPDGMass();
-  G4double gamma = 1.0 + tau;
-  G4double beta2 = tau*(tau + 2.0)/(gamma*gamma);
-  G4double ba2   = beta2/alpha2;
-
+  SetupKinematics(p, mat, e);
   G4double term = 0.0;
-  const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* atomDensity  = material->GetAtomicNumDensityVector(); 
-  G4int numberOfElements = material->GetNumberOfElements();
-
   for (G4int i = 0; i<numberOfElements; i++) {
 
     G4double Z = (*theElementVector)[i]->GetZ();
@@ -261,19 +142,11 @@ G4double G4EmCorrections:: KShellCorrection(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections:: LShellCorrection(const G4ParticleDefinition* p,
-                                            const G4Material* material,
-                                                  G4double kineticEnergy)
+					    const G4Material* mat, 
+					    G4double e)
 {
-  G4double tau   = kineticEnergy / p->GetPDGMass();
-  G4double gamma = 1.0 + tau;
-  G4double beta2 = tau*(tau + 2.0)/(gamma*gamma);
-  G4double ba2   = beta2/alpha2;
-
+  SetupKinematics(p, mat, e);
   G4double term = 0.0;
-  const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* atomDensity  = material->GetAtomicNumDensityVector(); 
-  G4int numberOfElements = material->GetNumberOfElements();
-
   for (G4int i = 0; i<numberOfElements; i++) {
 
     G4double Z = (*theElementVector)[i]->GetZ();
@@ -288,7 +161,8 @@ G4double G4EmCorrections:: LShellCorrection(const G4ParticleDefinition* p,
       for(G4int j=1; j<nmax; j++) {
         G4double ne = G4double(shells.GetNumberOfElectrons(iz,j));
         G4double e1 = shells.GetBindingEnergy(iz,j);
-	//        G4cout << "LShell: j= " << j << " ne= " << ne << " e(eV)= " << e/eV << " e0(eV)= " << e0/eV << G4endl; 
+	//   G4cout << "LShell: j= " << j << " ne= " << ne << " e(eV)= " << e/eV 
+	//  << " e0(eV)= " << e0/eV << G4endl; 
         term += f*ne*atomDensity[i]*LShell(e1/e0,ba2/Z2)/Z;
       }
     }
@@ -320,10 +194,13 @@ G4double G4EmCorrections::KShell(G4double tet, G4double eta)
     G4int ieta = Index(y, Eta, nEtaK);
     corr = Value2(x, y, TheK[itet], TheK[itet+1], Eta[ieta], Eta[ieta+1],
                   CK[itet][ieta], CK[itet+1][ieta], CK[itet][ieta+1], CK[itet+1][ieta+1]);
-    //G4cout << "   x= " <<x<<" y= "<<y<<" tet= " <<TheK[itet]<<" "<< TheK[itet+1]<<" eta= "<< Eta[ieta]<<" "<< Eta[ieta+1]
-    //       <<" CK= " << CK[itet][ieta]<<" "<< CK[itet+1][ieta]<<" "<< CK[itet][ieta+1]<<" "<< CK[itet+1][ieta+1]<<G4endl;
+    //G4cout << "   x= " <<x<<" y= "<<y<<" tet= " <<TheK[itet]
+    //<<" "<< TheK[itet+1]<<" eta= "<< Eta[ieta]<<" "<< Eta[ieta+1]
+    //       <<" CK= " << CK[itet][ieta]<<" "<< CK[itet+1][ieta]
+    //<<" "<< CK[itet][ieta+1]<<" "<< CK[itet+1][ieta+1]<<G4endl;
   }
-  //G4cout << "Kshell:  tet= " << tet << " eta= " << eta << "  C= " << corr << " itet,ieta= " << itet <<G4endl;
+  //G4cout << "Kshell:  tet= " << tet << " eta= " << eta << "  C= " << corr 
+  //<< " itet,ieta= " << itet <<G4endl;
   return corr;
 }
 
@@ -348,8 +225,10 @@ G4double G4EmCorrections::LShell(G4double tet, G4double eta)
     G4int ieta = Index(y, Eta, nEtaL);
     corr = Value2(x, y, TheL[itet], TheL[itet+1], Eta[ieta], Eta[ieta+1],
                CL[itet][ieta], CL[itet+1][ieta], CL[itet][ieta+1], CL[itet+1][ieta+1]);
-    //G4cout << "   x= " <<x<<" y= "<<y<<" tet= " <<TheL[itet]<<" "<< TheL[itet+1]<<" eta= "<< Eta[ieta]<<" "<< Eta[ieta+1]
-    //       <<" CL= " << CL[itet][ieta]<<" "<< CL[itet+1][ieta]<<" "<< CL[itet][ieta+1]<<" "<< CL[itet+1][ieta+1]<<G4endl;
+    //G4cout << "   x= " <<x<<" y= "<<y<<" tet= " <<TheL[itet]
+    //<<" "<< TheL[itet+1]<<" eta= "<< Eta[ieta]<<" "<< Eta[ieta+1]
+    //       <<" CL= " << CL[itet][ieta]<<" "<< CL[itet+1][ieta]
+    //<<" "<< CL[itet][ieta+1]<<" "<< CL[itet+1][ieta+1]<<G4endl;
   }
   //  G4cout << "Lshell:  tet= " << tet << " eta= " << eta << "  C= " << corr << " itet= " << itet <<G4endl;
   return corr;
@@ -358,12 +237,11 @@ G4double G4EmCorrections::LShell(G4double tet, G4double eta)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections::ShellCorrectionSTD(const G4ParticleDefinition* p,
-					     const G4Material* material,
-					           G4double kineticEnergy)
+					     const G4Material* mat, 
+					     G4double e)
 {
-  G4double tau   = kineticEnergy / p->GetPDGMass();
-  G4double bg2   = tau * (tau+2.0);
-  G4double taulim= 8.0*MeV/p->GetPDGMass();
+  SetupKinematics(p, mat, e);
+  G4double taulim= 8.0*MeV/mass;
   G4double bg2lim= taulim * (taulim+2.0);
 
   G4double* shellCorrectionVector =
@@ -393,18 +271,12 @@ G4double G4EmCorrections::ShellCorrectionSTD(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections::ShellCorrection(const G4ParticleDefinition* p,
-                                           const G4Material* material,
-                                                 G4double kineticEnergy)
+					  const G4Material* mat, 
+					  G4double e)
 {
-  G4double tau   = kineticEnergy / p->GetPDGMass();
-  G4double gamma = 1.0 + tau;
-  G4double beta2 = tau*(tau + 2.0)/(gamma*gamma);
-  G4double ba2   = beta2/alpha2;
+  SetupKinematics(p, mat, e);
 
   G4double term = 0.0;
-  const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* atomDensity  = material->GetAtomicNumDensityVector();
-  G4int numberOfElements = material->GetNumberOfElements();
 
   for (G4int i = 0; i<numberOfElements; i++) {
 
@@ -471,11 +343,10 @@ G4double G4EmCorrections::ShellCorrection(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections::DensityCorrection(const G4ParticleDefinition* p,
-                                            const G4Material* material,
-                                                  G4double kineticEnergy)
+					    const G4Material* mat, 
+					    G4double e)
 {
-  G4double tau   = kineticEnergy / p->GetPDGMass();
-  G4double bg2   = tau * (tau+2.0);
+  SetupKinematics(p, mat, e);
 
   G4double cden  = material->GetIonisation()->GetCdensity();
   G4double mden  = material->GetIonisation()->GetMdensity();
@@ -499,25 +370,16 @@ G4double G4EmCorrections::DensityCorrection(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections::BarkasCorrection(const G4ParticleDefinition* p,
-                                           const G4Material* material,
-                                                 G4double kineticEnergy)
+					   const G4Material* mat, 
+					   G4double e)
 {
 // . Z^3 Barkas effect in the stopping power of matter for charged particles
 //   J.C Ashley and R.H.Ritchie
 //   Physical review B Vol.5 No.7 1 April 1972 pp. 2393-2397
 //   valid for kineticEnergy > 0.5 MeV
 
-  G4double tau   = kineticEnergy / p->GetPDGMass();
-  G4double gamma = 1.0 + tau;
-  G4double beta2 = tau*(tau + 2.0)/(gamma*gamma);
-
-  G4double q  = effCharge.EffectiveCharge(p,material,kineticEnergy)/eplus;
-  G4double ba2 = beta2/alpha2;
-
+  SetupKinematics(p, mat, e);
   G4double BarkasTerm = 0.0;
-  const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* atomDensity  = material->GetAtomicNumDensityVector();
-  G4int numberOfElements = material->GetNumberOfElements();
 
   for (G4int i = 0; i<numberOfElements; i++) {
 
@@ -525,12 +387,6 @@ G4double G4EmCorrections::BarkasCorrection(const G4ParticleDefinition* p,
     G4int iz = G4int(Z);
 
     G4double X = ba2 / Z;
-
-    // Variables to compute L_1
-    //    G4double Eta0Chi = 0.8;
-    //    G4double EtaChi = Eta0Chi * ( 1.0 + 6.02*std::pow( Z,-1.19 ) );
-    //    G4double W = ( EtaChi * std::pow( Z,0.16666667 ) ) / std::sqrt(X);
-
     G4double b = 1.3;
     if(1 == iz) {
       if(material->GetName() == "G4_lH2") b = 0.6;
@@ -555,24 +411,19 @@ G4double G4EmCorrections::BarkasCorrection(const G4ParticleDefinition* p,
     BarkasTerm += val*atomDensity[i] * std::sqrt(1.0/(Z*X))/ X;
   }
 
-  BarkasTerm *= q/material->GetTotNbOfAtomsPerVolume();
-
+  BarkasTerm *= 1.29*charge/material->GetTotNbOfAtomsPerVolume();
   return BarkasTerm;
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections::BlochCorrection(const G4ParticleDefinition* p,
-                                          const G4Material* material,
-                                                G4double kineticEnergy)
+					  const G4Material* mat, 
+					  G4double e)
 {
-  G4double tau   = kineticEnergy / p->GetPDGMass();
-  G4double gamma = 1.0 + tau;
-  G4double beta2 = tau*(tau + 2.0)/(gamma*gamma);
+  SetupKinematics(p, mat, e);
 
-  G4double q  = effCharge.EffectiveCharge(p,material,kineticEnergy)/eplus;
-  G4double q2 = q*q;
-
-  G4double y2 = q2*alpha2 / beta2;
+  G4double y2 = q2/ba2;
   
   G4double term = 1.0/(1.0 + y2);
   G4double del;
@@ -589,26 +440,31 @@ G4double G4EmCorrections::BlochCorrection(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections::MottCorrection(const G4ParticleDefinition* p,
-                                         const G4Material* material,
-                                               G4double kineticEnergy)
+                                               const G4Material* mat, 
+					       G4double e)
 {
-  G4double tau   = kineticEnergy / p->GetPDGMass();
-  G4double gamma = 1.0 + tau;
-  G4double bg2   = tau*(tau + 2.0);
-  G4double beta2 = bg2/(gamma*gamma);
-
-  G4double q  = effCharge.EffectiveCharge(p,material,kineticEnergy)/eplus;
-
-  G4double beta = std::sqrt(beta2);
-  G4double eexc = material->GetIonisation()->GetMeanExcitationEnergy();
-
-  G4double mterm = 0.0;
-
+  SetupKinematics(p, mat, e);
+  G4double mterm = pi*fine_structure_const*beta*charge;
+  /*
+  G4double mterm = 0.0; 
   if(beta > 0.0) {
+
+    // Estimation of mean square root of the ionisation potential 
+    G4double Zeff = 0.0;
+    G4double norm = 0.0;
+
+    for (G4int i = 0; i<numberOfElements; i++) {
+      G4double Z = (*theElementVector)[i]->GetZ();
+      Zeff += Z*atomDensity[i];
+      norm += atomDensity[i];
+    }
+    Zeff *= (2.0/norm); 
+    G4double ze1 = std::log(Zeff);
+    G4double eexc= material->GetIonisation()->GetMeanExcitationEnergy()*ze1*ze1/Zeff;
 
     G4double invbeta = 1.0/beta;
     G4double invbeta2= invbeta*invbeta;
-    G4double za  = q*fine_structure_const;
+    G4double za  = charge*fine_structure_const;
     G4double za2 = za*za;
     G4double za3 = za2*za;
     G4double x   = za*invbeta;
@@ -621,47 +477,96 @@ G4double G4EmCorrections::MottCorrection(const G4ParticleDefinition* p,
     }
 
     mterm =
-        za*beta*(1.725 + pi*cosx*(0.52 - 2.0*std::sqrt(eexc/(2.0*electron_mass_c2*bg2))))
+      za*beta*(1.725 + pi*cosx*(0.52 - 2.0*std::sqrt(eexc/(2.0*electron_mass_c2*bg2))));
       + za2*(3.246 - 0.451*beta2)
       + za3*(1.522*beta + 0.987*invbeta)
       + za2*za2*(4.569 - 0.494*beta2 - 2.696*invbeta2)
       + za3*za2*(1.254*beta + 0.222*invbeta - 1.17*invbeta*invbeta2);
-
   }
-
+*/  
   return mterm;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4double G4EmCorrections::FiniteSizeCorrection(const G4ParticleDefinition* p,
+                                               const G4Material* mat, 
+					       G4double e)
+  // Finite size corrections are parameterized according to
+  // J.D.Jackson Phys. Rev. D59 (1998) 017301 
+{
+  SetupKinematics(p, mat, e);
+  G4double term = 0.0;
+
+  //Leptons
+  if(p->GetLeptonNumber() != 0) {
+    G4double x =  tmax/(e + mass);
+    term = x*x;
+
+    // Pions and Kaons
+  } else if(p->GetPDGSpin() == 0.0 && q2 < 1.5) {
+    G4double xpi = 0.736*GeV;
+    G4double x   = 2.0*electron_mass_c2*tmax0/(xpi*xpi);
+    term = -std::log(1.0 + x);
+
+    // Protons and baryons
+  } else if(q2 < 1.5) {
+    G4double xp = 0.8426*GeV;
+    G4double x  = 2.0*electron_mass_c2*tmax0/(xp*xp);
+    G4double ksi2 = 2.79285*2.79285;
+    term = -x*(1.0 + 5.0*x/6.0)/((1.0 + x)*(1 + x)) - std::log(1.0 + x);
+    G4double b  = xp*0.5/mass;
+    G4double c  = xp*mass/(electron_mass_c2*(mass + e));
+    G4double lb = b*b;
+    G4double lb2= lb*lb;
+    G4double nu = 0.5*c*c;
+    G4double x1 = 1.0 + x;
+    G4double x2 = x1*x1;
+    G4double l1 = 1.0 - lb;
+    G4double l2 = l1*l1;
+    G4double lx = 1.0 + lb*x;
+    G4double ia = lb2*(lx*std::log(lx/x1)/x + l1 - 
+		       0.5*x*l2/(lb*x1) + 
+		       x*(3.0 + 2.0*x)*l2*l1/(6.0*x2*lb2))/(l2*l2);
+    G4double ib = x*x*(3.0 + x)/(6.0*x2*x1); 
+    term += lb*((ksi2 - 1.0)*ia + nu*ksi2*ib);
+    // G4cout << "Proton F= " << term << " ia= " << ia << " ib= " << ib << " lb= " << lb<< G4endl;
+    
+    //ions
+  } else {
+    G4double xp = 0.8426*GeV/std::pow(mass/proton_mass_c2,-0.33333333);
+    G4double x  = 2.0*electron_mass_c2*tmax0/(xp*xp);
+    term = -std::log(1.0 + x);
+    //G4cout << "Ion F= " << term << G4endl;
+  } 
+    
+  return term;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4EmCorrections::NuclearDEDX(const G4ParticleDefinition* p,
-                                      const G4Material* material,
-				            G4double kineticEnergy,
-                                            G4bool fluct)
+				      const G4Material* mat, 
+				      G4double e,
+				      G4bool fluct)
 {
   G4double nloss = 0.0;
-  if(kineticEnergy <= 0.0) return nloss; 
+  if(e <= 0.0) return nloss; 
+  SetupKinematics(p, mat, e);
 
   lossFlucFlag = fluct;
 
   // Projectile nucleus
-  G4double z1 = std::abs((p->GetPDGCharge())/eplus) ;
-  G4double m1 = p->GetPDGMass()/amu_c2;
-
-  G4int NumberOfElements = material->GetNumberOfElements() ;
-  const G4ElementVector* theElementVector = 
-                                 material->GetElementVector() ;
-  const G4double* theAtomicNumDensityVector = 
-                                 material->GetAtomicNumDensityVector() ;
+  G4double z1 = std::abs(particle->GetPDGCharge()/eplus);
+  G4double m1 = mass/amu_c2;
 
   //  loop for the elements in the material
-
-  for (G4int iel=0; iel<NumberOfElements; iel++) {
+  for (G4int iel=0; iel<numberOfElements; iel++) {
     const G4Element* element = (*theElementVector)[iel] ;
     G4double z2 = element->GetZ();
     G4double m2 = element->GetA()*mole/g ;
-    nloss += (NuclearStoppingPower(kineticEnergy, z1, z2, m1, m2))
-           * theAtomicNumDensityVector[iel] ;    
+    nloss += (NuclearStoppingPower(kinEnergy, z1, z2, m1, m2))
+           * atomDensity[iel] ;    
   }
   nloss *= theZieglerFactor;
   return nloss;

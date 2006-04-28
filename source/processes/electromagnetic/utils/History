@@ -1,4 +1,4 @@
-$Id: History,v 1.242 2006-04-18 08:48:08 vnivanch Exp $
+$Id: History,v 1.243 2006-04-28 17:32:47 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28 April 06: V.Ivant (emutils-V08-00-13)
+- G4EmCalculator - remove debug output 
+- G4EmCorrections - add finite size correction, cleanup other
+- G4ionEffectiveCharge - extend upper limit to 50 MeV
 
 18 April 06: V.Ivant (emutils-V08-00-12)
 - G4EmCalculator - fix GetCrossSectionPerVolume problem for gamma

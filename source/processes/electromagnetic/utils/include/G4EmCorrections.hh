@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.3 2005-02-26 22:01:20 vnivanch Exp $
+// $Id: G4EmCorrections.hh,v 1.4 2006-04-28 17:30:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,7 +35,7 @@
 // Creation date: 13.01.2005
 //
 // Modifications:
-//
+// 28.04.2006 General cleanup, add finite size corrections
 //
 // Class Description:
 //
@@ -51,9 +51,8 @@
 #include "globals.hh"
 #include "G4AtomicShells.hh"
 #include "G4ionEffectiveCharge.hh"
-
-class G4Material;
-class G4ParticleDefinition;
+#include "G4Material.hh"
+#include "G4ParticleDefinition.hh"
 
 class G4EmCorrections 
 {
@@ -70,52 +69,59 @@ public:
 
   G4double Bethe(const G4ParticleDefinition* p,
                  const G4Material* material,
-                       G4double kineticEnergy);
+		 G4double kineticEnergy);
 
   G4double SpinCorrection(const G4ParticleDefinition* p,
                           const G4Material* material,
-                                G4double kineticEnergy);
+			  G4double kineticEnergy);
 
   G4double KShellCorrection(const G4ParticleDefinition* p,
                             const G4Material* material,
-                                  G4double kineticEnergy);
+			    G4double kineticEnergy);
 
   G4double LShellCorrection(const G4ParticleDefinition* p,
                             const G4Material* material,
-                                  G4double kineticEnergy);
+			    G4double kineticEnergy);
 
   G4double ShellCorrection(const G4ParticleDefinition* p,
                            const G4Material* material,
-                                 G4double kineticEnergy);
+			   G4double kineticEnergy);
 
   G4double ShellCorrectionSTD(const G4ParticleDefinition* p,
                               const G4Material* material,
-                                    G4double kineticEnergy);
+			      G4double kineticEnergy);
 
   G4double DensityCorrection(const G4ParticleDefinition* p,
                              const G4Material* material,
-                                   G4double kineticEnergy);
+			     G4double kineticEnergy);
 
   G4double BarkasCorrection(const G4ParticleDefinition* p,
                             const G4Material* material,
-                                  G4double kineticEnergy);
+			    G4double kineticEnergy);
 
   G4double BlochCorrection(const G4ParticleDefinition* p,
                            const G4Material* material,
-                                 G4double kineticEnergy);
+			   G4double kineticEnergy);
 
   G4double MottCorrection(const G4ParticleDefinition* p,
                           const G4Material* material,
-                                G4double kineticEnergy);
+			  G4double kineticEnergy);
+
+  G4double FiniteSizeCorrection(const G4ParticleDefinition* p,
+				const G4Material* material,
+				G4double kineticEnergy);
 
   G4double NuclearDEDX(const G4ParticleDefinition* p,
                        const G4Material* material,
- 		             G4double kineticEnergy,
-                             G4bool fluct = true);
+		       G4double kineticEnergy,
+		       G4bool fluct = true);
 
 private:
 
   void Initialise();
+  void SetupKinematics(const G4ParticleDefinition* p,
+		       const G4Material* material,
+		       G4double kineticEnergy);
 
   G4double KShell(G4double theta, G4double eta); 
 
@@ -174,6 +180,25 @@ private:
   G4double     MSH[93];
   G4double     TAU[93];
 
+  const G4ParticleDefinition* particle;
+  const G4Material*           material;
+  const G4ElementVector*      theElementVector;
+  const G4double*             atomDensity; 
+
+  G4int     numberOfElements;
+  G4double  kinEnergy;
+  G4double  mass;
+  G4double  tau;
+  G4double  gamma;
+  G4double  bg2;
+  G4double  beta2;
+  G4double  beta;
+  G4double  ba2;
+  G4double  tmax;
+  G4double  tmax0;
+  G4double  charge;
+  G4double  q2;
+
   G4AtomicShells        shells;
   G4ionEffectiveCharge  effCharge; 
 };
@@ -198,6 +223,40 @@ inline G4double G4EmCorrections::Value2(G4double xv, G4double yv, G4double x1, G
   return (z11*(x2-xv)*(y2-yv) + z22*(xv-x1)*(yv-y1) + 
 	  0.5*(z12*((x2-xv)*(yv-y1)+(xv-x1)*(y2-yv))+z21*((xv-x1)*(y2-yv)+(yv-y1)*(x2-xv))))
          / ((x2-x1)*(y2-y1));
+}
+
+inline void G4EmCorrections::SetupKinematics(const G4ParticleDefinition* p,
+					     const G4Material* mat,
+					     G4double kineticEnergy)
+{
+  if(kineticEnergy != kinEnergy || p != particle) {
+    particle = p;
+    kinEnergy = kineticEnergy;
+    mass  = p->GetPDGMass();
+    tau   = kineticEnergy / mass;
+    gamma = 1.0 + tau;
+    bg2   = tau * (tau+2.0);
+    beta2 = bg2/(gamma*gamma);
+    beta  = std::sqrt(beta2);
+    ba2   = beta2/alpha2;
+    G4double ratio = electron_mass_c2/mass;
+    tmax  = 2.0*electron_mass_c2*bg2 /(1. + 2.0*gamma*ratio + ratio*ratio);
+    tmax0 = tmax;
+    charge  = p->GetPDGCharge()/eplus;
+    if(charge < 1.5)  q2 = charge*charge;
+    else {
+      q2 = effCharge.EffectiveChargeSquareRatio(p,mat,kinEnergy);
+      charge = std::sqrt(q2);
+    }
+    if(mass > 120.*MeV)
+      tmax = std::min(tmax,51200.*electron_mass_c2*std::pow(proton_mass_c2/mass,0.666667));
+  }
+  if(mat != material) {
+    material = mat;
+    theElementVector = material->GetElementVector();
+    atomDensity  = material->GetAtomicNumDensityVector(); 
+    numberOfElements = material->GetNumberOfElements();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

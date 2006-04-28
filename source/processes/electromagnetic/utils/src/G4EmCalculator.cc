@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.30 2006-04-18 08:48:08 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.31 2006-04-28 17:30:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -723,7 +723,7 @@ G4bool G4EmCalculator::UpdateParticle(const G4ParticleDefinition* p,
      ionEffCharge->EffectiveChargeSquareRatio(p, currentMaterial, kinEnergy);
     if(currentProcess) 
       currentProcess->SetDynamicMassCharge(massRatio,chargeSquare);
-    G4cout << "massR= " << massRatio << "   q2= " << chargeSquare << G4endl;
+    // G4cout << "massR= " << massRatio << "   q2= " << chargeSquare << G4endl;
   }
   return true;
 }
