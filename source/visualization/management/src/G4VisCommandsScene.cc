@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.48 2006-03-28 16:31:33 allison Exp $
+// $Id: G4VisCommandsScene.cc,v 1.49 2006-04-28 10:24:34 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -238,7 +238,17 @@ void G4VisCommandSceneEndOfRunAction::SetNewValue (G4UIcommand*,
   }
 
   if (action == "accumulate") {
-    pScene->SetRefreshAtEndOfRun(false);
+    if (pScene->GetRefreshAtEndOfEvent()) {
+      if (verbosity >= G4VisManager::errors) {
+	G4cout <<
+	  "ERROR: Cannot accumulate runs unless events accumulate too."
+	  "\n  Use \"/vis/scene/endOfEventAction accumulate\"."
+	       << G4endl;
+      }
+      else {
+	pScene->SetRefreshAtEndOfRun(false);
+      }
+    }
   }
   else if (action == "refresh") {
     pScene->SetRefreshAtEndOfRun(true);
