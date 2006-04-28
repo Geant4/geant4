@@ -188,6 +188,7 @@ void StatAccepTestDetectorConstruction::DefineMaterials() {
   a = 238.03*g/mole;
   Uranium = new G4Material(name="Uranium", z=92., a, density);
 
+  // Liquid Argon has a  X0 = 10.971 cm  and  lambda_I = 65.769 cm.  
   density = 1.4*g/cm3;
   a = 39.95*g/mole;
   LiquidArgon = new G4Material(name="LiquidArgon", z=18., a, density);
@@ -219,7 +220,8 @@ void StatAccepTestDetectorConstruction::DefineMaterials() {
   Vacuum->AddMaterial(Air, fractionmass=1.);
 
   // Plastic scintillator tiles (used both in CMS hadron calorimeter
-  // and ATLAS hadron barrel calorimeter).
+  // and ATLAS hadron barrel calorimeter): 
+  //     X0 = 42.4 cm  and  lambda_I = 79.360 cm.  
   density = 1.032*g/cm3;
   Polystyrene = new G4Material(name="Polystyrene", density, nel=2);
   Polystyrene->AddElement(elC, natoms=19);

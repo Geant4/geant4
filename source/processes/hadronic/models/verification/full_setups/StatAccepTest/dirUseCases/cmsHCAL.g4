@@ -1,5 +1,5 @@
 #----------------------------------------------------------------
-# Last update: 09-Apr-2006
+# Last update: 28-Apr-2006
 #
 # CMS hadronic barrel : 4 mm Sci.
 #                       For the absorber thickness, I have found
@@ -24,6 +24,8 @@
 # following:  25  active layers
 # which corresponds to  0.3985 lambda  per passive layer.           
 # We use  25 readout layers  (which is close to the usual 20). 
+# The total amount of Scintillator is 10 cm, corresponding 
+# (X0 = 42.4 cm, lambda = 79.36 cm) to 0.24 X0 and 0.13 lambda.
 #
 # The real setup, as in Elvira's note, is made of layers with
 # different thicknesses and even materials, and are in total 17.

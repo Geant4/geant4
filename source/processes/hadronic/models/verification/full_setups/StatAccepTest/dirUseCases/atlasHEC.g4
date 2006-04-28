@@ -1,5 +1,5 @@
 #--------------------------------------------------------------------
-# Last update: 09-Apr-2006
+# Last update: 28-Apr-2006
 #
 # ATLAS HEC : HEC1 : Cu (25 mm) LAr (8.5 mm)  0.82 m length
 #             HEC2 : Cu (50 mm) LAr (8.5 mm)  0.96 m length
@@ -16,6 +16,8 @@
 # following:  60  active layers
 # which corresponds to  0.1660 lambda  per passive layer.           
 # We use as usual  20 readout layers .
+# The total amount of LAr is 51 cm, corresponding 
+# (X0 = 10.971 cm, lambda = 65.769 cm) to 4.64 X0 and 0.78 lambda.
 #
 # The real setup is made of two sets of layers with different 
 # thicknesses, and the total thickness seems to me less than
