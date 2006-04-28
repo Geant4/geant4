@@ -85,6 +85,27 @@ msc:  Model variant of multiple scattering for proton
 msc:  Model variant of multiple scattering for GenericIon
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+hIoni:   tables are built for  kaon+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+hIoni:   tables are built for  kaon-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
@@ -123,6 +144,20 @@ muPairProd:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
@@ -136,5 +171,5 @@ Test23 event # 700
 Test23 event # 800
 Test23 event # 900
 Test23 event # 1000
-Test23_Result: gam=2722(0.86553931), e-=15010(0.43804417), e+=73(2.7168497), p=382(4.854759), n=1670(4.3689687), d=89(4.1294302), t=54(6.7535501), He3=8(8.7787924), alph=387(5.8900925), nu=1000(69.210895), anu=131(33.179477), others=16559*0.14154637
+Test23_Result: gam=2734(0.8878397), e-=15068(0.43799887), e+=75(2.5419819), p=348(5.2115586), n=1630(4.4051686), d=96(4.0851427), t=50(7.2800553), He3=9(8.8393523), alph=382(5.7852311), nu=1000(69.625682), anu=129(32.853664), others=16232*0.14258829
 Test23 is done

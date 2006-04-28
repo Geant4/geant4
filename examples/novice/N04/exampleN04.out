@@ -14,7 +14,7 @@ Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
 
-You have successfully chosen to use the following graphics systems.
+You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
@@ -26,6 +26,22 @@ Current available graphics systems are:
   VRML2FILE (VRML2FILE)
 
 Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+drawByCharge
+drawByParticleID
+drawByOriginVolume
+
+Registered models: 
+None
+
+Registered filter factories:
+particleFilter
+
+Registered Filters:
+None
+
 /run/verbose      1
 /tracking/verbose 0
 /run/beamOn 3
@@ -95,6 +111,27 @@ ionIoni:   tables are built for  GenericIon
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
 
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+hIoni:   tables are built for  kaon+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+hIoni:   tables are built for  kaon-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
@@ -133,9 +170,23 @@ muPairProd:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 ========= Table of registered couples ==============================
 
@@ -182,7 +233,7 @@ Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 0 isolated muon found.
 ++++++++ event aborted
 >>> Event 0
-     249 hits are stored in ExN04TrackerHitsCollection.
+     235 hits are stored in ExN04TrackerHitsCollection.
      9 hits are stored in ExN04CalorimeterHitsCollection.
      Total energy deposition in calorimeter : 0.21463286 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
@@ -197,14 +248,14 @@ Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 0 isolated muon found.
 ++++++++ event aborted
 >>> Event 2
-     131 hits are stored in ExN04TrackerHitsCollection.
+     140 hits are stored in ExN04TrackerHitsCollection.
      13 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.32791824 (GeV)
+     Total energy deposition in calorimeter : 0.33183994 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=2.23s Real=2.32s Sys=0.04s
+  User=1.22s Real=1.53s Sys=0.07s
 G4 kernel has come to Quit state.
 Graphics systems deleted.
 Visualization Manager deleting...

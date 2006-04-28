@@ -42,7 +42,7 @@ Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
 
-You have successfully chosen to use the following graphics systems.
+You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
@@ -54,6 +54,22 @@ Current available graphics systems are:
   VRML2FILE (VRML2FILE)
 
 Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+drawByCharge
+drawByParticleID
+drawByOriginVolume
+
+Registered models: 
+None
+
+Registered filter factories:
+particleFilter
+
+Registered Filters:
+None
+
 /run/verbose 2
 #
 /testem/det/setMat G4_Si
@@ -84,6 +100,7 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /testem/histo/setFileName testem11
 /testem/histo/setHisto 1 100 0.    1. mm	#edep profile
 ----> SetHisto 1: Edep (MeV/mm) along absorber (mm);  100 bins from 0 mm to 1 mm
+      stepMax = 10 um 
 /testem/histo/setHisto 2 102 0.  510. keV	#total Edep
 ----> SetHisto 2: total Energy deposited in absorber (keV);  102 bins from 0 keV to 510 keV
 /testem/histo/setHisto 3 100 0.    2. mm	#track length
@@ -166,6 +183,30 @@ ionIoni:   tables are built for  GenericIon
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
       CSDA range table up to 1 GeV in 70 bins.
 
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      CSDA range table up to 1 GeV in 70 bins.
+
+hIoni:   tables are built for  kaon+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      CSDA range table up to 1 GeV in 70 bins.
+
+hIoni:   tables are built for  kaon-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      CSDA range table up to 1 GeV in 70 bins.
+
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
@@ -206,9 +247,25 @@ muPairProd:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      CSDA range table up to 1 GeV in 70 bins.
+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      CSDA range table up to 1 GeV in 70 bins.
 
 Region <DefaultRegionForTheWorld> -- appears in <Absorber> world volume
  Materials : G4_Si 
@@ -260,7 +317,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=755.71s Real=1896.98s Sys=345.29s
+  User=791.81s Real=1679.83s Sys=699.47s
 
  ======================== run summary ======================
 
@@ -268,20 +325,20 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 455.092 keV +- 96.129 keV
+ Total Energy deposited        = 453.004 keV +- 99.651 keV
 
- Track length of primary track = 878.949 um  +- 175.911 um 
+ Track length of primary track = 869.756 um  +- 181.671 um 
  Range from EmCalculator       = 937.365 um  (from full dE/dx)
 
- Projected range               = 336.620 um  +- 198.628 um 
+ Projected range               = 336.422 um  +- 202.793 um 
 
- Nb of steps of primary track  = 43.68 +- 9.52	 Step size= 20.301 um  +- 2.449 um 
+ Nb of steps of primary track  = 87.49 +- 18.16	 Step size= 9.932 um  +- 92.620 nm 
 
- absorbed = 80.37 %   transmit = 4.92 %   reflected = 14.71 %
+ absorbed = 79.69 %   transmit = 5.21 %   reflected = 15.10 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1719632975, 1258014494
+ Current couple of seeds = 1531979934, 735368099
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

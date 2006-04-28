@@ -10,7 +10,7 @@ Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
 
-You have successfully chosen to use the following graphics systems.
+You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
@@ -22,6 +22,22 @@ Current available graphics systems are:
   VRML2FILE (VRML2FILE)
 
 Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+drawByCharge
+drawByParticleID
+drawByOriginVolume
+
+Registered models: 
+None
+
+Registered filter factories:
+particleFilter
+
+Registered Filters:
+None
+
  Material: FluorCarbonate     density:  1.610 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  22.435 cm 
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  38.74 %  ElmAbundance  50.00 %
    --->  Element: Fluorine (N)   Z =  9.0   N =  19.0   A =  18.99 g/mole  ElmMassFraction:  61.26 %  ElmAbundance  50.00 %
@@ -124,7 +140,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=98.46s Real=1476.03s Sys=190.48s
+  User=95.17s Real=368.58s Sys=114.95s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

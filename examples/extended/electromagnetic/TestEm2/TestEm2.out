@@ -41,7 +41,7 @@ Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
 
-You have successfully chosen to use the following graphics systems.
+You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
@@ -53,6 +53,22 @@ Current available graphics systems are:
   VRML2FILE (VRML2FILE)
 
 Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+drawByCharge
+drawByParticleID
+drawByOriginVolume
+
+Registered models: 
+None
+
+Registered filter factories:
+particleFilter
+
+Registered Filters:
+None
+
 /run/verbose 2
 #
 /testem/det/setMat PbWO4
@@ -128,21 +144,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=313.37s Real=357.8s Sys=43.39s
+  User=165.66s Real=213.77s Sys=45.69s
 
                               SUMMARY
-                         energy deposit :   94.45 % E0 +-    1.09 % E0
-                         charged traklen:  479.70 radl +-    5.29 radl
-                         neutral traklen: 4467.26 radl +-  146.47 radl
+                         energy deposit :   94.70 % E0 +-    1.34 % E0
+                         charged traklen:  480.91 radl +-    6.90 radl
+                         neutral traklen: 4436.50 radl +-  135.22 radl
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 106067685, 1869557631
+ Current couple of seeds = 1118812840, 314883357
 ----------------------------------------
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.94453605  delEdep= -0.00046394935 nrms= -0.48328057
-Erms: 0.01088555  delErms= 0.0012855501 nrms= 1.3391147
+Edep: 0.94701485  delEdep= 0.0020148499 nrms= 2.0988019
+Erms: 0.013438367  delErms= 0.0038383673 nrms= 3.9982993
 <<<<END>>>>   IS ACCEPTED
 
 Graphics systems deleted.

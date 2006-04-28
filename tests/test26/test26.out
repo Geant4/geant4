@@ -65,7 +65,7 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
 
-You have successfully chosen to use the following graphics systems.
+You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
@@ -80,6 +80,20 @@ Registering model factories...
 G4VisManager: No model factories registered with G4VisManager.
 G4VisManager::RegisterModelFactories() should be overridden in derived
 class. See G4VisExecutive for an example.
+
+You have successfully registered the following model factories.
+Registered model factories:
+None
+
+Registered models: 
+None
+
+Registered filter factories:
+None
+
+Registered Filters:
+None
+
 /run/verbose 1
 #/tracking/verbose 1
 #
@@ -166,6 +180,27 @@ ionIoni:   tables are built for  GenericIon
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
 
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+hIoni:   tables are built for  kaon+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+hIoni:   tables are built for  kaon-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
@@ -204,9 +239,23 @@ muPairProd:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 ========= Table of registered couples ==============================
 
@@ -280,7 +329,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=64.79s Real=71.36s Sys=5.62s
+  User=32.12s Real=38.51s Sys=5.81s
 
 ============   SUMMARY   ============
 
@@ -393,7 +442,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=5.29000000s Real=7.13000000s Sys=0.93000000s
+  User=2.50000000s Real=4.08000000s Sys=1.13000000s
 
 ============   SUMMARY   ============
 
@@ -505,7 +554,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=5.50000000s Real=7.28000000s Sys=0.90000000s
+  User=2.71000000s Real=3.99000000s Sys=1.05000000s
 
 ============   SUMMARY   ============
 
@@ -617,7 +666,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=64.11000000s Real=70.76000000s Sys=5.85000000s
+  User=31.41000000s Real=38.07000000s Sys=6.09000000s
 
 ============   SUMMARY   ============
 

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-00-ref-02    (10-February-2006)
+ Geant4 version Name: global-V08-00-01    (10-February-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -9,11 +9,11 @@
 
 ***** Table : Nb of materials = 15 *****
 
- Material:      Air     density:  1.290 kg/m3   temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
+ Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
- Material: H2liquid     density: 70.800 kg/m3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.923 m  
+ Material: H2liquid     density: 70.800 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.923 m  
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    Water H_2O   density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
@@ -64,7 +64,7 @@ Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
 
-You have successfully chosen to use the following graphics systems.
+You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
@@ -74,13 +74,24 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
-  FukuiRenderer (DAWN)
-  OpenGLImmediateX (OGLIX)
-  OpenGLStoredX (OGLSX)
-  VRML1 (VRML1)
-  VRML2 (VRML2)
 
 Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+drawByCharge
+drawByParticleID
+drawByOriginVolume
+
+Registered models: 
+None
+
+Registered filter factories:
+particleFilter
+
+Registered Filters:
+None
+
 /run/verbose 2
 #
 /testem/det/setMat Water
@@ -276,7 +287,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=8.06s Real=8.58s Sys=0.1s
+  User=21.29s Real=21.54s Sys=0s
 
  The run consists of 100000 gamma of 100 keV through 1 cm  of Water (density: 1 g/cm3 )
 
@@ -344,7 +355,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=6.99s Real=7.21s Sys=0.08s
+  User=22.38s Real=22.64s Sys=0s
 
  The run consists of 100000 e- of 100 MeV through 1 cm  of Water (density: 1 g/cm3 )
 

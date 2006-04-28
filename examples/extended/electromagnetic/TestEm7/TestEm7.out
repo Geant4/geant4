@@ -25,7 +25,7 @@ Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
 
-You have successfully chosen to use the following graphics systems.
+You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
@@ -37,6 +37,22 @@ Current available graphics systems are:
   VRML2FILE (VRML2FILE)
 
 Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+drawByCharge
+drawByParticleID
+drawByOriginVolume
+
+Registered models: 
+None
+
+Registered filter factories:
+particleFilter
+
+Registered Filters:
+None
+
 /run/verbose 2
 #
 /testem/det/setMat Water
@@ -149,6 +165,27 @@ ionIoni:   tables are built for  GenericIon
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
 
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+hIoni:   tables are built for  kaon+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+hIoni:   tables are built for  kaon-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
@@ -187,9 +224,23 @@ muPairProd:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Materials : Galactic Water 
@@ -258,25 +309,25 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=387.25s Real=520.87s Sys=56.2s
+  User=187.64s Real=269.77s Sys=62.64s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of Water (density: 1 g/cm3 )
 
- projected Range= 17.6823 cm    rms= 2.14415 mm 
+ projected Range= 17.6812 cm    rms= 2.41615 mm 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	4.61907 GeV	0.288692 % 	9.25072e-05 Gy
- tally 1: 	 	4.97649 GeV	0.311031 % 	9.96652e-05 Gy
- tally 2: 	 	3.11895 GeV	0.194934 % 	6.24638e-05 Gy
- tally 3: 	 	1.76005 GeV	0.110003 % 	3.52489e-05 Gy
+ tally 0: 	 	4.56662 GeV	0.285414 % 	9.14566e-05 Gy
+ tally 1: 	 	4.94327 GeV	0.308954 % 	9.89999e-05 Gy
+ tally 2: 	 	2.98633 GeV	0.186645 % 	5.98078e-05 Gy
+ tally 3: 	 	1.76558 GeV	0.110349 % 	3.53597e-05 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 116307179, 1596138633
+ Current couple of seeds = 419358202, 1109266975
 ----------------------------------------
 #
 /gun/particle ion
@@ -311,7 +362,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 116307179, 1596138633
+ Current couple of seeds = 419358202, 1109266975
 ----------------------------------------
 Start Run processing.
 
@@ -319,25 +370,25 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=161.02s Real=196.31s Sys=26.69s
+  User=79.33s Real=110.04s Sys=27.47s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of Water (density: 1 g/cm3 )
 
- projected Range= 16.3698 cm    rms= 462.716 um 
+ projected Range= 16.3678 cm    rms= 473.67 um 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	11.4221 GeV	0.326347 % 	0.000228754 Gy
- tally 1: 	 	12.8057 GeV	0.365876 % 	0.000256462 Gy
- tally 2: 	 	14.989 GeV	0.428258 % 	0.000300188 Gy
- tally 3: 	 	22.4362 GeV	0.641034 % 	0.000449334 Gy
+ tally 0: 	 	12.0505 GeV	0.344301 % 	0.000241339 Gy
+ tally 1: 	 	13.735 GeV	0.392429 % 	0.000275074 Gy
+ tally 2: 	 	15.7209 GeV	0.449169 % 	0.000314846 Gy
+ tally 3: 	 	23.5497 GeV	0.67285 % 	0.000471636 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 859652216, 1986071251
+ Current couple of seeds = 1726705947, 108999063
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

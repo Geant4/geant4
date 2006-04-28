@@ -94,6 +94,27 @@ hIoni:   tables are built for  proton
 msc:  Model variant of multiple scattering for GenericIon
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+hIoni:   tables are built for  kaon+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+hIoni:   tables are built for  kaon-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
@@ -132,9 +153,23 @@ muPairProd:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
@@ -157,20 +192,20 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
+ G4NuclearLevelManager: nuclide (87,222) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (91,227) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (88,229) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (91,237) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (91,225) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (82,220) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (82,215) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (88,233) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (91,232) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (84,219) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (84,220) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (83,216) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (93,236) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (85,214) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (87,230) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (86,226) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (89,233) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (87,228) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (85,221) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=59s Real=60s Sys=0.47s
+  User=21s Real=22s Sys=0.18s
 #
 # neutron at 10 GeV in U
 #
@@ -196,11 +231,15 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
- G4NuclearLevelManager: nuclide (93,231) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,237) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (88,232) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (85,224) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,225) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,230) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=33s Real=34s Sys=0.33s
+  User=11s Real=12s Sys=0.09s
 #
 # pi+ at 10 GeV in U
 #
@@ -226,14 +265,13 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
- G4NuclearLevelManager: nuclide (91,223) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (86,227) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (89,229) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (90,221) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,232) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (89,222) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=68s Real=69s Sys=0.37s
+  User=15s Real=16s Sys=0.18s
 #
 # pi- at 10 GeV in U
 #
@@ -259,17 +297,18 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
- G4NuclearLevelManager: nuclide (82,213) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (86,223) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (69,168) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (86,224) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (89,229) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (84,220) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (87,218) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (87,233) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (89,226) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (90,235) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (94,234) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (90,225) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (88,234) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (87,226) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=63s Real=64s Sys=0.13s
+  User=19s Real=20s Sys=0.13s
 #
 # proton at 10 GeV in Cu
 #
@@ -340,6 +379,27 @@ hIoni:   tables are built for  proton
 msc:  Model variant of multiple scattering for GenericIon
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+hIoni:   tables are built for  kaon+
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 1.1 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+hIoni:   tables are built for  kaon-
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 1.1 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
@@ -378,9 +438,23 @@ muPairProd:   tables are built for  mu-
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Parametrised model 
 
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.3 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.3 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
@@ -406,7 +480,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=21s Real=22s Sys=0.47s
+  User=10s Real=12s Sys=0.38s
 #
 # neutron at 10 GeV in Cu
 #
@@ -440,7 +514,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=23s Real=24s Sys=0.25s
+  User=8.9s Real=9.4s Sys=0.13s
 #
 # pi+ at 10 GeV in Cu
 #
@@ -474,7 +548,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=23s Real=23s Sys=0.04s
+  User=7.2s Real=7.4s Sys=0.03s
 #
 # pi- at 10 GeV in Cu
 #
@@ -508,7 +582,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=24s Real=24s Sys=0.01s
+  User=5.5s Real=5.8s Sys=0.02s
 #
 # proton at 10 GeV in Si
 #
@@ -579,6 +653,27 @@ hIoni:   tables are built for  proton
 msc:  Model variant of multiple scattering for GenericIon
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+hIoni:   tables are built for  kaon+
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 1.1 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+hIoni:   tables are built for  kaon-
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 1.1 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
@@ -617,9 +712,23 @@ muPairProd:   tables are built for  mu-
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Parametrised model 
 
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.3 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.3 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
@@ -647,11 +756,10 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
- G4NuclearLevelManager: nuclide (2,4) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=11.38s Real=11.85s Sys=0.06s
+  User=3.66s Real=3.76s Sys=0.04s
 #
 # neutron at 10 GeV in Si
 #
@@ -687,12 +795,11 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
- G4NuclearLevelManager: nuclide (14,24) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (14,25) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (2,4) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=10.21s Real=10.39s Sys=0.06s
+  User=3.21s Real=3.32s Sys=0.03s
 #
 # pi+ at 10 GeV in Si
 #
@@ -731,7 +838,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=12.88s Real=12.9s Sys=0s
+  User=2.77s Real=2.8s Sys=0.01s
 #
 # pi- at 10 GeV in Si
 #
@@ -767,11 +874,11 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
- G4NuclearLevelManager: nuclide (15,27) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (12,21) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=14.71s Real=14.86s Sys=0.03s
+  User=3.61s Real=3.7s Sys=0.01s
 #
 # proton at 10 GeV in H
 #
@@ -839,6 +946,27 @@ hIoni:   tables are built for  proton
 msc:  Model variant of multiple scattering for GenericIon
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+hIoni:   tables are built for  kaon+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 1.0523107 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+hIoni:   tables are built for  kaon-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 1.0523107 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
@@ -877,9 +1005,23 @@ muPairProd:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.29750425 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.29750425 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : H 
@@ -915,7 +1057,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # neutron at 10 GeV in H
 #
@@ -1003,7 +1145,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # pi- at 10 GeV in H
 #

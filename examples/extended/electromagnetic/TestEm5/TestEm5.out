@@ -10,7 +10,7 @@ Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
 
-You have successfully chosen to use the following graphics systems.
+You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
@@ -22,6 +22,22 @@ Current available graphics systems are:
   VRML2FILE (VRML2FILE)
 
 Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+drawByCharge
+drawByParticleID
+drawByOriginVolume
+
+Registered models: 
+None
+
+Registered filter factories:
+particleFilter
+
+Registered Filters:
+None
+
 /run/verbose 2
 #
 /testem/det/setAbsMat Silicon
@@ -130,6 +146,27 @@ ionIoni:   tables are built for  GenericIon
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
 
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+hIoni:   tables are built for  kaon+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+hIoni:   tables are built for  kaon-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
@@ -168,9 +205,23 @@ muPairProd:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Materials : Galactic Silicon 
@@ -229,24 +280,24 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=164.27s Real=2019.82s Sys=322.85s
+  User=140.96s Real=433.71s Sys=133.26s
 
  ======================== run summary ======================
 
  The run was 100000 pi+ of 5 GeV through 20 um  of Silicon (density: 2.3 g/cm3 )
 
- Total energy deposit in absorber per event = 6.305 keV +- 15.91 eV 
+ Total energy deposit in absorber per event = 6.306 keV +- 15.74 eV 
 
- Mean dE/dx  = 3.152 MeV/cm	 stopping Power = 1.353 MeV*cm2/g
+ Mean dE/dx  = 3.153 MeV/cm	 stopping Power = 1.353 MeV*cm2/g
  (from Table = 2.807 MeV/cm)	 (from Table    = 1.205 MeV*cm2/g)
 
- Total track length (charged) in absorber per event = 20.31 um  +- 7.935 nm 
- Total track length (neutral) in absorber per event = 5.894e+04 fm  +- 5.894e+04 fm 
+ Total track length (charged) in absorber per event = 20.31 um  +- 7.906 nm 
+ Total track length (neutral) in absorber per event = 4.222 Ang +- 2.014 Ang
 
- Number of steps (charged) in absorber per event = 4.216 +- 8.908e-06
- Number of steps (neutral) in absorber per event = 1e-05 +- 8.908e-06
+ Number of steps (charged) in absorber per event = 4.216 +- 8.892e-06
+ Number of steps (neutral) in absorber per event = 5e-05 +- 8.892e-06
 
- Number of secondaries per event : Gammas = 1e-05;   electrons = 0.03606;   positrons = 0
+ Number of secondaries per event : Gammas = 5e-05;   electrons = 0.03612;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -254,12 +305,12 @@ Run Summary
  Number of events with the primary particle reflected = 0 %
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
- MultipleScattering: rms proj angle of transmit primary particle = 0.03175 mrad 
+ MultipleScattering: rms proj angle of transmit primary particle = 0.03172 mrad 
  MultipleScattering: computed theta0 (Highland formula)          = 0.02627 mrad
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 880018269, 1124425902
+ Current couple of seeds = 758933996, 1829523824
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
