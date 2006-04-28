@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.57 2006-04-19 13:48:16 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.58 2006-04-28 10:22:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -468,6 +468,8 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
 
 void G4VSceneHandler::ProcessScene (G4VViewer&) {
 
+  if (!fpScene) return;
+
   fReadyForTransients = false;
 
   // Clear stored scene, if any, i.e., display lists, scene graphs.
@@ -552,6 +554,8 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 	     << G4endl;
     }
   }
+
+  fpViewer->FinishView();  // Flush streams and/or swap buffers.
 
   fReadyForTransients = true;
 
