@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2006-04-24 07:37:31 allison Exp $
+$Id: History,v 1.46 2006-04-28 10:26:01 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,20 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+28th April 2006  John Allison (visman-V08-00-14)
+- G4VSceneHandler.cc: Added call to FinishView after run-duration
+  model computation and before end-of-event and transients
+  re-computation to get good buffer swapping behaviour for double
+  buffer drivers.
+- G4VisCommandsScene.cc: Added protection in
+  /vis/scene/endOfRunAction.  Error for accumulate if end of event
+  action is not also accumulate.
+- G4VisManager: To get good refresh bahaviour when re-computing
+  transients in OpenGL*Xm and similar drivers, postpone ShowView to
+  end of run for last event in a run.  This ensures G4 is in Idle
+  state.
+- GNUmakefile: Added includes for access to run manager for above.
 
 22nd April 2006  John Allison (visman-V08-00-13)
 - Bug fix (workaround) for memory leak in CheckModel (bug #861).
