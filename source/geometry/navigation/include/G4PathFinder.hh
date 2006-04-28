@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.hh,v 1.5 2006-04-28 17:02:10 japost Exp $
+// $Id: G4PathFinder.hh,v 1.6 2006-04-28 17:19:25 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -118,6 +118,8 @@ class G4PathFinder
 
   G4double  DoNextLinearStep(  const G4FieldTrack  &FieldTrack,
 			       G4double            proposedStepLength); 
+
+  void WhichLimited();
   // 
   // void SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter);
   //   Set the filter that examines & stores 'intermediate' 
@@ -153,6 +155,7 @@ class G4PathFinder
    static const G4int MaxNav = 8;   // rename to kMaxNoNav ??
    // enum EMaximumNavs { MaxNav = 8; }
    ELimited      fLimitedStep[MaxNav];
+   G4bool        fLimitTruth[MaxNav];
    G4Navigator*  fpNavigator[MaxNav];   // G4Navigator** fpNavigator;
    G4double      fCurrentStepSize[MaxNav]; 
    G4double      fNewSafety[ MaxNav ]; 
