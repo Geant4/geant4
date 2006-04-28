@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.91 2006-04-22 10:12:32 allison Exp $
+// $Id: G4VisManager.cc,v 1.92 2006-04-28 10:25:21 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,6 +67,9 @@
 #include "G4VTrajectoryModel.hh"
 #include "G4TrajectoryDrawByCharge.hh"
 #include "Randomize.hh"
+#include "G4RunManager.hh"
+#include "G4Run.hh"
+
 #include <sstream>
 
 G4VisManager* G4VisManager::fpInstance = 0;
@@ -1050,8 +1053,15 @@ void G4VisManager::EndOfEvent ()
       fpSceneHandler -> SetModel (0);  // Flags invalid model.
     }
     if (fpScene->GetRefreshAtEndOfEvent()) {
-      fpViewer->ShowView();
-      fpSceneHandler->SetMarkForClearingTransientStore(true);
+      G4RunManager* runManager = G4RunManager::GetRunManager();
+      G4int nEvents =
+	runManager->GetCurrentRun()->GetNumberOfEventToBeProcessed();
+      G4int eventID = runManager->GetCurrentEvent()->GetEventID();
+      // Unless last event (in which case wait end of run)...
+      if (eventID < nEvents -1) {
+	fpViewer->ShowView();
+	fpSceneHandler->SetMarkForClearingTransientStore(true);
+      }
     }
   }
 }
