@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.cc,v 1.8 2006-04-28 10:51:02 japost Exp $
+// $Id: G4FieldTrack.cc,v 1.9 2006-04-28 13:24:44 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -48,7 +48,7 @@ G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition,
 			          G4double       kineticEnergy,
 			          G4double       restMass_c2,
 		                  G4double       charge, 
-			    const G4ThreeVector* pSpin,
+			    const G4ThreeVector& Spin,
 			          G4double       magnetic_dipole_moment,
 			          G4double       curve_length )
  : fKineticEnergy(kineticEnergy),
@@ -62,7 +62,7 @@ G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition,
 
   G4ThreeVector pMomentum= momentum * pMomentumDirection; 
   SetCurvePnt( pPosition, pMomentum, curve_length );
-  InitialiseSpin( pSpin ); 
+  InitialiseSpin( Spin ); 
 
   fpChargeState = new G4ChargeState( charge, magnetic_dipole_moment ); 
 }
@@ -87,7 +87,11 @@ G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition,
   G4ThreeVector pMomentum= momentum * pMomentumDirection; 
 
   SetCurvePnt( pPosition, pMomentum, curve_length );
-  InitialiseSpin( pSpin ); 
+
+  G4ThreeVector Spin(0.0, 0.0, 0.0); 
+  if( !pSpin ) Spin= G4ThreeVector(0.,0.,0.); 
+  else         Spin= *pSpin;
+  InitialiseSpin( Spin ); 
 
   fpChargeState = new G4ChargeState( DBL_MAX );     //  charge not yet set !!
 }
