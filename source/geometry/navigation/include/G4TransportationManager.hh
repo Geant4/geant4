@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.hh,v 1.4 2006-04-27 16:30:05 gcosmo Exp $
+// $Id: G4TransportationManager.hh,v 1.5 2006-04-28 11:02:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4TransportationManager
@@ -49,6 +49,7 @@
 class G4PropagatorInField;
 class G4GeometryMessenger;
 class G4FieldManager;
+class G4VPhysicalVolume;
 
 class G4TransportationManager 
 {
@@ -70,12 +71,25 @@ class G4TransportationManager
      inline std::vector<G4Navigator*>::iterator GetActiveNavigatorsIterator();
        // Return an iterator to the list of active navigators
 
-     G4bool RegisterNavigator( G4Navigator* aNavigator );
+     G4VPhysicalVolume* GetParallelWorld ( const G4String& worldName );
+       // Return an exact copy of the tracking world volume. If already
+       // existing just return the pointerq
+
+     G4VPhysicalVolume* IsWorldExisting ( const G4String& worldName );
+       // Verify existance or not of an istance of the world volume with
+       // same name in the collection
+
+     G4Navigator* GetNavigator ( const G4String& worldName );
+     G4Navigator* GetNavigator ( G4VPhysicalVolume* aWorld );
+       // Return a navigator associated to either the world volume name
+       // or the pointer to world physical volume. If not existing already
+       // create it and register it in the collection
+
      void DeRegisterNavigator( G4Navigator* aNavigator );
      G4int  ActivateNavigator( G4Navigator* aNavigator );
      void DeActivateNavigator( G4Navigator* aNavigator );
        // Methods for handling navigators. Navigator for tracking is always the
-       // first, i.e. position 0 in the collection and cannot be deregistered
+       // first, i.e. position 0 in the collection and cannot be de-registered
 
   protected:
 
@@ -87,13 +101,19 @@ class G4TransportationManager
 
      void ClearNavigators();
        // Clear collection of navigators and delete allocated objects
-
+     G4bool RegisterWorld( G4VPhysicalVolume* aWorld );
+     void DeRegisterWorld( G4VPhysicalVolume* aWorld );
+       // Register/de-register an already allocated world volume.
+       // The pointed object is not deleted.
+ 
   private:
 
      std::vector<G4Navigator*> fNavigators;
        // The collection of all navigators registered
      std::vector<G4Navigator*> fActiveNavigators;
        // The collection of only active navigators
+     std::vector<G4VPhysicalVolume*> fWorlds;
+       // The collection of worlds associated to the registered navigators
 
      G4PropagatorInField*    fPropagatorInField;
      G4FieldManager*         fFieldManager;
