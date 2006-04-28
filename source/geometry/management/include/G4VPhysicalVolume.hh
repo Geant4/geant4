@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.hh,v 1.12 2005-11-11 22:34:37 japost Exp $
+// $Id: G4VPhysicalVolume.hh,v 1.13 2006-04-28 12:57:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -123,7 +123,7 @@ class G4VPhysicalVolume
     inline void SetMotherLogical(G4LogicalVolume *pMother);
       // Set the mother logical volume. Must not be called when geometry closed.
 
-    inline G4String GetName() const;
+    inline const G4String& GetName() const;
       // Return the volume's name.
     inline void SetName(const G4String& pName);
       // Set the volume's name.
