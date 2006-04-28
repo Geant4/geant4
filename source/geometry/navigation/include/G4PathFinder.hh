@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.hh,v 1.4 2006-04-28 16:38:08 japost Exp $
+// $Id: G4PathFinder.hh,v 1.5 2006-04-28 17:02:10 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -54,7 +54,7 @@
 // class G4VCurvedTrajectoryFilter;
 class G4TransportationManager; 
 class G4Navigator;
-#include "G4TouchableHistory.hh"
+#include "G4TouchableHandle.hh"
 #include "G4FieldTrack.hh"
 
 enum   ELimited { kDoNot, kUnique, kSharedTransport, kSharedOther } ; 
@@ -85,8 +85,8 @@ class G4PathFinder
    void PrepareNewTrack( G4ThreeVector position, G4ThreeVector direction); 
      // Check and cache set of active navigators
 
-   G4TouchableHandle CreateTouchableHandle( G4int navId ) const;
-   // Also? G4TouchableCreator& GetTouchableCreator( navId ) const; 
+   G4TouchableHandle CreateTouchableHandle( G4int navId) const;
+   // Also? G4TouchableCreator& GetTouchableCreator( G4int navId ) const; 
 
   // -----------------------------------------------------------------
    inline void SetChargeMomentumMass( G4double charge,     // in e+ units
@@ -131,7 +131,7 @@ class G4PathFinder
       //   unneccesary calls to navigator (thus 'optimising' performance)
 
  protected:
-   G4Navigator* GetNavigator(G4int n) { 
+   G4Navigator* GetNavigator(G4int n) const { 
       if( (n>fNoActiveNavigators)||(n<0)){ n=0; }
       return fpNavigator[n]; 
    }
