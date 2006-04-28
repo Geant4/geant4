@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.hh,v 1.3 2006-04-28 08:23:43 japost Exp $
+// $Id: G4PathFinder.hh,v 1.4 2006-04-28 16:38:08 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -54,8 +54,10 @@
 // class G4VCurvedTrajectoryFilter;
 class G4TransportationManager; 
 class G4Navigator;
-#include "G4TouchableHistoryHandle.hh"
+#include "G4TouchableHistory.hh"
 #include "G4FieldTrack.hh"
+
+enum   ELimited { kDoNot, kUnique, kSharedTransport, kSharedOther } ; 
 
 class G4PathFinder
 {
@@ -65,6 +67,7 @@ class G4PathFinder
    static G4PathFinder* GetInstance();  //  Singleton
   ~G4PathFinder();
 
+
   //  Attempt next step
   // 
    G4double ComputeStep( const G4FieldTrack      &pFieldTrack,   // Or update non-c
@@ -72,7 +75,7 @@ class G4PathFinder
 			       G4int              navigatorId, 
 			       G4int              stepNo,     // See next step / check 
                                G4double          &pNewSafety,   // for this geom 
-			       G4bool            &limitedStep, 
+			       ELimited          &limitedStep, 
 			       G4FieldTrack      &EndState );
      // Compute the next geometric Step  -- Curved or linear
 
@@ -82,7 +85,7 @@ class G4PathFinder
    void PrepareNewTrack( G4ThreeVector position, G4ThreeVector direction); 
      // Check and cache set of active navigators
 
-   G4TouchableHistoryHandle CreateTouchableHandle( G4int navId ) const;
+   G4TouchableHandle CreateTouchableHandle( G4int navId ) const;
    // Also? G4TouchableCreator& GetTouchableCreator( navId ) const; 
 
   // -----------------------------------------------------------------
@@ -127,6 +130,12 @@ class G4PathFinder
       //  Whether to safety to discard 
       //   unneccesary calls to navigator (thus 'optimising' performance)
 
+ protected:
+   G4Navigator* GetNavigator(G4int n) { 
+      if( (n>fNoActiveNavigators)||(n<0)){ n=0; }
+      return fpNavigator[n]; 
+   }
+
  private:
    G4PathFinder();  //  Singleton 
 
@@ -143,9 +152,8 @@ class G4PathFinder
 
    static const G4int MaxNav = 8;   // rename to kMaxNoNav ??
    // enum EMaximumNavs { MaxNav = 8; }
-   enum     ELimited { kDoNot, kUnique, kSharedTransport, kSharedOther } ; 
    ELimited      fLimitedStep[MaxNav];
-   G4Navigator*  fpNavigator[MaxNav];
+   G4Navigator*  fpNavigator[MaxNav];   // G4Navigator** fpNavigator;
    G4double      fCurrentStepSize[MaxNav]; 
    G4double      fNewSafety[ MaxNav ]; 
 
