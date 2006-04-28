@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.hh,v 1.14 2006-04-28 13:25:30 japost Exp $
+// $Id: G4FieldTrack.hh,v 1.15 2006-04-28 15:46:11 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -64,6 +64,7 @@ class  G4FieldTrack
 		         G4double       curve_length= 0.0
 		 );
      G4FieldTrack( const G4FieldTrack&   pFieldTrack );
+     G4FieldTrack( char );   //  Almost default constructor
 
      ~G4FieldTrack();
        // End of preferred Constructors / Destructor 
