@@ -195,47 +195,48 @@ private:
   AIDA::IHistogram1D* gammaSpectrumWeighted5[10];
 
   // Keep the count of the number of steps and tracks.
-  G4int numStep;
-  G4int numStepPositive, numStepNeutral, numStepNegative;
-  G4int numStepPDGCodeZero, numStepPDGCodeUnrecognized;
-  G4int numStepEM;             // e- , e+ , gamma
-  G4int numStepEWK;            // mu- , mu+ , tau+, tau-, neutrinos
-  G4int numStepHAD;            // mesons + baryons
-  G4int numStepMeson, numStepBaryon;     
-  G4int numStepMesonLight, numStepBaryonLight;            // u/d-hadrons    
-  G4int numStepMesonStrange, numStepBaryonStrange;        // s-hadrons
-  G4int numStepMesonHeavy, numStepBaryonHeavy;            // c-hadrons, and b-hadrons
-  G4int numStepElectron, numStepGamma, numStepPositron;
-  G4int numStepMuMinus, numStepMuPlus;
-  G4int numStepTauMinus, numStepTauPlus;
-  G4int numStepNeutrino;
-  G4int numStepPiPlus, numStepPi0, numStepPiMinus;
-  G4int numStepKPlus;
-  G4int numStepKNeutral;       // K0/K0bar or K0_S/KO_L
-  G4int numStepKMinus;
-  G4int numStepProton, numStepAntiProton;
-  G4int numStepNeutron, numStepAntiNeutron;
+  // We use doubles instead of integers to avoid overflow problems.
+  G4double numStep;
+  G4double numStepPositive, numStepNeutral, numStepNegative;
+  G4double numStepPDGCodeZero, numStepPDGCodeUnrecognized;
+  G4double numStepEM;             // e- , e+ , gamma
+  G4double numStepEWK;            // mu- , mu+ , tau+, tau-, neutrinos
+  G4double numStepHAD;            // mesons + baryons
+  G4double numStepMeson, numStepBaryon;     
+  G4double numStepMesonLight, numStepBaryonLight;            // u/d-hadrons    
+  G4double numStepMesonStrange, numStepBaryonStrange;        // s-hadrons
+  G4double numStepMesonHeavy, numStepBaryonHeavy;            // c-hadrons, and b-hadrons
+  G4double numStepElectron, numStepGamma, numStepPositron;
+  G4double numStepMuMinus, numStepMuPlus;
+  G4double numStepTauMinus, numStepTauPlus;
+  G4double numStepNeutrino;
+  G4double numStepPiPlus, numStepPi0, numStepPiMinus;
+  G4double numStepKPlus;
+  G4double numStepKNeutral;       // K0/K0bar or K0_S/KO_L
+  G4double numStepKMinus;
+  G4double numStepProton, numStepAntiProton;
+  G4double numStepNeutron, numStepAntiNeutron;
 
-  G4int numTrack;
-  G4int numTrackPositive, numTrackNeutral, numTrackNegative;
-  G4int numTrackPDGCodeZero, numTrackPDGCodeUnrecognized;
-  G4int numTrackEM;             // e- , e+ , gamma
-  G4int numTrackEWK;            // mu- , mu+ , tau+, tau-, neutrinos
-  G4int numTrackHAD;            // mesons + baryons
-  G4int numTrackMeson, numTrackBaryon;     
-  G4int numTrackMesonLight, numTrackBaryonLight;            // u/d-hadrons
-  G4int numTrackMesonStrange, numTrackBaryonStrange;        // s-hadrons
-  G4int numTrackMesonHeavy, numTrackBaryonHeavy;            // c-hadrons, and b-hadrons
-  G4int numTrackElectron, numTrackGamma, numTrackPositron;
-  G4int numTrackMuMinus, numTrackMuPlus;
-  G4int numTrackTauMinus, numTrackTauPlus;
-  G4int numTrackNeutrino;
-  G4int numTrackPiPlus, numTrackPi0, numTrackPiMinus;
-  G4int numTrackKPlus;
-  G4int numTrackKNeutral;       // K0/K0bar or K0_S/KO_L
-  G4int numTrackKMinus;
-  G4int numTrackProton, numTrackAntiProton;
-  G4int numTrackNeutron, numTrackAntiNeutron;
+  G4double numTrack;
+  G4double numTrackPositive, numTrackNeutral, numTrackNegative;
+  G4double numTrackPDGCodeZero, numTrackPDGCodeUnrecognized;
+  G4double numTrackEM;             // e- , e+ , gamma
+  G4double numTrackEWK;            // mu- , mu+ , tau+, tau-, neutrinos
+  G4double numTrackHAD;            // mesons + baryons
+  G4double numTrackMeson, numTrackBaryon;     
+  G4double numTrackMesonLight, numTrackBaryonLight;          // u/d-hadrons
+  G4double numTrackMesonStrange, numTrackBaryonStrange;      // s-hadrons
+  G4double numTrackMesonHeavy, numTrackBaryonHeavy;          // c-hadrons, and b-hadrons
+  G4double numTrackElectron, numTrackGamma, numTrackPositron;
+  G4double numTrackMuMinus, numTrackMuPlus;
+  G4double numTrackTauMinus, numTrackTauPlus;
+  G4double numTrackNeutrino;
+  G4double numTrackPiPlus, numTrackPi0, numTrackPiMinus;
+  G4double numTrackKPlus;
+  G4double numTrackKNeutral;       // K0/K0bar or K0_S/KO_L
+  G4double numTrackKMinus;
+  G4double numTrackProton, numTrackAntiProton;
+  G4double numTrackNeutron, numTrackAntiNeutron;
 
   // Count the track length of some particles.
   G4double electronTrackLength;      // e- or e+
@@ -254,13 +255,13 @@ private:
   G4double kinEnergyExitingMuons;     // due only to muons
   G4double kinEnergyExitingElectrons; // due only to e- and e+
   G4double kinEnergyExitingOthers;    // due to other particles
-  G4int    numExiting;                // number of exiting particles
-  G4int    numExitingGammas;          // number of exiting gammas
-  G4int    numExitingNeutrons;        // number of exiting neutrons
-  G4int    numExitingNeutrinos;       // number of exiting neutrinos
-  G4int    numExitingMuons;           // number of exiting muons
-  G4int    numExitingElectrons;       // number of exiting e- and e+
-  G4int    numExitingOthers;          // number of other particles
+  G4double numExiting;                // number of exiting particles
+  G4double numExitingGammas;          // number of exiting gammas
+  G4double numExitingNeutrons;        // number of exiting neutrons
+  G4double numExitingNeutrinos;       // number of exiting neutrinos
+  G4double numExitingMuons;           // number of exiting muons
+  G4double numExitingElectrons;       // number of exiting e- and e+
+  G4double numExitingOthers;          // number of other particles
 
 };
 

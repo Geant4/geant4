@@ -129,43 +129,43 @@ void StatAccepTestAnalysis::init() {
   numberOfEvents = 0;
   vecEvis.clear();
 
-  numStep = 0;
-  numStepPositive = numStepNeutral = numStepNegative = 0;
-  numStepPDGCodeZero = numStepPDGCodeUnrecognized = 0;
-  numStepEM = 0;
-  numStepEWK = 0;
-  numStepHAD = 0; 
-  numStepMeson = numStepBaryon = 0;     
-  numStepMesonLight = numStepBaryonLight = 0;     
-  numStepMesonStrange = numStepBaryonStrange = 0;     
-  numStepMesonHeavy = numStepBaryonHeavy = 0;
-  numStepElectron = numStepGamma = numStepPositron = 0;
-  numStepMuMinus = numStepMuPlus = 0;
-  numStepTauMinus = numStepTauPlus = 0;
-  numStepNeutrino = 0;
-  numStepPiPlus = numStepPi0 = numStepPiMinus = 0;
-  numStepKPlus = numStepKNeutral = numStepKMinus = 0; 
-  numStepProton = numStepAntiProton = 0;
-  numStepNeutron = numStepAntiNeutron = 0;
+  numStep = 0.0;
+  numStepPositive = numStepNeutral = numStepNegative = 0.0;
+  numStepPDGCodeZero = numStepPDGCodeUnrecognized = 0.0;
+  numStepEM = 0.0;
+  numStepEWK = 0.0;
+  numStepHAD = 0.0; 
+  numStepMeson = numStepBaryon = 0.0;     
+  numStepMesonLight = numStepBaryonLight = 0.0;     
+  numStepMesonStrange = numStepBaryonStrange = 0.0;     
+  numStepMesonHeavy = numStepBaryonHeavy = 0.0;
+  numStepElectron = numStepGamma = numStepPositron = 0.0;
+  numStepMuMinus = numStepMuPlus = 0.0;
+  numStepTauMinus = numStepTauPlus = 0.0;
+  numStepNeutrino = 0.0;
+  numStepPiPlus = numStepPi0 = numStepPiMinus = 0.0;
+  numStepKPlus = numStepKNeutral = numStepKMinus = 0.0; 
+  numStepProton = numStepAntiProton = 0.0;
+  numStepNeutron = numStepAntiNeutron = 0.0;
 
-  numTrack = 0;
-  numTrackPositive = numTrackNeutral = numTrackNegative = 0;
-  numTrackPDGCodeZero = numTrackPDGCodeUnrecognized = 0;
-  numTrackEM = 0;
-  numTrackEWK = 0;
-  numTrackHAD = 0; 
-  numTrackMeson = numTrackBaryon = 0;     
-  numTrackMesonLight = numTrackBaryonLight = 0;     
-  numTrackMesonStrange = numTrackBaryonStrange = 0;     
-  numTrackMesonHeavy = numTrackBaryonHeavy = 0;
-  numTrackElectron = numTrackGamma = numTrackPositron = 0;
-  numTrackMuMinus = numTrackMuPlus = 0;
-  numTrackTauMinus = numTrackTauPlus = 0;
-  numTrackNeutrino = 0;
-  numTrackPiPlus = numTrackPi0 = numTrackPiMinus = 0;
-  numTrackKPlus = numTrackKNeutral = numTrackKMinus = 0; 
-  numTrackProton = numTrackAntiProton = 0;
-  numTrackNeutron = numTrackAntiNeutron = 0;
+  numTrack = 0.0;
+  numTrackPositive = numTrackNeutral = numTrackNegative = 0.0;
+  numTrackPDGCodeZero = numTrackPDGCodeUnrecognized = 0.0;
+  numTrackEM = 0.0;
+  numTrackEWK = 0.0;
+  numTrackHAD = 0.0; 
+  numTrackMeson = numTrackBaryon = 0.0;     
+  numTrackMesonLight = numTrackBaryonLight = 0.0;     
+  numTrackMesonStrange = numTrackBaryonStrange = 0.0;     
+  numTrackMesonHeavy = numTrackBaryonHeavy = 0.0;
+  numTrackElectron = numTrackGamma = numTrackPositron = 0.0;
+  numTrackMuMinus = numTrackMuPlus = 0.0;
+  numTrackTauMinus = numTrackTauPlus = 0.0;
+  numTrackNeutrino = 0.0;
+  numTrackPiPlus = numTrackPi0 = numTrackPiMinus = 0.0;
+  numTrackKPlus = numTrackKNeutral = numTrackKMinus = 0.0; 
+  numTrackProton = numTrackAntiProton = 0.0;
+  numTrackNeutron = numTrackAntiNeutron = 0.0;
 
   electronTrackLength = 0.0;
   muonTrackLength = 0.0;
@@ -182,13 +182,13 @@ void StatAccepTestAnalysis::init() {
   kinEnergyExitingMuons = 0.0;
   kinEnergyExitingElectrons = 0.0;
   kinEnergyExitingOthers = 0.0;
-  numExiting = 0;
-  numExitingGammas = 0;
-  numExitingNeutrons = 0;
-  numExitingNeutrinos = 0;
-  numExitingMuons = 0;
-  numExitingElectrons = 0;
-  numExitingOthers = 0;
+  numExiting = 0.0;
+  numExitingGammas = 0.0;
+  numExitingNeutrons = 0.0;
+  numExitingNeutrinos = 0.0;
+  numExitingMuons = 0.0;
+  numExitingElectrons = 0.0;
+  numExitingOthers = 0.0;
 
 }                       
 
@@ -1797,315 +1797,315 @@ void StatAccepTestAnalysis::finish() {
       case 0 : {
 	caseName += "# total";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStep );
+	  sum = numStep;
 	} else {
-	  sum = static_cast< G4double >( numTrack );
+	  sum = numTrack;
 	}
 	break;
       }
       case 1 : {
 	caseName += "# positives";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepPositive );
+	  sum = numStepPositive;
 	} else {
-	  sum = static_cast< G4double >( numTrackPositive );
+	  sum = numTrackPositive;
 	}
 	break;
       }
       case 2 : {
 	caseName += "# neutrals";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepNeutral );
+	  sum = numStepNeutral;
 	} else {
-	  sum = static_cast< G4double >( numTrackNeutral );
+	  sum = numTrackNeutral;
 	}
 	break;
       }
       case 3 : {
 	caseName += "# negatives";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepNegative );
+	  sum = numStepNegative;
 	} else {
-	  sum = static_cast< G4double >( numTrackNegative );
+	  sum = numTrackNegative;
 	}
 	break;
       }
       case 4 : {
 	caseName += "# particles with 0 PDG code";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepPDGCodeZero );
+	  sum = numStepPDGCodeZero;
 	} else {
-	  sum = static_cast< G4double >( numTrackPDGCodeZero );
+	  sum = numTrackPDGCodeZero;
 	}
 	break;
       }
       case 5 : {
 	caseName += "# particles with Unrecognized PDG code";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepPDGCodeUnrecognized );
+	  sum = numStepPDGCodeUnrecognized;
 	} else {
-	  sum = static_cast< G4double >( numTrackPDGCodeUnrecognized );
+	  sum = numTrackPDGCodeUnrecognized;
 	}
 	break;
       }
       case 6 : {
 	caseName += "# electromagnetic (e+ , e- , gammas)";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepEM );
+	  sum = numStepEM ;
 	} else {
-	  sum = static_cast< G4double >( numTrackEM );
+	  sum = numTrackEM;
 	}
 	break;
       }
       case 7 : {
 	caseName += "# electroweak (mu+, mu-, tau+, tau-, neutrinos)";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepEWK );
+	  sum = numStepEWK;
 	} else {
-	  sum = static_cast< G4double >( numTrackEWK );
+	  sum = numTrackEWK;
 	}
 	break;
       }
       case 8 : {
 	caseName += "# hadrons";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepHAD );
+	  sum = numStepHAD;
 	} else {
-	  sum = static_cast< G4double >( numTrackHAD );
+	  sum = numTrackHAD;
 	}
 	break;
       }
       case 9 : {
 	caseName += "# mesons";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepMeson );
+	  sum = numStepMeson;
 	} else {
-	  sum = static_cast< G4double >( numTrackMeson );
+	  sum = numTrackMeson;
 	}
 	break;
       }
       case 10 : {
 	caseName += "# baryons";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepBaryon );
+	  sum = numStepBaryon;
 	} else {
-	  sum = static_cast< G4double >( numTrackBaryon );
+	  sum = numTrackBaryon;
 	}
 	break;
       }
       case 11 : {
 	caseName += "# light mesons (u/ubar/d/dbar)";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepMesonLight );
+	  sum = numStepMesonLight;
 	} else {
-	  sum = static_cast< G4double >( numTrackMesonLight );
+	  sum = numTrackMesonLight;
 	}
 	break;
       }
       case 12 : {
 	caseName += "# light baryons (u/ubar/d/dbar)";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepBaryonLight );
+	  sum = numStepBaryonLight;
 	} else {
-	  sum = static_cast< G4double >( numTrackBaryonLight );
+	  sum = numTrackBaryonLight;
 	}
 	break;
       }
       case 13 : {
 	caseName += "# strange (s/sbar) mesons";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepMesonStrange );
+	  sum = numStepMesonStrange;
 	} else {
-	  sum = static_cast< G4double >( numTrackMesonStrange );
+	  sum = numTrackMesonStrange;
 	}
 	break;
       }
       case 14 : {
 	caseName += "# strange (s/sbar) baryons";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepBaryonStrange );
+	  sum = numStepBaryonStrange;
 	} else {
-	  sum = static_cast< G4double >( numTrackBaryonStrange );
+	  sum = numTrackBaryonStrange;
 	}
 	break;
       }
       case 15 : {
 	caseName += "# heavy (c/cbar or b/bbar) mesons";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepMesonHeavy );
+	  sum = numStepMesonHeavy;
 	} else {
-	  sum = static_cast< G4double >( numTrackMesonHeavy );
+	  sum = numTrackMesonHeavy;
 	}
 	break;
       }
       case 16 : {
 	caseName += "# heavy (c/cbar or b/bbar) baryons";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepBaryonHeavy );
+	  sum = numStepBaryonHeavy;
 	} else {
-	  sum = static_cast< G4double >( numTrackBaryonHeavy );
+	  sum = numTrackBaryonHeavy;
 	}
 	break;
       }
       case 17 : {
 	caseName += "# electrons";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepElectron );
+	  sum = numStepElectron;
 	} else {
-	  sum = static_cast< G4double >( numTrackElectron );
+	  sum = numTrackElectron;
 	}
 	break;
       }
       case 18 : {
 	caseName += "# gammas";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepGamma );
+	  sum = numStepGamma;
 	} else {
-	  sum = static_cast< G4double >( numTrackGamma );
+	  sum = numTrackGamma;
 	}
 	break;
       }
       case 19 : {
 	caseName += "# positrons";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepPositron );
+	  sum = numStepPositron;
 	} else {
-	  sum = static_cast< G4double >( numTrackPositron );
+	  sum = numTrackPositron;
 	}
 	break;
       }
       case 20 : {
 	caseName += "# mu-";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepMuMinus );
+	  sum = numStepMuMinus;
 	} else {
-	  sum = static_cast< G4double >( numTrackMuMinus );
+	  sum = numTrackMuMinus;
 	}
 	break;
       }
       case 21 : {
 	caseName += "# mu+";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepMuPlus );
+	  sum = numStepMuPlus;
 	} else {
-	  sum = static_cast< G4double >( numTrackMuPlus );
+	  sum = numTrackMuPlus;
 	}
 	break;
       }
       case 22 : {
 	caseName += "# tau-";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepTauMinus );
+	  sum = numStepTauMinus;
 	} else {
-	  sum = static_cast< G4double >( numTrackTauMinus );
+	  sum = numTrackTauMinus;
 	}
 	break;
       }
       case 23 : {
 	caseName += "# tau+";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepTauPlus );
+	  sum = numStepTauPlus;
 	} else {
-	  sum = static_cast< G4double >( numTrackTauPlus );
+	  sum = numTrackTauPlus;
 	}
 	break;
       }
       case 24 : {
 	caseName += "# neutrinos";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepNeutrino );
+	  sum = numStepNeutrino;
 	} else {
-	  sum = static_cast< G4double >( numTrackNeutrino );
+	  sum = numTrackNeutrino;
 	}
 	break;
       }
       case 25 : {
 	caseName += "# pi+";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepPiPlus );
+	  sum = numStepPiPlus;
 	} else {
-	  sum = static_cast< G4double >( numTrackPiPlus );
+	  sum = numTrackPiPlus;
 	}
 	break;
       }
       case 26 : {
 	caseName += "# pi0";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepPi0 );
+	  sum = numStepPi0;
 	} else {
-	  sum = static_cast< G4double >( numTrackPi0 );
+	  sum = numTrackPi0;
 	}
 	break;
       }
       case 27 : {
 	caseName += "# pi-";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepPiMinus );
+	  sum = numStepPiMinus;
 	} else {
-	  sum = static_cast< G4double >( numTrackPiMinus );
+	  sum = numTrackPiMinus;
 	}
 	break;
       }
       case 28 : {
 	caseName += "# K+";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepKPlus );
+	  sum = numStepKPlus;
 	} else {
-	  sum = static_cast< G4double >( numTrackKPlus );
+	  sum = numTrackKPlus;
 	}
 	break;
       }
       case 29 : {
 	caseName += "# K-neutral (K0/K0bar or K0_S/K0_L)";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepKNeutral );
+	  sum = numStepKNeutral;
 	} else {
-	  sum = static_cast< G4double >( numTrackKNeutral );
+	  sum = numTrackKNeutral;
 	}
 	break;
       }
       case 30 : {
 	caseName += "# K-";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepKMinus );
+	  sum = numStepKMinus;
 	} else {
-	  sum = static_cast< G4double >( numTrackKMinus );
+	  sum = numTrackKMinus;
 	}
 	break;
       }
       case 31 : {
 	caseName += "# protons";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepProton );
+	  sum = numStepProton;
 	} else {
-	  sum = static_cast< G4double >( numTrackProton );
+	  sum = numTrackProton;
 	}
 	break;
       }
       case 32 : {
 	caseName += "# anti-protons";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepAntiProton );
+	  sum = numStepAntiProton;
 	} else {
-	  sum = static_cast< G4double >( numTrackAntiProton );
+	  sum = numTrackAntiProton;
 	}
 	break;
       }
       case 33 : {
 	caseName += "# neutrons";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepNeutron );
+	  sum = numStepNeutron;
 	} else {
-	  sum = static_cast< G4double >( numTrackNeutron );
+	  sum = numTrackNeutron;
 	}
 	break;
       }
       case 34 : {
 	caseName += "# anti-neutrons";
 	if ( i == 0 ) {
-	  sum = static_cast< G4double >( numStepAntiNeutron );
+	  sum = numStepAntiNeutron;
 	} else {
-	  sum = static_cast< G4double >( numTrackAntiNeutron );
+	  sum = numTrackAntiNeutron;
 	}
 	break;
       }
@@ -2124,26 +2124,26 @@ void StatAccepTestAnalysis::finish() {
   }
 
   // Print information about track length:
-  if ( numTrackElectron + numTrackPositron > 0 ) {
-    electronTrackLength /= static_cast< G4double >( numTrackElectron + numTrackPositron );
+  if ( numTrackElectron + numTrackPositron > 0.0 ) {
+    electronTrackLength /= ( numTrackElectron + numTrackPositron );
   }
-  if ( numTrackMuMinus + numTrackMuPlus > 0 ) {
-    muonTrackLength /= static_cast< G4double >( numTrackMuMinus + numTrackMuPlus );
+  if ( numTrackMuMinus + numTrackMuPlus > 0.0 ) {
+    muonTrackLength /= ( numTrackMuMinus + numTrackMuPlus );
   }
-  if ( numTrackPiPlus + numTrackPiMinus > 0 ) {
-    pionChargedTrackLength /= static_cast< G4double >( numTrackPiPlus + numTrackPiMinus );
+  if ( numTrackPiPlus + numTrackPiMinus > 0.0 ) {
+    pionChargedTrackLength /= ( numTrackPiPlus + numTrackPiMinus );
   }
-  if ( numTrackProton > 0 ) {
-    protonTrackLength /= static_cast< G4double >( numTrackProton );
+  if ( numTrackProton > 0.0 ) {
+    protonTrackLength /= numTrackProton;
   }
   if ( numTrackGamma > 0 ) {
-    gammaTrackLength /= static_cast< G4double >( numTrackGamma );
+    gammaTrackLength /= numTrackGamma;
   }
   if ( numTrackPi0 > 0 ) {
-    pion0TrackLength /= static_cast< G4double >( numTrackPi0 );
+    pion0TrackLength /= numTrackPi0;
   }
   if ( numTrackNeutron > 0 ) {
-    neutronTrackLength /= static_cast< G4double >( numTrackNeutron );
+    neutronTrackLength /= numTrackNeutron;
   }
   G4cout << G4endl << " Average track LENGTH [mm] " << G4endl
          << "\t electron/positron  : " << electronTrackLength << std::endl
@@ -2157,54 +2157,50 @@ void StatAccepTestAnalysis::finish() {
   // Print information about step length and number of steps
   G4cout << G4endl << " Average step LENGTH [mm] and number of steps " << G4endl;
   G4double averageNumberOfSteps = 1.0;
-  if ( numTrackElectron + numTrackPositron > 0 ) {
+  if ( numTrackElectron + numTrackPositron > 0.0 ) {
     averageNumberOfSteps = 
-      ( static_cast< G4double >( numStepElectron + numStepPositron ) ) /
-      ( static_cast< G4double >( numTrackElectron + numTrackPositron ) );
+      ( numStepElectron + numStepPositron ) /
+      ( numTrackElectron + numTrackPositron );
     G4cout << "\t electron/positron  : " 
 	   << electronTrackLength / averageNumberOfSteps 
 	   << "\t numSteps = " << averageNumberOfSteps << G4endl;
   }
-  if ( numTrackMuMinus + numTrackMuPlus > 0 ) {
+  if ( numTrackMuMinus + numTrackMuPlus > 0.0 ) {
     averageNumberOfSteps = 
-      ( static_cast< G4double >( numStepMuMinus + numStepMuPlus ) ) /
-      ( static_cast< G4double >( numTrackMuMinus + numTrackMuPlus ) );
+      ( numStepMuMinus + numStepMuPlus ) /
+      ( numTrackMuMinus + numTrackMuPlus );
     G4cout << "\t muon-/muon+        : " 
 	   << muonTrackLength / averageNumberOfSteps 
 	   << "\t numSteps = " << averageNumberOfSteps << G4endl;
   }
-  if ( numTrackPiPlus + numTrackPiMinus > 0 ) {
+  if ( numTrackPiPlus + numTrackPiMinus > 0.0 ) {
     averageNumberOfSteps =
-      ( static_cast< G4double >( numStepPiMinus + numStepPiPlus ) ) /
-      ( static_cast< G4double >( numTrackPiMinus + numTrackPiPlus ) );
+      ( numStepPiMinus + numStepPiPlus ) /
+      ( numTrackPiMinus + numTrackPiPlus );
     G4cout << "\t pion-/pion+        : " 
 	   << pionChargedTrackLength / averageNumberOfSteps 
 	   << "\t numSteps = " << averageNumberOfSteps << G4endl;
   }
-  if ( numTrackProton > 0 ) {
-    averageNumberOfSteps = ( static_cast< G4double >( numStepProton ) ) / 
-      ( static_cast< G4double >( numTrackProton ) );
+  if ( numTrackProton > 0.0 ) {
+    averageNumberOfSteps = numStepProton / numTrackProton;
     G4cout << "\t proton             : "
 	   << protonTrackLength / averageNumberOfSteps 
 	   << "\t numSteps = " << averageNumberOfSteps << G4endl;
   }
-  if ( numTrackGamma > 0 ) {
-    averageNumberOfSteps = ( static_cast< G4double >( numStepGamma ) ) / 
-      ( static_cast< G4double >( numTrackGamma ) );
+  if ( numTrackGamma > 0.0 ) {
+    averageNumberOfSteps = numStepGamma / numTrackGamma;
     G4cout << "\t gamma              : " 
 	   << gammaTrackLength / averageNumberOfSteps 
 	   << "\t numSteps = " << averageNumberOfSteps << G4endl;
   }
-  if ( numTrackPi0 > 0 ) {
-    averageNumberOfSteps = ( static_cast< G4double >( numStepPi0 ) ) / 
-      ( static_cast< G4double >( numTrackPi0 ) );
+  if ( numTrackPi0 > 0.0 ) {
+    averageNumberOfSteps = numStepPi0 / numTrackPi0;
     G4cout << "\t pion0              : " 
 	   << pion0TrackLength / averageNumberOfSteps 
 	   << "\t numSteps = " << averageNumberOfSteps << G4endl;
   }
-  if ( numTrackNeutron > 0 ) {
-    averageNumberOfSteps = ( static_cast< G4double >( numStepNeutron ) ) / 
-      ( static_cast< G4double >( numTrackNeutron ) );
+  if ( numTrackNeutron > 0.0 ) {
+    averageNumberOfSteps = numStepNeutron / numTrackNeutron;
     G4cout << "\t neutron            : " 
 	   << neutronTrackLength / averageNumberOfSteps 
 	   << "\t numSteps = " << averageNumberOfSteps << G4endl;
@@ -2230,28 +2226,22 @@ void StatAccepTestAnalysis::finish() {
            << numExiting / n << G4endl
            << "\t number of exiting Gammas    = " 
            << numExitingGammas / n 
-           << " (" << 100.0*( static_cast< G4double >( numExitingGammas ) / 
-			      static_cast< G4double >( numExiting ) ) << " %)" << G4endl
+           << " (" << 100.0 * numExitingGammas / numExiting << " %)" << G4endl
            << "\t number of exiting Neutrons  = " 
            << numExitingNeutrons / n 
-           << " (" << 100.0*( static_cast< G4double >( numExitingNeutrons ) / 
-			      static_cast< G4double >( numExiting ) ) << " %)" << G4endl
+           << " (" << 100.0 * numExitingNeutrons / numExiting << " %)" << G4endl
            << "\t number of exiting Neutrinos = " 
            << numExitingNeutrinos / n
-           << " (" << 100.0*( static_cast< G4double >( numExitingNeutrinos ) / 
-			      static_cast< G4double >( numExiting ) ) << " %)" << G4endl
+           << " (" << 100.0 * numExitingNeutrinos / numExiting << " %)" << G4endl
            << "\t number of exiting Muons     = " 
            << numExitingMuons / n 
-           << " (" << 100.0*( static_cast< G4double >( numExitingMuons ) / 
-			      static_cast< G4double >( numExiting ) ) << " %)" << G4endl
+           << " (" << 100.0 * numExitingMuons / numExiting << " %)" << G4endl
            << "\t number of exiting e- and e+ = " 
            << numExitingElectrons / n 
-           << " (" << 100.0*( static_cast< G4double >( numExitingElectrons ) / 
-			      static_cast< G4double >( numExiting ) ) << " %)" << G4endl
+           << " (" << 100.0 * numExitingElectrons / numExiting << " %)" << G4endl
            << "\t number of exiting Others    = " 
            << numExitingOthers / n 
-           << " (" << 100.0*( static_cast< G4double >( numExitingOthers ) / 
-			      static_cast< G4double >( numExiting ) ) << " %)" << G4endl;
+           << " (" << 100.0 * numExitingOthers / numExiting << " %)" << G4endl;
   }
 
 }
