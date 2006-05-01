@@ -239,6 +239,10 @@ private:
   G4double numTrackNeutron, numTrackAntiNeutron;
 
   // Count the track length of some particles.
+  // To avoid bias in the track length due to the big world volume
+  // (which can affect significantly the track length of neutrons)
+  // we consider only those tracks that are fully contained inside
+  // the calorimeter, i.e. created and terminated inside it.
   G4double electronTrackLength;      // e- or e+
   G4double muonTrackLength;          // mu- or mu+
   G4double pionChargedTrackLength;   // pi- or pi+

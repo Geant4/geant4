@@ -855,6 +855,8 @@ void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
     //       << "\t Name = " << aTrack->GetDefinition()->GetParticleName() << G4endl
     //       << "\t Volume = " << aTrack->GetVolume()->GetName() 
     //       << "\t Material = " << aTrack->GetMaterial()->GetName() << G4endl
+    //       << "\t Vertex (origin) Volume = " 
+    //       << aTrack->GetLogicalVolumeAtVertex()->GetName() << G4endl
     //       << "\t Ekin = " << aTrack->GetKineticEnergy() << " MeV "
     //       << "\t Length track = " << aTrack->GetTrackLength() 
     //       << G4endl;  //***DEBUG*** 
@@ -863,27 +865,33 @@ void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
     //	     aTrack->GetVolume()->GetName() == "physiActive" ) ) {
     //  G4cout << " ***STRANGE VOLUME *** : " << aTrack->GetVolume()->GetName() << G4endl;
     //}
-     
-    G4double trackLength = aTrack->GetTrackLength();
-    if ( aTrack->GetDefinition() == G4Electron::ElectronDefinition() || 
-         aTrack->GetDefinition() == G4Positron::PositronDefinition() ) {
-      electronTrackLength += trackLength;
-    } else if ( aTrack->GetDefinition() == G4Gamma::GammaDefinition() ) {
-      gammaTrackLength += trackLength;
-    } else if ( aTrack->GetDefinition() == G4MuonMinus::MuonMinusDefinition() ||  
-		aTrack->GetDefinition() == G4MuonPlus::MuonPlusDefinition() ) {
-      muonTrackLength += trackLength;
-    } else if ( aTrack->GetDefinition() == G4PionPlus::PionPlusDefinition() ||
-		aTrack->GetDefinition() == G4PionMinus::PionMinusDefinition() ) {
-      pionChargedTrackLength += trackLength;
-    } else if ( aTrack->GetDefinition() == G4PionZero::PionZeroDefinition() ) {
-      pion0TrackLength += trackLength;
-    } else if ( aTrack->GetDefinition() == G4Proton::ProtonDefinition() ) {
-      protonTrackLength += trackLength;
-    } else if ( aTrack->GetDefinition() == G4Neutron::NeutronDefinition() ) {
-      neutronTrackLength += trackLength;
-    }
-    if ( aTrack->GetVolume()->GetName() == "expHall" ) {
+  
+    // To avoid bias in the track length due to the big world volume
+    // (which can affect significantly the track length of neutrons)
+    // we consider only those tracks that are fully contained inside
+    // the calorimeter, i.e. created and terminated inside it.
+    if ( aTrack->GetLogicalVolumeAtVertex()->GetName() != "expHall"  &&
+	 aTrack->GetVolume()->GetName() != "expHall" ) {
+      G4double trackLength = aTrack->GetTrackLength();
+      if ( aTrack->GetDefinition() == G4Electron::ElectronDefinition() || 
+	   aTrack->GetDefinition() == G4Positron::PositronDefinition() ) {
+	electronTrackLength += trackLength;
+      } else if ( aTrack->GetDefinition() == G4Gamma::GammaDefinition() ) {
+	gammaTrackLength += trackLength;
+      } else if ( aTrack->GetDefinition() == G4MuonMinus::MuonMinusDefinition() ||  
+		  aTrack->GetDefinition() == G4MuonPlus::MuonPlusDefinition() ) {
+	muonTrackLength += trackLength;
+      } else if ( aTrack->GetDefinition() == G4PionPlus::PionPlusDefinition() ||
+		  aTrack->GetDefinition() == G4PionMinus::PionMinusDefinition() ) {
+	pionChargedTrackLength += trackLength;
+      } else if ( aTrack->GetDefinition() == G4PionZero::PionZeroDefinition() ) {
+	pion0TrackLength += trackLength;
+      } else if ( aTrack->GetDefinition() == G4Proton::ProtonDefinition() ) {
+	protonTrackLength += trackLength;
+      } else if ( aTrack->GetDefinition() == G4Neutron::NeutronDefinition() ) {
+	neutronTrackLength += trackLength;
+      }
+    } else if ( aTrack->GetVolume()->GetName() == "expHall" ) {
       kinEnergyExiting += aTrack->GetKineticEnergy();
       numExiting++;
       //G4cout << " Exiting particle: " 
@@ -898,10 +906,10 @@ void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
       //       << " MeV" << G4endl;  //***DEBUG***
       if ( aTrack->GetDefinition() == G4Gamma::GammaDefinition() ) {
 	kinEnergyExitingGammas += aTrack->GetKineticEnergy();
-        numExitingGammas++;
+	numExitingGammas++;
       } else if ( aTrack->GetDefinition() == G4Neutron::NeutronDefinition() ) {
 	kinEnergyExitingNeutrons += aTrack->GetKineticEnergy();
-        numExitingNeutrons++;
+	numExitingNeutrons++;
       } else if ( aTrack->GetDefinition() == G4NeutrinoE::NeutrinoEDefinition()  ||
 		  aTrack->GetDefinition() == G4NeutrinoMu::NeutrinoMuDefinition()  ||
 		  aTrack->GetDefinition() == G4NeutrinoTau::NeutrinoTauDefinition()  ||
@@ -909,18 +917,18 @@ void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
 		  aTrack->GetDefinition() == G4AntiNeutrinoMu::AntiNeutrinoMuDefinition()  ||
 		  aTrack->GetDefinition() == G4AntiNeutrinoTau::AntiNeutrinoTauDefinition() ) {
 	kinEnergyExitingNeutrinos += aTrack->GetKineticEnergy();
-        numExitingNeutrinos++;
+	numExitingNeutrinos++;
       } else if ( aTrack->GetDefinition() == G4MuonMinus::MuonMinusDefinition() ||  
 		  aTrack->GetDefinition() == G4MuonPlus::MuonPlusDefinition() ) {
 	kinEnergyExitingMuons += aTrack->GetKineticEnergy();
-        numExitingMuons++;        
+	numExitingMuons++;        
       } else if ( aTrack->GetDefinition() == G4Electron::ElectronDefinition() ||  
 		  aTrack->GetDefinition() == G4Positron::PositronDefinition() ) {
 	kinEnergyExitingElectrons += aTrack->GetKineticEnergy();
-        numExitingElectrons++;        
+	numExitingElectrons++;        
       } else {
 	kinEnergyExitingOthers += aTrack->GetKineticEnergy();
-        numExitingOthers++;
+	numExitingOthers++;
       }
     }
   } else {
@@ -2147,11 +2155,11 @@ void StatAccepTestAnalysis::finish() {
   }
   G4cout << G4endl << " Average track LENGTH [mm] " << G4endl
          << "\t electron/positron  : " << electronTrackLength << std::endl
-         << "\t muon-/muon+        : " << muonTrackLength << std::endl
+    //     << "\t muon-/muon+        : " << muonTrackLength << std::endl
          << "\t pion-/pion+        : " << pionChargedTrackLength << std::endl
          << "\t proton             : " << protonTrackLength << std::endl
          << "\t gamma              : " << gammaTrackLength << std::endl
-         << "\t pion0              : " << pion0TrackLength << std::endl
+    //     << "\t pion0              : " << pion0TrackLength << std::endl
 	 << "\t neutron            : " << neutronTrackLength << std::endl;
 
   // Print information about step length and number of steps
@@ -2169,9 +2177,9 @@ void StatAccepTestAnalysis::finish() {
     averageNumberOfSteps = 
       ( numStepMuMinus + numStepMuPlus ) /
       ( numTrackMuMinus + numTrackMuPlus );
-    G4cout << "\t muon-/muon+        : " 
-	   << muonTrackLength / averageNumberOfSteps 
-	   << "\t numSteps = " << averageNumberOfSteps << G4endl;
+    //G4cout << "\t muon-/muon+        : " 
+    //       << muonTrackLength / averageNumberOfSteps 
+    //	     << "\t numSteps = " << averageNumberOfSteps << G4endl;
   }
   if ( numTrackPiPlus + numTrackPiMinus > 0.0 ) {
     averageNumberOfSteps =
@@ -2195,9 +2203,9 @@ void StatAccepTestAnalysis::finish() {
   }
   if ( numTrackPi0 > 0.0 ) {
     averageNumberOfSteps = numStepPi0 / numTrackPi0;
-    G4cout << "\t pion0              : " 
-	   << pion0TrackLength / averageNumberOfSteps 
-	   << "\t numSteps = " << averageNumberOfSteps << G4endl;
+    //G4cout << "\t pion0              : " 
+    //	     << pion0TrackLength / averageNumberOfSteps 
+    //	     << "\t numSteps = " << averageNumberOfSteps << G4endl;
   }
   if ( numTrackNeutron > 0.0 ) {
     averageNumberOfSteps = numStepNeutron / numTrackNeutron;
