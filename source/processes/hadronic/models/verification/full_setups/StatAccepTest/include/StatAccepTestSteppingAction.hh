@@ -17,12 +17,8 @@ public:
   // The main method to define.
 
   inline G4double getTotalEdepAllParticles() const;
-  // Total deposited energy, in the same event, due to all particles.
-  // Notice that this total energy deposited energy do not only
-  // take into account the whole calorimeter (i.e. both the
-  // sensitive and the passive layers), but also the air which
-  // surrounds the calorimeter. The latter, of course, is
-  // expected to give a negligible contribution.
+  // Total deposited energy, in the same event, due to all particles,
+  // inside the calorimeter.
 
   inline G4int getPrimaryParticleId() const;
   inline G4double getPrimaryParticleEnergy() const;

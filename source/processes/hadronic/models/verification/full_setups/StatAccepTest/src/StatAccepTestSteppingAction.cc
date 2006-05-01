@@ -61,13 +61,20 @@ void StatAccepTestSteppingAction::UserSteppingAction(const G4Step * theStep) {
     }
   }
 
-  G4double edep = theStep->GetTotalEnergyDeposit() * theStep->GetTrack()->GetWeight();
-  // Multiply the energy deposit with the weight of the track,
-  // to allow the use of biasing.
+  // Consider the energy of the step only if the step is (partially or
+  // totally) inside the calorimeter. 
+  if ( ( theStep->GetPreStepPoint()->GetPhysicalVolume()  &&
+  	 theStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() != "expHall" ) ||
+       ( theStep->GetPostStepPoint()->GetPhysicalVolume()  &&
+  	 theStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() != "expHall" ) ) {
 
-  if ( edep < 0.001*eV ) return;
- 
-  totalEdepAllParticles += edep;
+    G4double edep = theStep->GetTotalEnergyDeposit() * theStep->GetTrack()->GetWeight();
+    // Multiply the energy deposit with the weight of the track,
+    // to allow the use of biasing.
+
+    if ( edep < 0.001*eV ) return;
+    totalEdepAllParticles += edep;
+  }
 
 }
 
