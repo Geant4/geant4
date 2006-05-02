@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TstVADetectorConstruction.cc,v 1.10 2005-11-09 14:53:08 gcosmo Exp $
+// $Id: TstVADetectorConstruction.cc,v 1.11 2006-05-02 12:59:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -68,8 +68,6 @@ TstVADetectorConstruction::~TstVADetectorConstruction()
 {
   // R.I.P. messenger
   delete detectorMessenger;
-  CleanClassic();
-  CleanAssembly(); 
 }
 
 G4VPhysicalVolume* TstVADetectorConstruction::Construct()
