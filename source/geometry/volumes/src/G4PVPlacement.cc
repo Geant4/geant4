@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.cc,v 1.8 2006-05-02 15:30:30 gcosmo Exp $
+// $Id: G4PVPlacement.cc,v 1.9 2006-05-02 15:35:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -243,6 +243,7 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res)
 
   G4VSolid* solid = GetLogicalVolume()->GetSolid();
   G4LogicalVolume* motherLog = GetMotherLogical();
+  if (!motherLog) { return false; }
 
   G4cout << "Checking overlaps for volume " << GetName() << " ... ";
 
