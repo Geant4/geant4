@@ -1,4 +1,4 @@
-$Id: History,v 1.46 2006-04-28 10:26:01 allison Exp $
+$Id: History,v 1.47 2006-05-02 20:50:32 tinslay Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,9 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+2nd May 2006 Jane Tinslay 
+- Add G4TrajectoryGenericDrawerFactory to G4VisExecutive
 
 28th April 2006  John Allison (visman-V08-00-14)
 - G4VSceneHandler.cc: Added call to FinishView after run-duration
