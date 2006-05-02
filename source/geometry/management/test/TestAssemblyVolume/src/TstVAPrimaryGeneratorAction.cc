@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TstVAPrimaryGeneratorAction.cc,v 1.5 2004-12-02 09:31:23 gcosmo Exp $
+// $Id: TstVAPrimaryGeneratorAction.cc,v 1.6 2006-05-02 11:47:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -102,9 +102,9 @@ void TstVAPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   case randomDirectionGun:
 
-    costheta = RandFlat::shoot (-1., 1.);
+    costheta = CLHEP::RandFlat::shoot (-1., 1.);
     sintheta = std::sqrt (1. - costheta * costheta);
-    phi      = RandFlat::shoot (twopi);
+    phi      = CLHEP::RandFlat::shoot (twopi);
     cosphi   = std::cos (phi);
     sinphi   = std::sin (phi);
     particleGun->SetParticleMomentumDirection
@@ -127,9 +127,9 @@ void TstVAPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     particleGun->SetParticlePosition
       (G4ThreeVector
-       (RandFlat::shoot (worldExtent.GetXmin (), worldExtent.GetXmax ()),
-	RandFlat::shoot (worldExtent.GetYmin (), worldExtent.GetYmax ()),
-	RandFlat::shoot (worldExtent.GetZmin (), worldExtent.GetZmax ())));
+       (CLHEP::RandFlat::shoot (worldExtent.GetXmin (), worldExtent.GetXmax ()),
+	CLHEP::RandFlat::shoot (worldExtent.GetYmin (), worldExtent.GetYmax ()),
+	CLHEP::RandFlat::shoot (worldExtent.GetZmin (), worldExtent.GetZmax ())));
 
     particleGun->GeneratePrimaryVertex(anEvent);
     break;
@@ -148,13 +148,13 @@ void TstVAPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     particleGun->SetParticlePosition
       (G4ThreeVector
-       (RandFlat::shoot (worldExtent.GetXmin (), worldExtent.GetXmax ()),
-	RandFlat::shoot (worldExtent.GetYmin (), worldExtent.GetYmax ()),
-	RandFlat::shoot (worldExtent.GetZmin (), worldExtent.GetZmax ())));
+       (CLHEP::RandFlat::shoot (worldExtent.GetXmin (), worldExtent.GetXmax ()),
+	CLHEP::RandFlat::shoot (worldExtent.GetYmin (), worldExtent.GetYmax ()),
+	CLHEP::RandFlat::shoot (worldExtent.GetZmin (), worldExtent.GetZmax ())));
 
-    costheta = RandFlat::shoot (-1., 1.);
+    costheta = CLHEP::RandFlat::shoot (-1., 1.);
     sintheta = std::sqrt (1. - costheta * costheta);
-    phi      = RandFlat::shoot (twopi);
+    phi      = CLHEP::RandFlat::shoot (twopi);
     cosphi   = std::cos (phi);
     sinphi   = std::sin (phi);
     particleGun->SetParticleMomentumDirection
