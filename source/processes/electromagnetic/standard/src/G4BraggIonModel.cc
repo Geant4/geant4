@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc,v 1.12 2006-04-26 16:57:11 vnivanch Exp $
+// $Id: G4BraggIonModel.cc,v 1.13 2006-05-02 09:23:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -73,7 +73,7 @@ G4BraggIonModel::G4BraggIonModel(const G4ParticleDefinition* p,
   highKinEnergy    = 2.0*MeV;
   lowKinEnergy     = 0.0*MeV;
   lowestKinEnergy  = 1.0*keV;
-  HeMass           = 3.72742*GeV;
+  HeMass           = 3.727417*GeV;
   rateMassHe2p     = HeMass/proton_mass_c2;
   massFactor       = 1000.*amu_c2/HeMass;
   theZieglerFactor = eV*cm2*1.0e-15;
