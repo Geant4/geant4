@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.hh,v 1.3 2006-03-15 16:38:11 gcosmo Exp $
+// $Id: G4AssemblyVolume.hh,v 1.4 2006-05-02 11:39:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,6 +42,10 @@
 // Author:      Radovan Chytracek, John Apostolakis, Gabriele Cosmo
 // Version:     1.0
 // Date:        November 2000
+//
+// History:
+// March 2006, I.Hrivnacova - Extended to support assembly of assemblies
+//             of volumes and reflections
 // ----------------------------------------------------------------------
 #ifndef G4_ASSEMBLYVOLUME_H
 #define G4_ASSEMBLYVOLUME_H 
@@ -117,23 +121,45 @@ class G4AssemblyVolume
     // The same as previous but takes complete 3D transformation in space
     // as its argument.
 
+  void AddPlacedAssembly( G4AssemblyVolume* pAssembly,
+                          G4ThreeVector& translation,
+                          G4RotationMatrix* rotation);
+    //
+    // The same as first AddPlacedVolume()  but takes an assembly volume 
+    // as its argument.
+
+  void AddPlacedAssembly( G4AssemblyVolume* pAssembly,
+                          G4Transform3D&    transformation);
+    //
+    // The same as second  AddPlacedVolume() but takes an assembly volume 
+    // as its argument.
+
   void MakeImprint( G4LogicalVolume* pMotherLV,
                     G4ThreeVector& translationInMother,
                     G4RotationMatrix* pRotationInMother,
                     G4int copyNumBase = 0,
-                    G4bool pSurfChk = false );
+                    G4bool surfCheck = false );
     //
     // Creates instance of an assembly volume inside the given mother volume.
 
   void MakeImprint( G4LogicalVolume* pMotherLV,
                     G4Transform3D&   transformation,
                     G4int copyNumBase = 0,
-                    G4bool pSurfChk = false );
+                    G4bool surfCheck = false );
     //
     // The same as previous but takes complete 3D transformation in space
     // as its argument.
 
  private:    
+
+  void MakeImprint( G4AssemblyVolume* pAssembly,
+                    G4LogicalVolume*  pMotherLV,
+                    G4Transform3D&    transformation,
+                    G4int copyNumBase = 0,
+                    G4bool surfCheck = false );
+    //    
+    // Function for placement of the given assembly in the given mother
+    // (called recursively if the assembly contains an assembly) 
 
   std::vector<G4AssemblyTriplet> fTriplets;
     //
@@ -198,4 +224,3 @@ class G4AssemblyVolume
 #include "G4AssemblyVolume.icc"
 
 #endif // G4_ASSEMBLYVOLUME_H
-
