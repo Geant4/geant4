@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.18 2006-04-04 15:16:26 gcosmo Exp $
+// $Id: G4Region.cc,v 1.19 2006-05-02 08:46:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -113,7 +113,6 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
     G4Exception("G4Region::ScanVolumeTree()", "SetupError",
                 FatalException, errmsg);
   }
-  G4MaterialList::iterator pos;
   if (region)
   {
     currentRegion = this;
