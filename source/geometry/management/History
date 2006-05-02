@@ -1,4 +1,4 @@
-$Id: History,v 1.98 2006-04-28 13:03:09 gcosmo Exp $
+$Id: History,v 1.99 2006-05-02 08:51:10 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 2, 2006  G.Cosmo                       geommng-V08-00-03
+- G4Region:
+  o Added inclusion of <algorithm> to resolve compilation error on WIN32-VC.
+  o Fixed compilation warning for unused variable.
 
 April 28, 2006  G.Cosmo                    geommng-V08-00-02
 - G4VPhysicalVolume: return 'const G4String&' for GetName() instead of a
