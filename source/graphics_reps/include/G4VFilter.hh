@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VFilter.hh,v 1.1 2006-03-28 17:42:17 tinslay Exp $
+// $Id: G4VFilter.hh,v 1.2 2006-05-02 22:16:31 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Abstract filter class.
@@ -37,6 +37,8 @@ template <typename T>
 class G4VFilter {
 
 public: // With description
+
+  typedef T Type;
 
   // Construct with filter name
   G4VFilter(const G4String& name);

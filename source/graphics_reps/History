@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.96 2006-04-19 14:25:27 allison Exp $
+cvs log $Id: History,v 1.97 2006-05-02 22:16:31 tinslay Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+2nd May 2006 Jane Tinslay
+- Add FilterTrajectory method to G4VVisManager
 
 19th April 2006  John Allison  (greps-V08-00-02 - needs vis-V08-00-04)
 - G4VGraphicsScene: Added Begin/EndPrimitives2D.
