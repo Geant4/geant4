@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testAssemblyVolume.cc,v 1.4 2006-05-02 11:47:55 gcosmo Exp $
+// $Id: testAssemblyVolume.cc,v 1.5 2006-05-02 11:58:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,8 +45,9 @@
 #include "G4UIterminal.hh"
 
 #include "G4RunManager.hh"
+
 #ifdef G4VIS_USE
-#include "TstVAVisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "G4ios.hh"
@@ -66,7 +67,7 @@ int main(int argc,char** argv) {
 
   #ifdef G4VIS_USE
     // Visualization, if you choose to have it!
-    G4VisManager* visManager = new TstVAVisManager;
+    G4VisManager* visManager = new G4VisExecutive;
     visManager->Initialize();
   #endif
 
