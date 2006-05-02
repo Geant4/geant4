@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LElasticB.hh,v 1.3 2006-04-18 16:53:05 vnivanch Exp $
+// $Id: G4HadronElastic.hh,v 1.1 2006-05-02 07:58:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,8 +37,8 @@
 //
 
 
-#ifndef G4LElasticB_h
-#define G4LElasticB_h 1
+#ifndef G4HadronElastic_h
+#define G4HadronElastic_h 1
  
 // Class Description
 // Final state production model for hadron nuclear elastic scattering; 
@@ -56,13 +56,13 @@ class G4ParticleDefinition;
 class G4VQCrossSection;
 class G4QElastic;
 
-class G4LElasticB : public G4HadronicInteraction
+class G4HadronElastic : public G4HadronicInteraction
 {
 public:
 
-  G4LElasticB(G4double elim = 0.0, G4double plim = 200.*MeV);
+  G4HadronElastic(G4double elim = 0.0, G4double plim = 200.*MeV);
 
-  virtual ~G4LElasticB();
+  virtual ~G4HadronElastic();
  
   G4HadFinalState * ApplyYourself(const G4HadProjectile & aTrack, 
 				  G4Nucleus & targetNucleus);

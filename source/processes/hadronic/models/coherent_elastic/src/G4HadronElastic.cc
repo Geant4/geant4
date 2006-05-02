@@ -22,7 +22,7 @@
 //
 //
 //
-// Physics model class G4LElasticB (derived from G4LElastic)
+// Physics model class G4HadronElastic (derived from G4LElastic)
 //
 // G4 Model: Low-energy Elastic scattering with 4-momentum balance
 // F.W. Jones, TRIUMF, 04-JUN-96
@@ -45,7 +45,7 @@
 // 24-Apr-06 V.Ivanchenko add neutron scattering on hydrogen from CHIPS
 //
 
-#include "G4LElasticB.hh"
+#include "G4HadronElastic.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4IonTable.hh"
@@ -66,7 +66,7 @@ enum G4ElasticGenerator
   fSWave
 };
 
-G4LElasticB::G4LElasticB(G4double elim, G4double plim) : G4HadronicInteraction()
+G4HadronElastic::G4HadronElastic(G4double elim, G4double plim) : G4HadronicInteraction()
 {
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( DBL_MAX );
@@ -82,13 +82,13 @@ G4LElasticB::G4LElasticB(G4double elim, G4double plim) : G4HadronicInteraction()
   theAlpha    = G4Alpha::Alpha();
 }
 
-G4LElasticB::~G4LElasticB()
+G4HadronElastic::~G4HadronElastic()
 {
   delete qElastic;
 }
 
 G4HadFinalState*
-G4LElasticB::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
+G4HadronElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
 {
   theParticleChange.Clear();
   const G4HadProjectile* aParticle = &aTrack;
@@ -102,7 +102,7 @@ G4LElasticB::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucle
 
   G4double plab = aParticle->GetTotalMomentum();
   if (verboseLevel > 1) 
-    G4cout << "G4LElasticB::DoIt: Incident particle plab=" << plab/GeV << " GeV/c " 
+    G4cout << "G4HadronElastic::DoIt: Incident particle plab=" << plab/GeV << " GeV/c " 
 	   << " ekin(MeV) = " << aParticle->GetKineticEnergy()/MeV << "  " 
 	   << aParticle->GetDefinition()->GetParticleName() << G4endl;
 
@@ -115,7 +115,7 @@ G4LElasticB::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucle
   G4int N = A - Z;
   G4int projPDG = theParticle->GetPDGEncoding();
   if (verboseLevel > 1) 
-    G4cout << "G4LElasticB for " << theParticle->GetParticleName()
+    G4cout << "G4HadronElastic for " << theParticle->GetParticleName()
 	   << " PDGcode= " << projPDG << " on nucleus Z= " << Z 
 	   << " A= " << A << " N= " << N 
 	   << G4endl;
@@ -186,7 +186,7 @@ G4LElasticB::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucle
 	   << " ekin1= " << nlv01.e() - m2 
 	   <<G4endl;
   if(ekin < 0.0) {
-    G4cout << "G4LElasticB WARNING ekin= " << ekin 
+    G4cout << "G4HadronElastic WARNING ekin= " << ekin 
 	   << " after scattering of " 
 	   << aParticle->GetDefinition()->GetParticleName()
 	   << " p(GeV/c)= " << plab
@@ -210,7 +210,7 @@ G4LElasticB::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucle
 }
 
 G4double 
-G4LElasticB::SampleT(G4double, G4double, G4double, G4double atno2)
+G4HadronElastic::SampleT(G4double, G4double, G4double, G4double atno2)
 {
   // G4cout << "Entering elastic scattering 2"<<G4endl;
   // Compute the direction of elastic scattering.
@@ -267,10 +267,10 @@ G4LElasticB::SampleT(G4double, G4double, G4double, G4double atno2)
 // the planned revisions to DoIt().
 
 G4int
-G4LElasticB::Rtmi(G4double* x, G4double xli, G4double xri, G4double eps, 
-                 G4int iend, 
-                 G4double aa, G4double bb, G4double cc, G4double dd, 
-                 G4double rr)
+G4HadronElastic::Rtmi(G4double* x, G4double xli, G4double xri, G4double eps, 
+		      G4int iend, 
+		      G4double aa, G4double bb, G4double cc, G4double dd, 
+		      G4double rr)
 {
    G4int ier = 0;
    G4double xl = xli;
@@ -378,9 +378,9 @@ label17:
 // Test function for root-finder
 
 G4double
-G4LElasticB::Fctcos(G4double t, 
-                   G4double aa, G4double bb, G4double cc, G4double dd, 
-                   G4double rr)
+G4HadronElastic::Fctcos(G4double t, 
+			G4double aa, G4double bb, G4double cc, G4double dd, 
+			G4double rr)
 {
    const G4double expxl = -82.;
    const G4double expxu = 82.;
@@ -398,9 +398,9 @@ G4LElasticB::Fctcos(G4double t,
 
 
 void
-G4LElasticB::Defs1(G4double p, G4double px, G4double py, G4double pz, 
-                  G4double pxinc, G4double pyinc, G4double pzinc, 
-                  G4double* pxnew, G4double* pynew, G4double* pznew)
+G4HadronElastic::Defs1(G4double p, G4double px, G4double py, G4double pz, 
+		       G4double pxinc, G4double pyinc, G4double pzinc, 
+		       G4double* pxnew, G4double* pynew, G4double* pznew)
 {
 // Transform scattered particle to reflect direction of incident particle
    G4double pt2 = pxinc*pxinc + pyinc*pyinc;
