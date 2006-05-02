@@ -63,6 +63,7 @@ enum{ GHADLISTSIZE=256};
      const G4HadProjectile *originalIncident,
      G4ReactionProduct &currentParticle,
      G4ReactionProduct &targetParticle,
+     const G4DynamicParticle* originalTarget,
      const G4Nucleus &targetNucleus,
      G4bool &incidentHasChanged, 
      G4bool &targetHasChanged,
@@ -86,6 +87,7 @@ enum{ GHADLISTSIZE=256};
      const G4HadProjectile *originalIncident,
      G4ReactionProduct &currentParticle,
      G4ReactionProduct &targetParticle,
+     const G4DynamicParticle* originalTarget,
      const G4Nucleus &targetNucleus,
      G4bool &incidentHasChanged, 
      G4bool &targetHasChanged,
@@ -164,8 +166,7 @@ enum{ GHADLISTSIZE=256};
      G4int &vecLen );
     
     std::pair<G4int, G4int> GetFinalStateNucleons(
-     const G4ReactionProduct& currentParticle,
-     const G4ReactionProduct& targetParticle,
+     const G4DynamicParticle* originalTarget,
      const G4FastVector<G4ReactionProduct,GHADLISTSIZE>& vec,
      const G4int& vecLen );
 
