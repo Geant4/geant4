@@ -1,4 +1,4 @@
-$Id: README,v 1.3 1999-11-26 09:49:10 grichine Exp $
+$Id: README,v 1.4 2006-05-02 14:39:55 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,21 +9,14 @@ $Id: README,v 1.3 1999-11-26 09:49:10 grichine Exp $
                             ----------
 
   The purpose of this test is to exercise the CSG as well as boolean solids 
-  extensively using the full apparatus of the G4 geometry.
+  extensively using the full apparatus of the G4 geometry. It also exicises
+  assemblies with different configurations (simple,  assembly of assemblies
+  and containing reflections).
 
   Author: Vladimir Grichine
-  Contributors: Simone Giani, John Apostolakis
+  Contributors: Simone Giani, John Apostolakis, Gabriele Cosmo,
+                Radovan Chytracek, Ivana Hrivnacova.
 
   To run it you can use
 
-    g4test *.in or *.mac
-
- which will compile, run it and check its output, 
- or compile it and say:
-
- ./AIX-AFS/test01 < test01.in | tee test01.newout
- diff test01.out test01.newout
-
- to run it and check the output yourself.
-
-    J. Apostolakis, July 5th, 1998
+    test01 *.in or *.mac
