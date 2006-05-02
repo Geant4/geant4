@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.hh,v 1.1 2004-05-13 14:50:58 gcosmo Exp $
+// $Id: G4ReflectionFactory.hh,v 1.2 2006-05-02 11:40:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,7 +96,8 @@ class G4ReflectionFactory
                                       G4LogicalVolume* LV,
                                       G4LogicalVolume* motherLV,
                                       G4bool isMany, 
-                                      G4int  copyNo);
+                                      G4int  copyNo,
+                                      G4bool surfCheck=false);
       // Evaluates the passed transformation; if it contains reflection
       // it performs its decomposition, creates new reflected solid and
       // logical volume (or retrieves them from a map if the reflected
@@ -187,7 +188,7 @@ class G4ReflectionFactory
  
   private:  
 
-    G4LogicalVolume*   ReflectLV(G4LogicalVolume* LV);
+    G4LogicalVolume*   ReflectLV(G4LogicalVolume* LV, G4bool surfCheck=false);
       // Gets/creates the reflected solid and logical volume
       // and copies + transforms LV daughters.
 
@@ -195,10 +196,12 @@ class G4ReflectionFactory
       // Creates the reflected solid and logical volume
       // and add the logical volumes pair in the maps.
 
-    void ReflectDaughters(G4LogicalVolume* LV, G4LogicalVolume* refLV);
+    void ReflectDaughters(G4LogicalVolume* LV,
+                          G4LogicalVolume* refLV, G4bool surfCheck=false);
       // Reflects daughters recursively.
 
-    void ReflectPVPlacement(G4VPhysicalVolume* PV, G4LogicalVolume* refLV);
+    void ReflectPVPlacement(G4VPhysicalVolume* PV,
+                            G4LogicalVolume* refLV, G4bool surfCheck=false);
       // Copies and transforms daughter of PVPlacement type of
       // a constituent volume into a reflected volume. 
 
@@ -210,7 +213,8 @@ class G4ReflectionFactory
       // Copies and transforms daughter of PVDivision type of
       // a constituent volume into a reflected volume. 
 
-    void ReflectPVParameterised(G4VPhysicalVolume* PV, G4LogicalVolume* refLV);
+    void ReflectPVParameterised(G4VPhysicalVolume* PV,
+                                G4LogicalVolume* refLV, G4bool surfCheck=false);
       // Not implemented yet.
       // Should copy and transform daughter of PVReplica type of
       // a constituent volume into a reflected volume. 
