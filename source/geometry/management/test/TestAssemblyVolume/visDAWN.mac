@@ -1,19 +1,15 @@
 /tracking/verbose 1
 /run/verbose 1
 /run/initialize
-/tracking/storeTrajectories 1
-/vis~/create_view/new_graphics_system DAWN
+/tracking/storeTrajectory 1
+/vis/open DAWNFILE
 /vis/scene/add/trajectories
+/vis/drawVolume
 /run/beamOn 1
-/vis/refresh/view
-/vis/view/update
-/vis/draw/current
-/vis/show/view
+/vis/viewer/flush
 /geom/switch assembly
-/vis~/create_view/new_graphics_system DAWN
+/vis/open DAWNFILE
 /vis/scene/add/trajectories
+/vis/drawVolume
 /run/beamOn 1
-/vis/refresh/view
-/vis/view/update
-/vis/draw/current
-/vis/show/view
+/vis/viewer/flush
