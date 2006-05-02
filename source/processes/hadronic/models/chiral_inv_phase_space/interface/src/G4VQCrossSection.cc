@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VQCrossSection.cc,v 1.6 2006-04-27 16:39:58 mkossov Exp $
+// $Id: G4VQCrossSection.cc,v 1.7 2006-05-02 10:15:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -104,6 +104,14 @@ G4double G4VQCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int tgZ,
         <<colN.size()<<G4endl;
 		//CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
+  if(!pPDG)
+  {
+#ifdef pdebug
+    G4cout<<"G4VQCS::GetCS: *** Found pPDG="<<pPDG<<" ====> CS=0"<<G4endl;
+    //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
+#endif
+    return 0.;                         // projectile PDG=0 is a mistake (?!) @@
+  }
   G4bool in=false;                     // By default the isotope must be found in the AMDB
   if(tgN!=lastN || tgZ!=lastZ || pPDG!=lastPDG)// The nucleus was not the last used isotope
   {
