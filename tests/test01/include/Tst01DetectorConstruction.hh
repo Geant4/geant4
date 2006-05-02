@@ -106,6 +106,14 @@ class Tst01DetectorConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume*              AssemblyDetector;
      G4AssemblyVolume*               AssemblyCalo;
      G4LogicalVolume*                AssemblyCellLog;
+
+     // ------------------------------------------
+     // Assembly2 (assembly of assemblies)
+     G4VPhysicalVolume*              AssemblyDetector2;
+
+     // ------------------------------------------
+     // Assembly3 (assembly with reflections )
+     G4VPhysicalVolume*              AssemblyDetector3;
 };
 
 #endif

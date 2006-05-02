@@ -70,7 +70,8 @@ Tst01DetectorConstruction::Tst01DetectorConstruction()
 :simpleBoxLog(0),simpleBoxDetector(0),honeycombDetector(0),fWorldPhysVol(0),
  fTestCSG(0),fTestLog(0),fTestVol(0),Air(0),Al(0),Pb(0),
  selectedMaterial(0),detectorChoice(0), fChoiceCSG(0),fChoiceBool(0),
- AssemblyDetectorLog(0),AssemblyDetector(0),AssemblyCalo(0),AssemblyCellLog(0)
+ AssemblyDetectorLog(0),AssemblyDetector(0),AssemblyCalo(0),AssemblyCellLog(0),
+ AssemblyDetector2(0), AssemblyDetector3(0)
 {
   detectorMessenger = new Tst01DetectorMessenger(this);
   materialChoice = "Pb";
@@ -90,7 +91,8 @@ Tst01DetectorConstruction::~Tst01DetectorConstruction()
 
 G4VPhysicalVolume* Tst01DetectorConstruction::Construct()
 {
-  if((!simpleBoxDetector)&&(!honeycombDetector)&&(!AssemblyDetector))
+  if((!simpleBoxDetector)&&(!honeycombDetector)&&
+     (!AssemblyDetector)&&(!AssemblyDetector2)&&(!AssemblyDetector3))
   {
     ConstructDetectors();
   }
@@ -102,6 +104,12 @@ G4VPhysicalVolume* Tst01DetectorConstruction::Construct()
       break;
     case 2:
       fWorldPhysVol = AssemblyDetector; 
+      break;
+    case 3:
+      fWorldPhysVol = AssemblyDetector2; 
+      break;
+    case 4:
+      fWorldPhysVol = AssemblyDetector3; 
       break;
     default:
       fWorldPhysVol = simpleBoxDetector;
@@ -115,7 +123,8 @@ G4VPhysicalVolume* Tst01DetectorConstruction::Construct()
 
 void Tst01DetectorConstruction::SwitchDetector()
 {
-  if((!simpleBoxDetector)&&(!honeycombDetector)&&(!AssemblyDetector))
+  if((!simpleBoxDetector)&&(!honeycombDetector)&&
+     (!AssemblyDetector)&&(!AssemblyDetector2)&&(!AssemblyDetector3))
   {
     ConstructDetectors();
   }
@@ -130,6 +139,16 @@ void Tst01DetectorConstruction::SwitchDetector()
     case 2:
     {
       fWorldPhysVol = AssemblyDetector ;
+      break;
+    }
+    case 3:
+    {
+      fWorldPhysVol = AssemblyDetector2 ;
+      break;
+    }
+    case 4:
+    {
+      fWorldPhysVol = AssemblyDetector3 ;
       break;
     }
     default:
@@ -150,6 +169,10 @@ void Tst01DetectorConstruction::SelectDetector(G4String val)
     detectorChoice = 1 ;
   else if(val == "Assembly") 
     detectorChoice = 2 ;
+  else if(val == "Assembly2") 
+    detectorChoice = 3 ;
+  else if(val == "Assembly3") 
+    detectorChoice = 4 ;
   else
     detectorChoice = 0 ;
 
@@ -423,6 +446,10 @@ void Tst01DetectorConstruction::ConstructDetectors()
 						 "WPhys",
 						 myWorldLog,
 						 0,false,0);
+//
+//  AssemblyDetector
+//
+
 
   const double worldX              = 2000*mm;
   const double worldY              = 2000*mm;
@@ -518,6 +545,153 @@ void Tst01DetectorConstruction::ConstructDetectors()
   }
 
   ************************************************ */
+
+  //
+  //  AssemblyDetector2 (assembly of assemblies)
+  //
+  
+  G4double wSize = 1000.*cm;
+  G4VSolid* worldS
+    = new G4Box("worldS", wSize, wSize, wSize);
+  G4LogicalVolume* worldV2
+    = new G4LogicalVolume(worldS, Air, "worldV2");
+  AssemblyDetector2
+    = new G4PVPlacement(0, G4ThreeVector(), worldV2, "world2", 0, false, 0); 
+   
+  // Make the elementary assembly of the whole structure
+  // Use mother volume instead of assembly as Geant4 does not 
+  // support assebly of assemblies
+
+  G4int ntooth = 5;
+  G4double xplate = 25.*cm;
+  G4double yplate = 50.*cm;
+  G4double xtooth = 10.*cm;
+  G4double ytooth = 0.5*yplate/ntooth;
+  G4double dshift = 2.*xplate + xtooth;
+  G4double xt,yt;
+
+  G4AssemblyVolume* tplate = new G4AssemblyVolume();
+
+  // plate volume
+  G4Box* plateS
+    = new G4Box("plateS", xplate, yplate, 1.*cm);
+  G4LogicalVolume* plateV
+    = new G4LogicalVolume(plateS, Al, "PLATE");
+   
+  // tooth volume
+  G4Box* toothS
+    = new G4Box("toothS", xtooth, ytooth, 1.*cm);
+  G4LogicalVolume* toothV
+    = new G4LogicalVolume(toothS, Al, "TOOTH");
+   
+  // compose assembly 
+  G4ThreeVector pos0(0.,0., 0.);
+  tplate->AddPlacedVolume(plateV, pos0, 0);
+  for (G4int i=0; i<ntooth; i++) {
+    xt = xplate+xtooth;
+    yt = -yplate + (4*i+1)*ytooth;
+    G4ThreeVector pos1(xt, yt, 0);
+    tplate->AddPlacedVolume(toothV, pos1, 0);
+
+    xt = -xplate-xtooth;
+    yt = -yplate + (4*i+3)*ytooth;
+    G4ThreeVector pos2(xt, yt, 0);
+    tplate->AddPlacedVolume(toothV, pos2, 0);
+  }  
+  
+  G4RotationMatrix* rot1 = new G4RotationMatrix();
+  rot1->rotateX(90.*deg);
+  G4RotationMatrix *rot;
+  G4AssemblyVolume* cell = new G4AssemblyVolume();
+  // Make a hexagone cell out of 6 toothplates. These can zip togeather
+  // without generating overlaps (they are self-contained)
+  for (G4int i2=0; i2<6; i2++) {
+    G4double phi =  60.*i2 * deg;
+    G4double xp = dshift*sin(phi);
+    G4double yp = -dshift*cos(phi);
+    rot = new G4RotationMatrix(*rot1);
+    rot->rotateZ(phi); 
+    G4ThreeVector pos(xp, yp,0.);
+    cell->AddPlacedAssembly(tplate, pos, rot);
+  }   
+
+  // Make a row as an assembly of cells, then combine rows in a honeycomb
+  // structure. This again works without any need to define rows as "overlapping"
+  G4AssemblyVolume* row = new G4AssemblyVolume();
+  G4int ncells = 5;
+  for (G4int i3=0; i3<ncells; i3++) {
+    G4double ycell = (2*i3+1)*(dshift+10.*cm);
+    G4ThreeVector pos1(0., ycell, 0.);
+    row->AddPlacedAssembly(cell, pos1, 0);
+    G4ThreeVector pos2(0., -ycell, 0.);
+    row->AddPlacedAssembly(cell, pos2, 0);
+  }
+
+  G4double dxrow = 3.*(dshift+10.*cm)*tan(30.*deg);
+  G4double dyrow = dshift+10.*cm;
+  G4int nrows = 5;
+  for (G4int i4=0; i4<nrows; i4++) {
+    G4double xrow = 0.5*(2*i4+1)*dxrow;
+    G4double yrow = 0.5*dyrow;
+    if ((i4%2)==0) yrow = -yrow;
+    G4ThreeVector pos1(xrow, yrow, 0.);
+    row->MakeImprint(worldV2, pos1, 0);
+    G4ThreeVector pos2(-xrow, -yrow, 0.);
+    row->MakeImprint(worldV2, pos2, 0);
+  }        
+
+  //
+  //  AssemblyDetector3 (assembly with reflections)
+  //
+  
+  // World
+  //
+  G4LogicalVolume* worldV3
+    = new G4LogicalVolume(worldS, Air, "worldV3");
+  AssemblyDetector3
+    = new G4PVPlacement(0, G4ThreeVector(), worldV3, "world3", 0, false, 0); 
+   
+  // Assembly 
+  //
+  G4AssemblyVolume* assembly = new G4AssemblyVolume();
+
+
+  // Volumes
+  //
+  G4VSolid* consS
+    = new G4Cons("consS", 10.*cm, 40.*cm, 20.*cm, 60.*cm, 50*cm, 0., 360.*deg);
+  G4LogicalVolume* consV
+    = new G4LogicalVolume(consS, Al, "CONS");
+
+  // Place volume in assembly
+  //
+  HepGeom::Transform3D transform1
+   = HepGeom::Translate3D( 110.*cm,0., 0.)
+   * HepGeom::RotateY3D( 90.*deg);
+  assembly->AddPlacedVolume(consV, transform1);
+ 
+  HepGeom::Transform3D transform2
+   = HepGeom::ReflectX3D()
+   * HepGeom::Translate3D( 110.*cm,0., 0.)
+   * HepGeom::RotateY3D( 90.*deg);
+  assembly->AddPlacedVolume(consV, transform2);
+  
+  HepGeom::Transform3D transform3
+   = HepGeom::Translate3D( 0., 110.*cm, 0.)
+   * HepGeom::RotateX3D(-90.*deg);
+  assembly->AddPlacedVolume(consV, transform3);
+ 
+  HepGeom::Transform3D transform4
+   = HepGeom::ReflectY3D()
+   * HepGeom::Translate3D( 0., 110.*cm, 0.)
+   * HepGeom::RotateX3D(-90.*deg);
+  assembly->AddPlacedVolume(consV, transform4);
+
+  // Make imprint
+  //
+  G4RotationMatrix* rotv = 0;
+  G4ThreeVector posv;
+  assembly->MakeImprint(worldV3, posv, rotv);
 
 //
 // Visualization attributes 

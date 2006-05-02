@@ -40,10 +40,10 @@ Tst01DetectorMessenger::Tst01DetectorMessenger(Tst01DetectorConstruction * myDC)
 
   selDetCmd = new G4UIcmdWithAString("/mydet/SelectDetector",this);
   selDetCmd->SetGuidance("Select Detector Setup.");
-  selDetCmd->SetGuidance("  Choice : SimpleBox / Honeycomb / Assembly");
+  selDetCmd->SetGuidance("  Choice : SimpleBox / Honeycomb / Assembly / Assembly2 / Assembly3");
   selDetCmd->SetParameterName("choice",true);
   selDetCmd->SetDefaultValue("SimpleBox");
-  selDetCmd->SetCandidates("SimpleBox Honeycomb Assembly");
+  selDetCmd->SetCandidates("SimpleBox Honeycomb Assembly Assembly2 Assembly3");
   selDetCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   switchCmd = new G4UIcmdWithAString("/mydet/SwitchDetector",this);
@@ -53,7 +53,7 @@ Tst01DetectorMessenger::Tst01DetectorMessenger(Tst01DetectorConstruction * myDC)
   SetGuidance("\"/mydet/SelectDetector\" will be invoked and then switched.");
   switchCmd->SetParameterName("choice",true);
   switchCmd->SetDefaultValue(" ");
-  switchCmd->SetCandidates("SimpleBox Honeycomb Assembly \" \"");
+  switchCmd->SetCandidates("SimpleBox Honeycomb Assembly Assembly2 Assembly3 \" \"");
   switchCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   selMatCmd = new G4UIcmdWithAString("/mydet/SelectMaterial",this);
@@ -135,7 +135,8 @@ void Tst01DetectorMessenger::SetNewValue( G4UIcommand* command ,
   }
   if( command == switchCmd )
   {
-    if(newValues=="SimpleBox" || newValues=="Honeycomb" || newValues=="Assembly")
+    if(newValues=="SimpleBox" || newValues=="Honeycomb" || 
+       newValues=="Assembly" || newValues=="Assembly2" || newValues=="Assembly3" )
     { 
       myDetector->SelectDetector(newValues); 
     }
