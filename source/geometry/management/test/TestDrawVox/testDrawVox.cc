@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testDrawVox.cc,v 1.3 2001-07-11 09:59:27 gunter Exp $
+// $Id: testDrawVox.cc,v 1.4 2006-05-02 13:25:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,8 +44,9 @@
 #include "G4UIterminal.hh"
 
 #include "G4RunManager.hh"
+
 #ifdef G4VIS_USE
-#include "TstDrawVox01VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "G4ios.hh"
@@ -53,8 +54,8 @@
 int main(int argc,char** argv) {
 
   // Set the default random engine to RanecuEngine
-  RanecuEngine defaultEngine;
-  HepRandom::setTheEngine(&defaultEngine);
+  CLHEP::RanecuEngine defaultEngine;
+  CLHEP::HepRandom::setTheEngine(&defaultEngine);
 
   // Run manager
   G4RunManager * runManager = new G4RunManager;
@@ -65,7 +66,7 @@ int main(int argc,char** argv) {
 
   #ifdef G4VIS_USE
     // Visualization, if you choose to have it!
-    G4VisManager* visManager = new TstDrawVox01VisManager;
+    G4VisManager* visManager = new G4VisExecutive;
     visManager->Initialize();
   #endif
 
