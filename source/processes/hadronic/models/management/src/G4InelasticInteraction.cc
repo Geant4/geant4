@@ -250,6 +250,18 @@
     G4double rand1 = G4UniformRand();
     G4double rand2 = G4UniformRand();
 
+    // Cache current, target, and secondaries
+    G4ReactionProduct saveCurrent = currentParticle;
+    G4ReactionProduct saveTarget = targetParticle;
+    G4FastVector<G4ReactionProduct,GHADLISTSIZE> savevec;
+    G4int savevecLen = 0;
+    savevec.Initialize( 0 );
+    for (G4int i = 0; i < vecLen; i++) {
+      G4ReactionProduct* p = new G4ReactionProduct;
+      *p = *vec[i];
+      savevec.SetElement( savevecLen++, p );
+    }
+
     if( annihilation || (vecLen >= 6) ||
         (modifiedOriginal.GetKineticEnergy()/GeV >= 1.0) &&
         (((originalIncident->GetDefinition() == G4KaonPlus::KaonPlus() ||
@@ -261,6 +273,7 @@
         theReactionDynamics.GenerateXandPt( vec, vecLen,
                                             modifiedOriginal, originalIncident,
                                             currentParticle, targetParticle,
+                                            originalTarget,
                                             targetNucleus, incidentHasChanged,
                                             targetHasChanged, leadFlag,
                                             leadingStrangeParticle );
@@ -278,18 +291,37 @@
     }
     else
     {
+      // Occaisionally, GenerateXandPt will fail in the annihilation channel.
+      // Restore current, target and secondaries to pre-GenerateXandPt state
+      // before trying annihilation in TwoCluster
+
+      if (!finishedGenXPt && annihilation) {
+        currentParticle = saveCurrent;
+        targetParticle = saveTarget;
+        for (G4int i = 0; i < vecLen; i++) delete vec[i];
+        vecLen = 0;
+        vec.Initialize( 0 );
+        for (G4int i = 0; i < savevecLen; i++) {
+          G4ReactionProduct* p = new G4ReactionProduct;
+          *p = *savevec[i];
+          vec.SetElement( vecLen++, p );
+          delete savevec[i];
+        }
+      }
+
       theReactionDynamics.SuppressChargedPions( vec, vecLen,
-                                                modifiedOriginal, currentParticle,
-                                                targetParticle, targetNucleus,
-                                                incidentHasChanged, targetHasChanged );
+                                      modifiedOriginal, currentParticle,
+                                      targetParticle, targetNucleus,
+                                      incidentHasChanged, targetHasChanged );
       try
       {
       finishedTwoClu = theReactionDynamics.TwoCluster( vec, vecLen,
-                                                       modifiedOriginal, originalIncident,
-                                                       currentParticle, targetParticle,
-                                                       targetNucleus, incidentHasChanged,
-                                                       targetHasChanged, leadFlag,
-                                                       leadingStrangeParticle );
+                                      modifiedOriginal, originalIncident,
+                                      currentParticle, targetParticle,
+                                      originalTarget,
+                                      targetNucleus, incidentHasChanged,
+                                      targetHasChanged, leadFlag,
+                                      leadingStrangeParticle );
        }
        catch(G4HadReentrentException aC)
        {
