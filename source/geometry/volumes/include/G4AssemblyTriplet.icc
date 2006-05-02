@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyTriplet.icc,v 1.5 2001-07-11 09:59:16 gunter Exp $
+// $Id: G4AssemblyTriplet.icc,v 1.1 2006-05-02 11:35:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,7 @@
 
 inline
 G4AssemblyTriplet::G4AssemblyTriplet()
-  : fVolume( 0 ), fRotation( 0 )
+  : fVolume( 0 ), fRotation( 0 ), fAssembly(0), fIsReflection(false)
 {
   G4ThreeVector v(0.,0.,0.);
   fTranslation = v;
@@ -40,17 +40,31 @@ G4AssemblyTriplet::G4AssemblyTriplet()
 inline
 G4AssemblyTriplet::G4AssemblyTriplet( G4LogicalVolume* pVolume,
                                       G4ThreeVector& translation,
-                                      G4RotationMatrix* pRotation )
-  : fVolume( pVolume ), fTranslation( translation ), fRotation( pRotation )
+                                      G4RotationMatrix* pRotation,
+                                      G4bool isReflection )
+  : fVolume( pVolume ), fTranslation( translation ), fRotation( pRotation ),
+    fAssembly( 0 ), fIsReflection(isReflection)
+{
+}
+
+inline
+G4AssemblyTriplet::G4AssemblyTriplet( G4AssemblyVolume* pAssembly,
+                                      G4ThreeVector& translation,
+                                      G4RotationMatrix* pRotation,
+                                      G4bool isReflection )
+  : fVolume( 0 ), fTranslation( translation ), fRotation( pRotation ),
+    fAssembly( pAssembly ), fIsReflection(isReflection) 
 {
 }
 
 inline
 G4AssemblyTriplet::G4AssemblyTriplet( const G4AssemblyTriplet& second )
 {
-  fVolume      = second.GetVolume();
-  fRotation    = second.GetRotation();
-  fTranslation = second.GetTranslation();
+  fVolume       = second.GetVolume();
+  fRotation     = second.GetRotation();
+  fTranslation  = second.GetTranslation();
+  fAssembly     = second.GetAssembly();
+  fIsReflection = second.IsReflection();
 }
 
 inline
@@ -67,7 +81,33 @@ G4LogicalVolume* G4AssemblyTriplet::GetVolume() const
 inline
 void G4AssemblyTriplet::SetVolume( G4LogicalVolume* pVolume )
 {
+  if ( fAssembly ) 
+  {
+    G4Exception("G4AssemblyTriplet::SetVolume()",
+                "IllegalCall", JustWarning,
+                "There is an assembly already set, it will be ignored.");
+  }
   fVolume = pVolume;
+  fAssembly = 0;
+}
+
+inline
+G4AssemblyVolume* G4AssemblyTriplet::GetAssembly() const
+{
+  return fAssembly;
+}
+
+inline
+void G4AssemblyTriplet::SetAssembly( G4AssemblyVolume* pAssembly )
+{
+  if ( fVolume ) 
+  {
+    G4Exception("G4AssemblyTriplet::SetAssembly()",
+                "IllegalCall", JustWarning,
+                "There is a volume already set, it will be ignored.");
+  }
+  fAssembly = pAssembly;
+  fVolume = 0;
 }
 
 inline
@@ -95,14 +135,22 @@ void G4AssemblyTriplet::SetRotation( G4RotationMatrix* pRotation )
 }
 
 inline
+G4bool G4AssemblyTriplet::IsReflection() const
+{
+  return fIsReflection;
+}  
+
+inline
 G4AssemblyTriplet&
 G4AssemblyTriplet::operator=( const G4AssemblyTriplet& second )
 {
   if( this != &second )
   {
-    fVolume      = second.GetVolume();
-    fRotation    = second.GetRotation();
-    fTranslation = second.GetTranslation();
+    fVolume       = second.GetVolume();
+    fRotation     = second.GetRotation();
+    fTranslation  = second.GetTranslation();
+    fAssembly     = second.GetAssembly();
+    fIsReflection = second.IsReflection();
   }
   
   return *this;

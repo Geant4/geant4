@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyTriplet.hh,v 1.6 2003-11-02 14:01:21 gcosmo Exp $
+// $Id: G4AssemblyTriplet.hh,v 1.1 2006-05-02 11:35:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,17 +29,22 @@
 //
 // Class description:
 //
-// A class to help place logical volumes inside a generic containers (like
-// STL vector ) together with information about its rotation and placement.
+// A class to help place logical or assembly volumes inside a generic 
+// containers (like STL vector ) together with information about its rotation, 
+// placement and eventually reflection.
 // How to interpret the rotation and translation depends on the class which
 // uses a container of these triplets. The first class using G4AssemblyTriplet
 // is G4AssemblyVolume class.
-// The pointer to the logical volume is copied so this class does not take
-// its ownership and does not delete the object behind.
+// The pointer to the logical or assembly volume is copied so this class 
+// does not take its ownership and does not delete the object behind.
 
 // Author:      Radovan Chytracek
 // Version:     1.0
 // Date:        November 2000
+//
+// History:
+// March 2006, I.Hrivnacova - Extended to support assembly of assemblies
+//             of volumes and reflections
 // ----------------------------------------------------------------------
 #ifndef G4_ASSEMBLYTRIPLET_H
 #define G4_ASSEMBLYTRIPLET_H 
@@ -48,6 +53,7 @@
 #include "G4RotationMatrix.hh"
 
 class G4LogicalVolume;
+class G4AssemblyVolume;
 
 class G4AssemblyTriplet
 {
@@ -58,8 +64,15 @@ class G4AssemblyTriplet
 
     G4AssemblyTriplet( G4LogicalVolume* pVolume,
                        G4ThreeVector& translation,
-                       G4RotationMatrix* pRotation);
-      // An explicit constructor
+                       G4RotationMatrix* pRotation,
+                       G4bool isReflection = false);
+      // An explicit constructor for a logical volume
+    
+    G4AssemblyTriplet( G4AssemblyVolume* pAssembly,
+                       G4ThreeVector& translation,
+                       G4RotationMatrix* pRotation,
+                       G4bool isReflection = false);
+      // An explicit constructor for an assembly volume
     
     G4AssemblyTriplet( const G4AssemblyTriplet& second );
       // Copy constructor
@@ -76,6 +89,12 @@ class G4AssemblyTriplet
     void SetVolume( G4LogicalVolume* pVolume );
       // Update the logical volume reference
 
+    G4AssemblyVolume* GetAssembly() const;
+      // Retrieve the assembly volume reference
+
+    void SetAssembly( G4AssemblyVolume* pAssembly );
+      // Update the assembly volume reference
+
     G4ThreeVector GetTranslation() const;
       // Retrieve the logical volume translation
 
@@ -87,7 +106,9 @@ class G4AssemblyTriplet
 
     void SetRotation( G4RotationMatrix* pVolume );
       // Update the logical volume rotation
-   
+
+    G4bool IsReflection() const;
+      // Return true if the logical or assembly volume has reflection
 
  private:
 
@@ -99,9 +120,18 @@ class G4AssemblyTriplet
 
     G4RotationMatrix* fRotation;
       // A logical volume rotation
+
+ private:
+
+    // Member data for handling assemblies of assemblies and reflections
+
+    G4AssemblyVolume* fAssembly;
+      // An assembly volume
+
+    G4bool            fIsReflection;
+      // True if the logical or assembly volume has reflection  
 };
 
 #include "G4AssemblyTriplet.icc"
 
 #endif // G4_ASSEMBLYTRIPLET_H
-
