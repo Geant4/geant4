@@ -241,33 +241,33 @@ void StatAccepTestAnalysis::init( const G4int numberOfReplicasIn,
       // G4cout << " Created transverseProfileHisto " << G4endl;
 
       // Step Energy versus step Length.
-      h2stepEvsL_active = 
-	histoFactory->createHistogram2D( "80", "Step: Energy(MeV) vs. Length(mm), active", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-      h2stepEvsL_electron_active = 
-	histoFactory->createHistogram2D( "81", "Step: Energy(MeV) vs. Length(mm), active, ELECTRON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-      h2stepEvsL_muon_active = 
-	histoFactory->createHistogram2D( "82", "Step: Energy(MeV) vs. Length(mm), active,  MUON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-      h2stepEvsL_pionCharged_active = 
-	histoFactory->createHistogram2D( "83", "Step: Energy(MeV) vs. Length(mm), active, PION charged", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-      h2stepEvsL_proton_active = 
-	histoFactory->createHistogram2D( "84", "Step: Energy(MeV) vs. Length(mm), active, PROTON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-      h2stepEvsL_gamma_active = 
-	histoFactory->createHistogram2D( "85", "Step: Energy(MeV) vs. Length(mm), active, GAMMA", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-      h2stepEvsL_neutron_active = 
-	histoFactory->createHistogram2D( "86", "Step: Energy(MeV) vs. Length(mm), active, NEUTRON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-      h2stepEvsL_absorber = 
-	histoFactory->createHistogram2D( "90", "Step: Energy(MeV) vs. Length(mm), absorber", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-      h2stepEvsL_electron_absorber = 
-	histoFactory->createHistogram2D( "91", "Step: Energy(MeV) vs. Length(mm), absorber, ELECTRON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-      h2stepEvsL_muon_absorber = 
-	histoFactory->createHistogram2D( "92", "Step: Energy(MeV) vs. Length(mm), absorber, MUON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-      h2stepEvsL_pionCharged_absorber = 
-	histoFactory->createHistogram2D( "93", "Step: Energy(MeV) vs. Length(mm), absorber, PION charged", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-      h2stepEvsL_proton_absorber = 
-	histoFactory->createHistogram2D( "94", "Step: Energy(MeV) vs. Length(mm), absorber, PROTON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-      h2stepEvsL_gamma_absorber = 
-	histoFactory->createHistogram2D( "95", "Step: Energy(MeV) vs. Length(mm), absorber, GAMMA", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-      h2stepEvsL_neutron_absorber = 
+      // h2stepEvsL_active = 
+      // 	histoFactory->createHistogram2D( "80", "Step: Energy(MeV) vs. Length(mm), active", 100, 0.0, 10.0, 100, 0.0, 10.0 );
+      // h2stepEvsL_electron_active = 
+      // 	histoFactory->createHistogram2D( "81", "Step: Energy(MeV) vs. Length(mm), active, ELECTRON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
+      // h2stepEvsL_muon_active = 
+      // 	histoFactory->createHistogram2D( "82", "Step: Energy(MeV) vs. Length(mm), active,  MUON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
+      // h2stepEvsL_pionCharged_active = 
+      // 	histoFactory->createHistogram2D( "83", "Step: Energy(MeV) vs. Length(mm), active, PION charged", 100, 0.0, 10.0, 100, 0.0, 10.0 );
+      // h2stepEvsL_proton_active = 
+      // 	histoFactory->createHistogram2D( "84", "Step: Energy(MeV) vs. Length(mm), active, PROTON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
+      // h2stepEvsL_gamma_active = 
+      // 	histoFactory->createHistogram2D( "85", "Step: Energy(MeV) vs. Length(mm), active, GAMMA", 100, 0.0, 10.0, 100, 0.0, 10.0 );
+      // h2stepEvsL_neutron_active = 
+      // 	histoFactory->createHistogram2D( "86", "Step: Energy(MeV) vs. Length(mm), active, NEUTRON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
+      // h2stepEvsL_absorber = 
+      // 	histoFactory->createHistogram2D( "90", "Step: Energy(MeV) vs. Length(mm), absorber", 100, 0.0, 10.0, 100, 0.0, 10.0 );
+      // h2stepEvsL_electron_absorber = 
+      // 	histoFactory->createHistogram2D( "91", "Step: Energy(MeV) vs. Length(mm), absorber, ELECTRON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
+      // h2stepEvsL_muon_absorber = 
+      // 	histoFactory->createHistogram2D( "92", "Step: Energy(MeV) vs. Length(mm), absorber, MUON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
+      // h2stepEvsL_pionCharged_absorber = 
+      // 	histoFactory->createHistogram2D( "93", "Step: Energy(MeV) vs. Length(mm), absorber, PION charged", 100, 0.0, 10.0, 100, 0.0, 10.0 );
+      // h2stepEvsL_proton_absorber = 
+      // 	histoFactory->createHistogram2D( "94", "Step: Energy(MeV) vs. Length(mm), absorber, PROTON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
+      // h2stepEvsL_gamma_absorber = 
+      // 	histoFactory->createHistogram2D( "95", "Step: Energy(MeV) vs. Length(mm), absorber, GAMMA", 100, 0.0, 10.0, 100, 0.0, 10.0 );
+      // h2stepEvsL_neutron_absorber = 
 	histoFactory->createHistogram2D( "96", "Step: Energy(MeV) vs. Length(mm), absorber, NEUTRON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
 
       // Kinetic spectra of some particles.
@@ -290,10 +290,10 @@ void StatAccepTestAnalysis::init( const G4int numberOfReplicasIn,
       //            -1. to +1. GeV  (2000 bins) - energy in GeV
       //        4 : Particle flux up to 0.1 GeV (backward going have negative energy)
       //            -0.1 to +0.1 GeV  (2000 bins) - energy in GeV
-      //        5 : LOG10(energy/MeV) Particle flux up to 100 GeV 
+      //        5 : LOG10(energy/MeV) Particle flux from 0.1 keV up to 100 GeV 
       //            (backward going are REMOVED)
-      //            -100. to +100. GeV  (1000 logarithmic bins) 
-      //            energy in MeV from 0.1keV to 100GeV
+      //            -4.0 to +5.0  (1000 logarithmic bins) 
+      //            energy in MeV from  0.1 keV to 100 GeV
       // Example:
       //   5201 is the histogram of energy of gammas passing into the 
       //   second layer (index #1) binned linearly between -10 and 10 GeV.
@@ -781,69 +781,69 @@ void StatAccepTestAnalysis::infoStep( const G4Step* aStep ) {
   classifyParticle( false , aStep->GetTrack()->GetDefinition() );
 
   // 2D plots on Step Energy vs. Step Length.
-  if ( aStep->GetTrack()->GetVolume()->GetName() == "physiActive" ) {
-    h2stepEvsL_active->fill( aStep->GetStepLength() / mm, 
-			     aStep->GetTotalEnergyDeposit() / MeV );
-  } else if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
-    h2stepEvsL_absorber->fill( aStep->GetStepLength() / mm, 
-			       aStep->GetTotalEnergyDeposit() / MeV );
-  }
-  if ( aStep->GetTrack()->GetDefinition() == G4Electron::ElectronDefinition() || 
-       aStep->GetTrack()->GetDefinition() == G4Positron::PositronDefinition() ) {
-    if ( aStep->GetTrack()->GetVolume()->GetName() == "physiActive" ) {
-      h2stepEvsL_electron_active->fill( aStep->GetStepLength() / mm, 
-					aStep->GetTotalEnergyDeposit() / MeV );
-    } else if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
-      h2stepEvsL_electron_absorber->fill( aStep->GetStepLength() / mm,
-					  aStep->GetTotalEnergyDeposit() / MeV );
-    }
-  } else if ( aStep->GetTrack()->GetDefinition() == G4Gamma::GammaDefinition() ) {
-    if ( aStep->GetTrack()->GetVolume()->GetName() == "physiActive" ) {
-      h2stepEvsL_gamma_active->fill( aStep->GetStepLength() / mm, 
-				     aStep->GetTotalEnergyDeposit() / MeV );
-    } else if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
-      h2stepEvsL_gamma_absorber->fill( aStep->GetStepLength() / mm, 
-				       aStep->GetTotalEnergyDeposit() / MeV );
-    }
-  } else if ( aStep->GetTrack()->GetDefinition() == 
-	      G4MuonMinus::MuonMinusDefinition()  ||  
-	      aStep->GetTrack()->GetDefinition() == 
-	      G4MuonPlus::MuonPlusDefinition() ) {
-    if ( aStep->GetTrack()->GetVolume()->GetName() == "physiActive" ) {
-      h2stepEvsL_muon_active->fill( aStep->GetStepLength() / mm, 
-				    aStep->GetTotalEnergyDeposit() / MeV );
-    } else if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
-      h2stepEvsL_muon_absorber->fill( aStep->GetStepLength() / mm, 
-				      aStep->GetTotalEnergyDeposit() / MeV );
-    }
-  } else if ( aStep->GetTrack()->GetDefinition() == 
-	      G4PionPlus::PionPlusDefinition()  ||
-	      aStep->GetTrack()->GetDefinition() == 
-	      G4PionMinus::PionMinusDefinition() ) {
-    if ( aStep->GetTrack()->GetVolume()->GetName() == "physiActive" ) {
-      h2stepEvsL_pionCharged_active->fill( aStep->GetStepLength() / mm, 
-					   aStep->GetTotalEnergyDeposit() / MeV );
-    } else if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
-      h2stepEvsL_pionCharged_absorber->fill( aStep->GetStepLength() / mm, 
-					     aStep->GetTotalEnergyDeposit() / MeV );
-    }
-  } else if ( aStep->GetTrack()->GetDefinition() == G4Proton::ProtonDefinition() ) {
-    if ( aStep->GetTrack()->GetVolume()->GetName() == "physiActive" ) {
-      h2stepEvsL_proton_active->fill( aStep->GetStepLength() / mm, 
-				      aStep->GetTotalEnergyDeposit() / MeV );
-    } else if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
-      h2stepEvsL_proton_absorber->fill( aStep->GetStepLength() / mm,
-					aStep->GetTotalEnergyDeposit() / MeV );
-    }
-  } else if ( aStep->GetTrack()->GetDefinition() == G4Neutron::NeutronDefinition() ) {
-    if ( aStep->GetTrack()->GetVolume()->GetName() == "physiActive" ) {
-      h2stepEvsL_neutron_active->fill( aStep->GetStepLength() / mm,
-				       aStep->GetTotalEnergyDeposit() / MeV );
-    } else if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
-      h2stepEvsL_neutron_absorber->fill( aStep->GetStepLength() / mm,
-					 aStep->GetTotalEnergyDeposit() / MeV );
-    }    
-  }
+  // if ( aStep->GetTrack()->GetVolume()->GetName() == "physiActive" ) {
+  //   h2stepEvsL_active->fill( aStep->GetStepLength() / mm, 
+  // 			     aStep->GetTotalEnergyDeposit() / MeV );
+  // } else if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
+  //   h2stepEvsL_absorber->fill( aStep->GetStepLength() / mm, 
+  // 			       aStep->GetTotalEnergyDeposit() / MeV );
+  // }
+  // if ( aStep->GetTrack()->GetDefinition() == G4Electron::ElectronDefinition() || 
+  //      aStep->GetTrack()->GetDefinition() == G4Positron::PositronDefinition() ) {
+  //   if ( aStep->GetTrack()->GetVolume()->GetName() == "physiActive" ) {
+  //     h2stepEvsL_electron_active->fill( aStep->GetStepLength() / mm, 
+  // 					aStep->GetTotalEnergyDeposit() / MeV );
+  //   } else if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
+  //     h2stepEvsL_electron_absorber->fill( aStep->GetStepLength() / mm,
+  // 					  aStep->GetTotalEnergyDeposit() / MeV );
+  //   }
+  // } else if ( aStep->GetTrack()->GetDefinition() == G4Gamma::GammaDefinition() ) {
+  //   if ( aStep->GetTrack()->GetVolume()->GetName() == "physiActive" ) {
+  //     h2stepEvsL_gamma_active->fill( aStep->GetStepLength() / mm, 
+  // 				     aStep->GetTotalEnergyDeposit() / MeV );
+  //   } else if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
+  //     h2stepEvsL_gamma_absorber->fill( aStep->GetStepLength() / mm, 
+  // 				       aStep->GetTotalEnergyDeposit() / MeV );
+  //   }
+  // } else if ( aStep->GetTrack()->GetDefinition() == 
+  // 	      G4MuonMinus::MuonMinusDefinition()  ||  
+  // 	      aStep->GetTrack()->GetDefinition() == 
+  // 	      G4MuonPlus::MuonPlusDefinition() ) {
+  //   if ( aStep->GetTrack()->GetVolume()->GetName() == "physiActive" ) {
+  //     h2stepEvsL_muon_active->fill( aStep->GetStepLength() / mm, 
+  // 				    aStep->GetTotalEnergyDeposit() / MeV );
+  //   } else if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
+  //     h2stepEvsL_muon_absorber->fill( aStep->GetStepLength() / mm, 
+  // 				      aStep->GetTotalEnergyDeposit() / MeV );
+  //   }
+  // } else if ( aStep->GetTrack()->GetDefinition() == 
+  // 	      G4PionPlus::PionPlusDefinition()  ||
+  // 	      aStep->GetTrack()->GetDefinition() == 
+  // 	      G4PionMinus::PionMinusDefinition() ) {
+  //   if ( aStep->GetTrack()->GetVolume()->GetName() == "physiActive" ) {
+  //     h2stepEvsL_pionCharged_active->fill( aStep->GetStepLength() / mm, 
+  // 					   aStep->GetTotalEnergyDeposit() / MeV );
+  //   } else if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
+  //     h2stepEvsL_pionCharged_absorber->fill( aStep->GetStepLength() / mm, 
+  // 					     aStep->GetTotalEnergyDeposit() / MeV );
+  //   }
+  // } else if ( aStep->GetTrack()->GetDefinition() == G4Proton::ProtonDefinition() ) {
+  //   if ( aStep->GetTrack()->GetVolume()->GetName() == "physiActive" ) {
+  //     h2stepEvsL_proton_active->fill( aStep->GetStepLength() / mm, 
+  // 				      aStep->GetTotalEnergyDeposit() / MeV );
+  //   } else if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
+  //     h2stepEvsL_proton_absorber->fill( aStep->GetStepLength() / mm,
+  // 					aStep->GetTotalEnergyDeposit() / MeV );
+  //   }
+  // } else if ( aStep->GetTrack()->GetDefinition() == G4Neutron::NeutronDefinition() ) {
+  //   if ( aStep->GetTrack()->GetVolume()->GetName() == "physiActive" ) {
+  //     h2stepEvsL_neutron_active->fill( aStep->GetStepLength() / mm,
+  // 				       aStep->GetTotalEnergyDeposit() / MeV );
+  //   } else if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
+  //     h2stepEvsL_neutron_absorber->fill( aStep->GetStepLength() / mm,
+  // 					 aStep->GetTotalEnergyDeposit() / MeV );
+  //   }    
+  // }
 }
 
 
