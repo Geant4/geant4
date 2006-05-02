@@ -1,11 +1,7 @@
 /mydet/SelectDetector Honeycomb
 /run/initialize
 /vis/scene/create
-/vis/open DAWN
-#/vis/open VRML1FILE
+/vis/open DAWNFILE
 /vis/viewer/flush
 /run/beamOn 1
 /vis/viewer/flush
-
-#hello, I have voxelised
-#/run/geometryModified
